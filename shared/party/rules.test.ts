@@ -294,4 +294,16 @@ describe('party helpers', () => {
   it('ranks the leaderboard by score, then name', () => {
     expect(leaderboard([{ name: 'b', score: 1 }, { name: 'a', score: 1 }, { name: 'c', score: 2 }]).map(player => player.name)).toEqual(['c', 'a', 'b']);
   });
+  it('grades a recited ayah on what was written when the time runs out', () => {
+    const write = { asked: [0, 1, 2, 3], words: ['قُلۡ', 'هُوَ', 'ٱللَّهُ', 'أَحَدٌ'] };
+    const recited = { key: 'ENDS:112:1', correctAnswer: '1', promptArabic: 'سمّع', choices: [], ayahKey: '112:1', write } as unknown as PartyQuestion;
+    let state = createParty('123456', 'p0', 'Host', 0);
+    state = act(state, { type: 'start', playerId: 'p0', early: true }, 0).state;
+    state = act(state, { type: 'loaded', questions: [recited], surahNames: {} }, 0).state;
+    state = act(state, { type: 'draft', playerId: 'p0', answer: ['قل', 'هو'] }, 1).state;
+    expect(state.phase).toBe('question');
+    state = act(state, { type: 'tick' }, state.deadline!).state;
+    expect(state.results.p0).toEqual({ earned: 2, total: 4 });
+    expect(viewFor(state, 'p0', state.deadline ?? 0).answer).toEqual(['قل', 'هو']);
+  });
 });

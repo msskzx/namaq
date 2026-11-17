@@ -232,6 +232,15 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
   const isHost = view.you === view.hostId;
   const last = view.index + 1 >= view.total;
   const total = (question.tree || question.compare || question.write ? view.settings.treeSeconds : view.settings.seconds) * 1000;
+  // A recited ayah: each word goes as a draft, the last as the answer, sent again if the connection dropped it.
+  const finished = useRef<string[] | null>(null);
+  useEffect(() => {
+    if (finished.current && view.phase === "question" && view.answer === null) send({ type: "submit", answer: finished.current });
+  }, [view, send]);
+  const write = (answer: string[], done: boolean) => {
+    if (done) finished.current = answer;
+    send({ type: done ? "submit" : "draft", answer });
+  };
   if (!revealed && sent) return (
     <div className="flex flex-col gap-5">
       <p className="sr-only" aria-live="polite">{ar
@@ -253,7 +262,7 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
           </blockquote>
         )}
         <ChoiceQuran question={question} given={revealed && typeof view.answer === "string" ? view.answer : undefined} revealed ar={ar}
-          pen={view.settings.pen} onWrite={(answer) => send({ type: "submit", answer })} written={revealed ? (Array.isArray(view.answer) ? view.answer : null) : undefined} />
+          pen={view.settings.pen} onWrite={write} written={revealed ? (Array.isArray(view.answer) ? view.answer : null) : undefined} />
         {question.compare ? (
           revealed ? <CompareFeedback question={question} typed={Array.isArray(view.answer) ? view.answer : []} ar={ar} />
             : <CompareInputs question={question} typed={typed} onChange={setTyped} onCheck={() => send({ type: "submit", answer: typed })} ar={ar} />

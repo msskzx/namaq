@@ -47,6 +47,8 @@ export type PartyState = {
   current: number;
   deadline: number | null;
   answers: Record<string, QuestionAnswer>;
+  /** What each player has written so far on a recited ayah, graded if the time runs out before they send it. */
+  drafts?: Record<string, QuestionAnswer>;
   results: Record<string, Points>;
   history?: Record<string, QuestionAnswer>[];
   hostAwaySince: number | null;
@@ -63,6 +65,7 @@ export type PlayerAction =
   | { type: 'remove'; target: string }
   | { type: 'start'; early?: boolean }
   | { type: 'submit'; answer: QuestionAnswer }
+  | { type: 'draft'; answer: QuestionAnswer }
   | { type: 'next' }
   | { type: 'again' };
 
@@ -134,14 +137,16 @@ function nextHost(players: Player[], hostId: string, connected: boolean) {
 }
 
 function ask(state: PartyState, index: number, now: number): PartyState {
-  return { ...state, phase: 'question', current: index, answers: {}, results: {}, deadline: now + secondsFor(state, state.questions[index]) };
+  return { ...state, phase: 'question', current: index, answers: {}, drafts: {}, results: {}, deadline: now + secondsFor(state, state.questions[index]) };
 }
 
 function reveal(state: PartyState): PartyState {
   const question = state.questions[state.current];
-  const results = Object.fromEntries(state.players.map(player => [player.id, questionPoints(question, state.answers[player.id])]));
+  // A player the time ran out on is graded on what they had written so far.
+  const answers = { ...state.drafts, ...state.answers };
+  const results = Object.fromEntries(state.players.map(player => [player.id, questionPoints(question, answers[player.id])]));
   const history = [...(state.history ?? [])];
-  history[state.current] = { ...state.answers };
+  history[state.current] = answers;
   return { ...state, phase: 'reveal', deadline: null, results, history, players: state.players.map(player => ({ ...player, score: player.score + results[player.id].earned })) };
 }
 
@@ -215,6 +220,10 @@ function apply(state: PartyState, action: Action, now: number): { state: PartySt
     if (state.phase !== 'question') return { state, error: 'wrong-phase' };
     if (player.id in state.answers) return { state };
     return { state: settle({ ...state, answers: { ...state.answers, [player.id]: action.answer } }) };
+  }
+  if (action.type === 'draft') {
+    if (state.phase !== 'question' || player.id in state.answers) return { state };
+    return { state: { ...state, drafts: { ...state.drafts, [player.id]: action.answer } } };
   }
 
   if (!isHost) return { state, error: 'not-host' };
@@ -293,7 +302,7 @@ export function viewFor(state: PartyState, playerId: string, now: number): Party
     surahNames: state.surahNames,
     deadline: state.phase === 'question' ? state.deadline : null,
     now,
-    answer: state.answers[playerId] ?? null,
+    answer: (revealed ? state.history?.[state.current]?.[playerId] : undefined) ?? state.answers[playerId] ?? null,
     result: revealed ? state.results[playerId] ?? null : null,
     review: state.phase === 'final' && state.players.some(player => player.id === playerId) ? state.questions.map((question, index) => {
       const answer = state.history?.[index]?.[playerId] ?? (index === state.current ? state.answers[playerId] : undefined);

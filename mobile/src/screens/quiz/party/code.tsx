@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Share, View } from 'react-native';
 import { Text, TextInput } from '@/ui/Text';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -315,6 +315,15 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
   const isHost = view.you === view.hostId;
   const last = view.index + 1 >= view.total;
   const total = (question.tree || question.compare || question.write ? view.settings.treeSeconds : view.settings.seconds) * 1000;
+  // A recited ayah: each word goes as a draft, the last as the answer, sent again if the connection dropped it.
+  const finished = useRef<string[] | null>(null);
+  useEffect(() => {
+    if (finished.current && view.phase === 'question' && view.answer === null) send({ type: 'submit', answer: finished.current });
+  }, [view, send]);
+  const write = (answer: string[], done: boolean) => {
+    if (done) finished.current = answer;
+    send({ type: done ? 'submit' : 'draft', answer });
+  };
   const started = typed.some((text, index) => (question.compare || question.asked?.includes(index)) && text.trim());
 
   if (!revealed && sent) return (
@@ -365,7 +374,7 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
         </>
       ) : isAyahChoice(question)
         ? <View style={{ flex: 1 }}><QuizChoice question={question} shown palette={palette} onOpen={readAyah} onPick={value => send({ type: 'submit', answer: value })}
-          pen={view.settings.pen} onWrite={answer => send({ type: 'submit', answer })} /></View>
+          pen={view.settings.pen} onWrite={write} /></View>
         : <Choices question={question} answer={view.answer} revealed={false} onPick={value => send({ type: 'submit', answer: value })} palette={palette} />}
     </View>
   );

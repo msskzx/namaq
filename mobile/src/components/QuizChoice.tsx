@@ -30,7 +30,7 @@ function Words({ words, marked, palette }: { words: string[]; marked?: number[];
 export default function QuizChoice({ question, picked, shown, onPick, onReveal, onOpen, header, palette, scroll = true, pen, onWrite, written }: {
   question: ChoiceQuestion; picked?: string; shown: boolean; onPick?: (value: string) => void; onReveal?: () => void;
   /** A party's recited ayah (`question.write`): the host's pen rule, what was written sent with `onWrite`, and once revealed, what was `written` (null for nothing). */
-  pen?: PenRule; onWrite?: (answer: string[]) => void; written?: string[] | null;
+  pen?: PenRule; onWrite?: (answer: string[], done: boolean) => void; written?: string[] | null;
   /** The mushaf button under the answer. A card leaves it out and puts it in its own button row (owner, 2026-11-15). */
   onOpen?: (key: string) => void;
   header?: React.ReactNode; palette: Palette;
@@ -55,7 +55,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
         <View style={{ marginHorizontal: 16 }}>
           <QuizPage key={question.key} ayah={question.ayahKey} ask={question.page} palette={palette}
             shown={write ? written !== undefined : shown || answered || pageShown === question.key}
-            party={write ? { pen: pen ?? 'whole', asked: write.asked, words: write.words, answer: written, onSubmit: onWrite ?? (() => {}) } : undefined}
+            party={write ? { pen: pen ?? 'whole', asked: write.asked, words: write.words, answer: written, onWrite: onWrite ?? (() => {}) } : undefined}
             onShown={() => { setPageShown(question.key); onReveal?.(); }}
             onWritten={!answered && onPick ? graded => onPick(graded.wrong.length ? FORGOT : RECITED) : undefined} />
         </View>

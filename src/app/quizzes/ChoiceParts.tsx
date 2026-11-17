@@ -23,13 +23,13 @@ function Words({ words, marked }: { words: string[]; marked?: number[] }) {
  */
 export function ChoiceQuran({ question, given, revealed, onReveal, onAnswer, ar, pen, onWrite, written }: { question: ChoiceParts; given?: string; revealed: boolean; onReveal?: () => void;
   /** A party's recited ayah (`question.write`): the host's pen rule, what was written sent with `onWrite`, and once revealed, what was `written` (null for nothing). */
-  pen?: PenRule; onWrite?: (answer: string[]) => void; written?: string[] | null;
+  pen?: PenRule; onWrite?: (answer: string[], done: boolean) => void; written?: string[] | null;
   /** A recited ayah's written rest, graded: حفظتها when every word is right, نسيتها otherwise. */
   onAnswer?: (value: string) => void; ar: boolean }) {
   if (question.ayahKey && question.page) {
     return <div dir="rtl" lang="ar">
       <QuizPage key={`${question.family}:${question.ayahKey}`} ayah={question.ayahKey} ask={question.page} shown={question.write ? written !== undefined : revealed}
-        party={question.write ? { pen: pen ?? "whole", asked: question.write.asked, words: question.write.words, answer: written, onSubmit: onWrite ?? (() => {}) } : undefined}
+        party={question.write ? { pen: pen ?? "whole", asked: question.write.asked, words: question.write.words, answer: written, onWrite: onWrite ?? (() => {}) } : undefined}
         onShown={onReveal} ar={ar} onWritten={given === undefined && onAnswer ? graded => onAnswer(graded.wrong.length ? FORGOT : RECITED) : undefined} />
     </div>;
   }

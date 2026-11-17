@@ -52,6 +52,8 @@ export default function QuestionReview({ entries, names, ar }: { entries: Review
       ? (ar ? `${num(result.earned)} من ${num(result.total)} فراغات` : `${result.earned} of ${result.total} blanks`)
       : question.tree
       ? (ar ? `${num(result.earned)} من ${num(result.total)} أطراف` : `${result.earned} of ${result.total} leaves`)
+      : question.write
+      ? (ar ? `${num(result.earned)} من ${num(result.total)} كلمات` : `${result.earned} of ${result.total} words`)
       : (ar ? (correct ? "صحيح" : "خطأ") : correct ? "Correct" : "Incorrect")}</p>
     {question.ayah && <blockquote dir="rtl" lang="ar"><p className="font-quran text-xl leading-loose">{mushafText(question.ayah.text)}</p><p className="text-sm text-[var(--home-muted)]">{question.ayah.reference}</p></blockquote>}
     <ChoiceQuran question={question} given={typeof answer === "string" ? answer : undefined} revealed ar={ar} written={Array.isArray(answer) ? answer : null} />
