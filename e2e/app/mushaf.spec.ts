@@ -198,3 +198,21 @@ test('listening starts from a long press, and its sheet keeps the repeats and th
   await expect(bar).toBeHidden();
 });
 });
+
+test('recite from the top bar starts at the page start', async ({ page }) => {
+  const start = async () => (await stored<{ position: { start: string } }>(page, 'reader-recite-last'))?.position.start;
+  await open(page, '/read');
+  // A tapped ayah is selected, but the top bar still recites from the page's first ayah (owner, 2026-11-17).
+  await page.getByText(IHDINA, { exact: true }).first().click();
+  await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
+  await expect.poll(start).toBe('1:1');
+});
+
+test('recite from an ayah\'s long-press menu starts at that ayah', async ({ page }) => {
+  const start = async () => (await stored<{ position: { start: string } }>(page, 'reader-recite-last'))?.position.start;
+  await open(page, '/read');
+  await pressWord(page, IHDINA);
+  await page.getByRole('button', { name: 'سمّع من هذه الآية' }).click();
+  await expect(page.getByRole('button', { name: 'أظهر الآية التالية' })).toBeVisible();
+  await expect.poll(start).toBe('1:6');
+});

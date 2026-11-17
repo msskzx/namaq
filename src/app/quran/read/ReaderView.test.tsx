@@ -406,14 +406,15 @@ describe('Recite mode', () => {
     expect(JSON.parse(localStorage.getItem('ayah-forgot')!)['2:1'].forgot).toBe(1);
   });
 
-  it('starts reciting from the marked ayah with the recite button', () => {
+  // The top bar recites from the page's start even with an ayah marked (owner, 2026-11-17).
+  it('starts reciting from the page start with the recite button, even with an ayah marked', () => {
     media(true);
     const rail = document.createElement('div');
     const { container } = render(<RailSlotElement.Provider value={rail}>
       <ReaderView page={3} pages={one(3, opening)} names={names} surahs={surahs} mark={{ surah: 2, ayah: 2 }} />
     </RailSlotElement.Provider>);
     fireEvent.click(within(rail).getByRole('button', { name: /^تسميع/ }));
-    expect(veiled(container)).toEqual(['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ۝']);
+    expect(veiled(container)).toEqual(['الٓمٓ ۝', 'ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ۝']);
   });
 
   it('keeps the rest of an ayah that runs onto the next page hidden there', () => {

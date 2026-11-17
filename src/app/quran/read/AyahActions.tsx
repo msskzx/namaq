@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, type ReactNode } from 'react';
-import { ArrowLeftRight, BookOpen, Bookmark, Check, Layers, LightbulbOff, ListTree, NotebookPen, Play, Send, Sparkles, TableOfContents } from 'lucide-react';
+import { ArrowLeftRight, BookOpen, Bookmark, Check, EyeOff, Layers, LightbulbOff, ListTree, NotebookPen, Play, Send, Sparkles, TableOfContents } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import Button from '@/components/common/Button';
 import { num } from '@shared/quran/arabicNumber';
@@ -28,7 +28,7 @@ function Act({ label, name, on = false, tint = 'var(--home-accent)', pressed, po
  * its compare cards, the trees that hold it, how the ten readers differ in its words and al-Sa'di's tafsir, each previewed
  * in a sheet (AyahPreviewSheet). The first three show only when there are any; every ayah has its tafsir.
  */
-export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, ar, links, irab = false, onListen, onForgot, onClear, onSave, onNote, onPreview, onTopics, onShare, onClose, onDismiss = onClose }: {
+export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, ar, links, irab = false, onListen, onRecite, onForgot, onClear, onSave, onNote, onPreview, onTopics, onShare, onClose, onDismiss = onClose }: {
   ayah: string;
   x: number;
   y: number;
@@ -42,6 +42,8 @@ export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, 
   irab?: boolean;
   /** Listening from this ayah to its surah's end, the first button (owner's sketch, 2026-11-17). */
   onListen?: () => void;
+  /** Recite mode from this ayah. */
+  onRecite?: () => void;
   onForgot: () => void;
   onClear: () => void;
   onSave: () => void;
@@ -83,7 +85,7 @@ export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, 
   const shareLabel = ar ? 'مشاركة' : 'Share';
   const readingsLabel = ar ? 'القراءات العشر في كلمات الآية' : 'The ten readings of its words';
   const tafsirLabel = ar ? 'تفسير السعدي' : 'Al-Sa‘di’s tafsir';
-  const count = 2 + (onListen ? 1 : 0) + (forgot > 0 ? 1 : 0) + (onNote ? 1 : 0) + (onTopics ? 1 : 0) + (links?.compare.length ? 1 : 0) + (links?.trees ? 1 : 0) + (links?.qiraat ? 1 : 0) + (onPreview ? 1 : 0) + (onPreview && irab ? 1 : 0) + (onPreview ? 1 : 0) + (onShare ? 1 : 0);
+  const count = 2 + (onListen ? 1 : 0) + (onRecite ? 1 : 0) + (forgot > 0 ? 1 : 0) + (onNote ? 1 : 0) + (onTopics ? 1 : 0) + (links?.compare.length ? 1 : 0) + (links?.trees ? 1 : 0) + (links?.qiraat ? 1 : 0) + (onPreview ? 1 : 0) + (onPreview && irab ? 1 : 0) + (onPreview ? 1 : 0) + (onShare ? 1 : 0);
   // On a narrow phone the buttons wrap onto a second row rather than run off the screen.
   const half = typeof window === 'undefined' ? 0 : Math.min(count * 27 + 8, window.innerWidth / 2 - 8);
   const left = typeof window === 'undefined' ? x : Math.min(window.innerWidth - half, Math.max(half, x));
@@ -91,6 +93,7 @@ export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, 
   return (
     <div ref={box} role="dialog" aria-label={label} data-ayah-actions className={styles.ayahActions} style={{ left, top: Math.max(64, y) }}>
       {onListen && <Act label={ar ? 'استمع من هذه الآية' : 'Listen from this ayah'} name={ar ? 'استمع' : 'Listen'} onClick={() => { onListen(); onClose(); }}><Play aria-hidden /></Act>}
+      {onRecite && <Act label={ar ? 'سمّع من هذه الآية' : 'Recite from this ayah'} name={ar ? 'سمّع' : 'Recite'} onClick={() => { onRecite(); onClose(); }}><EyeOff aria-hidden /></Act>}
       <Act label={forgotLabel} name={ar ? 'نسيتها' : 'Forgot'} on={!!forgot} onClick={() => { onForgot(); onClose(); }}><LightbulbOff aria-hidden /></Act>
       {forgot > 0 && <Act label={clearLabel} name={ar ? 'تذكّرتها' : 'Recalled'} onClick={() => { onClear(); onClose(); }}><Check aria-hidden className="text-[var(--home-green)]" /></Act>}
       <Act label={saveLabel} name={ar ? 'احفظ' : 'Save'} on={saved} tint="var(--home-root)" pressed={saved} onClick={() => { onSave(); onClose(); }}><Bookmark aria-hidden fill={saved ? 'currentColor' : 'none'} /></Act>

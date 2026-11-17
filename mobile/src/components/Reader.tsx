@@ -198,11 +198,13 @@ export default function Reader() {
     setPosition(intent.recite ? { start: intent.at ?? modelOf(to).order[0], shown: null, words: 0 } : null);
   });
 
-  const startRecite = () => {
+  // The top bar recites from the page's start, an ayah's long-press menu from that ayah (owner, 2026-11-17).
+  const startRecite = (from: string = model.order[0]) => {
     setActions(null);
     setTools(false);
     setReviewing(false);
-    setPosition({ start: mark?.page === page ? mark.key : model.order[0], shown: null, words: 0 });
+    setMark(null);
+    setPosition({ start: from, shown: null, words: 0 });
   };
   const stopRecite = () => { setActions(null); setReviewing(false); setPosition(null); setChecked(null); boxes.blur(); };
   const reviewNext = reviewing && position ? nextForgotten(forgotten, position.start) : null;
@@ -353,7 +355,7 @@ export default function Reader() {
   // The surah's topics, opened at the section holding the ayah (owner, 2026-11-14: the header names no topic).
   const [actionSurah, actionAyah] = (actionKey ?? '0:0').split(':').map(Number);
   const topics = !!actionKey && !position && !!surahTopicsOf(actionSurah);
-  const buttons = 8 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (readings ? 1 : 0) + (topics ? 1 : 0) + (actions?.lemmas.length ? 1 : 0) + (actions?.word !== undefined ? 1 : 0);
+  const buttons = 9 + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (readings ? 1 : 0) + (topics ? 1 : 0) + (actions?.lemmas.length ? 1 : 0) + (actions?.word !== undefined ? 1 : 0);
   // On a narrow phone the buttons wrap onto a second row rather than run off the screen.
   const barWidth = Math.min(buttons * (ACT_WIDTH + 2) + 10, (size?.width ?? 360) - 16);
   // Each row of labelled buttons is about 62 tall; the bar sits above the pressed line.
@@ -391,6 +393,7 @@ export default function Reader() {
           style={{ position: 'absolute', top: Math.max(insets.top + 8, actions.y - 20 - barRows * 62), left: Math.min((size?.width ?? 300) - barWidth - 8, Math.max(8, actions.x - barWidth / 2)), maxWidth: (size?.width ?? 360) - 16, flexDirection: 'row', flexWrap: 'wrap', gap: 2, padding: 5, borderRadius: 12, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}>
           {/* Listening comes first (owner's sketch, 2026-11-17): from this ayah to its surah's end, with the repeats last set. */}
           <ActButton Icon={Play} label="استمع من هذه الآية" name="استمع" palette={palette} onPress={() => { const key = actions.key; setActions(null); setFollowing(true); listen(key); }} />
+          <ActButton Icon={EyeOff} label="سمّع من هذه الآية" name="سمّع" palette={palette} onPress={() => startRecite(actions.key)} />
           <ActButton Icon={LightbulbOff} label={forgotCount ? 'نسيتها مرة أخرى' : 'نسيتها'} name="نسيتها" palette={palette} on={forgotCount > 0} onPress={() => { markForgotten(actions.key); setActions(null); }} />
           {forgotCount > 0 && <ActButton Icon={Check} label="تذكّرتها" name="تذكّرتها" palette={palette} color={palette.green} onPress={() => { rememberAyah(actions.key); setActions(null); }} />}
           <ActButton Icon={Bookmark} label={saved.has(actions.key) ? 'أزلها من المحفوظات' : 'احفظ الآية'} name="احفظ" palette={palette} on={saved.has(actions.key)} tint={palette.root} filled onPress={() => { toggleSaved(actions.key); setActions(null); }} />
