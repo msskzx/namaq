@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test';
 import { branchNodes, givenAnswer } from '../../shared/quiz/branchAnswers';
 import type { Branch } from '../../shared/quran/branches';
-import { expect, open, readerPage, stored, tab, test } from './fixtures';
+import { expect, open, stored, tab, test } from './fixtures';
 
 type Run = { questions: { tree: Branch; asked: number[] }[]; current: number };
 
@@ -26,12 +26,22 @@ test.beforeEach(async ({ page }) => {
   });
 });
 
-test('the quizzes tab opens every quiz', async ({ page }) => {
+test('the quizzes tab holds solo and party only, and the written kinds are asked inside the quiz', async ({ page }) => {
   await open(page, '/');
   await tab(page, 'الاختبارات').click();
-  for (const name of ['اختبار فردي', 'اختبار جماعي', 'تسميع', 'اكتب أول الآية وآخرها']) await expect(page.getByRole('link', { name: new RegExp(`^${name}`) })).toBeVisible();
-  await page.getByRole('link', { name: /^اكتب أول الآية وآخرها/ }).click();
+  // Two cards (owner, 2026-11-17): every kind of question is picked inside them.
+  await expect(page.getByRole('link')).toHaveText([/^اختبار فردي/, /^اختبار جماعي/]);
+  await page.getByRole('link', { name: /^اختبار فردي/ }).click();
+  await page.getByRole('button', { name: 'اكتب أول الآية وآخرها' }).click();
+  await page.getByRole('button', { name: 'أوائل السور' }).click();
+  await page.getByRole('button', { name: 'متشابهات القرآن', exact: true }).click();
+  await page.getByRole('button', { name: 'ابدأ الاختبار' }).click();
+  await expect(page).toHaveURL(/\/quiz\/play/);
+  // The ayah's words are boxes on its own page; the first is written into.
   await expect(page.getByRole('button', { name: 'اكتب هذه الكلمة' }).first()).toBeVisible();
+  await page.getByRole('button', { name: 'أظهر الآية' }).click();
+  await page.getByRole('button', { name: 'نسيتها' }).click();
+  await expect.poll(async () => Object.keys(await stored<Record<string, unknown>>(page, 'ayah-forgot') ?? {}).length).toBe(1);
 });
 
 test('a solo quiz: right, wrong and shown answers, resume after reload, then the result', async ({ page }) => {
@@ -79,16 +89,6 @@ test('a solo quiz: right, wrong and shown answers, resume after reload, then the
   await expect(page.getByText(/أطراف$/)).toBeVisible();
   await page.getByRole('button', { name: 'العودة للنتيجة' }).click();
   await expect(page.getByRole('button', { name: 'اختبار جديد' })).toBeVisible();
-});
-
-test('recite mode on the mushaf shows the next ayah on a tap', async ({ page }) => {
-  await open(page, '/quizzes');
-  await page.getByRole('link', { name: /^تسميع/ }).click();
-  await expect(page.getByRole('button', { name: 'أظهر الآية التالية' })).toBeVisible();
-  const before = await stored<{ position: { shown: string | null } }>(page, 'reader-place');
-  await page.getByRole('button', { name: 'أظهر الآية التالية' }).click();
-  await expect.poll(async () => (await stored<{ position: { shown: string | null } }>(page, 'reader-place'))?.position?.shown).not.toBe(before?.position?.shown ?? null);
-  expect(await readerPage(page)).not.toBeNull();
 });
 
 test('a solo quiz of which surah and recite questions: pick, reveal, then the result', async ({ page }) => {

@@ -1,7 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import Svg, { Ellipse } from 'react-native-svg';
 import { Pressable, View, type GestureResponderEvent, type LayoutChangeEvent } from 'react-native';
-import { FasilaRibbon } from './FasilaIcon';
 import { Text } from '@/components/Text';
 import type { MushafPage, WordGroup } from '@shared/quran/readerPage';
 import { isSajda, juzName, quarterLabel } from '@shared/quran/mushafMarks';
@@ -42,13 +41,13 @@ type Props = {
   top?: number;
   names: Record<number, string>;
   mark?: string | null;
+  /** The ayah being recited aloud (listening): a band in the accent, over the selection. */
+  playing?: string | null;
   /** The word of the marked ayah a long press landed on (its place in the ayah, from 0, the ۞ mark not counted): lit inside the ayah's band. */
   markWord?: number | null;
   recite?: Recite | null;
   forgot: Readonly<Record<string, unknown>>;
   saved: ReadonlySet<string>;
-  /** The reader's «فاصلة», where they stopped reading (shared/readingMarks.ts): a ribbon tucked in at that ayah's end. */
-  fasila?: string | null;
   /** A touch on a word gives its ayah and the word's place in it (from 0, the ۞ mark not counted); a touch elsewhere on the page (or on a hidden word) gives null. */
   onTouch: (touch: Touch, key: string | null, x: number, y: number, word?: number) => void;
   /** Write mode: the next ayah's words to write (by place in the ayah, from 0), what each holds, and the box being written; a tap on a box picks it. */
@@ -93,8 +92,9 @@ function Word({ press, onLayout, children }: { press?: object; onLayout?: (event
 
 type Box = { x: number; y: number; w: number; h: number };
 /** A band behind the words: the selected ayah (neutral), or a forgotten one (the accent, faint). */
-type Band = 'mark' | 'forgot' | null;
+type Band = 'playing' | 'mark' | 'forgot' | null;
 const BAND_TINT: Record<NonNullable<Band>, (palette: Palette) => string> = {
+  playing: palette => tint(palette.accent, 0.24),
   mark: palette => tint(palette.ink, 0.1),
   forgot: palette => tint(palette.accent, 0.16),
 };
@@ -148,7 +148,7 @@ export function Mistyped({ text, size, palette }: { text: string; size: number; 
 
 const groupText = (word: string, marks: number[]) => `${word}${marks.map(end => `${word ? ' ' : ''}${num(end)}`).join('')}`;
 
-function MushafPageView({ page, data, model, palette, width, height, top, names, mark, markWord = null, recite, forgot, saved, fasila = null, onTouch, write, checked, zoom = 1, onHeight, focus, onFocus, slice, onTopic, anonymous = false }: Props) {
+function MushafPageView({ page, data, model, palette, width, height, top, names, mark, playing = null, markWord = null, recite, forgot, saved, onTouch, write, checked, zoom = 1, onHeight, focus, onFocus, slice, onTopic, anonymous = false }: Props) {
   const [laid, setBody] = useState<{ width: number; height: number } | null>(null);
   // A slice is laid out at its own height, but sized as the whole page is.
   const body = useMemo(() => (laid && slice ? { width: laid.width, height } : laid), [laid, slice, height]);
@@ -378,7 +378,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                 // The word's place in its ayah, past a titled surah's title and basmala steps (write mode counts words only).
                 const rel = word - (group.ayah === 1 && group.surah !== undefined ? titled?.get(group.surah) ?? 0 : 0);
                 // A selected ayah sits on a neutral band and keeps its ink (owner, 2026-11-14); a forgotten one on a faint accent band.
-                const band: Band = wordHidden ? null : mark === key ? 'mark' : forgot[key] ? 'forgot' : null;
+                const band: Band = wordHidden ? null : playing === key ? 'playing' : mark === key ? 'mark' : forgot[key] ? 'forgot' : null;
                 return { group, key, wordHidden, rel, at, band, word: band === 'mark' && markWord !== null && at === markWord };
               });
               const holdsFocus = flowing && !!focus && !focused.taken && cells.some(cell => cell.key === focus) && (focused.taken = true);
@@ -413,11 +413,6 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                           : wordHidden && group.word ? <Veil text={group.word} size={size} palette={palette} faint={writing} next={next === key && !(group.ayah === 1 && group.surah !== undefined && firstHidden(group.surah))} /> : null}
                         {/* A wrong word keeps what was typed, struck through above it, so the reader sees the mistake. */}
                         {mistyped ? <Mistyped text={mistyped} size={size} palette={palette} /> : null}
-                        {fasila && group.marks.some(end => `${group.surah}:${end}` === fasila) && (
-                          <View pointerEvents="none" style={{ position: 'absolute', left: -GAP * size * 0.75, top: -size * 0.45 }}>
-                            <FasilaRibbon color={palette.accent} width={Math.max(5, size * 0.2)} height={size * 1.2} />
-                          </View>
-                        )}
                         <Text style={{ fontFamily: QURAN_FONT, fontSize: size, color: graded ?? palette.ink }}>
                           {wordHidden ? '' : group.word}
                           {group.marks.map(end => (
@@ -425,7 +420,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                               {group.word ? ' ' : ''}
                               {/* The number and its sign are quiet, neither the text's colour nor the accent; a saved ayah's take the bookmark
                                   colour and a forgotten one's the accent (owner, 2026-11-14). */}
-                              <Text style={{ color: endHidden(end) ? palette.muted : fasila === `${group.surah}:${end}` ? palette.accent : saved.has(`${group.surah}:${end}`) ? palette.root : forgot[`${group.surah}:${end}`] ? palette.accent : palette.muted }}>
+                              <Text style={{ color: endHidden(end) ? palette.muted : saved.has(`${group.surah}:${end}`) ? palette.root : forgot[`${group.surah}:${end}`] ? palette.accent : palette.muted }}>
                                 {/* A hidden ayah's end shows the empty ayah ornament, so the reader sees where each ayah ends. */}
                                 {endHidden(end) ? EMPTY_END : num(end)}
                               </Text>

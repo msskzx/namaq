@@ -15,6 +15,7 @@ import { ayahOf, surahNames } from '@/lib/branches';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { readAyah } from '@/lib/openReader';
 import { shareCard } from '@/lib/shareImage';
+import { readSettings, writeSettings } from '@/lib/soloStore';
 import { useTabRetap } from '@/lib/tabRetap';
 import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 
@@ -93,6 +94,12 @@ function Card({ card, palette }: { card: OpeningCard; palette: Palette }) {
   );
 }
 
+/** The quiz button: the solo quiz set to ask the surahs' openings (a kind inside the quizzes, owner 2026-11-17). */
+const quizOpenings = () => {
+  writeSettings({ ...readSettings(), kinds: ['OPENINGS'] });
+  router.push('/quiz/solo');
+};
+
 /** The website's /quran/openings on the phone (owner, 2026-11-13): the ten kinds of opening as chips, and cards of surahs whose openings look alike. */
 export default function OpeningsScreen() {
   const palette = usePalette();
@@ -105,7 +112,7 @@ export default function OpeningsScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar hub hideOnScroll>
-        <Pressable onPress={() => router.push('/quiz/openings')} accessibilityRole="link" accessibilityLabel="اختبار أوائل السور" hitSlop={8} style={{ padding: 4 }}>
+        <Pressable onPress={quizOpenings} accessibilityRole="link" accessibilityLabel="اختبار أوائل السور" hitSlop={8} style={{ padding: 4 }}>
           <PenLine size={20} color={palette.muted} />
         </Pressable>
       </TopBar>

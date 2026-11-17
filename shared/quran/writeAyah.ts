@@ -2,6 +2,7 @@
 // page, and the reader writes its first and last few words, one box each.
 import { matchedWords } from '../quiz/branchAnswers';
 import { normalizeWord } from './normalize';
+import { pageWordsAt } from './quranText/ayahWords';
 
 /** How many words are written at each end of an ayah. */
 export const WRITE_EACH = 3;
@@ -91,16 +92,24 @@ export function gradeWritten(asked: number[], typed: Record<number, string>, wor
 }
 
 /**
- * Where an ayah's opening ends among its words as the mushaf page sets them: the first page word past the opening's letters.
- * The quiz's words (trees.json) and the page split a few ayat differently (لَّوْ مَا / لَّوۡمَا 15:7, إِلْ يَاسِينَ 37:130) and the
- * page has the ۞ quarter sign, so the opening is counted in letters, not words.
+ * How a quiz asks an ayah on its own mushaf page (QuizPage, owner 2026-11-17). `shows`: how many of its words show, counted
+ * as the quiz's words (all when left out). `write`: the reader writes the rest (`rest`) or its first and last words (`ends`)
+ * in boxes, graded once the last box is written. `title`: its surah's title stays hidden even with the ayat before written
+ * (the surah is the answer), or shows (the surah is the question).
  */
-export function openingCut(pageWords: string[], opening: string[]): number {
-  const letters = opening.map(normalizeWord).join('').replace(/\s+/g, '').length;
-  let seen = 0;
-  for (let at = 0; at < pageWords.length; at++) {
-    if (seen >= letters && maxLetters(pageWords[at])) return at;
-    seen += normalizeWord(pageWords[at]).replace(/\s+/g, '').length;
-  }
-  return pageWords.length;
+export type PageAsk = { shows?: number; write?: 'rest' | 'ends'; title?: 'hidden' | 'shown' };
+
+/**
+ * Where on the page an asked ayah's hidden part starts (`cut`, among the page's words, ۞ included) and the words written in
+ * boxes. The quiz's words and the page's line up one to one but in the few ayat they split differently (pageWordsAt).
+ */
+export function pageAsk(key: string, pageWords: string[], ask: PageAsk): { cut: number; asked: number[] } {
+  const spoken = pageWords.flatMap((word, at) => (maxLetters(word) ? [at] : []));
+  const shows = ask.shows;
+  const cut = shows === undefined ? pageWords.length
+    : shows <= 0 ? 0
+    : (spoken[Math.max(...pageWordsAt(key, shows - 1))] ?? pageWords.length - 1) + 1;
+  const asked = ask.write === 'ends' ? wordTargets(pageWords).filter(at => at >= cut)
+    : ask.write === 'rest' ? spoken.filter(at => at >= cut) : [];
+  return { cut, asked };
 }

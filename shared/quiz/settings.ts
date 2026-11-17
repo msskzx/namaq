@@ -1,15 +1,17 @@
 // The quiz settings both the website and the phone app offer, and the party worker checks.
-export const QUIZ_TOPICS = ['PEOPLE', 'BATTLES', 'RELATIONSHIPS', 'AYAT', 'EVENTS', 'PERSON_CIRCLE', 'BRANCHES', 'SURAH', 'RECITE', 'COMPARE', 'TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE'] as const;
+export const QUIZ_TOPICS = ['PEOPLE', 'BATTLES', 'RELATIONSHIPS', 'AYAT', 'EVENTS', 'PERSON_CIRCLE', 'BRANCHES', 'SURAH', 'RECITE', 'COMPARE', 'OPENINGS', 'ENDS', 'TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE'] as const;
 export type QuizTopic = (typeof QUIZ_TOPICS)[number];
 export type QuizTopics = readonly QuizTopic[];
 
 /** The topics built from the Quran's text on the fly (quiz/kinds.ts), not from the question bank. */
-export const CHOICE_TOPICS = ['COMPARE', 'SURAH', 'RECITE', 'TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE'] as const satisfies readonly QuizTopic[];
-/** The topics a party cannot ask: the reader grades a recited snippet alone. */
-export const SOLO_TOPICS: readonly QuizTopic[] = ['RECITE'];
+export const CHOICE_TOPICS = ['COMPARE', 'SURAH', 'RECITE', 'OPENINGS', 'ENDS', 'TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE'] as const satisfies readonly QuizTopic[];
+/** The topics a party cannot ask: the reader grades what they recite or write alone. */
+export const SOLO_TOPICS: readonly QuizTopic[] = ['RECITE', 'OPENINGS', 'ENDS'];
+/** The topics asked on the ayah's own mushaf page, so the setup offers «اكتب الآيات قبلها في الصفحة». */
+export const PAGE_TOPICS: readonly QuizTopic[] = ['SURAH', 'RECITE', 'OPENINGS', 'ENDS'];
 /** The topics asked over part of the Quran, so the setup offers the range filters. */
 // Tuhfat al-Atfal's kinds ask the poem, so a Quran range means nothing to them.
-export const RANGED_TOPICS: readonly QuizTopic[] = ['BRANCHES', 'SURAH', 'RECITE', 'COMPARE'];
+export const RANGED_TOPICS: readonly QuizTopic[] = ['BRANCHES', 'SURAH', 'RECITE', 'COMPARE', 'OPENINGS', 'ENDS'];
 
 export const QUIZ_LENGTHS = [5, 10, 15] as const;
 export type QuizLength = (typeof QUIZ_LENGTHS)[number];

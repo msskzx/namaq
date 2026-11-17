@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import type { MushafPage } from './readerPage';
-import { freshBoxes, gradeWritten, keepsSpace, maxLetters, nextBox, openingCut, previousBox, typeInBox, wordTargets, writeTargets, writtenRight } from './writeAyah';
+import { freshBoxes, gradeWritten, keepsSpace, maxLetters, nextBox, pageAsk, previousBox, typeInBox, wordTargets, writeTargets, writtenRight } from './writeAyah';
 
 describe('writing an ayah\'s first and last words', () => {
   it('asks the first and last three words, or every word of a short ayah', () => {
@@ -101,11 +101,17 @@ describe('the write boxes', () => {
   });
 });
 
-describe('openingCut', () => {
-  it('ends the opening at the same letters when the page splits words differently or has a quarter sign', () => {
-    expect(openingCut(['۞', 'قُلۡ', 'هُوَ', 'ٱللَّهُ'], ['قُلْ', 'هُوَ'])).toBe(3);
-    expect(openingCut(['لَّوۡمَا', 'تَأۡتِينَا', 'بِٱلۡمَلَٰٓئِكَةِ'], ['لَّوْ', 'مَا'])).toBe(1);
-    expect(openingCut(['سَلَٰمٌ', 'عَلَىٰٓ', 'إِلۡ', 'يَاسِينَ'], ['سَلَٰمٌ', 'عَلَىٰٓ', 'إِلْ يَاسِينَ'])).toBe(4);
-    expect(openingCut(['قُلۡ', 'هُوَ'], [])).toBe(0);
+describe('pageAsk', () => {
+  it('shows the opening as the quiz counts it, past a quarter sign and where the page splits words differently', () => {
+    expect(pageAsk('112:1', ['۞', 'قُلۡ', 'هُوَ', 'ٱللَّهُ', 'أَحَدٌ'], { shows: 2, write: 'rest' })).toEqual({ cut: 3, asked: [3, 4] });
+    // 15:7 «لَّوۡمَا» is one page word for the quiz's two.
+    expect(pageAsk('15:7', ['لَّوۡمَا', 'تَأۡتِينَا', 'بِٱلۡمَلَٰٓئِكَةِ'], { shows: 2, write: 'rest' })).toEqual({ cut: 1, asked: [1, 2] });
+    // 37:130 «إِلۡ يَاسِينَ» is two page words for the quiz's one.
+    expect(pageAsk('37:130', ['سَلَٰمٌ', 'عَلَىٰٓ', 'إِلۡ', 'يَاسِينَ'], { shows: 3 }).cut).toBe(4);
+  });
+  it('hides the whole ayah for its first and last words, and shows all of it without a count', () => {
+    const words = ['ٱلۡحَمۡدُ', 'لِلَّهِ', 'رَبِّ', 'ٱلۡعَٰلَمِينَ', 'مَٰلِكِ', 'يَوۡمِ', 'ٱلدِّينِ', 'إِيَّاكَ'];
+    expect(pageAsk('1:2', words, { shows: 0, write: 'ends' })).toEqual({ cut: 0, asked: [0, 1, 2, 5, 6, 7] });
+    expect(pageAsk('1:2', words, {})).toEqual({ cut: 8, asked: [] });
   });
 });

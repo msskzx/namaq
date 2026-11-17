@@ -42,29 +42,17 @@ test('a reflection note is written from the long-press menu', async ({ page }) =
   await expect.poll(async () => (await stored<Record<string, { text: string }>>(page, 'ayah-notes'))?.['1:2']?.text).toBe('الحمد كله لله');
 });
 
-test('a new user\'s trees sheet opens its cards as the matrix', async ({ page }) => {
+test('the trees sheet holds the branches cards, with their own matrix switch, and opens the ayah\'s trees', async ({ page }) => {
   await open(page, '/read');
   await pressWord(page, HAMD);
-  await page.getByRole('button', { name: 'الأشجار التي فيها الآية' }).click();
-  await expect(page.getByRole('button', { name: 'عرض الشجرة' }).first()).toBeVisible();
-  await expect(page.getByRole('button', { name: 'عرض المصفوفة' })).toHaveCount(0);
-});
-
-test.describe('with the tree picked in settings', () => {
-  test.use({ seed: { 'branches-view': '"tree"' } });
-
-  test('the trees sheet holds the branches cards, with their own matrix switch, and opens the ayah\'s trees', async ({ page }) => {
-    await open(page, '/read');
-    await pressWord(page, HAMD);
-    await page.getByRole('button', { name: 'الأشجار التي فيها الآية' }).click();
-    await page.getByRole('button', { name: 'عرض المصفوفة' }).first().click();
-    await expect(page.getByRole('button', { name: 'عرض الشجرة' }).first()).toBeVisible();
-    await page.getByRole('button', { name: /افتح في المتشابهات/ }).click();
-    await expect(page).toHaveURL(/\/branches/);
-    // The ayah's tree (الفاتحة ٢ with الصافات ١٨٢) opens in the full list, not in the saved trees.
-    await expect(page.getByRole('button', { name: 'سورة الصافات' }).first()).toBeVisible();
-    expect((await stored<{ saved: boolean }>(page, 'branches-list'))?.saved).toBe(false);
-  });
+  await page.getByRole('button', { name: 'متشابهات الآية' }).click();
+  await page.getByRole('button', { name: 'عرض الشجرة' }).first().click();
+  await expect(page.getByRole('button', { name: 'عرض المصفوفة' }).first()).toBeVisible();
+  await page.getByRole('button', { name: /افتح في المتشابهات/ }).click();
+  await expect(page).toHaveURL(/\/branches/);
+  // The ayah's tree (الفاتحة ٢ with الصافات ١٨٢) opens in the full list, not in the saved trees.
+  await expect(page.getByRole('button', { name: 'سورة الصافات' }).first()).toBeVisible();
+  expect((await stored<{ saved: boolean }>(page, 'branches-list'))?.saved).toBe(false);
 });
 
 test('the compare preview sheet opens the compare card', async ({ page }) => {
@@ -184,4 +172,29 @@ test.describe('the write quiz', () => {
     await expect(page.getByLabel('كتبت: بسا')).toBeVisible();
     await expect.poll(async () => Object.keys((await stored<object>(page, 'ayah-forgot')) ?? {})).toContain('1:1');
   });
+});
+
+test.describe('listening', () => {
+  // The range plays round without end, so the bar stays while the test works with it.
+  test.use({ seed: { 'listen-plan': { eachAyah: 1, rangeTimes: 0, pause: 'none', speed: 1 } } });
+test('listening starts from a long press, and its sheet keeps the repeats and the reciter', async ({ page }) => {
+  // The recitations are not fetched in the test: every ayah plays a second of silence.
+  const silence = await import('node:fs').then(fs => fs.readFileSync('mobile/assets/silence.mp3'));
+  await page.route(/\.mp3($|\?)/, route => route.fulfill({ body: silence, contentType: 'audio/mpeg' }));
+  await open(page, '/read');
+  await pressWord(page, HAMD);
+  await page.getByRole('button', { name: 'استمع من هذه الآية' }).click();
+  const bar = page.getByRole('toolbar', { name: 'الاستماع' });
+  await expect(bar).toBeVisible();
+  await expect(bar.getByRole('button', { name: /^الفاتحة [٢-٧]،/ })).toBeVisible();
+  await bar.getByRole('button', { name: 'التكرار والقارئ' }).click();
+  await page.getByRole('button', { name: '٣', exact: true }).first().click();
+  await expect.poll(async () => (await stored<{ eachAyah: number }>(page, 'listen-plan'))?.eachAyah).toBe(3);
+  await page.getByRole('button', { name: 'القارئ والتنزيل' }).click();
+  await page.getByRole('radio', { name: /الحصري \(المعلّم\)/ }).click();
+  await expect.poll(() => stored<number>(page, 'reciter')).toBe(12);
+  await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: 'أوقف الاستماع' }).click();
+  await expect(bar).toBeHidden();
+});
 });
