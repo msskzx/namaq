@@ -171,3 +171,4 @@ counts for neither.
 | [R0056](R0056-a-reader-drawn-anew-per-page-forgets-what-it-holds.md) | A reader drawn anew for every page forgets what it holds | challenge | solved |
 | [R0057](R0057-a-sign-on-a-word-is-not-a-way-of-writing-it.md) | A sign on a word is not a way of writing it | challenge | solved |
 | [R0058](R0058-a-pinch-inside-react-natives-scroll-view-loses-to-the-scroll.md) | Gestures inside React Native's own scroll view lose to the scroll | challenge | open |
+| [R0059](R0059-a-later-author-can-be-in-the-main-text.md) | A later author's note can sit inside the main text | obstacle | solved |

@@ -55,6 +55,7 @@ const USE = {
   trees: { ar: 'الأشجار والمقارنة والبحث', en: 'trees, compare and search', href: '/quran/branches' },
   tuhfa: { ar: 'تحفة الأطفال', en: 'Tuhfat al-Atfal', href: '/quran/tajwid/tuhfat-al-atfal' },
   listen: { ar: 'الاستماع إلى التلاوة في المصحف', en: 'listening to recitations in the mushaf reader', href: '/quran/read' },
+  adhkar: { ar: 'الأذكار والدعاء في تطبيق الهاتف', en: 'adhkar and du’a in the phone app' },
   prayer: { ar: 'مواقيت الصلاة والقبلة', en: 'prayer times and the qibla', href: '/utilities' },
   hijri: { ar: 'التاريخ الهجري وجزء اليوم', en: 'the Hijri date and today’s juz', href: '/utilities' },
   people: { ar: 'التراجم والأنساب والمعارك', en: 'biographies, lineages and battles', href: '/people' },
@@ -63,6 +64,26 @@ const USE = {
 
 export const SOURCES: Source[] = [
   // Books
+  {
+    id: 'adhkar-nawawi', group: 'books',
+    title: { ar: 'الأذكار', en: 'al-Adhkar' }, author: { ar: 'يحيى بن شرف النووي', en: 'al-Nawawi' },
+    edition: 'تحقيق عبد القادر الأرنؤوط، دار الفكر، طبعة جديدة منقحة ١٤١٤هـ/١٩٩٤م، جزء واحد', link: shamela(1956),
+    licence: {
+      ar: 'توفي المؤلف سنة ٦٧٦هـ، فنصه في الملك العام. نختار كلامه وحده دون حواشي المحقق أو إضافاته، مع الجزء والصفحة ورقم الحديث ورابط الطبعة. أحكام العلماء منسوبة إليهم، ولا نضع حكمًا من عندنا.',
+      en: "The author died in 1277, so his text is in the public domain. We select his words alone, without the modern editor's footnotes or additions, with volume, printed page, report number and an edition link. Scholarly judgments remain attributed; Namaq supplies no grades.",
+    },
+    uses: [USE.adhkar],
+  },
+  {
+    id: 'nataij-afkar', group: 'books',
+    title: { ar: 'نتائج الأفكار في تخريج أحاديث الأذكار', en: "Nata’ij al-Afkar fi Takhrij Ahadith al-Adhkar" }, author: { ar: 'ابن حجر العسقلاني', en: 'Ibn Hajar al-Asqalani' },
+    edition: 'تحقيق حمدي عبد المجيد السلفي، دار ابن كثير، دمشق وبيروت، الطبعة الثانية ١٤٢٩هـ/٢٠٠٨م، ٥ أجزاء', link: shamela(30108),
+    licence: {
+      ar: 'توفي المؤلف سنة ٨٥٢هـ، فنصه في الملك العام. نقتبس حكمه مع سياقه وجزئه وصفحته ورابطه، دون الحواشي أو الإضافات الحديثة في النسخة الرقمية.',
+      en: "The author died in 1449, so his text is in the public domain. We quote his judgment with its context, volume, printed page and link, without modern notes or additions in the digital witness.",
+    },
+    uses: [USE.adhkar],
+  },
   {
     id: 'siyar', group: 'books',
     title: { ar: 'سير أعلام النبلاء', en: 'Siyar A‘lam al-Nubala’' }, author: { ar: 'شمس الدين الذهبي', en: 'al-Dhahabi' },
