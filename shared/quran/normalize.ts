@@ -4,6 +4,10 @@ const BASMALA = 'بسم الله الرحمن الرحيم';
 
 export function normalizeWord(token: string): string {
   return token
+    // The page writes a hamza on a seat as the seat with a hamza mark (يٕ, ؤ); the older text as one letter (ئ, ؤ).
+    .replace(/[يى]([\u064B-\u0652]*)[\u0654\u0655]/g, 'ئ$1')
+    .replace(/و([\u064B-\u0652]*)\u0654/g, 'ؤ$1')
+    .replace(/\u200f/g, '')
     .replace(MARKS, '')
     .replace(/[أإآٱٲٳ]/g, 'ا')
     .replace(/[ىی]/g, 'ي')

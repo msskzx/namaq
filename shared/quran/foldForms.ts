@@ -1,5 +1,6 @@
 import { keys, type Branch, type Variant } from './branches';
 import { writtenForms } from './writtenForms';
+import { bare } from './quranText/ayahWords';
 
 type Presentation = { tree: Branch; prefixes: Variant[]; offsets: Record<string, number> };
 
@@ -8,12 +9,14 @@ const differs = (node: Branch, index: number) => writtenForms(node, index, node.
 /** The one way `ayahKeys` write word `index` of `node`, or undefined when they write it differently. */
 function formFor(node: Branch, index: number, ayahKeys: string[]) {
   const words = new Set(ayahKeys.map(key => node.forms?.[key]?.[index]));
-  return words.size === 1 ? [...words][0] : undefined;
+  if (words.size === 1) return [...words][0];
+  const plain = new Set([...words].map(word => word && bare(word)));
+  return plain.size === 1 ? [...plain][0] : undefined;
 }
 
 function sameForms(forms: Record<string, string[]> | undefined) {
   if (!forms) return undefined;
-  return new Set(Object.values(forms).map(words => words.join(' '))).size > 1 ? forms : undefined;
+  return new Set(Object.values(forms).map(words => words.map(bare).join(' '))).size > 1 ? forms : undefined;
 }
 
 const mapForms = (forms: Record<string, string[]> | undefined, change: (words: string[]) => string[]) =>

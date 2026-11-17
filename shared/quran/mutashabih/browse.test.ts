@@ -61,7 +61,7 @@ describe('browse groups', () => {
     expect(visible).toHaveLength(1);
     expect(visible[0].places.map(place => place.key)).toEqual(['17:61', '18:50']);
     expect(visible[0].tree.occurrences.map(place => place.start)).toEqual([0, 0]);
-    expect(visible[0].tree.text).toContain('إِذْ قُلْنَا');
+    expect(visible[0].tree.text).toContain('إِذۡ قُلۡنَا');
     for (const id of [...oldIds, ...candidates.map(group => group.id)]) expect(groupHasId(visible[0], id)).toBe(true);
     expect(candidates.map(group => group.places.length)).toEqual([4, 5]);
   });
