@@ -10,6 +10,7 @@ import Sheet from '@/ui/Sheet';
 import { toTab } from '@/lib/ways';
 import { FORGOTTEN_LABEL, NOTE_LABEL, ShelfCard, useHomeCards } from '@/components/HomeCards';
 import { usePalette, type Palette } from '@/lib/theme';
+import Empty from '@/ui/Empty';
 
 type Tab = 'saved' | 'forgotten' | 'notes';
 const TABS: { tab: Tab; label: string }[] = [{ tab: 'saved', label: 'المحفوظات' }, { tab: 'forgotten', label: 'ما نسيته' }, { tab: 'notes', label: 'تأملاتي' }];
@@ -56,7 +57,7 @@ export default function LibraryScreen() {
           ? <ShelfCard wide card={item} palette={palette} onPress={at => savedMenu(item, at)} />
           : tab === 'notes' ? <ShelfCard wide note card={item} palette={palette} Icon={NotebookPen} label={NOTE_LABEL} onPress={at => noteMenu(item, at)} />
           : <ShelfCard wide card={item} palette={palette} Icon={LightbulbOff} label={FORGOTTEN_LABEL} onPress={at => forgottenMenu(item, at)} />}
-        ListEmptyComponent={<Text style={{ paddingVertical: 24, color: palette.muted, fontSize: 15, textAlign: 'center' }}>{tab === 'saved' ? 'لا شيء محفوظ بعد. احفظ شجرة أو بطاقة مقارنة أو آية بزر الحفظ لتجدها هنا.' : tab === 'notes' ? 'لا تأملات بعد. اضغط مطولًا على آية في المصحف لتكتب تأملك.' : 'لا آيات منسية.'}</Text>} />
+        ListEmptyComponent={<Empty palette={palette} text={tab === 'saved' ? 'لا شيء محفوظ بعد. احفظ شجرة أو بطاقة مقارنة أو آية بزر الحفظ لتجدها هنا.' : tab === 'notes' ? 'لا تأملات بعد. اضغط مطولًا على آية في المصحف لتكتب تأملك.' : 'لا آيات منسية.'} />} />
       {menus}
     </View>
   );

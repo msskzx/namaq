@@ -127,7 +127,7 @@ stay out.
 right).
 **PR:** one.
 
-### 9. Empty state and loading
+### 9. Empty state and loading (done: ui/Empty; LoadingDots is the one loader, `fill` for a page or sheet. LoadingScreen (app start) and Hourglass (quiz timer) are not loaders)
 Drift: empty messages in `ComparePager`, `screens/library.tsx`,
 `screens/book.tsx` each styled differently; loading by `LoadingDots`,
 `Hourglass`, `LoadingScreen` and raw `ActivityIndicator` (`Books.tsx`,

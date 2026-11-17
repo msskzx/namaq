@@ -19,6 +19,7 @@ import { back, openIntent as go, toTab } from '@/lib/ways';
 import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 import Card from '@/ui/Card';
 import { SearchField } from '@/ui/Field';
+import Empty from '@/ui/Empty';
 
 /** Results a group shows until its arrow opens the rest. */
 export const GROUP_SHOWN = 3;
@@ -164,7 +165,7 @@ export default function SearchScreen() {
       </TopBar>
       <ScrollView ref={scroll} onScroll={event => { top.current = event.nativeEvent.contentOffset.y; shrink(event); }} scrollEventThrottle={16}
         keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: bottom, gap: 14 }}>
-        {!waiting && found.query !== '' && !groups.length && <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center', marginTop: 24 }}>لا توجد نتيجة مطابقة.</Text>}
+        {!waiting && found.query !== '' && !groups.length && <Empty text="لا توجد نتيجة مطابقة." palette={palette} />}
         {groups.map(group => {
           const { title, Icon } = GROUPS[group.kind];
           const more = group.hits.length > GROUP_SHOWN;

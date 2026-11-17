@@ -28,6 +28,7 @@ import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import Tabs from '@/ui/Tabs';
 import { SearchField } from '@/ui/Field';
+import Empty from '@/ui/Empty';
 
 /**
  * The book reader (owner, 2026-11-16; docs/plans/book-reader.md): a book turned page by page as its printed edition
@@ -47,7 +48,7 @@ export default function BookScreen() {
         : (
           <>
             <TopBar shelf title={bookOf(id).title} />
-            {book === null ? <View accessibilityLabel="جارٍ التحميل" style={{ paddingVertical: 40, alignItems: 'center' }}><LoadingDots /></View> : (
+            {book === null ? <LoadingDots fill /> : (
               <View style={{ padding: 16, gap: 12 }}>
                 <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>هذا الكتاب ليس على هاتفك. نزّله ليُقرأ هنا بلا اتصال.</Text>
                 <BookList kind={bookOf(id).kind} palette={palette} />
@@ -289,7 +290,7 @@ function BookSheet({ open, onTab, onClose, id, entries, pages, page, palette, sa
       )}
       {kept === 'saved' && (
         <FlatList data={saved} keyExtractor={item => `${item.entry}:${item.at}`} style={{ flex: 1 }}
-          ListEmptyComponent={<Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'center', padding: 24 }}>لم تحفظ فقرة من هذا الكتاب بعد. اضغط على فقرة مطولًا لتحفظها.</Text>}
+          ListEmptyComponent={<Empty text="لم تحفظ فقرة من هذا الكتاب بعد. اضغط على فقرة مطولًا لتحفظها." palette={palette} />}
           renderItem={({ item }) => (
             <Pressable onPress={() => onGo(item, true)} accessibilityRole="link" style={row}>
               <Text numberOfLines={2} style={{ color: palette.ink, fontSize: 16, lineHeight: 28, textAlign: 'right' }}>{item.text}</Text>

@@ -153,7 +153,7 @@ function Kashshaf({ ayah, palette, onSpan, onClose }: { ayah: string; palette: P
           </Folded>
         </Card>
       )}
-      {on && book === null && <View accessibilityLabel="جارٍ التحميل" style={{ paddingVertical: 16, alignItems: 'center' }}><LoadingDots /></View>}
+      {on && book === null && <LoadingDots fill />}
       {book && !passage && <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center', paddingVertical: 16 }}>لا كلام للكشاف على هذه الآية.</Text>}
       {on && book === false && <Text style={{ color: palette.accent, fontSize: 15, textAlign: 'right' }}>تعذّرت قراءة الكشاف على هاتفك. احذفه ونزّله مرة أخرى.</Text>}
       {!on && (

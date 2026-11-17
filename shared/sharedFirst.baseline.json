@@ -2,7 +2,7 @@
   "appControls": {
     "mobile/src/components/AyahPreviewSheet.tsx": 1,
     "mobile/src/components/BalaghaSheet.tsx": 3,
-    "mobile/src/components/Books.tsx": 3,
+    "mobile/src/components/Books.tsx": 2,
     "mobile/src/components/BranchSearch.tsx": 6,
     "mobile/src/components/BranchTree.tsx": 2,
     "mobile/src/components/CompareCard.tsx": 6,
@@ -37,7 +37,7 @@
     "mobile/src/components/WordSheet.tsx": 1,
     "mobile/src/lib/useWriteBoxes.tsx": 1,
     "mobile/src/screens/book.tsx": 9,
-    "mobile/src/screens/books.tsx": 2,
+    "mobile/src/screens/books.tsx": 1,
     "mobile/src/screens/library.tsx": 1,
     "mobile/src/screens/openings.tsx": 2,
     "mobile/src/screens/prophets.tsx": 1,

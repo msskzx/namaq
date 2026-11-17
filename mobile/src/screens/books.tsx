@@ -1,5 +1,5 @@
 import { useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
-import { ActivityIndicator, ScrollView, useWindowDimensions, View } from 'react-native';
+import { ScrollView, useWindowDimensions, View } from 'react-native';
 import { Check, Download, Eye, EyeOff, Pencil, RotateCw, Trash2 } from 'lucide-react-native';
 import { BOOK_KINDS, BOOKS, type Book } from '@shared/books';
 import { isReaderBook, pageName } from '@shared/readerBooks';
@@ -17,6 +17,7 @@ import { usePalette, type Palette } from '@/lib/theme';
 import Card from '@/ui/Card';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
+import LoadingDots from '@/ui/LoadingDots';
 
 /** Tuhfat al-Atfal is a poem with a page of its own (screens/tuhfa.tsx), shelved with the books. It ships with the app and has nothing to manage. */
 const TUHFA = { id: 'tuhfa', kind: 'التجويد', title: 'تحفة الأطفال', by: 'سليمان الجمزوري' } as const;
@@ -77,7 +78,7 @@ function BookCard({ book, palette, editing, fasila }: { book: Book; palette: Pal
 
 /** The card's one button: download (or retry) when the book is not on the phone; while editing, remove, hide or bring back. */
 function Action({ book, state, editing, palette }: { book: Book; state: BookState; editing: boolean; palette: Palette }) {
-  if (state === 'downloading') return <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}><ActivityIndicator color={palette.accent} /></View>;
+  if (state === 'downloading') return <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}><LoadingDots label={`ينزل ${book.title}`} /></View>;
   const on = state === 'on';
   if (on && !editing) return null;
   // While editing, a download that failed can be dropped as well as retried.

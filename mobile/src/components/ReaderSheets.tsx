@@ -14,6 +14,7 @@ import { surahName } from '@shared/quran/surahNames';
 import Tabs from '@/ui/Tabs';
 import Chip from '@/ui/Chip';
 import { SearchField } from '@/ui/Field';
+import Empty from '@/ui/Empty';
 
 /** Where a link in the index goes: a page, the ayah that starts there, and whether to mark that ayah. */
 export type Jump = { page: number; key: string; mark: boolean };
@@ -95,7 +96,7 @@ export function IndexSheet({ open, onClose, onJump, palette, page, recite }: {
             <Text style={{ color: palette.accent, fontSize: 16 }}>افتح {name(reference.surah)} {num(reference.ayah)}</Text>
           </Pressable>
         )}
-        {query.trim() && rows.length === 0 && (!words || found) && <Text style={{ color: palette.muted, fontSize: 14 }}>لا توجد سورة ولا آية بهذا النص.</Text>}
+        {query.trim() && rows.length === 0 && (!words || found) && <Empty text="لا توجد سورة ولا آية بهذا النص." palette={palette} />}
         {rows[0]?.kind === 'ayah' && <Text style={{ color: palette.muted, fontSize: 14 }}>{ayatCount(rows.length)}</Text>}
       </View>
       <FlatList data={rows} keyExtractor={row => (row.kind === 'juz' ? `j${row.juz}` : row.kind === 'surah' ? `s${row.number}-${row.from}` : `a${row.key}`)}

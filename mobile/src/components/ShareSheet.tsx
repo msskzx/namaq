@@ -90,7 +90,7 @@ export default function ShareSheet() {
           style={{ flex: 1, marginHorizontal: 12, borderRadius: 12, overflow: 'hidden', borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paperDeep, alignItems: 'center', justifyContent: 'center' }}>
           {shot && fit ? <Image source={{ uri: shot.uri }} accessibilityLabel="الصورة" style={{ width: shot.width * fit, height: shot.height * fit }} />
             : failed ? <Text style={{ color: palette.accent }}>تعذّر تجهيز الصورة.</Text>
-            : <View accessibilityLabel="جارٍ تجهيز الصورة"><LoadingDots /></View>}
+            : <LoadingDots label="جارٍ تجهيز الصورة" />}
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12, minHeight: 72, backgroundColor: palette.paper }}>
           <IconButton Icon={Send} label="مشاركة كصورة" onPress={() => shot && void shareImageFile(shot.uri)} round big disabled={!shot} />
