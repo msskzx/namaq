@@ -69,7 +69,7 @@ test.describe('a new user', () => {
 
   test('the feed asks a question of every Quran quiz kind in turn, each card with the quiz buttons', async ({ page }) => {
     // Three batches a day take three kinds in turn; three days apart, the seven kinds all come up.
-    const kinds = ['في أي سورة؟', 'أكمل الشجرة', 'سمّع بقية الآية', 'أوائل السور', 'التحفة: أكمل البيت', 'التحفة: البيت التالي', 'التحفة: حكم الحرف'];
+    const kinds = ['في أي سورة؟', 'أكمل المتشابهات', 'سمّع بقية الآية', 'أوائل السور', 'التحفة: أكمل البيت', 'التحفة: البيت التالي', 'التحفة: حكم الحرف'];
     const seen = new Set<string>();
     for (const days of [0, 3, 6]) {
       await page.clock.setFixedTime(new Date(Date.now() + days * 86_400_000));

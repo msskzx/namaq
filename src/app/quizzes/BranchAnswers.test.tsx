@@ -35,31 +35,33 @@ function Chrome({ children }: { children: React.ReactNode }) {
 }
 const render = (ui: React.ReactNode) => renderUI(ui, { wrapper: Chrome });
 
+const contexts = (keys: string[]) => keys.map(key => ({ before: null, after: null, ayah: { key, page: 1, words: ['آية', key] }, match: { exact: [], rooted: [] } }));
+const fresh = (ui: React.ReactNode) => <SWRConfig value={{ provider: () => new Map() }}>{ui}</SWRConfig>;
+
 describe('complete branch tree answers', () => {
-  it('shares a feedback path toggle between its opening and leaf without changing grading', () => {
-    const prefixes = [{ word: 'بداية المسار', keys: ['52:24'], conj: '', id: 'بداية' }];
-    const { container } = render(<BranchFeedback question={{ ...question, prefixes }} typed={typed} names={{}} ar />);
-    const opening = screen.getByRole('button', { name: 'إظهار المسار: بداية المسار' });
-    const leaf = screen.getByRole('button', { name: 'إظهار المسار: غِلْمَانٌ لَهُمْ' });
-    fireEvent.click(opening);
-    expect(leaf.getAttribute('aria-pressed')).toBe('true');
-    expect(leaf.closest('[data-node]')!.hasAttribute('data-lit')).toBe(true);
-    fireEvent.click(leaf.closest('[data-node]')!);
-    expect(opening.getAttribute('aria-pressed')).toBe('false');
-    expect(leaf.getAttribute('aria-pressed')).toBe('false');
-    expect(container.querySelectorAll('[data-lit]')).toHaveLength(0);
-    expect(container.querySelectorAll('[data-answer="correct"]')).toHaveLength(4);
-    expect(branchesCorrect(question, typed)).toBe(true);
+  // Quizzes draw the matrix only (owner, 2026-11-17): no tree, no view switch, no rotate button.
+  it('draws the graded answer as the ayah cards, each ayah with its verdict, and saves the tree address', async () => {
+    quranContexts.mockReset().mockImplementation(async (keys: string[]) => contexts(keys));
+    render(fresh(<BranchFeedback question={question} typed={[typed[0], typed[1], typed[3], 'wrong']} names={{}} ar={false} />));
+    expect(await screen.findByRole('region', { name: 'مصفوفة الآيات' })).toBeTruthy();
+    expect(screen.queryByRole('region', { name: 'Answer tree' })).toBeNull();
+    expect(screen.queryByRole('button', { name: /Show tree|tree/i })).toBeNull();
+    expect(await screen.findAllByText('Wrong at word 1')).toHaveLength(1);
+    expect(screen.getByText('wrong').tagName).toBe('DEL');
+    expect(screen.getByRole('button', { name: 'الآيات المحيطة' })).toBeTruthy();
+    expect(document.querySelectorAll('[data-answer]').length).toBeGreaterThan(0);
+    fireEvent.click(screen.getByRole('button', { name: 'حفظ' }));
+    expect(readBookmarks().find(saved => saved.id === question.phrase)?.href).toBe(branchesHref(question.phrase));
   });
 
-  it('keeps the animation studio open when the same revealed answer arrives again', () => {
-    const { rerender } = render(<BranchFeedback question={question} typed={typed} names={{}} ar />);
-    fireEvent.click(screen.getByRole('button', { name: 'استوديو النمو' }));
-    expect(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' })).toBeTruthy();
-    rerender(<BranchFeedback question={JSON.parse(JSON.stringify(question))} typed={[...typed]} names={{ 52: 'الطور' }} ar />);
-    expect(screen.getByRole('button', { name: 'شاهد الشجرة تنمو' })).toBeTruthy();
-    expect(screen.queryByRole('button', { name: 'استوديو النمو' })).toBeNull();
+  it('marks an empty leaf of a partly typed answer as unanswered', async () => {
+    quranContexts.mockReset().mockImplementation(async (keys: string[]) => contexts(keys));
+    render(fresh(<BranchFeedback question={question} typed={[typed[0], typed[1], '', '']} names={{}} ar={false} />));
+    expect((await screen.findAllByText('No answer')).length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Nothing typed').length).toBeGreaterThan(0);
+    expect(document.querySelector('[data-answer="correct"]')).toBeTruthy();
   });
+
   it('clears only the requested answers without checking or revealing the solution', () => {
     const own = { ...question, asked: [0, 2] };
     const onChange = vi.fn();
@@ -70,83 +72,18 @@ describe('complete branch tree answers', () => {
     expect(onCheck).not.toHaveBeenCalled();
     expect(screen.queryByRole('button', { name: 'اعرض بطاقات الآيات' })).toBeNull();
     expect(screen.queryByRole('button', { name: 'مشاركة' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'الآيات المحيطة' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'تدوير الشجرة' })).toBeNull();
     expect(screen.queryByText(/اكتب كل طرف فارغ/)).toBeNull();
   });
 
-  it('switches the revealed answer to the ayah matrix and back, and saves the tree address', async () => {
-    quranContexts.mockReset().mockResolvedValue(['52:24', '56:17', '76:19'].map(key => ({ before: null, after: null, ayah: { key, page: 1, words: ['آية'] }, match: { exact: [], rooted: [] } })));
-    localStorage.clear();
-    try {
-      render(<SWRConfig value={{ provider: () => new Map() }}><BranchFeedback question={question} typed={typed} names={{}} ar /></SWRConfig>);
-      fireEvent.click(screen.getByRole('button', { name: 'حفظ' }));
-      expect(readBookmarks().find(saved => saved.id === question.phrase)?.href).toBe(branchesHref(question.phrase));
-      fireEvent.click(screen.getByRole('button', { name: 'اعرض بطاقات الآيات' }));
-      expect(await screen.findByRole('region', { name: 'مصفوفة الآيات' })).toBeTruthy();
-      expect(quranContexts).toHaveBeenCalledWith(['52:24', '56:17', '76:19']);
-      fireEvent.click(screen.getByRole('button', { name: 'اعرض الشجرة' }));
-      expect(screen.getByRole('region', { name: 'شجرة الإجابة' })).toBeTruthy();
-      expect(screen.getAllByText('صحيح')).toHaveLength(4);
-    } finally {
-      localStorage.clear();
-    }
-  });
-  it('keeps surrounding ayat and path keys attached to reordered answer text', async () => {
-    const own = { tree: { words: ['حرم'], ayat: [], children: [
-      { words: ['نَبِّـُٔونِى', 'بِعِلْمٍ'], ayat: ['6:143'], children: [] },
-      { words: ['أَمْ', 'كُنتُمْ', 'شُهَدَآءَ'], ayat: ['6:144'], children: [] },
-    ] }, asked: [0, 1] };
-    quranSurrounding.mockReset().mockResolvedValue({ before: {}, after: {
-      '6:143': { key: '6:144', words: ['السياق الأول'] },
-      '6:144': { key: '6:145', words: ['السياق الثاني'] },
-    } });
-    try {
-      const { container } = render(<BranchFeedback question={own} typed={['ام كنتم', 'نبئوني بعلم']} names={{}} ar />);
-      const first = container.querySelector('[data-answer]')!.closest('[data-node]')!;
-      expect(first.getAttribute('data-keys')).toBe('6:144');
-      fireEvent.click(screen.getByRole('button', { name: 'الآيات المحيطة' }));
-      const following = await screen.findByText('السياق الثاني');
-      expect(first.parentElement!.contains(following)).toBe(true);
-      expect(first.parentElement!.textContent).not.toContain('السياق الأول');
-    } finally {
-      vi.unstubAllGlobals();
-    }
-  });
-
-  it('offers surrounding ayat only after revealing the solution and loads them on demand', async () => {
-    const fetchContext = quranSurrounding.mockReset().mockResolvedValue({ before: { '52:24': { key: '52:23', words: ['السياق السابق'] } }, after: {} });
-    try {
-      const { rerender } = render(<BranchInputs question={question} typed={[]} onChange={() => {}} onCheck={() => {}} ar />);
-      expect(screen.queryByRole('switch')).toBeNull();
-      expect(within(screen.getByRole('banner')).queryByRole('button', { name: 'الآيات المحيطة' })).toBeNull();
-      expect(within(screen.getByRole('banner')).getByRole('button', { name: 'تدوير الشجرة' })).toBeTruthy();
-      rerender(<BranchFeedback question={question} typed={typed} names={{}} ar />);
-      const toggle = screen.getByRole('button', { name: 'الآيات المحيطة' });
-      expect(screen.queryByRole('link', { name: 'شجرة العبارة' })).toBeNull();
-      expect(toggle.getAttribute('aria-pressed')).toBe('false');
-      expect(fetchContext).not.toHaveBeenCalled();
-      fireEvent.click(toggle);
-      expect(await screen.findByText('السياق السابق')).toBeTruthy();
-      expect(fetchContext).toHaveBeenCalledWith(['52:24', '56:17', '76:19'], expect.arrayContaining(['52:24']));
-      fireEvent.click(toggle);
-      expect(screen.queryByText('السياق السابق')).toBeNull();
-    } finally {
-      vi.unstubAllGlobals();
-    }
-  });
-
-  it('empties as many example leaves as the answers chosen, the rest drawn by the tree', () => {
-    const { rerender } = render(<BranchPreview leaves={1} ar={false} />);
-    expect(screen.getAllByText('You type this')).toHaveLength(1);
-    rerender(<BranchPreview leaves={10} ar={false} />);
-    expect(screen.getAllByText('You type this')).toHaveLength(6);
-    expect(document.querySelector('[data-tree-content]')!.textContent).toMatch(/ج\p{M}*ن\p{M}*ـ/u);
-  });
-
-  it('shows the example as the matrix too, each ayah reading on to its empty box', () => {
-    render(<BranchPreview leaves={2} ar={false} />);
-    fireEvent.click(screen.getByRole('button', { name: /Matrix/ }));
+  it('shows the example as the matrix, as many empty boxes as the answers chosen', () => {
+    const { rerender } = render(<BranchPreview leaves={2} ar={false} />);
     expect(document.querySelectorAll('[data-quiz-matrix] > div')).toHaveLength(6);
     expect(screen.getAllByText('You type this')).toHaveLength(2);
+    expect(screen.queryByRole('button', { name: /Tree/ })).toBeNull();
+    rerender(<BranchPreview leaves={1} ar={false} />);
+    expect(screen.getAllByText('You type this')).toHaveLength(1);
   });
 
   it('shows the beginnings before the shared root without answer-stage controls', () => {
@@ -154,17 +91,10 @@ describe('complete branch tree answers', () => {
     const { container } = render(<BranchInputs question={{ ...question, prefixes }} typed={[]} onChange={() => {}} onCheck={() => {}} ar />);
     expect(screen.getByText('يوم يتذكر')).toBeTruthy();
     expect(screen.getByText('وقال')).toBeTruthy();
-    // No way off the page mid-quiz; a node's path button only lights its path.
-    expect(container.querySelectorAll('[data-node] a')).toHaveLength(0);
-    expect(screen.getAllByRole('textbox')).toHaveLength(4);
-  });
-
-  it('writes the differently voiced word of a feedback leaf in each ayah\'s form and gives every node a path button', () => {
-    const merged = { words: ['مِنْ', 'رب'], ayat: ['1:1', '1:2'], forms: { '1:1': ['مِّنْ', 'رب'], '1:2': ['مِنْ', 'رب'] }, children: [] };
-    const own = { tree: { words: ['قال'], ayat: [], children: [merged, { words: ['يا'], ayat: ['1:3'], children: [] }] }, branches: [{ words: [], ayat: [{ key: '1:1', page: 1, words: [] }, { key: '1:2', page: 1, words: [] }, { key: '1:3', page: 1, words: [] }] }] };
-    const { container } = render(<BranchFeedback question={own} typed={['من رب', 'يا']} names={{}} ar />);
-    expect([...container.querySelectorAll('[data-strand] > span:first-child')].map(word => word.textContent)).toEqual(['مِّنْ', 'مِنْ']);
-    expect(screen.getAllByRole('button', { name: /إظهار المسار/ })).toHaveLength(3);
+    // No way off the page mid-quiz.
+    expect(container.querySelectorAll('a')).toHaveLength(0);
+    // The node 56:17 and 76:19 share is asked in both their rows.
+    expect(screen.getAllByRole('textbox')).toHaveLength(5);
   });
 
   it('keeps original spelling references out of the unanswered quiz tree', () => {
@@ -201,8 +131,8 @@ describe('complete branch tree answers', () => {
     const onChange = vi.fn();
     const onCheck = vi.fn();
     render(<BranchInputs question={question} typed={emptyBranchAnswers(question)} onChange={onChange} onCheck={onCheck} ar={false} />);
-    expect(screen.getAllByRole('textbox')).toHaveLength(4);
-    expect(screen.getByText('يَطُوفُ عَلَيْهِمْ')).toBeTruthy();
+    expect(screen.getAllByRole('textbox')).toHaveLength(5);
+    expect(screen.getAllByText('يَطُوفُ عَلَيْهِمْ').length).toBeGreaterThan(0);
     expect(screen.queryByText('غِلْمَانٌ لَهُمْ')).toBeNull();
     expect(screen.queryAllByRole('link')).toHaveLength(0);
     expect(screen.getByRole('button', { name: 'Check' }).hasAttribute('disabled')).toBe(true);
@@ -212,40 +142,4 @@ describe('complete branch tree answers', () => {
     expect(onCheck).not.toHaveBeenCalled();
   });
 
-  it('allows checking a partial tree and marks its empty leaves incorrect', () => {
-    const onCheck = vi.fn();
-    const partial = [typed[0], typed[1], '', ''];
-    const { unmount } = render(<BranchInputs question={question} typed={partial} onChange={vi.fn()} onCheck={onCheck} ar={false} />);
-    expect(screen.getByRole('button', { name: 'Check' }).hasAttribute('disabled')).toBe(false);
-    fireEvent.submit(screen.getByRole('button', { name: 'Check' }).closest('form')!);
-    expect(onCheck).toHaveBeenCalledOnce();
-    unmount();
-    render(<BranchFeedback question={question} typed={partial} names={{}} ar={false} />);
-    expect(screen.getAllByText('No answer')).toHaveLength(2);
-    expect(screen.getAllByText('Nothing typed')).toHaveLength(2);
-    const nodes = [...within(screen.getByRole('region', { name: 'Answer tree' })).getAllByText(/Correct|No answer/)].map(verdict => verdict.closest<HTMLElement>('[data-answer]')!.dataset.answer);
-    expect(nodes).toEqual(['correct', 'correct', 'incorrect', 'incorrect']);
-  });
-
-  it('shows corrections and each leaf reference as plain text', () => {
-    render(<BranchFeedback question={question} typed={[typed[0], typed[1], typed[3], 'wrong']} names={{ 52: 'الطور' }} ar={false} />);
-    expect(screen.getByRole('region', { name: 'Answer tree' })).toBeTruthy();
-    expect(screen.getAllByText('Correct', { exact: true })).toHaveLength(3);
-    expect(screen.getAllByText('Wrong at word 1')).toHaveLength(1);
-    expect(screen.getByText('wrong').tagName).toBe('DEL');
-    expect(screen.getAllByText('بِأَكْوَابٍ').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('إِذَا رَأَيْتَهُمْ').length).toBeGreaterThan(0);
-    for (const ref of [...screen.getAllByText('الطور ٢٤'), ...screen.getAllByText('٥٦:١٧')]) expect(ref.closest('button, a')).toBeNull();
-    expect(document.querySelector('a[href^="/quran/read/"]')).toBeNull();
-  });
-
-  it('draws each joined spelling without a link before checking, and tags each ayah with it after', () => {
-    const variants = [{ word: 'يَطُوفُ', conj: '', keys: ['52:24'], id: 'يطوف عليهم' }, { word: 'وَيَطُوفُ', conj: 'و', keys: ['56:17', '76:19'], id: 'يطوف عليهم' }];
-    const { unmount } = render(<BranchInputs question={{ ...question, variants }} typed={emptyBranchAnswers(question)} onChange={vi.fn()} onCheck={vi.fn()} ar={false} />);
-    expect(screen.getByText('وَيَطُوفُ')).toBeTruthy();
-    expect(screen.queryAllByRole('link')).toHaveLength(0);
-    unmount();
-    render(<BranchFeedback question={{ ...question, variants }} typed={typed} names={{}} ar={false} />);
-    expect(screen.getAllByText('وَيَطُوفُ')).toHaveLength(3);
-  });
 });

@@ -2,7 +2,9 @@ import { Pressable, ScrollView, View } from 'react-native';
 import { BookOpen, Check, Eye, X } from 'lucide-react-native';
 import { Text } from '@/components/Text';
 import Button from '@/components/Button';
-import { alikeDiff, type ChoiceQuestion } from '@shared/quiz/choiceKinds';
+import { alikeDiff, FORGOT, RECITE_SNIPPET, RECITED, type ChoiceQuestion } from '@shared/quiz/choiceKinds';
+import { WHICH_SURAH } from '@shared/quiz/whichSurah';
+import QuizPage from './QuizPage';
 import { num } from '@shared/quran/arabicNumber';
 import { quranText } from '@/lib/quranText';
 import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
@@ -17,8 +19,12 @@ function Words({ words, marked, palette }: { words: string[]; marked?: number[];
   return <>{words.map((word, at) => <Text key={at} style={marked?.includes(at) ? { color: palette.accent } : undefined}>{quranText(word)}{at < words.length - 1 ? ' ' : ''}</Text>)}</>;
 }
 
+/** The kinds asked on the ayah's own mushaf page (owner, 2026-11-17), in its place and shape. */
+const ON_PAGE = new Set([RECITE_SNIPPET, WHICH_SURAH]);
+
 /**
- * A choice question (shared/quiz/choiceKinds.ts): the ayah in the mushaf's font, a recited snippet's rest behind a button,
+ * A choice question (shared/quiz/choiceKinds.ts): the ayah in the mushaf's font, or for recite and «في أي سورة؟» its whole
+ * mushaf page (QuizPage), where the rest of a recited ayah is written in boxes and its grade picks حفظتها or نسيتها; a recited snippet's rest behind a button,
  * then the choices. Once picked, the right one turns green and a wrong one red; a wrong surah with a look-alike shows it,
  * the words where the two part marked in both.
  */
@@ -39,7 +45,13 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
   return (
     <Box {...(scroll ? { contentContainerStyle: { paddingBottom: 24, gap: 12 } } : { style: { gap: 12 } })}>
       {header}
-      {question.quran && (
+      {question.ayahKey && ON_PAGE.has(question.family) ? (
+        <View style={{ marginHorizontal: 16 }}>
+          <QuizPage key={question.key} ayah={question.ayahKey} palette={palette} shown={revealed}
+            opening={question.family === RECITE_SNIPPET ? question.quran?.length ?? 0 : undefined} nameless={question.family === WHICH_SURAH}
+            onGraded={question.family === RECITE_SNIPPET && !answered && onPick ? graded => onPick(graded.wrong.length ? FORGOT : RECITED) : undefined} />
+        </View>
+      ) : question.quran && (
         <View style={{ marginHorizontal: 16, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, padding: 16 }}>
           <Text style={{ fontFamily: QURAN_FONT, fontSize: SIZE, lineHeight: SIZE * 1.9, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
             <Words words={question.quran} marked={diff?.a} palette={palette} />

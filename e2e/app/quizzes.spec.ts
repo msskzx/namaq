@@ -42,9 +42,8 @@ test('a solo quiz: right, wrong and shown answers, resume after reload, then the
   const right = await answersOf(page, 0);
   await expect(leaves(page)).toHaveCount(right.length);
   for (const [i, answer] of right.entries()) await leaves(page).nth(i).fill(answer);
-  await page.getByRole('button', { name: 'عرض المصفوفة' }).first().click();
-  await expect(leaves(page).first()).toHaveValue(right[0]);
-  await page.getByRole('button', { name: 'عرض الشجرة' }).first().click();
+  // Quizzes draw the matrix only (owner, 2026-11-17).
+  await expect(page.getByRole('button', { name: 'عرض الشجرة' })).toHaveCount(0);
   await page.getByRole('button', { name: 'تحقق', exact: true }).click();
   await expect(page.getByLabel('السؤال ١ - صحيح')).toBeVisible();
 
@@ -95,7 +94,7 @@ test('a solo quiz of which surah and recite questions: pick, reveal, then the re
   await open(page, '/quiz/solo');
   await page.getByRole('button', { name: 'في أي سورة؟' }).click();
   await page.getByRole('button', { name: 'سمّع بقية الآية' }).click();
-  await page.getByRole('button', { name: 'شجرة المتشابهات' }).click();
+  await page.getByRole('button', { name: 'متشابهات القرآن', exact: true }).click();
   await expect(page.getByText('عدد الإجابات')).toHaveCount(0);
   await page.getByRole('button', { name: 'ابدأ الاختبار' }).click();
   await expect(page).toHaveURL(/\/quiz\/play/);

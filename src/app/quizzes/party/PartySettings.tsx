@@ -37,7 +37,7 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
   // Trees and compare questions are typed, so they run on the longer time.
   const typedTopics = settings.topics.filter((topic) => topic === "BRANCHES" || topic === "COMPARE");
   const typedTime = typedTopics.length > 0;
-  const typedLabel = branches && typedTopics.length === 1 ? (ar ? "وقت سؤال الشجرة" : "Time per tree") : (ar ? "وقت سؤال الكتابة" : "Time per typed question");
+  const typedLabel = branches && typedTopics.length === 1 ? (ar ? "وقت سؤال المتشابهات" : "Time per similar-verses question") : (ar ? "وقت سؤال الكتابة" : "Time per typed question");
   const others = settings.topics.some((topic) => topic !== "BRANCHES" && topic !== "COMPARE");
   const ready = settings.topics.length > 0 && (!settings.topics.includes("PERSON_CIRCLE") || settings.person);
   const scope = new URLSearchParams(quizQuery(settings));
@@ -55,7 +55,7 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
         [branches ? (ar ? "الأشجار" : "Trees") : (ar ? "النطاق" : "Range"), scopeSummary(settings, ar, branches)] as [string, string],
         [ar ? "الصعوبة" : "Difficulty", DIFFICULTY_LABELS[settings.difficulty ?? DEFAULT_DIFFICULTY][ar ? "ar" : "en"]] as [string, string],
       ] : []),
-      ...(branches ? [[ar ? "الإجابات في كل شجرة" : "Answers per tree", n(settings.leaves, ar)] as [string, string]] : []),
+      ...(branches ? [[ar ? "الإجابات في كل سؤال" : "Answers per question", n(settings.leaves, ar)] as [string, string]] : []),
       ...(typedTime ? [[typedLabel, duration(settings.treeSeconds, ar)] as [string, string]] : []),
       ...(others ? [[ar ? "وقت السؤال" : "Time per question", duration(settings.seconds, ar)] as [string, string]] : []),
     ];
@@ -95,7 +95,7 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
             {DIFFICULTIES.map((value) => <Button key={value} active={(settings.difficulty ?? DEFAULT_DIFFICULTY) === value} aria-pressed={(settings.difficulty ?? DEFAULT_DIFFICULTY) === value} onClick={() => onChange({ difficulty: value })}>{DIFFICULTY_LABELS[value][ar ? "ar" : "en"]}</Button>)}
             {settings.topics.flatMap((topic) => DIFFICULTY_NOTES[topic] ? [<p key={topic} className="basis-full text-sm text-[var(--home-muted)]">{DIFFICULTY_NOTES[topic]![ar ? "ar" : "en"]}</p>] : [])}
           </Row>
-          {branches && <Row label={ar ? "عدد الإجابات في كل شجرة" : "Answers per tree"}>
+          {branches && <Row label={ar ? "عدد الإجابات في كل سؤال" : "Answers per question"}>
             {QUIZ_LEAVES.map((value) => (
               <Button key={value} size="icon" className="min-w-10 justify-center" active={settings.leaves === value} aria-pressed={settings.leaves === value} onClick={() => onChange({ leaves: value })}>{n(value, ar)}</Button>
             ))}
