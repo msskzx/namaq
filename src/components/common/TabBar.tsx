@@ -4,6 +4,7 @@ import React, { useCallback, useContext, useEffect, useId, useRef, useState } fr
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { PenSetting } from '@/components/recite/PenSetting';
 import { BookOpen, CircleHelp, Compass, Library, LibraryBig, Feather, House, Play, Search, Settings, ShieldCheck, type LucideIcon } from 'lucide-react';
 import { usePageHelp } from './SettingsHelp';
 import ThemeTiles from '@/components/theme/ThemeTiles';
@@ -93,6 +94,7 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
         <BranchAroundSetting />
         <BranchConnectorSetting />
         <ReaderGestureSetting />
+        <PenSetting ar={ar} />
         <div className={styles.sheetLinks}>
           {links.map(({ href, icon, label }) => (
             <Link key={href} href={href} className={styles.sheetLink} onClick={() => { if (href === '/?tour=1') resetHints(); onClose(); }}>

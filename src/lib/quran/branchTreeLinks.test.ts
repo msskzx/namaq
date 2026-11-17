@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import data from '@shared/data/quran/trees.json';
+import data from '@shared/quran/quranText/corpus';
 import { keys, searchPhrases, type Branch, type BranchAyah } from '@shared/quran/branches';
 import { parseOccurrences, resolveTree, scopeTree, subtreeLinks } from './branchTreeLinks';
 import { buildPhraseGroups, createPhrasePresenter, phrasePresentation, phraseSubtreeTargets, type TreeGroup } from '@shared/quran/phraseTrees';

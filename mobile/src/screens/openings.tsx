@@ -5,7 +5,7 @@ import { ChevronDown, ChevronUp, PenLine, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { CONDITION_NOTES, CONDITION_SOURCES, CONDITION_SPANS, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, conditionLines, inKind, soleCard, openingCards, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
-import { blend } from '@shared/quran/compareCardLook';
+import { someTone } from '@/lib/marks';
 import { Text } from '@/ui/Text';
 import ExternalLink from '@/ui/ExternalLink';
 import Reference from '@/ui/Reference';
@@ -22,10 +22,10 @@ import IconButton from '@/ui/IconButton';
 
 const words = (key: string) => ayahOf(key)?.words ?? [];
 
-/** A shared word's colour, as the matrix gives it (mobile/src/lib/marks.ts): faded into the card when only some rows share it. */
+/** A shared word's colour, as the matrix gives it (mobile/src/lib/marks.ts): mixed with the muted colour when only some rows share it. */
 function tone(palette: Palette, kind: keyof Palette['marks'], some: boolean) {
   const colour = palette.marks[kind];
-  return colour && (some ? blend(colour, palette.card, 0.55) : colour);
+  return colour && (some ? someTone(palette, colour) : colour);
 }
 
 function Ayah({ words: list, cut, palette, size = 22 }: { words: OpeningWord[]; cut?: boolean; palette: Palette; size?: number }) {

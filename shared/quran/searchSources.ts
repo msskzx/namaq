@@ -1,4 +1,4 @@
-import corpus from '../data/quran/trees.json';
+import corpus from './quranText/corpus';
 import surahRows from '../data/quran/surahs.json';
 import wordsData from '../data/quran/words.json';
 import poemData from '../tajwid/tuhfat-al-atfal.json';

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import generated from '../data/quran/compareCards';
-import corpus from '../data/quran/trees.json';
+import corpus from './quranText/corpus';
 import { shownCards, type StoredCards } from './compareCards';
 import { compareMatrixOnly, compareViews } from './compareViews';
 

@@ -49,3 +49,15 @@ export function reciteView(model: PageModel, position: RecitePosition) {
     nextWord: (): RecitePosition | null => (upcoming ? revealWord(position, upcoming, counts[upcoming] ?? 0) : null),
   };
 }
+
+/** Shown pages as one (the website's two-page spread): an ayah's words are counted across them, in order. */
+export function joinModels(models: PageModel[]): PageModel {
+  if (models.length === 1) return models[0];
+  const words: Record<string, number> = {};
+  const titles = new Map<number, number>();
+  models.forEach(model => {
+    Object.entries(model.words).forEach(([key, count]) => { words[key] = (words[key] ?? 0) + count; });
+    model.titles.forEach((steps, surah) => titles.set(surah, steps));
+  });
+  return { lines: models.flatMap(model => model.lines), order: [...new Set(models.flatMap(model => model.order))], words, titles };
+}

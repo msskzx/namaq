@@ -94,9 +94,9 @@ type Box = { x: number; y: number; w: number; h: number };
 /** A band behind the words: the selected ayah (neutral), or a forgotten one (the accent, faint). */
 type Band = 'playing' | 'mark' | 'forgot' | null;
 const BAND_TINT: Record<NonNullable<Band>, (palette: Palette) => string> = {
-  playing: palette => tint(palette.accent, 0.24),
-  mark: palette => tint(palette.ink, 0.1),
-  forgot: palette => tint(palette.accent, 0.16),
+  playing: palette => palette.bands.playing,
+  mark: palette => palette.bands.mark,
+  forgot: palette => palette.bands.forgot,
 };
 /** `word`: the long-pressed word, a stronger box laid over the ayah's unbroken band. */
 type Cell = { band: Band; word?: boolean };
@@ -294,7 +294,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
       return <View key={`b${run[0]}`} pointerEvents="none" style={{ position: 'absolute', left, top, width: right - left, height: bottom - top, borderRadius: 4, backgroundColor: BAND_TINT[cells[run[0]].band!](palette) }} />;
     }).concat(cells.map((cell, at) => {
       const box = cell.word ? boxes[`${line}:${at}`] : undefined;
-      return box ? <View key={`w${at}`} pointerEvents="none" style={{ position: 'absolute', left: box.x, top: box.y, width: box.w, height: box.h, borderRadius: 4, backgroundColor: tint(palette.accent, 0.3) }} /> : null;
+      return box ? <View key={`w${at}`} pointerEvents="none" style={{ position: 'absolute', left: box.x, top: box.y, width: box.w, height: box.h, borderRadius: 4, backgroundColor: palette.bands.word }} /> : null;
     }));
   };
 

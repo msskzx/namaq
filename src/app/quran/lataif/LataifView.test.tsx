@@ -6,7 +6,7 @@ import itqan from '@shared/data/quran/itqanBalagha';
 import { exampleReference } from '@shared/quran/lataif';
 import { examples } from '@shared/quran/iltifat';
 import LataifView, { VOICE_COLOR } from './LataifView';
-import corpus from '@shared/data/quran/trees.json';
+import corpus from '@shared/quran/quranText/corpus';
 
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 afterEach(cleanup);

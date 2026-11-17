@@ -1,8 +1,9 @@
-// The kinds written on the ayah's own mushaf page (owner, 2026-11-17: every quiz kind lives inside the quizzes, the quizzes
-// tab holds only solo and party). «أوائل السور»: a surah's name, and its first ayah to write; «اكتب أول الآية وآخرها»: an
-// ayah's first and last words to write in their places. Graded by what is written: حفظتها when every word is right.
+// The kinds recited on the ayah's own mushaf page with recite mode's bar (owner, 2026-11-17: every quiz kind lives inside
+// the quizzes, the quizzes tab holds only solo and party). «أوائل السور»: a surah's name, and its first ayah to recite;
+// «سمّع الآية»: an ayah named by its surah and number. The pen writes what the pen setting says; written, it is graded by
+// the words, else the reader says حفظتها or نسيتها.
 // Only the ayat's keys and pages are read here, for the range and filters; the words are the page's own (QuizPage).
-import corpus from '../data/quran/trees.json';
+import corpus from '../quran/quranText/corpus';
 import surahRows from '../data/quran/surahs.json';
 import { num } from '../quran/arabicNumber';
 import type { BranchAyah } from '../quran/branches';
@@ -27,7 +28,7 @@ const ask = (family: string, key: string, promptArabic: string): ChoiceQuestion 
   correctAnswer: RECITED,
   ayahKey: key,
   // The surah is named in the question, so its title shows on the page.
-  page: { shows: 0, write: 'ends', title: 'shown' },
+  page: { shows: 0, recite: true, title: 'shown' },
   evidence: { claimKeys: [] },
 });
 
@@ -43,7 +44,7 @@ const kind = (id: string, name: string, keys: (scope: ChoiceScope) => string[], 
 });
 
 export const surahOpenings = kind(OPENING, 'أوائل السور', scope => inScope(scope).filter(key => key.endsWith(':1')),
-  surah => `اكتب أول آية في سورة ${names[surah]}.`);
+  surah => `سمّع أول آية في سورة ${names[surah]}.`);
 
-export const ayahEnds = kind(ENDS, 'اكتب أول الآية وآخرها', inScope,
-  (surah, ayah) => `اكتب أول آية ${names[surah]} ${num(ayah)} وآخرها.`);
+export const ayahEnds = kind(ENDS, 'سمّع الآية', inScope,
+  (surah, ayah) => `سمّع آية ${names[surah]} ${num(ayah)}.`);

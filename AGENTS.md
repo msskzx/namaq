@@ -271,6 +271,7 @@ decision.
 | Quran text | the Quran module (being built: `shared/quran/quranText/`, `src/components/quran/text/`, `mobile/src/components/quran/text/`) | `shared/quran/oneQuranText.test.ts` |
 | Tree | builders in `shared/quran` (`createTreePresenter`, `compareTree`), drawn by each platform's `BranchTree` | `shared/quran/oneTree.test.ts` |
 | Link out of Namaq | `ExternalLink` (web and app) | `src/components/common/ExternalLink.test.tsx` |
+| Recite mode (تسميع) | `useRecite` (state) + `RecitePill` (bar) in `src/components/recite/` and `mobile/src/components/recite/`; the pen rule is a setting (`PenSetting`) | `shared/quran/oneRecite.test.ts` |
 | Button | `src/components/common/Button.tsx` (website), `mobile/src/ui/Button.tsx` (app) | `shared/sharedFirst.test.ts` counts raw buttons per file (no new ones) |
 | Controls and boxes | `mobile/src/ui/` (app), `src/components/common/` (website) | `shared/sharedFirst.test.ts` |
 
@@ -285,9 +286,14 @@ page (two ayat stacked in compare or the matrix, words in a tree box); it keeps
 everything else. Features store places (surah:ayah:word), never copies of the
 text. The pages are the only stored Quran text: a feature that needs an ayah's
 words reads them from the pages (`ayahWordsOf` in
-`shared/quran/quranText/ayahWords.ts`), never from a regrouped copy. The same
-file maps the older tree text's words onto the page words. Only the module sets the Quran font. The one exception is Quran quoted
-inside a book. `oneQuranText.test.ts` lists today's breaks in
+`shared/quran/quranText/ayahWords.ts`), never from a regrouped copy. Built
+data keeps positions only: trees.json holds keys, pages, roots and word
+ranges, and `shared/quran/quranText/corpus.ts` puts the page words back (import
+it, never trees.json). The same ayahWords file maps the corpus's word split onto
+the page words. Only the module sets the Quran font. The exceptions are Quran quoted
+inside a book, the other readers' readings (qiraat.json), and the Quranic
+Arabic Corpus's dictionary forms of a word (words, lemmas, similar ayat): none
+of them is the Hafs page text. `oneQuranText.test.ts` lists today's breaks in
 `oneQuranText.baseline.json`; the list only shrinks.
 
 ## Data model

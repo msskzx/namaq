@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import corpus from '@shared/data/quran/trees.json';
+import corpus from '@shared/quran/quranText/corpus';
 import { num } from '@shared/quran/arabicNumber';
 import { orderSurahs } from '@shared/quran/surahOrder';
 import OrderView from './OrderView';

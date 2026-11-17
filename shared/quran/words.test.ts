@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import data from '../data/quran/words.json';
-import trees from '../data/quran/trees.json';
+import trees from './quranText/corpus';
 import { pageGroups, type MushafPage } from './readerPage';
 import { corpusWords, countsBySurah, lemmasAtMushafWord, lemmasOfWord, nearestSurah, placesOf, stepSurah, searchWords, type WordsData } from './words';
 import { corpusWordsAt } from './quranText/ayahWords';

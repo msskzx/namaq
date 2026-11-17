@@ -10,7 +10,7 @@ import type { BranchReviewState } from '@shared/quran/branchVerdicts';
 type Action = Exclude<BranchReviewState, null>;
 
 /** The owner's three choices for one branches card, on their own machine. Pressing the current choice again clears it. */
-export default function TreeReview({ id, text, state }: { id: string; text: string; state: BranchReviewState }) {
+export default function TreeReview({ id, state }: { id: string; state: BranchReviewState }) {
   const ar = useLanguage().language === 'ar';
   const router = useRouter();
   const [chosen, setChosen] = useState<BranchReviewState | undefined>(undefined);
@@ -22,7 +22,7 @@ export default function TreeReview({ id, text, state }: { id: string; text: stri
     setChosen(undo ? null : action);
     setFailed(false);
     try {
-      const response = await fetch('/api/quran/branch-review', { method: 'POST', keepalive: true, headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id, text, action: undo ? 'undo' : action }) });
+      const response = await fetch('/api/quran/branch-review', { method: 'POST', keepalive: true, headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id, action: undo ? 'undo' : action }) });
       if (!response.ok) throw new Error(String(response.status));
       router.refresh();
     } catch {

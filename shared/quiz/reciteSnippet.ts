@@ -1,6 +1,6 @@
 // Recite a snippet (owner, 2026-11-13): an ayah's opening words from the chosen range, the reader recites the rest, shows
 // it and says whether they had it. The opening is long enough that no other ayah starts the same way.
-import corpus from '../data/quran/trees.json';
+import corpus from '../quran/quranText/corpus';
 import type { BranchAyah } from '../quran/branches';
 import { filteredAyat } from '../quran/mutashabih/browse';
 import { normalizeWord } from '../quran/normalize';
@@ -58,7 +58,7 @@ function question(ayah: BranchAyah, difficulty: Difficulty): ChoiceQuestion {
     choices: [{ value: RECITED, labelArabic: 'حفظتها' }, { value: FORGOT, labelArabic: 'نسيتها' }],
     correctAnswer: RECITED,
     ayahKey: ayah.key,
-    page: { shows: shown, write: 'rest' },
+    page: { shows: shown, recite: true },
     evidence: { claimKeys: [] },
   };
 }

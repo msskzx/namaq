@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import corpus from '@shared/data/quran/trees.json';
+import corpus from '@shared/quran/quranText/corpus';
 import { groups as artifact } from '@shared/quran/mutashabih/data';
 import type { BranchAyah } from '@shared/quran/branches';
 import { normalizeWord } from '@shared/quran/normalize';

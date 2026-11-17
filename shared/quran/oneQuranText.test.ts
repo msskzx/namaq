@@ -24,6 +24,11 @@ const MODULE = ['shared/quran/quranText/', 'src/components/quran/text/', 'mobile
 const FONT_HOME = ['src/app/globals.css', 'mobile/src/lib/fonts.ts', 'mobile/src/app/_layout.tsx', 'shared/sources.ts'];
 /** Books quote the Quran in their own words and spelling (the exception): tafsir, i'rab, balagha, printed pages. */
 const BOOKS = ['tafsirSadi', 'kashshaf', 'irab', 'irabUkbari', 'itqanBalagha', 'bookPages'].map(name => `shared/data/quran/${name}.`);
+/**
+ * Not the Hafs text, so the pages cannot hold it (owner, 2026-11-17): the other readers' readings (qiraat) and the Quranic Arabic
+ * Corpus's dictionary forms of a word (lemmas, on the words page and in similar ayat).
+ */
+const NOT_HAFS = ['shared/data/quran/qiraat.json', 'shared/data/quran/words.json', 'src/app/quran/words/lemmas.json', 'src/app/quran/words/places.json', 'src/app/quran/compare/similar.json'];
 
 const inside = (path: string, places: string[]) => places.some(place => path.startsWith(place));
 
@@ -47,7 +52,7 @@ const code = ['src', 'mobile/src', 'shared']
 const WASLA = /ٱ/g;
 const data = ['src', 'mobile/src', 'shared']
   .flatMap(dir => walk(dir, name => /\.(json|jsx?|mjs|tsx?)$/.test(name) && !/\.(fixture\.json|test\.tsx?)$/.test(name)))
-  .filter(path => !inside(path, SOURCE) && !inside(path, BOOKS))
+  .filter(path => !inside(path, SOURCE) && !inside(path, BOOKS) && !NOT_HAFS.includes(path))
   .filter(path => (readFileSync(join(ROOT, path), 'utf8').match(WASLA)?.length ?? 0) >= 20);
 
 const breaks = {

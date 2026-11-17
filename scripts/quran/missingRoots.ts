@@ -1,5 +1,5 @@
 import { writeFileSync } from 'node:fs';
-import treeData from '../../shared/data/quran/trees.json';
+import treeData from '../../shared/quran/quranText/corpus';
 import type { BranchAyah } from '../../shared/quran/branches';
 import { listedPairs, pairCards } from '../../src/app/quran/compare/pairCards';
 import { rootGaps, rootTable, rootTableMarkdown } from '../../src/lib/quran/missingRoots';

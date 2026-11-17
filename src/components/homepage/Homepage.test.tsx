@@ -148,7 +148,7 @@ describe('home', () => {
     // Recite mode's way first: the words hidden, the next word or the whole ayah on a click.
     await waitFor(() => expect(within(reciting).getByRole('button', { name: 'أظهر الكلمة التالية' })).toBeTruthy());
     expect(within(reciting).queryAllByRole('button', { name: 'اكتب هذه الكلمة' })).toHaveLength(0);
-    fireEvent.click(within(reciting).getByRole('button', { name: 'اكتب الآية كاملة' }));
+    fireEvent.click(within(reciting).getByRole('button', { name: 'اكتب كل آية كاملة' }));
     expect(localStorage.getItem('recall-write')).toBe('true');
     // The card is drawn afresh for the pen, with empty boxes.
     const post = screen.getByText('هل تذكرها؟').closest('article')!;

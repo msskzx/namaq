@@ -1,4 +1,4 @@
-import treeData from '@shared/data/quran/trees.json';
+import treeData from '@shared/quran/quranText/corpus';
 import surahRows from '@shared/data/quran/surahs.json';
 import { branchInventory, type BranchPiece } from '@shared/quran/branchInventory';
 import { branchesHref, type BranchAyah } from '@shared/quran/branches';

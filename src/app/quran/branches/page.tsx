@@ -10,7 +10,7 @@ import { inJuzRange, parseJuzRange, type JuzRange } from '@shared/quran/juz';
 import { parseOccurrences, resolveTree, scopeTree, subtreeLinks as subtreeLinksFor } from '@/lib/quran/branchTreeLinks';
 import { buildPhraseGroups, buildTreeGroups, focusPhraseGroup, phrasePresentation, phraseSubtreeTargets, type TreeGroup } from '@shared/quran/phraseTrees';
 import { subtreeIndex, type Subtree } from '@shared/quran/subtrees';
-import treeData from '@shared/data/quran/trees.json';
+import treeData from '@shared/quran/quranText/corpus';
 import BranchTree from './BranchTree';
 import TreeSteps, { TreeMode, TreeProgress } from './TreeSteps';
 import BranchHeading, { MatchingRules } from './BranchHeading';
@@ -252,7 +252,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
           : tree && <BranchTree key={`${id}:${requestedOccurrences.join(',')}:${range?.from}-${range?.to}`} tree={tree} ayat={presentation?.ayat} prefixes={presentation?.prefixes} offsets={presentation?.offsets} subtreeLinks={subtreeLinks} names={names} juz={range} view={treeView} viewportHeight={viewportHeight} header={steps && <TreeSteps key="steps" steps={steps} />} surround={{ on: false, sync: true, card: id }} steppable={{ next: !!steps?.next, previous: !!steps?.previous, nextCard: neighbourCard(neighbours.next), previousCard: neighbourCard(neighbours.previous) }} direction="auto" rotatable growable zoomInRail hideArrows={!!requestedGroup} label="شجرة العبارات المشتركة" />}
       </DoubleTapSave>
       </div>
-      {review && process.env.NODE_ENV === 'development' && treeGroup && <TreeReview id={id} text={treeGroup.text} state={branchReviewState(verdict)} />}
+      {review && process.env.NODE_ENV === 'development' && treeGroup && <TreeReview id={id} state={branchReviewState(verdict)} />}
       {review && verdict && !verdict.checked && <p data-draft dir="ltr" className={`text-sm ${verdict.keep ? 'text-[var(--home-green)]' : 'text-[var(--home-accent)]'}`}>{verdict.keep ? '✓ Kept' : '✗ Left out'} · {verdict.why}<span className="text-[var(--home-muted)]"> · drafted by Claude</span></p>}
       {review && related.length > 0 && <ul data-related dir="ltr" className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-[var(--home-muted)]">
         {related.map(({ piece, inside }) => <li key={piece.id}>{inside ? 'Inside' : 'Holds'} <Link href={branchesHref(piece.id, juz, { review: true, mode: state.mode, filters: asked })} className="underline" dir="rtl">{piece.text}</Link> ({piece.keys.length})</li>)}

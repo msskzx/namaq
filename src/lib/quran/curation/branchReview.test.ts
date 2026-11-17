@@ -18,10 +18,10 @@ afterEach(() => vi.restoreAllMocks());
 
 describe('branch review', () => {
   it('records keep, drop and discuss, and a second press of the same choice clears it', () => {
-    recordBranchReview('cmp:a', 'drop', 'إن المتقين');
-    expect(onDisk()['cmp:a']).toEqual({ keep: false, why: '(owner removed)', checked: true, text: 'إن المتقين' });
+    recordBranchReview('cmp:a', 'drop');
+    expect(onDisk()['cmp:a']).toEqual({ keep: false, why: '(owner removed)', checked: true });
     recordBranchReview('cmp:a', 'keep');
-    expect(onDisk()['cmp:a']).toEqual({ keep: true, why: '(owner kept)', checked: true, text: 'إن المتقين' });
+    expect(onDisk()['cmp:a']).toEqual({ keep: true, why: '(owner kept)', checked: true });
     recordBranchReview('cmp:a', 'discuss');
     expect(onDisk()['cmp:a']).toMatchObject({ keep: true, ask: 'owner: discuss' });
     recordBranchReview('cmp:a', 'undo');

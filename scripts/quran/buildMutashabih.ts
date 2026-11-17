@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { BranchAyah, WordFeatures } from '../../shared/quran/branches';
 import { buildGroups, KINDS, TAGS } from '../../src/lib/quran/mutashabih/engine';
-import source from '../../shared/data/quran/trees.json';
+import source from '../../shared/quran/quranText/corpus';
 
 const features = new Map<string, WordFeatures[]>();
 const corpus = readFileSync(join(__dirname, '../../data/quran/quranic-corpus-morphology-0.4.txt'), 'utf8');
@@ -26,7 +26,9 @@ for (const line of corpus.split('\n')) {
 const ayat: BranchAyah[] = source.ayat.map(ayah => ({ ...ayah, features: features.get(ayah.key) }));
 const groups = buildGroups(ayat);
 const out = join(__dirname, '../../shared/data/quran/mutashabih.json');
-writeFileSync(out, `${JSON.stringify(groups)}\n`);
+// Places only: shared/quran/mutashabih/data.ts puts the words back from the pages (owner 2026-11-17).
+const stored = groups.map(({ text: _text, tree: { text: _treeText, ...tree }, ...group }) => ({ ...group, tree }));
+writeFileSync(out, `${JSON.stringify(stored)}\n`);
 for (const kind of Object.keys(KINDS)) console.log(kind, groups.filter(group => group.kind === kind).length);
 for (const tag of Object.keys(TAGS)) console.log(tag, groups.filter(group => group.tags.some(value => value === tag)).length);
 console.log('book citations', groups.reduce((count, group) => count + group.citations.length, 0));
