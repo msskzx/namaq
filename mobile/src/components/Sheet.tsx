@@ -49,7 +49,7 @@ export default function Sheet({ open, onClose, palette, tall, children }: { open
           <Pressable accessibilityLabel="إغلاق" onPress={onClose} style={{ flex: 1 }} />
         </Animated.View>
         <View pointerEvents="none" style={{ flex: 1 }} />
-        <Animated.View style={[{ direction: 'rtl', ...(tall ? { height: Math.round((screen - keyboard) * 0.85) } : { maxHeight: '85%' }), backgroundColor: palette.paper, borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingBottom: (keyboard ? 0 : insets.bottom) + 8 }, moved]}>
+        <Animated.View style={[{ direction: 'rtl', ...(tall ? { height: Math.round((screen - keyboard) * 0.85) } : { maxHeight: '85%' }), backgroundColor: palette.paper, borderTopWidth: 1, borderColor: palette.rule, borderTopLeftRadius: 16, borderTopRightRadius: 16, paddingBottom: (keyboard ? 0 : insets.bottom) + 8 }, moved]}>
           <GestureDetector gesture={swipe}>
             <View style={{ alignItems: 'center', paddingVertical: 10 }}>
               <View style={{ width: 40, height: 4, borderRadius: 2, backgroundColor: palette.rule }} />

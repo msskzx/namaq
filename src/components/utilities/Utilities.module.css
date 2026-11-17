@@ -28,7 +28,7 @@
 .wide { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 2.75rem; padding: 0 1rem; border-radius: 10px; border: 1px solid var(--home-rule); background: transparent; color: var(--home-ink); font: inherit; font-size: 1rem; cursor: pointer; }
 .primary { background: var(--home-accent); border-color: var(--home-accent); color: var(--home-paper); }
 .wide:disabled { opacity: 0.6; }
-.sheet { margin: auto auto 0; width: min(100%, 30rem); max-height: 85dvh; border: 0; border-radius: 22px 22px 0 0; padding: 1rem; background: var(--home-paper); color: var(--home-ink); }
+.sheet { margin: auto auto 0; width: min(100%, 30rem); max-height: 85dvh; border: 0; border-top: 1px solid var(--home-rule); border-radius: 22px 22px 0 0; padding: 1rem; background: var(--home-paper); color: var(--home-ink); }
 .sheet::backdrop { background: var(--home-backdrop); }
 .sheetBody { display: grid; gap: 0.6rem; }
 .search { display: flex; align-items: center; gap: 0.5rem; border: 1px solid var(--home-rule); border-radius: 10px; padding: 0 0.6rem; color: var(--home-muted); }
