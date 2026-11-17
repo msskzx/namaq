@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Tap } from '@/ui/Tap';
 import { BlurView } from 'expo-blur';
 import Animated from 'react-native-reanimated';
 import { hiddenProps, useSlideAway } from '@/ui/motion';
@@ -69,9 +70,9 @@ export default function TopBar({ children, title, middle, away: putAway = false,
       <Animated.View style={[{ height: HEIGHT, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 8 }, row.content]}>
         {/* Everything the thumb presses sits on the right; the logo (or the grid or shelf in its place) stays on the left
             (owner, 2026-11-17). A back arrow is the one exception: it leads on the right, the way back in Arabic. */}
-        {back && <Pressable onPress={back} accessibilityRole="button" accessibilityLabel="رجوع" hitSlop={10} style={{ width: 34, height: 34, alignItems: 'center', justifyContent: 'center' }}>
+        {back && <Tap onPress={back} accessibilityRole="button" accessibilityLabel="رجوع" hitSlop={10} style={{ width: 34, height: 34, alignItems: 'center', justifyContent: 'center' }}>
           <ChevronRight size={28} color={palette.ink} />
-        </Pressable>}
+        </Tap>}
         {middle ? <View style={{ flex: 1, minWidth: 0 }}>{middle}</View>
           : title ? <Text accessibilityRole="header" numberOfLines={1} style={{ flexShrink: 1, color: palette.ink, fontSize: 17, fontWeight: '600' }}>{title}</Text> : null}
         {center && <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, bottom: 0, left: SIDE, right: SIDE, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>{children}</View>}
@@ -85,16 +86,16 @@ export default function TopBar({ children, title, middle, away: putAway = false,
           {center ? null : children}
         </View>
         {bare || back ? null : hub
-          ? <Pressable onPress={toHub} accessibilityRole="button" accessibilityLabel="أدوات القرآن" hitSlop={8} style={{ width: 34, height: 34, alignItems: 'center', justifyContent: 'center' }}>
+          ? <Tap onPress={toHub} accessibilityRole="button" accessibilityLabel="أدوات القرآن" hitSlop={8} style={{ width: 34, height: 34, alignItems: 'center', justifyContent: 'center' }}>
             <LayoutGrid size={24} color={palette.ink} />
-          </Pressable>
+          </Tap>
           : shelf
-          ? <Pressable onPress={toShelf} accessibilityRole="button" accessibilityLabel="المكتبة" hitSlop={8} style={{ width: 34, height: 34, alignItems: 'center', justifyContent: 'center' }}>
+          ? <Tap onPress={toShelf} accessibilityRole="button" accessibilityLabel="المكتبة" hitSlop={8} style={{ width: 34, height: 34, alignItems: 'center', justifyContent: 'center' }}>
             <LibraryBig size={24} color={palette.ink} />
-          </Pressable>
-          : <Pressable onPress={() => toTab('/')} accessibilityRole="button" accessibilityLabel="الصفحة الرئيسية" hitSlop={8}>
+          </Tap>
+          : <Tap onPress={() => toTab('/')} accessibilityRole="button" accessibilityLabel="الصفحة الرئيسية" hitSlop={8}>
             <Logo size={34} />
-          </Pressable>}
+          </Tap>}
       </Animated.View>
       </Animated.View>
       {withSettings && <SettingsSheet open={settings} onClose={() => setSettings(false)} palette={palette} />}
