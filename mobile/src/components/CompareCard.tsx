@@ -21,7 +21,7 @@ import VideoSheet from './VideoSheet';
 import { shareCard } from '@/lib/shareImage';
 import TreeIcon from './TreeIcon';
 import { cardVideoPage } from '@/lib/compareVideo';
-import { WEBSITE } from '@/lib/branches';
+import { WEBSITE } from '@/lib/website';
 import { surahPairHref } from '@shared/quran/curatedComparisons';
 import { compareAnchor } from '@shared/compareBookmarks';
 import { toTab } from '@/lib/ways';

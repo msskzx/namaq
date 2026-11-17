@@ -1,4 +1,4 @@
 import { lazyScreen } from '@/lib/lazyScreen';
 
-// The screen itself loads on its first visit, or in the background once home is up (lib/lazyScreen.ts).
-export default lazyScreen(() => require('@/screens/tree-sizes'));
+// A measuring tool for scripts, not a screen people open: it loads only on its visit, never in the background (lib/lazyScreen.ts).
+export default lazyScreen(() => require('@/screens/tree-sizes'), { warm: false });

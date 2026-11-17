@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 import { Directory, File, Paths } from 'expo-file-system';
 import { bookOf, bookPath, isBookId, type BookId } from '@shared/books';
 import { readJson, writeJson } from './storage';
-import { WEBSITE } from './branches';
+import { WEBSITE } from './website';
 
 /**
  * The person's books (shared/books.ts): which are on the phone, and downloading or removing one. A built-in book is

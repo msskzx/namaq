@@ -4,7 +4,7 @@ import { Directory, File, Paths } from 'expo-file-system';
 import { ayahAudioUrl, ayahFile, reciterOf } from '@shared/quran/recitation';
 import { applySync, syncDue, type AudioRow, type SyncResult } from '@shared/quran/recitationSync';
 import { arrayOf, isNumberIn, isRecord, isString, readJson, writeJson } from './storage';
-import { WEBSITE } from './branches';
+import { WEBSITE } from './website';
 
 /**
  * Recitations kept on the phone to listen offline, one folder of ayah files per reciter.

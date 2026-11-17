@@ -10,7 +10,7 @@ import Reference from '@/ui/Reference';
 import TopBar from '@/ui/TopBar';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { ayahMushafWords } from '@/lib/mushaf';
-import { WEBSITE } from '@/lib/branches';
+import { WEBSITE } from '@/lib/website';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { readAyah } from '@/lib/openReader';
 import { useTabRetap } from '@/lib/tabRetap';
