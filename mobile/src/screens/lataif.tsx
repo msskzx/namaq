@@ -11,6 +11,7 @@ import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
 import { usePalette } from '@/lib/theme';
+import { ayahMushafWords } from '@/lib/mushaf';
 
 /**
  * The website's /quran/lataif (owner, 2026-11-16): a curated list of examples, each card with its own picture, grouped
@@ -22,7 +23,7 @@ export default function LataifScreen() {
   const bottom = useTabBarSpace();
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   const [topic, setTopic] = useState<string | null>(null);
-  const views = useMemo(examples, []);
+  const views = useMemo(() => examples(ayahMushafWords), []);
   const references = useMemo(() => Object.fromEntries(views.map(view => [view.key, exampleReference(view, itqan)])), [views]);
   useTabRetap('lataif', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   const chip = (on: boolean) => ({ borderWidth: 1, borderColor: on ? palette.accent : palette.rule, backgroundColor: on ? palette.accent : 'transparent', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 6 });

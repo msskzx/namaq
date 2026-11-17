@@ -7,7 +7,6 @@ import Segmented from '@/components/common/Segmented';
 import Reference from '@/components/common/Reference';
 import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
-import { mushafText } from '@shared/quran/mushafText';
 import { BY_QUOTES, OATH_BY, OATH_QUOTES, citesOf, kindQuotes, oathSections, sectionQuotes, type OathBy } from '@shared/quran/oathSources';
 import { oathPlace, oathShareText, type OathKind, type OathView } from '@shared/quran/oaths';
 
@@ -44,7 +43,7 @@ function OathCard({ oath }: { oath: OathView }) {
           {oath.lines.map(line => (
             <span key={line.ayah}>
               {line.words.map((word, i) => (
-                <span key={i} data-sworn={word.sworn || undefined} className={word.sworn ? 'text-[var(--home-accent)]' : undefined}>{`${mushafText(word.text)} `}</span>
+                <span key={i} data-sworn={word.sworn || undefined} className={word.sworn ? 'text-[var(--home-accent)]' : undefined}>{`${word.text} `}</span>
               ))}
               <span className="text-[var(--home-amber)]">{`${num(line.ayah)} `}</span>
             </span>

@@ -1,5 +1,7 @@
 import { juzOf } from './juz';
 import { normalizeWord } from './normalize';
+import surahRows from '../data/quran/surahs.json';
+import type { AyahWordsOf } from './quranText/ayahWords';
 
 /**
  * Surah order from al-Fatiha to al-Nas (owner, 2026-11-13): each surah's aim in al-Biqa'i's words and what joins it to the
@@ -262,8 +264,6 @@ export const ORDER_HELP = [
   'القائمة تذكر كل سورة من أولها. لم يراجع هذا العرض أحد من أهل العلم، والنص برواية حفص.',
 ];
 
-/** Opening ayat and the ayat of each pair as the mushaf writes them (shared/data/quran/surahOrder.json, `npm run quran:order`). */
-export type OrderData = { names: Record<string, string>; counts: Record<string, number>; openings: Record<string, string[]>; ayat: Record<string, string> };
 export type OrderWord = { text: string; shared: boolean };
 export type OrderAyah = { key: string; place: string; words: OrderWord[] };
 export type OrderLinkView = Omit<Link, 'pairs'> & { pairs: [OrderAyah, OrderAyah][] };
@@ -273,11 +273,25 @@ export type OrderSurah = { surah: number; name: string; juz: [number, number]; o
 const core = (word: string) => normalizeWord(word).replace(/^[وف]/, '').replace(/^(ال|لل|ل)/, '');
 const words = (text: string) => text.split(' ').filter(w => normalizeWord(w) !== '');
 
-export function orderSurahs({ names, counts, openings, ayat }: OrderData, num: (n: number) => string): OrderSurah[] {
+const names: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.name]));
+const counts: Record<number, number> = Object.fromEntries(surahRows.map(row => [row.number, row.numberOfAyat]));
+
+/** A surah's opening: whole ayat from the first until ten words, four ayat or the surah's end. */
+function openingKeys(surah: number, text: (key: string) => string) {
+  const keys: string[] = [];
+  for (let ayah = 1, count = 0; ayah <= counts[surah] && count < 10 && keys.length < 4; ayah++) {
+    keys.push(`${surah}:${ayah}`);
+    count += words(text(`${surah}:${ayah}`)).length;
+  }
+  return keys;
+}
+
+/** The surahs of /quran/order, their openings and the ayat of each link as the Madina pages print them (AGENTS.md, "Quran text"). */
+export function orderSurahs(ayahWords: AyahWordsOf, num: (n: number) => string): OrderSurah[] {
   const text = (key: string) => {
-    const t = ayat[key];
-    if (t === undefined) throw new Error(`${key} is missing from the data`);
-    return t;
+    const found = ayahWords(key);
+    if (!found?.length) throw new Error(`${key} is missing from the pages`);
+    return found.join(' ');
   };
   const place = (key: string) => { const [s, a] = key.split(':').map(Number); return `${names[s]} ${num(a)}`; };
   const pair = ([a, b]: [string, string]): [OrderAyah, OrderAyah] => {
@@ -293,7 +307,7 @@ export function orderSurahs({ names, counts, openings, ayat }: OrderData, num: (
       surah,
       name: names[surah],
       juz: [juzOf(`${surah}:1`), juzOf(`${surah}:${counts[surah]}`)] as [number, number],
-      opening: openings[surah].map(key => ({ ayah: Number(key.split(':')[1]), text: text(key) })),
+      opening: openingKeys(surah, text).map(key => ({ ayah: Number(key.split(':')[1]), text: text(key) })),
       aim: ORDER_AIMS[surah],
       link: link && { ...link, pairs: link.pairs.map(pair) },
     };
