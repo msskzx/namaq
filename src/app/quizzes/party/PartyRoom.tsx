@@ -6,7 +6,7 @@ import { faBookOpen, faCircle, faCircleCheck, faCircleXmark, faCopy, faCrown, fa
 import { renderSVG } from "uqr";
 import styles from "@/components/common/PaperPage.module.css";
 import Button from "@/components/common/Button";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
+import LoadingDots from "@/components/common/LoadingDots";
 import QuizReferenceDialog from "@/components/common/QuizReferenceDialog";
 import type { QuizReference } from "@/lib/quiz/quizReference";
 import { useHideFooter } from "@/components/common/AppChrome";
@@ -352,9 +352,9 @@ export default function PartyRoom({ code }: { code: string }) {
   if (status === "missing" || status === "removed") body = <Notice status={status} ar={ar} />;
   else if (!joined && error === "started") body = <Notice status="started" ar={ar} />;
   else if (id && (!name || nameError)) body = <NameForm initial={name ?? ""} error={nameError} ar={ar} label={ar ? "انضم" : "Join"} nameError onSubmit={(value) => { saveName(value); setName(value); }} />;
-  else if (!view) body = <LoadingSpinner fill />;
+  else if (!view) body = <LoadingDots fill="page" />;
   else if (view.phase === "lobby") body = <Lobby view={view} send={send} error={error} ar={ar} />;
-  else if (view.phase === "loading") body = <div className="flex flex-col items-center gap-3"><LoadingSpinner /><p className="text-[var(--home-muted)]">{ar ? "تُجهَّز الأسئلة…" : "Getting the questions ready…"}</p></div>;
+  else if (view.phase === "loading") body = <div className="flex flex-col items-center gap-3"><LoadingDots fill /><p className="text-[var(--home-muted)]">{ar ? "تُجهَّز الأسئلة…" : "Getting the questions ready…"}</p></div>;
   else if (view.phase === "final") body = <FinalResults view={view} send={send} ar={ar} />;
   else body = <QuestionStage key={view.question?.key} view={view} send={send} offset={offset} ar={ar} />;
 

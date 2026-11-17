@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import LoadingDots from '@/components/common/LoadingDots';
 import { LAST_PAGE_KEY } from './ReaderView';
 
 /** The page /quran/read opens: the last page read on this device, else the first. */
@@ -20,5 +20,5 @@ export default function OpenLastPage() {
     try { stored = localStorage.getItem(LAST_PAGE_KEY); } catch {}
     router.replace(`/quran/read/${lastPage(stored)}${writing ? '?write=1' : ''}`);
   }, [router, writing]);
-  return <LoadingSpinner className="py-24" />;
+  return <LoadingDots fill className="py-24" />;
 }

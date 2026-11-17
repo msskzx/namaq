@@ -9,7 +9,7 @@ import { GraphData, GraphNode, GraphNodeFull, GraphLink } from '@/types/graph';
 import { edgeColor, PARTICIPATION_STATUS_COLOR } from '@/lib/relationship/status';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import LoadingDots from '@/components/common/LoadingDots';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import { kindFillColor } from './nodeKindColor';
 
@@ -134,7 +134,7 @@ const GraphSurface = forwardRef<Methods, GraphSurfaceProps>(function GraphSurfac
   if (isLoading) {
     return (
       <div className="flex items-center justify-center" style={{ width: width ?? '100%', height: height ?? '100%' }}>
-        <LoadingSpinner variant="graph" />
+        <LoadingDots fill />
       </div>
     );
   }

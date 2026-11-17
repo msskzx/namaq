@@ -2,7 +2,7 @@
 
 import React, { createContext, Suspense, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import LoadingSpinner from './LoadingSpinner';
+import LoadingDots from './LoadingDots';
 
 const SHOW_AFTER_MS = 150;
 const GIVE_UP_MS = 8000;
@@ -31,7 +31,6 @@ function UrlWatcher({ onChange }: { onChange(): void }) {
 export function NavigationLoaderProvider({ children }: { children: React.ReactNode }) {
   const [pending, setPending] = useState(false);
   const [shown, setShown] = useState(false);
-  const pathname = usePathname();
   const start = useCallback((href: string) => { if (isNewUrl(href)) setPending(true); }, []);
   const stop = useCallback(() => setPending(false), []);
 
@@ -56,7 +55,7 @@ export function NavigationLoaderProvider({ children }: { children: React.ReactNo
       {shown && (
         <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none [:root:has([data-route-loading])_&]:hidden">
           <div className="rounded-md border border-[var(--home-rule)] bg-[var(--home-paper-deep)] px-5 py-4 shadow-[0_4px_16px_var(--home-shadow)]">
-            <LoadingSpinner size="lg" variant={pathname.startsWith('/graphs') ? 'graph' : 'tree'} />
+            <LoadingDots className="text-2xl" />
           </div>
         </div>
       )}

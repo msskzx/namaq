@@ -1,9 +1,9 @@
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import LoadingDots from '@/components/common/LoadingDots';
 
 export default function Loading() {
   return (
     <div data-route-loading className="min-h-screen bg-[var(--home-paper)]">
-      <LoadingSpinner fill />
+      <LoadingDots fill="page" />
     </div>
   );
 }

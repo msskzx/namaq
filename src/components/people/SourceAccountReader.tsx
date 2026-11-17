@@ -8,7 +8,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faCompress, faExpand, faList, faGear, faXmark, faFont, faSun, faMoon, faPalette, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import ErrorMessage from '@/components/common/ErrorMessage';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import LoadingDots from '@/components/common/LoadingDots';
 import Button from '@/components/common/Button';
 import { useSwipeClose } from '@/components/common/useSwipeClose';
 import NumberInput from '@/components/common/NumberInput';
@@ -313,9 +313,9 @@ export default function SourceAccountReader({
   }, [targetIndex, page]);
 
   if (error) return <ErrorMessage title={language === 'ar' ? 'تعذر تحميل نص المصدر' : 'The source text could not be loaded'} description={String(error)} />;
-  if (isLoading || !data) return <LoadingSpinner />;
+  if (isLoading || !data) return <LoadingDots fill />;
   if (!data.account || !data.page) return null;
-  if (!currentPage) return <LoadingSpinner />;
+  if (!currentPage) return <LoadingDots fill />;
 
   const { accounts, account } = data;
   const current = currentPage;

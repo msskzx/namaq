@@ -17,3 +17,12 @@ it('takes a more specific label', () => {
   render(<LoadingDots label="Loading phrases" />);
   expect(screen.getByRole('status').textContent).toBe('Loading phrases');
 });
+
+it('centres itself in the room it is given with fill, and holds a page height with fill="page"', () => {
+  const { container, rerender } = render(<LoadingDots fill />);
+  expect(container.firstElementChild?.className).toContain('justify-center');
+  expect(container.firstElementChild?.className).toContain('min-h-24');
+  rerender(<LoadingDots fill="page" />);
+  expect(container.firstElementChild?.className).toContain('min-h-[60vh]');
+  expect(screen.getByRole('status')).toBeTruthy();
+});

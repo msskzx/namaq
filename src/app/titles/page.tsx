@@ -2,7 +2,7 @@
 
 import { useLanguage } from "@/components/language/LanguageContext";
 import useSWR from "swr";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
+import LoadingDots from "@/components/common/LoadingDots";
 import TitleCard from '@/components/people/TitleCard';
 import { TitleBase } from "@/types/title";
 import ErrorMessage from '@/components/common/ErrorMessage';
@@ -22,7 +22,7 @@ export default function TitlesPage() {
         <div>
           {error && <ErrorMessage title={language === 'ar' ? 'تعذر تحميل الألقاب.' : 'Failed to load titles.'} />}
           {isLoading || !titles ? (
-            <LoadingSpinner fill />
+            <LoadingDots fill="page" />
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {Array.isArray(titles) && titles.length > 0 ? (

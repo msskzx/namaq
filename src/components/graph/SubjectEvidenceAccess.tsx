@@ -10,7 +10,7 @@ import ExternalLink from '@/components/common/ExternalLink';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { fetcher } from '@/lib/swr';
 import { reviewStatusLabel, type ClaimWithCitations } from '@/types/provenance';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import LoadingDots from '@/components/common/LoadingDots';
 
 interface SubjectEvidenceAccessProps {
   kind: string;
@@ -47,7 +47,7 @@ export default function SubjectEvidenceAccess({
   const claims = (data?.claims ?? []).filter((claim) => !claim.field || identityFields.has(claim.field));
 
   if (error) return null;
-  if (!data) return <LoadingSpinner size="sm" variant="graph" className="mt-2 justify-start" />;
+  if (!data) return <LoadingDots className="mt-2" />;
   if (claims.length === 0) {
     return <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">{noEvidence}</p>;
   }

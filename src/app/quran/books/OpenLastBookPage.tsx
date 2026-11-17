@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { ReaderBookId } from '@shared/bookReader';
 import { lastBookSpot } from '@shared/readingMarks';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import LoadingDots from '@/components/common/LoadingDots';
 
 /** The page whose first paragraph is at or before a spot, 1-based. */
 export function pageAt(starts: [number, number][], entry: number, at: number) {
@@ -21,5 +21,5 @@ export default function OpenLastBookPage({ id, starts }: { id: ReaderBookId; sta
     try { last = lastBookSpot(id); } catch {}
     router.replace(`/quran/books/${id}/${last ? pageAt(starts, last.entry, last.at) : 1}`);
   }, [id, starts, router]);
-  return <LoadingSpinner className="py-24" />;
+  return <LoadingDots fill className="py-24" />;
 }
