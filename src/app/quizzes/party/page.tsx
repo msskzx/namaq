@@ -11,6 +11,7 @@ import { useNavigatingRouter } from "@/components/common/NavigationLoader";
 import { playerId, saveName, savedName, startParty } from "@/lib/party/client";
 import { NameForm } from "./PartyRoom";
 import Card from '@/components/common/Card';
+import Field from '@/components/common/Field';
 
 export default function PartyStartPage() {
   const { language } = useLanguage();
@@ -55,8 +56,7 @@ export default function PartyStartPage() {
               }}>
                 <label className="flex flex-col gap-1">
                   <span className="text-sm font-semibold text-[var(--home-ink)]">{ar ? "رقم الاختبار" : "Party number"}</span>
-                  <input dir="ltr" inputMode="numeric" autoComplete="off" maxLength={6} value={code} onChange={(event) => setCode(event.target.value.replace(/\D/g, ""))}
-                    className="w-full max-w-xs rounded border border-[var(--home-rule)] bg-transparent px-3 py-2 text-2xl tracking-[0.2em] text-[var(--home-ink)] tabular-nums" />
+                  <Field code label={ar ? "رقم الاختبار" : "Party number"} inputMode="numeric" autoComplete="off" maxLength={6} value={code} onChange={(event) => setCode(event.target.value.replace(/\D/g, ""))} className="max-w-xs tabular-nums" />
                 </label>
                 <Button className="self-start" variant="primary" type="submit" disabled={code.length !== 6}><FontAwesomeIcon icon={ar ? faArrowLeft : faArrowRight} />{ar ? "انضم" : "Join"}</Button>
               </form>

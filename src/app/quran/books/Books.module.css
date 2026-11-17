@@ -16,7 +16,6 @@
 .sheetBody { height: calc(100% - 3.5rem); overflow-y: auto; }
 .row { display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem; border-bottom: 1px solid var(--home-rule); }
 .row:hover, .row[data-here] { background: var(--home-paper-deep); }
-.search { width: calc(100% - 2rem); margin: 1rem; padding: 0.5rem 0.75rem; font-size: 16px; border: 1px solid var(--home-rule); border-radius: 0.75rem; background: var(--home-card); }
 .match { background: none; color: var(--home-accent); }
 
 /* The shelf: square cards, two to a row (owner, 2026-11-16). */

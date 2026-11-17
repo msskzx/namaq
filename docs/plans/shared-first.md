@@ -150,6 +150,7 @@ Same pieces, same order, after the app: raw `<button>` onto `Button`
 - Step 4b: Card gains `as="button"` and `spine`; the home shelf books, the feed post, the books shelf and the utilities card use it; dead `.daily`/`.prayers` CSS removed. The mushaf spread (`PageSpread`) and the tree frame (`.post` via TreeViewCard) stay: page and tree drawings are exempt.
 - Step 5: `common/Segmented` is the one tab row (`tabs` makes a tablist, `fill`, option `name`/`lang`). Balagha's two books, the book sheet's tabs and the language switch use it. The library switch stays a top-bar switch; word lists and لطائف topics become chips (step 6).
 - Step 6: `common/Chip` is the one chip (as the app's `ui/Chip`: `lit`, `quran`, `dashed`, `small`, `count`, `check`, `role`, removable with `onClear`/`clearHref`). Filters, topics, i'rab words, tree surahs, compare's ayah picker and the quiz, party, events, nasab, listen and qira'at choice rows use it. The recite pen setting stays with the quiz thread.
+- Step 7: `common/Field` is the one text field (`multiline`, `code`) and `SearchField` the one search (magnifier, clear ×). The site search, city, surah, word, book and events searches, the party's code and name, the question bank search and the ayah note use them. The quiz and mushaf writing boxes and the people, graph and phrase comboboxes keep their own input for now.
 
 ## AGENTS.md rule (added as "Shared first")
 

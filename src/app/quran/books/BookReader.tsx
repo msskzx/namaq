@@ -17,6 +17,7 @@ import FasilaIcon from '@/components/quran/FasilaIcon';
 import { useSwipe } from '@/components/common/useSwipe';
 import type { ViewSlice } from '@/lib/books/bookView';
 import styles from './Books.module.css';
+import { SearchField } from '@/components/common/Field';
 
 type BookTab = 'contents' | 'saved' | 'search';
 type Hit = { page: number; name: string; entry: number; at: number; before: string; match: string; after: string };
@@ -171,7 +172,7 @@ function BookSheet({ id, tab, onTab, onClose, contents, page, saved }: {
         )) : <p className="p-6 text-center text-[var(--home-muted)]">لم تحفظ فقرة من هذا الكتاب بعد. اضغط على فقرة لتحفظها.</p>)}
         {tab === 'search' && (
           <>
-            <input autoFocus value={query} onChange={event => setQuery(event.target.value)} placeholder="كلمة أو عبارة في الكتاب" aria-label="ابحث في الكتاب" className={styles.search} />
+            <SearchField autoFocus label="ابحث في الكتاب" placeholder="كلمة أو عبارة في الكتاب" value={query} onChangeText={setQuery} className="m-4" />
             {hits.map(hit => (
               <Link key={`${hit.entry}:${hit.at}`} href={`/quran/books/${id}/${hit.page}`} onClick={onClose} className={styles.row}>
                 <span className="flex-1">{hit.before}<mark className={styles.match}>{hit.match}</mark>{hit.after}</span>

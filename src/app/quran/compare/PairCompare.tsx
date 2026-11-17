@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, CircleHelp, Clapperboard, GalleryHorizontal, Pause, Play, RotateCcw, Search, Send, UnfoldHorizontal, X } from 'lucide-react';
+import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, CircleHelp, Clapperboard, GalleryHorizontal, Pause, Play, RotateCcw, Send, UnfoldHorizontal, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import Sheet from '@/components/common/Sheet';
 import Segmented from '@/components/common/Segmented';
@@ -28,7 +28,7 @@ import { normalizeWord } from '@shared/quran/normalize';
 import { matchesSurah } from '@shared/quran/surahSearch';
 import { DoubleTapSave } from '../branches/Filters';
 import { TreeProgress, usePreload } from '../branches/TreeSteps';
-import { FIELD, NOTE } from '../panel';
+import { NOTE } from '../panel';
 import PairSwipe from './PairSwipe';
 import { surahOrder, type Visit } from '@shared/quran/compareCards';
 import ReviewButtons, { CardReview } from './ReviewButtons';
@@ -45,6 +45,7 @@ import type { VideoNames } from '@shared/video/compareVideo';
 import { surahName } from '@shared/quran/surahNames';
 import Frame from '@/components/common/Card';
 import Chip from '@/components/common/Chip';
+import { SearchField } from '@/components/common/Field';
 
 export type SurahName = { ar: string; en?: string };
 type Names = Record<number, SurahName>;
@@ -222,11 +223,7 @@ function PairList({ pairs: listed, names, a, b, lead = a, autoFocus = false, onP
   const search = ar ? 'ابحث عن سورة: الطور، ٥٢…' : 'Search a surah: At-Tur, 52…';
   return (
     <div className="flex min-h-0 flex-col gap-2">
-      <label className="relative">
-        <Search size={16} aria-hidden className="pointer-events-none absolute start-2.5 top-1/2 -translate-y-1/2 text-[var(--home-muted)]" />
-        <input type="search" autoFocus={autoFocus} aria-label={ar ? 'ابحث عن سورة' : 'Search a surah'} placeholder={search} value={query} onChange={event => setQuery(event.target.value)}
-          className={`${FIELD} w-full ps-8 text-base`} />
-      </label>
+      <SearchField autoFocus={autoFocus} label={ar ? 'ابحث عن سورة' : 'Search a surah'} placeholder={search} value={query} onChangeText={setQuery} />
       <CompareFilter a={lead} b={lead === a ? b : a} review={review} todo={todo} scope={juz} names={names} savedOnly={savedOnly} onSavedOnly={onSavedOnly}>
         {onSavedOnly && <SavedOnly checked={savedOnly} onChange={onSavedOnly} saved={saved.size} />}
         <MemorizedOnly a={lead} b={lead === a ? b : a} review={review} todo={todo} juz={juz} />

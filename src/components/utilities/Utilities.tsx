@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import * as adhan from 'adhan';
-import { CalendarDays, Check, ChevronLeft, ChevronRight, Clock, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin, Search } from 'lucide-react';
+import { CalendarDays, Check, ChevronLeft, ChevronRight, Clock, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin } from 'lucide-react';
 import Segmented from '@/components/common/Segmented';
 import { keyStore } from '@shared/storage';
 import { hijriDate } from '@shared/hijri';
@@ -13,6 +13,7 @@ import {
 import styles from './Utilities.module.css';
 import Sheet from '@/components/common/Sheet';
 import Card from '@/components/common/Card';
+import { SearchField } from '@/components/common/Field';
 
 const lib = adhan as unknown as Adhan;
 type View = 'times' | 'qibla' | 'calendar';
@@ -256,10 +257,7 @@ function PlaceSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
       <div className={styles.sheetBody}>
         <button type="button" className={`${styles.wide} ${styles.primary}`} onClick={here} disabled={busy}><LocateFixed size={18} aria-hidden />موقعي الحالي</button>
         {refused && <p className={styles.note}>تعذّر معرفة الموقع، فاختر مدينة.</p>}
-        <label className={styles.search}>
-          <Search size={18} aria-hidden />
-          <input value={query} onChange={event => setQuery(event.target.value)} placeholder="ابحث عن مدينة" aria-label="ابحث عن مدينة" autoFocus={false} />
-        </label>
+        <SearchField label="ابحث عن مدينة" placeholder="ابحث عن مدينة" value={query} onChangeText={setQuery} />
         <div className={styles.list}>
           {shown.map(city => (
             <button key={city.name} type="button" className={styles.city} aria-pressed={place?.name === city.name} onClick={() => pick(city)}>

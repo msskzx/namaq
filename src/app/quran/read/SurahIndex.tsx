@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faBookOpen } from '@fortawesome/free-solid-svg-icons';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@shared/quran/arabicNumber';
@@ -16,6 +16,7 @@ import styles from '@/components/homepage/Home.module.css';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import LoadingDots from '@/components/common/LoadingDots';
 import { surahName } from '@shared/quran/surahNames';
+import { SearchField } from '@/components/common/Field';
 
 const MUTED = 'text-[var(--home-muted)]';
 const AROUND = 6;
@@ -83,18 +84,14 @@ export default function SurahIndex({ surahs, fontClass, onNavigate, recite = fal
             }
           }}
         >
-          <label className="flex max-w-md items-center gap-3 border-b border-[var(--home-rule)] pb-1 focus-within:border-[var(--home-accent)]">
-            <FontAwesomeIcon icon={faMagnifyingGlass} className="text-[var(--home-accent)]" aria-hidden />
-            <input
+          <SearchField
               id={onNavigate ? undefined : 'quran-search'}
-              type="search"
               value={query}
-              onChange={event => setQuery(event.target.value)}
+              onChangeText={setQuery}
               placeholder={ar ? 'سورة باسمها أو رقمها، أو آية برقمها (٢:٢٥٥) أو بكلماتها' : 'A surah by name or number, or an ayah by number (2:255) or Arabic words'}
-              aria-label={ar ? 'ابحث عن سورة أو آية' : 'Search surahs or ayat'}
-              className="w-full scroll-mt-16 bg-transparent py-1 text-lg outline-none placeholder:text-[var(--home-muted)]"
+              label={ar ? 'ابحث عن سورة أو آية' : 'Search surahs or ayat'}
+              className="max-w-md scroll-mt-16"
             />
-          </label>
         </form>
         {reference && referenceHref && (
           <Button onClick={onNavigate} href={referenceHref} className="mt-3">

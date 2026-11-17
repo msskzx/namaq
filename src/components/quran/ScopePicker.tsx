@@ -6,6 +6,7 @@ import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { normalizeWord } from '@shared/quran/normalize';
 import { toggleFilter } from '@shared/quran/mutashabih/browse';
+import { SearchField } from '@/components/common/Field';
 
 export type ScopeOption = { number: number; name: string; nameEn?: string };
 
@@ -22,8 +23,7 @@ export default function ScopePicker({ name, value, onChange, options }: { name: 
     onChange(toggleFilter(value, String(number)));
   };
   return <div className="flex min-w-0 flex-1 flex-col gap-1">
-    <input aria-label={name} placeholder={name} value={query} onChange={event => setQuery(event.target.value)} onKeyDown={event => { if (event.key === 'Enter' && query.trim()) { event.preventDefault(); if (matches[0]) toggle(matches[0].number); } }}
-      className="h-10 w-full rounded border border-[var(--home-rule)] bg-[var(--home-paper)] px-2 py-1.5 text-base" />
+    <SearchField label={name} placeholder={name} value={query} onChangeText={setQuery} onKeyDown={event => { if (event.key === 'Enter' && query.trim()) { event.preventDefault(); if (matches[0]) toggle(matches[0].number); } }} />
     <div className="flex flex-wrap gap-1">
       {picked.flatMap(number => {
         const option = options.find(item => item.number === number);

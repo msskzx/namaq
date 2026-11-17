@@ -60,7 +60,7 @@ it('selects chapters 50 and 60 individually through one picker', () => {
   render(<FilterButton range={null} view={{}} allSurahs={[{ number: 50, name: 'ق' }, { number: 60, name: 'الممتحنة' }]} />);
   fireEvent.click(screen.getByRole('button', { name: 'تصفية' }));
   fireEvent.change(screen.getByRole('combobox', { name: 'التصفية حسب' }), { target: { value: 'surahs' } });
-  const picker = screen.getByRole('textbox', { name: 'ابحث عن سورة' });
+  const picker = screen.getByRole('searchbox', { name: 'ابحث عن سورة' });
   fireEvent.change(picker, { target: { value: '50' } });
   fireEvent.click(screen.getByRole('button', { name: 'ق' }));
   fireEvent.change(picker, { target: { value: '60' } });
@@ -76,7 +76,7 @@ it('selects separate juz values without treating them as a range', () => {
   render(<FilterButton range={null} view={{}} />);
   fireEvent.click(screen.getByRole('button', { name: 'تصفية' }));
   fireEvent.change(screen.getByRole('combobox', { name: 'التصفية حسب' }), { target: { value: 'juzs' } });
-  const picker = screen.getByRole('textbox', { name: 'ابحث عن جزء' });
+  const picker = screen.getByRole('searchbox', { name: 'ابحث عن جزء' });
   for (const number of ['٢٥', '٣٠']) {
     fireEvent.change(picker, { target: { value: number } });
     fireEvent.click(screen.getByRole('button', { name: `الجزء ${number}` }));
