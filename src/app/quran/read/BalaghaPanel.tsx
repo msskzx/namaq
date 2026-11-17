@@ -10,6 +10,7 @@ import ExternalLink from '@/components/common/ExternalLink';
 import OpenInBook from '@/components/quran/OpenInBook';
 import type { BalaghaAyah } from './balagha';
 import Card from '@/components/common/Card';
+import Segmented from '@/components/common/Segmented';
 
 // The reader's neutral band (Mushaf.module.css .marked), seen on a card in both themes.
 const LIT = 'bg-[var(--home-band-mark)]';
@@ -52,14 +53,8 @@ export default function BalaghaPanel({ ayah, data }: { ayah: string; data: Balag
       <Card as="p" className="block shrink-0 px-3.5 py-2.5 font-quran text-2xl leading-[2]">
         {words.map((word, i) => <span key={i} className={span.some(([from, to]) => i >= from && i <= to) ? PICKED : undefined}>{`${i ? ' ' : ''}${word}`}</span>)}
       </Card>
-      <div role="tablist" aria-label="الكتاب" className="flex shrink-0 gap-2">
-        {(Object.keys(BOOKS) as Book[]).map(book => (
-          <button key={book} type="button" role="tab" aria-selected={shown === book} onClick={() => setShown(book)}
-            className={`rounded-full border px-3 py-1.5 text-[0.9375rem] ${shown === book ? 'border-[var(--home-accent)] bg-[var(--home-accent)] text-[var(--home-paper)]' : 'border-[var(--home-rule)]'}`}>
-            {BOOKS[book]}
-          </button>
-        ))}
-      </div>
+      <Segmented tabs label="الكتاب" className="shrink-0 self-start"
+        options={(Object.keys(BOOKS) as Book[]).map(book => ({ key: book, label: BOOKS[book], current: shown === book, onClick: () => setShown(book) }))} />
       {shown === 'itqan' && (itqan.length ? itqan.map((item, i) => (
         <Card key={`${item.id}/${i}`} picked={paragraph === i && itqan.length > 1} className="block shrink-0 px-3.5 py-2.5">
           {/* The paragraph lights the words it quotes; its reference below is a control of its own. */}

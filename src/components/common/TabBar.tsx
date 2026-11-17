@@ -22,6 +22,7 @@ import { MemorizedSetting } from '@/components/homepage/Memorized';
 import { useSwipeClose } from './useSwipeClose';
 import PageHint, { resetHints } from './PageHint';
 import styles from './NavBar.module.css';
+import Segmented from './Segmented';
 
 export const SECTION_ICONS: Record<string, LucideIcon | typeof TreeIcon> = {
   '/quran': TreeIcon,
@@ -78,14 +79,8 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
         <div className={styles.grab} aria-hidden />
         <div className={styles.sheetRow}>
           <h2 className="text-lg font-bold">{ar ? 'الإعدادات' : 'Settings'}</h2>
-          <div className={styles.segment} role="group" aria-label={ar ? 'اللغة' : 'Language'}>
-            {(['ar', 'en'] as const).map(value => (
-              <button key={value} type="button" lang={value} aria-pressed={language === value} title={value === 'ar' ? 'العربية' : 'English'}
-                aria-label={value === 'ar' ? 'العربية' : 'English'} onClick={() => { if (language !== value) toggleLanguage(); }}>
-                {value === 'ar' ? 'ع' : 'EN'}
-              </button>
-            ))}
-          </div>
+          <Segmented label={ar ? 'اللغة' : 'Language'}
+            options={(['ar', 'en'] as const).map(value => ({ key: value, label: value === 'ar' ? 'ع' : 'EN', name: value === 'ar' ? 'العربية' : 'English', lang: value, current: language === value, onClick: () => { if (language !== value) toggleLanguage(); } }))} />
         </div>
         <MemorizedSetting />
         <ThemeTiles />
