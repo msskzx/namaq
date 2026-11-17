@@ -1,4 +1,5 @@
 import type React from 'react';
+import { SURAH_TITLES } from '@shared/quran/surahNames';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('next/navigation', () => ({
@@ -29,10 +30,10 @@ describe('/quran/read/[page]', () => {
   it('names the surah a page continues, beside the ones it opens', async () => {
     const element = (await open('22')) as React.ReactElement<Props>;
     expect(element.props.pages.map(entry => entry.top)).toEqual([2, 2]);
-    expect(element.props.names[2]).toBe('سورة 2');
+    expect(element.props.names[2]).toBe(SURAH_TITLES[2]);
     const first = (await open('1')) as React.ReactElement<Props>;
     expect(first.props.pages[0].top).toBeUndefined();
-    expect(first.props.names[1]).toBe('سورة 1');
+    expect(first.props.names[1]).toBe(SURAH_TITLES[1]);
   });
 
   it('loads the facing page beside the one asked for, odd on the right', async () => {

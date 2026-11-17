@@ -11,6 +11,7 @@ import { parseJuzRange } from '@shared/quran/juz';
 import { parseTreeScope } from '@shared/quiz/treeScope';
 import { seededRandom } from '@shared/quiz/feedQuiz';
 import { parseLeaves, QUIZ_LENGTHS, QUIZ_TOPICS, type QuizLength, type QuizTopic } from '@/lib/quiz/types';
+import { surahName } from '@shared/quran/surahNames';
 
 async function referenceClaims(claimKeys: string[]) {
   if (claimKeys.length === 0) return [];
@@ -73,7 +74,7 @@ export async function GET(request: Request) {
         ayah: details.get(askedAyah(question) ?? '') ?? null,
         evidence: { reference: selectQuizReference(question.evidence.claimKeys, claims) },
       })),
-      surahNames: Object.fromEntries(names.map((row) => [row.number, row.name])),
+      surahNames: Object.fromEntries(names.map((row) => [row.number, surahName(row.number)])),
     });
   } catch (error) {
     console.error('Quiz API error:', error);

@@ -1,8 +1,8 @@
 import { entryLabel, paragraphsOf, runsIn, type BookEntry, type BookPage, type ReaderBookId } from '@shared/bookReader';
 import { ayahHref } from '@shared/ayahMarks';
-import surahRows from '@shared/data/quran/surahs.json';
+import { SURAH_NAMES } from '@shared/quran/surahNames';
 
-const names: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.name]));
+const names: Record<number, string> = SURAH_NAMES;
 export const surahName = (surah: number) => names[surah] ?? String(surah);
 
 export type ViewParagraph = { entry: number; at: number; runs: { text: string; quran: boolean }[] };

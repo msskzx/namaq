@@ -5,6 +5,7 @@ import ExternalLink from '@/ui/ExternalLink';
 import { TAGS, type Group } from '@shared/quran/mutashabih/types';
 import Sheet from '@/ui/Sheet';
 import type { Palette } from '@/lib/theme';
+import DifferenceWords from '@/components/quran/text/DifferenceWords';
 
 const arabicDigits = (text: string) => text.replace(/\d/g, digit => '٠١٢٣٤٥٦٧٨٩'[Number(digit)]);
 
@@ -27,7 +28,7 @@ export default function EvidenceSheet({ group, onClose, palette }: { group: Grou
                   <Tags size={14} color={palette.muted} />
                   <Text style={{ color: palette.ink, fontSize: 14 }}>{TAGS[tag].ar}</Text>
                 </View>
-                {example ? <Text style={{ color: palette.ink, fontSize: 15, flexShrink: 1, textAlign: 'right' }}>{example}</Text> : null}
+                {example ? <Text style={{ color: palette.ink, fontSize: 15, flexShrink: 1, textAlign: 'right' }}>{example}</Text> : group.words?.[tag] ? <DifferenceWords words={group.words[tag]!} color={palette.ink} fontSize={15} /> : null}
               </View>
             );
           })}

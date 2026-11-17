@@ -116,7 +116,6 @@
   ],
   "copies": [
     "shared/data/quran/mushafWords.json",
-    "shared/data/quran/mutashabih.json",
     "shared/data/quran/trees.json"
   ]
 }

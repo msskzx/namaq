@@ -14,11 +14,11 @@ import { forgottenOrder } from '@shared/quran/recite';
 import { bookmarkReferences } from '@/lib/bookmarkReferences';
 import { BOOKMARK_KIND_LABEL, bookmarkKind, type BookmarkKind } from '@shared/bookmarkKind';
 import { num } from '@shared/quran/arabicNumber';
-import { plainName } from '@shared/quran/normalize';
 import { quranContexts } from '@/lib/quran/quranText';
 import CardMenu, { type MenuItem } from './CardMenu';
 import { AyahShareDialog } from '@/components/share/AyahShare';
 import styles from './Homepage.module.css';
+import { surahName } from '@shared/quran/surahNames';
 
 /** The same icons as the tab bar, so a saved card says which feature it opens in. */
 const KIND_ICONS: Record<BookmarkKind, typeof BookOpen | typeof TreeIcon> = { tree: TreeIcon, compare: ArrowLeftRight, ayah: BookOpen };
@@ -70,7 +70,7 @@ export function useHomeCards(data: CardData, forgottenShown = Infinity) {
   const [sharing, setSharing] = useState<string | null>(null);
   const [menu, setMenu] = useState<Menu | null>(null);
   const closeMenu = useCallback(() => setMenu(null), []);
-  const names = new Map(data.surahs.map(surah => [surah.number, plainName(surah.name).replace(/^سورة\s*/, '')]));
+  const names = new Map(data.surahs.map(surah => [surah.number, surahName(surah.number)]));
   const kindLabel = (kind: BookmarkKind) => BOOKMARK_KIND_LABEL[kind][ar ? 'ar' : 'en'];
   const forgottenLabel = ar ? 'آية نسيتها' : 'Forgotten ayah';
   const noteLabel = ar ? 'تأمل' : 'Note';

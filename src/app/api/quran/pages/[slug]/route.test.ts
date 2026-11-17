@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { findMany } = vi.hoisted(() => ({ findMany: vi.fn() }));
+vi.mock('@/lib/quran/readerAyat', () => ({ loadAyahText: async () => (surah: number, ayah: number) => `page ${surah}:${ayah}` }));
 vi.mock('@/lib/prisma', () => ({ prisma: { ayah: { findMany } } }));
 
 import { GET } from './route';
@@ -23,7 +24,7 @@ describe('GET /api/quran/pages/[slug]', () => {
   });
 
   it('returns the ayat on the page ordered by global number', async () => {
-    const ayat = [{ id: '1', page: 1 }, { id: '2', page: 1 }];
+    const ayat = [{ id: '1', page: 1, number: 1, surah: { number: 1 } }, { id: '2', page: 1, number: 2, surah: { number: 1 } }];
     findMany.mockResolvedValue(ayat);
 
     const response = await call('1');
@@ -32,9 +33,10 @@ describe('GET /api/quran/pages/[slug]', () => {
     expect(findMany).toHaveBeenCalledWith({
       where: { page: 1 },
       orderBy: { globalNumber: 'asc' },
+      include: { surah: { select: { number: true } } },
     });
     expect(response.status).toBe(200);
-    expect(body).toEqual(ayat);
+    expect(body).toEqual(ayat.map(({ surah, ...row }) => ({ ...row, text: `page ${surah.number}:${row.number}` })));
   });
 
   it('returns 200 with an empty list when the page has no ayat', async () => {

@@ -15,7 +15,7 @@ const sources: SearchSources = {
 describe('one search across the app', () => {
   it('puts surah names first, then the other groups in a fixed order', () => {
     const groups = searchAll(sources, 'البقرة');
-    expect(groups[0]).toEqual({ kind: 'surah', hits: [{ kind: 'surah', number: 2, name: 'البقرة' }] });
+    expect(groups[0]).toEqual({ kind: 'surah', hits: [{ kind: 'surah', number: 2, name: 'البَقَرَةْ' }] });
     expect(groups.map(group => group.kind)).toEqual(['surah', 'ayah', 'word', 'compare', 'event', 'note']);
     const order = groups.map(group => SEARCH_ORDER.indexOf(group.kind));
     expect(order).toEqual([...order].sort((a, b) => a - b));

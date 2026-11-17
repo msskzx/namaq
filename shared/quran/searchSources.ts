@@ -12,13 +12,14 @@ import { STORIES } from './prophets/stories';
 import { searchWords, type WordsData } from './words';
 import { numberVerses, type Poem } from '../tajwid/poem';
 import { holdsTerms, type CompareItem, type EventItem, type SearchSources, type TuhfaItem } from './searchAll';
+import { SURAH_NAMES } from './surahNames';
 
 /** Results a group lists at most when opened in full; the finders return one more, so a page can say there are more. */
 export const GROUP_MAX = 100;
 const FIND = GROUP_MAX + 1;
 
 const words = wordsData as unknown as WordsData;
-const names: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.name]));
+const names: Record<number, string> = SURAH_NAMES;
 /** A compare page's name, as the compare pages title it. */
 export const pairName = (a: number, b: number) => (a === b ? `سورة ${names[a]} مع نفسها` : `سورة ${names[a]} وسورة ${names[b]}`);
 

@@ -126,7 +126,7 @@ describe('surahs in the search', () => {
     render(<OpeningSearch top={[]} phrases={[]} surahs={[{ number: 2, name: 'البقرة', count: 40 }, { number: 3, name: 'آل عمران', count: 30 }]} />);
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'البقرة' } });
     const options = screen.getAllByRole('option');
-    expect(options[0].textContent).toContain('البقرة');
+    expect(options[0].textContent).toContain('البَقَرَةْ');
     fireEvent.click(options[0]);
     expect(router.push).toHaveBeenCalledWith(branchesHref('', undefined, { surah: 2 }));
   });

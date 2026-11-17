@@ -14,6 +14,7 @@ import { phrasePresentation } from '@shared/quran/phraseTrees';
 import { stepTime } from '@shared/quran/readPlan';
 import type { Beat } from './growth';
 import { aliasesOf, branchList, EMPTY_LIST, isSavedIn, type ListState } from './branchList';
+import { SURAH_NAMES } from '@shared/quran/surahNames';
 
 export type Presentation = { tree: Branch; prefixes: Variant[]; offsets: Record<string, number>; ayat: BranchAyah[] };
 /** Which word positions of an ayah every ayah shares, by how alike they are (shared/quran/wordMatch.ts). */
@@ -27,7 +28,7 @@ export type Matches = Record<string, Shared>;
 export type TreeCard = { piece: BranchPiece; presentation: Presentation; matches: Matches };
 
 export const surahs = surahRows;
-export const surahNames: Record<number, string> = Object.fromEntries(surahs.map(row => [row.number, row.name]));
+export const surahNames: Record<number, string> = SURAH_NAMES;
 
 const all = corpus.ayat as BranchAyah[];
 let ayatByKey: Map<string, BranchAyah> | undefined;

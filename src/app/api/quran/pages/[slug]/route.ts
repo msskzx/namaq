@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { loadAyahText } from '@/lib/quran/readerAyat';
 
 export async function GET(_request: Request, { params }: { params: Promise<{ slug: string }> }) {
 try {
@@ -19,6 +20,7 @@ try {
       orderBy: {
         globalNumber: 'asc',
       },
+      include: { surah: { select: { number: true } } },
     });
 
     if (!ayat) {
@@ -28,7 +30,8 @@ try {
       );
     }
 
-    return NextResponse.json(ayat);
+    const text = await loadAyahText();
+    return NextResponse.json(ayat.map(({ surah, ...row }) => ({ ...row, text: text(surah.number, row.number) })));
   } catch (error) {
     console.error('Error fetching ayah:', error);
     return NextResponse.json(

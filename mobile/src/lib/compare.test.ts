@@ -26,8 +26,8 @@ describe('compare cards side by side', () => {
   });
 
   it('names a part by its surah and ayat, and the surah that does not tell it', () => {
-    expect(partLabel(2, [30, 31, 32, 33])).toBe('البقرة ٣٠–٣٣');
-    expect(aloneNote(7)).toBe('سورة الأعراف لا تذكر هذا الجزء');
+    expect(partLabel(2, [30, 31, 32, 33])).toBe('البَقَرَةْ ٣٠–٣٣');
+    expect(aloneNote(7)).toBe('سورة الأَعْرَافْ لا تذكر هذا الجزء');
   });
 });
 

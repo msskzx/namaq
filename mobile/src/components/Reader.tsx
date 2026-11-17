@@ -7,7 +7,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
 import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, EyeOff, Layers, LightbulbOff, List, ListTree, NotebookPen, Play, Send, Sparkles, TableOfContents, TextSearch } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
-import { plainName } from '@shared/quran/normalize';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayahBookmarkId, ayahHref, clearForgotten, markAyah, markWord, wordMarkKey, readAyahMarks, subscribeAyahMarks, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
@@ -27,7 +26,8 @@ import WordSheet from './WordSheet';
 import IrabSheet, { type IrabTarget } from './IrabSheet';
 import BalaghaSheet from './BalaghaSheet';
 import TreeIcon from './TreeIcon';
-import ActButton, { ACT_WIDTH } from '@/ui/ActButton';
+import ActButton from '@/ui/ActButton';
+import FloatingMenu from '@/ui/FloatingMenu';
 import FasilaIcon from './FasilaIcon';
 import { shareAyah } from './AyahShare';
 import ListenBar, { LISTEN_BAR } from './ListenBar';
@@ -53,6 +53,7 @@ import { settleZoom } from '@/lib/pageZoom';
 import { useIntent } from '@/lib/intent';
 import { usePalette } from '@/lib/theme';
 import { penRule, reciteBarEdge } from '@/lib/settings';
+import { surahName } from '@shared/quran/surahNames';
 
 /** Where the reader was: the page, and the recitation if one was running. Kept so the app opens where it was left. */
 const PLACE = 'reader-place';
@@ -78,7 +79,7 @@ const modelOf = (page: number) => {
 };
 
 /** «البقرة ٥»: an ayah named as the reader names it, surah first. */
-const plainSurah = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return `${plainName(surahNames[surah] ?? '').replace(/^سورة\s*/, '')} ${num(ayah)}`; };
+const plainSurah = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return `${surahName(surah)} ${num(ayah)}`; };
 
 /** The 1441 Madinah mushaf, page by page, with recite mode (تسميع) and the forgot and save marks (the website's /quran/read on a phone). */
 export default function Reader() {
@@ -366,11 +367,8 @@ export default function Reader() {
   // The surah's topics, opened at the section holding the ayah (owner, 2026-11-14: the header names no topic).
   const [actionSurah, actionAyah] = (actionKey ?? '0:0').split(':').map(Number);
   const topics = !!actionKey && !position && !!surahTopicsOf(actionSurah);
-  const buttons = 9 + (wordKey ? 1 : 0) + (forgotCount > 0 ? 1 : 0) + (targets.length ? 1 : 0) + (trees ? 1 : 0) + (readings ? 1 : 0) + (topics ? 1 : 0) + (actions?.lemmas.length ? 1 : 0) + (actions?.word !== undefined ? 1 : 0);
-  // On a narrow phone the buttons wrap onto a second row rather than run off the screen.
-  const barWidth = Math.min(buttons * (ACT_WIDTH + 2) + 10, (size?.width ?? 360) - 16);
-  // Each row of labelled buttons is about 62 tall; the bar sits above the pressed line.
-  const barRows = Math.ceil(buttons / Math.max(1, Math.floor((barWidth - 10) / (ACT_WIDTH + 2))));
+  // The long press's menu opens where the finger pressed.
+  const actionsAt = actions ? { x: actions.x, y: actions.y } : null;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paperDeep }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
       <GestureDetector gesture={scrollGesture}>
@@ -400,8 +398,7 @@ export default function Reader() {
           </TopBar>
       </View>
       {actions && (
-        <View accessibilityRole="toolbar" accessibilityLabel={`الآية ${num(Number(actions.key.split(':')[1]))} من السورة ${num(Number(actions.key.split(':')[0]))}`}
-          style={{ position: 'absolute', top: Math.max(pageInsets.top + 8, actions.y - 20 - barRows * 62), left: Math.min((size?.width ?? 300) - barWidth - 8, Math.max(8, actions.x - barWidth / 2)), maxWidth: (size?.width ?? 360) - 16, flexDirection: 'row', flexWrap: 'wrap', gap: 2, padding: 5, borderRadius: 12, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6 }}>
+        <FloatingMenu at={actionsAt} label={`الآية ${num(Number(actions.key.split(':')[1]))} من السورة ${num(Number(actions.key.split(':')[0]))}`} onClose={() => setActions(null)} top={pageInsets.top} palette={palette}>
           {/* Listening comes first (owner's sketch, 2026-11-17): from this ayah to its surah's end, with the repeats last set. */}
           <ActButton Icon={Play} label="استمع من هذه الآية" name="استمع" palette={palette} onPress={() => { const key = actions.key; setActions(null); setFollowing(true); listen(key); }} />
           <ActButton Icon={EyeOff} label="سمّع من هذه الآية" name="سمّع" palette={palette} onPress={() => startRecite(actions.key)} />
@@ -427,7 +424,7 @@ export default function Reader() {
             onPress={() => { const lemmas = actions.lemmas; setActions(null); setWordLemmas(lemmas); }} />}
           {/* Share is always the last button. */}
           <ActButton Icon={Send} label="مشاركة" name="مشاركة" palette={palette} onPress={() => { const key = actions.key; setActions(null); shareAyah(key, palette, notes[key]?.text); }} />
-        </View>
+        </FloatingMenu>
       )}
       {/* The tree and compare buttons preview in place; each item, and the sheet's last button, opens its page (owner, 2026-11-13). */}
       <AyahPreviewSheet preview={preview} onClose={() => setPreview(null)} palette={palette} />
@@ -459,7 +456,7 @@ export default function Reader() {
       {/* Back to the فاصلة from any other page, with the bars (a tap), so it never covers the page's last line. */}
       {tools && !position && fasila && fasila.page !== page && (
         <Pressable onPress={() => jump({ page: fasila.page, key: fasila.key, mark: false })} accessibilityRole="button"
-          accessibilityLabel={`عد إلى فاصلتك، ${surahNames[Number(fasila.key.split(':')[0])] ?? ''} ${num(Number(fasila.key.split(':')[1]))}`}
+          accessibilityLabel={`عد إلى فاصلتك، ${surahName(Number(fasila.key.split(':')[0]))} ${num(Number(fasila.key.split(':')[1]))}`}
           style={{ position: 'absolute', alignSelf: 'center', bottom: tabBarTop(insets.bottom) + 10, height: 40, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, borderRadius: 999, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }}>
           <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
           <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: palette.glass }]} />

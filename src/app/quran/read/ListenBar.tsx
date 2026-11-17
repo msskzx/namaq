@@ -2,9 +2,7 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { Check, ChevronDown, Pause, Play, Repeat, X } from 'lucide-react';
-import surahRows from '@shared/data/quran/surahs.json';
 import { num } from '@shared/quran/arabicNumber';
-import { plainName } from '@shared/quran/normalize';
 import { EACH_AYAH, LISTEN_REFERENCE, ONCE, PAUSES, RANGE_TIMES, RECITERS, RIWAYA, SPEEDS, pauseLabel, reciterName, reciterOf, speedLabel, surahEnd, timesLabel, type Range, type RepeatPlan } from '@shared/quran/recitation';
 import { readListenPlan, readReciter, serverListenPlan, serverReciter, subscribeListenPlan, subscribeReciter, writeListenPlan, writeReciter } from '@shared/listenSettings';
 import Button from '@/components/common/Button';
@@ -12,8 +10,8 @@ import Reference from '@/components/common/Reference';
 import { useSwipeClose } from '@/components/common/useSwipeClose';
 import { applyReciter, applySpeed, ayahCounts, listen, stopListening, togglePlaying, useListening } from '@/lib/listen';
 import styles from './Mushaf.module.css';
+import { surahName } from '@shared/quran/surahNames';
 
-const surahName = (surah: number) => plainName(surahRows.find(row => row.number === surah)?.title ?? '').replace(/^سورة\s*/, '');
 const named = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return `${surahName(surah)} ${num(ayah)}`; };
 const rangeText = (from: string, to: string) =>
   from.split(':')[0] === to.split(':')[0] ? `من ${named(from)} إلى ${num(Number(to.split(':')[1]))}` : `من ${named(from)} إلى ${named(to)}`;

@@ -81,7 +81,7 @@ copies with their own chevron in `screens/prophets/slug.tsx`,
 search). `BackBar` becomes that option, then is deleted.
 **PR:** one.
 
-### 4. Layers: sheet and floating menu (4a sheets done)
+### 4. Layers: sheet and floating menu (done: 4a sheets, 4b FloatingMenu)
 Drift: `Sheet` has 19 users, but `ShareSheet`, `VideoSheet`, `CompareSheet`
 each open their own `<Modal>` (slide, full screen or see-through), and
 `CardMenu` (round pill bar) and the reader's long-press bar

@@ -5,7 +5,6 @@ import { Text } from '@/ui/Text';
 import type { MushafPage, WordGroup } from '@shared/quran/readerPage';
 import { isSajda, juzName, quarterLabel } from '@shared/quran/mushafMarks';
 import { num } from '@shared/quran/arabicNumber';
-import { plainName } from '@shared/quran/normalize';
 import type { PageModel, reciteView } from '@shared/quran/recitePage';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { breakLines, FLOW_LINE, flowSize } from '@/lib/pageZoom';
@@ -309,7 +308,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
             <Text key={label} style={{ borderWidth: 1, borderColor: label === 'سجدة' ? palette.accent : palette.rule, color: label === 'سجدة' ? palette.accent : palette.muted, borderRadius: 10, paddingHorizontal: 7, fontSize: 11, lineHeight: 18, backgroundColor: palette.paper }}>{label}</Text>
           ))}
         </View>
-        <Text style={[{ color: palette.muted, fontSize: small }, current && surahHidden(current) ? veiled : null]}>{!anonymous && current && names[current] ? plainName(names[current]) : ''}</Text>
+        <Text style={[{ color: palette.muted, fontSize: small }, current && surahHidden(current) ? veiled : null]}>{!anonymous && current && names[current] ? names[current] : ''}</Text>
       </View>}
       {/* The double rule around the text. With flowing text the frames grow with it (flexGrow, not flex: 1): on a phone
           flex: 1 is a zero basis, so the page stayed the screen's height, the words ran out past the frame and there was

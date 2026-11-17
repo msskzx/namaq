@@ -10,10 +10,10 @@ import { branchesHref } from '@shared/quran/branches';
 import { surahPairHref } from '@shared/quran/curatedComparisons';
 import { mushafText } from '@shared/quran/mushafText';
 import { holdsTerms, SEARCH_ORDER, type SearchGroup, type SearchHit, type SearchKind } from '@shared/quran/searchAll';
-import surahRows from '@shared/data/quran/surahs.json';
 import { NavActions } from '@/components/common/NavBar';
 import TreeIcon from '@/components/common/TreeIcon';
 import styles from './Search.module.css';
+import { SURAH_NAMES } from '@shared/quran/surahNames';
 
 /** Results a group shows until its arrow opens the rest; at most this many when open (shared/quran/searchSources.ts). */
 export const GROUP_SHOWN = 3;
@@ -31,7 +31,7 @@ const GROUPS: Record<SearchKind, { title: string; Icon: (props: LucideProps) => 
   note: { title: 'تأملاتي', Icon: NotebookPen },
 };
 
-const names: Record<number, string> = Object.fromEntries(surahRows.map(row => [row.number, row.name]));
+const names: Record<number, string> = SURAH_NAMES;
 const ayahLabel = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return `${names[surah]} ${num(ayah)}`; };
 
 export function hitHref(hit: SearchHit): string {

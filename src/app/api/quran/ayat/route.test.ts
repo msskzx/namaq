@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { findFirst, findMany } = vi.hoisted(() => ({ findFirst: vi.fn(), findMany: vi.fn() }));
+vi.mock('@/lib/quran/readerAyat', () => ({ loadAyahText: async () => (surah: number, ayah: number) => `page ${surah}:${ayah}` }));
 vi.mock('@/lib/prisma', () => ({ prisma: { ayah: { findFirst, findMany } } }));
 
 import { GET } from './route';
@@ -48,7 +49,7 @@ describe('GET /api/quran/ayat', () => {
       include: { surah: expect.any(Object) },
     });
     expect(response.status).toBe(200);
-    expect(body).toEqual(ayah);
+    expect(body).toEqual({ ...ayah, text: 'page 1:1' });
   });
 
   it('returns 404 when the single requested ayah is not found', async () => {
@@ -61,7 +62,7 @@ describe('GET /api/quran/ayat', () => {
   });
 
   it('fetches multiple ayat with OR and orders by global number', async () => {
-    const ayat = [{ id: '1' }, { id: '2' }];
+    const ayat = [{ id: '1', number: 1, surah: { number: 1 } }, { id: '2', number: 2, surah: { number: 2 } }];
     findMany.mockResolvedValue(ayat);
 
     const response = await GET(request('?q=1:1,2:2'));
@@ -73,7 +74,7 @@ describe('GET /api/quran/ayat', () => {
       orderBy: { globalNumber: 'asc' },
     });
     expect(response.status).toBe(200);
-    expect(body).toEqual(ayat);
+    expect(body).toEqual(ayat.map(row => ({ ...row, text: `page ${row.surah.number}:${row.number}` })));
   });
 
   it('returns 404 when none of the multiple requested ayat are found', async () => {

@@ -4,7 +4,6 @@ import React, { Fragment, useLayoutEffect, useMemo, useRef } from 'react';
 import { pageGroups, type MushafPage as MushafPageData } from '@shared/quran/readerPage';
 import { isSajda, juzName, quarterLabel } from '@shared/quran/mushafMarks';
 import { num } from '@shared/quran/arabicNumber';
-import { plainName } from '@shared/quran/normalize';
 import styles from './Mushaf.module.css';
 
 const BASMALA = 'بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ';
@@ -271,7 +270,7 @@ export default function MushafPage({
             ))}
           </div>
         )}
-        <span className={current && surahHidden(current) ? styles.veiled : undefined}>{!anonymous && current && names[current] ? plainName(names[current]) : ''}</span>
+        <span className={current && surahHidden(current) ? styles.veiled : undefined}>{!anonymous && current && names[current] ? names[current] : ''}</span>
       </div>
       <div className={styles.frame}>
         <div ref={body} className={`${styles.body} ${page <= 2 && !flow ? styles.opening : ''}`} style={flow ? undefined : { gridTemplateRows: data.items.map(item => ('surah' in item && page <= 2 ? TITLE_ABOVE_OVAL : 'line' in item && page > 2 ? 'minmax(0, 1fr)' : ONE_LINE)).join(' ') }}>

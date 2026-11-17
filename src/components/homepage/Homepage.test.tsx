@@ -197,7 +197,7 @@ describe('home', () => {
     render(<Homepage data={data} />);
     expect(screen.queryByRole('region', { name: 'ما الذي تحفظه؟' })).toBeNull();
     const post = (await screen.findByText('هل تذكرها؟')).closest('article')!;
-    expect(post.textContent).toContain('الفاتحة');
+    expect(post.textContent).toContain('الفَاتِحَةْ');
     expect(within(post).queryByRole('link', { name: 'راجع ما نسيت' })).toBeNull();
     fireEvent.click(within(post).getByRole('button', { name: /نسيتها/ }));
     expect(Object.keys(JSON.parse(localStorage.getItem('ayah-forgot')!))[0]).toMatch(/^1:/);

@@ -4,17 +4,17 @@
 // the words, else the reader says حفظتها or نسيتها.
 // Only the ayat's keys and pages are read here, for the range and filters; the words are the page's own (QuizPage).
 import corpus from '../quran/quranText/corpus';
-import surahRows from '../data/quran/surahs.json';
 import { num } from '../quran/arabicNumber';
 import type { BranchAyah } from '../quran/branches';
 import { filteredAyat } from '../quran/mutashabih/browse';
 import { shuffle } from './random';
 import { FORGOT, RECITED, type ChoiceKind, type ChoiceQuestion, type ChoiceScope } from './choiceKinds';
+import { SURAH_NAMES } from '../quran/surahNames';
 
 export const OPENING = 'OPENINGS';
 export const ENDS = 'ENDS';
 
-const names = Object.fromEntries(surahRows.map(row => [row.number, row.name])) as Record<number, string>;
+const names = SURAH_NAMES;
 const CHOICES = [{ value: RECITED, labelArabic: 'حفظتها' }, { value: FORGOT, labelArabic: 'نسيتها' }];
 
 let ayat: Map<string, BranchAyah> | undefined;

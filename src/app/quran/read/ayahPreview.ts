@@ -1,5 +1,4 @@
 import treeData from '@shared/quran/quranText/corpus';
-import surahRows from '@shared/data/quran/surahs.json';
 import { branchInventory, type BranchPiece } from '@shared/quran/branchInventory';
 import { branchesHref, type BranchAyah } from '@shared/quran/branches';
 import { matrixOnly } from '@shared/quran/branchVerdicts';
@@ -8,6 +7,7 @@ import { normalizeWord } from '@shared/quran/normalize';
 import { phrasePresentation } from '@shared/quran/phraseTrees';
 import { groupPresentation } from '@shared/quran/mutashabih/presentation';
 import { compareLinksOfAyah } from '../compare/pairCards';
+import { surahName } from '@shared/quran/surahNames';
 
 /** At most this many trees or compare cards in the sheet; its last button opens them all (the app's PREVIEW_MAX). */
 export const PREVIEW_MAX = 10;
@@ -21,7 +21,7 @@ const ayat = treeData.ayat as BranchAyah[];
 let indexed: Map<string, BranchAyah> | undefined;
 const byKey = () => (indexed ??= new Map(ayat.map(ayah => [ayah.key, ayah])));
 let inventory: ReturnType<typeof branchInventory> | undefined;
-const nameOf = (surah: number) => surahRows.find(row => row.number === surah)?.name ?? '';
+const nameOf = surahName;
 
 /** The unfiltered branches list, as the app's `treeList` and the branches page without filters. */
 export const treeInventory = () => (inventory ??= branchInventory({}, null));

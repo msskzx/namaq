@@ -96,8 +96,8 @@ describe('TabBar', () => {
     const row = within(sheet).getByRole('button', { name: 'ما أحفظه: لم تختر بعد' });
     fireEvent.click(row);
     fireEvent.click(within(sheet).getByRole('button', { name: 'السور' }));
-    fireEvent.click(within(sheet).getByRole('checkbox', { name: 'الملك' }));
-    expect(within(sheet).getByRole('button', { name: 'ما أحفظه: السور الملك' })).toBeTruthy();
+    fireEvent.click(within(sheet).getByRole('checkbox', { name: 'المُلْكْ' }));
+    expect(within(sheet).getByRole('button', { name: 'ما أحفظه: السور المُلْكْ' })).toBeTruthy();
     const questions = within(sheet).getByRole('switch', { name: 'الأسئلة مما أحفظ فقط' }) as HTMLInputElement;
     expect(questions.checked).toBe(true);
     fireEvent.click(questions);

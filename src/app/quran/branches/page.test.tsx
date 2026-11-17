@@ -67,7 +67,7 @@ describe('Quran branch trees', () => {
     const context = vi.spyOn(quranText, 'quranContexts').mockImplementation(async keys => sharedByAll(ayahContexts(data.ayat as BranchAyah[], keys)));
     try {
       render(await open({ o: 'الم', m: 'cards', q: 'الم' }));
-      const card = await screen.findByLabelText('البقرة ١–٢');
+      const card = await screen.findByLabelText('البَقَرَةْ ١–٢');
       expect(card.textContent).toContain((data.ayat as BranchAyah[]).find(ayah => ayah.key === '2:2')!.words.join(' '));
       expect(card.querySelectorAll('span[class*="verseSeal"]')).toHaveLength(2);
       expect(document.querySelectorAll('[data-col][data-current]')).toHaveLength(6);
@@ -96,7 +96,7 @@ describe('Quran branch trees', () => {
     const context = vi.spyOn(quranText, 'quranContexts').mockImplementation(async keys => sharedByAll(ayahContexts(data.ayat as BranchAyah[], keys)));
     try {
       render(await open({ o: 'group:2:1,3:1,29:1,30:1,31:1,32:1', m: 'cards' }));
-      const card = await screen.findByLabelText('البقرة ١–٢');
+      const card = await screen.findByLabelText('البَقَرَةْ ١–٢');
       expect(card.textContent).toContain((data.ayat as BranchAyah[]).find(ayah => ayah.key === '2:2')!.words.join(' '));
       expect(card.querySelectorAll('span[class*="verseSeal"]')).toHaveLength(2);
       expect(document.querySelectorAll('[data-col][data-current]')).toHaveLength(6);
@@ -300,9 +300,9 @@ describe('Quran branch trees', () => {
     const tree = screen.getByRole('region', { name: 'شجرة العبارات المشتركة' });
     expect(within(tree).getAllByText(/^فَذَرۡهُمۡ/).filter(element => element.closest('[data-node]') && !element.closest('li, [data-tree-neighbour]'))).toHaveLength(1);
     expect(within(tree).queryByText('ف')).toBeNull();
-    expect(tree.textContent).toContain('الزخرف ٨٣');
+    expect(tree.textContent).toContain('الزُّخْرُفْ ٨٣');
     expect(tree.textContent).toContain('٧٠:٤٢');
-    expect(tree.textContent).toContain('الزخرف ٨٣');
+    expect(tree.textContent).toContain('الزُّخْرُفْ ٨٣');
   });
 
   it('has no list view any more: old list and page links open the first tree', async () => {
@@ -397,7 +397,7 @@ describe('Quran branch trees', () => {
     let steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
     expect(within(steps).getByRole('button', { name: 'الشجرة السابقة' }).hasAttribute('disabled')).toBe(true);
     expect(screen.getByRole('link', { name: 'اعرض بطاقات الآيات' })).toBeTruthy();
-    expect(screen.getByText('سورة البقرة')).toBeTruthy();
+    expect(screen.getByText('سورة البَقَرَةْ')).toBeTruthy();
     const total = branchInventory({}, null).filter(piece => piece.keys.some(key => key.startsWith('2:'))).length;
     expect(screen.getByRole('progressbar').getAttribute('value')).toBe('1');
     expect(screen.getByRole('progressbar').getAttribute('max')).toBe(String(total));
@@ -436,8 +436,8 @@ describe('Quran branch trees', () => {
     cleanup();
     render(await open(Object.fromEntries(new URL(href, 'http://localhost').searchParams)));
     const tree = screen.getByRole('region', { name: 'شجرة العبارات المشتركة' });
-    expect(tree.textContent).toContain('البقرة ١٧٣');
-    expect(tree.textContent).toContain('البقرة ١٨٢');
+    expect(tree.textContent).toContain('البَقَرَةْ ١٧٣');
+    expect(tree.textContent).toContain('البَقَرَةْ ١٨٢');
     expect(screen.getByRole('navigation', { name: 'التنقل بين الأشجار' }).textContent).toBe(parentSteps);
   });
 
@@ -519,8 +519,8 @@ describe('branches review', () => {
     vi.mocked(surahList).mockResolvedValueOnce([{ number: 1, name: 'الفاتحة' }, { number: 37, name: 'الصافات' }, { number: 38, name: 'ص' }] as Awaited<ReturnType<typeof surahList>>);
     render(await open({ o: 'cmp:0oc27w50449cxf' }));
     const label = (key: string) => document.querySelector(`[data-node][data-keys="${key}"] [data-ref]`)?.textContent;
-    expect(label('1:2')).toBe('الفاتحة ٢–٣');
-    expect(label('37:182')).toBe('الصافات ١٨٢ ثم ص ١');
+    expect(label('1:2')).toBe('الفَاتِحَةْ ٢–٣');
+    expect(label('37:182')).toBe('الصَّافَّاتْ ١٨٢ ثم صٓ ١');
   }, 30000);
 
   it('reviews every kind of tree up to 35 ayat and names the trees a tree sits inside', async () => {

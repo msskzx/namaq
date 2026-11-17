@@ -35,7 +35,7 @@ describe('WordPlaces', () => {
     expect(screen.getByText(`٣٠ مرة في ${String(PLACES_STEP + 3).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[Number(d)])} آية`)).toBeTruthy();
     const items = within(list).getAllByRole('listitem');
     expect(items).toHaveLength(PLACES_STEP);
-    expect(await within(items[0]).findByText('البقرة ١')).toBeTruthy();
+    expect(await within(items[0]).findByText('البَقَرَةْ ١')).toBeTruthy();
     expect(within(items[0]).getAllByRole('link', { name: 'قراءة الآية' })[0].getAttribute('href')).toBe('/quran/read/2?a=2:1');
     expect([...items[2].querySelectorAll('mark')].map(mark => mark.textContent)).toEqual(['الارض', 'ارضا']);
   });
@@ -53,13 +53,13 @@ describe('WordPlaces', () => {
     show('نَهَار');
     const strip = await screen.findByRole('slider', { name: 'عدد مرات ورودها في كل سورة' });
     fireEvent.keyDown(strip, { key: 'ArrowLeft' });
-    expect(strip.getAttribute('aria-valuetext')).toBe('البقرة');
-    expect(await screen.findByText('، منها ٣ في البقرة')).toBeTruthy();
+    expect(strip.getAttribute('aria-valuetext')).toBe('البَقَرَةْ');
+    expect(await screen.findByText('، منها ٣ في البَقَرَةْ')).toBeTruthy();
     fireEvent.keyDown(strip, { key: 'ArrowLeft' });
-    expect(strip.getAttribute('aria-valuetext')).toBe('آل عمران');
-    expect(screen.getByText('، منها ١ في آل عمران')).toBeTruthy();
+    expect(strip.getAttribute('aria-valuetext')).toBe('آلِ عِمْرَانْ');
+    expect(screen.getByText('، منها ١ في آلِ عِمْرَانْ')).toBeTruthy();
     expect(scrolled).toEqual(['2:1', '3:5']);
     fireEvent.keyDown(strip, { key: 'ArrowLeft' });
-    expect(strip.getAttribute('aria-valuetext')).toBe('آل عمران');
+    expect(strip.getAttribute('aria-valuetext')).toBe('آلِ عِمْرَانْ');
   });
 });

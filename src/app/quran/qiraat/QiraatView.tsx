@@ -7,13 +7,14 @@ import Button from '@/components/common/Button';
 import ExternalLink from '@/components/common/ExternalLink';
 import { AyahCard } from '@/components/quran/AyahCard';
 import type { Ayah } from '@/types/quran';
-import { ayahWords, plainName } from '@shared/quran/normalize';
+import { ayahWords } from '@shared/quran/normalize';
 import { chipStates, neighbors, READERS, RIWAYAT, type Variant } from '@/lib/quran/qiraat';
 import { num } from '@shared/quran/arabicNumber';
 import { wordDiff } from '@shared/quran/wordDiff';
 import { mushafText } from '@shared/quran/mushafText';
+import { surahName } from '@shared/quran/surahNames';
 
-export type QiraatEntry = { variant: Variant; text: string; surahName: string };
+export type QiraatEntry = { variant: Variant; text: string };
 
 const BADGE_COLORS = ['amber', 'blue', 'emerald', 'rose'];
 const WORD_COLORS = ['text-amber-600 dark:text-amber-400', 'text-sky-600 dark:text-sky-400', 'text-emerald-600 dark:text-emerald-400', 'text-rose-600 dark:text-rose-400'];
@@ -44,7 +45,7 @@ function hafsWordOf({ variant, text }: QiraatEntry) {
 }
 
 function Card({ entry }: { entry: QiraatEntry }) {
-  const { variant, text, surahName } = entry;
+  const { variant, text } = entry;
   const words = ayahWords(text, false);
   const found = neighbors(words.norm, variant.hafsWord, variant.occurrence);
   const states = chipStates(variant);
@@ -61,7 +62,7 @@ function Card({ entry }: { entry: QiraatEntry }) {
     if (i > 0 && span.length === spans[0].length) differing[0].forEach(k => differing[i].add(k));
   });
   const slots = found ? Object.fromEntries([...differing[0]].map(k => [found.start + k, 0])) : undefined;
-  const ayah = { id: key(variant), number: variant.ayah, text: words.display.join(' '), surah: { name: surahName } } as unknown as Ayah;
+  const ayah = { id: key(variant), number: variant.ayah, text: words.display.join(' '), surah: { number: variant.surah } } as unknown as Ayah;
   const around = (side: readonly [number, number]) => mushafText(words.display.slice(side[0], side[1]).join(' '));
 
   return (
@@ -128,10 +129,7 @@ function Card({ entry }: { entry: QiraatEntry }) {
 }
 
 const JUZ_AMMA_FROM = 78;
-const surahLabel = (entries: QiraatEntry[], surah: number) => {
-  const name = entries.find(e => e.variant.surah === surah)?.surahName;
-  return name ? plainName(name).replace(/^سورة /, '') : String(surah);
-};
+const surahLabel = (_entries: QiraatEntry[], surah: number) => surahName(surah);
 
 export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
   const [selected, setSelected] = useState(0);

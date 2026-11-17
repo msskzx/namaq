@@ -7,6 +7,7 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import { TAGS, type Group } from '@shared/quran/mutashabih/types';
 import { evidenceGroup } from '@shared/quran/mutashabih/evidence';
 import { connectionColor, useGroupConnections } from './GroupConnections';
+import DifferenceWords from '@/components/quran/text/DifferenceWords';
 
 export function GroupDetails({ group, shownKeys }: { group: Group; shownKeys?: string[] }) {
   group = evidenceGroup(group, shownKeys);
@@ -20,7 +21,7 @@ export function GroupDetails({ group, shownKeys }: { group: Group; shownKeys?: s
         const example = group.examples?.[tag] ?? (group.tags.length === 1 ? group.detail : undefined);
         return <span key={tag} className="inline-flex flex-wrap items-center gap-1.5"><Button data-connection-chip={tag} size="sm" tone={connectionColor(tag)} active={active} aria-pressed={active} onClick={() => connections?.select(tag)}>
           <Tags size={12} aria-hidden />{ar ? label.ar : label.en}
-        </Button>{example && <span data-connection-words lang="ar" dir="rtl">{example}</span>}</span>;
+        </Button>{example ? <span data-connection-words lang="ar" dir="rtl">{example}</span> : group.words?.[tag] && <DifferenceWords words={group.words[tag]!} />}</span>;
       })}
     </div>}
     {group.citations.map(citation => <p key={citation.id} lang="ar" dir="rtl" className="m-0 text-xs leading-relaxed text-[var(--home-muted)]">
