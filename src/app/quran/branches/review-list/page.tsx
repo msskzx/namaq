@@ -7,7 +7,7 @@ import ReviewList from './ReviewList';
 /** TEMPORARY (2026-11-17, not for main): every tree in open-audits/trees-like-musa.md on one page, for the owner to scroll. */
 export const dynamic = 'force-dynamic';
 
-const GROUPS = ['A', 'B', 'C', 'D'] as const;
+const GROUPS = ['A', 'B', 'C', 'D', 'E'] as const;
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ g?: string }> }) {
   if (process.env.NODE_ENV === 'production' && !process.env.REVIEW_LIST) notFound();
