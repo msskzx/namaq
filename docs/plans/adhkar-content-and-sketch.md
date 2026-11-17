@@ -31,7 +31,9 @@ author passages and the grading context. The test witness is not imported by the
 selection or the app. Report 207's Quran wording is omitted as separate fragment
 boundaries; the item holds only the positions of surahs 112, 113 and 114.
 
-All 15 items have at least one named sahih or hasan judgment. No inclusion is a
+All 15 items have at least one named sahih or hasan judgment of the hadith itself.
+A judgment on the chain alone (al-Nawawi's «بإسناد صحيح», al-Hakim's «صحيح الإسناد»)
+is typed `isnad-sahih`, is shown, and never counts as that judgment. No inclusion is a
 new Namaq grade or a claim of agreement among every scholar. Judgments of
 al-Tirmidhi and al-Hakim are quoted as reported by al-Nawawi, not as checked
 transcriptions of those scholars' own books. No al-Albani annotation, Hisn
@@ -43,21 +45,23 @@ al-Muslim selection/order, editor footnote or editor heading was copied.
 | `waking-spirit` | Waking | [20 / 38](https://shamela.ws/book/1956/18) | al-Nawawi there; Ibn Hajar, 1:113, [122](https://shamela.ws/book/30108/122) | None |
 | `prayer-peace` | After prayer | [71 / 183](https://shamela.ws/book/1956/69) | Ibn Hajar, 2:252, [827](https://shamela.ws/book/30108/827) | None |
 | `prayer-giving` | After prayer | [71 / 184](https://shamela.ws/book/1956/69) | Ibn Hajar, 2:256, [832](https://shamela.ws/book/30108/832) | None |
-| `prayer-help` | After prayer | [73 / 192](https://shamela.ws/book/1956/71) | al-Nawawi there | None |
+| `prayer-help` | After prayer | [73 / 192](https://shamela.ws/book/1956/71) | al-Nawawi there (chain); Ibn Hajar, 2:297, [879](https://shamela.ws/book/30108/879) | None |
 | `morning-evening-protection` | Morning/evening | [77 / 207](https://shamela.ws/book/1956/75) | al-Tirmidhi, reported there | Three complete selections, each containing all three surahs |
 | `morning-by-you` | Morning | [77 / 208](https://shamela.ws/book/1956/75) | al-Tirmidhi, reported there | None |
 | `evening-by-you` | Evening | [77 / 208](https://shamela.ws/book/1956/75) | al-Tirmidhi, reported there | None |
 | `morning-evening-sleep-creator` | Morning/evening/sleep | [78 / 212](https://shamela.ws/book/1956/76) | al-Tirmidhi, reported there | None |
 | `morning-evening-name` | Morning/evening | [78 / 213](https://shamela.ws/book/1956/76) | al-Tirmidhi, reported there | Three utterances |
-| `morning-evening-wellbeing` | Morning/evening | [80 / 217](https://shamela.ws/book/1956/78) | al-Hakim, reported there; the collection attribution begins on page79 | None |
+| `morning-evening-wellbeing` | Morning/evening | [80 / 217](https://shamela.ws/book/1956/78) | al-Hakim, reported there (chain); Ibn Hajar, 2:382, [976](https://shamela.ws/book/30108/976); the collection attribution begins on page 79 | None |
 | `sleep-life` | Sleep | [89 / 251](https://shamela.ws/book/1956/87) | Ibn Hajar, 1:109; his explicit return to that grading is 3:28, [1073](https://shamela.ws/book/30108/1073) | None |
 | `sleep-side` | Sleep | [89 / 253](https://shamela.ws/book/1956/87) | Ibn Hajar, 3:35, [1082](https://shamela.ws/book/30108/1082) | None |
 | `sleep-surrender` | Sleep | [90 / 257](https://shamela.ws/book/1956/88) | Ibn Hajar, 3:45, [1092](https://shamela.ws/book/30108/1092) | None |
 | `sleep-fed` | Sleep | [91 / 262](https://shamela.ws/book/1956/89) | al-Tirmidhi, reported there | None |
 
-The waking report 38 retains al-Nawawi's sahih-isnad judgment and Ibn Hajar's
-hasan judgment. Ibn Hajar identifies the waking half specifically in 1:113.
-There is no weak judgment in that comparison. Al-Nawawi's witness also inserts
+Report 38 keeps al-Nawawi's judgment on the chain and Ibn Hajar's answer to it.
+Ibn Hajar's opening sentence on 1:113 grades al-Tirmidhi's whole hadith, whose
+first half (shaking out the bed) the card does not show, so the card quotes his
+sentence on the second half instead: «فإن الشطر الثاني ... فالذي ينفرد به من قبيل
+الحسن». There is no weak judgment in that comparison. Al-Nawawi's witness also inserts
 a later quotation from al-Suyuti in the main text after report 38. That paragraph
 is excluded from our author-only witness. See [R0059](../records/R0059-a-later-author-can-be-in-the-main-text.md).
 
@@ -121,7 +125,7 @@ render at 390 wide, not iOS or Android device verification.
 This is a small selection, not a complete occasion collection. The following are
 left out rather than supplied without the requested source evidence:
 
-- The separate three-istighfar card from report183 and the multi-part counted
+- The separate three-istighfar card from report 183 and the multi-part counted
   tasbih sequences after prayer and at bedtime. They need sequence-specific
   counter units, not a count copied onto the following du'a.
 - Ayat al-Kursi and the last two ayat of al-Baqara at bedtime. Their Quran
@@ -131,7 +135,12 @@ left out rather than supplied without the requested source evidence:
   carry a matching strong judgment for that exact variant.
 
 The data tests compare every displayed utterance, occasion, count, instruction,
-virtue and grading quote to the saved author-only witness. They also test all
+virtue and grading quote to the saved author-only witness. That file was made
+from the books, so the tests check the data against it, not against the books.
+They also check each rank against the words of its quote, each Nata'ij link
+against the page it names, and that each Nata'ij passage is about the item's
+own hadith. `npm run adhkar:check` downloads both books and checks every string,
+printed page and link against them; it passes for all 15 items. They also test all
 occasion selectors, exact-id selection, variant separation, Quran positions and
 counts that belong to an action instead of the following utterance. These are
 ordinary content/behavior tests, not a proposed architectural guard.

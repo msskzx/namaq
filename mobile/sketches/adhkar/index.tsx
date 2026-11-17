@@ -10,7 +10,7 @@ import IconButton from '@/ui/IconButton';
 import { Text } from '@/ui/Text';
 import MushafPageView from '@/components/MushafPageView';
 import { dark } from '@/lib/theme';
-import { pageData, surahBefore } from '@/lib/mushaf';
+import { pageData, pageOfAyah, surahBefore } from '@/lib/mushaf';
 import { pageModel } from '@shared/quran/recitePage';
 import { pageTop } from '@shared/quran/ayahSlice';
 import { SURAH_TITLES } from '@shared/quran/surahNames';
@@ -42,7 +42,7 @@ function quotes(item: Dhikr): Quote[] {
   ];
 }
 
-/** Al-Ikhlas and al-Mu'awwidhatayn fill page 604, so the card shows that Madina page whole, through the reader's own page view. */
+/** The Madina page the selection starts on, whole, through the reader's own page view (al-Ikhlas and al-Mu'awwidhatayn fill page 604). */
 function QuranPage({ page }: { page: number }) {
   const [width, setWidth] = useState(0);
   const parts = useMemo(() => {
@@ -91,7 +91,7 @@ export default function AdhkarSketch() {
           <Card key={item.id} palette={dark} pad={18} gap={14}>
             {item.content.kind === 'text'
               ? <Text style={{ color: dark.ink, fontSize: 21, lineHeight: 40, textAlign: 'justify' }}>{item.content.text}</Text>
-              : <QuranPage page={604} />}
+              : <QuranPage page={pageOfAyah(`${item.content.ranges[0].surah}:${item.content.ranges[0].from}`)!} />}
             {item.virtueQuote && <Text style={{ color: dark.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>«{item.virtueQuote}»</Text>}
             {item.repeat && <Counter count={item.repeat.count} />}
             <Reference title={`${cite(item.citation)} · ${item.collections.join('، ')}`} palette={dark} quotes={quotes(item)} />

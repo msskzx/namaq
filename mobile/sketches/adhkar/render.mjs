@@ -9,7 +9,9 @@ if (['app.config.js', 'app.config.ts', 'app.config.json'].some(name => existsSyn
   throw new Error('Preserve the existing dynamic app config; select the sketch root there before exporting.');
 }
 const config = JSON.parse(readFileSync(join(mobile, 'app.json'), 'utf8')).expo;
-config.plugins = config.plugins.map(plugin => plugin === 'expo-router' ? ['expo-router', { root: './sketches/adhkar' }] : plugin);
+const router = plugin => plugin === 'expo-router' || (Array.isArray(plugin) && plugin[0] === 'expo-router');
+if (config.plugins.filter(router).length !== 1) throw new Error('Expected one expo-router plugin in app.json.');
+config.plugins = config.plugins.map(plugin => router(plugin) ? ['expo-router', { ...(Array.isArray(plugin) ? plugin[1] : {}), root: './sketches/adhkar' }] : plugin);
 writeFileSync(configPath, `module.exports = ${JSON.stringify(config)};\n`);
 try {
   const result = spawnSync(process.execPath, [join(mobile, 'node_modules/expo/bin/cli'), 'export', '--platform', 'web', '--output-dir', '/tmp/namaq-adhkar-sketch'], {

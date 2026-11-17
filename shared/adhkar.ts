@@ -10,7 +10,8 @@ export type AdhkarCitation = {
 };
 
 export type DhikrGrade = {
-  rank: 'sahih' | 'hasan' | 'hasan-sahih';
+  /** `isnad-sahih` is a judgment on the chain alone («بإسناد صحيح», «صحيح الإسناد»), not on the hadith. */
+  rank: 'sahih' | 'hasan' | 'hasan-sahih' | 'isnad-sahih';
   scholar: string;
   quote: string;
   citation: AdhkarCitation;
@@ -89,7 +90,7 @@ export const ADHKAR: readonly Dhikr[] = [
     ],
     "grades": [
       {
-        "rank": "sahih",
+        "rank": "isnad-sahih",
         "scholar": "النووي",
         "quote": "بإسناد صحيح",
         "citation": {
@@ -103,7 +104,7 @@ export const ADHKAR: readonly Dhikr[] = [
       {
         "rank": "hasan",
         "scholar": "ابن حجر العسقلاني",
-        "quote": "هذا حديث حسن من هذا الوجه بهذا السياق، وأصل شطره الأول صحيح.",
+        "quote": "فإن الشطر الثاني الذي اقتصر عليه من أفراد محمد بن عجلان، وهو صدوق، لكن في حفظه شيء، وخصوصًا في روايته عن المقبري، فالذي ينفرد به من قبيل الحسن",
         "citation": {
           "source": "nataij-afkar",
           "volume": 1,
@@ -204,7 +205,7 @@ export const ADHKAR: readonly Dhikr[] = [
     ],
     "grades": [
       {
-        "rank": "sahih",
+        "rank": "isnad-sahih",
         "scholar": "النووي",
         "quote": "بإسناد صحيح",
         "citation": {
@@ -213,6 +214,17 @@ export const ADHKAR: readonly Dhikr[] = [
           "page": 73,
           "url": "https://shamela.ws/book/1956/71",
           "report": 192
+        }
+      },
+      {
+        "rank": "sahih",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث صحيح",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 2,
+          "page": 297,
+          "url": "https://shamela.ws/book/30108/879"
         }
       }
     ],
@@ -462,7 +474,7 @@ export const ADHKAR: readonly Dhikr[] = [
     ],
     "grades": [
       {
-        "rank": "sahih",
+        "rank": "isnad-sahih",
         "scholar": "الحاكم أبو عبد الله",
         "quote": "قال الحاكم أبو عبد الله: هذا حديث صحيح الإِسناد",
         "citation": {
@@ -473,6 +485,17 @@ export const ADHKAR: readonly Dhikr[] = [
           "report": 217
         },
         "reportedBy": "النووي"
+      },
+      {
+        "rank": "hasan",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث حسن غريب لا نعرفه إلا من حديث عبادة بهذا السند.",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 2,
+          "page": 382,
+          "url": "https://shamela.ws/book/30108/976"
+        }
       }
     ],
     "occasionQuote": "حين يُمسي وحين يُصبح"

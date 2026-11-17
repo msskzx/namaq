@@ -46,25 +46,35 @@ describe('the al-Adhkar selection', () => {
   });
 
   it('has only attributed sahih/hasan judgments, quoted within their source context', () => {
+    const words = { 'sahih': /صحيح/, 'hasan': /حسن/, 'hasan-sahih': /حسن صحيح/, 'isnad-sahih': /بإسناد صحيح|صحيح الإ.?سناد/ };
+    const pages = new Map(Object.entries(witness.gradingPages));
     for (const item of ADHKAR) {
-      expect(item.grades.length).toBeGreaterThan(0);
+      expect(item.grades.some(grade => grade.rank !== 'isnad-sahih'), `${item.id} needs a grade of the hadith, not only its chain`).toBe(true);
       for (const grade of item.grades) {
-        expect(['sahih', 'hasan', 'hasan-sahih']).toContain(grade.rank);
+        expect(grade.quote).toMatch(words[grade.rank]);
         expect(grade.scholar.length).toBeGreaterThan(0);
-        expect(grade.quote).toMatch(/صحيح|صحيحة|حسن/);
         const { source, volume, page } = grade.citation;
-        const context = source === 'nataij-afkar'
-          ? grading.get(`nataij-${volume}-${page}`)
-          : authorReport(grade.citation.report);
-        expect(context).toBeTruthy();
-        expect(context).toContain(grade.quote);
         expect(SOURCES.some(entry => entry.id === source && entry.edition)).toBe(true);
-        expect(grade.citation.url).toMatch(/^https:\/\/shamela.ws\/book\/(1956|30108)\/\d+$/);
+        if (source === 'nataij-afkar') {
+          const key = `nataij-${volume}-${page}`;
+          const context = grading.get(key);
+          expect(context, key).toContain(grade.quote);
+          expect(grade.citation.url).toBe(`https://shamela.ws/book/30108/${pages.get(key)}`);
+          if (item.content.kind === 'text') {
+            const plain = (text: string) => text.replace(/[\u064B-\u0652\u0670]/g, '').replace(/[أإآ]/g, 'ا');
+            const said = plain(item.content.text).split(/[\s،.]+/).filter(word => word.length > 3);
+            const found = said.filter(word => plain(context!).includes(word.replace(/^و/, '')));
+            expect(found.length, `${item.id}: ${key} is about another hadith`).toBeGreaterThanOrEqual(Math.min(3, said.length));
+          }
+        } else {
+          expect(authorReport(grade.citation.report)).toContain(grade.quote);
+          expect(grade.citation.url).toBe(item.citation.url);
+        }
         if (grade.scholar === 'الترمذي' || grade.scholar === 'الحاكم أبو عبد الله') expect(grade.reportedBy).toBe('النووي');
       }
     }
     expect(dhikrById('waking-spirit')?.grades.map(grade => [grade.scholar, grade.rank])).toEqual([
-      ['النووي', 'sahih'], ['ابن حجر العسقلاني', 'hasan'],
+      ['النووي', 'isnad-sahih'], ['ابن حجر العسقلاني', 'hasan'],
     ]);
   });
 
