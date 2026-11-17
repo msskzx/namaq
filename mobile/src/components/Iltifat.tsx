@@ -10,6 +10,7 @@ import { readAyah } from '@/lib/openReader';
 import { shareCard } from '@/lib/shareImage';
 import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import Card from '@/ui/Card';
 
 // The app lays out right to left (direction: 'rtl' in app/_layout.tsx), so a row starts on the right.
 
@@ -119,7 +120,7 @@ function Dialog({ turns, palette }: { turns: TurnView[]; palette: Palette }) {
 export function IltifatCard({ view, palette, image }: { view: ExampleView; palette: Palette; image?: boolean }) {
   const title = `${view.name} ${rangeLabel(view)}`;
   return (
-    <View style={{ backgroundColor: palette.card, ...CARD, paddingHorizontal: 16, paddingTop: 14, paddingBottom: 4, gap: 10 }} accessibilityLabel={title}>
+    <Card palette={palette} pad={[10, 16]} gap={10} accessibilityLabel={title}>
       <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{title}</Text>
       {view.kind === 'strip' && <>
         <Strip steps={view.steps} palette={palette} />
@@ -131,6 +132,6 @@ export function IltifatCard({ view, palette, image }: { view: ExampleView; palet
         <IconButton Icon={BookOpen} label={`افتح ${title} في المصحف`} onPress={() => readAyah(`${view.surah}:${view.from}`)} />
         <IconButton Icon={Send} label={`شارك ${title}`} onPress={() => shareCard({ content: width => <View style={{ width }}><IltifatCard view={view} palette={palette} image /></View> })} />
       </View>}
-    </View>
+    </Card>
   );
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
-import { Text, TextInput } from '@/ui/Text';
+import { Text } from '@/ui/Text';
 import { router } from 'expo-router';
 import { ArrowLeft } from 'lucide-react-native';
 import { NAME_MAX } from '@shared/party/rules';
@@ -9,6 +9,7 @@ import Button from '@/ui/Button';
 import { Section } from '@/components/QuizForm';
 import { NoPartyServer, playerId, saveName, savedName, startParty } from '@/lib/party';
 import { usePalette } from '@/lib/theme';
+import Field from '@/ui/Field';
 
 const toLatin = (text: string) => text.replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d))).replace(/\D/g, '');
 
@@ -19,7 +20,6 @@ export default function PartyStart() {
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const input = { fontSize: 18, color: palette.ink, borderWidth: 1, borderColor: palette.rule, borderRadius: 8, paddingHorizontal: 12, height: 48 } as const;
   const start = async () => {
     if (busy || !name.trim()) return;
     setBusy(true);
@@ -45,8 +45,7 @@ export default function PartyStart() {
           يبدأ أحدكم الاختبار ويشارك رقمه، ويدخل الباقون من أجهزتهم. يجيب الجميع السؤال نفسه، وتظهر الإجابة والترتيب بعد أن يجيب الكل.
         </Text>
         <Section title="اسمك" palette={palette}>
-          <TextInput value={name} onChangeText={setName} maxLength={NAME_MAX} autoComplete="nickname" accessibilityLabel="اسمك"
-            placeholder="اكتب اسمك" placeholderTextColor={palette.muted} style={{ ...input, textAlign: 'right' }} />
+          <Field value={name} onChangeText={setName} maxLength={NAME_MAX} autoComplete="nickname" label="اسمك" placeholder="اكتب اسمك" palette={palette} />
         </Section>
         <Section title="ابدأ اختبارًا" palette={palette}>
           {error ? <Text accessibilityRole="alert" style={{ color: palette.accent, textAlign: 'right' }}>{error}</Text> : null}
@@ -56,9 +55,7 @@ export default function PartyStart() {
           </View>
         </Section>
         <Section title="انضم إلى اختبار" palette={palette}>
-          <TextInput value={code} onChangeText={text => setCode(toLatin(text).slice(0, 6))} keyboardType="number-pad" maxLength={6} placeholder="رقم الاختبار"
-            placeholderTextColor={palette.muted} accessibilityLabel="رقم الاختبار"
-            style={{ ...input, fontSize: code ? 26 : 18, letterSpacing: code ? 6 : 0, textAlign: 'center', writingDirection: 'ltr', height: 56 }} />
+          <Field code value={code} onChangeText={text => setCode(toLatin(text).slice(0, 6))} keyboardType="number-pad" maxLength={6} placeholder="رقم الاختبار" label="رقم الاختبار" palette={palette} />
           <View style={{ alignItems: 'flex-start' }}>
             <Button variant="primary" Icon={ArrowLeft} label="انضم" disabled={code.length !== 6} onPress={join} />
           </View>

@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState, type ComponentRef } from 'react';
-import { FlatList, Pressable, Share, View } from 'react-native';
+import { FlatList, Share, View } from 'react-native';
 import { BookOpen, Send } from 'lucide-react-native';
 import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
@@ -14,8 +14,11 @@ import { WEBSITE } from '@/lib/website';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { readAyah } from '@/lib/openReader';
 import { useTabRetap } from '@/lib/tabRetap';
-import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import Card from '@/ui/Card';
+import Tabs from '@/ui/Tabs';
+import Chip from '@/ui/Chip';
 
 const KINDS: { kind: OathKind; label: string }[] = [{ kind: 'allah', label: 'أقسم الله' }, { kind: 'others', label: 'أقسم غيره' }];
 const BUILT = { allah: buildOaths('allah', ayahMushafWords), others: buildOaths('others', ayahMushafWords) };
@@ -41,14 +44,14 @@ function OathCard({ oath, palette }: { oath: OathView; palette: Palette }) {
         {oath.who && <Text style={{ color: palette.muted, fontSize: 14 }}>{oath.who}</Text>}
         {quotes && <Reference title={citesOf(quotes)} quotes={quotes} palette={palette} />}
       </View>
-      <View style={{ ...CARD, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.card, paddingHorizontal: 14, paddingVertical: 6 }}>
+      <Card palette={palette} pad={[6, 14]}>
         <Text style={{ fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 42, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
           {oath.lines.map(line => [
             ...line.words.map((word, i) => <Text key={`${line.ayah}-${i}`} style={{ fontFamily: QURAN_FONT, color: word.sworn ? palette.accent : palette.ink }}>{`${word.text} `}</Text>),
             <Text key={`${line.ayah}-n`} style={{ fontFamily: QURAN_FONT, color: palette.amber }}>{`${num(line.ayah)} `}</Text>,
           ])}
         </Text>
-      </View>
+      </Card>
       {/* Card actions under the card, on the right (owner): the mushaf, then share last. */}
       <View style={{ flexDirection: 'row', gap: 4 }}>
         <IconButton Icon={BookOpen} label={`افتح ${place} في المصحف`} onPress={() => readAyah(oath.id)} size="small" />
@@ -74,30 +77,12 @@ export default function OathsScreen() {
   const rows = useMemo(() => rowsOf(kind, by), [kind, by]);
   useTabRetap('oaths', () => { if (top.current > 4) list.current?.scrollToOffset({ offset: 0, animated: true }); else setBy(null); });
   const pick = (next: OathKind) => { setKind(next); setBy(null); list.current?.scrollToOffset({ offset: 0, animated: false }); };
-  const chip = (label: string, value: OathBy | null) => {
-    const on = by === value;
-    return (
-      <Pressable key={label} onPress={() => setBy(value)} accessibilityRole="button" accessibilityState={{ selected: on }}
-        style={{ paddingHorizontal: 14, height: 34, justifyContent: 'center', borderRadius: 999, borderWidth: 1, borderColor: on ? palette.accent : palette.rule, backgroundColor: on ? palette.accent : 'transparent' }}>
-        <Text style={{ fontSize: 16, color: on ? palette.onAccent : palette.ink }}>{label}</Text>
-      </Pressable>
-    );
-  };
+  const chip = (label: string, value: OathBy | null) => <Chip key={label} label={label} on={by === value} onPress={() => setBy(value)} palette={palette} />;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar hub hideOnScroll />
       <View style={{ paddingHorizontal: 16, paddingTop: 8, gap: 10 }}>
-        <View accessibilityRole="tablist" style={{ flexDirection: 'row', padding: 3, borderRadius: 12, backgroundColor: palette.paperDeep }}>
-          {KINDS.map(option => {
-            const on = option.kind === kind;
-            return (
-              <Pressable key={option.kind} onPress={() => pick(option.kind)} accessibilityRole="tab" accessibilityState={{ selected: on }}
-                style={{ flex: 1, height: 36, alignItems: 'center', justifyContent: 'center', borderRadius: 10, backgroundColor: on ? palette.accent : 'transparent' }}>
-                <Text style={{ fontSize: 16, color: on ? palette.onAccent : palette.muted }}>{option.label}</Text>
-              </Pressable>
-            );
-          })}
-        </View>
+        <Tabs options={KINDS.map(option => ({ key: option.kind, label: option.label }))} value={kind} onChange={pick} palette={palette} fill />
       </View>
       {/* The references and chips scroll with the list, as on the website, so an open reference never pins the cards down. */}
       <FlatList ref={list} data={rows} keyExtractor={row => ('head' in row ? row.head.on : row.oath.id)} onScroll={event => { top.current = event.nativeEvent.contentOffset.y; shrink(event); }} scrollEventThrottle={16}

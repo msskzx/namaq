@@ -91,7 +91,7 @@ job. `Tour` keeps its own overlay.
 `ActButton`s, used by the card menu and the reader long press.
 **PRs:** 4a sheets, 4b floating menu.
 
-### 5. Card
+### 5. Card (5a done: home, library, quizzes; 5b done: Quran tools, sheets. Hub tiles, openings and لطائف now framed too (owner 2026-11-17); MatrixCard's lane frames stay its own)
 Drift: the `CARD` token in `lib/theme.ts:63` is only a radius (14), spread
 as `...CARD` in 27 files, each adding its own border, colour and padding.
 About 42 more boxed containers set a literal radius instead: 10 (19), 12 (8),
@@ -102,7 +102,7 @@ options). Smaller boxes (word chips, inputs) are not cards and go to their own
 pieces below.
 **PRs:** 5a home + library + quizzes, 5b Quran tools screens.
 
-### 6. Tabs
+### 6. Tabs (done: reader settings, balagha, book sheet, oaths. The word lists in WordSheet and IrabSheet and the لطائف topics wrap and filter, so they are chips, step 7)
 Drift: seven tab rows, four looks: filled accent (`ReaderSheets`,
 `BalaghaSheet`), outlined round pill (`WordSheet`, `IrabSheet`), 56×38 radius
 12 (`screens/book.tsx`), full-width radius 10 (`screens/oaths.tsx`,
@@ -110,14 +110,14 @@ Drift: seven tab rows, four looks: filled accent (`ReaderSheets`,
 **Home:** `Tabs` in `ui/`, same look as the website's `Segmented`.
 **PR:** one.
 
-### 7. Chip
+### 7. Chip (done: filters, listen plan, gestures, لطائف topics, order, oaths, word lists, tree surahs, removable search chips. Not chips: the reader's and book's floating pills, the video studio's cycle buttons)
 Drift: 9 round chips in `Reader.tsx` (3), `CardMenu.tsx` (2), `WordSheet`,
 `screens/book.tsx`, `screens/order.tsx`, `screens/oaths.tsx`, plus
 `SurahChips` and `FilterFields`, paddings 12/6, 14/2, 10/…
 **Home:** `Chip` (selected, removable).
 **PR:** one.
 
-### 8. Text field
+### 8. Text field (done: one framed look, 44 tall, 16px; search fields, note, party name and code)
 Drift: 14 inputs. Search fields in `BranchSearch`, `screens/search.tsx`,
 `screens/words.tsx`, `screens/book.tsx`, `CompareSheet`, `Utilities`; note
 and party fields in `NoteSheet`, `screens/quiz/party/*`. Writing boxes
@@ -127,7 +127,7 @@ stay out.
 right).
 **PR:** one.
 
-### 9. Empty state and loading
+### 9. Empty state and loading (done: ui/Empty; LoadingDots is the one loader, `fill` for a page or sheet. LoadingScreen (app start) and Hourglass (quiz timer) are not loaders)
 Drift: empty messages in `ComparePager`, `screens/library.tsx`,
 `screens/book.tsx` each styled differently; loading by `LoadingDots`,
 `Hourglass`, `LoadingScreen` and raw `ActivityIndicator` (`Books.tsx`,

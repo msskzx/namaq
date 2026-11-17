@@ -5,7 +5,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Text } from '@/ui/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
-import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, EyeOff, Layers, LightbulbOff, List, ListTree, NotebookPen, Play, Send, Sparkles, TableOfContents, TextSearch } from 'lucide-react-native';
+import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, EyeOff, Layers, LightbulbOff, ListTree, NotebookPen, History, Play, Pointer, Search, Send, Sparkles, TableOfContents, TextSearch } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayahBookmarkId, ayahHref, clearForgotten, markAyah, markWord, wordMarkKey, readAyahMarks, subscribeAyahMarks, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
@@ -95,6 +95,7 @@ export default function Reader() {
   const [page, setPage] = useState(() => Math.min(PAGES, Math.max(1, place?.page ?? 1)));
   const [position, setPosition] = useState<RecitePosition | null>(place?.position ?? null);
   const [reviewing, setReviewing] = useState(!!place?.reviewing && !!place?.position);
+  const [reciteMenu, setReciteMenu] = useState<{ x: number; y: number } | null>(null);
   /** The selected ayah, and after a long press the word it landed on (its place in the ayah). */
   const [mark, setMark] = useState<{ key: string; page: number; word?: number } | null>(null);
   const [wordLemmas, setWordLemmas] = useState<number[] | null>(null);
@@ -168,7 +169,7 @@ export default function Reader() {
     return () => setImmersive(false);
   }, [focused, tools]);
 
-  // However a recitation starts (the eye button, the index's continue or review, the homepage), the bars step aside for it.
+  // However a recitation starts (the eye's menu, an ayah's menu, the homepage), the bars step aside for it.
   useEffect(() => {
     if (reciting) { setTools(false); setActions(null); }
   }, [reciting]);
@@ -213,7 +214,7 @@ export default function Reader() {
     setPosition(intent.recite ? { start: intent.at ?? modelOf(to).order[0], ...(intent.word !== undefined ? { word: intent.word } : {}), shown: null, words: 0 } : null);
   });
 
-  // The top bar recites from the page's start, an ayah's long-press menu from that ayah (owner, 2026-11-17).
+  // The page's start by default; the eye's menu and an ayah's long-press menu pass the ayah (owner, 2026-11-17).
   const startRecite = (from: string = model.order[0]) => {
     setActions(null);
     setTools(false);
@@ -294,7 +295,7 @@ export default function Reader() {
   }, []);
   const scrolled = useRef(0);
   const scrollTo = (y: number) => { scroller.current?.scrollTo({ y, animated: false }); scrolled.current = y; scrollY.current = y; };
-  useEffect(() => { if (!keyboard && !flowing) scrollTo(0); }, [keyboard, flowing]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (!keyboard && !flowing) { scrollTo(0); setScrollTop(0); } }, [keyboard, flowing]); // eslint-disable-line react-hooks/exhaustive-deps
   // With bigger text the row of pages is as tall as the current page; a neighbour sliding in shows its top where the reader is.
   const pagerHeight = flowing ? Math.max(height, heights[page] ?? 0) : height;
   const [scrollTop, setScrollTop] = useState(0);
@@ -375,7 +376,7 @@ export default function Reader() {
   // The long press's menu opens where the finger pressed.
   const actionsAt = actions ? { x: actions.x, y: actions.y } : null;
   return (
-    <View style={{ flex: 1, backgroundColor: palette.paperDeep }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
+    <View style={{ flex: 1, backgroundColor: palette.card }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
       <GestureDetector gesture={scrollGesture}>
       <ScrollView ref={scroller} scrollEnabled={!pinching && (!!keyboard || flowing)} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always" scrollEventThrottle={32}
         onScroll={event => { scrolled.current = event.nativeEvent.contentOffset.y; scrollY.current = scrolled.current; }}
@@ -392,16 +393,28 @@ export default function Reader() {
       <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>
           {/* No logo; the buttons at the right edge, under the thumb (owner, 2026-11-17). */}
           <TopBar away={!tools}>
+            {/* Search first, at the right edge; the sheet shows the surah list until something is typed (owner, 2026-11-17). */}
+            <IconButton Icon={Search} label="فهرس السور والبحث" tone="ink" onPress={() => setSheet('index')} />
             {/* The فاصلة: the ribbon fills on its page; a tap puts it on the page open or takes it off. Filled, not boxed (owner, 2026-11-17). */}
             <Pressable onPress={() => { buzz(); setQuranFasila(fasila?.page === page ? null : { key: firstAyahOfPage(page), page }); }} accessibilityRole="button"
               accessibilityState={{ selected: fasila?.page === page }} accessibilityLabel={fasila?.page === page ? 'أزل الفاصلة من هذه الصفحة' : 'ضع الفاصلة في هذه الصفحة: هنا توقفت'}
               hitSlop={6} style={{ padding: 9 }}>
               <FasilaIcon size={24} color={palette.accent} filled={fasila?.page === page} />
             </Pressable>
-            <IconButton Icon={List} label="فهرس السور والبحث" tone="ink" onPress={() => setSheet('index')} />
-            <IconButton Icon={EyeOff} label={reciting ? 'إنهاء التسميع' : 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة'} tone="ink" on={reciting} onPress={() => (reciting ? stopRecite() : startRecite())} />
+            <IconButton Icon={EyeOff} label={reciting ? 'إنهاء التسميع' : 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة'} tone="ink" on={reciting} onPress={() => (reciting ? stopRecite() : setReciteMenu({ x: (size?.width ?? 390) - 122, y: insets.top + 26 }))} />
           </TopBar>
       </View>
+      {/* The eye's ways to start reciting, only those that apply (owner, 2026-11-17); they left the index sheet. */}
+      {reciteMenu && (
+        <FloatingMenu at={reciteMenu} label="ابدأ التسميع" onClose={() => setReciteMenu(null)} palette={palette} overlay>
+          <ActButton Icon={EyeOff} label="سمّع من أول الصفحة" name="هذه الصفحة" palette={palette} onPress={() => { setReciteMenu(null); startRecite(); }} />
+          {mark?.page === page && <ActButton Icon={Pointer} label="سمّع من الآية المختارة" name="الآية المختارة" palette={palette} onPress={() => { setReciteMenu(null); startRecite(mark!.key); }} />}
+          {last?.position && <ActButton Icon={History} label="تابع التسميع من حيث توقفت" name="تابع" palette={palette}
+            onPress={() => { setReciteMenu(null); setReviewing(false); setPosition(last.position!); setPage(last.page); }} />}
+          {forgotten.length > 0 && <ActButton Icon={LightbulbOff} label="راجع ما نسيت" name="ما نسيت" palette={palette}
+            onPress={() => { setReciteMenu(null); jump({ page: pageOfAyah(markAyah(forgotten[0])) ?? page, key: forgotten[0], mark: false }, 'review'); }} />}
+        </FloatingMenu>
+      )}
       {actions && (
         <FloatingMenu at={actionsAt} label={`الآية ${num(Number(actions.key.split(':')[1]))} من السورة ${num(Number(actions.key.split(':')[0]))}`} onClose={() => setActions(null)} top={pageInsets.top} palette={palette}>
           {/* Listening comes first (owner's sketch, 2026-11-17): from this ayah to its surah's end, with the repeats last set. */}
@@ -474,8 +487,7 @@ export default function Reader() {
       {boxes.field}
       {/* The first visit's tip names the reading touches, so it waits out recite mode, and steps aside while an ayah's buttons are open. */}
       <TabHint id="read" palette={palette} hidden={reciting || !!actions || !!listening} />
-      <IndexSheet open={sheet === 'index'} onClose={() => setSheet(null)} onJump={jump} palette={palette} page={page} forgotten={forgotten} recite={reciting}
-        last={last?.position ? () => { setReviewing(false); setPosition(last.position!); setPage(last.page); } : null} />
+      <IndexSheet open={sheet === 'index'} onClose={() => setSheet(null)} onJump={jump} palette={palette} page={page} recite={reciting} />
     </View>
   );
 }

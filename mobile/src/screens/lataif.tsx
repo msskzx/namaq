@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState, type ComponentRef } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import itqan from '@shared/data/quran/itqanBalagha';
 import { TOPICS, topicOf, exampleReference } from '@shared/quran/lataif';
 import { examples, type Voice } from '@shared/quran/iltifat';
@@ -12,6 +12,7 @@ import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
 import { usePalette } from '@/lib/theme';
 import { ayahMushafWords } from '@/lib/mushaf';
+import Chip from '@/ui/Chip';
 
 /**
  * The website's /quran/lataif (owner, 2026-11-16): a curated list of examples, each card with its own picture, grouped
@@ -26,12 +27,7 @@ export default function LataifScreen() {
   const views = useMemo(() => examples(ayahMushafWords), []);
   const references = useMemo(() => Object.fromEntries(views.map(view => [view.key, exampleReference(view, itqan)])), [views]);
   useTabRetap('lataif', () => scroll.current?.scrollTo({ y: 0, animated: true }));
-  const chip = (on: boolean) => ({ borderWidth: 1, borderColor: on ? palette.accent : palette.rule, backgroundColor: on ? palette.accent : 'transparent', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 6 });
-  const pill = (name: string | null, label: string) => (
-    <Pressable key={label} onPress={() => setTopic(name)} accessibilityRole="tab" aria-selected={topic === name} style={chip(topic === name)}>
-      <Text style={{ color: topic === name ? palette.onAccent : palette.ink, fontSize: 15 }}>{label}</Text>
-    </Pressable>
-  );
+  const pill = (name: string | null, label: string) => <Chip key={label} role="tab" label={label} on={topic === name} onPress={() => setTopic(name)} palette={palette} />;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar hub hideOnScroll />

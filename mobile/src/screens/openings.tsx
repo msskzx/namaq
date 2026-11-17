@@ -17,8 +17,9 @@ import { readAyah } from '@/lib/openReader';
 import { shareCard } from '@/lib/shareImage';
 import { readSettings, writeSettings } from '@/lib/soloStore';
 import { useTabRetap } from '@/lib/tabRetap';
-import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import Card from '@/ui/Card';
 
 const words = (key: string) => ayahOf(key)?.words ?? [];
 
@@ -64,17 +65,17 @@ function Rows({ card, palette, open, still }: { card: OpeningCard; palette: Pale
   </>;
 }
 
-function Card({ card, palette }: { card: OpeningCard; palette: Palette }) {
+function Opening({ card, palette }: { card: OpeningCard; palette: Palette }) {
   const [open, setOpen] = useState(false);
   const share = () => shareCard({ link: `https://namaq.vercel.app/quran/openings?kind=${card.kind}#${card.id}`, content: width => (
-    <View style={{ width, padding: 14, ...CARD, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule }}>
+    <Card palette={palette} style={{ width }}>
       <Text style={{ color: palette.accent, fontSize: 19, textAlign: 'right' }}>{card.title}</Text>
       <Rows card={card} palette={palette} still />
-    </View>
+    </Card>
   ) });
   return (
     <View style={{ marginBottom: 12, gap: 2 }}>
-      <View style={{ ...CARD, backgroundColor: palette.card, paddingHorizontal: 16, paddingTop: 10, paddingBottom: 8 }}>
+      <Card palette={palette} pad={[9, 16]}>
         {!soleCard(card) && <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 19, textAlign: 'right' }}>{card.title}</Text>}
         {card.refs && !soleCard(card) && <Reference title={card.refs[0].cite!} quotes={card.refs} palette={palette} />}
         <Rows card={card} palette={palette} open={open} />
@@ -82,7 +83,7 @@ function Card({ card, palette }: { card: OpeningCard; palette: Palette }) {
           {CONDITION_NOTES.map(text => <Text key={text} style={{ color: palette.muted, fontSize: 13, lineHeight: 21, textAlign: 'right' }}>{text}</Text>)}
           {CONDITION_SOURCES.map(source => <ExternalLink key={source.url} url={source.url} color={palette.muted} size={13} style={{ textAlign: 'right' }}>{source.title}</ExternalLink>)}
         </View>}
-      </View>
+      </Card>
       <View style={{ flexDirection: 'row', gap: 14, paddingHorizontal: 4 }}>
         {card.rows.some(row => CONDITION_SPANS[row.surah]) && <IconButton Icon={open ? ChevronUp : ChevronDown} label="الشرط وجوابه" onPress={() => setOpen(!open)} size="small" expanded={open} />}
         <IconButton Icon={Send} label={`شارك ${card.title}`} onPress={share} size="small" />
@@ -137,7 +138,7 @@ export default function OpeningsScreen() {
                 <Reference title={quote.cite} quotes={[quote, ...(ITQAN_KIND_NOTES[k.id] ?? [])]} palette={palette} />
                 {sole?.refs && <Reference title={sole.refs[0].cite!} quotes={sole.refs} palette={palette} />}
               </View>
-              {cards.filter(card => (kind ? inKind(card, k.id) : card.kind === k.id)).map(card => <Card key={card.id} card={card} palette={palette} />)}
+              {cards.filter(card => (kind ? inKind(card, k.id) : card.kind === k.id)).map(card => <Opening key={card.id} card={card} palette={palette} />)}
             </View>
           );
         })}

@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
-import { Text, TextInput } from '@/ui/Text';
-import { LightbulbOff, Play, Search } from 'lucide-react-native';
-import { num } from '@shared/quran/arabicNumber';
+import { Text } from '@/ui/Text';
+import { ayatCount, num } from '@shared/quran/arabicNumber';
 import { juzGroups, matchesSurah, parseReference, type IndexSurah } from '@shared/quran/juzIndex';
 import { searchAyat, searchable, type AyahSearch } from '@shared/quran/ayahSearch';
 import { corpusIndex as ayahIndex } from '@shared/quran/corpusIndex';
@@ -12,12 +11,17 @@ import { pageOfAyah, surahs } from '@/lib/mushaf';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { quranText } from '@/lib/quranText';
 import { surahName } from '@shared/quran/surahNames';
+import Tabs from '@/ui/Tabs';
+import Chip from '@/ui/Chip';
+import { SearchField } from '@/ui/Field';
+import Empty from '@/ui/Empty';
 
 /** Where a link in the index goes: a page, the ayah that starts there, and whether to mark that ayah. */
 export type Jump = { page: number; key: string; mark: boolean };
 
 const name = (surah: { number: number }) => surahName(surah.number);
-const AROUND = 6;
+/** Words set as one run of text with a space after each, so a long ayah is three spans, not one per word. */
+const join = (words: string[]) => words.map(word => `${quranText(word)} `).join('');
 const JUZ_ROW = 48;
 const SURAH_ROW = 40;
 
@@ -27,17 +31,14 @@ type Row =
   | { kind: 'surah'; number: number; name: string; from: number; page: number }
   | { kind: 'ayah'; key: string; page: number; words: string[]; from: number; to: number };
 
-/** The index of surahs and juz', the search for a surah, an ayah number or words, and the recite shortcuts. */
-export function IndexSheet({ open, onClose, onJump, palette, page, last, forgotten, recite }: {
+/** The index of surahs and juz', and the search for a surah, an ayah number or words. */
+export function IndexSheet({ open, onClose, onJump, palette, page, recite }: {
   open: boolean;
   /** The page open in the reader: the index opens at its surah. */
   page: number;
   onClose: () => void;
-  onJump: (jump: Jump, recite?: 'review') => void;
+  onJump: (jump: Jump) => void;
   palette: Palette;
-  /** Where the last recitation stopped. */
-  last: (() => void) | null;
-  forgotten: string[];
   /** Reciting: the index says what a link does now, as the website's recite index. */
   recite?: boolean;
 }) {
@@ -48,7 +49,7 @@ export function IndexSheet({ open, onClose, onJump, palette, page, last, forgott
   const [hits, setHits] = useState<AyahSearch & { query: string }>({ query: '', total: 0, hits: [] });
   useEffect(() => {
     if (!words) return;
-    const timer = setTimeout(() => setHits({ ...searchAyat(ayahIndex(), words), query: words }), 150);
+    const timer = setTimeout(() => setHits({ ...searchAyat(ayahIndex(), words, Infinity), query: words }), 150);
     return () => clearTimeout(timer);
   }, [words]);
   const found = words && hits.query === words ? hits : null;
@@ -81,38 +82,22 @@ export function IndexSheet({ open, onClose, onJump, palette, page, last, forgott
   }, [rows]);
   const start = plain && !query.trim() && here > 0 ? Math.max(0, here - 2) : 0;
 
-  const go = (jump: Jump, recite?: 'review') => { onJump(jump, recite); onClose(); };
+  const go = (jump: Jump) => { onJump(jump); onClose(); };
   const button = { flexDirection: 'row', alignItems: 'center', gap: 8, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8 } as const;
   return (
     <Sheet open={open} onClose={onClose} palette={palette} tall>
       <View style={{ paddingHorizontal: 16, gap: 10, paddingBottom: 8 }}>
         {recite && <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 22 }}>اختر سورة أو جزءًا أو آية. تُخفى الآيات في مواضعها من الصفحة، وتُظهر كل لمسة الآية التالية.</Text>}
-        {(last || forgotten.length > 0) && (
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-            {last && <Pressable style={button} accessibilityRole="button" onPress={() => { last(); onClose(); }}>
-              <Play size={18} color={palette.accent} /><Text style={{ color: palette.ink, fontSize: 15 }}>تابع التسميع من حيث توقفت</Text>
-            </Pressable>}
-            {forgotten.length > 0 && <Pressable style={button} accessibilityRole="button"
-              onPress={() => go({ page: pageOfAyah(forgotten[0].split(':').slice(0, 2).join(':')) ?? 1, key: forgotten[0], mark: false }, 'review')}>
-              <LightbulbOff size={18} color={palette.accent} /><Text style={{ color: palette.ink, fontSize: 15 }}>راجع ما نسيت</Text>
-            </Pressable>}
-          </View>
-        )}
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, borderBottomWidth: 1, borderColor: palette.rule }}>
-          <Search size={18} color={palette.accent} />
-          <TextInput value={query} onChangeText={setQuery} placeholder="سورة، أو آية برقمها (٢:٢٥٥) أو بكلماتها"
-            placeholderTextColor={palette.muted} accessibilityLabel="ابحث عن سورة أو آية" returnKeyType="search"
-            onSubmitEditing={() => reference && go({ page: pageOfAyah(`${reference.surah.number}:${reference.ayah}`) ?? 1, key: `${reference.surah.number}:${reference.ayah}`, mark: true })}
-            style={{ flex: 1, fontSize: 16, paddingVertical: 8, color: palette.ink, textAlign: 'right' }} />
-        </View>
+        <SearchField value={query} onChangeText={setQuery} placeholder="سورة، أو آية برقمها (٢:٢٥٥) أو بكلماتها" label="ابحث عن سورة أو آية" palette={palette}
+          onSubmitEditing={() => reference && go({ page: pageOfAyah(`${reference.surah.number}:${reference.ayah}`) ?? 1, key: `${reference.surah.number}:${reference.ayah}`, mark: true })} />
         {reference && (
           <Pressable style={[button, { alignSelf: 'flex-start' }]} accessibilityRole="button"
             onPress={() => go({ page: pageOfAyah(`${reference.surah.number}:${reference.ayah}`) ?? 1, key: `${reference.surah.number}:${reference.ayah}`, mark: true })}>
             <Text style={{ color: palette.accent, fontSize: 16 }}>افتح {name(reference.surah)} {num(reference.ayah)}</Text>
           </Pressable>
         )}
-        {query.trim() && rows.length === 0 && (!words || found) && <Text style={{ color: palette.muted, fontSize: 14 }}>لا توجد سورة ولا آية بهذا النص.</Text>}
-        {found && found.total > found.hits.length && rows[0]?.kind === 'ayah' && <Text style={{ color: palette.muted, fontSize: 14 }}>{num(found.total)} آية، أول {num(found.hits.length)} منها</Text>}
+        {query.trim() && rows.length === 0 && (!words || found) && <Empty text="لا توجد سورة ولا آية بهذا النص." palette={palette} />}
+        {rows[0]?.kind === 'ayah' && <Text style={{ color: palette.muted, fontSize: 14 }}>{ayatCount(rows.length)}</Text>}
       </View>
       <FlatList data={rows} keyExtractor={row => (row.kind === 'juz' ? `j${row.juz}` : row.kind === 'surah' ? `s${row.number}-${row.from}` : `a${row.key}`)}
         keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" initialNumToRender={30} style={{ flex: 1 }}
@@ -137,19 +122,15 @@ export function IndexSheet({ open, onClose, onJump, palette, page, last, forgott
             </Pressable>
           );
           const [surah, ayah] = row.key.split(':').map(Number);
-          const start = Math.max(0, row.from - AROUND);
-          const end = Math.min(row.words.length, row.to + 1 + AROUND);
           return (
             <Pressable onPress={() => go({ page: row.page, key: row.key, mark: true })} accessibilityRole="link"
               style={{ paddingHorizontal: 16, paddingVertical: 8, borderBottomWidth: 1, borderColor: palette.rule, gap: 2 }}>
               <Text style={{ color: palette.accent, fontSize: 13 }}>{name(surahs[surah - 1])} {num(ayah)}</Text>
               <Text style={{ color: palette.ink, fontSize: 20, lineHeight: 36, fontFamily: QURAN_FONT }}>
-                {start > 0 ? '… ' : ''}
-                {row.words.slice(start, end).map((word, at) => {
-                  const inside = start + at >= row.from && start + at <= row.to;
-                  return <Text key={at} style={inside ? { color: palette.accent } : undefined}>{quranText(word)} </Text>;
-                })}
-                {end < row.words.length ? '…' : ''}
+                {/* The whole ayah, its found words coloured (owner, 2026-11-17). */}
+                {join(row.words.slice(0, row.from))}
+                <Text style={{ color: palette.accent }}>{join(row.words.slice(row.from, row.to + 1))}</Text>
+                {join(row.words.slice(row.to + 1))}
               </Text>
             </Pressable>
           );
@@ -175,17 +156,10 @@ export function GestureSettings({ palette, mode: shownMode }: { palette: Palette
   const gestures = useSyncExternalStore(subscribeGestures, readGestures, serverGestures);
   const [mode, setMode] = useState<ReaderMode>(shownMode);
   useEffect(() => { setMode(shownMode); }, [shownMode]);
-  const chip = (on: boolean) => ({ borderWidth: 1, borderColor: on ? palette.accent : palette.rule, backgroundColor: on ? palette.accent : 'transparent', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 6 });
   return (
     <View style={{ gap: 14 }}>
       <Text style={{ color: palette.muted, fontSize: 14 }}>اللمسات في المصحف</Text>
-      <View style={{ flexDirection: 'row', gap: 8 }} accessibilityRole="tablist">
-        {(['read', 'recite'] as const).map(option => (
-          <Pressable key={option} onPress={() => setMode(option)} accessibilityRole="tab" accessibilityState={{ selected: mode === option }} style={chip(mode === option)}>
-            <Text style={{ color: mode === option ? palette.onAccent : palette.ink, fontSize: 15 }}>{option === 'read' ? 'قراءة' : 'تسميع'}</Text>
-          </Pressable>
-        ))}
-      </View>
+      <Tabs options={[{ key: 'read', label: 'قراءة' }, { key: 'recite', label: 'تسميع' }] as const} value={mode} onChange={setMode} palette={palette} />
       {GESTURES.map(gesture => (
         <View key={gesture} style={{ gap: 6 }}>
           <Text style={{ color: palette.ink, fontSize: 15 }}>{GESTURE_NAMES[gesture]}</Text>
@@ -193,9 +167,7 @@ export function GestureSettings({ palette, mode: shownMode }: { palette: Palette
             {MODE_ACTIONS[mode].map(action => {
               const on = gestures[mode][gesture] === action;
               return (
-                <Pressable key={action} onPress={() => setGesture(mode, gesture, action)} accessibilityRole="radio" accessibilityState={{ checked: on }} style={chip(on)}>
-                  <Text style={{ color: on ? palette.onAccent : palette.ink, fontSize: 13 }}>{ACTION_NAMES[action]}</Text>
-                </Pressable>
+                <Chip key={action} role="radio" label={ACTION_NAMES[action]} on={on} onPress={() => setGesture(mode, gesture, action)} palette={palette} />
               );
             })}
           </View>

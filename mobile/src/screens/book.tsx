@@ -9,7 +9,7 @@ import { entryLabel, entryOfAyah, pageOfSpot, paragraphsOf, runsIn, searchBook, 
 import { isReaderBook, pageName } from '@shared/readerBooks';
 import { readFasilas, readSavedParagraphs, serverFasilas, serverSavedParagraphs, setBookFasila, setLastBookSpot, lastBookSpot, subscribeFasilas, subscribeSavedParagraphs, toggleSavedParagraph } from '@shared/readingMarks';
 import { num } from '@shared/quran/arabicNumber';
-import { Text, TextInput } from '@/ui/Text';
+import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Sheet from '@/ui/Sheet';
 import ReaderPager from '@/components/ReaderPager';
@@ -26,6 +26,9 @@ import { toTab } from '@/lib/ways';
 import { buzz } from '@/lib/haptics';
 import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import Tabs from '@/ui/Tabs';
+import { SearchField } from '@/ui/Field';
+import Empty from '@/ui/Empty';
 
 /**
  * The book reader (owner, 2026-11-16; docs/plans/book-reader.md): a book turned page by page as its printed edition
@@ -45,7 +48,7 @@ export default function BookScreen() {
         : (
           <>
             <TopBar shelf title={bookOf(id).title} />
-            {book === null ? <View accessibilityLabel="جارٍ التحميل" style={{ paddingVertical: 40, alignItems: 'center' }}><LoadingDots /></View> : (
+            {book === null ? <LoadingDots fill /> : (
               <View style={{ padding: 16, gap: 12 }}>
                 <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>هذا الكتاب ليس على هاتفك. نزّله ليُقرأ هنا بلا اتصال.</Text>
                 <BookList kind={bookOf(id).kind} palette={palette} />
@@ -268,13 +271,8 @@ function BookSheet({ open, onTab, onClose, id, entries, pages, page, palette, sa
   const row = { paddingHorizontal: 16, paddingVertical: 10, borderBottomWidth: 1, borderColor: `${palette.rule}66` } as const;
   return (
     <Sheet open={!!open} onClose={onClose} palette={palette} tall>
-      <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 6, paddingBottom: 10 }} accessibilityRole="tablist">
-        {TABS.map(({ tab, label, Icon }) => (
-          <Pressable key={tab} onPress={() => onTab(tab)} accessibilityRole="tab" accessibilityLabel={label} accessibilityState={{ selected: kept === tab }}
-            style={{ width: 56, height: 38, borderRadius: 12, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: kept === tab ? palette.rule : 'transparent', backgroundColor: kept === tab ? palette.paperDeep : 'transparent' }}>
-            <Icon size={20} color={kept === tab ? palette.ink : palette.muted} />
-          </Pressable>
-        ))}
+      <View style={{ paddingBottom: 10 }}>
+        <Tabs options={TABS.map(({ tab, label, Icon }) => ({ key: tab, label, Icon }))} value={kept} onChange={onTab} palette={palette} iconOnly />
       </View>
       {kept === 'contents' && (
         <FlatList data={surahs} keyExtractor={([surah]) => String(surah)} style={{ flex: 1 }} initialNumToRender={40}
@@ -292,7 +290,7 @@ function BookSheet({ open, onTab, onClose, id, entries, pages, page, palette, sa
       )}
       {kept === 'saved' && (
         <FlatList data={saved} keyExtractor={item => `${item.entry}:${item.at}`} style={{ flex: 1 }}
-          ListEmptyComponent={<Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'center', padding: 24 }}>لم تحفظ فقرة من هذا الكتاب بعد. اضغط على فقرة مطولًا لتحفظها.</Text>}
+          ListEmptyComponent={<Empty text="لم تحفظ فقرة من هذا الكتاب بعد. اضغط على فقرة مطولًا لتحفظها." palette={palette} />}
           renderItem={({ item }) => (
             <Pressable onPress={() => onGo(item, true)} accessibilityRole="link" style={row}>
               <Text numberOfLines={2} style={{ color: palette.ink, fontSize: 16, lineHeight: 28, textAlign: 'right' }}>{item.text}</Text>
@@ -302,11 +300,7 @@ function BookSheet({ open, onTab, onClose, id, entries, pages, page, palette, sa
       )}
       {kept === 'search' && (
         <View style={{ flex: 1 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginHorizontal: 16, marginBottom: 6, borderBottomWidth: 1, borderColor: palette.rule }}>
-            <Search size={18} color={palette.accent} />
-            <TextInput value={query} onChangeText={setQuery} placeholder="كلمة أو عبارة في الكتاب" placeholderTextColor={palette.muted} accessibilityLabel="ابحث في الكتاب"
-              returnKeyType="search" style={{ flex: 1, fontSize: 16, paddingVertical: 8, color: palette.ink, textAlign: 'right' }} />
-          </View>
+          <SearchField value={query} onChangeText={setQuery} placeholder="كلمة أو عبارة في الكتاب" label="ابحث في الكتاب" palette={palette} style={{ marginHorizontal: 16, marginBottom: 6 }} />
           {found.query === query && query.trim() && (
             <Text style={{ color: palette.muted, fontSize: 13, paddingHorizontal: 16, textAlign: 'right' }}>
               {found.hits.length ? `${found.more ? 'أول ' : ''}${num(found.hits.length)} موضعًا` : 'لا يوجد هذا في الكتاب.'}

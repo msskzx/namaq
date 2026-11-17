@@ -11,11 +11,13 @@ import { tafsirRuns } from '@shared/quran/tafsirSadi';
 import { bookState, readBook, useBooks } from '@/lib/books';
 import { surahNames } from '@/lib/branches';
 import { ayahMushafWords } from '@/lib/mushaf';
-import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
+import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { BookList } from './Books';
 import LoadingDots from '@/ui/LoadingDots';
 import Sheet from '@/ui/Sheet';
 import OpenInBook from './OpenInBook';
+import Card from '@/ui/Card';
+import Tabs from '@/ui/Tabs';
 
 /**
  * Balagha in the reader (owner, 2026-11-16; docs/plans/balagha.md), from two books picked with pills. Al-Itqan (built
@@ -49,7 +51,6 @@ function BalaghaBody({ ayah, palette, onClose }: { ayah: string; palette: Palett
   const [span, setSpan] = useState<[number, number][]>([]);
   const words = useMemo(() => ayahMushafWords(ayah), [ayah]);
   const [surah, number] = ayah.split(':').map(Number);
-  const chip = (on: boolean) => ({ borderWidth: 1, borderColor: on ? palette.accent : palette.rule, backgroundColor: on ? palette.accent : 'transparent', borderRadius: 999, paddingHorizontal: 12, paddingVertical: 6 });
   return (
     <View style={{ flexShrink: 1 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 18, paddingBottom: 8 }}>
@@ -57,20 +58,14 @@ function BalaghaBody({ ayah, palette, onClose }: { ayah: string; palette: Palett
         <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 16 }}>{`${surahNames[surah] ?? num(surah)} ${num(number)}`}</Text>
       </View>
       <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 10, paddingBottom: 8 }}>
-        <View style={cardStyle(palette)}>
+        <Card palette={palette} pad={[10, 14]}>
           <Text style={{ fontFamily: QURAN_FONT, fontSize: 23, lineHeight: 46, color: palette.ink, textAlign: 'right', writingDirection: 'rtl' }}>
             {words.map((word, i) => (
               <Text key={i} style={span.some(([from, to]) => i >= from && i <= to) ? { backgroundColor: deepBand(palette) } : undefined}>{`${i ? ' ' : ''}${word}`}</Text>
             ))}
           </Text>
-        </View>
-        <View style={{ flexDirection: 'row', gap: 8 }} accessibilityRole="tablist">
-          {(['itqan', 'kashshaf'] as const).map(book => (
-            <Pressable key={book} onPress={() => { setShown(book); setSpan([]); }} accessibilityRole="tab" aria-selected={shown === book} style={chip(shown === book)}>
-              <Text style={{ color: shown === book ? palette.onAccent : palette.ink, fontSize: 15 }}>{BOOK_NAMES[book]}</Text>
-            </Pressable>
-          ))}
-        </View>
+        </Card>
+        <Tabs options={(['itqan', 'kashshaf'] as const).map(book => ({ key: book, label: BOOK_NAMES[book] }))} value={shown} onChange={book => { setShown(book); setSpan([]); }} palette={palette} />
         {shown === 'itqan'
           ? <Itqan paragraphs={paragraphs} palette={palette} onSpan={setSpan} />
           : <Kashshaf ayah={ayah} palette={palette} onSpan={setSpan} onClose={onClose} />}
@@ -78,8 +73,6 @@ function BalaghaBody({ ayah, palette, onClose }: { ayah: string; palette: Palett
     </View>
   );
 }
-
-const cardStyle = (palette: Palette) => ({ ...CARD, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.card, paddingHorizontal: 14, paddingVertical: 10 });
 
 function Folded({ credit, children, palette, extra }: { credit: string; children: React.ReactNode; palette: Palette; extra?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -103,7 +96,7 @@ function Itqan({ paragraphs, palette, onSpan }: { paragraphs: ItqanParagraph[]; 
   if (bookState('itqan') !== 'on') return <BookList kind="balagha" palette={palette} />;
   if (!paragraphs.length) return <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center', paddingVertical: 16 }}>لم يستشهد السيوطي بهذه الآية في أنواع البلاغة.</Text>;
   return paragraphs.map((paragraph, i) => (
-    <View key={`${paragraph.id}/${i}`} style={[cardStyle(palette), picked === i && paragraphs.length > 1 ? { borderColor: palette.ink } : null]}>
+    <Card key={`${paragraph.id}/${i}`} palette={palette} pad={[10, 14]} picked={picked === i && paragraphs.length > 1}>
       {/* The paragraph lights the words it quotes; its reference below is a control of its own. */}
       <Pressable onPress={() => setPicked(i)} accessibilityRole="button" aria-pressed={picked === i}>
       <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 22, textAlign: 'right' }}>{paragraph.heading ? `«${paragraph.heading}» · ${paragraph.kind}` : paragraph.kind}</Text>
@@ -118,7 +111,7 @@ function Itqan({ paragraphs, palette, onSpan }: { paragraphs: ItqanParagraph[]; 
         </Text>
         <ExternalLink url={itqanPage(paragraph)} color={palette.muted} size={14} style={{ textAlign: 'right' }}>اقرأ الصفحة</ExternalLink>
       </Folded>
-    </View>
+    </Card>
   ));
 }
 
@@ -141,7 +134,7 @@ function Kashshaf({ ayah, palette, onSpan, onClose }: { ayah: string; palette: P
   return (
     <>
       {passage && (
-        <View style={cardStyle(palette)}>
+        <Card palette={palette} pad={[10, 14]}>
           <Text selectable style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' }}>
             {kashshafRuns(passage).map((run, i) => (
               <Text key={i} onPress={run.lit !== null ? () => setPicked(run.lit) : undefined}
@@ -158,9 +151,9 @@ function Kashshaf({ ayah, palette, onSpan, onClose }: { ayah: string; palette: P
             </Text>
             <ExternalLink url={kashshafPage(passage)} color={palette.muted} size={14} style={{ textAlign: 'right' }}>اقرأ الصفحة</ExternalLink>
           </Folded>
-        </View>
+        </Card>
       )}
-      {on && book === null && <View accessibilityLabel="جارٍ التحميل" style={{ paddingVertical: 16, alignItems: 'center' }}><LoadingDots /></View>}
+      {on && book === null && <LoadingDots fill />}
       {book && !passage && <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center', paddingVertical: 16 }}>لا كلام للكشاف على هذه الآية.</Text>}
       {on && book === false && <Text style={{ color: palette.accent, fontSize: 15, textAlign: 'right' }}>تعذّرت قراءة الكشاف على هاتفك. احذفه ونزّله مرة أخرى.</Text>}
       {!on && (

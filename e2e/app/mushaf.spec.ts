@@ -24,6 +24,22 @@ test('a tap on an ayah shows the bars, the index finds a surah', async ({ page }
   await expect.poll(() => readerPage(page)).toBe(440);
 });
 
+test('the index lists every ayah a search finds', async ({ page }) => {
+  await open(page, '/read');
+  await page.getByText(HAMD, { exact: true }).first().click();
+  await page.getByRole('button', { name: 'فهرس السور والبحث' }).click();
+  await page.getByLabel('ابحث عن سورة أو آية').fill('يا أيها الذين آمنوا');
+  await expect(page.getByText('٨٩ آية', { exact: true })).toBeVisible();
+  const last = page.getByRole('link').filter({ hasText: `${S(66)} ٨` });
+  await page.getByRole('link').filter({ hasText: `${S(2)} ١٠٤` }).hover();
+  await expect(async () => {
+    await page.mouse.wheel(0, 4000);
+    await expect(last).toBeVisible({ timeout: 500 });
+  }).toPass({ timeout: 20_000 });
+  await last.click();
+  await expect.poll(() => readerPage(page)).toBe(561);
+});
+
 test('a long press saves an ayah and marks it forgotten', async ({ page }) => {
   await open(page, '/read');
   await pressWord(page, HAMD);
@@ -278,7 +294,39 @@ test('recite from the top bar starts at the page start', async ({ page }) => {
   // A tapped ayah is selected, but the top bar still recites from the page's first ayah (owner, 2026-11-17).
   await page.getByText(IHDINA, { exact: true }).first().click();
   await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
+  await page.getByRole('button', { name: 'سمّع من أول الصفحة' }).click();
   await expect.poll(start).toBe('1:1');
+});
+
+test('the eye offers the selected ayah, and nothing to continue or review on a first visit', async ({ page }) => {
+  const start = async () => (await stored<{ position: { start: string } }>(page, 'reader-recite-last'))?.position.start;
+  await open(page, '/read');
+  await page.getByText(IHDINA, { exact: true }).first().click();
+  await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
+  const menu = page.getByRole('toolbar', { name: 'ابدأ التسميع' });
+  await expect(menu.getByRole('button')).toHaveCount(2);
+  await menu.getByRole('button', { name: 'سمّع من الآية المختارة' }).click();
+  await expect.poll(start).toBe('1:6');
+});
+
+test.describe('the eye with a recitation to continue and a forgotten ayah', () => {
+  test.use({ seed: { 'ayah-forgot': { '2:5': { forgot: 1, at: 1 } }, 'reader-recite-last': { page: 3, position: { start: '2:17', shown: null, words: 0 } } } });
+  test('continues where the recitation stopped', async ({ page }) => {
+    await open(page, '/read');
+    await page.getByText(HAMD, { exact: true }).first().click();
+    await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
+    await page.getByRole('button', { name: 'تابع التسميع من حيث توقفت' }).click();
+    await expect.poll(() => readerPage(page)).toBe(3);
+    await expect(page.getByRole('button', { name: 'أظهر الآية التالية' })).toBeVisible();
+  });
+  test('reviews what was forgotten', async ({ page }) => {
+    await open(page, '/read');
+    await page.getByText(HAMD, { exact: true }).first().click();
+    await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
+    await page.getByRole('button', { name: 'راجع ما نسيت' }).click();
+    await expect.poll(() => readerPage(page)).toBe(2);
+    await expect(page.getByText(/مراجعة/)).toBeVisible();
+  });
 });
 
 test('recite from an ayah\'s long-press menu starts at that ayah', async ({ page }) => {
@@ -294,6 +342,7 @@ test('the recite bar moves to the top and back, by its grip or by dragging, and 
   await open(page, '/read');
   await page.getByText(HAMD, { exact: true }).first().click();
   await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
+  await page.getByRole('button', { name: 'سمّع من أول الصفحة' }).click();
   const bar = page.getByLabel('أدوات التسميع');
   const y = async () => (await bar.boundingBox())!.y;
   expect(await y()).toBeGreaterThan(600);
@@ -308,4 +357,24 @@ test('the recite bar moves to the top and back, by its grip or by dragging, and 
   await page.mouse.up();
   await expect.poll(y).toBeGreaterThan(600);
   await expect.poll(() => stored(page, 'recite-bar-edge')).toBe('bottom');
+});
+
+test.describe('zoom', () => {
+  test.use({ seed: { 'reader-zoom': 1.6, 'reader-place': { page: 3 } } });
+
+  test('pinching a zoomed page back out sets the printed page again, all on the screen', async ({ page }) => {
+    await open(page, '/read');
+    // A word on page 3's last line (shared/data/quran/mushaf/3.json): below the screen while zoomed, on it at the printed size.
+    const last = page.getByText('رَبِحَت', { exact: true });
+    const bottom = async () => { const box = await last.boundingBox(); return box ? box.y + box.height : Infinity; };
+    const screen = page.viewportSize()!.height;
+    await expect.poll(bottom).toBeGreaterThan(screen);
+    const cdp = await page.context().newCDPSession(page);
+    const fingers = (gap: number) => [{ x: 195 - gap / 2, y: 400, id: 1 }, { x: 195 + gap / 2, y: 400, id: 2 }];
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: fingers(240) });
+    for (let gap = 220; gap >= 80; gap -= 20) await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: fingers(gap) });
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    await expect.poll(() => stored<number>(page, 'reader-zoom')).toBe(1);
+    await expect.poll(bottom).toBeLessThan(screen);
+  });
 });

@@ -71,7 +71,7 @@ export default function VideoSheet({ input, page, onClose, palette, part, onNext
               {shareFailed && <Text style={{ color: palette.accent }}>تعذّرت المشاركة.</Text>}
             </> : <>
               {font !== null && <IconButton label={paused ? 'متابعة' : 'إيقاف مؤقت'} onPress={toggle} Icon={paused ? Play : Pause} tone="ink" />}
-              <View accessibilityLabel="جارٍ تجهيز الفيديو"><LoadingDots /></View>
+              <LoadingDots label="جارٍ تجهيز الفيديو" />
             </>}
         </View>
       </View>

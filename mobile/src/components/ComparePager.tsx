@@ -1,12 +1,12 @@
 import { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { FlatList, Platform, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
-import { Text } from '@/ui/Text';
 import type { Visit } from '@shared/quran/compareCards';
 import { cardsFor, focusIndex, visitKey } from '@/lib/compare';
 import type { Palette } from '@/lib/theme';
 import CompareCard from './CompareCard';
 import { setCompact, useShrinkOnScroll } from '@/lib/chrome';
 import PageVideo from './PageVideo';
+import Empty from '@/ui/Empty';
 
 const GAP = 14;
 
@@ -49,7 +49,7 @@ const PairPage = memo(function PairPage({ visit, width, height, palette, savedOn
       <PageVideo lead={visit.lead} other={visit.other} cards={cards} open={video} onClose={() => setVideo(false)} palette={palette} />
       <FlatList ref={list} data={cards} keyExtractor={card => card.id} initialNumToRender={Math.max(4, target + 2)} windowSize={5} onContentSizeChange={land} onLayout={land} onScrollBeginDrag={stop} onScroll={shrink} scrollEventThrottle={16}
         contentContainerStyle={{ padding: 12, gap: GAP, paddingBottom: 32 }}
-        ListEmptyComponent={<Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{savedOnly ? 'لا بطاقات محفوظة بين السورتين.' : 'لا آيات متشابهة بين السورتين.'}</Text>}
+        ListEmptyComponent={<Empty palette={palette} text={savedOnly ? 'لا بطاقات محفوظة بين السورتين.' : 'لا آيات متشابهة بين السورتين.'} />}
         renderItem={({ item, index }) => <View onLayout={event => { heights.current[index] = event.nativeEvent.layout.height; land(); }}><CompareCard card={item} palette={palette} onPageVideo={pageVideo} /></View>} />
     </View>
   );

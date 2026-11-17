@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Pressable, ScrollView, View } from 'react-native';
 import Svg, { Circle, G, Line, Polygon, Rect, Text as SvgText } from 'react-native-svg';
-import { Bell, BellOff, CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight, Clock, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin, Search, type LucideProps } from 'lucide-react-native';
-import { Text, TextInput } from '@/ui/Text';
+import { Bell, BellOff, CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight, Clock, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin, type LucideProps } from 'lucide-react-native';
+import { Text } from '@/ui/Text';
 import Sheet from '@/ui/Sheet';
 import { hijriDate } from '@shared/hijri';
 import { ALL, clock, dayDigits, FACING, hijriMonth, METHODS, MY_LOCATION, nextPrayer, PRAYER_NAMES, qiblaLabel, searchPlaces, turnTo, type Place, type PrayerKey } from '@shared/prayer';
@@ -11,8 +11,11 @@ import { adhanAlerts, prayerPlace, prayerSettings, utilityView, type UtilityView
 import { buzz } from '@/lib/haptics';
 import { ALERTS_SUPPORTED, allowAlerts, alertsAllowed, openPhoneSettings, useForeground } from '@/lib/adhan';
 import { anyAlert } from '@shared/adhanAlerts';
-import { type Palette, CARD } from '@/lib/theme';
+import { type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import Card from '@/ui/Card';
+import { SearchField } from '@/ui/Field';
+import Empty from '@/ui/Empty';
 
 const VIEWS: { id: UtilityView; Icon: (props: LucideProps) => React.ReactNode; label: string }[] = [
   { id: 'times', Icon: Clock, label: 'مواقيت الصلاة' },
@@ -147,7 +150,7 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
         <PlaceChip place={place} palette={palette} onPress={onPlace} />
         {date && <Text style={{ color: palette.ink, fontSize: 15 }}>{date}</Text>}
       </View>
-      <View style={{ borderWidth: 1, borderColor: palette.rule, ...CARD, backgroundColor: palette.card, padding: 6 }}>
+      <Card palette={palette} pad={6}>
         {ALL.map((key, i) => {
           const on = key === next;
           const faint = key === 'sunrise';
@@ -166,7 +169,7 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
             </View>
           );
         })}
-      </View>
+      </Card>
       {blocked && (
         <Pressable onPress={openPhoneSettings} accessibilityRole="button" accessibilityLabel="التنبيهات موقوفة، افتح إعدادات الجوال"
           style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'center', paddingVertical: 4, opacity: pressed ? 0.7 : 1 })}>
@@ -248,16 +251,12 @@ export function PlaceSheet({ open, onClose, palette }: { open: boolean; onClose:
       <View style={{ flex: 1, paddingHorizontal: 16, paddingBottom: 16, gap: 10 }}>
         <Wide Icon={LocateFixed} label="موقعي الحالي" onPress={here} palette={palette} primary disabled={busy} />
         {refused && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'center' }}>تعذّر معرفة الموقع، فاختر مدينة.</Text>}
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 10, backgroundColor: palette.paper }}>
-          <Search size={18} color={palette.muted} />
-          <TextInput value={query} onChangeText={setQuery} placeholder="ابحث عن مدينة" placeholderTextColor={palette.muted} accessibilityLabel="ابحث عن مدينة"
-            style={{ flex: 1, height: 42, color: palette.ink, fontSize: 16, textAlign: 'right' }} />
-        </View>
+        <SearchField value={query} onChangeText={setQuery} placeholder="ابحث عن مدينة" label="ابحث عن مدينة" palette={palette} />
         <ScrollView keyboardShouldPersistTaps="handled" style={{ flex: 1, borderWidth: 1, borderColor: palette.rule, borderRadius: 10 }}>
           {shown.map(city => (
             <Radio key={city.name} label={city.name} on={place?.name === city.name} palette={palette} onPress={() => { prayerPlace.set(city); onClose(); }} />
           ))}
-          {!shown.length && <Text style={{ padding: 16, color: palette.muted, fontSize: 15, textAlign: 'center' }}>لا توجد نتيجة مطابقة.</Text>}
+          {!shown.length && <Empty text="لا توجد نتيجة مطابقة." palette={palette} />}
         </ScrollView>
       </View>
     </Sheet>
