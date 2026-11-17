@@ -31,3 +31,4 @@
 .bookTitle { margin-top: 0.375rem; font-size: 1.1875rem; line-height: 1.45; }
 .by { font-size: 0.875rem; color: var(--home-muted); }
 .stop { margin-top: auto; display: flex; align-items: center; gap: 0.25rem; font-size: 0.875rem; color: var(--home-accent); }
+.note { margin-top: auto; font-size: 0.875rem; color: var(--home-muted); }

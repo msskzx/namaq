@@ -6,7 +6,7 @@ import { Text } from './Text';
 import { addBook, bookState, removeBook, useBooks } from '@/lib/books';
 import { CARD, type Palette } from '@/lib/theme';
 
-const size = (book: Book) => (book.builtIn ? 'مع التطبيق' : `${num(Math.round(book.megabytes * 10) / 10).replace('.', '٫')} م.ب`);
+export const size = (book: Book) => (book.builtIn ? 'مع التطبيق' : `${num(Math.round(book.megabytes * 10) / 10).replace('.', '٫')} م.ب`);
 
 function BookRow({ book, palette, first }: { book: Book; palette: Palette; first: boolean }) {
   const state = bookState(book.id);
@@ -50,17 +50,6 @@ export function BookList({ kind, palette }: { kind?: BookKind; palette: Palette 
           </View>
         );
       })}
-    </View>
-  );
-}
-
-/** The settings sheet's books: every book, and a line on what removing a built-in one does. */
-export function BooksSetting({ palette }: { palette: Palette }) {
-  return (
-    <View style={{ gap: 8 }}>
-      <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>الكتب</Text>
-      <BookList palette={palette} />
-      <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>يعمل الكتاب بلا اتصال بعد تنزيله. ما يأتي مع التطبيق يُخفى إذا حذفته، وتعيده متى شئت.</Text>
     </View>
   );
 }

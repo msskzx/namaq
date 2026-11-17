@@ -35,6 +35,9 @@ export const back = () => router.back();
 /** The grid of a Quran tool: back to the Quran hub, the stack's first page, however many pages lie between (a tree's compare). */
 export const toHub = () => router.dismissTo('/quran');
 
+/** The library mark of a book: back to the shelf, the library stack's first page. */
+export const toShelf = () => router.dismissTo('/books');
+
 /** Opens the tab an intent is for, which then takes it. */
 export const openIntent = (intent: Intent) => { setIntent(intent); toTab(TAB_OF[intent.tab]); };
 
