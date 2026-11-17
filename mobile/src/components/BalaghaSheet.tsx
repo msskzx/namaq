@@ -24,7 +24,7 @@ import OpenInBook from './OpenInBook';
  * it in front. A tap on a paragraph or a lit sentence lights the ayah words it quotes. Each book's page folds open below.
  */
 // The reader's neutral band (MushafPageView's mark): the ink at 10%, seen on a card in both themes.
-const band = (palette: Palette) => `${palette.ink}1a`;
+const band = (palette: Palette) => palette.bands.mark;
 /** The sentence whose ayah words are lit: a deeper band. */
 const deepBand = (palette: Palette) => `${palette.ink}33`;
 

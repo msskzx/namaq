@@ -53,6 +53,11 @@
 }
 
 :root:has([data-feature-theme]) {
+  /* The reader's ayah bands (the app's palette.bands): selected, forgotten, recited aloud, and the long-pressed word. */
+  --home-band-mark: color-mix(in srgb, var(--home-ink) 10%, var(--home-card));
+  --home-band-forgot: color-mix(in srgb, #783d49 16%, var(--home-card));
+  --home-band-playing: color-mix(in srgb, #783d49 24%, var(--home-card));
+  --home-band-word: color-mix(in srgb, #783d49 24%, var(--home-band-mark));
   --home-paper: #f8f6f0;
   --home-paper-deep: #eee8da;
   --home-card: #f4ecdb;
@@ -86,6 +91,10 @@
 }
 
 :root.dark:has([data-feature-theme]) {
+  /* Deep wine bands keep the light ink readable; a light wash over a dark card greys it (owner, 2026-11-17). */
+  --home-band-forgot: color-mix(in srgb, #783d49 45%, var(--home-card));
+  --home-band-playing: color-mix(in srgb, #783d49 70%, var(--home-card));
+  --home-band-word: color-mix(in srgb, #783d49 85%, var(--home-band-mark));
   --home-card: var(--home-paper-deep);
   --home-paper: #15191b;
   --home-paper-deep: #242727;
@@ -114,7 +123,7 @@
 
 /* Words the ayat share, by how alike they are (shared/quran/wordMatch.ts), under the colour setting (src/lib/markMode.ts).
    With none, a mark keeps its text's own colour. */
-:root { --mark-exact: var(--home-accent); --mark-written: var(--home-amber); --mark-root: var(--home-root); --mark-some: 80%; }
+:root { --mark-exact: var(--home-accent); --mark-written: var(--home-amber); --mark-root: var(--home-root); --mark-some: 60%; }
 :root[data-marks="one"] { --mark-written: var(--home-accent); --mark-root: var(--home-accent); }
 :root[data-marks="none"] { --mark-exact: currentColor; --mark-written: currentColor; --mark-root: currentColor; }
 

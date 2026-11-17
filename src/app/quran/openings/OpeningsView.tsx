@@ -20,7 +20,7 @@ const ROLE: Record<ConditionRole, string> = {
 };
 
 function Words({ words }: { words: OpeningWord[] }) {
-  return <>{words.map((word, i) => <span key={i}>{i > 0 && ' '}{'end' in word ? num(word.end) : <span data-mark={word.mark?.kind} data-some={word.mark?.some || undefined} style={word.mark ? { color: word.mark.some ? `color-mix(in srgb, var(--mark-${word.mark.kind}) var(--mark-some), var(--home-card))` : `var(--mark-${word.mark.kind})` } : undefined}>{mushafText(word.text)}</span>}</span>)}</>;
+  return <>{words.map((word, i) => <span key={i}>{i > 0 && ' '}{'end' in word ? num(word.end) : <span data-mark={word.mark?.kind} data-some={word.mark?.some || undefined} style={word.mark ? { color: word.mark.some ? `color-mix(in srgb, var(--mark-${word.mark.kind}) var(--mark-some), var(--home-muted))` : `var(--mark-${word.mark.kind})` } : undefined}>{mushafText(word.text)}</span>}</span>)}</>;
 }
 
 function Conditions({ lines }: { lines: ConditionText[string] }) {

@@ -21,7 +21,7 @@ import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 
 const words = (key: string) => ayahOf(key)?.words ?? [];
 
-/** A shared word's colour, as the matrix gives it (mobile/src/lib/marks.ts): faded into the card when only some rows share it. */
+/** A shared word's colour, as the matrix gives it (mobile/src/lib/marks.ts): mixed with the muted colour when only some rows share it. */
 function tone(palette: Palette, kind: keyof Palette['marks'], some: boolean) {
   const colour = palette.marks[kind];
   return colour && (some ? someTone(palette, colour) : colour);
