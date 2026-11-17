@@ -7,9 +7,10 @@ import { Text } from '@/ui/Text';
 import Toggle from '@/ui/Toggle';
 import Sheet from '@/ui/Sheet';
 import { surahNames } from '@/lib/branches';
-import { CARD, type Palette } from '@/lib/theme';
+import { type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
+import Card from '@/ui/Card';
 
 const useMemorized = () => useSyncExternalStore(subscribeMemorized, readMemorized);
 
@@ -121,7 +122,7 @@ export function MemorizedPrompt({ palette }: { palette: Palette }) {
   if ((asked || memorized) && !picking) return null;
   return (
     <>
-      <View style={{ gap: 8, padding: 12, borderWidth: 1, borderStyle: 'dashed', borderColor: palette.rule, ...CARD, backgroundColor: palette.card }}>
+      <Card palette={palette} dashed pad={12} gap={8}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <BookOpenCheck size={20} color={palette.accent} />
           <Text accessibilityRole="header" style={{ flex: 1, color: palette.ink, fontSize: 17, fontWeight: '700', textAlign: 'right' }}>ما الذي تحفظه؟</Text>
@@ -133,7 +134,7 @@ export function MemorizedPrompt({ palette }: { palette: Palette }) {
           <Check size={18} color={palette.onAccent} />
           <Text style={{ color: palette.onAccent, fontSize: 16 }}>اختر</Text>
         </Tap>
-      </View>
+      </Card>
       <Sheet open={picking} onClose={() => { setPicking(false); setMemorizedAsked(); }} palette={palette}>
         <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 12 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>

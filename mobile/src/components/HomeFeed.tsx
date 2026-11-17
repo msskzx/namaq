@@ -55,9 +55,10 @@ import { readAyah } from '@/lib/openReader';
 import QuizChoice, { QuizPrompt } from './QuizChoice';
 import { CompareFeedback, CompareInputs } from './QuizCompare';
 import { QuizFeedback, QuizInputs } from './QuizTree';
-import { CARD, type Palette } from '@/lib/theme';
+import { type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
+import Card from '@/ui/Card';
 
 type IconType = (props: LucideProps) => React.ReactNode;
 
@@ -65,8 +66,6 @@ type IconType = (props: LucideProps) => React.ReactNode;
 function Action({ Icon, label, on, onPress, tone, disabled }: { Icon: IconType; label: string; on?: boolean; onPress: () => void; palette: Palette; tone?: 'green'; disabled?: boolean }) {
   return <IconButton Icon={Icon} label={label} onPress={onPress} on={on} disabled={disabled} tone={tone} />;
 }
-
-const cardStyle = (palette: Palette) => ({ borderWidth: 1, borderColor: palette.rule, ...CARD, backgroundColor: palette.card });
 
 /**
  * Every feed post's one shape (owner, 2026-11-14), the compare card's: the head, the body in one card, and a row of icon
@@ -78,7 +77,7 @@ function Post({ head, actions, bar, palette, children }: { head: React.ReactNode
   return (
     <View style={{ gap: 4 }}>
       {head}
-      <View style={{ ...cardStyle(palette), overflow: 'hidden' }}>{children}</View>
+      <Card palette={palette} pad={0} clip>{children}</Card>
       {bar}
       {actions && <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>{actions}</View>}
     </View>

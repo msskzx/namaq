@@ -13,7 +13,8 @@ import { addBook, bookState, removeBook, useBooks, type BookState } from '@/lib/
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
 import { toTab } from '@/lib/ways';
-import { CARD, usePalette, type Palette } from '@/lib/theme';
+import { usePalette, type Palette } from '@/lib/theme';
+import Card from '@/ui/Card';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
 
@@ -51,7 +52,7 @@ export default function LibraryScreen() {
           const fasila = isReaderBook(book.id) ? fasilas[book.id] : undefined;
           return <BookCard key={book.id} book={book} palette={palette} editing={editing} fasila={fasila && isReaderBook(book.id) ? pageName(book.id, fasila.part, fasila.page) : null} />;
         })}
-        <Card palette={palette} label={TUHFA.title} onPress={editing ? undefined : () => toTab('/tuhfa')} kind={TUHFA.kind} title={TUHFA.title} by={TUHFA.by} />
+        <Shelf palette={palette} label={TUHFA.title} onPress={editing ? undefined : () => toTab('/tuhfa')} kind={TUHFA.kind} title={TUHFA.title} by={TUHFA.by} />
       </ScrollView>
     </View>
   );
@@ -69,7 +70,7 @@ function BookCard({ book, palette, editing, fasila }: { book: Book; palette: Pal
     : editing ? { text: book.builtIn ? (state === 'off' ? 'مخفي' : 'مع التطبيق') : 'على هاتفك', accent: false }
     : null;
   return (
-    <Card palette={palette} label={book.title} onPress={editing ? undefined : open} kind={kindTitle(book)} title={book.title} by={book.by}
+    <Shelf palette={palette} label={book.title} onPress={editing ? undefined : open} kind={kindTitle(book)} title={book.title} by={book.by}
       faded={state === 'off' && book.builtIn} foot={foot} action={<Action book={book} state={state} editing={editing} palette={palette} />} />
   );
 }
@@ -100,14 +101,15 @@ function Button({ Icon, label, press, muted, palette }: { Icon: typeof Trash2; l
 
 type Foot = { text: string; accent: boolean; fasila?: boolean } | null;
 
-function Card({ palette, label, onPress, kind, title, by, foot = null, action, faded = false }: { palette: Palette; label: string; onPress?: () => void;
+function Shelf({ palette, label, onPress, kind, title, by, foot = null, action, faded = false }: { palette: Palette; label: string; onPress?: () => void;
   kind: string; title: string; by: string; foot?: Foot; action?: React.ReactNode; faded?: boolean }) {
   // Square, two to a row, and taller when a long title or author needs the room (the row's other card grows with it).
   const side = (useWindowDimensions().width - 32 - 12) / 2;
-  const look = { ...CARD, width: side, minHeight: side, padding: 14, borderWidth: 1, borderColor: palette.rule,
-    backgroundColor: palette.card, opacity: faded ? 0.55 : 1, justifyContent: 'space-between', gap: 8 } as const;
-  const body = (
-    <>
+  // A card that opens is one link. One that does not (editing, or a book to download) is a plain view, so a screen reader
+  // reaches its button: a pressable card would read as one element with the button folded inside it.
+  return (
+    <Card palette={palette} gap={8} faded={faded} onPress={onPress} accessibilityRole={onPress ? 'link' : undefined} accessibilityLabel={onPress ? label : undefined}
+      style={{ width: side, minHeight: side, justifyContent: 'space-between' }}>
       <View style={{ gap: 4 }}>
         <Text style={{ color: palette.accent, fontSize: 13, textAlign: 'right' }}>{kind}</Text>
         <Text numberOfLines={3} style={{ color: palette.ink, fontSize: 18, lineHeight: 28, textAlign: 'right' }}>{title}</Text>
@@ -118,14 +120,6 @@ function Card({ palette, label, onPress, kind, title, by, foot = null, action, f
         <Text style={{ flex: 1, color: foot?.accent ? palette.accent : palette.muted, fontSize: 13, textAlign: 'right' }}>{foot?.text ?? ''}</Text>
         {action}
       </View>
-    </>
-  );
-  // A card that opens is one link. One that does not (editing, or a book to download) is a plain view, so a screen reader
-  // reaches its button: a pressable card would read as one element with the button folded inside it.
-  if (!onPress) return <View style={look}>{body}</View>;
-  return (
-    <Tap onPress={onPress} accessibilityRole="link" accessibilityLabel={label} style={({ pressed }) => [look, pressed && { backgroundColor: palette.paperDeep }]}>
-      {body}
-    </Tap>
+    </Card>
   );
 }

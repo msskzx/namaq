@@ -20,7 +20,8 @@ import { availability, cleanSolo, SOLO_KINDS, startSolo, type SoloSettings } fro
 import { CHOICE_KINDS } from '@shared/quiz/kinds';
 import { PAGE_TOPICS, RANGED_TOPICS, type QuizTopic } from '@shared/quiz/settings';
 import { readSettings, setRun, useRun, writeSettings } from '@/lib/soloStore';
-import { usePalette, CARD } from '@/lib/theme';
+import { usePalette } from '@/lib/theme';
+import Card from '@/ui/Card';
 
 /** What each kind is called on its chip. */
 const KIND_NAMES = { BRANCHES: 'متشابهات القرآن', ...Object.fromEntries(CHOICE_KINDS.map(kind => [kind.id, kind.name])) } as Record<QuizTopic, string>;
@@ -79,7 +80,7 @@ export default function SoloSetup() {
       <TopBar back={() => router.back()} title="اختبار فردي" />
       <ScrollView contentContainerStyle={{ padding: 16, gap: 14, paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
         {resumable && (
-          <View style={{ borderWidth: 1, borderColor: palette.accent, ...CARD, padding: 14, gap: 10 }}>
+          <Card palette={palette} outline={palette.accent} gap={10}>
             <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>
               {`لديك اختبار لم تُنهه، وصلت فيه إلى السؤال ${num(resumable.current + 1)} من ${num(resumable.questions.length)}.`}
             </Text>
@@ -87,7 +88,7 @@ export default function SoloSetup() {
               <Button variant="primary" Icon={ArrowLeft} label="أكمله" onPress={() => router.push('/quiz/play')} />
               <Button label="اتركه" onPress={() => setRun(null)} />
             </Row>
-          </View>
+          </Card>
         )}
         <Section title="أنواع الأسئلة" palette={palette}>
           <Row>{SOLO_KINDS.map(kind => <Button key={kind} label={KIND_NAMES[kind]} active={settings.kinds.includes(kind)} onPress={() => toggleKind(kind)} />)}</Row>

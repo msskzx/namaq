@@ -91,7 +91,7 @@ job. `Tour` keeps its own overlay.
 `ActButton`s, used by the card menu and the reader long press.
 **PRs:** 4a sheets, 4b floating menu.
 
-### 5. Card
+### 5. Card (5a done: home, library, quizzes)
 Drift: the `CARD` token in `lib/theme.ts:63` is only a radius (14), spread
 as `...CARD` in 27 files, each adding its own border, colour and padding.
 About 42 more boxed containers set a literal radius instead: 10 (19), 12 (8),

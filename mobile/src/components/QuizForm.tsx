@@ -4,14 +4,15 @@ import { num } from '@shared/quran/arabicNumber';
 import { QUIZ_LEAVES, type QuizTopic } from '@shared/quiz/settings';
 import { DIFFICULTIES, DIFFICULTY_NAMES, DIFFICULTY_NOTES, type Difficulty } from '@shared/quiz/difficulty';
 import Button, { Row } from '@/ui/Button';
-import { CARD, type Palette } from '@/lib/theme';
+import { type Palette } from '@/lib/theme';
+import Card from '@/ui/Card';
 
 export function Section({ title, palette, children }: { title: string; palette: Palette; children: React.ReactNode }) {
   return (
-    <View style={{ backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, padding: 14, gap: 10 }}>
+    <Card palette={palette} gap={10}>
       <Text style={{ color: palette.ink, fontSize: 16, fontWeight: '700', textAlign: 'right' }}>{title}</Text>
       {children}
-    </View>
+    </Card>
   );
 }
 
