@@ -21,9 +21,13 @@ const SIDE = 54; // the logo and its padding, kept clear on both sides so centre
  * See-through with no line under it, like the see-through tab bar (owner, 2026-11-13): on the mushaf, where it floats over the page, the page shows blurred through it.
  * With hub (the Quran button's tools) a grid takes the logo's place and opens the Quran hub, the page of all the Quran's tools
  * (owner, 2026-11-15: a chevron reads as "back" in a right-to-left app). With back (the search) a back arrow takes it instead.
+ * With bare (the mushaf reader, owner 2026-11-17) there is no logo: the page's buttons start at the right edge, under the thumb;
+ * the home tab is in the bottom bar.
  * With center the page's buttons sit in the middle of the bar, clear of the logo (the compare dropdown, owner 2026-11-10).
  */
-export default function TopBar({ children, settings: withSettings = false, hideOnScroll = false, center = false, help, refs, back, hub = false, shelf = false, search, utilities }: { children?: React.ReactNode; settings?: boolean; hideOnScroll?: boolean; center?: boolean;
+export default function TopBar({ children, bare = false, settings: withSettings = false, hideOnScroll = false, center = false, help, refs, back, hub = false, shelf = false, search, utilities }: { children?: React.ReactNode;
+  /** No logo: the page's buttons start at the right edge (the reader). */
+  bare?: boolean; settings?: boolean; hideOnScroll?: boolean; center?: boolean;
   /** A grid in the logo's place that opens the Quran hub (the Quran's tools). */
   hub?: boolean;
   /** The library's books in the logo's place, back to the shelf (a book in the reader, owner 2026-11-17). */
@@ -50,7 +54,7 @@ export default function TopBar({ children, settings: withSettings = false, hideO
       <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
       <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: `${palette.paper}b8` }]} />
       <Animated.View style={[{ overflow: 'hidden', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, gap: 8 }, row]}>
-        {hub
+        {bare ? null : hub
           ? <Pressable onPress={toHub} accessibilityRole="button" accessibilityLabel="أدوات القرآن" hitSlop={8} style={{ width: 34, height: 34, alignItems: 'center', justifyContent: 'center' }}>
             <LayoutGrid size={24} color={palette.ink} />
           </Pressable>
@@ -67,7 +71,7 @@ export default function TopBar({ children, settings: withSettings = false, hideO
           </Pressable>}
         {center
           ? <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, bottom: 0, left: SIDE, right: SIDE, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>{children}</View>
-          : <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', gap: 4 }}>{children}</View>}
+          : <View style={{ flex: 1, flexDirection: 'row', justifyContent: bare ? 'flex-start' : 'flex-end', alignItems: 'center', gap: 4 }}>{children}</View>}
         {(help || refs) && center && <View style={{ flex: 1 }} />}
         {refs && <Pressable onPress={refs} accessibilityRole="button" accessibilityLabel="المصادر" hitSlop={4}
           style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}>
