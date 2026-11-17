@@ -127,7 +127,9 @@ export default function Reader() {
   const [following, setFollowing] = useState(true);
   const listenPage = listening ? pageOfAyah(listening.key) ?? null : null;
   // Reciting keeps its own place on the pages; the recitation does not move them then.
-  useEffect(() => { if (listenPage && following && !position) setPage(listenPage); }, [listenPage, following]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (listenPage && following && !position) setPage(listenPage); }, [listenPage, following, position]); // eslint-disable-line react-hooks/exhaustive-deps
+  // A new recitation (from the ayah buttons or the sheet) follows again.
+  useEffect(() => { if (listening) setFollowing(true); }, [listening?.range]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (!listening) setFollowing(true); }, [listening]);
   const saved = useMemo(() => new Set(bookmarks.filter(item => item.id.startsWith('ayah:')).map(item => item.id.slice(5))), [bookmarks]);
   const forgotten = useMemo(() => forgottenOrder(Object.keys(forgot)), [forgot]);

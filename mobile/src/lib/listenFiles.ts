@@ -25,6 +25,8 @@ const web = Platform.OS === 'web';
 let packs: Pack[] = readJson<Pack[]>(PACKS) ?? [];
 let synced: Record<string, Synced> = readJson<Record<string, Synced>>(SYNCED) ?? {};
 const busy = new Map<string, Progress>();
+/** The ayat each running download is fetching, so that a sweep leaves them alone. */
+const running = new Map<string, string[]>();
 const stopped = new Set<string>();
 const listeners = new Set<() => void>();
 let version = 0;
@@ -71,7 +73,8 @@ function sweep(reciter: number) {
   try {
     const dir = folder(reciter);
     if (!dir.exists) return;
-    const names = new Set([...heldKeys(reciter)].map(ayahFile));
+    const fetching = [...running.entries()].filter(([id]) => id.startsWith(`${reciter}:`)).flatMap(([, keys]) => keys);
+    const names = new Set([...heldKeys(reciter), ...fetching].map(ayahFile));
     for (const item of dir.list()) if (item instanceof File && !names.has(item.name)) item.delete();
   } catch {}
 }
@@ -102,10 +105,12 @@ export async function downloadPack(reciter: number, kind: PackKind, label: strin
   stopped.delete(id);
   const progress: Progress = { done: 0, total: keys.length };
   busy.set(id, progress);
+  running.set(id, keys);
   changed();
   try {
     if (!synced[reciter] || syncDue(synced[reciter].syncedAt, Date.now())) await sync(reciter);
   } catch {
+    running.delete(id);
     busy.set(id, { ...progress, failed: true });
     changed();
     return;
@@ -127,6 +132,7 @@ export async function downloadPack(reciter: number, kind: PackKind, label: strin
     }
   };
   await Promise.all([worker(), worker(), worker(), worker()]);
+  running.delete(id);
   if (stopped.has(id)) { busy.delete(id); stopped.delete(id); sweep(reciter); changed(); return; }
   // A failed run keeps its files so that trying again picks up where it stopped; the next app start sweeps them otherwise.
   if (failed || !progress.total) { busy.set(id, { ...progress, failed: true }); changed(); return; }
