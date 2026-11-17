@@ -1,7 +1,8 @@
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { Text } from '@/ui/Text';
 import type { LucideProps } from 'lucide-react-native';
 import { usePalette } from '@/lib/theme';
+import { Tap } from '@/ui/Tap';
 
 type Props = {
   label?: string;
@@ -24,7 +25,7 @@ export default function Button({ label, Icon, onPress, variant = 'outline', acti
   const filled = !disabled && (variant === 'primary' || active);
   const color = filled ? palette.onAccent : disabled ? palette.muted : palette.ink;
   return (
-    <Pressable onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={accessibilityLabel ?? label}
+    <Tap onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={accessibilityLabel ?? label}
       accessibilityState={{ disabled, selected: active }} hitSlop={6}
       style={({ pressed }) => ({
         flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
@@ -35,7 +36,7 @@ export default function Button({ label, Icon, onPress, variant = 'outline', acti
       })}>
       {Icon && <Icon size={big ? 22 : 20} color={color} />}
       {label ? <Text style={{ color, fontSize: big ? 18 : 16, fontWeight: variant === 'primary' ? '600' : '400' }}>{label}</Text> : null}
-    </Pressable>
+    </Tap>
   );
 }
 

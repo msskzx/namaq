@@ -1,6 +1,7 @@
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import type { LucideProps } from 'lucide-react-native';
 import { usePalette } from '@/lib/theme';
+import { Tap } from '@/ui/Tap';
 
 type IconType = (props: LucideProps) => React.ReactNode;
 
@@ -49,7 +50,7 @@ export default function IconButton({ Icon, label, onPress, size = 'bar', tone = 
   const color = round ? palette.onAccent : on ? palette.accent : off;
   const filled = !round && on && fill ? palette.accent : 'none';
   return (
-    <Pressable onPress={onPress} disabled={disabled} hitSlop={HIT} accessibilityRole={role} accessibilityLabel={label}
+    <Tap onPress={onPress} disabled={disabled} hitSlop={HIT} accessibilityRole={role} accessibilityLabel={label}
       accessibilityState={{ ...(on === undefined ? {} : { selected: on }), ...(expanded === undefined ? {} : { expanded }), ...(disabled ? { disabled } : {}) }}
       style={({ pressed }) => ({
         width: dims.box, height: dims.box, alignItems: 'center', justifyContent: 'center',
@@ -59,6 +60,6 @@ export default function IconButton({ Icon, label, onPress, size = 'bar', tone = 
       })}>
       {render ? render({ size: dims.icon, color, fill: round ? color : filled }) : <Icon size={dims.icon} color={color} fill={round ? color : filled} strokeWidth={on ? 2.25 : 2} />}
       {dot && <View style={{ position: 'absolute', top: dims.box / 6, end: dims.box / 6, width: 7, height: 7, borderRadius: 4, backgroundColor: palette.accent }} />}
-    </Pressable>
+    </Tap>
   );
 }

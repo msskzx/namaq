@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import artifact from '../../data/quran/mutashabih.json';
+import { builtGroups as artifact } from './data';
 import corpus from '../quranText/corpus';
 import manifest from './categories.json';
 import { groups } from './data';

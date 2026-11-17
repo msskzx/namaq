@@ -6,10 +6,10 @@ export async function POST(request: Request) {
   if (process.env.NODE_ENV !== 'development') return new NextResponse(null, { status: 404 });
   const origin = request.headers.get('origin');
   if (origin && new URL(origin).host !== request.headers.get('host')) return new NextResponse(null, { status: 403 });
-  const { id, text, action } = await request.json();
-  if (typeof id !== 'string' || !/^[\w:\-\u0600-\u06FF ]{1,200}$/.test(id) || (text !== undefined && typeof text !== 'string') || !['keep', 'drop', 'discuss', 'undo'].includes(action)) {
+  const { id, action } = await request.json();
+  if (typeof id !== 'string' || !/^[\w:\-\u0600-\u06FF ]{1,200}$/.test(id) || !['keep', 'drop', 'discuss', 'undo'].includes(action)) {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   }
-  recordBranchReview(id, action, text);
+  recordBranchReview(id, action);
   return NextResponse.json({ ok: true });
 }
