@@ -204,6 +204,37 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   (`size="sm"` inside dense panels), so a title looks the same on a profile
   page and in the graph panel.
 
+## One entry for each shared thing
+
+Features drift when a new place draws an existing thing its own way: the tree
+was rebuilt three times (#776, #811, #825), and Quran text lost its signs and
+room in every feature that shaped it itself. Each shared thing has ONE entry
+point and a guard test that fails on any other path. Before building, find the
+thing here and use its entry; give it a prop for the new place rather than a
+copy. A new shared thing gets a row here and its guard in the same PR. A guard
+checks every caller of the lower-level code it replaces, not only the feature
+that was reported (docs/records/R0054).
+
+| Thing | Entry | Guard |
+| --- | --- | --- |
+| Quran text | the Quran module (being built: `shared/quran/quranText/`, `src/components/quran/text/`, `mobile/src/components/quran/text/`) | `shared/quran/oneQuranText.test.ts` |
+| Tree | builders in `shared/quran` (`createTreePresenter`, `compareTree`), drawn by each platform's `BranchTree` | `shared/quran/oneTree.test.ts` |
+| Link out of Namaq | `ExternalLink` (web and app) | `src/components/common/ExternalLink.test.tsx` |
+| Button | `src/components/common/Button.tsx` | none yet |
+
+### Quran text
+
+Every Quran text goes through the module, at the first level the feature has
+room for: the whole Madina page, a slice of the page, the ayah as the page sets
+it, or the ayah copied off the page. "As in the mushaf" holds at every level:
+the KFGQPC Hafs page text with its tashkeel, ayah number medallion and every
+waqf, sajda and hizb sign. The copied level drops only the position on the
+page (two ayat stacked in compare or the matrix, words in a tree box); it keeps
+everything else. Features store places (surah:ayah:word), never copies of the
+text. Only the module sets the Quran font. The one exception is Quran quoted
+inside a book. `oneQuranText.test.ts` lists today's breaks in
+`oneQuranText.baseline.json`; the list only shrinks.
+
 ## Data model
 
 - Person data has two sources of truth: PostgreSQL (profiles, search) and
