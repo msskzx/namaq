@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Modal, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { Palette } from '@/lib/theme';
@@ -18,17 +18,22 @@ export default function FloatingMenu({ at, label, onClose, overlay = false, top:
   top?: number; palette: Palette; children: React.ReactNode;
 }) {
   const insets = useSafeAreaInsets();
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   // Measured once drawn, for the place it was opened at (another ayah may hold other buttons): hidden until then.
   const [measured, setMeasured] = useState<{ at: MenuAt; width: number; height: number } | null>(null);
   const size = measured && at && measured.at.x === at.x && measured.at.y === at.y ? measured : null;
+  // Closed: forget the size, so the next card's menu (other buttons, maybe the same spot) is measured afresh.
+  useEffect(() => { if (!at) setMeasured(null); }, [at]);
   if (!at && !overlay) return null;
   const above = at && size ? at.y - 20 - size.height : 0;
+  const top = (clear ?? insets.top) + 8;
+  // Above the finger; below it when there is no room above; and when neither fits, as high as it may go, over the line.
+  const place = !at || !size ? 0 : above >= top ? above : at.y + 20 + size.height <= height - insets.bottom - 8 ? at.y + 20 : top;
   const bar = at && (
-    <View accessibilityRole="toolbar" accessibilityLabel={label} onLayout={event => setMeasured({ at, width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}
+    <View accessibilityRole="toolbar" accessibilityLabel={label} pointerEvents={size ? 'auto' : 'none'} accessibilityElementsHidden={!size} importantForAccessibility={size ? 'auto' : 'no-hide-descendants'} onLayout={event => setMeasured({ at, width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}
       style={{
         position: 'absolute', opacity: size ? 1 : 0, maxWidth: width - 16,
-        top: above < (clear ?? insets.top) + 8 ? at.y + 20 : above,
+        top: size ? place : at.y + 20,
         left: size ? Math.min(width - size.width - 8, Math.max(8, at.x - size.width / 2)) : 8,
         flexDirection: 'row', flexWrap: 'wrap', gap: 2, padding: 5, borderRadius: 12, borderWidth: 1, borderColor: palette.rule,
         backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6,
