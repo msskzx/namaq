@@ -5,6 +5,6 @@ import type { Surah } from '@/lib/quran/passage';
 import type { Ayah } from '@/types/quran';
 
 export function Card({ surah, ayah, text, slots, notes }: { surah: Surah; ayah: number; text: string; slots?: Record<number, number>; notes?: Record<number, WordNote> }) {
-  const s = { id: `s${surah.number}`, number: surah.number, name: surah.name, nameTransliterated: null };
+  const s = { id: `s${surah.number}`, number: surah.number, nameTransliterated: null };
   return <AyahCard ayah={{ id: `${surah.number}:${ayah}`, number: ayah, text, surah: s } as unknown as Ayah} slots={slots} notes={notes} />;
 }

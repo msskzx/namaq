@@ -6,10 +6,11 @@ import { readAyahNotes, writeAyahNote } from '@shared/ayahNotes';
 import { num } from '@shared/quran/arabicNumber';
 import Sheet from '@/ui/Sheet';
 import { Text, TextInput } from '@/ui/Text';
-import { ayahText, surahNames } from '@/lib/mushaf';
+import { ayahText } from '@/lib/mushaf';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import { onLeave } from '@/lib/storage';
+import { surahName } from '@shared/quran/surahNames';
 
 /** How long typing rests before the note is kept, so the reader behind the sheet is not redrawn on every key. */
 const SAVE_MS = 400;
@@ -42,7 +43,7 @@ export default function NoteSheet({ ayah, onClose, palette }: { ayah: string | n
       <View style={{ flex: 1, paddingHorizontal: 16, paddingBottom: 12, gap: 8 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <NotebookPen size={18} color={palette.accent} />
-          <Text style={{ flex: 1, color: palette.muted, fontSize: 15, textAlign: 'right' }}>{surahNames[surah]} {num(number)}</Text>
+          <Text style={{ flex: 1, color: palette.muted, fontSize: 15, textAlign: 'right' }}>{surahName(surah)} {num(number)}</Text>
           {!!text.trim() && (
             <IconButton Icon={Trash2} label="احذف التأمل" onPress={() => { edit('', true); onClose(); }} />
           )}

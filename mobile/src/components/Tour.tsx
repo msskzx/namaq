@@ -19,13 +19,14 @@ import { prophetStory } from '@/lib/prophets';
 import Button from '@/ui/Button';
 import { cardOf } from '@/lib/branches';
 import { EMPTY_LIST } from '@/lib/branchList';
-import { pageData, surahBefore, surahNames as mushafNames } from '@/lib/mushaf';
+import { pageData, surahBefore } from '@/lib/mushaf';
 import { pageModel, reciteView } from '@shared/quran/recitePage';
 import { RECITE_AYAH, RECITE_PAGE, TOUR_STEPS, tourPiece, type TourStep } from '@/lib/tour';
 import { branchView } from '@/lib/settings';
 import type { Palette } from '@/lib/theme';
 import type { RecitePosition } from '@shared/quran/recite';
 import { APP_NAME, OPENING, SLOGAN } from '@shared/brand';
+import { SURAH_TITLES } from '@shared/quran/surahNames';
 
 type Size = { width: number; height: number };
 const noop = () => {};
@@ -189,7 +190,7 @@ export default function Tour({ palette, onDone }: { palette: Palette; onDone: ()
         {which === 'recite' && (
           <Fit>{size => (
             <MushafPageView page={page} data={pageData(page)} model={model} palette={palette} width={size.width} height={size.height}
-              top={surahBefore(page)} names={mushafNames} mark={null} recite={recite} forgot={{}} saved={new Set()}
+              top={surahBefore(page)} names={SURAH_TITLES} mark={null} recite={recite} forgot={{}} saved={new Set()}
               onTouch={touch => {
                 if (touch !== 'tap') return;
                 const shown = recite.nextAyah();

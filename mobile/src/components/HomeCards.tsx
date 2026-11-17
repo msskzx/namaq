@@ -12,13 +12,14 @@ import TreeIcon from './TreeIcon';
 import FloatingMenu, { type MenuAt } from '@/ui/FloatingMenu';
 import ActButton from '@/ui/ActButton';
 import { buzz } from '@/lib/haptics';
+import { surahName } from '@shared/quran/surahNames';
 
 /** A card menu's button: its icon, its short name under it, and what a screen reader says. */
 type MenuItem = { id: string; Icon: (props: LucideProps) => React.ReactNode; name: string; label: string; on?: boolean; tint?: string; filled?: boolean; color?: string; onPress: () => void };
 import { shareAyah } from './AyahShare';
 import CompareTargetsSheet from './CompareTargetsSheet';
 import NoteSheet from './NoteSheet';
-import { ayahMushafWords, ayahText, surahNames } from '@/lib/mushaf';
+import { ayahMushafWords, ayahText } from '@/lib/mushaf';
 import type { CompareTarget } from '@/lib/compare';
 import { cardWays, forgottenCard, forgottenWays, noteCard, savedCard, shownBookmarks, shelfText, type CardWay, type SavedCard } from '@/lib/home';
 import { followWay, openIntent } from '@/lib/ways';
@@ -56,7 +57,7 @@ export function ShelfCard({ card, palette, onPress, wide = false, note = false, 
           <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', columnGap: 12, rowGap: 2 }}>
             {card.references.map(reference => (
               <Text key={reference.surah} style={{ color: palette.muted, fontSize: 13, lineHeight: 20 }}>
-                {surahNames[reference.surah]} {reference.ayat.map(num).join(reference.range ? '–' : '، ')}
+                {surahName(reference.surah)} {reference.ayat.map(num).join(reference.range ? '–' : '، ')}
               </Text>
             ))}
           </View>
