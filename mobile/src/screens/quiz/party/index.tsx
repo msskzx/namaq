@@ -4,7 +4,7 @@ import { Text, TextInput } from '@/ui/Text';
 import { router } from 'expo-router';
 import { ArrowLeft } from 'lucide-react-native';
 import { NAME_MAX } from '@shared/party/rules';
-import BackBar from '@/ui/BackBar';
+import TopBar from '@/ui/TopBar';
 import Button from '@/ui/Button';
 import { Section } from '@/components/QuizForm';
 import { NoPartyServer, playerId, saveName, savedName, startParty } from '@/lib/party';
@@ -39,7 +39,7 @@ export default function PartyStart() {
   };
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: palette.paper }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <BackBar title="اختبار جماعي" />
+      <TopBar back={() => router.back()} title="اختبار جماعي" />
       <ScrollView contentContainerStyle={{ padding: 16, gap: 14 }} keyboardShouldPersistTaps="handled">
         <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 24, textAlign: 'right' }}>
           يبدأ أحدكم الاختبار ويشارك رقمه، ويدخل الباقون من أجهزتهم. يجيب الجميع السؤال نفسه، وتظهر الإجابة والترتيب بعد أن يجيب الكل.
