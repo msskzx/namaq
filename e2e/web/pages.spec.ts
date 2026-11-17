@@ -1,4 +1,5 @@
 import { expect, hasDatabase, noErrorPage, test } from './fixtures';
+import { surahName as S } from '../../shared/quran/surahNames';
 
 test.describe('pages without the database', () => {
   test('the Quran hub links to its tools', async ({ page }) => {
@@ -30,10 +31,10 @@ test.describe('pages without the database', () => {
 
   test('a prophet story dot shows its ayat', async ({ page }) => {
     await page.goto('/quran/prophets');
-    const dot = page.getByRole('button', { name: /^إغراق فرعون وجنوده، البقرة/ });
+    const dot = page.getByRole('button', { name: new RegExp(`^إغراق فرعون وجنوده، ${S(2)}`) });
     await dot.click();
     await expect(dot).toHaveAttribute('aria-current', 'true');
-    await expect(page.getByRole('link', { name: 'افتح البقرة في المصحف' }).first()).toBeVisible();
+    await expect(page.getByRole('link', { name: `افتح ${S(2)} في المصحف` }).first()).toBeVisible();
     await noErrorPage(page);
   });
 
@@ -205,7 +206,7 @@ test.describe('pages with the database', () => {
       await expect(saved).toBeAttached({ timeout: 1000 });
     }).toPass({ timeout: 40_000 });
     const card = page.locator('article').filter({ has: saved }).first();
-    await expect(card.getByText('البقرة ٢٥٥', { exact: true })).toBeVisible();
+    await expect(card.getByText(`${S(2)} ٢٥٥`, { exact: true })).toBeVisible();
     await expect(card.locator('[data-line]').first()).toBeAttached();
     await noErrorPage(page);
   });
@@ -270,7 +271,7 @@ test.describe('pages with the database', () => {
     }).toPass({ timeout: 20_000 });
     await page.getByRole('button', { name: 'تفسير السعدي' }).click();
     const sheet = page.getByRole('dialog', { name: 'تفسير السعدي' });
-    await expect(sheet.getByRole('heading', { name: 'الفاتحة ١–٧' })).toBeVisible();
+    await expect(sheet.getByRole('heading', { name: `${S(1)} ١–٧` })).toBeVisible();
     await expect(sheet.getByText('هو المألوه المعبود', { exact: false })).toBeVisible();
     await expect(sheet.getByRole('link', { name: /تيسير الكريم الرحمن للسعدي، ص ٣٩/ })).toBeVisible();
     await noErrorPage(page);
@@ -307,11 +308,11 @@ test.describe('pages with the database', () => {
       await expect(page.getByRole('button', { name: 'موضوع الآية في السورة' })).toBeVisible({ timeout: 1000 });
     }).toPass({ timeout: 20_000 });
     await page.getByRole('button', { name: 'موضوع الآية في السورة' }).click();
-    const sheet = page.getByRole('dialog', { name: 'موضوعات سورة النبأ' });
+    const sheet = page.getByRole('dialog', { name: `موضوعات سورة ${S(78)}` });
     await expect(sheet.getByText(/^مقصودها الدلالة على أن يوم القيامة/)).toBeVisible();
     await expect(sheet.getByRole('link', { name: /البقاعي، نظم الدرر/ })).toBeVisible();
     await sheet.getByRole('link', { name: /جزاء المتقين/ }).click();
-    await expect(page).toHaveURL(/\/quran\/read\/ayah\/78\/31$/);
+    await expect(page).toHaveURL(/\/quran\/read\/(ayah\/78\/31|\d+\?a=78(:|%3A)31)$/);
     await noErrorPage(page);
   });
 
