@@ -70,7 +70,7 @@ const isPlace = (value: unknown): value is Place =>
 const ZOOM = 'reader-zoom';
 /** Whether recite mode asks to write each ayah's first and last words (on) or only reveals them (off). */
 const WRITE = 'reader-write';
-const WORD_FORGOT = { ar: 'نسيتها', en: 'I forgot this word' };
+const WORD_FORGOT = { ar: 'نسيت الكلمة', en: 'I forgot this word' };
 const UNDO_WORD_FORGOT = { ar: 'تراجع', en: 'Undo' };
 const UNDO_WORD_NAME = { ar: 'تراجع عن نسيان الكلمة', en: 'Undo forgotten word' };
 const AYAH_FORGOT = { ar: 'نسيت الآية', en: 'I forgot this ayah' };
@@ -406,7 +406,8 @@ export default function Reader() {
         <FloatingMenu at={actionsAt} label={`الآية ${num(Number(actions.key.split(':')[1]))} من السورة ${num(Number(actions.key.split(':')[0]))}`} onClose={() => setActions(null)} top={pageInsets.top} palette={palette}>
           {/* Listening comes first (owner's sketch, 2026-11-17): from this ayah to its surah's end, with the repeats last set. */}
           <ActButton Icon={Play} label="استمع من هذه الآية" name="استمع" palette={palette} onPress={() => { const key = actions.key; setActions(null); setFollowing(true); listen(key); }} />
-          <ActButton Icon={EyeOff} label="سمّع من هذه الآية" name="سمّع" palette={palette} onPress={() => startRecite(actions.key)} />
+          {/* Already reciting: the top bar's eye ends it, so the menu does not offer it again (owner asked, 2026-11-17). */}
+          {!reciting && <ActButton Icon={EyeOff} label="سمّع من هذه الآية" name="سمّع" palette={palette} onPress={() => startRecite(actions.key)} />}
           <ActButton Icon={LightbulbOff} label={forgotCount ? AYAH_FORGOT_AGAIN.ar : AYAH_FORGOT.ar} name={AYAH_FORGOT.ar} palette={palette} on={forgotCount > 0} onPress={() => { markForgotten(actions.key); setActions(null); }} />
           {wordKey && <ActButton Icon={LightbulbOff} label={allForgot[wordKey] ? UNDO_WORD_NAME.ar : WORD_FORGOT.ar} name={allForgot[wordKey] ? UNDO_WORD_FORGOT.ar : WORD_FORGOT.ar} palette={palette} on={!!allForgot[wordKey]} onPress={() => { if (allForgot[wordKey]) clearForgotten(wordKey); else markForgotten(wordKey); setActions(null); setMark(null); }} />}
           {forgotCount > 0 && <ActButton Icon={Check} label="تذكّرتها" name="تذكّرتها" palette={palette} color={palette.green} onPress={() => { rememberAyah(actions.key); setActions(null); }} />}
