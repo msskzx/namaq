@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { findProphet, PROPHETS, storyTitle } from '@shared/quran/prophets';
-import { buildStory, placesOf, storedText, type EventView } from '@shared/quran/prophets/story';
+import { buildStory, placesOf, type EventView } from '@shared/quran/prophets/story';
+import { quranStoryText } from '@shared/quran/prophets/storyText';
 import { STORIES } from '@shared/quran/prophets/stories';
 import data from '@shared/quran/prophets/verdicts.json';
 import { keptViews, placeKeyOf, type PlaceVerdicts } from '@shared/quran/prophets/review';
 import { compareLinksFor, type CompareLink } from '../../compare/pairCards';
 import { withUnappliedStoryReviews } from '@/lib/quran/curation/storyReviewLog';
-import { AYAT } from '../ayat';
 import ProphetView from './ProphetView';
 
 /** Each place's compare pages: listed surah pairs holding a kept card of one of its ayat with an ayah another surah gives the same event. */
@@ -40,7 +40,7 @@ export default async function QuranProphetPage({ params }: Props) {
   const story = STORIES[prophet.slug];
   const all = withUnappliedStoryReviews(data.places as PlaceVerdicts);
   const verdicts = Object.fromEntries(Object.entries(all).filter(([key]) => key.startsWith(`${prophet.slug}/`)));
-  const events = buildStory(story.events, storedText(AYAT[prophet.slug]));
+  const events = buildStory(story.events, quranStoryText);
   // Readers get the story already cut; the dropped dots and the drafted reasons go only to the owner's own machine, where review can save.
   const owner = process.env.NODE_ENV === 'development';
   const shown = owner ? events : keptViews(prophet.slug, events, verdicts);

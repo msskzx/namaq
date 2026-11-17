@@ -1,16 +1,15 @@
 import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { FlatList, Pressable, Share, View } from 'react-native';
 import { BookOpen, Send } from 'lucide-react-native';
-import data from '@shared/data/quran/oaths.json';
 import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
-import { mushafText } from '@shared/quran/mushafText';
 import { BY_QUOTES, OATH_BY, OATH_QUOTES, citesOf, kindQuotes, oathSections, sectionQuotes, type OathBy } from '@shared/quran/oathSources';
 import { buildOaths, oathPlace, oathShareText, type OathKind, type OathView } from '@shared/quran/oaths';
 import { Text } from '@/ui/Text';
 import Reference from '@/ui/Reference';
 import TopBar from '@/ui/TopBar';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
+import { ayahMushafWords } from '@/lib/mushaf';
 import { WEBSITE } from '@/lib/branches';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { readAyah } from '@/lib/openReader';
@@ -18,7 +17,7 @@ import { useTabRetap } from '@/lib/tabRetap';
 import { CARD, QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 
 const KINDS: { kind: OathKind; label: string }[] = [{ kind: 'allah', label: 'أقسم الله' }, { kind: 'others', label: 'أقسم غيره' }];
-const BUILT = { allah: buildOaths('allah', data), others: buildOaths('others', data) };
+const BUILT = { allah: buildOaths('allah', ayahMushafWords), others: buildOaths('others', ayahMushafWords) };
 const BY_ID = new Map(BUILT.allah.map(oath => [oath.id, oath]));
 
 /** A row of the list: a section's heading with its reference, or an oath's card. */
@@ -27,7 +26,7 @@ const rowsOf = (kind: OathKind, by: OathBy | null): Row[] =>
   kind === 'others' ? BUILT.others.map(oath => ({ oath })) : oathSections(by).flatMap(head => [{ head }, ...head.oaths.map(id => ({ oath: BY_ID.get(id)! }))]);
 
 function shareOath(oath: OathView) {
-  void Share.share({ message: `${mushafText(oathShareText(oath, num))}\n${WEBSITE}${ayahHref(oath.id)}` });
+  void Share.share({ message: `${oathShareText(oath, num)}\n${WEBSITE}${ayahHref(oath.id)}` });
 }
 
 function OathCard({ oath, palette }: { oath: OathView; palette: Palette }) {
@@ -44,7 +43,7 @@ function OathCard({ oath, palette }: { oath: OathView; palette: Palette }) {
       <View style={{ ...CARD, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.card, paddingHorizontal: 14, paddingVertical: 6 }}>
         <Text style={{ fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 42, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
           {oath.lines.map(line => [
-            ...line.words.map((word, i) => <Text key={`${line.ayah}-${i}`} style={{ fontFamily: QURAN_FONT, color: word.sworn ? palette.accent : palette.ink }}>{`${mushafText(word.text)} `}</Text>),
+            ...line.words.map((word, i) => <Text key={`${line.ayah}-${i}`} style={{ fontFamily: QURAN_FONT, color: word.sworn ? palette.accent : palette.ink }}>{`${word.text} `}</Text>),
             <Text key={`${line.ayah}-n`} style={{ fontFamily: QURAN_FONT, color: palette.amber }}>{`${num(line.ayah)} `}</Text>,
           ])}
         </Text>

@@ -5,13 +5,14 @@ import { cleanup, render, screen, within } from '@testing-library/react';
 import itqan from '@shared/data/quran/itqanBalagha';
 import { exampleReference } from '@shared/quran/lataif';
 import { examples } from '@shared/quran/iltifat';
-import { mushafText } from '@shared/quran/mushafText';
 import LataifView, { VOICE_COLOR } from './LataifView';
+import corpus from '@shared/data/quran/trees.json';
 
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar' }) }));
 afterEach(cleanup);
 
-const views = examples();
+const pageWords = new Map(corpus.ayat.map(ayah => [ayah.key, ayah.words]));
+const views = examples(key => pageWords.get(key));
 const references = Object.fromEntries(views.map(view => [view.key, exampleReference(view, itqan)]));
 const card = (name: string) => screen.getByRole('article', { name });
 
@@ -33,7 +34,7 @@ describe('LataifView', () => {
 
   it('colours a word with the colour of its chip', () => {
     render(<LataifView views={views} references={references} />);
-    const word = within(card('فاطر ٩')).getByText(mushafText('فَسُقۡنَـٰهُ'));
+    const word = within(card('فاطر ٩')).getByText('فَسُقۡنَٰهُ');
     expect(word.getAttribute('style')).toContain(VOICE_COLOR.we);
   });
 

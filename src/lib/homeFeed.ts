@@ -9,13 +9,13 @@ import { bookmarkKind } from '@shared/bookmarkKind';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { treeInventory, treePreviewOf, type TreePreview } from '@/app/quran/read/ayahPreview';
 import { findProphet, storyTitle } from '@shared/quran/prophets';
-import { buildStory, storedText, storyMap, type EventView, type StoryMap } from '@shared/quran/prophets/story';
+import { quranStoryText } from '@shared/quran/prophets/storyText';
+import { buildStory, storyMap, type EventView, type StoryMap } from '@shared/quran/prophets/story';
 import { STORIES } from '@shared/quran/prophets/stories';
 import verdictData from '@shared/quran/prophets/verdicts.json';
 import { keptViews, type PlaceVerdicts } from '@shared/quran/prophets/review';
 import { hasStoryCard, storyGroupOfDay } from '@shared/quran/prophets/storyGroup';
 import { withUnappliedStoryReviews } from '@/lib/quran/curation/storyReviewLog';
-import { AYAT } from '@/app/quran/prophets/ayat';
 
 
 let fits: BranchPiece[] | undefined;
@@ -82,7 +82,7 @@ export function storyCards(day: number, slots: number[]): StoryCard[] {
     if (!prophet) return [];
     const story = STORIES[slug];
     const verdicts = Object.fromEntries(Object.entries(all).filter(([key]) => key.startsWith(`${slug}/`)));
-    const events = keptViews(slug, buildStory(story.events, storedText(AYAT[slug])), verdicts);
+    const events = keptViews(slug, buildStory(story.events, quranStoryText), verdicts);
     const whole = storyMap(events);
     // The words stay behind: the map needs only each place's count.
     const map = { ...whole, places: whole.places.map(places => places.map(place => ({ ...place, segments: [] }))) };
