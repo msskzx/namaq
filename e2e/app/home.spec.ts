@@ -199,6 +199,20 @@ test.describe('a returning user', () => {
     await expect.poll(async () => (await stored<Record<string, { due?: number }>>(page, 'ayah-forgot'))?.['18:10']?.due).toBeGreaterThan(Date.now());
   });
 
+  test('the recall card small recite bar shares one row with the card buttons', async ({ page }) => {
+    await open(page, '/');
+    const bar = page.getByRole('toolbar', { name: 'أدوات التسميع' }).first();
+    const remembered = page.getByRole('button', { name: 'تذكّرتها' }).first();
+    await expect(bar).toBeVisible();
+    const [barBox, buttonBox] = [await bar.boundingBox(), await remembered.boundingBox()];
+    expect(barBox!.height).toBeLessThanOrEqual(40);
+    // Same row: the button's middle lies within the bar's height, and the bar on the right of it.
+    const middle = buttonBox!.y + buttonBox!.height / 2;
+    expect(middle).toBeGreaterThan(barBox!.y);
+    expect(middle).toBeLessThan(barBox!.y + barBox!.height);
+    expect(buttonBox!.x + buttonBox!.width).toBeLessThanOrEqual(barBox!.x);
+  });
+
   test('the recall card reveals a word at a time, and with the pen takes what the pen setting asks in write boxes and grades it', async ({ page }) => {
     await open(page, '/');
     await expect(page.getByRole('button', { name: 'أظهر الكلمة التالية' }).first()).toBeVisible();
