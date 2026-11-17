@@ -176,7 +176,7 @@ describe('QuizzesPage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
 
     expect(screen.getByText('Score: 0 / 5 (0%)')).toBeTruthy();
-    expect(screen.getByText('Not passed')).toBeTruthy();
+    expect(screen.queryByText('Not passed')).toBeNull();
     expect(screen.queryByText('No answer')).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Review questions' }));
     expect(screen.getByText('No answer')).toBeTruthy();
@@ -397,7 +397,7 @@ describe('QuizzesPage', () => {
     }
   });
 
-  it('reports a rounded percentage with a pass state at the inclusive threshold', () => {
+  it('reports a rounded percentage with no passed or failed word (owner, 2026-11-17)', () => {
     nav.reset('/quizzes?topic=PEOPLE&length=5');
     render(<QuizzesPage />);
 
@@ -409,7 +409,7 @@ describe('QuizzesPage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
 
     expect(screen.getByText('Score: 3 / 5 (60%)')).toBeTruthy();
-    expect(screen.getByText('Passed')).toBeTruthy();
+    expect(screen.queryByText('Passed')).toBeNull();
   });
 
   it('keeps a tree answer with no right leaf marked incorrect', () => {

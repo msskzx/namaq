@@ -1,7 +1,8 @@
 // docs/quiz-ayah-branches.md
-import { keys, type Branch, type BranchAyah, type Variant } from '../quran/branches';
+import { keys, ownAyat, type Branch, type BranchAyah, type Variant } from '../quran/branches';
 import { inJuzRange, type JuzRange } from '../quran/juz';
-import { buildTreeGroups, createPhrasePresenter, type TreeGroup } from '../quran/phraseTrees';
+import { ownAyatOnly } from '../quran/branchVerdicts';
+import { buildTreeGroups, createTreePresenter, type TreeGroup } from '../quran/phraseTrees';
 import { askedNodes } from './branchAnswers';
 import { byDifficulty, DEFAULT_DIFFICULTY, levelOf, treeScore, type Difficulty } from './difficulty';
 import { shuffle, type Random } from './random';
@@ -35,7 +36,8 @@ export function branchQuestionPool(all: BranchAyah[], range: JuzRange | null = n
   const byKey = new Map(ayat.map(entry => [entry.key, entry]));
   // Supplied trees keep only their places inside the range.
   const trees = supplied ? supplied.map(group => ({ ...group, occurrences: group.occurrences.filter(occurrence => byKey.has(occurrence.key)) })) : buildTreeGroups(ayat);
-  const present = createPhrasePresenter(ayat, true, !range);
+  // Built as the branches tab builds the same tree (createTreePresenter, the owner's curated ends), so a quiz tree is the tree.
+  const present = createTreePresenter(ayat, true, !range);
   const candidates = trees.filter(group => !group.family && new Set(group.occurrences.map(occurrence => occurrence.key)).size >= 2 && new Set(group.occurrences.map(occurrence => occurrence.key)).size <= MAX_BRANCHES && new Set(group.occurrences.map(occurrence => nextClass(byKey.get(occurrence.key)!, occurrence.end))).size >= 2);
   const levels = new Map<TreeGroup, Difficulty>();
   /** A tree's difficulty, from its whole ayat. */
@@ -46,7 +48,7 @@ export function branchQuestionPool(all: BranchAyah[], range: JuzRange | null = n
   };
   const build = (group: TreeGroup): BranchQuestion | null => {
     const presentation = present(group);
-    const tree = presentation.tree;
+    const tree = ownAyatOnly(group) ? ownAyat(presentation.tree) : presentation.tree;
     const memberKeys = [...new Set(group.occurrences.map(occurrence => occurrence.key))];
     if (!tree.words.length || tree.children.length < 2 || tree.children.length > MAX_BRANCHES || tree.ayat.length > 0 || memberKeys.length > MAX_BRANCHES) return null;
     return {

@@ -154,3 +154,4 @@ counts for neither.
 | [R0051](R0051-one-tree-means-one-builder-not-one-drawer.md) | One tree means one builder and one set of rules, not only one drawing component | detour | solved |
 | [R0052](R0052-a-printed-page-is-found-again-by-its-letters.md) | A printed page is found again in a built book by its letters | challenge | solved |
 | [R0053](R0053-a-word-filed-under-the-next-ayah-needs-a-move.md) | A word filed under the next ayah needs a move, not a replacement | challenge | solved |
+| [R0054](R0054-a-guard-on-one-feature-misses-the-copies-in-another.md) | A guard written for one feature misses the same bypass in another | detour | solved |

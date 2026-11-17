@@ -134,15 +134,19 @@ describe('complete branch tree answers', () => {
     }
   });
 
-  it('reserves the same preview text space at every difficulty', () => {
-    const { container, rerender } = render(<BranchPreview leaves={1} ar={false} />);
-    const reservedText = () => container.querySelector('[data-tree-content]')!.textContent!.replaceAll('You type this', '');
-    const initial = reservedText();
+  it('empties as many example leaves as the answers chosen, the rest drawn by the tree', () => {
+    const { rerender } = render(<BranchPreview leaves={1} ar={false} />);
     expect(screen.getAllByText('You type this')).toHaveLength(1);
     rerender(<BranchPreview leaves={10} ar={false} />);
     expect(screen.getAllByText('You type this')).toHaveLength(6);
-    expect(reservedText()).toBe(initial);
-    expect(container.querySelectorAll('[data-node] [aria-hidden="true"].invisible')).toHaveLength(6);
+    expect(document.querySelector('[data-tree-content]')!.textContent).toMatch(/ج\p{M}*ن\p{M}*ـ/u);
+  });
+
+  it('shows the example as the matrix too, each ayah reading on to its empty box', () => {
+    render(<BranchPreview leaves={2} ar={false} />);
+    fireEvent.click(screen.getByRole('button', { name: /Matrix/ }));
+    expect(document.querySelectorAll('[data-quiz-matrix] > div')).toHaveLength(6);
+    expect(screen.getAllByText('You type this')).toHaveLength(2);
   });
 
   it('shows the beginnings before the shared root without answer-stage controls', () => {
@@ -150,7 +154,8 @@ describe('complete branch tree answers', () => {
     const { container } = render(<BranchInputs question={{ ...question, prefixes }} typed={[]} onChange={() => {}} onCheck={() => {}} ar />);
     expect(screen.getByText('يوم يتذكر')).toBeTruthy();
     expect(screen.getByText('وقال')).toBeTruthy();
-    expect(container.querySelectorAll('[data-node] button, [data-node] a')).toHaveLength(0);
+    // No way off the page mid-quiz; a node's path button only lights its path.
+    expect(container.querySelectorAll('[data-node] a')).toHaveLength(0);
     expect(screen.getAllByRole('textbox')).toHaveLength(4);
   });
 

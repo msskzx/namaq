@@ -159,5 +159,5 @@ export function soloScore(run: SoloRun) {
   const points = run.questions.map((question, i) => run.checked[i] ? questionPoints(question, answerOf(question, run.typed[i])) : { earned: 0, total: questionPoints(question, isTree(question) ? [] : undefined).total });
   const score = points.reduce((sum, point) => sum + point.earned, 0);
   const total = points.reduce((sum, point) => sum + point.total, 0);
-  return { points, score, total, percent: total ? Math.round((score / total) * 100) : 0, passed: total > 0 && score / total >= 0.5 };
+  return { points, score, total, percent: total ? Math.round((score / total) * 100) : 0 };
 }

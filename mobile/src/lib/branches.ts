@@ -4,7 +4,7 @@ import type { BranchPiece } from '@shared/quran/branchInventory';
 import { ayahContexts, sharedByAll, surrounding, treeContexts, type AyahContext, type Neighbour } from '@shared/quran/ayahContext';
 import type { Likeness } from '@shared/quran/wordMatch';
 import { ownAyatOnly, twoAyat } from '@shared/quran/branchVerdicts';
-import { ayahEnds, ownEnds, twoEnds, branchesHref, keys, textHolds, type Branch, type BranchAyah, type Variant } from '@shared/quran/branches';
+import { ayahEnds, ownAyat, ownEnds, twoEnds, branchesHref, keys, textHolds, type Branch, type BranchAyah, type Variant } from '@shared/quran/branches';
 import { readBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { filteredAyat } from '@shared/quran/mutashabih/browse';
 import { groupPresentation } from '@shared/quran/mutashabih/presentation';
@@ -53,7 +53,6 @@ const cards = new Map<string, TreeCard>();
 const curatedEnds = new WeakMap<Presentation, Record<string, string>>();
 
 /** The tree drawn on a card, built the same way as the website's branches page with the same filters. */
-const ownAyat = (node: Branch): Branch => ({ ...node, through: undefined, children: node.children.map(ownAyat), ...(node.rejoin ? { rejoin: ownAyat(node.rejoin) } : {}) });
 
 export function cardOf(piece: BranchPiece, state: Pick<ListState, 'filters' | 'range'> = EMPTY_LIST): TreeCard {
   const id = JSON.stringify([piece.id, piece.keys.length, state.filters, state.range]);

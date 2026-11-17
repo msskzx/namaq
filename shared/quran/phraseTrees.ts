@@ -163,7 +163,17 @@ export function sharedDisplay(forms: string[]) {
 }
 
 export function phrasePresentation(group: PhraseGroup, ayat: BranchAyah[], continueIdentical = true, followCorpus = true, within?: (key: string) => boolean): { tree: Branch; prefixes: Variant[]; offsets: Record<string, number>; ayat: BranchAyah[] } {
-  return foldForms(createPhrasePresenter(ayat, continueIdentical, followCorpus, within)(group));
+  return createTreePresenter(ayat, continueIdentical, followCorpus, within)(group);
+}
+
+/**
+ * The one way a tree is built for showing (branches, home cards, previews, quizzes): the phrase trie with every rule folded in
+ * (foldForms, ADR 0036). Made once for many trees, as the quiz builds several. `createPhrasePresenter` alone is the bare trie,
+ * for ids and sizes only; shared/quran/oneTree.test.ts keeps it out of anything drawn.
+ */
+export function createTreePresenter(ayat: BranchAyah[], continueIdentical = true, followCorpus = true, within?: (key: string) => boolean) {
+  const present = createPhrasePresenter(ayat, continueIdentical, followCorpus, within);
+  return (group: PhraseGroup) => foldForms(present(group));
 }
 
 export function createPhrasePresenter(ayat: BranchAyah[], continueIdentical = true, followCorpus = true, within?: (key: string) => boolean) {

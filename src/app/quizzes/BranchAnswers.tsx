@@ -13,11 +13,13 @@ import Button from "@/components/common/Button";
 import MushafText from "@/components/common/MushafText";
 import BranchTree, { AyahRefs, Marked, TreeWords } from "@/app/quran/branches/BranchTree";
 import { PathButton } from "@/app/quran/branches/Paths";
-import { askedNodes, givenAnswer, LEAF_WORDS } from "@shared/quiz/branchAnswers";
+import { askedNodes, branchNodes, givenAnswer, leadingSigns } from "@shared/quiz/branchAnswers";
 import { correctionOf, gradedTree, neededCut, verdict, type Correction } from "@shared/quiz/feedback";
 import { emptyBranchAnswers, isAsked, type ScoredQuestion } from "@shared/quiz/score";
 import { addHint, hintsOf, type Hints } from "@shared/quiz/hints";
-import { branchesHref, keys, shownAyat, type Branch, type Variant } from "@shared/quran/branches";
+import { ayatLabel, branchesHref, keys, shownAyat, type Branch, type Variant } from "@shared/quran/branches";
+import Cookies from "js-cookie";
+import { BRANCH_VIEW_COOKIE, parseBranchView } from "@shared/quran/branchView";
 import { num } from "@shared/quran/arabicNumber";
 import example from "@shared/data/quiz/example.json";
 
@@ -38,6 +40,63 @@ function nodeOffsets(tree: Branch) {
   return { offsets, parents };
 }
 
+
+/** The reader's default view from the settings: the quiz opens on the matrix when it is set (owner, 2026-11-17). */
+const NO_LINKS: Record<string, string> = {};
+const defaultMatrix = () => parseBranchView(Cookies.get(BRANCH_VIEW_COOKIE)) === "cards";
+
+/** An asked node: the ayah sign it opens with (﴿١٧﴾ where its ayah reads on) given, then the box to type in. */
+function AskedBox({ node, children }: { node: Branch; children: React.ReactNode }) {
+  const signs = leadingSigns(node.words);
+  if (!signs.length) return <>{children}</>;
+  return <span className="flex items-center gap-1.5"><span className="font-quran text-lg text-[var(--home-muted)]"><MushafText>{signs.join(" ")}</MushafText></span>{children}</span>;
+}
+
+type MatrixRow = { leaf: Branch; path: number[]; words: string[]; before: string[]; ayahKeys: string[] };
+
+/** One row per ayah ending, split where its ayat open with different words before the tree (يطوف / ويطوف), as the app's quiz matrix. */
+function matrixRows(tree: Branch, prefixes: Variant[]): MatrixRow[] {
+  const rows: MatrixRow[] = [];
+  let next = 0;
+  const walk = (node: Branch, path: number[], words: string[]) => node.children.forEach(child => {
+    const index = next++;
+    const here = [...path, index];
+    if (!child.children.length) {
+      const byBefore = new Map<string, { before: string[]; ayahKeys: string[] }>();
+      for (const key of child.ayat.length ? child.ayat : keys(child)) {
+        const prefix = prefixes.find(item => item.keys.includes(key));
+        const before = prefix?.words ?? (prefix?.word ? prefix.word.split(" ") : []);
+        const id = before.join(" ");
+        byBefore.set(id, { before, ayahKeys: [...byBefore.get(id)?.ayahKeys ?? [], key] });
+      }
+      for (const { before, ayahKeys } of byBefore.values()) rows.push({ leaf: child, path: here, words, before, ayahKeys });
+    }
+    walk(child, here, [...words, ...child.words]);
+  });
+  walk(tree, [], tree.words);
+  return rows;
+}
+
+/** The matrix view of a question: one card per ayah, the shared start in colour, a box where a node is asked. */
+function MatrixInputs({ question, values, input, names }: { question: Question; values: string[]; input: (index: number) => React.ReactNode; names: Names }) {
+  const tree = question.tree!;
+  const nodes = branchNodes(tree);
+  return <div className="flex flex-col gap-2.5" dir="rtl" data-quiz-matrix>
+    {matrixRows(tree, question.prefixes ?? []).map(({ leaf, path, words, before, ayahKeys }) => {
+      const spans = shownAyat(leaf, words);
+      return <div key={`${path.join("-")}:${ayahKeys[0]}`} className="rounded-[14px] border border-[var(--home-rule)] bg-[var(--home-card)] p-2.5">
+        <p className="text-xs text-[var(--home-muted)]">{ayahKeys.map(key => ayatLabel(spans[key], names)).join(" · ")}</p>
+        <p className="flex flex-wrap items-center gap-x-2 font-quran text-lg leading-loose text-[var(--home-ink)]">
+          {before.length > 0 && <MushafText>{before.join(" ")}</MushafText>}
+          <span className="font-bold text-[var(--home-accent)]"><MushafText>{givenAnswer(tree)}</MushafText></span>
+          {path.map(index => isAsked(question, index)
+            ? <AskedBox key={index} node={nodes[index]}>{input(index)}</AskedBox>
+            : <MushafText key={index}>{values[index]}</MushafText>)}
+        </p>
+      </div>;
+    })}
+  </div>;
+}
 
 function Badge({ row, ar }: { row: Correction; ar: boolean }) {
   return <span aria-hidden className={`inline-flex size-6 shrink-0 items-center justify-center rounded-full text-sm font-bold ${row.correct ? "bg-[color-mix(in_srgb,var(--home-green)_15%,var(--home-paper))] text-[var(--home-green)]" : "bg-[var(--home-action,var(--home-accent))] text-[var(--home-on-action,var(--home-paper))]"}`}>{ar ? num(row.number) : row.number}</span>;
@@ -63,7 +122,8 @@ function TypedWords({ row, ar }: { row: Correction; ar: boolean }) {
 export function BranchFeedback({ question: givenQuestion, typed: givenTyped, names, ar, controls = true, hints }: { question: Question; typed: string[]; names: Names; ar: boolean; controls?: boolean;
   /** The hints used on this question, marked with a small bulb. */
   hints?: Hints }) {
-  const [matrix, setMatrix] = React.useState(false);
+  // Opens on the view the settings name as the default, tree or ayah cards (owner, 2026-11-17).
+  const [matrix, setMatrix] = React.useState(defaultMatrix);
   const snapshot = JSON.stringify({ question: givenQuestion, typed: givenTyped });
   const feedback = React.useMemo(() => {
     const { question, typed } = JSON.parse(snapshot) as { question: Question; typed: string[] };
@@ -93,7 +153,8 @@ export function BranchFeedback({ question: givenQuestion, typed: givenTyped, nam
           const context = { subject: answer.words.join(" "), siblings: answer.children.length === 0 && parents.has(answer) ? keys(parents.get(answer)!) : undefined };
           const row = byIndex.get(index);
           const marked = (text: React.ReactNode, references: React.ReactNode) => <Marked node={answer} ayahKeys={keys(answer)} {...context} names={names} offset={offsets.get(answer)} before={<PathButton id={`n${index}`} keys={keys(node)} subject={context.subject} />} references={references}>{text}</Marked>;
-          if (!row) return marked(<span className="font-quran text-lg leading-loose"><TreeWords words={answer.words} ayahKeys={keys(answer)} at={offsets.get(answer) ?? 0} /></span>, answer.ayat.length > 0 && <AyahRefs keys={answer.ayat} names={names} tags={tags} spans={shownAyat(answer, path)} />);
+          // A node not asked is drawn by BranchTree itself, as on the branches page.
+          if (!row) return undefined;
           return (
             <div className="flex max-w-60 flex-col gap-1" data-answer={row.correct ? "correct" : "incorrect"}>
               <p className="flex items-center gap-2 text-sm font-semibold text-[var(--home-ink)]"><Badge row={row} ar={ar} />{verdict(row, ar)}{hints?.[index] ? <Lightbulb size={15} className="text-[var(--home-muted)]" aria-label={ar ? "بتلميح" : "With a hint"} /> : null}</p>
@@ -114,16 +175,26 @@ export function BranchFeedback({ question: givenQuestion, typed: givenTyped, nam
   );
 }
 
-export function BranchInputs({ question, typed, onChange, onCheck, ar, hints: kept, onHints }: { question: Question; typed: string[]; onChange: (typed: string[]) => void; onCheck: () => void; ar: boolean;
+export function BranchInputs({ question, typed, onChange, onCheck, ar, names, hints: kept, onHints }: { question: Question; typed: string[]; onChange: (typed: string[]) => void; onCheck: () => void; ar: boolean; names?: Names;
   /** The hints shown so far, when the quiz keeps them (solo, so the review can mark them); otherwise they live here. */
   hints?: Hints; onHints?: (hints: Hints) => void }) {
   const [own, setOwn] = React.useState<Hints>({});
+  const [matrix, setMatrix] = React.useState(defaultMatrix);
   if (!question.tree) return null;
   const values = emptyBranchAnswers(question).map((value, index) => isAsked(question, index) ? typed[index] ?? "" : value);
   const hints = kept ?? own;
   const shown = hintsOf(question, hints);
   const hintLabel = ar ? "تلميح: حرف آخر من كل طرف فارغ" : "Hint: one more letter in each empty leaf";
   const started = values.some((value, index) => isAsked(question, index) && value.trim());
+  const viewLabel = matrix ? (ar ? "اعرض الشجرة" : "Show tree") : (ar ? "اعرض المصفوفة" : "Show matrix");
+  const box = (index: number, width: string) => (
+    <label className={`flex ${width} max-w-full flex-col gap-1`}>
+      <span className="sr-only">{ar ? `العقدة ${num(index + 1)}` : `Node ${index + 1}`}</span>
+      <input type="text" dir="rtl" lang="ar" autoComplete="off" spellCheck={false} value={values[index]} placeholder={shown[index] || undefined}
+        onChange={(event) => onChange(values.map((value, at) => at === index ? event.target.value : value))}
+        className="w-full rounded-sm border border-[var(--home-rule)] bg-transparent px-3 py-2 font-quran text-lg text-[var(--home-ink)] focus:border-[var(--home-accent)]" />
+    </label>
+  );
   return (
     <form className="flex flex-col gap-3" onSubmit={(event) => {
       event.preventDefault();
@@ -133,18 +204,15 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar, hints: ke
       <div dir="rtl">
         <NavButtons>
           <Button size="lg" variant="muted" aria-label={hintLabel} title={hintLabel} onClick={() => (onHints ?? setOwn)(addHint(question, values, hints))}><Lightbulb aria-hidden /></Button>
-          <RotateButton />
+          <Button size="lg" variant="muted" aria-label={viewLabel} title={viewLabel} onClick={() => setMatrix(value => !value)}>{matrix ? <TreeIcon aria-hidden /> : <GalleryHorizontal aria-hidden />}</Button>
+          {!matrix && <RotateButton />}
         </NavButtons>
-        <BranchTree tree={question.tree} variants={question.variants} prefixes={question.prefixes} names={{}} showSpellings={false} direction="auto" rotatable label={ar ? "أكمل الشجرة" : "Complete the tree"} renderNode={(node, index) => !isAsked(question, index) ? (
-          <span className="font-quran text-lg leading-loose text-[var(--home-muted)]"><MushafText>{givenAnswer(node)}</MushafText></span>
-        ) : (
-          <label className="flex w-36 max-w-full flex-col gap-1">
-            <span className="sr-only">{ar ? `العقدة ${num(index + 1)}` : `Node ${index + 1}`}</span>
-            <input type="text" dir="rtl" lang="ar" autoComplete="off" spellCheck={false} value={values[index]} placeholder={shown[index] || undefined}
-              onChange={(event) => onChange(values.map((value, at) => at === index ? event.target.value : value))}
-              className="w-full rounded-sm border border-[var(--home-rule)] bg-transparent px-3 py-2 font-quran text-lg text-[var(--home-ink)] focus:border-[var(--home-accent)]" />
-          </label>
-        )} />
+        {matrix
+          ? <MatrixInputs question={question} values={values} input={index => box(index, "w-32")} names={names ?? {}} />
+          // Written differences stay hidden until checking (they would point at an ayah); no links away mid-quiz.
+          : <BranchTree tree={question.tree} variants={question.variants} prefixes={question.prefixes} names={names ?? {}} showSpellings={false} subtreeLinks={NO_LINKS} direction="auto" rotatable label={ar ? "أكمل الشجرة" : "Complete the tree"}
+            // Given nodes are drawn by BranchTree as on the branches page; only an asked node gets the box to type in.
+            renderNode={(node, index) => isAsked(question, index) ? <AskedBox node={node}>{box(index, "w-36")}</AskedBox> : undefined} />}
       </div>
       <div className="flex flex-wrap gap-2">
       <Button variant="primary" type="submit" disabled={!started}>
@@ -158,22 +226,26 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar, hints: ke
 }
 
 // docs/quiz-ayah-branches.md
+/**
+ * The example question as the quiz draws it, as a tree or as the matrix: the إن المتقين في tree, built by the same builder as
+ * every quiz tree (shared/quiz/branchQuestions.test.ts keeps example.json equal to it).
+ */
 export function BranchPreview({ leaves, ar }: { leaves: number; ar: boolean }) {
+  const [matrix, setMatrix] = React.useState(defaultMatrix);
   const tree = example.tree as Branch;
-  const asked = askedNodes(tree, leaves, () => 0.5);
+  const question: Question = { tree, prefixes: example.prefixes as Variant[], asked: askedNodes(tree, leaves, () => 0.5) };
+  const values = branchNodes(tree).map((node, index) => isAsked(question, index) ? "" : node.words.join(" "));
+  const empty = <span data-asked className="block h-8 w-24 rounded-sm border border-dashed border-[var(--home-accent)]"><span className="sr-only">{ar ? "تكتبه أنت" : "You type this"}</span></span>;
   return (
-    <div dir="rtl">
-      <BranchTree tree={tree} variants={example.variants as Variant[]} names={{}} showSpellings={false} label={ar ? "مثال على الشجرة" : "Example tree"} renderNode={(node, index) => {
-        if (node.children.length > 0) return <span className="flex flex-col items-start">
-          <span className="font-quran leading-loose"><MushafText>{node.words.join(" ")}</MushafText></span>
-        </span>;
-        const shown = node.words.slice(0, LEAF_WORDS + 1);
-        const empty = asked.includes(index);
-        return <span className="relative block min-h-8 font-quran leading-loose text-[var(--home-muted)]">
-          <span aria-hidden={empty || undefined} className={empty ? "invisible" : undefined}><MushafText>{shown.join(" ")}</MushafText>{shown.length < node.words.length ? " …" : ""}</span>
-          {empty && <span data-asked className="absolute inset-0 rounded-sm border border-dashed border-[var(--home-accent)]"><span className="sr-only">{ar ? "تكتبه أنت" : "You type this"}</span></span>}
-        </span>;
-      }} />
+    <div dir="rtl" className="flex flex-col gap-3">
+      <div className="flex flex-wrap gap-2" role="group" aria-label={ar ? "شكل المثال" : "Example view"}>
+        <Button active={!matrix} aria-pressed={!matrix} onClick={() => setMatrix(false)}><TreeIcon aria-hidden />{ar ? "شجرة" : "Tree"}</Button>
+        <Button active={matrix} aria-pressed={matrix} onClick={() => setMatrix(true)}><GalleryHorizontal aria-hidden />{ar ? "مصفوفة" : "Matrix"}</Button>
+      </div>
+      {matrix
+        ? <MatrixInputs question={question} values={values} input={() => empty} names={{}} />
+        : <BranchTree tree={tree} prefixes={question.prefixes} names={{}} showSpellings={false} subtreeLinks={NO_LINKS} label={ar ? "مثال على الشجرة" : "Example tree"}
+          renderNode={(node, index) => isAsked(question, index) ? <AskedBox node={node}>{empty}</AskedBox> : undefined} />}
     </div>
   );
 }
@@ -190,12 +262,12 @@ export function BranchExplainer({ leaves, ar }: { leaves: number; ar: boolean })
         <div><dt className="inline font-semibold">{ar ? "التصحيح: " : "Grading: "}</dt><dd className="inline">{ar
           ? "تكفي من كل طرف كلمتاه الأوليان، ويجب أن تصح كل كلمة تكتبها وبترتيبها. اكتب بالإملاء المعتاد لا برسم المصحف، والهمزة على أي كرسي. لكل طرف صحيح نقطة، والأطراف المتشابهة في الشكل تقبل أي ترتيب."
           : "A leaf's first two words are enough, and every word you type must be right and in order. Type ordinary spelling, not the mushaf script; a hamza may sit on any seat. Each correct leaf scores a point, and leaves of the same shape can go in either order."}</dd></div>
-        <div><dt className="inline font-semibold">{ar ? "الزر الملوّن: " : "Coloured button: "}</dt><dd className="inline">{ar
-          ? "يظهر بعد التحقق على عقدة تجمع آيات تختلف كلماتها في علامات الضبط، مثل «إِن» و«إِنْ» أعلاه. اضغطه لترى كل آية في سياقها والكلمات المختلفة بارزة."
-          : "After checking, it marks a node whose ayat differ in the marks of its words, like «إِن» and «إِنْ» above. Press it to see each ayah in context with the differing words highlighted."}</dd></div>
+        <div><dt className="inline font-semibold">{ar ? "الكلمة الملوّنة: " : "Coloured word: "}</dt><dd className="inline">{ar
+          ? "بعد التحقق، كلمة تكتبها الآيات بضبط مختلف، مثل «إِن» و«إِنْ»، تُرسم باللون الكهرماني كما في متشابهات القرآن. اضغط العقدة لترى كل آية في سياقها."
+          : "After checking, a word the ayat write with different marks, like «إِن» and «إِنْ», is drawn amber as on the branches page. Press the node to see each ayah in context."}</dd></div>
         <div><dt className="inline font-semibold">{ar ? "الكلمة الأولى: " : "First word: "}</dt><dd className="inline">{ar
-          ? "إذا بدأت بعض الآيات بالواو أو الفاء رُسمت كل صيغة وحدها، الخضراء بالواو والبنفسجية بالفاء."
-          : "When some ayat open with و or ف, each spelling is drawn on its own: green with و, purple with ف."}</dd></div>
+          ? "إذا بدأت بعض الآيات بالواو أو الفاء رُسمت كل صيغة وحدها قبل الشجرة."
+          : "When some ayat open with و or ف, each spelling is drawn on its own before the tree."}</dd></div>
       </dl>
     </>
   );

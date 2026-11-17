@@ -1,6 +1,6 @@
 // Hints in the tree quiz (owner, 2026-11-13): each tap on the bulb shows one more letter of the first word in every
 // leaf still empty, faded in its box. A hint costs nothing; the review marks the leaves that had one.
-import { branchNodes } from './branchAnswers';
+import { branchNodes, spoken } from './branchAnswers';
 import { isAsked, type ScoredQuestion } from './score';
 
 /** Letters revealed so far, by node index. */
@@ -11,8 +11,10 @@ export const hintLetters = (word: string) => [...word.replace(/[ً-ٰٟۖ-ۭـ]/
 
 /** What a hinted box shows: the first letters of its first word, and … while more are left. */
 export function hintText(words: string[], letters: number) {
-  if (!letters || !words.length) return '';
-  const all = hintLetters(words[0]);
+  // An ayah's sign (﴿١٧﴾) is drawn before the box, not typed: the hint starts at the first spoken word.
+  const [first] = spoken(words);
+  if (!letters || !first) return '';
+  const all = hintLetters(first);
   return all.length > letters ? `${all.slice(0, letters).join('')}…` : all.join('');
 }
 
@@ -21,8 +23,9 @@ export function addHint(question: ScoredQuestion, typed: string[], hints: Hints)
   if (!question.tree) return hints;
   const next = { ...hints };
   branchNodes(question.tree).forEach((node, index) => {
-    if (!isAsked(question, index) || (typed[index] ?? '').trim() || !node.words.length) return;
-    next[index] = Math.min((next[index] ?? 0) + 1, hintLetters(node.words[0]).length);
+    const [first] = spoken(node.words);
+    if (!isAsked(question, index) || (typed[index] ?? '').trim() || !first) return;
+    next[index] = Math.min((next[index] ?? 0) + 1, hintLetters(first).length);
   });
   return next;
 }
