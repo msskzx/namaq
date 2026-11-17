@@ -22,6 +22,8 @@ export const light = {
   // A lit word and its partner on the compare cards.
   highlight: '#dcc5a0',
   onHighlight: '#202c35',
+  /** The reader's ayah bands over the card (theme.css --home-band-*): the selected ayah, a forgotten one, the one recited aloud, the long-pressed word over its band. */
+  bands: { mark: '#202c351a', forgot: '#783d4929', playing: '#783d493d', word: '#783d493d' },
   /** The prophets timeline's five phase colours, in the website's order (blue, amber, rose, green, violet), muted to this palette. */
   phases: ['#426578', '#8a6420', '#783d49', '#506449', '#665177'],
   /** The website's --home-slot-1…4: the word-connection colours. */
@@ -51,6 +53,8 @@ export const dark: Palette = {
   amber: '#dcc5a0',
   highlight: '#dcc5a0',
   onHighlight: '#202c35',
+  // Deep wine bands keep the light ink readable; a light wash over a dark card greys it (owner, 2026-11-17).
+  bands: { mark: '#edeae21a', forgot: '#783d4973', playing: '#783d49b3', word: '#783d49d9' },
   phases: ['#a9c4d1', '#dcb46e', '#d9a6b0', '#b1c59f', '#c3afd5'],
   slots: ['#a9c4d1', '#b1c59f', '#c3afd5', '#dcc5a0'],
   glass: '#242727b3',

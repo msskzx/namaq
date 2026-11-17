@@ -10,7 +10,7 @@ describe('the ayat a tree video shows under the tree', () => {
   const piece = treeList().find(item => item.keys.length >= 3)!;
   const beats = growthBeats(cardOf(piece, EMPTY_LIST).presentation.tree, { paths: true });
 
-  const palette = { ink: '#000000', accent: '#aa0000', root: '#0000aa', card: '#ffffff', marks: { exact: '#aa0000', written: '#00aa00', root: '#0000aa' } } as Palette;
+  const palette = { ink: '#000000', accent: '#aa0000', root: '#0000aa', card: '#ffffff', muted: '#666666', marks: { exact: '#aa0000', written: '#00aa00', root: '#0000aa' } } as Palette;
   const presentation = cardOf(piece, EMPTY_LIST).presentation;
 
   it('lists each ayah once, in the order it grows, its chip naming the surah and the ayah', () => {

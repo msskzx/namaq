@@ -12,7 +12,7 @@ import type { BalaghaAyah } from './balagha';
 
 const CARD = 'block shrink-0 rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-3.5 py-2.5';
 // The reader's neutral band (Mushaf.module.css .marked), seen on a card in both themes.
-const LIT = 'bg-[color-mix(in_srgb,var(--home-ink)_10%,var(--home-card))]';
+const LIT = 'bg-[var(--home-band-mark)]';
 // The sentence whose ayah words are lit: a deeper band.
 const PICKED = 'bg-[color-mix(in_srgb,var(--home-ink)_20%,var(--home-card))]';
 const BOOKS = { itqan: 'الإتقان للسيوطي', kashshaf: 'الكشاف للزمخشري' } as const;
