@@ -6,7 +6,7 @@ import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
  * here or not at all. No batch has read this far into the nasab yet, so
  * every link stays on the legacy marker.
  *
- * Brother of Muawwidh and Awf ibn al-Harith below -- all three sons of Afra
+ * Brother of Muawwidh and Awf ibn Afra (muawwidh-ibn-afra, awf-ibn-afra) -- all three sons of Afra
  * bint Ubayd, the "ibna Afra'" of the Abu Jahl-killing tradition, per the
  * retired prisma/personSeedData11.ts entry. Fuller nasab per Ibn Sa'd, as
  * quoted on his own page.
@@ -30,7 +30,7 @@ const muadhIbnAlHarith = {
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-harith-ibn-rifaah-al-najjari', claims: legacyUnreviewed },
     { type: 'SON', inverse: 'MOTHER', to: 'afra-bint-ubayd', claims: legacyUnreviewed },
-    { type: 'BROTHER', inverse: 'BROTHER', to: 'muawwidh-ibn-al-harith', claims: legacyUnreviewed },
+    { type: 'BROTHER', inverse: 'BROTHER', to: 'muawwidh-ibn-afra', claims: legacyUnreviewed },
   ],
 } satisfies CatalogPerson;
 

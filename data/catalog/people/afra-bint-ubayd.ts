@@ -17,9 +17,9 @@ const afraBintUbayd = {
   },
   titles: [],
   relations: [
-    { type: 'MOTHER', inverse: 'SON', to: 'awf-ibn-al-harith', claims: legacyUnreviewed },
+    { type: 'MOTHER', inverse: 'SON', to: 'awf-ibn-afra', claims: legacyUnreviewed },
     { type: 'MOTHER', inverse: 'SON', to: 'muadh-ibn-al-harith', claims: legacyUnreviewed },
-    { type: 'MOTHER', inverse: 'SON', to: 'muawwidh-ibn-al-harith', claims: legacyUnreviewed },
+    { type: 'MOTHER', inverse: 'SON', to: 'muawwidh-ibn-afra', claims: legacyUnreviewed },
   ],
 } satisfies CatalogPerson;
 

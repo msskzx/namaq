@@ -17,9 +17,9 @@ const alHarithIbnRifaahAlNajjari = {
   },
   titles: [],
   relations: [
-    { type: 'FATHER', inverse: 'SON', to: 'awf-ibn-al-harith', claims: legacyUnreviewed },
+    { type: 'FATHER', inverse: 'SON', to: 'awf-ibn-afra', claims: legacyUnreviewed },
     { type: 'FATHER', inverse: 'SON', to: 'muadh-ibn-al-harith', claims: legacyUnreviewed },
-    { type: 'FATHER', inverse: 'SON', to: 'muawwidh-ibn-al-harith', claims: legacyUnreviewed },
+    { type: 'FATHER', inverse: 'SON', to: 'muawwidh-ibn-afra', claims: legacyUnreviewed },
   ],
 } satisfies CatalogPerson;
 
