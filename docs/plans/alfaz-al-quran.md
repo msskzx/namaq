@@ -38,7 +38,7 @@ Both files are pinned by sha256 in `scripts/quran/buildGharib.ts`. Both are publ
 - **The wrong choices.** Each question gets three of his other short meanings, from the same surah first (nearest ayah first), then from up to three surahs away. They are of similar length, share no content word with the right one or with each other, explain a different word, and never a word of the same Quranic Arabic Corpus root (رهقا «ضلالا» is not a wrong choice for رهقا «ظلما»).
 - **Hand review.** Every question was read. The decisions are in `scripts/quran/meaningReview.json`:
   - `notMeaning`: 79 entries whose first sentence is not the word's meaning in the mushaf: a fragment, a note on the word's form, a meaning of one word set on a long quote, a meaning of the second ayah of a quote that runs over two, or a meaning of another reading than Hafs's (his «هنالك تتلو» is «تقرأ», but Hafs reads «تبلوا»). These are kept out of the questions and the wrong choices.
-  - `apart`: 66 pairs of his meanings too close to be the right and a wrong choice of one question (البأساء «الشدة» and الضراء «البلاء», خاسئا «مبعدا» and فسحقا «بعدا», …). Such a question keeps another wrong choice instead of being dropped.
+  - `apart`: 67 pairs of his meanings too close to be the right and a wrong choice of one question (البأساء «الشدة» and الضراء «البلاء», خاسئا «مبعدا» and فسحقا «بعدا», …). Such a question keeps another wrong choice instead of being dropped.
   - `ambiguous`: questions dropped outright (none now).
   - 2,472 questions remain.
 - **On screen.** The question is the whole quote he explains, in its ayah, with the quote marked. After answering, each wrong choice shows the word it explains and where («معنى «فراتا»، المرسلات ٢٧»), and the note gives his pages.
