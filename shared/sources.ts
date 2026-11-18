@@ -68,6 +68,7 @@ const USE = {
   battles: { ar: 'خرائط الغزوات والمعارك في تطبيق الهاتف', en: 'the battle maps in the phone app' },
   hijri: { ar: 'التاريخ الهجري وجزء اليوم', en: 'the Hijri date and today’s juz', href: '/utilities' },
   people: { ar: 'التراجم والأنساب والمعارك', en: 'biographies, lineages and battles', href: '/people' },
+  forty: { ar: 'الأربعون النووية ورواياتها في الصحيحين، في تطبيق الهاتف', en: 'al-Nawawi’s Forty and their Sahihayn records, in the phone app' },
   everywhere: { ar: 'كل الصفحات', en: 'every page' },
 } satisfies Record<string, SourceUse>;
 
@@ -92,6 +93,21 @@ export const SOURCES: Source[] = [
       en: "The author died in 1449, so his text is in the public domain. We quote his judgment with its context, volume, printed page and link, without modern notes or additions in the digital witness.",
     },
     uses: [USE.adhkar],
+  },
+  {
+    id: 'arbain-nawawi', group: 'books',
+    title: { ar: 'الأربعون النووية', en: 'al-Arba‘un al-Nawawiyya' }, author: { ar: 'يحيى بن شرف النووي', en: 'al-Nawawi' },
+    edition: 'دار المنهاج، بيروت، الطبعة الأولى ١٤٣٠هـ، عناية قصي محمد نورس الحلاق وأنور بن أبي بكر الشيخي؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(12836), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+  },
+  {
+    id: 'sahih-bukhari', group: 'books',
+    title: { ar: 'صحيح البخاري', en: 'Sahih al-Bukhari' }, author: { ar: 'محمد بن إسماعيل البخاري', en: 'al-Bukhari' },
+    edition: 'الطبعة السلطانية، بولاق ١٣١١هـ، مصوّرة دار طوق النجاة ١٤٢٢هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1681), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+  },
+  {
+    id: 'sahih-muslim', group: 'books',
+    title: { ar: 'صحيح مسلم', en: 'Sahih Muslim' }, author: { ar: 'مسلم بن الحجاج النيسابوري', en: 'Muslim' },
+    edition: 'تحقيق محمد فؤاد عبد الباقي، مطبعة عيسى البابي الحلبي، القاهرة ١٣٧٤هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1727), licence: PUBLIC_DOMAIN, uses: [USE.forty],
   },
   {
     id: 'siyar', group: 'books',

@@ -23,6 +23,7 @@ describe('tab groups', () => {
     expect(tapOnOpen('utilities')).toBe('back');
     expect(tapOnOpen('book')).toBe('back');
     expect(tapOnOpen('hadith-unit')).toBe('back');
+    expect(tapOnOpen('hadith-forty')).toBe('back');
     expect(tapOnOpen('hadith')).toBe('retap');
     expect(tapOnOpen('index')).toBe('retap');
     expect(tapOnOpen('branches')).toBe('retap');

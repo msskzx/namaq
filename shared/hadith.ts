@@ -113,3 +113,60 @@ export function sceneSlots(scenes: SceneView[], count: number): Map<string, numb
     return slots;
   });
 }
+
+/** A Bukhari record or one printed Muslim route that al-Nawawi's hadith comes from (data/hadith/forty.json). */
+export interface FortyRecord {
+  book: 'bukhari' | 'muslim';
+  /** Bukhari's printed number, or Abd al-Baqi's number for Muslim. */
+  number: number;
+  /** Muslim's route under that number as printed («١٥٥», «١ م»); empty when printed bare. */
+  route?: string;
+  /** Shamela's id of the record's first page. */
+  shamela: number;
+  volume: number;
+  pages: number[];
+  /** The record as printed, its chain and its text. */
+  text: string;
+  /** Where the text's first quote mark opens the saying; before it is the chain. */
+  isnadEnd?: number;
+  /** The record holds only part of al-Nawawi's wording. */
+  partial?: boolean;
+  /** The chain drawn (one line of narrators the edition links), for «الرسم». */
+  isnad?: AppIsnad;
+}
+
+/** One of al-Nawawi's Forty: his own text as printed, the Companion, the books he names, and the records found. */
+export interface FortyEntry {
+  n: number;
+  heading: string;
+  companion: string;
+  text: string;
+  /** Shamela's id of the entry's first page. */
+  shamela: number;
+  pages: number[];
+  named: string[];
+  partial?: boolean;
+  /** Other Companions al-Bukhari has the same hadith from, in another wording or in part. */
+  alsoFrom?: string[];
+  records: FortyRecord[];
+}
+
+export interface AppForty {
+  books: Record<'nawawi' | 'bukhari' | 'muslim', { shamela: number; title: string; edition: string }>;
+  entries: FortyEntry[];
+}
+
+/** «صحيح البخاري ٥٤» or «صحيح مسلم ١٩٠٧ (١٥٥)», a record's short reference. */
+export const recordName = (record: Pick<FortyRecord, 'book' | 'number' | 'route'>, digits: (n: number) => string) =>
+  `${record.book === 'bukhari' ? 'صحيح البخاري' : 'صحيح مسلم'} ${digits(record.number)}${record.route ? ` (${record.route})` : ''}`;
+
+/** «عن أبي هريرة»: the Companion after «عن», a kunya in the genitive. */
+export const fromCompanion = (companion: string) => `عن ${companion.replace(/^أبو /, 'أبي ')}`;
+
+/** al-Nawawi's text after his opening «عن فلان رضي الله عنه», for a short preview; a «قال:» that opens what is left goes too. */
+export function sayingStart(text: string): string {
+  const at = /رضي الله (?:تعالى )?عن(?:هما|هم|ها|ه)(?: أيضًا)?\s*[:،]?\s*/.exec(text);
+  const rest = at ? text.slice(at.index + at[0].length) : text.replace(/^«/, '');
+  return rest.replace(/^(?:قالت?|يقول)\s*:\s*/, '');
+}
+

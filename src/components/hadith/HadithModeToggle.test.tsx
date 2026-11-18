@@ -15,7 +15,7 @@ afterEach(() => {
   (languageMock as { language: 'ar' | 'en' }).language = 'ar';
 });
 
-const toggle = (name: RegExp | string = 'الإسناد والفقاعات') => screen.getByRole('switch', { name }) as HTMLInputElement;
+const toggle = (name: RegExp | string = 'الرسم') => screen.getByRole('switch', { name }) as HTMLInputElement;
 
 describe('HadithModeToggle', () => {
   it('is on in bubbles mode', () => {
@@ -52,7 +52,7 @@ describe('HadithModeToggle', () => {
   it('names both modes in English', () => {
     (languageMock as { language: 'ar' | 'en' }).language = 'en';
     render(<HadithModeToggle mode="bubbles" onChange={() => {}} />);
-    expect(toggle('Isnad and bubbles')).toBeTruthy();
+    expect(toggle('Drawing')).toBeTruthy();
     expect(screen.getByText('Full text')).toBeTruthy();
   });
 });
