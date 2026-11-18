@@ -23,7 +23,7 @@ import data from '@shared/quran/quranText/corpus';
 import { groups as groupData } from '@shared/quran/mutashabih/data';
 import { browseGroups } from '@shared/quran/mutashabih/browse';
 import { branchInventory, reviewPool } from '@shared/quran/branchInventory';
-import { branchVerdictFor } from '@shared/quran/branchVerdicts';
+import { branchVerdictFor, matrixOnly } from '@shared/quran/branchVerdicts';
 import { NextRequest } from 'next/server';
 import { GET as phrasesRoute } from '@/app/api/quran/branch-phrases/route';
 import { ALL_KINDS } from '@shared/quran/branchSearch';
@@ -57,6 +57,10 @@ const shortTree = (id: string) => {
   return `tree:${comparisonId(tree.occurrences).slice(4)}`;
 };
 const defaultGroups = (range: { from: number; to: number } | null = null) => browseGroups(groupData, { categories: 'mutashabeh,pondering' }, new Map(data.ayat.map(ayah => [ayah.key, ayah])), range);
+/** A card whose ayat share no word shows as its matrix only, with no tree and so no tree steps. */
+const trunked = (tree: { occurrences: { start: number; end: number }[] }) => tree.occurrences.every(occurrence => occurrence.end > occurrence.start);
+/** The first tree that has a tree before and after it, all three with a trunk. */
+const middle = (trees: { occurrences: { start: number; end: number }[] }[]) => trees.findIndex((tree, i) => i > 0 && i < trees.length - 1 && [trees[i - 1], tree, trees[i + 1]].every(trunked));
 
 describe('Quran branch trees', () => {
   // Search outside the filters builds the every-kind tree list once and keeps it. That takes seconds on a slow CI runner and
@@ -357,10 +361,11 @@ describe('Quran branch trees', () => {
   it('steps to the neighbouring trees in list order, keeping the juz range', async () => {
     const trees = defaultGroups({ from: 30, to: 30 }).map(group => ({ ...group.tree, id: group.id }));
     const juz = { from: 30, to: 30 };
-    render(await open({ o: trees[1].id, juzFrom: '30', juzTo: '30' }));
+    const at = middle(trees);
+    render(await open({ o: trees[at].id, juzFrom: '30', juzTo: '30' }));
     const steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
-    expect(within(steps).getByRole('link', { name: 'الشجرة السابقة' }).getAttribute('href')).toBe(branchesHref(trees[0].id, juz));
-    expect(within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(branchesHref(trees[2].id, juz));
+    expect(within(steps).getByRole('link', { name: 'الشجرة السابقة' }).getAttribute('href')).toBe(branchesHref(trees[at - 1].id, juz));
+    expect(within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')).toBe(branchesHref(trees[at + 1].id, juz));
   });
 
   it.each(['tree', 'cards'])('shows progress through only the filtered juz trees in %s view', async mode => {
@@ -376,11 +381,12 @@ describe('Quran branch trees', () => {
 
   it('draws the neighbouring trees beside this one, so a swipe brings in the finished card', async () => {
     const trees = defaultGroups({ from: 30, to: 30 }).map(group => ({ ...group.tree, id: group.id }));
-    render(await open({ o: trees[1].id, juzFrom: '30', juzTo: '30' }));
+    const at = middle(trees);
+    render(await open({ o: trees[at].id, juzFrom: '30', juzTo: '30' }));
     const drawn = (side: string) => new Set([...document.querySelectorAll(`[data-tree-neighbour="${side}"] [data-keys]`)].flatMap(box => box.getAttribute('data-keys')!.split(' ')));
     const keysOf = (index: number) => [...new Set(trees[index].occurrences.map(occurrence => occurrence.key))].sort();
-    expect([...drawn('next')].sort()).toEqual(keysOf(2));
-    expect([...drawn('previous')].sort()).toEqual(keysOf(0));
+    expect([...drawn('next')].sort()).toEqual(keysOf(at + 1));
+    expect([...drawn('previous')].sort()).toEqual(keysOf(at - 1));
   });
 
   it('disables the previous step on the first tree', async () => {
@@ -391,19 +397,19 @@ describe('Quran branch trees', () => {
   });
 
   it('browses the trees a surah filter leaves from its first tree, keeping the filter as a chip', async () => {
-    const first = await target({ s: '2' });
-    expect(new URL(first, 'http://localhost').searchParams.get('s')).toBe('2');
+    // al-Zukhruf: its first cards are trees (al-Baqara now opens on a book's matrix-only card, which has no tree steps).
+    const first = await target({ s: '43' });
+    expect(new URL(first, 'http://localhost').searchParams.get('s')).toBe('43');
     render(await open(paramsOf(first)));
     let steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
     expect(within(steps).getByRole('button', { name: 'الشجرة السابقة' }).hasAttribute('disabled')).toBe(true);
     expect(screen.getByRole('link', { name: 'اعرض بطاقات الآيات' })).toBeTruthy();
-    expect(screen.getByText('سورة البَقَرَةْ')).toBeTruthy();
-    const total = branchInventory({}, null).filter(piece => piece.keys.some(key => key.startsWith('2:'))).length;
+    const total = branchInventory({}, null).filter(piece => piece.keys.some(key => key.startsWith('43:'))).length;
     expect(screen.getByRole('progressbar').getAttribute('value')).toBe('1');
     expect(screen.getByRole('progressbar').getAttribute('max')).toBe(String(total));
     expect(new URL(screen.getByRole('link', { name: 'إزالة السورة' }).getAttribute('href')!, 'http://localhost').searchParams.has('s')).toBe(false);
     const second = within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')!;
-    expect(new URL(second, 'http://localhost').searchParams.get('s')).toBe('2');
+    expect(new URL(second, 'http://localhost').searchParams.get('s')).toBe('43');
     cleanup();
     render(await open(paramsOf(second)));
     steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
@@ -413,7 +419,8 @@ describe('Quran branch trees', () => {
   });
 
   it('opens the first search result and swipes through the rest in order, with no result count', async () => {
-    const query = 'قال';
+    // Its first results are trees (a book's matrix-only card has no tree steps).
+    const query = 'ربك';
     const first = await target({ q: query });
     expect(new URL(first, 'http://localhost').searchParams.get('q')).toBe(query);
     render(await open(paramsOf(first)));
@@ -490,10 +497,11 @@ describe('Quran branch trees', () => {
   it('shows the tree as ayah cards in cards view, linking back to the same tree in tree view within the juz range', async () => {
     const trees = defaultGroups({ from: 30, to: 30 }).map(group => ({ ...group.tree, id: group.id }));
     const juz = { from: 30, to: 30 };
-    render(await open({ o: trees[1].id, juzFrom: '30', juzTo: '30', m: 'cards' }));
+    const at = middle(trees);
+    render(await open({ o: trees[at].id, juzFrom: '30', juzTo: '30', m: 'cards' }));
     expect(screen.getByRole('region', { name: 'آيات الشجرة في سياقها' })).toBeTruthy();
     expect(screen.queryByRole('region', { name: 'شجرة العبارات المشتركة' })).toBeNull();
-    expect(screen.getByRole('link', { name: 'اعرض الشجرة' }).getAttribute('href')).toBe(branchesHref(trees[1].id, juz, { mode: 'tree' }));
+    expect(screen.getByRole('link', { name: 'اعرض الشجرة' }).getAttribute('href')).toBe(branchesHref(trees[at].id, juz, { mode: 'tree' }));
     expect(screen.queryByRole('link', { name: 'اعرض بطاقات الآيات' })).toBeNull();
   });
 });
@@ -507,7 +515,7 @@ describe('branches review', () => {
     expect(paramsOf(landing).review).toBe('1');
     vi.stubEnv('NODE_ENV', 'development');
     // A card whose verdict Claude drafted and the owner has not checked yet.
-    const drafted = reviewPool({}, null).find(piece => branchVerdictFor(piece) && !branchVerdictFor(piece)?.checked)!;
+    const drafted = reviewPool({}, null).find(piece => branchVerdictFor(piece) && !branchVerdictFor(piece)?.checked && !matrixOnly(piece))!;
     const card = { ...paramsOf(landing), o: drafted.id };
     render(await open(card));
     expect(screen.getByRole('button', { name: 'حذف البطاقة' })).toBeTruthy();

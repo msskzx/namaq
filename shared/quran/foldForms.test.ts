@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import corpus from './quranText/corpus';
 import { branchInventory } from './branchInventory';
+import { matrixOnly } from './branchVerdicts';
 import { keys, type Branch, type BranchAyah, type Variant } from './branches';
 import { foldForms } from './foldForms';
 import { buildPhraseGroups, createPhrasePresenter, phrasePresentation, phraseSubtreeTargets } from './phraseTrees';
@@ -79,7 +80,8 @@ describe('writtenPieces and writtenStrands', () => {
 describe('every tree of the default list, folded', () => {
   const ayat = corpus.ayat as BranchAyah[];
   const byKey = new Map(ayat.map(ayah => [ayah.key, ayah]));
-  const pieces = branchInventory({}, null);
+  // A matrix-only card shows no tree.
+  const pieces = branchInventory({}, null).filter(piece => !matrixOnly(piece));
   const presentations = pieces.map(piece => [piece.id, piece.group ? groupPresentation(piece.group, byKey) : phrasePresentation(piece.phrase, ayat, true, true)] as const);
 
   it('writes each moved word as its ayat do, in its place in the ayah', () => {
