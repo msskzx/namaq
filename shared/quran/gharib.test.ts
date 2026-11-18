@@ -29,11 +29,11 @@ describe("Ibn Qutaybah's gharib", () => {
   });
 
   it('asks only his short meanings, each question with three others and their text', () => {
-    expect(gharib.questions.length).toBeGreaterThan(600);
+    expect(gharib.questions.length).toBeGreaterThan(2000);
     for (const question of gharib.questions) {
       expect(new Set(question).size).toBe(4);
       for (const at of question) expect(gharib.meanings[at]).toBeTruthy();
-      expect(gharib.entries[question[0]][4]).toHaveLength(1);
+      expect(gharib.entries[question[0]][4][0][1]).toBeGreaterThanOrEqual(0);
     }
   });
 });

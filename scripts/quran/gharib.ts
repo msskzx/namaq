@@ -195,37 +195,71 @@ export function headingsFor(root: string, headings: Map<string, number[]>): numb
 export { same };
 
 /** One question of «ما معنى؟»: the entry asked, and the three entries whose meanings are offered beside its own. */
+const VOWELS = /[\u064B-\u0652\u0670\u0640]/;
+const VOWELS_ALL = /[\u064B-\u0652\u0670\u0640]/g;
+
 export type MeaningPick = { asked: number; others: [number, number, number] };
 
-/** What he says a quoted word means, when it is one short explanation of his own on the entry's first line: the words after
- * the quote, with no second quote, no second opinion (يقال، قيل), no report (قال), no pointer to another book or place, and no
- * editor's [addition]. */
+/** What he says a quoted word or phrase means (owner, 2026-11-18): the first sentence of his own after the quote on the entry's
+ * first line, whatever follows it, as long as it is one meaning: no second quote, no second opinion (أو، قيل), no report
+ * (قال), no pointer to another book or place, and no editor's [addition]. A meaning he opens with «يقال:» counts when the
+ * entry gives no other. Words that carry on the ayah («في الأرحام») count too. */
 export function meaningOf(entry: { text: string; places: GharibPlace[] }): string | null {
-  if (entry.text.includes('\n') || entry.places.length !== 1 || entry.places[0][1] < 0) return null;
-  const line = entry.text.replace(NUMBERED, '');
+  if (!entry.places.length || entry.places[0][1] < 0) return null;
+  const voweled = entry.text.split('\n')[0].replace(NUMBERED, '');
+  // The rules read his words without vowels; the meaning returned keeps them.
+  const at: number[] = [];
+  let line = '';
+  [...voweled].forEach((char, i) => { if (!VOWELS.test(char)) { at.push(i); line += char; } });
+  at.push(voweled.length);
   const quote = line.match(/^(?:و\s*)?(?:﴿[^﴾]*﴾|\([^)]*\))\s*:?\s*/);
   if (!quote) return null;
-  if (quote[0].replace(/[^ء-ۭ\s]/g, ' ').trim().split(/\s+/).length > 3) return null;
-  const meaning = line.slice(quote[0].length).trim();
-  const words = meaning.split(/\s+/).filter(Boolean);
-  if (!words.length || words.length > 8) return null;
-  if (/[﴿\[\]"«(]|يقال|قيل|قال|المشكل|تقدم|ذكرت|مفسر|كتاب|موضع|أو\s/.test(meaning)) return null;
-  // A second sentence (a note on the word's form or another place), or words that carry on the ayah («لكم»، «في الأرحام») rather
-  // than say what the word means.
-  if (/[.:؛]\s*\S/.test(meaning.replace(/^(?:أي|يعني|يريد|هم)\s*:/, '').replace(/\.$/, '')) || /^(?:في|من|على|عن|إلى|لكم|لهم|له|حسب)(?:\s|$)/.test(meaning)) return null;
-  return meaning;
+  if (quote[0].replace(/[^ء-ۭ\s]/g, ' ').trim().split(/\s+/).length > 8) return null;
+  let from = quote[0].length;
+  // «يقال: …» is his one meaning only when nothing else in the entry offers another.
+  const hedged = line.slice(from).match(/^و?يقال\s*:\s*/);
+  if (hedged) {
+    from += hedged[0].length;
+    if (/يقال|قيل|\sأو\s/.test(line.slice(from)) || /يقال|قيل/.test(entry.text.split('\n').slice(1).join(' ').replace(VOWELS_ALL, ''))) return null;
+  }
+  const lead = line.slice(from).match(/^(?:أي|يعني|يريد|هم)(?=[\s:])\s*:?\s*/)?.[0] ?? '';
+  const body = line.slice(from + lead.length);
+  const end = body.search(/[.؛:]/);
+  let first = end < 0 ? body : body.slice(0, end);
+  // A colon ends his meaning only before a note on the word (واحدها: …، ومنه يقال: …); elsewhere it is inside it
+  // («وأقتارها: جوانبها»).
+  if (body[end] === ':') {
+    const note = first.match(/(?:[،,]?\s*(?:و?واحدها|و?واحده|و?واحدهم|والواحد|و?يقال|ومنه))+\s*$/);
+    if (!note || /(?:كأنه|كأن|أي|يعني)\s*[،,]?\s*$/.test(first.slice(0, note.index))) return null;
+    first = first.slice(0, note.index);
+  }
+  first = first.trimEnd();
+  const plain = (lead + first + (body[end] === '.' && first.length === (end < 0 ? body : body.slice(0, end)).trimEnd().length ? '.' : '')).trim();
+  // His first sentence stands when more follows (owner, 2026-11-18), but not when what follows is a second reading
+  // («مطيعين. ويقال: قائمين»). A «يقال:» that shows the word in use («يقال: نكب عن الحق: أي عدل عنه») is not one.
+  const next = body.slice(first.length).match(/^[.؛:،,]?\s*(?:و(?:يقال|قيل)(?:\s+أيضا)?\s*:|وفيه قول آخر)\s*([^.]*)/);
+  if (next && !/إذا|[:؛]\s*أي/.test(next[1].replace(/\[[^\]]*\]/g, ''))) return null;
+  const words = plain.split(/\s+/).filter(Boolean);
+  if (!words.length || words.length > 10 || !/^[ء-ي]/.test(first)) return null;
+  // At least one word of his own beyond a pointer («في ذلك»، «لكم»), and not a note on the word's form («جمع أغلف»،
+  // «واحدها قنطار») or one that stops on a preposition.
+  if (!first.split(/[\s،]+/).some(word => /[ء-ي]{3}/.test(word) && !/^و?(?:ذلك|هذا|هذه|ذاك|هؤلاء|أولئك|الذي|التي|الذين|يعني|أي|يريد|لكم|لهم|لها|له|بها|به|بهم|عليه|عليها|عليهم|عليكم|منه|منها|منهم|فيه|فيها|إليه|إليها|إليهم|عنه|عنها|عنهم)$/.test(word))) return null;
+  if (/^(?:واحد|جمع)/.test(first) || /(?:^|\s)(?:من|في|على|إلى|عن|ب)\s*$/.test(first)) return null;
+  if (/[﴿\[\]"«(]|يقال|قيل|قال|المشكل|تقدم|ذكرت|ذكرنا|بينت|بينا|بيناه|مبين في|مفسر|كتاب|موضع|مجاز|(?:^|\s)أو\s/.test(plain)) return null;
+  const start = from + (line.slice(from).length - line.slice(from).trimStart().length);
+  return voweled.slice(at[start], at[start + plain.length]).trim();
 }
 
 /** The letters of a meaning's own words (three letters or more, not «أي، يعني، الذي»), to keep a near synonym out of the
  * wrong choices. */
-const contentWords = (meaning: string) => new Set(meaning.split(/[\s،؛.:]+/).map(word => skeleton(word).replace(/^(?:وال|ال|و)/, '')).filter(word => word.length >= 3 && !['يعني', 'الذي', 'التي', 'الذين'].includes(word)));
+const contentWords = (meaning: string) => new Set(meaning.split(/[\s،؛.:]+/).map(word => skeleton(word).replace(/^(?:وال|فال|بال|لل|ال|و|ف|ب)(?=...)/, '')).filter(word => word.length >= 3 && !['يعني', 'الذي', 'التي', 'الذين', 'ذلك'].includes(word)).map(word => word.slice(0, 3)));
 
 /**
  * Three wrong choices for each askable entry, all his own meanings of other words: from the same surah, nearest first,
- * then the surahs beside it, of a length near the right one's; none that shares a word with it or with another choice,
- * repeats one, or explains the same word.
+ * then the surahs beside it, of a length near the right one's; none that shares a word (by its first three letters) with it
+ * or with another choice, repeats one, or explains the same word or a word of the same root, and no two that explain one word.
  */
-export function meaningPicks(entries: { surah: number; text: string; places: GharibPlace[]; quote: string }[], apart: [string, string][] = []): MeaningPick[] {
+export function meaningPicks(entries: { surah: number; text: string; places: GharibPlace[]; quote: string; roots?: string[] }[], apart: [string, string][] = []): MeaningPick[] {
   // Meanings read by hand as too close to stand as right and wrong in one question (meaningReview.json «apart»): either way round.
   const bare = (text: string) => letters(text).replace(/[^ء-ي\s]/g, '');
   const clash = (a: string, b: string) => apart.some(([x, y]) => (bare(a).includes(x) && bare(b).includes(y)) || (bare(a).includes(y) && bare(b).includes(x)));
@@ -237,17 +271,22 @@ export function meaningPicks(entries: { surah: number; text: string; places: Gha
     const taken = [contentWords(item.meaning)];
     const seen = new Set([item.meaning.replace(/[.\s]/g, '')]);
     const quote = skeleton(item.entry.quote);
+    const lit = (entry: { surah: number; places: GharibPlace[] }) => `${entry.surah}:${entry.places[0][0]}:${entry.places[0][1]}`;
+    const explained = new Set([lit(item.entry)]);
     const pool = askable
-      .filter(other => other.at !== item.at && skeleton(other.entry.quote) !== quote && Math.abs(other.entry.surah - item.entry.surah) <= 3)
+      // Not a meaning of the same word, nor of a word from the same root (رهقا «ضلالا» beside رهقا «ظلما»).
+      .filter(other => other.at !== item.at && skeleton(other.entry.quote) !== quote && Math.abs(other.entry.surah - item.entry.surah) <= 3
+        && !(other.entry.roots ?? []).some(root => (item.entry.roots ?? []).includes(root)))
       .map(other => ({ other, distance: Math.abs(other.entry.surah - item.entry.surah) * 1000 + Math.abs(other.entry.places[0][0] - ayah) + Math.abs(other.meaning.split(/\s+/).length - length) * 5 }))
       .sort((a, b) => a.distance - b.distance || a.other.at - b.other.at);
     const others: number[] = [];
     for (const { other } of pool) {
       const flat = other.meaning.replace(/[.\s]/g, '');
       const words = contentWords(other.meaning);
-      if (seen.has(flat) || taken.some(set => [...words].some(word => set.has(word))) || clash(item.meaning, other.meaning)) continue;
+      if (seen.has(flat) || explained.has(lit(other.entry)) || taken.some(set => [...words].some(word => set.has(word))) || clash(item.meaning, other.meaning)) continue;
       others.push(other.at);
       seen.add(flat);
+      explained.add(lit(other.entry));
       taken.push(words);
       if (others.length === 3) break;
     }

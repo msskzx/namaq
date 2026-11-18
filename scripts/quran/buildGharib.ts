@@ -6,7 +6,7 @@ import { execFileSync } from 'node:child_process';
 import { skeleton } from './irabUkbari';
 import { firstWords, gharibEntry, headingsFor, letters, meaningOf, meaningPicks, placeEntry, quotesOf, readGharib, readMufradat, type MushafWord, type TurathPage } from './gharib';
 import { corpusWordsAt } from '../../shared/quran/quranText/ayahWords';
-import type { GharibData, MufradatData } from '../../shared/quran/gharib';
+import type { GharibData, GharibPlace, MufradatData } from '../../shared/quran/gharib';
 
 // docs/plans/alfaz-al-quran.md: Ibn Qutaybah's gharib (Shamela 3259, Saqr's edition) and al-Raghib's al-Mufradat
 // (Shamela 23636, Dawudi's edition) from Turath's exports, pinned by hash like scripts/quran/buildItqanBalagha.ts.
@@ -70,7 +70,27 @@ const keyOf = (at: number) => `${gharib.entries[at][2]}:${quotesOf(gharib.entrie
 const notMeaning = new Set(review.notMeaning);
 const keys = new Set(gharib.entries.map((_, at) => keyOf(at)));
 for (const key of [...notMeaning, ...Object.keys(review.ambiguous)]) if (!keys.has(key)) throw new Error(`meaningReview.json: no entry ${key}`);
-const candidates = gharib.entries.map(([surah, , , text, places], at) => ({ surah, text: notMeaning.has(keyOf(at)) ? '' : text, places, quote: quotesOf(text)[0] ?? '' }));
+// The question marks the entry's first place, so that place must hold every word of its first quote (not a later quote's,
+// nor half of a quote that runs into the next ayah).
+const byPlace = new Map(mushaf.map(word => [`${word.surah}:${word.ayah}:${word.at}`, word.skeleton]));
+const firstPlaced = (surah: number, text: string, [ayah, from, to]: GharibPlace) => {
+  if (from < 0) return false;
+  const words = Array.from({ length: to - from + 1 }, (_, i) => byPlace.get(`${surah}:${ayah}:${from + i}`) ?? '');
+  // Each word of his first quote is inside one place word or two side by side (a place word can carry a prefix or a
+  // pronoun the quote lacks). A word the skeleton leaves one letter of («حوايا» ح) must end a place word.
+  const spans = words.flatMap((word, i) => [word, word + (words[i + 1] ?? '')]);
+  const tokens = (quotesOf(text)[0] ?? '').replace(/[^ء-ۭ\s]/g, ' ').split(/\s+/).filter(Boolean)
+    .map(token => skeleton(letters(token).replace(/^(?:وال|فال|بال|ال|و|ف)(?=...)/, '')));
+  return tokens.some(Boolean) && tokens.every(token => !token || (token.length < 2 ? words.some(word => word.endsWith(token)) : spans.some(span => span.includes(token))));
+};
+const trees = JSON.parse(readFileSync(join(OUT, 'trees.json'), 'utf8')) as { ayat: { key: string; roots?: (string | null)[] }[] };
+const treeAyat = new Map(trees.ayat.map(ayah => [ayah.key, ayah]));
+/** The corpus roots of the words an entry's first place quotes. */
+const rootsOf = (surah: number, [ayah, from, to]: GharibPlace) => {
+  const tree = treeAyat.get(`${surah}:${ayah}`);
+  return from < 0 || !tree ? [] : [...new Set(Array.from({ length: to - from + 1 }, (_, i) => corpusWordsAt(tree.key, from + i).map(old => tree.roots?.[old])).flat().filter((root): root is string => !!root))];
+};
+const candidates = gharib.entries.map(([surah, , , text, places], at) => ({ surah, roots: places.length ? rootsOf(surah, places[0]) : [], text: notMeaning.has(keyOf(at)) || !places.length || !firstPlaced(surah, text, places[0]) ? '' : text, places, quote: quotesOf(text)[0] ?? '' }));
 const asked = new Set<string>();
 gharib.questions = meaningPicks(candidates, review.apart.map(pair => pair.map(letters) as [string, string]))
   .filter(pick => {
@@ -100,7 +120,6 @@ const ALIASES: Record<string, string> = {
   قصو: 'قصى', لفو: 'لفى', حوط: 'حيط', مطو: 'مطى', سجو: 'سجى', موه: 'ماء', سوع: 'ساعة', خور: 'خوار', حوي: 'حوايا', ارك: 'أريك',
   برهن: 'بره', صلصل: 'صلل', ذبذب: 'ذب', كبكب: 'كب', زحزح: 'زحح', حصحص: 'حصَ', رفرف: 'رف', صفصف: 'صف', تيه: 'التيه', يمم: 'اليم', صلي: 'صلا', زني: 'زنا',
 };
-const trees = JSON.parse(readFileSync(join(OUT, 'trees.json'), 'utf8')) as { ayat: { key: string; roots?: (string | null)[] }[] };
 const words: Record<string, number[]> = {};
 let rooted = 0;
 let linked = 0;
