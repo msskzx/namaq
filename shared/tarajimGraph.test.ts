@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { AppPerson } from './tarajim';
 import peopleJson from './data/tarajim/people.json';
-import { chainBetween, chainSentence, joining, linkedPairs, peopleGraph, tieGroups } from './tarajimGraph';
+import { chainBetween, chainSentence, genitive, joining, linkedPairs, peopleGraph, tieGroups } from './tarajimGraph';
 
 const people = peopleJson as AppPerson[];
 const graph = peopleGraph(people);
@@ -53,6 +53,17 @@ describe('linkedPairs', () => {
       expect(pair.steps[0].from).toBe(pair.a);
       expect(pair.steps[pair.steps.length - 1].to).toBe(pair.b);
     }
-    expect(pairs.every((pair) => pair.steps.length > 1)).toBe(true);
+    expect(pairs.every((pair) => pair.steps.length > 1 && pair.steps.length <= 3)).toBe(true);
+    expect(pairs.some((pair) => pair.steps.some((step) => step.kind === 'companion' || step.kind === 'accompanied'))).toBe(false);
+  });
+});
+
+describe('genitive', () => {
+  it('puts a leading kunya or «ذو» in the genitive after the word that governs it, and leaves other names', () => {
+    expect(genitive('أبو العاص بن الربيع')).toBe('أبي العاص بن الربيع');
+    expect(genitive('أبا سفيان')).toBe('أبي سفيان');
+    expect(genitive('ذو اليدين')).toBe('ذي اليدين');
+    expect(genitive('أبان بن سعيد')).toBe('أبان بن سعيد');
+    expect(genitive('الزبير بن العوام')).toBe('الزبير بن العوام');
   });
 });

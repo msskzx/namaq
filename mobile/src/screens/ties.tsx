@@ -4,7 +4,7 @@ import Svg, { Line } from 'react-native-svg';
 import { router, useLocalSearchParams } from 'expo-router';
 import { pageLabel } from '@shared/tarajim';
 import { groupWord, tieGroups, tieWord, type GraphNode, type Tie, type TieKind } from '@shared/tarajimGraph';
-import { counted, num } from '@shared/quran/arabicNumber';
+import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Card from '@/ui/Card';
@@ -16,40 +16,54 @@ import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { toTab } from '@/lib/ways';
 import { battleOf } from '@/lib/battles';
 import { findPerson, GRAPH, personName, unvowelled } from '@/lib/tarajim';
-
-/** The one graph of every stated tie, built once. */
+import { Credit } from './person';
 
 /** Each kind of tie has its colour, for its lines and its group (sketch tarajim-app/graph/sketch-dark.png). */
 export const kindColor = (palette: Palette, kind: TieKind) =>
-  ({ parent: palette.amber, spouse: palette.accent, child: palette.root, sibling: palette.ink, cousin: palette.path, companion: palette.green })[kind];
+  ({ parent: palette.amber, spouse: palette.accent, child: palette.root, sibling: palette.ink, cousin: palette.path, companion: palette.green, accompanied: palette.green })[kind];
 
-const NODE_W = 124;
 const NODE_H = 46;
+const GAP = 10;
+const ROW = NODE_H + 46;
 const nodeName = (node: GraphNode) => personName(node).replace(/\s+بن\s+.*$/u, (rest) => (rest.length > 18 ? '' : rest));
 
-/** A node on the ring: a person (opens his ties if he has a page), or a whole kind folded into one node with its count. */
+/** A node round the middle: a person (opens his ties if he has a page), or a whole kind folded into one node with its count. */
 type Spot = { key: string; x: number; y: number; kind: TieKind } & ({ tie: Tie } | { group: TieKind; count: number });
 
+/** Columns the screen's width holds: three nodes a row on a phone, more on a wider screen. */
+const columns = (width: number) => Math.max(2, Math.floor((width + GAP) / (100 + GAP)));
+const nodeWidth = (width: number) => (width - (columns(width) - 1) * GAP) / columns(width);
+
 /**
- * Places the spots on an ellipse round the middle, starting off the axes so no node sits on the middle card's sides.
- * Returns how many fit: the screen's width decides it, not a fixed number.
+ * How many nodes go round the middle without a line crossing a node: a row above, the two sides of the middle, a row
+ * below. The screen's width decides it, not a fixed number.
  */
-function ring(count: number, width: number, height: number) {
-  const rx = width / 2 - NODE_W / 2 - 4;
-  const ry = height / 2 - NODE_H / 2 - 4;
-  return Array.from({ length: count }, (_, i) => {
-    const a = -Math.PI / 2 + Math.PI / count + (i * 2 * Math.PI) / count;
-    return { x: width / 2 + rx * Math.cos(a), y: height / 2 + ry * Math.sin(a) };
-  });
+const capacity = (width: number) => 2 * columns(width) + (columns(width) >= 3 ? 2 : 0);
+
+/**
+ * Places the nodes in the drawing's order: the first half above the middle and the rest below, the sides of the middle
+ * only once both rows are full. Each row is centred, so the lines fan out from the middle.
+ */
+function layout(count: number, width: number) {
+  const cols = columns(width);
+  const w = nodeWidth(width);
+  const top = count > 2 * cols ? cols : Math.ceil(count / 2);
+  const sides = cols >= 3 ? Math.max(0, count - 2 * cols) : 0;
+  const below = count - top - sides;
+  const row = (n: number, y: number) => Array.from({ length: n }, (_, i) => ({ x: width / 2 + (i - (n - 1) / 2) * (w + GAP), y }));
+  const mid = NODE_H / 2 + (top > 0 ? ROW : 0);
+  const side = [{ x: width - w / 2, y: mid }, { x: w / 2, y: mid }].slice(0, sides);
+  // The middle card is wider than the others, but never over the sides of its row.
+  const middleW = sides > 0 ? Math.min(w * 1.2, width - 2 * (w + GAP)) : Math.min(w * 1.8, width);
+  return { places: [...row(top, NODE_H / 2), ...side, ...row(below, mid + ROW)], middle: mid, middleW, height: mid + NODE_H / 2 + (below > 0 ? ROW : 0), w };
 }
 
-/** How many nodes the ring holds without their boxes overlapping. */
-function capacity(width: number, height: number) {
-  const rx = width / 2 - NODE_W / 2 - 4;
-  const ry = height / 2 - NODE_H / 2 - 4;
-  const perimeter = Math.PI * (3 * (rx + ry) - Math.sqrt((3 * rx + ry) * (rx + 3 * ry)));
-  // Boxes on the sides need their width along the ring, those on top and bottom their height: take the mean.
-  return Math.max(4, Math.floor(perimeter / ((NODE_W + NODE_H) / 2 + 12)));
+/** Where the line from `a` to `b` leaves a box of half sizes `hw`×`hh` round `a`, so a faded box shows no line through it. */
+export function edge(a: { x: number; y: number }, b: { x: number; y: number }, hw: number, hh: number) {
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const t = Math.min(dx ? hw / Math.abs(dx) : Infinity, dy ? hh / Math.abs(dy) : Infinity, 1);
+  return { x: a.x + dx * t, y: a.y + dy * t };
 }
 
 /**
@@ -68,14 +82,19 @@ export default function TiesScreen() {
   const [shown, setShown] = useState<Tie | undefined>();
   const at = trail[trail.length - 1];
   const person = at ? findPerson(at) : undefined;
-  const groups = useMemo(() => (at ? tieGroups(GRAPH, at) : []), [at]);
+  // Each person once, under the nearest kind of tie (al-Zubayr's kin the Prophet ﷺ is not drawn again as his companion).
+  const groups = useMemo(() => {
+    const seen = new Set<string>();
+    return (at ? tieGroups(GRAPH, at) : [])
+      .map(g => ({ ...g, ties: g.ties.filter(tie => !seen.has(tie.to) && seen.add(tie.to)) }))
+      .filter(g => g.ties.length > 0);
+  }, [at]);
   const back = () => (trail.length > 1 ? (setTrail(trail.slice(0, -1)), setOpen(undefined)) : router.canGoBack() ? router.back() : toTab('/tarajim'));
   const go = (to: string) => { setTrail([...trail, to]); setOpen(undefined); };
   if (!person) return <View style={{ flex: 1, backgroundColor: palette.paper }}><TopBar back={back} title="الصلات" /></View>;
 
   const drawW = Math.min(width - 32, 480);
-  const drawH = Math.round(drawW * 0.95);
-  const room = capacity(drawW, drawH);
+  const room = capacity(drawW);
   // What goes on the ring: every person while they fit; else the biggest kinds fold into one node each until the rest fit.
   type Item = { tie: Tie; kind: TieKind } | { group: TieKind; count: number; kind: TieKind };
   const spots = ((): Item[] => {
@@ -91,7 +110,8 @@ export default function TiesScreen() {
     }
     return groups.flatMap((g): Item[] => (folded.has(g.kind) ? [{ group: g.kind, count: g.ties.length, kind: g.kind }] : g.ties.map(tie => ({ tie, kind: tie.kind }))));
   })();
-  const places = ring(spots.length, drawW, drawH);
+  const { places, middle, middleW, height: drawH, w: NODE_W } = layout(spots.length, drawW);
+  const centre = { x: drawW / 2, y: middle };
   const placed: Spot[] = spots.map((spot, i) => ({ ...spot, ...places[i], key: 'tie' in spot ? `${spot.kind}:${spot.tie.to}` : `g:${spot.group}` }));
   const openGroup = open ? groups.find(g => g.kind === open) : undefined;
   const listed = openGroup && openGroup.ties.length > room ? openGroup.ties : [];
@@ -111,18 +131,20 @@ export default function TiesScreen() {
         {open && (
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
             {groups.map(g => (
-              <Chip key={g.kind} small label={`${groupWord(g.kind, person.sex)} ${num(g.ties.length)}`} on={g.kind === open} palette={palette}
+              <Chip key={g.kind} small label={`${groupWord(g.kind, person.sex, g.ties.length)} ${num(g.ties.length)}`} on={g.kind === open} palette={palette}
                 onPress={() => setOpen(g.kind === open ? undefined : g.kind)} />
             ))}
           </View>
         )}
         <View style={{ width: drawW, height: drawH, alignSelf: 'center' }}>
           <Svg width={drawW} height={drawH} style={{ position: 'absolute' }}>
-            {placed.map(spot => (
-              <Line key={spot.key} x1={drawW / 2} y1={drawH / 2} x2={spot.x} y2={spot.y} stroke={kindColor(palette, spot.kind)} strokeWidth={2} strokeOpacity={0.8} />
-            ))}
+            {placed.map(spot => {
+              const from = edge(centre, spot, middleW / 2, NODE_H / 2);
+              const to = edge(spot, centre, NODE_W / 2, NODE_H / 2);
+              return <Line key={spot.key} x1={from.x} y1={from.y} x2={to.x} y2={to.y} stroke={kindColor(palette, spot.kind)} strokeWidth={2} strokeOpacity={0.8} />;
+            })}
           </Svg>
-          <View style={{ position: 'absolute', left: drawW / 2 - NODE_W * 0.6, top: drawH / 2 - NODE_H / 2, width: NODE_W * 1.2 }}>
+          <View style={{ position: 'absolute', left: drawW / 2 - middleW / 2, top: middle - NODE_H / 2, width: middleW }}>
             <Card palette={palette} pad={[8, 10]} picked accessibilityRole="header" accessibilityLabel={personName(person)}>
               <Text numberOfLines={2} style={{ color: palette.ink, fontSize: 17, textAlign: 'center' }}>{personName(person)}</Text>
             </Card>
@@ -130,7 +152,7 @@ export default function TiesScreen() {
           {placed.map(spot => {
             const style = { position: 'absolute' as const, left: spot.x - NODE_W / 2, top: spot.y - NODE_H / 2, width: NODE_W };
             if ('group' in spot) {
-              const label = `${groupWord(spot.group, person.sex)} ${num(spot.count)}`;
+              const label = `${groupWord(spot.group, person.sex, spot.count)} ${num(spot.count)}`;
               return (
                 <View key={spot.key} style={style}>
                   <Card palette={palette} pad={[6, 8]} outline={kindColor(palette, spot.kind)} accessibilityRole="button" accessibilityLabel={label}
@@ -157,7 +179,7 @@ export default function TiesScreen() {
             {groups.map(g => (
               <View key={g.kind} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                 <Svg width={14} height={4}><Line x1={0} y1={2} x2={14} y2={2} stroke={kindColor(palette, g.kind)} strokeWidth={3} strokeLinecap="round" /></Svg>
-                <Text style={{ color: palette.muted, fontSize: 13 }}>{groupWord(g.kind, person.sex)}</Text>
+                <Text style={{ color: palette.muted, fontSize: 13 }}>{groupWord(g.kind, person.sex, g.ties.length)}</Text>
               </View>
             ))}
           </View>
@@ -182,7 +204,7 @@ export default function TiesScreen() {
           </View>
         </>}
         {person.titles.length > 0 && <>
-          <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{person.sex === 'FEMALE' ? 'من' : 'من'}</Text>
+          <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>من</Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
             {person.titles.map(title => (
               <Chip key={title.title} label={title.name} on={false} palette={palette}
@@ -190,6 +212,7 @@ export default function TiesScreen() {
             ))}
           </View>
         </>}
+        <Credit facts={groups.flatMap(g => g.ties.map(tie => tie.link))} palette={palette} />
         <Row>
           <Button label={person.sex === 'FEMALE' ? 'بينها وبين…' : 'بينه وبين…'} onPress={() => router.push({ pathname: '/between', params: { slugs: person.slug } })} />
           <Button label="النسب" onPress={() => router.push({ pathname: '/nasab', params: { slug: person.slug } })} />
@@ -202,7 +225,7 @@ export default function TiesScreen() {
           <View style={{ padding: 16, gap: 8 }}>
             <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{shown.link.text || personName(GRAPH.nodes.get(shown.to)!)}</Text>
             <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>
-              {shown.link.refs.length ? pageLabel(shown.link.refs) : ''}{shown.reversed ? ` · ${counted(1, ['من ترجمة الآخر', '', ''])}` : ''}
+              {shown.link.refs.length ? pageLabel(shown.link.refs) : ''}{shown.reversed ? ' · من ترجمة الآخر' : ''}
             </Text>
           </View>
         )}

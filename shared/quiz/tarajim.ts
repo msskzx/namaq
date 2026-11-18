@@ -6,7 +6,7 @@ import peopleJson from '../data/tarajim/people.json';
 import virtueSkip from '../data/tarajim/virtueQuizSkip.json';
 import { pageLabel, sayer, type AppPerson } from '../tarajim';
 import { bareName, chainOf, lineOf, meetingOf, type LineName } from '../tarajimLine';
-import { peopleGraph, TIE_KINDS, tieWord, type TieKind } from '../tarajimGraph';
+import { genitive, peopleGraph, TIE_KINDS, tieWord, type TieKind } from '../tarajimGraph';
 import { shuffle, type Random } from './random';
 import type { ChoiceKind, ChoiceQuestion } from './choiceKinds';
 
@@ -21,8 +21,6 @@ const PEOPLE = peopleJson as AppPerson[];
 const plain = (text: string) => text.replace(/[ً-ْٰـ]/g, '');
 /** Not asked: virtues another person in the app could rightly own too (shared/data/tarajim/virtueQuizSkip.json). */
 const SKIP: Record<string, string> = virtueSkip.skip;
-/** A name after «نسب»: genitive, so «أبو جندل» reads «أبي جندل» and «ذو» reads «ذي». */
-const genitive = (name: string) => name.replace(/^أبو /u, 'أبي ').replace(/^ذو /u, 'ذي ');
 const nameOf = (person: AppPerson) => (person.slug === 'prophet-muhammad' && !person.name.includes('ﷺ') ? `${person.name} ﷺ` : person.name);
 
 /** Every person's line, once per list of people. */
@@ -146,26 +144,37 @@ export function virtueQuestions(people: AppPerson[] = PEOPLE, random: Random = M
  */
 export function tieQuestions(people: AppPerson[] = PEOPLE): ChoiceQuestion[] {
   const graph = peopleGraph(people);
+  const bySlug = new Map(people.map(p => [p.slug, p]));
   const questions: ChoiceQuestion[] = [];
-  for (const b of people) {
-    const ties = graph.ties.get(b.slug) ?? [];
-    for (const to of [...new Set(ties.map(t => t.to))]) {
-      const a = graph.nodes.get(to)!;
-      if (!a.inApp || a.slug < b.slug) continue;
-      const kinds = new Set(ties.filter(t => t.to === to).map(t => t.kind));
+  const family: TieKind[] = ['parent', 'spouse', 'child', 'sibling'];
+  for (const first of people) {
+    for (const to of [...new Set((graph.ties.get(first.slug) ?? []).map(t => t.to))]) {
+      const other = bySlug.get(to);
+      if (!other || other.slug < first.slug) continue;
+      // Asked so that «a» is the companion, never «the one he was a companion of», which has no plain word.
+      const nearest = (from: AppPerson, of: string) => TIE_KINDS.find(kind => (graph.ties.get(from.slug) ?? []).some(t => t.to === of && t.kind === kind));
+      const [a, b] = nearest(first, other.slug) === 'accompanied' ? [first, other] : [other, first];
+      const ties = (graph.ties.get(b.slug) ?? []).filter(t => t.to === a.slug);
+      // Only ties stated as settled: one «على خلاف» or from an unnamed «قيل» is shown attributed on the pages, never asked.
+      if (ties.length === 0 || ties.some(t => t.link.disputed || t.link.anonymous)) continue;
+      const kinds = new Set(ties.map(t => t.kind));
       const answer = TIE_KINDS.find(kind => kinds.has(kind))!;
+      if (answer === 'accompanied') continue;
       const word = (kind: TieKind) => tieWord(kind, a.sex, b.sex);
-      const wrong = TIE_KINDS.filter(kind => !kinds.has(kind)).map(word).filter((w, i, all) => all.indexOf(w) === i && w !== word(answer));
+      // Wrong choices are family kinds not stated between the two; «قريبه» is never offered beside a family answer, since
+      // a father or a brother is a relative too.
+      const pool = (answer === 'cousin' || answer === 'companion' ? family : family.filter(k => k !== answer));
+      const wrong = pool.filter(kind => !kinds.has(kind)).map(word).filter((w, i, all) => all.indexOf(w) === i && w !== word(answer));
+      if (answer !== 'cousin' && answer !== 'companion' && !kinds.has('companion') && wrong.length < 3) wrong.push(word('companion'));
       if (wrong.length < 3) continue;
-      const link = ties.find(t => t.to === to && t.kind === answer)!.link;
-      const person = people.find(p => p.slug === a.slug)!;
+      const link = ties.find(t => t.kind === answer)!.link;
       questions.push({
         key: `${TARAJIM_TIE}:${a.slug}:${b.slug}`,
         family: TARAJIM_TIE,
-        promptArabic: `ما ${nameOf(person)} من ${nameOf(b)}؟`,
+        promptArabic: `ما ${nameOf(a)} من ${genitive(nameOf(b))}؟`,
         choices: [word(answer), ...wrong.slice(0, 3)].map(w => ({ value: w, labelArabic: w })),
         correctAnswer: word(answer),
-        note: { label: 'المصدر', text: `${link.text ? `${link.text}\n` : ''}${pageLabel(link.refs)}` },
+        note: { label: 'المصدر', text: `${link.text ? `${link.text}\n` : ''}${sayer(link)} · ${pageLabel(link.refs)}` },
         evidence: { claimKeys: [] },
       });
     }

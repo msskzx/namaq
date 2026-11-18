@@ -6,19 +6,24 @@ import type { AppPerson, PersonLink } from './tarajim';
  * nearest chain of ties between people the reader picks. People the entries name who are not converted yet are nodes
  * too (they join two converted people), but they have no page.
  */
-export type TieKind = 'parent' | 'child' | 'spouse' | 'sibling' | 'cousin' | 'companion';
+/**
+ * `companion`: «to is my companion» (Abu Bakr to the Prophet ﷺ); `accompanied`: «to is the one I was a companion of» (the
+ * Prophet ﷺ to Abu Bakr). An entry's «صاحب النبي» states the second, so companionship is one-way, unlike kinship.
+ */
+export type TieKind = 'parent' | 'child' | 'spouse' | 'sibling' | 'cousin' | 'companion' | 'accompanied';
 
 /** The kinds in the order the person view draws them. */
-export const TIE_KINDS: readonly TieKind[] = ['parent', 'spouse', 'child', 'sibling', 'cousin', 'companion'];
+export const TIE_KINDS: readonly TieKind[] = ['parent', 'spouse', 'child', 'sibling', 'cousin', 'companion', 'accompanied'];
 
 /** A family tie is nearer than companionship, so the chain between two people prefers it (sketch, screen 2). */
-const COST: Record<TieKind, number> = { parent: 1, child: 1, spouse: 1, sibling: 1, cousin: 2, companion: 3 };
+const COST: Record<TieKind, number> = { parent: 1, child: 1, spouse: 1, sibling: 1, cousin: 2, companion: 3, accompanied: 3 };
 
 /** The reverse of each kind: A is B's parent when B is A's child. */
-const REVERSE: Record<TieKind, TieKind> = { parent: 'child', child: 'parent', spouse: 'spouse', sibling: 'sibling', cousin: 'cousin', companion: 'companion' };
+const REVERSE: Record<TieKind, TieKind> = { parent: 'child', child: 'parent', spouse: 'spouse', sibling: 'sibling', cousin: 'cousin', companion: 'accompanied', accompanied: 'companion' };
 
-const FIELD: Record<TieKind, keyof Pick<AppPerson, 'parents' | 'children' | 'spouses' | 'siblings' | 'cousins' | 'companionOf'>> = {
-  parent: 'parents', child: 'children', spouse: 'spouses', sibling: 'siblings', cousin: 'cousins', companion: 'companionOf',
+/** The entry's field each kind is read from; `companion` is only ever read backwards from the companion's own entry. */
+const FIELD: Partial<Record<TieKind, keyof Pick<AppPerson, 'parents' | 'children' | 'spouses' | 'siblings' | 'cousins' | 'companionOf'>>> = {
+  parent: 'parents', child: 'children', spouse: 'spouses', sibling: 'siblings', cousin: 'cousins', accompanied: 'companionOf',
 };
 
 export interface GraphNode {
@@ -55,7 +60,9 @@ export function peopleGraph(people: readonly AppPerson[]): PeopleGraph {
   };
   for (const person of people) {
     for (const kind of TIE_KINDS) {
-      for (const link of person[FIELD[kind]]) {
+      const field = FIELD[kind];
+      if (!field) continue;
+      for (const link of person[field]) {
         if (link.slug === person.slug) continue;
         if (!nodes.has(link.slug)) nodes.set(link.slug, { slug: link.slug, name: link.name, sex: link.sex, inApp: link.inApp });
         add(person.slug, { to: link.slug, kind, link });
@@ -101,7 +108,8 @@ export function chainBetween(graph: PeopleGraph, from: string, to: string): Step
         return steps;
       }
       for (const tie of graph.ties.get(at) ?? []) {
-        const next = cost + COST[tie.kind];
+        // A tie stated «على خلاف» or by an unnamed «قيل» is the far way round when a settled one joins them too.
+        const next = cost + COST[tie.kind] + (tie.link.disputed || tie.link.anonymous ? 3 : 0);
         if (next >= (best.get(tie.to) ?? Infinity)) continue;
         best.set(tie.to, next);
         back.set(tie.to, { from: at, to: tie.to, kind: tie.kind, link: tie.link });
@@ -146,20 +154,23 @@ export function tieWord(kind: TieKind, toSex: GraphNode['sex'], fromSex: GraphNo
     case 'spouse': return f ? `زوجت${s}` : `زوج${s}`;
     case 'sibling': return f ? `أخت${s}` : `أخو${s}`;
     case 'cousin': return f ? `قريبت${s}` : `قريب${s}`;
-    case 'companion': return `صاحب${s}`;
+    case 'companion': return f ? `صاحبت${s}` : `صاحب${s}`;
+    // «صَحِبَه»: `from` was `to`'s companion, said from `from`'s side.
+    case 'accompanied': return fromSex === 'FEMALE' ? `صَحِبَت${f ? 'ها' : 'ه'}` : `صَحِب${f ? 'ها' : 'ه'}`;
   }
 }
 
 /** The names of the groups in the person view: «أبواه», «أزواجه», «أولاده»… */
-export function groupWord(kind: TieKind, sex: GraphNode['sex']) {
+export function groupWord(kind: TieKind, sex: GraphNode['sex'], count = 2) {
   const s = sex === 'FEMALE' ? 'ها' : 'ه';
   switch (kind) {
     case 'parent': return `أبوا${s}`;
     case 'child': return `أولاد${s}`;
-    case 'spouse': return sex === 'FEMALE' ? `زوج${s}` : `أزواج${s}`;
+    case 'spouse': return sex === 'FEMALE' && count === 1 ? `زوج${s}` : `أزواج${s}`;
     case 'sibling': return `إخوت${s}`;
     case 'cousin': return `قرابت${s}`;
     case 'companion': return `صحب${s}`;
+    case 'accompanied': return sex === 'FEMALE' ? 'صَحِبَت' : 'صَحِبَ';
   }
 }
 
@@ -172,22 +183,31 @@ export function tieOf(kind: TieKind, toSex: GraphNode['sex']) {
     case 'spouse': return f ? 'زوجةُ' : 'زوجُ';
     case 'sibling': return f ? 'أختُ' : 'أخو';
     case 'cousin': return f ? 'قريبةُ' : 'قريبُ';
-    case 'companion': return 'صاحبُ';
+    case 'companion': return f ? 'صاحبةُ' : 'صاحبُ';
+    // Said the other way round in the sentence (chainSentence): «أبو بكر صاحبُ محمد ﷺ».
+    case 'accompanied': return 'صاحبُ';
   }
 }
 
-/** A chain as one sentence, each step «صفية بنت عبد المطلب أمُّ الزبير بن العوام»: «… ، و…». */
+/** A name after a word that governs it («أمُّ أبي العاص», «من أبي سفيان»): a leading kunya or «ذو» in the genitive. */
+export const genitive = (name: string) => name.replace(/^أب[وا](?= )/u, 'أبي').replace(/^ذو(?= )/u, 'ذي');
+
+/** A chain as one sentence, each step «صفية بنت عبد المطلب أمُّ الزبير بن العوام»: «… ، و…»; a disputed tie says so. */
 export function chainSentence(graph: PeopleGraph, steps: readonly Step[], nameOf: (node: GraphNode) => string = (n) => n.name) {
   return steps.map((step) => {
     const from = graph.nodes.get(step.from)!;
     const to = graph.nodes.get(step.to)!;
-    return `${nameOf(to)} ${tieOf(step.kind, to.sex)} ${nameOf(from)}`;
+    const doubt = step.link.disputed ? ' على خلاف' : step.link.anonymous ? ' فيما قيل' : '';
+    // «to is the one `from` accompanied» reads from the companion's side: «أبو بكر صاحبُ محمد ﷺ».
+    if (step.kind === 'accompanied') return `${nameOf(from)} ${tieOf('companion', from.sex)} ${genitive(nameOf(to))}${doubt}`;
+    return `${nameOf(to)} ${tieOf(step.kind, to.sex)} ${genitive(nameOf(from))}${doubt}`;
   }).join('، و');
 }
 
 /**
- * The pairs of converted people the «صلة» feed card shows (owner, 2026-11-18): those joined through someone else, since a
- * tie the person page already lists says nothing new. While no such pair exists, the direct ties.
+ * The pairs of converted people the «صلة» feed card shows (owner, 2026-11-18): those joined through one or two others by
+ * family ties, since a tie the person page already lists says nothing new. While no such pair exists, any longer chain,
+ * then the direct ties.
  */
 export function linkedPairs(graph: PeopleGraph): { a: string; b: string; steps: Step[] }[] {
   const people = [...graph.nodes.values()].filter((node) => node.inApp).map((node) => node.slug).sort();
@@ -198,6 +218,9 @@ export function linkedPairs(graph: PeopleGraph): { a: string; b: string; steps: 
       if (steps && steps.length > 0) pairs.push({ a, b, steps });
     }
   });
+  // Short family chains say something: two of the Prophet's ﷺ companions joined only through him say nothing new, and a
+  // chain of six ties is too long to read on a card.
+  const family = pairs.filter((pair) => pair.steps.length > 1 && pair.steps.length <= 3 && pair.steps.every((step) => step.kind !== 'companion' && step.kind !== 'accompanied'));
   const through = pairs.filter((pair) => pair.steps.length > 1);
-  return through.length ? through : pairs;
+  return family.length ? family : through.length ? through : pairs;
 }

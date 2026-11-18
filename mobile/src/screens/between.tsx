@@ -16,9 +16,10 @@ import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { toTab } from '@/lib/ways';
 import { findPerson, GRAPH, personName, searchPeople } from '@/lib/tarajim';
 import { Credit } from './person';
-import { kindColor } from './ties';
+import { edge, kindColor } from './ties';
 
-const NODE_W = 132;
+const NODE_W = 220;
+const GAP = 8;
 const NODE_H = 44;
 const ROW = 92;
 
@@ -41,9 +42,11 @@ function layout(nodes: string[], steps: Step[], first: string, width: number) {
   for (const node of nodes) if (!depth.has(node)) depth.set(node, last + 1);
   const rows = new Map<number, string[]>();
   for (const node of nodes) rows.set(depth.get(node)!, [...(rows.get(depth.get(node)!) ?? []), node]);
-  const place = new Map<string, { x: number; y: number }>();
+  // A row of few people gives each a wide box, so a name stays on one line and the tie's word between rows stays clear.
+  const place = new Map<string, { x: number; y: number; w: number }>();
   for (const [row, members] of rows) {
-    members.forEach((node, i) => place.set(node, { x: (width * (i + 1)) / (members.length + 1), y: NODE_H / 2 + 8 + row * ROW }));
+    const w = Math.min(NODE_W, (width - GAP * (members.length - 1)) / members.length);
+    members.forEach((node, i) => place.set(node, { x: width / 2 + (i - (members.length - 1) / 2) * (w + GAP), y: NODE_H / 2 + 8 + row * ROW, w }));
   }
   return { place, height: (Math.max(...rows.keys()) + 1) * ROW };
 }
@@ -63,7 +66,7 @@ export default function BetweenScreen() {
   const [query, setQuery] = useState('');
   const { nodes, steps, apart } = useMemo(() => joining(GRAPH, picked), [picked]);
   const drawW = Math.min(width - 32, 480);
-  const { place, height } = useMemo(() => (picked.length ? layout(nodes, steps, picked[0], drawW) : { place: new Map(), height: 0 }), [nodes, steps, picked, drawW]);
+  const { place, height } = useMemo(() => (picked.length ? layout(nodes, steps, picked[0], drawW) : { place: new Map<string, { x: number; y: number; w: number }>(), height: 0 }), [nodes, steps, picked, drawW]);
   const back = () => (router.canGoBack() ? router.back() : toTab('/tarajim'));
   const name = (slug: string) => personName(GRAPH.nodes.get(slug)!);
   const sentence = steps.length ? chainSentence(GRAPH, steps, node => personName(node)) : '';
@@ -88,8 +91,8 @@ export default function BetweenScreen() {
           <View style={{ width: drawW, height, alignSelf: 'center' }}>
             <Svg width={drawW} height={height} style={{ position: 'absolute' }}>
               {steps.map(step => {
-                const a = place.get(step.from)!;
-                const b = place.get(step.to)!;
+                const a = edge(place.get(step.from)!, place.get(step.to)!, place.get(step.from)!.w / 2, NODE_H / 2);
+                const b = edge(place.get(step.to)!, place.get(step.from)!, place.get(step.to)!.w / 2, NODE_H / 2);
                 return <Line key={`${step.from}>${step.to}`} x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke={kindColor(palette, step.kind)} strokeWidth={2} />;
               })}
             </Svg>
@@ -98,7 +101,7 @@ export default function BetweenScreen() {
               const b = place.get(step.to)!;
               const to = GRAPH.nodes.get(step.to)!;
               return (
-                <Text key={`l${step.from}>${step.to}`} style={{ position: 'absolute', left: (a.x + b.x) / 2 - 40, top: (a.y + b.y) / 2 - 10, width: 80, textAlign: 'center', color: kindColor(palette, step.kind), fontSize: 13 }}>
+                <Text key={`l${step.from}>${step.to}`} style={{ position: 'absolute', left: (a.x + b.x) / 2 - 40, top: (a.y + b.y) / 2 - 10, width: 80, textAlign: 'center', color: kindColor(palette, step.kind), fontSize: 13, backgroundColor: palette.paper }}>
                   {tieOf(step.kind, to.sex)}
                 </Text>
               );
@@ -108,7 +111,7 @@ export default function BetweenScreen() {
               const at = place.get(slug)!;
               const chosen = picked.includes(slug);
               return (
-                <View key={slug} style={{ position: 'absolute', left: at.x - NODE_W / 2, top: at.y - NODE_H / 2, width: NODE_W }}>
+                <View key={slug} style={{ position: 'absolute', left: at.x - at.w / 2, top: at.y - NODE_H / 2, width: at.w }}>
                   <Card palette={palette} pad={[6, 8]} picked={chosen} faded={!node.inApp} accessibilityRole={node.inApp ? 'link' : undefined} accessibilityLabel={personName(node)}
                     onPress={node.inApp ? () => router.push({ pathname: '/ties', params: { slug } }) : undefined}>
                     <Text numberOfLines={2} style={{ color: node.inApp ? palette.accent : palette.muted, fontSize: 14, textAlign: 'center' }}>{personName(node)}</Text>
