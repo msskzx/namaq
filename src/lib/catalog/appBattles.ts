@@ -12,7 +12,8 @@ type Claim = { key: string; assertion?: string; disputed?: boolean; citations?: 
 
 const BOOKS: Record<string, string> = { 'siyar-alam-al-nubala-risalah': 'سير أعلام النبلاء' };
 const SIRA_VOLUME = /^السيرة (\d)$/;
-const RIVAL = (key: string) => new RegExp(`^${key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}-(alt|other)(-|$)`);
+/** A claim's rival readings: the claims a batch records beside it as `<key>-alt…` or `<key>-other…` (the quiz generator shares it). */
+export const RIVAL = (key: string) => new RegExp(`^${key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}-(alt|other)(-|$)`);
 const digits = (text: string) => text.replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[Number(d)]);
 
 /** «سير أعلام النبلاء، السيرة ١، ص ٣٢٥» */

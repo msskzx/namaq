@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { RIVAL } from '@/lib/catalog/appBattles';
 import { loadCatalog } from '@/lib/catalog/loadCatalog';
 import { legacyUnreviewed, type CatalogPerson, type Provenance } from '@/lib/catalog/types';
 import { formatHijriYear } from '@/lib/hijriYear';
@@ -121,6 +122,38 @@ function relationPrompt(type: string, name: string, answerSex: string | null) {
   return prompts[type] ?? `من ارتبط بـ«${name}» بعلاقة «${type}»؟`;
 }
 
+type BatchClaim = { key: string; assertion?: string; disputed?: boolean; citations?: unknown[] };
+
+/** Every claim in the batches, by key. */
+function batchClaims() {
+  const claims = new Map<string, BatchClaim>();
+  for (const dir of readdirSync('data/history/batches')) {
+    const batch = JSON.parse(readFileSync(join('data/history/batches', dir, 'batch.json'), 'utf8')) as { claims: BatchClaim[] };
+    for (const claim of batch.claims) claims.set(claim.key, claim);
+  }
+  return claims;
+}
+
+
+/**
+ * A year the sources differ on is still asked (owner, 2026-11-18): the right answer holds the source's year and every rival
+ * reading, each in the source's words and attributed, and the years next to it are left out of the wrong choices so
+ * that none of them is half right. Null when the year is cited and undisputed (the plain question) or not cited at all.
+ */
+function disputedYear(value: number, claims: Provenance, all: Map<string, BatchClaim>): { answer: QuestionChoice; claimKeys: string[]; excluded: string[] } | null {
+  if (claims === legacyUnreviewed) return null;
+  const own = claims.map((key) => all.get(key)).filter((claim): claim is BatchClaim => Boolean(claim?.disputed && claim.citations?.length));
+  if (!own.length || own.length !== claims.length) return null;
+  const rivals = [...all.values()].filter((other) => own.some((claim) => RIVAL(claim.key).test(other.key)) && other.citations?.length && other.assertion);
+  if (!rivals.length) return null;
+  const label = [formatHijriYear(value, 'ar'), ...rivals.map((rival) => rival.assertion!)].join('، ');
+  return {
+    answer: choice(`${value}:${rivals.map((rival) => rival.key).join('+')}`, label),
+    claimKeys: [...own.map((claim) => claim.key), ...rivals.map((rival) => rival.key)],
+    excluded: [value - 1, value, value + 1].map(String),
+  };
+}
+
 function eligibleClaimKeys() {
   const keys = new Set<string>();
   for (const dir of readdirSync('data/history/batches')) {
@@ -150,6 +183,7 @@ export async function generateQuestionCandidates(): Promise<GeneratedQuestion[]>
     prisma.title.findMany({ select: { slug: true, name: true } }),
   ]);
   const eligible = eligibleClaimKeys();
+  const allClaims = batchClaims();
   const peopleBySlug = new Map(dbPeople.map((person) => [person.slug, person]));
   for (const person of catalog.people) {
     const stored = peopleBySlug.get(person.slug);
@@ -264,10 +298,12 @@ export async function generateQuestionCandidates(): Promise<GeneratedQuestion[]>
   for (const battle of catalog.battles) {
     const year = battle.fields?.hijriYear;
     if (year) {
+      const disputed = disputedYear(year.value, year.claims, allClaims);
       add(candidate({
         family: 'BATTLE_HIJRI_YEAR', topic: 'BATTLES', subject: { kind: 'BATTLE', slug: battle.slug }, attribute: 'hijriYear',
-        personSlugs: [], promptArabic: `في أي سنة هجرية وقع الحدث المعروف بـ«${battle.name}»؟`, answer: choice(String(year.value), formatHijriYear(year.value, 'ar')),
-        pool: battleYears, evidence: { claimKeys: cited(year.claims, eligible) },
+        personSlugs: [], promptArabic: `في أي سنة هجرية وقع الحدث المعروف بـ«${battle.name}»؟`,
+        answer: disputed?.answer ?? choice(String(year.value), formatHijriYear(year.value, 'ar')), excludedValues: disputed?.excluded,
+        pool: battleYears, evidence: { claimKeys: disputed?.claimKeys ?? cited(year.claims, eligible) },
       }));
     }
     for (const participation of battle.participants) {
@@ -289,10 +325,12 @@ export async function generateQuestionCandidates(): Promise<GeneratedQuestion[]>
   for (const event of catalog.events) {
     const year = event.fields.hijriYear;
     if (!year) continue;
+    const disputed = disputedYear(year.value, year.claims, allClaims);
     add(candidate({
       family: 'EVENT_HIJRI_YEAR', topic: 'EVENTS', subject: { kind: 'EVENT', slug: event.slug }, attribute: 'hijriYear',
-      personSlugs: [], promptArabic: `في أي سنة هجرية وقع حدث «${event.name}»؟`, answer: choice(String(year.value), formatHijriYear(year.value, 'ar')),
-      pool: eventYears, evidence: { claimKeys: cited(year.claims, eligible) },
+      personSlugs: [], promptArabic: `في أي سنة هجرية وقع حدث «${event.name}»؟`,
+      answer: disputed?.answer ?? choice(String(year.value), formatHijriYear(year.value, 'ar')), excludedValues: disputed?.excluded,
+      pool: eventYears, evidence: { claimKeys: disputed?.claimKeys ?? cited(year.claims, eligible) },
     }));
   }
 

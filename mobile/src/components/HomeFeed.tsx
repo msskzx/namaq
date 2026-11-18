@@ -13,7 +13,7 @@ import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, se
 import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
-import { feedBooks, hasBooksCard, hasJuzCard, hasMomentCard, hasSceneCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot } from '@shared/homeFeed';
+import { feedBooks, hasBooksCard, hasJuzCard, hasMomentCard, hasSceneCard, hasSiraCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, siraOfSlot } from '@shared/homeFeed';
 import { clock, FIVE, PRAYER_NAMES, type PrayerDay, type PrayerKey } from '@shared/prayer';
 import { BOOKS } from '@shared/books';
 import { isReaderBook, pageName } from '@shared/readerBooks';
@@ -31,6 +31,8 @@ import { Text } from '@/ui/Text';
 import momentBattles from '@shared/data/battles/moments.json';
 import type { AppMomentBattle } from '@shared/battles/battle';
 import { battleLine, Moment } from './battles/BattleParts';
+import { STORIES } from '@/lib/stories';
+import { Report, StoryAyat } from './stories/StoryParts';
 import CompareCard from './CompareCard';
 import TreePager from './TreePager';
 import { aliasesOf, EMPTY_LIST } from '@/lib/branchList';
@@ -544,6 +546,29 @@ const ScenePost = memo(function ScenePost({ day, slot, palette }: { day: number;
   );
 });
 
+/**
+ * A sira story (owner, 2026-11-18): its first report whole, so a first reader has what led to the words and what came of
+ * them; the ayat it turns on folded under it. The head opens the story's page.
+ */
+function SiraPost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
+  const story = STORIES[siraOfSlot(STORIES.length, day, slot)];
+  if (!story?.reports[0]) return null;
+  const report = story.reports[0];
+  const open = () => toTab({ pathname: '/story', params: { slug: story.slug } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={ScrollText} title="من قصص السيرة" sub={story.name} palette={palette} open={{ onPress: open, label: `افتح ${story.name}` }} />}
+      actions={<>
+        <Action Icon={ScrollText} label={`افتح ${story.name}`} onPress={open} palette={palette} />
+        <Action Icon={ExternalLinkIcon} label={`المصدر: ${report.cite}`} onPress={() => openExternal(report.url)} palette={palette} />
+      </>}>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
+        <Report report={report} palette={palette} plain />
+        {story.ayat.map(ayat => <StoryAyat key={ayat.from} ayat={ayat} palette={palette} folded />)}
+      </View>
+    </Post>
+  );
+}
+
 /** Every battle's moments, in the battles' order, for the moment card. */
 const MOMENTS = (momentBattles as AppMomentBattle[]).flatMap(battle => battle.moments.map((moment, i) => ({ battle, moment, n: i + 1 })));
 
@@ -710,6 +735,7 @@ export function Feed({ palette, nearEnd, screenBottom }: { palette: Palette; nea
     if (hasJuzCard(i) && juz) posts.push(<JuzPost key={`j${day}`} palette={palette} />);
     if (hasSceneCard(i) && sceneList().length) posts.push(<ScenePost key={`m${day}-${i}`} day={day} slot={i} palette={palette} />);
     if (hasBooksCard(i)) posts.push(<BooksPost key={`k${day}-${i}`} day={day} palette={palette} />);
+    if (hasSiraCard(i) && STORIES.length) posts.push(<SiraPost key={`r${day}-${i}`} day={day} slot={i} palette={palette} />);
     if (hasMomentCard(i) && MOMENTS.length) posts.push(<MomentPost key={`w${day}-${i}`} day={day} slot={i} palette={palette} />);
   }
   // A prayer that is near comes in once, before the first post below the screen, so what the reader looks at stays put (owner,
