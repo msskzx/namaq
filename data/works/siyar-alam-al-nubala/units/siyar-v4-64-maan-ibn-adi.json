@@ -1,0 +1,518 @@
+{
+  "unit": {
+    "id": "siyar-v4-64-maan-ibn-adi",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٦٤"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ma_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "320",
+      "layer": "MAIN",
+      "exact": "٦٤ - مَعْنُ بنُ عَدِيِّ بنِ الجدِّ بنِ العَجْلاَنِ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sp_ma1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "320",
+      "layer": "MAIN",
+      "exact": "مَعْنُ بنُ عَدِيِّ بنِ الجدِّ بنِ العَجْلاَنِ",
+      "prefix": "٦٤ - "
+    },
+    {
+      "id": "sp_ma_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "320",
+      "layer": "MAIN",
+      "exact": "مَعْنُ بنُ",
+      "prefix": "٦٤ - "
+    },
+    {
+      "id": "sp_ma_father_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "320",
+      "layer": "MAIN",
+      "exact": "عَدِيِّ بنِ الجدِّ",
+      "prefix": "مَعْنُ بنُ "
+    },
+    {
+      "id": "sp_ma_epithets",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "320",
+      "layer": "MAIN",
+      "exact": "العَجْلاَنِيُّ، العَقَبِيُّ، البَدْرِيُّ، مِنْ حُلَفَاءِ بَنِي مَالِكِ بنِ عَوْفٍ، مِنْ سَادَةِ الأَنْصَارِ، كَانَ يَكْتُبُ العَرَبِيَّةَ قَبْلَ الإِسْلاَمِ"
+    },
+    {
+      "id": "sp_ma_badri",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "320",
+      "layer": "MAIN",
+      "exact": "العَقَبِيُّ، البَدْرِيُّ",
+      "prefix": "العَجْلاَنِيُّ، "
+    },
+    {
+      "id": "sp_ma_sadah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "320",
+      "layer": "MAIN",
+      "exact": "مِنْ سَادَةِ الأَنْصَارِ",
+      "suffix": "، كَانَ يَكْتُبُ"
+    },
+    {
+      "id": "sp_ma_writes",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "320",
+      "layer": "MAIN",
+      "exact": "كَانَ يَكْتُبُ العَرَبِيَّةَ قَبْلَ الإِسْلاَمِ"
+    },
+    {
+      "id": "sp_ma_athir_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "321",
+      "layer": "MAIN",
+      "exact": "قَالَ ابْنُ الأَثِيْرِ",
+      "suffix": ": مَعْنُ"
+    },
+    {
+      "id": "sp_ma_athir",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "321",
+      "layer": "MAIN",
+      "exact": "مَعْنُ بنُ عَدِيِّ بنِ العَجْلاَنِ البَلَوِيُّ، حَلِيْفُ بَنِي عَمْرِو بنِ عَوْفٍ، عَقَبِيٌّ، بَدْرِيٌّ، مَشْهُوْرٌ"
+    },
+    {
+      "id": "sp_ma_athir_badri",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "321",
+      "layer": "MAIN",
+      "exact": "عَقَبِيٌّ، بَدْرِيٌّ",
+      "prefix": "عَوْفٍ، "
+    },
+    {
+      "id": "sp_ma_brother",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "321",
+      "layer": "MAIN",
+      "exact": "هُوَ أَخُو عَاصِمِ بنِ عَدِيِّ بنِ الجدِّ بنِ العَجْلاَنِ البَلَوِيِّ",
+      "prefix": "قُلْتُ: "
+    },
+    {
+      "id": "sp_ma_asim_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "321",
+      "layer": "MAIN",
+      "exact": "عَاصِمِ بنِ عَدِيِّ بنِ الجدِّ",
+      "prefix": "هُوَ أَخُو "
+    },
+    {
+      "id": "sp_ma_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "321",
+      "layer": "MAIN",
+      "exact": "وَكَانَ مَعْنٌ مِمَّنِ اسْتُشْهِدَ يَوْمَ اليَمَامَةِ، سَنَةَ اثْنَتَيْ عَشْرَةَ"
+    },
+    {
+      "id": "sp_ma_death_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "321",
+      "layer": "MAIN",
+      "exact": "سَنَةَ اثْنَتَيْ عَشْرَةَ",
+      "prefix": "اليَمَامَةِ، "
+    },
+    {
+      "id": "sp_ma_death_place",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "321",
+      "layer": "MAIN",
+      "exact": "اليَمَامَةِ",
+      "prefix": "اسْتُشْهِدَ يَوْمَ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ma0",
+      "unit": "siyar-v4-64-maan-ibn-adi",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ma_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ma_athir",
+      "unit": "siyar-v4-64-maan-ibn-adi",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ma_athir_frame"
+      ],
+      "origin": {
+        "mention": "m_ma_athir"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ma_name",
+      "report": "r_ma0",
+      "spans": [
+        "sp_ma1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ma_epithets",
+      "report": "r_ma0",
+      "spans": [
+        "sp_ma_epithets"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ma_brother",
+      "report": "r_ma0",
+      "spans": [
+        "sp_ma_brother"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ma_death",
+      "report": "r_ma0",
+      "spans": [
+        "sp_ma_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ma_athir",
+      "report": "r_ma_athir",
+      "spans": [
+        "sp_ma_athir"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ma",
+      "parent": "sp_ma1",
+      "exact": "مَعْنُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ma_father",
+      "parent": "sp_ma1",
+      "exact": "عَدِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ma_badr",
+      "parent": "sp_ma_epithets",
+      "exact": "البَدْرِيُّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ma_athir",
+      "parent": "sp_ma_athir_frame",
+      "exact": "ابْنُ الأَثِيْرِ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ma_at",
+      "parent": "sp_ma_athir",
+      "exact": "مَعْنُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ma_badr2",
+      "parent": "sp_ma_athir",
+      "exact": "بَدْرِيٌّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ma_b",
+      "parent": "sp_ma_brother",
+      "exact": "هُوَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ma_asim",
+      "parent": "sp_ma_brother",
+      "exact": "عَاصِمِ بنِ عَدِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ma_d",
+      "parent": "sp_ma_death",
+      "exact": "مَعْنٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ma",
+      "mention": "m_ma",
+      "agent": "maan-ibn-adi",
+      "basis": [
+        {
+          "span": "sp_ma_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_at",
+      "mention": "m_ma_at",
+      "agent": "maan-ibn-adi",
+      "basis": [
+        {
+          "span": "sp_ma_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_b",
+      "mention": "m_ma_b",
+      "agent": "maan-ibn-adi",
+      "basis": [
+        {
+          "span": "sp_ma_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_d",
+      "mention": "m_ma_d",
+      "agent": "maan-ibn-adi",
+      "basis": [
+        {
+          "span": "sp_ma_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_father",
+      "mention": "m_ma_father",
+      "agent": "adi-ibn-al-jidd",
+      "basis": [
+        {
+          "span": "sp_ma_father_nasab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_asim",
+      "mention": "m_ma_asim",
+      "agent": "asim-ibn-adi",
+      "basis": [
+        {
+          "span": "sp_ma_asim_name",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_badr",
+      "mention": "m_ma_badr",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_ma_badri",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_badr2",
+      "mention": "m_ma_badr2",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_ma_athir_badri",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ma_name",
+      "subject": "m_ma",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ma1"
+        ]
+      },
+      "restsOn": [
+        "st_ma_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_sex",
+      "subject": "m_ma",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ma_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ma_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_father",
+      "subject": "m_ma",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ma_father"
+      },
+      "restsOn": [
+        "st_ma_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_badr",
+      "subject": "m_ma",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_ma_badr"
+      },
+      "restsOn": [
+        "st_ma_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_badr2",
+      "subject": "m_ma_at",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_ma_badr2"
+      },
+      "restsOn": [
+        "st_ma_athir"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_v_sadah",
+      "subject": "m_ma",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ma_sadah"
+        ]
+      },
+      "restsOn": [
+        "st_ma_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_v_writes",
+      "subject": "m_ma",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ma_writes"
+        ]
+      },
+      "restsOn": [
+        "st_ma_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_asim",
+      "subject": "m_ma_b",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_ma_asim"
+      },
+      "restsOn": [
+        "st_ma_brother"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_death",
+      "subject": "m_ma_d",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 12,
+        "spans": [
+          "sp_ma_death_y"
+        ]
+      },
+      "restsOn": [
+        "st_ma_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_death_place",
+      "subject": "m_ma_d",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "sp_ma_death_place"
+        ]
+      },
+      "restsOn": [
+        "st_ma_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

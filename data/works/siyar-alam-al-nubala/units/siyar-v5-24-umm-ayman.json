@@ -1,0 +1,565 @@
+{
+  "unit": {
+    "id": "siyar-v5-24-umm-ayman",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٢٤"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ay_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "223",
+      "layer": "MAIN",
+      "exact": "٢٤ - أُمُّ أَيْمَنَ الحَبَشِيَّةُ بَرَكَةُ مَوْلاَةُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَحَاضِنَتُهُ"
+    },
+    {
+      "id": "sp_ay_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "223",
+      "layer": "MAIN",
+      "exact": "أُمُّ أَيْمَنَ",
+      "prefix": "٢٤ - "
+    },
+    {
+      "id": "sp_ay_mawla",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "223",
+      "layer": "MAIN",
+      "exact": "مَوْلاَةُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَحَاضِنَتُهُ"
+    },
+    {
+      "id": "sp_ay_muhajirat",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "224",
+      "layer": "MAIN",
+      "exact": "وَكَانَتْ مِنَ المُهَاجِرَاتِ الأُوَلِ"
+    },
+    {
+      "id": "sp_ay_ism",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "224",
+      "layer": "MAIN",
+      "exact": "اسْمُهَا: بَرَكَةٌ، وَقَدْ تَزَوَّجَهَا عُبَيْدُ بنُ الحَارِثِ الخَزْرَجِيُّ، فَوَلَدَتْ لَهُ أَيْمَنَ"
+    },
+    {
+      "id": "sp_ay_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "224",
+      "layer": "MAIN",
+      "exact": "بَرَكَةٌ",
+      "prefix": "اسْمُهَا: "
+    },
+    {
+      "id": "sp_ay_ubayd_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "224",
+      "layer": "MAIN",
+      "exact": "عُبَيْدُ بنُ الحَارِثِ",
+      "prefix": "تَزَوَّجَهَا "
+    },
+    {
+      "id": "sp_ay_ayman_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "224",
+      "layer": "MAIN",
+      "exact": "فَوَلَدَتْ لَهُ أَيْمَنَ",
+      "prefix": "الخَزْرَجِيُّ، "
+    },
+    {
+      "id": "sp_ay_zaid",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "224",
+      "layer": "MAIN",
+      "exact": "ثُمَّ تَزَوَّجَهَا زَيْدُ بنُ حَارِثَةَ لَيَالِيَ بُعِثَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فَوَلَدَتْ لَهُ أُسَامَةَ بنَ زَيْدٍ، حِبُّ رَسُوْلِ اللهِ"
+    },
+    {
+      "id": "sp_ay_zaid_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "224",
+      "layer": "MAIN",
+      "exact": "زَيْدُ بنُ حَارِثَةَ",
+      "prefix": "ثُمَّ تَزَوَّجَهَا "
+    },
+    {
+      "id": "sp_ay_usamah_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "224",
+      "layer": "MAIN",
+      "exact": "فَوَلَدَتْ لَهُ أُسَامَةَ بنَ زَيْدٍ"
+    },
+    {
+      "id": "sp_ay_wahy_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "226",
+      "layer": "MAIN",
+      "exact": "حَمَّادُ بنُ سَلَمَةَ: عَنْ ثَابِتٍ، عَنْ أَنَسٍ"
+    },
+    {
+      "id": "sp_ay_wahy",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "226",
+      "layer": "MAIN",
+      "exact": "أَنَّ أُمَّ أَيْمَنَ بَكَتْ حِيْنَ مَاتَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-"
+    },
+    {
+      "id": "sp_ay_wahy_1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "226",
+      "layer": "MAIN",
+      "exact": "وَاللهِ، لَقَدْ عَلِمْتُ أَنَّهُ سَيَمُوْتُ؛ وَلَكِنِّي إِنَّمَا أَبْكِي عَلَى الوَحْيِ إِذِ انْقَطَعَ عَنَّا مِنَ السِّمَاءِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ay0",
+      "unit": "siyar-v5-24-umm-ayman",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ay_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ay_wahy",
+      "unit": "siyar-v5-24-umm-ayman",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_ay_wahy_isnad",
+      "origin": {
+        "mention": "m_ay_wahy_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ay_kunya",
+      "report": "r_ay0",
+      "spans": [
+        "sp_ay_kunya"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ay_mawla",
+      "report": "r_ay0",
+      "spans": [
+        "sp_ay_mawla"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ay_muhajirat",
+      "report": "r_ay0",
+      "spans": [
+        "sp_ay_muhajirat"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ay_ism",
+      "report": "r_ay0",
+      "spans": [
+        "sp_ay_ism"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ay_zaid",
+      "report": "r_ay0",
+      "spans": [
+        "sp_ay_zaid"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ay_wahy",
+      "report": "r_ay_wahy",
+      "spans": [
+        "sp_ay_wahy",
+        "sp_ay_wahy_1"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ay_k",
+      "parent": "sp_ay_kunya",
+      "exact": "أُمُّ أَيْمَنَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ay_mawla",
+      "parent": "sp_ay_mawla",
+      "exact": "مَوْلاَةُ رَسُوْلِ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ay_muh",
+      "parent": "sp_ay_muhajirat",
+      "exact": "وَكَانَتْ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ay",
+      "parent": "sp_ay_ism",
+      "exact": "اسْمُهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ay_ubayd",
+      "parent": "sp_ay_ism",
+      "exact": "عُبَيْدُ بنُ الحَارِثِ الخَزْرَجِيُّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ay_c_ayman",
+      "parent": "sp_ay_ism",
+      "exact": "أَيْمَنَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ay_z",
+      "parent": "sp_ay_zaid",
+      "exact": "تَزَوَّجَهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ay_zaid",
+      "parent": "sp_ay_zaid",
+      "exact": "زَيْدُ بنُ حَارِثَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ay_c_usamah",
+      "parent": "sp_ay_zaid",
+      "exact": "أُسَامَةَ بنَ زَيْدٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ay_wahy_by",
+      "parent": "sp_ay_wahy_isnad",
+      "exact": "أَنَسٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ay_wahy",
+      "parent": "sp_ay_wahy",
+      "exact": "أُمَّ أَيْمَنَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ay_k",
+      "mention": "m_ay_k",
+      "agent": "umm-ayman",
+      "basis": [
+        {
+          "span": "sp_ay_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ay_mawla",
+      "mention": "m_ay_mawla",
+      "agent": "umm-ayman",
+      "basis": [
+        {
+          "span": "sp_ay_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ay_muh",
+      "mention": "m_ay_muh",
+      "agent": "umm-ayman",
+      "basis": [
+        {
+          "span": "sp_ay_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ay",
+      "mention": "m_ay",
+      "agent": "umm-ayman",
+      "basis": [
+        {
+          "span": "sp_ay_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ay_ubayd",
+      "mention": "m_ay_ubayd",
+      "agent": "ubayd-ibn-al-harith-al-khazraji",
+      "basis": [
+        {
+          "span": "sp_ay_ubayd_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ay_c_ayman",
+      "mention": "m_ay_c_ayman",
+      "agent": "ayman-ibn-ubayd",
+      "basis": [
+        {
+          "span": "sp_ay_ayman_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ay_z",
+      "mention": "m_ay_z",
+      "agent": "umm-ayman",
+      "basis": [
+        {
+          "span": "sp_ay_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ay_zaid",
+      "mention": "m_ay_zaid",
+      "agent": "zaid-ibn-harithah",
+      "basis": [
+        {
+          "span": "sp_ay_zaid_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ay_c_usamah",
+      "mention": "m_ay_c_usamah",
+      "agent": "usamah-ibn-zaid",
+      "basis": [
+        {
+          "span": "sp_ay_usamah_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ay_wahy",
+      "mention": "m_ay_wahy",
+      "agent": "umm-ayman",
+      "basis": [
+        {
+          "span": "sp_ay_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ay_kunya",
+      "subject": "m_ay_k",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_ay_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_ay_kunya"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ay_sex",
+      "subject": "m_ay_k",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_ay_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_ay_kunya"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ay_v_mawla",
+      "subject": "m_ay_mawla",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ay_mawla"
+        ]
+      },
+      "restsOn": [
+        "st_ay_mawla"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ay_v_muhajirat",
+      "subject": "m_ay_muh",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ay_muhajirat"
+        ]
+      },
+      "restsOn": [
+        "st_ay_muhajirat"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ay_name",
+      "subject": "m_ay",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ay_name"
+        ]
+      },
+      "restsOn": [
+        "st_ay_ism"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ay_w_ubayd",
+      "subject": "m_ay",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_ay_ubayd"
+      },
+      "restsOn": [
+        "st_ay_ism"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ay_c_ayman_0",
+      "subject": "m_ay_c_ayman",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ay"
+      },
+      "restsOn": [
+        "st_ay_ism"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ay_c_ayman_1",
+      "subject": "m_ay_c_ayman",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ay_ubayd"
+      },
+      "restsOn": [
+        "st_ay_ism"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ay_w_zaid",
+      "subject": "m_ay_z",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_ay_zaid"
+      },
+      "restsOn": [
+        "st_ay_zaid"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ay_c_usamah_0",
+      "subject": "m_ay_c_usamah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ay_z"
+      },
+      "restsOn": [
+        "st_ay_zaid"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ay_c_usamah_1",
+      "subject": "m_ay_c_usamah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ay_zaid"
+      },
+      "restsOn": [
+        "st_ay_zaid"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ay_v_wahy",
+      "subject": "m_ay_wahy",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ay_wahy",
+          "sp_ay_wahy_1"
+        ]
+      },
+      "restsOn": [
+        "st_ay_wahy"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

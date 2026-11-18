@@ -1,0 +1,878 @@
+{
+  "unit": {
+    "id": "siyar-v4-68-yazid",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٦٨"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_yz_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "328",
+      "layer": "MAIN",
+      "exact": "٦٨ - يَزِيْدُ بنُ أَبِي سُفْيَانَ بنِ حَرْبِ بنِ أُمَيَّةَ الأُمَوِيُّ * (ق)"
+    },
+    {
+      "id": "sp_yz1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "328",
+      "layer": "MAIN",
+      "exact": "يَزِيْدُ بنُ أَبِي سُفْيَانَ بنِ حَرْبِ بنِ أُمَيَّةَ",
+      "prefix": "٦٨ - "
+    },
+    {
+      "id": "sp_yz2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "328",
+      "layer": "MAIN",
+      "exact": "ابْنِ عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ بنِ قُصَيِّ"
+    },
+    {
+      "id": "sp_yz_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "328",
+      "layer": "MAIN",
+      "exact": "يَزِيْدُ بنُ",
+      "prefix": "٦٨ - "
+    },
+    {
+      "id": "sp_yz_father_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "328",
+      "layer": "MAIN",
+      "exact": "أَبِي سُفْيَانَ بنِ حَرْبِ",
+      "prefix": "يَزِيْدُ بنُ "
+    },
+    {
+      "id": "sp_yz_bro",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "329",
+      "layer": "MAIN",
+      "exact": "أَخُو مُعَاوِيَةَ مِنْ أَبِيْهِ. وَيُقَالُ لَهُ: يَزِيْدُ الخَيْرُ"
+    },
+    {
+      "id": "sp_yz_yuqal_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "329",
+      "layer": "MAIN",
+      "exact": "وَيُقَالُ لَهُ",
+      "prefix": "مِنْ أَبِيْهِ. "
+    },
+    {
+      "id": "sp_yz_laqab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "329",
+      "layer": "MAIN",
+      "exact": "يَزِيْدُ الخَيْرُ",
+      "prefix": "وَيُقَالُ لَهُ: "
+    },
+    {
+      "id": "sp_yz_mother",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "329",
+      "layer": "MAIN",
+      "exact": "وَأُمُّهُ: هِيَ زَيْنَبُ بِنْتُ نَوْفَلٍ الكِنَانِيَّةُ، وَهُوَ أَخُو أُمِّ المُؤْمِنِيْنَ أُمِّ حَبِيْبَةَ"
+    },
+    {
+      "id": "sp_yz_mother_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "329",
+      "layer": "MAIN",
+      "exact": "زَيْنَبُ بِنْتُ نَوْفَلٍ",
+      "prefix": "هِيَ "
+    },
+    {
+      "id": "sp_yz_uh_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "329",
+      "layer": "MAIN",
+      "exact": "أُمِّ المُؤْمِنِيْنَ أُمِّ حَبِيْبَةَ"
+    },
+    {
+      "id": "sp_yz_life",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "329",
+      "layer": "MAIN",
+      "exact": "كَانَ مِنَ العُقَلاَءِ الأَلِبَّاءِ، وَالشُّجْعَانِ المَذْكُوْرِيْنَ، أَسْلَمَ يَوْمَ الفَتْحِ، وَحَسُنَ إِسْلاَمُهُ، وَشَهِدَ حُنَيْناً"
+    },
+    {
+      "id": "sp_yz_v_aql",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "329",
+      "layer": "MAIN",
+      "exact": "مِنَ العُقَلاَءِ الأَلِبَّاءِ، وَالشُّجْعَانِ المَذْكُوْرِيْنَ"
+    },
+    {
+      "id": "sp_yz_v_islam",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "329",
+      "layer": "MAIN",
+      "exact": "أَسْلَمَ يَوْمَ الفَتْحِ، وَحَسُنَ إِسْلاَمُهُ"
+    },
+    {
+      "id": "sp_yz_hunayn_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "329",
+      "layer": "MAIN",
+      "exact": "حُنَيْناً",
+      "prefix": "وَشَهِدَ "
+    },
+    {
+      "id": "sp_yz_amir",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "329",
+      "layer": "MAIN",
+      "exact": "وَهُوَ أَحَدُ الأُمَرَاءِ الأَرْبَعَةِ الَّذِيْنَ نَدَبَهُم أَبُو بَكْرٍ لِغَزْوِ الرُّوْمِ، عَقَدَ لَهُ أَبُو بَكْرٍ، وَمَشَى مَعَهُ تَحْتَ رِكَابِهِ يُسَايِرُهُ، وَيُوَدِّعُهُ، وَيُوْصِيْهِ، وَمَا ذَاكَ إِلاَّ لِشَرَفِهِ، وَكَمَالِ دِيْنِهِ، وَلَمَّا فُتِحَتْ دِمَشْقُ أَمَّرَهُ عُمَرُ عَلَيْهَا (١)"
+    },
+    {
+      "id": "sp_yz_amir_rum",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "329",
+      "layer": "MAIN",
+      "exact": "أَحَدُ الأُمَرَاءِ الأَرْبَعَةِ الَّذِيْنَ نَدَبَهُم أَبُو بَكْرٍ لِغَزْوِ الرُّوْمِ"
+    },
+    {
+      "id": "sp_yz_v_abubakr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "329",
+      "layer": "MAIN",
+      "exact": "عَقَدَ لَهُ أَبُو بَكْرٍ، وَمَشَى مَعَهُ تَحْتَ رِكَابِهِ يُسَايِرُهُ، وَيُوَدِّعُهُ، وَيُوْصِيْهِ، وَمَا ذَاكَ إِلاَّ لِشَرَفِهِ، وَكَمَالِ دِيْنِهِ"
+    },
+    {
+      "id": "sp_yz_amir_dim",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "329",
+      "layer": "MAIN",
+      "exact": "وَلَمَّا فُتِحَتْ دِمَشْقُ أَمَّرَهُ عُمَرُ عَلَيْهَا"
+    },
+    {
+      "id": "sp_yz_qay",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "329",
+      "layer": "MAIN",
+      "exact": "وَعَلَى يَدِهِ كَانَ فَتْحُ قَيْسَارِيَّةَ (٣) الَّتِي بِالشَّامِ"
+    },
+    {
+      "id": "sp_yz_ibr_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "330",
+      "layer": "MAIN",
+      "exact": "قَالَ إِبْرَاهِيْمُ بنُ سَعْدٍ"
+    },
+    {
+      "id": "sp_yz_ibr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "330",
+      "layer": "MAIN",
+      "exact": "كَانَ يَزِيْدُ بنُ أَبِي سُفْيَانَ عَلَى رُبُعٍ، وَأَبُو عُبَيْدَةَ عَلَى رُبُعٍ، وَعَمْرُو بنُ العَاصِ عَلَى رُبُعٍ، وَشُرَحْبِيْلُ بنُ حَسَنَةَ عَلَى رُبُعٍ -يَعْنِي: يَوْمَ اليَرْمُوْكِ-"
+    },
+    {
+      "id": "sp_yz_ibr_yarmuk",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "330",
+      "layer": "MAIN",
+      "exact": "اليَرْمُوْكِ",
+      "prefix": "يَعْنِي: يَوْمَ "
+    },
+    {
+      "id": "sp_yz_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "330",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ يَزِيْدُ فِي الطَّاعُوْنِ، سَنَةَ ثَمَانِيَ عَشْرَةَ، وَلَمَّا احْتُضِرَ اسْتَعْمَلَ أَخَاهُ مُعَاوِيَةَ عَلَى عَمَلِهِ"
+    },
+    {
+      "id": "sp_yz_death_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "330",
+      "layer": "MAIN",
+      "exact": "سَنَةَ ثَمَانِيَ عَشْرَةَ",
+      "prefix": "الطَّاعُوْنِ، "
+    },
+    {
+      "id": "sp_yz_muaw2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "330",
+      "layer": "MAIN",
+      "exact": "أَخَاهُ مُعَاوِيَةَ",
+      "prefix": "اسْتَعْمَلَ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_yz0",
+      "unit": "siyar-v4-68-yazid",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_yz_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_yz_ibr",
+      "unit": "siyar-v4-68-yazid",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_yz_ibr_frame"
+      ],
+      "origin": {
+        "mention": "m_yz_ibr"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_yz_yuqal",
+      "unit": "siyar-v4-68-yazid",
+      "ordinal": 3,
+      "voice": "REPORTED_ANONYMOUS",
+      "frame": [
+        "sp_yz_yuqal_frame"
+      ],
+      "origin": {
+        "mention": "m_yz_yuqal"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_yz_name",
+      "report": "r_yz0",
+      "spans": [
+        "sp_yz1",
+        "sp_yz2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_yz_bro",
+      "report": "r_yz0",
+      "spans": [
+        "sp_yz_bro"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_yz_mother",
+      "report": "r_yz0",
+      "spans": [
+        "sp_yz_mother"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_yz_life",
+      "report": "r_yz0",
+      "spans": [
+        "sp_yz_life"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_yz_amir",
+      "report": "r_yz0",
+      "spans": [
+        "sp_yz_amir"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_yz_qay",
+      "report": "r_yz0",
+      "spans": [
+        "sp_yz_qay"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_yz_death",
+      "report": "r_yz0",
+      "spans": [
+        "sp_yz_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_yz_ibr",
+      "report": "r_yz_ibr",
+      "spans": [
+        "sp_yz_ibr"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_yz_laqab",
+      "report": "r_yz_yuqal",
+      "spans": [
+        "sp_yz_laqab"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_yz_yuqal",
+      "parent": "sp_yz_yuqal_frame",
+      "exact": "وَيُقَالُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_yz",
+      "parent": "sp_yz1",
+      "exact": "يَزِيْدُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_yz_father",
+      "parent": "sp_yz1",
+      "exact": "أَبِي سُفْيَانَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_yz_b",
+      "parent": "sp_yz_bro",
+      "exact": "أَخُو",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_yz_muaw",
+      "parent": "sp_yz_bro",
+      "exact": "مُعَاوِيَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_yz_mo",
+      "parent": "sp_yz_mother",
+      "exact": "وَهُوَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_yz_zaynab",
+      "parent": "sp_yz_mother",
+      "exact": "زَيْنَبُ بِنْتُ نَوْفَلٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_yz_uh",
+      "parent": "sp_yz_mother",
+      "exact": "أُمِّ المُؤْمِنِيْنَ أُمِّ حَبِيْبَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_yz_l",
+      "parent": "sp_yz_life",
+      "exact": "كَانَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_yz_hunayn",
+      "parent": "sp_yz_life",
+      "exact": "حُنَيْناً",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_yz_a",
+      "parent": "sp_yz_amir",
+      "exact": "وَهُوَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_yz_q",
+      "parent": "sp_yz_qay",
+      "exact": "يَدِهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_yz_ibr",
+      "parent": "sp_yz_ibr_frame",
+      "exact": "إِبْرَاهِيْمُ بنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_yz_i",
+      "parent": "sp_yz_ibr",
+      "exact": "يَزِيْدُ بنُ أَبِي سُفْيَانَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_yz_yarmuk",
+      "parent": "sp_yz_ibr",
+      "exact": "يَوْمَ اليَرْمُوْكِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_yz_d",
+      "parent": "sp_yz_death",
+      "exact": "يَزِيْدُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_yz_muaw2",
+      "parent": "sp_yz_death",
+      "exact": "أَخَاهُ مُعَاوِيَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_yz",
+      "mention": "m_yz",
+      "agent": "yazid-ibn-abi-sufyan",
+      "basis": [
+        {
+          "span": "sp_yz_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_yz_b",
+      "mention": "m_yz_b",
+      "agent": "yazid-ibn-abi-sufyan",
+      "basis": [
+        {
+          "span": "sp_yz_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_yz_mo",
+      "mention": "m_yz_mo",
+      "agent": "yazid-ibn-abi-sufyan",
+      "basis": [
+        {
+          "span": "sp_yz_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_yz_l",
+      "mention": "m_yz_l",
+      "agent": "yazid-ibn-abi-sufyan",
+      "basis": [
+        {
+          "span": "sp_yz_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_yz_a",
+      "mention": "m_yz_a",
+      "agent": "yazid-ibn-abi-sufyan",
+      "basis": [
+        {
+          "span": "sp_yz_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_yz_q",
+      "mention": "m_yz_q",
+      "agent": "yazid-ibn-abi-sufyan",
+      "basis": [
+        {
+          "span": "sp_yz_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_yz_i",
+      "mention": "m_yz_i",
+      "agent": "yazid-ibn-abi-sufyan",
+      "basis": [
+        {
+          "span": "sp_yz_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_yz_d",
+      "mention": "m_yz_d",
+      "agent": "yazid-ibn-abi-sufyan",
+      "basis": [
+        {
+          "span": "sp_yz_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_yz_father",
+      "mention": "m_yz_father",
+      "agent": "abu-sufyan-ibn-harb",
+      "basis": [
+        {
+          "span": "sp_yz_father_nasab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_yz_muaw",
+      "mention": "m_yz_muaw",
+      "agent": "muawiyah-ibn-abi-sufyan",
+      "basis": [
+        {
+          "span": "sp_yz_father_nasab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_yz_muaw2",
+      "mention": "m_yz_muaw2",
+      "agent": "muawiyah-ibn-abi-sufyan",
+      "basis": [
+        {
+          "span": "sp_yz_bro",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_yz_zaynab",
+      "mention": "m_yz_zaynab",
+      "agent": "zaynab-bint-nawfal",
+      "basis": [
+        {
+          "span": "sp_yz_mother_name",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_yz_uh",
+      "mention": "m_yz_uh",
+      "agent": "umm-habibah",
+      "basis": [
+        {
+          "span": "sp_yz_uh_name",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_yz_hunayn",
+      "mention": "m_yz_hunayn",
+      "event": "hunayn",
+      "basis": [
+        {
+          "span": "sp_yz_hunayn_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_yz_yarmuk",
+      "mention": "m_yz_yarmuk",
+      "event": "yarmuk",
+      "basis": [
+        {
+          "span": "sp_yz_ibr_yarmuk",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_yz_name",
+      "subject": "m_yz",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_yz1",
+          "sp_yz2"
+        ]
+      },
+      "restsOn": [
+        "st_yz_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yz_sex",
+      "subject": "m_yz",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_yz_sex"
+        ]
+      },
+      "restsOn": [
+        "st_yz_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yz_father",
+      "subject": "m_yz",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_yz_father"
+      },
+      "restsOn": [
+        "st_yz_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yz_muaw",
+      "subject": "m_yz_b",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_yz_muaw"
+      },
+      "restsOn": [
+        "st_yz_bro"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yz_laqab",
+      "subject": "m_yz_b",
+      "predicate": "name.laqab",
+      "value": {
+        "spans": [
+          "sp_yz_laqab"
+        ]
+      },
+      "restsOn": [
+        "st_yz_laqab"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yz_mother",
+      "subject": "m_yz_mo",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_yz_zaynab"
+      },
+      "restsOn": [
+        "st_yz_mother"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yz_uh",
+      "subject": "m_yz_mo",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_yz_uh"
+      },
+      "restsOn": [
+        "st_yz_mother"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yz_v_aql",
+      "subject": "m_yz_l",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_yz_v_aql"
+        ]
+      },
+      "restsOn": [
+        "st_yz_life"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yz_v_islam",
+      "subject": "m_yz_l",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_yz_v_islam"
+        ]
+      },
+      "restsOn": [
+        "st_yz_life"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yz_hunayn",
+      "subject": "m_yz_l",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_yz_hunayn"
+      },
+      "restsOn": [
+        "st_yz_life"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yz_off_rum",
+      "subject": "m_yz_a",
+      "predicate": "office",
+      "value": {
+        "classified": "amir",
+        "spans": [
+          "sp_yz_amir_rum"
+        ]
+      },
+      "restsOn": [
+        "st_yz_amir"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yz_v_abubakr",
+      "subject": "m_yz_a",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_yz_v_abubakr"
+        ]
+      },
+      "restsOn": [
+        "st_yz_amir"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yz_off_dim",
+      "subject": "m_yz_a",
+      "predicate": "office",
+      "value": {
+        "classified": "amir",
+        "spans": [
+          "sp_yz_amir_dim"
+        ]
+      },
+      "restsOn": [
+        "st_yz_amir"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yz_v_qay",
+      "subject": "m_yz_q",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_yz_qay"
+        ]
+      },
+      "restsOn": [
+        "st_yz_qay"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yz_yarmuk",
+      "subject": "m_yz_i",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_yz_yarmuk"
+      },
+      "restsOn": [
+        "st_yz_ibr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yz_death",
+      "subject": "m_yz_d",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 18,
+        "spans": [
+          "sp_yz_death_y"
+        ]
+      },
+      "restsOn": [
+        "st_yz_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yz_muaw2",
+      "subject": "m_yz_d",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_yz_muaw2"
+      },
+      "restsOn": [
+        "st_yz_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

@@ -298,7 +298,7 @@ export const SOURCES: Source[] = [
   {
     id: 'hadith-api', group: 'data',
     title: { ar: 'hadith-api: نص صحيح البخاري', en: 'hadith-api: the text of Sahih al-Bukhari' },
-    edition: 'الإصدار ١ (ara-bukhari)، نُزّل ٢٠٢٦-١١-١٨، ولم يُحذف منه إلا علامات الاتجاه (U+200F)', link: { url: 'https://github.com/fawazahmed0/hadith-api', label: 'fawazahmed0/hadith-api' },
+    edition: 'الإصدار ١ (ara-bukhari)، نُزّل ٢٠٢٦-١١-١٨، ولم يُغيَّر فيه إلا حذف علامات الاتجاه (U+200F) وجعل المسافات المتتالية مسافة واحدة', link: { url: 'https://github.com/fawazahmed0/hadith-api', label: 'fawazahmed0/hadith-api' },
     licence: {
       ar: 'منشورة في الملك العام (Unlicense).',
       en: 'Released into the public domain (Unlicense).',
