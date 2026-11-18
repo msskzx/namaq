@@ -12,7 +12,7 @@ Continue reading, today's juz, prayer time, books, scenes (مشاهد), saved an
 ayat, surah openings, a battle's moment (من غزوة …, opening the battle's page), a sira story whole (من قصص السيرة, its first report with
 the ayat folded under it, opening the story's page), and the quiz cards in `FEED_QUIZ_NAMES`
 (`shared/quiz/feedQuiz.ts`): في أي سورة؟, أكمل المتشابهات, سمّع بقية الآية, قارن الموضعين,
-أوائل السور, سمّع الآية, and the three Tuhfat al-Atfal questions.
+أوائل السور, سمّع الآية, the three Tuhfat al-Atfal questions, and السيرة والغزوات (shared/quiz/sira.ts).
 
 The ayah cards (`AyahNotePost` in `HomeFeed.tsx`, lists in `shared/quran/ayahNotes.ts`), one a batch, the kind turning:
 من التفسير (an ayah al-Sa'di explains alone), من البلاغة (an ayah al-Suyuti surely names), من الإعراب (one word's line),

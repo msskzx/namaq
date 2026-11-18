@@ -1,12 +1,10 @@
 import { View } from 'react-native';
-import type { AppReport, AppStory, AppStoryAyat } from '@shared/stories/story';
+import { rangeName, type AppReport, type AppStory, type AppStoryAyat } from '@shared/stories/story';
 import { Text } from '@/ui/Text';
 import Chip from '@/ui/Chip';
 import ExternalLink from '@/ui/ExternalLink';
 import Step from '@/ui/Step';
 import Folded from '@/ui/Folded';
-import { surahName } from '@shared/quran/surahNames';
-import { num } from '@shared/quran/arabicNumber';
 import { AyatRange } from '@/components/AyahLines';
 import { People, Readings, Refs } from '@/components/battles/BattleParts';
 import type { Palette } from '@/lib/theme';
@@ -44,13 +42,6 @@ export function Report({ report, palette, plain }: { report: AppReport; palette:
     </View>
   );
 }
-
-/** «فصلت ١–١٣»: surah name first, then the ayat. */
-export const rangeName = (from: string, to: string) => {
-  const [surah, first] = from.split(':').map(Number);
-  const last = Number(to.split(':')[1]);
-  return `${surahName(surah)} ${num(first)}${last === first ? '' : `–${num(last)}`}`;
-};
 
 /** The ayat a story turns on, whole in the mushaf's lines and shown at first (owner, 2026-11-18), with the quotes that say so. */
 export function StoryAyat({ ayat, palette, folded = false }: { ayat: AppStoryAyat; palette: Palette;

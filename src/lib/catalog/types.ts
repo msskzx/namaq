@@ -246,6 +246,8 @@ export type CatalogStoryEvidence = { readonly source: string; readonly page: num
 
 export interface CatalogStoryAyat {
   readonly kind: 'RECITED' | 'REVEALED_ABOUT';
+  /** REVEALED_ABOUT: the person the evidence names (a person's slug). */
+  readonly about?: string;
   /** Whose report the range is, when the source's reports differ on it («في رواية جابر»). */
   readonly report?: string;
   /** surah:ayah, first and last. */
