@@ -1,3 +1,4 @@
+import { num } from './quran/arabicNumber';
 /**
  * Today's date in the Umm al-Qura Hijri calendar, in Arabic («الجمعة، ٣ جمادى الآخرة ١٤٤٨ هـ»),
  * or null where the platform's Intl has no Hijri calendar, so the widget hides instead of showing a Gregorian date.
@@ -35,3 +36,6 @@ export function todaysJuz(date: Date): number[] | null {
   const tomorrow = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1, 12);
   return day === 29 && hijriDay(tomorrow) === 1 ? [29, 30] : [day];
 }
+
+/** «الجزء ٣», or «الجزءان ٢٩ و٣٠» on the last day of a 29-day month. */
+export const juzLabel = (juz: number[]) => (juz.length > 1 ? `الجزءان ${num(juz[0])} و${num(juz[1])}` : `الجزء ${num(juz[0])}`);

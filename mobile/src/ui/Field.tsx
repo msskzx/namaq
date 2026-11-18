@@ -2,6 +2,7 @@ import { View, type StyleProp, type TextInputProps, type ViewStyle } from 'react
 import { TextInput } from '@/ui/Text';
 import { Search, X } from 'lucide-react-native';
 import IconButton from '@/ui/IconButton';
+import { Tap } from '@/ui/Tap';
 import type { Palette } from '@/lib/theme';
 
 const HEIGHT = 44;
@@ -42,5 +43,18 @@ export function SearchField({ palette, label, value, onChangeText, style, ...inp
         style={{ flex: 1, width: 0, height: '100%', paddingHorizontal: 8, color: palette.ink, fontSize: 16, textAlign: 'right', writingDirection: 'rtl' }} />
       {value !== '' && <IconButton Icon={X} label="مسح" onPress={() => onChangeText('')} size="small" />}
     </View>
+  );
+}
+
+/**
+ * The search field as a button: the field's frame and magnifier, with nothing typed in it, that opens the search page (home's
+ * top bar, owner 2026-11-18: a field says "search" better than an icon). `label` is what a screen reader says.
+ */
+export function SearchOpener({ palette, label, onPress, style }: { palette: Palette; label: string; onPress: () => void; style?: StyleProp<ViewStyle> }) {
+  return (
+    <Tap onPress={onPress} accessibilityRole="button" accessibilityLabel={label} hitSlop={4}
+      style={({ pressed }) => [frame(palette), { flexDirection: 'row', alignItems: 'center', height: 40, paddingHorizontal: 12, opacity: pressed ? 0.7 : 1 }, style]}>
+      <Search size={18} color={palette.muted} />
+    </Tap>
   );
 }

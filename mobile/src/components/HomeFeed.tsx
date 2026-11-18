@@ -1,7 +1,7 @@
-import { memo, useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Eye, EyeOff, Feather, LightbulbOff, Users, NotebookPen, ScrollText, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, LibraryBig, LightbulbOff, Presentation, Users, ScrollText, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { bookmarkKind } from '@shared/bookmarkKind';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
@@ -12,8 +12,13 @@ import { isMemorized, memorizedPrefer, memorizedQuestions, readMemorized, recall
 import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, seededRandom, type FeedQuizKind } from '@shared/quiz/feedQuiz';
 import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
-import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
-import { backToVisit, FEED_AHEAD, freshPicks, savedOfSlot, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, type StoryId } from '@shared/feedSeen';
+import { backToVisit, FEED_AHEAD, freshPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
+import { feedBooks, hasBooksCard, hasJuzCard, hasSceneCard, inMinutes, insertAt, prayerSoon, sceneOfSlot } from '@shared/homeFeed';
+import { clock, FIVE, PRAYER_NAMES, type PrayerDay, type PrayerKey } from '@shared/prayer';
+import { BOOKS } from '@shared/books';
+import { isReaderBook, pageName } from '@shared/readerBooks';
+import { examples } from '@shared/quran/iltifat';
+import { topicOf } from '@shared/quran/lataif';
 import { hijriDate, todaysJuz } from '@shared/hijri';
 import { JUZ_INDEX } from '@shared/quran/juzIndex';
 import { num } from '@shared/quran/arabicNumber';
@@ -39,12 +44,16 @@ import AyahLines, { pageWords, PageTop } from './AyahLines';
 import { pairOfDayNumber, treeOfDay } from '@/lib/daily';
 import { cardsFor, sideKeys, sideLabel } from '@/lib/compare';
 import { surahNames as shortNames } from '@/lib/branches';
-import { pageData, pageOfAyah, PAGES, surahBefore } from '@/lib/mushaf';
+import { ayahMushafWords, pageData, pageOfAyah, PAGES, surahBefore } from '@/lib/mushaf';
 import { isBoolean, isNumberIn, isRecord, readJson, writeJson } from '@/lib/storage';
-import { openIntent, toTab } from '@/lib/ways';
-import { around as aroundSetting, branchView, penRule } from '@/lib/settings';
+import { openIntent, openUtility, toTab } from '@/lib/ways';
+import { juzLabel, openJuz } from '@/lib/juz';
+import { around as aroundSetting, branchView, penRule, prayerPlace, prayerSettings } from '@/lib/settings';
 import { showsOtherView } from '@shared/quran/branchView';
-import { useMinute } from '@/lib/prayer';
+import { timesFor, useMinute } from '@/lib/prayer';
+import { bookState, useBooks } from '@/lib/books';
+import { BookCard, Shelf, TUHFA } from '@/screens/books';
+import { IltifatActions, IltifatScene } from './Iltifat';
 import { prophetStory } from '@/lib/prophets';
 import StoryMap from './StoryMap';
 import { ayahPlaces } from '@shared/quran/ayahPlaces';
@@ -104,10 +113,6 @@ function PostHead({ Icon, title, sub, palette, open }: { Icon: IconType; title: 
 /** Where a post's ayat are, for its head: «البقرة ٦١ · آل عمران ٢١، ١١٢» (shared/quran/ayahPlaces.ts). */
 const placesOf = (keys: string[]) => ayahPlaces(keys, shortNames);
 
-/** «الجزء ٣», or «الجزءان ٢٩ و٣٠» on the last day of a 29-day month. */
-export const juzLabel = (juz: number[]) => (juz.length > 1 ? `الجزءان ${num(juz[0])} و${num(juz[1])}` : `الجزء ${num(juz[0])}`);
-const openJuz = (juz: number) => { const start = JUZ_INDEX[juz - 1]; openIntent({ tab: 'read', at: `${start.surah}:${start.ayah}` }); };
-
 /** The day's things, the same all day: date, juz. */
 function useToday() {
   const now = useMinute();
@@ -117,77 +122,26 @@ function useToday() {
   return { day, date, juz };
 }
 
-const STORY: Record<StoryId, { label: string; Icon: IconType }> = {
-  juz: { label: 'جزء اليوم', Icon: BookOpen },
-  forgotten: { label: 'ما نسيته', Icon: LightbulbOff },
-  saved: { label: 'المحفوظات', Icon: Bookmark },
-  notes: { label: 'تأملاتي', Icon: NotebookPen },
-  prophets: { label: 'الأنبياء', Icon: ScrollText },
-};
-
-/**
- * The circles at the top, like a social app's stories: places to go back to. A circle's ring is in the accent while it holds
- * something newer than the last time it was opened; nothing is counted.
- */
-export function Stories({ palette }: { palette: Palette }) {
-  const { juz } = useToday();
-  const due = useSyncExternalStore(subscribeDueMarks, readDueMarks);
-  const saved = useSyncExternalStore(subscribeBookmarks, readBookmarks);
-  const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes);
-  const opened = useSyncExternalStore(subscribeStoriesOpened, readStoriesOpened);
-  const times = storyTimes({ due, saved, notes });
-  const open: Record<StoryId, () => void> = {
-    juz: () => juz && openJuz(juz[0]),
-    forgotten: () => router.push({ pathname: '/library', params: { tab: 'forgotten' } }),
-    saved: () => router.push({ pathname: '/library', params: { tab: 'saved' } }),
-    notes: () => router.push({ pathname: '/library', params: { tab: 'notes' } }),
-    prophets: () => toTab('/prophets'),
-  };
-  const ids = (Object.keys(STORY) as StoryId[]).filter(id => id !== 'juz' || juz);
-  return (
-    // Inverted in a left-to-right box, as the shelves are, so the first circle sits on the right on every platform.
-    <View style={{ direction: 'ltr', marginHorizontal: -16 }}>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexDirection: 'row-reverse', flexGrow: 1, justifyContent: 'flex-start', gap: 12, paddingHorizontal: 16 }}>
-        {ids.map(id => {
-          const { label, Icon } = STORY[id];
-          const lit = storyIsNew(opened, id, times[id]);
-          return (
-            <Tap key={id} onPress={() => { markStoryOpened(id); open[id](); }} accessibilityRole="button" accessibilityLabel={id === 'juz' && juz ? `${label}: ${juzLabel(juz)}` : label}
-              style={({ pressed }) => ({ alignItems: 'center', gap: 4, width: 66, opacity: pressed ? 0.7 : 1 })}>
-              <View style={{ width: 60, height: 60, borderRadius: 30, borderWidth: 2, borderColor: lit ? palette.accent : palette.rule, padding: 3 }}>
-                <View style={{ flex: 1, borderRadius: 27, backgroundColor: palette.card, alignItems: 'center', justifyContent: 'center' }}>
-                  <Icon size={22} color={palette.accent} />
-                </View>
-              </View>
-              <Text numberOfLines={1} style={{ color: palette.ink, fontSize: 13 }}>{label}</Text>
-            </Tap>
-          );
-        })}
-      </ScrollView>
-    </View>
-  );
-}
-
 /** Where the reader stopped, kept by the mushaf tab (Reader.tsx, key `reader-place`). */
 const lastPage = () => { const place = readJson('reader-place', isRecord); return isNumberIn(1, PAGES)(place?.page) ? Math.round(place.page) : 1; };
 
-/** The reading card: a slice of the page at the mushaf's فاصلة (else the page it was left on), a button there, and today's date and juz under it. */
+/** The reading card: a slice of the page at the mushaf's فاصلة (else the page it was left on), a button there, today's date, and that page's juz. */
 export function ContinueReading({ palette }: { palette: Palette }) {
   const [last, setLast] = useState(lastPage);
   // Back on home after reading: show the page reached when no فاصلة is set.
   useFocusEffect(useCallback(() => { setLast(lastPage()); }, []));
   const { page, fasila } = continuePage(useSyncExternalStore(subscribeFasilas, readFasilas, serverFasilas), last);
   const { surah } = useMemo(() => pageStart(pageData(page), surahBefore(page)), [page]);
-  const { date, juz } = useToday();
+  const { date } = useToday();
+  // The juz of the page it opens on, not today's juz (owner, 2026-11-18: today's juz is its own card in the feed).
+  const juz = pageData(page).juz;
   const read = () => openIntent({ tab: 'read', page });
   const where = [shortNames[surah], date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ');
   return (
     <Post palette={palette} head={<PostHead Icon={BookOpen} title={fasila || page > 1 ? 'تابع القراءة' : 'ابدأ القراءة'} sub={where} palette={palette} />}
       actions={<>
         <Action Icon={BookOpen} label="اقرأ" onPress={read} palette={palette} />
-        {juz && <Tap onPress={() => { markStoryOpened('juz'); openJuz(juz[0]); }} hitSlop={6} accessibilityRole="button" accessibilityLabel={`اقرأ ${juzLabel(juz)}، جزء اليوم`} style={{ padding: 8 }}>
-          <Text style={{ color: palette.accent, fontSize: 14 }}>{juzLabel(juz)}</Text>
-        </Tap>}
+        <Text style={{ color: palette.muted, fontSize: 14, padding: 8 }}>{juzLabel([juz])}</Text>
       </>}>
       <Tap onPress={read} accessibilityRole="button" accessibilityLabel={`افتح المصحف ${fasila ? 'عند فاصلتك' : 'حيث توقفت'}، سورة ${shortNames[surah] ?? ''}`} style={{ paddingHorizontal: 12, paddingVertical: 6 }}>
         {/* The page's first half as the reader draws it (owner, 2026-11-14). */}
@@ -443,15 +397,144 @@ const StoryPost = memo(function StoryPost({ slug, phase, palette }: { slug: stri
   );
 });
 
+/**
+ * Today's juz as a post (owner, 2026-11-18: no longer a circle at the top): the Hijri day's juz, the top of its first page,
+ * and a button to read it. «الجزءان» on the last day of a 29-day month.
+ */
+function JuzPost({ palette }: { palette: Palette }) {
+  const { date, juz } = useToday();
+  if (!juz) return null;
+  const start = JUZ_INDEX[juz[0] - 1];
+  const page = pageOfAyah(`${start.surah}:${start.ayah}`) ?? 1;
+  const read = () => openJuz(juz[0]);
+  return (
+    <Post palette={palette} head={<PostHead Icon={BookOpen} title="جزء اليوم" sub={[juzLabel(juz), date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ')} palette={palette} />}
+      actions={<Action Icon={BookOpen} label={`اقرأ ${juzLabel(juz)}`} onPress={read} palette={palette} />}>
+      <Tap onPress={read} accessibilityRole="button" accessibilityLabel={`اقرأ ${juzLabel(juz)}، جزء اليوم`} style={{ paddingHorizontal: 12, paddingVertical: 6 }}>
+        <PageTop page={page} palette={palette} />
+      </Tap>
+    </Post>
+  );
+}
+
+/**
+ * The prayer card (owner, 2026-11-18): when a prayer is near it comes into the feed where the reader is, with the time left,
+ * the five times of the day and the Hijri date. Its buttons open the prayer times and the qibla.
+ */
+function PrayerPost({ prayer, times, palette }: { prayer: Exclude<PrayerKey, 'sunrise'>; times: PrayerDay; palette: Palette }) {
+  const now = useMinute();
+  const [place] = prayerPlace.use();
+  const { date } = useToday();
+  const left = Math.ceil((times[prayer].getTime() - now.getTime()) / 60_000);
+  const title = left > 0 ? `${PRAYER_NAMES[prayer]} ${inMinutes(left)}` : `حان وقت ${PRAYER_NAMES[prayer]}`;
+  return (
+    <Post palette={palette} head={<PostHead Icon={Clock} title={title} sub={[date, place?.name].filter(Boolean).join(' · ')} palette={palette} />}
+      actions={<>
+        <Action Icon={Clock} label="مواقيت الصلاة" onPress={() => openUtility('times')} palette={palette} />
+        <Action Icon={Compass} label="القبلة" onPress={() => openUtility('qibla')} palette={palette} />
+      </>}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 14, paddingVertical: 12 }}>
+        {FIVE.map(key => {
+          const color = key === prayer ? palette.accent : palette.ink;
+          return (
+            <View key={key} accessible accessibilityLabel={`${PRAYER_NAMES[key]} ${clock(times[key], true)}`} style={{ alignItems: 'center', gap: 2 }}>
+              <Text style={{ color: key === prayer ? palette.accent : palette.muted, fontSize: 13 }}>{PRAYER_NAMES[key]}</Text>
+              <Text style={{ color, fontSize: 16 }}>{clock(times[key])}</Text>
+            </View>
+          );
+        })}
+      </View>
+    </Post>
+  );
+}
+
+type Soon = { key: string; prayer: Exclude<PrayerKey, 'sunrise'>; times: PrayerDay };
+
+/** The prayer that is near now, with its day's times, or null; checked every half minute. */
+function soonNow(): Soon | null {
+  const place = prayerPlace.get();
+  if (!place) return null;
+  const now = new Date();
+  const times = timesFor(place, now, prayerSettings.get());
+  const soon = prayerSoon(times, now);
+  return soon ? { key: `${now.toDateString()}-${soon.key}`, prayer: soon.key, times } : null;
+}
+
+/**
+ * The prayer that is near, changing only when it becomes another one, so the feed draws again only then (not every minute).
+ * The place or the method changed in the utilities is picked up within half a minute.
+ */
+function usePrayerSoon(): Soon | null {
+  const [soon, setSoon] = useState(soonNow);
+  useEffect(() => {
+    const check = () => setSoon(now => { const next = soonNow(); return next?.key === now?.key ? now : next; });
+    const timer = setInterval(check, 30_000);
+    const listener = AppState.addEventListener('change', state => { if (state === 'active') check(); });
+    return () => { clearInterval(timer); listener.remove(); };
+  }, []);
+  return soon;
+}
+
+/** How wide a book is on the books card: two and a bit show, so the row says it scrolls. */
+const FEED_BOOK = 150;
+
+/**
+ * A few books from the library as a post (owner, 2026-11-18): the shelf's own cards, title and author, those with a فاصلة
+ * first; a tap opens the book. The head opens the library.
+ */
+function BooksPost({ day, palette }: { day: number; palette: Palette }) {
+  useBooks();
+  const fasilas = useSyncExternalStore(subscribeFasilas, readFasilas, serverFasilas);
+  const shelf = [...BOOKS.filter(book => isReaderBook(book.id) && bookState(book.id) === 'on'), TUHFA];
+  const picks = feedBooks(shelf, id => id in fasilas, day);
+  return (
+    <View style={{ gap: 4 }}>
+      <PostHead Icon={LibraryBig} title="من المكتبة" palette={palette} open={{ onPress: () => toTab('/books'), label: 'افتح المكتبة' }} />
+      {/* Inverted in a left-to-right box, as the shelves are, so the first book sits on the right on every platform. */}
+      <View style={{ direction: 'ltr', marginHorizontal: -16 }}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexDirection: 'row-reverse', flexGrow: 1, justifyContent: 'flex-start', gap: 12, paddingHorizontal: 16 }}>
+          {picks.map(book => {
+            if (book.id === TUHFA.id) return <Shelf key={book.id} palette={palette} label={TUHFA.title} onPress={() => toTab('/tuhfa')} kind={TUHFA.kind} title={TUHFA.title} by={TUHFA.by} width={FEED_BOOK} />;
+            const mark = 'kind' in book && isReaderBook(book.id) ? fasilas[book.id] : undefined;
+            return 'builtIn' in book ? <BookCard key={book.id} book={book} palette={palette} editing={false} width={FEED_BOOK}
+              fasila={mark && isReaderBook(book.id) ? pageName(book.id, mark.part, mark.page) : null} /> : null;
+          })}
+        </ScrollView>
+      </View>
+    </View>
+  );
+}
+
+let scenes: ReturnType<typeof examples> | undefined;
+const sceneList = () => (scenes ??= examples(ayahMushafWords));
+
+/**
+ * A scene from «مشاهد» as a post (owner, 2026-11-18): the page's own card, whole, so the picture reads as it does there.
+ * The head opens the page.
+ */
+const ScenePost = memo(function ScenePost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
+  const view = sceneList()[sceneOfSlot(sceneList().length, day, slot)];
+  if (!view) return null;
+  return (
+    <Post palette={palette} head={<PostHead Icon={Presentation} title="من المشاهد" sub={topicOf(view).name} palette={palette} open={{ onPress: () => toTab('/lataif'), label: 'افتح المشاهد' }} />}
+      actions={<IltifatActions view={view} palette={palette} />}>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 10 }}><IltifatScene view={view} palette={palette} /></View>
+    </Post>
+  );
+});
+
 /** Batches added each time the page nears the feed's end. */
 const MORE = 3;
 
 /**
- * The home feed: today's pair, a forgotten ayah that is due, today's tree, then more each time the page nears its end (`nearEnd` changes).
+ * The home feed: today's pair, a forgotten ayah that is due, today's tree and today's juz, then more each time the page nears its end
+ * (`nearEnd` changes), with a scene from «مشاهد» and a few books among them, and the prayer card when a prayer is near.
  * What was shown before is skipped for good (shared/feedSeen.ts); once all was seen it starts again from the seen ones.
  */
-export function Feed({ palette, nearEnd }: { palette: Palette; nearEnd: number }) {
-  const { day } = useToday();
+export function Feed({ palette, nearEnd, screenBottom }: { palette: Palette; nearEnd: number;
+  /** Where the bottom of the screen is in the page, for a card that comes while the feed is open (the prayer card). */
+  screenBottom: () => number }) {
+  const { day, juz } = useToday();
   const visit = useSyncExternalStore(subscribeVisit, visitStart, serverVisit);
   // A new visit (pulled to refresh, or back after long away) starts again from one batch, in the same render that picks it.
   const [more, setMore] = useState({ visit, batches: 1 });
@@ -491,10 +574,38 @@ export function Feed({ palette, nearEnd }: { palette: Palette; nearEnd: number }
     const savedItem = savedOfSlot(saved, day, i);
     if (savedItem) posts.push(<SavedPost key={`b${savedItem.id}-${i}`} item={savedItem} palette={palette} />);
     if (hasStoryCard(i)) { const group = storyGroupOfDay(day, i); posts.push(<StoryPost key={`s${day}-${i}`} slug={group.slug} phase={group.phase} palette={palette} />); }
+    if (hasJuzCard(i) && juz) posts.push(<JuzPost key={`j${day}`} palette={palette} />);
+    if (hasSceneCard(i) && sceneList().length) posts.push(<ScenePost key={`m${day}-${i}`} day={day} slot={i} palette={palette} />);
+    if (hasBooksCard(i)) posts.push(<BooksPost key={`k${day}-${i}`} day={day} palette={palette} />);
+  }
+  // A prayer that is near comes in once, before the first post below the screen, so what the reader looks at stays put (owner,
+  // 2026-11-18). One near when home opens leads the feed. A card the reader has passed or is looking at stays; one still
+  // below the screen gives way to the next prayer's.
+  const soon = usePrayerSoon();
+  const [cards, setCards] = useState<(Soon & { after: string | null })[]>(() => (soon ? [{ ...soon, after: null }] : []));
+  const top = useRef(0);
+  const tops = useRef(new Map<string, number>());
+  const keys = posts.map(post => String((post as React.ReactElement).key));
+  useEffect(() => {
+    if (!soon || cards.some(card => card.key === soon.key)) return;
+    const bottom = screenBottom();
+    const below = (key: string) => (tops.current.get(key) ?? Infinity) + top.current >= bottom;
+    const at = insertAt(keys.map(key => (tops.current.get(key) ?? Infinity) + top.current), bottom);
+    setCards(now => [...now.filter(card => !below(`pr${card.key}`)), { ...soon, after: at ? keys[at - 1] : null }]);
+  }, [soon?.key]); // eslint-disable-line react-hooks/exhaustive-deps -- once for each prayer
+  // A new visit starts the feed again from the top, with the prayer that is near now leading it.
+  const [cardsVisit, setCardsVisit] = useState(visit);
+  if (cardsVisit !== visit) { setCardsVisit(visit); setCards(soon ? [{ ...soon, after: null }] : []); }
+  for (const card of cards) {
+    const at = card.after === null ? 0 : keys.indexOf(card.after) + 1;
+    posts.splice(at, 0, <PrayerPost key={`pr${card.key}`} prayer={card.prayer} times={card.times} palette={palette} />);
+    keys.splice(at, 0, `pr${card.key}`);
   }
   return (
-    <View style={{ gap: 14 }}>
-      {posts}
+    <View style={{ gap: 14 }} onLayout={event => { top.current = event.nativeEvent.layout.y; }}>
+      {posts.map((post, i) => (
+        <View key={keys[i]} onLayout={event => { tops.current.set(keys[i], event.nativeEvent.layout.y); }}>{post}</View>
+      ))}
     </View>
   );
 }

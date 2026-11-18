@@ -1,12 +1,17 @@
 import { expect, open, readerPage, returningUser, stored, test } from './fixtures';
 import { surahName as S } from '../../shared/quran/surahNames';
+import * as adhan from 'adhan';
+import { DEFAULT_PRAYER_SETTINGS, prayerDay, type Adhan } from '../../shared/prayer';
 
 const menu = (page: import('@playwright/test').Page) => page.getByRole('toolbar');
 
 test.describe('a new user', () => {
-  test('home shows the story circles, the reading card with the date, and the feed', async ({ page }) => {
+  test('home shows the few buttons, the reading card with the date, and the feed', async ({ page }) => {
     await open(page, '/');
-    for (const name of ['ما نسيته', 'المحفوظات', 'تأملاتي', 'الأنبياء']) await expect(page.getByRole('button', { name, exact: true })).toBeVisible();
+    for (const name of ['القبلة', 'الأذكار', 'المكتبة', 'مشاهد', 'مدونتي']) await expect(page.getByRole('button', { name, exact: true })).toBeVisible();
+    // No story circles (owner, 2026-11-18): today's juz is a card in the feed.
+    for (const name of ['جزء اليوم', 'الأنبياء']) await expect(page.getByRole('button', { name, exact: true })).toHaveCount(0);
+    await expect(page.getByRole('heading', { name: 'جزء اليوم', exact: true })).toBeAttached();
     // The reading card's head: where the page is and today's Hijri date.
     await expect(page.getByText(/ · .*[٠-٩]{4}$/).first()).toBeVisible();
     await expect(page.getByRole('button', { name: /^افتح المصحف حيث توقفت/ })).toBeVisible();
@@ -60,16 +65,71 @@ test.describe('a new user', () => {
       // docs/records/R0042: tabs came back on a path that skipped the rule, and iOS shrank their labels to a speck. Since 2026-11-16
       // (owner) no tree has tabs at all.
       await open(page, '/');
-      await expect(page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).first()).toBeAttached();
+      const tree = page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).first();
+      await expect(tree).toBeAttached();
+      // A tree card draws its tree once it comes near the screen.
+      await tree.scrollIntoViewIfNeeded();
       await expect(page.locator('[aria-label$="شجرةً"]').first()).toBeAttached();
       await expect(page.getByTestId('node-tab')).toHaveCount(0);
     });
   });
 
-  test('the story circles open their pages', async ({ page }) => {
+  test('the home buttons open their pages', async ({ page }) => {
+    for (const [name, url] of [['مشاهد', /\/lataif/], ['المكتبة', /\/books/], ['مدونتي', /\/library/], ['القبلة', /\/utilities/]] as const) {
+      await open(page, '/');
+      await page.getByRole('button', { name, exact: true }).click();
+      await expect(page).toHaveURL(url);
+    }
+    await expect(page.getByRole('radio', { name: 'القبلة' })).toBeChecked();
+  });
+
+  test('the reading card names the juz of its own page, and today\'s juz is a card that opens the mushaf', async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('reader-place', JSON.stringify({ page: 300, position: null })));
     await open(page, '/');
-    await page.getByRole('button', { name: 'الأنبياء', exact: true }).click();
-    await expect(page).toHaveURL(/\/prophets/);
+    await expect(page.getByText('الجزء ١٥', { exact: true }).first()).toBeVisible();
+    const juz = page.getByRole('button', { name: /^اقرأ الجزءا?ن? .*، جزء اليوم$/ });
+    await juz.scrollIntoViewIfNeeded();
+    await juz.click();
+    await expect(page).toHaveURL(/\/read/);
+  });
+
+  test('a scene from «مشاهد» and a few books with their authors come up in the feed', async ({ page }) => {
+    await open(page, '/');
+    await page.mouse.move(380, 500);
+    const scene = page.getByRole('button', { name: 'افتح المشاهد' }).first();
+    const books = page.getByRole('button', { name: 'افتح المكتبة' }).first();
+    await expect(async () => {
+      await page.mouse.wheel(0, 3000);
+      await expect(scene).toBeAttached({ timeout: 1000 });
+      await expect(books).toBeAttached({ timeout: 1000 });
+    }).toPass({ timeout: 30_000 });
+    await expect(page.getByText('السعدي (ت ١٣٧٦هـ)').first()).toBeAttached();
+    await page.getByRole('link', { name: 'تيسير الكريم الرحمن' }).first().click();
+    await expect(page).toHaveURL(/\/book/);
+  });
+
+  test.describe('with a prayer near', () => {
+    const cairo = { name: 'القاهرة', lat: 30.0444, lng: 31.2357 };
+    test.use({ seed: { 'prayer-place': JSON.stringify(cairo) } });
+
+    test('the prayer card comes into the feed with the time left, the five times and the qibla', async ({ page }) => {
+      // Ten minutes before today's asr in Cairo, worked out as the app works it out.
+      const asr = prayerDay(adhan as unknown as Adhan, cairo, new Date(), DEFAULT_PRAYER_SETTINGS).asr;
+      await page.clock.setFixedTime(new Date(asr.getTime() - 10 * 60_000));
+      await open(page, '/');
+      await expect(page.getByRole('heading', { name: 'العصر بعد ١٠ دقائق', exact: true })).toBeAttached();
+      for (const prayer of ['الفجر', 'الظهر', 'المغرب', 'العشاء']) await expect(page.getByLabel(new RegExp(`^${prayer} `)).first()).toBeAttached();
+      await page.getByRole('button', { name: 'القبلة' }).last().click();
+      await expect(page.getByRole('radio', { name: 'القبلة' })).toBeChecked();
+    });
+
+    test('far from a prayer there is no prayer card', async ({ page }) => {
+      const asr = prayerDay(adhan as unknown as Adhan, cairo, new Date(), DEFAULT_PRAYER_SETTINGS).asr;
+      await page.clock.setFixedTime(new Date(asr.getTime() - 90 * 60_000));
+      await open(page, '/');
+      await expect(page.getByRole('heading', { name: 'جزء اليوم', exact: true })).toBeAttached();
+      await expect(page.getByRole('heading', { name: /^العصر / })).toHaveCount(0);
+    });
   });
 
   test('the feed has no tools or «more» button, and loads the next trees as the page nears its end', async ({ page }) => {
@@ -172,7 +232,7 @@ test.describe('a returning user', () => {
 
   test('a saved ayah opens on its mushaf page from the card menu', async ({ page }) => {
     await open(page, '/');
-    await page.getByRole('button', { name: 'المحفوظات', exact: true }).click();
+    await page.getByRole('button', { name: 'مدونتي', exact: true }).click();
     await page.getByRole('button', { name: /^آية: ٱللَّهُ لَآ إِلَٰهَ/ }).click();
     await menu(page).getByRole('button', { name: 'في المصحف' }).click();
     await expect.poll(() => readerPage(page)).toBe(42);
@@ -264,8 +324,10 @@ test.describe('a returning user', () => {
     await expect(page.getByRole('button', { name: 'أظهر الآية التالية' })).toBeVisible();
   });
 
-  test('the notes circle lists the notes, and a note can be deleted', async ({ page }) => {
+  test('the notes list in «مدونتي» lists the notes, and a note can be deleted', async ({ page }) => {
     await open(page, '/');
+    await page.getByRole('button', { name: 'مدونتي', exact: true }).click();
+    await page.getByRole('button', { name: /^اختر القائمة:/ }).click();
     await page.getByRole('button', { name: 'تأملاتي', exact: true }).click();
     await page.getByRole('button', { name: 'تأمل: تأمل في الحي القيوم' }).click();
     await menu(page).getByRole('button', { name: 'احذف التأمل' }).click();

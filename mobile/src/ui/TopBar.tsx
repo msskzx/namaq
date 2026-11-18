@@ -5,7 +5,8 @@ import { BlurView } from 'expo-blur';
 import Animated from 'react-native-reanimated';
 import { hiddenProps, useSlideAway } from '@/ui/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ChevronRight, Compass, LayoutGrid, LibraryBig, Settings, CircleHelp, Search } from 'lucide-react-native';
+import { ChevronRight, LayoutGrid, LibraryBig, Settings, CircleHelp } from 'lucide-react-native';
+import { SearchOpener } from '@/ui/Field';
 import IconButton from '@/ui/IconButton';
 import { Text } from '@/ui/Text';
 import Logo from '@/components/Logo';
@@ -20,7 +21,7 @@ export const TOP_BAR = HEIGHT;
 const SIDE = 54; // the logo and its padding, kept clear on both sides so centred buttons stay centred
 
 /**
- * The phone top bar: the page's own buttons and the bar's (search, gear) on the right under the thumb, the help on the far left (owner, 2026-11-17).
+ * The phone top bar: the page's own buttons and the bar's (gear, search field) on the right under the thumb, the help on the far left (owner, 2026-11-17).
  * The gear (owner, 2026-11-10) and the logo, on the left, show only on the homepage (owner, 2026-11-17).
  * With hideOnScroll (pages that scroll up and down) it slides away while the page scrolls down and comes back on the way up,
  * together with the bottom bar shrinking (owner, 2026-11-10).
@@ -31,7 +32,7 @@ const SIDE = 54; // the logo and its padding, kept clear on both sides so centre
  * A pushed screen (a quiz, the library, an ayah, a prophet's story) passes back and a title, or middle for something that
  * takes the title's room (the quiz's question circles): one bar for every screen (owner, 2026-11-17: shared first).
  */
-export default function TopBar({ children, title, middle, away: putAway = false, settings: withSettings = false, hideOnScroll = false, center = false, help, back, hub = false, shelf = false, search, utilities }: { children?: React.ReactNode;
+export default function TopBar({ children, title, middle, away: putAway = false, settings: withSettings = false, hideOnScroll = false, center = false, help, back, hub = false, shelf = false, search }: { children?: React.ReactNode;
   /** The whole bar slides up off the screen (the mushaf while reading); it stays drawn, so it comes back the same way. */
   away?: boolean;
   /** A pushed screen's short title, beside the back arrow. */
@@ -43,10 +44,8 @@ export default function TopBar({ children, title, middle, away: putAway = false,
   hub?: boolean;
   /** The library's books in the logo's place, back to the shelf (a book in the reader, owner 2026-11-17). */
   shelf?: boolean;
-  /** The one search across the app, beside the gear (home, owner 2026-11-13). */
+  /** The one search across the app, as a field filling the bar between the gear and the logo (home, owner 2026-11-18). */
   search?: () => void;
-  /** The utilities (prayer times, qibla, calendar), as a compass beside the search (home, owner 2026-11-17: a compass says qibla, a clock says nothing). */
-  utilities?: () => void;
   /** A back arrow, first on the right; the bar then has no logo. */
   back?: () => void;
   /** The page's help (rules and colour legend), on the far left. */
@@ -54,7 +53,7 @@ export default function TopBar({ children, title, middle, away: putAway = false,
 }) {
   const palette = usePalette();
   // Centred buttons keep clear of both sides: the logo on the left and the buttons on the right, whichever is wider.
-  const side = Math.max(SIDE, 12 + ((back || hub || shelf) ? 42 : 0) + [utilities, search, withSettings].filter(Boolean).length * 44);
+  const side = Math.max(SIDE, 12 + ((back || hub || shelf) ? 42 : 0) + [withSettings].filter(Boolean).length * 44);
   const insets = useSafeAreaInsets();
   const [settings, setSettings] = useState(false);
   // Scrolling down, the row folds away under the status bar; put away, the whole bar leaves. Both move as every bar does (ui/motion).
@@ -84,9 +83,8 @@ export default function TopBar({ children, title, middle, away: putAway = false,
         {center && <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, bottom: 0, left: side, right: side, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>{children}</View>}
         {/* The bar's buttons, then the page's, from the right edge; a search field or chips among them take the free room. */}
         <View pointerEvents="box-none" style={{ flexGrow: middle ? 0 : 1, flexShrink: 0, minWidth: 0, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: 4 }}>
-          {utilities && <IconButton Icon={Compass} label="الأدوات" onPress={utilities} />}
-          {search && <IconButton Icon={Search} label="البحث" onPress={search} />}
           {withSettings && <IconButton Icon={Settings} label="الإعدادات" onPress={() => setSettings(true)} />}
+          {search && <SearchOpener palette={palette} label="البحث" onPress={search} style={{ flex: 1 }} />}
           {center ? null : children}
         </View>
         {/* The page's help on the far left, out of the way of the buttons (owner, 2026-11-17). */}
