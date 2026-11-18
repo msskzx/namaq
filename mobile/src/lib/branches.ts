@@ -54,6 +54,8 @@ export function subtreeOf(ayahKeys: string[]): BranchPiece | undefined {
 const cards = new Map<string, TreeCard>();
 /** The ends of a card the owner curated (twoAyat, ownAyatOnly), set by cardOf, read by the matrix and the ayat around it. */
 const curatedEnds = new WeakMap<Presentation, Record<string, string>>();
+/** A book's one-ayah card: the words it says twice that the book quotes, marked as shared words are (engine's repeatedQuoted). */
+const repeated = new WeakMap<Presentation, Record<string, number[]>>();
 
 /** The tree drawn on a card, built the same way as the website's branches page with the same filters. */
 
@@ -71,6 +73,7 @@ export function cardOf(piece: BranchPiece, state: Pick<ListState, 'filters' | 'r
   // A card the owner keeps two ayat deep: its matrix rows (and the card under the tree) read each ayah on into the next.
   if (twoAyat(piece)) curatedEnds.set(presentation, twoEnds(presentation.tree, key => positions.has(key)));
   if (ownAyatOnly(piece)) curatedEnds.set(presentation, ownEnds(presentation.tree));
+  if (piece.group?.places.length === 1 && Object.keys(piece.group.differences).length) repeated.set(presentation, piece.group.differences);
   const card = { piece, presentation, matches };
   if (cards.size > 40) cards.delete(cards.keys().next().value!);
   cards.set(id, card);
@@ -168,7 +171,7 @@ export function matrixOf(presentation: Presentation, withAround: boolean): Matri
     columns: withAround ? ['before', 'ayah', 'after'] : ['ayah'],
     rows: passages.map((passage, row) => ({
       before: cellOf(around?.before[starts[row]]),
-      ayah: { ayat: passage.map((ayah, step) => ({ key: ayah.key, page: ayah.page, words: ayah.words, ...(matched.get(`${step}:${ayah.key}`) ?? NOTHING_SHARED) })) },
+      ayah: { ayat: passage.map((ayah, step) => ({ key: ayah.key, page: ayah.page, words: ayah.words, ...(matched.get(`${step}:${ayah.key}`) ?? NOTHING_SHARED), ...(repeated.get(presentation)?.[ayah.key] && { exact: new Set(repeated.get(presentation)![ayah.key]) }) })) },
       after: cellOf(around?.after[passage[passage.length - 1].key]),
     })),
   };

@@ -204,6 +204,20 @@ const byMushaf = (a: string, b: string) => { const [x, y] = a.split('-')[0].spli
  * (a word said twice in it, or a wording found only there) is a card of that one ayah (owner 2026-11-18: every book entry is a card).
  * A case on the same ayat as a hand-made entry joins that entry's citations; cases on the same ayat share one group.
  */
+/**
+ * A book's one-ayah entry marks the words the ayah says twice or more that the book quotes from it, inside ﴿ ﴾ or ( ) (إياك in
+ * «إياك نعبد وإياك نستعين»), a و or ف before the word aside. Short particles (من، ما، لا) are left plain. None when the ayah
+ * repeats none of the quoted words.
+ */
+function repeatedQuoted(words: Word[], citations: Citation[]): Record<string, number[]> | undefined {
+  const quotes = citations.flatMap(citation => [...citation.quote.matchAll(/﴿([^﴾]*)﴾|\(([^)]*)\)/g)].map(match => match[1] ?? match[2]));
+  const quoted = new Set(quotes.flatMap(quote => quote.split(/[\s«»"،.:؟!]+/)).map(token => letters(token)).flatMap(token => [token, token.replace(/^[وف](?=...)/, '')]));
+  const byBase = new Map<string, number[]>();
+  for (const word of words) if (word.base.length >= 3 && (quoted.has(word.base) || quoted.has(word.letters))) byBase.set(word.base, [...byBase.get(word.base) ?? [], word.index]);
+  const marked = [...byBase.values()].filter(indexes => indexes.length > 1).flat().sort((a, b) => a - b);
+  return marked.length ? { [words[0].key]: marked } : undefined;
+}
+
 function withBookEntries(handWritten: Attested[], rows: Word[][], index: Map<string, number>): Attested[] {
   const attested = handWritten.map(entry => ({ ...entry, citations: [...entry.citations] }));
   const held = new Set(attested.flatMap(entry => entry.citations));
@@ -404,7 +418,7 @@ export function buildGroups(ayat: BranchAyah[], config = MATCH_CONFIG): Group[] 
         return place.key === key && (!last || place.through === `${key.split(':')[0]}:${last}`);
       })),
     }));
-    let group = makeGroup(places, selected, kind, citations, focus, detail);
+    let group = makeGroup(places, selected, kind, citations, focus ?? (book && places.length === 1 ? repeatedQuoted(selected[0], citations) : undefined), detail);
     // A book's ayat that share one word or none have no trunk a tree can grow from: the card shows as its matrix only.
     // So does a book's one-ayah entry, which has nothing to branch.
     const trunk = group.tree.occurrences[0];

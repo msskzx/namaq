@@ -14,7 +14,7 @@ const contains = (place: Place, word: Position) => start(place) <= position(word
 
 export function evidenceGroup(group: Group, shownKeys?: string[]): Group {
   const places = group.places.filter(place => !shownKeys || shownKeys.includes(place.key));
-  const citations = group.citations.filter(citation => citation.selections && citation.selections.length >= 2 &&
+  const citations = group.citations.filter(citation => citation.selections && citation.selections.length >= Math.min(2, citation.places.length) &&
     citation.selections.every(selection => places.some(place => start(place) <= start(selection) && end(place) >= end(selection))));
   const tags = [...new Set(citations.flatMap(citation => citation.tags))];
   const columns = group.columns.map(pair => ({ ...pair, columns: pair.columns.map(column => ({ ...column, tags: column.tags.filter(tag =>
