@@ -1,0 +1,487 @@
+{
+  "unit": {
+    "id": "siyar-v4-48-khalid-ibn-said",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٤٨"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ks_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "259",
+      "layer": "MAIN",
+      "exact": "٤٨ - خَالِدُ بنُ سَعِيْدِ بنِ العَاصِ بنِ أُمَيَّةَ الأُمَوِيُّ"
+    },
+    {
+      "id": "sp_ks1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "259",
+      "layer": "MAIN",
+      "exact": "خَالِدُ بنُ سَعِيْدِ بنِ العَاصِ بنِ أُمَيَّةَ الأُمَوِيُّ",
+      "prefix": "٤٨ - "
+    },
+    {
+      "id": "sp_ks2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "259",
+      "layer": "MAIN",
+      "exact": "ابْنِ عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ بنِ قُصَيٍّ"
+    },
+    {
+      "id": "sp_ks_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "259",
+      "layer": "MAIN",
+      "exact": "خَالِدُ بنُ",
+      "prefix": "٤٨ - "
+    },
+    {
+      "id": "sp_ks_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "259",
+      "layer": "MAIN",
+      "exact": "سَعِيْدِ بنِ العَاصِ",
+      "prefix": "٤٨ - خَالِدُ بنُ "
+    },
+    {
+      "id": "sp_ks_epithets",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "السَّيِّدُ الكَبِيْرُ، أَبُو سَعِيْدٍ القُرَشِيُّ، الأُمَوِيُّ، أَحَدُ السَّابِقِيْنَ الأَوَّلِيْنَ"
+    },
+    {
+      "id": "sp_ks_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "أَبُو سَعِيْدٍ",
+      "prefix": "السَّيِّدُ الكَبِيْرُ، "
+    },
+    {
+      "id": "sp_ks_sabiq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "السَّابِقِيْنَ الأَوَّلِيْنَ",
+      "prefix": "الأُمَوِيُّ، أَحَدُ "
+    },
+    {
+      "id": "sp_ks_um_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "رُوِيَ عَنْ أُمِّ خَالِدٍ بِنْتِ خَالِدٍ، قَالَتْ:"
+    },
+    {
+      "id": "sp_ks_um_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "أُمِّ خَالِدٍ بِنْتِ خَالِدٍ",
+      "prefix": "رُوِيَ عَنْ "
+    },
+    {
+      "id": "sp_ks_um",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "كَانَ أَبِي خَامِساً فِي الإِسْلاَمِ، وَهَاجَرَ إِلَى أَرْضِ الحَبَشَةِ، وَأَقَامَ بِهَا بِضْعَ عَشْرَةَ سَنَةً، وَوُلِدْتُ أَنَا بِهَا"
+    },
+    {
+      "id": "sp_ks_qila_word",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "وَقِيْلَ",
+      "suffix": ": كَانَ خَالدُ"
+    },
+    {
+      "id": "sp_ks_qila",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "كَانَ خَالدُ بنُ سَعِيْدٍ وَسِيْماً، جَمِيْلاً، قُتِلَ يَوْمَ أَجْنَادِيْنَ",
+      "prefix": "وَقِيْلَ: "
+    },
+    {
+      "id": "sp_ks_app",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "وَسِيْماً، جَمِيْلاً",
+      "prefix": "سَعِيْدٍ "
+    },
+    {
+      "id": "sp_ks_day_ajn",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "يَوْمَ أَجْنَادِيْنَ، وَهَاجَرَ",
+      "prefix": "قُتِلَ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ks0",
+      "unit": "siyar-v4-48-khalid-ibn-said",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ks_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ks_um",
+      "unit": "siyar-v4-48-khalid-ibn-said",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ks_um_frame"
+      ],
+      "origin": {
+        "mention": "m_ks_um"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ks_qila",
+      "unit": "siyar-v4-48-khalid-ibn-said",
+      "ordinal": 3,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_ks_qila"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ks_name",
+      "report": "r_ks0",
+      "spans": [
+        "sp_ks1",
+        "sp_ks2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ks_epithets",
+      "report": "r_ks0",
+      "spans": [
+        "sp_ks_epithets"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ks_um",
+      "report": "r_ks_um",
+      "spans": [
+        "sp_ks_um"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ks_qila",
+      "report": "r_ks_qila",
+      "spans": [
+        "sp_ks_qila"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ks",
+      "parent": "sp_ks1",
+      "exact": "خَالِدُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ks_father",
+      "parent": "sp_ks1",
+      "exact": "سَعِيْدِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ks_e",
+      "parent": "sp_ks_epithets",
+      "exact": "أَبُو سَعِيْدٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ks_um",
+      "parent": "sp_ks_um_frame",
+      "exact": "أُمِّ خَالِدٍ بِنْتِ خَالِدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ks_abi",
+      "parent": "sp_ks_um",
+      "exact": "أَبِي",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ks_ana",
+      "parent": "sp_ks_um",
+      "exact": "أَنَا",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ks_qila",
+      "parent": "sp_ks_qila_word",
+      "exact": "قِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ks_q",
+      "parent": "sp_ks_qila",
+      "exact": "خَالدُ بنُ سَعِيْدٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ks_ajn",
+      "parent": "sp_ks_qila",
+      "exact": "أَجْنَادِيْنَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ks",
+      "mention": "m_ks",
+      "agent": "khalid-ibn-said",
+      "basis": [
+        {
+          "span": "sp_ks_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ks_e",
+      "mention": "m_ks_e",
+      "agent": "khalid-ibn-said",
+      "basis": [
+        {
+          "span": "sp_ks_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ks_q",
+      "mention": "m_ks_q",
+      "agent": "khalid-ibn-said",
+      "basis": [
+        {
+          "span": "sp_ks_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ks_abi",
+      "mention": "m_ks_abi",
+      "agent": "khalid-ibn-said",
+      "basis": [
+        {
+          "span": "sp_ks_um_frame",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ks_um",
+      "mention": "m_ks_um",
+      "agent": "umm-khalid-bint-khalid",
+      "basis": [
+        {
+          "span": "sp_ks_um_name",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ks_ana",
+      "mention": "m_ks_ana",
+      "agent": "umm-khalid-bint-khalid",
+      "basis": [
+        {
+          "span": "sp_ks_um_frame",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ks_father",
+      "mention": "m_ks_father",
+      "agent": "said-ibn-al-as",
+      "basis": [
+        {
+          "span": "sp_ks_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ks_ajn",
+      "mention": "m_ks_ajn",
+      "event": "ajnadayn",
+      "basis": [
+        {
+          "span": "sp_ks_day_ajn",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ks_name",
+      "subject": "m_ks",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ks1",
+          "sp_ks2"
+        ]
+      },
+      "restsOn": [
+        "st_ks_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ks_sex",
+      "subject": "m_ks",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ks_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ks_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ks_father",
+      "subject": "m_ks",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ks_father"
+      },
+      "restsOn": [
+        "st_ks_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ks_kunya",
+      "subject": "m_ks_e",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_ks_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_ks_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ks_sabiq",
+      "subject": "m_ks_e",
+      "predicate": "title",
+      "value": {
+        "classified": "al-sabiqoon",
+        "spans": [
+          "sp_ks_sabiq"
+        ]
+      },
+      "restsOn": [
+        "st_ks_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ks_child",
+      "subject": "m_ks_ana",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ks_abi"
+      },
+      "restsOn": [
+        "st_ks_um"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ks_app",
+      "subject": "m_ks_q",
+      "predicate": "appearance",
+      "value": {
+        "spans": [
+          "sp_ks_app"
+        ]
+      },
+      "restsOn": [
+        "st_ks_qila"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ks_ajn",
+      "subject": "m_ks_q",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_ks_ajn"
+      },
+      "restsOn": [
+        "st_ks_qila"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
