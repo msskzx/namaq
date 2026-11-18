@@ -146,6 +146,8 @@ export interface FortyEntry {
   pages: number[];
   named: string[];
   partial?: boolean;
+  /** Other Companions al-Bukhari has the same hadith from, in another wording or in part. */
+  alsoFrom?: string[];
   records: FortyRecord[];
 }
 
@@ -158,8 +160,13 @@ export interface AppForty {
 export const recordName = (record: Pick<FortyRecord, 'book' | 'number' | 'route'>, digits: (n: number) => string) =>
   `${record.book === 'bukhari' ? 'صحيح البخاري' : 'صحيح مسلم'} ${digits(record.number)}${record.route ? ` (${record.route})` : ''}`;
 
-/** al-Nawawi's text from the saying on, for a short preview: what follows his first «قال» (or «قالت», «يقول»). */
+/** «عن أبي هريرة»: the Companion after «عن», a kunya in the genitive. */
+export const fromCompanion = (companion: string) => `عن ${companion.replace(/^أبو /, 'أبي ')}`;
+
+/** al-Nawawi's text after his opening «عن فلان رضي الله عنه», for a short preview; a «قال:» that opens what is left goes too. */
 export function sayingStart(text: string): string {
-  const at = /(?:قالت?|يقول)\s*:?\s*/.exec(text);
-  return at ? text.slice(at.index + at[0].length) : text.replace(/^«/, '');
+  const at = /رضي الله (?:تعالى )?عن(?:هما|هم|ها|ه)(?: أيضًا)?\s*[:،]?\s*/.exec(text);
+  const rest = at ? text.slice(at.index + at[0].length) : text.replace(/^«/, '');
+  return rest.replace(/^(?:قالت?|يقول)\s*:\s*/, '');
 }
+

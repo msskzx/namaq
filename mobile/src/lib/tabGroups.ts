@@ -23,4 +23,4 @@ export function openPage(segments: readonly string[]): { tab: string; page: stri
  * shelf, and from a hadith back to the list (a way back, not a re-tap);
  * any other page goes to its top, then resets (lib/tabRetap.ts).
  */
-export const tapOnOpen = (page: string): 'back' | 'retap' => (page === 'search' || page === 'utilities' || page === 'book' || page === 'hadith-unit' ? 'back' : 'retap');
+export const tapOnOpen = (page: string): 'back' | 'retap' => (page === 'search' || page === 'utilities' || page === 'book' || page === 'hadith-unit' || page === 'hadith-forty' ? 'back' : 'retap');

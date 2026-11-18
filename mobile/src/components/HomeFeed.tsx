@@ -33,6 +33,7 @@ import type { AppMomentBattle } from '@shared/battles/battle';
 import { battleLine, Moment } from './battles/BattleParts';
 import { STORIES } from '@/lib/stories';
 import { FORTY, shamelaPage } from '@/lib/hadith';
+import { fromCompanion } from '@shared/hadith';
 import { Report, StoryAyat } from './stories/StoryParts';
 import CompareCard from './CompareCard';
 import TreePager from './TreePager';
@@ -579,7 +580,7 @@ function HadithPost({ day, slot, palette }: { day: number; slot: number; palette
   if (!entry) return null;
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
-    <Post palette={palette} head={<PostHead Icon={MessagesSquare} title="من الحديث" sub={`${entry.heading}، عن ${entry.companion}`} palette={palette} open={{ onPress: open, label: `افتح ${entry.heading}` }} />}
+    <Post palette={palette} head={<PostHead Icon={MessagesSquare} title="من الحديث" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} palette={palette} open={{ onPress: open, label: `افتح ${entry.heading}` }} />}
       actions={<>
         <Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />
         <Action Icon={ExternalLinkIcon} label={`المصدر: ${FORTY.books.nawawi.title}`} onPress={() => openExternal(shamelaPage('nawawi', entry.shamela))} palette={palette} />

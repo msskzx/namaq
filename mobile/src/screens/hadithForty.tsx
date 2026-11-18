@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { MessagesSquare } from 'lucide-react-native';
-import { recordName, type FortyEntry, type FortyRecord } from '@shared/hadith';
+import { fromCompanion, recordName, type FortyEntry, type FortyRecord } from '@shared/hadith';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
@@ -60,8 +60,8 @@ function BookRecords({ title, records, mode, palette }: { title: string; records
       <Record record={firstWhole} mode={mode} palette={palette} />
       {rest.length > 0 && (
         <Folded credit={firstWhole.book === 'muslim' ? `طرق أخرى عند مسلم (${num(rest.length)})` : `مواضع أخرى في البخاري (${num(rest.length)})`} palette={palette}>
-          {rest.map(record => (
-            <View key={`${record.number}${record.route ?? ''}`} style={{ gap: 6, marginTop: 6 }}>
+          {rest.map((record, i) => (
+            <View key={`${record.number}-${i}`} style={{ gap: 6, marginTop: 6 }}>
               {record.partial && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>فيه بعض لفظ الحديث</Text>}
               <Record record={record} mode={mode} palette={palette} />
             </View>
@@ -108,7 +108,7 @@ export default function HadithFortyScreen() {
       <TopBar back={back} title={entry.heading} hideOnScroll />
       <ScrollView onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 14 }}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 26, textAlign: 'right' }}>{entry.heading}</Text>
-        <Text style={{ color: palette.muted, fontSize: 16, textAlign: 'right', marginTop: -8 }}>عن {entry.companion}</Text>
+        <Text style={{ color: palette.muted, fontSize: 16, textAlign: 'right', marginTop: -8 }}>{fromCompanion(entry.companion)}</Text>
         <Nawawi entry={entry} palette={palette} />
         {entry.n === 2 && (
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
@@ -117,6 +117,7 @@ export default function HadithFortyScreen() {
           </View>
         )}
         {drawn && <Tabs label="طريقة العرض" options={MODES} value={mode} onChange={setMode} palette={palette} />}
+        {entry.partial && entry.records.length > 0 && <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>في الصحيحين بعض لفظ الحديث</Text>}
         {bukhari.length > 0 && <BookRecords title="في صحيح البخاري" records={bukhari} mode={mode} palette={palette} />}
         {muslim.length > 0 && <BookRecords title="في صحيح مسلم" records={muslim} mode={mode} palette={palette} />}
       </ScrollView>

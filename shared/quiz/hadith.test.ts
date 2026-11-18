@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import fortyData from '../data/hadith/forty.json';
-import type { AppForty } from '../hadith';
+import { sayingStart, type AppForty } from '../hadith';
 import { completeQuestions, narratorQuestions } from './hadith';
 
 const FORTY = fortyData as AppForty;
@@ -16,6 +16,21 @@ describe('the Forty as al-Nawawi printed them', () => {
       expect(record.pages).toEqual([...record.pages].sort((a, b) => a - b));
       if (record.isnadEnd) expect(record.isnadEnd).toBeLessThan(record.text.length);
     }
+  });
+});
+
+describe('the hadith pages', () => {
+  it('leads no. 9 with route ١٣٠ of Muslim 1337, al-Nawawi\'s wording, before the Hajj sermon', () => {
+    expect(FORTY.entries[8].records.filter(record => record.book === 'muslim').map(record => record.route)).toEqual(['١٣٠', '١٣٠ م', '١٣١', '٤١٢']);
+  });
+
+  it('starts every preview on a whole word after the opening «عن فلان رضي الله عنه»', () => {
+    for (const entry of FORTY.entries) expect(sayingStart(entry.text)).toMatch(/^(?:سمعت|بينما|حدثنا|قال|أن|حفظت|خادم|عن|كنت|قلت|وعظنا|أخذ)\s/);
+  });
+
+  it('carries the corrected wording of the digital transcription', () => {
+    const text = FORTY.entries.map(entry => entry.text).join(' ');
+    for (const slip of ['يقوم: من رأى', 'اسكترهوا', 'غفرت للك', 'الخشبي', 'مانهيتكم', 'صلى الله وعليه', 'تعالى وعليه']) expect(text).not.toContain(slip);
   });
 });
 
@@ -36,12 +51,14 @@ describe('the hadith quizzes', () => {
       const entry = FORTY.entries.find(item => item.records.some(record => record.book === 'bukhari' && record.number === n))!;
       expect(right(question)).toBe(entry.companion);
       expect(bare(question.promptArabic)).not.toContain(bare(entry.companion));
+      for (const other of entry.alsoFrom ?? []) expect(question.choices.map(choice => choice.labelArabic)).not.toContain(other);
     }
   });
 
   it('hides the last words of the saying, and every wrong ending is named from another record', () => {
     for (const question of complete) {
       expect(question.promptArabic.endsWith('…»')).toBe(true);
+      expect(bare(question.promptArabic)).not.toContain(bare(right(question)));
       for (const choice of question.choices.filter(item => item.value !== question.correctAnswer)) expect(question.note!.text).toContain(`«${choice.labelArabic}»`);
     }
   });

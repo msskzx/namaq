@@ -1,7 +1,7 @@
 import { useRef, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
-import { sayingStart } from '@shared/hadith';
+import { fromCompanion, sayingStart } from '@shared/hadith';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Card from '@/ui/Card';
@@ -29,13 +29,13 @@ export default function HadithScreen() {
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>الحديث</Text>
         <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right', marginTop: -8 }}>{FORTY.books.nawawi.title}</Text>
         {FORTY.entries.map(entry => (
-          <Card key={entry.n} palette={palette} pad={[10, 14]} gap={4} accessibilityRole="link" accessibilityLabel={`${entry.heading}، عن ${entry.companion}`}
+          <Card key={entry.n} palette={palette} pad={[10, 14]} gap={4} accessibilityRole="link" accessibilityLabel={`${entry.heading}، ${fromCompanion(entry.companion)}`}
             onPress={() => router.push({ pathname: '/hadith-forty', params: { n: String(entry.n) } })}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 8 }}>
               <Text style={{ color: palette.accent, fontSize: 15 }}>{entry.heading}</Text>
-              <Text numberOfLines={1} style={{ flexShrink: 1, color: palette.muted, fontSize: 14 }}>{entry.companion}</Text>
+              <Text style={{ flexShrink: 1, color: palette.muted, fontSize: 14, textAlign: 'right' }}>{entry.companion}</Text>
             </View>
-            <Text numberOfLines={2} style={{ color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' }}>{sayingStart(entry.text)}</Text>
+            <Text numberOfLines={3} style={{ color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' }}>{sayingStart(entry.text)}</Text>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
               {entry.named.map(book => <Chip key={book} label={book} on={false} small role="text" palette={palette} />)}
             </View>

@@ -26,7 +26,7 @@ export const siraOfSlot = (count: number, day: number, slot: number) => (count ?
 export const hasHadithCard = (slot: number) => slot % 4 === 2;
 
 /** The hadith of a batch, the same all day; each hadith batch brings the next one. */
-export const hadithOfSlot = (count: number, day: number, slot: number) => (count ? (((day * 7 + (slot - 2) / 4) % count) + count) % count : -1);
+export const hadithOfSlot = (count: number, day: number, slot: number) => (count ? (((day + (slot - 2) / 4) % count) + count) % count : -1);
 
 /** The scene of a batch, the same all day; the next scene batch brings the next one. */
 export const sceneOfSlot = (count: number, day: number, slot: number) => (count ? (((day * 5 + slot / 2) % count) + count) % count : -1);

@@ -51,25 +51,29 @@ const namesOf = (companion: string) => [companion, companion.replace(/^عبد ا
 
 /**
  * «من راوي الحديث؟»: the saying as al-Bukhari prints it, and which Companion it comes from; the wrong choices are the
- * Companions of the other hadith. A saying that names its Companion is not asked.
+ * Companions of the other hadith, never one al-Bukhari also has it from. A saying that names its Companion is not asked.
  */
 export function narratorQuestions(random: Random): ChoiceQuestion[] {
   const all = bukhari();
   return shuffle(all.flatMap(({ entry, record }) => {
     const saying = sayingOf(record);
     if (namesOf(entry.companion).some(name => bare(saying).includes(name))) return [];
-    const wrong = all.map(other => other.entry.companion);
+    const also = new Set([entry.companion, ...(entry.alsoFrom ?? [])].map(bare));
+    const wrong = all.map(other => other.entry.companion).filter(name => !also.has(bare(name)));
     const question = choose(`${record.number}`, HADITH_NARRATOR, `${saying}\nعن أي صحابي روى البخاري هذا الحديث؟`, entry.companion, wrong, source(entry, record), random);
     return question ? [question] : [];
   }), random);
 }
 
-/** A saying's last two words, and the saying before them. */
+/** A saying's last two words, and the saying before them; none when the words are already said before. */
 function ending(record: FortyRecord) {
   const saying = sayingOf(record);
   const words = saying.replace(/[«»]/g, '').replace(/[.،:]+$/, '').trim().split(/\s+/);
   if (words.length < 6) return null;
-  return { start: saying.replace(/»$/, '').trim().split(/\s+/).slice(0, -2).join(' '), end: words.slice(-2).join(' ') };
+  const start = saying.replace(/»$/, '').trim().split(/\s+/).slice(0, -2).join(' ');
+  const end = words.slice(-2).join(' ');
+  // A saying whose last words come earlier in it would give the answer away («قال: لا تغضب، فردد مرارًا قال: لا تغضب»).
+  return bare(start).includes(bare(end)) ? null : { start, end };
 }
 
 /** «أكمل الحديث»: a saying's last words hidden; the wrong choices are the last words of the other sayings. */

@@ -10,7 +10,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import type { AppForty, AppIsnad, FortyRecord } from '../../shared/hadith';
-import { NODE_W, ROW } from '../../src/lib/model/isnadGraph';
+import { layoutIsnad } from '../../src/lib/model/isnadGraph';
 import { spellSigns } from '../quran/signs';
 
 interface Page { text: string; vol?: string; page?: number }
@@ -131,7 +131,7 @@ function muslimRoutes(book: string, n: number, keep?: string[]) {
     const { text, shamela, volume, pages } = cut(book, start, next < 0 ? book.length : from + next);
     const route = m[1].replace(/-/g, ' ').replace(/\s+/g, ' ').trim();
     return { book: 'muslim', number: n, route, shamela, volume, pages, text };
-  }).filter(r => !keep || keep.includes(r.route));
+  }).filter(r => !keep || keep.includes(r.route)).sort((a, b) => (keep ? keep.indexOf(a.route) - keep.indexOf(b.route) : 0));
   if (!routes.length) throw new Error(`Muslim ${n} not found`);
   return routes;
 }
@@ -153,7 +153,7 @@ function nawawiEntries(pages: Page[]) {
 }
 
 type Ref = number | { n: number; partial?: boolean; routes?: string[] };
-interface MapEntry { n: number; companion: string; named: string[]; bukhari?: Ref[]; muslim?: Ref[]; partial?: boolean; note?: string }
+interface MapEntry { n: number; companion: string; named: string[]; errata?: [string, string][]; alsoFrom?: string[]; bukhari?: Ref[]; muslim?: Ref[]; partial?: boolean; note?: string }
 const refOf = (ref: Ref) => (typeof ref === 'number' ? { n: ref } : ref);
 
 export function buildForty() {
@@ -165,9 +165,15 @@ export function buildForty() {
   const entries = nawawi.map(entry => {
     const m = map.entries.find(e => e.n === entry.n);
     if (!m) throw new Error(`al-Nawawi ${entry.n} is not in forty-map.json`);
+    const text = (m.errata ?? []).reduce((now, [wrong, right]) => {
+      if (!now.includes(wrong)) throw new Error(`al-Nawawi ${entry.n}: erratum «${wrong}» not found`);
+      return now.replace(wrong, right);
+    }, entry.text);
     return {
       ...entry,
+      text,
       companion: m.companion,
+      ...(m.alsoFrom ? { alsoFrom: m.alsoFrom } : {}),
       named: m.named,
       ...(m?.partial ? { partial: true } : {}),
       ...(m?.note ? { note: m.note } : {}),
@@ -183,11 +189,14 @@ export function buildForty() {
 
 type Built = ReturnType<typeof buildForty>;
 
-/** A chain as the website lays out an isnad, one narrator under the other: the collector on top, the Companion last. */
+/** A chain laid out as the website lays out an isnad (layoutIsnad), one narrator under the other: the collector on top, the Companion last. */
 function chainIsnad(collector: string, chain: { name: string; mode: string }[]): AppIsnad {
-  const nodes = [{ id: 'c', label: collector, x: 0, y: 0 }, ...chain.map((link, i) => ({ id: `n${i}`, label: link.name, x: 0, y: (i + 1) * ROW }))];
-  const edges = chain.map((link, i) => ({ from: `n${i}`, to: i ? `n${i - 1}` : 'c', label: link.mode }));
-  return { nodes, edges, rows: [], width: NODE_W, height: nodes.length * ROW };
+  const graph = {
+    nodes: [{ id: 'c', label: collector }, ...chain.map((link, i) => ({ id: `n${i}`, label: link.name }))],
+    edges: chain.map((link, i) => ({ from: `n${i}`, to: i ? `n${i - 1}` : 'c', label: link.mode })),
+  };
+  const { nodes, edges, width, height } = layoutIsnad(graph);
+  return { nodes: nodes.map(({ id, label, x, y }) => ({ id, label, x, y })), edges, rows: [], width, height };
 }
 
 /**
@@ -197,15 +206,19 @@ function chainIsnad(collector: string, chain: { name: string; mode: string }[]):
 export function appForty(built: Built): AppForty {
   const { books } = built;
   return {
-    books: Object.fromEntries(Object.entries(books).map(([k, { sha256: _sha, ...b }]) => [k, b])) as AppForty['books'],
-    entries: built.entries.map(({ note: _note, ...entry }) => ({
-      ...entry,
-      records: entry.records.map((record): FortyRecord => {
-        const { chain, ...rest } = record as typeof record & { chain?: { name: string; mode: string }[] };
-        const drawn = chain && !entry.partial && !rest.partial;
-        return { ...(rest as FortyRecord), ...(drawn ? { isnad: chainIsnad(record.book === 'bukhari' ? 'البخاري' : 'مسلم', chain) } : {}) };
-      }),
-    })),
+    books: Object.fromEntries(Object.entries(books).map(([k, b]) => [k, { shamela: b.shamela, title: b.title, edition: b.edition }])) as AppForty['books'],
+    entries: built.entries.map(full => {
+      const entry = { ...full };
+      delete entry.note;
+      return {
+        ...entry,
+        records: entry.records.map((record): FortyRecord => {
+          const { chain, ...rest } = record as typeof record & { chain?: { name: string; mode: string }[] };
+          const drawn = chain && !entry.partial && !rest.partial;
+          return { ...(rest as FortyRecord), ...(drawn ? { isnad: chainIsnad(record.book === 'bukhari' ? 'البخاري' : 'مسلم', chain) } : {}) };
+        }),
+      };
+    }),
   };
 }
 

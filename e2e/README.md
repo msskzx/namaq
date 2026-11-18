@@ -27,6 +27,7 @@ export DATABASE_URL=... DATABASE_URL_UNPOOLED=...
 - `app/home.spec.ts`: the story circles, the reading card and date, the search, settings, and for a returning user the forgotten card, a saved ayah's menu and the notes list.
 - `app/mushaf.spec.ts`: the index, the long-press menu (save, forgotten, note), the trees and compare preview sheets, a word's places, and the write quiz.
 - `app/quran.spec.ts`: the Quran hub, branches (tree and matrix, save, search), compare, a prophet story dot, and the words page.
+- `app/hadith.spec.ts`: the Forty list, a hadith with its chain drawn and its whole text, the Jibril pages from no. 2, the library and the tab bar.
 - `app/quizzes.spec.ts`: the quizzes tab, a solo quiz (right, wrong and shown answers, reload, result) with seeded random questions, and recite mode.
 - `app/party.spec.ts`: a host and a guest play a whole party quiz against `app/partyServer.ts`, which runs the worker's rules from `shared/party/rules.ts` in the test.
 - `app/utilities.spec.ts`: prayer times for a picked city, the qibla and the Hijri month.

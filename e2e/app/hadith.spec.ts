@@ -1,30 +1,39 @@
 import { expect, open, tab, test } from './fixtures';
 
-// The hadith tab (owner, 2026-11-18): the hadith of Jibril in al-Bukhari and in Muslim, as the website shows them
-// (shared/data/hadith/units.json, written from src/lib/model/hadithView.ts).
-test('the hadith tab lists the two hadith, and one opens with its isnad and its scenes, or its whole text', async ({ page }) => {
+// The hadith tab (owner, 2026-11-18): al-Nawawi's Forty, each opening with his text and the Sahihayn records he names
+// (shared/data/hadith/forty.json, written by scripts/hadith/buildForty.ts); no. 2 opens the Jibril pages with their scenes.
+test('the hadith tab lists the Forty, and one opens with its chain drawn or its whole text', async ({ page }) => {
   await open(page, '/');
   await tab(page, 'الحديث').click();
   await expect(page.getByRole('heading', { name: 'الحديث', exact: true })).toBeVisible();
-  await expect(page.getByRole('link', { name: /^صحيح مسلم،/ })).toBeVisible();
-  await page.getByRole('link', { name: /^صحيح البخاري،/ }).click();
+  await expect(page.getByRole('link', { name: 'الحديث الأول، عن عمر بن الخطاب' })).toBeVisible();
+  await page.getByRole('link', { name: 'الحديث الخامس عشر، عن أبي هريرة' }).click();
+  await expect(page).toHaveURL(/\/hadith-forty\?n=15/);
+  await expect(page.getByRole('heading', { name: 'في صحيح البخاري' })).toBeVisible();
+  await expect(page.getByLabel(/^الإسناد: البخاري، قُتَيْبَةُ/)).toBeVisible();
+  await page.getByRole('tab', { name: 'النص كاملًا' }).click();
+  await expect(page.getByLabel(/^الإسناد: البخاري/)).toHaveCount(0);
+  await expect(page.getByText(/^٦٠١٨ - حَدَّثَنَا قُتَيْبَةُ/)).toBeVisible();
+  // The hadith button tapped on a hadith goes back to the list.
+  await tab(page, 'الحديث').click();
+  await expect(page).toHaveURL(/\/hadith$/);
+});
+
+test('the hadith of Jibril opens its scenes in al-Bukhari and in Muslim', async ({ page }) => {
+  await open(page, '/hadith-forty?n=2');
+  await page.getByRole('button', { name: 'رواية أبي هريرة في البخاري' }).click();
   await expect(page).toHaveURL(/\/hadith-unit\?unit=bukhari-jibril/);
   await expect(page.getByLabel(/^الإسناد: البخاري، مُسَدَّدٌ/)).toBeVisible();
   await expect(page.getByRole('heading', { name: 'المشهد ١' })).toBeVisible();
-  await expect(page.getByText('هَذَا جِبْرِيلُ جَاءَ يُعَلِّمُ النَّاسَ دِينَهُمْ').first()).toBeAttached();
   await page.getByRole('tab', { name: 'النص كاملًا' }).click();
   await expect(page.getByRole('heading', { name: 'المشهد ١' })).toHaveCount(0);
   await expect(page.getByRole('heading', { name: 'تعليق المصنف' })).toBeVisible();
-
   // Where else the same event is: Muslim's hadith opens over it, and back comes back.
   await page.getByRole('button', { name: 'اقرأ الحديث في صحيح مسلم' }).click();
   await expect(page).toHaveURL(/unit=muslim-jibril/);
   await expect(page.getByLabel(/^الإسناد: مسلم/)).toBeVisible();
   await page.getByRole('button', { name: 'رجوع' }).last().click();
   await expect(page).toHaveURL(/unit=bukhari-jibril/);
-  // The hadith button tapped on a hadith goes back to the list.
-  await tab(page, 'الحديث').click();
-  await expect(page).toHaveURL(/\/hadith$/);
 });
 
 test('the library opens from home and goes back to it', async ({ page }) => {

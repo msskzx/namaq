@@ -45,8 +45,9 @@ describe('home feed cards', () => {
   });
 
   it('picks a hadith for each hadith batch, the same all day and the next one in the next', () => {
-    expect(hadithOfSlot(30, 10, 6)).toBe((hadithOfSlot(30, 10, 2) + 1) % 30);
-    expect(hadithOfSlot(30, 11, 2)).toBe((hadithOfSlot(30, 10, 2) + 7) % 30);
+    expect(hadithOfSlot(28, 10, 6)).toBe((hadithOfSlot(28, 10, 2) + 1) % 28);
+    expect(hadithOfSlot(28, 11, 2)).toBe((hadithOfSlot(28, 10, 2) + 1) % 28);
+    expect(new Set(Array.from({ length: 28 }, (_, day) => hadithOfSlot(28, day, 2))).size).toBe(28);
     expect(hadithOfSlot(0, 3, 2)).toBe(-1);
   });
 

@@ -91,17 +91,17 @@ export const SOURCES: Source[] = [
   {
     id: 'arbain-nawawi', group: 'books',
     title: { ar: 'الأربعون النووية', en: 'al-Arba‘un al-Nawawiyya' }, author: { ar: 'يحيى بن شرف النووي', en: 'al-Nawawi' },
-    edition: 'دار المنهاج، بيروت، الطبعة الأولى ١٤٣٠هـ، عناية قصي محمد نورس الحلاق وأنور بن أبي بكر الشيخي', link: shamela(12836), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+    edition: 'دار المنهاج، بيروت، الطبعة الأولى ١٤٣٠هـ، عناية قصي محمد نورس الحلاق وأنور بن أبي بكر الشيخي؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(12836), licence: PUBLIC_DOMAIN, uses: [USE.forty],
   },
   {
     id: 'sahih-bukhari', group: 'books',
     title: { ar: 'صحيح البخاري', en: 'Sahih al-Bukhari' }, author: { ar: 'محمد بن إسماعيل البخاري', en: 'al-Bukhari' },
-    edition: 'الطبعة السلطانية، بولاق ١٣١١هـ، مصوّرة دار طوق النجاة ١٤٢٢هـ', link: shamela(1681), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+    edition: 'الطبعة السلطانية، بولاق ١٣١١هـ، مصوّرة دار طوق النجاة ١٤٢٢هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1681), licence: PUBLIC_DOMAIN, uses: [USE.forty],
   },
   {
     id: 'sahih-muslim', group: 'books',
     title: { ar: 'صحيح مسلم', en: 'Sahih Muslim' }, author: { ar: 'مسلم بن الحجاج النيسابوري', en: 'Muslim' },
-    edition: 'تحقيق محمد فؤاد عبد الباقي، مطبعة عيسى البابي الحلبي، القاهرة ١٣٧٤هـ', link: shamela(1727), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+    edition: 'تحقيق محمد فؤاد عبد الباقي، مطبعة عيسى البابي الحلبي، القاهرة ١٣٧٤هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1727), licence: PUBLIC_DOMAIN, uses: [USE.forty],
   },
   {
     id: 'siyar', group: 'books',
