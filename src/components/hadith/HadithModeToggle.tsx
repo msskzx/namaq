@@ -22,13 +22,13 @@ export default function HadithModeToggle({
     <div className="mb-4 flex items-center gap-2 text-sm">
       <button type="button" tabIndex={-1} aria-hidden className={label(!bubbles)} onClick={() => onChange('text')}>{ar ? 'النص كاملاً' : 'Full text'}</button>
       <Toggle
-        label={ar ? 'الإسناد والفقاعات' : 'Isnad and bubbles'}
+        label={ar ? 'الرسم' : 'Drawing'}
         checked={bubbles}
         onChange={(checked) => onChange(checked ? 'bubbles' : 'text')}
         offIcon={<FontAwesomeIcon icon={faScroll} className="size-3" />}
         onIcon={<FontAwesomeIcon icon={faComments} className="size-3" />}
       />
-      <button type="button" tabIndex={-1} aria-hidden className={label(bubbles)} onClick={() => onChange('bubbles')}>{ar ? 'الإسناد والفقاعات' : 'Isnad and bubbles'}</button>
+      <button type="button" tabIndex={-1} aria-hidden className={label(bubbles)} onClick={() => onChange('bubbles')}>{ar ? 'الرسم' : 'Drawing'}</button>
     </div>
   );
 }
