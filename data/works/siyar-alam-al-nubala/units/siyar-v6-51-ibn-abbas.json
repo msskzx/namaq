@@ -240,8 +240,7 @@
       "volume": 6,
       "page": "359",
       "layer": "MAIN",
-      "exact": "وَقِيْلَ",
-      "suffix": ": عَاشَ"
+      "exact": "قَالَ عَلِيُّ بنُ المَدِيْنِيِّ"
     },
     {
       "id": "sp_ib94",
@@ -249,10 +248,72 @@
       "volume": 6,
       "page": "359",
       "layer": "MAIN",
+      "exact": "تُوُفِّيَ ابْنُ عَبَّاسٍ سَنَةَ ثَمَانٍ، أَوْ سَبْعٍ وَسِتِّيْنَ."
+    },
+    {
+      "id": "sp_ib98",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "359",
+      "layer": "MAIN",
+      "exact": "وَقَالَ الوَاقِدِيُّ، وَالهَيْثَمُ، وَأَبُو نُعَيْمٍ"
+    },
+    {
+      "id": "sp_ib101",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "359",
+      "layer": "MAIN",
+      "exact": "سَنَةَ ثَمَانٍ.",
+      "prefix": "وَأَبُو نُعَيْمٍ:"
+    },
+    {
+      "id": "sp_ib103",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "359",
+      "layer": "MAIN",
+      "exact": "سَنَةَ ثَمَانٍ",
+      "prefix": "تُوُفِّيَ ابْنُ عَبَّاسٍ",
+      "suffix": "، أَوْ"
+    },
+    {
+      "id": "sp_ib104",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "359",
+      "layer": "MAIN",
+      "exact": "وَسِتِّيْنَ",
+      "prefix": "أَوْ سَبْعٍ"
+    },
+    {
+      "id": "sp_ib106",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "359",
+      "layer": "MAIN",
+      "exact": "سَبْعٍ وَسِتِّيْنَ",
+      "prefix": "سَنَةَ ثَمَانٍ، أَوْ"
+    },
+    {
+      "id": "sp_ib108",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "359",
+      "layer": "MAIN",
+      "exact": "وَقِيْلَ",
+      "suffix": ": عَاشَ"
+    },
+    {
+      "id": "sp_ib111",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "359",
+      "layer": "MAIN",
       "exact": "عَاشَ إِحْدَى وَسَبْعِيْنَ سَنَةً."
     },
     {
-      "id": "sp_ib95",
+      "id": "sp_ib112",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "359",
@@ -334,12 +395,38 @@
       "id": "r_ib93",
       "unit": "siyar-v6-51-ibn-abbas",
       "ordinal": 7,
-      "voice": "REPORTED_ANONYMOUS",
+      "voice": "TRANSMITTED",
       "frame": [
         "sp_ib91"
       ],
       "origin": {
         "mention": "m_ib92"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ib100",
+      "unit": "siyar-v6-51-ibn-abbas",
+      "ordinal": 8,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ib98"
+      ],
+      "origin": {
+        "mention": "m_ib99"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ib110",
+      "unit": "siyar-v6-51-ibn-abbas",
+      "ordinal": 9,
+      "voice": "REPORTED_ANONYMOUS",
+      "frame": [
+        "sp_ib108"
+      ],
+      "origin": {
+        "mention": "m_ib109"
       },
       "chainState": "DEFERRED"
     }
@@ -440,10 +527,26 @@
       "role": "TRANSMITTED"
     },
     {
-      "id": "st_ib96",
+      "id": "st_ib95",
       "report": "r_ib93",
       "spans": [
         "sp_ib94"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ib102",
+      "report": "r_ib100",
+      "spans": [
+        "sp_ib101"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ib113",
+      "report": "r_ib110",
+      "spans": [
+        "sp_ib111"
       ],
       "role": "TRANSMITTED"
     }
@@ -585,6 +688,27 @@
     {
       "id": "m_ib92",
       "parent": "sp_ib91",
+      "exact": "عَلِيُّ بنُ المَدِيْنِيِّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ib96",
+      "parent": "sp_ib94",
+      "exact": "ابْنُ عَبَّاسٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ib99",
+      "parent": "sp_ib98",
+      "exact": "الوَاقِدِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ib109",
+      "parent": "sp_ib108",
       "exact": "وَقِيْلَ",
       "occurrence": 1,
       "role": "SPEAKER"
@@ -738,6 +862,18 @@
     {
       "id": "i_ib86",
       "mention": "m_ib85",
+      "agent": "abdullah-ibn-abbas",
+      "basis": [
+        {
+          "span": "sp_ib_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ib97",
+      "mention": "m_ib96",
       "agent": "abdullah-ibn-abbas",
       "basis": [
         {
@@ -974,17 +1110,49 @@
       "status": "PROPOSED"
     },
     {
-      "id": "a_ib97",
+      "id": "a_ib105",
+      "subject": "m_ib96",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 68,
+        "spans": [
+          "sp_ib103",
+          "sp_ib104"
+        ]
+      },
+      "restsOn": [
+        "st_ib95",
+        "st_ib102"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ib107",
+      "subject": "m_ib96",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 67,
+        "spans": [
+          "sp_ib106"
+        ]
+      },
+      "restsOn": [
+        "st_ib95"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ib114",
       "subject": "m_ib4",
       "predicate": "died.age",
       "value": {
         "parsed": 71,
         "spans": [
-          "sp_ib95"
+          "sp_ib112"
         ]
       },
       "restsOn": [
-        "st_ib96"
+        "st_ib113"
       ],
       "status": "PROPOSED"
     }
