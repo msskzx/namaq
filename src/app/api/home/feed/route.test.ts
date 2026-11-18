@@ -19,6 +19,14 @@ describe('GET /api/home/feed', () => {
     expect(content.trees[0].id).toBe(ids.trees[0]);
   });
 
+  it('lists further on as the feed grows, and sends pairs past the first 60', async () => {
+    const ids = await get(`day=${today}&n=180`);
+    expect(ids.pairs.length).toBe(180);
+    const content = await get(`day=${today}&p=150,179`);
+    expect(content.pairs.map((pair: { id: string }) => pair.id)).toEqual([ids.pairs[150], ids.pairs[179]]);
+    for (const n of ['59', '61', '0', 'x', String(100 * 60 + 60)]) expect((await GET(new Request(`http://localhost/api/home/feed?day=${today}&n=${n}`))).status).toBe(400);
+  });
+
   it('sends a page slice', async () => {
     const slice = await get('page=294');
     expect(slice.surah).toBe(18);

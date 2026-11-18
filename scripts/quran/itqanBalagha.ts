@@ -102,35 +102,33 @@ export function firstWords(mushaf: MushafWord[]) {
   return index;
 }
 
-/** A quote that fits more places than this, with nothing in its paragraph to choose, is placed nowhere. */
-export const MAX_PLACES = 5;
-
 /**
  * The ayah words a paragraph quotes. A quote found in one place is placed there. A quote found in several is placed on
- * the one in the surah of the paragraph's other placed quotes, nearest to them; failing that, on all of them when they
- * are few (MAX_PLACES), with their count.
+ * the one in the surah of the paragraph's other placed quotes, nearest to them; failing that, on every one of them, with
+ * their count, however many: the sheet says he named none of them and lists them all (owner, 2026-11-18: quote him as
+ * he wrote, never pin his words on an ayah he did not name, and hide no place).
  */
 export function placeQuotes(text: string, mushaf: MushafWord[], first: Map<string, number[]>): ItqanPlace[] {
   const found = [...text.matchAll(/﴿([^﴾]*)﴾/g)].map(match => ({ quote: match[1], starts: placesOf(match[1], mushaf, first), length: quoteWords(match[1]).length }));
   const sure = found.filter(item => item.starts.length === 1).map(item => mushaf[item.starts[0]]);
   const places: ItqanPlace[] = [];
-  const add = (start: number, length: number, count: number) => {
+  const add = (start: number, length: number, count: number, quote: number) => {
     for (let j = 0; j < length; j++) {
       const word = mushaf[start + j];
-      const same = places.find(place => place[0] === word.surah && place[1] === word.ayah && place[4] === count && place[3] === word.at - 1);
+      const same = places.find(place => place[0] === word.surah && place[1] === word.ayah && place[4] === count && place[5] === quote && place[3] === word.at - 1);
       if (same) same[3] = word.at;
-      else places.push([word.surah, word.ayah, word.at, word.at, count]);
+      else places.push([word.surah, word.ayah, word.at, word.at, count, quote]);
     }
   };
-  for (const item of found) {
-    if (item.starts.length === 1) { add(item.starts[0], item.length, 1); continue; }
+  for (const [quote, item] of found.entries()) {
+    if (item.starts.length === 1) { add(item.starts[0], item.length, 1, quote); continue; }
     if (!item.starts.length) continue;
     const near = item.starts
       .map(start => ({ start, distance: Math.min(...sure.filter(word => word.surah === mushaf[start].surah).map(word => Math.abs(word.ayah - mushaf[start].ayah))) }))
       .filter(option => Number.isFinite(option.distance))
       .sort((a, b) => a.distance - b.distance);
-    if (near.length && (near.length === 1 || near[0].distance < near[1].distance)) add(near[0].start, item.length, 1);
-    else if (item.starts.length <= MAX_PLACES) for (const start of item.starts) add(start, item.length, item.starts.length);
+    if (near.length && (near.length === 1 || near[0].distance < near[1].distance)) add(near[0].start, item.length, 1, quote);
+    else for (const start of item.starts) add(start, item.length, item.starts.length, quote);
   }
   return places;
 }

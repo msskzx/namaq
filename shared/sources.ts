@@ -59,6 +59,7 @@ const USE = {
   listen: { ar: 'الاستماع إلى التلاوة في المصحف', en: 'listening to recitations in the mushaf reader', href: '/quran/read' },
   adhkar: { ar: 'الأذكار والدعاء في تطبيق الهاتف', en: 'adhkar and du’a in the phone app' },
   prayer: { ar: 'مواقيت الصلاة والقبلة', en: 'prayer times and the qibla', href: '/utilities' },
+  battles: { ar: 'خرائط الغزوات والمعارك في تطبيق الهاتف', en: 'the battle maps in the phone app' },
   hijri: { ar: 'التاريخ الهجري وجزء اليوم', en: 'the Hijri date and today’s juz', href: '/utilities' },
   people: { ar: 'التراجم والأنساب والمعارك', en: 'biographies, lineages and battles', href: '/people' },
   everywhere: { ar: 'كل الصفحات', en: 'every page' },
@@ -312,6 +313,12 @@ export const SOURCES: Source[] = [
       en: 'The author died in 1108, so his text is in the public domain. We show his whole article under his own heading, his words alone without the editor’s notes, from the Shamela copy published by Turath, with the page number and a link. A word is linked to its article by its root in the Quranic Arabic Corpus.',
     },
     uses: [USE.meaning],
+  },
+  {
+    id: 'natural-earth', group: 'data',
+    title: { ar: 'Natural Earth: اليابسة بمقياس ١:٥٠ مليون', en: 'Natural Earth: 1:50m land' },
+    edition: 'ne_50m_land، مقصوصة على ما بين مصر وفارس', link: { url: 'https://www.naturalearthdata.com', label: 'naturalearthdata.com' },
+    licence: { ar: 'ملك عام. مواضع الغزوات على الخريطة من عندنا، تقريبية.', en: 'Public domain. Where each battle is pinned is our own, approximate.' }, uses: [USE.battles],
   },
   {
     id: 'quranic-arabic-corpus', group: 'data',

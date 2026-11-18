@@ -1440,6 +1440,22 @@ Left for a later pass: four `zaynab-khuzaymah/*` excerpts drop «رضي الله
 without «...», and `saad-muadh/arsh` reads «جنازته» where the stored page has
 «جناته» (to check against the print).
 
+# Battle years from the year chapters (2026-11-18)
+
+Five battles' years are dated by the year chapter that tells them (ADR 0024): each
+claim cites the year's heading and the battle's own heading inside it.
+`qurayzah/year` (5: 1/467-p1, 1/506-p2), `fath-makkah/year` (8, Ramadan: 2/111-p1,
+2/153-p1, 2/164-p7), `hunayn/year` (8), `taif/year` (8, Shawwal), `tabuk/year`
+(9, Rajab). No year heading falls between any year heading and its battle.
+Qurayzah has a rival: Musa ibn Uqbah and Urwah put the Khandaq and Qurayzah in
+year 4 (1/498-p8, p9), which al-Dhahabi calls «وهم بين» (p10). It is recorded as
+`qurayzah/year-alt`, DISPUTED, and `qurayzah/year` is marked disputed. A second
+agent checked these against the pages; its two findings (volume 1 links past the
+skipped page 442, and Ramadan needing its own citation) are fixed. These claims
+came after the approval at 8f87a821 and were approved again under the owner's standing rule.
+The catalog's «معركة ذات السلاسل» is the battle of year 12 against Persia, not the
+sariyyah of year 8 told in 2/146, so it gets no year from this chapter.
+
 # Review
 
 Nothing in this batch is reviewed, across any of its chapters. The claims are

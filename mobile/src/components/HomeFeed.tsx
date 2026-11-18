@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { bookmarkKind } from '@shared/bookmarkKind';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
@@ -12,8 +12,8 @@ import { isMemorized, memorizedPrefer, memorizedQuestions, readMemorized, recall
 import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, seededRandom, type FeedQuizKind } from '@shared/quiz/feedQuiz';
 import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
-import { backToVisit, FEED_AHEAD, freshPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
-import { feedBooks, hasBooksCard, hasJuzCard, hasSceneCard, hasTarajimCard, inMinutes, insertAt, prayerSoon, sceneOfSlot, tarajimOfSlot } from '@shared/homeFeed';
+import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
+import { feedBooks, hasBooksCard, hasJuzCard, hasMomentCard, hasSceneCard, hasTarajimCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, tarajimOfSlot } from '@shared/homeFeed';
 import { pageLabel, sayer } from '@shared/tarajim';
 import { PEOPLE, personName } from '@/lib/tarajim';
 import { clock, FIVE, PRAYER_NAMES, type PrayerDay, type PrayerKey } from '@shared/prayer';
@@ -30,6 +30,9 @@ import type { BranchPiece } from '@shared/quran/branchInventory';
 import { pageStart } from '@shared/quran/readerPage';
 import { continuePage, readFasilas, serverFasilas, subscribeFasilas } from '@shared/readingMarks';
 import { Text } from '@/ui/Text';
+import momentBattles from '@shared/data/battles/moments.json';
+import type { AppMomentBattle } from '@shared/battles/battle';
+import { battleLine, Moment } from './battles/BattleParts';
 import CompareCard from './CompareCard';
 import TreePager from './TreePager';
 import { aliasesOf, EMPTY_LIST } from '@/lib/branchList';
@@ -85,6 +88,7 @@ import { type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
 import Card from '@/ui/Card';
+import { openExternal } from '@/ui/ExternalLink';
 
 type IconType = (props: LucideProps) => React.ReactNode;
 
@@ -561,6 +565,26 @@ const ScenePost = memo(function ScenePost({ day, slot, palette }: { day: number;
   );
 });
 
+/** Every battle's moments, in the battles' order, for the moment card. */
+const MOMENTS = (momentBattles as AppMomentBattle[]).flatMap(battle => battle.moments.map((moment, i) => ({ battle, moment, n: i + 1 })));
+
+/** A moment of a battle in the source's words (owner, 2026-11-18); the head opens the battle's page. */
+function MomentPost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
+  const item = MOMENTS[momentOfSlot(MOMENTS.length, day, slot)];
+  if (!item) return null;
+  const { battle, moment, n } = item;
+  return (
+    <Post palette={palette} head={<PostHead Icon={Swords} title={`من ${battle.name}`} sub={battleLine(battle)} palette={palette}
+      open={{ onPress: () => toTab({ pathname: '/battle', params: { slug: battle.slug } }), label: `افتح ${battle.name}` }} />}
+      actions={<>
+        <Action Icon={Swords} label={`افتح ${battle.name}`} onPress={() => toTab({ pathname: '/battle', params: { slug: battle.slug } })} palette={palette} />
+        <Action Icon={ExternalLinkIcon} label={`المصدر: ${moment.cite}`} onPress={() => openExternal(moment.url)} palette={palette} />
+      </>}>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}><Moment moment={moment} n={n} palette={palette} plain /></View>
+    </Post>
+  );
+}
+
 /** Each ayah card's list of ayat, read once when first asked for. */
 const noteLists: Partial<Record<AyahNote, string[]>> = {};
 const noteList = (kind: AyahNote) => (noteLists[kind] ??= kind === 'tafsir' ? singleAyahPassages() : kind === 'balagha' ? itqanSureAyat(itqan)
@@ -666,7 +690,7 @@ export function Feed({ palette, nearEnd, screenBottom }: { palette: Palette; nea
   const [more, setMore] = useState({ visit, batches: 1 });
   const batches = more.visit === visit ? more.batches : 1;
   useEffect(() => {
-    if (nearEnd) setMore(now => ({ visit, batches: Math.min(FEED_AHEAD, (now.visit === visit ? now.batches : 1) + MORE) }));
+    if (nearEnd) setMore(now => ({ visit, batches: (now.visit === visit ? now.batches : 1) + MORE }));
   }, [nearEnd]); // eslint-disable-line react-hooks/exhaustive-deps -- only a new signal asks for more
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen);
   const bookmarks = readBookmarks();
@@ -684,10 +708,13 @@ export function Feed({ palette, nearEnd, screenBottom }: { palette: Palette; nea
     const listener = AppState.addEventListener('change', state => (state === 'active' ? backToVisit() : leftVisit()));
     return () => listener.remove();
   }, []);
-  const pairs = useMemo(() => freshPicks(offset => pairOfDayNumber(day + offset), pair => pair.id, seen, batches,
-    { since: visit, prefer: prefer ? pair => touchesMemorized(pair.sides.flatMap(sideKeys), memorized) : undefined }), [day, batches, seen, prefer, memorized, visit]);
-  const trees = useMemo(() => freshPicks(offset => treeOfDay(day, offset), piece => piece.id, seen, batches,
-    { since: visit, prefer: prefer ? piece => touchesMemorized(piece.keys, memorized) : undefined }), [day, batches, seen, prefer, memorized, visit]);
+  // The cards already shown stay in place as more come; a new visit, day or setting picks afresh.
+  const shownPairs = useRef<{ reset?: unknown[]; list: NonNullable<ReturnType<typeof pairOfDayNumber>>[] }>({ list: [] }).current;
+  const shownTrees = useRef<{ reset?: unknown[]; list: NonNullable<ReturnType<typeof treeOfDay>>[] }>({ list: [] }).current;
+  const pairs = useMemo(() => growingPicks(shownPairs, [visit, day, prefer, memorized], offset => pairOfDayNumber(day + offset), pair => pair.id, seen, batches,
+    { since: visit, prefer: prefer ? pair => touchesMemorized(pair.sides.flatMap(sideKeys), memorized) : undefined }), [day, batches, seen, prefer, memorized, visit, shownPairs]);
+  const trees = useMemo(() => growingPicks(shownTrees, [visit, day, prefer, memorized], offset => treeOfDay(day, offset), piece => piece.id, seen, batches,
+    { since: visit, prefer: prefer ? piece => touchesMemorized(piece.keys, memorized) : undefined }), [day, batches, seen, prefer, memorized, visit, shownTrees]);
   useEffect(() => { markFeedSeen([...pairs.map(pair => pair.id), ...trees.map(piece => piece.id)]); }, [pairs, trees]);
   const posts: React.ReactNode[] = [];
   for (let i = 0; i < batches; i++) {
@@ -704,6 +731,7 @@ export function Feed({ palette, nearEnd, screenBottom }: { palette: Palette; nea
     if (hasJuzCard(i) && juz) posts.push(<JuzPost key={`j${day}`} palette={palette} />);
     if (hasSceneCard(i) && sceneList().length) posts.push(<ScenePost key={`m${day}-${i}`} day={day} slot={i} palette={palette} />);
     if (hasBooksCard(i)) posts.push(<BooksPost key={`k${day}-${i}`} day={day} palette={palette} />);
+    if (hasMomentCard(i) && MOMENTS.length) posts.push(<MomentPost key={`w${day}-${i}`} day={day} slot={i} palette={palette} />);
     if (hasTarajimCard(i)) posts.push(<TarajimPost key={`r${day}-${i}`} day={day} slot={i} palette={palette} />);
   }
   // A prayer that is near comes in once, before the first post below the screen, so what the reader looks at stays put (owner,
