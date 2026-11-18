@@ -68,4 +68,11 @@ test('the adhkar: each time\'s cards, a counter that stops at its number and sta
   await page.getByRole('link', { name: peace.kind === 'text' ? peace.text : '' }).first().click();
   await expect(page.getByRole('tab', { name: 'صلاة' }).filter({ visible: true }).first()).toHaveAttribute('aria-selected', 'true');
   await expect(page.getByRole('button', { name: /^الأذكار ٧١ ح١٨٣/ }).filter({ visible: true }).first()).toBeInViewport();
+
+  // A morning card sits under the whole Quran page, which is drawn after the cards are first laid out.
+  await open(page, '/search');
+  await page.getByLabel(/ابحث/).first().fill('بك أصبحنا وبك أمسينا');
+  const morning = dhikrById('morning-by-you')!.content;
+  await page.getByRole('link', { name: morning.kind === 'text' ? morning.text : '' }).first().click();
+  await expect(page.getByRole('button', { name: /^الأذكار ٧٧ ح٢٠٨/ }).filter({ visible: true }).first()).toBeInViewport();
 });

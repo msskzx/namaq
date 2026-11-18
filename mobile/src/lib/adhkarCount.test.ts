@@ -28,7 +28,8 @@ describe('the adhkar counter', () => {
     for (const source of [page, ...libs]) {
       expect(source).not.toMatch(/storage|writeJson|AsyncStorage|SecureStore|MMKV/);
       // Settings it touches: which utility is open, the reminder switches and the place they need. Never a count.
-      const settings = [...source.matchAll(/\b(\w+)\.(?:set|use)\(/g)].map(match => match[1]);
+      // (`boxes.current.set` is the card sizes kept in a ref for the search scroll, not a setting.)
+      const settings = [...source.matchAll(/\b(\w+)\.(?:set|use)\(/g)].map(match => match[1]).filter(name => name !== 'current');
       expect(settings.every(name => ['utilityView', 'adhkarAlerts', 'prayerPlace'].includes(name))).toBe(true);
     }
     expect(page).toMatch(/useReducer\(counting, null\)/);

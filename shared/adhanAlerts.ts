@@ -77,6 +77,10 @@ export function planAll(alerts: AdhanAlerts, adhkar: AdhkarAlerts, place: Place,
 export const plannedHere = (data: Record<string, unknown> | undefined) =>
   !!data && (typeof data.prayer === 'string' || typeof data.adhkar === 'string');
 
+/** The reminder a tapped notification was for, or null for an adhan alert or anything else. */
+export const adhkarOf = (data: Record<string, unknown> | undefined): AdhkarTime | null =>
+  data?.adhkar === 'morning' || data?.adhkar === 'evening' ? data.adhkar : null;
+
 /** The upcoming adhan alerts alone, when no adhkar reminder is on. */
 export const planAlerts = (alerts: AdhanAlerts, place: Place, now: Date, timesOn: (day: Date) => PrayerDay): Alert[] =>
   planAll(alerts, NO_ADHKAR_ALERTS, place, now, timesOn).prayers;

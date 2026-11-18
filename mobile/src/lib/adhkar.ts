@@ -20,6 +20,13 @@ export function showAdhkar(occasion: AdhkarOccasion, id?: string) {
 
 export const useAdhkarPlace = () => useSyncExternalStore(subscribe, get, get);
 
+/** The asked-for card is in view: forget it, so opening the page again starts at the top. */
+export function reachedAdhkar() {
+  if (!place.id) return;
+  place = { ...place, id: undefined };
+  listeners.forEach(listener => listener());
+}
+
 /** Open the utilities on the adhkar page, on `occasion`'s tab, scrolled to the card `id` when given. */
 export function openAdhkar(occasion: AdhkarOccasion, id?: string) {
   showAdhkar(occasion, id);

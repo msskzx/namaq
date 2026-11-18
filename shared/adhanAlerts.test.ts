@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import * as adhan from 'adhan';
-import { ADHKAR_AFTER, adhkarAt, alertText, isAdhkarAlerts, MAX_ALERTS, MAX_DAYS, NO_ADHKAR_ALERTS, NO_ALERTS, isAdhanAlerts, planAll, planAlerts, plannedHere, planKey } from './adhanAlerts';
+import { ADHKAR_AFTER, adhkarAt, adhkarOf, alertText, isAdhkarAlerts, MAX_ALERTS, MAX_DAYS, NO_ADHKAR_ALERTS, NO_ALERTS, isAdhanAlerts, planAll, planAlerts, plannedHere, planKey } from './adhanAlerts';
 import { DEFAULT_PRAYER_SETTINGS, MY_LOCATION, prayerDay, type Adhan, type Place } from './prayer';
 
 const lib = adhan as unknown as Adhan;
@@ -125,6 +125,14 @@ describe('adhkar reminders', () => {
     expect(plannedHere({ adhkar: 'morning' })).toBe(true);
     expect(plannedHere({ other: 'x' })).toBe(false);
     expect(plannedHere(undefined)).toBe(false);
+  });
+
+  it('opens a tapped reminder\'s adhkar, and nothing for an adhan alert', () => {
+    expect(adhkarOf({ adhkar: 'morning' })).toBe('morning');
+    expect(adhkarOf({ adhkar: 'evening' })).toBe('evening');
+    expect(adhkarOf({ prayer: 'fajr' })).toBeNull();
+    expect(adhkarOf({ adhkar: 'noon' })).toBeNull();
+    expect(adhkarOf(undefined)).toBeNull();
   });
 
   it('checks stored values', () => {

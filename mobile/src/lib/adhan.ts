@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { AppState, Linking, Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import * as adhan from 'adhan';
-import { anyAlert, planAll, plannedHere, planKey } from '@shared/adhanAlerts';
+import { adhkarOf, anyAlert, planAll, plannedHere, planKey } from '@shared/adhanAlerts';
 import { prayerDay, type Adhan } from '@shared/prayer';
 import { adhanAlerts, adhkarAlerts, prayerPlace, prayerSettings } from './settings';
 import { openAdhkar } from './adhkar';
@@ -10,6 +10,8 @@ import { openAdhkar } from './adhkar';
 const lib = adhan as unknown as Adhan;
 /** Android groups notifications by channel; this one rings with the phone's own notification sound. */
 const CHANNEL = 'adhan';
+/** The adhkar reminders ring on their own channel, so the phone's settings can quiet one without the other. */
+const ADHKAR_CHANNEL = 'adhkar';
 export const ALERTS_SUPPORTED = true;
 
 // Show the alert even while the app is open.
@@ -64,6 +66,9 @@ export function syncAlerts(force = false): Promise<void> {
         await Notifications.setNotificationChannelAsync(CHANNEL, {
           name: 'الأذان', importance: Notifications.AndroidImportance.HIGH, sound: 'default', vibrationPattern: [0, 250, 250, 250],
         });
+        await Notifications.setNotificationChannelAsync(ADHKAR_CHANNEL, {
+          name: 'الأذكار', importance: Notifications.AndroidImportance.DEFAULT, sound: 'default',
+        });
       }
       const plan = planAll(alerts, adhkar, place, now, day => prayerDay(lib, place, day, settings));
       for (const alert of plan.prayers) {
@@ -75,7 +80,7 @@ export function syncAlerts(force = false): Promise<void> {
       for (const alert of plan.adhkar) {
         await Notifications.scheduleNotificationAsync({
           content: { title: alert.title, body: alert.body, sound: 'default', data: { adhkar: alert.adhkar } },
-          trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: alert.at, channelId: CHANNEL },
+          trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: alert.at, channelId: ADHKAR_CHANNEL },
         });
       }
     } catch {
@@ -99,8 +104,8 @@ export function startAlerts() {
   AppState.addEventListener('change', state => { if (state === 'active') syncAlerts(); });
   // A tap on an adhkar reminder opens that time's adhkar.
   const opened = (response: Notifications.NotificationResponse | null) => {
-    const time = response?.notification.request.content.data?.adhkar;
-    if (time !== 'morning' && time !== 'evening') return;
+    const time = adhkarOf(response?.notification.request.content.data);
+    if (!time) return;
     // Cleared once handled, or the next launch would open it again.
     Notifications.clearLastNotificationResponseAsync().catch(() => {});
     openAdhkar(time);
