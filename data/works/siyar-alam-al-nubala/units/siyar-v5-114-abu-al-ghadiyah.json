@@ -1,0 +1,286 @@
+{
+  "unit": {
+    "id": "siyar-v5-114-abu-al-ghadiyah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١١٤"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_gh_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "544",
+      "layer": "MAIN",
+      "exact": "١١٤ - أَبُو الغَادِيَةِ الصَّحَابِيُّ"
+    },
+    {
+      "id": "sp_gh_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "544",
+      "layer": "MAIN",
+      "exact": "أَبُو الغَادِيَةِ الصَّحَابِيُّ"
+    },
+    {
+      "id": "sp_gh_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "544",
+      "layer": "MAIN",
+      "exact": "أَبُو الغَادِيَةِ",
+      "prefix": "-"
+    },
+    {
+      "id": "sp_gh_son",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "544",
+      "layer": "MAIN",
+      "exact": "ابْنُهُ؛ سَعْدٌ",
+      "prefix": "عَنْهُ:"
+    },
+    {
+      "id": "sp_gh_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "544",
+      "layer": "MAIN",
+      "exact": "ابْنُهُ",
+      "prefix": "عَنْهُ:"
+    },
+    {
+      "id": "sp_gh_son_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "544",
+      "layer": "MAIN",
+      "exact": "سَعْدٌ",
+      "prefix": "ابْنُهُ؛"
+    },
+    {
+      "id": "sp_gh_yuqal",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "544",
+      "layer": "MAIN",
+      "exact": "يُقَالُ: شَهِدَ الحُدَيْبِيَةَ"
+    },
+    {
+      "id": "sp_gh_hud_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "544",
+      "layer": "MAIN",
+      "exact": "شَهِدَ الحُدَيْبِيَةَ",
+      "prefix": "الشَّامِ.\n\nيُقَالُ:"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_gh0",
+      "unit": "siyar-v5-114-abu-al-ghadiyah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_gh_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_gh_yuqal",
+      "unit": "siyar-v5-114-abu-al-ghadiyah",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_gh_yuqal_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_gh_name",
+      "report": "r_gh0",
+      "spans": [
+        "sp_gh_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_gh_son",
+      "report": "r_gh0",
+      "spans": [
+        "sp_gh_son"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_gh_yuqal",
+      "report": "r_gh_yuqal",
+      "spans": [
+        "sp_gh_yuqal"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_gh",
+      "parent": "sp_gh_name",
+      "exact": "أَبُو الغَادِيَةِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_gh_s",
+      "parent": "sp_gh_son",
+      "exact": "ابْنُهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_gh_c_saad",
+      "parent": "sp_gh_son",
+      "exact": "سَعْدٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_gh_yuqal_by",
+      "parent": "sp_gh_yuqal",
+      "exact": "يُقَالُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_gh_hud",
+      "parent": "sp_gh_yuqal",
+      "exact": "الحُدَيْبِيَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_gh",
+      "mention": "m_gh",
+      "agent": "abu-al-ghadiyah",
+      "basis": [
+        {
+          "span": "sp_gh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_gh_s",
+      "mention": "m_gh_s",
+      "agent": "abu-al-ghadiyah",
+      "basis": [
+        {
+          "span": "sp_gh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_gh_c_saad",
+      "mention": "m_gh_c_saad",
+      "agent": "saad-ibn-abi-al-ghadiyah",
+      "basis": [
+        {
+          "span": "sp_gh_son_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_gh_hud",
+      "mention": "m_gh_hud",
+      "event": "hudaybiyyah",
+      "basis": [
+        {
+          "span": "sp_gh_hud_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_gh_name",
+      "subject": "m_gh",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_gh_name"
+        ]
+      },
+      "restsOn": [
+        "st_gh_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_gh_kunya",
+      "subject": "m_gh",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_gh_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_gh_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_gh_sex",
+      "subject": "m_gh",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_gh_sex"
+        ]
+      },
+      "restsOn": [
+        "st_gh_son"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_gh_c_saad_0",
+      "subject": "m_gh_c_saad",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_gh_s"
+      },
+      "restsOn": [
+        "st_gh_son"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_gh_hud",
+      "subject": "m_gh",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_gh_hud"
+      },
+      "restsOn": [
+        "st_gh_yuqal"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

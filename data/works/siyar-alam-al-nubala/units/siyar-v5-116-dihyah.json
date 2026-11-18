@@ -1,0 +1,489 @@
+{
+  "unit": {
+    "id": "siyar-v5-116-dihyah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١١٦"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_dh_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "550",
+      "layer": "MAIN",
+      "exact": "١١٦ - دِحْيَةُ بنُ خَلِيْفَةَ بنِ فَرْوَةَ بنِ فَضَالَةَ الكَلْبِيُّ"
+    },
+    {
+      "id": "sp_dh_n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "550",
+      "layer": "MAIN",
+      "exact": "دِحْيَةُ بنُ خَلِيْفَةَ بنِ فَرْوَةَ بنِ فَضَالَةَ الكَلْبِيُّ"
+    },
+    {
+      "id": "sp_dh_n2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "550",
+      "layer": "MAIN",
+      "exact": "القُضَاعِيُّ",
+      "prefix": "(د)"
+    },
+    {
+      "id": "sp_dh_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "550",
+      "layer": "MAIN",
+      "exact": "دِحْيَةُ بنُ",
+      "prefix": "-"
+    },
+    {
+      "id": "sp_dh_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "550",
+      "layer": "MAIN",
+      "exact": "خَلِيْفَةَ بنِ فَرْوَةَ",
+      "prefix": "بنُ"
+    },
+    {
+      "id": "sp_dh_rasul_a",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "550",
+      "layer": "MAIN",
+      "exact": "صَاحِبُ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-"
+    },
+    {
+      "id": "sp_dh_rasul_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "551",
+      "layer": "MAIN",
+      "exact": "وَرَسُوْلُهُ بِكِتَابِهِ إِلَى عَظِيْمِ بُصْرَى، لِيُوْصِلَهُ إِلَى هِرَقْلَ"
+    },
+    {
+      "id": "sp_dh_yarmuk",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "551",
+      "layer": "MAIN",
+      "exact": "وَقَدْ شَهِدَ اليَرْمُوْكَ، وَكَانَ عَلَى كُرْدُوْسٍ"
+    },
+    {
+      "id": "sp_dh_yarmuk_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "551",
+      "layer": "MAIN",
+      "exact": "شَهِدَ اليَرْمُوْكَ",
+      "prefix": "مُعَاوِيَةَ.\n\nوَقَدْ"
+    },
+    {
+      "id": "sp_dh_saad_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "551",
+      "layer": "MAIN",
+      "exact": "قَالَ ابْنُ سَعْدٍ",
+      "prefix": "ذَلِكَ."
+    },
+    {
+      "id": "sp_dh_saad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "551",
+      "layer": "MAIN",
+      "exact": "أَسْلَمَ دِحْيَةُ قَبْلَ بَدْرٍ، وَلَمْ يَشْهَدْهَا"
+    },
+    {
+      "id": "sp_dh_badr_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "551",
+      "layer": "MAIN",
+      "exact": "قَبْلَ بَدْرٍ",
+      "prefix": "دِحْيَةُ"
+    },
+    {
+      "id": "sp_dh_ajmal",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "554",
+      "layer": "MAIN",
+      "exact": "وَلاَ رَيْبَ أَنَّ دِحْيَةَ كَانَ أَجْمَلَ الصَّحَابَةِ المَوْجُودِيْنَ بِالمَدِيْنَةِ، وَهُوَ مَعْرُوفٌ، فَلِذَا كَانَ جِبْرِيْلُ رُبَّمَا نَزَلَ فِي صُوْرَتِهِ"
+    },
+    {
+      "id": "sp_dh_khaybar",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "555",
+      "layer": "MAIN",
+      "exact": "وَصَحَّ: أَنَّ صَفِيَّةَ وَقَعَتْ يَوْمَ خَيْبَرَ فِي سَهْمِ دِحْيَةَ"
+    },
+    {
+      "id": "sp_dh_khaybar_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "555",
+      "layer": "MAIN",
+      "exact": "يَوْمَ خَيْبَرَ",
+      "prefix": "وَقَعَتْ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_dh0",
+      "unit": "siyar-v5-116-dihyah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_dh_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_dh_saad",
+      "unit": "siyar-v5-116-dihyah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_dh_saad_frame"
+      ],
+      "origin": {
+        "mention": "m_dh_saad_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_dh_name",
+      "report": "r_dh0",
+      "spans": [
+        "sp_dh_n1",
+        "sp_dh_n2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_dh_rasul",
+      "report": "r_dh0",
+      "spans": [
+        "sp_dh_rasul_a",
+        "sp_dh_rasul_b"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_dh_yarmuk",
+      "report": "r_dh0",
+      "spans": [
+        "sp_dh_yarmuk"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_dh_saad",
+      "report": "r_dh_saad",
+      "spans": [
+        "sp_dh_saad"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_dh_ajmal",
+      "report": "r_dh0",
+      "spans": [
+        "sp_dh_ajmal"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_dh_khaybar",
+      "report": "r_dh0",
+      "spans": [
+        "sp_dh_khaybar"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_dh",
+      "parent": "sp_dh_n1",
+      "exact": "دِحْيَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_dh_father",
+      "parent": "sp_dh_n1",
+      "exact": "خَلِيْفَةَ بنِ فَرْوَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_dh_yarmuk",
+      "parent": "sp_dh_yarmuk",
+      "exact": "اليَرْمُوْكَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_dh_saad_by",
+      "parent": "sp_dh_saad_frame",
+      "exact": "ابْنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_dh_s",
+      "parent": "sp_dh_saad",
+      "exact": "دِحْيَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_dh_badr",
+      "parent": "sp_dh_saad",
+      "exact": "بَدْرٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_dh_aj",
+      "parent": "sp_dh_ajmal",
+      "exact": "دِحْيَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_dh_kh",
+      "parent": "sp_dh_khaybar",
+      "exact": "دِحْيَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_dh_khaybar",
+      "parent": "sp_dh_khaybar",
+      "exact": "خَيْبَرَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_dh",
+      "mention": "m_dh",
+      "agent": "dihyah-al-kalbi",
+      "basis": [
+        {
+          "span": "sp_dh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_dh_father",
+      "mention": "m_dh_father",
+      "agent": "khalifah-ibn-farwah-al-kalbi",
+      "basis": [
+        {
+          "span": "sp_dh_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_dh_yarmuk",
+      "mention": "m_dh_yarmuk",
+      "event": "yarmuk",
+      "basis": [
+        {
+          "span": "sp_dh_yarmuk_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_dh_s",
+      "mention": "m_dh_s",
+      "agent": "dihyah-al-kalbi",
+      "basis": [
+        {
+          "span": "sp_dh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_dh_badr",
+      "mention": "m_dh_badr",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_dh_badr_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_dh_aj",
+      "mention": "m_dh_aj",
+      "agent": "dihyah-al-kalbi",
+      "basis": [
+        {
+          "span": "sp_dh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_dh_kh",
+      "mention": "m_dh_kh",
+      "agent": "dihyah-al-kalbi",
+      "basis": [
+        {
+          "span": "sp_dh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_dh_khaybar",
+      "mention": "m_dh_khaybar",
+      "event": "khaybar",
+      "basis": [
+        {
+          "span": "sp_dh_khaybar_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_dh_name",
+      "subject": "m_dh",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_dh_n1",
+          "sp_dh_n2"
+        ]
+      },
+      "restsOn": [
+        "st_dh_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_dh_sex",
+      "subject": "m_dh",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_dh_sex"
+        ]
+      },
+      "restsOn": [
+        "st_dh_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_dh_father",
+      "subject": "m_dh",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_dh_father"
+      },
+      "restsOn": [
+        "st_dh_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_dh_v_rasul",
+      "subject": "m_dh",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_dh_rasul_a",
+          "sp_dh_rasul_b"
+        ]
+      },
+      "restsOn": [
+        "st_dh_rasul"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_dh_yarmuk",
+      "subject": "m_dh",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_dh_yarmuk"
+      },
+      "restsOn": [
+        "st_dh_yarmuk"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_dh_absent_badr",
+      "subject": "m_dh_s",
+      "predicate": "ABSENT_FROM",
+      "value": {
+        "object": "m_dh_badr"
+      },
+      "restsOn": [
+        "st_dh_saad"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_dh_app",
+      "subject": "m_dh_aj",
+      "predicate": "appearance",
+      "value": {
+        "spans": [
+          "sp_dh_ajmal"
+        ]
+      },
+      "restsOn": [
+        "st_dh_ajmal"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_dh_khaybar",
+      "subject": "m_dh_kh",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_dh_khaybar"
+      },
+      "restsOn": [
+        "st_dh_khaybar"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
