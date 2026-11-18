@@ -1,6 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { ayahHref } from '@shared/ayahMarks';
+import { SURAH_NAMES } from '@shared/quran/surahNames';
 import { num } from '@shared/quran/arabicNumber';
 import { ITQAN_BOOK, ITQAN_EDITION, itqanCredit, itqanPage } from '@shared/quran/itqanBalagha';
 import { KASHSHAF_BOOK, KASHSHAF_EDITION, kashshafCredit, kashshafPage, kashshafRuns, litWords } from '@shared/quran/kashshaf';
@@ -12,6 +15,7 @@ import Card from '@/components/common/Card';
 import Segmented from '@/components/common/Segmented';
 import Folded from '@/components/common/Folded';
 import Pickable from '@/components/common/Pickable';
+import Chip from '@/components/common/Chip';
 
 // The reader's neutral band (Mushaf.module.css .marked), seen on a card in both themes.
 const LIT = 'bg-[var(--home-band-mark)]';
@@ -28,6 +32,7 @@ type Book = keyof typeof BOOKS;
  */
 export default function BalaghaPanel({ ayah, data }: { ayah: string; data: BalaghaAyah }) {
   const { passage, words, itqan } = data;
+  const router = useRouter();
   const [shown, setShown] = useState<Book>(itqan.length ? 'itqan' : 'kashshaf');
   const [paragraph, setParagraph] = useState(0);
   const firstLit = passage ? passage.lit.findIndex((_, at) => litWords(passage, at, ayah)) : -1;
@@ -47,11 +52,22 @@ export default function BalaghaPanel({ ayah, data }: { ayah: string; data: Balag
           {/* The paragraph lights the words it quotes; its reference below is a control of its own. */}
           <Pickable picked={paragraph === i} onPick={() => setParagraph(i)}>
           <p className="text-sm leading-6 text-[var(--home-muted)]">{item.heading ? `«${item.heading}» · ${item.kind}` : item.kind}</p>
-          {item.places > 1 && <p className="text-[0.8125rem] text-[var(--home-muted)]">{`مواضع الشاهد في القرآن: ${num(item.places)}، ولم يعيّن السيوطي أحدها`}</p>}
           <p className="text-[1.125rem] leading-[1.9]">
             {tafsirRuns(item.text).map((run, j) => (run.quran ? <span key={j} className="font-quran text-[var(--home-accent)]">{run.text}</span> : run.text))}
           </p>
           </Pickable>
+          {/* A quote that names no ayah: every ayah it fits, listed, none chosen for him (owner, 2026-11-18). */}
+          {item.matches.length > 0 && (
+            <Folded credit={`مواضع الشاهد في القرآن: ${num(item.matches.length)}، ولم يعيّن السيوطي أحدها`}>
+              <span className="flex flex-wrap gap-1.5 pt-1">
+                {item.matches.map(key => {
+                  const [surah, number] = key.split(':').map(Number);
+                  const name = `${SURAH_NAMES[surah] ?? num(surah)} ${num(number)}`;
+                  return <Chip key={key} small label={name} name={`افتح ${name} في المصحف`} onClick={() => router.push(ayahHref(key))} />;
+                })}
+              </span>
+            </Folded>
+          )}
           <Folded credit={itqanCredit(item)}>
             <p>{`${ITQAN_BOOK}، ${ITQAN_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث. الفقرة كاملة كما في الكتاب، والعنوان عنوانه.`}</p>
             <ExternalLink href={itqanPage(item)}>اقرأ الصفحة</ExternalLink>
