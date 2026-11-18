@@ -3,6 +3,7 @@
 import { same, skeleton } from './irabUkbari';
 import { firstWords, placesOf, type MushafWord, type TurathPage } from './itqanBalagha';
 import type { GharibEntry, GharibPlace, MufradatEntry } from '../../shared/quran/gharib';
+import { spellSigns } from './signs';
 
 export { firstWords, type MushafWord, type TurathPage };
 
@@ -17,6 +18,7 @@ export const authorText = (text: string) =>
     .replace(/\s*\(\s*[٠-٩]+\s*\)/g, '')
     .replace(/\s*«\s*[٠-٩]+\s*»/g, '')
     .replace(/[ \t]+([.،؛:])/g, '$1')
+    .replace(/[^\n]+/g, spellSigns)
     .normalize('NFC');
 
 /** A line that opens an entry: «١٤- …», «١-٢- …», «﴿…﴾ …», «و﴿…﴾ …». */
@@ -259,6 +261,9 @@ const contentWords = (meaning: string) => new Set(meaning.split(/[\s،؛.:]+/).m
  * then the surahs beside it, of a length near the right one's; none that shares a word (by its first three letters) with it
  * or with another choice, repeats one, or explains the same word or a word of the same root, and no two that explain one word.
  */
+/** A meaning that only names what the word points to: «يعني: القرآن»، «هم: أصحابه». */
+const POINTS = /^(?:يعني|هم|هي|هو|وهو|وهي)\s*:?\s/;
+
 export function meaningPicks(entries: { surah: number; text: string; places: GharibPlace[]; quote: string; roots?: string[] }[], apart: [string, string][] = []): MeaningPick[] {
   // Meanings read by hand as too close to stand as right and wrong in one question (meaningReview.json «apart»): either way round.
   const bare = (text: string) => letters(text).replace(/[^ء-ي\s]/g, '');
@@ -275,7 +280,10 @@ export function meaningPicks(entries: { surah: number; text: string; places: Gha
     const explained = new Set([lit(item.entry)]);
     const pool = askable
       // Not a meaning of the same word, nor of a word from the same root (رهقا «ضلالا» beside رهقا «ظلما»).
+      // Nor one from the same ayah, whose words read together with the asked one («مختلفا أكله» «ثمره» beside «وغير
+      // متشابه» «في الطعم»), nor one that only names what a word points to («يعني: القرآن»).
       .filter(other => other.at !== item.at && skeleton(other.entry.quote) !== quote && Math.abs(other.entry.surah - item.entry.surah) <= 3
+        && !(other.entry.surah === item.entry.surah && other.entry.places[0][0] === ayah) && !POINTS.test(letters(other.meaning))
         && !(other.entry.roots ?? []).some(root => (item.entry.roots ?? []).includes(root)))
       .map(other => ({ other, distance: Math.abs(other.entry.surah - item.entry.surah) * 1000 + Math.abs(other.entry.places[0][0] - ayah) + Math.abs(other.meaning.split(/\s+/).length - length) * 5 }))
       .sort((a, b) => a.distance - b.distance || a.other.at - b.other.at);

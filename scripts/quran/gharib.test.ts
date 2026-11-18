@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { spellSigns } from './signs';
 import { authorText, headingsFor, letters, meaningOf, meaningPicks, quotesOf, readGharib, readMufradat } from './gharib';
 
 const page = (id: number, text: string, at = id) => ({ id, text, vol: '1', page: at });
@@ -65,6 +66,18 @@ describe('«ما معنى؟» meanings', () => {
     expect(first.others).not.toContain(4);
   });
 
+  it("never offers a meaning from the question's own ayah, nor one that only names what a word points to", () => {
+    const entry = (ayah: number, quote: string, meaning: string) => ({ surah: 2, text: `﴿${quote}﴾ ${meaning}`, places: [[ayah, 0, 0]] as [number, number, number][], quote });
+    const picks = meaningPicks([
+      entry(25, 'رزقا', 'أي طعاما.'), entry(25, 'متشابها', 'أي ثمره.'), entry(23, 'بسورة', 'يعني: القرآن.'),
+      entry(26, 'بعوضة', 'أي صغيرة.'), entry(27, 'ينقضون', 'أي يفسدون.'), entry(28, 'أمواتا', 'نطفا.'), entry(29, 'استوى', 'عمد.'),
+    ]);
+    const first = picks.find(pick => pick.asked === 0)!;
+    expect(first.others).not.toContain(1);
+    expect(first.others).not.toContain(2);
+    expect(picks.some(pick => pick.asked === 2)).toBe(true);
+  });
+
   it('never offers a meaning of a word from the same root', () => {
     const entry = (ayah: number, quote: string, meaning: string, roots: string[]) => ({ surah: 72, text: `﴿${quote}﴾ ${meaning}`, places: [[ayah, 0, 0]] as [number, number, number][], quote, roots });
     const picks = meaningPicks([
@@ -72,6 +85,13 @@ describe('«ما معنى؟» meanings', () => {
       entry(12, 'ظننا', 'أي استيقنا.', ['ظنن']), entry(14, 'القاسطون', 'الجائرون.', ['قسط']), entry(2, 'الرشد', 'الصواب.', ['رشد']),
     ]);
     expect(picks.find(pick => pick.asked === 0)!.others).not.toContain(1);
+  });
+});
+
+describe('signs', () => {
+  it('spells out every honorific sign but ﷺ', () => {
+    expect(spellSigns('قال الله﷿ والنبي ﷺ')).toBe('قال الله عز وجل والنبي ﷺ');
+    expect(spellSigns('موسى﵇')).toBe('موسى عليه السلام');
   });
 });
 
