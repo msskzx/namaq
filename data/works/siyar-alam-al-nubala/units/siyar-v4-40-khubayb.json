@@ -1,0 +1,366 @@
+{
+  "unit": {
+    "id": "siyar-v4-40-khubayb",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٤٠"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_kh_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "246",
+      "layer": "MAIN",
+      "exact": "٤٠ - خُبَيْبُ بنُ عَدِيِّ بنِ عَامِرِ بنِ مَجْدَعَةَ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sp_kh1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "246",
+      "layer": "MAIN",
+      "exact": "خُبَيْبُ بنُ عَدِيِّ بنِ عَامِرِ بنِ مَجْدَعَةَ الأَنْصَارِيُّ",
+      "prefix": "٤٠ - "
+    },
+    {
+      "id": "sp_kh2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "246",
+      "layer": "MAIN",
+      "exact": "ابْنِ جَحْجَبَا الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sp_kh_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "246",
+      "layer": "MAIN",
+      "exact": "خُبَيْبُ بنُ",
+      "prefix": "٤٠ - "
+    },
+    {
+      "id": "sp_kh_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "246",
+      "layer": "MAIN",
+      "exact": "عَدِيِّ بنِ عَامِرِ",
+      "prefix": "خُبَيْبُ بنُ "
+    },
+    {
+      "id": "sp_kh_saad_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "246",
+      "layer": "MAIN",
+      "exact": "ذَكَرَهُ: ابْنُ سَعْدٍ، فَقَالَ:"
+    },
+    {
+      "id": "sp_kh_saad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "246",
+      "layer": "MAIN",
+      "exact": "شَهِدَ أُحُداً، وَكَانَ فِيْمَنْ بَعَثَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مَعَ بَنِي لِحْيَانَ، فَلَمَّا صَارُوا بِالرَّجِيْعِ غَدَرُوا بِهِم، وَاسْتَصْرَخُوا عَلَيْهِم، وَقَتَلُوا فِيْهِم، وَأَسَرُوا خُبَيْباً، وَزَيْدَ بنَ الدَّثِنَةِ، فَبَاعُوْهُمَا بِمَكَّةَ، فَقَتَلُوْهُمَا بِمَنْ قَتَلَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنْ قَوْمِهِم، وَصَلَبُوْهُمَا بِالتَّنْعِيْمِ"
+    },
+    {
+      "id": "sp_kh_place",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "246",
+      "layer": "MAIN",
+      "exact": "التَّنْعِيْمِ",
+      "prefix": "وَصَلَبُوْهُمَا بِ"
+    },
+    {
+      "id": "sp_kh_day_uhud",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "246",
+      "layer": "MAIN",
+      "exact": "شَهِدَ أُحُداً",
+      "prefix": "فَقَالَ: "
+    },
+    {
+      "id": "sp_kh_asim_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "247",
+      "layer": "MAIN",
+      "exact": "ابْنُ إِسْحَاقَ: عَنْ عَاصِمِ بنِ عُمَرَ"
+    },
+    {
+      "id": "sp_kh_sunnah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "248",
+      "layer": "MAIN",
+      "exact": "فَكَانَ أَوَّلَ مَنْ سَنَّ الصَّلاَةَ عِنْدَ القَتْلِ."
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_kh0",
+      "unit": "siyar-v4-40-khubayb",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_kh_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_kh_saad",
+      "unit": "siyar-v4-40-khubayb",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_kh_saad_frame"
+      ],
+      "origin": {
+        "mention": "m_kh_saad"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_kh_asim",
+      "unit": "siyar-v4-40-khubayb",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_kh_asim_isnad",
+      "origin": {
+        "mention": "m_kh_asim"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_kh_name",
+      "report": "r_kh0",
+      "spans": [
+        "sp_kh1",
+        "sp_kh2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_kh_saad",
+      "report": "r_kh_saad",
+      "spans": [
+        "sp_kh_saad"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_kh_sunnah",
+      "report": "r_kh_asim",
+      "spans": [
+        "sp_kh_sunnah"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_kh",
+      "parent": "sp_kh1",
+      "exact": "خُبَيْبُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_kh_father",
+      "parent": "sp_kh1",
+      "exact": "عَدِيِّ بنِ عَامِرِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_kh_saad",
+      "parent": "sp_kh_saad_frame",
+      "exact": "ابْنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_kh_s",
+      "parent": "sp_kh_saad",
+      "exact": "خُبَيْباً",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_kh_uhud",
+      "parent": "sp_kh_saad",
+      "exact": "أُحُداً",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_kh_asim",
+      "parent": "sp_kh_asim_isnad",
+      "exact": "عَاصِمِ بنِ عُمَرَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_kh_sn",
+      "parent": "sp_kh_sunnah",
+      "exact": "فَكَانَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_kh",
+      "mention": "m_kh",
+      "agent": "khubayb-ibn-adi",
+      "basis": [
+        {
+          "span": "sp_kh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_kh_s",
+      "mention": "m_kh_s",
+      "agent": "khubayb-ibn-adi",
+      "basis": [
+        {
+          "span": "sp_kh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_kh_sn",
+      "mention": "m_kh_sn",
+      "agent": "khubayb-ibn-adi",
+      "basis": [
+        {
+          "span": "sp_kh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_kh_father",
+      "mention": "m_kh_father",
+      "agent": "adi-ibn-amir",
+      "basis": [
+        {
+          "span": "sp_kh_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_kh_uhud",
+      "mention": "m_kh_uhud",
+      "event": "uhud",
+      "basis": [
+        {
+          "span": "sp_kh_day_uhud",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_kh_name",
+      "subject": "m_kh",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_kh1",
+          "sp_kh2"
+        ]
+      },
+      "restsOn": [
+        "st_kh_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kh_sex",
+      "subject": "m_kh",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_kh_sex"
+        ]
+      },
+      "restsOn": [
+        "st_kh_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kh_father",
+      "subject": "m_kh",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_kh_father"
+      },
+      "restsOn": [
+        "st_kh_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kh_uhud",
+      "subject": "m_kh_s",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_kh_uhud"
+      },
+      "restsOn": [
+        "st_kh_saad"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kh_place",
+      "subject": "m_kh_s",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "sp_kh_place"
+        ]
+      },
+      "restsOn": [
+        "st_kh_saad"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kh_v_sunnah",
+      "subject": "m_kh_sn",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_kh_sunnah"
+        ]
+      },
+      "restsOn": [
+        "st_kh_sunnah"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

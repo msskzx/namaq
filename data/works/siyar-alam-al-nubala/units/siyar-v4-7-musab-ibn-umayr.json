@@ -1,0 +1,649 @@
+{
+  "unit": {
+    "id": "siyar-v4-7-musab-ibn-umayr",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٧"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_mu_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "145",
+      "layer": "MAIN",
+      "exact": "٧ - مُصْعَبُ بنُ عُمَيْرِ * بنِ هَاشِمِ بنِ عَبْدِ مَنَافٍ البَدْرِيُّ"
+    },
+    {
+      "id": "sp_mu1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "145",
+      "layer": "MAIN",
+      "exact": "مُصْعَبُ بنُ عُمَيْرِ",
+      "prefix": "٧ - "
+    },
+    {
+      "id": "sp_mu1b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "145",
+      "layer": "MAIN",
+      "exact": "بنِ هَاشِمِ بنِ عَبْدِ مَنَافٍ",
+      "prefix": "عُمَيْرِ * "
+    },
+    {
+      "id": "sp_mu2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "145",
+      "layer": "MAIN",
+      "exact": "ابْنِ عَبْدِ الدَّارِ بنِ قُصَيِّ بنِ كِلاَبٍ"
+    },
+    {
+      "id": "sp_mu_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "145",
+      "layer": "MAIN",
+      "exact": "مُصْعَبُ بنُ",
+      "prefix": "٧ - "
+    },
+    {
+      "id": "sp_mu_father_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "145",
+      "layer": "MAIN",
+      "exact": "عُمَيْرِ * بنِ هَاشِمِ",
+      "prefix": "مُصْعَبُ بنُ "
+    },
+    {
+      "id": "sp_mu_titles",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "145",
+      "layer": "MAIN",
+      "exact": "السَّيِّدُ، الشَّهِيْدُ، السَّابِقُ (٣) ، البَدْرِيُّ"
+    },
+    {
+      "id": "sp_mu_sabiq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "145",
+      "layer": "MAIN",
+      "exact": "السَّابِقُ",
+      "prefix": "الشَّهِيْدُ، "
+    },
+    {
+      "id": "sp_mu_badr_word",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "145",
+      "layer": "MAIN",
+      "exact": "البَدْرِيُّ",
+      "prefix": "السَّابِقُ (٣) ، "
+    },
+    {
+      "id": "sp_mu_bara_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "145",
+      "layer": "MAIN",
+      "exact": "قَالَ البَرَاءُ بنُ عَازِبٍ:"
+    },
+    {
+      "id": "sp_mu_first",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "145",
+      "layer": "MAIN",
+      "exact": "أَوَّلُ مَنْ قَدِمَ عَلَيْنَا مِنَ المُهَاجِرِيْنَ مُصْعَبُ بنُ عُمَيْرٍ"
+    },
+    {
+      "id": "sp_mu_khabbab_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "146",
+      "layer": "MAIN",
+      "exact": "الأَعْمَشُ: عَنْ أَبِي وَائِلٍ، عَنْ خَبَّابٍ، قَالَ:"
+    },
+    {
+      "id": "sp_mu_khabbab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "146",
+      "layer": "MAIN",
+      "exact": "مِنْهُم مُصْعَبُ بنُ عُمَيْرٍ، قُتِلَ يَوْمَ أُحُدٍ، وَلَمْ يَتْرُكْ إِلاَّ نَمِرَةً كُنَّا إِذَا غَطَّيْنَا رَأْسَهُ بَدَتْ رِجْلاَهُ، وَإِذَا غَطَّيْنَا رِجْلَيْهِ بَدَا رَأْسُهُ. فَقَالَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-: (غَطُّوا رَأْسَهُ، وَاجْعَلُوا عَلَى رِجلَيْهِ مِنَ الإِذْخِرِ)"
+    },
+    {
+      "id": "sp_mu_uhud_day",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "146",
+      "layer": "MAIN",
+      "exact": "يَوْمَ أُحُدٍ",
+      "prefix": "قُتِلَ "
+    },
+    {
+      "id": "sp_mu_awf_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "146",
+      "layer": "MAIN",
+      "exact": "شُعْبَةُ: عَنْ سَعْدِ بنِ إِبْرَاهِيْمَ: سَمِعَ أَبَاهُ يَقُوْلُ:"
+    },
+    {
+      "id": "sp_mu_awf_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "146",
+      "layer": "MAIN",
+      "exact": "أُتِيَ عَبْدُ الرَّحْمَنِ بنُ عَوْفٍ بِطَعَامٍ، فَجَعَلَ يَبْكِي، فَقَالَ:"
+    },
+    {
+      "id": "sp_mu_awf",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "147",
+      "layer": "MAIN",
+      "exact": "وَقُتِلَ مُصْعَبُ بنُ عُمَيْرٍ، فَلَمْ يُوْجَدْ مَا يُكَفَّنُ فِيْهِ إِلاَّ ثَوْباً وَاحِداً"
+    },
+    {
+      "id": "sp_mu_awf_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "146",
+      "layer": "MAIN",
+      "exact": "عَبْدُ الرَّحْمَنِ بنُ عَوْفٍ",
+      "prefix": "أُتِيَ "
+    },
+    {
+      "id": "sp_mu_ishaq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "148",
+      "layer": "MAIN",
+      "exact": "قَالَ ابْنُ إِسْحَاقَ: وَقَاتَلَ مُصْعَبُ بنُ عُمَيْرٍ دُوْنَ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- حَتَّى قُتِلَ"
+    },
+    {
+      "id": "sp_mu_fought",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "148",
+      "layer": "MAIN",
+      "exact": "وَقَاتَلَ مُصْعَبُ بنُ عُمَيْرٍ دُوْنَ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- حَتَّى قُتِلَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_mu0",
+      "unit": "siyar-v4-7-musab-ibn-umayr",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_mu_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_mu_bara",
+      "unit": "siyar-v4-7-musab-ibn-umayr",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_mu_bara_frame"
+      ],
+      "origin": {
+        "mention": "m_mu_bara"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_mu_khabbab",
+      "unit": "siyar-v4-7-musab-ibn-umayr",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_mu_khabbab_isnad",
+      "origin": {
+        "mention": "m_mu_khabbab"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_mu_awf",
+      "unit": "siyar-v4-7-musab-ibn-umayr",
+      "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_mu_awf_frame"
+      ],
+      "isnadSpan": "sp_mu_awf_isnad",
+      "origin": {
+        "mention": "m_mu_awf"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_mu_ishaq",
+      "unit": "siyar-v4-7-musab-ibn-umayr",
+      "ordinal": 5,
+      "voice": "TRANSMITTED",
+      "origin": {
+        "mention": "m_mu_ishaq"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_mu_name",
+      "report": "r_mu0",
+      "spans": [
+        "sp_mu1",
+        "sp_mu1b",
+        "sp_mu2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_mu_titles",
+      "report": "r_mu0",
+      "spans": [
+        "sp_mu_heading",
+        "sp_mu_titles"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_mu_first",
+      "report": "r_mu_bara",
+      "spans": [
+        "sp_mu_first"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_mu_khabbab",
+      "report": "r_mu_khabbab",
+      "spans": [
+        "sp_mu_khabbab"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_mu_awf",
+      "report": "r_mu_awf",
+      "spans": [
+        "sp_mu_awf"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_mu_ishaq",
+      "report": "r_mu_ishaq",
+      "spans": [
+        "sp_mu_fought"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_mu",
+      "parent": "sp_mu1",
+      "exact": "مُصْعَبُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_mu_father",
+      "parent": "sp_mu1",
+      "exact": "عُمَيْرِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_mu_t",
+      "parent": "sp_mu_titles",
+      "exact": "السَّيِّدُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_mu_badr",
+      "parent": "sp_mu_titles",
+      "exact": "البَدْرِيُّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_mu_bara",
+      "parent": "sp_mu_bara_frame",
+      "exact": "البَرَاءُ بنُ عَازِبٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_mu_f",
+      "parent": "sp_mu_first",
+      "exact": "مُصْعَبُ بنُ عُمَيْرٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_mu_khabbab",
+      "parent": "sp_mu_khabbab_isnad",
+      "exact": "خَبَّابٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_mu_k",
+      "parent": "sp_mu_khabbab",
+      "exact": "مُصْعَبُ بنُ عُمَيْرٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_mu_uhud",
+      "parent": "sp_mu_khabbab",
+      "exact": "أُحُدٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_mu_awf",
+      "parent": "sp_mu_awf_frame",
+      "exact": "عَبْدُ الرَّحْمَنِ بنُ عَوْفٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_mu_a",
+      "parent": "sp_mu_awf",
+      "exact": "مُصْعَبُ بنُ عُمَيْرٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_mu_ishaq",
+      "parent": "sp_mu_ishaq",
+      "exact": "ابْنُ إِسْحَاقَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_mu_i",
+      "parent": "sp_mu_fought",
+      "exact": "مُصْعَبُ بنُ عُمَيْرٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_mu",
+      "mention": "m_mu",
+      "agent": "musab-ibn-umayr",
+      "basis": [
+        {
+          "span": "sp_mu_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mu_t",
+      "mention": "m_mu_t",
+      "agent": "musab-ibn-umayr",
+      "basis": [
+        {
+          "span": "sp_mu_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mu_f",
+      "mention": "m_mu_f",
+      "agent": "musab-ibn-umayr",
+      "basis": [
+        {
+          "span": "sp_mu_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mu_k",
+      "mention": "m_mu_k",
+      "agent": "musab-ibn-umayr",
+      "basis": [
+        {
+          "span": "sp_mu_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mu_a",
+      "mention": "m_mu_a",
+      "agent": "musab-ibn-umayr",
+      "basis": [
+        {
+          "span": "sp_mu_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mu_i",
+      "mention": "m_mu_i",
+      "agent": "musab-ibn-umayr",
+      "basis": [
+        {
+          "span": "sp_mu_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mu_father",
+      "mention": "m_mu_father",
+      "agent": "umayr-ibn-hashim",
+      "basis": [
+        {
+          "span": "sp_mu_father_name",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mu_awf",
+      "mention": "m_mu_awf",
+      "agent": "abdur-rahman-ibn-awf",
+      "basis": [
+        {
+          "span": "sp_mu_awf_name",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mu_badr",
+      "mention": "m_mu_badr",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_mu_badr_word",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mu_uhud",
+      "mention": "m_mu_uhud",
+      "event": "uhud",
+      "basis": [
+        {
+          "span": "sp_mu_uhud_day",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_mu_name",
+      "subject": "m_mu",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_mu1",
+          "sp_mu1b",
+          "sp_mu2"
+        ]
+      },
+      "restsOn": [
+        "st_mu_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mu_sex",
+      "subject": "m_mu",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_mu_sex"
+        ]
+      },
+      "restsOn": [
+        "st_mu_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mu_father",
+      "subject": "m_mu",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_mu_father"
+      },
+      "restsOn": [
+        "st_mu_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mu_sabiq",
+      "subject": "m_mu_t",
+      "predicate": "title",
+      "value": {
+        "classified": "al-sabiqoon",
+        "spans": [
+          "sp_mu_sabiq"
+        ]
+      },
+      "restsOn": [
+        "st_mu_titles"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mu_badr",
+      "subject": "m_mu_t",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_mu_badr"
+      },
+      "restsOn": [
+        "st_mu_titles"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mu_v_first",
+      "subject": "m_mu_f",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_mu_first"
+        ]
+      },
+      "restsOn": [
+        "st_mu_first"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mu_v_khabbab",
+      "subject": "m_mu_k",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_mu_khabbab"
+        ]
+      },
+      "restsOn": [
+        "st_mu_khabbab"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mu_uhud",
+      "subject": "m_mu_k",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_mu_uhud"
+      },
+      "restsOn": [
+        "st_mu_khabbab"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mu_v_awf",
+      "subject": "m_mu_a",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_mu_awf"
+        ]
+      },
+      "restsOn": [
+        "st_mu_awf"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mu_v_fought",
+      "subject": "m_mu_i",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_mu_fought"
+        ]
+      },
+      "restsOn": [
+        "st_mu_ishaq"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

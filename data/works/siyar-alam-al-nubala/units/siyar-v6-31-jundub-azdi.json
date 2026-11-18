@@ -1,0 +1,304 @@
+{
+  "unit": {
+    "id": "siyar-v6-31-jundub-azdi",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٣١"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_jz_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "175",
+      "layer": "MAIN",
+      "exact": "٣١ - جُنْدُبٍ الأَزْدِيِّ، أَبِي عَبْدِ اللهِ"
+    },
+    {
+      "id": "sp_jz_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "175",
+      "layer": "MAIN",
+      "exact": "جُنْدُبٍ الأَزْدِيِّ، أَبِي عَبْدِ اللهِ",
+      "prefix": "٣١ -"
+    },
+    {
+      "id": "sp_jz1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "175",
+      "layer": "MAIN",
+      "exact": "جُنْدُبُ بنُ عَبْدِ اللهِ",
+      "prefix": "فَذَاكَ:",
+      "suffix": ". وَيُقَالُ:"
+    },
+    {
+      "id": "sp_jz6",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "175",
+      "layer": "MAIN",
+      "exact": "جُنْدُبُ بنُ",
+      "prefix": "فَذَاكَ:"
+    },
+    {
+      "id": "sp_jz8",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "175",
+      "layer": "MAIN",
+      "exact": "وَيُقَالُ",
+      "suffix": ": جُنْدُبُ بنُ كَعْبٍ."
+    },
+    {
+      "id": "sp_jz11",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "175",
+      "layer": "MAIN",
+      "exact": "جُنْدُبُ بنُ كَعْبٍ",
+      "prefix": "وَيُقَالُ:",
+      "suffix": ". أَبُو عَبْدِ اللهِ"
+    },
+    {
+      "id": "sp_jz14",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "175",
+      "layer": "MAIN",
+      "exact": "أَبُو عَبْدِ اللهِ الأَزْدِيُّ، صَاحِبُ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ -."
+    },
+    {
+      "id": "sp_jz16",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "175",
+      "layer": "MAIN",
+      "exact": "أَبُو عَبْدِ اللهِ",
+      "suffix": "الأَزْدِيُّ، صَاحِبُ"
+    },
+    {
+      "id": "sp_jz20",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "175",
+      "layer": "MAIN",
+      "exact": "وَيُقَالُ لَهُ",
+      "suffix": ": جُنْدُبُ الخَيْرِ،"
+    },
+    {
+      "id": "sp_jz23",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "175",
+      "layer": "MAIN",
+      "exact": "جُنْدُبُ الخَيْرِ",
+      "prefix": "وَيُقَالُ لَهُ:"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_jz0",
+      "unit": "siyar-v6-31-jundub-azdi",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_jz_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_jz10",
+      "unit": "siyar-v6-31-jundub-azdi",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "frame": [
+        "sp_jz8"
+      ],
+      "origin": {
+        "mention": "m_jz9"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_jz22",
+      "unit": "siyar-v6-31-jundub-azdi",
+      "ordinal": 3,
+      "voice": "REPORTED_ANONYMOUS",
+      "frame": [
+        "sp_jz20"
+      ],
+      "origin": {
+        "mention": "m_jz21"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_jz2",
+      "report": "r_jz0",
+      "spans": [
+        "sp_jz1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_jz12",
+      "report": "r_jz10",
+      "spans": [
+        "sp_jz11"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_jz15",
+      "report": "r_jz0",
+      "spans": [
+        "sp_jz14"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_jz24",
+      "report": "r_jz22",
+      "spans": [
+        "sp_jz23"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_jz3",
+      "parent": "sp_jz1",
+      "exact": "جُنْدُبُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_jz9",
+      "parent": "sp_jz8",
+      "exact": "وَيُقَالُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_jz18",
+      "parent": "sp_jz14",
+      "exact": "النَّبِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_jz21",
+      "parent": "sp_jz20",
+      "exact": "وَيُقَالُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_jz4",
+      "mention": "m_jz3",
+      "agent": "jundub-al-azdi",
+      "basis": [
+        {
+          "span": "sp_jz_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_jz5",
+      "subject": "m_jz3",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_jz1"
+        ]
+      },
+      "restsOn": [
+        "st_jz2"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_jz7",
+      "subject": "m_jz3",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_jz6"
+        ]
+      },
+      "restsOn": [
+        "st_jz2"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_jz13",
+      "subject": "m_jz3",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_jz11"
+        ]
+      },
+      "restsOn": [
+        "st_jz12"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_jz17",
+      "subject": "m_jz3",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_jz16"
+        ]
+      },
+      "restsOn": [
+        "st_jz15"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_jz19",
+      "subject": "m_jz3",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_jz18"
+      },
+      "restsOn": [
+        "st_jz15"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_jz25",
+      "subject": "m_jz3",
+      "predicate": "name.laqab",
+      "value": {
+        "spans": [
+          "sp_jz23"
+        ]
+      },
+      "restsOn": [
+        "st_jz24"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

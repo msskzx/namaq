@@ -1,0 +1,218 @@
+{
+  "unit": {
+    "id": "siyar-v5-32-asma-bint-kaab-al-jawniyyah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٣٢"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_aj_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "255",
+      "layer": "MAIN",
+      "exact": "٣٢ - أَسْمَاءُ بِنْتُ كَعْبٍ الجَوْنِيَّةُ"
+    },
+    {
+      "id": "sp_aj_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "255",
+      "layer": "MAIN",
+      "exact": "أَسْمَاءُ بِنْتُ كَعْبٍ الجَوْنِيَّةُ",
+      "prefix": "٣٢ -"
+    },
+    {
+      "id": "sp_aj_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "255",
+      "layer": "MAIN",
+      "exact": "كَعْبٍ الجَوْنِيَّةُ",
+      "prefix": "٣٢ - أَسْمَاءُ بِنْتُ"
+    },
+    {
+      "id": "sp_aj_ishaq_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "255",
+      "layer": "MAIN",
+      "exact": "كَذَا سَمَّاهَا: ابْنُ إِسْحَاقَ، وَقَالَ:"
+    },
+    {
+      "id": "sp_aj_ishaq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "255",
+      "layer": "MAIN",
+      "exact": "لَمْ يَدْخُلْ بِهَا النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- حَتَّى طَلَّقَهَا"
+    },
+    {
+      "id": "sp_aj_nabi_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "255",
+      "layer": "MAIN",
+      "exact": "النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- حَتَّى طَلَّقَهَا",
+      "prefix": "لَمْ يَدْخُلْ بِهَا"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_aj0",
+      "unit": "siyar-v5-32-asma-bint-kaab-al-jawniyyah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_aj_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_aj_ishaq",
+      "unit": "siyar-v5-32-asma-bint-kaab-al-jawniyyah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_aj_ishaq_frame"
+      ],
+      "origin": {
+        "mention": "m_aj_ishaq_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_aj_name",
+      "report": "r_aj0",
+      "spans": [
+        "sp_aj_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_aj_ishaq",
+      "report": "r_aj_ishaq",
+      "spans": [
+        "sp_aj_ishaq"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_aj",
+      "parent": "sp_aj_name",
+      "exact": "أَسْمَاءُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_aj_ishaq_by",
+      "parent": "sp_aj_ishaq_frame",
+      "exact": "ابْنُ إِسْحَاقَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_aj_i",
+      "parent": "sp_aj_ishaq",
+      "exact": "بِهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_aj_nabi",
+      "parent": "sp_aj_ishaq",
+      "exact": "النَّبِيُّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_aj",
+      "mention": "m_aj",
+      "agent": "asma-bint-kaab-al-jawniyyah",
+      "basis": [
+        {
+          "span": "sp_aj_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aj_i",
+      "mention": "m_aj_i",
+      "agent": "asma-bint-kaab-al-jawniyyah",
+      "basis": [
+        {
+          "span": "sp_aj_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aj_nabi",
+      "mention": "m_aj_nabi",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_aj_nabi_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_aj_name",
+      "subject": "m_aj",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_aj_name"
+        ]
+      },
+      "restsOn": [
+        "st_aj_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aj_sex",
+      "subject": "m_aj",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_aj_name"
+        ]
+      },
+      "restsOn": [
+        "st_aj_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aj_nabi",
+      "subject": "m_aj_i",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_aj_nabi"
+      },
+      "restsOn": [
+        "st_aj_ishaq"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
