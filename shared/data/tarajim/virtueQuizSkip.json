@@ -1,4 +1,12 @@
 {
   "about": "Virtues the «صاحب المنقبة» quiz does not ask, keyed by the virtue's id (unit#assertion), each with why. They stay on the person's page. A virtue goes here when another person in the app could rightly be its answer too: general praise («من كبراء الصحابة», «من أشراف قومه»), or one shared by a group. The batch threads add to it when they read the generated questions (conversion GUIDE.md, check 4).",
-  "skip": {}
+  "skip": {
+    "siyar-v4-58-asad-ibn-zurarah#a_az_v_kubara": "general praise; other Companions fit too",
+    "siyar-v4-53-al-baraa-ibn-marur#a_br_v_fadil": "general praise; other Companions fit too",
+    "siyar-v4-54-bishr-ibn-al-baraa#a_bs_v_ashraf": "general praise; other Companions fit too",
+    "siyar-v4-54-bishr-ibn-al-baraa#a_bs_v_badri": "shared by every senior man of Badr",
+    "siyar-v4-55-saad-ibn-ubadah#a_su_v_malik": "general praise; other chiefs fit too",
+    "siyar-v4-56-saad-ibn-muadh#a_sm_v_janna": "shared by others promised Paradise and martyred, such as Hamzah",
+    "siyar-v4-45-ubaydah#a_ub_v_manzilah": "general praise; other Companions fit too"
+  }
 }
