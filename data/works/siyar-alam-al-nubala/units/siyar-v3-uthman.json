@@ -1,0 +1,929 @@
+{
+  "unit": {
+    "id": "siyar-v3-uthman",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": ""
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_o_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "149",
+      "layer": "MAIN",
+      "exact": "سيرة ذي النورين عثمان رضي الله عنه"
+    },
+    {
+      "id": "sp_o_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "149",
+      "layer": "MAIN",
+      "exact": "عثمان بن عفان بن أبي العاص بن أمية بن عبد شمس، أمير المؤمنين، أبو عمرو، وأبو عبد الله، القرشي الأموي"
+    },
+    {
+      "id": "sp_o_nasab_full",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "149",
+      "layer": "MAIN",
+      "exact": "عثمان بن عفان بن أبي العاص بن أمية بن عبد شمس",
+      "suffix": "، أمير المؤمنين"
+    },
+    {
+      "id": "sp_o_nisba",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "149",
+      "layer": "MAIN",
+      "exact": "القرشي الأموي",
+      "prefix": "وأبو عبد الله، "
+    },
+    {
+      "id": "sp_o_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "149",
+      "layer": "MAIN",
+      "exact": "عثمان بن عفان",
+      "suffix": " بن أبي العاص بن أمية"
+    },
+    {
+      "id": "sp_o_father_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "149",
+      "layer": "MAIN",
+      "exact": "بن عفان بن أبي العاص",
+      "prefix": "عثمان "
+    },
+    {
+      "id": "sp_o_amir",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "149",
+      "layer": "MAIN",
+      "exact": "أمير المؤمنين",
+      "prefix": "بن عبد شمس، "
+    },
+    {
+      "id": "sp_o_kunya1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "149",
+      "layer": "MAIN",
+      "exact": "أبو عمرو",
+      "prefix": "أمير المؤمنين، "
+    },
+    {
+      "id": "sp_o_kunya2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "149",
+      "layer": "MAIN",
+      "exact": "أبو عبد الله",
+      "prefix": "أبو عمرو، و"
+    },
+    {
+      "id": "sp_o_sabiq_line",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "149",
+      "layer": "MAIN",
+      "exact": "أحد السابقين الأولين، وذو النورين، وصاحب الهجرتين، وزوج الابنتين"
+    },
+    {
+      "id": "sp_o_sabiq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "149",
+      "layer": "MAIN",
+      "exact": "أحد السابقين الأولين",
+      "suffix": "، وذو النورين"
+    },
+    {
+      "id": "sp_o_nurayn",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "149",
+      "layer": "MAIN",
+      "exact": "ذو النورين",
+      "prefix": "السابقين الأولين، و"
+    },
+    {
+      "id": "sp_o_hijratayn",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "149",
+      "layer": "MAIN",
+      "exact": "صاحب الهجرتين",
+      "prefix": "وذو النورين، و"
+    },
+    {
+      "id": "sp_o_ibnatayn",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "149",
+      "layer": "MAIN",
+      "exact": "زوج الابنتين",
+      "prefix": "الهجرتين، و"
+    },
+    {
+      "id": "sp_o_ruqayyah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "149",
+      "layer": "MAIN",
+      "exact": "وتزوج رقية بنت رسول الله صلى الله عليه وسلم قبل المبعث، فولدت له عبد الله، وبه كان يكنى، وبابنه عمرو"
+    },
+    {
+      "id": "sp_o_ruqayyah_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "149",
+      "layer": "MAIN",
+      "exact": "رقية بنت رسول الله صلى الله عليه وسلم",
+      "prefix": "وتزوج "
+    },
+    {
+      "id": "sp_o_waladat",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "149",
+      "layer": "MAIN",
+      "exact": "فولدت له عبد الله",
+      "prefix": "قبل المبعث، "
+    },
+    {
+      "id": "sp_o_mother",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "149",
+      "layer": "MAIN",
+      "exact": "وأمه أروى بنت كريز بن حبيب بن عبد شمس"
+    },
+    {
+      "id": "sp_o_mother_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "149",
+      "layer": "MAIN",
+      "exact": "أروى بنت كريز بن حبيب بن عبد شمس",
+      "prefix": "وأمه "
+    },
+    {
+      "id": "sp_o_badr_a",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "149",
+      "layer": "MAIN",
+      "exact": "فهاجر برقية إلى الحبشة، وخلفه النبي صلى الله عليها"
+    },
+    {
+      "id": "sp_o_badr_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "150",
+      "layer": "MAIN",
+      "exact": "في غزوة بدر ليداويها في مرضها، فتوفيت بعد بدر بليال، وضرب له النبي صلى الله عليه وسلم بسهمه من بدر وأجره"
+    },
+    {
+      "id": "sp_o_day_badr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "150",
+      "layer": "MAIN",
+      "exact": "غزوة بدر",
+      "prefix": "في ",
+      "suffix": " ليداويها"
+    },
+    {
+      "id": "sp_o_ummkulthum",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "150",
+      "layer": "MAIN",
+      "exact": "ثم زوجه بالبنت الأخرى أم كلثوم"
+    },
+    {
+      "id": "sp_o_ukhra",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "150",
+      "layer": "MAIN",
+      "exact": "بالبنت الأخرى",
+      "prefix": "ثم زوجه "
+    },
+    {
+      "id": "sp_o_app",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "150",
+      "layer": "MAIN",
+      "exact": "وكان عثمان فيما بلغنا لا بالطويل، ولا بالقصير، حسن الوجه كبير اللحية أسمر اللون عظيم الكراديس بعيد ما بين المنكبين يخضب بالصفرة"
+    },
+    {
+      "id": "sp_o_rakah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "157",
+      "layer": "MAIN",
+      "exact": "وصح من وجوه، أن عثمان قرأ القرآن كله في ركعة"
+    },
+    {
+      "id": "sp_o_a82_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "162",
+      "layer": "MAIN",
+      "exact": "زاد غيره فقال",
+      "suffix": ": بعد العصر"
+    },
+    {
+      "id": "sp_o_a82",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "162",
+      "layer": "MAIN",
+      "exact": "وهو ابن اثنتين وثمانين سنة",
+      "prefix": "بين العشاءين، "
+    },
+    {
+      "id": "sp_o_a82_grade",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "162",
+      "layer": "MAIN",
+      "exact": "وهو الصحيح",
+      "prefix": "وثمانين سنة "
+    },
+    {
+      "id": "sp_o_a86_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "162",
+      "layer": "MAIN",
+      "exact": "وقيل",
+      "suffix": ": عاش ستا"
+    },
+    {
+      "id": "sp_o_a86",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "162",
+      "layer": "MAIN",
+      "exact": "عاش ستا وثمانين سنة"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_o0",
+      "unit": "siyar-v3-uthman",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_o_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_o_a82",
+      "unit": "siyar-v3-uthman",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "frame": [
+        "sp_o_a82_frame",
+        "sp_o_a82_grade"
+      ],
+      "origin": {
+        "mention": "m_o_ghayruh"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_o_a86",
+      "unit": "siyar-v3-uthman",
+      "ordinal": 3,
+      "voice": "REPORTED_ANONYMOUS",
+      "frame": [
+        "sp_o_a86_frame"
+      ],
+      "origin": {
+        "mention": "m_o_qila"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_o_name",
+      "report": "r_o0",
+      "spans": [
+        "sp_o_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_o_sabiq",
+      "report": "r_o0",
+      "spans": [
+        "sp_o_sabiq_line"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_o_ruqayyah",
+      "report": "r_o0",
+      "spans": [
+        "sp_o_ruqayyah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_o_mother",
+      "report": "r_o0",
+      "spans": [
+        "sp_o_mother"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_o_badr",
+      "report": "r_o0",
+      "spans": [
+        "sp_o_badr_a",
+        "sp_o_badr_b"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_o_ummkulthum",
+      "report": "r_o0",
+      "spans": [
+        "sp_o_ummkulthum"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_o_app",
+      "report": "r_o0",
+      "spans": [
+        "sp_o_app"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_o_rakah",
+      "report": "r_o0",
+      "spans": [
+        "sp_o_rakah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_o_a82",
+      "report": "r_o_a82",
+      "spans": [
+        "sp_o_a82"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_o_a86",
+      "report": "r_o_a86",
+      "spans": [
+        "sp_o_a86"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_o",
+      "parent": "sp_o_name",
+      "exact": "عثمان",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o_father",
+      "parent": "sp_o_name",
+      "exact": "عفان",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_o_ruq",
+      "parent": "sp_o_ruqayyah",
+      "exact": "رقية بنت رسول الله صلى الله عليه وسلم",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_o_abdullah",
+      "parent": "sp_o_ruqayyah",
+      "exact": "عبد الله",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o_mo",
+      "parent": "sp_o_mother",
+      "exact": "وأمه",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o_arwa",
+      "parent": "sp_o_mother",
+      "exact": "أروى بنت كريز",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_o_badr_o",
+      "parent": "sp_o_badr_b",
+      "exact": "له",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o_badr",
+      "parent": "sp_o_badr_b",
+      "exact": "بدر",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_o_uk",
+      "parent": "sp_o_ummkulthum",
+      "exact": "أم كلثوم",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_o_uk_o",
+      "parent": "sp_o_ummkulthum",
+      "exact": "زوجه",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o_app",
+      "parent": "sp_o_app",
+      "exact": "عثمان",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o_rakah",
+      "parent": "sp_o_rakah",
+      "exact": "عثمان",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o_ghayruh",
+      "parent": "sp_o_a82_frame",
+      "exact": "غيره",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_o_qila",
+      "parent": "sp_o_a86_frame",
+      "exact": "وقيل",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_o",
+      "mention": "m_o",
+      "agent": "uthman-ibn-affan",
+      "basis": [
+        {
+          "span": "sp_o_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o_mo",
+      "mention": "m_o_mo",
+      "agent": "uthman-ibn-affan",
+      "basis": [
+        {
+          "span": "sp_o_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o_badr_o",
+      "mention": "m_o_badr_o",
+      "agent": "uthman-ibn-affan",
+      "basis": [
+        {
+          "span": "sp_o_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o_uk_o",
+      "mention": "m_o_uk_o",
+      "agent": "uthman-ibn-affan",
+      "basis": [
+        {
+          "span": "sp_o_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o_app",
+      "mention": "m_o_app",
+      "agent": "uthman-ibn-affan",
+      "basis": [
+        {
+          "span": "sp_o_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o_rakah",
+      "mention": "m_o_rakah",
+      "agent": "uthman-ibn-affan",
+      "basis": [
+        {
+          "span": "sp_o_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o_father",
+      "mention": "m_o_father",
+      "agent": "affan-ibn-abi-al-as",
+      "basis": [
+        {
+          "span": "sp_o_father_nasab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o_ruq",
+      "mention": "m_o_ruq",
+      "agent": "ruqayyah-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_o_ruqayyah_name",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o_abdullah",
+      "mention": "m_o_abdullah",
+      "agent": "abdullah-ibn-uthman-ibn-affan",
+      "basis": [
+        {
+          "span": "sp_o_waladat",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o_arwa",
+      "mention": "m_o_arwa",
+      "agent": "arwa-bint-kurayz",
+      "basis": [
+        {
+          "span": "sp_o_mother_name",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o_uk",
+      "mention": "m_o_uk",
+      "agent": "umm-kulthum-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_o_ukhra",
+          "role": "SAME_WORK_EXPLICIT"
+        },
+        {
+          "span": "sp_o_ruqayyah_name",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o_badr",
+      "mention": "m_o_badr",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_o_day_badr",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_o_name",
+      "subject": "m_o",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_o_nasab_full",
+          "sp_o_nisba"
+        ]
+      },
+      "restsOn": [
+        "st_o_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_o_sex",
+      "subject": "m_o",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_o_sex"
+        ]
+      },
+      "restsOn": [
+        "st_o_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_o_kunya1",
+      "subject": "m_o",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_o_kunya1"
+        ]
+      },
+      "restsOn": [
+        "st_o_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_o_kunya2",
+      "subject": "m_o",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_o_kunya2"
+        ]
+      },
+      "restsOn": [
+        "st_o_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_o_father",
+      "subject": "m_o",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_o_father"
+      },
+      "restsOn": [
+        "st_o_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_o_office",
+      "subject": "m_o",
+      "predicate": "office",
+      "value": {
+        "classified": "caliph",
+        "spans": [
+          "sp_o_amir"
+        ]
+      },
+      "restsOn": [
+        "st_o_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_o_sabiq",
+      "subject": "m_o",
+      "predicate": "title",
+      "value": {
+        "classified": "al-sabiqoon",
+        "spans": [
+          "sp_o_sabiq"
+        ]
+      },
+      "restsOn": [
+        "st_o_sabiq"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_o_nurayn",
+      "subject": "m_o",
+      "predicate": "title",
+      "value": {
+        "classified": "dhu-al-nurayn",
+        "spans": [
+          "sp_o_nurayn"
+        ]
+      },
+      "restsOn": [
+        "st_o_sabiq"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_o_v_hijratayn",
+      "subject": "m_o",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_o_hijratayn"
+        ]
+      },
+      "restsOn": [
+        "st_o_sabiq"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_o_v_ibnatayn",
+      "subject": "m_o",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_o_ibnatayn"
+        ]
+      },
+      "restsOn": [
+        "st_o_sabiq"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_o_ruq",
+      "subject": "m_o",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_o_ruq"
+      },
+      "restsOn": [
+        "st_o_ruqayyah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_o_son",
+      "subject": "m_o_abdullah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_o"
+      },
+      "restsOn": [
+        "st_o_ruqayyah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_o_son_m",
+      "subject": "m_o_abdullah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_o_ruq"
+      },
+      "restsOn": [
+        "st_o_ruqayyah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_o_mother",
+      "subject": "m_o_mo",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_o_arwa"
+      },
+      "restsOn": [
+        "st_o_mother"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_o_badr",
+      "subject": "m_o_badr_o",
+      "predicate": "ABSENT_FROM",
+      "value": {
+        "object": "m_o_badr"
+      },
+      "restsOn": [
+        "st_o_badr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_o_uk",
+      "subject": "m_o_uk_o",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_o_uk"
+      },
+      "restsOn": [
+        "st_o_ummkulthum"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_o_app",
+      "subject": "m_o_app",
+      "predicate": "appearance",
+      "value": {
+        "spans": [
+          "sp_o_app"
+        ]
+      },
+      "restsOn": [
+        "st_o_app"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_o_v_rakah",
+      "subject": "m_o_rakah",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_o_rakah"
+        ]
+      },
+      "restsOn": [
+        "st_o_rakah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_o_a82",
+      "subject": "m_o",
+      "predicate": "died.age",
+      "value": {
+        "parsed": 82,
+        "spans": [
+          "sp_o_a82"
+        ]
+      },
+      "restsOn": [
+        "st_o_a82"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_o_a86",
+      "subject": "m_o",
+      "predicate": "died.age",
+      "value": {
+        "parsed": 86,
+        "spans": [
+          "sp_o_a86"
+        ]
+      },
+      "restsOn": [
+        "st_o_a86"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

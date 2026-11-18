@@ -1,0 +1,2248 @@
+{
+  "unit": {
+    "id": "siyar-v3-umar",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": ""
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_u_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "71",
+      "layer": "MAIN",
+      "exact": "سيرة عمر الفاروق رضي الله عنه"
+    },
+    {
+      "id": "sp_u_nasab_full",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "71",
+      "layer": "MAIN",
+      "exact": "عمر بن الخطاب بن نفيل بن عبد العزى بن رياح بن قرط بن رزاح بن عدي بن كعب بن لؤي",
+      "suffix": "، أمير المؤمنين"
+    },
+    {
+      "id": "sp_u_nisba",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "71",
+      "layer": "MAIN",
+      "exact": "القرشي العدوي",
+      "prefix": "أبو حفص "
+    },
+    {
+      "id": "sp_u_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "71",
+      "layer": "MAIN",
+      "exact": "عمر بن الخطاب بن نفيل بن عبد العزى بن رياح بن قرط بن رزاح بن عدي بن كعب بن لؤي، أمير المؤمنين، أبو حفص القرشي العدوي، الفاروق"
+    },
+    {
+      "id": "sp_u_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "71",
+      "layer": "MAIN",
+      "exact": "عمر بن الخطاب",
+      "suffix": " بن نفيل بن عبد العزى"
+    },
+    {
+      "id": "sp_u_father_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "71",
+      "layer": "MAIN",
+      "exact": "بن الخطاب بن نفيل بن عبد العزى",
+      "prefix": "عمر "
+    },
+    {
+      "id": "sp_u_amir",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "71",
+      "layer": "MAIN",
+      "exact": "أمير المؤمنين",
+      "prefix": "بن لؤي، "
+    },
+    {
+      "id": "sp_u_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "71",
+      "layer": "MAIN",
+      "exact": "أبو حفص",
+      "prefix": "أمير المؤمنين، "
+    },
+    {
+      "id": "sp_u_faruq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "71",
+      "layer": "MAIN",
+      "exact": "الفاروق",
+      "prefix": "القرشي العدوي، "
+    },
+    {
+      "id": "sp_u_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "71",
+      "layer": "MAIN",
+      "exact": "استشهد في أواخر ذي الحجة سنة ثلاث وعشرين"
+    },
+    {
+      "id": "sp_u_death_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "71",
+      "layer": "MAIN",
+      "exact": "سنة ثلاث وعشرين",
+      "prefix": "ذي الحجة "
+    },
+    {
+      "id": "sp_u_death_m",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "71",
+      "layer": "MAIN",
+      "exact": "ذي الحجة",
+      "prefix": "في أواخر "
+    },
+    {
+      "id": "sp_u_mother",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "71",
+      "layer": "MAIN",
+      "exact": "وأمه حنتمة بنت هشام المخزومية أخت أبي جهل"
+    },
+    {
+      "id": "sp_u_mother_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "71",
+      "layer": "MAIN",
+      "exact": "حنتمة بنت هشام المخزومية",
+      "prefix": "وأمه "
+    },
+    {
+      "id": "sp_u_islam",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "71",
+      "layer": "MAIN",
+      "exact": "أسلم في السنة السادسة من النبوة وله سبع وعشرون سنة"
+    },
+    {
+      "id": "sp_u_islam_age",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "71",
+      "layer": "MAIN",
+      "exact": "وله سبع وعشرون سنة",
+      "prefix": "من النبوة "
+    },
+    {
+      "id": "sp_u_ibnumar_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "71",
+      "layer": "MAIN",
+      "exact": "وعن عبد الله بن عمر، قال",
+      "suffix": ": كان أبي أبيض"
+    },
+    {
+      "id": "sp_u_ibnumar",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "71",
+      "layer": "MAIN",
+      "exact": "كان أبي أبيض تعلوه حمرة، طوالا، أصلع، أشيب"
+    },
+    {
+      "id": "sp_u_raja_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "71",
+      "layer": "MAIN",
+      "exact": "وقال أبو رجاء العطاردي"
+    },
+    {
+      "id": "sp_u_raja_a",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "71",
+      "layer": "MAIN",
+      "exact": "كان طويلا جسيما، شديد الصلع، شديد الحمرة، وفي عارضيه خفة وسبلته كبيرة وفي أطرافها"
+    },
+    {
+      "id": "sp_u_raja_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "72",
+      "layer": "MAIN",
+      "exact": "صهبة، إذا حزبه أمر فتلها"
+    },
+    {
+      "id": "sp_u_aizz_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "72",
+      "layer": "MAIN",
+      "exact": "وعن ابن عمر وغيره -من وجوه جيدة- أن النبي صلى الله عليه وسلم قال"
+    },
+    {
+      "id": "sp_u_aizz",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "72",
+      "layer": "MAIN",
+      "exact": "اللهم أعز الإسلام بعمر بن الخطاب"
+    },
+    {
+      "id": "sp_u_wazir_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "72",
+      "layer": "MAIN",
+      "exact": "وقال ليث بن أبي سليم عن مجاهد عن ابن عباس"
+    },
+    {
+      "id": "sp_u_wazir_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "73",
+      "layer": "MAIN",
+      "exact": "رسول الله صلى الله عليه وسلم:",
+      "suffix": " \"إن لي وزيرين"
+    },
+    {
+      "id": "sp_u_wazir_grade",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "73",
+      "layer": "MAIN",
+      "exact": "قلت: وكذلك حديث ان عباس حسن"
+    },
+    {
+      "id": "sp_u_wazir",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "73",
+      "layer": "MAIN",
+      "exact": "إن لي وزيرين من أهل السماء ووزيرين من أهل الأرض، فوزيراي من أهل السماء جبريل وميكائيل، ووزيراي من أهل الأرض أبو بكر وعمر"
+    },
+    {
+      "id": "sp_u_iqtadu_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "74",
+      "layer": "MAIN",
+      "exact": "وقال زائدة، عن عبد الملك بن عمير، عن ربعي، عن حذيفة"
+    },
+    {
+      "id": "sp_u_iqtadu_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "74",
+      "layer": "MAIN",
+      "exact": "قال رسول الله صلى الله عليه وسلم:",
+      "suffix": " \"اقتدوا"
+    },
+    {
+      "id": "sp_u_iqtadu_grade",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "74",
+      "layer": "MAIN",
+      "exact": "وحديث زائدة حسن"
+    },
+    {
+      "id": "sp_u_iqtadu",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "74",
+      "layer": "MAIN",
+      "exact": "اقتدوا بالذين من بعدي أبي بكر وعمر"
+    },
+    {
+      "id": "sp_u_firar_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "74",
+      "layer": "MAIN",
+      "exact": "وعنها أن النبي صلى الله عليه وسلم قال في زفن الحبشة لما أتى عمر"
+    },
+    {
+      "id": "sp_u_firar_grade",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "74",
+      "layer": "MAIN",
+      "exact": "صححه الترمذي",
+      "prefix": "من عمر\". "
+    },
+    {
+      "id": "sp_u_firar",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "74",
+      "layer": "MAIN",
+      "exact": "إن لأنظر إلى شياطين الجن والإنس قد فروا من عمر"
+    },
+    {
+      "id": "sp_u_muhaddath_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "75",
+      "layer": "MAIN",
+      "exact": "وقال عائشة: قال رسول الله صلى الله عليه وسلم"
+    },
+    {
+      "id": "sp_u_muhaddath_grade",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "75",
+      "layer": "MAIN",
+      "exact": "رواه مسلم",
+      "prefix": "بن الخطاب\". "
+    },
+    {
+      "id": "sp_u_muhaddath",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "75",
+      "layer": "MAIN",
+      "exact": "قد كان في الأمم محدثون فإن يكن في أمتي أحد فعمر بن الخطاب"
+    },
+    {
+      "id": "sp_u_qasr_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "77",
+      "layer": "MAIN",
+      "exact": "وقال أنس: قال رسول الله صلى الله عليه وسلم",
+      "suffix": ": \"دخلت الجنة"
+    },
+    {
+      "id": "sp_u_qasr_grade",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "77",
+      "layer": "MAIN",
+      "exact": "وفي الصحيح أيضًا من حديث جابر مثله"
+    },
+    {
+      "id": "sp_u_qasr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "77",
+      "layer": "MAIN",
+      "exact": "دخلت الجنة فرأيت قصرا من ذهب فقلت: لمن هذا؟ فقيل: لشاب من قريش فظننت أني أنا هو، فقيل: لعمر بن الخطاب"
+    },
+    {
+      "id": "sp_u_w_zaynab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "87",
+      "layer": "MAIN",
+      "exact": "تزوج زينب بنت مظعون، فولدت له عبد الله وحفصة، وعبد الرحمن"
+    },
+    {
+      "id": "sp_u_w_mulaykah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "87",
+      "layer": "MAIN",
+      "exact": "وتزوج مليكة الخزاعية، فولدت له عبيد الله",
+      "suffix": "، وقيل"
+    },
+    {
+      "id": "sp_u_w_ummhakim",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "87",
+      "layer": "MAIN",
+      "exact": "وتزوج أم حكيم بنت الحارث بن هشام المخزومية، فولدت له فاطمة"
+    },
+    {
+      "id": "sp_u_w_jamilah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "87",
+      "layer": "MAIN",
+      "exact": "وتزوج جميلة بنت عاصم بن ثابت فولدت له عاصما"
+    },
+    {
+      "id": "sp_u_w_ummkulthum",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "87",
+      "layer": "MAIN",
+      "exact": "وتزوج أم كلثوم بنت فاطمة الزهراء وأصدقها أربعين ألفا، فولدت له زيدا ورقية"
+    },
+    {
+      "id": "sp_u_uk_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "87",
+      "layer": "MAIN",
+      "exact": "بنت فاطمة الزهراء",
+      "prefix": "أم كلثوم "
+    },
+    {
+      "id": "sp_u_w_atikah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "88",
+      "layer": "MAIN",
+      "exact": "وتزوج عاتكة بنت زيد بن عمر بن نفيل"
+    },
+    {
+      "id": "sp_u_a55_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "95",
+      "layer": "MAIN",
+      "exact": "وقال أيوب، وعبيد الله، عن نافع، عن ابن عمر، قال"
+    },
+    {
+      "id": "sp_u_a55",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "95",
+      "layer": "MAIN",
+      "exact": "مات عمر وهو ابن خمس وخمسين سنة"
+    },
+    {
+      "id": "sp_u_a60_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "95",
+      "layer": "MAIN",
+      "exact": "وقال الواقدي: أخبرنا هشام بن سعد، عن زيد بن أسلم، عن أبيه"
+    },
+    {
+      "id": "sp_u_a60",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "95",
+      "layer": "MAIN",
+      "exact": "توفي عمر وله ستون سنة"
+    },
+    {
+      "id": "sp_u_a61_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "96",
+      "layer": "MAIN",
+      "exact": "وقال قتادة",
+      "suffix": ": قتل عمر"
+    },
+    {
+      "id": "sp_u_a61",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "96",
+      "layer": "MAIN",
+      "exact": "قتل عمر وهو ابن إحدى وستين سنة"
+    },
+    {
+      "id": "sp_u_a63_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "96",
+      "layer": "MAIN",
+      "exact": "وقال يحى بن سعيد: سمعت سعيد بن المسيب، قال"
+    },
+    {
+      "id": "sp_u_a63",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "96",
+      "layer": "MAIN",
+      "exact": "قبض عمر وقد استكمل ثلاثا وستين"
+    },
+    {
+      "id": "sp_u_a66_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "96",
+      "layer": "MAIN",
+      "exact": "قول ابن جريج، عن أبي الحويرث، عن ابن عباس"
+    },
+    {
+      "id": "sp_u_a66",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "96",
+      "layer": "MAIN",
+      "exact": "قبض عمر وهو ابن ست وستين سنة"
+    },
+    {
+      "id": "sp_u_wn_zaynab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "87",
+      "layer": "MAIN",
+      "exact": "زينب بنت مظعون",
+      "prefix": "تزوج "
+    },
+    {
+      "id": "sp_u_wl_zaynab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "87",
+      "layer": "MAIN",
+      "exact": "فولدت له",
+      "prefix": "مظعون، "
+    },
+    {
+      "id": "sp_u_wn_mulaykah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "87",
+      "layer": "MAIN",
+      "exact": "مليكة الخزاعية",
+      "prefix": "وتزوج "
+    },
+    {
+      "id": "sp_u_wl_mulaykah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "87",
+      "layer": "MAIN",
+      "exact": "فولدت له",
+      "prefix": "الخزاعية، "
+    },
+    {
+      "id": "sp_u_wn_ummhakim",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "87",
+      "layer": "MAIN",
+      "exact": "أم حكيم بنت الحارث بن هشام المخزومية",
+      "prefix": "وتزوج "
+    },
+    {
+      "id": "sp_u_wl_ummhakim",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "87",
+      "layer": "MAIN",
+      "exact": "فولدت له",
+      "prefix": "المخزومية، "
+    },
+    {
+      "id": "sp_u_wn_jamilah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "87",
+      "layer": "MAIN",
+      "exact": "جميلة بنت عاصم بن ثابت",
+      "prefix": "وتزوج "
+    },
+    {
+      "id": "sp_u_wl_jamilah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "87",
+      "layer": "MAIN",
+      "exact": "فولدت له",
+      "prefix": "ثابت "
+    },
+    {
+      "id": "sp_u_wn_ummkulthum",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "87",
+      "layer": "MAIN",
+      "exact": "أم كلثوم بنت فاطمة الزهراء",
+      "prefix": "وتزوج "
+    },
+    {
+      "id": "sp_u_wl_ummkulthum",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "87",
+      "layer": "MAIN",
+      "exact": "فولدت له",
+      "prefix": "أربعين ألفا، "
+    },
+    {
+      "id": "sp_u_wn_atikah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "88",
+      "layer": "MAIN",
+      "exact": "عاتكة بنت زيد بن عمر بن نفيل",
+      "prefix": "وتزوج "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_u0",
+      "unit": "siyar-v3-umar",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_u_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_u_ibnumar",
+      "unit": "siyar-v3-umar",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_u_ibnumar_frame"
+      ],
+      "origin": {
+        "mention": "m_u_ibnumar"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_u_raja",
+      "unit": "siyar-v3-umar",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_u_raja_frame"
+      ],
+      "origin": {
+        "mention": "m_u_raja"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_u_aizz",
+      "unit": "siyar-v3-umar",
+      "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_u_aizz_frame"
+      ],
+      "origin": {
+        "mention": "m_u_p_aizz"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_u_wazir",
+      "unit": "siyar-v3-umar",
+      "ordinal": 5,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_u_wazir_frame",
+        "sp_u_wazir_grade"
+      ],
+      "isnadSpan": "sp_u_wazir_isnad",
+      "origin": {
+        "mention": "m_u_p_wazir"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_u_iqtadu",
+      "unit": "siyar-v3-umar",
+      "ordinal": 6,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_u_iqtadu_frame",
+        "sp_u_iqtadu_grade"
+      ],
+      "isnadSpan": "sp_u_iqtadu_isnad",
+      "origin": {
+        "mention": "m_u_p_iqtadu"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_u_firar",
+      "unit": "siyar-v3-umar",
+      "ordinal": 7,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_u_firar_frame",
+        "sp_u_firar_grade"
+      ],
+      "origin": {
+        "mention": "m_u_p_firar"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_u_muhaddath",
+      "unit": "siyar-v3-umar",
+      "ordinal": 8,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_u_muhaddath_frame",
+        "sp_u_muhaddath_grade"
+      ],
+      "origin": {
+        "mention": "m_u_p_muhaddath"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_u_qasr",
+      "unit": "siyar-v3-umar",
+      "ordinal": 9,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_u_qasr_frame",
+        "sp_u_qasr_grade"
+      ],
+      "origin": {
+        "mention": "m_u_p_qasr"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_u_a55",
+      "unit": "siyar-v3-umar",
+      "ordinal": 10,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_u_a55_isnad",
+      "origin": {
+        "mention": "m_u_a55"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_u_a60",
+      "unit": "siyar-v3-umar",
+      "ordinal": 11,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_u_a60_isnad",
+      "origin": {
+        "mention": "m_u_a60"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_u_a61",
+      "unit": "siyar-v3-umar",
+      "ordinal": 12,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_u_a61_frame"
+      ],
+      "origin": {
+        "mention": "m_u_a61"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_u_a63",
+      "unit": "siyar-v3-umar",
+      "ordinal": 13,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_u_a63_isnad",
+      "origin": {
+        "mention": "m_u_a63"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_u_a66",
+      "unit": "siyar-v3-umar",
+      "ordinal": 14,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_u_a66_isnad",
+      "origin": {
+        "mention": "m_u_a66"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_u_name",
+      "report": "r_u0",
+      "spans": [
+        "sp_u_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_u_death",
+      "report": "r_u0",
+      "spans": [
+        "sp_u_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_u_mother",
+      "report": "r_u0",
+      "spans": [
+        "sp_u_mother"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_u_islam",
+      "report": "r_u0",
+      "spans": [
+        "sp_u_islam"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_u_w_zaynab",
+      "report": "r_u0",
+      "spans": [
+        "sp_u_w_zaynab"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_u_w_mulaykah",
+      "report": "r_u0",
+      "spans": [
+        "sp_u_w_mulaykah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_u_w_ummhakim",
+      "report": "r_u0",
+      "spans": [
+        "sp_u_w_ummhakim"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_u_w_jamilah",
+      "report": "r_u0",
+      "spans": [
+        "sp_u_w_jamilah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_u_w_ummkulthum",
+      "report": "r_u0",
+      "spans": [
+        "sp_u_w_ummkulthum"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_u_w_atikah",
+      "report": "r_u0",
+      "spans": [
+        "sp_u_w_atikah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_u_ibnumar",
+      "report": "r_u_ibnumar",
+      "spans": [
+        "sp_u_ibnumar"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_u_raja",
+      "report": "r_u_raja",
+      "spans": [
+        "sp_u_raja_a",
+        "sp_u_raja_b"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_u_aizz",
+      "report": "r_u_aizz",
+      "spans": [
+        "sp_u_aizz"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_u_wazir",
+      "report": "r_u_wazir",
+      "spans": [
+        "sp_u_wazir"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_u_iqtadu",
+      "report": "r_u_iqtadu",
+      "spans": [
+        "sp_u_iqtadu"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_u_firar",
+      "report": "r_u_firar",
+      "spans": [
+        "sp_u_firar"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_u_muhaddath",
+      "report": "r_u_muhaddath",
+      "spans": [
+        "sp_u_muhaddath"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_u_qasr",
+      "report": "r_u_qasr",
+      "spans": [
+        "sp_u_qasr"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_u_a55",
+      "report": "r_u_a55",
+      "spans": [
+        "sp_u_a55"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_u_a60",
+      "report": "r_u_a60",
+      "spans": [
+        "sp_u_a60"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_u_a61",
+      "report": "r_u_a61",
+      "spans": [
+        "sp_u_a61"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_u_a63",
+      "report": "r_u_a63",
+      "spans": [
+        "sp_u_a63"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_u_a66",
+      "report": "r_u_a66",
+      "spans": [
+        "sp_u_a66"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_u",
+      "parent": "sp_u_name",
+      "exact": "عمر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_father",
+      "parent": "sp_u_name",
+      "exact": "الخطاب",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_u_h",
+      "parent": "sp_u_heading",
+      "exact": "عمر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_mo",
+      "parent": "sp_u_mother",
+      "exact": "وأمه",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_hantamah",
+      "parent": "sp_u_mother",
+      "exact": "حنتمة بنت هشام المخزومية",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_u_ibnumar",
+      "parent": "sp_u_ibnumar_frame",
+      "exact": "عبد الله بن عمر",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_u_abi",
+      "parent": "sp_u_ibnumar",
+      "exact": "أبي",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_raja",
+      "parent": "sp_u_raja_frame",
+      "exact": "أبو رجاء العطاردي",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_u_p_aizz",
+      "parent": "sp_u_aizz_frame",
+      "exact": "النبي",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_u_aizz",
+      "parent": "sp_u_aizz",
+      "exact": "عمر بن الخطاب",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_p_wazir",
+      "parent": "sp_u_wazir_frame",
+      "exact": "رسول الله",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_u_wazir",
+      "parent": "sp_u_wazir",
+      "exact": "عمر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_p_iqtadu",
+      "parent": "sp_u_iqtadu_frame",
+      "exact": "رسول الله",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_u_iqtadu",
+      "parent": "sp_u_iqtadu",
+      "exact": "عمر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_p_firar",
+      "parent": "sp_u_firar_frame",
+      "exact": "النبي",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_u_firar",
+      "parent": "sp_u_firar",
+      "exact": "عمر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_p_muhaddath",
+      "parent": "sp_u_muhaddath_frame",
+      "exact": "رسول الله",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_u_muhaddath",
+      "parent": "sp_u_muhaddath",
+      "exact": "عمر بن الخطاب",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_p_qasr",
+      "parent": "sp_u_qasr_frame",
+      "exact": "رسول الله",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_u_qasr",
+      "parent": "sp_u_qasr",
+      "exact": "عمر بن الخطاب",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_w_zaynab",
+      "parent": "sp_u_w_zaynab",
+      "exact": "زينب بنت مظعون",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_u_c_abdullah",
+      "parent": "sp_u_w_zaynab",
+      "exact": "عبد الله",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_c_hafsa",
+      "parent": "sp_u_w_zaynab",
+      "exact": "وحفصة",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_c_abdrahman",
+      "parent": "sp_u_w_zaynab",
+      "exact": "وعبد الرحمن",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_w_mulaykah",
+      "parent": "sp_u_w_mulaykah",
+      "exact": "مليكة الخزاعية",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_u_c_ubaydullah",
+      "parent": "sp_u_w_mulaykah",
+      "exact": "عبيد الله",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_w_ummhakim",
+      "parent": "sp_u_w_ummhakim",
+      "exact": "أم حكيم بنت الحارث بن هشام المخزومية",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_u_c_fatimah",
+      "parent": "sp_u_w_ummhakim",
+      "exact": "فاطمة",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_w_jamilah",
+      "parent": "sp_u_w_jamilah",
+      "exact": "جميلة بنت عاصم بن ثابت",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_u_c_asim",
+      "parent": "sp_u_w_jamilah",
+      "exact": "عاصما",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_w_ummkulthum",
+      "parent": "sp_u_w_ummkulthum",
+      "exact": "أم كلثوم بنت فاطمة الزهراء",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_u_c_zayd",
+      "parent": "sp_u_w_ummkulthum",
+      "exact": "زيدا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_c_ruqayyah",
+      "parent": "sp_u_w_ummkulthum",
+      "exact": "ورقية",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_w_atikah",
+      "parent": "sp_u_w_atikah",
+      "exact": "عاتكة بنت زيد بن عمر بن نفيل",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_u_a55",
+      "parent": "sp_u_a55_isnad",
+      "exact": "ابن عمر",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_u_a55_s",
+      "parent": "sp_u_a55",
+      "exact": "عمر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_a60",
+      "parent": "sp_u_a60_isnad",
+      "exact": "أبيه",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_u_a60_s",
+      "parent": "sp_u_a60",
+      "exact": "عمر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_a61",
+      "parent": "sp_u_a61_frame",
+      "exact": "قتادة",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_u_a61_s",
+      "parent": "sp_u_a61",
+      "exact": "عمر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_a63",
+      "parent": "sp_u_a63_isnad",
+      "exact": "سعيد بن المسيب",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_u_a63_s",
+      "parent": "sp_u_a63",
+      "exact": "عمر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_a66",
+      "parent": "sp_u_a66_isnad",
+      "exact": "ابن عباس",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_u_a66_s",
+      "parent": "sp_u_a66",
+      "exact": "عمر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_u_w_zaynab",
+      "mention": "m_u_w_zaynab",
+      "agent": "zaynab-bint-mazun",
+      "basis": [
+        {
+          "span": "sp_u_wn_zaynab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_c_abdullah",
+      "mention": "m_u_c_abdullah",
+      "agent": "abdullah-ibn-umar",
+      "basis": [
+        {
+          "span": "sp_u_wl_zaynab",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_c_hafsa",
+      "mention": "m_u_c_hafsa",
+      "agent": "hafsa-bint-umar",
+      "basis": [
+        {
+          "span": "sp_u_wl_zaynab",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_c_abdrahman",
+      "mention": "m_u_c_abdrahman",
+      "agent": "abd-al-rahman-ibn-umar",
+      "basis": [
+        {
+          "span": "sp_u_wl_zaynab",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_w_mulaykah",
+      "mention": "m_u_w_mulaykah",
+      "agent": "mulaykah-al-khuzaiyyah",
+      "basis": [
+        {
+          "span": "sp_u_wn_mulaykah",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_c_ubaydullah",
+      "mention": "m_u_c_ubaydullah",
+      "agent": "ubaydullah-ibn-umar",
+      "basis": [
+        {
+          "span": "sp_u_wl_mulaykah",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_w_ummhakim",
+      "mention": "m_u_w_ummhakim",
+      "agent": "umm-hakim-bint-al-harith-ibn-hisham",
+      "basis": [
+        {
+          "span": "sp_u_wn_ummhakim",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_c_fatimah",
+      "mention": "m_u_c_fatimah",
+      "agent": "fatimah-bint-umar",
+      "basis": [
+        {
+          "span": "sp_u_wl_ummhakim",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_w_jamilah",
+      "mention": "m_u_w_jamilah",
+      "agent": "jamilah-bint-asim-ibn-thabit",
+      "basis": [
+        {
+          "span": "sp_u_wn_jamilah",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_c_asim",
+      "mention": "m_u_c_asim",
+      "agent": "asim-ibn-umar",
+      "basis": [
+        {
+          "span": "sp_u_wl_jamilah",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_w_ummkulthum",
+      "mention": "m_u_w_ummkulthum",
+      "agent": "umm-kulthum-bint-ali",
+      "basis": [
+        {
+          "span": "sp_u_uk_nasab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_c_zayd",
+      "mention": "m_u_c_zayd",
+      "agent": "zayd-ibn-umar",
+      "basis": [
+        {
+          "span": "sp_u_wl_ummkulthum",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_c_ruqayyah",
+      "mention": "m_u_c_ruqayyah",
+      "agent": "ruqayyah-bint-umar",
+      "basis": [
+        {
+          "span": "sp_u_wl_ummkulthum",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_w_atikah",
+      "mention": "m_u_w_atikah",
+      "agent": "atikah-bint-zayd",
+      "basis": [
+        {
+          "span": "sp_u_wn_atikah",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_h",
+      "mention": "m_u_h",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_u_name",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u",
+      "mention": "m_u",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_u_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_mo",
+      "mention": "m_u_mo",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_u_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_aizz",
+      "mention": "m_u_aizz",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_u_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_wazir",
+      "mention": "m_u_wazir",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_u_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_iqtadu",
+      "mention": "m_u_iqtadu",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_u_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_firar",
+      "mention": "m_u_firar",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_u_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_muhaddath",
+      "mention": "m_u_muhaddath",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_u_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_qasr",
+      "mention": "m_u_qasr",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_u_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_a55_s",
+      "mention": "m_u_a55_s",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_u_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_a60_s",
+      "mention": "m_u_a60_s",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_u_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_a61_s",
+      "mention": "m_u_a61_s",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_u_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_a63_s",
+      "mention": "m_u_a63_s",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_u_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_a66_s",
+      "mention": "m_u_a66_s",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_u_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_abi",
+      "mention": "m_u_abi",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_u_ibnumar_frame",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_ibnumar",
+      "mention": "m_u_ibnumar",
+      "agent": "abdullah-ibn-umar",
+      "basis": [
+        {
+          "span": "sp_u_w_zaynab",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_father",
+      "mention": "m_u_father",
+      "agent": "al-khattab-ibn-nufayl",
+      "basis": [
+        {
+          "span": "sp_u_father_nasab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u_hantamah",
+      "mention": "m_u_hantamah",
+      "agent": "hantamah-bint-hisham",
+      "basis": [
+        {
+          "span": "sp_u_mother_name",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_u_w_zaynab",
+      "subject": "m_u",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_u_w_zaynab"
+      },
+      "restsOn": [
+        "st_u_w_zaynab"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_c_abdullah",
+      "subject": "m_u_c_abdullah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_u"
+      },
+      "restsOn": [
+        "st_u_w_zaynab"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_c_abdullah_m",
+      "subject": "m_u_c_abdullah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_u_w_zaynab"
+      },
+      "restsOn": [
+        "st_u_w_zaynab"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_c_hafsa",
+      "subject": "m_u_c_hafsa",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_u"
+      },
+      "restsOn": [
+        "st_u_w_zaynab"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_c_hafsa_m",
+      "subject": "m_u_c_hafsa",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_u_w_zaynab"
+      },
+      "restsOn": [
+        "st_u_w_zaynab"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_c_abdrahman",
+      "subject": "m_u_c_abdrahman",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_u"
+      },
+      "restsOn": [
+        "st_u_w_zaynab"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_c_abdrahman_m",
+      "subject": "m_u_c_abdrahman",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_u_w_zaynab"
+      },
+      "restsOn": [
+        "st_u_w_zaynab"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_w_mulaykah",
+      "subject": "m_u",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_u_w_mulaykah"
+      },
+      "restsOn": [
+        "st_u_w_mulaykah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_c_ubaydullah",
+      "subject": "m_u_c_ubaydullah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_u"
+      },
+      "restsOn": [
+        "st_u_w_mulaykah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_c_ubaydullah_m",
+      "subject": "m_u_c_ubaydullah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_u_w_mulaykah"
+      },
+      "restsOn": [
+        "st_u_w_mulaykah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_w_ummhakim",
+      "subject": "m_u",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_u_w_ummhakim"
+      },
+      "restsOn": [
+        "st_u_w_ummhakim"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_c_fatimah",
+      "subject": "m_u_c_fatimah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_u"
+      },
+      "restsOn": [
+        "st_u_w_ummhakim"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_c_fatimah_m",
+      "subject": "m_u_c_fatimah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_u_w_ummhakim"
+      },
+      "restsOn": [
+        "st_u_w_ummhakim"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_w_jamilah",
+      "subject": "m_u",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_u_w_jamilah"
+      },
+      "restsOn": [
+        "st_u_w_jamilah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_c_asim",
+      "subject": "m_u_c_asim",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_u"
+      },
+      "restsOn": [
+        "st_u_w_jamilah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_c_asim_m",
+      "subject": "m_u_c_asim",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_u_w_jamilah"
+      },
+      "restsOn": [
+        "st_u_w_jamilah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_w_ummkulthum",
+      "subject": "m_u",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_u_w_ummkulthum"
+      },
+      "restsOn": [
+        "st_u_w_ummkulthum"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_c_zayd",
+      "subject": "m_u_c_zayd",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_u"
+      },
+      "restsOn": [
+        "st_u_w_ummkulthum"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_c_zayd_m",
+      "subject": "m_u_c_zayd",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_u_w_ummkulthum"
+      },
+      "restsOn": [
+        "st_u_w_ummkulthum"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_c_ruqayyah",
+      "subject": "m_u_c_ruqayyah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_u"
+      },
+      "restsOn": [
+        "st_u_w_ummkulthum"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_c_ruqayyah_m",
+      "subject": "m_u_c_ruqayyah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_u_w_ummkulthum"
+      },
+      "restsOn": [
+        "st_u_w_ummkulthum"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_w_atikah",
+      "subject": "m_u",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_u_w_atikah"
+      },
+      "restsOn": [
+        "st_u_w_atikah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_name",
+      "subject": "m_u",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_u_nasab_full",
+          "sp_u_nisba"
+        ]
+      },
+      "restsOn": [
+        "st_u_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_sex",
+      "subject": "m_u",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_u_sex"
+        ]
+      },
+      "restsOn": [
+        "st_u_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_kunya",
+      "subject": "m_u",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_u_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_u_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_father",
+      "subject": "m_u",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_u_father"
+      },
+      "restsOn": [
+        "st_u_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_faruq",
+      "subject": "m_u",
+      "predicate": "title",
+      "value": {
+        "classified": "al-farouq",
+        "spans": [
+          "sp_u_faruq"
+        ]
+      },
+      "restsOn": [
+        "st_u_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_office",
+      "subject": "m_u",
+      "predicate": "office",
+      "value": {
+        "classified": "caliph",
+        "spans": [
+          "sp_u_amir"
+        ]
+      },
+      "restsOn": [
+        "st_u_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_mother",
+      "subject": "m_u_mo",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_u_hantamah"
+      },
+      "restsOn": [
+        "st_u_mother"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_islam",
+      "subject": "m_u",
+      "predicate": "islam.age",
+      "value": {
+        "parsed": 27,
+        "spans": [
+          "sp_u_islam_age"
+        ]
+      },
+      "restsOn": [
+        "st_u_islam"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_death_y",
+      "subject": "m_u",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 23,
+        "spans": [
+          "sp_u_death_y"
+        ]
+      },
+      "restsOn": [
+        "st_u_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_death_m",
+      "subject": "m_u",
+      "predicate": "died.month",
+      "value": {
+        "parsed": 12,
+        "spans": [
+          "sp_u_death_m"
+        ]
+      },
+      "restsOn": [
+        "st_u_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_app_ibnumar",
+      "subject": "m_u_abi",
+      "predicate": "appearance",
+      "value": {
+        "spans": [
+          "sp_u_ibnumar"
+        ]
+      },
+      "restsOn": [
+        "st_u_ibnumar"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_app_raja",
+      "subject": "m_u",
+      "predicate": "appearance",
+      "value": {
+        "spans": [
+          "sp_u_raja_a",
+          "sp_u_raja_b"
+        ]
+      },
+      "restsOn": [
+        "st_u_raja"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_v_aizz",
+      "subject": "m_u_aizz",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_u_aizz"
+        ]
+      },
+      "restsOn": [
+        "st_u_aizz"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_v_wazir",
+      "subject": "m_u_wazir",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_u_wazir"
+        ]
+      },
+      "restsOn": [
+        "st_u_wazir"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_v_iqtadu",
+      "subject": "m_u_iqtadu",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_u_iqtadu"
+        ]
+      },
+      "restsOn": [
+        "st_u_iqtadu"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_v_firar",
+      "subject": "m_u_firar",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_u_firar"
+        ]
+      },
+      "restsOn": [
+        "st_u_firar"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_v_muhaddath",
+      "subject": "m_u_muhaddath",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_u_muhaddath"
+        ]
+      },
+      "restsOn": [
+        "st_u_muhaddath"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_v_qasr",
+      "subject": "m_u_qasr",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_u_qasr"
+        ]
+      },
+      "restsOn": [
+        "st_u_qasr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_a55",
+      "subject": "m_u_a55_s",
+      "predicate": "died.age",
+      "value": {
+        "parsed": 55,
+        "spans": [
+          "sp_u_a55"
+        ]
+      },
+      "restsOn": [
+        "st_u_a55"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_a60",
+      "subject": "m_u_a60_s",
+      "predicate": "died.age",
+      "value": {
+        "parsed": 60,
+        "spans": [
+          "sp_u_a60"
+        ]
+      },
+      "restsOn": [
+        "st_u_a60"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_a61",
+      "subject": "m_u_a61_s",
+      "predicate": "died.age",
+      "value": {
+        "parsed": 61,
+        "spans": [
+          "sp_u_a61"
+        ]
+      },
+      "restsOn": [
+        "st_u_a61"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_a63",
+      "subject": "m_u_a63_s",
+      "predicate": "died.age",
+      "value": {
+        "parsed": 63,
+        "spans": [
+          "sp_u_a63"
+        ]
+      },
+      "restsOn": [
+        "st_u_a63"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u_a66",
+      "subject": "m_u_a66_s",
+      "predicate": "died.age",
+      "value": {
+        "parsed": 66,
+        "spans": [
+          "sp_u_a66"
+        ]
+      },
+      "restsOn": [
+        "st_u_a66"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

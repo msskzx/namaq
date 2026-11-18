@@ -1,0 +1,1344 @@
+{
+  "unit": {
+    "id": "siyar-v3-ali",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": ""
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_l_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "225",
+      "layer": "MAIN",
+      "exact": "سيرة أبي الحسنين علي رضي الله عنه"
+    },
+    {
+      "id": "sp_l_nasab_full",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "225",
+      "layer": "MAIN",
+      "exact": "علي بن أبي طالب عبد مناف بن عبد المطلب بن هاشم بن عبد مناف",
+      "suffix": "، أمير المؤمنين"
+    },
+    {
+      "id": "sp_l_nisba",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "225",
+      "layer": "MAIN",
+      "exact": "القرشي الهاشمي",
+      "prefix": "أبو الحسن "
+    },
+    {
+      "id": "sp_l_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "225",
+      "layer": "MAIN",
+      "exact": "علي بن أبي طالب عبد مناف بن عبد المطلب بن هاشم بن عبد مناف، أمير المؤمنين، أبو الحسن القرشي الهاشمي"
+    },
+    {
+      "id": "sp_l_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "225",
+      "layer": "MAIN",
+      "exact": "علي بن أبي طالب",
+      "suffix": " عبد مناف بن عبد المطلب"
+    },
+    {
+      "id": "sp_l_father_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "225",
+      "layer": "MAIN",
+      "exact": "بن أبي طالب عبد مناف بن عبد المطلب",
+      "prefix": "علي "
+    },
+    {
+      "id": "sp_l_amir",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "225",
+      "layer": "MAIN",
+      "exact": "أمير المؤمنين",
+      "prefix": "بن عبد مناف، "
+    },
+    {
+      "id": "sp_l_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "225",
+      "layer": "MAIN",
+      "exact": "أبو الحسن",
+      "prefix": "أمير المؤمنين، "
+    },
+    {
+      "id": "sp_l_mother",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "225",
+      "layer": "MAIN",
+      "exact": "وأمه فاطمة بنت أسد بن هاشم بن عبد مناف الهاشمية"
+    },
+    {
+      "id": "sp_l_mother_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "225",
+      "layer": "MAIN",
+      "exact": "فاطمة بنت أسد بن هاشم بن عبد مناف الهاشمية",
+      "prefix": "وأمه "
+    },
+    {
+      "id": "sp_l_sons",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "225",
+      "layer": "MAIN",
+      "exact": "وبنوه: الحسن، والحسين، ومحمد، وعمر"
+    },
+    {
+      "id": "sp_l_banuhu",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "225",
+      "layer": "MAIN",
+      "exact": "وبنوه:",
+      "suffix": " الحسن، والحسين"
+    },
+    {
+      "id": "sp_l_sabiq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "226",
+      "layer": "MAIN",
+      "exact": "وكان من السابقين الأولين، شهد بدرا وما بعدها، وكان يكنى أبا تراب أيضا"
+    },
+    {
+      "id": "sp_l_sabiq_t",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "226",
+      "layer": "MAIN",
+      "exact": "من السابقين الأولين",
+      "prefix": "وكان "
+    },
+    {
+      "id": "sp_l_day_badr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "226",
+      "layer": "MAIN",
+      "exact": "شهد بدرا",
+      "suffix": " وما بعدها"
+    },
+    {
+      "id": "sp_l_turab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "226",
+      "layer": "MAIN",
+      "exact": "أبا تراب",
+      "prefix": "وكان يكنى "
+    },
+    {
+      "id": "sp_l_raja_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "226",
+      "layer": "MAIN",
+      "exact": "قال أبو رجاء العطاردي",
+      "suffix": ": رأيت عليا شيخا"
+    },
+    {
+      "id": "sp_l_raja",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "226",
+      "layer": "MAIN",
+      "exact": "رأيت عليا شيخا أصلع كثير الشعر، كأنما اجتاب إهاب شاة، ربعة عظيم البطن، عظيم اللحية"
+    },
+    {
+      "id": "sp_l_i8_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "227",
+      "layer": "MAIN",
+      "exact": "قال عروة",
+      "suffix": ": أسلم علي"
+    },
+    {
+      "id": "sp_l_i8",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "227",
+      "layer": "MAIN",
+      "exact": "أسلم علي وهو ابن ثمان"
+    },
+    {
+      "id": "sp_l_i9_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "227",
+      "layer": "MAIN",
+      "exact": "وقال الحسن بن زيد بن الحسن"
+    },
+    {
+      "id": "sp_l_i9",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "227",
+      "layer": "MAIN",
+      "exact": "أسلم وهو ابن تسع"
+    },
+    {
+      "id": "sp_l_i14_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "227",
+      "layer": "MAIN",
+      "exact": "وقال المغيرة",
+      "suffix": ": أسلم وله"
+    },
+    {
+      "id": "sp_l_i14",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "227",
+      "layer": "MAIN",
+      "exact": "أسلم وله أربع عشرة سنة"
+    },
+    {
+      "id": "sp_l_awwal_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "227",
+      "layer": "MAIN",
+      "exact": "وثبت عن ابن عباس، قال"
+    },
+    {
+      "id": "sp_l_awwal",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "227",
+      "layer": "MAIN",
+      "exact": "أول من أسلم علي",
+      "prefix": "ابن عباس، قال: "
+    },
+    {
+      "id": "sp_l_harun_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "229",
+      "layer": "MAIN",
+      "exact": "وقال بكير بن مسمار، عن عامر بن سعد عن أبيه"
+    },
+    {
+      "id": "sp_l_harun_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "229",
+      "layer": "MAIN",
+      "exact": "سمعت رسول الله صلى الله عليه وسلم يقول، وخلف عليا في بعض مغازيه"
+    },
+    {
+      "id": "sp_l_harun_a",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "229",
+      "layer": "MAIN",
+      "exact": "أما",
+      "prefix": "والصبيان!؟ قال: \""
+    },
+    {
+      "id": "sp_l_harun_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "230",
+      "layer": "MAIN",
+      "exact": "ترضى أن تكون مني بمنزلة هارون من موسى إلا أنه لا نبي بعدي"
+    },
+    {
+      "id": "sp_l_harun_grade",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "230",
+      "layer": "MAIN",
+      "exact": "أخرجه الترمذي وقال: صحيح غريب"
+    },
+    {
+      "id": "sp_l_mawla_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "231",
+      "layer": "MAIN",
+      "exact": "وقال غندر: حدثنا شعبة عن ميمون أبي عبد الله، عن زيد بن أرقم"
+    },
+    {
+      "id": "sp_l_mawla_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "231",
+      "layer": "MAIN",
+      "exact": "أن النبي صلى الله عليه وسلم قال",
+      "prefix": "عن زيد بن أرقم "
+    },
+    {
+      "id": "sp_l_mawla_grade",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "231",
+      "layer": "MAIN",
+      "exact": "هذا حديث صحيح",
+      "prefix": "فعلي مولاه\". "
+    },
+    {
+      "id": "sp_l_mawla",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "231",
+      "layer": "MAIN",
+      "exact": "من كنت مولاه فعلي مولاه",
+      "prefix": "صلى الله عليه وسلم قال: \""
+    },
+    {
+      "id": "sp_l_hubb_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "235",
+      "layer": "MAIN",
+      "exact": "وقال الأعمش، عن عدي بن ثابت، عن زر، عن علي"
+    },
+    {
+      "id": "sp_l_hubb_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "236",
+      "layer": "MAIN",
+      "exact": "لعهد النبي صلى الله عليه وسلم إلى أنه"
+    },
+    {
+      "id": "sp_l_hubb_grade",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "236",
+      "layer": "MAIN",
+      "exact": "أخرجه مسلم، والترمذي وصححه"
+    },
+    {
+      "id": "sp_l_hubb",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "236",
+      "layer": "MAIN",
+      "exact": "لا يحبك إلا مؤمن ولا يبغضك إلا منافق"
+    },
+    {
+      "id": "sp_l_d58_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "250",
+      "layer": "MAIN",
+      "exact": "قال أبو جعفر الباقر",
+      "suffix": ": قتل علي"
+    },
+    {
+      "id": "sp_l_d58_a",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "250",
+      "layer": "MAIN",
+      "exact": "قتل علي -رضي الله عنه- هو ابن ثمان"
+    },
+    {
+      "id": "sp_l_d58_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "251",
+      "layer": "MAIN",
+      "exact": "وخمسين",
+      "suffix": "."
+    },
+    {
+      "id": "sp_l_d63_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "251",
+      "layer": "MAIN",
+      "exact": "وعنه رواية أخرى"
+    },
+    {
+      "id": "sp_l_d63",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "251",
+      "layer": "MAIN",
+      "exact": "أنه عاش ثلاثا وستين سنة"
+    },
+    {
+      "id": "sp_l_qurazi_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "227",
+      "layer": "MAIN",
+      "exact": "وعن محمد القرظي، قال"
+    },
+    {
+      "id": "sp_l_qurazi",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "227",
+      "layer": "MAIN",
+      "exact": "أول من أسلم خديجة، وأول رجلين أسلما أبو بكر وعلي، وإن أبا بكر أول من أظهر الإسلام"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_l0",
+      "unit": "siyar-v3-ali",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_l_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_l_raja",
+      "unit": "siyar-v3-ali",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_l_raja_frame"
+      ],
+      "origin": {
+        "mention": "m_l_raja"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_l_i8",
+      "unit": "siyar-v3-ali",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_l_i8_frame"
+      ],
+      "origin": {
+        "mention": "m_l_urwah"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_l_i9",
+      "unit": "siyar-v3-ali",
+      "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_l_i9_frame"
+      ],
+      "origin": {
+        "mention": "m_l_hasanzayd"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_l_i14",
+      "unit": "siyar-v3-ali",
+      "ordinal": 5,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_l_i14_frame"
+      ],
+      "origin": {
+        "mention": "m_l_mughirah"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_l_awwal",
+      "unit": "siyar-v3-ali",
+      "ordinal": 6,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_l_awwal_frame"
+      ],
+      "origin": {
+        "mention": "m_l_ibnabbas"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_l_harun",
+      "unit": "siyar-v3-ali",
+      "ordinal": 7,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_l_harun_frame",
+        "sp_l_harun_grade"
+      ],
+      "isnadSpan": "sp_l_harun_isnad",
+      "origin": {
+        "mention": "m_l_p_harun"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_l_mawla",
+      "unit": "siyar-v3-ali",
+      "ordinal": 8,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_l_mawla_frame",
+        "sp_l_mawla_grade"
+      ],
+      "isnadSpan": "sp_l_mawla_isnad",
+      "origin": {
+        "mention": "m_l_p_mawla"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_l_hubb",
+      "unit": "siyar-v3-ali",
+      "ordinal": 9,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_l_hubb_frame",
+        "sp_l_hubb_grade"
+      ],
+      "isnadSpan": "sp_l_hubb_isnad",
+      "origin": {
+        "mention": "m_l_p_hubb"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_l_d58",
+      "unit": "siyar-v3-ali",
+      "ordinal": 10,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_l_d58_frame"
+      ],
+      "origin": {
+        "mention": "m_l_baqir"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_l_d63",
+      "unit": "siyar-v3-ali",
+      "ordinal": 11,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_l_d63_frame"
+      ],
+      "origin": {
+        "mention": "m_l_baqir"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_l_qurazi",
+      "unit": "siyar-v3-ali",
+      "ordinal": 12,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_l_qurazi_frame"
+      ],
+      "origin": {
+        "mention": "m_l_qurazi"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_l_name",
+      "report": "r_l0",
+      "spans": [
+        "sp_l_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_l_mother",
+      "report": "r_l0",
+      "spans": [
+        "sp_l_mother"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_l_sons",
+      "report": "r_l0",
+      "spans": [
+        "sp_l_sons"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_l_sabiq",
+      "report": "r_l0",
+      "spans": [
+        "sp_l_sabiq"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_l_raja",
+      "report": "r_l_raja",
+      "spans": [
+        "sp_l_raja"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_l_i8",
+      "report": "r_l_i8",
+      "spans": [
+        "sp_l_i8"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_l_i9",
+      "report": "r_l_i9",
+      "spans": [
+        "sp_l_i9"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_l_i14",
+      "report": "r_l_i14",
+      "spans": [
+        "sp_l_i14"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_l_awwal",
+      "report": "r_l_awwal",
+      "spans": [
+        "sp_l_awwal"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_l_harun",
+      "report": "r_l_harun",
+      "spans": [
+        "sp_l_harun_a",
+        "sp_l_harun_b"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_l_mawla",
+      "report": "r_l_mawla",
+      "spans": [
+        "sp_l_mawla"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_l_hubb",
+      "report": "r_l_hubb",
+      "spans": [
+        "sp_l_hubb"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_l_d58",
+      "report": "r_l_d58",
+      "spans": [
+        "sp_l_d58_a",
+        "sp_l_d58_b"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_l_d63",
+      "report": "r_l_d63",
+      "spans": [
+        "sp_l_d63"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_l_qurazi",
+      "report": "r_l_qurazi",
+      "spans": [
+        "sp_l_qurazi"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_l",
+      "parent": "sp_l_name",
+      "exact": "علي",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_l_father",
+      "parent": "sp_l_name",
+      "exact": "أبي طالب عبد مناف",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_l_mo",
+      "parent": "sp_l_mother",
+      "exact": "وأمه",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_l_fatimah",
+      "parent": "sp_l_mother",
+      "exact": "فاطمة بنت أسد",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_l_s",
+      "parent": "sp_l_sons",
+      "exact": "وبنوه",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_l_hasan",
+      "parent": "sp_l_sons",
+      "exact": "الحسن",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_l_husayn",
+      "parent": "sp_l_sons",
+      "exact": "والحسين",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_l_badr",
+      "parent": "sp_l_sabiq",
+      "exact": "بدرا",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_l_raja",
+      "parent": "sp_l_raja_frame",
+      "exact": "أبو رجاء العطاردي",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_l_r",
+      "parent": "sp_l_raja",
+      "exact": "عليا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_l_urwah",
+      "parent": "sp_l_i8_frame",
+      "exact": "عروة",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_l_i8",
+      "parent": "sp_l_i8",
+      "exact": "علي",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_l_hasanzayd",
+      "parent": "sp_l_i9_frame",
+      "exact": "الحسن بن زيد بن الحسن",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_l_mughirah",
+      "parent": "sp_l_i14_frame",
+      "exact": "المغيرة",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_l_ibnabbas",
+      "parent": "sp_l_awwal_frame",
+      "exact": "ابن عباس",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_l_awwal",
+      "parent": "sp_l_awwal",
+      "exact": "علي",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_l_p_harun",
+      "parent": "sp_l_harun_frame",
+      "exact": "رسول الله",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_l_harun",
+      "parent": "sp_l_harun_frame",
+      "exact": "عليا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_l_p_mawla",
+      "parent": "sp_l_mawla_frame",
+      "exact": "النبي",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_l_mawla",
+      "parent": "sp_l_mawla",
+      "exact": "فعلي",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_l_p_hubb",
+      "parent": "sp_l_hubb_frame",
+      "exact": "النبي",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_l_hubb",
+      "parent": "sp_l_hubb_isnad",
+      "exact": "علي",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_l_baqir",
+      "parent": "sp_l_d58_frame",
+      "exact": "أبو جعفر الباقر",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_l_d58",
+      "parent": "sp_l_d58_a",
+      "exact": "علي",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_l_qurazi",
+      "parent": "sp_l_qurazi_frame",
+      "exact": "محمد القرظي",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_l",
+      "mention": "m_l",
+      "agent": "ali-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_l_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_mo",
+      "mention": "m_l_mo",
+      "agent": "ali-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_l_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_r",
+      "mention": "m_l_r",
+      "agent": "ali-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_l_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_i8",
+      "mention": "m_l_i8",
+      "agent": "ali-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_l_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_awwal",
+      "mention": "m_l_awwal",
+      "agent": "ali-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_l_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_harun",
+      "mention": "m_l_harun",
+      "agent": "ali-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_l_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_mawla",
+      "mention": "m_l_mawla",
+      "agent": "ali-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_l_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_hubb",
+      "mention": "m_l_hubb",
+      "agent": "ali-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_l_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_d58",
+      "mention": "m_l_d58",
+      "agent": "ali-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_l_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_s",
+      "mention": "m_l_s",
+      "agent": "ali-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_l_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_father",
+      "mention": "m_l_father",
+      "agent": "abu-talib",
+      "basis": [
+        {
+          "span": "sp_l_father_nasab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_fatimah",
+      "mention": "m_l_fatimah",
+      "agent": "fatimah-bint-asad",
+      "basis": [
+        {
+          "span": "sp_l_mother_name",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_hasan",
+      "mention": "m_l_hasan",
+      "agent": "al-hasan-ibn-ali",
+      "basis": [
+        {
+          "span": "sp_l_banuhu",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_husayn",
+      "mention": "m_l_husayn",
+      "agent": "al-husayn-ibn-ali",
+      "basis": [
+        {
+          "span": "sp_l_banuhu",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_badr",
+      "mention": "m_l_badr",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_l_day_badr",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_l_name",
+      "subject": "m_l",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_l_nasab_full",
+          "sp_l_nisba"
+        ]
+      },
+      "restsOn": [
+        "st_l_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_sex",
+      "subject": "m_l",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_l_sex"
+        ]
+      },
+      "restsOn": [
+        "st_l_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_kunya",
+      "subject": "m_l",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_l_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_l_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_kunya2",
+      "subject": "m_l",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_l_turab"
+        ]
+      },
+      "restsOn": [
+        "st_l_sabiq"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_father",
+      "subject": "m_l",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_l_father"
+      },
+      "restsOn": [
+        "st_l_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_office",
+      "subject": "m_l",
+      "predicate": "office",
+      "value": {
+        "classified": "caliph",
+        "spans": [
+          "sp_l_amir"
+        ]
+      },
+      "restsOn": [
+        "st_l_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_mother",
+      "subject": "m_l_mo",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_l_fatimah"
+      },
+      "restsOn": [
+        "st_l_mother"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_hasan",
+      "subject": "m_l_hasan",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_l_s"
+      },
+      "restsOn": [
+        "st_l_sons"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_husayn",
+      "subject": "m_l_husayn",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_l_s"
+      },
+      "restsOn": [
+        "st_l_sons"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_sabiq",
+      "subject": "m_l",
+      "predicate": "title",
+      "value": {
+        "classified": "al-sabiqoon",
+        "spans": [
+          "sp_l_sabiq_t"
+        ]
+      },
+      "restsOn": [
+        "st_l_sabiq"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_badr",
+      "subject": "m_l",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_l_badr"
+      },
+      "restsOn": [
+        "st_l_sabiq"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_app",
+      "subject": "m_l_r",
+      "predicate": "appearance",
+      "value": {
+        "spans": [
+          "sp_l_raja"
+        ]
+      },
+      "restsOn": [
+        "st_l_raja"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_i8",
+      "subject": "m_l_i8",
+      "predicate": "islam.age",
+      "value": {
+        "parsed": 8,
+        "spans": [
+          "sp_l_i8"
+        ]
+      },
+      "restsOn": [
+        "st_l_i8"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_i9",
+      "subject": "m_l",
+      "predicate": "islam.age",
+      "value": {
+        "parsed": 9,
+        "spans": [
+          "sp_l_i9"
+        ]
+      },
+      "restsOn": [
+        "st_l_i9"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_i14",
+      "subject": "m_l",
+      "predicate": "islam.age",
+      "value": {
+        "parsed": 14,
+        "spans": [
+          "sp_l_i14"
+        ]
+      },
+      "restsOn": [
+        "st_l_i14"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_v_awwal",
+      "subject": "m_l_awwal",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_l_awwal"
+        ]
+      },
+      "restsOn": [
+        "st_l_awwal",
+        "st_l_qurazi"
+      ],
+      "status": "DISPUTED"
+    },
+    {
+      "id": "a_l_v_harun",
+      "subject": "m_l_harun",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_l_harun_a",
+          "sp_l_harun_b"
+        ]
+      },
+      "restsOn": [
+        "st_l_harun"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_v_mawla",
+      "subject": "m_l_mawla",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_l_mawla"
+        ]
+      },
+      "restsOn": [
+        "st_l_mawla"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_v_hubb",
+      "subject": "m_l_hubb",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_l_hubb"
+        ]
+      },
+      "restsOn": [
+        "st_l_hubb"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_d58",
+      "subject": "m_l_d58",
+      "predicate": "died.age",
+      "value": {
+        "parsed": 58,
+        "spans": [
+          "sp_l_d58_a",
+          "sp_l_d58_b"
+        ]
+      },
+      "restsOn": [
+        "st_l_d58"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_d63",
+      "subject": "m_l",
+      "predicate": "died.age",
+      "value": {
+        "parsed": 63,
+        "spans": [
+          "sp_l_d63"
+        ]
+      },
+      "restsOn": [
+        "st_l_d63"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
