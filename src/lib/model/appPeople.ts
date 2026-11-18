@@ -22,6 +22,11 @@ const arabicCommas = (text: string) => text.replace(/,/g, '،');
  * The fathers in a full name as printed, from the person up: «الزبير بن العوام بن خويلد» → الزبير، العوام، خويلد.
  * The book's asides are not fathers: «واسمه عمرو» after a name, «واسم عبد المطلب شيبة», and a nisba («القرشي»).
  */
+/** A person with no catalog entry is named by the name and the father, as the book does: «عبد الله بن أبي طلحة». */
+export function shortName(nasab: string[], sex?: string) {
+  return nasab.slice(0, 2).join(sex === 'FEMALE' ? ' بنت ' : ' بن ');
+}
+
 export function nasabOf(fullName: string) {
   // «،» stays a word: the book closes an aside with it.
   const words = fullName.replace(/[.]/gu, ' ').replace(/[،,]/gu, ' ، ').trim().split(/\s+/u).filter(Boolean);
@@ -101,13 +106,19 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
       by: entry.statementIds.flatMap((id) => {
         const from = units.get(entry.unit)!;
         const report = from.reports.find((r) => r.id === from.statements.find((s) => s.id === id)?.report);
-        if (!report || !('mention' in report.origin)) return [];
+        // An unnamed view («وقيل», «غيره») names no one: the fact says so itself (`anonymous`).
+        if (!report || !('mention' in report.origin) || report.voice === 'REPORTED_ANONYMOUS') return [];
         const mention = report.origin.mention;
         const agent = agentOfMention(from, mention);
         const text = from.mentions.find((m) => m.id === mention)?.exact ?? '';
         return [agent && people.has(agent) ? people.get(agent)!.name : strip(text)];
       }),
       ...(entry.status === 'LEGACY' && { legacy: true as const }),
+      ...(entry.status === 'DISPUTED' && { disputed: true as const }),
+      ...(entry.statementIds.length > 0 && entry.statementIds.every((id) => {
+        const from = units.get(entry.unit)!;
+        return from.reports.find((r) => r.id === from.statements.find((st) => st.id === id)?.report)?.voice === 'REPORTED_ANONYMOUS';
+      }) && { anonymous: true as const }),
       ...(entry.parsed !== undefined && { value: entry.parsed }),
       ...(entry.classified !== undefined && { value: entry.classified }),
     });
@@ -140,7 +151,7 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
     const sorted = [...pages].sort((a, b) => a.volume - b.volume || Number(a.page) - Number(b.page));
     return {
       slug,
-      name: strip(people.get(slug)?.name ?? fullName?.text.split(/\s+/u).slice(0, 3).join(' ') ?? slug),
+      name: strip(people.get(slug)?.name ?? (fullName ? shortName(nasabOf(fullName.text), sex) : slug)),
       ...(sex === 'MALE' || sex === 'FEMALE' ? { sex: sex as 'MALE' | 'FEMALE' } : {}),
       entry: { unit: unitId, number: file.unit.numbers.printed, volume: sorted[0]?.volume ?? 0, from: sorted[0]?.page ?? '', to: sorted.at(-1)?.page ?? '' },
       ...(fullName && { fullName }),

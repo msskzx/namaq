@@ -17,6 +17,10 @@ export interface PersonFact {
   by: string[];
   /** Carried over from the old data without a page; the conversion of its entry sources it. */
   legacy?: true;
+  /** The book gives it and also a word against it (a companionship some deny): shown with «على خلاف» and both texts. */
+  disputed?: true;
+  /** An unnamed view («وقيل», «غيره»): shown as «قيل», with no sayer. */
+  anonymous?: true;
   /** The number or key read from the text: a year, an age, a month, an ayah key. */
   value?: number | string;
 }

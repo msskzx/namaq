@@ -55,6 +55,7 @@ export function Credit({ facts, palette, quotes = false }: { facts: PersonFact[]
  * it only where the book gives more than one value (`many`), so each of them reads as one saying among others.
  */
 function Sayer({ fact, palette, many = false }: { fact: PersonFact; palette: Palette; many?: boolean }) {
+  if (fact.anonymous) return <Text style={muted(palette)}>قيل</Text>;
   return fact.by.length || many ? <Text style={muted(palette)}>{many ? `عند ${sayer(fact)}` : sayer(fact)}</Text> : null;
 }
 
@@ -82,9 +83,15 @@ function Line({ label, palette, children }: { label: string; palette: Palette; c
 function Names({ links, palette }: { links: PersonLink[]; palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 6 }}>
-      {links.map(link => (link.inApp
-        ? <Button key={link.slug} variant="plain" label={personName(link)} onPress={() => openPerson(link.slug)} />
-        : <Text key={link.slug} style={body(palette)}>{personName(link)}</Text>))}
+      {links.map(link => (
+        <View key={link.slug} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+          {link.inApp
+            ? <Button variant="plain" label={personName(link)} onPress={() => openPerson(link.slug)} />
+            : <Text style={body(palette)}>{personName(link)}</Text>}
+          {/* A tie the book gives with a word against it: both texts and sayers are in the sources under the section. */}
+          {link.disputed && <Text style={muted(palette)}>(على خلاف)</Text>}
+        </View>
+      ))}
     </View>
   );
 }
