@@ -123,20 +123,28 @@
       "exact": "وَخَاتِمَةُ مَنْ مَاتَ بِالكُوْفَةِ مِنَ الصَّحَابَةِ"
     },
     {
-      "id": "sp_aw_dua_a",
+      "id": "sp_aw_dua_isnad",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "429",
       "layer": "MAIN",
-      "exact": "وَقَدْ فَازَ عَبْدُ اللهِ بِالدَّعْوَةِ النَّبَوِيَّةِ حَيْثُ أَتَى النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - بِزَكَاةِ وَالِدِهِ"
+      "exact": "شُعْبَةُ: عَنْ عَمْرِو بنِ مُرَّةَ، عَنْ عَبْدِ اللهِ بنِ أَبِي أَوْفَى"
     },
     {
-      "id": "sp_aw_dua_b",
+      "id": "sp_aw_dua",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "429",
       "layer": "MAIN",
-      "exact": "فَقَالَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ -: (اللَّهُمَّ صَلِّ عَلَى آلِ أَبِي أَوْفَى)"
+      "exact": "كَانَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - إِذَا أُتِيَ بِصَدَقَةٍ، قَالَ: (اللَّهُمَّ صَلِّ عَلَيْهِم)"
+    },
+    {
+      "id": "sp_aw_dua_1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "429",
+      "layer": "MAIN",
+      "exact": "فَأَتَاهُ أَبِي بِصَدَقَةِ قَوْمِهِ، فَقَالَ: (اللَّهُمَّ صَلِّ عَلَى آلِ أَبِي أَوْفَى)"
     },
     {
       "id": "sp_aw_ghazawat_isnad",
@@ -255,9 +263,20 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_aw_ghazawat",
+      "id": "r_aw_dua",
       "unit": "siyar-v6-76-ibn-abi-awfa",
       "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_aw_dua_isnad",
+      "origin": {
+        "mention": "m_aw_dua_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_aw_ghazawat",
+      "unit": "siyar-v6-76-ibn-abi-awfa",
+      "ordinal": 5,
       "voice": "TRANSMITTED",
       "isnadSpan": "sp_aw_ghazawat_isnad",
       "origin": {
@@ -268,7 +287,7 @@
     {
       "id": "r_aw_hunayn",
       "unit": "siyar-v6-76-ibn-abi-awfa",
-      "ordinal": 5,
+      "ordinal": 6,
       "voice": "TRANSMITTED",
       "isnadSpan": "sp_aw_hunayn_isnad",
       "origin": {
@@ -279,7 +298,7 @@
     {
       "id": "r_aw_d88",
       "unit": "siyar-v6-76-ibn-abi-awfa",
-      "ordinal": 6,
+      "ordinal": 7,
       "voice": "REPORTED_ANONYMOUS",
       "origin": {
         "mention": "m_aw_d88_by"
@@ -338,12 +357,12 @@
     },
     {
       "id": "st_aw_dua",
-      "report": "r_aw0",
+      "report": "r_aw_dua",
       "spans": [
-        "sp_aw_dua_a",
-        "sp_aw_dua_b"
+        "sp_aw_dua",
+        "sp_aw_dua_1"
       ],
-      "role": "AUTHOR_REPORT"
+      "role": "TRANSMITTED"
     },
     {
       "id": "st_aw_ghazawat",
@@ -416,11 +435,11 @@
       "role": "SPEAKER"
     },
     {
-      "id": "m_aw_d",
-      "parent": "sp_aw_dua_a",
-      "exact": "عَبْدُ اللهِ",
+      "id": "m_aw_dua_by",
+      "parent": "sp_aw_dua_isnad",
+      "exact": "عَبْدِ اللهِ بنِ أَبِي أَوْفَى",
       "occurrence": 1,
-      "role": "SUBJECT"
+      "role": "SPEAKER"
     },
     {
       "id": "m_aw_ghazawat_by",
@@ -496,8 +515,8 @@
       "status": "PROPOSED"
     },
     {
-      "id": "i_aw_d",
-      "mention": "m_aw_d",
+      "id": "i_aw_dua_by",
+      "mention": "m_aw_dua_by",
       "agent": "abdullah-ibn-abi-awfa",
       "basis": [
         {
@@ -656,12 +675,12 @@
     },
     {
       "id": "a_aw_v_dua",
-      "subject": "m_aw_d",
+      "subject": "m_aw_dua_by",
       "predicate": "virtue",
       "value": {
         "spans": [
-          "sp_aw_dua_a",
-          "sp_aw_dua_b"
+          "sp_aw_dua",
+          "sp_aw_dua_1"
         ]
       },
       "restsOn": [

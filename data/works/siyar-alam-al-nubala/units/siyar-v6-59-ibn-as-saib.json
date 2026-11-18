@@ -79,12 +79,21 @@
       "prefix": "عَبْدِ الرَّحْمَنِ، وَ"
     },
     {
-      "id": "sp_is_muqri",
+      "id": "sp_is_muqri_st",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "388",
       "layer": "MAIN",
       "exact": "مُقْرِئُ مَكَّةَ، وَلَهُ صُحْبَةٌ وَرِوَايَةٌ، عِدَادُهُ فِي صِغَارِ الصَّحَابَةِ"
+    },
+    {
+      "id": "sp_is_muqri",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "388",
+      "layer": "MAIN",
+      "exact": "مُقْرِئُ مَكَّةَ",
+      "suffix": "، وَلَهُ صُحْبَةٌ"
     },
     {
       "id": "sp_is_ubayy",
@@ -101,6 +110,15 @@
       "page": "389",
       "layer": "MAIN",
       "exact": "وَصَلَّى خَلْفَ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - بِمَكَّةَ، فَقَرَأَ بِسُوْرَةِ المُؤْمِنِيْنَ"
+    },
+    {
+      "id": "sp_is_salah_p",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "389",
+      "layer": "MAIN",
+      "exact": "النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "prefix": "وَصَلَّى خَلْفَ "
     },
     {
       "id": "sp_is_mujahid_isnad",
@@ -162,10 +180,10 @@
       "role": "AUTHOR_REPORT"
     },
     {
-      "id": "st_is_muqri",
+      "id": "st_is_muqri_st",
       "report": "r_is0",
       "spans": [
-        "sp_is_muqri"
+        "sp_is_muqri_st"
       ],
       "role": "AUTHOR_REPORT"
     },
@@ -217,6 +235,13 @@
       "role": "SUBJECT"
     },
     {
+      "id": "m_is_prophet",
+      "parent": "sp_is_salah",
+      "exact": "النَّبِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
       "id": "m_is_mujahid_by",
       "parent": "sp_is_mujahid_isnad",
       "exact": "مُجَاهِدٍ",
@@ -263,6 +288,18 @@
       "basis": [
         {
           "span": "sp_is_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_is_prophet",
+      "mention": "m_is_prophet",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_is_salah_p",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -362,7 +399,7 @@
         ]
       },
       "restsOn": [
-        "st_is_muqri"
+        "st_is_muqri_st"
       ],
       "status": "PROPOSED"
     },
@@ -390,6 +427,19 @@
         ]
       },
       "restsOn": [
+        "st_is_salah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_is_comp",
+      "subject": "m_is",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_is_prophet"
+      },
+      "restsOn": [
+        "st_is_muqri_st",
         "st_is_salah"
       ],
       "status": "PROPOSED"

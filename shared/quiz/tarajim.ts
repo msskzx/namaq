@@ -3,6 +3,7 @@
 // virtue this is. Every value is the book's, and after answering the note says where it is, so the tree or the person's
 // page is the way to check it.
 import peopleJson from '../data/tarajim/people.json';
+import virtueSkip from '../data/tarajim/virtueQuizSkip.json';
 import { pageLabel, sayer, type AppPerson } from '../tarajim';
 import { bareName, chainOf, lineOf, meetingOf, type LineName } from '../tarajimLine';
 import { shuffle, type Random } from './random';
@@ -15,6 +16,10 @@ export const TARAJIM_VIRTUE_NAME = 'صاحب المنقبة';
 
 const PEOPLE = peopleJson as AppPerson[];
 const plain = (text: string) => text.replace(/[ً-ْٰـ]/g, '');
+/** Not asked: virtues another person in the app could rightly own too (shared/data/tarajim/virtueQuizSkip.json). */
+const SKIP: Record<string, string> = virtueSkip.skip;
+/** A name after «نسب»: genitive, so «أبو جندل» reads «أبي جندل» and «ذو» reads «ذي». */
+const genitive = (name: string) => name.replace(/^أبو /u, 'أبي ').replace(/^ذو /u, 'ذي ');
 const nameOf = (person: AppPerson) => (person.slug === 'prophet-muhammad' && !person.name.includes('ﷺ') ? `${person.name} ﷺ` : person.name);
 
 /** Every person's line, once per list of people. */
@@ -57,7 +62,7 @@ export function nasabQuestions(people: AppPerson[] = PEOPLE): ChoiceQuestion[] {
     questions.push({
       key: `${TARAJIM_NASAB}:${a.slug}:${b.slug}`,
       family: TARAJIM_NASAB,
-      promptArabic: `أين يلتقي نسب ${nameOf(a)} ونسب ${nameOf(b)}؟`,
+      promptArabic: `أين يلتقي نسب ${genitive(nameOf(a))} ونسب ${genitive(nameOf(b))}؟`,
       choices: [answer, ...below.slice(0, 3)].map(name => ({ value: name, labelArabic: name })),
       correctAnswer: answer,
       note: { label: 'النسبان', text: `${chainOf(a, la, at.a)}\n${chainOf(b, lb, at.b)}\n${pages ? `${pages}\n` : ''}وشجرة النسب في التراجم` },
@@ -110,10 +115,13 @@ export function virtueQuestions(people: AppPerson[] = PEOPLE, random: Random = M
     person.virtues.forEach((virtue, k) => {
       const quote = virtue.text;
       // A quote that names its owner gives the answer; one that only points («هذا ممن…») needs its scene to say whom.
-      if (names.some(name => mentions(quote, name)) || /^(?:هذا|هذه)\s/u.test(bareName(quote))) return;
+      // A sayer that names the owner («امرأة ابن رواحة») gives it away too; and some virtues fit others as well (SKIP).
+      if (names.some(name => mentions(quote, name) || virtue.by.some(by => mentions(by, name)))) return;
+      // A virtue the book also contests, or gives with no sayer («قيل»), is not one answer: not asked.
+      if (/^(?:هذا|هذه)\s/u.test(bareName(quote)) || (virtue.id && SKIP[virtue.id]) || virtue.disputed || virtue.anonymous) return;
       const others = shuffle(people.filter(p => p.slug !== person.slug && p.slug !== 'prophet-muhammad' && p.sex === person.sex
         && fatherKey(p) !== fatherKey(person)
-        && !hasName(quote, plain(p.name).split(/\s+/)[0])
+        && !mentions(quote, plain(p.name).split(/\s+/)[0])
         && !virtue.by.some(by => bareName(by).startsWith(bareName(plain(p.name).split(/\s+/)[0])))), random).slice(0, 3);
       if (others.length < 3) return;
       questions.push({
@@ -122,7 +130,7 @@ export function virtueQuestions(people: AppPerson[] = PEOPLE, random: Random = M
         promptArabic: `«${virtue.text}»${virtue.by.length ? ` — ${sayer(virtue)}` : ''}\nفيمن قيل هذا؟`,
         choices: shuffle([person, ...others], random).map(p => ({ value: p.slug, labelArabic: nameOf(p) })),
         correctAnswer: person.slug,
-        note: { label: 'المصدر', text: `${pageLabel(virtue.refs)}، في ترجمة ${nameOf(person)}` },
+        note: { label: 'المصدر', text: `${pageLabel(virtue.refs)}، في ترجمة ${genitive(nameOf(person))}` },
         evidence: { claimKeys: [] },
       });
     });

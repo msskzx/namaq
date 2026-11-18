@@ -1,7 +1,7 @@
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Network } from 'lucide-react-native';
-import { pageLabel, sayer, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
+import { kunyaName, pageLabel, sayer, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
 import { surahName } from '@shared/quran/surahNames';
 import { counted, num } from '@shared/quran/arabicNumber';
 import { sourceById } from '@shared/sources';
@@ -55,6 +55,7 @@ export function Credit({ facts, palette, quotes = false }: { facts: PersonFact[]
  * it only where the book gives more than one value (`many`), so each of them reads as one saying among others.
  */
 function Sayer({ fact, palette, many = false }: { fact: PersonFact; palette: Palette; many?: boolean }) {
+  if (fact.anonymous) return <Text style={muted(palette)}>قيل</Text>;
   return fact.by.length || many ? <Text style={muted(palette)}>{many ? `عند ${sayer(fact)}` : sayer(fact)}</Text> : null;
 }
 
@@ -82,9 +83,15 @@ function Line({ label, palette, children }: { label: string; palette: Palette; c
 function Names({ links, palette }: { links: PersonLink[]; palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 6 }}>
-      {links.map(link => (link.inApp
-        ? <Button key={link.slug} variant="plain" label={personName(link)} onPress={() => openPerson(link.slug)} />
-        : <Text key={link.slug} style={body(palette)}>{personName(link)}</Text>))}
+      {links.map(link => (
+        <View key={link.slug} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+          {link.inApp
+            ? <Button variant="plain" label={personName(link)} onPress={() => openPerson(link.slug)} />
+            : <Text style={body(palette)}>{personName(link)}</Text>}
+          {/* A tie the book gives with a word against it: both texts and sayers are in the sources under the section. */}
+          {link.disputed && <Text style={muted(palette)}>(على خلاف)</Text>}
+        </View>
+      ))}
     </View>
   );
 }
@@ -129,7 +136,7 @@ export default function PersonScreen() {
   const back = () => (router.canGoBack() ? router.back() : toTab('/tarajim'));
   if (!person) return <View style={{ flex: 1, backgroundColor: palette.paper }}><TopBar back={back} /></View>;
   const tree = () => router.push({ pathname: '/nasab', params: { slug: person.slug } });
-  const names = [...person.kunya.map(fact => ({ label: `كنيت${suffixOf(person)}`, fact })), ...person.laqab.map(fact => ({ label: `لقب${suffixOf(person)}`, fact }))];
+  const names = [...person.kunya.map(fact => ({ label: `كنيت${suffixOf(person)}`, fact, kunya: true })), ...person.laqab.map(fact => ({ label: `لقب${suffixOf(person)}`, fact, kunya: false }))];
   const f = person.sex === 'FEMALE';
   const life = [...person.islamAge, ...person.battles, ...person.absentFrom, ...person.died.year, ...person.died.month, ...person.died.age, ...person.died.place];
   const tieList = ties(person);
@@ -143,7 +150,7 @@ export default function PersonScreen() {
       <ScrollView onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 18 }}>
         <View style={{ gap: 6 }}>
           <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>{personName(person)}</Text>
-          {person.kunya[0] && <Text style={{ color: palette.muted, fontSize: 16, textAlign: 'right' }}>{unvowelled(person.kunya[0].text)}</Text>}
+          {person.kunya[0] && <Text style={{ color: palette.muted, fontSize: 16, textAlign: 'right' }}>{kunyaName(person.kunya[0].text)}</Text>}
           {person.titles.length > 0 && (
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
               {person.titles.map(title => (
@@ -158,17 +165,30 @@ export default function PersonScreen() {
         {person.fullName && (
           <Part n={++n} title={person.sex === 'FEMALE' ? 'نسبها' : 'نسبه'} palette={palette}>
             <Text style={body(palette)}>{person.fullName.text}</Text>
+            {person.otherNames?.length ? <>
+              <Sayer fact={person.fullName} palette={palette} many />
+              {person.otherNames.map((fact, i) => (
+                <View key={i} style={{ gap: 2 }}>
+                  <Text style={body(palette)}>وقيل: {fact.text}</Text>
+                  <Sayer fact={fact} palette={palette} many />
+                </View>
+              ))}
+            </> : null}
             <Row><Button label="الشجرة" onPress={tree} /></Row>
-            <Credit facts={[person.fullName]} palette={palette} />
+            <Credit facts={[person.fullName, ...(person.otherNames ?? [])]} palette={palette} />
           </Part>
         )}
 
         {names.length > 0 && (
           <Part n={++n} title={[person.kunya.length ? 'كنيت' : '', person.laqab.length ? 'لقب' : ''].filter(Boolean).map(w => w + suffixOf(person)).join(' و')} palette={palette}>
-            {names.map(({ label, fact }, i) => (
-              <Line key={i} label={label} palette={palette}><Quote fact={fact} palette={palette} /></Line>
+            {names.map(({ label, fact, kunya }, i) => (
+              <Line key={i} label={label} palette={palette}>
+                {/* A kunya reads as a name (nominative); the book's own words are in the sources below. */}
+                {kunya ? <View style={{ gap: 2 }}><Text style={body(palette)}>{kunyaName(fact.text)}</Text><Sayer fact={fact} palette={palette} /></View>
+                  : <Quote fact={fact} palette={palette} />}
+              </Line>
             ))}
-            <Credit facts={names.map(name => name.fact)} palette={palette} />
+            <Credit facts={names.map(name => name.fact)} palette={palette} quotes />
           </Part>
         )}
 

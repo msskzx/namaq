@@ -1,7 +1,12 @@
 // A person's «حياته» for the phone app (shared/events/life.ts): only what is cited, both the person's place in it and its year.
 import type { AppLife, AppLifeEntry } from '@shared/events/life';
 import { batchClaims, citing, type Claim } from './appBattles';
-import type { Catalog } from './types';
+import { reportCite } from './appStories';
+import type { Catalog, CatalogEvent } from './types';
+
+/** A story's person with no claim stands on its reports: the first moment that names them, quoted. */
+const reportRefs = (event: CatalogEvent, person: string) =>
+  (event.reports ?? []).flatMap(report => report.moments.filter(moment => moment.people.includes(person)).map(moment => ({ text: moment.text, cite: reportCite(report.source), url: report.source.url }))).slice(0, 1);
 
 export function appLife(catalog: Catalog, claims: Map<string, Claim> = batchClaims()): AppLife {
   const { refs, cited } = citing(claims);
@@ -15,7 +20,9 @@ export function appLife(catalog: Catalog, claims: Map<string, Claim> = batchClai
     const kind = event.reports?.length ? 'story' : 'event';
     // An event with no cited year stays off the timeline (owner, 2026-11-18); a story shows undated.
     if (kind === 'event' && !year) continue;
-    for (const person of event.people) add(person.person, { kind, slug: event.slug, name: event.name, ...(year ? { year } : {}), refs: refs(person.claims) });
+    for (const person of event.people) {
+      add(person.person, { kind, slug: event.slug, name: event.name, ...(year ? { year } : {}), refs: person.claims ? refs(person.claims) : reportRefs(event, person.person) });
+    }
   }
   for (const battle of catalog.battles) {
     const year = cited(battle.fields?.hijriYear);

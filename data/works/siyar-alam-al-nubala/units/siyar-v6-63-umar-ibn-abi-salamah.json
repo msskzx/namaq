@@ -120,6 +120,23 @@
       "exact": "وَقَدْ عَلَّمَهُ النَّبِيُّ - صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - إِذْ صَارَ رَبِيْبَهُ أَدَبَ الأَكْلِ، وَقَالَ: (يَا بُنَيَّ! ادْنُ، وَسَمِّ اللهَ، وَكُلْ بِيَمِيْنِكَ، وَكُلْ مِمَّا يَلِيْكَ (٣))"
     },
     {
+      "id": "sp_ua_adab_p",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "407",
+      "layer": "MAIN",
+      "exact": "النَّبِيُّ - صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "prefix": "وَقَدْ عَلَّمَهُ "
+    },
+    {
+      "id": "sp_ua_zawwaj",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "407",
+      "layer": "MAIN",
+      "exact": "ثُمَّ كَانَ عُمَرُ هُوَ الَّذِي زَوَّجَ أُمَّهُ بِالنَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - وَهُوَ صَبِيٌّ"
+    },
+    {
       "id": "sp_ua_death_frame",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
@@ -224,6 +241,14 @@
       "role": "AUTHOR_REPORT"
     },
     {
+      "id": "st_ua_zawwaj",
+      "report": "r_ua0",
+      "spans": [
+        "sp_ua_zawwaj"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
       "id": "st_ua_death",
       "report": "r_ua_death",
       "spans": [
@@ -302,6 +327,20 @@
       "exact": "أُمِّ سَلَمَةَ",
       "occurrence": 1,
       "role": "REFERENT"
+    },
+    {
+      "id": "m_ua_prophet",
+      "parent": "sp_ua_adab",
+      "exact": "النَّبِيُّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ua_z",
+      "parent": "sp_ua_zawwaj",
+      "exact": "عُمَرُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
     },
     {
       "id": "m_ua_death_by",
@@ -415,6 +454,30 @@
       "basis": [
         {
           "span": "sp_ua_mother_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ua_prophet",
+      "mention": "m_ua_prophet",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_ua_adab_p",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ua_z",
+      "mention": "m_ua_z",
+      "agent": "umar-ibn-abi-salamah",
+      "basis": [
+        {
+          "span": "sp_ua_heading",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -551,6 +614,32 @@
         "st_ua_adab"
       ],
       "status": "PROPOSED"
+    },
+    {
+      "id": "a_ua_comp",
+      "subject": "m_ua",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_ua_prophet"
+      },
+      "restsOn": [
+        "st_ua_adab"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ua_v_zawwaj",
+      "subject": "m_ua_z",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ua_zawwaj"
+        ]
+      },
+      "restsOn": [
+        "st_ua_zawwaj"
+      ],
+      "status": "DISPUTED"
     },
     {
       "id": "a_ua_death",

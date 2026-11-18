@@ -16,7 +16,7 @@ import { branchesCorrect, emptyBranchAnswers } from "@shared/quiz/score";
 import { BranchFeedback, BranchInputs } from "./BranchAnswers";
 import { CompareFeedback, CompareInputs } from "./CompareAnswers";
 import { comparePoints, emptyCompareAnswers, type CompareAsk } from "@shared/quiz/compareAnswers";
-import { ChoiceAfter, ChoiceQuran, type ChoiceParts } from "./ChoiceParts";
+import { ChoiceAfter, ChoiceLabel, ChoiceQuran, type ChoiceParts } from "./ChoiceParts";
 
 export type QuizData = { questions: QuizQuestionView[]; surahNames?: Record<number, string> };
 
@@ -41,6 +41,9 @@ export interface QuizQuestionView {
   alike?: ChoiceParts["alike"];
   marked?: ChoiceParts["marked"];
   explains?: ChoiceParts["explains"];
+  passage?: ChoiceParts["passage"];
+  quranChoices?: ChoiceParts["quranChoices"];
+  whereOf?: ChoiceParts["whereOf"];
   note?: ChoiceParts["note"];
   ayah?: { text: string; reference: string } | null;
   choiceDetails: Record<string, { text: string; reference: string }>;
@@ -57,11 +60,11 @@ function AskedAyah({ ayah }: { ayah: { text: string; reference: string } }) {
   );
 }
 
-const answerContent = (question: QuizQuestionView, value: string | undefined) => {
+const answerContent = (question: QuizQuestionView, value: string | undefined, answered: boolean) => {
   const choice = question.choices.find((item) => item.value === value);
   if (!choice) return null;
   const detail = question.choiceDetails?.[choice.value];
-  if (!detail) return choice.labelArabic;
+  if (!detail) return <ChoiceLabel question={question} value={choice.value} label={choice.labelArabic} answered={answered} />;
   return <span><span className="block font-quran leading-relaxed">{mushafText(detail.text)}</span><span className="text-xs text-[var(--home-muted)]">{detail.reference}</span></span>;
 };
 
@@ -116,7 +119,7 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
             }}>
             {/* No empty circle before a choice (owner, 2026-11-15): the mark comes only with the answer, as in the app. */}
             {locked && (isAnswer || isGiven) && <FontAwesomeIcon icon={isAnswer ? faCircleCheck : faCircleXmark} />}
-            {answerContent(question, choice.value)}
+            {answerContent(question, choice.value, locked)}
             {locked && isAnswer ? <span className="text-xs font-semibold">{ar ? 'صحيح' : 'Correct'}</span> : null}
             {locked && isGiven && !isAnswer ? <span className="text-xs font-semibold">{ar ? 'خطأ' : 'Incorrect'}</span> : null}
           </Button>

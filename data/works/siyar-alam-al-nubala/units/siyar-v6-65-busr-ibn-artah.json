@@ -59,6 +59,33 @@
       "layer": "MAIN",
       "exact": "أَبُو عَبْدِ الرَّحْمَنِ",
       "prefix": "الأَمِيْرُ، "
+    },
+    {
+      "id": "sp_bu_nabi",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "409",
+      "layer": "MAIN",
+      "exact": "لَهُ عَنِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - حَدِيْثُ",
+      "suffix": ": (لاَ تُقْطَعُ"
+    },
+    {
+      "id": "sp_bu_prophet_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "409",
+      "layer": "MAIN",
+      "exact": "النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "prefix": "لَهُ عَنِ "
+    },
+    {
+      "id": "sp_bu_taraddud",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "410",
+      "layer": "MAIN",
+      "exact": "وَفِي صُحْبَتِهِ تَرَدُّدٌ",
+      "prefix": "مِنْ أَفرَادِ الأَبْطَالِ، "
     }
   ],
   "reports": [
@@ -90,6 +117,22 @@
         "sp_bu_kunya_st"
       ],
       "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_bu_nabi",
+      "report": "r_bu0",
+      "spans": [
+        "sp_bu_nabi"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_bu_taraddud",
+      "report": "r_bu0",
+      "spans": [
+        "sp_bu_taraddud"
+      ],
+      "role": "AUTHOR_REPORT"
     }
   ],
   "mentions": [
@@ -104,6 +147,13 @@
       "id": "m_bu_father",
       "parent": "sp_bu_name",
       "exact": "أَرْطَاةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_bu_prophet",
+      "parent": "sp_bu_nabi",
+      "exact": "النَّبِيِّ",
       "occurrence": 1,
       "role": "REFERENT"
     }
@@ -129,6 +179,18 @@
         {
           "span": "sp_bu_father_n",
           "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_bu_prophet",
+      "mention": "m_bu_prophet",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_bu_prophet_b",
+          "role": "SAME_WORK_EXPLICIT"
         }
       ],
       "status": "PROPOSED"
@@ -189,6 +251,20 @@
         "st_bu_kunya_st"
       ],
       "status": "PROPOSED"
+    },
+    {
+      "id": "a_bu_comp",
+      "subject": "m_bu",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_bu_prophet"
+      },
+      "restsOn": [
+        "st_bu_kunya_st",
+        "st_bu_nabi",
+        "st_bu_taraddud"
+      ],
+      "status": "DISPUTED"
     }
   ]
 }

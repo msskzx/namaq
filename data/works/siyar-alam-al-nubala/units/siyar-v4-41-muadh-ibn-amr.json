@@ -1,0 +1,486 @@
+{
+  "unit": {
+    "id": "siyar-v4-41-muadh-ibn-amr",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٤١"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ma_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "249",
+      "layer": "MAIN",
+      "exact": "٤١ - مُعَاذُ بنُ عَمْرِو بنِ الجَمُوْحِ بنِ كَعْبٍ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sp_ma1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "249",
+      "layer": "MAIN",
+      "exact": "مُعَاذُ بنُ عَمْرِو بنِ الجَمُوْحِ بنِ كَعْبٍ الأَنْصَارِيُّ",
+      "prefix": "٤١ - "
+    },
+    {
+      "id": "sp_ma_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "249",
+      "layer": "MAIN",
+      "exact": "مُعَاذُ بنُ",
+      "prefix": "٤١ - "
+    },
+    {
+      "id": "sp_ma_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "249",
+      "layer": "MAIN",
+      "exact": "عَمْرِو بنِ الجَمُوْحِ",
+      "prefix": "٤١ - مُعَاذُ بنُ "
+    },
+    {
+      "id": "sp_ma_epithets",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "249",
+      "layer": "MAIN",
+      "exact": "الخَزْرَجِيُّ، السَّلَمِيُّ، المَدَنِيُّ، البَدْرِيُّ، العَقَبِيُّ، قَاتِلُ أَبِي جَهْلٍ"
+    },
+    {
+      "id": "sp_ma_killer",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "249",
+      "layer": "MAIN",
+      "exact": "قَاتِلُ أَبِي جَهْلٍ",
+      "prefix": "العَقَبِيُّ، "
+    },
+    {
+      "id": "sp_ma_ishaq_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "249",
+      "layer": "MAIN",
+      "exact": "قَالَ جَرِيْرُ بنُ حَازِمٍ:"
+    },
+    {
+      "id": "sp_ma_ishaq_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "249",
+      "layer": "MAIN",
+      "exact": "عَنِ ابْنِ إِسْحَاقَ",
+      "suffix": ": مُعَاذُ"
+    },
+    {
+      "id": "sp_ma_ishaq_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "249",
+      "layer": "MAIN",
+      "exact": "مُعَاذُ بنُ عَمْرِو بنِ الجَمُوْحِ بنِ زَيْدِ بنِ حَرَامِ بنِ كَعْبِ بنِ غَنْمِ بنِ كَعْبِ بنِ سَلِمَةَ",
+      "prefix": "عَنِ ابْنِ إِسْحَاقَ: "
+    },
+    {
+      "id": "sp_ma_ishaq_badr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "249",
+      "layer": "MAIN",
+      "exact": "شَهِدَ بَدْراً",
+      "prefix": "سَلِمَةَ، "
+    },
+    {
+      "id": "sp_ma_day_badr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "249",
+      "layer": "MAIN",
+      "exact": "بَدْراً",
+      "prefix": "سَلِمَةَ، شَهِدَ "
+    },
+    {
+      "id": "sp_ma_sahih_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "250",
+      "layer": "MAIN",
+      "exact": "وَفِي (الصَّحِيْحَيْنِ) مِنْ طَرِيْقِ يُوْسُفَ بنِ المَاجِشُوْنِ،"
+    },
+    {
+      "id": "sp_ma_sahih_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "250",
+      "layer": "MAIN",
+      "exact": "أَنْبَأَنَا صَالِحُ بنُ إِبْرَاهِيْمَ بنِ عَبْدِ الرَّحْمَنِ بنِ عَوْفٍ، عَنْ أَبِيْهِ، عَنْ جَدِّهِ"
+    },
+    {
+      "id": "sp_ma_awf_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "250",
+      "layer": "MAIN",
+      "exact": "عَبْدِ الرَّحْمَنِ بنِ عَوْفٍ",
+      "prefix": "إِبْرَاهِيْمَ بنِ "
+    },
+    {
+      "id": "sp_ma_both",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "250",
+      "layer": "MAIN",
+      "exact": "فَنَظَرَ فِي السَّيْفَيْنِ، فَقَالَ: (كِلاَكُمَا قَتَلَهُ) ."
+    },
+    {
+      "id": "sp_ma_salab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "250",
+      "layer": "MAIN",
+      "exact": "وَقَضَى بِسَلَبِهِ لِمُعَاذِ بنِ عَمْرٍو، وَالآخَرُ هُوَ مُعَاذُ بنُ عَفْرَاءَ"
+    },
+    {
+      "id": "sp_ma_salab_badr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "250",
+      "layer": "MAIN",
+      "exact": "إِنِّي لَوَاقِفٌ يَوْمَ بَدْرٍ فِي الصَّفِّ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ma0",
+      "unit": "siyar-v4-41-muadh-ibn-amr",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ma_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ma_ishaq",
+      "unit": "siyar-v4-41-muadh-ibn-amr",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ma_ishaq_frame"
+      ],
+      "isnadSpan": "sp_ma_ishaq_isnad",
+      "origin": {
+        "mention": "m_ma_ishaq"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ma_awf",
+      "unit": "siyar-v4-41-muadh-ibn-amr",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ma_sahih_frame"
+      ],
+      "isnadSpan": "sp_ma_sahih_isnad",
+      "origin": {
+        "mention": "m_ma_awf"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ma_name",
+      "report": "r_ma0",
+      "spans": [
+        "sp_ma1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ma_epithets",
+      "report": "r_ma0",
+      "spans": [
+        "sp_ma_epithets"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ma_ishaq_name",
+      "report": "r_ma_ishaq",
+      "spans": [
+        "sp_ma_ishaq_name"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ma_ishaq_badr",
+      "report": "r_ma_ishaq",
+      "spans": [
+        "sp_ma_ishaq_name",
+        "sp_ma_ishaq_badr"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ma_salab",
+      "report": "r_ma_awf",
+      "spans": [
+        "sp_ma_salab_badr",
+        "sp_ma_both",
+        "sp_ma_salab"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ma",
+      "parent": "sp_ma1",
+      "exact": "مُعَاذُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ma_father",
+      "parent": "sp_ma1",
+      "exact": "عَمْرِو بنِ الجَمُوْحِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ma_e",
+      "parent": "sp_ma_epithets",
+      "exact": "قَاتِلُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ma_ishaq",
+      "parent": "sp_ma_ishaq_isnad",
+      "exact": "ابْنِ إِسْحَاقَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ma_i",
+      "parent": "sp_ma_ishaq_name",
+      "exact": "مُعَاذُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ma_badr",
+      "parent": "sp_ma_ishaq_badr",
+      "exact": "بَدْراً",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ma_awf",
+      "parent": "sp_ma_sahih_isnad",
+      "exact": "جَدِّهِ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ma_s",
+      "parent": "sp_ma_salab",
+      "exact": "مُعَاذِ بنِ عَمْرٍو",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ma",
+      "mention": "m_ma",
+      "agent": "muadh-ibn-amr-ibn-al-jumuh",
+      "basis": [
+        {
+          "span": "sp_ma_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_e",
+      "mention": "m_ma_e",
+      "agent": "muadh-ibn-amr-ibn-al-jumuh",
+      "basis": [
+        {
+          "span": "sp_ma_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_i",
+      "mention": "m_ma_i",
+      "agent": "muadh-ibn-amr-ibn-al-jumuh",
+      "basis": [
+        {
+          "span": "sp_ma_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_s",
+      "mention": "m_ma_s",
+      "agent": "muadh-ibn-amr-ibn-al-jumuh",
+      "basis": [
+        {
+          "span": "sp_ma_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_father",
+      "mention": "m_ma_father",
+      "agent": "amr-ibn-al-jumuh",
+      "basis": [
+        {
+          "span": "sp_ma_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_awf",
+      "mention": "m_ma_awf",
+      "agent": "abdur-rahman-ibn-awf",
+      "basis": [
+        {
+          "span": "sp_ma_awf_name",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_badr",
+      "mention": "m_ma_badr",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_ma_day_badr",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ma_name",
+      "subject": "m_ma",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ma1"
+        ]
+      },
+      "restsOn": [
+        "st_ma_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_name_ishaq",
+      "subject": "m_ma_i",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ma_ishaq_name"
+        ]
+      },
+      "restsOn": [
+        "st_ma_ishaq_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_sex",
+      "subject": "m_ma",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ma_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ma_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_father",
+      "subject": "m_ma",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ma_father"
+      },
+      "restsOn": [
+        "st_ma_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_killer",
+      "subject": "m_ma_e",
+      "predicate": "title",
+      "value": {
+        "classified": "killer-of-abu-jahl",
+        "spans": [
+          "sp_ma_killer"
+        ]
+      },
+      "restsOn": [
+        "st_ma_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_badr",
+      "subject": "m_ma_i",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_ma_badr"
+      },
+      "restsOn": [
+        "st_ma_ishaq_badr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_v_salab",
+      "subject": "m_ma_s",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ma_both",
+          "sp_ma_salab"
+        ]
+      },
+      "restsOn": [
+        "st_ma_salab"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

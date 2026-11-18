@@ -45,6 +45,12 @@ export type ChoiceQuestion = {
   explains?: Record<string, { quote: string; where: string }>;
   /** For a wrong choice, the ayah in it that looks like the asked one, shown when it is picked. */
   alike?: Record<string, { key: string; words: string[] }>;
+  /** A book's text the question asks about, drawn over the choices; its own quotes of the Quran (﴿…﴾) in the mushaf's font («لأي آية هذا التفسير؟»). */
+  passage?: string;
+  /** The choices are Quran words (whole ayat, or a word as a reader reads it), drawn in the mushaf's font. */
+  quranChoices?: boolean;
+  /** Once answered, a line under each choice saying what it is: an ayah's place, a reading's readers. */
+  whereOf?: Record<string, string>;
   /** Shown under the choices after answering, such as the line of a poem that states the rule. */
   note?: { label: string; text: string };
   /** A compare question (compareQuiz.ts): typed into its blanks, not picked from choices. */

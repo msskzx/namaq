@@ -460,20 +460,6 @@
       "status": "PROPOSED"
     },
     {
-      "id": "a_nb_v_sami",
-      "subject": "m_nb",
-      "predicate": "virtue",
-      "value": {
-        "spans": [
-          "sp_nb_sami"
-        ]
-      },
-      "restsOn": [
-        "st_nb_sami"
-      ],
-      "status": "PROPOSED"
-    },
-    {
       "id": "a_nb_c_muh_0",
       "subject": "m_nb_c_muh",
       "predicate": "CHILD_OF",

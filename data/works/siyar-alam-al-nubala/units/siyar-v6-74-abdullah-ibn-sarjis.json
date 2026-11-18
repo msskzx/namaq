@@ -52,6 +52,24 @@
       "exact": "صَحَّ أَنَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - اسْتَغْفَرَ لَهُ"
     },
     {
+      "id": "sp_sj_sahabi",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "426",
+      "layer": "MAIN",
+      "exact": "الصَّحَابِيُّ، المُعَمَّرُ",
+      "suffix": "، نَزِيْلُ البَصْرَةِ"
+    },
+    {
+      "id": "sp_sj_istighfar_p",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "426",
+      "layer": "MAIN",
+      "exact": "رَسُوْلَ اللهِ",
+      "prefix": "صَحَّ أَنَّ "
+    },
+    {
       "id": "sp_sj_death",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
@@ -100,6 +118,14 @@
       "role": "AUTHOR_REPORT"
     },
     {
+      "id": "st_sj_sahabi",
+      "report": "r_sj0",
+      "spans": [
+        "sp_sj_sahabi"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
       "id": "st_sj_death",
       "report": "r_sj0",
       "spans": [
@@ -120,6 +146,13 @@
       "id": "m_sj_father",
       "parent": "sp_sj_name",
       "exact": "سَرْجِسَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_sj_prophet",
+      "parent": "sp_sj_istighfar",
+      "exact": "رَسُوْلَ اللهِ",
       "occurrence": 1,
       "role": "REFERENT"
     },
@@ -152,6 +185,18 @@
         {
           "span": "sp_sj_father_n",
           "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sj_prophet",
+      "mention": "m_sj_prophet",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_sj_istighfar_p",
+          "role": "SAME_WORK_EXPLICIT"
         }
       ],
       "status": "PROPOSED"
@@ -221,6 +266,19 @@
         ]
       },
       "restsOn": [
+        "st_sj_istighfar"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sj_comp",
+      "subject": "m_sj",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_sj_prophet"
+      },
+      "restsOn": [
+        "st_sj_sahabi",
         "st_sj_istighfar"
       ],
       "status": "PROPOSED"

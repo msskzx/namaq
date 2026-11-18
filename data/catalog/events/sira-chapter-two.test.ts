@@ -32,7 +32,7 @@ const claimByKey = new Map([...claimsByBatch.values()].flat().map((claim) => [cl
 const siraClaimKeys = new Set(claimsByBatch.get('prophet-muhammad-sira')?.map((claim) => claim.key));
 
 /** Nothing in this chapter carries the marker, but Provenance allows it. */
-const keysOf = (claims: Provenance): readonly string[] => (claims === legacyUnreviewed ? [] : claims);
+const keysOf = (claims: Provenance | undefined): readonly string[] => (!claims || claims === legacyUnreviewed ? [] : claims);
 
 const chapterTwo: CatalogEvent[] = [
   habashaSecond, aqabaFirst, aqabaSecond, isra, moon, boycott, taif, deathKhadijah, deathAbuTalib,

@@ -283,8 +283,8 @@
       "volume": 6,
       "page": "406",
       "layer": "MAIN",
-      "exact": "قَالَ الأَنْصَارِيُّ",
-      "suffix": ": اخْتُلِفَ"
+      "exact": "وَقَالَ بَعَضُهُم",
+      "suffix": ": بَلغَ"
     },
     {
       "id": "sp_an_age107",
@@ -407,7 +407,7 @@
       "id": "r_an_age107",
       "unit": "siyar-v6-62-anas",
       "ordinal": 9,
-      "voice": "TRANSMITTED",
+      "voice": "REPORTED_ANONYMOUS",
       "frame": [
         "sp_an_age107_frame"
       ],
@@ -663,7 +663,7 @@
     {
       "id": "m_an_age107_by",
       "parent": "sp_an_age107_frame",
-      "exact": "الأَنْصَارِيُّ",
+      "exact": "بَعَضُهُم",
       "occurrence": 1,
       "role": "SPEAKER"
     }

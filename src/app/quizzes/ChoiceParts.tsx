@@ -11,11 +11,30 @@ import { mushafText } from "@shared/quran/mushafText";
 import { num } from "@shared/quran/arabicNumber";
 import Card from '@/components/common/Card';
 import QuranWords from '@/components/quran/text/QuranWords';
+import BookRuns from '@/components/quran/text/BookRuns';
 
-export type ChoiceParts = Partial<Pick<ChoiceQuestion, "quran" | "number" | "reveal" | "page" | "ayahKey" | "alike" | "note" | "marked" | "explains">> & { correctAnswer?: string; family?: string; write?: WriteAsk };
+export type ChoiceParts = Partial<Pick<ChoiceQuestion, "quran" | "number" | "reveal" | "page" | "ayahKey" | "alike" | "note" | "marked" | "explains" | "passage" | "quranChoices" | "whereOf">> & { correctAnswer?: string; family?: string; write?: WriteAsk };
 
 function Words({ words, marked }: { words: string[]; marked?: number[] }) {
-  return <>{words.map((word, at) => <span key={at} className={marked?.includes(at) ? "text-[var(--home-accent)]" : undefined}>{mushafText(word)}{at < words.length - 1 ? " " : ""}</span>)}</>;
+  // A run of ayat carries each ayah's number between them, drawn as the end mark after the last one is.
+  return <>{words.map((word, at) => <span key={at} className={marked?.includes(at) || AYAH_NUMBER.test(word) ? "text-[var(--home-accent)]" : undefined}>{mushafText(word)}{at < words.length - 1 ? " " : ""}</span>)}</>;
+}
+
+const AYAH_NUMBER = /^[٠-٩]+$/;
+
+/**
+ * A choice as the question draws it: Quran words (whole ayat, a reading) in the mushaf's font, and once answered what it is
+ * (an ayah's place, a reading's readers). Solo, party and the review all draw a choice with it.
+ */
+export function ChoiceLabel({ question, value, label, answered }: { question: ChoiceParts; value: string; label: string; answered: boolean }) {
+  const where = answered ? question.whereOf?.[value] : undefined;
+  const text = question.quranChoices ? <QuranWords className="text-xl leading-loose">{label}</QuranWords> : label;
+  return where ? <span className="flex flex-col items-start"><span>{text}</span><span className="text-xs text-[var(--home-muted)]">{where}</span></span> : <>{text}</>;
+}
+
+/** A book's text the question asks about («لأي آية هذا التفسير؟»), its quotes of the ayah hidden. */
+function ChoicePassage({ text }: { text: string }) {
+  return <p className="mb-4 text-lg leading-loose text-[var(--home-ink)]"><BookRuns text={text} /></p>;
 }
 
 /**
@@ -35,6 +54,7 @@ export function ChoiceQuran({ question, given, revealed, onReveal, onAnswer, ar,
         onShown={onReveal} ar={ar} onWritten={given === undefined && onAnswer ? graded => onAnswer(graded.wrong.length ? FORGOT : RECITED) : undefined} />
     </div>;
   }
+  if (question.passage) return <div dir="rtl" lang="ar"><ChoicePassage text={question.passage} /></div>;
   if (!question.quran) return null;
   // After a wrong pick with a look-alike, the words where the two part are marked in both.
   const alike = given !== undefined && given !== question.correctAnswer ? question.alike?.[given] : undefined;

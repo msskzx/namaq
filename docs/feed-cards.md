@@ -12,8 +12,19 @@ Continue reading, today's juz, prayer time, books, scenes (مشاهد), saved an
 ayat, surah openings, a battle's moment (من غزوة …, opening the battle's page), a sira story whole (من قصص السيرة, its first report with
 the ayat folded under it, opening the story's page), and the quiz cards in `FEED_QUIZ_NAMES`
 (`shared/quiz/feedQuiz.ts`): في أي سورة؟, أكمل المتشابهات, سمّع بقية الآية, قارن الموضعين,
-أوائل السور, سمّع الآية, the three Tuhfat al-Atfal questions, السيرة والغزوات (shared/quiz/sira.ts), and the two tarajim questions
+أوائل السور, سمّع الآية, ما معنى؟, the four ayah quizzes below, the three Tuhfat al-Atfal questions, السيرة والغزوات (shared/quiz/sira.ts), and the two tarajim questions
 (أين يلتقي النسبان؟ and صاحب المنقبة, `shared/quiz/tarajim.ts`).
+
+The ayah quizzes (`shared/quiz/ayahQuizzes.ts`), whose questions are built once by `scripts/quran/buildAyahQuizzes.ts`
+(the app and the website only read the bank; hand review in `scripts/quran/ayahQuizReview.json`):
+- لأي آية هذا التفسير؟: only on short tafsir entries, al-Sa'di's whole comment on one ayah, never cut, the ayah's own
+  quotes hidden («…»); three whole ayat to pick from, no wrong one saying what the passage says (owner 2026-11-18).
+- ما الأسلوب؟: the words al-Suyuti quotes, coloured, and which of his headings he cites them under; wrong headings from
+  his other chapters (ITQAN RULE: only places he surely means).
+- ما إعرابها؟: one word, coloured, and its role (Quranic Treebank), only plain roles its case ending shows.
+- كيف يقرؤها؟: a word the ten readers differ on, and how one of them reads it; half ask a reader who reads as the
+  mushaf does. (The sketch asked «من يقرأ بها؟»; with two readings that question is answered by knowing the mushaf is
+  Hafs's reading, so it asks the other way.)
 
 من التراجم (`TarajimPost`): a virtue from a converted Siyar entry, in the book's words with who says it and
 its page; the head opens the person's page. Every fourth batch from the fourth (`hasTarajimCard` in `shared/homeFeed.ts`).
@@ -31,8 +42,7 @@ work as «ما معنى؟»), من الأقسام, من ترتيب السور, �
 
 ## Quiz kinds to add
 
-لأي آية هذا التفسير؟ (only on short tafsir entries: al-Sa'di's whole comment on one ayah, never cut, the
-ayah's own words hidden, no wrong choice holding the explained words; owner 2026-11-18), ما الأسلوب؟, أي كلمة يعرب؟, من يقرأ بها؟, أين ترد؟ / ما ضدها؟,
+أين ترد؟ / ما ضدها؟,
 بم أقسم؟, ما السورة التي قبلها؟, مقاصد أي سورة؟, أكمل الذكر, من القائل؟,
 في أي سورة ذُكر؟, من المخاطَب؟, and for the battles and events: أين كانت؟ (on the map), متى كان؟ (on the
 timeline), رتّب, من شهدها؟ / من أمير السرية؟, فيمَ نزلت؟, أي حدث هذا؟ (next battles PR: they wait for the years, places and ghazwah or sariyyah to be cited, so no quiz asks about a value without its reference)

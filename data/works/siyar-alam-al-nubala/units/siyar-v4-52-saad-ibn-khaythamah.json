@@ -1,0 +1,372 @@
+{
+  "unit": {
+    "id": "siyar-v4-52-saad-ibn-khaythamah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٥٢"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_sk_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "266",
+      "layer": "MAIN",
+      "exact": "٥٢ - سَعْدُ بنُ خَيْثَمَةَ بنِ الحَارِثِ الأَنْصَارِيُّ الأَوْسِيُّ"
+    },
+    {
+      "id": "sp_sk1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "266",
+      "layer": "MAIN",
+      "exact": "سَعْدُ بنُ خَيْثَمَةَ بنِ الحَارِثِ الأَنْصَارِيُّ الأَوْسِيُّ",
+      "prefix": "٥٢ - "
+    },
+    {
+      "id": "sp_sk2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "266",
+      "layer": "MAIN",
+      "exact": "ابْنِ مَالِكِ بنِ كَعْبِ بنِ النَّحَّاطِ بنِ كَعْبِ بنِ حَارِثَةَ بنِ غَنْمِ بنِ السَّلْمِ"
+    },
+    {
+      "id": "sp_sk_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "266",
+      "layer": "MAIN",
+      "exact": "سَعْدُ بنُ",
+      "prefix": "٥٢ - "
+    },
+    {
+      "id": "sp_sk_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "266",
+      "layer": "MAIN",
+      "exact": "خَيْثَمَةَ بنِ الحَارِثِ",
+      "prefix": "سَعْدُ بنُ "
+    },
+    {
+      "id": "sp_sk_epithets",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "266",
+      "layer": "MAIN",
+      "exact": "أَبُو عَبْدِ اللهِ الأَنْصَارِيُّ، الأَوْسِيُّ، البَدْرِيُّ، النَّقِيْبُ"
+    },
+    {
+      "id": "sp_sk_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "266",
+      "layer": "MAIN",
+      "exact": "أَبُو عَبْدِ اللهِ",
+      "prefix": "السَّلْمِ، "
+    },
+    {
+      "id": "sp_sk_naqib",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "266",
+      "layer": "MAIN",
+      "exact": "النَّقِيْبُ",
+      "prefix": "البَدْرِيُّ، "
+    },
+    {
+      "id": "sp_sk_badr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "266",
+      "layer": "MAIN",
+      "exact": "فَاقْتَرَعَا، فَخَرَجَ سَهْمُ سَعْدٍ، فَخَرَجَ، وَاسْتُشْهِدَ بِبَدْرٍ، وَاسْتُشْهِدَ أَبُوْهُ خَيْثَمَةُ يَوْمَ أُحُدٍ."
+    },
+    {
+      "id": "sp_sk_day_badr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "266",
+      "layer": "MAIN",
+      "exact": "بِبَدْرٍ، وَاسْتُشْهِدَ أَبُوْهُ",
+      "prefix": "وَاسْتُشْهِدَ "
+    },
+    {
+      "id": "sp_sk_place",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "266",
+      "layer": "MAIN",
+      "exact": "بَدْرٍ",
+      "prefix": "وَاسْتُشْهِدَ بِ",
+      "suffix": "، وَاسْتُشْهِدَ أَبُوْهُ"
+    },
+    {
+      "id": "sp_sk_qalu",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "266",
+      "layer": "MAIN",
+      "exact": "قَالُوا",
+      "suffix": ": وَكَانَ أَحَدَ النُّقَبَاءِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_sk_qalu",
+      "unit": "siyar-v4-52-saad-ibn-khaythamah",
+      "ordinal": 1,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_sk_qalu"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sk0",
+      "unit": "siyar-v4-52-saad-ibn-khaythamah",
+      "ordinal": 2,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_sk_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_sk_name",
+      "report": "r_sk0",
+      "spans": [
+        "sp_sk1",
+        "sp_sk2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sk_epithets",
+      "report": "r_sk0",
+      "spans": [
+        "sp_sk_epithets"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sk_badr",
+      "report": "r_sk_qalu",
+      "spans": [
+        "sp_sk_badr"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_sk",
+      "parent": "sp_sk1",
+      "exact": "سَعْدُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sk_father",
+      "parent": "sp_sk1",
+      "exact": "خَيْثَمَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_sk_e",
+      "parent": "sp_sk_epithets",
+      "exact": "أَبُو عَبْدِ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sk_qalu",
+      "parent": "sp_sk_qalu",
+      "exact": "قَالُوا",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sk_b",
+      "parent": "sp_sk_badr",
+      "exact": "سَعْدٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sk_badr",
+      "parent": "sp_sk_badr",
+      "exact": "بَدْرٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_sk",
+      "mention": "m_sk",
+      "agent": "saad-ibn-khaythamah",
+      "basis": [
+        {
+          "span": "sp_sk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sk_b",
+      "mention": "m_sk_b",
+      "agent": "saad-ibn-khaythamah",
+      "basis": [
+        {
+          "span": "sp_sk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sk_e",
+      "mention": "m_sk_e",
+      "agent": "saad-ibn-khaythamah",
+      "basis": [
+        {
+          "span": "sp_sk1",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sk_father",
+      "mention": "m_sk_father",
+      "agent": "khaythamah-ibn-al-harith",
+      "basis": [
+        {
+          "span": "sp_sk_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sk_badr",
+      "mention": "m_sk_badr",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_sk_day_badr",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_sk_name",
+      "subject": "m_sk",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_sk1",
+          "sp_sk2"
+        ]
+      },
+      "restsOn": [
+        "st_sk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sk_sex",
+      "subject": "m_sk",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_sk_sex"
+        ]
+      },
+      "restsOn": [
+        "st_sk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sk_father",
+      "subject": "m_sk",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_sk_father"
+      },
+      "restsOn": [
+        "st_sk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sk_kunya",
+      "subject": "m_sk_e",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_sk_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_sk_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sk_naqib",
+      "subject": "m_sk_e",
+      "predicate": "title",
+      "value": {
+        "classified": "naqib",
+        "spans": [
+          "sp_sk_naqib"
+        ]
+      },
+      "restsOn": [
+        "st_sk_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sk_badr",
+      "subject": "m_sk_b",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_sk_badr"
+      },
+      "restsOn": [
+        "st_sk_badr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sk_place",
+      "subject": "m_sk_b",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "sp_sk_place"
+        ]
+      },
+      "restsOn": [
+        "st_sk_badr"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

@@ -172,6 +172,14 @@
       "layer": "MAIN",
       "exact": "رَبِيْعٍ الآخِرِ",
       "prefix": "لِهِلاَلِ "
+    },
+    {
+      "id": "sp_mi_jamaah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "394",
+      "layer": "MAIN",
+      "exact": "وَكَذَا أَرَّخَهُ فِيْهَا: جَمَاعَةٌ"
     }
   ],
   "reports": [
@@ -209,6 +217,16 @@
       ],
       "origin": {
         "mention": "m_mi_death_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_mi_jamaah",
+      "unit": "siyar-v6-60-miswar",
+      "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "origin": {
+        "mention": "m_mi_jamaah_by"
       },
       "chainState": "DEFERRED"
     }
@@ -268,6 +286,14 @@
       "report": "r_mi_death",
       "spans": [
         "sp_mi_death"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_mi_jamaah",
+      "report": "r_mi_jamaah",
+      "spans": [
+        "sp_mi_jamaah"
       ],
       "role": "TRANSMITTED"
     }
@@ -340,6 +366,13 @@
       "id": "m_mi_death_by",
       "parent": "sp_mi_death_frame",
       "exact": "أُمِّ بَكْرٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_mi_jamaah_by",
+      "parent": "sp_mi_jamaah",
+      "exact": "جَمَاعَةٌ",
       "occurrence": 1,
       "role": "SPEAKER"
     }
@@ -588,7 +621,8 @@
         ]
       },
       "restsOn": [
-        "st_mi_death"
+        "st_mi_death",
+        "st_mi_jamaah"
       ],
       "status": "PROPOSED"
     },

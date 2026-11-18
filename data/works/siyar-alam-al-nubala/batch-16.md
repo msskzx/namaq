@@ -28,39 +28,42 @@ Catalog slugs reached: `makhramah-ibn-nawfal` (al-Miswar's father, batch 12), `a
 | # | slug | modeled | not modeled (why) |
 |---|---|---|---|
 | 58 | abdullah-ibn-al-harith-ibn-jaz | name, father, kunya, virtue (last Companion to die in Egypt), death 86 (author) and 85 (قيل), place | «سنة سبع» (87 by ellipsis; the reader reads 7); uncle Mahmiyah (no uncle predicate); the Abu Hanifah claim the author rejects |
-| 59 | abdullah-ibn-as-saib | name (heading + nasab), father, 2 kunyas, virtues: reciter of Makkah, read to Ubayy, prayed behind the Prophet (Muslim 455), Mujahid's «قارئنا» (editor: sahih) | the «نعم الخليط» report (editor: weak); death «في إمارة ابن الزبير» (no year) |
-| 60 | al-miswar-ibn-makhramah | name, father, mother Atikah, children Abd al-Rahman and Umm Bakr, 2 kunyas, virtues (close to Umar; Ibn Ma'in «ثقة»), death 64, Rabi' al-Akhir (Umm Bakr) | name kept as printed, but «زهرة بن قصي» is a printing slip (Zuhrah is Kilab's son): the link is to be marked so the tree and nasab quiz skip it (open, see STATUS.md); al-Mada'ini's 73, which the author calls an error; born «بعد الهجرة بعامين» (offset); ungraded reports |
-| 61 | sulayman-ibn-surad | name, father, kunya, virtue («كان ديناً عابداً»), Siffin, killed 65 at Ayn al-Wardah | «الأمير» (office with no scope) |
-| 62 | anas-ibn-malik | see the diff above | «وآخر أصحابه موتاً» (Abu al-Tufayl, batch 18, outlived him); Badr (the author: present as a boy, not counted); weak or ungraded reports («يا ذا الأذنين», the kunya story, «رجاله ثقات» ones); born (offset) |
-| 63 | umar-ibn-abi-salamah | name, father, mother (قيل), Abu Salamah's four children, kunya, virtue (the Prophet taught him to eat, al-Bukhari and Muslim), death 83 (Ibn al-Athir) | «هو الذي زوج أمه بالنبي»: Salamah's entry says it of Salamah (disputed; as virtues each would make the other a wrong choice that is right); milk uncle; born (offset) |
-| 64 | salamah-ibn-abi-salamah | name, father, mother, wife Umamah bint Hamzah, brother Umar and death place al-Madinah (Ibn Sa'd) | the same «زوّج أمه» virtue; «أكبر من أخيه» vs the author's «هذا أكبرهم» stays in the shown sentence, attributed to Ibn Sa'd |
-| 65 | busr-ibn-artah | name, father, kunya | the author's «فارساً شجاعاً، فاتكاً» beside the wrongs he lists (no merit to quote alone); «وفي صحبته تردد» (status is not a predicate yet); «إلى حدود سنة سبعين» (approximate) |
-| 66 | an-numan-ibn-bashir | name, father, 2 kunyas (author, يقال), COMPANION_OF, virtue (heard the Prophet, a young Companion by agreement), son Muhammad, offices al-Kufah and Hims, killed late 64 at Birin (قيل) | «صاحب رسول الله وابن صاحبه» as a virtue (true of the sons of Abu Salamah too); Simak's praise (ungraded); born 2 vs al-Bukhari's «عام الهجرة» |
+| 59 | abdullah-ibn-as-saib | name (heading + nasab), father, 2 kunyas, COMPANION_OF («وله صحبة», his prayer behind the Prophet), virtues: «مقرئ مكة» (alone, not the rest of its sentence), read to Ubayy, prayed behind the Prophet (Muslim 455), Mujahid's «قارئنا» (editor: sahih) | «عداده في صغار الصحابة» as a virtue (true of every young Companion); the «نعم الخليط» report (editor: weak); death «في إمارة ابن الزبير» (no year) |
+| 60 | al-miswar-ibn-makhramah | name, father, mother Atikah, children Abd al-Rahman and Umm Bakr, 2 kunyas, virtues (close to Umar; Ibn Ma'in «ثقة»), death 64, Rabi' al-Akhir (Umm Bakr; the year also «جماعة») | name kept exactly as printed; «زهرة بن قصي» is a printing slip (Zuhrah is Kilab's son, Qusayy's brother), marked in `nasabSlips.json` (GUIDE 11), so his tree line and the nasab quiz stop at «زهرة»; al-Mada'ini's 73, which the author calls an error; born «بعد الهجرة بعامين» (offset); ungraded reports |
+| 61 | sulayman-ibn-surad | name, father, kunya, virtue («كان ديناً عابداً», on his page; in `virtueQuizSkip.json` since it is general praise), Siffin, killed 65 at Ayn al-Wardah | «الأمير» (office with no scope) |
+| 62 | anas-ibn-malik | see the diff above (age 107 is «بعضهم», anonymous, as al-Ansari reports the disagreement) | «وآخر أصحابه موتاً» (Abu al-Tufayl, batch 18, outlived him); Badr (the author: present as a boy, not counted); weak or ungraded reports («يا ذا الأذنين», the kunya story, «رجاله ثقات» ones); born (offset) |
+| 63 | umar-ibn-abi-salamah | name, father, mother (قيل), Abu Salamah's four children, kunya, COMPANION_OF, virtues: the Prophet taught him to eat (al-Bukhari and Muslim); «هو الذي زوج أمه بالنبي» (al-Nasa'i, sahih chain), DISPUTED since Salamah's entry gives it to Salamah: shown «على خلاف», not asked; death 83 (Ibn al-Athir) | milk uncle; born (offset) |
+| 64 | salamah-ibn-abi-salamah | name, father, mother, wife Umamah bint Hamzah, virtue «زوّج رسول الله بأمه» (Ibn Ishaq per the editor; DISPUTED against Umar's entry, not asked), brother Umar and death place al-Madinah (Ibn Sa'd) | «أكبر من أخيه» vs the author's «هذا أكبرهم» stays in the shown sentence, attributed to Ibn Sa'd |
+| 65 | busr-ibn-artah | name, father, kunya, COMPANION_OF DISPUTED (GUIDE 3a: «الصحابي» and his hadith from the Prophet, against «وفي صحبته تردد») | the author's «فارساً شجاعاً، فاتكاً» beside the wrongs he lists (no merit to quote alone); «إلى حدود سنة سبعين» (approximate) |
+| 66 | an-numan-ibn-bashir | name, father, 2 kunyas (author, يقال), COMPANION_OF, son Muhammad, offices al-Kufah and Hims, killed late 64 at Birin (قيل) | «صاحب رسول الله وابن صاحبه» and «سمع من النبي… وعد من الصحابة الصبيان» as virtues (true of other young Companions too); Simak's praise (ungraded); born 2 vs al-Bukhari's «عام الهجرة» |
 | 67 | al-walid-ibn-uqbah | name, father, kunya, brother Uthman (by the mother), office al-Kufah | no virtue: the author's praise sits in sentences that name his drinking; al-Hujurat 6 only in the editor's note; burial near al-Raqqah; no death year in the text |
 | 68 | utbah-ibn-abd-as-sulami | name (heading with kunya), father, kunya, COMPANION_OF, son Yahya, age 94 (al-Waqidi), death 87 (Abu Ubayd) | renaming from «عتلة» (ungraded); the pledge of Banu Sulaym («رجاله ثقات») |
 | 69 | utbah-ibn-an-nudhdhar | name, father, death 84 (Khalifah) | his one hadith (editor: weak) |
 | 70 | amr-ibn-hurayth | name (heading + nasab), father, death 85, eleven children (al-Waqidi), brother Sa'id | the Prophet's prayer for him (weak), «كنت في بطن المرأة يوم بدر» (Sharik), age at the Prophet's death |
 | 71 | al-irbad-ibn-sariyah | name, father, virtue (of the people of al-Suffah), REVEALED_ABOUT al-Tawbah 92 (editor: sahih chain), kunya (Ahmad), death 75 (Abu Mushir) | «ربع الإسلام» (the author: not sound); the angel story (ungraded). The book prints [التوبة: ٩٣]; the quoted words are 9:92 |
 | 72 | sahl-ibn-saad | name (heading + nasab), father, kunyas (author, «بعضهم»), virtue (last Companion to die in al-Madinah), son Abbas, death 91 (many) and 88 (Abu Nu'aym, al-Bukhari) | renaming from «حزن» (weak); fifteen wives (ungraded) |
-| 73 | maslamah-ibn-mukhallad | name, father, 3 kunyas (author, two قيل), office Egypt, death Dhu al-Qa'dah 62 at Alexandria (Ibn Yunus) | companionship contested by Abu Hatim alone («وشذ»): status not a predicate yet; ungraded reports |
-| 74 | abdullah-ibn-sarjis | name, father, virtue (the Prophet asked forgiveness for him, Muslim 2346), death place al-Basrah | «سنة نيف وثمانين» (indefinite); Asim's «لم يكن له صحبة», which the author explains |
+| 73 | maslamah-ibn-mukhallad | name, father, 3 kunyas (author, two قيل), COMPANION_OF DISPUTED (GUIDE 3a: the author, al-Bukhari, al-Daraqutni, Ibn Yunus and al-Waqidi's age at the Prophet's death, against Abu Hatim, «وشذ»), office Egypt, death Dhu al-Qa'dah 62 at Alexandria (Ibn Yunus) | ungraded reports |
+| 74 | abdullah-ibn-sarjis | name, father, COMPANION_OF («الصحابي», the Prophet's prayer), virtue (the Prophet asked forgiveness for him, Muslim 2346), death place al-Basrah | «سنة نيف وثمانين» (indefinite); Asim's «لم يكن له صحبة», which the author explains |
 | 75 | al-miqdam-ibn-madikarib | name, father, 5 kunyas (author, four قيل/يقال), COMPANION_OF, son Yahya, death 87 (جماعة) and 88 (al-Tamimi), age 91 (al-Fallas) | «أفلحت يا قديم» and the ear story (weak); burial (قيل) |
-| 76 | abdullah-ibn-abi-awfa | name, father, 3 kunyas, COMPANION_OF, virtues (last Companion to die in al-Kufah; the Prophet's prayer for his family, al-Bukhari and Muslim; seven campaigns, al-Bukhari and Muslim), Hunayn (al-Bukhari), death 86 (author) and 88 (قيل) | «من أهل بيعة الرضوان» as a virtue (true of many; a quiz could offer al-Zubayr); «قارب مائة سنة» (approximate) |
+| 76 | abdullah-ibn-abi-awfa | name, father, 3 kunyas, COMPANION_OF, virtues (last Companion to die in al-Kufah; the Prophet's prayer for his family in the Sahih wording the book gives, Ibn Abi Awfa's own words, al-Bukhari and Muslim; seven campaigns, al-Bukhari and Muslim; the two he narrates are not asked, the sayer being the owner), Hunayn (al-Bukhari), death 86 (author) and 88 (قيل) | «من أهل بيعة الرضوان» as a virtue (true of many; a quiz could offer al-Zubayr); «قارب مائة سنة» (approximate) |
 
-## Code changes in this batch
+## Code and data changes in this batch
 
 - `nasabOf`: a nominative «أبو …» after a father's name is a kunya, not a father («سليمان بن صرد أبو مطرف»); «بن أبي بسر»
   stays a father.
-- A person with no catalog entry is named «X بن Y» from the nasab (was the first three words: «عبد الله بن»).
+- Two people with no catalog entry whose name and father are the same get the grandfather too: Ibn Jaz' is «عبد الله بن
+  الحارث بن جزء», since «عبد الله بن الحارث» is also the Hashimi.
 - The virtue quiz finds the owner's name without its article (Ibn Ma'in's «مسور ثقة»); the nasab test matches whole
   words («عمرو» does not name «عمر»).
+- `nasabSlips.json`: al-Miswar at «قصي». `virtueQuizSkip.json`: Sulayman's «كان ديناً عابداً».
 
 ## Checks
 
-1. `npm run model:check`: 27 units (8 + 19).
+1. `npm run model:check`: 48 units (29 on main + 19).
 2. Diff: above.
 3. `npm run model:app-people`: all 19 in people.json with their pages (none «٠–٠»).
 4. `npx vitest run shared/ src/lib/model`: pass. Every new nasab and virtue question was read; the three that offered a
    wrong choice that is also right were removed at the data (above) or fixed in code.
-5. Nasab meetings checked: Umar ibn Abi Salamah and Amr ibn Hurayth meet at «عبد الله» (ibn Umar ibn Makhzum), Ibn
-   al-Sa'ib and Amr ibn Hurayth at «عمر» (ibn Makhzum); al-Miswar's meeting at «قصي» is wrong until the slip mark lands (STATUS.md).
+5. Nasab meetings checked (13 questions): Umar and Salamah ibn Abi Salamah meet Amr ibn Hurayth at «عبد الله» (ibn Umar
+   ibn Makhzum), Ibn al-Sa'ib and Amr ibn Hurayth at «عمر» (ibn Makhzum), al-Walid ibn Uqbah meets the Umawis at «أمية»
+   and the Hashimis and al-Muttalibis at «عبد مناف». No question asks al-Miswar's line past «زهرة».

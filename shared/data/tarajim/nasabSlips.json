@@ -1,0 +1,9 @@
+{
+  "about": "Printing slips in a nasab: the full name stays exactly as printed on the person's page, and the nasab tree and the nasab quiz stop the line before the slipped name, so it joins no one wrongly. Keyed by the person's slug; `at` is the slipped name as printed; `note` says what the slip is and where that is known (the editor's note, another entry).",
+  "slips": {
+    "al-miswar-ibn-makhramah": {
+      "at": "قُصَيِّ",
+      "note": "Siyar v6 p390 prints «بن زهرة بن قصي بن كلاب». Zuhrah is the son of Kilab, not of Qusayy: the two are brothers, sons of Kilab, as the Prophet's ﷺ nasab and every Zuhri nasab in the Siyar give it. So «بن قصي» here is a printing slip."
+    }
+  }
+}

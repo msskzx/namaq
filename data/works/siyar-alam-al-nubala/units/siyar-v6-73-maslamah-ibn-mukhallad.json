@@ -146,6 +146,82 @@
       "layer": "MAIN",
       "exact": "الإِسْكَنْدَرِيَّةِ",
       "prefix": "بِ"
+    },
+    {
+      "id": "sp_mm_suhba",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "424",
+      "layer": "MAIN",
+      "exact": "لَهُ صُحْبَةٌ، وَلاَ صُحْبَةَ لأَبِيْهِ"
+    },
+    {
+      "id": "sp_mm_bukhari_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "425",
+      "layer": "MAIN",
+      "exact": "وَقَالَ البُخَارِيُّ، وَالدَّارَقُطْنِيُّ، وَابْنُ يُوْنُسَ"
+    },
+    {
+      "id": "sp_mm_bukhari",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "425",
+      "layer": "MAIN",
+      "exact": "لَهُ صُحْبَةٌ",
+      "prefix": "وَابْنُ يُوْنُسَ: "
+    },
+    {
+      "id": "sp_mm_waqidi_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "425",
+      "layer": "MAIN",
+      "exact": "قَالَ الوَاقِدِيُّ، وَغَيْرُهُ"
+    },
+    {
+      "id": "sp_mm_waqidi",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "425",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - وَلِمَسْلَمَةَ بنِ مُخَلَّدٍ أَرْبَعَ عَشْرَةَ سَنَةً"
+    },
+    {
+      "id": "sp_mm_abuhatim_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "425",
+      "layer": "MAIN",
+      "exact": "وَشَذَّ: أَبُو حَاتِمٍ، فَقَالَ"
+    },
+    {
+      "id": "sp_mm_abuhatim",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "425",
+      "layer": "MAIN",
+      "exact": "لَيْسَتْ لَهُ صُحْبَةٌ",
+      "prefix": "فَقَالَ: "
+    },
+    {
+      "id": "sp_mm_waqidi_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "425",
+      "layer": "MAIN",
+      "exact": "وَلِمَسْلَمَةَ بنِ مُخَلَّدٍ",
+      "prefix": "وَسَلَّمَ - "
+    },
+    {
+      "id": "sp_mm_prophet_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "425",
+      "layer": "MAIN",
+      "exact": "النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "prefix": "تُوُفِّيَ "
     }
   ],
   "reports": [
@@ -190,6 +266,45 @@
       ],
       "origin": {
         "mention": "m_mm_death_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_mm_bukhari",
+      "unit": "siyar-v6-73-maslamah-ibn-mukhallad",
+      "ordinal": 5,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_mm_bukhari_frame"
+      ],
+      "origin": {
+        "mention": "m_mm_bukhari_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_mm_waqidi",
+      "unit": "siyar-v6-73-maslamah-ibn-mukhallad",
+      "ordinal": 6,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_mm_waqidi_frame"
+      ],
+      "origin": {
+        "mention": "m_mm_waqidi_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_mm_abuhatim",
+      "unit": "siyar-v6-73-maslamah-ibn-mukhallad",
+      "ordinal": 7,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_mm_abuhatim_frame"
+      ],
+      "origin": {
+        "mention": "m_mm_abuhatim_by"
       },
       "chainState": "DEFERRED"
     }
@@ -242,6 +357,38 @@
         "sp_mm_death"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_mm_suhba",
+      "report": "r_mm0",
+      "spans": [
+        "sp_mm_suhba"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_mm_bukhari",
+      "report": "r_mm_bukhari",
+      "spans": [
+        "sp_mm_bukhari"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_mm_waqidi",
+      "report": "r_mm_waqidi",
+      "spans": [
+        "sp_mm_waqidi"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_mm_abuhatim",
+      "report": "r_mm_abuhatim",
+      "spans": [
+        "sp_mm_abuhatim"
+      ],
+      "role": "TRANSMITTED"
     }
   ],
   "mentions": [
@@ -279,6 +426,41 @@
       "exact": "ابْنُ يُوْنُسَ",
       "occurrence": 1,
       "role": "SPEAKER"
+    },
+    {
+      "id": "m_mm_bukhari_by",
+      "parent": "sp_mm_bukhari_frame",
+      "exact": "البُخَارِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_mm_waqidi_by",
+      "parent": "sp_mm_waqidi_frame",
+      "exact": "الوَاقِدِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_mm_abuhatim_by",
+      "parent": "sp_mm_abuhatim_frame",
+      "exact": "أَبُو حَاتِمٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_mm_w",
+      "parent": "sp_mm_waqidi",
+      "exact": "وَلِمَسْلَمَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_mm_prophet",
+      "parent": "sp_mm_waqidi",
+      "exact": "النَّبِيُّ",
+      "occurrence": 1,
+      "role": "REFERENT"
     }
   ],
   "identifications": [
@@ -302,6 +484,30 @@
         {
           "span": "sp_mm_father_n",
           "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mm_w",
+      "mention": "m_mm_w",
+      "agent": "maslamah-ibn-mukhallad",
+      "basis": [
+        {
+          "span": "sp_mm_waqidi_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mm_prophet",
+      "mention": "m_mm_prophet",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_mm_prophet_b",
+          "role": "SAME_WORK_EXPLICIT"
         }
       ],
       "status": "PROPOSED"
@@ -449,6 +655,21 @@
         "st_mm_death"
       ],
       "status": "PROPOSED"
+    },
+    {
+      "id": "a_mm_comp",
+      "subject": "m_mm",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_mm_prophet"
+      },
+      "restsOn": [
+        "st_mm_suhba",
+        "st_mm_bukhari",
+        "st_mm_waqidi",
+        "st_mm_abuhatim"
+      ],
+      "status": "DISPUTED"
     }
   ]
 }

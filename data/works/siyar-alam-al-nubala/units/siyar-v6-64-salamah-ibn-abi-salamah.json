@@ -79,6 +79,15 @@
       "suffix": " الَّتِي اخْتَصَمَ"
     },
     {
+      "id": "sp_sa_zawwaj",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "408",
+      "layer": "MAIN",
+      "exact": "وَهُوَ الَّذِي زَوَّجَ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - بِأُمِّهِ أُمِّ سَلَمَةَ",
+      "suffix": " (٢)"
+    },
+    {
       "id": "sp_sa_ibnsaad_frame",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
@@ -166,6 +175,14 @@
       "role": "AUTHOR_REPORT"
     },
     {
+      "id": "st_sa_zawwaj",
+      "report": "r_sa0",
+      "spans": [
+        "sp_sa_zawwaj"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
       "id": "st_sa_ibnsaad",
       "report": "r_sa_ibnsaad",
       "spans": [
@@ -216,6 +233,13 @@
       "exact": "أُمَامَةَ",
       "occurrence": 1,
       "role": "REFERENT"
+    },
+    {
+      "id": "m_sa_z",
+      "parent": "sp_sa_zawwaj",
+      "exact": "وَهُوَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
     },
     {
       "id": "m_sa_ibnsaad_by",
@@ -313,6 +337,18 @@
       "status": "PROPOSED"
     },
     {
+      "id": "i_sa_z",
+      "mention": "m_sa_z",
+      "agent": "salamah-ibn-abi-salamah",
+      "basis": [
+        {
+          "span": "sp_sa_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
       "id": "i_sa_s",
       "mention": "m_sa_s",
       "agent": "salamah-ibn-abi-salamah",
@@ -402,6 +438,20 @@
         "st_sa_wife"
       ],
       "status": "PROPOSED"
+    },
+    {
+      "id": "a_sa_v_zawwaj",
+      "subject": "m_sa_z",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_sa_zawwaj"
+        ]
+      },
+      "restsOn": [
+        "st_sa_zawwaj"
+      ],
+      "status": "DISPUTED"
     },
     {
       "id": "a_sa_umar",
