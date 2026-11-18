@@ -55,6 +55,7 @@
     "model:coverage": "tsx scripts/model/coverage.ts",
     "model:diff": "tsx scripts/model/diff.ts",
     "model:project": "tsx scripts/model/project.ts",
+    "model:app-hadith": "tsx scripts/model/buildAppHadith.ts",
     "history:validate": "tsx scripts/history/validateBatch.ts",
     "history:import": "tsx scripts/history/importBatch.ts",
     "history:review": "tsx scripts/history/reviewBatch.ts",

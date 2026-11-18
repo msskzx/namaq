@@ -6,6 +6,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { letterDiff, rangeLabel, type ExampleView, type Line, type Step, type TurnView, type Voice } from '@shared/quran/iltifat';
 import { Text } from '@/ui/Text';
+import Bubble from '@/ui/Bubble';
 import { readAyah } from '@/lib/openReader';
 import { shareCard } from '@/lib/shareImage';
 import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
@@ -104,12 +105,9 @@ function Dialog({ turns, palette }: { turns: TurnView[]; palette: Palette }) {
         const color = voiceColor(palette, turn.voice);
         const start = turn.side === 'start';
         return (
-          <View key={i} style={{ maxWidth: '88%', alignSelf: start ? 'flex-start' : 'flex-end', backgroundColor: palette.paper, ...CARD,
-            borderTopStartRadius: start ? 4 : CARD.borderRadius, borderTopEndRadius: start ? CARD.borderRadius : 4,
-            borderWidth: turn.said ? 1.5 : 0, borderColor: color, paddingHorizontal: 12, paddingTop: 6, paddingBottom: 2 }}>
-            <Text style={{ color, fontSize: 13, textAlign: 'right' }}>{turn.who}</Text>
+          <Bubble key={i} who={turn.who} colour={color} start={start} framed={!!turn.said} palette={palette}>
             <Text style={[quran(palette), { fontSize: 20, lineHeight: 40, textAlign: 'right' }]}><Words lines={turn.lines} palette={palette} /></Text>
-          </View>
+          </Bubble>
         );
       })}
     </View>

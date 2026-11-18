@@ -47,7 +47,7 @@ describe('TabBar', () => {
     expect(logo.getAttribute('href')).toBe('/');
     const tabs = links.filter(link => link.getAttribute('href') !== '/search' && link.getAttribute('href') !== '/utilities');
     // The app's five buttons, first on the right.
-    expect(tabs.map(tab => tab.getAttribute('href'))).toEqual(['/quran', '/quran/read', '/', '/quizzes', '/quran/books']);
+    expect(tabs.map(tab => tab.getAttribute('href'))).toEqual(['/quran', '/hadith', '/', '/biographies', '/quizzes']);
     expect(tabs.every(tab => tab.textContent === '' && tab.getAttribute('aria-label') && tab.querySelector('svg'))).toBe(true);
     expect(tabs.filter(tab => tab.getAttribute('aria-current')).map(tab => tab.getAttribute('href'))).toEqual(['/quizzes']);
     expect(tabs[0].querySelector('svg')?.getAttribute('class')).toContain('-rotate-90');
@@ -109,7 +109,7 @@ describe('TabBar', () => {
     state.loaded = false;
     render(<TabBar />);
     expect(screen.getByRole('navigation', { name: 'شريط التبويب' })).toBeTruthy();
-    expect(screen.getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/', '/quran', '/quran/read', '/', '/quizzes', '/quran/books', '/utilities', '/search']);
+    expect(screen.getAllByRole('link').map(link => link.getAttribute('href'))).toEqual(['/', '/quran', '/hadith', '/', '/biographies', '/quizzes', '/utilities', '/search']);
   });
 
   it('closes the desktop settings panel on a press outside it, but not inside', () => {

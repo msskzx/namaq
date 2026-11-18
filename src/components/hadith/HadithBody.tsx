@@ -6,6 +6,7 @@ import type { HadithMode } from './HadithModeToggle';
 import { useLanguage } from '@/components/language/LanguageContext';
 import type { HadithUnitView, SceneLine } from '@/lib/model/hadithView';
 import { isnadGraph } from '@/lib/model/isnadGraph';
+import { bubbleSides, sceneSlots } from '@shared/hadith';
 
 const BUBBLE_COLOURS = [
   'bg-indigo-50 dark:bg-indigo-900',
@@ -16,36 +17,10 @@ const BUBBLE_COLOURS = [
 ];
 
 export function sceneColours(scenes: HadithUnitView['reports'][number]['scenes']) {
-  const earlier = new Map<string, number>();
-  return scenes.map((scene) => {
-    const taken = new Set<number>();
-    const colours = new Map<string, string>();
-    for (const { kind, speaker } of scene.lines) {
-      if (kind !== 'turn' || !speaker || colours.has(speaker)) continue;
-      const kept = earlier.get(speaker);
-      let at = kept !== undefined && !taken.has(kept) ? kept : 0;
-      while (taken.has(at)) at = (at + 1) % BUBBLE_COLOURS.length;
-      taken.add(at);
-      earlier.set(speaker, at);
-      colours.set(speaker, BUBBLE_COLOURS[at]);
-    }
-    return colours;
-  });
+  return sceneSlots(scenes, BUBBLE_COLOURS.length).map((slots) => new Map([...slots].map(([speaker, at]) => [speaker, BUBBLE_COLOURS[at]])));
 }
 
-// A new speaker moves to the other side, so two people in a row never share one.
-export function bubbleSides(lines: Pick<SceneLine, 'kind' | 'speaker'>[]): boolean[] {
-  let previous: string | undefined;
-  let seen = false;
-  let start = false;
-  return lines.map((line) => {
-    if (line.kind !== 'turn') return start;
-    if (seen && line.speaker !== previous) start = !start;
-    seen = true;
-    previous = line.speaker;
-    return start;
-  });
-}
+export { bubbleSides };
 
 function Bubbles({
   lines,

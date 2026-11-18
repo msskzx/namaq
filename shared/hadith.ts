@@ -1,0 +1,115 @@
+/**
+ * The hadith as the website and the phone app show them (src/lib/model/hadithView.ts builds a unit's view; the app reads
+ * them from data/hadith/units.json, written by scripts/model/buildAppHadith.ts), and what both draw them with.
+ */
+
+export type ChainLink =
+  | { gap: true }
+  | { gap?: false; narrator: string; agent?: string; mode: string; modeKey: string; text?: string };
+
+export interface ChainView {
+  links: ChainLink[];
+  tahwil?: string;
+  branches?: ChainView[];
+}
+
+export interface ReportView {
+  id: string;
+  voice: string;
+  origin: string;
+  chainState: string;
+  frame?: string;
+  fullText?: string;
+  statements: string[];
+  chain?: ChainView;
+  scenes: SceneView[];
+}
+
+export interface SceneLine {
+  kind: 'turn' | 'narration';
+  speaker?: string;
+  agent?: string;
+  text: string;
+}
+
+export interface SceneView {
+  ordinal: number;
+  inTurn?: string;
+  lines: SceneLine[];
+}
+
+export interface ReaderPage {
+  label: string;
+  parts: { text: string; mark: boolean }[];
+}
+
+export interface HadithUnitView {
+  book: string;
+  compiler?: string;
+  kitab?: string;
+  bab?: string;
+  reader?: ReaderPage[];
+  id: string;
+  work: string;
+  author: string;
+  type: string;
+  reports: ReportView[];
+  notes: { text: string; narrator?: string }[];
+  explains: { unit: string; basis: string; book: string }[];
+  explainedBy: { unit: string; texts: string[] }[];
+  sameEvent: { unit: string; book: string; basis: string; source: string }[];
+}
+
+/** A unit's isnad as the website lays it out (src/lib/model/isnadGraph.ts layoutIsnad), its rows named. */
+export interface AppIsnad {
+  nodes: { id: string; label: string; x: number; y: number }[];
+  edges: { from: string; to: string; label: string }[];
+  /** The rows' names, top to bottom: the collector, then each tabaqa (its number and Ibn Hajar's name for it), then the unranked. */
+  rows: { y: number; kind: 'collector' | 'tabaqa' | 'unranked'; tabaqa?: number; name?: string }[];
+  width: number;
+  height: number;
+}
+
+export type AppHadithUnit = HadithUnitView & { isnad: Record<string, AppIsnad> };
+
+export interface AppHadith {
+  /** The website's sizes the layout is in: the app draws it smaller, by these steps. */
+  size: { width: number; gap: number; row: number };
+  units: AppHadithUnit[];
+}
+
+/** A new speaker moves to the other side, so two people in a row never share one. */
+export function bubbleSides(lines: Pick<SceneLine, 'kind' | 'speaker'>[]): boolean[] {
+  let previous: string | undefined;
+  let seen = false;
+  let start = false;
+  return lines.map((line) => {
+    if (line.kind !== 'turn') return start;
+    if (seen && line.speaker !== previous) start = !start;
+    seen = true;
+    previous = line.speaker;
+    return start;
+  });
+}
+
+/**
+ * Each scene's speakers and the colour each takes, by its place in a list of `count` colours: a speaker keeps the colour
+ * an earlier scene gave him, unless someone in this scene already has it.
+ */
+export function sceneSlots(scenes: SceneView[], count: number): Map<string, number>[] {
+  const earlier = new Map<string, number>();
+  return scenes.map((scene) => {
+    const taken = new Set<number>();
+    const slots = new Map<string, number>();
+    for (const { kind, speaker } of scene.lines) {
+      if (kind !== 'turn' || !speaker || slots.has(speaker)) continue;
+      const kept = earlier.get(speaker);
+      let at = kept !== undefined && !taken.has(kept) ? kept : 0;
+      while (taken.has(at)) at = (at + 1) % count;
+      taken.add(at);
+      earlier.set(speaker, at);
+      slots.set(speaker, at);
+    }
+    return slots;
+  });
+}

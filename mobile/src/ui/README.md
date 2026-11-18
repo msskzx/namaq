@@ -29,6 +29,7 @@ below. Never copy one into a screen.
 | `Reference` | A book's quote with its page as a link | the sources of a section |
 | `Folded` | A passage's credit under a rule at its card's foot, folded; opens to the edition and the page's link | each passage in the reader's book sheets (balagha, meaning) |
 | `Pickable` | A block of a card that picks it on a tap, `aria-pressed` | a book's paragraph that lights the ayah words it quotes |
+| `Bubble` | A speech bubble: the speaker's name in his colour, his side, his corner sharp; `framed` | a conversation drawn as a chat (the dialog scenes of «مشاهد», a hadith's scenes) |
 | `Empty` | The one "nothing here" line: muted, centred, says what is missing and how to fill it | every empty list or search |
 | `LoadingDots`, `LoadingScreen`, `Hourglass` | The one loader (`fill` centres it for a page or sheet, `label` for screen readers), app start screen, quiz timer | waiting |
 

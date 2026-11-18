@@ -12,7 +12,7 @@ vi.mock('@/components/language/LanguageContext', () => ({
 vi.mock('next-themes', () => ({ useTheme: () => ({ resolvedTheme: 'light', setTheme: vi.fn() }) }));
 afterEach(() => { cleanup(); state.path = '/'; state.language = 'en'; vi.restoreAllMocks(); vi.clearAllMocks(); });
 
-const destinations = ['/quran', '/quran/read', '/', '/quizzes', '/quran/books'];
+const destinations = ['/quran', '/hadith', '/', '/biographies', '/quizzes'];
 
 describe('launch navigation', () => {
   it.each(['ar', 'en'] as const)('shows only the tree logo linking home, with no sections or settings, in %s', language => {
@@ -54,7 +54,10 @@ describe('launch navigation', () => {
     expect(activeSection('/quizzes')).toBe('/quizzes');
     expect(activeSection('/quizzes?topic=BRANCHES')).toBe('/quizzes');
     expect(activeSection('/quizzes/party/123456')).toBe('/quizzes');
-    expect(activeSection('/quran/read/3')).toBe('/quran/read');
+    expect(activeSection('/quran/read/3')).toBe('/quran');
+    expect(activeSection('/quran/books/sadi/4')).toBe('/');
+    expect(activeSection('/hadith/muslim-jibril')).toBe('/hadith');
+    expect(activeSection('/people/abu-bakr')).toBe('/biographies');
     expect(activeSection('/quran/branches?o=test')).toBe('/quran');
     expect(activeSection('/quran/compare')).toBe('/quran');
     expect(activeSection('/quran/tajwid/tuhfat-al-atfal')).toBe('/quran');
@@ -62,7 +65,7 @@ describe('launch navigation', () => {
     expect(activeSection('/')).toBe('/');
     expect(activeSection('/search')).toBe('/');
     expect(activeSection('/quran/words')).toBeUndefined();
-    expect(activeSection('/graphs')).toBeUndefined();
+    expect(activeSection('/graphs')).toBe('/biographies');
     expect(activeSection('/experiments')).toBeUndefined();
   });
 
