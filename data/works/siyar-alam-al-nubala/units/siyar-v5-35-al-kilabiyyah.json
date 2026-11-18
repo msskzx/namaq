@@ -597,8 +597,7 @@
         ]
       },
       "restsOn": [
-        "st_kl_q1",
-        "st_kl_ishaq"
+        "st_kl_q1"
       ],
       "status": "PROPOSED"
     },
@@ -641,6 +640,20 @@
       },
       "restsOn": [
         "st_kl_q4"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kl_n1i",
+      "subject": "m_kl_i",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_kl_ishaq_kl"
+        ]
+      },
+      "restsOn": [
+        "st_kl_ishaq"
       ],
       "status": "PROPOSED"
     },

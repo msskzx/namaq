@@ -503,6 +503,31 @@
       "layer": "MAIN",
       "exact": "سَنَةَ ثَمَانٍ وَخَمْسِيْنَ",
       "prefix": "المُلاَئِيُّ: "
+    },
+    {
+      "id": "sp_sd_ali_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "100",
+      "layer": "MAIN",
+      "exact": "ابْنُ عُيَيْنَةَ: عَنْ يَحْيَى بنِ سَعِيْدٍ، عَنِ ابْنِ المُسَيِّبِ قَالَ:"
+    },
+    {
+      "id": "sp_sd_ali_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "100",
+      "layer": "MAIN",
+      "exact": "قَالَ عَلِيٌّ:",
+      "suffix": " مَا سَمِعْتُ النَّبِيَّ"
+    },
+    {
+      "id": "sp_sd_ali",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "100",
+      "layer": "MAIN",
+      "exact": "مَا سَمِعْتُ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَجْمَعُ أَبَوَيْهِ لأَحَدٍ غَيْرَ سَعْدٍ"
     }
   ],
   "reports": [
@@ -676,6 +701,20 @@
       "voice": "TRANSMITTED",
       "origin": {
         "mention": "m_sd_mulai"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sd_ali",
+      "unit": "siyar-v4-5-saad-ibn-abi-waqqas",
+      "ordinal": 16,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_sd_ali_frame"
+      ],
+      "isnadSpan": "sp_sd_ali_isnad",
+      "origin": {
+        "mention": "m_sd_ali"
       },
       "chainState": "DEFERRED"
     }
@@ -864,6 +903,14 @@
       "report": "r_sd_mulai",
       "spans": [
         "sp_sd_mulai"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_sd_ali",
+      "report": "r_sd_ali",
+      "spans": [
+        "sp_sd_ali"
       ],
       "role": "TRANSMITTED"
     }
@@ -1106,6 +1153,20 @@
       "exact": "أَبُو نُعَيْمٍ المُلاَئِيُّ",
       "occurrence": 1,
       "role": "SPEAKER"
+    },
+    {
+      "id": "m_sd_ali",
+      "parent": "sp_sd_ali_frame",
+      "exact": "عَلِيٌّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sd_al",
+      "parent": "sp_sd_ali",
+      "exact": "سَعْدٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
     }
   ],
   "identifications": [
@@ -1396,6 +1457,18 @@
         }
       ],
       "status": "PROPOSED"
+    },
+    {
+      "id": "i_sd_al",
+      "mention": "m_sd_al",
+      "agent": "saad-ibn-abi-waqqas",
+      "basis": [
+        {
+          "span": "sp_sd_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
     }
   ],
   "assertions": [
@@ -1593,20 +1666,6 @@
       },
       "restsOn": [
         "st_sd_death_m"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_sd_app2",
-      "subject": "m_sd_ab",
-      "predicate": "appearance",
-      "value": {
-        "spans": [
-          "sp_sd_app2"
-        ]
-      },
-      "restsOn": [
-        "st_sd_app2"
       ],
       "status": "PROPOSED"
     },
@@ -1886,6 +1945,20 @@
       },
       "restsOn": [
         "st_sd_mulai"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sd_v_ali",
+      "subject": "m_sd_al",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_sd_ali"
+        ]
+      },
+      "restsOn": [
+        "st_sd_ali"
       ],
       "status": "PROPOSED"
     }

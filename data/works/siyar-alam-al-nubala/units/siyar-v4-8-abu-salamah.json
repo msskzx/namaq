@@ -287,6 +287,14 @@
       "layer": "MAIN",
       "exact": "سَنَةَ ثَلاَثٍ",
       "prefix": "مَاتَ أَبُو سَلَمَةَ "
+    },
+    {
+      "id": "sp_as_cousin",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "150",
+      "layer": "MAIN",
+      "exact": "أَخُو رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مِنَ الرَّضَاعَةِ، وَابْنُ عَمَّتِهِ"
     }
   ],
   "reports": [
@@ -472,6 +480,14 @@
         "sp_as_qila"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_as_cousin",
+      "report": "r_as0",
+      "spans": [
+        "sp_as_cousin"
+      ],
+      "role": "AUTHOR_REPORT"
     }
   ],
   "mentions": [
@@ -649,6 +665,20 @@
       "exact": "أَبُو سَلَمَةَ",
       "occurrence": 1,
       "role": "SUBJECT"
+    },
+    {
+      "id": "m_as_c",
+      "parent": "sp_as_cousin",
+      "exact": "وَابْنُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_as_prophet",
+      "parent": "sp_as_cousin",
+      "exact": "رَسُوْلِ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
     }
   ],
   "identifications": [
@@ -899,6 +929,18 @@
       "basis": [
         {
           "span": "sp_as_sariyyah_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_as_c",
+      "mention": "m_as_c",
+      "agent": "abu-salamah",
+      "basis": [
+        {
+          "span": "sp_as_heading",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -1165,6 +1207,18 @@
       },
       "restsOn": [
         "st_as_qila"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_as_cousin",
+      "subject": "m_as_c",
+      "predicate": "PATERNAL_COUSIN",
+      "value": {
+        "object": "m_as_prophet"
+      },
+      "restsOn": [
+        "st_as_cousin"
       ],
       "status": "PROPOSED"
     }

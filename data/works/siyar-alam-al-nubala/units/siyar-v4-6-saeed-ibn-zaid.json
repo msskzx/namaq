@@ -455,35 +455,9 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_sz_musa",
-      "unit": "siyar-v4-6-saeed-ibn-zaid",
-      "ordinal": 3,
-      "voice": "TRANSMITTED",
-      "frame": [
-        "sp_sz_musa_frame"
-      ],
-      "origin": {
-        "mention": "m_sz_musa"
-      },
-      "chainState": "DEFERRED"
-    },
-    {
-      "id": "r_sz_ishaq",
-      "unit": "siyar-v4-6-saeed-ibn-zaid",
-      "ordinal": 4,
-      "voice": "TRANSMITTED",
-      "frame": [
-        "sp_sz_ishaq_frame"
-      ],
-      "origin": {
-        "mention": "m_sz_ishaq"
-      },
-      "chainState": "DEFERRED"
-    },
-    {
       "id": "r_sz_bound",
       "unit": "siyar-v4-6-saeed-ibn-zaid",
-      "ordinal": 5,
+      "ordinal": 3,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_sz_bound_frame"
@@ -497,7 +471,7 @@
     {
       "id": "r_sz_waq",
       "unit": "siyar-v4-6-saeed-ibn-zaid",
-      "ordinal": 6,
+      "ordinal": 4,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_sz_waq_frame"
@@ -510,7 +484,7 @@
     {
       "id": "r_sz_arwa",
       "unit": "siyar-v4-6-saeed-ibn-zaid",
-      "ordinal": 7,
+      "ordinal": 5,
       "voice": "TRANSMITTED",
       "isnadSpan": "sp_sz_arwa_isnad",
       "origin": {
@@ -521,7 +495,7 @@
     {
       "id": "r_sz_hira",
       "unit": "siyar-v4-6-saeed-ibn-zaid",
-      "ordinal": 8,
+      "ordinal": 6,
       "voice": "TRANSMITTED",
       "isnadSpan": "sp_sz_hira_isnad",
       "origin": {
@@ -532,7 +506,7 @@
     {
       "id": "r_sz_aisha",
       "unit": "siyar-v4-6-saeed-ibn-zaid",
-      "ordinal": 9,
+      "ordinal": 7,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_sz_aisha_frame"
@@ -545,7 +519,7 @@
     {
       "id": "r_sz_malik",
       "unit": "siyar-v4-6-saeed-ibn-zaid",
-      "ordinal": 10,
+      "ordinal": 8,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_sz_malik_frame"
@@ -558,7 +532,7 @@
     {
       "id": "r_sz_waq_d",
       "unit": "siyar-v4-6-saeed-ibn-zaid",
-      "ordinal": 11,
+      "ordinal": 9,
       "voice": "TRANSMITTED",
       "origin": {
         "mention": "m_sz_waq2"
@@ -568,7 +542,7 @@
     {
       "id": "r_sz_abuubayd",
       "unit": "siyar-v4-6-saeed-ibn-zaid",
-      "ordinal": 12,
+      "ordinal": 10,
       "voice": "TRANSMITTED",
       "origin": {
         "mention": "m_sz_abuubayd"
@@ -578,7 +552,7 @@
     {
       "id": "r_sz_bukayr",
       "unit": "siyar-v4-6-saeed-ibn-zaid",
-      "ordinal": 13,
+      "ordinal": 11,
       "voice": "TRANSMITTED",
       "origin": {
         "mention": "m_sz_bukayr"
@@ -588,7 +562,7 @@
     {
       "id": "r_sz_shihab",
       "unit": "siyar-v4-6-saeed-ibn-zaid",
-      "ordinal": 14,
+      "ordinal": 12,
       "voice": "TRANSMITTED",
       "origin": {
         "mention": "m_sz_shihab"
@@ -598,7 +572,7 @@
     {
       "id": "r_sz_waq_app",
       "unit": "siyar-v4-6-saeed-ibn-zaid",
-      "ordinal": 15,
+      "ordinal": 13,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_sz_app_frame"
@@ -611,7 +585,7 @@
     {
       "id": "r_sz_haytham",
       "unit": "siyar-v4-6-saeed-ibn-zaid",
-      "ordinal": 16,
+      "ordinal": 14,
       "voice": "TRANSMITTED",
       "origin": {
         "mention": "m_sz_haytham"
@@ -621,7 +595,7 @@
     {
       "id": "r_sz_zuhri",
       "unit": "siyar-v4-6-saeed-ibn-zaid",
-      "ordinal": 17,
+      "ordinal": 15,
       "voice": "TRANSMITTED",
       "origin": {
         "mention": "m_sz_zuhri"
@@ -699,22 +673,6 @@
     {
       "id": "st_sz_urwa",
       "report": "r_sz_urwa",
-      "spans": [
-        "sp_sz_badr_share"
-      ],
-      "role": "TRANSMITTED"
-    },
-    {
-      "id": "st_sz_musa",
-      "report": "r_sz_musa",
-      "spans": [
-        "sp_sz_badr_share"
-      ],
-      "role": "TRANSMITTED"
-    },
-    {
-      "id": "st_sz_ishaq",
-      "report": "r_sz_ishaq",
       "spans": [
         "sp_sz_badr_share"
       ],
@@ -883,20 +841,6 @@
       "role": "SUBJECT"
     },
     {
-      "id": "m_sz_musa",
-      "parent": "sp_sz_musa_frame",
-      "exact": "مُوْسَى بنُ",
-      "occurrence": 1,
-      "role": "SPEAKER"
-    },
-    {
-      "id": "m_sz_ishaq",
-      "parent": "sp_sz_ishaq_frame",
-      "exact": "ابْنُ إِسْحَاقَ",
-      "occurrence": 1,
-      "role": "SPEAKER"
-    },
-    {
       "id": "m_sz_w",
       "parent": "sp_sz_wife",
       "exact": "وَامْرَأَتُهُ",
@@ -962,7 +906,7 @@
     {
       "id": "m_sz_urwa2",
       "parent": "sp_sz_arwa_isnad",
-      "exact": "أَبِيْهِ",
+      "exact": "عُرْوَةَ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
@@ -1479,9 +1423,7 @@
         ]
       },
       "restsOn": [
-        "st_sz_urwa",
-        "st_sz_musa",
-        "st_sz_ishaq"
+        "st_sz_urwa"
       ],
       "status": "PROPOSED"
     },

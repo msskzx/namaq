@@ -1105,20 +1105,6 @@
       "status": "PROPOSED"
     },
     {
-      "id": "a_aw_app1",
-      "subject": "m_aw_a1",
-      "predicate": "appearance",
-      "value": {
-        "spans": [
-          "sp_aw_app1"
-        ]
-      },
-      "restsOn": [
-        "st_aw_app1"
-      ],
-      "status": "PROPOSED"
-    },
-    {
       "id": "a_aw_app2",
       "subject": "m_aw",
       "predicate": "appearance",
@@ -1129,20 +1115,6 @@
       },
       "restsOn": [
         "st_aw_app2"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_aw_app3",
-      "subject": "m_aw_a3",
-      "predicate": "appearance",
-      "value": {
-        "spans": [
-          "sp_aw_app3"
-        ]
-      },
-      "restsOn": [
-        "st_aw_app3"
       ],
       "status": "PROPOSED"
     },

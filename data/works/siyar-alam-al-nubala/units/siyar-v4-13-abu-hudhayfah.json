@@ -186,6 +186,23 @@
       "layer": "MAIN",
       "exact": "ثَلاَثاً وَخَمْسِيْنَ سَنَةً",
       "prefix": "عَاشَ أَبُو حُذَيْفَةَ "
+    },
+    {
+      "id": "sp_ah_hind",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "165",
+      "layer": "MAIN",
+      "exact": "أَنَّ أَبَا حُذَيْفَةَ بنَ عُتْبَةَ دَعَا يَوْمَ بَدْرٍ أَبَاهُ إِلَى البرَازِ. فَقَالَتْ أُخْتُهُ أُمُّ مُعَاوِيَةَ؛ هِنْدُ بِنْتُ عُتْبَةَ"
+    },
+    {
+      "id": "sp_ah_hind_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "165",
+      "layer": "MAIN",
+      "exact": "هِنْدُ بِنْتُ عُتْبَةَ",
+      "prefix": "أُمُّ مُعَاوِيَةَ؛ "
     }
   ],
   "reports": [
@@ -315,6 +332,14 @@
         "sp_ah_age"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ah_hind",
+      "report": "r_ah_zinad",
+      "spans": [
+        "sp_ah_hind"
+      ],
+      "role": "TRANSMITTED"
     }
   ],
   "mentions": [
@@ -436,6 +461,20 @@
       "exact": "أَبُو حُذَيْفَةَ",
       "occurrence": 1,
       "role": "SUBJECT"
+    },
+    {
+      "id": "m_ah_hs",
+      "parent": "sp_ah_hind",
+      "exact": "أَبَا حُذَيْفَةَ بنَ عُتْبَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ah_hind",
+      "parent": "sp_ah_hind",
+      "exact": "هِنْدُ بِنْتُ عُتْبَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
     }
   ],
   "identifications": [
@@ -590,6 +629,30 @@
       "basis": [
         {
           "span": "sp_ah_badr_word",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ah_hs",
+      "mention": "m_ah_hs",
+      "agent": "abu-hudhayfah",
+      "basis": [
+        {
+          "span": "sp_ah_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ah_hind",
+      "mention": "m_ah_hind",
+      "agent": "hind-bint-utbah",
+      "basis": [
+        {
+          "span": "sp_ah_hind_name",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -805,6 +868,18 @@
       },
       "restsOn": [
         "st_ah_age"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ah_hind",
+      "subject": "m_ah_hs",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_ah_hind"
+      },
+      "restsOn": [
+        "st_ah_hind"
       ],
       "status": "PROPOSED"
     }

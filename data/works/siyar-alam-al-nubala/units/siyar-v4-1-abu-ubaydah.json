@@ -385,6 +385,23 @@
       "page": "6",
       "layer": "MAIN",
       "exact": "يَجْتَمِعُ فِي النَّسَبِ هُوَ وَالنَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فِي فِهْرٍ"
+    },
+    {
+      "id": "sp_au_yarmuk",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "22",
+      "layer": "MAIN",
+      "exact": "كَانَ أَبُو عُبَيْدَةَ رَأْسَ الإِسْلاَمِ يَوْمَ وَقْعَةِ اليَرْمُوْكِ"
+    },
+    {
+      "id": "sp_au_yarmuk_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "22",
+      "layer": "MAIN",
+      "exact": "وَقْعَةِ اليَرْمُوْكِ",
+      "prefix": "الإِسْلاَمِ يَوْمَ "
     }
   ],
   "reports": [
@@ -632,6 +649,14 @@
         "sp_au_17"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_au_yarmuk",
+      "report": "r_au0",
+      "spans": [
+        "sp_au_yarmuk"
+      ],
+      "role": "AUTHOR_REPORT"
     }
   ],
   "mentions": [
@@ -823,6 +848,20 @@
       "exact": "أَبَا عُبَيْدَةَ",
       "occurrence": 1,
       "role": "SUBJECT"
+    },
+    {
+      "id": "m_au_y",
+      "parent": "sp_au_yarmuk",
+      "exact": "أَبُو عُبَيْدَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_au_yarmuk",
+      "parent": "sp_au_yarmuk",
+      "exact": "اليَرْمُوْكِ",
+      "occurrence": 1,
+      "role": "REFERENT"
     }
   ],
   "identifications": [
@@ -1077,6 +1116,30 @@
         }
       ],
       "status": "PROPOSED"
+    },
+    {
+      "id": "i_au_y",
+      "mention": "m_au_y",
+      "agent": "abu-ubaydah-ibn-al-jarrah",
+      "basis": [
+        {
+          "span": "sp_au_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_au_yarmuk",
+      "mention": "m_au_yarmuk",
+      "event": "yarmuk",
+      "basis": [
+        {
+          "span": "sp_au_yarmuk_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
     }
   ],
   "assertions": [
@@ -1189,20 +1252,6 @@
       },
       "restsOn": [
         "st_au_janna"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_au_app",
-      "subject": "m_au_ap",
-      "predicate": "appearance",
-      "value": {
-        "spans": [
-          "sp_au_app"
-        ]
-      },
-      "restsOn": [
-        "st_au_app"
       ],
       "status": "PROPOSED"
     },
@@ -1398,6 +1447,18 @@
       },
       "restsOn": [
         "st_au_17"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_au_yarmuk",
+      "subject": "m_au_y",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_au_yarmuk"
+      },
+      "restsOn": [
+        "st_au_yarmuk"
       ],
       "status": "PROPOSED"
     }

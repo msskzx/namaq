@@ -85,6 +85,39 @@
       "exact": "أَسْلَمَ أَبُو السَّائِبِ بَعْدَ ثَلاَثَةَ عَشَرَ رَجُلاً، وَهَاجَرَ الهِجْرَتَيْنِ، وَتُوُفِّيَ بَعْدَ بَدْرٍ، وَكَانَ عَابِداً (١) مُجْتَهِداً"
     },
     {
+      "id": "sp_um_nm1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "155",
+      "layer": "MAIN",
+      "exact": "أَسْلَمَ أَبُو السَّائِبِ بَعْدَ ثَلاَثَةَ عَشَرَ رَجُلاً"
+    },
+    {
+      "id": "sp_um_nm2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "155",
+      "layer": "MAIN",
+      "exact": "وَهَاجَرَ الهِجْرَتَيْنِ",
+      "prefix": "عَشَرَ رَجُلاً، "
+    },
+    {
+      "id": "sp_um_nm3",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "155",
+      "layer": "MAIN",
+      "exact": "وَكَانَ عَابِداً (١) مُجْتَهِداً"
+    },
+    {
+      "id": "sp_um_ala_pframe",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "159",
+      "layer": "MAIN",
+      "exact": "فَقَالَ رَسُوْلُ اللهِ: (وَمَا يُدْرِيْكِ؟)"
+    },
+    {
       "id": "sp_um_burdah_isnad",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 4,
@@ -252,9 +285,23 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_um_app",
+      "id": "r_um_ala_p",
       "unit": "siyar-v4-9-uthman-ibn-mazun",
       "ordinal": 6,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_um_ala_pframe"
+      ],
+      "isnadSpan": "sp_um_ala_isnad",
+      "origin": {
+        "mention": "m_um_p_ala"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_um_app",
+      "unit": "siyar-v4-9-uthman-ibn-mazun",
+      "ordinal": 7,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_um_app_frame"
@@ -317,7 +364,7 @@
     },
     {
       "id": "st_um_ala1",
-      "report": "r_um_ala",
+      "report": "r_um_ala_p",
       "spans": [
         "sp_um_ala1"
       ],
@@ -424,6 +471,13 @@
       "exact": "هُوَ",
       "occurrence": 1,
       "role": "SUBJECT"
+    },
+    {
+      "id": "m_um_p_ala",
+      "parent": "sp_um_ala_pframe",
+      "exact": "رَسُوْلُ اللهِ",
+      "occurrence": 1,
+      "role": "SPEAKER"
     },
     {
       "id": "m_um_a2",
@@ -653,12 +707,40 @@
       "status": "PROPOSED"
     },
     {
-      "id": "a_um_v_namari",
+      "id": "a_um_v_nm1",
       "subject": "m_um_n",
       "predicate": "virtue",
       "value": {
         "spans": [
-          "sp_um_namari"
+          "sp_um_nm1"
+        ]
+      },
+      "restsOn": [
+        "st_um_namari"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_um_v_nm2",
+      "subject": "m_um_n",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_um_nm2"
+        ]
+      },
+      "restsOn": [
+        "st_um_namari"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_um_v_nm3",
+      "subject": "m_um_n",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_um_nm3"
         ]
       },
       "restsOn": [
