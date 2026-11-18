@@ -1,0 +1,195 @@
+{
+  "unit": {
+    "id": "siyar-v4-28-harith-nawfal",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٢٨"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_hn_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "199",
+      "layer": "MAIN",
+      "exact": "٢٨ - الحَارِثُ بنُ نَوْفَلِ بنِ الحَارِثِ الهَاشِمِيُّ"
+    },
+    {
+      "id": "sp_hn_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "199",
+      "layer": "MAIN",
+      "exact": "الحَارِثُ بنُ نَوْفَلِ بنِ الحَارِثِ الهَاشِمِيُّ",
+      "prefix": "٢٨ - "
+    },
+    {
+      "id": "sp_hn_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "199",
+      "layer": "MAIN",
+      "exact": "الحَارِثُ بنُ",
+      "prefix": "٢٨ - "
+    },
+    {
+      "id": "sp_hn_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "199",
+      "layer": "MAIN",
+      "exact": "نَوْفَلِ بنِ الحَارِثِ",
+      "prefix": "الحَارِثُ بنُ "
+    },
+    {
+      "id": "sp_hn_makkah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "199",
+      "layer": "MAIN",
+      "exact": "أَسْلَمَ مَعَ أَبِيْهِ، وَوَلِيَ مَكَّةَ لِعُمَرَ وَعُثْمَانَ"
+    },
+    {
+      "id": "sp_hn_office",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "199",
+      "layer": "MAIN",
+      "exact": "وَوَلِيَ مَكَّةَ لِعُمَرَ وَعُثْمَانَ",
+      "prefix": "مَعَ أَبِيْهِ، "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_hn0",
+      "unit": "siyar-v4-28-harith-nawfal",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_hn_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_hn_name",
+      "report": "r_hn0",
+      "spans": [
+        "sp_hn_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_hn_makkah",
+      "report": "r_hn0",
+      "spans": [
+        "sp_hn_makkah"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_hn",
+      "parent": "sp_hn_name",
+      "exact": "الحَارِثُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_hn_father",
+      "parent": "sp_hn_name",
+      "exact": "نَوْفَلِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_hn",
+      "mention": "m_hn",
+      "agent": "al-harith-ibn-nawfal",
+      "basis": [
+        {
+          "span": "sp_hn_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_hn_father",
+      "mention": "m_hn_father",
+      "agent": "nawfal-ibn-al-harith",
+      "basis": [
+        {
+          "span": "sp_hn_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_hn_name",
+      "subject": "m_hn",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_hn_name"
+        ]
+      },
+      "restsOn": [
+        "st_hn_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hn_sex",
+      "subject": "m_hn",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_hn_sex"
+        ]
+      },
+      "restsOn": [
+        "st_hn_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hn_father",
+      "subject": "m_hn",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_hn_father"
+      },
+      "restsOn": [
+        "st_hn_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hn_office",
+      "subject": "m_hn",
+      "predicate": "office",
+      "value": {
+        "classified": "amir",
+        "spans": [
+          "sp_hn_office"
+        ]
+      },
+      "restsOn": [
+        "st_hn_makkah"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
