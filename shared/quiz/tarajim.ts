@@ -4,7 +4,7 @@
 // page is the way to check it.
 import peopleJson from '../data/tarajim/people.json';
 import { pageLabel, sayer, type AppPerson } from '../tarajim';
-import { bareName, lineOf, meetingOf } from '../tarajimLine';
+import { bareName, chainOf, lineOf, meetingOf, type LineName } from '../tarajimLine';
 import { shuffle, type Random } from './random';
 import type { ChoiceKind, ChoiceQuestion } from './choiceKinds';
 
@@ -17,12 +17,25 @@ const PEOPLE = peopleJson as AppPerson[];
 const plain = (text: string) => text.replace(/[ً-ْٰـ]/g, '');
 const nameOf = (person: AppPerson) => (person.slug === 'prophet-muhammad' && !person.name.includes('ﷺ') ? `${person.name} ﷺ` : person.name);
 
+/** Every person's line, once per list of people. */
+const lineCache = new WeakMap<AppPerson[], Map<string, LineName[]>>();
+function linesOf(people: AppPerson[]) {
+  let lines = lineCache.get(people);
+  if (!lines) lineCache.set(people, (lines = new Map(people.map(person => [person.slug, lineOf(person, people)]))));
+  return lines;
+}
+
+const words = (text: string) => text.split(/\s+/).length;
+/** Whether `name` stands as whole words in `text`, both bare. */
+const hasName = (text: string, name: string) => ` ${bareName(text)} `.includes(` ${bareName(name)} `);
+
 /**
  * Where two people's nasabs meet: the nearest father both lines name. The wrong choices are fathers below the meeting
- * on either line, so each is clearly one side's alone; a pair with fewer than three such fathers is not asked.
+ * on either line, so each is clearly one side's alone (never a father above it, who is shared too); a pair with fewer
+ * than three such fathers is not asked, nor one whose names in the question already say where they meet.
  */
 export function nasabQuestions(people: AppPerson[] = PEOPLE): ChoiceQuestion[] {
-  const lines = new Map(people.map(person => [person.slug, lineOf(person, people)]));
+  const lines = linesOf(people);
   const questions: ChoiceQuestion[] = [];
   for (let i = 0; i < people.length; i += 1) for (let j = i + 1; j < people.length; j += 1) {
     const [a, b] = [people[i], people[j]];
@@ -30,43 +43,65 @@ export function nasabQuestions(people: AppPerson[] = PEOPLE): ChoiceQuestion[] {
     const at = meetingOf(la, lb);
     if (!at) continue;
     const answer = plain(la[at.a].name);
-    // One father from each side in turn, a name of one or two words (not «الصديق أبي بكر عبد الله», a kunya and a name).
+    // A name of one or two words, for the answer as for the others (not «الصديق أبي بكر عبد الله», a kunya and a name).
+    if (words(answer) > 2 || hasName(nameOf(a), answer) || hasName(nameOf(b), answer)) continue;
+    const shared = new Set([...la.slice(at.a), ...lb.slice(at.b)].map(n => n.bare));
+    // One father from each side in turn.
     const sideA = la.slice(1, at.a).map(n => plain(n.name));
     const sideB = lb.slice(1, at.b).map(n => plain(n.name));
     const turns = Array.from({ length: Math.max(sideA.length, sideB.length) }, (_, k) => [sideB[sideB.length - 1 - k], sideA[sideA.length - 1 - k]]).flat();
-    const below = turns.filter((name): name is string => !!name && name.split(/\s+/).length <= 2)
-      .filter((name, k, all) => all.findIndex(other => bareName(other) === bareName(name)) === k && bareName(name) !== bareName(answer));
+    const below = turns.filter((name): name is string => !!name && words(name) <= 2 && !shared.has(bareName(name)))
+      .filter((name, k, all) => all.findIndex(other => bareName(other) === bareName(name)) === k);
     if (below.length < 3) continue;
-    const chain = (line: typeof la, to: number) => line.slice(0, to + 1).map(n => plain(n.name)).join(' بن ');
+    const pages = [a, b].filter(p => p.fullName).map(p => `${nameOf(p)}: ${pageLabel(p.fullName!.refs)}`).join('؛ ');
     questions.push({
       key: `${TARAJIM_NASAB}:${a.slug}:${b.slug}`,
       family: TARAJIM_NASAB,
       promptArabic: `أين يلتقي نسب ${nameOf(a)} ونسب ${nameOf(b)}؟`,
       choices: [answer, ...below.slice(0, 3)].map(name => ({ value: name, labelArabic: name })),
       correctAnswer: answer,
-      note: { label: 'النسبان', text: `${chain(la, at.a)}\n${chain(lb, at.b)}\n(سير أعلام النبلاء، وشجرة النسب في التراجم)` },
+      note: { label: 'النسبان', text: `${chainOf(a, la, at.a)}\n${chainOf(b, lb, at.b)}\n${pages ? `${pages}\n` : ''}وشجرة النسب في التراجم` },
       evidence: { claimKeys: [] },
     });
   }
   return questions;
 }
 
+/** The words that name a person in a quote: the first name, «ابن» or «بنت» and the father, each kunya and laqab in any case. */
+function namesOf(person: AppPerson, line: LineName[]) {
+  const first = plain(person.name).split(/\s+/);
+  const own = first[0] === 'عبد' ? first.slice(0, 2).join(' ') : first[0];
+  const father = line[1] ? plain(line[1].name) : undefined;
+  const forms = (text: string) => {
+    const bare = bareName(text);
+    const kunya = bare.match(/^(?:ابو|ابا|ابي|ام) (.+)$/u);
+    return kunya ? ['ابو', 'ابا', 'ابي', 'ام'].map(k => `${k} ${kunya[1]}`) : [bare];
+  };
+  return [own, ...(father ? [`ابن ${father}`, `بن ${father}`, `بنت ${father}`] : []),
+    ...[...person.kunya, ...person.laqab].flatMap(k => forms(k.text))].map(bareName);
+}
+
 /**
  * A virtue as the entry prints it, with who says it, and four people to pick from. A virtue that names its owner
- * (his name or kunya in the quote) gives the answer away, so it is not asked. The wrong choices are other people in the
- * app of the same sex; a virtue with fewer than three such people waits for more entries to be converted.
+ * (name, kunya, laqab or «ابن» his father) gives the answer away, so it is not asked. The wrong choices are other people
+ * in the app of the same sex, never the Prophet ﷺ, not the owner's brothers or sisters (what is said of a man's uncle is said of his other
+ * uncles too), and no one the quote names or who says it; a virtue with fewer than three such people waits for more
+ * entries to be converted.
  */
 export function virtueQuestions(people: AppPerson[] = PEOPLE, random: Random = Math.random): ChoiceQuestion[] {
   const questions: ChoiceQuestion[] = [];
+  const lines = linesOf(people);
+  const fatherKey = (p: AppPerson) => p.parents.find(parent => parent.sex === 'MALE')?.slug ?? lines.get(p.slug)!.slice(1, 3).map(n => n.bare).join('/');
   for (const person of people) {
-    const names = [person.name.split(/\s+/)[0], ...person.kunya.map(k => k.text)].map(bareName);
+    const names = namesOf(person, lines.get(person.slug)!);
     person.virtues.forEach((virtue, k) => {
-      const quote = bareName(virtue.text);
-      if (names.some(name => quote.includes(name))) return;
-      // Others of the same sex, so the grammar of the quote gives nothing away, and no one the quote names or who says it.
-      const others = shuffle(people.filter(p => p.slug !== person.slug && p.sex === person.sex
-        && !quote.includes(bareName(p.name.split(/\s+/)[0]))
-        && !virtue.by.some(by => bareName(by).startsWith(bareName(p.name.split(/\s+/)[0])))), random).slice(0, 3);
+      const quote = virtue.text;
+      // A quote that names its owner gives the answer; one that only points («هذا ممن…») needs its scene to say whom.
+      if (names.some(name => bareName(quote).includes(name)) || /^(?:هذا|هذه)\s/u.test(bareName(quote))) return;
+      const others = shuffle(people.filter(p => p.slug !== person.slug && p.slug !== 'prophet-muhammad' && p.sex === person.sex
+        && fatherKey(p) !== fatherKey(person)
+        && !hasName(quote, plain(p.name).split(/\s+/)[0])
+        && !virtue.by.some(by => bareName(by).startsWith(bareName(plain(p.name).split(/\s+/)[0])))), random).slice(0, 3);
       if (others.length < 3) return;
       questions.push({
         key: `${TARAJIM_VIRTUE}:${person.slug}:${k}`,
@@ -90,5 +125,12 @@ const kind = (id: typeof TARAJIM_NASAB | typeof TARAJIM_VIRTUE, name: string, al
   count: () => all(Math.random).length,
 });
 
-export const tarajimNasab = kind(TARAJIM_NASAB, TARAJIM_NASAB_NAME, random => nasabQuestions().map(q => ({ ...q, choices: shuffle(q.choices, random) })));
+/** Built once, the first time a question is asked: the people do not change while the app runs. */
+const once = <T>(make: () => T) => {
+  let value: T | undefined;
+  return () => (value ??= make());
+};
+const nasabAll = once(() => nasabQuestions());
+
+export const tarajimNasab = kind(TARAJIM_NASAB, TARAJIM_NASAB_NAME, random => nasabAll().map(q => ({ ...q, choices: shuffle(q.choices, random) })));
 export const tarajimVirtue = kind(TARAJIM_VIRTUE, TARAJIM_VIRTUE_NAME, random => virtueQuestions(PEOPLE, random));

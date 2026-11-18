@@ -10,7 +10,7 @@ const meet = (a: string, b: string) => {
   const la = lineOf(person(a), people);
   const lb = lineOf(person(b), people);
   const at = meetingOf(la, lb);
-  return at && bareName(la[at.a].name);
+  return at && la[at.a].name.replace(/[ً-ْٰـ]/g, '');
 };
 
 describe('lineOf', () => {
@@ -47,5 +47,31 @@ describe('nasabTree', () => {
     expect(bareName(above[0])).toBe('هاشم');
     expect(start.children.map((c) => bareName(c.name)).sort()).toEqual(['العباس', 'عبد الله']);
     expect(start.children.find((c) => bareName(c.name) === 'عبد الله')!.children[0].people).toEqual(['prophet-muhammad']);
+  });
+});
+
+describe('safeguards', () => {
+  const man = (slug: string, nasab: string[], father?: string): AppPerson => ({
+    ...person('talhah-ibn-ubaydullah'), slug, name: nasab[0], nasab,
+    parents: father ? [{ slug: father, name: father, inApp: false, sex: 'MALE', text: '', refs: [], by: [] }] : [],
+  } as AppPerson);
+
+  it('never carries a line of two names on by a common name alone', () => {
+    // «جابر بن عبد الله» must not become the Prophet's ﷺ brother through «عبد الله».
+    const jabir = man('jabir', ['جابر', 'عبد الله'], 'abdullah-ibn-amr');
+    const all = [...people, jabir];
+    expect(lineOf(jabir, all).map((n) => n.bare)).toEqual(['جابر', 'عبد الله']);
+  });
+
+  it('carries a short line through a brother the entries name as the same father', () => {
+    expect(names('safiyyah-bint-abd-al-muttalib').slice(0, 3)).toEqual(['صفيه', 'عبد المطلب', 'هاشم']);
+  });
+
+  it('draws two lines whose top fathers only share a name as two trees', () => {
+    const a = man('a', ['زيد', 'خالد', 'عمرو'], 'x');
+    const b = man('b', ['بكر', 'سعد', 'عمرو'], 'y');
+    const all = [a, b];
+    const roots = nasabTree([a, b].map((p) => ({ slug: p.slug, line: lineOf(p, all) })));
+    expect(roots).toHaveLength(2);
   });
 });

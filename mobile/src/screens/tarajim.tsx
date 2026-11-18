@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, type ComponentRef } from 'react';
+import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Text } from '@/ui/Text';
@@ -26,6 +26,8 @@ export default function TarajimScreen() {
   const params = useLocalSearchParams<{ title?: string }>();
   const [query, setQuery] = useState('');
   const [title, setTitle] = useState<string | undefined>(params.title);
+  // The list stays mounted under the person's page, so a title tapped there arrives as a new param, not a new screen.
+  useEffect(() => { if (params.title) setTitle(params.title); }, [params.title]);
   const filters = useMemo(() => titleFilters(), []);
   const people = useMemo(() => searchPeople(query, title), [query, title]);
   return (

@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Plus } from 'lucide-react-native';
-import { foldTop, lineOf, meetingOf, nasabTree, type NasabNode } from '@shared/tarajimLine';
+import { ChevronDown, ChevronUp, Plus } from 'lucide-react-native';
+import { chainOf, foldTop, lineOf, meetingOf, nasabTree, type NasabNode } from '@shared/tarajimLine';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Card from '@/ui/Card';
@@ -13,6 +13,7 @@ import { usePalette, type Palette } from '@/lib/theme';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { toTab } from '@/lib/ways';
 import { findPerson, PEOPLE, personName, PROPHET, unvowelled } from '@/lib/tarajim';
+import { Credit } from './person';
 
 const LINE = 1.5;
 
@@ -67,7 +68,7 @@ export default function NasabScreen() {
   const { slug = '' } = useLocalSearchParams<{ slug?: string }>();
   const [picked, setPicked] = useState(() => (findPerson(slug) ? [slug] : []));
   const [adding, setAdding] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<string[]>([]);
   const lines = useMemo(() => picked.map(s => ({ slug: s, line: lineOf(findPerson(s)!, PEOPLE) })), [picked]);
   const roots = useMemo(() => nasabTree(lines), [lines]);
   const back = () => (router.canGoBack() ? router.back() : toTab('/tarajim'));
@@ -76,7 +77,9 @@ export default function NasabScreen() {
     const at = meetingOf(first.line, other.line);
     return { a: first, b: other, at };
   });
-  const chain = (line: { name: string }[], to: number) => line.slice(0, to + 1).map(n => unvowelled(n.name)).join(' بن ');
+  const chain = (slug: string, line: Parameters<typeof chainOf>[1], to: number) => chainOf(findPerson(slug)!, line, to);
+  // Every entry a name on the page comes from: a line carried on through another entry rests on that entry's nasab too.
+  const sources = [...new Set(lines.flatMap(({ line }) => line.map(n => n.from)))].map(s => findPerson(s)?.fullName).filter(f => !!f);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar back={back} title="النسب" />
@@ -91,11 +94,13 @@ export default function NasabScreen() {
         {roots.map(root => {
           // One person: his whole line. Several: from where they part, the shared fathers above folded into a line.
           const { above, start } = picked.length > 1 ? foldTop(root) : { above: [], start: root };
+          const shown = open.includes(root.key);
           return (
             <View key={root.key} style={{ gap: 10 }}>
               {above.length > 0 && (
-                <Button variant="plain" onPress={() => setOpen(!open)}
-                  label={`↑ ${(open ? above : above.slice(0, 3)).map(unvowelled).join(' · ')}${!open && above.length > 3 ? ' …' : ''}`} />
+                <Button variant="plain" Icon={shown ? ChevronUp : ChevronDown}
+                  onPress={() => setOpen(shown ? open.filter(k => k !== root.key) : [...open, root.key])}
+                  label={`${(shown ? above : above.slice(0, 3)).map(unvowelled).join(' · ')}${!shown && above.length > 3 ? ' …' : ''}`} />
               )}
               <ScrollView horizontal contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
                 <Branch node={start} palette={palette} />
@@ -107,8 +112,8 @@ export default function NasabScreen() {
           <Card key={b.slug} palette={palette} gap={6}>
             {at ? <>
               <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>يلتقيان في: {unvowelled(a.line[at.a].name)}</Text>
-              <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' }}>{chain(a.line, at.a)}</Text>
-              <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' }}>{chain(b.line, at.b)}</Text>
+              <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' }}>{chain(a.slug, a.line, at.a)}</Text>
+              <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' }}>{chain(b.slug, b.line, at.b)}</Text>
             </> : (
               <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>
                 لا يلتقي {personName(findPerson(a.slug)!)} و{personName(findPerson(b.slug)!)} فيما نقلته التراجم المضافة من نسبيهما.
@@ -119,6 +124,7 @@ export default function NasabScreen() {
         <Text style={{ color: palette.muted, fontSize: 13, lineHeight: 22, textAlign: 'right' }}>
           الأسماء كما في نسب كل علَم في سير أعلام النبلاء؛ وإذا وقف نسبه عند جدٍّ أكمله نسبُ علَمٍ آخر يذكر الآباء أنفسهم.
         </Text>
+        <Credit facts={sources} palette={palette} />
       </ScrollView>
       <Sheet open={adding} onClose={() => setAdding(false)} palette={palette}>
         <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 8, paddingBottom: 16 }}>

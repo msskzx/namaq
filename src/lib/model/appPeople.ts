@@ -20,12 +20,17 @@ const arabicCommas = (text: string) => text.replace(/,/g, '،');
  * The book's asides are not fathers: «واسمه عمرو» after a name, «واسم عبد المطلب شيبة», and a nisba («القرشي»).
  */
 export function nasabOf(fullName: string) {
-  const words = fullName.replace(/[.،,]/gu, ' ').trim().split(/\s+/u);
+  // «،» stays a word: the book closes an aside with it.
+  const words = fullName.replace(/[.]/gu, ' ').replace(/[،,]/gu, ' ، ').trim().split(/\s+/u).filter(Boolean);
   const names: string[][] = [[]];
   for (let i = 0; i < words.length; i += 1) {
     const bare = strip(words[i]);
-    if (bare === 'واسمه' || bare === 'واسمها') { i += 1; continue; }
-    if (bare === 'واسم') { i += names[names.length - 1].length + 1; continue; }
+    if (bare === '،') continue;
+    // An aside runs to the next «،» or «بن», however many words the names in it have.
+    if (bare === 'واسمه' || bare === 'واسمها' || bare === 'واسم') {
+      while (i + 1 < words.length && words[i + 1] !== '،' && !IBN.test(strip(words[i + 1]))) i += 1;
+      continue;
+    }
     if (IBN.test(bare)) names.push([]);
     else if (!(names[names.length - 1].length > 0 && NISBA.test(bare))) names[names.length - 1].push(words[i]);
   }

@@ -3,7 +3,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { Network } from 'lucide-react-native';
 import { pageLabel, sayer, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
 import { surahName } from '@shared/quran/surahNames';
-import { num } from '@shared/quran/arabicNumber';
+import { counted, num } from '@shared/quran/arabicNumber';
 import { sourceById } from '@shared/sources';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
@@ -36,7 +36,7 @@ function Part({ n, title, palette, children }: { n: number; title: string; palet
 }
 
 /** The pages a card rests on, folded at its foot; open, the edition and its page on al-Shamela, then each tie's own words. */
-function Credit({ facts, palette, quotes = false }: { facts: PersonFact[]; palette: Palette; quotes?: boolean }) {
+export function Credit({ facts, palette, quotes = false }: { facts: PersonFact[]; palette: Palette; quotes?: boolean }) {
   const refs = facts.flatMap(fact => fact.refs);
   if (refs.length === 0) return null;
   return (
@@ -50,9 +50,12 @@ function Credit({ facts, palette, quotes = false }: { facts: PersonFact[]; palet
   );
 }
 
-/** Who says it, under a quote: the author's own words carry no line; a narrator's or the Prophet's ﷺ do. */
-function Sayer({ fact, palette }: { fact: PersonFact; palette: Palette }) {
-  return fact.by.length ? <Text style={muted(palette)}>{sayer(fact)}</Text> : null;
+/**
+ * Who says it, under a quote: a narrator's or the Prophet's ﷺ words always carry the line; the author's own words carry
+ * it only where the book gives more than one value (`many`), so each of them reads as one saying among others.
+ */
+function Sayer({ fact, palette, many = false }: { fact: PersonFact; palette: Palette; many?: boolean }) {
+  return fact.by.length || many ? <Text style={muted(palette)}>{many ? `عند ${sayer(fact)}` : sayer(fact)}</Text> : null;
 }
 
 /** One quote from the entry, with who says it. */
@@ -100,13 +103,13 @@ function ties(person: AppPerson) {
     { label: `أولاد${s}`, links: person.children },
     { label: `إخوت${s}`, links: person.siblings },
     { label: `قرابت${s}`, links: person.cousins },
-    { label: 'صحب', links: person.companionOf },
+    { label: person.sex === 'FEMALE' ? 'صحبت' : 'صحب', links: person.companionOf },
   ].filter(tie => tie.links.length > 0);
 }
 
 /** «سنة ٣٦هـ», «جمادى الآخرة», «٨٨ سنة»: the number the reader confirmed, else the words as printed. */
 const yearOf = (fact: PersonFact) => (typeof fact.value === 'number' ? `سنة ${num(fact.value)}هـ` : unvowelled(fact.text));
-const ageOf = (fact: PersonFact) => (typeof fact.value === 'number' ? `${num(fact.value)} سنة` : unvowelled(fact.text));
+const ageOf = (fact: PersonFact) => (typeof fact.value === 'number' ? counted(fact.value, ['سنة', 'سنتين', 'سنين']) : unvowelled(fact.text));
 const ayahOf = (key: string) => {
   const [surah, ayah] = key.split(':').map(Number);
   return `${surahName(surah)} ${num(ayah)}`;
@@ -127,6 +130,7 @@ export default function PersonScreen() {
   if (!person) return <View style={{ flex: 1, backgroundColor: palette.paper }}><TopBar back={back} /></View>;
   const tree = () => router.push({ pathname: '/nasab', params: { slug: person.slug } });
   const names = [...person.kunya.map(fact => ({ label: `كنيت${suffixOf(person)}`, fact })), ...person.laqab.map(fact => ({ label: `لقب${suffixOf(person)}`, fact }))];
+  const f = person.sex === 'FEMALE';
   const life = [...person.islamAge, ...person.battles, ...person.absentFrom, ...person.died.year, ...person.died.month, ...person.died.age, ...person.died.place];
   const tieList = ties(person);
   const { book, part } = volumeLabel(person.entry.volume);
@@ -148,6 +152,7 @@ export default function PersonScreen() {
               ))}
             </View>
           )}
+          <Credit facts={person.titles} palette={palette} quotes />
         </View>
 
         {person.fullName && (
@@ -184,22 +189,22 @@ export default function PersonScreen() {
         {life.length > 0 && (
           <Part n={++n} title={person.sex === 'FEMALE' ? 'حياتها' : 'حياته'} palette={palette}>
             {person.islamAge.map((fact, i) => (
-              <Line key={`i${i}`} label="أسلم وعمره" palette={palette}>
-                <Text style={body(palette)}>{ageOf(fact)}</Text><Sayer fact={fact} palette={palette} />
+              <Line key={`i${i}`} label={f ? 'أسلمت وعمرها' : 'أسلم وعمره'} palette={palette}>
+                <Text style={body(palette)}>{ageOf(fact)}</Text><Sayer fact={fact} palette={palette} many={person.islamAge.length > 1} />
               </Line>
             ))}
-            {person.battles.length > 0 && <Line label="شهد" palette={palette}><Names links={uniq(person.battles)} palette={palette} /></Line>}
-            {person.absentFrom.length > 0 && <Line label="غاب عن" palette={palette}><Names links={uniq(person.absentFrom)} palette={palette} /></Line>}
+            {person.battles.length > 0 && <Line label={f ? 'شهدت' : 'شهد'} palette={palette}><Names links={uniq(person.battles)} palette={palette} /></Line>}
+            {person.absentFrom.length > 0 && <Line label={f ? 'غابت عن' : 'غاب عن'} palette={palette}><Names links={uniq(person.absentFrom)} palette={palette} /></Line>}
             {person.died.year.map((fact, i) => (
-              <Line key={`y${i}`} label="وفاته" palette={palette}>
-                <Text style={body(palette)}>{yearOf(fact)}</Text><Sayer fact={fact} palette={palette} />
+              <Line key={`y${i}`} label={f ? 'وفاتها' : 'وفاته'} palette={palette}>
+                <Text style={body(palette)}>{yearOf(fact)}</Text><Sayer fact={fact} palette={palette} many={person.died.year.length > 1} />
               </Line>
             ))}
             {person.died.month.map((fact, i) => (
-              <Line key={`m${i}`} label="شهر وفاته" palette={palette}><Text style={body(palette)}>{unvowelled(fact.text)}</Text><Sayer fact={fact} palette={palette} /></Line>
+              <Line key={`m${i}`} label={f ? 'شهر وفاتها' : 'شهر وفاته'} palette={palette}><Text style={body(palette)}>{unvowelled(fact.text)}</Text><Sayer fact={fact} palette={palette} many={person.died.month.length > 1} /></Line>
             ))}
             {person.died.age.map((fact, i) => (
-              <Line key={`a${i}`} label="عمره" palette={palette}><Text style={body(palette)}>{ageOf(fact)}</Text><Sayer fact={fact} palette={palette} /></Line>
+              <Line key={`a${i}`} label={f ? 'عمرها' : 'عمره'} palette={palette}><Text style={body(palette)}>{ageOf(fact)}</Text><Sayer fact={fact} palette={palette} many={person.died.age.length > 1} /></Line>
             ))}
             <Credit facts={life} palette={palette} quotes />
           </Part>
@@ -227,7 +232,7 @@ export default function PersonScreen() {
         )}
 
         <Part n={++n} title={person.sex === 'FEMALE' ? 'ترجمتها في الكتاب' : 'ترجمته في الكتاب'} palette={palette}>
-          <Text style={body(palette)}>{book}{part !== undefined ? ` ${num(part)}` : ''}، ص {num(Number(person.entry.from))}–{num(Number(person.entry.to))}</Text>
+          <Text style={body(palette)}>{book}{part !== undefined ? ` ${num(part)}` : ''}{person.entry.from ? `، ص ${num(Number(person.entry.from))}${person.entry.to && person.entry.to !== person.entry.from ? `–${num(Number(person.entry.to))}` : ''}` : ''}</Text>
           <Text style={muted(palette)}>{SIYAR.edition}</Text>
           <ExternalLink url={SIYAR.url} color={palette.accent} size={15} style={{ textAlign: 'right' }}>اقرأها على المكتبة الشاملة</ExternalLink>
         </Part>
