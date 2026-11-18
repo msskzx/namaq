@@ -26,8 +26,8 @@ const refOf = (evidence: CatalogStoryEvidence) =>
       ? { text: evidence.quote, cite: citeOf({ sourceSlug: SIRA, volume: evidence.volumeLabel, pageReference: String(evidence.page) }), url: evidence.url }
       : { text: evidence.quote, cite: digits(`تفسير السعدي، ص ${evidence.page}`), url: quranpediaPage('sadi', 1, evidence.page) };
 
-/** Where a story sits: in the order al-Siyar tells it, and the stories from the hadith books after. */
-const placeOf = (source: CatalogReportSource) => (isHadithSource(source) ? [Infinity, source.hadith] : [source.volume, source.page]);
+/** Where a story sits: in the order al-Siyar tells it, and the stories from the hadith books after (al-Siyar has far fewer than 1000 volumes). */
+const placeOf = (source: CatalogReportSource) => (isHadithSource(source) ? [1000, source.hadith] : [source.volume, source.page]);
 
 const AYAT_KIND: Record<CatalogStoryAyat['kind'], string> = { RECITED: 'ما قرأه', REVEALED_ABOUT: 'نزل فيه' };
 

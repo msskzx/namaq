@@ -1,11 +1,12 @@
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
- * Jubayr ibn Mut'im, not yet Muslim, came to Madinah about the captives of Badr and heard the Prophet ﷺ recite al-Tur at
+ * Jubayr ibn Mut'im, before he became Muslim, came about the captives of Badr and heard the Prophet ﷺ recite al-Tur at
  * Maghrib: at {أم خلقوا من غير شيء} (al-Tur 35-37) his heart all but flew, and it was the first time faith settled in
  * it. Told from Sahih al-Bukhari, each hadith whole: 4854 (Kitab al-Tafsir) names the ayat, 4023 (al-Maghazi) says it was
  * the first stirring of his faith, 3050 (al-Jihad) that he had come about the captives of Badr, and 765 (al-Adhan) is
- * Malik's report of the recitation. The people stand on these reports, which name them, not on a batch claim.
+ * Malik's report of the recitation. Not tagged ISLAM: the texts say faith first settled in his heart, not that he became
+ * Muslim then. The people stand on these reports, which name them, not on a batch claim.
  */
 const jubairHearsAlTur = {
   kind: 'EVENT',
@@ -15,7 +16,7 @@ const jubairHearsAlTur = {
   type: 'OTHER',
   fields: {},
   people: [{ person: 'jubair-ibn-mutim' }, { person: 'prophet-muhammad' }],
-  tags: ['HEARD_QURAN', 'ISLAM'],
+  tags: ['HEARD_QURAN'],
   ayat: [
     {
       kind: 'RECITED',
@@ -31,7 +32,7 @@ const jubairHearsAlTur = {
       moments: [
         { title: 'يقرأ في المغرب بالطور', text: 'قَالَ سَمِعْتُ النَّبِيَّ صلى الله عليه وسلم يَقْرَأُ فِي الْمَغْرِبِ بِالطُّورِ', people: ['jubair-ibn-mutim', 'prophet-muhammad'] },
         { title: '«كاد قلبي أن يطير»', text: 'فَلَمَّا بَلَغَ هَذِهِ الآيَةَ {أَمْ خُلِقُوا مِنْ غَيْرِ شَىْءٍ أَمْ هُمُ الْخَالِقُونَ * أَمْ خَلَقُوا السَّمَوَاتِ وَالأَرْضَ بَلْ لاَ يُوقِنُونَ * أَمْ عِنْدَهُمْ خَزَائِنُ رَبِّكَ أَمْ هُمُ الْمُسَيْطِرُونَ} كَادَ قَلْبِي أَنْ يَطِيرَ.', people: ['jubair-ibn-mutim', 'prophet-muhammad'] },
-        { title: 'ما سمعه سفيان من الزهري', text: 'قَالَ سُفْيَانُ فَأَمَّا أَنَا فَإِنَّمَا سَمِعْتُ الزُّهْرِيَّ يُحَدِّثُ عَنْ مُحَمَّدِ بْنِ جُبَيْرِ بْنِ مُطْعِمٍ عَنْ أَبِيهِ سَمِعْتُ النَّبِيَّ صلى الله عليه وسلم يَقْرَأُ فِي الْمَغْرِبِ بِالطُّورِ. لَمْ أَسْمَعْهُ زَادَ الَّذِي قَالُوا لِي.', people: [] },
+        { title: 'ما سمعه سفيان من الزهري', text: 'قَالَ سُفْيَانُ فَأَمَّا أَنَا فَإِنَّمَا سَمِعْتُ الزُّهْرِيَّ يُحَدِّثُ عَنْ مُحَمَّدِ بْنِ جُبَيْرِ بْنِ مُطْعِمٍ عَنْ أَبِيهِ سَمِعْتُ النَّبِيَّ صلى الله عليه وسلم يَقْرَأُ فِي الْمَغْرِبِ بِالطُّورِ. لَمْ أَسْمَعْهُ زَادَ الَّذِي قَالُوا لِي.', people: ['jubair-ibn-mutim', 'prophet-muhammad'] },
       ],
     },
     {
