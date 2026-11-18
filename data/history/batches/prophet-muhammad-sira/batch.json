@@ -14347,7 +14347,7 @@
           "passageAnchor": "1/467-p1",
           "volume": "السيرة 1",
           "pageReference": "467",
-          "extractionUrl": "https://shamela.ws/book/10906/604",
+          "extractionUrl": "https://shamela.ws/book/10906/603",
           "excerptArabic": "[السنة الخامسة من الهجرة:]",
           "accessedAt": "2026-11-18"
         },
@@ -14356,8 +14356,48 @@
           "passageAnchor": "1/506-p2",
           "volume": "السيرة 1",
           "pageReference": "506",
-          "extractionUrl": "https://shamela.ws/book/10906/643",
+          "extractionUrl": "https://shamela.ws/book/10906/642",
           "excerptArabic": "[غزوة بني قريظة:]",
+          "accessedAt": "2026-11-18"
+        }
+      ],
+      "disputed": true
+    },
+    {
+      "key": "qurayzah/year-alt",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "banu-qurayzah",
+      "assertion": "وقال موسى بن عقبة وعروة: كانت الخندق وبنو قريظة في شوال سنة أربع، وقال المصنف: وهو وهم بين.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/498-p8",
+          "volume": "السيرة 1",
+          "pageReference": "498",
+          "extractionUrl": "https://shamela.ws/book/10906/634",
+          "excerptArabic": "وقال موسى بن عقبة، عن ابن شهاب، أن رسول الله صلى الله عليه وسلم قاتل يوم بدر في رمضان سنة اثنين، ثم قاتل يوم أحد في شوال سنة ثلاث، ثم قاتل يوم الخندق، وهو يوم الأحزاب وبني",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/498-p9",
+          "volume": "السيرة 1",
+          "pageReference": "498",
+          "extractionUrl": "https://shamela.ws/book/10906/634",
+          "excerptArabic": "قريظة، في شوال سنة أربع. وكذا قال عروة في حديث ابن لهيعة عن أبي الأسود عنه. كذا قالا: سنة أربع, وقالا: في قصة الخندق إنها كانت بعد أحد بسنتين.",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/498-p10",
+          "volume": "السيرة 1",
+          "pageReference": "498",
+          "extractionUrl": "https://shamela.ws/book/10906/634",
+          "excerptArabic": "وقال قتادة من رواية شيبان عنه: كان يوم الأحزاب بعد أحد بسنتين، فهذا هو المقطوع به وقول موسى وعروة إنها في سنة أربع وهم بين، ويشبهه قول عبيد الله، عن نافع، عن ابن عمر: \"عرضني",
           "accessedAt": "2026-11-18"
         }
       ]
@@ -14387,6 +14427,15 @@
           "pageReference": "153",
           "extractionUrl": "https://shamela.ws/book/10906/812",
           "excerptArabic": "[فتح مكة شرفها الله وعظمها:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/164-p7",
+          "volume": "السيرة 2",
+          "pageReference": "164",
+          "extractionUrl": "https://shamela.ws/book/10906/823",
+          "excerptArabic": "وكان دخول النبي صلى الله عليه وسلم مكة في رمضان، واستعار النبي صلى الله عليه وسلم من صفوان فأعطاه فيما زعموا مائة درع وأداتها، وكان أكثر شيء سلاحا.",
           "accessedAt": "2026-11-18"
         }
       ]

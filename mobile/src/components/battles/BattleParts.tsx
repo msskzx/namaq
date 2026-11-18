@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import type { AppBattle, AppCite, AppMoment, AppPersonLink } from '@shared/battles/battle';
+import type { AppBattle, AppCite, AppCited, AppMoment, AppPersonLink } from '@shared/battles/battle';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import Chip from '@/ui/Chip';
@@ -17,6 +17,22 @@ export const battleLine = (battle: Pick<AppBattle, 'kind' | 'year'>) =>
 export function Refs({ refs, palette }: { refs: AppCite[]; palette: Palette }) {
   if (!refs.length) return null;
   return <Reference title={refs[0].cite} quotes={refs} palette={palette} />;
+}
+
+/** The other readings of the values shown, each as the source words it and with its own reference (owner, 2026-11-18). */
+export function Readings({ values, palette }: { values: readonly (AppCited<unknown> | undefined)[]; palette: Palette }) {
+  const readings = values.flatMap(value => value?.others ?? []);
+  if (!readings.length) return null;
+  return (
+    <View style={{ gap: 6 }}>
+      {readings.map(reading => (
+        <View key={reading.text} style={{ gap: 2 }}>
+          <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>{reading.text}</Text>
+          <Refs refs={reading.refs} palette={palette} />
+        </View>
+      ))}
+    </View>
+  );
 }
 
 /** How many on each side: the Muslims' bar in the accent, the other side's in the rule colour, both to one scale. */
@@ -47,6 +63,7 @@ export function Counts({ battle, palette }: { battle: AppBattle; palette: Palett
         );
       })}
       <Refs refs={[muslims, others, muslimsKilled, othersKilled].flatMap(value => value?.refs ?? [])} palette={palette} />
+      <Readings values={[muslims, others, muslimsKilled, othersKilled]} palette={palette} />
     </View>
   );
 }

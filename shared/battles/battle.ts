@@ -4,8 +4,13 @@ import type { LonLat } from './map';
 
 /** One quote a value stands on, with the page it cites. */
 export type AppCite = { text: string; cite: string; url?: string };
-/** A value with the quotes it stands on; none while its evidence is still owed. */
-export type AppCited<T> = { value: T; refs: AppCite[] };
+/** Another reading of a value, as the source words it («وقيل …»), with its own quotes. */
+export type AppReading = { text: string; refs: AppCite[] };
+/**
+ * A value with the quotes it stands on, and the other readings where the sources differ (owner, 2026-11-18: a disputed
+ * point is shown with every reading, each attributed and referenced).
+ */
+export type AppCited<T> = { value: T; refs: AppCite[]; others?: AppReading[] };
 
 export type AppPersonLink = { slug: string; name: string };
 

@@ -26,6 +26,12 @@ describe('the app battles', () => {
     expect(values.every(value => value === undefined || value.refs.length > 0)).toBe(true);
   });
 
+  it('gives a value its other readings, each with its own reference', () => {
+    expect(badr.counts.muslims!.others?.[0]).toMatchObject({ text: expect.stringContaining('ثلاثمائة وتسعة عشر') });
+    expect(badr.counts.muslims!.others![0].refs.length).toBeGreaterThan(0);
+    expect(built.find(battle => battle.slug === 'banu-al-mustaliq')!.year!.others?.[0].text).toContain('سنة ست');
+  });
+
   it('names the kind in Arabic and pins the place', () => {
     expect(badr.kind?.value).toBe('غزوة');
     expect(badr.place?.name).toBe('بدر');

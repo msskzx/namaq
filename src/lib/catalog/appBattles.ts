@@ -1,17 +1,18 @@
 // The phone app's battles (owner, 2026-11-18): the app is offline, so scripts/battles/buildAppBattles.ts writes them to
 // shared/data/battles/battles.json and the app only draws them.
 import { readdirSync, readFileSync } from 'node:fs';
-import type { AppBattle, AppCite, AppCited, AppMomentBattle, AppPersonLink } from '@shared/battles/battle';
+import type { AppBattle, AppCite, AppCited, AppMomentBattle, AppPersonLink, AppReading } from '@shared/battles/battle';
 import { KIND_NAMES } from '@shared/battles/battle';
 import { BATTLE_PLACE, PLACES } from '@shared/battles/places';
 import type { Catalog, Cited } from './types';
 import { legacyUnreviewed } from './types';
 
 type Citation = { volume?: string; pageReference?: string; excerptArabic?: string; extractionUrl?: string; sourceSlug?: string };
-type Claim = { key: string; citations?: Citation[] };
+type Claim = { key: string; assertion?: string; disputed?: boolean; citations?: Citation[] };
 
 const BOOKS: Record<string, string> = { 'siyar-alam-al-nubala-risalah': 'سير أعلام النبلاء' };
 const SIRA_VOLUME = /^السيرة (\d)$/;
+const RIVAL = (key: string) => new RegExp(`^${key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}-(alt|other)(-|$)`);
 const digits = (text: string) => text.replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[Number(d)]);
 
 /** «سير أعلام النبلاء، السيرة ١، ص ٣٢٥» */
@@ -36,9 +37,18 @@ export function appBattles(catalog: Catalog, claims = batchClaims()): AppBattle[
       : keys.flatMap(key => (claims.get(key)?.citations ?? []).filter(c => c.excerptArabic).map(c => ({ text: c.excerptArabic!, cite: citeOf(c), url: c.extractionUrl })));
   // A value shows only with the quotes it stands on (owner, 2026-11-18: everything gets its reference); one whose evidence
   // is still owed waits until it is cited.
+  // A claim's rival readings are the claims a batch records beside it as `<key>-alt…` or `<key>-other…`.
+  const rivals = (keys: Cited<unknown>['claims']): AppReading[] =>
+    keys === legacyUnreviewed
+      ? []
+      : keys.flatMap(key => [...claims.values()].filter(other => RIVAL(key).test(other.key)))
+          .map(other => ({ text: other.assertion ?? '', refs: refs([other.key]) }))
+          .filter(reading => reading.text && reading.refs.length);
   const cited = <T, U = T>(value: Cited<T> | undefined, as: (v: T) => U = v => v as unknown as U): AppCited<U> | undefined => {
     const quotes = value ? refs(value.claims) : [];
-    return value && quotes.length ? { value: as(value.value), refs: quotes } : undefined;
+    if (!value || !quotes.length) return undefined;
+    const others = rivals(value.claims);
+    return { value: as(value.value), refs: quotes, ...(others.length ? { others } : {}) };
   };
   return catalog.battles
     .map(battle => {

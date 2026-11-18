@@ -10,7 +10,7 @@ import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { back } from '@/lib/ways';
 import { battleOf } from '@/lib/battles';
 import BattleMap from '@/components/battles/BattleMap';
-import { battleLine, Counts, Moment, People, Refs } from '@/components/battles/BattleParts';
+import { battleLine, Counts, Moment, People, Readings, Refs } from '@/components/battles/BattleParts';
 
 const COURSE: Record<string, string> = { 'غزوة': 'مجرى الغزوة', 'سرية': 'مجرى السرية' };
 
@@ -31,6 +31,7 @@ export default function BattleScreen() {
           <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>{battle.name}</Text>
           <Text style={{ color: palette.muted, fontSize: 16, textAlign: 'right' }}>{battleLine(battle)}</Text>
           <Refs refs={heading} palette={palette} />
+          <Readings values={[battle.kind, battle.year, battle.location]} palette={palette} />
         </View>
         {battle.place ? (
           <Card palette={palette} pad={0} clip gap={0}>
