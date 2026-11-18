@@ -1,4 +1,12 @@
 {
   "about": "Virtues the «صاحب المنقبة» quiz does not ask, keyed by the virtue's id (unit#assertion), each with why. They stay on the person's page. A virtue goes here when another person in the app could rightly be its answer too: general praise («من كبراء الصحابة», «من أشراف قومه»), or one shared by a group. The batch threads add to it when they read the generated questions (conversion GUIDE.md, check 4).",
-  "skip": {}
+  "skip": {
+    "siyar-v5-84-abdullah-ibn-salam#a_10": "«المشهود له بالجنة» is said of others too: the ten, and every man of Badr.",
+    "siyar-v5-86-tamim-al-dari#a_14": "General praise («عابدا، تلاء لكتاب الله») that fits many Companions.",
+    "siyar-v5-81-harithah-ibn-al-numan#a_14": "General praise («دينا، خيرا») that fits many Companions.",
+    "siyar-v5-78-uthman-ibn-abi-al-as#a_19": "General praise («ما رأيت أحدا أفضل منه») with nothing tying it to him alone.",
+    "siyar-v5-83-abu-ayyub#a_12": "General praise («السيد الكبير») that fits many Companions.",
+    "siyar-v5-85-zaid-ibn-thabit#a_34": "Shared by a group: Anas names four who gathered the Quran (Ubayy, Mu'adh, Zaid, Abu Zayd).",
+    "siyar-v5-88-amr-ibn-absah#a_25": "Abu Dharr said the same of himself (p457: «كلاهما يقول»)."
+  }
 }

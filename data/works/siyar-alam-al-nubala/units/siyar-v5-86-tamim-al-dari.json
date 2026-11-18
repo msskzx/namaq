@@ -1,0 +1,575 @@
+{
+  "unit": {
+    "id": "siyar-v5-86-tamim-al-dari",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٨٦"
+    }
+  },
+  "spans": [
+    {
+      "id": "hd",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "٨٦ - تَمِيْمٌ الدَّارِيُّ أَبُو رُقَيَّةَ بنُ أَوْسِ بنِ خَارِجَةَ"
+    },
+    {
+      "id": "nl",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "صَاحِبُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَبُو رُقَيَّةَ تَمِيْمُ بنُ أَوْسِ بنِ خَارِجَةَ بنِ سَوْدِ بنِ جَذِيْمَةَ اللَّخْمِيُّ، الفِلَسْطِيْنِيُّ."
+    },
+    {
+      "id": "n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "تَمِيْمُ بنُ أَوْسِ بنِ خَارِجَةَ بنِ سَوْدِ بنِ جَذِيْمَةَ"
+    },
+    {
+      "id": "sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "تَمِيْمٌ الدَّارِيُّ",
+      "prefix": "-"
+    },
+    {
+      "id": "fa",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "أَوْسِ بنِ خَارِجَةَ بنِ سَوْدِ"
+    },
+    {
+      "id": "ku",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "أَبُو رُقَيَّةَ",
+      "prefix": "وَسَلَّمَ-"
+    },
+    {
+      "id": "comp_p",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَبُو رُقَيَّةَ"
+    },
+    {
+      "id": "lk",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "اللَّخْمِيُّ",
+      "prefix": "جَذِيْمَةَ"
+    },
+    {
+      "id": "dr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "الدَّارِيُّ",
+      "prefix": "- تَمِيْمٌ"
+    },
+    {
+      "id": "v1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "وَفَدَ تَمِيْمٌ الدَّارِيُّ سَنَةَ تِسْعٍ، فَأَسْلَمَ، فَحَدَّثَ عَنْهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَلَى المِنْبَرِ بِقِصَّةِ الجَسَّاسَةِ فِي أَمْرِ الدَّجَّالِ"
+    },
+    {
+      "id": "v2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "وَكَانَ عَابِداً، تَلاَّءً لِكِتَابِ اللهِ."
+    },
+    {
+      "id": "br",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "443",
+      "layer": "MAIN",
+      "exact": "قَالَ البُخَارِيُّ: هُوَ أَخُو أَبِي هِنْدٍ الدَّارِيِّ"
+    },
+    {
+      "id": "br_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "443",
+      "layer": "MAIN",
+      "exact": "هُوَ أَخُو أَبِي هِنْدٍ الدَّارِيِّ"
+    },
+    {
+      "id": "br_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "443",
+      "layer": "MAIN",
+      "exact": "أَبِي هِنْدٍ الدَّارِيِّ"
+    },
+    {
+      "id": "ay_f",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "444",
+      "layer": "MAIN",
+      "exact": "وَفِي (الصَّحِيْحِ) مِنْ حَدِيْثِ ابْنِ عَبَّاسٍ، قَالَ:"
+    },
+    {
+      "id": "ay",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "444",
+      "layer": "MAIN",
+      "exact": "وَفِيْهِم نَزَلَتْ آيَةُ: {شَهَادَةُ بَيْنِكُمْ إِذَا حَضَرَ أَحَدَكُمُ المَوْتُ}"
+    },
+    {
+      "id": "d",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "448",
+      "layer": "MAIN",
+      "exact": "يُقَالُ: وُجِدَ عَلَى بَلاَطَةِ قَبْرِ تَمِيْمٍ الدَّارِيِّ: مَاتَ سَنَةَ أَرْبَعِيْنَ."
+    },
+    {
+      "id": "d_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "448",
+      "layer": "MAIN",
+      "exact": "سَنَةَ أَرْبَعِيْنَ",
+      "prefix": "مَاتَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r0",
+      "unit": "siyar-v5-86-tamim-al-dari",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "hd",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_16",
+      "unit": "siyar-v5-86-tamim-al-dari",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "origin": {
+        "mention": "m_sp15"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_22",
+      "unit": "siyar-v5-86-tamim-al-dari",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "ay_f"
+      ],
+      "origin": {
+        "mention": "m_sp21"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_27",
+      "unit": "siyar-v5-86-tamim-al-dari",
+      "ordinal": 4,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_sp26"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_1",
+      "report": "r0",
+      "spans": [
+        "nl"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_10",
+      "report": "r0",
+      "spans": [
+        "v1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_13",
+      "report": "r0",
+      "spans": [
+        "v2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_17",
+      "report": "r_16",
+      "spans": [
+        "br_v"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_23",
+      "report": "r_22",
+      "spans": [
+        "ay"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_28",
+      "report": "r_27",
+      "spans": [
+        "d"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_s2",
+      "parent": "n1",
+      "exact": "تَمِيْمُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o5",
+      "parent": "n1",
+      "exact": "أَوْسِ بنِ خَارِجَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_o8",
+      "parent": "nl",
+      "exact": "رَسُوْلِ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_s11",
+      "parent": "v1",
+      "exact": "تَمِيْمٌ الدَّارِيُّ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sp15",
+      "parent": "br",
+      "exact": "البُخَارِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_s18",
+      "parent": "br_v",
+      "exact": "أَخُو",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o19",
+      "parent": "br_v",
+      "exact": "أَبِي هِنْدٍ الدَّارِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_sp21",
+      "parent": "ay_f",
+      "exact": "ابْنِ عَبَّاسٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_s24",
+      "parent": "ay",
+      "exact": "وَفِيْهِم",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sp26",
+      "parent": "d",
+      "exact": "يُقَالُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_s29",
+      "parent": "d",
+      "exact": "تَمِيْمٍ الدَّارِيِّ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_s2",
+      "mention": "m_s2",
+      "agent": "tamim-al-dari",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o5",
+      "mention": "m_o5",
+      "agent": "aws-ibn-kharijah-al-dari",
+      "basis": [
+        {
+          "span": "fa",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o8",
+      "mention": "m_o8",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "comp_p",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s11",
+      "mention": "m_s11",
+      "agent": "tamim-al-dari",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s18",
+      "mention": "m_s18",
+      "agent": "tamim-al-dari",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o19",
+      "mention": "m_o19",
+      "agent": "abu-hind-al-dari",
+      "basis": [
+        {
+          "span": "br_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s24",
+      "mention": "m_s24",
+      "agent": "tamim-al-dari",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s29",
+      "mention": "m_s29",
+      "agent": "tamim-al-dari",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_3",
+      "subject": "m_s2",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "n1",
+          "lk",
+          "dr"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_4",
+      "subject": "m_s2",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sex"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_6",
+      "subject": "m_s2",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_o5"
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_7",
+      "subject": "m_s2",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "ku"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_9",
+      "subject": "m_s2",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_o8"
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_12",
+      "subject": "m_s11",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "v1"
+        ]
+      },
+      "restsOn": [
+        "st_10"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_14",
+      "subject": "m_s2",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "v2"
+        ]
+      },
+      "restsOn": [
+        "st_13"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_20",
+      "subject": "m_s18",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_o19"
+      },
+      "restsOn": [
+        "st_17"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_25",
+      "subject": "m_s24",
+      "predicate": "REVEALED_ABOUT",
+      "value": {
+        "classified": "5:106",
+        "spans": [
+          "ay"
+        ]
+      },
+      "restsOn": [
+        "st_23"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_30",
+      "subject": "m_s29",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 40,
+        "spans": [
+          "d_y"
+        ]
+      },
+      "restsOn": [
+        "st_28"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
