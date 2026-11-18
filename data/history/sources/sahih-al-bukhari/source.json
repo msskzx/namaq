@@ -4,6 +4,6 @@
   "author": "محمد بن إسماعيل البخاري",
   "digitalHost": "fawazahmed0/hadith-api (ara-bukhari)",
   "url": "https://github.com/fawazahmed0/hadith-api",
-  "notes": "Each file under hadith/ is one hadith, named by its number in the common numbering (the one sunnah.com uses), its text as the hadith-api edition ara-bukhari has it, with only the right-to-left marks (U+200F) taken out. Fetched 2026-11-18 from https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/ara-bukhari/<number>.json.",
+  "notes": "Each file under hadith/ is one hadith, named by its number in the common numbering (the one sunnah.com uses), its text as the hadith-api edition ara-bukhari has it, with only the right-to-left marks (U+200F) taken out and runs of spaces made one. Fetched 2026-11-18 from https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/ara-bukhari/<number>.json.",
   "volumes": []
 }
