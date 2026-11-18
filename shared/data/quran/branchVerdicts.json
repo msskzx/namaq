@@ -365,8 +365,8 @@
    "why": "mutashabih: the places differ by a word or two, worth a tree"
   },
   "cmp:1ikletg0stfz0g": {
-   "keep": true,
-   "why": "mutashabih: the places differ by a word or two, worth a tree"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; mutashabih: the places differ by a word or two, worth a tree"
   },
   "cmp:0nttx0i0cyq6vo": {
    "keep": true,
@@ -2173,8 +2173,8 @@
    "why": "identical wording in different places; the tree shows where each sits"
   },
   "cmp:0hsf5kv04ahadl": {
-   "keep": true,
-   "why": "mutashabih: the places differ by a word or two, worth a tree"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; mutashabih: the places differ by a word or two, worth a tree"
   },
   "cmp:0kc7wik1ilteqq": {
    "keep": true,
@@ -6464,8 +6464,8 @@
    "why": "'ashab al-maymana' ma vs ula'ika ending"
   },
   "tree:0i632dh1xgdccf": {
-   "keep": true,
-   "why": "'ashab al-nar hum fiha khalidun' many lead-ins; khalidina in 64:10"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; 'ashab al-nar hum fiha khalidun' many lead-ins; khalidina in 64:10"
   },
   "tree:1xwf1p51u3uq25": {
    "keep": true,
@@ -6972,8 +6972,8 @@
    "why": "Closing 'fa-ktubna ma'a al-shahidin': disciples vs Christians"
   },
   "tree:1my1ql41lylhim": {
-   "keep": true,
-   "why": "'wa lakinna akthara al-nasi la' ya'lamun/yashkurun/yu'minun"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; 'wa lakinna akthara al-nasi la' ya'lamun/yashkurun/yu'minun"
   },
   "tree:0oaimtd1q9zesl": {
    "keep": true,
@@ -6992,8 +6992,8 @@
    "why": "'aktharuhum fa-hum la' yu'minun vs yasma'un"
   },
   "tree:059gp2i04dc5lc": {
-   "keep": true,
-   "why": "'aktharuhum la' ya'lamun/yashkurun/ya'qilun with bal vs lakinna"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; 'aktharuhum la' ya'lamun/yashkurun/ya'qilun with bal vs lakinna"
   },
   "tree:0oo78441hbmy9a": {
    "keep": true,
@@ -7276,8 +7276,8 @@
    "why": "Ayah-ending 'illa qalil' in 9:38 and 11:40"
   },
   "tree:0992jy41orb5sc": {
-   "keep": true,
-   "why": "Ending 'illa qalilan' vs 'illa qalilan minhum/minkum/mimma'"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Ending 'illa qalilan' vs 'illa qalilan minhum/minkum/mimma'"
   },
   "tree:166anpl10d9uin": {
    "keep": true,
@@ -7804,8 +7804,8 @@
    "why": "'ma fi al-samawati wal-ardi wa lahu' al-din vs al-hamd"
   },
   "tree:1i46dgo1kqq0ii": {
-   "keep": true,
-   "why": "'wal-ardi wa ma baynahuma' with many tails: core mutashabih"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; 'wal-ardi wa ma baynahuma' with many tails: core mutashabih"
   },
   "tree:1gpf92o0ysk9ge": {
    "keep": false,
@@ -8132,8 +8132,8 @@
    "why": "Closing 'wa alhiqni bil-salihin': Yusuf vs Ibrahim"
   },
   "tree:156weuq03e5mco": {
-   "keep": true,
-   "why": "'al-hamdu lillah' rabb / alladhi / bal: which praise where"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; 'al-hamdu lillah' rabb / alladhi / bal: which praise where"
   },
   "tree:1utr93p0znp57t": {
    "keep": true,
@@ -8380,8 +8380,8 @@
    "why": "'al-layla li-taskunu' 10:67 = 40:61 vs libasan"
   },
   "tree:1xg3klj0w7t49j": {
-   "keep": true,
-   "why": "'alladhi khalaqa' heavens / night / pairs / seven: sets inside"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; 'alladhi khalaqa' heavens / night / pairs / seven: sets inside"
   },
   "tree:0gu2m6v134zp63": {
    "keep": true,
@@ -8696,8 +8696,8 @@
    "why": "Yazid alladhina ihtadaw huda vs wa alladhina ihtadaw zadahum huda"
   },
   "tree:0o5gtcm1bzxu04": {
-   "keep": true,
-   "why": "Splits kitab vs 'ilm vs nasiban; parent of real slip groups"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Splits kitab vs 'ilm vs nasiban; parent of real slip groups"
   },
   "tree:0dmkx2o0x3zksk": {
    "keep": true,
@@ -8840,8 +8840,8 @@
    "why": "Kadhabu 'ala rabbihim (11:18) vs 'ala allah (39:60): one word"
   },
   "tree:111wi3c1x45zji": {
-   "keep": true,
-   "why": "Bi ayatina / bi ayat allah / bi liqa' / bil-kitab: endings to tell apart"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Bi ayatina / bi ayat allah / bi liqa' / bil-kitab: endings to tell apart"
   },
   "tree:1me7d6r1te8krb": {
    "keep": true,
@@ -9674,8 +9674,8 @@
    "why": "سوء العذاب يوم القيامة twice in Zumar, plus 25:69"
   },
   "tree:11gsrvt13rlb5v": {
-   "keep": true,
-   "why": "Closing العزيز الحكيم: which lead-in (إنك أنت / وهو / إنه هو) where"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Closing العزيز الحكيم: which lead-in (إنك أنت / وهو / إنه هو) where"
   },
   "tree:1g1o2jo1v2veju": {
    "keep": true,
@@ -10338,12 +10338,12 @@
    "why": "أإله مع الله بل هم قوم يعدلون (27:60) vs بل أكثرهم (27:61)"
   },
   "tree:1vqfjf90tjayn1": {
-   "keep": true,
-   "why": "Closing بما تعملون/يعملون with بصير / خبير / عليم / محيط"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Closing بما تعملون/يعملون with بصير / خبير / عليم / محيط"
   },
   "tree:19ivz1i029mjkw": {
-   "keep": true,
-   "why": "والله بما تعملون: بصير vs خبير vs عليم per place"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; والله بما تعملون: بصير vs خبير vs عليم per place"
   },
   "tree:0pw6jsx0fnwms1": {
    "keep": true,
@@ -10603,12 +10603,12 @@
    "why": "ختم (2:7) vs طبع; then وعلى سمعهم / فهم لا يعلمون / واتبعوا"
   },
   "tree:065dpgi1656yjo": {
-   "keep": true,
-   "why": "على كل شيء قدير/شهيد/مقيتا with lead-ins إن / والله / وكان"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; على كل شيء قدير/شهيد/مقيتا with lead-ins إن / والله / وكان"
   },
   "tree:1ewmuma194miqc": {
-   "keep": true,
-   "why": "Closing على كل شيء: ending and lead-in differ per place"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Closing على كل شيء: ending and lead-in differ per place"
   },
   "tree:1fgglc900r8rn1": {
    "keep": true,
@@ -10651,16 +10651,16 @@
    "why": "Grace on you vs what Allah granted you; no slip"
   },
   "tree:1qloduk03y3ve8": {
-   "keep": true,
-   "why": "اذكروا نعمة الله عليكم and فضل الله عليكم ورحمته sets"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; اذكروا نعمة الله عليكم and فضل الله عليكم ورحمته sets"
   },
   "tree:1xgc9sp0ncptqb": {
    "keep": true,
    "why": "اذكروا نعمة الله عليكم إذ: five different events"
   },
   "tree:04slv9k036zpe0": {
-   "keep": true,
-   "why": "Closing عليم ب...: بالظالمين / بالمتقين / بذات الصدور / حكيم"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Closing عليم ب...: بالظالمين / بالمتقين / بذات الصدور / حكيم"
   },
   "tree:142pk3g10ova0s": {
    "keep": true,
@@ -10759,8 +10759,8 @@
    "why": "غفور حليم: lead-ins والله / أن / إن per place"
   },
   "tree:0z0lkoz1hp5oof": {
-   "keep": true,
-   "why": "Closing غفور رحيم: إن / فإن / والله lead-ins across 35 places"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Closing غفور رحيم: إن / فإن / والله lead-ins across 35 places"
   },
   "tree:16n67xz1p08jcp": {
    "keep": true,
@@ -11003,8 +11003,8 @@
    "why": "إن الله لا يظلم مثقال ذرة (4:40) vs الناس شيئا (10:44)"
   },
   "tree:1twlo2q1ilggcw": {
-   "keep": true,
-   "why": "لا يهدي القوم الظالمين/الكافرين/الفاسقين; والله vs إن"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; لا يهدي القوم الظالمين/الكافرين/الفاسقين; والله vs إن"
   },
   "tree:061elyk071u7ic": {
    "keep": true,
@@ -11059,8 +11059,8 @@
    "why": "لكل أمة أجل (10:49) vs لكل أجل كتاب (13:38); 65:3"
   },
   "tree:1xvj20g1lh04iu": {
-   "keep": true,
-   "why": "Holds يبين الله لكم الآيات/آياته sets and ناقة الله لكم آية pair"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Holds يبين الله لكم الآيات/آياته sets and ناقة الله لكم آية pair"
   },
   "tree:00618a80vo39tk": {
    "keep": true,
@@ -13240,16 +13240,16 @@
    "why": "identical closing 8:28 and 9:22"
   },
   "tree:0qnmu6902pgqyb": {
-   "keep": true,
-   "why": "ghafur rahim vs ghafur halim: shows split"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; ghafur rahim vs ghafur halim: shows split"
   },
   "tree:1oi0ej81fcolre": {
    "keep": true,
    "why": "ghafur halim pair 2:235 / 3:155"
   },
   "tree:11140t70s3c7sf": {
-   "keep": true,
-   "why": "closing formula ghafur rahim; large but formula"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; closing formula ghafur rahim; large but formula"
   },
   "tree:1cnw0v40oqgcbe": {
    "keep": false,
@@ -13296,8 +13296,8 @@
    "why": "Same closing qawiyy aziz after mention of His messengers in 57:25 and 58:21"
   },
   "tree:1wivk7405jlqtc": {
-   "keep": true,
-   "why": "Nisa/Ahzab kana-endings: tree sorts which attribute pair closes each ayah"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Nisa/Ahzab kana-endings: tree sorts which attribute pair closes each ayah"
   },
   "cmp:1v3k8eo1ez7uq0": {
    "keep": true,
@@ -13868,12 +13868,12 @@
    "why": "wa-inna fariqan: People of the Book vs believers at Badr"
   },
   "tree:0g3d9ri16at8j6": {
-   "keep": true,
-   "why": "la-aya endings: li-qawmin..., ash-Shu'ara refrain, lakum in kuntum"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; la-aya endings: li-qawmin..., ash-Shu'ara refrain, lakum in kuntum"
   },
   "tree:0u5zs9t08pqgj1": {
-   "keep": true,
-   "why": "la-ayat endings: which qawm (yatafakkarun, ya'qilun...) goes where"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; la-ayat endings: which qawm (yatafakkarun, ya'qilun...) goes where"
   },
   "tree:1dd1whv0whpp7f": {
    "keep": true,
@@ -14072,8 +14072,8 @@
    "why": "Adjacent 23:84/88 in kuntum ta'lamun before sa-yaquluna lillah"
   },
   "tree:06iq2er0oxs83l": {
-   "keep": true,
-   "why": "in kuntum sadiqin closing: tree locates which challenges end with it"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; in kuntum sadiqin closing: tree locates which challenges end with it"
   },
   "tree:0vntelz0oe8pef": {
    "keep": true,
@@ -15413,8 +15413,8 @@
    "why": "annahu kana: Yunus vs two Jinn statements; no shared continuation"
   },
   "tree:0fq7cdb0875m2t": {
-   "keep": true,
-   "why": "innahu kana closings, 30 places with many referents and attributes",
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; innahu kana closings, 30 places with many referents and attributes",
    "ask": "Keep the big innahu kana tree for its endings, or rely on its small subtrees?"
   },
   "tree:0oh1oc50156yjl": {
@@ -16074,8 +16074,8 @@
    "why": "awwala man aslama vs alqa; unrelated"
   },
   "tree:0th2l5p0dny09t": {
-   "keep": true,
-   "why": "ula'ika ashabu an-nar/al-janna/al-jahim: which closing goes where"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; ula'ika ashabu an-nar/al-janna/al-jahim: which closing goes where"
   },
   "tree:1gtd4z51hsxccn": {
    "keep": true,
@@ -16154,8 +16154,8 @@
    "why": "ula'ika lam yakunu vs lam yu'minu; unrelated"
   },
   "tree:0khs5wp1nnwt2h": {
-   "keep": true,
-   "why": "ula'ika lahum endings: adhabun alim/azim/muhin, maghfira, ajr"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; ula'ika lahum endings: adhabun alim/azim/muhin, maghfira, ajr"
   },
   "tree:0lowbyc11krdlq": {
    "keep": true,
@@ -16742,8 +16742,8 @@
    "why": "bi-annahum kafaru billahi vs bi-ayatina; different contexts"
   },
   "tree:0e8vygb0ifwy5r": {
-   "keep": true,
-   "why": "Ar-Rahman refrain fa-bi-ayyi ala'i rabbikuma tukadhdhiban (and 53:55)"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Ar-Rahman refrain fa-bi-ayyi ala'i rabbikuma tukadhdhiban (and 53:55)"
   },
   "tree:1hghmqm1dcz1no": {
    "keep": true,
@@ -17214,8 +17214,8 @@
    "why": "bi-kulli sahirin alim: ya'tuka (7:112) vs i'tuni (10:79)"
   },
   "tree:0n6scgl0gwrky7": {
-   "keep": true,
-   "why": "bi-kulli shay'in: alim vs alima vs muhit vs basir closings"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; bi-kulli shay'in: alim vs alima vs muhit vs basir closings"
   },
   "tree:03cnigr1v75fyz": {
    "keep": true,
@@ -17482,8 +17482,8 @@
    "why": "bima kafaru: two different continuations, weak link"
   },
   "tree:1o1qyih0tri5zl": {
-   "keep": true,
-   "why": "bima kuntum closings: ta'malun vs takfurun vs taksibun"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; bima kuntum closings: ta'malun vs takfurun vs taksibun"
   },
   "tree:0k3ench1j65eqh": {
    "keep": true,
@@ -18214,8 +18214,8 @@
    "why": "Ships 'tajri fil-bahr' bima / bi-amrihi / bi-ni'mat Allah"
   },
   "tree:0o4fw2g0za7eq4": {
-   "keep": true,
-   "why": "Paradise formula hub; continuations vary widely across 34 places",
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Paradise formula hub; continuations vary widely across 34 places",
    "ask": "34 places: keep as the hub, or rely on the tighter khalidina fiha subtrees?"
   },
   "cmp:0ga01c51qyywpp": {
@@ -18251,12 +18251,12 @@
    "why": "'taj'alu lillah' andadan vs alaykum sultanan; unrelated"
   },
   "tree:04ng5fn1qd4237": {
-   "keep": true,
-   "why": "Includes 9:100 'tajri tahtaha' without min; paradise endings vary"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Includes 9:100 'tajri tahtaha' without min; paradise endings vary"
   },
   "tree:0x5nevy014wa2u": {
-   "keep": true,
-   "why": "'khalidina fiha' then abadan / dhalika al-fawz / wa dhalika jaza' variants"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; 'khalidina fiha' then abadan / dhalika al-fawz / wa dhalika jaza' variants"
   },
   "tree:0k6m6i20w44hzi": {
    "keep": true,
@@ -19075,8 +19075,8 @@
    "why": "13:3 wa anharan vs 41:10 min fawqiha"
   },
   "tree:0k2njnn1cu43up": {
-   "keep": true,
-   "why": "Creation blessings 'ja'ala lakum' al-ard / al-layl / as-sam' clusters"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Creation blessings 'ja'ala lakum' al-ard / al-layl / as-sam' clusters"
   },
   "tree:10vlrqk1fciac2": {
    "keep": true,
@@ -19207,8 +19207,8 @@
    "why": "Ending 'jannat an-na'im' with fi / lahum / ladayna lead-ins"
   },
   "tree:1l1c0go1evbf8w": {
-   "keep": true,
-   "why": "Paradise formula incl. 9:100 'tajri tahtaha' without min"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Paradise formula incl. 9:100 'tajri tahtaha' without min"
   },
   "cmp:1mkvmbv19dp4u1": {
    "keep": true,
@@ -19219,8 +19219,8 @@
    "why": "5:12 vs 64:9 share only the common formula; arbitrary pairing"
   },
   "tree:0h0b5f20olxvt2": {
-   "keep": true,
-   "why": "Paradise formula hub, 27 places; endings vary",
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Paradise formula hub, 27 places; endings vary",
    "ask": "Near-duplicate of the 28-place tree (only 9:100 missing); keep both?"
   },
   "cmp:0frsor11puh2zx": {
@@ -19712,16 +19712,16 @@
    "why": "'khalaqa al-insan min' nutfa / ajal / salsal / alaq; 55:3 vs 55:14"
   },
   "tree:0sikfos0oeawby": {
-   "keep": true,
-   "why": "'khalaqa as-samawat' then fi sitta / bil-haqq / la-yaqulunna; 31:10 bighayri"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; 'khalaqa as-samawat' then fi sitta / bil-haqq / la-yaqulunna; 31:10 bighayri"
   },
   "tree:1n19xy91g9q1ox": {
    "keep": true,
    "why": "'inna fi khalq as-samawat' wakhtilaf al-layl vs alsinatikum"
   },
   "tree:0ejegkb123xxwx": {
-   "keep": true,
-   "why": "Continuations after 'khalaqa as-samawat wal-ard' are a known slip set"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Continuations after 'khalaqa as-samawat wal-ard' are a known slip set"
   },
   "tree:0aj1ft604xluz4": {
    "keep": true,
@@ -20132,8 +20132,8 @@
    "why": "22:62 = 31:30 vs 22:6 and others after 'dhalika bi-anna Allah'"
   },
   "tree:0k2w10m10437l4": {
-   "keep": true,
-   "why": "'dhalika bi-annahum' kanu / qalu / qawmun la variants are slip-prone"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; 'dhalika bi-annahum' kanu / qalu / qawmun la variants are slip-prone"
   },
   "cmp:15uftyl12a4eot": {
    "keep": false,
@@ -20440,8 +20440,8 @@
    "why": "21:22 subhana Allah vs 43:82 subhana rabb as-samawat"
   },
   "tree:0ipuu691c4qg3z": {
-   "keep": true,
-   "why": "'rabb al-alamin' closings; clusters (rasul min, ajri illa ala) show lead-ins"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; 'rabb al-alamin' closings; clusters (rasul min, ajri illa ala) show lead-ins"
   },
   "tree:0ikw50w169szbg": {
    "keep": true,
@@ -21668,12 +21668,12 @@
    "why": "'saddukum an al-masjid al-haram' an ta'tadu (5:2) vs wal-hady (48:25)"
   },
   "tree:09ji6h91cd3fdb": {
-   "keep": true,
-   "why": "Ending 'sirat mustaqim' with ila / ala / hadha lead-ins"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Ending 'sirat mustaqim' with ila / ala / hadha lead-ins"
   },
   "tree:0aiec651y147gx": {
-   "keep": true,
-   "why": "Ending 'sirat mustaqim' 22 places, lead-ins differ"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Ending 'sirat mustaqim' 22 places, lead-ins differ"
   },
   "tree:0doesth1rh6vt3": {
    "keep": true,
@@ -22004,8 +22004,8 @@
    "why": "Ending 'adhab an-nar' waqina / faqina / lil-kafirin"
   },
   "tree:02cp2jo1up442m": {
-   "keep": true,
-   "why": "Ending 'adhabun alim' with walahum / falahu / lil-kafirin lead-ins"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Ending 'adhabun alim' with walahum / falahu / lil-kafirin lead-ins"
   },
   "tree:0w5hmyc0kwp7co": {
    "keep": true,
@@ -22661,12 +22661,12 @@
    "why": "yuhyi al-mawta wa annahu (22:6) vs wa huwa (42:9) ala kulli shay'in qadir"
   },
   "tree:13gee4p15xt549": {
-   "keep": true,
-   "why": "ala kulli shay'in qadir: which lead-in (inna/wallahu/wa huwa/innaka) where"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; ala kulli shay'in qadir: which lead-in (inna/wallahu/wa huwa/innaka) where"
   },
   "tree:1c2lzo1006ww1j": {
-   "keep": true,
-   "why": "ayah-final ala kulli shay'in qadir across 32 places, lead-ins differ"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; ayah-final ala kulli shay'in qadir across 32 places, lead-ins differ"
   },
   "tree:0oo4qde16c8mmi": {
    "keep": true,
@@ -23221,8 +23221,8 @@
    "why": "an dhikri: 18:101 and 20:124 different frames, low slip risk"
   },
   "tree:0hwu3mj0jqgekh": {
-   "keep": true,
-   "why": "saddu an sabil Allah formula with many distinct continuations"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; saddu an sabil Allah formula with many distinct continuations"
   },
   "tree:1t6nvb40pi5g2e": {
    "keep": true,
@@ -24037,8 +24037,8 @@
    "why": "fil-sama' wal-ard (singular sama'): three different continuations"
   },
   "tree:1plog0b1p0y4o3": {
-   "keep": true,
-   "why": "ma/man fil-samawat wal-ard formula, lead-ins and closings vary"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; ma/man fil-samawat wal-ard formula, lead-ins and closings vary"
   },
   "tree:05gds5010drsrm": {
    "keep": true,
@@ -24269,12 +24269,12 @@
    "why": "la taghlu fi dinikum wa la taqulu (4:171) vs ghayra al-haqq (5:77)"
   },
   "tree:1wk4twt0gsn01r": {
-   "keep": true,
-   "why": "inna fi dhalika la-ayatan + lakum / lil-mu'minin / li-qawmin / wa ma kana"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; inna fi dhalika la-ayatan + lakum / lil-mu'minin / li-qawmin / wa ma kana"
   },
   "tree:1l57fnu1dv3qm6": {
-   "keep": true,
-   "why": "inna fi dhalika la-ayatin + which group: yatafakkarun / ya'qilun / sabbar shakur"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; inna fi dhalika la-ayatin + which group: yatafakkarun / ya'qilun / sabbar shakur"
   },
   "tree:00cpj1t0qm994r": {
    "keep": true,
@@ -24401,8 +24401,8 @@
    "why": "naza'na ma fi sudurihim min ghill pair; 59:13 rahba is a tag-along"
   },
   "tree:0cyk6bn1w4h68d": {
-   "keep": true,
-   "why": "fi dalal + mubin / ba'id / kabir / bare: which adjective where"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; fi dalal + mubin / ba'id / kabir / bare: which adjective where"
   },
   "tree:03hgyai10oeway": {
    "keep": true,
@@ -24489,8 +24489,8 @@
    "why": "fi qulubikum: six scattered contexts, little slip risk"
   },
   "tree:0suk00n0gezg09": {
-   "keep": true,
-   "why": "alladhina fi qulubihim marad set, qadhafa fi qulubihim al-ru'b pair"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; alladhina fi qulubihim marad set, qadhafa fi qulubihim al-ru'b pair"
   },
   "tree:1vc2uk51r2brgj": {
    "keep": true,
@@ -24945,8 +24945,8 @@
    "why": "qala dhalika: two unrelated contexts"
   },
   "tree:0m6jwy10n8idff": {
-   "keep": true,
-   "why": "qala rabbi: 35 prayers with many real pairs (Zakariyya, unzurni, unsurni)",
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; qala rabbi: 35 prayers with many real pairs (Zakariyya, unzurni, unsurni)",
    "ask": "Keep the big qala rabbi tree, or rely on tighter subtrees for the pairs?"
   },
   "tree:0vn8zep0rigqah": {
@@ -25122,8 +25122,8 @@
    "why": "qala ya bunayya la (12:5, 12:67) vs inni ara (37:102)"
   },
   "tree:01ijse31s2xjjt": {
-   "keep": true,
-   "why": "qala ya qawmi: prophet speeches in al-A'raf/Hud with many parallel pairs"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; qala ya qawmi: prophet speeches in al-A'raf/Hud with many parallel pairs"
   },
   "tree:19e92bb1ax1oev": {
    "keep": true,
@@ -26314,8 +26314,8 @@
    "why": "qila lilladhina: zalamu vs ittaqaw, unrelated contexts"
   },
   "tree:1b49kqe06fsi86": {
-   "keep": true,
-   "why": "wa idha qila lahum: which command follows is the classic slip point"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; wa idha qila lahum: which command follows is the classic slip point"
   },
   "tree:1h7tbl214jymow": {
    "keep": true,
@@ -26474,8 +26474,8 @@
    "why": "Nisa closings afuwwan ghafura (4:43) vs afuwwan qadira (4:149)"
   },
   "tree:13jx3ix0i4shex": {
-   "keep": true,
-   "why": "kayfa kana aqibatu: which group (mukadhdhibin, mufsidin...) follows"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; kayfa kana aqibatu: which group (mukadhdhibin, mufsidin...) follows"
   },
   "tree:0r994d408pbako": {
    "keep": true,
@@ -26799,12 +26799,12 @@
    "why": "iyyakum kanu ya'budun vs wa ma kanu ya'budun"
   },
   "tree:0ara9oz1ty2ifn": {
-   "keep": true,
-   "why": "kanu ya'malun closing: bima / ma / alladhi / bi-ahsani before it"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; kanu ya'malun closing: bima / ma / alladhi / bi-ahsani before it"
   },
   "tree:0vw3ok41cnycha": {
-   "keep": true,
-   "why": "kanu ya'malun closing with varied lead-ins (sa'a ma, bima, ahsana)"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; kanu ya'malun closing with varied lead-ins (sa'a ma, bima, ahsana)"
   },
   "tree:01cvv531qmgq3z": {
    "keep": true,
@@ -27023,8 +27023,8 @@
    "why": "bi-ayatina wa liqa al-akhira in 7:147 vs 30:16"
   },
   "tree:0qpdia50600wsj": {
-   "keep": true,
-   "why": "kadhdhabu bi-ayatina: ula'ika ashab al-nar vs al-jahim and more"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; kadhdhabu bi-ayatina: ula'ika ashab al-nar vs al-jahim and more"
   },
   "tree:17yr25o0g2e8lo": {
    "keep": true,
@@ -27367,12 +27367,12 @@
    "why": "wasi'a rabbi / rabbuna kulla shay'in ilma, varied follow-on"
   },
   "tree:1muul2h05k8k0h": {
-   "keep": true,
-   "why": "ala kulli shay'in qadir: inna Allah / wa Allah / wa huwa..."
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; ala kulli shay'in qadir: inna Allah / wa Allah / wa huwa..."
   },
   "tree:0rkphe905uryvj": {
-   "keep": true,
-   "why": "qadir closing with its varied lead-ins across 32 ayat"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; qadir closing with its varied lead-ins across 32 ayat"
   },
   "tree:14bnxf41ujmpeu": {
    "keep": false,
@@ -27447,8 +27447,8 @@
    "why": "kullun min indi rabbina vs min indi Allah"
   },
   "tree:06kra841x30z0g": {
-   "keep": true,
-   "why": "kullu nafsin dha'iqat al-mawt / ma kasabat / bima kasabat"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; kullu nafsin dha'iqat al-mawt / ma kasabat / bima kasabat"
   },
   "tree:0s3pqbi0fpu06y": {
    "keep": true,
@@ -27711,12 +27711,12 @@
    "why": "23:84 and 23:88 both followed by sayaquluna lillah qul"
   },
   "tree:175xrxs1jr8czo": {
-   "keep": true,
-   "why": "fa yunabbi'ukum bima vs tujzawna ma kuntum ta'malun"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; fa yunabbi'ukum bima vs tujzawna ma kuntum ta'malun"
   },
   "tree:1oriaz10bfyphj": {
-   "keep": true,
-   "why": "kuntum ta'malun closing with varied lead-ins across 25 ayat"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; kuntum ta'malun closing with varied lead-ins across 25 ayat"
   },
   "tree:1fpjm5s0sk1580": {
    "keep": true,
@@ -27799,8 +27799,8 @@
    "why": "kayfa takfuruna billah vs wa kayfa takfuruna wa antum"
   },
   "tree:0het17p10b5sjj": {
-   "keep": true,
-   "why": "kayfa kana aqibatu / iqab / nakir / adhabi wa nudhur"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; kayfa kana aqibatu / iqab / nakir / adhabi wa nudhur"
   },
   "tree:145rbor0gw9ou9": {
    "keep": true,
@@ -27811,8 +27811,8 @@
    "why": "54:16 and 54:21 both followed by the yassarna refrain then kadhdhabat"
   },
   "tree:0feuy1p19no7x5": {
-   "keep": true,
-   "why": "aqibatu al-mukadhdhibin / al-mufsidin / al-mujrimin / alladhina"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; aqibatu al-mukadhdhibin / al-mufsidin / al-mujrimin / alladhina"
   },
   "tree:1918hys1j6e0hg": {
    "keep": true,
@@ -28079,12 +28079,12 @@
    "why": "fa la ta'duluhunna an yankihna vs wa la ta'duluhunna li-tadhhabu"
   },
   "tree:1518ks40jd29g6": {
-   "keep": true,
-   "why": "ma la ta'lamun vs wa antum la ta'lamun vs in kuntum la ta'lamun"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; ma la ta'lamun vs wa antum la ta'lamun vs in kuntum la ta'lamun"
   },
   "tree:1sydyrm06tbqn4": {
-   "keep": true,
-   "why": "la ta'lamun closing with ma / wa antum / in kuntum lead-ins"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; la ta'lamun closing with ma / wa antum / in kuntum lead-ins"
   },
   "tree:0muvrtb0s6v7tv": {
    "keep": true,
@@ -28355,8 +28355,8 @@
    "why": "la nukallifu nafsan illa wus'aha wa idha / ula'ika / wa ladayna"
   },
   "tree:09snlat0bib4nx": {
-   "keep": true,
-   "why": "wa la hum yahzanun / yunsarun / yunzarun / yusta'tabun closings"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; wa la hum yahzanun / yunsarun / yunzarun / yusta'tabun closings"
   },
   "tree:0w7dkhz0q6maw7": {
    "keep": true,
@@ -28419,8 +28419,8 @@
    "why": "kulla ayatin la yu'minu biha (6:25, 7:146) vs 10:88 hatta yaraw"
   },
   "tree:0pev6va0qp6302": {
-   "keep": true,
-   "why": "la yu'minun closing: fa hum / akthar al-nas / qawm lead-ins"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; la yu'minun closing: fa hum / akthar al-nas / qawm lead-ins"
   },
   "tree:0lutklj1smae1f": {
    "keep": false,
@@ -28491,8 +28491,8 @@
    "why": "fa la yujza illa mithlaha wa hum la yuzlamun vs wa man amila salihan"
   },
   "tree:0bkk27a038vcio": {
-   "keep": true,
-   "why": "la yuhibbu al-mu'tadin / al-zalimin / al-kafirin / kulla... closings"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; la yuhibbu al-mu'tadin / al-zalimin / al-kafirin / kulla... closings"
   },
   "tree:1olrbgk1wpbztq": {
    "keep": true,
@@ -28895,8 +28895,8 @@
    "why": "2:170 ya'qiluna vs 5:104 ya'lamuna shay'an wa la yahtadun"
   },
   "tree:0lykdqm1y4bsdk": {
-   "keep": true,
-   "why": "la yahdi al-qawm al-zalimin / al-kafirin / al-fasiqin / man"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; la yahdi al-qawm al-zalimin / al-kafirin / al-fasiqin / man"
   },
   "tree:1xbfu2d0ejy5fv": {
    "keep": true,
@@ -28963,8 +28963,8 @@
    "why": "la ilaha illa Allah yastakbirun vs wastaghfir"
   },
   "tree:1srmgxn0sqep9t": {
-   "keep": true,
-   "why": "la ilaha illa huwa followed by many different names and clauses"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; la ilaha illa huwa followed by many different names and clauses"
   },
   "cmp:0pcyr5f1h6le5r": {
    "keep": true,
@@ -30715,8 +30715,8 @@
    "why": "lahu mulku al-samawati wal-ard wa ma lakum vs wa ma baynahuma"
   },
   "tree:1pvdvj008p9uje": {
-   "keep": true,
-   "why": "fa ma lahu min hadin (5 places) and other ma lahu min endings"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; fa ma lahu min hadin (5 places) and other ma lahu min endings"
   },
   "tree:13cizu50rncd4n": {
    "keep": true,
@@ -31520,8 +31520,8 @@
    "why": "Ya'lamu ma bayna aydihim wa ma khalfahum: different endings"
   },
   "tree:0mznbs213h13ta": {
-   "keep": true,
-   "why": "As-samawat wal-ard wa ma baynahuma: many endings memorizers swap"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; As-samawat wal-ard wa ma baynahuma: many endings memorizers swap"
   },
   "tree:1e0qtuq0hxxob2": {
    "keep": true,
@@ -31848,8 +31848,8 @@
    "why": "Lillahi ma fis samawati wa ma fil ard: many endings to sort out"
   },
   "tree:18c62v01ym432u": {
-   "keep": true,
-   "why": "Same formula set; continuations memorizers routinely swap"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Same formula set; continuations memorizers routinely swap"
   },
   "cmp:1kjfaqy01b094u": {
    "keep": true,
@@ -32100,8 +32100,8 @@
    "why": "Fa-ma lakum kayfa tahkumun 10:35 vs ma lakum 37:154/68:36"
   },
   "tree:0elcsr31vu9wwj": {
-   "keep": true,
-   "why": "Big but two real sets: ma lakum min ilahin ghayruh, min dunillah",
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Big but two real sets: ma lakum min ilahin ghayruh, min dunillah",
    "ask": "Keep this 21-place tree, or rely on smaller subtrees for the two formula sets?"
   },
   "tree:17pa8if1egcg7z": {
@@ -33774,8 +33774,8 @@
    "why": "Iblis 7:11 vs command 15:98, unrelated"
   },
   "tree:13z3mm21letrok": {
-   "keep": true,
-   "why": "Anzala minas sama'i ma'an with many continuations to sort"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Anzala minas sama'i ma'an with many continuations to sort"
   },
   "tree:1gh131s1hsxf44": {
    "keep": true,
@@ -34451,12 +34451,12 @@
    "why": "5:66 minhum ummah vs 29:55 wa yaqulu dhuqu"
   },
   "tree:03wcvyj1cdekl9": {
-   "keep": true,
-   "why": "Tajri min tahtihal anhar with many continuations to sort"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Tajri min tahtihal anhar with many continuations to sort"
   },
   "tree:0ren0zh1w1jga5": {
-   "keep": true,
-   "why": "Same: khalidina fiha / abadan / dhalika al-fawz endings"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Same: khalidina fiha / abadan / dhalika al-fawz endings"
   },
   "tree:1pu6xow03ubjnk": {
    "keep": true,
@@ -35152,8 +35152,8 @@
    "why": "Yabtaghuna min fadlillah 62:10 vs 73:20, 12:38, 57:29"
   },
   "tree:1pxbkf70h9pji9": {
-   "keep": true,
-   "why": "Litabtaghu min fadlihi wa la'allakum tashkurun set and yaziduhum min fadlih"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Litabtaghu min fadlihi wa la'allakum tashkurun set and yaziduhum min fadlih"
   },
   "tree:1d3e8ib0w6fj25": {
    "keep": false,
@@ -35188,8 +35188,8 @@
    "why": "5:66 vs 29:55 continue differently"
   },
   "tree:1fjcr6a0agodte": {
-   "keep": true,
-   "why": "Man fis samawati wal-ard sets with varied continuations"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Man fis samawati wal-ard sets with varied continuations"
   },
   "tree:1qgw0ue099wcwo": {
    "keep": true,
@@ -35236,8 +35236,8 @@
    "why": "As-samawatu wal-ardu wa man fihinna 17:44 vs 23:71"
   },
   "tree:0q8f2pp0spk4sf": {
-   "keep": true,
-   "why": "Min qabli an ya'tiya yawmun and other min qabli an sets"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Min qabli an ya'tiya yawmun and other min qabli an sets"
   },
   "tree:1kxzy4z11b3uyt": {
    "keep": true,
@@ -36825,8 +36825,8 @@
    "why": "Hadha ifk mubin (24:12) vs ifk qadim (46:11)"
   },
   "tree:1lim3150rn0qxh": {
-   "keep": true,
-   "why": "Disbelievers' slogans in hadha illa: sihr / asatir / bashar / ifk"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Disbelievers' slogans in hadha illa: sihr / asatir / bashar / ifk"
   },
   "tree:070ik5z1rf93qf": {
    "keep": true,
@@ -37097,8 +37097,8 @@
    "why": "Hum fihi yakhtalifun: 27:76 vs 39:3; also 78:3 mukhtalifun"
   },
   "tree:0a9nayv027s6rd": {
-   "keep": true,
-   "why": "Hum fiha khalidun formula plus kalihun, yakhtasimun, la yasma'un"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Hum fiha khalidun formula plus kalihun, yakhtasimun, la yasma'un"
   },
   "tree:0vp1dwu0tbvrog": {
    "keep": true,
@@ -37421,8 +37421,8 @@
    "why": "6:115 and 8:61 closings both followed by wa in"
   },
   "tree:11gexp516yq3rl": {
-   "keep": true,
-   "why": "Huwa al-aziz: al-hakim / al-alim / al-rahim / al-ghaffar / al-ghafur"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Huwa al-aziz: al-hakim / al-alim / al-rahim / al-ghaffar / al-ghafur"
   },
   "tree:1vdjls31hgkv5b": {
    "keep": true,
@@ -38319,8 +38319,8 @@
    "why": "Classic: qawwamina bil-qist shuhada' lillah (4:135) vs lillah shuhada' bil-qist (5:8)"
   },
   "tree:1p6d1g6064mkue": {
-   "keep": true,
-   "why": "Ya ayyuha alladhina amanu la: 27 prohibitions, e.g. la tattakhidhu x5"
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Ya ayyuha alladhina amanu la: 27 prohibitions, e.g. la tattakhidhu x5"
   },
   "cmp:1mwzeqh0lly3ib": {
    "keep": true,
@@ -38339,8 +38339,8 @@
    "why": "An-Naml: inni ulqiya / aftuni / ayyukum ya'tini"
   },
   "tree:0s4poop0t7fxjf": {
-   "keep": true,
-   "why": "Ya ayyuha al-nas: ittaqu rabbakum x3, qad ja'akum, in kuntum etc."
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Ya ayyuha al-nas: ittaqu rabbakum x3, qad ja'akum, in kuntum etc."
   },
   "tree:0j9xx8805mayjy": {
    "keep": true,
@@ -39119,8 +39119,8 @@
    "why": "Wa ya'lama al-sabirin (3:142) vs wa lam yattakhidhu (9:16); 24:63"
   },
   "tree:1gggfsx07o4ezl": {
-   "keep": true,
-   "why": "Ya'lamu ma: many look-alike endings (yusirrun/tusirrun, ma bayna aydihim)",
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Ya'lamu ma: many look-alike endings (yusirrun/tusirrun, ma bayna aydihim)",
    "ask": "35 places: keep whole tree or rely on the smaller ya'lamu ma subtrees?"
   },
   "tree:09nxeq301qu0zp": {
@@ -39842,6 +39842,318 @@
   "tree:0v1dwll01bnv5n": {
    "keep": true,
    "why": "Al-Anbiya: qalu (21:14) vs la-yaqulunna (21:46)"
+  },
+  "tree:1550z2505mcref": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1tgcwrh1rnzozr": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:0udrvvd10bv1h7": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1p4t29h1te44x1": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:05394tj09ij3at": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:16ufokt0durwb5": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1skpin31bduxgv": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:0uj5n9714sdgir": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1sg4fhj1m0lbsh": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:0dpws7w0r9stog": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1twzz480s1u9io": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:16lg6ig1r9krlo": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1a8bkwr0w2aem9": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:11m8x1b18y0e4h": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:0sv9eye0yz9eve": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1e4v64h150030v": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1i3bb9d0781pjb": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1i3cxit1sjllqn": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:0xmuhl70ux6ft1": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:0a6xxz9002cjvl": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:0dcn98b0bkq5yb": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:05g80vs0ykqmqm": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1iolxb91h31kf5": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:12sfmnz1c8v83x": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:0llt51o0jhpwck": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1lt3rij18mhxa1": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:11jew6a0hgjy16": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1qzpsnm0yl7144": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:149tcj60z6wn6w": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1af77kp119torl": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:0wbow921rc7pss": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:095iu1612bl40a": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:057mygl0hqet0z": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1y805oy02mg0ks": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1xcv6b61pzfaya": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:0egl2n31g9bfe3": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1f0x8zk142y48w": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:0pusesr1jwp2q1": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1xjtjxr0m4zs75": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1hemmgg0xpitgu": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1kqucn40oida02": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:05t7jat1wc7un5": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1yy19in1lzlkot": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1gm15mu0gs7wko": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1wex0xj1exqa5x": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:0bz00uj18ryxpx": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:0b0qeu10q53vs1": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1ok19sd1lc92jx": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:06ui3m00v0omi8": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:17rur1h1hfkg3f": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1aizdmm0dqv8mu": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:00n8969008osl3": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1s3vfur16x0y1r": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:0r61q680tivljm": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1lwpb190w9l6z5": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:00wj9l102v2iax": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1kolo0p1knofsz": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1vhlfag1qeb6e6": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1qs5u8a01kbwyc": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:0amphjl0cyd3xh": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1xqz4t8044d534": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:13adp2e0kxt1ki": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1wpd8ha0pv1ugi": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1qq42so11yhupc": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:0y0kffb0fytv9h": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1ev1wpr06mh1rl": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:00wpir1124deof": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:15bkpoy187t62m": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:0yvn3vb1vbvhdb": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1b6k4jh1lmr1n3": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:04ox6vr1k91v95": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:0cqwri8052pc2a": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1w1kzrf1b0ysc5": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:13uxclk1ml2b7o": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1nxba7z1twh79z": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:1k5b0cl0j1mji7": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:029hd9w0x1bi0w": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "tree:0gbqfgd0cj7d75": {
+   "keep": false,
+   "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
   }
  }
 }
