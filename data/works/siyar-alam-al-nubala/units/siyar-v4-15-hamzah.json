@@ -1,0 +1,584 @@
+{
+  "unit": {
+    "id": "siyar-v4-15-hamzah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٥"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_h_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "171",
+      "layer": "MAIN",
+      "exact": "١٥ - حَمْزَةُ بنُ عَبْدِ المُطَّلِبِ"
+    },
+    {
+      "id": "sp_h1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "171",
+      "layer": "MAIN",
+      "exact": "حَمْزَةُ بنُ عَبْدِ المُطَّلِبِ بنِ هَاشِمِ بنِ عَبْدِ مَنَافٍ",
+      "prefix": "١٥ - "
+    },
+    {
+      "id": "sp_h2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "171",
+      "layer": "MAIN",
+      "exact": "ابْنِ قُصَيِّ بنِ كِلاَبٍ"
+    },
+    {
+      "id": "sp_h_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "171",
+      "layer": "MAIN",
+      "exact": "حَمْزَةُ بنُ",
+      "prefix": "١٥ - "
+    },
+    {
+      "id": "sp_h_father_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "171",
+      "layer": "MAIN",
+      "exact": "بنِ هَاشِمِ بنِ عَبْدِ مَنَافٍ",
+      "prefix": "عَبْدِ المُطَّلِبِ "
+    },
+    {
+      "id": "sp_h_epithets",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "172",
+      "layer": "MAIN",
+      "exact": "الإِمَامُ، البَطَلُ، الضِّرْغَامُ، أَسَدُ اللهِ، أَبُو عُمَارَةَ، وَأَبُو يَعْلَى القُرَشِيُّ، الهَاشِمِيُّ، المَكِّيُّ، ثُمَّ المَدَنِيُّ، البَدْرِيُّ، الشَّهِيْدُ"
+    },
+    {
+      "id": "sp_h_asad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "172",
+      "layer": "MAIN",
+      "exact": "أَسَدُ اللهِ",
+      "prefix": "الضِّرْغَامُ، "
+    },
+    {
+      "id": "sp_h_kunya1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "172",
+      "layer": "MAIN",
+      "exact": "أَبُو عُمَارَةَ",
+      "prefix": "أَسَدُ اللهِ، "
+    },
+    {
+      "id": "sp_h_kunya2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "172",
+      "layer": "MAIN",
+      "exact": "أَبُو يَعْلَى",
+      "prefix": "وَ",
+      "suffix": "القُرَشِيُّ"
+    },
+    {
+      "id": "sp_h_badri",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "172",
+      "layer": "MAIN",
+      "exact": "البَدْرِيُّ، الشَّهِيْدُ"
+    },
+    {
+      "id": "sp_h_islam_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "172",
+      "layer": "MAIN",
+      "exact": "قَالَ ابْنُ إِسْحَاقَ",
+      "suffix": ": لَمَّا أَسْلَمَ"
+    },
+    {
+      "id": "sp_h_islam",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "172",
+      "layer": "MAIN",
+      "exact": "لَمَّا أَسْلَمَ حَمْزَةُ عَلِمَتْ قُرَيْشٌ أَنَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَدِ امْتَنَعَ، وَأَنَّ حَمْزَةَ سَيَمْنَعُهُ، فَكَفُّوا عَنْ بَعْضِ مَا كَانُوا يَنَالُوْنَ مِنْهُ"
+    },
+    {
+      "id": "sp_h_uhud_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "177",
+      "layer": "MAIN",
+      "exact": "ابْنُ عَوْنٍ: عَنْ عُمَيْرِ بنِ إِسْحَاقَ، عَنْ سَعْدِ بنِ أَبِي وَقَّاصٍ"
+    },
+    {
+      "id": "sp_h_uhud",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "177",
+      "layer": "MAIN",
+      "exact": "كَانَ حَمْزَةُ يُقَاتِلُ يَوْمَ أُحُدٍ بَيْنَ يَدَيْ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِسَيْفَيْنِ، وَيَقُوْلُ: أَنَا أَسَدُ اللهِ"
+    },
+    {
+      "id": "sp_h_day_uhud",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "177",
+      "layer": "MAIN",
+      "exact": "يَوْمَ أُحُدٍ بَيْنَ يَدَيْ",
+      "prefix": "يُقَاتِلُ "
+    },
+    {
+      "id": "sp_h_sister_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "180",
+      "layer": "MAIN",
+      "exact": "أَبُو بَكْرٍ بنُ عَيَّاشٍ: عَنْ يَزِيْدَ بنِ أَبِي زِيَادٍ، عَنْ مِقْسَمٍ، عَنِ ابْنِ عَبَّاسٍ"
+    },
+    {
+      "id": "sp_h_sister",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "180",
+      "layer": "MAIN",
+      "exact": "لَمَّا قُتِلَ حَمْزَةُ، أَقَبْلَتْ صَفِيَّةُ أُخْتُهُ"
+    },
+    {
+      "id": "sp_h_sister_word",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "180",
+      "layer": "MAIN",
+      "exact": "صَفِيَّةُ أُخْتُهُ",
+      "prefix": "أَقَبْلَتْ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_h0",
+      "unit": "siyar-v4-15-hamzah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_h_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_h_islam",
+      "unit": "siyar-v4-15-hamzah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_h_islam_frame"
+      ],
+      "origin": {
+        "mention": "m_h_ishaq"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_h_uhud",
+      "unit": "siyar-v4-15-hamzah",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_h_uhud_isnad",
+      "origin": {
+        "mention": "m_h_saad"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_h_sister",
+      "unit": "siyar-v4-15-hamzah",
+      "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_h_sister_isnad",
+      "origin": {
+        "mention": "m_h_abbas"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_h_name",
+      "report": "r_h0",
+      "spans": [
+        "sp_h1",
+        "sp_h2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_h_epithets",
+      "report": "r_h0",
+      "spans": [
+        "sp_h_epithets"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_h_islam",
+      "report": "r_h_islam",
+      "spans": [
+        "sp_h_islam"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_h_uhud",
+      "report": "r_h_uhud",
+      "spans": [
+        "sp_h_uhud"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_h_sister",
+      "report": "r_h_sister",
+      "spans": [
+        "sp_h_sister"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_h",
+      "parent": "sp_h1",
+      "exact": "حَمْزَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_h_father",
+      "parent": "sp_h1",
+      "exact": "عَبْدِ المُطَّلِبِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_h_badr",
+      "parent": "sp_h_epithets",
+      "exact": "البَدْرِيُّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_h_ishaq",
+      "parent": "sp_h_islam_frame",
+      "exact": "ابْنُ إِسْحَاقَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_h_islam",
+      "parent": "sp_h_islam",
+      "exact": "حَمْزَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_h_saad",
+      "parent": "sp_h_uhud_isnad",
+      "exact": "سَعْدِ بنِ أَبِي وَقَّاصٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_h_uhud_h",
+      "parent": "sp_h_uhud",
+      "exact": "حَمْزَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_h_uhud",
+      "parent": "sp_h_uhud",
+      "exact": "أُحُدٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_h_abbas",
+      "parent": "sp_h_sister_isnad",
+      "exact": "ابْنِ عَبَّاسٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_h_sister_h",
+      "parent": "sp_h_sister",
+      "exact": "حَمْزَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_h_safiyyah",
+      "parent": "sp_h_sister",
+      "exact": "صَفِيَّةُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_h",
+      "mention": "m_h",
+      "agent": "hamzah-ibn-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_h_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_h_islam",
+      "mention": "m_h_islam",
+      "agent": "hamzah-ibn-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_h_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_h_uhud_h",
+      "mention": "m_h_uhud_h",
+      "agent": "hamzah-ibn-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_h_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_h_sister_h",
+      "mention": "m_h_sister_h",
+      "agent": "hamzah-ibn-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_h_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_h_father",
+      "mention": "m_h_father",
+      "agent": "abd-al-muttalib-ibn-hashim",
+      "basis": [
+        {
+          "span": "sp_h_father_nasab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_h_badr",
+      "mention": "m_h_badr",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_h_badri",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_h_uhud",
+      "mention": "m_h_uhud",
+      "event": "uhud",
+      "basis": [
+        {
+          "span": "sp_h_day_uhud",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_h_safiyyah",
+      "mention": "m_h_safiyyah",
+      "agent": "safiyyah-bint-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_h_sister_word",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_h_name",
+      "subject": "m_h",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_h1",
+          "sp_h2"
+        ]
+      },
+      "restsOn": [
+        "st_h_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_h_sex",
+      "subject": "m_h",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_h_sex"
+        ]
+      },
+      "restsOn": [
+        "st_h_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_h_father",
+      "subject": "m_h",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_h_father"
+      },
+      "restsOn": [
+        "st_h_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_h_kunya1",
+      "subject": "m_h",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_h_kunya1"
+        ]
+      },
+      "restsOn": [
+        "st_h_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_h_kunya2",
+      "subject": "m_h",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_h_kunya2"
+        ]
+      },
+      "restsOn": [
+        "st_h_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_h_asad",
+      "subject": "m_h",
+      "predicate": "name.laqab",
+      "value": {
+        "spans": [
+          "sp_h_asad"
+        ]
+      },
+      "restsOn": [
+        "st_h_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_h_badr",
+      "subject": "m_h",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_h_badr"
+      },
+      "restsOn": [
+        "st_h_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_h_v_islam",
+      "subject": "m_h_islam",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_h_islam"
+        ]
+      },
+      "restsOn": [
+        "st_h_islam"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_h_uhud",
+      "subject": "m_h_uhud_h",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_h_uhud"
+      },
+      "restsOn": [
+        "st_h_uhud"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_h_v_uhud",
+      "subject": "m_h_uhud_h",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_h_uhud"
+        ]
+      },
+      "restsOn": [
+        "st_h_uhud"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_h_sister",
+      "subject": "m_h_sister_h",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_h_safiyyah"
+      },
+      "restsOn": [
+        "st_h_sister"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

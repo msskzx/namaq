@@ -43,6 +43,7 @@ export const predicates = [
   'SIBLING_OF',
   'COMPANION_OF',
   'ABOUT_AYAH',
+  'REVEALED_ABOUT',
   'office',
 ] as const;
 

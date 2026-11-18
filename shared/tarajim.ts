@@ -62,7 +62,8 @@ export interface AppPerson {
   battles: PersonLink[];
   /** Battles the entry says he or she missed, with the reason in its words. */
   absentFrom: PersonLink[];
-  ayat: PersonFact[];
+  /** `value` is the ayah key. REVEALED_ABOUT when the source says it came down about him or her («نزلت فيه»). */
+  ayat: (PersonFact & { kind: 'REVEALED_ABOUT' | 'ABOUT' })[];
 }
 
 export const TITLE_SPEAKER_AUTHOR = 'الذهبي';

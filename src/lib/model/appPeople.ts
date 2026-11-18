@@ -132,7 +132,10 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
       companionOf: merge(links('COMPANION_OF')),
       battles: links('PARTICIPATED_IN'),
       absentFrom: of('ABSENT_FROM').flatMap((entry) => entry.object ? [{ ...fact(entry), text: sentence(entry), slug: entry.object, name: nameOf(entry.object, entry.objectMention), inApp: false }] : []),
-      ayat: facts('ABOUT_AYAH'),
+      ayat: [
+        ...facts('REVEALED_ABOUT').map((fact) => ({ ...fact, kind: 'REVEALED_ABOUT' as const })),
+        ...facts('ABOUT_AYAH').map((fact) => ({ ...fact, kind: 'ABOUT' as const })),
+      ],
     };
   }).sort((a, b) => a.name.localeCompare(b.name, 'ar'));
 }
