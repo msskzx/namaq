@@ -6,6 +6,7 @@ import Button from '@/ui/Button';
 import { alikeDiff, FORGOT, recited, RECITED, type ChoiceQuestion } from '@shared/quiz/choiceKinds';
 import QuizPage from './QuizPage';
 import QuranWords from './quran/text/QuranWords';
+import BookRuns from './quran/text/BookRuns';
 import type { WriteAsk } from '@shared/quiz/score';
 import type { PenRule } from '@shared/quran/writeAyah';
 import { num } from '@shared/quran/arabicNumber';
@@ -13,17 +14,19 @@ import { quranText } from '@/lib/quranText';
 import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
 
 const SIZE = 24;
+const AYAH_NUMBER = /^[٠-٩]+$/;
 
 /** A question's own line over its choices: tall enough lines and room above for the marks of a vowelled verse (the Tuhfa's). */
 export const QuizPrompt = ({ text, palette }: { text: string; palette: Palette }) =>
   <Text style={{ color: palette.ink, fontSize: 16, lineHeight: 32, textAlign: 'right', paddingHorizontal: 16, paddingTop: 8 }}>{text}</Text>;
 
 function Words({ words, marked, palette }: { words: string[]; marked?: number[]; palette: Palette }) {
-  return <>{words.map((word, at) => <Text key={at} style={marked?.includes(at) ? { color: palette.accent } : undefined}>{quranText(word)}{at < words.length - 1 ? ' ' : ''}</Text>)}</>;
+  // A run of ayat carries each ayah's number between them, drawn as the end mark after the last one is.
+  return <>{words.map((word, at) => <Text key={at} style={marked?.includes(at) || AYAH_NUMBER.test(word) ? { color: palette.accent } : undefined}>{quranText(word)}{at < words.length - 1 ? ' ' : ''}</Text>)}</>;
 }
 
 /**
- * A choice question (shared/quiz/choiceKinds.ts): the ayah in the mushaf's font, or for a question asked on the page its whole
+ * A choice question (shared/quiz/choiceKinds.ts): a book's passage it asks about, the ayah in the mushaf's font, or for a question asked on the page its whole
  * mushaf page (QuizPage, owner 2026-11-17), where what it asks to write is written in boxes and its grade picks حفظتها or نسيتها; a recited snippet's rest behind a button,
  * then the choices. Once picked, the right one turns green and a wrong one red; a wrong surah with a look-alike shows it,
  * the words where the two part marked in both.
@@ -52,6 +55,10 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
   return (
     <Box {...(scroll ? { contentContainerStyle: { paddingBottom: 24, gap: 12 } } : { style: { gap: 12 } })}>
       {header}
+      {/* A book's text the question asks about («لأي آية هذا التفسير؟»), its quotes of the ayah hidden: plain text, no card in the card. */}
+      {question.passage && (
+        <BookRuns text={question.passage} quran={palette.accent} style={{ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'right', paddingHorizontal: 16 }} />
+      )}
       {question.ayahKey && question.page ? (
         <View style={{ marginHorizontal: 16 }}>
           <QuizPage key={question.key} ayah={question.ayahKey} ask={question.page} palette={palette}
@@ -77,11 +84,16 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
             const wrong = answered && choice.value === picked && !right;
             const color = right ? palette.green : wrong ? palette.accent : palette.ink;
             return (
-              <Pressable key={choice.value} disabled={answered || !onPick} onPress={() => onPick?.(choice.value)} accessibilityRole="button" accessibilityLabel={answered && question.explains?.[choice.value] ? `${choice.labelArabic} معنى ${question.explains[choice.value].quote}، ${question.explains[choice.value].where}` : choice.labelArabic}
+              <Pressable key={choice.value} disabled={answered || !onPick} onPress={() => onPick?.(choice.value)} accessibilityRole="button" accessibilityLabel={answered && question.explains?.[choice.value] ? `${choice.labelArabic} معنى ${question.explains[choice.value].quote}، ${question.explains[choice.value].where}`
+                : answered && question.whereOf?.[choice.value] ? `${choice.labelArabic}، ${question.whereOf[choice.value]}` : choice.labelArabic}
                 accessibilityState={{ selected: choice.value === picked, disabled: answered }}
                 style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderWidth: right || wrong ? 1.5 : 1, borderColor: right || wrong ? color : palette.rule, ...CARD, paddingVertical: 12, paddingHorizontal: 16, backgroundColor: pressed ? palette.paperDeep : 'transparent' })}>
                 <View style={{ flexShrink: 1, gap: 2 }}>
-                  <Text style={{ color, fontSize: 19, fontWeight: right ? '700' : '400' }}>{choice.labelArabic}</Text>
+                  {question.quranChoices
+                    ? <Text style={{ color, fontSize: 21, lineHeight: 40, textAlign: 'right' }}><QuranWords>{choice.labelArabic}</QuranWords></Text>
+                    : <Text style={{ color, fontSize: 19, fontWeight: right ? '700' : '400' }}>{choice.labelArabic}</Text>}
+                  {/* What a choice is, once answered: an ayah's place, a reading's readers. */}
+                  {answered && question.whereOf?.[choice.value] && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{question.whereOf[choice.value]}</Text>}
                   {/* What a choice is, once answered («معنى «فراتا»، المرسلات ٢٧»). */}
                   {answered && question.explains?.[choice.value] && (
                     <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>

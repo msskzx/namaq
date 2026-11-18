@@ -29,6 +29,7 @@
     "quran:itqan-balagha": "tsx scripts/quran/buildItqanBalagha.ts",
     "quran:balagha-terms": "tsx scripts/quran/buildBalaghaTerms.ts",
     "quran:gharib": "tsx scripts/quran/buildGharib.ts",
+    "quran:ayah-quizzes": "tsx scripts/quran/buildAyahQuizzes.ts",
     "quran:mushaf": "tsx scripts/quran/buildMushaf.ts",
     "quran:lemmas": "tsx scripts/quran/buildLemmas.ts",
     "quran:mutashabih": "tsx scripts/quran/buildMutashabih.ts",

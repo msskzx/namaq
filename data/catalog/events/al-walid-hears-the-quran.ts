@@ -22,6 +22,7 @@ const alWalidHearsTheQuran = {
   ayat: [
     {
       kind: 'REVEALED_ABOUT',
+      about: 'al-walid-ibn-al-mughirah',
       from: '74:11',
       to: '74:26',
       evidence: [
