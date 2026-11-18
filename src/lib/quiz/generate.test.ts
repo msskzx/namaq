@@ -69,7 +69,8 @@ beforeEach(() => {
     slug: `event-${year}`,
     name: `الحدث ${year}`,
     type: 'OTHER',
-    fields: { hijriYear: { value: year, claims: ['sira/isra-year'] } },
+    // An undisputed cited year: a disputed claim (sira/isra-year has rival readings) asks nothing.
+    fields: { hijriYear: { value: year, claims: ['sira/qiblah'] } },
     people: [],
   }));
   loadCatalog.mockResolvedValue({ people, battles, events, utterances: [] });
