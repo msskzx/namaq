@@ -16,10 +16,12 @@ describe('«ما معنى؟»', () => {
       expect(question.choices.map(choice => choice.value)).toContain(question.correctAnswer);
       const wrong = question.choices.filter(choice => choice.value !== question.correctAnswer);
       expect(Object.keys(question.explains ?? {}).sort()).toEqual(wrong.map(choice => choice.value).sort());
-      for (const choice of wrong) expect(question.explains![choice.value]).toMatch(/^معنى «.+»، \S+.* [٠-٩]+$/);
+      for (const choice of wrong) {
+        expect(question.explains![choice.value].quote).toBeTruthy();
+        expect(question.explains![choice.value].where).toMatch(/ [٠-٩]+$/);
+      }
       expect(question.marked!.length).toBeGreaterThan(0);
-      const asked = question.marked!.map(at => question.quran![at]).join(' ');
-      expect(question.promptArabic).toBe(`ما معنى «${asked}»؟`);
+      expect(question.marked!.every(at => question.quran![at])).toBe(true);
       expect(question.note?.text).toMatch(/^كل الخيارات من غريب القرآن لابن قتيبة، ص /);
     }
   });
@@ -27,7 +29,7 @@ describe('«ما معنى؟»', () => {
   it("asks «مَآءٗ ثَجَّاجٗا», his whole quote, with his «أي سَيَّالا.»", () => {
     const naba = meaningQuiz.questions({ range: null, filters: { surahs: '78' } }, 'medium', seeded(2));
     const question = naba.find(item => item.ayahKey === '78:14');
-    expect(question?.promptArabic.normalize('NFC')).toBe('ما معنى «مَآءٗ ثَجَّاجٗا»؟'.normalize('NFC'));
+    expect(question?.marked!.map(at => question.quran![at]).join(' ').normalize('NFC')).toBe('مَآءٗ ثَجَّاجٗا'.normalize('NFC'));
     expect(question?.choices.find(choice => choice.value === question.correctAnswer)?.labelArabic.normalize('NFC')).toBe('أي سَيَّالا.'.normalize('NFC'));
   });
 

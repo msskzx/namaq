@@ -117,8 +117,6 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
             {/* No empty circle before a choice (owner, 2026-11-15): the mark comes only with the answer, as in the app. */}
             {locked && (isAnswer || isGiven) && <FontAwesomeIcon icon={isAnswer ? faCircleCheck : faCircleXmark} />}
             {answerContent(question, choice.value)}
-            {/* What a choice is, once answered («معنى «فراتا»، المرسلات ٢٧»). */}
-            {locked && question.explains?.[choice.value] && <span className="text-xs text-[var(--home-muted)]">{question.explains[choice.value]}</span>}
             {locked && isAnswer ? <span className="text-xs font-semibold">{ar ? 'صحيح' : 'Correct'}</span> : null}
             {locked && isGiven && !isAnswer ? <span className="text-xs font-semibold">{ar ? 'خطأ' : 'Incorrect'}</span> : null}
           </Button>

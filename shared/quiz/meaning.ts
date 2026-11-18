@@ -32,14 +32,15 @@ function question(asked: number, others: number[], random: Random): ChoiceQuesti
   const all = [asked, ...others];
   const explains = Object.fromEntries(others.map(at => {
     const other = placeOf(gharib.entries[at]);
-    return [String(at), `معنى «${other.quote}»، ${SURAH_NAMES[gharib.entries[at][0]]} ${num(other.ayah)}`];
+    return [String(at), { quote: other.quote, where: `${SURAH_NAMES[gharib.entries[at][0]]} ${num(other.ayah)}` }];
   }));
   const pages = all.map(at => gharib.entries[at][1]);
   const [first, last] = [Math.min(...pages), Math.max(...pages)];
   return {
     key: `${MEANING}:${asked}`,
     family: MEANING,
-    promptArabic: `ما معنى «${place.quote}»؟`,
+    // The words asked are coloured in the ayah below, in the mushaf's font, so the prompt does not copy them in the text font.
+    promptArabic: 'ما معنى ما لُوِّن من الآية؟',
     quran: place.words,
     number: place.ayah,
     marked: Array.from({ length: place.to - place.from + 1 }, (_, i) => place.from + i),

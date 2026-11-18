@@ -10,6 +10,7 @@ import type { PenRule } from "@shared/quran/writeAyah";
 import { mushafText } from "@shared/quran/mushafText";
 import { num } from "@shared/quran/arabicNumber";
 import Card from '@/components/common/Card';
+import QuranWords from '@/components/quran/text/QuranWords';
 
 export type ChoiceParts = Partial<Pick<ChoiceQuestion, "quran" | "number" | "reveal" | "page" | "ayahKey" | "alike" | "note" | "marked" | "explains">> & { correctAnswer?: string; family?: string; write?: WriteAsk };
 
@@ -58,6 +59,12 @@ export function ChoiceAfter({ question, given, surahName, ar, mushaf = true }: {
       <p className="text-sm text-[var(--home-muted)]">{`آية ${surahName?.(given!) ?? ""} التي تشبهها، ${num(Number(alike.key.split(":")[1]))}`}</p>
       <p className="text-justify font-quran text-xl leading-loose [text-align-last:right]"><Words words={alike.words} marked={alikeDiff(question.quran, alike.words).b} /></p>
     </div>}
+    {/* What each wrong choice is («معنى «فراتا»، المرسلات ٢٧»): solo, party and the review all draw this. */}
+    {question.explains && <ul className="flex flex-col gap-1 text-sm text-[var(--home-muted)]">
+      {Object.entries(question.explains).map(([value, { quote, where }]) => (
+        <li key={value}>{surahName?.(value) ? `${surahName(value)}: ` : ""}معنى «<QuranWords>{quote}</QuranWords>»، {where}</li>
+      ))}
+    </ul>}
     {question.note && <div><p className="text-sm text-[var(--home-muted)]">{question.note.label}</p><p className="leading-loose">{question.note.text}</p></div>}
     {mushaf && question.ayahKey && <Button className="self-start" size="sm" href={ayahHref(question.ayahKey)}><BookOpen size={16} aria-hidden />{ar ? "في المصحف" : "In the mushaf"}</Button>}
   </div>;

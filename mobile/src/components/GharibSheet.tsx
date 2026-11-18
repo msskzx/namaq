@@ -77,11 +77,13 @@ function GharibBody({ target, palette }: { target: GharibTarget; palette: Palett
           </QuranWords>
         </Card>
         {books.length > 1 && <Tabs options={books.map(book => ({ key: book, label: BOOK_NAMES[book] }))} value={shown} onChange={book => { setShown(book); setPicked(null); }} palette={palette} />}
-        {!gharibOn && !mufradatOn ? <BookList kind="gharib" palette={palette} />
+        {!books.length && !(gharibOn && mufradatOn) ? null
           : !books.length ? <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center', paddingVertical: 16 }}>لا كلام في الكتابين على هذه الكلمة.</Text>
           : (books.length === 1 ? books[0] : shown) === 'gharib'
             ? <Gharib entries={entries} picked={picked} onPick={setPicked} palette={palette} />
             : article && <Mufradat article={article} palette={palette} />}
+        {/* A hidden book is offered back under what the other shows (owner, 2026-11-15: books are the person's to keep). */}
+        {(!gharibOn || !mufradatOn) && <BookList kind="gharib" palette={palette} />}
       </ScrollView>
     </View>
   );

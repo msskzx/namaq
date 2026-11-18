@@ -5,7 +5,7 @@ Owner decisions 2026-11-18, after the audit `docs/audits/2026-11-18-alfaz-al-qur
 - **Layer 1, meaning in the ayah:** Ibn Qutaybah's «تفسير غريب القرآن». It feeds the reader sheet and the «ما معنى؟» quiz.
 - **Layer 2, the root:** al-Raghib's «المفردات في غريب القرآن», his whole article on the word's root. It is never offered as the word's meaning in its ayah.
 - **Text:** Shamela through Turath, the authors' words only (no editor's notes). Not OpenITI, whose licence is non-commercial.
-- **A word Ibn Qutaybah does not explain** shows al-Raghib's article only, as the balagha sheet shows only what the books hold.
+- **A word Ibn Qutaybah does not explain** opens on al-Raghib's article, as the balagha sheet shows only what the books hold. His pill stays only when he explains another word of the same ayah; an ayah he never touches shows al-Raghib alone.
 - **Quiz:** every choice is Ibn Qutaybah's own words: the right one his meaning of the word, the wrong ones his meanings of other words. We read every question and drop those where a wrong choice could also be right; the owner checks a sample before shipping.
 - **Build go (owner, "looks good"):** the whole Quran at once, no caps. On home, meaning questions join the feed's question cards, with no next button and no limit.
 
@@ -36,7 +36,7 @@ Both files are pinned by sha256 in `scripts/quran/buildGharib.ts`. Both are publ
   - `ambiguous`: 11 questions dropped because a wrong choice could also be read as right (e.g. البأساء/الضراء).
   - A repeat of a dropped question is dropped with it. 704 questions remain.
 - **On screen.** The question is the whole quote he explains, in its ayah, with the quote marked. After answering, each wrong choice shows the word it explains and where («معنى «فراتا»، المرسلات ٢٧»), and the note gives his pages.
-- **Where it appears.** The kind is `MEANING` (`shared/quiz/meaning.ts`), asked solo, in a party, and in the home feed's turn of question cards.
+- **Where it appears.** The kind is `MEANING` (`shared/quiz/meaning.ts`), asked solo, in a party, and in the home feed's turn of question cards. Hiding the book in the library hides the reader sheet's pill, not the quiz: the quiz is chosen by its own kind.
 
 ## Reader sheet
 
