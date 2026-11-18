@@ -46,8 +46,9 @@ test('the library opens from home and goes back to it', async ({ page }) => {
 
 test('the bar is Quran, hadith, home, tarajim and quizzes, and the mushaf opens from the Quran hub with the Quran button lit', async ({ page }) => {
   await open(page, '/');
-  const names = await page.getByRole('tab').evaluateAll(tabs => tabs.map(item => item.getAttribute('aria-label')));
-  expect(names).toEqual(['القرآن', 'الحديث', 'الرئيسية', 'التراجم', 'الاختبارات']);
+  // Polled: under a full run the bar may not have drawn all its tabs when the page first answers.
+  await expect.poll(() => page.getByRole('tab').evaluateAll(tabs => tabs.map(item => item.getAttribute('aria-label'))))
+    .toEqual(['القرآن', 'الحديث', 'الرئيسية', 'التراجم', 'الاختبارات']);
   await tab(page, 'التراجم').click();
   await expect(page.getByRole('heading', { name: 'التراجم', exact: true })).toBeVisible();
   await tab(page, 'القرآن').click();
