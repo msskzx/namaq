@@ -1,0 +1,313 @@
+{
+  "unit": {
+    "id": "siyar-v4-50-amr-ibn-said",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٥٠"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_as_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "261",
+      "layer": "MAIN",
+      "exact": "٥٠ - عَمْرُو بنُ سَعِيْدِ بنِ العَاصِ الأُمَوِيُّ"
+    },
+    {
+      "id": "sp_as1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "261",
+      "layer": "MAIN",
+      "exact": "عَمْرُو بنُ سَعِيْدِ بنِ العَاصِ الأُمَوِيُّ",
+      "prefix": "٥٠ - "
+    },
+    {
+      "id": "sp_as_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "261",
+      "layer": "MAIN",
+      "exact": "عَمْرُو بنُ",
+      "prefix": "٥٠ - "
+    },
+    {
+      "id": "sp_as_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "261",
+      "layer": "MAIN",
+      "exact": "سَعِيْدِ بنِ العَاصِ",
+      "prefix": "٥٠ - عَمْرُو بنُ "
+    },
+    {
+      "id": "sp_as_yarmuk",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "262",
+      "layer": "MAIN",
+      "exact": "اسْتُشْهِدَ يَوْمَ اليَرْمُوْكِ"
+    },
+    {
+      "id": "sp_as_day_yarmuk",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "262",
+      "layer": "MAIN",
+      "exact": "يَوْمَ اليَرْمُوْكِ",
+      "prefix": "اسْتُشْهِدَ "
+    },
+    {
+      "id": "sp_as_yuqal_word",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "262",
+      "layer": "MAIN",
+      "exact": "وَيُقَالُ",
+      "suffix": ": يَوْم أَجْنَادِيْنَ"
+    },
+    {
+      "id": "sp_as_ajn",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "262",
+      "layer": "MAIN",
+      "exact": "يَوْم أَجْنَادِيْنَ",
+      "prefix": "وَيُقَالُ: "
+    },
+    {
+      "id": "sp_as_ajn_word",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "262",
+      "layer": "MAIN",
+      "exact": "أَجْنَادِيْنَ",
+      "prefix": "وَيُقَالُ: يَوْم "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_as0",
+      "unit": "siyar-v4-50-amr-ibn-said",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_as_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_as_yuqal",
+      "unit": "siyar-v4-50-amr-ibn-said",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_as_yuqal"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_as_name",
+      "report": "r_as0",
+      "spans": [
+        "sp_as1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_as_yarmuk",
+      "report": "r_as0",
+      "spans": [
+        "sp_as_yarmuk"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_as_ajn",
+      "report": "r_as_yuqal",
+      "spans": [
+        "sp_as_ajn"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_as",
+      "parent": "sp_as1",
+      "exact": "عَمْرُو",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_as_father",
+      "parent": "sp_as1",
+      "exact": "سَعِيْدِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_as_y",
+      "parent": "sp_as_yarmuk",
+      "exact": "اسْتُشْهِدَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_as_yarmuk",
+      "parent": "sp_as_yarmuk",
+      "exact": "اليَرْمُوْكِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_as_yuqal",
+      "parent": "sp_as_yuqal_word",
+      "exact": "وَيُقَالُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_as_ajn",
+      "parent": "sp_as_ajn",
+      "exact": "أَجْنَادِيْنَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_as",
+      "mention": "m_as",
+      "agent": "amr-ibn-said-al-umawi",
+      "basis": [
+        {
+          "span": "sp_as_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_as_y",
+      "mention": "m_as_y",
+      "agent": "amr-ibn-said-al-umawi",
+      "basis": [
+        {
+          "span": "sp_as_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_as_father",
+      "mention": "m_as_father",
+      "agent": "said-ibn-al-as",
+      "basis": [
+        {
+          "span": "sp_as_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_as_yarmuk",
+      "mention": "m_as_yarmuk",
+      "event": "yarmuk",
+      "basis": [
+        {
+          "span": "sp_as_day_yarmuk",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_as_ajn",
+      "mention": "m_as_ajn",
+      "event": "ajnadayn",
+      "basis": [
+        {
+          "span": "sp_as_ajn_word",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_as_name",
+      "subject": "m_as",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_as1"
+        ]
+      },
+      "restsOn": [
+        "st_as_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_as_sex",
+      "subject": "m_as",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_as_sex"
+        ]
+      },
+      "restsOn": [
+        "st_as_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_as_father",
+      "subject": "m_as",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_as_father"
+      },
+      "restsOn": [
+        "st_as_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_as_yarmuk",
+      "subject": "m_as_y",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_as_yarmuk"
+      },
+      "restsOn": [
+        "st_as_yarmuk"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_as_ajn",
+      "subject": "m_as_y",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_as_ajn"
+      },
+      "restsOn": [
+        "st_as_ajn"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

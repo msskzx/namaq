@@ -1,0 +1,565 @@
+{
+  "unit": {
+    "id": "siyar-v4-57-zaid-ibn-al-khattab",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٥٧"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_zk_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "297",
+      "layer": "MAIN",
+      "exact": "٥٧ - زَيْدُ بنُ الخَطَّابِ بنِ نُفَيْلِ بنِ عَبْدِ العُزَّى بنِ رِيَاحٍ العَدَوِيُّ"
+    },
+    {
+      "id": "sp_zk1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "297",
+      "layer": "MAIN",
+      "exact": "زَيْدُ بنُ الخَطَّابِ بنِ نُفَيْلِ بنِ عَبْدِ العُزَّى بنِ رِيَاحٍ العَدَوِيُّ",
+      "prefix": "٥٧ - "
+    },
+    {
+      "id": "sp_zk_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "297",
+      "layer": "MAIN",
+      "exact": "زَيْدُ بنُ",
+      "prefix": "٥٧ - "
+    },
+    {
+      "id": "sp_zk_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "297",
+      "layer": "MAIN",
+      "exact": "الخَطَّابِ بنِ نُفَيْلِ",
+      "prefix": "زَيْدُ بنُ "
+    },
+    {
+      "id": "sp_zk_epithets",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "298",
+      "layer": "MAIN",
+      "exact": "السَّيِّدُ، الشَّهِيْدُ، المُجَاهِدُ، التَّقِيُّ، أَبُو عَبْدِ الرَّحْمَنِ القُرَشِيُّ، العَدَوِيُّ، أَخُو أَمِيْرِ المُؤْمِنِيْنَ عُمَرَ."
+    },
+    {
+      "id": "sp_zk_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "298",
+      "layer": "MAIN",
+      "exact": "أَبُو عَبْدِ الرَّحْمَنِ",
+      "prefix": "التَّقِيُّ، "
+    },
+    {
+      "id": "sp_zk_brother",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "298",
+      "layer": "MAIN",
+      "exact": "أَخُو أَمِيْرِ المُؤْمِنِيْنَ عُمَرَ",
+      "prefix": "العَدَوِيُّ، "
+    },
+    {
+      "id": "sp_zk_older",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "298",
+      "layer": "MAIN",
+      "exact": "وَكَانَ أَسَنَّ مِنْ عُمَرَ، وَأَسْلَمَ قَبْلَهُ."
+    },
+    {
+      "id": "sp_zk_older_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "298",
+      "layer": "MAIN",
+      "exact": "وَأَسْلَمَ قَبْلَهُ",
+      "prefix": "أَسَنَّ مِنْ عُمَرَ، ",
+      "suffix": "."
+    },
+    {
+      "id": "sp_zk_look_badr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "298",
+      "layer": "MAIN",
+      "exact": "وَكَانَ أَسْمَرَ، طَوِيْلاً جِدّاً، شَهِدَ بَدْراً وَالمَشَاهِدَ"
+    },
+    {
+      "id": "sp_zk_look",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "298",
+      "layer": "MAIN",
+      "exact": "أَسْمَرَ، طَوِيْلاً جِدّاً",
+      "prefix": "وَكَانَ "
+    },
+    {
+      "id": "sp_zk_day_badr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "298",
+      "layer": "MAIN",
+      "exact": "بَدْراً وَالمَشَاهِدَ",
+      "prefix": "جِدّاً، شَهِدَ "
+    },
+    {
+      "id": "sp_zk_raya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "298",
+      "layer": "MAIN",
+      "exact": "وَكَانَتْ رَايَةُ المُسْلِمِيْنَ مَعَهُ يَوْمَ اليَمَامَةِ، فَلَمْ يَزَلْ يَقْدَمُ بِهَا فِي نَحْرِ العَدُوِّ، ثُمَّ قَاتَلَ حَتَّى قُتِلَ"
+    },
+    {
+      "id": "sp_zk_place",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "298",
+      "layer": "MAIN",
+      "exact": "اليَمَامَةِ",
+      "prefix": "مَعَهُ يَوْمَ "
+    },
+    {
+      "id": "sp_zk_died",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "298",
+      "layer": "MAIN",
+      "exact": "اسْتُشْهِدَ فِي رَبِيْعٍ الأَوَّلِ، سَنَةَ اثْنَتَيْ عَشْرَةَ."
+    },
+    {
+      "id": "sp_zk_month",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "298",
+      "layer": "MAIN",
+      "exact": "رَبِيْعٍ الأَوَّلِ",
+      "prefix": "اسْتُشْهِدَ فِي "
+    },
+    {
+      "id": "sp_zk_year",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "298",
+      "layer": "MAIN",
+      "exact": "سَنَةَ اثْنَتَيْ عَشْرَةَ",
+      "prefix": "رَبِيْعٍ الأَوَّلِ، "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_zk0",
+      "unit": "siyar-v4-57-zaid-ibn-al-khattab",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_zk_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_zk_name",
+      "report": "r_zk0",
+      "spans": [
+        "sp_zk1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zk_epithets",
+      "report": "r_zk0",
+      "spans": [
+        "sp_zk_epithets"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zk_older",
+      "report": "r_zk0",
+      "spans": [
+        "sp_zk_older"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zk_look_badr",
+      "report": "r_zk0",
+      "spans": [
+        "sp_zk_look_badr"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zk_raya",
+      "report": "r_zk0",
+      "spans": [
+        "sp_zk_raya"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zk_died",
+      "report": "r_zk0",
+      "spans": [
+        "sp_zk_died"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_zk",
+      "parent": "sp_zk1",
+      "exact": "زَيْدُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zk_father",
+      "parent": "sp_zk1",
+      "exact": "الخَطَّابِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zk_e",
+      "parent": "sp_zk_epithets",
+      "exact": "أَبُو عَبْدِ الرَّحْمَنِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zk_umar",
+      "parent": "sp_zk_epithets",
+      "exact": "عُمَرَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zk_o",
+      "parent": "sp_zk_older",
+      "exact": "وَكَانَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zk_l",
+      "parent": "sp_zk_look_badr",
+      "exact": "وَكَانَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zk_badr",
+      "parent": "sp_zk_look_badr",
+      "exact": "بَدْراً",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zk_r",
+      "parent": "sp_zk_raya",
+      "exact": "مَعَهُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zk_d",
+      "parent": "sp_zk_died",
+      "exact": "اسْتُشْهِدَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_zk",
+      "mention": "m_zk",
+      "agent": "zaid-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_zk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zk_o",
+      "mention": "m_zk_o",
+      "agent": "zaid-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_zk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zk_l",
+      "mention": "m_zk_l",
+      "agent": "zaid-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_zk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zk_r",
+      "mention": "m_zk_r",
+      "agent": "zaid-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_zk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zk_d",
+      "mention": "m_zk_d",
+      "agent": "zaid-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_zk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zk_e",
+      "mention": "m_zk_e",
+      "agent": "zaid-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_zk1",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zk_father",
+      "mention": "m_zk_father",
+      "agent": "al-khattab-ibn-nufayl",
+      "basis": [
+        {
+          "span": "sp_zk_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zk_umar",
+      "mention": "m_zk_umar",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_zk_brother",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zk_badr",
+      "mention": "m_zk_badr",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_zk_day_badr",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_zk_name",
+      "subject": "m_zk",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_zk1"
+        ]
+      },
+      "restsOn": [
+        "st_zk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zk_sex",
+      "subject": "m_zk",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_zk_sex"
+        ]
+      },
+      "restsOn": [
+        "st_zk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zk_father",
+      "subject": "m_zk",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_zk_father"
+      },
+      "restsOn": [
+        "st_zk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zk_kunya",
+      "subject": "m_zk_e",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_zk_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_zk_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zk_brother",
+      "subject": "m_zk_e",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_zk_umar"
+      },
+      "restsOn": [
+        "st_zk_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zk_v_older",
+      "subject": "m_zk_o",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_zk_older_v"
+        ]
+      },
+      "restsOn": [
+        "st_zk_older"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zk_look",
+      "subject": "m_zk_l",
+      "predicate": "appearance",
+      "value": {
+        "spans": [
+          "sp_zk_look"
+        ]
+      },
+      "restsOn": [
+        "st_zk_look_badr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zk_badr",
+      "subject": "m_zk_l",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_zk_badr"
+      },
+      "restsOn": [
+        "st_zk_look_badr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zk_v_raya",
+      "subject": "m_zk_r",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_zk_raya"
+        ]
+      },
+      "restsOn": [
+        "st_zk_raya"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zk_place",
+      "subject": "m_zk_r",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "sp_zk_place"
+        ]
+      },
+      "restsOn": [
+        "st_zk_raya"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zk_year",
+      "subject": "m_zk_d",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 12,
+        "spans": [
+          "sp_zk_year"
+        ]
+      },
+      "restsOn": [
+        "st_zk_died"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zk_month",
+      "subject": "m_zk_d",
+      "predicate": "died.month",
+      "value": {
+        "parsed": 3,
+        "spans": [
+          "sp_zk_month"
+        ]
+      },
+      "restsOn": [
+        "st_zk_died"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

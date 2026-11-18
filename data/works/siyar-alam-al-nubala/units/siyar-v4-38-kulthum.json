@@ -1,0 +1,378 @@
+{
+  "unit": {
+    "id": "siyar-v4-38-kulthum",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٣٨"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_k_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "242",
+      "layer": "MAIN",
+      "exact": "٣٨ - كُلْثُوْمُ بنُ الهِدْمِ بنِ امْرِئِ القَيْسِ بنِ الحَارِثِ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sp_k1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "242",
+      "layer": "MAIN",
+      "exact": "كُلْثُوْمُ بنُ الهِدْمِ بنِ امْرِئِ القَيْسِ بنِ الحَارِثِ الأَنْصَارِيُّ",
+      "prefix": "٣٨ - "
+    },
+    {
+      "id": "sp_k2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "242",
+      "layer": "MAIN",
+      "exact": "ابْنِ زَيْدِ بنِ عُبَيْدِ بنِ زَيْدِ بنِ مَالِكِ بنِ عَوْفِ بنِ عَمْرِو بنِ عَوْفِ بنِ مَالِكِ بنِ الأَوْسِ الأَنْصَارِيُّ، العَوْفِيُّ"
+    },
+    {
+      "id": "sp_k_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "242",
+      "layer": "MAIN",
+      "exact": "كُلْثُوْمُ بنُ",
+      "prefix": "٣٨ - "
+    },
+    {
+      "id": "sp_k_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "242",
+      "layer": "MAIN",
+      "exact": "الهِدْمِ بنِ امْرِئِ القَيْسِ",
+      "prefix": "كُلْثُوْمُ بنُ "
+    },
+    {
+      "id": "sp_k_host",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "242",
+      "layer": "MAIN",
+      "exact": "شَيْخُ الأَنْصَارِ، وَمَنْ نَزَلَ عَلَيْهِ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَوَّلَ مَا قَدِمَ المَدِيْنَةَ بِقُبَاءَ، وَكَانَ قَدْ شَاخَ"
+    },
+    {
+      "id": "sp_k_qila_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "243",
+      "layer": "MAIN",
+      "exact": "فَلِذَلِكَ قَالَ الوَاقِدِيُّ:"
+    },
+    {
+      "id": "sp_k_qila",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "243",
+      "layer": "MAIN",
+      "exact": "نَزَلَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَلَى سَعْدِ بنِ خَيْثَمَةَ، وَنَزَلَ عَلَى كُلْثُوْمِ بنِ الهِدْمِ جَمَاعَةٌ مِنَ المُهَاجِرِيْنَ",
+      "prefix": "قِيْلَ: "
+    },
+    {
+      "id": "sp_k_qila_word",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "243",
+      "layer": "MAIN",
+      "exact": "قِيْلَ",
+      "suffix": ": نَزَلَ"
+    },
+    {
+      "id": "sp_k_saad_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "243",
+      "layer": "MAIN",
+      "exact": "سَعْدِ بنِ خَيْثَمَةَ",
+      "prefix": "عَلَى "
+    },
+    {
+      "id": "sp_k_salih",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "243",
+      "layer": "MAIN",
+      "exact": "ثُمَّ لَمْ يَلْبَثْ أَنْ تُوُفِّيَ -رَضِيَ اللهُ عَنْهُ- وَذَلِكَ قَبْلَ بَدْرٍ، وَكَانَ رَجُلاً صَالِحاً"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_k0",
+      "unit": "siyar-v4-38-kulthum",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_k_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_k_qila",
+      "unit": "siyar-v4-38-kulthum",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "frame": [
+        "sp_k_qila_frame"
+      ],
+      "origin": {
+        "mention": "m_k_qila"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_k_name",
+      "report": "r_k0",
+      "spans": [
+        "sp_k1",
+        "sp_k2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_k_host",
+      "report": "r_k0",
+      "spans": [
+        "sp_k_host"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_k_salih",
+      "report": "r_k0",
+      "spans": [
+        "sp_k_salih"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_k_qila",
+      "report": "r_k_qila",
+      "spans": [
+        "sp_k_qila"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_k",
+      "parent": "sp_k1",
+      "exact": "كُلْثُوْمُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_k_father",
+      "parent": "sp_k1",
+      "exact": "الهِدْمِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_k_h",
+      "parent": "sp_k_host",
+      "exact": "وَمَنْ نَزَلَ عَلَيْهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_k_s",
+      "parent": "sp_k_salih",
+      "exact": "تُوُفِّيَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_k_qila",
+      "parent": "sp_k_qila_word",
+      "exact": "قِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_k_q",
+      "parent": "sp_k_qila",
+      "exact": "كُلْثُوْمِ بنِ الهِدْمِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_k_saad",
+      "parent": "sp_k_qila",
+      "exact": "سَعْدِ بنِ خَيْثَمَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_k",
+      "mention": "m_k",
+      "agent": "kulthum-ibn-al-hidm",
+      "basis": [
+        {
+          "span": "sp_k_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_k_h",
+      "mention": "m_k_h",
+      "agent": "kulthum-ibn-al-hidm",
+      "basis": [
+        {
+          "span": "sp_k_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_k_s",
+      "mention": "m_k_s",
+      "agent": "kulthum-ibn-al-hidm",
+      "basis": [
+        {
+          "span": "sp_k_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_k_q",
+      "mention": "m_k_q",
+      "agent": "kulthum-ibn-al-hidm",
+      "basis": [
+        {
+          "span": "sp_k_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_k_father",
+      "mention": "m_k_father",
+      "agent": "al-hidm-ibn-imri-al-qays",
+      "basis": [
+        {
+          "span": "sp_k_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_k_saad",
+      "mention": "m_k_saad",
+      "agent": "saad-ibn-khaythamah",
+      "basis": [
+        {
+          "span": "sp_k_saad_name",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_k_name",
+      "subject": "m_k",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_k1",
+          "sp_k2"
+        ]
+      },
+      "restsOn": [
+        "st_k_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_k_sex",
+      "subject": "m_k",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_k_sex"
+        ]
+      },
+      "restsOn": [
+        "st_k_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_k_father",
+      "subject": "m_k",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_k_father"
+      },
+      "restsOn": [
+        "st_k_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_k_v_host",
+      "subject": "m_k_h",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_k_host"
+        ]
+      },
+      "restsOn": [
+        "st_k_host"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_k_v_qila",
+      "subject": "m_k_q",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_k_qila"
+        ]
+      },
+      "restsOn": [
+        "st_k_qila"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_k_v_salih",
+      "subject": "m_k_s",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_k_salih"
+        ]
+      },
+      "restsOn": [
+        "st_k_salih"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
