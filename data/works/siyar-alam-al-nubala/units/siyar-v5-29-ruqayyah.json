@@ -35,6 +35,15 @@
       "prefix": "٢٩ - رُقَيَّةُ بِنْتُ"
     },
     {
+      "id": "sp_rq_bint_rasul",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "250",
+      "layer": "MAIN",
+      "exact": "بِنْتُ رَسُوْلِ اللهِ",
+      "prefix": "٢٩ - رُقَيَّةُ"
+    },
+    {
       "id": "sp_rq_mother",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 5,
@@ -460,6 +469,21 @@
         "classified": "FEMALE",
         "spans": [
           "sp_rq_name"
+        ]
+      },
+      "restsOn": [
+        "st_rq_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rq_title",
+      "subject": "m_rq",
+      "predicate": "title",
+      "value": {
+        "classified": "daughter-of-prophet",
+        "spans": [
+          "sp_rq_bint_rasul"
         ]
       },
       "restsOn": [

@@ -35,6 +35,15 @@
       "prefix": "٣٠ - أُمُّ كُلْثُوْمٍ بِنْتُ"
     },
     {
+      "id": "sp_uk_bint_rasul",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "بِنْتُ رَسُوْلِ اللهِ",
+      "prefix": "٣٠ - أُمُّ كُلْثُوْمٍ"
+    },
+    {
       "id": "sp_uk_yuqal",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 5,
@@ -345,6 +354,21 @@
         "classified": "FEMALE",
         "spans": [
           "sp_uk_name"
+        ]
+      },
+      "restsOn": [
+        "st_uk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_title",
+      "subject": "m_uk",
+      "predicate": "title",
+      "value": {
+        "classified": "daughter-of-prophet",
+        "spans": [
+          "sp_uk_bint_rasul"
         ]
       },
       "restsOn": [
