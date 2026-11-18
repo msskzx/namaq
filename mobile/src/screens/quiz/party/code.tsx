@@ -159,8 +159,9 @@ function PartyFilters({ settings, change, palette }: { settings: PartySettings; 
 /** The kinds a party can mix (a recited snippet stays solo: the reader grades it alone). */
 const PARTY_KINDS: { id: QuizTopic; name: string }[] = [{ id: 'BRANCHES', name: 'متشابهات القرآن' }, ...CHOICE_KINDS.filter(kind => kind.party)];
 
-/** A choice question's surah view (which surah), or its plain choices. */
-const isAyahChoice = (question: Question): question is Question & ChoiceQuestion => Array.isArray((question as { quran?: unknown }).quran) || !!(question as { page?: unknown }).page;
+/** A choice question with something over its choices (an ayah, a page, a book's passage), or its plain choices. */
+const isAyahChoice = (question: Question): question is Question & ChoiceQuestion => Array.isArray((question as { quran?: unknown }).quran) || !!(question as { page?: unknown }).page
+  || typeof (question as { passage?: unknown }).passage === 'string';
 
 /** What the host chose; the host can change it until the quiz starts, everyone else only reads it. */
 function Settings({ settings, editable, send, palette }: { settings: PartySettings; editable: boolean; send: Send; palette: Palette }) {

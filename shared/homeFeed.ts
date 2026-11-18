@@ -16,6 +16,12 @@ export const hasMomentCard = (slot: number) => slot % 4 === 3;
 /** The moment of a batch, the same all day; each moment batch brings the next one. */
 export const momentOfSlot = (count: number, day: number, slot: number) => (count ? (((day * 3 + (slot - 3) / 4) % count) + count) % count : -1);
 
+/** A balagha term with its definition (owner, 2026-11-18) on every fourth batch from the third, with a scene. */
+export const hasTermCard = (slot: number) => slot % 4 === 2;
+
+/** The term of a batch, the same all day; each term batch brings the next one. */
+export const termOfSlot = (count: number, day: number, slot: number) => (count ? (((day * 5 + (slot - 2) / 4) % count) + count) % count : -1);
+
 /** A sira story, whole (owner, 2026-11-18), on every fourth batch from the second, with the books. */
 export const hasSiraCard = (slot: number) => slot % 4 === 1;
 
@@ -67,8 +73,8 @@ export function tarajimOfSlot<P extends { slug: string; virtues: readonly unknow
   return all[at];
 }
 
-/** The «صلة» card (owner, 2026-11-18): two people and the chain that joins them, on every fourth batch from the third. */
-export const hasTieCard = (slot: number) => slot % 4 === 2;
+/** The «صلة» card (owner, 2026-11-18): two people and the chain that joins them, on every fourth batch from the fifth. */
+export const hasTieCard = (slot: number) => slot > 0 && slot % 4 === 0;
 
 /** The pair a «صلة» card shows, the same all day, the next card the next pair. */
 export function tieOfSlot<T>(pairs: readonly T[], day: number, slot: number): T | null {

@@ -1,0 +1,1711 @@
+{
+  "unit": {
+    "id": "siyar-v3-abu-bakr",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": ""
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ab_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "7",
+      "layer": "MAIN",
+      "exact": "أبو بكر الصديق خليفة رسول الله صلى الله عليه وسلم"
+    },
+    {
+      "id": "sp_ab_hname",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "7",
+      "layer": "MAIN",
+      "exact": "أبو بكر الصديق",
+      "suffix": " خليفة رسول"
+    },
+    {
+      "id": "sp_ab_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "7",
+      "layer": "MAIN",
+      "exact": "أبو بكر",
+      "suffix": " الصديق خليفة"
+    },
+    {
+      "id": "sp_ab_siddiq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "7",
+      "layer": "MAIN",
+      "exact": "الصديق",
+      "prefix": "أبو بكر ",
+      "suffix": " خليفة"
+    },
+    {
+      "id": "sp_ab_caliph",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "7",
+      "layer": "MAIN",
+      "exact": "خليفة رسول الله صلى الله عليه وسلم",
+      "prefix": "الصديق "
+    },
+    {
+      "id": "sp_ab_ism",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "7",
+      "layer": "MAIN",
+      "exact": "عبد الله",
+      "prefix": "اسمه ",
+      "suffix": " -ويقال"
+    },
+    {
+      "id": "sp_ab_nasab2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "7",
+      "layer": "MAIN",
+      "exact": "بن أبي قحافة عثمان بن عامر بن عمرو بن كعب بن سعد بن تيم بن مرة بن كعب بن لؤي القرشي التيمي"
+    },
+    {
+      "id": "sp_ab_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "7",
+      "layer": "MAIN",
+      "exact": "اسمه عبد الله -ويقال: عتيق- بن أبي قحافة عثمان بن عامر بن عمرو بن كعب بن سعد بن تيم بن مرة بن كعب بن لؤي القرشي التيمي"
+    },
+    {
+      "id": "sp_ab_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "7",
+      "layer": "MAIN",
+      "exact": "عبد الله -ويقال: عتيق- بن",
+      "prefix": "اسمه "
+    },
+    {
+      "id": "sp_ab_father_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "7",
+      "layer": "MAIN",
+      "exact": "بن أبي قحافة عثمان بن عامر",
+      "prefix": "عتيق- "
+    },
+    {
+      "id": "sp_ab_mulaykah_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "7",
+      "layer": "MAIN",
+      "exact": "قال ابن أبي مليكة وغيره"
+    },
+    {
+      "id": "sp_ab_mulaykah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "7",
+      "layer": "MAIN",
+      "exact": "إنما كان عتيق لقبا له"
+    },
+    {
+      "id": "sp_ab_atiq_m",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "7",
+      "layer": "MAIN",
+      "exact": "عتيق",
+      "prefix": "إنما كان ",
+      "suffix": " لقبا له"
+    },
+    {
+      "id": "sp_ab_main_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "7",
+      "layer": "MAIN",
+      "exact": "وقال ابن معين",
+      "suffix": ": لقبه عتيق"
+    },
+    {
+      "id": "sp_ab_main",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "7",
+      "layer": "MAIN",
+      "exact": "لقبه عتيق لأن وجهه كان جميلا",
+      "prefix": "ابن معين: "
+    },
+    {
+      "id": "sp_ab_atiq_i",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "7",
+      "layer": "MAIN",
+      "exact": "عتيق",
+      "prefix": "لقبه ",
+      "suffix": " لأن وجهه"
+    },
+    {
+      "id": "sp_ab_first",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "7",
+      "layer": "MAIN",
+      "exact": "أول من آمن من الرجال",
+      "prefix": "وكان "
+    },
+    {
+      "id": "sp_ab_zuhri_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "8",
+      "layer": "MAIN",
+      "exact": "وعن الزهري، قال",
+      "suffix": ": كان أبو بكر أبيض"
+    },
+    {
+      "id": "sp_ab_zuhri",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "8",
+      "layer": "MAIN",
+      "exact": "كان أبو بكر أبيض أصفر لطيفا جعدا مسترق الوركين، لا يثبت إزاره على وركيه"
+    },
+    {
+      "id": "sp_ab_sayyid_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "9",
+      "layer": "MAIN",
+      "exact": "هشام بن عروة عن أبيه، عن عائشة، عن عمر"
+    },
+    {
+      "id": "sp_ab_sayyid_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "9",
+      "layer": "MAIN",
+      "exact": "عن عمر أنه قال",
+      "prefix": "عن عائشة، "
+    },
+    {
+      "id": "sp_ab_sayyid_grade",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "9",
+      "layer": "MAIN",
+      "exact": "صححه الترمذي",
+      "prefix": "عليه وسلم. "
+    },
+    {
+      "id": "sp_ab_sayyid",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "9",
+      "layer": "MAIN",
+      "exact": "أبو بكر سيدنا وخيرنا وأحبنا إلى رسول الله صلى الله عليه وسلم"
+    },
+    {
+      "id": "sp_ab_amann_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "10",
+      "layer": "MAIN",
+      "exact": "مالك في \"الموطأ عن أبي النضر، عن عبيد بن حنين، عن أبي سعيد الخدري"
+    },
+    {
+      "id": "sp_ab_amann_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "10",
+      "layer": "MAIN",
+      "exact": "فقال النبي صلى الله عليه وسلم:",
+      "suffix": " \"إن من أمن"
+    },
+    {
+      "id": "sp_ab_amann_grade",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "10",
+      "layer": "MAIN",
+      "exact": "متفق على صحته",
+      "prefix": "أبي بكر\". "
+    },
+    {
+      "id": "sp_ab_amann",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "10",
+      "layer": "MAIN",
+      "exact": "إن من أمن الناس علي في صحبته وماله أبو بكر"
+    },
+    {
+      "id": "sp_ab_khalil",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "10",
+      "layer": "MAIN",
+      "exact": "ولو كنت متخذا خليلا لاتخذت أبا بكر خليلا، ولكن أخوة الإسلام",
+      "prefix": "وماله أبو بكر، "
+    },
+    {
+      "id": "sp_ab_khawkhah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "10",
+      "layer": "MAIN",
+      "exact": "لا تبقين في المسجد خوخة إلا خوخة أبي بكر"
+    },
+    {
+      "id": "sp_ab_alam",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "10",
+      "layer": "MAIN",
+      "exact": "وكان أبو بكر أعلمنا به"
+    },
+    {
+      "id": "sp_ab_alam_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "10",
+      "layer": "MAIN",
+      "exact": "عن أبي سعيد الخدري"
+    },
+    {
+      "id": "sp_ab_tajidi_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "11",
+      "layer": "MAIN",
+      "exact": "وقال محمد بن جبير بن مطعم: أخبرني أبي"
+    },
+    {
+      "id": "sp_ab_tajidi_grade",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "11",
+      "layer": "MAIN",
+      "exact": "متفق على صحته",
+      "prefix": "أبا بكر\". "
+    },
+    {
+      "id": "sp_ab_tajidi_pframe",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "11",
+      "layer": "MAIN",
+      "exact": "أن امرأة أتت رسول الله صلى الله عليه وسلم فكلمته في شيء"
+    },
+    {
+      "id": "sp_ab_tajidi",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "11",
+      "layer": "MAIN",
+      "exact": "إن لم تجديني فأتى أبا بكر"
+    },
+    {
+      "id": "sp_ab_yaba_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "12",
+      "layer": "MAIN",
+      "exact": "وقال صالح بن كيسان، عن الزهري، عن عروة، عن عائشة"
+    },
+    {
+      "id": "sp_ab_yaba_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "12",
+      "layer": "MAIN",
+      "exact": "قال لي رسول الله صلى الله عليه وسلم في مرضه"
+    },
+    {
+      "id": "sp_ab_yaba_grade",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "12",
+      "layer": "MAIN",
+      "exact": "هذا حديث صحيح",
+      "prefix": "أبا بكر\". "
+    },
+    {
+      "id": "sp_ab_yaba",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "12",
+      "layer": "MAIN",
+      "exact": "ويأبي الله والمؤمنون إلا أبا بكر"
+    },
+    {
+      "id": "sp_ab_sahibi_grade",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "12",
+      "layer": "MAIN",
+      "exact": "وأخرج البخاري من حديث أبي إدريس الخولاني، قال: سمعت أبا الدرداء يقول"
+    },
+    {
+      "id": "sp_ab_sahibi_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "13",
+      "layer": "MAIN",
+      "exact": "فقال رسول الله صلى الله عليه وسلم:",
+      "suffix": " \"هل أنتم"
+    },
+    {
+      "id": "sp_ab_sahibi",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "13",
+      "layer": "MAIN",
+      "exact": "هل أنتم تاركو لي صاحبي؟ إني قلت: يا أيها الناس إني رسول الله إليكم جميعا، فقلتم: كذبت وقال أبو بكر: صدقت"
+    },
+    {
+      "id": "sp_ab_khayr_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "15",
+      "layer": "MAIN",
+      "exact": "وقال علي -رضي الله عنه:"
+    },
+    {
+      "id": "sp_ab_khayr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "15",
+      "layer": "MAIN",
+      "exact": "خير هذه الأمة بعد نبيها أبو بكر، وعمر"
+    },
+    {
+      "id": "sp_ab_khayr_grade",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "15",
+      "layer": "MAIN",
+      "exact": "هذا والله العظيم قاله علي وهو متواتر عنه"
+    },
+    {
+      "id": "sp_ab_mushaf_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "15",
+      "layer": "MAIN",
+      "exact": "وقال السدي، عن عبد خير، عن علي، قال"
+    },
+    {
+      "id": "sp_ab_mushaf_grade",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "15",
+      "layer": "MAIN",
+      "exact": "إسناده حسن",
+      "prefix": "بين اللوحين. "
+    },
+    {
+      "id": "sp_ab_mushaf",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "15",
+      "layer": "MAIN",
+      "exact": "أعظم الناس أجرا في المصاحف أبو بكر، كان أول من جمع القرآن بين اللوحين"
+    },
+    {
+      "id": "sp_ab_mashar_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "16",
+      "layer": "MAIN",
+      "exact": "وقال أبو معشر",
+      "suffix": ": سنتين"
+    },
+    {
+      "id": "sp_ab_mashar",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "16",
+      "layer": "MAIN",
+      "exact": "سنتين وأربعة أشهر إلا أربع ليال، عن ثلاث وستين سنة"
+    },
+    {
+      "id": "sp_ab_age",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "16",
+      "layer": "MAIN",
+      "exact": "عن ثلاث وستين سنة",
+      "prefix": "أربع ليال، "
+    },
+    {
+      "id": "sp_ab_ghusl_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "19",
+      "layer": "MAIN",
+      "exact": "وقال الزهري",
+      "suffix": ": أوصى أبو بكر"
+    },
+    {
+      "id": "sp_ab_ghusl",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "19",
+      "layer": "MAIN",
+      "exact": "أوصى أبو بكر أن تغسله امرأته أسماء بنت عميس، فإن لم تستطع استعانت بابنه عبد الرحمن"
+    },
+    {
+      "id": "sp_ab_imraatuh",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "19",
+      "layer": "MAIN",
+      "exact": "تغسله امرأته أسماء بنت عميس"
+    },
+    {
+      "id": "sp_ab_ibnuh",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "19",
+      "layer": "MAIN",
+      "exact": "استعانت بابنه عبد الرحمن"
+    },
+    {
+      "id": "sp_ab_saddaqa",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "13",
+      "layer": "MAIN",
+      "exact": "وقال أبو بكر: صدقت"
+    },
+    {
+      "id": "sp_ab_qila_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "7",
+      "layer": "MAIN",
+      "exact": "وقيل",
+      "suffix": ": كان أبيض نحيفا"
+    },
+    {
+      "id": "sp_ab_qila",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "7",
+      "layer": "MAIN",
+      "exact": "كان أبيض نحيفا خفيف العارضين، معروق الوجه، غائر العينين، ناتئ الجبهة، يخضب شيبه بالحناء والكتم"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ab0",
+      "unit": "siyar-v3-abu-bakr",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ab_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ab_mulaykah",
+      "unit": "siyar-v3-abu-bakr",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ab_mulaykah_frame"
+      ],
+      "origin": {
+        "mention": "m_ab_mulaykah"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ab_main",
+      "unit": "siyar-v3-abu-bakr",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ab_main_frame"
+      ],
+      "origin": {
+        "mention": "m_ab_main"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ab_zuhri",
+      "unit": "siyar-v3-abu-bakr",
+      "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ab_zuhri_frame"
+      ],
+      "origin": {
+        "mention": "m_ab_zuhri"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ab_sayyid",
+      "unit": "siyar-v3-abu-bakr",
+      "ordinal": 5,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ab_sayyid_frame",
+        "sp_ab_sayyid_grade"
+      ],
+      "isnadSpan": "sp_ab_sayyid_isnad",
+      "origin": {
+        "mention": "m_ab_umar"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ab_amann",
+      "unit": "siyar-v3-abu-bakr",
+      "ordinal": 6,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ab_amann_frame",
+        "sp_ab_amann_grade"
+      ],
+      "isnadSpan": "sp_ab_amann_isnad",
+      "origin": {
+        "mention": "m_ab_p_amann"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ab_alam",
+      "unit": "siyar-v3-abu-bakr",
+      "ordinal": 7,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ab_alam_frame",
+        "sp_ab_amann_grade"
+      ],
+      "isnadSpan": "sp_ab_amann_isnad",
+      "origin": {
+        "mention": "m_ab_abusaid"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ab_tajidi",
+      "unit": "siyar-v3-abu-bakr",
+      "ordinal": 8,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ab_tajidi_frame",
+        "sp_ab_tajidi_pframe",
+        "sp_ab_tajidi_grade"
+      ],
+      "origin": {
+        "mention": "m_ab_p_tajidi"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ab_yaba",
+      "unit": "siyar-v3-abu-bakr",
+      "ordinal": 9,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ab_yaba_frame",
+        "sp_ab_yaba_grade"
+      ],
+      "isnadSpan": "sp_ab_yaba_isnad",
+      "origin": {
+        "mention": "m_ab_p_yaba"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ab_sahibi",
+      "unit": "siyar-v3-abu-bakr",
+      "ordinal": 10,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ab_sahibi_grade",
+        "sp_ab_sahibi_frame"
+      ],
+      "origin": {
+        "mention": "m_ab_p_sahibi"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ab_khayr",
+      "unit": "siyar-v3-abu-bakr",
+      "ordinal": 11,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ab_khayr_frame",
+        "sp_ab_khayr_grade"
+      ],
+      "origin": {
+        "mention": "m_ab_ali_khayr"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ab_mushaf",
+      "unit": "siyar-v3-abu-bakr",
+      "ordinal": 12,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ab_mushaf_grade"
+      ],
+      "isnadSpan": "sp_ab_mushaf_isnad",
+      "origin": {
+        "mention": "m_ab_ali_mushaf"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ab_mashar",
+      "unit": "siyar-v3-abu-bakr",
+      "ordinal": 13,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ab_mashar_frame"
+      ],
+      "origin": {
+        "mention": "m_ab_mashar"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ab_ghusl",
+      "unit": "siyar-v3-abu-bakr",
+      "ordinal": 14,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ab_ghusl_frame"
+      ],
+      "origin": {
+        "mention": "m_ab_zuhri2"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ab_qila",
+      "unit": "siyar-v3-abu-bakr",
+      "ordinal": 15,
+      "voice": "REPORTED_ANONYMOUS",
+      "frame": [
+        "sp_ab_qila_frame"
+      ],
+      "origin": {
+        "mention": "m_ab_qila"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ab_name",
+      "report": "r_ab0",
+      "spans": [
+        "sp_ab_hname",
+        "sp_ab_nasab"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ab_heading",
+      "report": "r_ab0",
+      "spans": [
+        "sp_ab_heading"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ab_first",
+      "report": "r_ab0",
+      "spans": [
+        "sp_ab_first"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ab_mulaykah",
+      "report": "r_ab_mulaykah",
+      "spans": [
+        "sp_ab_mulaykah"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ab_main",
+      "report": "r_ab_main",
+      "spans": [
+        "sp_ab_main"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ab_zuhri",
+      "report": "r_ab_zuhri",
+      "spans": [
+        "sp_ab_zuhri"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ab_sayyid",
+      "report": "r_ab_sayyid",
+      "spans": [
+        "sp_ab_sayyid"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ab_amann",
+      "report": "r_ab_amann",
+      "spans": [
+        "sp_ab_amann"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ab_khalil",
+      "report": "r_ab_amann",
+      "spans": [
+        "sp_ab_khalil"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ab_khawkhah",
+      "report": "r_ab_amann",
+      "spans": [
+        "sp_ab_khawkhah"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ab_alam",
+      "report": "r_ab_alam",
+      "spans": [
+        "sp_ab_alam"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ab_tajidi",
+      "report": "r_ab_tajidi",
+      "spans": [
+        "sp_ab_tajidi"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ab_yaba",
+      "report": "r_ab_yaba",
+      "spans": [
+        "sp_ab_yaba"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ab_sahibi",
+      "report": "r_ab_sahibi",
+      "spans": [
+        "sp_ab_sahibi"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ab_khayr",
+      "report": "r_ab_khayr",
+      "spans": [
+        "sp_ab_khayr"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ab_mushaf",
+      "report": "r_ab_mushaf",
+      "spans": [
+        "sp_ab_mushaf"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ab_mashar",
+      "report": "r_ab_mashar",
+      "spans": [
+        "sp_ab_mashar"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ab_ghusl",
+      "report": "r_ab_ghusl",
+      "spans": [
+        "sp_ab_ghusl"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ab_qila",
+      "report": "r_ab_qila",
+      "spans": [
+        "sp_ab_qila"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ab",
+      "parent": "sp_ab_hname",
+      "exact": "أبو بكر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_father",
+      "parent": "sp_ab_nasab",
+      "exact": "أبي قحافة عثمان",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ab_h",
+      "parent": "sp_ab_heading",
+      "exact": "أبو بكر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_mulaykah",
+      "parent": "sp_ab_mulaykah_frame",
+      "exact": "ابن أبي مليكة",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ab_lahu",
+      "parent": "sp_ab_mulaykah",
+      "exact": "له",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_main",
+      "parent": "sp_ab_main_frame",
+      "exact": "ابن معين",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ab_laqabuh",
+      "parent": "sp_ab_main",
+      "exact": "لقبه",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_zuhri",
+      "parent": "sp_ab_zuhri_frame",
+      "exact": "الزهري",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ab_z",
+      "parent": "sp_ab_zuhri",
+      "exact": "أبو بكر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_umar",
+      "parent": "sp_ab_sayyid_frame",
+      "exact": "عمر",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ab_sayyid",
+      "parent": "sp_ab_sayyid",
+      "exact": "أبو بكر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_p_amann",
+      "parent": "sp_ab_amann_frame",
+      "exact": "النبي",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ab_amann",
+      "parent": "sp_ab_amann",
+      "exact": "أبو بكر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_khalil",
+      "parent": "sp_ab_khalil",
+      "exact": "أبا بكر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_khawkhah",
+      "parent": "sp_ab_khawkhah",
+      "exact": "أبي بكر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_abusaid",
+      "parent": "sp_ab_alam_frame",
+      "exact": "أبي سعيد الخدري",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ab_alam",
+      "parent": "sp_ab_alam",
+      "exact": "أبو بكر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_p_tajidi",
+      "parent": "sp_ab_tajidi_pframe",
+      "exact": "رسول الله",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ab_tajidi",
+      "parent": "sp_ab_tajidi",
+      "exact": "أبا بكر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_p_yaba",
+      "parent": "sp_ab_yaba_frame",
+      "exact": "رسول الله",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ab_yaba",
+      "parent": "sp_ab_yaba",
+      "exact": "أبا بكر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_p_sahibi",
+      "parent": "sp_ab_sahibi_frame",
+      "exact": "رسول الله",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ab_sahibi",
+      "parent": "sp_ab_sahibi",
+      "exact": "صاحبي",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_sahibi_p",
+      "parent": "sp_ab_sahibi",
+      "exact": "رسول الله",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ab_ali_khayr",
+      "parent": "sp_ab_khayr_frame",
+      "exact": "علي",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ab_khayr",
+      "parent": "sp_ab_khayr",
+      "exact": "أبو بكر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_ali_mushaf",
+      "parent": "sp_ab_mushaf_isnad",
+      "exact": "علي",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ab_mushaf",
+      "parent": "sp_ab_mushaf",
+      "exact": "أبو بكر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_mashar",
+      "parent": "sp_ab_mashar_frame",
+      "exact": "أبو معشر",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ab_zuhri2",
+      "parent": "sp_ab_ghusl_frame",
+      "exact": "الزهري",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ab_g",
+      "parent": "sp_ab_ghusl",
+      "exact": "أبو بكر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_asma",
+      "parent": "sp_ab_ghusl",
+      "exact": "أسماء بنت عميس",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ab_abdrahman",
+      "parent": "sp_ab_ghusl",
+      "exact": "عبد الرحمن",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_qila",
+      "parent": "sp_ab_qila_frame",
+      "exact": "وقيل",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ab_h",
+      "mention": "m_ab_h",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "sp_ab_nasab",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab",
+      "mention": "m_ab",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_lahu",
+      "mention": "m_ab_lahu",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_laqabuh",
+      "mention": "m_ab_laqabuh",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_z",
+      "mention": "m_ab_z",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_sayyid",
+      "mention": "m_ab_sayyid",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_amann",
+      "mention": "m_ab_amann",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_khalil",
+      "mention": "m_ab_khalil",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_khawkhah",
+      "mention": "m_ab_khawkhah",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_alam",
+      "mention": "m_ab_alam",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_tajidi",
+      "mention": "m_ab_tajidi",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_yaba",
+      "mention": "m_ab_yaba",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_khayr",
+      "mention": "m_ab_khayr",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_mushaf",
+      "mention": "m_ab_mushaf",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_g",
+      "mention": "m_ab_g",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_sahibi",
+      "mention": "m_ab_sahibi",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "sp_ab_saddaqa",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_father",
+      "mention": "m_ab_father",
+      "agent": "uthman-ibn-amir",
+      "basis": [
+        {
+          "span": "sp_ab_father_nasab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_umar",
+      "mention": "m_ab_umar",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "sp_ab_sayyid_isnad",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_abusaid",
+      "mention": "m_ab_abusaid",
+      "agent": "abu-said-al-khudri",
+      "basis": [
+        {
+          "span": "sp_ab_amann_isnad",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_asma",
+      "mention": "m_ab_asma",
+      "agent": "asma-bint-umays",
+      "basis": [
+        {
+          "span": "sp_ab_imraatuh",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_abdrahman",
+      "mention": "m_ab_abdrahman",
+      "agent": "abd-al-rahman-ibn-abi-bakr",
+      "basis": [
+        {
+          "span": "sp_ab_ibnuh",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_ali_khayr",
+      "mention": "m_ab_ali_khayr",
+      "agent": "ali-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_ab_khayr_grade",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ab_name",
+      "subject": "m_ab",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ab_ism",
+          "sp_ab_nasab2"
+        ]
+      },
+      "restsOn": [
+        "st_ab_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_sex",
+      "subject": "m_ab",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ab_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ab_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_kunya",
+      "subject": "m_ab",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_ab_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_ab_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_father",
+      "subject": "m_ab",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ab_father"
+      },
+      "restsOn": [
+        "st_ab_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_siddiq",
+      "subject": "m_ab_h",
+      "predicate": "title",
+      "value": {
+        "classified": "siddiq-al-ummah",
+        "spans": [
+          "sp_ab_siddiq"
+        ]
+      },
+      "restsOn": [
+        "st_ab_heading"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_caliph",
+      "subject": "m_ab_h",
+      "predicate": "office",
+      "value": {
+        "classified": "caliph",
+        "spans": [
+          "sp_ab_caliph"
+        ]
+      },
+      "restsOn": [
+        "st_ab_heading"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_laqab_m",
+      "subject": "m_ab_lahu",
+      "predicate": "name.laqab",
+      "value": {
+        "spans": [
+          "sp_ab_atiq_m"
+        ]
+      },
+      "restsOn": [
+        "st_ab_mulaykah",
+        "st_ab_main"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_v_first",
+      "subject": "m_ab",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ab_first"
+        ]
+      },
+      "restsOn": [
+        "st_ab_first"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_app_zuhri",
+      "subject": "m_ab_z",
+      "predicate": "appearance",
+      "value": {
+        "spans": [
+          "sp_ab_zuhri"
+        ]
+      },
+      "restsOn": [
+        "st_ab_zuhri"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_v_sayyid",
+      "subject": "m_ab_sayyid",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ab_sayyid"
+        ]
+      },
+      "restsOn": [
+        "st_ab_sayyid"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_v_amann",
+      "subject": "m_ab_amann",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ab_amann"
+        ]
+      },
+      "restsOn": [
+        "st_ab_amann"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_v_khalil",
+      "subject": "m_ab_khalil",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ab_khalil"
+        ]
+      },
+      "restsOn": [
+        "st_ab_khalil"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_v_khawkhah",
+      "subject": "m_ab_khawkhah",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ab_khawkhah"
+        ]
+      },
+      "restsOn": [
+        "st_ab_khawkhah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_v_alam",
+      "subject": "m_ab_alam",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ab_alam"
+        ]
+      },
+      "restsOn": [
+        "st_ab_alam"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_v_tajidi",
+      "subject": "m_ab_tajidi",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ab_tajidi"
+        ]
+      },
+      "restsOn": [
+        "st_ab_tajidi"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_v_yaba",
+      "subject": "m_ab_yaba",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ab_yaba"
+        ]
+      },
+      "restsOn": [
+        "st_ab_yaba"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_v_sahibi",
+      "subject": "m_ab_sahibi",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ab_sahibi"
+        ]
+      },
+      "restsOn": [
+        "st_ab_sahibi"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_comp",
+      "subject": "m_ab_sahibi",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_ab_sahibi_p"
+      },
+      "restsOn": [
+        "st_ab_sahibi"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_v_khayr",
+      "subject": "m_ab_khayr",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ab_khayr"
+        ]
+      },
+      "restsOn": [
+        "st_ab_khayr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_v_mushaf",
+      "subject": "m_ab_mushaf",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ab_mushaf"
+        ]
+      },
+      "restsOn": [
+        "st_ab_mushaf"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_age",
+      "subject": "m_ab",
+      "predicate": "died.age",
+      "value": {
+        "parsed": 63,
+        "spans": [
+          "sp_ab_age"
+        ]
+      },
+      "restsOn": [
+        "st_ab_mashar"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_wife",
+      "subject": "m_ab_g",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_ab_asma"
+      },
+      "restsOn": [
+        "st_ab_ghusl"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_son",
+      "subject": "m_ab_abdrahman",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ab_g"
+      },
+      "restsOn": [
+        "st_ab_ghusl"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_app_qila",
+      "subject": "m_ab",
+      "predicate": "appearance",
+      "value": {
+        "spans": [
+          "sp_ab_qila"
+        ]
+      },
+      "restsOn": [
+        "st_ab_qila"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

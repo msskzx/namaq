@@ -1,0 +1,940 @@
+{
+  "unit": {
+    "id": "siyar-v5-21-zaynab-bint-jahsh",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٢١"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_zj_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "211",
+      "layer": "MAIN",
+      "exact": "٢١ - زَيْنَبُ بِنْتُ جَحْشِ بنِ رِيَابٍ أُمُّ المُؤْمِنِيْنَ"
+    },
+    {
+      "id": "sp_zj_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "211",
+      "layer": "MAIN",
+      "exact": "زَيْنَبُ بِنْتُ جَحْشِ بنِ رِيَابٍ",
+      "prefix": "٢١ -"
+    },
+    {
+      "id": "sp_zj_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "211",
+      "layer": "MAIN",
+      "exact": "زَيْنَبُ بِنْتُ",
+      "prefix": "٢١ -"
+    },
+    {
+      "id": "sp_zj_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "211",
+      "layer": "MAIN",
+      "exact": "جَحْشِ بنِ رِيَابٍ",
+      "prefix": "زَيْنَبُ بِنْتُ"
+    },
+    {
+      "id": "sp_zj_umm",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "211",
+      "layer": "MAIN",
+      "exact": "أُمُّ المُؤْمِنِيْنَ",
+      "prefix": "جَحْشِ بنِ رِيَابٍ"
+    },
+    {
+      "id": "sp_zj_cousin",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "211",
+      "layer": "MAIN",
+      "exact": "وَابْنَةُ عَمَّةِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-"
+    },
+    {
+      "id": "sp_zj_rasul",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "211",
+      "layer": "MAIN",
+      "exact": "رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-",
+      "prefix": "وَابْنَةُ عَمَّةِ"
+    },
+    {
+      "id": "sp_zj_mother",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "211",
+      "layer": "MAIN",
+      "exact": "أُمُّهَا: أُمَيْمَةُ بِنْتُ عَبْدِ المُطَّلِبِ بنِ هَاشِمٍ"
+    },
+    {
+      "id": "sp_zj_mother_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "211",
+      "layer": "MAIN",
+      "exact": "أُمَيْمَةُ بِنْتُ عَبْدِ المُطَّلِبِ بنِ هَاشِمٍ"
+    },
+    {
+      "id": "sp_zj_sibs",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "211",
+      "layer": "MAIN",
+      "exact": "وَهِيَ أُخْتُ: حَمْنَةَ، وَأَبِي أَحْمَدَ"
+    },
+    {
+      "id": "sp_zj_sibs_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "211",
+      "layer": "MAIN",
+      "exact": "حَمْنَةَ، وَأَبِي أَحْمَدَ",
+      "prefix": "وَهِيَ أُخْتُ:"
+    },
+    {
+      "id": "sp_zj_muhajirat",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "211",
+      "layer": "MAIN",
+      "exact": "مِنَ المُهَاجِرَات الأُوَلِ"
+    },
+    {
+      "id": "sp_zj_zayd",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "211",
+      "layer": "MAIN",
+      "exact": "كَانَتْ عِنْدَ زَيْدٍ مَوْلَى النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-"
+    },
+    {
+      "id": "sp_zj_zayd_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "211",
+      "layer": "MAIN",
+      "exact": "زَيْدٍ مَوْلَى النَّبِيِّ"
+    },
+    {
+      "id": "sp_zj_ayah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "211",
+      "layer": "MAIN",
+      "exact": "وَهِيَ الَّتِي يَقُوْلُ اللهُ فِيْهَا"
+    },
+    {
+      "id": "sp_zj_ayah_ref",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "211",
+      "layer": "MAIN",
+      "exact": "[الأَحْزَابُ: ٣٧٠]",
+      "prefix": "زَوَّجْنَاكَهَا}"
+    },
+    {
+      "id": "sp_zj_zawwaja",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "211",
+      "layer": "MAIN",
+      "exact": "فَزَوَّجَهَا اللهُ -تَعَالَى- بِنَبِيِّهِ بِنَصِّ كِتَابِهِ، بِلاَ وَلِيٍّ وَلاَ شَاهِدٍ"
+    },
+    {
+      "id": "sp_zj_sadah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "212",
+      "layer": "MAIN",
+      "exact": "وَكَانَتْ مِنْ سَادَةِ النِّسَاءِ دِيْناً، وَوَرَعاً، وَجُوْداً، وَمَعْرُوْفاً"
+    },
+    {
+      "id": "sp_zj_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "212",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَتْ فِي سَنَةِ عِشْرِيْنَ، وَصَلَّى عَلَيْهَا عُمَرُ"
+    },
+    {
+      "id": "sp_zj_death_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "212",
+      "layer": "MAIN",
+      "exact": "سَنَةِ عِشْرِيْنَ",
+      "prefix": "تُوُفِّيَتْ فِي"
+    },
+    {
+      "id": "sp_zj_yad_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "213",
+      "layer": "MAIN",
+      "exact": "وَهِيَ الَّتِي كَانَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَقُوْلُ:"
+    },
+    {
+      "id": "sp_zj_yad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "213",
+      "layer": "MAIN",
+      "exact": "أَسْرَعُكُنَّ لُحُوْقاً بِي: أَطْوَلُكُنَّ يَداً"
+    },
+    {
+      "id": "sp_zj_aisha_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "213",
+      "layer": "MAIN",
+      "exact": "وَرُوِيَ عَنْ عَائِشَةَ، قَالَتْ:"
+    },
+    {
+      "id": "sp_zj_aisha",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "213",
+      "layer": "MAIN",
+      "exact": "مَا رَأَيْتُ امْرَأَةً خَيْراً فِي الدِّيْنِ مِنْ زَيْنَبَ، أَتْقَى للهِ،"
+    },
+    {
+      "id": "sp_zj_aisha_1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "214",
+      "layer": "MAIN",
+      "exact": "وَأَصْدَقَ حَدِيْثاً، وَأَوْصَلَ لِلرَّحِمِ، وَأَعْظَمَ صَدَقَةً"
+    },
+    {
+      "id": "sp_zj_salihah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "217",
+      "layer": "MAIN",
+      "exact": "وَكَانَتْ صَالِحَةً، صَوَّامَةً، قَوَّامَةً، بَارَّةً"
+    },
+    {
+      "id": "sp_zj_masakin",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "217",
+      "layer": "MAIN",
+      "exact": "وَيُقَالُ لَهَا: أُمُّ المَسَاكِيْنِ"
+    },
+    {
+      "id": "sp_zj_masakin_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "217",
+      "layer": "MAIN",
+      "exact": "أُمُّ المَسَاكِيْنِ",
+      "prefix": "وَيُقَالُ لَهَا:"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_zj0",
+      "unit": "siyar-v5-21-zaynab-bint-jahsh",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_zj_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_zj_yad",
+      "unit": "siyar-v5-21-zaynab-bint-jahsh",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_zj_yad_frame"
+      ],
+      "origin": {
+        "mention": "m_zj_yad_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_zj_aisha",
+      "unit": "siyar-v5-21-zaynab-bint-jahsh",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_zj_aisha_frame"
+      ],
+      "origin": {
+        "mention": "m_zj_aisha_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_zj_masakin",
+      "unit": "siyar-v5-21-zaynab-bint-jahsh",
+      "ordinal": 4,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_zj_masakin_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_zj_name",
+      "report": "r_zj0",
+      "spans": [
+        "sp_zj_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zj_umm",
+      "report": "r_zj0",
+      "spans": [
+        "sp_zj_umm"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zj_cousin",
+      "report": "r_zj0",
+      "spans": [
+        "sp_zj_cousin"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zj_mother",
+      "report": "r_zj0",
+      "spans": [
+        "sp_zj_mother"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zj_sibs",
+      "report": "r_zj0",
+      "spans": [
+        "sp_zj_sibs"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zj_muhajirat",
+      "report": "r_zj0",
+      "spans": [
+        "sp_zj_muhajirat"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zj_zayd",
+      "report": "r_zj0",
+      "spans": [
+        "sp_zj_zayd"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zj_ayah",
+      "report": "r_zj0",
+      "spans": [
+        "sp_zj_ayah",
+        "sp_zj_ayah_ref"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zj_zawwaja",
+      "report": "r_zj0",
+      "spans": [
+        "sp_zj_zawwaja"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zj_sadah",
+      "report": "r_zj0",
+      "spans": [
+        "sp_zj_sadah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zj_death",
+      "report": "r_zj0",
+      "spans": [
+        "sp_zj_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zj_yad",
+      "report": "r_zj_yad",
+      "spans": [
+        "sp_zj_yad"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_zj_aisha",
+      "report": "r_zj_aisha",
+      "spans": [
+        "sp_zj_aisha",
+        "sp_zj_aisha_1"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_zj_salihah",
+      "report": "r_zj0",
+      "spans": [
+        "sp_zj_salihah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zj_masakin",
+      "report": "r_zj_masakin",
+      "spans": [
+        "sp_zj_masakin"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_zj",
+      "parent": "sp_zj_name",
+      "exact": "زَيْنَبُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zj_father",
+      "parent": "sp_zj_name",
+      "exact": "جَحْشِ بنِ رِيَابٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zj_prophet_c",
+      "parent": "sp_zj_cousin",
+      "exact": "رَسُوْلِ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zj_mo",
+      "parent": "sp_zj_mother",
+      "exact": "أُمُّهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zj_umaymah",
+      "parent": "sp_zj_mother",
+      "exact": "أُمَيْمَةُ بِنْتُ عَبْدِ المُطَّلِبِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zj_s",
+      "parent": "sp_zj_sibs",
+      "exact": "وَهِيَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zj_hamnah",
+      "parent": "sp_zj_sibs",
+      "exact": "حَمْنَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zj_abuahmad",
+      "parent": "sp_zj_sibs",
+      "exact": "أَبِي أَحْمَدَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zj_zayd",
+      "parent": "sp_zj_zayd",
+      "exact": "زَيْدٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zj_ay",
+      "parent": "sp_zj_ayah",
+      "exact": "وَهِيَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zj_nabi",
+      "parent": "sp_zj_zawwaja",
+      "exact": "بِنَبِيِّهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zj_yad_by",
+      "parent": "sp_zj_yad_frame",
+      "exact": "النَّبِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_zj_yad",
+      "parent": "sp_zj_yad_frame",
+      "exact": "وَهِيَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zj_aisha_by",
+      "parent": "sp_zj_aisha_frame",
+      "exact": "عَائِشَةَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_zj_ai",
+      "parent": "sp_zj_aisha",
+      "exact": "زَيْنَبَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zj_masakin_by",
+      "parent": "sp_zj_masakin",
+      "exact": "يُقَالُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_zj_ms",
+      "parent": "sp_zj_masakin",
+      "exact": "لَهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_zj",
+      "mention": "m_zj",
+      "agent": "zaynab-bint-jahsh",
+      "basis": [
+        {
+          "span": "sp_zj_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zj_father",
+      "mention": "m_zj_father",
+      "agent": "jahsh-ibn-riyab",
+      "basis": [
+        {
+          "span": "sp_zj_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zj_prophet_c",
+      "mention": "m_zj_prophet_c",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_zj_rasul",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zj_mo",
+      "mention": "m_zj_mo",
+      "agent": "zaynab-bint-jahsh",
+      "basis": [
+        {
+          "span": "sp_zj_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zj_umaymah",
+      "mention": "m_zj_umaymah",
+      "agent": "umaymah-bint-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_zj_mother_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zj_s",
+      "mention": "m_zj_s",
+      "agent": "zaynab-bint-jahsh",
+      "basis": [
+        {
+          "span": "sp_zj_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zj_hamnah",
+      "mention": "m_zj_hamnah",
+      "agent": "hamnah-bint-jahsh",
+      "basis": [
+        {
+          "span": "sp_zj_sibs_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zj_abuahmad",
+      "mention": "m_zj_abuahmad",
+      "agent": "abu-ahmad-ibn-jahsh",
+      "basis": [
+        {
+          "span": "sp_zj_sibs_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zj_zayd",
+      "mention": "m_zj_zayd",
+      "agent": "zaid-ibn-harithah",
+      "basis": [
+        {
+          "span": "sp_zj_zayd_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zj_ay",
+      "mention": "m_zj_ay",
+      "agent": "zaynab-bint-jahsh",
+      "basis": [
+        {
+          "span": "sp_zj_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zj_nabi",
+      "mention": "m_zj_nabi",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_zj_cousin",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zj_yad",
+      "mention": "m_zj_yad",
+      "agent": "zaynab-bint-jahsh",
+      "basis": [
+        {
+          "span": "sp_zj_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zj_ai",
+      "mention": "m_zj_ai",
+      "agent": "zaynab-bint-jahsh",
+      "basis": [
+        {
+          "span": "sp_zj_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zj_ms",
+      "mention": "m_zj_ms",
+      "agent": "zaynab-bint-jahsh",
+      "basis": [
+        {
+          "span": "sp_zj_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_zj_name",
+      "subject": "m_zj",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_zj_name"
+        ]
+      },
+      "restsOn": [
+        "st_zj_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zj_sex",
+      "subject": "m_zj",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_zj_sex"
+        ]
+      },
+      "restsOn": [
+        "st_zj_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zj_father",
+      "subject": "m_zj",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_zj_father"
+      },
+      "restsOn": [
+        "st_zj_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zj_umm",
+      "subject": "m_zj",
+      "predicate": "title",
+      "value": {
+        "classified": "mother-of-believers",
+        "spans": [
+          "sp_zj_umm"
+        ]
+      },
+      "restsOn": [
+        "st_zj_umm"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zj_cousin",
+      "subject": "m_zj",
+      "predicate": "PATERNAL_COUSIN",
+      "value": {
+        "object": "m_zj_prophet_c"
+      },
+      "restsOn": [
+        "st_zj_cousin"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zj_mother",
+      "subject": "m_zj_mo",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_zj_umaymah"
+      },
+      "restsOn": [
+        "st_zj_mother"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zj_hamnah",
+      "subject": "m_zj_s",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_zj_hamnah"
+      },
+      "restsOn": [
+        "st_zj_sibs"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zj_abuahmad",
+      "subject": "m_zj_s",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_zj_abuahmad"
+      },
+      "restsOn": [
+        "st_zj_sibs"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zj_zayd",
+      "subject": "m_zj",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_zj_zayd"
+      },
+      "restsOn": [
+        "st_zj_zayd"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zj_ayah",
+      "subject": "m_zj_ay",
+      "predicate": "ABOUT_AYAH",
+      "value": {
+        "classified": "33:37",
+        "spans": [
+          "sp_zj_ayah_ref"
+        ]
+      },
+      "restsOn": [
+        "st_zj_ayah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zj_nabi",
+      "subject": "m_zj",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_zj_nabi"
+      },
+      "restsOn": [
+        "st_zj_zawwaja"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zj_v_zawwaja",
+      "subject": "m_zj",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_zj_zawwaja"
+        ]
+      },
+      "restsOn": [
+        "st_zj_zawwaja"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zj_v_sadah",
+      "subject": "m_zj",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_zj_sadah"
+        ]
+      },
+      "restsOn": [
+        "st_zj_sadah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zj_died",
+      "subject": "m_zj",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 20,
+        "spans": [
+          "sp_zj_death_y"
+        ]
+      },
+      "restsOn": [
+        "st_zj_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zj_v_yad",
+      "subject": "m_zj_yad",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_zj_yad"
+        ]
+      },
+      "restsOn": [
+        "st_zj_yad"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zj_v_aisha",
+      "subject": "m_zj_ai",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_zj_aisha",
+          "sp_zj_aisha_1"
+        ]
+      },
+      "restsOn": [
+        "st_zj_aisha"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zj_laqab",
+      "subject": "m_zj_ms",
+      "predicate": "name.laqab",
+      "value": {
+        "spans": [
+          "sp_zj_masakin_n"
+        ]
+      },
+      "restsOn": [
+        "st_zj_masakin"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

@@ -51,6 +51,7 @@ const USE = {
   irab: { ar: 'إعراب الكلمة في المصحف', en: 'word grammar (i‘rab) in the mushaf reader', href: '/quran/read' },
   books: { ar: 'قارئ الكتب', en: 'the book reader', href: '/quran/books' },
   balagha: { ar: 'البلاغة في المصحف', en: 'rhetoric (balagha) in the mushaf reader', href: '/quran/read' },
+  balaghaTerms: { ar: 'مصطلحات البلاغة في تطبيق الهاتف', en: 'balagha terms in the phone app' },
   meaning: { ar: 'معنى الكلمة في المصحف', en: 'word meanings in the mushaf reader', href: '/quran/read' },
   meaningQuiz: { ar: 'اختبار «ما معنى؟»', en: 'the «what does it mean?» quiz', href: '/quizzes' },
   tafsirQuiz: { ar: 'اختبار «لأي آية هذا التفسير؟»', en: 'the «which ayah is this tafsir on?» quiz', href: '/quizzes' },
@@ -121,7 +122,12 @@ export const SOURCES: Source[] = [
   {
     id: 'itqan', group: 'books',
     title: { ar: 'الإتقان في علوم القرآن', en: 'al-Itqan fi ‘Ulum al-Quran' }, author: { ar: 'جلال الدين السيوطي', en: 'al-Suyuti' },
-    edition: 'تحقيق محمد أبو الفضل إبراهيم، الهيئة المصرية العامة للكتاب، ١٣٩٤هـ/١٩٧٤م، ٤ أجزاء', link: shamela(11728), licence: PUBLIC_DOMAIN, uses: [USE.openings, USE.iltifat, USE.oaths, USE.balagha, USE.balaghaQuiz],
+    edition: 'تحقيق محمد أبو الفضل إبراهيم، الهيئة المصرية العامة للكتاب، ١٣٩٤هـ/١٩٧٤م، ٤ أجزاء', link: shamela(11728), licence: PUBLIC_DOMAIN, uses: [USE.openings, USE.iltifat, USE.oaths, USE.balagha, USE.balaghaQuiz, USE.balaghaTerms],
+  },
+  {
+    id: 'talkhis-miftah', group: 'books',
+    title: { ar: 'تلخيص المفتاح، في عروس الأفراح', en: 'Talkhis al-Miftah, in ‘Arus al-Afrah' }, author: { ar: 'جلال الدين القزويني (ت ٧٣٩هـ)، بشرح بهاء الدين السبكي (ت ٧٧٣هـ)', en: 'al-Qazwini, with al-Subki’s commentary' },
+    edition: 'تحقيق عبد الحميد هنداوي، المكتبة العصرية، بيروت، الطبعة الأولى ١٤٢٣هـ/٢٠٠٣م، جزءان', link: shamela(11151), licence: PUBLIC_DOMAIN, uses: [USE.balaghaTerms],
   },
   {
     id: 'tibyan-ayman', group: 'books',
@@ -292,7 +298,7 @@ export const SOURCES: Source[] = [
   {
     id: 'hadith-api', group: 'data',
     title: { ar: 'hadith-api: نص صحيح البخاري', en: 'hadith-api: the text of Sahih al-Bukhari' },
-    edition: 'الإصدار ١ (ara-bukhari)، نُزّل ٢٠٢٦-١١-١٨، ولم يُحذف منه إلا علامات الاتجاه (U+200F)', link: { url: 'https://github.com/fawazahmed0/hadith-api', label: 'fawazahmed0/hadith-api' },
+    edition: 'الإصدار ١ (ara-bukhari)، نُزّل ٢٠٢٦-١١-١٨، ولم يُغيَّر فيه إلا حذف علامات الاتجاه (U+200F) وجعل المسافات المتتالية مسافة واحدة', link: { url: 'https://github.com/fawazahmed0/hadith-api', label: 'fawazahmed0/hadith-api' },
     licence: {
       ar: 'منشورة في الملك العام (Unlicense).',
       en: 'Released into the public domain (Unlicense).',

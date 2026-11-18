@@ -7,12 +7,12 @@ export const OPENINGS = 'OPENINGS';
 export type FeedQuizKind = QuizTopic | typeof OPENINGS;
 
 /** The kinds in the order they take turns: the Quran's, then the tarajim's two built on the converted entries, then the sira stories and battles (owner, 2026-11-18). */
-export const FEED_QUIZ_KINDS: readonly FeedQuizKind[] = ['SURAH', 'BRANCHES', 'RECITE', 'COMPARE', OPENINGS, 'MEANING', 'TAFSIR', 'BALAGHA', 'IRAB', 'QIRAAT', 'TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE', 'TARAJIM_NASAB', 'TARAJIM_VIRTUE', 'TARAJIM_TIE', 'SIRA'];
+export const FEED_QUIZ_KINDS: readonly FeedQuizKind[] = ['SURAH', 'BRANCHES', 'RECITE', 'COMPARE', OPENINGS, 'MEANING', 'TAFSIR', 'BALAGHA', 'TERM', 'IRAB', 'QIRAAT', 'TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE', 'TARAJIM_NASAB', 'TARAJIM_VIRTUE', 'TARAJIM_TIE', 'SIRA'];
 
 /** Each kind's card title, the quiz's own names for them (shared/quiz/kinds.ts), without loading the kinds' data. */
 export const FEED_QUIZ_NAMES: Record<FeedQuizKind & string, string> = {
   SURAH: 'في أي سورة؟', BRANCHES: 'أكمل المتشابهات', RECITE: 'سمّع بقية الآية', COMPARE: 'قارن الموضعين', [OPENINGS]: 'أوائل السور', ENDS: 'سمّع الآية', MEANING: 'ما معنى؟',
-  TAFSIR: 'لأي آية هذا التفسير؟', BALAGHA: 'ما الأسلوب؟', IRAB: 'ما إعرابها؟', QIRAAT: 'كيف يقرؤها؟',
+  TAFSIR: 'لأي آية هذا التفسير؟', BALAGHA: 'ما الأسلوب؟', TERM: 'ما المصطلح؟', IRAB: 'ما إعرابها؟', QIRAAT: 'كيف يقرؤها؟',
   TUHFA_COMPLETE: 'التحفة: أكمل البيت', TUHFA_NEXT: 'التحفة: البيت التالي', TUHFA_RULE: 'التحفة: حكم الحرف',
   TARAJIM_NASAB: 'أين يلتقي النسبان؟', TARAJIM_VIRTUE: 'صاحب المنقبة', TARAJIM_TIE: 'ما صلته به؟', SIRA: 'السيرة والغزوات',
 } as Record<FeedQuizKind & string, string>;

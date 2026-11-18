@@ -1,0 +1,164 @@
+{
+  "unit": {
+    "id": "siyar-v5-33-umm-shareek",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٣٣"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_us_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "255",
+      "layer": "MAIN",
+      "exact": "٣٣ - أُمُّ شَرِيْكٍ الأَنْصَارِيَّةُ النَّجَّارِيَّةُ"
+    },
+    {
+      "id": "sp_us_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "255",
+      "layer": "MAIN",
+      "exact": "أُمُّ شَرِيْكٍ الأَنْصَارِيَّةُ النَّجَّارِيَّةُ",
+      "prefix": "٣٣ - "
+    },
+    {
+      "id": "sp_us_kunya_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "255",
+      "layer": "MAIN",
+      "exact": "أُمُّ شَرِيْكٍ",
+      "prefix": "٣٣ - "
+    },
+    {
+      "id": "sp_us_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "255",
+      "layer": "MAIN",
+      "exact": "امْرَأَةٌ أَنْصَارِيَّةٌ، النَّجَّارِيَّةُ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_us0",
+      "unit": "siyar-v5-33-umm-shareek",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_us_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_us_kunya",
+      "report": "r_us0",
+      "spans": [
+        "sp_us_kunya"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_us_sex",
+      "report": "r_us0",
+      "spans": [
+        "sp_us_sex"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_us",
+      "parent": "sp_us_kunya",
+      "exact": "أُمُّ شَرِيْكٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_us_sex",
+      "parent": "sp_us_sex",
+      "exact": "امْرَأَةٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_us",
+      "mention": "m_us",
+      "agent": "umm-shareek",
+      "basis": [
+        {
+          "span": "sp_us_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_us_sex",
+      "mention": "m_us_sex",
+      "agent": "umm-shareek",
+      "basis": [
+        {
+          "span": "sp_us_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_us_kunya",
+      "subject": "m_us",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_us_kunya_v"
+        ]
+      },
+      "restsOn": [
+        "st_us_kunya"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_us_name",
+      "subject": "m_us",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_us_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_us_kunya"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_us_sex",
+      "subject": "m_us_sex",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_us_sex"
+        ]
+      },
+      "restsOn": [
+        "st_us_sex"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

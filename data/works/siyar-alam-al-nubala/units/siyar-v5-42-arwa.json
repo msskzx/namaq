@@ -1,0 +1,437 @@
+{
+  "unit": {
+    "id": "siyar-v5-42-arwa",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٤٢"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ar_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "272",
+      "layer": "MAIN",
+      "exact": "٤٢ - أَرْوَى عَمَّةُ رَسُوْلِ اللهِ"
+    },
+    {
+      "id": "sp_ar_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "272",
+      "layer": "MAIN",
+      "exact": "أَرْوَى عَمَّةُ رَسُوْلِ اللهِ",
+      "prefix": "٤٢ - "
+    },
+    {
+      "id": "sp_ar_name_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "272",
+      "layer": "MAIN",
+      "exact": "أَرْوَى",
+      "prefix": "٤٢ - "
+    },
+    {
+      "id": "sp_ar_sad_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "272",
+      "layer": "MAIN",
+      "exact": "رَوَى هَذَا: ابْنُ سَعْدٍ"
+    },
+    {
+      "id": "sp_ar_sad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "272",
+      "layer": "MAIN",
+      "exact": "تَزَوَّجَهَا: عُمَيْرُ بنُ وَهْبٍ، فَوَلَدَتْ لَهُ طُلَيْباً"
+    },
+    {
+      "id": "sp_ar_sad_1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "272",
+      "layer": "MAIN",
+      "exact": "ثُمَّ خَلَفَ عَلَيْهَا: أَرْطَاةُ، فَوَلَدَتْ لَهُ فَاطِمَةَ"
+    },
+    {
+      "id": "sp_ar_sad_2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "272",
+      "layer": "MAIN",
+      "exact": "ثُمَّ أَسْلَمَتْ أَرْوَى، وَهَاجَرَتْ، وَأَسْلَمَ وَلَدُهَا طُلَيْبٌ فِي دَارِ الأَرْقَمِ"
+    },
+    {
+      "id": "sp_ar_umayr_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "272",
+      "layer": "MAIN",
+      "exact": "عُمَيْرُ بنُ وَهْبٍ",
+      "prefix": "تَزَوَّجَهَا: "
+    },
+    {
+      "id": "sp_ar_tulayb_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "272",
+      "layer": "MAIN",
+      "exact": "فَوَلَدَتْ لَهُ طُلَيْباً"
+    },
+    {
+      "id": "sp_ar_artah_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "272",
+      "layer": "MAIN",
+      "exact": "خَلَفَ عَلَيْهَا: أَرْطَاةُ"
+    },
+    {
+      "id": "sp_ar_fatimah_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "272",
+      "layer": "MAIN",
+      "exact": "فَوَلَدَتْ لَهُ فَاطِمَةَ"
+    },
+    {
+      "id": "sp_ar_islam",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "272",
+      "layer": "MAIN",
+      "exact": "ثُمَّ أَسْلَمَتْ أَرْوَى، وَهَاجَرَتْ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ar0",
+      "unit": "siyar-v5-42-arwa",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ar_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ar_sad",
+      "unit": "siyar-v5-42-arwa",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ar_sad_frame"
+      ],
+      "origin": {
+        "mention": "m_ar_sad_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ar_name",
+      "report": "r_ar0",
+      "spans": [
+        "sp_ar_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ar_sad",
+      "report": "r_ar_sad",
+      "spans": [
+        "sp_ar_sad",
+        "sp_ar_sad_1",
+        "sp_ar_sad_2"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ar",
+      "parent": "sp_ar_name",
+      "exact": "أَرْوَى",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ar_sad_by",
+      "parent": "sp_ar_sad_frame",
+      "exact": "ابْنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ar_1",
+      "parent": "sp_ar_sad",
+      "exact": "تَزَوَّجَهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ar_umayr",
+      "parent": "sp_ar_sad",
+      "exact": "عُمَيْرُ بنُ وَهْبٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ar_c_tulayb",
+      "parent": "sp_ar_sad",
+      "exact": "طُلَيْباً",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ar_2",
+      "parent": "sp_ar_sad_1",
+      "exact": "عَلَيْهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ar_artah",
+      "parent": "sp_ar_sad_1",
+      "exact": "أَرْطَاةُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ar_c_fatimah",
+      "parent": "sp_ar_sad_1",
+      "exact": "فَاطِمَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ar_3",
+      "parent": "sp_ar_sad_2",
+      "exact": "أَرْوَى",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ar",
+      "mention": "m_ar",
+      "agent": "arwa-bint-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_ar_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ar_1",
+      "mention": "m_ar_1",
+      "agent": "arwa-bint-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_ar_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ar_umayr",
+      "mention": "m_ar_umayr",
+      "agent": "umayr-ibn-wahb",
+      "basis": [
+        {
+          "span": "sp_ar_umayr_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ar_c_tulayb",
+      "mention": "m_ar_c_tulayb",
+      "agent": "tulayb-ibn-umayr",
+      "basis": [
+        {
+          "span": "sp_ar_tulayb_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ar_2",
+      "mention": "m_ar_2",
+      "agent": "arwa-bint-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_ar_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ar_artah",
+      "mention": "m_ar_artah",
+      "agent": "artah",
+      "basis": [
+        {
+          "span": "sp_ar_artah_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ar_c_fatimah",
+      "mention": "m_ar_c_fatimah",
+      "agent": "fatimah-bint-artah",
+      "basis": [
+        {
+          "span": "sp_ar_fatimah_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ar_3",
+      "mention": "m_ar_3",
+      "agent": "arwa-bint-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_ar_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ar_name",
+      "subject": "m_ar",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ar_name_v"
+        ]
+      },
+      "restsOn": [
+        "st_ar_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ar_sex",
+      "subject": "m_ar",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_ar_name"
+        ]
+      },
+      "restsOn": [
+        "st_ar_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ar_w_umayr",
+      "subject": "m_ar_1",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_ar_umayr"
+      },
+      "restsOn": [
+        "st_ar_sad"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ar_c_tulayb_0",
+      "subject": "m_ar_c_tulayb",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ar_1"
+      },
+      "restsOn": [
+        "st_ar_sad"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ar_c_tulayb_1",
+      "subject": "m_ar_c_tulayb",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ar_umayr"
+      },
+      "restsOn": [
+        "st_ar_sad"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ar_w_artah",
+      "subject": "m_ar_2",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_ar_artah"
+      },
+      "restsOn": [
+        "st_ar_sad"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ar_c_fatimah_0",
+      "subject": "m_ar_c_fatimah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ar_2"
+      },
+      "restsOn": [
+        "st_ar_sad"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ar_c_fatimah_1",
+      "subject": "m_ar_c_fatimah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ar_artah"
+      },
+      "restsOn": [
+        "st_ar_sad"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ar_v_islam",
+      "subject": "m_ar_3",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ar_islam"
+        ]
+      },
+      "restsOn": [
+        "st_ar_sad"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

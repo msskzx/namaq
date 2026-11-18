@@ -1,0 +1,454 @@
+{
+  "unit": {
+    "id": "siyar-v6-35-samurah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٣٥"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_sm_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "183",
+      "layer": "MAIN",
+      "exact": "٣٥ - سَمُرَةُ بنُ جُنْدُبِ بنِ هِلاَلٍ الفَزَارِيُّ"
+    },
+    {
+      "id": "sp_sm_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "183",
+      "layer": "MAIN",
+      "exact": "سَمُرَةُ بنُ جُنْدُبِ بنِ هِلاَلٍ الفَزَارِيُّ",
+      "prefix": "٣٥ -"
+    },
+    {
+      "id": "sp_sm5",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "183",
+      "layer": "MAIN",
+      "exact": "سَمُرَةُ بنُ جُنْدُبِ",
+      "prefix": "٣٥ -"
+    },
+    {
+      "id": "sp_sm7",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "183",
+      "layer": "MAIN",
+      "exact": "جُنْدُبِ بنِ هِلاَلٍ الفَزَارِيُّ",
+      "prefix": "سَمُرَةُ بنُ"
+    },
+    {
+      "id": "sp_sm11",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "183",
+      "layer": "MAIN",
+      "exact": "مِنْ عُلَمَاءِ الصَّحَابَةِ، نَزَلَ البَصْرَةَ."
+    },
+    {
+      "id": "sp_sm12",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "183",
+      "layer": "MAIN",
+      "exact": "مِنْ عُلَمَاءِ الصَّحَابَةِ",
+      "suffix": "، نَزَلَ"
+    },
+    {
+      "id": "sp_sm15",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "183",
+      "layer": "MAIN",
+      "exact": "ابْنُهُ؛ سُلَيْمَانُ",
+      "prefix": "حَدَّثَ عَنْهُ:"
+    },
+    {
+      "id": "sp_sm16",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "183",
+      "layer": "MAIN",
+      "exact": "ابْنُهُ؛ سُلَيْمَانُ، وَأَبُو قِلاَبَةَ"
+    },
+    {
+      "id": "sp_sm21",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "185",
+      "layer": "MAIN",
+      "exact": "وَعَنِ ابْنِ سِيْرِيْنَ، قَالَ"
+    },
+    {
+      "id": "sp_sm24",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "185",
+      "layer": "MAIN",
+      "exact": "كَانَ سَمُرَةُ عَظِيْمَ الأَمَانَةِ، صَدُوْقاً."
+    },
+    {
+      "id": "sp_sm29",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "186",
+      "layer": "MAIN",
+      "exact": "مَاتَ سَمُرَةُ: سَنَةَ ثَمَانٍ وَخَمْسِيْنَ."
+    },
+    {
+      "id": "sp_sm32",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "186",
+      "layer": "MAIN",
+      "exact": "سَنَةَ ثَمَانٍ وَخَمْسِيْنَ"
+    },
+    {
+      "id": "sp_sm35",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "186",
+      "layer": "MAIN",
+      "exact": "وَقِيْلَ",
+      "suffix": ": سَنَةَ تِسْعٍ وَخَمْسِيْنَ."
+    },
+    {
+      "id": "sp_sm38",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "186",
+      "layer": "MAIN",
+      "exact": "سَنَةَ تِسْعٍ وَخَمْسِيْنَ."
+    },
+    {
+      "id": "sp_sm39",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "186",
+      "layer": "MAIN",
+      "exact": "سَنَةَ تِسْعٍ وَخَمْسِيْنَ",
+      "suffix": "."
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_sm0",
+      "unit": "siyar-v6-35-samurah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_sm_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_sm23",
+      "unit": "siyar-v6-35-samurah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_sm21"
+      ],
+      "origin": {
+        "mention": "m_sm22"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sm37",
+      "unit": "siyar-v6-35-samurah",
+      "ordinal": 3,
+      "voice": "REPORTED_ANONYMOUS",
+      "frame": [
+        "sp_sm35"
+      ],
+      "origin": {
+        "mention": "m_sm36"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_sm1",
+      "report": "r_sm0",
+      "spans": [
+        "sp_sm_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sm13",
+      "report": "r_sm0",
+      "spans": [
+        "sp_sm11"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sm19",
+      "report": "r_sm0",
+      "spans": [
+        "sp_sm15"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sm27",
+      "report": "r_sm23",
+      "spans": [
+        "sp_sm24"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_sm33",
+      "report": "r_sm0",
+      "spans": [
+        "sp_sm29"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sm40",
+      "report": "r_sm37",
+      "spans": [
+        "sp_sm38"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_sm2",
+      "parent": "sp_sm_name",
+      "exact": "سَمُرَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sm8",
+      "parent": "sp_sm_name",
+      "exact": "جُنْدُبِ بنِ هِلاَلٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_sm17",
+      "parent": "sp_sm15",
+      "exact": "سُلَيْمَانُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_sm22",
+      "parent": "sp_sm21",
+      "exact": "ابْنِ سِيْرِيْنَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sm25",
+      "parent": "sp_sm24",
+      "exact": "سَمُرَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sm30",
+      "parent": "sp_sm29",
+      "exact": "سَمُرَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sm36",
+      "parent": "sp_sm35",
+      "exact": "وَقِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_sm3",
+      "mention": "m_sm2",
+      "agent": "samurah-ibn-jundub",
+      "basis": [
+        {
+          "span": "sp_sm_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sm9",
+      "mention": "m_sm8",
+      "agent": "jundub-ibn-hilal-al-fazari",
+      "basis": [
+        {
+          "span": "sp_sm7",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sm18",
+      "mention": "m_sm17",
+      "agent": "sulayman-ibn-samurah",
+      "basis": [
+        {
+          "span": "sp_sm16",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sm26",
+      "mention": "m_sm25",
+      "agent": "samurah-ibn-jundub",
+      "basis": [
+        {
+          "span": "sp_sm_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sm31",
+      "mention": "m_sm30",
+      "agent": "samurah-ibn-jundub",
+      "basis": [
+        {
+          "span": "sp_sm_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_sm4",
+      "subject": "m_sm2",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_sm_name"
+        ]
+      },
+      "restsOn": [
+        "st_sm1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sm6",
+      "subject": "m_sm2",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_sm5"
+        ]
+      },
+      "restsOn": [
+        "st_sm1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sm10",
+      "subject": "m_sm2",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_sm8"
+      },
+      "restsOn": [
+        "st_sm1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sm14",
+      "subject": "m_sm2",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_sm12"
+        ]
+      },
+      "restsOn": [
+        "st_sm13"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sm20",
+      "subject": "m_sm17",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_sm2"
+      },
+      "restsOn": [
+        "st_sm19"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sm28",
+      "subject": "m_sm25",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_sm24"
+        ]
+      },
+      "restsOn": [
+        "st_sm27"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sm34",
+      "subject": "m_sm30",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 58,
+        "spans": [
+          "sp_sm32"
+        ]
+      },
+      "restsOn": [
+        "st_sm33"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sm41",
+      "subject": "m_sm2",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 59,
+        "spans": [
+          "sp_sm39"
+        ]
+      },
+      "restsOn": [
+        "st_sm40"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

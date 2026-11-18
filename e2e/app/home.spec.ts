@@ -170,8 +170,8 @@ test.describe('a new user', () => {
   });
 
   test('the feed asks a question of every quiz kind in turn, each card with the quiz buttons', async ({ page }) => {
-    // Three batches a day take three kinds in turn; three days apart, the seventeen kinds all come up in six days.
-    const kinds = ['في أي سورة؟', 'أكمل المتشابهات', 'سمّع بقية الآية', 'قارن الموضعين', 'أوائل السور', 'ما معنى؟', 'لأي آية هذا التفسير؟', 'ما الأسلوب؟', 'ما إعرابها؟', 'كيف يقرؤها؟',
+    // Three batches a day take three kinds in turn; three days apart, the eighteen kinds all come up in six days.
+    const kinds = ['في أي سورة؟', 'أكمل المتشابهات', 'سمّع بقية الآية', 'قارن الموضعين', 'أوائل السور', 'ما معنى؟', 'لأي آية هذا التفسير؟', 'ما الأسلوب؟', 'ما المصطلح؟', 'ما إعرابها؟', 'كيف يقرؤها؟',
       'التحفة: أكمل البيت', 'التحفة: البيت التالي', 'التحفة: حكم الحرف', 'أين يلتقي النسبان؟', 'صاحب المنقبة', 'ما صلته به؟', 'السيرة والغزوات'];
     const seen = new Set<string>();
     for (const days of [0, 3, 6, 9, 12, 15]) {
@@ -195,7 +195,7 @@ test.describe('a new user', () => {
   });
 
   test('a «which surah» card shows the ayah number and marks the surah picked', async ({ page }) => {
-    // Seventeen kinds take turns, so the «which surah» card may be up to six loads away, each up to half a minute.
+    // Eighteen kinds take turns, so the «which surah» card may be up to six loads away, each up to half a minute.
     test.setTimeout(240_000);
     for (const days of [0, 3, 6, 9, 12, 15]) {
       await page.clock.setFixedTime(new Date(Date.now() + days * 86_400_000));
@@ -372,5 +372,46 @@ test.describe('a returning user', () => {
     await menu(page).getByRole('button', { name: 'احذف التأمل' }).click();
     await expect(page.getByRole('button', { name: /^تأمل:/ })).toHaveCount(0);
     await expect.poll(() => stored(page, 'ayah-notes')).toEqual({});
+  });
+});
+
+test.describe('balagha terms in the feed', () => {
+  test('a «ما الأسلوب؟» card, once answered, opens each choice\'s definition in a sheet with a way to its page', async ({ page }) => {
+    test.setTimeout(120_000);
+    for (const days of [0, 3, 6, 9, 12]) {
+      await page.clock.setFixedTime(new Date(Date.now() + days * 86_400_000));
+      await open(page, '/');
+      await page.mouse.move(195, 500);
+      await expect(async () => {
+        await page.mouse.wheel(0, 3000);
+        expect(await page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).count()).toBeGreaterThan(3);
+      }).toPass({ timeout: 20_000 });
+      if (await page.getByRole('heading', { name: 'ما الأسلوب؟', exact: true }).first().waitFor({ timeout: 10_000 }).then(() => true, () => false)) break;
+    }
+    const card = page.getByRole('heading', { name: 'ما الأسلوب؟', exact: true }).first().locator('xpath=ancestor::div[.//*[@aria-label="اختبار فردي"]][1]');
+    await card.scrollIntoViewIfNeeded();
+    await expect(page.getByRole('button', { name: /^تعريف / })).toHaveCount(0);
+    await card.getByRole('button').filter({ hasText: /\S/ }).first().click();
+    const chips = page.getByRole('button', { name: /^تعريف / });
+    await expect(chips.first()).toBeVisible();
+    const name = (await chips.first().textContent())!.replace(/^تعريف /, '');
+    await chips.first().click();
+    await expect(page.getByRole('heading', { name, exact: true })).toBeVisible();
+    await page.getByRole('button', { name: 'أمثلته في مصطلحات البلاغة' }).click();
+    await expect(page.getByRole('heading', { name: /^أمثلته في الإتقان/ })).toBeVisible();
+  });
+
+  test('the feed\'s term card opens the term\'s page', async ({ page }) => {
+    await open(page, '/');
+    await page.mouse.move(195, 500);
+    await expect(async () => {
+      await page.mouse.wheel(0, 3000);
+      expect(await page.getByText('من مصطلحات البلاغة', { exact: true }).count()).toBeGreaterThan(0);
+    }).toPass({ timeout: 30_000 });
+    await page.getByText('من مصطلحات البلاغة', { exact: true }).first().scrollIntoViewIfNeeded();
+    const action = page.getByRole('button', { name: /: تعريفه وأمثلته$/ }).first();
+    const name = (await action.getAttribute('aria-label'))!.replace(/: تعريفه وأمثلته$/, '');
+    await action.click();
+    await expect(page.getByRole('heading', { name, exact: true })).toBeVisible();
   });
 });

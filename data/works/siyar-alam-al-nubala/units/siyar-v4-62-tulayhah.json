@@ -1,0 +1,449 @@
+{
+  "unit": {
+    "id": "siyar-v4-62-tulayhah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٦٢"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_tu_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "316",
+      "layer": "MAIN",
+      "exact": "٦٢ - طُلَيْحَةُ بنُ خُوَيْلِدِ بنِ نَوْفَلٍ الأَسَدِيُّ"
+    },
+    {
+      "id": "sp_tu1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "316",
+      "layer": "MAIN",
+      "exact": "طُلَيْحَةُ بنُ خُوَيْلِدِ بنِ نَوْفَلٍ",
+      "prefix": "٦٢ - "
+    },
+    {
+      "id": "sp_tu_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "316",
+      "layer": "MAIN",
+      "exact": "طُلَيْحَةُ بنُ",
+      "prefix": "٦٢ - "
+    },
+    {
+      "id": "sp_tu_father_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "316",
+      "layer": "MAIN",
+      "exact": "خُوَيْلِدِ بنِ نَوْفَلٍ",
+      "prefix": "طُلَيْحَةُ بنُ "
+    },
+    {
+      "id": "sp_tu_epithets",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "317",
+      "layer": "MAIN",
+      "exact": "البَطَلُ الكَرَّارُ، صَاحِبُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَمَنْ يُضْرَبُ بِشَجَاعَتِهِ المَثَلُ"
+    },
+    {
+      "id": "sp_tu_karrar",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "317",
+      "layer": "MAIN",
+      "exact": "البَطَلُ الكَرَّارُ",
+      "suffix": "، صَاحِبُ"
+    },
+    {
+      "id": "sp_tu_sahib",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "317",
+      "layer": "MAIN",
+      "exact": "صَاحِبُ رَسُوْلِ اللهِ",
+      "prefix": "الكَرَّارُ، "
+    },
+    {
+      "id": "sp_tu_mathal",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "317",
+      "layer": "MAIN",
+      "exact": "وَمَنْ يُضْرَبُ بِشَجَاعَتِهِ المَثَلُ"
+    },
+    {
+      "id": "sp_tu_battles",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "317",
+      "layer": "MAIN",
+      "exact": "ثُمَّ شَهِدَ القَادِسِيَّةَ وَنَهَاوَنْدَ"
+    },
+    {
+      "id": "sp_tu_day_q",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "317",
+      "layer": "MAIN",
+      "exact": "شَهِدَ القَادِسِيَّةَ",
+      "prefix": "ثُمَّ "
+    },
+    {
+      "id": "sp_tu_day_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "317",
+      "layer": "MAIN",
+      "exact": "القَادِسِيَّةَ وَنَهَاوَنْدَ",
+      "prefix": "شَهِدَ "
+    },
+    {
+      "id": "sp_tu_saad_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "317",
+      "layer": "MAIN",
+      "exact": "قَالَ مُحَمَّدُ بنُ سَعْدٍ",
+      "suffix": ": كَانَ طُلَيْحَةُ"
+    },
+    {
+      "id": "sp_tu_saad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "317",
+      "layer": "MAIN",
+      "exact": "كَانَ طُلَيْحَةُ يُعَدُّ بِأَلْفِ فَارِسٍ لِشَجَاعَتِهِ وَشِدَّتِهِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_tu0",
+      "unit": "siyar-v4-62-tulayhah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_tu_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_tu_saad",
+      "unit": "siyar-v4-62-tulayhah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_tu_saad_frame"
+      ],
+      "origin": {
+        "mention": "m_tu_saad"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_tu_name",
+      "report": "r_tu0",
+      "spans": [
+        "sp_tu1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_tu_epithets",
+      "report": "r_tu0",
+      "spans": [
+        "sp_tu_epithets"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_tu_battles",
+      "report": "r_tu0",
+      "spans": [
+        "sp_tu_battles"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_tu_saad",
+      "report": "r_tu_saad",
+      "spans": [
+        "sp_tu_saad"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_tu",
+      "parent": "sp_tu1",
+      "exact": "طُلَيْحَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_tu_father",
+      "parent": "sp_tu1",
+      "exact": "خُوَيْلِدِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_tu_prophet",
+      "parent": "sp_tu_epithets",
+      "exact": "رَسُوْلِ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_tu_b",
+      "parent": "sp_tu_battles",
+      "exact": "شَهِدَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_tu_q",
+      "parent": "sp_tu_battles",
+      "exact": "القَادِسِيَّةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_tu_n",
+      "parent": "sp_tu_battles",
+      "exact": "وَنَهَاوَنْدَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_tu_saad",
+      "parent": "sp_tu_saad_frame",
+      "exact": "مُحَمَّدُ بنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_tu_s",
+      "parent": "sp_tu_saad",
+      "exact": "طُلَيْحَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_tu",
+      "mention": "m_tu",
+      "agent": "tulayhah-ibn-khuwaylid",
+      "basis": [
+        {
+          "span": "sp_tu_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tu_b",
+      "mention": "m_tu_b",
+      "agent": "tulayhah-ibn-khuwaylid",
+      "basis": [
+        {
+          "span": "sp_tu_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tu_s",
+      "mention": "m_tu_s",
+      "agent": "tulayhah-ibn-khuwaylid",
+      "basis": [
+        {
+          "span": "sp_tu_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tu_father",
+      "mention": "m_tu_father",
+      "agent": "khuwaylid-ibn-nawfal",
+      "basis": [
+        {
+          "span": "sp_tu_father_nasab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tu_prophet",
+      "mention": "m_tu_prophet",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_tu_sahib",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tu_q",
+      "mention": "m_tu_q",
+      "event": "qadisiyyah",
+      "basis": [
+        {
+          "span": "sp_tu_day_q",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tu_n",
+      "mention": "m_tu_n",
+      "event": "nahavand",
+      "basis": [
+        {
+          "span": "sp_tu_day_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_tu_name",
+      "subject": "m_tu",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_tu1"
+        ]
+      },
+      "restsOn": [
+        "st_tu_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tu_sex",
+      "subject": "m_tu",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_tu_sex"
+        ]
+      },
+      "restsOn": [
+        "st_tu_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tu_father",
+      "subject": "m_tu",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_tu_father"
+      },
+      "restsOn": [
+        "st_tu_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tu_comp",
+      "subject": "m_tu",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_tu_prophet"
+      },
+      "restsOn": [
+        "st_tu_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tu_v_karrar",
+      "subject": "m_tu",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_tu_karrar"
+        ]
+      },
+      "restsOn": [
+        "st_tu_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tu_v_mathal",
+      "subject": "m_tu",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_tu_mathal"
+        ]
+      },
+      "restsOn": [
+        "st_tu_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tu_q",
+      "subject": "m_tu_b",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_tu_q"
+      },
+      "restsOn": [
+        "st_tu_battles"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tu_n",
+      "subject": "m_tu_b",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_tu_n"
+      },
+      "restsOn": [
+        "st_tu_battles"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tu_v_saad",
+      "subject": "m_tu_s",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_tu_saad"
+        ]
+      },
+      "restsOn": [
+        "st_tu_saad"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

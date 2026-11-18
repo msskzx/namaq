@@ -1,0 +1,610 @@
+{
+  "unit": {
+    "id": "siyar-v5-39-juwayriyah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٣٩"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_jw_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "261",
+      "layer": "MAIN",
+      "exact": "٣٩ - جُوَيْرِيَةُ أُمُّ المُؤْمِنِيْنَ بِنْتُ الحَارِثِ بنِ أَبِي ضِرَارٍ المُصْطَلِقِيَّةُ"
+    },
+    {
+      "id": "sp_jw_n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "261",
+      "layer": "MAIN",
+      "exact": "جُوَيْرِيَةُ",
+      "prefix": "٣٩ - "
+    },
+    {
+      "id": "sp_jw_n2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "261",
+      "layer": "MAIN",
+      "exact": "بِنْتُ الحَارِثِ بنِ أَبِي ضِرَارٍ المُصْطَلِقِيَّةُ"
+    },
+    {
+      "id": "sp_jw_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "261",
+      "layer": "MAIN",
+      "exact": "بِنْتُ الحَارِثِ",
+      "prefix": "المُؤْمِنِيْنَ "
+    },
+    {
+      "id": "sp_jw_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "261",
+      "layer": "MAIN",
+      "exact": "الحَارِثِ بنِ أَبِي ضِرَارٍ",
+      "prefix": "المُؤْمِنِيْنَ بِنْتُ "
+    },
+    {
+      "id": "sp_jw_umm",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "261",
+      "layer": "MAIN",
+      "exact": "جُوَيْرِيَةُ أُمُّ المُؤْمِنِيْنَ",
+      "prefix": "٣٩ - "
+    },
+    {
+      "id": "sp_jw_ajmal",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "261",
+      "layer": "MAIN",
+      "exact": "وَكَانَتْ مِنْ أَجْمَلِ النِّسَاءِ"
+    },
+    {
+      "id": "sp_jw_marr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "261",
+      "layer": "MAIN",
+      "exact": "أَتَتِ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- تَطْلُبُ مِنْهُ إِعَانَةً فِي فَكَاكِ نَفْسِهَا، فَقَالَ: (أَوْ خَيْرٌ مِنْ ذَلِكَ؟ أَتَزَوَّجُكِ) . فَأَسْلَمَتْ، وَتَزَوَّجَ بِهَا"
+    },
+    {
+      "id": "sp_jw_baraka_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "265",
+      "layer": "MAIN",
+      "exact": "عُرْوَةَ، عَنْ عَائِشَةَ، قَالَتْ"
+    },
+    {
+      "id": "sp_jw_baraka",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "265",
+      "layer": "MAIN",
+      "exact": "فَلَقَدْ أُعْتِقَ بِهَا مائَةُ أَهْلِ بَيْتٍ، فَمَا أَعْلَمُ امْرَأَةً كَانَتْ أَعْظَمَ بَرَكَةً عَلَى قَوْمِهَا مِنْهَا"
+    },
+    {
+      "id": "sp_jw_baraka_who",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "265",
+      "layer": "MAIN",
+      "exact": "وَقَعَتْ جُوَيْرِيَةُ فِي سَهْمِ رَجُلٍ، فَكَاتَبَتْهُ"
+    },
+    {
+      "id": "sp_jw_musafi_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "262",
+      "layer": "MAIN",
+      "exact": "قَالَ ابْنُ سَعْدٍ، وَغَيْرُهُ"
+    },
+    {
+      "id": "sp_jw_musafi",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "262",
+      "layer": "MAIN",
+      "exact": "وَكَانَ زَوْجُهَا قَبْلَ أَنْ يُسْلِمَ ابْنُ عَمِّهَا مُسَافِعُ بنُ صَفْوَانَ بنِ أَبِي الشُّفَرِ"
+    },
+    {
+      "id": "sp_jw_musafi_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "262",
+      "layer": "MAIN",
+      "exact": "مُسَافِعُ بنُ صَفْوَانَ",
+      "prefix": "ابْنُ عَمِّهَا "
+    },
+    {
+      "id": "sp_jw_d50",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "263",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَتْ أُمُّ المُؤْمِنِيْنَ جُوَيْرِيَةُ فِي سَنَةِ خَمْسِيْنَ"
+    },
+    {
+      "id": "sp_jw_d50_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "263",
+      "layer": "MAIN",
+      "exact": "فِي سَنَةِ خَمْسِيْنَ",
+      "prefix": "جُوَيْرِيَةُ "
+    },
+    {
+      "id": "sp_jw_d56",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "263",
+      "layer": "MAIN",
+      "exact": "وَقِيْلَ: تُوُفِّيَتْ سَنَةَ سِتٍّ وَخَمْسِيْنَ"
+    },
+    {
+      "id": "sp_jw_d56_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "263",
+      "layer": "MAIN",
+      "exact": "سَنَةَ سِتٍّ وَخَمْسِيْنَ",
+      "prefix": "تُوُفِّيَتْ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_jw0",
+      "unit": "siyar-v5-39-juwayriyah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_jw_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_jw_baraka",
+      "unit": "siyar-v5-39-juwayriyah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_jw_baraka_isnad",
+      "origin": {
+        "mention": "m_jw_baraka_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_jw_musafi",
+      "unit": "siyar-v5-39-juwayriyah",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_jw_musafi_frame"
+      ],
+      "origin": {
+        "mention": "m_jw_musafi_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_jw_d56",
+      "unit": "siyar-v5-39-juwayriyah",
+      "ordinal": 4,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_jw_d56_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_jw_name",
+      "report": "r_jw0",
+      "spans": [
+        "sp_jw_n1",
+        "sp_jw_n2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_jw_umm",
+      "report": "r_jw0",
+      "spans": [
+        "sp_jw_umm"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_jw_ajmal",
+      "report": "r_jw0",
+      "spans": [
+        "sp_jw_ajmal"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_jw_marr",
+      "report": "r_jw0",
+      "spans": [
+        "sp_jw_marr"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_jw_baraka",
+      "report": "r_jw_baraka",
+      "spans": [
+        "sp_jw_baraka"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_jw_baraka_who",
+      "report": "r_jw_baraka",
+      "spans": [
+        "sp_jw_baraka_who"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_jw_musafi",
+      "report": "r_jw_musafi",
+      "spans": [
+        "sp_jw_musafi"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_jw_d50",
+      "report": "r_jw0",
+      "spans": [
+        "sp_jw_d50"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_jw_d56",
+      "report": "r_jw_d56",
+      "spans": [
+        "sp_jw_d56"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_jw",
+      "parent": "sp_jw_n1",
+      "exact": "جُوَيْرِيَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_jw_father",
+      "parent": "sp_jw_n2",
+      "exact": "الحَارِثِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_jw_umm",
+      "parent": "sp_jw_umm",
+      "exact": "أُمُّ المُؤْمِنِيْنَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_jw_aj",
+      "parent": "sp_jw_ajmal",
+      "exact": "وَكَانَتْ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_jw_w",
+      "parent": "sp_jw_marr",
+      "exact": "أَتَتِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_jw_prophet",
+      "parent": "sp_jw_marr",
+      "exact": "النَّبِيَّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_jw_baraka_by",
+      "parent": "sp_jw_baraka_isnad",
+      "exact": "عَائِشَةَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_jw_b",
+      "parent": "sp_jw_baraka_who",
+      "exact": "جُوَيْرِيَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_jw_musafi_by",
+      "parent": "sp_jw_musafi_frame",
+      "exact": "ابْنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_jw_z",
+      "parent": "sp_jw_musafi",
+      "exact": "زَوْجُهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_jw_musafi",
+      "parent": "sp_jw_musafi",
+      "exact": "مُسَافِعُ بنُ صَفْوَانَ بنِ أَبِي الشُّفَرِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_jw_d56_by",
+      "parent": "sp_jw_d56",
+      "exact": "وَقِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_jw",
+      "mention": "m_jw",
+      "agent": "juwayriyah-bint-al-harith",
+      "basis": [
+        {
+          "span": "sp_jw_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_jw_father",
+      "mention": "m_jw_father",
+      "agent": "al-harith-ibn-abi-dirar-al-mustaliqi",
+      "basis": [
+        {
+          "span": "sp_jw_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_jw_umm",
+      "mention": "m_jw_umm",
+      "agent": "juwayriyah-bint-al-harith",
+      "basis": [
+        {
+          "span": "sp_jw_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_jw_aj",
+      "mention": "m_jw_aj",
+      "agent": "juwayriyah-bint-al-harith",
+      "basis": [
+        {
+          "span": "sp_jw_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_jw_w",
+      "mention": "m_jw_w",
+      "agent": "juwayriyah-bint-al-harith",
+      "basis": [
+        {
+          "span": "sp_jw_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_jw_b",
+      "mention": "m_jw_b",
+      "agent": "juwayriyah-bint-al-harith",
+      "basis": [
+        {
+          "span": "sp_jw_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_jw_z",
+      "mention": "m_jw_z",
+      "agent": "juwayriyah-bint-al-harith",
+      "basis": [
+        {
+          "span": "sp_jw_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_jw_musafi",
+      "mention": "m_jw_musafi",
+      "agent": "musafi-ibn-safwan",
+      "basis": [
+        {
+          "span": "sp_jw_musafi_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_jw_name",
+      "subject": "m_jw",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_jw_n1",
+          "sp_jw_n2"
+        ]
+      },
+      "restsOn": [
+        "st_jw_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_jw_sex",
+      "subject": "m_jw",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_jw_sex"
+        ]
+      },
+      "restsOn": [
+        "st_jw_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_jw_father",
+      "subject": "m_jw",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_jw_father"
+      },
+      "restsOn": [
+        "st_jw_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_jw_umm",
+      "subject": "m_jw_umm",
+      "predicate": "title",
+      "value": {
+        "classified": "mother-of-believers",
+        "spans": [
+          "sp_jw_umm"
+        ]
+      },
+      "restsOn": [
+        "st_jw_umm"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_jw_app",
+      "subject": "m_jw_aj",
+      "predicate": "appearance",
+      "value": {
+        "spans": [
+          "sp_jw_ajmal"
+        ]
+      },
+      "restsOn": [
+        "st_jw_ajmal"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_jw_wife",
+      "subject": "m_jw_w",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_jw_prophet"
+      },
+      "restsOn": [
+        "st_jw_marr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_jw_v_baraka",
+      "subject": "m_jw_b",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_jw_baraka"
+        ]
+      },
+      "restsOn": [
+        "st_jw_baraka"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_jw_w_musafi",
+      "subject": "m_jw_z",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_jw_musafi"
+      },
+      "restsOn": [
+        "st_jw_musafi"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_jw_d50",
+      "subject": "m_jw",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 50,
+        "spans": [
+          "sp_jw_d50_y"
+        ]
+      },
+      "restsOn": [
+        "st_jw_d50"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_jw_d56",
+      "subject": "m_jw",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 56,
+        "spans": [
+          "sp_jw_d56_y"
+        ]
+      },
+      "restsOn": [
+        "st_jw_d56"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

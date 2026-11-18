@@ -1,0 +1,345 @@
+{
+  "unit": {
+    "id": "siyar-v5-45-barrah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٤٥"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_br_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "273",
+      "layer": "MAIN",
+      "exact": "٤٥ - بَرَّةُ بِنْتُ عَبْدِ المُطَّلِبِ عَمَّةُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-"
+    },
+    {
+      "id": "sp_br_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "273",
+      "layer": "MAIN",
+      "exact": "بَرَّةُ بِنْتُ عَبْدِ المُطَّلِبِ",
+      "prefix": "٤٥ -"
+    },
+    {
+      "id": "sp_br_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "273",
+      "layer": "MAIN",
+      "exact": "عَبْدِ المُطَّلِبِ",
+      "prefix": "٤٥ - بَرَّةُ بِنْتُ"
+    },
+    {
+      "id": "sp_br_abusalamah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "273",
+      "layer": "MAIN",
+      "exact": "وَالِدَةُ أَبِي سَلَمَةَ بنِ عَبْدِ الأَسَدِ المَخْزُوْمِيِّ، البَدْرِيِّ"
+    },
+    {
+      "id": "sp_br_abusalamah_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "273",
+      "layer": "MAIN",
+      "exact": "أَبِي سَلَمَةَ بنِ عَبْدِ الأَسَدِ المَخْزُوْمِيِّ"
+    },
+    {
+      "id": "sp_br_aburuhm",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "273",
+      "layer": "MAIN",
+      "exact": "ثُمَّ خَلَفَ عَلَيْهَا: أَبُو رُهْمٍ بنِ عَبْدِ العُزَّى العَامِرِيُّ، فَوَلَدَتَ لَهُ أَبَا سَبْرَةَ أَحَدُ البَدْرِيِّيْنَ"
+    },
+    {
+      "id": "sp_br_aburuhm_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "273",
+      "layer": "MAIN",
+      "exact": "أَبُو رُهْمٍ بنِ عَبْدِ العُزَّى العَامِرِيُّ"
+    },
+    {
+      "id": "sp_br_abusabrah_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "273",
+      "layer": "MAIN",
+      "exact": "أَبَا سَبْرَةَ أَحَدُ البَدْرِيِّيْنَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_br0",
+      "unit": "siyar-v5-45-barrah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_br_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_br_name",
+      "report": "r_br0",
+      "spans": [
+        "sp_br_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_br_abusalamah",
+      "report": "r_br0",
+      "spans": [
+        "sp_br_abusalamah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_br_aburuhm",
+      "report": "r_br0",
+      "spans": [
+        "sp_br_aburuhm"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_br",
+      "parent": "sp_br_name",
+      "exact": "بَرَّةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_br_father",
+      "parent": "sp_br_name",
+      "exact": "عَبْدِ المُطَّلِبِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_br_w",
+      "parent": "sp_br_abusalamah",
+      "exact": "وَالِدَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_br_abusalamah",
+      "parent": "sp_br_abusalamah",
+      "exact": "أَبِي سَلَمَةَ بنِ عَبْدِ الأَسَدِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_br_m",
+      "parent": "sp_br_aburuhm",
+      "exact": "عَلَيْهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_br_aburuhm",
+      "parent": "sp_br_aburuhm",
+      "exact": "أَبُو رُهْمٍ بنِ عَبْدِ العُزَّى",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_br_abusabrah",
+      "parent": "sp_br_aburuhm",
+      "exact": "أَبَا سَبْرَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_br",
+      "mention": "m_br",
+      "agent": "barrah-bint-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_br_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_father",
+      "mention": "m_br_father",
+      "agent": "abd-al-muttalib-ibn-hashim",
+      "basis": [
+        {
+          "span": "sp_br_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_w",
+      "mention": "m_br_w",
+      "agent": "barrah-bint-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_br_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_abusalamah",
+      "mention": "m_br_abusalamah",
+      "agent": "abu-salamah",
+      "basis": [
+        {
+          "span": "sp_br_abusalamah_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_m",
+      "mention": "m_br_m",
+      "agent": "barrah-bint-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_br_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_aburuhm",
+      "mention": "m_br_aburuhm",
+      "agent": "abu-ruhm-ibn-abd-al-uzza",
+      "basis": [
+        {
+          "span": "sp_br_aburuhm_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_abusabrah",
+      "mention": "m_br_abusabrah",
+      "agent": "abu-sabrah-ibn-abi-ruhm",
+      "basis": [
+        {
+          "span": "sp_br_abusabrah_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_br_name",
+      "subject": "m_br",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_br_name"
+        ]
+      },
+      "restsOn": [
+        "st_br_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_sex",
+      "subject": "m_br",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_br_name"
+        ]
+      },
+      "restsOn": [
+        "st_br_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_father",
+      "subject": "m_br",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_br_father"
+      },
+      "restsOn": [
+        "st_br_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_abusalamah",
+      "subject": "m_br_abusalamah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_br_w"
+      },
+      "restsOn": [
+        "st_br_abusalamah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_aburuhm",
+      "subject": "m_br_m",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_br_aburuhm"
+      },
+      "restsOn": [
+        "st_br_aburuhm"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_abusabrah_m",
+      "subject": "m_br_abusabrah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_br_m"
+      },
+      "restsOn": [
+        "st_br_aburuhm"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_abusabrah_f",
+      "subject": "m_br_abusabrah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_br_aburuhm"
+      },
+      "restsOn": [
+        "st_br_aburuhm"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
