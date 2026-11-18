@@ -1,7 +1,7 @@
 import { memo, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { pageModel, reciteView } from '@shared/quran/recitePage';
-import { ayahSlice, pageEnd, pageTop, READING_LINES } from '@shared/quran/ayahSlice';
+import { ayahSlice, pageEnd, pageTop, rangeSlice, READING_LINES } from '@shared/quran/ayahSlice';
 import MushafPageView, { type Checked, type Touch, type Write } from './MushafPageView';
 import { pageData, pageOfAyah, surahBefore } from '@/lib/mushaf';
 import type { Palette } from '@/lib/theme';
@@ -78,6 +78,30 @@ export const PageTop = memo(function PageTop({ page, palette, lines = READING_LI
     <View onLayout={event => setWidth(event.nativeEvent.layout.width)} pointerEvents="none">
       {width > 0 && <MushafPageView page={page} data={parts.data} model={parts.model} palette={palette} width={width} height={width * PAGE_TEXT_RATIO}
         top={surahBefore(page)} names={SURAH_TITLES} forgot={NONE} saved={NO_SAVES} onTouch={noTouch} slice={parts.slice} />}
+    </View>
+  );
+});
+
+/** Ayat `from`..`to` of one surah in the mushaf's own lines, page after page, as the reader draws them (a story's recited ayat, owner 2026-11-18). */
+export const AyatRange = memo(function AyatRange({ from, to, palette }: { from: string; to: string; palette: Palette }) {
+  const [width, setWidth] = useState(0);
+  const parts = useMemo(() => {
+    const first = pageOfAyah(from);
+    const last = pageOfAyah(to);
+    if (!first || !last) return [];
+    return Array.from({ length: last - first + 1 }, (_, i) => first + i).flatMap(page => {
+      const data = pageData(page);
+      const model = pageModel(data, surahBefore(page));
+      const slice = rangeSlice(model.lines, data.items, from, to);
+      return slice ? [{ page, data, model, slice }] : [];
+    });
+  }, [from, to]);
+  return (
+    <View onLayout={event => setWidth(event.nativeEvent.layout.width)} pointerEvents="none">
+      {width > 0 && parts.map(part => (
+        <MushafPageView key={part.page} page={part.page} data={part.data} model={part.model} palette={palette} width={width} height={width * PAGE_TEXT_RATIO}
+          top={surahBefore(part.page)} names={SURAH_TITLES} forgot={NONE} saved={NO_SAVES} onTouch={noTouch} slice={part.slice} />
+      ))}
     </View>
   );
 });

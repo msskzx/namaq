@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ayahSlice, pageTop, pageEnd } from './ayahSlice';
+import { ayahSlice, pageTop, pageEnd, rangeSlice } from './ayahSlice';
 import { pageGroups, type MushafPage } from './readerPage';
 import page293 from '../data/quran/mushaf/293.json';
 import page294 from '../data/quran/mushaf/294.json';
@@ -37,5 +37,17 @@ describe('a page\'s first rows', () => {
     expect(pageTop(items)).toEqual({ from: 0, to: 3 });
     expect(pageTop([{ line: 1 }, { line: 2 }, { line: 3 }, { line: 4 }] as never[])).toEqual({ from: 0, to: 2 });
     expect(pageTop([{ title: 1 }, { line: 1 }] as never[])).toEqual({ from: 0, to: 1 });
+  });
+});
+
+describe('the rows that hold a range of ayat', () => {
+  it('takes the surah title and basmala when the range opens the surah', () => {
+    expect(rangeSlice(pageGroups((page293 as MushafPage).items, 17), (page293 as MushafPage).items, '18:1', '18:4')).toEqual({ from: 9, to: 14 });
+  });
+
+  it('takes only the range\'s own lines on a later page', () => {
+    const range = rangeSlice(pageGroups((page294 as MushafPage).items, 18), (page294 as MushafPage).items, '18:9', '18:10');
+    expect(range).toEqual({ from: 4, to: 7 });
+    expect(rangeSlice(pageGroups((page294 as MushafPage).items, 18), (page294 as MushafPage).items, '2:1', '2:5')).toBeNull();
   });
 });

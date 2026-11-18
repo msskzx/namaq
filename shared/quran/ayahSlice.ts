@@ -42,3 +42,19 @@ export function pageTop(items: readonly Item[], count = 3): { from: number; to: 
   const lineRows = items.flatMap((item, at) => ('line' in item ? [at] : []));
   return { from: 0, to: lineRows[Math.min(count, lineRows.length) - 1] ?? items.length - 1 };
 }
+
+/**
+ * The rows of a page that hold the ayat `from`..`to` of one surah (a story's recited ayat, owner 2026-11-18), with the
+ * surah's title and basmala when the range opens the surah on this page; null when none of them is on the page.
+ */
+export function rangeSlice(lines: readonly (WordGroup[] | null)[], items: readonly Item[], from: string, to: string): { from: number; to: number } | null {
+  const [surah, first] = from.split(':').map(Number);
+  const last = Number(to.split(':')[1]);
+  const rows = lines.flatMap((line, at) => (line?.some(group => group.word && group.surah === surah && group.ayah !== undefined && group.ayah >= first && group.ayah <= last) ? [at] : []));
+  if (!rows.length) return null;
+  let start = rows[0];
+  if (first === 1 && lines[start]?.some(group => group.word && group.surah === surah && group.ayah === 1)) {
+    while (start > 0 && !('line' in items[start - 1])) start--;
+  }
+  return { from: start, to: rows[rows.length - 1] };
+}

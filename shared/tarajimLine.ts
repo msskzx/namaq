@@ -1,4 +1,8 @@
 import type { AppPerson } from './tarajim';
+import slipsJson from './data/tarajim/nasabSlips.json';
+
+/** Printing slips in a nasab (shared/data/tarajim/nasabSlips.json): the line stops before the slipped name. */
+const SLIPS: Record<string, { at: string; note: string }> = slipsJson.slips;
 
 /**
  * A person's line of fathers for the nasab tree (owner, 2026-11-18), read from the converted entries only.
@@ -27,6 +31,11 @@ const link = (name: string, from: string): LineName => ({ name, bare: bareName(n
 
 function ownLine(person: AppPerson): LineName[] {
   const line = person.nasab.map((name) => link(name, person.slug));
+  const slip = SLIPS[person.slug];
+  if (slip) {
+    const at = line.findIndex((n, i) => i > 0 && n.bare === bareName(slip.at));
+    if (at > 0) line.splice(at);
+  }
   if (line.length === 0) line.push(link(person.name, person.slug));
   if (line.length === 1) {
     const father = person.parents.find((parent) => parent.sex === 'MALE');
@@ -66,19 +75,25 @@ function ownLinesOf(people: readonly AppPerson[]) {
 }
 
 /**
- * The person's fathers from the person up, carried on through the other converted entries as far as they go. A line too
- * short to match by names (al-Abbas's heading names no father) goes on only through kin the entries name as the same
- * man: the father's own entry, or a brother whose entry names the same father.
+ * The person's fathers from the person up, carried on through the other converted entries as far as they go. Kin the
+ * entries name as the same man come first: the father's own entry always carries the line; else a brother whose entry
+ * names the same father (by slug) carries it when his goes further (al-Abbas's heading names no father; Amr ibn Sa'id's
+ * stops at «العاص»). Then three names in a row matching another entry's line carry it on.
  */
 export function lineOf(person: AppPerson, people: readonly AppPerson[]): LineName[] {
   const own = ownLinesOf(people);
   const line = [...own.get(person.slug)!];
   const father = fatherOf(person);
-  if (line.length < JOIN && father) {
-    const kin = people.filter((p) => p.slug !== person.slug && (p.slug === father || fatherOf(p) === father))
-      .map((p) => (p.slug === father ? own.get(p.slug)! : own.get(p.slug)!.slice(1)))
+  if (father && own.has(father)) {
+    // The father's own entry carries the line, whatever the son's heading prints: a heading may shorten the nasab
+    // («معاذ بن عمرو بن الجموح بن كعب» skips زيد and حرام, which his father's entry prints).
+    line.splice(1, line.length - 1, ...own.get(father)!);
+  } else if (father) {
+    // A brother whose entry names the same father (by slug, so the same man) carries a line his own stops short of.
+    const kin = people.filter((p) => p.slug !== person.slug && fatherOf(p) === father)
+      .map((p) => own.get(p.slug)!.slice(1))
       .sort((x, y) => y.length - x.length)[0];
-    if (kin && kin.length >= line.length) line.splice(1, line.length - 1, ...kin);
+    if (kin && kin.length > line.length - 1) line.splice(1, line.length - 1, ...kin);
   }
   const others = people.filter((p) => p.slug !== person.slug).map((p) => own.get(p.slug)!);
   for (let guard = 0; guard < people.length; guard += 1) {

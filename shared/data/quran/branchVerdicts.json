@@ -2948,7 +2948,7 @@
   },
   "tree:1a6f1681h381t6": {
    "keep": true,
-   "why": "Taking Allah's signs in mockery: commanded vs condemned, different tails"
+   "why": "Both use «اتخذ ءايات الله هزوا», a prohibition to believers in 2:231 and the charge against the people of the Fire in 45:35, and that contrast is worth pondering."
   },
   "tree:07cfi6s02gj0ru": {
    "keep": false,
@@ -3949,7 +3949,8 @@
   },
   "tree:0oy4pvd1dgulkr": {
    "keep": true,
-   "why": "Classic 'idha massa al-insana durr' da'ana / da'a rabbahu munib"
+   "why": "Same picture of ingratitude, calling on Allah in harm and forgetting Him in ease: 39:8 «وإذا مس الإنسان ضر دعا ربه منيبا» vs 39:49 «فإذا مس الإنسان ضر دعانا» vs 30:33 «مس الناس ضر دعوا ربهم» vs 10:12 «الضر دعانا لجنبه».",
+   "checked": true
   },
   "tree:10go8vo0jkn2po": {
    "keep": true,
@@ -4669,7 +4670,8 @@
   },
   "tree:0vtwdgb0582udh": {
    "keep": true,
-   "why": "'dhukkira bi-ayati rabbihi fa/thumma a'rada 'anha': wa nasiya vs inna"
+   "why": "Same question, who is more unjust than one reminded of his Lord's signs who turns away: 18:57 «فأعرض عنها» vs 32:22 «ثم أعرض عنهآ».",
+   "checked": true
   },
   "tree:18ozvsv1mr75r7": {
    "keep": true,
@@ -4889,7 +4891,8 @@
   },
   "tree:18kdttz1oxa6lf": {
    "keep": true,
-   "why": "'wa aqama al-salata wa ata al-zakata' wal-mufun vs wa lam yakhsha"
+   "why": "Same description of the true believer: «من ءامن بالله واليوم الأخر ... وأقام الصلوة وءاتى الزكوة» defines righteousness (2:177) and who may maintain Allah's mosques (9:18).",
+   "checked": true
   },
   "tree:0xz01u816n23ai": {
    "keep": true,
@@ -4988,8 +4991,8 @@
    "why": "'aktharuhum la ya'qilun' with wa / bal / no particle lead-ins"
   },
   "tree:0qkv4n30267tdx": {
-   "keep": true,
-   "why": "Closing 'aktharuhum la ya'lamun': bal vs lakinna lead-ins"
+   "keep": false,
+   "why": "Fifteen places are too many for one card; the useful split is «بل أكثرهم» against «ولاكن أكثرهم», plus the close pairs after «وعد الله حق» and «الحمد لله». Kept instead: tree:01qirmf0bht3tr, tree:00s4aqc1x6wjt0, cmp:0txiyea0gir41y, cmp:0k12agv1uf8der."
   },
   "tree:0ki7who0ybinrm": {
    "keep": true,
@@ -5157,7 +5160,8 @@
   },
   "tree:1juuozh1pozfyn": {
    "keep": true,
-   "why": "'alla ta'budu illa iyyahu' dhalika al-din vs wa bil-walidayn"
+   "why": "Same command of pure worship «ألا تعبدوا إلآ إياه»: Yusuf preaches it in prison as Allah's «أمر» (12:40), and it opens the commandments as «وقضى ربك» (17:23).",
+   "checked": true
   },
   "tree:0j2xjz11xut5t9": {
    "keep": true,
@@ -6065,7 +6069,8 @@
   },
   "tree:15hdkwi0zvboz0": {
    "keep": true,
-   "why": "'al-hayata al-dunya bil-akhira' ishtaraw vs yashruna"
+   "why": "Contrast between two trades: some bought this world at the price of the Hereafter, «اشتروا» (2:86), while the fighters sell this world for the Hereafter, «يشرون» (4:74).",
+   "checked": true
   },
   "tree:0lp9ixr1dglw9z": {
    "keep": true,
@@ -6753,7 +6758,8 @@
   },
   "tree:0mdnyqx0q3mcxz": {
    "keep": true,
-   "why": "Disbelieve in signs of الله vs ربهم, some add ولقائه; real mix-up set"
+   "why": "Same threat to those who reject the signs: 18:105 «بايات ربهم ولقآئه» vs 29:23 «بايات الله ولقآئه», and 3:4 «لهم عذاب شديد» vs 45:11 «لهم عذاب من رجز أليم».",
+   "checked": true
   },
   "tree:1konsxp09zci7z": {
    "keep": true,
@@ -7102,7 +7108,8 @@
   },
   "tree:0j5py691pwa679": {
    "keep": true,
-   "why": "Obey the Messenger, if you turn away: three different endings"
+   "why": "Same subject, obey Allah and the Messenger and if they turn away: 3:32 «والرسول فإن تولوا فإن الله لا يحب» vs 24:54 «وأطيعوا الرسول فإن تولوا فإنما عليه» vs 64:12 «فإن توليتم فإنما على رسولنا».",
+   "checked": true
   },
   "tree:1vcbsgi0neqy98": {
    "keep": true,
@@ -7177,8 +7184,8 @@
    "why": "'sky nor' in unrelated contexts"
   },
   "tree:1glhchk01juku0": {
-   "keep": true,
-   "why": "Descends and ascends: 34:2 vs 57:4 diverge after فيها"
+   "keep": false,
+   "why": "34:2 and 57:4 share the long run «يعلم ما يلج في الأرض ... وما يعرج فيها» and part at «وهو»; the other three share only two common words. Kept instead: cmp:1qqc7tk1ngrcgi."
   },
   "tree:1d7axeu1xpgrds": {
    "keep": true,
@@ -7314,8 +7321,8 @@
    "why": "Short link; the real slip is in the 'كان' tree"
   },
   "tree:0xh1f0e0r3t7em": {
-   "keep": true,
-   "why": "خطوات الشيطان إنه لكم عدو مبين vs 28:15 عدو مضل مبين"
+   "keep": false,
+   "why": "Drop 28:15, the story of Musa, and keep the three ayat sharing the long run «ولا تتبعوا خطوات الشيطان إنه لكم عدو مبين» together with the five-ayah card that shows what comes before «الشيطان ... إنه لكم عدو مبين» (follow his steps, worship him, let him turn you away). Kept instead: cmp:1rm4ewm1v4bask, tree:1fbag1f0p0iwul."
   },
   "tree:1fbag1f0p0iwul": {
    "keep": true,
@@ -7339,7 +7346,8 @@
   },
   "tree:1qaoluf0lfrtez": {
    "keep": true,
-   "why": "Oath والصبح إذا أسفر (74:34) vs تنفس (81:18)"
+   "why": "Same oath by the dawn with a different verb: 74:34 «والصبح إذآ أسفر» vs 81:18 «والصبح إذا تنفس».",
+   "checked": true
   },
   "tree:0atjv640rtksf2": {
    "keep": true,
@@ -9368,8 +9376,8 @@
    "why": "31 places of 'have you not seen'; subtrees carry the sets"
   },
   "tree:0en9zid0cmm8sj": {
-   "keep": true,
-   "why": "ألم تر إلى: أوتوا نصيبا trio (3:23, 4:44, 4:51) and others"
+   "keep": false,
+   "why": "«ألم تر إلى» opens fifteen unrelated passages; only «الذين أوتوا نصيبا من الكتاب» (3:23, 4:44, 4:51) and «كتب عليهم القتال» (2:246, 4:77) are close enough to confuse. Kept instead: cmp:0ylmag41fdj2cw, tree:16l5qsv19tlnll."
   },
   "tree:1fo46oq08ik3mc": {
    "keep": true,
@@ -10177,7 +10185,8 @@
   },
   "tree:1aaggdq0bwjshy": {
    "keep": true,
-   "why": "Same surah: فإلينا ... ثم الله شهيد (10:46) vs ثم إلينا ... ثم نذيقهم (10:70)"
+   "why": "Same warning in one surah: to Us is their return, «إلينا مرجعهم ثم», then Allah witnesses their deeds (10:46) or makes them taste severe punishment (10:70).",
+   "checked": true
   },
   "tree:1axltxn0fvfsxb": {
    "keep": true,
@@ -11369,7 +11378,8 @@
   },
   "tree:08wsgky0kp1052": {
    "keep": true,
-   "why": "inna dhalika ala Allahi yasir closing in four places"
+   "why": "Same point: whatever is written in Allah's Book is easy for Him. Knowledge (22:70), life spans (35:11) and calamities (57:22) are each recorded «في كتاب», then «إن ذالك على الله يسير»; 29:19 applies it to re-creation.",
+   "checked": true
   },
   "tree:0mj7u6o1a9l1yi": {
    "keep": true,
@@ -12238,7 +12248,8 @@
   },
   "tree:1npwrol0lrlaz9": {
    "keep": true,
-   "why": "arsalnaka bil-haqqi bashiran vs shahidan wa-mubashshiran"
+   "why": "Same description of the Prophet's mission: 2:119 and 35:24 «إنآ أرسلناك بالحق بشيرا ونذيرا» vs 33:45 and 48:8 «إنآ أرسلناك شاهدا ومبشرا ونذيرا».",
+   "checked": true
   },
   "tree:0pzernp1g4254n": {
    "keep": true,
@@ -12598,7 +12609,8 @@
   },
   "tree:0gesepw00dzz52": {
    "keep": true,
-   "why": "fa-nzur kayfa kana aqibatu: mujrimin, mufsidin, zalimin, mundharin..."
+   "why": "Same lesson, see how the end came out, with different closings: «المجرمين» (7:84), «المفسدين» (7:103, 27:14), «الظالمين» (10:39, 28:40), «المنذرين» (10:73, 37:73), «المكذبين» (43:25).",
+   "checked": true
   },
   "tree:1jejyzu0f45wqq": {
    "keep": true,
@@ -12709,8 +12721,9 @@
    "why": "innaka ala kulli shay'in qadir pair; ala al-haqq al-mubin vs ala siratin"
   },
   "tree:0qg7m9e1os7ops": {
-   "keep": true,
-   "why": "innaka ala kulli shay'in qadir closing in 3:26 and 66:8"
+   "keep": false,
+   "why": "Confirmed drop: «إنك على كل شيء قدير» is a stock closing and the two ayat are otherwise unrelated.",
+   "checked": true
   },
   "tree:0ol5ikn1y9rd4f": {
    "keep": false,
@@ -13803,7 +13816,8 @@
   },
   "tree:13d43vw0c17gey": {
    "keep": true,
-   "why": "wa-iyyaya fa-rhabun (2:40) vs fa-iyyaya (16:51)"
+   "why": "Same command to fear Allah alone, «فارهبون», found only here; 2:40 «وإياي» vs 16:51 «فإياي», and 2:41 nearby closes «وإياي فاتقون».",
+   "checked": true
   },
   "tree:1n4hhv40vrkbve": {
    "keep": true,
@@ -13883,7 +13897,8 @@
   },
   "tree:0vze3v51929s97": {
    "keep": true,
-   "why": "bil-batili li-yudhidu bihi al-haqq: wa-ttakhadhu (18:56) vs fa-akhadhtuhum"
+   "why": "Same charge: disbelievers argue with falsehood to refute the truth, a phrase found only here; 18:56 «ويجادل الذين كفروا» vs 40:5 «وجادلوا», then «واتخذوا ءاياتي» vs «فأخذتهم».",
+   "checked": true
   },
   "tree:09nfy7i0oqobt2": {
    "keep": false,
@@ -14099,7 +14114,8 @@
   },
   "tree:0fexxw1196pv2p": {
    "keep": true,
-   "why": "bi-annahum qawmun la yafqahun in 8:65, 9:127, 59:13"
+   "why": "Same diagnosis: lack of understanding, «قوم لا يفقهون», explains why disbelievers lose against fewer believers (8:65), why hypocrites slip away (9:127), and why they fear people more than Allah (59:13).",
+   "checked": true
   },
   "tree:10gwaio0chh9dk": {
    "keep": true,
@@ -14162,8 +14178,8 @@
    "why": "Musa sent bi-ayatina wa-sultanin mubin in 11:96, 23:45, 40:23"
   },
   "tree:1o5fcl81vmfmj6": {
-   "keep": true,
-   "why": "kadhdhabu bi-ayatina wa-kanu anha ghafilin (7:136, 7:146) vs muslimin"
+   "keep": false,
+   "why": "7:136 and 7:146 share the whole clause «بأنهم كذبوا باياتنا وكانوا عنها غافلين»; 43:69 shares only two words and is about believers. Kept instead: cmp:0kgl0u309d6ucb."
   },
   "tree:0ebrs0f1lik1rp": {
    "keep": false,
@@ -15222,8 +15238,8 @@
    "why": "Common 'bayna an-nas' across scattered contexts"
   },
   "tree:0bl4efc1vb6nyk": {
-   "keep": true,
-   "why": "Three clear groups: wa ma khalfahum, wa min khalfihim, wa bi-aymanihim"
+   "keep": false,
+   "why": "Split into three families: Allah's knowledge «يعلم ما بين أيديهم وما خلفهم», approach from all sides «من بين أيديهم», and the believers' light «يسعى نورهم» against «نورهم يسعى». Kept instead: cmp:0bfvn0u03r496e, tree:0hkt2ys09d7n24, tree:09tzezy0k5qhoa."
   },
   "tree:1gucclq1a66y16": {
    "keep": true,
@@ -15263,7 +15279,8 @@
   },
   "tree:0iv9cew09lhnf0": {
    "keep": true,
-   "why": "'tutla alayhim ayatuna bayyinat qala alladhina' la yarjuna vs kafaru"
+   "why": "Same reaction when clear ayat are recited: «قال الذين» then 10:15 «لا يرجون لقآءنا» vs 19:73 «كفروا للذين ءامنوا» vs 46:7 «كفروا للحق».",
+   "checked": true
   },
   "tree:05992i21btfmlc": {
    "keep": true,
@@ -15592,7 +15609,8 @@
   },
   "tree:1n61z5y1gmt8g2": {
    "keep": true,
-   "why": "'tusmi'u as-summ' 27:80 = 30:52 vs 10:42 and 43:40"
+   "why": "Same consolation: the Prophet cannot make the deaf hear; 27:80 «إنك ... بهادي العمي» vs 30:52 «فإنك ... بهاد العمي», and 10:42 «أفأنت تسمع الصم ولو كانوا لا يعقلون» vs 43:40 «أو تهدي العمي».",
+   "checked": true
   },
   "tree:0ysfui30c2jd1d": {
    "keep": false,
@@ -15691,16 +15709,16 @@
    "why": "'taksibu kullu nafs' in unrelated contexts, low risk"
   },
   "tree:1q36d8l1w2bc5n": {
-   "keep": true,
-   "why": "Zakariyya's sign: thalathata ayyam (3:41) vs thalatha layal (19:10)"
+   "keep": false,
+   "why": "The two Zakariyya places differ only in «ثلاثة أيام إلا رمزا» against «ثلاث ليال سويا»; 5:110 about 'Isa speaking in the cradle is another story. Kept instead: cmp:1ni937e1qztvdc."
   },
   "tree:1232fux08z9lil": {
    "keep": false,
    "why": "'takun fi' in unrelated contexts"
   },
   "tree:06ru2nw0lyu2li": {
-   "keep": true,
-   "why": "Ayah endings 'fala takun min al-...' differ: mumtarin, ghafilin, qanitin"
+   "keep": false,
+   "why": "Keep the three commands «لا تكن من» with their different endings; 26:136 «أم لم تكن من الواعظين» is not a command and drops out. Kept instead: tree:12awfjq0ws5yec."
   },
   "tree:153rp491azogkd": {
    "keep": true,
@@ -15719,8 +15737,8 @@
    "why": "Endings 'fatakuna min' az-zalimin / al-khasirin / al-mu'adhdhabin"
   },
   "tree:1ivcdft0t3gtfz": {
-   "keep": true,
-   "why": "Adam story 2:35 = 7:19 az-zalimin vs 7:20 al-khalidin"
+   "keep": false,
+   "why": "2:35 and 7:19 are the confusable pair («وكلا منها رغدا» against «فكلا من»); 7:20 shares only «تكونا من». Kept instead: tree:00e6rgg002g8yu."
   },
   "tree:1fog68z1mj6x8l": {
    "keep": true,
@@ -15744,7 +15762,8 @@
   },
   "tree:16xxdti0ez9dpo": {
    "keep": true,
-   "why": "Parables 29:43 wa ma ya'qiluha vs 59:21 la'allahum yatafakkarun"
+   "why": "Same statement that Allah strikes parables for people, with a different closing: 29:43 «وما يعقلهآ إلا العالمون» vs 59:21 «لعلهم يتفكرون».",
+   "checked": true
   },
   "tree:1ql5wqn00a8xxp": {
    "keep": true,
@@ -15772,7 +15791,7 @@
   },
   "tree:0bb07lo1mgsl70": {
    "keep": true,
-   "why": "Surah openings 'tanzil al-kitab' al-aziz al-hakim vs al-alim vs la rayb"
+   "why": "All five open a surah with «تنزيل الكتاب», and a memorizer must know that 32:2 goes on «لا ريب فيه» and 40:2 ends «العليم», so the row that differs most is the one worth learning."
   },
   "tree:1d42q1z0geib37": {
    "keep": true,
@@ -16804,8 +16823,8 @@
    "why": "'khalidan fiha' wa lahu / wa ghadiba / dhalika al-khizy"
   },
   "tree:12cmlwn19ovjd5": {
-   "keep": true,
-   "why": "'khalidina fiha abadan' in paradise and hell, endings differ"
+   "keep": false,
+   "why": "Split by meaning: the seven Paradise places with «تجري من تحتها الأنهار خالدين فيهآ أبدا», the two Hell places «جهنم خالدين فيهآ أبدا», and the two ayat that open with «خالدين فيهآ أبدا» (9:22, 33:65). Kept instead: tree:0k6m6i20w44hzi, tree:0uylofp072dgo1, cmp:1es6l3h0om8x05."
   },
   "tree:0oy1pmd1fteb0b": {
    "keep": true,
@@ -17433,7 +17452,8 @@
   },
   "tree:140mtd017ttaue": {
    "keep": true,
-   "why": "'dhuqu ma kuntum' taknizun / ta'malun / taksibun"
+   "why": "Same rebuke in punishment, taste what you used to do, with a different verb: 9:35 «تكنزون» vs 29:55 «تعملون» vs 39:24 «تكسبون».",
+   "checked": true
   },
   "tree:0measgi1ksmrj4": {
    "keep": true,
@@ -17477,7 +17497,8 @@
   },
   "tree:0zr0uob0yn5vn9": {
    "keep": true,
-   "why": "'rabbi ighfir li' wa li-akhi / wa hab li / wa li-walidayya"
+   "why": "Same prayer of prophets for forgiveness and mercy: 7:151 «وأدخلنا في رحمتك وأنت أرحم الراحمين» vs 23:118 «وارحم وأنت خير الراحمين», with Sulayman (38:35) and Nuh (71:28) adding their own requests.",
+   "checked": true
   },
   "tree:1qrazda0o75a0i": {
    "keep": true,
@@ -18313,7 +18334,8 @@
   },
   "tree:0g8apml1uez5sf": {
    "keep": true,
-   "why": "'sawa'un alaykum' ad'awtumuhum (7:193) vs innama (52:16)"
+   "why": "Shares only «سوآء عليكم»: calling idols who do not answer (7:193) and the people of Hell (52:16) are unrelated.",
+   "checked": true
   },
   "tree:17m6g3t1q484k9": {
    "keep": true,
@@ -18520,8 +18542,8 @@
    "why": "Ending 'kulla shay'in ilma' wasi'a (20:98) vs ahata (65:12)"
   },
   "tree:1hkp34l1wbvkvv": {
-   "keep": true,
-   "why": "'shay'un fil-ard wa la fis-sama'' 3:5 vs 14:38; 35:44 order reversed"
+   "keep": false,
+   "why": "3:5 and 14:38 say nothing in earth or heaven is hidden from Allah, and 35:44 is worth setting beside them for its reversed order «في السماوات ولا في الأرض»; 8:60 «من شيء في سبيل الله» does not belong."
   },
   "tree:1jb2p620j8inmk": {
    "keep": true,
@@ -19104,8 +19126,9 @@
    "why": "wa afa ankum in fasting ruling vs Uhud; unrelated contexts, short phrase"
   },
   "tree:03j0yab1tlrrhb": {
-   "keep": true,
-   "why": "kana Allah afuwwan ghafura ending, twice in an-Nisa"
+   "keep": false,
+   "why": "Confirmed drop: only the closing «عفوا غفورا» is shared, and the two ayat are on unrelated rulings.",
+   "checked": true
   },
   "tree:1j4fzgs12lf3d8": {
    "keep": true,
@@ -19260,8 +19283,8 @@
    "why": "unsurna ala al-qawm al-kafirin; fa-la ta'sa ala al-fasiqin vs al-kafirin"
   },
   "tree:0p08pqr1aahysf": {
-   "keep": true,
-   "why": "ala al-qawm al-kafirin: three du'a endings plus fa-la ta'sa in 5:68"
+   "keep": false,
+   "why": "The three prayers ending «انصرنا على القوم الكافرين» belong together, while 5:68 «فلا تأس على القوم الكافرين» is a different subject and drops out. Kept instead: tree:16lb3tp06s6cm5."
   },
   "tree:1b76pn70p6jgev": {
    "keep": true,
@@ -19826,7 +19849,8 @@
   },
   "tree:03cq72v19beb57": {
    "keep": true,
-   "why": "ash-Shu'ara refrain in ajriya illa ala rabb al-alamin; 12:104 in huwa"
+   "why": "Same refusal of payment for the message: every prophet in Ash-Shu'ara' says «ومآ أسلكم عليه من أجر إن أجري إلا على رب العالمين» (26:109,127,145,164,180) vs 12:104 «وما تسلهم ... إن هو إلا ذكر للعالمين».",
+   "checked": true
   },
   "tree:1hl8fsu04oihja": {
    "keep": true,
@@ -20613,8 +20637,8 @@
    "why": "la jarama annahum (11:22) vs wa hum (27:5) fil-akhira hum al-akhsarun"
   },
   "tree:08zdrb81tly5jg": {
-   "keep": true,
-   "why": "wa tarakna alayhi fil-akhirin refrain plus lisana sidqin fil-akhirin"
+   "keep": false,
+   "why": "The four As-Saffat refrains «وتركنا عليه في الأخرين» with «عليهما» in 37:119 and the following «سلام على» are the real family; 26:84 is a different sentence that only ends the same way. Kept instead: tree:1fps3680zjqysa."
   },
   "tree:1fps3680zjqysa": {
    "keep": true,
@@ -20993,8 +21017,8 @@
    "why": "yakhluqukum fi butuni ummahatikum (39:6) vs ajinnatun (53:32)"
   },
   "tree:1luphln1h2s01l": {
-   "keep": true,
-   "why": "ya'kuluna fi butunihim illa al-nar (2:174) vs naran (4:10)"
+   "keep": false,
+   "why": "Keep the pair «ما يأكلون في بطونهم إلا النار» against «إنما يأكلون في بطونهم نارا»; 22:20 is about the boiling water of Hell. Kept instead: tree:149uwip15lgln3."
   },
   "tree:01aximg1ahcp0a": {
    "keep": false,
@@ -21157,8 +21181,8 @@
    "why": "ma fi sudurikum: in tukhfu (3:29) vs li-yabtaliya (3:154) in Al Imran"
   },
   "tree:1cxaci21lqyg6y": {
-   "keep": true,
-   "why": "wa naza'na ma fi sudurihim min ghill: tajri (7:43) vs ikhwanan (15:47)"
+   "keep": false,
+   "why": "7:43 and 15:47 share «ونزعنا ما في صدورهم من غل» and then part; the other three only mention what is in the chests. Kept instead: cmp:0bmiih001b0czg."
   },
   "tree:1dgh1d61vp0bxo": {
    "keep": true,
@@ -22035,7 +22059,8 @@
   },
   "tree:08vtvvb1p7qquf": {
    "keep": true,
-   "why": "qala salamun fa-ma labitha (11:69) vs qawmun munkarun (51:25)"
+   "why": "Same scene, Ibrahim greeting his angel guests: 11:69 «قالوا سلاما قال سلام فما لبث» vs 51:25 «فقالوا سلاما قال سلام قوم منكرون».",
+   "checked": true
   },
   "tree:0mb13j8152ew08": {
    "keep": true,
@@ -22127,7 +22152,8 @@
   },
   "tree:1v2nyre02vs0tu": {
    "keep": true,
-   "why": "qalu hadha sihrun mubin: Fir'awn's people (27:13) vs Isa's (61:6)"
+   "why": "Same accusation against different prophets: Pharaoh's people called Musa's signs «سحر مبين» (27:13), and so did those 'Isa came to with clear proofs (61:6).",
+   "checked": true
   },
   "tree:1u7lfbp0najj77": {
    "keep": true,
@@ -22335,7 +22361,8 @@
   },
   "tree:1l7kwim1bllejk": {
    "keep": true,
-   "why": "qad khalat min qablihim al-mathulat (13:6) vs min al-jinn (41:25, 46:18)"
+   "why": "Same verdict on the doomed among past nations of jinn and men, «إنهم كانوا خاسرين»; 41:25 «وحق عليهم القول» vs 46:18 «أولائك الذين حق عليهم القول» (13:6 is an outlier).",
+   "checked": true
   },
   "tree:0kwl9p612w7olq": {
    "keep": true,
@@ -22979,7 +23006,8 @@
   },
   "tree:0ui6zb20ql6nka": {
    "keep": true,
-   "why": "wa kana al-insan ending: ajula, kafura, qatura, akthara shay"
+   "why": "Same subject, human nature, with a different trait closing each: «وكان الإنسان عجولا» (17:11), «كفورا» (17:67), «قتورا» (17:100), «أكثر شيء جدلا» (18:54).",
+   "checked": true
   },
   "tree:1dv6b1p1mulpmb": {
    "keep": true,
@@ -23564,7 +23592,8 @@
   },
   "tree:0wv4ph00l1kd4s": {
    "keep": true,
-   "why": "kadhdhaba wa tawalla closing in four surahs"
+   "why": "[leans تدبر] Same portrait of the denier, «كذب وتولى»: Pharaoh (20:48), the one who neither believed nor prayed (75:32), the wretched one kept from the Fire's escape (92:16), and the one forbidding prayer (96:13).",
+   "checked": true
   },
   "tree:1jd27ea0fmcuuk": {
    "keep": true,
@@ -23880,7 +23909,8 @@
   },
   "tree:0n1867w0842vn4": {
    "keep": true,
-   "why": "nab'athu min vs fi kulli ummatin shahida, plus 28:75"
+   "why": "Same scene, a witness from every nation on the Day: 16:84 «من كل أمة شهيدا ثم» vs 16:89 «في كل أمة شهيدا عليهم», and 28:75 «ونزعنا من كل أمة».",
+   "checked": true
   },
   "tree:107iptj0j700ht": {
    "keep": true,
@@ -24887,8 +24917,9 @@
    "why": "thumma la yu'dhanu lilladhina kafaru vs wa la yu'dhanu lahum"
   },
   "tree:1kav3bo17w9z1m": {
-   "keep": true,
-   "why": "la yu'minu billah / bihi / biha / bi-yawm al-hisab"
+   "keep": false,
+   "why": "Confirmed drop: «لا يؤمن» is too common to make these five ayat one family.",
+   "checked": true
   },
   "tree:0pvlhhi0f027sy": {
    "keep": true,
@@ -24920,7 +24951,8 @@
   },
   "tree:0hx8ox21q1vpp0": {
    "keep": true,
-   "why": "la yu'minuna billahi wa la bil-yawm vs wal-yawm vs wa hum bil-akhira"
+   "why": "Same description of those who reject faith: 9:29 and 4:38 «لا يؤمنون بالله ولا باليوم الأخر» vs 9:45 «لا يؤمنون بالله واليوم الأخر», with «ولا ب» added or dropped.",
+   "checked": true
   },
   "tree:0twmh5e0o378ay": {
    "keep": true,
@@ -26135,8 +26167,8 @@
    "why": "ba'da alladhi hurrima / tasta'jilun / takhtalifun, two from Isa"
   },
   "tree:03e2w031w2oofl": {
-   "keep": true,
-   "why": "lakum bihi ilm vs yunbitu / ansha'na lakum bihi"
+   "keep": false,
+   "why": "These are two separate subjects: speaking without knowledge «ما ليس لكم به علم» (3:66, 24:15), and rain bringing palms and grapes (16:11, 23:19). Kept instead: tree:0o9qfw91283ynh."
   },
   "tree:0s6z6b41pkuxxu": {
    "keep": true,
@@ -26436,7 +26468,7 @@
   },
   "tree:12apeh01iaxsy4": {
    "keep": true,
-   "why": "a'tadna / a'adda lil-kafirina adhaban muhina vs alima"
+   "why": "All four are the same threat with small changes a memorizer must hold apart: «وأعتدنا» against «أعد», and «مهينا» against «أليما»."
   },
   "tree:16ceidb0m2ymxz": {
    "keep": true,
@@ -27219,8 +27251,9 @@
    "why": "Lahum fi al-akhira: la khalaq / 'adhab 'azim / illa al-nar / 'adhab al-nar"
   },
   "tree:17d3ggq0q4co9g": {
-   "keep": true,
-   "why": "Lahum fi al-ard after ma / la-uzayyinanna / numakkinu: confusable"
+   "keep": false,
+   "why": "Confirmed drop: «لهم في الأرض» joins three unrelated subjects.",
+   "checked": true
   },
   "cmp:17dyhm31vse7jx": {
    "keep": true,
@@ -27689,7 +27722,8 @@
   },
   "tree:130twht1pihf7j": {
    "keep": true,
-   "why": "Layaqulunnallah qul: al-hamdu lillah vs a-fara'aytum"
+   "why": "Same argument: the idolaters admit Allah is the Creator; 29:63 ends «بل أكثرهم لا يعقلون» vs 31:25 «لا يعلمون», and 39:38 turns after the same question to «قل أفرءيتم».",
+   "checked": true
   },
   "tree:05seqk30j4sj1n": {
    "keep": false,
@@ -27937,7 +27971,8 @@
   },
   "tree:0sgnq4z0wijvdz": {
    "keep": true,
-   "why": "Wa ma khalaqallahu min shay' 7:185 vs 16:48"
+   "why": "Same call to reflect on creation: «أولم ينظروا» (7:185) and «أولم يروا» (16:48) both point to «ما خلق الله من شيء», a phrase found only here.",
+   "checked": true
   },
   "tree:05fk9to0e9692e": {
    "keep": false,
@@ -28076,8 +28111,9 @@
    "why": "Ma fil ardi jami'an: 5:36 liyaftadu vs 13:18/39:47 laftadaw"
   },
   "tree:0vp5iwc0ja7k2q": {
-   "keep": true,
-   "why": "Ma fis samawati wal-ard closings: tree shows which ending goes where"
+   "keep": false,
+   "why": "Confirmed drop of the eleven-ayah card, but the tighter families inside it stay: «لله ما في السماوات», «له ما في السماوات», «يعلم ما في السماوات» and the pair ending «وهو العزيز الحكيم». Kept instead: tree:13kxq2h0hb89ab, tree:1nccxlg0qx0nrc, tree:0ibmecl07xqys9, cmp:02wxmea1omfs8q.",
+   "checked": true
   },
   "cmp:164p7aj13aavgp": {
    "keep": true,
@@ -28858,7 +28894,8 @@
   },
   "tree:0mkmrrj0dhiof3": {
    "keep": true,
-   "why": "Fa-ma ... hafiza 4:80/42:48 vs wa ma ... wakila 17:54"
+   "why": "Same reassurance: the Prophet is not their keeper; 4:80 and 42:48 «فمآ أرسلناك عليهم حفيظا» vs 17:54 «ومآ أرسلناك عليهم وكيلا».",
+   "checked": true
   },
   "tree:07xpdgo161ytnq": {
    "keep": true,
@@ -29059,7 +29096,8 @@
   },
   "tree:1ujkx701u8dz5a": {
    "keep": true,
-   "why": "Wa ma utitum 28:60 vs fa-ma utitum 42:36 min shay'in fa-mata'"
+   "why": "Same lesson: what you are given is passing enjoyment and what is with Allah is better; 28:60 «ومآ أوتيتم ... وزينتها ... أفلا تعقلون» vs 42:36 «فمآ أوتيتم ... للذين ءامنوا» (17:85 is an outlier).",
+   "checked": true
   },
   "tree:1rw3l5z14s0djn": {
    "keep": true,
@@ -29791,7 +29829,8 @@
   },
   "tree:03z9lco15cn3k8": {
    "keep": true,
-   "why": "Lima bayna yadayya minat tawrat: wa li-uhilla / wa ataynahu / wa mubashshiran"
+   "why": "Same description of 'Isa confirming the Torah before him: 3:50 «ومصدقا لما بين يدي» and 61:6 «مصدقا لما بين يدي» (his own words) vs 5:46 «مصدقا لما بين يديه».",
+   "checked": true
   },
   "tree:08ogfce0ezdp7s": {
    "keep": true,
@@ -30298,8 +30337,8 @@
    "why": "Same surah 18:10 rashada vs 18:88 yusra min amrina"
   },
   "tree:147iu2z16powbf": {
-   "keep": true,
-   "why": "Ar-ruha min amrihi 'ala man yasha' 16:2 vs 40:15"
+   "keep": false,
+   "why": "16:2 and 40:15 share «من أمره على من يشآء من عباده» about sending the revelation; 65:4 is a divorce ruling. Kept instead: cmp:1uiz9jl1hhs1dn."
   },
   "tree:1tmntox1upjysz": {
    "keep": false,
@@ -32589,7 +32628,8 @@
   },
   "tree:13qeqjw17i1r4y": {
    "keep": true,
-   "why": "Hatu burhanakum: in kuntum (2:111, 27:64) vs hadha dhikr / fa-alimu"
+   "why": "Same challenge: bring your proof if you are truthful; 2:111 and 27:64 «قل هاتوا برهانكم إن كنتم صادقين» vs 21:24 «قل هاتوا برهانكم هاذا ذكر من معي» vs 28:75 «فقلنا هاتوا».",
+   "checked": true
   },
   "tree:1l5c11x0vgvb23": {
    "keep": true,
@@ -32870,7 +32910,8 @@
   },
   "tree:076v4501jjcpxo": {
    "keep": true,
-   "why": "Al-Qamar refrain fa-hal min muddakir"
+   "why": "Same refrain inviting reflection after each destroyed nation: «ولقد يسرنا القرءان للذكر فهل من مدكر» vs 54:15 «ولقد تركناهآ ءاية» and 54:51 «ولقد أهلكنآ أشياعكم», each followed by a different nation.",
+   "checked": true
   },
   "tree:0xs6nfd1b1752v": {
    "keep": true,
@@ -33134,7 +33175,8 @@
   },
   "tree:0rglrv71t4rgiv": {
    "keep": true,
-   "why": "Ayah-final 'wa hum mustakbirun': 16:22 vs 63:5"
+   "why": "[leans Search only] Shares the closing «وهم مستكبرون», for deniers of the Hereafter (16:22) and hypocrites refusing the Prophet's prayer for forgiveness (63:5); the link is arrogance, but it is a common phrase.",
+   "checked": true
   },
   "tree:0fhgydn0z2x7jb": {
    "keep": true,
@@ -33784,7 +33826,8 @@
   },
   "tree:0gmou8r16ct3on": {
    "keep": true,
-   "why": "Wa'dan alayhi haqqan fi al-Tawrat (9:111) vs wa lakinna (16:38)"
+   "why": "Same binding promise, «وعدا عليه حقا», found only here: Paradise for those who give their lives (9:111) and resurrection, which the deniers swore against (16:38).",
+   "checked": true
   },
   "tree:18shv1z14630xl": {
    "keep": true,
@@ -34083,8 +34126,8 @@
    "why": "Yu'minu billah wal-yawm al-akhir and other set phrases; mixed but useful"
   },
   "tree:12r5zsk1memlbs": {
-   "keep": true,
-   "why": "Yu'minu billah wal-yawm al-akhir: five places with different follow-ups"
+   "keep": false,
+   "why": "Keep only the true twins «ذالك يوعظ به من كان منكم يؤمن» (2:232) and «ذالكم يوعظ به من كان يؤمن» (65:2); the other three just use the common formula. Kept instead: cmp:18439pa00xx94u."
   },
   "tree:0f8arf9154mejh": {
    "keep": true,
@@ -34667,8 +34710,8 @@
    "why": "Yuridu an yukhrijakum min ardikum (7:110) vs bi-sihrihi (26:35)"
   },
   "tree:0asma5h19wpw07": {
-   "keep": true,
-   "why": "Yuriduna an: tadillu / yatahakamu / ya'manukum / yufarriqu / yukhriju..."
+   "keep": false,
+   "why": "«يريدون أن» is an ordinary phrase leading to seven different aims, so no reader would mix these places up."
   },
   "tree:09jdg28186d3es": {
    "keep": true,
@@ -34812,7 +34855,8 @@
   },
   "tree:0zyyiff1ajnet5": {
    "keep": true,
-   "why": "Yusibu bihi man yasha' min ibadihi (10:107) vs wa yasrifuhu (24:43)"
+   "why": "Shares only «يصيب به من يشآء»: good that Allah grants (10:107) and hail that strikes (24:43) are different subjects.",
+   "checked": true
   },
   "tree:10j5eb00zk9xye": {
    "keep": true,
@@ -35516,8 +35560,8 @@
    "why": "10:15 and 39:13 both followed by qul"
   },
   "tree:0vg84d30dcn5f9": {
-   "keep": true,
-   "why": "Yawm la bay' fihi 2:254 vs 14:31; la maradda 30:43 vs 42:47; la yanfa'"
+   "keep": false,
+   "why": "Split into the real families: «من قبل أن يأتي يوم لا» (four places), «يوم لا ينفع» (26:88, 40:52) and «يوم لا يغني ... ولا هم ينصرون» (44:41, 52:46); the rest share only two common words. Kept instead: cmp:111wodm1no93fo, cmp:0rfsb3j0359ntr, tree:0c0m51n0k6s3sf."
   },
   "tree:0zr3jqf1utbm2p": {
    "keep": true,
@@ -35918,6 +35962,14 @@
   "tree:0gbqfgd0cj7d75": {
    "keep": false,
    "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them"
+  },
+  "cmp:1rm4ewm1v4bask": {
+   "keep": true,
+   "why": "The tighter card inside a wider one the owner questioned: Drop 28:15, the story of Musa, and keep the three ayat sharing the long run «ولا تتبعوا خطوات الشيطان إنه لكم عدو مبين» together with the five-ayah card that shows what comes before «الشيطان ... إنه لكم عدو مبين» (follow his steps, worship him, let him turn you away)."
+  },
+  "cmp:0k12agv1uf8der": {
+   "keep": true,
+   "why": "The tighter card inside a wider one the owner questioned: Fifteen places are too many for one card; the useful split is «بل أكثرهم» against «ولاكن أكثرهم», plus the close pairs after «وعد الله حق» and «الحمد لله»."
   }
  }
 }

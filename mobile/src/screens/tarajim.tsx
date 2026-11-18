@@ -8,6 +8,7 @@ import Chip from '@/ui/Chip';
 import Empty from '@/ui/Empty';
 import { SearchField } from '@/ui/Field';
 import { BATTLES } from '@/lib/battles';
+import { STORY_TAGS } from '@/lib/stories';
 import { usePalette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
@@ -15,7 +16,7 @@ import { useTabRetap } from '@/lib/tabRetap';
 import { personLine, personName, searchPeople, titleFilters } from '@/lib/tarajim';
 
 /**
- * The tarajim tab (owner, 2026-11-18; sketch tarajim-app/sketch-dark.png, screen 1): the battles, a search, the book's
+ * The tarajim tab (owner, 2026-11-18; sketch tarajim-app/sketch-dark.png, screen 1): the sira stories and the battles, a search, the book's
  * own titles as filters, then a card for each person whose entry is converted. A person not converted yet is not listed.
  */
 export default function TarajimScreen() {
@@ -38,6 +39,10 @@ export default function TarajimScreen() {
       <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 12 }}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>التراجم</Text>
+        <Card palette={palette} pad={16} gap={4} accessibilityRole="link" accessibilityLabel="قصص السيرة" onPress={() => router.push('/stories')}>
+          <Text style={{ color: palette.ink, fontSize: 20, textAlign: 'right' }}>قصص السيرة</Text>
+          <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{STORY_TAGS.join(' · ')}</Text>
+        </Card>
         <Card palette={palette} pad={16} gap={4} accessibilityRole="link" accessibilityLabel="الغزوات والمعارك" onPress={() => router.push('/battles')}>
           <Text style={{ color: palette.ink, fontSize: 20, textAlign: 'right' }}>الغزوات والمعارك</Text>
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`${BATTLES[0].name} … ${BATTLES[BATTLES.length - 1].name}`}</Text>

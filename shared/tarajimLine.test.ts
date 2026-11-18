@@ -63,6 +63,15 @@ describe('safeguards', () => {
     expect(lineOf(jabir, all).map((n) => n.bare)).toEqual(['جابر', 'عبد الله']);
   });
 
+  it('carries a son through his father’s own entry even when the son’s heading shortens the nasab', () => {
+    const amr = man('amr-ibn-al-jumuh', ['عمرو', 'الجموح', 'زيد', 'حرام', 'كعب'], 'al-jumuh');
+    const muadh = man('muadh', ['معاذ', 'عمرو', 'الجموح', 'كعب'], 'amr-ibn-al-jumuh');
+    const all = [amr, muadh];
+    expect(lineOf(muadh, all).map((n) => n.bare)).toEqual(['معاذ', 'عمرو', 'الجموح', 'زيد', 'حرام', 'كعب']);
+    const roots = nasabTree([muadh, amr].map((p) => ({ slug: p.slug, line: lineOf(p, all) })));
+    expect(roots).toHaveLength(1);
+  });
+
   it('carries a short line through a brother the entries name as the same father', () => {
     expect(names('safiyyah-bint-abd-al-muttalib').slice(0, 3)).toEqual(['صفيه', 'عبد المطلب', 'هاشم']);
   });
@@ -87,5 +96,27 @@ describe('safeguards', () => {
     const count = (n: NasabNode): number => 1 + n.children.reduce((sum, c) => sum + count(c), 0);
     // u v w z y x a b c, each once.
     expect(count(roots.find((r) => r.key === 'u')!)).toBe(9);
+  });
+});
+
+describe('kunyaName', () => {
+  it('reads a kunya in the nominative whatever case the book gives it in', async () => {
+    const { kunyaName } = await import('./tarajim');
+    expect(kunyaName('أَبَا تُرَابٍ')).toBe('أبو تراب');
+    expect(kunyaName('أَبِي عَبْدِ اللهِ')).toBe('أبو عبد الله');
+    expect(kunyaName('أَبُو مُحَمَّدٍ')).toBe('أبو محمد');
+    expect(kunyaName('ذَا الجَنَاحَيْنِ')).toBe('ذو الجناحين');
+  });
+});
+
+describe('nasab slips', () => {
+  it('names only people that exist and a name their nasab prints, each with a note', async () => {
+    const { slips } = (await import('./data/tarajim/nasabSlips.json')).default as { slips: Record<string, { at: string; note: string }> };
+    for (const [slug, slip] of Object.entries(slips)) {
+      const p = people.find((x) => x.slug === slug);
+      expect(p).toBeDefined();
+      expect(p!.nasab.map(bareName)).toContain(bareName(slip.at));
+      expect(slip.note.length).toBeGreaterThan(0);
+    }
   });
 });
