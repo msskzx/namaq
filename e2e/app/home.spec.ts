@@ -125,8 +125,11 @@ test.describe('a new user', () => {
       }).toPass({ timeout: 30_000 });
       await page.getByRole('button', { name: new RegExp(`^${button}، `) }).first().click();
       await expect(inSheet.last()).toBeVisible();
-      await page.keyboard.press('Escape');
-      await expect(inSheet).toHaveCount(0);
+      // A tap above the sheet closes it, as on a phone.
+      await expect(async () => {
+        await page.mouse.click(195, 40);
+        await expect(inSheet).toHaveCount(0, { timeout: 1500 });
+      }).toPass({ timeout: 10_000 });
     }
   });
 

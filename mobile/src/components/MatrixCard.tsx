@@ -4,6 +4,7 @@ import { Text } from '@/ui/Text';
 import { BookOpen } from 'lucide-react-native';
 import { readAyah } from '@/lib/openReader';
 import { Gesture, GestureDetector, ScrollView, type GestureType } from 'react-native-gesture-handler';
+import { useFitReport, type OnFit } from '@/lib/useFit';
 import Animated, { cancelAnimation, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { num } from '@shared/quran/arabicNumber';
@@ -21,7 +22,10 @@ import { BACK_EDGE_SLOP } from '@/lib/stackOptions';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
 
-type Props = { presentation: Presentation; palette: Palette; view: Size; lane?: Lane; around: boolean; onTap: (ayahKeys: string[] | null) => void; onMove: () => void;
+type Props = {
+  /** In a feed card that follows its content: how much taller the rows are than the card (lib/useFit.ts). */
+  onFit?: OnFit;
+  presentation: Presentation; palette: Palette; view: Size; lane?: Lane; around: boolean; onTap: (ayahKeys: string[] | null) => void; onMove: () => void;
   /** The bookmark row, after the last ayah. */
   footer?: React.ReactNode;
   /** The footer stays under the scrolling rows instead of after them, as on home's tree card, so its buttons are always in sight; the rows then scroll inside one framed card. */
@@ -182,7 +186,7 @@ export function MatrixShare({ presentation, palette, width }: { presentation: Pr
  * The website's ayah matrix: a row per ayah of the tree, coloured where every row shares a word. With the surrounding switch,
  * the ayah before and after each sit in columns either side; a sideways swipe steps a column, then on to the next tree.
  */
-export default function MatrixCard({ presentation, palette, view, lane, around, onTap, onMove, footer, pinFooter = false, connections, growth, reading, onColumn, alongside, note, onScroll }: Props) {
+export default function MatrixCard({ onFit, presentation, palette, view, lane, around, onTap, onMove, footer, pinFooter = false, connections, growth, reading, onColumn, alongside, note, onScroll }: Props) {
   const matrix = useMemo(() => matrixOf(presentation, around), [presentation, around]);
   const count = matrix.columns.length;
   // One column fills the card; with the ayat around it, its neighbours peek in from the sides.
@@ -263,12 +267,13 @@ export default function MatrixCard({ presentation, palette, view, lane, around, 
   // Links are numbered per tree, so a new tree starts with nothing lit.
   useEffect(() => setLit(null), [presentation]);
   const light: Light = { lit, onWord: link => setLit(current => (current === link ? null : link)) };
+  const fit = useFitReport(onFit);
 
   if (alongside) pan.simultaneousWithExternalGesture(alongside);
   return (
     <GestureDetector gesture={pan}>
       <View collapsable={false} style={{ width: view.width, height: view.height, overflow: 'hidden', direction: 'ltr' }}>
-        <ScrollView nestedScrollEnabled onScroll={onScroll} scrollEventThrottle={16} style={pinFooter ? { flex: 1, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD } : { flex: 1 }} contentContainerStyle={{ paddingVertical: pinFooter ? 0 : 12 }} showsVerticalScrollIndicator={false}>
+        <ScrollView {...fit} nestedScrollEnabled onScroll={onScroll} scrollEventThrottle={16} style={pinFooter ? { flex: 1, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD } : { flex: 1 }} contentContainerStyle={{ paddingVertical: pinFooter ? 0 : 12 }} showsVerticalScrollIndicator={false}>
           <Words.Provider value={connections ? lines.registry : null}>
           {/* One card as wide as all its columns (owner, 2026-11-14): the rows parted by rules, solid between surahs and dashed within one. */}
           <Animated.View ref={lines.frame} onLayout={lines.measure} collapsable={false} style={[{ width: count * step - GAP + 2 * PAD, paddingHorizontal: PAD, paddingVertical: 4 }, !pinFooter && { backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD }, lanes]}>
