@@ -1,0 +1,251 @@
+{
+  "unit": {
+    "id": "siyar-v6-43-ibn-abza",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٤٣"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ab_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "201",
+      "layer": "MAIN",
+      "exact": "٤٣ - عَبْدُ الرَّحْمَنِ بنُ أَبْزَى الخُزَاعِيُّ"
+    },
+    {
+      "id": "sp_ab_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "201",
+      "layer": "MAIN",
+      "exact": "عَبْدُ الرَّحْمَنِ بنُ أَبْزَى الخُزَاعِيُّ",
+      "prefix": "٤٣ -"
+    },
+    {
+      "id": "sp_ab5",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "201",
+      "layer": "MAIN",
+      "exact": "عَبْدُ الرَّحْمَنِ بنُ أَبْزَى",
+      "prefix": "٤٣ -"
+    },
+    {
+      "id": "sp_ab7",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "201",
+      "layer": "MAIN",
+      "exact": "كَانَ نَافِعٌ مَوْلاَهُ اسْتَنَابَهُ عَلَى مَكَّةَ حِيْنَ تَلَقَّى عُمَرُ بنُ الخَطَّابِ إِلَى عُسْفَانَ"
+    },
+    {
+      "id": "sp_ab10",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "201",
+      "layer": "MAIN",
+      "exact": "إِنَّهُ عَالِمٌ بِالفَرَائِضِ، قَارِئٌ لِكِتَابِ اللهِ."
+    },
+    {
+      "id": "sp_ab13",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "202",
+      "layer": "MAIN",
+      "exact": "وَنَقَلَ ابْنُ الأَثِيْرِ فِي (تَارِيْخِهِ ) :"
+    },
+    {
+      "id": "sp_ab16",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "202",
+      "layer": "MAIN",
+      "exact": "أَنَّ عَلِيّاً -رَضِيَ اللهُ عَنْهُ - اسْتَعْمَلَ عَبْدَ الرَّحْمَنِ بنَ أَبْزَى عَلَى خُرَاسَانَ."
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ab0",
+      "unit": "siyar-v6-43-ibn-abza",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ab_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ab9",
+      "unit": "siyar-v6-43-ibn-abza",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ab7"
+      ],
+      "origin": {
+        "mention": "m_ab8"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ab15",
+      "unit": "siyar-v6-43-ibn-abza",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ab13"
+      ],
+      "origin": {
+        "mention": "m_ab14"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ab1",
+      "report": "r_ab0",
+      "spans": [
+        "sp_ab_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ab11",
+      "report": "r_ab9",
+      "spans": [
+        "sp_ab10"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ab19",
+      "report": "r_ab15",
+      "spans": [
+        "sp_ab16"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ab2",
+      "parent": "sp_ab_name",
+      "exact": "عَبْدُ الرَّحْمَنِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab8",
+      "parent": "sp_ab7",
+      "exact": "نَافِعٌ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ab14",
+      "parent": "sp_ab13",
+      "exact": "ابْنُ الأَثِيْرِ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ab17",
+      "parent": "sp_ab16",
+      "exact": "عَبْدَ الرَّحْمَنِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ab3",
+      "mention": "m_ab2",
+      "agent": "abd-al-rahman-ibn-abza",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab18",
+      "mention": "m_ab17",
+      "agent": "abd-al-rahman-ibn-abza",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ab4",
+      "subject": "m_ab2",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ab_name"
+        ]
+      },
+      "restsOn": [
+        "st_ab1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab6",
+      "subject": "m_ab2",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ab5"
+        ]
+      },
+      "restsOn": [
+        "st_ab1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab12",
+      "subject": "m_ab2",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ab10"
+        ]
+      },
+      "restsOn": [
+        "st_ab11"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab20",
+      "subject": "m_ab17",
+      "predicate": "office",
+      "value": {
+        "classified": "amir",
+        "spans": [
+          "sp_ab16"
+        ]
+      },
+      "restsOn": [
+        "st_ab19"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
