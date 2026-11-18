@@ -23,7 +23,7 @@ export const OWNER_ASK = 'owner: discuss';
 export const branchVerdicts = (data as { trees: BranchVerdicts }).trees;
 export const twinVerdicts = (twinData as { twins: TwinVerdicts }).twins;
 
-type Identified = { id: string; legacyId?: string; legacyIds?: string[]; group?: { id?: string; aliases?: string[] } };
+type Identified = { id: string; legacyId?: string; legacyIds?: string[]; group?: { id?: string; aliases?: string[] }; phrase?: { occurrences: { start: number; end: number }[] } };
 
 /** Every id a card answers to: its own, its old ids and its group's aliases. */
 export const idsOf = (piece: Identified) => [piece.id, piece.legacyId, ...(piece.legacyIds ?? []), piece.group?.id, ...(piece.group?.aliases ?? [])].filter((id): id is string => !!id);
@@ -46,8 +46,12 @@ export function branchVerdictFor(piece: Identified, verdicts: BranchVerdicts = b
 /** A card the owner dropped: hidden everywhere except review. A card with no verdict stays. */
 export const droppedBranch = (piece: Identified, verdicts: BranchVerdicts = branchVerdicts) => branchVerdictFor(piece, verdicts)?.keep === false;
 
-/** A card the owner keeps as its matrix only: the tree view and the tree quiz leave it out. */
+/**
+ * A card the owner keeps as its matrix only: the tree view and the tree quiz leave it out. So is a card whose ayat share
+ * no word at all (a book entry that sets them side by side): it has no trunk to grow a tree from.
+ */
 export const matrixOnly = (piece: Identified, verdicts: BranchVerdicts = branchVerdicts) => {
+  if (piece.phrase?.occurrences.length && piece.phrase.occurrences.every(occurrence => occurrence.end <= occurrence.start)) return true;
   const verdict = branchVerdictFor(piece, verdicts);
   return verdict?.keep === true && verdict.view === 'matrix';
 };
