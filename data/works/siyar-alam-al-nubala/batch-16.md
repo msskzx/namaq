@@ -64,6 +64,19 @@ Catalog slugs reached: `makhramah-ibn-nawfal` (al-Miswar's father, batch 12), `a
 3. `npm run model:app-people`: all 19 in people.json with their pages (none «٠–٠»).
 4. `npx vitest run shared/ src/lib/model`: pass. Every new nasab and virtue question was read; the three that offered a
    wrong choice that is also right were removed at the data (above) or fixed in code.
-5. Nasab meetings checked (13 questions): Umar and Salamah ibn Abi Salamah meet Amr ibn Hurayth at «عبد الله» (ibn Umar
-   ibn Makhzum), Ibn al-Sa'ib and Amr ibn Hurayth at «عمر» (ibn Makhzum), al-Walid ibn Uqbah meets the Umawis at «أمية»
-   and the Hashimis and al-Muttalibis at «عبد مناف». No question asks al-Miswar's line past «زهرة».
+5. Nasab meetings checked (11 questions): Umar and Salamah ibn Abi Salamah meet Amr ibn Hurayth at «عبد الله» (ibn Umar
+   ibn Makhzum); al-Walid ibn Uqbah meets the Umawis at «أمية» and the Hashimis and al-Muttalibis at «عبد مناف». No
+   question asks al-Miswar's line past «زهرة», nor Ibn al-Sa'ib's past «عابد» (below).
+6. Second-agent review: the first pass (NOT READY) and the re-review's two must-fix items are applied: Ibn al-Sa'ib's
+   printed line «صيفي بن عابد بن عمر بن مخزوم» leaves out «عبد الله» (Abid ibn Abdullah ibn Umar, al-Isti'ab and
+   Tahdhib al-Kamal), so the quiz said he meets Abu Salamah's sons and Amr ibn Hurayth at «عمر»; it is now in
+   `nasabSlips.json` at «عمر». Al-Irbad's «من أعيان أهل الصفة» and al-Miswar's «ممن يلزم عمر» (group virtues) are in
+   `virtueQuizSkip.json`.
+
+## Left for later (the review's optional items)
+
+- COMPANION_OF where the author says «الصحابي» or «له صحبة» with no mention of the Prophet ﷺ in the sentence (Ibn Jaz',
+  al-Miswar, Sulayman, al-Walid, Utbah ibn al-Nudhdhar, Amr ibn Hurayth, Sahl): it waits for the `status` predicate
+  (ADR 0025), which needs no object.
+- «على آل أبي أوفى»: the editor (p430) reads it as Abu Awfa himself, the author (p429) as a prayer the son won; the
+  virtue rests on the son's own words and is not asked (its sayer is the owner).
