@@ -28,6 +28,12 @@ export const hasSiraCard = (slot: number) => slot % 4 === 1;
 /** The sira story of a batch, the same all day; each story batch brings the next one. */
 export const siraOfSlot = (count: number, day: number, slot: number) => (count ? (((day + (slot - 1) / 4) % count) + count) % count : -1);
 
+/** One of al-Nawawi's Forty (owner, 2026-11-18) on every fourth batch from the fifth, after the moments. */
+export const hasHadithCard = (slot: number) => slot > 0 && slot % 4 === 0;
+
+/** The hadith of a batch, the same all day; each hadith batch brings the next one. */
+export const hadithOfSlot = (count: number, day: number, slot: number) => (count ? (((day + (slot - 4) / 4) % count) + count) % count : -1);
+
 /** The scene of a batch, the same all day; the next scene batch brings the next one. */
 export const sceneOfSlot = (count: number, day: number, slot: number) => (count ? (((day * 5 + slot / 2) % count) + count) % count : -1);
 
@@ -73,8 +79,8 @@ export function tarajimOfSlot<P extends { slug: string; virtues: readonly unknow
   return all[at];
 }
 
-/** The «صلة» card (owner, 2026-11-18): two people and the chain that joins them, on every fourth batch from the fifth. */
-export const hasTieCard = (slot: number) => slot > 0 && slot % 4 === 0;
+/** The «صلة» card (owner, 2026-11-18): two people and the chain that joins them, on every fourth batch from the seventh. */
+export const hasTieCard = (slot: number) => slot > 2 && slot % 4 === 2;
 
 /** The pair a «صلة» card shows, the same all day, the next card the next pair. */
 export function tieOfSlot<T>(pairs: readonly T[], day: number, slot: number): T | null {

@@ -94,7 +94,9 @@ function namesOf(person: AppPerson, line: LineName[]) {
     const kunya = bare.match(/^(?:ابو|ابا|ابي|ام) (.+)$/u);
     return kunya ? ['ابو', 'ابا', 'ابي', 'ام'].map(k => `${k} ${kunya[1]}`) : [bare];
   };
-  return [own, ...fathers.flatMap(father => [`ابن ${father}`, `بن ${father}`, `بنت ${father}`]),
+  // The name with or without its article: Ibn Ma'in's «مسور ثقة» names al-Miswar.
+  const bareOwn = /^ال\S{3,}$/u.test(own) ? [own.slice(2)] : [];
+  return [own, ...bareOwn, ...fathers.flatMap(father => [`ابن ${father}`, `بن ${father}`, `بنت ${father}`]),
     ...[...person.kunya, ...person.laqab].flatMap(k => forms(k.text))].map(bareName);
 }
 

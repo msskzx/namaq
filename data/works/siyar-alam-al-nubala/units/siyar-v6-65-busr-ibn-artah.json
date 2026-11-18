@@ -1,0 +1,270 @@
+{
+  "unit": {
+    "id": "siyar-v6-65-busr-ibn-artah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٦٥"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_bu_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "409",
+      "layer": "MAIN",
+      "exact": "٦٥ - بُسْرُ بنُ أَرْطَاةَ القُرَشِيُّ العَامِرِيُّ"
+    },
+    {
+      "id": "sp_bu_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "409",
+      "layer": "MAIN",
+      "exact": "بُسْرُ بنُ أَرْطَاةَ القُرَشِيُّ العَامِرِيُّ",
+      "prefix": "٦٥ - "
+    },
+    {
+      "id": "sp_bu_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "409",
+      "layer": "MAIN",
+      "exact": "بُسْرُ بنُ",
+      "prefix": "٦٥ - "
+    },
+    {
+      "id": "sp_bu_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "409",
+      "layer": "MAIN",
+      "exact": "أَرْطَاةَ القُرَشِيُّ",
+      "prefix": "بُسْرُ بنُ "
+    },
+    {
+      "id": "sp_bu_kunya_st",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "409",
+      "layer": "MAIN",
+      "exact": "الأَمِيْرُ، أَبُو عَبْدِ الرَّحْمَنِ القُرَشِيُّ، العَامِرِيُّ، الصَّحَابِيُّ، نَزِيْلُ دِمَشْقَ"
+    },
+    {
+      "id": "sp_bu_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "409",
+      "layer": "MAIN",
+      "exact": "أَبُو عَبْدِ الرَّحْمَنِ",
+      "prefix": "الأَمِيْرُ، "
+    },
+    {
+      "id": "sp_bu_nabi",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "409",
+      "layer": "MAIN",
+      "exact": "لَهُ عَنِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - حَدِيْثُ",
+      "suffix": ": (لاَ تُقْطَعُ"
+    },
+    {
+      "id": "sp_bu_prophet_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "409",
+      "layer": "MAIN",
+      "exact": "النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "prefix": "لَهُ عَنِ "
+    },
+    {
+      "id": "sp_bu_taraddud",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "410",
+      "layer": "MAIN",
+      "exact": "وَفِي صُحْبَتِهِ تَرَدُّدٌ",
+      "prefix": "مِنْ أَفرَادِ الأَبْطَالِ، "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_bu0",
+      "unit": "siyar-v6-65-busr-ibn-artah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_bu_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_bu_name",
+      "report": "r_bu0",
+      "spans": [
+        "sp_bu_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_bu_kunya_st",
+      "report": "r_bu0",
+      "spans": [
+        "sp_bu_kunya_st"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_bu_nabi",
+      "report": "r_bu0",
+      "spans": [
+        "sp_bu_nabi"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_bu_taraddud",
+      "report": "r_bu0",
+      "spans": [
+        "sp_bu_taraddud"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_bu",
+      "parent": "sp_bu_name",
+      "exact": "بُسْرُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_bu_father",
+      "parent": "sp_bu_name",
+      "exact": "أَرْطَاةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_bu_prophet",
+      "parent": "sp_bu_nabi",
+      "exact": "النَّبِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_bu",
+      "mention": "m_bu",
+      "agent": "busr-ibn-artah",
+      "basis": [
+        {
+          "span": "sp_bu_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_bu_father",
+      "mention": "m_bu_father",
+      "agent": "artah-al-amiri",
+      "basis": [
+        {
+          "span": "sp_bu_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_bu_prophet",
+      "mention": "m_bu_prophet",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_bu_prophet_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_bu_name",
+      "subject": "m_bu",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_bu_name"
+        ]
+      },
+      "restsOn": [
+        "st_bu_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_bu_sex",
+      "subject": "m_bu",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_bu_sex"
+        ]
+      },
+      "restsOn": [
+        "st_bu_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_bu_father",
+      "subject": "m_bu",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_bu_father"
+      },
+      "restsOn": [
+        "st_bu_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_bu_kunya",
+      "subject": "m_bu",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_bu_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_bu_kunya_st"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_bu_comp",
+      "subject": "m_bu",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_bu_prophet"
+      },
+      "restsOn": [
+        "st_bu_kunya_st",
+        "st_bu_nabi",
+        "st_bu_taraddud"
+      ],
+      "status": "DISPUTED"
+    }
+  ]
+}

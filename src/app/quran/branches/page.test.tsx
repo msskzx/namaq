@@ -529,7 +529,10 @@ describe('branches review', () => {
   it('names the surah a leaf runs on into: al-Saffat 182 into Sad 1 on the الحمد لله رب العالمين tree', async () => {
     vi.mocked(surahList).mockResolvedValueOnce([{ number: 1, name: 'الفاتحة' }, { number: 37, name: 'الصافات' }, { number: 38, name: 'ص' }] as Awaited<ReturnType<typeof surahList>>);
     render(await open({ o: 'cmp:0oc27w50449cxf' }));
-    const label = (key: string) => document.querySelector(`[data-node][data-keys="${key}"] [data-ref]`)?.textContent;
+    // The neighbouring cards drawn for the swipe also hold 1:2, so read the labels from this card's own root on.
+    const nodes = [...document.querySelectorAll('[data-node][data-keys]')];
+    const own = nodes.slice(nodes.findIndex(node => node.getAttribute('data-keys') === '1:2 37:182'));
+    const label = (key: string) => own.find(node => node.getAttribute('data-keys') === key)?.querySelector('[data-ref]')?.textContent;
     expect(label('1:2')).toBe('الفَاتِحَةْ ٢–٣');
     expect(label('37:182')).toBe('الصَّافَّاتْ ١٨٢ ثم صٓ ١');
   }, 30000);

@@ -1,0 +1,462 @@
+{
+  "unit": {
+    "id": "siyar-v6-59-ibn-as-saib",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٥٩"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_is_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "388",
+      "layer": "MAIN",
+      "exact": "٥٩ - عَبْدُ اللهِ بنُ السَّائِبِ القُرَشِيُّ"
+    },
+    {
+      "id": "sp_is_n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "388",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ السَّائِبِ القُرَشِيُّ",
+      "prefix": "٥٩ - "
+    },
+    {
+      "id": "sp_is_n2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "388",
+      "layer": "MAIN",
+      "exact": "ابْنِ أَبِي السَّائِبِ صَيْفِيِّ بنِ عَابِدِ بنِ عُمَرَ بنِ مَخْزُوْمِ بنِ يَقظَةَ بنِ مُرَّةَ"
+    },
+    {
+      "id": "sp_is_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "388",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ",
+      "prefix": "٥٩ - "
+    },
+    {
+      "id": "sp_is_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "388",
+      "layer": "MAIN",
+      "exact": "السَّائِبِ القُرَشِيُّ",
+      "prefix": "عَبْدُ اللهِ بنُ "
+    },
+    {
+      "id": "sp_is_kunyas",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "388",
+      "layer": "MAIN",
+      "exact": "أَبُو عَبْدِ الرَّحْمَنِ، وَأَبُو السَّائِبِ القُرَشِيُّ",
+      "prefix": "يَقظَةَ بنِ مُرَّةَ، "
+    },
+    {
+      "id": "sp_is_kunya1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "388",
+      "layer": "MAIN",
+      "exact": "أَبُو عَبْدِ الرَّحْمَنِ",
+      "prefix": "يَقظَةَ بنِ مُرَّةَ، "
+    },
+    {
+      "id": "sp_is_kunya2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "388",
+      "layer": "MAIN",
+      "exact": "أَبُو السَّائِبِ",
+      "prefix": "عَبْدِ الرَّحْمَنِ، وَ"
+    },
+    {
+      "id": "sp_is_muqri_st",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "388",
+      "layer": "MAIN",
+      "exact": "مُقْرِئُ مَكَّةَ، وَلَهُ صُحْبَةٌ وَرِوَايَةٌ، عِدَادُهُ فِي صِغَارِ الصَّحَابَةِ"
+    },
+    {
+      "id": "sp_is_muqri",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "388",
+      "layer": "MAIN",
+      "exact": "مُقْرِئُ مَكَّةَ",
+      "suffix": "، وَلَهُ صُحْبَةٌ"
+    },
+    {
+      "id": "sp_is_ubayy",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "389",
+      "layer": "MAIN",
+      "exact": "قَرَأَ عَبْدُ اللهِ القُرْآنَ عَلَى: أُبَيِّ بنِ كَعْبٍ"
+    },
+    {
+      "id": "sp_is_salah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "389",
+      "layer": "MAIN",
+      "exact": "وَصَلَّى خَلْفَ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - بِمَكَّةَ، فَقَرَأَ بِسُوْرَةِ المُؤْمِنِيْنَ"
+    },
+    {
+      "id": "sp_is_salah_p",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "389",
+      "layer": "MAIN",
+      "exact": "النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "prefix": "وَصَلَّى خَلْفَ "
+    },
+    {
+      "id": "sp_is_mujahid_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "390",
+      "layer": "MAIN",
+      "exact": "ابْنُ عُيَيْنَةَ: عَنْ دَاوُدَ بنِ شَابُوْرٍ، عَنْ مُجَاهِدٍ"
+    },
+    {
+      "id": "sp_is_mujahid",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "390",
+      "layer": "MAIN",
+      "exact": "كُنَّا نَفْخَرُ عَلَى النَّاسِ بِقَارِئِنَا عَبْدِ (٢) اللهِ بنِ السَّائِبِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_is0",
+      "unit": "siyar-v6-59-ibn-as-saib",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_is_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_is_mujahid",
+      "unit": "siyar-v6-59-ibn-as-saib",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_is_mujahid_isnad",
+      "origin": {
+        "mention": "m_is_mujahid_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_is_name",
+      "report": "r_is0",
+      "spans": [
+        "sp_is_n1",
+        "sp_is_n2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_is_kunyas",
+      "report": "r_is0",
+      "spans": [
+        "sp_is_kunyas"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_is_muqri_st",
+      "report": "r_is0",
+      "spans": [
+        "sp_is_muqri_st"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_is_ubayy",
+      "report": "r_is0",
+      "spans": [
+        "sp_is_ubayy"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_is_salah",
+      "report": "r_is0",
+      "spans": [
+        "sp_is_salah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_is_mujahid",
+      "report": "r_is_mujahid",
+      "spans": [
+        "sp_is_mujahid"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_is",
+      "parent": "sp_is_n1",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_is_father",
+      "parent": "sp_is_n1",
+      "exact": "السَّائِبِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_is_u",
+      "parent": "sp_is_ubayy",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_is_prophet",
+      "parent": "sp_is_salah",
+      "exact": "النَّبِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_is_mujahid_by",
+      "parent": "sp_is_mujahid_isnad",
+      "exact": "مُجَاهِدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_is_mj",
+      "parent": "sp_is_mujahid",
+      "exact": "عَبْدِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_is",
+      "mention": "m_is",
+      "agent": "abdullah-ibn-as-saib",
+      "basis": [
+        {
+          "span": "sp_is_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_is_father",
+      "mention": "m_is_father",
+      "agent": "as-saib-ibn-abi-as-saib",
+      "basis": [
+        {
+          "span": "sp_is_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_is_u",
+      "mention": "m_is_u",
+      "agent": "abdullah-ibn-as-saib",
+      "basis": [
+        {
+          "span": "sp_is_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_is_prophet",
+      "mention": "m_is_prophet",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_is_salah_p",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_is_mj",
+      "mention": "m_is_mj",
+      "agent": "abdullah-ibn-as-saib",
+      "basis": [
+        {
+          "span": "sp_is_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_is_name",
+      "subject": "m_is",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_is_n1",
+          "sp_is_n2"
+        ]
+      },
+      "restsOn": [
+        "st_is_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_is_sex",
+      "subject": "m_is",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_is_sex"
+        ]
+      },
+      "restsOn": [
+        "st_is_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_is_father",
+      "subject": "m_is",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_is_father"
+      },
+      "restsOn": [
+        "st_is_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_is_kunya1",
+      "subject": "m_is",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_is_kunya1"
+        ]
+      },
+      "restsOn": [
+        "st_is_kunyas"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_is_kunya2",
+      "subject": "m_is",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_is_kunya2"
+        ]
+      },
+      "restsOn": [
+        "st_is_kunyas"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_is_v_muqri",
+      "subject": "m_is",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_is_muqri"
+        ]
+      },
+      "restsOn": [
+        "st_is_muqri_st"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_is_v_ubayy",
+      "subject": "m_is_u",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_is_ubayy"
+        ]
+      },
+      "restsOn": [
+        "st_is_ubayy"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_is_v_salah",
+      "subject": "m_is",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_is_salah"
+        ]
+      },
+      "restsOn": [
+        "st_is_salah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_is_comp",
+      "subject": "m_is",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_is_prophet"
+      },
+      "restsOn": [
+        "st_is_muqri_st",
+        "st_is_salah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_is_v_mujahid",
+      "subject": "m_is_mj",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_is_mujahid"
+        ]
+      },
+      "restsOn": [
+        "st_is_mujahid"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

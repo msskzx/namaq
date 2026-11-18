@@ -170,11 +170,12 @@ test.describe('a new user', () => {
   });
 
   test('the feed asks a question of every quiz kind in turn, each card with the quiz buttons', async ({ page }) => {
-    // Three batches a day take three kinds in turn; three days apart, the eighteen kinds all come up in six days.
+    test.setTimeout(180_000);
+    // Three batches a day take three kinds in turn; three days apart, the twenty kinds all come up in seven days.
     const kinds = ['في أي سورة؟', 'أكمل المتشابهات', 'سمّع بقية الآية', 'قارن الموضعين', 'أوائل السور', 'ما معنى؟', 'لأي آية هذا التفسير؟', 'ما الأسلوب؟', 'ما المصطلح؟', 'ما إعرابها؟', 'كيف يقرؤها؟',
-      'التحفة: أكمل البيت', 'التحفة: البيت التالي', 'التحفة: حكم الحرف', 'أين يلتقي النسبان؟', 'صاحب المنقبة', 'ما صلته به؟', 'السيرة والغزوات'];
+      'التحفة: أكمل البيت', 'التحفة: البيت التالي', 'التحفة: حكم الحرف', 'أين يلتقي النسبان؟', 'صاحب المنقبة', 'ما صلته به؟', 'السيرة والغزوات', 'من راوي الحديث؟', 'أكمل الحديث'];
     const seen = new Set<string>();
-    for (const days of [0, 3, 6, 9, 12, 15]) {
+    for (const days of [0, 3, 6, 9, 12, 15, 18]) {
       await page.clock.setFixedTime(new Date(Date.now() + days * 86_400_000));
       await open(page, '/');
       await page.mouse.move(195, 500);
@@ -377,8 +378,8 @@ test.describe('a returning user', () => {
 
 test.describe('balagha terms in the feed', () => {
   test('a «ما الأسلوب؟» card, once answered, opens each choice\'s definition in a sheet with a way to its page', async ({ page }) => {
-    test.setTimeout(120_000);
-    for (const days of [0, 3, 6, 9, 12]) {
+    test.setTimeout(180_000);
+    for (const days of [0, 3, 6, 9, 12, 15, 18]) {
       await page.clock.setFixedTime(new Date(Date.now() + days * 86_400_000));
       await open(page, '/');
       await page.mouse.move(195, 500);

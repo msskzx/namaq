@@ -68,6 +68,7 @@ const USE = {
   battles: { ar: 'خرائط الغزوات والمعارك في تطبيق الهاتف', en: 'the battle maps in the phone app' },
   hijri: { ar: 'التاريخ الهجري وجزء اليوم', en: 'the Hijri date and today’s juz', href: '/utilities' },
   people: { ar: 'التراجم والأنساب والمعارك', en: 'biographies, lineages and battles', href: '/people' },
+  forty: { ar: 'الأربعون النووية ورواياتها في الصحيحين، في تطبيق الهاتف', en: 'al-Nawawi’s Forty and their Sahihayn records, in the phone app' },
   everywhere: { ar: 'كل الصفحات', en: 'every page' },
 } satisfies Record<string, SourceUse>;
 
@@ -92,6 +93,21 @@ export const SOURCES: Source[] = [
       en: "The author died in 1449, so his text is in the public domain. We quote his judgment with its context, volume, printed page and link, without modern notes or additions in the digital witness.",
     },
     uses: [USE.adhkar],
+  },
+  {
+    id: 'arbain-nawawi', group: 'books',
+    title: { ar: 'الأربعون النووية', en: 'al-Arba‘un al-Nawawiyya' }, author: { ar: 'يحيى بن شرف النووي', en: 'al-Nawawi' },
+    edition: 'دار المنهاج، بيروت، الطبعة الأولى ١٤٣٠هـ، عناية قصي محمد نورس الحلاق وأنور بن أبي بكر الشيخي؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(12836), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+  },
+  {
+    id: 'sahih-bukhari', group: 'books',
+    title: { ar: 'صحيح البخاري', en: 'Sahih al-Bukhari' }, author: { ar: 'محمد بن إسماعيل البخاري', en: 'al-Bukhari' },
+    edition: 'الطبعة السلطانية، بولاق ١٣١١هـ، مصوّرة دار طوق النجاة ١٤٢٢هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1681), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+  },
+  {
+    id: 'sahih-muslim', group: 'books',
+    title: { ar: 'صحيح مسلم', en: 'Sahih Muslim' }, author: { ar: 'مسلم بن الحجاج النيسابوري', en: 'Muslim' },
+    edition: 'تحقيق محمد فؤاد عبد الباقي، مطبعة عيسى البابي الحلبي، القاهرة ١٣٧٤هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1727), licence: PUBLIC_DOMAIN, uses: [USE.forty],
   },
   {
     id: 'siyar', group: 'books',
@@ -158,6 +174,11 @@ export const SOURCES: Source[] = [
     id: 'durrat-al-tanzil', group: 'books',
     title: { ar: 'درة التنزيل وغرة التأويل', en: 'Durrat al-Tanzil' }, author: { ar: 'الخطيب الإسكافي', en: 'al-Khatib al-Iskafi' },
     edition: 'تحقيق محمد مصطفى آيدين، جامعة أم القرى، ١٤٢٢هـ', link: shamela(1340), licence: PUBLIC_DOMAIN, uses: [USE.branches],
+  },
+  {
+    id: 'milak-al-tawil', group: 'books',
+    title: { ar: 'ملاك التأويل القاطع بذوي الإلحاد والتعطيل', en: 'Milak al-Ta’wil' }, author: { ar: 'ابن الزبير الغرناطي', en: 'Ibn al-Zubayr al-Gharnati' },
+    edition: 'وضع حواشيه عبد الغني محمد علي الفاسي، دار الكتب العلمية، بيروت', link: shamela(1419), licence: PUBLIC_DOMAIN, uses: [USE.branches],
   },
   {
     id: 'qisas-al-anbiya', group: 'books',

@@ -1,0 +1,348 @@
+{
+  "unit": {
+    "id": "siyar-v5-121-abd-al-rahman-ibn-samurah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٢١"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_as_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "571",
+      "layer": "MAIN",
+      "exact": "١٢١ - عَبْدُ الرَّحْمَنِ بنُ سَمُرَةَ بنِ حَبِيْبٍ العَبْشَمِيُّ"
+    },
+    {
+      "id": "sp_as_n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "571",
+      "layer": "MAIN",
+      "exact": "عَبْدُ الرَّحْمَنِ بنُ سَمُرَةَ بنِ حَبِيْبٍ"
+    },
+    {
+      "id": "sp_as_n2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "571",
+      "layer": "MAIN",
+      "exact": "ابْنِ عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ بنِ قُصَيِّ بنِ كِلاَبٍ"
+    },
+    {
+      "id": "sp_as_n3",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "571",
+      "layer": "MAIN",
+      "exact": "القُرَشِيُّ، العَبْشَمِيُّ"
+    },
+    {
+      "id": "sp_as_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "571",
+      "layer": "MAIN",
+      "exact": "عَبْدُ الرَّحْمَنِ بنُ",
+      "prefix": "-"
+    },
+    {
+      "id": "sp_as_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "571",
+      "layer": "MAIN",
+      "exact": "سَمُرَةَ بنِ حَبِيْبٍ",
+      "prefix": "بنُ"
+    },
+    {
+      "id": "sp_as_kunya_st",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "571",
+      "layer": "MAIN",
+      "exact": "أَبُو سَعِيْدٍ القُرَشِيُّ، العَبْشَمِيُّ، الأَمِيْرُ"
+    },
+    {
+      "id": "sp_as_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "571",
+      "layer": "MAIN",
+      "exact": "أَبُو سَعِيْدٍ",
+      "prefix": "كِلاَبٍ،"
+    },
+    {
+      "id": "sp_as_islam",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "571",
+      "layer": "MAIN",
+      "exact": "أَسْلَمَ عَبْدُ الرَّحْمَنِ يَوْمَ الفَتْحِ، وَكَانَ أَحَدَ الأَشْرَافِ"
+    },
+    {
+      "id": "sp_as_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "572",
+      "layer": "MAIN",
+      "exact": "مَاتَ: بِالبَصْرَةِ، سَنَةَ خَمْسِيْنَ"
+    },
+    {
+      "id": "sp_as_death_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "572",
+      "layer": "MAIN",
+      "exact": "سَنَةَ خَمْسِيْنَ",
+      "prefix": "بِالبَصْرَةِ،"
+    },
+    {
+      "id": "sp_as_death_p",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "572",
+      "layer": "MAIN",
+      "exact": "بِالبَصْرَةِ",
+      "prefix": "حَدِيْثاً.\n\nمَاتَ:"
+    },
+    {
+      "id": "sp_as_qila",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "572",
+      "layer": "MAIN",
+      "exact": "وَقِيْلَ: تُوُفِّيَ سَنَةَ إِحْدَى وَخَمْسِيْنَ"
+    },
+    {
+      "id": "sp_as_d51",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "572",
+      "layer": "MAIN",
+      "exact": "سَنَةَ إِحْدَى وَخَمْسِيْنَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_as0",
+      "unit": "siyar-v5-121-abd-al-rahman-ibn-samurah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_as_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_as_qila",
+      "unit": "siyar-v5-121-abd-al-rahman-ibn-samurah",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_as_qila_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_as_name",
+      "report": "r_as0",
+      "spans": [
+        "sp_as_n1",
+        "sp_as_n2",
+        "sp_as_n3"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_as_kunya_st",
+      "report": "r_as0",
+      "spans": [
+        "sp_as_kunya_st"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_as_islam",
+      "report": "r_as0",
+      "spans": [
+        "sp_as_islam"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_as_death",
+      "report": "r_as0",
+      "spans": [
+        "sp_as_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_as_qila",
+      "report": "r_as_qila",
+      "spans": [
+        "sp_as_qila"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_as",
+      "parent": "sp_as_n1",
+      "exact": "عَبْدُ الرَّحْمَنِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_as_father",
+      "parent": "sp_as_n1",
+      "exact": "سَمُرَةَ بنِ حَبِيْبٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_as_qila_by",
+      "parent": "sp_as_qila",
+      "exact": "وَقِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_as",
+      "mention": "m_as",
+      "agent": "abd-al-rahman-ibn-samurah",
+      "basis": [
+        {
+          "span": "sp_as_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_as_father",
+      "mention": "m_as_father",
+      "agent": "samurah-ibn-habib",
+      "basis": [
+        {
+          "span": "sp_as_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_as_name",
+      "subject": "m_as",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_as_n1",
+          "sp_as_n2",
+          "sp_as_n3"
+        ]
+      },
+      "restsOn": [
+        "st_as_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_as_sex",
+      "subject": "m_as",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_as_sex"
+        ]
+      },
+      "restsOn": [
+        "st_as_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_as_father",
+      "subject": "m_as",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_as_father"
+      },
+      "restsOn": [
+        "st_as_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_as_kunya",
+      "subject": "m_as",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_as_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_as_kunya_st"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_as_died",
+      "subject": "m_as",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 50,
+        "spans": [
+          "sp_as_death_y"
+        ]
+      },
+      "restsOn": [
+        "st_as_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_as_died_p",
+      "subject": "m_as",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "sp_as_death_p"
+        ]
+      },
+      "restsOn": [
+        "st_as_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_as_died51",
+      "subject": "m_as",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 51,
+        "spans": [
+          "sp_as_d51"
+        ]
+      },
+      "restsOn": [
+        "st_as_qila"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

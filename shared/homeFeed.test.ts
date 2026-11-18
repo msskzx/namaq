@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { feedBooks, hasBooksCard, hasJuzCard, hasMomentCard, hasSceneCard, hasSiraCard, hasTermCard, hasTieCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, siraOfSlot, termOfSlot, tieOfSlot } from './homeFeed';
+import { feedBooks, hadithOfSlot, hasBooksCard, hasHadithCard, hasJuzCard, hasMomentCard, hasSceneCard, hasSiraCard, hasTermCard, hasTieCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, siraOfSlot, termOfSlot, tieOfSlot } from './homeFeed';
 import { hasStoryCard } from './feedSeen';
 import type { PrayerDay } from './prayer';
 
@@ -37,6 +37,18 @@ describe('home feed cards', () => {
     expect(siraOfSlot(3, 10, 5)).toBe((siraOfSlot(3, 10, 1) + 1) % 3);
     expect(siraOfSlot(3, 11, 1)).toBe((siraOfSlot(3, 10, 1) + 1) % 3);
     expect(siraOfSlot(0, 3, 1)).toBe(-1);
+  });
+
+  it('puts one of the Forty on every fourth batch from the fifth, never with a balagha term, a sira story or a battle\'s moment', () => {
+    expect([0, 1, 2, 3, 4, 5, 6, 7, 8].filter(hasHadithCard)).toEqual([4, 8]);
+    for (let slot = 0; slot < 20; slot++) expect(hasHadithCard(slot) && (hasTermCard(slot) || hasSiraCard(slot) || hasMomentCard(slot))).toBe(false);
+  });
+
+  it('picks a hadith for each hadith batch, the same all day and the next one in the next', () => {
+    expect(hadithOfSlot(28, 10, 8)).toBe((hadithOfSlot(28, 10, 4) + 1) % 28);
+    expect(hadithOfSlot(28, 11, 4)).toBe((hadithOfSlot(28, 10, 4) + 1) % 28);
+    expect(new Set(Array.from({ length: 28 }, (_, day) => hadithOfSlot(28, day, 4))).size).toBe(28);
+    expect(hadithOfSlot(0, 3, 4)).toBe(-1);
   });
 
   it('puts a balagha term on every fourth batch from the third, never with the books, a sira story or a battle\'s moment', () => {
@@ -93,10 +105,10 @@ describe('the prayer card', () => {
     expect(insertAt([900], 844)).toBe(0);
   });
 
-  it('puts the «صلة» card on every fourth batch from the fifth, the same pair all day and the next pair the next card', () => {
-    expect([0, 1, 2, 3, 4, 5, 8].filter(hasTieCard)).toEqual([4, 8]);
+  it('puts the «صلة» card on every fourth batch from the seventh, the same pair all day and the next pair the next card', () => {
+    expect([0, 1, 2, 3, 4, 5, 6, 10].filter(hasTieCard)).toEqual([6, 10]);
     expect(tieOfSlot([], 3, 2)).toBeNull();
     expect(tieOfSlot(['a', 'b', 'c'], 3, 2)).toBe(tieOfSlot(['a', 'b', 'c'], 3, 2));
-    expect(tieOfSlot(['a', 'b', 'c'], 3, 8)).not.toBe(tieOfSlot(['a', 'b', 'c'], 3, 4));
+    expect(tieOfSlot(['a', 'b', 'c'], 3, 10)).not.toBe(tieOfSlot(['a', 'b', 'c'], 3, 6));
   });
 });

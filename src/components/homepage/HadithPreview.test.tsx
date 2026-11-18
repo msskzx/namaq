@@ -17,10 +17,10 @@ describe('complete hadith example', () => {
     expect(screen.queryByRole('heading', { name: 'Scene 3' })).toBeNull();
     expect(screen.getByRole('heading', { name: 'Scene 1' })).toBeTruthy();
     expect(screen.getByRole('heading', { name: 'Scene 2' })).toBeTruthy();
-    fireEvent.click(screen.getByRole('switch', { name: 'Isnad and bubbles' }));
+    fireEvent.click(screen.getByRole('switch', { name: 'Drawing' }));
     expect(screen.queryByRole('heading', { name: 'Scene 1' })).toBeNull();
     expect(container.textContent).toContain(view.reports[0].fullText!);
-    fireEvent.click(screen.getByRole('switch', { name: 'Isnad and bubbles' }));
+    fireEvent.click(screen.getByRole('switch', { name: 'Drawing' }));
     expect(screen.getByRole('heading', { name: 'Scene 2' })).toBeTruthy();
   });
 

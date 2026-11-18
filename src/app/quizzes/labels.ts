@@ -27,6 +27,8 @@ export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   TARAJIM_VIRTUE: { en: "Whose virtue?", ar: "صاحب المنقبة" },
   TARAJIM_TIE: { en: "How are they related?", ar: "ما صلته به؟" },
   SIRA: { en: "Sira and battles", ar: "السيرة والغزوات" },
+  HADITH_NARRATOR: { en: "Who narrated it?", ar: "من راوي الحديث؟" },
+  HADITH_COMPLETE: { en: "Complete the hadith", ar: "أكمل الحديث" },
 };
 
 export const TOPIC_GROUPS: { en: string; ar: string; topics: QuizTopic[] }[] = [
@@ -34,6 +36,7 @@ export const TOPIC_GROUPS: { en: string; ar: string; topics: QuizTopic[] }[] = [
   { en: "Tuhfat al-Atfal", ar: "تحفة الأطفال", topics: ["TUHFA_COMPLETE", "TUHFA_NEXT", "TUHFA_RULE"] },
   { en: "Tarajim", ar: "التراجم", topics: ["TARAJIM_NASAB", "TARAJIM_VIRTUE", "TARAJIM_TIE"] },
   { en: "Sira", ar: "السيرة", topics: ["SIRA"] },
+  { en: "Hadith", ar: "الحديث", topics: ["HADITH_NARRATOR", "HADITH_COMPLETE"] },
 ];
 
 export const DIFFICULTY_LABELS: Record<Difficulty, { en: string; ar: string }> = {

@@ -46,7 +46,7 @@ describe('HadithUnit component', () => {
   it('switches to Full text mode and shows the full text', () => {
     const view = hadithView('bukhari-jibril')!;
     render(<HadithUnit view={view} />);
-    const modeSwitch = screen.getByRole('switch', { name: /الإسناد والفقاعات/ });
+    const modeSwitch = screen.getByRole('switch', { name: /الرسم/ });
     fireEvent.click(modeSwitch);
     expect(screen.getByText(/حَدَّثَنَا مُسَدَّدٌ/)).toBeTruthy();
   });
@@ -54,7 +54,7 @@ describe('HadithUnit component', () => {
   it('switches back from Full text to bubbles mode', () => {
     const view = hadithView('bukhari-jibril')!;
     render(<HadithUnit view={view} />);
-    const modeSwitch = screen.getByRole('switch', { name: /الإسناد والفقاعات/ });
+    const modeSwitch = screen.getByRole('switch', { name: /الرسم/ });
     fireEvent.click(modeSwitch);
     expect(screen.getByText(/حَدَّثَنَا مُسَدَّدٌ/)).toBeTruthy();
     fireEvent.click(modeSwitch);
@@ -75,7 +75,7 @@ describe('HadithUnit component', () => {
     const h2s = screen.getAllByRole('heading', { level: 2 });
     const remarkHeadings = h2s.filter((h) => h.textContent?.includes('تعليق المصنف'));
     expect(remarkHeadings).toHaveLength(1);
-    const modeSwitch = screen.getByRole('switch', { name: /الإسناد والفقاعات/ });
+    const modeSwitch = screen.getByRole('switch', { name: /الرسم/ });
     fireEvent.click(modeSwitch);
 
     const h2sAfter = screen.getAllByRole('heading', { level: 2 });
@@ -100,7 +100,7 @@ describe('HadithUnit component', () => {
   it('Muslim hadith also starts in bubbles mode with toggle', () => {
     const view = hadithView('muslim-jibril')!;
     render(<HadithUnit view={view} />);
-    expect((screen.getByRole('switch', { name: /الإسناد والفقاعات/ }) as HTMLInputElement).checked).toBe(true);
+    expect((screen.getByRole('switch', { name: /الرسم/ }) as HTMLInputElement).checked).toBe(true);
     const h3s = screen.getAllByRole('heading', { level: 3 });
     expect(h3s.length).toBeGreaterThan(0);
   });
@@ -114,7 +114,7 @@ describe('HadithUnit component', () => {
   it('hides isnad diagram in full text mode', () => {
     const view = hadithView('bukhari-jibril')!;
     render(<HadithUnit view={view} />);
-    const modeSwitch = screen.getByRole('switch', { name: /الإسناد والفقاعات/ });
+    const modeSwitch = screen.getByRole('switch', { name: /الرسم/ });
     fireEvent.click(modeSwitch);
     expect(screen.queryByTestId('isnad-svg')).toBeNull();
   });

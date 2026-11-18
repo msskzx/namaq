@@ -1,0 +1,336 @@
+{
+  "unit": {
+    "id": "siyar-v5-112-said-ibn-yarbu",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١١٢"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_yb_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "542",
+      "layer": "MAIN",
+      "exact": "١١٢ - سَعِيْدُ بنُ يَرْبُوْعٍ القُرَشِيُّ"
+    },
+    {
+      "id": "sp_yb_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "542",
+      "layer": "MAIN",
+      "exact": "سَعِيْدُ بنُ يَرْبُوْعٍ القُرَشِيُّ"
+    },
+    {
+      "id": "sp_yb_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "542",
+      "layer": "MAIN",
+      "exact": "سَعِيْدُ بنُ",
+      "prefix": "-"
+    },
+    {
+      "id": "sp_yb_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "542",
+      "layer": "MAIN",
+      "exact": "يَرْبُوْعٍ القُرَشِيُّ",
+      "prefix": "بنُ"
+    },
+    {
+      "id": "sp_yb_age",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "542",
+      "layer": "MAIN",
+      "exact": "عَاشَ أَيْضاً: مائَةً وَعِشْرِيْنَ سَنَةً"
+    },
+    {
+      "id": "sp_yb_age_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "542",
+      "layer": "MAIN",
+      "exact": "مائَةً وَعِشْرِيْنَ سَنَةً"
+    },
+    {
+      "id": "sp_yb_son",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "542",
+      "layer": "MAIN",
+      "exact": "رَوَاهُ عَنْهُ: ابْنُهُ عَبْدُ الرَّحْمَنِ"
+    },
+    {
+      "id": "sp_yb_son_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "542",
+      "layer": "MAIN",
+      "exact": "ابْنُهُ عَبْدُ الرَّحْمَنِ"
+    },
+    {
+      "id": "sp_yb_ansab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "542",
+      "layer": "MAIN",
+      "exact": "وَكَانَ مِمَّنْ يُجَدِّدُ أَنْصَابَ الحَرَمِ"
+    },
+    {
+      "id": "sp_yb_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "542",
+      "layer": "MAIN",
+      "exact": "وَتُوُفِّيَ: سَنَةَ أَرْبَعٍ وَخَمْسِيْنَ"
+    },
+    {
+      "id": "sp_yb_death_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "542",
+      "layer": "MAIN",
+      "exact": "سَنَةَ أَرْبَعٍ وَخَمْسِيْنَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_yb0",
+      "unit": "siyar-v5-112-said-ibn-yarbu",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_yb_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_yb_name",
+      "report": "r_yb0",
+      "spans": [
+        "sp_yb_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_yb_age",
+      "report": "r_yb0",
+      "spans": [
+        "sp_yb_age"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_yb_son",
+      "report": "r_yb0",
+      "spans": [
+        "sp_yb_son"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_yb_ansab",
+      "report": "r_yb0",
+      "spans": [
+        "sp_yb_ansab"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_yb_death",
+      "report": "r_yb0",
+      "spans": [
+        "sp_yb_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_yb",
+      "parent": "sp_yb_name",
+      "exact": "سَعِيْدُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_yb_father",
+      "parent": "sp_yb_name",
+      "exact": "يَرْبُوْعٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_yb_s",
+      "parent": "sp_yb_son",
+      "exact": "عَنْهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_yb_c_abd",
+      "parent": "sp_yb_son",
+      "exact": "عَبْدُ الرَّحْمَنِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_yb",
+      "mention": "m_yb",
+      "agent": "said-ibn-yarbu-al-qurashi",
+      "basis": [
+        {
+          "span": "sp_yb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_yb_father",
+      "mention": "m_yb_father",
+      "agent": "yarbu-father-of-said-al-makhzumi",
+      "basis": [
+        {
+          "span": "sp_yb_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_yb_s",
+      "mention": "m_yb_s",
+      "agent": "said-ibn-yarbu-al-qurashi",
+      "basis": [
+        {
+          "span": "sp_yb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_yb_c_abd",
+      "mention": "m_yb_c_abd",
+      "agent": "abd-al-rahman-ibn-said-ibn-yarbu",
+      "basis": [
+        {
+          "span": "sp_yb_son_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_yb_name",
+      "subject": "m_yb",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_yb_name"
+        ]
+      },
+      "restsOn": [
+        "st_yb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yb_sex",
+      "subject": "m_yb",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_yb_sex"
+        ]
+      },
+      "restsOn": [
+        "st_yb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yb_father",
+      "subject": "m_yb",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_yb_father"
+      },
+      "restsOn": [
+        "st_yb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yb_age",
+      "subject": "m_yb",
+      "predicate": "died.age",
+      "value": {
+        "parsed": 120,
+        "spans": [
+          "sp_yb_age_n"
+        ]
+      },
+      "restsOn": [
+        "st_yb_age"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yb_c_abd_0",
+      "subject": "m_yb_c_abd",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_yb_s"
+      },
+      "restsOn": [
+        "st_yb_son"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yb_v_ansab",
+      "subject": "m_yb",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_yb_ansab"
+        ]
+      },
+      "restsOn": [
+        "st_yb_ansab"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_yb_died",
+      "subject": "m_yb",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 54,
+        "spans": [
+          "sp_yb_death_y"
+        ]
+      },
+      "restsOn": [
+        "st_yb_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

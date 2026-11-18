@@ -220,7 +220,9 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
     const shared = piece.keys.filter(key => shownKeys.has(key)).length;
     return shared === shownKeys.size ? [{ piece, inside: true }] : shared === piece.keys.length ? [{ piece, inside: false }] : [];
   }).sort((a, b) => a.piece.keys.length - b.piece.keys.length).slice(0, RELATED_MAX) : [];
-  const verdict = id ? branchVerdictFor({ id, legacyId: resolved?.id, group: requestedGroup }) : undefined;
+  // The listed card carries the ids of the cards merged into it (same ayat), so its verdict is read from it first.
+  const listed = inventory.find(piece => piece.id === id);
+  const verdict = listed ? branchVerdictFor(listed) : id ? branchVerdictFor({ id, legacyId: resolved?.id, group: requestedGroup }) : undefined;
   return (
     <div id="quran-branches" dir="rtl" data-share-card className={`${styles.page} w-full max-w-6xl mx-auto px-4 py-8 max-sm:py-3 [--tree-chrome:20rem] max-sm:[--tree-chrome:15rem] flex flex-col gap-3 overflow-x-clip`}>
       <PreloadQuranText />
