@@ -23,6 +23,17 @@ describe('the app search on the bundled data', () => {
   });
 });
 
+describe('adhkar in the app search', () => {
+  it('finds an adhkar card by its words, with the tab it opens on', () => {
+    expect(group('أنت السلام ومنك السلام', 'adhkar')).toEqual([expect.objectContaining({ id: 'prayer-peace', occasion: 'after-prayer' })]);
+    expect(group('بك أصبحنا', 'adhkar')).toContainEqual(expect.objectContaining({ id: 'morning-by-you', occasion: 'morning' }));
+  });
+
+  it('leaves the Quran selection to the ayat, so no Quran text is listed as an adhkar', () => {
+    expect(group('قل هو الله أحد', 'adhkar')).toEqual([]);
+  });
+});
+
 describe('trees in the app search', () => {
   it('keeps to trees that hold the words as typed when there are some', () => {
     const trees = group('فرعون', 'tree') as { text: string }[];

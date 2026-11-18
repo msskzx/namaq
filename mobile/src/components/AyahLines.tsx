@@ -64,13 +64,16 @@ function AyahLines({ ayah, palette, write, checked, shown, words = 0, whole = fa
 
 export default memo(AyahLines);
 
-/** A page's first lines exactly as the reader draws them (the reading card on home, owner 2026-11-14). */
-export const PageTop = memo(function PageTop({ page, palette }: { page: number; palette: Palette }) {
+/** The mushaf's lines on a page. */
+export const PAGE_LINES = 15;
+
+/** A page's first lines exactly as the reader draws them (the reading card on home, owner 2026-11-14); `lines={PAGE_LINES}` is the whole page. */
+export const PageTop = memo(function PageTop({ page, palette, lines = READING_LINES }: { page: number; palette: Palette; lines?: number }) {
   const [width, setWidth] = useState(0);
   const parts = useMemo(() => {
     const data = pageData(page);
-    return { data, model: pageModel(data, surahBefore(page)), slice: pageTop(data.items, READING_LINES) };
-  }, [page]);
+    return { data, model: pageModel(data, surahBefore(page)), slice: pageTop(data.items, lines) };
+  }, [page, lines]);
   return (
     <View onLayout={event => setWidth(event.nativeEvent.layout.width)} pointerEvents="none">
       {width > 0 && <MushafPageView page={page} data={parts.data} model={parts.model} palette={palette} width={width} height={width * PAGE_TEXT_RATIO}

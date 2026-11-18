@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { ArrowLeftRight, BookOpen, ChevronDown, ChevronLeft, List, NotebookPen, ScrollText, TextSearch, Users, type LucideProps } from 'lucide-react';
+import { ArrowLeftRight, BookOpen, ChevronDown, ChevronLeft, HandHeart, List, NotebookPen, ScrollText, TextSearch, Users, type LucideProps } from 'lucide-react';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes, notesByDate } from '@shared/ayahNotes';
 import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
@@ -30,6 +30,7 @@ const GROUPS: Record<SearchKind, { title: string; Icon: (props: LucideProps) => 
   compare: { title: 'المقارنة', Icon: ArrowLeftRight },
   event: { title: 'قصص الأنبياء', Icon: Users },
   tuhfa: { title: 'تحفة الأطفال', Icon: ScrollText },
+  adhkar: { title: 'الأذكار', Icon: HandHeart },
   note: { title: 'تأملاتي', Icon: NotebookPen },
 };
 
@@ -45,6 +46,8 @@ export function hitHref(hit: SearchHit): string {
     case 'compare': return surahPairHref(hit.a, hit.b);
     case 'event': return `/quran/prophets/${hit.slug}?event=${hit.event}`;
     case 'tuhfa': return `/quran/tajwid/tuhfat-al-atfal#bayt-${hit.verse}`;
+    // The adhkar are in the phone app only; the website's search never lists them (shared/quran/searchAll.ts).
+    case 'adhkar': return '/utilities';
   }
 }
 
@@ -74,13 +77,15 @@ function HitBody({ hit }: { hit: SearchHit }) {
       return <><span className={styles.grow}>{hit.title}</span><span className={styles.muted}>{hit.prophet}</span></>;
     case 'tuhfa':
       return <><span className={styles.muted}>{num(hit.verse)}</span><span className={`${styles.grow} ${styles.verse}`}><span>{hit.first}</span><span>{hit.second}</span></span></>;
+    case 'adhkar':
+      return <span className={styles.grow}>{hit.text}</span>;
     case 'note':
       return <span className={styles.grow}><span className="line-clamp-2">{hit.text}</span><span className={`${styles.muted} block`}>{ayahLabel(hit.key)}</span></span>;
   }
 }
 
 const hitKey = (hit: SearchHit) => hit.kind === 'surah' ? `s${hit.number}` : hit.kind === 'ayah' || hit.kind === 'note' ? `${hit.kind}${hit.key}` : hit.kind === 'word' ? `w${hit.id}`
-  : hit.kind === 'tree' ? `t${hit.id}` : hit.kind === 'compare' ? `c${hit.a}:${hit.b}` : hit.kind === 'event' ? `e${hit.slug}${hit.event}` : `v${hit.verse}`;
+  : hit.kind === 'tree' ? `t${hit.id}` : hit.kind === 'compare' ? `c${hit.a}:${hit.b}` : hit.kind === 'event' ? `e${hit.slug}${hit.event}` : hit.kind === 'adhkar' ? `d${hit.id}` : `v${hit.verse}`;
 
 /** The reader's notes join the groups the server found, in their place in the order. */
 export function withNotes(groups: SearchGroup[], notes: { key: string; text: string }[], query: string): SearchGroup[] {

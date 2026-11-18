@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Pressable, ScrollView, View } from 'react-native';
 import Svg, { Circle, G, Line, Polygon, Rect, Text as SvgText } from 'react-native-svg';
-import { Bell, BellOff, CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight, Clock, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin, type LucideProps } from 'lucide-react-native';
+import { Bell, BellOff, CalendarDays, Check, HandHeart, ChevronDown, ChevronLeft, ChevronRight, Clock, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin, type LucideProps } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import Sheet from '@/ui/Sheet';
 import { hijriDate } from '@shared/hijri';
@@ -16,15 +16,17 @@ import IconButton from '@/ui/IconButton';
 import Card from '@/ui/Card';
 import { SearchField } from '@/ui/Field';
 import Empty from '@/ui/Empty';
+import Adhkar from './Adhkar';
 
 const VIEWS: { id: UtilityView; Icon: (props: LucideProps) => React.ReactNode; label: string }[] = [
   { id: 'times', Icon: Clock, label: 'مواقيت الصلاة' },
   { id: 'qibla', Icon: Compass, label: 'القبلة' },
   { id: 'calendar', Icon: CalendarDays, label: 'التقويم الهجري' },
+  { id: 'adhkar', Icon: HandHeart, label: 'الأذكار' },
 ];
 
 /**
- * The three icons at the top of the utilities tab. The highlight slides with the pages under it:
+ * The icons at the top of the utilities tab. The highlight slides with the pages under it:
  * `progress` is the pager's place, 0 on the first page and 1 on the second (owner, 2026-11-15).
  */
 export function UtilityPicker({ palette, progress }: { palette: Palette; progress?: Animated.Value }) {
@@ -65,10 +67,14 @@ export function UtilityPicker({ palette, progress }: { palette: Palette; progres
 
 export const UTILITY_VIEWS = VIEWS.map(view => view.id);
 
-/** One utility's page: prayer times, the qibla or the Hijri calendar. `on` runs the compass only while its page is on screen. */
-export function UtilityPage({ view, palette, on = true, onPlace }: { view: UtilityView; palette: Palette; on?: boolean; onPlace: () => void }) {
+/**
+ * One utility's page: prayer times, the qibla, the Hijri calendar or the adhkar. `on` runs the compass only while its page is
+ * on screen, and ends an adhkar count when the page is left; `scrollTo` brings a searched adhkar card into view.
+ */
+export function UtilityPage({ view, palette, on = true, onPlace, scrollTo }: { view: UtilityView; palette: Palette; on?: boolean; onPlace: () => void; scrollTo?: (y: number) => void }) {
   const [place] = prayerPlace.use();
   return view === 'calendar' ? <Calendar palette={palette} />
+    : view === 'adhkar' ? <Adhkar palette={palette} on={on} onPlace={onPlace} scrollTo={scrollTo} />
     : !place ? <FirstUse palette={palette} onPick={onPlace} />
     : view === 'times' ? <Times place={place} palette={palette} onPlace={onPlace} />
     : <Qibla place={place} palette={palette} on={on} onPlace={onPlace} />;

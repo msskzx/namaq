@@ -14,7 +14,7 @@ export const HINTS: Record<HintId, { ar: string; en: string }> = {
   branches: { ar: 'اضغط فرعًا ليضيء طريقه وتظهر آيته، واضغط الشجرة مرتين لحفظها.', en: 'Tap a branch to light its path and show its ayah; double-tap the tree to save it.' },
   compare: { ar: 'اضغط كلمة ملوّنة لتضيء نظيرتها.', en: 'Tap a coloured word to light its match.' },
   prophets: { ar: 'اضغط دائرة لتقرأ آياتها في السورة.', en: 'Tap a dot to read its ayat in that surah.' },
-  utilities: { ar: 'اسحب جانبًا أو اختر من الأعلى بين المواقيت والقبلة والتقويم.', en: 'Swipe sideways, or tap the top, to switch between prayer times, qibla and calendar.' },
+  utilities: { ar: 'اسحب جانبًا أو اختر من الأعلى لتنتقل بين الأدوات.', en: 'Swipe sideways, or tap the top, to move between the tools.' },
 };
 
 /** The page's tip on the website, by its path; none elsewhere. */

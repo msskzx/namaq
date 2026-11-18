@@ -13,20 +13,20 @@ import { usePalette, type Palette } from '@/lib/theme';
 type Scroller = ComponentRef<typeof ScrollView>;
 
 /** One utility, scrolled up and down on its own. */
-function Page({ view, width, palette, on, current, bottom, onPlace, scrollers }: { view: UtilityView; width: number; palette: Palette; on: boolean; current: boolean; bottom: number; onPlace: () => void; scrollers: Map<UtilityView, Scroller> }) {
+function Page({ view, width, height, palette, on, current, bottom, onPlace, scrollers }: { view: UtilityView; width: number; height: number; palette: Palette; on: boolean; current: boolean; bottom: number; onPlace: () => void; scrollers: Map<UtilityView, Scroller> }) {
   const shrink = useShrinkOnScroll();
   return (
     <ScrollView ref={node => { if (node) scrollers.set(view, node); else scrollers.delete(view); }} onScroll={shrink} scrollEventThrottle={16}
       importantForAccessibility={current ? 'auto' : 'no-hide-descendants'} accessibilityElementsHidden={!current}
-      style={{ width, direction: 'rtl' }} contentContainerStyle={{ padding: 16, paddingBottom: bottom }}>
-      <UtilityPage view={view} palette={palette} on={on} onPlace={onPlace} />
+      style={{ width, height, direction: 'rtl' }} contentContainerStyle={{ padding: 16, paddingBottom: bottom }}>
+      <UtilityPage view={view} palette={palette} on={on} onPlace={onPlace} scrollTo={y => scrollers.get(view)?.scrollTo({ y, animated: false })} />
     </ScrollView>
   );
 }
 
 /**
- * The utilities tab: prayer times, the qibla and the Hijri calendar (owner, 2026-11-13), side by side.
- * A sideways swipe follows the finger and shows the next one coming in (owner, 2026-11-15); the three icons in the top bar jump to one.
+ * The utilities tab: prayer times, the qibla, the Hijri calendar (owner, 2026-11-13) and the adhkar (owner, 2026-11-17), side by side.
+ * A sideways swipe follows the finger and shows the next one coming in (owner, 2026-11-15); the icons in the top bar jump to one.
  * As in the reading order, the first is on the right and swiping right brings the next from the left.
  */
 export default function UtilitiesTab() {
@@ -36,7 +36,7 @@ export default function UtilitiesTab() {
   const focused = useIsFocused();
   const [view, setView] = utilityView.use();
   const index = Math.max(0, UTILITY_VIEWS.indexOf(view));
-  const [width, setWidth] = useState(0);
+  const [{ width, height }, setSize] = useState({ width: 0, height: 0 });
   const [picking, setPicking] = useState(false);
   const pick = useCallback(() => setPicking(true), []);
   const list = useRef<FlatList<UtilityView>>(null);
@@ -72,12 +72,12 @@ export default function UtilitiesTab() {
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar center back={back} hideOnScroll><UtilityPicker palette={palette} progress={progress} /></TopBar>
-      <View style={{ flex: 1, direction: 'ltr' }} onLayout={event => setWidth(event.nativeEvent.layout.width)}>
+      <View style={{ flex: 1, direction: 'ltr' }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
         {width > 0 && (
           <FlatList ref={list} data={UTILITY_VIEWS} horizontal inverted pagingEnabled showsHorizontalScrollIndicator={false}
             keyExtractor={id => id} initialScrollIndex={index} getItemLayout={(_, at) => ({ length: width, offset: width * at, index: at })}
             extraData={{ palette, focused, view, bottom }} onMomentumScrollEnd={settle} onScroll={scrolled} scrollEventThrottle={16} onScrollToIndexFailed={() => {}}
-            renderItem={({ item }) => <Page view={item} width={width} palette={palette} on={focused && item === view} current={item === view} bottom={bottom} onPlace={pick} scrollers={scrollers} />} />
+            renderItem={({ item }) => <Page view={item} width={width} height={height} palette={palette} on={focused && item === view} current={item === view} bottom={bottom} onPlace={pick} scrollers={scrollers} />} />
         )}
       </View>
       <PlaceSheet open={picking} onClose={() => setPicking(false)} palette={palette} />
