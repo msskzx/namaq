@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { feedBooks, hasBooksCard, hasJuzCard, hasMomentCard, hasSceneCard, hasSiraCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, siraOfSlot } from './homeFeed';
+import { feedBooks, hasBooksCard, hasJuzCard, hasMomentCard, hasSceneCard, hasSiraCard, hasTermCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, siraOfSlot, termOfSlot } from './homeFeed';
 import { hasStoryCard } from './feedSeen';
 import type { PrayerDay } from './prayer';
 
@@ -37,6 +37,19 @@ describe('home feed cards', () => {
     expect(siraOfSlot(3, 10, 5)).toBe((siraOfSlot(3, 10, 1) + 1) % 3);
     expect(siraOfSlot(3, 11, 1)).toBe((siraOfSlot(3, 10, 1) + 1) % 3);
     expect(siraOfSlot(0, 3, 1)).toBe(-1);
+  });
+
+  it('puts a balagha term on every fourth batch from the third, never with the books, a sira story or a battle\'s moment', () => {
+    expect([0, 1, 2, 3, 4, 5, 6, 7].filter(hasTermCard)).toEqual([2, 6]);
+    for (let slot = 0; slot < 20; slot++) expect(hasTermCard(slot) && (hasBooksCard(slot) || hasSiraCard(slot) || hasMomentCard(slot))).toBe(false);
+  });
+
+  it('picks a term for each term batch, the same all day and a different one in the next', () => {
+    expect(termOfSlot(67, 100, 2)).toBe(termOfSlot(67, 100, 2));
+    expect(termOfSlot(67, 100, 6)).not.toBe(termOfSlot(67, 100, 2));
+    expect(termOfSlot(67, 101, 2)).not.toBe(termOfSlot(67, 100, 2));
+    for (let d = 0; d < 30; d++) expect(termOfSlot(67, d, 2)).toBeGreaterThanOrEqual(0);
+    expect(termOfSlot(0, 3, 2)).toBe(-1);
   });
 
   it('picks a moment for each moment batch, the same all day and a different one in the next', () => {

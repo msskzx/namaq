@@ -1,0 +1,367 @@
+{
+  "unit": {
+    "id": "siyar-v5-44-al-bayda",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٤٤"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_bd_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "273",
+      "layer": "MAIN",
+      "exact": "٤٤ - البَيْضَاءُ * أُمُّ حَكِيْمٍ بِنْتُ عَبْدِ المُطَّلِبِ"
+    },
+    {
+      "id": "sp_bd_name1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "273",
+      "layer": "MAIN",
+      "exact": "البَيْضَاءُ",
+      "prefix": "٤٤ -"
+    },
+    {
+      "id": "sp_bd_name2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "273",
+      "layer": "MAIN",
+      "exact": "أُمُّ حَكِيْمٍ بِنْتُ عَبْدِ المُطَّلِبِ",
+      "prefix": "البَيْضَاءُ *"
+    },
+    {
+      "id": "sp_bd_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "273",
+      "layer": "MAIN",
+      "exact": "أُمُّ حَكِيْمٍ",
+      "prefix": "البَيْضَاءُ *"
+    },
+    {
+      "id": "sp_bd_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "273",
+      "layer": "MAIN",
+      "exact": "عَبْدِ المُطَّلِبِ",
+      "prefix": "البَيْضَاءُ * أُمُّ حَكِيْمٍ بِنْتُ"
+    },
+    {
+      "id": "sp_bd_kurayz",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "273",
+      "layer": "MAIN",
+      "exact": "تَزَوَّجَهَا: كُرَيزُ بنُ رَبِيْعَةَ العَبْشَمِيُّ، فَوَلَدَتْ لَهُ عَامِراً وَالِدَ الأَمِيْرِ عَبْدِ اللهِ، وَأَرْوَى وَالِدَةَ الشَّهِيْدِ عُثْمَانَ"
+    },
+    {
+      "id": "sp_bd_kurayz_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "273",
+      "layer": "MAIN",
+      "exact": "كُرَيزُ بنُ رَبِيْعَةَ العَبْشَمِيُّ"
+    },
+    {
+      "id": "sp_bd_kurayz_kids",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "273",
+      "layer": "MAIN",
+      "exact": "عَامِراً وَالِدَ الأَمِيْرِ عَبْدِ اللهِ، وَأَرْوَى وَالِدَةَ الشَّهِيْدِ عُثْمَانَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_bd0",
+      "unit": "siyar-v5-44-al-bayda",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_bd_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_bd_name",
+      "report": "r_bd0",
+      "spans": [
+        "sp_bd_name1",
+        "sp_bd_name2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_bd_kurayz",
+      "report": "r_bd0",
+      "spans": [
+        "sp_bd_kurayz"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_bd",
+      "parent": "sp_bd_name1",
+      "exact": "البَيْضَاءُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_bd_k",
+      "parent": "sp_bd_name2",
+      "exact": "أُمُّ حَكِيْمٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_bd_father",
+      "parent": "sp_bd_name2",
+      "exact": "عَبْدِ المُطَّلِبِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_bd_m1",
+      "parent": "sp_bd_kurayz",
+      "exact": "تَزَوَّجَهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_bd_kurayz",
+      "parent": "sp_bd_kurayz",
+      "exact": "كُرَيزُ بنُ رَبِيْعَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_bd_amir",
+      "parent": "sp_bd_kurayz",
+      "exact": "عَامِراً",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_bd_arwa",
+      "parent": "sp_bd_kurayz",
+      "exact": "أَرْوَى",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_bd",
+      "mention": "m_bd",
+      "agent": "al-bayda-bint-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_bd_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_bd_k",
+      "mention": "m_bd_k",
+      "agent": "al-bayda-bint-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_bd_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_bd_father",
+      "mention": "m_bd_father",
+      "agent": "abd-al-muttalib-ibn-hashim",
+      "basis": [
+        {
+          "span": "sp_bd_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_bd_m1",
+      "mention": "m_bd_m1",
+      "agent": "al-bayda-bint-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_bd_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_bd_kurayz",
+      "mention": "m_bd_kurayz",
+      "agent": "kurayz-ibn-rabiah",
+      "basis": [
+        {
+          "span": "sp_bd_kurayz_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_bd_amir",
+      "mention": "m_bd_amir",
+      "agent": "amir-ibn-kurayz",
+      "basis": [
+        {
+          "span": "sp_bd_kurayz_kids",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_bd_arwa",
+      "mention": "m_bd_arwa",
+      "agent": "arwa-bint-kurayz",
+      "basis": [
+        {
+          "span": "sp_bd_kurayz_kids",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_bd_name",
+      "subject": "m_bd",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_bd_name1",
+          "sp_bd_name2"
+        ]
+      },
+      "restsOn": [
+        "st_bd_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_bd_sex",
+      "subject": "m_bd",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_bd_name2"
+        ]
+      },
+      "restsOn": [
+        "st_bd_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_bd_kunya",
+      "subject": "m_bd_k",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_bd_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_bd_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_bd_father",
+      "subject": "m_bd",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_bd_father"
+      },
+      "restsOn": [
+        "st_bd_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_bd_kurayz",
+      "subject": "m_bd_m1",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_bd_kurayz"
+      },
+      "restsOn": [
+        "st_bd_kurayz"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_bd_amir_m",
+      "subject": "m_bd_amir",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_bd_m1"
+      },
+      "restsOn": [
+        "st_bd_kurayz"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_bd_amir_f",
+      "subject": "m_bd_amir",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_bd_kurayz"
+      },
+      "restsOn": [
+        "st_bd_kurayz"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_bd_arwa_m",
+      "subject": "m_bd_arwa",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_bd_m1"
+      },
+      "restsOn": [
+        "st_bd_kurayz"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_bd_arwa_f",
+      "subject": "m_bd_arwa",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_bd_kurayz"
+      },
+      "restsOn": [
+        "st_bd_kurayz"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

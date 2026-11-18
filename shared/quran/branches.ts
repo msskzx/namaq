@@ -381,6 +381,27 @@ export function ayatLabel(ayat: string[], names: Record<number, string>) {
   return lastSurah === surah ? `${named(surah, ayah)}–${num(lastAyah)}` : `${named(surah, ayah)} ثم ${named(lastSurah, lastAyah)}`;
 }
 
+/**
+ * A label for any ayat, each surah once with its runs of following ayat: «المسد ١، ٤–٥», «الأنفال ٢، القصص ٤، غافر ٣٦».
+ * `ayatLabel` is for one run read on through.
+ */
+export function placesLabel(ayat: string[], names: Record<number, string>) {
+  const bySurah = new Map<number, number[]>();
+  for (const key of ayat) {
+    const [surah, ayah] = key.split(':').map(Number);
+    bySurah.set(surah, [...(bySurah.get(surah) ?? []), ayah]);
+  }
+  return [...bySurah].map(([surah, numbers]) => {
+    const runs: [number, number][] = [];
+    for (const n of [...new Set(numbers)].sort((a, b) => a - b)) {
+      const last = runs.at(-1);
+      if (last && n === last[1] + 1) last[1] = n;
+      else runs.push([n, n]);
+    }
+    return `${names[surah] ?? num(surah)} ${runs.map(([from, to]) => (from === to ? num(from) : `${num(from)}–${num(to)}`)).join('، ')}`;
+  }).join('، ');
+}
+
 /** Each ayah's own end, for a card kept to its own ayat (ownAyatOnly): every ayah of the tree ends on itself. */
 /** A tree the owner keeps to its own ayat (branchVerdicts `ayat: 'own'`): no ayah reads on into the one after it. */
 export const ownAyat = (node: Branch): Branch => ({ ...node, through: undefined, children: node.children.map(ownAyat), ...(node.rejoin ? { rejoin: ownAyat(node.rejoin) } : {}) });

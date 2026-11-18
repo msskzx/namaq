@@ -1,0 +1,198 @@
+{
+  "unit": {
+    "id": "siyar-v5-36-asma-bint-al-numan-al-kindiyyah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٣٦"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_kn_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "257",
+      "layer": "MAIN",
+      "exact": "٣٦ - الكِنْدِيَّةُ",
+      "prefix": "الَّتِي تَعَوَّذَتْ. "
+    },
+    {
+      "id": "sp_kn1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "257",
+      "layer": "MAIN",
+      "exact": "الكِنْدِيَّةُ",
+      "prefix": "٣٦ - "
+    },
+    {
+      "id": "sp_kn_aqil_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "257",
+      "layer": "MAIN",
+      "exact": "قَالَ عَبْدُ اللهِ بنُ مُحَمَّدِ بنِ عَقِيْلٍ:"
+    },
+    {
+      "id": "sp_kn_aqil",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "257",
+      "layer": "MAIN",
+      "exact": "نَكَحَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- امْرَأَةً مِنْ كِنْدَةَ، وَهِيَ الشَّقِيَّةُ الَّتِي سَأَلَتْهُ أَنْ يُفَارِقَهَا، وَيَرُدَّهَا إِلَى قَوْمِهَا، فَفَعَلَ"
+    },
+    {
+      "id": "sp_kn_aqil_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "257",
+      "layer": "MAIN",
+      "exact": "امْرَأَةً مِنْ كِنْدَةَ",
+      "prefix": "وَسَلَّمَ- "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_kn0",
+      "unit": "siyar-v5-36-asma-bint-al-numan-al-kindiyyah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_kn_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_kn_aqil",
+      "unit": "siyar-v5-36-asma-bint-al-numan-al-kindiyyah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_kn_aqil_frame"
+      ],
+      "origin": {
+        "mention": "m_kn_aqil"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_kn_name",
+      "report": "r_kn0",
+      "spans": [
+        "sp_kn_heading"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_kn_aqil",
+      "report": "r_kn_aqil",
+      "spans": [
+        "sp_kn_aqil"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_kn",
+      "parent": "sp_kn_heading",
+      "exact": "الكِنْدِيَّةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_kn_aqil",
+      "parent": "sp_kn_aqil_frame",
+      "exact": "عَبْدُ اللهِ بنُ مُحَمَّدِ بنِ عَقِيْلٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_kn_a",
+      "parent": "sp_kn_aqil",
+      "exact": "امْرَأَةً مِنْ كِنْدَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_kn_prophet",
+      "parent": "sp_kn_aqil",
+      "exact": "رَسُوْلُ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_kn",
+      "mention": "m_kn",
+      "agent": "asma-bint-al-numan-al-kindiyyah",
+      "basis": [
+        {
+          "span": "sp_kn1",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_kn_a",
+      "mention": "m_kn_a",
+      "agent": "asma-bint-al-numan-al-kindiyyah",
+      "basis": [
+        {
+          "span": "sp_kn_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_kn_name",
+      "subject": "m_kn",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_kn1"
+        ]
+      },
+      "restsOn": [
+        "st_kn_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kn_sex",
+      "subject": "m_kn",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_kn1"
+        ]
+      },
+      "restsOn": [
+        "st_kn_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kn_married",
+      "subject": "m_kn_a",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_kn_prophet"
+      },
+      "restsOn": [
+        "st_kn_aqil"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

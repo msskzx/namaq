@@ -1,0 +1,462 @@
+{
+  "unit": {
+    "id": "siyar-v6-33-amr-damri",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٣٣"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ac_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "179",
+      "layer": "MAIN",
+      "exact": "٣٣ - عَمْرُو بنُ أُمَيَّةَ بنِ خُوَيْلِدِ بنِ عَبْدِ اللهِ الضَّمْرِيُّ"
+    },
+    {
+      "id": "sp_ac_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "179",
+      "layer": "MAIN",
+      "exact": "عَمْرُو بنُ أُمَيَّةَ بنِ خُوَيْلِدِ بنِ عَبْدِ اللهِ الضَّمْرِيُّ",
+      "prefix": "٣٣ -"
+    },
+    {
+      "id": "sp_ac1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "179",
+      "layer": "MAIN",
+      "exact": "ابْنِ إِيَاسٍ",
+      "suffix": "، أَبُو أُمَيَّةَ"
+    },
+    {
+      "id": "sp_ac2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "179",
+      "layer": "MAIN",
+      "exact": "عَمْرُو بنُ أُمَيَّةَ بنِ خُوَيْلِدِ بنِ عَبْدِ اللهِ",
+      "prefix": "٣٣ -",
+      "suffix": "الضَّمْرِيُّ"
+    },
+    {
+      "id": "sp_ac7",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "179",
+      "layer": "MAIN",
+      "exact": "عَمْرُو بنُ أُمَيَّةَ",
+      "prefix": "٣٣ -"
+    },
+    {
+      "id": "sp_ac9",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "179",
+      "layer": "MAIN",
+      "exact": "أُمَيَّةَ بنِ خُوَيْلِدِ بنِ عَبْدِ اللهِ",
+      "prefix": "عَمْرُو بنُ"
+    },
+    {
+      "id": "sp_ac13",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "179",
+      "layer": "MAIN",
+      "exact": "أَبُو أُمَيَّةَ الضَّمْرِيُّ، صَاحِبُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ -."
+    },
+    {
+      "id": "sp_ac15",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "179",
+      "layer": "MAIN",
+      "exact": "أَبُو أُمَيَّةَ",
+      "suffix": "الضَّمْرِيُّ، صَاحِبُ"
+    },
+    {
+      "id": "sp_ac19",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "179",
+      "layer": "MAIN",
+      "exact": "بَعَثَهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - سَرِيَّةً وَحْدَهُ ، وَبَعَثَهُ رَسُوْلاً إِلَى النَّجَاشِيِّ"
+    },
+    {
+      "id": "sp_ac21",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "179",
+      "layer": "MAIN",
+      "exact": "بَعَثَهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - سَرِيَّةً وَحْدَهُ",
+      "suffix": "، وَبَعَثَهُ"
+    },
+    {
+      "id": "sp_ac23",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "179",
+      "layer": "MAIN",
+      "exact": "بَعَثَهُ رَسُوْلاً إِلَى النَّجَاشِيِّ",
+      "prefix": "وَحْدَهُ ، وَ"
+    },
+    {
+      "id": "sp_ac25",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "179",
+      "layer": "MAIN",
+      "exact": "قَالَ ابْنُ سَعْدٍ",
+      "suffix": ": أَسْلَمَ"
+    },
+    {
+      "id": "sp_ac28",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "180",
+      "layer": "MAIN",
+      "exact": "شُجَاعاً، مِقْدَاماً، أَوَّلُ مَشَاهِدِهِ: بِئْرُ مَعُوْنَةَ"
+    },
+    {
+      "id": "sp_ac29",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "180",
+      "layer": "MAIN",
+      "exact": "شُجَاعاً، مِقْدَاماً",
+      "suffix": "، أَوَّلُ"
+    },
+    {
+      "id": "sp_ac32",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "179",
+      "layer": "MAIN",
+      "exact": "ابْنَاهُ؛ جَعْفَرٌ وَعَبْدُ اللهِ",
+      "prefix": "حَدَّثَ عَنْهُ:"
+    },
+    {
+      "id": "sp_ac34",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "179",
+      "layer": "MAIN",
+      "exact": "جَعْفَرٌ وَعَبْدُ اللهِ، وَابْنُ أَخِيْهِ"
+    },
+    {
+      "id": "sp_ac38",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "179",
+      "layer": "MAIN",
+      "exact": "جَعْفَرٌ وَعَبْدُ اللهِ، وَابْنُ أَخِيْهِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ac0",
+      "unit": "siyar-v6-33-amr-damri",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ac_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ac27",
+      "unit": "siyar-v6-33-amr-damri",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ac25"
+      ],
+      "origin": {
+        "mention": "m_ac26"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ac3",
+      "report": "r_ac0",
+      "spans": [
+        "sp_ac_name",
+        "sp_ac2",
+        "sp_ac1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ac14",
+      "report": "r_ac0",
+      "spans": [
+        "sp_ac1",
+        "sp_ac13"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ac20",
+      "report": "r_ac0",
+      "spans": [
+        "sp_ac19"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ac30",
+      "report": "r_ac27",
+      "spans": [
+        "sp_ac28"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ac33",
+      "report": "r_ac0",
+      "spans": [
+        "sp_ac32",
+        "sp_ac_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ac4",
+      "parent": "sp_ac_name",
+      "exact": "عَمْرُو",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ac10",
+      "parent": "sp_ac_name",
+      "exact": "أُمَيَّةَ بنِ خُوَيْلِدِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ac17",
+      "parent": "sp_ac13",
+      "exact": "رَسُوْلِ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ac26",
+      "parent": "sp_ac25",
+      "exact": "ابْنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ac35",
+      "parent": "sp_ac32",
+      "exact": "جَعْفَرٌ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ac39",
+      "parent": "sp_ac32",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ac5",
+      "mention": "m_ac4",
+      "agent": "amr-ibn-umayyah-al-damri",
+      "basis": [
+        {
+          "span": "sp_ac_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ac11",
+      "mention": "m_ac10",
+      "agent": "umayyah-ibn-khuwaylid-al-damri",
+      "basis": [
+        {
+          "span": "sp_ac9",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ac36",
+      "mention": "m_ac35",
+      "agent": "jafar-ibn-amr-ibn-umayyah",
+      "basis": [
+        {
+          "span": "sp_ac34",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ac40",
+      "mention": "m_ac39",
+      "agent": "abdullah-ibn-amr-ibn-umayyah",
+      "basis": [
+        {
+          "span": "sp_ac38",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ac6",
+      "subject": "m_ac4",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ac2",
+          "sp_ac1"
+        ]
+      },
+      "restsOn": [
+        "st_ac3"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ac8",
+      "subject": "m_ac4",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ac7"
+        ]
+      },
+      "restsOn": [
+        "st_ac3"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ac12",
+      "subject": "m_ac4",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ac10"
+      },
+      "restsOn": [
+        "st_ac3"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ac16",
+      "subject": "m_ac4",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_ac15"
+        ]
+      },
+      "restsOn": [
+        "st_ac14"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ac18",
+      "subject": "m_ac4",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_ac17"
+      },
+      "restsOn": [
+        "st_ac14"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ac22",
+      "subject": "m_ac4",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ac21"
+        ]
+      },
+      "restsOn": [
+        "st_ac20"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ac24",
+      "subject": "m_ac4",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ac23"
+        ]
+      },
+      "restsOn": [
+        "st_ac20"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ac31",
+      "subject": "m_ac4",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ac29"
+        ]
+      },
+      "restsOn": [
+        "st_ac30"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ac37",
+      "subject": "m_ac35",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ac4"
+      },
+      "restsOn": [
+        "st_ac33"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ac41",
+      "subject": "m_ac39",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ac4"
+      },
+      "restsOn": [
+        "st_ac33"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

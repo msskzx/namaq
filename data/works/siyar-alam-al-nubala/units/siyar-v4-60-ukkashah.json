@@ -1,0 +1,508 @@
+{
+  "unit": {
+    "id": "siyar-v4-60-ukkashah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٦٠"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_uk_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "307",
+      "layer": "MAIN",
+      "exact": "٦٠ - عُكَّاشَةُ بنُ مِحْصَنٍ أَبُو مِحْصَنٍ الأَسَدِيُّ"
+    },
+    {
+      "id": "sp_uk1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "307",
+      "layer": "MAIN",
+      "exact": "عُكَّاشَةُ بنُ مِحْصَنٍ",
+      "prefix": "٦٠ - "
+    },
+    {
+      "id": "sp_uk_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "307",
+      "layer": "MAIN",
+      "exact": "عُكَّاشَةُ بنُ",
+      "prefix": "٦٠ - "
+    },
+    {
+      "id": "sp_uk_epithets",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "307",
+      "layer": "MAIN",
+      "exact": "السَّعِيْدُ الشَّهِيْدُ، أَبُو مِحْصَنٍ الأَسَدِيُّ، حَلِيْفُ قُرَيْشٍ، مِنَ السَّابِقِيْنَ الأَوَّلِيْنَ، البَدْرِيِّيْنَ، أَهْلِ الجَنَّةِ"
+    },
+    {
+      "id": "sp_uk_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "307",
+      "layer": "MAIN",
+      "exact": "أَبُو مِحْصَنٍ",
+      "prefix": "الشَّهِيْدُ، "
+    },
+    {
+      "id": "sp_uk_sabiq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "307",
+      "layer": "MAIN",
+      "exact": "مِنَ السَّابِقِيْنَ الأَوَّلِيْنَ"
+    },
+    {
+      "id": "sp_uk_badri",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "307",
+      "layer": "MAIN",
+      "exact": "السَّابِقِيْنَ الأَوَّلِيْنَ، البَدْرِيِّيْنَ",
+      "prefix": "مِنَ "
+    },
+    {
+      "id": "sp_uk_jannah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "307",
+      "layer": "MAIN",
+      "exact": "مِنَ السَّابِقِيْنَ الأَوَّلِيْنَ، البَدْرِيِّيْنَ، أَهْلِ الجَنَّةِ"
+    },
+    {
+      "id": "sp_uk_ghamr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "307",
+      "layer": "MAIN",
+      "exact": "اسْتَعْمَلَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَلَى سَرِيَّةِ الغَمْرِ"
+    },
+    {
+      "id": "sp_uk_q_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "307",
+      "layer": "MAIN",
+      "exact": "قَالَ",
+      "suffix": ": وَقُتِلَ بَعْدَ"
+    },
+    {
+      "id": "sp_uk_uq_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "307",
+      "layer": "MAIN",
+      "exact": "وَقُتِلَ بَعْدَ ذَلِكَ بِسَنَةٍ بِبُزَاخَةَ، فِي خِلاَفَةِ أَبِي بَكْرٍ الصِّدِّيْقِ، سَنَةَ اثْنَتَيْ عَشْرَةَ"
+    },
+    {
+      "id": "sp_uk_uq_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "307",
+      "layer": "MAIN",
+      "exact": "سَنَةَ اثْنَتَيْ عَشْرَةَ",
+      "prefix": "الصِّدِّيْقِ، "
+    },
+    {
+      "id": "sp_uk_uq_place",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "307",
+      "layer": "MAIN",
+      "exact": "بُزَاخَةَ",
+      "prefix": "بِسَنَةٍ بِ"
+    },
+    {
+      "id": "sp_uk_uq_app",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "307",
+      "layer": "MAIN",
+      "exact": "وَكَانَ مِنْ أَجْمَلِ الرِّجَالِ"
+    },
+    {
+      "id": "sp_uk_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "308",
+      "layer": "MAIN",
+      "exact": "كَذَا هَذَا القَوْلُ، وَالصَّحِيْحُ أَنَّ مَقْتَلَهُ كَانَ فِي سَنَةِ إِحْدَى عَشْرَةَ، قَتَلَهُ طُلَيْحَةُ الأَسَدِيُّ"
+    },
+    {
+      "id": "sp_uk_death_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "308",
+      "layer": "MAIN",
+      "exact": "سَنَةِ إِحْدَى عَشْرَةَ",
+      "prefix": "كَانَ فِي "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_uk0",
+      "unit": "siyar-v4-60-ukkashah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_uk_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_uk_q",
+      "unit": "siyar-v4-60-ukkashah",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "frame": [
+        "sp_uk_q_frame"
+      ],
+      "origin": {
+        "mention": "m_uk_qala"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_uk_name",
+      "report": "r_uk0",
+      "spans": [
+        "sp_uk1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uk_epithets",
+      "report": "r_uk0",
+      "spans": [
+        "sp_uk_epithets"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uk_ghamr",
+      "report": "r_uk0",
+      "spans": [
+        "sp_uk_ghamr"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uk_death",
+      "report": "r_uk0",
+      "spans": [
+        "sp_uk_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uk_uq_death",
+      "report": "r_uk_q",
+      "spans": [
+        "sp_uk_uq_death"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_uk_uq_app",
+      "report": "r_uk_q",
+      "spans": [
+        "sp_uk_uq_app"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_uk",
+      "parent": "sp_uk1",
+      "exact": "عُكَّاشَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uk_badr",
+      "parent": "sp_uk_epithets",
+      "exact": "البَدْرِيِّيْنَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uk_g",
+      "parent": "sp_uk_ghamr",
+      "exact": "اسْتَعْمَلَهُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uk_qala",
+      "parent": "sp_uk_q_frame",
+      "exact": "قَالَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_uk_q",
+      "parent": "sp_uk_uq_death",
+      "exact": "وَقُتِلَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uk_a",
+      "parent": "sp_uk_uq_app",
+      "exact": "وَكَانَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uk_d",
+      "parent": "sp_uk_death",
+      "exact": "مَقْتَلَهُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_uk",
+      "mention": "m_uk",
+      "agent": "ukkashah-ibn-mihsan",
+      "basis": [
+        {
+          "span": "sp_uk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_g",
+      "mention": "m_uk_g",
+      "agent": "ukkashah-ibn-mihsan",
+      "basis": [
+        {
+          "span": "sp_uk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_q",
+      "mention": "m_uk_q",
+      "agent": "ukkashah-ibn-mihsan",
+      "basis": [
+        {
+          "span": "sp_uk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_a",
+      "mention": "m_uk_a",
+      "agent": "ukkashah-ibn-mihsan",
+      "basis": [
+        {
+          "span": "sp_uk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_d",
+      "mention": "m_uk_d",
+      "agent": "ukkashah-ibn-mihsan",
+      "basis": [
+        {
+          "span": "sp_uk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_badr",
+      "mention": "m_uk_badr",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_uk_badri",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_uk_name",
+      "subject": "m_uk",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_uk1"
+        ]
+      },
+      "restsOn": [
+        "st_uk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_sex",
+      "subject": "m_uk",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_uk_sex"
+        ]
+      },
+      "restsOn": [
+        "st_uk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_kunya",
+      "subject": "m_uk",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_uk_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_uk_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_sabiq",
+      "subject": "m_uk",
+      "predicate": "title",
+      "value": {
+        "classified": "al-sabiqoon",
+        "spans": [
+          "sp_uk_sabiq"
+        ]
+      },
+      "restsOn": [
+        "st_uk_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_badr",
+      "subject": "m_uk",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_uk_badr"
+      },
+      "restsOn": [
+        "st_uk_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_v_jannah",
+      "subject": "m_uk",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_uk_jannah"
+        ]
+      },
+      "restsOn": [
+        "st_uk_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_office",
+      "subject": "m_uk_g",
+      "predicate": "office",
+      "value": {
+        "classified": "amir",
+        "spans": [
+          "sp_uk_ghamr"
+        ]
+      },
+      "restsOn": [
+        "st_uk_ghamr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_death",
+      "subject": "m_uk_d",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 11,
+        "spans": [
+          "sp_uk_death_y"
+        ]
+      },
+      "restsOn": [
+        "st_uk_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_death_uq",
+      "subject": "m_uk_q",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 12,
+        "spans": [
+          "sp_uk_uq_y"
+        ]
+      },
+      "restsOn": [
+        "st_uk_uq_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_place_uq",
+      "subject": "m_uk_q",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "sp_uk_uq_place"
+        ]
+      },
+      "restsOn": [
+        "st_uk_uq_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_app",
+      "subject": "m_uk_a",
+      "predicate": "appearance",
+      "value": {
+        "spans": [
+          "sp_uk_uq_app"
+        ]
+      },
+      "restsOn": [
+        "st_uk_uq_app"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

@@ -1,0 +1,229 @@
+{
+  "unit": {
+    "id": "siyar-v5-31-al-aliyah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٣١"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_al_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "254",
+      "layer": "MAIN",
+      "exact": "٣١ - العَالِيَةُ امْرَأَةٌ مِنْ بَنِي بَكْرِ بنِ كِلاَبٍ"
+    },
+    {
+      "id": "sp_al_head",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "254",
+      "layer": "MAIN",
+      "exact": "العَالِيَةُ امْرَأَةٌ مِنْ بَنِي بَكْرِ بنِ كِلاَبٍ",
+      "prefix": "٣١ -"
+    },
+    {
+      "id": "sp_al_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "254",
+      "layer": "MAIN",
+      "exact": "العَالِيَةُ",
+      "prefix": "٣١ -"
+    },
+    {
+      "id": "sp_al_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "254",
+      "layer": "MAIN",
+      "exact": "العَالِيَةُ امْرَأَةٌ",
+      "prefix": "٣١ -"
+    },
+    {
+      "id": "sp_al_zuhri_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "254",
+      "layer": "MAIN",
+      "exact": "قَالَ الزُّهْرِيُّ",
+      "suffix": ": تَزَوَّجَ رَسُوْلُ اللهِ"
+    },
+    {
+      "id": "sp_al_zuhri",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "254",
+      "layer": "MAIN",
+      "exact": "تَزَوَّجَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- العَالِيَةَ؛ امْرَأَةً مِنْ بَنِي بَكْرِ بنِ كِلاَبٍ",
+      "prefix": "قَالَ الزُّهْرِيُّ:"
+    },
+    {
+      "id": "sp_al_rasul_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "254",
+      "layer": "MAIN",
+      "exact": "رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- العَالِيَةَ؛",
+      "prefix": "قَالَ الزُّهْرِيُّ: تَزَوَّجَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_al0",
+      "unit": "siyar-v5-31-al-aliyah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_al_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_al_zuhri",
+      "unit": "siyar-v5-31-al-aliyah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_al_zuhri_frame"
+      ],
+      "origin": {
+        "mention": "m_al_zuhri_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_al_head",
+      "report": "r_al0",
+      "spans": [
+        "sp_al_head"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_al_zuhri",
+      "report": "r_al_zuhri",
+      "spans": [
+        "sp_al_zuhri"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_al",
+      "parent": "sp_al_head",
+      "exact": "العَالِيَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_al_zuhri_by",
+      "parent": "sp_al_zuhri_frame",
+      "exact": "الزُّهْرِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_al_z",
+      "parent": "sp_al_zuhri",
+      "exact": "العَالِيَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_al_rasul",
+      "parent": "sp_al_zuhri",
+      "exact": "رَسُوْلُ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_al",
+      "mention": "m_al",
+      "agent": "al-aliyah",
+      "basis": [
+        {
+          "span": "sp_al_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_al_z",
+      "mention": "m_al_z",
+      "agent": "al-aliyah",
+      "basis": [
+        {
+          "span": "sp_al_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_al_rasul",
+      "mention": "m_al_rasul",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_al_rasul_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_al_name",
+      "subject": "m_al",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_al_name"
+        ]
+      },
+      "restsOn": [
+        "st_al_head"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_al_sex",
+      "subject": "m_al",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_al_sex"
+        ]
+      },
+      "restsOn": [
+        "st_al_head"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_al_rasul",
+      "subject": "m_al_z",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_al_rasul"
+      },
+      "restsOn": [
+        "st_al_zuhri"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
