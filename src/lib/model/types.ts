@@ -20,6 +20,8 @@ export const predicates = [
   'name.full',
   'name.kunya',
   'name.laqab',
+  /** A variant the book gives for one name in the nasab («ويقال: حسيل», «وقيل: اسم أبيه ربيعة»), as its own words. */
+  'name.variant',
   'appearance',
   'virtue',
   'born.year',
@@ -172,7 +174,11 @@ export interface Identification {
 export type AssertionValue =
   | { spans: string[] }
   | { object: string }
-  | { parsed: number; spans: string[] }
+  /**
+   * A number read from its quote. `decadeFrom` is for a year printed without its decade («ثم سنة ثمان» after «سنة سبع
+   * وستين»): the units come from the quote, the decade from that other span, and the print stays as it is.
+   */
+  | { parsed: number; spans: string[]; decadeFrom?: string }
   | { classified: string; spans: string[] };
 
 export interface Assertion {

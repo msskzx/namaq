@@ -174,8 +174,14 @@ export default function PersonScreen() {
                 </View>
               ))}
             </> : null}
+            {person.nameVariants.map((fact, i) => (
+              <View key={`v${i}`} style={{ gap: 2 }}>
+                <Text style={body(palette)}>{fact.text}</Text>
+                <Sayer fact={fact} palette={palette} many />
+              </View>
+            ))}
             <Row><Button label="الشجرة" onPress={tree} /></Row>
-            <Credit facts={[person.fullName, ...(person.otherNames ?? [])]} palette={palette} />
+            <Credit facts={[person.fullName, ...(person.otherNames ?? []), ...person.nameVariants]} palette={palette} />
           </Part>
         )}
 
@@ -233,6 +239,10 @@ export default function PersonScreen() {
         {tieList.length > 0 && (
           <Part n={++n} title={person.sex === 'FEMALE' ? 'صلاتها' : 'صلاته'} palette={palette}>
             {tieList.map(tie => <Line key={tie.label} label={tie.label} palette={palette}><Names links={tie.links} palette={palette} /></Line>)}
+            <Row>
+              <Button label={person.sex === 'FEMALE' ? 'ارسم صلاتها' : 'ارسم صلاته'} onPress={() => router.push({ pathname: '/ties', params: { slug: person.slug } })} />
+              <Button label={person.sex === 'FEMALE' ? 'بينها وبين…' : 'بينه وبين…'} onPress={() => router.push({ pathname: '/between', params: { slugs: person.slug } })} />
+            </Row>
             <Credit facts={tieList.flatMap(tie => tie.links)} palette={palette} quotes />
           </Part>
         )}

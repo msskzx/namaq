@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { feedBooks, hadithOfSlot, hasBooksCard, hasHadithCard, hasJuzCard, hasMomentCard, hasSceneCard, hasSiraCard, hasTermCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, siraOfSlot, termOfSlot } from './homeFeed';
+import { feedBooks, hadithOfSlot, hasBooksCard, hasHadithCard, hasJuzCard, hasMomentCard, hasSceneCard, hasSiraCard, hasTermCard, hasTieCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, siraOfSlot, termOfSlot, tieOfSlot } from './homeFeed';
 import { hasStoryCard } from './feedSeen';
 import type { PrayerDay } from './prayer';
 
@@ -103,5 +103,12 @@ describe('the prayer card', () => {
     expect(insertAt([0, 400, 900, 1500], 844)).toBe(2);
     expect(insertAt([0, 400], 844)).toBe(2);
     expect(insertAt([900], 844)).toBe(0);
+  });
+
+  it('puts the «صلة» card on every fourth batch from the seventh, the same pair all day and the next pair the next card', () => {
+    expect([0, 1, 2, 3, 4, 5, 6, 10].filter(hasTieCard)).toEqual([6, 10]);
+    expect(tieOfSlot([], 3, 2)).toBeNull();
+    expect(tieOfSlot(['a', 'b', 'c'], 3, 2)).toBe(tieOfSlot(['a', 'b', 'c'], 3, 2));
+    expect(tieOfSlot(['a', 'b', 'c'], 3, 10)).not.toBe(tieOfSlot(['a', 'b', 'c'], 3, 6));
   });
 });

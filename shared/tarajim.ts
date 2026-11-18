@@ -53,6 +53,8 @@ export interface AppPerson {
   fullName?: PersonFact;
   /** The book's other readings of the full name, each with its sayer («وقيل…»). */
   otherNames?: PersonFact[];
+  /** Variants the book gives for one name in the nasab («ويقال: حسيل»), shown under it; the tree and quizzes keep the printed line. */
+  nameVariants: PersonFact[];
   /** The fathers named in the full name, from the person up, as printed. */
   nasab: string[];
   kunya: PersonFact[];

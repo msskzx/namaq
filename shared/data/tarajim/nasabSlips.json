@@ -1,5 +1,5 @@
 {
-  "about": "Printing slips in a nasab: the full name stays exactly as printed on the person's page, and the nasab tree and the nasab quiz stop the line before the slipped name, so it joins no one wrongly. Keyed by the person's slug; `at` is the slipped name as printed; `note` says what the slip is and where that is known (the editor's note, another entry).",
+  "about": "Where the tree and the nasab quiz stop a person's line: a printing slip in the nasab, or a link the book's sources dispute (another line adds or drops a father). The full name stays exactly as printed on the person's page; the line stops before `at` (the name as printed), so it joins no one wrongly and the quiz offers no choice that could be right. Keyed by the person's slug; `note` says what the slip or dispute is and where it is known.",
   "slips": {
     "abd-al-rahman-ibn-samurah": {
       "at": "عَبْدِ شَمْسٍ",

@@ -16,7 +16,7 @@ from the Sahihayn, opening the hadith's page; `HadithPost`, every fourth batch f
 (`shared/quiz/feedQuiz.ts`): في أي سورة؟, أكمل المتشابهات, سمّع بقية الآية, قارن الموضعين,
 أوائل السور, سمّع الآية, ما معنى؟, the four ayah quizzes below, ما المصطلح؟ (`shared/quiz/balaghaTermQuiz.ts`: a term's
 definition with its name hidden, four terms to pick from, each choice linking to its definition once answered), the three Tuhfat al-Atfal questions, السيرة والغزوات (shared/quiz/sira.ts), the two tarajim questions
-(أين يلتقي النسبان؟ and صاحب المنقبة, `shared/quiz/tarajim.ts`), and the two hadith questions (من راوي الحديث؟ and أكمل الحديث,
+(أين يلتقي النسبان؟, صاحب المنقبة and ما صلته به؟, `shared/quiz/tarajim.ts`), and the two hadith questions (من راوي الحديث؟ and أكمل الحديث,
 `shared/quiz/hadith.ts`).
 
 The ayah quizzes (`shared/quiz/ayahQuizzes.ts`), whose questions are built once by `scripts/quran/buildAyahQuizzes.ts`
@@ -33,6 +33,10 @@ The ayah quizzes (`shared/quiz/ayahQuizzes.ts`), whose questions are built once 
 
 من التراجم (`TarajimPost`): a virtue from a converted Siyar entry, in the book's words with who says it and
 its page; the head opens the person's page. Every fourth batch from the fourth (`hasTarajimCard` in `shared/homeFeed.ts`).
+
+صلة (`TiePost`): two converted people joined through someone else, the nearest chain of ties as one sentence
+(«صفية أمُّ الزبير، و…») with the pages that state each tie; the head opens «بينه وبين…» with the two picked. Every
+fourth batch from the seventh (`hasTieCard`, pairs from `linkedPairs` in `shared/tarajimGraph.ts`).
 
 The ayah cards (`AyahNotePost` in `HomeFeed.tsx`, lists in `shared/quran/ayahNotes.ts`), one a batch, the kind turning:
 من التفسير (an ayah al-Sa'di explains alone), من البلاغة (an ayah al-Suyuti surely names), من الإعراب (one word's line),
@@ -58,4 +62,4 @@ timeline), رتّب, من شهدها؟ / من أمير السرية؟, فيمَ 
 - Qibla: already on the prayer card.
 - Search, share and videos, settings, «ما أحفظه»: tools, not content.
 - Party quizzes: played with others, not from the feed.
-- Tarajim: the battles have the moment card and the sira stories the story card; the people have «من التراجم».
+- Tarajim: the battles have the moment card and the sira stories the story card; the people have «من التراجم» and «صلة».

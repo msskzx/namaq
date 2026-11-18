@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, BookA, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, MessagesSquare, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookA, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, Link2, MessagesSquare, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { bookmarkKind } from '@shared/bookmarkKind';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
@@ -13,9 +13,10 @@ import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, se
 import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
-import { feedBooks, hadithOfSlot, hasBooksCard, hasHadithCard, hasJuzCard, hasMomentCard, hasSceneCard, hasSiraCard, hasTarajimCard, hasTermCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, siraOfSlot, tarajimOfSlot, termOfSlot } from '@shared/homeFeed';
+import { feedBooks, hadithOfSlot, hasBooksCard, hasHadithCard, hasJuzCard, hasMomentCard, hasSceneCard, hasSiraCard, hasTarajimCard, hasTermCard, hasTieCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, siraOfSlot, tarajimOfSlot, termOfSlot, tieOfSlot } from '@shared/homeFeed';
 import { pageLabel, sayer } from '@shared/tarajim';
-import { PEOPLE, personName } from '@/lib/tarajim';
+import { GRAPH, PEOPLE, personName, tiePairs } from '@/lib/tarajim';
+import { chainSentence } from '@shared/tarajimGraph';
 import balaghaTerms from '@shared/data/quran/balaghaTerms';
 import { plainName, examplesOf } from '@shared/quran/balaghaTerms';
 import { BookWords, ExampleAyat, ayatName, quotesTitle } from './BalaghaTerm';
@@ -352,6 +353,25 @@ function TarajimPost({ day, slot, palette }: { day: number; slot: number; palett
       <View style={{ padding: 14, gap: 6 }}>
         <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{virtue.text}</Text>
         <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{virtue.by.length ? `${sayer(virtue)} · ` : ''}{pageLabel(virtue.refs)}</Text>
+      </View>
+    </Post>
+  );
+}
+
+/**
+ * «صلة» (owner, 2026-11-18; sketch tarajim-app/graph/sketch2-dark.png): two converted people and the nearest chain of ties
+ * that joins them, in one sentence with the pages that state each tie; the head opens «بينه وبين…» with the two picked.
+ */
+function TiePost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
+  const pair = tieOfSlot(tiePairs(), day, slot);
+  if (!pair) return null;
+  const name = (slug: string) => personName(GRAPH.nodes.get(slug)!);
+  const open = () => router.push({ pathname: '/between', params: { slugs: `${pair.a},${pair.b}` } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={Link2} title="صلة" sub={`${name(pair.a)} و${name(pair.b)}`} palette={palette} open={{ onPress: open, label: `ارسم الصلة بين ${name(pair.a)} و${name(pair.b)}` }} />}>
+      <View style={{ padding: 14, gap: 6 }}>
+        <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{chainSentence(GRAPH, pair.steps, personName)}.</Text>
+        <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{[...new Set(pair.steps.map(step => pageLabel(step.link.refs)))].join(' · ')}</Text>
       </View>
     </Post>
   );
@@ -832,6 +852,7 @@ export function Feed({ palette, nearEnd, screenBottom }: { palette: Palette; nea
     if (hasHadithCard(i) && FEED_FORTY.length) posts.push(<HadithPost key={`h${day}-${i}`} day={day} slot={i} palette={palette} />);
     if (hasMomentCard(i) && MOMENTS.length) posts.push(<MomentPost key={`w${day}-${i}`} day={day} slot={i} palette={palette} />);
     if (hasTarajimCard(i)) posts.push(<TarajimPost key={`tj${day}-${i}`} day={day} slot={i} palette={palette} />);
+    if (hasTieCard(i)) posts.push(<TiePost key={`tl${day}-${i}`} day={day} slot={i} palette={palette} />);
   }
   // A prayer that is near comes in once, before the first post below the screen, so what the reader looks at stays put (owner,
   // 2026-11-18). One near when home opens leads the feed. A card the reader has passed or is looking at stays; one still

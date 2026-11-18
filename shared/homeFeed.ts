@@ -78,3 +78,12 @@ export function tarajimOfSlot<P extends { slug: string; virtues: readonly unknow
   const at = (((day * 7 + Math.floor(slot / 4)) % all.length) + all.length) % all.length;
   return all[at];
 }
+
+/** The «صلة» card (owner, 2026-11-18): two people and the chain that joins them, on every fourth batch from the seventh. */
+export const hasTieCard = (slot: number) => slot > 2 && slot % 4 === 2;
+
+/** The pair a «صلة» card shows, the same all day, the next card the next pair. */
+export function tieOfSlot<T>(pairs: readonly T[], day: number, slot: number): T | null {
+  if (pairs.length === 0) return null;
+  return pairs[(((day * 5 + Math.floor(slot / 4)) % pairs.length) + pairs.length) % pairs.length];
+}

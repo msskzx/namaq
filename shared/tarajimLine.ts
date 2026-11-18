@@ -19,9 +19,9 @@ export interface LineName {
   from: string;
 }
 
-/** A name with no vowels, tatweel or hamza seat, for matching («عَمْرٍو» = «عَمْرِو», «أبي» = «ابي», «مرة» = «مره»). */
+/** A name with no vowels, tatweel or hamza seat, for matching («عَمْرٍو» = «عَمْرِو», «أبي» = «ابي», «مرة» = «مره», «لؤي» = «لأي»). */
 export function bareName(name: string) {
-  return name.replace(/[ً-ْٰـ]/g, '').replace(/[أإآ]/g, 'ا').replace(/ؤ/g, 'و').replace(/ئ/g, 'ي').replace(/ة/g, 'ه')
+  return name.replace(/[ً-ْٰـ]/g, '').replace(/[أإآؤ]/g, 'ا').replace(/ئ/g, 'ي').replace(/ة/g, 'ه')
     .replace(/ى$/u, 'ي').replace(/\s+/g, ' ').trim();
 }
 

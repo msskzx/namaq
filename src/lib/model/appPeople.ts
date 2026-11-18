@@ -64,7 +64,8 @@ export function nasabOf(fullName: string) {
   // الجراح» there is the shorthand, not the father, so the line goes on from the name's own fathers.
   if (names.length > 2 && KUNYA.test(strip(names[0][0] ?? '')) && names[1].length > 1 && !COMPOUND.test(strip(names[1][0]))) names.splice(1, 1);
   // A name with no «بن» at all (al-Abbas's entry is headed «العباس عم رسول الله») names no fathers: the name alone.
-  if (names.length === 1) return words.length ? [words[0]] : [];
+  // A kunya stays whole («أبو ثعلبة الخشني» is «أبو ثعلبة»).
+  if (names.length === 1) return words.length ? [KUNYA.test(strip(words[0])) && words[1] ? `${words[0]} ${words[1]}` : words[0]] : [];
   return names.map((name) => name.join(' ')).filter(Boolean);
 }
 
@@ -158,7 +159,9 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
     });
     const of = (predicate: ProfileEntry['predicate']) => entries.filter((entry) => entry.predicate === predicate);
     const facts = (predicate: ProfileEntry['predicate']) => of(predicate).map(fact);
-    const nameOf = (other: string, mention?: string) => strip(people.get(other)?.name ?? battles.get(other) ?? events.get(other) ?? mention ?? mentioned.get(other) ?? other);
+    // A name read from the text may be in the genitive or accusative («أبي العاص» after «بن»): it reads as a name.
+    const nominative = (text: string) => text.replace(/^(?:أبي|أبا|ابي|ابا)(?=\s)/u, 'أبو').replace(/^(?:ذي|ذا)(?=\s)/u, 'ذو');
+    const nameOf = (other: string, mention?: string) => strip(people.get(other)?.name ?? battles.get(other) ?? events.get(other) ?? nominative(strip(mention ?? mentioned.get(other) ?? other)));
     // A tie stated in more than one place (his entry and his mother's) is one tie with every page that states it.
     const merge = (list: PersonLink[]) => {
       const merged = new Map<string, PersonLink>();
@@ -194,6 +197,7 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
       nasab: fullName ? nasabOf(fullName.text) : [],
       kunya: facts('name.kunya'),
       laqab: facts('name.laqab'),
+      nameVariants: facts('name.variant'),
       titles,
       appearance: facts('appearance'),
       virtues: facts('virtue'),
