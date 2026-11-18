@@ -35,6 +35,24 @@
       "suffix": " الأَوْسِيُّ. وَاسْمُهُ"
     },
     {
+      "id": "sp_aa_ism1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "188",
+      "layer": "MAIN",
+      "exact": "وَاسْمُهُ",
+      "prefix": "الأَوْسِيُّ. "
+    },
+    {
+      "id": "sp_aa_ism2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "189",
+      "layer": "MAIN",
+      "exact": "عَبْدُ الرَّحْمَنِ",
+      "suffix": ". بَدْرِيٌّ"
+    },
+    {
       "id": "sp_aa_sex",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 4,
@@ -143,7 +161,9 @@
       "report": "r_aa0",
       "spans": [
         "sp_aa1",
-        "sp_aa2"
+        "sp_aa2",
+        "sp_aa_ism1",
+        "sp_aa_ism2"
       ],
       "role": "AUTHOR_REPORT"
     },
@@ -252,7 +272,9 @@
       "value": {
         "spans": [
           "sp_aa1",
-          "sp_aa2"
+          "sp_aa2",
+          "sp_aa_ism1",
+          "sp_aa_ism2"
         ]
       },
       "restsOn": [

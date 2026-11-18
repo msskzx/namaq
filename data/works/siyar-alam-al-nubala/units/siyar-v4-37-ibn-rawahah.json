@@ -220,6 +220,14 @@
       "exact": "لأَنَّ ابْنَ رَوَاحَةَ قُتِلَ يَوْمَ مُؤْتَةَ"
     },
     {
+      "id": "sp_r_mutah_dh",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "236",
+      "layer": "MAIN",
+      "exact": "كَلاَّ، بَلْ مُؤْتَةُ بَعْدَهَا بِسِتَّةِ أَشْهُرٍ جَزْماً"
+    },
+    {
       "id": "sp_r_mutah_w",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 4,
@@ -377,6 +385,14 @@
         "sp_r_mutah"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_r_mutah_dh",
+      "report": "r_r0",
+      "spans": [
+        "sp_r_mutah_dh"
+      ],
+      "role": "AUTHOR_REPORT"
     }
   ],
   "mentions": [
@@ -806,7 +822,8 @@
         "object": "m_r_mutah"
       },
       "restsOn": [
-        "st_r_mutah"
+        "st_r_mutah",
+        "st_r_mutah_dh"
       ],
       "status": "PROPOSED"
     }

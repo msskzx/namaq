@@ -61,13 +61,76 @@
       "prefix": "وَلَهُ أَوْلاَدٌ: "
     },
     {
-      "id": "sp_at_kunya",
+      "id": "sp_at_c_muslim",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 4,
       "page": "218",
       "layer": "MAIN",
-      "exact": "وَيَزِيْدُ وَبِهِ كَانَ يُكْنَى",
-      "prefix": "مُسلمٌ، "
+      "exact": "مُسلمٌ",
+      "prefix": "وَلَهُ أَوْلاَدٌ: "
+    },
+    {
+      "id": "sp_at_c_yazid",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "218",
+      "layer": "MAIN",
+      "exact": "يَزِيْدُ",
+      "prefix": "مُسلمٌ، وَ"
+    },
+    {
+      "id": "sp_at_c_saeed",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "218",
+      "layer": "MAIN",
+      "exact": "سَعِيْدٌ",
+      "prefix": "كَانَ يُكْنَى، وَ"
+    },
+    {
+      "id": "sp_at_c_jaafar",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "218",
+      "layer": "MAIN",
+      "exact": "جَعْفَرٌ",
+      "prefix": "وَسَعِيْدٌ، وَ"
+    },
+    {
+      "id": "sp_at_c_abusaeed",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "218",
+      "layer": "MAIN",
+      "exact": "أَبُو سَعِيْدٍ الأَحْوَلُ",
+      "prefix": "وَجَعْفَرٌ، وَ"
+    },
+    {
+      "id": "sp_at_c_muhammad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "218",
+      "layer": "MAIN",
+      "exact": "مُحَمَّدٌ",
+      "prefix": "الأَحْوَلُ، وَ"
+    },
+    {
+      "id": "sp_at_c_rahman",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "218",
+      "layer": "MAIN",
+      "exact": "عَبْدُ الرَّحْمَنِ",
+      "prefix": "وَمُحَمَّدٌ، وَ"
+    },
+    {
+      "id": "sp_at_c_abdullah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "218",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ",
+      "prefix": "الرَّحْمَنِ، وَ"
     },
     {
       "id": "sp_at_saad_frame",
@@ -194,7 +257,7 @@
     {
       "id": "m_at_c_saeed",
       "parent": "sp_at_kids",
-      "exact": "وَسَعِيْدٌ",
+      "exact": "سَعِيْدٌ",
       "occurrence": 1,
       "role": "SUBJECT"
     },
@@ -303,7 +366,7 @@
       "agent": "muslim-ibn-aqil",
       "basis": [
         {
-          "span": "sp_at_kids_list",
+          "span": "sp_at_c_muslim",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -315,7 +378,7 @@
       "agent": "yazid-ibn-aqil",
       "basis": [
         {
-          "span": "sp_at_kids_list",
+          "span": "sp_at_c_yazid",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -327,7 +390,7 @@
       "agent": "saeed-ibn-aqil",
       "basis": [
         {
-          "span": "sp_at_kids_list",
+          "span": "sp_at_c_saeed",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -339,7 +402,7 @@
       "agent": "jaafar-ibn-aqil",
       "basis": [
         {
-          "span": "sp_at_kids_list",
+          "span": "sp_at_c_jaafar",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -351,7 +414,7 @@
       "agent": "abu-saeed-al-ahwal-ibn-aqil",
       "basis": [
         {
-          "span": "sp_at_kids_list",
+          "span": "sp_at_c_abusaeed",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -363,7 +426,7 @@
       "agent": "muhammad-ibn-aqil",
       "basis": [
         {
-          "span": "sp_at_kids_list",
+          "span": "sp_at_c_muhammad",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -375,7 +438,7 @@
       "agent": "abd-al-rahman-ibn-aqil",
       "basis": [
         {
-          "span": "sp_at_kids_list",
+          "span": "sp_at_c_rahman",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -387,7 +450,7 @@
       "agent": "abdullah-ibn-aqil",
       "basis": [
         {
-          "span": "sp_at_kids_list",
+          "span": "sp_at_c_abdullah",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -445,20 +508,6 @@
       },
       "restsOn": [
         "st_at_name"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_at_kunya",
-      "subject": "m_at_k",
-      "predicate": "name.kunya",
-      "value": {
-        "spans": [
-          "sp_at_kunya"
-        ]
-      },
-      "restsOn": [
-        "st_at_kids"
       ],
       "status": "PROPOSED"
     },

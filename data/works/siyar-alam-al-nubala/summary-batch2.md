@@ -20,7 +20,9 @@ Source: Risalah third edition, witness `siyar-alam-al-nubala-risalah`, read page
   only the first; reported to the main Tarajim thread.
 - **Anonymous «قيل» kept as REPORTED_ANONYMOUS:** Abdullah ibn Suhail's al-sabiqoon title and first hijra; Nawfal's
   death in 20 and in 15; Abu Sufyan's death in 20 at Madinah; Abu al-Haytham's death in 20 («غيره»).
-- **Dying in a battle** is PARTICIPATED_IN that battle, not `died.place`, as in the pilot (Ja'far, Hamzah).
+- **Dying in a battle** is PARTICIPATED_IN that battle when the battle is in the event catalog, not `died.place`, as in
+  the pilot (Ja'far, Hamzah). Where the book names a town (al-Baraa at Tustar, Abu Jandal in al-Urdunn), that town is
+  `died.place`.
 - **Mushrikin at Badr** (Suhail, Nawfal, Aqil ibn Abi Talib) are not given PARTICIPATED_IN badr: the predicate has no side.
 - **Weak or mursal reports left out** (editor's notes): Abu al-Haytham's «المستشار مؤتمن»; al-Waqidi's description of
   Zayd as short and dark; Abu Sufyan's «سيد فتيان أهل الجنة» and «خلفاً من حمزة»; Aqil's «أحبك حبين»; Ibn Rawahah's
@@ -40,7 +42,9 @@ Source: Risalah third edition, witness `siyar-alam-al-nubala-risalah`, read page
 - Suhail's death: Yarmuk per al-Mada'ini, the Amwas plague per al-Shafi'i and al-Waqidi, with no year; no predicate fits.
 - Events not in the catalog: al-Yamamah, al-Raji', Fath Misr, Bay'at al-Ridwan («تحت الشجرة»), al-Aqabah. These
   mentions stay unidentified.
-- The Siffin counter-report on Abu al-Haytham; approximate ages («نحو من سبعين»).
+- Approximate ages («نحو من سبعين»).
+- Ja'far ibn Abi Sufyan's «صحبة» (p205, Ibn Sa'd): COMPANION_OF needs a mention of the Prophet ﷺ, and the line has only
+  a pronoun («معه»).
 - Sa'id ibn al-Harith: al-Dhahabi says only al-Hakim names him among the Companions. The entry is converted as printed
   (name and nasab only).
 
@@ -60,9 +64,12 @@ by rule** (name exactly as printed). Catalog `virtues` that fold quoted speech o
 - **iyas-ibn-al-bukayr**: Fath Misr mention unidentified (gap); pact brother gap. Otherwise same.
 - **amir-ibn-al-bukayr**: al-Yamamah by rule and gap; pact brother gap.
 - **mistah-ibn-uthathah**: fullName by rule (nisba «المطلبي» is not part of the nasab line); died.age 56 by addition.
-- **abu-abs**: fullName by rule (catalog has «الأوسي» twice, out of order); died.age 70 by addition; Ka'b ibn
+- **abu-abs**: fullName by rule (catalog has «الأوسي» twice, out of order); the model's name ends «واسمه عبد الرحمن»
+  (pp188-189), so his ism shows; died.age 70 by addition; Ka'b ibn
   al-Ashraf's killing as PARTICIPATED_IN by addition.
-- **abu-al-haytham-ibn-at-tayyihan**: fullName by addition (two attributed lines); virtue «يكره الأصنام» by rule (al-Waqidi's
+- **abu-al-haytham-ibn-at-tayyihan**: fullName by addition (two attributed lines); death in 20 rests on «غيره» and
+  al-Waqidi's «هذا أثبت عندنا»; the report he answers, «أنه قتل بصفين مع علي», is kept as a DISPUTED
+  PARTICIPATED_IN siffin with both statements; virtue «يكره الأصنام» by rule (al-Waqidi's
   word on the Jahiliyyah, with no chain; left out); pact brother gap.
 - **abu-jandal**: fullName same name, the model keeps the kunya the heading prints first; death place «الأردن» same,
   «طاعون عمواس» is the cause, not the place (by rule); virtue different by addition (the whole author sentence); the
@@ -85,12 +92,23 @@ by rule** (name exactly as printed). Catalog `virtues` that fold quoted speech o
 - **abu-sufyan-ibn-al-harith**: fullName by addition (two attributed); virtues by rule (two weak reports out; Hunayn
   kept); milk brother gap; Nawfal and Rabi'ah as siblings by addition.
 - **jaafar-ibn-abi-sufyan-al-hashimi**: fullName as printed after «ولـ», in the genitive (by rule); Hunayn by addition.
-- **aqil-ibn-abi-talib**: fullName as printed in the heading (by rule); kunya kept as the book's «ويزيد وبه كان يكنى»
-  (the «يا أبا يزيد» hadith is weak); virtue «أحبك حبين» out (weak); Mu'tah by addition; the Ja'far brother tie comes
+- **aqil-ibn-abi-talib**: fullName as printed in the heading (by rule); no kunya (p218 «ويزيد وبه كان يكنى» names
+  the son; the one «يا أبا يزيد», p219, is mursal); each of the eight children rests on a span with that child's name; virtue «أحبك حبين» out (weak); Mu'tah by addition; the Ja'far brother tie comes
   from the pilot side.
 - **zaid-ibn-harithah**: fullName by rule; appearance different (al-Waqidi's short and dark is weak; the sound report
-  says very white); virtues by rule, eight kept each with its speaker; father Harithah ibn Sharahil by addition (new
-  slug); ABOUT_AYAH 33:37 and REVEALED_ABOUT 33:5 by addition; died.month 5 (Jumada al-Ula) and age 55 by addition;
+  says very white); virtues by rule, nine kept each with its speaker («سيد الموالي» and «أسبقهم إلى الإسلام» split); father Harithah ibn Sharahil by addition (new
+  slug); ABOUT_AYAH 33:37 and REVEALED_ABOUT 33:5 by addition (33:5's sayer is shown as the chain «سالم، عن أبيه»: the book
+  never names Salim's father here); died.month 5 (Jumada al-Ula) and age 55 by addition;
   Mu'tah by rule; son Usamah same (from the p222 sentence).
 - **abdullah-ibn-rawahah**: fullName by rule; kunyas same (three, as printed); virtues by rule (four kept); Abu
-  al-Darda as SIBLING_OF (Qutaybah: «أخوان لأم») by addition; al-Aqabah unidentified (gap); Mu'tah by addition.
+  al-Darda as SIBLING_OF (Qutaybah: «أخوان لأم») by addition; al-Aqabah unidentified (gap); Mu'tah by addition, on al-Tirmidhi's line (p235) and al-Dhahabi's «بل مؤتة بعدها بستة
+  أشهر جزماً» (p236), which rejects the order of events, not the death.
+
+## Second-agent review
+
+An independent agent reviewed every script against pages 185-241 and their notes. Fixed from its must-fix list: people.json
+regenerated after the last unit change; Aqil ibn Abi Talib's false kunya dropped and each child given its own basis
+span («سعيد» without the «و»); Abu Abs's ism added; Zayd's 33:5 sayer no longer shown as «أبيه»; Abu al-Haytham's
+Siffin counter-report kept as disputed; Zayd's two epithets split; Rabi'ah's basis now names him. From its suggestions:
+Ibn Rawahah's Mu'tah also rests on al-Dhahabi's own line. Kept as is: Abu Jandal's virtue stays the whole author
+sentence (trimmed to «كان من خيار الصحابة» it would fit many Companions, and a quiz choice could also be right).

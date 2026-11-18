@@ -78,6 +78,15 @@
       "exact": "أَخُو نَوْفَل وَرَبِيْعَةَ"
     },
     {
+      "id": "sp_sf_rabiah_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "202",
+      "layer": "MAIN",
+      "exact": "رَبِيْعَةَ",
+      "prefix": "أَخُو نَوْفَل وَ"
+    },
+    {
       "id": "sp_sf_hunayn",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 4,
@@ -477,8 +486,8 @@
       "agent": "rabiah-ibn-al-harith",
       "basis": [
         {
-          "span": "sp_sf_father",
-          "role": "NASAB"
+          "span": "sp_sf_rabiah_w",
+          "role": "SAME_WORK_EXPLICIT"
         }
       ],
       "status": "PROPOSED"

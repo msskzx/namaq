@@ -189,6 +189,34 @@
       "page": "191",
       "layer": "MAIN",
       "exact": "هَذَا أَثْبَتُ عِنْدَنَا مِمَّنْ رَوَى أَنَّهُ قُتِلَ بِصِفِّيْنَ مَعَ عَلِيٍّ"
+    },
+    {
+      "id": "sp_ah_siffin_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "191",
+      "layer": "MAIN",
+      "exact": "مِمَّنْ رَوَى",
+      "prefix": "أَثْبَتُ عِنْدَنَا "
+    },
+    {
+      "id": "sp_ah_siffin",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "191",
+      "layer": "MAIN",
+      "exact": "أَنَّهُ قُتِلَ بِصِفِّيْنَ مَعَ عَلِيٍّ",
+      "prefix": "مِمَّنْ رَوَى "
+    },
+    {
+      "id": "sp_ah_siffin_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "191",
+      "layer": "MAIN",
+      "exact": "بِصِفِّيْنَ",
+      "prefix": "أَنَّهُ قُتِلَ ",
+      "suffix": " مَعَ عَلِيٍّ"
     }
   ],
   "reports": [
@@ -268,6 +296,19 @@
         "mention": "m_ah_waqidi2"
       },
       "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ah_siffin",
+      "unit": "siyar-v4-22-abu-al-haytham",
+      "ordinal": 7,
+      "voice": "REPORTED_ANONYMOUS",
+      "frame": [
+        "sp_ah_siffin_frame"
+      ],
+      "origin": {
+        "mention": "m_ah_siffin_by"
+      },
+      "chainState": "DEFERRED"
     }
   ],
   "statements": [
@@ -317,6 +358,14 @@
       "report": "r_ah_waqidi2",
       "spans": [
         "sp_ah_athbat"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ah_siffin",
+      "report": "r_ah_siffin",
+      "spans": [
+        "sp_ah_siffin"
       ],
       "role": "TRANSMITTED"
     }
@@ -384,6 +433,27 @@
       "exact": "غَيْرُهُ",
       "occurrence": 1,
       "role": "SPEAKER"
+    },
+    {
+      "id": "m_ah_siffin_by",
+      "parent": "sp_ah_siffin_frame",
+      "exact": "مِمَّنْ رَوَى",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ah_s",
+      "parent": "sp_ah_siffin",
+      "exact": "أَنَّهُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ah_siffin",
+      "parent": "sp_ah_siffin",
+      "exact": "صِفِّيْنَ",
+      "occurrence": 1,
+      "role": "REFERENT"
     }
   ],
   "identifications": [
@@ -412,6 +482,18 @@
       "status": "PROPOSED"
     },
     {
+      "id": "i_ah_s",
+      "mention": "m_ah_s",
+      "agent": "abu-al-haytham-ibn-at-tayyihan",
+      "basis": [
+        {
+          "span": "sp_ah_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
       "id": "i_ah_father",
       "mention": "m_ah_father",
       "agent": "at-tayyihan-ibn-bali",
@@ -419,6 +501,18 @@
         {
           "span": "sp_ah_father",
           "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ah_siffin",
+      "mention": "m_ah_siffin",
+      "event": "siffin",
+      "basis": [
+        {
+          "span": "sp_ah_siffin_w",
+          "role": "SAME_WORK_EXPLICIT"
         }
       ],
       "status": "PROPOSED"
@@ -533,9 +627,23 @@
         ]
       },
       "restsOn": [
-        "st_ah_death"
+        "st_ah_death",
+        "st_ah_athbat"
       ],
       "status": "PROPOSED"
+    },
+    {
+      "id": "a_ah_siffin",
+      "subject": "m_ah_s",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_ah_siffin"
+      },
+      "restsOn": [
+        "st_ah_siffin",
+        "st_ah_athbat"
+      ],
+      "status": "DISPUTED"
     }
   ]
 }

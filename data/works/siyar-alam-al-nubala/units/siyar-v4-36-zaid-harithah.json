@@ -83,7 +83,17 @@
       "volume": 4,
       "page": "220",
       "layer": "MAIN",
-      "exact": "سَيِّدُ المَوَالِي، وَأَسْبَقُهُم إِلَى الإِسْلاَمِ"
+      "exact": "سَيِّدُ المَوَالِي",
+      "suffix": "، وَأَسْبَقُهُم"
+    },
+    {
+      "id": "sp_z_v_asbaq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "220",
+      "layer": "MAIN",
+      "exact": "وَأَسْبَقُهُم إِلَى الإِسْلاَمِ",
+      "prefix": "سَيِّدُ المَوَالِي، "
     },
     {
       "id": "sp_z_v_hibb",
@@ -683,7 +693,7 @@
     {
       "id": "m_z_ibnumar",
       "parent": "sp_z_ahzab5_isnad",
-      "exact": "أَبِيْهِ",
+      "exact": "سَالِمٍ، عَنْ أَبِيْهِ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
@@ -965,18 +975,6 @@
       "status": "PROPOSED"
     },
     {
-      "id": "i_z_ibnumar",
-      "mention": "m_z_ibnumar",
-      "agent": "abdullah-ibn-umar",
-      "basis": [
-        {
-          "span": "sp_z_ibnumar_name",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
       "id": "i_z_jabalah",
       "mention": "m_z_jabalah",
       "agent": "jabalah-ibn-harithah",
@@ -1105,6 +1103,20 @@
       "value": {
         "spans": [
           "sp_z_v_mawali"
+        ]
+      },
+      "restsOn": [
+        "st_z_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_z_v_asbaq",
+      "subject": "m_z_e",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_z_v_asbaq"
         ]
       },
       "restsOn": [
