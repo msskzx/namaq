@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import bank from '../data/quran/ayahQuizzes.json';
 import { balaghaQuiz, irabQuiz, qiraatQuiz, tafsirQuiz, type AyahQuizzes } from './ayahQuizzes';
 import { hideQuotes, quotesOf, stem } from './ayahQuizText';
+import { num } from '../quran/arabicNumber';
 
 const data = bank as AyahQuizzes;
 const seeded = (seed: number) => () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
@@ -36,6 +37,8 @@ describe('the four ayah quizzes', () => {
       expect(question.quranChoices).toBe(true);
       expect(question.choices).toHaveLength(3);
       expect(Object.keys(question.whereOf!).sort()).toEqual(question.choices.map(choice => choice.value).sort());
+      // Each whole ayah ends with its number, the mushaf's end mark.
+      for (const choice of question.choices) expect(choice.labelArabic).toMatch(new RegExp(` ${num(Number(choice.value.split(':')[1]))}$`));
     }
   });
 
