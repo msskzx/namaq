@@ -53,7 +53,7 @@ describe('nasabTree', () => {
 describe('safeguards', () => {
   const man = (slug: string, nasab: string[], father?: string): AppPerson => ({
     ...person('talhah-ibn-ubaydullah'), slug, name: nasab[0], nasab,
-    parents: father ? [{ slug: father, name: father, inApp: false, sex: 'MALE', text: '', refs: [], by: [] }] : [],
+    parents: father ? [{ slug: father, name: nasab[1], inApp: false, sex: 'MALE', text: '', refs: [], by: [] }] : [],
   } as AppPerson);
 
   it('never carries a line of two names on by a common name alone', () => {
@@ -96,5 +96,48 @@ describe('safeguards', () => {
     const count = (n: NasabNode): number => 1 + n.children.reduce((sum, c) => sum + count(c), 0);
     // u v w z y x a b c, each once.
     expect(count(roots.find((r) => r.key === 'u')!)).toBe(9);
+  });
+});
+
+describe('kunyaName', () => {
+  it('reads a kunya in the nominative whatever case the book gives it in', async () => {
+    const { kunyaName } = await import('./tarajim');
+    expect(kunyaName('أَبَا تُرَابٍ')).toBe('أبو تراب');
+    expect(kunyaName('أَبِي عَبْدِ اللهِ')).toBe('أبو عبد الله');
+    expect(kunyaName('أَبُو مُحَمَّدٍ')).toBe('أبو محمد');
+    expect(kunyaName('ذَا الجَنَاحَيْنِ')).toBe('ذو الجناحين');
+  });
+});
+
+describe('nasab slips', () => {
+  it('names only people that exist and a name their nasab prints, each with a note', async () => {
+    const { slips } = (await import('./data/tarajim/nasabSlips.json')).default as { slips: Record<string, { at: string; note: string }> };
+    for (const [slug, slip] of Object.entries(slips)) {
+      const p = people.find((x) => x.slug === slug);
+      expect(p).toBeDefined();
+      expect(p!.nasab.map(bareName)).toContain(bareName(slip.at));
+      expect(slip.note.length).toBeGreaterThan(0);
+    }
+  });
+});
+
+describe('names in a line', () => {
+  const man = (slug: string, nasab: string[], parents: { name: string; sex: 'MALE' | 'FEMALE' }[] = []): AppPerson => ({
+    ...person('talhah-ibn-ubaydullah'), slug, name: nasab[0], nasab,
+    parents: parents.map((p) => ({ slug: `${slug}-${p.sex}`, name: p.name, inApp: false, sex: p.sex, text: '', refs: [], by: [] })),
+  } as AppPerson);
+
+  it('reads a man named by his mother through the father his entry names', () => {
+    const safwan = man('safwan', ['صفوان', 'بيضاء'], [{ name: 'دعد بنت جحدم', sex: 'FEMALE' }, { name: 'وهب بن ربيعة بن هلال', sex: 'MALE' }]);
+    expect(lineOf(safwan, [safwan]).map((n) => n.bare)).toEqual(['صفوان', 'وهب', 'ربيعه', 'هلال']);
+  });
+
+  it('meets two lines at a father one of them gives with his laqab («مالك الأغر» is «مالك»)', () => {
+    const thabit = man('thabit', ['ثابت', 'قيس', 'زهير', 'مالك', 'امرئ القيس', 'مالك الأغر', 'ثعلبة']);
+    const saad = man('saad', ['سعد', 'الربيع', 'أبي زهير', 'مالك', 'امرئ القيس', 'مالك', 'ثعلبة']);
+    const all = [thabit, saad];
+    const at = meetingOf(lineOf(thabit, all), lineOf(saad, all))!;
+    expect(bareName(lineOf(thabit, all)[at.a].name)).toBe('مالك');
+    expect(at.a).toBe(3);
   });
 });

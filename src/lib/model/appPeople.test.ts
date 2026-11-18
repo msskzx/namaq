@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { loadCatalog } from '../catalog/loadCatalog';
-import { appPeople, nasabOf } from './appPeople';
+import { appPeople, nasabOf, shortName } from './appPeople';
 
 describe('the phone app people', () => {
   it('are the converted entries as they are now (npm run model:app-people writes them again)', async () => {
@@ -39,6 +39,16 @@ describe('the phone app people', () => {
     expect(nasabOf('الزُّبَيْرُ بنُ العَوَّامِ بنِ خُوَيْلِدِ بنِ عَبْدِ العُزَّى، القُرَشِيُّ')).toEqual(['الزُّبَيْرُ', 'العَوَّامِ', 'خُوَيْلِدِ', 'عَبْدِ العُزَّى']);
     expect(nasabOf('محمد بن عبد الله بن عبد المطلب واسم عبد المطلب شيبة, ابن هاشم واسمه عمرو, ابن عبد مناف واسمه المغيرة، ابن قصي'))
       .toEqual(['محمد', 'عبد الله', 'عبد المطلب', 'هاشم', 'عبد مناف', 'قصي']);
+    // A person with no catalog entry is named by the name and the father.
+    expect(shortName(nasabOf('عبد الله بن أبي طلحة زيد بن سهل'))).toBe('عبد الله بن أبي طلحة زيد');
+    expect(shortName(nasabOf('عبد الرحمن بن الحارث بن هشام'))).toBe('عبد الرحمن بن الحارث');
+    expect(shortName(nasabOf('صفية بنت شيبة بن عثمان'), 'FEMALE')).toBe('صفية بنت شيبة');
+    // An aside between dashes is no name.
+    expect(nasabOf('عبد الله بن سالم - وسالم هو الذي يقال له الحبلى، لعظم بطنه - بن غنم')).toEqual(['عبد الله', 'سالم', 'غنم']);
+    // A kunya with a forefather before the name: the line starts at the name's own father.
+    expect(nasabOf('أبو عبيدة بن الجراح عامر بن عبد الله بن الجراح بن هلال')).toEqual(['أبو عبيدة', 'عبد الله', 'الجراح', 'هلال']);
+    expect(nasabOf('أبو سفيان بن حرب بن أمية')).toEqual(['أبو سفيان', 'حرب', 'أمية']);
+    expect(nasabOf('أبو حذيفة بن عبد الله بن عتبة')).toEqual(['أبو حذيفة', 'عبد الله', 'عتبة']);
     // An aside whose names have more than one word, closed by «،» or by «بن».
     expect(nasabOf('أبو هريرة واسمه عبد الرحمن بن صخر')).toEqual(['أبو هريرة', 'صخر']);
     expect(nasabOf('علي بن أبي طالب واسم أبي طالب عبد مناف، ابن عبد المطلب')).toEqual(['علي', 'أبي طالب', 'عبد المطلب']);

@@ -1,4 +1,8 @@
 import type { AppPerson } from './tarajim';
+import slipsJson from './data/tarajim/nasabSlips.json';
+
+/** Printing slips in a nasab (shared/data/tarajim/nasabSlips.json): the line stops before the slipped name. */
+const SLIPS: Record<string, { at: string; note: string }> = slipsJson.slips;
 
 /**
  * A person's line of fathers for the nasab tree (owner, 2026-11-18), read from the converted entries only.
@@ -21,12 +25,39 @@ export function bareName(name: string) {
     .replace(/ى$/u, 'ي').replace(/\s+/g, ' ').trim();
 }
 
+/** The first word of a name of two words («عبد الله», «أبي طالب»), which is no name with a laqab after it. */
+const COMPOUND = /^(?:عبد|ابي|ابو|ام|ذي|ذو|امري|امرئ)$/u;
+
+/**
+ * Two bare names for the same father: the same, or one the other with a laqab after it («مالك الأغر» is «مالك»).
+ * Never for a name of two words («عبد الله» is not «عبد»), and the added word must be a laqab («ال…»).
+ */
+export function sameName(a: string, b: string) {
+  if (a === b) return true;
+  const [short, long] = a.length < b.length ? [a, b] : [b, a];
+  const words = long.split(' ');
+  return words.length === 2 && words[0] === short && !COMPOUND.test(short) && words[1].startsWith('ال');
+}
+
 /** The father's name from a link's name: «عبد المطلب بن هاشم» → «عبد المطلب». */
 const firstName = (name: string) => name.split(/\s+(?:بن|ابن|بنت)\s+/u)[0];
 const link = (name: string, from: string): LineName => ({ name, bare: bareName(name), from });
 
 function ownLine(person: AppPerson): LineName[] {
   const line = person.nasab.map((name) => link(name, person.slug));
+  // A heading that names him by his mother («صفوان ابن بيضاء», «ابن أم مكتوم») or a forefather, not his father: when
+  // the entry names his father, his line goes on through him as the entry names him («وهب بن ربيعة بن هلال»).
+  const mother = person.parents.find((parent) => parent.sex === 'FEMALE');
+  const father = person.parents.find((parent) => parent.sex === 'MALE');
+  const notFather = line.length > 1 && father && !sameName(line[1].bare, bareName(firstName(father.name)));
+  if (father && notFather && (line.length === 2 || (mother && sameName(line[1].bare, bareName(firstName(mother.name)))))) {
+    line.splice(1, line.length - 1, ...father.name.split(/\s+(?:بن|ابن)\s+/u).map((name) => link(name, person.slug)));
+  }
+  const slip = SLIPS[person.slug];
+  if (slip) {
+    const at = line.findIndex((n, i) => i > 0 && n.bare === bareName(slip.at));
+    if (at > 0) line.splice(at);
+  }
   if (line.length === 0) line.push(link(person.name, person.slug));
   if (line.length === 1) {
     const father = person.parents.find((parent) => parent.sex === 'MALE');
@@ -47,7 +78,7 @@ function continuation(line: LineName[], other: LineName[]) {
   if (line.length < JOIN) return -1;
   const tail = line.slice(-JOIN).map((n) => n.bare);
   for (let j = JOIN - 1; j < other.length - 1; j += 1) {
-    if (tail.every((bare, k) => other[j - (JOIN - 1) + k].bare === bare)) return j + 1;
+    if (tail.every((bare, k) => sameName(other[j - (JOIN - 1) + k].bare, bare))) return j + 1;
   }
   return -1;
 }
@@ -66,10 +97,10 @@ function ownLinesOf(people: readonly AppPerson[]) {
 }
 
 /**
- * The person's fathers from the person up, carried on through the other converted entries as far as they go. A line too
- * short to match by names (al-Abbas's heading names no father) goes on only through kin the entries name as the same
- * man: a brother whose entry names the same father. When the father has his own entry, the line always goes on
- * through it.
+ * The person's fathers from the person up, carried on through the other converted entries as far as they go. Kin the
+ * entries name as the same man come first: the father's own entry always carries the line; else a brother whose entry
+ * names the same father (by slug) carries it when his goes further (al-Abbas's heading names no father; Amr ibn Sa'id's
+ * stops at «العاص»). Then three names in a row matching another entry's line carry it on.
  */
 export function lineOf(person: AppPerson, people: readonly AppPerson[]): LineName[] {
   const own = ownLinesOf(people);
@@ -79,11 +110,12 @@ export function lineOf(person: AppPerson, people: readonly AppPerson[]): LineNam
     // The father's own entry carries the line, whatever the son's heading prints: a heading may shorten the nasab
     // («معاذ بن عمرو بن الجموح بن كعب» skips زيد and حرام, which his father's entry prints).
     line.splice(1, line.length - 1, ...own.get(father)!);
-  } else if (line.length < JOIN && father) {
+  } else if (father) {
+    // A brother whose entry names the same father (by slug, so the same man) carries a line his own stops short of.
     const kin = people.filter((p) => p.slug !== person.slug && fatherOf(p) === father)
       .map((p) => own.get(p.slug)!.slice(1))
       .sort((x, y) => y.length - x.length)[0];
-    if (kin && kin.length >= line.length) line.splice(1, line.length - 1, ...kin);
+    if (kin && kin.length > line.length - 1) line.splice(1, line.length - 1, ...kin);
   }
   const others = people.filter((p) => p.slug !== person.slug).map((p) => own.get(p.slug)!);
   for (let guard = 0; guard < people.length; guard += 1) {
@@ -116,12 +148,12 @@ const ABOVE = 2;
 export function meetingOf(a: LineName[], b: LineName[]): { a: number; b: number } | undefined {
   for (let i = 0; i < a.length; i += 1) {
     for (let j = 0; j < b.length; j += 1) {
-      if (b[j].bare !== a[i].bare) continue;
+      if (!sameName(b[j].bare, a[i].bare)) continue;
       const shared = Math.min(a.length - 1 - i, b.length - 1 - j, ABOVE);
       // One name alone with nothing above it to agree on is not a meeting.
       if (shared < 1) continue;
       let same = true;
-      for (let k = 1; k <= shared; k += 1) if (a[i + k].bare !== b[j + k].bare) same = false;
+      for (let k = 1; k <= shared; k += 1) if (!sameName(a[i + k].bare, b[j + k].bare)) same = false;
       if (same) return { a: i, b: j };
     }
   }
