@@ -1,4 +1,8 @@
 import type { AppPerson } from './tarajim';
+import slipsJson from './data/tarajim/nasabSlips.json';
+
+/** Printing slips in a nasab (shared/data/tarajim/nasabSlips.json): the line stops before the slipped name. */
+const SLIPS: Record<string, { at: string; note: string }> = slipsJson.slips;
 
 /**
  * A person's line of fathers for the nasab tree (owner, 2026-11-18), read from the converted entries only.
@@ -27,6 +31,11 @@ const link = (name: string, from: string): LineName => ({ name, bare: bareName(n
 
 function ownLine(person: AppPerson): LineName[] {
   const line = person.nasab.map((name) => link(name, person.slug));
+  const slip = SLIPS[person.slug];
+  if (slip) {
+    const at = line.findIndex((n, i) => i > 0 && n.bare === bareName(slip.at));
+    if (at > 0) line.splice(at);
+  }
   if (line.length === 0) line.push(link(person.name, person.slug));
   if (line.length === 1) {
     const father = person.parents.find((parent) => parent.sex === 'MALE');

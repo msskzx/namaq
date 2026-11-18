@@ -108,3 +108,15 @@ describe('kunyaName', () => {
     expect(kunyaName('ذَا الجَنَاحَيْنِ')).toBe('ذو الجناحين');
   });
 });
+
+describe('nasab slips', () => {
+  it('names only people that exist and a name their nasab prints, each with a note', async () => {
+    const { slips } = (await import('./data/tarajim/nasabSlips.json')).default as { slips: Record<string, { at: string; note: string }> };
+    for (const [slug, slip] of Object.entries(slips)) {
+      const p = people.find((x) => x.slug === slug);
+      expect(p).toBeDefined();
+      expect(p!.nasab.map(bareName)).toContain(bareName(slip.at));
+      expect(slip.note.length).toBeGreaterThan(0);
+    }
+  });
+});
