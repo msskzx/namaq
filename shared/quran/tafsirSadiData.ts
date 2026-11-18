@@ -24,3 +24,7 @@ export function tafsirSadiOf(key: string): TafsirPassage | null {
   const last = found[found.length - 1];
   return { surah: first[0], from: first[1], to: last[2], pages: [first[3], last[4]], text: found.map(row => row[5]).join('\n') };
 }
+
+/** The ayat al-Sa'di explains alone, in one passage of their own and in no other (the feed's tafsir card, owner 2026-11-18), in the book's order. */
+export const singleAyahPassages = (): string[] =>
+  rows.filter(([surah, from, to]) => from === to && byAyah.get(`${surah}:${from}`)?.length === 1).map(([surah, from]) => `${surah}:${from}`);

@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, LibraryBig, LightbulbOff, Presentation, Users, ScrollText, Swords, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { bookmarkKind } from '@shared/bookmarkKind';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
@@ -60,6 +60,20 @@ import { IltifatActions, IltifatScene } from './Iltifat';
 import { prophetStory } from '@/lib/prophets';
 import StoryMap from './StoryMap';
 import { ayahPlaces } from '@shared/quran/ayahPlaces';
+import itqan from '@shared/data/quran/itqanBalagha';
+import surahCounts from '@shared/data/quran/surahs.json';
+import { allAyat, ayahNoteAt, balaghaNote, ayahNoteKind, itqanSureAyat, withoutOpeningQuote, type AyahNote } from '@shared/quran/ayahNotes';
+import { itqanAt } from '@shared/quran/itqanBalagha';
+import { irabWordsAt } from '@shared/quran/irabData';
+import { qiraatAyat, qiraatOf } from '@shared/quran/qiraatData';
+import { singleAyahPassages, tafsirSadiOf } from '@shared/quran/tafsirSadiData';
+import { tafsirRuns } from '@shared/quran/tafsirSadi';
+import { corpusWords } from '@shared/quran/words';
+import AyahPreviewSheet, { QiraatWord } from './AyahPreviewSheet';
+import type { WordDifference } from '@shared/quran/qiraat';
+import BalaghaSheet from './BalaghaSheet';
+import IrabSheet from './IrabSheet';
+import QuranWords from './quran/text/QuranWords';
 import { storyMap } from '@shared/quran/prophets/story';
 import { hasStoryCard, storyGroupOfDay } from '@shared/quran/prophets/storyGroup';
 import { check, DEFAULT_LIST, DEFAULT_SOLO, hasTyped, isCompare, isTree, pick, reveal, showAnswer, startSolo, typeAnswer, type SoloRun } from '@/lib/quiz';
@@ -83,13 +97,15 @@ function Action({ Icon, label, on, onPress, tone, disabled }: { Icon: IconType; 
  * Every feed post's one shape (owner, 2026-11-14), the compare card's: the head, the body in one card, and a row of icon
  * buttons under the card, starting on the right.
  */
-function Post({ head, actions, bar, palette, children }: { head: React.ReactNode; actions?: React.ReactNode;
+function Post({ head, actions, bar, palette, press, children }: { head: React.ReactNode; actions?: React.ReactNode;
+  /** The whole card as one button (an ayah card opening its sheet); `label` names it for a screen reader. */
+  press?: { onPress: () => void; label: string };
   /** A bar of the feature's own under the card, leading the buttons' row (recite mode's small bar, on the recall card; owner 2026-11-17). */
   bar?: React.ReactNode; palette: Palette; children: React.ReactNode }) {
   return (
     <View style={{ gap: 4 }}>
       {head}
-      <Card palette={palette} pad={0} clip>{children}</Card>
+      <Card palette={palette} pad={0} clip onPress={press?.onPress} accessibilityLabel={press?.label}>{children}</Card>
       {(bar || actions) && <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', gap: bar ? 4 : 0, marginTop: bar ? 4 : 0 }}>{bar}{actions}</View>}
     </View>
   );
@@ -542,6 +558,94 @@ function MomentPost({ day, slot, palette }: { day: number; slot: number; palette
   );
 }
 
+/** Each ayah card's list of ayat, read once when first asked for. */
+const noteLists: Partial<Record<AyahNote, string[]>> = {};
+const noteList = (kind: AyahNote) => (noteLists[kind] ??= kind === 'tafsir' ? singleAyahPassages() : kind === 'balagha' ? itqanSureAyat(itqan)
+  : kind === 'qiraat' ? qiraatAyat() : allAyat(surahCounts.map(surah => surah.numberOfAyat)));
+const NOTE_HEADS: Record<AyahNote, { Icon: IconType; title: string; open: string }> = {
+  tafsir: { Icon: BookOpen, title: 'من التفسير', open: 'التفسير كاملًا' },
+  balagha: { Icon: Sparkles, title: 'من البلاغة', open: 'البلاغة كاملة' },
+  irab: { Icon: ListTree, title: 'من الإعراب', open: 'إعراب الآية' },
+  qiraat: { Icon: Layers, title: 'من القراءات', open: 'القراءات كاملة' },
+};
+type NoteBody = { key: string } & ({ text: string; source: string; heading?: string } | { word: number; shown: string; role: string; morph: string } | { readings: WordDifference[] });
+/** The lines of a book's words a card shows before «المزيد». */
+const NOTE_LINES = 4;
+
+/**
+ * An ayah with a little of what a book says on it (owner, 2026-11-18: small cards, the whole text one tap away): al-Sa'di on
+ * an ayah he explains alone, al-Suyuti's balagha paragraph on an ayah he surely names, a word's i'rab, or the readings. A
+ * tap opens the reader's own sheet for it. A card whose book is not on the phone is left out.
+ */
+const AyahNotePost = memo(function AyahNotePost({ kind, day, slot, palette }: { kind: AyahNote; day: number; slot: number; palette: Palette }) {
+  useBooks();
+  const on = kind === 'tafsir' ? bookState('sadi') === 'on' : kind === 'balagha' ? bookState('itqan') === 'on' : kind === 'irab' ? bookState('irab-words') === 'on' : true;
+  const note = useMemo((): NoteBody | null => {
+    const list = noteList(kind);
+    const at = ayahNoteAt(list.length, day, slot);
+    if (at < 0) return null;
+    const key = list[at];
+    if (kind === 'tafsir') { const passage = tafsirSadiOf(key); return passage ? { key, text: withoutOpeningQuote(passage.text), source: 'تفسير السعدي' } : null; }
+    if (kind === 'balagha') {
+      const found = balaghaNote(itqanAt(itqan, key));
+      return found ? { key, ...found, source: 'الإتقان للسيوطي' } : null;
+    }
+    if (kind === 'irab') {
+      const words = ayahMushafWords(key);
+      const lines = irabWordsAt(key);
+      const order = words.map((_, i) => (i + day + slot) % words.length);
+      // A word with a role; a noun or verb before a lone particle («حرف جر»), which says little on its own.
+      const hasRole = (i: number) => corpusWords(key, i).some(c => lines[c]?.role);
+      const particle = (i: number) => corpusWords(key, i).every(c => lines[c]?.morph.startsWith('حرف'));
+      const word = order.find(i => hasRole(i) && !particle(i)) ?? order.find(hasRole);
+      if (word === undefined) return null;
+      return { key, word, shown: words[word], role: corpusWords(key, word).map(c => lines[c]?.role).filter(Boolean).join('، '), morph: corpusWords(key, word).map(c => lines[c]?.morph).filter(Boolean).join(' · ') };
+    }
+    return { key, readings: qiraatOf(key) };
+  }, [kind, day, slot]);
+  const [open, setOpen] = useState(false);
+  // The sheet stays while it is open, even when its book is taken off the phone from inside it.
+  if (!note || (!on && !open)) return null;
+  const [surah, number] = note.key.split(':').map(Number);
+  const head = NOTE_HEADS[kind];
+  const show = () => setOpen(true);
+  const close = () => setOpen(false);
+  const more = <Text style={{ color: palette.accent, fontSize: 14, textAlign: 'right', paddingHorizontal: 14 }}>المزيد</Text>;
+  return (
+    <>
+      {on && <Post palette={palette} head={<PostHead Icon={head.Icon} title={head.title} sub={[`${shortNames[surah] ?? ''} ${num(number)}`, 'source' in note ? note.source : ''].filter(Boolean).join(' · ')} palette={palette} />}
+        actions={<Action Icon={head.Icon} label={head.open} onPress={show} palette={palette} />}
+        press={{ onPress: show, label: `${head.open}، ${shortNames[surah] ?? ''} ${num(number)}` }}>
+        <View style={{ paddingVertical: 10, gap: 6 }}>
+          <View pointerEvents="none" style={{ paddingHorizontal: 12 }}>
+            <AyahLines ayah={note.key} palette={palette} shown whole write={null} checked={null} />
+          </View>
+          <View style={{ height: 1, backgroundColor: palette.rule, marginHorizontal: 14, opacity: 0.6 }} />
+          {'heading' in note && note.heading ? <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right', paddingHorizontal: 14 }}>{note.heading}</Text> : null}
+          {'source' in note && <>
+            <Text numberOfLines={NOTE_LINES} style={{ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'right', writingDirection: 'rtl', paddingHorizontal: 14 }}>
+              {tafsirRuns(note.text).map((run, i) => (run.quran ? <QuranWords key={i} style={{ color: palette.accent }}>{run.text}</QuranWords> : run.text))}
+            </Text>
+            {more}
+          </>}
+          {'word' in note && <View style={{ paddingHorizontal: 14, gap: 2 }}>
+            <Text style={{ textAlign: 'right', writingDirection: 'rtl' }}><QuranWords style={{ fontSize: 26, lineHeight: 48, color: palette.accent }}>{note.shown}</QuranWords></Text>
+            <Text style={{ color: palette.ink, fontSize: 19, lineHeight: 31, textAlign: 'right' }}>{note.role}</Text>
+            <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>{note.morph}</Text>
+          </View>}
+          {'readings' in note && <>
+            {note.readings.slice(0, 2).map(word => <QiraatWord key={word.at.join('-')} word={word} palette={palette} bare />)}
+            {note.readings.length > 2 && more}
+          </>}
+        </View>
+      </Post>}
+      {(kind === 'tafsir' || kind === 'qiraat') && <AyahPreviewSheet preview={open ? { kind: kind === 'tafsir' ? 'tafsir' : 'readings', key: note.key } : null} onClose={close} palette={palette} />}
+      {kind === 'balagha' && <BalaghaSheet ayah={open ? note.key : null} onClose={close} palette={palette} />}
+      {kind === 'irab' && 'word' in note && <IrabSheet target={open ? { key: note.key, word: note.word } : null} onClose={close} palette={palette} />}
+    </>
+  );
+});
+
 /** Batches added each time the page nears the feed's end. */
 const MORE = 3;
 
@@ -590,6 +694,7 @@ export function Feed({ palette, nearEnd, screenBottom }: { palette: Palette; nea
     // A question card in every batch after the first (whose question is the recall card), each kind in turn.
     if (i > 0) posts.push(<FeedQuiz key={`q${day}-${i}`} kind={feedQuizKind(day, i)} seed={feedQuizSeed(day, i)} palette={palette} />);
     if (trees[i]) posts.push(<TreePost key={`t${trees[i].id}`} piece={trees[i]} palette={palette} />);
+    posts.push(<AyahNotePost key={`n${day}-${i}`} kind={ayahNoteKind(day, i)} day={day} slot={i} palette={palette} />);
     const savedItem = savedOfSlot(saved, day, i);
     if (savedItem) posts.push(<SavedPost key={`b${savedItem.id}-${i}`} item={savedItem} palette={palette} />);
     if (hasStoryCard(i)) { const group = storyGroupOfDay(day, i); posts.push(<StoryPost key={`s${day}-${i}`} slug={group.slug} phase={group.phase} palette={palette} />); }
