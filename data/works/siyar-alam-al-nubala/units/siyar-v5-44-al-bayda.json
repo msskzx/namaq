@@ -75,32 +75,6 @@
       "page": "273",
       "layer": "MAIN",
       "exact": "عَامِراً وَالِدَ الأَمِيْرِ عَبْدِ اللهِ، وَأَرْوَى وَالِدَةَ الشَّهِيْدِ عُثْمَانَ"
-    },
-    {
-      "id": "sp_bd_uqbah",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 5,
-      "page": "273",
-      "layer": "MAIN",
-      "exact": "ثُمَّ خَلَفَ عَلَيْهَا: عُقْبَةُ بنُ أَبِي مُعَيْطٍ، فَوَلَدَتْ لَهُ: الوَلِيْدَ، وَخَالِداً، وَأُمَّ كُلْثُوْمٍ، وَلِلثَّلاَثَةِ صُحْبَةٌ"
-    },
-    {
-      "id": "sp_bd_uqbah_n",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 5,
-      "page": "273",
-      "layer": "MAIN",
-      "exact": "عُقْبَةُ بنُ أَبِي مُعَيْطٍ",
-      "prefix": "ثُمَّ خَلَفَ عَلَيْهَا:"
-    },
-    {
-      "id": "sp_bd_uqbah_kids",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 5,
-      "page": "273",
-      "layer": "MAIN",
-      "exact": "الوَلِيْدَ، وَخَالِداً، وَأُمَّ كُلْثُوْمٍ",
-      "prefix": "فَوَلَدَتْ لَهُ:"
     }
   ],
   "reports": [
@@ -131,14 +105,6 @@
       "report": "r_bd0",
       "spans": [
         "sp_bd_kurayz"
-      ],
-      "role": "AUTHOR_REPORT"
-    },
-    {
-      "id": "st_bd_uqbah",
-      "report": "r_bd0",
-      "spans": [
-        "sp_bd_uqbah"
       ],
       "role": "AUTHOR_REPORT"
     }
@@ -190,41 +156,6 @@
       "id": "m_bd_arwa",
       "parent": "sp_bd_kurayz",
       "exact": "أَرْوَى",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
-      "id": "m_bd_m2",
-      "parent": "sp_bd_uqbah",
-      "exact": "عَلَيْهَا",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
-      "id": "m_bd_uqbah",
-      "parent": "sp_bd_uqbah",
-      "exact": "عُقْبَةُ بنُ أَبِي مُعَيْطٍ",
-      "occurrence": 1,
-      "role": "REFERENT"
-    },
-    {
-      "id": "m_bd_walid",
-      "parent": "sp_bd_uqbah",
-      "exact": "الوَلِيْدَ",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
-      "id": "m_bd_khalid",
-      "parent": "sp_bd_uqbah",
-      "exact": "وَخَالِداً",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
-      "id": "m_bd_ummk",
-      "parent": "sp_bd_uqbah",
-      "exact": "أُمَّ كُلْثُوْمٍ",
       "occurrence": 1,
       "role": "SUBJECT"
     }
@@ -309,66 +240,6 @@
       "basis": [
         {
           "span": "sp_bd_kurayz_kids",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_bd_m2",
-      "mention": "m_bd_m2",
-      "agent": "al-bayda-bint-abd-al-muttalib",
-      "basis": [
-        {
-          "span": "sp_bd_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_bd_uqbah",
-      "mention": "m_bd_uqbah",
-      "agent": "uqba-ibn-abi-muayt",
-      "basis": [
-        {
-          "span": "sp_bd_uqbah_n",
-          "role": "NASAB"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_bd_walid",
-      "mention": "m_bd_walid",
-      "agent": "al-walid-ibn-uqbah",
-      "basis": [
-        {
-          "span": "sp_bd_uqbah_kids",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_bd_khalid",
-      "mention": "m_bd_khalid",
-      "agent": "khalid-ibn-uqbah",
-      "basis": [
-        {
-          "span": "sp_bd_uqbah_kids",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_bd_ummk",
-      "mention": "m_bd_ummk",
-      "agent": "umm-kulthum-bint-uqbah",
-      "basis": [
-        {
-          "span": "sp_bd_uqbah_kids",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -489,90 +360,6 @@
       },
       "restsOn": [
         "st_bd_kurayz"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_bd_uqbah",
-      "subject": "m_bd_m2",
-      "predicate": "MARRIED",
-      "value": {
-        "object": "m_bd_uqbah"
-      },
-      "restsOn": [
-        "st_bd_uqbah"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_bd_walid_m",
-      "subject": "m_bd_walid",
-      "predicate": "CHILD_OF",
-      "value": {
-        "object": "m_bd_m2"
-      },
-      "restsOn": [
-        "st_bd_uqbah"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_bd_walid_f",
-      "subject": "m_bd_walid",
-      "predicate": "CHILD_OF",
-      "value": {
-        "object": "m_bd_uqbah"
-      },
-      "restsOn": [
-        "st_bd_uqbah"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_bd_khalid_m",
-      "subject": "m_bd_khalid",
-      "predicate": "CHILD_OF",
-      "value": {
-        "object": "m_bd_m2"
-      },
-      "restsOn": [
-        "st_bd_uqbah"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_bd_khalid_f",
-      "subject": "m_bd_khalid",
-      "predicate": "CHILD_OF",
-      "value": {
-        "object": "m_bd_uqbah"
-      },
-      "restsOn": [
-        "st_bd_uqbah"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_bd_ummk_m",
-      "subject": "m_bd_ummk",
-      "predicate": "CHILD_OF",
-      "value": {
-        "object": "m_bd_m2"
-      },
-      "restsOn": [
-        "st_bd_uqbah"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_bd_ummk_f",
-      "subject": "m_bd_ummk",
-      "predicate": "CHILD_OF",
-      "value": {
-        "object": "m_bd_uqbah"
-      },
-      "restsOn": [
-        "st_bd_uqbah"
       ],
       "status": "PROPOSED"
     }

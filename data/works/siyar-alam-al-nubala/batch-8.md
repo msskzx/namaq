@@ -61,14 +61,26 @@ Four classes: same / different by addition / different by rule / unsupported in 
   the Mothers of the Believers (p207); a statement about a group is not tied to one person here. New: Zaynab bint
   Jahsh `33:37` (author, «وهي التي يقول الله فيها», p211), Umm Kulthum bint Uqbah `60:10` (author, p276-277).
 - **death**: Zaynab bint Khuzaymah's catalog year 4 and al-Baqi' are *unsupported in the text* (the entry gives no
-  year: «لم تمكث عنده إلا شهرين أو أكثر، وتوفيت»). Model-only: Umm Salamah 61 (author) and 59 in Dhu al-Qa'dah
-  (al-Waqidi's report, which the author calls a slip, kept attributed); Zaynab bint Jahsh 20; Umm Habibah 44
+  year: «لم تمكث عنده إلا شهرين أو أكثر، وتوفيت»). Model-only: Umm Salamah 61 (author, p210) and 59 in Dhu al-Qa'dah
+  (Umar ibn Abi Salamah through al-Waqidi, p203; the author calls 59 a slip on p210, and both are kept with their sayers); Zaynab bint Jahsh 20; Umm Habibah 44
   (al-Waqidi, Abu Ubayd, al-Fasawi) and 42 (al-Mufaddal al-Ghallabi); Umm Kulthum bint Muhammad Sha'ban 9.
 - **asma-bint-kaab-al-jawniyyah**: no catalog entry; new subject. The book itself records the identity as reported:
   «قيل: هي أسماء بنت كعب الجونية. كذا سماها ابن إسحاق» and «وقيل: بل هي أسماء بنت النعمان الغفارية». The model has no
   predicate for an alternative name, so the second naming is left as text. Kept apart from
   asma-bint-al-numan-al-kindiyyah (batch 1, and #36 «الكندية»), whose entry names a different father and tribe.
   Al-Zuhri's «أخت بني الجون … فاستعاذت منه» is not tied to her: the page does not say it is the same woman.
+
+- **Second-agent review fixes**: Umm Habibah's «ليس في أزواجه من هي أقرب نسبا إليه منها» is the only virtue taken
+  from that sentence; «أكثر صداقا» and «نائية الدار أبعد» are facts about the marriage (GUIDE rule 5). Umm Umarah's virtue
+  is «وقطعت يدها في الجهاد» (p278); her list of battles stays as PARTICIPATED_IN. Her husband Ghaziyyah ibn Amr rests on
+  al-Waqidi's own statement (p278), used as a historian as for Umm Habibah's death year.
+- **Al-Bayda and Uqbah ibn Abi Mu'ayt (p273) not modeled**: «ثم خلف عليها: عقبة بن أبي معيط، فولدت له: الوليد، وخالدا،
+  وأم كلثوم» follows «وأروى والدة الشهيد عثمان», so «عليها» may be al-Bayda or Arwa (the nearer antecedent; Ibn Sa'd,
+  cited by the editor, puts it on Arwa). The text is unclear, so neither reading is modeled. The catalog's link of
+  al-Bayda to Uqbah's children is *catalog-only*.
+- **Bare «عثمان»** in Ruqayyah's and Umm Kulthum's entries (p251-252) is identified as uthman-ibn-affan from the
+  context of the Prophet's daughters' marriages; the entries do not print «بن عفان».
+- Zaynab bint Jahsh's ayah reference prints «[الأحزاب: ٣٧٠]», a print slip; the value is 33:37.
 
 ## Weak reports kept out (editor's grading in the notes)
 

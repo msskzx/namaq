@@ -240,6 +240,58 @@
       "page": "207",
       "layer": "MAIN",
       "exact": "اغْفِرْ لَنَا وَلَهُ، وَأَعْقِبْنِي مِنْهُ عُقْبَى صَالِحَةً) . فَقُلْتُهَا، فَأَعْقَبَنِي اللهُ مُحَمَّداً"
+    },
+    {
+      "id": "sp_us_d61",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "210",
+      "layer": "MAIN",
+      "exact": "وَبَعْضُهُم أَرَّخَ مَوْتَهَا فِي سَنَةِ تِسْعٍ وَخَمْسِيْنَ، فَوَهِمَ أَيْضاً، وَالظَّاهِرُ وَفَاتُهَا فِي سَنَةِ إِحْدَى وَسِتِّيْنَ"
+    },
+    {
+      "id": "sp_us_d61_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "210",
+      "layer": "MAIN",
+      "exact": "سَنَةِ إِحْدَى وَسِتِّيْنَ",
+      "prefix": "وَالظَّاهِرُ وَفَاتُهَا فِي"
+    },
+    {
+      "id": "sp_us_d59_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "203",
+      "layer": "MAIN",
+      "exact": "الوَاقِدِيُّ: حَدَّثَنَا عُمَرُ بنُ عُثْمَانَ، عَنْ عَبْدِ المَلِكِ بنِ عُبَيْدٍ، عَنْ سَعِيْدِ بنِ يَرْبُوْعٍ، عَنْ عُمَرَ بنِ أَبِي سَلَمَةَ"
+    },
+    {
+      "id": "sp_us_d59",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "203",
+      "layer": "MAIN",
+      "exact": "وَتُوُفِّيَتْ سَنَةَ تِسْعٍ وَخَمْسِيْنَ فِي ذِي القَعْدَةِ",
+      "prefix": "إِلَى أَنْ قَالَ:"
+    },
+    {
+      "id": "sp_us_d59_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "203",
+      "layer": "MAIN",
+      "exact": "سَنَةَ تِسْعٍ وَخَمْسِيْنَ",
+      "prefix": "وَتُوُفِّيَتْ"
+    },
+    {
+      "id": "sp_us_d59_m",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "203",
+      "layer": "MAIN",
+      "exact": "ذِي القَعْدَةِ",
+      "prefix": "سَنَةَ تِسْعٍ وَخَمْسِيْنَ فِي"
     }
   ],
   "reports": [
@@ -275,6 +327,17 @@
       "isnadSpan": "sp_us_aqib_isnad",
       "origin": {
         "mention": "m_us_aqib_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_us_d59",
+      "unit": "siyar-v5-20-umm-salamah",
+      "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_us_d59_isnad",
+      "origin": {
+        "mention": "m_us_d59_by"
       },
       "chainState": "DEFERRED"
     }
@@ -391,6 +454,22 @@
       "spans": [
         "sp_us_aqib",
         "sp_us_aqib_1"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_us_d61",
+      "report": "r_us0",
+      "spans": [
+        "sp_us_d61"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_us_d59",
+      "report": "r_us_d59",
+      "spans": [
+        "sp_us_d59"
       ],
       "role": "TRANSMITTED"
     }
@@ -540,6 +619,27 @@
       "id": "m_us_aqib",
       "parent": "sp_us_aqib",
       "exact": "أَتَيْتُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_us_d61",
+      "parent": "sp_us_d61",
+      "exact": "وَفَاتُهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_us_d59_by",
+      "parent": "sp_us_d59_isnad",
+      "exact": "عُمَرَ بنِ أَبِي سَلَمَةَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_us_d59",
+      "parent": "sp_us_d59",
+      "exact": "وَتُوُفِّيَتْ",
       "occurrence": 1,
       "role": "SUBJECT"
     }
@@ -764,6 +864,30 @@
     {
       "id": "i_us_aqib",
       "mention": "m_us_aqib",
+      "agent": "umm-salamah",
+      "basis": [
+        {
+          "span": "sp_us_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_us_d61",
+      "mention": "m_us_d61",
+      "agent": "umm-salamah",
+      "basis": [
+        {
+          "span": "sp_us_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_us_d59",
+      "mention": "m_us_d59",
       "agent": "umm-salamah",
       "basis": [
         {
@@ -1078,6 +1202,51 @@
       },
       "restsOn": [
         "st_us_aqib"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_us_died61",
+      "subject": "m_us_d61",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 61,
+        "spans": [
+          "sp_us_d61_y"
+        ]
+      },
+      "restsOn": [
+        "st_us_d61"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_us_died59",
+      "subject": "m_us_d59",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 59,
+        "spans": [
+          "sp_us_d59_y"
+        ]
+      },
+      "restsOn": [
+        "st_us_d59"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_us_died59_m",
+      "subject": "m_us_d59",
+      "predicate": "died.month",
+      "value": {
+        "parsed": 11,
+        "spans": [
+          "sp_us_d59_m"
+        ]
+      },
+      "restsOn": [
+        "st_us_d59"
       ],
       "status": "PROPOSED"
     }

@@ -307,7 +307,7 @@
       "agent": "uqba-ibn-abi-muayt",
       "basis": [
         {
-          "span": "sp_ku_father_n",
+          "span": "sp_ku_name2",
           "role": "NASAB"
         }
       ],
