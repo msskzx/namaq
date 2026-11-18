@@ -176,6 +176,11 @@ export const SOURCES: Source[] = [
     edition: 'تحقيق محمد مصطفى آيدين، جامعة أم القرى، ١٤٢٢هـ', link: shamela(1340), licence: PUBLIC_DOMAIN, uses: [USE.branches],
   },
   {
+    id: 'milak-al-tawil', group: 'books',
+    title: { ar: 'ملاك التأويل القاطع بذوي الإلحاد والتعطيل', en: 'Milak al-Ta’wil' }, author: { ar: 'ابن الزبير الغرناطي', en: 'Ibn al-Zubayr al-Gharnati' },
+    edition: 'وضع حواشيه عبد الغني محمد علي الفاسي، دار الكتب العلمية، بيروت', link: shamela(1419), licence: PUBLIC_DOMAIN, uses: [USE.branches],
+  },
+  {
     id: 'qisas-al-anbiya', group: 'books',
     title: { ar: 'قصص الأنبياء', en: 'Qisas al-Anbiya’' }, author: { ar: 'ابن كثير', en: 'Ibn Kathir' },
     edition: 'من البداية والنهاية، تحقيق مصطفى عبد الواحد', link: shamela(932), licence: PUBLIC_DOMAIN, uses: [USE.prophets],

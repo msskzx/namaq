@@ -48,6 +48,11 @@
    "keep": true,
    "why": "Same sentence: whether We show you some of what We promise them or take you, to Us they return."
   },
+  "cmp:01d4jt80dtvuzu": {
+   "pair": "12:2|43:3",
+   "keep": true,
+   "why": "Same sentence: an Arabic Quran so that you may understand."
+  },
   "cmp:01dog2102ti1lx": {
    "pair": "21:83|38:41",
    "keep": true,
@@ -75,6 +80,12 @@
    "why": "Same command: purify My House for those who circle it and those who bow and prostrate.",
    "checked": true,
    "view": "matrix"
+  },
+  "cmp:023vg0o1rlco34": {
+   "pair": "3:184|35:4",
+   "keep": true,
+   "why": "If they deny you, messengers before you were denied.",
+   "checked": true
   },
   "cmp:026kdwl10nneg5": {
    "pair": "6:5|26:6",
@@ -314,6 +325,17 @@
    "checked": true,
    "view": "matrix"
   },
+  "cmp:06bowv00d7pxvs": {
+   "pair": "7:113|26:41",
+   "keep": true,
+   "why": "Same story: the magicians ask Pharaoh for a reward if they win.",
+   "checked": true
+  },
+  "cmp:06mrx9v0z18tgf": {
+   "pair": "51:19|70:24",
+   "keep": true,
+   "why": "Same clause: in their wealth is a due."
+  },
   "cmp:06x5sdg0zjputg": {
    "pair": "9:55|9:85",
    "keep": true,
@@ -375,6 +397,11 @@
    "pair": "4:13|9:89",
    "keep": true,
    "why": "Same reward: gardens beneath which rivers flow, abiding in them; that is the great success."
+  },
+  "cmp:08n6f040hyx48g": {
+   "pair": "21:36|25:41",
+   "keep": true,
+   "why": "Same scene: when the disbelievers see the Prophet they take him in ridicule, 'is this the one...'."
   },
   "cmp:08vxsj811axje6": {
    "pair": "6:76|6:77",
@@ -616,6 +643,11 @@
    "pair": "20:10|27:7",
    "keep": true,
    "why": "Same scene: Musa sees a fire and tells his family he will bring news or a brand from it."
+  },
+  "cmp:0e8a5230lzvejv": {
+   "pair": "15:88|26:215",
+   "keep": true,
+   "why": "Same command: lower your wing to the believers."
   },
   "cmp:0e96j250r6iwln": {
    "pair": "7:107|26:32",
@@ -1028,6 +1060,11 @@
    "keep": true,
    "why": "Same threat: you will know who gets a disgracing punishment"
   },
+  "cmp:0nlcy7w1ccvycu": {
+   "pair": "13:32|22:44",
+   "keep": true,
+   "why": "Same words: I gave respite to the disbelievers, then seized them; how was My punishment."
+  },
   "cmp:0npaact0p88h99": {
    "pair": "2:218|8:74",
    "keep": true,
@@ -1396,6 +1433,11 @@
    "keep": true,
    "why": "Same pattern: what came from Allah confirming what they had, rejected"
   },
+  "cmp:0vx02201hmza3q": {
+   "pair": "13:15|16:49",
+   "keep": true,
+   "why": "Same statement: to Allah prostrates whoever is in the heavens and the earth."
+  },
   "cmp:0vzd4rx1nxr3hd": {
    "pair": "28:60|42:36",
    "keep": true,
@@ -1419,6 +1461,11 @@
    "keep": true,
    "why": "Nearly the same ayah: the way of Allah, and you will never find a change in it.",
    "checked": true
+  },
+  "cmp:0wgjvu814jpy0e": {
+   "pair": "15:1|27:1",
+   "keep": true,
+   "why": "Same opening: these are the verses of the Book and a clear Quran."
   },
   "cmp:0wid6v90gdkemx": {
    "pair": "7:85|11:84",
@@ -1507,6 +1554,11 @@
    "why": "Same rule: whoever brings a good deed ... whoever brings an evil deed.",
    "checked": true
   },
+  "cmp:0xrtnvx0l81jlz": {
+   "pair": "4:5|4:8",
+   "keep": true,
+   "why": "Same command: provide for them and speak kindly"
+  },
   "cmp:0xv55pp1uyp9ul": {
    "pair": "13:7|13:27",
    "keep": true,
@@ -1566,6 +1618,11 @@
    "keep": true,
    "why": "Same point: He creates/increases in creation what He wills; four legs / four wings."
   },
+  "cmp:0yuvrck0g67j8e": {
+   "pair": "15:12|26:200",
+   "keep": true,
+   "why": "Same words: thus We insert it into the hearts of the criminals."
+  },
   "cmp:0yyatmt03vp9nl": {
    "pair": "10:60|40:61",
    "keep": true,
@@ -1602,6 +1659,12 @@
    "pair": "37:174|37:178",
    "keep": true,
    "why": "Same command: turn away from them for a time"
+  },
+  "cmp:0zcsxvx1cveak7": {
+   "pair": "57:12|66:8",
+   "keep": true,
+   "why": "Same scene with a rare clause: their light running before them and on their right.",
+   "view": "matrix"
   },
   "cmp:0zf5c47183p6h1": {
    "pair": "59:9|64:16",
@@ -1902,6 +1965,12 @@
    "why": "Same answer: to our Lord we will return.",
    "checked": true
   },
+  "cmp:14ov5po05mdijq": {
+   "pair": "14:34|16:18",
+   "keep": true,
+   "why": "Same words: if you count Allah's favours you could not number them.",
+   "view": "matrix"
+  },
   "cmp:14rwzi91w6hhvn": {
    "pair": "22:61|31:29",
    "keep": true,
@@ -1956,6 +2025,11 @@
    "keep": true,
    "why": "Same phrase: do not transgress; Allah does not love the transgressors.",
    "checked": true
+  },
+  "cmp:15n1f9s15g46fm": {
+   "pair": "5:92|64:12",
+   "keep": true,
+   "why": "Obey Allah and obey the Messenger; if you turn away, the Messenger's duty is only clear delivery."
   },
   "cmp:15zwbtd0b2ye2b": {
    "pair": "7:34|10:49",
@@ -2122,6 +2196,11 @@
    "keep": true,
    "why": "Same refrain, word for word"
   },
+  "cmp:18sd4nj0hhcr2l": {
+   "pair": "9:15|9:27",
+   "keep": true,
+   "why": "Allah turns in repentance to whom He wills"
+  },
   "cmp:18ucfvo0908eua": {
    "pair": "43:83|70:42",
    "keep": true,
@@ -2138,6 +2217,12 @@
    "keep": true,
    "why": "Same description of the Messenger: reciting, purifying, teaching the Book and wisdom.",
    "checked": true
+  },
+  "cmp:192yph20u66yyq": {
+   "pair": "4:22|17:32",
+   "keep": true,
+   "why": "Same verdict: it is an immorality and an evil way.",
+   "view": "matrix"
   },
   "cmp:196i67502a0dt9": {
    "pair": "7:75|7:88",
@@ -2163,6 +2248,12 @@
    "pair": "21:16|38:27",
    "keep": true,
    "why": "Same statement: We did not create the heaven, the earth and what is between in play / in vain."
+  },
+  "cmp:19h3z9c1yha5b6": {
+   "pair": "16:60|30:27",
+   "keep": true,
+   "why": "Same sentence: His is the highest description, and He is the Mighty, the Wise.",
+   "view": "matrix"
   },
   "cmp:19hqotl13x3q6t": {
    "pair": "21:35|29:57",
@@ -2338,6 +2429,12 @@
    "keep": true,
    "why": "Same call of the prophets: worship Allah, a clear sign has come"
   },
+  "cmp:1cfzavi0pdq6dw": {
+   "pair": "52:41|68:47",
+   "keep": true,
+   "why": "Same words: or have they the unseen, so they write it down?",
+   "checked": true
+  },
   "cmp:1cjqizz0z7vxip": {
    "pair": "2:58|7:161",
    "keep": true,
@@ -2381,6 +2478,12 @@
    "keep": true,
    "why": "Same words: I am only a man like you; it is revealed that your god is one God."
   },
+  "cmp:1dikj7b1d291yp": {
+   "pair": "2:284|3:29",
+   "keep": true,
+   "why": "Same statement: whether you show or hide what is within you, Allah knows it.",
+   "checked": true
+  },
   "cmp:1djpvtd0dv6k3n": {
    "pair": "7:69|7:74",
    "keep": true,
@@ -2396,6 +2499,11 @@
    "pair": "59:1|61:1",
    "keep": true,
    "why": "The same opening ayah: whatever is in the heavens and the earth glorifies Allah."
+  },
+  "cmp:1ebz7i11rgdzhv": {
+   "pair": "5:40|48:14",
+   "keep": true,
+   "why": "Dominion of the heavens and earth; He forgives whom He wills and punishes whom He wills."
   },
   "cmp:1ekgzi616kp4zu": {
    "pair": "27:10|28:31",
@@ -2484,6 +2592,11 @@
    "keep": true,
    "why": "Same scene: go down from it all together; whoever follows My guidance.",
    "checked": true
+  },
+  "cmp:1gwzfcf15z5kyv": {
+   "pair": "6:16|45:30",
+   "keep": true,
+   "why": "Same ending: His mercy; that is the clear triumph."
   },
   "cmp:1h1np9q0ghnx6i": {
    "pair": "29:68|39:32",
@@ -2995,6 +3108,11 @@
    "keep": true,
    "why": "Same statement: this community of yours is one community and I am your Lord."
   },
+  "cmp:1pxxm621w1en9w": {
+   "pair": "27:10|28:31",
+   "keep": true,
+   "why": "Same scene, almost word for word: throw your staff; when he saw it move like a snake he turned and fled; O Moses, do not fear."
+  },
   "cmp:1q4poos15fe1e0": {
    "pair": "23:79|67:24",
    "keep": true,
@@ -3164,6 +3282,11 @@
    "keep": true,
    "why": "Allah knows what is in the heavens and the earth: you cannot hide from Him."
   },
+  "cmp:1u1p1mn1w9ophz": {
+   "pair": "4:137|4:168",
+   "keep": true,
+   "why": "Same verdict: Allah will not forgive them nor guide them"
+  },
   "cmp:1u5241a1vkiz9i": {
    "pair": "16:4|36:77",
    "keep": true,
@@ -3194,6 +3317,11 @@
    "keep": true,
    "why": "The same ayah: does not urge the feeding of the poor."
   },
+  "cmp:1ums17s1axoxxc": {
+   "pair": "2:45|2:153",
+   "keep": true,
+   "why": "Same command: seek help in patience and prayer"
+  },
   "cmp:1uvk2af0iemtv3": {
    "pair": "21:2|26:5",
    "keep": true,
@@ -3203,6 +3331,11 @@
    "pair": "15:45|51:15",
    "keep": true,
    "why": "Identical: the righteous are among gardens and springs."
+  },
+  "cmp:1v43xau07br7xg": {
+   "pair": "1:2|45:36",
+   "keep": false,
+   "why": "Only the formula of praise."
   },
   "cmp:1v4gj9a0aclbms": {
    "pair": "3:162|8:16",
@@ -3248,6 +3381,11 @@
    "keep": true,
    "why": "Same picture: immortal youths circulate among them."
   },
+  "cmp:1wjxsff1chju37": {
+   "pair": "5:118|60:5",
+   "keep": true,
+   "why": "Pleas for forgiveness that both close on 'You are the Mighty, the Wise'."
+  },
   "cmp:1wn2yjl0n7rye5": {
    "pair": "29:50|67:26",
    "keep": true,
@@ -3290,6 +3428,11 @@
    "pair": "21:93|23:53",
    "keep": true,
    "why": "Same statement: they split their affair among themselves."
+  },
+  "cmp:1xqzzvg15ipepo": {
+   "pair": "6:37|29:50",
+   "keep": true,
+   "why": "Why has a sign not been sent down to him from his Lord?"
   },
   "cmp:1xtx7e511vmdvv": {
    "pair": "17:81|34:49",
@@ -3413,11 +3556,6 @@
    "pair": "49:9|60:8",
    "keep": true,
    "why": "Same closing and command: act justly, Allah loves the just."
-  },
-  "tree:027gjc919hfpmn": {
-   "pair": "2:45|2:153",
-   "keep": true,
-   "why": "Same command: seek help in patience and prayer"
   },
   "tree:0288tce0hkr1s6": {
    "pair": "7:110|26:35",
@@ -3553,12 +3691,6 @@
    "pair": "39:48|45:33",
    "keep": true,
    "why": "Same words: the evils of what they did appeared, and what they mocked encompassed them."
-  },
-  "tree:05mingu0vhz8ig": {
-   "pair": "4:22|17:32",
-   "keep": true,
-   "why": "Same verdict: it is an immorality and an evil way.",
-   "view": "matrix"
   },
   "tree:05rudt81qv5c0c": {
    "pair": "44:36|45:25",
@@ -3708,11 +3840,6 @@
    "why": "Same law: those who die leaving wives",
    "view": "matrix"
   },
-  "tree:09j41fa009mggw": {
-   "pair": "13:32|22:44",
-   "keep": true,
-   "why": "Same words: I gave respite to the disbelievers, then seized them; how was My punishment."
-  },
   "tree:09nxeq301qu0zp": {
    "pair": "16:19|64:4",
    "keep": true,
@@ -3729,11 +3856,6 @@
    "keep": true,
    "why": "Same scene with a rare clause: their light running before them and on their right.",
    "view": "matrix"
-  },
-  "tree:09w2zic07a4yam": {
-   "pair": "15:12|26:200",
-   "keep": true,
-   "why": "Same words: thus We insert it into the hearts of the criminals."
   },
   "tree:0a1kb540oicm40": {
    "pair": "42:30|42:34",
@@ -3784,11 +3906,6 @@
    "pair": "4:11|4:176",
    "keep": true,
    "why": "Same law of inheritance: shares of the deceased's kin"
-  },
-  "tree:0atcfcf01dj9tp": {
-   "pair": "15:88|26:215",
-   "keep": true,
-   "why": "Same command: lower your wing to the believers."
   },
   "tree:0b1is2x1sf64dl": {
    "pair": "26:170|37:134",
@@ -3893,11 +4010,6 @@
    "keep": true,
    "why": "Same answer: I do not know whether what you are promised is near or far.",
    "view": "matrix"
-  },
-  "tree:0dm0al81wceoq2": {
-   "pair": "12:2|43:3",
-   "keep": true,
-   "why": "Same sentence: an Arabic Quran so that you may understand."
   },
   "tree:0doesth1rh6vt3": {
    "pair": "19:36|43:64",
@@ -4251,11 +4363,6 @@
    "keep": false,
    "why": "Refrain repeat: shown with the refrain's first place",
    "ask": "Compare and branches disagreed. Compare (drop): Refrain repeat: shown with the refrain's first place Branches (keep): Refrain then 'kadhdhabat qawm' 26:105 vs 26:160"
-  },
-  "tree:0m2veql15t4e83": {
-   "pair": "13:15|16:49",
-   "keep": true,
-   "why": "Same statement: to Allah prostrates whoever is in the heavens and the earth."
   },
   "tree:0m5wknk0fu58k2": {
    "pair": "13:1|13:19",
@@ -5436,12 +5543,6 @@
    "keep": true,
    "why": "Same rebuke to the People of the Book"
   },
-  "tree:1dii6ka0m0banu": {
-   "pair": "14:34|16:18",
-   "keep": true,
-   "why": "Same words: if you count Allah's favours you could not number them.",
-   "view": "matrix"
-  },
   "tree:1dinwys1uvgday": {
    "pair": "2:65|7:166",
    "keep": true,
@@ -5643,22 +5744,11 @@
    "why": "Same statement: We placed prophethood and the Book in his/their descendants.",
    "view": "matrix"
   },
-  "tree:1h6qd7c0zbg46o": {
-   "pair": "6:16|45:30",
-   "keep": true,
-   "why": "Same ending: His mercy; that is the clear triumph."
-  },
   "tree:1h8ulji0gix67y": {
    "pair": "3:32|24:54",
    "keep": true,
    "why": "Same command: say, obey Allah and the Messenger; if you turn away …",
    "checked": true
-  },
-  "tree:1hh3kc4142dz7g": {
-   "pair": "14:34|16:18",
-   "keep": true,
-   "why": "Same words: if you count Allah's favours you could not number them.",
-   "view": "matrix"
   },
   "tree:1hlkiw41j9wais": {
    "pair": "2:25|4:57",
@@ -5693,11 +5783,6 @@
    "pair": "29:22|42:31",
    "keep": true,
    "why": "Same statement: you cannot escape in the earth, and besides Allah you have no protector or helper."
-  },
-  "tree:1iopc090xpsyjh": {
-   "pair": "4:5|4:8",
-   "keep": true,
-   "why": "Same command: provide for them and speak kindly"
   },
   "tree:1iuy6350e7vlnt": {
    "pair": "24:54|64:12",
@@ -6105,12 +6190,6 @@
    "keep": true,
    "why": "Same warning: if you follow their desires after the knowledge came to you, you have no protector from Allah.",
    "checked": true,
-   "view": "matrix"
-  },
-  "tree:1vollas1n00nw8": {
-   "pair": "4:22|17:32",
-   "keep": true,
-   "why": "Same verdict: it is an immorality and an evil way.",
    "view": "matrix"
   },
   "tree:1vs0lso0kdnq8i": {
