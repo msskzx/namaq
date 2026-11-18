@@ -1,0 +1,765 @@
+{
+  "unit": {
+    "id": "siyar-sira-prophet",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": ""
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_p_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 1,
+      "page": "29",
+      "layer": "MAIN",
+      "exact": "محمد بن عبد الله بن عبد المطلب واسم عبد المطلب شيبة, ابن هاشم واسمه عمرو, ابن عبد مناف واسمه المغيرة، ابن قصي واسمه زيد بن كلاب بن مرة بن كعب بن لؤي بن غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة ابن مدركة، واسمه عامر بن إلياس بن مضر بن نزار بن معد بن عدنان",
+      "prefix": "هو "
+    },
+    {
+      "id": "sp_p_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 1,
+      "page": "29",
+      "layer": "MAIN",
+      "exact": "هو محمد بن عبد الله بن عبد المطلب"
+    },
+    {
+      "id": "sp_p_father_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 1,
+      "page": "29",
+      "layer": "MAIN",
+      "exact": "بن عبد المطلب واسم عبد المطلب شيبة",
+      "prefix": "محمد بن عبد الله "
+    },
+    {
+      "id": "sp_p_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 1,
+      "page": "29",
+      "layer": "MAIN",
+      "exact": "محمد بن عبد الله",
+      "prefix": "هو ",
+      "suffix": "بن عبد المطلب واسم"
+    },
+    {
+      "id": "sp_p_mother",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 1,
+      "page": "32",
+      "layer": "MAIN",
+      "exact": "وأمه آمنة بنت وهب بن عبد مناف بن زهرة بن كلاب"
+    },
+    {
+      "id": "sp_p_mother_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 1,
+      "page": "32",
+      "layer": "MAIN",
+      "exact": "بنت وهب بن عبد مناف بن زهرة بن كلاب",
+      "prefix": "آمنة "
+    },
+    {
+      "id": "sp_p_kunya_s",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 1,
+      "page": "40",
+      "layer": "MAIN",
+      "exact": "وقد تواتر أن كنيته أبو القاسم"
+    },
+    {
+      "id": "sp_p_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 1,
+      "page": "40",
+      "layer": "MAIN",
+      "exact": "أبو القاسم",
+      "prefix": "وقد تواتر أن كنيته "
+    },
+    {
+      "id": "sp_p_father_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 1,
+      "page": "53",
+      "layer": "MAIN",
+      "exact": "وتوفي \"عبد الله\" أبوه، وللنبي صلى الله عليه وسلم ثمانية وعشرون شهرا"
+    },
+    {
+      "id": "sp_p_marr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 1,
+      "page": "63",
+      "layer": "MAIN",
+      "exact": "دخل على خويلد فخطبها منه، وأصدقها النبي صلى الله عليه وسلم عشرين بكرة، فلم يتزوج عليها حتى ماتت، وتزوجها وعمره خمس وعشرون سنة"
+    },
+    {
+      "id": "sp_p_children",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 1,
+      "page": "63",
+      "layer": "MAIN",
+      "exact": "وأولاده كلهم من خديجة سوى إبراهيم، وهم: القاسم، والطيب, والطاهر، وماتوا صغارا رضعا قبل المبعث، ورقية، وزينب، وأم كلثوم, وفاطمة"
+    },
+    {
+      "id": "sp_p_awladuh",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 1,
+      "page": "63",
+      "layer": "MAIN",
+      "exact": "وأولاده كلهم",
+      "suffix": "من خديجة"
+    },
+    {
+      "id": "sp_p_khadijah_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 1,
+      "page": "62",
+      "layer": "MAIN",
+      "exact": "خديجة بنت خويلد بن أسد بن عبد العزى بن قصي",
+      "prefix": "ثم إن "
+    },
+    {
+      "id": "sp_p_hafsa",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 1,
+      "page": "390",
+      "layer": "MAIN",
+      "exact": "وتزوج النبي صلى الله عليه وسلم بحفصة بنت عمر"
+    },
+    {
+      "id": "sp_p_hafsa_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 1,
+      "page": "390",
+      "layer": "MAIN",
+      "exact": "بنت عمر",
+      "prefix": "بحفصة ",
+      "suffix": "."
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_p0",
+      "unit": "siyar-sira-prophet",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_p_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_p_name",
+      "report": "r_p0",
+      "spans": [
+        "sp_p_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_p_mother",
+      "report": "r_p0",
+      "spans": [
+        "sp_p_mother"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_p_kunya",
+      "report": "r_p0",
+      "spans": [
+        "sp_p_kunya_s"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_p_father_death",
+      "report": "r_p0",
+      "spans": [
+        "sp_p_father_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_p_khadijah",
+      "report": "r_p0",
+      "spans": [
+        "sp_p_marr",
+        "sp_p_children"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_p_children",
+      "report": "r_p0",
+      "spans": [
+        "sp_p_children"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_p_hafsa",
+      "report": "r_p0",
+      "spans": [
+        "sp_p_hafsa"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_p",
+      "parent": "sp_p_name",
+      "exact": "محمد",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_p_father",
+      "parent": "sp_p_name",
+      "exact": "عبد الله",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_p_m",
+      "parent": "sp_p_mother",
+      "exact": "وأمه",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_p_amina",
+      "parent": "sp_p_mother",
+      "exact": "آمنة",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_p_khadijah",
+      "parent": "sp_p_children",
+      "exact": "خديجة",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_p_k_qasim",
+      "parent": "sp_p_children",
+      "exact": "القاسم",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_p_k_tayyib",
+      "parent": "sp_p_children",
+      "exact": "الطيب",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_p_k_tahir",
+      "parent": "sp_p_children",
+      "exact": "الطاهر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_p_k_ruqayyah",
+      "parent": "sp_p_children",
+      "exact": "رقية",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_p_k_zaynab",
+      "parent": "sp_p_children",
+      "exact": "زينب",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_p_k_ummk",
+      "parent": "sp_p_children",
+      "exact": "أم كلثوم",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_p_k_fatimah",
+      "parent": "sp_p_children",
+      "exact": "فاطمة",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_p_k_ibrahim",
+      "parent": "sp_p_children",
+      "exact": "إبراهيم",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_p_h",
+      "parent": "sp_p_hafsa",
+      "exact": "النبي",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_p_hafsa",
+      "parent": "sp_p_hafsa",
+      "exact": "بحفصة",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_p",
+      "mention": "m_p",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_p_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_p_m",
+      "mention": "m_p_m",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_p_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_p_father",
+      "mention": "m_p_father",
+      "agent": "abdullah-ibn-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_p_father_nasab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_p_amina",
+      "mention": "m_p_amina",
+      "agent": "amina-bint-wahb",
+      "basis": [
+        {
+          "span": "sp_p_mother_nasab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_p_khadijah",
+      "mention": "m_p_khadijah",
+      "agent": "khadijah-bint-khuwaylid",
+      "basis": [
+        {
+          "span": "sp_p_khadijah_nasab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_p_k_qasim",
+      "mention": "m_p_k_qasim",
+      "agent": "al-qasim-ibn-muhammad",
+      "basis": [
+        {
+          "span": "sp_p_awladuh",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_p_k_tayyib",
+      "mention": "m_p_k_tayyib",
+      "agent": "al-tayyib-ibn-muhammad",
+      "basis": [
+        {
+          "span": "sp_p_awladuh",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_p_k_tahir",
+      "mention": "m_p_k_tahir",
+      "agent": "al-tahir-ibn-muhammad",
+      "basis": [
+        {
+          "span": "sp_p_awladuh",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_p_k_ruqayyah",
+      "mention": "m_p_k_ruqayyah",
+      "agent": "ruqayyah-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_p_awladuh",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_p_k_zaynab",
+      "mention": "m_p_k_zaynab",
+      "agent": "zaynab-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_p_awladuh",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_p_k_ummk",
+      "mention": "m_p_k_ummk",
+      "agent": "umm-kulthum-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_p_awladuh",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_p_k_fatimah",
+      "mention": "m_p_k_fatimah",
+      "agent": "fatimah-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_p_awladuh",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_p_k_ibrahim",
+      "mention": "m_p_k_ibrahim",
+      "agent": "ibrahim-ibn-muhammad",
+      "basis": [
+        {
+          "span": "sp_p_awladuh",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_p_hafsa",
+      "mention": "m_p_hafsa",
+      "agent": "hafsa-bint-umar",
+      "basis": [
+        {
+          "span": "sp_p_hafsa_nasab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_p_name",
+      "subject": "m_p",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_p_name"
+        ]
+      },
+      "restsOn": [
+        "st_p_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_sex",
+      "subject": "m_p",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_p_sex"
+        ]
+      },
+      "restsOn": [
+        "st_p_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_father",
+      "subject": "m_p",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_p_father"
+      },
+      "restsOn": [
+        "st_p_name",
+        "st_p_father_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_mother",
+      "subject": "m_p_m",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_p_amina"
+      },
+      "restsOn": [
+        "st_p_mother"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_kunya",
+      "subject": "m_p",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_p_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_p_kunya"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_khadijah",
+      "subject": "m_p",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_p_khadijah"
+      },
+      "restsOn": [
+        "st_p_khadijah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_k_qasim",
+      "subject": "m_p_k_qasim",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_p"
+      },
+      "restsOn": [
+        "st_p_children"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_km_qasim",
+      "subject": "m_p_k_qasim",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_p_khadijah"
+      },
+      "restsOn": [
+        "st_p_children"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_k_tayyib",
+      "subject": "m_p_k_tayyib",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_p"
+      },
+      "restsOn": [
+        "st_p_children"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_km_tayyib",
+      "subject": "m_p_k_tayyib",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_p_khadijah"
+      },
+      "restsOn": [
+        "st_p_children"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_k_tahir",
+      "subject": "m_p_k_tahir",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_p"
+      },
+      "restsOn": [
+        "st_p_children"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_km_tahir",
+      "subject": "m_p_k_tahir",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_p_khadijah"
+      },
+      "restsOn": [
+        "st_p_children"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_k_ruqayyah",
+      "subject": "m_p_k_ruqayyah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_p"
+      },
+      "restsOn": [
+        "st_p_children"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_km_ruqayyah",
+      "subject": "m_p_k_ruqayyah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_p_khadijah"
+      },
+      "restsOn": [
+        "st_p_children"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_k_zaynab",
+      "subject": "m_p_k_zaynab",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_p"
+      },
+      "restsOn": [
+        "st_p_children"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_km_zaynab",
+      "subject": "m_p_k_zaynab",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_p_khadijah"
+      },
+      "restsOn": [
+        "st_p_children"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_k_ummk",
+      "subject": "m_p_k_ummk",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_p"
+      },
+      "restsOn": [
+        "st_p_children"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_km_ummk",
+      "subject": "m_p_k_ummk",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_p_khadijah"
+      },
+      "restsOn": [
+        "st_p_children"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_k_fatimah",
+      "subject": "m_p_k_fatimah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_p"
+      },
+      "restsOn": [
+        "st_p_children"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_km_fatimah",
+      "subject": "m_p_k_fatimah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_p_khadijah"
+      },
+      "restsOn": [
+        "st_p_children"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_k_ibrahim",
+      "subject": "m_p_k_ibrahim",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_p"
+      },
+      "restsOn": [
+        "st_p_children"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_p_hafsa",
+      "subject": "m_p_h",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_p_hafsa"
+      },
+      "restsOn": [
+        "st_p_hafsa"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

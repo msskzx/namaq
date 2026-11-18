@@ -13,16 +13,20 @@ const IBN = /^(?:ابن|بن|بنت|ابنة)$/u;
 const NISBA = /^ال\S+(?:ي|ية)$/u;
 const strip = (text: string) => text.replace(/[ً-ْٰـ]/g, '');
 
-/** The fathers in a full name as printed, from the person up: «الزبير بن العوام بن خويلد» → الزبير، العوام، خويلد. */
+/**
+ * The fathers in a full name as printed, from the person up: «الزبير بن العوام بن خويلد» → الزبير، العوام، خويلد.
+ * The book's asides are not fathers: «واسمه عمرو» after a name, «واسم عبد المطلب شيبة», and a nisba («القرشي»).
+ */
 export function nasabOf(fullName: string) {
-  const words = fullName.replace(/[.،,]\s*$/u, '').split(/[،,]/u)[0].trim().split(/\s+/u);
+  const words = fullName.replace(/[.،,]/gu, ' ').trim().split(/\s+/u);
   const names: string[][] = [[]];
-  for (const word of words) {
-    if (IBN.test(strip(word))) names.push([]);
-    else names[names.length - 1].push(word);
+  for (let i = 0; i < words.length; i += 1) {
+    const bare = strip(words[i]);
+    if (bare === 'واسمه' || bare === 'واسمها') { i += 1; continue; }
+    if (bare === 'واسم') { i += names[names.length - 1].length + 1; continue; }
+    if (IBN.test(bare)) names.push([]);
+    else if (!(names[names.length - 1].length > 0 && NISBA.test(bare))) names[names.length - 1].push(words[i]);
   }
-  const last = names[names.length - 1];
-  while (last.length > 1 && NISBA.test(strip(last[last.length - 1]))) last.pop();
   return names.map((name) => name.join(' ')).filter(Boolean);
 }
 
