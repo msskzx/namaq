@@ -132,7 +132,7 @@ export default function Adhkar({ palette, on, onPlace, scrollTo }: { palette: Pa
             {item.virtueQuote && <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>«{item.virtueQuote}»</Text>}
             {item.repeat && (
               <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
-                <IconButton round Icon={Check} label={`عُدَّ مرة، ${num(counted)} من ${num(item.repeat.count)}`}
+                <IconButton round Icon={Check} render={({ size, color }) => <Check size={size} color={color} strokeWidth={2.5} />} label={`عُدَّ مرة، ${num(counted)} من ${num(item.repeat.count)}`}
                   disabled={counted >= item.repeat.count}
                   onPress={() => { buzz(); dispatch({ type: 'tap', id: item.id, target: item.repeat!.count }); }} />
                 <Text accessibilityElementsHidden importantForAccessibility="no" style={{ color: palette.ink, fontSize: 20, writingDirection: 'ltr' }}>
