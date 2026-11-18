@@ -16,6 +16,7 @@ import { BookList } from './Books';
 import LoadingDots from '@/ui/LoadingDots';
 import Sheet from '@/ui/Sheet';
 import OpenInBook from './OpenInBook';
+import LitAyat, { deepBand } from './quran/text/LitAyat';
 import Card from '@/ui/Card';
 import Tabs from '@/ui/Tabs';
 import Folded from '@/ui/Folded';
@@ -32,8 +33,7 @@ import { plainName, termOfParagraph } from '@shared/quran/balaghaTerms';
  */
 // The reader's neutral band (MushafPageView's mark): the ink at 10%, seen on a card in both themes.
 const band = (palette: Palette) => palette.bands.mark;
-/** The sentence whose ayah words are lit: a deeper band. */
-const deepBand = (palette: Palette) => `${palette.ink}33`;
+// The sentence whose ayah words are lit: a deeper band (LitAyat's deepBand).
 
 type Book = 'itqan' | 'kashshaf';
 const BOOK_NAMES: Record<Book, string> = { itqan: 'الإتقان للسيوطي', kashshaf: 'الكشاف للزمخشري' };
@@ -64,11 +64,7 @@ function BalaghaBody({ ayah, palette, onClose }: { ayah: string; palette: Palett
       </View>
       <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 10, paddingBottom: 8 }}>
         <Card palette={palette} pad={[10, 14]}>
-          <Text style={{ fontFamily: QURAN_FONT, fontSize: 23, lineHeight: 46, color: palette.ink, textAlign: 'right', writingDirection: 'rtl' }}>
-            {words.map((word, i) => (
-              <Text key={i} style={span.some(([from, to]) => i >= from && i <= to) ? { backgroundColor: deepBand(palette) } : undefined}>{`${i ? ' ' : ''}${word}`}</Text>
-            ))}
-          </Text>
+          <LitAyat ayat={[{ words, lit: span }]} palette={palette} />
         </Card>
         <Tabs options={(['itqan', 'kashshaf'] as const).map(book => ({ key: book, label: BOOK_NAMES[book] }))} value={shown} onChange={book => { setShown(book); setSpan([]); }} palette={palette} />
         {shown === 'itqan'

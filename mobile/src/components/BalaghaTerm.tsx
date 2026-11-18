@@ -9,11 +9,12 @@ import { num } from '@shared/quran/arabicNumber';
 import { ITQAN_BOOK, ITQAN_EDITION, itqanCredit, itqanPage } from '@shared/quran/itqanBalagha';
 import { exampleWords, termCredit, termPage, type BalaghaTerm, type TermExample, type TermQuote } from '@shared/quran/balaghaTerms';
 import { surahNames } from '@/lib/branches';
+import { placesLabel } from '@shared/quran/branches';
 import { ayahMushafWords } from '@/lib/mushaf';
 import { openIntent } from '@/lib/ways';
 import type { Palette } from '@/lib/theme';
 import BookRuns from './quran/text/BookRuns';
-import QuranWords from './quran/text/QuranWords';
+import LitAyat from './quran/text/LitAyat';
 
 /**
  * The pieces of the balagha terms page (shared/quran/balaghaTerms.ts), shared by the term's page and its feed card: a
@@ -21,8 +22,6 @@ import QuranWords from './quran/text/QuranWords';
  * al-Suyuti's with the ayah words he quotes lit.
  */
 const TALKHIS_EDITION = 'تلخيص المفتاح لجلال الدين القزويني (ت ٧٣٩هـ)، متنًا فوق شرح بهاء الدين السبكي «عروس الأفراح في شرح تلخيص المفتاح»، تحقيق عبد الحميد هنداوي، المكتبة العصرية، ١٤٢٣هـ/٢٠٠٣م';
-/** The lit ayah words: a deeper band than the reader's (BalaghaSheet). */
-const lit = (palette: Palette) => `${palette.ink}33`;
 
 /** A book's words, its ﴿…﴾ quotes in the mushaf's font and the accent (BookRuns). `lines` cuts it short (a feed card). */
 export function BookWords({ text, palette, lines, size = 18 }: { text: string; palette: Palette; lines?: number; size?: number }) {
@@ -68,27 +67,12 @@ export function TermQuotes({ term, palette }: { term: BalaghaTerm; palette: Pale
   );
 }
 
-/** «القيامة ٢٩» or «القيامة ٢٩–٣٠». */
-export function ayatName(ayat: string[]) {
-  const [surah, first] = ayat[0].split(':').map(Number);
-  const last = Number(ayat.at(-1)!.split(':')[1]);
-  const sameSurah = ayat.every(key => Number(key.split(':')[0]) === surah);
-  return `${surahNames[surah] ?? num(surah)} ${num(first)}${sameSurah && last !== first ? `–${num(last)}` : ''}`;
-}
+/** «القيامة ٢٩–٣٠», «المسد ١، ٤–٥», «الأنفال ٢، القصص ٤، غافر ٣٦» (placesLabel). */
+export const ayatName = (ayat: string[]) => placesLabel(ayat, surahNames);
 
 /** The ayat of an example in the mushaf's font, with the words he quotes lit and each ayah's number after it. */
 export function ExampleAyat({ example, palette, size = 23 }: { example: Pick<TermExample, 'entry' | 'ayat'>; palette: Palette; size?: number }) {
-  return (
-    <QuranWords style={{ fontSize: size, lineHeight: size * 2, color: palette.ink, textAlign: 'right', writingDirection: 'rtl' }}>
-      {example.ayat.map((key, k) => {
-        const runs = exampleWords(itqan, example, key);
-        const number = Number(key.split(':')[1]);
-        return ayahMushafWords(key).map((word, i) => (
-          <Text key={`${key}/${i}`} style={runs.some(([from, to]) => i >= from && i <= to) ? { backgroundColor: lit(palette) } : undefined}>{`${k || i ? ' ' : ''}${word}`}</Text>
-        )).concat(<Text key={`${key}#`}>{` ${num(number)}`}</Text>);
-      })}
-    </QuranWords>
-  );
+  return <LitAyat ayat={example.ayat.map(key => ({ words: ayahMushafWords(key), lit: exampleWords(itqan, example, key), number: Number(key.split(':')[1]) }))} palette={palette} size={size} />;
 }
 
 /** One example: the ayat with his quoted words lit, his paragraph whole (unless the definition above already quotes it), its credit, and the ayat as links to the mushaf. */

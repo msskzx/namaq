@@ -7,13 +7,14 @@ import Button from '@/ui/Button';
 import Chip from '@/ui/Chip';
 import terms from '@shared/data/quran/balaghaTerms';
 import { plainName, termNamed } from '@shared/quran/balaghaTerms';
-import { toTab } from '@/lib/ways';
+import { isOverTabs, toTab } from '@/lib/ways';
 import type { Palette } from '@/lib/theme';
 import { TermQuotes } from './BalaghaTerm';
 
 /**
  * Once a quiz question on balagha is answered, a chip for each term among its choices; a tap opens the term's definition in
- * a sheet over the quiz, so the quiz stays where it is, with a button to the term's page in «مصطلحات البلاغة».
+ * a sheet over the quiz, so the quiz stays where it is, with a button to the term's page in «مصطلحات البلاغة». A quiz or
+ * party stacked over the tabs leaves the button out, since opening a tab would close it.
  */
 export default function TermChips({ names, palette }: { names: string[]; palette: Palette }) {
   const [open, setOpen] = useState<string | null>(null);
@@ -32,9 +33,11 @@ export default function TermChips({ names, palette }: { names: string[]; palette
           <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 10, paddingBottom: 8 }}>
             <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 24, textAlign: 'right' }}>{plainName(term.name)}</Text>
             <TermQuotes term={term} palette={palette} />
-            <View style={{ alignItems: 'flex-start' }}>
-              <Button Icon={BookA} label="أمثلته في مصطلحات البلاغة" onPress={() => { setOpen(null); toTab({ pathname: '/term', params: { name: term.name } }); }} />
-            </View>
+            {!isOverTabs() && (
+              <View style={{ alignItems: 'flex-start' }}>
+                <Button Icon={BookA} label="أمثلته في مصطلحات البلاغة" onPress={() => { setOpen(null); toTab({ pathname: '/term', params: { name: term.name } }); }} />
+              </View>
+            )}
           </ScrollView>
         )}
       </Sheet>

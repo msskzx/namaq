@@ -16,6 +16,14 @@ const UNCLEAR = new Set(['الْأَعْلَامُ']);
 /** Chapters whose paragraphs stand under no heading of his: the chapter's own subject is the device. */
 const CHAPTER: Record<number, string> = { 52: 'الْمَجَازُ', 53: 'التَّشْبِيهُ وَالِاسْتِعَارَةُ', 54: 'الْكِنَايَةُ وَالتَّعْرِيضُ', 55: 'الْحَصْرُ وَالِاخْتِصَاصُ' };
 
+/**
+ * Terms that hold others, so never offered as a wrong choice: a metaphor is a مجاز, a تذييل is a إطناب بالزيادة. The
+ * balagha quiz's bank (buildAyahQuizzes) avoids the first six; «ما المصطلح؟» avoids all.
+ */
+export const BROAD_TERMS = ['الْمَجَازُ', 'التَّشْبِيهُ وَالِاسْتِعَارَةُ', 'الْكِنَايَةُ وَالتَّعْرِيضُ', 'الْحَصْرُ وَالِاخْتِصَاصُ', 'الْحَذْفُ', 'إيجاز الحذف'];
+/** al-Suyuti's two kinds of الإطناب (kind 56), each holding the devices he lists under it. */
+export const BROAD_ITNAB = ['الإطناب بالزيادة', 'الإطناب بالبسط'];
+
 /** The term a paragraph of his (its kind and heading) falls under, or null when it names none. */
 export function termOf(kind: number, heading: string): string | null {
   if (UNCLEAR.has(heading)) return null;

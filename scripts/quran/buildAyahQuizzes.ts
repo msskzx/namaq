@@ -15,7 +15,7 @@ import { seededRandom } from '../../shared/quiz/feedQuiz';
 import { shuffle } from '../../shared/quiz/random';
 import { quotesOf, stem, stems } from '../../shared/quiz/ayahQuizText';
 import type { AyahQuizzes } from '../../shared/quiz/ayahQuizzes';
-import { termOf } from '../../shared/quran/balaghaTerms';
+import { BROAD_TERMS, termOf } from '../../shared/quran/balaghaTerms';
 
 /**
  * The question banks of the four ayah quizzes (owner 2026-11-18, docs/feed-cards.md), built once here and only read by the
@@ -83,8 +83,7 @@ function tafsirBank() {
 // from his other chapters than any that cites the ayah, and share no word with the right one.
 // Headings as a choice are the terms of «مصطلحات البلاغة» (shared/quran/balaghaTerms.ts termOf), so each links to its page.
 // Broad kinds found in very many ayat (a metaphor, a مجاز, a dropped word, a حصر): asked as his heading, never offered as a
-// wrong one, since the second agent's reviews found them truly in the ayah again and again.
-const BROAD = ['الْمَجَازُ', 'التَّشْبِيهُ وَالِاسْتِعَارَةُ', 'الْكِنَايَةُ وَالتَّعْرِيضُ', 'الْحَصْرُ وَالِاخْتِصَاصُ', 'الْحَذْفُ', 'إيجاز الحذف'];
+// wrong one (BROAD_TERMS), since the second agent's reviews found them truly in the ayah again and again.
 // Chapters one inside the other: a metaphor is a مجاز, so the two never stand as right and wrong in one question.
 const FAMILY: Record<number, number> = { 53: 52 };
 function balaghaBank() {
@@ -129,7 +128,7 @@ function balaghaBank() {
     const cited = new Set(paragraphs.map(p => Number(Object.keys(data.kinds).find(kind => data.kinds[Number(kind)] === p.kind))).map(kind => FAMILY[kind] ?? kind));
     const citedLabels = new Set(paragraphs.map(p => labels.indexOf((p.heading && termOf(0, p.heading)) || '')).filter(i => i >= 0));
     const rightWords = stems(labels[run.label]);
-    const avoid = [...(review.avoid[`balagha:${run.key}`] ?? []), ...BROAD];
+    const avoid = [...(review.avoid[`balagha:${run.key}`] ?? []), ...BROAD_TERMS];
     const ok = (label: number) => label !== run.label && !citedLabels.has(label) && !avoid.includes(labels[label]) && !cited.has(family(label))
       && ![...stems(labels[label])].some(word => rightWords.has(word));
     // Common headings first, so a wrong choice is a style a reader may know; two different chapters when it can.
