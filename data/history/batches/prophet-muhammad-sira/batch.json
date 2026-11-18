@@ -10806,6 +10806,59 @@
       ]
     },
     {
+      "key": "utbah/hears-fussilat",
+      "subjectKind": "PERSON",
+      "subjectSlug": "utbah-ibn-rabiah",
+      "assertion": "أتى عتبة بن ربيعة النبي صلى الله عليه وسلم يعرض عليه الرياسة والنساء والمال، فقرأ عليه أول فصلت إلى قوله: {أنذرتكم صاعقة مثل صاعقة عاد وثمود}.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "utbah-offers-and-hears-fussilat",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/126-p3",
+          "volume": "السيرة 1",
+          "pageReference": "126-127",
+          "extractionUrl": "https://shamela.ws/book/10906/264",
+          "excerptArabic": "وقال محمد بن فضيل: حدثنا الأجلح، عن الذيال بن حرملة، عن جابر بن عبد الله، قال: قال أبو جهل والملأ من قريش: لقد انتشر علينا أمر محمد، فلو التمستم رجلا عالما بالسحر والكهانة والشعر، فكلمه ثم أتانا ببيان من أمره. فقال عتبة: لقد سمعت بقول السحرة والكهانة والشعر، وعلمت من ذلك علماء، وما يخفى عليّ إن كان كذلك. فأتاه، فلما أتاه قال له عتبة: يا محمد أنت خير أم هاشم؟ أنت خير أم عبد المطلب؟ أنت خير أم عبد الله؟ فلم يجبه، قال: فبم تشتم آلهتنا وتضلل آباءنا؟ فإن كنت إنما بك الرياسة عقدنا لك ألويتنا، فكنت رأسنا ما بقيت, وإن كان بك الباءة زوجناك عشر نسوة تختار من أي أبيات قريش شئت، وإن كان بك المال جمعنا لك من أموالنا ما تستغني به أنت وعقبك من بعدك، ورسول الله صلى الله عليه وسلم ساكت، فلما فرغ قال رسول الله صلى الله عليه وسلم: \"بسم الله الرحمن الرحيم {حم، تَنْزِيلٌ مِنَ الرَّحْمَنِ الرَّحِيمِ} \". [فصلت: ٢] ، فقرأ حتى بلغ {أَنْذَرْتُكُمْ صَاعِقَةً مِثْلَ صَاعِقَةِ عَادٍ وَثَمُودَ} [فصلت: ١٣] ، فأمسك عتبة على فيه، وناشده الرحم أن يكف عنه، ولم يخرج إلى أهله واحتبس عنهم، فقال أبو جهل: يا معشر قريش والله ما نرى عتبة إلا قد صبأ إلى محمد، وأعجبه طعامه، وما ذاك إلا من حاجة أصابته، انطلقوا بنا إليه. فأتوه، فقال أبو جهل: والله يا عتبة ما حسبنا إلا أنك صبوت، فإن كانت بك حاجة جمعنا لك ما يغنيك عن طعام محمد. فغضب وأقسم بالله لا يكلم محمدا أبدا، وقال: لقد علمتم أني من أكثر قريش مالا ولكني أتيته، فقص عليهم القصة، فأجابني بشيء والله ما هو بسحر ولا شعر ولا كهانة، قرأ: \"بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ {حم، تَنْزِيلٌ مِنَ الرَّحْمَنِ الرَّحِيمِ، كِتَابٌ فُصِّلَتْ آيَاتُهُ قُرْآنًا عَرَبِيًّا لِقَوْمٍ يَعْلَمُونَ} \". [فصلت: ١-٣] ، حتى بلغ {أَنْذَرْتُكُمْ صَاعِقَةً مِثْلَ صَاعِقَةِ عَادٍ وَثَمُودَ} [فصلت: ١٣] ، فأمسكت بفيه، وناشدته الرحم أن يكف، وقد علمتم أن محمدا إذا قال شيئا لم يكذب، فخفت أن ينزل بكم العذاب. رواه يحيى بن معين عنه.",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/127-p3",
+          "volume": "السيرة 1",
+          "pageReference": "127",
+          "extractionUrl": "https://shamela.ws/book/10906/265",
+          "excerptArabic": "وقال داود بن عمرو الضبي: حدثنا المثنى بن زرعة، عن محمد بن إسحاق، عن نافع، عن ابن عمر، قال: لما قرأ النبي صلى الله عليه وسلم على عتبة بن ربيعة {حم، تَنْزِيلٌ مِنَ الرَّحْمَنِ الرَّحِيمِ، كِتَابٌ فُصِّلَتْ آيَاتُهُ قُرْآنًا عَرَبِيًّا لِقَوْمٍ يَعْلَمُونَ}",
+          "accessedAt": "2026-11-18"
+        }
+      ]
+    },
+    {
+      "key": "walid/hears-quran",
+      "subjectKind": "PERSON",
+      "subjectSlug": "al-walid-ibn-al-mughirah",
+      "assertion": "جاء الوليد بن المغيرة إلى النبي صلى الله عليه وسلم فقرأ عليه القرآن فكأنه رق له، ثم قال فيه: هذا سحر يؤثر، فنزلت: {ذرني ومن خلقت وحيدا}.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "INVOLVED_IN",
+      "relatedSubjectKind": "EVENT",
+      "relatedSubjectSlug": "al-walid-hears-the-quran",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/124-p4",
+          "volume": "السيرة 1",
+          "pageReference": "124-125",
+          "extractionUrl": "https://shamela.ws/book/10906/262",
+          "excerptArabic": "وقال البيهقي: أخبرنا الحاكم، قال: أخبرنا محمد بن علي الصنعاني بمكة، قال: حدثنا إسحاق بن إبراهيم، قال: أخبرنا عبد الرزاق، عن معمر، عن أيوب، عن عكرمة، عن أبن عباس أن الوليد بن المغيرة جاء إلى النبي صلى الله عليه وسلم فقرأ عليه القرآن، فكأن رق له، فبلغ ذلك أبا جهل، فأتاه فقال: يا عم إن قومك يرون أن يجمعوا لك مالا. قال: لم؟ قال: ليعطوك فإنك أتيت محمدا لتعرض لما قبله. قال: قد علمت أني من أكثرها مالا. قال: فقل فيه قولا يبلغ قومك أنك منكر لها، أو أنك كاره له. قال: وماذا أقول؟ فوالله ما فيكم رجل أعلم بالأشعار مني، ولا أعلم برجزه ولا بقصيدته مني، ولا بأشعار الجن، والله ما يشبه الذي يقول شيئا من هذا، ووالله إن لقوله الذي يقول حلاوة، وإن عليه لطلاوة، وإنه لمثمر أعلاه، مغدق أسفله، وإنه ليعلو وما يعلى، وإنه ليحطم ما تحته. قال: لا يرضى عنك قومك حتى تقول فيه. قال: فدعني حتى أفكر فيه. فلما فكر قال: هذا سحر يؤثر، يأثره عن غيره، فنزلت: {ذَرْنِي وَمَنْ خَلَقْتُ وَحِيدًا} [المدثر: ١١] ، يعني الآيات. هكذا رواه الحاكم موصولا. ورواه معمر، عن عباد بن منصور، عن عكرمة مرسلا. ورواه مختصرا حماد بن زيد، عن أيوب، عن عكرمة مرسلا.",
+          "accessedAt": "2026-11-18"
+        }
+      ]
+    },
+    {
       "key": "dimad/sex",
       "subjectKind": "PERSON",
       "subjectSlug": "dimad-al-azdi",
@@ -14332,12 +14385,215 @@
           "accessedAt": "2026-09-19"
         }
       ]
+    },
+    {
+      "key": "qurayzah/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "banu-qurayzah",
+      "assertion": "كانت غزوة بني قريظة في السنة الخامسة من الهجرة: يذكرها الكتاب في أحداث تلك السنة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/467-p1",
+          "volume": "السيرة 1",
+          "pageReference": "467",
+          "extractionUrl": "https://shamela.ws/book/10906/603",
+          "excerptArabic": "[السنة الخامسة من الهجرة:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/506-p2",
+          "volume": "السيرة 1",
+          "pageReference": "506",
+          "extractionUrl": "https://shamela.ws/book/10906/642",
+          "excerptArabic": "[غزوة بني قريظة:]",
+          "accessedAt": "2026-11-18"
+        }
+      ],
+      "disputed": true
+    },
+    {
+      "key": "qurayzah/year-alt",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "banu-qurayzah",
+      "assertion": "وقال موسى بن عقبة وعروة: كانت الخندق وبنو قريظة في شوال سنة أربع، وقال المصنف: وهو وهم بين.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/498-p8",
+          "volume": "السيرة 1",
+          "pageReference": "498",
+          "extractionUrl": "https://shamela.ws/book/10906/634",
+          "excerptArabic": "وقال موسى بن عقبة، عن ابن شهاب، أن رسول الله صلى الله عليه وسلم قاتل يوم بدر في رمضان سنة اثنين، ثم قاتل يوم أحد في شوال سنة ثلاث، ثم قاتل يوم الخندق، وهو يوم الأحزاب وبني",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/498-p9",
+          "volume": "السيرة 1",
+          "pageReference": "498",
+          "extractionUrl": "https://shamela.ws/book/10906/634",
+          "excerptArabic": "قريظة، في شوال سنة أربع. وكذا قال عروة في حديث ابن لهيعة عن أبي الأسود عنه. كذا قالا: سنة أربع, وقالا: في قصة الخندق إنها كانت بعد أحد بسنتين.",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/498-p10",
+          "volume": "السيرة 1",
+          "pageReference": "498",
+          "extractionUrl": "https://shamela.ws/book/10906/634",
+          "excerptArabic": "وقال قتادة من رواية شيبان عنه: كان يوم الأحزاب بعد أحد بسنتين، فهذا هو المقطوع به وقول موسى وعروة إنها في سنة أربع وهم بين، ويشبهه قول عبيد الله، عن نافع، عن ابن عمر: \"عرضني",
+          "accessedAt": "2026-11-18"
+        }
+      ]
+    },
+    {
+      "key": "fath-makkah/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "fath-makkah",
+      "assertion": "كان فتح مكة في رمضان من سنة ثمان من الهجرة: يذكره الكتاب في أحداث تلك السنة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/111-p1",
+          "volume": "السيرة 2",
+          "pageReference": "111",
+          "extractionUrl": "https://shamela.ws/book/10906/770",
+          "excerptArabic": "[ثم دخلت سنة ثمان من الهجرة:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/153-p1",
+          "volume": "السيرة 2",
+          "pageReference": "153",
+          "extractionUrl": "https://shamela.ws/book/10906/812",
+          "excerptArabic": "[فتح مكة شرفها الله وعظمها:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/164-p7",
+          "volume": "السيرة 2",
+          "pageReference": "164",
+          "extractionUrl": "https://shamela.ws/book/10906/823",
+          "excerptArabic": "وكان دخول النبي صلى الله عليه وسلم مكة في رمضان، واستعار النبي صلى الله عليه وسلم من صفوان فأعطاه فيما زعموا مائة درع وأداتها، وكان أكثر شيء سلاحا.",
+          "accessedAt": "2026-11-18"
+        }
+      ]
+    },
+    {
+      "key": "hunayn/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "hunayn",
+      "assertion": "كانت غزوة حنين في سنة ثمان من الهجرة: يذكرها الكتاب في أحداث تلك السنة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/111-p1",
+          "volume": "السيرة 2",
+          "pageReference": "111",
+          "extractionUrl": "https://shamela.ws/book/10906/770",
+          "excerptArabic": "[ثم دخلت سنة ثمان من الهجرة:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/192-p1",
+          "volume": "السيرة 2",
+          "pageReference": "192",
+          "extractionUrl": "https://shamela.ws/book/10906/851",
+          "excerptArabic": "[غزوة حنين:]",
+          "accessedAt": "2026-11-18"
+        }
+      ]
+    },
+    {
+      "key": "taif/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "taif",
+      "assertion": "سار رسول الله صلى الله عليه وسلم من حنين إلى الطائف في شوال من سنة ثمان: يذكرها الكتاب في أحداث تلك السنة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/111-p1",
+          "volume": "السيرة 2",
+          "pageReference": "111",
+          "extractionUrl": "https://shamela.ws/book/10906/770",
+          "excerptArabic": "[ثم دخلت سنة ثمان من الهجرة:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/207-p3",
+          "volume": "السيرة 2",
+          "pageReference": "207",
+          "extractionUrl": "https://shamela.ws/book/10906/866",
+          "excerptArabic": "[غزوة الطائف:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/207-p4",
+          "volume": "السيرة 2",
+          "pageReference": "207",
+          "extractionUrl": "https://shamela.ws/book/10906/866",
+          "excerptArabic": "فسار رسول الله صلى الله عليه وسلم من حنين يريد الطائف في شوال، وقدم خالد بن الوليد على مقدمته. وقد كانت ثقيف رموا حصنهم وأدخلوا فيه ما يكفيهم لسنة، فلما انهزموا من أوطاس دخلو الحصن وتهيأوا للقتال.",
+          "accessedAt": "2026-11-18"
+        }
+      ]
+    },
+    {
+      "key": "tabuk/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "tabuk",
+      "assertion": "كانت غزوة تبوك في رجب من السنة التاسعة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/231-p1",
+          "volume": "السيرة 2",
+          "pageReference": "231",
+          "extractionUrl": "https://shamela.ws/book/10906/890",
+          "excerptArabic": "[السنة التاسعة:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/232-p5",
+          "volume": "السيرة 2",
+          "pageReference": "232",
+          "extractionUrl": "https://shamela.ws/book/10906/891",
+          "excerptArabic": "[وفي رجب غزوة تبوك:]",
+          "accessedAt": "2026-11-18"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "8f87a8218b1b722c",
+    "revision": "368b474bc6c63d9e",
     "approvedAt": "2026-11-18",
     "approvedBy": "msskzx",
-    "note": "Approved for publication under the owner's 2026-11-18 rule (data not live; a second agent checked the batch against its pages and the method). Claims are Not reviewed; approval permits the import and asserts nothing about review."
+    "note": "Sira stories: utbah/hears-fussilat and walid/hears-quran added, page-range citations, Shamela links corrected; checked by a second agent; approved under the owner's standing rule for reviewed dev data (2026-11-18)"
   }
 }

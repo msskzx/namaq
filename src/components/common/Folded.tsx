@@ -5,7 +5,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 
 /**
  * A passage's credit under a rule at the foot of its card (the book and page), folded; a click opens the edition and the
- * page's link. The reader's book sheets share it (BalaghaPanel, GharibPanel); the app has mobile/src/ui/Folded.tsx.
+ * page's link. Also the list of ayat a balagha quote fits when its paragraph names none. The reader's book sheets share it (BalaghaPanel, GharibPanel); the app has mobile/src/ui/Folded.tsx.
  */
 export default function Folded({ credit, children }: { credit: string; children: ReactNode }) {
   const [open, setOpen] = useState(false);

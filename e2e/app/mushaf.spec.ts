@@ -132,13 +132,26 @@ test('an ayah\'s balagha shows al-Suyuti\'s paragraphs, then al-Zamakhshari\'s p
   await page.getByRole('button', { name: 'البلاغة في الآية' }).click();
   await expect(page.getByRole('heading', { name: `${S(1)} ٢` })).toBeVisible();
   await expect(page.getByRole('tab', { name: 'الإتقان للسيوطي' })).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByText('«الصِّفَةُ»', { exact: false })).toBeVisible();
+  await expect(page.getByText('«الصِّفَةُ»', { exact: false }).first()).toBeVisible();
   await expect(page.getByText('الإتقان للسيوطي ٣/٢٣٣')).toBeVisible();
+  // His «الحمد لله» names no ayah: the paragraph says so and lists every ayah the quote fits.
+  await page.getByRole('button', { name: 'مواضع الشاهد في القرآن: ٦، ولم يعيّن السيوطي أحدها' }).click();
+  await expect(page.getByRole('button', { name: `افتح ${S(6)} ٤٥ في المصحف` })).toBeVisible();
+  if (process.env.E2E_SHOTS) { await page.emulateMedia({ colorScheme: 'dark' }); await page.waitForTimeout(500); await page.screenshot({ path: `${process.env.E2E_SHOTS}/itqan-places.png` }); await page.emulateMedia({ colorScheme: 'light' }); }
   await page.getByRole('tab', { name: 'الكشاف للزمخشري' }).click();
   await page.getByRole('button', { name: 'نزّل الكشاف عن حقائق التنزيل' }).click();
   await expect(page.getByText('«الاستعارة»', { exact: false })).toBeVisible();
   await expect(page.getByText('الكشاف للزمخشري ١/٨–٩')).toBeVisible();
   await expect.poll(() => stored<string[]>(page, 'books-saved')).toEqual(['kashshaf']);
+});
+
+test('a place al-Suyuti\'s quote fits opens in the mushaf', async ({ page }) => {
+  await open(page, '/read');
+  await pressWord(page, HAMD);
+  await page.getByRole('button', { name: 'البلاغة في الآية' }).click();
+  await page.getByRole('button', { name: 'مواضع الشاهد في القرآن: ٦، ولم يعيّن السيوطي أحدها' }).click();
+  await page.getByRole('button', { name: `افتح ${S(6)} ٤٥ في المصحف` }).click();
+  await expect.poll(() => readerPage(page)).toBe(133);
 });
 
 test.describe('a removed default tafsir', () => {

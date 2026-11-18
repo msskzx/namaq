@@ -1,6 +1,6 @@
 import { dailyIndex, feedTrees } from '@shared/dailyPick';
-import { FEED_AHEAD } from '@shared/feedSeen';
-export { FEED_AHEAD };
+import { FEED_AHEAD, FEED_FAR } from '@shared/feedSeen';
+export { FEED_AHEAD, FEED_FAR };
 import { pageOfAyah, pageStart, type MushafPage } from '@shared/quran/readerPage';
 import surahRows from '@shared/data/quran/surahs.json';
 import type { BranchPiece } from '@shared/quran/branchInventory';

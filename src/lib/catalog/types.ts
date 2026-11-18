@@ -171,6 +171,32 @@ export interface CatalogDateParts {
   readonly hijriDay?: Cited<number>;
 }
 
+/**
+ * A moment in a battle, told in the source's own words (owner, 2026-11-18: the battle page's key moments). Only a report
+ * the source itself places in al-Bukhari or Muslim becomes one (AGENTS.md, "Established claims only"), and only a point
+ * the reports agree on: where they differ, as over who duelled whom at Badr, the moment keeps what they share.
+ */
+export interface CatalogMoment {
+  /** A few words naming the moment. Ours, not the source's. */
+  readonly title: string;
+  /** Who the source has the report from, its words as printed, just before the quote (none when the report has no chain). */
+  readonly isnad?: string;
+  /**
+   * The whole report after its chain, exactly as the pages print it, up to its grading (owner, 2026-11-18: nothing is
+   * cut). A report that runs across a page break joins the pages' text with one space.
+   */
+  readonly quote: string;
+  /**
+   * `volume` is the source's folder (v1, v2…); `volumeLabel` is the volume as the book prints it, e.g. «السيرة 1».
+   * `endPage` is the last page the report runs onto, when it is not `page`.
+   */
+  readonly source: { readonly slug: string; readonly volume: number; readonly volumeLabel: string; readonly page: number; readonly endPage?: number; readonly url: string };
+  /** The source's own words placing the report, such as أخرجه البخاري, printed on the same page. */
+  readonly grading: string;
+  /** Who the moment is about, by catalog slug. */
+  readonly people: readonly string[];
+}
+
 /** Names only the participants its batch's focal subject brought, never the full roster. */
 export interface CatalogBattle {
   readonly kind: 'BATTLE';
@@ -181,6 +207,8 @@ export interface CatalogBattle {
   readonly fields?: CatalogBattleFields;
   readonly dateParts?: CatalogDateParts;
   readonly participants: readonly CatalogParticipation[];
+  /** In the order they happened. */
+  readonly moments?: readonly CatalogMoment[];
 }
 
 /** Keys of `fields` are Prisma `Event` column names. */
@@ -188,6 +216,46 @@ export interface CatalogEventFields {
   readonly hijriYear?: Cited<number>;
   readonly location?: Cited<string>;
   readonly description?: Cited<string>;
+}
+
+/**
+ * One report of a story, whole (owner, 2026-11-18: nothing is cut), told as its moments: the moments' texts, joined with
+ * a space, are the report after its chain exactly as the pages print it. Across a page break the pages' text joins with
+ * one space too.
+ */
+export interface CatalogReport {
+  /** Who the source has the report from, as printed, just before the first moment. */
+  readonly isnad?: string;
+  readonly source: { readonly slug: string; readonly volume: number; readonly volumeLabel: string; readonly page: number; readonly endPage?: number; readonly url: string };
+  /** The source's own words placing the report, such as أخرجه مسلم, printed right after it. None when the source gives none. */
+  readonly grading?: string;
+  readonly moments: readonly {
+    /** A few words naming the moment. Ours. */
+    readonly title: string;
+    readonly text: string;
+    readonly people: readonly string[];
+  }[];
+}
+
+/** Our tags for gathering stories (owner, 2026-11-18). */
+export const STORY_TAGS = { ISLAM: 'إسلامهم', HEARD_QURAN: 'سمعوا القرآن', HIS_WORDS: 'من كلامه ﷺ', REVEALED_ABOUT: 'فيمن نزلت' } as const;
+export type StoryTag = keyof typeof STORY_TAGS;
+
+/** Ayat a story turns on: the ones recited in it, or revealed about it, with the quotes that say so. */
+export type CatalogStoryEvidence = { readonly source: string; readonly page: number; readonly volume?: number; readonly volumeLabel?: string; readonly quote: string; readonly url?: string };
+
+export interface CatalogStoryAyat {
+  readonly kind: 'RECITED' | 'REVEALED_ABOUT';
+  /** REVEALED_ABOUT: the person the evidence names (a person's slug). */
+  readonly about?: string;
+  /** Whose report the range is, when the source's reports differ on it («في رواية جابر»). */
+  readonly report?: string;
+  /** surah:ayah, first and last. */
+  readonly from: string;
+  readonly to: string;
+  readonly evidence: readonly CatalogStoryEvidence[];
+  /** The other reports' words on it, each attributed (owner, 2026-11-18: disputed points shown attributed, not dropped). */
+  readonly others?: readonly { readonly label: string; readonly evidence: readonly CatalogStoryEvidence[] }[];
 }
 
 export interface CatalogEvent {
@@ -199,6 +267,10 @@ export interface CatalogEvent {
   readonly fields: CatalogEventFields;
   readonly dateParts?: CatalogDateParts;
   readonly people: readonly { readonly person: string; readonly claims: Provenance }[];
+  /** The story as the source tells it: the first report is the story, the others are the source's other reports of it. */
+  readonly reports?: readonly CatalogReport[];
+  readonly tags?: readonly StoryTag[];
+  readonly ayat?: readonly CatalogStoryAyat[];
 }
 
 /**

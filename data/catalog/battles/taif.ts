@@ -1,8 +1,9 @@
 import { legacyUnreviewed, type CatalogBattle } from '@/lib/catalog/types';
 
 // Carried from the old seed when the rows of the people who fought here were
-// retired. No batch has read this battle, so every value below is in use with
-// its evidence owed.
+// retired. The year is al-Dhahabi's sira's: the siege is told inside its chapter
+// [ثم دخلت سنة ثمان من الهجرة:], marching from Hunayn في شوال (ADR 0024). The other
+// values are still owed their evidence.
 const taif = {
   kind: 'BATTLE',
   slug: 'taif',
@@ -10,7 +11,7 @@ const taif = {
   nameTransliterated: 'Siege of Taif',
   fields: {
     engagement: { value: 'GHAZWAH', claims: legacyUnreviewed },
-    hijriYear: { value: 8, claims: legacyUnreviewed },
+    hijriYear: { value: 8, claims: ['taif/year'] },
     location: { value: 'الطائف', claims: legacyUnreviewed },
   },
   participants: [

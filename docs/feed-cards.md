@@ -9,9 +9,10 @@ repository; update it in the PR that adds a feature, a card, a quiz kind or an e
 ## Cards in the feed now
 
 Continue reading, today's juz, prayer time, books, scenes (مشاهد), saved and forgotten
-ayat, surah openings, and the quiz cards in `FEED_QUIZ_NAMES`
+ayat, surah openings, a battle's moment (من غزوة …, opening the battle's page), a sira story whole (من قصص السيرة, its first report with
+the ayat folded under it, opening the story's page), and the quiz cards in `FEED_QUIZ_NAMES`
 (`shared/quiz/feedQuiz.ts`): في أي سورة؟, أكمل المتشابهات, سمّع بقية الآية, قارن الموضعين,
-أوائل السور, سمّع الآية, ما معنى؟, the four ayah quizzes below, and the three Tuhfat al-Atfal questions.
+أوائل السور, سمّع الآية, ما معنى؟, the four ayah quizzes below, the three Tuhfat al-Atfal questions, and السيرة والغزوات (shared/quiz/sira.ts).
 
 The ayah quizzes (`shared/quiz/ayahQuizzes.ts`), whose questions are built once by `scripts/quran/buildAyahQuizzes.ts`
 (the app and the website only read the bank; hand review in `scripts/quran/ayahQuizReview.json`):
@@ -39,7 +40,8 @@ work as «ما معنى؟»), من الأقسام, من ترتيب السور, �
 
 أين ترد؟ / ما ضدها؟,
 بم أقسم؟, ما السورة التي قبلها؟, مقاصد أي سورة؟, أكمل الذكر, من القائل؟,
-في أي سورة ذُكر؟, من المخاطَب؟
+في أي سورة ذُكر؟, من المخاطَب؟, and for the battles and events: أين كانت؟ (on the map), متى كان؟ (on the
+timeline), رتّب, من شهدها؟ / من أمير السرية؟, فيمَ نزلت؟, أي حدث هذا؟ (next battles PR: they wait for the years, places and ghazwah or sariyyah to be cited, so no quiz asks about a value without its reference)
 
 ## Named exceptions
 
@@ -47,4 +49,4 @@ work as «ما معنى؟»), من الأقسام, من ترتيب السور, �
 - Qibla: already on the prayer card.
 - Search, share and videos, settings, «ما أحفظه»: tools, not content.
 - Party quizzes: played with others, not from the feed.
-- Tarajim: no content yet; it gets a card when it has some.
+- Tarajim: the battles have the moment card and the sira stories the story card; the people get theirs when they come to the app.

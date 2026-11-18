@@ -169,10 +169,10 @@ test.describe('a new user', () => {
     }).toPass({ timeout: 20_000 });
   });
 
-  test('the feed asks a question of every Quran quiz kind in turn, each card with the quiz buttons', async ({ page }) => {
-    // Three batches a day take three kinds in turn; three days apart, the thirteen kinds all come up.
+  test('the feed asks a question of every quiz kind in turn, each card with the quiz buttons', async ({ page }) => {
+    // Three batches a day take three kinds in turn; three days apart, the fourteen kinds all come up in five days.
     const kinds = ['في أي سورة؟', 'أكمل المتشابهات', 'سمّع بقية الآية', 'قارن الموضعين', 'أوائل السور', 'ما معنى؟', 'لأي آية هذا التفسير؟', 'ما الأسلوب؟', 'ما إعرابها؟', 'كيف يقرؤها؟',
-      'التحفة: أكمل البيت', 'التحفة: البيت التالي', 'التحفة: حكم الحرف'];
+      'التحفة: أكمل البيت', 'التحفة: البيت التالي', 'التحفة: حكم الحرف', 'السيرة والغزوات'];
     const seen = new Set<string>();
     for (const days of [0, 3, 6, 9, 12]) {
       await page.clock.setFixedTime(new Date(Date.now() + days * 86_400_000));
@@ -195,7 +195,7 @@ test.describe('a new user', () => {
   });
 
   test('a «which surah» card shows the ayah number and marks the surah picked', async ({ page }) => {
-    // Thirteen kinds take turns, so the «which surah» card may be days away.
+    // Fourteen kinds take turns, so the «which surah» card may be days away.
     test.setTimeout(120_000);
     for (const days of [0, 3, 6, 9, 12]) {
       await page.clock.setFixedTime(new Date(Date.now() + days * 86_400_000));
