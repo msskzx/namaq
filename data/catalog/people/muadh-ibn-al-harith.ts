@@ -30,7 +30,7 @@ const muadhIbnAlHarith = {
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'al-harith-ibn-rifaah-al-najjari', claims: legacyUnreviewed },
     { type: 'SON', inverse: 'MOTHER', to: 'afra-bint-ubayd', claims: legacyUnreviewed },
-    { type: 'BROTHER', inverse: 'BROTHER', to: 'muawwidh-ibn-al-harith', claims: legacyUnreviewed },
+    { type: 'BROTHER', inverse: 'BROTHER', to: 'muawwidh-ibn-afra', claims: legacyUnreviewed },
   ],
 } satisfies CatalogPerson;
 
