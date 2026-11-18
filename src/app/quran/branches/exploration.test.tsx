@@ -64,21 +64,24 @@ const visibleKeys = () => [...new Set([...screen.getByRole('region', { name: 'ش
 const citedGroup = (id: string) => groups.find(group => group.citations.some(citation => citation.id === id))!;
 
 describe('branch exploration acceptance', () => {
-  it('starts with mutashabeh and pondering, leaves word trees off, and applies purpose drafts only on Apply', async () => {
+  it('opens on the books\' tab, leaves ours and word trees off, and applies purpose drafts only on Apply', async () => {
     await visit({});
+    const tabs = screen.getByRole('group', { name: 'نوع البطاقات' });
+    expect(within(tabs).getByRole('link', { name: 'في كتب المتشابهات' }).getAttribute('aria-current')).toBe('page');
+    expect(paramsOf(within(tabs).getByRole('link', { name: 'تدبّر' }).getAttribute('href')!).categories).toBe('pondering');
     fireEvent.click(screen.getByRole('button', { name: 'تصفية' }));
     const form = screen.getByRole('form', { name: 'تصفية', hidden: true });
-    const mutashabeh = within(form).getByRole('button', { name: 'متشابهات', hidden: true });
+    const mutashabeh = within(form).getByRole('button', { name: 'في كتب المتشابهات', hidden: true });
     const pondering = within(form).getByRole('button', { name: 'تدبّر', hidden: true });
     const words = within(form).getByRole('button', { name: 'أشجار الكلمات', hidden: true });
     expect(mutashabeh.getAttribute('aria-pressed')).toBe('true');
-    expect(pondering.getAttribute('aria-pressed')).toBe('true');
+    expect(pondering.getAttribute('aria-pressed')).toBe('false');
     expect(words.getAttribute('aria-pressed')).toBe('false');
     expect(within(form).queryByRole('button', { name: /تذكير وتأنيث/, hidden: true })).toBeNull();
     fireEvent.click(words);
     expect(navigation.replace).not.toHaveBeenCalled();
     fireEvent.click(within(form).getByRole('button', { name: 'تطبيق', hidden: true }));
-    expect(paramsOf(navigation.replace.mock.calls[0][0]).categories.split(',').sort()).toEqual(['mutashabeh', 'pondering', 'words']);
+    expect(paramsOf(navigation.replace.mock.calls[0][0]).categories.split(',').sort()).toEqual(['mutashabeh', 'words']);
   });
 
   it('keeps the sourced 2:58 and 7:161 comparison without a singular/plural chip', async () => {
@@ -89,7 +92,7 @@ describe('branch exploration acceptance', () => {
   });
 
   it('searches the studied expression and visits each surviving comparison once', async () => {
-    await visit({ q: 'علي هدي' });
+    await visit({ q: 'علي هدي', categories: 'mutashabeh,pondering' });
     const seen: string[] = [];
     const progress = screen.getByRole('progressbar');
     const count = Number(progress.getAttribute('max'));
@@ -146,7 +149,7 @@ describe('branch exploration acceptance', () => {
     fireEvent.click(screen.getByRole('button', { name: 'تصفية' }));
     const form = screen.getByRole('form', { name: 'تصفية', hidden: true });
     expect(within(form).getByRole('button', { name: 'أشجار الكلمات', hidden: true }).getAttribute('aria-pressed')).toBe('true');
-    expect(within(form).getByRole('button', { name: 'متشابهات', hidden: true }).getAttribute('aria-pressed')).toBe('false');
+    expect(within(form).getByRole('button', { name: 'في كتب المتشابهات', hidden: true }).getAttribute('aria-pressed')).toBe('false');
   });
 
   it('keeps applied categories and surahs on subtree links while clearing the search', async () => {

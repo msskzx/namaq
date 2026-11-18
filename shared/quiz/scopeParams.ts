@@ -4,8 +4,8 @@ export const SCOPE_KEYS = ['categories', 'relations', 'differences', 'surahs', '
 export type ScopeFilters = Partial<Record<typeof SCOPE_KEYS[number], string>>;
 export type TreeScope = { filters?: ScopeFilters; saved?: string[] };
 
-/** The quiz asks the متشابهات unless the filters pick other kinds. */
-export const QUIZ_CATEGORIES = 'mutashabeh';
+/** The quiz asks both kinds, the books' and ours, unless the filters pick other kinds. */
+export const QUIZ_CATEGORIES = 'mutashabeh,pondering';
 
 /** The filters a quiz keeps, with the quiz's default kind. */
 export function quizFilters(filters: Record<string, unknown> | undefined): ScopeFilters {

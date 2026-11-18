@@ -16,9 +16,9 @@ it('combines pending changes without restoring a removed difference', () => {
   }
   render(<Draft />);
   fireEvent.click(screen.getByRole('button', { name: 'تقديم وتأخير' }));
-  fireEvent.click(screen.getByRole('button', { name: 'في كتب المتشابه' }));
+  fireEvent.click(screen.getByRole('button', { name: 'تدبّر' }));
   fireEvent.click(screen.getByRole('button', { name: 'الأكثر مواضع' }));
-  expect(changed).toHaveBeenLastCalledWith({ cited: '1', sort: 'places' });
+  expect(changed).toHaveBeenLastCalledWith({ categories: 'mutashabeh,pondering', sort: 'places' });
   expect(screen.getByRole('button', { name: 'تقديم وتأخير' }).getAttribute('aria-pressed')).toBe('false');
   expect(screen.getByRole('button', { name: 'الأكثر مواضع' }).getAttribute('aria-pressed')).toBe('true');
 });

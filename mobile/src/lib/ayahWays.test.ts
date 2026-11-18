@@ -6,7 +6,7 @@ import { compareLinksOfAyah } from '@/app/quran/compare/pairCards';
 import { ayahLinksFor, pageAyat } from '@/app/quran/read/ayahLinks';
 import page264 from '@shared/data/quran/mushaf/264.json';
 import type { MushafPage } from '@shared/quran/readerPage';
-import { branchList, EMPTY_LIST, hasTrees } from './branchList';
+import { BOTH_KINDS_LIST, branchList, EMPTY_LIST, hasTrees } from './branchList';
 import { cardsFor, compareTargetsOfAyah, focusIndex, holdsAyah, listedPairs } from './compare';
 import { cardWays, savedCard } from './home';
 import { treeList } from './branches';
@@ -38,7 +38,7 @@ describe("an ayah's long press: compare and trees", () => {
   it('offers trees only for an ayah some tree of the unfiltered list holds, and that list then shows them', () => {
     let withTrees = 0;
     for (const key of keys.filter((_, i) => i % 7 === 0)) {
-      const found = branchList({ ...EMPTY_LIST, ayah: key });
+      const found = branchList({ ...BOTH_KINDS_LIST, ayah: key });
       expect(hasTrees(key), key).toBe(found.length > 0);
       expect(found.every(piece => piece.keys.includes(key))).toBe(true);
       if (found.length) withTrees++;

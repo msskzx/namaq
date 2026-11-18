@@ -1,6 +1,6 @@
 import surahRows from '@shared/data/quran/surahs.json';
 import { branchInventory, distinctBranchPieces, outsideMatches, type BranchPiece } from '@shared/quran/branchInventory';
-import { ALL_KINDS, searchSharedPhrases } from '@shared/quran/branchSearch';
+import { ALL_KINDS, PAGE_DEFAULT_KIND, PAGE_KINDS, searchSharedPhrases } from '@shared/quran/branchSearch';
 import { textIs } from '@shared/quran/branches';
 import { hasGroupFilters, type GroupFilters } from '@shared/quran/mutashabih/browse';
 import { matchesSurah } from '@shared/quran/surahSearch';
@@ -29,7 +29,7 @@ function savedFirst(pieces: BranchPiece[], bookmarks: Bookmark[]) {
 
 /** The trees swiped through, worked out as the website's branches page does from the same filters, search and surah. */
 export function branchList(state: ListState, bookmarks: Bookmark[] = []): BranchPiece[] {
-  const inventory = branchInventory(state.filters, state.range);
+  const inventory = branchInventory({ ...state.filters, categories: kindsShown(state) }, state.range);
   const query = state.query.trim();
   let found = query ? distinctBranchPieces(searchSharedPhrases(inventory, query)) : inventory;
   if (state.saved) found = query ? found.filter(piece => isSavedIn(piece, bookmarks)) : savedFirst(found, bookmarks);
@@ -40,7 +40,7 @@ export function branchList(state: ListState, bookmarks: Bookmark[] = []): Branch
 
 let treeAyat: Set<string> | undefined;
 /** Whether any tree of the unfiltered list holds this ayah, so the reader offers its trees. */
-export const hasTrees = (key: string) => (treeAyat ??= new Set(branchList(EMPTY_LIST).flatMap(piece => piece.keys))).has(key);
+export const hasTrees = (key: string) => (treeAyat ??= new Set(branchList(BOTH_KINDS_LIST).flatMap(piece => piece.keys))).has(key);
 
 /** Where a search opens: the tree whose phrase is exactly what was typed, else the first found. */
 export function openingIndex(pieces: BranchPiece[], query: string) {
@@ -48,7 +48,13 @@ export function openingIndex(pieces: BranchPiece[], query: string) {
   return Math.max(0, exact);
 }
 
-export const isFiltered = (state: ListState) => !!(state.range || state.saved || hasGroupFilters(state.filters) || state.filters.sort);
+/** The kinds of card a list shows: the list opens on the books' cards, and the tab over it, or the filter sheet, picks
+ *  others. The saved cards show both tabs' cards. */
+export const kindsShown = (state: ListState) => state.filters.categories ?? (state.saved ? 'mutashabeh,pondering' : PAGE_DEFAULT_KIND);
+/** The kind tab lit over the list, or undefined when the list shows a mix (the saved cards, a mix the filter sheet picked). */
+export const tabOf = (state: ListState) => PAGE_KINDS.find(kind => kind.id === kindsShown(state))?.id;
+/** A tab is not a filter: picking «تدبّر» lights no dot on the search button. */
+export const isFiltered = (state: ListState) => !!(state.range || state.saved || hasGroupFilters(tabOf(state) ? { ...state.filters, categories: undefined } : state.filters) || state.filters.sort);
 
 export type SurahHit = { number: number; count: number };
 const SURAH_HITS = 3;
@@ -125,10 +131,13 @@ export const findPiece = (pieces: BranchPiece[], id: string) =>
 
 /** The list a tree found outside the filters opens in: no filters but every kind of tree. */
 export const ALL_KINDS_LIST: ListState = { ...EMPTY_LIST, filters: { categories: ALL_KINDS } };
+/** Our own cards, the «تدبّر» tab; and both tabs' cards together. */
+export const PONDERING_LIST: ListState = { ...EMPTY_LIST, filters: { categories: 'pondering' } };
+export const BOTH_KINDS_LIST: ListState = { ...EMPTY_LIST, filters: { categories: 'mutashabeh,pondering' } };
 
 /** The list to open a linked tree in: the one shown when it holds the tree, else no filters, else every kind of tree. Null when no list holds it. */
 export function listShowing(state: ListState, id: string, bookmarks: Bookmark[] = []): { list: ListState; piece: BranchPiece } | null {
-  for (const list of [state, EMPTY_LIST, ALL_KINDS_LIST]) {
+  for (const list of [state, EMPTY_LIST, PONDERING_LIST, ALL_KINDS_LIST]) {
     const piece = findPiece(branchList(list, bookmarks), id);
     if (piece) return { list, piece };
   }

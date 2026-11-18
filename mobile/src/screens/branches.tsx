@@ -13,7 +13,8 @@ import TreePager from '@/components/TreePager';
 import LoadingDots from '@/ui/LoadingDots';
 import BranchSearch from '@/components/BranchSearch';
 import { surahNames } from '@/lib/branches';
-import { aliasesOf, branchList, EMPTY_LIST, isFiltered, listShowing, openingIndex, type ListState } from '@/lib/branchList';
+import { aliasesOf, BOTH_KINDS_LIST, branchList, EMPTY_LIST, isFiltered, listShowing, openingIndex, tabOf, type ListState } from '@/lib/branchList';
+import { PAGE_KINDS } from '@shared/quran/branchSearch';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useIntent } from '@/lib/intent';
 import { loadPrefs, closeStudio, type Prefs } from '@/lib/growPlayer';
@@ -73,9 +74,10 @@ export default function BranchesScreen() {
     if (intent.query) change({ ...EMPTY_LIST, query: intent.query }, { id: intent.open, query: intent.query });
     else if (found) change(found.list, { id: found.piece.id });
     else if (intent.open || intent.saved) change({ ...EMPTY_LIST, saved: true }, { id: intent.open });
-    else if (intent.ayah) change({ ...EMPTY_LIST, ayah: intent.ayah });
-    else if (intent.surah) change({ ...EMPTY_LIST, surah: intent.surah });
-    else if (intent.juz) change({ ...EMPTY_LIST, range: { from: intent.juz, to: intent.juz } });
+    // An ayah's, a surah's or a juz's cards open with both tabs' cards, the books' and ours.
+    else if (intent.ayah) change({ ...BOTH_KINDS_LIST, ayah: intent.ayah });
+    else if (intent.surah) change({ ...BOTH_KINDS_LIST, surah: intent.surah });
+    else if (intent.juz) change({ ...BOTH_KINDS_LIST, range: { from: intent.juz, to: intent.juz } });
   });
   const at = useRef(0);
   const onIndex = useCallback((index: number) => { at.current = index; }, []);
@@ -83,7 +85,7 @@ export default function BranchesScreen() {
   useTabRetap('branches', () => {
     if (searching) return;
     if (at.current > 0 && pieces?.length) { writeJson('branches-place', { id: pieces[0].id }); setStart({ id: pieces[0].id }); setJumps(value => value + 1); }
-    else if (list.query || list.surah || list.ayah || isFiltered(list)) change(EMPTY_LIST);
+    else if (list.query || list.surah || list.ayah || isFiltered(list)) change({ ...EMPTY_LIST, filters: tabOf(list) ? { categories: list.filters.categories } : {} });
   });
   const openSearch = useCallback(() => setSearching(true), []);
   // A compare card's tree icon opens here with ?tree=<id>: that tree, in the list shown when it holds it.
@@ -108,6 +110,11 @@ export default function BranchesScreen() {
           {list.ayah ? <Chip on={false} label={`${surahNames[Number(list.ayah.split(':')[0])]} ${num(Number(list.ayah.split(':')[1]))}`} onClear={() => change({ ...list, ayah: undefined })} palette={palette} /> : null}
         </View> : null}
       </TopBar>
+      {/* The two kinds as tabs over the list: the books' cards first, then ours (owner 2026-11-18). */}
+      <View accessibilityRole="tablist" style={{ flexDirection: 'row', gap: 8, paddingHorizontal: 16, paddingBottom: 8 }}>
+        {PAGE_KINDS.map(kind => <Chip key={kind.id} role="tab" label={kind.ar} on={tabOf(list) === kind.id} palette={palette}
+          onPress={() => { if (tabOf(list) !== kind.id) change({ ...list, filters: { ...list.filters, categories: kind.id } }); }} />)}
+      </View>
       {pieces?.length ? <TreePager key={listKey} pieces={pieces} list={list} palette={palette} mode={mode} around={around} start={startIndex} onIndex={onIndex} onPull={openSearch} onOpen={openPart} />
         : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}>
           {pieces ? <Empty palette={palette} text={list.query ? `لا شجرة تطابق «${list.query}».` : list.saved && !isFiltered({ ...list, saved: false }) ? 'لا شجرة محفوظة بعد. احفظ شجرة بزر الحفظ تحتها أولًا.' : isFiltered(list) ? 'لا مواضع متشابهة تطابق التصفية.' : 'لا شجرة في هذا النطاق.'} /> : <LoadingDots />}

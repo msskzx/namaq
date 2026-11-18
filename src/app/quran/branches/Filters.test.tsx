@@ -27,7 +27,7 @@ it('keeps all edits pending and applies range, categories, differences and sorti
   fireEvent.click(screen.getByRole('button', { name: 'تصفية' }));
   fireEvent.change(screen.getByLabelText('من الجزء'), { target: { value: '25' } });
   fireEvent.change(screen.getByLabelText('إلى الجزء'), { target: { value: '30' } });
-  fireEvent.click(screen.getByRole('button', { name: 'متشابهات' }));
+  fireEvent.click(screen.getByRole('button', { name: 'تدبّر' }));
   fireEvent.click(screen.getByRole('button', { name: 'تقديم وتأخير' }));
   fireEvent.click(screen.getByRole('button', { name: 'الأكثر مواضع' }));
   await act(async () => { await vi.advanceTimersByTimeAsync(1000); });
@@ -37,7 +37,7 @@ it('keeps all edits pending and applies range, categories, differences and sorti
   expect(router.replace).toHaveBeenCalledTimes(1);
   const url = new URL(router.replace.mock.calls[0][0], 'http://localhost');
   expect(url.pathname).toBe('/quran/branches');
-  expect(Object.fromEntries(url.searchParams)).toEqual({ juzFrom: '25', juzTo: '30', m: 'cards', q: 'قال', categories: 'pondering', differences: 'order', sort: 'places' });
+  expect(Object.fromEntries(url.searchParams)).toEqual({ juzFrom: '25', juzTo: '30', m: 'cards', q: 'قال', categories: 'mutashabeh,pondering', differences: 'order', sort: 'places' });
   expect(document.querySelector('[popover]')?.getAttribute('data-open')).toBe('false');
   expect(screen.getByRole('button', { name: 'تصفية' }).getAttribute('aria-expanded')).toBe('false');
 });
@@ -90,11 +90,11 @@ it('discards unsubmitted edits when the sheet is closed and reopened', () => {
   render(<FilterButton range={{ from: 25, to: 30 }} view={{}} />);
   fireEvent.click(screen.getByRole('button', { name: 'تصفية' }));
   fireEvent.change(screen.getByLabelText('من الجزء'), { target: { value: '27' } });
-  fireEvent.click(screen.getByRole('button', { name: 'متشابهات' }));
+  fireEvent.click(screen.getByRole('button', { name: 'في كتب المتشابهات' }));
   fireEvent.click(screen.getByRole('button', { name: 'إغلاق' }));
   fireEvent.click(screen.getByRole('button', { name: 'تصفية' }));
   expect((screen.getByLabelText('من الجزء') as HTMLInputElement).value).toBe('٢٥');
-  expect(screen.getByRole('button', { name: 'متشابهات' }).getAttribute('aria-pressed')).toBe('true');
+  expect(screen.getByRole('button', { name: 'في كتب المتشابهات' }).getAttribute('aria-pressed')).toBe('true');
   expect(router.replace).not.toHaveBeenCalled();
 });
 

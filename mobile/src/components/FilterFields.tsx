@@ -8,6 +8,7 @@ import { isCompareBookmark } from '@shared/compareBookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import { JUZ_STARTS } from '@shared/quran/juz';
 import { SORTS, toggleFilter, type GroupFilters } from '@shared/quran/mutashabih/browse';
+import { PAGE_DEFAULT_KIND } from '@shared/quran/branchSearch';
 import { SUPPORTED_TAGS } from '@shared/quran/mutashabih/evidence';
 import Toggle from '@/ui/Toggle';
 import NumberPicker, { NumberList } from '@/ui/NumberPicker';
@@ -25,7 +26,7 @@ const UNITS: { value: FilterUnit; label: string }[] = [
   { value: 'surahs', label: 'سور محددة' },
   { value: 'juzs', label: 'أجزاء محددة' },
 ];
-const CATEGORIES: Record<string, string> = { mutashabeh: 'متشابهات', pondering: 'تدبّر', words: 'أشجار الكلمات' };
+const CATEGORIES: Record<string, string> = { mutashabeh: 'في كتب المتشابهات', pondering: 'تدبّر', words: 'أشجار الكلمات' };
 const SORT_LABELS = ['ترتيب المصحف', 'الأقرب', 'الأكثر مواضع', 'الأقل اختلافًا'];
 
 export function Group({ title, children, palette }: { title: string; children: React.ReactNode; palette: Palette }) {
@@ -57,7 +58,7 @@ export function FilterFields({ draft, setDraft, palette, compare = false, sort =
   const saved = shownBookmarks(bookmarks).filter(item => isCompareBookmark(item) === compare).length;
   const ranged = draft.unit === 'juz' || draft.unit === 'surah' || draft.unit === 'page';
   const setFilter = (key: keyof GroupFilters, value: string) => setDraft({ ...draft, filters: { ...draft.filters, [key]: value || undefined } });
-  const categories = draft.filters.categories ?? 'mutashabeh,pondering';
+  const categories = draft.filters.categories ?? PAGE_DEFAULT_KIND;
   const pickList = draft.unit === 'surahs' ? Array.from({ length: 114 }, (_, i) => ({ n: i + 1, label: `${num(i + 1)} ${surahNames[i + 1]}` }))
     : draft.unit === 'juzs' ? Array.from({ length: 30 }, (_, i) => ({ n: i + 1, label: `الجزء ${num(i + 1)}` })) : [];
   return (
@@ -96,7 +97,6 @@ export function FilterFields({ draft, setDraft, palette, compare = false, sort =
       <Group title="نوع المقارنة" palette={palette}>
         {Object.entries(CATEGORIES).map(([id, label]) => <Chip check key={id} label={label} on={categories.split(',').includes(id)} palette={palette}
           onPress={() => setFilter('categories', toggleFilter(categories, id) || 'none')} />)}
-        <Chip check label="في كتب المتشابه" on={draft.filters.cited === '1'} palette={palette} onPress={() => setFilter('cited', draft.filters.cited === '1' ? '' : '1')} />
       </Group>
       <Group title="نوع الاختلاف" palette={palette}>
         {Object.entries(SUPPORTED_TAGS).map(([id, label]) => <Chip check key={id} label={label.ar} on={(draft.filters.differences ?? '').split(',').includes(id)} palette={palette}

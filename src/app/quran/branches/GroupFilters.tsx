@@ -1,18 +1,19 @@
 'use client';
 
-import { ArrowDownWideNarrow, BookOpen } from 'lucide-react';
+import { ArrowDownWideNarrow } from 'lucide-react';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { SORTS, groupFilters, toggleFilter, type GroupFilters } from '@shared/quran/mutashabih/browse';
 import { SUPPORTED_TAGS } from '@shared/quran/mutashabih/evidence';
 import Chip from '@/components/common/Chip';
+import { PAGE_DEFAULT_KIND } from '@shared/quran/branchSearch';
 
 const categories = {
-  mutashabeh: { ar: 'متشابهات', en: 'Mutashabeh' },
+  mutashabeh: { ar: 'في كتب المتشابهات', en: 'In the mutashabih books' },
   pondering: { ar: 'تدبّر', en: 'Pondering' },
   words: { ar: 'أشجار الكلمات', en: 'Word trees' },
 };
 
-export default function GroupFilterControls({ filters: draft, onChange, sort = true, defaultCategories = 'mutashabeh,pondering' }: { filters: GroupFilters; onChange: (filters: GroupFilters) => void; sort?: boolean; defaultCategories?: string }) {
+export default function GroupFilterControls({ filters: draft, onChange, sort = true, defaultCategories = PAGE_DEFAULT_KIND }: { filters: GroupFilters; onChange: (filters: GroupFilters) => void; sort?: boolean; defaultCategories?: string }) {
   const { language } = useLanguage();
   const ar = language === 'ar';
   const set = (key: keyof GroupFilters, value: string) => onChange(groupFilters({ ...draft, [key]: value }));
@@ -28,7 +29,6 @@ export default function GroupFilterControls({ filters: draft, onChange, sort = t
         const active = selected.split(',').includes(id);
         return <Chip key={id} check on={active} onClick={() => set(group.key, toggleFilter(selected, id) || (group.key === 'categories' ? 'none' : ''))} label={ar ? label.ar : label.en} />;
       })}
-      {group.key === 'categories' && <Chip on={draft.cited === '1'} onClick={() => set('cited', draft.cited === '1' ? '' : '1')} label={<><BookOpen size={12} aria-hidden />{ar ? 'في كتب المتشابه' : 'In the books'}</>} />}
     </fieldset>)}
     {sort && <fieldset className="flex flex-wrap gap-1.5"><legend className="mb-1 text-sm">{ar ? 'الترتيب' : 'Sort'}</legend>
       {SORTS.map((order, index) => {

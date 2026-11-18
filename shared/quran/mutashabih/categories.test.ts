@@ -17,10 +17,9 @@ it('assigns every generated comparison exactly once in the reviewed manifest', (
   }
 });
 
-it('admits reviewed uncited parallels and keeps the broad interrogative tree optional', () => {
+it('admits reviewed uncited parallels as ours («تدبّر») and keeps the broad interrogative tree optional', () => {
   const rain = groups.find(group => groupHasId(group, 'group:22:63,35:27,39:21'))!;
-  expect(rain.categories).toContain('mutashabeh');
-  expect(rain.categories).toContain('pondering');
+  expect(rain.categories).toEqual(['pondering']);
   expect(rain.citations).toHaveLength(0);
   expect(groups.find(group => groupHasId(group, 'الم تر كيف'))?.categories).toEqual(['words']);
 });
@@ -43,4 +42,8 @@ it('puts short ayat that open alike on the default list (إن المجرمين �
   for (const pair of [['43:74', '54:47'], ['26:90', '50:31'], ['113:1', '114:1']]) {
     expect(pieces.some(piece => pair.every(key => piece.keys.includes(key))), pair.join(' ')).toBe(true);
   }
+});
+
+it('puts exactly the groups a book of mutashabih cites under «في كتب المتشابهات»', () => {
+  for (const group of groups) expect(group.categories?.includes('mutashabeh')).toBe(group.citations.length > 0);
 });

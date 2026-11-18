@@ -26,7 +26,7 @@ import { branchInventory, reviewPool } from '@shared/quran/branchInventory';
 import { branchVerdictFor, matrixOnly } from '@shared/quran/branchVerdicts';
 import { NextRequest } from 'next/server';
 import { GET as phrasesRoute } from '@/app/api/quran/branch-phrases/route';
-import { ALL_KINDS } from '@shared/quran/branchSearch';
+import { ALL_KINDS, PAGE_DEFAULT_KIND } from '@shared/quran/branchSearch';
 import { surahList } from '@/lib/quran/surahList';
 
 // Most tests read the tree, so they run as a reader who picked it; the matrix is the default for everyone else.
@@ -40,7 +40,7 @@ vi.mock('next/navigation', () => ({
   useSearchParams: () => params,
   redirect: (url: string) => { throw new Error(`REDIRECT ${url}`); },
 }));
-vi.mock('@/lib/quran/surahList', () => ({ surahList: vi.fn(async () => [{ number: 2, name: 'البقرة' }, { number: 43, name: 'الزخرف' }, { number: 78, name: 'النبأ' }]) }));
+vi.mock('@/lib/quran/surahList', () => ({ surahList: vi.fn(async () => [{ number: 2, name: 'البقرة' }, { number: 43, name: 'الزخرف' }, { number: 44, name: 'الدخان' }, { number: 78, name: 'النبأ' }]) }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'ar', languageLoaded: true }) }));
 
 afterEach(() => { cleanup(); preference.value = 'tree'; preference.connectors = undefined; });
@@ -56,7 +56,7 @@ const shortTree = (id: string) => {
   if (!tree) throw new Error(`Missing tree ${id}`);
   return `tree:${comparisonId(tree.occurrences).slice(4)}`;
 };
-const defaultGroups = (range: { from: number; to: number } | null = null) => browseGroups(groupData, { categories: 'mutashabeh,pondering' }, new Map(data.ayat.map(ayah => [ayah.key, ayah])), range);
+const defaultGroups = (range: { from: number; to: number } | null = null) => browseGroups(groupData, { categories: PAGE_DEFAULT_KIND }, new Map(data.ayat.map(ayah => [ayah.key, ayah])), range);
 /** A card whose ayat share no word shows as its matrix only, with no tree and so no tree steps. */
 const trunked = (tree: { occurrences: { start: number; end: number }[] }) => tree.occurrences.every(occurrence => occurrence.end > occurrence.start);
 /** The first tree that has a tree before and after it, all three with a trunk. */
@@ -300,7 +300,8 @@ describe('Quran branch trees', () => {
     expect(screen.getAllByRole('link', { name: 'عرض هذا الجزء وحده' }).some(link => link.getAttribute('href') === href)).toBe(true);
   });
   it('shows the فذرهم passages together once in the reported range and surah', async () => {
-    render(await follow({ juzFrom: '25', juzTo: '30', s: '43', q: 'فذرهم يخوضوا ويلعبوا' }));
+    // Both tabs: the فذرهم card is one of ours, not a book's.
+    render(await follow({ juzFrom: '25', juzTo: '30', s: '43', q: 'فذرهم يخوضوا ويلعبوا', categories: 'mutashabeh,pondering' }));
     const tree = screen.getByRole('region', { name: 'شجرة العبارات المشتركة' });
     expect(within(tree).getAllByText(/^فَذَرۡهُمۡ/).filter(element => element.closest('[data-node]') && !element.closest('li, [data-tree-neighbour]'))).toHaveLength(1);
     expect(within(tree).queryByText('ف')).toBeNull();
@@ -397,19 +398,19 @@ describe('Quran branch trees', () => {
   });
 
   it('browses the trees a surah filter leaves from its first tree, keeping the filter as a chip', async () => {
-    // al-Zukhruf: its first cards are trees (al-Baqara now opens on a book's matrix-only card, which has no tree steps).
-    const first = await target({ s: '43' });
-    expect(new URL(first, 'http://localhost').searchParams.get('s')).toBe('43');
+    // al-Dukhan: its first cards are trees (other surahs open on a book's matrix-only card, which has no tree steps).
+    const first = await target({ s: '44' });
+    expect(new URL(first, 'http://localhost').searchParams.get('s')).toBe('44');
     render(await open(paramsOf(first)));
     let steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });
     expect(within(steps).getByRole('button', { name: 'الشجرة السابقة' }).hasAttribute('disabled')).toBe(true);
     expect(screen.getByRole('link', { name: 'اعرض بطاقات الآيات' })).toBeTruthy();
-    const total = branchInventory({}, null).filter(piece => piece.keys.some(key => key.startsWith('43:'))).length;
+    const total = branchInventory({ categories: PAGE_DEFAULT_KIND }, null).filter(piece => piece.keys.some(key => key.startsWith('44:'))).length;
     expect(screen.getByRole('progressbar').getAttribute('value')).toBe('1');
     expect(screen.getByRole('progressbar').getAttribute('max')).toBe(String(total));
     expect(new URL(screen.getByRole('link', { name: 'إزالة السورة' }).getAttribute('href')!, 'http://localhost').searchParams.has('s')).toBe(false);
     const second = within(steps).getByRole('link', { name: 'الشجرة التالية' }).getAttribute('href')!;
-    expect(new URL(second, 'http://localhost').searchParams.get('s')).toBe('43');
+    expect(new URL(second, 'http://localhost').searchParams.get('s')).toBe('44');
     cleanup();
     render(await open(paramsOf(second)));
     steps = screen.getByRole('navigation', { name: 'التنقل بين الأشجار' });

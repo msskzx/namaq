@@ -23,7 +23,7 @@ export type QuizList = { filters: GroupFilters; range: JuzRange | null; saved: b
 /** The kinds of question a solo quiz mixes (owner, 2026-11-13): the trees and the Quran choice kinds (shared/quiz/kinds.ts). */
 export const SOLO_KINDS: QuizTopic[] = ['BRANCHES', ...CHOICE_TOPICS];
 export type SoloSettings = { kinds: QuizTopic[]; list: QuizList; difficulty: Difficulty; leaves: number; length: number };
-export const DEFAULT_LIST: QuizList = { filters: { categories: 'mutashabeh' }, range: null, saved: false };
+export const DEFAULT_LIST: QuizList = { filters: { categories: 'mutashabeh,pondering' }, range: null, saved: false };
 export const DEFAULT_SOLO: SoloSettings = { kinds: ['BRANCHES'], list: DEFAULT_LIST, difficulty: DEFAULT_DIFFICULTY, leaves: DEFAULT_LEAVES, length: 5 };
 
 const juz = (value: unknown, fallback: number) => Number.isInteger(value) && (value as number) >= 1 && (value as number) <= 30 ? value as number : fallback;
