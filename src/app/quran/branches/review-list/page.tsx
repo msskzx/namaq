@@ -7,12 +7,12 @@ import ReviewList from './ReviewList';
 /** TEMPORARY (2026-11-17, not for main): every tree in open-audits/trees-like-musa.md on one page, for the owner to scroll. */
 export const dynamic = 'force-dynamic';
 
-const GROUPS = ['T', 'N', 'S'] as const;
+const GROUPS = ['L', 'K'] as const;
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ g?: string }> }) {
   if (process.env.NODE_ENV === 'production' && !process.env.REVIEW_LIST) notFound();
   const g = (await searchParams).g;
-  const group = GROUPS.find(name => name === g) ?? 'T';
+  const group = GROUPS.find(name => name === g) ?? 'L';
   const pool = new Map(branchInventory(reviewFilters({}), null, true).map(piece => [piece.id, piece]));
   const ids = (tiers as Record<string, string[]>)[group];
   const trees = ids.flatMap(id => { const piece = pool.get(id); return piece ? [{ ...treePreviewOf(piece), matrixOnly: false }] : []; });
