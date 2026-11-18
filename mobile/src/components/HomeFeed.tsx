@@ -619,6 +619,11 @@ function HadithPost({ day, slot, palette }: { day: number; slot: number; palette
       </>}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
         <Text style={{ color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right' }}>{entry.text}</Text>
+      </View>
+    </Post>
+  );
+}
+
 /** The lines of a term's definition a card shows before its page. */
 const TERM_LINES = 5;
 

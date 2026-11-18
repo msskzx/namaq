@@ -49,6 +49,8 @@ describe('home feed cards', () => {
     expect(hadithOfSlot(28, 11, 4)).toBe((hadithOfSlot(28, 10, 4) + 1) % 28);
     expect(new Set(Array.from({ length: 28 }, (_, day) => hadithOfSlot(28, day, 4))).size).toBe(28);
     expect(hadithOfSlot(0, 3, 4)).toBe(-1);
+  });
+
   it('puts a balagha term on every fourth batch from the third, never with the books, a sira story or a battle\'s moment', () => {
     expect([0, 1, 2, 3, 4, 5, 6, 7].filter(hasTermCard)).toEqual([2, 6]);
     for (let slot = 0; slot < 20; slot++) expect(hasTermCard(slot) && (hasBooksCard(slot) || hasSiraCard(slot) || hasMomentCard(slot))).toBe(false);
