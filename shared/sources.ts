@@ -279,8 +279,8 @@ export const SOURCES: Source[] = [
     title: { ar: 'نصوص المجمع لسبع روايات', en: 'The Complex’s texts of seven riwayat' },
     edition: 'قالون، ورش، البزي، قنبل، الدوري، السوسي، شعبة', link: { url: 'https://github.com/fawazahmed0/quran-api', label: 'fawazahmed0/quran-api' },
     licence: {
-      ar: 'منشورة في الملك العام (Unlicense). تُستعمل لتصحيح الموضع الذي تختلف فيه بيانات القراءات فقط.',
-      en: 'Released into the public domain (Unlicense). Used only to settle places where the readings data disagrees.',
+      ar: 'منشورة في الملك العام (Unlicense). تُستعمل لتصحيح الموضع الذي تختلف فيه بيانات القراءات، ولنقل تشكيل القراءة كاملًا من رواية تقرأ بها.',
+      en: 'Released into the public domain (Unlicense). Used to settle places where the readings data disagrees, and to copy a reading\'s full tashkeel from a riwaya that reads it.',
     },
     uses: [USE.qiraat],
   },

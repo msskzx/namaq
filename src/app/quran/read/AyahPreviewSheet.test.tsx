@@ -19,7 +19,7 @@ describe('the readings sheet', () => {
   it("lists each differing word, Hafs's reading first, with who reads each and the source", () => {
     render(<AyahPreviewSheet preview={{ kind: 'readings', key: '2:85', qiraat: qiraatOf('2:85') }} onClose={vi.fn()} />);
     expect(screen.getByText('تَعۡمَلُونَ')).toBeTruthy();
-    expect(screen.getByText('يعملون')).toBeTruthy();
+    expect(screen.getByText('يَعۡمَلُونَ')).toBeTruthy();
     expect(screen.getAllByText('الباقون').length).toBeGreaterThan(0);
     expect(screen.getByText('المصدر: الموسوعة القرآنية').getAttribute('href')).toBe('https://quranpedia.net');
   });

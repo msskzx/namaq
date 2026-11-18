@@ -6,6 +6,8 @@ import corrections from './qiraatCorrections.json';
 import type { MushafPage } from '../../shared/quran/readerPage';
 import { farshGroups, sameForm, type DumpReading } from './qiraatFarsh';
 import { madinaSpelling } from './madinaSpelling';
+import { fullyVowelled, officialForm } from './qiraatVowels';
+import handVowels from './qiraatVowels.json';
 
 // docs/plans/quran-qiraat.md: the word differences (farsh) of the ten readers per ayah, from Quranpedia's qira'at dump,
 // anchored to the words of the bundled Hafs mushaf. Writes shared/data/quran/qiraat.json and a review list.
@@ -90,6 +92,8 @@ const occurs = (words: string[], form: string) => {
 type Out = { at: [number, number]; readings: { text: string; rawis: number[] }[] };
 const ayat: Record<string, Out[]> = {};
 const review: string[] = [];
+// The dump's own words on each reading (بضم الياء وفتح الكاف…), for vowelling by hand what it writes bare.
+const described = new Map<string, string[]>();
 let positions = 0;
 for (const entry of dump.data) {
   for (const word of entry.qiraat) {
@@ -126,6 +130,7 @@ for (const entry of dump.data) {
     const named = new Set(groups.flatMap(g => g.rawis));
     if (named.size < 20) review.push(`- ${place.key} «${hafsText}»: riwayat ${Array.from({ length: 20 }, (_, i) => i + 1).filter(r => !named.has(r)).join(', ')} not named`);
     if (place.key !== `${entry.surah}:${entry.ayah}`) review.push(`- ${where}: moved to ${place.key}`);
+    described.set(`${place.key}:${place.at[0]}`, word.qiraat.map(q => `${q.qiraa_text.trim()} (${q.rewayat.map(r => r.rawi.id).sort((x, y) => x - y).join(',')})`));
     (ayat[place.key] ??= []).push({
       at: place.at,
       readings: groups.map(g => ({ text: g.text, rawis: g.rawis })),
@@ -169,11 +174,59 @@ for (const { ayah, replacement } of corrections as { ayah: string; replacement: 
   if (list.some((w, i) => i && w.at[0] <= list[i - 1].at[1])) throw new Error(`Qira'at words overlap in ${ayah}`);
 }
 
+// Every reading other than the page's own gets its full tashkeel here (qiraatVowels.ts): from the King Fahd text of a
+// riwaya in its group, or else from qiraatVowels.json, vowelled by hand and checked by a second reviewer.
+const hand: Record<string, string> = handVowels;
+// An alif never takes the sukun ۡ: a silent alif written ْ, as the page writes it, is read by madinaSpelling as a sukun.
+// The page writes آ as an alif and its madda (ا + ٓ), never as the one letter آ.
+const spell = (text: string) => madinaSpelling(text).replace(/ا\u06E1/g, 'ا\u0652').replace(/\u0622/g, 'ا\u0653');
+const unvowelled: string[] = [];
+const handUsed = new Set<string>();
+let fromOfficial = 0;
+for (const [key, list] of Object.entries(ayat)) {
+  for (const word of list) {
+    // Each reading is stored in the Madina page's spelling, the form the screens show.
+    const spelled = word.readings.map(reading => ({ ...reading, text: spell(reading.text) }));
+    word.readings = spelled.map((reading, i) => {
+      if (!i) return reading;
+      const id = `${key}:${word.at[0]}:${reading.text}`;
+      if (hand[id]) handUsed.add(id);
+      if (hand[id]?.startsWith('KEEP')) return reading;
+      if (hand[id]) return { ...reading, text: spell(hand[id]) };
+      if (fullyVowelled(reading.text)) return reading;
+      const others = spelled.filter(r => r !== reading).map(r => r.text);
+      const copy = officialForm(reading.text, reading.rawis, others, official, key, word.at[0]);
+      if (copy) { fromOfficial++; return { ...reading, text: copy.text }; }
+      unvowelled.push(JSON.stringify({ id, hafs: spelled[0].text, rawis: reading.rawis, dump: described.get(`${key}:${word.at[0]}`) ?? [] }));
+      return reading;
+    });
+    // Once vowelled, a reading the dump set apart only by performance (naql, sakt, a softened hamza) reads as another:
+    // its riwayat join that reading, and a word left with one reading is no difference at all.
+    const merged: typeof word.readings = [];
+    for (const reading of word.readings) {
+      // Pause signs aside (ۖ ۗ ۚ…); the small sin ۜ of وَيَبۡصُۜطُ is part of the reading. Two readings one riwaya both reads
+      // (Hafs's ضَعۡف and ضُعۡف at 30:54) stay apart.
+      const bare = (text: string) => text.normalize('NFC').replace(/[\u06D6-\u06DB]/g, '');
+      const same = merged.find(m => bare(m.text) === bare(reading.text) && !m.rawis.some(r => reading.rawis.includes(r)));
+      if (!same) { merged.push(reading); continue; }
+      same.rawis = [...new Set([...same.rawis, ...reading.rawis])].sort((a, b) => a - b);
+      review.push(`- ${key} «${reading.text}»: the same as another reading once vowelled, merged`);
+    }
+    word.readings = merged;
+  }
+  ayat[key] = list.filter(word => word.readings.length > 1);
+  if (!ayat[key].length) delete ayat[key];
+}
+console.log(`vowelled from the King Fahd texts ${fromOfficial}, by hand ${handUsed.size}, still unvowelled ${unvowelled.length}`);
+writeFileSync(join(tmpdir(), 'qiraat-unvowelled.jsonl'), `${unvowelled.join('\n')}\n`);
+const unused = Object.keys(hand).filter(id => !handUsed.has(id));
+if (unused.length) throw new Error(`qiraatVowels.json entries that match no reading: ${unused.join(', ')}`);
+if (unvowelled.length) throw new Error(`${unvowelled.length} readings not fully vowelled, listed in ${join(tmpdir(), 'qiraat-unvowelled.jsonl')}: vowel them in qiraatVowels.json`);
+
 const order = (key: string) => key.split(':').map(Number);
 const sorted = Object.fromEntries(Object.entries(ayat)
   .sort(([a], [b]) => order(a)[0] - order(b)[0] || order(a)[1] - order(b)[1])
-  // Each reading is stored in the Madina page's spelling, the form the screens show.
-  .map(([key, list]) => [key, list.sort((x, y) => x.at[0] - y.at[0]).map(word => ({ ...word, readings: word.readings.map(r => ({ ...r, text: madinaSpelling(r.text) })) }))]));
+  .map(([key, list]) => [key, list.sort((x, y) => x.at[0] - y.at[0])]));
 const count = Object.values(sorted).reduce((n, list) => n + list.length, 0);
 writeFileSync(OUT, `${JSON.stringify({
   source: { name: 'الموسوعة القرآنية', url: 'https://quranpedia.net', dump: URL, version: VERSION },
