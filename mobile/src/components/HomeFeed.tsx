@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { bookmarkKind } from '@shared/bookmarkKind';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
@@ -85,6 +85,7 @@ import { type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
 import Card from '@/ui/Card';
+import { openExternal } from '@/ui/ExternalLink';
 
 type IconType = (props: LucideProps) => React.ReactNode;
 
@@ -552,8 +553,12 @@ function MomentPost({ day, slot, palette }: { day: number; slot: number; palette
   const { battle, moment, n } = item;
   return (
     <Post palette={palette} head={<PostHead Icon={Swords} title={`من ${battle.name}`} sub={battleLine(battle)} palette={palette}
-      open={{ onPress: () => toTab({ pathname: '/battle', params: { slug: battle.slug } }), label: `افتح ${battle.name}` }} />}>
-      <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}><Moment moment={moment} n={n} palette={palette} /></View>
+      open={{ onPress: () => toTab({ pathname: '/battle', params: { slug: battle.slug } }), label: `افتح ${battle.name}` }} />}
+      actions={<>
+        <Action Icon={Swords} label={`افتح ${battle.name}`} onPress={() => toTab({ pathname: '/battle', params: { slug: battle.slug } })} palette={palette} />
+        <Action Icon={ExternalLinkIcon} label={`المصدر: ${moment.cite}`} onPress={() => openExternal(moment.url)} palette={palette} />
+      </>}>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}><Moment moment={moment} n={n} palette={palette} plain /></View>
     </Post>
   );
 }

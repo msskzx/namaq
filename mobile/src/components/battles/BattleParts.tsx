@@ -60,13 +60,15 @@ export function People({ people, palette }: { people: AppPersonLink[]; palette: 
 }
 
 /** A numbered moment: our few words naming it, the source's words, where the source says the report is found, and its page. */
-export function Moment({ moment, n, palette }: { moment: AppMoment; n: number; palette: Palette }) {
+export function Moment({ moment, n, palette, plain }: { moment: AppMoment; n: number; palette: Palette;
+  /** In a feed card the source is plain text, and its link is a button under the card (owner, 2026-11-18). */
+  plain?: boolean }) {
   return (
     <Step n={n} palette={palette}>
       <Text style={{ color: palette.ink, fontSize: 18, fontWeight: '700', textAlign: 'right' }}>{moment.title}</Text>
       <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>«{moment.quote}»</Text>
       <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>
-        {moment.grading} · <ExternalLink url={moment.url} color={palette.muted} size={13}>{moment.cite}</ExternalLink>
+        {moment.grading} · {plain ? moment.cite : <ExternalLink url={moment.url} color={palette.muted} size={13}>{moment.cite}</ExternalLink>}
       </Text>
       {moment.people.length ? <People people={moment.people} palette={palette} /> : null}
     </Step>
