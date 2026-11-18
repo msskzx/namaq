@@ -68,26 +68,21 @@ function Quote({ fact, palette }: { fact: PersonFact; palette: Palette }) {
 /** A labelled line: the label small on the left, the value on the right («أبوه  العوام بن خويلد»). */
 function Line({ label, palette, children }: { label: string; palette: Palette; children: React.ReactNode }) {
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 12, paddingVertical: 6, borderBottomWidth: 1, borderColor: palette.rule }}>
+    <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 12 }}>
       <View style={{ flex: 1 }}>{children}</View>
       <Text style={{ color: palette.muted, fontSize: 13, paddingTop: 4 }}>{label}</Text>
     </View>
   );
 }
 
-/** Names in a line: each one with a page in the app opens it. */
+/** Names in a line: each one with a page in the app is a button that opens it, the others plain text. */
 function Names({ links, palette }: { links: PersonLink[]; palette: Palette }) {
   return (
-    <Text style={body(palette)}>
-      {links.map((link, i) => (
-        <Text key={link.slug}>
-          {i > 0 ? ' · ' : ''}
-          {link.inApp
-            ? <Text accessibilityRole="link" onPress={() => openPerson(link.slug)} style={{ color: palette.accent }}>{personName(link)}</Text>
-            : personName(link)}
-        </Text>
-      ))}
-    </Text>
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 6 }}>
+      {links.map(link => (link.inApp
+        ? <Button key={link.slug} variant="plain" label={personName(link)} onPress={() => openPerson(link.slug)} />
+        : <Text key={link.slug} style={body(palette)}>{personName(link)}</Text>))}
+    </View>
   );
 }
 
@@ -131,7 +126,7 @@ export default function PersonScreen() {
   const back = () => (router.canGoBack() ? router.back() : toTab('/tarajim'));
   if (!person) return <View style={{ flex: 1, backgroundColor: palette.paper }}><TopBar back={back} /></View>;
   const tree = () => router.push({ pathname: '/nasab', params: { slug: person.slug } });
-  const names = [...person.kunya.map(fact => ({ label: 'كنيته', fact })), ...person.laqab.map(fact => ({ label: 'لقبه', fact }))];
+  const names = [...person.kunya.map(fact => ({ label: `كنيت${suffixOf(person)}`, fact })), ...person.laqab.map(fact => ({ label: `لقب${suffixOf(person)}`, fact }))];
   const life = [...person.islamAge, ...person.battles, ...person.absentFrom, ...person.died.year, ...person.died.month, ...person.died.age, ...person.died.place];
   const tieList = ties(person);
   const { book, part } = volumeLabel(person.entry.volume);
@@ -164,7 +159,7 @@ export default function PersonScreen() {
         )}
 
         {names.length > 0 && (
-          <Part n={++n} title="كنيته ولقبه" palette={palette}>
+          <Part n={++n} title={[person.kunya.length ? 'كنيت' : '', person.laqab.length ? 'لقب' : ''].filter(Boolean).map(w => w + suffixOf(person)).join(' و')} palette={palette}>
             {names.map(({ label, fact }, i) => (
               <Line key={i} label={label} palette={palette}><Quote fact={fact} palette={palette} /></Line>
             ))}

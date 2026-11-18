@@ -21,7 +21,7 @@ test('the tarajim tab lists the converted people, filters by title, and opens a 
   await expect(page.getByRole('heading', { name: /نسبها/ })).toBeVisible();
   await expect(page.getByRole('heading', { name: /صلاتها/ })).toBeVisible();
   // Her son has a page too: his name opens it.
-  await page.getByRole('link', { name: 'الزبير بن العوام' }).click();
+  await page.getByRole('button', { name: 'الزبير بن العوام' }).click();
   await expect(page).toHaveURL(/slug=az-zubayr-ibn-al-awwam/);
   await expect(page.getByRole('heading', { name: /مناقبه/ })).toBeVisible();
 });

@@ -43,3 +43,14 @@ export function insertAt(tops: readonly number[], screenBottom: number): number 
   const at = tops.findIndex(top => top >= screenBottom);
   return at === -1 ? tops.length : at;
 }
+
+/** The tarajim card («من التراجم», owner 2026-11-18) comes on every fourth batch from the fourth. */
+export const hasTarajimCard = (slot: number) => slot % 4 === 3;
+
+/** The virtue a tarajim card shows, the same all day: every person's virtues in turn, the next card the next one. */
+export function tarajimOfSlot<P extends { slug: string; virtues: readonly unknown[] }>(people: readonly P[], day: number, slot: number) {
+  const all = people.flatMap(person => person.virtues.map((_, index) => ({ person, index })));
+  if (all.length === 0) return null;
+  const at = (((day * 7 + Math.floor(slot / 4)) % all.length) + all.length) % all.length;
+  return all[at];
+}

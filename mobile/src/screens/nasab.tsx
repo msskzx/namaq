@@ -9,7 +9,6 @@ import Card from '@/ui/Card';
 import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
 import Sheet from '@/ui/Sheet';
-import { Tap } from '@/ui/Tap';
 import { usePalette, type Palette } from '@/lib/theme';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { toTab } from '@/lib/ways';
@@ -17,18 +16,16 @@ import { findPerson, PEOPLE, personName, PROPHET, unvowelled } from '@/lib/taraj
 
 const LINE = 1.5;
 
-/** A father's name in the tree; a picked person is framed in the accent and opens his page. */
+/** A father's name in the tree, in the one card; a picked person's is picked and opens his page. */
 function Box({ node, palette }: { node: NasabNode; palette: Palette }) {
   const slug = node.people[0];
   const name = unvowelled(node.name) + (slug === PROPHET ? ' ﷺ' : '');
-  const box = {
-    minWidth: 96, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 12, borderWidth: slug ? 2 : 1,
-    borderColor: slug ? palette.accent : palette.rule, backgroundColor: slug ? palette.paperDeep : palette.card, alignItems: 'center' as const,
-  };
-  const label = <Text style={{ color: palette.ink, fontSize: 17 }}>{name}</Text>;
-  return slug
-    ? <Tap onPress={() => router.push({ pathname: '/person', params: { slug } })} accessibilityRole="link" accessibilityLabel={name} style={box}>{label}</Tap>
-    : <View style={box}>{label}</View>;
+  return (
+    <Card palette={palette} pad={[6, 12]} picked={!!slug} accessibilityRole={slug ? 'link' : undefined} accessibilityLabel={slug ? name : undefined}
+      onPress={slug ? () => router.push({ pathname: '/person', params: { slug } }) : undefined}>
+      <Text style={{ color: slug ? palette.accent : palette.ink, fontSize: 16, textAlign: 'center' }}>{name}</Text>
+    </Card>
+  );
 }
 
 /**
@@ -43,9 +40,9 @@ function Branch({ node, palette }: { node: NasabNode; palette: Palette }) {
       {node.children.length > 0 && <View style={stem} />}
       <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
         {node.children.map((child, i) => (
-          <View key={child.key} style={{ alignItems: 'center', paddingHorizontal: 6 }}>
+          <View key={child.key} style={{ alignItems: 'center', paddingHorizontal: 4 }}>
             {node.children.length > 1 && (
-              <View style={{ flexDirection: 'row', alignSelf: 'stretch', height: LINE, marginHorizontal: -6 }}>
+              <View style={{ flexDirection: 'row', alignSelf: 'stretch', height: LINE, marginHorizontal: -4 }}>
                 <View style={{ flex: 1, backgroundColor: i === 0 ? 'transparent' : palette.muted }} />
                 <View style={{ flex: 1, backgroundColor: i === node.children.length - 1 ? 'transparent' : palette.muted }} />
               </View>
@@ -97,11 +94,8 @@ export default function NasabScreen() {
           return (
             <View key={root.key} style={{ gap: 10 }}>
               {above.length > 0 && (
-                <Tap onPress={() => setOpen(!open)} accessibilityRole="button" accessibilityState={{ expanded: open }}>
-                  <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'center' }}>
-                    ↑ {(open ? above : above.slice(0, 3)).map(unvowelled).join(' · ')}{!open && above.length > 3 ? ' …' : ''}
-                  </Text>
-                </Tap>
+                <Button variant="plain" onPress={() => setOpen(!open)}
+                  label={`↑ ${(open ? above : above.slice(0, 3)).map(unvowelled).join(' · ')}${!open && above.length > 3 ? ' …' : ''}`} />
               )}
               <ScrollView horizontal contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
                 <Branch node={start} palette={palette} />
@@ -129,10 +123,7 @@ export default function NasabScreen() {
       <Sheet open={adding} onClose={() => setAdding(false)} palette={palette}>
         <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 8, paddingBottom: 16 }}>
           {PEOPLE.filter(p => !picked.includes(p.slug)).map(p => (
-            <Tap key={p.slug} onPress={() => { setPicked([...picked, p.slug]); setAdding(false); }} accessibilityRole="button"
-              style={{ height: 48, justifyContent: 'center', paddingHorizontal: 12 }}>
-              <Text style={{ color: palette.ink, fontSize: 17, textAlign: 'right' }}>{personName(p)}</Text>
-            </Tap>
+            <Button key={p.slug} variant="plain" label={personName(p)} onPress={() => { setPicked([...picked, p.slug]); setAdding(false); }} />
           ))}
         </ScrollView>
       </Sheet>

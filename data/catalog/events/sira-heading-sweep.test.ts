@@ -100,9 +100,9 @@ describe('what the heading sweep added to the catalog', () => {
   // it to one verse would drop two the chapter names.
   it('records Surah ar-Rum verse by verse for Abu Bakr', () => {
     expect(abuBakr.ayat).toEqual([
-      { surah: 30, ayah: 2, claims: ['abu-bakr/ayah-ar-rum'] },
-      { surah: 30, ayah: 3, claims: ['abu-bakr/ayah-ar-rum'] },
-      { surah: 30, ayah: 4, claims: ['abu-bakr/ayah-ar-rum'] },
+      { surah: 30, ayah: 2, kind: 'IN_STORY', claims: ['abu-bakr/ayah-ar-rum'] },
+      { surah: 30, ayah: 3, kind: 'IN_STORY', claims: ['abu-bakr/ayah-ar-rum'] },
+      { surah: 30, ayah: 4, kind: 'IN_STORY', claims: ['abu-bakr/ayah-ar-rum'] },
     ]);
   });
 
