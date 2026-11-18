@@ -181,11 +181,23 @@ describe('validateCatalog', () => {
   });
 
   it('checks an ayah reference for a surah and ayah that exist', () => {
-    const subject = person({ ayat: [{ surah: 115, ayah: 0, claims: ['pilot/one'] }] });
+    const subject = person({ ayat: [{ surah: 115, ayah: 0, kind: 'DESCRIBES', claims: ['pilot/one'] }] });
 
     expect(validateCatalog(catalog({ people: [subject] }), known)).toEqual([
       { path: 'people/someone.ayat.115:0', message: 'no surah 115' },
       { path: 'people/someone.ayat.115:0', message: 'no ayah 0' },
+    ]);
+  });
+
+  it('keeps revealedAbout to links of kind REVEALED_ABOUT', () => {
+    const subject = person({ ayat: [
+      { surah: 24, ayah: 11, kind: 'DESCRIBES', claims: ['pilot/one'], revealedAbout: {} },
+      { surah: 29, ayah: 8, kind: 'REVEALED_ABOUT', claims: ['pilot/one'] },
+    ] });
+
+    expect(validateCatalog(catalog({ people: [subject] }), known)).toEqual([
+      { path: 'people/someone.ayat.24:11', message: 'revealedAbout goes with kind REVEALED_ABOUT, and only with it' },
+      { path: 'people/someone.ayat.29:8', message: 'revealedAbout goes with kind REVEALED_ABOUT, and only with it' },
     ]);
   });
 

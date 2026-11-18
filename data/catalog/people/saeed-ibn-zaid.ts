@@ -47,7 +47,7 @@ const saeedIbnZaid = {
     // Carried from the old seed, which gave him al-Tawbah 100 uncited. The
     // entry never names this verse for him; it addresses السابقون الأولون
     // collectively rather than singling him out.
-    { surah: 9, ayah: 100, claims: legacyUnreviewed },
+    { surah: 9, ayah: 100, kind: 'DESCRIBES', claims: legacyUnreviewed },
   ],
 
   relations: [
