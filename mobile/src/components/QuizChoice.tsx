@@ -5,6 +5,7 @@ import { Text } from '@/ui/Text';
 import Button from '@/ui/Button';
 import { alikeDiff, FORGOT, recited, RECITED, type ChoiceQuestion } from '@shared/quiz/choiceKinds';
 import QuizPage from './QuizPage';
+import QuranWords from './quran/text/QuranWords';
 import type { WriteAsk } from '@shared/quiz/score';
 import type { PenRule } from '@shared/quran/writeAyah';
 import { num } from '@shared/quran/arabicNumber';
@@ -62,7 +63,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
       ) : question.quran && (
         <View style={{ marginHorizontal: 16, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, padding: 16 }}>
           <Text style={{ fontFamily: QURAN_FONT, fontSize: SIZE, lineHeight: SIZE * 1.9, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
-            <Words words={question.quran} marked={diff?.a} palette={palette} />
+            <Words words={question.quran} marked={diff?.a ?? question.marked} palette={palette} />
             {question.number !== undefined && <Text style={{ color: palette.accent }}>{' '}{num(question.number)}</Text>}
             {question.reveal && (revealed ? <Text style={{ color: palette.accent }}>{' '}<Words words={question.reveal} palette={palette} /></Text> : ' …')}
           </Text>
@@ -76,10 +77,18 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
             const wrong = answered && choice.value === picked && !right;
             const color = right ? palette.green : wrong ? palette.accent : palette.ink;
             return (
-              <Pressable key={choice.value} disabled={answered || !onPick} onPress={() => onPick?.(choice.value)} accessibilityRole="button" accessibilityLabel={choice.labelArabic}
+              <Pressable key={choice.value} disabled={answered || !onPick} onPress={() => onPick?.(choice.value)} accessibilityRole="button" accessibilityLabel={answered && question.explains?.[choice.value] ? `${choice.labelArabic} معنى ${question.explains[choice.value].quote}، ${question.explains[choice.value].where}` : choice.labelArabic}
                 accessibilityState={{ selected: choice.value === picked, disabled: answered }}
                 style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderWidth: right || wrong ? 1.5 : 1, borderColor: right || wrong ? color : palette.rule, ...CARD, paddingVertical: 12, paddingHorizontal: 16, backgroundColor: pressed ? palette.paperDeep : 'transparent' })}>
-                <Text style={{ color, fontSize: 19, fontWeight: right ? '700' : '400' }}>{choice.labelArabic}</Text>
+                <View style={{ flexShrink: 1, gap: 2 }}>
+                  <Text style={{ color, fontSize: 19, fontWeight: right ? '700' : '400' }}>{choice.labelArabic}</Text>
+                  {/* What a choice is, once answered («معنى «فراتا»، المرسلات ٢٧»). */}
+                  {answered && question.explains?.[choice.value] && (
+                    <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>
+                      {'معنى «'}<QuranWords>{question.explains[choice.value].quote}</QuranWords>{`»، ${question.explains[choice.value].where}`}
+                    </Text>
+                  )}
+                </View>
                 {right ? <Check size={20} color={color} /> : wrong ? <X size={20} color={color} /> : null}
               </Pressable>
             );

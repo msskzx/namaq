@@ -5,7 +5,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Text } from '@/ui/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
-import { ArrowLeft, ArrowLeftRight, BookOpen, Bookmark, Check, EyeOff, Layers, LightbulbOff, ListTree, NotebookPen, History, Play, Pointer, Search, Send, Sparkles, TableOfContents, TextSearch } from 'lucide-react-native';
+import { ArrowLeft, ArrowLeftRight, BookA, BookOpen, Bookmark, Check, EyeOff, Layers, LightbulbOff, ListTree, NotebookPen, History, Play, Pointer, Search, Send, Sparkles, TableOfContents, TextSearch } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayahBookmarkId, ayahHref, clearForgotten, markAyah, markWord, wordMarkKey, readAyahMarks, subscribeAyahMarks, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
@@ -25,6 +25,7 @@ import NoteSheet from './NoteSheet';
 import WordSheet from './WordSheet';
 import IrabSheet, { type IrabTarget } from './IrabSheet';
 import BalaghaSheet from './BalaghaSheet';
+import GharibSheet, { type GharibTarget } from './GharibSheet';
 import TreeIcon from './TreeIcon';
 import ActButton from '@/ui/ActButton';
 import FloatingMenu from '@/ui/FloatingMenu';
@@ -101,6 +102,7 @@ export default function Reader() {
   const [wordLemmas, setWordLemmas] = useState<number[] | null>(null);
   const [irab, setIrab] = useState<IrabTarget | null>(null);
   const [balagha, setBalagha] = useState<string | null>(null);
+  const [gharib, setGharib] = useState<GharibTarget | null>(null);
   const [tools, setTools] = useState(false);
   const [sheet, setSheet] = useState<'index' | null>(null);
   const [actions, setActions] = useState<{ key: string; x: number; y: number; lemmas: number[]; word?: number } | null>(null);
@@ -436,6 +438,9 @@ export default function Reader() {
           {/* The pressed word's i'rab (owner, 2026-11-15). */}
           {actions.word !== undefined && <ActButton Icon={ListTree} label="إعراب الكلمة" name="الإعراب" palette={palette}
             onPress={() => { const { key, word } = actions; setActions(null); setIrab({ key, word: word! }); }} />}
+          {/* The pressed word's meaning: Ibn Qutaybah on the ayah and al-Raghib on its root, pills between them (owner, 2026-11-18). */}
+          {actions.word !== undefined && <ActButton Icon={BookA} label="معنى الكلمة" name="المعنى" palette={palette}
+            onPress={() => { const { key, word } = actions; setActions(null); setGharib({ key, word: word! }); }} />}
           {/* The ayah's balagha: al-Itqan's paragraphs and al-Kashshaf's passage, pills between them (owner, 2026-11-16). */}
           <ActButton Icon={Sparkles} label="البلاغة في الآية" name="البلاغة" palette={palette} onPress={() => { const key = actions.key; setActions(null); setBalagha(key); }} />
           {/* The word's places: its label names the long-pressed word, which is lit on the page. */}
@@ -453,6 +458,7 @@ export default function Reader() {
       <WordSheet lemmas={wordLemmas} onClose={() => setWordLemmas(null)} palette={palette} />
       <IrabSheet target={irab} onClose={() => setIrab(null)} palette={palette} />
       <BalaghaSheet ayah={balagha} onClose={() => setBalagha(null)} palette={palette} />
+      <GharibSheet target={gharib} onClose={() => setGharib(null)} palette={palette} />
       {/* The recite pill: see-through and low at the bottom like the tab bar (owner, 2026-11-13), and just above the tab bar when the app's bars are shown. */}
       {position && (
         <RecitePill recite={recite} writing={writing} onWriting={toggleWriting} onClose={stopRecite} palette={palette}

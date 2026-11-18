@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { useState } from 'react';
 import { num } from '@shared/quran/arabicNumber';
 import { ITQAN_BOOK, ITQAN_EDITION, itqanCredit, itqanPage } from '@shared/quran/itqanBalagha';
 import { KASHSHAF_BOOK, KASHSHAF_EDITION, kashshafCredit, kashshafPage, kashshafRuns, litWords } from '@shared/quran/kashshaf';
@@ -11,6 +10,8 @@ import OpenInBook from '@/components/quran/OpenInBook';
 import type { BalaghaAyah } from './balagha';
 import Card from '@/components/common/Card';
 import Segmented from '@/components/common/Segmented';
+import Folded from '@/components/common/Folded';
+import Pickable from '@/components/common/Pickable';
 
 // The reader's neutral band (Mushaf.module.css .marked), seen on a card in both themes.
 const LIT = 'bg-[var(--home-band-mark)]';
@@ -18,20 +19,6 @@ const LIT = 'bg-[var(--home-band-mark)]';
 const PICKED = 'bg-[color-mix(in_srgb,var(--home-ink)_20%,var(--home-card))]';
 const BOOKS = { itqan: 'الإتقان للسيوطي', kashshaf: 'الكشاف للزمخشري' } as const;
 type Book = keyof typeof BOOKS;
-
-function Folded({ credit, children }: { credit: string; children: ReactNode }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <>
-      <button type="button" onClick={() => setOpen(was => !was)} aria-expanded={open}
-        className="mt-2 flex min-h-9 w-full items-center gap-1.5 border-t border-[var(--home-rule)] pt-2 text-sm text-[var(--home-muted)]">
-        {open ? <ChevronUp size={16} aria-hidden /> : <ChevronDown size={16} aria-hidden />}
-        {credit}
-      </button>
-      {open && <div className="flex flex-col gap-1 text-sm leading-6 text-[var(--home-muted)]">{children}</div>}
-    </>
-  );
-}
 
 /**
  * The reader's balagha sheet on the website, the app's BalaghaSheet (mobile/src/components/BalaghaSheet.tsx): pills pick
@@ -58,14 +45,13 @@ export default function BalaghaPanel({ ayah, data }: { ayah: string; data: Balag
       {shown === 'itqan' && (itqan.length ? itqan.map((item, i) => (
         <Card key={`${item.id}/${i}`} picked={paragraph === i && itqan.length > 1} className="block shrink-0 px-3.5 py-2.5">
           {/* The paragraph lights the words it quotes; its reference below is a control of its own. */}
-          <div role="button" tabIndex={0} aria-pressed={paragraph === i} onClick={() => setParagraph(i)} className="cursor-pointer"
-            onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setParagraph(i); } }}>
+          <Pickable picked={paragraph === i} onPick={() => setParagraph(i)}>
           <p className="text-sm leading-6 text-[var(--home-muted)]">{item.heading ? `«${item.heading}» · ${item.kind}` : item.kind}</p>
           {item.places > 1 && <p className="text-[0.8125rem] text-[var(--home-muted)]">{`مواضع الشاهد في القرآن: ${num(item.places)}، ولم يعيّن السيوطي أحدها`}</p>}
           <p className="text-[1.125rem] leading-[1.9]">
             {tafsirRuns(item.text).map((run, j) => (run.quran ? <span key={j} className="font-quran text-[var(--home-accent)]">{run.text}</span> : run.text))}
           </p>
-          </div>
+          </Pickable>
           <Folded credit={itqanCredit(item)}>
             <p>{`${ITQAN_BOOK}، ${ITQAN_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث. الفقرة كاملة كما في الكتاب، والعنوان عنوانه.`}</p>
             <ExternalLink href={itqanPage(item)}>اقرأ الصفحة</ExternalLink>

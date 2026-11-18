@@ -1418,6 +1418,28 @@ again before they import. The counts above predate them.
 - `zaynab-jahsh/father` (`1/466-p2`): زينب بنت جحش بن رئاب الأسدي names
   `jahsh-ibn-riyab`, who was already in the catalog with no edge to her.
 
+## Re-approval check, 2026-11-18
+
+A second agent checked the whole batch before it was approved again: 561
+citations against their stored pages, every relationship claim's direction, and
+a sample of 15 claims. Fixed from it:
+
+- `prophet/son-*` and `prophet/daughter-*` said the Prophet was the child; they
+  are `FATHER` now, and `prophet/mawla-zayd` is `PATRON`, matching the catalog.
+- `prophet/names` joined the «بلفظ آخر» line on 38 to the end of Abu Musa's
+  hadith on 39. They are two citations now, `1/38-p5` and `1/38-p8`.
+- Where a reading has a recorded rival (`-alt` / `-other`), the reading this
+  batch put first is now `disputed` too, so both show as attributed reports and
+  neither as settled fact: `prophet/birth-day`, `sira/badr-muslim-force`,
+  `sira/badr-quraysh-force`, `sira/uhud-quraysh-force`, `sira/badr-quraysh-dead`,
+  `sira/badr-muslim-dead`, `sira/isra-year`, `sira/isra`, `sira/banu-nadir`,
+  `waraqah/cousin-khadijah`. `mustaliq/year` already names its sources and
+  `khaybar/year` has al-Dhahabi's own «لا يصح» against the rival, so both stay.
+
+Left for a later pass: four `zaynab-khuzaymah/*` excerpts drop «رضي الله عنها»
+without «...», and `saad-muadh/arsh` reads «جنازته» where the stored page has
+«جناته» (to check against the print).
+
 # Review
 
 Nothing in this batch is reviewed, across any of its chapters. The claims are

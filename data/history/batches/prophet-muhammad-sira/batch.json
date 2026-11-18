@@ -4539,10 +4539,19 @@
           "sourceSlug": "siyar-alam-al-nubala-risalah",
           "passageAnchor": "1/38-p5",
           "volume": "السيرة 1",
+          "pageReference": "38",
+          "extractionUrl": "https://shamela.ws/book/10906/176",
+          "excerptArabic": "وجاء بلفظ آخر، قال: \"أنا أحمد، ومحمد، والمقفى، والحاشر، ونبي الرحمة، ونبي الملحمة\".",
+          "accessedAt": "2026-09-19"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/38-p8",
+          "volume": "السيرة 1",
           "pageReference": "38-39",
           "extractionUrl": "https://shamela.ws/book/10906/176",
-          "excerptArabic": "وجاء بلفظ آخر، قال: \"أنا أحمد، ومحمد، والمقفى، والحاشر، ونبي الرحمة، ونبي الملحمة\". وأحمد، والحاشر، والمقفى، ونبي التوبة، والملحمة\" رواه مسلم.",
-          "accessedAt": "2026-09-19"
+          "excerptArabic": "وقال عمرو بن مرة، عن أبي عبيدة، عن أبي موسى الأشعري، قال: كان رسول الله صلى الله عليه وسلم يسمي لنا نفسه أسماء فقال: \"أنا محمد، وأحمد، والحاشر، والمقفى، ونبي التوبة، والملحمة\" رواه مسلم.",
+          "accessedAt": "2026-11-18"
         }
       ],
       "field": "titles"
@@ -4993,7 +5002,7 @@
           "accessedAt": "2026-09-19"
         }
       ],
-      "relationshipType": "MAWLA",
+      "relationshipType": "PATRON",
       "relatedSubjectKind": "PERSON",
       "relatedSubjectSlug": "zaid-ibn-harithah"
     },
@@ -5015,7 +5024,7 @@
           "accessedAt": "2026-09-19"
         }
       ],
-      "relationshipType": "SON",
+      "relationshipType": "FATHER",
       "relatedSubjectKind": "PERSON",
       "relatedSubjectSlug": "al-qasim-ibn-muhammad"
     },
@@ -5037,7 +5046,7 @@
           "accessedAt": "2026-09-19"
         }
       ],
-      "relationshipType": "DAUGHTER",
+      "relationshipType": "FATHER",
       "relatedSubjectKind": "PERSON",
       "relatedSubjectSlug": "ruqayyah-bint-muhammad"
     },
@@ -5059,7 +5068,7 @@
           "accessedAt": "2026-09-19"
         }
       ],
-      "relationshipType": "DAUGHTER",
+      "relationshipType": "FATHER",
       "relatedSubjectKind": "PERSON",
       "relatedSubjectSlug": "zaynab-bint-muhammad"
     },
@@ -5081,7 +5090,7 @@
           "accessedAt": "2026-09-19"
         }
       ],
-      "relationshipType": "DAUGHTER",
+      "relationshipType": "FATHER",
       "relatedSubjectKind": "PERSON",
       "relatedSubjectSlug": "umm-kulthum-bint-muhammad"
     },
@@ -5103,7 +5112,7 @@
           "accessedAt": "2026-09-19"
         }
       ],
-      "relationshipType": "DAUGHTER",
+      "relationshipType": "FATHER",
       "relatedSubjectKind": "PERSON",
       "relatedSubjectSlug": "fatimah-bint-muhammad"
     },
@@ -5125,7 +5134,7 @@
           "accessedAt": "2026-09-19"
         }
       ],
-      "relationshipType": "SON",
+      "relationshipType": "FATHER",
       "relatedSubjectKind": "PERSON",
       "relatedSubjectSlug": "ibrahim-ibn-muhammad"
     },
@@ -5187,7 +5196,8 @@
           "excerptArabic": "وقال أبو قتادة الأنصاري: سأل أعرابي رسول الله صلى الله عليه وسلم فقال: ما تقول في صوم يوم الإثنين؟ قال: \"ذاك يوم ولدت فيه وفيه أوحي إليّ\". أخرجه مسلم.",
           "accessedAt": "2026-09-19"
         }
-      ]
+      ],
+      "disputed": true
     },
     {
       "key": "prophet/birth-day-alt",
@@ -5858,7 +5868,8 @@
           "excerptArabic": "أتيت بالبراق، وهو دابة أبيض، فركبته حتى أتينا ببيت المقدس، فربطته بالحلقة التي تربط بها الأنبياء، ثم دخلت",
           "accessedAt": "2026-09-20"
         }
-      ]
+      ],
+      "disputed": true
     },
     {
       "key": "sira/miraj-salah",
@@ -9781,7 +9792,8 @@
           "excerptArabic": "[ثم دخلت سنة ثلاث من الهجرة:]",
           "accessedAt": "2026-09-20"
         }
-      ]
+      ],
+      "disputed": true
     },
     {
       "key": "sira/banu-nadir-after-uhud",
@@ -10958,7 +10970,8 @@
           "excerptArabic": "وكنا -أصحاب محمد- نتحدث أن عدة أهل بدر ثلاثمائة وبضعة عشر، كعدة أصحاب طالوت الذين جازوا معه النهر، وما جازه إلا مؤمن. أخرجه البخاري.",
           "accessedAt": "2026-09-20"
         }
-      ]
+      ],
+      "disputed": true
     },
     {
       "key": "sira/badr-muslim-force-other",
@@ -11008,7 +11021,8 @@
           "excerptArabic": "فخرجوا بخمسين وتسعمائة مقاتل، وساقوا مائة فرس, ولم يتركوا كارها للخروج. فأشخصوا العباس بن عبد المطلب، ونوفل بن الحارث، وطالب بن أبي طالب، وأخاه عقيلا، إلى أن نزلوا الجحفة.",
           "accessedAt": "2026-09-20"
         }
-      ]
+      ],
+      "disputed": true
     },
     {
       "key": "sira/badr-quraysh-force-other",
@@ -11058,7 +11072,8 @@
           "excerptArabic": "فقتلوا يومئذ سبعين، وأسروا سبعين. أخرجه مسلم.",
           "accessedAt": "2026-09-20"
         }
-      ]
+      ],
+      "disputed": true
     },
     {
       "key": "sira/badr-quraysh-dead-other",
@@ -11099,7 +11114,8 @@
           "excerptArabic": "وقال هو وابن عقبة: إن عدد من قتل من المسلمين ستة من قريش، وثمانية من الأنصار.",
           "accessedAt": "2026-09-20"
         }
-      ]
+      ],
+      "disputed": true
     },
     {
       "key": "sira/badr-muslim-dead-other",
@@ -11187,7 +11203,8 @@
           "excerptArabic": "فخرج رسول الله صلى الله عليه وسلم والمسلمون وهم ألف، والمشركون ثلاثة آلاف. فنزل رسول الله صلى الله عليه وسلم أحدا، ورجع عنه عبد الله بن أبي في ثلاثمائة، فسقط في أيدي الطائفتين, وهمتا أن تفشلا، والطائفتان: بنو سلمة وبنو حارثة.",
           "accessedAt": "2026-09-20"
         }
-      ]
+      ],
+      "disputed": true
     },
     {
       "key": "sira/uhud-quraysh-force-other",
@@ -11277,7 +11294,8 @@
           "excerptArabic": "قال موسى بن عقبة، عن الزهري: أسري برسول الله صلى الله عليه وسلم إلى بيت المقدس قبل الهجرة بسنة.",
           "accessedAt": "2026-09-20"
         }
-      ]
+      ],
+      "disputed": true
     },
     {
       "key": "sira/isra-year-alt",
@@ -12303,7 +12321,8 @@
           "excerptArabic": "ثم انطلقت إلى ورقة بن نوفل، وهو ابن عمها، وكان قد تنصر وقرأ الكتب، فأخبرته بما رأى وسمع، فقال ورقة: قدوس، والذي نفسي بيده لئن كنت",
           "accessedAt": "2026-09-20"
         }
-      ]
+      ],
+      "disputed": true
     },
     {
       "key": "waraqah/uncle-khadijah",
@@ -14470,9 +14489,9 @@
     }
   ],
   "approval": {
-    "revision": "fe93b856e45d0a43",
-    "approvedAt": "2026-09-30",
+    "revision": "8f87a8218b1b722c",
+    "approvedAt": "2026-11-18",
     "approvedBy": "msskzx",
-    "note": "Approved for publication. Claims are Not reviewed: the entries are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+    "note": "Approved for publication under the owner's 2026-11-18 rule (data not live; a second agent checked the batch against its pages and the method). Claims are Not reviewed; approval permits the import and asserts nothing about review."
   }
 }
