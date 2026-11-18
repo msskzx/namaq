@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
+import { useFitReport, type OnFit } from '@/lib/useFit';
 import { Text, TextInput } from '@/ui/Text';
 import { Bookmark, Lightbulb, Send, SquareArrowOutUpLeft, UnfoldHorizontal, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
@@ -115,9 +116,13 @@ export function MatrixInputs({ question, values, hints, onType, palette, names, 
  * The question with an empty box in each asked node; the other nodes are given. Drawn as the matrix only: quizzes leave the
  * tree to the rest of the app, where it helps to see (owner, 2026-11-17).
  */
-export function QuizInputs({ question, typed, onType, palette, names, header, hints: kept, onHints }: { question: TreeQuestion; typed: string[]; onType: (node: number, text: string) => void; palette: Palette; names: Record<number, string>; header?: React.ReactNode;
+export function QuizInputs({ question, typed, onType, palette, names, header, hints: kept, onHints, onFit }: { question: TreeQuestion; typed: string[]; onType: (node: number, text: string) => void; palette: Palette; names: Record<number, string>; header?: React.ReactNode;
   /** The hints shown so far, when the quiz keeps them (solo, so the review can mark them); otherwise they live here. */
-  hints?: Hints; onHints?: (hints: Hints) => void }) {
+  hints?: Hints; onHints?: (hints: Hints) => void;
+  /** In a feed card that follows its content: how much taller it is than its room (lib/useFit.ts). */
+  onFit?: OnFit;
+}) {
+  const fit = useFitReport(onFit);
   const values = emptyBranchAnswers(question).map((given, index) => isAsked(question, index) ? typed[index] ?? '' : given);
   const [own, setOwn] = useState<Hints>({});
   const hints = kept ?? own;
@@ -126,7 +131,7 @@ export function QuizInputs({ question, typed, onType, palette, names, header, hi
   const typing = useKeyboardShown();
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={{ flex: 1 }} keyboardShouldPersistTaps="handled">{header}<MatrixInputs question={question} values={values} hints={shown} onType={onType} palette={palette} names={names} /></ScrollView>
+      <ScrollView {...fit} style={{ flex: 1 }} keyboardShouldPersistTaps="handled">{header}<MatrixInputs question={question} values={values} hints={shown} onType={onType} palette={palette} names={names} /></ScrollView>
       {/* The buttons sit on the right, as action buttons do across the app (owner, 2026-11-17). */}
       {!typing && <View style={{ direction: 'rtl', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 8 }}>
         <Bar label="تلميح: حرف آخر من كل طرف فارغ" onPress={hint} Icon={Lightbulb} palette={palette} />
@@ -203,9 +208,12 @@ function TreeActions({ phrase, text, palette, onShare }: { phrase: string; text:
  * The graded answer as the matrix: each ayah's row with how its asked node was graded; a tap opens its ayat. It can show the
  * surrounding ayat, and be saved, shared or opened on the branches tab.
  */
-export function QuizFeedback({ question, typed, palette, names: _names, onTap, header, hints }: { question: TreeQuestion; typed: string[]; palette: Palette; names: Record<number, string>; onTap?: (keys: string[]) => void; header?: React.ReactNode;
+export function QuizFeedback({ question, typed, palette, names: _names, onTap, header, hints, onFit }: { question: TreeQuestion; typed: string[]; palette: Palette; names: Record<number, string>; onTap?: (keys: string[]) => void; header?: React.ReactNode;
   /** The hints used on this question, marked with a small bulb. */
-  hints?: Hints }) {
+  hints?: Hints;
+  /** In a feed card that follows its content: how much taller it is than its room (lib/useFit.ts). */
+  onFit?: OnFit;
+}) {
   // Graded once per question and answer: a party sends a new copy of the same question with every update, and an
   // unanswered question comes with a new empty answer each render, which must not rebuild the matrix.
   const snapshot = JSON.stringify({ question, typed });
@@ -224,7 +232,7 @@ export function QuizFeedback({ question, typed, palette, names: _names, onTap, h
       <View style={{ flex: 1 }}>
         {header}
         <View style={{ flex: 1 }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
-          {size && <MatrixCard presentation={presentation} palette={palette} view={size} around={around} onTap={ayahKeys => ayahKeys && onTap?.(ayahKeys)} onMove={() => {}}
+          {size && <MatrixCard presentation={presentation} palette={palette} view={size} around={around} onTap={ayahKeys => ayahKeys && onTap?.(ayahKeys)} onMove={() => {}} onFit={onFit}
             note={key => { const row = correctionOf(graded.rows, key); return row ? <MatrixMark row={row} palette={palette} hinted={!!hints?.[row.index]} /> : null; }} />}
         </View>
       </View>

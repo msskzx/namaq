@@ -74,6 +74,7 @@ import type { WordDifference } from '@shared/quran/qiraat';
 import BalaghaSheet from './BalaghaSheet';
 import IrabSheet from './IrabSheet';
 import QuranWords from './quran/text/QuranWords';
+import { FIT_SHARE, useFitHeight } from '@/lib/useFit';
 import { storyMap } from '@shared/quran/prophets/story';
 import { hasStoryCard, storyGroupOfDay } from '@shared/quran/prophets/storyGroup';
 import { check, DEFAULT_LIST, DEFAULT_SOLO, hasTyped, isCompare, isTree, pick, reveal, showAnswer, startSolo, typeAnswer, type SoloRun } from '@/lib/quiz';
@@ -258,7 +259,7 @@ export function QuizActions({ palette }: { palette: Palette }) {
   );
 }
 
-/** The tree question's room in a card: the quiz's own tree, scrolling inside it, and its buttons. */
+/** The tree or compare question's room in a card before it has measured what it holds: the quiz's own tree and its buttons. */
 const QUIZ_TREE_HEIGHT = 380;
 const openAyat = (keys: string[]) => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } });
 
@@ -268,6 +269,8 @@ const openAyat = (keys: string[]) => router.push({ pathname: '/ayah', params: { 
  * فقط» on, it asks from what is memorized, as the solo quiz does.
  */
 const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTopic; seed: number; palette: Palette }) {
+  // A tree or compare question's room follows what it holds, up to most of the screen (owner, 2026-11-18).
+  const [roomHeight, onFit] = useFitHeight(QUIZ_TREE_HEIGHT);
   const memorized = useSyncExternalStore(subscribeMemorized, readMemorized);
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
   const [run, setRun] = useState<SoloRun | null>(null);
@@ -293,10 +296,10 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
         <QuizActions palette={palette} />
       </>}>
       {isCompare(question)
-        ? <View style={{ height: QUIZ_TREE_HEIGHT }}>
+        ? <View style={{ height: roomHeight }}>
           {checked
-            ? <CompareFeedback question={question} typed={run.typed[0]} palette={palette} header={prompt} hints={run.hints?.[0]} />
-            : <CompareInputs question={question} typed={run.typed[0]} onType={(blank, text) => setRun(now => now && typeAnswer(now, blank, text))} palette={palette} header={prompt} />}
+            ? <CompareFeedback onFit={onFit} question={question} typed={run.typed[0]} palette={palette} header={prompt} hints={run.hints?.[0]} />
+            : <CompareInputs onFit={onFit} question={question} typed={run.typed[0]} onType={(blank, text) => setRun(now => now && typeAnswer(now, blank, text))} palette={palette} header={prompt} />}
         </View>
         : !isTree(question)
         ? <View style={{ paddingBottom: 12 }}>
@@ -307,10 +310,10 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
               setRun(pick(run, value));
             }} />
         </View>
-        : <View style={{ height: QUIZ_TREE_HEIGHT }}>
+        : <View style={{ height: roomHeight }}>
           {checked
-            ? <QuizFeedback question={question} typed={run.typed[0]} palette={palette} names={shortNames} onTap={openAyat} header={prompt} hints={run.hints?.[0]} />
-            : <QuizInputs question={question} typed={run.typed[0]} onType={(node, text) => setRun(now => now && typeAnswer(now, node, text))} palette={palette} names={shortNames} header={prompt} />}
+            ? <QuizFeedback onFit={onFit} question={question} typed={run.typed[0]} palette={palette} names={shortNames} onTap={openAyat} header={prompt} hints={run.hints?.[0]} />
+            : <QuizInputs onFit={onFit} question={question} typed={run.typed[0]} onType={(node, text) => setRun(now => now && typeAnswer(now, node, text))} palette={palette} names={shortNames} header={prompt} />}
         </View>}
     </Post>
   );
@@ -336,7 +339,6 @@ const FeedQuiz = ({ kind, seed, palette }: { kind: FeedQuizKind; seed: number; p
 const TREE_HEIGHT = 470;
 /** On a taller screen the cards grow with it (owner, 2026-11-15): this share of the screen's height, never less than the sizes above. */
 const TREE_SHARE = 0.68;
-const STORY_SHARE = 0.62;
 
 /**
  * One tree as a post: the branches tab's own pager (TreePager) holding just this tree, so it zooms, pans, lights a path on
@@ -351,12 +353,14 @@ const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece
   const pieces = useMemo(() => [piece], [piece]);
   const [room, setRoom] = useState(0);
   const { height: screen } = useWindowDimensions();
-  const embedded = useMemo(() => ({ open: (at: BranchPiece) => toTab({ pathname: '/branches', params: { tree: at.id } }), ayatRoom: { height: room, set: setRoom } }), [room]);
+  // The matrix's card follows its rows, up to most of the screen (owner, 2026-11-18); the tree keeps its own height.
+  const [height, onFit] = useFitHeight(Math.max(TREE_HEIGHT, Math.round(screen * TREE_SHARE)));
+  const embedded = useMemo(() => ({ open: (at: BranchPiece) => toTab({ pathname: '/branches', params: { tree: at.id } }), ayatRoom: { height: room, set: setRoom }, onFit }), [room, onFit]);
   // The pager draws the tree in its own card and its buttons under it, so the post is the head and the pager.
   return (
     <View style={{ gap: 4 }}>
       <PostHead Icon={TreeIcon} title="من متشابهات القرآن" sub={placesOf(piece.keys)} palette={palette} open={{ onPress: () => embedded.open(piece), label: 'افتح الشجرة في متشابهات القرآن' }} />
-      <View style={{ height: Math.max(TREE_HEIGHT, Math.round(screen * TREE_SHARE)) + room }}>
+      <View style={{ height: height + room }}>
         <TreePager pieces={pieces} list={EMPTY_LIST} palette={palette} mode={mode} around={around} start={0} embedded={embedded} />
       </View>
     </View>
@@ -393,12 +397,9 @@ function SavedPost({ item, palette }: { item: SavedItem; palette: Palette }) {
   return found.pair ? <PairPost pair={found.pair} palette={palette} /> : null;
 }
 
-/** The prophets card's height: the surahs scroll up and down inside it, the events sideways. */
-const STORY_HEIGHT = 460;
-
 /**
  * A prophet's story map as a post (owner, 2026-11-14): the prophets page's own map (StoryMap), every event and surah, opened
- * sideways at the day's group; the surahs scroll up and down inside the card. Any tap opens the story page at its top, not scrolled
+ * sideways at the day's group; the card is as tall as its surahs, and only past most of the screen do they scroll inside it. Any tap opens the story page at its top, not scrolled
  * to an event, so a new reader sees where they landed (owner, 2026-11-14).
  */
 const StoryPost = memo(function StoryPost({ slug, phase, palette }: { slug: string; phase: number; palette: Palette }) {
@@ -410,7 +411,7 @@ const StoryPost = memo(function StoryPost({ slug, phase, palette }: { slug: stri
   return (
     <Post palette={palette} head={<PostHead Icon={ScrollText} title={prophet.title} sub={prophet.story.phases[phase]} palette={palette} open={{ onPress: () => open(), label: 'افتح القصة' }} />}
       actions={<Action Icon={BookOpen} label="افتح القصة" onPress={() => open()} palette={palette} />}>
-      <ScrollView nestedScrollEnabled style={{ maxHeight: Math.max(STORY_HEIGHT, Math.round(screen * STORY_SHARE)) }} contentContainerStyle={{ paddingVertical: 8 }}>
+      <ScrollView nestedScrollEnabled style={{ maxHeight: Math.round(screen * FIT_SHARE) }} contentContainerStyle={{ paddingVertical: 8 }}>
         <StoryMap map={map} events={prophet.events} phases={prophet.story.phases} at={phase} palette={palette} onPick={open} onTitle={open} />
       </ScrollView>
     </Post>

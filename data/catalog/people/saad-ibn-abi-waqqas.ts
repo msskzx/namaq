@@ -1,4 +1,4 @@
-import { legacyUnreviewed, type CatalogPerson } from '@/lib/catalog/types';
+import type { CatalogPerson } from '@/lib/catalog/types';
 
 /**
  * Authored from data/history/batches/saad-ibn-abi-waqqas. Arabic is verbatim
@@ -91,12 +91,15 @@ const saadIbnAbiWaqqas = {
 
   ayat: [
     // He names himself among the six the verse was revealed about.
-    { surah: 6, ayah: 52, claims: ['saad/ayah-al-anam'], revealedAbout: { with: ['abdullah-ibn-masud'], alsoUnnamed: true } },
+    { surah: 6, ayah: 52, kind: 'REVEALED_ABOUT', claims: ['saad/ayah-al-anam'], revealedAbout: { with: ['abdullah-ibn-masud'], alsoUnnamed: true } },
     // نزلت هذه الآية فيّ, over his mother's hunger strike against his Islam.
-    { surah: 29, ayah: 8, claims: ['saad/ayah-al-ankabut'], revealedAbout: {} },
-    // Carried from the old seed, which gave him الأنعام 124 uncited. The entry
-    // reaches for two other verses and never this one.
-    { surah: 6, ayah: 124, claims: legacyUnreviewed },
+    // The words he quotes, «على أن تشرك بي», are لقمان 15 (العنكبوت 8 reads «لتشرك بي»),
+    // though the print labels them العنكبوت 8. Muslim's report from him joins the two, so
+    // both are linked to the same claim, لقمان 15 first since its
+    // words are the ones he quotes. الأنعام 124, carried uncited from the old seed,
+    // was dropped: the entry never names it for him.
+    { surah: 31, ayah: 15, kind: 'REVEALED_ABOUT', claims: ['saad/ayah-al-ankabut'], revealedAbout: {} },
+    { surah: 29, ayah: 8, kind: 'REVEALED_ABOUT', claims: ['saad/ayah-al-ankabut'], revealedAbout: {} },
   ],
 
   relations: [

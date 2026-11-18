@@ -2,6 +2,7 @@
 // asked ayah with a box wherever it parts from it. Grading, hints and the checked marks follow the tree quiz's.
 import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
+import { useFitReport, type OnFit } from '@/lib/useFit';
 import { Lightbulb, SquareArrowOutUpLeft, type LucideProps } from 'lucide-react-native';
 import { Text, TextInput } from '@/ui/Text';
 import { num } from '@shared/quran/arabicNumber';
@@ -52,9 +53,13 @@ const Buttons = ({ children }: { children: React.ReactNode }) =>
   <View style={{ direction: 'rtl', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 8 }}>{children}</View>;
 
 /** The question: the given ayah, then the asked one with a box in each part, and the hint bulb. */
-export function CompareInputs({ question, typed, onType, palette, header, hints: kept, onHints }: { question: Asked; typed: string[]; onType: (blank: number, text: string) => void; palette: Palette; header?: React.ReactNode;
+export function CompareInputs({ question, typed, onType, palette, header, hints: kept, onHints, onFit }: { question: Asked; typed: string[]; onType: (blank: number, text: string) => void; palette: Palette; header?: React.ReactNode;
   /** The hints shown so far, when the quiz keeps them (solo, so the review can mark them); otherwise they live here. */
-  hints?: Hints; onHints?: (hints: Hints) => void }) {
+  hints?: Hints; onHints?: (hints: Hints) => void;
+  /** In a feed card that follows its content: how much taller it is than its room (lib/useFit.ts). */
+  onFit?: OnFit;
+}) {
+  const fit = useFitReport(onFit);
   const ask = question.compare;
   const [own, setOwn] = useState<Hints>({});
   const hints = kept ?? own;
@@ -63,7 +68,7 @@ export function CompareInputs({ question, typed, onType, palette, header, hints:
   const typing = useKeyboardShown();
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={{ flex: 1 }} keyboardShouldPersistTaps="handled">
+      <ScrollView {...fit} style={{ flex: 1 }} keyboardShouldPersistTaps="handled">
         {header}
         <View style={{ gap: 10, padding: 12 }}>
           <Line line={ask.shown} palette={palette}><Words line={ask.shown} at={ask.shown.words.map((_, i) => i)} palette={palette} /></Line>
@@ -115,7 +120,11 @@ function Mark({ row, palette, hinted }: { row: Correction; palette: Palette; hin
  * The checked question: each blank shows its words, the ones enough to type underlined, after its numbered badge, and under the
  * ayah each blank's verdict and what was typed when wrong. The card opens on the compare page.
  */
-export function CompareFeedback({ question, typed, palette, header, hints }: { question: Asked; typed: string[]; palette: Palette; header?: React.ReactNode; hints?: Hints }) {
+export function CompareFeedback({ question, typed, palette, header, hints, onFit }: { question: Asked; typed: string[]; palette: Palette; header?: React.ReactNode; hints?: Hints;
+  /** In a feed card that follows its content: how much taller it is than its room (lib/useFit.ts). */
+  onFit?: OnFit;
+}) {
+  const fit = useFitReport(onFit);
   const ask = question.compare;
   const rows = useMemo(() => compareCorrections(ask, typed), [ask, typed]);
   const pieces = useMemo(() => comparePieces(ask), [ask]);
@@ -123,7 +132,7 @@ export function CompareFeedback({ question, typed, palette, header, hints }: { q
   const open = () => openCompare({ lead: asked[0], other: shown[0], ayat: [asked[1], shown[1]] });
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView {...fit} style={{ flex: 1 }}>
         {header}
         <View style={{ gap: 10, padding: 12 }}>
           <Line line={ask.shown} palette={palette}><Words line={ask.shown} at={ask.shown.words.map((_, i) => i)} palette={palette} /></Line>

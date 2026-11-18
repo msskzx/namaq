@@ -115,8 +115,14 @@ the sources disagree on as settled.
 - Poems, sayings and reports in the feed and in quizzes start with the most
   authentic: a report in al-Bukhari or Muslim, or one a named scholar graded
   sahih. Those whose wording, line order or speaker differ between reports wait.
+- A disputed point is not dropped (owner, 2026-11-18). It shows, or is asked,
+  attributed: «قيل فيه كذا، عند فلان», each opinion with its reference, as one
+  answer. A question can ask who said it («من قال: فيّ نزلت؟») when that is
+  exactly what the source holds.
+- When more than one source states the same fact and we have found them, cite
+  them all.
 - When a generator or a reviewer cannot tell whether a point is disputed, it
-  leaves the question out and lists it for the owner.
+  words it attributed and lists it for the owner.
 
 ## Feed card and quiz
 

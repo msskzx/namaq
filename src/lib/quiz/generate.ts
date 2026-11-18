@@ -302,9 +302,18 @@ export async function generateQuestionCandidates(): Promise<GeneratedQuestion[]>
 
 // docs/quiz-ayah-revealed.md
 export function revealedAboutQuestions(people: readonly CatalogPerson[], eligible: Set<string>): GeneratedQuestion[] {
-  const named = (person: CatalogPerson) => choice(person.slug, person.name.replace(/[\u064B-\u0652\u0670]/g, ''));
-  const links = people.flatMap((person) => (person.ayat ?? []).flatMap((ayah) =>
-    ayah.revealedAbout && cited(ayah.claims, eligible).length > 0 ? [{ person, ayah, key: `${ayah.surah}:${ayah.ayah}` }] : []));
+  const plain = (person: CatalogPerson) => person.name.replace(/[\u064B-\u0652\u0670]/g, '');
+  const named = (person: CatalogPerson) => choice(person.slug, plain(person));
+  const bySlug = new Map(people.map((person) => [person.slug, person]));
+  const seen = new Set<string>();
+  const links = people.flatMap((person) => (person.ayat ?? []).flatMap((ayah) => {
+    if (ayah.kind !== 'REVEALED_ABOUT' || !ayah.revealedAbout || cited(ayah.claims, eligible).length === 0) return [];
+    // One report can name two ayat (Sa'd: لقمان 15 and العنكبوت 8); it is asked once, on the first.
+    const report = `${person.slug}|${[...(ayah.claims as readonly string[])].sort().join(',')}`;
+    if (seen.has(report)) return [];
+    seen.add(report);
+    return [{ person, ayah, key: `${ayah.surah}:${ayah.ayah}` }];
+  }));
   const about = new Map<string, Set<string>>();
   for (const { person, ayah, key } of links) {
     const slugs = about.get(key) ?? new Set<string>();
@@ -314,11 +323,22 @@ export function revealedAboutQuestions(people: readonly CatalogPerson[], eligibl
   return links.flatMap(({ person, ayah, key }) => {
     const sex = person.fields.sex?.value;
     if (!sex || ayah.revealedAbout?.alsoUnnamed) return [];
+    // Wrong choices are people with a profile, of the same sex, never the Prophet
+    // (every ayah was revealed to him) and never anyone the ayah was revealed about.
+    const others = people.filter((other) => other.hasProfile && other.fields.sex?.value === sex
+      && other.slug !== 'prophet-muhammad' && !about.get(key)?.has(other.slug));
+    // When the source names two people («فيهما»), the answer names both, and so does every choice.
+    const partners = (ayah.revealedAbout?.with ?? []).map((slug) => bySlug.get(slug)).filter((other): other is CatalogPerson => !!other);
+    const group = [person, ...partners];
+    const answer = choice(group.map((one) => one.slug).join('+'), group.map(plain).join(' و'));
+    const pool = partners.length === 0 ? others.map(named)
+      // Groups never share a name, so no name shows up twice as a hint.
+      : Array.from({ length: Math.floor(others.length / group.length) }, (_, index) => others.slice(index * group.length, (index + 1) * group.length))
+        .map((set) => choice(set.map((one) => one.slug).join('+'), set.map(plain).join(' و')));
     const question = candidate({
       family: 'AYAH_REVEALED_ABOUT', topic: 'AYAT', subject: { kind: 'PERSON', slug: person.slug }, attribute: key,
-      personSlugs: [person.slug], promptArabic: 'في من نزلت هذه الآية؟', answer: named(person),
-      pool: people.filter((other) => other.fields.sex?.value === sex && other.slug !== 'prophet-muhammad').map(named),
-      excludedValues: about.get(key), evidence: { claimKeys: cited(ayah.claims, eligible) },
+      personSlugs: group.map((one) => one.slug), promptArabic: ayah.revealedAbout?.prompt ?? 'فيمن نزلت هذه الآية؟', answer,
+      pool, excludedValues: about.get(key), evidence: { claimKeys: cited(ayah.claims, eligible) },
     });
     return question ? [question] : [];
   });

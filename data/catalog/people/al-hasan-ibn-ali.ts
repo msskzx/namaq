@@ -34,8 +34,10 @@ const alHasanIbnAli = {
     { title: 'caliph', name: 'خليفة', nameTransliterated: 'Caliph', claims: legacyUnreviewed },
   ],
   ayat: [
-    { surah: 76, ayah: 8, claims: legacyUnreviewed },
-    { surah: 33, ayah: 33, claims: legacyUnreviewed },
+    // الإنسان 8, carried uncited from the old seed, was dropped (2026-11-18): it rests on
+    // the story of three nights of feeding, which al-Qurtubi calls «حديثا لا يصح ولا يثبت»
+    // and al-Hakim al-Tirmidhi «حديث مزوق مزيف» (al-Qurtubi on الإنسان 8).
+    { surah: 33, ayah: 33, kind: 'DESCRIBES', claims: legacyUnreviewed },
   ],
   relations: [
     { type: 'SON', inverse: 'MOTHER', to: 'fatimah-bint-muhammad', claims: legacyUnreviewed },

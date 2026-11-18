@@ -36,7 +36,7 @@ const ummSalamah = {
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
   // Carried from the retired prisma/personSeedData.ts entry, uncited.
-  ayat: [{ surah: 33, ayah: 33, claims: legacyUnreviewed }],
+  ayat: [{ surah: 33, ayah: 33, kind: 'DESCRIBES', claims: legacyUnreviewed }],
   relations: [
     { type: 'WIFE', inverse: 'HUSBAND', to: 'prophet-muhammad', claims: ['prophet/wife-umm-salamah'] },
     { type: 'WIFE', inverse: 'HUSBAND', to: 'abu-salamah', claims: ['abu-salamah/husband-umm-salamah'] },

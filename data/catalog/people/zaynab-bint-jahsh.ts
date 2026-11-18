@@ -37,7 +37,7 @@ const zaynabBintJahsh = {
     { title: 'mother-of-believers', name: 'أم المؤمنين', nameTransliterated: 'Mother of the Believers', claims: legacyUnreviewed },
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
-  ayat: [{ surah: 33, ayah: 37, claims: ['zaynab-jahsh/ayah-al-ahzab'], revealedAbout: {} }],
+  ayat: [{ surah: 33, ayah: 37, kind: 'REVEALED_ABOUT', claims: ['zaynab-jahsh/ayah-al-ahzab'], revealedAbout: {} }],
   relations: [
     { type: 'WIFE', inverse: 'HUSBAND', to: 'prophet-muhammad', claims: ['prophet/wife-zaynab-jahsh'] },
     { type: 'DAUGHTER', inverse: 'FATHER', to: 'jahsh-ibn-riyab', claims: ['zaynab-jahsh/father'] },
