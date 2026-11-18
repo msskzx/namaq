@@ -39,8 +39,8 @@ export function branchVerdictFor(piece: Identified, verdicts: BranchVerdicts = b
   const own = idsOf(piece).map(id => verdicts[id]).find(Boolean);
   const twin = own?.same ? undefined : twinOf(piece, twins);
   if (!twin) return own;
-  const { pair: _pair, ...shared } = twin;
-  return { ...shared, ...(own?.ayat ? { ayat: own.ayat } : {}) };
+  const { keep, why, checked, ask, view } = twin;
+  return { keep, why, ...(checked ? { checked } : {}), ...(ask ? { ask } : {}), ...(view ? { view } : {}), ...(own?.ayat ? { ayat: own.ayat } : {}) };
 }
 
 /** A card the owner dropped: hidden everywhere except review. A card with no verdict stays. */

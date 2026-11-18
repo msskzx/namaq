@@ -30,7 +30,10 @@ describe('the trees sheet', () => {
     vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => data })));
     render(<LanguageProvider><AyahPreviewSheet preview={{ kind: 'trees', key: '2:25', all: '/quran/branches?k=2:25' }} onClose={vi.fn()} /></LanguageProvider>);
     const switches = await screen.findAllByRole('button', { name: 'عرض الشجرة' });
-    expect(switches.length).toBe(data.trees.length);
+    // A card kept as its matrix only (the owner's call, on branches or on its compare twin) has no switch to the tree.
+    const drawable = data.trees.filter(tree => !tree.matrixOnly);
+    expect(drawable.length).toBeGreaterThan(0);
+    expect(switches.length).toBe(drawable.length);
     fireEvent.click(switches[0]);
     expect(screen.getAllByRole('button', { name: 'عرض المصفوفة' }).length).toBe(1);
     vi.unstubAllGlobals();
