@@ -103,74 +103,6 @@
       "exact": "سُمِّيَ الطُّفَيْلُ بنُ عَمْرِو بنِ طَرِيْفٍ ذَا النُّوْرِ"
     },
     {
-      "id": "sp_tf_ishaq_isnad",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 4,
-      "page": "345",
-      "layer": "MAIN",
-      "exact": "وذَكَرَهُ ابْنُ إِسْحَاقَ، عَنْ عُثْمَانَ بنِ الحُوَيْرِثِ، عَنْ صَالِحِ بنِ كَيْسَانَ"
-    },
-    {
-      "id": "sp_tf_ishaq_who",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 4,
-      "page": "345",
-      "layer": "MAIN",
-      "exact": "أَنَّ الطُّفَيْلَ بنَ عَمْرٍو قَالَ"
-    },
-    {
-      "id": "sp_tf_sabaq",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 4,
-      "page": "346",
-      "layer": "MAIN",
-      "exact": "وَسَبَقَتْنِي بَدْرٌ وَأُحُدٌ وَالخَنْدَقُ"
-    },
-    {
-      "id": "sp_tf_badr_w",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 4,
-      "page": "346",
-      "layer": "MAIN",
-      "exact": "بَدْرٌ",
-      "prefix": "وَسَبَقَتْنِي "
-    },
-    {
-      "id": "sp_tf_uhud_w",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 4,
-      "page": "346",
-      "layer": "MAIN",
-      "exact": "وَأُحُدٌ",
-      "prefix": "بَدْرٌ "
-    },
-    {
-      "id": "sp_tf_khandaq_w",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 4,
-      "page": "346",
-      "layer": "MAIN",
-      "exact": "وَالخَنْدَقُ",
-      "prefix": "وَأُحُدٌ "
-    },
-    {
-      "id": "sp_tf_death",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 4,
-      "page": "346",
-      "layer": "MAIN",
-      "exact": "فَقُتِلَ الطُّفَيْلُ يَوْمَ اليَمَامَةِ"
-    },
-    {
-      "id": "sp_tf_death_place",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 4,
-      "page": "346",
-      "layer": "MAIN",
-      "exact": "اليَمَامَةِ",
-      "prefix": "فَقُتِلَ الطُّفَيْلُ يَوْمَ "
-    },
-    {
       "id": "sp_tf_son",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 4,
@@ -210,28 +142,6 @@
       ],
       "origin": {
         "mention": "m_tf_kalbi"
-      },
-      "chainState": "DEFERRED"
-    },
-    {
-      "id": "r_tf_tufayl",
-      "unit": "siyar-v4-75-tufayl",
-      "ordinal": 3,
-      "voice": "TRANSMITTED",
-      "isnadSpan": "sp_tf_ishaq_isnad",
-      "origin": {
-        "mention": "m_tf_self"
-      },
-      "chainState": "DEFERRED"
-    },
-    {
-      "id": "r_tf_salih",
-      "unit": "siyar-v4-75-tufayl",
-      "ordinal": 4,
-      "voice": "TRANSMITTED",
-      "isnadSpan": "sp_tf_ishaq_isnad",
-      "origin": {
-        "mention": "m_tf_salih"
       },
       "chainState": "DEFERRED"
     }
@@ -274,22 +184,6 @@
       "report": "r_tf_kalbi",
       "spans": [
         "sp_tf_kalbi"
-      ],
-      "role": "TRANSMITTED"
-    },
-    {
-      "id": "st_tf_sabaq",
-      "report": "r_tf_tufayl",
-      "spans": [
-        "sp_tf_sabaq"
-      ],
-      "role": "TRANSMITTED"
-    },
-    {
-      "id": "st_tf_death",
-      "report": "r_tf_salih",
-      "spans": [
-        "sp_tf_death"
       ],
       "role": "TRANSMITTED"
     }
@@ -341,55 +235,6 @@
       "id": "m_tf_k",
       "parent": "sp_tf_kalbi",
       "exact": "الطُّفَيْلُ بنُ عَمْرِو بنِ طَرِيْفٍ",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
-      "id": "m_tf_self",
-      "parent": "sp_tf_ishaq_who",
-      "exact": "الطُّفَيْلَ بنَ عَمْرٍو",
-      "occurrence": 1,
-      "role": "SPEAKER"
-    },
-    {
-      "id": "m_tf_sb",
-      "parent": "sp_tf_sabaq",
-      "exact": "وَسَبَقَتْنِي",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
-      "id": "m_tf_badr",
-      "parent": "sp_tf_sabaq",
-      "exact": "بَدْرٌ",
-      "occurrence": 1,
-      "role": "REFERENT"
-    },
-    {
-      "id": "m_tf_uhud",
-      "parent": "sp_tf_sabaq",
-      "exact": "وَأُحُدٌ",
-      "occurrence": 1,
-      "role": "REFERENT"
-    },
-    {
-      "id": "m_tf_khandaq",
-      "parent": "sp_tf_sabaq",
-      "exact": "وَالخَنْدَقُ",
-      "occurrence": 1,
-      "role": "REFERENT"
-    },
-    {
-      "id": "m_tf_salih",
-      "parent": "sp_tf_ishaq_isnad",
-      "exact": "صَالِحِ بنِ كَيْسَانَ",
-      "occurrence": 1,
-      "role": "SPEAKER"
-    },
-    {
-      "id": "m_tf_d",
-      "parent": "sp_tf_death",
-      "exact": "الطُّفَيْلُ",
       "occurrence": 1,
       "role": "SUBJECT"
     },
@@ -458,48 +303,12 @@
       "status": "PROPOSED"
     },
     {
-      "id": "i_tf_self",
-      "mention": "m_tf_self",
-      "agent": "at-tufayl-ibn-amr-ad-dawsi",
-      "basis": [
-        {
-          "span": "sp_tf_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_tf_d",
-      "mention": "m_tf_d",
-      "agent": "at-tufayl-ibn-amr-ad-dawsi",
-      "basis": [
-        {
-          "span": "sp_tf_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
       "id": "i_tf_so",
       "mention": "m_tf_so",
       "agent": "at-tufayl-ibn-amr-ad-dawsi",
       "basis": [
         {
           "span": "sp_tf_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_tf_sb",
-      "mention": "m_tf_sb",
-      "agent": "at-tufayl-ibn-amr-ad-dawsi",
-      "basis": [
-        {
-          "span": "sp_tf_ishaq_who",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -536,42 +345,6 @@
       "basis": [
         {
           "span": "sp_tf_son_w",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_tf_badr",
-      "mention": "m_tf_badr",
-      "event": "badr",
-      "basis": [
-        {
-          "span": "sp_tf_badr_w",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_tf_uhud",
-      "mention": "m_tf_uhud",
-      "event": "uhud",
-      "basis": [
-        {
-          "span": "sp_tf_uhud_w",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_tf_khandaq",
-      "mention": "m_tf_khandaq",
-      "event": "khandaq",
-      "basis": [
-        {
-          "span": "sp_tf_khandaq_w",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -658,56 +431,6 @@
       "restsOn": [
         "st_tf_laqab",
         "st_tf_kalbi"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_tf_badr",
-      "subject": "m_tf_sb",
-      "predicate": "ABSENT_FROM",
-      "value": {
-        "object": "m_tf_badr"
-      },
-      "restsOn": [
-        "st_tf_sabaq"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_tf_uhud",
-      "subject": "m_tf_sb",
-      "predicate": "ABSENT_FROM",
-      "value": {
-        "object": "m_tf_uhud"
-      },
-      "restsOn": [
-        "st_tf_sabaq"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_tf_khandaq",
-      "subject": "m_tf_sb",
-      "predicate": "ABSENT_FROM",
-      "value": {
-        "object": "m_tf_khandaq"
-      },
-      "restsOn": [
-        "st_tf_sabaq"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_tf_dp",
-      "subject": "m_tf_d",
-      "predicate": "died.place",
-      "value": {
-        "spans": [
-          "sp_tf_death_place"
-        ]
-      },
-      "restsOn": [
-        "st_tf_death"
       ],
       "status": "PROPOSED"
     },
