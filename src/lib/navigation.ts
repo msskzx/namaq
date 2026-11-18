@@ -81,28 +81,32 @@ export const QURAN_TOOLS: NavItem[] = [
 /** The library: the book shelf and each book's pages. */
 export const LIBRARY = '/quran/books';
 
+/** The Quran hub's tiles: the mushaf first (it lost its own button, owner 2026-11-18), then the tools, as in the app. */
+export const QURAN_HUB: NavItem[] = [
+  { href: '/quran/read', label: { ar: 'المصحف', en: 'The mushaf' }, purpose: { ar: '', en: '' } },
+  ...QURAN_TOOLS,
+];
+
 /**
- * The app's five tab buttons, first on the right: Quran, mushaf, home, quizzes, library. The library took the utilities'
- * place (owner, 2026-11-17); the utilities open from the compass beside the search, as in the app.
+ * The app's five tab buttons, first on the right: Quran, hadith, home, tarajim, quizzes (owner, 2026-11-18). The mushaf
+ * opens from the Quran hub and lights the Quran; the library, the search and the utilities open from home and light it.
  * `paths` are the pages that light a section besides its own href and the pages under it.
  */
 export const NAV_SECTIONS: (NavSection & { paths?: string[] })[] = [
-  { href: '/quran', label: { ar: 'القرآن', en: 'Quran' }, groups: [], paths: QURAN_TOOLS.map(tool => tool.href) },
-  { href: '/quran/read', label: { ar: 'المصحف', en: 'Quran reader' }, groups: [] },
-  { href: '/', label: { ar: 'الرئيسية', en: 'Home' }, groups: [] },
+  { href: '/quran', label: { ar: 'القرآن', en: 'Quran' }, groups: [], paths: QURAN_HUB.map(tool => tool.href) },
+  { href: '/hadith', label: { ar: 'الحديث', en: 'Hadith' }, groups: [] },
+  { href: '/', label: { ar: 'الرئيسية', en: 'Home' }, groups: [], paths: [LIBRARY, '/search', '/utilities'] },
+  { href: '/biographies', label: { ar: 'التراجم', en: 'Biographies' }, groups: [], paths: ['/biographies', '/people', '/titles', '/events', '/battles', '/graphs', '/nasab'] },
   { href: '/quizzes', label: { ar: 'الاختبارات', en: 'Quizzes' }, groups: [] },
-  { href: LIBRARY, label: { ar: 'المكتبة', en: 'Library' }, groups: [] },
 ];
 
 const under = (pathname: string, href: string) => pathname === href || (href !== '/' && pathname.startsWith(`${href}/`));
 
 export function activeSection(path: string): string | undefined {
   const pathname = path.split('?')[0];
-  // The one search and the utilities open from home and light it, as in the app.
-  if (pathname === '/search' || pathname === '/utilities') return '/';
-  return NAV_SECTIONS.find(section => section.href === '/quran'
-    ? pathname === '/quran' || section.paths!.some(href => under(pathname, href))
-    : under(pathname, section.href.split('?')[0]))?.href;
+  // A section with `paths` lights on its own page and those; one without, on its page and every page under it.
+  return NAV_SECTIONS.find(section => pathname === section.href
+    || (section.paths ? section.paths.some(href => under(pathname, href)) : under(pathname, section.href)))?.href;
 }
 
 /** A book's pages (not the shelf): the phone top bar shows the library in the logo's place, back to the shelf, as in the app. */

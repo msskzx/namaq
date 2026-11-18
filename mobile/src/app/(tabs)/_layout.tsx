@@ -10,6 +10,7 @@ export default function TabsLayout() {
       <Tabs.Screen name="read" />
       <Tabs.Screen name="quizzes" />
       <Tabs.Screen name="(hadith)" />
+      <Tabs.Screen name="(tarajim)" />
       {/* The library has no button of its own: it opens from home (المكتبة), and its shelf has a back arrow. */}
       <Tabs.Screen name="(library)" />
       <Tabs.Screen name="(quran)" />
