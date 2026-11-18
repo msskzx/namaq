@@ -6,6 +6,7 @@ import ExternalLink from '@/ui/ExternalLink';
 import { num } from '@shared/quran/arabicNumber';
 import { QIRAAT_SOURCE, whoReads } from '@shared/quran/qiraat';
 import { qiraatOf } from '@shared/quran/qiraatData';
+import type { WordDifference } from '@shared/quran/qiraat';
 import { tafsirRuns, tafsirSadiCredit, tafsirSadiPage } from '@shared/quran/tafsirSadi';
 import { tafsirSadiOf } from '@shared/quran/tafsirSadiData';
 import { bookState, useBooks } from '@/lib/books';
@@ -81,17 +82,7 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
               {tafsirRuns(tafsir.text).map((run, i) => (run.quran ? <Text key={i} style={{ fontFamily: QURAN_FONT, color: palette.accent }}>{run.text}</Text> : run.text))}
             </Text>
           )}
-          {/* Each differing word: Hafs's reading first, then the others in the accent colour, each with who reads it. */}
-          {qiraat.map(word => (
-            <Card key={word.at.join('-')} palette={palette} pad={[0, 14]}>
-              {word.readings.map((reading, i) => (
-                <View key={i} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 6, borderTopWidth: i ? 1 : 0, borderTopColor: palette.rule }}>
-                  <Text style={{ minWidth: 104, maxWidth: '62%', flexShrink: 1, fontFamily: QURAN_FONT, fontSize: 24, lineHeight: 44, textAlign: 'right', writingDirection: 'rtl', color: i ? palette.accent : palette.ink }}>{reading.text}</Text>
-                  <Text style={{ flex: 1, fontSize: 14, lineHeight: 22, textAlign: 'right', color: palette.muted }}>{whoReads(reading, word.readings)}</Text>
-                </View>
-              ))}
-            </Card>
-          ))}
+          {qiraat.map(word => <QiraatWord key={word.at.join('-')} word={word} palette={palette} />)}
           {preview.kind === 'compare' && pairs.map(({ target, partner, words }) => {
             const [other, at] = partner.split(':').map(Number);
             const label = target.lead === target.other ? `${surahName(target.lead)} مع نفسها` : `${surahName(target.lead)} مع ${surahName(target.other)}`;
@@ -131,4 +122,17 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
       </View>}
     </Sheet>
   );
+}
+
+/** One word the readers differ on: Hafs's reading first, then the others in the accent colour, each with who reads it (the feed's readings card too). */
+export function QiraatWord({ word, palette, bare = false }: { word: WordDifference; palette: Palette;
+  /** Inside another card (the feed's), the rows without a card of their own. */
+  bare?: boolean }) {
+  const rows = word.readings.map((reading, i) => (
+    <View key={i} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 6, borderTopWidth: i ? 1 : 0, borderTopColor: palette.rule }}>
+      <Text style={{ minWidth: 104, maxWidth: '62%', flexShrink: 1, fontFamily: QURAN_FONT, fontSize: 24, lineHeight: 44, textAlign: 'right', writingDirection: 'rtl', color: i ? palette.accent : palette.ink }}>{reading.text}</Text>
+      <Text style={{ flex: 1, fontSize: 14, lineHeight: 22, textAlign: 'right', color: palette.muted }}>{whoReads(reading, word.readings)}</Text>
+    </View>
+  ));
+  return bare ? <View style={{ paddingHorizontal: 14 }}>{rows}</View> : <Card palette={palette} pad={[0, 14]}>{rows}</Card>;
 }
