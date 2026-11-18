@@ -42,6 +42,8 @@ type Props = {
   alongside?: GestureType;
   /** Shown under an ayah's text in the middle column, by the row's first ayah (a checked quiz answer). */
   note?: (key: string) => React.ReactNode;
+  /** Inside the card under its rows, in the middle column (a book's words under the ayat it names). */
+  below?: React.ReactNode;
   /** The rows scrolled (the branches tab hides its top bar while they scroll down). */
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void };
 
@@ -186,7 +188,7 @@ export function MatrixShare({ presentation, palette, width }: { presentation: Pr
  * The website's ayah matrix: a row per ayah of the tree, coloured where every row shares a word. With the surrounding switch,
  * the ayah before and after each sit in columns either side; a sideways swipe steps a column, then on to the next tree.
  */
-export default function MatrixCard({ onFit, presentation, palette, view, lane, around, onTap, onMove, footer, pinFooter = false, connections, growth, reading, onColumn, alongside, note, onScroll }: Props) {
+export default function MatrixCard({ onFit, presentation, palette, view, lane, around, onTap, onMove, footer, pinFooter = false, connections, growth, reading, onColumn, alongside, note, below, onScroll }: Props) {
   const matrix = useMemo(() => matrixOf(presentation, around), [presentation, around]);
   const count = matrix.columns.length;
   // One column fills the card; with the ayat around it, its neighbours peek in from the sides.
@@ -289,6 +291,12 @@ export default function MatrixCard({ onFit, presentation, palette, view, lane, a
               </View>
               </Fragment>
             ))}
+            {below && <>
+              <RowRule dashed={false} color={palette.rule} />
+              <View style={{ flexDirection: 'row-reverse', gap: GAP }}>
+                {matrix.columns.map(name => <View key={name} style={{ width }}>{name === 'ayah' ? below : null}</View>)}
+              </View>
+            </>}
             {lines.routes.length > 0 && <Svg pointerEvents="none" style={{ position: 'absolute', left: 0, top: 0, width: count * step - GAP + 2 * PAD, height: '100%' }}>
               {lines.routes.filter(route => !growth?.hidden.has(route.id)).map(route => (
                 <Fragment key={route.id}>
