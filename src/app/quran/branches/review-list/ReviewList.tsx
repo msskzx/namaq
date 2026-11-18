@@ -21,7 +21,7 @@ function Lazy({ children }: { children: React.ReactNode }) {
 }
 
 export default function ReviewList({ group, groups, trees, missing }: {
-  group: string; groups: { name: string; count: number }[]; trees: TreePreview[]; missing: string[];
+  group: string; groups: { name: string; count: number }[]; trees: (TreePreview & { why?: string })[]; missing: string[];
 }) {
   return <main dir="rtl" className="mx-auto max-w-3xl px-4 py-6 flex flex-col gap-6">
     <nav className="flex gap-3 sticky top-0 z-10 py-2" style={{ background: 'var(--home-bg, #1c1c1c)' }}>
@@ -32,6 +32,7 @@ export default function ReviewList({ group, groups, trees, missing }: {
     {missing.length > 0 && <p>Not found today: {missing.join(', ')}</p>}
     {trees.map((tree, i) => <section key={tree.id} className="flex flex-col gap-2">
       <h2 className="text-lg"><span dir="ltr">{group}{i + 1}</span> · {tree.text} <a href={tree.href} target="_blank" rel="noreferrer" style={{ fontSize: 12, opacity: 0.7 }} dir="ltr">{tree.id}</a></h2>
+      {tree.why && <p dir="ltr" style={{ fontSize: 14, opacity: 0.8 }}>Agent ({group === 'K' ? 'keep' : 'drop'}): {tree.why}</p>}
       <Lazy><TreeViewCard tree={tree} height="420px" names={SURAH_NAMES} start="tree" /></Lazy>
     </section>)}
   </main>;
