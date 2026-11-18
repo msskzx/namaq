@@ -5,7 +5,7 @@ import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Card from '@/ui/Card';
 import ExternalLink from '@/ui/ExternalLink';
-import { Tap } from '@/ui/Tap';
+import Button from '@/ui/Button';
 import { toTab } from '@/lib/ways';
 import { usePalette, type Palette } from '@/lib/theme';
 import { ABOUT_INTRO, ABOUT_REFERENCES, APP_PRIVACY, ATTRIBUTIONS_INTRO, NAMAQ_FORMS, NAMAQ_NAME, SOURCE_EXTRAS } from '@shared/infoPages';
@@ -24,9 +24,7 @@ function About({ palette }: { palette: Palette }) {
       <Text style={paragraph(palette)}>{ABOUT_INTRO.ar}</Text>
       <Text accessibilityRole="header" style={heading(palette)}>المراجع</Text>
       {ABOUT_REFERENCES.map(text => <Text key={text.ar} style={paragraph(palette)}>{text.ar}</Text>)}
-      <Tap onPress={() => router.push('/attributions')} accessibilityRole="link" style={{ alignSelf: 'flex-start' }}>
-        <Text style={{ color: palette.accent, fontSize: 17 }}>{INFO_TITLES.attributions}</Text>
-      </Tap>
+      <View style={{ alignSelf: 'flex-start' }}><Button label={INFO_TITLES.attributions} onPress={() => router.push('/attributions')} /></View>
       <Text accessibilityRole="header" style={heading(palette)}>اسم نمق</Text>
       {[name.verb, name.noun].map(entry => (
         <Card key={entry.title} palette={palette} gap={4}>
@@ -61,15 +59,18 @@ function SourceCard({ source, palette }: { source: Source; palette: Palette }) {
       <Text style={{ color: palette.ink, fontSize: 19, textAlign: 'right', marginBottom: 4 }}>{source.title.ar}</Text>
       {source.author && <Line label="المؤلف: " palette={palette}>{source.author.ar}</Line>}
       {source.edition && <Line label="الطبعة: " palette={palette}>{source.edition}</Line>}
-      <Line label="المصدر: " palette={palette}><ExternalLink url={source.link.url} color={palette.accent} size={17}>{source.link.label}</ExternalLink></Line>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+        <Text style={[paragraph(palette), { color: palette.muted }]}>المصدر:</Text>
+        <ExternalLink url={source.link.url} color={palette.accent} size={17}>{source.link.label}</ExternalLink>
+      </View>
       <Line label="الترخيص: " palette={palette}>{source.licence.ar}</Line>
       <Line label="يُستعمل في: " palette={palette}>{source.uses.map(use => use.ar).join('، ')}</Line>
-      {extra?.links?.map((row, i) => (
-        <Text key={i} style={paragraph(palette)}>
-          {row.map((link, j) => (
-            <Text key={link.url}>{j > 0 && ' · '}<Text style={{ color: palette.muted }}>{link.prefix.ar}</Text><ExternalLink url={link.url} color={palette.accent} size={17}>{link.label.ar}</ExternalLink></Text>
-          ))}
-        </Text>
+      {/* Each link on its own line, as other screens put them: a link inside a line of text loses its alignment. */}
+      {extra?.links?.flat().map(link => (
+        <View key={link.url} style={{ alignItems: 'flex-start' }}>
+          {link.prefix.ar ? <Text style={paragraph(palette, true)}>{link.prefix.ar}</Text> : null}
+          <ExternalLink url={link.url} color={palette.accent} size={17}>{link.label.ar}</ExternalLink>
+        </View>
       ))}
       {extra?.notes.map(note => <Text key={note.ar} style={[paragraph(palette, true), { marginTop: 4 }]}>{note.ar}</Text>)}
     </Card>
