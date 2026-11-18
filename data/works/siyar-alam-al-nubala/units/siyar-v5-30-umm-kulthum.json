@@ -1,0 +1,434 @@
+{
+  "unit": {
+    "id": "siyar-v5-30-umm-kulthum",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٣٠"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_uk_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "٣٠ - أُمُّ كُلْثُوْمٍ بِنْتُ رَسُوْلِ اللهِ"
+    },
+    {
+      "id": "sp_uk_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "أُمُّ كُلْثُوْمٍ بِنْتُ رَسُوْلِ اللهِ",
+      "prefix": "٣٠ -"
+    },
+    {
+      "id": "sp_uk_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "رَسُوْلِ اللهِ",
+      "prefix": "٣٠ - أُمُّ كُلْثُوْمٍ بِنْتُ"
+    },
+    {
+      "id": "sp_uk_yuqal",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "يُقَالُ: تَزَوَّجَهَا عُتَيْبَةُ بنُ أَبِي لَهَبٍ، ثُمَّ فَارَقَهَا"
+    },
+    {
+      "id": "sp_uk_utaybah_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "عُتَيْبَةُ بنُ أَبِي لَهَبٍ"
+    },
+    {
+      "id": "sp_uk_uthman",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "فَلَمَّا تُوُفِّيَتْ أُخْتُهَا رُقَيَّةُ، تَزَوَّجَ بِهَا عُثْمَانُ - وَهِيَ بِكْرٌ - فِي رَبِيْعٍ الأَوَّلِ، سَنَةَ ثَلاَثٍ، فَلَمْ تَلِدْ لَهُ"
+    },
+    {
+      "id": "sp_uk_ruqayyah_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "أُخْتُهَا رُقَيَّةُ",
+      "prefix": "فَلَمَّا تُوُفِّيَتْ"
+    },
+    {
+      "id": "sp_uk_uthman_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "تَزَوَّجَ بِهَا عُثْمَانُ"
+    },
+    {
+      "id": "sp_uk_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "253",
+      "layer": "MAIN",
+      "exact": "وَتُوُفِّيَتْ: فِي شَعْبَانَ، سَنَةَ تِسْعٍ"
+    },
+    {
+      "id": "sp_uk_death_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "253",
+      "layer": "MAIN",
+      "exact": "سَنَةَ تِسْعٍ",
+      "prefix": "فِي شَعْبَانَ،"
+    },
+    {
+      "id": "sp_uk_death_m",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "253",
+      "layer": "MAIN",
+      "exact": "فِي شَعْبَانَ",
+      "prefix": "وَتُوُفِّيَتْ:"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_uk0",
+      "unit": "siyar-v5-30-umm-kulthum",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_uk_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_uk_yuqal",
+      "unit": "siyar-v5-30-umm-kulthum",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_uk_yuqal_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_uk_name",
+      "report": "r_uk0",
+      "spans": [
+        "sp_uk_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uk_yuqal",
+      "report": "r_uk_yuqal",
+      "spans": [
+        "sp_uk_yuqal"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_uk_uthman",
+      "report": "r_uk0",
+      "spans": [
+        "sp_uk_uthman"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uk_death",
+      "report": "r_uk0",
+      "spans": [
+        "sp_uk_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_uk",
+      "parent": "sp_uk_name",
+      "exact": "أُمُّ كُلْثُوْمٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uk_father",
+      "parent": "sp_uk_name",
+      "exact": "رَسُوْلِ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uk_yuqal_by",
+      "parent": "sp_uk_yuqal",
+      "exact": "يُقَالُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_uk_y",
+      "parent": "sp_uk_yuqal",
+      "exact": "تَزَوَّجَهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uk_utaybah",
+      "parent": "sp_uk_yuqal",
+      "exact": "عُتَيْبَةُ بنُ أَبِي لَهَبٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uk_u",
+      "parent": "sp_uk_uthman",
+      "exact": "بِهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uk_ruqayyah",
+      "parent": "sp_uk_uthman",
+      "exact": "رُقَيَّةُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uk_uthman",
+      "parent": "sp_uk_uthman",
+      "exact": "عُثْمَانُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uk_d",
+      "parent": "sp_uk_death",
+      "exact": "وَتُوُفِّيَتْ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_uk",
+      "mention": "m_uk",
+      "agent": "umm-kulthum-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_uk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_father",
+      "mention": "m_uk_father",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_uk_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_y",
+      "mention": "m_uk_y",
+      "agent": "umm-kulthum-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_uk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_utaybah",
+      "mention": "m_uk_utaybah",
+      "agent": "utaybah-ibn-abi-lahab",
+      "basis": [
+        {
+          "span": "sp_uk_utaybah_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_u",
+      "mention": "m_uk_u",
+      "agent": "umm-kulthum-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_uk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_ruqayyah",
+      "mention": "m_uk_ruqayyah",
+      "agent": "ruqayyah-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_uk_ruqayyah_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_uthman",
+      "mention": "m_uk_uthman",
+      "agent": "uthman-ibn-affan",
+      "basis": [
+        {
+          "span": "sp_uk_uthman_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_d",
+      "mention": "m_uk_d",
+      "agent": "umm-kulthum-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_uk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_uk_name",
+      "subject": "m_uk",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_uk_name"
+        ]
+      },
+      "restsOn": [
+        "st_uk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_sex",
+      "subject": "m_uk",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_uk_name"
+        ]
+      },
+      "restsOn": [
+        "st_uk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_father",
+      "subject": "m_uk",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_uk_father"
+      },
+      "restsOn": [
+        "st_uk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_utaybah",
+      "subject": "m_uk_y",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_uk_utaybah"
+      },
+      "restsOn": [
+        "st_uk_yuqal"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_uthman",
+      "subject": "m_uk_u",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_uk_uthman"
+      },
+      "restsOn": [
+        "st_uk_uthman"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_ruqayyah",
+      "subject": "m_uk_u",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_uk_ruqayyah"
+      },
+      "restsOn": [
+        "st_uk_uthman"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_died",
+      "subject": "m_uk_d",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 9,
+        "spans": [
+          "sp_uk_death_y"
+        ]
+      },
+      "restsOn": [
+        "st_uk_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_died_m",
+      "subject": "m_uk_d",
+      "predicate": "died.month",
+      "value": {
+        "parsed": 8,
+        "spans": [
+          "sp_uk_death_m"
+        ]
+      },
+      "restsOn": [
+        "st_uk_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

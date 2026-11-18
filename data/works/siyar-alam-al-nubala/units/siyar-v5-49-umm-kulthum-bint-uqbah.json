@@ -1,0 +1,618 @@
+{
+  "unit": {
+    "id": "siyar-v5-49-umm-kulthum-bint-uqbah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٤٩"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ku_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "276",
+      "layer": "MAIN",
+      "exact": "٤٩ - أُمُّ كُلْثُوْمٍ بِنْتُ عُقْبَةَ الأُمَوِيِّةُ"
+    },
+    {
+      "id": "sp_ku_name1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "276",
+      "layer": "MAIN",
+      "exact": "أُمُّ كُلْثُوْمٍ بِنْتُ عُقْبَةَ",
+      "prefix": "٤٩ -"
+    },
+    {
+      "id": "sp_ku_name2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "276",
+      "layer": "MAIN",
+      "exact": "ابْنِ أَبِي مُعَيْطٍ أَبَانِ بنِ ذَكْوَانَ بنِ أُمَيَّةَ بنِ عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ بنِ قُصَيٍّ"
+    },
+    {
+      "id": "sp_ku_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "276",
+      "layer": "MAIN",
+      "exact": "عُقْبَةَ الأُمَوِيِّةُ",
+      "prefix": "٤٩ - أُمُّ كُلْثُوْمٍ بِنْتُ"
+    },
+    {
+      "id": "sp_ku_muhajirat",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "276",
+      "layer": "MAIN",
+      "exact": "مِنَ المُهَاجِرَاتِ",
+      "prefix": "بنِ قُصَيٍّ الأُمَوِيِّ."
+    },
+    {
+      "id": "sp_ku_aslamat",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "276",
+      "layer": "MAIN",
+      "exact": "أَسْلَمَتْ بِمَكَّةَ، وَبَايَعَتْ، وَلَمْ يَتَهَيَّأْ لَهَا هِجْرَةٌ إِلَى سَنَةِ سَبْعٍ"
+    },
+    {
+      "id": "sp_ku_akhawa",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "276",
+      "layer": "MAIN",
+      "exact": "فَخَرَجَ فِي إِثْرِهَا أَخَوَاهَا؛ الوَلِيْدُ وَعُمَارَةُ"
+    },
+    {
+      "id": "sp_ku_akhawa_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "276",
+      "layer": "MAIN",
+      "exact": "الوَلِيْدُ وَعُمَارَةُ",
+      "prefix": "أَخَوَاهَا؛"
+    },
+    {
+      "id": "sp_ku_ayah1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "276",
+      "layer": "MAIN",
+      "exact": "فَقَالَتْ: أَتَرُدُّنِي يَا رَسُوْلَ اللهِ إِلَى الكُفَّارِ يَفْتِنُوْنِي عَنْ دِيْنِي وَلاَ صَبْرَ لِي، وَحَالُ النِّسَاءِ فِي الضَّعْفِ مَا قَدْ عَلِمْتَ؟ فَأَنْزَلَ اللهُ - تَعَالَى -:"
+    },
+    {
+      "id": "sp_ku_ayah2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "277",
+      "layer": "MAIN",
+      "exact": "[المُمْتَحَنَةُ: ١٠ - ١١]",
+      "prefix": "الآيَتَيْنِ"
+    },
+    {
+      "id": "sp_ku_husbands",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "277",
+      "layer": "MAIN",
+      "exact": "وَلَمْ يَكُنْ لأُمِّ كُلْثُوْمٍ بِمَكَّةَ زَوْجٌ، فَتَزَوَّجَهَا زَيْدُ بنُ حَارِثَةَ، ثُمَّ طَلَّقَهَا. فَتَزَوَّجَهَا عَبْدُ الرَّحْمَنِ بنُ عَوْفٍ، فَوَلَدَت لَهُ: إِبْرَاهِيْمَ، وَحُمَيْداً. فَلَمَّا تُوُفِّيَ عَنْهَا، تَزَوَّجَهَا عَمْرُو بنُ العَاصِ، فَتُوُفِّيَتْ عِنْدَهُ"
+    },
+    {
+      "id": "sp_ku_zayd_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "277",
+      "layer": "MAIN",
+      "exact": "زَيْدُ بنُ حَارِثَةَ",
+      "prefix": "فَتَزَوَّجَهَا"
+    },
+    {
+      "id": "sp_ku_awf_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "277",
+      "layer": "MAIN",
+      "exact": "عَبْدُ الرَّحْمَنِ بنُ عَوْفٍ"
+    },
+    {
+      "id": "sp_ku_amr_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "277",
+      "layer": "MAIN",
+      "exact": "عَمْرُو بنُ العَاصِ",
+      "prefix": "تَزَوَّجَهَا"
+    },
+    {
+      "id": "sp_ku_kids_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "277",
+      "layer": "MAIN",
+      "exact": "إِبْرَاهِيْمَ، وَحُمَيْداً",
+      "prefix": "فَوَلَدَت لَهُ:"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ku0",
+      "unit": "siyar-v5-49-umm-kulthum-bint-uqbah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ku_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ku_name",
+      "report": "r_ku0",
+      "spans": [
+        "sp_ku_name1",
+        "sp_ku_name2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ku_muhajirat",
+      "report": "r_ku0",
+      "spans": [
+        "sp_ku_muhajirat"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ku_aslamat",
+      "report": "r_ku0",
+      "spans": [
+        "sp_ku_aslamat"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ku_akhawa",
+      "report": "r_ku0",
+      "spans": [
+        "sp_ku_akhawa"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ku_ayah",
+      "report": "r_ku0",
+      "spans": [
+        "sp_ku_ayah1",
+        "sp_ku_ayah2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ku_husbands",
+      "report": "r_ku0",
+      "spans": [
+        "sp_ku_husbands"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ku",
+      "parent": "sp_ku_name1",
+      "exact": "أُمُّ كُلْثُوْمٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ku_father",
+      "parent": "sp_ku_name1",
+      "exact": "عُقْبَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ku_ak",
+      "parent": "sp_ku_akhawa",
+      "exact": "أَخَوَاهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ku_walid",
+      "parent": "sp_ku_akhawa",
+      "exact": "الوَلِيْدُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ku_umarah",
+      "parent": "sp_ku_akhawa",
+      "exact": "عُمَارَةُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ku_ay",
+      "parent": "sp_ku_ayah1",
+      "exact": "فَقَالَتْ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ku_h",
+      "parent": "sp_ku_husbands",
+      "exact": "لأُمِّ كُلْثُوْمٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ku_zayd",
+      "parent": "sp_ku_husbands",
+      "exact": "زَيْدُ بنُ حَارِثَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ku_awf",
+      "parent": "sp_ku_husbands",
+      "exact": "عَبْدُ الرَّحْمَنِ بنُ عَوْفٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ku_amr",
+      "parent": "sp_ku_husbands",
+      "exact": "عَمْرُو بنُ العَاصِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ku_ibrahim",
+      "parent": "sp_ku_husbands",
+      "exact": "إِبْرَاهِيْمَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ku_humayd",
+      "parent": "sp_ku_husbands",
+      "exact": "حُمَيْداً",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ku",
+      "mention": "m_ku",
+      "agent": "umm-kulthum-bint-uqbah",
+      "basis": [
+        {
+          "span": "sp_ku_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_father",
+      "mention": "m_ku_father",
+      "agent": "uqba-ibn-abi-muayt",
+      "basis": [
+        {
+          "span": "sp_ku_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_ak",
+      "mention": "m_ku_ak",
+      "agent": "umm-kulthum-bint-uqbah",
+      "basis": [
+        {
+          "span": "sp_ku_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_walid",
+      "mention": "m_ku_walid",
+      "agent": "al-walid-ibn-uqbah",
+      "basis": [
+        {
+          "span": "sp_ku_akhawa_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_umarah",
+      "mention": "m_ku_umarah",
+      "agent": "umarah-ibn-uqbah",
+      "basis": [
+        {
+          "span": "sp_ku_akhawa_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_ay",
+      "mention": "m_ku_ay",
+      "agent": "umm-kulthum-bint-uqbah",
+      "basis": [
+        {
+          "span": "sp_ku_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_h",
+      "mention": "m_ku_h",
+      "agent": "umm-kulthum-bint-uqbah",
+      "basis": [
+        {
+          "span": "sp_ku_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_zayd",
+      "mention": "m_ku_zayd",
+      "agent": "zaid-ibn-harithah",
+      "basis": [
+        {
+          "span": "sp_ku_zayd_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_awf",
+      "mention": "m_ku_awf",
+      "agent": "abdur-rahman-ibn-awf",
+      "basis": [
+        {
+          "span": "sp_ku_awf_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_amr",
+      "mention": "m_ku_amr",
+      "agent": "amr-ibn-al-as",
+      "basis": [
+        {
+          "span": "sp_ku_amr_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_ibrahim",
+      "mention": "m_ku_ibrahim",
+      "agent": "ibrahim-ibn-abd-al-rahman-ibn-awf",
+      "basis": [
+        {
+          "span": "sp_ku_kids_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_humayd",
+      "mention": "m_ku_humayd",
+      "agent": "humayd-ibn-abd-al-rahman-ibn-awf",
+      "basis": [
+        {
+          "span": "sp_ku_kids_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ku_name",
+      "subject": "m_ku",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ku_name1",
+          "sp_ku_name2"
+        ]
+      },
+      "restsOn": [
+        "st_ku_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_sex",
+      "subject": "m_ku",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_ku_name1"
+        ]
+      },
+      "restsOn": [
+        "st_ku_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_father",
+      "subject": "m_ku",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ku_father"
+      },
+      "restsOn": [
+        "st_ku_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_v_aslamat",
+      "subject": "m_ku",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ku_aslamat"
+        ]
+      },
+      "restsOn": [
+        "st_ku_aslamat"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_walid",
+      "subject": "m_ku_ak",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_ku_walid"
+      },
+      "restsOn": [
+        "st_ku_akhawa"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_umarah",
+      "subject": "m_ku_ak",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_ku_umarah"
+      },
+      "restsOn": [
+        "st_ku_akhawa"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_ayah",
+      "subject": "m_ku_ay",
+      "predicate": "ABOUT_AYAH",
+      "value": {
+        "classified": "60:10",
+        "spans": [
+          "sp_ku_ayah2"
+        ]
+      },
+      "restsOn": [
+        "st_ku_ayah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_zayd",
+      "subject": "m_ku_h",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_ku_zayd"
+      },
+      "restsOn": [
+        "st_ku_husbands"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_awf",
+      "subject": "m_ku_h",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_ku_awf"
+      },
+      "restsOn": [
+        "st_ku_husbands"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_amr",
+      "subject": "m_ku_h",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_ku_amr"
+      },
+      "restsOn": [
+        "st_ku_husbands"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_ibrahim_m",
+      "subject": "m_ku_ibrahim",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ku_h"
+      },
+      "restsOn": [
+        "st_ku_husbands"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_ibrahim_f",
+      "subject": "m_ku_ibrahim",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ku_awf"
+      },
+      "restsOn": [
+        "st_ku_husbands"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_humayd_m",
+      "subject": "m_ku_humayd",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ku_h"
+      },
+      "restsOn": [
+        "st_ku_husbands"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_humayd_f",
+      "subject": "m_ku_humayd",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ku_awf"
+      },
+      "restsOn": [
+        "st_ku_husbands"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
