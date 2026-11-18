@@ -311,3 +311,16 @@ test('the words page shows its source and how it counts in the page, collapsed',
   await page.getByRole('link', { name: 'المصادر والتراخيص' }).click();
   await expect.poll(() => page.evaluate(() => (window as unknown as { externalUrl: string }).externalUrl)).toBe('https://namaq.vercel.app/attributions#quranic-arabic-corpus');
 });
+
+test('the balagha terms list finds a term, opens its definition and examples, and an example opens the reader', async ({ page }) => {
+  await open(page, '/');
+  await tab(page, 'القرآن').click();
+  await page.getByRole('link', { name: 'مصطلحات البلاغة' }).click();
+  await page.getByRole('textbox', { name: 'ابحث عن مصطلح' }).fill('الجناس');
+  await page.getByRole('link', { name: 'الجناس', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'الجناس', exact: true })).toBeVisible();
+  await expect(page.getByText('تعريفه', { exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /^أمثلته في الإتقان/ })).toBeVisible();
+  await page.getByRole('button', { name: `افتح ${S(75)} ٢٩ في المصحف` }).first().click();
+  await expect(page).toHaveURL(/\/read/);
+});

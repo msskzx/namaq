@@ -51,6 +51,8 @@ export type ChoiceQuestion = {
   quranChoices?: boolean;
   /** Once answered, a line under each choice saying what it is: an ayah's place, a reading's readers. */
   whereOf?: Record<string, string>;
+  /** Once answered, the balagha term each choice names (shared/quran/balaghaTerms.ts), a tap from its definition. */
+  terms?: Record<string, string>;
   /** Shown under the choices after answering, such as the line of a poem that states the rule. */
   note?: { label: string; text: string };
   /** A compare question (compareQuiz.ts): typed into its blanks, not picked from choices. */
