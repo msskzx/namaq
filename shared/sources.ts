@@ -63,6 +63,7 @@ const USE = {
   tuhfa: { ar: 'تحفة الأطفال', en: 'Tuhfat al-Atfal', href: '/quran/tajwid/tuhfat-al-atfal' },
   listen: { ar: 'الاستماع إلى التلاوة في المصحف', en: 'listening to recitations in the mushaf reader', href: '/quran/read' },
   adhkar: { ar: 'الأذكار والدعاء في تطبيق الهاتف', en: 'adhkar and du’a in the phone app' },
+  stories: { ar: 'قصص السيرة في تطبيق الهاتف', en: 'the sira stories in the phone app' },
   prayer: { ar: 'مواقيت الصلاة والقبلة', en: 'prayer times and the qibla', href: '/utilities' },
   battles: { ar: 'خرائط الغزوات والمعارك في تطبيق الهاتف', en: 'the battle maps in the phone app' },
   hijri: { ar: 'التاريخ الهجري وجزء اليوم', en: 'the Hijri date and today’s juz', href: '/utilities' },
@@ -283,7 +284,27 @@ export const SOURCES: Source[] = [
     },
     uses: [USE.qiraat],
   },
+  {
+    id: 'sahih-al-bukhari', group: 'books',
+    title: { ar: 'صحيح البخاري', en: 'Sahih al-Bukhari' }, author: { ar: 'محمد بن إسماعيل البخاري', en: 'al-Bukhari' },
+    edition: 'نص hadith-api (ara-bukhari) بالترقيم المشهور، ويُربط كل حديث برقمه في sunnah.com', link: { url: 'https://sunnah.com/bukhari', label: 'sunnah.com' },
+    licence: {
+      ar: 'توفي المؤلف سنة ٢٥٦هـ، فنصه في الملك العام. نروي الحديث كاملًا من إسناده إلى آخره، مع رقمه ورابطه.',
+      en: 'The author died in 870, so his text is in the public domain. We give each hadith whole, chain to last word, with its number and a link.',
+    },
+    uses: [USE.stories],
+  },
   // Data
+  {
+    id: 'hadith-api', group: 'data',
+    title: { ar: 'hadith-api: نص صحيح البخاري', en: 'hadith-api: the text of Sahih al-Bukhari' },
+    edition: 'الإصدار ١ (ara-bukhari)، نُزّل ٢٠٢٦-١١-١٨، ولم يُحذف منه إلا علامات الاتجاه (U+200F)', link: { url: 'https://github.com/fawazahmed0/hadith-api', label: 'fawazahmed0/hadith-api' },
+    licence: {
+      ar: 'منشورة في الملك العام (Unlicense).',
+      en: 'Released into the public domain (Unlicense).',
+    },
+    uses: [USE.stories],
+  },
   {
     id: 'shamela-sadi', group: 'data',
     title: { ar: 'المكتبة الشاملة: تفسير السعدي (الكتاب ٤٢)', en: 'Shamela: al-Sa‘di’s tafsir (book 42)' },

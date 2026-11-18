@@ -223,10 +223,17 @@ export interface CatalogEventFields {
  * a space, are the report after its chain exactly as the pages print it. Across a page break the pages' text joins with
  * one space too.
  */
+/** A book's pages, or one hadith of a hadith book by its number (data/history/sources/<slug>/hadith/<number>.md). */
+export type CatalogReportSource =
+  | { readonly slug: string; readonly volume: number; readonly volumeLabel: string; readonly page: number; readonly endPage?: number; readonly url: string }
+  | { readonly slug: string; readonly hadith: number; readonly url: string };
+
+export const isHadithSource = (source: CatalogReportSource): source is Extract<CatalogReportSource, { hadith: number }> => 'hadith' in source;
+
 export interface CatalogReport {
   /** Who the source has the report from, as printed, just before the first moment. */
   readonly isnad?: string;
-  readonly source: { readonly slug: string; readonly volume: number; readonly volumeLabel: string; readonly page: number; readonly endPage?: number; readonly url: string };
+  readonly source: CatalogReportSource;
   /** The source's own words placing the report, such as أخرجه مسلم, printed right after it. None when the source gives none. */
   readonly grading?: string;
   readonly moments: readonly {
@@ -242,7 +249,10 @@ export const STORY_TAGS = { ISLAM: 'إسلامهم', HEARD_QURAN: 'سمعوا ا
 export type StoryTag = keyof typeof STORY_TAGS;
 
 /** Ayat a story turns on: the ones recited in it, or revealed about it, with the quotes that say so. */
-export type CatalogStoryEvidence = { readonly source: string; readonly page: number; readonly volume?: number; readonly volumeLabel?: string; readonly quote: string; readonly url?: string };
+/** A book's page (`page`), or a hadith book's hadith (`hadith`, its number). */
+export type CatalogStoryEvidence =
+  | { readonly source: string; readonly page: number; readonly volume?: number; readonly volumeLabel?: string; readonly quote: string; readonly url?: string }
+  | { readonly source: string; readonly hadith: number; readonly quote: string; readonly url: string };
 
 export interface CatalogStoryAyat {
   readonly kind: 'RECITED' | 'REVEALED_ABOUT';
@@ -266,7 +276,8 @@ export interface CatalogEvent {
   readonly type: EventType;
   readonly fields: CatalogEventFields;
   readonly dateParts?: CatalogDateParts;
-  readonly people: readonly { readonly person: string; readonly claims: Provenance }[];
+  /** A story's person may stand on its reports instead of a claim: then a moment of the reports must name them. */
+  readonly people: readonly { readonly person: string; readonly claims?: Provenance }[];
   /** The story as the source tells it: the first report is the story, the others are the source's other reports of it. */
   readonly reports?: readonly CatalogReport[];
   readonly tags?: readonly StoryTag[];
