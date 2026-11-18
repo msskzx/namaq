@@ -35,7 +35,7 @@ import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, ty
 import QuizAnswer, { type QuizData } from '@/app/quizzes/QuizAnswer';
 import type { Hints } from '@shared/quiz/hints';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
-import { backToVisit, FEED_AHEAD, freshPicks, hasStoryCard, savedOfSlot, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, serverFeedSeen, serverStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, STORIES, type StoryId } from '@shared/feedSeen';
+import { backToVisit, FEED_AHEAD, FEED_FAR, growingPicks, hasStoryCard, savedOfSlot, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, serverFeedSeen, serverStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, STORIES, type StoryId } from '@shared/feedSeen';
 import { forgottenOrder, type RecitePosition } from '@shared/quran/recite';
 import type { PairCard } from '@shared/quran/compareCards';
 import { hijriDate, juzLabel, todaysJuz } from '@shared/hijri';
@@ -63,6 +63,16 @@ const fetchJson = async <T,>(url: string): Promise<T> => {
   if (!response.ok) throw new Error(url);
   return response.json();
 };
+
+/** Pieces already asked for on this page: the feed only grows at its end, so a longer feed asks again only for its last piece. */
+const pieceCache = new Map<string, Promise<unknown>>();
+const fetchPiece = <T,>(url: string): Promise<T> => {
+  if (!pieceCache.has(url)) pieceCache.set(url, fetchJson<T>(url).catch(error => { pieceCache.delete(url); throw error; }));
+  return pieceCache.get(url) as Promise<T>;
+};
+/** Asks for the offsets FEED_AHEAD at a time (the most the API sends at once), in parallel. */
+const inPieces = <T,>(url: (offsets: number[]) => string, offsets: number[]): Promise<T[]> =>
+  Promise.all(Array.from({ length: Math.ceil(offsets.length / FEED_AHEAD) }, (_, at) => fetchPiece<T>(url(offsets.slice(at * FEED_AHEAD, (at + 1) * FEED_AHEAD)))));
 
 const juzHref = (juz: number) => ayahHref(`${JUZ_INDEX[juz - 1].surah}:${JUZ_INDEX[juz - 1].ayah}`);
 
@@ -379,21 +389,30 @@ export function Feed() {
     document.addEventListener('visibilitychange', change);
     return () => document.removeEventListener('visibilitychange', change);
   }, []);
-  const { data: ids } = useSWR(day ? `/api/home/feed?day=${day}` : null, fetchJson<Ids>, { revalidateOnFocus: false });
+  // The ids reach FEED_AHEAD past the batches shown, so the fresh ones can be found further on; never a limit (owner, 2026-11-18).
+  const reach = Math.min(FEED_FAR, (Math.floor(batches / FEED_AHEAD) + 2) * FEED_AHEAD);
+  const { data: ids } = useSWR(day ? `/api/home/feed?day=${day}&n=${reach}` : null, fetchJson<Ids>, { revalidateOnFocus: false, keepPreviousData: true });
   // The offsets picked: fresh ids first, in the day's order.
+  // The offsets already shown stay in place as more come; a new visit, day or setting picks afresh.
+  const shownPairs = useRef<{ reset?: unknown[]; list: number[] }>({ list: [] }).current;
+  const shownTrees = useRef<{ reset?: unknown[]; list: number[] }>({ list: [] }).current;
   const picked = useMemo(() => {
     if (!ids) return null;
-    const pick = (list: (string | null)[], keys: string[][] | undefined, count: number) => freshPicks(offset => (list[offset] ? offset : undefined), offset => list[offset]!, seen, count,
+    const pick = (holder: typeof shownPairs, list: (string | null)[], keys: string[][] | undefined, count: number) => growingPicks(holder, [visit, day, prefer, memorized],
+      offset => (list[offset] ? offset : undefined), offset => list[offset]!, seen, count,
       { since: visit, tries: list.length, prefer: prefer && keys ? offset => touchesMemorized(keys[offset] ?? [], memorized) : undefined });
-    return { pairs: pick(ids.pairs, ids.pairKeys, batches), trees: pick(ids.trees, ids.treeKeys, batches) };
-  }, [ids, seen, batches, prefer, memorized, visit]);
+    return { pairs: pick(shownPairs, ids.pairs, ids.pairKeys, batches), trees: pick(shownTrees, ids.trees, ids.treeKeys, batches) };
+  }, [ids, seen, batches, prefer, memorized, visit, day, shownPairs, shownTrees]);
   // Pairs and trees load apart, so the pairs show while the trees are still being worked out.
   const swr = { revalidateOnFocus: false, keepPreviousData: true };
-  const { data: pairContent, isValidating: pairsLoading } = useSWR(day && picked ? `/api/home/feed?day=${day}&p=${picked.pairs.join(',')}` : null, fetchJson<Content>, swr);
-  const { data: treeContent, isValidating: treesLoading } = useSWR(day && picked ? `/api/home/feed?day=${day}&t=${picked.trees.join(',')}` : null, fetchJson<Content>, swr);
+  const pieces = (kind: 'p' | 't', offsets: number[]) => () => inPieces<Content>(some => `/api/home/feed?day=${day}&${kind}=${some.join(',')}`, offsets)
+    .then(all => ({ pairs: all.flatMap(piece => piece.pairs), trees: all.flatMap(piece => piece.trees) }));
+  const { data: pairContent, isValidating: pairsLoading } = useSWR(day && picked ? `/api/home/feed?day=${day}&p=${picked.pairs.join(',')}` : null, picked ? pieces('p', picked.pairs) : null, swr);
+  const { data: treeContent, isValidating: treesLoading } = useSWR(day && picked ? `/api/home/feed?day=${day}&t=${picked.trees.join(',')}` : null, picked ? pieces('t', picked.trees) : null, swr);
   // The prophets cards of the batches shown, worked out on the server (the stories' ayat stay there).
   const storySlots = Array.from({ length: batches }, (_, i) => i).filter(hasStoryCard);
-  const { data: stories } = useSWR(day && storySlots.length ? `/api/home/feed?day=${day}&s=${storySlots.join(',')}` : null, fetchJson<StoryCard[]>, swr);
+  const { data: stories } = useSWR(day && storySlots.length ? `/api/home/feed?day=${day}&s=${storySlots.join(',')}` : null,
+    () => inPieces<StoryCard[]>(some => `/api/home/feed?day=${day}&s=${some.join(',')}`, storySlots).then(all => all.flat()), swr);
   const content = pairContent || treeContent ? { pairs: pairContent?.pairs ?? [], trees: treeContent?.trees ?? [] } : undefined;
   useEffect(() => { if (pairContent) markFeedSeen(pairContent.pairs.map(pair => pair.id)); }, [pairContent]);
   useEffect(() => { if (treeContent) markFeedSeen(treeContent.trees.map(tree => tree.id)); }, [treeContent]);
@@ -403,7 +422,7 @@ export function Feed() {
     const mark = end.current;
     if (!mark) return;
     const watch = new IntersectionObserver(entries => {
-      if (entries.some(entry => entry.isIntersecting)) setMore(now => ({ visit, batches: Math.min(FEED_AHEAD, (now.visit === visit ? now.batches : 1) + MORE) }));
+      if (entries.some(entry => entry.isIntersecting)) setMore(now => ({ visit, batches: (now.visit === visit ? now.batches : 1) + MORE }));
     }, { rootMargin: '0px 0px 1200px 0px' });
     watch.observe(mark);
     return () => watch.disconnect();
@@ -432,6 +451,6 @@ export function Feed() {
   return <section className={styles.feed} aria-label="للتأمل اليوم">
     {posts}
     {!content && <p className="py-6 text-center"><LoadingDots label="جارٍ التحميل" /></p>}
-    {content && !pairsLoading && !treesLoading && batches < FEED_AHEAD && <div ref={end} aria-hidden className="h-px" />}
+    {content && !pairsLoading && !treesLoading && <div ref={end} aria-hidden className="h-px" />}
   </section>;
 }

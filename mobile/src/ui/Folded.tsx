@@ -6,7 +6,7 @@ import type { Palette } from '@/lib/theme';
 
 /**
  * A passage's credit under a rule at the foot of its card (the book and page), folded; a tap opens the edition and the
- * page's link. The reader's book sheets share it (BalaghaSheet, GharibSheet); the website has src/components/common/Folded.tsx.
+ * page's link. Also the list of ayat a balagha quote fits when its paragraph names none. The reader's book sheets share it (BalaghaSheet, GharibSheet); the website has src/components/common/Folded.tsx.
  */
 export default function Folded({ credit, children, palette, extra, startOpen = false }: { credit: string; children: ReactNode; palette: Palette; extra?: ReactNode;
   /** Open at first (a story's recited ayat, owner 2026-11-18: shown, and folded at will). */
