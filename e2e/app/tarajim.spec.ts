@@ -34,3 +34,24 @@ test('the nasab tree shows where two lines meet', async ({ page }) => {
   await expect(page.getByText('يلتقيان في: عبد المطلب')).toBeVisible();
   await expect(page.getByRole('link', { name: 'محمد ﷺ' })).toBeVisible();
 });
+
+// The people graph (owner, 2026-11-18; sketch tarajim-app/graph/sketch2-dark.png): one person in the middle with his ties,
+// and «بينه وبين…» drawing the nearest chain between the people picked.
+test('the ties view draws a person with his ties and walks to a relative', async ({ page }) => {
+  await open(page, '/person?slug=az-zubayr-ibn-al-awwam');
+  await page.getByRole('button', { name: 'ارسم صلاته' }).click();
+  await expect(page).toHaveURL(/\/ties\?slug=az-zubayr-ibn-al-awwam/);
+  await expect(page.getByRole('heading', { name: 'الزبير بن العوام' })).toBeVisible();
+  await page.getByRole('link', { name: /^أمه: صفية/ }).click();
+  await expect(page.getByRole('heading', { name: /^صفية/ })).toBeVisible();
+  await expect(page.getByRole('link', { name: /^ابنها: الزبير/ })).toBeVisible();
+});
+
+test('between two people shows the chain that joins them, with its pages', async ({ page }) => {
+  await open(page, '/between?slugs=az-zubayr-ibn-al-awwam,hamzah-ibn-abd-al-muttalib');
+  await expect(page.getByText(/أمُّ الزبير بن العوام/)).toBeVisible();
+  await expect(page.getByRole('link', { name: 'حمزة بن عبد المطلب' })).toBeVisible();
+  await page.getByRole('button', { name: 'أضف' }).click();
+  await page.getByRole('button', { name: /^العباس/ }).click();
+  await expect(page.getByRole('link', { name: /^العباس/ })).toBeVisible();
+});

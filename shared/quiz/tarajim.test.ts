@@ -56,3 +56,17 @@ describe('virtue skip list', () => {
     }
   });
 });
+
+describe('ما صلته به؟', () => {
+  it('asks what one person is to another, never offering a tie that also holds between them', async () => {
+    const { tieQuestions } = await import('./tarajim');
+    const questions = tieQuestions();
+    expect(questions.length).toBeGreaterThan(0);
+    const zubayr = questions.find(q => q.key.includes('az-zubayr-ibn-al-awwam') && q.key.includes('safiyyah-bint-abd-al-muttalib'))!;
+    // Asked one way round: what Safiyyah is to al-Zubayr, or he to her.
+    expect(['أمه', 'ابنها']).toContain(zubayr.correctAnswer);
+    const prophet = questions.find(q => q.key.includes('az-zubayr-ibn-al-awwam') && q.key.includes('prophet-muhammad'));
+    if (prophet) expect(prophet.choices.map(c => c.value)).not.toContain('صاحبه');
+    for (const q of questions) expect(new Set(q.choices.map(c => c.value)).size).toBe(4);
+  });
+});

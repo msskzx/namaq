@@ -1,5 +1,6 @@
 import { kunyaName, type AppPerson, type PersonFact } from '@shared/tarajim';
 import { bareName } from '@shared/tarajimLine';
+import { linkedPairs, peopleGraph } from '@shared/tarajimGraph';
 import peopleJson from '@shared/data/tarajim/people.json';
 
 export const PROPHET = 'prophet-muhammad';
@@ -14,6 +15,13 @@ export const PEOPLE: AppPerson[] = (peopleJson as AppPerson[]).slice().sort((a, 
 
 const bySlug = new Map(PEOPLE.map(person => [person.slug, person]));
 export const findPerson = (slug: string) => bySlug.get(slug);
+
+/** Every tie the converted entries state (shared/tarajimGraph.ts), for the ties and «بينه وبين…» screens and the «صلة» card. */
+export const GRAPH = peopleGraph(PEOPLE);
+
+let pairs: ReturnType<typeof linkedPairs> | undefined;
+/** The pairs the «صلة» feed card goes through, found once when the first card asks. */
+export const tiePairs = () => (pairs ??= linkedPairs(GRAPH));
 
 /** The name to show: the Prophet with ﷺ (design rule), everyone else as the catalog names them. */
 export function personName(person: { slug: string; name: string }) {

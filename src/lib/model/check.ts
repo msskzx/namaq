@@ -434,7 +434,14 @@ function checkUnit(
         const quote = value.spans.map((id) => rendered.get(id) ?? '').join(' ');
         if (!Number.isFinite(value.parsed)) fail(`${owner}: parsed is not a number`);
         else if (!read) fail(`${owner}: ${assertion.predicate} has no date reader`);
-        else if (read(quote) !== value.parsed)
+        else if (value.decadeFrom !== undefined) {
+          needSpan(owner, value.decadeFrom);
+          const units = read(quote);
+          const context = read(rendered.get(value.decadeFrom) ?? '');
+          const year = units !== undefined && context !== undefined && units < 10 ? Math.floor(context / 10) * 10 + units : undefined;
+          if (year !== value.parsed)
+            fail(`${owner} (${assertion.predicate}): parsed ${value.parsed} but the quote and its decade read ${year ?? 'nothing'}`);
+        } else if (read(quote) !== value.parsed)
           fail(`${owner} (${assertion.predicate}): parsed ${value.parsed} but the quote reads ${read(quote) ?? 'nothing'}`);
       }
     } else {
