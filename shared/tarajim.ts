@@ -21,7 +21,10 @@ export interface PersonFact {
   value?: number | string;
 }
 
-/** Another person or an event the entry ties this person to. `inApp` when that one has a page in the app too. */
+/**
+ * Another person or an event the entry ties this person to; `text` is the sentence that states the tie, as printed.
+ * `inApp` when that one has a page in the app too.
+ */
 export interface PersonLink extends PersonFact {
   slug: string;
   name: string;
@@ -43,6 +46,8 @@ export interface AppPerson {
   /** The fathers named in the full name, from the person up, as printed. */
   nasab: string[];
   kunya: PersonFact[];
+  /** Names others called him or her by («أنت طلحة الفياض»), each with who said it. */
+  laqab: PersonFact[];
   titles: PersonTitle[];
   appearance: PersonFact[];
   virtues: PersonFact[];
@@ -55,6 +60,8 @@ export interface AppPerson {
   cousins: PersonLink[];
   companionOf: PersonLink[];
   battles: PersonLink[];
+  /** Battles the entry says he or she missed, with the reason in its words. */
+  absentFrom: PersonLink[];
   ayat: PersonFact[];
 }
 

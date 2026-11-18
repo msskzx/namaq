@@ -410,6 +410,13 @@
       "exact": "صَفِيَّةُ",
       "occurrence": 1,
       "role": "SUBJECT"
+    },
+    {
+      "id": "m_sf_ana",
+      "parent": "sp_sf_first",
+      "exact": "أَنَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
     }
   ],
   "identifications": [
@@ -564,6 +571,18 @@
       "basis": [
         {
           "span": "sp_sf_day_khandaq",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sf_ana",
+      "mention": "m_sf_ana",
+      "agent": "safiyyah-bint-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_sf_heading",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -762,6 +781,20 @@
       },
       "restsOn": [
         "st_sf_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sf_v_first",
+      "subject": "m_sf_ana",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_sf_first"
+        ]
+      },
+      "restsOn": [
+        "st_sf_first"
       ],
       "status": "PROPOSED"
     }

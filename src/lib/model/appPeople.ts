@@ -5,6 +5,7 @@ import type { AppPerson, PageRef, PersonFact, PersonLink, PersonTitle } from '@s
 import type { Catalog } from '../catalog/types';
 import { loadModel } from './load';
 import { agentOfMention, profilesFromModel, type ProfileEntry } from './profile';
+import { renderSpanRecord } from './render';
 import type { WorkFolder } from './types';
 
 const IBN = /^(?:ابن|بن|بنت|ابنة)$/u;
@@ -29,6 +30,13 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
   const profiles = profilesFromModel(folders, root);
   const spans = new Map(folders.flatMap((folder) => folder.units.flatMap((file) => file.spans.map((span) => [span.id + '@' + file.unit.id, span] as const))));
   const units = new Map(folders.flatMap((folder) => folder.units.map((file) => [file.unit.id, file] as const)));
+  const folderOf = new Map(folders.flatMap((folder) => folder.units.map((file) => [file.unit.id, folder] as const)));
+  // The sentence a tie rests on, as printed («غاب عن وقعة بدر في تجارة له بالشام…»).
+  const sentence = (entry: ProfileEntry) => {
+    const from = units.get(entry.unit)!;
+    return from.statements.filter((s) => entry.statementIds.includes(s.id)).flatMap((s) => s.spans)
+      .map((id) => renderSpanRecord(folderOf.get(entry.unit)!, from.spans.find((span) => span.id === id)!, root)).join(' ');
+  };
   const people = new Map(catalog.people.map((person) => [person.slug, person]));
   const battles = new Map(catalog.battles.map((battle) => [battle.slug, battle.name]));
   const events = new Map(catalog.events.map((event) => [event.slug, event.name]));
@@ -93,10 +101,10 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
     };
     const links = (predicate: ProfileEntry['predicate']): PersonLink[] => of(predicate).flatMap((entry) => {
       if (!entry.object) return [];
-      return [{ ...fact(entry), text: entry.objectMention ?? '', slug: entry.object, name: nameOf(entry.object, entry.objectMention), inApp: inApp.has(entry.object) }];
+      return [{ ...fact(entry), text: sentence(entry), slug: entry.object, name: nameOf(entry.object, entry.objectMention), inApp: inApp.has(entry.object) }];
     });
     const back = (predicate: ProfileEntry['predicate']): PersonLink[] => reverse(slug, predicate)
-      .map(({ other, entry }) => ({ ...fact(entry), text: '', slug: other, name: nameOf(other), inApp: inApp.has(other) }));
+      .map(({ other, entry }) => ({ ...fact(entry), text: sentence(entry), slug: other, name: nameOf(other), inApp: inApp.has(other) }));
     const titles: PersonTitle[] = of('title').map((entry) => ({ ...fact(entry), title: entry.classified ?? '', name: titleNames.get(entry.classified ?? '') ?? entry.text }));
     const fullName = facts('name.full')[0];
     const sex = of('sex')[0]?.classified;
@@ -110,6 +118,7 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
       ...(fullName && { fullName }),
       nasab: fullName ? nasabOf(fullName.text) : [],
       kunya: facts('name.kunya'),
+      laqab: facts('name.laqab'),
       titles,
       appearance: facts('appearance'),
       virtues: facts('virtue'),
@@ -122,6 +131,7 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
       cousins: merge([...links('PATERNAL_COUSIN'), ...back('PATERNAL_COUSIN')]),
       companionOf: merge(links('COMPANION_OF')),
       battles: links('PARTICIPATED_IN'),
+      absentFrom: of('ABSENT_FROM').flatMap((entry) => entry.object ? [{ ...fact(entry), text: sentence(entry), slug: entry.object, name: nameOf(entry.object, entry.objectMention), inApp: false }] : []),
       ayat: facts('ABOUT_AYAH'),
     };
   }).sort((a, b) => a.name.localeCompare(b.name, 'ar'));
