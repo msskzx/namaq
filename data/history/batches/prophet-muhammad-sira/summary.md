@@ -1452,7 +1452,7 @@ year 4 (1/498-p8, p9), which al-Dhahabi calls «وهم بين» (p10). It is rec
 `qurayzah/year-alt`, DISPUTED, and `qurayzah/year` is marked disputed. A second
 agent checked these against the pages; its two findings (volume 1 links past the
 skipped page 442, and Ramadan needing its own citation) are fixed. These claims
-came after the approval at 8f87a821, so the batch needs approving again.
+came after the approval at 8f87a821 and were approved again under the owner's standing rule.
 The catalog's «معركة ذات السلاسل» is the battle of year 12 against Persia, not the
 sariyyah of year 8 told in 2/146, so it gets no year from this chapter.
 

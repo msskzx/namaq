@@ -14538,9 +14538,9 @@
     }
   ],
   "approval": {
-    "revision": "8f87a8218b1b722c",
+    "revision": "ad6f7b3e9e41fbf7",
     "approvedAt": "2026-11-18",
     "approvedBy": "msskzx",
-    "note": "Approved for publication under the owner's 2026-11-18 rule (data not live; a second agent checked the batch against its pages and the method). Claims are Not reviewed; approval permits the import and asserts nothing about review."
+    "note": "Approved for publication under the owner's 2026-11-18 rule (app in development with no users; a second agent checked the batch against its pages and the method, including the five battle years added 2026-11-18). Claims are Not reviewed; approval permits the import and asserts nothing about review."
   }
 }
