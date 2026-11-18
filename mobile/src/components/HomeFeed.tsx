@@ -59,6 +59,7 @@ import { around as aroundSetting, branchView, penRule, prayerPlace, prayerSettin
 import { showsOtherView } from '@shared/quran/branchView';
 import { timesFor, useMinute } from '@/lib/prayer';
 import { bookState, useBooks } from '@/lib/books';
+import type { BookId } from '@shared/books';
 import { BookCard, Shelf, TUHFA } from '@/screens/books';
 import { IltifatActions, IltifatScene } from './Iltifat';
 import { prophetStory } from '@/lib/prophets';
@@ -351,9 +352,16 @@ function TarajimPost({ day, slot, palette }: { day: number; slot: number; palett
   );
 }
 
+/** The book a quiz kind asks from: its card stays out while that book is off the phone, as the book's own ayah card does. */
+const QUIZ_BOOKS: Partial<Record<FeedQuizKind, BookId>> = { TAFSIR: 'sadi', BALAGHA: 'itqan', IRAB: 'irab-words' };
+
 /** A question card of kind `kind`: the openings quiz, or one of the solo quiz's. */
-const FeedQuiz = ({ kind, seed, palette }: { kind: FeedQuizKind; seed: number; palette: Palette }) =>
-  kind === OPENINGS ? <OpeningPost seed={seed} palette={palette} /> : <QuizPost kind={kind} seed={seed} palette={palette} />;
+function FeedQuiz({ kind, seed, palette }: { kind: FeedQuizKind; seed: number; palette: Palette }) {
+  useBooks();
+  const book = QUIZ_BOOKS[kind];
+  if (book && bookState(book) !== 'on') return null;
+  return kind === OPENINGS ? <OpeningPost seed={seed} palette={palette} /> : <QuizPost kind={kind} seed={seed} palette={palette} />;
+}
 
 /**
  * The tree card's height: its frame, the buttons and the chips. A lit path's ayat add their room below (TreeCard `ayatRoom`),

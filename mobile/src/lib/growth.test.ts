@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { keys } from '@shared/quran/branches';
+import { matrixOnly } from '@shared/quran/branchVerdicts';
 import { growthPlan, growthWords } from '@shared/quran/growth';
 import { ALL_WORDS, connectionBeats, grownIds, growthBeats, lineId, nodeId, nodeIndices } from './growth';
 import { aroundOf, cardOf, growthParts, matrixOf, mixedBefore, readId, treeList, withPathReading } from './branches';
@@ -8,7 +9,8 @@ const list = treeList();
 const presentationOf = (index: number) => cardOf(list[index]).presentation;
 
 describe('a tree growing in the studio', () => {
-  const presentation = presentationOf(list.findIndex(piece => piece.keys.length >= 4));
+  // A matrix-only card (a book's ayat with no shared trunk) grows no tree.
+  const presentation = presentationOf(list.findIndex(piece => piece.keys.length >= 4 && !matrixOnly(piece)));
   const ids = [...nodeIndices(presentation.tree).values()].map(nodeId);
 
   it('draws every box once, each after the connector into it', () => {

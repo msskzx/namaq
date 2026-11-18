@@ -12,6 +12,8 @@ export interface PageRef {
 
 /** One value as the book prints it, with who says it. `by` is empty when the author says it himself. */
 export interface PersonFact {
+  /** The assertion this rests on, «unit#assertion», for review lists that pick a fact out. */
+  id?: string;
   text: string;
   refs: PageRef[];
   by: string[];
@@ -77,6 +79,14 @@ export interface AppPerson {
 export const TITLE_SPEAKER_AUTHOR = 'الذهبي';
 
 /** Who says it, for a line under the value: «الذهبي» when `by` is empty. Names lose their case endings' vowels only. */
+/**
+ * A kunya as a name, unvowelled and in the nominative: the book may give it only in the accusative or genitive
+ * («قم أبا تراب»), so «أبا/أبي» read «أبو» and «ذا/ذي» read «ذو», as joinName reads «ابن» as «بن».
+ */
+export function kunyaName(text: string) {
+  return text.replace(/[ً-ْٰـ]/g, '').trim().replace(/^(?:أبا|أبي|ابا|ابي)(?=\s)/u, 'أبو').replace(/^(?:ذا|ذي)(?=\s)/u, 'ذو');
+}
+
 export function sayer(fact: PersonFact) {
   return fact.by.length === 0 ? TITLE_SPEAKER_AUTHOR : fact.by.join('، ');
 }

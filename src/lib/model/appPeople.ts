@@ -23,13 +23,24 @@ const arabicCommas = (text: string) => text.replace(/,/g, '،');
  * The book's asides are not fathers: «واسمه عمرو» after a name, «واسم عبد المطلب شيبة», and a nisba («القرشي»).
  */
 /** A person with no catalog entry is named by the name and the father, as the book does: «عبد الله بن أبي طلحة». */
+/**
+ * A battle the book gives both ways (Sa'd ibn Ubadah at Badr: Urwah says he was there, Ibn Sa'd that he was not)
+ * stays in both lists, each marked «على خلاف», with its own sayers.
+ */
+function attendance(battles: PersonLink[], absentFrom: PersonLink[]) {
+  const both = new Set(battles.filter((b) => absentFrom.some((a) => a.slug === b.slug)).map((b) => b.slug));
+  const mark = (link: PersonLink): PersonLink => (both.has(link.slug) ? { ...link, disputed: true } : link);
+  return { battles: battles.map(mark), absentFrom: absentFrom.map(mark) };
+}
+
 export function shortName(nasab: string[], sex?: string) {
   return nasab.slice(0, 2).join(sex === 'FEMALE' ? ' بنت ' : ' بن ');
 }
 
 export function nasabOf(fullName: string) {
-  // «،» stays a word: the book closes an aside with it.
-  const words = fullName.replace(/[.]/gu, ' ').replace(/[،,]/gu, ' ، ').trim().split(/\s+/u).filter(Boolean);
+  // «،» stays a word: the book closes an aside with it. An aside between dashes («بن سالم - وسالم هو الذي يقال له
+  // الحبلى - بن غنم») is no name.
+  const words = fullName.replace(/\s[-–]\s[^-–]*\s[-–]\s/gu, ' ').replace(/[.]/gu, ' ').replace(/[،,]/gu, ' ، ').trim().split(/\s+/u).filter(Boolean);
   const names: string[][] = [[]];
   for (let i = 0; i < words.length; i += 1) {
     const bare = strip(words[i]);
@@ -100,6 +111,7 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
       return pages.filter((ref, index) => pages.findIndex((other) => other.volume === ref.volume && other.page === ref.page) === index);
     };
     const fact = (entry: ProfileEntry): PersonFact => ({
+      id: `${entry.unit}#${entry.assertionId}`,
       text: arabicCommas(entry.text),
       refs: refsOf(entry),
       // Who says it: the person the narrating mention is identified as («أبي» in Urwa's words is al-Zubayr), else its text.
@@ -171,8 +183,8 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
       spouses: merge([...links('MARRIED'), ...back('MARRIED')]),
       cousins: merge([...links('PATERNAL_COUSIN'), ...back('PATERNAL_COUSIN')]),
       companionOf: merge(links('COMPANION_OF')),
-      battles: links('PARTICIPATED_IN'),
-      absentFrom: of('ABSENT_FROM').flatMap((entry) => entry.object ? [{ ...fact(entry), text: sentence(entry), slug: entry.object, name: nameOf(entry.object, entry.objectMention), inApp: false }] : []),
+      ...attendance(merge(links('PARTICIPATED_IN')),
+        merge(of('ABSENT_FROM').flatMap((entry) => entry.object ? [{ ...fact(entry), text: sentence(entry), slug: entry.object, name: nameOf(entry.object, entry.objectMention), inApp: false }] : []))),
       ayat: [
         ...facts('REVEALED_ABOUT').map((fact) => ({ ...fact, kind: 'REVEALED_ABOUT' as const })),
         ...facts('ABOUT_AYAH').map((fact) => ({ ...fact, kind: 'ABOUT' as const })),

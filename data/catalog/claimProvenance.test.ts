@@ -37,7 +37,8 @@ describe('every catalog module', () => {
     const loaded = (await import(`./${path.replace(/\.ts$/, '')}`)).default;
     const cited = provenances(loaded, path);
 
-    expect(cited.length).toBeGreaterThan(0);
+    // A story may stand on its reports alone, which stories.test.ts checks word for word against the source.
+    if (!loaded.reports?.length) expect(cited.length).toBeGreaterThan(0);
     const unknown = cited.flatMap(([where, claims]) =>
       claims === legacyUnreviewed ? [] : claims.filter((key) => !declared.has(key)).map((key) => `${where}: ${key}`),
     );

@@ -16,7 +16,7 @@ const claimByKey = new Map(
     .flatMap((dir) => (JSON.parse(readFileSync(`${BATCHES}/${dir}/batch.json`, 'utf8')) as { claims: Claim[] }).claims)
     .map((claim) => [claim.key, claim]),
 );
-const keysOf = (claims: Provenance): readonly string[] => (claims === legacyUnreviewed ? [] : claims);
+const keysOf = (claims: Provenance | undefined): readonly string[] => (!claims || claims === legacyUnreviewed ? [] : claims);
 
 const chapterThree: CatalogEvent[] = [mosque, quba, muakhah, adhan, ibnSalam, deathAsad, deathBaraa];
 
