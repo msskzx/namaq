@@ -136,6 +136,6 @@ describe('al-Zubayr ibn al-Awwam in the catalog', () => {
 
   // The verse the old seed guessed at, now resting on Aisha naming him in it.
   it('cites the Qur\'an link the seed carried uncited', () => {
-    expect(person.ayat).toEqual([{ surah: 3, ayah: 172, claims: ['zubayr/ayah-al-imran'] }]);
+    expect(person.ayat).toEqual([{ surah: 3, ayah: 172, kind: 'DESCRIBES', claims: ['zubayr/ayah-al-imran'] }]);
   });
 });

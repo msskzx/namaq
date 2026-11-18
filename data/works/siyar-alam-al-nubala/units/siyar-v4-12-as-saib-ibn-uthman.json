@@ -1,0 +1,509 @@
+{
+  "unit": {
+    "id": "siyar-v4-12-as-saib-ibn-uthman",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٢"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_sb_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "163",
+      "layer": "MAIN",
+      "exact": "١٢ - السَّائِبُ بنُ عُثْمَانَ بنِ مَظْعُوْنٍ الجُمَحِيُّ"
+    },
+    {
+      "id": "sp_sb1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "163",
+      "layer": "MAIN",
+      "exact": "السَّائِبُ بنُ عُثْمَانَ بنِ مَظْعُوْنٍ",
+      "prefix": "١٢ - "
+    },
+    {
+      "id": "sp_sb_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "163",
+      "layer": "MAIN",
+      "exact": "السَّائِبُ بنُ",
+      "prefix": "١٢ - "
+    },
+    {
+      "id": "sp_sb_father_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "163",
+      "layer": "MAIN",
+      "exact": "عُثْمَانَ بنِ مَظْعُوْنٍ",
+      "prefix": "السَّائِبُ بنُ "
+    },
+    {
+      "id": "sp_sb_mother",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "163",
+      "layer": "MAIN",
+      "exact": "وَأُمُّهُ: خَوْلَةُ بِنْتُ حَكِيْمٍ السُّلَمِيَّةُ"
+    },
+    {
+      "id": "sp_sb_rami",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "163",
+      "layer": "MAIN",
+      "exact": "هَاجَرَ إِلَى الحَبَشَةِ، وَكَانَ مِنَ الرُّمَاةِ المَذْكُوْرِيْنَ"
+    },
+    {
+      "id": "sp_sb_saad_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "164",
+      "layer": "MAIN",
+      "exact": "قَالَ ابْنُ سَعْدٍ (١) :",
+      "suffix": " وَشَهِدَ السَّائِبُ"
+    },
+    {
+      "id": "sp_sb_badr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "164",
+      "layer": "MAIN",
+      "exact": "وَشَهِدَ السَّائِبُ بنُ عُثْمَانَ بَدْراً فِي رِوَايَةِ ابْنِ إِسْحَاقَ، وَأَبِي مَعْشَرٍ، وَالوَاقِدِيِّ"
+    },
+    {
+      "id": "sp_sb_badr_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "164",
+      "layer": "MAIN",
+      "exact": "بَدْراً",
+      "prefix": "السَّائِبُ بنُ عُثْمَانَ "
+    },
+    {
+      "id": "sp_sb_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "164",
+      "layer": "MAIN",
+      "exact": "وَأَصَابَهُ سَهْمٌ يَوْمَ اليَمَامَةِ سَنَةَ اثْنَتَيْ عَشْرَةَ. قَالَ: وَمَاتَ مِنْهُ"
+    },
+    {
+      "id": "sp_sb_d12",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "164",
+      "layer": "MAIN",
+      "exact": "سَنَةَ اثْنَتَيْ عَشْرَةَ",
+      "prefix": "يَوْمَ اليَمَامَةِ "
+    },
+    {
+      "id": "sp_sb_saad2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "164",
+      "layer": "MAIN",
+      "exact": "إِلَى أَنْ قَالَ:",
+      "suffix": " وَأَصَابَهُ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_sb0",
+      "unit": "siyar-v4-12-as-saib-ibn-uthman",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_sb_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_sb_ishaq",
+      "unit": "siyar-v4-12-as-saib-ibn-uthman",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_sb_saad_frame"
+      ],
+      "origin": {
+        "mention": "m_sb_ishaq"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sb_mashar",
+      "unit": "siyar-v4-12-as-saib-ibn-uthman",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_sb_saad_frame"
+      ],
+      "origin": {
+        "mention": "m_sb_mashar"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sb_waq",
+      "unit": "siyar-v4-12-as-saib-ibn-uthman",
+      "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_sb_saad_frame"
+      ],
+      "origin": {
+        "mention": "m_sb_waq"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sb_saad",
+      "unit": "siyar-v4-12-as-saib-ibn-uthman",
+      "ordinal": 5,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_sb_saad_frame",
+        "sp_sb_saad2"
+      ],
+      "origin": {
+        "mention": "m_sb_saad"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_sb_name",
+      "report": "r_sb0",
+      "spans": [
+        "sp_sb1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sb_mother",
+      "report": "r_sb0",
+      "spans": [
+        "sp_sb_mother"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sb_rami",
+      "report": "r_sb0",
+      "spans": [
+        "sp_sb_rami"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sb_ishaq",
+      "report": "r_sb_ishaq",
+      "spans": [
+        "sp_sb_badr"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_sb_mashar",
+      "report": "r_sb_mashar",
+      "spans": [
+        "sp_sb_badr"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_sb_waq",
+      "report": "r_sb_waq",
+      "spans": [
+        "sp_sb_badr"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_sb_death",
+      "report": "r_sb_saad",
+      "spans": [
+        "sp_sb_death"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_sb",
+      "parent": "sp_sb1",
+      "exact": "السَّائِبُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sb_father",
+      "parent": "sp_sb1",
+      "exact": "عُثْمَانَ بنِ مَظْعُوْنٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_sb_mo",
+      "parent": "sp_sb_mother",
+      "exact": "وَأُمُّهُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sb_khawlah",
+      "parent": "sp_sb_mother",
+      "exact": "خَوْلَةُ بِنْتُ حَكِيْمٍ السُّلَمِيَّةُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_sb_r",
+      "parent": "sp_sb_rami",
+      "exact": "هَاجَرَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sb_saad",
+      "parent": "sp_sb_saad_frame",
+      "exact": "ابْنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sb_ishaq",
+      "parent": "sp_sb_badr",
+      "exact": "ابْنِ إِسْحَاقَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sb_mashar",
+      "parent": "sp_sb_badr",
+      "exact": "أَبِي مَعْشَرٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sb_waq",
+      "parent": "sp_sb_badr",
+      "exact": "الوَاقِدِيِّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sb_b",
+      "parent": "sp_sb_badr",
+      "exact": "السَّائِبُ بنُ عُثْمَانَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sb_badr",
+      "parent": "sp_sb_badr",
+      "exact": "بَدْراً",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_sb_d",
+      "parent": "sp_sb_death",
+      "exact": "وَأَصَابَهُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_sb",
+      "mention": "m_sb",
+      "agent": "as-saib-ibn-uthman",
+      "basis": [
+        {
+          "span": "sp_sb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sb_mo",
+      "mention": "m_sb_mo",
+      "agent": "as-saib-ibn-uthman",
+      "basis": [
+        {
+          "span": "sp_sb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sb_r",
+      "mention": "m_sb_r",
+      "agent": "as-saib-ibn-uthman",
+      "basis": [
+        {
+          "span": "sp_sb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sb_b",
+      "mention": "m_sb_b",
+      "agent": "as-saib-ibn-uthman",
+      "basis": [
+        {
+          "span": "sp_sb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sb_d",
+      "mention": "m_sb_d",
+      "agent": "as-saib-ibn-uthman",
+      "basis": [
+        {
+          "span": "sp_sb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sb_father",
+      "mention": "m_sb_father",
+      "agent": "uthman-ibn-mazun",
+      "basis": [
+        {
+          "span": "sp_sb_father_name",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sb_badr",
+      "mention": "m_sb_badr",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_sb_badr_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_sb_name",
+      "subject": "m_sb",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_sb1"
+        ]
+      },
+      "restsOn": [
+        "st_sb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sb_sex",
+      "subject": "m_sb",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_sb_sex"
+        ]
+      },
+      "restsOn": [
+        "st_sb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sb_father",
+      "subject": "m_sb",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_sb_father"
+      },
+      "restsOn": [
+        "st_sb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sb_mother",
+      "subject": "m_sb_mo",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_sb_khawlah"
+      },
+      "restsOn": [
+        "st_sb_mother"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sb_v_rami",
+      "subject": "m_sb_r",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_sb_rami"
+        ]
+      },
+      "restsOn": [
+        "st_sb_rami"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sb_badr",
+      "subject": "m_sb_b",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_sb_badr"
+      },
+      "restsOn": [
+        "st_sb_ishaq",
+        "st_sb_mashar",
+        "st_sb_waq"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sb_d12",
+      "subject": "m_sb_d",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 12,
+        "spans": [
+          "sp_sb_d12"
+        ]
+      },
+      "restsOn": [
+        "st_sb_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

@@ -7,7 +7,7 @@ import { revisionOf, selectForProd, unitLookup, type ReviewRecord } from './revi
 
 function review(folders: ReturnType<typeof loadModel>, assertionId: string): ReviewRecord {
   const folder = folders[0];
-  const file = folder.units[0];
+  const file = folder.units.find((u) => u.unit.id === 'siyar-v4-3-az-zubayr')!;
   const assertion = file.assertions.find((a) => a.id === assertionId)!;
   return {
     record: assertionId,
@@ -21,10 +21,10 @@ function review(folders: ReturnType<typeof loadModel>, assertionId: string): Rev
 describe('projectionRows (the al-Zubayr entry)', () => {
   const folders = loadModel('.');
   const { spans, entries } = projectionRows(folders, '.');
-  const file = folders[0].units[0];
+  const file = folders[0].units.find((u) => u.unit.id === 'siyar-v4-3-az-zubayr')!;
 
   it('has one row per span, each with the text rendered from the page', () => {
-    expect(spans).toHaveLength(file.spans.length);
+    expect(spans.filter((s) => s.unit === file.unit.id)).toHaveLength(file.spans.length);
     const kunya = spans.find((s) => s.spanId === 'sp_kunya')!;
     expect(kunya).toMatchObject({
       unit: file.unit.id,
@@ -66,7 +66,7 @@ describe('projectionRows (the al-Zubayr entry)', () => {
 
   it('keeps one row per unit, assertion and agent', () => {
     const fresh = loadModel('.');
-    const f = fresh[0].units[0];
+    const f = fresh[0].units.find((u) => u.unit.id === 'siyar-v4-3-az-zubayr')!;
     f.identifications.push({ ...f.identifications[0], id: 'i_dup' });
     const keys = projectionRows(fresh, '.').entries.map(
       (e) => `${e.unit}/${e.assertionId}/${e.agent}`,

@@ -33,7 +33,7 @@ describe('profilesFromModel on the al-Zubayr entry', () => {
 
   it('keeps the exact mention text when the related person is not identified', () => {
     const folders = loadModel('.');
-    const file = folders[0].units[0];
+    const file = folders[0].units.find((u) => u.unit.id === 'siyar-v4-3-az-zubayr')!;
     file.identifications = file.identifications.filter((i) => i.id !== 'i_awwam');
     const child = profilesFromModel(folders, '.')
       .get('az-zubayr-ibn-al-awwam')
@@ -44,7 +44,7 @@ describe('profilesFromModel on the al-Zubayr entry', () => {
 
   it('shows every competing identification of one mention, and drops a rejected one', () => {
     const folders = loadModel('.');
-    const file = folders[0].units[0];
+    const file = folders[0].units.find((u) => u.unit.id === 'siyar-v4-3-az-zubayr')!;
     const original = file.identifications.find((i) => i.id === 'i_zb')!;
     file.identifications.push(
       { ...original, id: 'i_other', agent: 'another-zubayr', status: 'DISPUTED' },
@@ -57,7 +57,7 @@ describe('profilesFromModel on the al-Zubayr entry', () => {
 
   it('skips a rejected assertion, shows a LEGACY one, and keeps every origin of a multi-statement one', () => {
     const folders = loadModel('.');
-    const file = folders[0].units[0];
+    const file = folders[0].units.find((u) => u.unit.id === 'siyar-v4-3-az-zubayr')!;
     file.assertions.find((a) => a.id === 'a_age8')!.status = 'REJECTED';
     file.assertions.find((a) => a.id === 'a_age16')!.restsOn = ['st_age16', 'st_age8'];
     file.assertions.push({
@@ -76,7 +76,7 @@ describe('profilesFromModel on the al-Zubayr entry', () => {
 
   it('fails loudly on an unknown span instead of showing an empty value', () => {
     const folders = loadModel('.');
-    folders[0].units[0].assertions[0].value = { spans: ['nope'] };
+    folders[0].units.find((u) => u.unit.id === 'siyar-v4-3-az-zubayr')!.assertions[0].value = { spans: ['nope'] };
     expect(() => profilesFromModel(folders, '.')).toThrow(/unknown span nope/);
   });
 
@@ -139,7 +139,7 @@ describe('profilesFromModel on the al-Zubayr entry', () => {
 
   it('lets a recorded identification override the standing rule for the Prophet, even a rejected one', () => {
     const folders = loadModel('.');
-    const file = folders[0].units[0];
+    const file = folders[0].units.find((u) => u.unit.id === 'siyar-v4-3-az-zubayr')!;
     file.identifications.push({
       id: 'i_not_him',
       mention: 'm_prophet2',

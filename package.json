@@ -58,6 +58,7 @@
     "model:diff": "tsx scripts/model/diff.ts",
     "model:project": "tsx scripts/model/project.ts",
     "model:app-hadith": "tsx scripts/model/buildAppHadith.ts",
+    "model:app-people": "tsx scripts/model/buildAppPeople.ts",
     "battles:app": "tsx scripts/battles/buildAppBattles.ts",
     "battles:land": "tsx scripts/battles/buildLand.ts",
     "history:validate": "tsx scripts/history/validateBatch.ts",

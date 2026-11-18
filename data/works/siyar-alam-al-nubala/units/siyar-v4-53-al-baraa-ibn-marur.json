@@ -1,0 +1,470 @@
+{
+  "unit": {
+    "id": "siyar-v4-53-al-baraa-ibn-marur",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٥٣"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_br_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "267",
+      "layer": "MAIN",
+      "exact": "٥٣ - البَرَاءُ بنُ مَعْرُوْرِ بنِ صَخْرِ بنِ خَنْسَاءَ بنِ سِنَانَ الخَزْرَجِيُّ"
+    },
+    {
+      "id": "sp_br1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "267",
+      "layer": "MAIN",
+      "exact": "البَرَاءُ بنُ مَعْرُوْرِ بنِ صَخْرِ بنِ خَنْسَاءَ بنِ سِنَانَ الخَزْرَجِيُّ",
+      "prefix": "٥٣ - "
+    },
+    {
+      "id": "sp_br_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "267",
+      "layer": "MAIN",
+      "exact": "البَرَاءُ بنُ",
+      "prefix": "٥٣ - "
+    },
+    {
+      "id": "sp_br_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "267",
+      "layer": "MAIN",
+      "exact": "مَعْرُوْرِ بنِ صَخْرِ",
+      "prefix": "البَرَاءُ بنُ "
+    },
+    {
+      "id": "sp_br_epithets",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "267",
+      "layer": "MAIN",
+      "exact": "السَّيِّدُ، النَّقِيْبُ، أَبُو بِشْرٍ الأَنْصَارِيُّ، الخَزْرَجِيُّ."
+    },
+    {
+      "id": "sp_br_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "267",
+      "layer": "MAIN",
+      "exact": "أَبُو بِشْرٍ",
+      "prefix": "النَّقِيْبُ، "
+    },
+    {
+      "id": "sp_br_naqib_st",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "267",
+      "layer": "MAIN",
+      "exact": "أَحَدُ النُّقَبَاءِ لَيْلَةَ العَقَبَةِ، وَهُوَ ابْنُ عَمَّةِ سَعْدِ بنِ مُعَاذٍ."
+    },
+    {
+      "id": "sp_br_naqib",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "267",
+      "layer": "MAIN",
+      "exact": "أَحَدُ النُّقَبَاءِ لَيْلَةَ العَقَبَةِ",
+      "suffix": "، وَهُوَ"
+    },
+    {
+      "id": "sp_br_saad_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "267",
+      "layer": "MAIN",
+      "exact": "سَعْدِ بنِ مُعَاذٍ",
+      "prefix": "ابْنُ عَمَّةِ "
+    },
+    {
+      "id": "sp_br_virtues",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "267",
+      "layer": "MAIN",
+      "exact": "وَكَانَ أَوَّلَ مَنْ بَايَعَ لَيْلَةَ العَقَبَةِ الأُوْلَى، وَكَانَ فَاضِلاً، تَقِيّاً، فَقِيْهَ النَّفْسِ."
+    },
+    {
+      "id": "sp_br_first",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "267",
+      "layer": "MAIN",
+      "exact": "وَكَانَ أَوَّلَ مَنْ بَايَعَ لَيْلَةَ العَقَبَةِ الأُوْلَى"
+    },
+    {
+      "id": "sp_br_fadil",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "267",
+      "layer": "MAIN",
+      "exact": "وَكَانَ فَاضِلاً، تَقِيّاً، فَقِيْهَ النَّفْسِ"
+    },
+    {
+      "id": "sp_br_ajall_a",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "268",
+      "layer": "MAIN",
+      "exact": "وَكَانَ البَرَاءُ لَيْلَةَ العَقَبَةِ هُوَ أَجَلُّ (٤) السَّبْعِيْنَ، وَهُوَ أَوَّلُهُم مُبَايَعَةً لِرَسُوْلِ اللهِ"
+    },
+    {
+      "id": "sp_br_ajall_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "269",
+      "layer": "MAIN",
+      "exact": "-صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-",
+      "suffix": "، وَكَانَ ابْنُهُ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_br0",
+      "unit": "siyar-v4-53-al-baraa-ibn-marur",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_br_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_br_name",
+      "report": "r_br0",
+      "spans": [
+        "sp_br1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_br_epithets",
+      "report": "r_br0",
+      "spans": [
+        "sp_br_epithets"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_br_naqib",
+      "report": "r_br0",
+      "spans": [
+        "sp_br_naqib_st"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_br_virtues",
+      "report": "r_br0",
+      "spans": [
+        "sp_br_virtues"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_br_ajall",
+      "report": "r_br0",
+      "spans": [
+        "sp_br_ajall_a",
+        "sp_br_ajall_b"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_br",
+      "parent": "sp_br1",
+      "exact": "البَرَاءُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_br_father",
+      "parent": "sp_br1",
+      "exact": "مَعْرُوْرِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_br_e",
+      "parent": "sp_br_epithets",
+      "exact": "أَبُو بِشْرٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_br_n",
+      "parent": "sp_br_naqib_st",
+      "exact": "أَحَدُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_br_c",
+      "parent": "sp_br_naqib_st",
+      "exact": "ابْنُ عَمَّةِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_br_saad",
+      "parent": "sp_br_naqib_st",
+      "exact": "سَعْدِ بنِ مُعَاذٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_br_v",
+      "parent": "sp_br_virtues",
+      "exact": "وَكَانَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_br_aj",
+      "parent": "sp_br_ajall_a",
+      "exact": "البَرَاءُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_br",
+      "mention": "m_br",
+      "agent": "al-baraa-ibn-marur",
+      "basis": [
+        {
+          "span": "sp_br_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_n",
+      "mention": "m_br_n",
+      "agent": "al-baraa-ibn-marur",
+      "basis": [
+        {
+          "span": "sp_br_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_c",
+      "mention": "m_br_c",
+      "agent": "al-baraa-ibn-marur",
+      "basis": [
+        {
+          "span": "sp_br_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_v",
+      "mention": "m_br_v",
+      "agent": "al-baraa-ibn-marur",
+      "basis": [
+        {
+          "span": "sp_br_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_aj",
+      "mention": "m_br_aj",
+      "agent": "al-baraa-ibn-marur",
+      "basis": [
+        {
+          "span": "sp_br_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_e",
+      "mention": "m_br_e",
+      "agent": "al-baraa-ibn-marur",
+      "basis": [
+        {
+          "span": "sp_br1",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_father",
+      "mention": "m_br_father",
+      "agent": "marur-ibn-sakhr",
+      "basis": [
+        {
+          "span": "sp_br_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_saad",
+      "mention": "m_br_saad",
+      "agent": "saad-ibn-muadh",
+      "basis": [
+        {
+          "span": "sp_br_saad_name",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_br_name",
+      "subject": "m_br",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_br1"
+        ]
+      },
+      "restsOn": [
+        "st_br_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_sex",
+      "subject": "m_br",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_br_sex"
+        ]
+      },
+      "restsOn": [
+        "st_br_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_father",
+      "subject": "m_br",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_br_father"
+      },
+      "restsOn": [
+        "st_br_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_kunya",
+      "subject": "m_br_e",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_br_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_br_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_naqib",
+      "subject": "m_br_n",
+      "predicate": "title",
+      "value": {
+        "classified": "naqib",
+        "spans": [
+          "sp_br_naqib"
+        ]
+      },
+      "restsOn": [
+        "st_br_naqib"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_cousin",
+      "subject": "m_br_c",
+      "predicate": "PATERNAL_COUSIN",
+      "value": {
+        "object": "m_br_saad"
+      },
+      "restsOn": [
+        "st_br_naqib"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_v_first",
+      "subject": "m_br_v",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_br_first"
+        ]
+      },
+      "restsOn": [
+        "st_br_virtues"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_v_fadil",
+      "subject": "m_br_v",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_br_fadil"
+        ]
+      },
+      "restsOn": [
+        "st_br_virtues"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_v_ajall",
+      "subject": "m_br_aj",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_br_ajall_a",
+          "sp_br_ajall_b"
+        ]
+      },
+      "restsOn": [
+        "st_br_ajall"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

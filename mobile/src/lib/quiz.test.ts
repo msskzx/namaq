@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { keys } from '@shared/quran/branches';
 import { inJuzRange } from '@shared/quran/juz';
 import { branchNodes, spelled } from '@shared/quiz/branchAnswers';
-import { branchQuestions } from '@shared/quiz/branchQuestions';
+import { branchQuestionPool, branchQuestions } from '@shared/quiz/branchQuestions';
 import { quizTrees } from '@shared/quiz/treeScope';
 import type { BranchAyah } from '@shared/quran/branches';
 import corpus from '@shared/quran/quranText/corpus';
@@ -30,7 +30,12 @@ describe('solo quiz on the phone', () => {
 
   it('counts the questions the filters hold, as the website does', () => {
     for (const list of [{ ...DEFAULT_LIST, range: { from: 30, to: 30 } }, { ...DEFAULT_LIST, filters: { categories: 'mutashabeh', surahs: '2,36' } }]) {
-      expect(availability({ kinds: ['BRANCHES'], list }, []).available).toBe(branchQuestions(corpus.ayat as BranchAyah[], list.range, quizTrees(list.range, { filters: list.filters })).length);
+      // The phone counts the website's candidate trees without building each (too slow on a phone); a candidate whose tree
+      // turns out unaskable (e.g. al-Qadr 1-3, «ليلة القدر» thrice, where an ayah ends on the trunk) is counted but never asked.
+      const trees = quizTrees(list.range, { filters: list.filters });
+      const available = availability({ kinds: ['BRANCHES'], list }, []).available;
+      expect(available).toBe(branchQuestionPool(corpus.ayat as BranchAyah[], list.range, trees).candidates.length);
+      expect(branchQuestions(corpus.ayat as BranchAyah[], list.range, trees).length).toBeLessThanOrEqual(available);
     }
     expect(availability({ kinds: ['BRANCHES'], list: DEFAULT_LIST }, []).lengths).toEqual([5, 10, 15]);
   });

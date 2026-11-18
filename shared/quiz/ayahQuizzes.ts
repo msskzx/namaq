@@ -79,7 +79,8 @@ export const tafsirQuiz = bankKind(TAFSIR_QUIZ, () => data.tafsir, ([key, ...res
     family: TAFSIR_QUIZ,
     promptArabic: AYAH_QUIZ_NAMES[TAFSIR_QUIZ],
     passage: hideQuotes(withoutOpeningQuote(passage.text), hidden),
-    choices: shuffle(keys, random).map(value => ({ value, labelArabic: wordsOf(value).join(' ') })),
+    // Each ayah as the pipeline copies it: its page words and its number, drawn as the mushaf's end mark.
+    choices: shuffle(keys, random).map(value => ({ value, labelArabic: `${wordsOf(value).join(' ')} ${num(Number(value.split(':')[1]))}` })),
     quranChoices: true,
     whereOf: Object.fromEntries(keys.map(value => [value, where(value)])),
     correctAnswer: key,
