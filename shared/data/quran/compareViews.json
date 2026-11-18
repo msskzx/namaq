@@ -4887,6 +4887,10 @@
   "95:7|107:1": {
    "view": "matrix",
    "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
+  },
+  "94:5|94:6": {
+   "view": "matrix",
+   "why": "owner 2026-11-15: drop the tree, keep the matrix; 94:5 against 94:6 only, not the ayat after"
   }
  }
 }

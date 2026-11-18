@@ -118,6 +118,19 @@ the sources disagree on as settled.
 - When a generator or a reviewer cannot tell whether a point is disputed, it
   leaves the question out and lists it for the owner.
 
+## Feed card and quiz
+
+- A new app feature ships with its card in the home feed. The card uses the feed's post
+  shape (`PostHead`, and `Post` around the feature's own component, in
+  `mobile/src/components/HomeFeed.tsx`).
+- When the feature has something to ask, it also ships a quiz kind that comes into the
+  feed (a new entry in `FEED_QUIZ_NAMES` in `shared/quiz/feedQuiz.ts`).
+- The sketch the owner sees before the build shows the card and the quiz.
+- A feature without a card is named in the PR with the reason.
+  [docs/feed-cards.md](docs/feed-cards.md) lists the cards, the quiz kinds and the
+  named exceptions; the PR updates it.
+- This is a workflow rule checked in review, not a guard test.
+
 ## Quiz questions
 
 - Quiz candidates and review decisions are authored under `data/quiz/` and
