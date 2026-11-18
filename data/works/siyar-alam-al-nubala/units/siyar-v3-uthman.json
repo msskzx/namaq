@@ -234,6 +234,15 @@
       "exact": "وصح من وجوه، أن عثمان قرأ القرآن كله في ركعة"
     },
     {
+      "id": "sp_o_rakah_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "157",
+      "layer": "MAIN",
+      "exact": "عثمان قرأ القرآن كله في ركعة",
+      "prefix": "وصح من وجوه، أن "
+    },
+    {
       "id": "sp_o_a82_frame",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 3,
@@ -276,6 +285,31 @@
       "page": "162",
       "layer": "MAIN",
       "exact": "عاش ستا وثمانين سنة"
+    },
+    {
+      "id": "sp_o_hay_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "153",
+      "layer": "MAIN",
+      "exact": "ثم استأذن عثمان، فجلس رسول الله صلى الله عليه وسلم وسوى ثيابه"
+    },
+    {
+      "id": "sp_o_hay",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "153",
+      "layer": "MAIN",
+      "exact": "ألا أستحيي من رجل تستحيي منه الملائكة"
+    },
+    {
+      "id": "sp_o_hay_grade",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "153",
+      "layer": "MAIN",
+      "exact": "رواه مسلم",
+      "prefix": "منه الملائكة\"؟. "
     }
   ],
   "reports": [
@@ -314,6 +348,20 @@
       ],
       "origin": {
         "mention": "m_o_qila"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_o_hay",
+      "unit": "siyar-v3-uthman",
+      "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_o_hay_frame",
+        "sp_o_hay_grade"
+      ],
+      "origin": {
+        "mention": "m_o_p_hay"
       },
       "chainState": "DEFERRED"
     }
@@ -397,6 +445,14 @@
       "report": "r_o_a86",
       "spans": [
         "sp_o_a86"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_o_hay",
+      "report": "r_o_hay",
+      "spans": [
+        "sp_o_hay"
       ],
       "role": "TRANSMITTED"
     }
@@ -499,6 +555,20 @@
       "exact": "وقيل",
       "occurrence": 1,
       "role": "SPEAKER"
+    },
+    {
+      "id": "m_o_p_hay",
+      "parent": "sp_o_hay_frame",
+      "exact": "رسول الله",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_o_hay",
+      "parent": "sp_o_hay_frame",
+      "exact": "عثمان",
+      "occurrence": 1,
+      "role": "SUBJECT"
     }
   ],
   "identifications": [
@@ -645,6 +715,18 @@
       "basis": [
         {
           "span": "sp_o_day_badr",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o_hay",
+      "mention": "m_o_hay",
+      "agent": "uthman-ibn-affan",
+      "basis": [
+        {
+          "span": "sp_o_heading",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -887,7 +969,7 @@
       "predicate": "virtue",
       "value": {
         "spans": [
-          "sp_o_rakah"
+          "sp_o_rakah_v"
         ]
       },
       "restsOn": [
@@ -922,6 +1004,20 @@
       },
       "restsOn": [
         "st_o_a86"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_o_v_hay",
+      "subject": "m_o_hay",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_o_hay"
+        ]
+      },
+      "restsOn": [
+        "st_o_hay"
       ],
       "status": "PROPOSED"
     }

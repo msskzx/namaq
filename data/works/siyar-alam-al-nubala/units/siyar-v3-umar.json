@@ -582,6 +582,23 @@
       "layer": "MAIN",
       "exact": "عاتكة بنت زيد بن عمر بن نفيل",
       "prefix": "وتزوج "
+    },
+    {
+      "id": "sp_u_ubq_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "87",
+      "layer": "MAIN",
+      "exact": "وقيل",
+      "prefix": "فولدت له عبيد الله، "
+    },
+    {
+      "id": "sp_u_ubq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "87",
+      "layer": "MAIN",
+      "exact": "أمه وأم زيد الأصغر أم كلثوم بنت جرول"
     }
   ],
   "reports": [
@@ -761,6 +778,19 @@
       "isnadSpan": "sp_u_a66_isnad",
       "origin": {
         "mention": "m_u_a66"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_u_ubq",
+      "unit": "siyar-v3-umar",
+      "ordinal": 15,
+      "voice": "REPORTED_ANONYMOUS",
+      "frame": [
+        "sp_u_ubq_frame"
+      ],
+      "origin": {
+        "mention": "m_u_ubq"
       },
       "chainState": "DEFERRED"
     }
@@ -950,6 +980,14 @@
         "sp_u_a66"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_u_ubq",
+      "report": "r_u_ubq",
+      "spans": [
+        "sp_u_ubq"
+      ],
+      "role": "TRANSMITTED"
     }
   ],
   "mentions": [
@@ -1110,14 +1148,14 @@
     {
       "id": "m_u_c_hafsa",
       "parent": "sp_u_w_zaynab",
-      "exact": "وحفصة",
+      "exact": "حفصة",
       "occurrence": 1,
       "role": "SUBJECT"
     },
     {
       "id": "m_u_c_abdrahman",
       "parent": "sp_u_w_zaynab",
-      "exact": "وعبد الرحمن",
+      "exact": "عبد الرحمن",
       "occurrence": 1,
       "role": "SUBJECT"
     },
@@ -1180,7 +1218,7 @@
     {
       "id": "m_u_c_ruqayyah",
       "parent": "sp_u_w_ummkulthum",
-      "exact": "ورقية",
+      "exact": "رقية",
       "occurrence": 1,
       "role": "SUBJECT"
     },
@@ -1208,7 +1246,7 @@
     {
       "id": "m_u_a60",
       "parent": "sp_u_a60_isnad",
-      "exact": "أبيه",
+      "exact": "أسلم",
       "occurrence": 1,
       "role": "SPEAKER"
     },
@@ -1260,6 +1298,13 @@
       "exact": "عمر",
       "occurrence": 1,
       "role": "SUBJECT"
+    },
+    {
+      "id": "m_u_ubq",
+      "parent": "sp_u_ubq_frame",
+      "exact": "وقيل",
+      "occurrence": 1,
+      "role": "SPEAKER"
     }
   ],
   "identifications": [
@@ -1765,9 +1810,10 @@
         "object": "m_u_w_mulaykah"
       },
       "restsOn": [
-        "st_u_w_mulaykah"
+        "st_u_w_mulaykah",
+        "st_u_ubq"
       ],
-      "status": "PROPOSED"
+      "status": "DISPUTED"
     },
     {
       "id": "a_u_w_ummhakim",

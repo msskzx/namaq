@@ -157,7 +157,8 @@
       "volume": 3,
       "page": "7",
       "layer": "MAIN",
-      "exact": "وكان أول من آمن من الرجال"
+      "exact": "أول من آمن من الرجال",
+      "prefix": "وكان "
     },
     {
       "id": "sp_ab_zuhri_frame",
@@ -293,6 +294,14 @@
       "layer": "MAIN",
       "exact": "متفق على صحته",
       "prefix": "أبا بكر\". "
+    },
+    {
+      "id": "sp_ab_tajidi_pframe",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "11",
+      "layer": "MAIN",
+      "exact": "أن امرأة أتت رسول الله صلى الله عليه وسلم فكلمته في شيء"
     },
     {
       "id": "sp_ab_tajidi",
@@ -492,23 +501,6 @@
       "page": "7",
       "layer": "MAIN",
       "exact": "كان أبيض نحيفا خفيف العارضين، معروق الوجه، غائر العينين، ناتئ الجبهة، يخضب شيبه بالحناء والكتم"
-    },
-    {
-      "id": "sp_ab_ansab_frame",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 3,
-      "page": "7",
-      "layer": "MAIN",
-      "exact": "وقال غيره",
-      "suffix": ": كان أعلم قريش"
-    },
-    {
-      "id": "sp_ab_ansab",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 3,
-      "page": "7",
-      "layer": "MAIN",
-      "exact": "كان أعلم قريش بأنسابها"
     }
   ],
   "reports": [
@@ -614,6 +606,7 @@
       "voice": "TRANSMITTED",
       "frame": [
         "sp_ab_tajidi_frame",
+        "sp_ab_tajidi_pframe",
         "sp_ab_tajidi_grade"
       ],
       "origin": {
@@ -714,19 +707,6 @@
       ],
       "origin": {
         "mention": "m_ab_qila"
-      },
-      "chainState": "DEFERRED"
-    },
-    {
-      "id": "r_ab_ansab",
-      "unit": "siyar-v3-abu-bakr",
-      "ordinal": 16,
-      "voice": "REPORTED_ANONYMOUS",
-      "frame": [
-        "sp_ab_ansab_frame"
-      ],
-      "origin": {
-        "mention": "m_ab_ghayruh"
       },
       "chainState": "DEFERRED"
     }
@@ -884,14 +864,6 @@
         "sp_ab_qila"
       ],
       "role": "TRANSMITTED"
-    },
-    {
-      "id": "st_ab_ansab",
-      "report": "r_ab_ansab",
-      "spans": [
-        "sp_ab_ansab"
-      ],
-      "role": "TRANSMITTED"
     }
   ],
   "mentions": [
@@ -1016,8 +988,8 @@
     },
     {
       "id": "m_ab_p_tajidi",
-      "parent": "sp_ab_tajidi_frame",
-      "exact": "أبي",
+      "parent": "sp_ab_tajidi_pframe",
+      "exact": "رسول الله",
       "occurrence": 1,
       "role": "SPEAKER"
     },
@@ -1130,13 +1102,6 @@
       "id": "m_ab_qila",
       "parent": "sp_ab_qila_frame",
       "exact": "وقيل",
-      "occurrence": 1,
-      "role": "SPEAKER"
-    },
-    {
-      "id": "m_ab_ghayruh",
-      "parent": "sp_ab_ansab_frame",
-      "exact": "غيره",
       "occurrence": 1,
       "role": "SPEAKER"
     }
@@ -1389,6 +1354,18 @@
       "basis": [
         {
           "span": "sp_ab_ibnuh",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_ali_khayr",
+      "mention": "m_ab_ali_khayr",
+      "agent": "ali-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_ab_khayr_grade",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -1740,20 +1717,6 @@
       },
       "restsOn": [
         "st_ab_qila"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_ab_v_ansab",
-      "subject": "m_ab",
-      "predicate": "virtue",
-      "value": {
-        "spans": [
-          "sp_ab_ansab"
-        ]
-      },
-      "restsOn": [
-        "st_ab_ansab"
       ],
       "status": "PROPOSED"
     }

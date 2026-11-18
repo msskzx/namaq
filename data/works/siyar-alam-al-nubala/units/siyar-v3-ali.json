@@ -395,7 +395,48 @@
       "volume": 3,
       "page": "227",
       "layer": "MAIN",
-      "exact": "أول من أسلم خديجة، وأول رجلين أسلما أبو بكر وعلي، وإن أبا بكر أول من أظهر الإسلام"
+      "exact": "أول من أسلم خديجة، وأول رجلين أسلما أبو بكر وعلي، وإن أبا بكر أول من أظهر الإسلام، وكان علي يكتم الإسلام فرقا من أبيه، حتى لقيه أبو طالب، فقال: أسلمت؟ قال:"
+    },
+    {
+      "id": "sp_l_qurazi_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "228",
+      "layer": "MAIN",
+      "exact": "نعم، قال: وازر ابن عمك وانصره وأسلم علي قبل أبي بكر"
+    },
+    {
+      "id": "sp_l_zawj_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "237",
+      "layer": "MAIN",
+      "exact": "دخلت مع عمتي على عائشة، فسئلت"
+    },
+    {
+      "id": "sp_l_zawj",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "237",
+      "layer": "MAIN",
+      "exact": "قالت: فاطمة، فقيل: من الرجال، فقالت: زوجها"
+    },
+    {
+      "id": "sp_l_zawj_grade",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "237",
+      "layer": "MAIN",
+      "exact": "أخرجه الترمذي، وقال: حسن غريب"
+    },
+    {
+      "id": "sp_l_fatimah_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "225",
+      "layer": "MAIN",
+      "exact": "فاطمة بنت رسول الله صلى الله عليه وسلم",
+      "prefix": "قلت لأمي اكفي "
     }
   ],
   "reports": [
@@ -558,6 +599,20 @@
         "mention": "m_l_qurazi"
       },
       "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_l_zawj",
+      "unit": "siyar-v3-ali",
+      "ordinal": 13,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_l_zawj_frame",
+        "sp_l_zawj_grade"
+      ],
+      "origin": {
+        "mention": "m_l_aisha"
+      },
+      "chainState": "DEFERRED"
     }
   ],
   "statements": [
@@ -679,7 +734,16 @@
       "id": "st_l_qurazi",
       "report": "r_l_qurazi",
       "spans": [
-        "sp_l_qurazi"
+        "sp_l_qurazi",
+        "sp_l_qurazi_b"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_l_zawj",
+      "report": "r_l_zawj",
+      "spans": [
+        "sp_l_zawj"
       ],
       "role": "TRANSMITTED"
     }
@@ -821,7 +885,7 @@
     {
       "id": "m_l_mawla",
       "parent": "sp_l_mawla",
-      "exact": "فعلي",
+      "exact": "علي",
       "occurrence": 1,
       "role": "SUBJECT"
     },
@@ -859,6 +923,27 @@
       "exact": "محمد القرظي",
       "occurrence": 1,
       "role": "SPEAKER"
+    },
+    {
+      "id": "m_l_aisha",
+      "parent": "sp_l_zawj_frame",
+      "exact": "عائشة",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_l_zawj",
+      "parent": "sp_l_zawj",
+      "exact": "زوجها",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_l_zf",
+      "parent": "sp_l_zawj",
+      "exact": "فاطمة",
+      "occurrence": 1,
+      "role": "REFERENT"
     }
   ],
   "identifications": [
@@ -1037,6 +1122,30 @@
       "basis": [
         {
           "span": "sp_l_day_badr",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_zawj",
+      "mention": "m_l_zawj",
+      "agent": "ali-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_l_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_zf",
+      "mention": "m_l_zf",
+      "agent": "fatimah-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_l_fatimah_name",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -1337,6 +1446,18 @@
       },
       "restsOn": [
         "st_l_d63"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_fatimah",
+      "subject": "m_l_zawj",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_l_zf"
+      },
+      "restsOn": [
+        "st_l_zawj"
       ],
       "status": "PROPOSED"
     }
