@@ -15,7 +15,7 @@ const banuQurayzah = {
   nameTransliterated: 'Siege of Banu Qurayzah',
   fields: {
     engagement: { value: 'GHAZWAH', claims: ['qurayzah/engagement'] },
-    hijriYear: { value: 5, claims: legacyUnreviewed },
+    hijriYear: { value: 5, claims: ['qurayzah/year'] },
     // Carried from the retired prisma/battleSeedData.ts entry, uncited.
     location: { value: 'المدينة المنورة', claims: legacyUnreviewed },
   },

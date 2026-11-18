@@ -14313,6 +14313,160 @@
           "accessedAt": "2026-09-19"
         }
       ]
+    },
+    {
+      "key": "qurayzah/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "banu-qurayzah",
+      "assertion": "كانت غزوة بني قريظة في السنة الخامسة من الهجرة: يذكرها الكتاب في أحداث تلك السنة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/467-p1",
+          "volume": "السيرة 1",
+          "pageReference": "467",
+          "extractionUrl": "https://shamela.ws/book/10906/604",
+          "excerptArabic": "[السنة الخامسة من الهجرة:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/506-p2",
+          "volume": "السيرة 1",
+          "pageReference": "506",
+          "extractionUrl": "https://shamela.ws/book/10906/643",
+          "excerptArabic": "[غزوة بني قريظة:]",
+          "accessedAt": "2026-11-18"
+        }
+      ]
+    },
+    {
+      "key": "fath-makkah/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "fath-makkah",
+      "assertion": "كان فتح مكة في رمضان من سنة ثمان من الهجرة: يذكره الكتاب في أحداث تلك السنة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/111-p1",
+          "volume": "السيرة 2",
+          "pageReference": "111",
+          "extractionUrl": "https://shamela.ws/book/10906/770",
+          "excerptArabic": "[ثم دخلت سنة ثمان من الهجرة:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/153-p1",
+          "volume": "السيرة 2",
+          "pageReference": "153",
+          "extractionUrl": "https://shamela.ws/book/10906/812",
+          "excerptArabic": "[فتح مكة شرفها الله وعظمها:]",
+          "accessedAt": "2026-11-18"
+        }
+      ]
+    },
+    {
+      "key": "hunayn/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "hunayn",
+      "assertion": "كانت غزوة حنين في سنة ثمان من الهجرة: يذكرها الكتاب في أحداث تلك السنة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/111-p1",
+          "volume": "السيرة 2",
+          "pageReference": "111",
+          "extractionUrl": "https://shamela.ws/book/10906/770",
+          "excerptArabic": "[ثم دخلت سنة ثمان من الهجرة:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/192-p1",
+          "volume": "السيرة 2",
+          "pageReference": "192",
+          "extractionUrl": "https://shamela.ws/book/10906/851",
+          "excerptArabic": "[غزوة حنين:]",
+          "accessedAt": "2026-11-18"
+        }
+      ]
+    },
+    {
+      "key": "taif/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "taif",
+      "assertion": "سار رسول الله صلى الله عليه وسلم من حنين إلى الطائف في شوال من سنة ثمان: يذكرها الكتاب في أحداث تلك السنة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/111-p1",
+          "volume": "السيرة 2",
+          "pageReference": "111",
+          "extractionUrl": "https://shamela.ws/book/10906/770",
+          "excerptArabic": "[ثم دخلت سنة ثمان من الهجرة:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/207-p3",
+          "volume": "السيرة 2",
+          "pageReference": "207",
+          "extractionUrl": "https://shamela.ws/book/10906/866",
+          "excerptArabic": "[غزوة الطائف:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/207-p4",
+          "volume": "السيرة 2",
+          "pageReference": "207",
+          "extractionUrl": "https://shamela.ws/book/10906/866",
+          "excerptArabic": "فسار رسول الله صلى الله عليه وسلم من حنين يريد الطائف في شوال، وقدم خالد بن الوليد على مقدمته. وقد كانت ثقيف رموا حصنهم وأدخلوا فيه ما يكفيهم لسنة، فلما انهزموا من أوطاس دخلو الحصن وتهيأوا للقتال.",
+          "accessedAt": "2026-11-18"
+        }
+      ]
+    },
+    {
+      "key": "tabuk/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "tabuk",
+      "assertion": "كانت غزوة تبوك في رجب من السنة التاسعة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/231-p1",
+          "volume": "السيرة 2",
+          "pageReference": "231",
+          "extractionUrl": "https://shamela.ws/book/10906/890",
+          "excerptArabic": "[السنة التاسعة:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/232-p5",
+          "volume": "السيرة 2",
+          "pageReference": "232",
+          "extractionUrl": "https://shamela.ws/book/10906/891",
+          "excerptArabic": "[وفي رجب غزوة تبوك:]",
+          "accessedAt": "2026-11-18"
+        }
+      ]
     }
   ],
   "approval": {
