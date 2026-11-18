@@ -34,7 +34,7 @@ const prophetMuhammad = {
     // the fathers beyond him sit on the next two pages and none is taken.
     fullName: {
       value:
-        'محمد بن عبد الله بن عبد المطلب واسم عبد المطلب شيبة, ابن هاشم واسمه عمرو, ابن عبد مناف واسمه المغيرة، ابن قصي واسمه زيد بن كلاب بن مرة بن كعب بن لؤي بن غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة ابن مدركة، واسمه عامر بن إلياس بن مضر بن نزار بن معد بن عدنان.',
+        'محمد بن عبد الله بن عبد المطلب واسم عبد المطلب شيبة، ابن هاشم واسمه عمرو، ابن عبد مناف واسمه المغيرة، ابن قصي واسمه زيد بن كلاب بن مرة بن كعب بن لؤي بن غالب بن فهر بن مالك بن النضر بن كنانة بن خزيمة ابن مدركة، واسمه عامر بن إلياس بن مضر بن نزار بن معد بن عدنان.',
       claims: ['prophet/lineage'],
     },
     // The batch's last chapter fills the one field its central subject never
@@ -58,7 +58,7 @@ const prophetMuhammad = {
   titles: [
     // Carried from the retired seed entry; no batch cites these yet.
     { title: 'master-of-children-of-adam', name: 'سيد ولد آدم', nameTransliterated: 'Master of the Children of Adam', claims: legacyUnreviewed },
-    { title: 'the-intercessor', name: 'الشفیع', nameTransliterated: 'The Intercessor', claims: legacyUnreviewed },
+    { title: 'the-intercessor', name: 'الشفيع', nameTransliterated: 'The Intercessor', claims: legacyUnreviewed },
     { title: 'al-sabiqoon', name: 'السابقون', nameTransliterated: 'Al-Sabiqoon', claims: ['sira/al-sabiqoon-eight'] },
     { title: 'prophet', name: 'نبي', nameTransliterated: 'Prophet', claims: ['prophet/described-in-quran'] },
     { title: 'messenger', name: 'رسول', nameTransliterated: 'Messenger', claims: ['prophet/described-in-quran'] },
@@ -91,6 +91,7 @@ const prophetMuhammad = {
 
   relations: [
     { type: 'SON', inverse: 'FATHER', to: 'abdullah-ibn-abd-al-muttalib', claims: ['prophet/father'] },
+    { type: 'SON', inverse: 'MOTHER', to: 'amina-bint-wahb', claims: ['prophet/mother'] },
     { type: 'GRANDSON', inverse: 'GRANDFATHER', to: 'abd-al-muttalib-ibn-hashim', claims: ['prophet/grandfather'] },
     { type: 'PATERNAL_NEPHEW', inverse: 'PATERNAL_UNCLE', to: 'abu-talib', claims: ['prophet/uncle-abu-talib'] },
     { type: 'HUSBAND', inverse: 'WIFE', to: 'khadijah-bint-khuwaylid', claims: ['prophet/wife-khadijah'] },

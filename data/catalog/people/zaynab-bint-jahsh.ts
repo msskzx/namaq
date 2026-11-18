@@ -40,6 +40,7 @@ const zaynabBintJahsh = {
   ayat: [{ surah: 33, ayah: 37, claims: ['zaynab-jahsh/ayah-al-ahzab'], revealedAbout: {} }],
   relations: [
     { type: 'WIFE', inverse: 'HUSBAND', to: 'prophet-muhammad', claims: ['prophet/wife-zaynab-jahsh'] },
+    { type: 'DAUGHTER', inverse: 'FATHER', to: 'jahsh-ibn-riyab', claims: ['zaynab-jahsh/father'] },
     {
       type: 'DAUGHTER',
       inverse: 'MOTHER',
