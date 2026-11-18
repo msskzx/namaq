@@ -11,7 +11,7 @@ import { TermExampleCard, TermQuotes } from '@/components/BalaghaTerm';
 import terms from '@shared/data/quran/balaghaTerms';
 import itqan from '@shared/data/quran/itqanBalagha';
 import { num } from '@shared/quran/arabicNumber';
-import { chapterTitle, plainName, termExamples, termNamed } from '@shared/quran/balaghaTerms';
+import { chapterTitle, plainName, examplesOf, termNamed } from '@shared/quran/balaghaTerms';
 
 /**
  * A balagha term's page (owner, 2026-11-18): its definition in the scholars' words, each quote whole with its page, then
@@ -23,7 +23,7 @@ export default function BalaghaTermScreen() {
   const bottom = useTabBarSpace();
   const { name = '' } = useLocalSearchParams<{ name?: string }>();
   const term = termNamed(terms, name);
-  const examples = useMemo(() => (term ? termExamples(itqan, term.name) : []), [term]);
+  const examples = useMemo(() => (term ? examplesOf(itqan, term) : []), [term]);
   if (!term) return <View style={{ flex: 1, backgroundColor: palette.paper }}><TopBar back={back} /></View>;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>

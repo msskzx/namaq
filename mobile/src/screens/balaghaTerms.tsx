@@ -14,7 +14,7 @@ import { back, toTab } from '@/lib/ways';
 import terms from '@shared/data/quran/balaghaTerms';
 import itqan from '@shared/data/quran/itqanBalagha';
 import { counted } from '@shared/quran/arabicNumber';
-import { chapterTitle, plainName, searchTerms, termExamples, termsByChapter } from '@shared/quran/balaghaTerms';
+import { chapterTitle, plainName, searchTerms, examplesOf, termsByChapter } from '@shared/quran/balaghaTerms';
 
 /**
  * «مصطلحات البلاغة» (owner, 2026-11-18): every balagha term the app's cards and quizzes use, under al-Suyuti's chapters in
@@ -43,7 +43,7 @@ export default function BalaghaTermsScreen() {
           <View key={kind} style={{ gap: 8 }}>
             <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 15, textAlign: 'right', marginTop: 6 }}>{chapterTitle(itqan, kind)}</Text>
             {list.map(term => {
-              const count = termExamples(itqan, term.name).length;
+              const count = examplesOf(itqan, term).length;
               const name = plainName(term.name);
               return (
                 <Card key={term.name} palette={palette} pad={[10, 14]} accessibilityRole="link" accessibilityLabel={name}

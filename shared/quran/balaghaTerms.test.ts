@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import terms from '../data/quran/balaghaTerms';
 import itqan from '../data/quran/itqanBalagha';
 import { itqanAt } from './itqanBalagha';
-import { exampleWords, termOfParagraph, plainName, searchTerms, termCredit, termExamples, termNamed, termOf, termPage, termsByChapter } from './balaghaTerms';
+import { exampleWords, examplesOf, termOfParagraph, plainName, searchTerms, termCredit, termExamples, termNamed, termOf, termPage, termsByChapter } from './balaghaTerms';
 
 describe('balagha terms', () => {
   it('holds a term for every heading the balagha cards use, each with words quoted from a book', () => {
@@ -29,7 +29,7 @@ describe('balagha terms', () => {
   it("gives al-Qazwini's words first where al-Suyuti does not define the device", () => {
     const term = termNamed(terms, 'تأكيد المدح بما يشبه الذم');
     expect(term?.quotes[0].book).toBe('talkhis');
-    expect(term && termCredit(term.quotes[0])).toBe('تلخيص المفتاح للقزويني، في عروس الأفراح ٢/٢٦٩');
+    expect(term && termCredit(term.quotes[0])).toBe('تلخيص المفتاح للقزويني، في عروس الأفراح ٢/٢٦٩–٢٧١');
     expect(term?.quotes.at(-1)?.book).toBe('itqan');
   });
 
@@ -38,6 +38,11 @@ describe('balagha terms', () => {
     const naqis = examples.find(example => example.ayat.includes('75:29'));
     expect(naqis?.ayat).toEqual(['75:29', '75:30']);
     expect(naqis && exampleWords(itqan, naqis, '75:29').length).toBeGreaterThan(0);
+  });
+
+  it('marks an example whose paragraph is already quoted as the definition', () => {
+    const jinas = termNamed(terms, 'الجناس')!;
+    expect(examplesOf(itqan, jinas).map(example => example.inDefinition)).toEqual(termExamples(itqan, jinas.name).map((_, i) => i === 0));
   });
 
   it("names the term of each paragraph in the reader's sheet", () => {

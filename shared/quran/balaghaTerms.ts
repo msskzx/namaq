@@ -71,6 +71,10 @@ export function termExamples(itqan: ItqanData, name: string): TermExample[] {
   return index.get(name) ?? [];
 }
 
+/** A term's examples on its page and card, each marked when its paragraph is already quoted whole as the definition (so the page shows its ayat without the text again). */
+export const examplesOf = (itqan: ItqanData, term: Pick<BalaghaTerm, 'name' | 'quotes'>): (TermExample & { inDefinition: boolean })[] =>
+  termExamples(itqan, term.name).map(example => ({ ...example, inDefinition: term.quotes.some(quote => quote.text === example.text) }));
+
 /** The words of an example he quotes in one ayah, as runs of mushaf words [first, last]. */
 export function exampleWords(itqan: ItqanData, example: Pick<TermExample, 'entry'>, key: string): [number, number][] {
   const runs: [number, number][] = [];

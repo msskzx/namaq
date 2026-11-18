@@ -51,11 +51,12 @@ if (unused.length) throw new Error(`definitions for terms the cards do not use: 
 
 const terms: BalaghaTerm[] = [...kinds].map(([name, kind]) => {
   const definition = definitions[name];
-  const talkhis: TermQuote[] = (definition.talkhis ?? []).map(([id, text]) => {
+  // His lines on one device, though they run over pages, are one quote with one credit.
+  const lines = (definition.talkhis ?? []).map(([id, text]) => {
     if (!matn(id).includes(text)) throw new Error(`${name}: «${text}» is not on Talkhis page ${id}`);
-    const page = talkhisBook.pages[id - 1];
-    return { book: 'talkhis', part: Number(page.vol), pages: [page.page, page.page], id, text };
+    return { id, text, page: talkhisBook.pages[id - 1] };
   });
+  const talkhis: TermQuote[] = lines.length ? [{ book: 'talkhis', part: Number(lines[0].page.vol), pages: [lines[0].page.page, lines.at(-1)!.page.page], id: lines[0].id, text: lines.map(line => line.text).join(' ') }] : [];
   const quotes: TermQuote[] = definition.itqan.map(([id, start]) => {
     const found = paragraphs.filter(paragraph => paragraph.id === id && paragraph.text.startsWith(start));
     if (found.length !== 1) throw new Error(`${name}: ${found.length} paragraphs on page ${id} start «${start}»`);

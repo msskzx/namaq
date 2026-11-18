@@ -15,7 +15,7 @@ import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
 import { feedBooks, hasBooksCard, hasJuzCard, hasMomentCard, hasSceneCard, hasSiraCard, hasTermCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, siraOfSlot, termOfSlot } from '@shared/homeFeed';
 import balaghaTerms from '@shared/data/quran/balaghaTerms';
-import { plainName, termExamples } from '@shared/quran/balaghaTerms';
+import { plainName, examplesOf } from '@shared/quran/balaghaTerms';
 import { BookWords, ExampleAyat, ayatName, quotesTitle } from './BalaghaTerm';
 import { clock, FIVE, PRAYER_NAMES, type PrayerDay, type PrayerKey } from '@shared/prayer';
 import { BOOKS } from '@shared/books';
@@ -581,7 +581,7 @@ const TERM_LINES = 5;
  */
 function TermPost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
   const term = balaghaTerms.terms[termOfSlot(balaghaTerms.terms.length, day, slot)];
-  const examples = useMemo(() => (term ? termExamples(itqan, term.name) : []), [term]);
+  const examples = useMemo(() => (term ? examplesOf(itqan, term) : []), [term]);
   if (!term) return null;
   const name = plainName(term.name);
   const quote = term.quotes[0];

@@ -45,16 +45,21 @@ function QuoteCredit({ quote, palette }: { quote: TermQuote; palette: Palette })
   );
 }
 
+const BY: Record<TermQuote['book'], string> = { itqan: 'قال السيوطي في الإتقان:', talkhis: 'قال القزويني في تلخيص المفتاح:' };
+
 /** What heads a term's quotes: «تعريفه» where they define it, otherwise what al-Suyuti says under his heading. */
 export const quotesTitle = (term: Pick<BalaghaTerm, 'defines'>) => (term.defines ? 'تعريفه' : 'قال السيوطي تحت هذا العنوان');
 
 /** A term's quotes in one card, each whole, with its credit under it. */
 export function TermQuotes({ term, palette }: { term: BalaghaTerm; palette: Palette }) {
+  const mixed = new Set(term.quotes.map(quote => quote.book)).size > 1;
   return (
     <Card palette={palette} pad={[10, 14]} gap={4}>
       <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{quotesTitle(term)}</Text>
       {term.quotes.map((quote, i) => (
         <View key={`${quote.book}${quote.id}/${i}`}>
+          {/* Two books on one term: each book's words under its name. */}
+          {mixed && quote.book !== term.quotes[i - 1]?.book && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right', marginTop: i ? 8 : 0 }}>{BY[quote.book]}</Text>}
           <BookWords text={quote.text} palette={palette} />
           <QuoteCredit quote={quote} palette={palette} />
         </View>
@@ -86,13 +91,15 @@ export function ExampleAyat({ example, palette, size = 23 }: { example: Pick<Ter
   );
 }
 
-/** One example: the ayat with his quoted words lit, his paragraph whole, its credit, and the ayat as links to the mushaf. */
-export function TermExampleCard({ example, palette }: { example: TermExample; palette: Palette }) {
+/** One example: the ayat with his quoted words lit, his paragraph whole (unless the definition above already quotes it), its credit, and the ayat as links to the mushaf. */
+export function TermExampleCard({ example, palette }: { example: TermExample & { inDefinition?: boolean }; palette: Palette }) {
   return (
     <Card palette={palette} pad={[10, 14]} gap={6}>
       <ExampleAyat example={example} palette={palette} />
       <View style={{ height: 1, backgroundColor: palette.rule, opacity: 0.6 }} />
-      <BookWords text={example.text} palette={palette} />
+      {example.inDefinition
+        ? <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>ذكرها في كلامه المنقول في التعريف أعلاه.</Text>
+        : <BookWords text={example.text} palette={palette} />}
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, paddingTop: 2 }}>
         {example.ayat.map(key => {
           const [surah, number] = key.split(':').map(Number);
