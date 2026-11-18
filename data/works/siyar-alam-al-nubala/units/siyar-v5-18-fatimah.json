@@ -423,6 +423,14 @@
       "exact": "بِنْتَ ثَمَانٍ وَعِشْرِيْنَ سَنَةً"
     },
     {
+      "id": "sp_ft_age2425",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "121",
+      "layer": "MAIN",
+      "exact": "وَعَاشَتْ أَرْبَعاً أَوْ خَمْساً وَعِشْرِيْنَ سَنَةً"
+    },
+    {
       "id": "sp_ft_age29",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 5,
@@ -787,6 +795,14 @@
         "sp_ft_baqir"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ft_age2425",
+      "report": "r_ft0",
+      "spans": [
+        "sp_ft_age2425"
+      ],
+      "role": "AUTHOR_REPORT"
     },
     {
       "id": "st_ft_age29",
@@ -1684,9 +1700,10 @@
         ]
       },
       "restsOn": [
-        "st_ft_baqir"
+        "st_ft_baqir",
+        "st_ft_age2425"
       ],
-      "status": "PROPOSED"
+      "status": "DISPUTED"
     },
     {
       "id": "a_ft_age29",
@@ -1699,9 +1716,10 @@
         ]
       },
       "restsOn": [
-        "st_ft_age29"
+        "st_ft_age29",
+        "st_ft_age2425"
       ],
-      "status": "PROPOSED"
+      "status": "DISPUTED"
     }
   ]
 }

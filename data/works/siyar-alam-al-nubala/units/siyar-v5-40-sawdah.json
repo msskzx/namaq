@@ -176,6 +176,22 @@
       "layer": "MAIN",
       "exact": "بِالمَدِيْنَةِ",
       "prefix": "وَمَاتَتْ "
+    },
+    {
+      "id": "sp_sw_hilal_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "267",
+      "layer": "MAIN",
+      "exact": "وَرَوَى: عَمْرُو بنُ الحَارِثِ، عَنْ سَعِيْدِ بنِ أَبِي هِلاَلٍ"
+    },
+    {
+      "id": "sp_sw_hilal",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "267",
+      "layer": "MAIN",
+      "exact": "أَنَّ سَوْدَةَ -رَضِيَ اللهُ عَنْهَا - تُوُفِّيَتْ زَمَنَ عُمَر"
     }
   ],
   "reports": [
@@ -209,6 +225,17 @@
       "isnadSpan": "sp_sw_d54_isnad",
       "origin": {
         "mention": "m_sw_d54_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sw_hilal",
+      "unit": "siyar-v5-40-sawdah",
+      "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_sw_hilal_isnad",
+      "origin": {
+        "mention": "m_sw_hilal_by"
       },
       "chainState": "DEFERRED"
     }
@@ -284,6 +311,14 @@
       "report": "r_sw_d54",
       "spans": [
         "sp_sw_d54"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_sw_hilal",
+      "report": "r_sw_hilal",
+      "spans": [
+        "sp_sw_hilal"
       ],
       "role": "TRANSMITTED"
     }
@@ -370,6 +405,13 @@
       "id": "m_sw_d54_by",
       "parent": "sp_sw_d54_isnad",
       "exact": "الوَاقِدِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sw_hilal_by",
+      "parent": "sp_sw_hilal_isnad",
+      "exact": "سَعِيْدِ بنِ أَبِي هِلاَلٍ",
       "occurrence": 1,
       "role": "SPEAKER"
     }
@@ -633,9 +675,11 @@
         ]
       },
       "restsOn": [
-        "st_sw_d54"
+        "st_sw_d54",
+        "st_sw_dmad",
+        "st_sw_hilal"
       ],
-      "status": "PROPOSED"
+      "status": "DISPUTED"
     },
     {
       "id": "a_sw_d54_m",

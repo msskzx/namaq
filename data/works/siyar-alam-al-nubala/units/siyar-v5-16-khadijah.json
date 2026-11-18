@@ -416,6 +416,23 @@
       "prefix": "سِنِيْنَ. "
     },
     {
+      "id": "sp_kh_waqidi3_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "112",
+      "layer": "MAIN",
+      "exact": "قَالَ الوَاقِدِيُّ",
+      "suffix": ": خَرَجُوا"
+    },
+    {
+      "id": "sp_kh_waqidi3",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "112",
+      "layer": "MAIN",
+      "exact": "خَرَجُوا مِنْ شِعْبِ بَنِي هَاشِمٍ قَبْلَ الهِجْرَةِ بِثَلاَثِ سِنِيْنَ، فَتُوُفِّيَ أَبُو طَالِبٍ، وَقَبْلَهُ خَدِيْجَةُ بِشَهْرٍ وَخَمْسَةِ أَيَّامٍ"
+    },
+    {
       "id": "sp_kh_age",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 5,
@@ -604,9 +621,22 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_kh_age",
+      "id": "r_kh_waqidi3",
       "unit": "siyar-v5-16-khadijah",
       "ordinal": 14,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_kh_waqidi3_frame"
+      ],
+      "origin": {
+        "mention": "m_kh_waqidi3_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_kh_age",
+      "unit": "siyar-v5-16-khadijah",
+      "ordinal": 15,
       "voice": "REPORTED_ANONYMOUS",
       "origin": {
         "mention": "m_kh_age_by"
@@ -813,6 +843,14 @@
       "report": "r_kh_urwah",
       "spans": [
         "sp_kh_urwah"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_kh_waqidi3",
+      "report": "r_kh_waqidi3",
+      "spans": [
+        "sp_kh_waqidi3"
       ],
       "role": "TRANSMITTED"
     },
@@ -1118,6 +1156,13 @@
       "id": "m_kh_urwah_by",
       "parent": "sp_kh_urwah",
       "exact": "عُرْوَةُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_kh_waqidi3_by",
+      "parent": "sp_kh_waqidi3_frame",
+      "exact": "الوَاقِدِيُّ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
@@ -1895,7 +1940,8 @@
       },
       "restsOn": [
         "st_kh_qatadah",
-        "st_kh_urwah"
+        "st_kh_urwah",
+        "st_kh_waqidi3"
       ],
       "status": "PROPOSED"
     },

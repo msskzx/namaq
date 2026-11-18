@@ -229,6 +229,14 @@
       "exact": "وَلَهَا ثَمَانُوْنَ سَنَةً"
     },
     {
+      "id": "sp_my_rej61",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "245",
+      "layer": "MAIN",
+      "exact": "قُلْتُ: لَمْ تَبْقَ إِلَى هَذَا الوَقْتِ، فَقَدْ مَاتَتْ قَبْلَ عَائِشَةَ"
+    },
+    {
       "id": "sp_my_khalifah_frame",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 5,
@@ -418,6 +426,14 @@
         "sp_my_waqidi"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_my_rej61",
+      "report": "r_my0",
+      "spans": [
+        "sp_my_rej61"
+      ],
+      "role": "AUTHOR_REPORT"
     },
     {
       "id": "st_my_khalifah",
@@ -895,9 +911,10 @@
         ]
       },
       "restsOn": [
-        "st_my_waqidi"
+        "st_my_waqidi",
+        "st_my_rej61"
       ],
-      "status": "PROPOSED"
+      "status": "DISPUTED"
     },
     {
       "id": "a_my_age80",
@@ -910,9 +927,10 @@
         ]
       },
       "restsOn": [
-        "st_my_waqidi"
+        "st_my_waqidi",
+        "st_my_rej61"
       ],
-      "status": "PROPOSED"
+      "status": "DISPUTED"
     },
     {
       "id": "a_my_d51",

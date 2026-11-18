@@ -162,6 +162,33 @@
       "layer": "MAIN",
       "exact": "بِالمَدِيْنَةِ",
       "prefix": "تُوُفِّيَ: "
+    },
+    {
+      "id": "sp_af_d32",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "107",
+      "layer": "MAIN",
+      "exact": "وَقِيْلَ: سَنَةَ اثْنَتَيْنِ",
+      "suffix": "."
+    },
+    {
+      "id": "sp_af_d32_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "107",
+      "layer": "MAIN",
+      "exact": "سَنَةَ اثْنَتَيْنِ",
+      "prefix": "وَقِيْلَ: "
+    },
+    {
+      "id": "sp_af_d32_dec",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "107",
+      "layer": "MAIN",
+      "exact": "وَثَلاَثِيْنَ",
+      "prefix": "سَنَةَ إِحْدَى "
     }
   ],
   "reports": [
@@ -175,6 +202,16 @@
         "workAuthor": true
       },
       "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_af_d32",
+      "unit": "siyar-v5-13-abu-sufyan",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_af_d32_by"
+      },
+      "chainState": "DEFERRED"
     }
   ],
   "statements": [
@@ -227,6 +264,14 @@
         "sp_af_death"
       ],
       "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_af_d32",
+      "report": "r_af_d32",
+      "spans": [
+        "sp_af_d32"
+      ],
+      "role": "TRANSMITTED"
     }
   ],
   "mentions": [
@@ -285,6 +330,13 @@
       "exact": "مُعَاوِيَةَ",
       "occurrence": 1,
       "role": "SUBJECT"
+    },
+    {
+      "id": "m_af_d32_by",
+      "parent": "sp_af_d32",
+      "exact": "وَقِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
     }
   ],
   "identifications": [
@@ -543,6 +595,22 @@
       },
       "restsOn": [
         "st_af_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_af_died32",
+      "subject": "m_af",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 32,
+        "spans": [
+          "sp_af_d32_y",
+          "sp_af_d32_dec"
+        ]
+      },
+      "restsOn": [
+        "st_af_d32"
       ],
       "status": "PROPOSED"
     }

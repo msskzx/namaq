@@ -38,18 +38,20 @@ the coverage test.
   addition. Appearance and virtues keep the author's words.
 - **Umayr ibn Sa'd**: the laqab «نسيج وحده» (stated twice, both kept) and his governorship of Damascus and Hims for Umar are by addition.
 - **Abu Sufyan**: name starts at «صخر». The catalog spouses and relations are
-  not stated in this entry (unsupported here). The death years are
-  unreadable in the text (open question 2).
+  not stated in this entry (unsupported here). Death in Medina in 31 (author, same as
+  the catalog) and 32 (an unnamed «وقيل», by addition; the value reads the decade from
+  the line before). The «ثلاث أو أربع وثلاثين، وله نحو التسعين» view is open question 2.
 - **Al-Hakam**: kunya same (the catalog prints the accusative «أبا مروان»).
   Cousinship with the Prophet is by addition.
 - **Khadijah**: mother Fatimah bint Za'idah, husbands Abu Halah and Atiq,
   laqab «الطاهرة» (al-Zubayr ibn Bakkar), death three years before the hijra
-  (Qatadah, with Urwah), and age 65 (anonymous) are by addition.
+  (Qatadah, with Urwah and al-Waqidi), and age 65 (anonymous) are by addition.
 - **Fatimah bint Asad**: Ali is her son. The virtues are al-Zubayr ibn
   Bakkar's words, attributed to him.
 - **Fatimah bint Muhammad**: name as the entry prints it, with «فاطمة».
-  Kunya «أم أبيها», death in Ramadan, year 11 (Sa'id ibn Ufayr), ages 28
-  (al-Baqir) and 29 («قيل»): all by addition. Her mother is stated twice and
+  Kunya «أم أبيها», death in Ramadan, year 11 (Sa'id ibn Ufayr): by addition.
+  Ages 28 (al-Baqir) and 29 («قيل») are DISPUTED: the author's own view, «أربعا أو
+  خمسا وعشرين» with «والأول أصح», is a source of both. Her mother is stated twice and
   both sources are kept.
 - **Umm Ayman**: name «بركة», her kunya, and the husbands Ubayd and Zayd, with
   their sons Ayman and Usamah.
@@ -59,20 +61,25 @@ the coverage test.
 - **Safiyyah bint Huyayy**: husbands Sallam, Kinanah and the Prophet. She died in 36 or 50,
   both «قيل», and both are kept.
 - **Maymunah**: sister Umm al-Fadl and two earlier husbands are by addition.
-  She died at Sarif (Ata') or in Mecca («قيل»), in 51 (Khalifah) or 61 at 80 (al-Waqidi). The author rejects
-  the latter; it is kept with his rejection (open question 5).
+  She died at Sarif (Ata') or in Mecca («قيل»), in 51 (Khalifah) or 61 at 80 (al-Waqidi). The author answers al-Waqidi at once
+  («لم تبق إلى هذا الوقت، فقد ماتت قبل عائشة»), so 61 and 80 are DISPUTED and his
+  answer is a source of both.
 - **Umm Shareek**: name, kunya and sex from the heading. The catalog virtues
   are quoted reports about marriage, so they are left out by rule.
 - **Sana'**: her marriage to the Prophet comes only in Abu Ubayd's «زعم»
   report and stays attributed to him. Her other name, «سناء بنت سفيان الكلابية», is a «قيل» view.
 - **Qutaylah**: her brother is al-Ash'ath (heading and «يقال»). Abu Ubaydah reports her marriage
-  to the Prophet. The catalog parents and companionship are only implied
+  to the Prophet, and it stays his attributed report. Urwah's denial of a marriage to
+  «أخت الأشعث» («ما تزوجها قط», p258-259) is printed in entry ٣٦ (al-Kindiyyah), outside
+  this entry's bounds, so this unit cannot cite it (open question 9). The catalog parents and companionship are only implied
   (open question 6).
 - **Khawlah bint Hakim**: same on all stated fields; the author's «فأرجأها»
   gives the marriage.
 - **Juwayriyah**: appearance (author), husband Musafi (Ibn Sa'd), Aisha's
   «بركة» line, and death in 50 (author) or 56 («قيل»).
-- **Sawdah**: husband al-Sakran by addition. She died in Medina (author), in Shawwal 54 (al-Waqidi's chain).
+- **Sawdah**: husband al-Sakran by addition. She died in Medina (author). Shawwal 54 (al-Waqidi's chain) is
+  DISPUTED: the author puts her death at the end of Umar's caliphate and Sa'id ibn
+  Abi Hilal «زمن عمر» (editor: «رجاله ثقات»); both are sources of it.
 - **Arwa**: everything rests on Ibn Sa'd («روى هذا: ابن سعد»). Husbands
   Umayr ibn Wahb and Artah; children Tulayb and Fatimah. The parents are
   implied, not stated (open question 6).
@@ -90,15 +97,23 @@ would have more than one right answer. Each entry gives its reason.
 ## Open questions
 
 1. Jabr's death date: al-Dhahabi gives it to Jabir; nothing is assigned to Jabr.
-2. Abu Sufyan's death years: the text's numbers do not parse as one year.
-3. Fatimah's age «أربع وعشرين أو خمس وعشرين» is two numbers in one view
-   and is left out. Sa'id's «سبع وعشرين أو نحوها» is left out as well.
+2. Abu Sufyan's «وقيل: سنة ثلاث أو أربع وثلاثين، وله نحو التسعين» is two years in one
+   view and an approximate age, so it has no value yet.
+3. Fatimah's age: the author's own view «أربعا أو خمسا وعشرين» (he calls it the sounder,
+   «والأول أصح») is two numbers in one view, so it stands as the counter-statement of 28
+   and 29 with no value of its own. Sa'id's «سبع وعشرين أو نحوها» is left out as well.
 4. Ties with no predicate yet: maternal aunt (Maymunah), burial places,
    brotherhood pacts, a month with no year.
-5. Maymunah's 61 is kept as al-Waqidi's view; the author's rejection is in
-   the same span.
+5. Two «حسبك/أفضل نساء أهل الجنة» virtues (Khadijah p117, Fatimah p124) are the
+   Prophet's words («مرفوعا»), but the text names no word for him in the chain, so the
+   unit's speaker is the Companion (Anas, Ibn Abbas). Suhaib's «سابق الروم» wording is
+   from al-Hasan's mursal (editor: «إسناده ضعيف لإرساله»); it is kept because the author
+   adds «بإسناد جيد من حديث أبي أمامة». Khadijah's mother and first husbands (p111) follow
+   «قال الزبير بن بكار» and may be his words rather than the author's.
 6. Arwa's and Qutaylah's fathers are implied by their names, not stated.
 7. Old names changed by the Prophet («برة») are not modelled.
 8. New people slugs not yet in the catalog: the sira and kin people named
    above (for example `fatimah-bint-zaidah`, `abu-halah-ibn-zurarah`,
    `atiq-ibn-abid`, `muhsin-ibn-ali`, `tulayb-ibn-umayr`).
+9. Qutaylah's marriage: Urwah's denial sits in entry ٣٦ (al-Kindiyyah, batch 1). Once
+   that unit carries it, the tie should become DISPUTED with both sources.
