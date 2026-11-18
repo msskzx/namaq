@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { skeleton } from './irabUkbari';
-import { firstWords, headingName, MAX_PLACES, placeQuotes, readParagraphs, type MushafWord } from './itqanBalagha';
+import { firstWords, headingName, placeQuotes, readParagraphs, type MushafWord } from './itqanBalagha';
 
 const page = (id: number, page: number, text: string) => ({ id, page, vol: '3', text });
 
@@ -47,15 +47,16 @@ describe('placing his quotes', () => {
   const first = firstWords(mushaf);
 
   it('places a quote that fits one place there', () => {
-    expect(placeQuotes('قال ﴿رَبِّ الْعَالَمِينَ﴾', mushaf, first)).toEqual([[1, 1, 2, 3, 1]]);
+    expect(placeQuotes('قال ﴿رَبِّ الْعَالَمِينَ﴾', mushaf, first)).toEqual([[1, 1, 2, 3, 1, 0]]);
   });
 
   it("places a quote that fits several by the paragraph's other quotes", () => {
-    expect(placeQuotes('﴿الْحَمْدُ لِلَّهِ﴾ ثم ﴿الرَّحْمَنِ الرَّحِيمِ﴾', mushaf, first)).toEqual([[1, 1, 0, 1, 1], [1, 2, 0, 1, 1]]);
+    expect(placeQuotes('﴿الْحَمْدُ لِلَّهِ﴾ ثم ﴿الرَّحْمَنِ الرَّحِيمِ﴾', mushaf, first)).toEqual([[1, 1, 0, 1, 1, 0], [1, 2, 0, 1, 1, 1]]);
   });
 
-  it('places a quote with nothing to choose on all its places, with their count, up to MAX_PLACES', () => {
+  it('places a quote with nothing to choose on every one of its places, with their count, however many', () => {
     expect(placeQuotes('﴿الْحَمْدُ لِلَّهِ﴾', mushaf, first).map(place => place[4])).toEqual([3, 3, 3]);
-    expect(MAX_PLACES).toBeLessThan(6);
+    const many: MushafWord[] = Array.from({ length: 40 }, (_, at) => ({ surah: 3, ayah: at + 1, at: 0, skeleton: skeleton('سبحانه') }));
+    expect(placeQuotes('﴿سُبْحَانَهُ﴾', many, firstWords(many))).toHaveLength(40);
   });
 });

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { hasSavedCard, savedOfSlot, backToVisit, freshPicks, isFresh, leftVisit, storyIsNew, storyTimes, visitStart } from './feedSeen';
+import { hasSavedCard, savedOfSlot, backToVisit, freshPicks, growingPicks, isFresh, leftVisit, storyIsNew, storyTimes, visitStart } from './feedSeen';
 
 describe('feed seen', () => {
   const items = ['a', 'b', 'c', 'd', 'e'];
@@ -21,6 +21,21 @@ describe('feed seen', () => {
 
   it('puts preferred fresh items first', () => {
     expect(freshPicks(pick, id, { c: 1 }, 3, { since: 10, prefer: item => item === 'c' || item === 'd' })).toEqual(['d', 'a', 'b']);
+  });
+
+  it('looks past the first 60 when the feed has grown longer, never stopping', () => {
+    const many = (offset: number) => (offset < 500 ? `x${offset}` : undefined);
+    expect(freshPicks(many, id, {}, 200)).toHaveLength(200);
+  });
+
+  it('keeps the cards already given in place as the feed grows', () => {
+    // Only c is liked, and it is found only when looking further: it must not jump ahead of a and b, already shown.
+    const near = (offset: number) => ['a', 'b', 'x', 'y', 'c'][offset];
+    const holder = { list: [] as string[] };
+    const prefer = (item: string) => item === 'c';
+    expect(growingPicks(holder, [1], near, id, {}, 2, { tries: 2, prefer })).toEqual(['a', 'b']);
+    expect(growingPicks(holder, [1], near, id, {}, 3, { tries: 5, prefer })).toEqual(['a', 'b', 'c']);
+    expect(growingPicks(holder, [2], near, id, {}, 3, { tries: 5, prefer })).toEqual(['c', 'a', 'b']);
   });
 
   it('takes an item that is the number 0', () => {

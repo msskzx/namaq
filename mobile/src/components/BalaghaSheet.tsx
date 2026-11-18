@@ -20,6 +20,8 @@ import Card from '@/ui/Card';
 import Tabs from '@/ui/Tabs';
 import Folded from '@/ui/Folded';
 import Pickable from '@/ui/Pickable';
+import Chip from '@/ui/Chip';
+import { openIntent } from '@/lib/ways';
 
 /**
  * Balagha in the reader (owner, 2026-11-16; docs/plans/balagha.md), from two books picked with pills. Al-Itqan (built
@@ -69,14 +71,14 @@ function BalaghaBody({ ayah, palette, onClose }: { ayah: string; palette: Palett
         </Card>
         <Tabs options={(['itqan', 'kashshaf'] as const).map(book => ({ key: book, label: BOOK_NAMES[book] }))} value={shown} onChange={book => { setShown(book); setSpan([]); }} palette={palette} />
         {shown === 'itqan'
-          ? <Itqan paragraphs={paragraphs} palette={palette} onSpan={setSpan} />
+          ? <Itqan paragraphs={paragraphs} palette={palette} onSpan={setSpan} onClose={onClose} />
           : <Kashshaf ayah={ayah} palette={palette} onSpan={setSpan} onClose={onClose} />}
       </ScrollView>
     </View>
   );
 }
 
-function Itqan({ paragraphs, palette, onSpan }: { paragraphs: ItqanParagraph[]; palette: Palette; onSpan: (span: [number, number][]) => void }) {
+function Itqan({ paragraphs, palette, onSpan, onClose }: { paragraphs: ItqanParagraph[]; palette: Palette; onSpan: (span: [number, number][]) => void; onClose: () => void }) {
   useBooks();
   const [picked, setPicked] = useState(0);
   useEffect(() => { onSpan(paragraphs[picked]?.words ?? []); }, [paragraphs, picked, onSpan]);
@@ -87,11 +89,23 @@ function Itqan({ paragraphs, palette, onSpan }: { paragraphs: ItqanParagraph[]; 
       {/* The paragraph lights the words it quotes; its reference below is a control of its own. */}
       <Pickable picked={picked === i} onPick={() => setPicked(i)}>
       <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 22, textAlign: 'right' }}>{paragraph.heading ? `«${paragraph.heading}» · ${paragraph.kind}` : paragraph.kind}</Text>
-      {paragraph.places > 1 && <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{`مواضع الشاهد في القرآن: ${num(paragraph.places)}، ولم يعيّن السيوطي أحدها`}</Text>}
       <Text selectable style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' }}>
         {tafsirRuns(paragraph.text).map((run, j) => <Text key={j} style={run.quran ? { fontFamily: QURAN_FONT, color: palette.accent } : undefined}>{run.text}</Text>)}
       </Text>
       </Pickable>
+      {/* A quote that names no ayah: every ayah it fits, listed, none chosen for him (owner, 2026-11-18). */}
+      {paragraph.matches.length > 0 && (
+        <Folded credit={`مواضع الشاهد في القرآن: ${num(paragraph.matches.length)}، ولم يعيّن السيوطي أحدها`} palette={palette}>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, paddingTop: 4 }}>
+            {paragraph.matches.map(key => {
+              const [surah, number] = key.split(':').map(Number);
+              return <Chip key={key} small label={`${surahNames[surah] ?? num(surah)} ${num(number)}`} on={false} palette={palette}
+                accessibilityLabel={`افتح ${surahNames[surah] ?? num(surah)} ${num(number)} في المصحف`}
+                onPress={() => { onClose(); openIntent({ tab: 'read', at: key }); }} />;
+            })}
+          </View>
+        </Folded>
+      )}
       <Folded credit={itqanCredit(paragraph)} palette={palette}>
         <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 24, textAlign: 'right' }}>
           {`${ITQAN_BOOK}، ${ITQAN_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث. الفقرة كاملة كما في الكتاب، والعنوان عنوانه.`}

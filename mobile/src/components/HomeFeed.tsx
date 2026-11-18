@@ -12,7 +12,7 @@ import { isMemorized, memorizedPrefer, memorizedQuestions, readMemorized, recall
 import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, seededRandom, type FeedQuizKind } from '@shared/quiz/feedQuiz';
 import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
-import { backToVisit, FEED_AHEAD, freshPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
+import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
 import { feedBooks, hasBooksCard, hasJuzCard, hasMomentCard, hasSceneCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot } from '@shared/homeFeed';
 import { clock, FIVE, PRAYER_NAMES, type PrayerDay, type PrayerKey } from '@shared/prayer';
 import { BOOKS } from '@shared/books';
@@ -669,7 +669,7 @@ export function Feed({ palette, nearEnd, screenBottom }: { palette: Palette; nea
   const [more, setMore] = useState({ visit, batches: 1 });
   const batches = more.visit === visit ? more.batches : 1;
   useEffect(() => {
-    if (nearEnd) setMore(now => ({ visit, batches: Math.min(FEED_AHEAD, (now.visit === visit ? now.batches : 1) + MORE) }));
+    if (nearEnd) setMore(now => ({ visit, batches: (now.visit === visit ? now.batches : 1) + MORE }));
   }, [nearEnd]); // eslint-disable-line react-hooks/exhaustive-deps -- only a new signal asks for more
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen);
   const bookmarks = readBookmarks();
@@ -687,10 +687,13 @@ export function Feed({ palette, nearEnd, screenBottom }: { palette: Palette; nea
     const listener = AppState.addEventListener('change', state => (state === 'active' ? backToVisit() : leftVisit()));
     return () => listener.remove();
   }, []);
-  const pairs = useMemo(() => freshPicks(offset => pairOfDayNumber(day + offset), pair => pair.id, seen, batches,
-    { since: visit, prefer: prefer ? pair => touchesMemorized(pair.sides.flatMap(sideKeys), memorized) : undefined }), [day, batches, seen, prefer, memorized, visit]);
-  const trees = useMemo(() => freshPicks(offset => treeOfDay(day, offset), piece => piece.id, seen, batches,
-    { since: visit, prefer: prefer ? piece => touchesMemorized(piece.keys, memorized) : undefined }), [day, batches, seen, prefer, memorized, visit]);
+  // The cards already shown stay in place as more come; a new visit, day or setting picks afresh.
+  const shownPairs = useRef<{ reset?: unknown[]; list: NonNullable<ReturnType<typeof pairOfDayNumber>>[] }>({ list: [] }).current;
+  const shownTrees = useRef<{ reset?: unknown[]; list: NonNullable<ReturnType<typeof treeOfDay>>[] }>({ list: [] }).current;
+  const pairs = useMemo(() => growingPicks(shownPairs, [visit, day, prefer, memorized], offset => pairOfDayNumber(day + offset), pair => pair.id, seen, batches,
+    { since: visit, prefer: prefer ? pair => touchesMemorized(pair.sides.flatMap(sideKeys), memorized) : undefined }), [day, batches, seen, prefer, memorized, visit, shownPairs]);
+  const trees = useMemo(() => growingPicks(shownTrees, [visit, day, prefer, memorized], offset => treeOfDay(day, offset), piece => piece.id, seen, batches,
+    { since: visit, prefer: prefer ? piece => touchesMemorized(piece.keys, memorized) : undefined }), [day, batches, seen, prefer, memorized, visit, shownTrees]);
   useEffect(() => { markFeedSeen([...pairs.map(pair => pair.id), ...trees.map(piece => piece.id)]); }, [pairs, trees]);
   const posts: React.ReactNode[] = [];
   for (let i = 0; i < batches; i++) {
