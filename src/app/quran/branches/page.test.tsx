@@ -22,7 +22,8 @@ import { inJuzRange } from '@shared/quran/juz';
 import data from '@shared/quran/quranText/corpus';
 import { groups as groupData } from '@shared/quran/mutashabih/data';
 import { browseGroups } from '@shared/quran/mutashabih/browse';
-import { branchInventory } from '@shared/quran/branchInventory';
+import { branchInventory, reviewPool } from '@shared/quran/branchInventory';
+import { branchVerdictFor } from '@shared/quran/branchVerdicts';
 import { NextRequest } from 'next/server';
 import { GET as phrasesRoute } from '@/app/api/quran/branch-phrases/route';
 import { ALL_KINDS } from '@shared/quran/branchSearch';
@@ -505,11 +506,14 @@ describe('branches review', () => {
     const landing = await target({ review: '1' });
     expect(paramsOf(landing).review).toBe('1');
     vi.stubEnv('NODE_ENV', 'development');
-    render(await open(paramsOf(landing)));
+    // A card whose verdict Claude drafted and the owner has not checked yet.
+    const drafted = reviewPool({}, null).find(piece => branchVerdictFor(piece) && !branchVerdictFor(piece)?.checked)!;
+    const card = { ...paramsOf(landing), o: drafted.id };
+    render(await open(card));
     expect(screen.getByRole('button', { name: 'حذف البطاقة' })).toBeTruthy();
     expect(document.querySelector('[data-draft]')?.textContent).toContain('drafted by Claude');
     cleanup();
-    render(await open({ ...paramsOf(landing), review: '' }));
+    render(await open({ ...card, review: '' }));
     expect(screen.queryByRole('button', { name: 'حذف البطاقة' })).toBeNull();
     expect(document.querySelector('[data-draft]')).toBeNull();
   }, 30000);

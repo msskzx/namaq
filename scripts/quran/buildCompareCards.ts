@@ -12,6 +12,11 @@ async function main() {
   const { storyCards } = await import('../../src/app/quran/compare/pairCards');
   const stories = storyCards();
   write({ ...cards, stories });
+  // Twins are written last: a branches card of two ayat takes its compare pair's verdict.
+  const { buildTwinVerdicts } = await import('../../src/app/quran/compare/twins');
+  const twins = buildTwinVerdicts();
+  writeFileSync(join(__dirname, '../../shared/data/quran/twinVerdicts.json'), `${JSON.stringify({ twins }, null, 1)}\n`);
+  console.log('twins', Object.keys(twins).length);
   console.log('compare cards', Object.values(cards.cards).flat().length, 'on', Object.keys(cards.cards).length, 'surah pairs;', Object.keys(stories).length, 'pages with a story');
 }
 

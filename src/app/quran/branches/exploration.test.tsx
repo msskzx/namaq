@@ -127,14 +127,14 @@ describe('branch exploration acceptance', () => {
   });
 
   it('resolves the same short comparison ID with filters on and off', async () => {
-    const id = citedGroup('K02').id;
+    const id = citedGroup('K03').id;
     expect(id.length).toBeLessThan(70);
     await visit({ o: id });
     const original = visibleKeys();
     const originalId = document.querySelector('[data-connection-group]')?.getAttribute('data-connection-group');
     expect(originalId).toBe(id);
     cleanup();
-    await visit({ o: id, categories: 'mutashabeh', surahs: '2' });
+    await visit({ o: id, categories: 'mutashabeh', surahs: '2,7,14' });
     expect(visibleKeys()).toEqual(original);
     expect(document.querySelector('[data-connection-group]')?.getAttribute('data-connection-group')).toBe(id);
   });

@@ -1805,7 +1805,8 @@
   },
   "6:40|10:38": {
    "keep": false,
-   "why": "Both end 'if you are truthful', otherwise different challenges."
+   "why": "Both end 'if you are truthful', otherwise different challenges.",
+   "ask": "Compare and branches disagreed. Compare (drop): Both end 'if you are truthful', otherwise different challenges. Branches (keep): in kuntum sadiqin followed by bal in 6:40 and 10:38"
   },
   "6:45|10:10": {
    "keep": false,
@@ -3525,7 +3526,8 @@
   },
   "4:170|48:4": {
    "keep": false,
-   "why": "Only the heavens-and-earth formula and the closing 'Knowing, Wise'."
+   "why": "Only the heavens-and-earth formula and the closing 'Knowing, Wise'.",
+   "ask": "Compare and branches disagreed. Compare (drop): Only the heavens-and-earth formula and the closing 'Knowing, Wise'. Branches (keep): Same ending, lead-in differs: لله ما في vs ولله جنود"
   },
   "4:170|48:7": {
    "keep": false,
@@ -3685,7 +3687,8 @@
   },
   "6:126|16:13": {
    "keep": false,
-   "why": "Only the formula 'signs for a people who remember'."
+   "why": "Only the formula 'signs for a people who remember'.",
+   "ask": "Compare and branches disagreed. Compare (drop): Only the formula 'signs for a people who remember'. Branches (keep): fassalna al-ayat vs la-ayatan li-qawmin yadhdhakkarun"
   },
   "21:22|43:82": {
    "keep": true,
@@ -5668,7 +5671,8 @@
   },
   "22:63|31:16": {
    "keep": false,
-   "why": "Only the closing names Subtle, Aware."
+   "why": "Only the closing names Subtle, Aware.",
+   "ask": "Compare and branches disagreed. Compare (drop): Only the closing names Subtle, Aware. Branches (keep): Same closing latifun khabir in 22:63 and 31:16"
   },
   "22:64|31:25": {
    "keep": false,
@@ -7262,7 +7266,8 @@
   },
   "2:284|59:6": {
    "keep": false,
-   "why": "Shares only 'whom He wills' and 'able over all things'."
+   "why": "Shares only 'whom He wills' and 'able over all things'.",
+   "ask": "Compare and branches disagreed. Compare (drop): Shares only 'whom He wills' and 'able over all things'. Branches (keep): Qadir closing: yu'adhdhibu man yasha' (2:284) vs yusallitu rusulahu (59:6)"
   },
   "2:75|61:11": {
    "keep": false,
@@ -10573,7 +10578,8 @@
   },
   "6:45|40:65": {
    "keep": false,
-   "why": "Shared closing 'praise be to Allah, Lord of the worlds' only."
+   "why": "Shared closing 'praise be to Allah, Lord of the worlds' only.",
+   "ask": "Compare and branches disagreed. Compare (drop): Shared closing 'praise be to Allah, Lord of the worlds' only. Branches (keep): 6:45 and 40:65 'al-hamdu lillahi rabb al-alamin' then 'qul'"
   },
   "6:56|40:66": {
    "keep": true,
@@ -11149,7 +11155,8 @@
   },
   "17:44|35:41": {
    "keep": false,
-   "why": "Only the closing 'Forbearing, Forgiving' and the heavens and the earth; glorification vs holding the heavens from ceasing."
+   "why": "Only the closing 'Forbearing, Forgiving' and the heavens and the earth; glorification vs holding the heavens from ceasing.",
+   "ask": "Compare and branches disagreed. Compare (drop): Only the closing 'Forbearing, Forgiving' and the heavens and the earth; glorification vs holding the heavens from ceasing. Branches (keep): innahu kana haliman ghafura in 17:44 and 35:41"
   },
   "17:96|35:31": {
    "keep": false,
@@ -12500,7 +12507,8 @@
   },
   "21:91|29:15": {
    "keep": false,
-   "why": "Only 'made it a sign for the worlds'; different subjects (Maryam and her son / Nuh's ship)."
+   "why": "Only 'made it a sign for the worlds'; different subjects (Maryam and her son / Nuh's ship).",
+   "ask": "Compare and branches disagreed. Compare (drop): Only 'made it a sign for the worlds'; different subjects (Maryam and her son / Nuh's ship). Branches (keep): Same closing 'aya lil-alamin' for Maryam's son and Nuh's ark"
   },
   "21:108|29:46": {
    "keep": true,
@@ -14124,7 +14132,8 @@
   },
   "49:1|58:13": {
    "keep": false,
-   "why": "Only 'put forward before'; not preceding Allah and His Messenger vs charity before private counsel."
+   "why": "Only 'put forward before'; not preceding Allah and His Messenger vs charity before private counsel.",
+   "ask": "Compare and branches disagreed. Compare (drop): Only 'put forward before'; not preceding Allah and His Messenger vs charity before private counsel. Branches (keep): 'tuqaddimu bayna yaday' Allah (49:1) vs najwakum (58:13)"
   },
   "49:16|58:7": {
    "keep": true,
@@ -14486,7 +14495,8 @@
   },
   "11:48|36:18": {
    "keep": false,
-   "why": "Only 'a painful punishment from us will touch'; Allah to Nuh vs townspeople threatening messengers."
+   "why": "Only 'a painful punishment from us will touch'; Allah to Nuh vs townspeople threatening messengers.",
+   "ask": "Compare and branches disagreed. Compare (drop): Only 'a painful punishment from us will touch'; Allah to Nuh vs townspeople threatening messengers. Branches (keep): Ending 'minna adhab alim' after yamassuhum vs la-yamassannakum"
   },
   "11:113|36:74": {
    "keep": false,
@@ -14702,7 +14712,8 @@
   },
   "12:44|21:5": {
    "keep": false,
-   "why": "Only 'muddled dreams'; different subjects (the king's dream / the Qur'an)."
+   "why": "Only 'muddled dreams'; different subjects (the king's dream / the Qur'an).",
+   "ask": "Compare and branches disagreed. Compare (drop): Only 'muddled dreams'; different subjects (the king's dream / the Qur'an). Branches (keep): adghathu ahlam wa ma nahnu (12:44) vs bal iftarahu (21:5)"
   },
   "12:75|21:29": {
    "keep": false,
@@ -15784,7 +15795,8 @@
   },
   "28:64|39:58": {
    "keep": true,
-   "why": "Same scene: on seeing the punishment they wish they had been guided / had another chance."
+   "why": "Same scene: on seeing the punishment they wish they had been guided / had another chance.",
+   "ask": "Compare and branches disagreed. Compare (keep): Same scene: on seeing the punishment they wish they had been guided / had another chance. Branches (drop): 'see punishment, if' with different wishes; weak"
   },
   "28:68|39:4": {
    "keep": true,
@@ -17260,7 +17272,8 @@
   },
   "38:43|40:54": {
    "keep": false,
-   "why": "Only 'a reminder for those of understanding'; Ayyub's family restored vs Musa's Book."
+   "why": "Only 'a reminder for those of understanding'; Ayyub's family restored vs Musa's Book.",
+   "ask": "Compare and branches disagreed. Compare (drop): Only 'a reminder for those of understanding'; Ayyub's family restored vs Musa's Book. Branches (keep): Ending 'wa dhikra li-uli al-albab' 38:43 vs 40:54"
   },
   "38:4|43:24": {
    "keep": false,
@@ -18645,7 +18658,8 @@
   },
   "24:12|46:11": {
    "keep": false,
-   "why": "Only 'this is a lie'; believers rejecting slander vs disbelievers calling the Qur'an an old lie."
+   "why": "Only 'this is a lie'; believers rejecting slander vs disbelievers calling the Qur'an an old lie.",
+   "ask": "Compare and branches disagreed. Compare (drop): Only 'this is a lie'; believers rejecting slander vs disbelievers calling the Qur'an an old lie. Branches (keep): Hadha ifk mubin (24:12) vs ifk qadim (46:11)"
   },
   "24:15|46:23": {
    "keep": false,
@@ -21705,7 +21719,8 @@
   },
   "47:13|86:10": {
    "keep": true,
-   "why": "Same idea: strength gone and no helper."
+   "why": "Same idea: strength gone and no helper.",
+   "ask": "Compare and branches disagreed. Compare (keep): Same idea: strength gone and no helper. Branches (drop): la nasir in two unrelated contexts"
   },
   "47:6|89:30": {
    "keep": false,
@@ -22040,7 +22055,8 @@
   },
   "51:12|82:18": {
    "keep": false,
-   "why": "Only Day of Judgement, a common name."
+   "why": "Only Day of Judgement, a common name.",
+   "ask": "Compare and branches disagreed. Compare (drop): Only Day of Judgement, a common name. Branches (keep): 51:12 and 82:18 both followed by yawma; next-ayah cue"
   },
   "51:12|83:11": {
    "keep": false,
@@ -26462,7 +26478,8 @@
   },
   "5:74|5:98": {
    "keep": false,
-   "why": "Only the closing «غفور رحيم»"
+   "why": "Only the closing «غفور رحيم»",
+   "ask": "Compare and branches disagreed. Compare (drop): Only the closing «غفور رحيم» Branches (keep): ghafur rahim then ma (5:74, 5:98)"
   },
   "5:85|5:119": {
    "keep": true,
@@ -27518,7 +27535,8 @@
   },
   "26:103|26:158": {
    "keep": false,
-   "why": "Refrain repeat: shown with the refrain's first place"
+   "why": "Refrain repeat: shown with the refrain's first place",
+   "ask": "Compare and branches disagreed. Compare (drop): Refrain repeat: shown with the refrain's first place Branches (keep): Refrain then 'kadhdhabat qawm' 26:105 vs 26:160"
   },
   "26:103|26:174": {
    "keep": false,
@@ -27538,7 +27556,8 @@
   },
   "26:104|26:159": {
    "keep": false,
-   "why": "Same refrain: shown on the card of its first place"
+   "why": "Same refrain: shown on the card of its first place",
+   "ask": "Compare and branches disagreed. Compare (drop): Same refrain: shown on the card of its first place Branches (keep): ash-Shu'ara refrain before kadhdhabat qawm, two places"
   },
   "26:104|26:175": {
    "keep": false,
@@ -28338,7 +28357,8 @@
   },
   "54:18|54:30": {
    "keep": false,
-   "why": "Refrain repeat: shown with the refrain's first place"
+   "why": "Refrain repeat: shown with the refrain's first place",
+   "ask": "Compare and branches disagreed. Compare (drop): Refrain repeat: shown with the refrain's first place Branches (keep): 54:18 and 54:30 both followed by inna arsalna alayhim"
   },
   "54:21|54:30": {
    "keep": false,
@@ -29834,7 +29854,8 @@
   },
   "55:49|55:65": {
    "keep": false,
-   "why": "Same refrain: shown on the card of its first place"
+   "why": "Same refrain: shown on the card of its first place",
+   "ask": "Compare and branches disagreed. Compare (drop): Same refrain: shown on the card of its first place Branches (keep): Refrain followed by fihima aynan in 55:49 and 55:65"
   },
   "55:49|55:67": {
    "keep": false,
@@ -29954,7 +29975,8 @@
   },
   "55:53|55:75": {
    "keep": false,
-   "why": "Same refrain: shown on the card of its first place"
+   "why": "Same refrain: shown on the card of its first place",
+   "ask": "Compare and branches disagreed. Compare (drop): Same refrain: shown on the card of its first place Branches (keep): Refrain followed by muttaki'ina ala in 55:53 and 55:75"
   },
   "55:53|55:77": {
    "keep": false,
@@ -29986,7 +30008,8 @@
   },
   "55:55|55:69": {
    "keep": false,
-   "why": "Same refrain: shown on the card of its first place"
+   "why": "Same refrain: shown on the card of its first place",
+   "ask": "Compare and branches disagreed. Compare (drop): Same refrain: shown on the card of its first place Branches (keep): Refrain followed by fihinna in 55:55 and 55:69"
   },
   "55:55|55:71": {
    "keep": false,
@@ -30310,7 +30333,8 @@
   },
   "94:5|94:6": {
    "keep": true,
-   "why": "Same: with hardship comes ease"
+   "why": "Same: with hardship comes ease",
+   "checked": true
   },
   "98:1|98:6": {
    "keep": true,
@@ -30774,7 +30798,8 @@
   },
   "5:97|58:7": {
    "keep": false,
-   "why": "Only 'Allah knows what is in the heavens and the earth'."
+   "why": "Only 'Allah knows what is in the heavens and the earth'.",
+   "ask": "Compare and branches disagreed. Compare (drop): Only 'Allah knows what is in the heavens and the earth'. Branches (keep): Same clause, then wa-anna Allaha bi-kulli shay' vs ma yakunu min najwa"
   },
   "5:97|65:12": {
    "keep": true,
@@ -31142,7 +31167,8 @@
   },
   "8:70|57:28": {
    "keep": false,
-   "why": "Only 'give you ... forgive you, Forgiving, Merciful'; different subjects."
+   "why": "Only 'give you ... forgive you, Forgiving, Merciful'; different subjects.",
+   "ask": "Compare and branches disagreed. Compare (drop): Only 'give you ... forgive you, Forgiving, Merciful'; different subjects. Branches (keep): Same closing; captives (8:70) vs light to walk by (57:28)"
   },
   "9:11|31:4": {
    "keep": false,
@@ -31210,7 +31236,8 @@
   },
   "9:89|20:76": {
    "keep": false,
-   "why": "Only the reward formula, gardens beneath which rivers flow."
+   "why": "Only the reward formula, gardens beneath which rivers flow.",
+   "ask": "Compare and branches disagreed. Compare (drop): Only the reward formula, gardens beneath which rivers flow. Branches (keep): mutashabih: the places differ by a word or two, worth a tree"
   },
   "9:94|62:8": {
    "keep": true,
@@ -33226,7 +33253,8 @@
   },
   "25:2|85:9": {
    "keep": false,
-   "why": "Only 'dominion of the heavens and the earth'."
+   "why": "Only 'dominion of the heavens and the earth'.",
+   "ask": "Compare and branches disagreed. Compare (drop): Only 'dominion of the heavens and the earth'. Branches (keep): mutashabih: the places differ by a word or two, worth a tree"
   },
   "25:3|39:43": {
    "keep": true,
@@ -33682,7 +33710,8 @@
   },
   "29:58|85:11": {
    "keep": false,
-   "why": "Only the reward formula, gardens beneath which rivers flow."
+   "why": "Only the reward formula, gardens beneath which rivers flow.",
+   "ask": "Compare and branches disagreed. Compare (drop): Only the reward formula, gardens beneath which rivers flow. Branches (keep): mutashabih: the places differ by a word or two, worth a tree"
   },
   "29:58|98:8": {
    "keep": false,
@@ -33810,7 +33839,8 @@
   },
   "31:8|85:11": {
    "keep": false,
-   "why": "Only the formula 'those who believe and do righteous deeds ... gardens'."
+   "why": "Only the formula 'those who believe and do righteous deeds ... gardens'.",
+   "ask": "Compare and branches disagreed. Compare (drop): Only the formula 'those who believe and do righteous deeds ... gardens'. Branches (keep): shared phrase whose branches after it are worth learning"
   },
   "31:8|95:6": {
    "keep": false,
@@ -33970,7 +34000,8 @@
   },
   "32:19|95:6": {
    "keep": false,
-   "why": "Only the formula 'those who believe and do righteous deeds'."
+   "why": "Only the formula 'those who believe and do righteous deeds'.",
+   "ask": "Compare and branches disagreed. Compare (drop): Only the formula 'those who believe and do righteous deeds'. Branches (keep): fa-lahum jannat al-ma'wa (32:19) vs ajrun ghayru mamnun (95:6)"
   },
   "32:19|98:7": {
    "keep": false,
@@ -34206,7 +34237,8 @@
   },
   "35:1|59:6": {
    "keep": false,
-   "why": "Only 'has power over all things'."
+   "why": "Only 'has power over all things'.",
+   "ask": "Compare and branches disagreed. Compare (drop): Only 'has power over all things'. Branches (keep): qadir ending then next ayah starts ma (35:1, 59:6)"
   },
   "35:1|64:1": {
    "keep": false,
