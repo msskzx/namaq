@@ -27,8 +27,8 @@ one line, as the book prints it, so the coverage test finds where Umm Umarah's e
 | ٤٩ | siyar-v5-49-umm-kulthum-bint-uqbah | umm-kulthum-bint-uqbah | 276-277 |
 | ٥٠ | siyar-v5-50-umm-umarah | umm-umarah | 278-282 |
 
-Waiting (second entries, per batches.md, until their batch merges): #28 Zaynab bint Muhammad (batch 4), #35
-al-Kilabiyyah and #36 «الكندية» (batch 1). Their store pages (246-249, 256-259) are in the store already.
+Waiting: #28 Zaynab bint Muhammad (second entry, per batches.md, until batch 4 merges); its store pages 246-249 are in
+the store already. #35 al-Kilabiyyah and #36 «الكندية» were converted by batch 1.
 
 ## Classified diff (`npm run model:diff -- <slug>`)
 
