@@ -143,6 +143,8 @@ type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: B
     onLeave?: () => void;
     /** In a feed: the tree in a card's frame, and the room for a lit path's ayat added by the page below (TreeCard `ayatRoom`). */
     ayatRoom?: { height: number; set: (height: number) => void };
+    /** In a feed card that follows its content: the matrix's overflow, or null when the card shows the tree (lib/useFit.ts). */
+    onFit?: (overflow: number | null) => boolean;
   }; };
 
 /** The branches trees as a row of cards: the neighbour follows the finger, the place and zoom are kept for next time. */
@@ -163,6 +165,9 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
   const place = useMemo(() => (embedded ? undefined : readJson(PLACE, isPlace)), []); // eslint-disable-line react-hooks/exhaustive-deps
   const first = start ?? Math.max(0, pieces.findIndex(piece => piece.id === place?.id));
   const [index, setIndex] = useState(first);
+  // A feed card that follows the matrix's rows goes back to its own height when the tree is shown.
+  const currentMode = pieces[index] ? modeOf(pieces[index]) : defaultMode;
+  useEffect(() => { if (currentMode === 'tree') embedded?.onFit?.(null); }, [currentMode]); // eslint-disable-line react-hooks/exhaustive-deps
   const [view, setView] = useState<Size | null>(null);
   const [pop, setPop] = useState(0);
   const offset = useSharedValue(0);
@@ -357,6 +362,7 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
             <View key={pieces[at].id} style={{ position: 'absolute', top: 0, left: -at * view.width, width: view.width, height: view.height, backgroundColor: palette.paper }}>
               {atMode === 'matrix'
                 ? <MatrixCard key={String(atAround)} presentation={cardOf(pieces[at], list).presentation} palette={palette} view={view} lane={at === index ? lane : undefined} around={atAround} onTap={tap} onMove={move} footer={footer} pinFooter={!!embedded?.ayatRoom}
+                  onFit={at === index ? embedded?.onFit : undefined}
                   connections={linked ? { group: linked, tags: current && growth.studio && growth.kind === 'matrix' ? studioTags : tagsOf(pieces[at], linked) } : undefined}
                   growth={current && growth.studio && growth.kind !== 'tree' ? { hidden: growth.hidden, now: growth.now, ask: growth.ask } : undefined}
                   reading={current && growth.studio && growth.kind === 'read'} onScroll={current && !embedded ? shrink : undefined} />
