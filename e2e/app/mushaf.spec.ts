@@ -266,8 +266,9 @@ for (const theme of ['light', 'dark'] as const) {
       await expect(page.getByRole('toolbar', { name: 'أدوات التسميع' })).toBeVisible();
       await expect(page.getByText(HAMD, { exact: true }).first()).toBeVisible();
       await capture('review');
-      await page.getByRole('toolbar', { name: 'أدوات التسميع' }).getByRole('button', { name: 'أظهر الكلمة التالية' }).click();
-      await expect(page.getByRole('button', { name: 'أظهر الكلمة التالية' })).toBeDisabled();
+      const next = page.getByRole('toolbar', { name: 'أدوات التسميع' }).first().getByRole('button', { name: 'أظهر الكلمة التالية' });
+      await next.click();
+      await expect(next).toBeDisabled();
     });
   });
 }

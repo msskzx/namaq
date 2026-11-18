@@ -102,11 +102,11 @@ test.describe('branches', () => {
     await expect(page.getByRole('button', { name: 'حفظ الشجرة' }).first()).toBeVisible();
   });
 
-  test('a tree is saved and shows behind the saved circle on home', async ({ page }) => {
+  test('a tree is saved and shows in «مدونتي» on home', async ({ page }) => {
     await open(page, '/branches');
     await page.getByRole('button', { name: 'حفظ الشجرة' }).first().click();
     await tab(page, 'الرئيسية').click();
-    await page.getByRole('button', { name: 'المحفوظات', exact: true }).click();
+    await page.getByRole('button', { name: 'مدونتي', exact: true }).click();
     await expect(page.getByRole('button', { name: /^شجرة: / }).first()).toBeVisible();
   });
 

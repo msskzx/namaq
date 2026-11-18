@@ -33,7 +33,7 @@ export const EXPERIMENT_SECTIONS: NavSection[] = [
     ] },
     { title: { ar: 'الموضوعات', en: 'Themes' }, items: [
       { href: '/quran/prophets', label: { ar: 'قصص الأنبياء', en: 'Prophets’ stories' }, purpose: { ar: 'أحداث قصص الأنبياء وأين ذُكرت في السور', en: 'The events of the prophets’ stories and the surahs that tell them' } },
-      quran('/quran/lataif', { ar: 'لطائف', en: "Lata'if" }),
+      quran('/quran/lataif', { ar: 'مشاهد', en: 'Scenes' }),
       quran('/quran/openings', { ar: 'افتتاح السور', en: 'Surah openings' }),
       quran('/quran/oaths', { ar: 'الأقسام', en: 'Oaths' }),
       quran('/quran/order', { ar: 'ترتيب السور', en: 'Surah order' }),
@@ -73,7 +73,7 @@ export const QURAN_TOOLS: NavItem[] = [
   { href: '/quran/prophets', label: { ar: 'قصص الأنبياء', en: 'Prophets’ stories' }, purpose: { ar: '', en: '' } },
   { href: '/quran/tajwid/tuhfat-al-atfal', label: { ar: 'تحفة الأطفال', en: 'Tuhfat al-Atfal' }, purpose: { ar: '', en: '' } },
   { href: '/quran/oaths', label: { ar: 'الأقسام', en: 'Oaths' }, purpose: { ar: '', en: '' } },
-  { href: '/quran/lataif', label: { ar: 'لطائف', en: "Lata'if" }, purpose: { ar: '', en: '' } },
+  { href: '/quran/lataif', label: { ar: 'مشاهد', en: 'Scenes' }, purpose: { ar: '', en: '' } },
   { href: '/quran/openings', label: { ar: 'افتتاح السور', en: 'Surah openings' }, purpose: { ar: '', en: '' } },
   { href: '/quran/order', label: { ar: 'ترتيب السور', en: 'Surah order' }, purpose: { ar: '', en: '' } },
 ];

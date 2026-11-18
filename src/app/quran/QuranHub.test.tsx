@@ -24,6 +24,6 @@ describe('QuranHub', () => {
 
   it('names the tools as the app does', () => {
     render(<QuranHub />);
-    expect(screen.getAllByRole('link').map(link => link.textContent)).toEqual(['متشابهات القرآن', 'مقارنة السور', 'قصص الأنبياء', 'تحفة الأطفال', 'الأقسام', 'لطائف', 'افتتاح السور', 'ترتيب السور']);
+    expect(screen.getAllByRole('link').map(link => link.textContent)).toEqual(['متشابهات القرآن', 'مقارنة السور', 'قصص الأنبياء', 'تحفة الأطفال', 'الأقسام', 'مشاهد', 'افتتاح السور', 'ترتيب السور']);
   });
 });

@@ -18,7 +18,7 @@ export const LIVE: NavItem[] = [
   { href: '/quran/prophets', label: { ar: 'قصص الأنبياء', en: 'Prophets’ stories' }, purpose: { ar: 'أحداث كل قصة وكيف تُروى في السور', en: 'The events of each story and how the surahs tell them' } },
   { href: '/quran/prophets/muhammad', label: { ar: 'سيرة النبي ﷺ في القرآن', en: 'The Prophet ﷺ in the Quran' }, purpose: { ar: 'أحداث السيرة التي ذكرها القرآن', en: 'The events of his life that the Quran mentions' } },
   { href: '/quran/oaths', label: { ar: 'الأقسام في القرآن', en: 'Oaths in the Quran' }, purpose: { ar: 'كل قسم في القرآن وما أُقسم به، من الله ومن غيره', en: 'Every oath in the Quran and what is sworn by, Allah’s and others’' } },
-  { href: '/quran/lataif', label: { ar: 'لطائف', en: "Lata'if" }, purpose: { ar: 'أمثلة مختارة في موضوعات شتى، لكل مثال صورته ومرجعه', en: 'Chosen examples on many topics, each with its own picture and reference' } },
+  { href: '/quran/lataif', label: { ar: 'مشاهد', en: 'Scenes' }, purpose: { ar: 'أمثلة مختارة في موضوعات شتى، لكل مثال صورته ومرجعه', en: 'Chosen examples on many topics, each with its own picture and reference' } },
   { href: '/quizzes?topic=BRANCHES', label: { ar: 'اختبار فردي', en: 'Solo quiz' }, purpose: { ar: 'أكمل فروع شجرة المتشابهات', en: 'Complete the branches of a phrase tree' } },
   { href: '/quizzes?topic=OPENINGS', label: { ar: 'أوائل السور', en: 'Surah openings' }, purpose: { ar: 'ترى اسم السورة وتكتب أول آية فيها', en: 'See a surah’s name and write its first ayah' } },
   { href: '/quizzes/party', label: { ar: 'اختبار جماعي', en: 'Party quiz' }, purpose: { ar: 'الاختبار نفسه مع أصحابك برابط واحد', en: 'The same quiz with friends, from one link' } },

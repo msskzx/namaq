@@ -2,7 +2,7 @@ import { router, type Href } from 'expo-router';
 import type { CompareTarget } from './compare';
 import type { CardWay } from './home';
 import { setIntent, type Intent } from './intent';
-import { branchView } from './settings';
+import { branchView, utilityView, type UtilityView } from './settings';
 
 const TAB_OF: Record<Intent['tab'], Href> = { branches: '/branches', compare: '/compare', read: '/read' };
 
@@ -65,3 +65,6 @@ export function followWay(way: CardWay, target?: CompareTarget) {
 
 /** Opens a book in the book reader at the passage on an ayah, lit (a reader sheet's book button). */
 export const openBookAt = (id: string, ayah: string) => toTab({ pathname: '/book', params: { id, ayah } });
+
+/** Opens the utilities on one of them: the qibla, the prayer times, the adhkar. */
+export const openUtility = (view: UtilityView) => { utilityView.set(view); toTab('/utilities'); };

@@ -38,7 +38,7 @@ import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayah
 import { backToVisit, FEED_AHEAD, freshPicks, hasStoryCard, savedOfSlot, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, serverFeedSeen, serverStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, STORIES, type StoryId } from '@shared/feedSeen';
 import { forgottenOrder, type RecitePosition } from '@shared/quran/recite';
 import type { PairCard } from '@shared/quran/compareCards';
-import { hijriDate, todaysJuz } from '@shared/hijri';
+import { hijriDate, juzLabel, todaysJuz } from '@shared/hijri';
 import { JUZ_INDEX } from '@shared/quran/juzIndex';
 import { num } from '@shared/quran/arabicNumber';
 import { ayahPlaces } from '@shared/quran/ayahPlaces';
@@ -64,8 +64,6 @@ const fetchJson = async <T,>(url: string): Promise<T> => {
   return response.json();
 };
 
-/** «الجزء ٣», or «الجزءان ٢٩ و٣٠» on the last day of a 29-day month. */
-const juzLabel = (juz: number[]) => (juz.length > 1 ? `الجزءان ${num(juz[0])} و${num(juz[1])}` : `الجزء ${num(juz[0])}`);
 const juzHref = (juz: number) => ayahHref(`${JUZ_INDEX[juz - 1].surah}:${JUZ_INDEX[juz - 1].ayah}`);
 
 /** The reader's own day, worked out in the browser (null while the page is drawn on the server). */
