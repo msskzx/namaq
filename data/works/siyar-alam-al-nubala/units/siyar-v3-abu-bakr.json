@@ -1469,20 +1469,7 @@
         ]
       },
       "restsOn": [
-        "st_ab_mulaykah"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_ab_laqab_i",
-      "subject": "m_ab_laqabuh",
-      "predicate": "name.laqab",
-      "value": {
-        "spans": [
-          "sp_ab_atiq_i"
-        ]
-      },
-      "restsOn": [
+        "st_ab_mulaykah",
         "st_ab_main"
       ],
       "status": "PROPOSED"
