@@ -469,7 +469,7 @@
       "predicate": "virtue",
       "value": {
         "spans": [
-          "sp_zk_older_v"
+          "sp_zk_older"
         ]
       },
       "restsOn": [
