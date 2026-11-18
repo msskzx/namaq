@@ -61,7 +61,7 @@ const azZubayrIbnAlAwwam = {
   ayat: [
     // Aisha names him and Abu Bakr as two of those the verse describes, which
     // is the same verse the old seed carried for him, now with its evidence.
-    { surah: 3, ayah: 172, claims: ['zubayr/ayah-al-imran'] },
+    { surah: 3, ayah: 172, kind: 'DESCRIBES', claims: ['zubayr/ayah-al-imran'] },
   ],
 
   relations: [

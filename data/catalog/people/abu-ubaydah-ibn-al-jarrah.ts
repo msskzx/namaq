@@ -59,7 +59,7 @@ const abuUbaydahIbnAlJarrah = {
     // Carried from the retired seed. The entry quotes the Qur'an twice -- Al
     // Imran 200 in Umar's letter to him and al-Hadid 20 in his reply -- but
     // says of no verse that it was revealed about him, this one included.
-    { surah: 9, ayah: 100, claims: legacyUnreviewed },
+    { surah: 9, ayah: 100, kind: 'DESCRIBES', claims: legacyUnreviewed },
   ],
 
   relations: [

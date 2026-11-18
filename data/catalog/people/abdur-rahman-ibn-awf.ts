@@ -60,13 +60,13 @@ const abdurRahmanIbnAwf = {
 
   ayat: [
     // al-Dhahabi places him among أهل بيعة الرضوان, whom the verse names.
-    { surah: 48, ayah: 18, claims: ['awf/ayah-al-fath'] },
+    { surah: 48, ayah: 18, kind: 'DESCRIBES', claims: ['awf/ayah-al-fath'] },
     // Qatadah reads the verse against the hypocrites who called his half-estate
     // gift showing off.
-    { surah: 9, ayah: 79, claims: ['awf/ayah-al-tawbah'] },
+    { surah: 9, ayah: 79, kind: 'READ_AS_ABOUT', claims: ['awf/ayah-al-tawbah'] },
     // Carried from the old seed, which gave him التوبة 100 uncited. The entry
     // calls him one of السابقين but never reaches for this verse.
-    { surah: 9, ayah: 100, claims: legacyUnreviewed },
+    { surah: 9, ayah: 100, kind: 'DESCRIBES', claims: legacyUnreviewed },
   ],
 
   relations: [

@@ -10,6 +10,12 @@ export const hasJuzCard = (slot: number) => slot === 0;
 export const hasSceneCard = (slot: number) => slot > 0 && slot % 2 === 0;
 export const hasBooksCard = (slot: number) => slot % 4 === 1;
 
+/** A battle's moment (owner, 2026-11-18) on every fourth batch from the fourth, between the books and the scenes. */
+export const hasMomentCard = (slot: number) => slot % 4 === 3;
+
+/** The moment of a batch, the same all day; each moment batch brings the next one. */
+export const momentOfSlot = (count: number, day: number, slot: number) => (count ? (((day * 3 + (slot - 3) / 4) % count) + count) % count : -1);
+
 /** The scene of a batch, the same all day; the next scene batch brings the next one. */
 export const sceneOfSlot = (count: number, day: number, slot: number) => (count ? (((day * 5 + slot / 2) % count) + count) % count : -1);
 

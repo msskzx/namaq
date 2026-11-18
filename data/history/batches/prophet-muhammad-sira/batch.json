@@ -4539,10 +4539,19 @@
           "sourceSlug": "siyar-alam-al-nubala-risalah",
           "passageAnchor": "1/38-p5",
           "volume": "السيرة 1",
+          "pageReference": "38",
+          "extractionUrl": "https://shamela.ws/book/10906/176",
+          "excerptArabic": "وجاء بلفظ آخر، قال: \"أنا أحمد، ومحمد، والمقفى، والحاشر، ونبي الرحمة، ونبي الملحمة\".",
+          "accessedAt": "2026-09-19"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/38-p8",
+          "volume": "السيرة 1",
           "pageReference": "38-39",
           "extractionUrl": "https://shamela.ws/book/10906/176",
-          "excerptArabic": "وجاء بلفظ آخر، قال: \"أنا أحمد، ومحمد، والمقفى، والحاشر، ونبي الرحمة، ونبي الملحمة\". وأحمد، والحاشر، والمقفى، ونبي التوبة، والملحمة\" رواه مسلم.",
-          "accessedAt": "2026-09-19"
+          "excerptArabic": "وقال عمرو بن مرة، عن أبي عبيدة، عن أبي موسى الأشعري، قال: كان رسول الله صلى الله عليه وسلم يسمي لنا نفسه أسماء فقال: \"أنا محمد، وأحمد، والحاشر، والمقفى، ونبي التوبة، والملحمة\" رواه مسلم.",
+          "accessedAt": "2026-11-18"
         }
       ],
       "field": "titles"
@@ -4993,7 +5002,7 @@
           "accessedAt": "2026-09-19"
         }
       ],
-      "relationshipType": "MAWLA",
+      "relationshipType": "PATRON",
       "relatedSubjectKind": "PERSON",
       "relatedSubjectSlug": "zaid-ibn-harithah"
     },
@@ -5015,7 +5024,7 @@
           "accessedAt": "2026-09-19"
         }
       ],
-      "relationshipType": "SON",
+      "relationshipType": "FATHER",
       "relatedSubjectKind": "PERSON",
       "relatedSubjectSlug": "al-qasim-ibn-muhammad"
     },
@@ -5037,7 +5046,7 @@
           "accessedAt": "2026-09-19"
         }
       ],
-      "relationshipType": "DAUGHTER",
+      "relationshipType": "FATHER",
       "relatedSubjectKind": "PERSON",
       "relatedSubjectSlug": "ruqayyah-bint-muhammad"
     },
@@ -5059,7 +5068,7 @@
           "accessedAt": "2026-09-19"
         }
       ],
-      "relationshipType": "DAUGHTER",
+      "relationshipType": "FATHER",
       "relatedSubjectKind": "PERSON",
       "relatedSubjectSlug": "zaynab-bint-muhammad"
     },
@@ -5081,7 +5090,7 @@
           "accessedAt": "2026-09-19"
         }
       ],
-      "relationshipType": "DAUGHTER",
+      "relationshipType": "FATHER",
       "relatedSubjectKind": "PERSON",
       "relatedSubjectSlug": "umm-kulthum-bint-muhammad"
     },
@@ -5103,7 +5112,7 @@
           "accessedAt": "2026-09-19"
         }
       ],
-      "relationshipType": "DAUGHTER",
+      "relationshipType": "FATHER",
       "relatedSubjectKind": "PERSON",
       "relatedSubjectSlug": "fatimah-bint-muhammad"
     },
@@ -5125,7 +5134,7 @@
           "accessedAt": "2026-09-19"
         }
       ],
-      "relationshipType": "SON",
+      "relationshipType": "FATHER",
       "relatedSubjectKind": "PERSON",
       "relatedSubjectSlug": "ibrahim-ibn-muhammad"
     },
@@ -5187,7 +5196,8 @@
           "excerptArabic": "وقال أبو قتادة الأنصاري: سأل أعرابي رسول الله صلى الله عليه وسلم فقال: ما تقول في صوم يوم الإثنين؟ قال: \"ذاك يوم ولدت فيه وفيه أوحي إليّ\". أخرجه مسلم.",
           "accessedAt": "2026-09-19"
         }
-      ]
+      ],
+      "disputed": true
     },
     {
       "key": "prophet/birth-day-alt",
@@ -5858,7 +5868,8 @@
           "excerptArabic": "أتيت بالبراق، وهو دابة أبيض، فركبته حتى أتينا ببيت المقدس، فربطته بالحلقة التي تربط بها الأنبياء، ثم دخلت",
           "accessedAt": "2026-09-20"
         }
-      ]
+      ],
+      "disputed": true
     },
     {
       "key": "sira/miraj-salah",
@@ -9781,7 +9792,8 @@
           "excerptArabic": "[ثم دخلت سنة ثلاث من الهجرة:]",
           "accessedAt": "2026-09-20"
         }
-      ]
+      ],
+      "disputed": true
     },
     {
       "key": "sira/banu-nadir-after-uhud",
@@ -10958,7 +10970,8 @@
           "excerptArabic": "وكنا -أصحاب محمد- نتحدث أن عدة أهل بدر ثلاثمائة وبضعة عشر، كعدة أصحاب طالوت الذين جازوا معه النهر، وما جازه إلا مؤمن. أخرجه البخاري.",
           "accessedAt": "2026-09-20"
         }
-      ]
+      ],
+      "disputed": true
     },
     {
       "key": "sira/badr-muslim-force-other",
@@ -11008,7 +11021,8 @@
           "excerptArabic": "فخرجوا بخمسين وتسعمائة مقاتل، وساقوا مائة فرس, ولم يتركوا كارها للخروج. فأشخصوا العباس بن عبد المطلب، ونوفل بن الحارث، وطالب بن أبي طالب، وأخاه عقيلا، إلى أن نزلوا الجحفة.",
           "accessedAt": "2026-09-20"
         }
-      ]
+      ],
+      "disputed": true
     },
     {
       "key": "sira/badr-quraysh-force-other",
@@ -11058,7 +11072,8 @@
           "excerptArabic": "فقتلوا يومئذ سبعين، وأسروا سبعين. أخرجه مسلم.",
           "accessedAt": "2026-09-20"
         }
-      ]
+      ],
+      "disputed": true
     },
     {
       "key": "sira/badr-quraysh-dead-other",
@@ -11099,7 +11114,8 @@
           "excerptArabic": "وقال هو وابن عقبة: إن عدد من قتل من المسلمين ستة من قريش، وثمانية من الأنصار.",
           "accessedAt": "2026-09-20"
         }
-      ]
+      ],
+      "disputed": true
     },
     {
       "key": "sira/badr-muslim-dead-other",
@@ -11187,7 +11203,8 @@
           "excerptArabic": "فخرج رسول الله صلى الله عليه وسلم والمسلمون وهم ألف، والمشركون ثلاثة آلاف. فنزل رسول الله صلى الله عليه وسلم أحدا، ورجع عنه عبد الله بن أبي في ثلاثمائة، فسقط في أيدي الطائفتين, وهمتا أن تفشلا، والطائفتان: بنو سلمة وبنو حارثة.",
           "accessedAt": "2026-09-20"
         }
-      ]
+      ],
+      "disputed": true
     },
     {
       "key": "sira/uhud-quraysh-force-other",
@@ -11277,7 +11294,8 @@
           "excerptArabic": "قال موسى بن عقبة، عن الزهري: أسري برسول الله صلى الله عليه وسلم إلى بيت المقدس قبل الهجرة بسنة.",
           "accessedAt": "2026-09-20"
         }
-      ]
+      ],
+      "disputed": true
     },
     {
       "key": "sira/isra-year-alt",
@@ -12303,7 +12321,8 @@
           "excerptArabic": "ثم انطلقت إلى ورقة بن نوفل، وهو ابن عمها، وكان قد تنصر وقرأ الكتب، فأخبرته بما رأى وسمع، فقال ورقة: قدوس، والذي نفسي بيده لئن كنت",
           "accessedAt": "2026-09-20"
         }
-      ]
+      ],
+      "disputed": true
     },
     {
       "key": "waraqah/uncle-khadijah",
@@ -14313,12 +14332,215 @@
           "accessedAt": "2026-09-19"
         }
       ]
+    },
+    {
+      "key": "qurayzah/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "banu-qurayzah",
+      "assertion": "كانت غزوة بني قريظة في السنة الخامسة من الهجرة: يذكرها الكتاب في أحداث تلك السنة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/467-p1",
+          "volume": "السيرة 1",
+          "pageReference": "467",
+          "extractionUrl": "https://shamela.ws/book/10906/603",
+          "excerptArabic": "[السنة الخامسة من الهجرة:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/506-p2",
+          "volume": "السيرة 1",
+          "pageReference": "506",
+          "extractionUrl": "https://shamela.ws/book/10906/642",
+          "excerptArabic": "[غزوة بني قريظة:]",
+          "accessedAt": "2026-11-18"
+        }
+      ],
+      "disputed": true
+    },
+    {
+      "key": "qurayzah/year-alt",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "banu-qurayzah",
+      "assertion": "وقال موسى بن عقبة وعروة: كانت الخندق وبنو قريظة في شوال سنة أربع، وقال المصنف: وهو وهم بين.",
+      "confidence": "DISPUTED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "disputed": true,
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/498-p8",
+          "volume": "السيرة 1",
+          "pageReference": "498",
+          "extractionUrl": "https://shamela.ws/book/10906/634",
+          "excerptArabic": "وقال موسى بن عقبة، عن ابن شهاب، أن رسول الله صلى الله عليه وسلم قاتل يوم بدر في رمضان سنة اثنين، ثم قاتل يوم أحد في شوال سنة ثلاث، ثم قاتل يوم الخندق، وهو يوم الأحزاب وبني",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/498-p9",
+          "volume": "السيرة 1",
+          "pageReference": "498",
+          "extractionUrl": "https://shamela.ws/book/10906/634",
+          "excerptArabic": "قريظة، في شوال سنة أربع. وكذا قال عروة في حديث ابن لهيعة عن أبي الأسود عنه. كذا قالا: سنة أربع, وقالا: في قصة الخندق إنها كانت بعد أحد بسنتين.",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/498-p10",
+          "volume": "السيرة 1",
+          "pageReference": "498",
+          "extractionUrl": "https://shamela.ws/book/10906/634",
+          "excerptArabic": "وقال قتادة من رواية شيبان عنه: كان يوم الأحزاب بعد أحد بسنتين، فهذا هو المقطوع به وقول موسى وعروة إنها في سنة أربع وهم بين، ويشبهه قول عبيد الله، عن نافع، عن ابن عمر: \"عرضني",
+          "accessedAt": "2026-11-18"
+        }
+      ]
+    },
+    {
+      "key": "fath-makkah/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "fath-makkah",
+      "assertion": "كان فتح مكة في رمضان من سنة ثمان من الهجرة: يذكره الكتاب في أحداث تلك السنة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/111-p1",
+          "volume": "السيرة 2",
+          "pageReference": "111",
+          "extractionUrl": "https://shamela.ws/book/10906/770",
+          "excerptArabic": "[ثم دخلت سنة ثمان من الهجرة:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/153-p1",
+          "volume": "السيرة 2",
+          "pageReference": "153",
+          "extractionUrl": "https://shamela.ws/book/10906/812",
+          "excerptArabic": "[فتح مكة شرفها الله وعظمها:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/164-p7",
+          "volume": "السيرة 2",
+          "pageReference": "164",
+          "extractionUrl": "https://shamela.ws/book/10906/823",
+          "excerptArabic": "وكان دخول النبي صلى الله عليه وسلم مكة في رمضان، واستعار النبي صلى الله عليه وسلم من صفوان فأعطاه فيما زعموا مائة درع وأداتها، وكان أكثر شيء سلاحا.",
+          "accessedAt": "2026-11-18"
+        }
+      ]
+    },
+    {
+      "key": "hunayn/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "hunayn",
+      "assertion": "كانت غزوة حنين في سنة ثمان من الهجرة: يذكرها الكتاب في أحداث تلك السنة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/111-p1",
+          "volume": "السيرة 2",
+          "pageReference": "111",
+          "extractionUrl": "https://shamela.ws/book/10906/770",
+          "excerptArabic": "[ثم دخلت سنة ثمان من الهجرة:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/192-p1",
+          "volume": "السيرة 2",
+          "pageReference": "192",
+          "extractionUrl": "https://shamela.ws/book/10906/851",
+          "excerptArabic": "[غزوة حنين:]",
+          "accessedAt": "2026-11-18"
+        }
+      ]
+    },
+    {
+      "key": "taif/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "taif",
+      "assertion": "سار رسول الله صلى الله عليه وسلم من حنين إلى الطائف في شوال من سنة ثمان: يذكرها الكتاب في أحداث تلك السنة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/111-p1",
+          "volume": "السيرة 2",
+          "pageReference": "111",
+          "extractionUrl": "https://shamela.ws/book/10906/770",
+          "excerptArabic": "[ثم دخلت سنة ثمان من الهجرة:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/207-p3",
+          "volume": "السيرة 2",
+          "pageReference": "207",
+          "extractionUrl": "https://shamela.ws/book/10906/866",
+          "excerptArabic": "[غزوة الطائف:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/207-p4",
+          "volume": "السيرة 2",
+          "pageReference": "207",
+          "extractionUrl": "https://shamela.ws/book/10906/866",
+          "excerptArabic": "فسار رسول الله صلى الله عليه وسلم من حنين يريد الطائف في شوال، وقدم خالد بن الوليد على مقدمته. وقد كانت ثقيف رموا حصنهم وأدخلوا فيه ما يكفيهم لسنة، فلما انهزموا من أوطاس دخلو الحصن وتهيأوا للقتال.",
+          "accessedAt": "2026-11-18"
+        }
+      ]
+    },
+    {
+      "key": "tabuk/year",
+      "subjectKind": "BATTLE",
+      "subjectSlug": "tabuk",
+      "assertion": "كانت غزوة تبوك في رجب من السنة التاسعة.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "field": "hijriYear",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/231-p1",
+          "volume": "السيرة 2",
+          "pageReference": "231",
+          "extractionUrl": "https://shamela.ws/book/10906/890",
+          "excerptArabic": "[السنة التاسعة:]",
+          "accessedAt": "2026-11-18"
+        },
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "2/232-p5",
+          "volume": "السيرة 2",
+          "pageReference": "232",
+          "extractionUrl": "https://shamela.ws/book/10906/891",
+          "excerptArabic": "[وفي رجب غزوة تبوك:]",
+          "accessedAt": "2026-11-18"
+        }
+      ]
     }
   ],
   "approval": {
-    "revision": "fe93b856e45d0a43",
-    "approvedAt": "2026-09-30",
+    "revision": "ad6f7b3e9e41fbf7",
+    "approvedAt": "2026-11-18",
     "approvedBy": "msskzx",
-    "note": "Approved for publication. Claims are Not reviewed: the entries are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+    "note": "Approved for publication under the owner's 2026-11-18 rule (app in development with no users; a second agent checked the batch against its pages and the method, including the five battle years added 2026-11-18). Claims are Not reviewed; approval permits the import and asserts nothing about review."
   }
 }

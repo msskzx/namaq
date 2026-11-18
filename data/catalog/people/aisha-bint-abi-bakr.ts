@@ -32,8 +32,13 @@ const aishaBintAbiBakr = {
     },
   ],
   ayat: [
-    { surah: 24, ayah: 11, claims: ['aisha-siyar/ayah-an-nur-eleven'], revealedAbout: {} },
-    { surah: 33, ayah: 33, claims: ['aisha-siyar/ayah-al-ahzab-thirty-three'] },
+    // النور 11 names the slanderers; the ten ayat from it came down for her acquittal,
+    // so the question asks that and not «فيمن نزلت».
+    {
+      surah: 24, ayah: 11, kind: 'REVEALED_ABOUT', claims: ['aisha-siyar/ayah-an-nur-eleven'],
+      revealedAbout: { prompt: 'في براءة مَن نزلت آيات الإفك، وهذه أولها؟' },
+    },
+    { surah: 33, ayah: 33, kind: 'DESCRIBES', claims: ['aisha-siyar/ayah-al-ahzab-thirty-three'] },
   ],
   relations: [
     { type: 'DAUGHTER', inverse: 'FATHER', to: 'abu-bakr-as-siddiq', claims: ['aisha-siyar/father'] },

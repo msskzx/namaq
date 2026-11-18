@@ -1418,6 +1418,44 @@ again before they import. The counts above predate them.
 - `zaynab-jahsh/father` (`1/466-p2`): زينب بنت جحش بن رئاب الأسدي names
   `jahsh-ibn-riyab`, who was already in the catalog with no edge to her.
 
+## Re-approval check, 2026-11-18
+
+A second agent checked the whole batch before it was approved again: 561
+citations against their stored pages, every relationship claim's direction, and
+a sample of 15 claims. Fixed from it:
+
+- `prophet/son-*` and `prophet/daughter-*` said the Prophet was the child; they
+  are `FATHER` now, and `prophet/mawla-zayd` is `PATRON`, matching the catalog.
+- `prophet/names` joined the «بلفظ آخر» line on 38 to the end of Abu Musa's
+  hadith on 39. They are two citations now, `1/38-p5` and `1/38-p8`.
+- Where a reading has a recorded rival (`-alt` / `-other`), the reading this
+  batch put first is now `disputed` too, so both show as attributed reports and
+  neither as settled fact: `prophet/birth-day`, `sira/badr-muslim-force`,
+  `sira/badr-quraysh-force`, `sira/uhud-quraysh-force`, `sira/badr-quraysh-dead`,
+  `sira/badr-muslim-dead`, `sira/isra-year`, `sira/isra`, `sira/banu-nadir`,
+  `waraqah/cousin-khadijah`. `mustaliq/year` already names its sources and
+  `khaybar/year` has al-Dhahabi's own «لا يصح» against the rival, so both stay.
+
+Left for a later pass: four `zaynab-khuzaymah/*` excerpts drop «رضي الله عنها»
+without «...», and `saad-muadh/arsh` reads «جنازته» where the stored page has
+«جناته» (to check against the print).
+
+# Battle years from the year chapters (2026-11-18)
+
+Five battles' years are dated by the year chapter that tells them (ADR 0024): each
+claim cites the year's heading and the battle's own heading inside it.
+`qurayzah/year` (5: 1/467-p1, 1/506-p2), `fath-makkah/year` (8, Ramadan: 2/111-p1,
+2/153-p1, 2/164-p7), `hunayn/year` (8), `taif/year` (8, Shawwal), `tabuk/year`
+(9, Rajab). No year heading falls between any year heading and its battle.
+Qurayzah has a rival: Musa ibn Uqbah and Urwah put the Khandaq and Qurayzah in
+year 4 (1/498-p8, p9), which al-Dhahabi calls «وهم بين» (p10). It is recorded as
+`qurayzah/year-alt`, DISPUTED, and `qurayzah/year` is marked disputed. A second
+agent checked these against the pages; its two findings (volume 1 links past the
+skipped page 442, and Ramadan needing its own citation) are fixed. These claims
+came after the approval at 8f87a821 and were approved again under the owner's standing rule.
+The catalog's «معركة ذات السلاسل» is the battle of year 12 against Persia, not the
+sariyyah of year 8 told in 2/146, so it gets no year from this chapter.
+
 # Review
 
 Nothing in this batch is reviewed, across any of its chapters. The claims are

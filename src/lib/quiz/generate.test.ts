@@ -9,7 +9,7 @@ import { generateQuestionCandidates, revealedAboutQuestions } from './generate';
 const basePerson = (slug: string, name: string, kunya: string) => ({
   kind: 'PERSON', slug, name, hasProfile: true,
   fields: { kunya: { value: kunya, claims: ['abu-ubaydah/kunya'] }, sex: { value: 'MALE', claims: ['abu-ubaydah/kunya'] } },
-  titles: [], relations: [], ayat: [{ surah: 1, ayah: Number(slug.slice(1)), claims: ['awf/ayah-al-fath'], revealedAbout: {} }],
+  titles: [], relations: [], ayat: [{ surah: 1, ayah: Number(slug.slice(1)), kind: 'REVEALED_ABOUT', claims: ['awf/ayah-al-fath'], revealedAbout: {} }],
 });
 
 beforeEach(() => {
@@ -69,7 +69,8 @@ beforeEach(() => {
     slug: `event-${year}`,
     name: `الحدث ${year}`,
     type: 'OTHER',
-    fields: { hijriYear: { value: year, claims: ['sira/isra-year'] } },
+    // An undisputed cited year: a disputed claim (sira/isra-year has rival readings) asks nothing.
+    fields: { hijriYear: { value: year, claims: ['sira/qiblah'] } },
     people: [],
   }));
   loadCatalog.mockResolvedValue({ people, battles, events, utterances: [] });
@@ -204,26 +205,54 @@ describe('question candidate generation', () => {
   });
 
   it('asks in whom an ayah was revealed, with same-sex distractors and no one else it was revealed about', () => {
-    const person = (slug: string, sex: string, ayah: number, revealedAbout?: { with?: string[]; alsoUnnamed?: true }) => ({
-      kind: 'PERSON' as const, slug, name: `حَفْصَةُ ${slug}`, hasProfile: true, fields: { sex: { value: sex, claims: ['c'] } }, titles: [], relations: [],
-      ayat: [{ surah: 66, ayah, claims: ['c'], ...(revealedAbout && { revealedAbout }) }],
+    const person = (slug: string, sex: string, ayah: number, revealedAbout?: { with?: string[]; alsoUnnamed?: true; prompt?: string }, hasProfile = true) => ({
+      kind: 'PERSON' as const, slug, name: `حَفْصَةُ ${slug}`, hasProfile, fields: { sex: { value: sex, claims: ['c'] } }, titles: [], relations: [],
+      ayat: [{ surah: 66, ayah, kind: revealedAbout ? 'REVEALED_ABOUT' : 'DESCRIBES', claims: ['c'], ...(revealedAbout && { revealedAbout }) }],
     });
     const people = [
-      person('hafsa', 'FEMALE', 4, { with: ['aisha'] }), person('aisha', 'FEMALE', 11, {}), person('w1', 'FEMALE', 1), person('w2', 'FEMALE', 2), person('w3', 'FEMALE', 3),
+      person('aisha', 'FEMALE', 11, { prompt: 'في براءة مَن؟' }), person('w1', 'FEMALE', 1), person('w2', 'FEMALE', 2), person('w3', 'FEMALE', 3),
+      person('hidden', 'FEMALE', 9, undefined, false),
       person('m1', 'MALE', 5, { alsoUnnamed: true }), person('m2', 'MALE', 6), person('m3', 'MALE', 7),
     ];
     const questions = revealedAboutQuestions(people as never, new Set(['c']));
-    const hafsa = questions.find((question) => question.correctAnswer === 'hafsa')!;
-    expect(hafsa).toMatchObject({ family: 'AYAH_REVEALED_ABOUT', topic: 'AYAT', attribute: '66:4', promptArabic: 'في من نزلت هذه الآية؟' });
-    expect(hafsa.choices.map((choice) => choice.value).sort()).toEqual(['hafsa', 'w1', 'w2', 'w3']);
-    expect(hafsa.choices[0].labelArabic).toBe('حفصة hafsa');
-    expect(questions.map((question) => question.correctAnswer).sort()).toEqual(['aisha', 'hafsa']);
+    const [aisha] = questions;
+    expect(aisha).toMatchObject({ family: 'AYAH_REVEALED_ABOUT', topic: 'AYAT', attribute: '66:11', promptArabic: 'في براءة مَن؟' });
+    expect(aisha.choices.map((choice) => choice.value).sort()).toEqual(['aisha', 'w1', 'w2', 'w3']);
+    expect(aisha.choices[0].labelArabic).toBe('حفصة aisha');
+    expect(questions).toHaveLength(1);
+  });
+
+  it('names both people when the source says the ayah came down about two, and every choice is a pair', () => {
+    const woman = (slug: string, ayah?: number, revealedAbout?: { with?: string[] }) => ({
+      kind: 'PERSON' as const, slug, name: slug, hasProfile: true, fields: { sex: { value: 'FEMALE', claims: ['c'] } }, titles: [], relations: [],
+      ayat: ayah ? [{ surah: 66, ayah, kind: 'REVEALED_ABOUT', claims: ['c'], revealedAbout }] : [],
+    });
+    const [question] = revealedAboutQuestions(
+      [woman('hafsa', 4, { with: ['aisha'] }), woman('aisha'), ...['a', 'b', 'c', 'd', 'e', 'f'].map((slug) => woman(slug))] as never, new Set(['c']));
+    expect(question).toMatchObject({ promptArabic: 'فيمن نزلت هذه الآية؟', correctAnswer: 'hafsa+aisha', personSlugs: ['aisha', 'hafsa'] });
+    expect(question.choices[0].labelArabic).toBe('hafsa وaisha');
+    for (const choice of question.choices) expect(choice.value.split('+')).toHaveLength(2);
+    for (const choice of question.choices.slice(1)) expect(choice.value).not.toMatch(/hafsa|aisha/);
+    const names = question.choices.flatMap((choice) => choice.value.split('+'));
+    expect(new Set(names).size).toBe(names.length);
+  });
+
+  it('asks one question for one report that names two ayat, and none for a link of another kind', () => {
+    const man = (slug: string, ayat: { surah: number; ayah: number; kind: string }[] = []) => ({
+      kind: 'PERSON' as const, slug, name: slug, hasProfile: true, fields: { sex: { value: 'MALE', claims: ['c'] } }, titles: [], relations: [],
+      ayat: ayat.map((ayah) => ({ ...ayah, claims: ['c'], ...(ayah.kind === 'REVEALED_ABOUT' && { revealedAbout: {} }) })),
+    });
+    const questions = revealedAboutQuestions([
+      man('saad', [{ surah: 31, ayah: 15, kind: 'REVEALED_ABOUT' }, { surah: 29, ayah: 8, kind: 'REVEALED_ABOUT' }]),
+      man('talha', [{ surah: 9, ayah: 41, kind: 'ACTED_ON' }]), man('a'), man('b'), man('c'),
+    ] as never, new Set(['c']));
+    expect(questions.map((question) => question.attribute)).toEqual(['31:15']);
   });
 
   it('never offers the Prophet as a distractor', () => {
     const man = (slug: string, ayah?: number) => ({
       kind: 'PERSON' as const, slug, name: slug, hasProfile: true, fields: { sex: { value: 'MALE', claims: ['c'] } }, titles: [], relations: [],
-      ayat: ayah ? [{ surah: 29, ayah, claims: ['c'], revealedAbout: {} }] : [],
+      ayat: ayah ? [{ surah: 29, ayah, kind: 'REVEALED_ABOUT', claims: ['c'], revealedAbout: {} }] : [],
     });
     const [question] = revealedAboutQuestions([man('saad', 8), man('prophet-muhammad'), man('a'), man('b'), man('c')] as never, new Set(['c']));
     expect(question.choices.map((choice) => choice.value).sort()).toEqual(['a', 'b', 'c', 'saad']);

@@ -30,6 +30,8 @@ below. Never copy one into a screen.
 | `Folded` | A passage's credit under a rule at its card's foot, folded; opens to the edition and the page's link | each passage in the reader's book sheets (balagha, meaning); the ayat a balagha quote fits when al-Suyuti names none |
 | `Pickable` | A block of a card that picks it on a tap, `aria-pressed` | a book's paragraph that lights the ayah words it quotes |
 | `Bubble` | A speech bubble: the speaker's name in his colour, his side, his corner sharp; `framed` | a conversation drawn as a chat (the dialog scenes of «مشاهد», a hadith's scenes) |
+| `Step` | A numbered step: the number in an accent ring, its content beside it | a sequence told in order (a battle's moments) |
+| `SplitBar` | Two amounts on one bar, each its share, accent then rule colour | comparing two sides (a battle's numbers) |
 | `Empty` | The one "nothing here" line: muted, centred, says what is missing and how to fill it | every empty list or search |
 | `LoadingDots`, `LoadingScreen`, `Hourglass` | The one loader (`fill` centres it for a page or sheet, `label` for screen readers), app start screen, quiz timer | waiting |
 

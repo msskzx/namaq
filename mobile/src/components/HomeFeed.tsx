@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { bookmarkKind } from '@shared/bookmarkKind';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
@@ -13,7 +13,7 @@ import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, se
 import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
-import { feedBooks, hasBooksCard, hasJuzCard, hasSceneCard, inMinutes, insertAt, prayerSoon, sceneOfSlot } from '@shared/homeFeed';
+import { feedBooks, hasBooksCard, hasJuzCard, hasMomentCard, hasSceneCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot } from '@shared/homeFeed';
 import { clock, FIVE, PRAYER_NAMES, type PrayerDay, type PrayerKey } from '@shared/prayer';
 import { BOOKS } from '@shared/books';
 import { isReaderBook, pageName } from '@shared/readerBooks';
@@ -28,6 +28,9 @@ import type { BranchPiece } from '@shared/quran/branchInventory';
 import { pageStart } from '@shared/quran/readerPage';
 import { continuePage, readFasilas, serverFasilas, subscribeFasilas } from '@shared/readingMarks';
 import { Text } from '@/ui/Text';
+import momentBattles from '@shared/data/battles/moments.json';
+import type { AppMomentBattle } from '@shared/battles/battle';
+import { battleLine, Moment } from './battles/BattleParts';
 import CompareCard from './CompareCard';
 import TreePager from './TreePager';
 import { aliasesOf, EMPTY_LIST } from '@/lib/branchList';
@@ -71,6 +74,7 @@ import type { WordDifference } from '@shared/quran/qiraat';
 import BalaghaSheet from './BalaghaSheet';
 import IrabSheet from './IrabSheet';
 import QuranWords from './quran/text/QuranWords';
+import { FIT_SHARE, useFitHeight } from '@/lib/useFit';
 import { storyMap } from '@shared/quran/prophets/story';
 import { hasStoryCard, storyGroupOfDay } from '@shared/quran/prophets/storyGroup';
 import { check, DEFAULT_LIST, DEFAULT_SOLO, hasTyped, isCompare, isTree, pick, reveal, showAnswer, startSolo, typeAnswer, type SoloRun } from '@/lib/quiz';
@@ -82,6 +86,7 @@ import { type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
 import Card from '@/ui/Card';
+import { openExternal } from '@/ui/ExternalLink';
 
 type IconType = (props: LucideProps) => React.ReactNode;
 
@@ -254,7 +259,7 @@ export function QuizActions({ palette }: { palette: Palette }) {
   );
 }
 
-/** The tree question's room in a card: the quiz's own tree, scrolling inside it, and its buttons. */
+/** The tree or compare question's room in a card before it has measured what it holds: the quiz's own tree and its buttons. */
 const QUIZ_TREE_HEIGHT = 380;
 const openAyat = (keys: string[]) => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } });
 
@@ -264,6 +269,8 @@ const openAyat = (keys: string[]) => router.push({ pathname: '/ayah', params: { 
  * فقط» on, it asks from what is memorized, as the solo quiz does.
  */
 const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTopic; seed: number; palette: Palette }) {
+  // A tree or compare question's room follows what it holds, up to most of the screen (owner, 2026-11-18).
+  const [roomHeight, onFit] = useFitHeight(QUIZ_TREE_HEIGHT);
   const memorized = useSyncExternalStore(subscribeMemorized, readMemorized);
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
   const [run, setRun] = useState<SoloRun | null>(null);
@@ -289,10 +296,10 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
         <QuizActions palette={palette} />
       </>}>
       {isCompare(question)
-        ? <View style={{ height: QUIZ_TREE_HEIGHT }}>
+        ? <View style={{ height: roomHeight }}>
           {checked
-            ? <CompareFeedback question={question} typed={run.typed[0]} palette={palette} header={prompt} hints={run.hints?.[0]} />
-            : <CompareInputs question={question} typed={run.typed[0]} onType={(blank, text) => setRun(now => now && typeAnswer(now, blank, text))} palette={palette} header={prompt} />}
+            ? <CompareFeedback onFit={onFit} question={question} typed={run.typed[0]} palette={palette} header={prompt} hints={run.hints?.[0]} />
+            : <CompareInputs onFit={onFit} question={question} typed={run.typed[0]} onType={(blank, text) => setRun(now => now && typeAnswer(now, blank, text))} palette={palette} header={prompt} />}
         </View>
         : !isTree(question)
         ? <View style={{ paddingBottom: 12 }}>
@@ -303,10 +310,10 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
               setRun(pick(run, value));
             }} />
         </View>
-        : <View style={{ height: QUIZ_TREE_HEIGHT }}>
+        : <View style={{ height: roomHeight }}>
           {checked
-            ? <QuizFeedback question={question} typed={run.typed[0]} palette={palette} names={shortNames} onTap={openAyat} header={prompt} hints={run.hints?.[0]} />
-            : <QuizInputs question={question} typed={run.typed[0]} onType={(node, text) => setRun(now => now && typeAnswer(now, node, text))} palette={palette} names={shortNames} header={prompt} />}
+            ? <QuizFeedback onFit={onFit} question={question} typed={run.typed[0]} palette={palette} names={shortNames} onTap={openAyat} header={prompt} hints={run.hints?.[0]} />
+            : <QuizInputs onFit={onFit} question={question} typed={run.typed[0]} onType={(node, text) => setRun(now => now && typeAnswer(now, node, text))} palette={palette} names={shortNames} header={prompt} />}
         </View>}
     </Post>
   );
@@ -332,7 +339,6 @@ const FeedQuiz = ({ kind, seed, palette }: { kind: FeedQuizKind; seed: number; p
 const TREE_HEIGHT = 470;
 /** On a taller screen the cards grow with it (owner, 2026-11-15): this share of the screen's height, never less than the sizes above. */
 const TREE_SHARE = 0.68;
-const STORY_SHARE = 0.62;
 
 /**
  * One tree as a post: the branches tab's own pager (TreePager) holding just this tree, so it zooms, pans, lights a path on
@@ -347,12 +353,14 @@ const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece
   const pieces = useMemo(() => [piece], [piece]);
   const [room, setRoom] = useState(0);
   const { height: screen } = useWindowDimensions();
-  const embedded = useMemo(() => ({ open: (at: BranchPiece) => toTab({ pathname: '/branches', params: { tree: at.id } }), ayatRoom: { height: room, set: setRoom } }), [room]);
+  // The matrix's card follows its rows, up to most of the screen (owner, 2026-11-18); the tree keeps its own height.
+  const [height, onFit] = useFitHeight(Math.max(TREE_HEIGHT, Math.round(screen * TREE_SHARE)));
+  const embedded = useMemo(() => ({ open: (at: BranchPiece) => toTab({ pathname: '/branches', params: { tree: at.id } }), ayatRoom: { height: room, set: setRoom }, onFit }), [room, onFit]);
   // The pager draws the tree in its own card and its buttons under it, so the post is the head and the pager.
   return (
     <View style={{ gap: 4 }}>
       <PostHead Icon={TreeIcon} title="من متشابهات القرآن" sub={placesOf(piece.keys)} palette={palette} open={{ onPress: () => embedded.open(piece), label: 'افتح الشجرة في متشابهات القرآن' }} />
-      <View style={{ height: Math.max(TREE_HEIGHT, Math.round(screen * TREE_SHARE)) + room }}>
+      <View style={{ height: height + room }}>
         <TreePager pieces={pieces} list={EMPTY_LIST} palette={palette} mode={mode} around={around} start={0} embedded={embedded} />
       </View>
     </View>
@@ -389,12 +397,9 @@ function SavedPost({ item, palette }: { item: SavedItem; palette: Palette }) {
   return found.pair ? <PairPost pair={found.pair} palette={palette} /> : null;
 }
 
-/** The prophets card's height: the surahs scroll up and down inside it, the events sideways. */
-const STORY_HEIGHT = 460;
-
 /**
  * A prophet's story map as a post (owner, 2026-11-14): the prophets page's own map (StoryMap), every event and surah, opened
- * sideways at the day's group; the surahs scroll up and down inside the card. Any tap opens the story page at its top, not scrolled
+ * sideways at the day's group; the card is as tall as its surahs, and only past most of the screen do they scroll inside it. Any tap opens the story page at its top, not scrolled
  * to an event, so a new reader sees where they landed (owner, 2026-11-14).
  */
 const StoryPost = memo(function StoryPost({ slug, phase, palette }: { slug: string; phase: number; palette: Palette }) {
@@ -406,7 +411,7 @@ const StoryPost = memo(function StoryPost({ slug, phase, palette }: { slug: stri
   return (
     <Post palette={palette} head={<PostHead Icon={ScrollText} title={prophet.title} sub={prophet.story.phases[phase]} palette={palette} open={{ onPress: () => open(), label: 'افتح القصة' }} />}
       actions={<Action Icon={BookOpen} label="افتح القصة" onPress={() => open()} palette={palette} />}>
-      <ScrollView nestedScrollEnabled style={{ maxHeight: Math.max(STORY_HEIGHT, Math.round(screen * STORY_SHARE)) }} contentContainerStyle={{ paddingVertical: 8 }}>
+      <ScrollView nestedScrollEnabled style={{ maxHeight: Math.round(screen * FIT_SHARE) }} contentContainerStyle={{ paddingVertical: 8 }}>
         <StoryMap map={map} events={prophet.events} phases={prophet.story.phases} at={phase} palette={palette} onPick={open} onTitle={open} />
       </ScrollView>
     </Post>
@@ -538,6 +543,26 @@ const ScenePost = memo(function ScenePost({ day, slot, palette }: { day: number;
     </Post>
   );
 });
+
+/** Every battle's moments, in the battles' order, for the moment card. */
+const MOMENTS = (momentBattles as AppMomentBattle[]).flatMap(battle => battle.moments.map((moment, i) => ({ battle, moment, n: i + 1 })));
+
+/** A moment of a battle in the source's words (owner, 2026-11-18); the head opens the battle's page. */
+function MomentPost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
+  const item = MOMENTS[momentOfSlot(MOMENTS.length, day, slot)];
+  if (!item) return null;
+  const { battle, moment, n } = item;
+  return (
+    <Post palette={palette} head={<PostHead Icon={Swords} title={`من ${battle.name}`} sub={battleLine(battle)} palette={palette}
+      open={{ onPress: () => toTab({ pathname: '/battle', params: { slug: battle.slug } }), label: `افتح ${battle.name}` }} />}
+      actions={<>
+        <Action Icon={Swords} label={`افتح ${battle.name}`} onPress={() => toTab({ pathname: '/battle', params: { slug: battle.slug } })} palette={palette} />
+        <Action Icon={ExternalLinkIcon} label={`المصدر: ${moment.cite}`} onPress={() => openExternal(moment.url)} palette={palette} />
+      </>}>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}><Moment moment={moment} n={n} palette={palette} plain /></View>
+    </Post>
+  );
+}
 
 /** Each ayah card's list of ayat, read once when first asked for. */
 const noteLists: Partial<Record<AyahNote, string[]>> = {};
@@ -685,6 +710,7 @@ export function Feed({ palette, nearEnd, screenBottom }: { palette: Palette; nea
     if (hasJuzCard(i) && juz) posts.push(<JuzPost key={`j${day}`} palette={palette} />);
     if (hasSceneCard(i) && sceneList().length) posts.push(<ScenePost key={`m${day}-${i}`} day={day} slot={i} palette={palette} />);
     if (hasBooksCard(i)) posts.push(<BooksPost key={`k${day}-${i}`} day={day} palette={palette} />);
+    if (hasMomentCard(i) && MOMENTS.length) posts.push(<MomentPost key={`w${day}-${i}`} day={day} slot={i} palette={palette} />);
   }
   // A prayer that is near comes in once, before the first post below the screen, so what the reader looks at stays put (owner,
   // 2026-11-18). One near when home opens leads the feed. A card the reader has passed or is looking at stays; one still
