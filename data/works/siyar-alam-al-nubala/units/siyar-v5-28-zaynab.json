@@ -1,0 +1,586 @@
+{
+  "unit": {
+    "id": "siyar-v5-28-zaynab",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٢٨"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_zy_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "246",
+      "layer": "MAIN",
+      "exact": "٢٨ - زَيْنَبُ بِنْتُ رَسُوْلِ اللهِ * -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-"
+    },
+    {
+      "id": "sp_zy1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "246",
+      "layer": "MAIN",
+      "exact": "زَيْنَبُ بِنْتُ رَسُوْلِ اللهِ",
+      "prefix": "٢٨ - "
+    },
+    {
+      "id": "sp_zy_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "246",
+      "layer": "MAIN",
+      "exact": "زَيْنَبُ بِنْتُ",
+      "prefix": "٢٨ - "
+    },
+    {
+      "id": "sp_zy_title",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "246",
+      "layer": "MAIN",
+      "exact": "بِنْتُ رَسُوْلِ اللهِ",
+      "prefix": "٢٨ - زَيْنَبُ "
+    },
+    {
+      "id": "sp_zy_sal",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "246",
+      "layer": "MAIN",
+      "exact": "صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "prefix": "٢٨ - زَيْنَبُ بِنْتُ رَسُوْلِ اللهِ * -"
+    },
+    {
+      "id": "sp_zy_hijra",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "246",
+      "layer": "MAIN",
+      "exact": "وَأَكْبَرُ أَخَوَاتِهَا، مِنَ المُهَاجِرَاتِ السَّيِّدَاتِ (١)"
+    },
+    {
+      "id": "sp_zy_hijra_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "246",
+      "layer": "MAIN",
+      "exact": "مِنَ المُهَاجِرَاتِ السَّيِّدَاتِ (١)"
+    },
+    {
+      "id": "sp_zy_marr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "246",
+      "layer": "MAIN",
+      "exact": "تَزَوَّجَهَا فِي حَيَاةِ أُمِّهَا: ابْنُ خَالَتِهَا أَبُو العَاصِ؛ فَوَلَدَتْ لَهُ أُمَامَةَ الَّتِي تَزَوَّجَ بِهَا: عَلِيُّ بنُ أَبِي طَالِبٍ بَعْدَ فَاطِمَةَ، وَوَلَدَتْ لَهُ: عَلِيَّ بنَ أَبِي العَاصِ"
+    },
+    {
+      "id": "sp_zy_aas_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "246",
+      "layer": "MAIN",
+      "exact": "أَبُو العَاصِ",
+      "prefix": "ابْنُ خَالَتِهَا "
+    },
+    {
+      "id": "sp_zy_umamah_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "246",
+      "layer": "MAIN",
+      "exact": "فَوَلَدَتْ لَهُ أُمَامَةَ"
+    },
+    {
+      "id": "sp_zy_ali_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "246",
+      "layer": "MAIN",
+      "exact": "عَلِيَّ بنَ أَبِي العَاصِ",
+      "prefix": "وَوَلَدَتْ لَهُ: "
+    },
+    {
+      "id": "sp_zy_ia_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "249",
+      "layer": "MAIN",
+      "exact": "ابْنُ إِسْحَاقَ: عَنْ دَاوُدَ بنِ الحُصَيْنِ، عَنْ عِكْرِمَةَ، عَنِ ابْنِ عَبَّاسٍ"
+    },
+    {
+      "id": "sp_zy_ia",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "249",
+      "layer": "MAIN",
+      "exact": "أَنَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- رَدَّ ابْنَتَهُ إِلَى أَبِي العَاصِ بَعْدَ سِنِيْنَ بِنِكَاحِهَا الأَوَّلِ، وَلَمْ يُحْدِثْ صَدَاقاً (١)"
+    },
+    {
+      "id": "sp_zy_ia_aas",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "249",
+      "layer": "MAIN",
+      "exact": "أَبِي العَاصِ",
+      "prefix": "رَدَّ ابْنَتَهُ إِلَى "
+    },
+    {
+      "id": "sp_zy_ua_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "250",
+      "layer": "MAIN",
+      "exact": "عَاصِمٌ الأَحْوَلُ: عَنْ حَفْصَةَ، عَنِ أُمِّ عَطِيَّةَ"
+    },
+    {
+      "id": "sp_zy_ua_who",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "250",
+      "layer": "MAIN",
+      "exact": "لَمَّا مَاتَتْ زَيْنَبُ بِنْتُ رَسُوْلِ اللهِ"
+    },
+    {
+      "id": "sp_zy_ua",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "250",
+      "layer": "MAIN",
+      "exact": "فَلَمَّا غَسَّلْنَاهَا، أَعْطَانَا حَقْوَهُ، فَقَالَ: (أَشْعِرْنَهَا إِيَّاهُ) (٣)"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_zy0",
+      "unit": "siyar-v5-28-zaynab",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_zy_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_zy_ia",
+      "unit": "siyar-v5-28-zaynab",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_zy_ia_isnad",
+      "origin": {
+        "mention": "m_zy_ia"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_zy_ua",
+      "unit": "siyar-v5-28-zaynab",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_zy_ua_isnad",
+      "origin": {
+        "mention": "m_zy_ua"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_zy_name",
+      "report": "r_zy0",
+      "spans": [
+        "sp_zy1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zy_hijra",
+      "report": "r_zy0",
+      "spans": [
+        "sp_zy_hijra"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zy_marr",
+      "report": "r_zy0",
+      "spans": [
+        "sp_zy_marr"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zy_ia",
+      "report": "r_zy_ia",
+      "spans": [
+        "sp_zy_ia"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_zy_ua",
+      "report": "r_zy_ua",
+      "spans": [
+        "sp_zy_ua"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_zy",
+      "parent": "sp_zy1",
+      "exact": "زَيْنَبُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zy_p",
+      "parent": "sp_zy1",
+      "exact": "رَسُوْلِ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zy_h",
+      "parent": "sp_zy_hijra",
+      "exact": "أَخَوَاتِهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zy_m",
+      "parent": "sp_zy_marr",
+      "exact": "تَزَوَّجَهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zy_aas",
+      "parent": "sp_zy_marr",
+      "exact": "أَبُو العَاصِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zy_umamah",
+      "parent": "sp_zy_marr",
+      "exact": "أُمَامَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zy_ali",
+      "parent": "sp_zy_marr",
+      "exact": "عَلِيَّ بنَ أَبِي العَاصِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zy_ia",
+      "parent": "sp_zy_ia_isnad",
+      "exact": "ابْنِ عَبَّاسٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_zy_i",
+      "parent": "sp_zy_ia",
+      "exact": "ابْنَتَهُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zy_aas2",
+      "parent": "sp_zy_ia",
+      "exact": "أَبِي العَاصِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zy_ua",
+      "parent": "sp_zy_ua_isnad",
+      "exact": "أُمِّ عَطِيَّةَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_zy_u",
+      "parent": "sp_zy_ua",
+      "exact": "غَسَّلْنَاهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_zy",
+      "mention": "m_zy",
+      "agent": "zaynab-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_zy_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zy_h",
+      "mention": "m_zy_h",
+      "agent": "zaynab-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_zy_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zy_m",
+      "mention": "m_zy_m",
+      "agent": "zaynab-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_zy_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zy_i",
+      "mention": "m_zy_i",
+      "agent": "zaynab-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_zy_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zy_u",
+      "mention": "m_zy_u",
+      "agent": "zaynab-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_zy_ua_who",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zy_p",
+      "mention": "m_zy_p",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_zy_sal",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zy_aas",
+      "mention": "m_zy_aas",
+      "agent": "abu-al-as-ibn-al-rabi",
+      "basis": [
+        {
+          "span": "sp_zy_aas_name",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zy_aas2",
+      "mention": "m_zy_aas2",
+      "agent": "abu-al-as-ibn-al-rabi",
+      "basis": [
+        {
+          "span": "sp_zy_ia_aas",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zy_umamah",
+      "mention": "m_zy_umamah",
+      "agent": "umamah-bint-abi-al-as",
+      "basis": [
+        {
+          "span": "sp_zy_umamah_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zy_ali",
+      "mention": "m_zy_ali",
+      "agent": "ali-ibn-abi-al-as",
+      "basis": [
+        {
+          "span": "sp_zy_ali_name",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_zy_name",
+      "subject": "m_zy",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_zy1"
+        ]
+      },
+      "restsOn": [
+        "st_zy_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zy_sex",
+      "subject": "m_zy",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_zy_sex"
+        ]
+      },
+      "restsOn": [
+        "st_zy_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zy_father",
+      "subject": "m_zy",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_zy_p"
+      },
+      "restsOn": [
+        "st_zy_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zy_title",
+      "subject": "m_zy",
+      "predicate": "title",
+      "value": {
+        "classified": "daughter-of-prophet",
+        "spans": [
+          "sp_zy_title"
+        ]
+      },
+      "restsOn": [
+        "st_zy_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zy_v_hijra",
+      "subject": "m_zy_h",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_zy_hijra_v"
+        ]
+      },
+      "restsOn": [
+        "st_zy_hijra"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zy_marr",
+      "subject": "m_zy_m",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_zy_aas"
+      },
+      "restsOn": [
+        "st_zy_marr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zy_umamah",
+      "subject": "m_zy_umamah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_zy_m"
+      },
+      "restsOn": [
+        "st_zy_marr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zy_ali",
+      "subject": "m_zy_ali",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_zy_m"
+      },
+      "restsOn": [
+        "st_zy_marr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zy_ali_f",
+      "subject": "m_zy_ali",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_zy_aas"
+      },
+      "restsOn": [
+        "st_zy_marr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zy_marr2",
+      "subject": "m_zy_i",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_zy_aas2"
+      },
+      "restsOn": [
+        "st_zy_ia"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zy_v_ua",
+      "subject": "m_zy_u",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_zy_ua"
+        ]
+      },
+      "restsOn": [
+        "st_zy_ua"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
