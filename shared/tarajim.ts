@@ -12,11 +12,17 @@ export interface PageRef {
 
 /** One value as the book prints it, with who says it. `by` is empty when the author says it himself. */
 export interface PersonFact {
+  /** The assertion this rests on, «unit#assertion», for review lists that pick a fact out. */
+  id?: string;
   text: string;
   refs: PageRef[];
   by: string[];
   /** Carried over from the old data without a page; the conversion of its entry sources it. */
   legacy?: true;
+  /** The book gives it and also a word against it (a companionship some deny): shown with «على خلاف» and both texts. */
+  disputed?: true;
+  /** An unnamed view («وقيل», «غيره»): shown as «قيل», with no sayer. */
+  anonymous?: true;
   /** The number or key read from the text: a year, an age, a month, an ayah key. */
   value?: number | string;
 }
@@ -45,6 +51,8 @@ export interface AppPerson {
   /** The entry in the book: its number as printed, volume and pages. */
   entry: { unit: string; number?: string; volume: number; from: string; to: string };
   fullName?: PersonFact;
+  /** The book's other readings of the full name, each with its sayer («وقيل…»). */
+  otherNames?: PersonFact[];
   /** The fathers named in the full name, from the person up, as printed. */
   nasab: string[];
   kunya: PersonFact[];
