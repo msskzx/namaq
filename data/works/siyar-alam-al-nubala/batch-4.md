@@ -87,9 +87,9 @@ Differences that repeat for every person:
 - **Usayd ibn al-Hudayr** (74, pp. 340-343). death year: same, from Yahya ibn Bukayr and from al-Waqidi, Abu Ubayd and a
   group. kunya: same, split. Additions: ABSENT_FROM Badr (Ibn Ishaq), Uhud. Left out: the regret over Badr («سنده تالف»),
   the two debt reports (weak), «وروي… أحسن الناس صوتا بالقرآن» (no chain given).
-- **al-Tufayl ibn Amr** (75, pp. 344-347). place of death: same (Salih ibn Kaysan via Ibn Ishaq). virtues: the rest of
-  the catalog's text is his Islam story (narrative). Additions: laqab «ذو النور» (the author and Hisham ibn al-Kalbi),
-  absent from Badr, Uhud and al-Khandaq (his own words), son Amr.
+- **al-Tufayl ibn Amr** (75, pp. 344-347). place of death al-Yamamah (catalog only): unsupported; it rests only on a
+  broken chain (below). virtues: the rest of the catalog's text is his Islam story (narrative). Additions: laqab «ذو
+  النور» (the author and Hisham ibn al-Kalbi), son Amr.
 - **Bilal ibn Rabah** (76, pp. 347-360). appearance (catalog only): unsupported, al-Waqidi's report «في سنده جهالة،
   والواقدي متروك». death year: addition (21 «قيل» beside 20). places: addition, each attributed (the author's own «أحدها: بداريا، في سنة عشرين», p347, is a further
   source on year 20 and on Darayya) (al-Sham from al-Bukhari,
@@ -102,9 +102,9 @@ Differences that repeat for every person:
 
 - Ikrimah: the author's own line that he died at al-Yarmuk in 15 is printed on p316, inside another entry, so his unit
   cannot quote it (spans stay inside the entry). His unit has al-Yarmuk from Abu Ishaq al-Sabi'i.
-- al-Tufayl: ABSENT_FROM Badr, Uhud and al-Khandaq and the death at al-Yamamah rest only on Ibn Ishaq from Uthman ibn
-  al-Huwayrith from Salih ibn Kaysan, who did not meet al-Tufayl (munqati'). The editor gives no grade. Kept and flagged
-  for the owner. His laqab «ذو النور» is the author's own line (print «ذو الطفيتين», corrected by the editor).
+- al-Tufayl: his absence from Badr, Uhud and al-Khandaq and his death at al-Yamamah rest only on Ibn Ishaq from Uthman
+  ibn al-Huwayrith from Salih ibn Kaysan, who did not meet al-Tufayl (munqati'). A broken chain is weak, so both are left
+  out. His laqab «ذو النور» is the author's own line (print «ذو الطفيتين», corrected by the editor).
 - Ghufrah bint Rabah: female from «بنت» in her catalog name; the page names her only in the sibling list.
 
 ## Gaps (left out of the units, for the model to add later)
