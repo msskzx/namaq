@@ -161,7 +161,10 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
     checkHijriYear(event.fields.hijriYear, `${at}.hijriYear`, issues);
     checkDateParts(event.dateParts, known, at, issues);
     event.people.forEach((entry) => {
-      checkProvenance(entry.claims, known, `${at}.${entry.person}`, issues);
+      if (entry.claims) checkProvenance(entry.claims, known, `${at}.${entry.person}`, issues);
+      // A story's person may stand on its reports instead, so long as one of its moments names them.
+      else if (!event.reports?.some((report) => report.moments.some((moment) => moment.people.includes(entry.person))))
+        issues.push({ path: `${at}.${entry.person}`, message: 'no claim behind this value, and no report names them' });
       if (!person(entry.person)) issues.push({ path: at, message: `unknown person ${entry.person}` });
     });
   });
