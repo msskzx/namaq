@@ -51,6 +51,7 @@ const USE = {
   irab: { ar: 'إعراب الكلمة في المصحف', en: 'word grammar (i‘rab) in the mushaf reader', href: '/quran/read' },
   books: { ar: 'قارئ الكتب', en: 'the book reader', href: '/quran/books' },
   balagha: { ar: 'البلاغة في المصحف', en: 'rhetoric (balagha) in the mushaf reader', href: '/quran/read' },
+  balaghaTerms: { ar: 'مصطلحات البلاغة في تطبيق الهاتف', en: 'balagha terms in the phone app' },
   meaning: { ar: 'معنى الكلمة في المصحف', en: 'word meanings in the mushaf reader', href: '/quran/read' },
   meaningQuiz: { ar: 'اختبار «ما معنى؟»', en: 'the «what does it mean?» quiz', href: '/quizzes' },
   tafsirQuiz: { ar: 'اختبار «لأي آية هذا التفسير؟»', en: 'the «which ayah is this tafsir on?» quiz', href: '/quizzes' },
@@ -121,7 +122,12 @@ export const SOURCES: Source[] = [
   {
     id: 'itqan', group: 'books',
     title: { ar: 'الإتقان في علوم القرآن', en: 'al-Itqan fi ‘Ulum al-Quran' }, author: { ar: 'جلال الدين السيوطي', en: 'al-Suyuti' },
-    edition: 'تحقيق محمد أبو الفضل إبراهيم، الهيئة المصرية العامة للكتاب، ١٣٩٤هـ/١٩٧٤م، ٤ أجزاء', link: shamela(11728), licence: PUBLIC_DOMAIN, uses: [USE.openings, USE.iltifat, USE.oaths, USE.balagha, USE.balaghaQuiz],
+    edition: 'تحقيق محمد أبو الفضل إبراهيم، الهيئة المصرية العامة للكتاب، ١٣٩٤هـ/١٩٧٤م، ٤ أجزاء', link: shamela(11728), licence: PUBLIC_DOMAIN, uses: [USE.openings, USE.iltifat, USE.oaths, USE.balagha, USE.balaghaQuiz, USE.balaghaTerms],
+  },
+  {
+    id: 'talkhis-miftah', group: 'books',
+    title: { ar: 'تلخيص المفتاح، في عروس الأفراح', en: 'Talkhis al-Miftah, in ‘Arus al-Afrah' }, author: { ar: 'جلال الدين القزويني (ت ٧٣٩هـ)، بشرح بهاء الدين السبكي (ت ٧٧٣هـ)', en: 'al-Qazwini, with al-Subki’s commentary' },
+    edition: 'تحقيق عبد الحميد هنداوي، المكتبة العصرية، بيروت، الطبعة الأولى ١٤٢٣هـ/٢٠٠٣م، جزءان', link: shamela(11151), licence: PUBLIC_DOMAIN, uses: [USE.balaghaTerms],
   },
   {
     id: 'tibyan-ayman', group: 'books',

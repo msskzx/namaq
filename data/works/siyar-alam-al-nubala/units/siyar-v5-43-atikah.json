@@ -1,0 +1,238 @@
+{
+  "unit": {
+    "id": "siyar-v5-43-atikah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٤٣"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_at_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "272",
+      "layer": "MAIN",
+      "exact": "٤٣ - عَاتِكَةُ بِنْتُ عَبْدِ المُطَّلِبِ عَمَّةُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-"
+    },
+    {
+      "id": "sp_at_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "272",
+      "layer": "MAIN",
+      "exact": "عَاتِكَةُ بِنْتُ عَبْدِ المُطَّلِبِ",
+      "prefix": "٤٣ -"
+    },
+    {
+      "id": "sp_at_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "272",
+      "layer": "MAIN",
+      "exact": "عَبْدِ المُطَّلِبِ",
+      "prefix": "٤٣ - عَاتِكَةُ بِنْتُ"
+    },
+    {
+      "id": "sp_at_aslamat",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "272",
+      "layer": "MAIN",
+      "exact": "أَسْلَمَتْ، وَهَاجَرَتْ",
+      "prefix": "وَسَلَّمَ- **"
+    },
+    {
+      "id": "sp_at_ruya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "272",
+      "layer": "MAIN",
+      "exact": "وَهِيَ صَاحِبَةُ تِلْكَ الرُّؤْيَا فِي مَهْلِكِ أَهْلِ بَدْرٍ، وَتِلْكَ الرُّؤْيَا ثَبَّطَتْ أَخَاهَا أَبَا لَهَبٍ عَنْ شُهُودِ بَدْرٍ"
+    },
+    {
+      "id": "sp_at_abulahab_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "272",
+      "layer": "MAIN",
+      "exact": "أَخَاهَا أَبَا لَهَبٍ",
+      "prefix": "ثَبَّطَتْ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_at0",
+      "unit": "siyar-v5-43-atikah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_at_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_at_name",
+      "report": "r_at0",
+      "spans": [
+        "sp_at_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_at_aslamat",
+      "report": "r_at0",
+      "spans": [
+        "sp_at_aslamat"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_at_ruya",
+      "report": "r_at0",
+      "spans": [
+        "sp_at_ruya"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_at",
+      "parent": "sp_at_name",
+      "exact": "عَاتِكَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_at_father",
+      "parent": "sp_at_name",
+      "exact": "عَبْدِ المُطَّلِبِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_at_r",
+      "parent": "sp_at_ruya",
+      "exact": "وَهِيَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_at_abulahab",
+      "parent": "sp_at_ruya",
+      "exact": "أَبَا لَهَبٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_at",
+      "mention": "m_at",
+      "agent": "atikah-bint-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_at_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_at_father",
+      "mention": "m_at_father",
+      "agent": "abd-al-muttalib-ibn-hashim",
+      "basis": [
+        {
+          "span": "sp_at_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_at_r",
+      "mention": "m_at_r",
+      "agent": "atikah-bint-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_at_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_at_abulahab",
+      "mention": "m_at_abulahab",
+      "agent": "abu-lahab-ibn-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_at_abulahab_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_at_name",
+      "subject": "m_at",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_at_name"
+        ]
+      },
+      "restsOn": [
+        "st_at_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_at_sex",
+      "subject": "m_at",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_at_name"
+        ]
+      },
+      "restsOn": [
+        "st_at_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_at_father",
+      "subject": "m_at",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_at_father"
+      },
+      "restsOn": [
+        "st_at_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_at_abulahab",
+      "subject": "m_at_r",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_at_abulahab"
+      },
+      "restsOn": [
+        "st_at_ruya"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

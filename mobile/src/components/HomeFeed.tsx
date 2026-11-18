@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookA, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { bookmarkKind } from '@shared/bookmarkKind';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
@@ -13,9 +13,12 @@ import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, se
 import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
-import { feedBooks, hasBooksCard, hasJuzCard, hasMomentCard, hasSceneCard, hasSiraCard, hasTarajimCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, siraOfSlot, tarajimOfSlot } from '@shared/homeFeed';
+import { feedBooks, hasBooksCard, hasJuzCard, hasMomentCard, hasSceneCard, hasSiraCard, hasTarajimCard, hasTermCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, siraOfSlot, tarajimOfSlot, termOfSlot } from '@shared/homeFeed';
 import { pageLabel, sayer } from '@shared/tarajim';
 import { PEOPLE, personName } from '@/lib/tarajim';
+import balaghaTerms from '@shared/data/quran/balaghaTerms';
+import { plainName, examplesOf } from '@shared/quran/balaghaTerms';
+import { BookWords, ExampleAyat, ayatName, quotesTitle } from './BalaghaTerm';
 import { clock, FIVE, PRAYER_NAMES, type PrayerDay, type PrayerKey } from '@shared/prayer';
 import { BOOKS } from '@shared/books';
 import { isReaderBook, pageName } from '@shared/readerBooks';
@@ -353,7 +356,7 @@ function TarajimPost({ day, slot, palette }: { day: number; slot: number; palett
 }
 
 /** The book a quiz kind asks from: its card stays out while that book is off the phone, as the book's own ayah card does. */
-const QUIZ_BOOKS: Partial<Record<FeedQuizKind, BookId>> = { TAFSIR: 'sadi', BALAGHA: 'itqan', IRAB: 'irab-words' };
+const QUIZ_BOOKS: Partial<Record<FeedQuizKind, BookId>> = { TAFSIR: 'sadi', BALAGHA: 'itqan', TERM: 'itqan', IRAB: 'irab-words' };
 
 /** A question card of kind `kind`: the openings quiz, or one of the solo quiz's. */
 function FeedQuiz({ kind, seed, palette }: { kind: FeedQuizKind; seed: number; palette: Palette }) {
@@ -598,6 +601,43 @@ function SiraPost({ day, slot, palette }: { day: number; slot: number; palette: 
   );
 }
 
+/** The lines of a term's definition a card shows before its page. */
+const TERM_LINES = 5;
+
+/**
+ * A balagha term (owner, 2026-11-18): its name, its definition in the scholar's words, and one of al-Suyuti's examples with
+ * the words he quotes lit. The head and the first button open the term's page; the second, the list of terms.
+ */
+function TermPost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
+  const term = balaghaTerms.terms[termOfSlot(balaghaTerms.terms.length, day, slot)];
+  const examples = useMemo(() => (term ? examplesOf(itqan, term) : []), [term]);
+  if (!term) return null;
+  const name = plainName(term.name);
+  const quote = term.quotes[0];
+  const example = examples[(day + slot) % Math.max(examples.length, 1)];
+  const open = () => toTab({ pathname: '/term', params: { name: term.name } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={BookA} title="من مصطلحات البلاغة" sub={quote.book === 'itqan' ? 'الإتقان للسيوطي' : 'تلخيص المفتاح للقزويني'} palette={palette} open={{ onPress: open, label: `افتح ${name}` }} />}
+      actions={<>
+        <Action Icon={BookA} label={`${name}: تعريفه وأمثلته`} onPress={open} palette={palette} />
+        <Action Icon={ListTree} label="مصطلحات البلاغة" onPress={() => toTab('/terms')} palette={palette} />
+      </>}
+      press={{ onPress: open, label: `${name}: تعريفه وأمثلته` }}>
+      <View style={{ paddingHorizontal: 14, paddingVertical: 12, gap: 6 }}>
+        <Text style={{ color: palette.ink, fontSize: 24, textAlign: 'right' }}>{name}</Text>
+        {!term.defines && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{quotesTitle(term)}</Text>}
+        <BookWords text={quote.text} palette={palette} lines={TERM_LINES} size={18} />
+        {example && <>
+          <View style={{ height: 1, backgroundColor: palette.rule, opacity: 0.6, marginVertical: 4 }} />
+          <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>من أمثلته</Text>
+          <View pointerEvents="none"><ExampleAyat example={example} palette={palette} size={22} /></View>
+          <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{ayatName(example.ayat)}</Text>
+        </>}
+      </View>
+    </Post>
+  );
+}
+
 /** Every battle's moments, in the battles' order, for the moment card. */
 const MOMENTS = (momentBattles as AppMomentBattle[]).flatMap(battle => battle.moments.map((moment, i) => ({ battle, moment, n: i + 1 })));
 
@@ -763,6 +803,7 @@ export function Feed({ palette, nearEnd, screenBottom }: { palette: Palette; nea
     if (hasStoryCard(i)) { const group = storyGroupOfDay(day, i); posts.push(<StoryPost key={`s${day}-${i}`} slug={group.slug} phase={group.phase} palette={palette} />); }
     if (hasJuzCard(i) && juz) posts.push(<JuzPost key={`j${day}`} palette={palette} />);
     if (hasSceneCard(i) && sceneList().length) posts.push(<ScenePost key={`m${day}-${i}`} day={day} slot={i} palette={palette} />);
+    if (hasTermCard(i)) posts.push(<TermPost key={`d${day}-${i}`} day={day} slot={i} palette={palette} />);
     if (hasBooksCard(i)) posts.push(<BooksPost key={`k${day}-${i}`} day={day} palette={palette} />);
     if (hasSiraCard(i) && STORIES.length) posts.push(<SiraPost key={`r${day}-${i}`} day={day} slot={i} palette={palette} />);
     if (hasMomentCard(i) && MOMENTS.length) posts.push(<MomentPost key={`w${day}-${i}`} day={day} slot={i} palette={palette} />);

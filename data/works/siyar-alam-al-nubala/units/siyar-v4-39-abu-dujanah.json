@@ -1,0 +1,465 @@
+{
+  "unit": {
+    "id": "siyar-v4-39-abu-dujanah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٣٩"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_d_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "243",
+      "layer": "MAIN",
+      "exact": "٣٩ - أَبُو دُجَانَةَ الأَنْصَارِيُّ سِمَاكُ بنُ خَرَشَةَ بنِ لَوْذَانَ"
+    },
+    {
+      "id": "sp_d_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "243",
+      "layer": "MAIN",
+      "exact": "أَبُو دُجَانَةَ",
+      "prefix": "٣٩ - "
+    },
+    {
+      "id": "sp_d1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "243",
+      "layer": "MAIN",
+      "exact": "سِمَاكُ بنُ خَرَشَةَ بنِ لَوْذَانَ",
+      "prefix": "الأَنْصَارِيُّ "
+    },
+    {
+      "id": "sp_d2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "243",
+      "layer": "MAIN",
+      "exact": "ابْنِ عَبْدِ وُدٍّ بنِ زَيْدٍ السَّاعِدِيُّ"
+    },
+    {
+      "id": "sp_d_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "243",
+      "layer": "MAIN",
+      "exact": "سِمَاكُ بنُ",
+      "prefix": "الأَنْصَارِيُّ "
+    },
+    {
+      "id": "sp_d_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "243",
+      "layer": "MAIN",
+      "exact": "خَرَشَةَ بنِ لَوْذَانَ",
+      "prefix": "سِمَاكُ بنُ "
+    },
+    {
+      "id": "sp_d_uhud",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "243",
+      "layer": "MAIN",
+      "exact": "كَانَ يَوْمَ أُحُدٍ عَلَيْهِ عِصَابَةٌ حَمْرَاءُ"
+    },
+    {
+      "id": "sp_d_day_uhud",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "243",
+      "layer": "MAIN",
+      "exact": "يَوْمَ أُحُدٍ عَلَيْهِ",
+      "prefix": "كَانَ "
+    },
+    {
+      "id": "sp_d_qila_word",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "244",
+      "layer": "MAIN",
+      "exact": "وَقِيْلَ",
+      "suffix": ": هُوَ سِمَاكُ"
+    },
+    {
+      "id": "sp_d_alt",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "244",
+      "layer": "MAIN",
+      "exact": "سِمَاكُ بنُ أَوْسِ بنِ خَرَشَةَ",
+      "prefix": "هُوَ "
+    },
+    {
+      "id": "sp_d_sword_a",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "244",
+      "layer": "MAIN",
+      "exact": "وَكَانَ سَيْفُ أَبِي دُجَانَةَ غَيْرَ ذَمِيْمٍ."
+    },
+    {
+      "id": "sp_d_sword_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "244",
+      "layer": "MAIN",
+      "exact": "وَذَلِكَ أَنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَرَضَ ذَلِكَ السَّيْفَ حَتَّى قَالَ: (مَنْ يَأْخُذُ هَذَا السَّيْفَ بِحَقِّهِ؟) ."
+    },
+    {
+      "id": "sp_d_sword_c",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "244",
+      "layer": "MAIN",
+      "exact": "فَأَحْجَمَ النَّاسُ عَنْهُ."
+    },
+    {
+      "id": "sp_d_sword_d",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "244",
+      "layer": "MAIN",
+      "exact": "فَقَالَ أَبُو دُجَانَةَ: وَمَا حَقُّهُ يَا رَسُوْلَ اللهِ؟"
+    },
+    {
+      "id": "sp_d_sword_e",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "244",
+      "layer": "MAIN",
+      "exact": "قَالَ: (تُقَاتِلُ بِهِ فِي سَبِيْلِ اللهِ حَتَّى يَفْتَحَ اللهُ عَلَيْكَ، أَوْ تُقْتَلَ) ."
+    },
+    {
+      "id": "sp_d_sword_f",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "244",
+      "layer": "MAIN",
+      "exact": "فَأَخَذَهُ بِذَلِكَ الشَّرْطِ."
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_d0",
+      "unit": "siyar-v4-39-abu-dujanah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_d_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_d_qila",
+      "unit": "siyar-v4-39-abu-dujanah",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_d_qila"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_d_name",
+      "report": "r_d0",
+      "spans": [
+        "sp_d1",
+        "sp_d2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_d_kunya",
+      "report": "r_d0",
+      "spans": [
+        "sp_d_heading"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_d_uhud",
+      "report": "r_d0",
+      "spans": [
+        "sp_d_uhud"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_d_alt",
+      "report": "r_d_qila",
+      "spans": [
+        "sp_d_alt"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_d_sword",
+      "report": "r_d0",
+      "spans": [
+        "sp_d_sword_a",
+        "sp_d_sword_b",
+        "sp_d_sword_c",
+        "sp_d_sword_d",
+        "sp_d_sword_e",
+        "sp_d_sword_f"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_d",
+      "parent": "sp_d1",
+      "exact": "سِمَاكُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_d_k",
+      "parent": "sp_d_heading",
+      "exact": "أَبُو دُجَانَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_d_father",
+      "parent": "sp_d1",
+      "exact": "خَرَشَةَ بنِ لَوْذَانَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_d_u",
+      "parent": "sp_d_uhud",
+      "exact": "كَانَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_d_uhud",
+      "parent": "sp_d_uhud",
+      "exact": "أُحُدٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_d_qila",
+      "parent": "sp_d_qila_word",
+      "exact": "قِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_d_alt",
+      "parent": "sp_d_alt",
+      "exact": "سِمَاكُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_d_sw",
+      "parent": "sp_d_sword_a",
+      "exact": "أَبِي دُجَانَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_d",
+      "mention": "m_d",
+      "agent": "abu-dujanah-al-ansari",
+      "basis": [
+        {
+          "span": "sp_d_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_d_u",
+      "mention": "m_d_u",
+      "agent": "abu-dujanah-al-ansari",
+      "basis": [
+        {
+          "span": "sp_d_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_d_sw",
+      "mention": "m_d_sw",
+      "agent": "abu-dujanah-al-ansari",
+      "basis": [
+        {
+          "span": "sp_d_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_d_k",
+      "mention": "m_d_k",
+      "agent": "abu-dujanah-al-ansari",
+      "basis": [
+        {
+          "span": "sp_d1",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_d_alt",
+      "mention": "m_d_alt",
+      "agent": "abu-dujanah-al-ansari",
+      "basis": [
+        {
+          "span": "sp_d_kunya",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_d_father",
+      "mention": "m_d_father",
+      "agent": "khirashah-ibn-lawdhan",
+      "basis": [
+        {
+          "span": "sp_d_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_d_uhud",
+      "mention": "m_d_uhud",
+      "event": "uhud",
+      "basis": [
+        {
+          "span": "sp_d_day_uhud",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_d_name",
+      "subject": "m_d",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_d1",
+          "sp_d2"
+        ]
+      },
+      "restsOn": [
+        "st_d_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_d_name_alt",
+      "subject": "m_d_alt",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_d_alt"
+        ]
+      },
+      "restsOn": [
+        "st_d_alt"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_d_kunya",
+      "subject": "m_d_k",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_d_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_d_kunya"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_d_sex",
+      "subject": "m_d",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_d_sex"
+        ]
+      },
+      "restsOn": [
+        "st_d_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_d_father",
+      "subject": "m_d",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_d_father"
+      },
+      "restsOn": [
+        "st_d_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_d_uhud",
+      "subject": "m_d_u",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_d_uhud"
+      },
+      "restsOn": [
+        "st_d_uhud"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_d_v_sword",
+      "subject": "m_d_sw",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_d_sword_a",
+          "sp_d_sword_b",
+          "sp_d_sword_c",
+          "sp_d_sword_d",
+          "sp_d_sword_e",
+          "sp_d_sword_f"
+        ]
+      },
+      "restsOn": [
+        "st_d_sword"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

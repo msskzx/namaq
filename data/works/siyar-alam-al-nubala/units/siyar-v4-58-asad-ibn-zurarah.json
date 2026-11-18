@@ -1,0 +1,389 @@
+{
+  "unit": {
+    "id": "siyar-v4-58-asad-ibn-zurarah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٥٨"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_az_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "299",
+      "layer": "MAIN",
+      "exact": "٥٨ - أَسَعْدُ بنُ زُرَارَةَ بنِ عُدَسَ بنِ عُبَيْدِ بنِ ثَعْلَبَةَ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sp_az1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "299",
+      "layer": "MAIN",
+      "exact": "أَسَعْدُ بنُ زُرَارَةَ بنِ عُدَسَ بنِ عُبَيْدِ بنِ ثَعْلَبَةَ الأَنْصَارِيُّ",
+      "prefix": "٥٨ - "
+    },
+    {
+      "id": "sp_az2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "299",
+      "layer": "MAIN",
+      "exact": "ابْنِ غَنْمِ بنِ مَالِكِ بنِ النَّجَّارِ",
+      "suffix": "."
+    },
+    {
+      "id": "sp_az_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "299",
+      "layer": "MAIN",
+      "exact": "أَسَعْدُ بنُ",
+      "prefix": "٥٨ - "
+    },
+    {
+      "id": "sp_az_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "299",
+      "layer": "MAIN",
+      "exact": "زُرَارَةَ بنِ عُدَسَ",
+      "prefix": "أَسَعْدُ بنُ "
+    },
+    {
+      "id": "sp_az_epithets",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "299",
+      "layer": "MAIN",
+      "exact": "السَّيِّدُ، نَقِيْبُ بَنِي النَّجَّارِ، أَبُو أُمَامَةَ الأَنْصَارِيُّ، الخَزْرَجِيُّ، مِنْ كُبَرَاءِ الصَّحَابَةِ."
+    },
+    {
+      "id": "sp_az_naqib",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "299",
+      "layer": "MAIN",
+      "exact": "نَقِيْبُ بَنِي النَّجَّارِ",
+      "prefix": "السَّيِّدُ، "
+    },
+    {
+      "id": "sp_az_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "299",
+      "layer": "MAIN",
+      "exact": "أَبُو أُمَامَةَ",
+      "prefix": "نَقِيْبُ بَنِي النَّجَّارِ، "
+    },
+    {
+      "id": "sp_az_kubara",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "299",
+      "layer": "MAIN",
+      "exact": "مِنْ كُبَرَاءِ الصَّحَابَةِ",
+      "prefix": "الخَزْرَجِيُّ، ",
+      "suffix": "."
+    },
+    {
+      "id": "sp_az_kab_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "300",
+      "layer": "MAIN",
+      "exact": "قَالَ ابْنُ إِسْحَاقَ: حَدَّثَنَا مُحَمَّدُ بنُ أَبِي أُمَامَةَ بنِ سَهْلٍ، عَنْ عَبْدِ الرَّحْمَنِ بنِ كَعْبِ بنِ مَالِكٍ"
+    },
+    {
+      "id": "sp_az_kab1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "300",
+      "layer": "MAIN",
+      "exact": "صَلَّى عَلَى أَبِي أُمَامَةَ، وَاسْتَغْفَرَ لَهُ."
+    },
+    {
+      "id": "sp_az_kab2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "300",
+      "layer": "MAIN",
+      "exact": "كَانَ أَوَّلُ مَنْ جَمَعَ بِنَا بِالمَدِيْنَةِ",
+      "prefix": "أَيْ بُنَيَّ! "
+    },
+    {
+      "id": "sp_az_kab_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "300",
+      "layer": "MAIN",
+      "exact": "كُنْتُ قَائِدَ أَبِي حِيْنَ عَمِيَ"
+    },
+    {
+      "id": "sp_az_kab_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "300",
+      "layer": "MAIN",
+      "exact": "كَعْبِ بنِ مَالِكٍ",
+      "prefix": "عَبْدِ الرَّحْمَنِ بنِ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_az0",
+      "unit": "siyar-v4-58-asad-ibn-zurarah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_az_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_az_kab",
+      "unit": "siyar-v4-58-asad-ibn-zurarah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_az_kab_frame"
+      ],
+      "isnadSpan": "sp_az_kab_isnad",
+      "origin": {
+        "mention": "m_az_kab"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_az_name",
+      "report": "r_az0",
+      "spans": [
+        "sp_az1",
+        "sp_az2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_az_epithets",
+      "report": "r_az0",
+      "spans": [
+        "sp_az_epithets"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_az_kab",
+      "report": "r_az_kab",
+      "spans": [
+        "sp_az_kab1",
+        "sp_az_kab2"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_az",
+      "parent": "sp_az1",
+      "exact": "أَسَعْدُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_az_father",
+      "parent": "sp_az1",
+      "exact": "زُرَارَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_az_e",
+      "parent": "sp_az_epithets",
+      "exact": "أَبُو أُمَامَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_az_kab",
+      "parent": "sp_az_kab_frame",
+      "exact": "أَبِي",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_az_k",
+      "parent": "sp_az_kab1",
+      "exact": "أَبِي أُمَامَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_az",
+      "mention": "m_az",
+      "agent": "asad-ibn-zurarah",
+      "basis": [
+        {
+          "span": "sp_az_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_az_e",
+      "mention": "m_az_e",
+      "agent": "asad-ibn-zurarah",
+      "basis": [
+        {
+          "span": "sp_az1",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_az_k",
+      "mention": "m_az_k",
+      "agent": "asad-ibn-zurarah",
+      "basis": [
+        {
+          "span": "sp_az_kunya",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_az_father",
+      "mention": "m_az_father",
+      "agent": "zurarah-ibn-udas",
+      "basis": [
+        {
+          "span": "sp_az_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_az_kab",
+      "mention": "m_az_kab",
+      "agent": "kaab-ibn-malik",
+      "basis": [
+        {
+          "span": "sp_az_kab_name",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_az_name",
+      "subject": "m_az",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_az1",
+          "sp_az2"
+        ]
+      },
+      "restsOn": [
+        "st_az_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_az_sex",
+      "subject": "m_az",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_az_sex"
+        ]
+      },
+      "restsOn": [
+        "st_az_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_az_father",
+      "subject": "m_az",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_az_father"
+      },
+      "restsOn": [
+        "st_az_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_az_kunya",
+      "subject": "m_az_e",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_az_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_az_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_az_naqib",
+      "subject": "m_az_e",
+      "predicate": "title",
+      "value": {
+        "classified": "naqib",
+        "spans": [
+          "sp_az_naqib"
+        ]
+      },
+      "restsOn": [
+        "st_az_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_az_v_kubara",
+      "subject": "m_az_e",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_az_kubara"
+        ]
+      },
+      "restsOn": [
+        "st_az_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_az_v_juma",
+      "subject": "m_az_k",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_az_kab2"
+        ]
+      },
+      "restsOn": [
+        "st_az_kab"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
