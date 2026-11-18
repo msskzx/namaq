@@ -83,7 +83,8 @@ export function Moment({ moment, n, palette, plain }: { moment: AppMoment; n: nu
   return (
     <Step n={n} palette={palette}>
       <Text style={{ color: palette.ink, fontSize: 18, fontWeight: '700', textAlign: 'right' }}>{moment.title}</Text>
-      <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>«{moment.quote}»</Text>
+      {moment.isnad ? <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 24, textAlign: 'right' }}>{moment.isnad}</Text> : null}
+      <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>{moment.quote}</Text>
       <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>
         {moment.grading} · {plain ? moment.cite : <ExternalLink url={moment.url} color={palette.muted} size={13}>{moment.cite}</ExternalLink>}
       </Text>

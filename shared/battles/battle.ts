@@ -16,6 +16,9 @@ export type AppPersonLink = { slug: string; name: string };
 
 export type AppMoment = {
   title: string;
+  /** Who the source has the report from, shown with its reference. */
+  isnad?: string;
+  /** The whole report, as the source prints it. */
   quote: string;
   grading: string;
   cite: string;

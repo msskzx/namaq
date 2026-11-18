@@ -72,9 +72,10 @@ export function appBattles(catalog: Catalog, claims = batchClaims()): AppBattle[
         },
         moments: (battle.moments ?? []).map(moment => ({
           title: moment.title,
+          ...(moment.isnad ? { isnad: moment.isnad } : {}),
           quote: moment.quote,
           grading: moment.grading,
-          cite: citeOf({ sourceSlug: moment.source.slug, volume: moment.source.volumeLabel, pageReference: String(moment.source.page) }),
+          cite: citeOf({ sourceSlug: moment.source.slug, volume: moment.source.volumeLabel, pageReference: moment.source.endPage ? `${moment.source.page}–${moment.source.endPage}` : String(moment.source.page) }),
           url: moment.source.url,
           people: moment.people.map(link),
         })),
