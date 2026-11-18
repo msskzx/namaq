@@ -3355,9 +3355,8 @@
    "why": "Glue 'ahadin illa' in magic and Lut verses"
   },
   "tree:1ftoon00u0367w": {
-   "keep": true,
-   "why": "Lut pair 7:80/29:28 identical; other four places are noise",
-   "ask": "Keep for the Lut pair, or drop since four of six places are unrelated?"
+   "keep": false,
+   "why": "Keep only Lut's words in 7:80 and 29:28 («أتأتون» versus «إنكم لتأتون الفاحشة ما سبقكم بها من أحد من العالمين»); the other four share only «أحد من»."
   },
   "tree:1f85bzd1i8os4l": {
    "keep": true,
@@ -3708,8 +3707,8 @@
    "why": "'wa idh qultum ya Musa lan' nu'mina vs nasbira"
   },
   "tree:1de297g1a3z81o": {
-   "keep": true,
-   "why": "'qulna lil-mala'ikati usjudu' x4 with different endings after Iblis"
+   "keep": false,
+   "why": "Drop 2:58 and 17:60, which share only «وإذ قلنا»; 2:34, 17:61, 18:50 and 20:116 («اسجدوا لآدم فسجدوا إلا إبليس» with different endings) make the good card."
   },
   "tree:1e3ubyl10f8nqh": {
    "keep": false,
@@ -4633,8 +4632,8 @@
    "why": "'a'tadna lahum 'adhaban alima' x2 vs 'adhaba al-sa'ir"
   },
   "tree:1qok6eb15k7g8t": {
-   "keep": true,
-   "why": "Identical closing in 4:18 and 17:10, different lead-ins"
+   "keep": false,
+   "why": "Only the stock closing «أعتدنا لهم عذابا أليما» is shared, after unrelated lead-ins, so there is nothing to tell apart."
   },
   "tree:0c8c86f0ssgr8r": {
    "keep": true,
@@ -4746,8 +4745,8 @@
    "why": "Same 'shadid al-'iqab' ending after wattaqu Allah vs khassatan"
   },
   "tree:1wgynfm1ipz678": {
-   "keep": true,
-   "why": "ghafurun halim vs ghafurun rahim"
+   "keep": false,
+   "why": "Only the closing formula «واعلموا أن الله غفور» is shared, in two unrelated rulings (betrothal in 2:235, repentant brigands in 5:34)."
   },
   "tree:1l2kgae09f689a": {
    "keep": true,
@@ -4762,8 +4761,8 @@
    "why": "Adjacent at-Tawba: wa anna Allaha mukhzi vs wa bashshir"
   },
   "tree:0swimoj1nrfqkt": {
-   "keep": true,
-   "why": "'i'lamu annama' 'ala rasulina / amwalukum / ghanimtum / al-hayat"
+   "keep": false,
+   "why": "Only the opener «اعلموا أنما» is shared, followed by five unrelated statements."
   },
   "tree:0pu1quy09kcvwi": {
    "keep": true,
@@ -5596,8 +5595,8 @@
    "why": "'wal-ardi innahu' kana / 'alim / la-haqq: ending attributes"
   },
   "tree:12k3hd41kyldv8": {
-   "keep": true,
-   "why": "'innahu kana' ghafuran rahima vs 'aliman qadira"
+   "keep": false,
+   "why": "Only «الأرض إنه كان» plus stock divine names is shared; 25:6 and 35:44 are otherwise unrelated."
   },
   "tree:010krow1su1p18": {
    "keep": false,
@@ -6497,8 +6496,8 @@
    "why": "Min dunihi awliya: ma na'buduhum vs allahu hafiz; tight slip pair"
   },
   "tree:0n1rqks0vvpagk": {
-   "keep": true,
-   "why": "Holds the lakin alladhina ittaqaw rabbahum pair; places branch distinctly"
+   "keep": false,
+   "why": "Nine ayat share only «الذين اتقوا» and are too different for one card; the good card is 3:198, 39:20 and 39:73 («الذين اتقوا ربهم»), which tree:0v455xi1ocvaj8 already holds."
   },
   "tree:0v455xi1ocvaj8": {
    "keep": true,
@@ -7055,8 +7054,8 @@
    "why": "Forging lies: لا يفلحون twice vs يوم القيامة in 10:60"
   },
   "tree:0eqewch0zb2gth": {
-   "keep": true,
-   "why": "'Those who say Our Lord' supplications differ by place"
+   "keep": false,
+   "why": "Drop 63:7 (the hypocrites' «لا تنفقوا»); 3:16, 4:75, 25:65 and 25:74 («الذين يقولون ربنا» with different prayers) make the good card."
   },
   "tree:0zdfxm91pir7ah": {
    "keep": true,
@@ -7095,8 +7094,8 @@
    "why": "Filth on those who لا يؤمنون (6:125) vs لا يعقلون (10:100)"
   },
   "tree:1ve50is0uwv9sm": {
-   "keep": true,
-   "why": "Name pair after بسم الله / هو / تنزيل من; which lead-in where"
+   "keep": false,
+   "why": "«الرحمن الرحيم» is the basmala and a pair of divine names, a formula with nothing to tell apart; the real pair 1:1 and 1:3 is already a book card."
   },
   "tree:0mdgivk0uosjcs": {
    "keep": false,
@@ -7526,8 +7525,8 @@
    "why": "Shu'ara refrain followed by كذبت: which story comes next"
   },
   "tree:0wwfj4b0g93xm3": {
-   "keep": true,
-   "why": "ذلك تقدير العزيز العليم thrice vs other lead-ins"
+   "keep": false,
+   "why": "Only 6:96, 36:38 and 41:12 share «ذلك تقدير العزيز العليم» and would make the good card; 27:78, 40:2 and 43:9 share just the closing names."
   },
   "tree:1q0po1p00pm0hv": {
    "keep": true,
@@ -7578,8 +7577,8 @@
    "why": "فألف بين قلوبكم (3:103) vs وألف بين قلوبهم (8:63)"
   },
   "tree:07nooi80jsx970": {
-   "keep": true,
-   "why": "مقداره ألف سنة (32:5) vs خمسين ألف سنة (70:4); others"
+   "keep": false,
+   "why": "Drop 2:96 and 29:14; only 32:5 («مقداره ألف سنة مما تعدون») and 70:4 («مقداره خمسين ألف سنة») make the card."
   },
   "tree:1cr0hw41urz16g": {
    "keep": true,
@@ -7726,8 +7725,8 @@
    "why": "'Book, believe' in three unrelated addresses"
   },
   "tree:1kbfj021b3bvyo": {
-   "keep": true,
-   "why": "3:19 vs 98:4 أوتوا الكتاب إلا من بعد ما جاءهم/جاءتهم; rest noise"
+   "keep": false,
+   "why": "«الكتاب إلا» joins seven unrelated ayat; only 3:19 and 98:4 («وما اختلف / وما تفرق الذين أوتوا الكتاب إلا من بعد ما جاءهم / جاءتهم») make a card."
   },
   "tree:0j8nt5b0o5sghb": {
    "keep": false,
@@ -9444,8 +9443,8 @@
    "why": "Leaving believers vs urging them to fight; no slip"
   },
   "tree:1uhcsq705cvmtl": {
-   "keep": true,
-   "why": "Believing men and women: جنات (9:72, 48:5) vs others"
+   "keep": false,
+   "why": "Seven ayat share only «المؤمنين والمؤمنات»; the good card is 9:72, 48:5 and 57:12 («جنات تجري من تحتها الأنهار خالدين فيها» with «الفوز العظيم» / «فوزا عظيما»)."
   },
   "tree:1u4uy541sdwp7a": {
    "keep": true,
@@ -9568,8 +9567,8 @@
    "why": "قل يتوفاكم ملك الموت الذي وكل (32:11) vs قل إن الموت الذي تفرون (62:8)"
   },
   "tree:15y4u2z01yurgh": {
-   "keep": true,
-   "why": "الموت إن كنتم صادقين trio vs إن ترك خيرا (2:180)"
+   "keep": false,
+   "why": "Keep only 2:94, 62:6 and 3:168 («الموت إن كنتم صادقين»); 2:180 «حضر أحدكم الموت إن ترك خيرا» does not belong."
   },
   "tree:0nr1ygq0pmbxiu": {
    "keep": true,
@@ -9652,8 +9651,8 @@
    "why": "الناس أمة واحدة فبعث / ولا يزالون / لجعلنا"
   },
   "tree:05j01r90tmxnu5": {
-   "keep": true,
-   "why": "وما منع الناس أن يؤمنوا: إلا أن قالوا (17:94) vs ويستغفروا (18:55)"
+   "keep": false,
+   "why": "Drop 4:58 and 29:2, which share only «الناس أن»; 17:94 and 18:55 («وما منع الناس أن يؤمنوا إذ جاءهم الهدى») make the card."
   },
   "tree:0sg5w6g1oef3pk": {
    "keep": false,
@@ -10052,8 +10051,8 @@
    "why": "Revelation from my Lord vs Musa's prayer; no slip"
   },
   "tree:0kc8vo90x81amp": {
-   "keep": true,
-   "why": "وأوحينا إلى موسى أن ألق / أسر / اضرب; إذ استسقاه"
+   "keep": false,
+   "why": "Drop 28:44 («قضينا إلى موسى الأمر»); 7:117, 7:160, 10:87, 20:77, 26:52 and 26:63 («وأوحينا إلى موسى أن ألق / أسر / اضرب») make the good card, best as a matrix as the owner chose for this family."
   },
   "tree:0sv0ra90knc9aj": {
    "keep": true,
@@ -10641,8 +10640,9 @@
    "why": "إن الأبرار لفي نعيم (82:13 = 83:22) vs يشربون (76:5)"
   },
   "tree:1warcco0oqkr04": {
-   "keep": false,
-   "why": "Earth is Allah's vs righteous inherit; إن vs أن, no slip"
+   "keep": true,
+   "why": "Same promise that the earth is inherited by Allah's servants, easy to mix: 7:128 «إن الأرض لله يورثها من يشاء من عباده» vs 21:105 «أن الأرض يرثها عبادي الصالحون»; the shared words are broken, so stack them.",
+   "view": "matrix"
   },
   "tree:0ucuqgh0praeu1": {
    "keep": true,
@@ -10893,8 +10893,8 @@
    "why": "closing alim khabir, 31:34 and 49:13"
   },
   "tree:0jq5i2d16zejsr": {
-   "keep": true,
-   "why": "indahu ajrun azim vs indahu ilm al-sa'a"
+   "keep": false,
+   "why": "Keep only 8:28 and 9:22 («أن الله عنده أجر عظيم», already a checked card); 31:34 «عنده علم الساعة» does not belong."
   },
   "tree:0qnmu6902pgqyb": {
    "keep": false,
@@ -11249,8 +11249,8 @@
    "why": "an tadillu: two unrelated uses in an-Nisa"
   },
   "tree:0dtolnh0tybazp": {
-   "keep": true,
-   "why": "Ya ayyuha alladhina amanu in tuti'u fariqan vs alladhina kafaru (3:100, 3:149)"
+   "keep": false,
+   "why": "Only 3:100 and 3:149 belong together («يا أيها الذين ءامنوا إن تطيعوا فريقا من الذين أوتوا الكتاب / الذين كفروا يردوكم»); 48:16 and 49:14 use «إن تطيعوا» in other settings."
   },
   "tree:02na0de18lwcw6": {
    "keep": false,
@@ -11261,8 +11261,8 @@
    "why": "an taqula: three unrelated speakers and contexts"
   },
   "tree:1y2b2ec10y1cxa": {
-   "keep": true,
-   "why": "wa-an taqulu ala Allah ma la ta'lamun pair plus an taqulu excuse ayat"
+   "keep": false,
+   "why": "«أن تقولوا» joins seven unrelated ayat; only 2:169 and 7:33 share «وأن تقولوا على الله ما لا تعلمون», and 6:156 with 7:172 share the excuse ending «غافلين», which would make two small cards."
   },
   "tree:07e51j61stx152": {
    "keep": false,
@@ -11365,8 +11365,8 @@
    "why": "in khiftum across unrelated rulings; the ala pair has its own tree"
   },
   "tree:1qm9hgb1gs1xt3": {
-   "keep": true,
-   "why": "fa-in khiftum alla yuqima hududa Allah vs wa-in khiftum alla tuqsitu"
+   "keep": false,
+   "why": "Only the conditional «إن خفتم ألا» is shared, across unrelated rulings (divorce ransom in 2:229, orphans and polygamy in 4:3)."
   },
   "tree:1dkklso133qm88": {
    "keep": false,
@@ -11586,8 +11586,8 @@
    "why": "wa-in kanu min qablu la-fi dalal (3:164, 62:2) vs min qabli an yunazzal"
   },
   "tree:0x9i0dy0yraeeq": {
-   "keep": true,
-   "why": "wa-inna kathiran: la-musrifun, la-fasiqun, la-ghafilun, la-kafirun"
+   "keep": false,
+   "why": "Seven ayat share only «إن كثيرا»; the good card is 5:49, 10:92 and 30:8 «وإن كثيرا من الناس» ending «لفاسقون / عن ءاياتنا لغافلون / بلقاء ربهم لكافرون» (with 5:32 «لمسرفون»), while 6:119, 9:34 and 38:24 go elsewhere."
   },
   "tree:1u3p9b00tkc18k": {
    "keep": true,
@@ -11887,8 +11887,8 @@
    "why": "in hadha illa asatir al-awwalin closing in four places"
   },
   "tree:0csow5x096kah3": {
-   "keep": true,
-   "why": "ummatukum ummatan wahida: fa-'buduni vs fa-ttaquni; and tadhkira pair"
+   "keep": false,
+   "why": "Two unrelated pairs share only «إن هذه»: 21:92 with 23:52 («فاعبدون» against «فاتقون») and 73:19 with 76:29, each a card of its own."
   },
   "tree:1rp11p51hvqzyp": {
    "keep": true,
@@ -12304,8 +12304,8 @@
    "why": "kam anbatna (26:7) vs fa-anbatna (31:10) min kulli zawjin karim"
   },
   "tree:0u07gz30t1na97": {
-   "keep": true,
-   "why": "wa-anta arhamu ar-rahimin: Musa's prayer vs Ayyub's"
+   "keep": false,
+   "why": "Only the stock closing «وأنت أرحم الراحمين» is shared; Musa's prayer (7:151) and Ayyub's call (21:83) are otherwise different."
   },
   "tree:1r1mu7r1xu9kzd": {
    "keep": true,
@@ -12552,8 +12552,8 @@
    "why": "laqad anzalna ayatin mubayyinatin (24:46) vs ayatin bayyinatin (58:5)"
   },
   "tree:06j4p6905dcl5x": {
-   "keep": true,
-   "why": "anzalna ilayka: al-kitab bil-haqq set, adh-dhikr, ayatin bayyinat"
+   "keep": false,
+   "why": "Seven ayat share only «أنزلنا إليك»; the good card is 4:105, 5:48 and 39:2 («إنا أنزلنا / وأنزلنا إليك الكتاب بالحق»), which tree:1hpgg0s1tifhtg «الكتاب بالحق» covers."
   },
   "tree:1tly0lc1ytq4yu": {
    "keep": true,
@@ -15475,8 +15475,8 @@
    "why": "Adjacent 4:128 khabira vs 4:129 ghafuran rahima"
   },
   "tree:0bjyoul0vrfoxf": {
-   "keep": true,
-   "why": "'ayati tutla alaykum fakuntum' 23:66 vs 23:105 vs 45:31 fastakbartum"
+   "keep": false,
+   "why": "Drop 3:101; the good card is 23:66, 23:105 and 45:31, where «آياتي تتلى عليكم» goes on «فكنتم على أعقابكم تنكصون», «فكنتم بها تكذبون» or «فاستكبرتم»."
   },
   "tree:1o5goe80eeq4uc": {
    "keep": true,
@@ -15898,8 +15898,8 @@
    "why": "6:164 = 39:7 marji'ukum (fihi takhtalifun vs ta'malun); 32:11/45:15 turja'un"
   },
   "tree:12vyfv30o59lkb": {
-   "keep": true,
-   "why": "Ending 'thumma ila rabbikum turja'un' in 32:11 and 45:15"
+   "keep": false,
+   "why": "Only the closing «ثم إلى ربكم ترجعون» is shared, and the two ayat are otherwise unrelated; 45:15 belongs with 41:46 («من عمل صالحا فلنفسه»)."
   },
   "tree:1m2isl60x95f4o": {
    "keep": true,
@@ -16563,8 +16563,8 @@
    "why": "'hatta ja'ahum' al-ilm vs al-haqq; unrelated contexts"
   },
   "tree:04wuymj0hhxlgr": {
-   "keep": true,
-   "why": "Ending 'hatta hin' in six places with different lead-ins"
+   "keep": false,
+   "why": "«حتى حين» is a short stock ending with unrelated lead-ins; only 37:174 and 37:178 («فتول» against «وتول») make a card."
   },
   "tree:0owzgb00heby9w": {
    "keep": true,
@@ -18510,8 +18510,8 @@
    "why": "'shay'an inna Allah' muhit / alim bima / alim qadir / ghafur rahim"
   },
   "tree:0d3zhqt1oo9lor": {
-   "keep": true,
-   "why": "10:36 alimun bima yaf'alun vs 16:70 alimun qadir"
+   "keep": false,
+   "why": "Only «شيئا إن الله عليم» across an ayah end; conjecture (10:36) and old age (16:70) are unrelated and the closings are stock names."
   },
   "tree:0g7fcn41rgt6za": {
    "keep": true,
@@ -19195,8 +19195,8 @@
    "why": "uluwwan kabira ending twice in al-Isra, different lead-ins"
   },
   "tree:08396bi0ogxtqo": {
-   "keep": true,
-   "why": "ala atharihim muhtadun vs muqtadun (43:22/23), qaffayna pair too"
+   "keep": false,
+   "why": "Two separate good cards share only «على آثارهم»: 43:22 and 43:23 («مهتدون» versus «مقتدون») and 5:46 and 57:27 («وقفينا على آثارهم»); 18:6 and 37:70 do not belong."
   },
   "tree:0xfcuq30vw6p8l": {
    "keep": true,
@@ -19528,8 +19528,8 @@
    "why": "nazzalahu ala qalbika bi-idhn Allah vs li-takuna min al-mundhirin"
   },
   "tree:1y37y8t1b7olt9": {
-   "keep": true,
-   "why": "kadhalika yatba'u/natba'u ala qulub al-kafirin / mu'tadin / alladhina"
+   "keep": false,
+   "why": "Keep only 7:101, 10:74 and 30:59 («كذلك يطبع الله على قلوب الكافرين / نطبع على قلوب المعتدين / يطبع الله على قلوب الذين لا يعلمون»); 47:24 «أم على قلوب أقفالها» does not belong."
   },
   "tree:0ff7vvs0piu3hw": {
    "keep": false,
@@ -19548,8 +19548,8 @@
    "why": "ala qawm: generic, five unrelated contexts"
   },
   "tree:1um4l4f1n4dpkl": {
-   "keep": true,
-   "why": "fa-kharaja ala qawmihi min al-mihrab (19:11) vs fi zinatihi (28:79)"
+   "keep": false,
+   "why": "Keep only 19:11 and 28:79 («فخرج على قومه» «من المحراب» versus «في زينته»); 6:83 and 36:28 share only «على قومه»."
   },
   "tree:0ycbyws1hs4jpo": {
    "keep": false,
@@ -19788,8 +19788,8 @@
    "why": "law la unzila alayhi ayatun min rabbihi + qul / fa-qul / innama"
   },
   "tree:1x8tiu71yjxzt1": {
-   "keep": true,
-   "why": "la as'alukum alayhi ajran in (6:90, 11:51) vs illa (42:23)"
+   "keep": false,
+   "why": "Keep only 6:90, 11:51 and 42:23 («لا أسألكم عليه أجرا» then «إن هو / إن أجري / إلا المودة»); 18:77 «لاتخذت عليه أجرا» is a different story."
   },
   "tree:09uxj6w0qgxr7s": {
    "keep": false,
@@ -20913,8 +20913,8 @@
    "why": "al-rasikhuna fil-ilm yaqulun (3:7) vs minhum (4:162)"
   },
   "tree:0aic3qm1lbiaz4": {
-   "keep": true,
-   "why": "fa-anjaynahu wa man ma'ahu fil-fulk + wa aghraqna / wa ja'alnahum / al-mashhun"
+   "keep": false,
+   "why": "«في الفلك» mixes riding ships with the rescue of Nuh; the good card is 7:64, 10:73 and 26:119 («فأنجيناه / فنجيناه ... في الفلك» then «وأغرقنا» or «المشحون»)."
   },
   "tree:0irvia60vhrhdm": {
    "keep": true,
@@ -20977,8 +20977,8 @@
    "why": "yuliju al-nahar fil-layl then wa sakhkhara / wa anna / wa huwa / wa tukhriju"
   },
   "tree:1jpu1jn1bm0vof": {
-   "keep": true,
-   "why": "fa-nabadhnahum fil-yamm fa-unzur (28:40) vs wa huwa mulim (51:40)"
+   "keep": false,
+   "why": "«في اليم» joins the mother of Musa, the Samiri and Pharaoh; the good card is 28:40 and 51:40 («فنبذناهم في اليم» then «فانظر كيف كان عاقبة الظالمين» or «وهو مليم»)."
   },
   "tree:1hqzddg031cbew": {
    "keep": false,
@@ -21249,8 +21249,8 @@
    "why": "fi qalbihi: two unrelated contexts"
   },
   "tree:1dqw51a0m2y7q0": {
-   "keep": true,
-   "why": "sa-nulqi/sa-ulqi fi qulub alladhina kafaru, nasluku fi qulub al-mujrimin"
+   "keep": false,
+   "why": "«في قلوب» is too broad for six ayat; the good cards are 3:151 with 8:12 («سنلقي / سألقي في قلوب الذين كفروا الرعب») and 15:12 with 26:200 («نسلكه / سلكناه في قلوب المجرمين»)."
   },
   "tree:1hoqpcd1fw4l1r": {
    "keep": true,
@@ -21501,8 +21501,8 @@
    "why": "fiha min kulli + zawjayn ithnayn (11:40/23:27) / dabba / al-thamarat / zawj"
   },
   "tree:0m4yxp41ucasg4": {
-   "keep": true,
-   "why": "lahu fiha min kulli al-thamarat (2:266) vs wa lahum (47:15)"
+   "keep": false,
+   "why": "Only «فيها من كل الثمرات» is shared, between the burnt garden parable (2:266) and the rivers of the Garden (47:15), with nothing to confuse."
   },
   "tree:1rpenay0pme6zk": {
    "keep": true,
@@ -21718,8 +21718,8 @@
    "why": "qala rabbi inni + eight different prayers; Musa's three in al-Qasas"
   },
   "tree:02b61cs0fux4jo": {
-   "keep": true,
-   "why": "idh qala rabbuka lil-mala'ika inni ja'il/khaliq; kadhalika qala rabbuka huwa"
+   "keep": false,
+   "why": "Two separate families share only «قال ربك»: «وإذ قال ربك للملائكة إني» in 2:30, 15:28, 38:71 and «كذلك قال ربك هو علي هين» in 19:9, 19:21 (with 51:30), each a card of its own."
   },
   "tree:1aaxid50tdxno5": {
    "keep": false,
@@ -21994,8 +21994,8 @@
    "why": "inna bima ursila bihi mu'minun (7:75) vs bima ursiltum bihi kafirun (43:24)"
   },
   "tree:0aqzrsd1u0zs5x": {
-   "keep": true,
-   "why": "qalu inna kunna zalimin (7:5) vs qablu fi ahlina (52:26)"
+   "keep": false,
+   "why": "Only «قالوا إنا كنا» is shared; the doomed confessing wrongdoing (7:5) and the people of the Garden recalling their fear (52:26) are unrelated."
   },
   "tree:0tn3m4e1767yqs": {
    "keep": true,
@@ -22717,8 +22717,8 @@
    "why": "qul hiya mawaqitu lil-nas (2:189) vs lilladhina amanu (7:32)"
   },
   "tree:0uh3lv81424dem": {
-   "keep": true,
-   "why": "qul ya ayyuha al-nas inni rasul / in kuntum / qad ja'akum / innama ana"
+   "keep": false,
+   "why": "Drop 62:6 and 109:1, which address others; 7:158, 10:104, 10:108 and 22:49 («قل يا أيها الناس» then four different openings) make the good card."
   },
   "tree:1erv57o0j0uv8q": {
    "keep": false,
@@ -23054,8 +23054,8 @@
    "why": "alima hakima vs alima halima (33:51): one-word ending change"
   },
   "tree:13enea90nm96o7": {
-   "keep": true,
-   "why": "Closing alima hakima, six places in Nisa and Fath"
+   "keep": false,
+   "why": "«وكان الله عليما حكيما» is a stock closing shared by six otherwise unrelated ayat, with nothing to tell apart."
   },
   "tree:0o4sbm30bxyqut": {
    "keep": true,
@@ -23243,8 +23243,8 @@
    "ask": "Keep a broad kana min tree for the hanif set, or drop as a search result?"
   },
   "tree:1via7v40wvgmzy": {
-   "keep": true,
-   "why": "41:52 vs 46:10 in kana min indi Allah thumma kafartum / wa kafartum"
+   "keep": false,
+   "why": "Keep only 41:52 and 46:10 («قل أرأيتم إن كان من عند الله» then «ثم كفرتم به» versus «وكفرتم به»), which the books compare; 4:82 «من عند غير الله» does not belong."
   },
   "tree:1akp3xh14yey4b": {
    "keep": false,
@@ -23403,8 +23403,8 @@
    "why": "wa in kanu min qablu lafi dalal mubin (3:164 = 62:2) vs 2:89, 30:49"
   },
   "tree:1wuafef0m7ep35": {
-   "keep": true,
-   "why": "kanu hum al-khasirin / al-ghalibin / al-zalimin closings"
+   "keep": false,
+   "why": "Drop 40:21 and 53:52, where «كانوا هم» is followed by a comparison; 7:92, 26:40, 37:116 and 43:76 («كانوا هم الخاسرين / الغالبين / الظالمين») would make the card."
   },
   "tree:1yvkim70sn3xjv": {
    "keep": true,
@@ -25719,8 +25719,8 @@
    "why": "la'allahum vs wa la'allahum yatafakkarun"
   },
   "tree:1pir5yk086mo8e": {
-   "keep": true,
-   "why": "la'allahum yattaqun vs wa la'allahum, 20:113 aw yuhdithu"
+   "keep": false,
+   "why": "The closing «لعلهم يتقون» is a common formula across six unrelated ayat; 20:113 and 39:28 already sit in the «قرآنا عربيا» card."
   },
   "tree:0p7gyre1lo10sa": {
    "keep": true,
@@ -25919,8 +25919,8 @@
    "why": "wa la-qad afa ankum vs afa Allahu anhum, both Al Imran"
   },
   "tree:1s2rnwe05vgg30": {
-   "keep": true,
-   "why": "la-qad alimta ma lana / ma anzala / ma ha'ula'i yantiqun"
+   "keep": false,
+   "why": "Drop 37:158 («ولقد علمت الجنة»); 11:79, 17:102 and 21:65 («لقد علمت ما لنا / ما أنزل / ما هؤلاء ينطقون») would make the card."
   },
   "tree:1femkzk0tf07vu": {
    "keep": true,
@@ -26759,8 +26759,8 @@
    "why": "wa lamma / fa lamma dakhalu ala yusufa awa ilayhi akhahu / abawayhi"
   },
   "tree:0r6br9i0b8uljk": {
-   "keep": true,
-   "why": "fa lamma ra'a al-qamara bazighan vs al-shamsa bazighatan"
+   "keep": false,
+   "why": "Only 6:77 and 6:78 belong together (Ibrahim: «فلما رأى القمر بازغا» vs «فلما رأى الشمس بازغة»); 11:70, 12:28 and 33:22 share just «لما رأى»."
   },
   "tree:056ga4y1ym193w": {
    "keep": true,
@@ -26847,8 +26847,8 @@
    "why": "li-man fi in two unrelated contexts"
   },
   "tree:129n1u01fdwch6": {
-   "keep": true,
-   "why": "li-man kana yarju Allah (33:21, 60:6) vs lahu qalb vs kufir"
+   "keep": false,
+   "why": "Only 33:21 and 60:6 belong together («لقد كان لكم ... أسوة حسنة لمن كان يرجو الله واليوم الآخر», parting at «وذكر الله كثيرا» vs «ومن يتول»); 50:37 and 54:14 share just «لمن كان»."
   },
   "tree:0o5ri420nzpkk0": {
    "keep": true,
@@ -27657,8 +27657,8 @@
    "why": "Ma laysa laka bihi 'ilm: 29:8 vs 31:15 classic parents pair"
   },
   "tree:0o9qfw91283ynh": {
-   "keep": true,
-   "why": "Rare clause ma laysa lakum bihi 'ilm with different continuations"
+   "keep": false,
+   "why": "Only «ما ليس لكم به علم» is shared, in a debate with the People of the Book (3:66) and the slander (24:15), with nothing to tell apart."
   },
   "tree:0tmk2wa1ifflg0": {
    "keep": false,
@@ -28653,8 +28653,8 @@
    "why": "35:37 and 40:13 use different senses of ma, unrelated"
   },
   "tree:0gqeeop0hkjk5f": {
-   "keep": true,
-   "why": "Illa ma yutla 'alaykum 5:1 vs 22:30, and 4:127"
+   "keep": false,
+   "why": "Keep only 5:1 and 22:30 («أحلت لكم (بهيمة) الأنعام إلا ما يتلى عليكم»), which the books compare; 4:127 and 33:34 share only «ما يتلى»."
   },
   "tree:0alayg21cxzh8a": {
    "keep": true,
@@ -29100,8 +29100,8 @@
    "checked": true
   },
   "tree:1rw3l5z14s0djn": {
-   "keep": true,
-   "why": "Ittabi'/utlu ma uhiya ilayka"
+   "keep": false,
+   "why": "Drop 6:145 and 53:10; 6:106, 18:27 and 29:45 («اتبع / اتل ما أوحي إليك من ربك / من كتاب ربك / من الكتاب») make the good card."
   },
   "tree:0nth9fu09p6lx2": {
    "keep": true,
@@ -29436,8 +29436,8 @@
    "why": "Adjacent 48:19 ya'khudhunaha vs 48:20 ta'khudhunaha; 4:94"
   },
   "tree:17glh171srpdz1": {
-   "keep": true,
-   "why": "Sari'u 3:133 vs sabiqu 57:21 ila maghfiratin min rabbikum"
+   "keep": false,
+   "why": "Keep only 3:133 and 57:21 («وسارعوا» versus «سابقوا إلى مغفرة من ربكم وجنة عرضها»), which the books compare; 3:136, 47:15 and 57:20 share only «مغفرة من»."
   },
   "tree:18rs64d1jraozv": {
    "keep": true,
@@ -29857,8 +29857,8 @@
    "why": "41:25 vs 46:18 identical; 7:38 and others"
   },
   "tree:07li8va05ockpo": {
-   "keep": true,
-   "why": "Adam's expulsion minal janna 7:27 vs 20:117"
+   "keep": false,
+   "why": "Only «من الجنة» ties these together; the pair worth a card is 29:58 and 39:74 («لنبوئنهم من الجنة» versus «نتبوأ من الجنة», both ending «نعم أجر العاملين»)."
   },
   "tree:1at9t8414ztgkq": {
    "keep": true,
@@ -30241,8 +30241,8 @@
    "why": "3:45 vs 56:88 unrelated"
   },
   "tree:1dbxpc816i3elm": {
-   "keep": true,
-   "why": "Bi-thalathati/khamsati/alfin minal mala'ika munzalin/musawwimin/murdifin"
+   "keep": false,
+   "why": "Only 3:124, 3:125 and 8:9 belong together (angels sent as help: «بثلاثة ءالاف ... منزلين», «بخمسة ءالاف ... مسومين», «بألف ... مردفين»); 17:40 and 22:75 share just «من الملائكة»."
   },
   "tree:1uw5egy0hphidq": {
    "keep": false,
@@ -30582,8 +30582,8 @@
    "why": "owner 2026-11-18: search only, 20 or more ayat; verse and word search list them; Same: khalidina fiha / abadan / dhalika al-fawz endings"
   },
   "tree:1pu6xow03ubjnk": {
-   "keep": true,
-   "why": "Tajri min tahtihimul anhar 7:43/10:9/18:31 vs 6:6, 39:16"
+   "keep": false,
+   "why": "Keep only 6:6, 7:43, 10:9 and 18:31 («تجري من تحتهم الأنهار»); 39:16 «ومن تحتهم ظلل» does not belong."
   },
   "tree:0fqaevp1rju6at": {
    "keep": true,
@@ -30662,12 +30662,12 @@
    "why": "Same surah 6:52 ma 'alayka vs 6:69 'alalladhina yattaqun"
   },
   "tree:0q04mn11pzav4p": {
-   "keep": true,
-   "why": "Lahum sharabun min hamimin wa 'adhabun alim 6:70 vs 10:4"
+   "keep": false,
+   "why": "Only 6:70 and 10:4 belong together (same threat «لهم شراب من حميم وعذاب أليم بما كانوا يكفرون»); 37:67, 40:18 and 56:93 share only the word «حميم»."
   },
   "tree:1s69e830ni6vhf": {
-   "keep": true,
-   "why": "Ayah-final min hamim 37:67 vs 56:93"
+   "keep": false,
+   "why": "Only the final word «من حميم» is shared by 37:67 «لشوبا من حميم» and 56:93 «فنزل من حميم»; two words are not a card."
   },
   "tree:1isnkqu0qmkjz4": {
    "keep": true,
@@ -30706,8 +30706,8 @@
    "why": "Min khalfihi: yahfazunahu / tanzil / alla ta'budu / rasada"
   },
   "tree:05qdfzc1dikypk": {
-   "keep": true,
-   "why": "Min khalfihim with different continuations"
+   "keep": false,
+   "why": "Only 7:17, 36:9 and 41:14 belong together («من بين أيديهم ومن خلفهم» then «وعن أيمانهم / سدا / ألا تعبدوا»); 3:170 and 4:9 share just «من خلفهم»."
   },
   "tree:1su2pvm1ok4bie": {
    "keep": false,
@@ -31178,8 +31178,8 @@
    "why": "Man 'amila salihan/sayyi'atan set"
   },
   "tree:14z8kxm0c1ct52": {
-   "keep": true,
-   "why": "Min 'amalish shaytan: 5:90 vs Musa 28:15"
+   "keep": false,
+   "why": "Only the phrase «من عمل الشيطان» is shared; wine and gambling (5:90) and Musa striking the man (28:15) have nothing to confuse."
   },
   "tree:1osdiil0vj545j": {
    "keep": true,
@@ -31259,8 +31259,8 @@
    "why": "Min fadlihi innahu: kana bikum rahima / la yuhibbu / ghafurun shakur"
   },
   "tree:11ynsy70xyn70t": {
-   "keep": true,
-   "why": "Same surah 24:32 wasi'un 'alim vs 24:38 yarzuqu"
+   "keep": false,
+   "why": "Only «من فضله والله» is shared, with marriage (24:32) and the men of the mosques (24:38) closing on unrelated names."
   },
   "tree:0oiapmu0dj0hou": {
    "keep": false,
@@ -33187,8 +33187,8 @@
    "why": "'hum min' glue; mushfiqun cluster and 52:40/68:46 are better alone"
   },
   "tree:04l0pay1cm64w6": {
-   "keep": true,
-   "why": "Idha hum minha yarkudun (21:12) vs yadhakun (43:47)"
+   "keep": false,
+   "why": "Only 21:12 and 43:47 belong together («فلما ... إذا هم منها يركضون / يضحكون»); 15:48 and 27:66 share just «هم منها»."
   },
   "tree:108x69w0f46ecu": {
    "keep": true,
@@ -34174,8 +34174,8 @@
    "why": "Ya ayyuha al-insan ma gharraka (82:6) vs innaka kadih (84:6)"
   },
   "tree:0jr6nzn1rfiwmf": {
-   "keep": true,
-   "why": "Ittaqu Allah wa: dharu / haqqa tuqatihi / ibtaghu / kunu / qulu"
+   "keep": false,
+   "why": "«يا أيها الذين آمنوا اتقوا الله» is a common opener here followed by seven unrelated commands, so there is nothing to tell apart."
   },
   "tree:1gtt4b41ym1p50": {
    "keep": true,
@@ -34502,8 +34502,8 @@
    "why": "Wa mukhriju al-mayyit (6:95) vs wa yukhriju (10:31, 30:19)"
   },
   "tree:0eb6na80kmewok": {
-   "keep": true,
-   "why": "Fa-tara al-wadq yakhruju min khilalihi: 24:43 vs 30:48; others differ"
+   "keep": false,
+   "why": "«يخرج من» is too broad; only 24:43 and 30:48 («فترى الودق يخرج من خلاله») make a card."
   },
   "tree:154f53k0qo92fc": {
    "keep": true,
@@ -35460,8 +35460,8 @@
    "why": "Same clause; lead-ins al-mashriq / bi-idhnihi / dar al-salam / ayat"
   },
   "tree:19zq8s900g2mz3": {
-   "keep": true,
-   "why": "Wa ma tunfiqu (2:272) vs wa ma ya'lamu junud (74:31)"
+   "keep": false,
+   "why": "2:272 and 74:31 share only «يهدي من يشاء وما» by chance, with unrelated continuations."
   },
   "tree:0xctmp10tv879b": {
    "keep": true,
@@ -35970,6 +35970,18 @@
   "cmp:0k12agv1uf8der": {
    "keep": true,
    "why": "The tighter card inside a wider one the owner questioned: Fifteen places are too many for one card; the useful split is «بل أكثرهم» against «ولاكن أكثرهم», plus the close pairs after «وعد الله حق» and «الحمد لله»."
+  },
+  "tree:0x5b27e1n6a69i": {
+   "keep": false,
+   "why": "The six ayat share only the closing «في السماوات والأرض وهو العزيز الحكيم»; the good card is the openers 57:1, 59:1 and 61:1 («سبح لله ما في السماوات (وما في) الأرض»), which the books already compare, while 30:27 and 45:37 do not belong."
+  },
+  "tree:0w847rn10obxh1": {
+   "keep": false,
+   "why": "Ten ayat with only «من ولي ولا» in common; the good card is 2:107, 9:116, 29:22 and 42:31 «وما لكم من دون الله من ولي ولا نصير» (with the 2:120 and 13:37 pair «ما لك من الله من ولي ولا نصير / واق» as a second card), while 9:74, 18:26, 32:4 and 42:8 end differently."
+  },
+  "tree:0izl9on127msfx": {
+   "keep": false,
+   "why": "Only the closing «إن الله سميع عليم», a stock formula, after six unrelated rulings."
   }
  }
 }
