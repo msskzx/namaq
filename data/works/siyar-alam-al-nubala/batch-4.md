@@ -109,8 +109,7 @@ Differences that repeat for every person:
 
 ## Quiz checks
 
-- Nasab questions read: all right except Thabit ibn Qais with Sa'd ibn al-Rabi'. The lines really meet at «مالك»
-  (son of Imru' al-Qays), but Thabit's print says «مالك الأغر» one step above, so meetingOf answers «ثعلبة» and lists
-  «مالك» as a wrong choice. Sent to the main Tarajim thread as a rule question.
-- Virtue questions read: 33 general or group-shared virtues added to `shared/data/tarajim/virtueQuizSkip.json` with the
-  reason (the naqibs, «من سادة الأنصار/الأوس», the muezzin, the Umm Atiyyah washing also told of Umm Kulthum, and so on).
+- Nasab questions read: all right. Thabit ibn Qais and Sa'd ibn al-Rabi' first met at «ثعلبة» because Thabit's print says
+  «مالك الأغر»; the main Tarajim thread fixed the rule on main (#946), and they now meet at «مالك» (son of Imru' al-Qays).
+- Virtue questions read: 34 general or group-shared virtues added to `shared/data/tarajim/virtueQuizSkip.json` with the
+  reason (the naqibs, «من سادة الأنصار/الأوس», the muezzin, the Umm Atiyyah washing also told of Umm Kulthum, the lit staff given to Abbad and Usayd together, and so on).
