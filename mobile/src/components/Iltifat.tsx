@@ -116,22 +116,36 @@ function Dialog({ turns, palette }: { turns: TurnView[]; palette: Palette }) {
   );
 }
 
-/** One example's card: its place, its own picture, then the mushaf and share buttons on the right (left out of the shared image). */
+/** One example's scene: its place, then its own picture. */
+export function IltifatScene({ view, palette }: { view: ExampleView; palette: Palette }) {
+  return <>
+    <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{iltifatTitle(view)}</Text>
+    {view.kind === 'strip' && <>
+      <Strip steps={view.steps} palette={palette} />
+      <Text style={[quran(palette), { textAlign: 'justify' }]}><Words lines={view.lines} palette={palette} /></Text>
+    </>}
+    {view.kind === 'tree' && <Tree trunk={view.trunk} leaves={view.leaves} palette={palette} />}
+    {view.kind === 'dialog' && <Dialog turns={view.turns} palette={palette} />}
+  </>;
+}
+
+const iltifatTitle = (view: ExampleView) => `${view.name} ${rangeLabel(view)}`;
+
+/** An example's mushaf and share buttons: inside its card on «مشاهد», under the card in the home feed. */
+export function IltifatActions({ view, palette }: { view: ExampleView; palette: Palette }) {
+  const title = iltifatTitle(view);
+  return <>
+    <IconButton Icon={BookOpen} label={`افتح ${title} في المصحف`} onPress={() => readAyah(`${view.surah}:${view.from}`)} />
+    <IconButton Icon={Send} label={`شارك ${title}`} onPress={() => shareCard({ content: width => <View style={{ width }}><IltifatCard view={view} palette={palette} image /></View> })} />
+  </>;
+}
+
+/** One example's card: its scene, then the mushaf and share buttons on the right (left out of the shared image). */
 export function IltifatCard({ view, palette, image }: { view: ExampleView; palette: Palette; image?: boolean }) {
-  const title = `${view.name} ${rangeLabel(view)}`;
   return (
-    <Card palette={palette} pad={[10, 16]} gap={10} accessibilityLabel={title}>
-      <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{title}</Text>
-      {view.kind === 'strip' && <>
-        <Strip steps={view.steps} palette={palette} />
-        <Text style={[quran(palette), { textAlign: 'justify' }]}><Words lines={view.lines} palette={palette} /></Text>
-      </>}
-      {view.kind === 'tree' && <Tree trunk={view.trunk} leaves={view.leaves} palette={palette} />}
-      {view.kind === 'dialog' && <Dialog turns={view.turns} palette={palette} />}
-      {image ? <View style={{ height: 10 }} /> : <View style={{ flexDirection: 'row' }}>
-        <IconButton Icon={BookOpen} label={`افتح ${title} في المصحف`} onPress={() => readAyah(`${view.surah}:${view.from}`)} />
-        <IconButton Icon={Send} label={`شارك ${title}`} onPress={() => shareCard({ content: width => <View style={{ width }}><IltifatCard view={view} palette={palette} image /></View> })} />
-      </View>}
+    <Card palette={palette} pad={[10, 16]} gap={10} accessibilityLabel={iltifatTitle(view)}>
+      <IltifatScene view={view} palette={palette} />
+      {image ? <View style={{ height: 10 }} /> : <View style={{ flexDirection: 'row' }}><IltifatActions view={view} palette={palette} /></View>}
     </Card>
   );
 }
