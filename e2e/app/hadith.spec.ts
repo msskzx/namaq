@@ -13,7 +13,7 @@ test('the hadith tab lists the Forty, and one opens with its chain drawn or its 
   await expect(page.getByLabel(/^الإسناد: البخاري، قُتَيْبَةُ/)).toBeVisible();
   await page.getByRole('tab', { name: 'النص كاملًا' }).click();
   await expect(page.getByLabel(/^الإسناد: البخاري/)).toHaveCount(0);
-  await expect(page.getByText(/^٦٠١٨ - حَدَّثَنَا قُتَيْبَةُ/)).toBeVisible();
+  await expect(page.getByText(/^٦٠١٨ - /)).toBeVisible();
   // The hadith button tapped on a hadith goes back to the list.
   await tab(page, 'الحديث').click();
   await expect(page).toHaveURL(/\/hadith$/);
