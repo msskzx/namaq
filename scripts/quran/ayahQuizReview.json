@@ -1323,6 +1323,14 @@
   "qiraat:69:20:1": "Ya'qub's dropped ha (كتابيه، حسابيه، سلطانيه) only shows when joining across the end of the ayah",
   "qiraat:69:25:0": "Ya'qub's dropped ha (كتابيه، حسابيه، سلطانيه) only shows when joining across the end of the ayah",
   "qiraat:69:26:0": "Ya'qub's dropped ha (كتابيه، حسابيه، سلطانيه) only shows when joining across the end of the ayah",
-  "qiraat:69:29:1": "Ya'qub's dropped ha (كتابيه، حسابيه، سلطانيه) only shows when joining across the end of the ayah"
+  "qiraat:69:29:1": "Ya'qub's dropped ha (كتابيه، حسابيه، سلطانيه) only shows when joining across the end of the ayah",
+  "qiraat:56:48:0": "The riwayat grouped under the second reading do not all read it: Qalun, Ibn Amir and Abu Ja'far read «أَوۡ» while al-Kisa'i reads «أَوَ» as Hafs, so the grouping needs a source fix before it can be asked",
+  "qiraat:3:57:0": "Rawh is grouped with «فَنُوَفِّيهِمۡ» though the source gives him «فَنُوَفِّيهُمۡ»; the grouping needs a source fix before it can be asked",
+  "qiraat:2:245:0": "The reading فَيُضَعِّفُهُ for Ibn Kathir and Abu Ja'far is missing the small waw of the ha's sila (it should be فَيُضَعِّفُهُۥ like the others), so a choice is incompletely vowelled and gives itself away.",
+  "qiraat:3:145:1": "The ha of نُؤۡتِهِۦ is a disputed point: Qalun reads it with ikhtilas or sila by two ways and Hisham has three ways, so Nafi's reading is not clean and the groupings (Qalun, Hisham, Ya'qub, Abu Ja'far) are oversimplified.",
+  "qiraat:4:115:1": "The ha of وَنُصۡلِهِۦ is a disputed point: Qalun and Ya'qub read it with ikhtilas (not sila), Hisham has several ways and Abu Ja'far's narrators differ, so the riwayat groupings are wrong even though al-Kisa'i's own reading is right.",
+  "qiraat:6:23:0": "Khalaf al-'Ashir reads يَكُن with Hamza, al-Kisa'i and Ya'qub, so the answer placed under تَكُن is wrong.",
+  "qiraat:10:51:0": "The only difference between ءَآلۡـَٰٔنَ and ءَآلَٰنَ is naql, which is performance and not a reading difference the card may test.",
+  "qiraat:10:91:0": "The only difference between ءَآلۡـَٰٔنَ and ءَآلَٰنَ is naql, which is performance and not a reading difference the card may test."
  }
 }

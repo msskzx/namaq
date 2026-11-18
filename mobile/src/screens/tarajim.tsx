@@ -47,6 +47,10 @@ export default function TarajimScreen() {
           <Text style={{ color: palette.ink, fontSize: 20, textAlign: 'right' }}>الغزوات والمعارك</Text>
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`${BATTLES[0].name} … ${BATTLES[BATTLES.length - 1].name}`}</Text>
         </Card>
+        <Card palette={palette} pad={16} gap={4} accessibilityRole="link" accessibilityLabel="بين عدة أشخاص" onPress={() => router.push('/between')}>
+          <Text style={{ color: palette.ink, fontSize: 20, textAlign: 'right' }}>بين عدة أشخاص</Text>
+          <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>اختر شخصين أو أكثر لترى أقرب الصلات بينهم</Text>
+        </Card>
         <SearchField palette={palette} label="ابحث في التراجم" value={query} onChangeText={setQuery} />
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           <Chip label="الكل" on={!title} onPress={() => setTitle(undefined)} palette={palette} />

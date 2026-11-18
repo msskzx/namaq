@@ -3,6 +3,7 @@ import data from '../data/quran/qiraat.json';
 import corrections from '../../scripts/quran/qiraatCorrections.json';
 import { qiraatOf } from './qiraatData';
 import { madinaSpelling } from '../../scripts/quran/madinaSpelling';
+import { sameForm } from '../../scripts/quran/qiraatFarsh';
 
 const word = (key: string, at: number) => qiraatOf(key).find(w => w.at[0] === at)!;
 
@@ -60,8 +61,17 @@ describe('al-Nashr audit of al-Imran to al-Nas', () => {
   it('keeps every corrected word in the data and names each riwaya once in it', () => {
     for (const { ayah, replacement } of corrections) {
       if (!replacement) continue;
-      // Stored in the Madina page's spelling, as the build writes it.
-      expect(word(ayah, replacement.at[0])).toEqual({ ...replacement, readings: replacement.readings.map(r => ({ ...r, text: madinaSpelling(r.text) })) });
+      // Stored in the Madina page's spelling, as the build writes it, and fully vowelled (scripts/quran/qiraatVowels.ts).
+      const stored = word(ayah, replacement.at[0]);
+      expect(stored.at).toEqual(replacement.at);
+      expect(stored.readings.map(r => r.rawis)).toEqual(replacement.readings.map(r => r.rawis));
+      // A hamza's seat may move to the line, as the rasm writes it (وجَبۡرَئيلَ، وَجَبۡرَءِيلَ).
+      const seated = (text: string) => text.replace(/[ئؤ]/g, 'ء');
+      const words = (text: string) => text.trim().split(/\s+/).length;
+      stored.readings.forEach((r, i) => {
+        expect(words(r.text)).toBe(words(replacement.readings[i].text));
+        expect(sameForm(seated(r.text), seated(madinaSpelling(replacement.readings[i].text)))).toBe(true);
+      });
       expect(replacement.readings.flatMap(r => r.rawis).sort((a, b) => a - b)).toEqual(Array.from({ length: 20 }, (_, i) => i + 1));
     }
   });

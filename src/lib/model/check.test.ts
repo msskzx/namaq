@@ -254,6 +254,25 @@ describe('checkModel', () => {
     ).toEqual([]);
   });
 
+  it('reads an elided-decade year from its units and the decade of another span', () => {
+    const add = (parsed: number, decadeFrom = 'sp4') => (f: UnitFile) => {
+      f.spans.push({ id: 'sp3', edition: 'ed', volume: 4, page: '41', layer: 'MAIN', exact: 'سَنَةَ سِتٍّ', suffix: ' وَثَلاَثِيْنَ' });
+      f.spans.push({ id: 'sp4', edition: 'ed', volume: 4, page: '41', layer: 'MAIN', exact: 'سَنَةَ سِتٍّ وَثَلاَثِيْنَ' });
+      f.assertions.push({
+        id: 'a2',
+        subject: 'm1',
+        predicate: 'died.year',
+        value: { spans: ['sp3'], parsed, decadeFrom },
+        restsOn: ['st1'],
+        status: 'PROPOSED',
+      });
+    };
+    // The page prints the whole year, so the units span «سنة ست» stands in for an elided print such as «ثم سنة ثمان».
+    expect(issuesFor(add(36))).toEqual([]);
+    expect(issuesFor(add(46)).join()).toMatch(/parsed 46 but the quote and its decade read 36/);
+    expect(issuesFor(add(36, 'nope')).join()).toMatch(/nope/);
+  });
+
   it('accepts a died.age assertion read from its quote and fails an indefinite count', () => {
     const add = (exact: string, parsed: number) => (f: UnitFile) => {
       f.spans.push({ id: 'sp3', edition: 'ed', volume: 4, page: '41', layer: 'MAIN', exact });
