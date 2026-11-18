@@ -6,8 +6,8 @@ import type { QuizTopic } from './settings';
 export const OPENINGS = 'OPENINGS';
 export type FeedQuizKind = QuizTopic | typeof OPENINGS;
 
-/** The kinds in the order they take turns: the Quran's, then the tarajim's two built on the converted entries, then the sira stories and battles (owner, 2026-11-18). */
-export const FEED_QUIZ_KINDS: readonly FeedQuizKind[] = ['SURAH', 'BRANCHES', 'RECITE', 'COMPARE', OPENINGS, 'MEANING', 'TAFSIR', 'BALAGHA', 'TERM', 'IRAB', 'QIRAAT', 'TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE', 'TARAJIM_NASAB', 'TARAJIM_VIRTUE', 'SIRA'];
+/** The kinds in the order they take turns: the Quran's, then the tarajim's two built on the converted entries, then the sira stories and battles, then the hadith (owner, 2026-11-18). */
+export const FEED_QUIZ_KINDS: readonly FeedQuizKind[] = ['SURAH', 'BRANCHES', 'RECITE', 'COMPARE', OPENINGS, 'MEANING', 'TAFSIR', 'BALAGHA', 'TERM', 'IRAB', 'QIRAAT', 'TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE', 'TARAJIM_NASAB', 'TARAJIM_VIRTUE', 'SIRA', 'HADITH_NARRATOR', 'HADITH_COMPLETE'];
 
 /** Each kind's card title, the quiz's own names for them (shared/quiz/kinds.ts), without loading the kinds' data. */
 export const FEED_QUIZ_NAMES: Record<FeedQuizKind & string, string> = {
@@ -15,6 +15,7 @@ export const FEED_QUIZ_NAMES: Record<FeedQuizKind & string, string> = {
   TAFSIR: 'لأي آية هذا التفسير؟', BALAGHA: 'ما الأسلوب؟', TERM: 'ما المصطلح؟', IRAB: 'ما إعرابها؟', QIRAAT: 'كيف يقرؤها؟',
   TUHFA_COMPLETE: 'التحفة: أكمل البيت', TUHFA_NEXT: 'التحفة: البيت التالي', TUHFA_RULE: 'التحفة: حكم الحرف',
   TARAJIM_NASAB: 'أين يلتقي النسبان؟', TARAJIM_VIRTUE: 'صاحب المنقبة', SIRA: 'السيرة والغزوات',
+  HADITH_NARRATOR: 'من راوي الحديث؟', HADITH_COMPLETE: 'أكمل الحديث',
 } as Record<FeedQuizKind & string, string>;
 
 /** The kind of the feed's question card in batch `slot` on a day: the turn moves on one kind a day, so each day starts elsewhere. */

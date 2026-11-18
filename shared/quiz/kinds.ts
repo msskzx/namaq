@@ -8,10 +8,11 @@ import { balaghaQuiz, irabQuiz, qiraatQuiz, tafsirQuiz } from './ayahQuizzes';
 import { ayahEnds, surahOpenings } from './pageKinds';
 import { reciteSnippet } from './reciteSnippet';
 import { siraQuiz } from './sira';
+import { hadithCompleteQuiz, hadithNarratorQuiz } from './hadith';
 import { tarajimNasab, tarajimVirtue } from './tarajim';
 import { tuhfaComplete, tuhfaNext, tuhfaRule } from './tuhfa';
 import { whichSurah } from './whichSurah';
 
-export const CHOICE_KINDS: ChoiceKind[] = [compareQuiz, whichSurah, reciteSnippet, surahOpenings, ayahEnds, meaningQuiz, tafsirQuiz, balaghaQuiz, termQuiz, irabQuiz, qiraatQuiz, tuhfaComplete, tuhfaNext, tuhfaRule, tarajimNasab, tarajimVirtue, siraQuiz];
+export const CHOICE_KINDS: ChoiceKind[] = [compareQuiz, whichSurah, reciteSnippet, surahOpenings, ayahEnds, meaningQuiz, tafsirQuiz, balaghaQuiz, termQuiz, irabQuiz, qiraatQuiz, tuhfaComplete, tuhfaNext, tuhfaRule, tarajimNasab, tarajimVirtue, siraQuiz, hadithNarratorQuiz, hadithCompleteQuiz];
 
 export const choiceKind = (topic: QuizTopic) => CHOICE_KINDS.find(kind => kind.id === topic);
