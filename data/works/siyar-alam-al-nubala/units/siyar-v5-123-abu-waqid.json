@@ -104,6 +104,22 @@
       "prefix": ": شَهِدَ"
     },
     {
+      "id": "sp_aw_sinan_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "575",
+      "layer": "MAIN",
+      "exact": "إِبْرَاهِيْمُ بنُ سَعْدٍ: عَنِ ابْنِ شِهَابٍ، عَنْ سِنَانِ (٣) بنِ أَبِي سِنَانٍ الدُّؤْلِيِّ"
+    },
+    {
+      "id": "sp_aw_sinan",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "575",
+      "layer": "MAIN",
+      "exact": "أَنَّ أَبَا وَاقِدٍ اللَّيْثِيَّ أَسْلَمَ يَوْمَ الفَتْحِ"
+    },
+    {
       "id": "sp_aw_fath",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 5,
@@ -218,9 +234,20 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_aw_qila",
+      "id": "r_aw_sinan",
       "unit": "siyar-v5-123-abu-waqid",
       "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_aw_sinan_isnad",
+      "origin": {
+        "mention": "m_aw_sinan_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_aw_qila",
+      "unit": "siyar-v5-123-abu-waqid",
+      "ordinal": 5,
       "voice": "REPORTED_ANONYMOUS",
       "origin": {
         "mention": "m_aw_qila_by"
@@ -230,7 +257,7 @@
     {
       "id": "r_aw_bukayr",
       "unit": "siyar-v5-123-abu-waqid",
-      "ordinal": 5,
+      "ordinal": 6,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_aw_d_frame"
@@ -243,7 +270,7 @@
     {
       "id": "r_aw_fallas",
       "unit": "siyar-v5-123-abu-waqid",
-      "ordinal": 6,
+      "ordinal": 7,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_aw_d_frame"
@@ -256,7 +283,7 @@
     {
       "id": "r_aw_waqidi",
       "unit": "siyar-v5-123-abu-waqid",
-      "ordinal": 7,
+      "ordinal": 8,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_aw_waqidi_frame"
@@ -305,6 +332,14 @@
       "report": "r_aw_hakim",
       "spans": [
         "sp_aw_badr"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_aw_sinan",
+      "report": "r_aw_sinan",
+      "spans": [
+        "sp_aw_sinan"
       ],
       "role": "TRANSMITTED"
     },
@@ -391,6 +426,13 @@
       "exact": "بَدْراً",
       "occurrence": 1,
       "role": "REFERENT"
+    },
+    {
+      "id": "m_aw_sinan_by",
+      "parent": "sp_aw_sinan_isnad",
+      "exact": "سِنَانِ بنِ أَبِي سِنَانٍ الدُّؤْلِيِّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
     },
     {
       "id": "m_aw_fath",
@@ -586,9 +628,22 @@
       },
       "restsOn": [
         "st_aw_badr_bukhari",
-        "st_aw_badr_hakim"
+        "st_aw_sinan"
       ],
-      "status": "PROPOSED"
+      "status": "DISPUTED"
+    },
+    {
+      "id": "a_aw_badr2",
+      "subject": "m_aw",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_aw_badr"
+      },
+      "restsOn": [
+        "st_aw_badr_hakim",
+        "st_aw_sinan"
+      ],
+      "status": "DISPUTED"
     },
     {
       "id": "a_aw_fath",
