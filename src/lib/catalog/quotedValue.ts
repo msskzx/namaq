@@ -33,9 +33,16 @@ export function matchQuotedValue(value: string, groups: readonly (readonly strin
   return !result.ok && closed !== value.trim() ? (matchExact(closed, groups).ok ? { ok: true } : result) : result;
 }
 
+// The Shamela copies sometimes type a Latin comma where the print has «،»
+// (السيرة ١/٢٩: «شيبة, ابن هاشم»). A value written with the Arabic comma
+// still quotes the page, so the two count as one mark.
+const sameComma = (text: string) => text.replace(/,/g, '،');
+
 function matchExact(value: string, groups: readonly (readonly string[])[]): QuotedValueResult {
-  const haystacks = groups.flatMap((group) => [...group.map(cleanPassage), joinAtSeams(group), joinAtSeams(group, true)]);
-  const chars = [...value.replace(/\s+/g, ' ').trim()];
+  const haystacks = groups
+    .flatMap((group) => [...group.map(cleanPassage), joinAtSeams(group), joinAtSeams(group, true)])
+    .map(sameComma);
+  const chars = [...sameComma(value.replace(/\s+/g, ' ').trim())];
   if (haystacks.some((haystack) => haystack.includes(chars.join('')))) return { ok: true };
 
   let matched = 0;
