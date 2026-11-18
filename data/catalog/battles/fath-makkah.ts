@@ -1,7 +1,7 @@
 import { legacyUnreviewed, type CatalogBattle } from '@/lib/catalog/types';
 
-// The entry places him here but never dates the battle, so the year is
-// carried from the old seed with its evidence owed.
+// The entry places him here. The year is al-Dhahabi's sira's: the conquest is told
+// inside its chapter [ثم دخلت سنة ثمان من الهجرة:] (ADR 0024).
 const fathMakkah = {
   kind: 'BATTLE',
   slug: 'fath-makkah',
@@ -9,7 +9,7 @@ const fathMakkah = {
   nameTransliterated: 'Conquest of Mecca',
   fields: {
     engagement: { value: 'GHAZWAH', claims: legacyUnreviewed },
-    hijriYear: { value: 8, claims: legacyUnreviewed },
+    hijriYear: { value: 8, claims: ['fath-makkah/year'] },
     // Carried from the retired prisma/battleSeedData.ts entry, uncited.
     location: { value: 'مكة المكرمة', claims: legacyUnreviewed },
   },

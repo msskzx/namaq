@@ -11,9 +11,9 @@ import { legacyUnreviewed, type CatalogBattle } from '@/lib/catalog/types';
  * in charge, which is an absence the source remarks on rather than a gap in the
  * roster ([ADR 0013](../../../docs/adr/0013-separate-attendance-from-outcome.md)).
  *
- * The year stays on the marker. This chapter is headed السنة التاسعة and the
- * battle sits inside it, but the section never dates the march, and a heading
- * two pages up is not what the value cites.
+ * The year is the chapter's: [السنة التاسعة:] heads it and the battle's own
+ * heading follows a page later, [وفي رجب غزوة تبوك:], so the year cites both
+ * (ADR 0024: a chapter heading that makes the reading clear is recorded).
  */
 const tabuk = {
   kind: 'BATTLE',
@@ -22,7 +22,7 @@ const tabuk = {
   nameTransliterated: 'Expedition of Tabuk',
   fields: {
     engagement: { value: 'GHAZWAH', claims: ['tabuk/engagement'] },
-    hijriYear: { value: 9, claims: legacyUnreviewed },
+    hijriYear: { value: 9, claims: ['tabuk/year'] },
     location: { value: 'تبوك', claims: legacyUnreviewed },
   },
   participants: [

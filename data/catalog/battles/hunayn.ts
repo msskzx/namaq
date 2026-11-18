@@ -1,7 +1,8 @@
 import { legacyUnreviewed, type CatalogBattle } from '@/lib/catalog/types';
 
-// Carried from the old seed when its rows were retired. The Siyar entry is
-// silent about this battle, so both values are in use with their evidence owed.
+// Carried from the old seed when its rows were retired. The year is now al-Dhahabi's
+// sira's: the battle is told inside its chapter [ثم دخلت سنة ثمان من الهجرة:]
+// (ADR 0024); the place is still owed its evidence.
 const hunayn = {
   kind: 'BATTLE',
   slug: 'hunayn',
@@ -9,7 +10,7 @@ const hunayn = {
   nameTransliterated: 'Battle of Hunayn',
   fields: {
     engagement: { value: 'GHAZWAH', claims: legacyUnreviewed },
-    hijriYear: { value: 8, claims: legacyUnreviewed },
+    hijriYear: { value: 8, claims: ['hunayn/year'] },
     // Carried from the retired prisma/battleSeedData.ts entry, uncited.
     location: { value: 'حنين', claims: legacyUnreviewed },
   },

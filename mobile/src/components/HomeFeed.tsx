@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { bookmarkKind } from '@shared/bookmarkKind';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
@@ -13,7 +13,7 @@ import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, se
 import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, FEED_AHEAD, freshPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
-import { feedBooks, hasBooksCard, hasJuzCard, hasSceneCard, inMinutes, insertAt, prayerSoon, sceneOfSlot } from '@shared/homeFeed';
+import { feedBooks, hasBooksCard, hasJuzCard, hasMomentCard, hasSceneCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot } from '@shared/homeFeed';
 import { clock, FIVE, PRAYER_NAMES, type PrayerDay, type PrayerKey } from '@shared/prayer';
 import { BOOKS } from '@shared/books';
 import { isReaderBook, pageName } from '@shared/readerBooks';
@@ -28,6 +28,9 @@ import type { BranchPiece } from '@shared/quran/branchInventory';
 import { pageStart } from '@shared/quran/readerPage';
 import { continuePage, readFasilas, serverFasilas, subscribeFasilas } from '@shared/readingMarks';
 import { Text } from '@/ui/Text';
+import momentBattles from '@shared/data/battles/moments.json';
+import type { AppMomentBattle } from '@shared/battles/battle';
+import { battleLine, Moment } from './battles/BattleParts';
 import CompareCard from './CompareCard';
 import TreePager from './TreePager';
 import { aliasesOf, EMPTY_LIST } from '@/lib/branchList';
@@ -83,6 +86,7 @@ import { type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
 import Card from '@/ui/Card';
+import { openExternal } from '@/ui/ExternalLink';
 
 type IconType = (props: LucideProps) => React.ReactNode;
 
@@ -540,6 +544,26 @@ const ScenePost = memo(function ScenePost({ day, slot, palette }: { day: number;
   );
 });
 
+/** Every battle's moments, in the battles' order, for the moment card. */
+const MOMENTS = (momentBattles as AppMomentBattle[]).flatMap(battle => battle.moments.map((moment, i) => ({ battle, moment, n: i + 1 })));
+
+/** A moment of a battle in the source's words (owner, 2026-11-18); the head opens the battle's page. */
+function MomentPost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
+  const item = MOMENTS[momentOfSlot(MOMENTS.length, day, slot)];
+  if (!item) return null;
+  const { battle, moment, n } = item;
+  return (
+    <Post palette={palette} head={<PostHead Icon={Swords} title={`من ${battle.name}`} sub={battleLine(battle)} palette={palette}
+      open={{ onPress: () => toTab({ pathname: '/battle', params: { slug: battle.slug } }), label: `افتح ${battle.name}` }} />}
+      actions={<>
+        <Action Icon={Swords} label={`افتح ${battle.name}`} onPress={() => toTab({ pathname: '/battle', params: { slug: battle.slug } })} palette={palette} />
+        <Action Icon={ExternalLinkIcon} label={`المصدر: ${moment.cite}`} onPress={() => openExternal(moment.url)} palette={palette} />
+      </>}>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}><Moment moment={moment} n={n} palette={palette} plain /></View>
+    </Post>
+  );
+}
+
 /** Each ayah card's list of ayat, read once when first asked for. */
 const noteLists: Partial<Record<AyahNote, string[]>> = {};
 const noteList = (kind: AyahNote) => (noteLists[kind] ??= kind === 'tafsir' ? singleAyahPassages() : kind === 'balagha' ? itqanSureAyat(itqan)
@@ -683,6 +707,7 @@ export function Feed({ palette, nearEnd, screenBottom }: { palette: Palette; nea
     if (hasJuzCard(i) && juz) posts.push(<JuzPost key={`j${day}`} palette={palette} />);
     if (hasSceneCard(i) && sceneList().length) posts.push(<ScenePost key={`m${day}-${i}`} day={day} slot={i} palette={palette} />);
     if (hasBooksCard(i)) posts.push(<BooksPost key={`k${day}-${i}`} day={day} palette={palette} />);
+    if (hasMomentCard(i) && MOMENTS.length) posts.push(<MomentPost key={`w${day}-${i}`} day={day} slot={i} palette={palette} />);
   }
   // A prayer that is near comes in once, before the first post below the screen, so what the reader looks at stays put (owner,
   // 2026-11-18). One near when home opens leads the feed. A card the reader has passed or is looking at stays; one still

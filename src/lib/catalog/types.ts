@@ -171,6 +171,32 @@ export interface CatalogDateParts {
   readonly hijriDay?: Cited<number>;
 }
 
+/**
+ * A moment in a battle, told in the source's own words (owner, 2026-11-18: the battle page's key moments). Only a report
+ * the source itself places in al-Bukhari or Muslim becomes one (AGENTS.md, "Established claims only"), and only a point
+ * the reports agree on: where they differ, as over who duelled whom at Badr, the moment keeps what they share.
+ */
+export interface CatalogMoment {
+  /** A few words naming the moment. Ours, not the source's. */
+  readonly title: string;
+  /** Who the source has the report from, its words as printed, just before the quote (none when the report has no chain). */
+  readonly isnad?: string;
+  /**
+   * The whole report after its chain, exactly as the pages print it, up to its grading (owner, 2026-11-18: nothing is
+   * cut). A report that runs across a page break joins the pages' text with one space.
+   */
+  readonly quote: string;
+  /**
+   * `volume` is the source's folder (v1, v2…); `volumeLabel` is the volume as the book prints it, e.g. «السيرة 1».
+   * `endPage` is the last page the report runs onto, when it is not `page`.
+   */
+  readonly source: { readonly slug: string; readonly volume: number; readonly volumeLabel: string; readonly page: number; readonly endPage?: number; readonly url: string };
+  /** The source's own words placing the report, such as أخرجه البخاري, printed on the same page. */
+  readonly grading: string;
+  /** Who the moment is about, by catalog slug. */
+  readonly people: readonly string[];
+}
+
 /** Names only the participants its batch's focal subject brought, never the full roster. */
 export interface CatalogBattle {
   readonly kind: 'BATTLE';
@@ -181,6 +207,8 @@ export interface CatalogBattle {
   readonly fields?: CatalogBattleFields;
   readonly dateParts?: CatalogDateParts;
   readonly participants: readonly CatalogParticipation[];
+  /** In the order they happened. */
+  readonly moments?: readonly CatalogMoment[];
 }
 
 /** Keys of `fields` are Prisma `Event` column names. */
