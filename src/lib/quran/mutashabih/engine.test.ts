@@ -129,7 +129,8 @@ describe('the classical benchmark groups', () => {
 describe('automatic matching', () => {
   it.each(negatives)('%s and %s do not become a verbal parallel just because they share a formula', (a, b) => {
     expect(compareAyat(ayah(a), ayah(b)).kind).not.toBe('mutashabih_lafzi');
-    expect(artifact.some(group => group.kind === 'mutashabih_lafzi' && [a, b].every(key => group.places.some(place => place.key === key)))).toBe(false);
+    // A book may set them side by side; the automatic matching must not.
+    expect(artifact.some(group => group.kind === 'mutashabih_lafzi' && !group.citations.length && [a, b].every(key => group.places.some(place => place.key === key)))).toBe(false);
   });
 
   it('keeps every automatic pair strong within the published word spans', () => {

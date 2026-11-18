@@ -13,7 +13,9 @@ import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, se
 import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
-import { feedBooks, hadithOfSlot, hasBooksCard, hasHadithCard, hasJuzCard, hasMomentCard, hasSceneCard, hasSiraCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, siraOfSlot } from '@shared/homeFeed';
+import { feedBooks, hadithOfSlot, hasBooksCard, hasHadithCard, hasJuzCard, hasMomentCard, hasSceneCard, hasSiraCard, hasTarajimCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, siraOfSlot, tarajimOfSlot } from '@shared/homeFeed';
+import { pageLabel, sayer } from '@shared/tarajim';
+import { PEOPLE, personName } from '@/lib/tarajim';
 import { clock, FIVE, PRAYER_NAMES, type PrayerDay, type PrayerKey } from '@shared/prayer';
 import { BOOKS } from '@shared/books';
 import { isReaderBook, pageName } from '@shared/readerBooks';
@@ -59,6 +61,7 @@ import { around as aroundSetting, branchView, penRule, prayerPlace, prayerSettin
 import { showsOtherView } from '@shared/quran/branchView';
 import { timesFor, useMinute } from '@/lib/prayer';
 import { bookState, useBooks } from '@/lib/books';
+import type { BookId } from '@shared/books';
 import { BookCard, Shelf, TUHFA } from '@/screens/books';
 import { IltifatActions, IltifatScene } from './Iltifat';
 import { prophetStory } from '@/lib/prophets';
@@ -332,9 +335,35 @@ function OpeningPost({ seed, palette }: { seed: number; palette: Palette }) {
   return surah ? <ForgottenPost ayah={`${surah}:1`} title={FEED_QUIZ_NAMES[OPENINGS]} palette={palette} /> : null;
 }
 
+/**
+ * «من التراجم» (owner, 2026-11-18; sketch tarajim-app/sketch-dark.png, screen 4): a virtue from a converted entry, in the
+ * book's words with who says it and its page; the head opens the person's page.
+ */
+function TarajimPost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
+  const pick = tarajimOfSlot(PEOPLE, day, slot);
+  if (!pick) return null;
+  const virtue = pick.person.virtues[pick.index];
+  const open = () => router.push({ pathname: '/person', params: { slug: pick.person.slug } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={Users} title="من التراجم" sub={personName(pick.person)} palette={palette} open={{ onPress: open, label: `افتح ترجمة ${personName(pick.person)}` }} />}>
+      <View style={{ padding: 14, gap: 6 }}>
+        <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{virtue.text}</Text>
+        <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{virtue.by.length ? `${sayer(virtue)} · ` : ''}{pageLabel(virtue.refs)}</Text>
+      </View>
+    </Post>
+  );
+}
+
+/** The book a quiz kind asks from: its card stays out while that book is off the phone, as the book's own ayah card does. */
+const QUIZ_BOOKS: Partial<Record<FeedQuizKind, BookId>> = { TAFSIR: 'sadi', BALAGHA: 'itqan', IRAB: 'irab-words' };
+
 /** A question card of kind `kind`: the openings quiz, or one of the solo quiz's. */
-const FeedQuiz = ({ kind, seed, palette }: { kind: FeedQuizKind; seed: number; palette: Palette }) =>
-  kind === OPENINGS ? <OpeningPost seed={seed} palette={palette} /> : <QuizPost kind={kind} seed={seed} palette={palette} />;
+function FeedQuiz({ kind, seed, palette }: { kind: FeedQuizKind; seed: number; palette: Palette }) {
+  useBooks();
+  const book = QUIZ_BOOKS[kind];
+  if (book && bookState(book) !== 'on') return null;
+  return kind === OPENINGS ? <OpeningPost seed={seed} palette={palette} /> : <QuizPost kind={kind} seed={seed} palette={palette} />;
+}
 
 /**
  * The tree card's height: its frame, the buttons and the chips. A lit path's ayat add their room below (TreeCard `ayatRoom`),
@@ -761,6 +790,7 @@ export function Feed({ palette, nearEnd, screenBottom }: { palette: Palette; nea
     if (hasSiraCard(i) && STORIES.length) posts.push(<SiraPost key={`r${day}-${i}`} day={day} slot={i} palette={palette} />);
     if (hasHadithCard(i) && FEED_FORTY.length) posts.push(<HadithPost key={`h${day}-${i}`} day={day} slot={i} palette={palette} />);
     if (hasMomentCard(i) && MOMENTS.length) posts.push(<MomentPost key={`w${day}-${i}`} day={day} slot={i} palette={palette} />);
+    if (hasTarajimCard(i)) posts.push(<TarajimPost key={`tj${day}-${i}`} day={day} slot={i} palette={palette} />);
   }
   // A prayer that is near comes in once, before the first post below the screen, so what the reader looks at stays put (owner,
   // 2026-11-18). One near when home opens leads the feed. A card the reader has passed or is looking at stays; one still

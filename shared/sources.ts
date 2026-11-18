@@ -53,11 +53,16 @@ const USE = {
   balagha: { ar: 'البلاغة في المصحف', en: 'rhetoric (balagha) in the mushaf reader', href: '/quran/read' },
   meaning: { ar: 'معنى الكلمة في المصحف', en: 'word meanings in the mushaf reader', href: '/quran/read' },
   meaningQuiz: { ar: 'اختبار «ما معنى؟»', en: 'the «what does it mean?» quiz', href: '/quizzes' },
+  tafsirQuiz: { ar: 'اختبار «لأي آية هذا التفسير؟»', en: 'the «which ayah is this tafsir on?» quiz', href: '/quizzes' },
+  balaghaQuiz: { ar: 'اختبار «ما الأسلوب؟»', en: 'the «which style?» quiz', href: '/quizzes' },
+  irabQuiz: { ar: 'اختبار «ما إعرابها؟»', en: 'the «what is its i‘rab?» quiz', href: '/quizzes' },
+  qiraatQuiz: { ar: 'اختبار «كيف يقرؤها؟»', en: 'the «how does he read it?» quiz', href: '/quizzes' },
   words: { ar: 'عدد الكلمات والكلمات المتقابلة', en: 'word counts and opposite words', href: '/quran/words' },
   trees: { ar: 'الأشجار والمقارنة والبحث', en: 'trees, compare and search', href: '/quran/branches' },
   tuhfa: { ar: 'تحفة الأطفال', en: 'Tuhfat al-Atfal', href: '/quran/tajwid/tuhfat-al-atfal' },
   listen: { ar: 'الاستماع إلى التلاوة في المصحف', en: 'listening to recitations in the mushaf reader', href: '/quran/read' },
   adhkar: { ar: 'الأذكار والدعاء في تطبيق الهاتف', en: 'adhkar and du’a in the phone app' },
+  stories: { ar: 'قصص السيرة في تطبيق الهاتف', en: 'the sira stories in the phone app' },
   prayer: { ar: 'مواقيت الصلاة والقبلة', en: 'prayer times and the qibla', href: '/utilities' },
   battles: { ar: 'خرائط الغزوات والمعارك في تطبيق الهاتف', en: 'the battle maps in the phone app' },
   hijri: { ar: 'التاريخ الهجري وجزء اليوم', en: 'the Hijri date and today’s juz', href: '/utilities' },
@@ -132,7 +137,7 @@ export const SOURCES: Source[] = [
   {
     id: 'itqan', group: 'books',
     title: { ar: 'الإتقان في علوم القرآن', en: 'al-Itqan fi ‘Ulum al-Quran' }, author: { ar: 'جلال الدين السيوطي', en: 'al-Suyuti' },
-    edition: 'تحقيق محمد أبو الفضل إبراهيم، الهيئة المصرية العامة للكتاب، ١٣٩٤هـ/١٩٧٤م، ٤ أجزاء', link: shamela(11728), licence: PUBLIC_DOMAIN, uses: [USE.openings, USE.iltifat, USE.oaths, USE.balagha],
+    edition: 'تحقيق محمد أبو الفضل إبراهيم، الهيئة المصرية العامة للكتاب، ١٣٩٤هـ/١٩٧٤م، ٤ أجزاء', link: shamela(11728), licence: PUBLIC_DOMAIN, uses: [USE.openings, USE.iltifat, USE.oaths, USE.balagha, USE.balaghaQuiz],
   },
   {
     id: 'tibyan-ayman', group: 'books',
@@ -189,7 +194,7 @@ export const SOURCES: Source[] = [
       ar: 'توفي المؤلف سنة ١٣٧٦هـ/١٩٥٦م، فنصه في الملك العام. نعرض نصه وحده دون حواشي المحقق، من ملف الموسوعة القرآنية، مع رقم الصفحة ورابطها. وما انقطع في الملف (سبعة مواضع، منها آل عمران ٩٦-٩٧ ويوسف ١١٠-١١١) أكملناه من نسخة المكتبة الشاملة للطبعة نفسها.',
       en: 'The author died in 1956, so his text is in the public domain. We show his text alone, without the editor’s footnotes, from Quranpedia’s dump, with the page number and a link. Where the dump breaks off (seven passages, among them Al ‘Imran 96–97 and Yusuf 110–111), the rest comes from Shamela’s copy of the same edition.',
     },
-    uses: [USE.tafsir, USE.books, USE.oaths],
+    uses: [USE.tafsir, USE.books, USE.oaths, USE.tafsirQuiz],
   },
   {
     id: 'tibyan-ukbari', group: 'books',
@@ -289,7 +294,27 @@ export const SOURCES: Source[] = [
     },
     uses: [USE.qiraat],
   },
+  {
+    id: 'sahih-al-bukhari', group: 'books',
+    title: { ar: 'صحيح البخاري', en: 'Sahih al-Bukhari' }, author: { ar: 'محمد بن إسماعيل البخاري', en: 'al-Bukhari' },
+    edition: 'نص hadith-api (ara-bukhari) بالترقيم المشهور، ويُربط كل حديث برقمه في sunnah.com', link: { url: 'https://sunnah.com/bukhari', label: 'sunnah.com' },
+    licence: {
+      ar: 'توفي المؤلف سنة ٢٥٦هـ، فنصه في الملك العام. نروي الحديث كاملًا من إسناده إلى آخره، مع رقمه ورابطه.',
+      en: 'The author died in 870, so his text is in the public domain. We give each hadith whole, chain to last word, with its number and a link.',
+    },
+    uses: [USE.stories],
+  },
   // Data
+  {
+    id: 'hadith-api', group: 'data',
+    title: { ar: 'hadith-api: نص صحيح البخاري', en: 'hadith-api: the text of Sahih al-Bukhari' },
+    edition: 'الإصدار ١ (ara-bukhari)، نُزّل ٢٠٢٦-١١-١٨، ولم يُحذف منه إلا علامات الاتجاه (U+200F)', link: { url: 'https://github.com/fawazahmed0/hadith-api', label: 'fawazahmed0/hadith-api' },
+    licence: {
+      ar: 'منشورة في الملك العام (Unlicense).',
+      en: 'Released into the public domain (Unlicense).',
+    },
+    uses: [USE.stories],
+  },
   {
     id: 'shamela-sadi', group: 'data',
     title: { ar: 'المكتبة الشاملة: تفسير السعدي (الكتاب ٤٢)', en: 'Shamela: al-Sa‘di’s tafsir (book 42)' },
@@ -308,7 +333,7 @@ export const SOURCES: Source[] = [
       ar: 'رخصة الموسوعة: الاستعمال داخل التطبيقات لا يشترط الإسناد، ونذكرها مع الإصدار على كل حال. نشر البيانات ملفًا للتنزيل يلزم فيه ذكرها مع الرابط ورقم الإصدار.',
       en: 'Quranpedia’s licence: use inside apps needs no credit, and we credit it with the version anyway. Republishing the data as a download needs the name, a link and the version.',
     },
-    uses: [USE.qiraat, USE.reader, USE.tafsir, USE.topics, USE.irab],
+    uses: [USE.qiraat, USE.reader, USE.tafsir, USE.topics, USE.irab, USE.qiraatQuiz],
   },
   {
     id: 'gharib-ibn-qutaybah', group: 'books',
@@ -341,14 +366,14 @@ export const SOURCES: Source[] = [
     title: { ar: 'المدوّنة القرآنية العربية', en: 'Quranic Arabic Corpus' }, author: { ar: 'Kais Dukes، جامعة ليدز', en: 'Kais Dukes, University of Leeds' },
     edition: 'التحليل الصرفي، الإصدار ٠٫٤', link: { url: 'https://corpus.quran.com', label: 'corpus.quran.com' },
     licence: { ar: 'GNU GPL، مع إبقاء حقوق النشر والرابط دون تغيير.', en: 'GNU GPL, with the copyright notice and link kept unchanged.' },
-    uses: [USE.words, { ar: 'الجذور في الأشجار', en: 'roots in the trees', href: '/quran/branches' }, USE.irab, USE.meaning],
+    uses: [USE.words, { ar: 'الجذور في الأشجار', en: 'roots in the trees', href: '/quran/branches' }, USE.irab, USE.meaning, USE.irabQuiz],
   },
   {
     id: 'quranic-treebank', group: 'data',
     title: { ar: 'الشجرة النحوية للقرآن', en: 'The Quranic Treebank' }, author: { ar: 'NoorBayan، على المدوّنة القرآنية', en: 'NoorBayan, built on the Quranic Arabic Corpus' },
     edition: 'العلاقات النحوية بالعربية، من ملف الموسوعة القرآنية', link: { url: 'https://github.com/NoorBayan/Quranic', label: 'NoorBayan/Quranic' },
     licence: { ar: 'بترخيص MIT. نأخذ منه موقع كل كلمة من الإعراب (خبر، فاعل، صفة…) والكلمة التي تتعلق بها.', en: 'MIT licensed. We take each word’s grammatical role (khabar, fa‘il, sifa…) and the word it attaches to.' },
-    uses: [USE.irab],
+    uses: [USE.irab, USE.irabQuiz],
   },
   {
     id: 'quran-qcf4', group: 'data',
