@@ -74,19 +74,19 @@ const prophetMuhammad = {
 
   ayat: [
     // Carried from the retired seed entry, which read this verse as his.
-    { surah: 48, ayah: 29, claims: legacyUnreviewed },
-    { surah: 2, ayah: 129, claims: ['prophet/ayah-al-baqarah'] },
-    { surah: 5, ayah: 67, claims: ['prophet/ayah-al-maidah'] },
-    { surah: 15, ayah: 95, claims: ['prophet/ayah-al-hijr-mustahziin'] },
-    { surah: 17, ayah: 85, claims: ['prophet/ayah-al-isra-ruh'] },
-    { surah: 21, ayah: 107, claims: ['prophet/ayah-al-anbiya'] },
-    { surah: 26, ayah: 214, claims: ['prophet/ayah-al-shuara'] },
-    { surah: 33, ayah: 45, claims: ['prophet/ayah-al-ahzab'] },
-    { surah: 46, ayah: 29, claims: ['prophet/ayah-al-ahqaf-jinn'] },
-    { surah: 61, ayah: 6, claims: ['prophet/ayah-al-saff'] },
-    { surah: 70, ayah: 13, claims: ['prophet/ayah-al-maarij'] },
-    { surah: 74, ayah: 1, claims: ['prophet/ayah-al-muddaththir'] },
-    { surah: 96, ayah: 1, claims: ['prophet/ayah-al-alaq'] },
+    { surah: 48, ayah: 29, kind: 'DESCRIBES', claims: legacyUnreviewed },
+    { surah: 2, ayah: 129, kind: 'DESCRIBES', claims: ['prophet/ayah-al-baqarah'] },
+    { surah: 5, ayah: 67, kind: 'IN_STORY', claims: ['prophet/ayah-al-maidah'] },
+    { surah: 15, ayah: 95, kind: 'IN_STORY', claims: ['prophet/ayah-al-hijr-mustahziin'] },
+    { surah: 17, ayah: 85, kind: 'IN_STORY', claims: ['prophet/ayah-al-isra-ruh'] },
+    { surah: 21, ayah: 107, kind: 'DESCRIBES', claims: ['prophet/ayah-al-anbiya'] },
+    { surah: 26, ayah: 214, kind: 'IN_STORY', claims: ['prophet/ayah-al-shuara'] },
+    { surah: 33, ayah: 45, kind: 'DESCRIBES', claims: ['prophet/ayah-al-ahzab'] },
+    { surah: 46, ayah: 29, kind: 'IN_STORY', claims: ['prophet/ayah-al-ahqaf-jinn'] },
+    { surah: 61, ayah: 6, kind: 'DESCRIBES', claims: ['prophet/ayah-al-saff'] },
+    { surah: 70, ayah: 13, kind: 'READ_AS_ABOUT', claims: ['prophet/ayah-al-maarij'] },
+    { surah: 74, ayah: 1, kind: 'IN_STORY', claims: ['prophet/ayah-al-muddaththir'] },
+    { surah: 96, ayah: 1, kind: 'IN_STORY', claims: ['prophet/ayah-al-alaq'] },
   ],
 
   relations: [

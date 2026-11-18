@@ -44,7 +44,14 @@ const alAshathIbnQais = {
       claims: ['al-ashath-ibn-qais-siyar8/companion'],
     },
   ],
-  ayat: [{ surah: 3, ayah: 77, claims: ['al-ashath-ibn-qais-siyar8/ayah-al-imran'], revealedAbout: {} }],
+  ayat: [
+    // His own words, «فيّ نزلت». Other reports give this ayah another occasion (al-Bukhari
+    // also has Ibn Abi Awfa on a man selling his goods), so the question asks who said it.
+    {
+      surah: 3, ayah: 77, kind: 'REVEALED_ABOUT', claims: ['al-ashath-ibn-qais-siyar8/ayah-al-imran'],
+      revealedAbout: { prompt: 'مَن قال في هذه الآية: «فِيَّ نزلت»؟' },
+    },
+  ],
   relations: [
     {
       type: 'SON',

@@ -69,13 +69,30 @@ export interface CatalogRelation {
   readonly claims: Provenance;
 }
 
+/**
+ * How the cited source ties an ayah to a person (docs/quiz-ayah-revealed.md):
+ * REVEALED_ABOUT «نزلت فيه», the source says it was revealed about him or her;
+ * DESCRIBES «ذُكر فيمن تصفهم», he or she is among those the ayah describes;
+ * ACTED_ON «عمل بها», he or she read it and acted on it;
+ * READ_AS_ABOUT «قرأها فيه فلان», someone the source quotes reads it as about him or her;
+ * IN_STORY «في خبره», it came down during an event of his or her life.
+ * Only REVEALED_ABOUT may carry `revealedAbout` or become an «فيمن نزلت» question.
+ */
+export type AyahLinkKind = 'REVEALED_ABOUT' | 'DESCRIBES' | 'ACTED_ON' | 'READ_AS_ABOUT' | 'IN_STORY';
+
 /** A Qur'an verse the source ties to this person, by surah and ayah number. */
 // docs/quiz-ayah-revealed.md
 export interface CatalogAyah {
   readonly surah: number;
   readonly ayah: number;
+  readonly kind: AyahLinkKind;
   readonly claims: Provenance;
-  readonly revealedAbout?: { readonly with?: readonly string[]; readonly alsoUnnamed?: true };
+  readonly revealedAbout?: {
+    readonly with?: readonly string[];
+    readonly alsoUnnamed?: true;
+    /** The question's own wording, when «فيمن نزلت هذه الآية؟» would say more than the source does. */
+    readonly prompt?: string;
+  };
 }
 
 /** One virtue, in one speaker's exact words -- see docs/adr/0020-a-virtue-is-one-entry-with-one-speaker.md. */

@@ -48,9 +48,9 @@ const abuBakrAsSiddiq = {
   // came down over the wager he made, so the link is recorded verse by verse
   // rather than collapsed to the one that carries بضع سنين.
   ayat: [
-    { surah: 30, ayah: 2, claims: ['abu-bakr/ayah-ar-rum'] },
-    { surah: 30, ayah: 3, claims: ['abu-bakr/ayah-ar-rum'] },
-    { surah: 30, ayah: 4, claims: ['abu-bakr/ayah-ar-rum'] },
+    { surah: 30, ayah: 2, kind: 'IN_STORY', claims: ['abu-bakr/ayah-ar-rum'] },
+    { surah: 30, ayah: 3, kind: 'IN_STORY', claims: ['abu-bakr/ayah-ar-rum'] },
+    { surah: 30, ayah: 4, kind: 'IN_STORY', claims: ['abu-bakr/ayah-ar-rum'] },
   ],
   /**
    * The five Ibn Ishaq says answered him. The direction is his: فأسلم بدعائه,

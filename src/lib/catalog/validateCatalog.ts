@@ -96,6 +96,7 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
       if (ayah.surah < 1 || ayah.surah > 114) issues.push({ path: at_, message: `no surah ${ayah.surah}` });
       if (ayah.ayah < 1) issues.push({ path: at_, message: `no ayah ${ayah.ayah}` });
       if (ayah.revealedAbout && ayah.claims === legacyUnreviewed) issues.push({ path: at_, message: 'revealedAbout needs cited claims' });
+      if ((ayah.kind === 'REVEALED_ABOUT') !== !!ayah.revealedAbout) issues.push({ path: at_, message: 'revealedAbout goes with kind REVEALED_ABOUT, and only with it' });
       (ayah.revealedAbout?.with ?? []).forEach((slug) => {
         if (!person(slug)) issues.push({ path: at_, message: `unknown person ${slug}` });
       });
