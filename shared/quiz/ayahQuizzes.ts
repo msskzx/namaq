@@ -115,6 +115,8 @@ export const balaghaQuiz = bankKind(BALAGHA_QUIZ, () => data.balagha.questions, 
     marked: [...new Set(marked)],
     choices: shuffle([right, ...wrong], random).map(label => ({ value: String(label), labelArabic: data.balagha.labels[label] })),
     correctAnswer: String(right),
+    // The labels are the terms of «مصطلحات البلاغة» (scripts/quran/buildAyahQuizzes.ts reads them through termOf).
+    terms: Object.fromEntries([right, ...wrong].map(label => [String(label), data.balagha.labels[label]])),
     ayahKey: key,
     note: { label: 'المصدر', text: itqanCredit({ part, pages: [firstPage, lastPage] }) },
     evidence: { claimKeys: [] },

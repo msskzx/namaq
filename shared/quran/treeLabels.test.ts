@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ayatLabel, shownAyat, type Branch, type BranchAyah } from './branches';
+import { ayatLabel, placesLabel, shownAyat, type Branch, type BranchAyah } from './branches';
 import { normalizeWord } from './normalize';
 import { createPhrasePresenter, type PhraseGroup } from './phraseTrees';
 import treeData from './quranText/corpus';
@@ -34,6 +34,9 @@ describe('tree labels', () => {
     expect(ayatLabel(['1:2'], { 1: 'الفاتحة' })).toBe('الفاتحة ٢');
     expect(ayatLabel(['37:182', '38:1'], { 37: 'الصافات', 38: 'ص' })).toBe('الصافات ١٨٢ ثم ص ١');
     expect(ayatLabel(['2:4', '2:5'], { 2: 'البقرة' })).toBe('البقرة ٤–٥');
+    // Any ayat: each surah once, with its runs.
+    expect(placesLabel(['111:1', '111:4', '111:5'], { 111: 'المسد' })).toBe('المسد ١، ٤–٥');
+    expect(placesLabel(['8:2', '28:4', '40:36'], { 8: 'الأنفال', 28: 'القصص', 40: 'غافر' })).toBe('الأنفال ٢، القصص ٤، غافر ٣٦');
   });
 
   it('names, on every node of every tree, the ayat that hold the words the node shows', () => {
