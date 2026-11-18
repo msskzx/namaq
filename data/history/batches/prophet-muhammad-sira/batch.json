@@ -14335,9 +14335,9 @@
     }
   ],
   "approval": {
-    "revision": "fe93b856e45d0a43",
-    "approvedAt": "2026-09-30",
+    "revision": "8f87a8218b1b722c",
+    "approvedAt": "2026-11-18",
     "approvedBy": "msskzx",
-    "note": "Approved for publication. Claims are Not reviewed: the entries are extracted and the claims authored, and nobody has compared them against the stored pages. Approval permits the import and asserts nothing about review."
+    "note": "Approved for publication under the owner's 2026-11-18 rule (data not live; a second agent checked the batch against its pages and the method). Claims are Not reviewed; approval permits the import and asserts nothing about review."
   }
 }
