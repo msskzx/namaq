@@ -133,7 +133,17 @@
       "volume": 4,
       "page": "331",
       "layer": "MAIN",
-      "exact": "حَدَّثَنِي فَصَدَقَنِي، وَوَعَدَنِي فَوَفَى لِي (٢)"
+      "exact": "حَدَّثَنِي فَصَدَقَنِي، وَوَعَدَنِي فَوَفَى لِي",
+      "suffix": " (٢)"
+    },
+    {
+      "id": "sp_aas_p_sal",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "prefix": "أَثْنَى النَّبِيُّ -"
     },
     {
       "id": "sp_aas_wafa",
@@ -202,10 +212,11 @@
       "ordinal": 2,
       "voice": "TRANSMITTED",
       "frame": [
-        "sp_aas_miswar_frame"
+        "sp_aas_miswar1"
       ],
+      "isnadSpan": "sp_aas_miswar_frame",
       "origin": {
-        "mention": "m_aas_miswar"
+        "mention": "m_aas_p"
       },
       "chainState": "DEFERRED"
     },
@@ -269,7 +280,6 @@
       "id": "st_aas_miswar",
       "report": "r_aas_miswar",
       "spans": [
-        "sp_aas_miswar1",
         "sp_aas_miswar2"
       ],
       "role": "TRANSMITTED"
@@ -334,9 +344,9 @@
       "role": "REFERENT"
     },
     {
-      "id": "m_aas_miswar",
-      "parent": "sp_aas_miswar_frame",
-      "exact": "المِسْوَرُ بنُ مَخْرَمَةَ",
+      "id": "m_aas_p",
+      "parent": "sp_aas_miswar1",
+      "exact": "النَّبِيُّ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
@@ -470,6 +480,18 @@
       "basis": [
         {
           "span": "sp_aas_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aas_p",
+      "mention": "m_aas_p",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_aas_p_sal",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -661,7 +683,6 @@
       "predicate": "virtue",
       "value": {
         "spans": [
-          "sp_aas_miswar1",
           "sp_aas_miswar2"
         ]
       },

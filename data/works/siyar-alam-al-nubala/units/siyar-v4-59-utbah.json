@@ -139,22 +139,6 @@
       "prefix": "كُنْيَتُهُ: "
     },
     {
-      "id": "sp_ut_office_isnad",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 4,
-      "page": "305",
-      "layer": "MAIN",
-      "exact": "ابْنُ سَعْدٍ: أَنْبَأَنَا مُحَمَّدُ بنُ عُمَرَ، حَدَّثَنَا جُبَيْرُ بنُ عَبْدِ اللهِ، وَإِبْرَاهِيْمُ بنُ عَبْدِ اللهِ مِنْ وَلَدِ عُتْبَةَ بنِ غَزْوَانَ"
-    },
-    {
-      "id": "sp_ut_office",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 4,
-      "page": "305",
-      "layer": "MAIN",
-      "exact": "اسْتَعْمَلَ عُمَرُ عُتْبَةَ بنَ غَزْوَانَ عَلَى البَصْرَةِ"
-    },
-    {
       "id": "sp_ut_death",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 4,
@@ -258,20 +242,9 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_ut_office",
-      "unit": "siyar-v4-59-utbah",
-      "ordinal": 3,
-      "voice": "TRANSMITTED",
-      "isnadSpan": "sp_ut_office_isnad",
-      "origin": {
-        "mention": "m_ut_saad"
-      },
-      "chainState": "DEFERRED"
-    },
-    {
       "id": "r_ut_qila_d",
       "unit": "siyar-v4-59-utbah",
-      "ordinal": 4,
+      "ordinal": 3,
       "voice": "REPORTED_ANONYMOUS",
       "frame": [
         "sp_ut_qila_d_frame"
@@ -325,14 +298,6 @@
       "role": "TRANSMITTED"
     },
     {
-      "id": "st_ut_office",
-      "report": "r_ut_office",
-      "spans": [
-        "sp_ut_office"
-      ],
-      "role": "TRANSMITTED"
-    },
-    {
       "id": "st_ut_qila_d",
       "report": "r_ut_qila_d",
       "spans": [
@@ -378,20 +343,6 @@
       "role": "SUBJECT"
     },
     {
-      "id": "m_ut_saad",
-      "parent": "sp_ut_office_isnad",
-      "exact": "ابْنُ سَعْدٍ",
-      "occurrence": 1,
-      "role": "SPEAKER"
-    },
-    {
-      "id": "m_ut_o",
-      "parent": "sp_ut_office",
-      "exact": "عُتْبَةَ بنَ غَزْوَانَ",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
       "id": "m_ut_qila_d",
       "parent": "sp_ut_qila_d_frame",
       "exact": "قِيْلَ",
@@ -422,18 +373,6 @@
     {
       "id": "i_ut_k",
       "mention": "m_ut_k",
-      "agent": "utbah-ibn-ghazwan",
-      "basis": [
-        {
-          "span": "sp_ut_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_ut_o",
-      "mention": "m_ut_o",
       "agent": "utbah-ibn-ghazwan",
       "basis": [
         {
@@ -630,21 +569,6 @@
       },
       "restsOn": [
         "st_ut_life"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_ut_office",
-      "subject": "m_ut_o",
-      "predicate": "office",
-      "value": {
-        "classified": "amir",
-        "spans": [
-          "sp_ut_office"
-        ]
-      },
-      "restsOn": [
-        "st_ut_office"
       ],
       "status": "PROPOSED"
     },

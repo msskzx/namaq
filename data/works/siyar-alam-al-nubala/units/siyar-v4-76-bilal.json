@@ -382,6 +382,14 @@
       "suffix": "."
     },
     {
+      "id": "sp_bl_auth_d",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "347",
+      "layer": "MAIN",
+      "exact": "وَفِي وَفَاتِهِ أَقْوَالٌ، أَحَدُهَا: بِدَارَيَّا، فِي سَنَةِ عِشْرِيْنَ"
+    },
+    {
       "id": "sp_bl_tat_frame",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 4,
@@ -758,6 +766,14 @@
         "sp_bl_d20"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_bl_auth_d",
+      "report": "r_bl0",
+      "spans": [
+        "sp_bl_auth_d"
+      ],
+      "role": "AUTHOR_REPORT"
     },
     {
       "id": "st_bl_d21",
@@ -1650,6 +1666,7 @@
         ]
       },
       "restsOn": [
+        "st_bl_auth_d",
         "st_bl_taymi",
         "st_bl_ishaq",
         "st_bl_darir",
@@ -1699,6 +1716,7 @@
         ]
       },
       "restsOn": [
+        "st_bl_auth_d",
         "st_bl_tat"
       ],
       "status": "PROPOSED"

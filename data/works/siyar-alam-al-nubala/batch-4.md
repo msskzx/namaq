@@ -6,7 +6,7 @@ plus `units/siyar-v5-28-zaynab.json` for Zaynab's own entry in Siyar 2. Scripts:
 
 Store pages: v4 304, 314, 316, 324, 330 and 335 replaced with the full Shamela page (book 10906, ids 1730-1787), with small
 vowel fixes on 324 and 330 (for example «حَرَامِ بنِ كَعْبِ … سَلَمَةَ»). Notes replaced for 304, 307, 308, 309, 316 and 335.
-Added 314.notes, 315 (+notes), 336 (+notes) and v5/250 (+notes), which ends Zaynab's v5 entry and was missing.
+Added 314.notes, 315, 336 (+notes) and v5/250 (+notes), which ends Zaynab's v5 entry and was missing.
 
 Grading follows the editor's footnotes on each page. Weak reports stay out; every left-out report is named at the top of
 its person's script with the editor's words.
@@ -33,9 +33,10 @@ Differences that repeat for every person:
 ### Per person
 
 - **Utbah ibn Ghazwan** (59, pp. 304-306). fullName, placeOfDeath, sex, parents: same. kunya: addition («قيل» Abu Abd Allah).
-  death year: addition («قيل» 15 beside the author's 17), and age 57 («قيل»). office: addition (Ibn Sa'd: Umar made him
-  governor of al-Basrah). virtues: rule; the catalog's sermon is his own speech, and «هاجر إلى الحبشة» is a gap.
-- **Ukkashah ibn Mihsan** (60, pp. 307-308). kunya, place of death, sex: same. fullName: rule (the nisba and «حليف قريش»
+  death year: addition («قيل» 15 beside the author's 17), and age 57 («قيل»). office: left out; Ibn Sa'd has Umar making him
+  governor of al-Basrah from al-Waqidi («الواقدي متروك», the note to p304) and the page gives no other chain. virtues: rule; the catalog's sermon is his own speech, and «هاجر إلى الحبشة» is a gap.
+- **Ukkashah ibn Mihsan** (60, pp. 307-308). kunya, place of death, sex: same. Year 12, Buzakhah and «وكان من أجمل الرجال» follow Umm Qays's words
+  after an unnamed «قال», so they are REPORTED_ANONYMOUS («قيل»), not hers. fullName: rule (the nisba and «حليف قريش»
   are not the name). appearance: same text, the model keeps the leading «وكان». death year: addition (12 from Umm Qays
   beside the author's «والصحيح» 11). titles: al-sabiqoon from the page. virtues: unsupported for the sword story (the
   editor: «إسناد تالف فيه الواقدي»); the al-Ghamr raid is the office.
@@ -43,11 +44,14 @@ Differences that repeat for every person:
   and the «قيل» one. parents: addition (Hind al-Ta'iyyah from the author, Kabshah from «قيل»). HALF_BROTHER Abd Allah
   ibn Rawahah: the model has SIBLING_OF to him and Amrah (the page says «وإخوته لأمه»; half-sibling is a gap). virtues:
   «أما ترضى أن تعيش حميدا» is mursal (the editor) and left out; the Tamim khutbah has no chain. The Hujurat 2 report
-  is a story of him acting on an ayah (gap).
+  is a story of him acting on an ayah (gap). The «بل هو من أهل الجنة» virtue is told on p310 by Ayyub from Ikrimah, which is mursal; it is
+  kept because the editor gives the same words connected through Anas in Muslim 119 and Bukhari 3613 (notes to p310, p311). Death at
+  al-Yamamah rests on Hammad's report from Anas; the same day is in the Ayyub and Ibn Awn routes from Anas on p311, which
+  the editor gives as Bukhari 2845.
 - **Tulayhah ibn Khuwaylid** (62, pp. 316-317). placeOfDeath «نهاوند» (catalog only): unsupported; the page says
   «أبلى يوم نهاوند ثم استشهد», which does not say where he died (ADR 0024). Umar's letter is not a virtue.
 - **Sa'd ibn al-Rabi'** (63, pp. 318-320). PACT_BROTHER Abd al-Rahman (catalog only): gap (no brotherhood predicate), kept
-  inside the virtue sentence. His last words (Ibn Ishaq, Malik) have no connected chain and stay out.
+  inside the virtue sentence. Uhud: his widow's words in Jabir's report, so she is the sayer. His last words (Ibn Ishaq, Malik) have no connected chain and stay out.
 - **Ma'n ibn Adi** (64, pp. 320-321). death year and place: same. virtues: the Saqifah story is not a virtue; Urwah's
   «لكني والله…» is mursal (the editor) and left out.
 - **Abd Allah ibn Abd Allah ibn Ubayy** (65, pp. 321-322). fullName: rule; the dashed aside on Salim is about an
@@ -62,16 +66,20 @@ Differences that repeat for every person:
   earth not consuming him (Bukhari 1351), REVEALED_ABOUT Al Imran 169 (Tirmidhi 3013, hasan).
 - **Yazid ibn Abi Sufyan** (68, pp. 328-330). death year: same. HALF_BROTHER Mu'awiyah: the model has SIBLING_OF
   («أخو معاوية من أبيه»; half-sibling is a gap). Additions: mother Zaynab bint Nawfal, sister Umm Habibah, laqab
-  «يزيد الخير», two amir offices, Hunayn, Yarmuk (Ibrahim ibn Sa'd). «فقيل… أعطاه من غنائم حنين» is not a virtue.
+  «يزيد الخير» (an unnamed «ويقال له», so REPORTED_ANONYMOUS), two amir offices, Hunayn, Yarmuk (Ibrahim ibn Sa'd). «فقيل… أعطاه من غنائم حنين» is not a virtue.
   The Abu al-Aliyah story is mursal and weak (the editor) and left out.
-- **Abu al-As ibn al-Rabi'** (69, pp. 330-334; his death is on p335 inside entry 70). Additions: kunya, laqab, mother
+- **Abu al-As ibn al-Rabi'** (69, pp. 330-334; his death is on p335 inside entry 70). The virtue «حدثني فصدقني، ووعدني
+  فوفى لي» is the Prophet's words from al-Miswar (Bukhari 3729, Muslim 2449). The Ibn Abbas report of Zaynab's return is
+  graded «منكر» in the note to p334 and «فيقوى بها ويصح» with its witnesses in v5/249 n1; the model follows the v5 grading.
+  Additions: kunya, laqab, mother
   Hala bint Khuwaylid, death 12 in Dhu al-Hijjah. «واسمه لقيط» and «وقيل: اسم أبيه ربيعة» are gaps.
 - **Zaynab bint Muhammad** (v4 70, pp. 334-335, and v5 28, pp. 246-250). fullName: rule; her v5 heading prints
   «زينب بنت رسول الله ﷺ», not a nasab (the tree carries her line through the Prophet's entry). titles: daughter-of-prophet
   same. virtues: the ransom necklace and the jiwar are Aisha's weak report («بإسناد واه») and Yazid ibn Ruman's mursal;
-  Habbar's harm is in al-Bazzar's chain with Ibn Lahi'ah. parents: addition (Khadijah comes from the Prophet's unit).
-  The v5 «توفيت: في أول سنة ثمان» (the editor: from al-Waqidi) is not modeled so the year shows once; the author's v4
-  «سنة ثمان» stands.
+  Habbar's harm (al-Bazzar; the editor: «إسناده قوي») is left out because no predicate
+  fits harm suffered. parents: addition (Khadijah comes from the Prophet's unit).
+  The v5 «توفيت: في أول سنة ثمان» is not modeled: the editor says it is al-Waqidi's, and since facts from two units are
+  not merged it would repeat the author's v4 «سنة ثمان», which stands.
 - **Umamah bint Abi al-As** (71, p335). fullName, sex, virtue: same. spouses: addition (al-Mughirah ibn Nawfal).
 - **Abbad ibn Bishr** (73, pp. 337-340). fullName, kunya: same. placeOfDeath: rule (the place «اليمامة», from Ibn
   al-Athir, not the whole sentence). Additions: age 45, Badr, Ka'b ibn al-Ashraf (Bukhari 4037), Tabuk. Left out: the
@@ -83,11 +91,21 @@ Differences that repeat for every person:
   the catalog's text is his Islam story (narrative). Additions: laqab «ذو النور» (the author and Hisham ibn al-Kalbi),
   absent from Badr, Uhud and al-Khandaq (his own words), son Amr.
 - **Bilal ibn Rabah** (76, pp. 347-360). appearance (catalog only): unsupported, al-Waqidi's report «في سنده جهالة،
-  والواقدي متروك». death year: addition (21 «قيل» beside 20). places: addition, each attributed (al-Sham from al-Bukhari,
+  والواقدي متروك». death year: addition (21 «قيل» beside 20). places: addition, each attributed (the author's own «أحدها: بداريا، في سنة عشرين», p347, is a further
+  source on year 20 and on Darayya) (al-Sham from al-Bukhari,
   Damascus from al-Taymi, Ibn Ishaq, Abu Umar al-Darir and a group, Darayya from al-Tatari, Aleppo from Ibn Khurrazadh's
   chain). virtues: «سابق الحبشة» (Umarah ibn Zadhan, weak; al-Hasan's mursal), «سيد المؤذنين» (weak routes), «أذن فوق
   الكعبة» (mursal) are unsupported; «أول من أذن» (al-Mas'udi from al-Qasim, a tabi'i, so mursal; the editor only gives Ibn Sa'd) is left out. REVEALED_ABOUT al-An'am 52-53
   (Muslim 2413): addition.
+
+## Not in the units
+
+- Ikrimah: the author's own line that he died at al-Yarmuk in 15 is printed on p316, inside another entry, so his unit
+  cannot quote it (spans stay inside the entry). His unit has al-Yarmuk from Abu Ishaq al-Sabi'i.
+- al-Tufayl: ABSENT_FROM Badr, Uhud and al-Khandaq and the death at al-Yamamah rest only on Ibn Ishaq from Uthman ibn
+  al-Huwayrith from Salih ibn Kaysan, who did not meet al-Tufayl (munqati'). The editor gives no grade. Kept and flagged
+  for the owner. His laqab «ذو النور» is the author's own line (print «ذو الطفيتين», corrected by the editor).
+- Ghufrah bint Rabah: female from «بنت» in her catalog name; the page names her only in the sibling list.
 
 ## Gaps (left out of the units, for the model to add later)
 

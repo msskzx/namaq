@@ -205,6 +205,32 @@
         "mention": "m_ik_urwah"
       },
       "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ik_ibnsaad",
+      "unit": "siyar-v4-66-ikrimah",
+      "ordinal": 5,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ik_urwah_frame"
+      ],
+      "origin": {
+        "mention": "m_ik_ibnsaad"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ik_taifah",
+      "unit": "siyar-v4-66-ikrimah",
+      "ordinal": 6,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ik_urwah_frame"
+      ],
+      "origin": {
+        "mention": "m_ik_taifah"
+      },
+      "chainState": "DEFERRED"
     }
   ],
   "statements": [
@@ -252,6 +278,22 @@
     {
       "id": "st_ik_urwah",
       "report": "r_ik_urwah",
+      "spans": [
+        "sp_ik_urwah"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ik_ibnsaad",
+      "report": "r_ik_ibnsaad",
+      "spans": [
+        "sp_ik_urwah"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ik_taifah",
+      "report": "r_ik_taifah",
       "spans": [
         "sp_ik_urwah"
       ],
@@ -318,7 +360,21 @@
     {
       "id": "m_ik_urwah",
       "parent": "sp_ik_urwah_frame",
-      "exact": "عُرْوَةُ، وَابْنُ سَعْدٍ، وَطَائِفَةٌ",
+      "exact": "عُرْوَةُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ik_ibnsaad",
+      "parent": "sp_ik_urwah_frame",
+      "exact": "ابْنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ik_taifah",
+      "parent": "sp_ik_urwah_frame",
+      "exact": "طَائِفَةٌ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
@@ -554,7 +610,9 @@
         "object": "m_ik_ajnadayn"
       },
       "restsOn": [
-        "st_ik_urwah"
+        "st_ik_urwah",
+        "st_ik_ibnsaad",
+        "st_ik_taifah"
       ],
       "status": "PROPOSED"
     },
@@ -568,7 +626,9 @@
         ]
       },
       "restsOn": [
-        "st_ik_urwah"
+        "st_ik_urwah",
+        "st_ik_ibnsaad",
+        "st_ik_taifah"
       ],
       "status": "PROPOSED"
     }

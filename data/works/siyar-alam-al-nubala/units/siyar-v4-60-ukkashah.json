@@ -85,12 +85,13 @@
       "exact": "اسْتَعْمَلَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَلَى سَرِيَّةِ الغَمْرِ"
     },
     {
-      "id": "sp_uk_uq_frame",
+      "id": "sp_uk_q_frame",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 4,
       "page": "307",
       "layer": "MAIN",
-      "exact": "وَرُوِيَ عَنْ: أُمِّ قَيْسٍ بِنْتِ مِحْصَنٍ، قَالَتْ"
+      "exact": "قَالَ",
+      "suffix": ": وَقُتِلَ بَعْدَ"
     },
     {
       "id": "sp_uk_uq_death",
@@ -157,15 +158,15 @@
       "chainState": "COMPLETE"
     },
     {
-      "id": "r_uk_uq",
+      "id": "r_uk_q",
       "unit": "siyar-v4-60-ukkashah",
       "ordinal": 2,
-      "voice": "TRANSMITTED",
+      "voice": "REPORTED_ANONYMOUS",
       "frame": [
-        "sp_uk_uq_frame"
+        "sp_uk_q_frame"
       ],
       "origin": {
-        "mention": "m_uk_uq"
+        "mention": "m_uk_qala"
       },
       "chainState": "DEFERRED"
     }
@@ -205,7 +206,7 @@
     },
     {
       "id": "st_uk_uq_death",
-      "report": "r_uk_uq",
+      "report": "r_uk_q",
       "spans": [
         "sp_uk_uq_death"
       ],
@@ -213,7 +214,7 @@
     },
     {
       "id": "st_uk_uq_app",
-      "report": "r_uk_uq",
+      "report": "r_uk_q",
       "spans": [
         "sp_uk_uq_app"
       ],
@@ -243,9 +244,9 @@
       "role": "SUBJECT"
     },
     {
-      "id": "m_uk_uq",
-      "parent": "sp_uk_uq_frame",
-      "exact": "أُمِّ قَيْسٍ بِنْتِ مِحْصَنٍ",
+      "id": "m_uk_qala",
+      "parent": "sp_uk_q_frame",
+      "exact": "قَالَ",
       "occurrence": 1,
       "role": "SPEAKER"
     },

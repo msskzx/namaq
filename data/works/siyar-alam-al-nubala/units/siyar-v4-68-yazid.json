@@ -60,6 +60,15 @@
       "exact": "أَخُو مُعَاوِيَةَ مِنْ أَبِيْهِ. وَيُقَالُ لَهُ: يَزِيْدُ الخَيْرُ"
     },
     {
+      "id": "sp_yz_yuqal_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "329",
+      "layer": "MAIN",
+      "exact": "وَيُقَالُ لَهُ",
+      "prefix": "مِنْ أَبِيْهِ. "
+    },
+    {
       "id": "sp_yz_laqab",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 4,
@@ -242,6 +251,19 @@
         "mention": "m_yz_ibr"
       },
       "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_yz_yuqal",
+      "unit": "siyar-v4-68-yazid",
+      "ordinal": 3,
+      "voice": "REPORTED_ANONYMOUS",
+      "frame": [
+        "sp_yz_yuqal_frame"
+      ],
+      "origin": {
+        "mention": "m_yz_yuqal"
+      },
+      "chainState": "DEFERRED"
     }
   ],
   "statements": [
@@ -309,9 +331,24 @@
         "sp_yz_ibr"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_yz_laqab",
+      "report": "r_yz_yuqal",
+      "spans": [
+        "sp_yz_laqab"
+      ],
+      "role": "TRANSMITTED"
     }
   ],
   "mentions": [
+    {
+      "id": "m_yz_yuqal",
+      "parent": "sp_yz_yuqal_frame",
+      "exact": "وَيُقَالُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
     {
       "id": "m_yz",
       "parent": "sp_yz1",
@@ -672,7 +709,7 @@
         ]
       },
       "restsOn": [
-        "st_yz_bro"
+        "st_yz_laqab"
       ],
       "status": "PROPOSED"
     },

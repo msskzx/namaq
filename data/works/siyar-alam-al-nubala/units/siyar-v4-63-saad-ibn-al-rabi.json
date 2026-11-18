@@ -140,7 +140,7 @@
       ],
       "isnadSpan": "sp_sr_uhud_isnad",
       "origin": {
-        "mention": "m_sr_jabir"
+        "mention": "m_sr_widow"
       },
       "chainState": "DEFERRED"
     }
@@ -195,9 +195,9 @@
       "role": "REFERENT"
     },
     {
-      "id": "m_sr_jabir",
-      "parent": "sp_sr_uhud_isnad",
-      "exact": "جَابِرِ بنِ عَبْدِ اللهِ",
+      "id": "m_sr_widow",
+      "parent": "sp_sr_uhud_frame",
+      "exact": "امْرَأَةُ سَعْدِ بنِ الرَّبِيْعِ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
