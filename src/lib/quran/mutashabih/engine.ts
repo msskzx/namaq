@@ -195,7 +195,31 @@ const cases: Citation[] = rawEvidence.cases.map(row => {
 });
 
 type Selection = [key: string, start: number, end: number, through?: string];
-type Attested = { places: Selection[]; citations: string[]; focus?: Record<string, number[]>; detail?: string; kind?: Kind };
+type Attested = { places: Selection[]; citations: string[]; focus?: Record<string, number[]>; detail?: string; kind?: Kind; book?: true };
+
+const byMushaf = (a: string, b: string) => { const [x, y] = a.split(':').map(Number); const [u, v] = b.split(':').map(Number); return x - u || y - v; };
+
+/**
+ * Every multi-place case a book gives that no hand-made entry above already holds: whole ayat, in mushaf order.
+ * A case on the same ayat as a hand-made entry joins that entry's citations; cases on the same ayat share one group.
+ */
+function withBookEntries(handWritten: Attested[], rows: Word[][], index: Map<string, number>): Attested[] {
+  const attested = handWritten.map(entry => ({ ...entry, citations: [...entry.citations] }));
+  const held = new Set(attested.flatMap(entry => entry.citations));
+  const setOf = (keys: string[]) => [...keys].sort(byMushaf).join(',');
+  const handMade = new Map(attested.map(entry => [setOf(entry.places.map(([key]) => key)), entry]));
+  const made = new Map<string, Attested>();
+  for (const citation of cases) {
+    if (held.has(citation.id) || citation.places.length < 2 || citation.places.some(key => key.includes('-') || !index.has(key))) continue;
+    const keys = [...citation.places].sort(byMushaf);
+    const set = setOf(keys);
+    const existing = handMade.get(set) ?? made.get(set);
+    if (existing) { existing.citations = [...existing.citations, citation.id]; continue; }
+    const texts = keys.map(key => rows[index.get(key)!].map(word => word.text).join(' '));
+    made.set(set, { places: keys.map(key => [key, 0, rows[index.get(key)!].length]), citations: [citation.id], kind: texts.every(text => text === texts[0]) ? 'identical' : 'mutashabih_lafzi', book: true });
+  }
+  return [...attested, ...made.values()];
+}
 const attested: Attested[] = [
   { places: [['2:6', 3, 11], ['36:10', 0, 8]], citations: ['Z02'], focus: { '2:6': [3], '36:10': [0] }, detail: 'سواء / وسواء' },
   { places: [['2:35', 1, 18], ['7:19', 0, 16]], citations: ['Z06', 'K01', 'I01'], focus: { '2:35': [6, 8], '7:19': [5] }, detail: 'وكلا / فكلا' },
@@ -357,8 +381,9 @@ export function buildGroups(ayat: BranchAyah[], config = MATCH_CONFIG): Group[] 
   const source = (key: string) => rows[index.get(key)!];
   const groups: Group[] = [];
   const declared = new Set<string>();
+  const fromBooks = new Set<Group>();
 
-  for (const { places: selections, citations: ids, focus, detail, kind = 'mutashabih_lafzi' } of attested) {
+  for (const { places: selections, citations: ids, focus, detail, kind = 'mutashabih_lafzi', book } of withBookEntries(attested, rows, index)) {
     if (selections.some(([key, , , through]) => !index.has(key) || through && !index.has(through))) continue;
     const places = selections.map(([key, start, end, through]) => ({ key, start, end, ...(through && { through }) }));
     const selected = places.map(p => p.through
@@ -371,8 +396,14 @@ export function buildGroups(ayat: BranchAyah[], config = MATCH_CONFIG): Group[] 
         return place.key === key && (!last || place.through === `${key.split(':')[0]}:${last}`);
       })),
     }));
-    groups.push(makeGroup(places, selected, kind, citations, focus, detail));
-    for (const a of places) for (const b of places) if (a.key !== b.key) declared.add(pairKey(a.key, b.key));
+    let group = makeGroup(places, selected, kind, citations, focus, detail);
+    // A book's ayat that share one word or none have no trunk a tree can grow from: the card shows as its matrix only.
+    const trunk = group.tree.occurrences[0];
+    if (book && trunk.end - trunk.start < 2) group = { ...group, tree: { ...group.tree, occurrences: group.tree.occurrences.map(occurrence => ({ ...occurrence, end: occurrence.start })) } };
+    groups.push(group);
+    if (book) fromBooks.add(group);
+    // A book's whole-ayah entry leaves the word matching as it was, so the trees it finds keep their ids (and verdicts).
+    if (!book) for (const a of places) for (const b of places) if (a.key !== b.key) declared.add(pairKey(a.key, b.key));
   }
 
   const exact = new Map<string, number[]>();
@@ -387,9 +418,9 @@ export function buildGroups(ayat: BranchAyah[], config = MATCH_CONFIG): Group[] 
     if (members.length < 2) continue;
     const selected = members.map(i => rows[i]);
     const places = selected.map(row => place(row[0], row.at(-1)!));
-    const cited = groups.find(group => group.kind === 'identical' && group.places.every(p => places.some(place => place.key === p.key)));
-    if (cited) groups.splice(groups.indexOf(cited), 1);
-    groups.push(makeGroup(places, selected, 'identical', cited?.citations));
+    const cited = groups.filter(group => group.kind === 'identical' && group.places.every(p => places.some(place => place.key === p.key)));
+    for (const group of cited) groups.splice(groups.indexOf(group), 1);
+    groups.push(makeGroup(places, selected, 'identical', cited.length ? [...new Map(cited.flatMap(group => group.citations).map(citation => [citation.id, citation])).values()] : undefined));
   }
 
   const graph = new Map<number, Set<number>>();
@@ -407,8 +438,20 @@ export function buildGroups(ayat: BranchAyah[], config = MATCH_CONFIG): Group[] 
   }
 
   const inventory = new Set(groups.map(group => group.id));
+  // A tree the word matching finds on the same ayat as a book's whole-ayah entry keeps its own words
+  // (so its id and verdict stay) and takes the book's citations.
+  const bookGroups = new Map([...fromBooks].map(group => [group.id, group]));
+  const adopt = (group: Group, places: Place[], selected: Word[][], kind: Kind, opening = false) => {
+    const book = bookGroups.get(group.id);
+    if (!book) return false;
+    bookGroups.delete(group.id);
+    const citations = book.citations.map(citation => ({ ...citation, selections: places }));
+    groups[groups.indexOf(book)] = makeGroup(places, selected, kind, citations, undefined, undefined, opening);
+    return true;
+  };
   const retain = (places: Place[], selected: Word[][]) => {
     const group = makeGroup(places, selected, 'mutashabih_lafzi');
+    if (adopt(group, places, selected, 'mutashabih_lafzi')) return;
     if (inventory.has(group.id)) return;
     inventory.add(group.id);
     groups.push(group);
@@ -437,7 +480,7 @@ export function buildGroups(ayat: BranchAyah[], config = MATCH_CONFIG): Group[] 
   // Short ayat that open with the same words and then part (إن المجرمين في ضلال وسعر / في عذاب جهنم خالدون)
   // never reach the six-word floor above. Ayat sharing their first three or more words form a group of at most
   // six places; a bigger opening family is split by its next shared word until each part is small enough.
-  const linked = new Set(groups.flatMap(group => group.places.flatMap((a, i) => group.places.slice(i + 1).map(b => pairKey(a.key, b.key)))));
+  const linked = new Set(groups.filter(group => !fromBooks.has(group)).flatMap(group => group.places.flatMap((a, i) => group.places.slice(i + 1).map(b => pairKey(a.key, b.key)))));
   const wordKey = (word: Word) => `${word.base}|${word.root ?? ''}|${word.lemma ?? word.letters}`;
   const openings = (members: number[], length: number) => {
     const buckets = new Map<string, number[]>();
@@ -458,6 +501,7 @@ export function buildGroups(ayat: BranchAyah[], config = MATCH_CONFIG): Group[] 
       const selected = bucket.map(i => rows[i]);
       const places = selected.map(row => place(row[0], row.at(-1)!));
       const group = makeGroup(places, selected, 'mutashabih_lafzi', [], undefined, undefined, true);
+      if (adopt(group, places, selected, 'mutashabih_lafzi', true)) continue;
       if (inventory.has(group.id)) continue;
       inventory.add(group.id);
       groups.push(group);
@@ -475,6 +519,7 @@ export function buildGroups(ayat: BranchAyah[], config = MATCH_CONFIG): Group[] 
     const selected = places.map(p => source(p.key).filter(word => word.index >= p.start && word.index < p.end));
     if (selected.some(row => !row.length)) continue;
     const id = 'group:' + places.map(p => p.key).join(',');
+    if (bookGroups.has(id) && adopt(makeGroup(places, selected, 'shared_phrase'), places, selected, 'shared_phrase')) continue;
     if (inventory.has(id)) continue;
     inventory.add(id);
     groups.push(makeGroup(places, selected, 'shared_phrase'));

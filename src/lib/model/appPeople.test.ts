@@ -43,6 +43,8 @@ describe('the phone app people', () => {
     expect(shortName(nasabOf('عبد الله بن أبي طلحة زيد بن سهل'))).toBe('عبد الله بن أبي طلحة زيد');
     expect(shortName(nasabOf('عبد الرحمن بن الحارث بن هشام'))).toBe('عبد الرحمن بن الحارث');
     expect(shortName(nasabOf('صفية بنت شيبة بن عثمان'), 'FEMALE')).toBe('صفية بنت شيبة');
+    // An aside between dashes is no name.
+    expect(nasabOf('عبد الله بن سالم - وسالم هو الذي يقال له الحبلى، لعظم بطنه - بن غنم')).toEqual(['عبد الله', 'سالم', 'غنم']);
     // A kunya with a forefather before the name: the line starts at the name's own father.
     expect(nasabOf('أبو عبيدة بن الجراح عامر بن عبد الله بن الجراح بن هلال')).toEqual(['أبو عبيدة', 'عبد الله', 'الجراح', 'هلال']);
     expect(nasabOf('أبو سفيان بن حرب بن أمية')).toEqual(['أبو سفيان', 'حرب', 'أمية']);
