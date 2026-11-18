@@ -91,15 +91,16 @@ export default function NasabScreen() {
           ))}
           <Button Icon={Plus} label="أضف" onPress={() => setAdding(true)} />
         </View>
-        {roots.map(root => {
+        {roots.map((root, r) => {
           // One person: his whole line. Several: from where they part, the shared fathers above folded into a line.
           const { above, start } = picked.length > 1 ? foldTop(root) : { above: [], start: root };
-          const shown = open.includes(root.key);
+          const id = `${r}:${root.key}`;
+          const shown = open.includes(id);
           return (
-            <View key={root.key} style={{ gap: 10 }}>
+            <View key={id} style={{ gap: 10 }}>
               {above.length > 0 && (
                 <Button variant="plain" Icon={shown ? ChevronUp : ChevronDown}
-                  onPress={() => setOpen(shown ? open.filter(k => k !== root.key) : [...open, root.key])}
+                  onPress={() => setOpen(shown ? open.filter(k => k !== id) : [...open, id])}
                   label={`${(shown ? above : above.slice(0, 3)).map(unvowelled).join(' · ')}${!shown && above.length > 3 ? ' …' : ''}`} />
               )}
               <ScrollView horizontal contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>

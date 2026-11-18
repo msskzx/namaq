@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { AppPerson } from './tarajim';
-import { bareName, foldTop, lineOf, meetingOf, nasabTree } from './tarajimLine';
+import { bareName, foldTop, lineOf, meetingOf, nasabTree, type NasabNode } from './tarajimLine';
 import peopleJson from './data/tarajim/people.json';
 
 const people = peopleJson as AppPerson[];
@@ -73,5 +73,19 @@ describe('safeguards', () => {
     const all = [a, b];
     const roots = nasabTree([a, b].map((p) => ({ slug: p.slug, line: lineOf(p, all) })));
     expect(roots).toHaveLength(2);
+  });
+
+  it('keeps every tree when a line reaches above a top another line has already drawn higher', () => {
+    const line = (slug: string, ns: string[]) => ({ slug, line: ns.map((n) => ({ name: n, bare: n, from: slug })) });
+    const roots = nasabTree([
+      line('a', ['a', 'x', 'y', 'z']),
+      line('b', ['b', 'y', 'z', 'w', 'v']),
+      line('d', ['d', 'm', 'n']),
+      line('c', ['c', 'x', 'y', 'z', 'w', 'v', 'u']),
+    ]);
+    expect(roots.map((r) => r.key).sort()).toEqual(['n', 'u']);
+    const count = (n: NasabNode): number => 1 + n.children.reduce((sum, c) => sum + count(c), 0);
+    // u v w z y x a b c, each once.
+    expect(count(roots.find((r) => r.key === 'u')!)).toBe(9);
   });
 });

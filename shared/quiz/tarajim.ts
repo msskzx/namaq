@@ -67,17 +67,28 @@ export function nasabQuestions(people: AppPerson[] = PEOPLE): ChoiceQuestion[] {
   return questions;
 }
 
+/**
+ * Whether a quote names `name`: as whole words, with a joined «و ف ب ل ك» before it and the accusative «ا» after
+ * («جعفراً»), so «علي» is not found in «عليه» nor «عمر» in «عمرو».
+ */
+function mentions(quote: string, name: string) {
+  const escaped = bareName(name).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`(?:^|[\\s«(])[وفبلك]?${escaped}ا?(?=$|[\\s،.:؛»)!؟])`, 'u').test(bareName(quote));
+}
+
 /** The words that name a person in a quote: the first name, «ابن» or «بنت» and the father, each kunya and laqab in any case. */
 function namesOf(person: AppPerson, line: LineName[]) {
   const first = plain(person.name).split(/\s+/);
   const own = first[0] === 'عبد' ? first.slice(0, 2).join(' ') : first[0];
-  const father = line[1] ? plain(line[1].name) : undefined;
+  const fatherWords = line[1] ? plain(line[1].name).split(/\s+/) : [];
+  // The father as printed, and each two words of it («الصديق أبي بكر عبد الله» → «أبي بكر», «عبد الله»).
+  const fathers = [fatherWords.join(' '), ...fatherWords.slice(1).map((_, k) => fatherWords.slice(k, k + 2).join(' '))].filter(Boolean);
   const forms = (text: string) => {
     const bare = bareName(text);
     const kunya = bare.match(/^(?:ابو|ابا|ابي|ام) (.+)$/u);
     return kunya ? ['ابو', 'ابا', 'ابي', 'ام'].map(k => `${k} ${kunya[1]}`) : [bare];
   };
-  return [own, ...(father ? [`ابن ${father}`, `بن ${father}`, `بنت ${father}`] : []),
+  return [own, ...fathers.flatMap(father => [`ابن ${father}`, `بن ${father}`, `بنت ${father}`]),
     ...[...person.kunya, ...person.laqab].flatMap(k => forms(k.text))].map(bareName);
 }
 
@@ -97,7 +108,7 @@ export function virtueQuestions(people: AppPerson[] = PEOPLE, random: Random = M
     person.virtues.forEach((virtue, k) => {
       const quote = virtue.text;
       // A quote that names its owner gives the answer; one that only points («هذا ممن…») needs its scene to say whom.
-      if (names.some(name => bareName(quote).includes(name)) || /^(?:هذا|هذه)\s/u.test(bareName(quote))) return;
+      if (names.some(name => mentions(quote, name)) || /^(?:هذا|هذه)\s/u.test(bareName(quote))) return;
       const others = shuffle(people.filter(p => p.slug !== person.slug && p.slug !== 'prophet-muhammad' && p.sex === person.sex
         && fatherKey(p) !== fatherKey(person)
         && !hasName(quote, plain(p.name).split(/\s+/)[0])

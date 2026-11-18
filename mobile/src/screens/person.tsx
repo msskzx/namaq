@@ -148,7 +148,7 @@ export default function PersonScreen() {
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
               {person.titles.map(title => (
                 <Chip key={title.title} label={title.name} on={false} small palette={palette}
-                  onPress={() => router.navigate({ pathname: '/tarajim', params: { title: title.title } })} />
+                  onPress={() => router.navigate({ pathname: '/tarajim', params: { title: title.title, at: String(Date.now()) } })} />
               ))}
             </View>
           )}

@@ -23,11 +23,12 @@ export default function TarajimScreen() {
   const bottom = useTabBarSpace();
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   useTabRetap('tarajim', () => scroll.current?.scrollTo({ y: 0, animated: true }));
-  const params = useLocalSearchParams<{ title?: string }>();
+  const params = useLocalSearchParams<{ title?: string; at?: string }>();
   const [query, setQuery] = useState('');
   const [title, setTitle] = useState<string | undefined>(params.title);
-  // The list stays mounted under the person's page, so a title tapped there arrives as a new param, not a new screen.
-  useEffect(() => { if (params.title) setTitle(params.title); }, [params.title]);
+  // The list stays mounted under the person's page, so a title tapped there arrives as new params, not a new screen;
+  // `at` changes on every tap, so the same title tapped again after clearing the filter still sets it.
+  useEffect(() => { if (params.title) setTitle(params.title); }, [params.title, params.at]);
   const filters = useMemo(() => titleFilters(), []);
   const people = useMemo(() => searchPeople(query, title), [query, title]);
   return (

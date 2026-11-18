@@ -139,8 +139,13 @@ export interface NasabNode {
  */
 export function nasabTree(picked: { slug: string; line: LineName[] }[]): NasabNode[] {
   const roots: NasabNode[] = [];
+  const parentOf = new Map<NasabNode, NasabNode>();
   const placed: { line: LineName[]; nodes: NasabNode[] }[] = [];
   const node = (n: LineName): NasabNode => ({ key: n.bare, name: n.name, people: [], children: [] });
+  const adopt = (parent: NasabNode, child: NasabNode) => {
+    parent.children.push(child);
+    parentOf.set(child, parent);
+  };
   for (const { slug, line } of picked) {
     const nodes: NasabNode[] = new Array(line.length);
     // The nearest father this line shares with a line already in the tree.
@@ -151,18 +156,19 @@ export function nasabTree(picked: { slug: string; line: LineName[] }[]): NasabNo
     }
     let top: number;
     if (best) {
-      // From the meeting up, the other line's nodes; above where the other line stops, this line's own fathers on top.
+      // From the meeting up, the fathers already drawn above it (another line may have drawn them higher since); above
+      // the tree's top, this line's own fathers, and the old top goes under them.
       const { i, j, with: other } = best;
-      for (let k = 0; i + k < line.length && j + k < other.line.length; k += 1) nodes[i + k] = other.nodes[j + k];
-      top = i;
-      while (top + 1 < line.length && nodes[top + 1]) top += 1;
-      if (top + 1 < line.length) {
-        const oldRoot = nodes[top];
+      let k = i;
+      let at: NasabNode | undefined = other.nodes[j];
+      for (; at && k < line.length; k += 1, at = parentOf.get(at)) nodes[k] = at;
+      if (k < line.length) {
+        const oldRoot = nodes[k - 1];
         let child = oldRoot;
-        for (let k = top + 1; k < line.length; k += 1) {
-          nodes[k] = node(line[k]);
-          nodes[k].children.push(child);
-          child = nodes[k];
+        for (let up = k; up < line.length; up += 1) {
+          nodes[up] = node(line[up]);
+          adopt(nodes[up], child);
+          child = nodes[up];
         }
         roots.splice(roots.indexOf(oldRoot), 1, nodes[line.length - 1]);
       }
@@ -174,8 +180,9 @@ export function nasabTree(picked: { slug: string; line: LineName[] }[]): NasabNo
     }
     for (let k = top - 1; k >= 0; k -= 1) {
       const parent = nodes[k + 1];
-      nodes[k] = parent.children.find((c) => c.key === line[k].bare) ?? node(line[k]);
-      if (!parent.children.includes(nodes[k])) parent.children.push(nodes[k]);
+      const found = parent.children.find((c) => c.key === line[k].bare);
+      nodes[k] = found ?? node(line[k]);
+      if (!found) adopt(parent, nodes[k]);
     }
     if (!nodes[0].people.includes(slug)) nodes[0].people.push(slug);
     placed.push({ line, nodes });
