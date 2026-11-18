@@ -17,7 +17,8 @@ const ACTIONS: NodeActions = { onSubtree: () => {} };
  * into src/lib/treeSizes.json.
  */
 export default function TreeSizesScreen() {
-  const pieces = useMemo(() => treeList(), []);
+  // A book's one-ayah entry has no tree to draw: it shows as its matrix only.
+  const pieces = useMemo(() => treeList().filter(piece => piece.keys.length > 1), []);
   const [at, setAt] = useState(0);
   const sizes = useRef<Record<string, Shipped>>({});
   const left = useRef(0);
