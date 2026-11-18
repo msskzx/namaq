@@ -225,7 +225,10 @@ const contentWords = (meaning: string) => new Set(meaning.split(/[\s،؛.:]+/).m
  * then the surahs beside it, of a length near the right one's; none that shares a word with it or with another choice,
  * repeats one, or explains the same word.
  */
-export function meaningPicks(entries: { surah: number; text: string; places: GharibPlace[]; quote: string }[]): MeaningPick[] {
+export function meaningPicks(entries: { surah: number; text: string; places: GharibPlace[]; quote: string }[], apart: [string, string][] = []): MeaningPick[] {
+  // Meanings read by hand as too close to stand as right and wrong in one question (meaningReview.json «apart»): either way round.
+  const bare = (text: string) => letters(text).replace(/[^ء-ي\s]/g, '');
+  const clash = (a: string, b: string) => apart.some(([x, y]) => (bare(a).includes(x) && bare(b).includes(y)) || (bare(a).includes(y) && bare(b).includes(x)));
   const askable = entries.map((entry, at) => ({ at, entry, meaning: meaningOf(entry) })).filter((item): item is { at: number; entry: typeof entries[number]; meaning: string } => !!item.meaning);
   const picks: MeaningPick[] = [];
   for (const item of askable) {
@@ -242,7 +245,7 @@ export function meaningPicks(entries: { surah: number; text: string; places: Gha
     for (const { other } of pool) {
       const flat = other.meaning.replace(/[.\s]/g, '');
       const words = contentWords(other.meaning);
-      if (seen.has(flat) || taken.some(set => [...words].some(word => set.has(word)))) continue;
+      if (seen.has(flat) || taken.some(set => [...words].some(word => set.has(word))) || clash(item.meaning, other.meaning)) continue;
       others.push(other.at);
       seen.add(flat);
       taken.push(words);

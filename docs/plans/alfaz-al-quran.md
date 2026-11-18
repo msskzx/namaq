@@ -33,8 +33,9 @@ Both files are pinned by sha256 in `scripts/quran/buildGharib.ts`. Both are publ
 - **The wrong choices.** Each question gets three of his other short meanings, from the same surah first (nearest ayah first), then from up to three surahs away. They are of similar length, share no content word with the right one or with each other, and explain a different word.
 - **Hand review** is in `scripts/quran/meaningReview.json`:
   - `notMeaning`: 183 entries whose words say what the quote refers to rather than what it means. These are kept out of the questions and the wrong choices.
-  - `ambiguous`: 11 questions dropped because a wrong choice could also be read as right (e.g. البأساء/الضراء).
-  - A repeat of a dropped question is dropped with it. 704 questions remain.
+  - `apart`: six pairs of his meanings too close to be the right and a wrong choice of one question (البأساء «الشدة» and الضراء «البلاء», إمرا «عجبا» and نكرا «منكرا», …). Such a question keeps another wrong choice instead of being dropped.
+  - `ambiguous`: questions dropped outright (none now).
+  - 715 questions remain.
 - **On screen.** The question is the whole quote he explains, in its ayah, with the quote marked. After answering, each wrong choice shows the word it explains and where («معنى «فراتا»، المرسلات ٢٧»), and the note gives his pages.
 - **Where it appears.** The kind is `MEANING` (`shared/quiz/meaning.ts`), asked solo, in a party, and in the home feed's turn of question cards. Hiding the book in the library hides the reader sheet's pill, not the quiz: the quiz is chosen by its own kind.
 

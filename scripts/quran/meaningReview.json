@@ -1,5 +1,5 @@
 {
- "note": "docs/plans/alfaz-al-quran.md: each «ما معنى؟» candidate read by hand. notMeaning: entries (Shamela page id:quote) whose words after the quote say what it refers to, add to the ayah or point elsewhere rather than give the word's meaning; kept out of the questions and the wrong choices. ambiguous: questions dropped because a wrong choice could also be read as right.",
+ "note": "docs/plans/alfaz-al-quran.md: each «ما معنى؟» candidate read by hand. notMeaning: entries (Shamela page id:quote) whose words after the quote say what it refers to, add to the ayah or point elsewhere rather than give the word's meaning; kept out of the questions and the wrong choices. apart: meanings too close to stand as the right and a wrong choice of one question (letters only, either way round); the question keeps another wrong choice instead. ambiguous: questions dropped outright.",
  "notMeaning": [
   "39:يَعْمَهُونَ",
   "42:فَأَحْيَاكُمْ",
@@ -185,17 +185,31 @@
   "541:مَأْكُولٍ",
   "544:فَصَلِّ لِرَبِّكَ"
  ],
- "ambiguous": {
-  "79:مَسَّتْهُمُ الْبَأْسَاءُ": "wrong choice «البلاء» (الضراء) also reads as hardship",
-  "79:وَالضَّرَّاءُ": "wrong choice «الشدة» (البأساء) also reads as affliction",
-  "107:وَإِنْ تُصِبْكُمْ سَيِّئَةٌ": "wrong choice «شرا» also fits سيئة",
-  "266:شَيْئًا إِمْرًا": "wrong choice «منكرا» (نكرا) also fits إمرا",
-  "267:شَيْئًا نُكْرًا": "wrong choice «عجبا» (إمرا) also fits نكرا",
-  "277:فَجَمَعَ كَيْدَهُ": "wrong choice «حيلكم» says the same as حيله",
-  "277:فَأَجْمِعُوا كَيْدَكُمْ": "wrong choice «حيله» says the same as حيلكم",
-  "278:لا تَخَافُ دَرَكًا": "wrong choice «لحقهم» shares the meaning of لحاقا",
-  "278:فَأَتْبَعَهُمْ فِرْعَوْنُ": "wrong choice «لحاقا» shares the meaning of لحقهم",
-  "330:بُرْهَانَانِ": "wrong choice «حجة» says the same as حجتان",
-  "330:وَنَجْعَلُ لَكُمَا سُلْطَانًا": "wrong choice «حجتان» says the same as حجة"
- }
+ "ambiguous": {},
+ "apart": [
+  [
+   "الشدة",
+   "البلاء"
+  ],
+  [
+   "مصيبة",
+   "شرا"
+  ],
+  [
+   "عجبا",
+   "منكرا"
+  ],
+  [
+   "حيله",
+   "حيلكم"
+  ],
+  [
+   "لحاقا",
+   "لحقهم"
+  ],
+  [
+   "حجتان",
+   "حجة"
+  ]
+ ]
 }

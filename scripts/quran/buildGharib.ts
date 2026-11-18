@@ -65,14 +65,14 @@ for (const entry of raw) {
 }
 
 // «ما معنى؟»: his short meanings, three others beside each, less those read by hand and set aside (meaningReview.json).
-const review = JSON.parse(readFileSync(join(__dirname, 'meaningReview.json'), 'utf8')) as { notMeaning: string[]; ambiguous: Record<string, string> };
+const review = JSON.parse(readFileSync(join(__dirname, 'meaningReview.json'), 'utf8')) as { notMeaning: string[]; apart: [string, string][]; ambiguous: Record<string, string> };
 const keyOf = (at: number) => `${gharib.entries[at][2]}:${quotesOf(gharib.entries[at][3])[0] ?? ''}`;
 const notMeaning = new Set(review.notMeaning);
 const keys = new Set(gharib.entries.map((_, at) => keyOf(at)));
 for (const key of [...notMeaning, ...Object.keys(review.ambiguous)]) if (!keys.has(key)) throw new Error(`meaningReview.json: no entry ${key}`);
 const candidates = gharib.entries.map(([surah, , , text, places], at) => ({ surah, text: notMeaning.has(keyOf(at)) ? '' : text, places, quote: quotesOf(text)[0] ?? '' }));
 const asked = new Set<string>();
-gharib.questions = meaningPicks(candidates)
+gharib.questions = meaningPicks(candidates, review.apart.map(pair => pair.map(letters) as [string, string]))
   .filter(pick => {
     const same = `${skeleton(candidates[pick.asked].quote)}=${meaningOf(candidates[pick.asked])}`;
     // A repeat of a dropped question is dropped with it.
