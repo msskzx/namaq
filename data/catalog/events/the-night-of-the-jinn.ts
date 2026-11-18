@@ -2,9 +2,10 @@ import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
  * The night the jinn's caller came to the Prophet ﷺ and he went and recited to them, as Ibn Mas'ud told it (al-Sira 1
- * p160): Muslim's report through Alqamah, and the tree that told him of them (through Masruq, «متفق عليه»). al-Dhahabi
- * gives a report that Ibn Mas'ud was with him that night («وقد جاء ما يخالف هذا», al-Nasa'i's) after these; it waits
- * with the weaker reports (owner: sahih first).
+ * p160): Muslim's report through Alqamah, and the tree that told him of them (through Masruq, «متفق عليه»). Masruq's
+ * «ليلة استمعوا القرآن» does not say which occasion; putting it here, after Alqamah's as Muslim has them, is our reading.
+ * Reports that Ibn Mas'ud was with him that night (al-Nasa'i's, «وقد جاء ما يخالف هذا», pp160-161) and saw them (the Zutt,
+ * p161, «صحيح» but not placed in a Sahih) wait (owner: sahih first).
  */
 const theNightOfTheJinn = {
   kind: 'EVENT',
