@@ -33,6 +33,8 @@ export interface AssembledQuestion {
   page?: ChoiceQuestion['page'];
   ayahKey?: string;
   alike?: ChoiceQuestion['alike'];
+  marked?: ChoiceQuestion['marked'];
+  explains?: ChoiceQuestion['explains'];
   note?: ChoiceQuestion['note'];
   evidence: { claimKeys: string[] };
 }

@@ -1,14 +1,14 @@
 'use client';
 
 import { useEffect, useRef, type ReactNode } from 'react';
-import { ArrowLeftRight, BookOpen, Bookmark, Check, EyeOff, Layers, LightbulbOff, ListTree, NotebookPen, Play, Send, Sparkles, TableOfContents } from 'lucide-react';
+import { ArrowLeftRight, BookA, BookOpen, Bookmark, Check, EyeOff, Layers, LightbulbOff, ListTree, NotebookPen, Play, Send, Sparkles, TableOfContents } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import Button from '@/components/common/Button';
 import { num } from '@shared/quran/arabicNumber';
 import styles from './Mushaf.module.css';
 import type { AyahLink } from './ayahLinks';
 
-type Kind = 'trees' | 'compare' | 'readings' | 'tafsir' | 'irab' | 'balagha';
+type Kind = 'trees' | 'compare' | 'readings' | 'tafsir' | 'irab' | 'gharib' | 'balagha';
 
 /** An icon with its name under it (owner, 2026-11-13: the buttons got many, so each says what it is). */
 /** On (forgotten, saved, noted), the icon and its name take the mark's colour with nothing behind them, as in the app (owner, 2026-11-17). */
@@ -85,7 +85,7 @@ export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, 
   const shareLabel = ar ? 'مشاركة' : 'Share';
   const readingsLabel = ar ? 'القراءات العشر في كلمات الآية' : 'The ten readings of its words';
   const tafsirLabel = ar ? 'تفسير السعدي' : 'Al-Sa‘di’s tafsir';
-  const count = 2 + (onListen ? 1 : 0) + (onRecite ? 1 : 0) + (forgot > 0 ? 1 : 0) + (onNote ? 1 : 0) + (onTopics ? 1 : 0) + (links?.compare.length ? 1 : 0) + (links?.trees ? 1 : 0) + (links?.qiraat ? 1 : 0) + (onPreview ? 1 : 0) + (onPreview && irab ? 1 : 0) + (onPreview ? 1 : 0) + (onShare ? 1 : 0);
+  const count = 2 + (onListen ? 1 : 0) + (onRecite ? 1 : 0) + (forgot > 0 ? 1 : 0) + (onNote ? 1 : 0) + (onTopics ? 1 : 0) + (links?.compare.length ? 1 : 0) + (links?.trees ? 1 : 0) + (links?.qiraat ? 1 : 0) + (onPreview ? 1 : 0) + (onPreview && irab ? 2 : 0) + (onPreview ? 1 : 0) + (onShare ? 1 : 0);
   // On a narrow phone the buttons wrap onto a second row rather than run off the screen.
   const half = typeof window === 'undefined' ? 0 : Math.min(count * 27 + 8, window.innerWidth / 2 - 8);
   const left = typeof window === 'undefined' ? x : Math.min(window.innerWidth - half, Math.max(half, x));
@@ -104,6 +104,7 @@ export default function AyahActions({ ayah, x, y, forgot, saved, noted = false, 
       {links?.qiraat && <Act label={readingsLabel} name={ar ? 'القراءات' : 'Readings'} popup onClick={preview('readings')}><Layers aria-hidden /></Act>}
       {onPreview && <Act label={tafsirLabel} name={ar ? 'التفسير' : 'Tafsir'} popup onClick={preview('tafsir')}><BookOpen aria-hidden /></Act>}
       {onPreview && irab && <Act label={ar ? 'إعراب الكلمة' : 'Grammar of the word'} name={ar ? 'الإعراب' : 'I‘rab'} popup onClick={preview('irab')}><ListTree aria-hidden /></Act>}
+      {onPreview && irab && <Act label={ar ? 'معنى الكلمة' : 'Meaning of the word'} name={ar ? 'المعنى' : 'Meaning'} popup onClick={preview('gharib')}><BookA aria-hidden /></Act>}
       {onPreview && <Act label={ar ? 'البلاغة في الآية' : 'Rhetoric in the ayah'} name={ar ? 'البلاغة' : 'Balagha'} popup onClick={preview('balagha')}><Sparkles aria-hidden /></Act>}
       {onShare && <Act label={shareLabel} name={ar ? 'مشاركة' : 'Share'} popup onClick={() => { onShare(); onClose(); }}><Send aria-hidden /></Act>}
     </div>

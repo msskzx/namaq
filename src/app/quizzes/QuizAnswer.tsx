@@ -39,6 +39,8 @@ export interface QuizQuestionView {
   page?: ChoiceParts["page"];
   ayahKey?: string;
   alike?: ChoiceParts["alike"];
+  marked?: ChoiceParts["marked"];
+  explains?: ChoiceParts["explains"];
   note?: ChoiceParts["note"];
   ayah?: { text: string; reference: string } | null;
   choiceDetails: Record<string, { text: string; reference: string }>;

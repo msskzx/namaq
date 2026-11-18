@@ -51,6 +51,8 @@ const USE = {
   irab: { ar: 'إعراب الكلمة في المصحف', en: 'word grammar (i‘rab) in the mushaf reader', href: '/quran/read' },
   books: { ar: 'قارئ الكتب', en: 'the book reader', href: '/quran/books' },
   balagha: { ar: 'البلاغة في المصحف', en: 'rhetoric (balagha) in the mushaf reader', href: '/quran/read' },
+  meaning: { ar: 'معنى الكلمة في المصحف', en: 'word meanings in the mushaf reader', href: '/quran/read' },
+  meaningQuiz: { ar: 'اختبار «ما معنى؟»', en: 'the «what does it mean?» quiz', href: '/quizzes' },
   words: { ar: 'عدد الكلمات والكلمات المتقابلة', en: 'word counts and opposite words', href: '/quran/words' },
   trees: { ar: 'الأشجار والمقارنة والبحث', en: 'trees, compare and search', href: '/quran/branches' },
   tuhfa: { ar: 'تحفة الأطفال', en: 'Tuhfat al-Atfal', href: '/quran/tajwid/tuhfat-al-atfal' },
@@ -292,11 +294,31 @@ export const SOURCES: Source[] = [
     uses: [USE.qiraat, USE.reader, USE.tafsir, USE.topics, USE.irab],
   },
   {
+    id: 'gharib-ibn-qutaybah', group: 'books',
+    title: { ar: 'تفسير غريب القرآن', en: 'Tafsir Gharib al-Quran' }, author: { ar: 'ابن قتيبة الدينوري', en: 'Ibn Qutaybah' },
+    edition: 'تحقيق السيد أحمد صقر، دار الكتب العلمية، ١٣٩٨هـ/١٩٧٨م', link: shamela(3259),
+    licence: {
+      ar: 'توفي المؤلف سنة ٢٧٦هـ، فنصه في الملك العام. نعرض كلامه وحده بلا حواشي المحقق، من نسخة المكتبة الشاملة التي نشرها موقع تراث، مع رقم الصفحة ورابطها. كل خيار في اختبار «ما معنى؟» من كلامه.',
+      en: 'The author died in 889, so his text is in the public domain. We show his words alone, without the editor’s notes, from the Shamela copy published by Turath, with the page number and a link. Every choice in the «what does it mean?» quiz is his own wording.',
+    },
+    uses: [USE.meaning, USE.meaningQuiz],
+  },
+  {
+    id: 'mufradat-raghib', group: 'books',
+    title: { ar: 'المفردات في غريب القرآن', en: 'al-Mufradat fi Gharib al-Quran' }, author: { ar: 'الراغب الأصفهاني', en: 'al-Raghib al-Isfahani' },
+    edition: 'تحقيق صفوان عدنان الداودي، دار القلم والدار الشامية، الطبعة الأولى ١٤١٢هـ', link: shamela(23636),
+    licence: {
+      ar: 'توفي المؤلف سنة ٥٠٢هـ، فنصه في الملك العام. نعرض مادته كاملة تحت عنوانه، كلامه وحده بلا حواشي المحقق، من نسخة المكتبة الشاملة التي نشرها موقع تراث، مع رقم الصفحة ورابطها. وتوصل الكلمة بمادتها من جذرها في المدونة القرآنية العربية.',
+      en: 'The author died in 1108, so his text is in the public domain. We show his whole article under his own heading, his words alone without the editor’s notes, from the Shamela copy published by Turath, with the page number and a link. A word is linked to its article by its root in the Quranic Arabic Corpus.',
+    },
+    uses: [USE.meaning],
+  },
+  {
     id: 'quranic-arabic-corpus', group: 'data',
     title: { ar: 'المدوّنة القرآنية العربية', en: 'Quranic Arabic Corpus' }, author: { ar: 'Kais Dukes، جامعة ليدز', en: 'Kais Dukes, University of Leeds' },
     edition: 'التحليل الصرفي، الإصدار ٠٫٤', link: { url: 'https://corpus.quran.com', label: 'corpus.quran.com' },
     licence: { ar: 'GNU GPL، مع إبقاء حقوق النشر والرابط دون تغيير.', en: 'GNU GPL, with the copyright notice and link kept unchanged.' },
-    uses: [USE.words, { ar: 'الجذور في الأشجار', en: 'roots in the trees', href: '/quran/branches' }, USE.irab],
+    uses: [USE.words, { ar: 'الجذور في الأشجار', en: 'roots in the trees', href: '/quran/branches' }, USE.irab, USE.meaning],
   },
   {
     id: 'quranic-treebank', group: 'data',

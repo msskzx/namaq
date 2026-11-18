@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
-import { ChevronDown, ChevronUp, Sparkles } from 'lucide-react-native';
+import { ScrollView, View } from 'react-native';
+import { Sparkles } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import ExternalLink from '@/ui/ExternalLink';
 import itqan from '@shared/data/quran/itqanBalagha';
@@ -18,6 +18,8 @@ import Sheet from '@/ui/Sheet';
 import OpenInBook from './OpenInBook';
 import Card from '@/ui/Card';
 import Tabs from '@/ui/Tabs';
+import Folded from '@/ui/Folded';
+import Pickable from '@/ui/Pickable';
 
 /**
  * Balagha in the reader (owner, 2026-11-16; docs/plans/balagha.md), from two books picked with pills. Al-Itqan (built
@@ -74,21 +76,6 @@ function BalaghaBody({ ayah, palette, onClose }: { ayah: string; palette: Palett
   );
 }
 
-function Folded({ credit, children, palette, extra }: { credit: string; children: React.ReactNode; palette: Palette; extra?: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <>
-      <Pressable onPress={() => setOpen(was => !was)} accessibilityRole="button" aria-expanded={open}
-        style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 8, paddingTop: 8, borderTopWidth: 1, borderColor: palette.rule, minHeight: 36 }}>
-        {open ? <ChevronUp size={16} color={palette.muted} /> : <ChevronDown size={16} color={palette.muted} />}
-        <Text style={{ flex: 1, color: palette.muted, fontSize: 14 }}>{credit}</Text>
-        {extra}
-      </Pressable>
-      {open && <View style={{ gap: 4 }}>{children}</View>}
-    </>
-  );
-}
-
 function Itqan({ paragraphs, palette, onSpan }: { paragraphs: ItqanParagraph[]; palette: Palette; onSpan: (span: [number, number][]) => void }) {
   useBooks();
   const [picked, setPicked] = useState(0);
@@ -98,13 +85,13 @@ function Itqan({ paragraphs, palette, onSpan }: { paragraphs: ItqanParagraph[]; 
   return paragraphs.map((paragraph, i) => (
     <Card key={`${paragraph.id}/${i}`} palette={palette} pad={[10, 14]} picked={picked === i && paragraphs.length > 1}>
       {/* The paragraph lights the words it quotes; its reference below is a control of its own. */}
-      <Pressable onPress={() => setPicked(i)} accessibilityRole="button" aria-pressed={picked === i}>
+      <Pickable picked={picked === i} onPick={() => setPicked(i)}>
       <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 22, textAlign: 'right' }}>{paragraph.heading ? `«${paragraph.heading}» · ${paragraph.kind}` : paragraph.kind}</Text>
       {paragraph.places > 1 && <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{`مواضع الشاهد في القرآن: ${num(paragraph.places)}، ولم يعيّن السيوطي أحدها`}</Text>}
       <Text selectable style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' }}>
         {tafsirRuns(paragraph.text).map((run, j) => <Text key={j} style={run.quran ? { fontFamily: QURAN_FONT, color: palette.accent } : undefined}>{run.text}</Text>)}
       </Text>
-      </Pressable>
+      </Pickable>
       <Folded credit={itqanCredit(paragraph)} palette={palette}>
         <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 24, textAlign: 'right' }}>
           {`${ITQAN_BOOK}، ${ITQAN_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث. الفقرة كاملة كما في الكتاب، والعنوان عنوانه.`}

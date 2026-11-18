@@ -3,6 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { SIGNS } from './signs';
 
 // docs/plans/sadi-tafsir.md: Shamela's copy of the same edition of al-Sa'di (book 42, al-Risala 2000, ed. al-Luwayhiq,
 // "ترقيم الكتاب موافق للمطبوع"), read from turath.io's export of it. Quranpedia's dump cuts some passages short where a
@@ -32,11 +33,6 @@ export function loadShamela(): string {
     .replace(/[ \t ]+/g, ' ').replace(/ *\n */g, '\n');
 }
 
-// Shamela writes the blessings as one sign ("ﷺ"), Quranpedia mostly spells them out; both read the same here.
-const SIGNS: Record<string, string> = {
-  'ﷺ': 'صلى الله عليه وسلم', '﵇': 'عليه السلام', '﵊': 'عليه الصلاة والسلام', '﵀': 'رحمه الله', '﵁': 'رضي الله عنه',
-  '﵂': 'رضي الله عنها', '﵃': 'رضي الله عنهم', '﵄': 'رضي الله عنهما', '﷿': 'عز وجل', 'ﷻ': 'جل جلاله', '﵎': 'تبارك وتعالى',
-};
 
 /** Letters only, without tashkeel or hamza seats, so the two copies' punctuation and spelling quirks don't matter. */
 function letters(text: string): { norm: string; at: number[] } {
