@@ -14,7 +14,7 @@ import type { Group } from '@shared/quran/mutashabih/types';
 import { phrasePresentation } from '@shared/quran/phraseTrees';
 import { stepTime } from '@shared/quran/readPlan';
 import type { Beat } from './growth';
-import { aliasesOf, branchList, EMPTY_LIST, isSavedIn, type ListState } from './branchList';
+import { aliasesOf, BOTH_KINDS_LIST, branchList, EMPTY_LIST, isSavedIn, type ListState } from './branchList';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
 
 export type Presentation = { tree: Branch; prefixes: Variant[]; offsets: Record<string, number>; ayat: BranchAyah[] };
@@ -37,7 +37,8 @@ const byKey = () => (ayatByKey ??= new Map(all.map(ayah => [ayah.key, ayah])));
 export const ayahOf = (key: string) => byKey().get(key);
 
 /** The trees of the website's default branches list, in mushaf order. */
-export const treeList = (): BranchPiece[] => branchList(EMPTY_LIST);
+/** Every card of both tabs, the books' and ours: what the feed, the tour and a node's own tree draw from. */
+export const treeList = (): BranchPiece[] => branchList(BOTH_KINDS_LIST);
 
 const setOf = (ayahKeys: string[]) => [...ayahKeys].sort().join(' ');
 let bySet: Map<string, BranchPiece> | undefined;

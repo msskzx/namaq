@@ -7,8 +7,8 @@ describe('quiz tree scope', () => {
     expect([...SCOPE_KEYS]).toEqual(FILTER_KEYS.filter(key => key !== 'sort'));
   });
 
-  it('asks the متشابهات unless other kinds are picked, and drops sort', () => {
-    expect(quizFilters({ sort: 'closest', differences: 'taqdim' })).toEqual({ differences: 'taqdim', categories: 'mutashabeh' });
+  it('asks both kinds, the books and ours, unless other kinds are picked, and drops sort', () => {
+    expect(quizFilters({ sort: 'closest', differences: 'taqdim' })).toEqual({ differences: 'taqdim', categories: 'mutashabeh,pondering' });
   });
 
   it('goes through query parameters and back', () => {

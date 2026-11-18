@@ -22,7 +22,8 @@ import { groupPresentation } from '@shared/quran/mutashabih/presentation';
 import { groups } from '@shared/quran/mutashabih/data';
 import { phraseTreeId, groupHasId } from '@shared/quran/mutashabih/identity';
 import Link from 'next/link';
-import { searchSharedPhrases } from '@shared/quran/branchSearch';
+import { PAGE_DEFAULT_KIND, PAGE_KINDS, searchSharedPhrases } from '@shared/quran/branchSearch';
+import Segmented from '@/components/common/Segmented';
 import { branchInventory, distinctBranchPieces, reviewFilters, reviewPool } from '@shared/quran/branchInventory';
 import AyahCards, { CardsLegend } from './AyahCards';
 import OpeningSearch, { UnavailableNote } from './OpeningSearch';
@@ -109,7 +110,9 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const subtreeHolds = subtree && requestedOccurrences.every(entry => subtree.occurrences.some(occurrence => entry.startsWith(`${occurrence.key}:`)));
   const visibleAyat = filteredAyat(allAyat, filters, range);
   const withinScope = (key: string) => visibleAyat.has(key);
-  const effectiveFilters = { ...filters, categories: filters.categories ?? 'mutashabeh,pondering' };
+  // The list opens on the books' cards (owner 2026-11-18); review still walks both kinds.
+  const kind = filters.categories ?? (review ? 'mutashabeh,pondering' : PAGE_DEFAULT_KIND);
+  const effectiveFilters = { ...filters, categories: kind };
   const matchingGroups = browseGroups(groups, effectiveFilters, allAyat, range);
   const requestedGroup = matchingGroups.find(group => groupHasId(group, requestedId)) ?? groupsById.get(requestedId);
   const canonicalPhrase = requestedId.startsWith('tree:') ? searchableFor(built).find(piece => piece.id === requestedId)?.phrase : undefined;
@@ -136,7 +139,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
     return keys.length < 2 ? [] : [{ ...piece, keys, count: keys.length, opening: { ...piece.opening, count: keys.length }, phrase: { ...piece.phrase, occurrences } }];
   });
   const distinct = distinctBranchPieces;
-  const inventory = review ? reviewPool(asked, range) : branchInventory(filters, range);
+  const inventory = review ? reviewPool(asked, range) : branchInventory(effectiveFilters, range);
   const pieces = requestedId && !requestedGroup && !hasGroupFilters(filters) ? scopePieces(piecesFor(built)).filter(piece => review || !droppedBranch(piece)) : inventory;
   const needle = query ? JSON.stringify([/[a-z]/i.test(query) ? query.toLowerCase() : searchQuery(query), effectiveFilters, range, review]) : '';
   if (needle && !built.searches.has(needle)) {
@@ -240,6 +243,8 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
         </NavSearch>
       </NavActions>
       <MatchingRules>{tree && <CardsLegend />}</MatchingRules>
+      {/* The two kinds as tabs over the list: the books' cards first, then ours. */}
+      {!review && <Segmented label="نوع البطاقات" className="self-start" options={PAGE_KINDS.map(option => ({ key: option.id, label: option.ar, current: kind === option.id, href: branchesHref('', juz, { mode: state.mode, filters: { ...asked, categories: option.id } }) }))} />}
       {surah && names[surah] && <SurahChip surah={names[surah]} clear={branchesHref(id, juz, { ...state, surah: undefined })} />}
       {ayah && names[surahOf(ayah)] && <SurahChip surah={names[surahOf(ayah)]} ayah={Number(ayah.split(':')[1])} clear={branchesHref(id, juz, { ...state, ayah: undefined })} />}
       {(!id || constrained && !opening && !focusedRequest) && <NoTrees query={query} grouped={constrained} />}

@@ -535,8 +535,8 @@ describe('QuizzesPage', () => {
     render(<QuizzesPage />);
     fireEvent.click(screen.getByRole('button', { name: /Word trees/ }));
     const params = new URLSearchParams(nav.getUrl().split('?')[1]);
-    expect(params.get('categories')).toBe('mutashabeh,words');
-    expect(availabilityKeys.at(-1)).toBe('/api/quiz/availability?topic=BRANCHES&categories=mutashabeh%2Cwords');
+    expect(params.get('categories')).toBe('mutashabeh,pondering,words');
+    expect(availabilityKeys.at(-1)).toBe('/api/quiz/availability?topic=BRANCHES&categories=mutashabeh%2Cpondering%2Cwords');
     expect(screen.queryByRole('group', { name: 'Sort' })).toBeNull();
   });
 
