@@ -218,6 +218,44 @@ export interface CatalogEventFields {
   readonly description?: Cited<string>;
 }
 
+/**
+ * One report of a story, whole (owner, 2026-11-18: nothing is cut), told as its moments: the moments' texts, joined with
+ * a space, are the report after its chain exactly as the pages print it. Across a page break the pages' text joins with
+ * one space too.
+ */
+export interface CatalogReport {
+  /** Who the source has the report from, as printed, just before the first moment. */
+  readonly isnad?: string;
+  readonly source: { readonly slug: string; readonly volume: number; readonly volumeLabel: string; readonly page: number; readonly endPage?: number; readonly url: string };
+  /** The source's own words placing the report, such as أخرجه مسلم, printed right after it. None when the source gives none. */
+  readonly grading?: string;
+  readonly moments: readonly {
+    /** A few words naming the moment. Ours. */
+    readonly title: string;
+    readonly text: string;
+    readonly people: readonly string[];
+  }[];
+}
+
+/** Our tags for gathering stories (owner, 2026-11-18). */
+export const STORY_TAGS = { ISLAM: 'إسلامهم', HEARD_QURAN: 'سمعوا القرآن', HIS_WORDS: 'من كلامه ﷺ', REVEALED_ABOUT: 'فيمن نزلت' } as const;
+export type StoryTag = keyof typeof STORY_TAGS;
+
+/** Ayat a story turns on: the ones recited in it, or revealed about it, with the quotes that say so. */
+export type CatalogStoryEvidence = { readonly source: string; readonly page: number; readonly volume?: number; readonly volumeLabel?: string; readonly quote: string; readonly url?: string };
+
+export interface CatalogStoryAyat {
+  readonly kind: 'RECITED' | 'REVEALED_ABOUT';
+  /** Whose report the range is, when the source's reports differ on it («في رواية جابر»). */
+  readonly report?: string;
+  /** surah:ayah, first and last. */
+  readonly from: string;
+  readonly to: string;
+  readonly evidence: readonly CatalogStoryEvidence[];
+  /** The other reports' words on it, each attributed (owner, 2026-11-18: disputed points shown attributed, not dropped). */
+  readonly others?: readonly { readonly label: string; readonly evidence: readonly CatalogStoryEvidence[] }[];
+}
+
 export interface CatalogEvent {
   readonly kind: 'EVENT';
   readonly slug: string;
@@ -227,6 +265,10 @@ export interface CatalogEvent {
   readonly fields: CatalogEventFields;
   readonly dateParts?: CatalogDateParts;
   readonly people: readonly { readonly person: string; readonly claims: Provenance }[];
+  /** The story as the source tells it: the first report is the story, the others are the source's other reports of it. */
+  readonly reports?: readonly CatalogReport[];
+  readonly tags?: readonly StoryTag[];
+  readonly ayat?: readonly CatalogStoryAyat[];
 }
 
 /**

@@ -69,7 +69,8 @@ beforeEach(() => {
     slug: `event-${year}`,
     name: `الحدث ${year}`,
     type: 'OTHER',
-    fields: { hijriYear: { value: year, claims: ['sira/isra-year'] } },
+    // An undisputed cited year: a disputed claim (sira/isra-year has rival readings) asks nothing.
+    fields: { hijriYear: { value: year, claims: ['sira/qiblah'] } },
     people: [],
   }));
   loadCatalog.mockResolvedValue({ people, battles, events, utterances: [] });
@@ -201,6 +202,23 @@ describe('question candidate generation', () => {
       'EXCUSED_ABSENCE_REASON',
       'EVENT_HIJRI_YEAR',
     ]));
+  });
+
+  it('asks a disputed year with one right answer holding every reading, attributed, and no year next to it among the wrong ones', async () => {
+    const events = [-1, 3, 6, 9, 0, -2].map((year, i) => ({
+      kind: 'EVENT', slug: `event-${i}`, name: `الحدث ${i}`, type: 'OTHER', people: [],
+      // The Isra: the book's year a year before the hijra, Ibn Sa'd's eighteen months (sira/isra-year-alt).
+      fields: { hijriYear: { value: year, claims: [i === 0 ? 'sira/isra-year' : 'sira/qiblah'] } },
+    }));
+    loadCatalog.mockResolvedValue({ people: [], battles: [], events, utterances: [] });
+    personFindMany.mockResolvedValue([]);
+    titleFindMany.mockResolvedValue([]);
+    const isra = (await generateQuestionCandidates()).find((question) => question.subject?.slug === 'event-0');
+    expect(isra?.choices[0].labelArabic).toMatch(/^.+، وقال ابن سعد: كان المعراج قبل الهجرة بثمانية عشر شهرا/);
+    expect(isra?.evidence.claimKeys).toEqual(['sira/isra-year', 'sira/isra-year-alt']);
+    expect(isra?.choices.slice(1).map((choice) => choice.value)).not.toContain('0');
+    expect(isra?.choices.slice(1).map((choice) => choice.value)).not.toContain('-2');
+    expect(isra?.choices).toHaveLength(4);
   });
 
   it('asks in whom an ayah was revealed, with same-sex distractors and no one else it was revealed about', () => {
