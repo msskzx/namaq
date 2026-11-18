@@ -108,6 +108,28 @@ test.describe('a new user', () => {
     await expect(page).toHaveURL(/\/book/);
   });
 
+  test('the feed has small ayah cards from the tafsir, balagha, i\'rab and readings, each opening the reader\'s own sheet', async ({ page }) => {
+    await open(page, '/');
+    await page.mouse.move(380, 500);
+    const cards = [
+      ['من التفسير', 'التفسير كاملًا', page.getByText(/^تيسير الكريم الرحمن للسعدي، ص/)],
+      ['من البلاغة', 'البلاغة كاملة', page.getByRole('heading', { name: /^[^ ]+ [٠-٩]+$/ })],
+      ['من الإعراب', 'إعراب الآية', page.getByRole('tablist', { name: 'كلمات الآية' })],
+      ['من القراءات', 'القراءات كاملة', page.getByText(/^المصدر: /)],
+    ] as const;
+    for (const [title, button, inSheet] of cards) {
+      const head = page.getByRole('heading', { name: title, exact: true }).first();
+      await expect(async () => {
+        await page.mouse.wheel(0, 3000);
+        await expect(head).toBeAttached({ timeout: 1000 });
+      }).toPass({ timeout: 30_000 });
+      await page.getByRole('button', { name: new RegExp(`^${button}، `) }).first().click();
+      await expect(inSheet.last()).toBeVisible();
+      await page.keyboard.press('Escape');
+      await expect(inSheet).toHaveCount(0);
+    }
+  });
+
   test.describe('with a prayer near', () => {
     const cairo = { name: 'القاهرة', lat: 30.0444, lng: 31.2357 };
     test.use({ seed: { 'prayer-place': JSON.stringify(cairo) } });
