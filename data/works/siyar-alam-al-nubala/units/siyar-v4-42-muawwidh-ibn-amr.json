@@ -1,0 +1,301 @@
+{
+  "unit": {
+    "id": "siyar-v4-42-muawwidh-ibn-amr",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٤٢"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_mw_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "٤٢ - مُعَوَّذُ بنُ عَمْرِو بنِ الجَمُوْحِ الأَنْصَارِيُّ السَّلَمِيُّ"
+    },
+    {
+      "id": "sp_mw1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "مُعَوَّذُ بنُ عَمْرِو بنِ الجَمُوْحِ الأَنْصَارِيُّ السَّلَمِيُّ",
+      "prefix": "٤٢ - "
+    },
+    {
+      "id": "sp_mw_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "مُعَوَّذُ بنُ",
+      "prefix": "٤٢ - "
+    },
+    {
+      "id": "sp_mw_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "عَمْرِو بنِ الجَمُوْحِ",
+      "prefix": "٤٢ - مُعَوَّذُ بنُ "
+    },
+    {
+      "id": "sp_mw_badr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "شَهِدَ مَعَ أَخَوَيْهِ مُعَاذٍ وَخَلاَّدٍ بَدْراً، لَكِنْ لَمْ يَذْكُرْهُ ابْنُ إِسْحَاقَ، فَاللهُ أَعْلَمُ."
+    },
+    {
+      "id": "sp_mw_brothers",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "أَخَوَيْهِ مُعَاذٍ وَخَلاَّدٍ",
+      "prefix": "شَهِدَ مَعَ "
+    },
+    {
+      "id": "sp_mw_day_badr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "بَدْراً، لَكِنْ",
+      "prefix": "وَخَلاَّدٍ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_mw0",
+      "unit": "siyar-v4-42-muawwidh-ibn-amr",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_mw_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_mw_name",
+      "report": "r_mw0",
+      "spans": [
+        "sp_mw1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_mw_badr",
+      "report": "r_mw0",
+      "spans": [
+        "sp_mw_badr"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_mw",
+      "parent": "sp_mw1",
+      "exact": "مُعَوَّذُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_mw_father",
+      "parent": "sp_mw1",
+      "exact": "عَمْرِو بنِ الجَمُوْحِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_mw_b",
+      "parent": "sp_mw_badr",
+      "exact": "شَهِدَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_mw_muadh",
+      "parent": "sp_mw_badr",
+      "exact": "مُعَاذٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_mw_khallad",
+      "parent": "sp_mw_badr",
+      "exact": "خَلاَّدٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_mw_badr",
+      "parent": "sp_mw_badr",
+      "exact": "بَدْراً",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_mw",
+      "mention": "m_mw",
+      "agent": "muawwidh-ibn-amr-ibn-al-jumuh",
+      "basis": [
+        {
+          "span": "sp_mw_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mw_b",
+      "mention": "m_mw_b",
+      "agent": "muawwidh-ibn-amr-ibn-al-jumuh",
+      "basis": [
+        {
+          "span": "sp_mw_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mw_father",
+      "mention": "m_mw_father",
+      "agent": "amr-ibn-al-jumuh",
+      "basis": [
+        {
+          "span": "sp_mw_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mw_muadh",
+      "mention": "m_mw_muadh",
+      "agent": "muadh-ibn-amr-ibn-al-jumuh",
+      "basis": [
+        {
+          "span": "sp_mw_brothers",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mw_khallad",
+      "mention": "m_mw_khallad",
+      "agent": "khallad-ibn-amr-ibn-al-jumuh",
+      "basis": [
+        {
+          "span": "sp_mw_brothers",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mw_badr",
+      "mention": "m_mw_badr",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_mw_day_badr",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_mw_name",
+      "subject": "m_mw",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_mw1"
+        ]
+      },
+      "restsOn": [
+        "st_mw_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mw_sex",
+      "subject": "m_mw",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_mw_sex"
+        ]
+      },
+      "restsOn": [
+        "st_mw_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mw_father",
+      "subject": "m_mw",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_mw_father"
+      },
+      "restsOn": [
+        "st_mw_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mw_muadh",
+      "subject": "m_mw_b",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_mw_muadh"
+      },
+      "restsOn": [
+        "st_mw_badr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mw_khallad",
+      "subject": "m_mw_b",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_mw_khallad"
+      },
+      "restsOn": [
+        "st_mw_badr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mw_badr",
+      "subject": "m_mw_b",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_mw_badr"
+      },
+      "restsOn": [
+        "st_mw_badr"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

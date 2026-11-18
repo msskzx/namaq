@@ -1,0 +1,224 @@
+{
+  "unit": {
+    "id": "siyar-v6-69-utbah-ibn-an-nudhdhar",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٦٩"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_tn_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "417",
+      "layer": "MAIN",
+      "exact": "٦٩ - عُتْبَةُ بنُ النُّدَّرِ السُّلَمِيُّ الشَّامِيُّ"
+    },
+    {
+      "id": "sp_tn_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "417",
+      "layer": "MAIN",
+      "exact": "عُتْبَةُ بنُ النُّدَّرِ السُّلَمِيُّ الشَّامِيُّ",
+      "prefix": "٦٩ - "
+    },
+    {
+      "id": "sp_tn_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "417",
+      "layer": "MAIN",
+      "exact": "عُتْبَةُ بنُ",
+      "prefix": "٦٩ - "
+    },
+    {
+      "id": "sp_tn_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "417",
+      "layer": "MAIN",
+      "exact": "النُّدَّرِ السُّلَمِيُّ",
+      "prefix": "عُتْبَةُ بنُ "
+    },
+    {
+      "id": "sp_tn_death_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "417",
+      "layer": "MAIN",
+      "exact": "وَقَالَ خَلِيْفَةُ",
+      "suffix": ": تُوُفِّيَ سَنَةَ أَرْبَعٍ"
+    },
+    {
+      "id": "sp_tn_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "417",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ سَنَةَ أَرْبَعٍ وَثَمَانِيْنَ"
+    },
+    {
+      "id": "sp_tn_death_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "417",
+      "layer": "MAIN",
+      "exact": "سَنَةَ أَرْبَعٍ وَثَمَانِيْنَ",
+      "prefix": "تُوُفِّيَ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_tn0",
+      "unit": "siyar-v6-69-utbah-ibn-an-nudhdhar",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_tn_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_tn_death",
+      "unit": "siyar-v6-69-utbah-ibn-an-nudhdhar",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_tn_death_frame"
+      ],
+      "origin": {
+        "mention": "m_tn_death_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_tn_name",
+      "report": "r_tn0",
+      "spans": [
+        "sp_tn_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_tn_death",
+      "report": "r_tn_death",
+      "spans": [
+        "sp_tn_death"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_tn",
+      "parent": "sp_tn_name",
+      "exact": "عُتْبَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_tn_father",
+      "parent": "sp_tn_name",
+      "exact": "النُّدَّرِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_tn_death_by",
+      "parent": "sp_tn_death_frame",
+      "exact": "خَلِيْفَةُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_tn",
+      "mention": "m_tn",
+      "agent": "utbah-ibn-an-nudhdhar",
+      "basis": [
+        {
+          "span": "sp_tn_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tn_father",
+      "mention": "m_tn_father",
+      "agent": "an-nudhdhar-as-sulami",
+      "basis": [
+        {
+          "span": "sp_tn_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_tn_name",
+      "subject": "m_tn",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_tn_name"
+        ]
+      },
+      "restsOn": [
+        "st_tn_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tn_sex",
+      "subject": "m_tn",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_tn_sex"
+        ]
+      },
+      "restsOn": [
+        "st_tn_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tn_father",
+      "subject": "m_tn",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_tn_father"
+      },
+      "restsOn": [
+        "st_tn_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tn_death",
+      "subject": "m_tn",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 84,
+        "spans": [
+          "sp_tn_death_y"
+        ]
+      },
+      "restsOn": [
+        "st_tn_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

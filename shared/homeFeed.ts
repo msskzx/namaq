@@ -16,17 +16,23 @@ export const hasMomentCard = (slot: number) => slot % 4 === 3;
 /** The moment of a batch, the same all day; each moment batch brings the next one. */
 export const momentOfSlot = (count: number, day: number, slot: number) => (count ? (((day * 3 + (slot - 3) / 4) % count) + count) % count : -1);
 
+/** A balagha term with its definition (owner, 2026-11-18) on every fourth batch from the third, with a scene. */
+export const hasTermCard = (slot: number) => slot % 4 === 2;
+
+/** The term of a batch, the same all day; each term batch brings the next one. */
+export const termOfSlot = (count: number, day: number, slot: number) => (count ? (((day * 5 + (slot - 2) / 4) % count) + count) % count : -1);
+
 /** A sira story, whole (owner, 2026-11-18), on every fourth batch from the second, with the books. */
 export const hasSiraCard = (slot: number) => slot % 4 === 1;
 
 /** The sira story of a batch, the same all day; each story batch brings the next one. */
 export const siraOfSlot = (count: number, day: number, slot: number) => (count ? (((day + (slot - 1) / 4) % count) + count) % count : -1);
 
-/** One of al-Nawawi's Forty (owner, 2026-11-18) on every fourth batch from the third, between the sira stories and the moments. */
-export const hasHadithCard = (slot: number) => slot % 4 === 2;
+/** One of al-Nawawi's Forty (owner, 2026-11-18) on every fourth batch from the fifth, after the moments. */
+export const hasHadithCard = (slot: number) => slot > 0 && slot % 4 === 0;
 
 /** The hadith of a batch, the same all day; each hadith batch brings the next one. */
-export const hadithOfSlot = (count: number, day: number, slot: number) => (count ? (((day + (slot - 2) / 4) % count) + count) % count : -1);
+export const hadithOfSlot = (count: number, day: number, slot: number) => (count ? (((day + (slot - 4) / 4) % count) + count) % count : -1);
 
 /** The scene of a batch, the same all day; the next scene batch brings the next one. */
 export const sceneOfSlot = (count: number, day: number, slot: number) => (count ? (((day * 5 + slot / 2) % count) + count) % count : -1);

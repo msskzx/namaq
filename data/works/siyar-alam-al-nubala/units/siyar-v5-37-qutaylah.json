@@ -1,0 +1,321 @@
+{
+  "unit": {
+    "id": "siyar-v5-37-qutaylah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٣٧"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_qt_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "٣٧ - قُتَيْلَةُ أُخْتُ الأَشْعَثِ بنِ قَيْسٍ"
+    },
+    {
+      "id": "sp_qt_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "قُتَيْلَةُ أُخْتُ الأَشْعَثِ بنِ قَيْسٍ",
+      "prefix": "٣٧ - "
+    },
+    {
+      "id": "sp_qt_name_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "قُتَيْلَةُ",
+      "prefix": "٣٧ - "
+    },
+    {
+      "id": "sp_qt_ukht",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "أُخْتُ الأَشْعَثِ بنِ قَيْسٍ",
+      "prefix": "قُتَيْلَةُ "
+    },
+    {
+      "id": "sp_qt_yuqal",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "يُقَالُ: هِيَ أُخْتُ الأَشْعَثِ بنِ قَيْسٍ"
+    },
+    {
+      "id": "sp_qt_ubaydah_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "قَالَ أَبُو عُبَيْدَةَ",
+      "suffix": ": تَزَوَّجَهَا"
+    },
+    {
+      "id": "sp_qt_ubaydah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "تَزَوَّجَهَا النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- حِيْنَ قَدِمَ عَلَيْهِ وَفْدُ كِنْدَةَ، سَنَةَ عَشْرٍ، فَتُوُفِّيَ قَبْلَ أَنْ يَقْدَمَ عَلَيْهِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_qt0",
+      "unit": "siyar-v5-37-qutaylah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_qt_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_qt_yuqal",
+      "unit": "siyar-v5-37-qutaylah",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_qt_yuqal_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_qt_ubaydah",
+      "unit": "siyar-v5-37-qutaylah",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_qt_ubaydah_frame"
+      ],
+      "origin": {
+        "mention": "m_qt_ubaydah_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_qt_name",
+      "report": "r_qt0",
+      "spans": [
+        "sp_qt_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_qt_yuqal",
+      "report": "r_qt_yuqal",
+      "spans": [
+        "sp_qt_yuqal"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_qt_ubaydah",
+      "report": "r_qt_ubaydah",
+      "spans": [
+        "sp_qt_ubaydah"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_qt",
+      "parent": "sp_qt_name",
+      "exact": "قُتَيْلَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_qt_ashath",
+      "parent": "sp_qt_name",
+      "exact": "الأَشْعَثِ بنِ قَيْسٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_qt_yuqal_by",
+      "parent": "sp_qt_yuqal",
+      "exact": "يُقَالُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_qt_y",
+      "parent": "sp_qt_yuqal",
+      "exact": "هِيَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_qt_ashath2",
+      "parent": "sp_qt_yuqal",
+      "exact": "الأَشْعَثِ بنِ قَيْسٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_qt_ubaydah_by",
+      "parent": "sp_qt_ubaydah_frame",
+      "exact": "أَبُو عُبَيْدَةَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_qt_w",
+      "parent": "sp_qt_ubaydah",
+      "exact": "تَزَوَّجَهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_qt_prophet",
+      "parent": "sp_qt_ubaydah",
+      "exact": "النَّبِيُّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_qt",
+      "mention": "m_qt",
+      "agent": "qutaylah-bint-qais-al-kindiyyah",
+      "basis": [
+        {
+          "span": "sp_qt_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_qt_ashath",
+      "mention": "m_qt_ashath",
+      "agent": "al-ashath-ibn-qais",
+      "basis": [
+        {
+          "span": "sp_qt_ukht",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_qt_y",
+      "mention": "m_qt_y",
+      "agent": "qutaylah-bint-qais-al-kindiyyah",
+      "basis": [
+        {
+          "span": "sp_qt_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_qt_ashath2",
+      "mention": "m_qt_ashath2",
+      "agent": "al-ashath-ibn-qais",
+      "basis": [
+        {
+          "span": "sp_qt_ukht",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_qt_w",
+      "mention": "m_qt_w",
+      "agent": "qutaylah-bint-qais-al-kindiyyah",
+      "basis": [
+        {
+          "span": "sp_qt_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_qt_name",
+      "subject": "m_qt",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_qt_name_v"
+        ]
+      },
+      "restsOn": [
+        "st_qt_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_qt_sex",
+      "subject": "m_qt",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_qt_ukht"
+        ]
+      },
+      "restsOn": [
+        "st_qt_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_qt_sib",
+      "subject": "m_qt",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_qt_ashath"
+      },
+      "restsOn": [
+        "st_qt_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_qt_sib2",
+      "subject": "m_qt_y",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_qt_ashath2"
+      },
+      "restsOn": [
+        "st_qt_yuqal"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_qt_wife",
+      "subject": "m_qt_w",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_qt_prophet"
+      },
+      "restsOn": [
+        "st_qt_ubaydah"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

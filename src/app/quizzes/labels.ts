@@ -17,6 +17,7 @@ export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   MEANING: { en: "What does it mean?", ar: "ما معنى؟" },
   TAFSIR: { en: "Which ayah is this tafsir on?", ar: "لأي آية هذا التفسير؟" },
   BALAGHA: { en: "Which style?", ar: "ما الأسلوب؟" },
+  TERM: { en: "Which term?", ar: "ما المصطلح؟" },
   IRAB: { en: "What is its i'rab?", ar: "ما إعرابها؟" },
   QIRAAT: { en: "How does he read it?", ar: "كيف يقرؤها؟" },
   TUHFA_COMPLETE: { en: "Complete the verse", ar: "أكمل البيت" },
@@ -30,7 +31,7 @@ export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
 };
 
 export const TOPIC_GROUPS: { en: string; ar: string; topics: QuizTopic[] }[] = [
-  { en: "Quran", ar: "القرآن", topics: ["BRANCHES", "COMPARE", "SURAH", "RECITE", "OPENINGS", "ENDS", "MEANING", "TAFSIR", "BALAGHA", "IRAB", "QIRAAT"] },
+  { en: "Quran", ar: "القرآن", topics: ["BRANCHES", "COMPARE", "SURAH", "RECITE", "OPENINGS", "ENDS", "MEANING", "TAFSIR", "BALAGHA", "TERM", "IRAB", "QIRAAT"] },
   { en: "Tuhfat al-Atfal", ar: "تحفة الأطفال", topics: ["TUHFA_COMPLETE", "TUHFA_NEXT", "TUHFA_RULE"] },
   { en: "Tarajim", ar: "التراجم", topics: ["TARAJIM_NASAB", "TARAJIM_VIRTUE"] },
   { en: "Sira", ar: "السيرة", topics: ["SIRA"] },

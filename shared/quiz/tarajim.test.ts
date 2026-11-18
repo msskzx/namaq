@@ -27,6 +27,8 @@ describe('صاحب المنقبة', () => {
       expect(q.choices.map(c => c.value)).toContain(q.correctAnswer);
     }
     expect(questions.some(q => bareName(q.promptArabic).includes('طلحه'))).toBe(false);
+    // Ibn Ma'in's «مسور ثقة» names al-Miswar without the article.
+    expect(questions.some(q => bareName(q.promptArabic).startsWith('«مسور'))).toBe(false);
   });
 });
 
@@ -41,7 +43,8 @@ describe('fair choices', () => {
   it('writes «بنت» after a woman’s name in the nasab note, and never asks a meeting the question already names', () => {
     for (const q of nasabQuestions()) {
       expect(q.note?.text).not.toMatch(/^(?:صفية|عائشة) بن /u);
-      expect(bareName(q.promptArabic).includes(` ${bareName(q.correctAnswer)}`)).toBe(false);
+      // Word for word: «عمرو بن حريث» does not name «عمر».
+      expect(` ${bareName(q.promptArabic).replace(/[؟?]/gu, ' ')} `.includes(` ${bareName(q.correctAnswer)} `)).toBe(false);
     }
   });
 });

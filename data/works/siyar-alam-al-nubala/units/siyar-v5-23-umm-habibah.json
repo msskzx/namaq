@@ -1,0 +1,990 @@
+{
+  "unit": {
+    "id": "siyar-v5-23-umm-habibah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٢٣"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_uh_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "218",
+      "layer": "MAIN",
+      "exact": "٢٣ - أُمُّ حَبِيْبَةَ أُمُّ المُؤْمِنِيْنَ رَمْلَةُ بِنْتُ أَبِي سُفْيَانَ الأُمَوِيَّةُ"
+    },
+    {
+      "id": "sp_uh_head",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "218",
+      "layer": "MAIN",
+      "exact": "أُمُّ حَبِيْبَةَ أُمُّ المُؤْمِنِيْنَ رَمْلَةُ بِنْتُ أَبِي سُفْيَانَ الأُمَوِيَّةُ",
+      "prefix": "٢٣ -"
+    },
+    {
+      "id": "sp_uh_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "218",
+      "layer": "MAIN",
+      "exact": "أُمُّ حَبِيْبَةَ",
+      "prefix": "٢٣ -"
+    },
+    {
+      "id": "sp_uh_umm",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "218",
+      "layer": "MAIN",
+      "exact": "أُمُّ المُؤْمِنِيْنَ",
+      "prefix": "٢٣ - أُمُّ حَبِيْبَةَ"
+    },
+    {
+      "id": "sp_uh_name1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "218",
+      "layer": "MAIN",
+      "exact": "رَمْلَةُ بِنْتُ أَبِي سُفْيَانَ صَخْرِ بنِ حَرْبِ بنِ أُمَيَّةَ بنِ"
+    },
+    {
+      "id": "sp_uh_name2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "219",
+      "layer": "MAIN",
+      "exact": "عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ بنِ قُصَيٍّ"
+    },
+    {
+      "id": "sp_uh_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "218",
+      "layer": "MAIN",
+      "exact": "أَبِي سُفْيَانَ صَخْرِ بنِ حَرْبِ",
+      "prefix": "المُحَجَّبَةُ: رَمْلَةُ بِنْتُ"
+    },
+    {
+      "id": "sp_uh_aqrab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "219",
+      "layer": "MAIN",
+      "exact": "لَيْسَ فِي أَزْوَاجِهِ مَنْ هِيَ أَقْرَبُ نَسَباً إِلَيْهِ مِنْهَا"
+    },
+    {
+      "id": "sp_uh_hurmah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "222",
+      "layer": "MAIN",
+      "exact": "وَقَدْ كَانَ لأُمِّ حَبِيْبَةَ حُرْمَةٌ وَجَلاَلَةٌ"
+    },
+    {
+      "id": "sp_uh_aqd",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "219",
+      "layer": "MAIN",
+      "exact": "عُقِدَ لَهُ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِالحَبَشَةِ، وَأَصْدَقَهَا عَنْهُ صَاحِبُ الحَبَشَةِ أَرْبَعَ مائَةِ دِيْنَارٍ"
+    },
+    {
+      "id": "sp_uh_aqd_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "219",
+      "layer": "MAIN",
+      "exact": "لَهُ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-",
+      "prefix": "عُقِدَ"
+    },
+    {
+      "id": "sp_uh_self_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "220",
+      "layer": "MAIN",
+      "exact": "مَعْمَرٌ: عَنِ الزُّهْرِيِّ، عَنْ عُرْوَةَ، عَنْ أُمِّ حَبِيْبَةَ"
+    },
+    {
+      "id": "sp_uh_self",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "220",
+      "layer": "MAIN",
+      "exact": "أَنَّهَا كَانَتْ تَحْتَ عُبَيْدِ"
+    },
+    {
+      "id": "sp_uh_self_1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "221",
+      "layer": "MAIN",
+      "exact": "اللهِ، وَأَنَّ رَسُوْلَ اللهِ تَزَوَّجَهَا بِالحَبَشَةِ، زَوَّجَهَا إِيَّاهُ النَّجَاشِيُّ"
+    },
+    {
+      "id": "sp_uh_akhawa",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "219",
+      "layer": "MAIN",
+      "exact": "أَخَوَاهَا؛ الخَلِيْفَةُ مُعَاوِيَةُ، وَعَنْبَسَةُ",
+      "prefix": "حَدَّثَ عَنْهَا:"
+    },
+    {
+      "id": "sp_uh_akhawa_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "219",
+      "layer": "MAIN",
+      "exact": "الخَلِيْفَةُ مُعَاوِيَةُ، وَعَنْبَسَةُ",
+      "prefix": "أَخَوَاهَا؛"
+    },
+    {
+      "id": "sp_uh_saad_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "220",
+      "layer": "MAIN",
+      "exact": "قَالَ ابْنُ سَعْدٍ",
+      "prefix": "الأَنْصَارِيَّةُ."
+    },
+    {
+      "id": "sp_uh_saad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "220",
+      "layer": "MAIN",
+      "exact": "وَلَدَ أَبُو سُفْيَانَ: حَنْظَلَةَ المَقْتُوْلَ يَوْمَ بَدْرٍ؛ وَأُمَّ حَبِيْبَةَ، تُوُفِّيَ عَنْهَا زَوْجُهَا الَّذِي هَاجَرَ بِهَا إِلَى الحَبَشَةِ: عُبَيْدُ اللهِ بنُ جَحْشِ بنِ رِيَابٍ الأَسَدِيُّ مُرْتَدّاً مُتَنَصِّراً"
+    },
+    {
+      "id": "sp_uh_saad_ubaydullah_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "220",
+      "layer": "MAIN",
+      "exact": "عُبَيْدُ اللهِ بنُ جَحْشِ بنِ رِيَابٍ الأَسَدِيُّ"
+    },
+    {
+      "id": "sp_uh_hanzalah_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "220",
+      "layer": "MAIN",
+      "exact": "حَنْظَلَةَ المَقْتُوْلَ يَوْمَ بَدْرٍ"
+    },
+    {
+      "id": "sp_uh_d44_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "222",
+      "layer": "MAIN",
+      "exact": "قَالَ الوَاقِدِيُّ، وَأَبُو عُبَيْدٍ، وَالفَسَوِيُّ"
+    },
+    {
+      "id": "sp_uh_d44",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "222",
+      "layer": "MAIN",
+      "exact": "مَاتَتْ أُمُّ حَبِيْبَةَ سَنَةَ أَرْبَعٍ وَأَرْبَعِيْنَ"
+    },
+    {
+      "id": "sp_uh_d44_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "222",
+      "layer": "MAIN",
+      "exact": "سَنَةَ أَرْبَعٍ وَأَرْبَعِيْنَ",
+      "prefix": "مَاتَتْ أُمُّ حَبِيْبَةَ"
+    },
+    {
+      "id": "sp_uh_ghallabi_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "222",
+      "layer": "MAIN",
+      "exact": "وَقَالَ المُفَضَّلُ الغَلاَبِيُّ"
+    },
+    {
+      "id": "sp_uh_ghallabi",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "222",
+      "layer": "MAIN",
+      "exact": "سَنَةَ اثْنَتَيْنِ وَأَرْبَعِيْنَ",
+      "prefix": "وَقَالَ المُفَضَّلُ الغَلاَبِيُّ:"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_uh0",
+      "unit": "siyar-v5-23-umm-habibah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_uh_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_uh_self",
+      "unit": "siyar-v5-23-umm-habibah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_uh_self_isnad",
+      "origin": {
+        "mention": "m_uh_self_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_uh_saad",
+      "unit": "siyar-v5-23-umm-habibah",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_uh_saad_frame"
+      ],
+      "origin": {
+        "mention": "m_uh_saad_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_uh_d_waqidi",
+      "unit": "siyar-v5-23-umm-habibah",
+      "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_uh_d44_frame"
+      ],
+      "origin": {
+        "mention": "m_uh_d_waqidi"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_uh_d_abuubayd",
+      "unit": "siyar-v5-23-umm-habibah",
+      "ordinal": 5,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_uh_d44_frame"
+      ],
+      "origin": {
+        "mention": "m_uh_d_abuubayd"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_uh_d_fasawi",
+      "unit": "siyar-v5-23-umm-habibah",
+      "ordinal": 6,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_uh_d44_frame"
+      ],
+      "origin": {
+        "mention": "m_uh_d_fasawi"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_uh_ghallabi",
+      "unit": "siyar-v5-23-umm-habibah",
+      "ordinal": 7,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_uh_ghallabi_frame"
+      ],
+      "origin": {
+        "mention": "m_uh_ghallabi_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_uh_head",
+      "report": "r_uh0",
+      "spans": [
+        "sp_uh_head"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uh_name",
+      "report": "r_uh0",
+      "spans": [
+        "sp_uh_name1",
+        "sp_uh_name2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uh_aqrab",
+      "report": "r_uh0",
+      "spans": [
+        "sp_uh_aqrab"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uh_hurmah",
+      "report": "r_uh0",
+      "spans": [
+        "sp_uh_hurmah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uh_aqd",
+      "report": "r_uh0",
+      "spans": [
+        "sp_uh_aqd"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uh_self",
+      "report": "r_uh_self",
+      "spans": [
+        "sp_uh_self",
+        "sp_uh_self_1"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_uh_akhawa",
+      "report": "r_uh0",
+      "spans": [
+        "sp_uh_akhawa"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uh_saad",
+      "report": "r_uh_saad",
+      "spans": [
+        "sp_uh_saad"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_uh_d_waqidi",
+      "report": "r_uh_d_waqidi",
+      "spans": [
+        "sp_uh_d44"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_uh_d_abuubayd",
+      "report": "r_uh_d_abuubayd",
+      "spans": [
+        "sp_uh_d44"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_uh_d_fasawi",
+      "report": "r_uh_d_fasawi",
+      "spans": [
+        "sp_uh_d44"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_uh_ghallabi",
+      "report": "r_uh_ghallabi",
+      "spans": [
+        "sp_uh_ghallabi"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_uh",
+      "parent": "sp_uh_name1",
+      "exact": "رَمْلَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uh_h",
+      "parent": "sp_uh_head",
+      "exact": "أُمُّ حَبِيْبَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uh_father",
+      "parent": "sp_uh_name1",
+      "exact": "أَبِي سُفْيَانَ صَخْرِ بنِ حَرْبِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uh_hr",
+      "parent": "sp_uh_hurmah",
+      "exact": "لأُمِّ حَبِيْبَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uh_nabi",
+      "parent": "sp_uh_aqd",
+      "exact": "لَهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uh_self_by",
+      "parent": "sp_uh_self_isnad",
+      "exact": "أُمِّ حَبِيْبَةَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_uh_self",
+      "parent": "sp_uh_self",
+      "exact": "أَنَّهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uh_ubaydullah",
+      "parent": "sp_uh_self",
+      "exact": "عُبَيْدِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uh_rasul2",
+      "parent": "sp_uh_self_1",
+      "exact": "رَسُوْلَ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uh_ak",
+      "parent": "sp_uh_akhawa",
+      "exact": "أَخَوَاهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uh_muawiyah",
+      "parent": "sp_uh_akhawa",
+      "exact": "مُعَاوِيَةُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uh_anbasah",
+      "parent": "sp_uh_akhawa",
+      "exact": "عَنْبَسَةُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uh_saad_by",
+      "parent": "sp_uh_saad_frame",
+      "exact": "ابْنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_uh_sd",
+      "parent": "sp_uh_saad",
+      "exact": "وَأُمَّ حَبِيْبَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uh_sd_father",
+      "parent": "sp_uh_saad",
+      "exact": "أَبُو سُفْيَانَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uh_hanzalah",
+      "parent": "sp_uh_saad",
+      "exact": "حَنْظَلَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uh_ubaydullah2",
+      "parent": "sp_uh_saad",
+      "exact": "عُبَيْدُ اللهِ بنُ جَحْشِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uh_d",
+      "parent": "sp_uh_d44",
+      "exact": "أُمُّ حَبِيْبَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uh_d_waqidi",
+      "parent": "sp_uh_d44_frame",
+      "exact": "الوَاقِدِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_uh_d_abuubayd",
+      "parent": "sp_uh_d44_frame",
+      "exact": "أَبُو عُبَيْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_uh_d_fasawi",
+      "parent": "sp_uh_d44_frame",
+      "exact": "الفَسَوِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_uh_ghallabi_by",
+      "parent": "sp_uh_ghallabi_frame",
+      "exact": "المُفَضَّلُ الغَلاَبِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_uh",
+      "mention": "m_uh",
+      "agent": "umm-habibah",
+      "basis": [
+        {
+          "span": "sp_uh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uh_h",
+      "mention": "m_uh_h",
+      "agent": "umm-habibah",
+      "basis": [
+        {
+          "span": "sp_uh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uh_father",
+      "mention": "m_uh_father",
+      "agent": "abu-sufyan-ibn-harb",
+      "basis": [
+        {
+          "span": "sp_uh_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uh_hr",
+      "mention": "m_uh_hr",
+      "agent": "umm-habibah",
+      "basis": [
+        {
+          "span": "sp_uh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uh_nabi",
+      "mention": "m_uh_nabi",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_uh_aqd_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uh_self",
+      "mention": "m_uh_self",
+      "agent": "umm-habibah",
+      "basis": [
+        {
+          "span": "sp_uh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uh_rasul2",
+      "mention": "m_uh_rasul2",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_uh_aqd_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uh_ak",
+      "mention": "m_uh_ak",
+      "agent": "umm-habibah",
+      "basis": [
+        {
+          "span": "sp_uh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uh_muawiyah",
+      "mention": "m_uh_muawiyah",
+      "agent": "muawiyah-ibn-abi-sufyan",
+      "basis": [
+        {
+          "span": "sp_uh_akhawa_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uh_anbasah",
+      "mention": "m_uh_anbasah",
+      "agent": "anbasah-ibn-abi-sufyan",
+      "basis": [
+        {
+          "span": "sp_uh_akhawa_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uh_sd",
+      "mention": "m_uh_sd",
+      "agent": "umm-habibah",
+      "basis": [
+        {
+          "span": "sp_uh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uh_sd_father",
+      "mention": "m_uh_sd_father",
+      "agent": "abu-sufyan-ibn-harb",
+      "basis": [
+        {
+          "span": "sp_uh_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uh_hanzalah",
+      "mention": "m_uh_hanzalah",
+      "agent": "hanzalah-ibn-abi-sufyan",
+      "basis": [
+        {
+          "span": "sp_uh_hanzalah_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uh_ubaydullah2",
+      "mention": "m_uh_ubaydullah2",
+      "agent": "ubaydullah-ibn-jahsh",
+      "basis": [
+        {
+          "span": "sp_uh_saad_ubaydullah_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uh_ubaydullah",
+      "mention": "m_uh_ubaydullah",
+      "agent": "ubaydullah-ibn-jahsh",
+      "basis": [
+        {
+          "span": "sp_uh_saad_ubaydullah_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uh_d",
+      "mention": "m_uh_d",
+      "agent": "umm-habibah",
+      "basis": [
+        {
+          "span": "sp_uh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_uh_name",
+      "subject": "m_uh",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_uh_name1",
+          "sp_uh_name2"
+        ]
+      },
+      "restsOn": [
+        "st_uh_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uh_sex",
+      "subject": "m_uh",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_uh_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_uh_head"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uh_kunya",
+      "subject": "m_uh_h",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_uh_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_uh_head"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uh_umm",
+      "subject": "m_uh_h",
+      "predicate": "title",
+      "value": {
+        "classified": "mother-of-believers",
+        "spans": [
+          "sp_uh_umm"
+        ]
+      },
+      "restsOn": [
+        "st_uh_head"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uh_father",
+      "subject": "m_uh",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_uh_father"
+      },
+      "restsOn": [
+        "st_uh_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uh_v_aqrab",
+      "subject": "m_uh",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_uh_aqrab"
+        ]
+      },
+      "restsOn": [
+        "st_uh_aqrab"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uh_v_hurmah",
+      "subject": "m_uh_hr",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_uh_hurmah"
+        ]
+      },
+      "restsOn": [
+        "st_uh_hurmah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uh_nabi",
+      "subject": "m_uh",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_uh_nabi"
+      },
+      "restsOn": [
+        "st_uh_aqd"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uh_nabi2",
+      "subject": "m_uh_self",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_uh_rasul2"
+      },
+      "restsOn": [
+        "st_uh_self"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uh_muawiyah",
+      "subject": "m_uh_ak",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_uh_muawiyah"
+      },
+      "restsOn": [
+        "st_uh_akhawa"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uh_anbasah",
+      "subject": "m_uh_ak",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_uh_anbasah"
+      },
+      "restsOn": [
+        "st_uh_akhawa"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uh_sd_father",
+      "subject": "m_uh_sd",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_uh_sd_father"
+      },
+      "restsOn": [
+        "st_uh_saad"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uh_hanzalah",
+      "subject": "m_uh_sd",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_uh_hanzalah"
+      },
+      "restsOn": [
+        "st_uh_saad"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uh_ubaydullah",
+      "subject": "m_uh_sd",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_uh_ubaydullah2"
+      },
+      "restsOn": [
+        "st_uh_saad"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uh_ubaydullah_self",
+      "subject": "m_uh_self",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_uh_ubaydullah"
+      },
+      "restsOn": [
+        "st_uh_self"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uh_d44",
+      "subject": "m_uh_d",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 44,
+        "spans": [
+          "sp_uh_d44_y"
+        ]
+      },
+      "restsOn": [
+        "st_uh_d_waqidi",
+        "st_uh_d_abuubayd",
+        "st_uh_d_fasawi"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uh_d42",
+      "subject": "m_uh_d",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 42,
+        "spans": [
+          "sp_uh_ghallabi"
+        ]
+      },
+      "restsOn": [
+        "st_uh_ghallabi"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

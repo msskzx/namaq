@@ -1,0 +1,315 @@
+{
+  "unit": {
+    "id": "siyar-v5-124-maqil-ibn-yasar",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٢٤"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_my_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "576",
+      "layer": "MAIN",
+      "exact": "١٢٤ - مَعْقِلُ بنُ يَسَارٍ المُزَنِيُّ البَصْرِيُّ"
+    },
+    {
+      "id": "sp_my_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "576",
+      "layer": "MAIN",
+      "exact": "مَعْقِلُ بنُ يَسَارٍ المُزَنِيُّ البَصْرِيُّ"
+    },
+    {
+      "id": "sp_my_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "576",
+      "layer": "MAIN",
+      "exact": "مَعْقِلُ بنُ",
+      "prefix": "السِّتَّةِ.\n\n١٢٤ -"
+    },
+    {
+      "id": "sp_my_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "576",
+      "layer": "MAIN",
+      "exact": "يَسَارٍ المُزَنِيُّ",
+      "prefix": "بنُ"
+    },
+    {
+      "id": "sp_my_ridwan",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "576",
+      "layer": "MAIN",
+      "exact": "مِنْ أَهْلِ بَيْعَةِ الرِّضْوَانِ"
+    },
+    {
+      "id": "sp_my_hud_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "576",
+      "layer": "MAIN",
+      "exact": "أَهْلِ بَيْعَةِ الرِّضْوَانِ"
+    },
+    {
+      "id": "sp_my_saad_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "576",
+      "layer": "MAIN",
+      "exact": "قَالَ مُحَمَّدُ بنُ سَعْدٍ"
+    },
+    {
+      "id": "sp_my_saad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "576",
+      "layer": "MAIN",
+      "exact": "لاَ نَعْلَمُ فِي الصَّحَابَةِ مَنْ يُكْنَى أَبَا عَلِيٍّ سِوَاهُ"
+    },
+    {
+      "id": "sp_my_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "576",
+      "layer": "MAIN",
+      "exact": "أَبَا عَلِيٍّ",
+      "prefix": "يُكْنَى"
+    },
+    {
+      "id": "sp_my_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "576",
+      "layer": "MAIN",
+      "exact": "مَاتَ: بِالبَصْرَةِ، فِي آخِرِ خِلاَفَةِ مُعَاوِيَةَ"
+    },
+    {
+      "id": "sp_my_death_p",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "576",
+      "layer": "MAIN",
+      "exact": "بِالبَصْرَةِ",
+      "prefix": "سِوَاهُ.\n\nمَاتَ:"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_my0",
+      "unit": "siyar-v5-124-maqil-ibn-yasar",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_my_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_my_saad",
+      "unit": "siyar-v5-124-maqil-ibn-yasar",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_my_saad_frame"
+      ],
+      "origin": {
+        "mention": "m_my_saad_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_my_name",
+      "report": "r_my0",
+      "spans": [
+        "sp_my_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_my_ridwan",
+      "report": "r_my0",
+      "spans": [
+        "sp_my_ridwan"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_my_saad",
+      "report": "r_my_saad",
+      "spans": [
+        "sp_my_saad"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_my_death",
+      "report": "r_my0",
+      "spans": [
+        "sp_my_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_my",
+      "parent": "sp_my_name",
+      "exact": "مَعْقِلُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_my_father",
+      "parent": "sp_my_name",
+      "exact": "يَسَارٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_my_hud",
+      "parent": "sp_my_ridwan",
+      "exact": "بَيْعَةِ الرِّضْوَانِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_my_saad_by",
+      "parent": "sp_my_saad_frame",
+      "exact": "مُحَمَّدُ بنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_my",
+      "mention": "m_my",
+      "agent": "maqil-ibn-yasar",
+      "basis": [
+        {
+          "span": "sp_my_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_my_father",
+      "mention": "m_my_father",
+      "agent": "yasar-father-of-maqil-al-muzani",
+      "basis": [
+        {
+          "span": "sp_my_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_my_hud",
+      "mention": "m_my_hud",
+      "event": "hudaybiyyah",
+      "basis": [
+        {
+          "span": "sp_my_hud_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_my_name",
+      "subject": "m_my",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_my_name"
+        ]
+      },
+      "restsOn": [
+        "st_my_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_my_sex",
+      "subject": "m_my",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_my_sex"
+        ]
+      },
+      "restsOn": [
+        "st_my_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_my_father",
+      "subject": "m_my",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_my_father"
+      },
+      "restsOn": [
+        "st_my_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_my_hud",
+      "subject": "m_my",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_my_hud"
+      },
+      "restsOn": [
+        "st_my_ridwan"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_my_kunya",
+      "subject": "m_my",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_my_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_my_saad"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_my_died_p",
+      "subject": "m_my",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "sp_my_death_p"
+        ]
+      },
+      "restsOn": [
+        "st_my_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

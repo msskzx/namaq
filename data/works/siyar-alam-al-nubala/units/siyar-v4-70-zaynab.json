@@ -1,0 +1,282 @@
+{
+  "unit": {
+    "id": "siyar-v4-70-zaynab",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٧٠"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_zb_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "334",
+      "layer": "MAIN",
+      "exact": "٧٠ - زَيْنَبُ أَكْبَرُ بَنَاتِ رَسُوْلِ اللهِ * -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-"
+    },
+    {
+      "id": "sp_zb_main",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "334",
+      "layer": "MAIN",
+      "exact": "زَيْنَبُ (٢) هَذِهِ كَانَتْ - رَضِيَ اللهُ عَنْهَا - أَكْبَرَ بَنَاتِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَتُوُفِّيَتْ سَنَةَ ثَمَانٍ مِنَ الهِجْرَةِ"
+    },
+    {
+      "id": "sp_zb_sal",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "334",
+      "layer": "MAIN",
+      "exact": "صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "prefix": "أَكْبَرَ بَنَاتِ رَسُوْلِ اللهِ -"
+    },
+    {
+      "id": "sp_zb_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "334",
+      "layer": "MAIN",
+      "exact": "سَنَةَ ثَمَانٍ",
+      "prefix": "وَتُوُفِّيَتْ ",
+      "suffix": " مِنَ"
+    },
+    {
+      "id": "sp_zb_love",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "335",
+      "layer": "MAIN",
+      "exact": "وَكَانَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يُحِبُّهَا، وَيُثْنِي عَلَيْهَا"
+    },
+    {
+      "id": "sp_zb_aas",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "335",
+      "layer": "MAIN",
+      "exact": "وَمَاتَ أَبُو العَاصِ فِي شَهْرِ ذِي الحِجَّةِ، سَنَةَ اثْنَتَيْ عَشْرَةَ، فِي خِلاَفَةِ الصِّدِّيْقِ"
+    },
+    {
+      "id": "sp_zb_aas_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "335",
+      "layer": "MAIN",
+      "exact": "أَبُو العَاصِ",
+      "prefix": "وَمَاتَ ",
+      "suffix": " فِي شَهْرِ"
+    },
+    {
+      "id": "sp_zb_aas_m",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "335",
+      "layer": "MAIN",
+      "exact": "فِي شَهْرِ ذِي الحِجَّةِ"
+    },
+    {
+      "id": "sp_zb_aas_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "335",
+      "layer": "MAIN",
+      "exact": "سَنَةَ اثْنَتَيْ عَشْرَةَ",
+      "prefix": "ذِي الحِجَّةِ، "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_zb0",
+      "unit": "siyar-v4-70-zaynab",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_zb_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_zb_main",
+      "report": "r_zb0",
+      "spans": [
+        "sp_zb_main"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zb_love",
+      "report": "r_zb0",
+      "spans": [
+        "sp_zb_love"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zb_aas",
+      "report": "r_zb0",
+      "spans": [
+        "sp_zb_aas"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_zb",
+      "parent": "sp_zb_main",
+      "exact": "زَيْنَبُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zb_p",
+      "parent": "sp_zb_main",
+      "exact": "رَسُوْلِ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zb_l",
+      "parent": "sp_zb_love",
+      "exact": "يُحِبُّهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zb_aas",
+      "parent": "sp_zb_aas",
+      "exact": "أَبُو العَاصِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_zb",
+      "mention": "m_zb",
+      "agent": "zaynab-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_zb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zb_l",
+      "mention": "m_zb_l",
+      "agent": "zaynab-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_zb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zb_p",
+      "mention": "m_zb_p",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_zb_sal",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zb_aas",
+      "mention": "m_zb_aas",
+      "agent": "abu-al-as-ibn-al-rabi",
+      "basis": [
+        {
+          "span": "sp_zb_aas_name",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_zb_father",
+      "subject": "m_zb",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_zb_p"
+      },
+      "restsOn": [
+        "st_zb_main"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zb_death",
+      "subject": "m_zb",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 8,
+        "spans": [
+          "sp_zb_y"
+        ]
+      },
+      "restsOn": [
+        "st_zb_main"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zb_v_love",
+      "subject": "m_zb_l",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_zb_love"
+        ]
+      },
+      "restsOn": [
+        "st_zb_love"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zb_aas_y",
+      "subject": "m_zb_aas",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 12,
+        "spans": [
+          "sp_zb_aas_y"
+        ]
+      },
+      "restsOn": [
+        "st_zb_aas"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zb_aas_m",
+      "subject": "m_zb_aas",
+      "predicate": "died.month",
+      "value": {
+        "parsed": 12,
+        "spans": [
+          "sp_zb_aas_m"
+        ]
+      },
+      "restsOn": [
+        "st_zb_aas"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

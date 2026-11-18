@@ -1,0 +1,444 @@
+{
+  "unit": {
+    "id": "siyar-v6-71-al-irbad-ibn-sariyah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٧١"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ir_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "419",
+      "layer": "MAIN",
+      "exact": "٧١ - العِرْبَاضُ بنُ سَارِيَةَ السُّلَمِيُّ"
+    },
+    {
+      "id": "sp_ir_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "419",
+      "layer": "MAIN",
+      "exact": "العِرْبَاضُ بنُ سَارِيَةَ السُّلَمِيُّ",
+      "prefix": "٧١ - "
+    },
+    {
+      "id": "sp_ir_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "419",
+      "layer": "MAIN",
+      "exact": "العِرْبَاضُ بنُ",
+      "prefix": "٧١ - "
+    },
+    {
+      "id": "sp_ir_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "419",
+      "layer": "MAIN",
+      "exact": "سَارِيَةَ السُّلَمِيُّ",
+      "prefix": "العِرْبَاضُ بنُ "
+    },
+    {
+      "id": "sp_ir_suffah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "419",
+      "layer": "MAIN",
+      "exact": "مِنْ أَعْيَانِ أَهْلِ الصُّفَّةِ",
+      "suffix": "، سَكَنَ حِمْصَ"
+    },
+    {
+      "id": "sp_ir_ayah_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "420",
+      "layer": "MAIN",
+      "exact": "أَحْمَدُ فِي (مُسْنَدِهِ) : حَدَّثَنَا الوَلِيْدُ بنُ مُسْلِمٍ، حَدَّثَنَا ثَوْرٌ، حَدَّثَنَا خَالِدُ بنُ مَعْدَانَ، حَدَّثَنِي عَبْدُ الرَّحْمَنِ بنُ عَمْرٍو السُّلَمِيُّ، وَحُجْرُ بنُ حُجْرٍ"
+    },
+    {
+      "id": "sp_ir_ayah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "420",
+      "layer": "MAIN",
+      "exact": "أَتَينَا (١) العِرْبَاضَ بنَ سَارِيَةَ، وَهُوَ مِمَّنْ نَزَلَ فِيْهِ: {وَلاَ عَلَى الَّذِيْنَ إِذَا مَا أَتَوْكَ لِتَحْمِلَهُم قُلْتَ: لاَ أَجِدُ مَا أَحْمِلُكُم عَلَيْهِ} [التَّوْبَةُ: ٩٣]"
+    },
+    {
+      "id": "sp_ir_ayah_q",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "420",
+      "layer": "MAIN",
+      "exact": "وَلاَ عَلَى الَّذِيْنَ إِذَا مَا أَتَوْكَ لِتَحْمِلَهُم قُلْتَ: لاَ أَجِدُ مَا أَحْمِلُكُم عَلَيْهِ"
+    },
+    {
+      "id": "sp_ir_kunya_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "421",
+      "layer": "MAIN",
+      "exact": "قَالَ أَحْمَدُ بنُ حَنْبَلٍ",
+      "suffix": ": كُنْيَةُ"
+    },
+    {
+      "id": "sp_ir_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "421",
+      "layer": "MAIN",
+      "exact": "كُنْيَةُ العِرْبَاضِ: أَبُو نَجِيْحٍ"
+    },
+    {
+      "id": "sp_ir_kunya_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "421",
+      "layer": "MAIN",
+      "exact": "أَبُو نَجِيْحٍ",
+      "prefix": "كُنْيَةُ العِرْبَاضِ: "
+    },
+    {
+      "id": "sp_ir_death_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "422",
+      "layer": "MAIN",
+      "exact": "قَالَ أَبُو مُسْهِرٍ، وَغَيْرُهُ"
+    },
+    {
+      "id": "sp_ir_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "422",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ العِرْبَاضُ سَنَةَ خَمْسٍ وَسَبْعِيْنَ"
+    },
+    {
+      "id": "sp_ir_death_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "422",
+      "layer": "MAIN",
+      "exact": "سَنَةَ خَمْسٍ وَسَبْعِيْنَ",
+      "prefix": "تُوُفِّيَ العِرْبَاضُ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ir0",
+      "unit": "siyar-v6-71-al-irbad-ibn-sariyah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ir_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ir_ayah",
+      "unit": "siyar-v6-71-al-irbad-ibn-sariyah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_ir_ayah_isnad",
+      "origin": {
+        "mention": "m_ir_ayah_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ir_kunya",
+      "unit": "siyar-v6-71-al-irbad-ibn-sariyah",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ir_kunya_frame"
+      ],
+      "origin": {
+        "mention": "m_ir_kunya_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ir_death",
+      "unit": "siyar-v6-71-al-irbad-ibn-sariyah",
+      "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ir_death_frame"
+      ],
+      "origin": {
+        "mention": "m_ir_death_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ir_name",
+      "report": "r_ir0",
+      "spans": [
+        "sp_ir_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ir_suffah",
+      "report": "r_ir0",
+      "spans": [
+        "sp_ir_suffah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ir_ayah",
+      "report": "r_ir_ayah",
+      "spans": [
+        "sp_ir_ayah"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ir_kunya",
+      "report": "r_ir_kunya",
+      "spans": [
+        "sp_ir_kunya"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ir_death",
+      "report": "r_ir_death",
+      "spans": [
+        "sp_ir_death"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ir",
+      "parent": "sp_ir_name",
+      "exact": "العِرْبَاضُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ir_father",
+      "parent": "sp_ir_name",
+      "exact": "سَارِيَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ir_ayah_by",
+      "parent": "sp_ir_ayah_isnad",
+      "exact": "عَبْدُ الرَّحْمَنِ بنُ عَمْرٍو السُّلَمِيُّ، وَحُجْرُ بنُ حُجْرٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ir_a",
+      "parent": "sp_ir_ayah",
+      "exact": "العِرْبَاضَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ir_kunya_by",
+      "parent": "sp_ir_kunya_frame",
+      "exact": "أَحْمَدُ بنُ حَنْبَلٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ir_k",
+      "parent": "sp_ir_kunya",
+      "exact": "العِرْبَاضِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ir_death_by",
+      "parent": "sp_ir_death_frame",
+      "exact": "أَبُو مُسْهِرٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ir_d",
+      "parent": "sp_ir_death",
+      "exact": "العِرْبَاضُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ir",
+      "mention": "m_ir",
+      "agent": "al-irbad-ibn-sariyah",
+      "basis": [
+        {
+          "span": "sp_ir_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ir_father",
+      "mention": "m_ir_father",
+      "agent": "sariyah-as-sulami",
+      "basis": [
+        {
+          "span": "sp_ir_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ir_a",
+      "mention": "m_ir_a",
+      "agent": "al-irbad-ibn-sariyah",
+      "basis": [
+        {
+          "span": "sp_ir_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ir_k",
+      "mention": "m_ir_k",
+      "agent": "al-irbad-ibn-sariyah",
+      "basis": [
+        {
+          "span": "sp_ir_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ir_d",
+      "mention": "m_ir_d",
+      "agent": "al-irbad-ibn-sariyah",
+      "basis": [
+        {
+          "span": "sp_ir_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ir_name",
+      "subject": "m_ir",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ir_name"
+        ]
+      },
+      "restsOn": [
+        "st_ir_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ir_sex",
+      "subject": "m_ir",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ir_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ir_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ir_father",
+      "subject": "m_ir",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ir_father"
+      },
+      "restsOn": [
+        "st_ir_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ir_v_suffah",
+      "subject": "m_ir",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ir_suffah"
+        ]
+      },
+      "restsOn": [
+        "st_ir_suffah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ir_ayah",
+      "subject": "m_ir_a",
+      "predicate": "REVEALED_ABOUT",
+      "value": {
+        "classified": "9:92",
+        "spans": [
+          "sp_ir_ayah_q"
+        ]
+      },
+      "restsOn": [
+        "st_ir_ayah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ir_kunya",
+      "subject": "m_ir_k",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_ir_kunya_n"
+        ]
+      },
+      "restsOn": [
+        "st_ir_kunya"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ir_death",
+      "subject": "m_ir_d",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 75,
+        "spans": [
+          "sp_ir_death_y"
+        ]
+      },
+      "restsOn": [
+        "st_ir_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

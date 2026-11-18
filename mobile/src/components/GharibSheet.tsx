@@ -17,13 +17,11 @@ import Card from '@/ui/Card';
 import Tabs from '@/ui/Tabs';
 import Folded from '@/ui/Folded';
 import Pickable from '@/ui/Pickable';
-import QuranWords from './quran/text/QuranWords';
+import LitAyat from './quran/text/LitAyat';
 import BookRuns from './quran/text/BookRuns';
 
 export type GharibTarget = { key: string; word: number };
 
-/** The ayah's words in a card, the lit ones on a deeper band (BalaghaSheet's). */
-const deepBand = (palette: Palette) => `${palette.ink}33`;
 type Book = 'gharib' | 'mufradat';
 const BOOK_NAMES: Record<Book, string> = { gharib: 'غريب القرآن لابن قتيبة', mufradat: 'المفردات للراغب' };
 
@@ -70,11 +68,7 @@ function GharibBody({ target, palette }: { target: GharibTarget; palette: Palett
       </View>
       <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 10, paddingBottom: 8 }}>
         <Card palette={palette} pad={[10, 14]}>
-          <QuranWords style={{ fontSize: 23, lineHeight: 46, color: palette.ink, textAlign: 'right', writingDirection: 'rtl' }}>
-            {words.map((text, i) => (
-              <Text key={i} style={lit.some(([from, to]) => i >= from && i <= to) ? { backgroundColor: deepBand(palette) } : undefined}>{`${i ? ' ' : ''}${text}`}</Text>
-            ))}
-          </QuranWords>
+          <LitAyat ayat={[{ words, lit }]} palette={palette} />
         </Card>
         {books.length > 1 && <Tabs options={books.map(book => ({ key: book, label: BOOK_NAMES[book] }))} value={shown} onChange={book => { setShown(book); setPicked(null); }} palette={palette} />}
         {!books.length && !(gharibOn && mufradatOn) ? null

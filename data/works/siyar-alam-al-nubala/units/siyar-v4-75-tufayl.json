@@ -1,0 +1,450 @@
+{
+  "unit": {
+    "id": "siyar-v4-75-tufayl",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٧٥"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_tf_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "344",
+      "layer": "MAIN",
+      "exact": "٧٥ - الطُّفَيْلُ بنُ عَمْرِو بنِ طَرِيْفٍ الدَّوْسِيُّ *"
+    },
+    {
+      "id": "sp_tf1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "344",
+      "layer": "MAIN",
+      "exact": "الطُّفَيْلُ بنُ عَمْرِو بنِ طَرِيْفٍ",
+      "prefix": "٧٥ - "
+    },
+    {
+      "id": "sp_tf_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "344",
+      "layer": "MAIN",
+      "exact": "الطُّفَيْلُ بنُ",
+      "prefix": "٧٥ - "
+    },
+    {
+      "id": "sp_tf_father_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "344",
+      "layer": "MAIN",
+      "exact": "عَمْرِو بنِ طَرِيْفٍ",
+      "prefix": "الطُّفَيْلُ بنُ ",
+      "suffix": " الدَّوْسِيُّ"
+    },
+    {
+      "id": "sp_tf_sahib",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "344",
+      "layer": "MAIN",
+      "exact": "صَاحِبُ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- كَانَ سَيِّداً مُطَاعاً مِنْ أَشْرَافِ العَرَبِ"
+    },
+    {
+      "id": "sp_tf_sahib_sal",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "344",
+      "layer": "MAIN",
+      "exact": "صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "prefix": "صَاحِبُ النَّبِيِّ -"
+    },
+    {
+      "id": "sp_tf_sayyid",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "344",
+      "layer": "MAIN",
+      "exact": "كَانَ سَيِّداً مُطَاعاً مِنْ أَشْرَافِ العَرَبِ"
+    },
+    {
+      "id": "sp_tf_laqab_st",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "344",
+      "layer": "MAIN",
+      "exact": "وَكَانَ الطُّفَيْلُ يُلَقَّبُ: ذَا النُّوْرِ (١)"
+    },
+    {
+      "id": "sp_tf_laqab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "344",
+      "layer": "MAIN",
+      "exact": "ذَا النُّوْرِ",
+      "prefix": "يُلَقَّبُ: "
+    },
+    {
+      "id": "sp_tf_kalbi_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "344",
+      "layer": "MAIN",
+      "exact": "قَالَ هِشَامُ بنُ الكَلْبِيِّ"
+    },
+    {
+      "id": "sp_tf_kalbi",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "344",
+      "layer": "MAIN",
+      "exact": "سُمِّيَ الطُّفَيْلُ بنُ عَمْرِو بنِ طَرِيْفٍ ذَا النُّوْرِ"
+    },
+    {
+      "id": "sp_tf_son",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "347",
+      "layer": "MAIN",
+      "exact": "وَقَدْ عُدَّ وَلَدُهُ عَمْرٌو فِي الصَّحَابَةِ"
+    },
+    {
+      "id": "sp_tf_son_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "347",
+      "layer": "MAIN",
+      "exact": "وَلَدُهُ عَمْرٌو",
+      "prefix": "وَقَدْ عُدَّ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_tf0",
+      "unit": "siyar-v4-75-tufayl",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_tf_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_tf_kalbi",
+      "unit": "siyar-v4-75-tufayl",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_tf_kalbi_frame"
+      ],
+      "origin": {
+        "mention": "m_tf_kalbi"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_tf_name",
+      "report": "r_tf0",
+      "spans": [
+        "sp_tf1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_tf_sahib",
+      "report": "r_tf0",
+      "spans": [
+        "sp_tf_sahib"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_tf_laqab",
+      "report": "r_tf0",
+      "spans": [
+        "sp_tf_laqab_st"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_tf_son",
+      "report": "r_tf0",
+      "spans": [
+        "sp_tf_son"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_tf_kalbi",
+      "report": "r_tf_kalbi",
+      "spans": [
+        "sp_tf_kalbi"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_tf",
+      "parent": "sp_tf1",
+      "exact": "الطُّفَيْلُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_tf_father",
+      "parent": "sp_tf1",
+      "exact": "عَمْرِو",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_tf_s",
+      "parent": "sp_tf_sahib",
+      "exact": "صَاحِبُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_tf_p",
+      "parent": "sp_tf_sahib",
+      "exact": "النَّبِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_tf_l",
+      "parent": "sp_tf_laqab_st",
+      "exact": "الطُّفَيْلُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_tf_kalbi",
+      "parent": "sp_tf_kalbi_frame",
+      "exact": "هِشَامُ بنُ الكَلْبِيِّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_tf_k",
+      "parent": "sp_tf_kalbi",
+      "exact": "الطُّفَيْلُ بنُ عَمْرِو بنِ طَرِيْفٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_tf_so",
+      "parent": "sp_tf_son",
+      "exact": "وَلَدُهُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_tf_amr",
+      "parent": "sp_tf_son",
+      "exact": "عَمْرٌو",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_tf",
+      "mention": "m_tf",
+      "agent": "at-tufayl-ibn-amr-ad-dawsi",
+      "basis": [
+        {
+          "span": "sp_tf_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tf_s",
+      "mention": "m_tf_s",
+      "agent": "at-tufayl-ibn-amr-ad-dawsi",
+      "basis": [
+        {
+          "span": "sp_tf_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tf_l",
+      "mention": "m_tf_l",
+      "agent": "at-tufayl-ibn-amr-ad-dawsi",
+      "basis": [
+        {
+          "span": "sp_tf_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tf_k",
+      "mention": "m_tf_k",
+      "agent": "at-tufayl-ibn-amr-ad-dawsi",
+      "basis": [
+        {
+          "span": "sp_tf_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tf_so",
+      "mention": "m_tf_so",
+      "agent": "at-tufayl-ibn-amr-ad-dawsi",
+      "basis": [
+        {
+          "span": "sp_tf_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tf_father",
+      "mention": "m_tf_father",
+      "agent": "amr-ibn-tarif",
+      "basis": [
+        {
+          "span": "sp_tf_father_nasab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tf_p",
+      "mention": "m_tf_p",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_tf_sahib_sal",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tf_amr",
+      "mention": "m_tf_amr",
+      "agent": "amr-ibn-at-tufayl",
+      "basis": [
+        {
+          "span": "sp_tf_son_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_tf_name",
+      "subject": "m_tf",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_tf1"
+        ]
+      },
+      "restsOn": [
+        "st_tf_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tf_sex",
+      "subject": "m_tf",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_tf_sex"
+        ]
+      },
+      "restsOn": [
+        "st_tf_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tf_father",
+      "subject": "m_tf",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_tf_father"
+      },
+      "restsOn": [
+        "st_tf_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tf_comp",
+      "subject": "m_tf_s",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_tf_p"
+      },
+      "restsOn": [
+        "st_tf_sahib"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tf_v_sayyid",
+      "subject": "m_tf_s",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_tf_sayyid"
+        ]
+      },
+      "restsOn": [
+        "st_tf_sahib"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tf_laqab",
+      "subject": "m_tf_l",
+      "predicate": "name.laqab",
+      "value": {
+        "spans": [
+          "sp_tf_laqab"
+        ]
+      },
+      "restsOn": [
+        "st_tf_laqab",
+        "st_tf_kalbi"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tf_son",
+      "subject": "m_tf_amr",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_tf_so"
+      },
+      "restsOn": [
+        "st_tf_son"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

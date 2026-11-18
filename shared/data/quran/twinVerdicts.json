@@ -150,6 +150,11 @@
    "keep": true,
    "why": "Same reward description: believers who do righteous deeds in gardens beneath which rivers flow."
   },
+  "cmp:03dv3dv04ck32v": {
+   "pair": "83:9|83:20",
+   "keep": true,
+   "why": "Same refrain, word for word"
+  },
   "cmp:03g03gg0w8rckq": {
    "pair": "23:116|27:26",
    "keep": true,
@@ -229,6 +234,11 @@
    "pair": "7:83|27:57",
    "keep": true,
    "why": "Same sentence: We saved him and his family except his wife, who was of those who stayed behind."
+  },
+  "cmp:058j0ki1csa792": {
+   "pair": "10:108|27:92",
+   "keep": true,
+   "why": "Same sentence: whoever is guided is guided for himself; whoever strays ..."
   },
   "cmp:058yyjf06kvv9h": {
    "pair": "26:66|37:82",
@@ -393,6 +403,11 @@
    "keep": true,
    "why": "Same sentence: nothing on earth or in the heaven is hidden from Allah.",
    "checked": true
+  },
+  "cmp:09lddf81nq7hqc": {
+   "pair": "6:131|11:117",
+   "keep": true,
+   "why": "Your Lord would not destroy the towns unjustly while their people ..."
   },
   "cmp:09n2gz10jqxyl9": {
    "pair": "3:49|5:110",
@@ -633,6 +648,11 @@
    "pair": "7:80|27:54",
    "keep": true,
    "why": "Same story of Lot: when he said to his people, do you commit the immorality …"
+  },
+  "cmp:0f38p6a0cdewzm": {
+   "pair": "51:15|52:17",
+   "keep": true,
+   "why": "Same frame: indeed the pious are in gardens and..."
   },
   "cmp:0f3jq8j0zsqwn9": {
    "pair": "3:198|39:20",
@@ -1508,6 +1528,12 @@
    "keep": true,
    "why": "Same sentence: the punishment of the hereafter is greater, if they only knew."
   },
+  "cmp:0y7nyqs1wf19q8": {
+   "pair": "68:15|83:13",
+   "keep": true,
+   "why": "Identical ayah: the denier's reply, legends of the ancients.",
+   "checked": true
+  },
   "cmp:0y8tath0zwid41": {
    "pair": "3:184|35:25",
    "keep": true,
@@ -1571,6 +1597,11 @@
    "keep": true,
    "why": "Same words: whoever does good does it for himself, and whoever does evil, it is against him. (owner kept)",
    "checked": true
+  },
+  "cmp:0z9jerx0hahonj": {
+   "pair": "37:174|37:178",
+   "keep": true,
+   "why": "Same command: turn away from them for a time"
   },
   "cmp:0zf5c47183p6h1": {
    "pair": "59:9|64:16",
@@ -1955,6 +1986,12 @@
    "pair": "31:29|35:13",
    "keep": true,
    "why": "Same sign word for word: He merges night into day and day into night, and subjects sun and moon each running for a term."
+  },
+  "cmp:16i3xs30oga9kf": {
+   "pair": "2:94|62:6",
+   "keep": true,
+   "why": "Nearly the same ayah: if you claim it is for you alone, then wish for death, if you are truthful.",
+   "checked": true
   },
   "cmp:16i7kzh0h7p5k5": {
    "pair": "9:87|9:93",
@@ -2360,6 +2397,11 @@
    "keep": true,
    "why": "The same opening ayah: whatever is in the heavens and the earth glorifies Allah."
   },
+  "cmp:1ekgzi616kp4zu": {
+   "pair": "27:10|28:31",
+   "keep": true,
+   "why": "Same scene, almost word for word: throw your staff; when he saw it move like a snake he turned and fled; O Moses, do not fear."
+  },
   "cmp:1eo7xgb0x4nocl": {
    "pair": "11:77|29:33",
    "keep": true,
@@ -2410,6 +2452,11 @@
    "pair": "11:117|28:59",
    "keep": true,
    "why": "Same statement: your Lord would not destroy the towns unjustly."
+  },
+  "cmp:1fq9i6v1fk5k6j": {
+   "pair": "7:39|8:35",
+   "keep": false,
+   "why": "Only the stock 'taste the punishment for what you used to'."
   },
   "cmp:1fr7x5q0ty96e8": {
    "pair": "27:69|30:42",
@@ -2806,6 +2853,11 @@
    "keep": true,
    "why": "Same: before the punishment comes upon you"
   },
+  "cmp:1nsh28v0tiurpz": {
+   "pair": "6:117|68:7",
+   "keep": true,
+   "why": "Same sentence: your Lord knows best who strays from His way and who is guided."
+  },
   "cmp:1nwj2hp1e489mj": {
    "pair": "3:182|8:51",
    "keep": true,
@@ -2871,6 +2923,11 @@
    "keep": true,
    "why": "Same rare clause in a related setting on pride: Allah does not love every arrogant boaster."
   },
+  "cmp:1p0joz91hsm0eb": {
+   "pair": "29:22|42:31",
+   "keep": true,
+   "why": "Same statement: you cannot escape in the earth, and besides Allah you have no protector or helper."
+  },
   "cmp:1p3a0vb1tdl3e7": {
    "pair": "15:52|51:25",
    "keep": true,
@@ -2890,6 +2947,12 @@
    "pair": "3:11|8:52",
    "keep": true,
    "why": "Same sentence: like the way of Pharaoh's people and those before them; Allah seized them for their sins.",
+   "checked": true
+  },
+  "cmp:1pi3er61tsxrv8": {
+   "pair": "74:54|76:29",
+   "keep": true,
+   "why": "Same declaration: this is a reminder.",
    "checked": true
   },
   "cmp:1pihpq60xjhusg": {
@@ -2926,6 +2989,11 @@
    "pair": "16:30|39:10",
    "keep": true,
    "why": "Same phrase: for those who do good in this world is good."
+  },
+  "cmp:1pwgr9k0ka71hc": {
+   "pair": "21:92|23:52",
+   "keep": true,
+   "why": "Same statement: this community of yours is one community and I am your Lord."
   },
   "cmp:1q4poos15fe1e0": {
    "pair": "23:79|67:24",
@@ -5185,11 +5253,6 @@
    "keep": true,
    "why": "Same phrase: void is what they used to do.",
    "checked": true
-  },
-  "tree:17xph4z0bxlkc1": {
-   "pair": "6:131|11:117",
-   "keep": true,
-   "why": "Your Lord would not destroy the towns unjustly while their people ..."
   },
   "tree:17yjug11h9ih37": {
    "pair": "19:36|43:64",

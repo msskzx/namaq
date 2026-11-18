@@ -1,0 +1,363 @@
+{
+  "unit": {
+    "id": "siyar-v6-61-sulayman-ibn-surad",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٦١"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ss_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "394",
+      "layer": "MAIN",
+      "exact": "٦١ - سُلَيْمَانُ بنُ صُرَدٍ أَبُو مُطَرِّفٍ الخُزَاعِيُّ الكُوْفِيُّ"
+    },
+    {
+      "id": "sp_ss_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "394",
+      "layer": "MAIN",
+      "exact": "سُلَيْمَانُ بنُ صُرَدٍ أَبُو مُطَرِّفٍ الخُزَاعِيُّ الكُوْفِيُّ",
+      "prefix": "٦١ - "
+    },
+    {
+      "id": "sp_ss_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "394",
+      "layer": "MAIN",
+      "exact": "سُلَيْمَانُ بنُ",
+      "prefix": "٦١ - "
+    },
+    {
+      "id": "sp_ss_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "394",
+      "layer": "MAIN",
+      "exact": "صُرَدٍ أَبُو",
+      "prefix": "سُلَيْمَانُ بنُ "
+    },
+    {
+      "id": "sp_ss_epithets",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "394",
+      "layer": "MAIN",
+      "exact": "الأَمِيْرُ، أَبُو مُطَرِّفٍ الخُزَاعِيُّ، الكُوْفِيُّ، الصَّحَابِيُّ"
+    },
+    {
+      "id": "sp_ss_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "394",
+      "layer": "MAIN",
+      "exact": "أَبُو مُطَرِّفٍ",
+      "prefix": "الأَمِيْرُ، "
+    },
+    {
+      "id": "sp_ss_dayyin",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "395",
+      "layer": "MAIN",
+      "exact": "كَانَ دَيِّناً، عَابِداً",
+      "prefix": "قُلْتُ: "
+    },
+    {
+      "id": "sp_ss_siffin",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "395",
+      "layer": "MAIN",
+      "exact": "وَكَانَ هُوَ الَّذِي بَارَزَ يَوْمَ صِفِّيْنَ حَوْشَباً ذَا ظُلَيْمٍ، فَقَتَلَهُ"
+    },
+    {
+      "id": "sp_ss_siffin_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "395",
+      "layer": "MAIN",
+      "exact": "يَوْمَ صِفِّيْنَ",
+      "prefix": "بَارَزَ "
+    },
+    {
+      "id": "sp_ss_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "395",
+      "layer": "MAIN",
+      "exact": "وَقُتِلَ أُمَرَاؤُهُم الأَرْبَعَةُ؛ سُلَيْمَانُ، وَالمُسَيَّبُ، وَعَبْدُ اللهِ بنُ سَعْدٍ، وَعَبْدُ اللهِ بنُ وَالِي، وَذَلِكَ بِعَيْنِ الوَرْدَةِ، الَّتِي تُدْعَى رَأْسَ العَيْنِ (١) ، سَنَةَ خَمْسٍ وَسِتِّيْنَ"
+    },
+    {
+      "id": "sp_ss_death_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "395",
+      "layer": "MAIN",
+      "exact": "سَنَةَ خَمْسٍ وَسِتِّيْنَ",
+      "prefix": "رَأْسَ العَيْنِ (١) ، "
+    },
+    {
+      "id": "sp_ss_death_place",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "395",
+      "layer": "MAIN",
+      "exact": "عَيْنِ الوَرْدَةِ، الَّتِي تُدْعَى رَأْسَ العَيْنِ",
+      "prefix": "وَذَلِكَ بِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ss0",
+      "unit": "siyar-v6-61-sulayman-ibn-surad",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ss_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ss_name",
+      "report": "r_ss0",
+      "spans": [
+        "sp_ss_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ss_epithets",
+      "report": "r_ss0",
+      "spans": [
+        "sp_ss_epithets"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ss_dayyin",
+      "report": "r_ss0",
+      "spans": [
+        "sp_ss_dayyin"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ss_siffin",
+      "report": "r_ss0",
+      "spans": [
+        "sp_ss_siffin"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ss_death",
+      "report": "r_ss0",
+      "spans": [
+        "sp_ss_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ss",
+      "parent": "sp_ss_name",
+      "exact": "سُلَيْمَانُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ss_father",
+      "parent": "sp_ss_name",
+      "exact": "صُرَدٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ss_siffin",
+      "parent": "sp_ss_siffin",
+      "exact": "صِفِّيْنَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ss_d",
+      "parent": "sp_ss_death",
+      "exact": "سُلَيْمَانُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ss",
+      "mention": "m_ss",
+      "agent": "sulayman-ibn-surad",
+      "basis": [
+        {
+          "span": "sp_ss_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ss_father",
+      "mention": "m_ss_father",
+      "agent": "surad-al-khuzai",
+      "basis": [
+        {
+          "span": "sp_ss_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ss_siffin",
+      "mention": "m_ss_siffin",
+      "event": "siffin",
+      "basis": [
+        {
+          "span": "sp_ss_siffin_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ss_d",
+      "mention": "m_ss_d",
+      "agent": "sulayman-ibn-surad",
+      "basis": [
+        {
+          "span": "sp_ss_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ss_name",
+      "subject": "m_ss",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ss_name"
+        ]
+      },
+      "restsOn": [
+        "st_ss_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ss_sex",
+      "subject": "m_ss",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ss_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ss_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ss_father",
+      "subject": "m_ss",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ss_father"
+      },
+      "restsOn": [
+        "st_ss_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ss_kunya",
+      "subject": "m_ss",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_ss_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_ss_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ss_v_dayyin",
+      "subject": "m_ss",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ss_dayyin"
+        ]
+      },
+      "restsOn": [
+        "st_ss_dayyin"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ss_siffin",
+      "subject": "m_ss",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_ss_siffin"
+      },
+      "restsOn": [
+        "st_ss_siffin"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ss_death",
+      "subject": "m_ss_d",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 65,
+        "spans": [
+          "sp_ss_death_y"
+        ]
+      },
+      "restsOn": [
+        "st_ss_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ss_place",
+      "subject": "m_ss_d",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "sp_ss_death_place"
+        ]
+      },
+      "restsOn": [
+        "st_ss_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

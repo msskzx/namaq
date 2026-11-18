@@ -10,6 +10,8 @@ let overTabs = false;
 
 /** The root stack names the page in front (app/_layout.tsx): the tabs, or a page stacked over them. */
 export const noteRootPage = (name: string) => { overTabs = name !== '(tabs)'; };
+/** Whether a page is stacked over the tabs now (a quiz, a party): opening a tab from it would close it. */
+export const isOverTabs = () => overTabs;
 
 /**
  * Opens a tab. From a page stacked over the tabs (the saved and forgotten list) it closes that page first, so the tabs are not opened a second time over it.
