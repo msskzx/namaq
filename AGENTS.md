@@ -102,13 +102,15 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 
 ## Feed card and quiz
 
-- A new feature ships with its home feed card (the feed's one post shape, `Post` and
-  `PostHead` in `mobile/src/components/HomeFeed.tsx`, reusing the feature's own
-  component) and, where the feature has something to ask, a quiz kind that also comes
-  into the feed. Its sketch shows both.
-- A feature left without a card is named in the PR with the reason. The current list of
-  features, cards, quiz kinds and named exceptions is the plan "A feed card for every
-  feature" (https://claude.ai/artifact/93ufQsTcWLn8xY5C8Y5yix).
+- A new app feature ships with its card in the home feed. The card uses the feed's post
+  shape (`PostHead`, and `Post` around the feature's own component, in
+  `mobile/src/components/HomeFeed.tsx`).
+- When the feature has something to ask, it also ships a quiz kind that comes into the
+  feed (a new entry in `FEED_QUIZ_NAMES` in `shared/quiz/feedQuiz.ts`).
+- The sketch the owner sees before the build shows the card and the quiz.
+- A feature without a card is named in the PR with the reason.
+  [docs/feed-cards.md](docs/feed-cards.md) lists the cards, the quiz kinds and the
+  named exceptions; the PR updates it.
 - This is a workflow rule checked in review, not a guard test.
 
 ## Quiz questions
