@@ -5,7 +5,7 @@
 import terms from '../data/quran/balaghaTerms';
 import { plainName, termCredit, type BalaghaTerm } from '../quran/balaghaTerms';
 import { normalizeWord } from '../quran/normalize';
-import { stem, stems } from './ayahQuizText';
+import { stem } from './ayahQuizText';
 import { shuffle, type Random } from './random';
 import type { ChoiceKind, ChoiceQuestion } from './choiceKinds';
 
@@ -23,9 +23,13 @@ const asked = (term: BalaghaTerm) => {
   return talkhis.length ? talkhis : term.quotes;
 };
 
+/** A word of a term's name as `stem` reads it, but a two-letter one kept: «اللف» is لف. */
+const nameStem = (word: string) => stem(word) || normalizeWord(word).replace(/[^ء-ي]/g, '').replace(/^[وف]/, '').replace(/^(?:بال|كال|لل|ال)/, '');
+const nameStems = (name: string) => new Set(plainName(name).split(/\s+/).map(nameStem).filter(word => word.length >= 2));
+
 /** The definition with every word of the term's name, and each other name it gives, written «…». */
 export function hideName(text: string, name: string): string {
-  const hidden = stems(plainName(name));
+  const hidden = nameStems(name);
   const words = text.split(/(\s+)/);
   let afterNaming = false;
   return words.map(word => {
@@ -33,7 +37,7 @@ export function hideName(text: string, name: string): string {
     const bare = normalizeWord(word).replace(/[^ء-ي]/g, '');
     // A naming word's next word is the other name; «ويقال له القصر» skips «له» first.
     if (afterNaming && bare === 'له') return word;
-    const hide = afterNaming || hidden.has(stem(word));
+    const hide = afterNaming || hidden.has(nameStem(word));
     afterNaming = NAMING.has(bare);
     if (hide) return word.replace(/[ء-يً-ٰٟ]+/g, '…').replace(/…+/g, '…');
     return word;
@@ -47,13 +51,13 @@ const askable = () => defined().filter((term, i, all) => all.findIndex(other => 
 function question(right: BalaghaTerm, random: Random): ChoiceQuestion | null {
   const quotes = asked(right);
   const text = quotes.map(quote => quote.text).join(' ');
-  const rightWords = stems(plainName(right.name));
+  const rightWords = nameStems(right.name);
   // The definition's letters without marks: a wrong term named in it in any form («التفاتا» for الالتفات) is not offered.
   const bare = normalizeWord(text);
   // Two broad chapters (a مجاز and a metaphor, a kinaya) are never right and wrong in one question.
   const chapter = right.kind <= 55;
   const wrong = shuffle(defined().filter(term => term !== right
-    && ![...stems(plainName(term.name))].some(word => rightWords.has(word) || bare.includes(word))
+    && ![...nameStems(term.name)].some(word => rightWords.has(word) || bare.includes(word))
     && !term.quotes.some(quote => quotes.some(own => own.text === quote.text))
     && !(chapter && term.kind <= 55)), random).slice(0, WRONG);
   if (wrong.length < WRONG) return null;
