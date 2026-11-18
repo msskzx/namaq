@@ -58,7 +58,7 @@ describe('al-Nashr source corrections', () => {
 describe('al-Nashr audit of al-Imran to al-Nas', () => {
   const rawis = (key: string, at: number) => word(key, at).readings.map(r => r.rawis);
 
-  it('keeps every corrected word in the data and names each riwaya once in it', () => {
+  it('keeps every corrected word in the data and names every riwaya in it', () => {
     for (const { ayah, replacement } of corrections) {
       if (!replacement) continue;
       // Stored in the Madina page's spelling, as the build writes it, and fully vowelled (scripts/quran/qiraatVowels.ts).
@@ -72,7 +72,8 @@ describe('al-Nashr audit of al-Imran to al-Nas', () => {
         expect(words(r.text)).toBe(words(replacement.readings[i].text));
         expect(sameForm(seated(r.text), seated(madinaSpelling(replacement.readings[i].text)))).toBe(true);
       });
-      expect(replacement.readings.flatMap(r => r.rawis).sort((a, b) => a - b)).toEqual(Array.from({ length: 20 }, (_, i) => i + 1));
+      // A riwaya al-Nashr gives both ways (al-Bazzi at 10:16, Hisham at 6:80) is named under both.
+      expect([...new Set(replacement.readings.flatMap(r => r.rawis))].sort((a, b) => a - b)).toEqual(Array.from({ length: 20 }, (_, i) => i + 1));
     }
   });
 
