@@ -29,6 +29,8 @@ export interface PersonLink extends PersonFact {
   slug: string;
   name: string;
   inApp: boolean;
+  /** The linked person's sex when known, so a parent reads «أبوه» or «أمه». */
+  sex?: 'MALE' | 'FEMALE';
 }
 
 export interface PersonTitle extends PersonFact {

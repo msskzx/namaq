@@ -338,6 +338,64 @@
       "page": "40",
       "layer": "MAIN",
       "exact": "وَلِطَلْحَةَ أَوْلاَدٌ نُجَبَاءُ، أَفْضَلُهُمْ: مُحَمَّدٌ السَّجَّادُ"
+    },
+    {
+      "id": "sp_t_nahb2_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "28",
+      "layer": "MAIN",
+      "exact": "وَبِهِ إِلَى التَّمِيْمِيِّ: حَدَّثَنَا أَبُو كُرَيْبٍ، حَدَّثَنَا يُوْنُسُ بنُ بُكَيْرٍ، عَنْ طَلْحَةَ بنِ يَحْيَى، عَنْ مُوْسَى وَعِيْسَى ابْنَيْ طَلْحَةَ، عَنْ أَبِيْهِمَا"
+    },
+    {
+      "id": "sp_t_nahb2_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "28",
+      "layer": "MAIN",
+      "exact": "فَلَمَّا رَآنِي رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ"
+    },
+    {
+      "id": "sp_t_nahb2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "28",
+      "layer": "MAIN",
+      "exact": "هَذَا مِمَّنْ قَضَى نَحْبَهُ"
+    },
+    {
+      "id": "sp_t_raani",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "28",
+      "layer": "MAIN",
+      "exact": "فَلَمَّا رَآنِي",
+      "suffix": " رَسُوْلُ اللهِ"
+    },
+    {
+      "id": "sp_t_abihima",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "28",
+      "layer": "MAIN",
+      "exact": "عَنْ أَبِيْهِمَا",
+      "prefix": "ابْنَيْ طَلْحَةَ، "
+    },
+    {
+      "id": "sp_t_lam_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "27",
+      "layer": "MAIN",
+      "exact": "حَدَّثَنَا المُعْتَمِرُ، سَمِعتُ أَبِي، حَدَّثَنَا أَبُو عُثْمَانَ"
+    },
+    {
+      "id": "sp_t_lam",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "28",
+      "layer": "MAIN",
+      "exact": "لَمْ يَبْقَ مَعَ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فِي تِلْكَ الأَيَّامِ الَّتِي كَانَ يُقَاتِلُ بِهَا رَسُوْلُ اللهِ غَيْرُ طَلْحَةَ وَسَعْدٍ عَنْ حَدِيْثِهِمَا"
     }
   ],
   "reports": [
@@ -453,6 +511,31 @@
       ],
       "origin": {
         "mention": "m_t_jawan"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_t_nahb2",
+      "unit": "siyar-v4-2-talhah",
+      "ordinal": 10,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_t_nahb2_frame"
+      ],
+      "isnadSpan": "sp_t_nahb2_isnad",
+      "origin": {
+        "mention": "m_t_p_nahb2"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_t_lam",
+      "unit": "siyar-v4-2-talhah",
+      "ordinal": 11,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_t_lam_isnad",
+      "origin": {
+        "mention": "m_t_uthman"
       },
       "chainState": "DEFERRED"
     }
@@ -578,6 +661,22 @@
       "spans": [
         "sp_t_jamal_a",
         "sp_t_jamal_b"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_t_nahb2",
+      "report": "r_t_nahb2",
+      "spans": [
+        "sp_t_nahb2"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_t_lam",
+      "report": "r_t_lam",
+      "spans": [
+        "sp_t_lam"
       ],
       "role": "TRANSMITTED"
     }
@@ -762,6 +861,34 @@
       "id": "m_t_sajjad",
       "parent": "sp_t_sajjad",
       "exact": "مُحَمَّدٌ السَّجَّادُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_t_p_nahb2",
+      "parent": "sp_t_nahb2_frame",
+      "exact": "رَسُوْلُ اللهِ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_t_nahb2",
+      "parent": "sp_t_nahb2",
+      "exact": "هَذَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_t_uthman",
+      "parent": "sp_t_lam_isnad",
+      "exact": "أَبُو عُثْمَانَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_t_lam",
+      "parent": "sp_t_lam",
+      "exact": "طَلْحَةَ",
       "occurrence": 1,
       "role": "SUBJECT"
     }
@@ -982,6 +1109,34 @@
         }
       ],
       "status": "PROPOSED"
+    },
+    {
+      "id": "i_t_nahb2",
+      "mention": "m_t_nahb2",
+      "agent": "talhah-ibn-ubaydullah",
+      "basis": [
+        {
+          "span": "sp_t_abihima",
+          "role": "SAME_WORK_EXPLICIT"
+        },
+        {
+          "span": "sp_t_raani",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_t_lam",
+      "mention": "m_t_lam",
+      "agent": "talhah-ibn-ubaydullah",
+      "basis": [
+        {
+          "span": "sp_t_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
     }
   ],
   "assertions": [
@@ -1172,21 +1327,6 @@
       "status": "PROPOSED"
     },
     {
-      "id": "a_t_v_shahid",
-      "subject": "m_t_shahid",
-      "predicate": "virtue",
-      "value": {
-        "spans": [
-          "sp_t_shahid_a",
-          "sp_t_shahid_b"
-        ]
-      },
-      "restsOn": [
-        "st_t_shahid"
-      ],
-      "status": "PROPOSED"
-    },
-    {
       "id": "a_t_v_awjab",
       "subject": "m_t_awjab",
       "predicate": "virtue",
@@ -1197,49 +1337,6 @@
       },
       "restsOn": [
         "st_t_awjab"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_t_v_nahb",
-      "subject": "m_t_nahb",
-      "predicate": "virtue",
-      "value": {
-        "spans": [
-          "sp_t_nahb"
-        ]
-      },
-      "restsOn": [
-        "st_t_nahb"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_t_ayah_nahb",
-      "subject": "m_t_nahb",
-      "predicate": "ABOUT_AYAH",
-      "value": {
-        "classified": "33:23",
-        "spans": [
-          "sp_t_nahb"
-        ]
-      },
-      "restsOn": [
-        "st_t_nahb"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_t_laqab",
-      "subject": "m_t_fayyad",
-      "predicate": "name.laqab",
-      "value": {
-        "spans": [
-          "sp_t_fayyad"
-        ]
-      },
-      "restsOn": [
-        "st_t_fayyad"
       ],
       "status": "PROPOSED"
     },
@@ -1269,7 +1366,7 @@
     },
     {
       "id": "a_t_death_year",
-      "subject": "m_t_d",
+      "subject": "m_t",
       "predicate": "died.year",
       "value": {
         "parsed": 36,
@@ -1283,17 +1380,30 @@
       "status": "PROPOSED"
     },
     {
-      "id": "a_t_death_month",
-      "subject": "m_t_d",
-      "predicate": "died.month",
+      "id": "a_t_v_nahb2",
+      "subject": "m_t_nahb2",
+      "predicate": "virtue",
       "value": {
-        "parsed": 6,
         "spans": [
-          "sp_t_death_month"
+          "sp_t_nahb2"
         ]
       },
       "restsOn": [
-        "st_t_death"
+        "st_t_nahb2"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_t_v_lam",
+      "subject": "m_t_lam",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_t_lam"
+        ]
+      },
+      "restsOn": [
+        "st_t_lam"
       ],
       "status": "PROPOSED"
     }

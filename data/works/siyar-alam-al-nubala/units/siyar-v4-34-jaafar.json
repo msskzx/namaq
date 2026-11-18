@@ -104,14 +104,6 @@
       "prefix": "جَيْشِ "
     },
     {
-      "id": "sp_j_hijra",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 4,
-      "page": "206",
-      "layer": "MAIN",
-      "exact": "هَاجَرَ الهِجْرَتَيْنِ"
-    },
-    {
       "id": "sp_j_shabah_isnad",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 4,
@@ -136,28 +128,63 @@
       "exact": "أَشْبَهَ خَلْقُكَ خَلْقِي، وَأَشْبَهَ خُلُقُكَ خُلُقِي، فَأَنْتَ مِنِّي وَمِنْ شَجَرَتِي"
     },
     {
-      "id": "sp_j_shabah2_isnad",
+      "id": "sp_j_sahih_frame",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 4,
-      "page": "214",
+      "page": "217",
       "layer": "MAIN",
-      "exact": "إِسْرَائِيْلُ: عَنْ أَبِي إِسْحَاقَ، عَنِ البَرَاءِ، وَعَنْ هُبَيْرَةَ بنِ مَرْيَمَ، وَهَانِئ بنِ هَانِئٍ، عَنْ عَلِيٍّ"
+      "exact": "وَفِي (الصَّحِيْحِ) مِنْ حَدِيْثِ البَرَاءِ، وَغَيْرِهِ"
     },
     {
       "id": "sp_j_shabah2_frame",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 4,
-      "page": "214",
+      "page": "217",
       "layer": "MAIN",
-      "exact": "إِنَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ لِجَعْفَرٍ:"
+      "exact": "أَنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ لِجَعْفَرٍ:",
+      "suffix": " (أَشْبَهْتَ"
     },
     {
       "id": "sp_j_shabah2",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 4,
-      "page": "214",
+      "page": "217",
       "layer": "MAIN",
       "exact": "أَشْبَهْتَ خَلْقِي وَخُلُقِي"
+    },
+    {
+      "id": "sp_j_wings_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "215",
+      "layer": "MAIN",
+      "exact": "قَالَ الشَّعْبِيُّ: كَانَ ابْنُ عُمَرَ إِذَا سَلَّمَ عَلَى عَبْدِ اللهِ بنِ جَعْفَر، قَالَ"
+    },
+    {
+      "id": "sp_j_wings",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "215",
+      "layer": "MAIN",
+      "exact": "السَّلاَم عَلَيْك يَا ابْنَ ذِي الجَنَاحَيْنِ"
+    },
+    {
+      "id": "sp_j_wings_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "215",
+      "layer": "MAIN",
+      "exact": "ذِي الجَنَاحَيْنِ",
+      "prefix": "يَا ابْنَ "
+    },
+    {
+      "id": "sp_j_abd_ibn_j",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "215",
+      "layer": "MAIN",
+      "exact": "عَبْدِ اللهِ بنِ جَعْفَر",
+      "prefix": "سَلَّمَ عَلَى "
     },
     {
       "id": "sp_j_mother_frame",
@@ -286,9 +313,9 @@
       "ordinal": 3,
       "voice": "TRANSMITTED",
       "frame": [
+        "sp_j_sahih_frame",
         "sp_j_shabah2_frame"
       ],
-      "isnadSpan": "sp_j_shabah2_isnad",
       "origin": {
         "mention": "m_j_p2"
       },
@@ -330,6 +357,19 @@
         "mention": "m_j_ahu"
       },
       "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_j_wings",
+      "unit": "siyar-v4-34-jaafar",
+      "ordinal": 7,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_j_wings_frame"
+      ],
+      "origin": {
+        "mention": "m_j_ibnumar"
+      },
+      "chainState": "DEFERRED"
     }
   ],
   "statements": [
@@ -363,14 +403,6 @@
       "report": "r_j0",
       "spans": [
         "sp_j_mutah"
-      ],
-      "role": "AUTHOR_REPORT"
-    },
-    {
-      "id": "st_j_hijra",
-      "report": "r_j0",
-      "spans": [
-        "sp_j_hijra"
       ],
       "role": "AUTHOR_REPORT"
     },
@@ -413,6 +445,14 @@
         "sp_j_masakin"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_j_wings",
+      "report": "r_j_wings",
+      "spans": [
+        "sp_j_wings"
+      ],
+      "role": "TRANSMITTED"
     }
   ],
   "mentions": [
@@ -445,13 +485,6 @@
       "role": "REFERENT"
     },
     {
-      "id": "m_j_mt",
-      "parent": "sp_j_mutah",
-      "exact": "فَاسْتُشْهِدَ",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
       "id": "m_j_mutah",
       "parent": "sp_j_mutah",
       "exact": "مُؤْتَةَ",
@@ -475,7 +508,7 @@
     {
       "id": "m_j_p2",
       "parent": "sp_j_shabah2_frame",
-      "exact": "رَسُوْلَ اللهِ",
+      "exact": "النَّبِيَّ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
@@ -512,7 +545,7 @@
       "parent": "sp_j_mother",
       "exact": "عَقِيْلٌ",
       "occurrence": 1,
-      "role": "SUBJECT"
+      "role": "REFERENT"
     },
     {
       "id": "m_j_fatimah",
@@ -576,6 +609,20 @@
       "exact": "جَعْفَراً",
       "occurrence": 1,
       "role": "SUBJECT"
+    },
+    {
+      "id": "m_j_ibnumar",
+      "parent": "sp_j_wings_frame",
+      "exact": "ابْنُ عُمَرَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_j_wings",
+      "parent": "sp_j_wings",
+      "exact": "ذِي الجَنَاحَيْنِ",
+      "occurrence": 1,
+      "role": "REFERENT"
     }
   ],
   "identifications": [
@@ -594,18 +641,6 @@
     {
       "id": "i_j_b",
       "mention": "m_j_b",
-      "agent": "jaafar-ibn-abi-talib",
-      "basis": [
-        {
-          "span": "sp_j_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_j_mt",
-      "mention": "m_j_mt",
       "agent": "jaafar-ibn-abi-talib",
       "basis": [
         {
@@ -794,6 +829,18 @@
         }
       ],
       "status": "PROPOSED"
+    },
+    {
+      "id": "i_j_wings",
+      "mention": "m_j_wings",
+      "agent": "jaafar-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_j_abd_ibn_j",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
     }
   ],
   "assertions": [
@@ -975,27 +1022,13 @@
     },
     {
       "id": "a_j_mutah",
-      "subject": "m_j_mt",
+      "subject": "m_j",
       "predicate": "PARTICIPATED_IN",
       "value": {
         "object": "m_j_mutah"
       },
       "restsOn": [
         "st_j_mutah"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_j_v_shabah",
-      "subject": "m_j_s1",
-      "predicate": "virtue",
-      "value": {
-        "spans": [
-          "sp_j_shabah"
-        ]
-      },
-      "restsOn": [
-        "st_j_shabah"
       ],
       "status": "PROPOSED"
     },
@@ -1038,6 +1071,20 @@
       },
       "restsOn": [
         "st_j_masakin"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_j_laqab_wings",
+      "subject": "m_j_wings",
+      "predicate": "name.laqab",
+      "value": {
+        "spans": [
+          "sp_j_wings_name"
+        ]
+      },
+      "restsOn": [
+        "st_j_wings"
       ],
       "status": "PROPOSED"
     }

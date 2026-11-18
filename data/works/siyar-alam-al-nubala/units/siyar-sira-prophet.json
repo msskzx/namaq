@@ -189,7 +189,6 @@
       "id": "st_p_khadijah",
       "report": "r_p0",
       "spans": [
-        "sp_p_marr",
         "sp_p_children"
       ],
       "role": "AUTHOR_REPORT"
@@ -313,7 +312,7 @@
     {
       "id": "m_p_hafsa",
       "parent": "sp_p_hafsa",
-      "exact": "بحفصة",
+      "exact": "حفصة",
       "occurrence": 1,
       "role": "REFERENT"
     }

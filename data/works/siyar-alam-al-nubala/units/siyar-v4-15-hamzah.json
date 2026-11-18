@@ -567,18 +567,6 @@
         "st_h_uhud"
       ],
       "status": "PROPOSED"
-    },
-    {
-      "id": "a_h_sister",
-      "subject": "m_h_sister_h",
-      "predicate": "SIBLING_OF",
-      "value": {
-        "object": "m_h_safiyyah"
-      },
-      "restsOn": [
-        "st_h_sister"
-      ],
-      "status": "PROPOSED"
     }
   ]
 }

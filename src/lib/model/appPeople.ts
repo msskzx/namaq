@@ -29,6 +29,8 @@ export function nasabOf(fullName: string) {
     if (IBN.test(bare)) names.push([]);
     else if (!(names[names.length - 1].length > 0 && NISBA.test(bare))) names[names.length - 1].push(words[i]);
   }
+  // A name with no «بن» at all (al-Abbas's entry is headed «العباس عم رسول الله») names no fathers: the name alone.
+  if (names.length === 1) return words.length ? [words[0]] : [];
   return names.map((name) => name.join(' ')).filter(Boolean);
 }
 
@@ -54,6 +56,14 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
     return name ? [[slug, name.unit] as const] : [];
   }));
   const inApp = new Set(ownUnit.keys());
+  // A linked person's sex, for «أبوه» or «أمه»: the converted entry's own, else the catalog's.
+  const sexOf = (other: string): { sex?: 'MALE' | 'FEMALE' } => {
+    const stated = profiles.get(other)?.find((entry) => entry.predicate === 'sex')?.classified ?? people.get(other)?.fields.sex.value;
+    if (stated === 'MALE' || stated === 'FEMALE') return { sex: stated };
+    // Else the name says it: «نتيلة بنت جناب», «أم رومان».
+    const name = strip(people.get(other)?.name ?? mentioned.get(other) ?? '');
+    return /(^|\s)بنت\s|^أم\s/u.test(name) ? { sex: 'FEMALE' } : {};
+  };
   // A name for someone the catalog does not hold yet: how an entry names them.
   const mentioned = new Map<string, string>();
   for (const file of units.values()) for (const identification of file.identifications) {
@@ -108,10 +118,10 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
     };
     const links = (predicate: ProfileEntry['predicate']): PersonLink[] => of(predicate).flatMap((entry) => {
       if (!entry.object) return [];
-      return [{ ...fact(entry), text: sentence(entry), slug: entry.object, name: nameOf(entry.object, entry.objectMention), inApp: inApp.has(entry.object) }];
+      return [{ ...fact(entry), text: sentence(entry), slug: entry.object, name: nameOf(entry.object, entry.objectMention), inApp: inApp.has(entry.object), ...sexOf(entry.object) }];
     });
     const back = (predicate: ProfileEntry['predicate']): PersonLink[] => reverse(slug, predicate)
-      .map(({ other, entry }) => ({ ...fact(entry), text: sentence(entry), slug: other, name: nameOf(other), inApp: inApp.has(other) }));
+      .map(({ other, entry }) => ({ ...fact(entry), text: sentence(entry), slug: other, name: nameOf(other), inApp: inApp.has(other), ...sexOf(other) }));
     const titles: PersonTitle[] = of('title').map((entry) => ({ ...fact(entry), title: entry.classified ?? '', name: titleNames.get(entry.classified ?? '') ?? entry.text }));
     const fullName = facts('name.full')[0];
     const sex = of('sex')[0]?.classified;

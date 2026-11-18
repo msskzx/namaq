@@ -417,6 +417,13 @@
       "exact": "أَنَا",
       "occurrence": 1,
       "role": "SUBJECT"
+    },
+    {
+      "id": "m_sf_awwam2",
+      "parent": "sp_sf_children",
+      "exact": "العَوَّامِ",
+      "occurrence": 1,
+      "role": "REFERENT"
     }
   ],
   "identifications": [
@@ -587,6 +594,18 @@
         }
       ],
       "status": "PROPOSED"
+    },
+    {
+      "id": "i_sf_awwam2",
+      "mention": "m_sf_awwam2",
+      "agent": "al-awwam-ibn-khuwaylid",
+      "basis": [
+        {
+          "span": "sp_sf_awwam_nasab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
     }
   ],
   "assertions": [
@@ -692,11 +711,35 @@
       "status": "PROPOSED"
     },
     {
+      "id": "a_sf_child0_f",
+      "subject": "m_sf_zb2",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_sf_awwam2"
+      },
+      "restsOn": [
+        "st_sf_children"
+      ],
+      "status": "PROPOSED"
+    },
+    {
       "id": "a_sf_child1",
       "subject": "m_sf_saib",
       "predicate": "CHILD_OF",
       "value": {
         "object": "m_sf_c"
+      },
+      "restsOn": [
+        "st_sf_children"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sf_child1_f",
+      "subject": "m_sf_saib",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_sf_awwam2"
       },
       "restsOn": [
         "st_sf_children"
@@ -716,16 +759,14 @@
       "status": "PROPOSED"
     },
     {
-      "id": "a_sf_v_aunt",
-      "subject": "m_sf",
-      "predicate": "virtue",
+      "id": "a_sf_child2_f",
+      "subject": "m_sf_abdkabah",
+      "predicate": "CHILD_OF",
       "value": {
-        "spans": [
-          "sp_sf_only_aunt"
-        ]
+        "object": "m_sf_awwam2"
       },
       "restsOn": [
-        "st_sf_only_aunt"
+        "st_sf_children"
       ],
       "status": "PROPOSED"
     },
@@ -781,20 +822,6 @@
       },
       "restsOn": [
         "st_sf_death"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_sf_v_first",
-      "subject": "m_sf_ana",
-      "predicate": "virtue",
-      "value": {
-        "spans": [
-          "sp_sf_first"
-        ]
-      },
-      "restsOn": [
-        "st_sf_first"
       ],
       "status": "PROPOSED"
     }

@@ -22,17 +22,8 @@
       "volume": 5,
       "page": "135",
       "layer": "MAIN",
-      "exact": "عَائِشَةُ",
+      "exact": "عَائِشَةُ بِنْتُ الصِّدِّيْقِ أَبِي بَكْرٍ",
       "prefix": "١٩ - "
-    },
-    {
-      "id": "sp_a_bint",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 5,
-      "page": "135",
-      "layer": "MAIN",
-      "exact": "بِنْتُ",
-      "prefix": "١٩ - عَائِشَةُ "
     },
     {
       "id": "sp_a2",
@@ -40,7 +31,7 @@
       "volume": 5,
       "page": "135",
       "layer": "MAIN",
-      "exact": "أَبِي بَكْرٍ عَبْدِ اللهِ بنِ أَبِي قُحَافَةَ عُثْمَانَ بنِ عَامِرِ بنِ عَمْرِو بنِ كَعْبِ بنِ سَعْدِ بنِ تَيْمِ بنِ مُرَّةَ بنِ كَعْبِ بنِ لُؤَيٍّ"
+      "exact": "عَبْدِ اللهِ بنِ أَبِي قُحَافَةَ عُثْمَانَ بنِ عَامِرِ بنِ عَمْرِو بنِ كَعْبِ بنِ سَعْدِ بنِ تَيْمِ بنِ مُرَّةَ بنِ كَعْبِ بنِ لُؤَيٍّ"
     },
     {
       "id": "sp_a_sex",
@@ -290,6 +281,45 @@
         "mention": "m_a_waqidi"
       },
       "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_a_d57_ahmad",
+      "unit": "siyar-v5-19-aisha",
+      "ordinal": 6,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_a_d57_frame"
+      ],
+      "origin": {
+        "mention": "m_a_ahmad"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_a_d57_shabab",
+      "unit": "siyar-v5-19-aisha",
+      "ordinal": 7,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_a_d57_frame"
+      ],
+      "origin": {
+        "mention": "m_a_shabab"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_a_d58_abu",
+      "unit": "siyar-v5-19-aisha",
+      "ordinal": 8,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_a_d58_frame"
+      ],
+      "origin": {
+        "mention": "m_a_abuubaydah"
+      },
+      "chainState": "DEFERRED"
     }
   ],
   "statements": [
@@ -298,7 +328,6 @@
       "report": "r_a0",
       "spans": [
         "sp_a1",
-        "sp_a_bint",
         "sp_a2"
       ],
       "role": "AUTHOR_REPORT"
@@ -382,6 +411,30 @@
         "sp_a_d58_year"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_a_d57_ahmad",
+      "report": "r_a_d57_ahmad",
+      "spans": [
+        "sp_a_d57"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_a_d57_shabab",
+      "report": "r_a_d57_shabab",
+      "spans": [
+        "sp_a_d57"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_a_d58_abu",
+      "report": "r_a_d58_abu",
+      "spans": [
+        "sp_a_d58_year"
+      ],
+      "role": "TRANSMITTED"
     }
   ],
   "mentions": [
@@ -394,7 +447,7 @@
     },
     {
       "id": "m_a_father",
-      "parent": "sp_a2",
+      "parent": "sp_a1",
       "exact": "أَبِي بَكْرٍ",
       "occurrence": 1,
       "role": "REFERENT"
@@ -470,13 +523,6 @@
       "role": "SPEAKER"
     },
     {
-      "id": "m_a_d57",
-      "parent": "sp_a_d57",
-      "exact": "تُوُفِّيَتْ",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
       "id": "m_a_waqidi",
       "parent": "sp_a_d58_frame",
       "exact": "الوَاقِدِيُّ",
@@ -484,11 +530,25 @@
       "role": "SPEAKER"
     },
     {
-      "id": "m_a_d58_s",
-      "parent": "sp_a_d58_frame",
-      "exact": "وَقَالَ",
+      "id": "m_a_ahmad",
+      "parent": "sp_a_d57_frame",
+      "exact": "أَحْمَدُ بنُ حَنْبَلٍ",
       "occurrence": 1,
-      "role": "SUBJECT"
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_a_shabab",
+      "parent": "sp_a_d57_frame",
+      "exact": "شَبَابٌ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_a_abuubaydah",
+      "parent": "sp_a_d58_frame",
+      "exact": "أَبُو عُبَيْدَةَ مَعْمَرُ بنُ المُثَنَّى",
+      "occurrence": 1,
+      "role": "SPEAKER"
     }
   ],
   "identifications": [
@@ -565,30 +625,6 @@
       "status": "PROPOSED"
     },
     {
-      "id": "i_a_d57",
-      "mention": "m_a_d57",
-      "agent": "aisha-bint-abi-bakr",
-      "basis": [
-        {
-          "span": "sp_a_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_a_d58_s",
-      "mention": "m_a_d58_s",
-      "agent": "aisha-bint-abi-bakr",
-      "basis": [
-        {
-          "span": "sp_a_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
       "id": "i_a_father",
       "mention": "m_a_father",
       "agent": "abu-bakr-as-siddiq",
@@ -621,7 +657,6 @@
       "value": {
         "spans": [
           "sp_a1",
-          "sp_a_bint",
           "sp_a2"
         ]
       },
@@ -681,18 +716,6 @@
       },
       "restsOn": [
         "st_a_epithets"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_a_wife2",
-      "subject": "m_a_marr",
-      "predicate": "MARRIED",
-      "value": {
-        "object": "m_a_prophet2"
-      },
-      "restsOn": [
-        "st_a_marriage"
       ],
       "status": "PROPOSED"
     },
@@ -810,7 +833,7 @@
     },
     {
       "id": "a_a_d57",
-      "subject": "m_a_d57",
+      "subject": "m_a",
       "predicate": "died.year",
       "value": {
         "parsed": 57,
@@ -819,13 +842,15 @@
         ]
       },
       "restsOn": [
-        "st_a_d57"
+        "st_a_d57",
+        "st_a_d57_ahmad",
+        "st_a_d57_shabab"
       ],
       "status": "PROPOSED"
     },
     {
       "id": "a_a_d58",
-      "subject": "m_a_d58_s",
+      "subject": "m_a",
       "predicate": "died.year",
       "value": {
         "parsed": 58,
@@ -834,7 +859,8 @@
         ]
       },
       "restsOn": [
-        "st_a_d58"
+        "st_a_d58",
+        "st_a_d58_abu"
       ],
       "status": "PROPOSED"
     }

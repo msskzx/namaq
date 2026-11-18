@@ -296,6 +296,23 @@
       "layer": "MAIN",
       "exact": "العَبَّاسَ بنَ عَبْدِ المُطَّلِبِ",
       "prefix": "شَهِدَ "
+    },
+    {
+      "id": "sp_ab_age86",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "100",
+      "layer": "MAIN",
+      "exact": "وَلَهُ سِتٌّ وَثَمَانُوْنَ سَنَةً"
+    },
+    {
+      "id": "sp_ab_age86_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "100",
+      "layer": "MAIN",
+      "exact": "سِتٌّ وَثَمَانُوْنَ سَنَةً",
+      "prefix": "وَلَهُ "
     }
   ],
   "reports": [
@@ -476,10 +493,17 @@
       "role": "TRANSMITTED"
     },
     {
-      "id": "st_ab_sinw",
+      "id": "st_ab_sinw_a",
       "report": "r_ab_sinw",
       "spans": [
-        "sp_ab_sinw_a",
+        "sp_ab_sinw_a"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ab_sinw_b",
+      "report": "r_ab_sinw",
+      "spans": [
         "sp_ab_sinw_b"
       ],
       "role": "TRANSMITTED"
@@ -515,6 +539,14 @@
         "sp_ab_father"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ab_age86",
+      "report": "r_ab0",
+      "spans": [
+        "sp_ab_age86"
+      ],
+      "role": "AUTHOR_REPORT"
     }
   ],
   "mentions": [
@@ -536,13 +568,6 @@
       "id": "m_ab_k",
       "parent": "sp_ab_kalbi",
       "exact": "العَبَّاسُ",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
-      "id": "m_ab_t",
-      "parent": "sp_ab_tall_a",
-      "exact": "كَانَ",
       "occurrence": 1,
       "role": "SUBJECT"
     },
@@ -624,13 +649,6 @@
       "role": "SUBJECT"
     },
     {
-      "id": "m_ab_w",
-      "parent": "sp_ab_wife",
-      "exact": "وَأُمُّهُمْ",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
       "id": "m_ab_ummfadl",
       "parent": "sp_ab_wife",
       "exact": "أُمُّ الفَضْلِ",
@@ -680,20 +698,6 @@
       "role": "SUBJECT"
     },
     {
-      "id": "m_ab_a",
-      "parent": "sp_ab_age",
-      "exact": "عَاشَ",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
-      "id": "m_ab_d",
-      "parent": "sp_ab_death",
-      "exact": "وَمَاتَ",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
       "id": "m_ab_khalifah",
       "parent": "sp_ab_khalifah_frame",
       "exact": "خَلِيْفَةُ",
@@ -701,25 +705,11 @@
       "role": "SPEAKER"
     },
     {
-      "id": "m_ab_dk",
-      "parent": "sp_ab_khalifah",
-      "exact": "مَاتَ",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
       "id": "m_ab_madaini",
       "parent": "sp_ab_madaini_frame",
       "exact": "المَدَائِنِيُّ",
       "occurrence": 1,
       "role": "SPEAKER"
-    },
-    {
-      "id": "m_ab_dm",
-      "parent": "sp_ab_madaini",
-      "exact": "سَنَةَ",
-      "occurrence": 1,
-      "role": "SUBJECT"
     },
     {
       "id": "m_ab_abunamlah",
@@ -769,18 +759,6 @@
       "status": "PROPOSED"
     },
     {
-      "id": "i_ab_t",
-      "mention": "m_ab_t",
-      "agent": "al-abbas-ibn-abd-al-muttalib",
-      "basis": [
-        {
-          "span": "sp_ab_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
       "id": "i_ab_mo",
       "mention": "m_ab_mo",
       "agent": "al-abbas-ibn-abd-al-muttalib",
@@ -795,18 +773,6 @@
     {
       "id": "i_ab_s",
       "mention": "m_ab_s",
-      "agent": "al-abbas-ibn-abd-al-muttalib",
-      "basis": [
-        {
-          "span": "sp_ab_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_ab_w",
-      "mention": "m_ab_w",
       "agent": "al-abbas-ibn-abd-al-muttalib",
       "basis": [
         {
@@ -843,54 +809,6 @@
     {
       "id": "i_ab_is",
       "mention": "m_ab_is",
-      "agent": "al-abbas-ibn-abd-al-muttalib",
-      "basis": [
-        {
-          "span": "sp_ab_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_ab_a",
-      "mention": "m_ab_a",
-      "agent": "al-abbas-ibn-abd-al-muttalib",
-      "basis": [
-        {
-          "span": "sp_ab_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_ab_d",
-      "mention": "m_ab_d",
-      "agent": "al-abbas-ibn-abd-al-muttalib",
-      "basis": [
-        {
-          "span": "sp_ab_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_ab_dk",
-      "mention": "m_ab_dk",
-      "agent": "al-abbas-ibn-abd-al-muttalib",
-      "basis": [
-        {
-          "span": "sp_ab_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_ab_dm",
-      "mention": "m_ab_dm",
       "agent": "al-abbas-ibn-abd-al-muttalib",
       "basis": [
         {
@@ -1091,7 +1009,7 @@
     },
     {
       "id": "a_ab_app_author",
-      "subject": "m_ab_t",
+      "subject": "m_ab",
       "predicate": "appearance",
       "value": {
         "spans": [
@@ -1286,7 +1204,7 @@
     },
     {
       "id": "a_ab_wife",
-      "subject": "m_ab_w",
+      "subject": "m_ab",
       "predicate": "MARRIED",
       "value": {
         "object": "m_ab_ummfadl"
@@ -1323,17 +1241,30 @@
       "status": "PROPOSED"
     },
     {
-      "id": "a_ab_v_sinw",
+      "id": "a_ab_v_sinw_a",
       "subject": "m_ab_sw",
       "predicate": "virtue",
       "value": {
         "spans": [
-          "sp_ab_sinw_a",
+          "sp_ab_sinw_a"
+        ]
+      },
+      "restsOn": [
+        "st_ab_sinw_a"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_v_sinw_b",
+      "subject": "m_ab_sw",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
           "sp_ab_sinw_b"
         ]
       },
       "restsOn": [
-        "st_ab_sinw"
+        "st_ab_sinw_b"
       ],
       "status": "PROPOSED"
     },
@@ -1353,7 +1284,7 @@
     },
     {
       "id": "a_ab_age",
-      "subject": "m_ab_a",
+      "subject": "m_ab",
       "predicate": "died.age",
       "value": {
         "parsed": 88,
@@ -1368,7 +1299,7 @@
     },
     {
       "id": "a_ab_death",
-      "subject": "m_ab_d",
+      "subject": "m_ab",
       "predicate": "died.year",
       "value": {
         "parsed": 32,
@@ -1383,7 +1314,7 @@
     },
     {
       "id": "a_ab_death_kh",
-      "subject": "m_ab_dk",
+      "subject": "m_ab",
       "predicate": "died.year",
       "value": {
         "parsed": 34,
@@ -1398,7 +1329,7 @@
     },
     {
       "id": "a_ab_death_md",
-      "subject": "m_ab_dm",
+      "subject": "m_ab",
       "predicate": "died.year",
       "value": {
         "parsed": 33,
@@ -1420,6 +1351,21 @@
       },
       "restsOn": [
         "st_ab_father"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_age86",
+      "subject": "m_ab",
+      "predicate": "died.age",
+      "value": {
+        "parsed": 86,
+        "spans": [
+          "sp_ab_age86_n"
+        ]
+      },
+      "restsOn": [
+        "st_ab_age86"
       ],
       "status": "PROPOSED"
     }
