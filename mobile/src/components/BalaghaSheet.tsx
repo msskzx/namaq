@@ -16,12 +16,14 @@ import { BookList } from './Books';
 import LoadingDots from '@/ui/LoadingDots';
 import Sheet from '@/ui/Sheet';
 import OpenInBook from './OpenInBook';
+import LitAyat, { deepBand } from './quran/text/LitAyat';
 import Card from '@/ui/Card';
 import Tabs from '@/ui/Tabs';
 import Folded from '@/ui/Folded';
 import Pickable from '@/ui/Pickable';
 import Chip from '@/ui/Chip';
-import { openIntent } from '@/lib/ways';
+import { openIntent, toTab } from '@/lib/ways';
+import { plainName, termOfParagraph } from '@shared/quran/balaghaTerms';
 
 /**
  * Balagha in the reader (owner, 2026-11-16; docs/plans/balagha.md), from two books picked with pills. Al-Itqan (built
@@ -31,8 +33,7 @@ import { openIntent } from '@/lib/ways';
  */
 // The reader's neutral band (MushafPageView's mark): the ink at 10%, seen on a card in both themes.
 const band = (palette: Palette) => palette.bands.mark;
-/** The sentence whose ayah words are lit: a deeper band. */
-const deepBand = (palette: Palette) => `${palette.ink}33`;
+// The sentence whose ayah words are lit: a deeper band (LitAyat's deepBand).
 
 type Book = 'itqan' | 'kashshaf';
 const BOOK_NAMES: Record<Book, string> = { itqan: 'الإتقان للسيوطي', kashshaf: 'الكشاف للزمخشري' };
@@ -63,11 +64,7 @@ function BalaghaBody({ ayah, palette, onClose }: { ayah: string; palette: Palett
       </View>
       <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 10, paddingBottom: 8 }}>
         <Card palette={palette} pad={[10, 14]}>
-          <Text style={{ fontFamily: QURAN_FONT, fontSize: 23, lineHeight: 46, color: palette.ink, textAlign: 'right', writingDirection: 'rtl' }}>
-            {words.map((word, i) => (
-              <Text key={i} style={span.some(([from, to]) => i >= from && i <= to) ? { backgroundColor: deepBand(palette) } : undefined}>{`${i ? ' ' : ''}${word}`}</Text>
-            ))}
-          </Text>
+          <LitAyat ayat={[{ words, lit: span }]} palette={palette} />
         </Card>
         <Tabs options={(['itqan', 'kashshaf'] as const).map(book => ({ key: book, label: BOOK_NAMES[book] }))} value={shown} onChange={book => { setShown(book); setSpan([]); }} palette={palette} />
         {shown === 'itqan'
@@ -89,6 +86,7 @@ function Itqan({ paragraphs, palette, onSpan, onClose }: { paragraphs: ItqanPara
       {/* The paragraph lights the words it quotes; its reference below is a control of its own. */}
       <Pickable picked={picked === i} onPick={() => setPicked(i)}>
       <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 22, textAlign: 'right' }}>{paragraph.heading ? `«${paragraph.heading}» · ${paragraph.kind}` : paragraph.kind}</Text>
+      <TermLink paragraph={paragraph} palette={palette} onClose={onClose} />
       <Text selectable style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' }}>
         {tafsirRuns(paragraph.text).map((run, j) => <Text key={j} style={run.quran ? { fontFamily: QURAN_FONT, color: palette.accent } : undefined}>{run.text}</Text>)}
       </Text>
@@ -114,6 +112,19 @@ function Itqan({ paragraphs, palette, onSpan, onClose }: { paragraphs: ItqanPara
       </Folded>
     </Card>
   ));
+}
+
+/** The term his paragraph stands under, a tap from its page in «مصطلحات البلاغة». */
+function TermLink({ paragraph, palette, onClose }: { paragraph: ItqanParagraph; palette: Palette; onClose: () => void }) {
+  const term = termOfParagraph(itqan, paragraph);
+  if (!term) return null;
+  const label = `تعريف ${plainName(term)}`;
+  return (
+    <View style={{ flexDirection: 'row', paddingVertical: 4 }}>
+      <Chip small label={label} on={false} palette={palette} accessibilityLabel={`${label} في مصطلحات البلاغة`}
+        onPress={() => { onClose(); toTab({ pathname: '/term', params: { name: term } }); }} />
+    </View>
+  );
 }
 
 function Kashshaf({ ayah, palette, onSpan, onClose }: { ayah: string; palette: Palette; onSpan: (span: [number, number][]) => void; onClose: () => void }) {

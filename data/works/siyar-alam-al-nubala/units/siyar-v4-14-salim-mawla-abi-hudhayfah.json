@@ -1,0 +1,505 @@
+{
+  "unit": {
+    "id": "siyar-v4-14-salim-mawla-abi-hudhayfah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٤"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_sl_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "167",
+      "layer": "MAIN",
+      "exact": "١٤ - سَالِمٌ مَوْلَى أَبِي حُذَيْفَةَ"
+    },
+    {
+      "id": "sp_sl1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "167",
+      "layer": "MAIN",
+      "exact": "سَالِمٌ مَوْلَى أَبِي حُذَيْفَةَ",
+      "prefix": "١٤ - "
+    },
+    {
+      "id": "sp_sl_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "167",
+      "layer": "MAIN",
+      "exact": "سَالِمٌ مَوْلَى",
+      "prefix": "١٤ - "
+    },
+    {
+      "id": "sp_sl_titles",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "167",
+      "layer": "MAIN",
+      "exact": "مِنَ السَّابِقِيْنَ الأَوَّلِيْنَ، البَدْرِيِّيْنَ، المُقَرَّبِيْنَ، العَالِمِيْنَ"
+    },
+    {
+      "id": "sp_sl_sabiq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "167",
+      "layer": "MAIN",
+      "exact": "مِنَ السَّابِقِيْنَ الأَوَّلِيْنَ",
+      "suffix": "، البَدْرِيِّيْنَ"
+    },
+    {
+      "id": "sp_sl_badr_word",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "167",
+      "layer": "MAIN",
+      "exact": "البَدْرِيِّيْنَ",
+      "prefix": "السَّابِقِيْنَ الأَوَّلِيْنَ، "
+    },
+    {
+      "id": "sp_sl_virtue",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "167",
+      "layer": "MAIN",
+      "exact": "المُقَرَّبِيْنَ، العَالِمِيْنَ"
+    },
+    {
+      "id": "sp_sl_musa_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "167",
+      "layer": "MAIN",
+      "exact": "قَالَ مُوْسَى بنُ عُقْبَةَ:",
+      "suffix": " هُوَ سَالِمُ"
+    },
+    {
+      "id": "sp_sl_musa",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "167",
+      "layer": "MAIN",
+      "exact": "هُوَ سَالِمُ بنُ مَعْقِلٍ",
+      "prefix": "عُقْبَةَ: "
+    },
+    {
+      "id": "sp_sl_name2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "167",
+      "layer": "MAIN",
+      "exact": "سَالِمُ بنُ مَعْقِلٍ",
+      "prefix": "هُوَ "
+    },
+    {
+      "id": "sp_sl_umar_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "168",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ نُمَيْرٍ: عَنْ عُبَيْدِ اللهِ، عَنْ نَافِعٍ، عَنِ ابْنِ عُمَرَ:"
+    },
+    {
+      "id": "sp_sl_imam_a",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "168",
+      "layer": "MAIN",
+      "exact": "أَنَّ المُهَاجِرِيْنَ نَزَلُوا بِالعُصْبَةِ إِلَى جَنْبِ قُبَاءَ، فَأَمَّهُم سَالِمٌ مَوْلَى أَبِي حُذَيْفَةَ، لأَنَّهُ كَانَ"
+    },
+    {
+      "id": "sp_sl_imam_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "169",
+      "layer": "MAIN",
+      "exact": "أَكْثَرَهُم قُرْآناً، فِيْهِم عُمَرُ، وَأَبُو سَلَمَةَ بنُ عَبْدِ الأَسَدِ"
+    },
+    {
+      "id": "sp_sl_aisha_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "168",
+      "layer": "MAIN",
+      "exact": "حَنْظَلَةُ بنُ أَبِي سُفْيَانَ: عَنْ عَبْدِ الرَّحْمَنِ بنِ سَابِطٍ، عَنْ عَائِشَةَ، قَالَتْ:"
+    },
+    {
+      "id": "sp_sl_aisha_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "168",
+      "layer": "MAIN",
+      "exact": "عَنْ عَائِشَةَ، قَالَتْ:",
+      "prefix": "بنِ سَابِطٍ، "
+    },
+    {
+      "id": "sp_sl_voice",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "168",
+      "layer": "MAIN",
+      "exact": "قُلْتُ: إِنَّ فِي المَسْجِدِ لأَحْسَنَ مَنْ سَمِعْتُ صَوْتاً بِالقُرْآنِ. فَأَخَذَ رِدَاءهُ، وَخَرَجَ يَسْمَعُهُ، فَإِذَا هُوَ سَالِمٌ مَوْلَى أَبِي حُذَيْفَةَ. فَقَالَ: (الحَمْدُ لِلِّهِ الَّذِي جَعَلَ فِي أُمَّتِي مِثْلَكَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_sl0",
+      "unit": "siyar-v4-14-salim-mawla-abi-hudhayfah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_sl_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_sl_musa",
+      "unit": "siyar-v4-14-salim-mawla-abi-hudhayfah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_sl_musa_frame"
+      ],
+      "origin": {
+        "mention": "m_sl_musa"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sl_umar",
+      "unit": "siyar-v4-14-salim-mawla-abi-hudhayfah",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_sl_umar_isnad",
+      "origin": {
+        "mention": "m_sl_umar"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sl_aisha",
+      "unit": "siyar-v4-14-salim-mawla-abi-hudhayfah",
+      "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_sl_aisha_isnad",
+      "origin": {
+        "mention": "m_sl_aisha"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_sl_name",
+      "report": "r_sl0",
+      "spans": [
+        "sp_sl1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sl_titles",
+      "report": "r_sl0",
+      "spans": [
+        "sp_sl_titles"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sl_musa",
+      "report": "r_sl_musa",
+      "spans": [
+        "sp_sl_musa"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_sl_imam",
+      "report": "r_sl_umar",
+      "spans": [
+        "sp_sl_imam_a",
+        "sp_sl_imam_b"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_sl_voice",
+      "report": "r_sl_aisha",
+      "spans": [
+        "sp_sl_voice"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_sl",
+      "parent": "sp_sl1",
+      "exact": "سَالِمٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sl_t",
+      "parent": "sp_sl_titles",
+      "exact": "مِنَ السَّابِقِيْنَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sl_badr",
+      "parent": "sp_sl_titles",
+      "exact": "البَدْرِيِّيْنَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_sl_musa",
+      "parent": "sp_sl_musa_frame",
+      "exact": "مُوْسَى بنُ عُقْبَةَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sl_m",
+      "parent": "sp_sl_musa",
+      "exact": "هُوَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sl_umar",
+      "parent": "sp_sl_umar_isnad",
+      "exact": "ابْنِ عُمَرَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sl_i",
+      "parent": "sp_sl_imam_a",
+      "exact": "سَالِمٌ مَوْلَى أَبِي حُذَيْفَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sl_aisha",
+      "parent": "sp_sl_aisha_isnad",
+      "exact": "عَائِشَةَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sl_v",
+      "parent": "sp_sl_voice",
+      "exact": "سَالِمٌ مَوْلَى أَبِي حُذَيْفَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_sl",
+      "mention": "m_sl",
+      "agent": "salim-mawla-abi-hudhayfah",
+      "basis": [
+        {
+          "span": "sp_sl_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sl_t",
+      "mention": "m_sl_t",
+      "agent": "salim-mawla-abi-hudhayfah",
+      "basis": [
+        {
+          "span": "sp_sl_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sl_m",
+      "mention": "m_sl_m",
+      "agent": "salim-mawla-abi-hudhayfah",
+      "basis": [
+        {
+          "span": "sp_sl_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sl_i",
+      "mention": "m_sl_i",
+      "agent": "salim-mawla-abi-hudhayfah",
+      "basis": [
+        {
+          "span": "sp_sl_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sl_v",
+      "mention": "m_sl_v",
+      "agent": "salim-mawla-abi-hudhayfah",
+      "basis": [
+        {
+          "span": "sp_sl_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sl_aisha",
+      "mention": "m_sl_aisha",
+      "agent": "aisha-bint-abi-bakr",
+      "basis": [
+        {
+          "span": "sp_sl_aisha_name",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sl_badr",
+      "mention": "m_sl_badr",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_sl_badr_word",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_sl_name",
+      "subject": "m_sl",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_sl1"
+        ]
+      },
+      "restsOn": [
+        "st_sl_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sl_name2",
+      "subject": "m_sl_m",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_sl_name2"
+        ]
+      },
+      "restsOn": [
+        "st_sl_musa"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sl_sex",
+      "subject": "m_sl",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_sl_sex"
+        ]
+      },
+      "restsOn": [
+        "st_sl_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sl_sabiq",
+      "subject": "m_sl_t",
+      "predicate": "title",
+      "value": {
+        "classified": "al-sabiqoon",
+        "spans": [
+          "sp_sl_sabiq"
+        ]
+      },
+      "restsOn": [
+        "st_sl_titles"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sl_badr",
+      "subject": "m_sl_t",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_sl_badr"
+      },
+      "restsOn": [
+        "st_sl_titles"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sl_v_titles",
+      "subject": "m_sl_t",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_sl_virtue"
+        ]
+      },
+      "restsOn": [
+        "st_sl_titles"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sl_v_imam",
+      "subject": "m_sl_i",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_sl_imam_a",
+          "sp_sl_imam_b"
+        ]
+      },
+      "restsOn": [
+        "st_sl_imam"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sl_v_voice",
+      "subject": "m_sl_v",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_sl_voice"
+        ]
+      },
+      "restsOn": [
+        "st_sl_voice"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

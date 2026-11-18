@@ -38,6 +38,7 @@ export interface AssembledQuestion {
   passage?: ChoiceQuestion['passage'];
   quranChoices?: ChoiceQuestion['quranChoices'];
   whereOf?: ChoiceQuestion['whereOf'];
+  terms?: ChoiceQuestion['terms'];
   note?: ChoiceQuestion['note'];
   evidence: { claimKeys: string[] };
 }

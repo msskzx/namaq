@@ -25,9 +25,19 @@ it('keeps explicit multi-ayah passages complete without repeating their final ay
       const passage = presentation.ayat.find(ayah => ayah.key === place.key)!;
       const last = ayat.get(place.through!)!;
       const first = ayat.get(place.key)!;
-      expect(passage.words).toEqual([...first.words, `﴿${num(Number(place.key.split(':')[1]))}﴾`, ...last.words]);
-      expect(ends[place.key]).toBe(place.through);
+      const whole = [...first.words, `﴿${num(Number(place.key.split(':')[1]))}﴾`, ...last.words];
+      expect(passage.words.slice(0, whole.length)).toEqual(whole);
       expect(ayat.has(ends[place.key])).toBe(true);
+      // A passage reads on past its last ayah only as every tree does: while another row stays identical to it
+      // (al-Hijr 15:36-37 and Sad 38:79-80 both go on into «إلى يوم الوقت المعلوم»), never repeating its last ayah.
+      if (passage.words.length === whole.length) expect(ends[place.key]).toBe(place.through);
+      else {
+        const [surah, through] = place.through!.split(':').map(Number);
+        const [endSurah, end] = ends[place.key].split(':').map(Number);
+        expect(endSurah === surah && end > through).toBe(true);
+        // The ayah after the passage follows its end marker, not a second copy of the passage's last ayah.
+        expect(passage.words.slice(whole.length + 1, whole.length + 1 + last.words.length)).not.toEqual(last.words);
+      }
     }
   }
 });

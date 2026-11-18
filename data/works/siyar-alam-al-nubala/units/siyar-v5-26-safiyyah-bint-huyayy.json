@@ -1,0 +1,635 @@
+{
+  "unit": {
+    "id": "siyar-v5-26-safiyyah-bint-huyayy",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٢٦"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_sh2_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "231",
+      "layer": "MAIN",
+      "exact": "٢٦ - صَفِيَّةُ بِنْتُ حُيَيِّ بنِ أَخْطَبَ بنِ سَعْيَةَ أُمُّ المُؤْمِنِيْنَ"
+    },
+    {
+      "id": "sp_sh2_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "231",
+      "layer": "MAIN",
+      "exact": "صَفِيَّةُ بِنْتُ حُيَيِّ بنِ أَخْطَبَ بنِ سَعْيَةَ",
+      "prefix": "٢٦ - "
+    },
+    {
+      "id": "sp_sh2_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "231",
+      "layer": "MAIN",
+      "exact": "صَفِيَّةُ بِنْتُ",
+      "prefix": "٢٦ - "
+    },
+    {
+      "id": "sp_sh2_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "231",
+      "layer": "MAIN",
+      "exact": "حُيَيِّ بنِ أَخْطَبَ",
+      "prefix": "صَفِيَّةُ بِنْتُ "
+    },
+    {
+      "id": "sp_sh2_umm",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "231",
+      "layer": "MAIN",
+      "exact": "سَعْيَةَ أُمُّ المُؤْمِنِيْنَ",
+      "prefix": "أَخْطَبَ بنِ "
+    },
+    {
+      "id": "sp_sh2_harun",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "231",
+      "layer": "MAIN",
+      "exact": "مِنْ سِبْطِ اللاَّوِي بنِ نَبِيِّ اللهِ إِسْرَائِيْلَ بنِ إِسْحَاقَ بنِ إِبْرَاهِيْمَ - عَلَيْهِمُ السَّلاَمُ - ثُمَّ مِنْ ذُرِّيَّةِ رَسُوْلِ اللهِ هَارُوْنَ -عَلَيْهِ السَّلاَمُ-"
+    },
+    {
+      "id": "sp_sh2_jahili",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "231",
+      "layer": "MAIN",
+      "exact": "تَزَوَّجَهَا قَبْلَ إِسْلاَمِهَا: سَلاَمُ بنُ أَبِي الحُقَيْقِ، ثُمَّ خَلَفَ عَلَيْهَا: كِنَانَةُ بن أَبِي الحُقَيْقِ"
+    },
+    {
+      "id": "sp_sh2_sallam_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "231",
+      "layer": "MAIN",
+      "exact": "سَلاَمُ بنُ أَبِي الحُقَيْقِ",
+      "prefix": "إِسْلاَمِهَا: "
+    },
+    {
+      "id": "sp_sh2_kinanah_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "231",
+      "layer": "MAIN",
+      "exact": "كِنَانَةُ بن أَبِي الحُقَيْقِ",
+      "prefix": "عَلَيْهَا: "
+    },
+    {
+      "id": "sp_sh2_prophet",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "232",
+      "layer": "MAIN",
+      "exact": "ثُمَّ إِنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- لَمَّا طَهُرَتْ تَزَوَّجَهَا، وَجَعَلَ عِتْقَهَا صَدَاقَهَا"
+    },
+    {
+      "id": "sp_sh2_sharifa",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "232",
+      "layer": "MAIN",
+      "exact": "وَكَانَتْ شَرِيْفَةً، عَاقِلَةً، ذَاتَ حَسَبٍ، وَجَمَالٍ، وَدِيْنٍ"
+    },
+    {
+      "id": "sp_sh2_hilm",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "235",
+      "layer": "MAIN",
+      "exact": "وَكَانَتْ صَفِيَّةُ ذَاتَ حِلْمٍ، وَوَقَارٍ"
+    },
+    {
+      "id": "sp_sh2_d36",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "235",
+      "layer": "MAIN",
+      "exact": "قِيْلَ: تُوُفِّيَتْ سَنَةَ سِتٍّ وَثَلاَثِيْنَ"
+    },
+    {
+      "id": "sp_sh2_d36_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "235",
+      "layer": "MAIN",
+      "exact": "سَنَةَ سِتٍّ وَثَلاَثِيْنَ"
+    },
+    {
+      "id": "sp_sh2_d50",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "235",
+      "layer": "MAIN",
+      "exact": "وَقِيْلَ: تُوُفِّيَتْ سَنَةَ خَمْسِيْنَ"
+    },
+    {
+      "id": "sp_sh2_d50_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "235",
+      "layer": "MAIN",
+      "exact": "سَنَةَ خَمْسِيْنَ",
+      "prefix": "تُوُفِّيَتْ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_sh20",
+      "unit": "siyar-v5-26-safiyyah-bint-huyayy",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_sh2_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_sh2_d36",
+      "unit": "siyar-v5-26-safiyyah-bint-huyayy",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_sh2_d36_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sh2_d50",
+      "unit": "siyar-v5-26-safiyyah-bint-huyayy",
+      "ordinal": 3,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_sh2_d50_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_sh2_name",
+      "report": "r_sh20",
+      "spans": [
+        "sp_sh2_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sh2_umm",
+      "report": "r_sh20",
+      "spans": [
+        "sp_sh2_umm"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sh2_harun",
+      "report": "r_sh20",
+      "spans": [
+        "sp_sh2_harun"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sh2_jahili",
+      "report": "r_sh20",
+      "spans": [
+        "sp_sh2_jahili"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sh2_prophet",
+      "report": "r_sh20",
+      "spans": [
+        "sp_sh2_prophet"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sh2_sharifa",
+      "report": "r_sh20",
+      "spans": [
+        "sp_sh2_sharifa"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sh2_hilm",
+      "report": "r_sh20",
+      "spans": [
+        "sp_sh2_hilm"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sh2_d36",
+      "report": "r_sh2_d36",
+      "spans": [
+        "sp_sh2_d36"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_sh2_d50",
+      "report": "r_sh2_d50",
+      "spans": [
+        "sp_sh2_d50"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_sh2",
+      "parent": "sp_sh2_name",
+      "exact": "صَفِيَّةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sh2_father",
+      "parent": "sp_sh2_name",
+      "exact": "حُيَيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_sh2_umm",
+      "parent": "sp_sh2_umm",
+      "exact": "أُمُّ المُؤْمِنِيْنَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sh2_harun",
+      "parent": "sp_sh2_harun",
+      "exact": "مِنْ سِبْطِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sh2_j",
+      "parent": "sp_sh2_jahili",
+      "exact": "تَزَوَّجَهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sh2_sallam",
+      "parent": "sp_sh2_jahili",
+      "exact": "سَلاَمُ بنُ أَبِي الحُقَيْقِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_sh2_kinanah",
+      "parent": "sp_sh2_jahili",
+      "exact": "كِنَانَةُ بن أَبِي الحُقَيْقِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_sh2_p",
+      "parent": "sp_sh2_prophet",
+      "exact": "تَزَوَّجَهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sh2_prophet",
+      "parent": "sp_sh2_prophet",
+      "exact": "النَّبِيَّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_sh2_sh",
+      "parent": "sp_sh2_sharifa",
+      "exact": "وَكَانَتْ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sh2_hilm",
+      "parent": "sp_sh2_hilm",
+      "exact": "صَفِيَّةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sh2_d36_by",
+      "parent": "sp_sh2_d36",
+      "exact": "قِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sh2_d50_by",
+      "parent": "sp_sh2_d50",
+      "exact": "وَقِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_sh2",
+      "mention": "m_sh2",
+      "agent": "safiyyah-bint-huyayy",
+      "basis": [
+        {
+          "span": "sp_sh2_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sh2_father",
+      "mention": "m_sh2_father",
+      "agent": "huyayy-ibn-akhtab",
+      "basis": [
+        {
+          "span": "sp_sh2_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sh2_umm",
+      "mention": "m_sh2_umm",
+      "agent": "safiyyah-bint-huyayy",
+      "basis": [
+        {
+          "span": "sp_sh2_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sh2_harun",
+      "mention": "m_sh2_harun",
+      "agent": "safiyyah-bint-huyayy",
+      "basis": [
+        {
+          "span": "sp_sh2_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sh2_j",
+      "mention": "m_sh2_j",
+      "agent": "safiyyah-bint-huyayy",
+      "basis": [
+        {
+          "span": "sp_sh2_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sh2_sallam",
+      "mention": "m_sh2_sallam",
+      "agent": "sallam-ibn-abi-al-huqayq",
+      "basis": [
+        {
+          "span": "sp_sh2_sallam_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sh2_kinanah",
+      "mention": "m_sh2_kinanah",
+      "agent": "kinanah-ibn-abi-al-huqayq",
+      "basis": [
+        {
+          "span": "sp_sh2_kinanah_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sh2_p",
+      "mention": "m_sh2_p",
+      "agent": "safiyyah-bint-huyayy",
+      "basis": [
+        {
+          "span": "sp_sh2_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sh2_sh",
+      "mention": "m_sh2_sh",
+      "agent": "safiyyah-bint-huyayy",
+      "basis": [
+        {
+          "span": "sp_sh2_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sh2_hilm",
+      "mention": "m_sh2_hilm",
+      "agent": "safiyyah-bint-huyayy",
+      "basis": [
+        {
+          "span": "sp_sh2_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_sh2_name",
+      "subject": "m_sh2",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_sh2_name"
+        ]
+      },
+      "restsOn": [
+        "st_sh2_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sh2_sex",
+      "subject": "m_sh2",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_sh2_sex"
+        ]
+      },
+      "restsOn": [
+        "st_sh2_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sh2_father",
+      "subject": "m_sh2",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_sh2_father"
+      },
+      "restsOn": [
+        "st_sh2_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sh2_umm",
+      "subject": "m_sh2_umm",
+      "predicate": "title",
+      "value": {
+        "classified": "mother-of-believers",
+        "spans": [
+          "sp_sh2_umm"
+        ]
+      },
+      "restsOn": [
+        "st_sh2_umm"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sh2_v_harun",
+      "subject": "m_sh2_harun",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_sh2_harun"
+        ]
+      },
+      "restsOn": [
+        "st_sh2_harun"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sh2_w_sallam",
+      "subject": "m_sh2_j",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_sh2_sallam"
+      },
+      "restsOn": [
+        "st_sh2_jahili"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sh2_w_kinanah",
+      "subject": "m_sh2_j",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_sh2_kinanah"
+      },
+      "restsOn": [
+        "st_sh2_jahili"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sh2_w_prophet",
+      "subject": "m_sh2_p",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_sh2_prophet"
+      },
+      "restsOn": [
+        "st_sh2_prophet"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sh2_v_sharifa",
+      "subject": "m_sh2_sh",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_sh2_sharifa"
+        ]
+      },
+      "restsOn": [
+        "st_sh2_sharifa"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sh2_v_hilm",
+      "subject": "m_sh2_hilm",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_sh2_hilm"
+        ]
+      },
+      "restsOn": [
+        "st_sh2_hilm"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sh2_d36",
+      "subject": "m_sh2",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 36,
+        "spans": [
+          "sp_sh2_d36_y"
+        ]
+      },
+      "restsOn": [
+        "st_sh2_d36"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sh2_d50",
+      "subject": "m_sh2",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 50,
+        "spans": [
+          "sp_sh2_d50_y"
+        ]
+      },
+      "restsOn": [
+        "st_sh2_d50"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

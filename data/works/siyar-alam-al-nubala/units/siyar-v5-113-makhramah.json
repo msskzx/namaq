@@ -1,0 +1,356 @@
+{
+  "unit": {
+    "id": "siyar-v5-113-makhramah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١١٣"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_mk_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "542",
+      "layer": "MAIN",
+      "exact": "١١٣ - مَخْرَمَةُ بنُ نَوْفَلِ بنِ أُهَيْبِ بنِ عَبْدِ مَنَافٍ الزُّهْرِيُّ"
+    },
+    {
+      "id": "sp_mk_n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "542",
+      "layer": "MAIN",
+      "exact": "مَخْرَمَةُ بنُ نَوْفَلِ بنِ أُهَيْبِ بنِ عَبْدِ مَنَافٍ"
+    },
+    {
+      "id": "sp_mk_n2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "542",
+      "layer": "MAIN",
+      "exact": "ابْنِ زُهرَةَ بنِ كِلاَبٍ"
+    },
+    {
+      "id": "sp_mk_n3",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "542",
+      "layer": "MAIN",
+      "exact": "القُرَشِيُّ، الزُّهْرِيُّ"
+    },
+    {
+      "id": "sp_mk_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "542",
+      "layer": "MAIN",
+      "exact": "مَخْرَمَةُ بنُ",
+      "prefix": "-"
+    },
+    {
+      "id": "sp_mk_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "542",
+      "layer": "MAIN",
+      "exact": "نَوْفَلِ بنِ أُهَيْبِ",
+      "prefix": "بنُ"
+    },
+    {
+      "id": "sp_mk_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "542",
+      "layer": "MAIN",
+      "exact": "أَبُو المِسْوَرِ",
+      "prefix": "كِلاَبٍ."
+    },
+    {
+      "id": "sp_mk_kunya_st",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "542",
+      "layer": "MAIN",
+      "exact": "أَبُو المِسْوَرِ القُرَشِيُّ، الزُّهْرِيُّ"
+    },
+    {
+      "id": "sp_mk_hullah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "543",
+      "layer": "MAIN",
+      "exact": "كَسَاهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- حُلَّةً فَاخِرَةً"
+    },
+    {
+      "id": "sp_mk_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "543",
+      "layer": "MAIN",
+      "exact": "فَمَاتَ فِي سَنَةِ أَرْبَعٍ وَخَمْسِيْنَ، وَلَهُ مائَةُ عَامٍ وَخَمْسَةَ عَشَرَ عَاماً"
+    },
+    {
+      "id": "sp_mk_death_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "543",
+      "layer": "MAIN",
+      "exact": "سَنَةِ أَرْبَعٍ وَخَمْسِيْنَ"
+    },
+    {
+      "id": "sp_mk_miswar",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "544",
+      "layer": "MAIN",
+      "exact": "وَكَانَ وَلِدُهُ المِسْوَرُ بنُ مَخْرَمَةَ مِنْ صِغَارِ الصَّحَابَةِ، وَمِنْ أَشْرَافِ قُرَيْشٍ وَعُلَمَائِهِم"
+    },
+    {
+      "id": "sp_mk_miswar_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "544",
+      "layer": "MAIN",
+      "exact": "المِسْوَرُ بنُ مَخْرَمَةَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_mk0",
+      "unit": "siyar-v5-113-makhramah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_mk_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_mk_name",
+      "report": "r_mk0",
+      "spans": [
+        "sp_mk_n1",
+        "sp_mk_n2",
+        "sp_mk_n3"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_mk_kunya_st",
+      "report": "r_mk0",
+      "spans": [
+        "sp_mk_kunya_st"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_mk_hullah",
+      "report": "r_mk0",
+      "spans": [
+        "sp_mk_hullah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_mk_death",
+      "report": "r_mk0",
+      "spans": [
+        "sp_mk_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_mk_miswar",
+      "report": "r_mk0",
+      "spans": [
+        "sp_mk_miswar"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_mk",
+      "parent": "sp_mk_n1",
+      "exact": "مَخْرَمَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_mk_father",
+      "parent": "sp_mk_n1",
+      "exact": "نَوْفَلِ بنِ أُهَيْبِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_mk_m",
+      "parent": "sp_mk_miswar",
+      "exact": "وَلِدُهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_mk_c_miswar",
+      "parent": "sp_mk_miswar",
+      "exact": "المِسْوَرُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_mk",
+      "mention": "m_mk",
+      "agent": "makhramah-ibn-nawfal",
+      "basis": [
+        {
+          "span": "sp_mk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mk_father",
+      "mention": "m_mk_father",
+      "agent": "nawfal-ibn-uhayb",
+      "basis": [
+        {
+          "span": "sp_mk_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mk_m",
+      "mention": "m_mk_m",
+      "agent": "makhramah-ibn-nawfal",
+      "basis": [
+        {
+          "span": "sp_mk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mk_c_miswar",
+      "mention": "m_mk_c_miswar",
+      "agent": "al-miswar-ibn-makhramah",
+      "basis": [
+        {
+          "span": "sp_mk_miswar_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_mk_name",
+      "subject": "m_mk",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_mk_n1",
+          "sp_mk_n2",
+          "sp_mk_n3"
+        ]
+      },
+      "restsOn": [
+        "st_mk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mk_sex",
+      "subject": "m_mk",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_mk_sex"
+        ]
+      },
+      "restsOn": [
+        "st_mk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mk_father",
+      "subject": "m_mk",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_mk_father"
+      },
+      "restsOn": [
+        "st_mk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mk_kunya",
+      "subject": "m_mk",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_mk_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_mk_kunya_st"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mk_v_hullah",
+      "subject": "m_mk",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_mk_hullah"
+        ]
+      },
+      "restsOn": [
+        "st_mk_hullah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mk_died",
+      "subject": "m_mk",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 54,
+        "spans": [
+          "sp_mk_death_y"
+        ]
+      },
+      "restsOn": [
+        "st_mk_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mk_c_miswar_0",
+      "subject": "m_mk_c_miswar",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_mk_m"
+      },
+      "restsOn": [
+        "st_mk_miswar"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

@@ -1,0 +1,404 @@
+{
+  "unit": {
+    "id": "siyar-v4-71-umamah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٧١"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_um_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "335",
+      "layer": "MAIN",
+      "exact": "٧١ - أُمَامَةُ بِنْتُ أَبِي العَاصِ*"
+    },
+    {
+      "id": "sp_um1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "335",
+      "layer": "MAIN",
+      "exact": "أُمَامَةُ بِنْتُ أَبِي العَاصِ",
+      "prefix": "٧١ - "
+    },
+    {
+      "id": "sp_um_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "335",
+      "layer": "MAIN",
+      "exact": "أُمَامَةُ بِنْتُ",
+      "prefix": "٧١ - "
+    },
+    {
+      "id": "sp_um_father_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "335",
+      "layer": "MAIN",
+      "exact": "أَبِي العَاصِ",
+      "prefix": "أُمَامَةُ بِنْتُ "
+    },
+    {
+      "id": "sp_um_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "335",
+      "layer": "MAIN",
+      "exact": "الَّتِي كَانَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَحْمِلُهَا فِي صَلاَتِهِ (١)"
+    },
+    {
+      "id": "sp_um_ali",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "335",
+      "layer": "MAIN",
+      "exact": "تَزَوَّجَ بِهَا عَلِيُّ بنُ أَبِي طَالِبٍ فِي خِلاَفَةِ عُمَرَ"
+    },
+    {
+      "id": "sp_um_ali_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "335",
+      "layer": "MAIN",
+      "exact": "عَلِيُّ بنُ أَبِي طَالِبٍ",
+      "prefix": "تَزَوَّجَ بِهَا "
+    },
+    {
+      "id": "sp_um_mug",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "335",
+      "layer": "MAIN",
+      "exact": "وَعَاشَتْ بَعْدَهُ، حَتَّى تَزَوَّجَ بِهَا المُغِيْرَةُ بنُ نَوْفَلِ بنِ الحَارِثِ بنِ عَبْدِ المُطَّلِبِ الهَاشِمِيُّ، فَتُوُفِّيَتْ عِنْدَهُ بَعْدَ أَنْ وَلَدَتْ لَهُ يَحْيَى بنَ المُغِيْرَةِ"
+    },
+    {
+      "id": "sp_um_mug_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "335",
+      "layer": "MAIN",
+      "exact": "المُغِيْرَةُ بنُ نَوْفَلِ بنِ الحَارِثِ بنِ عَبْدِ المُطَّلِبِ"
+    },
+    {
+      "id": "sp_um_yahya_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "335",
+      "layer": "MAIN",
+      "exact": "يَحْيَى بنَ المُغِيْرَةِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_um0",
+      "unit": "siyar-v4-71-umamah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_um_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_um_name",
+      "report": "r_um0",
+      "spans": [
+        "sp_um1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_um_v",
+      "report": "r_um0",
+      "spans": [
+        "sp_um_v"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_um_ali",
+      "report": "r_um0",
+      "spans": [
+        "sp_um_ali"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_um_mug",
+      "report": "r_um0",
+      "spans": [
+        "sp_um_mug"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_um",
+      "parent": "sp_um1",
+      "exact": "أُمَامَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_um_father",
+      "parent": "sp_um1",
+      "exact": "أَبِي العَاصِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_um_v",
+      "parent": "sp_um_v",
+      "exact": "يَحْمِلُهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_um_a",
+      "parent": "sp_um_ali",
+      "exact": "بِهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_um_ali",
+      "parent": "sp_um_ali",
+      "exact": "عَلِيُّ بنُ أَبِي طَالِبٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_um_m",
+      "parent": "sp_um_mug",
+      "exact": "وَعَاشَتْ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_um_mug",
+      "parent": "sp_um_mug",
+      "exact": "المُغِيْرَةُ بنُ نَوْفَلِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_um_yahya",
+      "parent": "sp_um_mug",
+      "exact": "يَحْيَى بنَ المُغِيْرَةِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_um",
+      "mention": "m_um",
+      "agent": "umamah-bint-abi-al-as",
+      "basis": [
+        {
+          "span": "sp_um_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_um_v",
+      "mention": "m_um_v",
+      "agent": "umamah-bint-abi-al-as",
+      "basis": [
+        {
+          "span": "sp_um_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_um_a",
+      "mention": "m_um_a",
+      "agent": "umamah-bint-abi-al-as",
+      "basis": [
+        {
+          "span": "sp_um_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_um_m",
+      "mention": "m_um_m",
+      "agent": "umamah-bint-abi-al-as",
+      "basis": [
+        {
+          "span": "sp_um_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_um_father",
+      "mention": "m_um_father",
+      "agent": "abu-al-as-ibn-al-rabi",
+      "basis": [
+        {
+          "span": "sp_um_father_nasab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_um_ali",
+      "mention": "m_um_ali",
+      "agent": "ali-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_um_ali_name",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_um_mug",
+      "mention": "m_um_mug",
+      "agent": "al-mughirah-ibn-nawfal",
+      "basis": [
+        {
+          "span": "sp_um_mug_name",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_um_yahya",
+      "mention": "m_um_yahya",
+      "agent": "yahya-ibn-al-mughirah-ibn-nawfal",
+      "basis": [
+        {
+          "span": "sp_um_yahya_name",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_um_name",
+      "subject": "m_um",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_um1"
+        ]
+      },
+      "restsOn": [
+        "st_um_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_um_sex",
+      "subject": "m_um",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_um_sex"
+        ]
+      },
+      "restsOn": [
+        "st_um_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_um_father",
+      "subject": "m_um",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_um_father"
+      },
+      "restsOn": [
+        "st_um_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_um_v",
+      "subject": "m_um_v",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_um_v"
+        ]
+      },
+      "restsOn": [
+        "st_um_v"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_um_ali",
+      "subject": "m_um_a",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_um_ali"
+      },
+      "restsOn": [
+        "st_um_ali"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_um_mug",
+      "subject": "m_um_m",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_um_mug"
+      },
+      "restsOn": [
+        "st_um_mug"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_um_yahya",
+      "subject": "m_um_yahya",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_um_m"
+      },
+      "restsOn": [
+        "st_um_mug"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_um_yahya_f",
+      "subject": "m_um_yahya",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_um_mug"
+      },
+      "restsOn": [
+        "st_um_mug"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
