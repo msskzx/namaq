@@ -1,5 +1,7 @@
 # Per-ayah-range Quran topics: engine, order badges, themes comparison
 
+> Note (2026-11-18): the `/quran/themes` page this plan names was removed by the owner. It was agent-made and unreviewed, and themes now have a new source.
+
 > 2026-11-13: `/quran/order` no longer shows topics or hops. Its page quotes the books on surah order instead
 > ([quran-order-sources.md](quran-order-sources.md)), and `src/lib/quran/surahOrder.ts` with its tests was removed.
 > The order parts below are history.

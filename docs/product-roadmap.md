@@ -20,7 +20,8 @@ and harden the visualizations. Improve interactions for desktop and phones in
 the current React framework. No frontend rewrite or feature flags for now.
 
 Homepage, navigation and footer expose the selected features. Other tools remain
-reachable by URL and through the unlisted `/experiments` directory. Standalone
+reachable from their section hubs. (The `/experiments` directory was removed
+on 2026-11-18: every page it listed is reachable from the menus.) Standalone
 comparison needs more work; keep its current limited use inside branches.
 
 ## Phase 2: Release further learning features individually

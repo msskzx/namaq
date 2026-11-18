@@ -24,6 +24,9 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   Code in `shared/` imports no packages, no React and no database, and uses relative
   imports, so the app's bundler can read it.
 - Move code into `shared/` when the app needs it, and keep the website's tests passing.
+- No page lives on the website alone (owner, 2026-11-18), except the owner's review tools
+  (`/quizzes/questions`). About, privacy and attributions are app pages too
+  (`mobile/src/screens/info.tsx`), reading their text from `shared/infoPages.ts`.
 
 ## Testing
 
@@ -89,8 +92,8 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 
 - Every book, text, data set, font and library Namaq draws on is listed once in
   `shared/sources.ts`, with its licence and the pages that use it. The website's
-  `/sources` (books) and `/attributions` (everything) render that list, and the
-  app's settings link to it. **A PR that adds a data source or book adds it
+  `/sources` (books) and `/attributions` (everything) render that list, and so
+  does the app's own attributions page (opened from its settings). **A PR that adds a data source or book adds it
   there in the same PR**, with the licence as the source states it; one that
   stops using a source removes it.
 - A book may ship whole, built in or as a download, when it is an old author's own text
@@ -99,6 +102,21 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   (for example al-Muyassar, Hisn al-Muslim, al-Albani's annotated books) need the
   publisher's or author's written permission before any of their text ships; until then
   quote a short attributed line and link out.
+
+## Established claims only
+
+Owner, 2026-11-18: Namaq shows average readers correct, established information.
+It does not enter scholarly discussions, show doubtful claims, or present a point
+the sources disagree on as settled.
+
+- A quiz never asks about a disputed point, unless its right answer holds every
+  valid opinion with its references (a raid in year 4 or 5: «٤ أو ٥ هـ»), and the
+  wrong choices are clearly wrong (١٠ هـ, ١٢ هـ).
+- Poems, sayings and reports in the feed and in quizzes start with the most
+  authentic: a report in al-Bukhari or Muslim, or one a named scholar graded
+  sahih. Those whose wording, line order or speaker differ between reports wait.
+- When a generator or a reviewer cannot tell whether a point is disputed, it
+  leaves the question out and lists it for the owner.
 
 ## Feed card and quiz
 

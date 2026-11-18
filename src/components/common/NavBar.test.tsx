@@ -66,7 +66,6 @@ describe('launch navigation', () => {
     expect(activeSection('/search')).toBe('/');
     expect(activeSection('/quran/words')).toBeUndefined();
     expect(activeSection('/graphs')).toBe('/biographies');
-    expect(activeSection('/experiments')).toBeUndefined();
   });
 
   it('closes the party room menu with Escape and returns focus to its control', () => {

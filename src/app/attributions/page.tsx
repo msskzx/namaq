@@ -6,51 +6,30 @@ import styles from "@/components/common/PaperPage.module.css";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { GROUPS, SOURCES, type Source } from "@shared/sources";
 import Card from '@/components/common/Card';
+import { ATTRIBUTIONS_INTRO, SOURCE_EXTRAS } from "@shared/infoPages";
 
-/** What one source adds beyond its card: Siyar's scans and OCR text, the corpus's counting notes. */
+const linkClass = "underline decoration-[var(--home-rule)] underline-offset-4 hover:text-[var(--home-accent)]";
+
+/** What one source adds beyond its card (shared/infoPages.ts, which the app's page reads too): Siyar's scans and OCR text, the corpus's counting notes. */
 function Extra({ id, language }: { id: string; language: "ar" | "en" }) {
-  if (id === "siyar")
-    return (
-      <>
-        <p className="mt-1 leading-loose">
-          <span className="text-[var(--home-muted)]">{language === 'ar' ? 'النسخة المصورة: ' : 'Scanned edition: '}</span>
-          <ExternalLink className="underline decoration-[var(--home-rule)] underline-offset-4 hover:text-[var(--home-accent)]" href="https://archive.org/details/sanbz">
-            {language === 'ar' ? 'Archive.org، الطبعة الثالثة، ١٤٠٥/١٩٨٥' : 'Archive.org, third edition, 1405/1985'}
-          </ExternalLink>
+  const extra = SOURCE_EXTRAS[id];
+  if (!extra) return null;
+  return (
+    <>
+      {extra.links?.map((row, i) => (
+        <p key={i} className="mt-1 leading-loose">
+          {row.map((link, j) => (
+            <span key={link.url}>
+              {j > 0 && ' · '}
+              {link.prefix[language] && <span className="text-[var(--home-muted)]">{link.prefix[language]}</span>}
+              <ExternalLink className={linkClass} href={link.url}>{link.label[language]}</ExternalLink>
+            </span>
+          ))}
         </p>
-        <p className="mt-1 leading-loose">
-          <span className="text-[var(--home-muted)]">{language === 'ar' ? 'نص OCR للبحث: ' : 'Searchable OCR text: '}</span>
-          <ExternalLink className="underline decoration-[var(--home-rule)] underline-offset-4 hover:text-[var(--home-accent)]" href="https://archive.org/download/sanbz/sansera1_djvu.txt">
-            {language === 'ar' ? 'السيرة النبوية، المجلد الأول' : 'Prophet’s Sira, volume 1'}
-          </ExternalLink>
-          {' · '}
-          <ExternalLink className="underline decoration-[var(--home-rule)] underline-offset-4 hover:text-[var(--home-accent)]" href="https://archive.org/download/sanbz/sansera2_djvu.txt">
-            {language === 'ar' ? 'السيرة النبوية، المجلد الثاني' : 'Prophet’s Sira, volume 2'}
-          </ExternalLink>
-        </p>
-        <p className="mt-2 text-sm leading-loose text-[var(--home-muted)]">
-          {language === 'ar'
-            ? 'ملفات النص ناتجة عن التعرف الضوئي على الحروف، وهي للبحث والمقارنة. تُراجع الحواشي على صفحات النسخة المصورة.'
-            : 'The text files are OCR aids for searching and comparison. Check footnotes against the scanned pages.'}
-        </p>
-      </>
-    );
-  if (id === "quranic-arabic-corpus")
-    return (
-      <>
-        <p className="mt-2 text-sm leading-loose text-[var(--home-muted)]">
-          {language === 'ar'
-            ? 'تُعدّ الكلمة بمدخلها المعجمي كما حلّلتها المدوّنة القرآنية العربية (Quranic Arabic Corpus، الإصدار ٠٫٤)، فـ«والله» و«بالله» و«لله» كلها تحت «ٱللَّه»، ويُعدّ كل جزء من الكلمة له مدخل على حدة، فـ«مما» مرة لـ«مِن» ومرة لـ«مَا». التحليل من المدوّنة لا منّا، ولم يراجعه أحد من أهل العلم. لا مدخل في المدوّنة لـ٣٣٠٧ كلمة: الضمائر المنفصلة، وحروف الجر المتصلة بضمير مثل «لهم»، والحروف المقطّعة. والمداخل التي تتفق في الرسم تحمل رقمها في المدوّنة، فـ«صَٰلِح ١» صفة الصلاح و«صَٰلِح ٢» اسم النبي صالح.'
-            : 'Each word is counted under its lemma as the Quranic Arabic Corpus (version 0.4) analyses it, so «والله», «بالله» and «لله» all count under «ٱللَّه». Each part of a word that has its own lemma counts separately, so «مما» counts once for «مِن» and once for «مَا». The analysis is the corpus’s, not ours, and no scholar has reviewed it. The corpus gives no lemma to 3,307 words: separate pronouns, prepositions joined to a pronoun such as «لهم», and the disjoined letters. Lemmas that share a spelling carry the corpus’s number, so «صَٰلِح ١», the word for righteous, and «صَٰلِح ٢», the prophet Salih, count apart.'}
-        </p>
-        <p className="mt-2 text-sm leading-loose text-[var(--home-muted)]">
-          {language === 'ar'
-            ? 'وتُعدّ الكلمات المتقابلة بالطريقة نفسها، كل طرف بمدخله، إلا «الآخرة»: مدخلها «آخِر» يشمل «آخر» و«آخرين» أيضًا، فيُعدّ ذلك الطرف بصيغة «الآخرة» وحدها. والأزواج من اختيارنا.'
-            : 'The opposite words count each side the same way, under its lemma, except «الآخرة». Its lemma «آخِر» also covers «آخر» and «آخرين», so that side counts the form «الآخرة» alone. We chose the pairs.'}
-        </p>
-      </>
-    );
-  return null;
+      ))}
+      {extra.notes.map(note => <p key={note.en} className="mt-2 text-sm leading-loose text-[var(--home-muted)]">{note[language]}</p>)}
+    </>
+  );
 }
 
 function SourceCard({ source, language }: { source: Source; language: "ar" | "en" }) {
@@ -109,9 +88,7 @@ export default function AttributionsPage() {
         <header className={styles.heading}>
           <h1>{language === 'ar' ? 'المصادر والتراخيص' : 'Sources and licences'}</h1>
           <p className="mt-3 text-lg">
-            {language === 'ar'
-              ? 'الأعمال والبيانات التي اعتمد عليها نمق، ولمن يعود كل منها، وبأي ترخيص. '
-              : 'The works and data Namaq relies on, whom each one belongs to, and under what licence. '}
+            {ATTRIBUTIONS_INTRO[language]}{' '}
             <Link href="/sources" className="text-[var(--home-accent)] underline underline-offset-4">
               {language === 'ar' ? 'الكتب وحدها' : 'The books alone'}
             </Link>

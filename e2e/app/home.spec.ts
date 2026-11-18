@@ -225,6 +225,17 @@ test.describe('a new user', () => {
     await page.getByRole('button', { name: 'الإعدادات' }).click();
     await expect(page.getByRole('button', { name: 'الجولة التعريفية' })).toBeVisible();
   });
+
+  // About, privacy and the sources are pages of the app, offline (owner, 2026-11-18), not links to the website.
+  for (const [label, text] of [['عن نمق', 'نَمَق تطبيق تعليمي'], ['المصادر والتراخيص', 'الأعمال والبيانات التي اعتمد عليها نمق'], ['سياسة الخصوصية', 'ما يحفظه التطبيق']]) {
+    test(`the settings sheet opens «${label}» in the app`, async ({ page }) => {
+      await open(page, '/');
+      await page.getByRole('button', { name: 'الإعدادات' }).click();
+      await page.getByRole('link', { name: label }).click();
+      await expect(page.getByText(text).first()).toBeVisible();
+      expect(new URL(page.url()).host).not.toBe('namaq.vercel.app');
+    });
+  }
 });
 
 test.describe('a returning user', () => {
