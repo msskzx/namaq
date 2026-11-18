@@ -1,0 +1,237 @@
+{
+  "unit": {
+    "id": "siyar-v5-117-abu-jahm",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١١٧"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_aj_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "556",
+      "layer": "MAIN",
+      "exact": "١١٧ - أَبُو جَهْمٍ بنِ حُذَيْفَةَ القُرَشِيُّ العَدَوِيُّ"
+    },
+    {
+      "id": "sp_aj_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "556",
+      "layer": "MAIN",
+      "exact": "أَبُو جَهْمٍ بنِ حُذَيْفَةَ القُرَشِيُّ العَدَوِيُّ"
+    },
+    {
+      "id": "sp_aj_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "556",
+      "layer": "MAIN",
+      "exact": "أَبُو جَهْمٍ بنِ",
+      "prefix": "-"
+    },
+    {
+      "id": "sp_aj_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "556",
+      "layer": "MAIN",
+      "exact": "أَبُو جَهْمٍ",
+      "prefix": "-"
+    },
+    {
+      "id": "sp_aj_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "556",
+      "layer": "MAIN",
+      "exact": "حُذَيْفَةَ القُرَشِيُّ",
+      "prefix": "بنِ"
+    },
+    {
+      "id": "sp_aj_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "556",
+      "layer": "MAIN",
+      "exact": "وَكَانَ عَلاَّمَةً بِالنَّسَبِ"
+    },
+    {
+      "id": "sp_aj_musaddiq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "557",
+      "layer": "MAIN",
+      "exact": "وَبَعَثَهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- مَرَّةً مُصَدِّقاً"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_aj0",
+      "unit": "siyar-v5-117-abu-jahm",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_aj_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_aj_name",
+      "report": "r_aj0",
+      "spans": [
+        "sp_aj_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_aj_nasab",
+      "report": "r_aj0",
+      "spans": [
+        "sp_aj_nasab"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_aj_musaddiq",
+      "report": "r_aj0",
+      "spans": [
+        "sp_aj_musaddiq"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_aj",
+      "parent": "sp_aj_name",
+      "exact": "أَبُو جَهْمٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_aj_father",
+      "parent": "sp_aj_name",
+      "exact": "حُذَيْفَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_aj",
+      "mention": "m_aj",
+      "agent": "abu-jahm-ibn-hudhayfah",
+      "basis": [
+        {
+          "span": "sp_aj_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aj_father",
+      "mention": "m_aj_father",
+      "agent": "hudhayfah-father-of-abu-jahm",
+      "basis": [
+        {
+          "span": "sp_aj_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_aj_name",
+      "subject": "m_aj",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_aj_name"
+        ]
+      },
+      "restsOn": [
+        "st_aj_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aj_sex",
+      "subject": "m_aj",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_aj_sex"
+        ]
+      },
+      "restsOn": [
+        "st_aj_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aj_kunya",
+      "subject": "m_aj",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_aj_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_aj_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aj_father",
+      "subject": "m_aj",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_aj_father"
+      },
+      "restsOn": [
+        "st_aj_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aj_v_nasab",
+      "subject": "m_aj",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_aj_nasab"
+        ]
+      },
+      "restsOn": [
+        "st_aj_nasab"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aj_v_musaddiq",
+      "subject": "m_aj",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_aj_musaddiq"
+        ]
+      },
+      "restsOn": [
+        "st_aj_musaddiq"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

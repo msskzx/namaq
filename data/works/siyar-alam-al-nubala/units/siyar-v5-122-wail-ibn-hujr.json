@@ -1,0 +1,413 @@
+{
+  "unit": {
+    "id": "siyar-v5-122-wail-ibn-hujr",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٢٢"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_wl_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "572",
+      "layer": "MAIN",
+      "exact": "١٢٢ - وَائِلُ بنُ حُجْرِ بنِ سَعْدٍ أَبُو هُنَيْدَةَ الحَضْرِمِيُّ"
+    },
+    {
+      "id": "sp_wl_head",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "572",
+      "layer": "MAIN",
+      "exact": "وَائِلُ بنُ حُجْرِ بنِ سَعْدٍ أَبُو هُنَيْدَةَ الحَضْرِمِيُّ"
+    },
+    {
+      "id": "sp_wl_ism",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "572",
+      "layer": "MAIN",
+      "exact": "وَائِلُ بنُ حُجْرِ بنِ سَعْدٍ"
+    },
+    {
+      "id": "sp_wl_nisba",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "572",
+      "layer": "MAIN",
+      "exact": "الحَضْرِمِيُّ",
+      "prefix": "هُنَيْدَةَ"
+    },
+    {
+      "id": "sp_wl_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "572",
+      "layer": "MAIN",
+      "exact": "وَائِلُ بنُ",
+      "prefix": "-"
+    },
+    {
+      "id": "sp_wl_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "572",
+      "layer": "MAIN",
+      "exact": "أَبُو هُنَيْدَةَ",
+      "prefix": "سَعْدٍ"
+    },
+    {
+      "id": "sp_wl_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "572",
+      "layer": "MAIN",
+      "exact": "حُجْرِ بنِ سَعْدٍ",
+      "prefix": "بنُ"
+    },
+    {
+      "id": "sp_wl_sayyid",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "572",
+      "layer": "MAIN",
+      "exact": "أَحَدُ الأَشْرَافِ، كَانَ سَيِّدَ قَوْمِهِ"
+    },
+    {
+      "id": "sp_wl_sons",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "573",
+      "layer": "MAIN",
+      "exact": "ابْنَاهُ؛ عَلْقَمَةُ (١) وَعَبْدُ الجَبَّارِ"
+    },
+    {
+      "id": "sp_wl_sons_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "573",
+      "layer": "MAIN",
+      "exact": "ابْنَاهُ",
+      "prefix": "عَنْهُ:"
+    },
+    {
+      "id": "sp_wl_yuqal",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "574",
+      "layer": "MAIN",
+      "exact": "وَيُقَالُ: كَانَ عَلَى رَايَةِ قَوْمِهِ يَوْمَ صِفِّيْنَ مَعَ عَلِيٍّ"
+    },
+    {
+      "id": "sp_wl_siffin_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "574",
+      "layer": "MAIN",
+      "exact": "يَوْمَ صِفِّيْنَ",
+      "prefix": "قَوْمِهِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_wl0",
+      "unit": "siyar-v5-122-wail-ibn-hujr",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_wl_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_wl_yuqal",
+      "unit": "siyar-v5-122-wail-ibn-hujr",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_wl_yuqal_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_wl_head",
+      "report": "r_wl0",
+      "spans": [
+        "sp_wl_head"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_wl_name",
+      "report": "r_wl0",
+      "spans": [
+        "sp_wl_ism",
+        "sp_wl_nisba"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_wl_sayyid",
+      "report": "r_wl0",
+      "spans": [
+        "sp_wl_sayyid"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_wl_sons",
+      "report": "r_wl0",
+      "spans": [
+        "sp_wl_sons"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_wl_yuqal",
+      "report": "r_wl_yuqal",
+      "spans": [
+        "sp_wl_yuqal"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_wl",
+      "parent": "sp_wl_head",
+      "exact": "وَائِلُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_wl_father",
+      "parent": "sp_wl_head",
+      "exact": "حُجْرِ بنِ سَعْدٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_wl_s",
+      "parent": "sp_wl_sons",
+      "exact": "ابْنَاهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_wl_c_alqamah",
+      "parent": "sp_wl_sons",
+      "exact": "عَلْقَمَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_wl_c_abdjabbar",
+      "parent": "sp_wl_sons",
+      "exact": "وَعَبْدُ الجَبَّارِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_wl_yuqal_by",
+      "parent": "sp_wl_yuqal",
+      "exact": "وَيُقَالُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_wl_siffin",
+      "parent": "sp_wl_yuqal",
+      "exact": "صِفِّيْنَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_wl",
+      "mention": "m_wl",
+      "agent": "wail-ibn-hujr",
+      "basis": [
+        {
+          "span": "sp_wl_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_wl_father",
+      "mention": "m_wl_father",
+      "agent": "hujr-ibn-saad-al-hadrami",
+      "basis": [
+        {
+          "span": "sp_wl_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_wl_s",
+      "mention": "m_wl_s",
+      "agent": "wail-ibn-hujr",
+      "basis": [
+        {
+          "span": "sp_wl_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_wl_c_alqamah",
+      "mention": "m_wl_c_alqamah",
+      "agent": "alqamah-ibn-wail",
+      "basis": [
+        {
+          "span": "sp_wl_sons_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_wl_c_abdjabbar",
+      "mention": "m_wl_c_abdjabbar",
+      "agent": "abd-al-jabbar-ibn-wail",
+      "basis": [
+        {
+          "span": "sp_wl_sons_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_wl_siffin",
+      "mention": "m_wl_siffin",
+      "event": "siffin",
+      "basis": [
+        {
+          "span": "sp_wl_siffin_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_wl_name",
+      "subject": "m_wl",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_wl_ism",
+          "sp_wl_nisba"
+        ]
+      },
+      "restsOn": [
+        "st_wl_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_wl_sex",
+      "subject": "m_wl",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_wl_sex"
+        ]
+      },
+      "restsOn": [
+        "st_wl_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_wl_kunya",
+      "subject": "m_wl",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_wl_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_wl_head"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_wl_father",
+      "subject": "m_wl",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_wl_father"
+      },
+      "restsOn": [
+        "st_wl_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_wl_v_sayyid",
+      "subject": "m_wl",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_wl_sayyid"
+        ]
+      },
+      "restsOn": [
+        "st_wl_sayyid"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_wl_c_alqamah_0",
+      "subject": "m_wl_c_alqamah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_wl_s"
+      },
+      "restsOn": [
+        "st_wl_sons"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_wl_c_abdjabbar_0",
+      "subject": "m_wl_c_abdjabbar",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_wl_s"
+      },
+      "restsOn": [
+        "st_wl_sons"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_wl_siffin",
+      "subject": "m_wl",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_wl_siffin"
+      },
+      "restsOn": [
+        "st_wl_yuqal"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
