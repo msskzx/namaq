@@ -108,6 +108,7 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
         return [agent && people.has(agent) ? people.get(agent)!.name : strip(text)];
       }),
       ...(entry.status === 'LEGACY' && { legacy: true as const }),
+      ...(entry.status === 'DISPUTED' && { disputed: true as const }),
       ...(entry.parsed !== undefined && { value: entry.parsed }),
       ...(entry.classified !== undefined && { value: entry.classified }),
     });

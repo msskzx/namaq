@@ -82,9 +82,15 @@ function Line({ label, palette, children }: { label: string; palette: Palette; c
 function Names({ links, palette }: { links: PersonLink[]; palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 6 }}>
-      {links.map(link => (link.inApp
-        ? <Button key={link.slug} variant="plain" label={personName(link)} onPress={() => openPerson(link.slug)} />
-        : <Text key={link.slug} style={body(palette)}>{personName(link)}</Text>))}
+      {links.map(link => (
+        <View key={link.slug} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+          {link.inApp
+            ? <Button variant="plain" label={personName(link)} onPress={() => openPerson(link.slug)} />
+            : <Text style={body(palette)}>{personName(link)}</Text>}
+          {/* A tie the book gives with a word against it: both texts and sayers are in the sources under the section. */}
+          {link.disputed && <Text style={muted(palette)}>(على خلاف)</Text>}
+        </View>
+      ))}
     </View>
   );
 }
