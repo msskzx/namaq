@@ -42,7 +42,10 @@ function matchExact(value: string, groups: readonly (readonly string[])[]): Quot
   const haystacks = groups
     .flatMap((group) => [...group.map(cleanPassage), joinAtSeams(group), joinAtSeams(group, true)])
     .map(sameComma);
-  const chars = [...sameComma(value.replace(/\s+/g, ' ').trim())];
+  // Report the value as written; the fold is one character for one, so the
+  // offsets found on the folded text hold on the original.
+  const written = [...value.replace(/\s+/g, ' ').trim()];
+  const chars = [...sameComma(written.join(''))];
   if (haystacks.some((haystack) => haystack.includes(chars.join('')))) return { ok: true };
 
   let matched = 0;
@@ -51,5 +54,5 @@ function matchExact(value: string, groups: readonly (readonly string[])[]): Quot
     while (length < chars.length && haystack.includes(chars.slice(0, length + 1).join(''))) length += 1;
     matched = Math.max(matched, length);
   }
-  return { ok: false, reason: 'diverges', matched: chars.slice(0, matched).join(''), next: chars.slice(matched, matched + NEXT_CHARS).join('') };
+  return { ok: false, reason: 'diverges', matched: written.slice(0, matched).join(''), next: written.slice(matched, matched + NEXT_CHARS).join('') };
 }

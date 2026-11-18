@@ -27,6 +27,15 @@ const jamilahBintAbdAllahIbnAbi = {
   },
   titles: [],
   relations: [
+    // Al-Dhahabi's own line names her father (claim full-name). The editor's
+    // note on the other reading is a report to show beside it, attributed,
+    // not a reason to leave the edge out.
+    {
+      type: 'DAUGHTER',
+      inverse: 'FATHER',
+      to: 'abdullah-ibn-ubayy',
+      claims: ['jamilah-bint-abd-allah-ibn-abi-siyar61/full-name'],
+    },
     {
       type: 'WIFE',
       inverse: 'HUSBAND',
