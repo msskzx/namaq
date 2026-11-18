@@ -55,6 +55,7 @@ export function Credit({ facts, palette, quotes = false }: { facts: PersonFact[]
  * it only where the book gives more than one value (`many`), so each of them reads as one saying among others.
  */
 function Sayer({ fact, palette, many = false }: { fact: PersonFact; palette: Palette; many?: boolean }) {
+  if (fact.anonymous) return <Text style={muted(palette)}>قيل</Text>;
   return fact.by.length || many ? <Text style={muted(palette)}>{many ? `عند ${sayer(fact)}` : sayer(fact)}</Text> : null;
 }
 
