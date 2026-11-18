@@ -22,8 +22,17 @@
       "volume": 4,
       "page": "145",
       "layer": "MAIN",
-      "exact": "مُصْعَبُ بنُ عُمَيْرِ * بنِ هَاشِمِ بنِ عَبْدِ مَنَافٍ",
+      "exact": "مُصْعَبُ بنُ عُمَيْرِ",
       "prefix": "٧ - "
+    },
+    {
+      "id": "sp_mu1b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "145",
+      "layer": "MAIN",
+      "exact": "بنِ هَاشِمِ بنِ عَبْدِ مَنَافٍ",
+      "prefix": "عُمَيْرِ * "
     },
     {
       "id": "sp_mu2",
@@ -235,6 +244,7 @@
       "report": "r_mu0",
       "spans": [
         "sp_mu1",
+        "sp_mu1b",
         "sp_mu2"
       ],
       "role": "AUTHOR_REPORT"
@@ -504,6 +514,7 @@
       "value": {
         "spans": [
           "sp_mu1",
+          "sp_mu1b",
           "sp_mu2"
         ]
       },
