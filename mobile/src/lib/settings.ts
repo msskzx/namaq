@@ -5,7 +5,7 @@ import { parseCardTint, type CardMode } from '@shared/cardTint';
 import { isPenRule, type PenRule } from '@shared/quran/writeAyah';
 import { isMarkMode, type MarkMode } from '@shared/quran/wordMatch';
 import { HINT_IDS, HINTS_SEEN, type HintId } from '@shared/tabHints';
-import { isAdhanAlerts, NO_ALERTS, type AdhanAlerts } from '@shared/adhanAlerts';
+import { isAdhanAlerts, isAdhkarAlerts, NO_ADHKAR_ALERTS, NO_ALERTS, type AdhanAlerts, type AdhkarAlerts } from '@shared/adhanAlerts';
 import { DEFAULT_PRAYER_SETTINGS, isPlace, isPrayerSettings, type Place, type PrayerSettings } from '@shared/prayer';
 
 /** A value kept on the phone that every screen reading it follows. */
@@ -90,8 +90,10 @@ export const prayerPlace = setting<Place | null>('prayer-place', null, (value): 
 export const prayerSettings = setting<PrayerSettings>('prayer-settings', DEFAULT_PRAYER_SETTINGS, isPrayerSettings);
 /** Which of the five prayers ring a notification at their time; all off until the person turns one on. */
 export const adhanAlerts = setting<AdhanAlerts>('adhan-alerts', NO_ALERTS, isAdhanAlerts);
-export type UtilityView = 'times' | 'qibla' | 'calendar';
-export const utilityView = setting<UtilityView>('utilities-view', 'times', (value): value is UtilityView => value === 'times' || value === 'qibla' || value === 'calendar');
+/** The morning adhkar reminder after fajr and the evening one after asr; both off until the person turns one on. */
+export const adhkarAlerts = setting<AdhkarAlerts>('adhkar-alerts', NO_ADHKAR_ALERTS, isAdhkarAlerts);
+export type UtilityView = 'times' | 'qibla' | 'calendar' | 'adhkar';
+export const utilityView = setting<UtilityView>('utilities-view', 'times', (value): value is UtilityView => value === 'times' || value === 'qibla' || value === 'calendar' || value === 'adhkar');
 
 /** Where the reader's recite bar sits, dragged near the thumb (owner, 2026-11-17). */
 export const reciteBarEdge = setting<'top' | 'bottom'>('recite-bar-edge', 'bottom', (value): value is 'top' | 'bottom' => value === 'top' || value === 'bottom');

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type Compon
 import { Pressable, ScrollView, View } from 'react-native';
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { router } from 'expo-router';
-import { ArrowLeftRight, BookOpen, ChevronDown, ChevronLeft, List, NotebookPen, ScrollText, TextSearch, Users, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpen, ChevronDown, ChevronLeft, HandHeart, List, NotebookPen, ScrollText, TextSearch, Users, type LucideProps } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import type { SearchGroup, SearchHit, SearchKind } from '@shared/quran/searchAll';
@@ -15,6 +15,7 @@ import { useShrinkOnScroll } from '@/lib/chrome';
 import { surahName } from '@/lib/compare';
 import { GROUP_MAX, searchApp, warmSearch } from '@/lib/searchAll';
 import { useTabRetap } from '@/lib/tabRetap';
+import { openAdhkar } from '@/lib/adhkar';
 import { back, openIntent as go, toTab } from '@/lib/ways';
 import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 import Card from '@/ui/Card';
@@ -32,6 +33,7 @@ const GROUPS: Record<SearchKind, { title: string; Icon: (props: LucideProps) => 
   compare: { title: 'المقارنة', Icon: ArrowLeftRight },
   event: { title: 'قصص الأنبياء', Icon: Users },
   tuhfa: { title: 'تحفة الأطفال', Icon: ScrollText },
+  adhkar: { title: 'الأذكار', Icon: HandHeart },
   note: { title: 'تأملاتي', Icon: NotebookPen },
 };
 
@@ -106,6 +108,12 @@ function HitRow({ hit, palette, onWord }: { hit: SearchHit; palette: Palette; on
           </View>
         </Pressable>
       );
+    case 'adhkar':
+      return (
+        <Card palette={palette} pad={[8, 12]} onPress={() => openAdhkar(hit.occasion, hit.id)} accessibilityRole="link" accessibilityLabel={hit.text} style={{ marginBottom: 8 }}>
+          <Text numberOfLines={3} style={{ color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' }}>{hit.text}</Text>
+        </Card>
+      );
     case 'note':
       return (
         <Pressable onPress={() => go({ tab: 'read', at: hit.key })} accessibilityRole="link" style={({ pressed: on }) => [row, pressed(on)]}>
@@ -127,6 +135,7 @@ const hitKey = (hit: SearchHit) => {
     case 'compare': return `c${hit.a}:${hit.b}`;
     case 'event': return `e${hit.slug}${hit.event}`;
     case 'tuhfa': return `v${hit.verse}`;
+    case 'adhkar': return `d${hit.id}`;
   }
 };
 

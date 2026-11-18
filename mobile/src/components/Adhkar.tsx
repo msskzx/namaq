@@ -1,0 +1,137 @@
+import { useEffect, useReducer, useRef, useState } from 'react';
+import { AppState, View } from 'react-native';
+import { Bell, BellOff, Check, RotateCcw } from 'lucide-react-native';
+import { ADHKAR_OCCASIONS, adhkarFor, type AdhkarCitation, type AdhkarOccasion, type Dhikr } from '@shared/adhkar';
+import { num } from '@shared/quran/arabicNumber';
+import type { AdhkarTime } from '@shared/adhanAlerts';
+import Card from '@/ui/Card';
+import Tabs from '@/ui/Tabs';
+import Reference, { type Quote } from '@/ui/Reference';
+import Button from '@/ui/Button';
+import IconButton from '@/ui/IconButton';
+import { Text } from '@/ui/Text';
+import { PageTop, PAGE_LINES } from './AyahLines';
+import { pageOfAyah } from '@/lib/mushaf';
+import { buzz } from '@/lib/haptics';
+import { ALERTS_SUPPORTED, allowAlerts, alertsAllowed, openPhoneSettings, useForeground } from '@/lib/adhan';
+import { showAdhkar, useAdhkarPlace } from '@/lib/adhkar';
+import { countOf, counting } from '@/lib/adhkarCount';
+import { adhkarAlerts, prayerPlace } from '@/lib/settings';
+import type { Palette } from '@/lib/theme';
+
+const LABELS: Record<AdhkarOccasion, string> = { morning: 'صباح', evening: 'مساء', waking: 'يقظة', sleep: 'نوم', 'after-prayer': 'صلاة' };
+const ORDER: AdhkarOccasion[] = ['morning', 'evening', 'sleep', 'waking', 'after-prayer'];
+const TABS = ORDER.filter(key => ADHKAR_OCCASIONS.includes(key)).map(key => ({ key, label: LABELS[key] }));
+const BOOK: Record<AdhkarCitation['source'], string> = { 'adhkar-nawawi': 'الأذكار', 'nataij-afkar': 'نتائج الأفكار' };
+const REMINDER: Partial<Record<AdhkarOccasion, { time: AdhkarTime; label: string }>> = {
+  morning: { time: 'morning', label: 'تذكير بأذكار الصباح بعد الفجر' },
+  evening: { time: 'evening', label: 'تذكير بأذكار المساء بعد العصر' },
+};
+
+/** «الأذكار ٧٨ ح٢١٣», with the volume before the page when the book has several («نتائج الأفكار ٢/٢٩٧»). */
+const cite = (citation: AdhkarCitation) =>
+  `${BOOK[citation.source]} ${citation.volume > 1 ? `${num(citation.volume)}/` : ''}${num(citation.page)}${citation.report ? ` ح${num(citation.report)}` : ''}`;
+
+/** A card's reference: al-Nawawi's words on when, how often and what to do, then every grade in its scholar's words with its own page. */
+function quotes(item: Dhikr): Quote[] {
+  const at = { cite: cite(item.citation), url: item.citation.url };
+  return [
+    { text: item.occasionQuote, ...at },
+    ...(item.repeat ? [{ text: item.repeat.quote, ...at }] : []),
+    ...(item.instructionQuote ? [{ text: item.instructionQuote, ...at }] : []),
+    ...item.grades.map(grade => ({
+      text: grade.quote,
+      cite: `${grade.scholar}${grade.reportedBy ? `، نقله ${grade.reportedBy}` : ''}، ${cite(grade.citation)}`,
+      url: grade.citation.url,
+    })),
+  ];
+}
+
+/** The Madina page the Quran selection starts on, whole (al-Ikhlas and al-Mu'awwidhatayn fill page 604). */
+function QuranPage({ item, palette }: { item: Dhikr; palette: Palette }) {
+  if (item.content.kind !== 'quran') return null;
+  const first = item.content.ranges[0];
+  const page = pageOfAyah(`${first.surah}:${first.from}`);
+  return page ? <PageTop page={page} palette={palette} lines={PAGE_LINES} /> : null;
+}
+
+/** The fajr or asr reminder for the open tab, if it has one; switching it on asks for notifications the first time. */
+function useReminder(time: AdhkarTime | undefined, onPlace: () => void) {
+  const [alerts, setAlerts] = adhkarAlerts.use();
+  const [place] = prayerPlace.use();
+  const [blocked, setBlocked] = useState(false);
+  const back = useForeground();
+  const on = !!time && alerts[time];
+  useEffect(() => {
+    if (!on) { setBlocked(false); return; }
+    let gone = false;
+    alertsAllowed().then(ok => { if (!gone) setBlocked(!ok); });
+    return () => { gone = true; };
+  }, [on, back]);
+  const toggle = async () => {
+    if (!time) return;
+    buzz();
+    if (on) { setAlerts({ ...adhkarAlerts.get(), [time]: false }); return; }
+    // The reminder follows fajr and asr, so it needs the place the prayer times are for.
+    if (!place) { onPlace(); return; }
+    const ok = await allowAlerts();
+    setBlocked(!ok);
+    if (ok) setAlerts({ ...adhkarAlerts.get(), [time]: true });
+  };
+  return { on, blocked, toggle };
+}
+
+/**
+ * The adhkar page in the utilities (owner, 2026-11-17): al-Nawawi's al-Adhkar, each item with a named scholar's grade of
+ * sahih or hasan. docs/plans/adhkar-content-and-sketch.md. The counter is in this page's state only and never stored.
+ */
+export default function Adhkar({ palette, on, onPlace, scrollTo }: { palette: Palette; on: boolean; onPlace: () => void; scrollTo?: (y: number) => void }) {
+  const { occasion, id: wanted, at } = useAdhkarPlace();
+  const items = adhkarFor(occasion);
+  const [count, dispatch] = useReducer(counting, null);
+  // Leaving the card's tab, the page or the app ends the count.
+  useEffect(() => { dispatch({ type: 'leave' }); }, [occasion, on]);
+  useEffect(() => {
+    const listener = AppState.addEventListener('change', state => { if (state !== 'active') dispatch({ type: 'leave' }); });
+    return () => listener.remove();
+  }, []);
+  // A search or a reminder asked for one card: scroll to it once it is laid out.
+  const done = useRef(0);
+  const reach = (id: string, y: number) => {
+    if (id === wanted && done.current !== at) { done.current = at; scrollTo?.(y + 8); }
+  };
+  const reminder = ALERTS_SUPPORTED ? REMINDER[occasion] : undefined;
+  const bell = useReminder(reminder?.time, onPlace);
+  return (
+    <View style={{ gap: 16 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+        <View style={{ flex: 1 }}><Tabs label="وقت الذكر" options={TABS} value={occasion} onChange={key => showAdhkar(key)} palette={palette} fill /></View>
+        {reminder && <IconButton Icon={bell.on ? Bell : BellOff} label={reminder.label} onPress={bell.toggle} on={bell.on} />}
+      </View>
+      {bell.blocked && <Button variant="plain" Icon={BellOff} label="التنبيهات موقوفة، فاسمح بها من إعدادات الجوال" onPress={openPhoneSettings} />}
+      {items.map(item => {
+        const counted = countOf(count, item.id);
+        return (
+          <Card key={item.id} palette={palette} pad={18} gap={14} onLayout={event => reach(item.id, event.nativeEvent.layout.y)}>
+            {item.content.kind === 'text'
+              ? <Text style={{ color: palette.ink, fontSize: 21, lineHeight: 40, textAlign: 'justify' }}>{item.content.text}</Text>
+              : <QuranPage item={item} palette={palette} />}
+            {item.virtueQuote && <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>«{item.virtueQuote}»</Text>}
+            {item.repeat && (
+              <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
+                <Button Icon={Check} variant="primary" accessibilityLabel={`عُدَّ مرة، ${num(counted)} من ${num(item.repeat.count)}`}
+                  disabled={counted >= item.repeat.count}
+                  onPress={() => { buzz(); dispatch({ type: 'tap', id: item.id, target: item.repeat!.count }); }} />
+                <Text accessibilityElementsHidden importantForAccessibility="no" style={{ color: palette.ink, fontSize: 20, writingDirection: 'ltr' }}>
+                  {num(counted)} / {num(item.repeat.count)}
+                </Text>
+                {counted > 0 && <Button Icon={RotateCcw} variant="plain" accessibilityLabel="من جديد" onPress={() => dispatch({ type: 'reset' })} />}
+              </View>
+            )}
+            <Reference title={`${cite(item.citation)} · ${item.collections.join('، ')}`} palette={palette} quotes={quotes(item)} />
+          </Card>
+        );
+      })}
+    </View>
+  );
+}

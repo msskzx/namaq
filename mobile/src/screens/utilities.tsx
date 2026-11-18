@@ -19,14 +19,14 @@ function Page({ view, width, palette, on, current, bottom, onPlace, scrollers }:
     <ScrollView ref={node => { if (node) scrollers.set(view, node); else scrollers.delete(view); }} onScroll={shrink} scrollEventThrottle={16}
       importantForAccessibility={current ? 'auto' : 'no-hide-descendants'} accessibilityElementsHidden={!current}
       style={{ width, direction: 'rtl' }} contentContainerStyle={{ padding: 16, paddingBottom: bottom }}>
-      <UtilityPage view={view} palette={palette} on={on} onPlace={onPlace} />
+      <UtilityPage view={view} palette={palette} on={on} onPlace={onPlace} scrollTo={y => scrollers.get(view)?.scrollTo({ y, animated: true })} />
     </ScrollView>
   );
 }
 
 /**
- * The utilities tab: prayer times, the qibla and the Hijri calendar (owner, 2026-11-13), side by side.
- * A sideways swipe follows the finger and shows the next one coming in (owner, 2026-11-15); the three icons in the top bar jump to one.
+ * The utilities tab: prayer times, the qibla, the Hijri calendar (owner, 2026-11-13) and the adhkar (owner, 2026-11-17), side by side.
+ * A sideways swipe follows the finger and shows the next one coming in (owner, 2026-11-15); the icons in the top bar jump to one.
  * As in the reading order, the first is on the right and swiping right brings the next from the left.
  */
 export default function UtilitiesTab() {

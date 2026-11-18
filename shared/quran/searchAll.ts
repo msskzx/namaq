@@ -2,6 +2,7 @@ import { normalizeWord, plainName } from './normalize';
 import { searchSurahs, type SearchableSurah } from './surahSearch';
 import { searchable } from './searchText';
 import { surahName } from './surahNames';
+import type { AdhkarOccasion } from '../adhkar';
 
 /** One search across the app (owner, 2026-11-13): surah names always first, since they are few. docs/plans/search-everything.md */
 export type SearchHit =
@@ -12,15 +13,17 @@ export type SearchHit =
   | { kind: 'compare'; a: number; b: number; title: string }
   | { kind: 'event'; slug: string; event: number; title: string; prophet: string }
   | { kind: 'tuhfa'; chapter: number; verse: number; first: string; second: string }
-  | { kind: 'note'; key: string; text: string };
+  | { kind: 'note'; key: string; text: string }
+  | { kind: 'adhkar'; id: string; occasion: AdhkarOccasion; text: string };
 
 export type SearchKind = SearchHit['kind'];
-export const SEARCH_ORDER: SearchKind[] = ['surah', 'ayah', 'word', 'tree', 'compare', 'event', 'tuhfa', 'note'];
+export const SEARCH_ORDER: SearchKind[] = ['surah', 'ayah', 'word', 'tree', 'compare', 'event', 'tuhfa', 'adhkar', 'note'];
 export type SearchGroup = { kind: SearchKind; hits: SearchHit[] };
 
 export type CompareItem = { a: number; b: number; title: string };
 export type EventItem = { slug: string; event: number; title: string; prophet: string };
 export type TuhfaItem = { chapter: number; verse: number; first: string; second: string };
+export type AdhkarItem = { id: string; occasion: AdhkarOccasion; text: string };
 
 /** What each page can be searched in. The big indexes (ayat, trees, words) come as finders, so each side loads them its own way. */
 export type SearchSources = {
@@ -32,6 +35,8 @@ export type SearchSources = {
   events?: EventItem[];
   tuhfa?: TuhfaItem[];
   notes?: { key: string; text: string }[];
+  /** The phone app's adhkar (shared/adhkar.ts); the website has no adhkar page, so its search leaves them out. */
+  adhkar?: AdhkarItem[];
 };
 
 const loose = (text: string) => normalizeWord(plainName(text)).replace(/[«»،؛؟.,:;!?()\-]/g, ' ');
@@ -59,6 +64,7 @@ export function searchAll(sources: SearchSources, query: string): SearchGroup[] 
     compare: (sources.compare ?? []).filter(item => holdsTerms(item.title, typed)).map(item => ({ kind: 'compare', ...item })),
     event: (sources.events ?? []).filter(item => holdsTerms(`${item.prophet} ${item.title}`, typed)).map(item => ({ kind: 'event', ...item })),
     tuhfa: (sources.tuhfa ?? []).filter(item => holdsTerms(`${item.first} ${item.second}`, typed)).map(item => ({ kind: 'tuhfa', ...item })),
+    adhkar: (sources.adhkar ?? []).filter(item => holdsTerms(item.text, typed)).map(item => ({ kind: 'adhkar', ...item })),
     note: (sources.notes ?? []).filter(item => holdsTerms(item.text, typed)).map(item => ({ kind: 'note', ...item })),
   };
   return SEARCH_ORDER.filter(kind => groups[kind].length).map(kind => ({ kind, hits: groups[kind] }));
