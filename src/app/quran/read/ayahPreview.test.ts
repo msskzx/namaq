@@ -21,6 +21,8 @@ describe("the reader's ayah preview", () => {
   });
 
   it('is empty for an ayah with no tree or compare card', () => {
-    expect(ayahPreview('2:21')).toEqual({ trees: [], compare: [] });
+    // 2:21 has its own card now: al-Kirmani's entry on the call «يا أيها الناس اعبدوا ربكم», said only there.
+    expect(ayahPreview('2:20')).toEqual({ trees: [], compare: [] });
+    expect(ayahPreview('2:21').trees).toHaveLength(1);
   });
 });

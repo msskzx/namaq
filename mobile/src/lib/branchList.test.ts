@@ -9,13 +9,13 @@ const saved = (id: string, savedAt: number) => ({ id, text: '', href: '', savedA
 describe('the trees the branches tab swipes through', () => {
   const all = branchList(EMPTY_LIST);
 
-  it('keeps only trees inside a juz range, each with two ayat or more there', () => {
+  it('keeps only trees inside a juz range, each with two ayat or more there (a book\'s one-ayah entry has its one)', () => {
     const range = { from: 29, to: 30 };
     const list = branchList({ ...EMPTY_LIST, range });
     expect(list.length).toBeGreaterThan(0);
     for (const piece of list) {
       expect(piece.keys.every(key => inJuzRange(key, range)), piece.id).toBe(true);
-      expect(piece.keys.length).toBeGreaterThanOrEqual(2);
+      expect(piece.keys.length).toBeGreaterThanOrEqual(Math.min(2, piece.group?.places.length ?? 2));
     }
   });
 

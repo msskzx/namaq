@@ -200,7 +200,8 @@ type Attested = { places: Selection[]; citations: string[]; focus?: Record<strin
 const byMushaf = (a: string, b: string) => { const [x, y] = a.split('-')[0].split(':').map(Number); const [u, v] = b.split('-')[0].split(':').map(Number); return x - u || y - v; };
 
 /**
- * Every multi-place case a book gives that no hand-made entry above already holds: whole ayat, in mushaf order.
+ * Every case a book gives that no hand-made entry above already holds: whole ayat, in mushaf order. A case on one ayah
+ * (a word said twice in it, or a wording found only there) is a card of that one ayah (owner 2026-11-18: every book entry is a card).
  * A case on the same ayat as a hand-made entry joins that entry's citations; cases on the same ayat share one group.
  */
 function withBookEntries(handWritten: Attested[], rows: Word[][], index: Map<string, number>): Attested[] {
@@ -213,7 +214,7 @@ function withBookEntries(handWritten: Attested[], rows: Word[][], index: Map<str
     // A place is an ayah ("2:58") or a passage running on into a later ayah of the same surah ("2:58-59").
     const passage = (place: string) => { const [key, last] = place.split('-'); return { key, through: last ? `${key.split(':')[0]}:${last}` : undefined }; };
     const passages = citation.places.map(passage);
-    if (held.has(citation.id) || passages.length < 2 || passages.some(({ key, through }) => !index.has(key) || (through && !index.has(through)))) continue;
+    if (held.has(citation.id) || !passages.length || passages.some(({ key, through }) => !index.has(key) || (through && !index.has(through)))) continue;
     const sorted = [...passages].sort((a, b) => byMushaf(a.key, b.key));
     const set = sorted.map(({ key, through }) => through ? `${key}-${through}` : key).join(',');
     const existing = handMade.get(set) ?? made.get(set);
@@ -222,7 +223,7 @@ function withBookEntries(handWritten: Attested[], rows: Word[][], index: Map<str
     const texts = sorted.map(place => words(place).map(word => word.text).join(' '));
     made.set(set, {
       places: sorted.map(({ key, through }): Selection => through ? [key, 0, rows[index.get(through)!].length, through] : [key, 0, rows[index.get(key)!].length]),
-      citations: [citation.id], kind: texts.every(text => text === texts[0]) ? 'identical' : 'mutashabih_lafzi', book: true,
+      citations: [citation.id], kind: texts.length > 1 && texts.every(text => text === texts[0]) ? 'identical' : 'mutashabih_lafzi', book: true,
     });
   }
   return [...attested, ...made.values()];
@@ -405,8 +406,9 @@ export function buildGroups(ayat: BranchAyah[], config = MATCH_CONFIG): Group[] 
     }));
     let group = makeGroup(places, selected, kind, citations, focus, detail);
     // A book's ayat that share one word or none have no trunk a tree can grow from: the card shows as its matrix only.
+    // So does a book's one-ayah entry, which has nothing to branch.
     const trunk = group.tree.occurrences[0];
-    if (book && trunk.end - trunk.start < 2) group = { ...group, tree: { ...group.tree, occurrences: group.tree.occurrences.map(occurrence => ({ ...occurrence, end: occurrence.start })) } };
+    if (book && (places.length < 2 || trunk.end - trunk.start < 2)) group = { ...group, tree: { ...group.tree, occurrences: group.tree.occurrences.map(occurrence => ({ ...occurrence, end: occurrence.start })) } };
     groups.push(group);
     if (book) fromBooks.add(group);
     // A book's whole-ayah entry leaves the word matching as it was, so the trees it finds keep their ids (and verdicts).
