@@ -112,6 +112,23 @@
       "layer": "MAIN",
       "exact": "كَانَ أَوَّلُ مَنْ جَمَعَ بِنَا بِالمَدِيْنَةِ",
       "prefix": "أَيْ بُنَيَّ! "
+    },
+    {
+      "id": "sp_az_kab_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "300",
+      "layer": "MAIN",
+      "exact": "كُنْتُ قَائِدَ أَبِي حِيْنَ عَمِيَ"
+    },
+    {
+      "id": "sp_az_kab_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "300",
+      "layer": "MAIN",
+      "exact": "كَعْبِ بنِ مَالِكٍ",
+      "prefix": "عَبْدِ الرَّحْمَنِ بنِ "
     }
   ],
   "reports": [
@@ -131,6 +148,9 @@
       "unit": "siyar-v4-58-asad-ibn-zurarah",
       "ordinal": 2,
       "voice": "TRANSMITTED",
+      "frame": [
+        "sp_az_kab_frame"
+      ],
       "isnadSpan": "sp_az_kab_isnad",
       "origin": {
         "mention": "m_az_kab"
@@ -190,8 +210,8 @@
     },
     {
       "id": "m_az_kab",
-      "parent": "sp_az_kab_isnad",
-      "exact": "عَبْدِ الرَّحْمَنِ بنِ كَعْبِ بنِ مَالِكٍ",
+      "parent": "sp_az_kab_frame",
+      "exact": "أَبِي",
       "occurrence": 1,
       "role": "SPEAKER"
     },
@@ -247,6 +267,18 @@
       "basis": [
         {
           "span": "sp_az_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_az_kab",
+      "mention": "m_az_kab",
+      "agent": "kaab-ibn-malik",
+      "basis": [
+        {
+          "span": "sp_az_kab_name",
           "role": "NASAB"
         }
       ],

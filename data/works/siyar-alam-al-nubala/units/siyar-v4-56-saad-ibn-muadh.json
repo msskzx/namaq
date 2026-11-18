@@ -177,8 +177,9 @@
       "volume": 4,
       "page": "289",
       "layer": "MAIN",
-      "exact": "سَنَةَ خَمْسٍ مِنَ",
-      "prefix": "يَوْمَ الخَنْدَقِ، "
+      "exact": "سَنَةَ خَمْسٍ",
+      "prefix": "يَوْمَ الخَنْدَقِ، ",
+      "suffix": " مِنَ"
     },
     {
       "id": "sp_sm_wq_age",
@@ -230,7 +231,16 @@
       "volume": 4,
       "page": "291",
       "layer": "MAIN",
-      "exact": "شُعْبَةُ: حَدَّثَنَا سَعْدُ بنُ إِبْرَاهِيْمَ، عَنْ نَافِعٍ، عَنْ عَائِشَةَ"
+      "exact": "عُقْبَةُ بنُ مُكْرَمٍ: حَدَّثَنَا ابْنُ أَبِي عَدِيٍّ، عَنْ شُعْبَةَ، عَنْ سَعْدِ بنِ إِبْرَاهِيْمَ، عَنْ نَافِعٍ، عَنْ صَفِيَّةَ بِنْتِ أَبِي عُبَيْدٍ، عَنْ عَائِشَةَ"
+    },
+    {
+      "id": "sp_sm_damma_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "291",
+      "layer": "MAIN",
+      "exact": "عَنِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-",
+      "suffix": ": (لَوْ نَجَا"
     },
     {
       "id": "sp_sm_damma",
@@ -238,16 +248,7 @@
       "volume": 4,
       "page": "291",
       "layer": "MAIN",
-      "exact": "إِنَّ لِلْقَبْرِ ضَغْطَةً، وَلَوْ كَانَ أَحَدٌ نَاجِياً مِنْهَا، نَجَا مِنْهَا سَعْدُ بنُ مُعَاذٍ"
-    },
-    {
-      "id": "sp_sm_qawi",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 4,
-      "page": "291",
-      "layer": "MAIN",
-      "exact": "إِسْنَادُهُ قَوِيٌّ.",
-      "prefix": "نَجَا مِنْهَا سَعْدُ بنُ مُعَاذٍ (١)) . "
+      "exact": "لَوْ نَجَا أَحَدٌ مِنْ ضَمَّةِ القَبْرِ، لَنَجَا مِنْهَا سَعْدٌ"
     },
     {
       "id": "sp_sm_anas_isnad",
@@ -284,12 +285,12 @@
       "prefix": "يَرْحَمُ اللهُ سَعْداً، كَانَ "
     },
     {
-      "id": "sp_sm_anas_mandil",
+      "id": "sp_sm_tawatur_frame",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 4,
       "page": "292",
       "layer": "MAIN",
-      "exact": "فَوَاللهِ لَمَنَادِيْلُ سَعْدِ بنِ مُعَاذٍ فِي الجَنَّةِ أَحْسَنُ مِمَّا تَرَوْنَ"
+      "exact": "وَقَدْ تَوَاتَرَ (٢) قَوْلُ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-"
     },
     {
       "id": "sp_sm_tawatur",
@@ -300,22 +301,12 @@
       "exact": "إِنَّ العَرْشَ اهْتَزَّ لِمَوْتِ سَعْدٍ فَرَحاً بِهِ"
     },
     {
-      "id": "sp_sm_tawatur_word",
+      "id": "sp_sm_thabata_frame",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 4,
       "page": "292",
       "layer": "MAIN",
-      "exact": "وَقَدْ تَوَاتَرَ",
-      "suffix": " (٢) قَوْلُ"
-    },
-    {
-      "id": "sp_sm_thabata_word",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 4,
-      "page": "292",
-      "layer": "MAIN",
-      "exact": "وَثَبَتَ",
-      "suffix": ": أَنَّ النَّبِيَّ"
+      "exact": "وَثَبَتَ: أَنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ فِي حُلَّةٍ تَعَجَّبُوا مِنْ حُسْنِهَا"
     },
     {
       "id": "sp_sm_thabata",
@@ -324,23 +315,6 @@
       "page": "292",
       "layer": "MAIN",
       "exact": "لَمَنَادِيْلُ سَعْدِ بنِ مُعَاذٍ فِي الجَنَّةِ، خَيْرٌ مِنْ هَذِهِ"
-    },
-    {
-      "id": "sp_sm_jabir_isnad",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 4,
-      "page": "293",
-      "layer": "MAIN",
-      "exact": "الأَعْمَشُ: عَنْ أَبِي سُفْيَانَ، عَنْ جَابِرٍ مَرْفُوْعاً"
-    },
-    {
-      "id": "sp_sm_jabir",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 4,
-      "page": "293",
-      "layer": "MAIN",
-      "exact": "اهْتَزَّ عَرْشُ الرَّحْمَنِ لِمَوْتِ سَعْدٍ",
-      "prefix": "مَرْفُوْعاً: ("
     },
     {
       "id": "sp_sm_faqd_isnad",
@@ -392,31 +366,9 @@
       "chainState": "COMPLETE"
     },
     {
-      "id": "r_sm_tw",
-      "unit": "siyar-v4-56-saad-ibn-muadh",
-      "ordinal": 3,
-      "voice": "AUTHOR",
-      "voiceBasis": "sp_sm_tawatur_word",
-      "origin": {
-        "workAuthor": true
-      },
-      "chainState": "COMPLETE"
-    },
-    {
-      "id": "r_sm_th",
-      "unit": "siyar-v4-56-saad-ibn-muadh",
-      "ordinal": 4,
-      "voice": "AUTHOR",
-      "voiceBasis": "sp_sm_thabata_word",
-      "origin": {
-        "workAuthor": true
-      },
-      "chainState": "COMPLETE"
-    },
-    {
       "id": "r_sm_shihab",
       "unit": "siyar-v4-56-saad-ibn-muadh",
-      "ordinal": 5,
+      "ordinal": 3,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_sm_shihab_frame"
@@ -429,7 +381,7 @@
     {
       "id": "r_sm_qur",
       "unit": "siyar-v4-56-saad-ibn-muadh",
-      "ordinal": 6,
+      "ordinal": 4,
       "voice": "TRANSMITTED",
       "isnadSpan": "sp_sm_qur_isnad",
       "origin": {
@@ -440,7 +392,7 @@
     {
       "id": "r_sm_wq",
       "unit": "siyar-v4-56-saad-ibn-muadh",
-      "ordinal": 7,
+      "ordinal": 5,
       "voice": "TRANSMITTED",
       "isnadSpan": "sp_sm_wq_isnad",
       "origin": {
@@ -451,11 +403,40 @@
     {
       "id": "r_sm_damma",
       "unit": "siyar-v4-56-saad-ibn-muadh",
-      "ordinal": 8,
+      "ordinal": 6,
       "voice": "TRANSMITTED",
+      "frame": [
+        "sp_sm_damma_frame"
+      ],
       "isnadSpan": "sp_sm_damma_isnad",
       "origin": {
-        "mention": "m_sm_aisha1"
+        "mention": "m_sm_p_dm"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sm_tw",
+      "unit": "siyar-v4-56-saad-ibn-muadh",
+      "ordinal": 7,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_sm_tawatur_frame"
+      ],
+      "origin": {
+        "mention": "m_sm_p_tw"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sm_th",
+      "unit": "siyar-v4-56-saad-ibn-muadh",
+      "ordinal": 8,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_sm_thabata_frame"
+      ],
+      "origin": {
+        "mention": "m_sm_p_th"
       },
       "chainState": "DEFERRED"
     },
@@ -474,20 +455,9 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_sm_jabir",
-      "unit": "siyar-v4-56-saad-ibn-muadh",
-      "ordinal": 10,
-      "voice": "TRANSMITTED",
-      "isnadSpan": "sp_sm_jabir_isnad",
-      "origin": {
-        "mention": "m_sm_jabir"
-      },
-      "chainState": "DEFERRED"
-    },
-    {
       "id": "r_sm_faqd",
       "unit": "siyar-v4-56-saad-ibn-muadh",
-      "ordinal": 11,
+      "ordinal": 10,
       "voice": "TRANSMITTED",
       "isnadSpan": "sp_sm_faqd_isnad",
       "origin": {
@@ -557,26 +527,10 @@
       "role": "TRANSMITTED"
     },
     {
-      "id": "st_sm_qawi",
-      "report": "r_sm_q",
-      "spans": [
-        "sp_sm_qawi"
-      ],
-      "role": "AUTHOR_REPORT"
-    },
-    {
       "id": "st_sm_anas_look",
       "report": "r_sm_anas",
       "spans": [
         "sp_sm_anas_look"
-      ],
-      "role": "TRANSMITTED"
-    },
-    {
-      "id": "st_sm_anas_mandil",
-      "report": "r_sm_anas",
-      "spans": [
-        "sp_sm_anas_mandil"
       ],
       "role": "TRANSMITTED"
     },
@@ -586,21 +540,13 @@
       "spans": [
         "sp_sm_tawatur"
       ],
-      "role": "AUTHOR_REPORT"
+      "role": "TRANSMITTED"
     },
     {
       "id": "st_sm_thabata",
       "report": "r_sm_th",
       "spans": [
         "sp_sm_thabata"
-      ],
-      "role": "AUTHOR_REPORT"
-    },
-    {
-      "id": "st_sm_jabir",
-      "report": "r_sm_jabir",
-      "spans": [
-        "sp_sm_jabir"
       ],
       "role": "TRANSMITTED"
     },
@@ -707,18 +653,32 @@
       "role": "SUBJECT"
     },
     {
-      "id": "m_sm_aisha1",
-      "parent": "sp_sm_damma_isnad",
-      "exact": "عَائِشَةَ",
+      "id": "m_sm_dm",
+      "parent": "sp_sm_damma",
+      "exact": "سَعْدٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sm_p_dm",
+      "parent": "sp_sm_damma_frame",
+      "exact": "النَّبِيِّ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
     {
-      "id": "m_sm_dm",
-      "parent": "sp_sm_damma",
-      "exact": "سَعْدُ بنُ مُعَاذٍ",
+      "id": "m_sm_p_tw",
+      "parent": "sp_sm_tawatur_frame",
+      "exact": "النَّبِيِّ",
       "occurrence": 1,
-      "role": "SUBJECT"
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sm_p_th",
+      "parent": "sp_sm_thabata_frame",
+      "exact": "النَّبِيَّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
     },
     {
       "id": "m_sm_anas",
@@ -735,13 +695,6 @@
       "role": "SUBJECT"
     },
     {
-      "id": "m_sm_am",
-      "parent": "sp_sm_anas_mandil",
-      "exact": "سَعْدِ بنِ مُعَاذٍ",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
       "id": "m_sm_tw",
       "parent": "sp_sm_tawatur",
       "exact": "سَعْدٍ",
@@ -752,20 +705,6 @@
       "id": "m_sm_th",
       "parent": "sp_sm_thabata",
       "exact": "سَعْدِ بنِ مُعَاذٍ",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
-      "id": "m_sm_jabir",
-      "parent": "sp_sm_jabir_isnad",
-      "exact": "جَابِرٍ",
-      "occurrence": 1,
-      "role": "SPEAKER"
-    },
-    {
-      "id": "m_sm_jb",
-      "parent": "sp_sm_jabir",
-      "exact": "سَعْدٍ",
       "occurrence": 1,
       "role": "SUBJECT"
     },
@@ -870,18 +809,6 @@
       "status": "PROPOSED"
     },
     {
-      "id": "i_sm_am",
-      "mention": "m_sm_am",
-      "agent": "saad-ibn-muadh",
-      "basis": [
-        {
-          "span": "sp_sm_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
       "id": "i_sm_tw",
       "mention": "m_sm_tw",
       "agent": "saad-ibn-muadh",
@@ -896,18 +823,6 @@
     {
       "id": "i_sm_th",
       "mention": "m_sm_th",
-      "agent": "saad-ibn-muadh",
-      "basis": [
-        {
-          "span": "sp_sm_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_sm_jb",
-      "mention": "m_sm_jb",
       "agent": "saad-ibn-muadh",
       "basis": [
         {
@@ -949,18 +864,6 @@
         {
           "span": "sp_sm_father",
           "role": "NASAB"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_sm_aisha1",
-      "mention": "m_sm_aisha1",
-      "agent": "aisha-bint-abi-bakr",
-      "basis": [
-        {
-          "span": "sp_sm_faqd_isnad",
-          "role": "SAME_WORK_EXPLICIT"
         }
       ],
       "status": "PROPOSED"
@@ -1204,22 +1107,20 @@
         ]
       },
       "restsOn": [
-        "st_sm_damma",
-        "st_sm_qawi"
+        "st_sm_damma"
       ],
       "status": "PROPOSED"
     },
     {
       "id": "a_sm_v_arsh",
-      "subject": "m_sm_jb",
+      "subject": "m_sm_tw",
       "predicate": "virtue",
       "value": {
         "spans": [
-          "sp_sm_jabir"
+          "sp_sm_tawatur"
         ]
       },
       "restsOn": [
-        "st_sm_jabir",
         "st_sm_tawatur"
       ],
       "status": "PROPOSED"
@@ -1234,8 +1135,7 @@
         ]
       },
       "restsOn": [
-        "st_sm_thabata",
-        "st_sm_anas_mandil"
+        "st_sm_thabata"
       ],
       "status": "PROPOSED"
     },

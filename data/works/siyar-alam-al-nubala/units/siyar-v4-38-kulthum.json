@@ -57,7 +57,8 @@
       "volume": 4,
       "page": "242",
       "layer": "MAIN",
-      "exact": "شَيْخُ الأَنْصَارِ، وَمَنْ نَزَلَ عَلَيْهِ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَوَّلَ مَا قَدِمَ المَدِيْنَةَ بِقُبَاءَ، وَكَانَ قَدْ شَاخَ"
+      "exact": "شَيْخُ الأَنْصَارِ، وَمَنْ نَزَلَ عَلَيْهِ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَوَّلَ مَا قَدِمَ المَدِيْنَةَ بِقُبَاءَ",
+      "suffix": "، وَكَانَ قَدْ شَاخَ"
     },
     {
       "id": "sp_k_qila_frame",
@@ -93,14 +94,6 @@
       "layer": "MAIN",
       "exact": "سَعْدِ بنِ خَيْثَمَةَ",
       "prefix": "عَلَى "
-    },
-    {
-      "id": "sp_k_salih",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 4,
-      "page": "243",
-      "layer": "MAIN",
-      "exact": "ثُمَّ لَمْ يَلْبَثْ أَنْ تُوُفِّيَ -رَضِيَ اللهُ عَنْهُ- وَذَلِكَ قَبْلَ بَدْرٍ، وَكَانَ رَجُلاً صَالِحاً"
     }
   ],
   "reports": [
@@ -148,14 +141,6 @@
       "role": "AUTHOR_REPORT"
     },
     {
-      "id": "st_k_salih",
-      "report": "r_k0",
-      "spans": [
-        "sp_k_salih"
-      ],
-      "role": "AUTHOR_REPORT"
-    },
-    {
       "id": "st_k_qila",
       "report": "r_k_qila",
       "spans": [
@@ -183,13 +168,6 @@
       "id": "m_k_h",
       "parent": "sp_k_host",
       "exact": "وَمَنْ نَزَلَ عَلَيْهِ",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
-      "id": "m_k_s",
-      "parent": "sp_k_salih",
-      "exact": "تُوُفِّيَ",
       "occurrence": 1,
       "role": "SUBJECT"
     },
@@ -231,18 +209,6 @@
     {
       "id": "i_k_h",
       "mention": "m_k_h",
-      "agent": "kulthum-ibn-al-hidm",
-      "basis": [
-        {
-          "span": "sp_k_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_k_s",
-      "mention": "m_k_s",
       "agent": "kulthum-ibn-al-hidm",
       "basis": [
         {
@@ -357,20 +323,6 @@
       },
       "restsOn": [
         "st_k_qila"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_k_v_salih",
-      "subject": "m_k_s",
-      "predicate": "virtue",
-      "value": {
-        "spans": [
-          "sp_k_salih"
-        ]
-      },
-      "restsOn": [
-        "st_k_salih"
       ],
       "status": "PROPOSED"
     }

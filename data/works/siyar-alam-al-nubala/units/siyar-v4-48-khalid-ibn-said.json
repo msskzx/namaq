@@ -86,6 +86,15 @@
       "exact": "رُوِيَ عَنْ أُمِّ خَالِدٍ بِنْتِ خَالِدٍ، قَالَتْ:"
     },
     {
+      "id": "sp_ks_um_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "أُمِّ خَالِدٍ بِنْتِ خَالِدٍ",
+      "prefix": "رُوِيَ عَنْ "
+    },
+    {
       "id": "sp_ks_um",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 4,
@@ -321,7 +330,7 @@
       "agent": "umm-khalid-bint-khalid",
       "basis": [
         {
-          "span": "sp_ks_heading",
+          "span": "sp_ks_um_name",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],

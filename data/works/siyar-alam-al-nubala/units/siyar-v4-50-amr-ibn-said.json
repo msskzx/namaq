@@ -86,6 +86,23 @@
       "layer": "MAIN",
       "exact": "أَجْنَادِيْنَ",
       "prefix": "وَيُقَالُ: يَوْم "
+    },
+    {
+      "id": "sp_as_bro_st",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "262",
+      "layer": "MAIN",
+      "exact": "اسْتُشْهِدَ يَوْمَ اليَرْمُوْكِ - وَيُقَالُ: يَوْم أَجْنَادِيْنَ - مَعَ أَخَوَيْهِ"
+    },
+    {
+      "id": "sp_as_bro_word",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "262",
+      "layer": "MAIN",
+      "exact": "مَعَ أَخَوَيْهِ",
+      "prefix": "أَجْنَادِيْنَ - "
     }
   ],
   "reports": [
@@ -135,6 +152,14 @@
         "sp_as_ajn"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_as_bro",
+      "report": "r_as0",
+      "spans": [
+        "sp_as_bro_st"
+      ],
+      "role": "AUTHOR_REPORT"
     }
   ],
   "mentions": [
@@ -179,6 +204,34 @@
       "exact": "أَجْنَادِيْنَ",
       "occurrence": 1,
       "role": "REFERENT"
+    },
+    {
+      "id": "m_as_b",
+      "parent": "sp_as_bro_st",
+      "exact": "اسْتُشْهِدَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_as_khalid",
+      "parent": "sp_as_bro_st",
+      "exact": "أَخَوَيْهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_as_aban",
+      "parent": "sp_as_bro_st",
+      "exact": "أَخَوَيْهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_as_yarmuk2",
+      "parent": "sp_as_bro_st",
+      "exact": "اليَرْمُوْكِ",
+      "occurrence": 1,
+      "role": "REFERENT"
     }
   ],
   "identifications": [
@@ -197,6 +250,18 @@
     {
       "id": "i_as_y",
       "mention": "m_as_y",
+      "agent": "amr-ibn-said-al-umawi",
+      "basis": [
+        {
+          "span": "sp_as_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_as_b",
+      "mention": "m_as_b",
       "agent": "amr-ibn-said-al-umawi",
       "basis": [
         {
@@ -237,6 +302,42 @@
       "basis": [
         {
           "span": "sp_as_ajn_word",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_as_khalid",
+      "mention": "m_as_khalid",
+      "agent": "khalid-ibn-said",
+      "basis": [
+        {
+          "span": "sp_as_bro_word",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_as_aban",
+      "mention": "m_as_aban",
+      "agent": "aban-ibn-said",
+      "basis": [
+        {
+          "span": "sp_as_bro_word",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_as_yarmuk2",
+      "mention": "m_as_yarmuk2",
+      "event": "yarmuk",
+      "basis": [
+        {
+          "span": "sp_as_day_yarmuk",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -306,6 +407,54 @@
       },
       "restsOn": [
         "st_as_ajn"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_as_sib_khalid",
+      "subject": "m_as_b",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_as_khalid"
+      },
+      "restsOn": [
+        "st_as_bro"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_as_sib_aban",
+      "subject": "m_as_b",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_as_aban"
+      },
+      "restsOn": [
+        "st_as_bro"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_as_khalid_yarmuk",
+      "subject": "m_as_khalid",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_as_yarmuk2"
+      },
+      "restsOn": [
+        "st_as_bro"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_as_aban_yarmuk",
+      "subject": "m_as_aban",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_as_yarmuk2"
+      },
+      "restsOn": [
+        "st_as_bro"
       ],
       "status": "PROPOSED"
     }

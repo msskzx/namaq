@@ -103,13 +103,32 @@
       "exact": "بَدْرٍ",
       "prefix": "وَاسْتُشْهِدَ بِ",
       "suffix": "، وَاسْتُشْهِدَ أَبُوْهُ"
+    },
+    {
+      "id": "sp_sk_qalu",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "266",
+      "layer": "MAIN",
+      "exact": "قَالُوا",
+      "suffix": ": وَكَانَ أَحَدَ النُّقَبَاءِ"
     }
   ],
   "reports": [
     {
-      "id": "r_sk0",
+      "id": "r_sk_qalu",
       "unit": "siyar-v4-52-saad-ibn-khaythamah",
       "ordinal": 1,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_sk_qalu"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sk0",
+      "unit": "siyar-v4-52-saad-ibn-khaythamah",
+      "ordinal": 2,
       "voice": "AUTHOR",
       "voiceBasis": "sp_sk_heading",
       "origin": {
@@ -138,11 +157,11 @@
     },
     {
       "id": "st_sk_badr",
-      "report": "r_sk0",
+      "report": "r_sk_qalu",
       "spans": [
         "sp_sk_badr"
       ],
-      "role": "AUTHOR_REPORT"
+      "role": "TRANSMITTED"
     }
   ],
   "mentions": [
@@ -166,6 +185,13 @@
       "exact": "أَبُو عَبْدِ اللهِ",
       "occurrence": 1,
       "role": "SUBJECT"
+    },
+    {
+      "id": "m_sk_qalu",
+      "parent": "sp_sk_qalu",
+      "exact": "قَالُوا",
+      "occurrence": 1,
+      "role": "SPEAKER"
     },
     {
       "id": "m_sk_b",

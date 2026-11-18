@@ -110,6 +110,24 @@
       "layer": "MAIN",
       "exact": "يَوْمَ أَجْنَادِيْنَ عَلَى",
       "prefix": "خَالِدٌ "
+    },
+    {
+      "id": "sp_ab_cousin",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "261",
+      "layer": "MAIN",
+      "exact": "وَأبَانُ: هُوَ ابْنُ عَمَّةِ أَبِي جَهْلٍ."
+    },
+    {
+      "id": "sp_ab_abujahl",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "261",
+      "layer": "MAIN",
+      "exact": "أَبِي جَهْلٍ",
+      "prefix": "هُوَ ابْنُ عَمَّةِ ",
+      "suffix": "."
     }
   ],
   "reports": [
@@ -126,6 +144,14 @@
     }
   ],
   "statements": [
+    {
+      "id": "st_ab_cousin",
+      "report": "r_ab0",
+      "spans": [
+        "sp_ab_cousin"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
     {
       "id": "st_ab_name",
       "report": "r_ab0",
@@ -188,6 +214,20 @@
       "exact": "أَبُو الوَلِيْدِ",
       "occurrence": 1,
       "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_c",
+      "parent": "sp_ab_cousin",
+      "exact": "هُوَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_abujahl",
+      "parent": "sp_ab_cousin",
+      "exact": "أَبِي جَهْلٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
     },
     {
       "id": "m_ab_b",
@@ -359,6 +399,30 @@
         }
       ],
       "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_c",
+      "mention": "m_ab_c",
+      "agent": "aban-ibn-said",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_abujahl",
+      "mention": "m_ab_abujahl",
+      "agent": "abu-jahl-ibn-hisham",
+      "basis": [
+        {
+          "span": "sp_ab_abujahl",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
     }
   ],
   "assertions": [
@@ -477,6 +541,18 @@
       },
       "restsOn": [
         "st_ab_ajn"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_cousin",
+      "subject": "m_ab_c",
+      "predicate": "PATERNAL_COUSIN",
+      "value": {
+        "object": "m_ab_abujahl"
+      },
+      "restsOn": [
+        "st_ab_cousin"
       ],
       "status": "PROPOSED"
     }
