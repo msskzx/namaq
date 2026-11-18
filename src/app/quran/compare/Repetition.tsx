@@ -8,7 +8,7 @@ import Button from '@/components/common/Button';
 import { num } from '@shared/quran/arabicNumber';
 import type { Repetition } from '@/lib/quran/repetition';
 import { NOTE, PANEL } from '../panel';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import LoadingDots from '@/components/common/LoadingDots';
 
 function Tile({ value, label }: { value: number; label: string }) {
   return (
@@ -42,7 +42,7 @@ export function RepetitionProvider({ children }: { children: React.ReactNode }) 
 
 function Status() {
   const { failed } = useContext(RepetitionContext);
-  return failed ? <p role="alert" className={NOTE}>تعذر تحميل البيانات.</p> : <LoadingSpinner />;
+  return failed ? <p role="alert" className={NOTE}>تعذر تحميل البيانات.</p> : <LoadingDots fill />;
 }
 
 export function RepetitionStats() {

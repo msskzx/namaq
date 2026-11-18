@@ -5,8 +5,7 @@ import { pathToggleKey } from '@shared/quran/pathHighlight';
 import { treeSurahs } from '@shared/quran/treeSurahs';
 import { useGrowth } from './Grow';
 import { useOuterPaths } from './Paths';
-
-const CHIP = 'inline-flex h-7 shrink-0 items-center gap-1.5 rounded-full border px-2.5 text-sm';
+import Chip from '@/components/common/Chip';
 
 /** Under the card's buttons, like tags under a post: the surahs the tree's ayat come from. On a tree, a tap lights that surah's ayat. */
 export default function SurahChips({ ayahKeys, names, interactive = true }: { ayahKeys: string[]; names: Record<number, string>; interactive?: boolean }) {
@@ -19,17 +18,14 @@ export default function SurahChips({ ayahKeys, names, interactive = true }: { ay
     <ul data-surah-chips aria-label="السور" className="-mt-1 flex gap-1.5 overflow-x-auto pb-1 [scrollbar-width:none]">
       {surahs.map(({ surah, ayahKeys: keys }) => {
         const name = names[surah] ?? num(surah);
-        const count = keys.length > 1 && <span className="text-xs opacity-70">{num(keys.length)}</span>;
-        if (studio) return <li key={surah} className={`${CHIP} ${growth.lit?.split(':')[0] === String(surah) ? 'border-[var(--home-accent)] bg-[var(--home-paper-deep)] text-[var(--home-accent)]' : 'border-[var(--home-rule)] text-[var(--home-ink)]'}`}>{name}{count}</li>;
-        if (!interactive || !paths) return <li key={surah} className={`${CHIP} border-[var(--home-rule)] text-[var(--home-ink)]`}>{name}{count}</li>;
+        const count = keys.length > 1 ? keys.length : undefined;
+        if (studio) return <li key={surah} className="contents"><Chip small lit label={name} count={count} on={growth.lit?.split(':')[0] === String(surah)} /></li>;
+        if (!interactive || !paths) return <li key={surah} className="contents"><Chip small label={name} count={count} /></li>;
         const id = `surah:${surah}`;
         const on = paths.pinned.has(pathToggleKey(id, keys));
         return (
           <li key={surah} className="contents">
-            <button type="button" aria-pressed={on} aria-label={`سورة ${name}`} title={`سورة ${name}`} onClick={() => paths.pin(id, keys)}
-              className={`${CHIP} transition-colors ${on ? 'border-[var(--home-accent)] bg-[var(--home-paper-deep)] text-[var(--home-accent)]' : 'border-[var(--home-rule)] text-[var(--home-ink)] hover:bg-[var(--home-paper-deep)]'}`}>
-              {name}{count}
-            </button>
+            <Chip small lit label={name} count={count} on={on} name={`سورة ${name}`} onClick={() => paths.pin(id, keys)} />
           </li>
         );
       })}

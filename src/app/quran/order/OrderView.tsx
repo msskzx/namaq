@@ -8,6 +8,8 @@ import ExternalLink from '@/components/common/ExternalLink';
 import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
 import { BOOKS, citeLabel, citeUrl, ORDER_HELP, ORDER_JUZ, orderInJuz, type Cite, type OrderAyah, type OrderLinkView, type OrderSurah } from '@shared/quran/surahOrder';
+import Card from '@/components/common/Card';
+import Chip from '@/components/common/Chip';
 
 const HELP = [
   ...ORDER_HELP.map((text, i) => <p key={i} className={i === ORDER_HELP.length - 1 ? 'text-[var(--home-muted)]' : undefined}>{text}</p>),
@@ -51,7 +53,7 @@ function LinkBlock({ link }: { link: OrderLinkView }) {
 
 function SurahCard({ s }: { s: OrderSurah }) {
   return (
-    <li className="rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 pt-2.5 pb-1">
+    <Card as="li" className="px-4 pt-2.5 pb-1">
       <h2 className="flex items-baseline gap-2"><span className="text-2xl text-[var(--home-accent)]">{s.name}</span><span className="text-sm text-[var(--home-muted)]">{num(s.surah)}</span></h2>
       <p className="font-quran text-2xl leading-[2.1] [text-align:justify] [text-align-last:right]">
         {s.opening.map(a => <span key={a.ayah}>{`${a.text} `}<span className="text-[var(--home-amber)]">{`${num(a.ayah)} `}</span></span>)}
@@ -61,7 +63,7 @@ function SurahCard({ s }: { s: OrderSurah }) {
       <div className="flex gap-1">
         <Link href={ayahHref(`${s.surah}:1`)} className={ICON_BUTTON} aria-label={`افتح سورة ${s.name} في المصحف`} title="في المصحف"><BookOpen size={18} aria-hidden /></Link>
       </div>
-    </li>
+    </Card>
   );
 }
 
@@ -74,10 +76,7 @@ export default function OrderView({ surahs }: { surahs: OrderSurah[] }) {
   const shown = orderInJuz(surahs, juz);
   const chip = (label: string, value: number | null) => (
     <li key={label}>
-      <button type="button" aria-pressed={juz === value} onClick={() => setJuz(value)}
-        className={`whitespace-nowrap rounded-full border px-3 py-0.5 text-base ${juz === value ? 'border-[var(--home-accent)] bg-[var(--home-accent)] text-[var(--home-on-action)]' : 'border-[var(--home-rule)] text-[var(--home-ink)] hover:border-[var(--home-accent)]'}`}>
-        {label}
-      </button>
+      <Chip label={label} on={juz === value} onClick={() => setJuz(value)} />
     </li>
   );
   return (

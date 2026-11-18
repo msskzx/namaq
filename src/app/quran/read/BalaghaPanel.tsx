@@ -9,8 +9,9 @@ import { tafsirRuns } from '@shared/quran/tafsirSadi';
 import ExternalLink from '@/components/common/ExternalLink';
 import OpenInBook from '@/components/quran/OpenInBook';
 import type { BalaghaAyah } from './balagha';
+import Card from '@/components/common/Card';
+import Segmented from '@/components/common/Segmented';
 
-const CARD = 'block shrink-0 rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-3.5 py-2.5';
 // The reader's neutral band (Mushaf.module.css .marked), seen on a card in both themes.
 const LIT = 'bg-[var(--home-band-mark)]';
 // The sentence whose ayah words are lit: a deeper band.
@@ -49,19 +50,13 @@ export default function BalaghaPanel({ ayah, data }: { ayah: string; data: Balag
   const span: [number, number][] = shown === 'itqan' ? itqan[paragraph]?.words ?? [] : kashshafWords ? [kashshafWords] : [];
   return (
     <>
-      <p className={`${CARD} font-quran text-2xl leading-[2]`}>
+      <Card as="p" className="block shrink-0 px-3.5 py-2.5 font-quran text-2xl leading-[2]">
         {words.map((word, i) => <span key={i} className={span.some(([from, to]) => i >= from && i <= to) ? PICKED : undefined}>{`${i ? ' ' : ''}${word}`}</span>)}
-      </p>
-      <div role="tablist" aria-label="الكتاب" className="flex shrink-0 gap-2">
-        {(Object.keys(BOOKS) as Book[]).map(book => (
-          <button key={book} type="button" role="tab" aria-selected={shown === book} onClick={() => setShown(book)}
-            className={`rounded-full border px-3 py-1.5 text-[0.9375rem] ${shown === book ? 'border-[var(--home-accent)] bg-[var(--home-accent)] text-[var(--home-paper)]' : 'border-[var(--home-rule)]'}`}>
-            {BOOKS[book]}
-          </button>
-        ))}
-      </div>
+      </Card>
+      <Segmented tabs label="الكتاب" className="shrink-0 self-start"
+        options={(Object.keys(BOOKS) as Book[]).map(book => ({ key: book, label: BOOKS[book], current: shown === book, onClick: () => setShown(book) }))} />
       {shown === 'itqan' && (itqan.length ? itqan.map((item, i) => (
-        <div key={`${item.id}/${i}`} className={`${CARD} ${paragraph === i && itqan.length > 1 ? 'border-[var(--home-ink)]' : ''}`}>
+        <Card key={`${item.id}/${i}`} picked={paragraph === i && itqan.length > 1} className="block shrink-0 px-3.5 py-2.5">
           {/* The paragraph lights the words it quotes; its reference below is a control of its own. */}
           <div role="button" tabIndex={0} aria-pressed={paragraph === i} onClick={() => setParagraph(i)} className="cursor-pointer"
             onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setParagraph(i); } }}>
@@ -75,10 +70,10 @@ export default function BalaghaPanel({ ayah, data }: { ayah: string; data: Balag
             <p>{`${ITQAN_BOOK}، ${ITQAN_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث. الفقرة كاملة كما في الكتاب، والعنوان عنوانه.`}</p>
             <ExternalLink href={itqanPage(item)}>اقرأ الصفحة</ExternalLink>
           </Folded>
-        </div>
+        </Card>
       )) : <p className="py-6 text-center text-sm text-[var(--home-muted)]">لم يستشهد السيوطي بهذه الآية في أنواع البلاغة.</p>)}
       {shown === 'kashshaf' && (passage ? (
-        <div className={CARD}>
+        <Card className="block shrink-0 px-3.5 py-2.5">
           <p className="whitespace-pre-line text-[1.125rem] leading-[1.9]">
             {kashshafRuns(passage).map((run, i) => {
               const text = run.quran ? <span className="font-quran text-[var(--home-accent)]">{run.text}</span> : run.text;
@@ -97,7 +92,7 @@ export default function BalaghaPanel({ ayah, data }: { ayah: string; data: Balag
             <ExternalLink href={kashshafPage(passage)}>اقرأ الصفحة</ExternalLink>
             <OpenInBook book="kashshaf" ayah={ayah} />
           </Folded>
-        </div>
+        </Card>
       ) : <p className="py-6 text-center text-sm text-[var(--home-muted)]">لا كلام للكشاف على هذه الآية.</p>)}
     </>
   );

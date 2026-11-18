@@ -1,12 +1,12 @@
 'use client';
 
 import { useSyncExternalStore } from 'react';
-import Link from 'next/link';
 import { BOOK_KINDS, BOOKS } from '@shared/books';
 import { isReaderBook, pageName } from '@shared/readerBooks';
 import { readFasilas, serverFasilas, subscribeFasilas } from '@shared/readingMarks';
 import FasilaIcon from '@/components/quran/FasilaIcon';
 import styles from './Books.module.css';
+import Card from '@/components/common/Card';
 
 const kindOf = (kind: string) => BOOK_KINDS.find(item => item.kind === kind)?.title ?? '';
 
@@ -28,23 +28,23 @@ export default function BooksShelf() {
             <span className={styles.bookTitle}>{book.title}</span>
             <span className={styles.by}>{book.by}</span>
           </>;
-          if (!isReaderBook(id)) return <li key={id}><div className={styles.card}>{body}<span className={styles.note}>يُقرأ من أزرار الآية</span></div></li>;
+          if (!isReaderBook(id)) return <li key={id}><Card className={styles.card}>{body}<span className={styles.note}>يُقرأ من أزرار الآية</span></Card></li>;
           const fasila = fasilas[id];
           return (
             <li key={id}>
-              <Link href={`/quran/books/${id}`} className={styles.card}>
+              <Card href={`/quran/books/${id}`} className={styles.card}>
                 {body}
                 {fasila && <span className={styles.stop}><FasilaIcon aria-hidden width={16} height={16} />فاصلتك: {pageName(id, fasila.part, fasila.page)}</span>}
-              </Link>
+              </Card>
             </li>
           );
         })}
         <li>
-          <Link href="/quran/tajwid/tuhfat-al-atfal" className={styles.card}>
+          <Card href="/quran/tajwid/tuhfat-al-atfal" className={styles.card}>
             <span className={styles.kind}>التجويد</span>
             <span className={styles.bookTitle}>تحفة الأطفال</span>
             <span className={styles.by}>سليمان الجمزوري</span>
-          </Link>
+          </Card>
         </li>
       </ul>
     </div>

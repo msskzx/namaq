@@ -6,7 +6,7 @@ import { faArrowLeft, faArrowRight, faBookOpen, faFilter, faMagnifyingGlass } fr
 import useSWR from 'swr';
 import Button from '@/components/common/Button';
 import ErrorMessage from '@/components/common/ErrorMessage';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import LoadingDots from '@/components/common/LoadingDots';
 import QuizReferenceDialog from '@/components/common/QuizReferenceDialog';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { QUESTION_FAMILIES, QUESTION_STATUSES } from '@/lib/quiz/types';
@@ -16,6 +16,7 @@ import { fetcher } from '@/lib/swr';
 import { useState } from 'react';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { mushafText } from '@shared/quran/mushafText';
+import Field from '@/components/common/Field';
 
 interface ReviewQuestion {
   key: string;
@@ -72,7 +73,7 @@ export default function QuestionBankReview() {
       <div className="mb-6 grid gap-3 md:grid-cols-5">
         <label className="md:col-span-2">
           <span className="mb-1 flex items-center gap-2 text-sm font-semibold"><FontAwesomeIcon icon={faMagnifyingGlass} />{ar ? 'بحث' : 'Search'}</span>
-          <input defaultValue={searchParams.get('search') ?? ''} onBlur={(event) => setParam('search', event.target.value.trim())} className="w-full rounded border border-[var(--home-rule)] bg-transparent px-3 py-2" />
+          <Field label={ar ? 'بحث' : 'Search'} defaultValue={searchParams.get('search') ?? ''} onBlur={(event) => setParam('search', event.target.value.trim())} />
         </label>
         <Filter label={ar ? 'الحالة' : 'Status'} value={searchParams.get('status') ?? ''} values={QUESTION_STATUSES} onChange={(value) => setParam('status', value)} />
         <Filter label={ar ? 'الموضوع' : 'Topic'} value={searchParams.get('topic') ?? ''} values={TOPICS} onChange={(value) => setParam('topic', value)} />
@@ -84,7 +85,7 @@ export default function QuestionBankReview() {
         {ar ? 'النص العربي الناقص فقط' : 'Incomplete Arabic prompt only'}
       </label>
       {error ? <ErrorMessage title={ar ? 'تعذر تحميل الأسئلة' : 'Failed to load questions'} /> : null}
-      {isLoading || !data ? <LoadingSpinner fill /> : (
+      {isLoading || !data ? <LoadingDots fill="page" /> : (
         <>
           <p className="mb-4 text-sm text-[var(--home-muted)]">{ar ? `${data.pagination.total} سؤالًا` : `${data.pagination.total} questions`}</p>
           <ol className="space-y-5">

@@ -9,12 +9,12 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import { fetcher } from '@/lib/swr';
 import type { SourceShelfEntry } from '@/types/provenance';
 import { sourcesIn } from '@shared/sources';
+import Card from '@/components/common/Card';
 
 interface ShelfResponse {
   sources: SourceShelfEntry[];
 }
 
-const CARD = 'block h-full rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 py-3';
 const LINK = 'underline decoration-[var(--home-rule)] underline-offset-4 hover:text-[var(--home-accent)]';
 const ACTION = 'text-[var(--home-accent)] underline underline-offset-4';
 
@@ -50,7 +50,7 @@ export default function SourcesPage() {
           {books.map(book => {
             const held = book.shelf ? shelf.get(book.shelf) : undefined;
             return (
-              <li key={book.id} id={book.id} className={CARD}>
+              <Card as="li" key={book.id} id={book.id} className="h-full px-4 py-3">
                 <h2 dir="rtl" lang="ar" className="text-xl">{book.title.ar}</h2>
                 {book.author && <p dir="rtl" lang="ar" className="mt-1 text-[var(--home-muted)]">{book.author.ar}</p>}
                 {book.edition && <p dir="rtl" lang="ar" className="mt-1 text-sm text-[var(--home-muted)]">{book.edition}</p>}
@@ -76,18 +76,18 @@ export default function SourcesPage() {
                     </>
                   )}
                 </p>
-              </li>
+              </Card>
             );
           })}
           {unlisted.map(source => (
             <li key={source.slug}>
-              <Link href={`/sources/${source.slug}`} className={`${CARD} transition hover:border-[var(--home-accent)]`}>
+              <Card href={`/sources/${source.slug}`} className="h-full px-4 py-3">
                 <h2 dir="rtl" lang="ar" className="text-xl">{source.title}</h2>
                 {source.author && <p dir="rtl" lang="ar" className="mt-1 text-[var(--home-muted)]">{source.author}</p>}
                 <p className="mt-2 text-sm text-[var(--home-muted)]">
                   {language === 'ar' ? `التراجم: ${source.entryCount} · الصفحات: ${source.pageCount}` : `${source.entryCount} entries · ${source.pageCount} pages`}
                 </p>
-              </Link>
+              </Card>
             </li>
           ))}
         </ul>

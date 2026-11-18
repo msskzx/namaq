@@ -145,6 +145,13 @@ Same pieces, same order, after the app: raw `<button>` onto `Button`
   Reader sheets, listen, compare list, book sheet, place, share, note, page and tree videos and the quiz reference use it.
   Left for later: the settings and help panels in `TabBar` (a panel beside the rail on desktop, not modal),
   the tour, and the floating menus (`CardMenu`, `AyahActions`, `ScopeFilter`), which want a shared floating menu like the app's.
+- Step 3: `common/LoadingDots` is the one loader (`fill`, `fill="page"`), as in the app. `LoadingSpinner` and `InkLoader` (logo and quill loaders) are gone; `NavigationLoader` keeps its job (when to show) and shows the dots.
+- Step 4a: `common/Card` is the one card (`as`, `href`, `picked`, `dashed`, `faded`). The inline cards of the Quran pages, reader panels, sources, attributions, qira'at (off its grey look), quizzes and the party's panels (`PaperPage .panel` is gone) use it. Next (4b): the CSS-module cards (home feed `.daily`/`.post`/`.prayers`/`.book`, utilities, mushaf spread).
+- Step 4b: Card gains `as="button"` and `spine`; the home shelf books, the feed post, the books shelf and the utilities card use it; dead `.daily`/`.prayers` CSS removed. The mushaf spread (`PageSpread`) and the tree frame (`.post` via TreeViewCard) stay: page and tree drawings are exempt.
+- Step 5: `common/Segmented` is the one tab row (`tabs` makes a tablist, `fill`, option `name`/`lang`). Balagha's two books, the book sheet's tabs and the language switch use it. The library switch stays a top-bar switch; word lists and لطائف topics become chips (step 6).
+- Step 6: `common/Chip` is the one chip (as the app's `ui/Chip`: `lit`, `quran`, `dashed`, `small`, `count`, `check`, `role`, removable with `onClear`/`clearHref`). Filters, topics, i'rab words, tree surahs, compare's ayah picker and the quiz, party, events, nasab, listen and qira'at choice rows use it. The recite pen setting stays with the quiz thread.
+- Step 7: `common/Field` is the one text field (`multiline`, `code`) and `SearchField` the one search (magnifier, clear ×). The site search, city, surah, word, book and events searches, the party's code and name, the question bank search and the ayah note use them. The quiz and mushaf writing boxes and the people, graph and phrase comboboxes keep their own input for now.
+- Step 8: `common/Empty` is the one "nothing here" line (muted, centred, 15/26 as the app's `ui/Empty`; `children` puts an action under it). Library, site search, events, titles, people, nasab, quizzes, tree filters, compare and the word charts use it. Suggestion rows inside comboboxes and the surah index's result count stay as they are. The website pass is done.
 
 ## AGENTS.md rule (added as "Shared first")
 

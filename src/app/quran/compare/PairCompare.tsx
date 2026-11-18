@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, CircleHelp, Clapperboard, GalleryHorizontal, Pause, Play, RotateCcw, Search, Send, UnfoldHorizontal, X } from 'lucide-react';
+import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, CircleHelp, Clapperboard, GalleryHorizontal, Pause, Play, RotateCcw, Send, UnfoldHorizontal, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import Sheet from '@/components/common/Sheet';
 import Segmented from '@/components/common/Segmented';
@@ -28,7 +28,6 @@ import { normalizeWord } from '@shared/quran/normalize';
 import { matchesSurah } from '@shared/quran/surahSearch';
 import { DoubleTapSave } from '../branches/Filters';
 import { TreeProgress, usePreload } from '../branches/TreeSteps';
-import { FIELD, NOTE } from '../panel';
 import PairSwipe from './PairSwipe';
 import { surahOrder, type Visit } from '@shared/quran/compareCards';
 import ReviewButtons, { CardReview } from './ReviewButtons';
@@ -43,6 +42,10 @@ import { runsLabel, sideTitle, writtenLinks } from '@shared/quran/compareCardLoo
 import { compareMatrixOnly } from '@shared/quran/compareViews';
 import type { VideoNames } from '@shared/video/compareVideo';
 import { surahName } from '@shared/quran/surahNames';
+import Frame from '@/components/common/Card';
+import Chip from '@/components/common/Chip';
+import { SearchField } from '@/components/common/Field';
+import Empty from '@/components/common/Empty';
 
 export type SurahName = { ar: string; en?: string };
 type Names = Record<number, SurahName>;
@@ -220,11 +223,7 @@ function PairList({ pairs: listed, names, a, b, lead = a, autoFocus = false, onP
   const search = ar ? 'ابحث عن سورة: الطور، ٥٢…' : 'Search a surah: At-Tur, 52…';
   return (
     <div className="flex min-h-0 flex-col gap-2">
-      <label className="relative">
-        <Search size={16} aria-hidden className="pointer-events-none absolute start-2.5 top-1/2 -translate-y-1/2 text-[var(--home-muted)]" />
-        <input type="search" autoFocus={autoFocus} aria-label={ar ? 'ابحث عن سورة' : 'Search a surah'} placeholder={search} value={query} onChange={event => setQuery(event.target.value)}
-          className={`${FIELD} w-full ps-8 text-base`} />
-      </label>
+      <SearchField autoFocus={autoFocus} label={ar ? 'ابحث عن سورة' : 'Search a surah'} placeholder={search} value={query} onChangeText={setQuery} />
       <CompareFilter a={lead} b={lead === a ? b : a} review={review} todo={todo} scope={juz} names={names} savedOnly={savedOnly} onSavedOnly={onSavedOnly}>
         {onSavedOnly && <SavedOnly checked={savedOnly} onChange={onSavedOnly} saved={saved.size} />}
         <MemorizedOnly a={lead} b={lead === a ? b : a} review={review} todo={todo} juz={juz} />
@@ -240,7 +239,7 @@ function PairList({ pairs: listed, names, a, b, lead = a, autoFocus = false, onP
           <ul>{stories.map(pair => row(pair, <><span className="block">{ar ? pair.name.voweled : pair.name.en}</span><span className="block text-xs text-[var(--home-muted)]">{sides(pair)}</span></>))}</ul>
         </>}
         <h3 className={heading}>{ar ? 'كل السور المتشابهة' : 'All similar surahs'}</h3>
-        {(todo || juz) && !savedOnly && pairs.length === 0 ? <p role="status" className={`${NOTE} px-3`}>{todo ? (ar ? 'راجعت كل الصفحات هنا.' : 'Every page here is reviewed.') : ar ? 'لا صفحات بهذه التصفية.' : 'No pages match this filter.'}</p> : grouped ? <ul data-all>{surahs.map(n => (
+        {(todo || juz) && !savedOnly && pairs.length === 0 ? <Empty text={todo ? (ar ? 'راجعت كل الصفحات هنا.' : 'Every page here is reviewed.') : ar ? 'لا صفحات بهذه التصفية.' : 'No pages match this filter.'} /> : grouped ? <ul data-all>{surahs.map(n => (
           <li key={n}>
             <details open={open.has(n)} onToggle={event => {
               const shown = (event.currentTarget as HTMLDetailsElement).open;
@@ -259,7 +258,7 @@ function PairList({ pairs: listed, names, a, b, lead = a, autoFocus = false, onP
           </li>
         ))}</ul>
           : all.length ? <ul data-all>{all.map(pair => row(pair, sides(pair)))}</ul>
-          : <p role="status" className={`${NOTE} px-3`}>{ar ? 'لا سورة بهذا البحث.' : 'No surah matches this search.'}</p>}
+          : <Empty text={ar ? 'لا سورة بهذا البحث.' : 'No surah matches this search.'} />}
       </div>
     </div>
   );
@@ -421,10 +420,7 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'car
         {/* A tree stands in the branches tree's own frame, as on the branches page; the matrix is one card. */}
         {tree ? <div className="flex flex-col gap-2 text-[var(--home-ink)]">
           {card.many && !isRefrain(card.many.options) && <div className="flex flex-wrap justify-center gap-1.5" role="group" aria-label={ar ? 'اختر الآية' : 'Pick the ayah'}>
-            {card.many.options.map((item, row) => <button key={item.id} type="button" data-tap-through aria-pressed={row === selected} onClick={() => setSelected(row)}
-              className={`min-h-9 min-w-11 rounded-lg border px-2 text-sm ${row === selected ? 'border-[var(--home-accent)] text-[var(--home-accent)]' : 'border-[var(--home-rule)] text-[var(--home-muted)]'}`}>
-              {ar ? num(item.ayah.number) : item.ayah.number}
-            </button>)}
+            {card.many.options.map((item, row) => <Chip key={item.id} lit tapThrough on={row === selected} onClick={() => setSelected(row)} label={ar ? num(item.ayah.number) : item.ayah.number} />)}
           </div>}
           {rowsOf(shownSides).map((sides, row) => <div key={row} className={`${row > 0 || parts ? 'border-t border-dotted border-[var(--home-rule)]' : ''} ${parts ? 'min-h-7 pt-4' : row > 0 ? 'pt-2' : ''}`}>
             {parts && <div dir="rtl" className="grid h-0 grid-cols-2">{shownSides.map((side, i) => <div key={i} className="relative">
@@ -617,7 +613,7 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
         {pageVideo && <PageVideo cards={shown} title={title(lead, other)} {...(story ? { subtitle: ar ? story.name.ar : story.name.en } : {})} label={sideNamer(plain, ar)} names={videoNames(plain, ar)} ar={ar} onClose={() => setPageVideo(false)} />}
         <PairSwipe key={`${lead}-${other}`} previous={previousStep} next={nextStep} ar={ar}>
           {editable && <ReviewButtons a={a} b={b} cards={cards} nextHref={nextTodo && pairHref(nextTodo.lead, nextTodo.other, true, todo, juz)} />}
-          {shown.length === 0 ? <p role="status" className={NOTE}>{savedOnly ? (ar ? 'لا بطاقات محفوظة بين السورتين.' : 'No saved cards between these surahs.') : ar ? 'لا آيات متشابهة بين السورتين. اختر سورتين من القائمة.' : 'No similar ayat between these surahs. Choose two surahs from the list.'}</p>
+          {shown.length === 0 ? <Empty text={savedOnly ? (ar ? 'لا بطاقات محفوظة بين السورتين.' : 'No saved cards between these surahs.') : ar ? 'لا آيات متشابهة بين السورتين. اختر سورتين من القائمة.' : 'No similar ayat between these surahs. Choose two surahs from the list.'} />
             : <ol className="flex flex-col gap-4">{shown.map(card => <Card key={card.id} card={card} names={names} ar={ar} savedIds={savedAs(card.id, bookmarks)} review={editable ? { a, b } : undefined} view={view} onPageVideo={canShare ? openPageVideo : undefined} />)}</ol>}
         </PairSwipe>
         {/* At the end of the cards, step on without scrolling back up. */}
@@ -626,9 +622,9 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
           <StepLink step={nextStep} forward ar={ar} />
         </nav>}
         </div>
-        <aside ref={pane} aria-label={label} className="sticky top-4 hidden max-h-[calc(100dvh-2rem)] flex-col rounded-lg border border-[var(--home-rule)] bg-[var(--home-paper)] p-3 lg:flex">
+        <Frame as="aside" ref={pane} aria-label={label} className="sticky top-4 hidden max-h-[calc(100dvh-2rem)] flex-col p-3 lg:flex">
           <PairList pairs={pairs} names={names} a={a} b={b} lead={lead} review={review} states={states} savedOnly={savedOnly} onSavedOnly={setSavedOnly} todo={todo} juz={juz} />
-        </aside>
+        </Frame>
       </div>
       <Sheet ref={sheet} open={open} label={label} onClose={() => setOpen(false)} dir={ar ? 'rtl' : 'ltr'} lang={ar ? 'ar' : 'en'} className="p-3 lg:hidden">
         <div className="flex max-h-[calc(85dvh-1.5rem)] flex-col gap-2">

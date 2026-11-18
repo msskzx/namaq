@@ -19,6 +19,7 @@ import CardMenu, { type MenuItem } from './CardMenu';
 import { AyahShareDialog } from '@/components/share/AyahShare';
 import styles from './Homepage.module.css';
 import { surahName } from '@shared/quran/surahNames';
+import Card from '@/components/common/Card';
 
 /** The same icons as the tab bar, so a saved card says which feature it opens in. */
 const KIND_ICONS: Record<BookmarkKind, typeof BookOpen | typeof TreeIcon> = { tree: TreeIcon, compare: ArrowLeftRight, ayah: BookOpen };
@@ -101,7 +102,7 @@ export function useHomeCards(data: CardData, forgottenShown = Infinity) {
     const references = bookmarkReferences(item, data.bookmarkAyat);
     const kind = bookmarkKind(item);
     const KindIcon = KIND_ICONS[kind];
-    return <button key={item.id} type="button" className={`${styles.book} ${wide ? styles.wide : ''}`} data-kind={kind} aria-haspopup="dialog" onClick={event => savedMenu(item, event)}>
+    return <Card as="button" spine key={item.id} className={`${styles.book} ${wide ? styles.wide : ''}`} data-kind={kind} aria-haspopup="dialog" onClick={event => savedMenu(item, event)}>
       <span className={styles.bookHead}>
         <span className={styles.bookKind} role="img" aria-label={kindLabel(kind)} title={kindLabel(kind)}><KindIcon size={16} aria-hidden /></span>
         {references.length > 0 && <span className={styles.bookReferences} lang="ar" dir="rtl">
@@ -111,28 +112,28 @@ export function useHomeCards(data: CardData, forgottenShown = Infinity) {
         </span>}
       </span>
       <span className={styles.bookText} lang="ar" dir="rtl"><MushafText>{item.text}</MushafText></span>
-    </button>;
+    </Card>;
   };
   const forgottenCard = (key: string, wide = false) => {
     const [surah, ayah] = key.split(':').map(Number);
-    return <button key={key} type="button" className={`${styles.book} ${wide ? styles.wide : ''}`} aria-haspopup="dialog" onClick={event => forgottenMenu(key, event)}>
+    return <Card as="button" spine key={key} className={`${styles.book} ${wide ? styles.wide : ''}`} aria-haspopup="dialog" onClick={event => forgottenMenu(key, event)}>
       <span className={styles.bookHead}>
         <span className={styles.bookKind} role="img" aria-label={forgottenLabel} title={forgottenLabel}><LightbulbOff size={16} aria-hidden /></span>
         <span className={styles.bookReferences} lang="ar" dir="rtl"><span>{names.get(surah)} <bdi>{ar ? num(ayah) : ayah}</bdi></span></span>
       </span>
       <span className={styles.bookText} lang="ar" dir="rtl">{texts[key] && <MushafText>{texts[key]}</MushafText>}</span>
-    </button>;
+    </Card>;
   };
   /** A note: the ayah's name over the reader's own words, which are not in the mushaf font. */
   const noteCard = (key: string, wide = false) => {
     const [surah, ayah] = key.split(':').map(Number);
-    return <button key={key} type="button" className={`${styles.book} ${wide ? styles.wide : ''}`} aria-haspopup="dialog" onClick={event => noteMenu(key, event)}>
+    return <Card as="button" spine key={key} className={`${styles.book} ${wide ? styles.wide : ''}`} aria-haspopup="dialog" onClick={event => noteMenu(key, event)}>
       <span className={styles.bookHead}>
         <span className={styles.bookKind} role="img" aria-label={noteLabel} title={noteLabel}><NotebookPen size={16} aria-hidden /></span>
         <span className={styles.bookReferences} lang="ar" dir="rtl"><span>{names.get(surah)} <bdi>{ar ? num(ayah) : ayah}</bdi></span></span>
       </span>
       <span className={styles.noteText} dir="auto">{notes[key]?.text}</span>
-    </button>;
+    </Card>;
   };
   const menuElement = menu && <CardMenu x={menu.x} y={menu.y} label={menu.label} items={menu.items} onClose={closeMenu} />;
   const noteElement = noting && <NoteDialog ayah={noting} name={names.get(Number(noting.split(':')[0]))} ar={ar} onClose={() => setNoting(null)} />;

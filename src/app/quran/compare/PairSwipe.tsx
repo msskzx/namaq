@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ArrowLeftRight } from 'lucide-react';
 import { reducedMotion, SLIDE, useSwipe } from '@/components/common/useSwipe';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
+import Card from '@/components/common/Card';
 
 /** `preview` is the neighbouring page itself (its first cards), drawn beside this one while swiping. */
 export type PairStep = { href: string; label: string; preview?: React.ReactNode };
@@ -72,10 +73,10 @@ export default function PairSwipe({ previous, next, ar, children }: { previous?:
     if (!step || sign(forward) !== toward || (!x && !settling)) return null;
     // Bounded to the page's height, so a long neighbour never adds scroll below this page.
     return <div aria-hidden inert data-pair-neighbour={forward ? 'next' : 'previous'} className="pointer-events-none absolute inset-y-0 w-full overflow-hidden" style={{ ...side(forward), paddingTop: top }}>
-      {step.preview ?? <div className="flex flex-col items-center gap-2 rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 py-6 text-center">
+      {step.preview ?? <Card className="flex flex-col items-center gap-2 px-4 py-6 text-center">
         <ArrowLeftRight size={20} aria-hidden className="text-[var(--home-muted)]" />
         <span className="text-lg text-[var(--home-accent)]">{step.label}</span>
-      </div>}
+      </Card>}
     </div>;
   };
   return <div ref={box} data-pair-swipe className="overflow-x-clip" onClickCapture={event => { if (justSwiped()) { event.preventDefault(); event.stopPropagation(); } }}>

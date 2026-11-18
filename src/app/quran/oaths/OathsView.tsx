@@ -9,6 +9,8 @@ import { num } from '@shared/quran/arabicNumber';
 import { BY_QUOTES, OATH_BY, OATH_QUOTES, citesOf, kindQuotes, oathSections, sectionQuotes, type OathBy } from '@shared/quran/oathSources';
 import { oathPlace, oathShareText, type OathKind, type OathView } from '@shared/quran/oaths';
 import Button from '@/components/common/Button';
+import Card from '@/components/common/Card';
+import Chip from '@/components/common/Chip';
 
 export const OATH_KINDS: { kind: OathKind; label: string }[] = [
   { kind: 'allah', label: 'أقسم الله' },
@@ -36,7 +38,7 @@ function OathCard({ oath }: { oath: OathView }) {
         {oath.who && <p className="text-sm text-[var(--home-muted)]">{oath.who}</p>}
         {quotes && <Reference title={citesOf(quotes)} quotes={quotes} />}
       </div>
-      <article className="rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 py-1.5">
+      <Card as="article" className="px-4 py-1.5">
         <p className="font-quran text-2xl leading-[2.1] [text-align:justify] [text-align-last:right]">
           {oath.lines.map(line => (
             <span key={line.ayah}>
@@ -47,7 +49,7 @@ function OathCard({ oath }: { oath: OathView }) {
             </span>
           ))}
         </p>
-      </article>
+      </Card>
       <div className="flex items-center gap-1">
         <Button size="round" variant="muted" href={ayahHref(oath.id)} aria-label={`افتح ${place} في المصحف`} title="في المصحف"><BookOpen aria-hidden /></Button>
         <Button size="round" variant="muted" onClick={() => shareOath(oath)} aria-label={`شارك ${place}`} title="شارك"><Send aria-hidden /></Button>
@@ -73,10 +75,7 @@ export default function OathsView({ allah, others }: { allah: OathView[]; others
   const byId = new Map(allah.map(oath => [oath.id, oath]));
   const chip = (label: string, value: OathBy | null) => (
     <li key={label}>
-      <button type="button" aria-pressed={by === value} onClick={() => setBy(value)}
-        className={`whitespace-nowrap rounded-full border px-3 py-0.5 text-base ${by === value ? 'border-[var(--home-accent)] bg-[var(--home-accent)] text-[var(--home-on-action)]' : 'border-[var(--home-rule)] text-[var(--home-ink)] hover:border-[var(--home-accent)]'}`}>
-        {label}
-      </button>
+      <Chip label={label} on={by === value} onClick={() => setBy(value)} />
     </li>
   );
   return (

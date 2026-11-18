@@ -4,16 +4,18 @@ import React, { useCallback, useMemo } from "react";
 import useSWR from "swr";
 import { usePathname, useSearchParams } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarAlt, faFlag, faMagnifyingGlass, faRoute, faShieldAlt } from "@fortawesome/free-solid-svg-icons";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
+import { faCalendarAlt, faFlag, faRoute, faShieldAlt } from "@fortawesome/free-solid-svg-icons";
+import LoadingDots from "@/components/common/LoadingDots";
 import ErrorMessage from "@/components/common/ErrorMessage";
-import Button from "@/components/common/Button";
 import EventTimeline from "@/components/events/EventTimeline";
 import { useLanguage } from "@/components/language/LanguageContext";
 import translations from "@/components/language/translations";
 import { fetcher } from "@/lib/swr";
 import { filterTimeline, parseKinds, TIMELINE_KINDS, type TimelineItem, type TimelineKind } from "@/lib/timeline";
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
+import Chip from '@/components/common/Chip';
+import { SearchField } from '@/components/common/Field';
+import Empty from '@/components/common/Empty';
 
 const KIND_LABELS: Record<TimelineKind, { ar: string; en: string }> = {
   event: { ar: "حدث", en: "Event" },
@@ -57,23 +59,10 @@ function EventsPage() {
     <div className="min-h-screen bg-white dark:bg-black">
       <div className="w-full px-4 py-8" dir={ar ? "rtl" : "ltr"}>
         <div className="flex flex-col gap-3">
-          <label className="relative block">
-            <span className="sr-only">{ar ? "ابحث في الأحداث" : "Search events"}</span>
-            <FontAwesomeIcon icon={faMagnifyingGlass} className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-            <input
-              type="search"
-              value={query}
-              onChange={(event) => update({ q: event.target.value })}
-              placeholder={ar ? "ابحث بالاسم أو المكان" : "Search by name or place"}
-              className="w-full rounded border border-amber-400 bg-transparent py-2 ps-9 pe-3 text-gray-900 dark:text-gray-100"
-            />
-          </label>
+          <SearchField label={ar ? "ابحث في الأحداث" : "Search events"} placeholder={ar ? "ابحث بالاسم أو المكان" : "Search by name or place"} value={query} onChangeText={(text) => update({ q: text })} />
           <div className="flex flex-wrap gap-2" role="group" aria-label={ar ? "النوع" : "Type"}>
             {TIMELINE_KINDS.map((kind) => (
-              <Button key={kind} variant="outline" size="sm" active={kinds.includes(kind)} aria-pressed={kinds.includes(kind)} onClick={() => toggle(kind)}>
-                <FontAwesomeIcon icon={KIND_ICONS[kind]} className="h-3 w-3" />
-                {KIND_LABELS[kind][ar ? "ar" : "en"]}
-              </Button>
+              <Chip key={kind} on={kinds.includes(kind)} onClick={() => toggle(kind)} label={<><FontAwesomeIcon icon={KIND_ICONS[kind]} className="h-3 w-3" />{KIND_LABELS[kind][ar ? "ar" : "en"]}</>} />
             ))}
           </div>
         </div>
@@ -81,9 +70,9 @@ function EventsPage() {
         <div className="mt-8">
           {error && <ErrorMessage title={t.eventsLoadError} />}
           {isLoading || !items ? (
-            <LoadingSpinner fill />
+            <LoadingDots fill="page" />
           ) : shown.length === 0 ? (
-            <p className="text-center text-gray-600 dark:text-gray-400">{ar ? "لا توجد نتائج مطابقة." : "Nothing matches."}</p>
+            <Empty text={ar ? "لا توجد نتائج مطابقة." : "Nothing matches."} />
           ) : (
             <EventTimeline events={shown} />
           )}

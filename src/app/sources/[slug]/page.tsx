@@ -7,7 +7,7 @@ import useSWR from 'swr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight, faBookOpen } from '@fortawesome/free-solid-svg-icons';
 import ErrorMessage from '@/components/common/ErrorMessage';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import LoadingDots from '@/components/common/LoadingDots';
 import SourceAccountReader from '@/components/people/SourceAccountReader';
 import SourceContents from '@/components/sources/SourceContents';
 import { useLanguage } from '@/components/language/LanguageContext';
@@ -76,7 +76,7 @@ export default function SourcePage({ params }: { params: Promise<{ slug: string 
         )}
 
         {isLoading || !data ? (
-          <LoadingSpinner fill />
+          <LoadingDots fill="page" />
         ) : !source ? (
           <ErrorMessage
             title={language === 'ar' ? 'لا يوجد مصدر بهذا الاسم' : 'No source by that name'}
@@ -145,7 +145,7 @@ export default function SourcePage({ params }: { params: Promise<{ slug: string 
                 />
               </>
             ) : !contents ? (
-              <LoadingSpinner fill />
+              <LoadingDots fill="page" />
             ) : (
               <section>
                 <h2 className="mb-4 text-3xl text-gray-900 dark:text-gray-200">

@@ -2,10 +2,8 @@
 
 import React from "react";
 import useSWR from "swr";
-import Button from "@/components/common/Button";
 import TreeFilters from "../TreeFilters";
 import { scopeSummary } from "@shared/quiz/scopeSummary";
-import styles from "@/components/common/PaperPage.module.css";
 import { fetcher } from "@/lib/swr";
 import { num } from "@shared/quran/arabicNumber";
 import { QUIZ_LEAVES, QUIZ_LENGTHS, type QuizLength, type QuizTopic } from "@/lib/quiz/types";
@@ -17,6 +15,8 @@ import type { PenRule } from "@shared/quran/writeAyah";
 import { DEFAULT_DIFFICULTY, DIFFICULTIES } from "@shared/quiz/difficulty";
 import PersonPicker from "../PersonPicker";
 import { BranchExplainer } from "../BranchAnswers";
+import Card from '@/components/common/Card';
+import Chip from '@/components/common/Chip';
 
 const n = (value: number, ar: boolean) => ar ? num(value) : String(value);
 const duration = (seconds: number, ar: boolean) => seconds < 60
@@ -65,26 +65,24 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
       ...(others ? [[ar ? "وقت السؤال" : "Time per question", duration(settings.seconds, ar)] as [string, string]] : []),
     ];
     return (
-      <section className={styles.panel} aria-label={ar ? "إعدادات الاختبار" : "Quiz settings"}>
+      <Card as="section" className="p-[clamp(1rem,3vw,2rem)]" aria-label={ar ? "إعدادات الاختبار" : "Quiz settings"}>
         <h2 className="mb-1 text-lg font-semibold">{ar ? "إعدادات الاختبار" : "Quiz settings"}</h2>
         <p className="mb-3 text-sm text-[var(--home-muted)]">{ar ? "يختارها المضيف." : "The host chooses these."}</p>
         <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm">
           {rows.map(([label, value]) => <React.Fragment key={label}><dt className="text-[var(--home-muted)]">{label}</dt><dd className="text-[var(--home-ink)]">{value}</dd></React.Fragment>)}
         </dl>
         {branches && <div className="mt-4 border-t border-[var(--home-rule)] pt-4"><BranchExplainer leaves={settings.leaves} ar={ar} /></div>}
-      </section>
+      </Card>
     );
   }
 
   return (
-    <section className={styles.panel} aria-label={ar ? "إعدادات الاختبار" : "Quiz settings"}>
+    <Card as="section" className="p-[clamp(1rem,3vw,2rem)]" aria-label={ar ? "إعدادات الاختبار" : "Quiz settings"}>
       <h2 className="mb-3 text-lg font-semibold">{ar ? "إعدادات الاختبار" : "Quiz settings"}</h2>
       {TOPIC_GROUPS.map((group) => (
         <Row key={group.en} label={group[ar ? "ar" : "en"]}>
           {group.topics.map((topic) => (
-            <Button key={topic} active={settings.topics.includes(topic)} aria-pressed={settings.topics.includes(topic)} onClick={() => toggle(topic)}>
-              {TOPIC_LABELS[topic][ar ? "ar" : "en"]}
-            </Button>
+            <Chip key={topic} on={settings.topics.includes(topic)} onClick={() => toggle(topic)} label={TOPIC_LABELS[topic][ar ? "ar" : "en"]} />
           ))}
         </Row>
       ))}
@@ -97,38 +95,38 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
                 onChange={({ range, filters }) => onChange({ juzFrom: range?.from ?? 1, juzTo: range?.to ?? 30, filters })} />
             </div>
           <Row label={ar ? "الصعوبة" : "Difficulty"}>
-            {DIFFICULTIES.map((value) => <Button key={value} active={(settings.difficulty ?? DEFAULT_DIFFICULTY) === value} aria-pressed={(settings.difficulty ?? DEFAULT_DIFFICULTY) === value} onClick={() => onChange({ difficulty: value })}>{DIFFICULTY_LABELS[value][ar ? "ar" : "en"]}</Button>)}
+            {DIFFICULTIES.map((value) => <Chip key={value} on={(settings.difficulty ?? DEFAULT_DIFFICULTY) === value} onClick={() => onChange({ difficulty: value })} label={DIFFICULTY_LABELS[value][ar ? "ar" : "en"]} />)}
             {settings.topics.flatMap((topic) => DIFFICULTY_NOTES[topic] ? [<p key={topic} className="basis-full text-sm text-[var(--home-muted)]">{DIFFICULTY_NOTES[topic]![ar ? "ar" : "en"]}</p>] : [])}
           </Row>
           {branches && <Row label={ar ? "عدد الإجابات في كل سؤال" : "Answers per question"}>
             {QUIZ_LEAVES.map((value) => (
-              <Button key={value} size="icon" className="min-w-10 justify-center" active={settings.leaves === value} aria-pressed={settings.leaves === value} onClick={() => onChange({ leaves: value })}>{n(value, ar)}</Button>
+              <Chip key={value} on={settings.leaves === value} onClick={() => onChange({ leaves: value })} label={n(value, ar)} />
             ))}
           </Row>}
           </div>
           {branches && <div className="mb-4"><BranchExplainer leaves={settings.leaves} ar={ar} /></div>}
           {written && <Row label={ar ? "الكتابة بالقلم" : "Writing with the pen"}>
-            {(Object.keys(PEN_NAMES) as PenRule[]).map((value) => <Button key={value} active={(settings.pen ?? "whole") === value} aria-pressed={(settings.pen ?? "whole") === value} onClick={() => onChange({ pen: value })}>{PEN_NAMES[value][ar ? "ar" : "en"]}</Button>)}
+            {(Object.keys(PEN_NAMES) as PenRule[]).map((value) => <Chip key={value} on={(settings.pen ?? "whole") === value} onClick={() => onChange({ pen: value })} label={PEN_NAMES[value][ar ? "ar" : "en"]} />)}
           </Row>}
           {typedTime && <>
             <Row label={typedLabel}>
-              {TREE_SECONDS.map((value) => <Button key={value} active={settings.treeSeconds === value} aria-pressed={settings.treeSeconds === value} onClick={() => onChange({ treeSeconds: value })}>{duration(value, ar)}</Button>)}
+              {TREE_SECONDS.map((value) => <Chip key={value} on={settings.treeSeconds === value} onClick={() => onChange({ treeSeconds: value })} label={duration(value, ar)} />)}
             </Row>
           </>}
         </>
       )}
       {others && (
         <Row label={ar ? "وقت السؤال" : "Time per question"}>
-          {QUESTION_SECONDS.map((value) => <Button key={value} active={settings.seconds === value} aria-pressed={settings.seconds === value} onClick={() => onChange({ seconds: value })}>{duration(value, ar)}</Button>)}
+          {QUESTION_SECONDS.map((value) => <Chip key={value} on={settings.seconds === value} onClick={() => onChange({ seconds: value })} label={duration(value, ar)} />)}
         </Row>
       )}
       <Row label={ar ? "عدد الأسئلة" : "Questions"}>
         {QUIZ_LENGTHS.map((value) => {
           const allowed = !availability || availability.lengths.includes(value);
-          return <Button key={value} className="min-w-10" active={settings.length === value} aria-pressed={settings.length === value} disabled={!allowed} onClick={() => onChange({ length: value })}>{n(value, ar)}</Button>;
+          return <Chip key={value} on={settings.length === value} disabled={!allowed} onClick={() => onChange({ length: value })} label={n(value, ar)} />;
         })}
         {availability && <span className="text-sm text-[var(--home-muted)]">{ar ? `${num(availability.available)} سؤالًا متاحًا` : `${availability.available} questions available`}</span>}
       </Row>
-    </section>
+    </Card>
   );
 }

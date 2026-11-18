@@ -9,6 +9,7 @@ import { readAyahNotes, writeAyahNote } from '@shared/ayahNotes';
 import { num } from '@shared/quran/arabicNumber';
 import { quranContexts } from '@/lib/quran/quranText';
 import Sheet from '@/components/common/Sheet';
+import Field from '@/components/common/Field';
 
 /** How long typing rests before the note is kept, so the reader behind the dialog is not redrawn on every key. */
 const SAVE_MS = 400;
@@ -49,8 +50,7 @@ export default function NoteDialog({ ayah, name, ar, onClose }: { ayah: string; 
         <Button size="lg" variant="muted" aria-label={labels.close} title={labels.close} onClick={close}><X aria-hidden /></Button>
       </div>
       {words && <p lang="ar" dir="rtl" className="line-clamp-2 font-[family-name:var(--font-quran)] text-lg leading-loose text-[var(--home-muted)]"><MushafText>{words}</MushafText></p>}
-      <textarea ref={field} value={text} onChange={event => edit(event.target.value)} placeholder={labels.title} aria-label={labels.title} dir="auto" rows={7}
-        className="w-full resize-y rounded-xl border border-[var(--home-rule)] bg-[var(--home-card)] p-3 text-base leading-relaxed" />
+      <Field multiline ref={field} value={text} onChange={event => edit(event.target.value)} placeholder={labels.title} label={labels.title} dir="auto" rows={7} />
     </div>
     {sharing && <AyahShareDialog ayah={ayah} name={name} note={text.trim()} onClose={() => setSharing(false)} />}
   </Sheet>;

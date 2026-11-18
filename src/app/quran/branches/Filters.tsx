@@ -2,7 +2,7 @@
 
 import React, { useId, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { ArrowLeftRight, Bookmark, BookmarkCheck, Send, X } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookmarkCheck, Send } from 'lucide-react';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { isCompareBookmark } from '@shared/compareBookmarks';
 import Button from '@/components/common/Button';
@@ -22,6 +22,8 @@ import { hasGroupFilters, type GroupFilters } from '@shared/quran/mutashabih/bro
 import { GrowControls, GrowProgress, useGrowth } from './Grow';
 import GrowVideo, { canRecord, openVideo } from './GrowVideo';
 import { ShareImageButton } from '@/components/share/ShareImage';
+import Chip from '@/components/common/Chip';
+import Empty from '@/components/common/Empty';
 
 type FilterDraft = { unit: FilterUnit; values: RangeDraft; filters: GroupFilters; saved: boolean };
 
@@ -171,15 +173,12 @@ export function ShareButton({ video = false, href }: { video?: boolean; href?: s
 export function SurahChip({ surah, ayah, clear }: { surah: string; ayah?: number; clear: string }) {
   const ar = useLanguage().language === 'ar';
   const remove = ayah ? (ar ? 'إزالة الآية' : 'Remove ayah') : (ar ? 'إزالة السورة' : 'Remove surah');
-  return <span className="inline-flex items-center gap-1 self-start rounded-full border border-[var(--home-rule)] ps-3 pe-1 py-0.5 text-sm text-[var(--home-ink)]">
-    {ayah ? (ar ? `${surah} ${num(ayah)}` : `${surah} ${ayah}`) : ar ? `سورة ${surah}` : `Surah ${surah}`}
-    <Link href={clear} scroll={false} aria-label={remove} title={remove} className="grid size-6 place-items-center rounded-full text-[var(--home-muted)] hover:bg-[var(--home-paper-deep)] hover:text-[var(--home-ink)]"><X size={14} aria-hidden /></Link>
-  </span>;
+  return <Chip small className="self-start" label={ayah ? (ar ? `${surah} ${num(ayah)}` : `${surah} ${ayah}`) : ar ? `سورة ${surah}` : `Surah ${surah}`} clearHref={clear} clearLabel={remove} />;
 }
 
 export function NoTrees({ query, grouped = false }: { query: string; grouped?: boolean }) {
   const ar = useLanguage().language === 'ar';
-  return <p role="status" className="text-sm text-[var(--home-muted)]">{grouped ? (ar ? 'لا مواضع متشابهة تطابق التصفية.' : 'No parallel passages match these filters.') : query
+  return <Empty text={grouped ? (ar ? 'لا مواضع متشابهة تطابق التصفية.' : 'No parallel passages match these filters.') : query
     ? (ar ? `لا شجرة تطابق «${query}».` : `No tree matches «${query}».`)
-    : (ar ? 'لا شجرة في هذا النطاق.' : 'No tree in this range.')}</p>;
+    : (ar ? 'لا شجرة في هذا النطاق.' : 'No tree in this range.')} />;
 }

@@ -2,13 +2,14 @@
 
 import { useLanguage } from "@/components/language/LanguageContext";
 import useSWR from "swr";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
+import LoadingDots from "@/components/common/LoadingDots";
 import TitleCard from '@/components/people/TitleCard';
 import { TitleBase } from "@/types/title";
 import ErrorMessage from '@/components/common/ErrorMessage';
 
 import translations from '@/components/language/translations';
 import { fetcher } from '@/lib/swr';
+import Empty from '@/components/common/Empty';
 
 export default function TitlesPage() {
   const { language } = useLanguage();
@@ -22,7 +23,7 @@ export default function TitlesPage() {
         <div>
           {error && <ErrorMessage title={language === 'ar' ? 'تعذر تحميل الألقاب.' : 'Failed to load titles.'} />}
           {isLoading || !titles ? (
-            <LoadingSpinner fill />
+            <LoadingDots fill="page" />
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {Array.isArray(titles) && titles.length > 0 ? (
@@ -30,9 +31,7 @@ export default function TitlesPage() {
                   <TitleCard key={title.slug} title={title} language={language} url={`/people?title=${title.slug}`} />
                 ))
               ) : (
-                <div className="col-span-full text-center py-4 text-gray-500">
-                  {language === 'ar' ? 'لا توجد ألقاب.' : 'No titles found.'}
-                </div>
+                <Empty className="col-span-full" text={language === 'ar' ? 'لا توجد ألقاب.' : 'No titles found.'} />
               )}
             </div>
           )}

@@ -6,7 +6,7 @@ import { faBookOpen, faCircle, faCircleCheck, faCircleXmark, faCopy, faCrown, fa
 import { renderSVG } from "uqr";
 import styles from "@/components/common/PaperPage.module.css";
 import Button from "@/components/common/Button";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
+import LoadingDots from "@/components/common/LoadingDots";
 import QuizReferenceDialog from "@/components/common/QuizReferenceDialog";
 import type { QuizReference } from "@/lib/quiz/quizReference";
 import { useHideFooter } from "@/components/common/AppChrome";
@@ -24,6 +24,8 @@ import { Eye } from "lucide-react";
 import QuestionReview from "../QuestionReview";
 import { ChoiceAfter, ChoiceQuran, type ChoiceParts } from "../ChoiceParts";
 import { mushafText } from '@shared/quran/mushafText';
+import Card from '@/components/common/Card';
+import Field from '@/components/common/Field';
 
 type Question = PartyQuestion & ChoiceParts & {
   promptArabic: string;
@@ -57,8 +59,7 @@ export function NameForm({ initial, onSubmit, error, ar, label, nameError }: { i
     }}>
       <label className="flex flex-col gap-1">
         <span className="text-sm font-semibold text-[var(--home-ink)]">{ar ? "اسمك" : "Your name"}</span>
-        <input value={name} maxLength={NAME_MAX} onChange={(event) => setName(event.target.value)} autoComplete="nickname"
-          className="w-full max-w-xs rounded border border-[var(--home-rule)] bg-transparent px-3 py-2 text-[var(--home-ink)]" />
+        <Field label={ar ? "اسمك" : "Your name"} value={name} maxLength={NAME_MAX} onChange={(event) => setName(event.target.value)} autoComplete="nickname" className="max-w-xs" />
       </label>
       {error && (!nameError || name.trim() === sent) && <p role="alert" className="text-sm text-[var(--home-accent)]">{error}</p>}
       <Button className="self-start" variant="primary" type="submit" disabled={!name.trim()}>{label}</Button>
@@ -99,7 +100,7 @@ function Leaderboard({ players, you, ar, final, answering }: { players: PlayerVi
   const ranked = leaderboard(players);
   const top = Math.max(1, ...ranked.map((player) => player.score));
   return (
-    <section className={styles.panel} aria-label={ar ? "الترتيب" : "Leaderboard"}>
+    <Card as="section" className="p-[clamp(1rem,3vw,2rem)]" aria-label={ar ? "الترتيب" : "Leaderboard"}>
       <h2 className="mb-3 text-lg font-semibold">{final ? (ar ? "الترتيب النهائي" : "Final leaderboard") : (ar ? "الترتيب" : "Leaderboard")}</h2>
       <ol className="flex flex-col gap-1.5">
         {ranked.map((player) => {
@@ -125,7 +126,7 @@ function Leaderboard({ players, you, ar, final, answering }: { players: PlayerVi
           );
         })}
       </ol>
-    </section>
+    </Card>
   );
 }
 
@@ -135,7 +136,7 @@ function Share({ code, ar }: { code: string; ar: boolean }) {
   useEffect(() => setLink(`${window.location.origin}/quizzes/party/${code}`), [code]);
   const qr = useMemo(() => link ? renderSVG(link, { border: 1, whiteColor: "var(--home-paper)", blackColor: "var(--home-ink)" }) : "", [link]);
   return (
-    <section className={`${styles.panel} flex flex-wrap items-center gap-5`} aria-label={ar ? "ادعُ الآخرين" : "Invite others"}>
+    <Card as="section" className="flex flex-wrap items-center gap-5 p-[clamp(1rem,3vw,2rem)]" aria-label={ar ? "ادعُ الآخرين" : "Invite others"}>
       {qr && <div aria-hidden className="size-32 shrink-0 [&>svg]:size-full" dangerouslySetInnerHTML={{ __html: qr }} />}
       <div className="flex flex-col gap-2">
         <p className="text-sm text-[var(--home-muted)]">{ar ? "رقم الاختبار" : "Party number"}</p>
@@ -150,7 +151,7 @@ function Share({ code, ar }: { code: string; ar: boolean }) {
           } catch {}
         }}><FontAwesomeIcon icon={faCopy} />{copied ? (ar ? "نُسخ الرابط" : "Link copied") : (ar ? "شارك الرابط" : "Share the link")}</Button>
       </div>
-    </section>
+    </Card>
   );
 }
 
@@ -166,7 +167,7 @@ function Lobby({ view, send, error, ar }: { view: PartyView; send: ReturnType<ty
     <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
       <div className="flex flex-col gap-5">
         <Share code={view.code} ar={ar} />
-        <section className={styles.panel} aria-label={ar ? "اللاعبون" : "Players"}>
+        <Card as="section" className="p-[clamp(1rem,3vw,2rem)]" aria-label={ar ? "اللاعبون" : "Players"}>
           <h2 className="mb-3 text-lg font-semibold">{ar ? `اللاعبون (${num(view.players.length)})` : `Players (${view.players.length})`}</h2>
           <ul className="flex flex-col gap-1.5">
             {view.players.map((player) => (
@@ -181,20 +182,20 @@ function Lobby({ view, send, error, ar }: { view: PartyView; send: ReturnType<ty
               </li>
             ))}
           </ul>
-        </section>
+        </Card>
       </div>
       <div className="flex flex-col gap-5">
         <PartySettingsPanel settings={view.settings} editable={isHost} ar={ar} onChange={(settings) => send({ type: "settings", settings })} />
         {view.error && <p role="alert" className="text-[var(--home-accent)]">{view.error === "Not enough approved questions" ? (ar ? "لا توجد أسئلة كافية لهذه الإعدادات." : "There aren't enough questions for these settings.") : (ar ? "تعذر إنشاء الاختبار." : "Failed to build the quiz.")}</p>}
         {isHost ? (
           confirming ? (
-            <div role="alertdialog" aria-label={ar ? "تأكيد البدء" : "Confirm start"} className={`${styles.panel} flex flex-col gap-3`}>
+            <Card role="alertdialog" aria-label={ar ? "تأكيد البدء" : "Confirm start"} className="flex flex-col gap-3 p-[clamp(1rem,3vw,2rem)]">
               <p>{ar ? `استعد ${num(readyCount)} من ${num(others.length)}. أتبدأ الآن؟` : `${readyCount} of ${others.length} players are ready. Start anyway?`}</p>
               <div className="flex flex-wrap gap-2">
                 <Button variant="primary" onClick={() => { setConfirming(false); send({ type: "start", early: true }); }}><FontAwesomeIcon icon={faPlay} />{ar ? "ابدأ الآن" : "Start anyway"}</Button>
                 <Button onClick={() => setConfirming(false)}>{ar ? "انتظر" : "Wait"}</Button>
               </div>
-            </div>
+            </Card>
           ) : (
             <div className="flex flex-wrap items-center gap-3">
               <Button variant="primary" disabled={!view.settings.topics.length} onClick={() => send({ type: "start" })}><FontAwesomeIcon icon={faPlay} />{ar ? "ابدأ الاختبار" : "Start the quiz"}</Button>
@@ -253,7 +254,7 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
   return (
     <div className="flex flex-col gap-5">
       {!revealed && view.deadline !== null && <div className="flex justify-center"><Countdown deadline={view.deadline} total={total} offset={offset} ar={ar} /></div>}
-      <div className={styles.panel}>
+      <Card className="p-[clamp(1rem,3vw,2rem)]">
         <p dir="rtl" lang="ar" className={`mb-4 ${question.tree || question.compare ? "text-base leading-relaxed" : "text-xl leading-loose font-semibold"}`}>{question.promptArabic}</p>
         {question.ayah && (
           <blockquote dir="rtl" lang="ar" className="mb-4 border-s-2 border-[var(--home-accent)] ps-4">
@@ -304,7 +305,7 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
           <Button className="mt-3" size="sm" variant="outline" onClick={() => setSource(true)}><FontAwesomeIcon icon={faBookOpen} />{ar ? "المصدر" : "Source"}</Button>
         )}
         <QuizReferenceDialog reference={source ? question.evidence?.reference ?? null : null} onClose={() => setSource(false)} />
-      </div>
+      </Card>
       {revealed && (
         <>
           <Leaderboard players={view.players} you={view.you} ar={ar} />
@@ -352,9 +353,9 @@ export default function PartyRoom({ code }: { code: string }) {
   if (status === "missing" || status === "removed") body = <Notice status={status} ar={ar} />;
   else if (!joined && error === "started") body = <Notice status="started" ar={ar} />;
   else if (id && (!name || nameError)) body = <NameForm initial={name ?? ""} error={nameError} ar={ar} label={ar ? "انضم" : "Join"} nameError onSubmit={(value) => { saveName(value); setName(value); }} />;
-  else if (!view) body = <LoadingSpinner fill />;
+  else if (!view) body = <LoadingDots fill="page" />;
   else if (view.phase === "lobby") body = <Lobby view={view} send={send} error={error} ar={ar} />;
-  else if (view.phase === "loading") body = <div className="flex flex-col items-center gap-3"><LoadingSpinner /><p className="text-[var(--home-muted)]">{ar ? "تُجهَّز الأسئلة…" : "Getting the questions ready…"}</p></div>;
+  else if (view.phase === "loading") body = <div className="flex flex-col items-center gap-3"><LoadingDots fill /><p className="text-[var(--home-muted)]">{ar ? "تُجهَّز الأسئلة…" : "Getting the questions ready…"}</p></div>;
   else if (view.phase === "final") body = <FinalResults view={view} send={send} ar={ar} />;
   else body = <QuestionStage key={view.question?.key} view={view} send={send} offset={offset} ar={ar} />;
 

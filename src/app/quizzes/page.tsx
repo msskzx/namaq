@@ -22,7 +22,7 @@ import { QUIZ_CATEGORIES, quizFilters, SCOPE_KEYS, treeScopeParams } from "@shar
 import { memorizedFilters, memorizedQuestions, readMemorized } from "@shared/memorized";
 import { readBookmarks, serverBookmarks, subscribeBookmarks } from "@shared/bookmarks";
 import { isCompareBookmark } from "@shared/compareBookmarks";
-import LoadingSpinner from "@/components/common/LoadingSpinner";
+import LoadingDots from "@/components/common/LoadingDots";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import Button from "@/components/common/Button";
 import Toggle from "@/components/common/Toggle";
@@ -48,8 +48,10 @@ import QuizAnswer, { type QuizData } from "./QuizAnswer";
 import { branchesCorrect, questionPoints } from "@shared/quiz/score";
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 import { useHideFooter } from '@/components/common/AppChrome';
-import Link from "next/link";
 import { Eye, LogOut, RotateCcw, User, Users } from "lucide-react";
+import Card from '@/components/common/Card';
+import Chip from '@/components/common/Chip';
+import Empty from '@/components/common/Empty';
 
 /** /quizzes with no settings: pick solo or party first, then that mode's settings; every kind of question is chosen inside them (owner, 2026-11-17). */
 function QuizModes({ ar }: { ar: boolean }) {
@@ -63,12 +65,11 @@ function QuizModes({ ar }: { ar: boolean }) {
     <div className={styles.page}>
       <nav className="mx-auto grid max-w-3xl gap-4 px-4 py-8 sm:grid-cols-2" dir={ar ? "rtl" : "ltr"} aria-label={ar ? "نوع الاختبار" : "Quiz mode"}>
         {modes.map(({ href, Icon, title, text }) => (
-          <Link key={href} href={href}
-            className={`${styles.panel} flex flex-col items-start gap-2 text-[var(--home-ink)] transition-colors hover:bg-[var(--home-paper-deep)] active:scale-[0.98]`}>
+          <Card key={href} href={href} className="flex flex-col items-start gap-2 p-[clamp(1rem,3vw,2rem)] text-[var(--home-ink)] active:scale-[0.98]">
             <Icon className="size-12 text-[var(--home-accent)]" strokeWidth={1.5} aria-hidden />
             <span className="text-xl font-bold">{title}</span>
             <span className="text-[var(--home-muted)]">{text}</span>
-          </Link>
+          </Card>
         ))}
       </nav>
     </div>
@@ -248,31 +249,29 @@ export default function QuizzesPage() {
     return (
       <div className={styles.page}>
         <div className="mx-auto max-w-3xl px-4 py-8" dir={ar ? "rtl" : "ltr"}>
-          {stored && <section className={`mb-6 flex flex-col gap-3 border-[var(--home-accent)] ${styles.panel}`} aria-label={ar ? "اختبار لم تُنهه" : "Unfinished quiz"}>
+          {stored && <Card as="section" picked className="mb-6 flex flex-col gap-3 p-[clamp(1rem,3vw,2rem)]" aria-label={ar ? "اختبار لم تُنهه" : "Unfinished quiz"}>
             <p>{ar ? `لديك اختبار لم تُنهه، وصلت فيه إلى السؤال ${num(stored.current + 1)} من ${num(stored.data.questions.length)}.` : `You have an unfinished quiz, at question ${stored.current + 1} of ${stored.data.questions.length}.`}</p>
             <div className="flex flex-wrap gap-2">
               <Button variant="primary" href={`${pathname}?${stored.search}`}><FontAwesomeIcon icon={ar ? faArrowLeft : faArrowRight} />{ar ? "أكمله" : "Continue it"}</Button>
               <Button onClick={leave}>{ar ? "اتركه" : "Leave it"}</Button>
             </div>
-          </section>}
-          <fieldset className={`mb-6 min-w-0 ${styles.panel}`}>
+          </Card>}
+          <Card as="fieldset" className="mb-6 min-w-0 p-[clamp(1rem,3vw,2rem)]">
             <legend className="mb-2 text-sm font-semibold text-[var(--home-ink)]">{ar ? "المواضيع، اختر واحدًا أو أكثر" : "Topics, choose one or more"}</legend>
             {TOPIC_GROUPS.map((group) => (
               <div key={group.en} className="mb-3 last:mb-0">
                 <p className="mb-1.5 text-sm text-[var(--home-muted)]">{group[ar ? "ar" : "en"]}</p>
                 <div className="flex flex-wrap gap-2">
                   {group.topics.map((value) => (
-                    <Button key={value} active={topics.includes(value)} aria-pressed={topics.includes(value)} onClick={() => toggleTopic(value)}>
-                      {TOPIC_LABELS[value][ar ? "ar" : "en"]}
-                    </Button>
+                    <Chip key={value} on={topics.includes(value)} onClick={() => toggleTopic(value)} label={TOPIC_LABELS[value][ar ? "ar" : "en"]} />
                   ))}
                 </div>
               </div>
             ))}
             {topics.includes("PERSON_CIRCLE") && <PersonPicker person={person} ar={ar} onCommit={(slug) => setParam({ person: slug, length: undefined })} />}
-          </fieldset>
+          </Card>
           {ranged && (
-            <fieldset className={`mb-6 min-w-0 ${styles.panel}`}>
+            <Card as="fieldset" className="mb-6 min-w-0 p-[clamp(1rem,3vw,2rem)]">
               <legend className="mb-2 text-sm font-semibold text-[var(--home-ink)]">{hasBranches ? (ar ? "متشابهات القرآن" : "Phrase trees") : (ar ? "النطاق" : "Range")}</legend>
               <div className="mb-5 flex flex-wrap items-start gap-x-6 gap-y-4">
                 <div className="min-w-0 basis-full">
@@ -286,10 +285,7 @@ export default function QuizzesPage() {
                 <p id="quiz-difficulty" className="mb-1.5 text-sm font-semibold text-[var(--home-ink)]">{ar ? "الصعوبة" : "Difficulty"}</p>
                 <div className="flex flex-wrap items-start gap-2">
                   {DIFFICULTIES.map((value) => (
-                    <Button key={value} active={difficulty === value} aria-pressed={difficulty === value}
-                      onClick={() => setParam({ difficulty: value === DEFAULT_DIFFICULTY ? undefined : value })}>
-                      {DIFFICULTY_LABELS[value][ar ? "ar" : "en"]}
-                    </Button>
+                    <Chip key={value} on={difficulty === value} onClick={() => setParam({ difficulty: value === DEFAULT_DIFFICULTY ? undefined : value })} label={DIFFICULTY_LABELS[value][ar ? "ar" : "en"]} />
                   ))}
                 </div>
                 {topics.flatMap((topic) => DIFFICULTY_NOTES[topic] ? [<p key={topic} className="mt-1.5 text-sm text-[var(--home-muted)]">{DIFFICULTY_NOTES[topic]![ar ? "ar" : "en"]}</p>] : [])}
@@ -298,10 +294,7 @@ export default function QuizzesPage() {
                 <p id="quiz-leaves" className="mb-1.5 text-sm font-semibold text-[var(--home-ink)]">{ar ? "عدد الإجابات في كل سؤال" : "Answers per question"}</p>
                 <div className="flex flex-wrap items-start gap-2">
                   {QUIZ_LEAVES.map((value) => (
-                    <Button key={value} size="icon" className="min-w-10 justify-center" active={leaves === value} aria-pressed={leaves === value}
-                      onClick={() => setParam({ leaves: value === DEFAULT_LEAVES ? undefined : String(value) })}>
-                      {ar ? num(value) : value}
-                    </Button>
+                    <Chip key={value} on={leaves === value} onClick={() => setParam({ leaves: value === DEFAULT_LEAVES ? undefined : String(value) })} label={ar ? num(value) : value} />
                   ))}
                 </div>
               </div>}
@@ -312,7 +305,7 @@ export default function QuizzesPage() {
               {onPage && <QuizPenSetting ar={ar} />}
               </div>
               {hasBranches && <BranchExplainer leaves={leaves} ar={ar} />}
-            </fieldset>
+            </Card>
           )}
           {availability && (
             <>
@@ -332,7 +325,7 @@ export default function QuizzesPage() {
                   </Button>
                 </fieldset>
               ) : (
-                <p className="text-[var(--home-muted)]">{ar ? "لا توجد خمسة أسئلة معتمدة لهذا الاختيار بعد." : "Fewer than five approved questions are available."}</p>
+                <Empty text={ar ? "لا توجد خمسة أسئلة معتمدة لهذا الاختيار بعد." : "Fewer than five approved questions are available."} />
               )}
             </>
           )}
@@ -346,9 +339,9 @@ export default function QuizzesPage() {
       <div className="mx-auto max-w-6xl px-4 py-8" dir={ar ? "rtl" : "ltr"}>
         {error && <><ErrorMessage title={ar ? "تعذر إنشاء الاختبار" : "Failed to build the quiz"} /><Button className="mt-4" variant="outline" onClick={reset}><FontAwesomeIcon icon={faRotateLeft} />{ar ? "العودة للإعداد" : "Back to setup"}</Button></>}
         {isLoading || !data ? (
-          <LoadingSpinner fill />
+          <LoadingDots fill="page" />
         ) : questions.length === 0 ? (
-          <div className="text-center text-[var(--home-muted)]"><p>{ar ? "لا توجد أسئلة كافية لهذا الاختيار." : "Not enough approved questions for this choice."}</p><Button className="mt-4" variant="outline" onClick={reset}><FontAwesomeIcon icon={faRotateLeft} />{ar ? "العودة للإعداد" : "Back to setup"}</Button></div>
+          <Empty text={ar ? "لا توجد أسئلة كافية لهذا الاختيار." : "Not enough approved questions for this choice."}><Button variant="outline" onClick={reset}><FontAwesomeIcon icon={faRotateLeft} />{ar ? "العودة للإعداد" : "Back to setup"}</Button></Empty>
         ) : submitted ? (
           <div>
             <h2 className="mb-2 text-xl font-bold text-[var(--home-ink)]">{ar ? `النتيجة: ${score} من ${total} (${percent}٪)` : `Score: ${score} / ${total} (${percent}%)`}</h2>
@@ -386,7 +379,7 @@ export default function QuizzesPage() {
                 );
               })}
             </div>
-            <div className={styles.panel}>
+            <Card className="p-[clamp(1rem,3vw,2rem)]">
               <p dir="rtl" lang="ar" className={`mb-4 ${questions[current].tree ? "text-base leading-relaxed" : "text-xl leading-loose font-semibold"}`}>{questions[current].promptArabic}</p>
               <QuizAnswer question={questions[current]} given={answers[current]} typed={typed[current]} hints={hints[current]} revealed={Boolean(revealed[current])}
                 names={data?.surahNames ?? {}} ar={ar}
@@ -400,7 +393,7 @@ export default function QuizzesPage() {
                   {ar ? "المصدر" : "Source"}
                 </Button>
               )}
-            </div>
+            </Card>
             <div className="mt-4 flex items-center justify-between">
               <Button variant="outline" disabled={current === 0} onClick={() => setCurrent((value) => Math.max(0, value - 1))}>
                 <FontAwesomeIcon icon={ar ? faArrowRight : faArrowLeft} />

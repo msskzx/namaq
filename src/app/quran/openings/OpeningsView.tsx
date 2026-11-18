@@ -9,6 +9,8 @@ import { ShareImageButton } from '@/components/share/ShareImage';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, inKind, soleCard, type ConditionRole, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
+import Card from '@/components/common/Card';
+import Chip from '@/components/common/Chip';
 
 export type ConditionText = Record<string, { key: string; role: ConditionRole; ours: boolean; words: string[] }[]>;
 
@@ -39,12 +41,12 @@ function Conditions({ lines }: { lines: ConditionText[string] }) {
 /** A card's own part labels (الزمر and الحواميم, or what each lone oath swears by), shown over the part's first row. */
 const partAt = (card: OpeningCard, surah: number) => card.parts?.find(part => part.surahs[0] === surah)?.label;
 
-function Card({ card, names, conditions }: { card: OpeningCard; names: Record<number, string>; conditions: ConditionText }) {
+function OpeningItem({ card, names, conditions }: { card: OpeningCard; names: Record<number, string>; conditions: ConditionText }) {
   const [open, setOpen] = useState(false);
   const expandable = card.rows.some(row => conditions[row.surah]);
   return (
     <div data-share-card className="flex flex-col gap-1">
-      <article id={card.id} data-share-image data-card={card.id} className="scroll-mt-24 flex flex-col rounded-[var(--card-radius)] border border-[var(--home-rule)] bg-[var(--home-card)] px-4 pt-3 pb-2">
+      <Card as="article" id={card.id} data-share-image data-card={card.id} className="scroll-mt-24 flex flex-col px-4 pt-3 pb-2">
         {soleCard(card)
           ? <h3 data-share-only hidden className="text-xl text-[var(--home-accent)]">{card.title}</h3>
           : <h3 className="text-xl text-[var(--home-accent)]">{card.title}</h3>}
@@ -64,7 +66,7 @@ function Card({ card, names, conditions }: { card: OpeningCard; names: Record<nu
           {CONDITION_NOTES.map(n => <p key={n}>{n}</p>)}
           {CONDITION_SOURCES.map(c => <ExternalLink key={c.url} href={c.url}>{c.title}</ExternalLink>)}
         </div>}
-      </article>
+      </Card>
       <div data-share-skip className="flex items-center gap-1">
         {expandable && <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} aria-label={open ? 'إخفاء الشرط وجوابه' : 'الشرط وجوابه'} title="الشرط وجوابه" className={icon}>
           <ChevronDown size={18} aria-hidden className={open ? 'rotate-180' : undefined} />
@@ -104,10 +106,7 @@ export default function OpeningsView({ cards, names, conditions }: { cards: Open
       </header>
       <div role="group" aria-label="أنواع الافتتاح" className="flex gap-2 overflow-x-auto pb-1">
         {OPENING_KINDS.map(k => (
-          <button key={k.id} type="button" aria-pressed={kind === k.id} onClick={() => choose(k.id)}
-            className={`shrink-0 rounded-full border px-3.5 py-1 text-base ${kind === k.id ? 'border-[var(--home-action)] bg-[var(--home-action)] text-[var(--home-on-action)]' : 'border-[var(--home-rule)] text-[var(--home-muted)]'}`}>
-            {k.label}
-          </button>
+          <Chip key={k.id} label={k.label} on={kind === k.id} onClick={() => choose(k.id)} />
         ))}
       </div>
       <Reference title={ITQAN_OPENING.cite} quotes={[ITQAN_OPENING]} />
@@ -122,7 +121,7 @@ export default function OpeningsView({ cards, names, conditions }: { cards: Open
               <Reference title={quote.cite} quotes={[quote, ...(ITQAN_KIND_NOTES[k.id] ?? [])]} />
               {sole?.refs && <Reference title={sole.refs[0].cite!} quotes={sole.refs} />}
             </div>
-            {cards.filter(card => (kind ? inKind(card, k.id) : card.kind === k.id)).map(card => <Card key={card.id} card={card} names={names} conditions={conditions} />)}
+            {cards.filter(card => (kind ? inKind(card, k.id) : card.kind === k.id)).map(card => <OpeningItem key={card.id} card={card} names={names} conditions={conditions} />)}
           </section>
         );
       })}

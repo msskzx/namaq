@@ -15,7 +15,6 @@
 .chip svg { color: var(--home-accent); }
 .chip svg:last-child { color: var(--home-muted); }
 .date { font-size: 0.9375rem; }
-.card { border: 1px solid var(--home-rule); border-radius: var(--card-radius); background: var(--home-card); padding: 0.375rem; }
 .time { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 0.9rem; border-radius: 10px; font-size: 1.25rem; }
 .time + .time { border-top: 1px solid color-mix(in srgb, var(--home-rule) 35%, transparent); }
 .faint { font-size: 1rem; color: var(--home-muted); padding-block: 0.5rem; }
@@ -29,8 +28,6 @@
 .primary { background: var(--home-accent); border-color: var(--home-accent); color: var(--home-paper); }
 .wide:disabled { opacity: 0.6; }
 .sheetBody { display: grid; gap: 0.6rem; }
-.search { display: flex; align-items: center; gap: 0.5rem; border: 1px solid var(--home-rule); border-radius: 10px; padding: 0 0.6rem; color: var(--home-muted); }
-.search input { flex: 1; height: 2.6rem; background: transparent; border: 0; outline: none; color: var(--home-ink); font: inherit; font-size: 16px; }
 .list { max-height: 50dvh; overflow-y: auto; border: 1px solid var(--home-rule); border-radius: 10px; }
 .city { display: flex; width: 100%; align-items: center; justify-content: space-between; padding: 0.6rem 0.75rem; border: 0; border-bottom: 1px solid var(--home-paper-deep); background: transparent; color: var(--home-ink); font: inherit; font-size: 1.0625rem; cursor: pointer; text-align: start; }
 .city[aria-pressed='true'] { background: var(--home-paper-deep); }

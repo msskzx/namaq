@@ -12,7 +12,9 @@ import NasabPlot from './NasabPlot';
 import { givenName, layoutNasab, nasabHonorific, type NasabPerson } from '@/lib/relationship/nasabLayout';
 import styles from './Nasab.module.css';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import LoadingDots from '@/components/common/LoadingDots';
+import Chip from '@/components/common/Chip';
+import Empty from '@/components/common/Empty';
 
 const QUICK_PICKS = [
   { slug: 'prophet-muhammad', en: 'The Prophet ﷺ', ar: 'النبي ﷺ' },
@@ -104,10 +106,7 @@ export default function NasabView() {
         <GraphSearch personOnly hint={isArabic ? 'اختر لعرض النسب' : 'Select to show the nasab'} />
         <div className={styles.picks} aria-label={isArabic ? 'اختيارات سريعة' : 'Quick picks'}>
           {QUICK_PICKS.map((pick) => (
-            <Button key={pick.slug} size="sm" active={subjects.includes(pick.slug)} aria-pressed={subjects.includes(pick.slug)} onClick={() => toggle(pick.slug)}>
-              <FontAwesomeIcon icon={faUser} />
-              {isArabic ? pick.ar : pick.en}
-            </Button>
+            <Chip key={pick.slug} on={subjects.includes(pick.slug)} onClick={() => toggle(pick.slug)} label={<><FontAwesomeIcon icon={faUser} />{isArabic ? pick.ar : pick.en}</>} />
           ))}
         </div>
         {/* Left to right like every switch: off (fathers only) on the left, on (with descendants) on the right. */}
@@ -141,9 +140,9 @@ export default function NasabView() {
         </ul>
       )}
 
-      {subjects.length === 0 && <p>{isArabic ? 'لم تختر أحدًا بعد.' : 'Nobody picked yet.'}</p>}
+      {subjects.length === 0 && <Empty text={isArabic ? 'لم تختر أحدًا بعد.' : 'Nobody picked yet.'} />}
       {failed && subjects.length > 0 && <p role="alert">{isArabic ? 'تعذر تحميل النسب.' : 'Could not load the nasab.'}</p>}
-      {subjects.length > 0 && !current && !failed && <LoadingSpinner />}
+      {subjects.length > 0 && !current && !failed && <LoadingDots fill />}
       {missing.length > 0 && (
         <p>{isArabic ? 'لا سجل لهؤلاء في الشبكة: ' : 'Not in the graph: '}{missing.join(', ')}</p>
       )}
