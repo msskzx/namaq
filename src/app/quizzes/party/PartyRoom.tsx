@@ -22,7 +22,7 @@ import { emptyCompareAnswers } from "@shared/quiz/compareAnswers";
 import PartySettingsPanel from "./PartySettings";
 import { Eye } from "lucide-react";
 import QuestionReview from "../QuestionReview";
-import { ChoiceAfter, ChoiceQuran, type ChoiceParts } from "../ChoiceParts";
+import { ChoiceAfter, ChoiceLabel, ChoiceQuran, type ChoiceParts } from "../ChoiceParts";
 import { mushafText } from '@shared/quran/mushafText';
 import Card from '@/components/common/Card';
 import Field from '@/components/common/Field';
@@ -215,11 +215,11 @@ function Lobby({ view, send, error, ar }: { view: PartyView; send: ReturnType<ty
   );
 }
 
-function ChoiceText({ question, value }: { question: Question; value: string }) {
+function ChoiceText({ question, value, answered }: { question: Question; value: string; answered: boolean }) {
   const choice = question.choices.find((item) => item.value === value);
   const detail = question.choiceDetails?.[value];
   if (!choice) return null;
-  if (!detail) return <>{choice.labelArabic}</>;
+  if (!detail) return <ChoiceLabel question={question} value={value} label={choice.labelArabic} answered={answered} />;
   return <span><span className="block font-quran leading-relaxed">{mushafText(detail.text)}</span><span className="text-xs text-[var(--home-muted)]">{detail.reference}</span></span>;
 }
 
@@ -281,7 +281,7 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
                   className={`justify-start text-start ${right ? "border-[var(--home-green)]" : ""}`}
                   onClick={() => { if (!sent && !revealed) send({ type: "submit", answer: choice.value }); }}>
                   <FontAwesomeIcon icon={right ? faCircleCheck : wrong ? faCircleXmark : given ? faCircleCheck : faCircle} className={right ? "text-[var(--home-green)]" : wrong ? "text-[var(--home-accent)]" : undefined} />
-                  <ChoiceText question={question} value={choice.value} />
+                  <ChoiceText question={question} value={choice.value} answered={revealed} />
                   {right && <span className="text-xs font-semibold text-[var(--home-green)]">{ar ? "صحيح" : "Correct"}</span>}
                   {wrong && <span className="text-xs font-semibold text-[var(--home-accent)]">{ar ? "إجابتك" : "Your answer"}</span>}
                 </Button>

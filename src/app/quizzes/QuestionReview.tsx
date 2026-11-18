@@ -12,7 +12,7 @@ import { num } from "@shared/quran/arabicNumber";
 import { BranchFeedback } from "./BranchAnswers";
 import { CompareFeedback } from "./CompareAnswers";
 import { mushafText } from '@shared/quran/mushafText';
-import { ChoiceAfter, ChoiceQuran, type ChoiceParts } from "./ChoiceParts";
+import { ChoiceAfter, ChoiceLabel, ChoiceQuran, type ChoiceParts } from "./ChoiceParts";
 
 type ReviewQuestion = ScoredQuestion & ChoiceParts & {
   key: string;
@@ -34,7 +34,8 @@ export default function QuestionReview({ entries, names, ar }: { entries: Review
   const choiceText = (value: string) => {
     const choice = question.choices.find(item => item.value === value);
     const detail = question.choiceDetails?.[value];
-    return detail ? <span><span className="font-quran">{mushafText(detail.text)}</span><span className="block text-sm text-[var(--home-muted)]">{detail.reference}</span></span> : choice?.labelArabic;
+    return detail ? <span><span className="font-quran">{mushafText(detail.text)}</span><span className="block text-sm text-[var(--home-muted)]">{detail.reference}</span></span>
+      : choice && <ChoiceLabel question={question} value={value} label={choice.labelArabic} answered />;
   };
   const correct = result.earned === result.total;
   const Back = ar ? ArrowRight : ArrowLeft;

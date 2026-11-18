@@ -53,13 +53,14 @@ export const QIRAAT_SOURCE = { name: 'الموسوعة القرآنية', url: '
 
 /**
  * Who reads a reading, by name: a reader when both of his riwayat are in it, otherwise the riwaya. The biggest reading
- * of a word is «الباقون» when it holds exactly the riwayat no other reading names. A riwaya with two ways is named in both.
+ * of a word is «الباقون» when it holds exactly the riwayat no other reading names (unless `sayRest` is false: a quiz names them all). A
+ * riwaya with two ways is named in both.
  */
-export function whoReads(reading: WordReading, all: WordReading[]): string {
+export function whoReads(reading: WordReading, all: WordReading[], sayRest = true): string {
   const others = new Set(all.filter(r => r !== reading).flatMap(r => r.rawis));
   const biggest = all.reduce((p, r) => (r.rawis.length > p.rawis.length ? r : p), all[0]);
   const rest = RIWAYAT.map((_, i) => i + 1).filter(n => !others.has(n));
-  if (reading === biggest && reading.rawis.length > RIWAYAT.length / 2 && rest.length === reading.rawis.length && rest.every(n => reading.rawis.includes(n))) return 'الباقون';
+  if (sayRest && reading === biggest && reading.rawis.length > RIWAYAT.length / 2 && rest.length === reading.rawis.length && rest.every(n => reading.rawis.includes(n))) return 'الباقون';
   const has = new Set(reading.rawis);
   const names: string[] = [];
   for (const reader of READERS) {
