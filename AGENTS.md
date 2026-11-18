@@ -100,6 +100,17 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   publisher's or author's written permission before any of their text ships; until then
   quote a short attributed line and link out.
 
+## Feed card and quiz
+
+- A new feature ships with its home feed card (the feed's one post shape, `Post` and
+  `PostHead` in `mobile/src/components/HomeFeed.tsx`, reusing the feature's own
+  component) and, where the feature has something to ask, a quiz kind that also comes
+  into the feed. Its sketch shows both.
+- A feature left without a card is named in the PR with the reason. The current list of
+  features, cards, quiz kinds and named exceptions is the plan "A feed card for every
+  feature" (https://claude.ai/artifact/93ufQsTcWLn8xY5C8Y5yix).
+- This is a workflow rule checked in review, not a guard test.
+
 ## Quiz questions
 
 - Quiz candidates and review decisions are authored under `data/quiz/` and
