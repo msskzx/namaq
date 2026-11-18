@@ -40,6 +40,7 @@ export const predicates = [
   'is-sahabi',
   'sex',
   'PATERNAL_COUSIN',
+  'SIBLING_OF',
   'COMPANION_OF',
   'ABOUT_AYAH',
   'office',

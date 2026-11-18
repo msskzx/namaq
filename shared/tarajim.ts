@@ -49,6 +49,8 @@ export interface AppPerson {
   islamAge: PersonFact[];
   died: { year: PersonFact[]; month: PersonFact[]; age: PersonFact[]; place: PersonFact[] };
   parents: PersonLink[];
+  children: PersonLink[];
+  siblings: PersonLink[];
   spouses: PersonLink[];
   cousins: PersonLink[];
   companionOf: PersonLink[];
@@ -66,8 +68,25 @@ export function sayer(fact: PersonFact) {
 const ARABIC_DIGITS = '٠١٢٣٤٥٦٧٨٩';
 const arabic = (value: string | number) => String(value).replace(/\d/g, (d) => ARABIC_DIGITS[Number(d)]);
 
-/** «سير أعلام النبلاء ٤/٤١» for each page, joined. */
+/**
+ * The Risalah printing numbers its volumes from the two of the Sira and the one of the Rightly Guided Caliphs
+ * (data/history/sources/siyar-alam-al-nubala-risalah/source.json): store volume 4 is the Siyar's own part 1.
+ * «سير أعلام النبلاء ١/٤١»، «السيرة النبوية ١/٢٩».
+ */
+export function volumeLabel(volume: number) {
+  if (volume <= 2) return { book: 'السيرة النبوية', part: volume };
+  if (volume === 3) return { book: 'سيرة الخلفاء الراشدين' };
+  return { book: 'سير أعلام النبلاء', part: volume - 3 };
+}
+
 export function pageLabel(refs: PageRef[]) {
-  const seen = [...new Set(refs.map((ref) => `${arabic(ref.volume)}/${arabic(ref.page)}`))];
-  return seen.length ? `سير أعلام النبلاء ${seen.join('، ')}` : '';
+  const books = new Map<string, string[]>();
+  for (const ref of refs) {
+    const { book, part } = volumeLabel(ref.volume);
+    const at = part === undefined ? arabic(ref.page) : `${arabic(part)}/${arabic(ref.page)}`;
+    const list = books.get(book) ?? [];
+    if (!list.includes(at)) list.push(at);
+    books.set(book, list);
+  }
+  return [...books].map(([book, pages]) => `${book} ${pages.join('، ')}`).join('؛ ');
 }
