@@ -10,7 +10,7 @@ import type { Chain, Link, UnitFile, WorkFolder } from './types';
 export const fixturesRoot = 'src/lib/model/fixtures/jibril';
 
 export type { ChainLink, ChainView, HadithUnitView, ReaderPage, ReportView, SceneLine, SceneView } from '@shared/hadith';
-import type { ChainView, HadithUnitView, ReaderPage, ReportView, SceneLine } from '@shared/hadith';
+import type { ChainView, HadithUnitView, ReaderPage, SceneLine } from '@shared/hadith';
 
 const LEAD = /((?:[فو][\u064B-\u0652]*)?(?:قَالَ|قُلْتُ))(\s*["“]?\s*)$/;
 const TRAIL = /^\s*["”]?\s*[.،]?\s*/;

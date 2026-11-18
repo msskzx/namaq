@@ -6,24 +6,28 @@ import { hiddenProps, useHidden, useSlideAway } from '@/ui/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, useSegments } from 'expo-router';
 import type { BottomTabBarProps } from 'expo-router/js-tabs';
-import { BookOpen, Feather, House, ScrollText, type LucideProps } from 'lucide-react-native';
+import { Feather, House, ScrollText, Users, type LucideProps } from 'lucide-react-native';
 import TreeIcon from '@/components/TreeIcon';
 import { TAB_BAR, tabBarBottom } from '@/ui/tabBarSpace';
 import { usePalette } from '@/lib/theme';
 import { retapTab } from '@/lib/tabRetap';
 import { setCompact, useCompact, useImmersive } from '@/lib/chrome';
 import { openPage, tapOnOpen } from '@/lib/tabGroups';
+import { toTab } from '@/lib/ways';
 
 // Five buttons at most (owner, 2026-11-13). Arabic runs right to left, so the first sits on the right:
-// read left to right they are hadith, quizzes, home, mushaf, Quran. Keys are the tab routes; home, hadith and Quran hold page stacks (lib/tabGroups.ts).
-// The hadith took the library's place (owner, 2026-11-18); the library and the utilities open from the buttons at the top of home.
+// Quran, hadith, home, tarajim, quizzes (owner, 2026-11-18). Keys are the tab routes; each but the quizzes holds a page stack (lib/tabGroups.ts).
+// The mushaf opens from the Quran hub and from home's cards, and lights the Quran button; the library and the utilities open from home.
 const BUTTONS: { key: string; label: string; Icon: (props: LucideProps) => React.ReactNode }[] = [
   { key: '(quran)', label: 'القرآن', Icon: TreeIcon },
-  { key: 'read', label: 'المصحف', Icon: BookOpen },
-  { key: '(home)', label: 'الرئيسية', Icon: House },
-  { key: 'quizzes', label: 'الاختبارات', Icon: Feather },
   { key: '(hadith)', label: 'الحديث', Icon: ScrollText },
+  { key: '(home)', label: 'الرئيسية', Icon: House },
+  { key: '(tarajim)', label: 'التراجم', Icon: Users },
+  { key: 'quizzes', label: 'الاختبارات', Icon: Feather },
 ];
+
+/** The button lit for a tab with no button of its own: the mushaf under the Quran, the library under home. */
+const LIT_BY: Record<string, string> = { read: '(quran)', '(library)': '(home)' };
 
 // Instagram-style (owner, 2026-11-10): while a page scrolls down the bar gets a little smaller, and it comes back on the way up.
 const FULL = TAB_BAR.height;
@@ -55,6 +59,7 @@ export default function TabBar({ state, navigateToTab }: BottomTabBarProps) {
         <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: palette.glass }]} />
         {BUTTONS.map(({ key, label, Icon }) => {
           const active = open === key;
+          const lit = active || LIT_BY[open] === key;
           // The open button tapped again: the open page goes to its top, then resets (lib/tabRetap.ts); from the search it goes home.
           // Another button opens its tab on the page that was open there last.
           const press = () => {
@@ -63,14 +68,16 @@ export default function TabBar({ state, navigateToTab }: BottomTabBarProps) {
               else router.back();
               return;
             }
+            // From the mushaf the lit Quran button goes to the hub, not to the tool last open under it; from the library, home goes home.
+            if (lit) { toTab(key === '(quran)' ? '/quran' : '/'); return; }
             const route = state.routes.find(item => item.name === key);
             if (route) navigateToTab(route.key);
           };
           return (
-            <Pressable key={key} onPress={press} accessibilityRole="tab" accessibilityState={{ selected: active }} accessibilityLabel={label}
+            <Pressable key={key} onPress={press} accessibilityRole="tab" accessibilityState={{ selected: lit }} aria-selected={lit} accessibilityLabel={label}
               style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
               <Animated.View style={icon}>
-                <Icon size={26} color={active ? palette.accent : palette.muted} strokeWidth={active ? 2.25 : 1.75} />
+                <Icon size={26} color={lit ? palette.accent : palette.muted} strokeWidth={lit ? 2.25 : 1.75} />
               </Animated.View>
             </Pressable>
           );

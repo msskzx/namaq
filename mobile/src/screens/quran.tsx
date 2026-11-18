@@ -1,6 +1,6 @@
 import { useRef, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
-import { ArrowLeftRight, BookMarked, ListOrdered, ListStart, Presentation, ScrollText, SunMoon, TextSearch, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookMarked, BookOpen, ListOrdered, ListStart, Presentation, ScrollText, SunMoon, TextSearch, type LucideProps } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import TreeIcon from '@/components/TreeIcon';
@@ -13,6 +13,7 @@ import Card from '@/ui/Card';
 
 /** The Quran button's tools; each opens inside the tab, with a back arrow to this grid. */
 export const QURAN_TILES: { route: string; label: string; Icon: (props: LucideProps) => React.ReactNode }[] = [
+  { route: '/read', label: 'المصحف', Icon: BookOpen },
   { route: '/branches', label: 'متشابهات القرآن', Icon: TreeIcon },
   { route: '/compare', label: 'مقارنة السور', Icon: ArrowLeftRight },
   { route: '/prophets', label: 'قصص الأنبياء', Icon: ScrollText },
@@ -24,7 +25,7 @@ export const QURAN_TILES: { route: string; label: string; Icon: (props: LucidePr
   { route: '/order', label: 'ترتيب السور', Icon: ListOrdered },
 ];
 
-/** The Quran tab (owner, 2026-11-13): a grid of the Quran tools, two to a row. The mushaf has its own button. */
+/** The Quran tab (owner, 2026-11-13): a grid of the Quran tools, two to a row, the mushaf first (owner, 2026-11-18: it lost its own button). */
 export default function QuranHub() {
   const palette = usePalette();
   const onScroll = useShrinkOnScroll();

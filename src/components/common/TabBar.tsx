@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { PenSetting } from '@/components/recite/PenSetting';
-import { BookOpen, CircleHelp, Compass, Library, LibraryBig, Feather, House, Play, Search, Settings, ShieldCheck, type LucideIcon } from 'lucide-react';
+import { BookOpen, CircleHelp, Compass, Library, Feather, House, Play, ScrollText, Search, Settings, ShieldCheck, Users, type LucideIcon } from 'lucide-react';
 import { usePageHelp } from './SettingsHelp';
 import ThemeTiles from '@/components/theme/ThemeTiles';
 import { useLanguage } from '../language/LanguageContext';
@@ -26,10 +26,10 @@ import Segmented from './Segmented';
 
 export const SECTION_ICONS: Record<string, LucideIcon | typeof TreeIcon> = {
   '/quran': TreeIcon,
-  '/quran/read': BookOpen,
+  '/hadith': ScrollText,
   '/': House,
+  '/biographies': Users,
   '/quizzes': Feather,
-  '/quran/books': LibraryBig,
 };
 
 function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => void; toggle: React.RefObject<HTMLButtonElement | null> }) {

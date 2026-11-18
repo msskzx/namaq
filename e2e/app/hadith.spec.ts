@@ -34,3 +34,29 @@ test('the library opens from home and goes back to it', async ({ page }) => {
   await page.getByRole('button', { name: 'رجوع' }).click();
   await expect(page.getByRole('button', { name: 'مدونتي', exact: true })).toBeVisible();
 });
+
+test('the bar is Quran, hadith, home, tarajim and quizzes, and the mushaf opens from the Quran hub with the Quran button lit', async ({ page }) => {
+  await open(page, '/');
+  const names = await page.getByRole('tab').evaluateAll(tabs => tabs.map(item => item.getAttribute('aria-label')));
+  expect(names).toEqual(['القرآن', 'الحديث', 'الرئيسية', 'التراجم', 'الاختبارات']);
+  await tab(page, 'التراجم').click();
+  await expect(page.getByRole('heading', { name: 'التراجم', exact: true })).toBeVisible();
+  await tab(page, 'القرآن').click();
+  await page.getByRole('link', { name: 'المصحف', exact: true }).click();
+  await expect(page).toHaveURL(/\/read/);
+  await expect(tab(page, 'القرآن')).toHaveAttribute('aria-selected', 'true');
+  // With a tool left open under the Quran button, the button on the mushaf still goes to the hub.
+  await tab(page, 'القرآن').click();
+  await page.getByRole('link', { name: 'الأقسام', exact: true }).click();
+  await expect(page).toHaveURL(/\/oaths/);
+  await tab(page, 'الرئيسية').click();
+  await page.getByRole('button', { name: 'اقرأ', exact: true }).first().click();
+  await expect(page).toHaveURL(/\/read/);
+  // A tap on the page brings the bars back.
+  await expect(async () => {
+    await page.mouse.click(195, 400);
+    await expect(tab(page, 'القرآن')).toBeInViewport({ timeout: 1500 });
+  }).toPass({ timeout: 15_000 });
+  await tab(page, 'القرآن').click();
+  await expect(page).toHaveURL(/\/quran$/);
+});
