@@ -32,7 +32,7 @@ export default function ReviewList({ group, groups, trees, missing }: {
     {missing.length > 0 && <p>Not found today: {missing.join(', ')}</p>}
     {trees.map((tree, i) => <section key={tree.id} className="flex flex-col gap-2">
       <h2 className="text-lg"><span dir="ltr">{group}{i + 1}</span> · {tree.text} <a href={tree.href} target="_blank" rel="noreferrer" style={{ fontSize: 12, opacity: 0.7 }} dir="ltr">{tree.id}</a></h2>
-      {tree.why && <p dir="ltr" style={{ fontSize: 16, lineHeight: 1.5 }}><b>{group === 'K' ? 'Kept because:' : 'Dropped because:'}</b> {tree.why}</p>}
+      {tree.why && <p dir="ltr" style={{ fontSize: 16, lineHeight: 1.5 }}><b>{({ M: 'متشابهات', T: 'تدبّر', S: 'Search only', U: 'Unsure' } as Record<string, string>)[group]}:</b> {tree.why}</p>}
       <Lazy><TreeViewCard tree={tree} height="420px" names={SURAH_NAMES} start="cards" /></Lazy>
     </section>)}
   </main>;
