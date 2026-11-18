@@ -53,7 +53,7 @@ import { showsOtherView } from '@shared/quran/branchView';
 import { timesFor, useMinute } from '@/lib/prayer';
 import { bookState, useBooks } from '@/lib/books';
 import { BookCard, Shelf, TUHFA } from '@/screens/books';
-import { IltifatCard } from './Iltifat';
+import { IltifatActions, IltifatScene } from './Iltifat';
 import { prophetStory } from '@/lib/prophets';
 import StoryMap from './StoryMap';
 import { ayahPlaces } from '@shared/quran/ayahPlaces';
@@ -516,10 +516,10 @@ const ScenePost = memo(function ScenePost({ day, slot, palette }: { day: number;
   const view = sceneList()[sceneOfSlot(sceneList().length, day, slot)];
   if (!view) return null;
   return (
-    <View style={{ gap: 4 }}>
-      <PostHead Icon={Presentation} title="من المشاهد" sub={topicOf(view).name} palette={palette} open={{ onPress: () => toTab('/lataif'), label: 'افتح المشاهد' }} />
-      <IltifatCard view={view} palette={palette} />
-    </View>
+    <Post palette={palette} head={<PostHead Icon={Presentation} title="من المشاهد" sub={topicOf(view).name} palette={palette} open={{ onPress: () => toTab('/lataif'), label: 'افتح المشاهد' }} />}
+      actions={<IltifatActions view={view} palette={palette} />}>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 10 }}><IltifatScene view={view} palette={palette} /></View>
+    </Post>
   );
 });
 
