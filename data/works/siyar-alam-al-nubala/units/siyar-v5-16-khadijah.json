@@ -1066,6 +1066,20 @@
       "role": "SUBJECT"
     },
     {
+      "id": "m_kh_c_tayyib",
+      "parent": "sp_kh_kids",
+      "exact": "وَالطَّيِّبُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_kh_c_tahir",
+      "parent": "sp_kh_kids",
+      "exact": "وَالطَّاهِرُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
       "id": "m_kh_c_ruqayyah",
       "parent": "sp_kh_kids",
       "exact": "وَرُقَيَّةُ",
@@ -1384,6 +1398,30 @@
       "id": "i_kh_c_qasim",
       "mention": "m_kh_c_qasim",
       "agent": "al-qasim-ibn-muhammad",
+      "basis": [
+        {
+          "span": "sp_kh_kids_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_kh_c_tayyib",
+      "mention": "m_kh_c_tayyib",
+      "agent": "al-tayyib-ibn-muhammad",
+      "basis": [
+        {
+          "span": "sp_kh_kids_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_kh_c_tahir",
+      "mention": "m_kh_c_tahir",
+      "agent": "al-tahir-ibn-muhammad",
       "basis": [
         {
           "span": "sp_kh_kids_b",
@@ -1764,6 +1802,30 @@
     {
       "id": "a_kh_c_qasim_0",
       "subject": "m_kh_c_qasim",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_kh_k"
+      },
+      "restsOn": [
+        "st_kh_kids"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kh_c_tayyib_0",
+      "subject": "m_kh_c_tayyib",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_kh_k"
+      },
+      "restsOn": [
+        "st_kh_kids"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kh_c_tahir_0",
+      "subject": "m_kh_c_tahir",
       "predicate": "CHILD_OF",
       "value": {
         "object": "m_kh_k"

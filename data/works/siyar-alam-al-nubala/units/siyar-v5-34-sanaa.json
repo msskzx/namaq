@@ -1,10 +1,10 @@
 {
   "unit": {
-    "id": "siyar-v5-sanaa",
+    "id": "siyar-v5-34-sanaa",
     "work": "siyar-alam-al-nubala",
     "type": "tarjama",
     "numbers": {
-      "printed": ""
+      "printed": "٣٤"
     }
   },
   "spans": [
@@ -14,8 +14,34 @@
       "volume": 5,
       "page": "256",
       "layer": "MAIN",
-      "exact": "سَنَاءُ",
-      "suffix": " قَالَ أَبُو"
+      "exact": "٣٤ - سَنَاءُ بِنْتُ أَسْمَاءَ بنِ الصَّلْتِ السُّلَمِيَّةُ"
+    },
+    {
+      "id": "sp_sn_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "256",
+      "layer": "MAIN",
+      "exact": "سَنَاءُ بِنْتُ أَسْمَاءَ بنِ الصَّلْتِ السُّلَمِيَّةُ",
+      "prefix": "٣٤ - "
+    },
+    {
+      "id": "sp_sn_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "256",
+      "layer": "MAIN",
+      "exact": "سَنَاءُ بِنْتُ",
+      "prefix": "٣٤ - "
+    },
+    {
+      "id": "sp_sn_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "256",
+      "layer": "MAIN",
+      "exact": "أَسْمَاءَ بنِ الصَّلْتِ",
+      "prefix": "٣٤ - سَنَاءُ بِنْتُ "
     },
     {
       "id": "sp_sn_ubayd_frame",
@@ -31,33 +57,7 @@
       "volume": 5,
       "page": "256",
       "layer": "MAIN",
-      "exact": "وَزَعَمَ حَفْصُ بنُ النَّضْرِ السُّلَمِيُّ، وَعَبْدُ القَاهِرِ بنِ السَّرِيِّ: أَنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- تَزَوَّجَ سَنَاءَ بِنْتَ أَسْمَاءَ بنِ الصَّلْتِ السُّلَمِيَّةَ؛ فَمَاتَتْ قَبْلَ أَنْ يَدْخُلَ بِهَا"
-    },
-    {
-      "id": "sp_sn_name",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 5,
-      "page": "256",
-      "layer": "MAIN",
-      "exact": "سَنَاءَ بِنْتَ أَسْمَاءَ بنِ الصَّلْتِ السُّلَمِيَّةَ"
-    },
-    {
-      "id": "sp_sn_sex",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 5,
-      "page": "256",
-      "layer": "MAIN",
-      "exact": "سَنَاءَ بِنْتَ",
-      "suffix": " أَسْمَاءَ"
-    },
-    {
-      "id": "sp_sn_father_n",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 5,
-      "page": "256",
-      "layer": "MAIN",
-      "exact": "أَسْمَاءَ بنِ الصَّلْتِ",
-      "prefix": "سَنَاءَ بِنْتَ "
+      "exact": "وَزَعَمَ حَفْصُ بنُ النَّضْرِ السُّلَمِيُّ، وَعَبْدُ القَاهِرِ بنُ السَّرِيِّ: أَنَّ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- تَزَوَّجَ سَنَاءَ بِنْتَ أَسْمَاءَ بنِ الصَّلْتِ السُّلَمِيَّةَ؛ فَمَاتَتْ قَبْلَ أَنْ يَدْخُلَ بِهَا"
     },
     {
       "id": "sp_sn_kilabi",
@@ -79,7 +79,7 @@
   "reports": [
     {
       "id": "r_sn0",
-      "unit": "siyar-v5-sanaa",
+      "unit": "siyar-v5-34-sanaa",
       "ordinal": 1,
       "voice": "AUTHOR",
       "voiceBasis": "sp_sn_heading",
@@ -90,7 +90,7 @@
     },
     {
       "id": "r_sn_ubayd",
-      "unit": "siyar-v5-sanaa",
+      "unit": "siyar-v5-34-sanaa",
       "ordinal": 2,
       "voice": "TRANSMITTED",
       "frame": [
@@ -103,7 +103,7 @@
     },
     {
       "id": "r_sn_kilabi",
-      "unit": "siyar-v5-sanaa",
+      "unit": "siyar-v5-34-sanaa",
       "ordinal": 3,
       "voice": "REPORTED_ANONYMOUS",
       "origin": {
@@ -113,6 +113,14 @@
     }
   ],
   "statements": [
+    {
+      "id": "st_sn_name",
+      "report": "r_sn0",
+      "spans": [
+        "sp_sn_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
     {
       "id": "st_sn_ubayd",
       "report": "r_sn_ubayd",
@@ -132,6 +140,20 @@
   ],
   "mentions": [
     {
+      "id": "m_sn",
+      "parent": "sp_sn_name",
+      "exact": "سَنَاءُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sn_father",
+      "parent": "sp_sn_name",
+      "exact": "أَسْمَاءَ بنِ الصَّلْتِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
       "id": "m_sn_ubayd_by",
       "parent": "sp_sn_ubayd_frame",
       "exact": "أَبُو عُبَيْدٍ القَاسِمُ بنُ سَلاَّمٍ",
@@ -139,18 +161,11 @@
       "role": "SPEAKER"
     },
     {
-      "id": "m_sn",
+      "id": "m_sn_u",
       "parent": "sp_sn_ubayd",
       "exact": "سَنَاءَ بِنْتَ أَسْمَاءَ بنِ الصَّلْتِ السُّلَمِيَّةَ",
       "occurrence": 1,
       "role": "SUBJECT"
-    },
-    {
-      "id": "m_sn_father",
-      "parent": "sp_sn_ubayd",
-      "exact": "أَسْمَاءَ بنِ الصَّلْتِ",
-      "occurrence": 1,
-      "role": "REFERENT"
     },
     {
       "id": "m_sn_prophet",
@@ -200,6 +215,18 @@
       "status": "PROPOSED"
     },
     {
+      "id": "i_sn_u",
+      "mention": "m_sn_u",
+      "agent": "sanaa-bint-asma-al-sulami",
+      "basis": [
+        {
+          "span": "sp_sn_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
       "id": "i_sn_k",
       "mention": "m_sn_k",
       "agent": "sanaa-bint-asma-al-sulami",
@@ -223,7 +250,7 @@
         ]
       },
       "restsOn": [
-        "st_sn_ubayd"
+        "st_sn_name"
       ],
       "status": "PROPOSED"
     },
@@ -238,7 +265,7 @@
         ]
       },
       "restsOn": [
-        "st_sn_ubayd"
+        "st_sn_name"
       ],
       "status": "PROPOSED"
     },
@@ -250,13 +277,13 @@
         "object": "m_sn_father"
       },
       "restsOn": [
-        "st_sn_ubayd"
+        "st_sn_name"
       ],
       "status": "PROPOSED"
     },
     {
       "id": "a_sn_wife",
-      "subject": "m_sn",
+      "subject": "m_sn_u",
       "predicate": "MARRIED",
       "value": {
         "object": "m_sn_prophet"

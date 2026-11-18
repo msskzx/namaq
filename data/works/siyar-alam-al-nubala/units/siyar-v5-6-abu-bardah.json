@@ -17,13 +17,22 @@
       "exact": "٦ - أَبُو بُرْدَةَ بنُ نِيَارِ بنِ عَمْرِو بنِ عُبَيْدٍ البَلَوِيُّ"
     },
     {
+      "id": "sp_ab_n0",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "35",
+      "layer": "MAIN",
+      "exact": "هَانِئٌ",
+      "prefix": "وَاسْمُهُ: "
+    },
+    {
       "id": "sp_ab_n1",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 5,
       "page": "35",
       "layer": "MAIN",
-      "exact": "أَبُو بُرْدَةَ بنُ نِيَارِ بنِ عَمْرِو بنِ عُبَيْدٍ البَلَوِيُّ",
-      "prefix": "٦ - "
+      "exact": "بنُ نِيَارِ بنِ عَمْرِو بنِ عُبَيْدٍ البَلَوِيُّ",
+      "prefix": "أَبُو بُرْدَةَ "
     },
     {
       "id": "sp_ab_n2",
@@ -131,6 +140,7 @@
       "id": "st_ab_name",
       "report": "r_ab0",
       "spans": [
+        "sp_ab_n0",
         "sp_ab_n1",
         "sp_ab_n2"
       ],
@@ -164,8 +174,8 @@
   "mentions": [
     {
       "id": "m_ab",
-      "parent": "sp_ab_n1",
-      "exact": "أَبُو بُرْدَةَ",
+      "parent": "sp_ab_n0",
+      "exact": "هَانِئٌ",
       "occurrence": 1,
       "role": "SUBJECT"
     },
@@ -236,6 +246,7 @@
       "predicate": "name.full",
       "value": {
         "spans": [
+          "sp_ab_n0",
           "sp_ab_n1",
           "sp_ab_n2"
         ]
