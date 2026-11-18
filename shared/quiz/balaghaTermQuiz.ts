@@ -45,17 +45,28 @@ const cores = (word: string) => {
   return [...core(bare), ...(/^[بلك]/.test(bare) && bare.length > 3 ? core(bare.slice(1)) : [])];
 };
 
-/** What names a term: each word of its name as `stem` reads it (a two-letter one kept: «اللف»), and its core. */
+const marksOf = new Map<string, { stems: Set<string>; cores: Set<string> }>();
+/** What names a term: each word of its name as `stem` reads it (a two-letter one kept: «اللف»), and its core; worked out once a name. */
 const nameMarks = (name: string) => {
+  const known = marksOf.get(name);
+  if (known) return known;
   const words = plainName(name).split(/\s+/);
   const stemmed = words.map(word => stem(word) || plain(word)).filter(word => word.length >= 2);
-  return { stems: new Set(stemmed), cores: new Set(words.flatMap(cores)) };
+  const marks = { stems: new Set(stemmed), cores: new Set(words.flatMap(cores)) };
+  marksOf.set(name, marks);
+  return marks;
 };
 
 /** Whether a word of a definition is a form of the name: the same stem, the stem with a suffix («ترتيبها»), or the same core. */
+const readings = new Map<string, { bare: string; stem: string; cores: string[] }>();
+const reading = (word: string) => {
+  let known = readings.get(word);
+  if (!known) readings.set(word, known = { bare: plain(word), stem: stem(word) || plain(word), cores: cores(word) });
+  return known;
+};
 const names = (word: string, marks: ReturnType<typeof nameMarks>) => {
-  const bare = plain(word);
-  return marks.stems.has(stem(word) || bare) || [...marks.stems].some(name => name.length >= 3 && bare.startsWith(name)) || cores(word).some(letters => marks.cores.has(letters));
+  const { bare, stem: stemmed, cores: letters } = reading(word);
+  return marks.stems.has(stemmed) || [...marks.stems].some(name => name.length >= 3 && bare.startsWith(name)) || letters.some(core => marks.cores.has(core));
 };
 
 /** The definition with every form of a word of the term's name, and each other name it gives, written «…». */
@@ -66,8 +77,8 @@ export function hideName(text: string, name: string): string {
   return words.map(word => {
     if (/^\s+$/.test(word)) return word;
     const bare = normalizeWord(word).replace(/[^ء-ي]/g, '');
-    // A naming word's next word is the other name; «ويقال له القصر» skips «له» first.
-    if (afterNaming && bare === 'له') return word;
+    // A naming word's next word is the other name; «ويقال له القصر» skips «له» first, «ويقال أيضًا» «أيضًا».
+    if (afterNaming && (bare === 'له' || bare === 'ايضا')) return word;
     const hide = afterNaming || names(word, marks);
     afterNaming = NAMING.has(bare);
     if (hide) return word.replace(/[ء-يً-ٰٟ]+/g, '…').replace(/…+/g, '…');
@@ -76,7 +87,35 @@ export function hideName(text: string, name: string): string {
 }
 
 /** Whether a term is named in a text, in any of its forms. */
-export const namedIn = (term: string, text: string) => text.split(/\s+/).some(word => names(word, nameMarks(term)));
+const textsRead = new Map<string, { stems: Set<string>; bares: string[]; cores: Set<string> }>();
+export function namedIn(term: string, text: string) {
+  let read = textsRead.get(text);
+  if (!read) {
+    const words = text.split(/\s+/).filter(Boolean).map(reading);
+    textsRead.set(text, read = { stems: new Set(words.map(word => word.stem)), bares: words.map(word => word.bare), cores: new Set(words.flatMap(word => word.cores)) });
+  }
+  const marks = nameMarks(term);
+  const { bares, stems: shown, cores: shownCores } = read;
+  return [...marks.stems].some(name => shown.has(name) || (name.length >= 3 && bares.some(bare => bare.startsWith(name)))) || [...marks.cores].some(core => shownCores.has(core));
+}
+
+/** The other names a term's own definition gives it («ويدعى التورية» for الإيهام), each the word after a naming word. */
+const aliasesOf = new Map<BalaghaTerm, string[]>();
+function aliases(term: BalaghaTerm): string[] {
+  const known = aliasesOf.get(term);
+  if (known) return known;
+  const out: string[] = [];
+  aliasesOf.set(term, out);
+  for (const quote of asked(term)) {
+    const words = quote.text.split(/\s+/);
+    words.forEach((word, i) => {
+      if (!NAMING.has(normalizeWord(word).replace(/[^ء-ي]/g, ''))) return;
+      const next = words.slice(i + 1).find(after => !['له', 'ايضا'].includes(normalizeWord(after).replace(/[^ء-ي]/g, '')));
+      if (next && plain(next).length >= 3) out.push(next);
+    });
+  }
+  return out;
+}
 
 const defined = () => terms.terms.filter(term => term.defines);
 /** The terms asked: those defined, but one of two that share their definition (الحذف and إيجاز الحذف), the first. */
@@ -91,7 +130,7 @@ function question(right: BalaghaTerm, random: Random): ChoiceQuestion | null {
   const wrong = shuffle(defined().filter(term => term !== right
     && !BROAD.has(term.name)
     // No wrong term shares a word's form with the right one or is named in the definition («التفاتا» for الالتفات).
-    && !namedIn(term.name, `${plainName(right.name)} ${text}`)
+    && ![plainName(term.name), ...aliases(term)].some(name => namedIn(name, `${plainName(right.name)} ${text}`))
     && !term.quotes.some(quote => quotes.some(own => own.text === quote.text))
     && !(chapter && term.kind <= 55)), random).slice(0, WRONG);
   if (wrong.length < WRONG) return null;

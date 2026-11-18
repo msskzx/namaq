@@ -33,6 +33,20 @@ describe('«ما المصطلح؟»', () => {
     expect(hideName('أَقْسَامُ الشَّيْءِ', 'التَّقْسِيمُ')).toBe('… الشَّيْءِ');
   });
 
+  it('offers no wrong term under another name the passage gives it (التورية is الإيهام, الاحتراس is التكميل)', () => {
+    const never: Record<string, string> = { الاستخدام: 'الإيهام', التدبيج: 'الإيهام', الإبداع: 'التكميل' };
+    let asked = 0;
+    for (let seed = 0; seed < 40; seed++) {
+      for (const question of termQuiz.questions(scope, 'medium', seededRandom(seed))) {
+        const wrong = never[plainName(question.correctAnswer)];
+        if (!wrong) continue;
+        asked++;
+        expect(question.choices.map(choice => choice.labelArabic)).not.toContain(wrong);
+      }
+    }
+    expect(asked).toBeGreaterThan(0);
+  });
+
   it('hides another name the definition gives the term', () => {
     expect(hideName('وَتُسَمَّى الطِّبَاقُ: الْجَمْعُ بَيْنَ مُتَضَادَّيْنِ', 'الْمُطَابَقَةُ')).toBe('وَتُسَمَّى …: الْجَمْعُ بَيْنَ مُتَضَادَّيْنِ');
     // A two-letter word of the name is hidden too.
