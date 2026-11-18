@@ -15,6 +15,7 @@ import { seededRandom } from '../../shared/quiz/feedQuiz';
 import { shuffle } from '../../shared/quiz/random';
 import { quotesOf, stem, stems } from '../../shared/quiz/ayahQuizText';
 import type { AyahQuizzes } from '../../shared/quiz/ayahQuizzes';
+import { termOf } from '../../shared/quran/balaghaTerms';
 
 /**
  * The question banks of the four ayah quizzes (owner 2026-11-18, docs/feed-cards.md), built once here and only read by the
@@ -80,22 +81,17 @@ function tafsirBank() {
 
 // ما الأسلوب؟ An ayah al-Suyuti cites under one of his headings, surely there (ITQAN RULE): which heading. Wrong headings come
 // from his other chapters than any that cites the ayah, and share no word with the right one.
-// Headings as a choice: his «في أنواع الحذف» as the kind it names, and two slips of the printed text (the second agent's review).
-const LABEL: Record<string, string> = { 'فِي أَنْوَاعِ الْحَذْفِ': 'الْحَذْفُ', 'الإطناب الزيادة': 'الإطناب بالزيادة', 'الافتان': 'الافتنان' };
-// A heading that does not say what the device is to a reader («الْأَعْلَامُ» reads as names or flags) is not asked.
-const UNCLEAR = new Set(['الْأَعْلَامُ']);
+// Headings as a choice are the terms of «مصطلحات البلاغة» (shared/quran/balaghaTerms.ts termOf), so each links to its page.
 // Broad kinds found in very many ayat (a metaphor, a مجاز, a dropped word, a حصر): asked as his heading, never offered as a
 // wrong one, since the second agent's reviews found them truly in the ayah again and again.
 const BROAD = ['الْمَجَازُ', 'التَّشْبِيهُ وَالِاسْتِعَارَةُ', 'الْكِنَايَةُ وَالتَّعْرِيضُ', 'الْحَصْرُ وَالِاخْتِصَاصُ', 'الْحَذْفُ', 'إيجاز الحذف'];
 // Chapters one inside the other: a metaphor is a مجاز, so the two never stand as right and wrong in one question.
 const FAMILY: Record<number, number> = { 53: 52 };
-const CHAPTER: Record<number, string> = { 52: 'الْمَجَازُ', 53: 'التَّشْبِيهُ وَالِاسْتِعَارَةُ', 54: 'الْكِنَايَةُ وَالتَّعْرِيضُ', 55: 'الْحَصْرُ وَالِاخْتِصَاصُ' };
 function balaghaBank() {
   const data = itqan as ItqanData;
   const labels: string[] = [];
   const labelOf = (kind: number, heading: string) => {
-    if (UNCLEAR.has(heading)) return -1;
-    const label = heading ? LABEL[heading] ?? heading : CHAPTER[kind];
+    const label = termOf(kind, heading);
     if (!label) return -1;
     if (!labels.includes(label)) labels.push(label);
     return labels.indexOf(label);
@@ -131,7 +127,7 @@ function balaghaBank() {
     // Every chapter he cites any of these ayat in, sure or not, and every heading he gives them.
     const paragraphs = keys.flatMap(key => itqanAt(data, key));
     const cited = new Set(paragraphs.map(p => Number(Object.keys(data.kinds).find(kind => data.kinds[Number(kind)] === p.kind))).map(kind => FAMILY[kind] ?? kind));
-    const citedLabels = new Set(paragraphs.map(p => labels.indexOf(LABEL[p.heading] ?? p.heading)).filter(i => i >= 0));
+    const citedLabels = new Set(paragraphs.map(p => labels.indexOf((p.heading && termOf(0, p.heading)) || '')).filter(i => i >= 0));
     const rightWords = stems(labels[run.label]);
     const avoid = [...(review.avoid[`balagha:${run.key}`] ?? []), ...BROAD];
     const ok = (label: number) => label !== run.label && !citedLabels.has(label) && !avoid.includes(labels[label]) && !cited.has(family(label))

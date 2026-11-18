@@ -170,8 +170,8 @@ test.describe('a new user', () => {
   });
 
   test('the feed asks a question of every quiz kind in turn, each card with the quiz buttons', async ({ page }) => {
-    // Three batches a day take three kinds in turn; three days apart, the fourteen kinds all come up in five days.
-    const kinds = ['في أي سورة؟', 'أكمل المتشابهات', 'سمّع بقية الآية', 'قارن الموضعين', 'أوائل السور', 'ما معنى؟', 'لأي آية هذا التفسير؟', 'ما الأسلوب؟', 'ما إعرابها؟', 'كيف يقرؤها؟',
+    // Three batches a day take three kinds in turn; three days apart, the fifteen kinds all come up in five days.
+    const kinds = ['في أي سورة؟', 'أكمل المتشابهات', 'سمّع بقية الآية', 'قارن الموضعين', 'أوائل السور', 'ما معنى؟', 'لأي آية هذا التفسير؟', 'ما الأسلوب؟', 'ما المصطلح؟', 'ما إعرابها؟', 'كيف يقرؤها؟',
       'التحفة: أكمل البيت', 'التحفة: البيت التالي', 'التحفة: حكم الحرف', 'السيرة والغزوات'];
     const seen = new Set<string>();
     for (const days of [0, 3, 6, 9, 12]) {

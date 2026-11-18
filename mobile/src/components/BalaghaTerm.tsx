@@ -47,8 +47,8 @@ function QuoteCredit({ quote, palette }: { quote: TermQuote; palette: Palette })
 
 const BY: Record<TermQuote['book'], string> = { itqan: 'قال السيوطي في الإتقان:', talkhis: 'قال القزويني في تلخيص المفتاح:' };
 
-/** What heads a term's quotes: «تعريفه» where they define it, otherwise what al-Suyuti says under his heading. */
-export const quotesTitle = (term: Pick<BalaghaTerm, 'defines'>) => (term.defines ? 'تعريفه' : 'قال السيوطي تحت هذا العنوان');
+/** What heads a term's quotes: «تعريفه» where they define it, otherwise his words on it. */
+export const quotesTitle = (term: Pick<BalaghaTerm, 'defines'>) => (term.defines ? 'تعريفه' : 'من كلام السيوطي عليه');
 
 /** A term's quotes in one card, each whole, with its credit under it. */
 export function TermQuotes({ term, palette }: { term: BalaghaTerm; palette: Palette }) {

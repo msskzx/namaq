@@ -335,7 +335,7 @@ function OpeningPost({ seed, palette }: { seed: number; palette: Palette }) {
 }
 
 /** The book a quiz kind asks from: its card stays out while that book is off the phone, as the book's own ayah card does. */
-const QUIZ_BOOKS: Partial<Record<FeedQuizKind, BookId>> = { TAFSIR: 'sadi', BALAGHA: 'itqan', IRAB: 'irab-words' };
+const QUIZ_BOOKS: Partial<Record<FeedQuizKind, BookId>> = { TAFSIR: 'sadi', BALAGHA: 'itqan', TERM: 'itqan', IRAB: 'irab-words' };
 
 /** A question card of kind `kind`: the openings quiz, or one of the solo quiz's. */
 function FeedQuiz({ kind, seed, palette }: { kind: FeedQuizKind; seed: number; palette: Palette }) {

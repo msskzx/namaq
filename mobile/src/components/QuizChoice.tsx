@@ -7,6 +7,7 @@ import { alikeDiff, FORGOT, recited, RECITED, type ChoiceQuestion } from '@share
 import QuizPage from './QuizPage';
 import QuranWords from './quran/text/QuranWords';
 import BookRuns from './quran/text/BookRuns';
+import TermChips from './TermSheet';
 import type { WriteAsk } from '@shared/quiz/score';
 import type { PenRule } from '@shared/quran/writeAyah';
 import { num } from '@shared/quran/arabicNumber';
@@ -107,6 +108,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
           })}
         </View>
       )}
+      {answered && question.terms && <TermChips names={question.choices.map(choice => question.terms![choice.value]).filter(Boolean)} palette={palette} />}
       {alike && diff && (
         <View style={{ marginHorizontal: 16, borderTopWidth: 1, borderStyle: 'dashed', borderColor: palette.rule, paddingTop: 10, gap: 4 }}>
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`آية ${name(picked!)} التي تشبهها، ${num(Number(alike.key.split(':')[1]))}`}</Text>
