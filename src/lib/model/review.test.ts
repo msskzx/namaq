@@ -9,7 +9,7 @@ const scholar = { reviewer: 'test-scholar', qualification: 'test', date: '2026-0
 function setup() {
   const folders = loadModel('.');
   const folder = folders[0];
-  const file = folder.units[0];
+  const file = folder.units.find((u) => u.unit.id === 'siyar-v4-3-az-zubayr')!;
   const review = (id: string): ReviewRecord => ({
     record: id,
     revision: revisionOf(

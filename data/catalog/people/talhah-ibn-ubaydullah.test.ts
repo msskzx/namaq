@@ -93,8 +93,8 @@ describe('Talhah ibn Ubaydullah in the catalog', () => {
   // one the entry supports, one carried from that entry with its evidence owed.
   it('carries both Qur\'an links, only one of them cited', () => {
     expect(person.ayat).toEqual([
-      { surah: 33, ayah: 23, claims: ['talhah/qada-nahbahu'] },
-      { surah: 3, ayah: 172, claims: legacyUnreviewed },
+      { surah: 33, ayah: 23, kind: 'DESCRIBES', claims: ['talhah/qada-nahbahu'] },
+      { surah: 3, ayah: 172, kind: 'DESCRIBES', claims: legacyUnreviewed },
     ]);
     expect(claimByKey.get('talhah/qada-nahbahu')?.field).toBe('ayat');
   });

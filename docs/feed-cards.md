@@ -12,7 +12,8 @@ Continue reading, today's juz, prayer time, books, scenes (مشاهد), saved an
 ayat, surah openings, a battle's moment (من غزوة …, opening the battle's page), a sira story whole (من قصص السيرة, its first report with
 the ayat folded under it, opening the story's page), and the quiz cards in `FEED_QUIZ_NAMES`
 (`shared/quiz/feedQuiz.ts`): في أي سورة؟, أكمل المتشابهات, سمّع بقية الآية, قارن الموضعين,
-أوائل السور, سمّع الآية, ما معنى؟, the four ayah quizzes below, the three Tuhfat al-Atfal questions, and السيرة والغزوات (shared/quiz/sira.ts).
+أوائل السور, سمّع الآية, ما معنى؟, the four ayah quizzes below, the three Tuhfat al-Atfal questions, السيرة والغزوات (shared/quiz/sira.ts), and the two tarajim questions
+(أين يلتقي النسبان؟ and صاحب المنقبة, `shared/quiz/tarajim.ts`).
 
 The ayah quizzes (`shared/quiz/ayahQuizzes.ts`), whose questions are built once by `scripts/quran/buildAyahQuizzes.ts`
 (the app and the website only read the bank; hand review in `scripts/quran/ayahQuizReview.json`):
@@ -24,6 +25,9 @@ The ayah quizzes (`shared/quiz/ayahQuizzes.ts`), whose questions are built once 
 - كيف يقرؤها؟: a word the ten readers differ on, and how one of them reads it; half ask a reader who reads as the
   mushaf does. (The sketch asked «من يقرأ بها؟»; with two readings that question is answered by knowing the mushaf is
   Hafs's reading, so it asks the other way.)
+
+من التراجم (`TarajimPost`): a virtue from a converted Siyar entry, in the book's words with who says it and
+its page; the head opens the person's page. Every fourth batch from the fourth (`hasTarajimCard` in `shared/homeFeed.ts`).
 
 The ayah cards (`AyahNotePost` in `HomeFeed.tsx`, lists in `shared/quran/ayahNotes.ts`), one a batch, the kind turning:
 من التفسير (an ayah al-Sa'di explains alone), من البلاغة (an ayah al-Suyuti surely names), من الإعراب (one word's line),
@@ -49,4 +53,4 @@ timeline), رتّب, من شهدها؟ / من أمير السرية؟, فيمَ 
 - Qibla: already on the prayer card.
 - Search, share and videos, settings, «ما أحفظه»: tools, not content.
 - Party quizzes: played with others, not from the feed.
-- Tarajim: the battles have the moment card and the sira stories the story card; the people get theirs when they come to the app.
+- Tarajim: the battles have the moment card and the sira stories the story card; the people have «من التراجم».

@@ -99,7 +99,7 @@ describe('a review and a foreign basis', () => {
 describe('a foreign basis and the real al-Zubayr unit (a TARAJEM work)', () => {
   const real = (change: (file: ReturnType<typeof loadModel>[number]['units'][number]) => void) => {
     const folders = loadModel('.');
-    const file = folders[0].units[0];
+    const file = folders[0].units.find((u) => u.unit.id === 'siyar-v4-3-az-zubayr')!;
     change(file);
     return checkModel(folders, '.', events).join('\n');
   };

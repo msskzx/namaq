@@ -36,10 +36,11 @@ describe("Sa'd ibn Abi Waqqas in the catalog", () => {
     expect(unknown).toEqual([]);
   });
 
-  it('carries nothing uncited but the verse the seed guessed at', () => {
+  // The seed's guessed verse (al-An'am 124) was dropped when each ayah link got its kind (#929).
+  it('carries nothing uncited', () => {
     const carried = everyProvenance.filter(([, claims]) => claims === legacyUnreviewed);
 
-    expect(carried.map(([where]) => where)).toEqual(['ayah 6:124']);
+    expect(carried.map(([where]) => where)).toEqual([]);
   });
 
   it('points a single-claim field at a claim about that same field', () => {
