@@ -12,6 +12,8 @@ const IBN = /^(?:ابن|بن|بنت|ابنة)$/u;
 // A nisba after the last name («الهاشمية», «القرشي») is not a father.
 const NISBA = /^ال\S+(?:ي|ية)$/u;
 const strip = (text: string) => text.replace(/[ً-ْٰـ]/g, '');
+// Shamela types Latin commas inside Arabic text; the app shows the Arabic mark.
+const arabicCommas = (text: string) => text.replace(/,/g, '،');
 
 /**
  * The fathers in a full name as printed, from the person up: «الزبير بن العوام بن خويلد» → الزبير، العوام، خويلد.
@@ -38,8 +40,9 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
   // The sentence a tie rests on, as printed («غاب عن وقعة بدر في تجارة له بالشام…»).
   const sentence = (entry: ProfileEntry) => {
     const from = units.get(entry.unit)!;
-    return from.statements.filter((s) => entry.statementIds.includes(s.id)).flatMap((s) => s.spans)
+    const text = from.statements.filter((s) => entry.statementIds.includes(s.id)).flatMap((s) => s.spans)
       .map((id) => renderSpanRecord(folderOf.get(entry.unit)!, from.spans.find((span) => span.id === id)!, root)).join(' ');
+    return arabicCommas(text);
   };
   const people = new Map(catalog.people.map((person) => [person.slug, person]));
   const battles = new Map(catalog.battles.map((battle) => [battle.slug, battle.name]));
@@ -71,7 +74,7 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
       return pages.filter((ref, index) => pages.findIndex((other) => other.volume === ref.volume && other.page === ref.page) === index);
     };
     const fact = (entry: ProfileEntry): PersonFact => ({
-      text: entry.text,
+      text: arabicCommas(entry.text),
       refs: refsOf(entry),
       // Who says it: the person the narrating mention is identified as («أبي» in Urwa's words is al-Zubayr), else its text.
       by: entry.statementIds.flatMap((id) => {

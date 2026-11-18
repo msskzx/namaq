@@ -37,7 +37,7 @@ describe('highlightsOnPage (al-Zubayr, page 41)', () => {
 
   it('lists an assertion once in a mark even when two of its spans cover the same stretch', () => {
     const folders = loadModel('.');
-    const file = folders[0].units[0];
+    const file = folders[0].units.find((u) => u.unit.id === 'siyar-v4-3-az-zubayr')!;
     const kunya = file.spans.find((s) => s.id === 'sp_kunya')!;
     file.spans.push({ ...kunya, id: 'sp_kunya_twin' });
     const assertion = file.assertions.find((a) => a.id === 'a_kunya')!;
