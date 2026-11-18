@@ -1,0 +1,202 @@
+{
+  "unit": {
+    "id": "siyar-v5-38-khawlah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٣٨"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_kw_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "٣٨ - خَوْلَةُ بِنْتُ حَكِيْمٍ",
+      "suffix": " ** عُمَارَةُ"
+    },
+    {
+      "id": "sp_kw_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "خَوْلَةُ بِنْتُ حَكِيْمٍ",
+      "prefix": "٣٨ - ",
+      "suffix": " **"
+    },
+    {
+      "id": "sp_kw_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "260",
+      "layer": "MAIN",
+      "exact": "حَكِيْمٍ",
+      "prefix": "٣٨ - خَوْلَةُ بِنْتُ "
+    },
+    {
+      "id": "sp_kw_arja",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "261",
+      "layer": "MAIN",
+      "exact": "وَكَانَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- تَزَوَّجَهَا؛ فَأَرْجَأَهَا فِيْمَنْ أَرْجَأَ مِنْ نِسَائِهِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_kw0",
+      "unit": "siyar-v5-38-khawlah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_kw_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_kw_name",
+      "report": "r_kw0",
+      "spans": [
+        "sp_kw_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_kw_arja",
+      "report": "r_kw0",
+      "spans": [
+        "sp_kw_arja"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_kw",
+      "parent": "sp_kw_name",
+      "exact": "خَوْلَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_kw_father",
+      "parent": "sp_kw_name",
+      "exact": "حَكِيْمٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_kw_w",
+      "parent": "sp_kw_arja",
+      "exact": "تَزَوَّجَهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_kw_prophet",
+      "parent": "sp_kw_arja",
+      "exact": "النَّبِيُّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_kw",
+      "mention": "m_kw",
+      "agent": "khawlah-bint-hakim",
+      "basis": [
+        {
+          "span": "sp_kw_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_kw_father",
+      "mention": "m_kw_father",
+      "agent": "hakim-abu-khawlah",
+      "basis": [
+        {
+          "span": "sp_kw_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_kw_w",
+      "mention": "m_kw_w",
+      "agent": "khawlah-bint-hakim",
+      "basis": [
+        {
+          "span": "sp_kw_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_kw_name",
+      "subject": "m_kw",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_kw_name"
+        ]
+      },
+      "restsOn": [
+        "st_kw_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kw_sex",
+      "subject": "m_kw",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_kw_name"
+        ]
+      },
+      "restsOn": [
+        "st_kw_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kw_father",
+      "subject": "m_kw",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_kw_father"
+      },
+      "restsOn": [
+        "st_kw_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kw_wife",
+      "subject": "m_kw_w",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_kw_prophet"
+      },
+      "restsOn": [
+        "st_kw_arja"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

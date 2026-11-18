@@ -1,0 +1,338 @@
+{
+  "unit": {
+    "id": "siyar-v5-17-fatimah-bint-asad",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٧"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_fa_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "118",
+      "layer": "MAIN",
+      "exact": "١٧ - فَاطِمَةُ بِنْتُ أَسَدِ بنِ هَاشِمِ بنِ عَبْدِ مَنَافٍ بنِ قُصَيٍّ الهَاشِمِيَّةُ"
+    },
+    {
+      "id": "sp_fa_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "118",
+      "layer": "MAIN",
+      "exact": "فَاطِمَةُ بِنْتُ أَسَدِ بنِ هَاشِمِ بنِ عَبْدِ مَنَافٍ بنِ قُصَيٍّ الهَاشِمِيَّةُ",
+      "prefix": "١٧ - "
+    },
+    {
+      "id": "sp_fa_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "118",
+      "layer": "MAIN",
+      "exact": "فَاطِمَةُ بِنْتُ",
+      "prefix": "١٧ - "
+    },
+    {
+      "id": "sp_fa_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "118",
+      "layer": "MAIN",
+      "exact": "أَسَدِ بنِ هَاشِمِ",
+      "prefix": "فَاطِمَةُ بِنْتُ "
+    },
+    {
+      "id": "sp_fa_ali",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "118",
+      "layer": "MAIN",
+      "exact": "وَالِدَةُ عَلِيِّ بنِ أَبِي طَالِبٍ"
+    },
+    {
+      "id": "sp_fa_ali_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "118",
+      "layer": "MAIN",
+      "exact": "عَلِيِّ بنِ أَبِي طَالِبٍ",
+      "prefix": "وَالِدَةُ "
+    },
+    {
+      "id": "sp_fa_zubayr_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "118",
+      "layer": "MAIN",
+      "exact": "قَالَهُ: الزُّبَيْرُ",
+      "prefix": "هَاشِمِيّاً. "
+    },
+    {
+      "id": "sp_fa_zubayr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "118",
+      "layer": "MAIN",
+      "exact": "هِيَ حَمَاةُ فَاطِمَةَ، كَانَتْ مِنَ المُهَاجِرَاتِ الأُوَلِ، وَهِيَ أَوَّلُ هَاشِمِيَّةٍ وَلَدَتْ هَاشِمِيّاً"
+    },
+    {
+      "id": "sp_fa_muhajirat",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "118",
+      "layer": "MAIN",
+      "exact": "كَانَتْ مِنَ المُهَاجِرَاتِ الأُوَلِ"
+    },
+    {
+      "id": "sp_fa_hashimiyya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "118",
+      "layer": "MAIN",
+      "exact": "وَهِيَ أَوَّلُ هَاشِمِيَّةٍ وَلَدَتْ هَاشِمِيّاً"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_fa0",
+      "unit": "siyar-v5-17-fatimah-bint-asad",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_fa_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_fa_zubayr",
+      "unit": "siyar-v5-17-fatimah-bint-asad",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_fa_zubayr_frame"
+      ],
+      "origin": {
+        "mention": "m_fa_zubayr_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_fa_name",
+      "report": "r_fa0",
+      "spans": [
+        "sp_fa_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_fa_ali",
+      "report": "r_fa0",
+      "spans": [
+        "sp_fa_ali"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_fa_zubayr",
+      "report": "r_fa_zubayr",
+      "spans": [
+        "sp_fa_zubayr"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_fa",
+      "parent": "sp_fa_name",
+      "exact": "فَاطِمَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_fa_father",
+      "parent": "sp_fa_name",
+      "exact": "أَسَدِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_fa_w",
+      "parent": "sp_fa_ali",
+      "exact": "وَالِدَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_fa_ali",
+      "parent": "sp_fa_ali",
+      "exact": "عَلِيِّ بنِ أَبِي طَالِبٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_fa_zubayr_by",
+      "parent": "sp_fa_zubayr_frame",
+      "exact": "الزُّبَيْرُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_fa_z",
+      "parent": "sp_fa_zubayr",
+      "exact": "هِيَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_fa",
+      "mention": "m_fa",
+      "agent": "fatimah-bint-asad",
+      "basis": [
+        {
+          "span": "sp_fa_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_fa_father",
+      "mention": "m_fa_father",
+      "agent": "asad-ibn-hashim",
+      "basis": [
+        {
+          "span": "sp_fa_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_fa_w",
+      "mention": "m_fa_w",
+      "agent": "fatimah-bint-asad",
+      "basis": [
+        {
+          "span": "sp_fa_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_fa_ali",
+      "mention": "m_fa_ali",
+      "agent": "ali-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_fa_ali_b",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_fa_z",
+      "mention": "m_fa_z",
+      "agent": "fatimah-bint-asad",
+      "basis": [
+        {
+          "span": "sp_fa_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_fa_name",
+      "subject": "m_fa",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_fa_name"
+        ]
+      },
+      "restsOn": [
+        "st_fa_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_fa_sex",
+      "subject": "m_fa",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_fa_sex"
+        ]
+      },
+      "restsOn": [
+        "st_fa_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_fa_father",
+      "subject": "m_fa",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_fa_father"
+      },
+      "restsOn": [
+        "st_fa_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_fa_ali",
+      "subject": "m_fa_ali",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_fa_w"
+      },
+      "restsOn": [
+        "st_fa_ali"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_fa_v_muhajirat",
+      "subject": "m_fa_z",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_fa_muhajirat"
+        ]
+      },
+      "restsOn": [
+        "st_fa_zubayr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_fa_v_hashimiyya",
+      "subject": "m_fa_z",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_fa_hashimiyya"
+        ]
+      },
+      "restsOn": [
+        "st_fa_zubayr"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

@@ -1,0 +1,283 @@
+{
+  "unit": {
+    "id": "siyar-v5-14-al-hakam",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٤"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_hk_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "107",
+      "layer": "MAIN",
+      "exact": "١٤ - الحَكَمُ بنُ أَبِي العَاصِ بنِ أُمَيَّةَ الأُمَوِيُّ أَبُو مَرْوَانَ"
+    },
+    {
+      "id": "sp_hk_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "107",
+      "layer": "MAIN",
+      "exact": "الحَكَمُ بنُ أَبِي العَاصِ بنِ أُمَيَّةَ الأُمَوِيُّ",
+      "prefix": "١٤ - "
+    },
+    {
+      "id": "sp_hk_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "107",
+      "layer": "MAIN",
+      "exact": "الحَكَمُ بنُ",
+      "prefix": "١٤ - "
+    },
+    {
+      "id": "sp_hk_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "107",
+      "layer": "MAIN",
+      "exact": "أَبُو مَرْوَانَ",
+      "prefix": "الأُمَوِيُّ "
+    },
+    {
+      "id": "sp_hk_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "107",
+      "layer": "MAIN",
+      "exact": "أَبِي العَاصِ بنِ أُمَيَّةَ",
+      "prefix": "الحَكَمُ بنُ "
+    },
+    {
+      "id": "sp_hk_cousin",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "107",
+      "layer": "MAIN",
+      "exact": "ابْنُ عَمِّ أَبِي سُفْيَانَ",
+      "suffix": ". يُكْنَى"
+    },
+    {
+      "id": "sp_hk_cousin_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "107",
+      "layer": "MAIN",
+      "exact": "عَمِّ أَبِي سُفْيَانَ",
+      "suffix": ". يُكْنَى"
+    },
+    {
+      "id": "sp_hk_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "108",
+      "layer": "MAIN",
+      "exact": "مَاتَ: سَنَةَ إِحْدَى وَثَلاَثِيْنَ"
+    },
+    {
+      "id": "sp_hk_death_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "108",
+      "layer": "MAIN",
+      "exact": "سَنَةَ إِحْدَى وَثَلاَثِيْنَ",
+      "prefix": "مَاتَ: "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_hk0",
+      "unit": "siyar-v5-14-al-hakam",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_hk_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_hk_name",
+      "report": "r_hk0",
+      "spans": [
+        "sp_hk_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_hk_kunya",
+      "report": "r_hk0",
+      "spans": [
+        "sp_hk_kunya"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_hk_cousin",
+      "report": "r_hk0",
+      "spans": [
+        "sp_hk_cousin"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_hk_death",
+      "report": "r_hk0",
+      "spans": [
+        "sp_hk_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_hk",
+      "parent": "sp_hk_name",
+      "exact": "الحَكَمُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_hk_father",
+      "parent": "sp_hk_name",
+      "exact": "أَبِي العَاصِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_hk_as",
+      "parent": "sp_hk_cousin",
+      "exact": "أَبِي سُفْيَانَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_hk",
+      "mention": "m_hk",
+      "agent": "al-hakam-ibn-abi-al-as",
+      "basis": [
+        {
+          "span": "sp_hk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_hk_father",
+      "mention": "m_hk_father",
+      "agent": "abi-al-as-ibn-umayya",
+      "basis": [
+        {
+          "span": "sp_hk_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_hk_as",
+      "mention": "m_hk_as",
+      "agent": "abu-sufyan-ibn-harb",
+      "basis": [
+        {
+          "span": "sp_hk_cousin_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_hk_name",
+      "subject": "m_hk",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_hk_name"
+        ]
+      },
+      "restsOn": [
+        "st_hk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hk_sex",
+      "subject": "m_hk",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_hk_sex"
+        ]
+      },
+      "restsOn": [
+        "st_hk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hk_kunya",
+      "subject": "m_hk",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_hk_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_hk_kunya"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hk_father",
+      "subject": "m_hk",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_hk_father"
+      },
+      "restsOn": [
+        "st_hk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hk_cousin",
+      "subject": "m_hk",
+      "predicate": "PATERNAL_COUSIN",
+      "value": {
+        "object": "m_hk_as"
+      },
+      "restsOn": [
+        "st_hk_cousin"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hk_died",
+      "subject": "m_hk",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 31,
+        "spans": [
+          "sp_hk_death_y"
+        ]
+      },
+      "restsOn": [
+        "st_hk_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

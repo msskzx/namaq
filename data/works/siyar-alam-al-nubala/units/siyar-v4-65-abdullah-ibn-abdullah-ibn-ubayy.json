@@ -1,0 +1,367 @@
+{
+  "unit": {
+    "id": "siyar-v4-65-abdullah-ibn-abdullah-ibn-ubayy",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٦٥"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ab_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "321",
+      "layer": "MAIN",
+      "exact": "٦٥ - عَبْدُ اللهِ بنُ عَبْدِ اللهِ بنِ أُبَيِّ بنِ مَالِكٍ الأَنْصَارِيُّ *"
+    },
+    {
+      "id": "sp_ab1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "321",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ عَبْدِ اللهِ بنِ أُبَيِّ بنِ مَالِكٍ",
+      "prefix": "٦٥ - "
+    },
+    {
+      "id": "sp_ab2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "321",
+      "layer": "MAIN",
+      "exact": "ابْنِ الحَارِثِ بنِ عُبَيْدِ بنِ مَالِكِ بنِ سَالِمِ"
+    },
+    {
+      "id": "sp_ab3",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "321",
+      "layer": "MAIN",
+      "exact": "بنِ غَنْمِ بنِ عَوْفِ بنِ الخَزْرَجِ",
+      "prefix": "لِعِظَمِ بَطْنِهِ - "
+    },
+    {
+      "id": "sp_ab_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "321",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ",
+      "prefix": "٦٥ - "
+    },
+    {
+      "id": "sp_ab_father_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "321",
+      "layer": "MAIN",
+      "exact": "عَبْدِ اللهِ بنِ أُبَيِّ",
+      "prefix": "عَبْدُ اللهِ بنُ "
+    },
+    {
+      "id": "sp_ab_sadah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "322",
+      "layer": "MAIN",
+      "exact": "وَقَدْ كَانَ عَبْدُ اللهِ بنُ عَبْدِ اللهِ مِنْ سَادَةِ الصَّحَابَةِ وَأَخْيَارِهِم"
+    },
+    {
+      "id": "sp_ab_sadah_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "322",
+      "layer": "MAIN",
+      "exact": "مِنْ سَادَةِ الصَّحَابَةِ وَأَخْيَارِهِم"
+    },
+    {
+      "id": "sp_ab_badr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "322",
+      "layer": "MAIN",
+      "exact": "شَهِدَ بَدْراً وَمَا بَعْدَهَا"
+    },
+    {
+      "id": "sp_ab_badr_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "322",
+      "layer": "MAIN",
+      "exact": "بَدْراً",
+      "prefix": "شَهِدَ ",
+      "suffix": " وَمَا"
+    },
+    {
+      "id": "sp_ab_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "322",
+      "layer": "MAIN",
+      "exact": "اسْتُشْهِدَ عَبْدُ اللهِ يَوْمَ اليَمَامَةِ"
+    },
+    {
+      "id": "sp_ab_death_place",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "322",
+      "layer": "MAIN",
+      "exact": "اليَمَامَةِ",
+      "prefix": "اسْتُشْهِدَ عَبْدُ اللهِ يَوْمَ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ab0",
+      "unit": "siyar-v4-65-abdullah-ibn-abdullah-ibn-ubayy",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ab_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ab_name",
+      "report": "r_ab0",
+      "spans": [
+        "sp_ab1",
+        "sp_ab2",
+        "sp_ab3"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ab_sadah",
+      "report": "r_ab0",
+      "spans": [
+        "sp_ab_sadah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ab_badr",
+      "report": "r_ab0",
+      "spans": [
+        "sp_ab_badr"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ab_death",
+      "report": "r_ab0",
+      "spans": [
+        "sp_ab_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ab",
+      "parent": "sp_ab1",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_father",
+      "parent": "sp_ab1",
+      "exact": "عَبْدِ اللهِ بنِ أُبَيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ab_s",
+      "parent": "sp_ab_sadah",
+      "exact": "عَبْدُ اللهِ بنُ عَبْدِ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_b",
+      "parent": "sp_ab_badr",
+      "exact": "شَهِدَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ab_badr",
+      "parent": "sp_ab_badr",
+      "exact": "بَدْراً",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ab_d",
+      "parent": "sp_ab_death",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ab",
+      "mention": "m_ab",
+      "agent": "abdullah-ibn-abdullah-ibn-ubayy",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_s",
+      "mention": "m_ab_s",
+      "agent": "abdullah-ibn-abdullah-ibn-ubayy",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_b",
+      "mention": "m_ab_b",
+      "agent": "abdullah-ibn-abdullah-ibn-ubayy",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_d",
+      "mention": "m_ab_d",
+      "agent": "abdullah-ibn-abdullah-ibn-ubayy",
+      "basis": [
+        {
+          "span": "sp_ab_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_father",
+      "mention": "m_ab_father",
+      "agent": "abdullah-ibn-ubayy",
+      "basis": [
+        {
+          "span": "sp_ab_father_nasab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ab_badr",
+      "mention": "m_ab_badr",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_ab_badr_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ab_name",
+      "subject": "m_ab",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ab1",
+          "sp_ab2",
+          "sp_ab3"
+        ]
+      },
+      "restsOn": [
+        "st_ab_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_sex",
+      "subject": "m_ab",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ab_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ab_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_father",
+      "subject": "m_ab",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ab_father"
+      },
+      "restsOn": [
+        "st_ab_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_v",
+      "subject": "m_ab_s",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ab_sadah_v"
+        ]
+      },
+      "restsOn": [
+        "st_ab_sadah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_badr",
+      "subject": "m_ab_b",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_ab_badr"
+      },
+      "restsOn": [
+        "st_ab_badr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ab_death_place",
+      "subject": "m_ab_d",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "sp_ab_death_place"
+        ]
+      },
+      "restsOn": [
+        "st_ab_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
