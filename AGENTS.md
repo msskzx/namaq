@@ -92,7 +92,13 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   `/sources` (books) and `/attributions` (everything) render that list, and the
   app's settings link to it. **A PR that adds a data source or book adds it
   there in the same PR**, with the licence as the source states it; one that
-  stops using a source removes it. Link out; never host a book in full.
+  stops using a source removes it.
+- A book may ship whole, built in or as a download, when it is an old author's own text
+  in the public domain: show only the author's words, without the modern editor's
+  footnotes or additions, with the page number and a link to the edition. Modern works
+  (for example al-Muyassar, Hisn al-Muslim, al-Albani's annotated books) need the
+  publisher's or author's written permission before any of their text ships; until then
+  quote a short attributed line and link out.
 
 ## Quiz questions
 
