@@ -8,11 +8,12 @@ import type { Catalog, Cited } from './types';
 import { legacyUnreviewed } from './types';
 
 type Citation = { volume?: string; pageReference?: string; excerptArabic?: string; extractionUrl?: string; sourceSlug?: string };
-type Claim = { key: string; assertion?: string; disputed?: boolean; citations?: Citation[] };
+export type Claim = { key: string; assertion?: string; disputed?: boolean; citations?: Citation[] };
 
 const BOOKS: Record<string, string> = { 'siyar-alam-al-nubala-risalah': 'سير أعلام النبلاء' };
 const SIRA_VOLUME = /^السيرة (\d)$/;
-const RIVAL = (key: string) => new RegExp(`^${key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}-(alt|other)(-|$)`);
+/** A claim's rival readings: the claims a batch records beside it as `<key>-alt…` or `<key>-other…` (the quiz generator shares it). */
+export const RIVAL = (key: string) => new RegExp(`^${key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}-(alt|other)(-|$)`);
 const digits = (text: string) => text.replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[Number(d)]);
 
 /** «سير أعلام النبلاء، السيرة ١، ص ٣٢٥» */
@@ -28,16 +29,16 @@ export function batchClaims(root = 'data/history/batches'): Map<string, Claim> {
   );
 }
 
-export function appBattles(catalog: Catalog, claims = batchClaims()): AppBattle[] {
-  const people = new Map(catalog.people.map(person => [person.slug, person.name]));
-  const link = (slug: string): AppPersonLink => ({ slug, name: people.get(slug) ?? slug });
+/**
+ * A value shows only with the quotes it stands on (owner, 2026-11-18: everything gets its reference); one whose evidence
+ * is still owed waits until it is cited. Its rival readings are the claims a batch records beside it as `<key>-alt…` or
+ * `<key>-other…`. Shared by the battles, the stories and a person's life (appLife.ts).
+ */
+export function citing(claims: Map<string, Claim>) {
   const refs = (keys: Cited<unknown>['claims']): AppCite[] =>
     keys === legacyUnreviewed
       ? []
       : keys.flatMap(key => (claims.get(key)?.citations ?? []).filter(c => c.excerptArabic).map(c => ({ text: c.excerptArabic!, cite: citeOf(c), url: c.extractionUrl })));
-  // A value shows only with the quotes it stands on (owner, 2026-11-18: everything gets its reference); one whose evidence
-  // is still owed waits until it is cited.
-  // A claim's rival readings are the claims a batch records beside it as `<key>-alt…` or `<key>-other…`.
   const rivals = (keys: Cited<unknown>['claims']): AppReading[] =>
     keys === legacyUnreviewed
       ? []
@@ -50,6 +51,13 @@ export function appBattles(catalog: Catalog, claims = batchClaims()): AppBattle[
     const others = rivals(value.claims);
     return { value: as(value.value), refs: quotes, ...(others.length ? { others } : {}) };
   };
+  return { refs, cited };
+}
+
+export function appBattles(catalog: Catalog, claims = batchClaims()): AppBattle[] {
+  const people = new Map(catalog.people.map(person => [person.slug, person.name]));
+  const link = (slug: string): AppPersonLink => ({ slug, name: people.get(slug) ?? slug });
+  const { cited, refs } = citing(claims);
   return catalog.battles
     .map(battle => {
       const fields = battle.fields ?? {};
