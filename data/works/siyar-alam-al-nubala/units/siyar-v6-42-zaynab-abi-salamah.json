@@ -1,0 +1,291 @@
+{
+  "unit": {
+    "id": "siyar-v6-42-zaynab-abi-salamah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٤٢"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_zs_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "200",
+      "layer": "MAIN",
+      "exact": "٤٢ - زَيْنَبُ بِنْتُ أَبِي سَلَمَةَ بنِ عَبْدِ الأَسَدِ بنِ هِلاَلٍ المَخْزُوْمِيَّةُ"
+    },
+    {
+      "id": "sp_zs_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "200",
+      "layer": "MAIN",
+      "exact": "زَيْنَبُ بِنْتُ أَبِي سَلَمَةَ بنِ عَبْدِ الأَسَدِ بنِ هِلاَلٍ المَخْزُوْمِيَّةُ",
+      "prefix": "٤٢ -"
+    },
+    {
+      "id": "sp_zs5",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "200",
+      "layer": "MAIN",
+      "exact": "زَيْنَبُ بِنْتُ",
+      "prefix": "٤٢ -"
+    },
+    {
+      "id": "sp_zs7",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "200",
+      "layer": "MAIN",
+      "exact": "أَبِي سَلَمَةَ بنِ عَبْدِ الأَسَدِ بنِ هِلاَلٍ",
+      "prefix": "زَيْنَبُ بِنْتُ"
+    },
+    {
+      "id": "sp_zs11",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "200",
+      "layer": "MAIN",
+      "exact": "رَبِيْبَةُ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - وَأُخْتُ عُمَرَ، وَلَدَتْهُمَا أُمُّ المُؤْمِنِيْنَ بِالحَبَشَةِ."
+    },
+    {
+      "id": "sp_zs15",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "200",
+      "layer": "MAIN",
+      "exact": "وَأُخْتُ عُمَرَ، وَلَدَتْهُمَا"
+    },
+    {
+      "id": "sp_zs19",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "200",
+      "layer": "MAIN",
+      "exact": "وَلَدَتْهُمَا أُمُّ المُؤْمِنِيْنَ بِالحَبَشَةِ"
+    },
+    {
+      "id": "sp_zs23",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "200",
+      "layer": "MAIN",
+      "exact": "رَبِيْبَةُ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ -",
+      "suffix": "وَأُخْتُ عُمَرَ،"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_zs0",
+      "unit": "siyar-v6-42-zaynab-abi-salamah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_zs_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_zs1",
+      "report": "r_zs0",
+      "spans": [
+        "sp_zs_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zs12",
+      "report": "r_zs0",
+      "spans": [
+        "sp_zs11"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_zs2",
+      "parent": "sp_zs_name",
+      "exact": "زَيْنَبُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zs8",
+      "parent": "sp_zs_name",
+      "exact": "أَبِي سَلَمَةَ بنِ عَبْدِ الأَسَدِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zs13",
+      "parent": "sp_zs11",
+      "exact": "رَبِيْبَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zs16",
+      "parent": "sp_zs11",
+      "exact": "عُمَرَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zs20",
+      "parent": "sp_zs11",
+      "exact": "أُمُّ المُؤْمِنِيْنَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_zs3",
+      "mention": "m_zs2",
+      "agent": "zaynab-bint-abi-salamah",
+      "basis": [
+        {
+          "span": "sp_zs_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zs9",
+      "mention": "m_zs8",
+      "agent": "abu-salamah",
+      "basis": [
+        {
+          "span": "sp_zs7",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zs14",
+      "mention": "m_zs13",
+      "agent": "zaynab-bint-abi-salamah",
+      "basis": [
+        {
+          "span": "sp_zs_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zs17",
+      "mention": "m_zs16",
+      "agent": "umar-ibn-abi-salamah",
+      "basis": [
+        {
+          "span": "sp_zs15",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zs21",
+      "mention": "m_zs20",
+      "agent": "umm-salamah",
+      "basis": [
+        {
+          "span": "sp_zs19",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_zs4",
+      "subject": "m_zs2",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_zs_name"
+        ]
+      },
+      "restsOn": [
+        "st_zs1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zs6",
+      "subject": "m_zs2",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_zs5"
+        ]
+      },
+      "restsOn": [
+        "st_zs1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zs10",
+      "subject": "m_zs2",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_zs8"
+      },
+      "restsOn": [
+        "st_zs1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zs18",
+      "subject": "m_zs13",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_zs16"
+      },
+      "restsOn": [
+        "st_zs12"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zs22",
+      "subject": "m_zs13",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_zs20"
+      },
+      "restsOn": [
+        "st_zs12"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zs24",
+      "subject": "m_zs13",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_zs23"
+        ]
+      },
+      "restsOn": [
+        "st_zs12"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

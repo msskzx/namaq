@@ -1,0 +1,268 @@
+{
+  "unit": {
+    "id": "siyar-v6-41-rubayyi",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٤١"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_rb_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "198",
+      "layer": "MAIN",
+      "exact": "٤١ - الرُّبَيِّعُ بِنْتُ مُعَوِّذِ بنِ عَفْرَاءَ الأَنْصَارِيَّةُ"
+    },
+    {
+      "id": "sp_rb_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "198",
+      "layer": "MAIN",
+      "exact": "الرُّبَيِّعُ بِنْتُ مُعَوِّذِ بنِ عَفْرَاءَ الأَنْصَارِيَّةُ",
+      "prefix": "٤١ -"
+    },
+    {
+      "id": "sp_rb5",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "198",
+      "layer": "MAIN",
+      "exact": "الرُّبَيِّعُ بِنْتُ",
+      "prefix": "٤١ -"
+    },
+    {
+      "id": "sp_rb7",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "198",
+      "layer": "MAIN",
+      "exact": "مُعَوِّذِ بنِ عَفْرَاءَ",
+      "prefix": "الرُّبَيِّعُ بِنْتُ"
+    },
+    {
+      "id": "sp_rb11",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "198",
+      "layer": "MAIN",
+      "exact": "لَهَا: صُحْبَةٌ، وَرِوَايَةٌ، وَقَدْ زَارَهَا النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - صَبِيْحَةَ عُرْسِهَا، صِلَةً لِرَحِمِهَا."
+    },
+    {
+      "id": "sp_rb12",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "198",
+      "layer": "MAIN",
+      "exact": "وَقَدْ زَارَهَا النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - صَبِيْحَةَ عُرْسِهَا، صِلَةً لِرَحِمِهَا"
+    },
+    {
+      "id": "sp_rb15",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "199",
+      "layer": "MAIN",
+      "exact": "وَالرُّبَيِّعُ: هِيَ وَالِدَةُ مُحَمَّدِ بنِ إِيَاسِ بنِ البُكَيْرِ"
+    },
+    {
+      "id": "sp_rb19",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "199",
+      "layer": "MAIN",
+      "exact": "مُحَمَّدِ بنِ إِيَاسِ بنِ البُكَيْرِ",
+      "prefix": "هِيَ وَالِدَةُ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_rb0",
+      "unit": "siyar-v6-41-rubayyi",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_rb_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_rb1",
+      "report": "r_rb0",
+      "spans": [
+        "sp_rb_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_rb13",
+      "report": "r_rb0",
+      "spans": [
+        "sp_rb11"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_rb16",
+      "report": "r_rb0",
+      "spans": [
+        "sp_rb15"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_rb2",
+      "parent": "sp_rb_name",
+      "exact": "الرُّبَيِّعُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_rb8",
+      "parent": "sp_rb_name",
+      "exact": "مُعَوِّذِ بنِ عَفْرَاءَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_rb17",
+      "parent": "sp_rb15",
+      "exact": "وَالرُّبَيِّعُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_rb20",
+      "parent": "sp_rb15",
+      "exact": "مُحَمَّدِ بنِ إِيَاسِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_rb3",
+      "mention": "m_rb2",
+      "agent": "al-rubayyi-bint-muawwidh",
+      "basis": [
+        {
+          "span": "sp_rb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rb9",
+      "mention": "m_rb8",
+      "agent": "muawwidh-ibn-afra",
+      "basis": [
+        {
+          "span": "sp_rb7",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rb18",
+      "mention": "m_rb17",
+      "agent": "al-rubayyi-bint-muawwidh",
+      "basis": [
+        {
+          "span": "sp_rb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rb21",
+      "mention": "m_rb20",
+      "agent": "muhammad-ibn-iyas-ibn-al-bukayr",
+      "basis": [
+        {
+          "span": "sp_rb19",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_rb4",
+      "subject": "m_rb2",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_rb_name"
+        ]
+      },
+      "restsOn": [
+        "st_rb1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rb6",
+      "subject": "m_rb2",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_rb5"
+        ]
+      },
+      "restsOn": [
+        "st_rb1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rb10",
+      "subject": "m_rb2",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_rb8"
+      },
+      "restsOn": [
+        "st_rb1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rb14",
+      "subject": "m_rb2",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_rb12"
+        ]
+      },
+      "restsOn": [
+        "st_rb13"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rb22",
+      "subject": "m_rb20",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_rb17"
+      },
+      "restsOn": [
+        "st_rb16"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
