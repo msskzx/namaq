@@ -35,6 +35,9 @@ export interface AssembledQuestion {
   alike?: ChoiceQuestion['alike'];
   marked?: ChoiceQuestion['marked'];
   explains?: ChoiceQuestion['explains'];
+  passage?: ChoiceQuestion['passage'];
+  quranChoices?: ChoiceQuestion['quranChoices'];
+  whereOf?: ChoiceQuestion['whereOf'];
   note?: ChoiceQuestion['note'];
   evidence: { claimKeys: string[] };
 }

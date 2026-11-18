@@ -12,6 +12,8 @@ export interface PageRef {
 
 /** One value as the book prints it, with who says it. `by` is empty when the author says it himself. */
 export interface PersonFact {
+  /** The assertion this rests on, «unit#assertion», for review lists that pick a fact out. */
+  id?: string;
   text: string;
   refs: PageRef[];
   by: string[];

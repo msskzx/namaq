@@ -45,3 +45,14 @@ describe('fair choices', () => {
     }
   });
 });
+
+describe('virtue skip list', () => {
+  it('names only virtues that exist, each with a reason', async () => {
+    const { skip } = (await import('../data/tarajim/virtueQuizSkip.json')).default as { skip: Record<string, string> };
+    const ids = new Set((await import('../data/tarajim/people.json')).default.flatMap((p: { virtues: { id?: string }[] }) => p.virtues.map(v => v.id)));
+    for (const [id, why] of Object.entries(skip)) {
+      expect(ids.has(id)).toBe(true);
+      expect(why.length).toBeGreaterThan(0);
+    }
+  });
+});

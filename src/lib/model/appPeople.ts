@@ -100,6 +100,7 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
       return pages.filter((ref, index) => pages.findIndex((other) => other.volume === ref.volume && other.page === ref.page) === index);
     };
     const fact = (entry: ProfileEntry): PersonFact => ({
+      id: `${entry.unit}#${entry.assertionId}`,
       text: arabicCommas(entry.text),
       refs: refsOf(entry),
       // Who says it: the person the narrating mention is identified as («أبي» in Urwa's words is al-Zubayr), else its text.
