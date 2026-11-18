@@ -222,6 +222,12 @@ only for differences in letters or vowels (farsh), not performance (usul).
   differences (5:6 أرجلكم) are farsh.
 - The King Fahd Complex texts of seven riwayat correct the dump only narrowly
   (docs/records/R0028).
+- Every reading is stored fully vowelled (`scripts/quran/qiraatVowels.ts`,
+  docs/records/R0062): copied from the King Fahd text of a riwaya in its group
+  (Shu'ba, al-Duri, al-Susi, al-Bazzi, Qunbul; Qalun and Warsh are Maghribi
+  texts and are not copied), or else from `qiraatVowels.json`, vowelled by hand
+  from the dump's own description and checked by a second reviewer. A reading
+  that comes out the same as another once vowelled joins it.
 - Checked: 37 of the page's sourced examples agree with the data; the six left
   out are listed in `src/app/quran/qiraat/data/qiraatData.test.ts`.
 - Known gaps: some of al-Susi's long merging phrases and a few dump typos are

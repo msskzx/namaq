@@ -174,3 +174,4 @@ counts for neither.
 | [R0059](R0059-a-later-author-can-be-in-the-main-text.md) | A later author's note can sit inside the main text | obstacle | solved |
 | [R0060](R0060-a-root-dictionary-meets-the-corpus-root-by-tiers.md) | A root dictionary meets the corpus's roots by tiers of spelling, never across و and ي | challenge | solved |
 | [R0061](R0061-a-commentary-carries-the-text-it-explains-above-its-rule.md) | A commentary on Shamela carries the text it explains above its rule | obstacle | solved |
+| [R0062](R0062-a-partly-vowelled-reading-takes-its-tashkeel-from-a-riwaya-that-reads-it.md) | A partly vowelled reading takes its tashkeel from a riwaya that reads it | obstacle | solved |
