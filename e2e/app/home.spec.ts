@@ -195,7 +195,9 @@ test.describe('a new user', () => {
   });
 
   test('a «which surah» card shows the ayah number and marks the surah picked', async ({ page }) => {
-    for (const days of [0, 3, 6]) {
+    // Thirteen kinds take turns, so the «which surah» card may be days away.
+    test.setTimeout(120_000);
+    for (const days of [0, 3, 6, 9, 12]) {
       await page.clock.setFixedTime(new Date(Date.now() + days * 86_400_000));
       await open(page, '/');
       await page.mouse.move(195, 500);

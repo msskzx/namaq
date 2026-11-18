@@ -13,7 +13,7 @@ import { READERS, RIWAYAT } from '../../shared/quran/qiraat';
 import { normalizeWord } from '../../shared/quran/normalize';
 import { seededRandom } from '../../shared/quiz/feedQuiz';
 import { shuffle } from '../../shared/quiz/random';
-import { quotesOf, stems } from '../../shared/quiz/ayahQuizText';
+import { quotesOf, stem, stems } from '../../shared/quiz/ayahQuizText';
 import type { AyahQuizzes } from '../../shared/quiz/ayahQuizzes';
 
 /**
@@ -29,7 +29,10 @@ const REVIEW = join(__dirname, 'ayahQuizReview.json');
 type Review = { tafsir: Record<string, string>; avoid: Record<string, string[]>; drop: Record<string, string> };
 const review: Review = JSON.parse(readFileSync(REVIEW, 'utf8'));
 const dropped = (id: string) => id in review.drop;
-const random = seededRandom(20261118);
+// Each question draws from its own seed, so a review's change to one question (a wrong choice swapped) leaves the others as read.
+let random = seededRandom(20261118);
+const seedOf = (id: string) => [...id].reduce((hash, char) => (Math.imul(hash, 31) + char.charCodeAt(0)) >>> 0, 20261118);
+const reseed = (id: string) => { random = seededRandom(seedOf(id)); };
 
 const ayat = corpus.ayat as BranchAyah[];
 const byKey = new Map(ayat.map(ayah => [ayah.key, ayah]));
@@ -60,6 +63,7 @@ function tafsirBank() {
     if (review.tafsir[key] !== 'keep' || dropped(`tafsir:${key}`)) continue;
     // A passage that ends leading into the next ayah («ثم قال تعالى:») stops mid-thought in a card.
     if (/:\s*$/.test(text)) continue;
+    reseed(`tafsir:${key}`);
     const right = byKey.get(key)!;
     // Wrong ayat say nothing the passage says: none of their telling words is in the passage or in the right ayah.
     const said = new Set([...stems(text), ...stems(right.words)]);
@@ -80,6 +84,9 @@ function tafsirBank() {
 const LABEL: Record<string, string> = { 'فِي أَنْوَاعِ الْحَذْفِ': 'الْحَذْفُ', 'الإطناب الزيادة': 'الإطناب بالزيادة', 'الافتان': 'الافتنان' };
 // A heading that does not say what the device is to a reader («الْأَعْلَامُ» reads as names or flags) is not asked.
 const UNCLEAR = new Set(['الْأَعْلَامُ']);
+// Broad kinds found in very many ayat (a metaphor, a مجاز, a dropped word, a حصر): asked as his heading, never offered as a
+// wrong one, since the second agent's reviews found them truly in the ayah again and again.
+const BROAD = ['الْمَجَازُ', 'التَّشْبِيهُ وَالِاسْتِعَارَةُ', 'الْكِنَايَةُ وَالتَّعْرِيضُ', 'الْحَصْرُ وَالِاخْتِصَاصُ', 'الْحَذْفُ', 'إيجاز الحذف'];
 // Chapters one inside the other: a metaphor is a مجاز, so the two never stand as right and wrong in one question.
 const FAMILY: Record<number, number> = { 53: 52 };
 const CHAPTER: Record<number, string> = { 52: 'الْمَجَازُ', 53: 'التَّشْبِيهُ وَالِاسْتِعَارَةُ', 54: 'الْكِنَايَةُ وَالتَّعْرِيضُ', 55: 'الْحَصْرُ وَالِاخْتِصَاصُ' };
@@ -118,6 +125,7 @@ function balaghaBank() {
   for (const run of runs) {
     if (asked.has(run.key) || dropped(`balagha:${run.key}`)) continue;
     asked.add(run.key);
+    reseed(`balagha:${run.key}`);
     const [surah, from] = run.key.split(':').map(Number);
     const keys = Array.from({ length: run.through - from + 1 }, (_, i) => `${surah}:${from + i}`);
     // Every chapter he cites any of these ayat in, sure or not, and every heading he gives them.
@@ -125,7 +133,7 @@ function balaghaBank() {
     const cited = new Set(paragraphs.map(p => Number(Object.keys(data.kinds).find(kind => data.kinds[Number(kind)] === p.kind))).map(kind => FAMILY[kind] ?? kind));
     const citedLabels = new Set(paragraphs.map(p => labels.indexOf(LABEL[p.heading] ?? p.heading)).filter(i => i >= 0));
     const rightWords = stems(labels[run.label]);
-    const avoid = review.avoid[`balagha:${run.key}`] ?? [];
+    const avoid = [...(review.avoid[`balagha:${run.key}`] ?? []), ...BROAD];
     const ok = (label: number) => label !== run.label && !citedLabels.has(label) && !avoid.includes(labels[label]) && !cited.has(family(label))
       && ![...stems(labels[label])].some(word => rightWords.has(word));
     // Common headings first, so a wrong choice is a style a reader may know; two different chapters when it can.
@@ -149,6 +157,9 @@ const CASES: Record<string, 'مرفوع' | 'منصوب' | 'مجرور'> = {
 const SAME = [['اسم إن', 'اسم أن'], ['خبر إن', 'خبر أن']];
 // The role a wrong choice is best paired with: the other half of its sentence.
 const PARTNER: Record<string, string> = { 'اسم إن': 'خبر إن', 'خبر إن': 'اسم إن', 'اسم أن': 'خبر أن', 'خبر أن': 'اسم أن', 'اسم كان': 'خبر كان', 'خبر كان': 'اسم كان', 'فاعل': 'مفعول به', 'مفعول به': 'فاعل', 'نائب فاعل': 'فاعل' };
+const ADVERBS = new Set(['غير', 'مكان', 'يوم', 'حين', 'قبل', 'بعد', 'وراء', 'دون', 'ساعه', 'ليل', 'نهار', 'غدا', 'امس', 'اخري', 'اخر']);
+const NUMBERS = new Set(['ألف', 'مأي', 'ثني', 'ثلث', 'ربع', 'خمس', 'سدس', 'سبع', 'ثمن', 'تسع', 'عشر', 'وحد']);
+const SET_PHRASES = new Set(['سبحان', 'سنه', 'وعد', 'صبغه']);
 // كان and her sisters as verbs: in their ayah a فاعل may be كان's own (كان التامة) and a مفعول به her خبر, so neither is asked.
 const KANA = /الجذر \((?:كون|ليس|صبح|ظلل|بيت|مسي|صير|زول|برح|فتأ|دوم)\)/;
 /**
@@ -159,10 +170,29 @@ const KANA = /الجذر \((?:كون|ليس|صبح|ظلل|بيت|مسي|صير|�
 function settled(ayah: BranchAyah, word: number, role: string, lines: ReturnType<typeof irabWordsAt>): boolean {
   const line = lines[word];
   const head = line.head;
-  if ((role === 'فاعل' || role === 'نائب فاعل') && (head === null || head > word)) return false;
+  // A فاعل after its verb, never a participle after a pronoun (وهم … مشفقون is the خبر of هم).
+  if ((role === 'فاعل' || role === 'نائب فاعل') && (head === null || head > word || !lines[head]?.morph.startsWith('فعل'))) return false;
+  // A doubled verb (لا تضارّ) reads active or passive alike, so its فاعل and نائب فاعل cannot be told apart.
+  if ((role === 'فاعل' || role === 'نائب فاعل') && head !== null && /\u0651[\u064B-\u0650]*$/.test(ayah.words[head] ?? '')) return false;
+  // After كيف, كان may be تامة, so its اسم and فاعل cannot be told apart.
+  if (/^(?:اسم|خبر) كان$/.test(role) && ayah.words.some(other => stem(other) === 'كيف')) return false;
   if ((role === 'فاعل' || role === 'مفعول به') && lines.some(other => other.morph.startsWith('فعل') && KANA.test(other.morph))) return false;
-  if (role === 'مفعول به' && (/نكرة/.test(line.morph) || /مصدر/.test(line.morph))) return false;
-  if (role === 'مفعول به' && head !== null && line.morph.match(/الجذر \((.+?)\)/)?.[1] === lines[head]?.morph.match(/الجذر \((.+?)\)/)?.[1]) return false;
+  const root = (morph: string | undefined) => morph?.match(/الجذر \((.+?)\)/)?.[1];
+  // Indefinite: no «ال», nothing hanging on it as مضاف إليه, not a name (a sound plural carries no «نكرة» tag: خائبين).
+  const indefinite = !line.morph.includes('أل التعريف') && !/علم/.test(line.morph) && !lines.some(other => other.head === word && /مضاف إليه/.test(other.role ?? ''));
+  if (role === 'مفعول به' && (indefinite || /نكرة|مصدر/.test(line.morph))) return false;
+  // Nouns used as ظروف (مكان، يوم، حين…) and numbers (ألف سنة) are asked only as مضاف إليه; the bank has no ظرف to offer.
+  const bare = stem(ayah.words[word] ?? '').replace(/ا$/, '');
+  if (role !== 'مضاف إليه' && (ADVERBS.has(bare) || NUMBERS.has(root(line.morph) ?? ''))) return false;
+  // A مفعول مطلق is asked only beside a verb of its own root (أنبتكم … نباتا) or in a set phrase (سبحان، وعد الله).
+  if (role === 'مفعول مطلق' && !SET_PHRASES.has(bare) && !lines.some(other => other.morph.startsWith('فعل') && root(other.morph) === root(line.morph))) return false;
+  // A place after دخل or استبق (ادخلوا الباب): ظرف, نزع الخافض or مفعول به, so not asked; the transitive أدخل is.
+  if (role === 'مفعول به' && head !== null && /الجذر \((?:دخل|سبق|سكن)\)/.test(lines[head]?.morph ?? '') && !/الوزن \(أَفْعَلَ\)/.test(lines[head]?.morph ?? '')) return false;
+  // The noun after ضرب … مثلا may be the مثل's بدل.
+  if (role === 'مفعول به' && /الجذر \(ضرب\)/.test(head !== null ? lines[head]?.morph ?? '' : '')) return false;
+  // A نائب فاعل with a جار ومجرور right after its verb, which may be the نائب فاعل itself (نفخ فيه أخرى).
+  if (role === 'نائب فاعل' && head !== null && lines.slice(head + 1, word).some(other => /حرف جر/.test(other.morph))) return false;
+  if (role === 'مفعول به' && head !== null && root(line.morph) === root(lines[head]?.morph)) return false;
   const particle = role.match(/^(?:اسم|خبر) (إن|أن)$/)?.[1];
   if (particle) {
     // The governing word is the particle (its head for a خبر is the اسم, whose head is the particle).
@@ -196,6 +226,7 @@ function irabBank() {
       return [{ at, role: line.role }];
     });
     if (!fit.length || dropped(`irab:${ayah.key}`)) continue;
+    reseed(`irab:${ayah.key}`);
     const { at, role } = fit[Math.floor(random() * fit.length)];
     const same = SAME.find(pair => pair.includes(role)) ?? [role];
     const others = shuffle(roles.filter(other => !same.includes(other)), random);
@@ -254,6 +285,7 @@ function qiraatBank() {
         const reading = readings.findIndex(r => own.every(n => r.rawis.includes(n)));
         return reading < 0 ? [] : [{ reader: i, reading }];
       });
+      reseed(`qiraat:${key}:${at}`);
       const wanted = whole.filter(({ reading }) => (reading === 0) === mushafTurn);
       const pick = (wanted.length ? wanted : whole)[Math.floor(random() * (wanted.length || whole.length))];
       if (!pick) return;

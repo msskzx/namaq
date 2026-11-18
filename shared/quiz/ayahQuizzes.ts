@@ -53,7 +53,12 @@ const span = (count: number, from = 0) => Array.from({ length: count }, (_, i) =
 function bankKind<T extends [string, ...unknown[]]>(id: keyof typeof AYAH_QUIZ_NAMES, list: () => T[], ask: (row: T, random: Random) => ChoiceQuestion): ChoiceKind {
   const candidates = (scope: ChoiceScope, random: Random) => {
     const inScope = filteredAyat(ayatByKey(), scope.filters, scope.range);
-    return shuffle(list().filter(row => inScope.has(row[0])), random);
+    // A balagha run of ayat is asked only when its last ayah is in the scope too, and a tafsir question only when its wrong
+    // ayat are, so no choice can be ruled out by being outside what is asked.
+    const fits = (row: T) => inScope.has(row[0])
+      && (id !== BALAGHA_QUIZ || inScope.has(`${row[0].split(':')[0]}:${row[1]}`))
+      && (id !== TAFSIR_QUIZ || (inScope.has(row[1] as string) && inScope.has(row[2] as string)));
+    return shuffle(list().filter(fits), random);
   };
   return {
     id,

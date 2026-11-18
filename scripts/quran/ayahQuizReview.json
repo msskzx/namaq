@@ -13,9 +13,9 @@
   "2:79": "far too long for a card",
   "2:83": "far too long for a card",
   "2:87": "too long for a phone card, with many gaps in the second half",
-  "2:88": "keep",
+  "2:88": "Repeats قلوبهم غلف and the curse-for-disbelief clause, so the ayah is matched by its words",
   "2:99": "keep",
-  "2:100": "keep",
+  "2:100": "Quotes كُلَّمَا outright and repeats the ayah's ending أكثرهم لا يؤمنون word for word",
   "2:113": "keep",
   "2:114": "far too long for a card",
   "2:115": "too long for a phone card; several topics (qibla cases, the Face of Allah)",
@@ -101,7 +101,7 @@
   "3:160": "too long for a phone card",
   "3:161": "far too long for a card",
   "3:164": "far too long for a card",
-  "3:178": "keep",
+  "3:178": "Opening restates ولا يحسبن الذين كفروا ... نملي لهم خير لأنفسهم nearly word for word",
   "3:179": "too long for a phone card",
   "3:180": "far too long for a card",
   "3:185": "too long for a phone card",
@@ -152,7 +152,7 @@
   "4:135": "far too long for a card",
   "4:136": "far too long for a card",
   "4:137": "too long for a phone card",
-  "4:144": "keep",
+  "4:144": "Repeats اتخاذ الكافرين أولياء من دون المؤمنين and سلطانا مبينا, i.e. both halves of the ayah",
   "4:162": "keep",
   "4:166": "far too long for a card",
   "4:170": "far too long for a card",
@@ -182,7 +182,7 @@
   "5:93": "too long for a phone card",
   "5:100": "too long for a phone card",
   "5:105": "too long for a phone card; adds a side discussion on enjoining good",
-  "6:3": "keep",
+  "6:3": "Verbatim run يعلم سركم وجهركم ويعلم ما تكسبون is the ayah's second half",
   "6:12": "far too long for a card",
   "6:21": "keep",
   "6:25": "too long for a phone card",
@@ -191,7 +191,7 @@
   "6:31": "keep",
   "6:32": "too long for a phone card",
   "6:38": "far too long for a card",
-  "6:39": "keep",
+  "6:39": "Unmasked quotes of the ayah itself: ﴿صُمٌّ﴾ and ﴿فِي الظُّلُمَاتِ﴾ match the right choice word for word",
   "6:50": "far too long for a card",
   "6:59": "far too long for a card",
   "6:70": "far too long for a card",
@@ -249,7 +249,7 @@
   "9:37": "far too long for a card",
   "9:40": "far too long for a card",
   "9:49": "too long for a phone card",
-  "9:52": "keep",
+  "9:52": "Long verbatim run: إحدى الحسنيين، نتربص بكم أن يصيبكم الله بعذاب من عنده أو بأيدينا",
   "9:60": "far too long for a card",
   "9:79": "far too long for a card",
   "9:80": "opens mid-thought (على وجه المبالغة) and refers to «الآية الأخرى» that is hidden; does not stand alone",
@@ -262,7 +262,7 @@
   "9:101": "opens with fragments («…» أيضا منافقون «…») and gives two readings; choppy",
   "9:104": "too long for a phone card, with a gap opening each part",
   "9:105": "keep",
-  "9:106": "keep",
+  "9:106": "Unmasked ﴿وَآخَرُونَ﴾ is the first word of the right ayah and of no other choice",
   "9:111": "far too long for a card",
   "9:112": "far too long for a card",
   "9:119": "keep",
@@ -275,36 +275,36 @@
   "10:21": "keep",
   "10:24": "far too long for a card",
   "10:27": "too long for a phone card; includes two long quoted passages",
-  "10:45": "keep",
+  "10:45": "Passage retells the whole ayah in its own words: ما لبثوا إلا ساعة من نهار، يتعارفون بينهم، خسر الذين كذبوا بلقاء الله وما كانوا مهتدين",
   "10:46": "keep",
   "10:61": "far too long for a card",
   "10:65": "too long for a phone card",
   "10:74": "too long for a phone card",
   "10:75": "opens with إلى آخر القصة and is mostly fragments once quotes are hidden",
   "10:78": "far too long for a card",
-  "10:84": "keep",
+  "10:84": "Unmasked quote ﴿يَا قَوْمِ إِنْ كُنْتُمْ آمَنْتُمْ بِاللَّهِ﴾ is the opening of the right ayah",
   "10:85": "keep",
   "10:86": "a single half-sentence (لنسلم من شرهم...) that does not point to the verse on its own",
   "10:87": "too long and fragmented, with a garbled bracket (] به [)",
   "10:88": "opens mid-sentence and is choppy with gaps («…» أي: قسها «…»)",
   "10:89": "too long for a phone card",
   "10:90": "too long for a phone card; also states the twelve paths in the sea as fact, which the Quran does not establish",
-  "10:91": "keep",
+  "10:91": "Unmasked ﴿آلآنَ﴾ is the first word of the right ayah and appears in no other choice",
   "10:92": "keep",
   "10:93": "far too long for a card",
   "10:94": "far too long for a card",
   "10:95": "too long for a phone card",
   "10:98": "far too long for a card",
-  "10:106": "keep",
+  "10:106": "Verbatim run دعوت من دون الله ما لا ينفعك ولا يضرك is most of the ayah",
   "10:107": "far too long for a card",
-  "11:1": "keep",
+  "11:1": "Unmasked ﴿كِتَابٌ﴾; only the right choice contains كتاب",
   "11:2": "keep",
   "11:5": "too long for a phone card",
   "11:6": "too long for a phone card",
   "11:17": "far too long for a card",
   "11:109": "too long for a phone card",
   "11:116": "far too long for a card",
-  "11:117": "keep",
+  "11:117": "Passage restates the ayah twice almost word for word (وما كان ربك ليهلك القرى بظلم ... مصلحون)",
   "12:10": "too long for a phone card, and it ends mid-thought",
   "12:21": "too long for a phone card",
   "12:22": "keep",
@@ -312,7 +312,7 @@
   "12:42": "too long for a phone card",
   "12:101": "keep",
   "12:102": "too long for a phone card",
-  "13:1": "keep",
+  "13:1": "Repeats آيات الكتاب and الذي أنزل إلى الرسول من ربه هو الحق, nearly the whole ayah",
   "13:5": "far too long for a card",
   "13:6": "far too long for a card",
   "13:7": "too long for a phone card",
@@ -329,7 +329,7 @@
   "13:32": "keep",
   "13:35": "keep",
   "13:36": "too long for a phone card",
-  "13:37": "keep",
+  "13:37": "Unmasked ﴿مَا لَكَ مِنَ اللَّهِ مِنْ وَلِيٍّ﴾ and ﴿وَلا وَاقٍ﴾ are the right ayah's ending, word for word",
   "14:4": "too long for a phone card",
   "14:18": "too long for a phone card",
   "14:27": "too long for a phone card",
@@ -367,18 +367,18 @@
   "17:15": "says the people between prophets and the children of polytheists are not punished, a point scholars differ on",
   "17:22": "Too long and dense for a feed card (two long paragraphs on shirk and being forsaken)",
   "17:25": "Too long and dense for a feed card (three paragraphs, several hidden quotes)",
-  "17:31": "keep",
+  "17:31": "Verbatim قتلهم كان خطأ كبيرا plus الإملاق gives the ayah away",
   "17:32": "keep",
   "17:33": "Too long and dense for a feed card: detailed rulings on retaliation (قصاص) and the victim's guardian",
   "17:34": "Too long and dense for a feed card: rulings on the orphan's property plus covenants, with another ayah quoted",
   "17:35": "keep",
   "17:36": "keep",
   "17:40": "keep",
-  "17:58": "keep",
+  "17:58": "Repeats ما من قرية ... قبل يوم القيامة أو عذاب شديد ... كتاب, nearly the whole ayah",
   "17:70": "Too long and dense for a feed card, and leaves the ayah's own words (﴿وحملناهم في البر﴾, ﴿ورزقناهم من الطيبات﴾) visible",
   "17:82": "Too long and dense for a feed card: a long passage on the Quran as healing and mercy",
   "17:83": "keep",
-  "17:84": "keep",
+  "17:84": "Unmasked ﴿قُلْ كُلٌّ﴾ is the opening of the right ayah and of no other choice",
   "17:85": "Too long and dense for a feed card (three paragraphs on the question about الروح)",
   "17:88": "far too long for a card",
   "17:105": "keep",
@@ -446,7 +446,7 @@
   "27:60": "Five hidden quotes leave mostly one-word glosses (أي: لأجلكم، أي: بساتين) that do not read as a passage",
   "27:61": "Too long and dense for a feed card, broken up by hidden quotes",
   "27:62": "Too long and dense for a feed card: one dense paragraph",
-  "27:63": "keep",
+  "27:63": "Unmasked ﴿أَإِلَهٌ مَعَ اللَّهِ﴾ plus ظلمات البر والبحر, both straight from the right ayah",
   "27:64": "Too long and dense for a feed card (about 490 characters)",
   "27:69": "keep",
   "27:78": "keep",
@@ -510,7 +510,7 @@
   "39:22": "Hidden quotes leave «وهو المراد بقوله: «…» كمن ليس كذلك، بدليل قوله: «…»» meaningless",
   "39:23": "far too long for a card",
   "39:38": "far too long for a card",
-  "39:41": "keep",
+  "39:41": "Unmasked ﴿وَمَنْ ضَلَّ﴾ plus أنزل على رسوله الكتاب ... الحق restates the right ayah",
   "39:42": "far too long for a card",
   "39:67": "Too long and dense for a feed card (about 490 characters)",
   "40:56": "Too long and dense for a feed card (four paragraphs)",
@@ -529,9 +529,9 @@
   "45:21": "Too long and dense for a feed card: one long dense passage",
   "45:22": "keep",
   "46:20": "Too long and dense for a feed card (about 520 characters)",
-  "46:33": "keep",
+  "46:33": "Repeats خلق السماوات والأرض ... ولم يعي بخلقهن ... على كل شيء قدير, nearly the whole ayah",
   "47:12": "Too long and dense for a feed card (two long paragraphs)",
-  "47:13": "keep",
+  "47:13": "Unmasked ﴿أهلكناهم﴾, and the opening restates وكم من قرية هي أشد قوة من قريتك almost word for word",
   "47:14": "keep",
   "47:15": "far too long for a card",
   "47:18": "keep",
@@ -595,6 +595,7 @@
    "الْحَصْرُ وَالِاخْتِصَاصُ"
   ],
   "balagha:2:194": [
+   "التَّشْبِيهُ وَالِاسْتِعَارَةُ",
    "الْمَجَازُ"
   ],
   "balagha:2:210": [
@@ -617,6 +618,7 @@
    "الْمَجَازُ"
   ],
   "balagha:3:130": [
+   "التَّشْبِيهُ وَالِاسْتِعَارَةُ",
    "الْمَجَازُ"
   ],
   "balagha:3:187": [
@@ -629,6 +631,7 @@
    "الْمَجَازُ"
   ],
   "balagha:5:64": [
+   "التَّشْبِيهُ وَالِاسْتِعَارَةُ",
    "الْمَجَازُ"
   ],
   "balagha:6:68": [
@@ -644,7 +647,8 @@
    "التَّشْبِيهُ وَالِاسْتِعَارَةُ"
   ],
   "balagha:7:29": [
-   "الْأَمْرُ"
+   "الْأَمْرُ",
+   "الْمَجَازُ"
   ],
   "balagha:7:105": [
    "الْحَصْرُ وَالِاخْتِصَاصُ"
@@ -656,7 +660,8 @@
    "الْمَجَازُ"
   ],
   "balagha:7:178": [
-   "الْجِنَاسُ"
+   "الْجِنَاسُ",
+   "الْحَصْرُ وَالِاخْتِصَاصُ"
   ],
   "balagha:9:74": [
    "الْحَصْرُ وَالِاخْتِصَاصُ"
@@ -677,6 +682,7 @@
    "الْحَذْفُ"
   ],
   "balagha:11:105": [
+   "الْحَذْفُ",
    "الْحَصْرُ وَالِاخْتِصَاصُ"
   ],
   "balagha:12:86": [
@@ -686,10 +692,12 @@
    "الْحَصْرُ وَالِاخْتِصَاصُ"
   ],
   "balagha:15:66": [
+   "التَّشْبِيهُ وَالِاسْتِعَارَةُ",
    "الْكِنَايَةُ وَالتَّعْرِيضُ",
    "الْمَجَازُ"
   ],
   "balagha:15:94": [
+   "الْأَمْرُ",
    "الْمَجَازُ"
   ],
   "balagha:16:112": [
@@ -705,28 +713,34 @@
    "الْمَجَازُ"
   ],
   "balagha:17:75": [
+   "الْمَجَازُ",
    "الْمُطَابَقَةُ"
   ],
   "balagha:18:99": [
    "الْمَجَازُ"
   ],
   "balagha:18:101": [
-   "الْمَجَازُ",
-   "التَّشْبِيهُ وَالِاسْتِعَارَةُ"
+   "التَّشْبِيهُ وَالِاسْتِعَارَةُ",
+   "الِالْتِفَاتُ",
+   "الْمَجَازُ"
   ],
   "balagha:21:18": [
    "الْمَجَازُ"
   ],
   "balagha:22:46": [
+   "التَّشْبِيهُ وَالِاسْتِعَارَةُ",
    "الْمَجَازُ"
   ],
   "balagha:24:50": [
+   "التَّأْكِيدُ الصِّنَاعِيُّ",
+   "الْحَصْرُ وَالِاخْتِصَاصُ",
    "الْمَجَازُ"
   ],
   "balagha:26:225": [
    "الْمَجَازُ"
   ],
   "balagha:27:66": [
+   "التَّشْبِيهُ وَالِاسْتِعَارَةُ",
    "الْمَجَازُ"
   ],
   "balagha:30:4": [
@@ -743,13 +757,15 @@
    "الْمَجَازُ"
   ],
   "balagha:36:15": [
-   "التَّشْبِيهُ وَالِاسْتِعَارَةُ"
+   "التَّشْبِيهُ وَالِاسْتِعَارَةُ",
+   "الْحَصْرُ وَالِاخْتِصَاصُ"
   ],
   "balagha:36:52": [
    "الْمَجَازُ"
   ],
   "balagha:38:23": [
-   "التَّشْبِيهُ وَالِاسْتِعَارَةُ"
+   "التَّشْبِيهُ وَالِاسْتِعَارَةُ",
+   "الْمَجَازُ"
   ],
   "balagha:39:9": [
    "التَّشْبِيهُ وَالِاسْتِعَارَةُ"
@@ -759,18 +775,30 @@
    "التَّشْبِيهُ وَالِاسْتِعَارَةُ"
   ],
   "balagha:39:74": [
+   "التَّشْبِيهُ وَالِاسْتِعَارَةُ",
    "الْمَجَازُ"
   ],
   "balagha:42:11": [
    "التَّشْبِيهُ وَالِاسْتِعَارَةُ"
   ],
   "balagha:42:24": [
-   "التَّشْبِيهُ وَالِاسْتِعَارَةُ"
+   "التَّشْبِيهُ وَالِاسْتِعَارَةُ",
+   "الْكِنَايَةُ وَالتَّعْرِيضُ",
+   "الْمَجَازُ"
   ],
   "balagha:42:40": [
-   "التَّشْبِيهُ وَالِاسْتِعَارَةُ"
+   "التَّأْكِيدُ",
+   "التَّأْكِيدُ الصِّنَاعِيُّ",
+   "التَّشْبِيهُ وَالِاسْتِعَارَةُ",
+   "التَّمَنِّي",
+   "الصِّفَةُ",
+   "النِّدَاءُ",
+   "الْأَمْرُ",
+   "الْجِنَاسُ",
+   "الْمُطَابَقَةُ"
   ],
   "balagha:45:34": [
+   "التَّشْبِيهُ وَالِاسْتِعَارَةُ",
    "الْمَجَازُ"
   ],
   "balagha:47:4": [
@@ -798,12 +826,14 @@
    "التَّشْبِيهُ وَالِاسْتِعَارَةُ"
   ],
   "balagha:71:17": [
+   "التَّشْبِيهُ وَالِاسْتِعَارَةُ",
    "الْمَجَازُ"
   ],
   "balagha:78:6": [
    "الْمَجَازُ"
   ],
   "balagha:2:22": [
+   "التَّشْبِيهُ وَالِاسْتِعَارَةُ",
    "الْمَجَازُ"
   ],
   "balagha:81:18": [
@@ -822,7 +852,9 @@
    "التَّشْبِيهُ وَالِاسْتِعَارَةُ"
   ],
   "balagha:20:25": [
-   "التَّشْبِيهُ وَالِاسْتِعَارَةُ"
+   "التَّشْبِيهُ وَالِاسْتِعَارَةُ",
+   "الْأَمْرُ",
+   "الْمَجَازُ"
   ],
   "balagha:94:5": [
    "الْمُطَابَقَةُ"
@@ -834,14 +866,323 @@
    "التَّشْبِيهُ وَالِاسْتِعَارَةُ"
   ],
   "balagha:109:1": [
-   "النِّدَاءُ"
+   "النِّدَاءُ",
+   "الْأَمْرُ"
   ],
   "balagha:111:1": [
+   "الْجِنَاسُ",
    "الْمَجَازُ"
   ],
   "balagha:111:4": [
    "التَّشْبِيهُ وَالِاسْتِعَارَةُ",
    "الْمَجَازُ"
+  ],
+  "8:26": [
+   "7:141"
+  ],
+  "13:32": [
+   "16:127"
+  ],
+  "27:69": [
+   "27:52"
+  ],
+  "29:9": [
+   "31:9"
+  ],
+  "67:11": [
+   "69:50"
+  ],
+  "balagha:2:24": [
+   "التَّأْكِيدُ"
+  ],
+  "balagha:2:127": [
+   "النِّدَاءُ"
+  ],
+  "balagha:2:145": [
+   "التَّأْكِيدُ الصِّنَاعِيُّ"
+  ],
+  "balagha:2:222": [
+   "التَّأْكِيدُ",
+   "التَّأْكِيدُ الصِّنَاعِيُّ",
+   "التَّمَنِّي",
+   "الصِّفَةُ",
+   "النَّهْيُ",
+   "النِّدَاءُ",
+   "الْأَمْرُ",
+   "الْجِنَاسُ",
+   "الْمُطَابَقَةُ"
+  ],
+  "balagha:2:238": [
+   "الْأَمْرُ"
+  ],
+  "balagha:3:26": [
+   "التَّأْكِيدُ",
+   "التَّأْكِيدُ الصِّنَاعِيُّ",
+   "التَّمَنِّي",
+   "الصِّفَةُ",
+   "النِّدَاءُ",
+   "الْأَمْرُ",
+   "الْجِنَاسُ",
+   "الْمُطَابَقَةُ"
+  ],
+  "balagha:3:39": [
+   "النِّدَاءُ"
+  ],
+  "balagha:3:102": [
+   "الْأَمْرُ",
+   "الْجِنَاسُ"
+  ],
+  "balagha:3:158": [
+   "التَّأْكِيدُ",
+   "التَّأْكِيدُ الصِّنَاعِيُّ",
+   "التَّمَنِّي",
+   "الصِّفَةُ",
+   "النِّدَاءُ",
+   "الْأَمْرُ",
+   "الْجِنَاسُ",
+   "الْمُطَابَقَةُ"
+  ],
+  "balagha:3:169": [
+   "التَّأْكِيدُ الصِّنَاعِيُّ"
+  ],
+  "balagha:5:6": [
+   "الْأَمْرُ"
+  ],
+  "balagha:5:59": [
+   "التَّأْكِيدُ",
+   "التَّأْكِيدُ الصِّنَاعِيُّ",
+   "التَّمَنِّي",
+   "الصِّفَةُ",
+   "النِّدَاءُ",
+   "الْأَمْرُ",
+   "الْجِنَاسُ",
+   "الْمُطَابَقَةُ"
+  ],
+  "balagha:6:72": [
+   "الْأَمْرُ"
+  ],
+  "balagha:6:162": [
+   "الْأَمْرُ"
+  ],
+  "balagha:7:143": [
+   "التَّأْكِيدُ",
+   "التَّأْكِيدُ الصِّنَاعِيُّ",
+   "التَّمَنِّي",
+   "الصِّفَةُ",
+   "النِّدَاءُ",
+   "الْأَمْرُ",
+   "الْجِنَاسُ",
+   "الْمُطَابَقَةُ"
+  ],
+  "balagha:8:8": [
+   "الْجِنَاسُ"
+  ],
+  "balagha:8:17": [
+   "الْجِنَاسُ"
+  ],
+  "balagha:10:31": [
+   "الْأَمْرُ"
+  ],
+  "balagha:12:29": [
+   "التَّأْكِيدُ",
+   "التَّأْكِيدُ الصِّنَاعِيُّ",
+   "التَّمَنِّي",
+   "الصِّفَةُ",
+   "النِّدَاءُ",
+   "الْأَمْرُ",
+   "الْجِنَاسُ",
+   "الْمُطَابَقَةُ"
+  ],
+  "balagha:12:45": [
+   "التَّأْكِيدُ",
+   "التَّأْكِيدُ الصِّنَاعِيُّ",
+   "التَّمَنِّي",
+   "الصِّفَةُ",
+   "النِّدَاءُ",
+   "الْأَمْرُ",
+   "الْجِنَاسُ",
+   "الْمُطَابَقَةُ"
+  ],
+  "balagha:12:81": [
+   "النِّدَاءُ"
+  ],
+  "balagha:12:95": [
+   "التَّأْكِيدُ",
+   "التَّأْكِيدُ الصِّنَاعِيُّ",
+   "التَّمَنِّي",
+   "الصِّفَةُ",
+   "النِّدَاءُ",
+   "الْأَمْرُ",
+   "الْجِنَاسُ",
+   "الْمُطَابَقَةُ"
+  ],
+  "balagha:16:17": [
+   "الْمُطَابَقَةُ"
+  ],
+  "balagha:16:98": [
+   "الْجِنَاسُ"
+  ],
+  "balagha:17:1": [
+   "التَّأْكِيدُ",
+   "التَّأْكِيدُ الصِّنَاعِيُّ",
+   "التَّمَنِّي",
+   "الصِّفَةُ",
+   "النِّدَاءُ",
+   "الْأَمْرُ",
+   "الْجِنَاسُ",
+   "الْمُطَابَقَةُ"
+  ],
+  "balagha:17:101": [
+   "التَّأْكِيدُ الصِّنَاعِيُّ"
+  ],
+  "balagha:18:29": [
+   "الْأَمْرُ"
+  ],
+  "balagha:20:49": [
+   "النِّدَاءُ"
+  ],
+  "balagha:20:72": [
+   "الْأَمْرُ"
+  ],
+  "balagha:20:96": [
+   "الْجِنَاسُ"
+  ],
+  "balagha:21:108": [
+   "الصِّفَةُ"
+  ],
+  "balagha:22:1": [
+   "التَّأْكِيدُ",
+   "التَّأْكِيدُ الصِّنَاعِيُّ",
+   "التَّمَنِّي",
+   "الصِّفَةُ",
+   "النِّدَاءُ",
+   "الْأَمْرُ",
+   "الْجِنَاسُ",
+   "الْمُطَابَقَةُ"
+  ],
+  "balagha:23:12": [
+   "التَّأْكِيدُ الصِّنَاعِيُّ"
+  ],
+  "balagha:25:27": [
+   "التَّأْكِيدُ",
+   "التَّأْكِيدُ الصِّنَاعِيُّ",
+   "التَّرَجِّي",
+   "التَّمَنِّي",
+   "الصِّفَةُ",
+   "النِّدَاءُ",
+   "الْأَمْرُ",
+   "الْجِنَاسُ",
+   "الْمُطَابَقَةُ"
+  ],
+  "balagha:26:63": [
+   "الْأَمْرُ"
+  ],
+  "balagha:27:12": [
+   "الْمُطَابَقَةُ"
+  ],
+  "balagha:27:21": [
+   "الْجِنَاسُ"
+  ],
+  "balagha:29:27": [
+   "التَّأْكِيدُ"
+  ],
+  "balagha:30:43": [
+   "الْأَمْرُ"
+  ],
+  "balagha:33:49": [
+   "الْجِنَاسُ"
+  ],
+  "balagha:36:20": [
+   "التَّأْكِيدُ",
+   "التَّأْكِيدُ الصِّنَاعِيُّ",
+   "التَّمَنِّي",
+   "الصِّفَةُ",
+   "النِّدَاءُ",
+   "الْأَمْرُ",
+   "الْجِنَاسُ",
+   "الْمُطَابَقَةُ"
+  ],
+  "balagha:37:101": [
+   "الصِّفَةُ"
+  ],
+  "balagha:39:56": [
+   "النِّدَاءُ"
+  ],
+  "balagha:40:38": [
+   "التَّأْكِيدُ",
+   "التَّأْكِيدُ الصِّنَاعِيُّ",
+   "التَّمَنِّي",
+   "الصِّفَةُ",
+   "النِّدَاءُ",
+   "الْأَمْرُ",
+   "الْجِنَاسُ",
+   "الْمُطَابَقَةُ"
+  ],
+  "balagha:43:70": [
+   "الْأَمْرُ"
+  ],
+  "balagha:44:5": [
+   "التَّأْكِيدُ",
+   "التَّأْكِيدُ الصِّنَاعِيُّ",
+   "التَّمَنِّي",
+   "الصِّفَةُ",
+   "النِّدَاءُ",
+   "الْأَمْرُ",
+   "الْجِنَاسُ",
+   "الْمُطَابَقَةُ"
+  ],
+  "balagha:44:49": [
+   "التَّأْكِيدُ"
+  ],
+  "balagha:49:17": [
+   "الْأَمْرُ"
+  ],
+  "balagha:55:33": [
+   "النِّدَاءُ"
+  ],
+  "balagha:57:13": [
+   "الْأَمْرُ"
+  ],
+  "balagha:72:16": [
+   "التَّأْكِيدُ",
+   "التَّأْكِيدُ الصِّنَاعِيُّ",
+   "التَّمَنِّي",
+   "الصِّفَةُ",
+   "النِّدَاءُ",
+   "الْأَمْرُ",
+   "الْجِنَاسُ",
+   "الْمُطَابَقَةُ"
+  ],
+  "balagha:73:8": [
+   "الْجِنَاسُ"
+  ],
+  "balagha:74:4": [
+   "الْأَمْرُ"
+  ],
+  "balagha:77:23": [
+   "الْجِنَاسُ"
+  ],
+  "balagha:77:30": [
+   "الْأَمْرُ"
+  ],
+  "balagha:96:5": [
+   "الْجِنَاسُ"
+  ],
+  "balagha:100:7": [
+   "التَّأْكِيدُ",
+   "التَّأْكِيدُ الصِّنَاعِيُّ",
+   "التَّمَنِّي",
+   "الصِّفَةُ",
+   "النِّدَاءُ",
+   "الْأَمْرُ",
+   "الْجِنَاسُ",
+   "الْمُطَابَقَةُ"
+  ],
+  "balagha:103:2": [
+   "التَّأْكِيدُ"
+  ],
+  "balagha:112:2": [
+   "الْجِنَاسُ"
   ]
  },
  "drop": {
@@ -849,6 +1190,106 @@
   "balagha:70:22": "Only «إلا المصلين» is shown, an exception cut off from the verse it belongs to (70:19); nothing figurative is visible, so the answer «المجاز» cannot be worked out from the card, and the bare «إلا» points readers to «الحصر والاختصاص»",
   "balagha:4:102": "span runs across two whole ayat (4:102–103, about 1,580 characters) for a few marked words such as «فليصلوا معك» and «فأقيموا الصلاة»; far too long for a phone card.",
   "balagha:24:31": "span is the whole of a very long ayah (about 1,470 characters) with only «وتوبوا إلى الله جميعا أيه المؤمنون» marked at the very end; too long for a phone card.",
-  "balagha:2:282": "The span is the whole of the longest ayah in the Quran (about 2,270 characters) with only «فإن لم يكونا رجلين» marked; far too long for a phone card."
+  "balagha:2:282": "The span is the whole of the longest ayah in the Quran (about 2,270 characters) with only «فإن لم يكونا رجلين» marked; far too long for a phone card.",
+  "irab:4:20": "مَّكَانَ in «ٱسۡتِبۡدَالَ زَوۡجٖ مَّكَانَ زَوۡجٖ» is a ظرف مكان (مفعول فيه), not مفعول به. The ✓ is wrong.",
+  "irab:2:96": "أَلۡفَ in «لَوۡ يُعَمَّرُ أَلۡفَ سَنَةٖ» is ظرف زمان (it stands in for the time adverb); the تمييز is سَنَةٖ, not أَلۡفَ. The ✓ تمييز is wrong.",
+  "irab:27:14": "ظُلۡمٗا وَعُلُوّٗا is parsed as مفعول لأجله or حال (ظالمين) in the standard i'rab books. It is not مفعول مطلق: it does not share a root with the verb ٱسۡتَيۡقَنَتۡ. The ✓ is wrong or at best a minority view.",
+  "irab:3:127": "خَآئِبِينَ in «فَيَنقَلِبُواْ خَآئِبِينَ» is حال; the verb ينقلب is intransitive. The ✓ مفعول به is wrong.",
+  "irab:3:149": "خَٰسِرِينَ in «فَتَنقَلِبُواْ خَٰسِرِينَ» is حال; the verb ينقلب is intransitive. The ✓ مفعول به is wrong.",
+  "irab:39:68": "أُخۡرَىٰ in «ثُمَّ نُفِخَ فِيهِ أُخۡرَىٰ» is disputed: many parse it as a صفة for an omitted مفعول مطلق (نفخةً أخرى) with فِيهِ as نائب الفاعل. نائب فاعل is not the undisputed i'rab.",
+  "irab:36:66": "ٱلصِّرَٰطَ in «فَٱسۡتَبَقُواْ ٱلصِّرَٰطَ» is disputed: it may be منصوب بنزع الخافض (إلى الصراط), a ظرف, or a مفعول به by تضمين. It is not undisputed.",
+  "irab:39:72": "أَبۡوَٰبَ after ٱدۡخُلُوٓاْ: a noun of place after دخل is a well-known dispute. Sibawayh treats it as ظرف على التوسع, others as منصوب بنزع الخافض, others as مفعول به. It is not undisputed (lower severity).",
+  "irab:4:154": "ٱلۡبَابَ after ٱدۡخُلُواْ has the same دخل + place dispute (ظرف/نزع الخافض/مفعول به). It is not undisputed (lower severity).",
+  "irab:7:49": "ٱلۡجَنَّةَ after ٱدۡخُلُواْ has the same دخل + place dispute (ظرف/نزع الخافض/مفعول به). It is not undisputed (lower severity).",
+  "irab:21:28": "Wrong answer. In «وَهُم مِّنۡ خَشۡيَتِهِۦ مُشۡفِقُونَ», مُشۡفِقُونَ is the خبر of the مبتدأ هُم; no verb governs it, so it cannot be فاعل.",
+  "irab:19:57": "Wrong answer, and a ظرف leak. In «وَرَفَعۡنَٰهُ مَكَانًا عَلِيًّا» the standard i'rab of مَكَانًا is ظرف مكان (مفعول فيه), not تمييز. The مكان exclusion missed it because the word came in as تمييز with tanween.",
+  "irab:9:111": "Disputed. In «وَعۡدًا عَلَيۡهِ حَقّٗا» most i'rab books make حَقّٗا a نعت of وَعۡدًا; مفعول مطلق of an implied verb (حقّ ذلك حقًّا) is a minority view. No verb from the root حقق is in the ayah, so the 'مفعول مطلق without a same-root verb' filter should have removed this question.",
+  "irab:4:46": "Disputed. In «وَٱسۡمَعۡ غَيۡرَ مُسۡمَعٖ» the usual i'rab of غَيۡرَ is حال; reading it as مفعول به (or as the نعت of an omitted object) is a secondary view.",
+  "irab:66:11": "Disputed. In «ضَرَبَ ٱللَّهُ مَثَلٗا ... ٱمۡرَأَتَ فِرۡعَوۡنَ», ٱمۡرَأَتَ is commonly parsed as بدل from مَثَلٗا; reading it as a second مفعول به of ضرب (meaning جعل) is the other view.",
+  "irab:7:19": "Disputed. In «ٱسۡكُنۡ أَنتَ وَزَوۡجُكَ ٱلۡجَنَّةَ», ٱلۡجَنَّةَ is variously parsed as مفعول به, ظرف مكان, or منصوب على نزع الخافض. This is the same problem as a place after دخل.",
+  "irab:27:51": "Disputed, and the ✗ فاعل is defensible. In «كَيۡفَ كَانَ عَٰقِبَةُ مَكۡرِهِمۡ», كان can be تامة, which makes عَٰقِبَةُ a فاعل with كَيۡفَ as حال, or ناقصة, which makes it اسم كان with كَيۡفَ as the خبر. Both views are standard.",
+  "irab:2:233": "Disputed, and the ✗ فاعل is defensible. «لَا تُضَآرَّ وَٰلِدَةُۢ»: the doubled verb تُضَآرَّ can be تُضارِر (active, making وَٰلِدَةُۢ the فاعل) or تُضارَر (passive, making it نائب فاعل). The mufassirun give both.",
+  "irab:18:91": "Mildly disputed. In «وَقَدۡ أَحَطۡنَا بِمَا لَدَيۡهِ خُبۡرٗا», تمييز is the common i'rab of خُبۡرٗا, but several sources make it a مفعول مطلق in meaning (أحطنا = خَبَرنا). The distractors are fine. Drop it if the rule is strict.",
+  "qiraat:2:268:0": "Abu Amr's narrators do not read this exactly as the ✓ shows: al-Susi drops the hamza (ويامركم), and both narrators also read the ر with a shortened vowel. The single written form is incomplete for the reader asked about.",
+  "qiraat:3:48:0": "The ✓ ونُعلمه is misspelled: the shadda on the lam is missing (it should be ونُعَلِّمُه).",
+  "qiraat:3:178:0": "The ✓ يَحسِبن is malformed: the shadda on the nun is missing.",
+  "qiraat:3:180:0": "The ✓ يحسِبن is malformed: the shadda on the nun is missing.",
+  "qiraat:3:188:0": "The ✓ يَحسَبن and two of the ✗ choices are missing the shadda on the nun, so they look like different words.",
+  "qiraat:4:25:3": "Yaqub's damma on the ha (فعليهُنّ) is a general pronunciation rule for the pronoun ha (usul), not a word-level reading.",
+  "qiraat:4:155:0": "The ✗ قتلِهِمِ is malformed (the و is missing), and the difference (kasra on the mim for Abu Amr and Yaqub) is a pronunciation rule for the pronoun, not a word-level reading.",
+  "qiraat:6:10:0": "The difference (damma or kasra on the dal of ولقد before a hamzat al-wasl) is a general pronunciation rule (usul), not a word-level reading.",
+  "qiraat:6:10:1": "The only difference is Abu Jaafar's general rule of easing the hamza (usul), and his choice استهزِىَ is written irregularly.",
+  "qiraat:3:49:0": "The only difference is Abu Jaafar's treatment of the hamza in كهيئة (from the hamza chapter, usul), not a word-level reading worth testing.",
+  "qiraat:5:110:1": "The only difference is Abu Jaafar's treatment of the hamza in كهيئة (usul), not a word-level reading worth testing.",
+  "qiraat:6:86:0": "The ✓ وَالَّليۡسَعَ is misspelled: it has a shadda on the first lam plus an extra lam (it should be وَاللَّيۡسَعَ).",
+  "qiraat:6:153:0": "The reader lists are wrong: Hamza, al-Kisai and Khalaf read وإنّ (with kasra), a separate reading that is not offered, yet they are listed under وأنّ.",
+  "qiraat:7:165:0": "The reader lists are wrong: Ibn Amir reads بِئۡسٍ with a hamza, not بِيسٍ, and Shu'ba's reading بَيۡئَسٍ is left out although Asim is listed whole under بئيس.",
+  "qiraat:7:204:0": "The only difference is Abu Jaafar's general rule of turning the hamza into ya (usul), not a word-level reading.",
+  "qiraat:9:37:2": "The only difference is Abu Jaafar's general rule of dropping the hamza (usul), not a word-level reading.",
+  "qiraat:9:120:0": "The only difference is Abu Jaafar's hamza-dropping rule (usul), and his choice is misspelled (يَطَوۡنَ with a sukun on the waw; it should be يَطُونَ).",
+  "qiraat:10:18:0": "The only difference is Abu Jaafar's general rule of dropping the hamza (usul), not a word-level reading.",
+  "qiraat:10:94:0": "The ✓ فَسَلٍ is malformed: it has a double kasra (tanwin) on a verb (it should be فَسَلِ).",
+  "qiraat:12:29:0": "The only difference is Abu Jaafar's general rule of dropping the hamza (usul), not a word-level reading.",
+  "qiraat:13:32:0": "The difference (damma or kasra on the dal of ولقد before a hamzat al-wasl) is a general pronunciation rule (usul), not a word-level reading.",
+  "qiraat:13:32:1": "The only difference is Abu Jaafar's general rule of turning the hamza into ya (usul), and the ✓ اسۡتُهۡزِىَ is written irregularly.",
+  "qiraat:13:33:0": "The only difference is Abu Jaafar's general rule of dropping the hamza (usul), not a word-level reading.",
+  "qiraat:14:40:0": "This is an extra-ya question (usul), and the lists are wrong: Warsh adds the ya in continuous reading but is listed under دعاءِ with Nafi.",
+  "qiraat:17:7:0": "The reader lists are wrong: al-Kisai reads لِنَسُوءَ (with nun), not ليسوء, and that reading is not offered.",
+  "qiraat:18:10:0": "The only difference is Abu Jaafar's general rule of turning the hamza into ya (usul), not a word-level reading.",
+  "qiraat:18:16:0": "The only difference is Abu Jaafar's general rule of turning the hamza into ya (usul), not a word-level reading.",
+  "qiraat:18:31:0": "The only difference is Abu Jaafar's general rule of dropping the hamza (usul), not a word-level reading.",
+  "qiraat:18:38:0": "The two choices لَكِنَّا and لَّٰكِنَّا۠ look almost the same on the page. The real difference (keeping the alif when reading on) cannot be seen.",
+  "qiraat:18:77:0": "The ✗ لَتَخِذتَّ has the assimilation shadda of Abu Amr, but Ibn Kathir and Yaqub, listed with it, pronounce the ذ clearly. Assimilation is a pronunciation rule.",
+  "qiraat:19:8:0": "The ✓ عُتِّيًّا has a stray shadda on the ت (it should be عُتِيًّا).",
+  "qiraat:23:21:0": "The lists are wrong: Ibn Kathir reads نُسۡقِيكُم (as in 16:66), not تُسقيكم, and تُسقيكم is not a reading at all.",
+  "qiraat:24:31:0": "The lists are wrong: Shu'ba reads جِيوبهن with a kasra, but Asim is listed whole under the damma reading.",
+  "qiraat:25:44:0": "The lists are wrong: Yaqub reads تحسِب with a kasra, but he is listed under تحسَب.",
+  "qiraat:26:29:0": "The difference (assimilating the ذ into the ت) is a pronunciation rule (usul), not a word-level reading.",
+  "qiraat:27:28:0": "The difference is the vowel of the pronoun ha (usul), and the lists are imprecise: Qalun shortens the vowel and Abu Jaafar has more than one way, but they are listed with others.",
+  "qiraat:28:8:1": "The only difference is Abu Jaafar's general rule of dropping the hamza (usul), not a word-level reading.",
+  "qiraat:28:39:0": "The ✓ يُرۡجِعُونَ is misspelled: it has a damma on the ya (Yaqub's reading is يَرۡجِعُونَ).",
+  "qiraat:29:32:0": "The ✓ لَنُنۡجِيَّنَهُ is misspelled: the shadda is on the ya instead of the nun (it should be لَنُنۡجِيَنَّهُ).",
+  "qiraat:33:10:0": "The two choices الظُّنُونَا and ٱلظُّنُونَا۠ look almost the same on the page. The real difference (keeping the final alif when reading on or when stopping) has three groups, and the ✓ group mixes them (Ibn Kathir, Hafs and al-Kisai keep the alif when stopping; Abu Amr, Hamza and Yaqub never do).",
+  "qiraat:33:27:0": "The only difference is Abu Jaafar's hamza-dropping rule (usul), and his choice is misspelled (تَطَوۡهَا with a sukun on the waw).",
+  "qiraat:33:53:3": "The lists are wrong: Khalaf al-Ashir reads فَسَلُوهُنَّ like al-Kisai (as the other سل questions in this set show), but he is listed under the hamza form.",
+  "qiraat:33:66:0": "The two choices الرَّسُولاَ and ٱلرَّسُولَا۠ look almost the same on the page, and the ✗ group mixes readers who keep the alif when stopping with readers who never do.",
+  "qiraat:33:67:1": "The two choices السَّبِيلاَ and ٱلسَّبِيلَا۠ look almost the same on the page, and the ✓ group mixes readers who keep the alif when stopping with readers who never do.",
+  "qiraat:35:11:0": "The ✓ يَنقُصُ is the reading of Rawh from Yaqub only. Ruwais reads يُنقَصُ like the majority, so giving it as simply Yaqub's reading is incomplete.",
+  "qiraat:36:56:1": "The only difference is Abu Jaafar's general rule of dropping the hamza (usul), not a word-level reading.",
+  "qiraat:37:66:0": "The only difference is Abu Jaafar's general rule of dropping the hamza (usul), not a word-level reading.",
+  "qiraat:38:48:0": "The ✗ وَالَّيۡسَعَ is misspelled: one lam is missing (it should be وَاللَّيۡسَعَ).",
+  "qiraat:38:51:0": "The only difference is Abu Jaafar's general rule of dropping the hamza (usul), not a word-level reading.",
+  "qiraat:39:69:0": "The ✓ بِالنَّبِيّئِينَ is misspelled: it has a shadda on the ya as well as the hamza (Nafi's reading is بِالنَّبِيئِينَ).",
+  "qiraat:40:42:0": "The difference (Nafi and Abu Jaafar lengthening أنا before a hamza) is a pronunciation rule (usul), and the two choices look almost the same on the page.",
+  "qiraat:2:169:0": "Nafi's narrator Warsh reads this without the hamza (يَامُرُكُم), but the ✓ shows a full hamza, so it is not exactly how the reader asked about reads it.",
+  "qiraat:18:18:1": "Abu Jaafar reads this with the hamza turned into ya (وَلَمُلِّيتَ), but the ✓ shows a full hamza, so it is not how the reader asked about reads it.",
+  "qiraat:20:133:0": "Abu Amr's narrator al-Susi reads this without the hamza (تَاتِهِم), but the ✓ shows a full hamza, so the answer is incomplete for the reader asked about.",
+  "qiraat:22:48:0": "Abu Jaafar eases the hamza in وكأين (between hamza and ya), but the ✓ shows a full hamza, so it is not exactly how the reader asked about reads it.",
+  "qiraat:41:29:0": "The wrong word is bracketed: Ibn Kathir's doubled nun is in the dual اللذَين later in the verse (أرنا اللذَين أضلانا), not in the plural الذين that is coloured here.",
+  "qiraat:41:29:1": "The lists are wrong: Hisham from Ibn Amir reads أرِنا with a kasra here, and al-Duri from Abu Amr shortens the vowel, but Ibn Amir is listed whole under أرۡنا and al-Duri under the full kasra.",
+  "qiraat:42:20:0": "The difference is only the vowel length of the pronoun ha (usul), and the lists mix narrators who read it in different ways.",
+  "qiraat:43:34:1": "The only difference is Abu Jaafar's general rule of dropping the hamza (usul), not a word-level reading.",
+  "qiraat:45:6:0": "Nafi's narrator Warsh reads this without the hamza (يُومِنُونَ), but the ✓ shows a full hamza, so it is not exactly how the reader asked about reads it.",
+  "qiraat:48:25:0": "The only difference is Abu Jaafar's hamza-dropping rule (usul), and the ✓ تَطَوۡهُمُ is misspelled (a sukun on the waw).",
+  "qiraat:52:20:0": "The only difference is Abu Jaafar's general rule of dropping the hamza (usul), not a word-level reading.",
+  "qiraat:52:45:0": "The ✗ يَلۡقَوۡاۡ is malformed: it has a sukun on the final alif.",
+  "qiraat:53:23:0": "The ✓ رَبَّهُمُ is wrong: no reader puts a fatha on the ب here. The real difference (the vowels of the pronoun هم before الهدى) is a pronunciation rule.",
+  "qiraat:55:54:0": "The only difference is Abu Jaafar's general rule of dropping the hamza (usul), not a word-level reading.",
+  "qiraat:55:56:0": "The only difference is Yaqub's damma on the pronoun ha (فيهُنّ), which is a general rule (usul).",
+  "qiraat:55:76:0": "The only difference is Abu Jaafar's general rule of dropping the hamza (usul), not a word-level reading.",
+  "qiraat:56:16:0": "The only difference is Abu Jaafar's general rule of dropping the hamza (usul), not a word-level reading.",
+  "qiraat:56:53:0": "The only difference is Abu Jaafar's general rule of dropping the hamza (usul), not a word-level reading.",
+  "qiraat:57:9:1": "The lists are wrong: Yaqub reads رَؤُفٌ (as the other رؤوف questions in this set show), but here he is listed under رَءُوفٞ.",
+  "qiraat:61:8:0": "The only difference is Abu Jaafar's general rule of dropping the hamza (usul), not a word-level reading.",
+  "qiraat:69:9:1": "The only difference is Abu Jaafar's general rule of turning the hamza into ya (usul), not a word-level reading.",
+  "qiraat:70:13:0": "This is a hamza-easing rule (usul), and the lists are wrong: Warsh and al-Susi also read تُووِيهِ without the hamza, but Nafi and Abu Amr are listed under the hamza form.",
+  "qiraat:75:37:0": "The wrong word is bracketed: the coloured word is مِّن, but the variation is in يُمۡنَىٰ / تُمۡنَىٰ, so the choices do not match the coloured word.",
+  "qiraat:76:13:0": "The only difference is Abu Jaafar's general rule of dropping the hamza (usul), not a word-level reading.",
+  "qiraat:77:11:0": "The lists are wrong: Abu Amr reads وُقِّتَتۡ (with waw), not أُقِّتَتۡ, and that reading is not offered.",
+  "qiraat:79:18:0": "The ✗ تَزَكَى for Abu Amr differs from the ✓ only by imala, which spelling cannot show, and it is also missing the shadda on the kaf.",
+  "qiraat:69:20:1": "Ya'qub's dropped ha (كتابيه، حسابيه، سلطانيه) only shows when joining across the end of the ayah",
+  "qiraat:69:25:0": "Ya'qub's dropped ha (كتابيه، حسابيه، سلطانيه) only shows when joining across the end of the ayah",
+  "qiraat:69:26:0": "Ya'qub's dropped ha (كتابيه، حسابيه، سلطانيه) only shows when joining across the end of the ayah",
+  "qiraat:69:29:1": "Ya'qub's dropped ha (كتابيه، حسابيه، سلطانيه) only shows when joining across the end of the ayah"
  }
 }
