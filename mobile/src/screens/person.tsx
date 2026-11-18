@@ -158,8 +158,17 @@ export default function PersonScreen() {
         {person.fullName && (
           <Part n={++n} title={person.sex === 'FEMALE' ? 'نسبها' : 'نسبه'} palette={palette}>
             <Text style={body(palette)}>{person.fullName.text}</Text>
+            {person.otherNames?.length ? <>
+              <Sayer fact={person.fullName} palette={palette} many />
+              {person.otherNames.map((fact, i) => (
+                <View key={i} style={{ gap: 2 }}>
+                  <Text style={body(palette)}>وقيل: {fact.text}</Text>
+                  <Sayer fact={fact} palette={palette} many />
+                </View>
+              ))}
+            </> : null}
             <Row><Button label="الشجرة" onPress={tree} /></Row>
-            <Credit facts={[person.fullName]} palette={palette} />
+            <Credit facts={[person.fullName, ...(person.otherNames ?? [])]} palette={palette} />
           </Part>
         )}
 

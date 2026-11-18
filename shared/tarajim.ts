@@ -45,6 +45,8 @@ export interface AppPerson {
   /** The entry in the book: its number as printed, volume and pages. */
   entry: { unit: string; number?: string; volume: number; from: string; to: string };
   fullName?: PersonFact;
+  /** The book's other readings of the full name, each with its sayer («وقيل…»). */
+  otherNames?: PersonFact[];
   /** The fathers named in the full name, from the person up, as printed. */
   nasab: string[];
   kunya: PersonFact[];

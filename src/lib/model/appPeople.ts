@@ -10,6 +10,9 @@ import type { WorkFolder } from './types';
 
 const IBN = /^(?:ابن|بن|بنت|ابنة)$/u;
 // A nisba after the last name («الهاشمية», «القرشي») is not a father.
+const KUNYA = /^(?:أبو|ابو|أم|ام)$/u;
+/** The first word of a name of two words: «عبد الله», «أبي طالب». */
+const COMPOUND = /^(?:عبد|أبي|ابي|أبو|ابو|أم|ام|ذي|ذو)$/u;
 const NISBA = /^ال\S+(?:ي|ية)$/u;
 const strip = (text: string) => text.replace(/[ً-ْٰـ]/g, '');
 // Shamela types Latin commas inside Arabic text; the app shows the Arabic mark.
@@ -34,6 +37,9 @@ export function nasabOf(fullName: string) {
     if (IBN.test(bare)) names.push([]);
     else if (!(names[names.length - 1].length > 0 && NISBA.test(bare))) names[names.length - 1].push(words[i]);
   }
+  // A heading that opens with a kunya and a forefather before the name («أبو عبيدة بن الجراح عامر بن عبد الله»): «بن
+  // الجراح» there is the shorthand, not the father, so the line goes on from the name's own fathers.
+  if (names.length > 2 && KUNYA.test(strip(names[0][0] ?? '')) && names[1].length > 1 && !COMPOUND.test(strip(names[1][0]))) names.splice(1, 1);
   // A name with no «بن» at all (al-Abbas's entry is headed «العباس عم رسول الله») names no fathers: the name alone.
   if (names.length === 1) return words.length ? [words[0]] : [];
   return names.map((name) => name.join(' ')).filter(Boolean);
@@ -138,6 +144,8 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
       ...(sex === 'MALE' || sex === 'FEMALE' ? { sex: sex as 'MALE' | 'FEMALE' } : {}),
       entry: { unit: unitId, number: file.unit.numbers.printed, volume: sorted[0]?.volume ?? 0, from: sorted[0]?.page ?? '', to: sorted.at(-1)?.page ?? '' },
       ...(fullName && { fullName }),
+      // The book's other readings of the name («وقيل: …», each with its sayer), shown after the heading's.
+      ...(facts('name.full').length > 1 && { otherNames: facts('name.full').slice(1) }),
       nasab: fullName ? nasabOf(fullName.text) : [],
       kunya: facts('name.kunya'),
       laqab: facts('name.laqab'),
