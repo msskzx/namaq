@@ -115,23 +115,6 @@ const translations = {
     // Homepage
     intro: 'Uncover the fascinating stories of remarkable individuals who shaped the course of human civilization. Learn about many topics in an interactive manner and explore',
     definition: 'What is Namaq?',
-    verbNamaq: {
-      title: 'Namaq (Verb)',
-      definition: "To beautify or embellish; he beautifies, beautifying; he is a beautifier; the thing beautified.",
-      forms: [
-        "He beautified the book: improved and refined its writing.",
-        "He decorated leather: adorned and embellished it.",
-        "He beautified speech: refined it, perfected it with eloquence, improved and adorned it."
-      ]
-
-    },
-    nounNamaq: {
-      title: 'Namaq (Noun)',
-      definition: 'Namaq: The book in which one writes.',
-      forms: [
-        'Namaq: The book in which one writes.'
-      ]
-    },
     search: 'Search',
     viewProfile: 'Profile',
     selectToSearch: 'Select to search',
@@ -431,22 +414,6 @@ const translations = {
     },
     // Homepage
     intro: 'اكتشف القصص المذهلة للشخصيات البارزة الذين شكّلوا مسار التاريخ البشري وتعلم عن العديد من الموضوعات بطريقة تفاعلية',
-    verbNamaq: {
-      title: 'نَمَّقَ (فعل)',
-      definition: 'نمَّقَ ينمِّق ، تنميقًا ، فهو مُنمِّق ، والمفعول مُنمَّق',
-      forms: [
-        'نمَّق الكتابَ :جوَّد كتابتَه وحسَّنها',
-        'نمَّق جلْدًا: زخرفه ونقشَه وزيَّنه',
-        'نمَّق القولَ: جوّده وصاغَه بأنواعٍ من البديع'
-      ]
-    },
-    nounNamaq: {
-      title: 'نَمَق (اسم)',
-      definition: 'النَّمَقُ : الكِتابُ الذي يُكْتَب فيه',
-      forms: [
-        'النَّمَقُ : الكِتابُ الذي يُكْتَب فيه'
-      ]
-    },
     search: 'بحث',
     viewProfile: 'الصفحة الشخصية',
     selectToSearch: 'اختر للبحث',

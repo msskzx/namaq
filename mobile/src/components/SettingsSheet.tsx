@@ -1,12 +1,11 @@
 import { Pressable, ScrollView, View } from 'react-native';
 import { Text } from '@/ui/Text';
-import { BookOpen, Play, ShieldCheck, SquareArrowOutUpLeft } from 'lucide-react-native';
-import { openExternal } from '@/ui/ExternalLink';
+import { BookOpen, ChevronLeft, Play, ShieldCheck } from 'lucide-react-native';
+import { router } from 'expo-router';
 import Sheet from '@/ui/Sheet';
 import Logo from './Logo';
 import ThemeTiles, { MarkTiles, ViewTiles } from './ThemeTiles';
 import { GestureSettings } from './ReaderSheets';
-import { WEBSITE } from '@/lib/website';
 import { around, besideLayout, connectors, haptics, hintsSeen, tourSeen } from '@/lib/settings';
 import Toggle from '@/ui/Toggle';
 import { MemorizedSetting } from './Memorized';
@@ -16,12 +15,13 @@ import type { Palette } from '@/lib/theme';
 /** The tour opens once the sheet has slid away: iOS cannot show it over a sheet that is still closing. Each page's first-visit tip comes back with it. */
 const REPLAY_AFTER = 400;
 
-/** The website's settings sheet (src/components/common/TabBar.tsx): the look, the branches view, the mushaf touches, the books, then About, the sources and their licences, and Privacy. */
+/** The website's settings sheet (src/components/common/TabBar.tsx): the look, the branches view, the mushaf touches, the books, then About, the sources and their licences, and Privacy, each a page of the app. */
 export default function SettingsSheet({ open, onClose, palette }: { open: boolean; onClose: () => void; palette: Palette }) {
+  // The app's own pages (screens/info.tsx), offline, not the website's (owner, 2026-11-18).
   const links = [
-    { href: '/about', label: 'عن نمق', icon: <Logo size={22} /> },
-    { href: '/attributions', label: 'المصادر والتراخيص', icon: <BookOpen size={20} color={palette.ink} /> },
-    { href: '/privacy', label: 'سياسة الخصوصية', icon: <ShieldCheck size={20} color={palette.ink} /> },
+    { href: '/about' as const, label: 'عن نمق', icon: <Logo size={22} /> },
+    { href: '/attributions' as const, label: 'المصادر والتراخيص', icon: <BookOpen size={20} color={palette.ink} /> },
+    { href: '/privacy' as const, label: 'سياسة الخصوصية', icon: <ShieldCheck size={20} color={palette.ink} /> },
   ];
   return (
     <Sheet open={open} onClose={onClose} palette={palette}>
@@ -44,11 +44,11 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
             <Text style={{ flex: 1, color: palette.ink, fontSize: 16 }}>الجولة التعريفية</Text>
           </Pressable>
           {links.map(link => (
-            <Pressable key={link.href} onPress={() => openExternal(`${WEBSITE}${link.href}`)} accessibilityRole="link" accessibilityLabel={link.label}
+            <Pressable key={link.href} onPress={() => { onClose(); router.push(link.href); }} accessibilityRole="link" accessibilityLabel={link.label}
               style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, borderBottomWidth: 1, borderColor: palette.rule, opacity: pressed ? 0.6 : 1 })}>
               {link.icon}
               <Text style={{ flex: 1, color: palette.ink, fontSize: 16 }}>{link.label}</Text>
-              <SquareArrowOutUpLeft size={16} color={palette.muted} />
+              <ChevronLeft size={16} color={palette.muted} />
             </Pressable>
           ))}
         </View>

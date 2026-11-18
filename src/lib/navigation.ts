@@ -3,7 +3,7 @@ type Text = Record<Language, string>;
 export type NavItem = { href: string; label: Text; purpose: Text };
 export type NavSection = { href: string; label: Text; groups: { title?: Text; items: NavItem[] }[] };
 
-/** Every Quran page with its purpose, for the experiments page (EXPERIMENT_SECTIONS below). */
+/** Every Quran page with its purpose, for the section hubs (EXPERIMENT_SECTIONS below). */
 export const QURAN_CARDS: { href: string; desc: Text }[] = [
   { href: '/quran/read', desc: { ar: 'اقرأ المصحف صفحةً صفحة برواية حفص', en: 'Read the mushaf page by page, in Hafs' } },
   { href: '/quran/compare', desc: { ar: 'اقرأ سورتين متجاورتين، كل آية بجانب أختها المتشابهة، لتتدبّر كيف تُروى القصة الواحدة بألفاظ مختلفة', en: 'Read two surahs side by side, each ayah next to its similar partner, to ponder how one story is told in different words' } },

@@ -42,6 +42,9 @@ export default function AppShell({ onReady }: { onReady: () => void }) {
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="ayah" />
             <Stack.Screen name="library" />
+            <Stack.Screen name="about" />
+            <Stack.Screen name="privacy" />
+            <Stack.Screen name="attributions" />
             <Stack.Screen name="prophets/[slug]" />
           </Stack>
           <ShareSheet />
