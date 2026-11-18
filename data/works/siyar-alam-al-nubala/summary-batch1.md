@@ -44,10 +44,11 @@ Kept, with the editor's grading:
   kissed by the Prophet ﷺ (al-Tirmidhi: sahih; editor: hasan by its witness); Salim's voice (isnad sahih, author: جيد).
 - «رجاله ثقات»: Aisha on al-Kilabiyyah; Abu Burdah on Uthman ibn Maz'un's worship.
 - Historians and the author's own words, attributed (as the pilot did with Khalifah and al-Mada'ini): Ibn Sa'd,
-  al-Waqidi (dates and battles only), Ibn Ishaq, Musa ibn Uqbah, Urwah, Ibn Abd al-Barr, Ibn Mandah, Abu al-Zinad,
+  al-Waqidi (maghazi only: dates, battles and the sariyyah command; the three appearance reports that run through him,
+  for Abu Ubaydah p7, Ibn Awf p75 and Sa'd p97, are left out), Ibn Ishaq, Musa ibn Uqbah, Urwah, Ibn Abd al-Barr, Ibn Mandah, Abu al-Zinad,
   Aisha bint Sa'd, Aisha bint Qudamah, Abd Allah ibn Muhammad ibn Aqil.
 
-Left out as weak or broken (editor or author says so): Sa'd's «هذا خالي» chain; Sa'id's Marwan and «سيد أهل البلد»
+Left out as weak or broken (editor or author says so): Ibn Awf's appearance via Abd al-Aziz ibn Abi Thabit (matruk, p97 n3); Sa'd's «هذا خالي» chain; Sa'id's Marwan and «سيد أهل البلد»
 (ungraded, Ata' mukhtalit); the mu'akhat hadith of p141 (author: موضوع); Uthman ibn Maz'un's Kathir ibn Zayd and
 Ubaydullah ibn Abi Rafi' mursals, Ibn Sabit (author: لا يثبت), both Ibn Abbas reports (Sufyan ibn Waki', Ali ibn Zayd),
 al-Ifriqi, al-Zuhri and Abu Qilabah reports, al-Waqidi's Umar report; Mus'ab's Ali report (unnamed link) and Sa'd's
@@ -76,12 +77,15 @@ PARTICIPATED_IN, office, islam.age and died.month have no catalog field, so they
   virtue, not a title. MATERNAL_UNCLE: gap; the «هذا خالي» report is not in this unit.
 - **saeed-ibn-zaid**: deathYear 51 (al-Waqidi, Abu Ubayd, Yahya ibn Bukayr, Shihab), 52 (Ubaydullah ibn Sa'd al-Zuhri).
   placeOfDeath العقيق (Aisha bint Sa'd; Malik) and الكوفة (al-Haytham ibn Adi, whom the author calls شاذ; kept, attributed,
-  rule 3). Badr: the author counts him among the Badris, and Urwah, Musa ibn Uqbah and Ibn Ishaq say he came from Sham
-  after Badr and was given his share. That is modeled as a virtue with those three sayers, not as PARTICIPATED_IN badr.
+  rule 3). Badr: the author counts him among the Badris, and Urwah says he came from Sham after Badr and was given his
+  share («وكذلك قال موسى بن عقبة، وابن إسحاق»). That is a virtue in Urwah's words, with Urwah as its one speaker
+  (ADR 0020), not PARTICIPATED_IN badr.
   Wife «فاطمة أخت عمر» unidentified (no catalog person).
 - **musab-ibn-umayr**: fullName same (the heading's «*» marker is left out by splitting the span). virtues: the catalog's
   «المقرئ / أول من جمع الجمعة» is not in this entry. MATERNAL_UNCLE: gap.
-- **abu-salamah**: deathYear 3 (author), 4 (Abd al-Malik ibn Ubayd, with month Jumada II), 3 («وقيل»). MILK_BROTHER: gap.
+- **abu-salamah**: deathYear 3 (author), 4 (Abd al-Malik ibn Ubayd's report, with month Jumada II; the year is the
+  report's own gloss «يعني: سنة أربع», kept on that report), 3 («وقيل»). PATERNAL_COUSIN of the Prophet ﷺ («وابن عمته»,
+  as al-Zubayr's «ابن عمتي»). MILK_BROTHER: gap.
   The children (Salamah, Umar, Durrah, Zaynab, per Mus'ab al-Zubayri) are not catalog people, so not modeled.
 - **uthman-ibn-mazun**: died Sha'ban 3 (author). Brothers come from Abd Allah's entry (SIBLING_OF there); as-Sa'ib's
   CHILD_OF comes from as-Sa'ib's entry. Badr comes from Abd Allah's entry («شهد بدرا هو وإخوته: عثمان، وقدامة»).
@@ -106,7 +110,21 @@ PARTICIPATED_IN, office, islam.age and died.month have no catalog field, so they
   Marriage to the Prophet ﷺ from Aisha's report. «كلابية واحدة أو جماعة» (al-Hakim) has no predicate. Ibn Shihab's
   al-Aliyah report is not tied to her (the catalog keeps al-aliyah as a separate person).
 - **asma-bint-al-numan-al-kindiyyah**: name is the heading «الكندية» only (see weak reports above). Marriage to the
-  Prophet ﷺ from Ibn Aqil. Catalog fullName, father, appearance and al-Muhajir as spouse: unsupported by sound text.
+  Prophet ﷺ from Ibn Aqil (ungraded; the marriage itself is sound, in al-Bukhari, as the editor's note on p259 shows).
+  Catalog fullName, father, appearance and al-Muhajir as spouse: unsupported by sound text. The app still titles her
+  «أسماء بنت النعمان» from the catalog's `name`; that is for the main Tarajim thread to settle.
+
+## Changes after the second-agent review
+
+- Uthman ibn Maz'un: Ibn Abd al-Barr's sentence split into three virtues, the death clause left out; «أما هو فقد جاءه
+  اليقين…» is the Prophet's ﷺ words, so its speaker is the Prophet ﷺ, not Umm al-Ala'.
+- Al-Kilabiyyah: «عمرة بنت زيد» is two readings, one anonymous («قيل», p256) and one by Ibn Ishaq on his own words (p257).
+- Sa'id: the Arwa report's sayer is Urwah, not «أبيه».
+- Added: Abu Ubaydah PARTICIPATED_IN yarmuk (author, p22); Sa'd's virtue in Ali's words «ما سمعت النبي ﷺ يجمع أبويه
+  لأحد غير سعد» (agreed upon, p100); Abu Hudhayfah SIBLING_OF Hind bint Utbah (Abu al-Zinad, p165).
+- Not changed, noted: COMPANION_OF is given only where a sentence puts the person with the Prophet ﷺ; Badr shows once per
+  source in the app's battle list (an app-side merge); general-praise virtues («السيد الكبير») may need a quiz skip
+  list once the main thread adds one.
 
 ## Gaps (rule 9 and others)
 
@@ -128,4 +146,4 @@ PARTICIPATED_IN, office, islam.age and died.month have no catalog field, so they
 
 - `npm run model:check`: 22 units (8 before, 14 added).
 - `npm run model:app-people`: 22 people; no empty section, no «ص ٠–٠».
-- `npx vitest run shared/ src/lib/model`: see the PR.
+- `npx vitest run shared/ src/lib/model`: 146 files, 1,240 tests pass.
