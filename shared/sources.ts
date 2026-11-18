@@ -57,6 +57,7 @@ const USE = {
   listen: { ar: 'الاستماع إلى التلاوة في المصحف', en: 'listening to recitations in the mushaf reader', href: '/quran/read' },
   adhkar: { ar: 'الأذكار والدعاء في تطبيق الهاتف', en: 'adhkar and du’a in the phone app' },
   prayer: { ar: 'مواقيت الصلاة والقبلة', en: 'prayer times and the qibla', href: '/utilities' },
+  battles: { ar: 'خرائط الغزوات والمعارك في تطبيق الهاتف', en: 'the battle maps in the phone app' },
   hijri: { ar: 'التاريخ الهجري وجزء اليوم', en: 'the Hijri date and today’s juz', href: '/utilities' },
   people: { ar: 'التراجم والأنساب والمعارك', en: 'biographies, lineages and battles', href: '/people' },
   everywhere: { ar: 'كل الصفحات', en: 'every page' },
@@ -290,6 +291,12 @@ export const SOURCES: Source[] = [
       en: 'Quranpedia’s licence: use inside apps needs no credit, and we credit it with the version anyway. Republishing the data as a download needs the name, a link and the version.',
     },
     uses: [USE.qiraat, USE.reader, USE.tafsir, USE.topics, USE.irab],
+  },
+  {
+    id: 'natural-earth', group: 'data',
+    title: { ar: 'Natural Earth: اليابسة بمقياس ١:٥٠ مليون', en: 'Natural Earth: 1:50m land' },
+    edition: 'ne_50m_land، مقصوصة على ما بين مصر وفارس', link: { url: 'https://www.naturalearthdata.com', label: 'naturalearthdata.com' },
+    licence: { ar: 'ملك عام. مواضع الغزوات على الخريطة من عندنا، تقريبية.', en: 'Public domain. Where each battle is pinned is our own, approximate.' }, uses: [USE.battles],
   },
   {
     id: 'quranic-arabic-corpus', group: 'data',

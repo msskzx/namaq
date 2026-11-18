@@ -39,6 +39,7 @@ export function branchVerdictFor(piece: Identified, verdicts: BranchVerdicts = b
   const own = idsOf(piece).map(id => verdicts[id]).find(Boolean);
   const twin = own?.same ? undefined : twinOf(piece, twins);
   if (!twin) return own;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- the pair is left out on purpose
   const { pair: _pair, ...shared } = twin;
   return { ...shared, ...(own?.ayat ? { ayat: own.ayat } : {}) };
 }

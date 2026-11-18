@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { feedBooks, hasBooksCard, hasJuzCard, hasSceneCard, inMinutes, insertAt, prayerSoon, sceneOfSlot } from './homeFeed';
+import { feedBooks, hasBooksCard, hasJuzCard, hasMomentCard, hasSceneCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot } from './homeFeed';
 import { hasStoryCard } from './feedSeen';
 import type { PrayerDay } from './prayer';
 
@@ -20,6 +20,18 @@ describe('home feed cards', () => {
     expect(sceneOfSlot(7, 100, 4)).not.toBe(sceneOfSlot(7, 100, 2));
     for (let d = 0; d < 30; d++) expect(sceneOfSlot(7, d, 2)).toBeGreaterThanOrEqual(0);
     expect(sceneOfSlot(0, 3, 2)).toBe(-1);
+  });
+
+  it('puts a battle\'s moment on every fourth batch from the fourth, never with the books or a scene', () => {
+    expect([0, 1, 2, 3, 4, 5, 6, 7, 8].filter(hasMomentCard)).toEqual([3, 7]);
+    for (let slot = 0; slot < 20; slot++) expect(hasMomentCard(slot) && (hasBooksCard(slot) || hasSceneCard(slot))).toBe(false);
+  });
+
+  it('picks a moment for each moment batch, the same all day and a different one in the next', () => {
+    expect(momentOfSlot(7, 100, 3)).toBe(momentOfSlot(7, 100, 3));
+    expect(momentOfSlot(7, 100, 7)).not.toBe(momentOfSlot(7, 100, 3));
+    for (let d = 0; d < 30; d++) expect(momentOfSlot(7, d, 3)).toBeGreaterThanOrEqual(0);
+    expect(momentOfSlot(0, 3, 3)).toBe(-1);
   });
 
   it('lists the books with a فاصلة first, then turns the others by the day', () => {

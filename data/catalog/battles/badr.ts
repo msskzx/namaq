@@ -480,6 +480,57 @@ const badr = {
       claims: ['suhaib-ibn-sinan-siyar4/badr'],
     },
   ],
+  moments: [
+    {
+      title: 'عدة أهل بدر',
+      quote: 'وكنا -أصحاب محمد- نتحدث أن عدة أهل بدر ثلاثمائة وبضعة عشر، كعدة أصحاب طالوت الذين جازوا معه النهر، وما جازه إلا مؤمن',
+      source: { slug: 'siyar-alam-al-nubala-risalah', volume: 1, volumeLabel: 'السيرة 1', page: 324, url: 'https://shamela.ws/book/10906/461' },
+      grading: 'أخرجه البخاري',
+      people: ['al-baraa-ibn-azib'],
+    },
+    {
+      title: 'الدعاء في القبة',
+      quote: 'اللهم إني أنشدك عهدك ووعدك، اللهم إن شئت لم تعبد بعد اليوم أبدا',
+      source: { slug: 'siyar-alam-al-nubala-risalah', volume: 1, volumeLabel: 'السيرة 1', page: 330, url: 'https://shamela.ws/book/10906/467' },
+      grading: 'أخرجه البخاري',
+      people: ['prophet-muhammad', 'abu-bakr-as-siddiq'],
+    },
+    {
+      title: 'المبارزة',
+      quote: 'أنها نزلت في الذين برزوا يوم بدر: حمزة، وعلي، وعبيدة بن الحارث -رضي الله عنهم- وعتبة، وشيبة ابنا ربيعة، والوليد بن عتبة',
+      source: { slug: 'siyar-alam-al-nubala-risalah', volume: 1, volumeLabel: 'السيرة 1', page: 335, url: 'https://shamela.ws/book/10906/472' },
+      grading: 'أخرجه البخاري',
+      people: ['hamzah-ibn-abd-al-muttalib', 'ali-ibn-abi-talib', 'ubaydah-ibn-al-harith'],
+    },
+    {
+      title: 'جبريل يوم بدر',
+      quote: 'هذا جبريل آخذ برأس فرسه، عليه أداة الحرب',
+      source: { slug: 'siyar-alam-al-nubala-risalah', volume: 1, volumeLabel: 'السيرة 1', page: 331, url: 'https://shamela.ws/book/10906/468' },
+      grading: 'أخرجه البخاري',
+      people: ['prophet-muhammad'],
+    },
+    {
+      title: 'تمرات عمير بن الحمام',
+      quote: 'لئن أنا حييت حتى آكل تمراتي هذه إنها لحياة طويلة فرمى بهن، ثم قاتل حتى قتل',
+      source: { slug: 'siyar-alam-al-nubala-risalah', volume: 1, volumeLabel: 'السيرة 1', page: 335, url: 'https://shamela.ws/book/10906/472' },
+      grading: 'أخرجه مسلم',
+      people: ['umayr-ibn-al-humam'],
+    },
+    {
+      title: 'مقتل أبي جهل',
+      quote: 'من ينظر ما صنع أبو جهل؟ فانطلق ابن مسعود فوجده قد ضربه ابنا عفراء حتى برد',
+      source: { slug: 'siyar-alam-al-nubala-risalah', volume: 1, volumeLabel: 'السيرة 1', page: 339, url: 'https://shamela.ws/book/10906/476' },
+      grading: 'أخرجه البخاري ومسلم',
+      people: ['abdullah-ibn-masud', 'abu-jahl-ibn-hisham'],
+    },
+    {
+      title: 'الأسرى',
+      quote: 'فهوى رسول الله صلى الله عليه وسلم ما قال أبو بكر، ولم يهو ما قلت',
+      source: { slug: 'siyar-alam-al-nubala-risalah', volume: 1, volumeLabel: 'السيرة 1', page: 354, url: 'https://shamela.ws/book/10906/491' },
+      grading: 'أخرجه مسلم',
+      people: ['umar-ibn-al-khattab', 'abu-bakr-as-siddiq'],
+    },
+  ],
 } satisfies CatalogBattle;
 
 export default badr;
