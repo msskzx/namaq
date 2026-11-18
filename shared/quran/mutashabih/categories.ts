@@ -5,7 +5,11 @@ const reviewed = new Map(manifest.rules.flatMap(rule => rule.groups.map(id => [i
 
 export function categorizedGroups(groups: Group[]): Group[] {
   return [
-    ...groups.map(group => ({ ...group, categories: reviewed.get(group.id) ?? ['words' as const] })),
+    // A group a book of mutashabih cites is one of the mutashabihat, whatever the word review said (owner 2026-11-18).
+    ...groups.map(group => {
+      const categories = reviewed.get(group.id) ?? ['words' as const];
+      return { ...group, categories: group.citations.length && !categories.includes('mutashabeh') ? ['mutashabeh' as const, ...categories.filter(category => category !== 'words')] : categories };
+    }),
     ...manifest.extraComparisons.map(comparison => ({
       id: comparison.id,
       text: comparison.text,
