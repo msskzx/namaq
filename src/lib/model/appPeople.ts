@@ -2,6 +2,7 @@
 // entry is converted under data/works. Each value keeps the book's words, its pages and who says it.
 // scripts/model/buildAppPeople.ts writes shared/data/tarajim/people.json; shared/tarajim.ts has the shape.
 import type { AppPerson, PageRef, PersonFact, PersonLink, PersonTitle } from '@shared/tarajim';
+import { bareName } from '@shared/tarajimLine';
 import type { Catalog } from '../catalog/types';
 import { loadModel } from './load';
 import { agentOfMention, profilesFromModel, type ProfileEntry } from './profile';
@@ -47,6 +48,12 @@ export function nasabOf(fullName: string) {
     if (bare === '،') continue;
     // An aside runs to the next «،» or «بن», however many words the names in it have.
     if (bare === 'واسمه' || bare === 'واسمها' || bare === 'واسم') {
+      while (i + 1 < words.length && words[i + 1] !== '،' && !IBN.test(strip(words[i + 1]))) i += 1;
+      continue;
+    }
+    // A kunya after a father's name is not a father either: «سليمان بن صرد أبو مطرف الخزاعي».
+    // Only the nominative «أبو» marks it; inside a nasab a father is «بن أبي …».
+    if (/^[أا]بو$/u.test(bare) && names.length > 1 && names[names.length - 1].length > 0) {
       while (i + 1 < words.length && words[i + 1] !== '،' && !IBN.test(strip(words[i + 1]))) i += 1;
       continue;
     }
@@ -100,6 +107,21 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
   // Links others' entries state toward this person: their CHILD_OF is this person's child, and so on.
   const reverse = (slug: string, predicate: ProfileEntry['predicate']) => [...profiles.entries()]
     .flatMap(([other, entries]) => entries.filter((entry) => entry.predicate === predicate && entry.object === slug).map((entry) => ({ other, entry })));
+
+  // A person the catalog does not hold is named by the name and the father; where that is another person's name too
+  // («عبد الله بن الحارث»: Ibn Jaz' and the Hashimi), the grandfather is added («عبد الله بن الحارث بن جزء»).
+  const nasabs = new Map([...ownUnit.keys()].map((slug) => {
+    const text = profiles.get(slug)!.find((entry) => entry.predicate === 'name.full')?.text;
+    return [slug, text ? nasabOf(text) : []] as const;
+  }));
+  const sexes = new Map([...ownUnit.keys()].map((slug) => [slug, profiles.get(slug)!.find((entry) => entry.predicate === 'sex')?.classified] as const));
+  const short = (slug: string, length: number) => strip(nasabs.get(slug)!.slice(0, length).join(sexes.get(slug) === 'FEMALE' ? ' بنت ' : ' بن ') || slug);
+  const firstNames = new Map([...ownUnit.keys()].map((slug) => [slug, people.has(slug) ? strip(people.get(slug)!.name) : short(slug, 2)]));
+  const appName = (slug: string) => {
+    if (people.has(slug)) return firstNames.get(slug)!;
+    const taken = [...firstNames.entries()].some(([other, name]) => other !== slug && bareName(name) === bareName(firstNames.get(slug)!));
+    return taken ? short(slug, 3) : firstNames.get(slug)!;
+  };
 
   return [...ownUnit.entries()].map(([slug, unitId]) => {
     const entries = profiles.get(slug)!;
@@ -163,7 +185,7 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
     const sorted = [...pages].sort((a, b) => a.volume - b.volume || Number(a.page) - Number(b.page));
     return {
       slug,
-      name: strip(people.get(slug)?.name ?? (fullName ? shortName(nasabOf(fullName.text), sex) : slug)),
+      name: appName(slug),
       ...(sex === 'MALE' || sex === 'FEMALE' ? { sex: sex as 'MALE' | 'FEMALE' } : {}),
       entry: { unit: unitId, number: file.unit.numbers.printed, volume: sorted[0]?.volume ?? 0, from: sorted[0]?.page ?? '', to: sorted.at(-1)?.page ?? '' },
       ...(fullName && { fullName }),

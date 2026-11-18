@@ -1,0 +1,449 @@
+{
+  "unit": {
+    "id": "siyar-v6-68-utbah-ibn-abd",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٦٨"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ta_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "416",
+      "layer": "MAIN",
+      "exact": "٦٨ - عُتْبَةُ بنُ عَبْدٍ السُّلَمِيُّ أَبُو الوَلِيْدِ"
+    },
+    {
+      "id": "sp_ta_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "416",
+      "layer": "MAIN",
+      "exact": "عُتْبَةُ بنُ عَبْدٍ السُّلَمِيُّ أَبُو الوَلِيْدِ",
+      "prefix": "٦٨ - "
+    },
+    {
+      "id": "sp_ta_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "416",
+      "layer": "MAIN",
+      "exact": "عُتْبَةُ بنُ",
+      "prefix": "٦٨ - "
+    },
+    {
+      "id": "sp_ta_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "416",
+      "layer": "MAIN",
+      "exact": "عَبْدٍ السُّلَمِيُّ",
+      "prefix": "عُتْبَةُ بنُ "
+    },
+    {
+      "id": "sp_ta_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "416",
+      "layer": "MAIN",
+      "exact": "أَبُو الوَلِيْدِ",
+      "prefix": "عَبْدٍ السُّلَمِيُّ "
+    },
+    {
+      "id": "sp_ta_sahib",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "416",
+      "layer": "MAIN",
+      "exact": "صَاحِبُ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ -",
+      "suffix": ".\n\nنَزَلَ الشَّامَ"
+    },
+    {
+      "id": "sp_ta_sahib_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "416",
+      "layer": "MAIN",
+      "exact": "النَّبِيِّ",
+      "prefix": "صَاحِبُ ",
+      "suffix": " -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ -.\n\nنَزَلَ"
+    },
+    {
+      "id": "sp_ta_son",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "416",
+      "layer": "MAIN",
+      "exact": "وَلَدُهُ؛ يَحْيَى",
+      "prefix": "حَدَّثَ عَنْهُ: "
+    },
+    {
+      "id": "sp_ta_son_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "416",
+      "layer": "MAIN",
+      "exact": "وَلَدُهُ؛",
+      "suffix": " يَحْيَى، وَخَالِدُ"
+    },
+    {
+      "id": "sp_ta_age_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "416",
+      "layer": "MAIN",
+      "exact": "وَقَالَ الوَاقِدِيُّ",
+      "suffix": ": عَاشَ عُتْبَةُ"
+    },
+    {
+      "id": "sp_ta_age",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "416",
+      "layer": "MAIN",
+      "exact": "عَاشَ عُتْبَةُ بنُ عَبْدٍ أَرْبَعاً وَتِسْعِيْنَ سَنَةً"
+    },
+    {
+      "id": "sp_ta_age_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "416",
+      "layer": "MAIN",
+      "exact": "أَرْبَعاً وَتِسْعِيْنَ سَنَةً",
+      "prefix": "عُتْبَةُ بنُ عَبْدٍ "
+    },
+    {
+      "id": "sp_ta_death_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "417",
+      "layer": "MAIN",
+      "exact": "وَقَالَ أَبُو عُبَيْدٍ، وَجَمَاعَةٌ"
+    },
+    {
+      "id": "sp_ta_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "417",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ سَنَةَ سَبْعٍ وَثَمَانِيْنَ"
+    },
+    {
+      "id": "sp_ta_death_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "417",
+      "layer": "MAIN",
+      "exact": "سَنَةَ سَبْعٍ وَثَمَانِيْنَ",
+      "prefix": "تُوُفِّيَ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ta0",
+      "unit": "siyar-v6-68-utbah-ibn-abd",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ta_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ta_age",
+      "unit": "siyar-v6-68-utbah-ibn-abd",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ta_age_frame"
+      ],
+      "origin": {
+        "mention": "m_ta_age_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ta_death",
+      "unit": "siyar-v6-68-utbah-ibn-abd",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ta_death_frame"
+      ],
+      "origin": {
+        "mention": "m_ta_death_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ta_name",
+      "report": "r_ta0",
+      "spans": [
+        "sp_ta_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ta_sahib",
+      "report": "r_ta0",
+      "spans": [
+        "sp_ta_sahib"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ta_son",
+      "report": "r_ta0",
+      "spans": [
+        "sp_ta_son"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ta_age",
+      "report": "r_ta_age",
+      "spans": [
+        "sp_ta_age"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ta_death",
+      "report": "r_ta_death",
+      "spans": [
+        "sp_ta_death"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ta",
+      "parent": "sp_ta_name",
+      "exact": "عُتْبَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ta_father",
+      "parent": "sp_ta_name",
+      "exact": "عَبْدٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ta_prophet",
+      "parent": "sp_ta_sahib",
+      "exact": "النَّبِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ta_k",
+      "parent": "sp_ta_son",
+      "exact": "وَلَدُهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ta_c_yahya",
+      "parent": "sp_ta_son",
+      "exact": "يَحْيَى",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ta_age_by",
+      "parent": "sp_ta_age_frame",
+      "exact": "الوَاقِدِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ta_death_by",
+      "parent": "sp_ta_death_frame",
+      "exact": "أَبُو عُبَيْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ta",
+      "mention": "m_ta",
+      "agent": "utbah-ibn-abd-as-sulami",
+      "basis": [
+        {
+          "span": "sp_ta_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ta_father",
+      "mention": "m_ta_father",
+      "agent": "abd-as-sulami",
+      "basis": [
+        {
+          "span": "sp_ta_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ta_prophet",
+      "mention": "m_ta_prophet",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_ta_sahib_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ta_k",
+      "mention": "m_ta_k",
+      "agent": "utbah-ibn-abd-as-sulami",
+      "basis": [
+        {
+          "span": "sp_ta_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ta_c_yahya",
+      "mention": "m_ta_c_yahya",
+      "agent": "yahya-ibn-utbah-ibn-abd",
+      "basis": [
+        {
+          "span": "sp_ta_son_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ta_name",
+      "subject": "m_ta",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ta_name"
+        ]
+      },
+      "restsOn": [
+        "st_ta_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ta_sex",
+      "subject": "m_ta",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ta_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ta_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ta_father",
+      "subject": "m_ta",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ta_father"
+      },
+      "restsOn": [
+        "st_ta_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ta_kunya",
+      "subject": "m_ta",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_ta_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_ta_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ta_comp",
+      "subject": "m_ta",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_ta_prophet"
+      },
+      "restsOn": [
+        "st_ta_sahib"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ta_c_yahya_0",
+      "subject": "m_ta_c_yahya",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ta_k"
+      },
+      "restsOn": [
+        "st_ta_son"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ta_age",
+      "subject": "m_ta",
+      "predicate": "died.age",
+      "value": {
+        "parsed": 94,
+        "spans": [
+          "sp_ta_age_n"
+        ]
+      },
+      "restsOn": [
+        "st_ta_age"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ta_death",
+      "subject": "m_ta",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 87,
+        "spans": [
+          "sp_ta_death_y"
+        ]
+      },
+      "restsOn": [
+        "st_ta_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

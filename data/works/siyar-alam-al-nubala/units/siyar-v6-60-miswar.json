@@ -1,0 +1,645 @@
+{
+  "unit": {
+    "id": "siyar-v6-60-miswar",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٦٠"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_mi_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "390",
+      "layer": "MAIN",
+      "exact": "٦٠ - المِسْوَرُ بنُ مَخْرَمَةَ بنِ نَوْفَلِ بنِ أُهَيْبٍ الزُّهْرِيُّ"
+    },
+    {
+      "id": "sp_mi_n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "390",
+      "layer": "MAIN",
+      "exact": "المِسْوَرُ بنُ مَخْرَمَةَ بنِ نَوْفَلِ بنِ أُهَيْبٍ الزُّهْرِيُّ",
+      "prefix": "٦٠ - "
+    },
+    {
+      "id": "sp_mi_n2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "390",
+      "layer": "MAIN",
+      "exact": "ابْنِ عَبْدِ مَنَافٍ بنِ زُهْرَةَ بنِ قُصَيِّ بنِ كِلاَبٍ"
+    },
+    {
+      "id": "sp_mi_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "390",
+      "layer": "MAIN",
+      "exact": "المِسْوَرُ بنُ",
+      "prefix": "٦٠ - "
+    },
+    {
+      "id": "sp_mi_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "390",
+      "layer": "MAIN",
+      "exact": "مَخْرَمَةَ بنِ نَوْفَلِ",
+      "prefix": "المِسْوَرُ بنُ "
+    },
+    {
+      "id": "sp_mi_kunyas",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "391",
+      "layer": "MAIN",
+      "exact": "أَبُو عَبْدِ الرَّحْمَنِ، وَأَبُو عُثْمَانَ القُرَشِيُّ",
+      "prefix": "الجَلِيْلُ، "
+    },
+    {
+      "id": "sp_mi_kunya1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "391",
+      "layer": "MAIN",
+      "exact": "أَبُو عَبْدِ الرَّحْمَنِ",
+      "prefix": "الجَلِيْلُ، "
+    },
+    {
+      "id": "sp_mi_kunya2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "391",
+      "layer": "MAIN",
+      "exact": "أَبُو عُثْمَانَ",
+      "prefix": "عَبْدِ الرَّحْمَنِ، وَ"
+    },
+    {
+      "id": "sp_mi_mother",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "391",
+      "layer": "MAIN",
+      "exact": "وَأُمُّهُ: عَاتِكَةُ؛ أُخْتُ عَبْدِ الرَّحْمَنِ بنِ عَوْفٍ، زُهْرِيَّةٌ أَيْضاً"
+    },
+    {
+      "id": "sp_mi_mother_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "391",
+      "layer": "MAIN",
+      "exact": "عَاتِكَةُ؛ أُخْتُ عَبْدِ الرَّحْمَنِ بنِ عَوْفٍ",
+      "prefix": "وَأُمُّهُ: "
+    },
+    {
+      "id": "sp_mi_kids",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "391",
+      "layer": "MAIN",
+      "exact": "وَوَلَدَاهُ؛ عَبْدُ الرَّحْمَنِ وَأُمُّ بَكْرٍ"
+    },
+    {
+      "id": "sp_mi_kids_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "391",
+      "layer": "MAIN",
+      "exact": "وَوَلَدَاهُ",
+      "suffix": "؛ عَبْدُ الرَّحْمَنِ"
+    },
+    {
+      "id": "sp_mi_umar",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "391",
+      "layer": "MAIN",
+      "exact": "وَكَانَ مِمَّنْ يَلْزَمُ عُمَرَ، وَيَحْفَظُ عَنْهُ"
+    },
+    {
+      "id": "sp_mi_ibnmain_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "391",
+      "layer": "MAIN",
+      "exact": "قَالَ يَحْيَى بنُ مَعِيْنٍ",
+      "suffix": ": مِسْوَرٌ"
+    },
+    {
+      "id": "sp_mi_ibnmain",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "391",
+      "layer": "MAIN",
+      "exact": "مِسْوَرٌ ثِقَةٌ",
+      "prefix": "مَعِيْنٍ: "
+    },
+    {
+      "id": "sp_mi_death_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "394",
+      "layer": "MAIN",
+      "exact": "وَعَنْ أُمِّ بَكْرٍ، قَالَتْ",
+      "suffix": ":\n\nوُلِدَ المِسْوَرُ"
+    },
+    {
+      "id": "sp_mi_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "394",
+      "layer": "MAIN",
+      "exact": "وَبِهَا تُوُفِّيَ لِهِلاَلِ رَبِيْعٍ الآخِرِ، سَنَةَ أَرْبَعٍ وَسِتِّيْنَ"
+    },
+    {
+      "id": "sp_mi_death_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "394",
+      "layer": "MAIN",
+      "exact": "سَنَةَ أَرْبَعٍ وَسِتِّيْنَ",
+      "prefix": "رَبِيْعٍ الآخِرِ، "
+    },
+    {
+      "id": "sp_mi_death_m",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "394",
+      "layer": "MAIN",
+      "exact": "رَبِيْعٍ الآخِرِ",
+      "prefix": "لِهِلاَلِ "
+    },
+    {
+      "id": "sp_mi_jamaah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "394",
+      "layer": "MAIN",
+      "exact": "وَكَذَا أَرَّخَهُ فِيْهَا: جَمَاعَةٌ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_mi0",
+      "unit": "siyar-v6-60-miswar",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_mi_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_mi_ibnmain",
+      "unit": "siyar-v6-60-miswar",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_mi_ibnmain_frame"
+      ],
+      "origin": {
+        "mention": "m_mi_ibnmain_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_mi_death",
+      "unit": "siyar-v6-60-miswar",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_mi_death_frame"
+      ],
+      "origin": {
+        "mention": "m_mi_death_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_mi_jamaah",
+      "unit": "siyar-v6-60-miswar",
+      "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "origin": {
+        "mention": "m_mi_jamaah_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_mi_name",
+      "report": "r_mi0",
+      "spans": [
+        "sp_mi_n1",
+        "sp_mi_n2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_mi_kunyas",
+      "report": "r_mi0",
+      "spans": [
+        "sp_mi_kunyas"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_mi_mother",
+      "report": "r_mi0",
+      "spans": [
+        "sp_mi_mother"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_mi_kids",
+      "report": "r_mi0",
+      "spans": [
+        "sp_mi_kids"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_mi_umar",
+      "report": "r_mi0",
+      "spans": [
+        "sp_mi_umar"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_mi_ibnmain",
+      "report": "r_mi_ibnmain",
+      "spans": [
+        "sp_mi_ibnmain"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_mi_death",
+      "report": "r_mi_death",
+      "spans": [
+        "sp_mi_death"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_mi_jamaah",
+      "report": "r_mi_jamaah",
+      "spans": [
+        "sp_mi_jamaah"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_mi",
+      "parent": "sp_mi_n1",
+      "exact": "المِسْوَرُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_mi_father",
+      "parent": "sp_mi_n1",
+      "exact": "مَخْرَمَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_mi_mo",
+      "parent": "sp_mi_mother",
+      "exact": "وَأُمُّهُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_mi_atikah",
+      "parent": "sp_mi_mother",
+      "exact": "عَاتِكَةُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_mi_k",
+      "parent": "sp_mi_kids",
+      "exact": "وَوَلَدَاهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_mi_c_abd",
+      "parent": "sp_mi_kids",
+      "exact": "عَبْدُ الرَّحْمَنِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_mi_c_ummbakr",
+      "parent": "sp_mi_kids",
+      "exact": "أُمُّ بَكْرٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_mi_ibnmain_by",
+      "parent": "sp_mi_ibnmain_frame",
+      "exact": "يَحْيَى بنُ مَعِيْنٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_mi_m",
+      "parent": "sp_mi_ibnmain",
+      "exact": "مِسْوَرٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_mi_death_by",
+      "parent": "sp_mi_death_frame",
+      "exact": "أُمِّ بَكْرٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_mi_jamaah_by",
+      "parent": "sp_mi_jamaah",
+      "exact": "جَمَاعَةٌ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_mi",
+      "mention": "m_mi",
+      "agent": "al-miswar-ibn-makhramah",
+      "basis": [
+        {
+          "span": "sp_mi_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mi_father",
+      "mention": "m_mi_father",
+      "agent": "makhramah-ibn-nawfal",
+      "basis": [
+        {
+          "span": "sp_mi_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mi_mo",
+      "mention": "m_mi_mo",
+      "agent": "al-miswar-ibn-makhramah",
+      "basis": [
+        {
+          "span": "sp_mi_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mi_atikah",
+      "mention": "m_mi_atikah",
+      "agent": "atikah-bint-awf",
+      "basis": [
+        {
+          "span": "sp_mi_mother_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mi_k",
+      "mention": "m_mi_k",
+      "agent": "al-miswar-ibn-makhramah",
+      "basis": [
+        {
+          "span": "sp_mi_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mi_c_abd",
+      "mention": "m_mi_c_abd",
+      "agent": "abd-al-rahman-ibn-al-miswar",
+      "basis": [
+        {
+          "span": "sp_mi_kids_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mi_c_ummbakr",
+      "mention": "m_mi_c_ummbakr",
+      "agent": "umm-bakr-bint-al-miswar",
+      "basis": [
+        {
+          "span": "sp_mi_kids_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mi_m",
+      "mention": "m_mi_m",
+      "agent": "al-miswar-ibn-makhramah",
+      "basis": [
+        {
+          "span": "sp_mi_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_mi_name",
+      "subject": "m_mi",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_mi_n1",
+          "sp_mi_n2"
+        ]
+      },
+      "restsOn": [
+        "st_mi_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mi_sex",
+      "subject": "m_mi",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_mi_sex"
+        ]
+      },
+      "restsOn": [
+        "st_mi_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mi_father",
+      "subject": "m_mi",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_mi_father"
+      },
+      "restsOn": [
+        "st_mi_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mi_kunya1",
+      "subject": "m_mi",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_mi_kunya1"
+        ]
+      },
+      "restsOn": [
+        "st_mi_kunyas"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mi_kunya2",
+      "subject": "m_mi",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_mi_kunya2"
+        ]
+      },
+      "restsOn": [
+        "st_mi_kunyas"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mi_mother",
+      "subject": "m_mi_mo",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_mi_atikah"
+      },
+      "restsOn": [
+        "st_mi_mother"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mi_c_abd_0",
+      "subject": "m_mi_c_abd",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_mi_k"
+      },
+      "restsOn": [
+        "st_mi_kids"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mi_c_ummbakr_0",
+      "subject": "m_mi_c_ummbakr",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_mi_k"
+      },
+      "restsOn": [
+        "st_mi_kids"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mi_v_umar",
+      "subject": "m_mi",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_mi_umar"
+        ]
+      },
+      "restsOn": [
+        "st_mi_umar"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mi_v_thiqah",
+      "subject": "m_mi_m",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_mi_ibnmain"
+        ]
+      },
+      "restsOn": [
+        "st_mi_ibnmain"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mi_death",
+      "subject": "m_mi",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 64,
+        "spans": [
+          "sp_mi_death_y"
+        ]
+      },
+      "restsOn": [
+        "st_mi_death",
+        "st_mi_jamaah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mi_death_m",
+      "subject": "m_mi",
+      "predicate": "died.month",
+      "value": {
+        "parsed": 4,
+        "spans": [
+          "sp_mi_death_m"
+        ]
+      },
+      "restsOn": [
+        "st_mi_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
