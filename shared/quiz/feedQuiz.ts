@@ -6,13 +6,14 @@ import type { QuizTopic } from './settings';
 export const OPENINGS = 'OPENINGS';
 export type FeedQuizKind = QuizTopic | typeof OPENINGS;
 
-/** The kinds in the order they take turns: the Quran's, then the sira stories and battles (owner, 2026-11-18). */
-export const FEED_QUIZ_KINDS: readonly FeedQuizKind[] = ['SURAH', 'BRANCHES', 'RECITE', 'COMPARE', OPENINGS, 'MEANING', 'TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE', 'SIRA'];
+/** The kinds in the order they take turns: the Quran's, then the sira stories and battles, then the hadith (owner, 2026-11-18). */
+export const FEED_QUIZ_KINDS: readonly FeedQuizKind[] = ['SURAH', 'BRANCHES', 'RECITE', 'COMPARE', OPENINGS, 'MEANING', 'TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE', 'SIRA', 'HADITH_NARRATOR', 'HADITH_COMPLETE'];
 
 /** Each kind's card title, the quiz's own names for them (shared/quiz/kinds.ts), without loading the kinds' data. */
 export const FEED_QUIZ_NAMES: Record<FeedQuizKind & string, string> = {
   SURAH: 'في أي سورة؟', BRANCHES: 'أكمل المتشابهات', RECITE: 'سمّع بقية الآية', COMPARE: 'قارن الموضعين', [OPENINGS]: 'أوائل السور', ENDS: 'سمّع الآية', MEANING: 'ما معنى؟',
   TUHFA_COMPLETE: 'التحفة: أكمل البيت', TUHFA_NEXT: 'التحفة: البيت التالي', TUHFA_RULE: 'التحفة: حكم الحرف', SIRA: 'السيرة والغزوات',
+  HADITH_NARRATOR: 'من راوي الحديث؟', HADITH_COMPLETE: 'أكمل الحديث',
 } as Record<FeedQuizKind & string, string>;
 
 /** The kind of the feed's question card in batch `slot` on a day: the turn moves on one kind a day, so each day starts elsewhere. */

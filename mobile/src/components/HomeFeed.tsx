@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, MessagesSquare, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { bookmarkKind } from '@shared/bookmarkKind';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
@@ -13,7 +13,7 @@ import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, se
 import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
-import { feedBooks, hasBooksCard, hasJuzCard, hasMomentCard, hasSceneCard, hasSiraCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, siraOfSlot } from '@shared/homeFeed';
+import { feedBooks, hadithOfSlot, hasBooksCard, hasHadithCard, hasJuzCard, hasMomentCard, hasSceneCard, hasSiraCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, siraOfSlot } from '@shared/homeFeed';
 import { clock, FIVE, PRAYER_NAMES, type PrayerDay, type PrayerKey } from '@shared/prayer';
 import { BOOKS } from '@shared/books';
 import { isReaderBook, pageName } from '@shared/readerBooks';
@@ -32,6 +32,7 @@ import momentBattles from '@shared/data/battles/moments.json';
 import type { AppMomentBattle } from '@shared/battles/battle';
 import { battleLine, Moment } from './battles/BattleParts';
 import { STORIES } from '@/lib/stories';
+import { FORTY, shamelaPage } from '@/lib/hadith';
 import { Report, StoryAyat } from './stories/StoryParts';
 import CompareCard from './CompareCard';
 import TreePager from './TreePager';
@@ -569,6 +570,27 @@ function SiraPost({ day, slot, palette }: { day: number; slot: number; palette: 
   );
 }
 
+/** The Forty al-Nawawi took whole from the Sahihayn, the most authentic first (owner, 2026-11-18), for the hadith card. */
+const FEED_FORTY = FORTY.entries.filter(entry => !entry.partial && entry.records.length > 0);
+
+/** One of al-Nawawi's Forty in his words, with the books he names; the head opens the hadith's page with its records. */
+function HadithPost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
+  const entry = FEED_FORTY[hadithOfSlot(FEED_FORTY.length, day, slot)];
+  if (!entry) return null;
+  const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={MessagesSquare} title="من الحديث" sub={`${entry.heading}، عن ${entry.companion}`} palette={palette} open={{ onPress: open, label: `افتح ${entry.heading}` }} />}
+      actions={<>
+        <Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />
+        <Action Icon={ExternalLinkIcon} label={`المصدر: ${FORTY.books.nawawi.title}`} onPress={() => openExternal(shamelaPage('nawawi', entry.shamela))} palette={palette} />
+      </>}>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
+        <Text style={{ color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right' }}>{entry.text}</Text>
+      </View>
+    </Post>
+  );
+}
+
 /** Every battle's moments, in the battles' order, for the moment card. */
 const MOMENTS = (momentBattles as AppMomentBattle[]).flatMap(battle => battle.moments.map((moment, i) => ({ battle, moment, n: i + 1 })));
 
@@ -736,6 +758,7 @@ export function Feed({ palette, nearEnd, screenBottom }: { palette: Palette; nea
     if (hasSceneCard(i) && sceneList().length) posts.push(<ScenePost key={`m${day}-${i}`} day={day} slot={i} palette={palette} />);
     if (hasBooksCard(i)) posts.push(<BooksPost key={`k${day}-${i}`} day={day} palette={palette} />);
     if (hasSiraCard(i) && STORIES.length) posts.push(<SiraPost key={`r${day}-${i}`} day={day} slot={i} palette={palette} />);
+    if (hasHadithCard(i) && FEED_FORTY.length) posts.push(<HadithPost key={`h${day}-${i}`} day={day} slot={i} palette={palette} />);
     if (hasMomentCard(i) && MOMENTS.length) posts.push(<MomentPost key={`w${day}-${i}`} day={day} slot={i} palette={palette} />);
   }
   // A prayer that is near comes in once, before the first post below the screen, so what the reader looks at stays put (owner,

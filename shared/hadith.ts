@@ -121,6 +121,8 @@ export interface FortyRecord {
   number: number;
   /** Muslim's route under that number as printed («١٥٥», «١ م»); empty when printed bare. */
   route?: string;
+  /** Shamela's id of the record's first page. */
+  shamela: number;
   volume: number;
   pages: number[];
   /** The record as printed, its chain and its text. */
@@ -139,6 +141,8 @@ export interface FortyEntry {
   heading: string;
   companion: string;
   text: string;
+  /** Shamela's id of the entry's first page. */
+  shamela: number;
   pages: number[];
   named: string[];
   partial?: boolean;

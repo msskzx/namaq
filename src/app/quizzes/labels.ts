@@ -19,12 +19,15 @@ export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   TUHFA_NEXT: { en: "The next verse", ar: "البيت التالي" },
   TUHFA_RULE: { en: "A letter's rule", ar: "حكم الحرف" },
   SIRA: { en: "Sira and battles", ar: "السيرة والغزوات" },
+  HADITH_NARRATOR: { en: "Who narrated it?", ar: "من راوي الحديث؟" },
+  HADITH_COMPLETE: { en: "Complete the hadith", ar: "أكمل الحديث" },
 };
 
 export const TOPIC_GROUPS: { en: string; ar: string; topics: QuizTopic[] }[] = [
   { en: "Quran", ar: "القرآن", topics: ["BRANCHES", "COMPARE", "SURAH", "RECITE", "OPENINGS", "ENDS", "MEANING"] },
   { en: "Tuhfat al-Atfal", ar: "تحفة الأطفال", topics: ["TUHFA_COMPLETE", "TUHFA_NEXT", "TUHFA_RULE"] },
   { en: "Sira", ar: "السيرة", topics: ["SIRA"] },
+  { en: "Hadith", ar: "الحديث", topics: ["HADITH_NARRATOR", "HADITH_COMPLETE"] },
 ];
 
 export const DIFFICULTY_LABELS: Record<Difficulty, { en: string; ar: string }> = {
