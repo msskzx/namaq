@@ -1,0 +1,353 @@
+{
+  "unit": {
+    "id": "siyar-v6-99-amr-ibn-az-zubayr",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٩٩"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_az_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "472",
+      "layer": "MAIN",
+      "exact": "٩٩ - عَمْرُو بنُ الزُّبَيْرِ"
+    },
+    {
+      "id": "sp_az_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "472",
+      "layer": "MAIN",
+      "exact": "عَمْرُو بنُ الزُّبَيْرِ",
+      "prefix": "٩٩ - "
+    },
+    {
+      "id": "sp_az_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "472",
+      "layer": "MAIN",
+      "exact": "عَمْرُو بنُ",
+      "prefix": "٩٩ - "
+    },
+    {
+      "id": "sp_az_father_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "471",
+      "layer": "MAIN",
+      "exact": "وَتَزَوَّجَهَا الزُّبَيْرُ بنُ العَوَّامِ، فَوَلَدَتْ لَهُ: عَمْراً"
+    },
+    {
+      "id": "sp_az_abdullah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "472",
+      "layer": "MAIN",
+      "exact": "وَكَانَ بَيْنَهُ وَبَيْنَ أَخِيْهِ عَبْدِ اللهِ بنِ الزُّبَيْرِ شَرٌّ وَتَقَاطُعٌ"
+    },
+    {
+      "id": "sp_az_abdullah_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "472",
+      "layer": "MAIN",
+      "exact": "عَبْدِ اللهِ بنِ الزُّبَيْرِ",
+      "prefix": "أَخِيْهِ "
+    },
+    {
+      "id": "sp_az_ubaydah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "473",
+      "layer": "MAIN",
+      "exact": "فَقَالَ أَخُوْهُ عُبَيْدَةُ بنُ الزُّبَيْرِ: قَدْ أَجَرْتُهُ"
+    },
+    {
+      "id": "sp_az_ubaydah_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "473",
+      "layer": "MAIN",
+      "exact": "عُبَيْدَةُ بنُ الزُّبَيْرِ",
+      "prefix": "أَخُوْهُ "
+    },
+    {
+      "id": "sp_az_jamal",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "472",
+      "layer": "MAIN",
+      "exact": "وَكَانَ بَدِيعَ الجَمَالِ، شَدِيدَ العَارِضَةِ، جَرِيئاً، مَنِيعاً"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_az0",
+      "unit": "siyar-v6-99-amr-ibn-az-zubayr",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_az_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_az_name",
+      "report": "r_az0",
+      "spans": [
+        "sp_az_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_az_abdullah",
+      "report": "r_az0",
+      "spans": [
+        "sp_az_abdullah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_az_ubaydah",
+      "report": "r_az0",
+      "spans": [
+        "sp_az_ubaydah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_az_jamal",
+      "report": "r_az0",
+      "spans": [
+        "sp_az_jamal"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_az",
+      "parent": "sp_az_name",
+      "exact": "عَمْرُو",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_az_father",
+      "parent": "sp_az_name",
+      "exact": "الزُّبَيْرِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_az_b1",
+      "parent": "sp_az_abdullah",
+      "exact": "بَيْنَهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_az_abdullah",
+      "parent": "sp_az_abdullah",
+      "exact": "عَبْدِ اللهِ بنِ الزُّبَيْرِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_az_b2",
+      "parent": "sp_az_ubaydah",
+      "exact": "أَخُوْهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_az_ubaydah",
+      "parent": "sp_az_ubaydah",
+      "exact": "عُبَيْدَةُ بنُ الزُّبَيْرِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_az_jamal",
+      "parent": "sp_az_jamal",
+      "exact": "وَكَانَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_az",
+      "mention": "m_az",
+      "agent": "amr-ibn-az-zubayr",
+      "basis": [
+        {
+          "span": "sp_az_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_az_father",
+      "mention": "m_az_father",
+      "agent": "az-zubayr-ibn-al-awwam",
+      "basis": [
+        {
+          "span": "sp_az_father_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_az_b1",
+      "mention": "m_az_b1",
+      "agent": "amr-ibn-az-zubayr",
+      "basis": [
+        {
+          "span": "sp_az_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_az_abdullah",
+      "mention": "m_az_abdullah",
+      "agent": "abdullah-ibn-az-zubayr",
+      "basis": [
+        {
+          "span": "sp_az_abdullah_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_az_b2",
+      "mention": "m_az_b2",
+      "agent": "amr-ibn-az-zubayr",
+      "basis": [
+        {
+          "span": "sp_az_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_az_ubaydah",
+      "mention": "m_az_ubaydah",
+      "agent": "ubaydah-ibn-az-zubayr",
+      "basis": [
+        {
+          "span": "sp_az_ubaydah_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_az_jamal",
+      "mention": "m_az_jamal",
+      "agent": "amr-ibn-az-zubayr",
+      "basis": [
+        {
+          "span": "sp_az_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_az_name",
+      "subject": "m_az",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_az_name"
+        ]
+      },
+      "restsOn": [
+        "st_az_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_az_sex",
+      "subject": "m_az",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_az_sex"
+        ]
+      },
+      "restsOn": [
+        "st_az_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_az_father",
+      "subject": "m_az",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_az_father"
+      },
+      "restsOn": [
+        "st_az_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_az_sib_abdullah",
+      "subject": "m_az_b1",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_az_abdullah"
+      },
+      "restsOn": [
+        "st_az_abdullah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_az_sib_ubaydah",
+      "subject": "m_az_b2",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_az_ubaydah"
+      },
+      "restsOn": [
+        "st_az_ubaydah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_az_app",
+      "subject": "m_az_jamal",
+      "predicate": "appearance",
+      "value": {
+        "spans": [
+          "sp_az_jamal"
+        ]
+      },
+      "restsOn": [
+        "st_az_jamal"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

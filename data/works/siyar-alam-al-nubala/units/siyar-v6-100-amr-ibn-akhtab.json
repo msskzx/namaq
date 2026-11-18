@@ -1,0 +1,348 @@
+{
+  "unit": {
+    "id": "siyar-v6-100-amr-ibn-akhtab",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٠٠"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ak_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "473",
+      "layer": "MAIN",
+      "exact": "١٠٠ - عَمْرُو بنُ أَخْطَبَ أَبُو زَيْدٍ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sp_ak_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "473",
+      "layer": "MAIN",
+      "exact": "عَمْرُو بنُ أَخْطَبَ",
+      "prefix": "١٠٠ - ",
+      "suffix": " أَبُو زَيْدٍ"
+    },
+    {
+      "id": "sp_ak_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "473",
+      "layer": "MAIN",
+      "exact": "عَمْرُو بنُ",
+      "prefix": "١٠٠ - "
+    },
+    {
+      "id": "sp_ak_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "473",
+      "layer": "MAIN",
+      "exact": "أَبُو زَيْدٍ",
+      "prefix": "أَخْطَبَ "
+    },
+    {
+      "id": "sp_ak_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "473",
+      "layer": "MAIN",
+      "exact": "أَخْطَبَ أَبُو زَيْدٍ",
+      "prefix": "عَمْرُو بنُ "
+    },
+    {
+      "id": "sp_ak_jammilhu",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "474",
+      "layer": "MAIN",
+      "exact": "رُوِيَ أَنَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - مَسَحَ رَأْسَهُ، وَقَالَ: (اللَّهُمَّ جَمِّلْهُ)"
+    },
+    {
+      "id": "sp_ak_ghazwa",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "474",
+      "layer": "MAIN",
+      "exact": "رَوَى عَنِ: النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - أَحَادِيْثَ، وَغَزَا مَعَهُ ثَلاَثَ عَشْرَةَ غَزْوَةً"
+    },
+    {
+      "id": "sp_ak_ghazwa_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "474",
+      "layer": "MAIN",
+      "exact": "وَغَزَا مَعَهُ ثَلاَثَ عَشْرَةَ غَزْوَةً"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ak0",
+      "unit": "siyar-v6-100-amr-ibn-akhtab",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ak_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ak_jammilhu",
+      "unit": "siyar-v6-100-amr-ibn-akhtab",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_ak_jammilhu_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ak_name",
+      "report": "r_ak0",
+      "spans": [
+        "sp_ak_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ak_heading",
+      "report": "r_ak0",
+      "spans": [
+        "sp_ak_heading"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ak_jammilhu",
+      "report": "r_ak_jammilhu",
+      "spans": [
+        "sp_ak_jammilhu"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ak_ghazwa",
+      "report": "r_ak0",
+      "spans": [
+        "sp_ak_ghazwa_v"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ak",
+      "parent": "sp_ak_name",
+      "exact": "عَمْرُو",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ak_father",
+      "parent": "sp_ak_name",
+      "exact": "أَخْطَبَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ak_h",
+      "parent": "sp_ak_heading",
+      "exact": "عَمْرُو",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ak_jammilhu_by",
+      "parent": "sp_ak_jammilhu",
+      "exact": "رُوِيَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ak_jm",
+      "parent": "sp_ak_jammilhu",
+      "exact": "رَأْسَهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ak_gh",
+      "parent": "sp_ak_ghazwa_v",
+      "exact": "وَغَزَا",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ak_comp_prophet",
+      "parent": "sp_ak_ghazwa",
+      "exact": "النَّبِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ak",
+      "mention": "m_ak",
+      "agent": "amr-ibn-akhtab",
+      "basis": [
+        {
+          "span": "sp_ak_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ak_father",
+      "mention": "m_ak_father",
+      "agent": "akhtab-al-ansari",
+      "basis": [
+        {
+          "span": "sp_ak_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ak_h",
+      "mention": "m_ak_h",
+      "agent": "amr-ibn-akhtab",
+      "basis": [
+        {
+          "span": "sp_ak_name",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ak_jm",
+      "mention": "m_ak_jm",
+      "agent": "amr-ibn-akhtab",
+      "basis": [
+        {
+          "span": "sp_ak_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ak_gh",
+      "mention": "m_ak_gh",
+      "agent": "amr-ibn-akhtab",
+      "basis": [
+        {
+          "span": "sp_ak_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ak_name",
+      "subject": "m_ak",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ak_name"
+        ]
+      },
+      "restsOn": [
+        "st_ak_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ak_sex",
+      "subject": "m_ak",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ak_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ak_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ak_father",
+      "subject": "m_ak",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ak_father"
+      },
+      "restsOn": [
+        "st_ak_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ak_kunya",
+      "subject": "m_ak_h",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_ak_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_ak_heading"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ak_v_jammilhu",
+      "subject": "m_ak_jm",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ak_jammilhu"
+        ]
+      },
+      "restsOn": [
+        "st_ak_jammilhu"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ak_v_ghazwa",
+      "subject": "m_ak_gh",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ak_ghazwa_v"
+        ]
+      },
+      "restsOn": [
+        "st_ak_ghazwa"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ak_comp",
+      "subject": "m_ak_gh",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_ak_comp_prophet"
+      },
+      "restsOn": [
+        "st_ak_ghazwa"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

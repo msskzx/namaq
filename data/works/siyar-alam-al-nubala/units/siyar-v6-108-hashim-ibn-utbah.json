@@ -1,0 +1,520 @@
+{
+  "unit": {
+    "id": "siyar-v6-108-hashim-ibn-utbah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٠٨"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_hu_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "١٠٨ - هَاشِمُ بنُ عُتْبَةَ بنِ أَبِي وَقَّاصٍ الزُّهْرِيُّ"
+    },
+    {
+      "id": "sp_hu_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "هَاشِمُ بنُ عُتْبَةَ بنِ أَبِي وَقَّاصٍ الزُّهْرِيُّ",
+      "prefix": "١٠٨ - "
+    },
+    {
+      "id": "sp_hu_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "هَاشِمُ بنُ",
+      "prefix": "١٠٨ - "
+    },
+    {
+      "id": "sp_hu_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "عُتْبَةَ بنِ أَبِي وَقَّاصٍ",
+      "prefix": "١٠٨ - هَاشِمُ بنُ "
+    },
+    {
+      "id": "sp_hu_laqab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "وَيُعْرَفُ: بِالمِرْقَالِ"
+    },
+    {
+      "id": "sp_hu_laqab_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "المِرْقَالِ",
+      "prefix": "وَيُعْرَفُ: بِ"
+    },
+    {
+      "id": "sp_hu_born",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "وُلِدَ: فِي حَيَاةِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - وَشَهِدَ يَوْمَ اليَرْمُوْكِ؛ فَذَهَبَتْ عَيْنُهُ يَوْمَئِذٍ، وَشَهِدَ فُتُوحَ دِمَشْقَ"
+    },
+    {
+      "id": "sp_hu_yarmuk_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "وَشَهِدَ يَوْمَ اليَرْمُوْكِ"
+    },
+    {
+      "id": "sp_hu_dimashq_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "وَشَهِدَ فُتُوحَ دِمَشْقَ"
+    },
+    {
+      "id": "sp_hu_siffin",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "وَكَانَ مَعَهُ رَايَةُ الإِمَامِ عَلِيٍّ يَوْمَ صِفِّيْنَ، فَقُتِلَ يَوْمَئِذٍ"
+    },
+    {
+      "id": "sp_hu_siffin_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "يَوْمَ صِفِّيْنَ، فَقُتِلَ"
+    },
+    {
+      "id": "sp_hu_brave",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "وَكَانَ مَوْصُوَفاً بِالشَّجَاعَةِ وَالإِقدَامِ"
+    },
+    {
+      "id": "sp_hu_suhbah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "وَبَعْضُهُم عَدَّهُ فِي الصَّحَابَةِ، بِاعْتِبَارِ إِدْرَاكِ زَمَنِ النُّبُوَّةِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_hu0",
+      "unit": "siyar-v6-108-hashim-ibn-utbah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_hu_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_hu_suhbah",
+      "unit": "siyar-v6-108-hashim-ibn-utbah",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_hu_suhbah_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_hu_name",
+      "report": "r_hu0",
+      "spans": [
+        "sp_hu_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_hu_laqab",
+      "report": "r_hu0",
+      "spans": [
+        "sp_hu_laqab"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_hu_born",
+      "report": "r_hu0",
+      "spans": [
+        "sp_hu_born"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_hu_siffin",
+      "report": "r_hu0",
+      "spans": [
+        "sp_hu_siffin"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_hu_brave",
+      "report": "r_hu0",
+      "spans": [
+        "sp_hu_brave"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_hu_suhbah",
+      "report": "r_hu_suhbah",
+      "spans": [
+        "sp_hu_suhbah"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_hu",
+      "parent": "sp_hu_name",
+      "exact": "هَاشِمُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_hu_father",
+      "parent": "sp_hu_name",
+      "exact": "عُتْبَةَ بنِ أَبِي وَقَّاصٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_hu_l",
+      "parent": "sp_hu_laqab",
+      "exact": "وَيُعْرَفُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_hu_s",
+      "parent": "sp_hu_born",
+      "exact": "وُلِدَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_hu_yarmuk",
+      "parent": "sp_hu_born",
+      "exact": "اليَرْمُوْكِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_hu_dimashq",
+      "parent": "sp_hu_born",
+      "exact": "فُتُوحَ دِمَشْقَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_hu_sf",
+      "parent": "sp_hu_siffin",
+      "exact": "مَعَهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_hu_siffin",
+      "parent": "sp_hu_siffin",
+      "exact": "صِفِّيْنَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_hu_br",
+      "parent": "sp_hu_brave",
+      "exact": "وَكَانَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_hu_suhbah_by",
+      "parent": "sp_hu_suhbah",
+      "exact": "وَبَعْضُهُم",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_hu_c",
+      "parent": "sp_hu_suhbah",
+      "exact": "عَدَّهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_hu_comp_prophet",
+      "parent": "sp_hu_born",
+      "exact": "النَّبِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_hu",
+      "mention": "m_hu",
+      "agent": "hashim-ibn-utbah",
+      "basis": [
+        {
+          "span": "sp_hu_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_hu_father",
+      "mention": "m_hu_father",
+      "agent": "utbah-ibn-abi-waqqas",
+      "basis": [
+        {
+          "span": "sp_hu_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_hu_l",
+      "mention": "m_hu_l",
+      "agent": "hashim-ibn-utbah",
+      "basis": [
+        {
+          "span": "sp_hu_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_hu_s",
+      "mention": "m_hu_s",
+      "agent": "hashim-ibn-utbah",
+      "basis": [
+        {
+          "span": "sp_hu_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_hu_yarmuk",
+      "mention": "m_hu_yarmuk",
+      "event": "yarmuk",
+      "basis": [
+        {
+          "span": "sp_hu_yarmuk_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_hu_dimashq",
+      "mention": "m_hu_dimashq",
+      "event": "fath-damascus",
+      "basis": [
+        {
+          "span": "sp_hu_dimashq_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_hu_sf",
+      "mention": "m_hu_sf",
+      "agent": "hashim-ibn-utbah",
+      "basis": [
+        {
+          "span": "sp_hu_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_hu_siffin",
+      "mention": "m_hu_siffin",
+      "event": "siffin",
+      "basis": [
+        {
+          "span": "sp_hu_siffin_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_hu_br",
+      "mention": "m_hu_br",
+      "agent": "hashim-ibn-utbah",
+      "basis": [
+        {
+          "span": "sp_hu_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_hu_c",
+      "mention": "m_hu_c",
+      "agent": "hashim-ibn-utbah",
+      "basis": [
+        {
+          "span": "sp_hu_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_hu_name",
+      "subject": "m_hu",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_hu_name"
+        ]
+      },
+      "restsOn": [
+        "st_hu_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hu_sex",
+      "subject": "m_hu",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_hu_sex"
+        ]
+      },
+      "restsOn": [
+        "st_hu_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hu_father",
+      "subject": "m_hu",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_hu_father"
+      },
+      "restsOn": [
+        "st_hu_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hu_laqab",
+      "subject": "m_hu_l",
+      "predicate": "name.laqab",
+      "value": {
+        "spans": [
+          "sp_hu_laqab_v"
+        ]
+      },
+      "restsOn": [
+        "st_hu_laqab"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hu_yarmuk",
+      "subject": "m_hu_s",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_hu_yarmuk"
+      },
+      "restsOn": [
+        "st_hu_born"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hu_dimashq",
+      "subject": "m_hu_s",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_hu_dimashq"
+      },
+      "restsOn": [
+        "st_hu_born"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hu_siffin",
+      "subject": "m_hu_sf",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_hu_siffin"
+      },
+      "restsOn": [
+        "st_hu_siffin"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hu_v_brave",
+      "subject": "m_hu_br",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_hu_brave"
+        ]
+      },
+      "restsOn": [
+        "st_hu_brave"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hu_comp",
+      "subject": "m_hu_c",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_hu_comp_prophet"
+      },
+      "restsOn": [
+        "st_hu_suhbah"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
