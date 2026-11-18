@@ -132,6 +132,20 @@
       "status": "PROPOSED"
     },
     {
+      "id": "a_us_name",
+      "subject": "m_us",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_us_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_us_kunya"
+      ],
+      "status": "PROPOSED"
+    },
+    {
       "id": "a_us_sex",
       "subject": "m_us_sex",
       "predicate": "sex",
