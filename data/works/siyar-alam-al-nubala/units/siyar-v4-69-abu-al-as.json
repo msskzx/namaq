@@ -1,0 +1,726 @@
+{
+  "unit": {
+    "id": "siyar-v4-69-abu-al-as",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٦٩"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_aas_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "330",
+      "layer": "MAIN",
+      "exact": "٦٩ - أَبُو العَاصِ بنُ الرَّبِيْعِ بنِ عَبْدِ العُزَّى القُرَشِيُّ *"
+    },
+    {
+      "id": "sp_aas1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "330",
+      "layer": "MAIN",
+      "exact": "أَبُو العَاصِ بنُ الرَّبِيْعِ بنِ عَبْدِ العُزَّى",
+      "prefix": "٦٩ - "
+    },
+    {
+      "id": "sp_aas2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "330",
+      "layer": "MAIN",
+      "exact": "ابْنِ عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ بنِ قُصَيِّ بنِ كِلاَبٍ"
+    },
+    {
+      "id": "sp_aas_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "330",
+      "layer": "MAIN",
+      "exact": "أَبُو العَاصِ",
+      "prefix": "٦٩ - "
+    },
+    {
+      "id": "sp_aas_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "330",
+      "layer": "MAIN",
+      "exact": "أَبُو العَاصِ بنُ",
+      "prefix": "٦٩ - "
+    },
+    {
+      "id": "sp_aas_father_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "330",
+      "layer": "MAIN",
+      "exact": "الرَّبِيْعِ بنِ عَبْدِ العُزَّى",
+      "prefix": "أَبُو العَاصِ بنُ "
+    },
+    {
+      "id": "sp_aas_sihr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "صِهْرُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- زَوْجُ بِنْتِهِ زَيْنَبَ، وَهُوَ وَالِدُ أُمَامَةَ الَّتِي كَانَ يَحْمِلُهَا النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فِي صَلاَتِهِ (١)"
+    },
+    {
+      "id": "sp_aas_zaynab_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "بِنْتِهِ زَيْنَبَ",
+      "prefix": "زَوْجُ "
+    },
+    {
+      "id": "sp_aas_umamah_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "وَالِدُ أُمَامَةَ",
+      "prefix": "وَهُوَ "
+    },
+    {
+      "id": "sp_aas_mother",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "أُمُّهُ: هِيَ هَالَةُ بِنْتُ خُوَيْلِدٍ، وَكَانَ أَبُو العَاصِ يُدْعَى: جَرْوَ البَطْحَاءِ"
+    },
+    {
+      "id": "sp_aas_hala",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "هَالَةُ بِنْتُ خُوَيْلِدٍ"
+    },
+    {
+      "id": "sp_aas_laqab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "جَرْوَ البَطْحَاءِ",
+      "prefix": "يُدْعَى: "
+    },
+    {
+      "id": "sp_aas_miswar_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "قَالَ المِسْوَرُ بنُ مَخْرَمَةَ"
+    },
+    {
+      "id": "sp_aas_miswar1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "أَثْنَى النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- عَلَى أَبِي العَاصِ فِي مُصَاهَرَتِهِ خَيْراً"
+    },
+    {
+      "id": "sp_aas_miswar2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "حَدَّثَنِي فَصَدَقَنِي، وَوَعَدَنِي فَوَفَى لِي (٢)"
+    },
+    {
+      "id": "sp_aas_wafa",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "وَكَانَ قَدْ وَعَدَ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَنْ يَرْجِعَ إِلَى مَكَّةَ بَعْدَ وَقْعَةِ بَدْرٍ، فَيَبْعَثَ إِلَيْهِ بِزَيْنَبَ ابْنَتِهِ، فَوَفَى بِوَعْدِهِ، وَفَارَقَهَا مَعَ شِدَّةِ حُبِّهِ لَهَا، وَكَانَ مِنْ تُجَّارِ قُرَيْشٍ وَأُمَنَائِهِم"
+    },
+    {
+      "id": "sp_aas_wafa_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "وَكَانَ قَدْ وَعَدَ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَنْ يَرْجِعَ إِلَى مَكَّةَ بَعْدَ وَقْعَةِ بَدْرٍ، فَيَبْعَثَ إِلَيْهِ بِزَيْنَبَ ابْنَتِهِ، فَوَفَى بِوَعْدِهِ"
+    },
+    {
+      "id": "sp_aas_amin",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "وَكَانَ مِنْ تُجَّارِ قُرَيْشٍ وَأُمَنَائِهِم"
+    },
+    {
+      "id": "sp_aas_radd",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "332",
+      "layer": "MAIN",
+      "exact": "وَلَمَّا هَاجَرَ، رَدَّ عَلَيْهِ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- زَوْجَتَهُ زَيْنَبَ بَعْدَ سِتَّةِ أَعْوَامٍ عَلَى النِّكَاحِ الأَوَّلِ (١)"
+    },
+    {
+      "id": "sp_aas_ia_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "334",
+      "layer": "MAIN",
+      "exact": "فَعَنِ ابْنِ عَبَّاسٍ، قَالَ"
+    },
+    {
+      "id": "sp_aas_ia",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "334",
+      "layer": "MAIN",
+      "exact": "رَدَّ عَلَيْهِ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- زَيْنَبَ عَلَى النِّكَاحِ الأَوَّلِ، لَمْ يُحْدِثْ شَيْئاً"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_aas0",
+      "unit": "siyar-v4-69-abu-al-as",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_aas_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_aas_miswar",
+      "unit": "siyar-v4-69-abu-al-as",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_aas_miswar_frame"
+      ],
+      "origin": {
+        "mention": "m_aas_miswar"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_aas_ia",
+      "unit": "siyar-v4-69-abu-al-as",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_aas_ia_frame"
+      ],
+      "origin": {
+        "mention": "m_aas_ia"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_aas_name",
+      "report": "r_aas0",
+      "spans": [
+        "sp_aas1",
+        "sp_aas2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_aas_sihr",
+      "report": "r_aas0",
+      "spans": [
+        "sp_aas_sihr"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_aas_mother",
+      "report": "r_aas0",
+      "spans": [
+        "sp_aas_mother"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_aas_wafa",
+      "report": "r_aas0",
+      "spans": [
+        "sp_aas_wafa"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_aas_radd",
+      "report": "r_aas0",
+      "spans": [
+        "sp_aas_radd"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_aas_miswar",
+      "report": "r_aas_miswar",
+      "spans": [
+        "sp_aas_miswar1",
+        "sp_aas_miswar2"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_aas_ia",
+      "report": "r_aas_ia",
+      "spans": [
+        "sp_aas_ia"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_aas",
+      "parent": "sp_aas1",
+      "exact": "أَبُو العَاصِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_aas_father",
+      "parent": "sp_aas1",
+      "exact": "الرَّبِيْعِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aas_s",
+      "parent": "sp_aas_sihr",
+      "exact": "صِهْرُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_aas_zaynab",
+      "parent": "sp_aas_sihr",
+      "exact": "زَيْنَبَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aas_umamah",
+      "parent": "sp_aas_sihr",
+      "exact": "أُمَامَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aas_mo",
+      "parent": "sp_aas_mother",
+      "exact": "أَبُو العَاصِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_aas_hala",
+      "parent": "sp_aas_mother",
+      "exact": "هَالَةُ بِنْتُ خُوَيْلِدٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aas_miswar",
+      "parent": "sp_aas_miswar_frame",
+      "exact": "المِسْوَرُ بنُ مَخْرَمَةَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_aas_mi",
+      "parent": "sp_aas_miswar1",
+      "exact": "أَبِي العَاصِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_aas_w",
+      "parent": "sp_aas_wafa",
+      "exact": "فَوَفَى",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_aas_r",
+      "parent": "sp_aas_radd",
+      "exact": "عَلَيْهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_aas_zaynab2",
+      "parent": "sp_aas_radd",
+      "exact": "زَوْجَتَهُ زَيْنَبَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aas_ia",
+      "parent": "sp_aas_ia_frame",
+      "exact": "ابْنِ عَبَّاسٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_aas_i",
+      "parent": "sp_aas_ia",
+      "exact": "عَلَيْهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_aas_zaynab3",
+      "parent": "sp_aas_ia",
+      "exact": "زَيْنَبَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_aas",
+      "mention": "m_aas",
+      "agent": "abu-al-as-ibn-al-rabi",
+      "basis": [
+        {
+          "span": "sp_aas_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aas_s",
+      "mention": "m_aas_s",
+      "agent": "abu-al-as-ibn-al-rabi",
+      "basis": [
+        {
+          "span": "sp_aas_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aas_mo",
+      "mention": "m_aas_mo",
+      "agent": "abu-al-as-ibn-al-rabi",
+      "basis": [
+        {
+          "span": "sp_aas_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aas_mi",
+      "mention": "m_aas_mi",
+      "agent": "abu-al-as-ibn-al-rabi",
+      "basis": [
+        {
+          "span": "sp_aas_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aas_w",
+      "mention": "m_aas_w",
+      "agent": "abu-al-as-ibn-al-rabi",
+      "basis": [
+        {
+          "span": "sp_aas_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aas_r",
+      "mention": "m_aas_r",
+      "agent": "abu-al-as-ibn-al-rabi",
+      "basis": [
+        {
+          "span": "sp_aas_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aas_i",
+      "mention": "m_aas_i",
+      "agent": "abu-al-as-ibn-al-rabi",
+      "basis": [
+        {
+          "span": "sp_aas_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aas_father",
+      "mention": "m_aas_father",
+      "agent": "al-rabi-ibn-abd-al-uzza",
+      "basis": [
+        {
+          "span": "sp_aas_father_nasab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aas_zaynab",
+      "mention": "m_aas_zaynab",
+      "agent": "zaynab-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_aas_zaynab_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aas_zaynab2",
+      "mention": "m_aas_zaynab2",
+      "agent": "zaynab-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_aas_zaynab_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aas_zaynab3",
+      "mention": "m_aas_zaynab3",
+      "agent": "zaynab-bint-muhammad",
+      "basis": [
+        {
+          "span": "sp_aas_zaynab_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aas_umamah",
+      "mention": "m_aas_umamah",
+      "agent": "umamah-bint-abi-al-as",
+      "basis": [
+        {
+          "span": "sp_aas_umamah_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aas_hala",
+      "mention": "m_aas_hala",
+      "agent": "hala-bint-khuwaylid",
+      "basis": [
+        {
+          "span": "sp_aas_hala",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_aas_name",
+      "subject": "m_aas",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_aas1",
+          "sp_aas2"
+        ]
+      },
+      "restsOn": [
+        "st_aas_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aas_sex",
+      "subject": "m_aas",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_aas_sex"
+        ]
+      },
+      "restsOn": [
+        "st_aas_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aas_kunya",
+      "subject": "m_aas",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_aas_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_aas_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aas_father",
+      "subject": "m_aas",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_aas_father"
+      },
+      "restsOn": [
+        "st_aas_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aas_married",
+      "subject": "m_aas_s",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_aas_zaynab"
+      },
+      "restsOn": [
+        "st_aas_sihr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aas_umamah",
+      "subject": "m_aas_umamah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_aas_s"
+      },
+      "restsOn": [
+        "st_aas_sihr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aas_mother",
+      "subject": "m_aas_mo",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_aas_hala"
+      },
+      "restsOn": [
+        "st_aas_mother"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aas_laqab",
+      "subject": "m_aas_mo",
+      "predicate": "name.laqab",
+      "value": {
+        "spans": [
+          "sp_aas_laqab"
+        ]
+      },
+      "restsOn": [
+        "st_aas_mother"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aas_v_miswar",
+      "subject": "m_aas_mi",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_aas_miswar1",
+          "sp_aas_miswar2"
+        ]
+      },
+      "restsOn": [
+        "st_aas_miswar"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aas_v_wafa",
+      "subject": "m_aas_w",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_aas_wafa_v"
+        ]
+      },
+      "restsOn": [
+        "st_aas_wafa"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aas_v_amin",
+      "subject": "m_aas_w",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_aas_amin"
+        ]
+      },
+      "restsOn": [
+        "st_aas_wafa"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aas_married2",
+      "subject": "m_aas_r",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_aas_zaynab2"
+      },
+      "restsOn": [
+        "st_aas_radd"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aas_married3",
+      "subject": "m_aas_i",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_aas_zaynab3"
+      },
+      "restsOn": [
+        "st_aas_ia"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

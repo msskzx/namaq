@@ -1,0 +1,576 @@
+{
+  "unit": {
+    "id": "siyar-v4-66-ikrimah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٦٦"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ik_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "323",
+      "layer": "MAIN",
+      "exact": "٦٦ - عِكْرِمَةُ بنُ أَبِي جَهْلٍ عَمْرِو بنِ هِشَامٍ المَخْزُوْمِيُّ * (ت)"
+    },
+    {
+      "id": "sp_ik1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "323",
+      "layer": "MAIN",
+      "exact": "عِكْرِمَةُ بنُ أَبِي جَهْلٍ عَمْرِو بنِ هِشَامٍ",
+      "prefix": "٦٦ - "
+    },
+    {
+      "id": "sp_ik2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "323",
+      "layer": "MAIN",
+      "exact": "ابْنِ المُغِيْرَةِ بنِ عَبْدِ اللهِ بنِ عُمَرَ بنِ مَخْزُوْمِ بنِ يَقَظَةَ بنِ مُرَّةَ بنِ كَعْبِ بنِ لُؤَيٍّ"
+    },
+    {
+      "id": "sp_ik_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "323",
+      "layer": "MAIN",
+      "exact": "عِكْرِمَةُ بنُ",
+      "prefix": "٦٦ - "
+    },
+    {
+      "id": "sp_ik_father_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "323",
+      "layer": "MAIN",
+      "exact": "أَبِي جَهْلٍ عَمْرِو بنِ هِشَامٍ",
+      "prefix": "عِكْرِمَةُ بنُ "
+    },
+    {
+      "id": "sp_ik_epithets",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "323",
+      "layer": "MAIN",
+      "exact": "الشَّرِيْفُ، الرَّئِيْسُ، الشَّهِيْدُ، أَبُو عُثْمَانَ القُرَشِيُّ، المَخْزُوْمِيُّ، المَكِّيُّ"
+    },
+    {
+      "id": "sp_ik_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "323",
+      "layer": "MAIN",
+      "exact": "أَبُو عُثْمَانَ",
+      "prefix": "الشَّهِيْدُ، "
+    },
+    {
+      "id": "sp_ik_islam",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "323",
+      "layer": "MAIN",
+      "exact": "لَمَّا قُتِلَ أَبُوْهُ، تَحَوَّلَتْ رِئَاسَةُ بَنِي مَخْزُوْمٍ إِلَى عِكْرِمَةَ، ثُمَّ إِنَّهُ أَسْلَمَ، وَحَسُنَ إِسْلاَمُهُ بِالمَرَّةِ (١)"
+    },
+    {
+      "id": "sp_ik_islam_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "323",
+      "layer": "MAIN",
+      "exact": "أَسْلَمَ، وَحَسُنَ إِسْلاَمُهُ بِالمَرَّةِ",
+      "prefix": "ثُمَّ إِنَّهُ "
+    },
+    {
+      "id": "sp_ik_shafii_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "324",
+      "layer": "MAIN",
+      "exact": "قَالَ الشَّافِعِيُّ",
+      "suffix": ": كَانَ"
+    },
+    {
+      "id": "sp_ik_shafii",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "324",
+      "layer": "MAIN",
+      "exact": "كَانَ مَحْمُوْدَ البَلاَءِ فِي الإِسْلاَمِ",
+      "prefix": "قَالَ الشَّافِعِيُّ: "
+    },
+    {
+      "id": "sp_ik_sabii_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "324",
+      "layer": "MAIN",
+      "exact": "قَالَ أَبُو إِسْحَاقَ السَّبِيْعِيُّ"
+    },
+    {
+      "id": "sp_ik_sabii",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "324",
+      "layer": "MAIN",
+      "exact": "نَزَلَ عِكْرِمَةُ يَوْمَ اليَرْمُوْكِ، فَقَاتَلَ قِتَالاً شَدِيْداً، ثُمَّ اسْتُشْهِدَ"
+    },
+    {
+      "id": "sp_ik_yarmuk",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "324",
+      "layer": "MAIN",
+      "exact": "اليَرْمُوْكِ",
+      "prefix": "نَزَلَ عِكْرِمَةُ يَوْمَ "
+    },
+    {
+      "id": "sp_ik_urwah_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "324",
+      "layer": "MAIN",
+      "exact": "وَقَالَ عُرْوَةُ، وَابْنُ سَعْدٍ، وَطَائِفَةٌ"
+    },
+    {
+      "id": "sp_ik_urwah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "324",
+      "layer": "MAIN",
+      "exact": "قُتِلَ يَوْمَ أَجْنَادِيْنَ",
+      "prefix": "وَطَائِفَةٌ: "
+    },
+    {
+      "id": "sp_ik_ajnadayn",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "324",
+      "layer": "MAIN",
+      "exact": "أَجْنَادِيْنَ",
+      "prefix": "قُتِلَ يَوْمَ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ik0",
+      "unit": "siyar-v4-66-ikrimah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ik_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ik_shafii",
+      "unit": "siyar-v4-66-ikrimah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ik_shafii_frame"
+      ],
+      "origin": {
+        "mention": "m_ik_shafii"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ik_sabii",
+      "unit": "siyar-v4-66-ikrimah",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ik_sabii_frame"
+      ],
+      "origin": {
+        "mention": "m_ik_sabii"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ik_urwah",
+      "unit": "siyar-v4-66-ikrimah",
+      "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ik_urwah_frame"
+      ],
+      "origin": {
+        "mention": "m_ik_urwah"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ik_name",
+      "report": "r_ik0",
+      "spans": [
+        "sp_ik1",
+        "sp_ik2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ik_epithets",
+      "report": "r_ik0",
+      "spans": [
+        "sp_ik_epithets"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ik_islam",
+      "report": "r_ik0",
+      "spans": [
+        "sp_ik_islam"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ik_shafii",
+      "report": "r_ik_shafii",
+      "spans": [
+        "sp_ik_shafii"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ik_sabii",
+      "report": "r_ik_sabii",
+      "spans": [
+        "sp_ik_sabii"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ik_urwah",
+      "report": "r_ik_urwah",
+      "spans": [
+        "sp_ik_urwah"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ik",
+      "parent": "sp_ik1",
+      "exact": "عِكْرِمَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ik_father",
+      "parent": "sp_ik1",
+      "exact": "أَبِي جَهْلٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ik_i",
+      "parent": "sp_ik_islam",
+      "exact": "عِكْرِمَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ik_shafii",
+      "parent": "sp_ik_shafii_frame",
+      "exact": "الشَّافِعِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ik_sh",
+      "parent": "sp_ik_shafii",
+      "exact": "كَانَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ik_sabii",
+      "parent": "sp_ik_sabii_frame",
+      "exact": "أَبُو إِسْحَاقَ السَّبِيْعِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ik_s",
+      "parent": "sp_ik_sabii",
+      "exact": "عِكْرِمَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ik_yarmuk",
+      "parent": "sp_ik_sabii",
+      "exact": "يَوْمَ اليَرْمُوْكِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ik_urwah",
+      "parent": "sp_ik_urwah_frame",
+      "exact": "عُرْوَةُ، وَابْنُ سَعْدٍ، وَطَائِفَةٌ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ik_u",
+      "parent": "sp_ik_urwah",
+      "exact": "قُتِلَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ik_ajnadayn",
+      "parent": "sp_ik_urwah",
+      "exact": "يَوْمَ أَجْنَادِيْنَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ik",
+      "mention": "m_ik",
+      "agent": "ikrimah-ibn-abi-jahl",
+      "basis": [
+        {
+          "span": "sp_ik_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ik_i",
+      "mention": "m_ik_i",
+      "agent": "ikrimah-ibn-abi-jahl",
+      "basis": [
+        {
+          "span": "sp_ik_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ik_sh",
+      "mention": "m_ik_sh",
+      "agent": "ikrimah-ibn-abi-jahl",
+      "basis": [
+        {
+          "span": "sp_ik_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ik_s",
+      "mention": "m_ik_s",
+      "agent": "ikrimah-ibn-abi-jahl",
+      "basis": [
+        {
+          "span": "sp_ik_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ik_u",
+      "mention": "m_ik_u",
+      "agent": "ikrimah-ibn-abi-jahl",
+      "basis": [
+        {
+          "span": "sp_ik_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ik_father",
+      "mention": "m_ik_father",
+      "agent": "abu-jahl-ibn-hisham",
+      "basis": [
+        {
+          "span": "sp_ik_father_nasab",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ik_yarmuk",
+      "mention": "m_ik_yarmuk",
+      "event": "yarmuk",
+      "basis": [
+        {
+          "span": "sp_ik_yarmuk",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ik_ajnadayn",
+      "mention": "m_ik_ajnadayn",
+      "event": "ajnadayn",
+      "basis": [
+        {
+          "span": "sp_ik_ajnadayn",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ik_name",
+      "subject": "m_ik",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ik1",
+          "sp_ik2"
+        ]
+      },
+      "restsOn": [
+        "st_ik_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ik_sex",
+      "subject": "m_ik",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ik_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ik_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ik_father",
+      "subject": "m_ik",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ik_father"
+      },
+      "restsOn": [
+        "st_ik_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ik_kunya",
+      "subject": "m_ik",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_ik_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_ik_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ik_v_islam",
+      "subject": "m_ik_i",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ik_islam_v"
+        ]
+      },
+      "restsOn": [
+        "st_ik_islam"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ik_v_shafii",
+      "subject": "m_ik_sh",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ik_shafii"
+        ]
+      },
+      "restsOn": [
+        "st_ik_shafii"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ik_yarmuk",
+      "subject": "m_ik_s",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_ik_yarmuk"
+      },
+      "restsOn": [
+        "st_ik_sabii"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ik_dp_yarmuk",
+      "subject": "m_ik_s",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "sp_ik_yarmuk"
+        ]
+      },
+      "restsOn": [
+        "st_ik_sabii"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ik_ajnadayn",
+      "subject": "m_ik_u",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_ik_ajnadayn"
+      },
+      "restsOn": [
+        "st_ik_urwah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ik_dp_ajnadayn",
+      "subject": "m_ik_u",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "sp_ik_ajnadayn"
+        ]
+      },
+      "restsOn": [
+        "st_ik_urwah"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
