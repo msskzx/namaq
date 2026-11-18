@@ -23,6 +23,14 @@ export interface ProfileEntry {
   identification: Identification['status'];
 }
 
+/** Who a mention in a unit is: its identification's agent, or the standing referent of its text. */
+export function agentOfMention(file: WorkFolder['units'][number], mention: string) {
+  const found = file.identifications.find((i) => i.mention === mention && i.status !== 'REJECTED');
+  if (found) return found.agent;
+  if (file.identifications.some((i) => i.mention === mention)) return undefined;
+  return standingAgent(file.mentions.find((m) => m.id === mention)?.exact ?? '');
+}
+
 export function profilesFromModel(folders: WorkFolder[], root: string) {
   const profiles = new Map<string, ProfileEntry[]>();
   for (const folder of folders) {
