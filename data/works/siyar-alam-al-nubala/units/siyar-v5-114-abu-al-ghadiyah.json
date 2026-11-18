@@ -221,7 +221,7 @@
       "predicate": "name.full",
       "value": {
         "spans": [
-          "sp_gh_name"
+          "sp_gh_kunya"
         ]
       },
       "restsOn": [

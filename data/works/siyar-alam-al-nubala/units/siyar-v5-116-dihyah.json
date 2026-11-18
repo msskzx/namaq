@@ -52,12 +52,21 @@
       "prefix": "بنُ"
     },
     {
-      "id": "sp_dh_rasul_a",
+      "id": "sp_dh_sahib",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 5,
       "page": "550",
       "layer": "MAIN",
       "exact": "صَاحِبُ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-"
+    },
+    {
+      "id": "sp_dh_sahib_pb",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "550",
+      "layer": "MAIN",
+      "exact": "النَّبِيِّ",
+      "prefix": "(د)\n\nالقُضَاعِيُّ.\n\nصَاحِبُ"
     },
     {
       "id": "sp_dh_rasul_b",
@@ -173,10 +182,17 @@
       "role": "AUTHOR_REPORT"
     },
     {
+      "id": "st_dh_sahib",
+      "report": "r_dh0",
+      "spans": [
+        "sp_dh_sahib"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
       "id": "st_dh_rasul",
       "report": "r_dh0",
       "spans": [
-        "sp_dh_rasul_a",
         "sp_dh_rasul_b"
       ],
       "role": "AUTHOR_REPORT"
@@ -226,6 +242,13 @@
       "id": "m_dh_father",
       "parent": "sp_dh_n1",
       "exact": "خَلِيْفَةَ بنِ فَرْوَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_dh_sahib_p",
+      "parent": "sp_dh_sahib",
+      "exact": "النَّبِيِّ",
       "occurrence": 1,
       "role": "REFERENT"
     },
@@ -300,6 +323,18 @@
         {
           "span": "sp_dh_father_n",
           "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_dh_sahib_p",
+      "mention": "m_dh_sahib_p",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_dh_sahib_pb",
+          "role": "SAME_WORK_EXPLICIT"
         }
       ],
       "status": "PROPOSED"
@@ -421,12 +456,23 @@
       "status": "PROPOSED"
     },
     {
+      "id": "a_dh_sahib",
+      "subject": "m_dh",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_dh_sahib_p"
+      },
+      "restsOn": [
+        "st_dh_sahib"
+      ],
+      "status": "PROPOSED"
+    },
+    {
       "id": "a_dh_v_rasul",
       "subject": "m_dh",
       "predicate": "virtue",
       "value": {
         "spans": [
-          "sp_dh_rasul_a",
           "sp_dh_rasul_b"
         ]
       },

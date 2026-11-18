@@ -31,20 +31,20 @@ samurah-ibn-habib) are **same**.
   Ibn Sa'd, Khalifah), 60 (al-Mada'ini, the author: «بعيد»; Abbas ibn Sahl), 65 (Ibn Mandah, «وأشذ منه»), 30 (al-Fallas):
   all kept, attributed. Age 78 is «وقيل». The banner of Banu Sa'idah at the Conquest is Ibn Sa'd's.
 - **Huwaytib ibn Abd al-Uzza** (540-541). fullName: same. Age 120; death 54 (author), 52 («وقيل»). Virtues: the Haram
-  markers and Uthman's burial, «حميد الإسلام». Left out: his Badr (as an idolater) and the Hunayn loan (al-Waqidi).
+  markers and Uthman's burial (two virtues), «حميد الإسلام». Left out: his Badr (as an idolater) and the Hunayn loan (al-Waqidi).
 - **Sa'id ibn Yarbu'** (542). fullName: rule (the catalog's «المخزومي» is not printed in the name). Age 120, death 54.
   His son Abd al-Rahman. Virtue: the Haram markers.
 - **Makhramah ibn Nawfal** (542-544). fullName: same. Kunya «أبو المسور». Son al-Miswar. Virtue: the garment (al-Bukhari
   and Muslim). Death 54. Gap: «وله مائة عام وخمسة عشر عاما» (115) is not read by the date reader («عام»). Left out:
   «بئس أخو العشيرة» (Abu Amir al-Khazzaz; the Sahih wording does not name him, and others name Uyaynah ibn Hisn).
-- **Abu al-Ghadiyah** (544-545). fullName: addition (the heading «أبو الغادية الصحابي»; the catalog has none). His son
+- **Abu al-Ghadiyah** (544-545). fullName: addition («أبو الغادية»; the heading's «الصحابي» describes him and is left out; the catalog has none). His son
   Sa'd. Al-Hudaybiyyah is «يقال». Left out: the report on Ammar's killing (the author: «إسناده فيه انقطاع») and the
   naval arrow story (ungraded). No death year («لم أجد لأبي الغادية وفاة»).
 - **Safwan ibn al-Mu'attal** (545-550). fullName: rule (the heading; «ثم الذكواني» is on the kunya line). «ما علمت إلا خيرا»
   (the Prophet ﷺ, the Ifk account in al-Bukhari and Muslim). Death: 60 at Sumaysat (al-Waqidi, also through Ibn Sa'd),
   «بناحية سميساط من الجزيرة» (Khalifah), killed in Armenia in 19 (Ibn Ishaq). The author thinks they may be two men;
   every reading is kept, attributed. Left out: the poem (poems rule), «خبيث اللسان، طيب القلب» (weak chain).
-- **Dihyah al-Kalbi** (550-556). fullName: same. The envoy to the ruler of Busra (author; the letter is in al-Bukhari).
+- **Dihyah al-Kalbi** (550-556). fullName: same. COMPANION_OF from «صاحب النبي» (author). The envoy to the ruler of Busra (author; the letter is in al-Bukhari).
   Yarmuk (author), Khaybar («وصح»), ABSENT_FROM Badr (Ibn Sa'd). Appearance: the author's «أجمل الصحابة… فلذا كان جبريل
   ربما نزل في صورته». Left out: the gifts and the Caesar audience (weak or matruk), Anas's «في صورة دحية» chain (weak;
   the Ibn Umar route the editor grades sahih is only «روى نحوه», no text).
@@ -71,18 +71,28 @@ samurah-ibn-habib) are **same**.
   in 63. Gap: «نيف وسبعون» is no number; al-Harrah has no event in the catalog.
 - **Abu Hurayrah** (578-632). fullName: rule. The heading's ism «عبد الرحمن بن صخر», which the author calls «أرجحها»;
   the other names are «قيل» (gap: no second-ism predicate). Mother «ميمونة بنت صبيح» (al-Tabarani). Gap: his own «وأنا
-  أبو هريرة بن أميمة» (p612, sahih) names her differently; the page does not say they are one woman, so only al-Tabarani's
-  tie is modelled. Appearance: Ibn Lubaynah («آدم») and Ibn Sirin («أبيض»), both kept. Khaybar: his own «شهدت خيبر»
-  (Ibn al-Musayyib's report). Virtues: the author's epithets and «حمل… علما كثيرا»; the Prophet's prayer for him and his
+  أبو هريرة بن أميمة» (p612, the editor: «رجاله ثقات») names her differently; the page does not say they are one woman, so only al-Tabarani's
+  tie is modelled. Appearance: Ibn Lubaynah («آدم») and Ibn Sirin («أبيض»), both kept. Khaybar: DISPUTED (rule 3a): his own «شهدت خيبر»
+  (Ibn al-Musayyib's report) against Qays ibn Abi Hazim's from him, «جئت يوم خيبر بعد ما فرغوا من القتال». Virtues: the author's epithets and «حمل… علما كثيرا»; the Prophet's prayer for him and his
   mother (Muslim, the author: «إسناده حسن»); «ما نسيت شيئا سمعته منه» (al-Bukhari and Muslim; the author: «صحيحان»);
   «لما رأيت من حرصك على الحديث» (al-Bukhari); al-Shafi'i's «أحفظ من روى الحديث في دهره»; the author's «إليه المنتهى…»
   and «رأس في القرآن…». Death 57 (Hisham ibn Urwah and five others), 58 (Abu Ma'shar and three others), 59 with age 78
-  (al-Waqidi, and Ibn Ishaq and three others «كالواقدي»). Burial at al-Baqi' is a gap. Office over al-Bahrayn for Umar
-  (p619) is not modelled yet.
+  (al-Waqidi, and Ibn Ishaq and three others «كالواقدي»). Burial at al-Baqi' is a gap. Office: amir of al-Bahrayn for Umar (author, p619). Not modelled: his wife Busrah bint
+  Ghazwan (his own words, p612).
 
 ## Quiz
 
 Read every new nasab and virtue question. Five virtues went into `virtueQuizSkip.json`: Wail's «سيد قومه», Huwaytib's
-«حميد الإسلام», both Haram-marker virtues (Huwaytib and Sa'id ibn Yarbu' share them) and Abu Hurayrah's «رأس في القرآن».
+«حميد الإسلام», both Haram-marker virtues (Huwaytib and Sa'id ibn Yarbu' share them) and Abu Hurayrah's «رأس في القرآن». After the review six more: Safwan ibn al-Mu'attal's «ما علمت إلا خيرا» (said of
+Aisha in the same hadith), Jarir's «هاديا مهديا» (also said of Mu'awiyah), Abu Jahm's nasab knowledge and zakat
+collecting, Makhramah's garment, and Huwaytib's burial of Uthman.
 Abu Tha'labah and Abu al-Ghadiyah show a one-word nasab («أبو»): their name has no «بن», and the rule is the main Tarajim
 thread's (asked).
+
+## Review (check 6)
+
+A second agent read every script against the store pages. Applied: Abu Hurayrah's Khaybar is DISPUTED, his epithets
+virtue no longer carries his name or «صاحب رسول الله», Dihyah's «صاحب النبي» is COMPANION_OF, Huwaytib's two deeds
+are two virtues, Abu al-Ghadiyah's name drops «الصحابي», Abu Hurayrah's office over al-Bahrayn is modelled, six virtues
+went to the quiz skip list. Open with the main Tarajim thread: a nasab distractor printed in both lines («عبد مناف» for
+Makhramah), and nasabSlips.json used for Abd al-Rahman ibn Samurah's disputed link.

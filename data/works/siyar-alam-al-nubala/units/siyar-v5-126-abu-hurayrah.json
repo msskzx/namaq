@@ -78,6 +78,22 @@
       "prefix": "صَاحِبُ"
     },
     {
+      "id": "sp_ah_epi_a",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "578",
+      "layer": "MAIN",
+      "exact": "الإِمَامُ، الفَقِيْهُ، المُجْتَهِدُ، الحَافِظُ"
+    },
+    {
+      "id": "sp_ah_epi_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "578",
+      "layer": "MAIN",
+      "exact": "سَيِّدُ الحُفَّاظِ الأَثْبَاتِ"
+    },
+    {
       "id": "sp_ah_tabarani_frame",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 5,
@@ -175,6 +191,22 @@
       "layer": "MAIN",
       "exact": "خَيْبَرَ",
       "prefix": "شَهِدْتُ"
+    },
+    {
+      "id": "sp_ah_qays_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "588",
+      "layer": "MAIN",
+      "exact": "وَرَوَى عَنْهُ قَيْسُ بنُ أَبِي حَازِمٍ"
+    },
+    {
+      "id": "sp_ah_qays",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "588",
+      "layer": "MAIN",
+      "exact": "جِئْتُ يَوْمَ خَيْبَرَ بَعْدَ مَا فَرَغُوْا مِنَ القِتَالِ"
     },
     {
       "id": "sp_ah_hubb_frame",
@@ -379,6 +411,14 @@
       "page": "627",
       "layer": "MAIN",
       "exact": "سَنَةَ تِسْعٍ، كَالوَاقِدِيِّ"
+    },
+    {
+      "id": "sp_ah_bahrayn",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "619",
+      "layer": "MAIN",
+      "exact": "وَقَدْ وَلِيَ أَبُو هُرَيْرَةَ البَحْرَيْنِ لِعُمَرَ"
     }
   ],
   "reports": [
@@ -446,9 +486,22 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_ah_hubb",
+      "id": "r_ah_qays",
       "unit": "siyar-v5-126-abu-hurayrah",
       "ordinal": 6,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ah_qays_frame"
+      ],
+      "origin": {
+        "mention": "m_ah_qays_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ah_hubb",
+      "unit": "siyar-v5-126-abu-hurayrah",
+      "ordinal": 7,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_ah_hubb_frame"
@@ -462,7 +515,7 @@
     {
       "id": "r_ah_nasiya",
       "unit": "siyar-v5-126-abu-hurayrah",
-      "ordinal": 7,
+      "ordinal": 8,
       "voice": "TRANSMITTED",
       "isnadSpan": "sp_ah_nasiya_isnad",
       "origin": {
@@ -473,7 +526,7 @@
     {
       "id": "r_ah_hirs",
       "unit": "siyar-v5-126-abu-hurayrah",
-      "ordinal": 8,
+      "ordinal": 9,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_ah_hirs_frame"
@@ -486,7 +539,7 @@
     {
       "id": "r_ah_shafii",
       "unit": "siyar-v5-126-abu-hurayrah",
-      "ordinal": 9,
+      "ordinal": 10,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_ah_shafii_frame"
@@ -499,7 +552,7 @@
     {
       "id": "r_ah_waqidi",
       "unit": "siyar-v5-126-abu-hurayrah",
-      "ordinal": 10,
+      "ordinal": 11,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_ah_waqidi_frame"
@@ -512,7 +565,7 @@
     {
       "id": "r_ah_hisham",
       "unit": "siyar-v5-126-abu-hurayrah",
-      "ordinal": 11,
+      "ordinal": 12,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_ah_d57_frame"
@@ -525,7 +578,7 @@
     {
       "id": "r_ah_bukayr",
       "unit": "siyar-v5-126-abu-hurayrah",
-      "ordinal": 12,
+      "ordinal": 13,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_ah_d57_tab"
@@ -538,7 +591,7 @@
     {
       "id": "r_ah_madini",
       "unit": "siyar-v5-126-abu-hurayrah",
-      "ordinal": 13,
+      "ordinal": 14,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_ah_d57_tab"
@@ -551,7 +604,7 @@
     {
       "id": "r_ah_khalifah",
       "unit": "siyar-v5-126-abu-hurayrah",
-      "ordinal": 14,
+      "ordinal": 15,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_ah_d57_tab"
@@ -564,7 +617,7 @@
     {
       "id": "r_ah_madaini",
       "unit": "siyar-v5-126-abu-hurayrah",
-      "ordinal": 15,
+      "ordinal": 16,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_ah_d57_tab"
@@ -577,7 +630,7 @@
     {
       "id": "r_ah_fallas",
       "unit": "siyar-v5-126-abu-hurayrah",
-      "ordinal": 16,
+      "ordinal": 17,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_ah_d57_tab"
@@ -590,7 +643,7 @@
     {
       "id": "r_ah_mashar",
       "unit": "siyar-v5-126-abu-hurayrah",
-      "ordinal": 17,
+      "ordinal": 18,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_ah_d58_frame"
@@ -603,7 +656,7 @@
     {
       "id": "r_ah_damrah",
       "unit": "siyar-v5-126-abu-hurayrah",
-      "ordinal": 18,
+      "ordinal": 19,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_ah_d58_frame"
@@ -616,7 +669,7 @@
     {
       "id": "r_ah_maghra",
       "unit": "siyar-v5-126-abu-hurayrah",
-      "ordinal": 19,
+      "ordinal": 20,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_ah_d58_frame"
@@ -629,7 +682,7 @@
     {
       "id": "r_ah_haytham",
       "unit": "siyar-v5-126-abu-hurayrah",
-      "ordinal": 20,
+      "ordinal": 21,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_ah_d58_frame"
@@ -642,7 +695,7 @@
     {
       "id": "r_ah_ishaq",
       "unit": "siyar-v5-126-abu-hurayrah",
-      "ordinal": 21,
+      "ordinal": 22,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_ah_d59b_frame"
@@ -655,7 +708,7 @@
     {
       "id": "r_ah_darir",
       "unit": "siyar-v5-126-abu-hurayrah",
-      "ordinal": 22,
+      "ordinal": 23,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_ah_d59b_frame"
@@ -668,7 +721,7 @@
     {
       "id": "r_ah_ubayd",
       "unit": "siyar-v5-126-abu-hurayrah",
-      "ordinal": 23,
+      "ordinal": 24,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_ah_d59b_frame"
@@ -681,7 +734,7 @@
     {
       "id": "r_ah_numayr",
       "unit": "siyar-v5-126-abu-hurayrah",
-      "ordinal": 24,
+      "ordinal": 25,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_ah_d59b_frame"
@@ -764,6 +817,14 @@
         "sp_ah_khaybar_note"
       ],
       "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ah_qays",
+      "report": "r_ah_qays",
+      "spans": [
+        "sp_ah_qays"
+      ],
+      "role": "TRANSMITTED"
     },
     {
       "id": "st_ah_hubb",
@@ -948,6 +1009,14 @@
         "sp_ah_d59b"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ah_bahrayn",
+      "report": "r_ah0",
+      "spans": [
+        "sp_ah_bahrayn"
+      ],
+      "role": "AUTHOR_REPORT"
     }
   ],
   "mentions": [
@@ -1041,6 +1110,13 @@
       "exact": "خَيْبَرَ",
       "occurrence": 1,
       "role": "REFERENT"
+    },
+    {
+      "id": "m_ah_qays_by",
+      "parent": "sp_ah_qays_frame",
+      "exact": "عَنْهُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
     },
     {
       "id": "m_ah_hubb_by",
@@ -1209,6 +1285,13 @@
       "exact": "مُحَمَّدُ بنُ عَبْدِ اللهِ بنِ نُمَيْرٍ",
       "occurrence": 1,
       "role": "SPEAKER"
+    },
+    {
+      "id": "m_ah_bh",
+      "parent": "sp_ah_bahrayn",
+      "exact": "أَبُو هُرَيْرَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
     }
   ],
   "identifications": [
@@ -1333,6 +1416,18 @@
       "status": "PROPOSED"
     },
     {
+      "id": "i_ah_qays_by",
+      "mention": "m_ah_qays_by",
+      "agent": "abu-hurayrah",
+      "basis": [
+        {
+          "span": "sp_ah_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
       "id": "i_ah_hb",
       "mention": "m_ah_hb",
       "agent": "abu-hurayrah",
@@ -1395,6 +1490,18 @@
     {
       "id": "i_ah_57",
       "mention": "m_ah_57",
+      "agent": "abu-hurayrah",
+      "basis": [
+        {
+          "span": "sp_ah_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ah_bh",
+      "mention": "m_ah_bh",
       "agent": "abu-hurayrah",
       "basis": [
         {
@@ -1479,7 +1586,8 @@
       "predicate": "virtue",
       "value": {
         "spans": [
-          "sp_ah_epithets"
+          "sp_ah_epi_a",
+          "sp_ah_epi_b"
         ]
       },
       "restsOn": [
@@ -1550,9 +1658,10 @@
       },
       "restsOn": [
         "st_ah_khaybar",
-        "st_ah_khaybar_note"
+        "st_ah_khaybar_note",
+        "st_ah_qays"
       ],
-      "status": "PROPOSED"
+      "status": "DISPUTED"
     },
     {
       "id": "a_ah_v_hubb",
@@ -1709,6 +1818,21 @@
         "st_ah_d59_darir",
         "st_ah_d59_ubayd",
         "st_ah_d59_numayr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ah_office",
+      "subject": "m_ah_bh",
+      "predicate": "office",
+      "value": {
+        "classified": "amir",
+        "spans": [
+          "sp_ah_bahrayn"
+        ]
+      },
+      "restsOn": [
+        "st_ah_bahrayn"
       ],
       "status": "PROPOSED"
     }

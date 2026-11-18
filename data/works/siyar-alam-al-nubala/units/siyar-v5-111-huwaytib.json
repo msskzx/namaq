@@ -50,6 +50,22 @@
       "exact": "وَهُوَ أَحَدُ الَّذِيْنَ أَمَرَهُمْ عُمَرُ بِتَجْدِيْدِ أَنْصَابِ حُدُوْدِ حَرَمِ اللهِ (١) ، وَأَحَدُ مَنْ دَفَنَ عُثْمَانَ لَيْلاً"
     },
     {
+      "id": "sp_hw_ansab_a",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "541",
+      "layer": "MAIN",
+      "exact": "أَحَدُ الَّذِيْنَ أَمَرَهُمْ عُمَرُ بِتَجْدِيْدِ أَنْصَابِ حُدُوْدِ حَرَمِ اللهِ"
+    },
+    {
+      "id": "sp_hw_dafn",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "541",
+      "layer": "MAIN",
+      "exact": "وَأَحَدُ مَنْ دَفَنَ عُثْمَانَ لَيْلاً"
+    },
+    {
       "id": "sp_hw_hamid",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 5,
@@ -268,7 +284,21 @@
       "predicate": "virtue",
       "value": {
         "spans": [
-          "sp_hw_ansab"
+          "sp_hw_ansab_a"
+        ]
+      },
+      "restsOn": [
+        "st_hw_ansab"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hw_v_dafn",
+      "subject": "m_hw",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_hw_dafn"
         ]
       },
       "restsOn": [
