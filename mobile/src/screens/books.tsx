@@ -20,11 +20,11 @@ import { Tap } from '@/ui/Tap';
 import LoadingDots from '@/ui/LoadingDots';
 
 /** Tuhfat al-Atfal is a poem with a page of its own (screens/tuhfa.tsx), shelved with the books. It ships with the app and has nothing to manage. */
-const TUHFA = { id: 'tuhfa', kind: 'التجويد', title: 'تحفة الأطفال', by: 'سليمان الجمزوري' } as const;
+export const TUHFA = { id: 'tuhfa', kind: 'التجويد', title: 'تحفة الأطفال', by: 'سليمان الجمزوري' } as const;
 const kindTitle = (book: Book) => BOOK_KINDS.find(kind => kind.kind === book.kind)?.title ?? '';
 
 /**
- * The library (owner, 2026-11-17): its own button in the tab bar, in the utilities' old place. Every book on square cards,
+ * The library (owner, 2026-11-17): its own button in the tab bar, in the utilities' old place. Every book on a card a little taller than wide,
  * two to a row, no headings by kind until there are more books (the kind sits on each card). A reader book opens in the
  * book reader; the short i'rab and al-Itqan are read from an ayah's buttons in the mushaf, so their cards only say so.
  * Under a book only its «فاصلة», where the reader stopped: no counts of pages read.
@@ -59,7 +59,8 @@ export default function LibraryScreen() {
   );
 }
 
-function BookCard({ book, palette, editing, fasila }: { book: Book; palette: Palette; editing: boolean; fasila: string | null }) {
+/** A book on the shelf; home's books card shows the same card, narrower (`width`). */
+export function BookCard({ book, palette, editing, fasila, width }: { book: Book; palette: Palette; editing: boolean; fasila: string | null; width?: number }) {
   const state = bookState(book.id);
   const reads = isReaderBook(book.id);
   const open = reads && state === 'on' ? () => toTab({ pathname: '/book', params: { id: book.id } }) : undefined;
@@ -72,7 +73,7 @@ function BookCard({ book, palette, editing, fasila }: { book: Book; palette: Pal
     : null;
   return (
     <Shelf palette={palette} label={book.title} onPress={editing ? undefined : open} kind={kindTitle(book)} title={book.title} by={book.by}
-      faded={state === 'off' && book.builtIn} foot={foot} action={<Action book={book} state={state} editing={editing} palette={palette} />} />
+      faded={state === 'off' && book.builtIn} foot={foot} width={width} action={<Action book={book} state={state} editing={editing} palette={palette} />} />
   );
 }
 
@@ -100,17 +101,22 @@ function Button({ Icon, label, press, muted, palette }: { Icon: typeof Trash2; l
   );
 }
 
+/** A book card's height over its width. */
+const BOOK_SHAPE = 1.2;
+
 type Foot = { text: string; accent: boolean; fasila?: boolean } | null;
 
-function Shelf({ palette, label, onPress, kind, title, by, foot = null, action, faded = false }: { palette: Palette; label: string; onPress?: () => void;
-  kind: string; title: string; by: string; foot?: Foot; action?: React.ReactNode; faded?: boolean }) {
-  // Square, two to a row, and taller when a long title or author needs the room (the row's other card grows with it).
-  const side = (useWindowDimensions().width - 32 - 12) / 2;
+export function Shelf({ palette, label, onPress, kind, title, by, foot = null, action, faded = false, width }: { palette: Palette; label: string; onPress?: () => void;
+  kind: string; title: string; by: string; foot?: Foot; action?: React.ReactNode; faded?: boolean; width?: number }) {
+  // Two to a row, a little taller than wide like a book (owner, 2026-11-18), and taller still when a long title or author
+  // needs the room (the row's other card grows with it).
+  const shelf = (useWindowDimensions().width - 32 - 12) / 2;
+  const side = width ?? shelf;
   // A card that opens is one link. One that does not (editing, or a book to download) is a plain view, so a screen reader
   // reaches its button: a pressable card would read as one element with the button folded inside it.
   return (
     <Card palette={palette} gap={8} faded={faded} onPress={onPress} accessibilityRole={onPress ? 'link' : undefined} accessibilityLabel={onPress ? label : undefined}
-      style={{ width: side, minHeight: side, justifyContent: 'space-between' }}>
+      style={{ width: side, minHeight: Math.round(side * BOOK_SHAPE), justifyContent: 'space-between' }}>
       <View style={{ gap: 4 }}>
         <Text style={{ color: palette.accent, fontSize: 13, textAlign: 'right' }}>{kind}</Text>
         <Text numberOfLines={3} style={{ color: palette.ink, fontSize: 18, lineHeight: 28, textAlign: 'right' }}>{title}</Text>

@@ -41,7 +41,7 @@ const USE = {
   order: { ar: 'ترتيب السور ومقاصدها', en: 'surah order and aims', href: '/quran/order' },
   openings: { ar: 'فواتح السور', en: 'surah openings', href: '/quran/openings' },
   oaths: { ar: 'الأقسام في القرآن', en: 'oaths in the Quran', href: '/quran/oaths' },
-  iltifat: { ar: 'لطائف: أمثلة مختارة', en: "lata'if: chosen examples", href: '/quran/lataif' },
+  iltifat: { ar: 'مشاهد: أمثلة مختارة', en: 'scenes: chosen examples', href: '/quran/lataif' },
   branches: { ar: 'شواهد المتشابه في الفروع', en: 'the cited cases in branches', href: '/quran/branches' },
   prophets: { ar: 'ترتيب الأنبياء في قصصهم', en: 'the order of the prophets’ stories', href: '/quran/prophets' },
   qiraat: { ar: 'القراءات', en: 'the readings', href: '/quran/qiraat' },

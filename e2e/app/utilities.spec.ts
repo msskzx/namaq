@@ -1,12 +1,15 @@
 import { dhikrById } from '../../shared/adhkar';
 import { expect, open, test } from './fixtures';
 
-// The utilities left the tab bar for the library (owner, 2026-11-17): they open from the compass in home's top bar.
-const compass = (page: import('@playwright/test').Page) => page.getByRole('button', { name: 'الأدوات', exact: true }).filter({ visible: true }).first();
+// The utilities open from home's buttons (owner, 2026-11-18): «القبلة» on the qibla, «الأذكار» on the adhkar.
+const compass = async (page: import('@playwright/test').Page) => {
+  await page.getByRole('button', { name: 'القبلة', exact: true }).filter({ visible: true }).first().click();
+  await page.getByRole('radio', { name: 'مواقيت الصلاة' }).click();
+};
 
 test('prayer times for a picked city, then the qibla and the Hijri month', async ({ page }) => {
   await open(page, '/');
-  await compass(page).click();
+  await compass(page);
   await page.getByRole('button', { name: 'اختر مدينة' }).filter({ visible: true }).first().click();
   await page.getByLabel('ابحث عن مدينة').fill('القاهرة');
   await page.getByRole('radio', { name: 'القاهرة' }).click();
@@ -25,7 +28,7 @@ test('prayer times for a picked city, then the qibla and the Hijri month', async
 
 test('a sideways swipe moves to the next utility and its icon', async ({ page }) => {
   await open(page, '/');
-  await compass(page).click();
+  await compass(page);
   await page.getByRole('radio', { name: 'مواقيت الصلاة' }).click();
   await expect(page.getByRole('radio', { name: 'مواقيت الصلاة' })).toBeChecked();
   // The web export pages with CSS scroll snap; scrolling the pager one page is what a swipe does.
@@ -41,7 +44,7 @@ test('a sideways swipe moves to the next utility and its icon', async ({ page })
 
 test('the adhkar: each time\'s cards, a counter that stops at its number and starts again, and a search that opens the card', async ({ page }) => {
   await open(page, '/');
-  await compass(page).click();
+  await compass(page);
   await page.getByRole('radio', { name: 'الأذكار' }).click();
   await expect(page.getByRole('tab', { name: 'صباح' }).filter({ visible: true }).first()).toBeVisible();
   // Only a card whose hadith states a number has a counter; it stops at three.

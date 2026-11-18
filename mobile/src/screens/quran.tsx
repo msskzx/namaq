@@ -1,6 +1,6 @@
 import { useRef, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
-import { ArrowLeftRight, BookMarked, ListOrdered, ListStart, MessagesSquare, ScrollText, SunMoon, TextSearch, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookMarked, ListOrdered, ListStart, Presentation, ScrollText, SunMoon, TextSearch, type LucideProps } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import TreeIcon from '@/components/TreeIcon';
@@ -19,7 +19,7 @@ export const QURAN_TILES: { route: string; label: string; Icon: (props: LucidePr
   { route: '/tuhfa', label: 'تحفة الأطفال', Icon: BookMarked },
   { route: '/words', label: 'ألفاظ القرآن', Icon: TextSearch },
   { route: '/oaths', label: 'الأقسام', Icon: SunMoon },
-  { route: '/lataif', label: 'لطائف', Icon: MessagesSquare },
+  { route: '/lataif', label: 'مشاهد', Icon: Presentation },
   { route: '/openings', label: 'افتتاح السور', Icon: ListStart },
   { route: '/order', label: 'ترتيب السور', Icon: ListOrdered },
 ];

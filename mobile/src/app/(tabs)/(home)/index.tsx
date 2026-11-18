@@ -6,7 +6,8 @@ import { newVisit } from '@shared/feedSeen';
 import TopBar from '@/ui/TopBar';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import Tour from '@/components/Tour';
-import { ContinueReading, Feed, Stories } from '@/components/HomeFeed';
+import { ContinueReading, Feed } from '@/components/HomeFeed';
+import HomeButtons from '@/components/HomeButtons';
 import { MemorizedPrompt } from '@/components/Memorized';
 import { toTab } from '@/lib/ways';
 import { useShrinkOnScroll } from '@/lib/chrome';
@@ -15,9 +16,10 @@ import { useTabRetap } from '@/lib/tabRetap';
 import { usePalette } from '@/lib/theme';
 
 /**
- * Home (owner, 2026-11-13): reading and learning first, like a social app's home. Story circles, the page the mushaf was left on,
- * then a feed that loads more as it nears its end (owner, 2026-11-14: no «more» button and no tools below; prayer times live in
- * the utilities behind the compass in the top bar (owner, 2026-11-17), saved cards behind their story circle). Pulled down at the top, it refreshes. Nothing about the reader is counted or shown.
+ * Home (owner, 2026-11-13): reading and learning first, like a social app's home. A search field in the top bar, a few buttons
+ * for what is not a tab (owner, 2026-11-18, in the story circles' place), the page the mushaf was left on, then a feed that
+ * loads more as it nears its end (owner, 2026-11-14: no «more» button and no tools below; today's juz, the prayer times and
+ * the date come as cards in it, owner 2026-11-18). Pulled down at the top, it refreshes. Nothing about the reader is counted or shown.
  */
 /** How close to the end (px) the feed asks for its next batch, about two cards ahead. */
 const NEAR_END = 1200;
@@ -51,15 +53,15 @@ export default function HomeScreen() {
   useTabRetap('index', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar settings utilities={() => toTab('/utilities')} search={() => toTab('/search')} hideOnScroll />
+      <TopBar settings search={() => toTab('/search')} hideOnScroll />
       <ScrollView ref={scroll} onScroll={onScroll} onLayout={event => { seenTo.current.height = event.nativeEvent.layout.height; }}
         onContentSizeChange={(_w, h) => check(h)} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" automaticallyAdjustKeyboardInsets
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} tintColor={palette.accent} colors={[palette.accent]} progressBackgroundColor={palette.card} />}
         contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 20 }}>
-        <Stories palette={palette} />
+        <HomeButtons palette={palette} />
         <ContinueReading palette={palette} />
         <MemorizedPrompt palette={palette} />
-        <Feed palette={palette} nearEnd={nearEnd} />
+        <Feed palette={palette} nearEnd={nearEnd} screenBottom={() => seenTo.current.y + seenTo.current.height} />
       </ScrollView>
       {!seen && <Tour palette={palette} onDone={() => setSeen(true)} />}
     </View>

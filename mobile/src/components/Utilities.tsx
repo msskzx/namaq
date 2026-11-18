@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Pressable, ScrollView, View } from 'react-native';
 import Svg, { Circle, G, Line, Polygon, Rect, Text as SvgText } from 'react-native-svg';
-import { Bell, BellOff, CalendarDays, Check, HandHeart, ChevronDown, ChevronLeft, ChevronRight, Clock, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin, type LucideProps } from 'lucide-react-native';
+import { Bell, BellOff, BookOpen, CalendarDays, Check, HandHeart, ChevronDown, ChevronLeft, ChevronRight, Clock, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin, type LucideProps } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import Sheet from '@/ui/Sheet';
-import { hijriDate } from '@shared/hijri';
+import { hijriDate, todaysJuz } from '@shared/hijri';
+import { juzLabel, openJuz } from '@/lib/juz';
+import Button from '@/ui/Button';
 import { ALL, clock, dayDigits, FACING, hijriMonth, METHODS, MY_LOCATION, nextPrayer, PRAYER_NAMES, qiblaLabel, searchPlaces, turnTo, type Place, type PrayerKey } from '@shared/prayer';
 import { locate, qiblaFor, timesFor, useHeading, useMinute } from '@/lib/prayer';
 import { adhanAlerts, prayerPlace, prayerSettings, utilityView, type UtilityView } from '@/lib/settings';
@@ -336,6 +338,7 @@ function Calendar({ palette }: { palette: Palette }) {
   const [offset, setOffset] = useState(0);
   const dayKey = now.toDateString();
   const month = useMemo(() => hijriMonth(now, offset), [dayKey, offset]); // eslint-disable-line react-hooks/exhaustive-deps
+  const juz = useMemo(() => todaysJuz(now), [dayKey]); // eslint-disable-line react-hooks/exhaustive-deps
   if (!month) return <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center', paddingVertical: 40 }}>لا يدعم هذا الجهاز التقويم الهجري.</Text>;
   const cells: (typeof month.days[number] | null)[] = [...Array(month.lead).fill(null), ...month.days];
   const arrow = (Icon: (props: LucideProps) => React.ReactNode, step: number, label: string) => (
@@ -351,6 +354,8 @@ function Calendar({ palette }: { palette: Palette }) {
         </Pressable>
         {arrow(ChevronLeft, 1, 'الشهر التالي')}
       </View>
+      {/* Today's juz, which follows the Hijri day (owner, 2026-11-18: its shortcut lives here and as a card on home). */}
+      {juz && <View style={{ alignItems: 'center' }}><Button Icon={BookOpen} label={`اقرأ جزء اليوم: ${juzLabel(juz)}`} onPress={() => openJuz(juz[0])} /></View>}
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', rowGap: 6 }}>
         {WEEK.map(day => <Text key={day} style={{ width: `${100 / 7}%`, color: palette.muted, fontSize: 14, textAlign: 'center' }}>{day}</Text>)}
         {cells.map((cell, i) => (
