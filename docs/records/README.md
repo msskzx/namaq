@@ -172,3 +172,4 @@ counts for neither.
 | [R0057](R0057-a-sign-on-a-word-is-not-a-way-of-writing-it.md) | A sign on a word is not a way of writing it | challenge | solved |
 | [R0058](R0058-a-pinch-inside-react-natives-scroll-view-loses-to-the-scroll.md) | Gestures inside React Native's own scroll view lose to the scroll | challenge | open |
 | [R0059](R0059-a-later-author-can-be-in-the-main-text.md) | A later author's note can sit inside the main text | obstacle | solved |
+| [R0060](R0060-a-root-dictionary-meets-the-corpus-root-by-tiers.md) | A root dictionary meets the corpus's roots by tiers of spelling, never across و and ي | challenge | solved |

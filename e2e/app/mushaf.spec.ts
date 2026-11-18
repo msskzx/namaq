@@ -108,6 +108,20 @@ test('a word\'s i\'rab shows its short line, and al-\'Ukbari once his book is do
   await expect(page.getByText('لم يتكلم العكبري على هذه الكلمة ولا على آيتها.')).toBeVisible();
 });
 
+test('a word\'s meaning shows al-Raghib\'s article on its root, and Ibn Qutaybah on the ayah behind the other pill', async ({ page }) => {
+  await open(page, '/read');
+  await pressWord(page, HAMD);
+  await page.getByRole('button', { name: 'معنى الكلمة' }).click();
+  await expect(page.getByRole('heading', { name: `${S(1)} ٢` })).toBeVisible();
+  // Ibn Qutaybah explains «ٱلۡعَٰلَمِينَ» in this ayah, not the pressed word, so the sheet opens on al-Raghib's root article.
+  await expect(page.getByRole('tab', { name: 'المفردات للراغب' })).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByText(/الثناء عليه بالفضيلة/).first()).toBeVisible();
+  await expect(page.getByText('المفردات للراغب، ص ٢٥٦')).toBeVisible();
+  await page.getByRole('tab', { name: 'غريب القرآن لابن قتيبة' }).click();
+  await expect(page.getByText(/أصناف الخلق/).first()).toBeVisible();
+  await expect(page.getByText('غريب القرآن لابن قتيبة، ص ٣٨')).toBeVisible();
+});
+
 test('an ayah\'s balagha shows al-Suyuti\'s paragraphs, then al-Zamakhshari\'s passage once al-Kashshaf is downloaded', async ({ page }) => {
   const text = 'قوله ﴿الْحَمْدُ لِلَّهِ﴾ كلام. وفيه استعارة في ﴿الْحَمْدُ﴾. آخر.';
   await page.route('https://namaq.vercel.app/api/books/kashshaf', route => route.fulfill({

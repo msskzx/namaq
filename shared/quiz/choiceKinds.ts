@@ -39,6 +39,10 @@ export type ChoiceQuestion = {
   ayahKey?: string;
   /** Asked on the ayah's own mushaf page instead of the words above (QuizPage): how much shows, what is written, the surah title. */
   page?: PageAsk;
+  /** Words of `quran` marked in the accent colour: the word a question asks about («ما معنى؟»). */
+  marked?: number[];
+  /** A line under each choice once answered, saying what it is («معنى «فراتا»، المرسلات ٢٧» for a wrong meaning). */
+  explains?: Record<string, string>;
   /** For a wrong choice, the ayah in it that looks like the asked one, shown when it is picked. */
   alike?: Record<string, { key: string; words: string[] }>;
   /** Shown under the choices after answering, such as the line of a poem that states the rule. */

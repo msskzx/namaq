@@ -11,7 +11,7 @@ import { mushafText } from "@shared/quran/mushafText";
 import { num } from "@shared/quran/arabicNumber";
 import Card from '@/components/common/Card';
 
-export type ChoiceParts = Partial<Pick<ChoiceQuestion, "quran" | "number" | "reveal" | "page" | "ayahKey" | "alike" | "note">> & { correctAnswer?: string; family?: string; write?: WriteAsk };
+export type ChoiceParts = Partial<Pick<ChoiceQuestion, "quran" | "number" | "reveal" | "page" | "ayahKey" | "alike" | "note" | "marked" | "explains">> & { correctAnswer?: string; family?: string; write?: WriteAsk };
 
 function Words({ words, marked }: { words: string[]; marked?: number[] }) {
   return <>{words.map((word, at) => <span key={at} className={marked?.includes(at) ? "text-[var(--home-accent)]" : undefined}>{mushafText(word)}{at < words.length - 1 ? " " : ""}</span>)}</>;
@@ -37,7 +37,7 @@ export function ChoiceQuran({ question, given, revealed, onReveal, onAnswer, ar,
   if (!question.quran) return null;
   // After a wrong pick with a look-alike, the words where the two part are marked in both.
   const alike = given !== undefined && given !== question.correctAnswer ? question.alike?.[given] : undefined;
-  const marked = alike ? alikeDiff(question.quran, alike.words).a : undefined;
+  const marked = alike ? alikeDiff(question.quran, alike.words).a : question.marked;
   return <div className="mb-4" dir="rtl" lang="ar">
     <Card as="p" className="p-4 text-justify font-quran text-2xl leading-loose text-[var(--home-ink)] [text-align-last:right]">
       <Words words={question.quran} marked={marked} />

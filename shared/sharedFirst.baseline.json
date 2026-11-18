@@ -1,7 +1,7 @@
 {
   "appControls": {
     "mobile/src/components/AyahPreviewSheet.tsx": 1,
-    "mobile/src/components/BalaghaSheet.tsx": 3,
+    "mobile/src/components/BalaghaSheet.tsx": 1,
     "mobile/src/components/Books.tsx": 2,
     "mobile/src/components/BranchSearch.tsx": 6,
     "mobile/src/components/BranchTree.tsx": 2,
@@ -109,7 +109,7 @@
     "src/app/quran/prophets/[slug]/StoryMap.tsx": 2,
     "src/app/quran/qiraat/QiraatView.tsx": 1,
     "src/app/quran/read/AyahActions.tsx": 1,
-    "src/app/quran/read/BalaghaPanel.tsx": 5,
+    "src/app/quran/read/BalaghaPanel.tsx": 2,
     "src/app/quran/read/ListenBar.tsx": 4,
     "src/app/quran/read/Mushaf.module.css": 4,
     "src/app/quran/read/MushafPage.tsx": 1,
