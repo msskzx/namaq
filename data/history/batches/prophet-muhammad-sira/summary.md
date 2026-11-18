@@ -1051,8 +1051,9 @@ Prophet praying over her.
 Umm Salamah married in شوال once her عدة had run, and Zaynab bint Jahsh بأيام
 يسيرة after her. Both needed modules, and a module makes a subject
 catalog-owned, so what their rows already held — `companion`,
-`mother-of-believers`, the edge to each father — is carried on the marker
-beside what the chapter cites.
+`mother-of-believers` — is carried on the marker beside what the chapter
+cites. Zaynab's father is cited from her own line (`zaynab-jahsh/father`, added
+2026-11-18; see below).
 
 Zaynab bint Jahsh brings the chapter's one Qur'an link, and the book gives it
 outright rather than by inference: وهي التي نزلت هذه الآية فيها, الأحزاب ٣٧.
@@ -1402,6 +1403,20 @@ read for yet, and they belong to the companion batches rather than this one.
 
 What this batch can say it did: the account is read end to end, and nothing in
 it was recorded that the pages do not state.
+
+## Added 2026-11-18: the Prophet's mother and two fathers
+
+Three claims were added after the batch was approved, so it needs approving
+again before they import. The counts above predate them.
+
+- `prophet/mother` (`1/32-p6`): وأمه آمنة بنت وهب. Aminah had no node, so
+  `amina-bint-wahb` is a new graph-only module.
+- `aminah/father` (`1/32-p6`): the same line goes on بنت وهب بن عبد مناف بن
+  زهرة بن كلاب, which names the existing `wahb-ibn-abd-manaf-al-zuhri`. His own
+  edges up to Kilab stay on the marker; promoting them is the Siyar
+  conversion's work, not this fix's.
+- `zaynab-jahsh/father` (`1/466-p2`): زينب بنت جحش بن رئاب الأسدي names
+  `jahsh-ibn-riyab`, who was already in the catalog with no edge to her.
 
 # Review
 

@@ -53,6 +53,11 @@ describe('closing full stops', () => {
 });
 
 describe('matchQuotedValue', () => {
+  it('reads a Latin comma on the page as the Arabic comma of the value', () => {
+    expect(matchQuotedValue('شيبة، ابن هاشم واسمه عمرو، ابن عبد مناف', [['واسم عبد المطلب شيبة, ابن هاشم واسمه عمرو, ابن عبد مناف']])).toEqual({ ok: true });
+    expect(matchQuotedValue('شيبة؛ ابن هاشم', [['شيبة, ابن هاشم']])).toMatchObject({ ok: false });
+  });
+
   it('accepts a value joined across a seam with the seam edit and no closing full stop', () => {
     expect(matchQuotedValue(seamed, [[heading, continuation]])).toEqual({ ok: true });
   });

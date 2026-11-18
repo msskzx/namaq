@@ -33,9 +33,19 @@ export function matchQuotedValue(value: string, groups: readonly (readonly strin
   return !result.ok && closed !== value.trim() ? (matchExact(closed, groups).ok ? { ok: true } : result) : result;
 }
 
+// The Shamela copies sometimes type a Latin comma where the print has «،»
+// (السيرة ١/٢٩: «شيبة, ابن هاشم»). A value written with the Arabic comma
+// still quotes the page, so the two count as one mark.
+const sameComma = (text: string) => text.replace(/,/g, '،');
+
 function matchExact(value: string, groups: readonly (readonly string[])[]): QuotedValueResult {
-  const haystacks = groups.flatMap((group) => [...group.map(cleanPassage), joinAtSeams(group), joinAtSeams(group, true)]);
-  const chars = [...value.replace(/\s+/g, ' ').trim()];
+  const haystacks = groups
+    .flatMap((group) => [...group.map(cleanPassage), joinAtSeams(group), joinAtSeams(group, true)])
+    .map(sameComma);
+  // Report the value as written; the fold is one character for one, so the
+  // offsets found on the folded text hold on the original.
+  const written = [...value.replace(/\s+/g, ' ').trim()];
+  const chars = [...sameComma(written.join(''))];
   if (haystacks.some((haystack) => haystack.includes(chars.join('')))) return { ok: true };
 
   let matched = 0;
@@ -44,5 +54,5 @@ function matchExact(value: string, groups: readonly (readonly string[])[]): Quot
     while (length < chars.length && haystack.includes(chars.slice(0, length + 1).join(''))) length += 1;
     matched = Math.max(matched, length);
   }
-  return { ok: false, reason: 'diverges', matched: chars.slice(0, matched).join(''), next: chars.slice(matched, matched + NEXT_CHARS).join('') };
+  return { ok: false, reason: 'diverges', matched: written.slice(0, matched).join(''), next: written.slice(matched, matched + NEXT_CHARS).join('') };
 }

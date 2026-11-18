@@ -4857,6 +4857,50 @@
       "relatedSubjectSlug": "abdullah-ibn-abd-al-muttalib"
     },
     {
+      "key": "prophet/mother",
+      "subjectKind": "PERSON",
+      "subjectSlug": "prophet-muhammad",
+      "assertion": "أمه آمنة بنت وهب بن عبد مناف بن زهرة بن كلاب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/32-p6",
+          "volume": "السيرة 1",
+          "pageReference": "32",
+          "extractionUrl": "https://shamela.ws/book/10906/170",
+          "excerptArabic": "وأمه آمنة بنت وهب بن عبد مناف بن زهرة بن كلاب، فهي أقرب نسبا إلى كلاب من زوجها عبد الله برجل.",
+          "accessedAt": "2026-11-18"
+        }
+      ],
+      "relationshipType": "SON",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "amina-bint-wahb"
+    },
+    {
+      "key": "aminah/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "amina-bint-wahb",
+      "assertion": "أبوها وهب بن عبد مناف بن زهرة بن كلاب.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/32-p6",
+          "volume": "السيرة 1",
+          "pageReference": "32",
+          "extractionUrl": "https://shamela.ws/book/10906/170",
+          "excerptArabic": "وأمه آمنة بنت وهب بن عبد مناف بن زهرة بن كلاب، فهي أقرب نسبا إلى كلاب من زوجها عبد الله برجل.",
+          "accessedAt": "2026-11-18"
+        }
+      ],
+      "relationshipType": "DAUGHTER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "wahb-ibn-abd-manaf-al-zuhri"
+    },
+    {
       "key": "prophet/grandfather",
       "subjectKind": "PERSON",
       "subjectSlug": "prophet-muhammad",
@@ -13293,6 +13337,28 @@
           "extractionUrl": "https://shamela.ws/book/10906/602",
           "excerptArabic": "ثم تزوج بعدها بأيام يسيرة، بنت عمته أم الحكم؛ زينب بنت جحش بن رئاب الأسدي، وكان اسمها برة فسماها زينب ... وأمهم أميمة بنت عبد المطلب، وهي التي نزلت هذه الآية فيها: {فَلَمَّا قَضَى زَيْدٌ مِنْهَا وَطَرًا زَوَّجْنَاكَهَا}.",
           "accessedAt": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "key": "zaynab-jahsh/father",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaynab-bint-jahsh",
+      "assertion": "أبوها جحش بن رئاب الأسدي.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "relationshipType": "DAUGHTER",
+      "relatedSubjectKind": "PERSON",
+      "relatedSubjectSlug": "jahsh-ibn-riyab",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "1/466-p2",
+          "volume": "السيرة 1",
+          "pageReference": "466",
+          "extractionUrl": "https://shamela.ws/book/10906/602",
+          "excerptArabic": "ثم تزوج بعدها بأيام يسيرة، بنت عمته أم الحكم؛ زينب بنت جحش بن رئاب الأسدي",
+          "accessedAt": "2026-11-18"
         }
       ]
     },
