@@ -214,6 +214,22 @@
       "layer": "MAIN",
       "exact": "سَبْعاً وَخَمْسِيْنَ سَنَةً",
       "prefix": "وَعَاشَ "
+    },
+    {
+      "id": "sp_ut_amir",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "304",
+      "layer": "MAIN",
+      "exact": "وَمِنْ أُمَرَاءِ الغَزَاةِ"
+    },
+    {
+      "id": "sp_ut_sayyid",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "304",
+      "layer": "MAIN",
+      "exact": "السَّيِّدُ، الأَمِيْرُ، المُجَاهِدُ"
     }
   ],
   "reports": [
@@ -568,6 +584,34 @@
       "value": {
         "spans": [
           "sp_ut_archer"
+        ]
+      },
+      "restsOn": [
+        "st_ut_life"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ut_v_sayyid",
+      "subject": "m_ut",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ut_sayyid"
+        ]
+      },
+      "restsOn": [
+        "st_ut_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ut_v_amir",
+      "subject": "m_ut",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ut_amir"
         ]
       },
       "restsOn": [

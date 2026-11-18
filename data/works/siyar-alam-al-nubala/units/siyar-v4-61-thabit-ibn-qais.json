@@ -366,6 +366,14 @@
       "layer": "MAIN",
       "exact": "بَنُو ثَابِتِ بنِ قَيْسٍ",
       "suffix": " يَوْم الحَرَّةِ"
+    },
+    {
+      "id": "sp_th_jahir",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "309",
+      "layer": "MAIN",
+      "exact": "وَكَانَ جَهِيْرَ الصَّوْتِ، خَطِيْباً بَلِيْغاً"
     }
   ],
   "reports": [
@@ -574,6 +582,14 @@
         "sp_th_hakim"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_th_jahir",
+      "report": "r_th0",
+      "spans": [
+        "sp_th_jahir"
+      ],
+      "role": "AUTHOR_REPORT"
     }
   ],
   "mentions": [
@@ -1377,6 +1393,20 @@
       },
       "restsOn": [
         "st_th_sons"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_th_v_jahir",
+      "subject": "m_th",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_th_jahir"
+        ]
+      },
+      "restsOn": [
+        "st_th_jahir"
       ],
       "status": "PROPOSED"
     },
