@@ -5,9 +5,10 @@ import { compareQuiz } from './compareQuiz';
 import { meaningQuiz } from './meaning';
 import { ayahEnds, surahOpenings } from './pageKinds';
 import { reciteSnippet } from './reciteSnippet';
+import { siraQuiz } from './sira';
 import { tuhfaComplete, tuhfaNext, tuhfaRule } from './tuhfa';
 import { whichSurah } from './whichSurah';
 
-export const CHOICE_KINDS: ChoiceKind[] = [compareQuiz, whichSurah, reciteSnippet, surahOpenings, ayahEnds, meaningQuiz, tuhfaComplete, tuhfaNext, tuhfaRule];
+export const CHOICE_KINDS: ChoiceKind[] = [compareQuiz, whichSurah, reciteSnippet, surahOpenings, ayahEnds, meaningQuiz, tuhfaComplete, tuhfaNext, tuhfaRule, siraQuiz];
 
 export const choiceKind = (topic: QuizTopic) => CHOICE_KINDS.find(kind => kind.id === topic);

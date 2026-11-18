@@ -60,7 +60,7 @@ describe('sira stories', () => {
 
   it('names only people the catalog has', () => {
     const people = new Set(readdirSync('data/catalog/people').map(file => file.replace(/\.ts$/, '')));
-    const named = stories.flatMap(story => [...story.people.map(p => p.person), ...story.reports!.flatMap(r => r.moments.flatMap(m => m.people))]);
+    const named = stories.flatMap(story => [...story.people.map(p => p.person), ...(story.ayat ?? []).flatMap(a => (a.about ? [a.about] : [])), ...story.reports!.flatMap(r => r.moments.flatMap(m => m.people))]);
     expect(named.filter(slug => !people.has(slug))).toEqual([]);
   });
 });

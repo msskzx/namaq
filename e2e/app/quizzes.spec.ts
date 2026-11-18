@@ -147,3 +147,21 @@ test('a compare quiz: the matrix only, a right and a wrong blank, then the resul
   await page.getByLabel('السؤال ١ - صحيح').click();
   await expect(page.getByText(/فراغات$/)).toBeVisible();
 });
+
+// «السيرة والغزوات» (owner, 2026-11-18): the sira stories and battles as a quiz kind, each answer with its source under it.
+test('a solo quiz of the sira and battles: pick the right answers, each shows its source, then the result', async ({ page }) => {
+  await open(page, '/quiz/solo');
+  await page.getByRole('button', { name: 'السيرة والغزوات' }).click();
+  await page.getByRole('button', { name: 'متشابهات القرآن', exact: true }).click();
+  await page.getByRole('button', { name: 'ابدأ الاختبار' }).click();
+  await expect(page).toHaveURL(/\/quiz\/play/);
+  await expect.poll(() => stored(page, 'quiz-solo-run')).not.toBeNull();
+  const run = await stored<{ questions: { family: string; correctAnswer: string; choices: { value: string; labelArabic: string }[] }[] }>(page, 'quiz-solo-run');
+  expect(run!.questions.every(question => question.family === 'SIRA')).toBe(true);
+  for (const [index, question] of run!.questions.entries()) {
+    await page.getByRole('button', { name: question.choices.find(choice => choice.value === question.correctAnswer)!.labelArabic, exact: true }).click();
+    await expect(page.getByText(/سير أعلام النبلاء/).first()).toBeVisible();
+    await page.getByRole('button', { name: index === run!.questions.length - 1 ? 'إرسال' : 'التالي' }).click();
+  }
+  await expect(page.getByText(/^النتيجة: ٥ من ٥/)).toBeVisible();
+});

@@ -1,7 +1,6 @@
 // The phone app's sira stories (owner, 2026-11-18): events the catalog tells whole in reports. The app is offline, so
 // scripts/battles/buildAppBattles.ts writes them to shared/data/events/stories.json.
 import type { AppStory } from '@shared/stories/story';
-import { surahName } from '@shared/quran/surahNames';
 import { quranpediaPage } from '@shared/readerBooks';
 import { batchClaims, citeOf } from './appBattles';
 import type { Catalog, CatalogStoryAyat, CatalogStoryEvidence } from './types';
@@ -9,13 +8,6 @@ import { legacyUnreviewed, STORY_TAGS } from './types';
 
 const digits = (text: string) => text.replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[Number(d)]);
 const SIRA = 'siyar-alam-al-nubala-risalah';
-
-/** «فصلت ١–١٣» */
-export function ayatLabel(from: string, to: string): string {
-  const [surah, first] = from.split(':');
-  const last = to.split(':')[1];
-  return digits(`${surahName(Number(surah))} ${first === last ? first : `${first}–${last}`}`);
-}
 
 const refOf = (evidence: CatalogStoryEvidence) =>
   evidence.source === SIRA
@@ -55,6 +47,7 @@ export function appStories(catalog: Catalog, claims = batchClaims()): AppStory[]
         }),
         ayat: (event.ayat ?? []).map(ayat => ({
           label: ayat.report ? `${AYAT_KIND[ayat.kind]} ${ayat.report}` : AYAT_KIND[ayat.kind],
+          ...(ayat.about ? { about: link(ayat.about) } : {}),
           from: ayat.from,
           to: ayat.to,
           refs: ayat.evidence.map(refOf),
