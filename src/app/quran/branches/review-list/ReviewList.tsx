@@ -57,7 +57,7 @@ export default function ReviewList({ group, groups, trees, missing }: {
       <Lazy><TreeViewCard tree={tree} height="420px" names={SURAH_NAMES} start="cards" /></Lazy>
       <div className="flex items-center justify-end gap-2">
         {tree.twin && <span dir="ltr" className="text-sm opacity-70">also in compare: one verdict</span>}
-        <TreeReview id={tree.id} state={tree.state} />
+        <TreeReview id={tree.id} state={tree.state} refresh={false} />
       </div>
     </section>)}
   </main>;

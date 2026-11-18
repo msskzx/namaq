@@ -9,8 +9,8 @@ import type { BranchReviewState } from '@shared/quran/branchVerdicts';
 
 type Action = Exclude<BranchReviewState, null>;
 
-/** The owner's three choices for one branches card, on their own machine. Pressing the current choice again clears it. */
-export default function TreeReview({ id, state }: { id: string; state: BranchReviewState }) {
+/** The owner's three choices for one branches card, on their own machine. Pressing the current choice again clears it. `refresh: false` keeps a long list as it is (the button shows the press). */
+export default function TreeReview({ id, state, refresh = true }: { id: string; state: BranchReviewState; refresh?: boolean }) {
   const ar = useLanguage().language === 'ar';
   const router = useRouter();
   const [chosen, setChosen] = useState<BranchReviewState | undefined>(undefined);
@@ -24,7 +24,7 @@ export default function TreeReview({ id, state }: { id: string; state: BranchRev
     try {
       const response = await fetch('/api/quran/branch-review', { method: 'POST', keepalive: true, headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id, action: undo ? 'undo' : action }) });
       if (!response.ok) throw new Error(String(response.status));
-      router.refresh();
+      if (refresh) router.refresh();
     } catch {
       setChosen(undefined);
       setFailed(true);

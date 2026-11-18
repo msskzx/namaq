@@ -50,6 +50,7 @@ next-env.d.ts
 
 # Review button presses not yet folded into the verdicts
 /.review-log.*
+/.branch-review-log.*
 /.story-review-log.*
 
 # end-to-end tests (e2e/)
