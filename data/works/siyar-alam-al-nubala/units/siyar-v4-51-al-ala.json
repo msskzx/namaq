@@ -1,0 +1,331 @@
+{
+  "unit": {
+    "id": "siyar-v4-51-al-ala",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٥١"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_al_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "262",
+      "layer": "MAIN",
+      "exact": "٥١ - العَلاَءُ بنُ الحَضْرَمِيِّ"
+    },
+    {
+      "id": "sp_al1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "262",
+      "layer": "MAIN",
+      "exact": "العَلاَءُ بنُ عَبْدِ اللهِ بنِ عِمَادِ (١) بنِ أَكْبَرَ بنِ رَبِيْعَةَ بنِ مُقَنَّعِ بنِ حَضْرَمَوْتَ",
+      "prefix": "وَاسْمُهُ: "
+    },
+    {
+      "id": "sp_al_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "262",
+      "layer": "MAIN",
+      "exact": "العَلاَءُ بنُ",
+      "prefix": "وَاسْمُهُ: "
+    },
+    {
+      "id": "sp_al_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "262",
+      "layer": "MAIN",
+      "exact": "عَبْدِ اللهِ بنِ عِمَادِ",
+      "prefix": "وَاسْمُهُ: العَلاَءُ بنُ "
+    },
+    {
+      "id": "sp_al_sadah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "262",
+      "layer": "MAIN",
+      "exact": "كَانَ مِنْ حُلَفَاءِ بَنِي أُمَيَّةَ، وَمِنْ سَادَةِ المُهَاجِرِيْنَ."
+    },
+    {
+      "id": "sp_al_sadah_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "262",
+      "layer": "MAIN",
+      "exact": "وَمِنْ سَادَةِ المُهَاجِرِيْنَ",
+      "prefix": "أُمَيَّةَ، "
+    },
+    {
+      "id": "sp_al_office",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "263",
+      "layer": "MAIN",
+      "exact": "وَلاَّهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- البَحْرَيْنِ، ثُمَّ وَلِيَهَا لأَبِي بَكْرٍ، وَعُمَرَ."
+    },
+    {
+      "id": "sp_al_office_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "263",
+      "layer": "MAIN",
+      "exact": "وَلاَّهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- البَحْرَيْنِ، ثُمَّ وَلِيَهَا لأَبِي بَكْرٍ، وَعُمَرَ",
+      "suffix": "."
+    },
+    {
+      "id": "sp_al_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "264",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ سَنَةَ: إِحْدَى وَعِشْرِيْنَ."
+    },
+    {
+      "id": "sp_al_death_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "264",
+      "layer": "MAIN",
+      "exact": "سَنَةَ: إِحْدَى وَعِشْرِيْنَ",
+      "prefix": "تُوُفِّيَ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_al0",
+      "unit": "siyar-v4-51-al-ala",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_al_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_al_name",
+      "report": "r_al0",
+      "spans": [
+        "sp_al1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_al_sadah",
+      "report": "r_al0",
+      "spans": [
+        "sp_al_sadah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_al_office",
+      "report": "r_al0",
+      "spans": [
+        "sp_al_office"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_al_death",
+      "report": "r_al0",
+      "spans": [
+        "sp_al_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_al",
+      "parent": "sp_al1",
+      "exact": "العَلاَءُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_al_father",
+      "parent": "sp_al1",
+      "exact": "عَبْدِ اللهِ بنِ عِمَادِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_al_s",
+      "parent": "sp_al_sadah",
+      "exact": "كَانَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_al_o",
+      "parent": "sp_al_office",
+      "exact": "وَلاَّهُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_al_d",
+      "parent": "sp_al_death",
+      "exact": "تُوُفِّيَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_al",
+      "mention": "m_al",
+      "agent": "al-ala-ibn-al-hadrami",
+      "basis": [
+        {
+          "span": "sp_al_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_al_s",
+      "mention": "m_al_s",
+      "agent": "al-ala-ibn-al-hadrami",
+      "basis": [
+        {
+          "span": "sp_al_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_al_o",
+      "mention": "m_al_o",
+      "agent": "al-ala-ibn-al-hadrami",
+      "basis": [
+        {
+          "span": "sp_al_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_al_d",
+      "mention": "m_al_d",
+      "agent": "al-ala-ibn-al-hadrami",
+      "basis": [
+        {
+          "span": "sp_al_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_al_father",
+      "mention": "m_al_father",
+      "agent": "abdullah-ibn-imad-al-hadrami",
+      "basis": [
+        {
+          "span": "sp_al_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_al_name",
+      "subject": "m_al",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_al1"
+        ]
+      },
+      "restsOn": [
+        "st_al_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_al_sex",
+      "subject": "m_al",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_al_sex"
+        ]
+      },
+      "restsOn": [
+        "st_al_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_al_father",
+      "subject": "m_al",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_al_father"
+      },
+      "restsOn": [
+        "st_al_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_al_v_sadah",
+      "subject": "m_al_s",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_al_sadah_v"
+        ]
+      },
+      "restsOn": [
+        "st_al_sadah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_al_office",
+      "subject": "m_al_o",
+      "predicate": "office",
+      "value": {
+        "classified": "amir",
+        "spans": [
+          "sp_al_office_v"
+        ]
+      },
+      "restsOn": [
+        "st_al_office"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_al_death",
+      "subject": "m_al_d",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 21,
+        "spans": [
+          "sp_al_death_y"
+        ]
+      },
+      "restsOn": [
+        "st_al_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

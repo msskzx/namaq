@@ -1,0 +1,270 @@
+{
+  "unit": {
+    "id": "siyar-v4-43-khallad-ibn-amr",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٤٣"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_kl_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "٤٣ - خَلاَّدُ بنُ عَمْرِو بنِ الجَمُوْحِ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sp_kl1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "خَلاَّدُ بنُ عَمْرِو بنِ الجَمُوْحِ الأَنْصَارِيُّ",
+      "prefix": "٤٣ - "
+    },
+    {
+      "id": "sp_kl_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "خَلاَّدُ بنُ",
+      "prefix": "٤٣ - "
+    },
+    {
+      "id": "sp_kl_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "عَمْرِو بنِ الجَمُوْحِ",
+      "prefix": "٤٣ - خَلاَّدُ بنُ "
+    },
+    {
+      "id": "sp_kl_badr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "شَهِدَ بَدْراً، وَاسْتُشْهِدَ يَوْمَ أُحُدٍ."
+    },
+    {
+      "id": "sp_kl_day_badr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "بَدْراً، وَاسْتُشْهِدَ",
+      "prefix": "شَهِدَ "
+    },
+    {
+      "id": "sp_kl_day_uhud",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "252",
+      "layer": "MAIN",
+      "exact": "يَوْمَ أُحُدٍ.",
+      "prefix": "وَاسْتُشْهِدَ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_kl0",
+      "unit": "siyar-v4-43-khallad-ibn-amr",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_kl_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_kl_name",
+      "report": "r_kl0",
+      "spans": [
+        "sp_kl1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_kl_badr",
+      "report": "r_kl0",
+      "spans": [
+        "sp_kl_badr"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_kl",
+      "parent": "sp_kl1",
+      "exact": "خَلاَّدُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_kl_father",
+      "parent": "sp_kl1",
+      "exact": "عَمْرِو بنِ الجَمُوْحِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_kl_b",
+      "parent": "sp_kl_badr",
+      "exact": "شَهِدَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_kl_badr",
+      "parent": "sp_kl_badr",
+      "exact": "بَدْراً",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_kl_uhud",
+      "parent": "sp_kl_badr",
+      "exact": "أُحُدٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_kl",
+      "mention": "m_kl",
+      "agent": "khallad-ibn-amr-ibn-al-jumuh",
+      "basis": [
+        {
+          "span": "sp_kl_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_kl_b",
+      "mention": "m_kl_b",
+      "agent": "khallad-ibn-amr-ibn-al-jumuh",
+      "basis": [
+        {
+          "span": "sp_kl_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_kl_father",
+      "mention": "m_kl_father",
+      "agent": "amr-ibn-al-jumuh",
+      "basis": [
+        {
+          "span": "sp_kl_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_kl_badr",
+      "mention": "m_kl_badr",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_kl_day_badr",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_kl_uhud",
+      "mention": "m_kl_uhud",
+      "event": "uhud",
+      "basis": [
+        {
+          "span": "sp_kl_day_uhud",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_kl_name",
+      "subject": "m_kl",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_kl1"
+        ]
+      },
+      "restsOn": [
+        "st_kl_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kl_sex",
+      "subject": "m_kl",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_kl_sex"
+        ]
+      },
+      "restsOn": [
+        "st_kl_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kl_father",
+      "subject": "m_kl",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_kl_father"
+      },
+      "restsOn": [
+        "st_kl_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kl_badr",
+      "subject": "m_kl_b",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_kl_badr"
+      },
+      "restsOn": [
+        "st_kl_badr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kl_uhud",
+      "subject": "m_kl_b",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_kl_uhud"
+      },
+      "restsOn": [
+        "st_kl_badr"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
