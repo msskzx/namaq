@@ -10,7 +10,7 @@ import Card from '@/ui/Card';
 export function Section({ title, palette, children }: { title: string; palette: Palette; children: React.ReactNode }) {
   return (
     <Card palette={palette} gap={10}>
-      <Text style={{ color: palette.ink, fontSize: 16, fontWeight: '700', textAlign: 'right' }}>{title}</Text>
+      <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 16, fontWeight: '700', textAlign: 'right' }}>{title}</Text>
       {children}
     </Card>
   );

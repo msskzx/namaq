@@ -6,7 +6,7 @@ import { hiddenProps, useHidden, useSlideAway } from '@/ui/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, useSegments } from 'expo-router';
 import type { BottomTabBarProps } from 'expo-router/js-tabs';
-import { BookOpen, Feather, House, LibraryBig, type LucideProps } from 'lucide-react-native';
+import { BookOpen, Feather, House, ScrollText, type LucideProps } from 'lucide-react-native';
 import TreeIcon from '@/components/TreeIcon';
 import { TAB_BAR, tabBarBottom } from '@/ui/tabBarSpace';
 import { usePalette } from '@/lib/theme';
@@ -15,14 +15,14 @@ import { setCompact, useCompact, useImmersive } from '@/lib/chrome';
 import { openPage, tapOnOpen } from '@/lib/tabGroups';
 
 // Five buttons at most (owner, 2026-11-13). Arabic runs right to left, so the first sits on the right:
-// read left to right they are library, quizzes, home, mushaf, Quran. Keys are the tab routes; home, library and Quran hold page stacks (lib/tabGroups.ts).
-// The library took the utilities' place (owner, 2026-11-17); the utilities open from the compass in home's top bar.
+// read left to right they are hadith, quizzes, home, mushaf, Quran. Keys are the tab routes; home, hadith and Quran hold page stacks (lib/tabGroups.ts).
+// The hadith took the library's place (owner, 2026-11-18); the library and the utilities open from the buttons at the top of home.
 const BUTTONS: { key: string; label: string; Icon: (props: LucideProps) => React.ReactNode }[] = [
   { key: '(quran)', label: 'القرآن', Icon: TreeIcon },
   { key: 'read', label: 'المصحف', Icon: BookOpen },
   { key: '(home)', label: 'الرئيسية', Icon: House },
   { key: 'quizzes', label: 'الاختبارات', Icon: Feather },
-  { key: '(library)', label: 'المكتبة', Icon: LibraryBig },
+  { key: '(hadith)', label: 'الحديث', Icon: ScrollText },
 ];
 
 // Instagram-style (owner, 2026-11-10): while a page scrolls down the bar gets a little smaller, and it comes back on the way up.

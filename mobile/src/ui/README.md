@@ -27,6 +27,7 @@ below. Never copy one into a screen.
 | `Text` | Amiri text with the interface scale | every non-Quran text |
 | `ExternalLink` (+ `openExternal`) | Opens a page outside the app | every link out of Namaq |
 | `Reference` | A book's quote with its page as a link | the sources of a section |
+| `Bubble` | A speech bubble: the speaker's name in his colour, his side, his corner sharp; `framed` | a conversation drawn as a chat (the dialog scenes of «مشاهد», a hadith's scenes) |
 | `Empty` | The one "nothing here" line: muted, centred, says what is missing and how to fill it | every empty list or search |
 | `LoadingDots`, `LoadingScreen`, `Hourglass` | The one loader (`fill` centres it for a page or sheet, `label` for screen readers), app start screen, quiz timer | waiting |
 
