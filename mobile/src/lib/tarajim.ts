@@ -1,4 +1,4 @@
-import type { AppPerson, PersonFact } from '@shared/tarajim';
+import { kunyaName, type AppPerson, type PersonFact } from '@shared/tarajim';
 import { bareName } from '@shared/tarajimLine';
 import peopleJson from '@shared/data/tarajim/people.json';
 
@@ -25,7 +25,7 @@ export const unvowelled = (text: string) => text.replace(/[\u064B-\u0652\u0670\u
 
 /** The line under a name: the kunya, then the laqab when it is a name alone (not a sentence that gives it). */
 export function personLine(person: AppPerson) {
-  return [person.kunya[0]?.text, person.titles[0]?.name].filter(Boolean).map(text => unvowelled(text!)).join(' · ');
+  return [person.kunya[0] && kunyaName(person.kunya[0].text), person.titles[0]?.name].filter(Boolean).map(text => unvowelled(text!)).join(' · ');
 }
 
 /** Each title the people hold, once, in the order they first come, for the list's filter chips. */
