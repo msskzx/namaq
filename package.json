@@ -27,6 +27,7 @@
     "quran:kashshaf": "tsx scripts/quran/buildKashshaf.ts",
     "quran:book-pages": "tsx scripts/quran/buildBookPages.ts",
     "quran:itqan-balagha": "tsx scripts/quran/buildItqanBalagha.ts",
+    "quran:balagha-terms": "tsx scripts/quran/buildBalaghaTerms.ts",
     "quran:gharib": "tsx scripts/quran/buildGharib.ts",
     "quran:mushaf": "tsx scripts/quran/buildMushaf.ts",
     "quran:lemmas": "tsx scripts/quran/buildLemmas.ts",

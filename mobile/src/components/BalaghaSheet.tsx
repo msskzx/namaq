@@ -21,7 +21,8 @@ import Tabs from '@/ui/Tabs';
 import Folded from '@/ui/Folded';
 import Pickable from '@/ui/Pickable';
 import Chip from '@/ui/Chip';
-import { openIntent } from '@/lib/ways';
+import { openIntent, toTab } from '@/lib/ways';
+import { plainName, termOfParagraph } from '@shared/quran/balaghaTerms';
 
 /**
  * Balagha in the reader (owner, 2026-11-16; docs/plans/balagha.md), from two books picked with pills. Al-Itqan (built
@@ -89,6 +90,7 @@ function Itqan({ paragraphs, palette, onSpan, onClose }: { paragraphs: ItqanPara
       {/* The paragraph lights the words it quotes; its reference below is a control of its own. */}
       <Pickable picked={picked === i} onPick={() => setPicked(i)}>
       <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 22, textAlign: 'right' }}>{paragraph.heading ? `«${paragraph.heading}» · ${paragraph.kind}` : paragraph.kind}</Text>
+      <TermLink paragraph={paragraph} palette={palette} onClose={onClose} />
       <Text selectable style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' }}>
         {tafsirRuns(paragraph.text).map((run, j) => <Text key={j} style={run.quran ? { fontFamily: QURAN_FONT, color: palette.accent } : undefined}>{run.text}</Text>)}
       </Text>
@@ -114,6 +116,19 @@ function Itqan({ paragraphs, palette, onSpan, onClose }: { paragraphs: ItqanPara
       </Folded>
     </Card>
   ));
+}
+
+/** The term his paragraph stands under, a tap from its page in «مصطلحات البلاغة». */
+function TermLink({ paragraph, palette, onClose }: { paragraph: ItqanParagraph; palette: Palette; onClose: () => void }) {
+  const term = termOfParagraph(itqan, paragraph);
+  if (!term) return null;
+  const label = `تعريف ${plainName(term)}`;
+  return (
+    <View style={{ flexDirection: 'row', paddingVertical: 4 }}>
+      <Chip small label={label} on={false} palette={palette} accessibilityLabel={`${label} في مصطلحات البلاغة`}
+        onPress={() => { onClose(); toTab({ pathname: '/term', params: { name: term } }); }} />
+    </View>
+  );
 }
 
 function Kashshaf({ ayah, palette, onSpan, onClose }: { ayah: string; palette: Palette; onSpan: (span: [number, number][]) => void; onClose: () => void }) {

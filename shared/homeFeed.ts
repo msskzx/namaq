@@ -16,6 +16,12 @@ export const hasMomentCard = (slot: number) => slot % 4 === 3;
 /** The moment of a batch, the same all day; each moment batch brings the next one. */
 export const momentOfSlot = (count: number, day: number, slot: number) => (count ? (((day * 3 + (slot - 3) / 4) % count) + count) % count : -1);
 
+/** A balagha term with its definition (owner, 2026-11-18) on every fourth batch from the third, with a scene. */
+export const hasTermCard = (slot: number) => slot % 4 === 2;
+
+/** The term of a batch, the same all day; each term batch brings the next one. */
+export const termOfSlot = (count: number, day: number, slot: number) => (count ? (((day * 5 + (slot - 2) / 4) % count) + count) % count : -1);
+
 /** A sira story, whole (owner, 2026-11-18), on every fourth batch from the second, with the books. */
 export const hasSiraCard = (slot: number) => slot % 4 === 1;
 
