@@ -197,7 +197,7 @@ const cases: Citation[] = rawEvidence.cases.map(row => {
 type Selection = [key: string, start: number, end: number, through?: string];
 type Attested = { places: Selection[]; citations: string[]; focus?: Record<string, number[]>; detail?: string; kind?: Kind; book?: true };
 
-const byMushaf = (a: string, b: string) => { const [x, y] = a.split(':').map(Number); const [u, v] = b.split(':').map(Number); return x - u || y - v; };
+const byMushaf = (a: string, b: string) => { const [x, y] = a.split('-')[0].split(':').map(Number); const [u, v] = b.split('-')[0].split(':').map(Number); return x - u || y - v; };
 
 /**
  * Every multi-place case a book gives that no hand-made entry above already holds: whole ayat, in mushaf order.
@@ -207,16 +207,23 @@ function withBookEntries(handWritten: Attested[], rows: Word[][], index: Map<str
   const attested = handWritten.map(entry => ({ ...entry, citations: [...entry.citations] }));
   const held = new Set(attested.flatMap(entry => entry.citations));
   const setOf = (keys: string[]) => [...keys].sort(byMushaf).join(',');
-  const handMade = new Map(attested.map(entry => [setOf(entry.places.map(([key]) => key)), entry]));
+  const handMade = new Map(attested.map(entry => [setOf(entry.places.map(([key, , , through]) => through ? `${key}-${through}` : key)), entry]));
   const made = new Map<string, Attested>();
   for (const citation of cases) {
-    if (held.has(citation.id) || citation.places.length < 2 || citation.places.some(key => key.includes('-') || !index.has(key))) continue;
-    const keys = [...citation.places].sort(byMushaf);
-    const set = setOf(keys);
+    // A place is an ayah ("2:58") or a passage running on into a later ayah of the same surah ("2:58-59").
+    const passage = (place: string) => { const [key, last] = place.split('-'); return { key, through: last ? `${key.split(':')[0]}:${last}` : undefined }; };
+    const passages = citation.places.map(passage);
+    if (held.has(citation.id) || passages.length < 2 || passages.some(({ key, through }) => !index.has(key) || (through && !index.has(through)))) continue;
+    const sorted = [...passages].sort((a, b) => byMushaf(a.key, b.key));
+    const set = sorted.map(({ key, through }) => through ? `${key}-${through}` : key).join(',');
     const existing = handMade.get(set) ?? made.get(set);
     if (existing) { existing.citations = [...existing.citations, citation.id]; continue; }
-    const texts = keys.map(key => rows[index.get(key)!].map(word => word.text).join(' '));
-    made.set(set, { places: keys.map(key => [key, 0, rows[index.get(key)!].length]), citations: [citation.id], kind: texts.every(text => text === texts[0]) ? 'identical' : 'mutashabih_lafzi', book: true });
+    const words = ({ key, through }: { key: string; through?: string }) => [...rows[index.get(key)!], ...(through ? rows[index.get(through)!] : [])];
+    const texts = sorted.map(place => words(place).map(word => word.text).join(' '));
+    made.set(set, {
+      places: sorted.map(({ key, through }): Selection => through ? [key, 0, rows[index.get(through)!].length, through] : [key, 0, rows[index.get(key)!].length]),
+      citations: [citation.id], kind: texts.every(text => text === texts[0]) ? 'identical' : 'mutashabih_lafzi', book: true,
+    });
   }
   return [...attested, ...made.values()];
 }
