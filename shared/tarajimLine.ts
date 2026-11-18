@@ -68,15 +68,20 @@ function ownLinesOf(people: readonly AppPerson[]) {
 /**
  * The person's fathers from the person up, carried on through the other converted entries as far as they go. A line too
  * short to match by names (al-Abbas's heading names no father) goes on only through kin the entries name as the same
- * man: the father's own entry, or a brother whose entry names the same father.
+ * man: a brother whose entry names the same father. When the father has his own entry, the line always goes on
+ * through it.
  */
 export function lineOf(person: AppPerson, people: readonly AppPerson[]): LineName[] {
   const own = ownLinesOf(people);
   const line = [...own.get(person.slug)!];
   const father = fatherOf(person);
-  if (line.length < JOIN && father) {
-    const kin = people.filter((p) => p.slug !== person.slug && (p.slug === father || fatherOf(p) === father))
-      .map((p) => (p.slug === father ? own.get(p.slug)! : own.get(p.slug)!.slice(1)))
+  if (father && own.has(father)) {
+    // The father's own entry carries the line, whatever the son's heading prints: a heading may shorten the nasab
+    // («معاذ بن عمرو بن الجموح بن كعب» skips زيد and حرام, which his father's entry prints).
+    line.splice(1, line.length - 1, ...own.get(father)!);
+  } else if (line.length < JOIN && father) {
+    const kin = people.filter((p) => p.slug !== person.slug && fatherOf(p) === father)
+      .map((p) => own.get(p.slug)!.slice(1))
       .sort((x, y) => y.length - x.length)[0];
     if (kin && kin.length >= line.length) line.splice(1, line.length - 1, ...kin);
   }

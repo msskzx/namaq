@@ -63,6 +63,15 @@ describe('safeguards', () => {
     expect(lineOf(jabir, all).map((n) => n.bare)).toEqual(['جابر', 'عبد الله']);
   });
 
+  it('carries a son through his father’s own entry even when the son’s heading shortens the nasab', () => {
+    const amr = man('amr-ibn-al-jumuh', ['عمرو', 'الجموح', 'زيد', 'حرام', 'كعب'], 'al-jumuh');
+    const muadh = man('muadh', ['معاذ', 'عمرو', 'الجموح', 'كعب'], 'amr-ibn-al-jumuh');
+    const all = [amr, muadh];
+    expect(lineOf(muadh, all).map((n) => n.bare)).toEqual(['معاذ', 'عمرو', 'الجموح', 'زيد', 'حرام', 'كعب']);
+    const roots = nasabTree([muadh, amr].map((p) => ({ slug: p.slug, line: lineOf(p, all) })));
+    expect(roots).toHaveLength(1);
+  });
+
   it('carries a short line through a brother the entries name as the same father', () => {
     expect(names('safiyyah-bint-abd-al-muttalib').slice(0, 3)).toEqual(['صفيه', 'عبد المطلب', 'هاشم']);
   });
