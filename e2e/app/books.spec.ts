@@ -5,7 +5,7 @@ import { surahName as S } from '../../shared/quran/surahNames';
 // The فاصلة is a page, set from the ribbon in the top bar (owner, 2026-11-17).
 test('a book opens from the shelf, its فاصلة stays on its page while the reader turns pages, and its button comes back to it', async ({ page }) => {
   await open(page, '/');
-  await tab(page, 'المكتبة').click();
+  await page.getByRole('button', { name: 'المكتبة', exact: true }).click();
   await page.getByRole('link', { name: 'تيسير الكريم الرحمن' }).click();
   await page.getByRole('button', { name: 'ضع الفاصلة في هذه الصفحة: هنا توقفت' }).click();
   await expect(page.getByRole('button', { name: 'أزل الفاصلة من هذه الصفحة' })).toBeVisible();

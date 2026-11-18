@@ -1,5 +1,6 @@
 import { useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
 import { ScrollView, useWindowDimensions, View } from 'react-native';
+import { router } from 'expo-router';
 import { Check, Download, Eye, EyeOff, Pencil, RotateCw, Trash2 } from 'lucide-react-native';
 import { BOOK_KINDS, BOOKS, type Book } from '@shared/books';
 import { isReaderBook, pageName } from '@shared/readerBooks';
@@ -45,7 +46,8 @@ export default function LibraryScreen() {
   const shown = BOOKS.filter(book => editing || !(book.builtIn && bookState(book.id) === 'off'));
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar hideOnScroll>
+      {/* The shelf opens from home's المكتبة, not from a button of the bar (owner, 2026-11-18), so it has a way back. */}
+      <TopBar hideOnScroll back={() => (router.canGoBack() ? router.back() : toTab('/'))}>
         <IconButton Icon={editing ? Check : Pencil} label={editing ? 'تم' : 'تعديل الكتب'} onPress={() => setEditing(!editing)} on={editing} />
       </TopBar>
       <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>

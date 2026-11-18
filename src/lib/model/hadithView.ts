@@ -9,62 +9,8 @@ import type { Chain, Link, UnitFile, WorkFolder } from './types';
 
 export const fixturesRoot = 'src/lib/model/fixtures/jibril';
 
-export type ChainLink =
-  | { gap: true }
-  | { gap?: false; narrator: string; agent?: string; mode: string; modeKey: string; text?: string };
-
-export interface ChainView {
-  links: ChainLink[];
-  tahwil?: string;
-  branches?: ChainView[];
-}
-
-export interface ReportView {
-  id: string;
-  voice: string;
-  origin: string;
-  chainState: string;
-  frame?: string;
-  fullText?: string;
-  statements: string[];
-  chain?: ChainView;
-  scenes: SceneView[];
-}
-
-export interface SceneLine {
-  kind: 'turn' | 'narration';
-  speaker?: string;
-  agent?: string;
-  text: string;
-}
-
-export interface SceneView {
-  ordinal: number;
-  inTurn?: string;
-  lines: SceneLine[];
-}
-
-export interface ReaderPage {
-  label: string;
-  parts: { text: string; mark: boolean }[];
-}
-
-export interface HadithUnitView {
-  book: string;
-  compiler?: string;
-  kitab?: string;
-  bab?: string;
-  reader?: ReaderPage[];
-  id: string;
-  work: string;
-  author: string;
-  type: string;
-  reports: ReportView[];
-  notes: { text: string; narrator?: string }[];
-  explains: { unit: string; basis: string; book: string }[];
-  explainedBy: { unit: string; texts: string[] }[];
-  sameEvent: { unit: string; book: string; basis: string; source: string }[];
-}
+export type { ChainLink, ChainView, HadithUnitView, ReaderPage, ReportView, SceneLine, SceneView } from '@shared/hadith';
+import type { ChainView, HadithUnitView, ReaderPage, ReportView, SceneLine } from '@shared/hadith';
 
 const LEAD = /((?:[فو][\u064B-\u0652]*)?(?:قَالَ|قُلْتُ))(\s*["“]?\s*)$/;
 const TRAIL = /^\s*["”]?\s*[.،]?\s*/;
