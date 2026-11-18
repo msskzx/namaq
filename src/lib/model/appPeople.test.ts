@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { loadCatalog } from '../catalog/loadCatalog';
-import { appPeople, nasabOf } from './appPeople';
+import { appPeople, nasabOf, shortName } from './appPeople';
 
 describe('the phone app people', () => {
   it('are the converted entries as they are now (npm run model:app-people writes them again)', async () => {
@@ -41,6 +41,12 @@ describe('the phone app people', () => {
       .toEqual(['محمد', 'عبد الله', 'عبد المطلب', 'هاشم', 'عبد مناف', 'قصي']);
     // An aside whose names have more than one word, closed by «،» or by «بن».
     expect(nasabOf('أبو هريرة واسمه عبد الرحمن بن صخر')).toEqual(['أبو هريرة', 'صخر']);
+    // A kunya after the father's name is no father («سليمان بن صرد أبو مطرف»); «بن أبي بسر» is.
+    expect(nasabOf('سُلَيْمَانُ بنُ صُرَدٍ أَبُو مُطَرِّفٍ الخُزَاعِيُّ الكُوْفِيُّ')).toEqual(['سُلَيْمَانُ', 'صُرَدٍ']);
+    expect(nasabOf('عَبْدُ اللهِ بنُ بُسْرِ بنِ أَبِي بُسْرٍ أَبُو صَفْوَانَ المَازِنِيُّ')).toEqual(['عَبْدُ اللهِ', 'بُسْرِ', 'أَبِي بُسْرٍ']);
     expect(nasabOf('علي بن أبي طالب واسم أبي طالب عبد مناف، ابن عبد المطلب')).toEqual(['علي', 'أبي طالب', 'عبد المطلب']);
+    expect(shortName('عَبْدُ اللهِ بنُ أَبِي أَوْفَى عَلْقَمَةَ بنِ خَالِدِ')).toBe('عَبْدُ اللهِ بن أَبِي أَوْفَى');
+    expect(shortName('المِقْدَامُ بنُ مَعْدِ يْكَرِبَ بنِ عَمْرِو')).toBe('المِقْدَامُ بن مَعْدِ يْكَرِبَ');
+    expect(shortName('العِرْبَاضُ بنُ سَارِيَةَ السُّلَمِيُّ')).toBe('العِرْبَاضُ بن سَارِيَةَ');
   });
 });

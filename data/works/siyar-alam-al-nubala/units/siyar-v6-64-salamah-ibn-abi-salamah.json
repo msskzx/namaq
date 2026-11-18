@@ -1,0 +1,433 @@
+{
+  "unit": {
+    "id": "siyar-v6-64-salamah-ibn-abi-salamah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٦٤"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_sa_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "408",
+      "layer": "MAIN",
+      "exact": "٦٤ - سَلَمَةُ بنُ أَبِي سَلَمَةَ بنِ عَبْدِ الأَسَدِ القُرَشِيُّ"
+    },
+    {
+      "id": "sp_sa_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "408",
+      "layer": "MAIN",
+      "exact": "سَلَمَةُ بنُ أَبِي سَلَمَةَ بنِ عَبْدِ الأَسَدِ القُرَشِيُّ",
+      "prefix": "٦٤ - "
+    },
+    {
+      "id": "sp_sa_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "408",
+      "layer": "MAIN",
+      "exact": "سَلَمَةُ بنُ",
+      "prefix": "٦٤ - "
+    },
+    {
+      "id": "sp_sa_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "408",
+      "layer": "MAIN",
+      "exact": "أَبِي سَلَمَةَ بنِ عَبْدِ الأَسَدِ",
+      "prefix": "سَلَمَةُ بنُ "
+    },
+    {
+      "id": "sp_sa_mother",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "408",
+      "layer": "MAIN",
+      "exact": "بِأُمِّهِ أُمِّ سَلَمَةَ",
+      "prefix": "رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - "
+    },
+    {
+      "id": "sp_sa_mother_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "408",
+      "layer": "MAIN",
+      "exact": "أُمِّ سَلَمَةَ",
+      "prefix": "بِأُمِّهِ "
+    },
+    {
+      "id": "sp_sa_wife_a",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "408",
+      "layer": "MAIN",
+      "exact": "فَجَزَاهُ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - بَعْدَ عُمْرَةِ القَضِيَّةِ (٣) بِأَنْ زَوَّجَهُ بِبِنْتِ عَمِّهِ أُمَامَةَ"
+    },
+    {
+      "id": "sp_sa_wife_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "409",
+      "layer": "MAIN",
+      "exact": "بِنْتِ حَمْزَةَ",
+      "suffix": " الَّتِي اخْتَصَمَ"
+    },
+    {
+      "id": "sp_sa_ibnsaad_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "409",
+      "layer": "MAIN",
+      "exact": "هَكَذَا يَرْوِي: ابْنُ سَعْدٍ"
+    },
+    {
+      "id": "sp_sa_ibnsaad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "409",
+      "layer": "MAIN",
+      "exact": "وَتُوُفِّيَ: بِالمَدِيْنَةِ، فِي خِلاَفَةِ عَبْدِ المَلِكِ، وَكَانَ أَكْبَرَ مِنْ أَخِيْهِ عُمَرَ"
+    },
+    {
+      "id": "sp_sa_place",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "409",
+      "layer": "MAIN",
+      "exact": "بِالمَدِيْنَةِ",
+      "prefix": "وَتُوُفِّيَ: "
+    },
+    {
+      "id": "sp_sa_brother_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "409",
+      "layer": "MAIN",
+      "exact": "أَخِيْهِ عُمَرَ",
+      "prefix": "أَكْبَرَ مِنْ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_sa0",
+      "unit": "siyar-v6-64-salamah-ibn-abi-salamah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_sa_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_sa_ibnsaad",
+      "unit": "siyar-v6-64-salamah-ibn-abi-salamah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_sa_ibnsaad_frame"
+      ],
+      "origin": {
+        "mention": "m_sa_ibnsaad_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_sa_name",
+      "report": "r_sa0",
+      "spans": [
+        "sp_sa_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sa_mother",
+      "report": "r_sa0",
+      "spans": [
+        "sp_sa_mother"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sa_wife",
+      "report": "r_sa0",
+      "spans": [
+        "sp_sa_wife_a",
+        "sp_sa_wife_b"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sa_ibnsaad",
+      "report": "r_sa_ibnsaad",
+      "spans": [
+        "sp_sa_ibnsaad"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_sa",
+      "parent": "sp_sa_name",
+      "exact": "سَلَمَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sa_father",
+      "parent": "sp_sa_name",
+      "exact": "أَبِي سَلَمَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_sa_mo",
+      "parent": "sp_sa_mother",
+      "exact": "بِأُمِّهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sa_ummsalamah",
+      "parent": "sp_sa_mother",
+      "exact": "أُمِّ سَلَمَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_sa_w",
+      "parent": "sp_sa_wife_a",
+      "exact": "زَوَّجَهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_sa_umamah",
+      "parent": "sp_sa_wife_a",
+      "exact": "أُمَامَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_sa_ibnsaad_by",
+      "parent": "sp_sa_ibnsaad_frame",
+      "exact": "ابْنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sa_s",
+      "parent": "sp_sa_ibnsaad",
+      "exact": "أَكْبَرَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sa_umar",
+      "parent": "sp_sa_ibnsaad",
+      "exact": "عُمَرَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_sa",
+      "mention": "m_sa",
+      "agent": "salamah-ibn-abi-salamah",
+      "basis": [
+        {
+          "span": "sp_sa_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sa_father",
+      "mention": "m_sa_father",
+      "agent": "abu-salamah",
+      "basis": [
+        {
+          "span": "sp_sa_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sa_mo",
+      "mention": "m_sa_mo",
+      "agent": "salamah-ibn-abi-salamah",
+      "basis": [
+        {
+          "span": "sp_sa_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sa_ummsalamah",
+      "mention": "m_sa_ummsalamah",
+      "agent": "umm-salamah",
+      "basis": [
+        {
+          "span": "sp_sa_mother_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sa_w",
+      "mention": "m_sa_w",
+      "agent": "salamah-ibn-abi-salamah",
+      "basis": [
+        {
+          "span": "sp_sa_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sa_umamah",
+      "mention": "m_sa_umamah",
+      "agent": "umamah-bint-hamzah",
+      "basis": [
+        {
+          "span": "sp_sa_wife_b",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sa_s",
+      "mention": "m_sa_s",
+      "agent": "salamah-ibn-abi-salamah",
+      "basis": [
+        {
+          "span": "sp_sa_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sa_umar",
+      "mention": "m_sa_umar",
+      "agent": "umar-ibn-abi-salamah",
+      "basis": [
+        {
+          "span": "sp_sa_brother_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_sa_name",
+      "subject": "m_sa",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_sa_name"
+        ]
+      },
+      "restsOn": [
+        "st_sa_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sa_sex",
+      "subject": "m_sa",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_sa_sex"
+        ]
+      },
+      "restsOn": [
+        "st_sa_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sa_father",
+      "subject": "m_sa",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_sa_father"
+      },
+      "restsOn": [
+        "st_sa_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sa_mother",
+      "subject": "m_sa_mo",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_sa_ummsalamah"
+      },
+      "restsOn": [
+        "st_sa_mother"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sa_wife",
+      "subject": "m_sa_w",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_sa_umamah"
+      },
+      "restsOn": [
+        "st_sa_wife"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sa_umar",
+      "subject": "m_sa_s",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_sa_umar"
+      },
+      "restsOn": [
+        "st_sa_ibnsaad"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sa_place",
+      "subject": "m_sa_s",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "sp_sa_place"
+        ]
+      },
+      "restsOn": [
+        "st_sa_ibnsaad"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

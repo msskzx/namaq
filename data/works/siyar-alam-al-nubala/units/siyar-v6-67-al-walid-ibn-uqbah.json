@@ -1,0 +1,310 @@
+{
+  "unit": {
+    "id": "siyar-v6-67-al-walid-ibn-uqbah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٦٧"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_wu_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "412",
+      "layer": "MAIN",
+      "exact": "٦٧ - الوَلِيْدُ بنُ عُقْبَةَ بنِ أَبِي مُعَيْطٍ بنِ أَبِي عَمْرٍو الأُمَوِيُّ"
+    },
+    {
+      "id": "sp_wu_n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "412",
+      "layer": "MAIN",
+      "exact": "الوَلِيْدُ بنُ عُقْبَةَ بنِ أَبِي مُعَيْطٍ بنِ أَبِي عَمْرٍو الأُمَوِيُّ",
+      "prefix": "٦٧ - "
+    },
+    {
+      "id": "sp_wu_n2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "412",
+      "layer": "MAIN",
+      "exact": "ابْنِ أُمَيَّةَ بنِ عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ"
+    },
+    {
+      "id": "sp_wu_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "412",
+      "layer": "MAIN",
+      "exact": "الوَلِيْدُ بنُ",
+      "prefix": "٦٧ - "
+    },
+    {
+      "id": "sp_wu_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "412",
+      "layer": "MAIN",
+      "exact": "عُقْبَةَ بنِ أَبِي مُعَيْطٍ",
+      "prefix": "الوَلِيْدُ بنُ "
+    },
+    {
+      "id": "sp_wu_kunya_st",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "413",
+      "layer": "MAIN",
+      "exact": "الأَمِيْرُ؛ أَبُو وَهْبٍ الأُمَوِيُّ"
+    },
+    {
+      "id": "sp_wu_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "413",
+      "layer": "MAIN",
+      "exact": "أَبُو وَهْبٍ",
+      "prefix": "الأَمِيْرُ؛ "
+    },
+    {
+      "id": "sp_wu_uthman",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "413",
+      "layer": "MAIN",
+      "exact": "وَهُوَ أَخُو أَمِيْرِ المُؤْمِنِيْنَ عُثْمَانَ لأُمِّهِ"
+    },
+    {
+      "id": "sp_wu_uthman_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "413",
+      "layer": "MAIN",
+      "exact": "أَمِيْرِ المُؤْمِنِيْنَ عُثْمَانَ",
+      "prefix": "وَهُوَ أَخُو "
+    },
+    {
+      "id": "sp_wu_kufa",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "414",
+      "layer": "MAIN",
+      "exact": "وَوَلِيَ الكُوْفَةَ لِعُثْمَانَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_wu0",
+      "unit": "siyar-v6-67-al-walid-ibn-uqbah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_wu_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_wu_name",
+      "report": "r_wu0",
+      "spans": [
+        "sp_wu_n1",
+        "sp_wu_n2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_wu_kunya_st",
+      "report": "r_wu0",
+      "spans": [
+        "sp_wu_kunya_st"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_wu_uthman",
+      "report": "r_wu0",
+      "spans": [
+        "sp_wu_uthman"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_wu_kufa",
+      "report": "r_wu0",
+      "spans": [
+        "sp_wu_kufa"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_wu",
+      "parent": "sp_wu_n1",
+      "exact": "الوَلِيْدُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_wu_father",
+      "parent": "sp_wu_n1",
+      "exact": "عُقْبَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_wu_b",
+      "parent": "sp_wu_uthman",
+      "exact": "أَخُو",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_wu_uthman",
+      "parent": "sp_wu_uthman",
+      "exact": "عُثْمَانَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_wu",
+      "mention": "m_wu",
+      "agent": "al-walid-ibn-uqbah",
+      "basis": [
+        {
+          "span": "sp_wu_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_wu_father",
+      "mention": "m_wu_father",
+      "agent": "uqba-ibn-abi-muayt",
+      "basis": [
+        {
+          "span": "sp_wu_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_wu_b",
+      "mention": "m_wu_b",
+      "agent": "al-walid-ibn-uqbah",
+      "basis": [
+        {
+          "span": "sp_wu_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_wu_uthman",
+      "mention": "m_wu_uthman",
+      "agent": "uthman-ibn-affan",
+      "basis": [
+        {
+          "span": "sp_wu_uthman_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_wu_name",
+      "subject": "m_wu",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_wu_n1",
+          "sp_wu_n2"
+        ]
+      },
+      "restsOn": [
+        "st_wu_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_wu_sex",
+      "subject": "m_wu",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_wu_sex"
+        ]
+      },
+      "restsOn": [
+        "st_wu_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_wu_father",
+      "subject": "m_wu",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_wu_father"
+      },
+      "restsOn": [
+        "st_wu_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_wu_kunya",
+      "subject": "m_wu",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_wu_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_wu_kunya_st"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_wu_uthman",
+      "subject": "m_wu_b",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_wu_uthman"
+      },
+      "restsOn": [
+        "st_wu_uthman"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_wu_kufa",
+      "subject": "m_wu",
+      "predicate": "office",
+      "value": {
+        "classified": "amir",
+        "spans": [
+          "sp_wu_kufa"
+        ]
+      },
+      "restsOn": [
+        "st_wu_kufa"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

@@ -31,12 +31,30 @@ export function nasabOf(fullName: string) {
       while (i + 1 < words.length && words[i + 1] !== '،' && !IBN.test(strip(words[i + 1]))) i += 1;
       continue;
     }
+    // A kunya after a father's name is not a father either: «سليمان بن صرد أبو مطرف الخزاعي».
+    // Only the nominative «أبو» marks it; inside a nasab a father is «بن أبي …».
+    if (/^[أا]بو$/u.test(bare) && names.length > 1 && names[names.length - 1].length > 0) {
+      while (i + 1 < words.length && words[i + 1] !== '،' && !IBN.test(strip(words[i + 1]))) i += 1;
+      continue;
+    }
     if (IBN.test(bare)) names.push([]);
     else if (!(names[names.length - 1].length > 0 && NISBA.test(bare))) names[names.length - 1].push(words[i]);
   }
   // A name with no «بن» at all (al-Abbas's entry is headed «العباس عم رسول الله») names no fathers: the name alone.
   if (names.length === 1) return words.length ? [words[0]] : [];
   return names.map((name) => name.join(' ')).filter(Boolean);
+}
+
+/**
+ * A short name for someone the catalog does not hold: the name and the father, as the book's nasab gives them
+ * («عبد الله بن الحارث», «سلمة بن أبي سلمة»). A father named by his kunya keeps two words («أبي أوفى»).
+ */
+export function shortName(fullName: string, sex?: string) {
+  const [own, father] = nasabOf(fullName);
+  if (!father) return own ?? fullName;
+  const words = father.split(/\s+/u);
+  const kept = /^(?:[أا]بي|[أا]بو|[أا]م)$/u.test(strip(words[0])) ? words.slice(0, 2) : words;
+  return `${own} ${sex === 'FEMALE' ? 'بنت' : 'بن'} ${kept.join(' ')}`;
 }
 
 export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.'), root = '.'): AppPerson[] {
@@ -134,7 +152,7 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
     const sorted = [...pages].sort((a, b) => a.volume - b.volume || Number(a.page) - Number(b.page));
     return {
       slug,
-      name: strip(people.get(slug)?.name ?? fullName?.text.split(/\s+/u).slice(0, 3).join(' ') ?? slug),
+      name: strip(people.get(slug)?.name ?? (fullName ? shortName(fullName.text, sex) : slug)),
       ...(sex === 'MALE' || sex === 'FEMALE' ? { sex: sex as 'MALE' | 'FEMALE' } : {}),
       entry: { unit: unitId, number: file.unit.numbers.printed, volume: sorted[0]?.volume ?? 0, from: sorted[0]?.page ?? '', to: sorted.at(-1)?.page ?? '' },
       ...(fullName && { fullName }),
