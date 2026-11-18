@@ -29,7 +29,7 @@ Catalog slugs reached: `makhramah-ibn-nawfal` (al-Miswar's father, batch 12), `a
 |---|---|---|---|
 | 58 | abdullah-ibn-al-harith-ibn-jaz | name, father, kunya, virtue (last Companion to die in Egypt), death 86 (author) and 85 (قيل), place | «سنة سبع» (87 by ellipsis; the reader reads 7); uncle Mahmiyah (no uncle predicate); the Abu Hanifah claim the author rejects |
 | 59 | abdullah-ibn-as-saib | name (heading + nasab), father, 2 kunyas, virtues: reciter of Makkah, read to Ubayy, prayed behind the Prophet (Muslim 455), Mujahid's «قارئنا» (editor: sahih) | the «نعم الخليط» report (editor: weak); death «في إمارة ابن الزبير» (no year) |
-| 60 | al-miswar-ibn-makhramah | name, father, mother Atikah, children Abd al-Rahman and Umm Bakr, 2 kunyas, virtues (close to Umar; Ibn Ma'in «ثقة»), death 64, Rabi' al-Akhir (Umm Bakr) | **name stops at «زهرة»**: the print goes on «بن قصي بن كلاب», but Zuhrah is Kilab's son, so the tree would meet the Hashimis at Qusayy instead of Kilab (raised with the main Tarajim thread); al-Mada'ini's 73, which the author calls an error; born «بعد الهجرة بعامين» (offset); ungraded reports |
+| 60 | al-miswar-ibn-makhramah | name, father, mother Atikah, children Abd al-Rahman and Umm Bakr, 2 kunyas, virtues (close to Umar; Ibn Ma'in «ثقة»), death 64, Rabi' al-Akhir (Umm Bakr) | name kept as printed, but «زهرة بن قصي» is a printing slip (Zuhrah is Kilab's son): the link is to be marked so the tree and nasab quiz skip it (open, see STATUS.md); al-Mada'ini's 73, which the author calls an error; born «بعد الهجرة بعامين» (offset); ungraded reports |
 | 61 | sulayman-ibn-surad | name, father, kunya, virtue («كان ديناً عابداً»), Siffin, killed 65 at Ayn al-Wardah | «الأمير» (office with no scope) |
 | 62 | anas-ibn-malik | see the diff above | «وآخر أصحابه موتاً» (Abu al-Tufayl, batch 18, outlived him); Badr (the author: present as a boy, not counted); weak or ungraded reports («يا ذا الأذنين», the kunya story, «رجاله ثقات» ones); born (offset) |
 | 63 | umar-ibn-abi-salamah | name, father, mother (قيل), Abu Salamah's four children, kunya, virtue (the Prophet taught him to eat, al-Bukhari and Muslim), death 83 (Ibn al-Athir) | «هو الذي زوج أمه بالنبي»: Salamah's entry says it of Salamah (disputed; as virtues each would make the other a wrong choice that is right); milk uncle; born (offset) |
@@ -63,5 +63,4 @@ Catalog slugs reached: `makhramah-ibn-nawfal` (al-Miswar's father, batch 12), `a
 4. `npx vitest run shared/ src/lib/model`: pass. Every new nasab and virtue question was read; the three that offered a
    wrong choice that is also right were removed at the data (above) or fixed in code.
 5. Nasab meetings checked: Umar ibn Abi Salamah and Amr ibn Hurayth meet at «عبد الله» (ibn Umar ibn Makhzum), Ibn
-   al-Sa'ib and Amr ibn Hurayth at «عمر» (ibn Makhzum); al-Miswar, cut at Zuhrah, has no meeting until the main thread
-   decides.
+   al-Sa'ib and Amr ibn Hurayth at «عمر» (ibn Makhzum); al-Miswar's meeting at «قصي» is wrong until the slip mark lands (STATUS.md).
