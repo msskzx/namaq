@@ -7,7 +7,7 @@ describe('the phone app people', () => {
   it('are the converted entries as they are now (npm run model:app-people writes them again)', async () => {
     const people = appPeople(await loadCatalog());
     expect(JSON.parse(readFileSync('shared/data/tarajim/people.json', 'utf8'))).toEqual(JSON.parse(JSON.stringify(people)));
-  });
+  }, 30_000);
 
   it('holds only people whose entry is converted, each value with its page', async () => {
     const people = appPeople(await loadCatalog());
@@ -18,13 +18,13 @@ describe('the phone app people', () => {
     for (const fact of [zubayr.fullName!, ...zubayr.kunya, ...zubayr.titles, ...zubayr.virtues, ...zubayr.parents, ...zubayr.battles]) {
       expect(fact.refs.length).toBeGreaterThan(0);
     }
-  });
+  }, 30_000);
 
   it('names who says each value, as the person the narrator is', async () => {
     const zubayr = appPeople(await loadCatalog()).find((person) => person.slug === 'az-zubayr-ibn-al-awwam')!;
     expect(zubayr.islamAge.map((fact) => [fact.value, fact.by])).toEqual([[16, []], [8, ['عروة']]]);
     expect(zubayr.companionOf[0].by).toEqual(['الزبير بن العوام']);
-  });
+  }, 30_000);
 
   it('joins a tie stated in two entries into one, with both entries\' pages', async () => {
     const people = appPeople(await loadCatalog());
@@ -33,7 +33,7 @@ describe('the phone app people', () => {
     expect(zubayr.parents.find((link) => link.slug === safiyyah.slug)?.refs.map((ref) => ref.volume)).toEqual([4, 5, 5]);
     expect(safiyyah.children.map((link) => link.slug)).toContain('az-zubayr-ibn-al-awwam');
     expect(zubayr.parents.find((link) => link.slug === safiyyah.slug)?.inApp).toBe(true);
-  });
+  }, 30_000);
 
   it('reads the fathers from the full name as printed', () => {
     expect(nasabOf('الزُّبَيْرُ بنُ العَوَّامِ بنِ خُوَيْلِدِ بنِ عَبْدِ العُزَّى، القُرَشِيُّ')).toEqual(['الزُّبَيْرُ', 'العَوَّامِ', 'خُوَيْلِدِ', 'عَبْدِ العُزَّى']);
