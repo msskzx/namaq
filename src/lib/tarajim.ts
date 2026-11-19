@@ -37,14 +37,14 @@ export function searchPeople(query: string) {
 }
 
 /** The pages a part rests on, with each book's edition and link (the Siyar, and Zad al-Ma'ad where it is cited): the app's Credit. */
-export type Credit = { pages: string; books: { title: string; url: string }[]; quotes?: { text: string; pages: string }[] };
+export type Credit = { pages: string; label: string; books: { title: string; url: string; label: string }[]; quotes?: { text: string; pages: string }[] };
 export function creditOf(facts: PersonFact[], quotes = false): Credit | undefined {
   const refs = facts.flatMap(fact => fact.refs);
   if (!refs.length) return undefined;
   const books = sourcesOf(refs).map(id => sourceById(id)).filter(book => book !== undefined)
-    .map(book => ({ title: `${book.title.ar}، ${book.edition ?? ''}`, url: book.link.url }));
+    .map(book => ({ title: `${book.title.ar}، ${book.edition ?? ''}`, url: book.link.url, label: `${book.title.ar}، ${book.author?.ar ?? ''}` }));
   return {
-    pages: pageLabel(refs), books,
+    pages: pageLabel(refs), books, label: books.map(book => book.label).join(' · '),
     ...(quotes ? { quotes: facts.filter(fact => fact.text).map(fact => ({ text: fact.text!, pages: pageLabel(fact.refs) })) } : {}),
   };
 }

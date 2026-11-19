@@ -35,17 +35,20 @@ function Part({ n, title, palette, children }: { n: number; title: string; palet
   );
 }
 
-/** The pages a card rests on, folded at its foot; open, the edition and its page on al-Shamela, then each tie's own words. */
+/** The books a card rests on, folded at its foot; open, the pages, each tie's own words, then the edition on al-Shamela. */
 export function Credit({ facts, palette, quotes = false }: { facts: PersonFact[]; palette: Palette; quotes?: boolean }) {
   const refs = facts.flatMap(fact => fact.refs);
   if (refs.length === 0) return null;
+  const books = sourcesOf(refs).map(id => sourceById(id)).filter(book => book !== undefined);
+  // Folded, only the books and their authors (owner 2026-11-19); a tap opens the pages, the quotes and the edition.
   return (
-    <Folded credit={pageLabel(refs)} palette={palette}>
+    <Folded credit={books.map(book => `${book.title.ar}، ${book.author?.ar ?? ''}`).join(' · ')} palette={palette}>
+      <Text style={muted(palette)}>{pageLabel(refs)}</Text>
       {quotes && facts.filter(fact => fact.text).map((fact, i) => (
         <Text key={i} style={{ color: palette.ink, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>«{fact.text}» <Text style={muted(palette)}>{pageLabel(fact.refs)}</Text></Text>
       ))}
       {/* Each book the pages come from: the Siyar, and another book where one is cited too (Zad al-Ma'ad). */}
-      {sourcesOf(refs).map(id => sourceById(id)).filter(book => book !== undefined).map(book => (
+      {books.map(book => (
         <View key={book.id} style={{ gap: 2 }}>
           <Text style={muted(palette)}>{book.title.ar}، {book.edition ?? ''}</Text>
           <ExternalLink url={book.link.url} color={palette.accent} size={14} style={{ textAlign: 'right' }}>الكتاب على المكتبة الشاملة</ExternalLink>

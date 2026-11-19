@@ -50,7 +50,9 @@ function useRoom(max: number) {
 export function CreditFold({ credit }: { credit?: Credit }) {
   if (!credit) return null;
   return (
-    <Folded credit={credit.pages}>
+    // Folded, only the books and their authors (owner 2026-11-19); open, the pages, the quotes and the edition.
+    <Folded credit={credit.label}>
+      <p className="text-[var(--home-muted)]">{credit.pages}</p>
       {credit.quotes?.map((quote, i) => <p key={i} className="text-[var(--home-ink)]">«{quote.text}» <span className="text-[var(--home-muted)]">{quote.pages}</span></p>)}
       {credit.books.map(book => (
         <div key={book.url} className="flex flex-col gap-0.5">
