@@ -7,7 +7,7 @@ import { CardActions } from "@/app/quran/branches/Filters";
 import { AroundButton } from "@/app/quran/branches/Surroundings";
 import { NavButtons } from "@/components/common/NavBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpellCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCheckDouble } from "@fortawesome/free-solid-svg-icons";
 import Button from "@/components/common/Button";
 import MushafText from "@/components/common/MushafText";
 import { askedNodes, branchNodes, givenAnswer, leadingSigns } from "@shared/quiz/branchAnswers";
@@ -152,7 +152,7 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar, names, hi
       </div>
       <div className="flex flex-wrap gap-2">
       <Button variant="primary" type="submit" disabled={!started}>
-        <FontAwesomeIcon icon={faSpellCheck} />
+        <FontAwesomeIcon icon={faCheckDouble} />
         {ar ? "تحقق" : "Check"}
       </Button>
       <Button disabled={!started} onClick={() => onChange(emptyBranchAnswers(question))}><Eraser size={16} aria-hidden />{ar ? "مسح الإجابات" : "Clear answers"}</Button>

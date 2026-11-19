@@ -5,7 +5,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Text } from '@/ui/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
-import { ArrowLeft, ArrowLeftRight, BookA, BookOpen, Bookmark, Check, EyeOff, Layers, LightbulbOff, ListTree, NotebookPen, History, Play, Pointer, Search, Send, Sparkles, TableOfContents, TextSearch } from 'lucide-react-native';
+import { ArrowLeft, ArrowLeftRight, BookOpenText, BookOpen, Bookmark, Check, EyeOff, Layers, LightbulbOff, ListTree, NotebookPen, History, Play, Pointer, Search, Send, Sparkles, TableOfContents, TextSearch } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayahBookmarkId, ayahHref, clearForgotten, markAyah, markWord, wordMarkKey, readAyahMarks, subscribeAyahMarks, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
@@ -439,7 +439,7 @@ export default function Reader() {
           {actions.word !== undefined && <ActButton Icon={ListTree} label="إعراب الكلمة" name="الإعراب" palette={palette}
             onPress={() => { const { key, word } = actions; setActions(null); setIrab({ key, word: word! }); }} />}
           {/* The pressed word's meaning: Ibn Qutaybah on the ayah and al-Raghib on its root, pills between them (owner, 2026-11-18). */}
-          {actions.word !== undefined && <ActButton Icon={BookA} label="معنى الكلمة" name="المعنى" palette={palette}
+          {actions.word !== undefined && <ActButton Icon={BookOpenText} label="معنى الكلمة" name="المعنى" palette={palette}
             onPress={() => { const { key, word } = actions; setActions(null); setGharib({ key, word: word! }); }} />}
           {/* The ayah's balagha: al-Itqan's paragraphs and al-Kashshaf's passage, pills between them (owner, 2026-11-16). */}
           <ActButton Icon={Sparkles} label="البلاغة في الآية" name="البلاغة" palette={palette} onPress={() => { const key = actions.key; setActions(null); setBalagha(key); }} />
