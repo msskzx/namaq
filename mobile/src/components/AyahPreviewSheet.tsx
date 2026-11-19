@@ -77,11 +77,7 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
             <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>لم تبقِ تفسيرًا على هاتفك. اختر ما تريد، ويعمل بلا اتصال.</Text>
             <BookList kind="tafsir" palette={palette} />
           </>}
-          {tafsir && (
-            <Text selectable style={{ color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right', writingDirection: 'rtl', paddingHorizontal: 2 }}>
-              {tafsirRuns(tafsir.text).map((run, i) => (run.quran ? <Text key={i} style={{ fontFamily: QURAN_FONT, color: palette.accent }}>{run.text}</Text> : run.text))}
-            </Text>
-          )}
+          {tafsir && <SadiText text={tafsir.text} palette={palette} />}
           {qiraat.map(word => <QiraatWord key={word.at.join('-')} word={word} palette={palette} />)}
           {preview.kind === 'compare' && pairs.map(({ target, partner, words }) => {
             const [other, at] = partner.split(':').map(Number);
@@ -121,6 +117,15 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
         </Pressable>}
       </View>}
     </Sheet>
+  );
+}
+
+/** Al-Sa'di's words on an ayah, the Quran he quotes in the mushaf's font (a quiz that looks the tafsir up draws it too). */
+export function SadiText({ text, palette }: { text: string; palette: Palette }) {
+  return (
+    <Text selectable style={{ color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right', writingDirection: 'rtl', paddingHorizontal: 2 }}>
+      {tafsirRuns(text).map((run, i) => (run.quran ? <Text key={i} style={{ fontFamily: QURAN_FONT, color: palette.accent }}>{run.text}</Text> : run.text))}
+    </Text>
   );
 }
 

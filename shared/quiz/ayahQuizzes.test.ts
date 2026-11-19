@@ -76,6 +76,18 @@ describe('the four ayah quizzes', () => {
       }
     }
   });
+
+  it('each looks its answer up in the reader\'s sheet of the ayah, the tafsir in al-Sa\'di on every offered ayah in the choices\' order', () => {
+    for (const question of tafsirQuiz.questions(whole, 'medium', seeded(5), 60)) {
+      expect(question.look).toEqual({ view: 'tafsir', keys: question.choices.map(choice => choice.value), mark: question.correctAnswer });
+    }
+    // The asked ayah is not always listed first.
+    expect(new Set(tafsirQuiz.questions(whole, 'medium', seeded(6), 60).map(question => question.choices[0].value === question.correctAnswer)).size).toBe(2);
+    for (const question of balaghaQuiz.questions(whole, 'medium', seeded(7), 20)) expect(question.look).toEqual({ view: 'balagha', key: question.ayahKey });
+    for (const question of irabQuiz.questions(whole, 'medium', seeded(8), 20)) expect(question.look).toEqual({ view: 'irab', key: question.ayahKey, word: question.marked![0] });
+    for (const question of qiraatQuiz.questions(whole, 'medium', seeded(9), 20)) expect(question.look).toEqual({ view: 'qiraat', key: question.ayahKey });
+  });
+
 });
 
 describe('hiding the quotes', () => {

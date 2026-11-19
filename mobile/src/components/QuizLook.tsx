@@ -21,6 +21,25 @@ import { FortyCard } from '@/screens/hadith';
 import { FortyHadith } from '@/screens/hadithForty';
 import { NasabTree } from '@/screens/nasab';
 import { Virtues } from '@/screens/person';
+import { StoryView } from '@/screens/story';
+import { BattleView } from '@/screens/battle';
+import { storyOf } from '@/lib/stories';
+import { battleOf } from '@/lib/battles';
+import { GharibBody } from './GharibSheet';
+import { BalaghaBody } from './BalaghaSheet';
+import { IrabBody } from './IrabSheet';
+import { QiraatWord, SadiText } from './AyahPreviewSheet';
+import { BookList } from './Books';
+import ExternalLink from '@/ui/ExternalLink';
+import { bookState, useBooks } from '@/lib/books';
+import { surahNames } from '@/lib/branches';
+import { qiraatOf } from '@shared/quran/qiraatData';
+import { QIRAAT_SOURCE } from '@shared/quran/qiraat';
+import { tafsirSadiOf } from '@shared/quran/tafsirSadiData';
+import { tafsirSadiCredit, tafsirSadiPage } from '@shared/quran/tafsirSadi';
+import { numberVerses, type Poem } from '@shared/tajwid/poem';
+import poemData from '@shared/tajwid/tuhfat-al-atfal.json';
+import { TuhfaVerse } from '@/screens/tuhfa';
 import TiesRing from './TiesRing';
 import { TermQuotes } from './BalaghaTerm';
 
@@ -115,6 +134,47 @@ function HadithLook({ mark, palette }: { mark?: number; palette: Palette }) {
   );
 }
 
+/** Al-Sa'di on each offered ayah, one at a time, as the reader's tafsir sheet shows him; once shown, the asked one first and checked. */
+function TafsirLook({ keys, mark, palette }: { keys: string[]; mark?: string; palette: Palette }) {
+  useBooks();
+  const [at, setAt] = useState(mark ?? keys[0]);
+  if (bookState('sadi') !== 'on') return <BookList kind="tafsir" palette={palette} />;
+  const passage = tafsirSadiOf(at ?? '');
+  const name = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return `${surahNames[surah] ?? num(surah)} ${num(ayah)}`; };
+  return (
+    <View style={{ gap: 12 }}>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+        {keys.map(key => <Chip key={key} label={name(key)} on={key === at} palette={palette} onPress={() => setAt(key)}
+          Icon={key === mark ? Check : undefined} accessibilityLabel={key === mark ? `${name(key)}، الجواب` : undefined} />)}
+      </View>
+      {passage && <Card palette={palette} gap={8}>
+        <SadiText text={passage.text} palette={palette} />
+        <ExternalLink url={tafsirSadiPage(passage)} color={palette.muted} size={14} style={{ textAlign: 'right' }}>{tafsirSadiCredit(passage)}</ExternalLink>
+      </Card>}
+    </View>
+  );
+}
+
+const TUHFA = numberVerses(poemData as Poem);
+
+/** Tuhfat al-Atfal whole, as on its page; once marked, the chapter of the verse that answers, the verse lit. */
+function TuhfaLook({ mark, palette }: { mark?: number; palette: Palette }) {
+  const chapters = mark === undefined ? TUHFA : TUHFA.filter(chapter => chapter.verses.some(verse => verse.number === mark));
+  return (
+    <View style={{ gap: 14 }}>
+      {chapters.map(chapter => (
+        <View key={chapter.title}>
+          <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 18, fontWeight: '700', textAlign: 'center', marginBottom: 6 }}>{chapter.title}</Text>
+          {chapter.verses.map(verse => <TuhfaVerse key={verse.number} verse={verse} marked={verse.number === mark} palette={palette} />)}
+        </View>
+      ))}
+    </View>
+  );
+}
+
+/** The reader's sheets draw their own side margins, so inside the look they take back the sheet's. */
+const bleed = { marginHorizontal: -16 } as const;
+
 /**
  * The feature's own view a question looks its answer up in (owner, 2026-11-19; sketch /mnt/project-files/quiz-lookup): the
  * same drawing as the feature's page and feed card. `shown` once the answer is: then what the look marks is lit.
@@ -128,6 +188,19 @@ export function LookView({ look, shown, palette }: { look: QuizLook; shown: bool
     case 'virtues': return <VirtuesLook slugs={look.slugs} mark={shown ? look.mark : undefined} palette={palette} />;
     case 'terms': return <TermsLook names={look.names} mark={shown ? look.mark : undefined} palette={palette} />;
     case 'hadith': return <HadithLook mark={shown ? look.mark : undefined} palette={palette} />;
+    case 'story': { const story = storyOf(look.slug); return story ? <View style={{ gap: 14 }}><StoryView story={story} palette={palette} /></View> : null; }
+    case 'battle': { const battle = battleOf(look.slug); return battle ? <View style={{ gap: 14 }}><BattleView battle={battle} palette={palette} /></View> : null; }
+    case 'word': return <View style={bleed}><GharibBody key={`${look.key}/${look.word}`} target={{ key: look.key, word: look.word }} palette={palette} /></View>;
+    case 'balagha': return <View style={bleed}><BalaghaBody key={look.key} ayah={look.key} palette={palette} /></View>;
+    case 'irab': return <View style={bleed}><IrabBody key={`${look.key}/${look.word}`} target={{ key: look.key, word: look.word }} palette={palette} /></View>;
+    case 'qiraat': return (
+      <View style={{ gap: 10 }}>
+        {qiraatOf(look.key).map(word => <QiraatWord key={word.at.join('-')} word={word} palette={palette} />)}
+        <ExternalLink url={QIRAAT_SOURCE.url} color={palette.muted} size={14} style={{ textAlign: 'right' }}>{`المصدر: ${QIRAAT_SOURCE.name}`}</ExternalLink>
+      </View>
+    );
+    case 'tafsir': return <TafsirLook key={`${look.keys.join()}/${look.mark ?? ''}`} keys={look.keys} mark={shown ? look.mark : undefined} palette={palette} />;
+    case 'tuhfa': return <TuhfaLook mark={shown ? look.mark : undefined} palette={palette} />;
   }
 }
 

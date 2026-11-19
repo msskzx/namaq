@@ -35,7 +35,8 @@ export default function IrabSheet({ target, onClose, palette }: { target: IrabTa
   );
 }
 
-function IrabBody({ target, palette, onClose }: { target: IrabTarget; palette: Palette; onClose: () => void }) {
+/** The sheet's inside: a quiz that looks the word up draws it too, without `onClose` and so without the ways out of the quiz. */
+export function IrabBody({ target, palette, onClose }: { target: IrabTarget; palette: Palette; onClose?: () => void }) {
   useBooks();
   const { key } = target;
   const [surah, ayah] = key.split(':').map(Number);
@@ -105,7 +106,7 @@ function IrabBody({ target, palette, onClose }: { target: IrabTarget; palette: P
 }
 
 /** One of al-'Ukbari's passages: the book and page on top (a link to the page), then his text with Quran words in the Quran font. */
-function Passage({ passage, onWord, palette, onClose }: { passage: BookPassage; onWord: boolean; palette: Palette; onClose: () => void }) {
+function Passage({ passage, onWord, palette, onClose }: { passage: BookPassage; onWord: boolean; palette: Palette; onClose?: () => void }) {
   return (
     <Card palette={palette} pad={[10, 14]} gap={4}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
