@@ -37,3 +37,11 @@ export function questionPoints(question: ScoredQuestion, answer: QuestionAnswer 
   if (question.tree) return branchPoints(question, Array.isArray(answer) ? answer : emptyBranchAnswers(question));
   return { earned: Number(answer !== undefined && answer === question.correctAnswer), total: 1 };
 }
+
+/**
+ * A party's points (owner, 2026-11-19; sketch /mnt/project-files/quiz-lookup): ten for each thing asked that is answered
+ * right, five when the player opened «ابحث عن الجواب» before answering, so one who knew stays ahead of one who looked.
+ */
+export const POINTS = 10;
+export const LOOKED_POINTS = 5;
+export const partyPoints = (earned: number, looked: boolean) => earned * (looked ? LOOKED_POINTS : POINTS);

@@ -59,14 +59,22 @@ function Sayer({ fact, palette, many = false }: { fact: PersonFact; palette: Pal
   return fact.by.length || many ? <Text style={muted(palette)}>{many ? `عند ${sayer(fact)}` : sayer(fact)}</Text> : null;
 }
 
-/** One quote from the entry, with who says it. */
-function Quote({ fact, palette }: { fact: PersonFact; palette: Palette }) {
+/** One quote from the entry, with who says it; a `marked` one (a quiz's answer, once shown) in green. */
+function Quote({ fact, palette, marked = false }: { fact: PersonFact; palette: Palette; marked?: boolean }) {
   return (
     <View style={{ gap: 2 }}>
-      <Text style={body(palette)}>{fact.text}</Text>
+      <Text style={marked ? { ...body(palette), color: palette.green } : body(palette)}>{fact.text}</Text>
       <Sayer fact={fact} palette={palette} />
     </View>
   );
+}
+
+/** A person's virtues as the entry gives them, with the pages: the person page's «مناقبه» and a quiz's look-up draw it. */
+export function Virtues({ person, palette, marked }: { person: AppPerson; palette: Palette; marked?: number }) {
+  return <>
+    {person.virtues.map((fact, i) => <Quote key={i} fact={fact} palette={palette} marked={i === marked} />)}
+    <Credit facts={person.virtues} palette={palette} />
+  </>;
 }
 
 /** A labelled line: the label small on the left, the value on the right («أبوه  العوام بن خويلد»). */
@@ -207,8 +215,7 @@ export default function PersonScreen() {
 
         {person.virtues.length > 0 && (
           <Part n={++n} title={person.sex === 'FEMALE' ? 'مناقبها' : 'مناقبه'} palette={palette}>
-            {person.virtues.map((fact, i) => <Quote key={i} fact={fact} palette={palette} />)}
-            <Credit facts={person.virtues} palette={palette} />
+            <Virtues person={person} palette={palette} />
           </Part>
         )}
 

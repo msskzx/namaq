@@ -73,3 +73,21 @@ describe('ما صلته به؟', () => {
     for (const q of questions) expect(new Set(q.choices.map(c => c.value)).size).toBe(4);
   });
 });
+
+describe('ابحث عن الجواب', () => {
+  it('opens each Tarajim question on the people it asks about, with the answer marked for after the reveal', async () => {
+    const { tieQuestions } = await import('./tarajim');
+    const safiyyah = tieQuestions().find(q => q.key === 'TARAJIM_TIE:safiyyah-bint-abd-al-muttalib:az-zubayr-ibn-al-awwam')!;
+    // «ما صفية من الزبير؟»: his ties round him, where her node names what she is to him.
+    expect(safiyyah.look).toEqual({ view: 'ties', slug: 'az-zubayr-ibn-al-awwam', mark: 'safiyyah-bint-abd-al-muttalib' });
+    const [nasab] = nasabQuestions();
+    expect(nasab.look).toEqual({ view: 'nasab', slugs: nasab.key.split(':').slice(1), mark: true });
+    for (const virtue of virtueQuestions(undefined, seededRandom(3))) {
+      expect(virtue.look?.view).toBe('virtues');
+      expect(virtue.look && 'slugs' in virtue.look && virtue.look.slugs).toEqual(virtue.choices.map(c => c.value));
+      const [, slug, index] = virtue.key.split(':');
+      expect(virtue.look?.mark).toEqual({ slug, index: Number(index) });
+      expect(slug).toBe(virtue.correctAnswer);
+    }
+  });
+});

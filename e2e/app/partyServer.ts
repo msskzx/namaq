@@ -5,6 +5,7 @@ import type { BranchAyah } from '../../shared/quran/branches';
 import { branchQuestionPool, branchQuiz } from '../../shared/quiz/branchQuestions';
 import { ayahEnds } from '../../shared/quiz/pageKinds';
 import { writeAsk } from '../../shared/quiz/writeAsk';
+import { tieQuestions } from '../../shared/quiz/tarajim';
 
 /** The party worker's address in the test build (EXPO_PUBLIC_PARTY_URL in e2e/playwright.config.ts). */
 const HOST = 'http://127.0.0.1:8787';
@@ -22,8 +23,11 @@ export class PartyServer {
   state: PartyState | null = null;
   private sockets: { id: string; ws: WebSocketRoute }[] = [];
 
-  /** `trees` asks tree questions; `recite` asks the ayat of al-Ikhlas written with the pen, as /api/quiz sends them. */
-  constructor(private readonly kind: 'trees' | 'recite' = 'trees') {}
+  /**
+   * `trees` asks tree questions; `recite` asks the ayat of al-Ikhlas written with the pen, as /api/quiz sends them; `ties`
+   * asks «ما صفية بنت عبد المطلب من الزبير بن العوام؟», which can be looked up.
+   */
+  constructor(private readonly kind: 'trees' | 'recite' | 'ties' = 'trees') {}
 
   async attach(context: BrowserContext) {
     await context.route(`${HOST}/parties`, async route => {
@@ -66,7 +70,9 @@ export class PartyServer {
     }
     if (state.phase !== 'loading' && result.state.phase === 'loading') {
       const { settings } = result.state;
-      const questions = this.kind === 'recite'
+      const questions = this.kind === 'ties'
+        ? tieQuestions().filter(question => question.key === 'TARAJIM_TIE:safiyyah-bint-abd-al-muttalib:az-zubayr-ibn-al-awwam')
+        : this.kind === 'recite'
         ? ayahEnds.questions({ range: null, filters: { surahs: '112' } }, 'easy', random).slice(0, 2)
           .map(question => ({ ...question, write: writeAsk(question.ayahKey!, question.page!, settings.pen) ?? undefined }))
         : branchQuiz(branchQuestionPool((corpus as { ayat: BranchAyah[] }).ayat, null), settings.length, settings.leaves, random);

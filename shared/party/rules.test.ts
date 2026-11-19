@@ -138,7 +138,30 @@ describe('party questions', () => {
     expect(state.phase).toBe('question');
     state = act(state, { type: 'submit', playerId: 'p2', answer: 'a' }, 0).state;
     expect(state.phase).toBe('reveal');
-    expect(state.players.map(player => player.score)).toEqual([1, 0, 1]);
+    expect(state.players.map(player => player.score)).toEqual([10, 0, 10]);
+  });
+
+  it('gives half the points to a right answer after looking it up, and keeps who looked hidden until the reveal', () => {
+    let state = run(playing(), [{ type: 'look', playerId: 'p0' }, { type: 'look', playerId: 'p1' }, { type: 'submit', playerId: 'p0', answer: 'a' }]);
+    expect(viewFor(state, 'p0', 0).looked).toBe(true);
+    expect(viewFor(state, 'p2', 0).looked).toBe(false);
+    expect(viewFor(state, 'p2', 0).players.map(player => player.looked)).toEqual([null, null, null]);
+    // Looking after the answer is sent is for learning only.
+    state = run(state, [{ type: 'submit', playerId: 'p2', answer: 'a' }, { type: 'look', playerId: 'p2' }, { type: 'submit', playerId: 'p1', answer: 'b' }]);
+    expect(state.phase).toBe('reveal');
+    expect(state.players.map(player => player.score)).toEqual([5, 0, 10]);
+    const view = viewFor(state, 'p2', 0);
+    expect(view.players.map(player => [player.earned, player.looked])).toEqual([[5, true], [0, true], [10, false]]);
+    state = run(state, [{ type: 'next', playerId: 'p0' }, { type: 'submit', playerId: 'p0', answer: 'a' }]);
+    expect(viewFor(state, 'p0', 0).looked).toBe(false);
+  });
+
+  it('keeps what a look points at hidden until the reveal', () => {
+    const look = { view: 'ties', slug: 'b', mark: 'a' };
+    const state = playing([{ ...choice('q1'), look }]);
+    expect(JSON.parse(JSON.stringify(viewFor(state, 'p1', 0).question?.look))).toStrictEqual({ view: 'ties', slug: 'b' });
+    const revealed = run(state, ['p0', 'p1', 'p2'].map(playerId => ({ type: 'submit', playerId, answer: 'b' }) as Action));
+    expect(viewFor(revealed, 'p1', 0).question?.look).toEqual(look);
   });
 
   it('keeps the first answer a player sends', () => {
@@ -156,7 +179,7 @@ describe('party questions', () => {
     expect(revealed.results).toEqual({ p0: { earned: 1, total: 1 }, p1: { earned: 0, total: 1 }, p2: { earned: 0, total: 1 } });
   });
 
-  it('scores a tree question one point per asked leaf, on the longer timer', () => {
+  it('scores a tree question ten points per asked leaf, on the longer timer', () => {
     let state = playing([tree]);
     expect(state.deadline).toBe(180_000);
     state = run(state, [
@@ -164,10 +187,10 @@ describe('party questions', () => {
       { type: 'submit', playerId: 'p1', answer: ['رب', 'لا'] },
       { type: 'submit', playerId: 'p2', answer: ['', ''] },
     ]);
-    expect(state.players.map(player => player.score)).toEqual([2, 1, 0]);
+    expect(state.players.map(player => player.score)).toEqual([20, 10, 0]);
   });
 
-  it('scores a compare question one point per blank, on the longer timer', () => {
+  it('scores a compare question ten points per blank, on the longer timer', () => {
     const compare: PartyQuestion = { key: 'compare', correctAnswer: 'ويعبدون … ينفعهم ولا يضرهم', choices: [], compare: {
       card: '21:66|25:55', shown: { key: '21:66', words: ['قال', 'أفتعبدون', 'من', 'دون', 'الله'], tones: [] },
       asked: { key: '25:55', words: ['ويعبدون', 'من', 'دون', 'الله', 'ينفعهم', 'ولا', 'يضرهم'], tones: [] }, blanks: [[0, 1], [4, 7]] } };
@@ -178,7 +201,7 @@ describe('party questions', () => {
       { type: 'submit', playerId: 'p1', answer: ['ويعبدون', 'ينفعكم شيئا'] },
       { type: 'submit', playerId: 'p2', answer: ['', ''] },
     ]);
-    expect(state.players.map(player => player.score)).toEqual([2, 1, 0]);
+    expect(state.players.map(player => player.score)).toEqual([20, 10, 0]);
   });
 
   it('moves on only when the host taps next, then ends on the final leaderboard', () => {

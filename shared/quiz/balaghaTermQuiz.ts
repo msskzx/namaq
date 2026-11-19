@@ -136,15 +136,18 @@ function question(right: BalaghaTerm, random: Random): ChoiceQuestion | null {
   if (wrong.length < WRONG) return null;
   const choices = [right, ...wrong];
   const pages = quotes.map(termCredit);
+  // In the order shown, so the look's list never puts the right one first.
+  const offered = shuffle(choices, random);
   return {
     key: `${TERM_QUIZ}:${right.name}`,
     family: TERM_QUIZ,
     promptArabic: 'أي مصطلح عُرِّف بهذا؟',
     passage: hideName(text, right.name),
-    choices: shuffle(choices, random).map(term => ({ value: term.name, labelArabic: plainName(term.name) })),
+    choices: offered.map(term => ({ value: term.name, labelArabic: plainName(term.name) })),
     correctAnswer: right.name,
-    terms: Object.fromEntries(choices.map(term => [term.name, term.name])),
+    terms: Object.fromEntries(offered.map(term => [term.name, term.name])),
     note: { label: 'المصدر', text: [...new Set(pages)].join('؛ ') },
+    look: { view: 'terms', names: offered.map(term => term.name), mark: right.name },
     evidence: { claimKeys: [] },
   };
 }

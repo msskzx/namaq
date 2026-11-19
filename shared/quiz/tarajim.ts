@@ -67,6 +67,7 @@ export function nasabQuestions(people: AppPerson[] = PEOPLE): ChoiceQuestion[] {
       choices: [answer, ...below.slice(0, 3)].map(name => ({ value: name, labelArabic: name })),
       correctAnswer: answer,
       note: { label: 'النسبان', text: `${chainOf(a, la, at.a)}\n${chainOf(b, lb, at.b)}\n${pages ? `${pages}\n` : ''}وشجرة النسب في التراجم` },
+      look: { view: 'nasab', slugs: [a.slug, b.slug], mark: true },
       evidence: { claimKeys: [] },
     });
   }
@@ -125,13 +126,15 @@ export function virtueQuestions(people: AppPerson[] = PEOPLE, random: Random = M
         && !mentions(quote, plain(p.name).split(/\s+/)[0])
         && !virtue.by.some(by => bareName(by).startsWith(bareName(plain(p.name).split(/\s+/)[0])))), random).slice(0, 3);
       if (others.length < 3) return;
+      const choices = shuffle([person, ...others], random).map(p => ({ value: p.slug, labelArabic: nameOf(p) }));
       questions.push({
         key: `${TARAJIM_VIRTUE}:${person.slug}:${k}`,
         family: TARAJIM_VIRTUE,
         promptArabic: `«${virtue.text}»${virtue.by.length ? ` — ${sayer(virtue)}` : ''}\nفيمن قيل هذا؟`,
-        choices: shuffle([person, ...others], random).map(p => ({ value: p.slug, labelArabic: nameOf(p) })),
+        choices,
         correctAnswer: person.slug,
         note: { label: 'المصدر', text: `${pageLabel(virtue.refs)}، في ترجمة ${genitive(nameOf(person))}` },
+        look: { view: 'virtues', slugs: choices.map(choice => choice.value), mark: { slug: person.slug, index: k } },
         evidence: { claimKeys: [] },
       });
     });
@@ -177,6 +180,7 @@ export function tieQuestions(people: AppPerson[] = PEOPLE): ChoiceQuestion[] {
         choices: [word(answer), ...wrong.slice(0, 3)].map(w => ({ value: w, labelArabic: w })),
         correctAnswer: word(answer),
         note: { label: 'المصدر', text: `${link.text ? `${link.text}\n` : ''}${sayer(link)} · ${pageLabel(link.refs)}` },
+        look: { view: 'ties', slug: b.slug, mark: a.slug },
         evidence: { claimKeys: [] },
       });
     }
