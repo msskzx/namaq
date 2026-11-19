@@ -49,6 +49,32 @@ test.describe('a new user', () => {
       await expect(page).toHaveURL(/\/compare/);
     });
 
+    // Owner, 2026-11-19: no box inside a feed card, and the buttons sit in the row under the card, not in it.
+    test('the tree quiz card holds no box and keeps its buttons under the card, before and after the answer', async ({ page }) => {
+      await open(page, '/');
+      const head = page.getByRole('heading', { name: 'أكمل المتشابهات', exact: true }).first();
+      await expect(head).toBeAttached({ timeout: 20_000 });
+      await head.scrollIntoViewIfNeeded();
+      const post = head.locator('xpath=ancestor::div[.//*[@data-testid="feed-card"]][1]');
+      const card = post.getByTestId('feed-card');
+      const row = post.locator('xpath=.//*[@aria-label="اختبار فردي"]/..');
+      const boxes = () => card.evaluate(root => [...root.querySelectorAll('*')].filter(el => {
+        if (el.closest('[role="button"], button, input, textarea')) return false;
+        const style = getComputedStyle(el);
+        const sides = ['Top', 'Right', 'Bottom', 'Left'].every(side => parseFloat(style.getPropertyValue(`border-${side.toLowerCase()}-width`)) > 0);
+        return sides && parseFloat(style.borderTopLeftRadius) >= 10;
+      }).length);
+      expect(await boxes()).toBe(0);
+      // The hint is the card's own button: it waits in the row with the quiz buttons.
+      await expect(row.getByRole('button', { name: /^تلميح/ })).toHaveCount(1);
+      await expect(card.getByRole('button', { name: /^تلميح/ })).toHaveCount(0);
+      await row.getByRole('button', { name: 'إظهار الإجابة' }).click();
+      // Answered, the matrix draws no frame of its own, and its buttons join the same row.
+      await expect(row.getByRole('button', { name: 'الآيات المحيطة' })).toHaveCount(1);
+      await expect(card.getByRole('button', { name: 'الآيات المحيطة' })).toHaveCount(0);
+      expect(await boxes()).toBe(0);
+    });
+
     test.describe('with the tree picked in settings', () => {
       test.use({ seed: { 'branches-view': '"tree"', interests: '["mutashabih"]', 'interests-surprise': '0' } });
 

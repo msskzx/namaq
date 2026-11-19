@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import IconButton from '@/ui/IconButton';
+import { UnderCard, useCardRow } from '@/ui/Card';
 import { ScrollView, View, useWindowDimensions } from 'react-native';
 import { Check, Search } from 'lucide-react-native';
 import type { QuizLook } from '@shared/quiz/choiceKinds';
@@ -211,9 +213,12 @@ export function LookView({ look, shown, palette }: { look: QuizLook; shown: bool
 /** `top`: kept in sight above the looked-up view, such as a party's clock (owner, 2026-11-19: the time left shows while looking). */
 export function LookButton({ look, onLook, costs = false, palette, top }: { look: QuizLook; onLook?: () => void; costs?: boolean; palette: Palette; top?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
+  // In a feed card the button joins the row of icons under the card (owner: no buttons in a card).
+  const inRow = useCardRow();
+  const press = () => { setOpen(true); onLook?.(); };
   return (
     <View style={{ gap: 4, alignItems: 'flex-start' }}>
-      <Button Icon={Search} label="ابحث عن الجواب" onPress={() => { setOpen(true); onLook?.(); }} />
+      {inRow ? <UnderCard><IconButton Icon={Search} label="ابحث عن الجواب" onPress={press} tone="ink" /></UnderCard> : <Button Icon={Search} label="ابحث عن الجواب" onPress={press} />}
       {costs && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right', alignSelf: 'stretch' }}>
         {`بعد البحث للإجابة الصحيحة ${num(LOOKED_POINTS)} نقاط بدل ${num(POINTS)}.`}
       </Text>}

@@ -1,4 +1,5 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import { UnderCard, useCardRow } from '@/ui/Card';
 import { View } from 'react-native';
 import type { RecitePosition } from '@shared/quran/recite';
 import { pageModel } from '@shared/quran/recitePage';
@@ -42,6 +43,7 @@ function QuizPage({ ayah, ask, shown, onWritten, onShown, party, palette }: { ay
   /** In a party: the pen on with the host's rule, what is written handed over, and once revealed, the words marked by what was sent. */
   party?: PartyWrite; palette: Palette }) {
   const [width, setWidth] = useState(0);
+  const inRow = useCardRow();
   const [before] = quizPageBefore.use();
   const quizPen = useQuizPen();
   const pen = party?.pen ?? quizPen;
@@ -109,7 +111,8 @@ function QuizPage({ ayah, ask, shown, onWritten, onShown, party, palette }: { ay
             write={shown ? null : recite.write} checked={marked ?? recite.checked} />
         )}
       </View>
-      {ask.recite && !shown && !sent && <RecitePill recite={recite} writing={writing || !!party} onWriting={toggleWriting} palette={palette} />}
+      {/* In a feed card the bar joins the row under the card, small like the recall card's (owner: no buttons in a card). */}
+      {ask.recite && !shown && !sent && <UnderCard><RecitePill recite={recite} writing={writing || !!party} onWriting={toggleWriting} palette={palette} small={inRow} /></UnderCard>}
       {recite.write && recite.boxes.field}
     </View>
   );
