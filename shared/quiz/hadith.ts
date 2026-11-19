@@ -104,3 +104,56 @@ export const hadithCompleteQuiz: ChoiceKind = {
   questions: (_scope, _difficulty, random, limit = Infinity) => completeQuestions(random).slice(0, limit),
   count: () => completeQuestions(Math.random).length,
 };
+
+export const HADITH_BOOK = 'HADITH_BOOK';
+export const HADITH_BOOK_NAME = 'من أخرجه؟';
+
+/** «الترمذي والنسائي», «مسلم وأحمد والدارمي»: the books al-Nawawi names after a hadith, in his order. */
+export const namedBooks = (named: readonly string[]) => (named.length > 1 ? `${named.slice(0, -1).join('، ')} و${named[named.length - 1]}` : named[0]);
+
+/** al-Nawawi's quotation without the words after it that name its books; none when a second quotation follows (nos. 19 and 27). */
+function quotationOf(entry: FortyEntry) {
+  const end = entry.text.indexOf('»');
+  if (end < 0 || entry.text.indexOf('«', end) >= 0) return null;
+  return entry.text.slice(0, end + 1);
+}
+
+const BOOK_OF: Record<string, string> = {
+  البخاري: 'bukhari', مسلم: 'muslim', الترمذي: 'tirmidhi', النسائي: 'nasai', 'أبو داود': 'abudawud', 'ابن ماجه': 'ibnmajah', أحمد: 'ahmad',
+  الدارمي: 'darimi', الدارقطني: 'daraqutni', البيهقي: 'bayhaqi', مالك: 'muwatta',
+};
+/** Every book al-Nawawi names holds the hadith whole from his Companion in our records: not no. 33 (part in the Sahihayn), no. 32 (Ibn Majah has it from others) or no. 41 (al-Hujja not at hand). */
+const citedWhole = (entry: FortyEntry) => !entry.partial && !/وغيره/.test(entry.text.slice(entry.text.lastIndexOf('»')))
+  && entry.named.every(name => entry.records.some(record => record.book === BOOK_OF[name] && !record.partial && !record.from));
+
+/**
+ * The hadith outside the Sahihayn a quiz may carry (owner, 2026-11-18: quizzes start with the Sahihayn or what a named scholar
+ * graded sahih, undisputed): al-Tirmidhi's «حسن صحيح» on nos. 11, 18, 28 and 29, printed in his Sunan beside each. Not no. 42,
+ * which his printed Sunan grades «حسن غريب», nor 12, 31 and 39, which Ibn Rajab weakens.
+ */
+const GRADED_SAHIH = new Set([11, 18, 28, 29]);
+const sahih = (entry: FortyEntry) => GRADED_SAHIH.has(entry.n) || (entry.records.length > 0 && entry.records.every(record => record.book === 'bukhari' || record.book === 'muslim'));
+
+/**
+ * «من أخرجه؟» (owner, 2026-11-18: every feature a quiz kind): al-Nawawi's quotation, and the books he names for it. The
+ * question asks his citation, a fact of his book, not where else a report is found; the wrong choices are other entries' citations.
+ */
+export function bookQuestions(random: Random): ChoiceQuestion[] {
+  const all = FORTY.entries.filter(entry => sahih(entry) && citedWhole(entry)).flatMap(entry => { const quotation = quotationOf(entry); return quotation ? [{ entry, quotation, books: namedBooks(entry.named) }] : []; });
+  // «مسلم» against «البخاري ومسلم» is half right, so a choice sharing any book with the right one is never offered.
+  const apart = (a: readonly string[], b: readonly string[]) => !a.some(book => b.includes(book));
+  return shuffle(all.flatMap(({ entry, quotation, books }) => {
+    const wrong = all.filter(other => apart(other.entry.named, entry.named)).map(other => other.books);
+    const question = choose(`${entry.n}`, HADITH_BOOK, `${quotation}\nإلى أي كتب عزاه النووي؟`, books, wrong,
+      `الأربعون النووية، ${entry.heading}، ص ${num(entry.pages[entry.pages.length - 1])}`, random);
+    return question ? [question] : [];
+  }), random);
+}
+
+export const hadithBookQuiz: ChoiceKind = {
+  id: HADITH_BOOK,
+  name: HADITH_BOOK_NAME,
+  party: true,
+  questions: (_scope, _difficulty, random, limit = Infinity) => bookQuestions(random).slice(0, limit),
+  count: () => bookQuestions(Math.random).length,
+};

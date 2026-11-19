@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { MessagesSquare } from 'lucide-react-native';
-import { fromCompanion, recordName, type FortyEntry, type FortyRecord } from '@shared/hadith';
+import { RECORD_BOOKS, fromCompanion, recordName, type FortyEntry, type FortyGrade, type FortyRecord, type RajabChapter } from '@shared/hadith';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
@@ -18,6 +18,10 @@ import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { toTab } from '@/lib/ways';
 import { FORTY, JIBRIL, fortyEntry, shamelaPage } from '@/lib/hadith';
 import Isnad from '@/components/Isnad';
+import IbnRajab from '@/components/IbnRajab';
+import rajab from '@shared/data/hadith/ibnRajab.json';
+
+const RAJAB = rajab as RajabChapter[];
 
 type Mode = 'drawing' | 'text';
 // The owner's names (2026-11-18): the drawing, and the whole text with its isnad.
@@ -44,7 +48,8 @@ function Record({ record, mode, palette }: { record: FortyRecord; mode: Mode; pa
           <Text style={body(palette)}>{saying}</Text>
         </>
         : <Text style={body(palette)}><Text style={{ color: palette.muted }}>{chain}</Text>{saying}</Text>}
-      <Cite title={`${recordName(record, num)}، ج ${num(record.volume)}، ${pagesName(record.pages)}`} edition={`${book.title}، ${book.edition}`}
+      {record.from && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{record.mursal ? `مرسلًا، عن ${record.from}` : `من حديث ${record.from}`}</Text>}
+      <Cite title={`${recordName(record, num, FORTY.books)}، ج ${num(record.volume)}، ${pagesName(record.pages)}`} edition={`${book.title}، ${book.edition}`}
         url={shamelaPage(record.book, record.shamela)} palette={palette} />
     </View>
   );
@@ -57,9 +62,10 @@ function BookRecords({ title, records, mode, palette }: { title: string; records
   return (
     <Card palette={palette} gap={10}>
       <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 17, fontWeight: '700', textAlign: 'right' }}>{title}</Text>
+      {firstWhole.partial && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>فيه بعض لفظ الحديث</Text>}
       <Record record={firstWhole} mode={mode} palette={palette} />
       {rest.length > 0 && (
-        <Folded credit={firstWhole.book === 'muslim' ? `طرق أخرى عند مسلم (${num(rest.length)})` : `مواضع أخرى في البخاري (${num(rest.length)})`} palette={palette}>
+        <Folded credit={firstWhole.book === 'muslim' ? `طرق أخرى عند مسلم (${num(rest.length)})` : `مواضع أخرى في ${FORTY.books[firstWhole.book].title} (${num(rest.length)})`} palette={palette}>
           {rest.map((record, i) => (
             <View key={`${record.number}-${i}`} style={{ gap: 6, marginTop: 6 }}>
               {record.partial && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>فيه بعض لفظ الحديث</Text>}
@@ -68,6 +74,43 @@ function BookRecords({ title, records, mode, palette }: { title: string; records
           ))}
         </Folded>
       )}
+    </Card>
+  );
+}
+
+/** «الأربعون النووية، ص ٦٣» or «سنن الترمذي ٢٥١٨، ج ٤، ص ٦٦٨»: where a grade is printed. */
+const gradePlace = (grade: FortyGrade) => {
+  const book = FORTY.books[grade.book];
+  if (grade.book === 'nawawi') return `${book.title}، ${pagesName(grade.pages)}`;
+  if (grade.book === 'ibnrajab') return `${book.title}، ${num(grade.volume)}/ ${num(grade.pages[0])}${grade.pages.length > 1 ? `–${num(grade.pages[grade.pages.length - 1])}` : ''}`;
+  return `${recordName({ book: grade.book, number: grade.number! }, num, FORTY.books)}، ج ${num(grade.volume)}، ${pagesName(grade.pages)}`;
+};
+
+/** A grade longer than a few lines (Ibn Rajab's whole discussion of the routes) opens on «المزيد» after its first lines. */
+const GRADE_LINES = 5;
+const LONG_GRADE = 300;
+
+/** One scholar's words on the grade: his name, his words as printed, and where. A long discussion opens on «المزيد». */
+function Grade({ grade, palette }: { grade: FortyGrade; palette: Palette }) {
+  const [open, setOpen] = useState(false);
+  const long = grade.quote.length > LONG_GRADE;
+  const book = FORTY.books[grade.book];
+  return (
+    <View style={{ gap: 4, borderStartWidth: 2, borderColor: palette.rule, paddingStart: 10 }}>
+      <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{grade.by}</Text>
+      <Text numberOfLines={long && !open ? GRADE_LINES : undefined} style={body(palette)}>{grade.quote}</Text>
+      {long && <View style={{ flexDirection: 'row' }}><Button variant="plain" label={open ? 'أقل' : 'المزيد'} onPress={() => setOpen(was => !was)} accessibilityLabel={open ? 'اطو الكلام' : `اقرأ كلام ${grade.by} كاملًا`} /></View>}
+      <Cite title={gradePlace(grade)} edition={`${book.title}، ${book.edition}`} url={shamelaPage(grade.book, grade.shamela)} palette={palette} />
+    </View>
+  );
+}
+
+/** What the scholars said of the hadith's grade (the owner's sketch, frame 4): each in his own words, under his name; no grade of ours. */
+function Grades({ grades, palette }: { grades: FortyGrade[]; palette: Palette }) {
+  return (
+    <Card palette={palette} gap={14}>
+      <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 17, fontWeight: '700', textAlign: 'right' }}>ما قاله العلماء في درجته</Text>
+      {grades.map((grade, i) => <Grade key={`${grade.by}-${i}`} grade={grade} palette={palette} />)}
     </Card>
   );
 }
@@ -99,8 +142,8 @@ export default function HadithFortyScreen() {
   const [mode, setMode] = useState<Mode>('drawing');
   const back = () => (router.canGoBack() ? router.back() : toTab('/hadith'));
   if (!entry) return <View style={{ flex: 1, backgroundColor: palette.paper }}><TopBar back={back} /></View>;
-  const bukhari = entry.records.filter(record => record.book === 'bukhari');
-  const muslim = entry.records.filter(record => record.book === 'muslim');
+  const books = RECORD_BOOKS.map(book => ({ book, records: entry.records.filter(record => record.book === book) })).filter(({ records }) => records.length > 0);
+  const chapter = RAJAB.find(item => item.n === entry.n);
   const drawn = entry.records.some(record => record.isnad);
   const unit = (id: string) => router.push({ pathname: '/hadith-unit', params: { unit: id } });
   return (
@@ -118,8 +161,17 @@ export default function HadithFortyScreen() {
         )}
         {drawn && <Tabs label="طريقة العرض" options={MODES} value={mode} onChange={setMode} palette={palette} />}
         {entry.partial && entry.records.length > 0 && <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>في الصحيحين بعض لفظ الحديث</Text>}
-        {bukhari.length > 0 && <BookRecords title="في صحيح البخاري" records={bukhari} mode={mode} palette={palette} />}
-        {muslim.length > 0 && <BookRecords title="في صحيح مسلم" records={muslim} mode={mode} palette={palette} />}
+        {entry.grades && <Grades grades={entry.grades} palette={palette} />}
+        {books.map(({ book, records }) => <BookRecords key={book} title={`في ${FORTY.books[book].title}`} records={records} mode={mode} palette={palette} />)}
+        {chapter && (
+          <>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' }}>
+              <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, textAlign: 'right' }}>من شرح ابن رجب</Text>
+              <Text style={{ color: palette.muted, fontSize: 13 }}>{FORTY.books.ibnrajab.title}</Text>
+            </View>
+            <Card palette={palette} gap={8}><IbnRajab chapter={chapter} palette={palette} /></Card>
+          </>
+        )}
       </ScrollView>
     </View>
   );
