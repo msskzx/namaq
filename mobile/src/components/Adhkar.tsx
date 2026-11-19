@@ -34,13 +34,22 @@ const REMINDER: Partial<Record<AdhkarOccasion, { time: AdhkarTime; label: string
 const cite = (citation: AdhkarCitation) =>
   `${BOOK[citation.source]} ${citation.volume > 1 ? `${num(citation.volume)}/` : ''}${num(citation.page)}${citation.report ? ` ح${num(citation.report)}` : ''}`;
 
-/** A card's reference: al-Nawawi's words on when, how often and what to do, then every grade in its scholar's words with its own page. */
+/**
+ * A card's reference: al-Nawawi's words on when, how often and what to do, any remark in the report, each corrected
+ * printing slip with the words that give the right reading, then every grade in its scholar's words with its own page.
+ */
 function quotes(item: Dhikr): Quote[] {
   const at = { cite: cite(item.citation), url: item.citation.url };
   return [
     { text: item.occasionQuote, ...at },
     ...(item.repeat ? [{ text: item.repeat.quote, ...at }] : []),
     ...(item.instructionQuote ? [{ text: item.instructionQuote, ...at }] : []),
+    ...(item.noteQuote ? [{ text: item.noteQuote, ...at }] : []),
+    ...(item.fixes ?? []).map(fix => ({
+      text: fix.quote,
+      cite: `في المطبوع «${fix.printed}»، والصواب «${fix.reads}» كما هنا: ${cite(fix.citation)}`,
+      url: fix.citation.url,
+    })),
     ...item.grades.map(grade => ({
       text: grade.quote,
       cite: `${grade.scholar}${grade.reportedBy ? `، نقله ${grade.reportedBy}` : ''}، ${cite(grade.citation)}`,
