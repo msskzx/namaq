@@ -19,6 +19,7 @@ import MarkModeSetting from '@/components/quran/MarkModeSetting';
 import BranchViewSetting from '@/components/quran/BranchViewSetting';
 import ReaderGestureSetting from '@/components/quran/ReaderGestureSetting';
 import { MemorizedSetting } from '@/components/homepage/Memorized';
+import { InterestsSetting } from '@/components/homepage/Interests';
 import { useSwipeClose } from './useSwipeClose';
 import PageHint, { resetHints } from './PageHint';
 import styles from './NavBar.module.css';
@@ -82,6 +83,7 @@ function SettingsSheet({ id, onClose, toggle }: { id: string; onClose: () => voi
           <Segmented label={ar ? 'اللغة' : 'Language'}
             options={(['ar', 'en'] as const).map(value => ({ key: value, label: value === 'ar' ? 'ع' : 'EN', name: value === 'ar' ? 'العربية' : 'English', lang: value, current: language === value, onClick: () => { if (language !== value) toggleLanguage(); } }))} />
         </div>
+        <InterestsSetting />
         <MemorizedSetting />
         <ThemeTiles />
         <BranchViewSetting />
