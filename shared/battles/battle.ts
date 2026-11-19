@@ -46,3 +46,6 @@ export const KIND_NAMES: Record<string, string> = { GHAZWAH: 'غزوة', SARIYYA
 
 /** A battle with moments, as the home feed's moment card needs it. */
 export type AppMomentBattle = Pick<AppBattle, 'slug' | 'name' | 'kind' | 'year' | 'moments'>;
+
+/** The heading over a battle's moments: «مجرى الغزوة», «مجرى السرية», else «مجرى المعركة» (the app's and the website's battle pages). */
+export const courseTitle = (kind?: string): string => ({ 'غزوة': 'مجرى الغزوة', 'سرية': 'مجرى السرية' } as Record<string, string>)[kind ?? ''] ?? 'مجرى المعركة';

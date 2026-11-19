@@ -9,11 +9,9 @@ import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { back } from '@/lib/ways';
 import { battleOf } from '@/lib/battles';
-import type { AppBattle } from '@shared/battles/battle';
+import { courseTitle, type AppBattle } from '@shared/battles/battle';
 import BattleMap from '@/components/battles/BattleMap';
 import { battleLine, Counts, Moment, People, Readings, Refs } from '@/components/battles/BattleParts';
-
-const COURSE: Record<string, string> = { 'غزوة': 'مجرى الغزوة', 'سرية': 'مجرى السرية' };
 
 /** A battle whole: its name, year and place with the readings, the map, the numbers, the moments and the people. The battle page draws it, and so does a quiz that looks it up. */
 export function BattleView({ battle, palette }: { battle: AppBattle; palette: Palette }) {
@@ -35,7 +33,7 @@ export function BattleView({ battle, palette }: { battle: AppBattle; palette: Pa
     ) : null}
     {Object.values(battle.counts).some(Boolean) ? <Section title="العدد" palette={palette}><Counts battle={battle} palette={palette} /></Section> : null}
     {battle.moments.length ? (
-      <Section title={COURSE[battle.kind?.value ?? ''] ?? 'مجرى المعركة'} palette={palette}>
+      <Section title={courseTitle(battle.kind?.value)} palette={palette}>
         {battle.moments.map((moment, i) => <Moment key={moment.title} moment={moment} n={i + 1} palette={palette} />)}
       </Section>
     ) : null}
