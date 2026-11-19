@@ -35,7 +35,7 @@ function Word({ word, mark }: { word: WordDifference; mark: number[] }) {
 function Frame({ lines, id, children }: { lines: boolean; id: string; children: ReactNode }) {
   return lines
     ? <div className="flex flex-col gap-1 px-4 py-2.5">{children}</div>
-    : <Card as="article" id={id} className="flex flex-col gap-1 px-4 py-2.5 [content-visibility:auto] [contain-intrinsic-size:auto_16rem]">{children}</Card>;
+    : <Card as="article" id={id} className="flex flex-col gap-1 px-4 py-2.5">{children}</Card>;
 }
 
 /**
@@ -48,7 +48,9 @@ export function QiraatPlace({ ayah, words, text = [], mark = [], lines, max, mor
   const all = qiraatOf(ayah);
   const every = (words ?? all.map((_, i) => i)).map(i => all[i]);
   const shown = max ? every.slice(0, max) : every;
-  const lit = (i: number) => shown.some(word => i >= word.at[0] && i <= word.at[1]);
+  // A phrase the source quotes across the end of the ayah before (89:20 «لمّا وتحبون») is not banded.
+  const fits = (word: WordDifference) => word.readings[0].text.split(/\s+/).filter(Boolean).join(' ') === text.slice(word.at[0], word.at[1] + 1).join(' ');
+  const lit = (i: number) => shown.some(word => fits(word) && i >= word.at[0] && i <= word.at[1]);
   const [surah, number] = ayah.split(':').map(Number);
   const meaning = QIRAAT_MEANINGS[ayah];
   return (

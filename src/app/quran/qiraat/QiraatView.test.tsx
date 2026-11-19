@@ -1,15 +1,16 @@
 // @vitest-environment jsdom
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import { pageAyat } from '@shared/quran/branches';
+import { ayahWordsOf } from '@shared/quran/quranText/ayahWords';
 import type { MushafPage } from '@shared/quran/readerPage';
 import { qiraatAyat } from '@shared/quran/qiraatData';
-import page1 from '@shared/data/quran/mushaf/1.json';
-import page2 from '@shared/data/quran/mushaf/2.json';
-import page3 from '@shared/data/quran/mushaf/3.json';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import QiraatView from './QiraatView';
 
-const texts = Object.fromEntries(pageAyat([page1, page2, page3] as MushafPage[]).map(ayah => [ayah.key, ayah.words]));
+// The first 17 pages, as the server reads them: up to 2:106, whose ayah opens with the hizb mark ۞.
+const pages = Array.from({ length: 17 }, (_, i) => JSON.parse(readFileSync(join(__dirname, `../../../../shared/data/quran/mushaf/${i + 1}.json`), 'utf8')) as MushafPage);
+const texts = ayahWordsOf(pages);
 
 afterEach(cleanup);
 
@@ -21,6 +22,9 @@ describe('QiraatView: the website\'s «القراءات»', () => {
     expect(place.textContent).toContain(texts['2:9'][1]);
     expect([...place.querySelectorAll('mark')].map(m => m.textContent)).toEqual([texts['2:9'][5]]);
     expect(place.textContent).toContain('يُخَٰدِعُونَ');
+    // qiraat.json counts the ۞ as a word, so the band stays on نَنسَخۡ and نُنسِهَا, not the word after each.
+    expect([...container.querySelectorAll('#a2-106 mark')].map(m => m.textContent)).toEqual([texts['2:106'][2], texts['2:106'][6]]);
+    expect(texts['2:106'][0]).toBe('۞');
   });
 
   it("narrows to a reader, shades his reading, and offers his two riwayat", () => {

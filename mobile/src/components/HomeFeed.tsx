@@ -860,7 +860,7 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
   return (
     <>
       {on && <Post palette={palette} head={<PostHead Icon={head.Icon} title={head.title} sub={[`${shortNames[surah] ?? ''} ${num(number)}`, 'source' in note ? note.source : ''].filter(Boolean).join(' · ')} palette={palette} />}
-        actions={<Action Icon={head.Icon} label={head.open} onPress={kind === 'qiraat' ? () => toTab({ pathname: '/qiraat', params: { ayah: note.key } }) : show} palette={palette} />}
+        actions={<Action Icon={head.Icon} label={head.open} onPress={kind === 'qiraat' ? () => toTab({ pathname: '/qiraat', params: { ayah: note.key, at: String(Date.now()) } }) : show} palette={palette} />}
         press={{ onPress: show, label: `${head.open}، ${shortNames[surah] ?? ''} ${num(number)}` }}>
         {'readings' in note ? <View style={{ paddingVertical: 10 }}><QiraatPlace ayah={note.key} max={2} lines bare palette={palette} /></View> : <View style={{ paddingVertical: 10, gap: 6 }}>
           <View pointerEvents="none" style={{ paddingHorizontal: 12 }}>

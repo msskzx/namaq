@@ -32,7 +32,10 @@ function QiraatPlace({ ayah, words, mark, max, bare = false, lines = false, pale
   const tokens = useMemo(() => ayahMushafTokens(ayah), [ayah]);
   // qiraat.json counts the ۞ mark as a word; the page words drawn here leave it out.
   const before = (at: number) => tokens.slice(0, at).filter(word => word === '۞').length;
-  const lit = shown.map(word => [word.at[0] - before(word.at[0]), word.at[1] - before(word.at[1])] as [number, number]);
+  // A phrase the source quotes across the end of the ayah before (89:20 «لمّا وتحبون», listed in the build's review) is not
+  // banded, rather than banding a word of this ayah alone.
+  const fits = (word: (typeof shown)[number]) => word.readings[0].text.split(/\s+/).filter(w => w && w !== '۞').length === word.at[1] - word.at[0] + 1 - (before(word.at[1] + 1) - before(word.at[0]));
+  const lit = shown.filter(fits).map(word => [word.at[0] - before(word.at[0]), word.at[1] - before(word.at[1])] as [number, number]);
   const [surah, number] = ayah.split(':').map(Number);
   const listed = max ? shown.slice(0, max) : shown;
   const body = (

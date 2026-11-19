@@ -220,7 +220,13 @@ for (const [key, list] of Object.entries(ayat)) {
     // quoted across the end of an ayah (anchor) starts with `lead` words of the ayah before; a difference left wholly
     // there moves to that ayah.
     const lead = word.readings[0].text.split(/\s+/).filter(Boolean).length - (word.at[1] - word.at[0] + 1);
-    const trimmed = trimShared(word.readings.map(r => r.text));
+    // The other readings never carry the hizb mark ۞, so Hafs's phrase is trimmed without it and its places counted back
+    // with it (18:17 «مرفقا ۞ وترى» is مرفقا of 18:16).
+    const tokens = word.readings[0].text.split(/\s+/).filter(Boolean);
+    const kept = tokens.flatMap((token, i) => (token === '۞' ? [] : [i]));
+    const cut = trimShared(word.readings.map((r, i) => (i ? r.text : kept.map(k => tokens[k]).join(' '))));
+    const trimmed = 'problem' in cut ? cut : { start: kept[cut.start], end: kept[cut.end - 1] + 1, texts: cut.texts.map((text, i) => (i ? text : '')) };
+    if (!('problem' in trimmed)) trimmed.texts[0] = tokens.slice(trimmed.start, trimmed.end).join(' ');
     const problem = 'problem' in trimmed ? trimmed.problem : trimmed.start < lead && trimmed.end > lead ? 'runs across the end of the ayah before' : '';
     if (problem || 'problem' in trimmed) { review.push(`- ${key} «${word.readings[0].text}»: ${problem}, shown untrimmed`); trimProblems.push(`${key}:${word.at[0]}`); continue; }
     word.readings = word.readings.map((r, i) => ({ ...r, text: trimmed.texts[i] }));

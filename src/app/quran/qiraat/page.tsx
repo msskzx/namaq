@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { loadReaderAyat } from '@/lib/quran/readerAyat';
+import { loadAyahTokens } from '@/lib/quran/readerAyat';
 import { qiraatAyat } from '@shared/quran/qiraatData';
 import QiraatView from './QiraatView';
 
@@ -8,8 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default async function QuranQiraatPage() {
-  const ayat = await loadReaderAyat();
-  const wanted = new Set(qiraatAyat());
-  const texts = Object.fromEntries(ayat.filter(ayah => wanted.has(ayah.key)).map(ayah => [ayah.key, ayah.words]));
+  const words = await loadAyahTokens();
+  const texts = Object.fromEntries(qiraatAyat().map(key => [key, words[key] ?? []]));
   return <QiraatView texts={texts} />;
 }
