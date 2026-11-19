@@ -390,21 +390,21 @@
     {
       "id": "m_mh_c_umar",
       "parent": "sp_mh_sons",
-      "exact": "وَعُمَرُ",
+      "exact": "َعُمَرُ",
       "occurrence": 1,
       "role": "SUBJECT"
     },
     {
       "id": "m_mh_c_ibrahim",
       "parent": "sp_mh_sons",
-      "exact": "وَإِبْرَاهِيْمُ",
+      "exact": "َإِبْرَاهِيْمُ",
       "occurrence": 1,
       "role": "SUBJECT"
     },
     {
       "id": "m_mh_c_luqman",
       "parent": "sp_mh_sons",
-      "exact": "وَلُقْمَانُ",
+      "exact": "َلُقْمَانُ",
       "occurrence": 1,
       "role": "SUBJECT"
     },

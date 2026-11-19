@@ -44,6 +44,24 @@
       "prefix": "غُضَيْفُ بنُ "
     },
     {
+      "id": "sp_gh_variant_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "455",
+      "layer": "MAIN",
+      "exact": "وَقِيْلَ فِيْهِ",
+      "suffix": ": الحَارِثُ"
+    },
+    {
+      "id": "sp_gh_variant",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "455",
+      "layer": "MAIN",
+      "exact": "الحَارِثُ بنُ غُضَيْفٍ",
+      "prefix": "وَقِيْلَ فِيْهِ: "
+    },
+    {
       "id": "sp_gh_kunya_st",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
@@ -176,6 +194,26 @@
       "page": "454",
       "layer": "MAIN",
       "exact": "أَنَّهُ مَرَّ بِعُمَرَ، فَقَالَ: نِعْمَ الفَتَى غُضَيْفٌ، فَلِقِيتُ أَبَا ذَرٍّ بَعْدَ ذَلِكَ، فَقَالَ: يَا أَخِي! اسْتَغْفِرْ لِي"
+    },
+    {
+      "id": "sp_gh_umarq_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "454",
+      "layer": "MAIN",
+      "exact": "إِنِّيْ سَمِعْتُ عُمَرَ يَقُوْلُ",
+      "prefix": "قَالَ: ",
+      "suffix": ": نِعْمَ"
+    },
+    {
+      "id": "sp_gh_umarq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "454",
+      "layer": "MAIN",
+      "exact": "نِعْمَ الفَتَى غُضَيْفٌ",
+      "prefix": "يَقُوْلُ: ",
+      "suffix": "، وَقَدْ"
     }
   ],
   "reports": [
@@ -191,9 +229,22 @@
       "chainState": "COMPLETE"
     },
     {
-      "id": "r_gh_salah",
+      "id": "r_gh_variant",
       "unit": "siyar-v6-92-ghudayf-ibn-al-harith",
       "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "frame": [
+        "sp_gh_variant_frame"
+      ],
+      "origin": {
+        "mention": "m_gh_variant_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_gh_salah",
+      "unit": "siyar-v6-92-ghudayf-ibn-al-harith",
+      "ordinal": 3,
       "voice": "TRANSMITTED",
       "isnadSpan": "sp_gh_salah_isnad",
       "origin": {
@@ -204,7 +255,7 @@
     {
       "id": "r_gh_ibnabihatim",
       "unit": "siyar-v6-92-ghudayf-ibn-al-harith",
-      "ordinal": 3,
+      "ordinal": 4,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_gh_ibnabihatim_frame"
@@ -217,7 +268,7 @@
     {
       "id": "r_gh_abuzura",
       "unit": "siyar-v6-92-ghudayf-ibn-al-harith",
-      "ordinal": 4,
+      "ordinal": 5,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_gh_abuzura_frame"
@@ -230,7 +281,7 @@
     {
       "id": "r_gh_ibnsaad",
       "unit": "siyar-v6-92-ghudayf-ibn-al-harith",
-      "ordinal": 5,
+      "ordinal": 6,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_gh_ibnsaad_frame"
@@ -243,11 +294,24 @@
     {
       "id": "r_gh_umar",
       "unit": "siyar-v6-92-ghudayf-ibn-al-harith",
-      "ordinal": 6,
+      "ordinal": 7,
       "voice": "TRANSMITTED",
       "isnadSpan": "sp_gh_umar_isnad",
       "origin": {
         "mention": "m_gh_umar_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_gh_umarq",
+      "unit": "siyar-v6-92-ghudayf-ibn-al-harith",
+      "ordinal": 8,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_gh_umarq_frame"
+      ],
+      "origin": {
+        "mention": "m_gh_umarq_by"
       },
       "chainState": "DEFERRED"
     }
@@ -260,6 +324,14 @@
         "sp_gh_name"
       ],
       "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_gh_variant",
+      "report": "r_gh_variant",
+      "spans": [
+        "sp_gh_variant"
+      ],
+      "role": "TRANSMITTED"
     },
     {
       "id": "st_gh_kunya_st",
@@ -324,6 +396,14 @@
         "sp_gh_umar"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_gh_umarq",
+      "report": "r_gh_umarq",
+      "spans": [
+        "sp_gh_umarq"
+      ],
+      "role": "TRANSMITTED"
     }
   ],
   "mentions": [
@@ -340,6 +420,13 @@
       "exact": "الحَارِثِ",
       "occurrence": 1,
       "role": "REFERENT"
+    },
+    {
+      "id": "m_gh_variant_by",
+      "parent": "sp_gh_variant_frame",
+      "exact": "وَقِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
     },
     {
       "id": "m_gh_s",
@@ -396,6 +483,20 @@
       "exact": "غُضَيْفِ بنِ الحَارِثِ",
       "occurrence": 1,
       "role": "SPEAKER"
+    },
+    {
+      "id": "m_gh_umarq_by",
+      "parent": "sp_gh_umarq_frame",
+      "exact": "عُمَرَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_gh_umarq_s",
+      "parent": "sp_gh_umarq",
+      "exact": "غُضَيْفٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
     }
   ],
   "identifications": [
@@ -482,6 +583,18 @@
         }
       ],
       "status": "PROPOSED"
+    },
+    {
+      "id": "i_gh_umarq_s",
+      "mention": "m_gh_umarq_s",
+      "agent": "ghudayf-ibn-al-harith",
+      "basis": [
+        {
+          "span": "sp_gh_name",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
     }
   ],
   "assertions": [
@@ -496,6 +609,20 @@
       },
       "restsOn": [
         "st_gh_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_gh_variant",
+      "subject": "m_gh",
+      "predicate": "name.variant",
+      "value": {
+        "spans": [
+          "sp_gh_variant"
+        ]
+      },
+      "restsOn": [
+        "st_gh_variant"
       ],
       "status": "PROPOSED"
     },
@@ -570,15 +697,15 @@
     },
     {
       "id": "a_gh_v_umar",
-      "subject": "m_gh_umar_by",
+      "subject": "m_gh_umarq_s",
       "predicate": "virtue",
       "value": {
         "spans": [
-          "sp_gh_umar"
+          "sp_gh_umarq"
         ]
       },
       "restsOn": [
-        "st_gh_umar"
+        "st_gh_umarq"
       ],
       "status": "PROPOSED"
     }

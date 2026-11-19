@@ -96,6 +96,14 @@
       "prefix": "وَقَدْ غَزَا "
     },
     {
+      "id": "sp_ib_qarn_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "431",
+      "layer": "MAIN",
+      "exact": "أَرَانِي عَبْدُ اللهِ بنُ بُسْرٍ شَامَةً فِي قَرْنِهِ، فَوَضَعتُ أُصْبُعِي عَلَيْهَا، فَقَالَ"
+    },
+    {
       "id": "sp_ib_qarn_isnad",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
@@ -105,14 +113,6 @@
     },
     {
       "id": "sp_ib_qarn",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 6,
-      "page": "431",
-      "layer": "MAIN",
-      "exact": "أَرَانِي عَبْدُ اللهِ بنُ بُسْرٍ شَامَةً فِي قَرْنِهِ، فَوَضَعتُ أُصْبُعِي عَلَيْهَا، فَقَالَ"
-    },
-    {
-      "id": "sp_ib_qarn_1",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "431",
@@ -170,14 +170,6 @@
       "layer": "MAIN",
       "exact": "سَنَةَ ثَمَانٍ وَثَمَانِيْنَ",
       "prefix": "مَاتَ "
-    },
-    {
-      "id": "sp_ib_waqidi_v",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 6,
-      "page": "432",
-      "layer": "MAIN",
-      "exact": "وَهُوَ آخِرُ مَنْ مَاتَ مِنَ الصَّحَابَةِ بِالشَّامِ"
     },
     {
       "id": "sp_ib_waqidi_age",
@@ -239,6 +231,9 @@
       "unit": "siyar-v6-77-ibn-busr",
       "ordinal": 2,
       "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ib_qarn_frame"
+      ],
       "isnadSpan": "sp_ib_qarn_isnad",
       "origin": {
         "mention": "m_ib_qarn_by"
@@ -319,8 +314,7 @@
       "id": "st_ib_qarn",
       "report": "r_ib_qarn",
       "spans": [
-        "sp_ib_qarn",
-        "sp_ib_qarn_1"
+        "sp_ib_qarn"
       ],
       "role": "TRANSMITTED"
     },
@@ -382,7 +376,7 @@
     {
       "id": "m_ib_samma",
       "parent": "sp_ib_siblings",
-      "exact": "وَالصَّمَّاءِ",
+      "exact": "الصَّمَّاءِ",
       "occurrence": 1,
       "role": "REFERENT"
     },
@@ -395,21 +389,14 @@
     },
     {
       "id": "m_ib_qarn_by",
-      "parent": "sp_ib_qarn_isnad",
-      "exact": "الحَسَنُ بنُ أَيُّوْبَ الحَضْرَمِيُّ",
+      "parent": "sp_ib_qarn_frame",
+      "exact": "عَبْدُ اللهِ بنُ بُسْرٍ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
     {
-      "id": "m_ib_q",
-      "parent": "sp_ib_qarn",
-      "exact": "عَبْدُ اللهِ بنُ بُسْرٍ",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
       "id": "m_ib_prophet",
-      "parent": "sp_ib_qarn_1",
+      "parent": "sp_ib_qarn",
       "exact": "رَسُوْلُ اللهِ",
       "occurrence": 1,
       "role": "REFERENT"
@@ -511,7 +498,7 @@
     },
     {
       "id": "i_ib_q",
-      "mention": "m_ib_q",
+      "mention": "m_ib_qarn_by",
       "agent": "abdullah-ibn-busr",
       "basis": [
         {
@@ -628,11 +615,11 @@
     },
     {
       "id": "a_ib_v_qarn",
-      "subject": "m_ib_q",
+      "subject": "m_ib_qarn_by",
       "predicate": "virtue",
       "value": {
         "spans": [
-          "sp_ib_qarn_1"
+          "sp_ib_qarn"
         ]
       },
       "restsOn": [
@@ -642,7 +629,7 @@
     },
     {
       "id": "a_ib_comp",
-      "subject": "m_ib_q",
+      "subject": "m_ib_qarn_by",
       "predicate": "COMPANION_OF",
       "value": {
         "object": "m_ib_prophet"
@@ -677,20 +664,6 @@
         "parsed": 94,
         "spans": [
           "sp_ib_waqidi_age"
-        ]
-      },
-      "restsOn": [
-        "st_ib_waqidi"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_ib_v_sham",
-      "subject": "m_ib",
-      "predicate": "virtue",
-      "value": {
-        "spans": [
-          "sp_ib_waqidi_v"
         ]
       },
       "restsOn": [

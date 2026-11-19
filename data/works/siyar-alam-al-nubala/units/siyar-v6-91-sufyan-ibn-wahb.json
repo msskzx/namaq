@@ -95,6 +95,30 @@
       "exact": "وَأَمَّا ابْنُ سَعْدٍ، وَالبُخَارِيُّ، فَذَكَرَاهُ فِي التَّابِعِيْنَ - فَاللهُ أَعْلَمُ -"
     },
     {
+      "id": "sp_sw_barqi2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "453",
+      "layer": "MAIN",
+      "exact": "عَدَّهُ فِي الصَّحَابَةِ: أَحْمَدُ بنُ البَرْقِيِّ، وَعَبْدُ الرَّحْمَنِ بنُ أَبِي حَاتِمٍ، وَابْنُ يُوْنُسَ، وَغَيْرُهُم"
+    },
+    {
+      "id": "sp_sw_barqi3",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "453",
+      "layer": "MAIN",
+      "exact": "عَدَّهُ فِي الصَّحَابَةِ: أَحْمَدُ بنُ البَرْقِيِّ، وَعَبْدُ الرَّحْمَنِ بنُ أَبِي حَاتِمٍ، وَابْنُ يُوْنُسَ، وَغَيْرُهُم"
+    },
+    {
+      "id": "sp_sw_tabii2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "453",
+      "layer": "MAIN",
+      "exact": "وَأَمَّا ابْنُ سَعْدٍ، وَالبُخَارِيُّ، فَذَكَرَاهُ فِي التَّابِعِيْنَ - فَاللهُ أَعْلَمُ -"
+    },
+    {
       "id": "sp_sw_death",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
@@ -145,9 +169,39 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_sw_death",
+      "id": "r_sw_barqi2",
       "unit": "siyar-v6-91-sufyan-ibn-wahb",
       "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "origin": {
+        "mention": "m_sw_barqi2_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sw_barqi3",
+      "unit": "siyar-v6-91-sufyan-ibn-wahb",
+      "ordinal": 5,
+      "voice": "TRANSMITTED",
+      "origin": {
+        "mention": "m_sw_barqi3_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sw_tabii2",
+      "unit": "siyar-v6-91-sufyan-ibn-wahb",
+      "ordinal": 6,
+      "voice": "TRANSMITTED",
+      "origin": {
+        "mention": "m_sw_tabii2_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sw_death",
+      "unit": "siyar-v6-91-sufyan-ibn-wahb",
+      "ordinal": 7,
       "voice": "TRANSMITTED",
       "origin": {
         "mention": "m_sw_death_by"
@@ -197,6 +251,30 @@
       "role": "TRANSMITTED"
     },
     {
+      "id": "st_sw_barqi2",
+      "report": "r_sw_barqi2",
+      "spans": [
+        "sp_sw_barqi2"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_sw_barqi3",
+      "report": "r_sw_barqi3",
+      "spans": [
+        "sp_sw_barqi3"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_sw_tabii2",
+      "report": "r_sw_tabii2",
+      "spans": [
+        "sp_sw_tabii2"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
       "id": "st_sw_death",
       "report": "r_sw_death",
       "spans": [
@@ -238,6 +316,27 @@
       "id": "m_sw_tabii_by",
       "parent": "sp_sw_tabii",
       "exact": "ابْنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sw_barqi2_by",
+      "parent": "sp_sw_barqi2",
+      "exact": "عَبْدُ الرَّحْمَنِ بنُ أَبِي حَاتِمٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sw_barqi3_by",
+      "parent": "sp_sw_barqi3",
+      "exact": "ابْنُ يُوْنُسَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sw_tabii2_by",
+      "parent": "sp_sw_tabii2",
+      "exact": "البُخَارِيُّ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
@@ -354,7 +453,10 @@
         "st_sw_sahabi",
         "st_sw_hadith",
         "st_sw_barqi",
-        "st_sw_tabii"
+        "st_sw_barqi2",
+        "st_sw_barqi3",
+        "st_sw_tabii",
+        "st_sw_tabii2"
       ],
       "status": "DISPUTED"
     },

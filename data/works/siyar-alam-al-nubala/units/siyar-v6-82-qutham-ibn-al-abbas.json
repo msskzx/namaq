@@ -529,21 +529,21 @@
     {
       "id": "m_qa_abdullah",
       "parent": "sp_qa_brothers",
-      "exact": "وَعَبْدِ اللهِ",
+      "exact": "َعَبْدِ اللهِ",
       "occurrence": 1,
       "role": "REFERENT"
     },
     {
       "id": "m_qa_ubaydullah",
       "parent": "sp_qa_brothers",
-      "exact": "وَعُبَيْدِ اللهِ",
+      "exact": "َعُبَيْدِ اللهِ",
       "occurrence": 1,
       "role": "REFERENT"
     },
     {
       "id": "m_qa_kathir",
       "parent": "sp_qa_brothers",
-      "exact": "وَكَثِيْرٍ",
+      "exact": "َكَثِيْرٍ",
       "occurrence": 1,
       "role": "REFERENT"
     },

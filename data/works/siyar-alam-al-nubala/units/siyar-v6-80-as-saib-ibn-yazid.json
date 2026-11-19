@@ -173,6 +173,38 @@
       "prefix": "تُوُفِّيَ "
     },
     {
+      "id": "sp_sy_d91m_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "438",
+      "layer": "MAIN",
+      "exact": "وَقَالَ الوَاقِدِيُّ، وَأَبُو مُسْهِرٍ، وَجَمَاعَةٌ"
+    },
+    {
+      "id": "sp_sy_d91m",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "438",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ سَنَةَ إِحْدَى وَتِسْعِيْنَ"
+    },
+    {
+      "id": "sp_sy_d91j_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "438",
+      "layer": "MAIN",
+      "exact": "وَقَالَ الوَاقِدِيُّ، وَأَبُو مُسْهِرٍ، وَجَمَاعَةٌ"
+    },
+    {
+      "id": "sp_sy_d91j",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "438",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ سَنَةَ إِحْدَى وَتِسْعِيْنَ"
+    },
+    {
       "id": "sp_sy_d80_frame",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
@@ -197,6 +229,15 @@
       "layer": "MAIN",
       "exact": "سَنَةَ ثَمَانِيْنَ",
       "prefix": "مَاتَ "
+    },
+    {
+      "id": "sp_sy_shadhdha",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "439",
+      "layer": "MAIN",
+      "exact": "وَشَذَّ",
+      "suffix": ": الهَيْثَمُ"
     }
   ],
   "reports": [
@@ -251,9 +292,35 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_sy_d80",
+      "id": "r_sy_d91m",
       "unit": "siyar-v6-80-as-saib-ibn-yazid",
       "ordinal": 5,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_sy_d91m_frame"
+      ],
+      "origin": {
+        "mention": "m_sy_d91m_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sy_d91j",
+      "unit": "siyar-v6-80-as-saib-ibn-yazid",
+      "ordinal": 6,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_sy_d91j_frame"
+      ],
+      "origin": {
+        "mention": "m_sy_d91j_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sy_d80",
+      "unit": "siyar-v6-80-as-saib-ibn-yazid",
+      "ordinal": 7,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_sy_d80_frame"
@@ -322,12 +389,36 @@
       "role": "TRANSMITTED"
     },
     {
+      "id": "st_sy_d91m",
+      "report": "r_sy_d91m",
+      "spans": [
+        "sp_sy_d91m"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_sy_d91j",
+      "report": "r_sy_d91j",
+      "spans": [
+        "sp_sy_d91j"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
       "id": "st_sy_d80",
       "report": "r_sy_d80",
       "spans": [
         "sp_sy_d80"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_sy_shadhdha",
+      "report": "r_sy0",
+      "spans": [
+        "sp_sy_shadhdha"
+      ],
+      "role": "AUTHOR_REPORT"
     }
   ],
   "mentions": [
@@ -384,6 +475,20 @@
       "id": "m_sy_d91_by",
       "parent": "sp_sy_d91_frame",
       "exact": "الوَاقِدِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sy_d91m_by",
+      "parent": "sp_sy_d91m_frame",
+      "exact": "أَبُو مُسْهِرٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sy_d91j_by",
+      "parent": "sp_sy_d91j_frame",
+      "exact": "جَمَاعَةٌ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
@@ -604,7 +709,9 @@
         ]
       },
       "restsOn": [
-        "st_sy_d91"
+        "st_sy_d91",
+        "st_sy_d91m",
+        "st_sy_d91j"
       ],
       "status": "PROPOSED"
     },
@@ -619,9 +726,10 @@
         ]
       },
       "restsOn": [
-        "st_sy_d80"
+        "st_sy_d80",
+        "st_sy_shadhdha"
       ],
-      "status": "PROPOSED"
+      "status": "DISPUTED"
     }
   ]
 }

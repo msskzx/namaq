@@ -68,6 +68,31 @@
       "layer": "MAIN",
       "exact": "يَوْمَ اليَرْمُوْكِ",
       "prefix": "أَنَّهُ شَهِدَ "
+    },
+    {
+      "id": "sp_jh_sahabi",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "439",
+      "layer": "MAIN",
+      "exact": "صَحَابِيٌّ صَغِيْرٌ، لَهُ رُؤْيَةٌ بِلاَ رِوَايَةٍ"
+    },
+    {
+      "id": "sp_jh_np",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "439",
+      "layer": "MAIN",
+      "exact": "النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ",
+      "prefix": "أَهْدَرَ "
+    },
+    {
+      "id": "sp_jh_np_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "439",
+      "layer": "MAIN",
+      "exact": "مِمَّنْ أَهْدَرَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - دَمَهُ"
     }
   ],
   "reports": [
@@ -112,6 +137,14 @@
         "sp_jh_yarmuk"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_jh_sahabi",
+      "report": "r_jh0",
+      "spans": [
+        "sp_jh_sahabi"
+      ],
+      "role": "AUTHOR_REPORT"
     }
   ],
   "mentions": [
@@ -140,6 +173,13 @@
       "id": "m_jh_yarmuk",
       "parent": "sp_jh_yarmuk",
       "exact": "اليَرْمُوْكِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_jh_prophet",
+      "parent": "sp_jh_np_w",
+      "exact": "النَّبِيُّ",
       "occurrence": 1,
       "role": "REFERENT"
     }
@@ -188,6 +228,18 @@
       "basis": [
         {
           "span": "sp_jh_yarmuk_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_jh_prophet",
+      "mention": "m_jh_prophet",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_jh_np",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -245,6 +297,18 @@
       },
       "restsOn": [
         "st_jh_yarmuk"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_jh_comp",
+      "subject": "m_jh",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_jh_prophet"
+      },
+      "restsOn": [
+        "st_jh_sahabi"
       ],
       "status": "PROPOSED"
     }

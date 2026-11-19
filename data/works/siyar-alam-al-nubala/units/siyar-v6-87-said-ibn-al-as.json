@@ -255,6 +255,34 @@
       "layer": "MAIN",
       "exact": "ثَمَانٍ وَخَمْسِيْنَ",
       "prefix": "سَبْعٍ، أَوْ "
+    },
+    {
+      "id": "sp_sa_abumashar_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "448",
+      "layer": "MAIN",
+      "exact": "وَقَالَ أَبُو مَعْشَرٍ",
+      "suffix": ": سَنَةَ"
+    },
+    {
+      "id": "sp_sa_abumashar",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "448",
+      "layer": "MAIN",
+      "exact": "سَنَةَ ثَمَانٍ",
+      "prefix": "أَبُو مَعْشَرٍ: "
+    },
+    {
+      "id": "sp_sa_musaddad_57",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "448",
+      "layer": "MAIN",
+      "exact": "سَنَةَ سَبْعٍ",
+      "prefix": "أَبِي هُرَيْرَةَ ",
+      "suffix": "، أَوْ"
     }
   ],
   "reports": [
@@ -328,6 +356,19 @@
       ],
       "origin": {
         "mention": "m_sa_musaddad_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sa_abumashar",
+      "unit": "siyar-v6-87-said-ibn-al-as",
+      "ordinal": 7,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_sa_abumashar_frame"
+      ],
+      "origin": {
+        "mention": "m_sa_abumashar_by"
       },
       "chainState": "DEFERRED"
     }
@@ -431,6 +472,14 @@
         "sp_sa_musaddad"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_sa_abumashar",
+      "report": "r_sa_abumashar",
+      "spans": [
+        "sp_sa_abumashar"
+      ],
+      "role": "TRANSMITTED"
     }
   ],
   "mentions": [
@@ -447,13 +496,6 @@
       "exact": "العَاصِ",
       "occurrence": 1,
       "role": "REFERENT"
-    },
-    {
-      "id": "m_sa_s",
-      "parent": "sp_sa_sons",
-      "exact": "وَالِدُ",
-      "occurrence": 1,
-      "role": "SUBJECT"
     },
     {
       "id": "m_sa_c_amr",
@@ -524,6 +566,13 @@
       "exact": "مُسَدَّدٌ",
       "occurrence": 1,
       "role": "SPEAKER"
+    },
+    {
+      "id": "m_sa_abumashar_by",
+      "parent": "sp_sa_abumashar_frame",
+      "exact": "أَبُو مَعْشَرٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
     }
   ],
   "identifications": [
@@ -547,18 +596,6 @@
         {
           "span": "sp_sa_father_n",
           "role": "NASAB"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_sa_s",
-      "mention": "m_sa_s",
-      "agent": "said-ibn-al-as-ibn-said",
-      "basis": [
-        {
-          "span": "sp_sa_heading",
-          "role": "SAME_WORK_EXPLICIT"
         }
       ],
       "status": "PROPOSED"
@@ -673,7 +710,7 @@
       "subject": "m_sa_c_amr",
       "predicate": "CHILD_OF",
       "value": {
-        "object": "m_sa_s"
+        "object": "m_sa"
       },
       "restsOn": [
         "st_sa_sons"
@@ -685,7 +722,7 @@
       "subject": "m_sa_c_yahya",
       "predicate": "CHILD_OF",
       "value": {
-        "object": "m_sa_s"
+        "object": "m_sa"
       },
       "restsOn": [
         "st_sa_sons"
@@ -817,6 +854,23 @@
         "spans": [
           "sp_sa_musaddad_y"
         ]
+      },
+      "restsOn": [
+        "st_sa_musaddad",
+        "st_sa_abumashar"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sa_d57",
+      "subject": "m_sa",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 57,
+        "spans": [
+          "sp_sa_musaddad_57"
+        ],
+        "decadeFrom": "sp_sa_musaddad_y"
       },
       "restsOn": [
         "st_sa_musaddad"

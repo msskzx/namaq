@@ -188,14 +188,14 @@
     {
       "id": "m_ma_c_abbas",
       "parent": "sp_ma_kids_a",
-      "exact": "وَعَبَّاسٌ",
+      "exact": "َعَبَّاسٌ",
       "occurrence": 1,
       "role": "SUBJECT"
     },
     {
       "id": "m_ma_c_maymunah",
       "parent": "sp_ma_kids_a",
-      "exact": "وَمَيْمُوْنَةُ",
+      "exact": "َمَيْمُوْنَةُ",
       "occurrence": 1,
       "role": "SUBJECT"
     }

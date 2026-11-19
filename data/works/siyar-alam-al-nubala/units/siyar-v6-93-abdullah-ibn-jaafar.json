@@ -288,6 +288,22 @@
       "prefix": "مَاتَ فِي "
     },
     {
+      "id": "sp_aj_d80m_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "462",
+      "layer": "MAIN",
+      "exact": "قَالَ الوَاقِدِيُّ، وَمُصْعَبٌ الزُّبَيْرِيُّ"
+    },
+    {
+      "id": "sp_aj_d80m",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "462",
+      "layer": "MAIN",
+      "exact": "مَاتَ فِي سَنَةِ ثَمَانِيْنَ"
+    },
+    {
       "id": "sp_aj_d85_frame",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
@@ -433,9 +449,22 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_aj_d85",
+      "id": "r_aj_d80m",
       "unit": "siyar-v6-93-abdullah-ibn-jaafar",
       "ordinal": 8,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_aj_d80m_frame"
+      ],
+      "origin": {
+        "mention": "m_aj_d80m_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_aj_d85",
+      "unit": "siyar-v6-93-abdullah-ibn-jaafar",
+      "ordinal": 9,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_aj_d85_frame"
@@ -448,7 +477,7 @@
     {
       "id": "r_aj_d84",
       "unit": "siyar-v6-93-abdullah-ibn-jaafar",
-      "ordinal": 9,
+      "ordinal": 10,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_aj_d84_frame"
@@ -461,7 +490,7 @@
     {
       "id": "r_aj_d90",
       "unit": "siyar-v6-93-abdullah-ibn-jaafar",
-      "ordinal": 10,
+      "ordinal": 11,
       "voice": "REPORTED_ANONYMOUS",
       "origin": {
         "mention": "m_aj_d90_by"
@@ -585,6 +614,14 @@
       "role": "TRANSMITTED"
     },
     {
+      "id": "st_aj_d80m",
+      "report": "r_aj_d80m",
+      "spans": [
+        "sp_aj_d80m"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
       "id": "st_aj_d85",
       "report": "r_aj_d85",
       "spans": [
@@ -662,14 +699,14 @@
     {
       "id": "m_aj_c_ishaq",
       "parent": "sp_aj_sons",
-      "exact": "وَإِسْحَاقُ",
+      "exact": "َإِسْحَاقُ",
       "occurrence": 1,
       "role": "SUBJECT"
     },
     {
       "id": "m_aj_c_muawiyah",
       "parent": "sp_aj_sons",
-      "exact": "وَمُعَاوِيَةُ",
+      "exact": "َمُعَاوِيَةُ",
       "occurrence": 1,
       "role": "SUBJECT"
     },
@@ -690,14 +727,14 @@
     {
       "id": "m_aj_awn",
       "parent": "sp_aj_musab",
-      "exact": "وَعَوْناً",
+      "exact": "عَوْن",
       "occurrence": 1,
       "role": "REFERENT"
     },
     {
       "id": "m_aj_muhammad",
       "parent": "sp_aj_musab",
-      "exact": "وَمُحَمَّداً",
+      "exact": "مُحَمَّد",
       "occurrence": 1,
       "role": "REFERENT"
     },
@@ -747,6 +784,13 @@
       "id": "m_aj_d80_by",
       "parent": "sp_aj_d80_frame",
       "exact": "الوَاقِدِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_aj_d80m_by",
+      "parent": "sp_aj_d80m_frame",
+      "exact": "مُصْعَبٌ الزُّبَيْرِيُّ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
@@ -1227,7 +1271,8 @@
         ]
       },
       "restsOn": [
-        "st_aj_d80"
+        "st_aj_d80",
+        "st_aj_d80m"
       ],
       "status": "PROPOSED"
     },
@@ -1257,7 +1302,8 @@
         ]
       },
       "restsOn": [
-        "st_aj_d84"
+        "st_aj_d84",
+        "st_aj_d85"
       ],
       "status": "PROPOSED"
     },
