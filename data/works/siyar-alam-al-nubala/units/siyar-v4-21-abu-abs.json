@@ -1,0 +1,395 @@
+{
+  "unit": {
+    "id": "siyar-v4-21-abu-abs",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٢١"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_aa_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "188",
+      "layer": "MAIN",
+      "exact": "٢١ - أَبُو عَبْسٍ بنُ جَبْرِ بنِ عَمْرٍو الأَوْسِيُّ"
+    },
+    {
+      "id": "sp_aa1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "188",
+      "layer": "MAIN",
+      "exact": "أَبُو عَبْسٍ بنُ جَبْرِ بنِ عَمْرٍو",
+      "prefix": "٢١ - "
+    },
+    {
+      "id": "sp_aa2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "188",
+      "layer": "MAIN",
+      "exact": "ابْنِ زَيْدِ بنِ جُشَمَ بنِ حَارِثَةَ بنِ الحَارِثِ",
+      "suffix": " الأَوْسِيُّ. وَاسْمُهُ"
+    },
+    {
+      "id": "sp_aa_ism1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "188",
+      "layer": "MAIN",
+      "exact": "وَاسْمُهُ",
+      "prefix": "الأَوْسِيُّ. "
+    },
+    {
+      "id": "sp_aa_ism2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "189",
+      "layer": "MAIN",
+      "exact": "عَبْدُ الرَّحْمَنِ",
+      "suffix": ". بَدْرِيٌّ"
+    },
+    {
+      "id": "sp_aa_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "188",
+      "layer": "MAIN",
+      "exact": "أَبُو عَبْسٍ بنُ",
+      "prefix": "٢١ - "
+    },
+    {
+      "id": "sp_aa_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "188",
+      "layer": "MAIN",
+      "exact": "أَبُو عَبْسٍ",
+      "prefix": "٢١ - "
+    },
+    {
+      "id": "sp_aa_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "188",
+      "layer": "MAIN",
+      "exact": "جَبْرِ بنِ عَمْرٍو",
+      "prefix": "أَبُو عَبْسٍ بنُ "
+    },
+    {
+      "id": "sp_aa_badr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "189",
+      "layer": "MAIN",
+      "exact": "شَهِدَ بَدْراً وَالمَشَاهِدَ، وَكَانَ فِيْمَنْ قَتَلَ كَعْبَ بنَ الأَشْرَفِ"
+    },
+    {
+      "id": "sp_aa_badr_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "189",
+      "layer": "MAIN",
+      "exact": "بَدْراً وَالمَشَاهِدَ",
+      "prefix": "شَهِدَ "
+    },
+    {
+      "id": "sp_aa_kaab_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "189",
+      "layer": "MAIN",
+      "exact": "قَتَلَ كَعْبَ بنَ الأَشْرَفِ",
+      "prefix": "فِيْمَنْ "
+    },
+    {
+      "id": "sp_aa_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "189",
+      "layer": "MAIN",
+      "exact": "مَاتَ بِالمَدِيْنَةِ سَنَةَ أَرْبَعٍ وَثَلاَثِيْنَ، وَصَلَّى عَلَيْهِ عُثْمَانُ، وَعَاشَ سَبْعِيْنَ سَنَةً"
+    },
+    {
+      "id": "sp_aa_place",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "189",
+      "layer": "MAIN",
+      "exact": "المَدِيْنَةِ",
+      "prefix": "مَاتَ بِ",
+      "suffix": " سَنَةَ أَرْبَعٍ"
+    },
+    {
+      "id": "sp_aa_year",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "189",
+      "layer": "MAIN",
+      "exact": "سَنَةَ أَرْبَعٍ وَثَلاَثِيْنَ",
+      "prefix": "مَاتَ بِالمَدِيْنَةِ "
+    },
+    {
+      "id": "sp_aa_age",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "189",
+      "layer": "MAIN",
+      "exact": "وَعَاشَ سَبْعِيْنَ سَنَةً",
+      "prefix": "عُثْمَانُ، "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_aa0",
+      "unit": "siyar-v4-21-abu-abs",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_aa_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_aa_name",
+      "report": "r_aa0",
+      "spans": [
+        "sp_aa1",
+        "sp_aa2",
+        "sp_aa_ism1",
+        "sp_aa_ism2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_aa_badr",
+      "report": "r_aa0",
+      "spans": [
+        "sp_aa_badr"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_aa_death",
+      "report": "r_aa0",
+      "spans": [
+        "sp_aa_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_aa",
+      "parent": "sp_aa1",
+      "exact": "أَبُو عَبْسٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_aa_father",
+      "parent": "sp_aa1",
+      "exact": "جَبْرِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aa_badr",
+      "parent": "sp_aa_badr",
+      "exact": "بَدْراً",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aa_kaab",
+      "parent": "sp_aa_badr",
+      "exact": "قَتَلَ كَعْبَ بنَ الأَشْرَفِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_aa",
+      "mention": "m_aa",
+      "agent": "abu-abs",
+      "basis": [
+        {
+          "span": "sp_aa_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aa_father",
+      "mention": "m_aa_father",
+      "agent": "jabr-ibn-amr",
+      "basis": [
+        {
+          "span": "sp_aa_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aa_badr",
+      "mention": "m_aa_badr",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_aa_badr_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aa_kaab",
+      "mention": "m_aa_kaab",
+      "event": "killing-of-kaab-ibn-al-ashraf",
+      "basis": [
+        {
+          "span": "sp_aa_kaab_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_aa_name",
+      "subject": "m_aa",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_aa1",
+          "sp_aa2",
+          "sp_aa_ism1",
+          "sp_aa_ism2"
+        ]
+      },
+      "restsOn": [
+        "st_aa_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aa_sex",
+      "subject": "m_aa",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_aa_sex"
+        ]
+      },
+      "restsOn": [
+        "st_aa_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aa_kunya",
+      "subject": "m_aa",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_aa_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_aa_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aa_father",
+      "subject": "m_aa",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_aa_father"
+      },
+      "restsOn": [
+        "st_aa_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aa_badr",
+      "subject": "m_aa",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_aa_badr"
+      },
+      "restsOn": [
+        "st_aa_badr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aa_kaab",
+      "subject": "m_aa",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_aa_kaab"
+      },
+      "restsOn": [
+        "st_aa_badr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aa_place",
+      "subject": "m_aa",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "sp_aa_place"
+        ]
+      },
+      "restsOn": [
+        "st_aa_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aa_year",
+      "subject": "m_aa",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 34,
+        "spans": [
+          "sp_aa_year"
+        ]
+      },
+      "restsOn": [
+        "st_aa_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aa_age",
+      "subject": "m_aa",
+      "predicate": "died.age",
+      "value": {
+        "parsed": 70,
+        "spans": [
+          "sp_aa_age"
+        ]
+      },
+      "restsOn": [
+        "st_aa_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
