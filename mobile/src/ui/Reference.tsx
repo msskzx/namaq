@@ -6,7 +6,7 @@ import ExternalLink from '@/ui/ExternalLink';
 import type { Palette } from '@/lib/theme';
 import { Tap } from '@/ui/Tap';
 
-/** A quote from a book: its words, with the page it cites as a link. A quote with no page is our own note on the ones above. */
+/** A quote from a book: its words, with the page it cites as a link (the page alone when it has no words). A quote with no page is our own note on the ones above. */
 export type Quote = { text: string; cite?: string; url?: string };
 
 /**
@@ -25,9 +25,10 @@ export default function Reference({ title, quotes, links = [], palette }: { titl
       </Tap>
       {open && quotes.map((quote, i) => {
         const style = { color: i ? palette.muted : palette.ink, fontSize: i ? 13 : 15, lineHeight: i ? 21 : 25, textAlign: 'right' as const };
+        const key = `${i}:${quote.text}`;
         return quote.url
-          ? <Text key={quote.text} style={style}>«{quote.text}» <ExternalLink url={quote.url} color={palette.muted} size={13}>{quote.cite}</ExternalLink></Text>
-          : <Text key={quote.text} style={style}>{quote.text}</Text>;
+          ? <Text key={key} style={style}>{quote.text ? `«${quote.text}» ` : ''}<ExternalLink url={quote.url} color={palette.muted} size={13}>{quote.cite}</ExternalLink></Text>
+          : <Text key={key} style={style}>{quote.text}</Text>;
       })}
       {open && links.map(link => <ExternalLink key={link.url} url={link.url} color={palette.accent} size={14} style={{ textAlign: 'right' }}>{link.label}</ExternalLink>)}
     </View>

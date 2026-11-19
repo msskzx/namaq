@@ -15,10 +15,12 @@ import { byDifficulty, levelOf, treeScore, type Difficulty } from './difficulty'
 import { COMPARE_QUIZ, compareLabel, type CompareAsk, type CompareLine, type Tone } from './compareAnswers';
 import type { ChoiceKind, ChoiceQuestion, ChoiceScope } from './choiceKinds';
 import { shuffle, type Random } from './random';
+import { citationSource, mushafSource, uniqueSources, type QuizSource } from './sources';
+import type { Citation } from '../quran/mutashabih/types';
 
 
 /** A card asked one way: the side given whole and the blanks on the other. */
-type Asked = { card: PairCard; ask: CompareAsk; level: Difficulty };
+type Asked = { card: PairCard; ask: CompareAsk; level: Difficulty; sources: QuizSource[] };
 let built: { ayat: Map<string, BranchAyah>; asks: Asked[] } | undefined;
 
 /** Each side's words with their tones, as a compare card colours them: shared runs by their likeness, parted words by their mark. */
@@ -55,15 +57,27 @@ function index() {
   const asks: Asked[] = [];
   // Only two ayat the mutashabih books set side by side, in one of their entries (owner, 2026-11-19): never our own «تدبّر» pairs.
   const together = new Set(branchInventory({ categories: QUIZ_CATEGORIES }, null).flatMap(piece => piece.keys.flatMap(a => piece.keys.map(b => `${a}|${b}`))));
+  // The books' entries that set the two side by side: those naming both ayat, else every entry of the piece that holds them.
+  const cited = new Map<string, Citation[]>();
+  for (const piece of branchInventory({ categories: QUIZ_CATEGORIES }, null)) {
+    const all = piece.group?.citations ?? [];
+    for (const a of piece.keys) for (const b of piece.keys) {
+      const both = all.filter(citation => citation.places.includes(a) && citation.places.includes(b));
+      cited.set(`${a}|${b}`, [...cited.get(`${a}|${b}`) ?? [], ...(both.length ? both : all)]);
+    }
+  }
   for (const pair of stored.listed) for (const card of shownCards(stored, words, pair.a, pair.b)) {
     if (card.sides.some(side => side.ayat.length !== 1) || !together.has(`${card.sides[0].surah}:${card.sides[0].ayat[0].number}|${card.sides[1].surah}:${card.sides[1].ayat[0].number}`)) continue;
     if (card.many || card.pairs) continue;
     const strands = braidOf(card.sides);
     const [a, b] = lines(card, strands);
     const level = levelOf(treeScore([a.words, b.words]));
+    const books = uniqueSources((cited.get(`${a.key}|${b.key}`) ?? []).map(citationSource));
     ([0, 1] as const).forEach(side => {
       const blanks = blanksOf(strands, side);
-      if (blanks.length) asks.push({ card, level, ask: { card: card.id, shown: side ? a : b, asked: side ? b : a, blanks } });
+      const asked = side ? b : a;
+      // The words typed are the mushaf's; the books are why the two are asked together.
+      if (blanks.length) asks.push({ card, level, sources: [mushafSource(asked.key, ayat.get(asked.key)?.page), ...books], ask: { card: card.id, shown: side ? a : b, asked, blanks } });
     });
   }
   return (built = { ayat, asks });
@@ -78,7 +92,7 @@ function candidates(scope: ChoiceScope, random: Random): Asked[] {
   return shuffle([...byCard.values()], random).map(ways => ways[Math.floor(random() * ways.length)]);
 }
 
-function question({ ask }: Asked): ChoiceQuestion {
+function question({ ask, sources }: Asked): ChoiceQuestion {
   return {
     key: `${COMPARE_QUIZ}:${ask.card}:${ask.asked.key}`,
     family: COMPARE_QUIZ,
@@ -87,6 +101,7 @@ function question({ ask }: Asked): ChoiceQuestion {
     // Typed questions are scored by their blanks (compareAnswers.ts); the answer names them, so a check that got every one right can give it.
     correctAnswer: ask.blanks.map(([from, to]) => ask.asked.words.slice(from, to).join(' ')).join(' … '),
     compare: ask,
+    sources,
     evidence: { claimKeys: [] },
   };
 }

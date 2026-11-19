@@ -9,6 +9,7 @@ import { byDifficulty, HARD_FROM, wordShare, type Difficulty } from './difficult
 import { shuffle, type Random } from './random';
 import { quizTrees } from './treeScope';
 import type { ChoiceKind, ChoiceQuestion, ChoiceScope } from './choiceKinds';
+import { mushafSource } from './sources';
 import { SURAH_NAMES } from '../quran/surahNames';
 
 export const WHICH_SURAH = 'SURAH';
@@ -113,6 +114,7 @@ function question(ayah: BranchAyah, alike: Alike[], difficulty: Difficulty, rand
     ayahKey: ayah.key,
     page: { title: 'hidden' },
     ...(Object.keys(closest).length && { alike: closest }),
+    sources: [mushafSource(ayah.key, ayah.page)],
     evidence: { claimKeys: [] },
   };
 }

@@ -33,7 +33,7 @@ describe('a card kept as its matrix only', () => {
     const piece = branchInventory({}, null).find(item => item.id === 'cmp:138fsj406mr5cc');
     expect(piece).toBeDefined();
     expect(matrixOnly(piece!)).toBe(true);
-    expect(quizTrees().includes(piece!.phrase)).toBe(false);
+    expect(quizTrees().some(tree => tree.id === piece!.phrase.id)).toBe(false);
     expect(quizTrees().some(tree => tree.text === piece!.phrase.text)).toBe(false);
   });
 });

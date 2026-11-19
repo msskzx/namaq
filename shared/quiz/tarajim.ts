@@ -4,7 +4,8 @@
 // page is the way to check it.
 import peopleJson from '../data/tarajim/people.json';
 import virtueSkip from '../data/tarajim/virtueQuizSkip.json';
-import { pageLabel, sayer, sayerLine, type AppPerson } from '../tarajim';
+import { pageSources, sayer, sayerLine, type AppPerson } from '../tarajim';
+import { uniqueSources } from './sources';
 import { kunyaFacts, laqabFacts, type NameFact } from '../tarajimNames';
 import { bareName, chainOf, lineOf, meetingOf, type LineName } from '../tarajimLine';
 import { genitive, peopleGraph, TIE_KINDS, tieWord, type TieKind } from '../tarajimGraph';
@@ -66,14 +67,15 @@ export function nasabQuestions(people: AppPerson[] = PEOPLE): ChoiceQuestion[] {
     const below = turns.filter((name): name is string => !!name && words(name) <= 2 && !shared.has(bareName(name)))
       .filter((name, k, all) => all.findIndex(other => bareName(other) === bareName(name)) === k);
     if (below.length < 3) continue;
-    const pages = [a, b].filter(p => p.fullName).map(p => `${nameOf(p)}: ${pageLabel(p.fullName!.refs)}`).join('؛ ');
     questions.push({
       key: `${TARAJIM_NASAB}:${a.slug}:${b.slug}`,
       family: TARAJIM_NASAB,
       promptArabic: `أين يلتقي نسب ${genitive(nameOf(a))} ونسب ${genitive(nameOf(b))}؟`,
       choices: [answer, ...below.slice(0, 3)].map(name => ({ value: name, labelArabic: name })),
       correctAnswer: answer,
-      note: { label: 'النسبان', text: `${chainOf(a, la, at.a)}\n${chainOf(b, lb, at.b)}\n${pages ? `${pages}\n` : ''}وشجرة النسب في التراجم` },
+      note: { label: 'النسبان', text: `${chainOf(a, la, at.a)}\n${chainOf(b, lb, at.b)}` },
+      // Each one's nasab where his entry gives it.
+      sources: uniqueSources([a, b].flatMap(p => (p.fullName ? pageSources(p.fullName.refs, { text: p.fullName.text }) : []))),
       look: { view: 'nasab', slugs: [a.slug, b.slug], mark: true },
       evidence: { claimKeys: [] },
     });
@@ -140,7 +142,7 @@ export function virtueQuestions(people: AppPerson[] = PEOPLE, random: Random = M
         promptArabic: `«${virtue.text}»${virtue.by.length ? ` — ${sayer(virtue)}` : ''}\nفيمن قيل هذا؟`,
         choices,
         correctAnswer: person.slug,
-        note: { label: 'المصدر', text: `${pageLabel(virtue.refs)}، في ترجمة ${genitive(nameOf(person))}` },
+        sources: pageSources(virtue.refs, { text: virtue.text, by: virtue.by.length ? sayerLine(virtue) : undefined }),
         look: { view: 'virtues', slugs: choices.map(choice => choice.value), mark: { slug: person.slug, index: k } },
         evidence: { claimKeys: [] },
       });
@@ -220,7 +222,7 @@ export function tieQuestions(people: AppPerson[] = PEOPLE): ChoiceQuestion[] {
         promptArabic: `ما صلة ${genitive(nameOf(a))} ب${genitive(nameOf(b))}؟`,
         choices: [word(answer), ...wrong.slice(0, 3)].map(w => ({ value: w, labelArabic: w })),
         correctAnswer: word(answer),
-        note: { label: 'المصدر', text: `${link.text ? `${link.text}\n` : ''}${sayer(link)} · ${pageLabel(link.refs)}` },
+        sources: pageSources(link.refs, { text: link.text, by: link.by.length ? sayerLine(link) : undefined }),
         look: { view: 'ties', slug: b.slug, mark: a.slug },
         evidence: { claimKeys: [] },
       });
@@ -257,7 +259,7 @@ export function nameQuestions(family: typeof TARAJIM_KUNYA | typeof TARAJIM_LAQA
       promptArabic,
       choices: shuffle([name, ...others.map(other => other.name)], random).map(each => ({ value: each, labelArabic: each })),
       correctAnswer: name,
-      note: { label: 'المصدر', text: `«${fact.text}»\n${fact.by.length ? `${sayerLine(fact)} · ` : ''}${pageLabel(fact.refs)}، في ترجمة ${genitive(nameOf(person))}` },
+      sources: pageSources(fact.refs, { text: fact.text, by: fact.by.length ? sayerLine(fact) : undefined }),
       evidence: { claimKeys: [] },
     }];
   });
@@ -303,7 +305,7 @@ export function prophetNameQuestions(people: AppPerson[] = PEOPLE, random: Rando
       choices: choices.map(name => ({ value: name, labelArabic: name })),
       correctAnswer: correctAnswers.join(PICKS),
       correctAnswers,
-      note: { label: 'المصدر', text: right.map(title => `«${title.text}» · ${pageLabel(title.refs)}`).join('\n') },
+      sources: right.flatMap(title => pageSources(title.refs, { text: title.text })),
       evidence: { claimKeys: [] },
     });
   }

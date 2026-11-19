@@ -12,8 +12,9 @@ import Card from '@/components/common/Card';
 import QuranWords from '@/components/quran/text/QuranWords';
 import BookRuns from '@/components/quran/text/BookRuns';
 import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
+import QuizSources from "@/components/quiz/QuizSources";
 
-export type ChoiceParts = Partial<Pick<ChoiceQuestion, "quran" | "number" | "reveal" | "page" | "ayahKey" | "alike" | "note" | "marked" | "explains" | "passage" | "quranChoices" | "whereOf">> & { correctAnswer?: string; family?: string; write?: WriteAsk };
+export type ChoiceParts = Partial<Pick<ChoiceQuestion, "quran" | "number" | "reveal" | "page" | "ayahKey" | "alike" | "note" | "sources" | "marked" | "explains" | "passage" | "quranChoices" | "whereOf">> & { correctAnswer?: string; family?: string; write?: WriteAsk };
 
 function Words({ words, marked }: { words: string[]; marked?: number[] }) {
   // A run of ayat carries each ayah's number between them, drawn as the end mark after the last one is.
@@ -71,7 +72,7 @@ export function ChoiceQuran({ question, given, revealed, onReveal, onAnswer, ar,
   </div>;
 }
 
-/** After answering: the look-alike in the surah picked, a note, and the ayah in the mushaf. */
+/** After answering: the look-alike in the surah picked, a note, where the answer comes from, and the ayah in the mushaf. */
 export function ChoiceAfter({ question, given, surahName, ar, mushaf = true }: { question: ChoiceParts; given?: string; surahName?: (value: string) => string | undefined; ar: boolean;
   /** The mushaf button. A home card leaves it out and puts it in its own button row (owner, 2026-11-15). */
   mushaf?: boolean }) {
@@ -88,6 +89,8 @@ export function ChoiceAfter({ question, given, surahName, ar, mushaf = true }: {
       ))}
     </ul>}
     {question.note && <div><p className="text-sm text-[var(--home-muted)]">{question.note.label}</p><p className="leading-loose">{question.note.text}</p></div>}
+    {/* Where the answer comes from, each book collapsed to its name (owner, 2026-11-19); solo, party and the review all draw this. */}
+    <QuizSources sources={question.sources} />
     {mushaf && question.ayahKey && <Button className="self-start" size="sm" href={ayahHref(question.ayahKey)}><BookOpen size={16} aria-hidden />{ar ? "في المصحف" : "In the mushaf"}</Button>}
   </div>;
 }

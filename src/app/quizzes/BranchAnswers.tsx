@@ -22,8 +22,10 @@ import Card from '@/components/common/Card';
 import { BlankBoxes } from "@/app/quran/read/MushafPage";
 import { useWriteBlanks, type WriteBlanks } from "@/components/recite/useRecite";
 import { writeBlank, type WriteBlank } from "@shared/quiz/writeBlanks";
+import QuizSources from "@/components/quiz/QuizSources";
+import type { QuizSource } from "@shared/quiz/sources";
 
-type Question = ScoredQuestion;
+type Question = ScoredQuestion & { sources?: QuizSource[] };
 type Names = Record<number, string>;
 
 /** The ayah signs an asked node opens with (﴿١٧﴾ where its ayah reads on): given before its boxes, never typed. */
@@ -130,6 +132,8 @@ export function BranchFeedback({ question: givenQuestion, typed: givenTyped, nam
           </div>;
         }} />
       </div>
+      {/* Where the leaves come from: the mushaf, and the book that sets the ayat side by side (owner, 2026-11-19). */}
+      <QuizSources sources={question.sources} />
       {controls && <UnderCard><CardActions id={id} text={question.tree!.words.join(' ')} href={branchesHref(id)} toggles={<AroundButton card={id} />} /></UnderCard>}
     </div>
   );

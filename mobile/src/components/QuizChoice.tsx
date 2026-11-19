@@ -9,6 +9,7 @@ import QuizPage from './QuizPage';
 import QuranWords from './quran/text/QuranWords';
 import BookRuns from './quran/text/BookRuns';
 import TermChips from './TermSheet';
+import QuizSources from './QuizSources';
 import { LookButton, LookView } from './QuizLook';
 import type { WriteAsk } from '@shared/quiz/score';
 import type { PenRule } from '@shared/quran/writeAyah';
@@ -157,6 +158,8 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
           <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 28, textAlign: 'right' }}>{question.note.text}</Text>
         </View>
       )}
+      {/* Where the answer comes from, each book collapsed to its name (owner, 2026-11-19). */}
+      {answered && !!question.sources?.length && <View style={{ paddingHorizontal: 16 }}><QuizSources sources={question.sources} palette={palette} /></View>}
       {/* After the answer, the view it was looked up in, the answer lit there, so everyone learns from it (owner, 2026-11-19). */}
       {answered && question.look && <View style={{ paddingHorizontal: 16 }}><LookView look={question.look} shown palette={palette} /></View>}
       {answered && question.ayahKey && onOpen && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}><Button Icon={BookOpen} accessibilityLabel="في المصحف" onPress={() => onOpen(question.ayahKey!)} /></View>}

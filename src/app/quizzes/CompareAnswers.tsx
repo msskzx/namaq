@@ -19,8 +19,10 @@ import Card from '@/components/common/Card';
 import { BlankBoxes } from "@/app/quran/read/MushafPage";
 import { useWriteBlanks } from "@/components/recite/useRecite";
 import { writeBlank } from "@shared/quiz/writeBlanks";
+import QuizSources from "@/components/quiz/QuizSources";
+import type { QuizSource } from "@shared/quiz/sources";
 
-type Question = { compare?: CompareAsk };
+type Question = { compare?: CompareAsk; sources?: QuizSource[] };
 
 /** The app-wide word-match colours: same words terracotta, written differently amber, same root purple. */
 const TONES: Record<NonNullable<Tone>, string> = {
@@ -133,6 +135,7 @@ export function CompareFeedback({ question, typed, ar, hints }: { question: Ques
           </span>;
         })}
       </Line>
+      <QuizSources sources={question.sources} />
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { buildTreeGroups, createTreePresenter, type TreeGroup } from '../quran/p
 import { askedNodes } from './branchAnswers';
 import { byDifficulty, DEFAULT_DIFFICULTY, levelOf, treeScore, type Difficulty } from './difficulty';
 import { shuffle, type Random } from './random';
+import { ayahPlace, MUSHAF_BOOK, type QuizSource } from './sources';
 
 export const BRANCH_FAMILY = 'AYAH_BRANCH';
 const MAX_BRANCHES = 10;
@@ -25,13 +26,15 @@ export interface BranchQuestion {
   level: Difficulty;
   variants: Variant[];
   prefixes: Variant[];
+  /** The mushaf the leaves are written from, then the mutashabih books that set the ayat side by side (shared/quiz/sources.ts). */
+  sources: QuizSource[];
   evidence: { claimKeys: string[] };
 }
 
 const nextClass = (ayah: BranchAyah, at: number) => at >= ayah.words.length ? '۝' : `${ayah.roots?.[at] ?? ''}:${ayah.words[at].replace(/[\u064B-\u065F\u0670\u06D6-\u06EDـ]/g, '')}`;
 
 /** The trees a quiz may ask, and how to turn one into a question; building a question costs time, so callers build only what they ask. */
-export function branchQuestionPool(all: BranchAyah[], range: JuzRange | null = null, supplied?: TreeGroup[]) {
+export function branchQuestionPool(all: BranchAyah[], range: JuzRange | null = null, supplied?: (TreeGroup & { sources?: QuizSource[] })[]) {
   const ayat = range ? all.filter(entry => inJuzRange(entry.key, range)) : all;
   const byKey = new Map(ayat.map(entry => [entry.key, entry]));
   // Supplied trees keep only their places inside the range.
@@ -46,7 +49,7 @@ export function branchQuestionPool(all: BranchAyah[], range: JuzRange | null = n
     if (!found) levels.set(group, (found = levelOf(treeScore([...new Set(group.occurrences.map(occurrence => occurrence.key))].map(key => byKey.get(key)!.words)))));
     return found;
   };
-  const build = (group: TreeGroup): BranchQuestion | null => {
+  const build = (group: TreeGroup & { sources?: QuizSource[] }): BranchQuestion | null => {
     const presentation = present(group);
     const tree = ownAyatOnly(group) ? ownAyat(presentation.tree) : presentation.tree;
     const memberKeys = [...new Set(group.occurrences.map(occurrence => occurrence.key))];
@@ -69,13 +72,14 @@ export function branchQuestionPool(all: BranchAyah[], range: JuzRange | null = n
           return { key, page: entry.page, words: entry.words.slice((presentation.offsets[key] ?? 0) + tree.words.length) };
         }),
       })),
+      sources: [{ book: MUSHAF_BOOK, at: memberKeys.map(ayahPlace).join('، ') }, ...(group.sources ?? [])],
       evidence: { claimKeys: [] },
     };
   };
   return { candidates, build, level };
 }
 
-export function branchQuestions(all: BranchAyah[], range: JuzRange | null = null, supplied?: TreeGroup[]): BranchQuestion[] {
+export function branchQuestions(all: BranchAyah[], range: JuzRange | null = null, supplied?: (TreeGroup & { sources?: QuizSource[] })[]): BranchQuestion[] {
   const { candidates, build } = branchQuestionPool(all, range, supplied);
   return candidates.flatMap(group => build(group) ?? []);
 }

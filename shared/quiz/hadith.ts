@@ -6,6 +6,7 @@ import { recordName, type AppForty, type FortyEntry, type FortyRecord } from '..
 import { num } from '../quran/arabicNumber';
 import { shuffle, type Random } from './random';
 import type { ChoiceKind, ChoiceQuestion } from './choiceKinds';
+import type { QuizSource } from './sources';
 
 export const HADITH_NARRATOR = 'HADITH_NARRATOR';
 export const HADITH_NARRATOR_NAME = 'من راوي الحديث؟';
@@ -28,10 +29,17 @@ const sayingOf = (record: FortyRecord) => {
   return end > 0 ? text.slice(0, end + 1) : text;
 };
 
-const source = (entry: FortyEntry, record: FortyRecord) =>
-  `${recordName(record, num)}، ج ${num(record.volume)}، ص ${num(record.pages[0])}؛ الأربعون النووية، ${entry.heading}`;
+const shamela = (book: keyof AppForty['books'], id: number) => `https://shamela.ws/book/${FORTY.books[book].shamela}/${id}`;
+/** al-Nawawi's entry in his Forty. */
+const nawawi = (entry: FortyEntry): QuizSource =>
+  ({ book: FORTY.books.nawawi.title, author: 'النووي', at: `${entry.heading}، ص ${num(entry.pages[entry.pages.length - 1])}`, url: shamela('nawawi', entry.shamela) });
+/** The record the saying is quoted from, then al-Nawawi's entry that holds it. */
+const sources = (entry: FortyEntry, record: FortyRecord): QuizSource[] => [
+  { book: FORTY.books[record.book].title, at: `رقم ${num(record.number)}${record.route ? ` (${record.route})` : ''}، ج ${num(record.volume)}، ص ${num(record.pages[0])}`, url: shamela(record.book, record.shamela) },
+  nawawi(entry),
+];
 
-function choose(key: string, family: string, promptArabic: string, right: string, wrong: string[], note: string, entry: FortyEntry, random: Random): ChoiceQuestion | null {
+function choose(key: string, family: string, promptArabic: string, right: string, wrong: string[], cited: { sources: QuizSource[]; note?: string }, entry: FortyEntry, random: Random): ChoiceQuestion | null {
   const others = [...new Map(wrong.filter(label => bare(label) !== bare(right)).map(label => [bare(label), label])).values()];
   if (others.length < CHOICES - 1) return null;
   const choices = shuffle([right, ...shuffle(others, random).slice(0, CHOICES - 1)], random);
@@ -41,7 +49,8 @@ function choose(key: string, family: string, promptArabic: string, right: string
     promptArabic,
     choices: choices.map((label, i) => ({ value: String(i), labelArabic: label })),
     correctAnswer: String(choices.indexOf(right)),
-    note: { label: 'المصدر', text: note },
+    sources: cited.sources,
+    ...(cited.note && { note: { label: 'الخيارات الأخرى', text: cited.note } }),
     // Looked up in the Forty, searched by its words; after the answer, this hadith's page.
     look: { view: 'hadith', mark: entry.n },
     evidence: { claimKeys: [] },
@@ -62,7 +71,7 @@ export function narratorQuestions(random: Random): ChoiceQuestion[] {
     if (namesOf(entry.companion).some(name => bare(saying).includes(name))) return [];
     const also = new Set([entry.companion, ...(entry.alsoFrom ?? [])].map(bare));
     const wrong = all.map(other => other.entry.companion).filter(name => !also.has(bare(name)));
-    const question = choose(`${record.number}`, HADITH_NARRATOR, `${saying}\nعن أي صحابي روى البخاري هذا الحديث؟`, entry.companion, wrong, source(entry, record), entry, random);
+    const question = choose(`${record.number}`, HADITH_NARRATOR, `${saying}\nعن أي صحابي روى البخاري هذا الحديث؟`, entry.companion, wrong, { sources: sources(entry, record) }, entry, random);
     return question ? [question] : [];
   }), random);
 }
@@ -86,7 +95,7 @@ export function completeQuestions(random: Random): ChoiceQuestion[] {
     const wrong = shuffle(all.filter(other => other.record !== record), random)
       .filter(other => !seen.has(bare(other.end)) && seen.add(bare(other.end))).slice(0, CHOICES - 1);
     const from = wrong.map(other => `«${other.end}» من ${recordName(other.record, num)}`).join('، ');
-    const question = choose(`${record.number}`, HADITH_COMPLETE, `${start} …»`, end, wrong.map(other => other.end), `${source(entry, record)}. والخيارات الأخرى أواخر أحاديث أخرى: ${from}`, entry, random);
+    const question = choose(`${record.number}`, HADITH_COMPLETE, `${start} …»`, end, wrong.map(other => other.end), { sources: sources(entry, record), note: `أواخر أحاديث أخرى: ${from}` }, entry, random);
     return question ? [question] : [];
   }), random);
 }
@@ -147,7 +156,7 @@ export function bookQuestions(random: Random): ChoiceQuestion[] {
   return shuffle(all.flatMap(({ entry, quotation, books }) => {
     const wrong = all.filter(other => apart(other.entry.named, entry.named)).map(other => other.books);
     const question = choose(`${entry.n}`, HADITH_BOOK, `${quotation}\nإلى أي كتب عزاه النووي؟`, books, wrong,
-      `الأربعون النووية، ${entry.heading}، ص ${num(entry.pages[entry.pages.length - 1])}`, entry, random);
+      { sources: [nawawi(entry)] }, entry, random);
     return question ? [question] : [];
   }), random);
 }

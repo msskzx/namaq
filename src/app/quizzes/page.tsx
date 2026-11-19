@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
   faArrowRight,
-  faBookOpen,
   faCircleHalfStroke,
   faCircleCheck,
   faCircleQuestion,
@@ -28,7 +27,6 @@ import Button from "@/components/common/Button";
 import Toggle from "@/components/common/Toggle";
 import { setQuizPageBefore, useQuizPageBefore } from "@/lib/quizPageBefore";
 import { QuizPenSetting } from "@/components/recite/PenSetting";
-import QuizReferenceDialog from "@/components/common/QuizReferenceDialog";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { parseQuizTopics } from "@/lib/quiz/topics";
 import { fetcher } from "@/lib/swr";
@@ -142,7 +140,6 @@ export default function QuizzesPage() {
   const [revealed, setRevealed] = useState<Record<number, boolean>>({});
   const [submitted, setSubmitted] = useState(false);
   const [reviewing, setReviewing] = useState(false);
-  const [referenceIndex, setReferenceIndex] = useState<number | null>(null);
   // The quiz whose answers the state holds, and so may save; none while leaving it for the setup.
   const [owner, setOwner] = useState<string | null>(null);
   const [leavingFrom, setLeavingFrom] = useState<string | null>(null);
@@ -166,7 +163,6 @@ export default function QuizzesPage() {
     setRevealed({});
     setSubmitted(false);
     setReviewing(false);
-    setReferenceIndex(null);
   }, [query]);
   // Every step of an unfinished quiz is kept; Submit lets it go.
   useEffect(() => {
@@ -209,7 +205,6 @@ export default function QuizzesPage() {
     setHints({});
     setSubmitted(false);
     setReviewing(false);
-    setReferenceIndex(null);
     // The cleared state belongs to no quiz: an unfinished one stays saved as it was, and the setup offers it.
     setOwner(null);
     setLeavingFrom(search);
@@ -355,7 +350,7 @@ export default function QuizzesPage() {
         ) : (
           <div>
             <div className="mb-4 flex flex-wrap gap-2">
-              <Button size="sm" onClick={() => { setCurrent(0); setAnswers({}); setTyped({}); setHints({}); setReferenceIndex(null); }}><RotateCcw size={16} aria-hidden />{ar ? "ابدأ من جديد" : "Start over"}</Button>
+              <Button size="sm" onClick={() => { setCurrent(0); setAnswers({}); setTyped({}); setHints({}); }}><RotateCcw size={16} aria-hidden />{ar ? "ابدأ من جديد" : "Start over"}</Button>
               <Button size="sm" onClick={reset}><LogOut size={16} aria-hidden />{ar ? "الخروج للإعدادات" : "Exit to setup"}</Button>
             </div>
             <div className="mb-4 flex flex-wrap gap-2" role="group" aria-label={ar ? "الأسئلة" : "Questions"}>
@@ -387,12 +382,6 @@ export default function QuizzesPage() {
                 onType={(value) => setTyped((previous) => ({ ...previous, [current]: value }))}
                 onHints={(value) => setHints((previous) => ({ ...previous, [current]: value }))}
                 onAnswer={(value) => setAnswers((previous) => ({ ...previous, [current]: value }))} />
-              {answers[current] !== undefined && questions[current].evidence.reference && (
-                <Button className="mt-3" size="sm" variant="outline" onClick={() => setReferenceIndex(current)}>
-                  <FontAwesomeIcon icon={faBookOpen} />
-                  {ar ? "المصدر" : "Source"}
-                </Button>
-              )}
             </Card>
             <div className="mt-4 flex items-center justify-between">
               <Button variant="outline" disabled={current === 0} onClick={() => setCurrent((value) => Math.max(0, value - 1))}>
@@ -418,10 +407,6 @@ export default function QuizzesPage() {
                 </Button>
               )}
             </div>
-            <QuizReferenceDialog
-              reference={referenceIndex !== null ? questions[referenceIndex]?.evidence.reference ?? null : null}
-              onClose={() => setReferenceIndex(null)}
-            />
           </div>
         )}
       </div>

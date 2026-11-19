@@ -6,6 +6,7 @@ import { firstBoxes, writeBlank } from './writeBlankTesting';
 import example from '@shared/data/quiz/example.json';
 import { branchNodes } from '@shared/quiz/branchAnswers';
 import type { Branch } from '@shared/quran/branches';
+import { referenceSource } from '@/lib/quiz/quizReference';
 
 const nav = vi.hoisted(() => {
   let url = '/quizzes';
@@ -226,15 +227,16 @@ describe('QuizzesPage', () => {
 
   it('locks the first answer and shows immediate correct feedback with its source', () => {
     const original = questions[0];
-    questions[0] = { ...original, evidence: { reference } };
+    questions[0] = { ...original, sources: [referenceSource(reference)], evidence: { reference } };
     try {
       nav.reset('/quizzes?topic=PEOPLE&length=5');
       render(<QuizzesPage />);
 
-      expect(screen.queryByRole('button', { name: 'Source' })).toBeNull();
+      // The source waits for the answer, then shows as its book's name.
+      expect(screen.queryByText('سير أعلام النبلاء')).toBeNull();
       fireEvent.click(screen.getByRole('button', { name: 'الصحيح' }));
       expect(screen.getByText('Correct')).toBeTruthy();
-      expect(screen.getByRole('button', { name: 'Source' })).toBeTruthy();
+      expect(screen.getByText('سير أعلام النبلاء')).toBeTruthy();
 
       fireEvent.click(screen.getByRole('button', { name: 'الأول' }));
       expect(screen.queryByText('Incorrect')).toBeNull();
@@ -400,17 +402,17 @@ describe('QuizzesPage', () => {
     expect(screen.getByRole('button', { name: 'Question 2 - correct' })).toBeTruthy();
   });
 
-  it('opens the quiz reference overlay from a locked question', () => {
+  it("opens a locked question's reference to the cited words, linked to the reader at its page", () => {
     const original = questions[0];
-    questions[0] = { ...original, evidence: { reference } };
+    questions[0] = { ...original, sources: [referenceSource(reference)], evidence: { reference } };
     try {
       nav.reset('/quizzes?topic=PEOPLE&length=5');
       render(<QuizzesPage />);
 
       fireEvent.click(screen.getByRole('button', { name: 'الصحيح' }));
-      fireEvent.click(screen.getByRole('button', { name: 'Source' }));
-      expect(screen.getByRole('dialog')).toBeTruthy();
-      expect(screen.getByText('نص الشاهد')).toBeTruthy();
+      fireEvent.click(screen.getByText('سير أعلام النبلاء'));
+      expect(screen.getByText(/نص الشاهد/)).toBeTruthy();
+      expect(screen.getByRole('link', { name: /ص 5/ }).getAttribute('href')).toBe(reference.readerUrl);
     } finally {
       questions[0] = original;
     }

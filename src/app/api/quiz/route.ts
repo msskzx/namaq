@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { assembleQuiz, availableQuestionCount } from '@/lib/quiz/assemble';
 import { askedAyah, ayahDetails } from '@/lib/quiz/ayahDetails';
-import { selectQuizReference } from '@/lib/quiz/quizReference';
+import { referenceSource, selectQuizReference } from '@/lib/quiz/quizReference';
 import { parseQuizTopics } from '@/lib/quiz/topics';
 import { writeAsk } from '@shared/quiz/writeAsk';
 import { isPenRule } from '@shared/quran/writeAyah';
@@ -65,15 +65,19 @@ export async function GET(request: Request) {
       surahs.length ? prisma.surah.findMany({ where: { number: { in: surahs } }, select: { number: true, name: true } }) : [],
     ]);
     return NextResponse.json({
-      questions: questions.map((question) => ({
-        ...question,
-        ...(isPenRule(pen) && question.ayahKey && question.page?.recite ? { write: writeAsk(question.ayahKey, question.page, pen) ?? undefined } : {}),
-        choiceDetails: Object.fromEntries(
-          question.choices.map((choice) => [choice.value, details.get(choice.value)]).filter((entry) => entry[1]),
-        ),
-        ayah: details.get(askedAyah(question) ?? '') ?? null,
-        evidence: { reference: selectQuizReference(question.evidence.claimKeys, claims) },
-      })),
+      questions: questions.map((question) => {
+        const reference = selectQuizReference(question.evidence.claimKeys, claims);
+        return {
+          ...question,
+          ...(isPenRule(pen) && question.ayahKey && question.page?.recite ? { write: writeAsk(question.ayahKey, question.page, pen) ?? undefined } : {}),
+          choiceDetails: Object.fromEntries(
+            question.choices.map((choice) => [choice.value, details.get(choice.value)]).filter((entry) => entry[1]),
+          ),
+          ayah: details.get(askedAyah(question) ?? '') ?? null,
+          sources: question.sources ?? (reference ? [referenceSource(reference)] : []),
+          evidence: { reference },
+        };
+      }),
       surahNames: Object.fromEntries(names.map((row) => [row.number, surahName(row.number)])),
     });
   } catch (error) {

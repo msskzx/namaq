@@ -43,7 +43,8 @@ describe('the hadith quizzes', () => {
     for (const question of [...narrator, ...complete]) {
       expect(question.choices).toHaveLength(4);
       expect(new Set(question.choices.map(choice => bare(choice.labelArabic))).size).toBe(4);
-      expect(question.note?.text).toMatch(/صحيح البخاري .*ص .*الأربعون النووية/);
+      // The record the saying is quoted from, then al-Nawawi's entry that holds it.
+      expect(question.sources.map(source => source.book)).toEqual(['صحيح البخاري', 'الأربعون النووية']);
     }
   });
 

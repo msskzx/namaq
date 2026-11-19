@@ -47,7 +47,8 @@ describe('«في أي سنة كان؟»', () => {
       for (const choice of q.choices.filter(choice => choice.value !== q.correctAnswer)) {
         expect(yearsOf(choice.labelArabic).every(year => thing.years.every(given => Math.abs(year - given) > 1))).toBe(true);
       }
-      for (const cite of thing.cites) expect(q.note?.text).toContain(cite);
+      // Every year given is cited: each source of each reading is under the answer.
+      expect(q.sources).toEqual(expect.arrayContaining(thing.sources));
     }
   });
 

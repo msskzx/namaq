@@ -7,6 +7,7 @@ import { normalizeWord } from '../quran/normalize';
 import type { Difficulty } from './difficulty';
 import { shuffle } from './random';
 import { FORGOT, RECITE_SNIPPET, RECITED, type ChoiceKind, type ChoiceQuestion, type ChoiceScope } from './choiceKinds';
+import { mushafSource } from './sources';
 
 /** The opening shows at least this many words, and leaves at least this many to recite. */
 const MIN_SHOWN = 3;
@@ -59,6 +60,7 @@ function question(ayah: BranchAyah, difficulty: Difficulty): ChoiceQuestion {
     correctAnswer: RECITED,
     ayahKey: ayah.key,
     page: { shows: shown, recite: true },
+    sources: [mushafSource(ayah.key, ayah.page)],
     evidence: { claimKeys: [] },
   };
 }

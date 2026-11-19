@@ -10,6 +10,7 @@ import type { ScopeFilters } from './scopeParams';
 import type { QuizTopic } from './settings';
 import type { CompareAsk } from './compareAnswers';
 import type { PageAsk } from '../quran/writeAyah';
+import type { QuizSource } from './sources';
 
 /** A recited snippet's kind and its two answers (reciteSnippet.ts), here so screens need not load the Quran's text. */
 export const RECITE_SNIPPET = 'RECITE';
@@ -75,6 +76,8 @@ export type ChoiceQuestion = {
   compare?: CompareAsk;
   /** What «ابحث عن الجواب» opens, and after the answer what shows under it: the feature's own view (QuizLook). */
   look?: QuizLook;
+  /** Where the answer comes from, shown once answered, collapsed to each book's name (shared/quiz/sources.ts). */
+  sources: QuizSource[];
   evidence: { claimKeys: string[] };
 };
 

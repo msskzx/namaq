@@ -12,6 +12,7 @@ import surahRows from '../data/quran/surahs.json';
 import { SURAH_NAMES } from '../quran/surahNames';
 import { shuffle, type Random } from './random';
 import type { ChoiceKind, ChoiceQuestion, QuizLook } from './choiceKinds';
+import { citeSource, uniqueSources } from './sources';
 
 export const SIRA = 'SIRA';
 export const SIRA_NAME = 'السيرة والغزوات';
@@ -20,7 +21,6 @@ const CHOICES = 4;
 const STORIES = storiesData as AppStory[];
 const BATTLES = battlesData as AppBattle[];
 
-const source = (refs: AppCite[]) => ({ label: 'المصدر', text: [...new Set(refs.map(ref => ref.cite))].join('؛ ') });
 /** «كانت غزوة بدر» but «كان فتح مكة»: the verb follows the name's first word. */
 const was = (name: string) => (/^(غزوة|سرية|معركة|بدر|وقعة)/.test(name) ? 'كانت' : 'كان');
 const yearName = (year: number) => (year < 0 ? `${num(-year)} قبل الهجرة` : `السنة ${num(year)} للهجرة`);
@@ -35,7 +35,7 @@ function ask(key: string, promptArabic: string, right: string, wrong: string[], 
     promptArabic,
     choices: choices.map((label, i) => ({ value: String(i), labelArabic: label })),
     correctAnswer: String(choices.indexOf(right)),
-    note: source(refs),
+    sources: uniqueSources(refs.map(citeSource)),
     look,
     evidence: { claimKeys: [] },
   };
@@ -69,7 +69,7 @@ function recited(story: AppStory, random: Random) {
     const question = ask(`recited:${story.slug}:${ayat.from}`, `أي آيات قُرئت في قصة «${story.name}»؟`, label(surah), wrong, refs, { view: 'story', slug: story.slug }, random);
     const reading = ayat.label.replace(/^ما قرأه\s*/, '');
     const told = [`${rangeName(ayat.from, ayat.to)}${reading ? ` ${reading}` : ''}`, ...(ayat.others ?? []).map(other => other.text)].join('، ');
-    return question && { ...question, note: { label: 'المصدر', text: `${told}\n${question.note!.text}` } };
+    return question && { ...question, note: { label: 'في القصة', text: told } };
   });
 }
 
@@ -128,7 +128,7 @@ function battlePlace(battle: AppBattle, random: Random) {
   if (name.split(/\s+/).some(word => said.has(bareWord(word)))) return null;
   const wrong = BATTLES.flatMap(other => (other.location && other.slug !== battle.slug ? [placeName(other.location.value)] : []));
   const question = ask(`place:${battle.slug}`, `أين ${was(battle.name)} ${battle.name}؟`, name, wrong, place.refs, { view: 'battle', slug: battle.slug }, random);
-  return question && name !== place.value ? { ...question, note: { label: 'المصدر', text: `${place.value}\n${question.note!.text}` } } : question;
+  return question && name !== place.value ? { ...question, note: { label: 'في المصدر', text: place.value } } : question;
 }
 
 /** Every question the stories and battles hold, in random order. */

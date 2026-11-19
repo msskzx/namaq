@@ -1,5 +1,6 @@
 import { num } from './arabicNumber';
-import { itqanCredit, itqanPage, type ItqanData } from './itqanBalagha';
+import { ITQAN_BOOK, itqanCredit, itqanPage, type ItqanData } from './itqanBalagha';
+import type { QuizSource } from '../quiz/sources';
 
 /**
  * The balagha terms page «مصطلحات البلاغة» (owner, 2026-11-18): every device al-Suyuti names in al-Itqan's chapters on
@@ -50,6 +51,13 @@ const TALKHIS_SHORT = 'تلخيص المفتاح للقزويني';
 export const termCredit = (quote: TermQuote) => quote.book === 'itqan'
   ? itqanCredit(quote)
   : `${TALKHIS_SHORT}، في عروس الأفراح ${num(quote.part)}/${num(quote.pages[0])}${quote.pages[1] !== quote.pages[0] ? `–${num(quote.pages[1])}` : ''}`;
+/** A quote as a quiz source (shared/quiz/sources.ts): its book and author, volume and pages, and its page online. */
+export const termSource = (quote: TermQuote): QuizSource => {
+  const at = `${num(quote.part)}/${num(quote.pages[0])}${quote.pages[1] !== quote.pages[0] ? `–${num(quote.pages[1])}` : ''}`;
+  return quote.book === 'itqan'
+    ? { book: ITQAN_BOOK, author: 'السيوطي', at, url: termPage(quote) }
+    : { book: 'تلخيص المفتاح', author: 'القزويني', at: `في عروس الأفراح ${at}`, url: termPage(quote) };
+};
 export const termPage = (quote: TermQuote) => quote.book === 'itqan' ? itqanPage(quote) : `https://shamela.ws/book/11151/${quote.id}`;
 
 /** His chapter's title without its marks («النوع الثامن والخمسون: في بدائع القرآن»). */

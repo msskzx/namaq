@@ -56,6 +56,8 @@ export interface QuizQuestionView {
   correctAnswer: string;
   /** Several right choices: the reader ticks boxes, then checks (shared/quiz/choiceKinds.ts). */
   correctAnswers?: string[];
+  /** Where the answer comes from, shown once answered (shared/quiz/sources.ts); a bank question's cited passage among them. */
+  sources?: ChoiceQuestion["sources"];
   evidence: { reference: QuizReference | null };
 }
 
