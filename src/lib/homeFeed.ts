@@ -113,15 +113,19 @@ const MOMENT_FEED = (momentsData as AppMomentBattle[]).flatMap(battle => battle.
 const turnOf = (day: number, at: number, count: number) => ((((day * 37 + at) % count) + count) % count);
 
 export async function siraCards(day: number, slots: number[]): Promise<SiraCard[]> {
-  return Promise.all(slots.map(async (slot): Promise<SiraCard> => {
-    // A story in even batches, a battle's moment in odd ones, each list in the day's turn.
-    if (slot % 2 === 0 && SIRA_FEED.length) {
-      const story = SIRA_FEED[turnOf(day, slot / 2, SIRA_FEED.length)];
+  const cards = await Promise.all(slots.map(async (slot): Promise<SiraCard | null> => {
+    // A story in even batches, a battle's moment in odd ones, each list in the day's turn; a list with nothing in it brings no card.
+    const turn = Math.floor(slot / 2);
+    if (slot % 2 === 0) {
+      if (!SIRA_FEED.length) return null;
+      const story = SIRA_FEED[turnOf(day, turn, SIRA_FEED.length)];
       return { slot, kind: 'sira', slug: story.slug, name: story.name, report: story.reports[0], ayat: story.ayat, pages: await storyAyat(story) };
     }
-    const { battle, moment, n } = MOMENT_FEED[turnOf(day, (slot - 1) / 2, MOMENT_FEED.length)];
+    if (!MOMENT_FEED.length) return null;
+    const { battle, moment, n } = MOMENT_FEED[turnOf(day, turn, MOMENT_FEED.length)];
     return { slot, kind: 'moment', battle: { slug: battle.slug, name: battle.name, kind: battle.kind, year: battle.year }, moment, n };
   }));
+  return cards.filter((card): card is SiraCard => card !== null);
 }
 
 /** A saved item drawn as its own card in the feed: the tree card's tree or the pair card's pair; a saved ayah needs nothing here. */

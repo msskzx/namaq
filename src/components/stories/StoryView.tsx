@@ -41,12 +41,15 @@ export function Report({ report, plain = false, titled = false }: { report: AppR
  * A sira story whole (the app's StoryView, mobile/src/screens/story.tsx): its name, its tags as muted words, who is in it,
  * the first report, the ayat it turns on shown in the mushaf's lines, and the source's other reports folded.
  */
-export default function StoryView({ story, ayat, titled = false }: { story: AppStory; ayat: AyatPage[][]; titled?: boolean }) {
+export default function StoryView({ story, ayat, titled = false, inset = false }: { story: AppStory; ayat: AyatPage[][]; titled?: boolean;
+  /** Drawn inside another page (the quiz's look-up): its name is a second-level heading, not the page's own. */
+  inset?: boolean }) {
+  const Name = inset ? 'h2' : 'h1';
   const [main, ...rest] = story.reports;
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl">{story.name}</h1>
+        <Name className="text-3xl">{story.name}</Name>
         {story.place && <p className="text-[var(--home-muted)]">{story.place.value}</p>}
         {story.place && <Refs refs={story.place.refs} />}
         {story.tags.length > 0 && <p className="text-sm text-[var(--home-muted)]">{story.tags.join(' · ')}</p>}

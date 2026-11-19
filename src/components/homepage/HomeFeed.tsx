@@ -60,6 +60,7 @@ import { ayahNoteAt } from '@shared/quran/ayahNotes';
 import { QiraatPlace } from '@/app/quran/qiraat/QiraatView';
 import { surahName } from '@shared/quran/surahNames';
 import Card from '@/components/common/Card';
+import ExternalLink from '@/components/common/ExternalLink';
 
 /**
  * The website's home feed, as the app's (mobile/src/components/HomeFeed.tsx): story circles, the page the mushaf was left on,
@@ -181,7 +182,7 @@ function Action({ Icon, label, href, onClick, on, tone, disabled, external }: { 
   external?: boolean }) {
   const className = [styles.action, on && styles.actionOn, tone === 'green' && styles.green].filter(Boolean).join(' ');
   const icon = <Icon size={22} aria-hidden />;
-  if (href && external) return <a href={href} target="_blank" rel="noreferrer" aria-label={label} title={label} className={className}>{icon}</a>;
+  if (href && external) return <ExternalLink href={href} mark={false} aria-label={label} title={label} className={className}>{icon}</ExternalLink>;
   return href
     ? <Link href={href} onClick={onClick} aria-label={label} title={label} className={className}>{icon}</Link>
     : <button type="button" onClick={onClick} disabled={disabled} aria-label={label} title={label} aria-pressed={on} className={className}>{icon}</button>;
@@ -481,7 +482,7 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
   const storySlots = shows('prophets') ? Array.from({ length: batches }, (_, i) => i).filter(hasStoryCard) : [];
   const { data: stories } = useSWR(day && storySlots.length ? `/api/home/feed?day=${day}&s=${storySlots.join(',')}` : null,
     () => inPieces<StoryCard[]>(some => `/api/home/feed?day=${day}&s=${some.join(',')}`, storySlots).then(all => all.flat()), swr);
-  // The sira and battle-moment cards, one a batch, worked out on the server (the stories' ayat pages stay there).
+  // The sira and battle-moment cards, one a batch, worked out on the server (a story card brings its ayat's mushaf pages with it).
   const siraSlots = shows('sira') || shows('moment') ? Array.from({ length: batches }, (_, i) => i) : [];
   const { data: sira } = useSWR(day && siraSlots.length ? `/api/home/feed?day=${day}&sira=${siraSlots.join(',')}` : null,
     () => inPieces<SiraCard[]>(some => `/api/home/feed?day=${day}&sira=${some.join(',')}`, siraSlots).then(all => all.flat()), swr);

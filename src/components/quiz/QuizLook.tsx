@@ -29,9 +29,9 @@ export const canLook = (look: QuizLook | undefined): look is QuizLook => !!look 
 /** The feature's own view a question is looked up in (the app's LookView): the sira story whole, its moments titled, or the battle. */
 export function LookView({ look }: { look: QuizLook }) {
   const { data, error } = useSWR(urlOf(look), fetchLooked, { revalidateOnFocus: false });
-  if (error) return null;
+  if (error) return <p className="py-6 text-center text-[var(--home-muted)]">تعذّر التحميل، حاول مرة أخرى.</p>;
   if (!data) return <p className="py-6 text-center"><LoadingDots label="جارٍ التحميل" /></p>;
-  return 'story' in data ? <div dir="rtl" lang="ar" className="text-[var(--home-ink)]"><StoryView story={data.story} ayat={data.ayat} titled /></div> : <BattleView battle={data.battle} />;
+  return 'story' in data ? <div dir="rtl" lang="ar" className="text-[var(--home-ink)]"><StoryView story={data.story} ayat={data.ayat} titled inset /></div> : <BattleView battle={data.battle} />;
 }
 
 /** «ابحث عن الجواب» under a question's choices (the app's LookButton): opens its view in a sheet, with a way back to the question. */
