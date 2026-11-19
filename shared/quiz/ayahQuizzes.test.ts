@@ -3,6 +3,8 @@ import bank from '../data/quran/ayahQuizzes.json';
 import { balaghaQuiz, irabQuiz, qiraatQuiz, tafsirQuiz, type AyahQuizzes } from './ayahQuizzes';
 import { hideQuotes, quotesOf, stem } from './ayahQuizText';
 import { num } from '../quran/arabicNumber';
+import { qiraatOf } from '../quran/qiraatData';
+import { READERS, RIWAYAT } from '../quran/qiraat';
 
 const data = bank as AyahQuizzes;
 const seeded = (seed: number) => () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
@@ -55,6 +57,15 @@ describe('the four ayah quizzes', () => {
     for (const question of qiraatQuiz.questions(whole, 'medium', seeded(4), 100)) {
       expect(question.quranChoices).toBe(true);
       expect(Object.values(question.whereOf!).join(' ')).not.toContain('الباقون');
+    }
+  });
+
+  it('«كيف يقرؤها؟» asks only a reader whose riwayat all read one way', () => {
+    for (const [key, at, reader] of data.qiraat) {
+      const own = RIWAYAT.flatMap((riwaya, n) => (riwaya.reader === READERS[reader].id ? [n + 1] : []));
+      const holding = qiraatOf(key)[at].readings.filter(reading => own.some(n => reading.rawis.includes(n)));
+      expect(holding).toHaveLength(1);
+      expect(own.every(n => holding[0].rawis.includes(n))).toBe(true);
     }
   });
 
