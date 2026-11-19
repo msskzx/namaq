@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useSyncExternalStore } from 'react';
-import { Check, ChevronDown, Pause, Play, Repeat, X } from 'lucide-react';
+import { Check, ChevronDown, Headphones, Minimize2, Pause, Play, Repeat, X } from 'lucide-react';
 import { num } from '@shared/quran/arabicNumber';
 import { EACH_AYAH, LISTEN_REFERENCE, ONCE, PAUSES, RANGE_TIMES, RECITERS, RIWAYA, SPEEDS, pauseLabel, reciterName, reciterOf, speedLabel, surahEnd, timesLabel, type Range, type RepeatPlan } from '@shared/quran/recitation';
 import { readListenPlan, readReciter, serverListenPlan, serverReciter, subscribeListenPlan, subscribeReciter, writeListenPlan, writeReciter } from '@shared/listenSettings';
@@ -12,6 +12,7 @@ import styles from './Mushaf.module.css';
 import { surahName } from '@shared/quran/surahNames';
 import Sheet from '@/components/common/Sheet';
 import Chip from '@/components/common/Chip';
+import FloatingBar from '@/components/common/FloatingBar';
 
 const named = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return `${surahName(surah)} ${num(ayah)}`; };
 const rangeText = (from: string, to: string) =>
@@ -119,8 +120,9 @@ export default function ListenBar({ onRepeat, above = false }: { onRepeat: () =>
   if (!listening) return null;
   const repeating = plan.eachAyah !== ONCE.eachAyah || plan.rangeTimes !== ONCE.rangeTimes || plan.pause !== ONCE.pause;
   return (
-    <div className={styles.reciteBar} data-listen data-above={above || undefined}>
-      <div role="toolbar" aria-label="الاستماع" dir="rtl" className={styles.listenBar}>
+    // It floats over the page and goes wherever it is dragged (owner, 2026-11-19); until then low, above the recite bar.
+    <FloatingBar id="listen" openLabel="افتح شريط الاستماع" Icon={Headphones} className={styles.reciteBar} style={above ? { transform: 'translateY(calc(-1 * (var(--recite-pill) + 8px)))' } : undefined}>
+      {fold => <div role="toolbar" aria-label="الاستماع" dir="rtl" className={styles.listenBar}>
         <Button size="icon" variant="primary" className="rounded-full" aria-label={listening.playing ? 'إيقاف مؤقت' : 'استمع'} title={listening.playing ? 'إيقاف مؤقت' : 'استمع'} onClick={togglePlaying}>
           {listening.playing ? <Pause aria-hidden fill="currentColor" /> : <Play aria-hidden fill="currentColor" />}
         </Button>
@@ -131,8 +133,9 @@ export default function ListenBar({ onRepeat, above = false }: { onRepeat: () =>
           <span className="truncate">{named(listening.key)}</span>
           <span className="truncate text-xs text-[var(--home-muted)]">{`${reciterOf(listening.reciter).name} · ${rangeText(listening.keys[0], listening.keys[listening.keys.length - 1])}`}</span>
         </button>
+        <Button size="lg" variant="muted" aria-label="اطوِ الشريط في دائرة" title="اطوِ الشريط في دائرة" onClick={fold}><Minimize2 aria-hidden /></Button>
         <Button size="lg" variant="muted" aria-label="أوقف الاستماع" title="أوقف الاستماع" onClick={stopListening}><X aria-hidden /></Button>
-      </div>
-    </div>
+      </div>}
+    </FloatingBar>
   );
 }

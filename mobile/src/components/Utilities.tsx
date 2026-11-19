@@ -19,6 +19,7 @@ import Card from '@/ui/Card';
 import { SearchField } from '@/ui/Field';
 import Empty from '@/ui/Empty';
 import Adhkar from './Adhkar';
+import { Tap } from '@/ui/Tap';
 
 const VIEWS: { id: UtilityView; Icon: (props: LucideProps) => React.ReactNode; label: string }[] = [
   { id: 'times', Icon: Clock, label: 'مواقيت الصلاة' },
@@ -179,11 +180,11 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
         })}
       </Card>
       {blocked && (
-        <Pressable onPress={openPhoneSettings} accessibilityRole="button" accessibilityLabel="التنبيهات موقوفة، افتح إعدادات الجوال"
+        <Tap onPress={openPhoneSettings} accessibilityRole="button" accessibilityLabel="التنبيهات موقوفة، افتح إعدادات الجوال"
           style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'center', paddingVertical: 4, opacity: pressed ? 0.7 : 1 })}>
           <BellOff size={16} color={palette.muted} />
           <Text style={{ color: palette.muted, fontSize: 15 }}>التنبيهات موقوفة، فاسمح بها من إعدادات الجوال</Text>
-        </Pressable>
+        </Tap>
       )}
       <View style={{ gap: 6 }}>
         <Text style={{ color: palette.muted, fontSize: 14 }}>طريقة الحساب</Text>

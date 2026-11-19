@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, PenLine, Undo2, X, type LucideIcon } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Minimize2, PenLine, Undo2, X, type LucideIcon } from 'lucide-react';
 import Button from '@/components/common/Button';
 import mushaf from '@/app/quran/read/Mushaf.module.css';
 import type { Recite } from './useRecite';
@@ -18,8 +18,10 @@ export function penLabel(writing: boolean, pen: Recite['pen'], ar: boolean) {
  * (`onClose`), and says what the next-ayah button does once its ayat are done (`after`: the reader's next forgotten ayah)
  * and whether there is anything after (`more`: the next page).
  */
-export default function RecitePill({ recite, writing, onWriting, onClose, after, more = false, lead, ar = true, className }: {
+export default function RecitePill({ recite, writing, onWriting, onClose, onFold, after, more = false, lead, ar = true, className }: {
   recite: Recite; writing: boolean; onWriting: () => void; onClose?: () => void;
+  /** The reader's bar floats over the page (common/FloatingBar), with a last button that folds it into a circle. */
+  onFold?: () => void;
   after?: { Icon: LucideIcon; label: string }; more?: boolean; lead?: React.ReactNode; ar?: boolean; className?: string;
 }) {
   const ended = recite.done || !recite.view?.upcoming;
@@ -35,5 +37,7 @@ export default function RecitePill({ recite, writing, onWriting, onClose, after,
     {!recite.party && <Button size="lg" variant="ghost" {...tip(next.label)} disabled={ended && !more} onClick={recite.nextAyah}><next.Icon aria-hidden /></Button>}
     <Button size="lg" variant={writing ? 'primary' : 'muted'} aria-pressed={writing} {...tip(pen)} disabled={recite.party} onClick={onWriting}><PenLine aria-hidden /></Button>
     {onClose && <Button size="lg" variant="muted" {...tip(ar ? 'إنهاء التسميع' : 'Stop reciting')} onClick={onClose}><X aria-hidden /></Button>}
+    {/* The far end, away from the buttons: fold the bar into a circle (owner, 2026-11-19). */}
+    {onFold && <Button size="lg" variant="muted" {...tip(ar ? 'اطوِ الشريط في دائرة' : 'Fold the bar into a circle')} onClick={onFold}><Minimize2 aria-hidden /></Button>}
   </div>;
 }

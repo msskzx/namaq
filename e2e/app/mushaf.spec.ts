@@ -367,25 +367,45 @@ test('recite from an ayah\'s long-press menu starts at that ayah', async ({ page
   await expect.poll(start).toBe('1:6');
 });
 
-test('the recite bar moves to the top and back, by its grip or by dragging, and stays where it was put', async ({ page }) => {
+test('the recite bar floats over a full-size page, goes wherever it is dragged, stays there, and folds into a circle', async ({ page }) => {
   await open(page, '/read');
+  // The page measures its lines and draws once more, so its place is read once it holds still.
+  const pageTop = async () => (await page.getByText(HAMD, { exact: true }).first().boundingBox())?.y ?? -1;
+  await expect.poll(pageTop).toBeGreaterThan(0);
+  await page.waitForTimeout(300);
+  const before = await pageTop();
   await page.getByText(HAMD, { exact: true }).first().click();
   await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
   await page.getByRole('button', { name: 'سمّع من أول الصفحة' }).click();
-  const bar = page.getByLabel('أدوات التسميع');
-  const y = async () => (await bar.boundingBox())!.y;
-  expect(await y()).toBeGreaterThan(600);
-  await page.getByRole('button', { name: 'انقل الشريط إلى الأعلى' }).click();
-  await expect.poll(y).toBeLessThan(30);
-  await expect.poll(() => stored(page, 'recite-bar-edge')).toBe('top');
-  // Dragged most of the way down, it settles at the bottom.
-  const box = (await bar.boundingBox())!;
-  await page.mouse.move(box.x + 40, box.y + box.height / 2);
+  const bar = page.getByRole('toolbar', { name: 'أدوات التسميع' });
+  const box = async () => (await bar.boundingBox())!;
+  expect((await box()).y).toBeGreaterThan(600);
+  // The page keeps its place and size: the bar takes no room from it (owner, 2026-11-19).
+  await expect.poll(pageTop).toBe(before);
+  // Every bar button is a full 44-point box (ui/tapSize.ts).
+  const undo = (await page.getByRole('button', { name: 'ارجع خطوة' }).boundingBox())!;
+  expect(Math.min(undo.width, undo.height)).toBeGreaterThanOrEqual(44);
+  // Dragged up and to the side, by a spot that is not a button, it stays where it is let go.
+  const from = await box();
+  const grab = { x: from.x + 3, y: from.y + from.height / 2 };
+  await page.mouse.move(grab.x, grab.y);
   await page.mouse.down();
-  for (let step = 1; step <= 12; step++) { await page.mouse.move(box.x + 40, box.y + box.height / 2 + step * 50); await page.waitForTimeout(16); }
+  for (let step = 1; step <= 10; step++) { await page.mouse.move(grab.x - step * 3, grab.y - step * 35); await page.waitForTimeout(16); }
   await page.mouse.up();
-  await expect.poll(y).toBeGreaterThan(600);
-  await expect.poll(() => stored(page, 'recite-bar-edge')).toBe('bottom');
+  await expect.poll(async () => (await box()).y).toBeLessThan(from.y - 300);
+  const dropped = await box();
+  // Its place is kept where it shows, for next time.
+  const screen = page.viewportSize()!.height;
+  await expect.poll(() => stored<{ recite: { y: number } }>(page, 'floating-bars').then(places => Math.round((places?.recite.y ?? 1) * screen)))
+    .toBeCloseTo(dropped.y + dropped.height / 2, -1);
+  // Folded, it is a circle where it was; a tap on the circle opens it again.
+  await page.getByRole('button', { name: 'اطوِ الشريط في دائرة' }).click();
+  const circle = page.getByRole('button', { name: 'افتح أدوات التسميع' });
+  await expect(circle).toBeVisible();
+  expect(Math.abs((await circle.boundingBox())!.y - dropped.y)).toBeLessThan(40);
+  await expect.poll(() => stored<{ recite: { folded: boolean } }>(page, 'floating-bars').then(places => places?.recite.folded)).toBe(true);
+  await circle.click();
+  await expect(page.getByRole('button', { name: 'ارجع خطوة' })).toBeVisible();
 });
 
 test.describe('zoom', () => {

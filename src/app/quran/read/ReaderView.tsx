@@ -13,6 +13,7 @@ import { readFasilas, serverFasilas, setQuranFasila, subscribeFasilas } from '@s
 import FasilaIcon from '@/components/quran/FasilaIcon';
 import { readGestures, serverGestures, subscribeGestures, type GestureAction } from '@shared/readerGestures';
 import RecitePill from '@/components/recite/RecitePill';
+import FloatingBar from '@/components/common/FloatingBar';
 import { useRecite } from '@/components/recite/useRecite';
 import { usePenRule } from '@/lib/penRule';
 import { joinModels, pageModel } from '@shared/quran/recitePage';
@@ -624,7 +625,8 @@ export default function ReaderView({
       </div>}
       <AyahPreviewSheet preview={preview} onClose={() => setPreview(null)} />
       <ListenBar above={!!position} onRepeat={() => setListenFrom(listening?.key ?? null)} />
-      {listening && listenShown === undefined && !following && <div className={mushaf.reciteBar} style={{ transform: `translateY(calc(-1 * (58px + ${position ? 'var(--recite-pill) + 16px' : '8px'})))` }}>
+      {/* Back to the ayah being read: at the top, out of the way of the floating bars low on the page. */}
+      {listening && listenShown === undefined && !following && <div className={`${mushaf.reciteBar} ${mushaf.backBar}`}>
         <Button size="md" variant="muted" className={mushaf.fasilaPill} onClick={() => setFollowing(true)}>
           {ar ? `عُد إلى الآية · ${surahOfKey(listening.key) ?? ''} ${num(Number(listening.key.split(':')[1]))}` : `Back to the ayah being read · ${listening.key}`}
         </Button>
@@ -633,11 +635,12 @@ export default function ReaderView({
       <TopicSheet open={topic} onClose={() => setTopic(null)} />
       {noting && <NoteDialog ayah={noting} name={surahOfKey(noting)} ar={ar} onClose={() => setNoting(null)} />}
       {sharing && <AyahShareDialog ayah={sharing} name={surahOfKey(sharing)} note={notes[sharing]?.text} onClose={() => setSharing(null)} />}
-      {position && <div className={mushaf.reciteBar}>
-        <RecitePill recite={reciter} writing={writing} onWriting={toggleWriting} onClose={stopRecite} ar={ar} more={reviewing ? !!reviewNext : !last}
+      {/* The recite bar floats over the page, goes wherever it is dragged and folds into a circle (owner, 2026-11-19). */}
+      {position && <FloatingBar id="recite" openLabel={ar ? 'افتح أدوات التسميع' : 'Open the recite tools'} Icon={EyeOff} className={mushaf.reciteBar}>
+        {fold => <RecitePill recite={reciter} writing={writing} onWriting={toggleWriting} onClose={stopRecite} onFold={fold} ar={ar} more={reviewing ? !!reviewNext : !last}
           after={reviewing ? { Icon: ar ? ArrowLeft : ArrowRight, label: ar ? 'الآية المنسية التالية' : 'Next forgotten ayah' } : undefined}
-          lead={reviewing ? <span className="px-2 text-sm text-[var(--home-muted)]">{ar ? `مراجعة ${num(reviewAt)} من ${num(reviewTotal)}` : `Review ${reviewAt} of ${reviewTotal}`}</span> : null} />
-      </div>}
+          lead={reviewing ? <span className="px-2 text-sm text-[var(--home-muted)]">{ar ? `مراجعة ${num(reviewAt)} من ${num(reviewTotal)}` : `Review ${reviewAt} of ${reviewTotal}`}</span> : null} />}
+      </FloatingBar>}
       {/* The keyboard writes into the box being written; the field itself is out of sight. */}
       {reciting && writing && boxes.field({ 'aria-label': ar ? 'اكتب الكلمة' : 'Write the word' })}
     </div>

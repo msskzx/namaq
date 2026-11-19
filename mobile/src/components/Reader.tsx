@@ -5,7 +5,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Text } from '@/ui/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
-import { ArrowLeft, ArrowLeftRight, BookOpenText, BookOpen, Bookmark, Check, EyeOff, Layers, LightbulbOff, ListTree, NotebookPen, History, Play, Pointer, Search, Send, Sparkles, TableOfContents, TextSearch } from 'lucide-react-native';
+import { ArrowLeft, ArrowLeftRight, BookOpenText, BookOpen, Bookmark, Check, EyeOff, Headphones, Layers, LightbulbOff, ListTree, NotebookPen, History, Play, Pointer, Search, Send, Sparkles, TableOfContents, TextSearch } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayahBookmarkId, ayahHref, clearForgotten, markAyah, markWord, wordMarkKey, readAyahMarks, subscribeAyahMarks, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
@@ -33,6 +33,7 @@ import FasilaIcon from './FasilaIcon';
 import { shareAyah } from './AyahShare';
 import ListenBar, { LISTEN_BAR } from './ListenBar';
 import RecitePill, { RECITE_BAR } from './recite/RecitePill';
+import FloatingBar from '@/ui/FloatingBar';
 import IconButton from '@/ui/IconButton';
 import { useRecite } from './recite/useRecite';
 import ListenSheet from './ListenSheet';
@@ -53,7 +54,7 @@ import { usePageTouch } from '@/lib/usePageTouch';
 import { settleZoom } from '@/lib/pageZoom';
 import { useIntent } from '@/lib/intent';
 import { usePalette } from '@/lib/theme';
-import { penRule, reciteBarEdge } from '@/lib/settings';
+import { penRule } from '@/lib/settings';
 import { surahName } from '@shared/quran/surahNames';
 import { SURAH_TITLES } from '@shared/quran/surahNames';
 
@@ -157,9 +158,6 @@ export default function Reader() {
   const { view, boxes, checked, setChecked } = recite;
   const writeKey = recite.write?.key ?? null;
   const keyboard = useKeyboardHeight(reciting && writing);
-  // The recite bar sits at the bottom or, dragged there, at the top under the top bar (owner, 2026-11-17).
-  const [barEdge, setBarEdge] = reciteBarEdge.use();
-  const barAtTop = reciting && barEdge === 'top';
   const toggleWriting = () => { setWriting(on => { writeJson(WRITE, !on); return !on; }); setChecked(null); boxes.blur(); };
   const write: Write | null = recite.write ? { ...recite.write, onActive: (y, h) => follow.current(y, h) } : null;
   // Scrolls the box being written into the part of the screen above the pill and keyboard.
@@ -278,11 +276,12 @@ export default function Reader() {
     touches.touch(touch, key, x, y, word);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // While reciting the page ends above the recite pill, so it never covers a line.
-  // While writing, the page keeps its size and scrolls above the keyboard (owner, 2026-11-13: no squeezed page),
-  // following the box being written.
-  const pillBottom = keyboard ? keyboard + 8 : tools ? tabBarTop(insets.bottom) + 8 : tabBarBottom(insets.bottom);
-  const pageInsets = { top: insets.top + (barAtTop ? RECITE_BAR + 8 : 0), bottom: (reciting && !barAtTop ? tabBarBottom(insets.bottom) + RECITE_BAR + 8 : listening || reciting ? tabBarBottom(insets.bottom) : insets.bottom) + (listening ? LISTEN_BAR + 8 : 0) };
+  // The page always keeps its full size: the recite and listen bars float over it (owner, 2026-11-19), wherever the
+  // reader drops them. While writing, the page keeps its size and scrolls above the keyboard (owner, 2026-11-13: no
+  // squeezed page), following the box being written.
+  const pageInsets = { top: insets.top, bottom: insets.bottom };
+  /** What the floating bars stay clear of: the status bar and the top bar above, the keyboard or the tab bar below. */
+  const barClear = { top: insets.top + (tools ? TOP_BAR : 0) + 8, bottom: keyboard ? keyboard + 8 : tools ? tabBarTop(insets.bottom) + 8 : tabBarBottom(insets.bottom) };
   const height = size ? size.height - pageInsets.top - pageInsets.bottom : 0;
   const scroller = useRef<ComponentRef<typeof ScrollView>>(null);
   // The scroll view as a gesture-handler gesture, so the pager's swipe and pinch inside it are weighed together with it:
@@ -341,8 +340,9 @@ export default function Reader() {
   const onFocus = useCallback((y: number, h: number) => follow.current(y, h), []);
   follow.current = (y, h) => {
     if (!size || (!keyboard && (!flowing || Date.now() < quietUntil.current))) return;
-    const top = barAtTop ? insets.top + (tools ? TOP_BAR : 0) + RECITE_BAR + 16 : pageInsets.top + 8;
-    const bottom = keyboard ? size.height - (barAtTop ? keyboard + 8 : pillBottom + RECITE_BAR + 12) : size.height - pageInsets.bottom - 8;
+    const top = pageInsets.top + 8;
+    // Over the keyboard the recite bar is held just above it, so the box being written stays above the bar too.
+    const bottom = keyboard ? size.height - keyboard - RECITE_BAR - 16 : size.height - pageInsets.bottom - 8;
     if (y + h > bottom) scroller.current?.scrollTo({ y: scrolled.current + y + h - bottom + 24, animated: true });
     else if (y < top) scroller.current?.scrollTo({ y: Math.max(0, scrolled.current - (top - y) - 24), animated: true });
   };
@@ -459,19 +459,29 @@ export default function Reader() {
       <IrabSheet target={irab} onClose={() => setIrab(null)} palette={palette} />
       <BalaghaSheet ayah={balagha} onClose={() => setBalagha(null)} palette={palette} />
       <GharibSheet target={gharib} onClose={() => setGharib(null)} palette={palette} />
-      {/* The recite pill: see-through and low at the bottom like the tab bar (owner, 2026-11-13), and just above the tab bar when the app's bars are shown. */}
-      {position && (
-        <RecitePill recite={recite} writing={writing} onWriting={toggleWriting} onClose={stopRecite} palette={palette}
-          more={reviewing ? !!reviewNext : page < PAGES} after={reviewing ? { Icon: ArrowLeft, label: 'الآية المنسية التالية' } : undefined}
-          lead={reviewing ? <Text style={{ color: palette.muted, fontSize: 13, paddingHorizontal: 8 }}>مراجعة {num(reviewAt)} من {num(reviewTotal)}</Text> : null}
-          style={{ left: TAB_BAR.side, right: TAB_BAR.side }}
-          dock={size ? { edge: barEdge, top: insets.top + (tools ? TOP_BAR : 0) + 8, bottom: pillBottom, height: size.height, onEdge: setBarEdge } : undefined} />
+      {/* The recite bar and the listen bar float over the page, start low near the thumb, and stay wherever they are
+          dropped; each folds into a circle (owner, 2026-11-19, ui/FloatingBar). */}
+      {position && size && (
+        <FloatingBar id="recite" label="أدوات التسميع" Icon={EyeOff} screen={size} clear={barClear} palette={palette}
+          start={{ x: size.width / 2, y: size.height - barClear.bottom - RECITE_BAR / 2 }}>
+          {fold => (
+            <RecitePill recite={recite} writing={writing} onWriting={toggleWriting} onClose={stopRecite} palette={palette} onFold={fold}
+              more={reviewing ? !!reviewNext : page < PAGES} after={reviewing ? { Icon: ArrowLeft, label: 'الآية المنسية التالية' } : undefined}
+              lead={reviewing ? <Text style={{ color: palette.muted, fontSize: 13, paddingHorizontal: 8 }}>مراجعة {num(reviewAt)} من {num(reviewTotal)}</Text> : null} />
+          )}
+        </FloatingBar>
       )}
-      <ListenBar bottom={reciting && !barAtTop ? pillBottom + RECITE_BAR + 8 : pillBottom} side={TAB_BAR.side} palette={palette}
-        onRepeat={() => { setListenFrom(listening?.key ?? null); setListenOpen(true); }} />
+      {listening && size && (
+        <FloatingBar id="listen" label="شريط الاستماع" Icon={Headphones} screen={size} clear={barClear} palette={palette}
+          start={{ x: size.width / 2, y: size.height - barClear.bottom - LISTEN_BAR / 2 - (reciting ? RECITE_BAR + 8 : 0) }}>
+          {fold => <ListenBar width={Math.min(size.width - TAB_BAR.side * 2, 420)} palette={palette} onFold={fold}
+            onRepeat={() => { setListenFrom(listening?.key ?? null); setListenOpen(true); }} />}
+        </FloatingBar>
+      )}
+      {/* Back to the ayah being read, under the top bar, out of the way of the bars low on the page. */}
       {listening && listenPage && listenPage !== page && (
         <Pressable onPress={() => { setFollowing(true); setPage(listenPage); setActions(null); }} accessibilityRole="button" accessibilityLabel={`عُد إلى الآية التي تُتلى، ${plainSurah(listening.key)}`}
-          style={{ position: 'absolute', alignSelf: 'center', bottom: (reciting && !barAtTop ? pillBottom + RECITE_BAR + 8 : pillBottom) + LISTEN_BAR + 10, height: 36, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, borderRadius: 999, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }}>
+          style={{ position: 'absolute', alignSelf: 'center', top: barClear.top, height: 36, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 14, borderRadius: 999, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }}>
           <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
           <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: palette.glass }]} />
           <Text style={{ color: palette.ink, fontSize: 14 }}>{`عُد إلى الآية · ${plainSurah(listening.key)}`}</Text>

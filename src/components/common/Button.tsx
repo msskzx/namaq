@@ -20,8 +20,15 @@ const SIZE_CLASSES: Record<ButtonSize, string> = {
   /** An icon alone in a circle, beside a title or under a card (close, share, open in the mushaf). */
   round: 'size-9 shrink-0 [&_svg]:size-[18px]',
 };
+/**
+ * Every button gives the finger at least 44 × 44 px (owner, 2026-11-19, as the app's ui/tapSize.ts): an invisible
+ * ::after reaches past a smaller box, so the look stays and the icon never grows. The button holds it (relative)
+ * unless the page already places the button itself.
+ */
+export const TAP_FLOOR = "after:absolute after:content-[''] after:inset-[min(0px,calc((100%_-_44px)/2))]";
+const placed = (className?: string) => /(^|[\s:])(absolute|fixed|sticky)(\s|$)/.test(className ?? '');
 function classesFor(variant: ButtonVariant, size: ButtonSize, active: boolean, className?: string) {
-  return ['inline-flex items-center justify-center gap-2 transition', size === 'round' ? 'rounded-full' : 'rounded-sm', 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--home-accent)] disabled:opacity-50 disabled:cursor-not-allowed', SIZE_CLASSES[size], VARIANT_CLASSES[active ? 'primary' : variant], active && (variant === 'outline' || variant === 'neutral') ? 'border border-[var(--button-color,var(--home-accent))]' : '', className].filter(Boolean).join(' ');
+  return ['inline-flex items-center justify-center gap-2 transition', TAP_FLOOR, placed(className) ? '' : 'relative', size === 'round' ? 'rounded-full' : 'rounded-sm', 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--home-accent)] disabled:opacity-50 disabled:cursor-not-allowed', SIZE_CLASSES[size], VARIANT_CLASSES[active ? 'primary' : variant], active && (variant === 'outline' || variant === 'neutral') ? 'border border-[var(--button-color,var(--home-accent))]' : '', className].filter(Boolean).join(' ');
 }
 
 type CommonProps = {

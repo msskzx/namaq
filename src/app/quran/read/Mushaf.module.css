@@ -9,8 +9,8 @@
   justify-content: center;
   padding: 0.75rem;
 }
-/* While reciting, the page leaves room under it for the recite pill instead of hiding lines behind it. */
-.reader[data-reciting] .stage { padding-bottom: calc(var(--recite-pill) + 16px); }
+/* The page keeps its full size while reciting: the recite and listen bars float over it, wherever the reader drops them
+   (owner, 2026-11-19, common/FloatingBar). */
 
 .page {
   --count: 1;
@@ -212,8 +212,6 @@
   .strip { display: flex; }
   .head { align-items: center; }
   .strip .badge { padding: 0 0.6em; font-size: 11px; line-height: 1.6; }
-  /* While reciting, the page leaves room under it for the recite pill instead of hiding lines behind it. */
-  .reader[data-reciting] .stage { padding-bottom: calc(max(8px, env(safe-area-inset-bottom) - 10px) + var(--recite-pill) + 8px); }
 }
 
 /* Recite mode (تسميع): hidden words keep their place; the next ayah is tinted. */
@@ -269,7 +267,11 @@
   border: 1px solid color-mix(in srgb, var(--home-ink) 12%, transparent);
   box-shadow: 0 6px 24px rgb(0 0 0 / 0.3);
 }
-.reciteBar[data-above] { transform: translateY(calc(-1 * (var(--recite-pill) + 8px))); }
+/* Floating, the recite pill hugs its buttons (each a full 44px box, side by side) and the listen bar keeps a phone's width. */
+[data-floating] .recitePill { width: auto; }
+[data-floating] .listenBar { width: min(26rem, calc(100vw - 40px)); }
+/* Back to the ayah being read sits under the top of the window, clear of the bars low on the page. */
+.reciteBar.backBar { bottom: auto; top: calc(8px + env(safe-area-inset-top)); }
 /* The pill back to the «فاصلة», in the recite bar's place. */
 .fasilaPill { pointer-events: auto; border-radius: 999px; -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); background: color-mix(in srgb, var(--home-paper) 88%, transparent); border: 1px solid var(--home-rule); color: var(--home-ink); }
 /* While writing on a phone, the recite pill sits above the keyboard (ReaderView measures it). */

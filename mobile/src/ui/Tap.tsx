@@ -1,5 +1,6 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Pressable, type GestureResponderEvent } from 'react-native';
+import { slopFor, type Slop } from './tapSize';
 
 /** How far (px) the finger may move between down and up and still be a tap: beyond it, it was a scroll or a swipe. */
 const SLOP = 10;
@@ -18,11 +19,21 @@ function point(event: GestureResponderEvent): { x: number; y: number } | null {
  * A long press needs none: React Native already cancels it once the finger moves. A press with no point always fires.
  * Screens still use the pieces (Button, IconButton, the cards); a screen that draws its own Tap counts as drawing a
  * control (shared/sharedFirst.test.ts).
+ *
+ * Every press reaches at least 44 × 44 points (owner, 2026-11-19, ui/tapSize.ts): once drawn, its hit slop widens on its
+ * own around a smaller box, so nothing tappable is only as big as its icon.
  */
-export function Tap({ onPressIn, onPress, ...rest }: React.ComponentProps<typeof Pressable>) {
+export function Tap({ onPressIn, onPress, onLayout, hitSlop, ...rest }: React.ComponentProps<typeof Pressable>) {
   const start = useRef<{ x: number; y: number } | null>(null);
+  const [size, setSize] = useState<{ width: number; height: number } | null>(null);
   return (
     <Pressable {...rest}
+      hitSlop={slopFor(size, hitSlop as number | Partial<Slop> | null | undefined)}
+      onLayout={event => {
+        const { width, height } = event.nativeEvent.layout;
+        setSize(prev => (prev && Math.abs(prev.width - width) < 1 && Math.abs(prev.height - height) < 1 ? prev : { width, height }));
+        onLayout?.(event);
+      }}
       onPressIn={event => { start.current = point(event); onPressIn?.(event); }}
       onPress={onPress ? event => {
         const from = start.current, to = point(event);
