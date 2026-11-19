@@ -691,19 +691,6 @@ export const ADHKAR: readonly Dhikr[] = [
     ],
     "grades": [
       {
-        "rank": "hasan-sahih",
-        "scholar": "الترمذي",
-        "quote": "هذا حديث حسن صحيح غريب من هذا الوجه",
-        "citation": {
-          "source": "adhkar-nawawi",
-          "volume": 1,
-          "page": 79,
-          "url": "https://shamela.ws/book/1956/77",
-          "report": 214
-        },
-        "reportedBy": "النووي"
-      },
-      {
         "rank": "hasan",
         "scholar": "ابن حجر العسقلاني",
         "quote": "هذا حديث حسن، أخرجه الترمذي",
@@ -928,18 +915,6 @@ export const ADHKAR: readonly Dhikr[] = [
       "كتاب ابن السني"
     ],
     "grades": [
-      {
-        "rank": "isnad-sahih",
-        "scholar": "النووي",
-        "quote": "بإسناد صحيح",
-        "citation": {
-          "source": "adhkar-nawawi",
-          "volume": 1,
-          "page": 82,
-          "url": "https://shamela.ws/book/1956/80",
-          "report": 225
-        }
-      },
       {
         "rank": "hasan",
         "scholar": "ابن حجر العسقلاني",

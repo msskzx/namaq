@@ -90,12 +90,12 @@ checked by `npm run adhkar:check` against both books.
 | `morning-evening-hundred-praise` | 206 | Ibn Hajar, 2:343, sahih; counter 100 |
 | `evening-kingdom` | 210 | Ibn Hajar, 2:355, sahih |
 | `evening-perfect-words` | 211 | Ibn Hajar, 2:356, sahih |
-| `evening-pleased` | 214 | al-Tirmidhi via al-Nawawi; Ibn Hajar, 2:371, hasan |
+| `evening-pleased` | 214 | Ibn Hajar, 2:371, hasan |
 | `morning-bear-witness` | 215 | Ibn Hajar, 2:375, hasan; counter 4 («فإن قالها أربعًا») |
 | `morning-thanks` | 216 | Ibn Hajar, 2:380, hasan |
 | `morning-evening-oneness` | 219 | Ibn Hajar, 2:386, sahih |
 | `morning-evening-wellness` | 221 | Ibn Hajar, 2:390, hasan; Abu Bakrah's three times quoted, no counter |
-| `morning-fitra` | 225 | al-Nawawi (chain); Ibn Hajar, 2:401, hasan |
+| `morning-fitra` | 225 | Ibn Hajar, 2:401, hasan |
 | `morning-evening-living` | 230 | Ibn Hajar, 2:407, hasan |
 | `morning-knowledge` | 232 | Ibn Hajar, 2:411, hasan |
 
@@ -105,11 +105,19 @@ al-Darda'), 238, 239. Report 234 is not a dhikr to say. Report 209 (travel befor
 218 (at bedtime) for the sleep batch. Where al-Nawawi gives only the start of the other time's wording («أصبحنا وأصبح
 الملك لله ...») or says «مثل ذلك», only the time with full printed words is shown, as with report 208.
 
+Two judgments al-Nawawi quotes are not shown because Ibn Hajar answers them on the cited pages: al-Tirmidhi's «حسن
+صحيح غريب» for 214 (Ibn Hajar, 2:371: al-Tirmidhi's book has «حسن غريب», «ولم أر لفظة صحيح في كتاب الترمذي») and
+al-Nawawi's «بإسناد صحيح» for 225 (2:402: «لا يتأتى الحكم بصحته»). Ibn Hajar's own hasan stands for both. Report
+221's times come from Abu Bakrah's own practice («تعيدها حين تصبح ثلاثًا، وثلاثًا حين تُمسي»), which he says follows
+the Prophet ﷺ («إني سمعتُ رسولَ الله ﷺ يدعو بهنّ»); both are quoted in its reference. Report 230 names no collection
+of its own («وروينا فيه», Ibn al-Sunni's book per Ibn Hajar), so its card lists none.
+
 Three new fields keep the words as printed: `content.parts` (the pieces either side of a narrator's remark or a line
 end, joined for display), `noteQuote` (that remark, shown in the reference) and `fixes`. A fix corrects a printing slip
 only from a named source, shown in the reference: report 225's «نبِيِّا» reads «نبِيِّنا» from al-Nawawi's own
-comment under it; report 214's «رَبًَّا» and «نَبِيًَّا» read as on p. 18 and in al-Nawawi's note; report 221's
-«أعُوذَ بِكَ مِنْ عَذَابِ» reads «أعُوذُ» as in report 174, p. 68.
+comment under it; report 214's «نَبِيًَّا» reads as in al-Nawawi's note under it. Two fixes rest on the same words printed in
+another hadith of the book, not this one, and say so by their citation: 214's «رَبًَّا» as in report 29, p. 18, and
+221's «أعُوذَ بِكَ مِنْ عَذَابِ» as «أعُوذُ» in report 174, p. 68. The second reviewer flagged these two as by analogy.
 
 The website has no adhkar page, so this batch changes the app only; the website's search leaves the adhkar out as before.
 
