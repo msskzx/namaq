@@ -390,6 +390,11 @@ Arabic Corpus's dictionary forms of a word (words, lemmas, similar ayat): none
 of them is the Hafs page text. The readings and dictionary forms are stored
 in the Madina page's spelling (`scripts/quran/madinaSpelling.ts` at build
 time), so no screen converts a word; book quotes keep the book's own spelling.
+An ayah drawn off the page (a quiz's ayah, a choice that is an ayah) goes in
+the module's `AyahFlow` with `AyahWords`, which size it from its width as the
+reader's flowing text is (`shared/quran/quranText/flow.ts`); the place sets
+colour and marks, never a size (owner, 2026-11-19). The guard's `sized` rule
+fails a size given to Quran words outside the module.
 `oneQuranText.test.ts` lists today's breaks in
 `oneQuranText.baseline.json`; the list only shrinks.
 

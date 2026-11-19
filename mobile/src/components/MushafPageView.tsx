@@ -9,6 +9,7 @@ import { wordAtPoint } from '@shared/quran/selection';
 import type { PageModel, reciteView } from '@shared/quran/recitePage';
 import type { WriteBlank } from '@shared/quiz/writeBlanks';
 import type { WriteBlanks } from './recite/useRecite';
+import { useAyahSize } from './quran/text/AyahFlow';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { breakLines, FLOW_LINE, flowSize } from '@/lib/pageZoom';
 
@@ -146,9 +147,13 @@ export function WriteBox({ text, size, palette, typed, active, onPress, onActive
  * A quiz blank in recite mode's boxes (owner, 2026-11-19; useWriteBlanks): the words it asks are WriteBoxes, the rest of its
  * words the faint boxes the pen leaves, as on the mushaf page. Without `write` (an example) the boxes take no typing.
  */
-export function BlankBoxes({ blank, index, write, size, palette, hint, name }: { blank: WriteBlank; index: number; write?: WriteBlanks; size: number; palette: Palette; hint?: string;
+export function BlankBoxes({ blank, index, write, size: given, palette, hint, name }: { blank: WriteBlank; index: number; write?: WriteBlanks;
+  /** The words' size; in an AyahFlow, its own. */
+  size?: number; palette: Palette; hint?: string;
   /** The blank's name («الطرف ١»); each box adds its word's place. */
   name: string }) {
+  const flow = useAyahSize();
+  const size = given ?? flow;
   return <>{blank.words.map((word, at) => {
     if (at >= blank.write) return <Veil key={at} text={word} size={size} palette={palette} next={false} faint />;
     // An example's box only shows where you write: the write box's look, no button.

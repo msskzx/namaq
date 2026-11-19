@@ -6,7 +6,6 @@ import { Bookmark, Lightbulb, Send, SquareArrowOutUpLeft, UnfoldHorizontal, type
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayatLabel, branchesHref, keys, shownAyat, type Branch, type Variant } from '@shared/quran/branches';
 import { num } from '@shared/quran/arabicNumber';
-import { quranText } from '@/lib/quranText';
 import { branchNodes, givenAnswer, leadingSigns } from '@shared/quiz/branchAnswers';
 import { correctionOf, gradedTree, verdict, type Correction } from '@shared/quiz/feedback';
 import { emptyBranchAnswers, isAsked, type ScoredQuestion } from '@shared/quiz/score';
@@ -20,7 +19,8 @@ import { EMPTY_LIST, listShowing } from '@/lib/branchList';
 import type { Size } from '@/lib/camera';
 import { around as aroundSetting } from '@/lib/settings';
 import { useKeyboardShown } from '@/lib/keyboard';
-import { QURAN_FONT, type Palette } from '@/lib/theme';
+import { type Palette } from '@/lib/theme';
+import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
 import { toTab } from '@/lib/ways';
 import Card, { UnderCard } from '@/ui/Card';
 import { BlankBoxes } from './MushafPageView';
@@ -29,13 +29,11 @@ import { writeBlank, type WriteBlank } from '@shared/quiz/writeBlanks';
 
 export type TreeQuestion = ScoredQuestion & { tree: Branch; prefixes?: Variant[] };
 
-/** The size the matrix draws its words in. */
-const LEAF_SIZE = 20;
 
 /** The ayah signs an asked node opens with (﴿١٧﴾ where its ayah reads on into the next): given before its boxes, never typed. */
 function LeadingSigns({ node, palette }: { node: Branch; palette: Palette }) {
   const signs = leadingSigns(node.words);
-  return signs.length ? <Text style={{ fontFamily: QURAN_FONT, fontSize: LEAF_SIZE, lineHeight: LEAF_SIZE * 1.9, color: palette.muted }}>{quranText(signs.join(' '))}</Text> : null;
+  return signs.length ? <AyahWords look={{ color: palette.muted }}>{signs.join(' ')}</AyahWords> : null;
 }
 
 /** The asked nodes as blanks to write: a leaf's first two words, or all the words of a node above leaves. */
@@ -81,7 +79,6 @@ export function MatrixInputs({ question, values, hints, write, palette, names }:
   const rows = useMemo(() => rowsOf(question.tree, question.prefixes ?? []), [question.tree, question.prefixes]);
   const nodes = useMemo(() => branchNodes(question.tree), [question.tree]);
   const blanks = useMemo(() => treeBlanks(question), [question]);
-  const text = { fontFamily: QURAN_FONT, fontSize: LEAF_SIZE, lineHeight: LEAF_SIZE * 1.9, color: palette.ink, writingDirection: 'rtl' as const };
   return (
     <View style={{ gap: 10, paddingHorizontal: 12, paddingVertical: 8 }}>
       {rows.map(({ leaf, path, words, before, ayahKeys }) => {
@@ -91,19 +88,19 @@ export function MatrixInputs({ question, values, hints, write, palette, names }:
         return (
           <Card key={`${path.join('-')}:${ayahKeys[0]}`} palette={palette} pad={10} gap={2}>
             {label ? <Text style={{ color: palette.muted, fontSize: 13 }}>{label}</Text> : null}
-            <View style={{ direction: 'rtl', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 8 }}>
-              {before.length > 0 && <Text style={text}>{quranText(before.join(' '))}</Text>}
-              <Text style={[text, { color: palette.accent, fontWeight: '700' }]}>{quranText(givenAnswer(question.tree))}</Text>
+            <AyahFlow row color={palette.ink}>
+              {before.length > 0 && <AyahWords>{before.join(' ')}</AyahWords>}
+              <AyahWords look={{ color: palette.accent, fontWeight: '700' }}>{givenAnswer(question.tree)}</AyahWords>
               {path.map(index => {
                 const at = blanks.findIndex(blank => blank.id === index);
                 return at < 0
-                  ? <Text key={index} style={text}>{quranText(values[index])}</Text>
+                  ? <AyahWords key={index}>{values[index]}</AyahWords>
                   : <Fragment key={index}>
                     <LeadingSigns node={nodes[index]} palette={palette} />
-                    <BlankBoxes blank={blanks[at]} index={at} write={write} size={LEAF_SIZE} palette={palette} hint={hints[index]} name={`الطرف ${num(at + 1)}`} />
+                    <BlankBoxes blank={blanks[at]} index={at} write={write} palette={palette} hint={hints[index]} name={`الطرف ${num(at + 1)}`} />
                   </Fragment>;
               })}
-            </View>
+            </AyahFlow>
           </Card>
         );
       })}
@@ -156,7 +153,7 @@ function Typed({ row, palette }: { row: Correction; palette: Palette }) {
   return (
     <Text style={{ fontSize: 15, color: palette.muted, textAlign: 'right' }}>
       {'كتبتَ: '}
-      {typed.length === 0 ? 'لا شيء' : <Text style={{ fontFamily: QURAN_FONT, fontSize: 17 }}>{typed.map((word, i) => (
+      {typed.length === 0 ? 'لا شيء' : <Text style={{ fontSize: 17 }}>{typed.map((word, i) => (
         <Text key={i} style={row.marks[i] ? { color: palette.green } : { color: palette.accent, textDecorationLine: 'line-through' }}>{i > 0 ? ' ' : ''}{word}</Text>
       ))}</Text>}
     </Text>
