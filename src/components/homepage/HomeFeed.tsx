@@ -3,12 +3,21 @@
 import { Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText, SquareArrowOutUpLeft, Swords } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText, SquareArrowOutUpLeft, Swords, BookOpenText, ListTree, MessagesSquare, Link2 } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Cookies from 'js-cookie';
 import StoryMap from '@/app/quran/prophets/[slug]/StoryMap';
 import type { SavedContent, SiraCard, StoryCard } from '@/lib/homeFeed';
+import type { TermCard } from '@/lib/balaghaTerms';
+import type { HadithCard } from '@/lib/forty';
+import type { TarajimCard } from '@/lib/tarajim';
+import { TiesChain, tiesHref } from '@/components/tarajim/TarajimParts';
+import { IbnRajab, shamelaPage } from '@/components/hadith/FortyParts';
+import { fromCompanion } from '@shared/hadith';
+import { LitAyat, ayatName, quotesTitle, termHref } from '@/components/balagha/TermParts';
+import BookRuns from '@/components/quran/text/BookRuns';
+import { plainName } from '@shared/quran/balaghaTerms';
 import { Report } from '@/components/stories/StoryView';
 import StoryAyatLines from '@/components/stories/StoryAyatLines';
 import { Moment } from '@/components/battles/BattleMoments';
@@ -363,6 +372,89 @@ function MomentPost({ card }: { card: Extract<SiraCard, { kind: 'moment' }> }) {
   </Post>;
 }
 
+/**
+ * A balagha term as a post (the app's TermPost): its name, the start of its definition in the book's words, and one of
+ * al-Suyuti's examples, the ayah words he quotes lit. The head and the first button open the term's page.
+ */
+function TermPost({ card }: { card: TermCard }) {
+  const name = plainName(card.term.name);
+  const href = termHref(card.term.name);
+  const quote = card.term.quotes[0];
+  return <Post head={<PostHead Icon={BookOpenText} title="من مصطلحات البلاغة" sub={quote.book === 'itqan' ? 'الإتقان للسيوطي' : 'تلخيص المفتاح للقزويني'} href={href} label={`افتح ${name}`} />}
+    actions={<>
+      <Action Icon={BookOpenText} label={`${name}: تعريفه وأمثلته`} href={href} />
+      <Action Icon={ListTree} label="مصطلحات البلاغة" href="/quran/terms" />
+    </>}>
+    <div className="flex flex-col gap-1.5 px-3.5 py-3" lang="ar">
+      <p className="text-2xl">{name}</p>
+      {!card.term.defines && <p className="text-sm text-[var(--home-muted)]">{quotesTitle(card.term)}</p>}
+      <p className="line-clamp-5 text-[1.125rem] leading-[1.85]"><BookRuns text={quote.text} /></p>
+      {card.example && <>
+        <hr className="my-1 border-[var(--home-rule)] opacity-60" />
+        <p className="text-sm text-[var(--home-muted)]">من أمثلته</p>
+        <LitAyat lines={card.example.lines} size="text-[1.375rem]" />
+        <p className="text-[0.8125rem] text-[var(--home-muted)]">{ayatName(card.example.ayat)}</p>
+      </>}
+    </div>
+  </Post>;
+}
+
+/**
+ * One of al-Nawawi's Forty in his words (the app's HadithPost), or a passage of Ibn Rajab's explanation of one (its
+ * RajabPost); the head and the first button open the hadith's page with its records.
+ */
+function HadithPost({ card }: { card: HadithCard }) {
+  const { entry, books } = card;
+  const href = `/hadith/forty/${entry.n}`;
+  const rajab = card.kind === 'rajab';
+  const source = rajab ? { title: books.ibnrajab.title, url: shamelaPage(books, 'ibnrajab', card.passage[0].shamela) } : { title: books.nawawi.title, url: shamelaPage(books, 'nawawi', entry.shamela) };
+  return <Post head={<PostHead Icon={rajab ? BookOpenText : MessagesSquare} title={rajab ? 'من شرح ابن رجب' : 'من الحديث'} sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} href={href} label={`افتح ${entry.heading}`} />}
+    actions={<>
+      <Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} href={href} />
+      <Action Icon={SquareArrowOutUpLeft} label={`المصدر: ${source.title}`} href={source.url} external />
+    </>}>
+    <div className="px-4 py-3" lang="ar">
+      {card.kind === 'rajab' ? <IbnRajab only={card.passage} books={books} /> : <p className="text-[1.1875rem] leading-[1.9]">{entry.text}</p>}
+    </div>
+  </Post>;
+}
+
+/**
+ * «من التراجم» (the app's TarajimPost): a virtue from a converted Siyar entry, in the book's words with who says it and its
+ * page; the head opens the person's page.
+ */
+function TarajimPost({ card }: { card: Extract<TarajimCard, { kind: 'tarajim' }> }) {
+  const href = `/people/${card.person.slug}`;
+  return <Post head={<PostHead Icon={Users} title="من التراجم" sub={card.person.name} href={href} label={`افتح ترجمة ${card.person.name}`} />}
+    actions={<>
+      <Action Icon={Users} label={`افتح ترجمة ${card.person.name}`} href={href} />
+      <Action Icon={Link2} label={card.person.sex === 'FEMALE' ? 'صلاتها' : 'صلاته'} href={tiesHref(card.person.slug)} />
+    </>}>
+    <div className="flex flex-col gap-1.5 px-4 py-3" lang="ar">
+      <p className="text-[1.125rem] leading-[1.85]">{card.virtue.text}</p>
+      <p className="text-sm text-[var(--home-muted)]">{card.virtue.by ? `${card.virtue.by} · ` : ''}{card.pages}</p>
+    </div>
+  </Post>;
+}
+
+/**
+ * «صلة» (the app's TiePost): two converted people and the nearest chain of ties that joins them, drawn as «بينه وبين…»
+ * draws it, then in one sentence with the pages that state each tie.
+ */
+function TiePost({ card }: { card: Extract<TarajimCard, { kind: 'tie' }> }) {
+  return <Post head={<PostHead Icon={Link2} title="صلة" sub={`${card.a.name} و${card.b.name}`} href={tiesHref(card.a.slug)} label={`افتح صلات ${card.a.name}`} />}
+    actions={<>
+      <Action Icon={Link2} label={`صلات ${card.a.name}`} href={tiesHref(card.a.slug)} />
+      <Action Icon={Link2} label={`صلات ${card.b.name}`} href={tiesHref(card.b.slug)} />
+    </>}>
+    <div className="flex flex-col gap-1.5 px-4 py-3" lang="ar">
+      <TiesChain chain={card.chain} inCard />
+      <p className="text-[1.125rem] leading-[1.85]">{card.sentence}</p>
+      <p className="text-sm text-[var(--home-muted)]">{card.pages}</p>
+    </div>
+  </Post>;
+}
+
 type Tree = TreePreview & { text: string };
 
 /** A saved ayah as a post: the ayah in the mushaf's own lines, as the recall card shows it once revealed. */
@@ -488,6 +580,18 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
   const siraSlots = shows('sira') || shows('moment') ? Array.from({ length: batches }, (_, i) => i) : [];
   const { data: sira } = useSWR(day && siraSlots.length ? `/api/home/feed?day=${day}&sira=${siraSlots.join(',')}` : null,
     () => inPieces<SiraCard[]>(some => `/api/home/feed?day=${day}&sira=${some.join(',')}`, siraSlots).then(all => all.flat()), swr);
+  // The hadith and Ibn Rajab cards, one a batch, worked out on the server (the records and Ibn Rajab's book stay there).
+  const hadithSlots = shows('hadith') || shows('rajab') ? Array.from({ length: batches }, (_, i) => i) : [];
+  const { data: hadith } = useSWR(day && hadithSlots.length ? `/api/home/feed?day=${day}&hadith=${hadithSlots.join(',')}` : null,
+    () => inPieces<HadithCard[]>(some => `/api/home/feed?day=${day}&hadith=${some.join(',')}`, hadithSlots).then(all => all.flat()), swr);
+  // The virtue and «صلة» cards, one a batch, worked out on the server (the people's entries stay there).
+  const tarajimSlots = shows('tarajim') || shows('tie') ? Array.from({ length: batches }, (_, i) => i) : [];
+  const { data: tarajim } = useSWR(day && tarajimSlots.length ? `/api/home/feed?day=${day}&tarajim=${tarajimSlots.join(',')}` : null,
+    () => inPieces<TarajimCard[]>(some => `/api/home/feed?day=${day}&tarajim=${some.join(',')}`, tarajimSlots).then(all => all.flat()), swr);
+  // The balagha term cards, in every other batch, worked out on the server (al-Suyuti's book stays there).
+  const termSlots = shows('term') ? Array.from({ length: batches }, (_, i) => i).filter(i => i % 2 === 1) : [];
+  const { data: termCards } = useSWR(day && termSlots.length ? `/api/home/feed?day=${day}&term=${termSlots.join(',')}` : null,
+    () => inPieces<TermCard[]>(some => `/api/home/feed?day=${day}&term=${some.join(',')}`, termSlots).then(all => all.flat()), swr);
   // Pairs and trees load only for the interests shown, so what is not shown is never fetched or counted as seen.
   const content = pairContent || treeContent ? { pairs: pairContent?.pairs ?? [], trees: treeContent?.trees ?? [] } : undefined;
   const ready = (!shows('pair') || !!pairContent) && (!shows('tree') || !!treeContent);
@@ -528,9 +632,16 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
     if (readings) posts.push(<QiraatPost key={`r${readings}`} ayah={readings} />);
     const story = shows('prophets') ? stories?.find(card => card.slot === i) : undefined;
     if (story) posts.push(<StoryPost key={`s${day}-${i}`} card={story} />);
+    const hadithCard = hadith?.find(card => card.slot === i);
+    if (hadithCard && shows(hadithCard.kind)) posts.push(<HadithPost key={`h${day}-${i}`} card={hadithCard} />);
+    const termCard = shows('term') ? termCards?.find(card => card.slot === i) : undefined;
+    if (termCard) posts.push(<TermPost key={`term${day}-${i}`} card={termCard} />);
     const siraCard = sira?.find(card => card.slot === i);
     if (siraCard?.kind === 'sira' && shows('sira')) posts.push(<SiraPost key={`sira${day}-${i}`} card={siraCard} />);
     if (siraCard?.kind === 'moment' && shows('moment')) posts.push(<MomentPost key={`m${day}-${i}`} card={siraCard} />);
+    const tarajimCard = tarajim?.find(card => card.slot === i);
+    if (tarajimCard?.kind === 'tarajim' && shows('tarajim')) posts.push(<TarajimPost key={`tj${day}-${i}`} card={tarajimCard} />);
+    if (tarajimCard?.kind === 'tie' && shows('tie')) posts.push(<TiePost key={`tie${day}-${i}`} card={tarajimCard} />);
   }
   return <section className={styles.feed} aria-label="للتأمل اليوم">
     {posts}

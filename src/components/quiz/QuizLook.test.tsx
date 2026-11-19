@@ -17,7 +17,10 @@ describe('QuizLook', () => {
     expect(canLook({ view: 'story', slug: 'x' })).toBe(true);
     expect(canLook({ view: 'battle', slug: 'x' })).toBe(true);
     for (const look of [{ view: 'word', key: '1:1', word: 0 }, { view: 'irab', key: '1:1', word: 0 }, { view: 'balagha', key: '1:1' }, { view: 'qiraat', key: '1:4' }, { view: 'tafsir', keys: ['1:1'] }, { view: 'tuhfa' }] satisfies QuizLook[]) expect(canLook(look)).toBe(true);
-    expect(canLook({ view: 'terms', names: [] })).toBe(false);
+    expect(canLook({ view: 'terms', names: [] })).toBe(true);
+    expect(canLook({ view: 'hadith' })).toBe(true);
+    expect(canLook({ view: 'ties', slug: 'x' })).toBe(true);
+    expect(canLook({ view: 'recite' } as never)).toBe(false);
     expect(canLook(undefined)).toBe(false);
   });
 

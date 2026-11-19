@@ -64,7 +64,7 @@ describe('launch navigation', () => {
     expect(activeSection('/quran')).toBe('/quran');
     expect(activeSection('/')).toBe('/');
     expect(activeSection('/search')).toBe('/');
-    expect(activeSection('/quran/words')).toBeUndefined();
+    expect(activeSection('/quran/words')).toBe('/quran');
     expect(activeSection('/graphs')).toBe('/biographies');
   });
 
