@@ -2,12 +2,19 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import NavSearch from './NavSearch';
+import NavSearch, { NavSearchShown } from './NavSearch';
 
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => ({ language: 'en' }) }));
 afterEach(cleanup);
 
 describe('NavSearch', () => {
+  it('keeps the search page box out, with no icon or close, at the shared top-bar width', () => {
+    const { container } = render(<NavSearchShown><input aria-label="phrase" /></NavSearchShown>);
+    expect(screen.queryByRole('button')).toBeNull();
+    expect(screen.getByRole('textbox', { name: 'phrase' })).toBeTruthy();
+    expect(container.firstElementChild?.className).toMatch(/search/);
+  });
+
   it('shows a dot on the icon only while a search is set', () => {
     const { rerender, container } = render(<NavSearch><input aria-label="phrase" /></NavSearch>);
     expect(container.querySelector('[data-search-dot]')).toBeNull();

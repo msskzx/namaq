@@ -19,7 +19,6 @@ import { openAdhkar } from '@/lib/adhkar';
 import { back, openIntent as go, toTab } from '@/lib/ways';
 import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
 import Card from '@/ui/Card';
-import { SearchField } from '@/ui/Field';
 import Empty from '@/ui/Empty';
 
 /** Results a group shows until its arrow opens the rest. */
@@ -169,9 +168,7 @@ export default function SearchScreen() {
   const waiting = query.trim() !== found.query;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar back={() => (open ? setOpen(null) : back())} hideOnScroll>
-        <SearchField value={query} onChangeText={setQuery} placeholder="ابحث" label="ابحث في كل شيء" palette={palette} style={{ flex: 1 }} />
-      </TopBar>
+      <TopBar back={() => (open ? setOpen(null) : back())} hideOnScroll search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث', label: 'ابحث في كل شيء' }} />
       <ScrollView ref={scroll} onScroll={event => { top.current = event.nativeEvent.contentOffset.y; shrink(event); }} scrollEventThrottle={16}
         keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: bottom, gap: 14 }}>
         {!waiting && found.query !== '' && !groups.length && <Empty text="لا توجد نتيجة مطابقة." palette={palette} />}

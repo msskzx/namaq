@@ -6,7 +6,7 @@ import Animated from 'react-native-reanimated';
 import { hiddenProps, useSlideAway } from '@/ui/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronRight, LayoutGrid, LibraryBig, Settings, CircleHelp } from 'lucide-react-native';
-import { SearchOpener } from '@/ui/Field';
+import { SearchField, SearchOpener } from '@/ui/Field';
 import IconButton from '@/ui/IconButton';
 import { Text } from '@/ui/Text';
 import Logo from '@/components/Logo';
@@ -18,6 +18,8 @@ import { toHub, toShelf, toTab } from '@/lib/ways';
 const HEIGHT = 52;
 /** The bar's row height, under the status bar. */
 export const TOP_BAR = HEIGHT;
+/** The widest a search in the bar grows, on a tablet or a wide window; on a phone it fills the free room (owner, 2026-11-19). */
+export const TOP_BAR_SEARCH_MAX = 480;
 const SIDE = 54; // the logo and its padding, kept clear on both sides so centred buttons stay centred
 
 /**
@@ -44,8 +46,12 @@ export default function TopBar({ children, title, middle, away: putAway = false,
   hub?: boolean;
   /** The library's books in the logo's place, back to the shelf (a book in the reader, owner 2026-11-17). */
   shelf?: boolean;
-  /** The one search across the app, as a field filling the bar between the gear and the logo (home, owner 2026-11-18). */
-  search?: () => void;
+  /**
+   * The bar's search, the one way any page puts a search in the top bar: a function shows the field as a button that opens the
+   * search page (home, owner 2026-11-18); a field's value and change make it a real field (the search page, the branches' search).
+   * Either way it takes the free room up to TOP_BAR_SEARCH_MAX, never the whole width of a wide screen (owner, 2026-11-19).
+   */
+  search?: (() => void) | Omit<React.ComponentProps<typeof SearchField>, 'palette' | 'style'>;
   /** A back arrow, first on the right; the bar then has no logo. */
   back?: () => void;
   /** The page's help (rules and colour legend), on the far left. */
@@ -84,7 +90,11 @@ export default function TopBar({ children, title, middle, away: putAway = false,
         {/* The bar's buttons, then the page's, from the right edge; a search field or chips among them take the free room. */}
         <View pointerEvents="box-none" style={{ flexGrow: middle ? 0 : 1, flexShrink: 0, minWidth: 0, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: 4 }}>
           {withSettings && <IconButton Icon={Settings} label="الإعدادات" onPress={() => setSettings(true)} />}
-          {search && <SearchOpener palette={palette} label="البحث" onPress={search} style={{ flex: 1 }} />}
+          {search && <View style={{ flex: 1, minWidth: 0, maxWidth: TOP_BAR_SEARCH_MAX }}>
+            {typeof search === 'function'
+              ? <SearchOpener palette={palette} label="البحث" onPress={search} />
+              : <SearchField {...search} palette={palette} style={{ height: 40 }} />}
+          </View>}
           {center ? null : children}
         </View>
         {/* The page's help on the far left, out of the way of the buttons (owner, 2026-11-17). */}
