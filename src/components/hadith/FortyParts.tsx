@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, type ReactNode } from 'react';
-import { RECORD_BOOKS, fromCompanion, lastPage, rajabOpening, recordName, type AppHadith, type FortyBook, type FortyEntry, type FortyGrade, type FortyRecord, type RajabChapter, type RajabParagraph } from '@shared/hadith';
+import { RECORD_BOOKS, fromCompanion, lastPage, recordedIn, rajabOpening, recordName, type AppHadith, type FortyBook, type FortyEntry, type FortyGrade, type FortyRecord, type RajabChapter, type RajabParagraph } from '@shared/hadith';
 import { num } from '@shared/quran/arabicNumber';
 import Button from '@/components/common/Button';
 import Card from '@/components/common/Card';
@@ -11,6 +11,7 @@ import ExternalLink from '@/components/common/ExternalLink';
 import Segmented from '@/components/common/Segmented';
 import type { FortyBooks, FortyListItem } from '@/lib/forty';
 import FortyIsnad from './FortyIsnad';
+import HadithBooks from './HadithBooks';
 
 /**
  * The Forty's pieces on the website (the app's mobile/src/screens/hadithForty.tsx, hadith.tsx and components/IbnRajab.tsx):
@@ -154,9 +155,10 @@ export function FortyHadith({ entry, books, chapter, size, inset = false, jibril
       </div>
       <Card className="flex flex-col gap-2 p-4">
         <p className={BODY}>{entry.text}</p>
-        <div className="flex flex-wrap gap-1.5">{entry.named.map(name => <Chip key={name} label={name} small />)}</div>
         <Cite title={`${books.nawawi.title}، ${pagesName(entry.pages)}`} edition={`${books.nawawi.title}، ${books.nawawi.edition}`} url={shamelaPage(books, 'nawawi', entry.shamela)} />
       </Card>
+      <Heading className="text-lg">من أخرجه</Heading>
+      <HadithBooks top={entry.heading} boxes={recordedIn(entry)} />
       {jibril}
       {drawn && <Segmented tabs label="طريقة العرض" className="self-start" options={MODES.map(item => ({ ...item, current: mode === item.key, onClick: () => setMode(item.key) }))} />}
       {entry.partial && entry.records.length > 0 && <p className="text-[0.9375rem] text-[var(--home-muted)]">في الصحيحين بعض لفظ الحديث</p>}

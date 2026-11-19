@@ -14,7 +14,9 @@ al-Suyuti's examples, opening the term's page in «مصطلحات البلاغة
 the ayat folded under it, opening the story's page), one of al-Nawawi's Forty (من الحديث, his text for an entry he takes whole
 from the Sahihayn, opening the hadith's page; `HadithPost`), a passage of Ibn Rajab's
 commentary (من شرح ابن رجب, a paragraph where he explains a phrase of one of those hadith, opening the hadith's page;
-`RajabPost` drawn by `components/IbnRajab`, the page's own view), and the quiz cards in `FEED_QUIZ_NAMES`
+`RajabPost` drawn by `components/IbnRajab`, the page's own view), the books that record one of the Forty (من أخرجه, the
+start of one al-Nawawi takes whole from the Sahihayn and the «من أخرجه» drawing of each book and number; `RecordedPost` drawn
+by `components/HadithBooks`, the page's own view), and the quiz cards in `FEED_QUIZ_NAMES`
 (`shared/quiz/feedQuiz.ts`): في أي سورة؟, أكمل المتشابهات, سمّع بقية الآية, قارن الموضعين,
 أوائل السور, سمّع الآية, ما معنى؟, the four ayah quizzes below, ما المصطلح؟ (`shared/quiz/balaghaTermQuiz.ts`: a term's
 definition with its name hidden, four terms to pick from, each choice linking to its definition once answered), the three Tuhfat al-Atfal questions, السيرة والغزوات (shared/quiz/sira.ts), the four tarajim questions
