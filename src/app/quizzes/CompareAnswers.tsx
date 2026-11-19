@@ -12,9 +12,12 @@ import { num } from "@shared/quran/arabicNumber";
 import { compareAnchor } from "@shared/compareBookmarks";
 import { surahPairHref } from "@shared/quran/curatedComparisons";
 import { addCompareHint, blankWords, compareCorrections, compareHintsOf, compareLabel, comparePieces, emptyCompareAnswers, type CompareAsk, type CompareLine, type Tone } from "@shared/quiz/compareAnswers";
-import { neededCut, verdict, type Correction } from "@shared/quiz/feedback";
+import { neededCut, typedMarks, verdict, type Correction } from "@shared/quiz/feedback";
 import type { Hints } from "@shared/quiz/hints";
 import Card from '@/components/common/Card';
+import { BlankBoxes } from "@/app/quran/read/MushafPage";
+import { useWriteBlanks } from "@/components/recite/useRecite";
+import { writeBlank } from "@shared/quiz/writeBlanks";
 
 type Question = { compare?: CompareAsk };
 
@@ -47,14 +50,20 @@ export function CompareInputs({ question, typed, onChange, onCheck, ar, hints: k
   hints?: Hints; onHints?: (hints: Hints) => void }) {
   const [own, setOwn] = React.useState<Hints>({});
   const ask = question.compare;
+  // Each blank in recite mode's boxes (owner, 2026-11-19): its first two words to write, the rest faint.
+  const blanks = React.useMemo(() => ask ? ask.blanks.map((_, blank) => writeBlank(blank, blankWords(ask, blank))) : [], [ask]);
+  const values = ask ? ask.blanks.map((_, index) => typed[index] ?? "") : [];
+  const write = useWriteBlanks({ id: ask ? `${ask.card}:${ask.asked.key}` : "", blanks, texts: values, onType: (blank, text) => onChange(values.map((value, at) => at === blank ? text : value)),
+    // Enter on the last box checks, as Enter in a field did.
+    onEnd: () => { if (values.some(value => value.trim())) onCheck(); } });
   if (!ask) return null;
-  const values = ask.blanks.map((_, index) => typed[index] ?? "");
   const hints = kept ?? own;
   const shown = compareHintsOf(ask, hints);
   const started = values.some(value => value.trim());
   const hintLabel = ar ? "تلميح: حرف آخر من كل فراغ" : "Hint: one more letter in each empty blank";
   return (
     <form className="flex flex-col gap-3" onSubmit={(event) => { event.preventDefault(); if (started) onCheck(); }}>
+      {write.field({ "aria-label": ar ? "اكتب الكلمة" : "Write the word" })}
       <div dir="rtl" className="flex flex-col gap-2.5" data-quiz-compare>
         <NavButtons>
           <Button size="lg" variant="muted" aria-label={hintLabel} title={hintLabel} onClick={() => (onHints ?? setOwn)(addCompareHint(ask, values, hints))}><Lightbulb aria-hidden /></Button>
@@ -63,12 +72,7 @@ export function CompareInputs({ question, typed, onChange, onCheck, ar, hints: k
         <Line line={ask.asked} ar={ar}>
           {comparePieces(ask).map((piece, i) => "given" in piece
             ? <Words key={i} line={ask.asked} at={piece.given} />
-            : <label key={i} className="flex w-32 max-w-full flex-col">
-              <span className="sr-only">{ar ? `الفراغ ${num(piece.blank + 1)}` : `Blank ${piece.blank + 1}`}</span>
-              <input type="text" dir="rtl" lang="ar" autoComplete="off" spellCheck={false} value={values[piece.blank]} placeholder={shown[piece.blank] || undefined}
-                onChange={(event) => onChange(values.map((value, at) => at === piece.blank ? event.target.value : value))}
-                className="w-full rounded-sm border border-[var(--home-rule)] bg-transparent px-3 py-2 font-quran text-lg text-[var(--home-ink)] focus:border-[var(--home-accent)]" />
-            </label>)}
+            : <BlankBoxes key={i} blank={blanks[piece.blank]} index={piece.blank} write={write} hint={shown[piece.blank] || undefined} name={ar ? `الفراغ ${num(piece.blank + 1)}` : `Blank ${piece.blank + 1}`} />)}
         </Line>
       </div>
       <div className="flex flex-wrap gap-2">
@@ -88,8 +92,8 @@ function Mark({ row, ar, hinted }: { row: Correction; ar: boolean; hinted: boole
     <span className="flex items-center gap-2"><Badge row={row} ar={ar} /><span className="font-semibold">{verdict(row, ar)}</span>
       {hinted && <Lightbulb size={15} className="text-[var(--home-muted)]" aria-label={ar ? "بتلميح" : "With a hint"} />}</span>
     {!row.correct && <span className="text-sm text-[var(--home-muted)]">{ar ? "كتبتَ: " : "You typed: "}
-      {row.typed ? <span className="font-quran text-lg">{row.typed.split(/\s+/).map((word, at) => <React.Fragment key={at}>
-        {at > 0 && " "}{at < row.right ? <span className="text-[var(--home-green)]">{word}</span> : <del className="text-[var(--home-accent)]">{word}</del>}
+      {row.typed ? <span className="font-quran text-lg">{typedMarks(row).map(({ word, right }, at) => <React.Fragment key={at}>
+        {at > 0 && " "}{right ? <span className="text-[var(--home-green)]">{word}</span> : <del className="text-[var(--home-accent)]">{word}</del>}
       </React.Fragment>)}</span> : (ar ? "لا شيء" : "nothing")}</span>}
   </li>;
 }

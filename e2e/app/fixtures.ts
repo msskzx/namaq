@@ -74,3 +74,19 @@ export const stored = <T = unknown>(page: Page, key: string) =>
 
 /** The mushaf page the reader is on (mobile/src/components/Reader.tsx keeps it in `reader-place`). */
 export const readerPage = async (page: Page) => (await stored<{ page: number }>(page, 'reader-place'))?.page ?? null;
+
+/** The first box of every quiz blank whose name matches (a regex source): recite mode's boxes (owner, 2026-11-19). */
+export const firstBoxes = (page: Page, name: string) => page.getByRole('button', { name: new RegExp(`^${name}، الكلمة ١(:|$)`) });
+
+/**
+ * Writes a quiz blank in its recite-mode boxes: a tap on its first box, then one word a box into the hidden field, as many
+ * words as the blank has boxes. Tashkeel is left out, as people type.
+ */
+export async function writeBlank(page: Page, name: string, text: string, nth = 0) {
+  const first = firstBoxes(page, name).nth(nth);
+  const label = (await first.getAttribute('aria-label'))!.split('،')[0];
+  const boxes = await page.getByRole('button', { name: new RegExp(`^${label}، `) }).count() / await firstBoxes(page, label).count();
+  await first.click();
+  const field = page.getByLabel('اكتب الكلمة', { exact: true });
+  for (const word of text.split(' ').slice(0, boxes)) await field.fill(`${word.replace(/[ً-ٰٟۖ-ۭ]/g, '').replace(/ٱ/g, 'ا')} `);
+}

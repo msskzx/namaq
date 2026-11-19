@@ -11,22 +11,24 @@ import { faCheckDouble } from "@fortawesome/free-solid-svg-icons";
 import Button from "@/components/common/Button";
 import MushafText from "@/components/common/MushafText";
 import { askedNodes, branchNodes, givenAnswer, leadingSigns } from "@shared/quiz/branchAnswers";
-import { correctionOf, gradedTree, verdict, type Correction } from "@shared/quiz/feedback";
+import { correctionOf, gradedTree, typedMarks, verdict, type Correction } from "@shared/quiz/feedback";
 import { emptyBranchAnswers, isAsked, type ScoredQuestion } from "@shared/quiz/score";
 import { addHint, hintsOf, type Hints } from "@shared/quiz/hints";
 import { ayatLabel, branchesHref, keys, shownAyat, type Branch, type Variant } from "@shared/quran/branches";
 import { num } from "@shared/quran/arabicNumber";
 import example from "@shared/data/quiz/example.json";
 import Card from '@/components/common/Card';
+import { BlankBoxes } from "@/app/quran/read/MushafPage";
+import { useWriteBlanks, type WriteBlanks } from "@/components/recite/useRecite";
+import { writeBlank, type WriteBlank } from "@shared/quiz/writeBlanks";
 
 type Question = ScoredQuestion;
 type Names = Record<number, string>;
 
-/** An asked node: the ayah sign it opens with (﴿١٧﴾ where its ayah reads on) given, then the box to type in. */
-function AskedBox({ node, children }: { node: Branch; children: React.ReactNode }) {
+/** The ayah signs an asked node opens with (﴿١٧﴾ where its ayah reads on): given before its boxes, never typed. */
+function LeadingSigns({ node }: { node: Branch }) {
   const signs = leadingSigns(node.words);
-  if (!signs.length) return <>{children}</>;
-  return <span className="flex items-center gap-1.5"><span className="font-quran text-lg text-[var(--home-muted)]"><MushafText>{signs.join(" ")}</MushafText></span>{children}</span>;
+  return signs.length ? <span className="font-quran text-lg text-[var(--home-muted)]"><MushafText>{signs.join(" ")}</MushafText></span> : null;
 }
 
 type MatrixRow = { leaf: Branch; path: number[]; words: string[]; before: string[]; ayahKeys: string[] };
@@ -54,10 +56,19 @@ function matrixRows(tree: Branch, prefixes: Variant[]): MatrixRow[] {
   return rows;
 }
 
-/** The matrix view of a question: one card per ayah, the shared start in colour, a box where a node is asked. */
-function MatrixInputs({ question, values, input, names }: { question: Question; values: string[]; input: (index: number) => React.ReactNode; names: Names }) {
+/** The asked nodes as blanks to write: a leaf's first two words, or all the words of a node above leaves (the app's treeBlanks). */
+function treeBlanks(question: Question): WriteBlank[] {
+  return branchNodes(question.tree!).flatMap((node, index) => isAsked(question, index) ? [writeBlank(index, node.words, node.children.length > 0)] : []);
+}
+
+/**
+ * The matrix view of a question: one card per ayah, the shared start in colour, each asked node's words as recite mode's boxes
+ * (BlankBoxes). Without `write` (the explainer's example) the boxes show where you write, without taking typing.
+ */
+function MatrixInputs({ question, values, hints, write, names, ar }: { question: Question; values: string[]; hints: string[]; write?: WriteBlanks; names: Names; ar: boolean }) {
   const tree = question.tree!;
   const nodes = branchNodes(tree);
+  const blanks = treeBlanks(question);
   return <div className="flex flex-col gap-2.5" dir="rtl" data-quiz-matrix>
     {matrixRows(tree, question.prefixes ?? []).map(({ leaf, path, words, before, ayahKeys }) => {
       const spans = shownAyat(leaf, words);
@@ -66,9 +77,12 @@ function MatrixInputs({ question, values, input, names }: { question: Question; 
         <p className="flex flex-wrap items-center gap-x-2 font-quran text-lg leading-loose text-[var(--home-ink)]">
           {before.length > 0 && <MushafText>{before.join(" ")}</MushafText>}
           <span className="font-bold text-[var(--home-accent)]"><MushafText>{givenAnswer(tree)}</MushafText></span>
-          {path.map(index => isAsked(question, index)
-            ? <AskedBox key={index} node={nodes[index]}>{input(index)}</AskedBox>
-            : <MushafText key={index}>{values[index]}</MushafText>)}
+          {path.map(index => {
+            const at = blanks.findIndex(blank => blank.id === index);
+            return at < 0
+              ? <MushafText key={index}>{values[index]}</MushafText>
+              : <React.Fragment key={index}><LeadingSigns node={nodes[index]} /><BlankBoxes blank={blanks[at]} index={at} write={write} hint={hints[index] || undefined} name={ar ? `العقدة ${num(index + 1)}` : `Node ${index + 1}`} /></React.Fragment>;
+          })}
         </p>
       </Card>;
     })}
@@ -81,9 +95,9 @@ function Badge({ row, ar }: { row: Correction; ar: boolean }) {
 
 function TypedWords({ row, ar }: { row: Correction; ar: boolean }) {
   if (!row.typed) return <span className="text-[var(--home-muted)]">{ar ? "لم تكتب شيئًا" : "Nothing typed"}</span>;
-  return <span className="font-quran text-lg">{row.typed.split(/\s+/).map((word, at) => <React.Fragment key={at}>
+  return <span className="font-quran text-lg">{typedMarks(row).map(({ word, right }, at) => <React.Fragment key={at}>
     {at > 0 && " "}
-    {at < row.right ? <span className="text-[var(--home-green)]">{word}</span> : <del className="text-[var(--home-accent)]">{word}</del>}
+    {right ? <span className="text-[var(--home-green)]">{word}</span> : <del className="text-[var(--home-accent)]">{word}</del>}
   </React.Fragment>)}</span>;
 }
 
@@ -124,20 +138,17 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar, names, hi
   /** The hints shown so far, when the quiz keeps them (solo, so the review can mark them); otherwise they live here. */
   hints?: Hints; onHints?: (hints: Hints) => void }) {
   const [own, setOwn] = React.useState<Hints>({});
+  const values = question.tree ? emptyBranchAnswers(question).map((value, index) => isAsked(question, index) ? typed[index] ?? "" : value) : [];
+  const blanks = React.useMemo(() => question.tree ? treeBlanks(question) : [], [question]);
+  const write = useWriteBlanks({ id: question.tree ? JSON.stringify(question.asked) + givenAnswer(question.tree) : "", blanks, texts: values,
+    onType: (node, text) => onChange(values.map((value, at) => at === node ? text : value)),
+    // Enter on the last box checks, as Enter in a field did.
+    onEnd: () => { if (values.some((value, index) => isAsked(question, index) && value.trim())) onCheck(); } });
   if (!question.tree) return null;
-  const values = emptyBranchAnswers(question).map((value, index) => isAsked(question, index) ? typed[index] ?? "" : value);
   const hints = kept ?? own;
   const shown = hintsOf(question, hints);
   const hintLabel = ar ? "تلميح: حرف آخر من كل طرف فارغ" : "Hint: one more letter in each empty leaf";
   const started = values.some((value, index) => isAsked(question, index) && value.trim());
-  const box = (index: number, width: string) => (
-    <label className={`flex ${width} max-w-full flex-col gap-1`}>
-      <span className="sr-only">{ar ? `العقدة ${num(index + 1)}` : `Node ${index + 1}`}</span>
-      <input type="text" dir="rtl" lang="ar" autoComplete="off" spellCheck={false} value={values[index]} placeholder={shown[index] || undefined}
-        onChange={(event) => onChange(values.map((value, at) => at === index ? event.target.value : value))}
-        className="w-full rounded-sm border border-[var(--home-rule)] bg-transparent px-3 py-2 font-quran text-lg text-[var(--home-ink)] focus:border-[var(--home-accent)]" />
-    </label>
-  );
   return (
     <form className="flex flex-col gap-3" onSubmit={(event) => {
       event.preventDefault();
@@ -148,7 +159,8 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar, names, hi
         <NavButtons>
           <Button size="lg" variant="muted" aria-label={hintLabel} title={hintLabel} onClick={() => (onHints ?? setOwn)(addHint(question, values, hints))}><Lightbulb aria-hidden /></Button>
         </NavButtons>
-        <MatrixInputs question={question} values={values} input={index => box(index, "w-32")} names={names ?? {}} />
+        {write.field({ "aria-label": ar ? "اكتب الكلمة" : "Write the word" })}
+        <MatrixInputs question={question} values={values} hints={shown} write={write} names={names ?? {}} ar={ar} />
       </div>
       <div className="flex flex-wrap gap-2">
       <Button variant="primary" type="submit" disabled={!started}>
@@ -170,8 +182,7 @@ export function BranchPreview({ leaves, ar }: { leaves: number; ar: boolean }) {
   const tree = example.tree as Branch;
   const question: Question = { tree, prefixes: example.prefixes as Variant[], asked: askedNodes(tree, leaves, () => 0.5) };
   const values = branchNodes(tree).map((node, index) => isAsked(question, index) ? "" : node.words.join(" "));
-  const empty = <span data-asked className="block h-8 w-24 rounded-sm border border-dashed border-[var(--home-accent)]"><span className="sr-only">{ar ? "تكتبه أنت" : "You type this"}</span></span>;
-  return <div dir="rtl"><MatrixInputs question={question} values={values} input={() => empty} names={{}} /></div>;
+  return <div dir="rtl"><MatrixInputs question={question} values={values} hints={[]} names={{}} ar={ar} /></div>;
 }
 
 /** How a متشابهات question works: what you type, the example, and how it is graded. */

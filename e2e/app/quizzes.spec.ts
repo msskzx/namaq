@@ -6,7 +6,7 @@ import { numberVerses, type Poem } from '../../shared/tajwid/poem';
 import poemData from '../../shared/tajwid/tuhfat-al-atfal.json';
 
 const chapters = numberVerses(poemData as Poem);
-import { expect, open, stored, tab, test } from './fixtures';
+import { expect, firstBoxes, open, stored, tab, test, writeBlank } from './fixtures';
 
 type Run = { questions: { tree: Branch; asked: number[] }[]; current: number };
 
@@ -17,11 +17,13 @@ const answersOf = async (page: Page, index: number) => {
   const run = await stored<Run>(page, 'quiz-solo-run');
   const question = run!.questions[index];
   const nodes = branchNodes(question.tree);
-  return question.asked.map(node => givenAnswer(nodes[node]));
+  // In the boxes' order: the tree's own node order («الطرف ١» first).
+  return [...question.asked].sort((a, b) => a - b).map(node => givenAnswer(nodes[node]));
 };
 
-// The quiz explainer draws a read-only example; only the question's own boxes count.
-const leaves = (page: Page) => page.locator('input:not([readonly])').and(page.getByLabel(/^الطرف /));
+/** Each asked leaf's first box (recite mode's boxes, owner 2026-11-19), named in the boxes' order. */
+const leaves = (page: Page) => firstBoxes(page, 'الطرف \\S+');
+const leaf = (i: number) => `الطرف ${num(i + 1)}`;
 
 test.beforeEach(async ({ page }) => {
   // The same questions every run: Math.random seeded before the app starts.
@@ -57,16 +59,16 @@ test('a solo quiz: right, wrong and shown answers, resume after reload, then the
 
   const right = await answersOf(page, 0);
   await expect(leaves(page)).toHaveCount(right.length);
-  for (const [i, answer] of right.entries()) await leaves(page).nth(i).fill(answer);
+  for (const [i, answer] of right.entries()) await writeBlank(page, leaf(i), answer);
   // Quizzes draw the matrix only (owner, 2026-11-17).
   await expect(page.getByRole('button', { name: 'عرض الشجرة' })).toHaveCount(0);
   await page.getByRole('button', { name: 'تحقق', exact: true }).click();
   await expect(page.getByLabel('السؤال ١ - صحيح')).toBeVisible();
 
   await page.getByRole('button', { name: 'التالي' }).click();
-  await expect(leaves(page).first()).toHaveValue('');
+  await expect(leaves(page).first()).toHaveAccessibleName('الطرف ١، الكلمة ١');
   const count = await leaves(page).count();
-  for (let i = 0; i < count; i++) await leaves(page).nth(i).fill('كلام خطأ');
+  for (let i = 0; i < count; i++) await writeBlank(page, leaf(i), 'كلام خطأ');
   await page.getByRole('button', { name: 'تحقق', exact: true }).click();
   await expect(page.getByLabel('السؤال ٢ - خطأ')).toBeVisible();
 
@@ -75,10 +77,10 @@ test('a solo quiz: right, wrong and shown answers, resume after reload, then the
   await expect(page.getByLabel(/^السؤال ٣ - /)).toBeVisible();
 
   await page.getByRole('button', { name: 'التالي' }).click();
-  await leaves(page).first().fill('شيء');
+  await writeBlank(page, leaf(0), 'شيء');
   await expect.poll(async () => JSON.stringify(await stored(page, 'quiz-solo-run'))).toContain('شيء');
   await page.reload();
-  await expect(leaves(page).first()).toHaveValue('شيء');
+  await expect(leaves(page).first()).toHaveAccessibleName('الطرف ١، الكلمة ١: شيء');
   await expect(page.getByLabel('السؤال ١ - صحيح')).toBeVisible();
 
   const send = page.getByRole('button', { name: 'إرسال' });
@@ -125,18 +127,18 @@ test('a compare quiz: the matrix only, a right and a wrong blank, then the resul
   await expect(page).toHaveURL(/\/quiz\/play/);
   await expect.poll(() => stored(page, 'quiz-solo-run')).not.toBeNull();
   const run = await stored<{ questions: { compare: { asked: { words: string[] }; blanks: [number, number][] } }[] }>(page, 'quiz-solo-run');
-  const blanks = page.getByLabel(/^الفراغ /);
+  const blanks = firstBoxes(page, 'الفراغ \\S+');
   const first = run!.questions[0].compare;
   await expect(blanks).toHaveCount(first.blanks.length);
   // No tree to switch to (owner, 2026-11-17).
   await expect(page.getByRole('button', { name: 'عرض الشجرة' })).toHaveCount(0);
-  for (const [i, [from, to]] of first.blanks.entries()) await blanks.nth(i).fill(first.asked.words.slice(from, to).join(' '));
+  for (const [i, [from, to]] of first.blanks.entries()) await writeBlank(page, `الفراغ ${num(i + 1)}`, first.asked.words.slice(from, to).join(' '));
   await page.getByRole('button', { name: 'تحقق', exact: true }).click();
   await expect(page.getByLabel('السؤال ١ - صحيح')).toBeVisible();
   await expect(page.getByRole('button', { name: 'افتح في مقارنة السور' })).toBeVisible();
 
   await page.getByRole('button', { name: 'التالي' }).click();
-  await blanks.first().fill('كلام خطأ');
+  await writeBlank(page, 'الفراغ ١', 'كلام خطأ');
   await page.getByRole('button', { name: 'تحقق', exact: true }).click();
   await expect(page.getByText('كتبتَ:').first()).toBeVisible();
 

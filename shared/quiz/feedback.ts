@@ -2,7 +2,7 @@
 // The website (src/app/quizzes/BranchAnswers.tsx) and the phone app draw the same rows.
 import { num } from '../quran/arabicNumber';
 import type { Branch } from '../quran/branches';
-import { branchNodes, LEAF_WORDS, matchTreeAnswers, rightWords, spoken, withoutRepeat, wordsBefore } from './branchAnswers';
+import { branchNodes, LEAF_WORDS, matchedWords, matchTreeAnswers, rightWords, spoken, withoutRepeat, wordsBefore } from './branchAnswers';
 import { givenNodes, isAsked, type ScoredQuestion } from './score';
 
 export type Correction = { index: number; number: number; node: Branch; typed: string; correct: boolean; right: number; needed: number };
@@ -52,4 +52,13 @@ export function verdict(row: Correction, ar: boolean) {
 export function neededCut(words: string[], needed: number) {
   let seen = 0;
   return words.findIndex(word => spoken([word]).length > 0 && ++seen === needed) + 1;
+}
+
+/**
+ * Each word typed for a row, right or not against the word in its place (owner, 2026-11-19): one wrong letter marks only its
+ * own word, never the right words after it.
+ */
+export function typedMarks(row: Correction): { word: string; right: boolean }[] {
+  const words = spoken(row.node.words);
+  return row.typed.split(/\s+/).filter(Boolean).map((word, at) => ({ word, right: at < words.length && matchedWords(word, [words[at]]) === 1 }));
 }

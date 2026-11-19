@@ -7,6 +7,8 @@ import { isSajda, juzName, quarterLabel } from '@shared/quran/mushafMarks';
 import { num } from '@shared/quran/arabicNumber';
 import { wordAtPoint } from '@shared/quran/selection';
 import type { PageModel, reciteView } from '@shared/quran/recitePage';
+import type { WriteBlank } from '@shared/quiz/writeBlanks';
+import type { WriteBlanks } from './recite/useRecite';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { breakLines, FLOW_LINE, flowSize } from '@/lib/pageZoom';
 
@@ -119,21 +121,41 @@ export function Veil({ text, size, palette, next, faint = false }: { text: strin
  * A word to write, in write mode: the hidden word's own box in its place on the line, holding what was typed.
  * The box being written has the accent border.
  */
-export function WriteBox({ text, size, palette, typed, active, onPress, onActive }: { text: string; size: number; palette: Palette; typed: string; active: boolean; onPress: () => void; onActive?: (y: number, height: number) => void }) {
+export function WriteBox({ text, size, palette, typed, active, onPress, onActive, hint, label }: { text: string; size: number; palette: Palette; typed: string; active: boolean; onPress: () => void; onActive?: (y: number, height: number) => void;
+  /** A quiz's hint (its bulb): the word's first letters, faint, while the box is empty. */
+  hint?: string;
+  /** A quiz blank's own name for the box («الطرف ١، الكلمة ٢»), what was typed after it. */
+  label?: string }) {
   const box = useRef<ComponentRef<typeof View>>(null);
   useEffect(() => {
     // Again on each change of the page around it (the keyboard rising, a scroll), so the box stays in sight.
     if (active) box.current?.measureInWindow((_x: number, y: number, _w: number, h: number) => onActive?.(y, h));
   }, [active, onActive]);
   return (
-    <Pressable ref={box} onPress={onPress} accessibilityRole="button" accessibilityLabel={typed ? `كلمة مكتوبة: ${typed}` : 'اكتب هذه الكلمة'} accessibilityState={{ selected: active }}
+    <Pressable ref={box} onPress={onPress} accessibilityRole="button" accessibilityLabel={label ? `${label}${typed ? `: ${typed}` : ''}` : typed ? `كلمة مكتوبة: ${typed}` : 'اكتب هذه الكلمة'} accessibilityState={{ selected: active }}
       style={{ height: size * 1.25, overflow: 'hidden', justifyContent: 'center', borderRadius: 5, backgroundColor: palette.paper, borderWidth: active ? 2 : 1, borderColor: active ? palette.accent : palette.rule }}>
       <Text selectable={false} style={{ fontFamily: QURAN_FONT, fontSize: size, color: 'transparent', marginVertical: -size }}>{text}</Text>
       <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}>
-        <Text numberOfLines={1} style={{ fontSize: size * 0.72, lineHeight: size * 1.1, color: palette.ink }}>{typed}</Text>
+        <Text numberOfLines={1} style={{ fontSize: size * 0.72, lineHeight: size * 1.1, color: typed ? palette.ink : palette.muted }}>{typed || hint}</Text>
       </View>
     </Pressable>
   );
+}
+
+/**
+ * A quiz blank in recite mode's boxes (owner, 2026-11-19; useWriteBlanks): the words it asks are WriteBoxes, the rest of its
+ * words the faint boxes the pen leaves, as on the mushaf page. Without `write` (an example) the boxes take no typing.
+ */
+export function BlankBoxes({ blank, index, write, size, palette, hint, name }: { blank: WriteBlank; index: number; write?: WriteBlanks; size: number; palette: Palette; hint?: string;
+  /** The blank's name («الطرف ١»); each box adds its word's place. */
+  name: string }) {
+  return <>{blank.words.map((word, at) => {
+    if (at >= blank.write) return <Veil key={at} text={word} size={size} palette={palette} next={false} faint />;
+    // An example's box only shows where you write: the write box's look, no button.
+    if (!write) return <Veil key={at} text={word} size={size} palette={palette} next />;
+    const box = write.box(index, at);
+    return <WriteBox key={at} text={word} size={size} palette={palette} typed={box.typed} active={box.active} onPress={box.pick} hint={at === 0 ? hint : undefined} label={`${name}، الكلمة ${num(at + 1)}`} />;
+  })}</>;
 }
 
 /** What was typed for a wrong word, struck through above it (place it in a box around the word). */

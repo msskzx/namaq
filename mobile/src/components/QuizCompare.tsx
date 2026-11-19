@@ -4,11 +4,11 @@ import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useFitReport, type OnFit } from '@/lib/useFit';
 import { Lightbulb, SquareArrowOutUpLeft, type LucideProps } from 'lucide-react-native';
-import { Text, TextInput } from '@/ui/Text';
+import { Text } from '@/ui/Text';
 import { num } from '@shared/quran/arabicNumber';
 import { markColour } from '@shared/quran/compareCardLook';
 import { addCompareHint, blankWords, compareCorrections, compareHintsOf, compareLabel, comparePieces, type CompareAsk, type CompareLine, type Tone } from '@shared/quiz/compareAnswers';
-import { neededCut, verdict, type Correction } from '@shared/quiz/feedback';
+import { neededCut, typedMarks, verdict, type Correction } from '@shared/quiz/feedback';
 import type { Hints } from '@shared/quiz/hints';
 import { quranText } from '@/lib/quranText';
 import { useKeyboardShown } from '@/lib/keyboard';
@@ -16,6 +16,9 @@ import { openCompare } from '@/lib/ways';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import Card from '@/ui/Card';
+import { BlankBoxes } from './MushafPageView';
+import { useWriteBlanks } from './recite/useRecite';
+import { writeBlank } from '@shared/quiz/writeBlanks';
 
 const SIZE = 20;
 const quran = (palette: Palette, color?: string) => ({ fontFamily: QURAN_FONT, fontSize: SIZE, lineHeight: SIZE * 1.9, color: color ?? palette.ink });
@@ -65,9 +68,13 @@ export function CompareInputs({ question, typed, onType, palette, header, hints:
   const hints = kept ?? own;
   const shown = useMemo(() => compareHintsOf(ask, hints), [ask, hints]);
   const pieces = useMemo(() => comparePieces(ask), [ask]);
+  // Each blank in recite mode's boxes (owner, 2026-11-19): its first two words to write, the rest faint.
+  const blanks = useMemo(() => ask.blanks.map((_, blank) => writeBlank(blank, blankWords(ask, blank))), [ask]);
+  const write = useWriteBlanks({ id: `${ask.card}:${ask.asked.key}`, blanks, texts: typed, onType });
   const typing = useKeyboardShown();
   return (
     <View style={{ flex: 1 }}>
+      {write.field}
       <ScrollView {...fit} style={{ flex: 1 }} keyboardShouldPersistTaps="handled">
         {header}
         <View style={{ gap: 10, padding: 12 }}>
@@ -75,9 +82,7 @@ export function CompareInputs({ question, typed, onType, palette, header, hints:
           <Line line={ask.asked} palette={palette}>
             {pieces.map((piece, i) => 'given' in piece
               ? <Words key={i} line={ask.asked} at={piece.given} palette={palette} />
-              : <TextInput key={i} value={typed[piece.blank] ?? ''} onChangeText={text => onType(piece.blank, text)} placeholder={shown[piece.blank]} placeholderTextColor={palette.muted}
-                accessibilityLabel={`الفراغ ${num(piece.blank + 1)}`} autoCorrect={false} autoCapitalize="none" spellCheck={false} autoComplete="off"
-                style={{ width: 130, minHeight: 40, fontFamily: QURAN_FONT, fontSize: SIZE, color: palette.ink, textAlign: 'right', writingDirection: 'rtl', paddingVertical: 6, borderBottomWidth: 1.5, borderColor: palette.accent }} />)}
+              : <BlankBoxes key={i} blank={blanks[piece.blank]} index={piece.blank} write={write} size={SIZE} palette={palette} hint={shown[piece.blank]} name={`الفراغ ${num(piece.blank + 1)}`} />)}
           </Line>
         </View>
       </ScrollView>
@@ -98,7 +103,7 @@ function Badge({ row, palette }: { row: Correction; palette: Palette }) {
 
 /** A checked blank under the asked ayah: its number and verdict, a bulb when hinted, and what was typed when wrong. */
 function Mark({ row, palette, hinted }: { row: Correction; palette: Palette; hinted: boolean }) {
-  const typed = row.typed ? row.typed.split(/\s+/) : [];
+  const typed = typedMarks(row);
   return (
     <View style={{ direction: 'rtl', gap: 2 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
@@ -108,8 +113,8 @@ function Mark({ row, palette, hinted }: { row: Correction; palette: Palette; hin
       </View>
       {!row.correct && <Text style={{ fontSize: 15, color: palette.muted, textAlign: 'right' }}>
         {'كتبتَ: '}
-        {typed.length === 0 ? 'لا شيء' : <Text style={{ fontFamily: QURAN_FONT, fontSize: 17 }}>{typed.map((word, i) => (
-          <Text key={i} style={i < row.right ? { color: palette.green } : { color: palette.accent, textDecorationLine: 'line-through' }}>{i > 0 ? ' ' : ''}{word}</Text>
+        {typed.length === 0 ? 'لا شيء' : <Text style={{ fontFamily: QURAN_FONT, fontSize: 17 }}>{typed.map(({ word, right }, i) => (
+          <Text key={i} style={right ? { color: palette.green } : { color: palette.accent, textDecorationLine: 'line-through' }}>{i > 0 ? ' ' : ''}{word}</Text>
         ))}</Text>}
       </Text>}
     </View>
