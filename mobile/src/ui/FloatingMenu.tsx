@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { OutsideCard } from '@/ui/Card';
 import { Modal, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { Palette } from '@/lib/theme';
@@ -48,7 +49,7 @@ export default function FloatingMenu({ at, label, onClose, overlay = false, top:
   return (
     <Modal visible={!!at} transparent statusBarTranslucent animationType="none" onRequestClose={onClose}>
       <Pressable style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.18)' }]} onPress={onClose} accessibilityLabel="أغلق" accessibilityRole="button" />
-      {bar}
+      <OutsideCard>{bar}</OutsideCard>
     </Modal>
   );
 }

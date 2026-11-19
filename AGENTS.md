@@ -149,6 +149,13 @@ the sources disagree on as settled.
 - A feature without a card is named in the PR with the reason.
   [docs/feed-cards.md](docs/feed-cards.md) lists the cards, the quiz kinds and the
   named exceptions; the PR updates it.
+- No box in a feed card and no button in it (owner, 2026-11-19): the post's card is
+  the only box, and the feature's own buttons (hint, check, save, share, look up,
+  recite bar) sit in the row under it. The shared pieces do it for you: a `Card`
+  inside a card draws flat (app `ui/Card`, website `common/Card` with `Card.css`), and a
+  button row wrapped in `UnderCard` joins the row under the card (app `ui/Card`,
+  website `common/UnderCard`). A piece that frames itself asks `useInsideCard()` (app).
+  `e2e/app/home.spec.ts` checks the tree quiz card.
 - This is a workflow rule checked in review, not a guard test.
 
 ## Quiz questions

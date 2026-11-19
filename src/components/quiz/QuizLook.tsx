@@ -1,5 +1,6 @@
 'use client';
 
+import { UnderCard, useCardRow } from "@/components/common/UnderCard";
 import { Fragment, useState, type ReactNode } from 'react';
 import useSWR from 'swr';
 import { Check, Search } from 'lucide-react';
@@ -221,10 +222,9 @@ export function LookView({ look, shown }: { look: QuizLook; shown: boolean }) {
  */
 export function LookButton({ look, onLook, costs = false, top }: { look: QuizLook; onLook?: () => void; costs?: boolean; top?: ReactNode }) {
   const [open, setOpen] = useState(false);
-  return <div className="mt-3 flex flex-col items-start gap-1">
-    <Button size="sm" onClick={() => { setOpen(true); onLook?.(); }}><Search size={16} aria-hidden />ابحث عن الجواب</Button>
-    {costs && <p dir="rtl" lang="ar" className="text-sm text-[var(--home-muted)]">{`بعد البحث للإجابة الصحيحة ${num(LOOKED_POINTS)} نقاط بدل ${num(POINTS)}.`}</p>}
-    <Sheet open={open} onClose={() => setOpen(false)} label="ابحث عن الجواب" className="overflow-y-auto">
+  // In a feed card the button joins the row of icons under the card (owner: no buttons in a card).
+  const inRow = useCardRow();
+  const sheet = <Sheet open={open} onClose={() => setOpen(false)} label="ابحث عن الجواب" className="overflow-y-auto">
       {open && <>
         {top && <div className="sticky top-0 z-10 flex justify-center bg-[var(--home-paper)] pt-3 pb-2">{top}</div>}
         <div className="flex flex-col gap-3 p-4">
@@ -232,7 +232,16 @@ export function LookButton({ look, onLook, costs = false, top }: { look: QuizLoo
           <Button className="self-start" onClick={() => setOpen(false)}>رجوع إلى السؤال</Button>
         </div>
       </>}
-    </Sheet>
+    </Sheet>;
+  const openLook = () => { setOpen(true); onLook?.(); };
+  if (inRow) return <>
+    <UnderCard><Button size="lg" variant="muted" aria-label="ابحث عن الجواب" title="ابحث عن الجواب" onClick={openLook}><Search aria-hidden /></Button></UnderCard>
+    {sheet}
+  </>;
+  return <div className="mt-3 flex flex-col items-start gap-1">
+    <Button size="sm" onClick={openLook}><Search size={16} aria-hidden />ابحث عن الجواب</Button>
+    {costs && <p dir="rtl" lang="ar" className="text-sm text-[var(--home-muted)]">{`بعد البحث للإجابة الصحيحة ${num(LOOKED_POINTS)} نقاط بدل ${num(POINTS)}.`}</p>}
+    {sheet}
   </div>;
 }
 
