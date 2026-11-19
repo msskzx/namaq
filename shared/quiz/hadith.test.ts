@@ -163,14 +163,13 @@ describe('ابحث عن الجواب', () => {
 describe('the eight Ibn Rajab adds (43–50)', () => {
   const added = FORTY.entries.filter(entry => entry.source === 'ibnrajab');
 
-  it('names only the books he names at the head of his chapter', () => {
+  it('names only the books he names, at the head of his chapter or in the «وخرَّجه…» right after it', () => {
     for (const entry of added) {
       const text = bare(entry.text);
-      const citation = text.slice(Math.max(text.lastIndexOf('خرجه'), text.lastIndexOf('رواه')));
+      const next = bare(RAJAB[entry.n - 1].paragraphs[1].text);
+      const citation = text.slice(Math.max(text.lastIndexOf('خرجه'), text.lastIndexOf('رواه'))) + (/^وخرجه/.test(next) ? next : '');
       for (const book of entry.named) expect(citation).toContain(book);
     }
-    // He gives no. 46 to al-Bukhari alone, though Muslim has it too.
-    expect(added.find(entry => entry.n === 46)!.named).toEqual(['البخاري']);
   });
 
   it('quotes the grade for each one outside the Sahihayn, his words and al-Tirmidhi\'s own', () => {
@@ -179,7 +178,8 @@ describe('the eight Ibn Rajab adds (43–50)', () => {
     }
   });
 
-  it('is never asked as one of al-Nawawi\'s citations', () => {
+  it('is never asked as one of al-Nawawi\'s citations, nor in the Bukhari quizzes until the other Companions al-Bukhari has each from are listed', () => {
     for (const question of bookQuestions(() => 0.3)) expect(Number(question.key.split(':')[1])).toBeLessThanOrEqual(42);
+    for (const question of [...narrator, ...complete]) expect(question.look?.mark).toBeLessThanOrEqual(42);
   });
 });

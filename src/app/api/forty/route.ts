@@ -4,7 +4,7 @@ import { fortyList, fortyPage } from '@/lib/forty';
 const CACHE = { 'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800' };
 
 /**
- * al-Nawawi's Forty for the hadith quizzes' «ابحث عن الجواب» (src/components/quiz/QuizLook.tsx): the list to search, or
+ * al-Nawawi's Forty and Ibn Rajab's eight for the hadith quizzes' «ابحث عن الجواب» (src/components/quiz/QuizLook.tsx): the list to search, or
  * `?n=N` one hadith whole with its records and Ibn Rajab's chapter.
  */
 export async function GET(request: Request) {

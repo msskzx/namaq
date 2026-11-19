@@ -17,8 +17,9 @@ const FORTY = fortyData as AppForty;
 const bare = (text: string) => text.replace(/[ً-ْٰ]/g, '').replace(/[أإآ]/g, 'ا').replace(/\s+/g, ' ').trim();
 
 /** Al-Bukhari's whole records of the Forty: each entry al-Nawawi takes whole from the Sahihayn, each record holding his wording. */
+// Not Ibn Rajab's eight yet: their other Companions in al-Bukhari (`alsoFrom`) are not listed, so a wrong choice could be right.
 const bukhari = (): { entry: FortyEntry; record: FortyRecord }[] =>
-  FORTY.entries.filter(entry => !entry.partial).flatMap(entry =>
+  FORTY.entries.filter(entry => !entry.partial && !entry.source).flatMap(entry =>
     entry.records.filter(record => record.book === 'bukhari' && !record.partial && record.isnadEnd).map(record => ({ entry, record })));
 
 /** The saying as printed, from its opening quote mark to its closing one. */
