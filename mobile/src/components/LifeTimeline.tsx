@@ -58,7 +58,7 @@ function Strip({ items, on, palette }: { items: LifeItem[]; on: (item: LifeItem)
               <Dot key={item.key} color={on(item) ? lifeColor(palette, item.kind) : palette.muted} hollow={!on(item)} />
             ))}
             {/* A year with something in it is named where its label has room; an empty year keeps its place unnamed. */}
-            <Text numberOfLines={1} style={{ width: 40, marginHorizontal: -20, color: palette.muted, fontSize: 12, marginTop: 2, minHeight: 16, textAlign: 'center' }}>
+            <Text style={{ width: 40, marginHorizontal: -20, flexShrink: 0, color: palette.muted, fontSize: 12, marginTop: 2, minHeight: 16, textAlign: 'center' }}>
               {named.has(column.key) ? (column.before ? 'قبل' : num(column.year!)) : ''}
             </Text>
           </View>
