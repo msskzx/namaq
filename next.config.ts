@@ -1,10 +1,11 @@
 import type { NextConfig } from "next";
 
 const BOOK_FILES = ['./shared/data/quran/tafsirSadi.json', './shared/data/quran/kashshaf.js', './shared/data/quran/irabUkbari.js'];
+const SAHIH_FILES = ['./data/hadith/sahih/*.json'];
 
 const nextConfig: NextConfig = {
-  // The book reader reads its books from disk (src/lib/books/readerBook.ts).
-  outputFileTracingIncludes: { '/quran/books/**': BOOK_FILES, '/api/books/**': BOOK_FILES },
+  // The book reader reads its books from disk (src/lib/books/readerBook.ts), the hadith pages the Sahihayn (src/lib/sahih.ts).
+  outputFileTracingIncludes: { '/quran/books/**': BOOK_FILES, '/api/books/**': [...BOOK_FILES, ...SAHIH_FILES], '/hadith/**': SAHIH_FILES, '/': SAHIH_FILES },
   async redirects() {
     return [
       { source: '/quran/shifts', destination: '/quran/compare', permanent: true },

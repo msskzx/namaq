@@ -40,8 +40,13 @@ export const useBooks = () => useSyncExternalStore(subscribe, () => version);
 const folder = () => new Directory(Paths.document, 'books');
 /** Where each downloaded book keeps a passage's text in its entries (shared/quran/kashshaf.ts, shared/quran/irab.ts). */
 const TEXT_AT: Partial<Record<BookId, number>> = { kashshaf: 6, ukbari: 5 };
-/** A book's data must be a book: its source and a list of passages, each with its text where that book keeps it. */
+/** A book's data must be a book: its source and a list of passages, each with its text where that book keeps it; a hadith book its kitabs (shared/sahih.ts). */
 const readable = (id: BookId, data: unknown) => {
+  if (bookOf(id).kind === 'hadith') {
+    const kitabs = (data as { kitabs?: unknown } | null)?.kitabs;
+    if (!Array.isArray(kitabs) || !kitabs.length || !kitabs.every(kitab => kitab && Array.isArray(kitab.hadith))) throw new Error('not a hadith book');
+    return data;
+  }
   const book = data as { source?: unknown; entries?: unknown } | null;
   const at = TEXT_AT[id] ?? -1;
   if (!book || typeof book !== 'object' || !book.source || typeof book.source !== 'object' || !Array.isArray(book.entries)

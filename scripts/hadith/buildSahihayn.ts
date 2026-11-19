@@ -207,7 +207,7 @@ function assemble(book: string, heads: Heading[], cuts: Cut[], meta: SahihBook, 
     const piece = cut(book, c.start, Math.ceil(end));
     // The number heading the text («٨ - », «١٩ - (١٦) ») is shown apart from it.
     const text = piece.text.replace(/^[٠-٩]+(?: \(م\))?(?:(?: ?- ?| )[٠-٩]+)* ?-?(?: ?[٠-٩]+ ?-?)*\s*/, '').replace(/^(?:[٠-٩]+ ?)?(?:- )?(?:٠ )?(?:م(?: [٠-٩]+)? ?)?(?:- )?\([٠-٩]+(?:\/ ?[٠-٩]+)?\)(?: -)?\s*/, '');
-    const route: SahihRoute = { ...(c.route ? { route: c.route } : {}), text, volume: piece.volume, pages: piece.pages, shamela: piece.shamela };
+    const route: SahihRoute = { ...(c.route ? { route: c.route } : {}), ...(piece.chain ? { chain: piece.chain } : {}), text, volume: piece.volume, pages: piece.pages, shamela: piece.shamela };
     const earlier = muslim ? byNumber.get(c.n) : undefined;
     if (earlier) { earlier.routes.push(route); continue; }
     const hadith: SahihHadith = { n: c.n, ...(c.also?.length ? { also: c.also } : {}), bab: kitab.babs.length - 1, routes: [route] };
