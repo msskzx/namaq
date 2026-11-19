@@ -138,7 +138,7 @@ export function TiesRing({ view, marked, onPick, onShow }: { view: TiesView;
     <div className="flex flex-col gap-3" lang="ar">
       {open && (
         <div className="flex flex-wrap gap-2">
-          {groups.map(g => <Chip key={g.kind} small label={`${g.word} ${num(g.ties.length)}`} on={g.kind === open} onClick={() => setOpen(g.kind === open ? undefined : { slug: view.slug, kind: g.kind })} />)}
+          {groups.map(g => <Chip key={g.kind} label={`${g.word} ${num(g.ties.length)}`} on={g.kind === open} onClick={() => setOpen(g.kind === open ? undefined : { slug: view.slug, kind: g.kind })} />)}
         </div>
       )}
       <div ref={box} className="w-full">
@@ -287,7 +287,7 @@ export function TiesChain({ chain, inCard = false }: { chain: ChainView; inCard?
                 {inCard
                   ? <Chip label={node.name} on={picked} lit href={node.inApp ? tiesHref(node.slug) : undefined} className={node.inApp ? '' : 'opacity-70'} />
                   : <Card href={node.inApp ? tiesHref(node.slug) : undefined} picked={picked} faded={!node.inApp}
-                    className={`w-full px-2 py-1.5 text-center text-sm ${node.inApp ? 'text-[var(--home-accent)]' : 'text-[var(--home-muted)]'}`}>
+                    className={`flex min-h-11 w-full items-center justify-center px-2 py-1.5 text-center text-sm ${node.inApp ? 'text-[var(--home-accent)]' : 'text-[var(--home-muted)]'}`}>
                     <span className="line-clamp-2">{node.name}</span>
                   </Card>}
               </div>
@@ -303,7 +303,7 @@ export function TiesChain({ chain, inCard = false }: { chain: ChainView; inCard?
 function NasabName({ node, linked }: { node: NasabBox; linked: boolean }) {
   const text = <span className={node.slug ? 'text-[var(--home-accent)]' : ''}>{node.name}</span>;
   return node.slug && linked
-    ? <Card href={`/people/${node.slug}`} picked className="whitespace-nowrap px-3 py-1.5 text-center">{text}</Card>
+    ? <Card href={`/people/${node.slug}`} picked className="flex min-h-11 items-center justify-center whitespace-nowrap px-3 py-1.5 text-center">{text}</Card>
     : <Card picked={!!node.slug} className="whitespace-nowrap px-3 py-1.5 text-center">{text}</Card>;
 }
 
@@ -320,8 +320,8 @@ function Branch({ node, linked }: { node: NasabBox; linked: boolean }) {
           <div key={child.key} className="flex flex-col items-center px-1">
             {many && (
               <div className="-mx-1 flex h-[1.5px] self-stretch">
-                <div className={`flex-1 ${i === node.children.length - 1 ? '' : 'bg-[var(--home-muted)]'}`} />
                 <div className={`flex-1 ${i === 0 ? '' : 'bg-[var(--home-muted)]'}`} />
+                <div className={`flex-1 ${i === node.children.length - 1 ? '' : 'bg-[var(--home-muted)]'}`} />
               </div>
             )}
             {many && <div className={stem} />}
