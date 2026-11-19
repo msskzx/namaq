@@ -72,3 +72,15 @@ test('the bar is Quran, hadith, home, tarajim and quizzes, and the mushaf opens 
   await tab(page, 'القرآن').click();
   await expect(page).toHaveURL(/\/quran$/);
 });
+
+test.describe('the «من أخرجه» card', () => {
+  test.use({ seed: { bookmarks: [{ id: 'card:recorded:15', text: '', href: '', savedAt: Date.now() }] } });
+
+  // Owner, 2026-11-19: the card draws the page's own view, and its head opens the hadith's page.
+  test('a saved card draws the books and opens its hadith', async ({ page }) => {
+    await open(page, '/library');
+    await expect(page.getByLabel('البخاري ٦٠١٨، سمّاه النووي؛ مسلم ٤٧، سمّاه النووي')).toBeVisible();
+    await page.getByRole('button', { name: 'افتح الحديث الخامس عشر' }).first().click();
+    await expect(page).toHaveURL(/\/hadith-forty\?n=15/);
+  });
+});
