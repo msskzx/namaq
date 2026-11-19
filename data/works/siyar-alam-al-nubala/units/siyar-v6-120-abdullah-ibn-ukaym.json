@@ -1,0 +1,319 @@
+{
+  "unit": {
+    "id": "siyar-v6-120-abdullah-ibn-ukaym",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٢٠"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_uk_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "510",
+      "layer": "MAIN",
+      "exact": "١٢٠ - عَبْدُ اللهِ بنُ عُكَيْمٍ الجُهَنِيُّ"
+    },
+    {
+      "id": "sp_uk_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "510",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ عُكَيْمٍ الجُهَنِيُّ",
+      "prefix": "١٢٠ - "
+    },
+    {
+      "id": "sp_uk_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "510",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ",
+      "prefix": "١٢٠ - "
+    },
+    {
+      "id": "sp_uk_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "510",
+      "layer": "MAIN",
+      "exact": "عُكَيْمٍ الجُهَنِيُّ",
+      "prefix": "١٢٠ - عَبْدُ اللهِ بنُ "
+    },
+    {
+      "id": "sp_uk_qila",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "510",
+      "layer": "MAIN",
+      "exact": "قِيْلَ: لَهُ صُحْبَةٌ",
+      "suffix": ".\n\nوَقَدْ أَسْلَمَ"
+    },
+    {
+      "id": "sp_uk_aslama",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "510",
+      "layer": "MAIN",
+      "exact": "وَقَدْ أَسْلَمَ بِلاَ رَيْبٍ فِي حَيَاةِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ -"
+    },
+    {
+      "id": "sp_uk_d88",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "511",
+      "layer": "MAIN",
+      "exact": "قِيْلَ: إِنَّ عَبْدَ اللهِ بنَ عُكَيْمٍ تُوُفِّيَ سَنَةَ ثَمَانٍ وَثَمَانِيْنَ"
+    },
+    {
+      "id": "sp_uk_y88",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "511",
+      "layer": "MAIN",
+      "exact": "سَنَةَ ثَمَانٍ وَثَمَانِيْنَ",
+      "prefix": "عُكَيْمٍ تُوُفِّيَ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_uk0",
+      "unit": "siyar-v6-120-abdullah-ibn-ukaym",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_uk_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_uk_qila",
+      "unit": "siyar-v6-120-abdullah-ibn-ukaym",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_uk_qila_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_uk_d88",
+      "unit": "siyar-v6-120-abdullah-ibn-ukaym",
+      "ordinal": 3,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_uk_d88_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_uk_name",
+      "report": "r_uk0",
+      "spans": [
+        "sp_uk_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uk_qila",
+      "report": "r_uk_qila",
+      "spans": [
+        "sp_uk_qila"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_uk_aslama",
+      "report": "r_uk0",
+      "spans": [
+        "sp_uk_aslama"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uk_d88",
+      "report": "r_uk_d88",
+      "spans": [
+        "sp_uk_d88"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_uk",
+      "parent": "sp_uk_name",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uk_father",
+      "parent": "sp_uk_name",
+      "exact": "عُكَيْمٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uk_qila_by",
+      "parent": "sp_uk_qila",
+      "exact": "قِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_uk_q",
+      "parent": "sp_uk_qila",
+      "exact": "لَهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uk_comp_prophet",
+      "parent": "sp_uk_aslama",
+      "exact": "النَّبِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uk_d88_by",
+      "parent": "sp_uk_d88",
+      "exact": "قِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_uk_d",
+      "parent": "sp_uk_d88",
+      "exact": "عَبْدَ اللهِ بنَ عُكَيْمٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_uk",
+      "mention": "m_uk",
+      "agent": "abdullah-ibn-ukaym",
+      "basis": [
+        {
+          "span": "sp_uk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_father",
+      "mention": "m_uk_father",
+      "agent": "ukaym-al-juhani",
+      "basis": [
+        {
+          "span": "sp_uk_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_q",
+      "mention": "m_uk_q",
+      "agent": "abdullah-ibn-ukaym",
+      "basis": [
+        {
+          "span": "sp_uk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_d",
+      "mention": "m_uk_d",
+      "agent": "abdullah-ibn-ukaym",
+      "basis": [
+        {
+          "span": "sp_uk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_uk_name",
+      "subject": "m_uk",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_uk_name"
+        ]
+      },
+      "restsOn": [
+        "st_uk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_sex",
+      "subject": "m_uk",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_uk_sex"
+        ]
+      },
+      "restsOn": [
+        "st_uk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_father",
+      "subject": "m_uk",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_uk_father"
+      },
+      "restsOn": [
+        "st_uk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_comp",
+      "subject": "m_uk_q",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_uk_comp_prophet"
+      },
+      "restsOn": [
+        "st_uk_qila"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_d88",
+      "subject": "m_uk_d",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 88,
+        "spans": [
+          "sp_uk_y88"
+        ]
+      },
+      "restsOn": [
+        "st_uk_d88"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

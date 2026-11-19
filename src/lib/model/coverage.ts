@@ -75,7 +75,8 @@ export function coverageOf(folder: WorkFolder, file: UnitFile, root: string): Co
   const volume = main[0].volume;
   const printed = file.unit.numbers.printed;
   const heading = new RegExp(`(^|\\n\\n)${printed} - `);
-  const stop = new RegExp(`(^|\\n\\n)${nextNumber(printed)} - `);
+  // Shamela sometimes prints the next number on a line of its own («١٣٦\n\n- حكيم بن جبلة», Siyar v6 p531).
+  const stop = new RegExp(`(^|\\n\\n)${nextNumber(printed)}(?: |\\n\\n)- `);
   const first = Math.min(...main.filter((span) => span.volume === volume).map((span) => Number(span.page)));
   const manifest = existsSync(join(root, sourcesRoot, witness.slug, 'source.json'))
     ? loadSourceManifest(root, witness.slug)

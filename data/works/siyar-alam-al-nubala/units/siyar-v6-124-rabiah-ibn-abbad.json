@@ -1,0 +1,360 @@
+{
+  "unit": {
+    "id": "siyar-v6-124-rabiah-ibn-abbad",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٢٤"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_rb_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "516",
+      "layer": "MAIN",
+      "exact": "١٢٤ - رَبِيْعَةُ بنُ عِبَادٍ الدِّيْلِيُّ الحِجَازِيُّ"
+    },
+    {
+      "id": "sp_rb_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "516",
+      "layer": "MAIN",
+      "exact": "رَبِيْعَةُ بنُ عِبَادٍ الدِّيْلِيُّ الحِجَازِيُّ",
+      "prefix": "١٢٤ - "
+    },
+    {
+      "id": "sp_rb_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "516",
+      "layer": "MAIN",
+      "exact": "رَبِيْعَةُ بنُ",
+      "prefix": "١٢٤ - "
+    },
+    {
+      "id": "sp_rb_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "516",
+      "layer": "MAIN",
+      "exact": "عِبَادٍ الدِّيْلِيُّ",
+      "prefix": "١٢٤ - رَبِيْعَةُ بنُ "
+    },
+    {
+      "id": "sp_rb_saw",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "517",
+      "layer": "MAIN",
+      "exact": "رَأَى النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - بِسُوْقِ ذِي المَجَازِ (١) قَبْلَ أَنْ يُسْلِمَ، ثُمَّ أَسْلَمَ، وَشَهِدَ اليَرْمُوْكَ"
+    },
+    {
+      "id": "sp_rb_bukhari_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "517",
+      "layer": "MAIN",
+      "exact": "وَقَالَ البُخَارِيُّ، وَغَيْرُهُ:",
+      "suffix": " لَهُ صُحْبَةٌ"
+    },
+    {
+      "id": "sp_rb_bukhari",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "517",
+      "layer": "MAIN",
+      "exact": "لَهُ صُحْبَةٌ",
+      "prefix": "وَقَالَ البُخَارِيُّ، وَغَيْرُهُ: "
+    },
+    {
+      "id": "sp_rb_khalifah_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "517",
+      "layer": "MAIN",
+      "exact": "قَالَ خَلِيْفَةُ:",
+      "suffix": " شَهِدَ اليَرْمُوْكَ"
+    },
+    {
+      "id": "sp_rb_khalifah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "517",
+      "layer": "MAIN",
+      "exact": "شَهِدَ اليَرْمُوْكَ، وَتُوُفِّيَ فِي خِلاَفَةِ الوَلِيْدِ بنِ عَبْدِ المَلِكِ"
+    },
+    {
+      "id": "sp_rb_yarmuk_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "517",
+      "layer": "MAIN",
+      "exact": "اليَرْمُوْكَ، وَتُوُفِّيَ",
+      "prefix": "قَالَ خَلِيْفَةُ: شَهِدَ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_rb0",
+      "unit": "siyar-v6-124-rabiah-ibn-abbad",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_rb_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_rb_bukhari",
+      "unit": "siyar-v6-124-rabiah-ibn-abbad",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_rb_bukhari_frame"
+      ],
+      "origin": {
+        "mention": "m_rb_bukhari_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_rb_khalifah",
+      "unit": "siyar-v6-124-rabiah-ibn-abbad",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_rb_khalifah_frame"
+      ],
+      "origin": {
+        "mention": "m_rb_khalifah_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_rb_name",
+      "report": "r_rb0",
+      "spans": [
+        "sp_rb_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_rb_saw",
+      "report": "r_rb0",
+      "spans": [
+        "sp_rb_saw"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_rb_bukhari",
+      "report": "r_rb_bukhari",
+      "spans": [
+        "sp_rb_bukhari"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_rb_khalifah",
+      "report": "r_rb_khalifah",
+      "spans": [
+        "sp_rb_khalifah"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_rb",
+      "parent": "sp_rb_name",
+      "exact": "رَبِيْعَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_rb_father",
+      "parent": "sp_rb_name",
+      "exact": "عِبَادٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_rb_bukhari_by",
+      "parent": "sp_rb_bukhari_frame",
+      "exact": "البُخَارِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_rb_b",
+      "parent": "sp_rb_bukhari",
+      "exact": "لَهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_rb_comp_prophet",
+      "parent": "sp_rb_saw",
+      "exact": "النَّبِيَّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_rb_y",
+      "parent": "sp_rb_saw",
+      "exact": "وَشَهِدَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_rb_yarmuk",
+      "parent": "sp_rb_saw",
+      "exact": "اليَرْمُوْكَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_rb_khalifah_by",
+      "parent": "sp_rb_khalifah_frame",
+      "exact": "خَلِيْفَةُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_rb",
+      "mention": "m_rb",
+      "agent": "rabiah-ibn-abbad",
+      "basis": [
+        {
+          "span": "sp_rb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rb_father",
+      "mention": "m_rb_father",
+      "agent": "abbad-ad-dili",
+      "basis": [
+        {
+          "span": "sp_rb_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rb_b",
+      "mention": "m_rb_b",
+      "agent": "rabiah-ibn-abbad",
+      "basis": [
+        {
+          "span": "sp_rb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rb_y",
+      "mention": "m_rb_y",
+      "agent": "rabiah-ibn-abbad",
+      "basis": [
+        {
+          "span": "sp_rb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rb_yarmuk",
+      "mention": "m_rb_yarmuk",
+      "event": "yarmuk",
+      "basis": [
+        {
+          "span": "sp_rb_yarmuk_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_rb_name",
+      "subject": "m_rb",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_rb_name"
+        ]
+      },
+      "restsOn": [
+        "st_rb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rb_sex",
+      "subject": "m_rb",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_rb_sex"
+        ]
+      },
+      "restsOn": [
+        "st_rb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rb_father",
+      "subject": "m_rb",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_rb_father"
+      },
+      "restsOn": [
+        "st_rb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rb_comp",
+      "subject": "m_rb_b",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_rb_comp_prophet"
+      },
+      "restsOn": [
+        "st_rb_bukhari"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rb_yarmuk",
+      "subject": "m_rb_y",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_rb_yarmuk"
+      },
+      "restsOn": [
+        "st_rb_saw",
+        "st_rb_khalifah"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
