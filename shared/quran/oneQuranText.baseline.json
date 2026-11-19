@@ -43,7 +43,6 @@
     "src/app/quran/prophets/[slug]/PlaceText.tsx",
     "src/app/quran/qiraat/QiraatView.tsx",
     "src/app/quran/read/AyahPreviewSheet.tsx",
-    "src/app/quran/read/BalaghaPanel.tsx",
     "src/app/quran/read/IrabPanel.tsx",
     "src/app/quran/read/Mushaf.module.css",
     "src/app/quran/words/OppositesChart.tsx",

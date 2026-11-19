@@ -12,6 +12,7 @@ import { bookState, readBook, useBooks } from '@/lib/books';
 import { surahNames } from '@/lib/branches';
 import { ayahMushafWords } from '@/lib/mushaf';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
+import QuranWords from './quran/text/QuranWords';
 import { BookList } from './Books';
 import LoadingDots from '@/ui/LoadingDots';
 import Sheet from '@/ui/Sheet';
@@ -89,7 +90,7 @@ function Itqan({ paragraphs, palette, onSpan, onClose }: { paragraphs: ItqanPara
       <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 22, textAlign: 'right' }}>{paragraph.heading ? `«${paragraph.heading}» · ${paragraph.kind}` : paragraph.kind}</Text>
       <TermLink paragraph={paragraph} palette={palette} onClose={onClose} />
       <Text selectable style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' }}>
-        {tafsirRuns(paragraph.text).map((run, j) => <Text key={j} style={run.quran ? { fontFamily: QURAN_FONT, color: palette.accent } : undefined}>{run.text}</Text>)}
+        {tafsirRuns(paragraph.text).map((run, j) => run.quran ? <QuranWords key={j} style={{ color: palette.accent }}>{run.text}</QuranWords> : <Text key={j}>{run.text}</Text>)}
       </Text>
       </Pickable>
       {/* A quote that names no ayah: every ayah it fits, listed, none chosen for him (owner, 2026-11-18). */}

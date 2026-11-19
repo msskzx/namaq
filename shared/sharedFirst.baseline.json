@@ -178,7 +178,6 @@
     "src/app/quran/prophets/[slug]/EventPlaces.tsx": 1,
     "src/app/quran/prophets/[slug]/ProphetView.tsx": 1,
     "src/app/quran/prophets/[slug]/StoryMap.tsx": 3,
-    "src/app/quran/qiraat/QiraatView.tsx": 1,
     "src/app/quran/read/AyahPreviewSheet.tsx": 2,
     "src/app/quran/read/ListenBar.tsx": 4,
     "src/app/quran/read/Mushaf.module.css": 8,
