@@ -194,9 +194,7 @@ piece (`oneRecite.test.ts`) and the records index
 
 ## Doc conflicts found
 
-- [palette.md](../palette.md) says joined ف is purple; one project memory line
-  says terracotta, with no dated owner word. The code uses purple. Owner to
-  confirm.
+- Joined ف is purple, as palette.md and the app have it (owner 11-19).
 - [palette.md](../palette.md) describes "asymmetrically rounded" tree node
   borders; the owner set one 14 px round radius on 11-13 and the code follows
   it. The doc line is stale.
