@@ -193,3 +193,21 @@ test('a solo quiz looks an answer up in the poem, and after the answer shows the
   await expect(page.getByRole('heading', { name: chapter.title })).toBeVisible();
   for (const other of chapters.filter(part => part !== chapter)) await expect(page.getByRole('heading', { name: other.title, exact: true })).toHaveCount(0);
 });
+
+test('a solo quiz of which came first in a life looks it up on his timeline, then names the book', async ({ page }) => {
+  await open(page, '/quiz/solo');
+  await page.getByRole('button', { name: 'أيها كان أولًا في حياته؟' }).click();
+  await page.getByRole('button', { name: 'متشابهات القرآن', exact: true }).click();
+  await page.getByRole('button', { name: 'ابدأ الاختبار' }).click();
+  await expect(page).toHaveURL(/\/quiz\/play/);
+  await expect.poll(() => stored(page, 'quiz-solo-run')).not.toBeNull();
+  const run = await stored<{ questions: { correctAnswer: string; choices: { value: string; labelArabic: string }[] }[] }>(page, 'quiz-solo-run');
+  const question = run!.questions[0];
+  const names = question.choices.map(choice => choice.labelArabic);
+  // The look-up is his timeline: all four things on its rail.
+  await page.getByRole('button', { name: 'ابحث عن الجواب' }).click();
+  for (const name of names) await expect(page.getByText(name, { exact: true }).last()).toBeVisible();
+  await page.getByRole('button', { name: 'رجوع إلى السؤال' }).click();
+  await page.getByRole('button', { name: names[Number(question.correctAnswer)], exact: true }).click();
+  await expect(page.getByText('سير أعلام النبلاء').first()).toBeVisible();
+});
