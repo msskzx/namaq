@@ -46,7 +46,7 @@ export default function Chip({ label, on, onPress, palette, role = 'button', che
   );
   return (
     <Tap onPress={onPress} disabled={!onPress} hitSlop={small ? 6 : undefined} accessibilityRole={role} accessibilityLabel={accessibilityLabel}
-      accessibilityState={role === 'radio' ? { checked: on } : role === 'text' ? undefined : { selected: on }} aria-selected={role === 'tab' ? on : undefined}
+      accessibilityState={role === 'radio' ? { checked: on } : role === 'text' ? undefined : { selected: on }} aria-selected={role === 'tab' ? on : undefined} aria-checked={role === 'radio' ? on : undefined}
       style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 5, ...(small ? { height: 32 } : { minHeight: 36 }), paddingHorizontal: quran ? 14 : 12, borderRadius: 999,
         borderWidth: 1, borderStyle: dashed ? 'dashed' : 'solid', borderColor: on || dashed ? accent : palette.rule,
         backgroundColor: filled ? accent : on ? palette.paperDeep : 'transparent', opacity: pressed ? 0.6 : 1 })}>

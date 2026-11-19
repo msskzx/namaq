@@ -9,6 +9,7 @@ import { GestureSettings } from './ReaderSheets';
 import { around, besideLayout, connectors, haptics, hintsSeen, tourSeen } from '@/lib/settings';
 import Toggle from '@/ui/Toggle';
 import { MemorizedSetting } from './Memorized';
+import { InterestsSetting } from './Interests';
 import { PenSetting } from './recite/PenSetting';
 import type { Palette } from '@/lib/theme';
 
@@ -27,6 +28,7 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
     <Sheet open={open} onClose={onClose} palette={palette}>
       <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 20 }}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, fontWeight: '700' }}>الإعدادات</Text>
+        <InterestsSetting palette={palette} />
         <MemorizedSetting palette={palette} />
         <ThemeTiles palette={palette} />
         <ViewTiles palette={palette} />

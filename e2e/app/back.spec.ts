@@ -45,14 +45,18 @@ test.describe('going back', () => {
     await expect(page).toHaveURL(/\/$/);
   });
 
-  test('a tool opened from home before the Quran button was ever tapped still has the hub under it', async ({ page }) => {
-    await open(page, '/');
-    const button = page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).first();
-    await button.scrollIntoViewIfNeeded();
-    await button.click();
-    await expect(page).toHaveURL(/\/branches/);
-    await page.getByRole('button', { name: 'أدوات القرآن' }).last().click();
-    await expect(page).toHaveURL(/\/quran$/);
+  test.describe('with the mutashabih picked', () => {
+    test.use({ seed: { interests: '["mutashabih"]', 'interests-surprise': '0' } });
+
+    test('a tool opened from home before the Quran button was ever tapped still has the hub under it', async ({ page }) => {
+      await open(page, '/');
+      const button = page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).first();
+      await button.scrollIntoViewIfNeeded();
+      await button.click();
+      await expect(page).toHaveURL(/\/branches/);
+      await page.getByRole('button', { name: 'أدوات القرآن' }).last().click();
+      await expect(page).toHaveURL(/\/quran$/);
+    });
   });
 
   test('only the home page shows the logo; other pages go home by the home tab', async ({ page }) => {

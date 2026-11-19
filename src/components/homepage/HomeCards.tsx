@@ -22,7 +22,7 @@ import { surahName } from '@shared/quran/surahNames';
 import Card from '@/components/common/Card';
 
 /** The same icons as the tab bar, so a saved card says which feature it opens in. */
-const KIND_ICONS: Record<BookmarkKind, typeof BookOpen | typeof TreeIcon> = { tree: TreeIcon, compare: ArrowLeftRight, ayah: BookOpen };
+const KIND_ICONS: Record<BookmarkKind, typeof BookOpen | typeof TreeIcon> = { tree: TreeIcon, compare: ArrowLeftRight, ayah: BookOpen, card: Bookmark };
 export const reviewHref = (key: string) => `${ayahHref(key)}?recite=${key}&review=1`;
 /** The context endpoint takes up to 200 ayat a call. */
 const CHUNK = 200;
@@ -80,7 +80,7 @@ export function useHomeCards(data: CardData, forgottenShown = Infinity) {
     const kind = bookmarkKind(item);
     const first = bookmarkReferences(item, data.bookmarkAyat)[0];
     setMenu({ ...menuAt(event), label: kindLabel(kind), items: [
-      { id: 'open', Icon: KIND_ICONS[kind], label: ar ? 'افتحها' : 'Open', href: item.href },
+      ...(item.href ? [{ id: 'open', Icon: KIND_ICONS[kind], label: ar ? 'افتحها' : 'Open', href: item.href }] : []),
       ...(kind !== 'ayah' && first ? [{ id: 'mushaf', Icon: BookOpen, label: ar ? 'في المصحف' : 'In the mushaf', href: ayahHref(`${first.surah}:${first.ayat[0]}`) }] : []),
       { id: 'saved', Icon: Bookmark, label: ar ? 'أزلها من المحفوظات' : 'Remove from saved', on: true, onClick: () => toggleBookmark(item) },
     ] });
@@ -111,7 +111,8 @@ export function useHomeCards(data: CardData, forgottenShown = Infinity) {
           </span>)}
         </span>}
       </span>
-      <span className={styles.bookText} lang="ar" dir="rtl"><MushafText>{item.text}</MushafText></span>
+      {/* A saved feed card from the app keeps its title, which is not Quran text. */}
+      <span className={styles.bookText} lang="ar" dir="rtl">{kind === 'card' ? item.text : <MushafText>{item.text}</MushafText>}</span>
     </Card>;
   };
   const forgottenCard = (key: string, wide = false) => {

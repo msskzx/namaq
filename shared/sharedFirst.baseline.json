@@ -12,7 +12,7 @@
     "mobile/src/components/ListenBar.tsx": 2,
     "mobile/src/components/ListenSheet.tsx": 6,
     "mobile/src/components/MatrixCard.tsx": 3,
-    "mobile/src/components/Memorized.tsx": 6,
+    "mobile/src/components/Memorized.tsx": 5,
     "mobile/src/components/MushafPageView.tsx": 3,
     "mobile/src/components/OpenInBook.tsx": 1,
     "mobile/src/components/PageVideo.tsx": 2,

@@ -9,6 +9,7 @@ import TopBar from '@/ui/TopBar';
 import Sheet from '@/ui/Sheet';
 import { toTab } from '@/lib/ways';
 import { FORGOTTEN_LABEL, NOTE_LABEL, ShelfCard, useHomeCards } from '@/components/HomeCards';
+import { SavedFeedCard } from '@/components/HomeFeed';
 import { usePalette, type Palette } from '@/lib/theme';
 import Empty from '@/ui/Empty';
 
@@ -53,11 +54,13 @@ export default function LibraryScreen() {
         <View style={{ width: 34 }} />
       </TopBar>
       <FlatList key={tab} data={shown} keyExtractor={card => card.id} contentContainerStyle={{ padding: 16, paddingBottom: insets.bottom + 24, gap: 12 }}
-        renderItem={({ item }) => tab === 'saved'
+        renderItem={({ item }) => tab === 'saved' && item.kind === 'card'
+          ? <SavedFeedCard id={item.id} palette={palette} />
+          : tab === 'saved'
           ? <ShelfCard wide card={item} palette={palette} onPress={at => savedMenu(item, at)} />
           : tab === 'notes' ? <ShelfCard wide note card={item} palette={palette} Icon={NotebookPen} label={NOTE_LABEL} onPress={at => noteMenu(item, at)} />
           : <ShelfCard wide card={item} palette={palette} Icon={LightbulbOff} label={FORGOTTEN_LABEL} onPress={at => forgottenMenu(item, at)} />}
-        ListEmptyComponent={<Empty palette={palette} text={tab === 'saved' ? 'لا شيء محفوظ بعد. احفظ شجرة أو بطاقة مقارنة أو آية بزر الحفظ لتجدها هنا.' : tab === 'notes' ? 'لا تأملات بعد. اضغط مطولًا على آية في المصحف لتكتب تأملك.' : 'لا آيات منسية.'} />} />
+        ListEmptyComponent={<Empty palette={palette} text={tab === 'saved' ? 'لا شيء محفوظ بعد. احفظ شجرة أو بطاقة مقارنة أو آية، أو أي بطاقة في الرئيسية من زر «…» فوقها، لتجدها هنا.' : tab === 'notes' ? 'لا تأملات بعد. اضغط مطولًا على آية في المصحف لتكتب تأملك.' : 'لا آيات منسية.'} />} />
       {menus}
     </View>
   );

@@ -1,19 +1,21 @@
-import { memo, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { createContext, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
 import { AppState, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, BookOpenText, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, Link2, MessagesSquare, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpenText, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, Link2, MessagesSquare, MoreHorizontal, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
-import { bookmarkKind } from '@shared/bookmarkKind';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
 import { toggleBookmark } from '@shared/bookmarks';
 import { readGestures, type GestureAction } from '@shared/readerGestures';
 import { isMemorized, memorizedPrefer, memorizedQuestions, readMemorized, recallOfDay, subscribeMemorized, touchesMemorized, withMemorizedScope } from '@shared/memorized';
-import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, seededRandom, type FeedQuizKind } from '@shared/quiz/feedQuiz';
+import { FEED_QUIZ_NAMES, feedQuizSeed, OPENINGS, openingSurah, seededRandom, type FeedQuizKind } from '@shared/quiz/feedQuiz';
+import { answeredQuestion, dueSeeds, readMissed } from '@shared/quiz/missedQuestions';
+import { activeInterests, INTERESTS, interestById, interestOf, pickedInterests, surpriseMe, toggledInterest, type FeedCardKind } from '@shared/interests';
+import { bookmarkKind, cardBookmarkId, cardOfBookmark, isCardBookmark } from '@shared/bookmarkKind';
 import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
-import { feedBooks, hadithOfSlot, hasBooksCard, hasHadithCard, hasRajabCard, rajabOfSlot, hasJuzCard, hasMomentCard, hasSceneCard, hasSiraCard, hasTarajimCard, hasTermCard, hasTieCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, siraOfSlot, tarajimOfSlot, termOfSlot, tieOfSlot } from '@shared/homeFeed';
+import { allVirtues, dayStart, feedBooks, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, prayerSoon, type FeedSlot } from '@shared/homeFeed';
 import { pageLabel, sayer } from '@shared/tarajim';
 import { GRAPH, PEOPLE, personName, tiePairs } from '@/lib/tarajim';
 import { chainSentence } from '@shared/tarajimGraph';
@@ -76,7 +78,7 @@ import StoryMap from './StoryMap';
 import { ayahPlaces } from '@shared/quran/ayahPlaces';
 import itqan from '@shared/data/quran/itqanBalagha';
 import surahCounts from '@shared/data/quran/surahs.json';
-import { allAyat, ayahNoteAt, balaghaNote, ayahNoteKind, itqanSureAyat, withoutOpeningQuote, type AyahNote } from '@shared/quran/ayahNotes';
+import { allAyat, balaghaNote, itqanSureAyat, withoutOpeningQuote, type AyahNote } from '@shared/quran/ayahNotes';
 import { itqanAt } from '@shared/quran/itqanBalagha';
 import { irabWordsAt } from '@shared/quran/irabData';
 import { qiraatAyat, qiraatOf } from '@shared/quran/qiraatData';
@@ -90,8 +92,8 @@ import IrabSheet from './IrabSheet';
 import QuranWords from './quran/text/QuranWords';
 import { FIT_SHARE, useFitHeight } from '@/lib/useFit';
 import { storyMap } from '@shared/quran/prophets/story';
-import { hasStoryCard, storyGroupOfDay } from '@shared/quran/prophets/storyGroup';
-import { check, DEFAULT_LIST, DEFAULT_SOLO, hasTyped, isCompare, isTree, pick, reveal, showAnswer, startSolo, typeAnswer, type SoloRun } from '@/lib/quiz';
+import { STORY_GROUPS } from '@shared/quran/prophets/storyGroup';
+import { check, DEFAULT_LIST, DEFAULT_SOLO, hasTyped, isCompare, isTree, pick, questionState, reveal, showAnswer, startSolo, typeAnswer, type SoloRun } from '@/lib/quiz';
 import { readAyah } from '@/lib/openReader';
 import QuizChoice, { QuizPrompt } from './QuizChoice';
 import { CompareFeedback, CompareInputs } from './QuizCompare';
@@ -101,6 +103,10 @@ import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
 import Card from '@/ui/Card';
 import { openExternal } from '@/ui/ExternalLink';
+import FloatingMenu, { type MenuAt } from '@/ui/FloatingMenu';
+import ActButton from '@/ui/ActButton';
+import Button from '@/ui/Button';
+import { buzz } from '@/lib/haptics';
 
 type IconType = (props: LucideProps) => React.ReactNode;
 
@@ -127,10 +133,53 @@ function Post({ head, actions, bar, palette, press, children }: { head: React.Re
   );
 }
 
-/** A feed card's head: a round icon, a title and a line under it, like a post's author. */
+/**
+ * What a feed card's «…» menu acts on (owner, 2026-11-19): the card's kind and item (to save it), the interest it came from
+ * («ليس من اهتماماتي»), and whether it came from outside the reader's interests («أضفه»). Only cards an interest brings carry it.
+ */
+type CardMenu = { kind: FeedCardKind | FeedQuizKind; item?: string; interest: string; surprise?: boolean;
+  /** Left out where taking the interest out makes no sense (the only one picked, one interest's own view). */
+  notMine?: () => void; add: () => void;
+  /** A saved card shown again (the saved shelf, «مدونتي»): only to unsave it. */
+  savedOnly?: boolean };
+const CardMenuContext = createContext<CardMenu | null>(null);
+
+/** The kinds that save themselves on their own card (the tree's double tap, the compare card's button), so the menu does not. */
+const SAVES_ITSELF: readonly string[] = ['pair', 'tree'];
+
+/** A feed card's «…»: the reader's long-press menu (icons with their names), to save the card or say it is not for them. */
+function CardMenuButton({ menu, title, sub, palette }: { menu: CardMenu; title: string; sub?: string; palette: Palette }) {
+  const box = useRef<ComponentRef<typeof View>>(null);
+  const [at, setAt] = useState<MenuAt | null>(null);
+  const saved = useSyncExternalStore(subscribeBookmarks, readBookmarks);
+  const id = menu.item !== undefined && !SAVES_ITSELF.includes(menu.kind) ? cardBookmarkId(menu.kind, menu.item) : null;
+  const on = !!id && saved.some(item => item.id === id);
+  const name = interestById(menu.interest)?.name ?? '';
+  const picked = useSyncExternalStore(pickedInterests.subscribe, pickedInterests.read, pickedInterests.server);
+  const adds = !menu.savedOnly && !!menu.surprise && !picked.includes(menu.interest);
+  const notMine = !menu.savedOnly && !menu.surprise && menu.notMine;
+  const open = () => box.current?.measureInWindow((x: number, y: number, width: number, height: number) => { setAt({ x: x + width / 2, y: y + height / 2 }); buzz(); });
+  const close = () => setAt(null);
+  if (!id && !adds && !notMine) return null;
+  return (
+    <>
+      <View ref={box} collapsable={false}><IconButton Icon={MoreHorizontal} label={`خيارات: ${title}`} onPress={open} /></View>
+      <FloatingMenu overlay at={at} label={title} onClose={close} palette={palette}>
+        {id && <ActButton Icon={Bookmark} name="احفظ" label={on ? 'أزلها من المحفوظات' : 'احفظ البطاقة'} on={on} tint={palette.root} filled palette={palette}
+          onPress={() => { close(); toggleBookmark({ id, text: [title, sub].filter(Boolean).join(' · '), href: '' }); }} />}
+        {adds
+          ? <ActButton wide Icon={Plus} name="أضفه إلى اهتماماتي" label={`أضف «${name}» إلى اهتماماتي`} palette={palette} onPress={() => { close(); menu.add(); }} />
+          : notMine && <ActButton wide Icon={EyeOff} name="ليس من اهتماماتي" label={`«${name}» ليس من اهتماماتي`} palette={palette} onPress={() => { close(); menu.notMine?.(); }} />}
+      </FloatingMenu>
+    </>
+  );
+}
+
+/** A feed card's head: a round icon, a title and a line under it, like a post's author; the «…» menu on cards an interest brings. */
 function PostHead({ Icon, title, sub, palette, open }: { Icon: IconType; title: string; sub?: string; palette: Palette;
   /** A tap on the head opens the post's own page; `label` names it for a screen reader. */
   open?: { onPress: () => void; label: string } }) {
+  const menu = useContext(CardMenuContext);
   const head = (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, paddingTop: 10, paddingBottom: 6 }}>
       <View style={{ width: 36, height: 36, borderRadius: 18, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, alignItems: 'center', justifyContent: 'center' }}>
@@ -142,7 +191,14 @@ function PostHead({ Icon, title, sub, palette, open }: { Icon: IconType; title: 
       </View>
     </View>
   );
-  return open ? <Tap onPress={open.onPress} accessibilityRole="button" accessibilityLabel={open.label} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>{head}</Tap> : head;
+  const tappable = open ? <Tap onPress={open.onPress} accessibilityRole="button" accessibilityLabel={open.label} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>{head}</Tap> : head;
+  if (!menu) return tappable;
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View style={{ flex: 1 }}>{tappable}</View>
+      <CardMenuButton menu={menu} title={title} sub={sub} palette={palette} />
+    </View>
+  );
 }
 
 /** Where a post's ayat are, for its head: «البقرة ٦١ · آل عمران ٢١، ١١٢» (shared/quran/ayahPlaces.ts). */
@@ -293,6 +349,13 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
     const started = startSolo({ ...DEFAULT_SOLO, kinds: [kind], length: 1, list }, seededRandom(seed));
     setRun(started.questions.length ? started : null);
   }, [kind, seed, memorized, questions]);
+  // Answered wrong (or looked up), the question comes back after a rest; right, it goes (shared/quiz/missedQuestions.ts).
+  const reported = useRef<string | null>(null);
+  useEffect(() => {
+    if (!run?.checked[0] || reported.current === `${kind}:${seed}`) return;
+    reported.current = `${kind}:${seed}`;
+    answeredQuestion(kind, seed, questionState(run, 0) === 'correct');
+  }, [run, kind, seed]);
   if (!run) return null;
   const question = run.questions[0];
   const checked = run.checked[0];
@@ -346,8 +409,8 @@ function OpeningPost({ seed, palette }: { seed: number; palette: Palette }) {
  * «من التراجم» (owner, 2026-11-18; sketch tarajim-app/sketch-dark.png, screen 4): a virtue from a converted entry, in the
  * book's words with who says it and its page; the head opens the person's page.
  */
-function TarajimPost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
-  const pick = tarajimOfSlot(PEOPLE, day, slot);
+function TarajimPost({ id, palette }: { id: string; palette: Palette }) {
+  const pick = virtueOf(id);
   if (!pick) return null;
   const virtue = pick.person.virtues[pick.index];
   const open = () => router.push({ pathname: '/person', params: { slug: pick.person.slug } });
@@ -365,9 +428,9 @@ function TarajimPost({ day, slot, palette }: { day: number; slot: number; palett
  * «صلة» (owner, 2026-11-18; sketch tarajim-app/graph/sketch2-dark.png): two converted people and the nearest chain of ties
  * that joins them, in one sentence with the pages that state each tie; the head opens «بينه وبين…» with the two picked.
  */
-function TiePost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
+function TiePost({ id, palette }: { id: string; palette: Palette }) {
   const { width } = useWindowDimensions();
-  const pair = tieOfSlot(tiePairs(), day, slot);
+  const pair = tiePairs().find(each => `${each.a},${each.b}` === id);
   if (!pair) return null;
   const nodes = [...new Set(pair.steps.flatMap(step => [step.from, step.to]))];
   const name = (slug: string) => personName(GRAPH.nodes.get(slug)!);
@@ -450,11 +513,13 @@ function SavedAyahPost({ ayah, palette }: { ayah: string; palette: Palette }) {
 function SavedPost({ item, palette }: { item: SavedItem; palette: Palette }) {
   const found = useMemo(() => {
     const kind = bookmarkKind(item);
+    if (kind === 'card') return { card: item.id };
     if (kind === 'ayah') return { ayah: item.id.slice('ayah:'.length) };
     if (kind === 'tree') return { piece: treeList().find(piece => piece.id === item.id || aliasesOf(piece).includes(item.id)) };
     const surahs = [...new Set(compareBookmarkAyat(item).map(key => Number(key.split(':')[0])))].sort((a, b) => a - b);
     return { pair: surahs.length ? cardsFor(surahs[0], surahs[1] ?? surahs[0]).find(card => savedAs(card.id, [item]).length) : undefined };
   }, [item]);
+  if ('card' in found) return found.card ? <SavedFeedCard id={found.card} palette={palette} /> : null;
   if ('ayah' in found) return found.ayah && /^\d+:\d+$/.test(found.ayah) && shortNames[Number(found.ayah.split(':')[0])] ? <SavedAyahPost ayah={found.ayah} palette={palette} /> : null;
   if ('piece' in found) return found.piece ? <TreePost piece={found.piece} palette={palette} /> : null;
   return found.pair ? <PairPost pair={found.pair} palette={palette} /> : null;
@@ -470,7 +535,7 @@ const StoryPost = memo(function StoryPost({ slug, phase, palette }: { slug: stri
   const map = useMemo(() => (prophet ? storyMap(prophet.events) : null), [prophet]);
   const { height: screen } = useWindowDimensions();
   if (!prophet || !map) return null;
-  const open = () => router.push({ pathname: '/prophets/[slug]', params: { slug } });
+  const open = () => { continueAfter('prophets', `${slug}-${phase}`); router.push({ pathname: '/prophets/[slug]', params: { slug } }); };
   return (
     <Post palette={palette} head={<PostHead Icon={ScrollText} title={prophet.title} sub={prophet.story.phases[phase]} palette={palette} open={{ onPress: () => open(), label: 'افتح القصة' }} />}
       actions={<Action Icon={BookOpen} label="افتح القصة" onPress={() => open()} palette={palette} />}>
@@ -596,8 +661,8 @@ const sceneList = () => (scenes ??= examples(ayahMushafWords));
  * A scene from «مشاهد» as a post (owner, 2026-11-18): the page's own card, whole, so the picture reads as it does there.
  * The head opens the page.
  */
-const ScenePost = memo(function ScenePost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
-  const view = sceneList()[sceneOfSlot(sceneList().length, day, slot)];
+const ScenePost = memo(function ScenePost({ id, palette }: { id: string; palette: Palette }) {
+  const view = sceneList().find(scene => scene.key === id);
   if (!view) return null;
   return (
     <Post palette={palette} head={<PostHead Icon={Presentation} title="من المشاهد" sub={topicOf(view).name} palette={palette} open={{ onPress: () => toTab('/lataif'), label: 'افتح المشاهد' }} />}
@@ -611,11 +676,11 @@ const ScenePost = memo(function ScenePost({ day, slot, palette }: { day: number;
  * A sira story (owner, 2026-11-18): its first report whole, so a first reader has what led to the words and what came of
  * them; the ayat it turns on folded under it. The head opens the story's page.
  */
-function SiraPost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
-  const story = STORIES[siraOfSlot(STORIES.length, day, slot)];
+function SiraPost({ id, palette }: { id: string; palette: Palette }) {
+  const story = STORIES.find(each => each.slug === id);
   if (!story?.reports[0]) return null;
   const report = story.reports[0];
-  const open = () => toTab({ pathname: '/story', params: { slug: story.slug } });
+  const open = () => { continueAfter('sira', id); toTab({ pathname: '/story', params: { slug: story.slug } }); };
   return (
     <Post palette={palette} head={<PostHead Icon={ScrollText} title="من قصص السيرة" sub={story.name} palette={palette} open={{ onPress: open, label: `افتح ${story.name}` }} />}
       actions={<>
@@ -635,13 +700,15 @@ const FEED_FORTY = FORTY.entries.filter(entry => !entry.partial && entry.records
 
 /** Ibn Rajab's explanations of a phrase of those hadith, for his card. */
 const RAJAB_PASSAGES = rajabFeedPassages(rajab as RajabChapter[], FORTY.entries);
+/** A passage's lasting id: its hadith's number and its first paragraph's place in the chapter. */
+const rajabId = ({ chapter, passage }: (typeof RAJAB_PASSAGES)[number]) => `${chapter.n}-${chapter.paragraphs.indexOf(passage[0])}`;
 
 /**
  * A passage of Ibn Rajab's Jami' al-'Ulum wal-Hikam (owner, 2026-11-18: every feature gets a card), where he explains a phrase
  * of one of the Forty; the head opens the hadith's page, his whole chapter at its foot.
  */
-function RajabPost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
-  const picked = RAJAB_PASSAGES[rajabOfSlot(RAJAB_PASSAGES.length, day, slot)];
+function RajabPost({ id, palette }: { id: string; palette: Palette }) {
+  const picked = RAJAB_PASSAGES.find(each => rajabId(each) === id);
   if (!picked) return null;
   const entry = fortyEntry(picked.chapter.n);
   if (!entry) return null;
@@ -660,8 +727,8 @@ function RajabPost({ day, slot, palette }: { day: number; slot: number; palette:
 }
 
 /** One of al-Nawawi's Forty in his words, with the books he names; the head opens the hadith's page with its records. */
-function HadithPost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
-  const entry = FEED_FORTY[hadithOfSlot(FEED_FORTY.length, day, slot)];
+function HadithPost({ id, palette }: { id: string; palette: Palette }) {
+  const entry = FEED_FORTY.find(each => String(each.n) === id);
   if (!entry) return null;
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
@@ -684,13 +751,13 @@ const TERM_LINES = 5;
  * A balagha term (owner, 2026-11-18): its name, its definition in the scholar's words, and one of al-Suyuti's examples with
  * the words he quotes lit. The head and the first button open the term's page; the second, the list of terms.
  */
-function TermPost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
-  const term = balaghaTerms.terms[termOfSlot(balaghaTerms.terms.length, day, slot)];
+function TermPost({ id, day, palette }: { id: string; day: number; palette: Palette }) {
+  const term = balaghaTerms.terms.find(each => each.name === id);
   const examples = useMemo(() => (term ? examplesOf(itqan, term) : []), [term]);
   if (!term) return null;
   const name = plainName(term.name);
   const quote = term.quotes[0];
-  const example = examples[(day + slot) % Math.max(examples.length, 1)];
+  const example = examples[day % Math.max(examples.length, 1)];
   const open = () => toTab({ pathname: '/term', params: { name: term.name } });
   return (
     <Post palette={palette} head={<PostHead Icon={BookOpenText} title="من مصطلحات البلاغة" sub={quote.book === 'itqan' ? 'الإتقان للسيوطي' : 'تلخيص المفتاح للقزويني'} palette={palette} open={{ onPress: open, label: `افتح ${name}` }} />}
@@ -716,17 +783,19 @@ function TermPost({ day, slot, palette }: { day: number; slot: number; palette: 
 
 /** Every battle's moments, in the battles' order, for the moment card. */
 const MOMENTS = (momentBattles as AppMomentBattle[]).flatMap(battle => battle.moments.map((moment, i) => ({ battle, moment, n: i + 1 })));
+const momentId = (item: (typeof MOMENTS)[number]) => `${item.battle.slug}-${item.n}`;
 
 /** A moment of a battle in the source's words (owner, 2026-11-18); the head opens the battle's page. */
-function MomentPost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
-  const item = MOMENTS[momentOfSlot(MOMENTS.length, day, slot)];
+function MomentPost({ id, palette }: { id: string; palette: Palette }) {
+  const item = MOMENTS.find(each => momentId(each) === id);
   if (!item) return null;
   const { battle, moment, n } = item;
+  const open = () => { continueAfter('moment', id); toTab({ pathname: '/battle', params: { slug: battle.slug } }); };
   return (
     <Post palette={palette} head={<PostHead Icon={Swords} title={`من ${battle.name}`} sub={battleLine(battle)} palette={palette}
-      open={{ onPress: () => toTab({ pathname: '/battle', params: { slug: battle.slug } }), label: `افتح ${battle.name}` }} />}
+      open={{ onPress: open, label: `افتح ${battle.name}` }} />}
       actions={<>
-        <Action Icon={Swords} label={`افتح ${battle.name}`} onPress={() => toTab({ pathname: '/battle', params: { slug: battle.slug } })} palette={palette} />
+        <Action Icon={Swords} label={`افتح ${battle.name}`} onPress={open} palette={palette} />
         <Action Icon={ExternalLinkIcon} label={`المصدر: ${moment.cite}`} onPress={() => openExternal(moment.url)} palette={palette} />
       </>}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}><Moment moment={moment} n={n} palette={palette} plain /></View>
@@ -753,14 +822,14 @@ const NOTE_LINES = 4;
  * an ayah he explains alone, al-Suyuti's balagha paragraph on an ayah he surely names, a word's i'rab, or the readings. A
  * tap opens the reader's own sheet for it. A card whose book is not on the phone is left out.
  */
-const AyahNotePost = memo(function AyahNotePost({ kind, day, slot, palette }: { kind: AyahNote; day: number; slot: number; palette: Palette }) {
+/** The book a note card reads from is on (the readings are built in). */
+const noteBookOn = (kind: AyahNote) => (kind === 'tafsir' ? bookState('sadi') === 'on' : kind === 'balagha' ? bookState('itqan') === 'on' : kind === 'irab' ? bookState('irab-words') === 'on' : true);
+
+const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { kind: AyahNote; id: string; day: number; palette: Palette }) {
   useBooks();
-  const on = kind === 'tafsir' ? bookState('sadi') === 'on' : kind === 'balagha' ? bookState('itqan') === 'on' : kind === 'irab' ? bookState('irab-words') === 'on' : true;
+  const on = noteBookOn(kind);
   const note = useMemo((): NoteBody | null => {
-    const list = noteList(kind);
-    const at = ayahNoteAt(list.length, day, slot);
-    if (at < 0) return null;
-    const key = list[at];
+    const key = id;
     if (kind === 'tafsir') { const passage = tafsirSadiOf(key); return passage ? { key, text: withoutOpeningQuote(passage.text), source: 'تفسير السعدي' } : null; }
     if (kind === 'balagha') {
       const found = balaghaNote(itqanAt(itqan, key));
@@ -769,7 +838,7 @@ const AyahNotePost = memo(function AyahNotePost({ kind, day, slot, palette }: { 
     if (kind === 'irab') {
       const words = ayahMushafWords(key);
       const lines = irabWordsAt(key);
-      const order = words.map((_, i) => (i + day + slot) % words.length);
+      const order = words.map((_, i) => (i + day) % words.length);
       // A word with a role; a noun or verb before a lone particle («حرف جر»), which says little on its own.
       const hasRole = (i: number) => corpusWords(key, i).some(c => lines[c]?.role);
       const particle = (i: number) => corpusWords(key, i).every(c => lines[c]?.morph.startsWith('حرف'));
@@ -778,7 +847,7 @@ const AyahNotePost = memo(function AyahNotePost({ kind, day, slot, palette }: { 
       return { key, word, shown: words[word], role: corpusWords(key, word).map(c => lines[c]?.role).filter(Boolean).join('، '), morph: corpusWords(key, word).map(c => lines[c]?.morph).filter(Boolean).join(' · ') };
     }
     return { key, readings: qiraatOf(key) };
-  }, [kind, day, slot]);
+  }, [kind, id, day]);
   const [open, setOpen] = useState(false);
   // The sheet stays while it is open, even when its book is taken off the phone from inside it.
   if (!note || (!on && !open)) return null;
@@ -822,29 +891,126 @@ const AyahNotePost = memo(function AyahNotePost({ kind, day, slot, palette }: { 
   );
 });
 
-/** Batches added each time the page nears the feed's end. */
-const MORE = 3;
+/** Every virtue of the converted people, read once: the «من التراجم» card's list. */
+let virtues: { person: (typeof PEOPLE)[number]; index: number }[] | undefined;
+const virtueList = () => (virtues ??= allVirtues(PEOPLE));
+const virtueOf = (id: string) => virtueList().find(each => `${each.person.slug}-${each.index}` === id);
+
+/** The content cards drawn from a list (pairs and trees have their own picks): each kind's items, by a lasting id. */
+type ListKind = Exclude<FeedCardKind, 'pair' | 'tree'>;
+const NOTE_OF: Record<string, AyahNote> = { 'note-tafsir': 'tafsir', 'note-qiraat': 'qiraat', 'note-irab': 'irab', 'note-balagha': 'balagha' };
+const itemLists: Partial<Record<ListKind, readonly string[]>> = {};
+const LIST_OF: Record<ListKind, () => readonly string[]> = {
+  'note-tafsir': () => noteList('tafsir'), 'note-qiraat': () => noteList('qiraat'), 'note-irab': () => noteList('irab'), 'note-balagha': () => noteList('balagha'),
+  term: () => balaghaTerms.terms.map(term => term.name),
+  scene: () => sceneList().map(scene => scene.key),
+  hadith: () => FEED_FORTY.map(entry => String(entry.n)),
+  rajab: () => RAJAB_PASSAGES.map(rajabId),
+  prophets: () => STORY_GROUPS.map(group => `${group.slug}-${group.phase}`),
+  sira: () => STORIES.filter(story => story.reports[0]).map(story => story.slug),
+  moment: () => MOMENTS.map(momentId),
+  tarajim: () => virtueList().map(each => `${each.person.slug}-${each.index}`),
+  tie: () => tiePairs().map(pair => `${pair.a},${pair.b}`),
+};
+const itemsOf = (kind: ListKind) => (itemLists[kind] ??= LIST_OF[kind]());
+const LIST_KINDS = Object.keys(LIST_OF) as ListKind[];
 
 /**
- * The home feed: today's pair, a forgotten ayah that is due, today's tree and today's juz, then more each time the page nears its end
- * (`nearEnd` changes), with a scene from «مشاهد» and a few books among them, and the prayer card when a prayer is near.
- * What was shown before is skipped for good (shared/feedSeen.ts); once all was seen it starts again from the seen ones.
+ * A story opened from the feed continues (owner, 2026-11-19): that kind's next card is the one after it in the list (the
+ * next phase of a prophet's story, the next moment of the battle, the next sira story), before the day's turn goes on.
  */
-export function Feed({ palette, nearEnd, screenBottom }: { palette: Palette; nearEnd: number;
+const continued = new Map<string, string>();
+const continuedListeners = new Set<() => void>();
+let continuedVersion = 0;
+function continueAfter(kind: ListKind, item: string) {
+  continued.set(kind, item);
+  continuedVersion++;
+  continuedListeners.forEach(listener => listener());
+}
+const subscribeContinued = (listener: () => void) => { continuedListeners.add(listener); return () => { continuedListeners.delete(listener); }; };
+const readContinued = () => continuedVersion;
+
+/** One content card by its kind and item: the card's own post, as it shows in the feed and when saved. */
+function ContentPost({ kind, item, day, palette }: { kind: ListKind; item: string; day: number; palette: Palette }) {
+  if (kind in NOTE_OF) return <AyahNotePost kind={NOTE_OF[kind]} id={item} day={day} palette={palette} />;
+  switch (kind) {
+    case 'term': return <TermPost id={item} day={day} palette={palette} />;
+    case 'scene': return <ScenePost id={item} palette={palette} />;
+    case 'hadith': return <HadithPost id={item} palette={palette} />;
+    case 'rajab': return <RajabPost id={item} palette={palette} />;
+    case 'prophets': { const at = item.lastIndexOf('-'); return <StoryPost slug={item.slice(0, at)} phase={Number(item.slice(at + 1))} palette={palette} />; }
+    case 'sira': return <SiraPost id={item} palette={palette} />;
+    case 'moment': return <MomentPost id={item} palette={palette} />;
+    case 'tarajim': return <TarajimPost id={item} palette={palette} />;
+    case 'tie': return <TiePost id={item} palette={palette} />;
+    default: return null;
+  }
+}
+
+/** A saved feed card (owner, 2026-11-19: every card can be saved), drawn as it was in the feed; null when the data no longer holds it. */
+export function SavedFeedCard({ id, palette }: { id: string; palette: Palette }) {
+  const card = cardOfBookmark(id);
+  const { day } = useToday();
+  if (!card || !(LIST_KINDS as string[]).includes(card.kind) || !itemsOf(card.kind as ListKind).includes(card.item)) return null;
+  const kind = card.kind as ListKind;
+  const menu: CardMenu = { kind, item: card.item, interest: interestOf(kind)?.id ?? '', savedOnly: true, add: () => {} };
+  return <CardMenuContext.Provider value={menu}><ContentPost kind={kind} item={card.item} day={day} palette={palette} /></CardMenuContext.Provider>;
+}
+
+/** The interest's line over a card from outside the reader's interests, with a button to add it. */
+function SurpriseLine({ interest, added, palette }: { interest: string; added: boolean; palette: Palette }) {
+  const name = interestById(interest)?.name ?? '';
+  // Once added the line stays, saying so, so the card under it does not move.
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 12 }}>
+      <Text style={{ flex: 1, color: palette.muted, fontSize: 13, textAlign: 'right' }}>{added ? `أُضيف «${name}» إلى اهتماماتك` : `من غير اهتماماتك: ${name}`}</Text>
+      <Button Icon={added ? Check : Plus} label={added ? 'تراجع' : 'أضفه'} accessibilityLabel={added ? `أزل «${name}» من اهتماماتي` : `أضف «${name}» إلى اهتماماتي`}
+        onPress={() => pickedInterests.write(toggledInterest(pickedInterests.read(), interest))} />
+    </View>
+  );
+}
+
+/** In a card's place after «ليس من اهتماماتي»: what was taken out, and a button to put it back. */
+function RemovedLine({ interest, onUndo, palette }: { interest: string; onUndo: () => void; palette: Palette }) {
+  const name = interestById(interest)?.name ?? '';
+  return (
+    <Card palette={palette} dashed pad={[8, 12]}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+        <Text style={{ flex: 1, color: palette.ink, fontSize: 15, textAlign: 'right' }}>{`أُزيل «${name}» من اهتماماتك`}</Text>
+        <Button label="تراجع" variant="plain" onPress={() => { pickedInterests.write(toggledInterest(pickedInterests.read(), interest)); onUndo(); }} />
+      </View>
+    </Card>
+  );
+}
+
+/** About how many cards come at a time, as the page opens and each time it nears the end: a round of every interest. */
+const STEP_CARDS = INTERESTS.length;
+
+/**
+ * The home feed (owner, 2026-11-19): the reader's own cards at the top (a forgotten ayah that is due, today's juz, the prayer
+ * when near), then rounds, each one card from every interest picked (shared/interests.ts, shared/homeFeed.ts feedRound),
+ * content and questions taking turns, with a saved item and the books now and then; more rounds as the page nears its end.
+ * `only` shows one interest's cards alone (the chip row over the feed). What was shown before is skipped (shared/feedSeen.ts);
+ * once all was seen it starts again from the seen ones. A question answered wrong comes back after a rest.
+ */
+export function Feed({ palette, nearEnd, screenBottom, only = null }: { palette: Palette; nearEnd: number;
   /** Where the bottom of the screen is in the page, for a card that comes while the feed is open (the prayer card). */
-  screenBottom: () => number }) {
+  screenBottom: () => number;
+  /** One interest's id: its cards alone. */
+  only?: string | null }) {
   const { day, juz } = useToday();
   const visit = useSyncExternalStore(subscribeVisit, visitStart, serverVisit);
-  // A new visit (pulled to refresh, or back after long away) starts again from one batch, in the same render that picks it.
-  const [more, setMore] = useState({ visit, batches: 1 });
-  const batches = more.visit === visit ? more.batches : 1;
+  // A new visit (pulled to refresh, or back after long away), or another chip, starts again from one round.
+  const view = `${visit}|${only ?? ''}`;
+  const [more, setMore] = useState({ view, batches: 0 });
   useEffect(() => {
-    if (nearEnd) setMore(now => ({ visit, batches: (now.visit === visit ? now.batches : 1) + MORE }));
+    if (nearEnd) setMore(now => ({ view, batches: (now.view === view && now.batches ? now.batches : step) + step }));
   }, [nearEnd]); // eslint-disable-line react-hooks/exhaustive-deps -- only a new signal asks for more
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen);
   const bookmarks = readBookmarks();
   // The saved items as they were when the visit began, so saving or unsaving a card does not move the cards on screen.
-  const saved = useMemo(() => shownBookmarks(bookmarks), [visit]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
+  const saved = useMemo(() => shownBookmarks(bookmarks).filter(item => !isCardBookmark(item.id)), [visit]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
+  const savedCards = useMemo(() => shownBookmarks(bookmarks).filter(item => isCardBookmark(item.id)), [visit]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const forgotten = mostForgotten(due)[0];
   // The settings under «ما أحفظه»: questions come from the memorized range, pondering puts it first.
@@ -852,42 +1018,130 @@ export function Feed({ palette, nearEnd, screenBottom }: { palette: Palette; nea
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
   const prefer = useSyncExternalStore(memorizedPrefer.subscribe, memorizedPrefer.read);
   const recall = useMemo(() => (memorized ? recallOfDay(questions ? memorized : { all: true }, day) : undefined), [memorized, questions, day]);
+  // The interests as they were when the visit began (a change in settings starts a new visit); one taken out from a card's
+  // menu leaves the cards on screen in place, its own replaced by a line to put it back.
+  const picked = useSyncExternalStore(pickedInterests.subscribe, pickedInterests.read, pickedInterests.server);
+  const surprise = useSyncExternalStore(surpriseMe.subscribe, surpriseMe.read, surpriseMe.server);
+  // A note card whose book is off (or still loading) is passed over, and not counted as seen.
+  useBooks();
+  const frozen = useMemo(() => ({ picked, surprise }), [visit]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
+  const { active, others } = useMemo(() => {
+    if (only) return { active: INTERESTS.filter(interest => interest.id === only), others: [] };
+    const chosen = activeInterests(frozen.picked);
+    return { active: chosen, others: frozen.surprise && frozen.picked.length ? INTERESTS.filter(interest => !chosen.includes(interest)) : [] };
+  }, [frozen, only]);
+  // Rounds of few interests are short: as many rounds at a time as make about a round of all, and the books and a saved
+  // item come once in each such step, not in every short round.
+  const step = Math.max(1, Math.ceil(STEP_CARDS / (active.length + (others.length ? 1 : 0))));
+  const batches = more.view === view && more.batches ? more.batches : step;
+  // Cards taken out from their menu this visit, by key; each leaves a line in its place, the others stay as they are.
+  const [removed, setRemoved] = useState<{ visit: number; keys: ReadonlySet<string> }>({ visit, keys: new Set() });
+  const removedKeys = removed.visit === visit ? removed.keys : new Set<string>();
+  const showing = new Set(activeInterests(picked).map(interest => interest.id));
+  const rounds = useMemo(() => Array.from({ length: batches }, (_, round) => feedRound(active, round, day, others)), [active, others, batches, day]);
+  // The questions answered wrong that are due again, as they were when the visit began.
+  const missed = useMemo(() => ({ list: readMissed(), at: Date.now() }), [visit]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
   // Back after a long time in the background: a new visit, so what was shown before counts as seen (shared/feedSeen.ts).
   useEffect(() => {
     const listener = AppState.addEventListener('change', state => (state === 'active' ? backToVisit() : leftVisit()));
     return () => listener.remove();
   }, []);
-  // The cards already shown stay in place as more come; a new visit, day or setting picks afresh.
+  // How many of each kind the rounds hold, in order.
+  const counts = useMemo(() => {
+    const count: Record<string, number> = {};
+    for (const slot of rounds.flat()) count[slot.kind] = (count[slot.kind] ?? 0) + 1;
+    return count;
+  }, [rounds]);
+  // The cards already shown stay in place as more come; a new visit, day, chip or setting picks afresh.
   const shownPairs = useRef<{ reset?: unknown[]; list: NonNullable<ReturnType<typeof pairOfDayNumber>>[] }>({ list: [] }).current;
   const shownTrees = useRef<{ reset?: unknown[]; list: NonNullable<ReturnType<typeof treeOfDay>>[] }>({ list: [] }).current;
-  const pairs = useMemo(() => growingPicks(shownPairs, [visit, day, prefer, memorized], offset => pairOfDayNumber(day + offset), pair => pair.id, seen, batches,
-    { since: visit, prefer: prefer ? pair => touchesMemorized(pair.sides.flatMap(sideKeys), memorized) : undefined }), [day, batches, seen, prefer, memorized, visit, shownPairs]);
-  const trees = useMemo(() => growingPicks(shownTrees, [visit, day, prefer, memorized], offset => treeOfDay(day, offset), piece => piece.id, seen, batches,
-    { since: visit, prefer: prefer ? piece => touchesMemorized(piece.keys, memorized) : undefined }), [day, batches, seen, prefer, memorized, visit, shownTrees]);
-  useEffect(() => { markFeedSeen([...pairs.map(pair => pair.id), ...trees.map(piece => piece.id)]); }, [pairs, trees]);
+  const pairs = useMemo(() => growingPicks(shownPairs, [view, day, prefer, memorized], offset => pairOfDayNumber(day + offset), pair => pair.id, seen, counts.pair ?? 0,
+    { since: visit, prefer: prefer ? pair => touchesMemorized(pair.sides.flatMap(sideKeys), memorized) : undefined }), [day, counts.pair, seen, prefer, memorized, visit, view, shownPairs]);
+  const trees = useMemo(() => growingPicks(shownTrees, [view, day, prefer, memorized], offset => treeOfDay(day, offset), piece => piece.id, seen, counts.tree ?? 0,
+    { since: visit, prefer: prefer ? piece => touchesMemorized(piece.keys, memorized) : undefined }), [day, counts.tree, seen, prefer, memorized, visit, view, shownTrees]);
+  const holders = useRef<Partial<Record<ListKind, { reset?: unknown[]; list: string[] }>>>({}).current;
+  const turn = useSyncExternalStore(subscribeContinued, readContinued);
+  const items = useMemo(() => {
+    const out: Partial<Record<ListKind, string[]>> = {};
+    LIST_KINDS.forEach((kind, salt) => {
+      const need = counts[kind] ?? 0;
+      if (!need) return;
+      const list = itemsOf(kind);
+      const after = continued.get(kind);
+      const start = after !== undefined && list.includes(after) ? list.indexOf(after) + 1 : dayStart(list.length, day, salt);
+      out[kind] = growingPicks(holders[kind] ??= { list: [] }, [view, day], offset => list[(start + offset) % list.length], item => `${kind}:${item}`, seen, need,
+        { since: visit, tries: list.length });
+    });
+    return out;
+  }, [counts, day, seen, view, visit, holders, turn]); // eslint-disable-line react-hooks/exhaustive-deps -- `turn` tells a story was opened
   const posts: React.ReactNode[] = [];
-  for (let i = 0; i < batches; i++) {
-    if (pairs[i]) posts.push(<PairPost key={`p${pairs[i].id}`} pair={pairs[i]} palette={palette} />);
-    if (i === 0 && forgotten) posts.push(<ForgottenPost key={`ask${forgotten}`} ayah={forgotten} review={() => reviewForgotten(forgottenOrder(Object.keys(due)))} palette={palette} />);
-    else if (i === 0 && recall) posts.push(<ForgottenPost key={`ask${recall}`} ayah={recall} palette={palette} />);
-    // A question card in every batch after the first (whose question is the recall card), each kind in turn.
-    if (i > 0) posts.push(<FeedQuiz key={`q${day}-${i}`} kind={feedQuizKind(day, i)} seed={feedQuizSeed(day, i)} palette={palette} />);
-    if (trees[i]) posts.push(<TreePost key={`t${trees[i].id}`} piece={trees[i]} palette={palette} />);
-    posts.push(<AyahNotePost key={`n${day}-${i}`} kind={ayahNoteKind(day, i)} day={day} slot={i} palette={palette} />);
-    const savedItem = savedOfSlot(saved, day, i);
-    if (savedItem) posts.push(<SavedPost key={`b${savedItem.id}-${i}`} item={savedItem} palette={palette} />);
-    if (hasStoryCard(i)) { const group = storyGroupOfDay(day, i); posts.push(<StoryPost key={`s${day}-${i}`} slug={group.slug} phase={group.phase} palette={palette} />); }
-    if (hasJuzCard(i) && juz) posts.push(<JuzPost key={`j${day}`} palette={palette} />);
-    if (hasSceneCard(i) && sceneList().length) posts.push(<ScenePost key={`m${day}-${i}`} day={day} slot={i} palette={palette} />);
-    if (hasTermCard(i)) posts.push(<TermPost key={`d${day}-${i}`} day={day} slot={i} palette={palette} />);
-    if (hasBooksCard(i)) posts.push(<BooksPost key={`k${day}-${i}`} day={day} palette={palette} />);
-    if (hasSiraCard(i) && STORIES.length) posts.push(<SiraPost key={`r${day}-${i}`} day={day} slot={i} palette={palette} />);
-    if (hasHadithCard(i) && FEED_FORTY.length) posts.push(<HadithPost key={`h${day}-${i}`} day={day} slot={i} palette={palette} />);
-    if (hasRajabCard(i) && RAJAB_PASSAGES.length) posts.push(<RajabPost key={`ir${day}-${i}`} day={day} slot={i} palette={palette} />);
-    if (hasMomentCard(i) && MOMENTS.length) posts.push(<MomentPost key={`w${day}-${i}`} day={day} slot={i} palette={palette} />);
-    if (hasTarajimCard(i)) posts.push(<TarajimPost key={`tj${day}-${i}`} day={day} slot={i} palette={palette} />);
-    if (hasTieCard(i)) posts.push(<TiePost key={`tl${day}-${i}`} day={day} slot={i} palette={palette} />);
+  // Only what is drawn counts as seen (a note whose book is off draws nothing).
+  const rendered: string[] = [];
+  const used: Record<string, number> = {};
+  const next = (kind: string) => { const at = used[kind] ?? 0; used[kind] = at + 1; return at; };
+  for (let round = 0; round < batches; round++) {
+    if (round === 0 && !only) {
+      if (forgotten) posts.push(<ForgottenPost key={`ask${forgotten}`} ayah={forgotten} review={() => reviewForgotten(forgottenOrder(Object.keys(due)))} palette={palette} />);
+      else if (recall) posts.push(<ForgottenPost key={`ask${recall}`} ayah={recall} palette={palette} />);
+      if (hasJuzCard(round) && juz) posts.push(<JuzPost key={`j${day}`} palette={palette} />);
+    }
+    rounds[round].forEach((slot: FeedSlot) => {
+      const at = next(slot.kind);
+      let key: string;
+      let post: React.ReactNode = null;
+      let item: string | undefined;
+      if (slot.quiz) {
+        const kind = slot.kind as FeedQuizKind;
+        const seed = dueSeeds(missed.list, kind, missed.at)[at] ?? feedQuizSeed(day, round);
+        key = `q${kind}-${seed}-${round}`;
+        post = <FeedQuiz kind={kind} seed={seed} palette={palette} />;
+      } else if (slot.kind === 'pair') {
+        const pair = pairs[at];
+        key = `p${pair?.id ?? at}`;
+        item = pair?.id;
+        post = pair ? <PairPost pair={pair} palette={palette} /> : null;
+      } else if (slot.kind === 'tree') {
+        const piece = trees[at];
+        key = `t${piece?.id ?? at}`;
+        item = piece?.id;
+        post = piece ? <TreePost piece={piece} palette={palette} /> : null;
+      } else {
+        item = items[slot.kind as ListKind]?.[at];
+        key = `${slot.kind}:${item ?? at}`;
+        const note = NOTE_OF[slot.kind];
+        post = item !== undefined && (!note || noteBookOn(note)) ? <ContentPost kind={slot.kind as ListKind} item={item} day={day} palette={palette} /> : null;
+      }
+      if (!post) return;
+      if (removedKeys.has(key)) {
+        posts.push(<RemovedLine key={key} interest={slot.interest} palette={palette}
+          onUndo={() => setRemoved({ visit, keys: new Set([...removedKeys].filter(each => each !== key)) })} />);
+        return;
+      }
+      rendered.push(...(item !== undefined && !slot.quiz ? [slot.kind === 'pair' || slot.kind === 'tree' ? item : `${slot.kind}:${item}`] : []));
+      const menu: CardMenu = {
+        kind: slot.kind, item, interest: slot.interest, surprise: slot.surprise,
+        // Not on the only interest left (none picked means all) nor on one interest's own view.
+        notMine: only || (showing.size === 1 && showing.has(slot.interest)) ? undefined : () => {
+          setRemoved({ visit, keys: new Set([...removedKeys, key]) });
+          pickedInterests.write(activeInterests(pickedInterests.read()).map(each => each.id).filter(id => id !== slot.interest));
+        },
+        add: () => pickedInterests.write([...pickedInterests.read(), slot.interest]),
+      };
+      posts.push(
+        <CardMenuContext.Provider key={key} value={menu}>
+          {slot.surprise ? <View style={{ gap: 4 }}><SurpriseLine interest={slot.interest} added={picked.includes(slot.interest)} palette={palette} />{post}</View> : post}
+        </CardMenuContext.Provider>,
+      );
+    });
+    if (!only && round % step === step - 1) {
+      const at = (round + 1) / step - 1;
+      const savedItem = savedOfSlot([...saved, ...savedCards], day, at);
+      if (savedItem) posts.push(<SavedPost key={`b${savedItem.id}-${at}`} item={savedItem} palette={palette} />);
+      if (hasBooksCard(at)) posts.push(<BooksPost key={`k${day}-${at}`} day={day} palette={palette} />);
+    }
   }
+  const renderedKey = rendered.join('|');
+  useEffect(() => { if (renderedKey) markFeedSeen(renderedKey.split('|')); }, [renderedKey]);
   // A prayer that is near comes in once, before the first post below the screen, so what the reader looks at stays put (owner,
   // 2026-11-18). One near when home opens leads the feed. A card the reader has passed or is looking at stays; one still
   // below the screen gives way to the next prayer's.
@@ -906,7 +1160,7 @@ export function Feed({ palette, nearEnd, screenBottom }: { palette: Palette; nea
   // A new visit starts the feed again from the top, with the prayer that is near now leading it.
   const [cardsVisit, setCardsVisit] = useState(visit);
   if (cardsVisit !== visit) { setCardsVisit(visit); setCards(soon ? [{ ...soon, after: null }] : []); }
-  for (const card of cards) {
+  for (const card of only ? [] : cards) {
     const at = card.after === null ? 0 : keys.indexOf(card.after) + 1;
     posts.splice(at, 0, <PrayerPost key={`pr${card.key}`} prayer={card.prayer} times={card.times} palette={palette} />);
     keys.splice(at, 0, `pr${card.key}`);

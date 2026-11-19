@@ -40,6 +40,8 @@ export const shownBookmarks = (items: Bookmark[]) => items.filter(item => bookma
 /** A homepage shelf card: what it is, which ayat it holds, and where in the app it opens. */
 export function savedCard(item: Bookmark): SavedCard {
   const kind = bookmarkKind(item);
+  // A saved feed card is drawn as its own card (HomeFeed SavedFeedCard); its title is all a shelf needs.
+  if (kind === 'card') return { id: item.id, text: item.text, kind, references: [], open: null };
   if (kind === 'ayah') {
     const key = item.id.slice('ayah:'.length);
     const [surah, ayah] = split(key);
@@ -76,6 +78,7 @@ const inMushafOrder = (keys: string[]) => [...keys].sort((p, q) => { const [a, b
 
 export function cardWays(item: Bookmark): CardWay[] {
   const kind = bookmarkKind(item);
+  if (kind === 'card') return [];
   if (kind === 'ayah') {
     const key = item.id.slice('ayah:'.length);
     const [surah, ayah] = split(key);

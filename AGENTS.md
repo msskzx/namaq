@@ -132,6 +132,9 @@ the sources disagree on as settled.
 - When the feature has something to ask, it also ships a quiz kind that comes into the
   feed (a new entry in `FEED_QUIZ_NAMES` in `shared/quiz/feedQuiz.ts`).
 - The sketch the owner sees before the build shows the card and the quiz.
+- Each new card kind and quiz kind belongs to exactly one interest in
+  `shared/interests.ts` (its `cards` or `quizzes`), and the card's item list goes in
+  `LIST_OF` in `HomeFeed.tsx`; `shared/interests.test.ts` fails on a kind left out.
 - A feature without a card is named in the PR with the reason.
   [docs/feed-cards.md](docs/feed-cards.md) lists the cards, the quiz kinds and the
   named exceptions; the PR updates it.
