@@ -76,17 +76,17 @@ Rules a test already enforces are listed at the end.
    picker uses, so filters count, not just the juz. For every question, its
    ayah, every choice naming a surah or ayah, and both ayat of a compare
    question are in scope. The database bank path needs the same check. Fails
-   today (`wrongSurahs`). Owner question: when the scope holds fewer surahs
-   than four choices, what should the quiz do?
+   today (`wrongSurahs`). When the scope holds fewer surahs than the
+   choices need, the question is not valid and is not asked (owner 11-19).
 9. **Kunya questions never come first.** Vote: change. They live only in the
    website's database bank (family KUNYA). For a range of seeds, the first
    tarajim question `assembleQuiz` returns is never KUNYA. The app has no kunya
    questions: a parity gap.
 10. **Mutashabihat quizzes draw only from the books' cards.** Vote: change.
     Check the category of the cards behind the built questions, not the
-    constant, since `treeScope.ts` widens it too. Owner questions: does the
-    rule also cover the compare quiz (whose cards have no books' category)
-    and which-surah's computed look-alikes?
+    constant, since `treeScope.ts` widens it too. The rule covers trees and
+    «قارن الموضعين» (owner 11-19, thread "Stop quizzes giving away their
+    answers").
 11. **One wrong letter marks only that word.** Vote: change. Through
     `rightWords`/`matchedWords` (`shared/quiz/branchAnswers.ts`, also used by
     `compareCorrections`), on every leaf and blank of the built questions:
