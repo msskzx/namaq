@@ -51,7 +51,7 @@ export default function TopBar({ children, title, middle, away: putAway = false,
    * search page (home, owner 2026-11-18); a field's value and change make it a real field (the search page, the branches' search).
    * Either way it takes the free room up to TOP_BAR_SEARCH_MAX, never the whole width of a wide screen (owner, 2026-11-19).
    */
-  search?: (() => void) | { value: string; onChangeText: (text: string) => void; label: string; placeholder?: string; onSubmitEditing?: () => void };
+  search?: (() => void) | Omit<React.ComponentProps<typeof SearchField>, 'palette' | 'style'>;
   /** A back arrow, first on the right; the bar then has no logo. */
   back?: () => void;
   /** The page's help (rules and colour legend), on the far left. */
@@ -93,7 +93,7 @@ export default function TopBar({ children, title, middle, away: putAway = false,
           {search && <View style={{ flex: 1, minWidth: 0, maxWidth: TOP_BAR_SEARCH_MAX }}>
             {typeof search === 'function'
               ? <SearchOpener palette={palette} label="البحث" onPress={search} />
-              : <SearchField {...search} returnKeyType="search" palette={palette} style={{ height: 40 }} />}
+              : <SearchField {...search} palette={palette} style={{ height: 40 }} />}
           </View>}
           {center ? null : children}
         </View>
