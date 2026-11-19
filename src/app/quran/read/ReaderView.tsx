@@ -663,7 +663,7 @@ export default function ReaderView({
         ))}
       </article>
       {actions && !actions.dragging && <AyahActions ayah={actions.key} x={actions.x} y={actions.y} below={actions.below} ar={ar} forgot={!!forgot[actions.key]} lit={actions.words && { text: picked, forgot: isForgotten(litKeys, forgot) }} saved={saved.has(actions.key)} noted={!!notes[actions.key]} links={links[actions.key]}
-        onCopy={what => copy(actions.key, what === 'lit' ? picked : ayahText(actions.key))} onPlaces={() => { setSearchFor(picked); document.getElementById(searchId)?.showPopover?.(); }}
+        onCopy={() => copy(actions.key, ayahText(actions.key))} onPlaces={() => { setSearchFor(picked); document.getElementById(searchId)?.showPopover?.(); }}
         onForgot={what => toggleForgot(what === 'lit' ? litKeys : [actions.key])} onSave={() => toggleSaved(actions.key)} onNote={() => setNoting(actions.key)} onShare={() => setSharing(actions.key)}
         onTopics={!position && surahTopicsOf(Number(actions.key.split(':')[0])) ? () => { const [surah, ayah] = actions.key.split(':').map(Number); setTopic({ surah, section: Math.max(0, sectionAt(surah, ayah)) }); } : undefined}
         irab={!!actions.word} onListen={() => listen(actions.key)} onRecite={() => startRecite(actions.key)} onPreview={kind => setPreview(kind === 'irab' || kind === 'gharib' ? { kind, key: actions.key, ...actions.word! } : kind === 'tafsir' || kind === 'balagha' ? { kind, key: actions.key } : kind === 'readings' ? { kind, key: actions.key, qiraat: links[actions.key]?.qiraat ?? [] } : { kind, key: actions.key, all: kind === 'trees' ? links[actions.key]?.trees ?? '/quran/branches' : `/quran/compare?a=${actions.key.split(':')[0]}` })} onClose={closeActions} onDismiss={dismissActions} />}

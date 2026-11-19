@@ -39,7 +39,8 @@ function Act({ label, name, on = false, tint = 'var(--home-accent)', pressed, po
  * sheet (AyahPreviewSheet); a button shows only where there is something behind it.
  *
  * «نسيت» is one bulb toggle: forgotten while due for review, and a tap then rests it. With a word lit (long pressed, or the
- * words dragged over), «نسيت» and «نسخ» open a bubble over the button, as a chat app's reactions: the ayah, or the lit words.
+ * words dragged over), «نسيت» opens a bubble over the button, as a chat app's reactions: the ayah, or the lit words. «نسخ»
+ * copies the whole ayah (owner, 2026-11-19).
  */
 export default function AyahActions({ ayah, x, y, below, forgot, lit, saved, noted = false, ar, links, irab = false, onForgot, onCopy, onPlaces, onListen, onRecite, onSave, onNote, onPreview, onTopics, onShare, onClose, onDismiss = onClose }: {
   ayah: string;
@@ -59,8 +60,8 @@ export default function AyahActions({ ayah, x, y, below, forgot, lit, saved, not
   irab?: boolean;
   /** Toggles the ayah's forgot mark, or the lit words'. */
   onForgot: (what: 'ayah' | 'lit') => void;
-  /** Copies the ayah, or the lit words. */
-  onCopy?: (what: 'ayah' | 'lit') => void;
+  /** Copies the whole ayah. */
+  onCopy?: () => void;
   /** Where the lit words come in the Quran (the search). */
   onPlaces?: () => void;
   /** Listening from this ayah to its surah's end, the first button (owner's sketch, 2026-11-17). */
@@ -81,7 +82,7 @@ export default function AyahActions({ ayah, x, y, below, forgot, lit, saved, not
 }) {
   const box = useRef<HTMLDivElement>(null);
   /** The open bubble, and its button's place in the buttons' box (and its top on the screen). */
-  const [bubble, setBubble] = useState<{ kind: 'forgot' | 'copy'; center: number; top: number; bottom: number; screenTop: number; button: HTMLButtonElement } | null>(null);
+  const [bubble, setBubble] = useState<{ center: number; top: number; bottom: number; screenTop: number; button: HTMLButtonElement } | null>(null);
   const bubbleNow = useRef(bubble);
   useEffect(() => { bubbleNow.current = bubble; }, [bubble]);
   const bubbleBox = useRef<HTMLDivElement>(null);
@@ -123,10 +124,10 @@ export default function AyahActions({ ayah, x, y, below, forgot, lit, saved, not
   const saveLabel = saved ? (ar ? 'أزلها من المحفوظات' : 'Remove from saved') : (ar ? 'احفظ الآية' : 'Save ayah');
   const noteLabel = noted ? (ar ? 'ما دوّنته عن الآية' : 'Your note') : (ar ? 'دوّن عن الآية' : 'Write a note');
   const preview = (kind: Kind) => () => { onPreview?.(kind); onClose(); };
-  const toggle = (kind: 'forgot' | 'copy') => (button: HTMLButtonElement) => {
+  const toggle = (button: HTMLButtonElement) => {
     const frame = box.current!.getBoundingClientRect(), at = button.getBoundingClientRect();
-    const next = { kind, center: at.left + at.width / 2 - frame.left, top: at.top - frame.top, bottom: at.bottom - frame.top, screenTop: at.top, button };
-    setBubble(was => (was?.kind === kind ? null : next));
+    const next = { center: at.left + at.width / 2 - frame.left, top: at.top - frame.top, bottom: at.bottom - frame.top, screenTop: at.top, button };
+    setBubble(was => (was ? null : next));
   };
   const mine = [onListen, onRecite, true, true, onNote].filter(Boolean).length;
   const quran = [onPreview, onPreview && irab, onPreview && irab, onPreview, links?.qiraat, links?.trees, links?.compare.length, onPlaces && lit, onTopics].filter(Boolean).length;
@@ -142,7 +143,7 @@ export default function AyahActions({ ayah, x, y, below, forgot, lit, saved, not
         {onListen && <Act label={ar ? 'استمع من هذه الآية' : 'Listen from this ayah'} name={ar ? 'استمع' : 'Listen'} onClick={() => { onListen(); onClose(); }}><Play aria-hidden /></Act>}
         {onRecite && <Act label={ar ? 'سمّع من هذه الآية' : 'Recite from this ayah'} name={ar ? 'سمّع' : 'Recite'} onClick={() => { onRecite(); onClose(); }}><EyeOff aria-hidden /></Act>}
         {lit
-          ? <Act label={ar ? 'نسيت: الآية أو ما أضاءته' : 'Forgot: the ayah or the lit words'} name={ar ? 'نسيت' : 'Forgot'} on={anyForgot} expanded={bubble?.kind === 'forgot'} onClick={toggle('forgot')}>{Bulb(anyForgot)}</Act>
+          ? <Act label={ar ? 'نسيت: الآية أو ما أضاءته' : 'Forgot: the ayah or the lit words'} name={ar ? 'نسيت' : 'Forgot'} on={anyForgot} expanded={!!bubble} onClick={toggle}>{Bulb(anyForgot)}</Act>
           : <Act label={forgotNames.ayah} name={ar ? 'نسيت' : 'Forgot'} on={forgot} pressed={forgot} onClick={() => onForgot('ayah')}>{Bulb(forgot)}</Act>}
         <Act label={saveLabel} name={ar ? 'احفظ' : 'Save'} on={saved} tint="var(--home-root)" pressed={saved} onClick={() => { onSave(); onClose(); }}><Bookmark aria-hidden fill={saved ? 'currentColor' : 'none'} /></Act>
         {onNote && <Act label={noteLabel} name={ar ? NOTE_NAME : 'Note'} on={noted} pressed={noted} onClick={() => { onNote(); onClose(); }}><NotebookPen aria-hidden /></Act>}
@@ -159,23 +160,16 @@ export default function AyahActions({ ayah, x, y, below, forgot, lit, saved, not
         {onTopics && <Act label={ar ? 'موضوع الآية في السورة' : 'Topic of this ayah'} name={ar ? 'الموضوعات' : 'Topics'} popup onClick={() => { onTopics(); onClose(); }}><TableOfContents aria-hidden /></Act>}
       </>)}
       {group(2, <>
-        {onCopy && (lit
-          ? <Act label={ar ? 'انسخ الآية أو ما أضاءته' : 'Copy the ayah or the lit words'} name={ar ? 'نسخ' : 'Copy'} expanded={bubble?.kind === 'copy'} onClick={toggle('copy')}><Copy aria-hidden /></Act>
-          : <Act label={ar ? 'انسخ الآية' : 'Copy the ayah'} name={ar ? 'نسخ' : 'Copy'} onClick={() => { onCopy('ayah'); onClose(); }}><Copy aria-hidden /></Act>)}
+        {onCopy && <Act label={ar ? 'انسخ الآية' : 'Copy the ayah'} name={ar ? 'نسخ' : 'Copy'} onClick={() => { onCopy(); onClose(); }}><Copy aria-hidden /></Act>}
         {onShare && <Act label={ar ? 'مشاركة' : 'Share'} name={ar ? 'مشاركة' : 'Share'} popup onClick={() => { onShare(); onClose(); }}><Send aria-hidden /></Act>}
       </>)}
       {bubble && lit && (() => {
         const place = bubbleUnder ? { top: bubble.bottom + 6 } : { top: bubble.top - 6, transform: 'translate(-50%, -100%)' };
         return (
-          <ReactionBubble ref={bubbleBox} label={bubble.kind === 'forgot' ? (ar ? 'ما نسيت' : 'What you forgot') : (ar ? 'ما تنسخ' : 'What to copy')}
-            style={{ left: bubble.center + nudge, transform: 'translate(-50%, 0)', ...place }}>
-            {bubble.kind === 'forgot' ? <>
-              <Act wide label={forgotNames.ayah} name={ar ? 'الآية' : 'Ayah'} on={forgot} pressed={forgot} onClick={() => onForgot('ayah')}>{Bulb(forgot)}</Act>
+          <ReactionBubble ref={bubbleBox} label={ar ? 'ما نسيت' : 'What you forgot'}
+            style={{ left: bubble.center + nudge, transform: 'translate(-50%, 0)', ...place }} tip={{ x: -nudge, down: !bubbleUnder }}>
+            <Act wide label={forgotNames.ayah} name={ar ? 'الآية' : 'Ayah'} on={forgot} pressed={forgot} onClick={() => onForgot('ayah')}>{Bulb(forgot)}</Act>
               <Act wide label={ar ? `${lit.forgot ? 'تذكّرت' : 'نسيت'} «${lit.text}»` : `${lit.forgot ? 'I remember' : 'I forgot'} «${lit.text}»`} quran name={lit.text} on={lit.forgot} pressed={lit.forgot} onClick={() => onForgot('lit')}>{Bulb(lit.forgot)}</Act>
-            </> : <>
-              <Act wide label={ar ? 'انسخ الآية' : 'Copy the ayah'} name={ar ? 'الآية' : 'Ayah'} onClick={() => { onCopy?.('ayah'); onClose(); }}><Copy aria-hidden /></Act>
-              <Act wide label={ar ? `انسخ «${lit.text}»` : `Copy «${lit.text}»`} quran name={lit.text} onClick={() => { onCopy?.('lit'); onClose(); }}><Copy aria-hidden /></Act>
-            </>}
           </ReactionBubble>
         );
       })()}

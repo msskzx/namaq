@@ -5,6 +5,7 @@ import { surahName as S } from '../../shared/quran/surahNames';
 const HAMD = 'ٱلۡحَمۡدُ';
 const IHDINA = 'ٱهۡدِنَا';
 const LILLAH = 'لِلَّهِ';
+const ALAMIN = 'ٱلۡعَٰلَمِينَ';
 const RABB = 'رَبِّ';
 
 const pressWord = async (page: import('@playwright/test').Page, word: string) => {
@@ -16,7 +17,7 @@ const pressWord = async (page: import('@playwright/test').Page, word: string) =>
     await expect(page.getByRole('toolbar')).toBeVisible({ timeout: 1500 });
   }).toPass({ timeout: 15_000 });
 };
-/** «نسيت» and «نسخ» open a bubble over the button: the ayah, or the lit words (owner, 2026-11-19). */
+/** «نسيت» opens a bubble over the button: the ayah, or the lit words (owner, 2026-11-19). */
 const bubble = async (page: import('@playwright/test').Page, button: string, choice: string) => {
   await page.getByRole('button', { name: button, exact: true }).click();
   await page.getByRole('button', { name: choice, exact: true }).click();
@@ -259,12 +260,12 @@ test('«نسيت» toggles the ayah or the lit word from its bubble, each on its
   await expect.poll(async () => Object.keys((await stored<object>(page, 'ayah-forgot')) ?? {}).sort()).toEqual(['1:2', '1:2:0']);
 });
 
-test('«نسخ» copies the lit word with its place', async ({ page, context }) => {
+test('«نسخ» copies the whole ayah with its place, even with a word lit', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   await open(page, '/read');
   await pressWord(page, HAMD);
-  await bubble(page, 'انسخ الآية أو ما أضاءته', `انسخ «${HAMD}»`);
-  await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toBe(`«${HAMD}»\n${S(1)} ٢`);
+  await page.getByRole('button', { name: 'انسخ الآية', exact: true }).click();
+  await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toBe(`«${HAMD} ${LILLAH} ${RABB} ${ALAMIN}»\n${S(1)} ٢`);
 });
 
 test('dragging after a long press selects several words, and «نسيت» marks each one', async ({ page }) => {

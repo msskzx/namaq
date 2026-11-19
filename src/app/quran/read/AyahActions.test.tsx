@@ -55,7 +55,7 @@ describe("the reader's ayah buttons", () => {
     expect(screen.getByLabelText('تذكّرت الآية').getAttribute('aria-pressed')).toBe('true');
   });
 
-  it('with words lit, «نسيت» and «نسخ» open a bubble: the ayah, or the lit words', () => {
+  it('with words lit, «نسيت» opens a bubble: the ayah, or the lit words; «نسخ» copies the whole ayah', () => {
     const onForgot = vi.fn(), onCopy = vi.fn();
     render(<AyahActions {...everything} lit={{ text: 'وَإِذۡ نَجَّيۡنَٰكُم', forgot: true }} onForgot={onForgot} onCopy={onCopy} />);
     fireEvent.click(screen.getByLabelText('نسيت: الآية أو ما أضاءته'));
@@ -63,9 +63,8 @@ describe("the reader's ayah buttons", () => {
     expect(forgot.getByLabelText('نسيت الآية').getAttribute('aria-pressed')).toBe('false');
     fireEvent.click(forgot.getByLabelText('تذكّرت «وَإِذۡ نَجَّيۡنَٰكُم»'));
     expect(onForgot).toHaveBeenLastCalledWith('lit');
-    fireEvent.click(screen.getByLabelText('انسخ الآية أو ما أضاءته'));
-    fireEvent.click(within(screen.getByRole('group', { name: 'ما تنسخ' })).getByLabelText('انسخ «وَإِذۡ نَجَّيۡنَٰكُم»'));
-    expect(onCopy).toHaveBeenLastCalledWith('lit');
+    fireEvent.click(screen.getByLabelText('انسخ الآية'));
+    expect(onCopy).toHaveBeenCalled();
   });
 
   it('opens the note, filled when the ayah has one', () => {

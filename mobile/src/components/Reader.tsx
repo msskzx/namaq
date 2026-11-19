@@ -109,8 +109,8 @@ export default function Reader() {
    * down, so the page holds still for the drag; `dragging` once it reached another word, so the menu steps aside.
    */
   const [actions, setActions] = useState<{ key: string; x: number; y: number; lemmas: number[]; words?: Selection; holding?: boolean; dragging?: boolean;
-    /** The «نسيت» or «نسخ» bubble open over its button. */
-    bubble?: { kind: 'forgot' | 'copy'; box: ButtonBox } } | null>(null);
+    /** The «نسيت» bubble open over its button. */
+    bubble?: ButtonBox } | null>(null);
   const [phrase, setPhrase] = useState<string | null>(null);
   const [size, setSize] = useState<{ width: number; height: number } | null>(null);
   const [zoom, setZoom] = useState(() => settleZoom(readJson(ZOOM, isNumberIn(0, Infinity)) ?? 1));
@@ -401,8 +401,9 @@ export default function Reader() {
     for (const key of rest) rememberAyah(key);
     for (const key of forget) markForgotten(key);
   };
-  const copy = (text: string) => { const key = actionKey!; setActions(null); void Clipboard.setStringAsync(`«${text}»\n${plainSurah(key)}`); };
-  const openBubble = (kind: 'forgot' | 'copy') => (box: ButtonBox) => setActions(was => was && { ...was, bubble: was.bubble?.kind === kind ? undefined : { kind, box } });
+  // «نسخ» copies the whole ayah, with its place (owner, 2026-11-19: no copying a word).
+  const copyAyah = (key: string) => { setActions(null); void Clipboard.setStringAsync(`«${ayahText(key)}»\n${plainSurah(key)}`); };
+  const openBubble = (box: ButtonBox) => setActions(was => was && { ...was, bubble: was.bubble ? undefined : box });
   // Where else the ayah is: its compare cards, the trees that hold it and its readings, each shown only when there are any.
   const targets = useMemo(() => (actionKey ? compareTargetsOfAyah(actionKey) : []), [actionKey]);
   const trees = useMemo(() => !!actionKey && hasTrees(actionKey), [actionKey]);
@@ -464,7 +465,7 @@ export default function Reader() {
               {!reciting && <ActButton Icon={EyeOff} label="سمّع من هذه الآية" name="سمّع" palette={palette} onPress={() => startRecite(actions.key)} />}
               {lit
                 ? <ActButton Icon={ayahForgot || litForgot ? LightbulbOff : Lightbulb} label="نسيت: الآية أو ما أضاءته" name="نسيت" palette={palette} on={ayahForgot || litForgot}
-                    expanded={actions.bubble?.kind === 'forgot'} onPressAt={openBubble('forgot')} />
+                    expanded={!!actions.bubble} onPressAt={openBubble} />
                 : <ActButton Icon={ayahForgot ? LightbulbOff : Lightbulb} label={ayahForgot ? 'تذكّرتها' : 'نسيت الآية'} name="نسيت" palette={palette} on={ayahForgot} onPress={() => toggleForgot([actions.key])} />}
               <ActButton Icon={Bookmark} label={saved.has(actions.key) ? 'أزلها من المحفوظات' : 'احفظ الآية'} name="احفظ" palette={palette} on={saved.has(actions.key)} tint={palette.root} filled onPress={() => { toggleSaved(actions.key); setActions(null); }} />
               {/* «دوّن», the reader's own words on the ayah (owner, 2026-11-19; it was «تأمّل»). */}
@@ -490,29 +491,18 @@ export default function Reader() {
                 onPress={() => { setActions(null); setTopic({ surah: actionSurah, section: Math.max(0, sectionAt(actionSurah, actionAyah)) }); }} />}
             </>,
             <>
-              {lit
-                ? <ActButton Icon={Copy} label="انسخ الآية أو ما أضاءته" name="نسخ" palette={palette} expanded={actions.bubble?.kind === 'copy'} onPressAt={openBubble('copy')} />
-                : <ActButton Icon={Copy} label="انسخ الآية" name="نسخ" palette={palette} onPress={() => copy(ayahText(actions.key))} />}
+              <ActButton Icon={Copy} label="انسخ الآية" name="نسخ" palette={palette} onPress={() => copyAyah(actions.key)} />
               {/* Share is always the last button. */}
               <ActButton Icon={Send} label="مشاركة" name="مشاركة" palette={palette} onPress={() => { const key = actions.key; setActions(null); shareAyah(key, palette, notes[key]?.text); }} />
             </>,
           ]} />
       )}
-      {/* The bubble over «نسيت» or «نسخ», as a chat app's reactions (owner, 2026-11-19): the ayah, or the lit words. */}
+      {/* The bubble over «نسيت», as a chat app's reactions (owner, 2026-11-19): the ayah, or the lit words. */}
       {actions?.bubble && lit && !actions.dragging && (
-        <FloatingMenu bubble at={{ x: actions.bubble.box.x + actions.bubble.box.width / 2, y: actions.bubble.box.y }} span={actions.bubble.box.height}
-          label={actions.bubble.kind === 'forgot' ? 'ما نسيت' : 'ما تنسخ'} onClose={() => setActions(was => was && { ...was, bubble: undefined })} top={pageInsets.top} palette={palette}>
-          {actions.bubble.kind === 'forgot' ? (
-            <>
-              <ActButton wide Icon={ayahForgot ? LightbulbOff : Lightbulb} label={ayahForgot ? 'تذكّرت الآية' : 'نسيت الآية'} name="الآية" palette={palette} on={ayahForgot} onPress={() => toggleForgot([actions.key])} />
-              <ActButton wide Icon={litForgot ? LightbulbOff : Lightbulb} label={`${litForgot ? 'تذكّرت' : 'نسيت'} «${litText}»`} quran name={litText} palette={palette} on={litForgot} onPress={() => toggleForgot(litKeys)} />
-            </>
-          ) : (
-            <>
-              <ActButton wide Icon={Copy} label="انسخ الآية" name="الآية" palette={palette} onPress={() => copy(ayahText(actions.key))} />
-              <ActButton wide Icon={Copy} label={`انسخ «${litText}»`} quran name={litText} palette={palette} onPress={() => copy(litText)} />
-            </>
-          )}
+        <FloatingMenu bubble at={{ x: actions.bubble.x + actions.bubble.width / 2, y: actions.bubble.y }} span={actions.bubble.height}
+          label="ما نسيت" onClose={() => setActions(was => was && { ...was, bubble: undefined })} top={pageInsets.top} palette={palette}>
+          <ActButton wide Icon={ayahForgot ? LightbulbOff : Lightbulb} label={ayahForgot ? 'تذكّرت الآية' : 'نسيت الآية'} name="الآية" palette={palette} on={ayahForgot} onPress={() => toggleForgot([actions.key])} />
+          <ActButton wide Icon={litForgot ? LightbulbOff : Lightbulb} label={`${litForgot ? 'تذكّرت' : 'نسيت'} «${litText}»`} quran name={litText} palette={palette} on={litForgot} onPress={() => toggleForgot(litKeys)} />
         </FloatingMenu>
       )}
       {/* The tree and compare buttons preview in place; each item, and the sheet's last button, opens its page (owner, 2026-11-13). */}
