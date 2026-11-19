@@ -59,6 +59,8 @@ describe('recite', () => {
     const keys = forgottenOrder(['1:3', '1:2:1', '1:2', '1:2:0']);
     expect(keys).toEqual(['1:2', '1:2:0', '1:2:1', '1:3']);
     expect(nextForgotten(keys, '1:2:0')).toBe('1:2:1');
+    // The word under review was rested and left the list: the next one still follows it.
+    expect(nextForgotten(['1:2', '1:3'], '1:2:0')).toBe('1:3');
   });
 
   it('walks forgotten ayat in mushaf order', () => {
@@ -75,6 +77,8 @@ describe('mixed forgotten ayat and words', () => {
     const keys = forgottenOrder(['2:255:10', '1:2:1', '2:255', '2:255:2', '1:2:0', 'bad', '2:255:-1']);
     expect(keys).toEqual(['1:2:0', '1:2:1', '2:255', '2:255:2', '2:255:10']);
     expect(nextForgotten(keys, '1:2:0')).toBe('1:2:1');
+    // The word under review was rested and left the list: the next one still follows it.
+    expect(nextForgotten(['1:2', '1:3'], '1:2:0')).toBe('1:3');
     expect(nextForgotten(keys, '2:255')).toBe('2:255:2');
     expect(nextForgotten(keys, '2:255:2')).toBe('2:255:10');
     expect(nextForgotten(keys, '2:255:10')).toBeNull();

@@ -391,8 +391,10 @@ test.describe('pages with the database', () => {
 
     test('the forgotten shelf shows the word itself', async ({ page }) => {
       await page.goto('/library?tab=forgotten');
-      await expect(page.getByRole('button', { name: /لِلَّهِ/ }).first()).toBeVisible();
-      await expect(page.getByRole('button', { name: /رَبِّ/ })).toHaveCount(0);
+      // Only the word: not its ayah's other words.
+      const card = page.locator('main [aria-haspopup="dialog"]').first();
+      await expect(card).toContainText('لِلَّهِ');
+      await expect(card).not.toContainText('رَبِّ');
     });
   });
 

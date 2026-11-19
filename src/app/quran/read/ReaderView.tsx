@@ -189,7 +189,8 @@ export default function ReaderView({
   // Recite mode's one state (components/recite, as the home card and the quiz page): it stops at the ayah under review,
   // then goes to the next forgotten one; past the last ayah shown it turns the page.
   const reciter = useRecite({ model: spreadModel, position, setPosition, writing, pen, autoFocus: true,
-    until: reviewing ? position?.start ?? null : null,
+    // A word is asked alone, so it ends where its ayah shows even outside a review.
+    until: reviewing || position?.word !== undefined ? position?.start ?? null : null,
     onPastEnd: () => {
       if (reviewing) { if (reviewNext) router.push(reviewHref(reviewNext)); }
       else if ((two ? spreadOf(page)[1] : page) < 604) go(1);
