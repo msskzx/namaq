@@ -270,7 +270,8 @@ export function nameQuestions(family: typeof TARAJIM_KUNYA | typeof TARAJIM_LAQA
 export function prophetNames(people: AppPerson[] = PEOPLE) {
   const prophet = people.find(p => p.slug === 'prophet-muhammad');
   return (prophet?.titles ?? []).filter(title => !title.shared && !/^(?:نبي|رسول)$/u.test(title.name)
-    && ` ${bareName(title.text)} `.includes(` ${bareName(title.name)} `));
+    // «ونبي التوبة», «وخاتم النبيين»: the joined «و» is the hadith's, not the name's.
+    && ` ${bareName(title.text).split(' ').map(word => word.replace(/^[وف](?=\S{2})/u, '')).join(' ')} `.includes(` ${bareName(title.name)} `));
 }
 
 /** How many of the four choices are right (owner, 2026-11-19): mostly two or three, some one, now and then all four. */
@@ -281,7 +282,7 @@ const RIGHT_COUNTS = [1, 2, 2, 3, 3, 1, 2, 3, 4];
  * them his names, the others Companions' laqabs (laqabFacts) that share no word with his names, so none is half right.
  * Scored per choice (score.ts pickedPoints). The note quotes each of his names offered with its page.
  */
-export function prophetNameQuestions(people: AppPerson[] = PEOPLE, random: Random = Math.random, count = 12): ChoiceQuestion[] {
+export function prophetNameQuestions(people: AppPerson[] = PEOPLE, random: Random = Math.random, count = 30): ChoiceQuestion[] {
   const names = prophetNames(people);
   const nameWordsOf = new Set(names.flatMap(title => nameWords(title.name)).filter(word => word !== 'نبي'));
   const others = laqabFacts(people).filter(fact => fact.person.sex === 'MALE' && !nameWords(fact.name).some(word => nameWordsOf.has(word)))

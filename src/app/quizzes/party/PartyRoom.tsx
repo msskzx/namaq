@@ -273,7 +273,7 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
             : <BranchInputs question={question} typed={typed} onChange={setTyped} onCheck={() => send({ type: "submit", answer: typed })} ar={ar} sendEmpty />
         ) : question.write ? null : ticks(question) ? (
           <Ticks key={question.key} question={question} answer={typeof view.answer === "string" ? view.answer : null} revealed={revealed} sent={sent} ar={ar}
-            onSend={(answer) => send({ type: "submit", answer })} />
+            onSend={(answer) => send({ type: "submit", answer })} onDraft={(answer) => send({ type: "draft", answer })} />
         ) : (
           <div className="flex flex-col gap-2">
             {question.choices.map((choice) => {
@@ -388,15 +388,17 @@ export default function PartyRoom({ code }: { code: string }) {
  * A question of several right choices in a party (the app's QuizChoice): tick each that holds and send; once revealed, the
  * right ones ticked green, a wrong one ticked red, a right one left unticked amber «فاتك» (owner, 2026-11-19).
  */
-function Ticks({ question, answer, revealed, sent, ar, onSend }: {
+function Ticks({ question, answer, revealed, sent, ar, onSend, onDraft }: {
   question: { choices: { value: string; labelArabic: string }[]; correctAnswer: string; correctAnswers?: string[] };
   answer: string | null; revealed: boolean; sent: boolean; ar: boolean; onSend: (answer: string) => void;
+  /** Each tick goes to the party as a draft, so what is ticked when time runs out is graded (rules.ts reveal). */
+  onDraft: (answer: string) => void;
 }) {
   const [ticked, setTicked] = useState<string[]>([]);
+  const joined = (values: string[]) => question.choices.map(choice => choice.value).filter(value => values.includes(value)).join(PICKS);
   const picks = revealed || sent ? picksOf(answer ?? undefined) : ticked;
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-sm text-[var(--home-muted)]">{ar ? "اختر كل ما يصح، وقد يكون أكثر من واحد." : "Tick every one that is right; there may be more than one."}</p>
       {question.choices.map((choice) => {
         const given = picks.includes(choice.value);
         const isRight = revealed && isRightChoice(question, choice.value);
@@ -406,7 +408,12 @@ function Ticks({ question, answer, revealed, sent, ar, onSend }: {
         return (
           <Button key={choice.value} variant="outline" role="checkbox" aria-checked={given} className="justify-start text-start"
             style={color ? { borderColor: color, color, borderStyle: missed ? "dashed" : "solid" } : undefined}
-            onClick={() => { if (!sent && !revealed) setTicked(now => now.includes(choice.value) ? now.filter(value => value !== choice.value) : [...now, choice.value]); }}>
+            onClick={() => {
+              if (sent || revealed) return;
+              const next = ticked.includes(choice.value) ? ticked.filter(value => value !== choice.value) : [...ticked, choice.value];
+              setTicked(next);
+              onDraft(joined(next));
+            }}>
             {given ? <SquareCheck size={18} aria-hidden /> : <Square size={18} aria-hidden />}
             <span>{choice.labelArabic}</span>
             {missed && <span className="text-xs font-semibold">{ar ? "فاتك" : "Missed"}</span>}
@@ -414,7 +421,7 @@ function Ticks({ question, answer, revealed, sent, ar, onSend }: {
         );
       })}
       {!sent && !revealed && <div className="flex flex-wrap gap-2">
-        <Button variant="primary" disabled={!ticked.length} onClick={() => onSend(question.choices.map(choice => choice.value).filter(value => ticked.includes(value)).join(PICKS))}>
+        <Button variant="primary" disabled={!ticked.length} onClick={() => onSend(joined(ticked))}>
           <FontAwesomeIcon icon={faPaperPlane} />{ar ? "أرسل" : "Send"}</Button>
         <Button onClick={() => onSend("")}><FontAwesomeIcon icon={faPaperPlane} />{ar ? "أرسل بلا إجابة" : "Send with no answer"}</Button>
       </div>}

@@ -164,7 +164,7 @@ export function questionState(run: SoloRun, index: number): QuestionState {
   }
   if (!isTree(question) && 'correctAnswers' in question && question.correctAnswers) {
     const { earned, total } = questionPoints(question, run.typed[index][0]);
-    return earned === total && run.typed[index][0] === question.correctAnswer ? 'correct' : earned > 0 ? 'partial' : 'incorrect';
+    return earned === total ? 'correct' : earned > 0 ? 'partial' : 'incorrect';
   }
   if (!isTree(question)) return run.typed[index][0] === question.correctAnswer ? 'correct' : 'incorrect';
   if (branchesCorrect(question, run.typed[index])) return 'correct';

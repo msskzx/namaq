@@ -36,7 +36,7 @@ function Words({ words, marked, palette }: { words: string[]; marked?: number[];
  * titles-quiz/multi-select-dark.png) ticks boxes and checks: then what was ticked right is green, ticked wrong red, and a right
  * one left unticked is marked «فاتك»; `picked` is the ticks joined (PICKS).
  */
-export default function QuizChoice({ question, picked, shown, onPick, onReveal, onOpen, header, palette, scroll = true, pen, onWrite, written, onLook, costs, lookTop }: {
+export default function QuizChoice({ question, picked, shown, onPick, onReveal, onOpen, header, palette, scroll = true, pen, onWrite, written, onLook, costs, lookTop, onTicks }: {
   question: ChoiceQuestion; picked?: string; shown: boolean; onPick?: (value: string) => void; onReveal?: () => void;
   /** A party's recited ayah (`question.write`): the host's pen rule, what was written sent with `onWrite`, and once revealed, what was `written` (null for nothing). */
   pen?: PenRule; onWrite?: (answer: string[], done: boolean) => void; written?: string[] | null;
@@ -45,6 +45,8 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
   header?: React.ReactNode; palette: Palette;
   /** «ابحث عن الجواب» was opened (a party counts it); `costs` says under the button what it costs there. */
   onLook?: () => void; costs?: boolean;
+  /** A party's ticks of several right choices, sent as a draft on each tick so the time running out grades them. */
+  onTicks?: (answer: string) => void;
   /** Kept in sight above the looked-up view (a party's clock). */
   lookTop?: React.ReactNode;
   /** Inside a screen that already scrolls, it does not scroll on its own. */
@@ -62,7 +64,12 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
   // The ticks belong to their question: a screen that keeps this component for the next one starts it empty.
   const [tickState, setTickState] = useState<{ key: string; values: string[] }>({ key: question.key, values: [] });
   const ticked = tickState.key === question.key ? tickState.values : [];
-  const toggle = (value: string) => setTickState({ key: question.key, values: ticked.includes(value) ? ticked.filter(each => each !== value) : [...ticked, value] });
+  const joined = (values: string[]) => question.choices.map(choice => choice.value).filter(value => values.includes(value)).join(PICKS);
+  const toggle = (value: string) => {
+    const values = ticked.includes(value) ? ticked.filter(each => each !== value) : [...ticked, value];
+    setTickState({ key: question.key, values });
+    onTicks?.(joined(values));
+  };
   const picks = several && answered ? picksOf(picked) : [];
   const alike = answered && !several && picked !== question.correctAnswer ? question.alike?.[picked] : undefined;
   const diff = alike && question.quran ? alikeDiff(question.quran, alike.words) : undefined;
@@ -132,7 +139,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
       {several && !answered && onPick && (
         <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}>
           <Button variant="primary" Icon={Check} label="تحقق" disabled={ticked.length === 0}
-            onPress={() => onPick(question.choices.map(choice => choice.value).filter(value => ticked.includes(value)).join(PICKS))} />
+            onPress={() => onPick(joined(ticked))} />
         </View>
       )}
       {!answered && revealed && question.look && onPick && <View style={{ paddingHorizontal: 16 }}><LookButton look={question.look} onLook={onLook} costs={costs} palette={palette} top={lookTop} /></View>}

@@ -392,7 +392,7 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
         </>
       ) : isAyahChoice(question)
         ? <View style={{ flex: 1 }}><QuizChoice question={question} shown palette={palette} onOpen={readAyah} onPick={value => send({ type: 'submit', answer: value })}
-          pen={view.settings.pen} onWrite={write} onLook={look} costs={!view.looked} lookTop={clock}
+          pen={view.settings.pen} onWrite={write} onLook={look} costs={!view.looked} lookTop={clock} onTicks={answer => send({ type: 'draft', answer })}
           header={view.looked ? <View style={{ paddingHorizontal: 16 }}><LookedNote palette={palette} /></View> : undefined} />
           {!question.write && skip}</View>
         : <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}>

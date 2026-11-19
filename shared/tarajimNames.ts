@@ -26,7 +26,9 @@ export function kunyaFacts(people: readonly AppPerson[]): NameFact[] {
     const name = kunyaName(person.kunya[0].text);
     const shown = new Set(bareName(person.name).split(' '));
     const after = bareName(name).split(' ').slice(1);
-    return inName(person, name) || /^(?:أبو|أم|ابن) /u.test(person.name) || after.some(word => shown.has(word)) ? [] : [{ person, name, fact: person.kunya[0] }];
+    // A name of one word another person's name starts with too («جندب», «جندب الأزدي») does not say whom it asks.
+    const unclear = shown.size === 1 && people.some(other => other !== person && bareName(other.name).split(' ')[0] === bareName(person.name));
+    return inName(person, name) || /^(?:أبو|أم|ابن) /u.test(person.name) || after.some(word => shown.has(word)) || unclear ? [] : [{ person, name, fact: person.kunya[0] }];
   });
 }
 

@@ -142,6 +142,9 @@ describe('أسماء النبي ﷺ (several right choices)', () => {
   it('offers four choices, one to four of them his names as the hadith gives them, the rest Companions’ laqabs', () => {
     const names = new Set(prophetNames(people).map(title => title.name));
     expect(names.has('نبي')).toBe(false);
+    // A name the hadith joins with «و» is his too.
+    expect(names.has('نبي التوبة')).toBe(true);
+    expect(names.has('خاتم النبيين')).toBe(true);
     const questions = prophetNameQuestions(people, seededRandom(3), 30);
     expect(questions.length).toBeGreaterThan(0);
     for (const q of questions) {

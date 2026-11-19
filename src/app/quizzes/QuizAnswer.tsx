@@ -117,7 +117,6 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
           onCheck={() => onAnswer(branchesCorrect(question, answers) ? question.correctAnswer : "")} ar={ar} />
       )
     ) : recited(question) && !revealed && !locked ? null : <div className="flex flex-col gap-2">
-      {several && <p className="text-sm text-[var(--home-muted)]">{ar ? "اختر كل ما يصح، وقد يكون أكثر من واحد." : "Tick every one that is right; there may be more than one."}</p>}
       {question.choices.map((choice) => {
         const isAnswer = isRightChoice(question, choice.value);
         const isGiven = several ? picks.includes(choice.value) : given === choice.value;
