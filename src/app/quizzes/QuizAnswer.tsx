@@ -134,7 +134,7 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
     {locked && <ChoiceAfter question={question} given={given} ar={ar} mushaf={mushaf}
       surahName={(value) => question.choices.find((choice) => choice.value === value)?.labelArabic} />}
     {/* After the answer, the view it was looked up in, so everyone learns from it (owner, 2026-11-19; the app's QuizChoice). */}
-    {locked && canLook(question.look) && <div className="mt-4"><LookView look={question.look} /></div>}
+    {locked && canLook(question.look) && <div className="mt-4"><LookView look={question.look} shown /></div>}
     {!locked && !recited(question) && <Button className="mt-3" size="sm" onClick={() => {
       if (question.tree) onType(emptyBranchAnswers(question));
       if (question.compare) onType(emptyCompareAnswers(question));

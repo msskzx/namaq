@@ -1,120 +1,24 @@
-"use client";
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import BattleView from '@/components/battles/BattleView';
+import { BATTLES, battleOf } from '@/lib/stories';
 
-import React from "react";
-import { useParams } from "next/navigation";
-import useSWR from "swr";
-import { useLanguage } from "@/components/language/LanguageContext";
-import translations from "@/components/language/translations";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShieldHalved, faLocationDot, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
-import LoadingDots from '@/components/common/LoadingDots';
-import PersonNameCard from '@/components/people/PersonNameCard';
-import { formatHijriYear } from '@/lib/hijriYear';
-import BattleParticipantsGraph from '@/components/battles/BattleParticipantsGraph';
-import BattleCounts from '@/components/battles/BattleCounts';
-import UtteranceGroup from '@/components/utterances/UtteranceGroup';
-import Badge from '@/components/common/Badge';
-import { PersonBase } from "@/types/person";
-import { Battle } from "@/types/battle";
-import { fetcher } from '@/lib/swr';
-import ErrorMessage from '@/components/common/ErrorMessage';
-import BattleMoments from '@/components/battles/BattleMoments';
-import appMoments from '@shared/data/battles/moments.json';
-import type { AppMomentBattle } from '@shared/battles/battle';
+export const generateStaticParams = () => BATTLES.map(battle => ({ slug: battle.slug }));
 
-// The key moments the app's battle page shows (owner, 2026-11-19: every phone feature on the website too).
-const MOMENTS = appMoments as AppMomentBattle[];
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  return { title: battleOf((await params).slug)?.name ?? 'الغزوات والمعارك' };
+}
 
-export default function BattleDetailPage() {
-  const { slug } = useParams<{ slug: string }>();
-  const { language } = useLanguage();
-  const t = translations[language];
-  const { data: battle, error, isLoading } = useSWR<Battle>(slug ? `/api/battles/${slug}` : null, fetcher);
-  const moments = MOMENTS.find(entry => entry.slug === slug);
-
+/**
+ * A battle, as the app's battle page (owner, 2026-11-18; every phone feature on the website too, owner 2026-11-19): where
+ * it was on a still map, how many, how it went in the source's words, and who was there.
+ */
+export default async function BattlePage({ params }: { params: Promise<{ slug: string }> }) {
+  const battle = battleOf((await params).slug);
+  if (!battle) notFound();
   return (
-    <div className="min-h-screen bg-white dark:bg-black" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-      <div className="w-full px-4 py-8">
-        {isLoading ? (
-          <LoadingDots fill="page" />
-        ) : (
-          <>
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-16 h-16 flex items-center justify-center rounded-full bg-indigo-100 dark:bg-gray-900">
-                <FontAwesomeIcon icon={faShieldHalved} className="text-amber-400 w-10 h-10" />
-              </div>
-              <h1 className="text-4xl font-bold text-amber-400">
-                {battle ? (language === 'ar' ? battle.name : battle.nameTransliterated || battle.name) : t.battles.title}
-              </h1>
-              {/* A غزوة the Prophet led, a سرية he sent, or a battle outside his
-                  campaigns; the value is cited rather than assigned. */}
-              {battle?.engagement && battle.engagement in t.battles.engagement && (
-                <Badge
-                  size="sm"
-                  color="amber"
-                  text={t.battles.engagement[battle.engagement as keyof typeof t.battles.engagement]}
-                />
-              )}
-            </div>
-            {error && (
-              <ErrorMessage title={t.battles.loadError} />
-            )}
-            {battle && (
-              <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 font-geistmono">
-                <div className="mb-6">
-                  <div className="flex items-center gap-2 mb-2">
-                    <FontAwesomeIcon icon={faLocationDot} className="text-amber-400 w-5 h-5" />
-                    <span className="font-semibold text-gray-800 dark:text-gray-300">{language === 'ar' ? t.battles.location : t.battles.locationEn}:</span>
-                    <span className="text-gray-800 dark:text-gray-300">{language === 'ar' ? battle.location : battle.locationEn || battle.location || '-'}</span>
-                  </div>
-                </div>
-                {battle.hijriYear && (
-                  <div className="mb-2 flex items-center gap-2">
-                    <FontAwesomeIcon icon={faCalendarDays} className="text-amber-400 w-5 h-5" />
-                    <span className="font-semibold text-gray-800 dark:text-gray-300">{t.battles.hijriYear}:</span>
-                    <span className="text-gray-800 dark:text-gray-300">{formatHijriYear(battle.hijriYear, language)}</span>
-                  </div>
-                )}
-                <BattleCounts battle={battle} />
-                {moments && <div className="mt-6"><BattleMoments moments={moments.moments} kind={moments.kind?.value} /></div>}
-                {battle.description && (
-                  <div className="mt-6">
-                    <p className="text-gray-800 dark:text-gray-200 text-2xl/8 text-justify ">{battle.description}</p>
-                  </div>
-                )}
-                <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-200 mt-8">
-                  {t.participants}
-                </h2>
-                {battle.participations && battle.participations.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    {battle.participations.map((p: { person: PersonBase }) => (
-                      <PersonNameCard key={p.person.id} person={p.person} language={language} />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center text-gray-400 py-4">
-                    {t.noParticipants}
-                  </div>
-                )}
-                {battle.participations && battle.participations.length > 0 && (
-                  <div className="mt-6 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
-                    <div className="p-4 bg-amber-50 dark:bg-gray-800 flex items-center gap-2">
-                      <FontAwesomeIcon icon={faShieldHalved} className="text-amber-500" />
-                      <h3 className="font-semibold text-amber-800 dark:text-amber-400">
-                        {t.battleParticipantsGraph}
-                      </h3>
-                    </div>
-                    <BattleParticipantsGraph slug={battle.slug} />
-                  </div>
-                )}
-                <div className="mt-6">
-                  <UtteranceGroup utterances={battle.utterances} variant="here" />
-                </div>
-              </div>
-            )}
-          </>
-        )}
-      </div>
+    <div dir="rtl" className="mx-auto flex w-full max-w-2xl flex-col gap-4 p-4">
+      <BattleView battle={battle} />
     </div>
   );
 }

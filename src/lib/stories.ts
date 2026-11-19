@@ -15,7 +15,7 @@ export const STORY_TAGS = [...new Set(STORIES.flatMap(story => story.tags))];
 /** A story's ayat in the mushaf's lines, one list of pages for each of its ayat (the story page, its feed card and its quiz look-up). */
 export const storyAyat = (story: AppStory): Promise<AyatPage[][]> => Promise.all(story.ayat.map(item => ayatPages(item.from, item.to)));
 
-/** The battles as the app has them (shared/data/battles/battles.json), for the sira quiz's look-up. */
+/** The battles as the app has them (shared/data/battles/battles.json), earliest first: the battle pages and the sira quiz's look-up. */
 export const BATTLES = battlesData as AppBattle[];
 
 export const battleOf = (slug: string): AppBattle | undefined => BATTLES.find(battle => battle.slug === slug);
