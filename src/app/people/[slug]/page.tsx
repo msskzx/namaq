@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHexagonNodes, faPeopleGroup, faSeedling, faPenNib, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faPeopleGroup, faSeedling, faPenNib, faUser } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
@@ -17,7 +17,6 @@ import Timeline from '@/components/people/Timeline';
 import type { PersonFull } from '@/types/person';
 import useSWR from 'swr';
 import { useParams } from 'next/navigation';
-import GraphCanvas from '@/components/graph/GraphCanvas';
 
 import { fetcher } from '@/lib/swr';
 import { AyatGroup } from '@/components/quran/AyahCard';
@@ -161,15 +160,8 @@ function PersonDetailPage() {
               : <Timeline events={person.events || []} participations={person.participations || []} death={person} />}
             <TiesSection view={drawings} />
           </> : <>
+            {/* The old «العلاقات» graph is gone (owner 2026-11-19): his ties come as the ring once his entry is converted. */}
             <Timeline events={person.events || []} participations={person.participations || []} death={person} />
-
-            <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
-              <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
-                <FontAwesomeIcon icon={faHexagonNodes} className="w-7 h-7 text-amber-500 me-2" />
-                {t.relations}
-              </h2>
-              <GraphCanvas targetSlug={slug} />
-            </div>
           </>}
 
           {otherModelEntries.length > 0 && <ModelEntries entries={otherModelEntries} spans={person.modelSpans ?? []} />}

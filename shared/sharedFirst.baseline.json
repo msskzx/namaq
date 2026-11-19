@@ -63,7 +63,7 @@
     "mobile/src/components/OpenInBook.tsx": 1,
     "mobile/src/components/PageVideo.tsx": 1,
     "mobile/src/components/QuestionDots.tsx": 1,
-    "mobile/src/components/QuizChoice.tsx": 2,
+    "mobile/src/components/QuizChoice.tsx": 1,
     "mobile/src/components/QuizCompare.tsx": 1,
     "mobile/src/components/QuizTree.tsx": 2,
     "mobile/src/components/Reader.tsx": 2,

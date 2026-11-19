@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText, SquareArrowOutUpLeft, Swords, BookOpenText, ListTree, MessagesSquare, Link2 } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText, SquareArrowOutUpLeft, Swords, BookOpenText, ListTree, MessagesSquare, Link2, History } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Cookies from 'js-cookie';
@@ -13,6 +13,7 @@ import type { TermCard } from '@/lib/balaghaTerms';
 import type { HadithCard } from '@/lib/forty';
 import type { TarajimCard } from '@/lib/tarajim';
 import { TiesChain, tiesHref } from '@/components/tarajim/TarajimParts';
+import LifeTimeline from '@/components/tarajim/LifeTimeline';
 import { IbnRajab, shamelaPage } from '@/components/hadith/FortyParts';
 import { fromCompanion } from '@shared/hadith';
 import { LitAyat, ayatName, quotesTitle, termHref } from '@/components/balagha/TermParts';
@@ -68,6 +69,7 @@ import { ayahNoteAt } from '@shared/quran/ayahNotes';
 import { QiraatPlace } from '@/app/quran/qiraat/QiraatView';
 import { surahName } from '@shared/quran/surahNames';
 import Card from '@/components/common/Card';
+import { CardRowProvider, useRowSlot } from '@/components/common/UnderCard';
 import ExternalLink from '@/components/common/ExternalLink';
 
 /**
@@ -172,11 +174,14 @@ function PostHead({ Icon, title, sub, href, label, id }: { Icon: typeof BookOpen
 function Post({ head, actions, bar, labelledBy, children }: { head: React.ReactNode; actions?: React.ReactNode;
   /** A bar of the card's own between it and its buttons (recall's recite bar). */
   bar?: React.ReactNode; labelledBy?: string; children: React.ReactNode }) {
+  // What the card's content hands up with UnderCard lands at the start of the row under the card (owner: buttons under the
+  // card, never in it); the row hides while it holds no button.
+  const [slot, setSlot] = useRowSlot();
   const body = <>
     {head}
-    <Card className="overflow-hidden">{children}</Card>
+    <Card className="overflow-hidden"><CardRowProvider slot={slot}>{children}</CardRowProvider></Card>
     {bar && <div className="mt-2 flex justify-center" data-share-skip>{bar}</div>}
-    {actions && <div className={styles.postActions} data-share-skip>{actions}</div>}
+    <div className={styles.postActions} data-share-skip><span ref={setSlot} className="contents" />{actions}</div>
   </>;
   // The reading card is a section of the page named by its head (`labelledBy`); the feed's posts are articles.
   return labelledBy
@@ -454,6 +459,17 @@ function TiePost({ card }: { card: Extract<TarajimCard, { kind: 'tie' }> }) {
   </Post>;
 }
 
+/** «من حياته» (the app's LifePost): a person's «حياته» timeline as his page draws it, the rail a year a line; the head opens his page. */
+function LifePost({ card }: { card: Extract<TarajimCard, { kind: 'life' }> }) {
+  const href = `/people/${card.person.slug}`;
+  return <Post head={<PostHead Icon={History} title={card.person.sex === 'FEMALE' ? 'من حياتها' : 'من حياته'} sub={card.person.name} href={href} label={`افتح ترجمة ${card.person.name}`} />}
+    actions={<Action Icon={Users} label={`افتح ترجمة ${card.person.name}`} href={href} />}>
+    <div className="px-2.5 py-3.5">
+      <LifeTimeline items={card.items} inCard compact linked={false} />
+    </div>
+  </Post>;
+}
+
 type Tree = TreePreview & { text: string };
 
 /** A saved ayah as a post: the ayah in the mushaf's own lines, as the recall card shows it once revealed. */
@@ -584,7 +600,7 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
   const { data: hadith } = useSWR(day && hadithSlots.length ? `/api/home/feed?day=${day}&hadith=${hadithSlots.join(',')}` : null,
     () => inPieces<HadithCard[]>(some => `/api/home/feed?day=${day}&hadith=${some.join(',')}`, hadithSlots).then(all => all.flat()), swr);
   // The virtue and «صلة» cards, one a batch, worked out on the server (the people's entries stay there).
-  const tarajimSlots = shows('tarajim') || shows('tie') ? Array.from({ length: batches }, (_, i) => i) : [];
+  const tarajimSlots = shows('tarajim') || shows('tie') || shows('life') ? Array.from({ length: batches }, (_, i) => i) : [];
   const { data: tarajim } = useSWR(day && tarajimSlots.length ? `/api/home/feed?day=${day}&tarajim=${tarajimSlots.join(',')}` : null,
     () => inPieces<TarajimCard[]>(some => `/api/home/feed?day=${day}&tarajim=${some.join(',')}`, tarajimSlots).then(all => all.flat()), swr);
   // The balagha term cards, in every other batch, worked out on the server (al-Suyuti's book stays there).
@@ -641,6 +657,7 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
     const tarajimCard = tarajim?.find(card => card.slot === i);
     if (tarajimCard?.kind === 'tarajim' && shows('tarajim')) posts.push(<TarajimPost key={`tj${day}-${i}`} card={tarajimCard} />);
     if (tarajimCard?.kind === 'tie' && shows('tie')) posts.push(<TiePost key={`tie${day}-${i}`} card={tarajimCard} />);
+    if (tarajimCard?.kind === 'life' && shows('life')) posts.push(<LifePost key={`life${day}-${i}`} card={tarajimCard} />);
   }
   return <section className={styles.feed} aria-label="للتأمل اليوم">
     {posts}

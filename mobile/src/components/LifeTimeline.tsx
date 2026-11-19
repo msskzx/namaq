@@ -7,6 +7,7 @@ import { lifeFilters, lifeRail, lifeStrip, openLabel, stripLabels, type LifeItem
 import { Text } from '@/ui/Text';
 import Svg, { Circle } from 'react-native-svg';
 import TapRow from '@/ui/TapRow';
+import { MIN_TAP } from '@/ui/tapSize';
 import Card from '@/ui/Card';
 import Chip from '@/ui/Chip';
 import Sheet from '@/ui/Sheet';
@@ -42,15 +43,20 @@ function Dot({ color, hollow = false }: { color: string; hollow?: boolean }) {
   );
 }
 
+/** The strip's frame: its own card on a page; inside a card (a feed post, a quiz's look-up) only its padding, no card in a card. */
+function Frame({ inCard, palette, children }: { inCard: boolean; palette: Palette; children: React.ReactNode }) {
+  return inCard ? <View style={{ paddingVertical: 4, paddingHorizontal: 18 }}>{children}</View> : <Card palette={palette} pad={[10, 18]}>{children}</Card>;
+}
+
 /** The strip (sketch screen 1): a column per year, a dot per thing in it, filled when it is of the kind picked. */
-function Strip({ items, on, palette }: { items: LifeItem[]; on: (item: LifeItem) => boolean; palette: Palette }) {
+function Strip({ items, on, palette, inCard }: { items: LifeItem[]; on: (item: LifeItem) => boolean; palette: Palette; inCard: boolean }) {
   const [width, setWidth] = useState(0);
   const columns = lifeStrip(items);
   if (columns.length === 0) return null;
   // The before-hijra column is twice as wide as a year's.
   const named = stripLabels(columns, width / (columns.length + (columns[0].before ? 1 : 0)), LABEL_W);
   return (
-    <Card palette={palette} pad={[10, 18]}>
+    <Frame inCard={inCard} palette={palette}>
       <View onLayout={event => setWidth(event.nativeEvent.layout.width)} style={{ flexDirection: 'row', alignItems: 'flex-end' }} accessible accessibilityLabel={`على سنوات الهجرة، من ${placeLabel(columns[0])} إلى ${placeLabel(columns[columns.length - 1])}`}>
         {columns.map(column => (
           <View key={column.key} style={{ flex: column.before ? 2 : 1, alignItems: 'center', gap: 3 }}>
@@ -64,27 +70,45 @@ function Strip({ items, on, palette }: { items: LifeItem[]; on: (item: LifeItem)
           </View>
         ))}
       </View>
-    </Card>
+    </Frame>
   );
 }
 
 /** One row on the rail: its dot on the line, its name; tapped it opens, held it shows the sentences that place the person there. */
-function Item({ item, palette, show, last }: { item: LifeItem; palette: Palette; show: (item: LifeItem) => void; last: boolean }) {
+function Item({ item, palette, show, last, linked, marked }: { item: LifeItem; palette: Palette; show: (item: LifeItem) => void; last: boolean; linked: boolean; marked: boolean }) {
   const color = lifeColor(palette, item.kind);
-  return (
-    <TapRow onPress={() => openItem(item, show)} onLongPress={() => show(item)} role={item.open ? 'link' : 'button'}>
+  const body = <>
       <View style={{ width: 18, alignItems: 'center' }}>
         <View style={{ position: 'absolute', top: 0, bottom: last ? '50%' : 0, width: 1.5, backgroundColor: palette.rule }} />
         <View style={{ marginTop: 17 }}><Dot color={color} /></View>
       </View>
       <View style={{ flex: 1, justifyContent: 'center', paddingStart: 8 }}>
-        <Text style={{ color: item.kind === 'own' ? palette.muted : palette.ink, fontSize: 17, lineHeight: 28, textAlign: 'right' }}>
+        <Text style={{ color: marked ? palette.green : item.kind === 'own' ? palette.muted : palette.ink, fontSize: 17, lineHeight: 28, textAlign: 'right' }}>
           {item.name}
           {item.note ? <Text style={{ color: palette.muted, fontSize: 13 }}>{`  ${item.note}`}</Text> : null}
           {item.others.length ? <Text style={{ color: palette.muted, fontSize: 13 }}>{'  وقيل غير ذلك'}</Text> : null}
         </Text>
       </View>
-    </TapRow>
+  </>;
+  return linked
+    ? <TapRow onPress={() => openItem(item, show)} onLongPress={() => show(item)} role={item.open ? 'link' : 'button'}>{body}</TapRow>
+    : <View style={{ flexDirection: 'row', alignItems: 'stretch', minHeight: MIN_TAP }}>{body}</View>;
+}
+
+/** A year on the compact rail: one dot, its things in one line, each in its kind's colour. */
+function Line({ items, palette, last }: { items: LifeItem[]; palette: Palette; last: boolean }) {
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'stretch', minHeight: 36 }}>
+      <View style={{ width: 18, alignItems: 'center' }}>
+        <View style={{ position: 'absolute', top: 0, bottom: last ? '50%' : 0, width: 1.5, backgroundColor: palette.rule }} />
+        <View style={{ marginTop: 13 }}><Dot color={lifeColor(palette, items[0].kind)} /></View>
+      </View>
+      <Text style={{ flex: 1, paddingStart: 8, paddingVertical: 4, fontSize: 16, lineHeight: 26, textAlign: 'right', color: palette.ink }}>
+        {items.map((item, i) => (
+          <Text key={item.key} style={{ color: item.kind === 'own' ? palette.muted : palette.ink }}>{i > 0 ? ' · ' : ''}{item.name}</Text>
+        ))}
+      </Text>
+    </View>
   );
 }
 
@@ -120,7 +144,17 @@ export function LifeSheet({ item, onClose, palette }: { item?: LifeItem; onClose
  * chips for the kinds he has and «+ قارن», then the rail by year. The person page draws it; `onCompare` opens the
  * «حياتهما» screen (screens/life.tsx) with him first.
  */
-export default function LifeTimeline({ items, palette, onCompare }: { items: LifeItem[]; palette: Palette; onCompare?: () => void }) {
+export default function LifeTimeline({ items, palette, onCompare, inCard = false, compact = false, linked = true, marked }: {
+  items: LifeItem[]; palette: Palette; onCompare?: () => void;
+  /** Inside a card (a feed post, a quiz's look-up): the strip draws no card of its own. */
+  inCard?: boolean;
+  /** The feed card's rail: a year a line, its things side by side («غزوة أحد · غزوة حمراء الأسد»), as on the sketch. */
+  compact?: boolean;
+  /** Rows open their pages; not inside a quiz, which would close under them. */
+  linked?: boolean;
+  /** A row lit in green: a quiz's answer, once shown. */
+  marked?: string;
+}) {
   const [filter, setFilter] = useState<number | undefined>();
   const [shown, setShown] = useState<LifeItem | undefined>();
   const filters = useMemo(() => lifeFilters(items), [items]);
@@ -130,7 +164,7 @@ export default function LifeTimeline({ items, palette, onCompare }: { items: Lif
   if (items.length === 0) return null;
   return (
     <View style={{ gap: 12 }}>
-      <Strip items={items} on={on} palette={palette} />
+      <Strip items={items} on={on} palette={palette} inCard={inCard} />
       {(filters.length > 0 || onCompare) && (
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           {filters.length > 0 && <Chip label="الكل" on={filter === undefined} palette={palette} onPress={() => setFilter(undefined)} />}
@@ -143,7 +177,10 @@ export default function LifeTimeline({ items, palette, onCompare }: { items: Lif
           <View key={place.key} style={{ flexDirection: 'row' }}>
             <Text style={{ width: 52, color: place.year === undefined ? palette.muted : palette.accent, fontSize: 15, lineHeight: 20, paddingTop: 12, textAlign: 'center' }}>{placeLabel(place)}</Text>
             <View style={{ flex: 1 }}>
-              {place.items.map((item, i) => <Item key={item.key} item={item} palette={palette} show={setShown} last={p === rail.length - 1 && i === place.items.length - 1} />)}
+              {compact
+                ? <Line items={place.items} palette={palette} last={p === rail.length - 1} />
+                : place.items.map((item, i) => <Item key={item.key} item={item} palette={palette} show={setShown} linked={linked} marked={item.key === marked}
+                  last={p === rail.length - 1 && i === place.items.length - 1} />)}
             </View>
           </View>
         ))}
