@@ -13,10 +13,9 @@ import { LookButton, LookView } from './QuizLook';
 import type { WriteAsk } from '@shared/quiz/score';
 import type { PenRule } from '@shared/quran/writeAyah';
 import { num } from '@shared/quran/arabicNumber';
-import { quranText } from '@/lib/quranText';
-import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
+import { CARD, type Palette } from '@/lib/theme';
+import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
 
-const SIZE = 24;
 const AYAH_NUMBER = /^[٠-٩]+$/;
 
 /** A question's own line over its choices: tall enough lines and room above for the marks of a vowelled verse (the Tuhfa's). */
@@ -25,7 +24,7 @@ export const QuizPrompt = ({ text, palette }: { text: string; palette: Palette }
 
 function Words({ words, marked, palette }: { words: string[]; marked?: number[]; palette: Palette }) {
   // A run of ayat carries each ayah's number between them, drawn as the end mark after the last one is.
-  return <>{words.map((word, at) => <Text key={at} style={marked?.includes(at) || AYAH_NUMBER.test(word) ? { color: palette.accent } : undefined}>{quranText(word)}{at < words.length - 1 ? ' ' : ''}</Text>)}</>;
+  return <>{words.map((word, at) => <AyahWords key={at} look={marked?.includes(at) || AYAH_NUMBER.test(word) ? { color: palette.accent } : undefined}>{`${word}${at < words.length - 1 ? ' ' : ''}`}</AyahWords>)}</>;
 }
 
 /**
@@ -76,11 +75,11 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
         </View>
       ) : question.quran && (
         <Card palette={palette} pad={16} style={{ marginHorizontal: 16 }}>
-          <Text style={{ fontFamily: QURAN_FONT, fontSize: SIZE, lineHeight: SIZE * 1.9, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
+          <AyahFlow color={palette.ink}>
             <Words words={question.quran} marked={diff?.a ?? question.marked} palette={palette} />
-            {question.number !== undefined && <Text style={{ color: palette.accent }}>{' '}{num(question.number)}</Text>}
-            {question.reveal && (revealed ? <Text style={{ color: palette.accent }}>{' '}<Words words={question.reveal} palette={palette} /></Text> : ' …')}
-          </Text>
+            {question.number !== undefined && <AyahWords look={{ color: palette.accent }}>{` ${num(question.number)}`}</AyahWords>}
+            {question.reveal && (revealed ? <Text>{' '}<Words words={question.reveal} marked={question.reveal.map((_, at) => at)} palette={palette} /></Text> : ' …')}
+          </AyahFlow>
         </Card>
       )}
       {!revealed && !onPage && onReveal && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}><Button variant="primary" Icon={Eye} label="أظهر الآية" onPress={onReveal} /></View>}
@@ -95,9 +94,9 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
                 : answered && question.whereOf?.[choice.value] ? `${choice.labelArabic}، ${question.whereOf[choice.value]}` : choice.labelArabic}
                 accessibilityState={{ selected: choice.value === picked, disabled: answered }}
                 style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderWidth: right || wrong ? 1.5 : 1, borderColor: right || wrong ? color : palette.rule, ...CARD, paddingVertical: 12, paddingHorizontal: 16, backgroundColor: pressed ? palette.paperDeep : 'transparent' })}>
-                <View style={{ flexShrink: 1, gap: 2 }}>
+                <View style={{ flexShrink: 1, flexGrow: question.quranChoices ? 1 : 0, gap: 2 }}>
                   {question.quranChoices
-                    ? <Text style={{ color, fontSize: 21, lineHeight: 40, textAlign: 'right' }}><QuranWords>{choice.labelArabic}</QuranWords></Text>
+                    ? <AyahFlow color={color}><AyahWords>{choice.labelArabic}</AyahWords></AyahFlow>
                     : <Text style={{ color, fontSize: 19, fontWeight: right ? '700' : '400' }}>{choice.labelArabic}</Text>}
                   {/* What a choice is, once answered: an ayah's place, a reading's readers. */}
                   {answered && question.whereOf?.[choice.value] && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{question.whereOf[choice.value]}</Text>}
@@ -119,9 +118,9 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
       {alike && diff && (
         <View style={{ marginHorizontal: 16, borderTopWidth: 1, borderStyle: 'dashed', borderColor: palette.rule, paddingTop: 10, gap: 4 }}>
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`آية ${name(picked!)} التي تشبهها، ${num(Number(alike.key.split(':')[1]))}`}</Text>
-          <Text style={{ fontFamily: QURAN_FONT, fontSize: SIZE - 3, lineHeight: (SIZE - 3) * 1.9, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
+          <AyahFlow color={palette.ink}>
             <Words words={alike.words} marked={diff.b} palette={palette} />
-          </Text>
+          </AyahFlow>
         </View>
       )}
       {answered && question.note && (

@@ -11,9 +11,9 @@ import { emptyBranchAnswers, type QuestionAnswer, type ScoredQuestion } from "@s
 import { num } from "@shared/quran/arabicNumber";
 import { BranchFeedback } from "./BranchAnswers";
 import { CompareFeedback } from "./CompareAnswers";
-import { mushafText } from '@shared/quran/mushafText';
 import { canLook, LookView } from "@/components/quiz/QuizLook";
 import type { QuizLook } from "@shared/quiz/choiceKinds";
+import AyahFlow, { AyahWords } from "@/components/quran/text/AyahFlow";
 import { ChoiceAfter, ChoiceLabel, ChoiceQuran, type ChoiceParts } from "./ChoiceParts";
 
 type ReviewQuestion = ScoredQuestion & ChoiceParts & {
@@ -37,7 +37,7 @@ export default function QuestionReview({ entries, names, ar }: { entries: Review
   const choiceText = (value: string) => {
     const choice = question.choices.find(item => item.value === value);
     const detail = question.choiceDetails?.[value];
-    return detail ? <span><span className="font-quran">{mushafText(detail.text)}</span><span className="block text-sm text-[var(--home-muted)]">{detail.reference}</span></span>
+    return detail ? <span className="w-full"><AyahFlow><AyahWords>{detail.text}</AyahWords></AyahFlow><span className="block text-sm text-[var(--home-muted)]">{detail.reference}</span></span>
       : choice && <ChoiceLabel question={question} value={value} label={choice.labelArabic} answered />;
   };
   const correct = result.earned === result.total;
@@ -59,7 +59,7 @@ export default function QuestionReview({ entries, names, ar }: { entries: Review
       : question.write
       ? (ar ? `${num(result.earned)} من ${num(result.total)} كلمات` : `${result.earned} of ${result.total} words`)
       : (ar ? (correct ? "صحيح" : "خطأ") : correct ? "Correct" : "Incorrect")}</p>
-    {question.ayah && <blockquote dir="rtl" lang="ar"><p className="font-quran text-xl leading-loose">{mushafText(question.ayah.text)}</p><p className="text-sm text-[var(--home-muted)]">{question.ayah.reference}</p></blockquote>}
+    {question.ayah && <blockquote dir="rtl" lang="ar"><AyahFlow><AyahWords>{question.ayah.text}</AyahWords></AyahFlow><p className="text-sm text-[var(--home-muted)]">{question.ayah.reference}</p></blockquote>}
     <ChoiceQuran question={question} given={typeof answer === "string" ? answer : undefined} revealed ar={ar} written={Array.isArray(answer) ? answer : null} />
     {question.compare ? <CompareFeedback key={question.key} question={question} typed={Array.isArray(answer) ? answer : []} ar={ar} hints={entries[index].hints} /> : question.tree ? <BranchFeedback key={question.key} question={question} typed={Array.isArray(answer) ? answer : emptyBranchAnswers(question)} names={names} ar={ar} hints={entries[index].hints} /> : question.write ? null : <>
       <div>{typeof answer === "string" && answer ? choiceText(answer) : ar ? "بدون إجابة" : "No answer"}</div>
