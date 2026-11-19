@@ -155,5 +155,6 @@ describe('ابحث عن الجواب', () => {
       expect(look.view).toBe('hadith');
       expect(forty.some(entry => entry.n === look.mark && entry.records.some(record => question.key.endsWith(`:${record.number}`)))).toBe(true);
     }
+    for (const question of bookQuestions(() => 0.3)) expect(question.look).toEqual({ view: 'hadith', mark: Number(question.key.split(':')[1]) });
   });
 });

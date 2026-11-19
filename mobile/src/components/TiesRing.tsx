@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Check } from 'lucide-react-native';
 import { View } from 'react-native';
 import Svg, { Line } from 'react-native-svg';
 import { groupWord, tieGroups, tieWord, type GraphNode, type Tie, type TieGroup, type TieKind } from '@shared/tarajimGraph';
@@ -94,8 +95,7 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
     const size = () => groups.reduce((sum, g) => sum + (folded.has(g.kind) ? 1 : g.ties.length), 0);
     for (const g of [...groups].sort((a, b) => b.ties.length - a.ties.length)) {
       if (size() <= room) break;
-      // The marked person's kind stays open, so the answer is a node of its own.
-      if (g.ties.length > 1 && !g.ties.some(tie => tie.to === marked)) folded.add(g.kind);
+      if (g.ties.length > 1) folded.add(g.kind);
     }
     return groups.flatMap((g): Item[] => (folded.has(g.kind) ? [{ group: g.kind, count: g.ties.length, kind: g.kind }] : g.ties.map(tie => ({ tie, kind: tie.kind }))));
   })();
@@ -139,7 +139,8 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
               const label = `${groupWord(spot.group, person.sex, spot.count)} ${num(spot.count)}`;
               return (
                 <View key={spot.key} style={style}>
-                  <Card palette={palette} pad={[6, 8]} outline={kindColor(palette, spot.kind)} accessibilityRole="button" accessibilityLabel={label}
+                  {/* A kind folded with the marked person in it is framed green: he is a tap away. */}
+                  <Card palette={palette} pad={[6, 8]} outline={groups.find(g => g.kind === spot.group)?.ties.some(tie => tie.to === marked) ? palette.green : kindColor(palette, spot.kind)} accessibilityRole="button" accessibilityLabel={label}
                     onPress={() => setOpen({ slug, kind: spot.group })}>
                     <Text style={{ color: kindColor(palette, spot.kind), fontSize: 15, textAlign: 'center' }}>{label}</Text>
                   </Card>
@@ -175,8 +176,8 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
             {listed.map(tie => {
               const node = GRAPH.nodes.get(tie.to)!;
               return node.inApp
-                ? <Button key={tie.to} variant="plain" label={personName(node)} onPress={() => go(node.slug)} />
-                : <Text key={tie.to} style={{ color: palette.muted, fontSize: 16, lineHeight: 34, textAlign: 'right' }}>{personName(node)}</Text>;
+                ? <Button key={tie.to} variant="plain" label={personName(node)} Icon={tie.to === marked ? Check : undefined} onPress={() => go(node.slug)} />
+                : <Text key={tie.to} style={{ color: tie.to === marked ? palette.green : palette.muted, fontSize: 16, lineHeight: 34, textAlign: 'right' }}>{personName(node)}</Text>;
             })}
           </Card>
         )}
