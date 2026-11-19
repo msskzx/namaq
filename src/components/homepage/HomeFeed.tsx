@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Cookies from 'js-cookie';
@@ -32,7 +32,7 @@ import { continuePage, readFasilas, serverFasilas, subscribeFasilas } from '@sha
 import { ayahBookmarkId, ayahHref, markForgotten, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { isMemorized, memorizedFilters, memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized, type Memorized } from '@shared/memorized';
 import { FEED_QUIZ_NAMES, feedQuizSeed, OPENINGS, openingSurah, type FeedQuizKind } from '@shared/quiz/feedQuiz';
-import { activeInterests, pickedInterests } from '@shared/interests';
+import { activeInterests, INTERESTS, pickedInterests } from '@shared/interests';
 import QuizAnswer, { type QuizData } from '@/app/quizzes/QuizAnswer';
 import type { Hints } from '@shared/quiz/hints';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
@@ -50,6 +50,9 @@ import AyahLines, { PageTop, useAyahPage, type Page } from './AyahLines';
 import { useMemorized } from './Memorized';
 import styles from './Homepage.module.css';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
+import { qiraatAyat } from '@shared/quran/qiraatData';
+import { ayahNoteAt } from '@shared/quran/ayahNotes';
+import { QiraatPlace } from '@/app/quran/qiraat/QiraatView';
 import { surahName } from '@shared/quran/surahNames';
 import Card from '@/components/common/Card';
 
@@ -358,19 +361,36 @@ function TreePost({ tree }: { tree: Tree }) {
   </article>;
 }
 
+/**
+ * A place the readers differ, as the app's readings card (owner, 2026-11-19: every phone feature on the website too): the
+ * ayah in the mushaf's own lines and at most two of its words as each reader reads them, the «القراءات» page's own view
+ * (QiraatPlace), and a button that opens that page at this ayah.
+ */
+function QiraatPost({ ayah }: { ayah: string }) {
+  const { pages } = useAyahPage(ayah);
+  const [surah, number] = ayah.split(':').map(Number);
+  const href = `/quran/qiraat#a${ayah.replace(':', '-')}`;
+  return <Post head={<PostHead Icon={Layers} title="من القراءات" sub={`${names[surah]} ${num(number)}`} />} actions={<Action Icon={Layers} label="القراءات كاملة" href={href} />}>
+    <QiraatPlace ayah={ayah} max={2} more={href} lines={pages ? <AyahLines ayah={ayah} pages={pages} shown whole checked={null} /> : <LoadingDots label="جارٍ التحميل" />} />
+  </Post>;
+}
+
 /** Batches added each time the page nears the feed's end. */
 const MORE = 3;
 type Ids = { pairs: (string | null)[]; trees: (string | null)[]; pairKeys?: string[][]; treeKeys?: string[][] };
 type Content = { pairs: PairCard[]; trees: (TreePreview & { text: string })[] };
 
 /** The home feed: pairs and trees not seen before, a forgotten ayah that is due, and more each time the page nears its end. */
-export function Feed() {
+/** `only`: one interest's id, its cards alone (the chip row over the feed). */
+export function Feed({ only = null }: { only?: string | null } = {}) {
   const today = useToday();
   const day = today?.day;
   const visit = useSyncExternalStore(subscribeVisit, visitStart, serverVisit);
   // «More» counts per visit, so a new visit starts again at one batch in the same render that picks it.
-  const [more, setMore] = useState({ visit, batches: 1 });
-  const batches = more.visit === visit ? more.batches : 1;
+  // «More» counts per visit and chip, so either starts again at one batch in the same render that picks it.
+  const view = `${visit}|${only ?? ''}`;
+  const [more, setMore] = useState({ view, batches: 1 });
+  const batches = more.view === view ? more.batches : 1;
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen, serverFeedSeen);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
   // The saved items as they were when the visit began (once read in the browser), so saving or unsaving a card does not move the cards on screen.
@@ -378,9 +398,12 @@ export function Feed() {
   if (!savedAtVisit.current || savedAtVisit.current.visit !== visit || (!savedAtVisit.current.list.length && bookmarks.length)) savedAtVisit.current = { visit, list: bookmarks };
   // Feed cards saved in the app are drawn by the app's cards only; the website's feed shows trees, pairs and ayat.
   const saved = savedAtVisit.current.list.filter(item => !isCardBookmark(item.id));
-  // The interests picked on this device (shared/interests.ts): the feed brings only theirs, questions in turn by them.
+  // The interests picked on this device (shared/interests.ts), as they were when the visit began (a change starts a new
+  // visit, so the cards on screen never move): the feed brings only theirs, questions in turn by them.
   const interests = useSyncExternalStore(pickedInterests.subscribe, pickedInterests.read, pickedInterests.server);
-  const active = activeInterests(interests);
+  const picksAtVisit = useRef<{ visit: number; list: typeof interests } | null>(null);
+  if (!picksAtVisit.current || picksAtVisit.current.visit !== visit) picksAtVisit.current = { visit, list: interests };
+  const active = only ? INTERESTS.filter(interest => interest.id === only) : activeInterests(picksAtVisit.current.list);
   const quizKinds = active.flatMap(interest => interest.quizzes);
   const shows = (kind: string) => active.some(interest => (interest.cards as readonly string[]).includes(kind));
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks, serverAyahMarks);
@@ -414,13 +437,15 @@ export function Feed() {
   const swr = { revalidateOnFocus: false, keepPreviousData: true };
   const pieces = (kind: 'p' | 't', offsets: number[]) => () => inPieces<Content>(some => `/api/home/feed?day=${day}&${kind}=${some.join(',')}`, offsets)
     .then(all => ({ pairs: all.flatMap(piece => piece.pairs), trees: all.flatMap(piece => piece.trees) }));
-  const { data: pairContent, isValidating: pairsLoading } = useSWR(day && picked ? `/api/home/feed?day=${day}&p=${picked.pairs.join(',')}` : null, picked ? pieces('p', picked.pairs) : null, swr);
-  const { data: treeContent, isValidating: treesLoading } = useSWR(day && picked ? `/api/home/feed?day=${day}&t=${picked.trees.join(',')}` : null, picked ? pieces('t', picked.trees) : null, swr);
+  const { data: pairContent, isValidating: pairsLoading } = useSWR(day && picked && shows('pair') ? `/api/home/feed?day=${day}&p=${picked.pairs.join(',')}` : null, picked ? pieces('p', picked.pairs) : null, swr);
+  const { data: treeContent, isValidating: treesLoading } = useSWR(day && picked && shows('tree') ? `/api/home/feed?day=${day}&t=${picked.trees.join(',')}` : null, picked ? pieces('t', picked.trees) : null, swr);
   // The prophets cards of the batches shown, worked out on the server (the stories' ayat stay there).
-  const storySlots = Array.from({ length: batches }, (_, i) => i).filter(hasStoryCard);
+  const storySlots = shows('prophets') ? Array.from({ length: batches }, (_, i) => i).filter(hasStoryCard) : [];
   const { data: stories } = useSWR(day && storySlots.length ? `/api/home/feed?day=${day}&s=${storySlots.join(',')}` : null,
     () => inPieces<StoryCard[]>(some => `/api/home/feed?day=${day}&s=${some.join(',')}`, storySlots).then(all => all.flat()), swr);
+  // Pairs and trees load only for the interests shown, so what is not shown is never fetched or counted as seen.
   const content = pairContent || treeContent ? { pairs: pairContent?.pairs ?? [], trees: treeContent?.trees ?? [] } : undefined;
+  const ready = (!shows('pair') || !!pairContent) && (!shows('tree') || !!treeContent);
   useEffect(() => { if (pairContent) markFeedSeen(pairContent.pairs.map(pair => pair.id)); }, [pairContent]);
   useEffect(() => { if (treeContent) markFeedSeen(treeContent.trees.map(tree => tree.id)); }, [treeContent]);
   // A mark below the posts: when it comes near the screen, the next batch is added.
@@ -429,19 +454,20 @@ export function Feed() {
     const mark = end.current;
     if (!mark) return;
     const watch = new IntersectionObserver(entries => {
-      if (entries.some(entry => entry.isIntersecting)) setMore(now => ({ visit, batches: (now.visit === visit ? now.batches : 1) + MORE }));
+      if (entries.some(entry => entry.isIntersecting)) setMore(now => ({ view, batches: (now.view === view ? now.batches : 1) + MORE }));
     }, { rootMargin: '0px 0px 1200px 0px' });
     watch.observe(mark);
     return () => watch.disconnect();
-  }, [visit, batches, pairsLoading, treesLoading]);
+  }, [view, batches, pairsLoading, treesLoading]);
   const posts: React.ReactNode[] = [];
   for (let i = 0; i < batches; i++) {
     const pair = shows('pair') ? content?.pairs[i] : undefined;
     if (pair) posts.push(<PairPost key={`p${pair.id}`} pair={pair} />);
-    if (i === 0 && forgotten) posts.push(<ForgottenPost key={`ask${forgotten}`} ayah={forgotten} review={reviewHref(forgottenOrder(Object.keys(due))[0])} />);
-    else if (i === 0 && recall) posts.push(<ForgottenPost key={`ask${recall}`} ayah={recall} />);
-    // A question card in every batch after the first (whose question is the recall card), each kind in turn.
-    if (i > 0 && day && quizKinds.length) {
+    if (i === 0 && forgotten && !only) posts.push(<ForgottenPost key={`ask${forgotten}`} ayah={forgotten} review={reviewHref(forgottenOrder(Object.keys(due))[0])} />);
+    else if (i === 0 && recall && !only) posts.push(<ForgottenPost key={`ask${recall}`} ayah={recall} />);
+    // A question card in every batch after the first (whose question is the recall card), each kind in turn; from the first
+    // when one interest is shown alone.
+    if ((i > 0 || only) && day && quizKinds.length) {
       const kind = quizKinds[(day + i) % quizKinds.length];
       const seed = feedQuizSeed(day, i);
       posts.push(kind === OPENINGS
@@ -450,14 +476,17 @@ export function Feed() {
     }
     const tree = shows('tree') ? content?.trees[i] : undefined;
     if (tree) posts.push(<TreePost key={`t${tree.id}`} tree={tree} />);
-    const savedItem = savedOfSlot(saved, day ?? 0, i);
+    const savedItem = only ? undefined : savedOfSlot(saved, day ?? 0, i);
     if (savedItem) posts.push(<SavedPost key={`b${savedItem.id}-${i}`} item={savedItem} />);
+    // A readings card in every batch after the first, as the app's feed has one among its ayah cards.
+    const readings = i > 0 && day && shows('note-qiraat') ? qiraatAyat()[ayahNoteAt(qiraatAyat().length, day, i)] : undefined;
+    if (readings) posts.push(<QiraatPost key={`r${readings}`} ayah={readings} />);
     const story = shows('prophets') ? stories?.find(card => card.slot === i) : undefined;
     if (story) posts.push(<StoryPost key={`s${day}-${i}`} card={story} />);
   }
   return <section className={styles.feed} aria-label="للتأمل اليوم">
     {posts}
-    {!content && <p className="py-6 text-center"><LoadingDots label="جارٍ التحميل" /></p>}
-    {content && !pairsLoading && !treesLoading && <div ref={end} aria-hidden className="h-px" />}
+    {!ready && <p className="py-6 text-center"><LoadingDots label="جارٍ التحميل" /></p>}
+    {ready && !pairsLoading && !treesLoading && <div ref={end} aria-hidden className="h-px" />}
   </section>;
 }

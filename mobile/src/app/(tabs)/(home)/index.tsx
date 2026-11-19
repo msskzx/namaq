@@ -10,7 +10,7 @@ import Tour from '@/components/Tour';
 import { ContinueReading, Feed } from '@/components/HomeFeed';
 import HomeButtons from '@/components/HomeButtons';
 import { MemorizedPrompt } from '@/components/Memorized';
-import { InterestChips, InterestsWelcome } from '@/components/Interests';
+import { InterestChips, InterestsWelcome, onlyOf, usePicked } from '@/components/Interests';
 import { toTab } from '@/lib/ways';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { tourSeen } from '@/lib/settings';
@@ -50,7 +50,9 @@ export default function HomeScreen() {
   const [seen, setSeen] = tourSeen.use();
   const asked = useSyncExternalStore(interestsAsked.subscribe, interestsAsked.read, interestsAsked.server);
   // The chip row's pick: one interest's cards alone, or the mixed feed (null).
-  const [only, setOnly] = useState<string | null>(null);
+  const [chosen, setOnly] = useState<string | null>(null);
+  // A chip whose interest was taken out of the picks shows the mixed feed again.
+  const only = onlyOf(chosen, usePicked());
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   // Pulled down at the top, as in a social app: a new visit, so the feed shows what was not seen yet.
   const [refreshing, setRefreshing] = useState(false);

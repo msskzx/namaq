@@ -32,7 +32,7 @@ export const INTERESTS: readonly Interest[] = [
   { id: 'mutashabih', name: 'المتشابه اللفظي', section: 'quran', ours: true, cards: ['pair', 'tree'], quizzes: ['BRANCHES', 'COMPARE'] },
   { id: 'tafsir', name: 'التفسير', section: 'quran', cards: ['note-tafsir'], quizzes: ['TAFSIR'] },
   { id: 'gharib', name: 'غريب القرآن', section: 'quran', ours: true, cards: [], quizzes: ['MEANING'] },
-  { id: 'qiraat', name: 'القراءات', section: 'quran', cards: ['note-qiraat'], quizzes: ['QIRAAT'] },
+  { id: 'qiraat', name: 'القراءات', section: 'quran', cards: ['note-qiraat'], quizzes: ['QIRAAT', 'QIRAAT_WHO'] },
   { id: 'tajwid', name: 'التجويد', section: 'quran', ours: true, cards: [], quizzes: ['TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE'] },
   { id: 'irab', name: 'الإعراب', section: 'lisan', cards: ['note-irab'], quizzes: ['IRAB'] },
   { id: 'balagha', name: 'البلاغة', section: 'lisan', cards: ['note-balagha', 'term', 'scene'], quizzes: ['BALAGHA', 'TERM'] },
