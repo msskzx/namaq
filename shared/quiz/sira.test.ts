@@ -16,9 +16,15 @@ describe('the sira and battles quiz', () => {
     }
   });
 
-  it('asks the ayat Utbah heard with the reading of each report in the right answer', () => {
-    expect(right('recited:utbah-offers-and-hears-fussilat:41:1').startsWith(`${surahName(41)} ١–١٣ في رواية جابر، وفي رواية محمد بن كعب القرظي`)).toBe(true);
-    expect(wrong('recited:utbah-offers-and-hears-fussilat:41:1').join()).not.toContain(surahName(41));
+  it('asks the ayat Utbah heard as «أوائل سورة فصلت», true of both reports, every choice of one shape and the reports in the note', () => {
+    expect(right('recited:utbah-offers-and-hears-fussilat:41:1')).toBe(`أوائل سورة ${surahName(41)}`);
+    expect(wrong('recited:utbah-offers-and-hears-fussilat:41:1').every(label => label.startsWith('أوائل سورة ') && !label.includes(surahName(41)))).toBe(true);
+    expect(questions.find(q => q.key === 'SIRA:recited:utbah-offers-and-hears-fussilat:41:1')!.note!.text).toContain('في رواية محمد بن كعب القرظي');
+  });
+
+  it('never asks what a name already says: the place of «غزوة خيبر» or «سرية أبي سلمة إلى قطن», the ayat of «… يسمع سورة الطور»', () => {
+    for (const key of ['place:khaybar', 'place:sariyyah-abi-salamah-qatan']) expect(questions.some(q => q.key === `SIRA:${key}`)).toBe(false);
+    expect(questions.some(q => q.key.startsWith('SIRA:recited:') && q.key.includes(':52:'))).toBe(false);
   });
 
   it('asks who al-Muddaththir 11-26 was revealed about, with no one from the story as a wrong choice', () => {
@@ -26,8 +32,8 @@ describe('the sira and battles quiz', () => {
     expect(wrong('revealed:al-walid-hears-the-quran:74:11')).not.toContain('أبو جهل');
   });
 
-  it('asks a disputed year with every reading in the right answer and no year next to it among the wrong ones', () => {
-    expect(right('year:banu-qurayzah')).toMatch(/^السنة ٥ للهجرة، وقال موسى بن عقبة وعروة/);
+  it('asks the year the source holds, not the one it calls «وهم بين», with no year next to it among the wrong ones', () => {
+    expect(right('year:banu-qurayzah')).toBe('السنة ٥ للهجرة');
     expect(wrong('year:banu-qurayzah')).not.toContain('السنة ٤ للهجرة');
     expect(wrong('year:banu-qurayzah')).not.toContain('السنة ٦ للهجرة');
   });

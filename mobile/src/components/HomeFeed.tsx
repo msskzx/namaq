@@ -332,7 +332,6 @@ export function QuizActions({ palette }: { palette: Palette }) {
 
 /** The tree or compare question's room in a card before it has measured what it holds: the quiz's own tree and its buttons. */
 const QUIZ_TREE_HEIGHT = 380;
-const openAyat = (keys: string[]) => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } });
 
 /**
  * One question of the solo quiz as a post (owner, 2026-11-14): the quiz's own question, drawn by its own parts (QuizChoice,
@@ -390,7 +389,7 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
         </View>
         : <View style={{ height: roomHeight }}>
           {checked
-            ? <QuizFeedback onFit={onFit} question={question} typed={run.typed[0]} palette={palette} names={shortNames} onTap={openAyat} header={prompt} hints={run.hints?.[0]} />
+            ? <QuizFeedback onFit={onFit} question={question} typed={run.typed[0]} palette={palette} names={shortNames} header={prompt} hints={run.hints?.[0]} />
             : <QuizInputs onFit={onFit} question={question} typed={run.typed[0]} onType={(node, text) => setRun(now => now && typeAnswer(now, node, text))} palette={palette} names={shortNames} header={prompt} />}
         </View>}
     </Post>

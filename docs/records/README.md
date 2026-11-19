@@ -177,3 +177,4 @@ counts for neither.
 | [R0062](R0062-a-partly-vowelled-reading-takes-its-tashkeel-from-a-riwaya-that-reads-it.md) | A partly vowelled reading takes its tashkeel from a riwaya that reads it | obstacle | solved |
 | [R0063](R0063-a-grade-quote-ends-where-the-scholars-judgement-ends.md) | A grade quote ends where the scholar's judgement ends | obstacle | solved |
 | [R0064](R0064-a-quoted-readings-context-words-are-trimmed-not-kept.md) | A reading's quoted context words are trimmed, not shown | obstacle | solved |
+| [R0065](R0065-a-quiz-rule-binds-only-where-its-check-runs.md) | A quiz rule binds only where its check runs | challenge | solved |

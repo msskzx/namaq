@@ -2,10 +2,11 @@
 // The website (src/app/quizzes/BranchAnswers.tsx) and the phone app draw the same rows.
 import { num } from '../quran/arabicNumber';
 import type { Branch } from '../quran/branches';
-import { branchNodes, LEAF_WORDS, matchTreeAnswers, rightWords, spoken, withoutRepeat, wordsBefore } from './branchAnswers';
+import { branchNodes, LEAF_WORDS, matchTreeAnswers, rightWords, spoken, typedMarks, withoutRepeat, wordsBefore } from './branchAnswers';
 import { givenNodes, isAsked, type ScoredQuestion } from './score';
 
-export type Correction = { index: number; number: number; node: Branch; typed: string; correct: boolean; right: number; needed: number };
+/** `right`: how many typed words from the start are right (the verdict names the first wrong one); `marks`: each typed word right or wrong, as drawn. */
+export type Correction = { index: number; number: number; node: Branch; typed: string; correct: boolean; right: number; marks: boolean[]; needed: number };
 
 /** One row per asked node: what was typed, word by word, against the node it was graded with. */
 export function corrections(question: ScoredQuestion, typed: string[], matches: ReturnType<typeof matchTreeAnswers>): Correction[] {
@@ -16,7 +17,7 @@ export function corrections(question: ScoredQuestion, typed: string[], matches: 
     const words = spoken(answer.words);
     // A repeat of the word before the node is not counted against it (see withoutRepeat).
     const text = withoutRepeat(typed[index] ?? '', words, before.get(answer) ?? []);
-    return { index, number: at + 1, node: answer, typed: text, correct: Boolean(matches[index]?.correct), right: rightWords(text, words), needed: answer.children.length === 0 ? Math.min(LEAF_WORDS, words.length) : words.length };
+    return { index, number: at + 1, node: answer, typed: text, correct: Boolean(matches[index]?.correct), right: rightWords(text, words), marks: typedMarks(text, words), needed: answer.children.length === 0 ? Math.min(LEAF_WORDS, words.length) : words.length };
   });
 }
 

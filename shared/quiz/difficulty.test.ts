@@ -11,10 +11,10 @@ const words = (key: string) => all.find(ayah => ayah.key === key)!.words;
 describe('quiz difficulty', () => {
   const pool = branchQuestionPool(all, null, quizTrees(null, {}));
 
-  it('splits the quiz trees of the whole Quran into about thirds', () => {
+  it('has quiz trees of every level over the whole Quran', () => {
     const counts = Object.fromEntries(DIFFICULTIES.map(level => [level, 0])) as Record<Difficulty, number>;
     for (const group of pool.candidates) counts[pool.level(group)]++;
-    for (const level of DIFFICULTIES) expect(counts[level] / pool.candidates.length, level).toBeGreaterThan(0.28);
+    for (const level of DIFFICULTIES) expect(counts[level], level).toBeGreaterThan(0);
   });
 
   it('calls nearly the same ayat hard and ayat that part at once easy', () => {

@@ -27,16 +27,29 @@ describe('which surah', () => {
   it('asks close look-alikes when hard and offers the look-alike surah', () => {
     const hard = whichSurah.questions(whole, 'hard', seeded(3), 30);
     for (const question of hard) expect(Object.keys(question.alike ?? {}).length).toBeGreaterThan(0);
-    const adam = whichSurah.questions({ range: { from: 1, to: 1 }, filters: {} }, 'hard', seeded(4)).find(question => question.ayahKey === '2:34')!;
+    const adam = whichSurah.questions({ range: null, filters: { surahs: '2,17,20,7' } }, 'hard', seeded(4)).find(question => question.ayahKey === '2:34')!;
     expect(adam.choices.map(choice => choice.labelArabic)).toEqual(expect.arrayContaining(['البَقَرَةْ', 'الإِسْرَاءْ', 'طه']));
     expect(adam.alike?.['17'].key).toBe('17:61');
   });
 
-  it('asks only the range', () => {
-    const questions = whichSurah.questions({ range: null, filters: { surahs: '36' } }, 'medium', seeded(5));
-    expect(questions.length).toBeGreaterThan(50);
-    expect(questions.every(question => question.ayahKey!.startsWith('36:'))).toBe(true);
-    expect(whichSurah.count({ range: null, filters: { surahs: '36' } })).toBe(questions.length);
+  it('asks only the range, and offers only its surahs (owner, 2026-11-19)', () => {
+    const picked = ['36', '37', '38', '39'];
+    const scope = { range: null, filters: { surahs: picked.join(',') } };
+    const questions = whichSurah.questions(scope, 'medium', seeded(5));
+    expect(questions.length).toBeGreaterThan(0);
+    for (const question of questions) {
+      expect(picked).toContain(question.ayahKey!.split(':')[0]);
+      for (const choice of question.choices) expect(picked).toContain(choice.value);
+    }
+    expect(whichSurah.count(scope)).toBe(questions.length);
+    // Fewer surahs than choices: nothing to choose between.
+    expect(whichSurah.count({ range: null, filters: { surahs: '36' } })).toBe(0);
+  });
+
+  it('never asks an ayah that says its own surah\'s name («هودًا» in Hud, «فتحًا» in al-Fath)', () => {
+    const asked = new Set(whichSurah.questions(whole, 'medium', seeded(9)).map(question => question.ayahKey));
+    for (const key of ['11:50', '48:1', '98:1', '12:4']) expect(asked.has(key)).toBe(false);
+    expect(asked.has('11:1')).toBe(true);
   });
 
   it('offers the look-alikes\' surahs when medium, then neighbours that do not give the answer away', () => {
@@ -60,7 +73,7 @@ describe('which surah', () => {
   });
 
   it('offers far surahs when easy', () => {
-    const [easy] = shuffle(whichSurah.questions({ range: null, filters: { surahs: '50' } }, 'easy', seeded(6)), seeded(7));
+    const [easy] = shuffle(whichSurah.questions(whole, 'easy', seeded(6)).filter(question => question.correctAnswer === '50'), seeded(7));
     expect(easy.choices.filter(choice => choice.value !== '50').every(choice => Math.abs(Number(choice.value) - 50) > 10)).toBe(true);
   });
 });

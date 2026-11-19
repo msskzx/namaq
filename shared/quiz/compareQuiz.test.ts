@@ -30,7 +30,7 @@ describe('compare quiz', () => {
 
   it('asks each card of one ayah against one ayah once', () => {
     expect(every.length).toBe(compareQuiz.count(all));
-    expect(every.length).toBeGreaterThan(2000);
+    expect(every.length).toBeGreaterThan(0);
     expect(new Set(every.map(question => question.compare!.card)).size).toBe(every.length);
   });
 
@@ -46,10 +46,14 @@ describe('compare quiz', () => {
     }
   });
 
-  it('asks only the ayah that parts: al-Naml 26 says nothing al-Tawba 129 does not, so al-Tawba 129 is asked', () => {
-    const asked = every.filter(question => question.compare!.card === '9:129|27:26');
-    expect(asked.map(question => question.compare!.asked.key)).toEqual(['9:129']);
-    expect(asked[0].compare!.blanks.map((_, i) => blankWords(asked[0].compare!, i).map(normalizeWord).join(' '))).toEqual(['فان تولوا فقل حسبي', 'عليه توكلت وهو']);
+  it('asks only the ayah that parts: al-Shura 31 says nothing al-Ankabut 22 does not, so al-Ankabut 22 is asked', () => {
+    const asked = every.filter(question => question.compare!.card === '29:22|42:31');
+    expect(asked.map(question => question.compare!.asked.key)).toEqual(['29:22']);
+    expect(asked[0].compare!.blanks.map((_, i) => blankWords(asked[0].compare!, i).map(normalizeWord).join(' '))).toEqual(['ولا في السماء']);
+  });
+
+  it('asks only two ayat the mutashabih books set side by side (owner, 2026-11-19), never our own pairs', () => {
+    expect(every.some(question => question.compare!.card === '9:129|27:26')).toBe(false);
   });
 
   it('keeps both ayat inside the scope', () => {

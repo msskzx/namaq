@@ -115,7 +115,8 @@ export async function assembleQuiz({ topics, personSlug, juz = null, scope = {},
   }));
   // Trees of the chosen difficulty first; within each, trees big enough for the leaves asked first (see biggerFirst).
   const bigger = biggerFirst(shuffle(branchesFor(topics, juz, scope), random), leaves, question => branchNodes(question.tree).filter(node => node.children.length === 0).length);
-  const trees: AssembledQuestion[] = byDifficulty(bigger, difficulty, question => question.level).slice(0, length);
+  // Extra are kept, as for the kinds: a tree sharing an ayah with one already picked is skipped, and the quiz still fills.
+  const trees: AssembledQuestion[] = byDifficulty(bigger, difficulty, question => question.level).slice(0, length * 3);
   const kinds = kindsOf(topics).map((kind) => kind.questions(choiceScope(juz, scope), difficulty, random, length * 3) as AssembledQuestion[]);
   // Each kind gets its share of the quiz, never two questions on one ayah (choiceKinds.ts mixQuestions); extra are drawn for those skipped.
   return mixQuestions<AssembledQuestion>([shuffle(bank, random), trees, ...kinds], length, random, questionAyat).map((question) => ({

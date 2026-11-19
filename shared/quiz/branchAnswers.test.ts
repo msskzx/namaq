@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { leadingWords, matchBranches, matchedWords, matchTreeAnswers, rightWords } from './branchAnswers';
+import { leadingWords, matchBranches, matchedWords, matchTreeAnswers, rightWords, typedMarks } from './branchAnswers';
 
 const one = (...branches: string[][]) => branches.map((words) => [words]);
 const heavens = one(['ٱلسَّمَـٰوَٰتِ', 'وَٱلْأَرْضَ'], ['ٱلْأَرْضِ', 'جَمِيعًۭا']);
@@ -158,5 +158,18 @@ describe('rightWords', () => {
     expect(rightWords('من الاخبار', words)).toBe(1);
     expect(rightWords('الاخبار من', words)).toBe(0);
     expect(rightWords('', words)).toBe(0);
+  });
+});
+
+describe('typedMarks (owner, 2026-11-19: one extra letter marks that word alone)', () => {
+  const words = 'يَسۡعَىٰ نُورُهُم بَيۡنَ أَيۡدِيهِمۡ وَبِأَيۡمَٰنِهِم بُشۡرَىٰكُمُ'.split(' ');
+  it('strikes only the misspelled word, and reads a lone «و» with the word after it', () => {
+    expect(typedMarks('يسعى نوررهم بين ايديهم و بايمانهم بشراكم', words)).toEqual([true, false, true, true, true, true, true]);
+  });
+  it('strikes a word typed twice, and not the words after it', () => {
+    expect(typedMarks('يسعى نورهم نورهم بين ايديهم', words)).toEqual([true, true, false, true, true]);
+  });
+  it('does not pass words typed far from their place: a missing start is wrong', () => {
+    expect(typedMarks('بين ايديهم', words)).toEqual([false, false]);
   });
 });

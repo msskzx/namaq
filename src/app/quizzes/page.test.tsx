@@ -530,13 +530,17 @@ describe('QuizzesPage', () => {
     expect(params.get('person')).toBe('abu-ubaydah');
   });
 
-  it('asks the kinds of difference picked, as on the branches page, and sends them with the count', () => {
+  it('asks the kinds of difference picked, as on the branches page, and sends them with the count; the books\' kind only', () => {
     nav.reset('/quizzes?topic=BRANCHES');
     render(<QuizzesPage />);
-    fireEvent.click(screen.getByRole('button', { name: /Word trees/ }));
+    // Only the mutashabih books' pairs are asked (owner, 2026-11-19), so no comparison kind is offered.
+    expect(screen.queryByRole('button', { name: /Word trees/ })).toBeNull();
+    expect(screen.queryByRole('button', { name: /Pondering/ })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: /Word order/ }));
     const params = new URLSearchParams(nav.getUrl().split('?')[1]);
-    expect(params.get('categories')).toBe('mutashabeh,pondering,words');
-    expect(availabilityKeys.at(-1)).toBe('/api/quiz/availability?topic=BRANCHES&categories=mutashabeh%2Cpondering%2Cwords');
+    expect(params.get('differences')).toBe('order');
+    expect(params.get('categories')).toBeNull();
+    expect(availabilityKeys.at(-1)).toBe('/api/quiz/availability?topic=BRANCHES&differences=order');
     expect(screen.queryByRole('group', { name: 'Sort' })).toBeNull();
   });
 

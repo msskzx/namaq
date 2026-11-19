@@ -1,0 +1,38 @@
+// No question gives its answer away (owner, 2026-11-19; AGENTS.md "Quiz questions"): the checks every multiple-choice
+// kind passes, run over all of them by giveaway.test.ts so a new kind in CHOICE_KINDS is checked without anyone adding it.
+// They catch what can be seen from the question alone; what needs knowledge of the subject (a son named «X بن Y» asked
+// about Y) stays with each kind's own builder and test, and with the reviewer reading the kind's questions.
+import { normalizeWord } from '../quran/normalize';
+import type { ChoiceQuestion } from './choiceKinds';
+
+/** Words as answers are matched: no marks, one alif, no joined «و ف ب ل ك» before the article, no article, no punctuation. */
+const words = (text: string) => text.split(/\s+/).map(word => normalizeWord(word).replace(/[^ء-ي]/g, ''))
+  .filter(Boolean).map(word => word.replace(/^(?:[وفبلك]?ال)(?=\S{2})/, ''));
+
+/** Whether `label` stands, word for word, in `shown` («هودًا» holds هود: the accusative's alif is no other word). */
+function standsIn(label: string, shown: string[]) {
+  const asked = words(label);
+  if (!asked.length || asked.join('').length < 2) return false;
+  const same = (seen: string, word: string) => seen === word || seen === `${word}ا`;
+  for (let i = 0; i + asked.length <= shown.length; i++) if (asked.every((word, k) => same(shown[i + k], word))) return true;
+  return false;
+}
+
+/**
+ * Why a question gives its answer away, or null:
+ * - the right choice is written in what the question shows (its prompt, passage or Quran words) and no wrong one is;
+ * - the right choice stands apart by its look: the only one holding a second reading («… وقيل …», «… أو …»).
+ */
+export function givesAway(question: ChoiceQuestion): string | null {
+  if (question.choices.length < 2) return null;
+  const right = question.choices.find(choice => choice.value === question.correctAnswer);
+  if (!right) return 'no right choice';
+  const wrong = question.choices.filter(choice => choice !== right);
+  // The words the question asks about (coloured, `marked`) are not the answer's giveaway: a reading or a meaning of them is asked.
+  const quran = (question.quran ?? []).filter((_, i) => !question.marked?.includes(i));
+  const shown = words([question.promptArabic, question.passage ?? '', ...quran].join(' '));
+  if (standsIn(right.labelArabic, shown) && !wrong.some(choice => standsIn(choice.labelArabic, shown))) return `«${right.labelArabic}» is in the question`;
+  const second = (label: string) => /\s(?:أو|وقيل|وقال|وفي رواية)\s/u.test(` ${label} `);
+  if (second(right.labelArabic) && !wrong.some(choice => second(choice.labelArabic))) return `«${right.labelArabic}» alone holds a second reading`;
+  return null;
+}

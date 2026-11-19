@@ -42,9 +42,11 @@ function Line({ line, ar, children, after }: { line: CompareLine; ar: boolean; c
 
 const Whole = ({ line, ar }: { line: CompareLine; ar: boolean }) => <Line line={line} ar={ar}><Words line={line} at={line.words.map((_, i) => i)} /></Line>;
 
-export function CompareInputs({ question, typed, onChange, onCheck, ar, hints: kept, onHints }: { question: Question; typed: string[]; onChange: (typed: string[]) => void; onCheck: () => void; ar: boolean;
+export function CompareInputs({ question, typed, onChange, onCheck, ar, sendEmpty = false, hints: kept, onHints }: { question: Question; typed: string[]; onChange: (typed: string[]) => void; onCheck: () => void; ar: boolean;
   /** The hints shown so far, when the quiz keeps them (solo, so the review can mark them); otherwise they live here. */
-  hints?: Hints; onHints?: (hints: Hints) => void }) {
+  hints?: Hints; onHints?: (hints: Hints) => void;
+  /** A party may send it empty (owner, 2026-11-19): a player who does not know need not wait out the clock. */
+  sendEmpty?: boolean }) {
   const [own, setOwn] = React.useState<Hints>({});
   const ask = question.compare;
   if (!ask) return null;
@@ -54,7 +56,7 @@ export function CompareInputs({ question, typed, onChange, onCheck, ar, hints: k
   const started = values.some(value => value.trim());
   const hintLabel = ar ? "تلميح: حرف آخر من كل فراغ" : "Hint: one more letter in each empty blank";
   return (
-    <form className="flex flex-col gap-3" onSubmit={(event) => { event.preventDefault(); if (started) onCheck(); }}>
+    <form className="flex flex-col gap-3" onSubmit={(event) => { event.preventDefault(); if (started || sendEmpty) onCheck(); }}>
       <div dir="rtl" className="flex flex-col gap-2.5" data-quiz-compare>
         <NavButtons>
           <Button size="lg" variant="muted" aria-label={hintLabel} title={hintLabel} onClick={() => (onHints ?? setOwn)(addCompareHint(ask, values, hints))}><Lightbulb aria-hidden /></Button>
@@ -72,7 +74,7 @@ export function CompareInputs({ question, typed, onChange, onCheck, ar, hints: k
         </Line>
       </div>
       <div className="flex flex-wrap gap-2">
-        <Button variant="primary" type="submit" disabled={!started}><FontAwesomeIcon icon={faCheckDouble} />{ar ? "تحقق" : "Check"}</Button>
+        <Button variant="primary" type="submit" disabled={!started && !sendEmpty}><FontAwesomeIcon icon={faCheckDouble} />{ar ? "تحقق" : "Check"}</Button>
         <Button disabled={!started} onClick={() => onChange(emptyCompareAnswers(question))}><Eraser size={16} aria-hidden />{ar ? "مسح الإجابات" : "Clear answers"}</Button>
       </div>
     </form>
@@ -89,7 +91,7 @@ function Mark({ row, ar, hinted }: { row: Correction; ar: boolean; hinted: boole
       {hinted && <Lightbulb size={15} className="text-[var(--home-muted)]" aria-label={ar ? "بتلميح" : "With a hint"} />}</span>
     {!row.correct && <span className="text-sm text-[var(--home-muted)]">{ar ? "كتبتَ: " : "You typed: "}
       {row.typed ? <span className="font-quran text-lg">{row.typed.split(/\s+/).map((word, at) => <React.Fragment key={at}>
-        {at > 0 && " "}{at < row.right ? <span className="text-[var(--home-green)]">{word}</span> : <del className="text-[var(--home-accent)]">{word}</del>}
+        {at > 0 && " "}{row.marks[at] ? <span className="text-[var(--home-green)]">{word}</span> : <del className="text-[var(--home-accent)]">{word}</del>}
       </React.Fragment>)}</span> : (ar ? "لا شيء" : "nothing")}</span>}
   </li>;
 }

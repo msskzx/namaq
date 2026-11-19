@@ -147,8 +147,15 @@ export const irabQuiz = bankKind(IRAB_QUIZ, () => data.irab.questions, ([key, ..
   };
 });
 
+/**
+ * The page is Hafs from 'Asim, so 'Asim's reading is the word already on it: asking how he reads it, or offering him as
+ * who reads it so, puts the answer in the question (owner, 2026-11-19). He is never asked or offered.
+ */
+const ASIM = READERS.findIndex(reader => reader.id === 'asim');
+const notAsim = (row: [string, number, number]) => row[2] !== ASIM;
+
 /** كيف يقرؤها؟ A word the ten readers differ on, coloured, and how one of them reads it; each reading names its readers once answered. */
-export const qiraatQuiz = bankKind(QIRAAT_QUIZ, () => data.qiraat, ([key, ...rest], random): ChoiceQuestion => {
+export const qiraatQuiz = bankKind(QIRAAT_QUIZ, () => data.qiraat.filter(notAsim), ([key, ...rest], random): ChoiceQuestion => {
   const [at, reader] = rest as number[];
   const difference = qiraatOf(key)[at];
   const right = difference.readings.findIndex(reading => reading.rawis.some(n => RIWAYAT[n - 1].reader === READERS[reader].id));
@@ -175,14 +182,14 @@ const otherReaders = ([key, at, reader]: [string, number, number]) => {
   const readings = qiraatOf(key)[at].readings;
   const whole = wholeReaders(readings);
   const asked = whole.find(w => w.reader === reader)?.reading;
-  return whole.filter(w => w.reading !== asked).map(w => w.reader);
+  return whole.filter(w => w.reading !== asked && w.reader !== ASIM).map(w => w.reader);
 };
 
 /**
  * مَن يقرأ هكذا؟ (owner 2026-11-19): the ayah with a word coloured, one reading of it, and readers to pick who reads it so;
  * the same bank as «كيف يقرؤها؟», read the other way. The wrong readers read it another way, each wholly one way.
  */
-export const qiraatWhoQuiz = bankKind(QIRAAT_WHO_QUIZ, () => data.qiraat.filter(row => otherReaders(row).length), (row, random): ChoiceQuestion => {
+export const qiraatWhoQuiz = bankKind(QIRAAT_WHO_QUIZ, () => data.qiraat.filter(row => notAsim(row) && otherReaders(row).length), (row, random): ChoiceQuestion => {
   const [key, at, reader] = row;
   const difference = qiraatOf(key)[at];
   const reading = difference.readings.findIndex(r => r.rawis.some(n => RIWAYAT[n - 1].reader === READERS[reader].id));
