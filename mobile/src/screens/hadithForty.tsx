@@ -62,6 +62,7 @@ function BookRecords({ title, records, mode, palette }: { title: string; records
   return (
     <Card palette={palette} gap={10}>
       <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 17, fontWeight: '700', textAlign: 'right' }}>{title}</Text>
+      {firstWhole.partial && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>فيه بعض لفظ الحديث</Text>}
       <Record record={firstWhole} mode={mode} palette={palette} />
       {rest.length > 0 && (
         <Folded credit={firstWhole.book === 'muslim' ? `طرق أخرى عند مسلم (${num(rest.length)})` : `مواضع أخرى في ${FORTY.books[firstWhole.book].title} (${num(rest.length)})`} palette={palette}>

@@ -199,27 +199,58 @@ export function sayingStart(text: string): string {
 }
 
 
+/** Ibn Rajab's text without its harakat, for matching how a paragraph starts («فقولُه» is «فقوله»). */
+const bare = (text: string) => text.replace(/[\u064B-\u065F\u0670]/g, '');
+
 /** A paragraph where Ibn Rajab explains a phrase of the hadith: «وقوله ﷺ: …», «فقوله: …», «ومعنى هذا الحديث …». */
-const EXPLAINS = /^(?:[فو]?قوله|ومعنى|وأما معنى|فأما)/;
+const EXPLAINS = /^(?:[فو]?قوله|ومعنى|وأما معنى)/;
+/** His paragraphs on a hadith's routes («هذا الحديث خرجه مسلم…», «وقد روي…», «وخرجه أحمد…») or pointing back («وقد سبق…»). */
+const ROUTES = /^(?:و?هذا الحديث|وقد روي|وروي|و?روى|و?خرج|وقد سبق|فأما ما خرج)/;
+/** A paragraph that only leads into what follows: it ends «…قولان:», or holds only the phrase he explains. */
+const leadsOn = (text: string) => /:\s*$/.test(text) || /^[فو]?قوله[^"«:]*:\s*["«][^"»]*["»]\s*[.،]?\s*$/.test(bare(text));
+
+/** From paragraph `from`, through the ones it leads into, so a passage never stops at his «قولان:» or on the bare phrase. */
+function passageFrom(paragraphs: readonly RajabParagraph[], from: number): RajabParagraph[] {
+  let to = from;
+  let listing = false;
+  while (to < paragraphs.length - 1) {
+    const next = bare(paragraphs[to + 1].text);
+    if (leadsOn(paragraphs[to].text)) listing = listing || COUNTS.test(next);
+    else if (!(listing && COUNTS.test(next))) break;
+    to += 1;
+  }
+  return paragraphs.slice(from, to + 1);
+}
+/** The items of what he counts out after «قولان:», «نوعان:»: «أحدهما…», «والثاني…», «الثالث…». */
+const COUNTS = /^و?(?:أحد(?:هما|ها)|ثاني(?:هما|ها)|ثالثها|رابعها|الثاني|الثالث|الرابع|الخامس|السادس|السابع)/;
 
 /**
- * The opening a hadith page shows of Ibn Rajab's chapter: from his first paragraph that explains the hadith to the next one,
- * past the hadith he quotes and his paragraphs on its routes; a chapter with none opens on the paragraph after the hadith.
+ * The opening a hadith page shows of Ibn Rajab's chapter: his first paragraph that explains the hadith, past the hadith he
+ * quotes and his paragraphs on its routes; a chapter with none opens on his first paragraph that is not about routes.
  */
 export function rajabOpening(chapter: RajabChapter): RajabParagraph[] {
-  const at = chapter.paragraphs.findIndex((paragraph, i) => i > 0 && EXPLAINS.test(paragraph.text));
-  const from = at > 0 ? at : Math.min(1, chapter.paragraphs.length - 1);
-  return chapter.paragraphs.slice(from, from + 1);
+  const { paragraphs } = chapter;
+  const explains = paragraphs.findIndex((paragraph, i) => i > 0 && EXPLAINS.test(bare(paragraph.text)));
+  const other = paragraphs.findIndex((paragraph, i) => i > 0 && !ROUTES.test(bare(paragraph.text)));
+  const from = explains > 0 ? explains : other > 0 ? other : Math.min(1, paragraphs.length - 1);
+  return passageFrom(paragraphs, from);
 }
 
 /**
- * The passages the feed's Ibn Rajab card shows (owner, 2026-11-18: every feature gets a card): each paragraph where he
- * explains a phrase of a hadith al-Nawawi took whole from the Sahihayn, short enough to read whole on a phone screen.
+ * The passages the feed's Ibn Rajab card shows (owner, 2026-11-18: every feature gets a card): each place where he explains
+ * a phrase of a hadith al-Nawawi took whole from the Sahihayn, short enough to read whole on a phone screen.
  */
 export function rajabFeedPassages(chapters: readonly RajabChapter[], entries: readonly FortyEntry[]) {
   const sahihayn = new Set(entries.filter(entry => !entry.partial && entry.records.length > 0 && entry.records.every(record => record.book === 'bukhari' || record.book === 'muslim')).map(entry => entry.n));
-  return chapters.filter(chapter => sahihayn.has(chapter.n)).flatMap(chapter =>
-    chapter.paragraphs.filter(paragraph => /^[فو]?قوله/.test(paragraph.text) && paragraph.text.length <= SCREEN_PASSAGE).map(paragraph => ({ chapter, paragraph })));
+  return chapters.filter(chapter => sahihayn.has(chapter.n)).flatMap(chapter => chapter.paragraphs.flatMap((paragraph, i) => {
+    if (!/^[فو]?قوله/.test(bare(paragraph.text))) return [];
+    const passage = passageFrom(chapter.paragraphs, i);
+    return passage.reduce((length, item) => length + item.text.length, 0) <= SCREEN_PASSAGE && !leadsOn(passage[passage.length - 1].text) ? [{ chapter, passage }] : [];
+  }));
 }
+
+/** The last page a paragraph runs onto. */
+export const lastPage = (paragraph: RajabParagraph) => paragraph.turns?.length ? paragraph.turns[paragraph.turns.length - 1].page : paragraph.page;
+
 /** About what a phone screen holds of Ibn Rajab's text at the feed's size, so a card never scrolls inside. */
 const SCREEN_PASSAGE = 700;

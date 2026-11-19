@@ -123,15 +123,23 @@ const BOOK_OF: Record<string, string> = {
   الدارمي: 'darimi', الدارقطني: 'daraqutni', البيهقي: 'bayhaqi', مالك: 'muwatta',
 };
 /** Every book al-Nawawi names holds the hadith whole from his Companion in our records: not no. 33 (part in the Sahihayn), no. 32 (Ibn Majah has it from others) or no. 41 (al-Hujja not at hand). */
-const citedWhole = (entry: FortyEntry) => !entry.partial
+const citedWhole = (entry: FortyEntry) => !entry.partial && !/وغيره/.test(entry.text.slice(entry.text.lastIndexOf('»')))
   && entry.named.every(name => entry.records.some(record => record.book === BOOK_OF[name] && !record.partial && !record.from));
+
+/**
+ * The hadith outside the Sahihayn a quiz may carry (owner, 2026-11-18: quizzes start with the Sahihayn or what a named scholar
+ * graded sahih, undisputed): al-Tirmidhi's «حسن صحيح» on nos. 11, 18, 28 and 29, printed in his Sunan beside each. Not no. 42,
+ * which his printed Sunan grades «حسن غريب», nor 12, 31 and 39, which Ibn Rajab weakens.
+ */
+const GRADED_SAHIH = new Set([11, 18, 28, 29]);
+const sahih = (entry: FortyEntry) => GRADED_SAHIH.has(entry.n) || (entry.records.length > 0 && entry.records.every(record => record.book === 'bukhari' || record.book === 'muslim'));
 
 /**
  * «من أخرجه؟» (owner, 2026-11-18: every feature a quiz kind): al-Nawawi's quotation, and the books he names for it. The
  * question asks his citation, a fact of his book, not where else a report is found; the wrong choices are other entries' citations.
  */
 export function bookQuestions(random: Random): ChoiceQuestion[] {
-  const all = FORTY.entries.filter(citedWhole).flatMap(entry => { const quotation = quotationOf(entry); return quotation ? [{ entry, quotation, books: namedBooks(entry.named) }] : []; });
+  const all = FORTY.entries.filter(entry => sahih(entry) && citedWhole(entry)).flatMap(entry => { const quotation = quotationOf(entry); return quotation ? [{ entry, quotation, books: namedBooks(entry.named) }] : []; });
   // «مسلم» against «البخاري ومسلم» is half right, so a choice sharing any book with the right one is never offered.
   const apart = (a: readonly string[], b: readonly string[]) => !a.some(book => b.includes(book));
   return shuffle(all.flatMap(({ entry, quotation, books }) => {

@@ -38,7 +38,7 @@ import momentBattles from '@shared/data/battles/moments.json';
 import type { AppMomentBattle } from '@shared/battles/battle';
 import { battleLine, Moment } from './battles/BattleParts';
 import { STORIES } from '@/lib/stories';
-import { FORTY, shamelaPage } from '@/lib/hadith';
+import { FORTY, fortyEntry, shamelaPage } from '@/lib/hadith';
 import { fromCompanion, rajabFeedPassages, type RajabChapter } from '@shared/hadith';
 import rajab from '@shared/data/hadith/ibnRajab.json';
 import IbnRajab from '@/components/IbnRajab';
@@ -638,16 +638,17 @@ const RAJAB_PASSAGES = rajabFeedPassages(rajab as RajabChapter[], FORTY.entries)
 function RajabPost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
   const picked = RAJAB_PASSAGES[rajabOfSlot(RAJAB_PASSAGES.length, day, slot)];
   if (!picked) return null;
-  const entry = FORTY.entries[picked.chapter.n - 1];
+  const entry = fortyEntry(picked.chapter.n);
+  if (!entry) return null;
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
     <Post palette={palette} head={<PostHead Icon={BookOpenText} title="من شرح ابن رجب" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} palette={palette} open={{ onPress: open, label: `افتح ${entry.heading}` }} />}
       actions={<>
         <Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />
-        <Action Icon={ExternalLinkIcon} label={`المصدر: ${FORTY.books.ibnrajab.title}`} onPress={() => openExternal(shamelaPage('ibnrajab', picked.paragraph.shamela))} palette={palette} />
+        <Action Icon={ExternalLinkIcon} label={`المصدر: ${FORTY.books.ibnrajab.title}`} onPress={() => openExternal(shamelaPage('ibnrajab', picked.passage[0].shamela))} palette={palette} />
       </>}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
-        <IbnRajab chapter={picked.chapter} only={picked.paragraph} palette={palette} />
+        <IbnRajab chapter={picked.chapter} only={picked.passage} palette={palette} />
       </View>
     </Post>
   );

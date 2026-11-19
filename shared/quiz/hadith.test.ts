@@ -98,7 +98,12 @@ describe('Ibn Rajab on the Forty', () => {
   it('has a chapter for each, opening on the hadith al-Nawawi quotes', () => {
     expect(RAJAB.map(chapter => chapter.n)).toEqual(Array.from({ length: 42 }, (_, i) => i + 1));
     expect(RAJAB[18].paragraphs.some(paragraph => paragraph.text.includes('احفَظِ الله يَحفَظْكَ'))).toBe(true);
-    for (const chapter of RAJAB) expect(rajabOpening(chapter)).toHaveLength(1);
+    for (const chapter of RAJAB) {
+      const opening = rajabOpening(chapter);
+      expect(opening.length).toBeGreaterThan(0);
+      expect(opening[opening.length - 1].text).not.toMatch(/:\s*$/);
+      expect(bare(opening[0].text)).not.toMatch(/^و?هذا الحديث (?:خرج|رواه)/);
+    }
   });
 
   it('keeps his words only: no footnote marks or editors\' notes', () => {
@@ -109,7 +114,8 @@ describe('Ibn Rajab on the Forty', () => {
   it('takes the feed\'s passages only from hadith al-Nawawi took whole from the Sahihayn', () => {
     const passages = rajabFeedPassages(RAJAB, FORTY.entries);
     expect(passages.length).toBeGreaterThan(20);
-    for (const { chapter } of passages) {
+    for (const { chapter, passage } of passages) {
+      expect(passage[passage.length - 1].text).not.toMatch(/:\s*$/);
       expect(FORTY.entries[chapter.n - 1].records.every(record => record.book === 'bukhari' || record.book === 'muslim')).toBe(true);
     }
   });
@@ -128,6 +134,15 @@ describe('«من أخرجه؟»', () => {
       for (const choice of question.choices.filter(item => item.value !== question.correctAnswer)) {
         for (const book of entry.named) expect(choice.labelArabic.split(/،\s*|\sو/)).not.toContain(book);
       }
+    }
+  });
+
+  it('carries only the Sahihayn and what a named scholar graded sahih, undisputed, and no «وغيره» citation', () => {
+    const asked = new Set(questions.map(question => Number(question.key.split(':')[1])));
+    for (const n of [12, 31, 39, 42]) expect(asked.has(n)).toBe(false);
+    for (const n of [11, 18, 28, 29]) {
+      expect(asked.has(n)).toBe(true);
+      expect(FORTY.entries[n - 1].grades!.some(grade => grade.by === 'الترمذي' && bare(grade.quote).includes('صحيح'))).toBe(true);
     }
   });
 });
