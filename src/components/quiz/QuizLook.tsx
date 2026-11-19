@@ -1,5 +1,6 @@
 'use client';
 
+import { UnderCard, useCardRow } from "@/components/common/UnderCard";
 import { Fragment, useState, type ReactNode } from 'react';
 import useSWR from 'swr';
 import { Check, Search } from 'lucide-react';
@@ -216,8 +217,12 @@ export function LookView({ look, shown }: { look: QuizLook; shown: boolean }) {
 /** «ابحث عن الجواب» under a question's choices (the app's LookButton): opens its view in a sheet, with a way back to the question. */
 export function LookButton({ look }: { look: QuizLook }) {
   const [open, setOpen] = useState(false);
+  // In a feed card the button joins the row of icons under the card (owner: no buttons in a card).
+  const inRow = useCardRow();
   return <>
-    <Button className="mt-3" size="sm" onClick={() => setOpen(true)}><Search size={16} aria-hidden />ابحث عن الجواب</Button>
+    {inRow
+      ? <UnderCard><Button size="lg" variant="muted" aria-label="ابحث عن الجواب" title="ابحث عن الجواب" onClick={() => setOpen(true)}><Search aria-hidden /></Button></UnderCard>
+      : <Button className="mt-3" size="sm" onClick={() => setOpen(true)}><Search size={16} aria-hidden />ابحث عن الجواب</Button>}
     <Sheet open={open} onClose={() => setOpen(false)} label="ابحث عن الجواب" className="overflow-y-auto">
       {open && <div className="flex flex-col gap-3 p-4">
         <LookView look={look} shown={false} />

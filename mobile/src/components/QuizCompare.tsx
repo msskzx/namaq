@@ -15,7 +15,7 @@ import { useKeyboardShown } from '@/lib/keyboard';
 import { openCompare } from '@/lib/ways';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
-import Card from '@/ui/Card';
+import Card, { UnderCard } from '@/ui/Card';
 import { BlankBoxes } from './MushafPageView';
 import { useWriteBlanks } from './recite/useRecite';
 import { writeBlank } from '@shared/quiz/writeBlanks';
@@ -53,7 +53,7 @@ function Bar({ label, onPress, Icon, palette }: { label: string; onPress: () => 
 
 /** The buttons under a question, on the right as across the app. */
 const Buttons = ({ children }: { children: React.ReactNode }) =>
-  <View style={{ direction: 'rtl', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 8 }}>{children}</View>;
+  <UnderCard><View style={{ direction: 'rtl', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 8 }}>{children}</View></UnderCard>;
 
 /** The question: the given ayah, then the asked one with a box in each part, and the hint bulb. */
 export function CompareInputs({ question, typed, onType, palette, header, hints: kept, onHints, onFit }: { question: Asked; typed: string[]; onType: (blank: number, text: string) => void; palette: Palette; header?: React.ReactNode;

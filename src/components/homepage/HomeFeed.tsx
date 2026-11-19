@@ -68,6 +68,7 @@ import { ayahNoteAt } from '@shared/quran/ayahNotes';
 import { QiraatPlace } from '@/app/quran/qiraat/QiraatView';
 import { surahName } from '@shared/quran/surahNames';
 import Card from '@/components/common/Card';
+import { CardRowProvider, useRowSlot } from '@/components/common/UnderCard';
 import ExternalLink from '@/components/common/ExternalLink';
 
 /**
@@ -172,11 +173,14 @@ function PostHead({ Icon, title, sub, href, label, id }: { Icon: typeof BookOpen
 function Post({ head, actions, bar, labelledBy, children }: { head: React.ReactNode; actions?: React.ReactNode;
   /** A bar of the card's own between it and its buttons (recall's recite bar). */
   bar?: React.ReactNode; labelledBy?: string; children: React.ReactNode }) {
+  // What the card's content hands up with UnderCard lands at the start of the row under the card (owner: buttons under the
+  // card, never in it); the row hides while it holds no button.
+  const [slot, setSlot] = useRowSlot();
   const body = <>
     {head}
-    <Card className="overflow-hidden">{children}</Card>
+    <Card className="overflow-hidden"><CardRowProvider slot={slot}>{children}</CardRowProvider></Card>
     {bar && <div className="mt-2 flex justify-center" data-share-skip>{bar}</div>}
-    {actions && <div className={styles.postActions} data-share-skip>{actions}</div>}
+    <div className={styles.postActions} data-share-skip><span ref={setSlot} className="contents" />{actions}</div>
   </>;
   // The reading card is a section of the page named by its head (`labelledBy`); the feed's posts are articles.
   return labelledBy

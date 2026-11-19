@@ -1,6 +1,7 @@
 "use client";
 
 // The compare quiz (shared/quiz/compareQuiz.ts) as the app draws it (mobile QuizCompare.tsx): matrix only, no trees (owner, 2026-11-17).
+import { UnderCard, useCardRow } from "@/components/common/UnderCard";
 import React from "react";
 import { Eraser, Lightbulb, SquareArrowOutUpLeft } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -50,6 +51,8 @@ export function CompareInputs({ question, typed, onChange, onCheck, ar, sendEmpt
   hints?: Hints; onHints?: (hints: Hints) => void;
   /** A party may send it empty (owner, 2026-11-19): a player who does not know need not wait out the clock. */
   sendEmpty?: boolean }) {
+  const inRow = useCardRow();
+  const formId = React.useId();
   const [own, setOwn] = React.useState<Hints>({});
   const ask = question.compare;
   // Each blank in recite mode's boxes (owner, 2026-11-19): its first two words to write, the rest faint.
@@ -64,12 +67,14 @@ export function CompareInputs({ question, typed, onChange, onCheck, ar, sendEmpt
   const started = values.some(value => value.trim());
   const hintLabel = ar ? "تلميح: حرف آخر من كل فراغ" : "Hint: one more letter in each empty blank";
   return (
-    <form className="flex flex-col gap-3" onSubmit={(event) => { event.preventDefault(); if (started || sendEmpty) onCheck(); }}>
+    <form id={formId} className="flex flex-col gap-3" onSubmit={(event) => { event.preventDefault(); if (started || sendEmpty) onCheck(); }}>
       {write.field({ "aria-label": ar ? "اكتب الكلمة" : "Write the word" })}
       <div dir="rtl" className="flex flex-col gap-2.5" data-quiz-compare>
-        <NavButtons>
-          <Button size="lg" variant="muted" aria-label={hintLabel} title={hintLabel} onClick={() => (onHints ?? setOwn)(addCompareHint(ask, values, hints))}><Lightbulb aria-hidden /></Button>
-        </NavButtons>
+        {inRow
+          ? <UnderCard><Button size="lg" variant="muted" aria-label={hintLabel} title={hintLabel} onClick={() => (onHints ?? setOwn)(addCompareHint(ask, values, hints))}><Lightbulb aria-hidden /></Button></UnderCard>
+          : <NavButtons>
+            <Button size="lg" variant="muted" aria-label={hintLabel} title={hintLabel} onClick={() => (onHints ?? setOwn)(addCompareHint(ask, values, hints))}><Lightbulb aria-hidden /></Button>
+          </NavButtons>}
         <Whole line={ask.shown} ar={ar} />
         <Line line={ask.asked} ar={ar}>
           {comparePieces(ask).map((piece, i) => "given" in piece
@@ -77,10 +82,11 @@ export function CompareInputs({ question, typed, onChange, onCheck, ar, sendEmpt
             : <BlankBoxes key={i} blank={blanks[piece.blank]} index={piece.blank} write={write} hint={shown[piece.blank] || undefined} name={ar ? `الفراغ ${num(piece.blank + 1)}` : `Blank ${piece.blank + 1}`} />)}
         </Line>
       </div>
-      <div className="flex flex-wrap gap-2">
-        <Button variant="primary" type="submit" disabled={!started && !sendEmpty}><FontAwesomeIcon icon={faCheckDouble} />{ar ? "تحقق" : "Check"}</Button>
-        <Button disabled={!started} onClick={() => onChange(emptyCompareAnswers(question))}><Eraser size={16} aria-hidden />{ar ? "مسح الإجابات" : "Clear answers"}</Button>
-      </div>
+      {/* In a feed card they join the row of icons under the card (owner: no buttons in a card); `form` keeps «تحقق» submitting. */}
+      <UnderCard><div className={inRow ? "contents" : "flex flex-wrap gap-2"}>
+        <Button variant={inRow ? "muted" : "primary"} size={inRow ? "lg" : undefined} type="submit" form={formId} disabled={!started && !sendEmpty} aria-label={inRow ? (ar ? "تحقق" : "Check") : undefined} title={inRow ? (ar ? "تحقق" : "Check") : undefined}><FontAwesomeIcon icon={faCheckDouble} />{!inRow && (ar ? "تحقق" : "Check")}</Button>
+        <Button variant={inRow ? "muted" : undefined} size={inRow ? "lg" : undefined} disabled={!started} onClick={() => onChange(emptyCompareAnswers(question))} aria-label={inRow ? (ar ? "مسح الإجابات" : "Clear answers") : undefined} title={inRow ? (ar ? "مسح الإجابات" : "Clear answers") : undefined}><Eraser size={16} aria-hidden />{!inRow && (ar ? "مسح الإجابات" : "Clear answers")}</Button>
+      </div></UnderCard>
     </form>
   );
 }

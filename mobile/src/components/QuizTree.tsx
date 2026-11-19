@@ -22,7 +22,7 @@ import { around as aroundSetting } from '@/lib/settings';
 import { useKeyboardShown } from '@/lib/keyboard';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { toTab } from '@/lib/ways';
-import Card from '@/ui/Card';
+import Card, { UnderCard } from '@/ui/Card';
 import { BlankBoxes } from './MushafPageView';
 import { useWriteBlanks, type WriteBlanks } from './recite/useRecite';
 import { writeBlank, type WriteBlank } from '@shared/quiz/writeBlanks';
@@ -135,9 +135,9 @@ export function QuizInputs({ question, typed, onType, palette, names, header, hi
       {write.field}
       <ScrollView {...fit} style={{ flex: 1 }} keyboardShouldPersistTaps="handled">{header}<MatrixInputs question={question} values={values} hints={shown} write={write} palette={palette} names={names} /></ScrollView>
       {/* The buttons sit on the right, as action buttons do across the app (owner, 2026-11-17). */}
-      {!typing && <View style={{ direction: 'rtl', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 8 }}>
+      {!typing && <UnderCard><View style={{ direction: 'rtl', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 8 }}>
         <Bar label="تلميح: حرف آخر من كل طرف فارغ" onPress={hint} Icon={Lightbulb} palette={palette} />
-      </View>}
+      </View></UnderCard>}
     </View>
   );
 }
@@ -241,10 +241,10 @@ export function QuizFeedback({ question, typed, palette, names: _names, header, 
             note={key => { const row = correctionOf(graded.rows, key); return row ? <MatrixMark row={row} palette={palette} hinted={!!hints?.[row.index]} /> : null; }} />}
         </View>
       </View>
-      <View style={{ direction: 'rtl', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, gap: 2 }}>
+      <UnderCard><View style={{ direction: 'rtl', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, gap: 2 }}>
         {question.phrase && <TreeActions phrase={question.phrase} text={question.tree.words.join(' ')} palette={palette} onShare={share} />}
         <Bar label="الآيات المحيطة" onPress={() => setAround(!around)} Icon={UnfoldHorizontal} palette={palette} on={around} />
-      </View>
+      </View></UnderCard>
     </View>
   );
 }
