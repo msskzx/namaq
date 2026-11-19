@@ -48,12 +48,12 @@ function Record({ record, mode, books, size }: { record: FortyRecord; mode: Mode
 }
 
 /** A book's records for the hadith: the first in full, the others (Muslim's other routes, another place) folded under it. */
-function BookRecords({ title, records, mode, books, size }: { title: string; records: FortyRecord[]; mode: Mode; books: FortyBooks; size: AppHadith['size'] }) {
+function BookRecords({ title, records, mode, books, size, heading: Heading = 'h2' }: { title: string; records: FortyRecord[]; mode: Mode; books: FortyBooks; size: AppHadith['size']; heading?: 'h2' | 'h3' }) {
   const firstWhole = records.find(record => !record.partial) ?? records[0];
   const rest = records.filter(record => record !== firstWhole);
   return (
     <Card className="flex flex-col gap-2.5 p-4">
-      <h3 className="text-[1.0625rem] font-bold">{title}</h3>
+      <Heading className="text-[1.0625rem] font-bold">{title}</Heading>
       {firstWhole.partial && <p className="text-sm text-[var(--home-muted)]">فيه بعض لفظ الحديث</p>}
       <Record record={firstWhole} mode={mode} books={books} size={size} />
       {rest.length > 0 && (
@@ -164,7 +164,7 @@ export function FortyHadith({ entry, books, chapter, size, inset = false, jibril
         <Heading className="text-[1.0625rem] font-bold">ما قاله العلماء في درجته</Heading>
         {entry.grades.map((grade, i) => <Grade key={`${grade.by}-${i}`} grade={grade} books={books} />)}
       </Card>}
-      {grouped.map(({ book, records }) => <BookRecords key={book} title={`في ${books[book].title}`} records={records} mode={mode} books={books} size={size} />)}
+      {grouped.map(({ book, records }) => <BookRecords key={book} title={`في ${books[book].title}`} records={records} mode={mode} books={books} size={size} heading={Heading} />)}
       {chapter && <>
         <div className="flex items-baseline justify-between">
           <Heading className="text-lg">من شرح ابن رجب</Heading>
