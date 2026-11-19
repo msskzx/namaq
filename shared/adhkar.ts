@@ -12,8 +12,8 @@ export type AdhkarCitation = {
 export type DhikrGrade = {
   /**
    * `isnad-sahih` is a judgment on the chain alone («بإسناد صحيح», «صحيح الإسناد»), not on the hadith.
-   * `in-sahih` is the compiler's own judgment by placing it in his Sahih («صحيح البخاري», «صحيح مسلم»), as al-Nawawi
-   * names the book; used only where Ibn Hajar's Nata'ij has no sentence of its own on that route.
+   * `in-sahih` is the compiler's own judgment by placing it in his Sahih («صحيح البخاري», «صحيح مسلم», «الصحيحين»), as
+   * al-Nawawi names the book; used only where Ibn Hajar's Nata'ij has no sentence of its own on that route.
    */
   rank: 'sahih' | 'hasan' | 'hasan-sahih' | 'isnad-sahih' | 'in-sahih';
   scholar: string;
@@ -1154,6 +1154,434 @@ export const ADHKAR: readonly Dhikr[] = [
       }
     ],
     "occasionQuote": "إذا أوى إلى فراشه"
+  },
+  {
+    "id": "sleep-three-surahs",
+    "occasions": [
+      "sleep"
+    ],
+    "content": {
+      "kind": "quran",
+      "ranges": [
+        {
+          "surah": 112,
+          "from": 1,
+          "to": 4
+        },
+        {
+          "surah": 113,
+          "from": 1,
+          "to": 5
+        },
+        {
+          "surah": 114,
+          "from": 1,
+          "to": 6
+        }
+      ]
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 90,
+      "url": "https://shamela.ws/book/1956/88",
+      "report": 255
+    },
+    "collections": [
+      "الصحيحين"
+    ],
+    "grades": [
+      {
+        "rank": "in-sahih",
+        "scholar": "البخاري ومسلم",
+        "quote": "الصحيحين",
+        "citation": {
+          "source": "adhkar-nawawi",
+          "volume": 1,
+          "page": 90,
+          "url": "https://shamela.ws/book/1956/88",
+          "report": 255
+        },
+        "reportedBy": "النووي"
+      }
+    ],
+    "occasionQuote": "ثم نفث فيهما وقرأ فيهما",
+    "repeat": {
+      "count": 3,
+      "quote": "يفعل ذلك ثلاثَ مرّاتٍ",
+      "scope": "whole-selection"
+    },
+    "instructionQuote": "ثُم مسح بهما ما استطاع من جسده، يبدأ بهما على رأسه ووجهه، وما أقبل من جسده"
+  },
+  {
+    "id": "sleep-baqarah-end",
+    "occasions": [
+      "sleep"
+    ],
+    "content": {
+      "kind": "quran",
+      "ranges": [
+        {
+          "surah": 2,
+          "from": 285,
+          "to": 286
+        }
+      ]
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 90,
+      "url": "https://shamela.ws/book/1956/88",
+      "report": 256
+    },
+    "collections": [
+      "الصحيحين"
+    ],
+    "grades": [
+      {
+        "rank": "in-sahih",
+        "scholar": "البخاري ومسلم",
+        "quote": "الصحيحين",
+        "citation": {
+          "source": "adhkar-nawawi",
+          "volume": 1,
+          "page": 90,
+          "url": "https://shamela.ws/book/1956/88",
+          "report": 256
+        },
+        "reportedBy": "النووي"
+      }
+    ],
+    "occasionQuote": "مَنْ قَرأ بِهِما في لَيْلَةٍ",
+    "virtueQuote": "كَفَتاهُ"
+  },
+  {
+    "id": "sleep-kursi",
+    "occasions": [
+      "sleep"
+    ],
+    "content": {
+      "kind": "quran",
+      "ranges": [
+        {
+          "surah": 2,
+          "from": 255,
+          "to": 255
+        }
+      ]
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 90,
+      "url": "https://shamela.ws/book/1956/88",
+      "report": 258
+    },
+    "collections": [
+      "صحيح البخاري"
+    ],
+    "grades": [
+      {
+        "rank": "sahih",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث صحيح، أخرجه البخاري",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 3,
+          "page": 47,
+          "url": "https://shamela.ws/book/30108/1094"
+        }
+      }
+    ],
+    "occasionQuote": "إذا أويتَ إلى فراشِكَ فاقرأ آيةَ الكرسي",
+    "virtueQuote": "فإنه لن يزالَ معكَ من الله تعالى حافظ، ولا يقربَك شيطانٌ حتى تُصْبِحَ"
+  },
+  {
+    "id": "sleep-punishment",
+    "occasions": [
+      "sleep"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "اللَّهُمَّ قِني عَذَابَكَ يَوْمَ تَبْعَثُ عِبادَكَ"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 91,
+      "url": "https://shamela.ws/book/1956/89",
+      "report": 259
+    },
+    "collections": [
+      "سنن أبي داود"
+    ],
+    "grades": [
+      {
+        "rank": "hasan",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث حسن أخرجه أحمد عن عبد الصمد",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 3,
+          "page": 49,
+          "url": "https://shamela.ws/book/30108/1096"
+        }
+      }
+    ],
+    "occasionQuote": "كان إذا أرادَ أن يرقدَ",
+    "repeat": {
+      "count": 3,
+      "quote": "ثَلاثَ مَرَّاتٍ",
+      "scope": "whole-selection"
+    },
+    "instructionQuote": "وضعَ يدَه اليمنى تحتَ خدّه"
+  },
+  {
+    "id": "sleep-lord-of-heavens",
+    "occasions": [
+      "sleep"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "اللَّهُمَّ رَبَّ السَّمَوَاتِ وَرَبَّ الأرْضِ وَرَبَّ العَرْشِ العَظِيمِ، رَبَّنا ورب كل شئ، فالِقَ الحَبّ وَالنَّوَى، مُنَزِّل التَّوْرَاةِ وَالإِنجِيلِ وَالقُرآنِ، أعُوذُ بِكَ مِنْ شَرّ كُلّ ذِي شَرٍّ أنْتَ آخِذٌ بِنَاصِيَتِهِ، أنْتَ الأوَّلُ فَلَيْسَ قَبْلَكَ شئ، وأنْتَ الآخِرُ فَلَيْسَ بعدك شئ، وأَنْتَ الظَّاهِرُ فَلَيْسَ فوقك شئ، وأنْتَ الباطِنُ فَلَيْسَ دونك شئ، اقْضِ عَنَّا الدَّيْنَ، وأغْنِنا مِنَ الفَقْرِ"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 91,
+      "url": "https://shamela.ws/book/1956/89",
+      "report": 260
+    },
+    "collections": [
+      "صحيح مسلم"
+    ],
+    "grades": [
+      {
+        "rank": "sahih",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث صحيح، أخرجه مسلم عن زهير بن حرب",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 3,
+          "page": 56,
+          "url": "https://shamela.ws/book/30108/1104"
+        }
+      }
+    ],
+    "occasionQuote": "كان يقولُ إذا أوى إلى فراشه"
+  },
+  {
+    "id": "sleep-noble-face",
+    "occasions": [
+      "sleep"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "اللَّهُمَّ إني أعُوذُ بِوَجْهِكَ الكَرِيمِ وَكَلِماتِكَ التَّامَّة مِنْ شر ما أنت آخذ بناصيته، اللَّهُمّ أنْتَ تَكْشِفُ المَغْرَمَ والمَأثمَ، اللَّهُمَّ لا يُهْزَمُ جُنْدُكَ، وَلا يُخْلَفُ وَعْدُكَ، ولا ينفع ذا الجد مِنْكَ الجَدُّ، سُبْحانَكَ اللَّهُمَّ وَبِحَمْدِكَ"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 91,
+      "url": "https://shamela.ws/book/1956/89",
+      "report": 261
+    },
+    "collections": [
+      "سنن أبي داود",
+      "النسائي"
+    ],
+    "grades": [
+      {
+        "rank": "hasan",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث حسن، أخرجه أبو داود عن عباس بن عبد العظيم العنبري",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 2,
+          "page": 385,
+          "url": "https://shamela.ws/book/30108/980"
+        }
+      }
+    ],
+    "occasionQuote": "كان يقول عند مضجعه"
+  },
+  {
+    "id": "sleep-cast-out",
+    "occasions": [
+      "sleep"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "بِسْمِ الله وَضَعْتُ جَنْبِي، اللَّهُمَّ اغْفِرْ لي ذَنْبِي، وأخسئ شَيْطانِي، وَفُكَّ رِهانِي، وَاجْعَلْنِي فِي النَّدِيّ الأعْلَى"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 91,
+      "url": "https://shamela.ws/book/1956/89",
+      "report": 263
+    },
+    "collections": [
+      "سنن أبي داود"
+    ],
+    "grades": [
+      {
+        "rank": "hasan",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث حسن، أخرجه أبو داود عن جعفر بن مسافر",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 3,
+          "page": 60,
+          "url": "https://shamela.ws/book/30108/1109"
+        }
+      }
+    ],
+    "occasionQuote": "كان إذا أخذ مضجعه من الليل قالَ"
+  },
+  {
+    "id": "sleep-kafirun",
+    "occasions": [
+      "sleep"
+    ],
+    "content": {
+      "kind": "quran",
+      "ranges": [
+        {
+          "surah": 109,
+          "from": 1,
+          "to": 6
+        }
+      ]
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 92,
+      "url": "https://shamela.ws/book/1956/90",
+      "report": 264
+    },
+    "collections": [
+      "سنن أبي داود",
+      "الترمذي"
+    ],
+    "grades": [
+      {
+        "rank": "hasan",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث حسن، أخرجه أبو داود عن عبد الله بن محمد النفيلي",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 3,
+          "page": 61,
+          "url": "https://shamela.ws/book/30108/1110"
+        }
+      }
+    ],
+    "occasionQuote": "اقْرأ (قُلْ يا أيُّها الكافِرُونَ) ثُمَّ نَمْ على خاتِمَتِها",
+    "virtueQuote": "فإنَّها بَرَاءَةٌ مِنَ الشِّرْكِ"
+  },
+  {
+    "id": "sleep-gave-plenty",
+    "occasions": [
+      "sleep"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "الحَمْدُ لِلَّهِ الَّذي كفاني وآوَانِي وأطْعَمَنِي وَسَقَانِي، وَالَّذِي مَنَّ عَليَّ فأفْضَلَ، وَالَّذي أعطانِي فأجْزَل، الحَمْدُ لِلَّهِ على كُلّ حالٍ ; اللَّهُمَّ رَبَّ كل شئ وَمَلِيكَهُ، وَإِلهَ كُلِّ شئ، أعُوذُ بِكَ مِنَ النَّارِ"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 92,
+      "url": "https://shamela.ws/book/1956/90",
+      "report": 268
+    },
+    "collections": [
+      "سنن أبي داود"
+    ],
+    "grades": [
+      {
+        "rank": "hasan",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث حسن، أخرجه أبو داود والنسائي",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 3,
+          "page": 67,
+          "url": "https://shamela.ws/book/30108/1117"
+        }
+      }
+    ],
+    "occasionQuote": "كان يقول إذا أخذ مضجعه"
+  },
+  {
+    "id": "sleep-created-my-soul",
+    "occasions": [
+      "sleep"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "اللَّهُمَّ أنْتَ خَلَقْتَ نَفْسِي وأنْتَ تَتَوَفَّاها، لَكَ مَمَاتُها وَمَحْياها، إنْ أحْيَيْتَها فاحْفَظْها، وَإنْ أمَتَّها فاغْفِرْ لَهَا، اللَّهُمَّ إنِّي أسألُكَ العافِيَةَ"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 93,
+      "url": "https://shamela.ws/book/1956/91",
+      "report": 273
+    },
+    "collections": [
+      "صحيح مسلم"
+    ],
+    "grades": [
+      {
+        "rank": "sahih",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث صحيح، أخرجه مسلم عن عقبة بن مكرم",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 3,
+          "page": 71,
+          "url": "https://shamela.ws/book/30108/1121"
+        }
+      }
+    ],
+    "occasionQuote": "أمر رجلًا إذا أخذ مضجعة",
+    "noteQuote": "قال ابن عمر: سمعتها من رسول الله ﷺ"
+  },
+  {
+    "id": "sleep-in-your-name-forgive",
+    "occasions": [
+      "sleep"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "اللَّهُمَّ باسْمِكَ رَبي وَضَعْتُ جَنْبِي فاغْفِرْ لي ذَنْبِي"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 94,
+      "url": "https://shamela.ws/book/1956/92",
+      "report": 277
+    },
+    "collections": [],
+    "grades": [
+      {
+        "rank": "hasan",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث حسن، ورجاله من شيخ الطبراني",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 3,
+          "page": 80,
+          "url": "https://shamela.ws/book/30108/1131"
+        }
+      }
+    ],
+    "occasionQuote": "كان يقول إذا اضطجع للنوم"
   }
 ];
 

@@ -73,7 +73,7 @@ describe('the al-Adhkar selection', () => {
   });
 
   it('has only attributed sahih/hasan judgments, quoted within their source context', () => {
-    const words = { 'in-sahih': /^صحيح (البخاري|مسلم)$/, 'sahih': /صحيح/, 'hasan': /حسن/, 'hasan-sahih': /حسن صحيح/, 'isnad-sahih': /بإسناد صحيح|صحيح الإ.?سناد/ };
+    const words = { 'in-sahih': /^(صحيح (البخاري|مسلم)|الصحيحين)$/, 'sahih': /صحيح/, 'hasan': /حسن/, 'hasan-sahih': /حسن صحيح/, 'isnad-sahih': /بإسناد صحيح|صحيح الإ.?سناد/ };
     const pages = new Map(Object.entries(witness.gradingPages));
     for (const item of ADHKAR) {
       for (const grade of item.grades.filter(grade => grade.rank === 'in-sahih')) {
@@ -111,7 +111,7 @@ describe('the al-Adhkar selection', () => {
 
   it('gives a counter only the sourced target and the whole selection as its unit', () => {
     const counted = ADHKAR.filter(item => item.repeat);
-    expect(counted.map(item => [item.citation.report, item.repeat!.count])).toEqual([[207, 3], [213, 3], [206, 100], [215, 4]]);
+    expect(counted.map(item => [item.citation.report, item.repeat!.count])).toEqual([[207, 3], [213, 3], [206, 100], [215, 4], [255, 3], [259, 3]]);
     for (const item of counted) {
       expect(item.repeat!.scope).toBe('whole-selection');
       expect(authorReport(item.citation.report)).toContain(item.repeat!.quote);
