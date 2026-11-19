@@ -27,7 +27,7 @@ export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   TARAJIM_NASAB: { en: "Where two lineages meet", ar: "أين يلتقي النسبان؟" },
   TARAJIM_VIRTUE: { en: "Whose virtue?", ar: "صاحب المنقبة" },
   TARAJIM_TIE: { en: "How are they related?", ar: "ما صلته به؟" },
-  TARAJIM_LIFE: { en: "Which came first in his life?", ar: "أيها كان أولًا في حياته؟" },
+  TARAJIM_LIFE: { en: "In which year?", ar: "في أي سنة كان؟" },
   SIRA: { en: "Sira and battles", ar: "السيرة والغزوات" },
   HADITH_NARRATOR: { en: "Who narrated it?", ar: "من راوي الحديث؟" },
   HADITH_COMPLETE: { en: "Complete the hadith", ar: "أكمل الحديث" },

@@ -18,8 +18,9 @@ commentary (من شرح ابن رجب, a paragraph where he explains a phrase of
 (`shared/quiz/feedQuiz.ts`): في أي سورة؟, أكمل المتشابهات, سمّع بقية الآية, قارن الموضعين,
 أوائل السور, سمّع الآية, ما معنى؟, the four ayah quizzes below, ما المصطلح؟ (`shared/quiz/balaghaTermQuiz.ts`: a term's
 definition with its name hidden, four terms to pick from, each choice linking to its definition once answered), the three Tuhfat al-Atfal questions, السيرة والغزوات (shared/quiz/sira.ts), the four tarajim questions
-(أين يلتقي النسبان؟, صاحب المنقبة and ما صلته به؟, `shared/quiz/tarajim.ts`; أيها كان أولًا في حياته؟, `shared/quiz/life.ts`:
-four things of one person's life from four different years, none with another reading of its year, the look-up his timeline), and the three hadith questions (من راوي الحديث؟, أكمل الحديث and من أخرجه؟,
+(أين يلتقي النسبان؟, صاحب المنقبة and ما صلته به؟, `shared/quiz/tarajim.ts`; في أي سنة كان؟, `shared/quiz/life.ts`:
+the year of an event or story of someone's «حياته», or of a person's death (battles are the sira quiz's); two years where
+the sources give two, the wrong choices of the same shape and none near; the look-up his timeline), and the three hadith questions (من راوي الحديث؟, أكمل الحديث and من أخرجه؟,
 `shared/quiz/hadith.ts`).
 
 The ayah quizzes (`shared/quiz/ayahQuizzes.ts`), whose questions are built once by `scripts/quran/buildAyahQuizzes.ts`

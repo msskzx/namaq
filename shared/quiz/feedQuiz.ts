@@ -14,7 +14,7 @@ export const FEED_QUIZ_NAMES: Record<FeedQuizKind & string, string> = {
   SURAH: 'في أي سورة؟', BRANCHES: 'أكمل المتشابهات', RECITE: 'سمّع بقية الآية', COMPARE: 'قارن الموضعين', [OPENINGS]: 'أوائل السور', ENDS: 'سمّع الآية', MEANING: 'ما معنى؟',
   TAFSIR: 'لأي آية هذا التفسير؟', BALAGHA: 'ما الأسلوب؟', TERM: 'ما المصطلح؟', IRAB: 'ما إعرابها؟', QIRAAT: 'كيف يقرؤها؟', QIRAAT_WHO: 'مَن يقرأ هكذا؟',
   TUHFA_COMPLETE: 'التحفة: أكمل البيت', TUHFA_NEXT: 'التحفة: البيت التالي', TUHFA_RULE: 'التحفة: حكم الحرف',
-  TARAJIM_NASAB: 'أين يلتقي النسبان؟', TARAJIM_VIRTUE: 'صاحب المنقبة', TARAJIM_TIE: 'ما صلته به؟', TARAJIM_LIFE: 'أيها كان أولًا في حياته؟', SIRA: 'السيرة والغزوات',
+  TARAJIM_NASAB: 'أين يلتقي النسبان؟', TARAJIM_VIRTUE: 'صاحب المنقبة', TARAJIM_TIE: 'ما صلته به؟', TARAJIM_LIFE: 'في أي سنة كان؟', SIRA: 'السيرة والغزوات',
   HADITH_NARRATOR: 'من راوي الحديث؟', HADITH_COMPLETE: 'أكمل الحديث', HADITH_BOOK: 'من أخرجه؟',
 } as Record<FeedQuizKind & string, string>;
 
