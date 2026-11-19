@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { bookPagesOf, type BookEntry, type BookPage, type PageBreak, type ReaderBookId } from '@shared/bookReader';
-import { kashshafEntries, sadiEntries, ukbariEntries } from '@shared/readerBooks';
+import { kashshafEntries, mutashabihEntries, sadiEntries, ukbariEntries, type MutashabihBookData } from '@shared/readerBooks';
 import type { KashshafData } from '@shared/quran/kashshaf';
 import type { UkbariData } from '@shared/quran/irab';
 import breaks from '@shared/data/quran/bookPages.json';
@@ -18,10 +18,19 @@ const generated = async <T>(file: string): Promise<T> => {
   return JSON.parse(JSON.parse(source.slice(source.indexOf('"'), source.lastIndexOf('"') + 1))) as T;
 };
 
-const LOADERS: Record<ReaderBookId, () => Promise<BookEntry[]>> = {
-  sadi: async () => sadiEntries((await json<{ passages: unknown[] }>('tafsirSadi.json')).passages),
-  kashshaf: async () => kashshafEntries(await generated<KashshafData>('kashshaf.js')),
-  ukbari: async () => ukbariEntries(await generated<UkbariData>('irabUkbari.js')),
+const bookPages = (id: ReaderBookId) => (breaks as unknown as Record<string, PageBreak[]>)[id] ?? [];
+const mutashabih = (file: string) => async () => {
+  const data = await generated<MutashabihBookData>(file);
+  return { entries: mutashabihEntries(data), breaks: data.breaks };
+};
+
+const LOADERS: Record<ReaderBookId, () => Promise<{ entries: BookEntry[]; breaks: PageBreak[] }>> = {
+  sadi: async () => ({ entries: sadiEntries((await json<{ passages: unknown[] }>('tafsirSadi.json')).passages), breaks: bookPages('sadi') }),
+  kashshaf: async () => ({ entries: kashshafEntries(await generated<KashshafData>('kashshaf.js')), breaks: bookPages('kashshaf') }),
+  ukbari: async () => ({ entries: ukbariEntries(await generated<UkbariData>('irabUkbari.js')), breaks: bookPages('ukbari') }),
+  kirmani: mutashabih('mutashabihKirmani.js'),
+  iskafi: mutashabih('mutashabihIskafi.js'),
+  zubayr: mutashabih('mutashabihZubayr.js'),
 };
 
 const cache = new Map<ReaderBookId, Promise<ReaderBook>>();
@@ -29,7 +38,7 @@ const cache = new Map<ReaderBookId, Promise<ReaderBook>>();
 export function readerBook(id: ReaderBookId): Promise<ReaderBook> {
   let book = cache.get(id);
   if (!book) {
-    book = LOADERS[id]().then(entries => ({ entries, pages: bookPagesOf(entries, (breaks as unknown as Record<string, PageBreak[]>)[id] ?? []) }));
+    book = LOADERS[id]().then(({ entries, breaks }) => ({ entries, pages: bookPagesOf(entries, breaks) }));
     book.catch(() => cache.delete(id));
     cache.set(id, book);
   }

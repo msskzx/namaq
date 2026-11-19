@@ -231,19 +231,34 @@ export const SOURCES: Source[] = [
     edition: 'تحقيق محمد أبو الفضل إبراهيم، دار إحياء الكتب العربية، ١٣٧٦هـ', link: shamela(11436), licence: PUBLIC_DOMAIN, uses: [USE.branches, USE.iltifat, USE.openings],
   },
   {
-    id: 'asrar-al-tikrar', group: 'books',
+    id: 'asrar-al-tikrar', group: 'books', files: ['shared/data/quran/mutashabihKirmani.js', 'shared/data/quran/mutashabihKirmani.d.ts'],
     title: { ar: 'أسرار التكرار في القرآن', en: 'Asrar al-Tikrar fi al-Quran' }, author: { ar: 'تاج القراء الكرماني', en: 'al-Kirmani' },
-    edition: 'تحقيق عبد القادر أحمد عطا، دار الفضيلة', link: shamela(3580), licence: PUBLIC_DOMAIN, uses: [USE.branches],
+    edition: 'تحقيق عبد القادر أحمد عطا، دار الفضيلة', link: shamela(3580),
+    licence: {
+      ar: 'توفي المؤلف قبل قرون، فنصه في الملك العام. نعرض كلامه وحده كاملًا في قارئ الكتب، دون حواشي المحقق وزياداته (أرقام المسائل والآيات، والإحالات، وما بين المعقوفين)، مع رقم الصفحة. لا يأتي مع التطبيق، بل ينزّله من يختاره إلى هاتفه.',
+      en: 'The author died centuries ago, so his text is in the public domain. The book reader shows his words alone and whole, without the editor’s footnotes and additions (numbers of entries and ayat, references, and what he put in square brackets), with the page number. It does not ship with the app; whoever wants it downloads it to their phone.',
+    },
+    uses: [USE.branches, USE.books],
   },
   {
-    id: 'durrat-al-tanzil', group: 'books',
+    id: 'durrat-al-tanzil', group: 'books', files: ['shared/data/quran/mutashabihIskafi.js', 'shared/data/quran/mutashabihIskafi.d.ts'],
     title: { ar: 'درة التنزيل وغرة التأويل', en: 'Durrat al-Tanzil' }, author: { ar: 'الخطيب الإسكافي', en: 'al-Khatib al-Iskafi' },
-    edition: 'تحقيق محمد مصطفى آيدين، جامعة أم القرى، ١٤٢٢هـ', link: shamela(1340), licence: PUBLIC_DOMAIN, uses: [USE.branches],
+    edition: 'تحقيق محمد مصطفى آيدين، جامعة أم القرى، ١٤٢٢هـ', link: shamela(1340),
+    licence: {
+      ar: 'توفي المؤلف قبل قرون، فنصه في الملك العام. نعرض كلامه وحده كاملًا في قارئ الكتب، دون حواشي المحقق وزياداته (أرقام المسائل والآيات، والإحالات، وما بين المعقوفين)، ودون دراسته في أول المجلد الأول، مع رقم الصفحة. لا يأتي مع التطبيق، بل ينزّله من يختاره إلى هاتفه.',
+      en: 'The author died centuries ago, so his text is in the public domain. The book reader shows his words alone and whole, without the editor’s footnotes and additions (numbers of entries and ayat, references, and what he put in square brackets) and without his study that opens volume 1, with the page number. It does not ship with the app; whoever wants it downloads it to their phone.',
+    },
+    uses: [USE.branches, USE.books],
   },
   {
-    id: 'milak-al-tawil', group: 'books',
+    id: 'milak-al-tawil', group: 'books', files: ['shared/data/quran/mutashabihZubayr.js', 'shared/data/quran/mutashabihZubayr.d.ts'],
     title: { ar: 'ملاك التأويل القاطع بذوي الإلحاد والتعطيل', en: 'Milak al-Ta’wil' }, author: { ar: 'ابن الزبير الغرناطي', en: 'Ibn al-Zubayr al-Gharnati' },
-    edition: 'وضع حواشيه عبد الغني محمد علي الفاسي، دار الكتب العلمية، بيروت', link: shamela(1419), licence: PUBLIC_DOMAIN, uses: [USE.branches],
+    edition: 'وضع حواشيه عبد الغني محمد علي الفاسي، دار الكتب العلمية، بيروت', link: shamela(1419),
+    licence: {
+      ar: 'توفي المؤلف قبل قرون، فنصه في الملك العام. نعرض كلامه وحده كاملًا في قارئ الكتب، دون حواشي المحقق وزياداته (أرقام المسائل والآيات، والإحالات، وما بين المعقوفين)، مع رقم الصفحة. لا يأتي مع التطبيق، بل ينزّله من يختاره إلى هاتفه.',
+      en: 'The author died centuries ago, so his text is in the public domain. The book reader shows his words alone and whole, without the editor’s footnotes and additions (numbers of entries and ayat, references, and what he put in square brackets), with the page number. It does not ship with the app; whoever wants it downloads it to their phone.',
+    },
+    uses: [USE.branches, USE.books],
   },
   {
     id: 'qisas-al-anbiya', group: 'books',

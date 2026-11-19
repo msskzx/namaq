@@ -38,8 +38,8 @@ export function bookState(id: BookId): BookState {
 export const useBooks = () => useSyncExternalStore(subscribe, () => version);
 
 const folder = () => new Directory(Paths.document, 'books');
-/** Where each downloaded book keeps a passage's text in its entries (shared/quran/kashshaf.ts, shared/quran/irab.ts). */
-const TEXT_AT: Partial<Record<BookId, number>> = { kashshaf: 6, ukbari: 5 };
+/** Where each downloaded book keeps a passage's text in its entries (shared/quran/kashshaf.ts, shared/quran/irab.ts, shared/readerBooks.ts). */
+const TEXT_AT: Partial<Record<BookId, number>> = { kashshaf: 6, ukbari: 5, kirmani: 1, iskafi: 1, zubayr: 1 };
 /** A book's data must be a book: its source and a list of passages, each with its text where that book keeps it; a hadith book its kitabs (shared/sahih.ts). */
 const readable = (id: BookId, data: unknown) => {
   if (bookOf(id).kind === 'hadith') {

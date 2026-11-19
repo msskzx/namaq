@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { bookPagesOf, type BookEntry, type BookPage, type PageBreak, type ReaderBookId } from '@shared/bookReader';
-import { kashshafEntries, sadiEntries, ukbariEntries } from '@shared/readerBooks';
+import { kashshafEntries, mutashabihEntries, sadiEntries, ukbariEntries, type MutashabihBookData } from '@shared/readerBooks';
 import type { KashshafData } from '@shared/quran/kashshaf';
 import type { UkbariData } from '@shared/quran/irab';
 import breaks from '@shared/data/quran/bookPages.json';
@@ -17,9 +17,9 @@ const madeOf = (id: ReaderBookId) => {
   made.delete(id);
   return undefined;
 };
-const make = (id: ReaderBookId, entries: BookEntry[], revision: number) => {
+const make = (id: ReaderBookId, entries: BookEntry[], revision: number, pageBreaks = (breaks as unknown as Record<string, PageBreak[]>)[id] ?? []) => {
   // A download from another build of the book can hold fewer passages than the breaks were found in: those breaks are left out.
-  const own = ((breaks as unknown as Record<string, PageBreak[]>)[id] ?? []).filter(([entry, at]) => entry < entries.length && at <= entries[entry].text.length);
+  const own = pageBreaks.filter(([entry, at]) => entry < entries.length && at <= entries[entry].text.length);
   const book = { entries, pages: bookPagesOf(entries, own) };
   if (revision === bookRevision(id)) made.set(id, { revision, book });
   return book;
@@ -31,6 +31,7 @@ async function load(id: ReaderBookId): Promise<ReaderBook | null> {
   const revision = bookRevision(id);
   if (id === 'sadi') return make(id, sadiEntries(sadi.passages), revision);
   if (id === 'kashshaf') { const data = await readBook<KashshafData>(id); return data && make(id, kashshafEntries(data), revision); }
+  if (id !== 'ukbari') { const data = await readBook<MutashabihBookData>(id); return data && make(id, mutashabihEntries(data), revision, data.breaks); }
   const data = await readBook<UkbariData>(id);
   return data && make(id, ukbariEntries(data), revision);
 }
