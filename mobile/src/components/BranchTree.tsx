@@ -5,7 +5,7 @@ import { Text, UI_SCALE } from '@/ui/Text';
 import { ZoomIn, type LucideProps } from 'lucide-react-native';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
-import { ayatLabel, endSign, keys, shownAyat, withStarts, type Branch } from '@shared/quran/branches';
+import { ayatLabel, closingSign, endedIn, keys, shownAyat, withStarts, type Branch } from '@shared/quran/branches';
 import { pathToggleKey } from '@shared/quran/pathHighlight';
 import { markColour } from '@shared/quran/compareCardLook';
 import { bare } from '@shared/quran/quranText/ayahWords';
@@ -275,27 +275,31 @@ function Box({ id, ayahKeys, leaf, shared, muted, text, tools, width, children }
   // A lit path tints its boxes blue and outlines them in the colour of its lines; the box tapped (or just grown) is tinted deeper.
   const onPath = isLit(shared, growth, ayahKeys);
   const selected = !!paths?.pinned.has(pathToggleKey(id, ayahKeys));
+  const [pressed, setPressed] = useState(false);
+  const tap = () => shared.onTap(ayahKeys, paths ? () => paths.pin(id, ayahKeys) : undefined);
   return (
     <Fade id={id}>
-      <Pressable ref={register}
-        onPress={() => shared.onTap(ayahKeys, paths ? () => paths.pin(id, ayahKeys) : undefined)}
-        accessibilityRole="button"
-        accessibilityLabel={asked ? 'اكشف الكلمة التالية' : undefined}
-        style={({ pressed }) => ({
+      {/* The box draws the frame; the words are its tap area and the buttons sit beside them, not in them: a button inside a
+          pressable is lost on the web and to screen readers (R0055). */}
+      <View ref={register}
+        style={{
           maxWidth: width ?? (down ? (leaf ? 176 : 384) : leaf ? 208 : 192),
           borderWidth: 1,
           borderStyle: muted ? 'dashed' : 'solid',
           borderColor: asked ? palette.accent : growth.now.has(id) || onPath || selected ? palette.path : pressed ? palette.accent : muted ? palette.muted : palette.rule,
           backgroundColor: onPath ? blend(palette.path, palette.paper, selected ? 0.22 : 0.12) : muted ? 'transparent' : palette.card,
           ...CARD,
-        })}>
-        {/* The video draws the whole box, buttons' room included, and in it the words and references, not the buttons. */}
-        <View style={{ paddingHorizontal: 12, paddingVertical: 4, opacity: asked ? 0 : 1 }}><BoxId.Provider value={id}>{children}</BoxId.Provider></View>
-        {tools && <View style={{ opacity: asked ? 0 : 1 }}>{tools}</View>}
-        {asked && <View style={{ position: 'absolute', top: 0, bottom: 0, start: 0, end: 0, alignItems: 'center', justifyContent: 'center' }}>
+        }}>
+        <Pressable onPress={tap} onPressIn={() => setPressed(true)} onPressOut={() => setPressed(false)} accessibilityRole="button" accessibilityLabel={asked ? 'اكشف الكلمة التالية' : undefined}>
+          {/* The video draws the whole box, buttons' room included, and in it the words and references, not the buttons. */}
+          <View style={{ paddingHorizontal: 12, paddingVertical: 4, opacity: asked ? 0 : 1 }}><BoxId.Provider value={id}>{children}</BoxId.Provider></View>
+        </Pressable>
+        {/* Asked, the buttons keep their room but hide and take no tap; the words reveal the next word. */}
+        {tools && <View pointerEvents={asked ? 'none' : 'auto'} style={{ opacity: asked ? 0 : 1 }}>{tools}</View>}
+        {asked && <View pointerEvents="none" style={{ position: 'absolute', top: 0, bottom: 0, start: 0, end: 0, alignItems: 'center', justifyContent: 'center' }}>
           {asked.seconds ? <Hourglass left={asked.left} seconds={asked.seconds} color={palette.accent} /> : <Text style={{ color: palette.accent, fontSize: 22, fontWeight: '700' }}>؟</Text>}
         </View>}
-      </Pressable>
+      </View>
     </Fade>
   );
 }
@@ -449,7 +453,7 @@ function NeighbourBox({ id, beside, of, shared }: { id: string; beside: Beside; 
   const [surah, ayah] = beside.key.split(':').map(Number);
   const ref = shared.names[surah] ? `${shared.names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`;
   const basmala = beside.basmala ? sceneWords({ words: beside.basmala, ayahKeys: [], at: 0, shared, size: 17, marks: NOTHING_SHARED, color: shared.palette.muted }).words : [];
-  const closed = [...beside.words, ...endSign([beside.key])];
+  const closed = [...beside.words, ...closingSign(beside.words, [beside.key])];
   // Drawn as every box is (owner, 2026-11-15: the dashed, muted look drew more attention than it should): same border, card,
   // text size and ink; only the basmala stays muted, as it is not the ayah's text.
   const own = sceneWords({ words: closed, ayahKeys: [], at: 0, shared, size: 20, marks: beside });
@@ -509,7 +513,7 @@ function Node({ node, path, shared, starts }: { node: Branch; path: string[]; sh
   if (!bare) entries.forEach(entry => edge(shared, id, entry.id));
   if (rejoinId) node.children.forEach(child => edge(shared, nodeId(shared.indices.get(child)!), rejoinId));
   const references = runs.map(run => ayatLabel(run, shared.names)).join(' · ');
-  const shownWords = { words: [...words, ...(isMark(words[words.length - 1] ?? '') ? [] : endSign(node.ayat.map(key => ayatSpans[key][ayatSpans[key].length - 1])))], ayahKeys: all, at: path.length, shared, size: root ? 22 : 20, forms: shared.spellings ? node.forms : undefined, differs: shared.spellings ? node.differs : undefined, tones: node.tones };
+  const shownWords = { words: [...words, ...closingSign(words, endedIn(node, path))], ayahKeys: all, at: path.length, shared, size: root ? 22 : 20, forms: shared.spellings ? node.forms : undefined, differs: shared.spellings ? node.differs : undefined, tones: node.tones };
   const start = starts && startLabel(shared, starts, node.ayat);
   const text: SceneText = { ...sceneWords(shownWords), ...(runs.length ? singleSurah ? { header: references } : { footer: references } : {}), ...(start ? { header: singleSurah ? `${start} · ${references}` : start } : {}) };
   return (
