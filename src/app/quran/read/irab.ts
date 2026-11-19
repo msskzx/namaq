@@ -19,9 +19,9 @@ for (const entry of books.entries) {
 /**
  * The ayah's mushaf words (the ۞ mark left out), across a page turn, and which of them was pressed: `n` counts the
  * ayah's words on page `page`, ۞ included and recite mode's title steps not, as the reader's spans number them
- * (MushafPage.tsx data-word).
+ * (MushafPage.tsx data-word). `w`, when given, is the word's place in the ayah itself (a quiz's look-up) in place of a
+ * page and its `n`th word.
  */
-/** `w`, when given, is the word's place in the ayah itself (a quiz's look-up), in place of a page and its `n`th word. */
 export async function ayahMushafWords(key: string, page?: number, n?: number, w?: number): Promise<{ words: string[]; word: number }> {
   const surah = Number(key.split(':')[0]);
   const words: string[] = [];

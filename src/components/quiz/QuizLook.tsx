@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import { Fragment, useState, type ReactNode } from 'react';
 import useSWR from 'swr';
-import { Search } from 'lucide-react';
+import { Check, Search } from 'lucide-react';
 import Button from '@/components/common/Button';
 import Sheet from '@/components/common/Sheet';
 import LoadingDots from '@/components/common/LoadingDots';
@@ -54,7 +54,8 @@ function Failed() {
 /** One fetched view: the dots while it loads, a line if it fails. */
 function Fetched<T>({ url, children }: { url: string; children: (data: T) => ReactNode }) {
   const { data, error } = useSWR<T>(url, fetchJson, swr);
-  return error ? <Failed /> : data ? <>{children(data)}</> : <Loading />;
+  // Keyed by its address, so a panel that keeps its own state (the picked word) starts afresh for another question.
+  return error ? <Failed /> : data ? <Fragment key={url}>{children(data)}</Fragment> : <Loading />;
 }
 
 /** Al-Sa'di on each offered ayah, one at a time, as the reader's tafsir sheet shows him; once shown, the asked one first and checked. */
@@ -62,7 +63,7 @@ function TafsirLook({ keys, mark }: { keys: string[]; mark?: string }) {
   const [at, setAt] = useState(mark ?? keys[0]);
   return <div className="flex flex-col gap-3">
     <div className="flex flex-wrap gap-2">
-      {keys.map(key => <Chip key={key} label={ayahName(key)} on={key === at} check={key === mark} role="tab" onClick={() => setAt(key)}
+      {keys.map(key => <Chip key={key} label={<>{key === mark && <Check size={13} aria-hidden />}{ayahName(key)}</>} on={key === at} role="tab" onClick={() => setAt(key)}
         name={key === mark ? `${ayahName(key)}، الجواب` : undefined} />)}
     </div>
     <Fetched<TafsirPassage> key={at} url={`/api/quran/tafsir?k=${encodeURIComponent(at)}`}>
