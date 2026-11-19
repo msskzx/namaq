@@ -1,0 +1,281 @@
+{
+  "unit": {
+    "id": "siyar-v5-118-umayr",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١١٨"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_u2_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "557",
+      "layer": "MAIN",
+      "exact": "١١٨ - عُمَيْرُ بنُ سَعْدِ بنِ شُهَيْدِ بنِ قَيْسٍ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sp_u2_head",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "557",
+      "layer": "MAIN",
+      "exact": "عُمَيْرُ بنُ سَعْدِ بنِ شُهَيْدِ بنِ قَيْسٍ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sp_u2_salih",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "557",
+      "layer": "MAIN",
+      "exact": "العَبْدُ الصَّالِحُ، الأَمِيْرُ"
+    },
+    {
+      "id": "sp_u2_dimashq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "557",
+      "layer": "MAIN",
+      "exact": "وَكَانَ مِمَّنْ شَهِدَ فَتْحَ دِمَشْقَ مَعَ أَبِي عُبَيْدَةَ"
+    },
+    {
+      "id": "sp_u2_fath_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "557",
+      "layer": "MAIN",
+      "exact": "شَهِدَ فَتْحَ دِمَشْقَ",
+      "prefix": "مِمَّنْ"
+    },
+    {
+      "id": "sp_u2_hims",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "557",
+      "layer": "MAIN",
+      "exact": "وَوَلِيَ دِمَشْقَ وَحِمْصَ لِعُمَرَ"
+    },
+    {
+      "id": "sp_u2_qaddah_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "558",
+      "layer": "MAIN",
+      "exact": "قَالَ عَبْدُ اللهِ بنُ مُحَمَّدٍ القَدَّاحُ"
+    },
+    {
+      "id": "sp_u2_qaddah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "558",
+      "layer": "MAIN",
+      "exact": "وَكَانَ مِنَ الزُّهَّادِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_u20",
+      "unit": "siyar-v5-118-umayr",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_u2_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_u2_qaddah",
+      "unit": "siyar-v5-118-umayr",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_u2_qaddah_frame"
+      ],
+      "origin": {
+        "mention": "m_u2_qaddah_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_u2_salih",
+      "report": "r_u20",
+      "spans": [
+        "sp_u2_salih"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_u2_dimashq",
+      "report": "r_u20",
+      "spans": [
+        "sp_u2_dimashq"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_u2_hims",
+      "report": "r_u20",
+      "spans": [
+        "sp_u2_hims"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_u2_qaddah",
+      "report": "r_u2_qaddah",
+      "spans": [
+        "sp_u2_qaddah"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_u2",
+      "parent": "sp_u2_head",
+      "exact": "عُمَيْرُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_u2_d",
+      "parent": "sp_u2_dimashq",
+      "exact": "شَهِدَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_u2_fath",
+      "parent": "sp_u2_dimashq",
+      "exact": "فَتْحَ دِمَشْقَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_u2_h",
+      "parent": "sp_u2_hims",
+      "exact": "وَوَلِيَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_u2_qaddah_by",
+      "parent": "sp_u2_qaddah_frame",
+      "exact": "عَبْدُ اللهِ بنُ مُحَمَّدٍ القَدَّاحُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_u2",
+      "mention": "m_u2",
+      "agent": "umayr-ibn-saad-al-ansari",
+      "basis": [
+        {
+          "span": "sp_u2_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u2_d",
+      "mention": "m_u2_d",
+      "agent": "umayr-ibn-saad-al-ansari",
+      "basis": [
+        {
+          "span": "sp_u2_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u2_fath",
+      "mention": "m_u2_fath",
+      "event": "fath-damascus",
+      "basis": [
+        {
+          "span": "sp_u2_fath_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_u2_h",
+      "mention": "m_u2_h",
+      "agent": "umayr-ibn-saad-al-ansari",
+      "basis": [
+        {
+          "span": "sp_u2_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_u2_v_salih",
+      "subject": "m_u2",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_u2_salih"
+        ]
+      },
+      "restsOn": [
+        "st_u2_salih"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u2_fath",
+      "subject": "m_u2_d",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_u2_fath"
+      },
+      "restsOn": [
+        "st_u2_dimashq"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u2_office",
+      "subject": "m_u2_h",
+      "predicate": "office",
+      "value": {
+        "classified": "amir",
+        "spans": [
+          "sp_u2_hims"
+        ]
+      },
+      "restsOn": [
+        "st_u2_hims"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_u2_v_zuhd",
+      "subject": "m_u2",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_u2_qaddah"
+        ]
+      },
+      "restsOn": [
+        "st_u2_qaddah"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

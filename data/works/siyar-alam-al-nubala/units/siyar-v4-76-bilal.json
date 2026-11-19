@@ -439,6 +439,14 @@
       "layer": "MAIN",
       "exact": "حَلَبٍ",
       "prefix": "مَاتَ بِلاَلٌ بِ"
+    },
+    {
+      "id": "sp_bl_saad_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "351",
+      "layer": "MAIN",
+      "exact": "بِلاَلُ بنُ عَبْدِ اللهِ"
     }
   ],
   "reports": [
@@ -1052,6 +1060,13 @@
       "exact": "بِلاَلٌ",
       "occurrence": 1,
       "role": "SUBJECT"
+    },
+    {
+      "id": "m_bl_saad_by",
+      "parent": "sp_bl_saad_frame",
+      "exact": "مُحَمَّدُ بنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
     }
   ],
   "identifications": [
@@ -1732,6 +1747,20 @@
       },
       "restsOn": [
         "st_bl_halab"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_bl_variant",
+      "subject": "m_bl",
+      "predicate": "name.variant",
+      "value": {
+        "spans": [
+          "sp_bl_saad_name"
+        ]
+      },
+      "restsOn": [
+        "st_bl_saad"
       ],
       "status": "PROPOSED"
     }

@@ -1,0 +1,271 @@
+{
+  "unit": {
+    "id": "siyar-v6-13-hisham-ibn-hakim",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٣"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_hh_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "51",
+      "layer": "MAIN",
+      "exact": "١٣ - هِشَامُ بنُ حَكِيْمِ بنِ حِزَامٍ الأَسَدِيُّ ابْنُهُ"
+    },
+    {
+      "id": "sp_hh_head",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "51",
+      "layer": "MAIN",
+      "exact": "هِشَامُ بنُ حَكِيْمِ بنِ حِزَامٍ الأَسَدِيُّ"
+    },
+    {
+      "id": "sp_hh_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "51",
+      "layer": "MAIN",
+      "exact": "هِشَامُ بنُ",
+      "prefix": "-"
+    },
+    {
+      "id": "sp_hh_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "51",
+      "layer": "MAIN",
+      "exact": "حَكِيْمِ بنِ حِزَامٍ الأَسَدِيُّ ابْنُهُ"
+    },
+    {
+      "id": "sp_hh_saad_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "52",
+      "layer": "MAIN",
+      "exact": "قَالَ ابْنُ سَعْدٍ",
+      "prefix": "وَغَيْرُهُمَا."
+    },
+    {
+      "id": "sp_hh_saad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "52",
+      "layer": "MAIN",
+      "exact": "كَانَ صَلِيْباً، مَهِيْباً"
+    },
+    {
+      "id": "sp_hh_zuhri_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "52",
+      "layer": "MAIN",
+      "exact": "وَقَالَ الزُّهْرِيُّ",
+      "prefix": "مَهِيْباً."
+    },
+    {
+      "id": "sp_hh_zuhri",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "52",
+      "layer": "MAIN",
+      "exact": "كَانَ يَأْمُرُ بِالمَعْرُوْفِ، وَيَنْهَى عَنِ المُنْكَرِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_hh0",
+      "unit": "siyar-v6-13-hisham-ibn-hakim",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_hh_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_hh_saad",
+      "unit": "siyar-v6-13-hisham-ibn-hakim",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_hh_saad_frame"
+      ],
+      "origin": {
+        "mention": "m_hh_saad_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_hh_zuhri",
+      "unit": "siyar-v6-13-hisham-ibn-hakim",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_hh_zuhri_frame"
+      ],
+      "origin": {
+        "mention": "m_hh_zuhri_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_hh_head",
+      "report": "r_hh0",
+      "spans": [
+        "sp_hh_head"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_hh_saad",
+      "report": "r_hh_saad",
+      "spans": [
+        "sp_hh_saad"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_hh_zuhri",
+      "report": "r_hh_zuhri",
+      "spans": [
+        "sp_hh_zuhri"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_hh",
+      "parent": "sp_hh_head",
+      "exact": "هِشَامُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_hh_father",
+      "parent": "sp_hh_head",
+      "exact": "حَكِيْمِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_hh_saad_by",
+      "parent": "sp_hh_saad_frame",
+      "exact": "ابْنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_hh_zuhri_by",
+      "parent": "sp_hh_zuhri_frame",
+      "exact": "الزُّهْرِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_hh",
+      "mention": "m_hh",
+      "agent": "hisham-ibn-hakim",
+      "basis": [
+        {
+          "span": "sp_hh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_hh_father",
+      "mention": "m_hh_father",
+      "agent": "hakim-ibn-hizam",
+      "basis": [
+        {
+          "span": "sp_hh_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_hh_name",
+      "subject": "m_hh",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_hh_head"
+        ]
+      },
+      "restsOn": [
+        "st_hh_head"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hh_sex",
+      "subject": "m_hh",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_hh_sex"
+        ]
+      },
+      "restsOn": [
+        "st_hh_head"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hh_father",
+      "subject": "m_hh",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_hh_father"
+      },
+      "restsOn": [
+        "st_hh_head"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hh_v_salib",
+      "subject": "m_hh",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_hh_saad"
+        ]
+      },
+      "restsOn": [
+        "st_hh_saad"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hh_v_amr",
+      "subject": "m_hh",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_hh_zuhri"
+        ]
+      },
+      "restsOn": [
+        "st_hh_zuhri"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
