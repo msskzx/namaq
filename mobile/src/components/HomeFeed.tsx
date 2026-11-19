@@ -16,7 +16,7 @@ import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
 import { allVirtues, dayStart, feedBooks, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, prayerSoon, type FeedSlot } from '@shared/homeFeed';
-import { pageLabel, sayer } from '@shared/tarajim';
+import { pageLabel, sayerLine } from '@shared/tarajim';
 import { GRAPH, PEOPLE, personName, tiePairs } from '@/lib/tarajim';
 import { chainSentence } from '@shared/tarajimGraph';
 import TiesChain from './TiesChain';
@@ -418,7 +418,7 @@ function TarajimPost({ id, palette }: { id: string; palette: Palette }) {
     <Post palette={palette} head={<PostHead Icon={Users} title="من التراجم" sub={personName(pick.person)} palette={palette} open={{ onPress: open, label: `افتح ترجمة ${personName(pick.person)}` }} />}>
       <View style={{ padding: 14, gap: 6 }}>
         <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{virtue.text}</Text>
-        <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{virtue.by.length ? `${sayer(virtue)} · ` : ''}{pageLabel(virtue.refs)}</Text>
+        <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{virtue.by.length ? `${sayerLine(virtue)} · ` : ''}{pageLabel(virtue.refs)}</Text>
       </View>
     </Post>
   );

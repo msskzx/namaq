@@ -1,7 +1,7 @@
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Network } from 'lucide-react-native';
-import { kunyaName, pageLabel, sayer, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
+import { kunyaName, pageLabel, sayer, sayerLine, sourcesOf, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
 import { surahName } from '@shared/quran/surahNames';
 import { counted, num } from '@shared/quran/arabicNumber';
 import { sourceById } from '@shared/sources';
@@ -35,17 +35,25 @@ function Part({ n, title, palette, children }: { n: number; title: string; palet
   );
 }
 
-/** The pages a card rests on, folded at its foot; open, the edition and its page on al-Shamela, then each tie's own words. */
+/** The books a card rests on, folded at its foot; open, the pages, each tie's own words, then the edition on al-Shamela. */
 export function Credit({ facts, palette, quotes = false }: { facts: PersonFact[]; palette: Palette; quotes?: boolean }) {
   const refs = facts.flatMap(fact => fact.refs);
   if (refs.length === 0) return null;
+  const books = sourcesOf(refs).map(id => sourceById(id)).filter(book => book !== undefined);
+  // Folded, only the books and their authors (owner 2026-11-19); a tap opens the pages, the quotes and the edition.
   return (
-    <Folded credit={pageLabel(refs)} palette={palette}>
+    <Folded credit={books.map(book => `${book.title.ar}، ${book.author?.ar ?? ''}`).join(' · ')} palette={palette}>
+      <Text style={muted(palette)}>{pageLabel(refs)}</Text>
       {quotes && facts.filter(fact => fact.text).map((fact, i) => (
         <Text key={i} style={{ color: palette.ink, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>«{fact.text}» <Text style={muted(palette)}>{pageLabel(fact.refs)}</Text></Text>
       ))}
-      <Text style={muted(palette)}>{SIYAR.title}، {SIYAR.edition}</Text>
-      <ExternalLink url={SIYAR.url} color={palette.accent} size={14} style={{ textAlign: 'right' }}>الكتاب على المكتبة الشاملة</ExternalLink>
+      {/* Each book the pages come from: the Siyar, and another book where one is cited too (Zad al-Ma'ad). */}
+      {books.map(book => (
+        <View key={book.id} style={{ gap: 2 }}>
+          <Text style={muted(palette)}>{book.title.ar}، {book.edition ?? ''}</Text>
+          <ExternalLink url={book.link.url} color={palette.accent} size={14} style={{ textAlign: 'right' }}>الكتاب على المكتبة الشاملة</ExternalLink>
+        </View>
+      ))}
     </Folded>
   );
 }
@@ -56,7 +64,8 @@ export function Credit({ facts, palette, quotes = false }: { facts: PersonFact[]
  */
 function Sayer({ fact, palette, many = false }: { fact: PersonFact; palette: Palette; many?: boolean }) {
   if (fact.anonymous) return <Text style={muted(palette)}>قيل</Text>;
-  return fact.by.length || many ? <Text style={muted(palette)}>{many ? `عند ${sayer(fact)}` : sayer(fact)}</Text> : null;
+  if (many) return <Text style={muted(palette)}>عند {sayer(fact)}</Text>;
+  return fact.by.length ? <Text style={muted(palette)}>{sayerLine(fact)}</Text> : null;
 }
 
 /** One quote from the entry, with who says it; a `marked` one (a quiz's answer, once shown) in green. */
@@ -109,12 +118,13 @@ const suffixOf = (person: AppPerson) => (person.sex === 'FEMALE' ? 'ها' : 'ه'
 
 function ties(person: AppPerson) {
   const s = suffixOf(person);
+  const spouses = person.spouses;
   const fathers = person.parents.filter(p => p.sex !== 'FEMALE');
   const mothers = person.parents.filter(p => p.sex === 'FEMALE');
   return [
     { label: `أبو${s}`, links: fathers },
     { label: `أم${s}`, links: mothers },
-    { label: person.spouses.length > 1 ? `أزواج${s}` : `زوج${s}`, links: person.spouses },
+    { label: spouses.length > 1 ? `أزواج${s}` : `زوج${s}`, links: spouses },
     { label: `أولاد${s}`, links: person.children },
     { label: `إخوت${s}`, links: person.siblings },
     { label: `قرابت${s}`, links: person.cousins },
@@ -269,7 +279,10 @@ export default function PersonScreen() {
         )}
 
         <Part n={++n} title={person.sex === 'FEMALE' ? 'ترجمتها في الكتاب' : 'ترجمته في الكتاب'} palette={palette}>
-          <Text style={body(palette)}>{book}{part !== undefined ? ` ${num(part)}` : ''}{person.entry.from ? `، ص ${num(Number(person.entry.from))}${person.entry.to && person.entry.to !== person.entry.from ? `–${num(Number(person.entry.to))}` : ''}` : ''}</Text>
+          {/* An entry that runs into the next volume (the Sira) names both: «السيرة النبوية ١/٢٩ – ٢/٤٩٥». */}
+          <Text style={body(palette)}>{person.entry.toVolume !== undefined && part !== undefined
+            ? `${book} ${num(part)}/${num(Number(person.entry.from))} – ${num(volumeLabel(person.entry.toVolume).part ?? person.entry.toVolume)}/${num(Number(person.entry.to))}`
+            : `${book}${part !== undefined ? ` ${num(part)}` : ''}${person.entry.from ? `، ص ${num(Number(person.entry.from))}${person.entry.to && person.entry.to !== person.entry.from ? `–${num(Number(person.entry.to))}` : ''}` : ''}`}</Text>
           <Text style={muted(palette)}>{SIYAR.edition}</Text>
           <ExternalLink url={SIYAR.url} color={palette.accent} size={15} style={{ textAlign: 'right' }}>اقرأها على المكتبة الشاملة</ExternalLink>
         </Part>
