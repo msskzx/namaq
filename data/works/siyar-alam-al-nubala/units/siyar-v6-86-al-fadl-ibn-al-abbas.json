@@ -1,0 +1,155 @@
+{
+  "unit": {
+    "id": "siyar-v6-86-al-fadl-ibn-al-abbas",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٨٦"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_fa_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "444",
+      "layer": "MAIN",
+      "exact": "٨٦ - الفَضْلُ بنُ العَبَّاسِ بنِ عَبْدِ المُطَّلِبِ الهَاشِمِيُّ"
+    },
+    {
+      "id": "sp_fa_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "444",
+      "layer": "MAIN",
+      "exact": "الفَضْلُ بنُ العَبَّاسِ بنِ عَبْدِ المُطَّلِبِ الهَاشِمِيُّ",
+      "prefix": "٨٦ - "
+    },
+    {
+      "id": "sp_fa_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "444",
+      "layer": "MAIN",
+      "exact": "الفَضْلُ بنُ",
+      "prefix": "٨٦ - "
+    },
+    {
+      "id": "sp_fa_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "444",
+      "layer": "MAIN",
+      "exact": "العَبَّاسِ بنِ عَبْدِ المُطَّلِبِ",
+      "prefix": "الفَضْلُ بنُ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_fa0",
+      "unit": "siyar-v6-86-al-fadl-ibn-al-abbas",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_fa_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_fa_name",
+      "report": "r_fa0",
+      "spans": [
+        "sp_fa_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_fa",
+      "parent": "sp_fa_name",
+      "exact": "الفَضْلُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_fa_father",
+      "parent": "sp_fa_name",
+      "exact": "العَبَّاسِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_fa",
+      "mention": "m_fa",
+      "agent": "al-fadl-ibn-al-abbas",
+      "basis": [
+        {
+          "span": "sp_fa_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_fa_father",
+      "mention": "m_fa_father",
+      "agent": "al-abbas-ibn-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_fa_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_fa_name",
+      "subject": "m_fa",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_fa_name"
+        ]
+      },
+      "restsOn": [
+        "st_fa_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_fa_sex",
+      "subject": "m_fa",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_fa_sex"
+        ]
+      },
+      "restsOn": [
+        "st_fa_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_fa_father",
+      "subject": "m_fa",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_fa_father"
+      },
+      "restsOn": [
+        "st_fa_name"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
