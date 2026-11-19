@@ -1,0 +1,398 @@
+{
+  "unit": {
+    "id": "siyar-v5-67-amir-ibn-rabiah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٦٧"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ar_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "333",
+      "layer": "MAIN",
+      "exact": "٦٧ - عَامِرُ بنُ رَبِيْعَةَ بنِ كَعْبِ بنِ مَالِكٍ أَبُو عَبْدِ اللهِ العَنْزِيُّ"
+    },
+    {
+      "id": "sp_ar_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "333",
+      "layer": "MAIN",
+      "exact": "عَامِرُ بنُ رَبِيْعَةَ بنِ كَعْبِ بنِ مَالِكٍ",
+      "prefix": "٦٧ -"
+    },
+    {
+      "id": "sp_ar_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "333",
+      "layer": "MAIN",
+      "exact": "أَبُو عَبْدِ اللهِ",
+      "prefix": "بنِ كَعْبِ بنِ مَالِكٍ"
+    },
+    {
+      "id": "sp_ar_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "333",
+      "layer": "MAIN",
+      "exact": "رَبِيْعَةَ بنِ كَعْبِ",
+      "prefix": "٦٧ - عَامِرُ بنُ"
+    },
+    {
+      "id": "sp_ar_badr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "334",
+      "layer": "MAIN",
+      "exact": "أَسْلَمَ قَبْلَ عُمَرَ، وَهَاجَرَ الهِجْرَتَيْنِ، وَشَهِدَ بَدْراً"
+    },
+    {
+      "id": "sp_ar_badr_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "334",
+      "layer": "MAIN",
+      "exact": "وَشَهِدَ بَدْراً",
+      "prefix": "الهِجْرَتَيْنِ،"
+    },
+    {
+      "id": "sp_ar_awwal_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "334",
+      "layer": "MAIN",
+      "exact": "قَالَ ابْنُ إِسْحَاقَ",
+      "suffix": ": أَوَّلُ مَنْ قَدِمَ"
+    },
+    {
+      "id": "sp_ar_awwal",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "334",
+      "layer": "MAIN",
+      "exact": "أَوَّلُ مَنْ قَدِمَ المَدِيْنَةَ مُهَاجِراً: أَبُو سَلَمَةَ بنُ عَبْدِ الأَسَدِ، وَبَعْدَهُ: عَامِرُ بنُ رَبِيْعَةَ"
+    },
+    {
+      "id": "sp_ar_walad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "334",
+      "layer": "MAIN",
+      "exact": "وَلَدُهُ؛ عَبْدُ اللهِ",
+      "prefix": "حَدَّثَ عَنْهُ:"
+    },
+    {
+      "id": "sp_ar_walad_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "334",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ",
+      "prefix": "وَلَدُهُ؛"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ar0",
+      "unit": "siyar-v5-67-amir-ibn-rabiah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ar_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ar_awwal",
+      "unit": "siyar-v5-67-amir-ibn-rabiah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ar_awwal_frame"
+      ],
+      "origin": {
+        "mention": "m_ar_awwal_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ar_name",
+      "report": "r_ar0",
+      "spans": [
+        "sp_ar_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ar_badr",
+      "report": "r_ar0",
+      "spans": [
+        "sp_ar_badr"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ar_awwal",
+      "report": "r_ar_awwal",
+      "spans": [
+        "sp_ar_awwal"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ar_walad",
+      "report": "r_ar0",
+      "spans": [
+        "sp_ar_walad"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ar",
+      "parent": "sp_ar_name",
+      "exact": "عَامِرُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ar_father",
+      "parent": "sp_ar_name",
+      "exact": "رَبِيْعَةَ بنِ كَعْبِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ar_b",
+      "parent": "sp_ar_badr",
+      "exact": "أَسْلَمَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ar_badr",
+      "parent": "sp_ar_badr",
+      "exact": "بَدْراً",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ar_awwal_by",
+      "parent": "sp_ar_awwal_frame",
+      "exact": "ابْنُ إِسْحَاقَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ar_aw",
+      "parent": "sp_ar_awwal",
+      "exact": "عَامِرُ بنُ رَبِيْعَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ar_w",
+      "parent": "sp_ar_walad",
+      "exact": "وَلَدُهُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ar_abdullah",
+      "parent": "sp_ar_walad",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ar",
+      "mention": "m_ar",
+      "agent": "amir-ibn-rabiah",
+      "basis": [
+        {
+          "span": "sp_ar_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ar_father",
+      "mention": "m_ar_father",
+      "agent": "rabiah-ibn-kaab-al-anazi",
+      "basis": [
+        {
+          "span": "sp_ar_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ar_b",
+      "mention": "m_ar_b",
+      "agent": "amir-ibn-rabiah",
+      "basis": [
+        {
+          "span": "sp_ar_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ar_badr",
+      "mention": "m_ar_badr",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_ar_badr_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ar_aw",
+      "mention": "m_ar_aw",
+      "agent": "amir-ibn-rabiah",
+      "basis": [
+        {
+          "span": "sp_ar_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ar_w",
+      "mention": "m_ar_w",
+      "agent": "amir-ibn-rabiah",
+      "basis": [
+        {
+          "span": "sp_ar_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ar_abdullah",
+      "mention": "m_ar_abdullah",
+      "agent": "abdullah-ibn-amir-ibn-rabiah",
+      "basis": [
+        {
+          "span": "sp_ar_walad_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ar_name",
+      "subject": "m_ar",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ar_name"
+        ]
+      },
+      "restsOn": [
+        "st_ar_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ar_sex",
+      "subject": "m_ar",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ar_name"
+        ]
+      },
+      "restsOn": [
+        "st_ar_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ar_father",
+      "subject": "m_ar",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ar_father"
+      },
+      "restsOn": [
+        "st_ar_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ar_kunya",
+      "subject": "m_ar",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_ar_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_ar_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ar_badr",
+      "subject": "m_ar_b",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_ar_badr"
+      },
+      "restsOn": [
+        "st_ar_badr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ar_v_awwal",
+      "subject": "m_ar_aw",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ar_awwal"
+        ]
+      },
+      "restsOn": [
+        "st_ar_awwal"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ar_abdullah",
+      "subject": "m_ar_abdullah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ar_w"
+      },
+      "restsOn": [
+        "st_ar_walad"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

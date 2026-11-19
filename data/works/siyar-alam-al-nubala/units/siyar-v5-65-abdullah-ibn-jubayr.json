@@ -1,0 +1,339 @@
+{
+  "unit": {
+    "id": "siyar-v5-65-abdullah-ibn-jubayr",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٦٥"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_aj_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "٦٥ - أَخُوْه ُ: عَبْدُ اللهِ بنِ جُبَيْرِ"
+    },
+    {
+      "id": "sp_aj_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنِ جُبَيْرِ بنِ النُّعْمَانِ بنِ أُمَيَّةَ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sp_aj_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "جُبَيْرِ بنِ النُّعْمَانِ",
+      "prefix": "عَبْدُ اللهِ بنِ"
+    },
+    {
+      "id": "sp_aj_shahid",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "شَهِدَ: العَقَبَةَ مَعَ السَّبْعِيْنَ، وَبَدْراً، وَأُحُداً"
+    },
+    {
+      "id": "sp_aj_aqabah_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "العَقَبَةَ مَعَ السَّبْعِيْنَ"
+    },
+    {
+      "id": "sp_aj_badr_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "وَبَدْراً، وَأُحُداً",
+      "prefix": "مَعَ السَّبْعِيْنَ،"
+    },
+    {
+      "id": "sp_aj_rumah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "وَاسْتَعْمَلَهُ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَوْمَئِذٍ عَلَى الرُّمَاةِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_aj0",
+      "unit": "siyar-v5-65-abdullah-ibn-jubayr",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_aj_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_aj_name",
+      "report": "r_aj0",
+      "spans": [
+        "sp_aj_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_aj_shahid",
+      "report": "r_aj0",
+      "spans": [
+        "sp_aj_shahid"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_aj_rumah",
+      "report": "r_aj0",
+      "spans": [
+        "sp_aj_rumah"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_aj",
+      "parent": "sp_aj_name",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_aj_father",
+      "parent": "sp_aj_name",
+      "exact": "جُبَيْرِ بنِ النُّعْمَانِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aj_s",
+      "parent": "sp_aj_shahid",
+      "exact": "شَهِدَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_aj_aqabah",
+      "parent": "sp_aj_shahid",
+      "exact": "العَقَبَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aj_badr",
+      "parent": "sp_aj_shahid",
+      "exact": "وَبَدْراً",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aj_uhud",
+      "parent": "sp_aj_shahid",
+      "exact": "وَأُحُداً",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aj_r",
+      "parent": "sp_aj_rumah",
+      "exact": "وَاسْتَعْمَلَهُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_aj",
+      "mention": "m_aj",
+      "agent": "abdullah-ibn-jubayr",
+      "basis": [
+        {
+          "span": "sp_aj_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aj_father",
+      "mention": "m_aj_father",
+      "agent": "jubayr-ibn-al-numan",
+      "basis": [
+        {
+          "span": "sp_aj_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aj_s",
+      "mention": "m_aj_s",
+      "agent": "abdullah-ibn-jubayr",
+      "basis": [
+        {
+          "span": "sp_aj_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aj_aqabah",
+      "mention": "m_aj_aqabah",
+      "event": "second-pledge-of-aqaba",
+      "basis": [
+        {
+          "span": "sp_aj_aqabah_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aj_badr",
+      "mention": "m_aj_badr",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_aj_badr_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aj_uhud",
+      "mention": "m_aj_uhud",
+      "event": "uhud",
+      "basis": [
+        {
+          "span": "sp_aj_badr_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aj_r",
+      "mention": "m_aj_r",
+      "agent": "abdullah-ibn-jubayr",
+      "basis": [
+        {
+          "span": "sp_aj_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_aj_name",
+      "subject": "m_aj",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_aj_name"
+        ]
+      },
+      "restsOn": [
+        "st_aj_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aj_sex",
+      "subject": "m_aj",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_aj_name"
+        ]
+      },
+      "restsOn": [
+        "st_aj_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aj_father",
+      "subject": "m_aj",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_aj_father"
+      },
+      "restsOn": [
+        "st_aj_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aj_aqabah",
+      "subject": "m_aj_s",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_aj_aqabah"
+      },
+      "restsOn": [
+        "st_aj_shahid"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aj_badr",
+      "subject": "m_aj_s",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_aj_badr"
+      },
+      "restsOn": [
+        "st_aj_shahid"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aj_uhud",
+      "subject": "m_aj_s",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_aj_uhud"
+      },
+      "restsOn": [
+        "st_aj_shahid"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aj_v_rumah",
+      "subject": "m_aj_r",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_aj_rumah"
+        ]
+      },
+      "restsOn": [
+        "st_aj_rumah"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
