@@ -1,0 +1,428 @@
+{
+  "unit": {
+    "id": "siyar-v5-60-fatimah-bint-qays",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٦٠"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_fq_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "319",
+      "layer": "MAIN",
+      "exact": "٦٠ - فَاطِمَةُ بِنْتُ قَيْسٍ الفِهْرِيَّةُ"
+    },
+    {
+      "id": "sp_fq_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "319",
+      "layer": "MAIN",
+      "exact": "فَاطِمَةُ بِنْتُ قَيْسٍ الفِهْرِيَّةُ",
+      "prefix": "٦٠ -"
+    },
+    {
+      "id": "sp_fq_dahhak",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "319",
+      "layer": "MAIN",
+      "exact": "إِحْدَى المُهَاجِرَاتِ، وَأُخْتُ الضَّحَّاكِ"
+    },
+    {
+      "id": "sp_fq_dahhak_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "319",
+      "layer": "MAIN",
+      "exact": "وَأُخْتُ الضَّحَّاكِ",
+      "prefix": "المُهَاجِرَاتِ،"
+    },
+    {
+      "id": "sp_fq_abuamr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "319",
+      "layer": "MAIN",
+      "exact": "كَانَتْ تَحْتَ أَبِي عَمْرٍو بنِ حَفْصِ بنِ المُغِيْرَةِ المَخْزُوْمِيِّ، فَطَلَّقَهَا"
+    },
+    {
+      "id": "sp_fq_abuamr_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "319",
+      "layer": "MAIN",
+      "exact": "أَبِي عَمْرٍو بنِ حَفْصِ بنِ المُغِيْرَةِ"
+    },
+    {
+      "id": "sp_fq_usamah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "319",
+      "layer": "MAIN",
+      "exact": "وَأَشَارَ عَلَيْهَا بِأُسَامَةَ بنِ زَيْدٍ، فَتَزَوَّجَتْ بِهِ"
+    },
+    {
+      "id": "sp_fq_usamah_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "319",
+      "layer": "MAIN",
+      "exact": "بِأُسَامَةَ بنِ زَيْدٍ",
+      "prefix": "عَلَيْهَا"
+    },
+    {
+      "id": "sp_fq_sukna",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "319",
+      "layer": "MAIN",
+      "exact": "وَهِيَ الَّتِي رَوَتْ حَدِيْثَ السُّكْنَى وَالنَّفَقَةِ لِلمُطَلَّقَةِ بَتَّةً"
+    },
+    {
+      "id": "sp_fq_jassasah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "319",
+      "layer": "MAIN",
+      "exact": "وَهِيَ الَّتِي رَوَتْ قِصَّةَ الجَسَّاسَةِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_fq0",
+      "unit": "siyar-v5-60-fatimah-bint-qays",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_fq_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_fq_name",
+      "report": "r_fq0",
+      "spans": [
+        "sp_fq_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_fq_dahhak",
+      "report": "r_fq0",
+      "spans": [
+        "sp_fq_dahhak"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_fq_abuamr",
+      "report": "r_fq0",
+      "spans": [
+        "sp_fq_abuamr"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_fq_usamah",
+      "report": "r_fq0",
+      "spans": [
+        "sp_fq_usamah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_fq_sukna",
+      "report": "r_fq0",
+      "spans": [
+        "sp_fq_sukna"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_fq_jassasah",
+      "report": "r_fq0",
+      "spans": [
+        "sp_fq_jassasah"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_fq",
+      "parent": "sp_fq_name",
+      "exact": "فَاطِمَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_fq_d",
+      "parent": "sp_fq_dahhak",
+      "exact": "وَأُخْتُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_fq_dahhak",
+      "parent": "sp_fq_dahhak",
+      "exact": "الضَّحَّاكِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_fq_a",
+      "parent": "sp_fq_abuamr",
+      "exact": "كَانَتْ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_fq_abuamr",
+      "parent": "sp_fq_abuamr",
+      "exact": "أَبِي عَمْرٍو بنِ حَفْصِ بنِ المُغِيْرَةِ المَخْزُوْمِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_fq_u",
+      "parent": "sp_fq_usamah",
+      "exact": "فَتَزَوَّجَتْ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_fq_usamah",
+      "parent": "sp_fq_usamah",
+      "exact": "أُسَامَةَ بنِ زَيْدٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_fq_sukna",
+      "parent": "sp_fq_sukna",
+      "exact": "وَهِيَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_fq_jassasah",
+      "parent": "sp_fq_jassasah",
+      "exact": "وَهِيَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_fq",
+      "mention": "m_fq",
+      "agent": "fatimah-bint-qais-al-fihriyyah",
+      "basis": [
+        {
+          "span": "sp_fq_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_fq_d",
+      "mention": "m_fq_d",
+      "agent": "fatimah-bint-qais-al-fihriyyah",
+      "basis": [
+        {
+          "span": "sp_fq_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_fq_dahhak",
+      "mention": "m_fq_dahhak",
+      "agent": "al-dahhak-ibn-qays-al-fihri",
+      "basis": [
+        {
+          "span": "sp_fq_dahhak_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_fq_a",
+      "mention": "m_fq_a",
+      "agent": "fatimah-bint-qais-al-fihriyyah",
+      "basis": [
+        {
+          "span": "sp_fq_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_fq_abuamr",
+      "mention": "m_fq_abuamr",
+      "agent": "abu-amr-ibn-hafs-al-makhzumi",
+      "basis": [
+        {
+          "span": "sp_fq_abuamr_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_fq_u",
+      "mention": "m_fq_u",
+      "agent": "fatimah-bint-qais-al-fihriyyah",
+      "basis": [
+        {
+          "span": "sp_fq_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_fq_usamah",
+      "mention": "m_fq_usamah",
+      "agent": "usamah-ibn-zaid",
+      "basis": [
+        {
+          "span": "sp_fq_usamah_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_fq_sukna",
+      "mention": "m_fq_sukna",
+      "agent": "fatimah-bint-qais-al-fihriyyah",
+      "basis": [
+        {
+          "span": "sp_fq_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_fq_jassasah",
+      "mention": "m_fq_jassasah",
+      "agent": "fatimah-bint-qais-al-fihriyyah",
+      "basis": [
+        {
+          "span": "sp_fq_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_fq_name",
+      "subject": "m_fq",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_fq_name"
+        ]
+      },
+      "restsOn": [
+        "st_fq_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_fq_sex",
+      "subject": "m_fq",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_fq_name"
+        ]
+      },
+      "restsOn": [
+        "st_fq_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_fq_dahhak",
+      "subject": "m_fq_d",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_fq_dahhak"
+      },
+      "restsOn": [
+        "st_fq_dahhak"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_fq_abuamr",
+      "subject": "m_fq_a",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_fq_abuamr"
+      },
+      "restsOn": [
+        "st_fq_abuamr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_fq_usamah",
+      "subject": "m_fq_u",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_fq_usamah"
+      },
+      "restsOn": [
+        "st_fq_usamah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_fq_v_sukna",
+      "subject": "m_fq_sukna",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_fq_sukna"
+        ]
+      },
+      "restsOn": [
+        "st_fq_sukna"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_fq_v_jassasah",
+      "subject": "m_fq_jassasah",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_fq_jassasah"
+        ]
+      },
+      "restsOn": [
+        "st_fq_jassasah"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

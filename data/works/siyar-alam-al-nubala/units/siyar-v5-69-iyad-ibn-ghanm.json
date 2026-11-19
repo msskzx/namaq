@@ -1,0 +1,560 @@
+{
+  "unit": {
+    "id": "siyar-v5-69-iyad-ibn-ghanm",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٦٩"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ig_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "354",
+      "layer": "MAIN",
+      "exact": "٦٩ - عِيَاضُ بنُ غَنْمِ بنِ زُهَيْرِ بنِ أَبِي شَدَّادٍ أَبُو سَعْدٍ الفِهْرِيُّ"
+    },
+    {
+      "id": "sp_ig_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "354",
+      "layer": "MAIN",
+      "exact": "عِيَاضُ بنُ غَنْمِ بنِ زُهَيْرِ بنِ أَبِي شَدَّادٍ",
+      "prefix": "٦٩ -"
+    },
+    {
+      "id": "sp_ig_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "354",
+      "layer": "MAIN",
+      "exact": "أَبُو سَعْدٍ",
+      "prefix": "بنِ أَبِي شَدَّادٍ"
+    },
+    {
+      "id": "sp_ig_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "354",
+      "layer": "MAIN",
+      "exact": "غَنْمِ بنِ زُهَيْرِ",
+      "prefix": "٦٩ - عِيَاضُ بنُ"
+    },
+    {
+      "id": "sp_ig_ridwan",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "354",
+      "layer": "MAIN",
+      "exact": "مِمَّنْ بَايَعَ بَيْعَةَ الرِّضْوَانِ"
+    },
+    {
+      "id": "sp_ig_ridwan_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "354",
+      "layer": "MAIN",
+      "exact": "بَيْعَةَ الرِّضْوَانِ",
+      "prefix": "بَايَعَ"
+    },
+    {
+      "id": "sp_ig_saad_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "354",
+      "layer": "MAIN",
+      "exact": "قَالَ ابْنُ سَعْدٍ",
+      "suffix": ": شَهِدَ الحُدَيْبِيَةَ"
+    },
+    {
+      "id": "sp_ig_saad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "354",
+      "layer": "MAIN",
+      "exact": "شَهِدَ الحُدَيْبِيَةَ، وَكَانَ أَحَدَ الأُمَرَاءِ الخَمْسَةِ يَوْمَ اليَرْمُوْكِ"
+    },
+    {
+      "id": "sp_ig_hud_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "354",
+      "layer": "MAIN",
+      "exact": "شَهِدَ الحُدَيْبِيَةَ",
+      "prefix": "سَعْدٍ:"
+    },
+    {
+      "id": "sp_ig_yarmuk_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "354",
+      "layer": "MAIN",
+      "exact": "يَوْمَ اليَرْمُوْكِ",
+      "prefix": "أَحَدَ الأُمَرَاءِ الخَمْسَةِ"
+    },
+    {
+      "id": "sp_ig_jazirah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "354",
+      "layer": "MAIN",
+      "exact": "وَهُوَ الَّذِي افْتَتَحَ الجَزِيْرَةَ صُلْحاً"
+    },
+    {
+      "id": "sp_ig_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "354",
+      "layer": "MAIN",
+      "exact": "وَقِيْلَ: عَاشَ سِتِّيْنَ سَنَةً، وَمَاتَ فِي سَنَةِ عِشْرِيْنَ بِالشَّامِ"
+    },
+    {
+      "id": "sp_ig_death_a",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "354",
+      "layer": "MAIN",
+      "exact": "سِتِّيْنَ سَنَةً",
+      "prefix": "وَقِيْلَ: عَاشَ"
+    },
+    {
+      "id": "sp_ig_death_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "354",
+      "layer": "MAIN",
+      "exact": "سَنَةِ عِشْرِيْنَ",
+      "prefix": "وَمَاتَ فِي"
+    },
+    {
+      "id": "sp_ig_death_p",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "354",
+      "layer": "MAIN",
+      "exact": "بِالشَّامِ",
+      "prefix": "سَنَةِ عِشْرِيْنَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ig0",
+      "unit": "siyar-v5-69-iyad-ibn-ghanm",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ig_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ig_saad",
+      "unit": "siyar-v5-69-iyad-ibn-ghanm",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ig_saad_frame"
+      ],
+      "origin": {
+        "mention": "m_ig_saad_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ig_death",
+      "unit": "siyar-v5-69-iyad-ibn-ghanm",
+      "ordinal": 3,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_ig_death_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ig_name",
+      "report": "r_ig0",
+      "spans": [
+        "sp_ig_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ig_ridwan",
+      "report": "r_ig0",
+      "spans": [
+        "sp_ig_ridwan"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ig_saad",
+      "report": "r_ig_saad",
+      "spans": [
+        "sp_ig_saad"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ig_jazirah",
+      "report": "r_ig0",
+      "spans": [
+        "sp_ig_jazirah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ig_death",
+      "report": "r_ig_death",
+      "spans": [
+        "sp_ig_death"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ig",
+      "parent": "sp_ig_name",
+      "exact": "عِيَاضُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ig_father",
+      "parent": "sp_ig_name",
+      "exact": "غَنْمِ بنِ زُهَيْرِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ig_r",
+      "parent": "sp_ig_ridwan",
+      "exact": "بَايَعَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ig_ridwan",
+      "parent": "sp_ig_ridwan",
+      "exact": "بَيْعَةَ الرِّضْوَانِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ig_saad_by",
+      "parent": "sp_ig_saad_frame",
+      "exact": "ابْنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ig_s",
+      "parent": "sp_ig_saad",
+      "exact": "شَهِدَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ig_hud",
+      "parent": "sp_ig_saad",
+      "exact": "الحُدَيْبِيَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ig_yarmuk",
+      "parent": "sp_ig_saad",
+      "exact": "اليَرْمُوْكِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ig_j",
+      "parent": "sp_ig_jazirah",
+      "exact": "وَهُوَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ig_death_by",
+      "parent": "sp_ig_death",
+      "exact": "قِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ig_d",
+      "parent": "sp_ig_death",
+      "exact": "عَاشَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ig",
+      "mention": "m_ig",
+      "agent": "iyad-ibn-ghanm",
+      "basis": [
+        {
+          "span": "sp_ig_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ig_father",
+      "mention": "m_ig_father",
+      "agent": "ghanm-ibn-zuhayr-al-fihri",
+      "basis": [
+        {
+          "span": "sp_ig_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ig_r",
+      "mention": "m_ig_r",
+      "agent": "iyad-ibn-ghanm",
+      "basis": [
+        {
+          "span": "sp_ig_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ig_ridwan",
+      "mention": "m_ig_ridwan",
+      "event": "hudaybiyyah",
+      "basis": [
+        {
+          "span": "sp_ig_ridwan_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ig_s",
+      "mention": "m_ig_s",
+      "agent": "iyad-ibn-ghanm",
+      "basis": [
+        {
+          "span": "sp_ig_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ig_hud",
+      "mention": "m_ig_hud",
+      "event": "hudaybiyyah",
+      "basis": [
+        {
+          "span": "sp_ig_hud_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ig_yarmuk",
+      "mention": "m_ig_yarmuk",
+      "event": "yarmuk",
+      "basis": [
+        {
+          "span": "sp_ig_yarmuk_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ig_j",
+      "mention": "m_ig_j",
+      "agent": "iyad-ibn-ghanm",
+      "basis": [
+        {
+          "span": "sp_ig_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ig_d",
+      "mention": "m_ig_d",
+      "agent": "iyad-ibn-ghanm",
+      "basis": [
+        {
+          "span": "sp_ig_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ig_name",
+      "subject": "m_ig",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ig_name"
+        ]
+      },
+      "restsOn": [
+        "st_ig_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ig_sex",
+      "subject": "m_ig",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ig_name"
+        ]
+      },
+      "restsOn": [
+        "st_ig_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ig_father",
+      "subject": "m_ig",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ig_father"
+      },
+      "restsOn": [
+        "st_ig_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ig_kunya",
+      "subject": "m_ig",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_ig_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_ig_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ig_ridwan",
+      "subject": "m_ig_r",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_ig_ridwan"
+      },
+      "restsOn": [
+        "st_ig_ridwan"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ig_hud",
+      "subject": "m_ig_s",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_ig_hud"
+      },
+      "restsOn": [
+        "st_ig_saad"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ig_yarmuk",
+      "subject": "m_ig_s",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_ig_yarmuk"
+      },
+      "restsOn": [
+        "st_ig_saad"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ig_v_jazirah",
+      "subject": "m_ig_j",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ig_jazirah"
+        ]
+      },
+      "restsOn": [
+        "st_ig_jazirah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ig_age",
+      "subject": "m_ig_d",
+      "predicate": "died.age",
+      "value": {
+        "parsed": 60,
+        "spans": [
+          "sp_ig_death_a"
+        ]
+      },
+      "restsOn": [
+        "st_ig_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ig_died",
+      "subject": "m_ig_d",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 20,
+        "spans": [
+          "sp_ig_death_y"
+        ]
+      },
+      "restsOn": [
+        "st_ig_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ig_place",
+      "subject": "m_ig_d",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "sp_ig_death_p"
+        ]
+      },
+      "restsOn": [
+        "st_ig_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
