@@ -18,6 +18,7 @@ export interface PageRef {
  */
 export const OTHER_WORKS: Record<string, { book: string; author: string; source: string }> = {
   'zad-al-maad': { book: 'زاد المعاد', author: 'ابن القيم', source: 'zad-al-maad' },
+  'sunan-al-tirmidhi': { book: 'سنن الترمذي', author: 'الترمذي', source: 'sunan-tirmidhi' },
 };
 
 /** The books a list of pages comes from, the Siyar as «siyar», each once, in the order met. */
@@ -115,7 +116,8 @@ export function sayer(fact: PersonFact) {
  */
 export function sayerLine(fact: PersonFact) {
   if (fact.by.length === 1 && fact.by[0] === PROPHET_NAME) return 'من قوله ﷺ';
-  return `قاله ${fact.by.map(name => (name === PROPHET_NAME ? 'النبي ﷺ' : name)).join('، ')}`;
+  // A sayer is stored as the book's sentence has him («عن أبي هريرة»); after «قاله» he is the subject: «قاله أبو هريرة».
+  return `قاله ${fact.by.map(name => (name === PROPHET_NAME ? 'النبي ﷺ' : name.replace(/^(?:أبي|أبا)(?= )/u, 'أبو'))).join('، ')}`;
 }
 const PROPHET_NAME = 'محمد ﷺ';
 

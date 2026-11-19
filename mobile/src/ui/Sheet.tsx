@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { OutsideCard } from '@/ui/Card';
 import { Modal, Pressable, View, useWindowDimensions } from 'react-native';
 import { useKeyboardHeight } from '@/lib/keyboard';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -74,7 +75,7 @@ export default function Sheet({ open, onClose, palette, tall, full, title, onDis
         {!full && <View pointerEvents="none" style={{ flex: 1 }} />}
         <Animated.View style={[{ direction: 'rtl', ...size, backgroundColor: palette.paper, ...edge, paddingBottom: (keyboard ? 0 : insets.bottom) + 8 }, moved]}>
           {handle}
-          {children}
+          <OutsideCard>{children}</OutsideCard>
         </Animated.View>
       </GestureHandlerRootView>
     </Modal>

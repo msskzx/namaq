@@ -1,0 +1,20 @@
+{
+  "editions": [
+    {
+      "slug": "tirmidhi-halabi-1395-shakir",
+      "work": "sunan-al-tirmidhi",
+      "publisher": "mustafa-al-babi-al-halabi",
+      "editors": ["ahmad-shakir", "muhammad-fuad-abd-al-baqi", "ibrahim-atwah-awad"],
+      "printing": "second-1395-1975"
+    }
+  ],
+  "witnesses": [
+    {
+      "slug": "sunan-al-tirmidhi-shakir",
+      "edition": "tirmidhi-halabi-1395-shakir",
+      "vowelled": true,
+      "hasFootnotes": false,
+      "checkedAgainstPrint": false
+    }
+  ]
+}

@@ -15,7 +15,15 @@ import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { toTab } from '@/lib/ways';
 import { SAHIH, fortyOf, isSahihSlug, rememberOpened, useSahihText } from '@/lib/sahih';
 import { SahihDownload, SahihHadithView } from '@/components/Sahih';
-import { openKitab } from './hadith';
+import HadithBooks from '@/components/HadithBooks';
+import { recordedIn, type BookBox } from '@shared/hadith';
+import { openKitab, openSahih } from './hadith';
+
+/** A box of «من أخرجه» opens that hadith's page when it is in the Sahihayn. */
+const openBox = (box: BookBox) => {
+  const [book, n] = box.key.split(':');
+  if (isSahihSlug(book) && n) openSahih(book, Number(n));
+};
 
 /** One hadith's page: where it sits (kitab › bab, a tap opens the kitab), its words and chain, and the ones of the Forty that hold it. */
 function SahihPage({ book, hadith, width, palette }: { book: SahihIndex; hadith: SahihHadith; width: number; palette: Palette }) {
@@ -32,6 +40,8 @@ function SahihPage({ book, hadith, width, palette }: { book: SahihIndex; hadith:
       <Card palette={palette}><SahihHadithView book={book} hadith={hadith} palette={palette} /></Card>
       {forty.length > 0 && (
         <View style={{ gap: 8 }}>
+          <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 17, fontWeight: '700', textAlign: 'right' }}>من أخرجه</Text>
+          {forty.map(entry => <HadithBooks key={entry.n} top={`${book.title} ${num(hadith.n)}`} boxes={recordedIn(entry)} palette={palette} onOpen={box => openBox(box)} />)}
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>من الأربعين النووية</Text>
           <Row>{forty.map(entry => <Button key={entry.n} Icon={MessagesSquare} label={entry.heading} onPress={() => router.push({ pathname: '/hadith-forty', params: { n: String(entry.n) } })} />)}</Row>
         </View>

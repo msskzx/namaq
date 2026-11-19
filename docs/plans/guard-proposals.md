@@ -3,12 +3,41 @@
 Rules from [ship-checklist.md](../ship-checklist.md) that a test could check.
 Owner rule: a guard needs a second agent's vote, then the owner's sign-off,
 before anyone builds it. Reviewer A wrote each proposal; reviewer B, a separate
-agent that read the code, voted on it. Nothing here is built yet. Each one
-names its single entry point and asserts a rule over every item, never a
-hard-coded count.
+agent that read the code, voted on it. The owner signed them off on
+2026-11-19. Each one names its single entry point and asserts a rule over
+every item, never a hard-coded count.
 
 Votes: 9 yes, 2 no, 17 change (B's change is folded into the proposal below).
 Rules a test already enforces are listed at the end.
+
+## Status
+
+| No. | Where |
+| --- | --- |
+| 1 | Quran pipeline thread (`oneQuranText.test.ts`) |
+| 2 | `shared/quiz/quranWords.test.ts` |
+| 5 | `shared/quiz/integrity.test.ts`, plus counts replaced in nine other tests |
+| 6, 8, 10 | `shared/quiz/giveaway.test.ts` (#1000) |
+| 7 | `shared/party/reveal.test.ts`. Known break kept on its list: tree questions send their tree, ayat and answers before the reveal, and compare questions their blanks' words |
+| 9 | kunya thread (`kunyaNotFirst`) |
+| 11 | `shared/quiz/branchAnswers.test.ts` (#1000) |
+| 12 | `e2e/app/party.spec.ts` |
+| 13 | `shared/quran/oneRecite.test.ts` (#1002) |
+| 3 | `shared/oneText.test.ts` |
+| 15 | `shared/tapSize.test.ts`: the website floor and the app floor read one value; the "is 44" line is gone |
+| 16 | `shared/topBarSearch.test.ts` |
+| 17 | `shared/colourLiterals.test.ts`, with a shrink-only list of the colours still outside the themes |
+| 21 | `shared/firstFrame.test.ts`. Follows value imports only: `import type` lines are erased at build, and the type graph reaches the data through harmless card shapes. It found six tab pages that ignored a tap on their open button (battle, battles, story, stories, life, term); fixed |
+| 14 | `shared/bookmarkKind.test.ts` over `cardMenuSaveId`, which the app's «…» menu now uses. The website has no «…» menu on its feed cards yet (a parity gap, not built here) |
+| 18 | `e2e/app` `reciteBarsHidden`, run after recite starts from the top bar, the long-press menu and the home review |
+| 19 | Not a test: the blank tree was seen on a phone only, so it is on the real-phone checklist |
+| 20 | `e2e/app/fixtures.ts` `noNestedButtons`: the page each app UI test ends on has no button inside a button |
+| 4 | `shared/quran/closingSign.test.ts`: both tree drawers (and the website's neighbour boxes) take the sign from `closingSign`; every built tree is walked through it |
+| 23 | `shared/quran/oneWordMatch.test.ts`: no file outside `shared/quran` strips marks or letters itself, except a listed few (names, hadith and book text, plus four Quran ones marked "should move": the website's mutashabih engine, quiz checks, hints, tajwid). Not built: "every matrix link is a phrase of two or more words with a rare-root word". Today a matrix link is one word lined up across the rows (`sharedByAll`), so this would change what the matrix lights; it waits for the owner |
+| 24 | `shared/sourceFiles.test.ts`: sources name their files (`files` in `shared/sources.ts`); 25 older files wait on a shrink-only list; no non-commercial licence |
+| 25 | `shared/quran/droppedCards.test.ts`: only `compareCards.ts` reads the stored compare cards. Known: the review page (on purpose) and the app's tree-to-compare links, which keep their own copy of the rule. Trees and compare cards are judged by different verdicts, so the two filters stay two |
+| 26 | `shared/quran/storyCards.test.ts`: an ayah on a part of a story sits on no other card of its page. 50 places break it today, kept on a shrink-only list |
+| 22 | `shared/pages.ts` + `shared/pages.test.ts`: every app route and website page in one list; a page on one side only says why (review tool, browser-impossible) or waits on a shrink-only list (today: recite start, events, titles, sources have no app page). The website menu has the app bar's five sections in order |
 
 ## Bugs the review found in today's code
 

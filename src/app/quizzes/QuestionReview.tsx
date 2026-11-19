@@ -11,8 +11,11 @@ import { emptyBranchAnswers, type QuestionAnswer, type ScoredQuestion } from "@s
 import { num } from "@shared/quran/arabicNumber";
 import { BranchFeedback } from "./BranchAnswers";
 import { CompareFeedback } from "./CompareAnswers";
-import { mushafText } from '@shared/quran/mushafText';
+import { canLook, LookView } from "@/components/quiz/QuizLook";
+import type { QuizLook } from "@shared/quiz/choiceKinds";
+import AyahFlow, { AyahWords } from "@/components/quran/text/AyahFlow";
 import { ChoiceAfter, ChoiceLabel, ChoiceQuran, type ChoiceParts } from "./ChoiceParts";
+import { PICKS, picksOf, ticks } from "@shared/quiz/choiceKinds";
 
 type ReviewQuestion = ScoredQuestion & ChoiceParts & {
   key: string;
@@ -21,6 +24,7 @@ type ReviewQuestion = ScoredQuestion & ChoiceParts & {
   choiceDetails?: Record<string, { text: string; reference: string }>;
   ayah?: { text: string; reference: string } | null;
   evidence?: { reference: QuizReference | null };
+  look?: QuizLook;
 };
 
 export type ReviewEntry = { question: ReviewQuestion; answer: QuestionAnswer | null; result: { earned: number; total: number }; hints?: Hints };
@@ -31,10 +35,12 @@ export default function QuestionReview({ entries, names, ar }: { entries: Review
   const entry = entries[index];
   if (!entry) return null;
   const { question, answer, result } = entry;
-  const choiceText = (value: string) => {
+  // Several right choices: the ticks joined (PICKS), each named, «، » between.
+  const choiceText = (value: string): React.ReactNode => value.includes(PICKS) ? picksOf(value).map(one => question.choices.find(item => item.value === one)?.labelArabic ?? one).join("، ") : oneChoice(value);
+  const oneChoice = (value: string) => {
     const choice = question.choices.find(item => item.value === value);
     const detail = question.choiceDetails?.[value];
-    return detail ? <span><span className="font-quran">{mushafText(detail.text)}</span><span className="block text-sm text-[var(--home-muted)]">{detail.reference}</span></span>
+    return detail ? <span className="w-full"><AyahFlow><AyahWords>{detail.text}</AyahWords></AyahFlow><span className="block text-sm text-[var(--home-muted)]">{detail.reference}</span></span>
       : choice && <ChoiceLabel question={question} value={value} label={choice.labelArabic} answered />;
   };
   const correct = result.earned === result.total;
@@ -55,13 +61,16 @@ export default function QuestionReview({ entries, names, ar }: { entries: Review
       ? (ar ? `${num(result.earned)} من ${num(result.total)} أطراف` : `${result.earned} of ${result.total} leaves`)
       : question.write
       ? (ar ? `${num(result.earned)} من ${num(result.total)} كلمات` : `${result.earned} of ${result.total} words`)
+      : ticks(question) && !correct
+      ? (ar ? `${num(result.earned)} من ${num(result.total)} صحيحة` : `${result.earned} of ${result.total} right`)
       : (ar ? (correct ? "صحيح" : "خطأ") : correct ? "Correct" : "Incorrect")}</p>
-    {question.ayah && <blockquote dir="rtl" lang="ar"><p className="font-quran text-xl leading-loose">{mushafText(question.ayah.text)}</p><p className="text-sm text-[var(--home-muted)]">{question.ayah.reference}</p></blockquote>}
+    {question.ayah && <blockquote dir="rtl" lang="ar"><AyahFlow><AyahWords>{question.ayah.text}</AyahWords></AyahFlow><p className="text-sm text-[var(--home-muted)]">{question.ayah.reference}</p></blockquote>}
     <ChoiceQuran question={question} given={typeof answer === "string" ? answer : undefined} revealed ar={ar} written={Array.isArray(answer) ? answer : null} />
     {question.compare ? <CompareFeedback key={question.key} question={question} typed={Array.isArray(answer) ? answer : []} ar={ar} hints={entries[index].hints} /> : question.tree ? <BranchFeedback key={question.key} question={question} typed={Array.isArray(answer) ? answer : emptyBranchAnswers(question)} names={names} ar={ar} hints={entries[index].hints} /> : question.write ? null : <>
       <div>{typeof answer === "string" && answer ? choiceText(answer) : ar ? "بدون إجابة" : "No answer"}</div>
       {!correct && <div>{ar ? "الصحيح: " : "Correct: "}{choiceText(question.correctAnswer ?? "")}</div>}
       <ChoiceAfter question={question} given={typeof answer === "string" && answer ? answer : undefined} ar={ar} surahName={value => question.choices.find(item => item.value === value)?.labelArabic} />
+      {canLook(question.look) && <LookView look={question.look} shown />}
     </>}
     {question.evidence?.reference && <Button className="self-start" size="sm" onClick={() => setSource(true)}><BookOpen size={16} aria-hidden />{ar ? "المصدر" : "Source"}</Button>}
     <nav className="flex justify-between gap-2" aria-label={ar ? "التنقل في المراجعة" : "Review navigation"}>

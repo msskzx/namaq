@@ -1,22 +1,20 @@
 import { num } from '@shared/quran/arabicNumber';
-import { mushafText } from '@shared/quran/mushafText';
 import type { Place } from '@shared/quran/prophets/story';
+import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
 
-/** A place's ayat in the Quran font, words another surah also has (`shared`, from sharedWords) in colour. */
-export default function PlaceText({ place, shared, className = 'text-2xl leading-[2.1]' }: { place: Place; shared: boolean[][][]; className?: string }) {
+/** A place's ayat as the page sets them (AyahFlow), words another surah also has (`shared`, from sharedWords) in colour. */
+export default function PlaceText({ place, shared }: { place: Place; shared: boolean[][][] }) {
   return (
     <>
       {place.segments.map((g, gi) => (
-        <p key={g.range[0]} className={`font-quran text-justify ${className}`}>
+        <AyahFlow key={g.range[0]}>
           {g.lines.map((line, li) => (
             <span key={line.ayah}>
-              {line.words.map((word, w) => (
-                <span key={w} style={shared[gi][li][w] ? { color: 'var(--home-accent)' } : undefined}>{`${mushafText(word)} `}</span>
-              ))}
-              <span className="text-[0.75em] text-[var(--home-muted)]">{`${num(line.ayah)} `}</span>
+              {line.words.map((word, w) => <AyahWords key={w} className={shared[gi][li][w] ? 'text-[var(--home-accent)]' : undefined}>{`${word} `}</AyahWords>)}
+              <AyahWords className="text-[var(--home-muted)]">{`${num(line.ayah)} `}</AyahWords>
             </span>
           ))}
-        </p>
+        </AyahFlow>
       ))}
     </>
   );

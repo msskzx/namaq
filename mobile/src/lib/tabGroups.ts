@@ -20,7 +20,7 @@ export function openPage(segments: readonly string[]): { tab: string; page: stri
 
 /**
  * What a tap on the open button does: from the search or the utilities it goes back home, from a book back to the
- * shelf, from a hadith back to the list, and from a person or a nasab tree back to the tarajim list (a way back, not a re-tap);
+ * shelf, from a hadith back to the list, and from a person, a nasab tree or the full list back to the tarajim hub (a way back, not a re-tap);
  * any other page goes to its top, then resets (lib/tabRetap.ts).
  */
-export const tapOnOpen = (page: string): 'back' | 'retap' => (page === 'search' || page === 'utilities' || page === 'book' || page === 'hadith-unit' || page === 'hadith-forty' || page.startsWith('hadith-') || page === 'person' || page === 'nasab' || page === 'ties' || page === 'between' ? 'back' : 'retap');
+export const tapOnOpen = (page: string): 'back' | 'retap' => (page === 'search' || page === 'utilities' || page === 'book' || page === 'hadith-unit' || page === 'hadith-forty' || page.startsWith('hadith-') || page === 'person' || page === 'nasab' || page === 'ties' || page === 'between' || page === 'people' ? 'back' : 'retap');

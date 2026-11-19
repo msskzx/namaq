@@ -9,7 +9,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import type { AppForty, AppIsnad, FortyGrade, FortyRecord } from '../../shared/hadith';
+import { COLLECTOR, type AppForty, type AppIsnad, type FortyGrade, type FortyRecord } from '../../shared/hadith';
 import { layoutIsnad } from '../../src/lib/model/isnadGraph';
 import { spellSigns } from '../quran/signs';
 
@@ -330,11 +330,6 @@ function chainIsnad(collector: string, chain: { name: string; mode: string }[]):
  * The phone's copy (shared/data/hadith/forty.json): the same texts, with each linked chain drawn. A record that holds only
  * part of al-Nawawi's wording, or an entry he takes only partly from the Sahihayn, keeps its text and gets no drawing.
  */
-const COLLECTORS: Record<RecordBook, string> = {
-  bukhari: 'البخاري', muslim: 'مسلم', tirmidhi: 'الترمذي', nasai: 'النسائي', abudawud: 'أبو داود', ibnmajah: 'ابن ماجه', daraqutni: 'الدارقطني',
-  bayhaqi: 'البيهقي', ahmad: 'أحمد', darimi: 'الدارمي', muwatta: 'مالك', abd: 'عبد بن حميد',
-};
-
 export function appForty(built: Built): AppForty {
   const { books } = built;
   return {
@@ -347,7 +342,7 @@ export function appForty(built: Built): AppForty {
         records: entry.records.map((record): FortyRecord => {
           const { chain, ...rest } = record as typeof record & { chain?: { name: string; mode: string }[] };
           const drawn = chain && !entry.partial && !rest.partial;
-          return { ...(rest as FortyRecord), ...(drawn ? { isnad: chainIsnad(COLLECTORS[record.book], chain) } : {}) };
+          return { ...(rest as FortyRecord), ...(drawn ? { isnad: chainIsnad(COLLECTOR[record.book], chain) } : {}) };
         }),
       };
     }),

@@ -3603,9 +3603,9 @@
       },
       "fingerprint": "5719d739ed701714954e49b9947cb11a315899f7ef44583dc3515d336bacf90a",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -3647,9 +3647,9 @@
       },
       "fingerprint": "685786b39695f8a7468b2309f752371d5192ad67bfa93b74eac93b401d80577f",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -3691,9 +3691,9 @@
       },
       "fingerprint": "86bbfc7c329eb0fc91e1109bb55095c14180900bb7289208a25c90a61d134248",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -3779,9 +3779,9 @@
       },
       "fingerprint": "e9374bf3dcaee2e3955ff392d7ee1c09296c6d9db0544d4005f1b6aa071236ba",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -4043,10 +4043,10 @@
       },
       "fingerprint": "77a9ac560eded72c683efc8712e3812fede3ea824872cd444f6611668d343200",
       "promptArabicOverride": "ما كنية عامر بن عبد الله؟",
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-10-03T11:03:28.418Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "KUNYA:PERSON:al-baraa-ibn-marur:kunya:أبو بشر",
@@ -4087,9 +4087,9 @@
       },
       "fingerprint": "76e04e77e62053d06878b507e17a738d1f847ea9c57251e31c6d9ba2b84a4c0e",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -4131,9 +4131,9 @@
       },
       "fingerprint": "706d9f35c2ec45a7908cd755a9faad26f0d3c55192b42936c10177392f5ebf91",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -4175,9 +4175,9 @@
       },
       "fingerprint": "5bb5954cfe011afa37e8db0ca1d9512f640a0051ff5fd1b1a3938b996d3a2c8e",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -4219,9 +4219,9 @@
       },
       "fingerprint": "89df39586341fdebaff23deb273185028d4eec9b2770cc1472e7c285b0dadbe8",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -4263,9 +4263,9 @@
       },
       "fingerprint": "51122254b3666a5d50e57887df8b701e6fb7286fb35048320df5157a0d262b89",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -4307,9 +4307,9 @@
       },
       "fingerprint": "75791e8f07779434319249d866c16e92059882b8b9588fd7b1209f98edf340cb",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -4351,9 +4351,9 @@
       },
       "fingerprint": "d625d03883a81d89f74783b8030b5940d95b0d51a3232b17ceeb581caadd069a",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -4395,9 +4395,9 @@
       },
       "fingerprint": "fa40a5dd5a940ca45a6a1acbf435c6b7a428d84b3e6c641200b1aa4f1bab35c9",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -4439,9 +4439,9 @@
       },
       "fingerprint": "89b62ee96c7e6790dc5c2c37521d64fda2a997886c7cda4242fecc06ce4bb98d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -4483,9 +4483,9 @@
       },
       "fingerprint": "93503f0d1b6cb5047c1ffa1e43e948f01234f5ba0eec34843984bc37eee44ccb",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -4527,9 +4527,9 @@
       },
       "fingerprint": "7c17595d176afa62055ece343a511da7d198c3a72c2baf9948509e54e4aa92fb",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -4571,9 +4571,9 @@
       },
       "fingerprint": "81c85b84b7154ea2e75a38d676261c1f171f1472779862ee8937f89a09ca69b9",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -4615,9 +4615,9 @@
       },
       "fingerprint": "181de92524c844567791c441bee892afdcce1dc13df68fccf43c45ee4fbac26e",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -4659,9 +4659,9 @@
       },
       "fingerprint": "87cde3bd3ba47cd972ea0e099d004ffdb579ee8b57130e7ef56e1660e9618f47",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -4747,9 +4747,9 @@
       },
       "fingerprint": "c9122f80cc504607573c5afe0c614270466227702996136e1b93959d572eb3f4",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -4791,9 +4791,9 @@
       },
       "fingerprint": "79a5cbbb3a9bcd2eccd5f0b81ee8ddc3580854ad4ae1ecffdf7c529bb860488f",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «ما كنيته؟» من بيانات السير: كانت بعض الخيارات تحمل كنيتين أو ثلاثًا فتبرز، وبعضها مشكول وبعضها لا.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -4968,10 +4968,10 @@
       },
       "fingerprint": "ec6805afd0e5d554a7a2171ea6d7a4de28fbb47a7054675e529a532b4e060953",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "PERSON_TITLE:PERSON:abdur-rahman-ibn-awf:titles:the-ten-promised-paradise",
@@ -5012,10 +5012,10 @@
       },
       "fingerprint": "a6247c9b296bb0d3a6c26748d34043f95047bcb8ac4f3a173a7bca379b6944fa",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "PERSON_TITLE:PERSON:abu-bakr-as-siddiq:titles:al-qarinayn",
@@ -5056,10 +5056,10 @@
       },
       "fingerprint": "16d02c98de352919167fffd171419fa594c98a26e8e9bfc52433d064e6c3c1ef",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "PERSON_TITLE:PERSON:abu-bakr-as-siddiq:titles:al-sabiqoon",
@@ -5144,10 +5144,10 @@
       },
       "fingerprint": "cafc3034afd7144da8661d9fc54ef1999048c7062d7841ad49d780bd668ecc8d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "PERSON_TITLE:PERSON:abu-dujanah-al-ansari:titles:companion",
@@ -5364,10 +5364,10 @@
       },
       "fingerprint": "dde9bffd9e00f0c27469afb24094eca5249a1128910c64fdeb237f890c51a0cb",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "PERSON_TITLE:PERSON:abu-ubaydah-ibn-al-jarrah:titles:companion",
@@ -5452,10 +5452,10 @@
       },
       "fingerprint": "c86fe5e69bf4afa18dc2077adfdda4811b1c512bb00ffe0ec52095899d3d8c86",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "PERSON_TITLE:PERSON:al-ala-ibn-al-hadrami:titles:companion",
@@ -5716,10 +5716,10 @@
       },
       "fingerprint": "0c5f80bd8ab8fcb9703857e14e84ad1f86e818b0338be459c3cf0d46d4576c4b",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-10-03T10:57:28.601Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "PERSON_TITLE:PERSON:az-zubayr-ibn-al-awwam:titles:al-sabiqoon",
@@ -5850,10 +5850,10 @@
       },
       "fingerprint": "c6e7c4db5e697d3766672e6165c347953c9ea714193307925ba6a95358961375",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "PERSON_TITLE:PERSON:az-zubayr-ibn-al-awwam:titles:the-six-of-the-shura",
@@ -5894,10 +5894,10 @@
       },
       "fingerprint": "8bb83199e0f05961d233c8d91eb7359f7db9cb00f588534ef39ca08096d7ad3c",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "PERSON_TITLE:PERSON:az-zubayr-ibn-al-awwam:titles:the-ten-promised-paradise",
@@ -5938,10 +5938,10 @@
       },
       "fingerprint": "6d14cc3d8d7900f3d9f6d2065ae21bb04a3cc3e10bc37f6ac683eacc7b640b69",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "PERSON_TITLE:PERSON:bishr-ibn-al-baraa:titles:companion",
@@ -6026,10 +6026,10 @@
       },
       "fingerprint": "9bd574f7a3444c2d36036642ce27d4114f9ade9eb0d41e522e85609c80e8f2fa",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "PERSON_TITLE:PERSON:hamzah-ibn-abd-al-muttalib:titles:sayyid-al-shuhada",
@@ -6070,10 +6070,10 @@
       },
       "fingerprint": "17520617347d687fd67436274604a624953f8b26dc1fa9cf3db77bad75ace136",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "PERSON_TITLE:PERSON:khalid-ibn-said:titles:companion",
@@ -6290,9 +6290,9 @@
       },
       "fingerprint": "4f94319431fc9fdc67244e58d9506a1c33b22f13a9c7ea929dd87529b4800255",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -6995,10 +6995,10 @@
       },
       "fingerprint": "d76001401373035776c5f4c9c1b67945ee9a7607cc9f5cf966d09a664dba4533",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "PERSON_TITLE:PERSON:saad-ibn-abi-waqqas:titles:companion",
@@ -7083,10 +7083,10 @@
       },
       "fingerprint": "4d5f7603fa2a212c016897090411584de96b41da1a7b87c320800fba11fb747d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "PERSON_TITLE:PERSON:saad-ibn-abi-waqqas:titles:the-ten-promised-paradise",
@@ -7127,10 +7127,10 @@
       },
       "fingerprint": "8ee01a960c68e75a0654121b767e62ca3d2c2a66ffca9e882413f34cb90d420d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "PERSON_TITLE:PERSON:saad-ibn-khaythamah:titles:companion",
@@ -7303,9 +7303,9 @@
       },
       "fingerprint": "abd34d2a1fd448b3dfeb206eb33958fe11ac1f0fd9e7f4bf8b6ba998ff087ff6",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -7347,10 +7347,10 @@
       },
       "fingerprint": "1e966409ad87db705b4d42dd23d3736d2370e67025a931e0d30659312241b7fd",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "PERSON_TITLE:PERSON:talhah-ibn-ubaydullah:titles:al-sabiqoon",
@@ -7480,10 +7480,10 @@
       },
       "fingerprint": "4d356c9c6693ce18b8ebe02bf94468ededc0d9ac632e35283a8ab804db623f42",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.081Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "PERSON_TITLE:PERSON:ubaydah-ibn-al-harith:titles:companion",
@@ -7568,10 +7568,10 @@
       },
       "fingerprint": "3359016b20f4d1897681c298032db0fa875c05c3fe359c26762769d8ed3b0a2d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-10-03T10:57:29.134Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "PERSON_TITLE:PERSON:uthman-ibn-affan:titles:al-sabiqoon",
@@ -7656,10 +7656,10 @@
       },
       "fingerprint": "c9ef3f5e263209e03166743a8c8bafbcf23f5323da895bb5d3316479afc8c7ce",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-10-03T10:57:29.851Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "PERSON_TITLE:PERSON:zaynab-bint-khuzaymah:titles:umm-al-masakeen",
@@ -7700,10 +7700,10 @@
       },
       "fingerprint": "253d1aa050f3661dd95a175c31fb4e3910fe7b6289c5fb7d7890edbcbd27c5a0",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-10-03T10:57:30.521Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير: كان يعرض أسماء النبي ﷺ خيارات خاطئة، وخيارات من الجنس الآخر، وألقابًا بغير لفظ الكتاب.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "RELATION:PERSON:aban-ibn-said:HALF_BROTHER:amr-ibn-said-al-umawi",
@@ -15079,10 +15079,10 @@
       },
       "fingerprint": "e604d90d0fae14e5309ed4c2c3f38bd9c74b2c8bb23e9a8b4de5496455d3e4b0",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "TITLE_HOLDER:TITLE:al-qarinayn:titles:talhah-ibn-ubaydullah",
@@ -15123,10 +15123,10 @@
       },
       "fingerprint": "0bb90938a79110ea1b6a927baf6944d1797b7f5492d900b67d8ef5736541eea6",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-10-03T11:03:24.357Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "TITLE_HOLDER:TITLE:al-sabiqoon:titles:abdur-rahman-ibn-awf",
@@ -15699,10 +15699,10 @@
       },
       "fingerprint": "c016b115990baf0b928291df54c80bdca9f818af0ff127b819628dd20ce5e48a",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "TITLE_HOLDER:TITLE:asadu-allah:titles:hamzah-ibn-abd-al-muttalib",
@@ -15743,10 +15743,10 @@
       },
       "fingerprint": "80f037faba43c15a3bbe3340b14b8cc71457086b04af482505ada0b204fdc2f3",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "TITLE_HOLDER:TITLE:awwal-rami:titles:saad-ibn-abi-waqqas",
@@ -15787,10 +15787,10 @@
       },
       "fingerprint": "0083b65965a34777df96a71e3820b6c32eec6ff74c8940da70ebcefbbdccfd6f",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "TITLE_HOLDER:TITLE:companion:titles:aban-ibn-said",
@@ -16799,10 +16799,10 @@
       },
       "fingerprint": "582183074fcf64656b9dd2dcc47999d95865a45f059123c1e463ef1aedb45dd7",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-10-03T11:01:37.980Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "TITLE_HOLDER:TITLE:hawari-al-ummah:titles:az-zubayr-ibn-al-awwam",
@@ -16844,10 +16844,10 @@
       },
       "fingerprint": "b24f24da56ffeb9e0bd470354bd25ca7b4cc4885005fe55e5d513e1ecbd4cc7b",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-10-03T11:03:24.935Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "TITLE_HOLDER:TITLE:killer-of-abu-jahl:titles:muadh-ibn-amr-ibn-al-jumuh",
@@ -16888,9 +16888,9 @@
       },
       "fingerprint": "e12d55add4c37e23fa1aaae59773dd409fec13bc2cc5cbeeee8a4a1929c550e7",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -16976,10 +16976,10 @@
       },
       "fingerprint": "de16a428f72aee817fb7378f12529ca2f8dd5b35857be7dc9e2d370af1d4927e",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-10-03T11:01:38.565Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "TITLE_HOLDER:TITLE:mother-of-believers:titles:zaynab-bint-khuzaymah",
@@ -17020,10 +17020,10 @@
       },
       "fingerprint": "0679ff0c65fc9a00c9356ae5d05406262b3b53ab3948e84a439881f8350e40e8",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-10-03T11:01:39.239Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "TITLE_HOLDER:TITLE:prophet-of-mercy:titles:prophet-muhammad",
@@ -17196,10 +17196,10 @@
       },
       "fingerprint": "d8ca26902aa6d21b4953a0268f8c4417642d8b954a6ccad5ac3c56e972e20d74",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "TITLE_HOLDER:TITLE:seal-of-the-prophets:titles:prophet-muhammad",
@@ -17284,10 +17284,10 @@
       },
       "fingerprint": "4ff12c11cf1b754cbc2ed7843f4ef9955e58096b2f422cb981e4e00bc6de250a",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-10-03T11:03:25.514Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "TITLE_HOLDER:TITLE:the-chosen-one:titles:prophet-muhammad",
@@ -17460,10 +17460,10 @@
       },
       "fingerprint": "7372330f64d5aadb999366d9621ccf22724bd93caaf097ba213134ac5c8aff6e",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "TITLE_HOLDER:TITLE:the-six-of-the-shura:titles:az-zubayr-ibn-al-awwam",
@@ -17504,10 +17504,10 @@
       },
       "fingerprint": "91444c8240c5c72c9d9dc256a935c98e19d294cf24c689e6c8db95d035706b13",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-10-03T11:03:26.104Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "TITLE_HOLDER:TITLE:the-six-of-the-shura:titles:saad-ibn-abi-waqqas",
@@ -17548,10 +17548,10 @@
       },
       "fingerprint": "9b4885f2978428bbacd45f3db6cfcf51facc1aa384d902eb5bf12fa0c7016478",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "TITLE_HOLDER:TITLE:the-ten-promised-paradise:titles:abdur-rahman-ibn-awf",
@@ -17592,10 +17592,10 @@
       },
       "fingerprint": "68ed3f9330928293f98c0adbf4c75f18043d0cb8c6243de4e450e4ea3e3f0718",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "TITLE_HOLDER:TITLE:the-ten-promised-paradise:titles:abu-ubaydah-ibn-al-jarrah",
@@ -17636,10 +17636,10 @@
       },
       "fingerprint": "cf9f52998bacbfe1e81a37792776da676c0b5e5222df56792b977f60457162c5",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "TITLE_HOLDER:TITLE:the-ten-promised-paradise:titles:az-zubayr-ibn-al-awwam",
@@ -17680,10 +17680,10 @@
       },
       "fingerprint": "650e5f524360015bc116c2bcf275a91b0994a884f5eb1b375cfc09a9474e7a52",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-10-03T11:03:26.682Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "TITLE_HOLDER:TITLE:the-ten-promised-paradise:titles:saad-ibn-abi-waqqas",
@@ -17724,10 +17724,10 @@
       },
       "fingerprint": "1d411ebd2f0080638da2aebc942f73a9e40c6808a3372efdfe82a1fd69b29b2d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.414Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "TITLE_HOLDER:TITLE:the-ten-promised-paradise:titles:saeed-ibn-zaid",
@@ -17768,10 +17768,10 @@
       },
       "fingerprint": "50a5c1a76ec637832a1c5bfa545d4d7a137336e878ef984436ca819263e2b606",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-10-03T11:03:27.262Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "TITLE_HOLDER:TITLE:the-ten-promised-paradise:titles:talhah-ibn-ubaydullah",
@@ -17812,10 +17812,10 @@
       },
       "fingerprint": "703b2ea7c19ba91ab2e9128aa853d532f31d1da7ca9c52a66a5a7840f8207531",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-10-03T11:03:27.837Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "TITLE_HOLDER:TITLE:truthful-trustworthy:titles:prophet-muhammad",
@@ -17900,10 +17900,10 @@
       },
       "fingerprint": "28c4484787be257f816fdb989b8c18b3c0165251ecc7096c3a9f5c4cc6eabe80",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-10-03T11:01:39.823Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «بمَ لُقّب؟» من بيانات السير (shared/quiz/tarajim.ts): كان يسأل عن ألقاب جماعات كأنها لقب واحد، ويعرض خيارات من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:aban-ibn-said:virtues:aban-ibn-said",
@@ -17944,9 +17944,9 @@
       },
       "fingerprint": "525ffadde4abda72584aa9198a1fd4b92f98e9b9c468f8aba1315e3f6eea7782",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -17988,9 +17988,9 @@
       },
       "fingerprint": "447a05c2e607d2e92ad1a5125256b807dd4fe9940fe2f9f712a4b73991f9900f",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -18032,9 +18032,9 @@
       },
       "fingerprint": "39d32560669dfd8a2174ccbc6d3be295096496e2a6ce3b3b5ba930ef5e31cd88",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -18076,9 +18076,9 @@
       },
       "fingerprint": "e73ac995596db852abfa79aec155e6b4778ee58223a1886c28292e9418790cc4",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -18120,10 +18120,10 @@
       },
       "fingerprint": "bc356c7979713912ba50811b9bd03a02c9fe8ddef752f065dc36100b15ef8b3c",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:abdullah-ibn-masud:virtues:abdullah-ibn-masud",
@@ -18164,10 +18164,10 @@
       },
       "fingerprint": "c81cd441123fa0bc6f0e093069e108a696be9308da6bf031f3810b927293ab83",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:abdullah-ibn-rawahah:virtues:abdullah-ibn-rawahah",
@@ -18209,9 +18209,9 @@
       },
       "fingerprint": "5e7afd4307002936f243577ea1902648d8881a233cd6af9e3deba40aadcbd47c",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -18253,10 +18253,10 @@
       },
       "fingerprint": "b510eeb1703871c30e0b2a601e18a9c14bd27dd430b96caf2cd66447b00f6479",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:abdullah-ibn-suhail:virtues:abdullah-ibn-suhail",
@@ -18341,10 +18341,10 @@
       },
       "fingerprint": "595dbda7ef2c8f712d0f5b495e6f5c19091c336b008ed31a6e488262bbe3e7b3",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:abu-al-haytham-ibn-at-tayyihan:virtues:abu-al-haytham-ibn-at-tayyihan",
@@ -18385,10 +18385,10 @@
       },
       "fingerprint": "fe79fb02644622c24f086ac377e459187d559a71fafedec70d429ee836322852",
       "promptArabicOverride": "من تصفه المصادر بأنه كان يكره الأصنام في الجاهلية ويقول بالتوحيد؟",
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:15:12.976Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:abu-bakr-as-siddiq:virtues:abu-bakr-as-siddiq",
@@ -18429,10 +18429,10 @@
       },
       "fingerprint": "5ad278da4acda630cd568ebaa49cfb4a79b6dbc04ab547d8466174fbede30250",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:abu-dharr-al-ghifari:virtues:abu-dharr-al-ghifari",
@@ -18473,10 +18473,10 @@
       },
       "fingerprint": "d0079b84572495cdd33ae5c6d6bf877cd3e1d7d3a3bc67f58449e74dec84ce16",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:abu-dujanah-al-ansari:virtues:abu-dujanah-al-ansari",
@@ -18521,9 +18521,9 @@
       },
       "fingerprint": "7460b6ea6be67d60cd305834b0a95e74d7f293ae9d408b41976eac540aaed0b7",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -18653,10 +18653,10 @@
       },
       "fingerprint": "c29332e22566d955ff085778bfeab4639b69b50d4d2035ebfec0836106ed79f9",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:abu-sufyan-ibn-al-harith:virtues:abu-sufyan-ibn-al-harith",
@@ -18741,10 +18741,10 @@
       },
       "fingerprint": "678fed67df9cac4773b6349fca1d4a22d8bf48244bfac6d369a1f10c8f50ce68",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:al-ala-ibn-al-hadrami:virtues:al-ala-ibn-al-hadrami",
@@ -18785,9 +18785,9 @@
       },
       "fingerprint": "3e3ff0f3d58069e66439ca4b8993e38809314067a773b87c2a78c148c99beea2",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -18829,10 +18829,10 @@
       },
       "fingerprint": "7fa9d3cf038d18211342ce83ed5ef979644936354abc26f8c0a1596e5e460f1d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:al-baraa-ibn-marur:virtues:al-baraa-ibn-marur",
@@ -18874,9 +18874,9 @@
       },
       "fingerprint": "d127dbfc7bf8e0d0b2abe9fb716c483e9600a945719e7932706f1c6c83393024",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -18918,9 +18918,9 @@
       },
       "fingerprint": "2f44c5ffac68ea5dfc7c36d07444950400ac852f953a201fe07abc7de075f77d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -18962,10 +18962,10 @@
       },
       "fingerprint": "2d073159e30af7ba0b62b426e334b3ecb8d666cc6a5d74cd11befee5cf2dd4e2",
       "promptArabicOverride": "من رقد على فراش رسول الله ﷺ ليلة خروجه مهاجرًا ليواري عنه العيون؟",
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:15:15.977Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:ammar-ibn-yasir:virtues:ammar-ibn-yasir",
@@ -19006,10 +19006,10 @@
       },
       "fingerprint": "7f6cae15ac11a1ae01421a8097c6c70f5c7d7b5949d78f935d1b03bd6994dec8",
       "promptArabicOverride": "من أخبر النبي ﷺ أن الفئة الباغية تقتله؟",
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:15:18.805Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:amr-ibn-al-jumuh:virtues:amr-ibn-al-jumuh",
@@ -19094,9 +19094,9 @@
       },
       "fingerprint": "63de921404f880e11f47a68efb08f8d1f1dc178722d31b3f5e59416427ecdfa3",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -19138,10 +19138,10 @@
       },
       "fingerprint": "4c29b12395b6d3ee844250e0daf1e11b15dc9514df839242bf23560602966858",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:aqil-ibn-abi-talib:virtues:aqil-ibn-abi-talib",
@@ -19182,9 +19182,9 @@
       },
       "fingerprint": "44144379d33de7ef8735c5cac1a3e48cbc51960f299ac309fa740048f353cb8d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -19226,10 +19226,10 @@
       },
       "fingerprint": "5cc78c9783bb8e8050a11ec8296e86b15b7b95885ed823a222e0d0f03c75afe9",
       "promptArabicOverride": "من غيّر النبي ﷺ اسمه من «غافل» إلى اسمه المعروف؟",
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:15:21.282Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:as-saib-ibn-uthman:virtues:as-saib-ibn-uthman",
@@ -19270,10 +19270,10 @@
       },
       "fingerprint": "e8a7ab8ab2e301ab4b3c2f8ece142c1a1b47417e497fe075aa5b1054ac814202",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:asad-ibn-zurarah:virtues:asad-ibn-zurarah",
@@ -19314,10 +19314,10 @@
       },
       "fingerprint": "b376e4cbe5ffc542f4bf8c84f0b0aa42737c8813c3350bc19ded2fe3c7b5bf44",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:az-zubayr-ibn-al-awwam:virtues:az-zubayr-ibn-al-awwam",
@@ -19358,10 +19358,10 @@
       },
       "fingerprint": "5a71a84daecb3b1a0df90ff3661b2f44c9379cc81c49cb61f01eece885ed0efe",
       "promptArabicOverride": "من قال عنه النبي ﷺ: «لكل نبي حواري، وحواريي ...»؟",
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:15:55.594Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:bilal-ibn-rabah:virtues:bilal-ibn-rabah",
@@ -19403,10 +19403,10 @@
       },
       "fingerprint": "aac5209c8b2821921a7947e27824aad86a2e2ff19b43c9dfbdae3fe434ea699e",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:bishr-ibn-al-baraa:virtues:bishr-ibn-al-baraa",
@@ -19493,10 +19493,10 @@
       },
       "fingerprint": "62204172f19d21058ac9a2e0d3fc3954ebb8a3a346279b6a0eb6b23eedfef0f2",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:hamzah-ibn-abd-al-muttalib:virtues:hamzah-ibn-abd-al-muttalib",
@@ -19538,10 +19538,10 @@
       },
       "fingerprint": "04d905e37ff7ab9cd7b7ebf1d193588ae1ed72aa4143342631d56b757beef96d",
       "promptArabicOverride": "من كان أعز فتى في قريش وأشدّه شكيمة، وقيل بعد استشهاده: «لكن لا بواكي له»؟",
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:15:24.263Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:hanzalah-ibn-abi-amir:virtues:hanzalah-ibn-abi-amir",
@@ -19582,10 +19582,10 @@
       },
       "fingerprint": "9e84f25b1e6bd84150065bbf6bbbb5638da0507c5d28a547e037ec63b131e46a",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:jaafar-ibn-abi-talib:virtues:jaafar-ibn-abi-talib",
@@ -19627,9 +19627,9 @@
       },
       "fingerprint": "2f008f7a4e2641db9f04a2f4628814c22ba88d4f2ea2ef3cc5e546be3cdd8d98",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -19671,10 +19671,10 @@
       },
       "fingerprint": "76e976dd73c7f60cd4d5c7661421643b9c369605f908fc62aa27ae3f14d342cc",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:khalid-ibn-said:virtues:khalid-ibn-said",
@@ -19715,9 +19715,9 @@
       },
       "fingerprint": "a9c51c4f7a6592954b883591d48344a93334df8edd9ce569ccd7a7be980f2c4b",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -19759,9 +19759,9 @@
       },
       "fingerprint": "af9142d22e404bc4e3948f029b722869634616b091060bac9c6cd411c5c01b20",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -19804,9 +19804,9 @@
       },
       "fingerprint": "1964198dd37836068f094fb2a1b03a50c0f1abd33d3694d943f28b23c936c025",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -19848,10 +19848,10 @@
       },
       "fingerprint": "c3c1cb0ac1710179f3eb3ad9fb355d1154eaac12a5fac4c01df94876ae60cdd5",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:muadh-ibn-amr-ibn-al-jumuh:virtues:muadh-ibn-amr-ibn-al-jumuh",
@@ -19892,9 +19892,9 @@
       },
       "fingerprint": "8e64bf2e432f0f5a09858e62d64e60f02092a53beb52a822e55dc4866b5897c6",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -19936,10 +19936,10 @@
       },
       "fingerprint": "5232a21fc4bc448eef9c275ff71e10e2fa4fd0c9c0bf0e5359ea17183d33d8cb",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:muawwidh-ibn-amr-ibn-al-jumuh:virtues:muawwidh-ibn-amr-ibn-al-jumuh",
@@ -19980,9 +19980,9 @@
       },
       "fingerprint": "ee7b890f277707958487a32893c08b6b91e0fb114c67a86d1740fce7d3ee2cf5",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -20024,10 +20024,10 @@
       },
       "fingerprint": "48400562e41a7ceba68c9ba33d211f2708c4cc05f64d930d09ca54eabc1bdb43",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:nawfal-ibn-al-harith:virtues:nawfal-ibn-al-harith",
@@ -20068,9 +20068,9 @@
       },
       "fingerprint": "92fac7356309fe0b8294a0eaf2968660779b17f82e595bd60ad13074ec1f0c4b",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -20112,10 +20112,10 @@
       },
       "fingerprint": "12cb7eded56b9a4ac2635c0fbe67b6275b71e694a2318991e3d9d8d4962a2dca",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:rabiah-ibn-al-harith:virtues:rabiah-ibn-al-harith",
@@ -20201,10 +20201,10 @@
       },
       "fingerprint": "239c979c1d1c8ec460b3f26399955680f4e8805a68eab4cac10e302160ed7389",
       "promptArabicOverride": "من جمع له رسول الله ﷺ أبويه يوم أُحد، وكان فتح العراق على يديه؟",
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:15:27.214Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:saad-ibn-khaythamah:virtues:saad-ibn-khaythamah",
@@ -20245,9 +20245,9 @@
       },
       "fingerprint": "34ba8dd8bea7414d1e0cfb627e1efd2561e75076a6d98b2651536dd2367cb326",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -20290,10 +20290,10 @@
       },
       "fingerprint": "23bddd0f85aa55ebb23bc0f4423d487ae7617e659dfa222a6fbb6884a8097e65",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:saeed-ibn-zaid:virtues:saeed-ibn-zaid",
@@ -20378,10 +20378,10 @@
       },
       "fingerprint": "61f5c7bc1c850b5169a0b59dab8c3f134d3faf9acda2c507d512b8204bd61c79",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:suhail-ibn-amr:virtues:suhail-ibn-amr",
@@ -20422,10 +20422,10 @@
       },
       "fingerprint": "e99013e6e54fd9121d8e7ebee618bb89c7e7c93178a565d85206a0392cdb0946",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:sumayyah-bint-khayyat:virtues:sumayyah-bint-khayyat",
@@ -20466,10 +20466,10 @@
       },
       "fingerprint": "993d409779b1de8b04b3b393504dfb206a3d049973960847a42672f4c2e308ac",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:talhah-ibn-ubaydullah:virtues:talhah-ibn-ubaydullah",
@@ -20511,10 +20511,10 @@
       },
       "fingerprint": "4f6833ddb883b6d4eb8ece292d9bd6a1607cabaab6d42cc078c57984a2d00449",
       "promptArabicOverride": "من وقى النبي ﷺ بيده يوم أُحد حتى شُلّت؟",
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:15:30.138Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:ubaydah-ibn-al-harith:virtues:ubaydah-ibn-al-harith",
@@ -20555,9 +20555,9 @@
       },
       "fingerprint": "0f5945363f7ab82c62ab5087e2498d501d7779ac510858bd7850cc98ee48e35b",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -20599,10 +20599,10 @@
       },
       "fingerprint": "b55e0196299eeae0063c9067a2b7955c48a1df5d86f447de51bbe95f96145adc",
       "promptArabicOverride": "من دعا النبي ﷺ أن يُعزّ الإسلام به؟",
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:15:32.954Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:umayr-ibn-al-humam:virtues:umayr-ibn-al-humam",
@@ -20643,10 +20643,10 @@
       },
       "fingerprint": "cdb17176449731c2330584d8b79b943ff5cda39a86b5680c9714e8cf1ead6444",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:uthman-ibn-affan:virtues:uthman-ibn-affan",
@@ -20687,10 +20687,10 @@
       },
       "fingerprint": "db6249de0fcf4bd9a9351e52cd68d187c21c0740b8a72d07afbcd0077424d665",
       "promptArabicOverride": "من قال عنه النبي ﷺ إنه أول من هاجر بأهله بعد لوط؟",
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:15:35.602Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:uthman-ibn-mazun:virtues:uthman-ibn-mazun",
@@ -20731,10 +20731,10 @@
       },
       "fingerprint": "485d3ea5af6e7c1a2b57fc2bb433317da021aa46eaf429c8ea884609cb21280d",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:waraqah-ibn-nawfal:virtues:waraqah-ibn-nawfal",
@@ -20775,10 +20775,10 @@
       },
       "fingerprint": "3dc89af667cc99801a79c01098e1159eb4c74f0f20763cd53d1e711bddf42f0b",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     },
     {
       "key": "VIRTUE_HOLDER:PERSON:zaid-ibn-harithah:virtues:zaid-ibn-harithah",
@@ -20819,9 +20819,9 @@
       },
       "fingerprint": "331acb8f8e4bd39fb9c4f713ca228fbacbb528df4ae04b28c29c4fd5735af4bb",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-29T19:25:15.796Z",
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
       "reviewedBy": "Claude"
     },
     {
@@ -20865,10 +20865,10 @@
       },
       "fingerprint": "d0b57c9a294c8a78ee086d4023b16f883bccca74743d120db747cc87e11d211b",
       "promptArabicOverride": null,
-      "status": "APPROVED",
-      "rejectionReason": null,
-      "reviewedAt": "2026-09-28T07:04:20.750Z",
-      "reviewedBy": "Codex"
+      "status": "RETIRED",
+      "rejectionReason": "حلّ محله «صاحب المنقبة» من بيانات السير: كان يسأل عن أخبار ليست مناقب، وعن «قيل»، وخياراته من قبل الإسلام أو من الجنس الآخر.",
+      "reviewedAt": "2026-11-19T19:39:34.000Z",
+      "reviewedBy": "Claude"
     }
   ]
 }

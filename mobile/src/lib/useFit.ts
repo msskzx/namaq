@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useWindowDimensions, type LayoutChangeEvent } from 'react-native';
 
 /** How much of the screen's height a feed card may grow to before what is in it scrolls inside (owner, 2026-11-18). */
@@ -13,13 +13,20 @@ export type OnFit = (overflow: number) => boolean;
  * that resizes the card it waits for the new frame before reporting again, so one overflow is never counted twice.
  */
 export function useFitReport(onFit?: OnFit) {
-  const sizes = useRef({ frame: 0, content: 0, waiting: false });
+  const sizes = useRef<{ frame: number; content: number; waiting: boolean; timer?: ReturnType<typeof setTimeout> }>({ frame: 0, content: 0, waiting: false });
   const report = () => {
     const { frame, content, waiting } = sizes.current;
     if (!onFit || !frame || !content || waiting) return;
     const overflow = Math.round(content - frame);
-    if (Math.abs(overflow) > 1 && onFit(overflow)) sizes.current.waiting = true;
+    if (Math.abs(overflow) > 1 && onFit(overflow)) {
+      sizes.current.waiting = true;
+      // A frame that never reports its new height (seen on the phone: a card left with empty room under its last ayah, owner
+      // 2026-11-19) would hold the wait for good, and later sizes would be dropped: measure again after a moment.
+      clearTimeout(sizes.current.timer);
+      sizes.current.timer = setTimeout(() => { sizes.current.waiting = false; report(); }, 400);
+    }
   };
+  useEffect(() => () => clearTimeout(sizes.current.timer), []);
   if (!onFit) return {};
   return {
     // Only a new frame height ends the wait: a layout that moves or widens the frame still measures the old height.

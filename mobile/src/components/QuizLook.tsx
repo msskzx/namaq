@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { SahihLook } from '@/components/Sahih';
 import { SAHIH } from '@/lib/sahih';
+import IconButton from '@/ui/IconButton';
+import { UnderCard, useCardRow } from '@/ui/Card';
 import { ScrollView, View, useWindowDimensions } from 'react-native';
 import { Check, Search } from 'lucide-react-native';
 import type { QuizLook } from '@shared/quiz/choiceKinds';
@@ -43,6 +45,8 @@ import { numberVerses, type Poem } from '@shared/tajwid/poem';
 import poemData from '@shared/tajwid/tuhfat-al-atfal.json';
 import { TuhfaVerse } from '@/screens/tuhfa';
 import TiesRing from './TiesRing';
+import LifeTimeline from './LifeTimeline';
+import { personLife } from '@/lib/life';
 import { TermQuotes } from './BalaghaTerm';
 
 /** Names a search lists before asking for more letters. */
@@ -186,6 +190,7 @@ export function LookView({ look, shown, palette }: { look: QuizLook; shown: bool
   const drawW = Math.min(width - 32, 480);
   switch (look.view) {
     case 'ties': return <TiesLook key={look.slug} slug={look.slug} mark={shown ? look.mark : undefined} width={drawW} palette={palette} />;
+    case 'life': { const person = findPerson(look.slug); return person ? <LifeTimeline items={personLife(person)} palette={palette} inCard linked={false} marked={shown ? look.mark : undefined} /> : null; }
     case 'nasab': return <View style={{ gap: 16 }}><NasabTree slugs={look.slugs} palette={palette} meetings={shown && !!look.mark} linked={false} /></View>;
     case 'virtues': return <VirtuesLook slugs={look.slugs} mark={shown ? look.mark : undefined} palette={palette} />;
     case 'terms': return <TermsLook names={look.names} mark={shown ? look.mark : undefined} palette={palette} />;
@@ -214,9 +219,12 @@ export function LookView({ look, shown, palette }: { look: QuizLook; shown: bool
 /** `top`: kept in sight above the looked-up view, such as a party's clock (owner, 2026-11-19: the time left shows while looking). */
 export function LookButton({ look, onLook, costs = false, palette, top }: { look: QuizLook; onLook?: () => void; costs?: boolean; palette: Palette; top?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
+  // In a feed card the button joins the row of icons under the card (owner: no buttons in a card).
+  const inRow = useCardRow();
+  const press = () => { setOpen(true); onLook?.(); };
   return (
     <View style={{ gap: 4, alignItems: 'flex-start' }}>
-      <Button Icon={Search} label="ابحث عن الجواب" onPress={() => { setOpen(true); onLook?.(); }} />
+      {inRow ? <UnderCard><IconButton Icon={Search} label="ابحث عن الجواب" onPress={press} tone="ink" /></UnderCard> : <Button Icon={Search} label="ابحث عن الجواب" onPress={press} />}
       {costs && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right', alignSelf: 'stretch' }}>
         {`بعد البحث للإجابة الصحيحة ${num(LOOKED_POINTS)} نقاط بدل ${num(POINTS)}.`}
       </Text>}

@@ -149,6 +149,13 @@ the sources disagree on as settled.
 - A feature without a card is named in the PR with the reason.
   [docs/feed-cards.md](docs/feed-cards.md) lists the cards, the quiz kinds and the
   named exceptions; the PR updates it.
+- No box in a feed card and no button in it (owner, 2026-11-19): the post's card is
+  the only box, and the feature's own buttons (hint, check, save, share, look up,
+  recite bar) sit in the row under it. The shared pieces do it for you: a `Card`
+  inside a card draws flat (app `ui/Card`, website `common/Card` with `Card.css`), and a
+  button row wrapped in `UnderCard` joins the row under the card (app `ui/Card`,
+  website `common/UnderCard`). A piece that frames itself asks `useInsideCard()` (app).
+  `e2e/app/home.spec.ts` checks the tree quiz card.
 - This is a workflow rule checked in review, not a guard test.
 
 ## Quiz questions
@@ -167,6 +174,12 @@ the sources disagree on as settled.
 - **Wrong choices come from the part of the Quran the quiz is set to** (owner, 2026-11-19): a juz 30
   quiz offers no surah or ayah of juz 29. A kind whose choices are places checks them against the scope,
   as `whichSurah`, `tafsirQuiz`, `meaningQuiz` and `compareQuiz` do; `giveaway.test.ts` checks it.
+- **A question about a man offers men, one about a woman offers women** (owner, 2026-11-19; it was in
+  `docs/quiz-question-review.md` only, so the code-built kinds missed it): every person or name a choice
+  holds is of the asked person's sex («أم المساكين» is never offered for al-Zubayr). The Prophet's ﷺ
+  names are never a wrong choice; they are asked about on their own. Each kind's test checks both.
+- **Each thing about a person is its own kind and its own interest** (owner, 2026-11-19): kunya, laqab,
+  virtue, ties… so a reader who does not want kunyas turns them off alone (`shared/interests.ts`).
 - **Mutashabih quizzes ask only what the mutashabih books set side by side** («في كتب المتشابهات»,
   category `mutashabeh`), never our own «تدبّر» pairs (owner, 2026-11-19): `quizFilters` fixes the kind.
 
@@ -383,6 +396,11 @@ Arabic Corpus's dictionary forms of a word (words, lemmas, similar ayat): none
 of them is the Hafs page text. The readings and dictionary forms are stored
 in the Madina page's spelling (`scripts/quran/madinaSpelling.ts` at build
 time), so no screen converts a word; book quotes keep the book's own spelling.
+An ayah drawn off the page (a quiz's ayah, a choice that is an ayah) goes in
+the module's `AyahFlow` with `AyahWords`, which size it from its width as the
+reader's flowing text is (`shared/quran/quranText/flow.ts`); the place sets
+colour and marks, never a size (owner, 2026-11-19). The guard's `sized` rule
+fails a size given to Quran words outside the module.
 `oneQuranText.test.ts` lists today's breaks in
 `oneQuranText.baseline.json`; the list only shrinks.
 

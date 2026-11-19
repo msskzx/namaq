@@ -20,6 +20,16 @@ export const FORGOT = '0';
  * A question the reader recites or writes and then grades (حفظتها or نسيتها): what it asks stays hidden until it is shown,
  * its two answers keep their order, and نسيتها puts the ayah on the forgotten shelf.
  */
+/** What joins the ticks of a question of several right choices into one answer (a character no label holds). */
+export const PICKS = '\u001f';
+export const picksOf = (answer: string | undefined) => (answer ? answer.split(PICKS) : []);
+/** Several right choices: the question ticks boxes (in a party before the reveal the list is empty, still saying so). */
+export const ticks = (question: { correctAnswers?: string[] }) => Array.isArray(question.correctAnswers);
+
+/** Whether a choice is a right one: the one answer, or one of several. */
+export const isRightChoice = (question: { correctAnswer: string; correctAnswers?: string[] }, value: string) =>
+  question.correctAnswers ? question.correctAnswers.includes(value) : value === question.correctAnswer;
+
 export const recited = (question: { reveal?: unknown; page?: { recite?: unknown } }) => !!(question.reveal || question.page?.recite);
 
 export type ChoiceQuestion = {
@@ -35,6 +45,12 @@ export type ChoiceQuestion = {
   reveal?: string[];
   choices: { value: string; labelArabic: string }[];
   correctAnswer: string;
+  /**
+   * A question with more than one right choice (owner, 2026-11-19; sketch titles-quiz/multi-select-dark.png): the reader
+   * ticks every one that holds, then checks. Both are in the choices' order, and `correctAnswer` is these joined by PICKS,
+   * as a reader's ticks are sent (`picksOf` reads them back), so «all of them and nothing else» is still one string.
+   */
+  correctAnswers?: string[];
   /** The ayah (`surah:ayah`) the question is about, opened in the mushaf after answering. */
   ayahKey?: string;
   /** Asked on the ayah's own mushaf page instead of the words above (QuizPage): how much shows, what is written, the surah title. */
@@ -66,6 +82,7 @@ export type ChoiceQuestion = {
  * The feature's view a question opens to look its answer up (owner, 2026-11-19: the same view as its page and its feed
  * card, never a stand-in). `mark` points at the answer in it, so a party keeps it back until the reveal.
  * - `ties`: the person's ties round him (TiesRing), the asked person marked.
+ * - `life`: the person's «حياته» timeline (LifeTimeline), the asked row marked.
  * - `nasab`: the nasab tree of the people, where they meet named.
  * - `virtues`: the virtues each person's entry gives, the asked one marked.
  * - `terms`: the definition of each balagha term offered, the asked one marked.
@@ -79,6 +96,7 @@ export type ChoiceQuestion = {
  */
 export type QuizLook =
   | { view: 'ties'; slug: string; mark?: string }
+  | { view: 'life'; slug: string; mark?: string }
   | { view: 'nasab'; slugs: string[]; mark?: boolean }
   | { view: 'virtues'; slugs: string[]; mark?: { slug: string; index: number } }
   | { view: 'terms'; names: string[]; mark?: string }

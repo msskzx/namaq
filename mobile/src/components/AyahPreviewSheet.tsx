@@ -19,6 +19,8 @@ import { surahNames } from '@/lib/branches';
 import { surahName } from '@/lib/compare';
 import { openCompare, openIntent, openTreesOf } from '@/lib/ways';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
+import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
+import QuranWords from './quran/text/QuranWords';
 import Sheet from '@/ui/Sheet';
 import TreeIcon from './TreeIcon';
 import TreePager from './TreePager';
@@ -89,9 +91,9 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
                   <Text style={{ color: palette.muted, fontSize: 14 }}>{`${surahName(other)} ${num(at)}`}</Text>
                   <ChevronLeft size={16} color={palette.muted} />
                 </View>
-                <Text style={{ fontFamily: QURAN_FONT, fontSize: 20, lineHeight: 38, textAlign: 'right', writingDirection: 'rtl', color: palette.ink }}>
-                  {words.map((word, i) => <Text key={i} style={{ fontFamily: QURAN_FONT, color: word.shared ? palette.accent : palette.ink }}>{`${i ? ' ' : ''}${word.text}`}</Text>)}
-                </Text>
+                <AyahFlow color={palette.ink}>
+                  {words.map((word, i) => <AyahWords key={i} look={word.shared ? { color: palette.accent } : undefined}>{`${i ? ' ' : ''}${word.text}`}</AyahWords>)}
+                </AyahFlow>
               </Card>
             );
           })}
@@ -124,7 +126,7 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
 export function SadiText({ text, palette }: { text: string; palette: Palette }) {
   return (
     <Text selectable style={{ color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right', writingDirection: 'rtl', paddingHorizontal: 2 }}>
-      {tafsirRuns(text).map((run, i) => (run.quran ? <Text key={i} style={{ fontFamily: QURAN_FONT, color: palette.accent }}>{run.text}</Text> : run.text))}
+      {tafsirRuns(text).map((run, i) => (run.quran ? <QuranWords key={i} style={{ color: palette.accent }}>{run.text}</QuranWords> : run.text))}
     </Text>
   );
 }

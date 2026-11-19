@@ -21,6 +21,7 @@ import type { Group, Tag } from '@shared/quran/mutashabih/types';
 import { BACK_EDGE_SLOP } from '@/lib/stackOptions';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
+import { useInsideCard } from '@/ui/Card';
 
 type Props = {
   /** In a feed card that follows its content: how much taller the rows are than the card (lib/useFit.ts). */
@@ -129,6 +130,7 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
   const range = first === last ? num(number) : `${num(number)}–${lastSurah === surah ? num(lastNumber) : `${surahNames[lastSurah]} ${num(lastNumber)}`}`;
   const muted = at !== 'ayah';
   const wordViews = !!useContext(Words);
+  const [head, setHead] = useState(26);
   // Each ayah of a passage shows what is left of `shown` after the ayat before it.
   const shownOf = (index: number) => shown === undefined ? undefined : shown - cell.ayat.slice(0, index).reduce((sum, item) => sum + item.words.length, 0);
   // A word takes the touch from the cell, so it does the cell's tap too (double tap to save, the studio's answer…).
@@ -143,15 +145,12 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
   </Text>);
   const basmala = first.basmala && <Text style={{ fontFamily: QURAN_FONT, fontSize: 18, lineHeight: 36, color: palette.muted, textAlign: 'center' }}>{mushafText(first.basmala.join(' '))}</Text>;
   return (
-    <Tap onPress={onPress} accessible={!!onPress} accessibilityRole={onPress ? 'button' : undefined} accessibilityLabel={`${surahNames[surah]} ${range}`}
-      style={stacked ? { width, paddingVertical: 8 } : { width, opacity: current ? 1 : 0.45, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, paddingHorizontal: 12, paddingVertical: 8 }}>
+    // The card's own buttons sit beside its tap area, not in it: a button inside a pressable is lost on the web and to screen readers (R0055).
+    <View style={stacked ? { width, paddingVertical: 8 } : { width, opacity: current ? 1 : 0.45, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, paddingHorizontal: 12, paddingVertical: 8 }}>
+    <Tap onPress={onPress} accessible={!!onPress} accessibilityRole={onPress ? 'button' : undefined} accessibilityLabel={`${surahNames[surah]} ${range}`}>
       {/* As the compare card heads a side (owner, 2026-11-15): the buttons at the right edge, in the thumb's reach, and the surah's
           name and number in the middle. The row is set left to right and filled from its right end, in any host. */}
-      <View {...({ dir: 'ltr' } as object)} style={{ direction: 'ltr', flexDirection: 'row-reverse', alignItems: 'center', gap: 4, marginBottom: 4, minHeight: 26 }}>
-        {current && !still && <View style={{ position: 'absolute', right: 0, flexDirection: 'row-reverse', alignItems: 'center', gap: 4, zIndex: 1 }}>
-          <IconButton Icon={BookOpen} label={`قراءة ${surahNames[own.key.split(':').map(Number)[0]]} ${num(Number(own.key.split(':')[1]))}`} onPress={() => readAyah(own.key)} size="small" />
-          {tools}
-        </View>}
+      <View {...({ dir: 'ltr' } as object)} onLayout={event => setHead(event.nativeEvent.layout.height)} style={{ direction: 'ltr', flexDirection: 'row-reverse', alignItems: 'center', gap: 4, marginBottom: 4, minHeight: 26 }}>
         <Text style={{ flex: 1, color: palette.muted, fontSize: 15, textAlign: 'center', paddingHorizontal: current && !still ? (tools ? 64 : 32) : 0 }}>
           {lastSurah !== surah ? `${surahNames[surah]} ${num(number)} ثم ${surahNames[lastSurah]} ${num(lastNumber)}` : `${surahNames[surah]} ${range}`}{at === 'before' ? ' · قبلها' : at === 'after' ? ' · بعدها' : ''}
         </Text>
@@ -171,6 +170,12 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
       {at === 'before' && basmala}
       {at === 'ayah' && note?.(own.key)}
     </Tap>
+    {/* Centred on the heading row, as when they sat in it. */}
+    {current && !still && <View style={{ position: 'absolute', top: 8, right: stacked ? 0 : 12, height: head, flexDirection: 'row-reverse', alignItems: 'center', gap: 4, zIndex: 1 }}>
+      <IconButton Icon={BookOpen} label={`قراءة ${surahNames[own.key.split(':').map(Number)[0]]} ${num(Number(own.key.split(':')[1]))}`} onPress={() => readAyah(own.key)} size="small" />
+      {tools}
+    </View>}
+    </View>
   );
 }
 
@@ -193,7 +198,10 @@ export default function MatrixCard({ onFit, presentation, palette, view, lane, a
   const count = matrix.columns.length;
   // One column fills the card; with the ayat around it, its neighbours peek in from the sides.
   // On home the card's frame is the view's edge; on the branches page it keeps a margin from the screen's.
-  const width = count === 1 ? view.width - 2 * PAD - (pinFooter ? 0 : 2 * EDGE) : Math.round(view.width * SHARE);
+  // Inside a card (a checked quiz in a feed card) the matrix draws no frame of its own: no box in a box (owner, 2026-11-19).
+  const inside = useInsideCard();
+  const framed = !pinFooter && !inside;
+  const width = count === 1 ? view.width - 2 * PAD - (framed ? 2 * EDGE : 0) : Math.round(view.width * SHARE);
   const step = width + GAP;
   // Columns run right to left like the text: the ayah before on the right, the ayah after on the left.
   const xOf = (i: number) => PAD + (count - 1 - i) * step;
@@ -275,10 +283,10 @@ export default function MatrixCard({ onFit, presentation, palette, view, lane, a
   return (
     <GestureDetector gesture={pan}>
       <View collapsable={false} style={{ width: view.width, height: view.height, overflow: 'hidden', direction: 'ltr' }}>
-        <ScrollView {...fit} nestedScrollEnabled onScroll={onScroll} scrollEventThrottle={16} style={pinFooter ? { flex: 1, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD } : { flex: 1 }} contentContainerStyle={{ paddingVertical: pinFooter ? 0 : 12 }} showsVerticalScrollIndicator={false}>
+        <ScrollView {...fit} nestedScrollEnabled onScroll={onScroll} scrollEventThrottle={16} style={pinFooter && !inside ? { flex: 1, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD } : { flex: 1 }} contentContainerStyle={{ paddingVertical: framed ? 12 : 0 }} showsVerticalScrollIndicator={false}>
           <Words.Provider value={connections ? lines.registry : null}>
           {/* One card as wide as all its columns (owner, 2026-11-14): the rows parted by rules, solid between surahs and dashed within one. */}
-          <Animated.View ref={lines.frame} onLayout={lines.measure} collapsable={false} style={[{ width: count * step - GAP + 2 * PAD, paddingHorizontal: PAD, paddingVertical: 4 }, !pinFooter && { backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD }, lanes]}>
+          <Animated.View ref={lines.frame} onLayout={lines.measure} collapsable={false} style={[{ width: count * step - GAP + 2 * PAD, paddingHorizontal: PAD, paddingVertical: 4 }, framed && { backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD }, lanes]}>
             {matrix.rows.map((row, r) => (
               <Fragment key={r}>
               {r > 0 && <RowRule dashed={surahOf(row.ayah) === surahOf(matrix.rows[r - 1].ayah)} color={palette.rule} />}

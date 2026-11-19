@@ -1,5 +1,6 @@
 "use client";
 
+import { UnderCard, useCardRow } from "@/components/common/UnderCard";
 import React from "react";
 import { Eraser, Lightbulb } from "lucide-react";
 import AyahCards from "@/app/quran/branches/AyahCards";
@@ -9,7 +10,7 @@ import { NavButtons } from "@/components/common/NavBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckDouble } from "@fortawesome/free-solid-svg-icons";
 import Button from "@/components/common/Button";
-import MushafText from "@/components/common/MushafText";
+import AyahFlow, { AyahWords } from "@/components/quran/text/AyahFlow";
 import { askedNodes, branchNodes, givenAnswer, leadingSigns } from "@shared/quiz/branchAnswers";
 import { correctionOf, gradedTree, verdict, type Correction } from "@shared/quiz/feedback";
 import { emptyBranchAnswers, isAsked, type ScoredQuestion } from "@shared/quiz/score";
@@ -28,7 +29,7 @@ type Names = Record<number, string>;
 /** The ayah signs an asked node opens with (﴿١٧﴾ where its ayah reads on): given before its boxes, never typed. */
 function LeadingSigns({ node }: { node: Branch }) {
   const signs = leadingSigns(node.words);
-  return signs.length ? <span className="font-quran text-lg text-[var(--home-muted)]"><MushafText>{signs.join(" ")}</MushafText></span> : null;
+  return signs.length ? <AyahWords className="text-[var(--home-muted)]">{signs.join(" ")}</AyahWords> : null;
 }
 
 type MatrixRow = { leaf: Branch; path: number[]; words: string[]; before: string[]; ayahKeys: string[] };
@@ -74,16 +75,16 @@ function MatrixInputs({ question, values, hints, write, names, ar }: { question:
       const spans = shownAyat(leaf, words);
       return <Card key={`${path.join("-")}:${ayahKeys[0]}`} className="p-2.5">
         <p className="text-xs text-[var(--home-muted)]">{ayahKeys.map(key => ayatLabel(spans[key], names)).join(" · ")}</p>
-        <p className="flex flex-wrap items-center gap-x-2 font-quran text-lg leading-loose text-[var(--home-ink)]">
-          {before.length > 0 && <MushafText>{before.join(" ")}</MushafText>}
-          <span className="font-bold text-[var(--home-accent)]"><MushafText>{givenAnswer(tree)}</MushafText></span>
+        <AyahFlow row className="text-[var(--home-ink)]">
+          {before.length > 0 && <AyahWords>{before.join(" ")}</AyahWords>}
+          <AyahWords className="font-bold text-[var(--home-accent)]">{givenAnswer(tree)}</AyahWords>
           {path.map(index => {
             const at = blanks.findIndex(blank => blank.id === index);
             return at < 0
-              ? <MushafText key={index}>{values[index]}</MushafText>
+              ? <AyahWords key={index}>{values[index]}</AyahWords>
               : <React.Fragment key={index}><LeadingSigns node={nodes[index]} /><BlankBoxes blank={blanks[at]} index={at} write={write} hint={hints[index] || undefined} name={ar ? `العقدة ${num(index + 1)}` : `Node ${index + 1}`} /></React.Fragment>;
           })}
-        </p>
+        </AyahFlow>
       </Card>;
     })}
   </div>;
@@ -95,7 +96,7 @@ function Badge({ row, ar }: { row: Correction; ar: boolean }) {
 
 function TypedWords({ row, ar }: { row: Correction; ar: boolean }) {
   if (!row.typed) return <span className="text-[var(--home-muted)]">{ar ? "لم تكتب شيئًا" : "Nothing typed"}</span>;
-  return <span className="font-quran text-lg">{row.typed.split(/\s+/).map((word, at) => <React.Fragment key={at}>
+  return <span className="text-base">{row.typed.split(/\s+/).map((word, at) => <React.Fragment key={at}>
     {at > 0 && " "}
     {row.marks[at] ? <span className="text-[var(--home-green)]">{word}</span> : <del className="text-[var(--home-accent)]">{word}</del>}
   </React.Fragment>)}</span>;
@@ -129,7 +130,7 @@ export function BranchFeedback({ question: givenQuestion, typed: givenTyped, nam
           </div>;
         }} />
       </div>
-      {controls && <CardActions id={id} text={question.tree!.words.join(' ')} href={branchesHref(id)} toggles={<AroundButton card={id} />} />}
+      {controls && <UnderCard><CardActions id={id} text={question.tree!.words.join(' ')} href={branchesHref(id)} toggles={<AroundButton card={id} />} /></UnderCard>}
     </div>
   );
 }
@@ -139,6 +140,8 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar, sendEmpty
   hints?: Hints; onHints?: (hints: Hints) => void;
   /** A party may send it empty (owner, 2026-11-19): a player who does not know need not wait out the clock. */
   sendEmpty?: boolean }) {
+  const inRow = useCardRow();
+  const formId = React.useId();
   const [own, setOwn] = React.useState<Hints>({});
   const values = question.tree ? emptyBranchAnswers(question).map((value, index) => isAsked(question, index) ? typed[index] ?? "" : value) : [];
   const blanks = React.useMemo(() => question.tree ? treeBlanks(question) : [], [question]);
@@ -152,25 +155,28 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar, sendEmpty
   const hintLabel = ar ? "تلميح: حرف آخر من كل طرف فارغ" : "Hint: one more letter in each empty leaf";
   const started = values.some((value, index) => isAsked(question, index) && value.trim());
   return (
-    <form className="flex flex-col gap-3" onSubmit={(event) => {
+    <form id={formId} className="flex flex-col gap-3" onSubmit={(event) => {
       event.preventDefault();
       if (started || sendEmpty) onCheck();
     }}>
       {!question.asked && <p className="text-sm text-[var(--home-muted)]">{ar ? "أكمل كل عقدة. وفي نهاية كل فرع تكفي كلمتاه الأوليان، على أن تصح كل كلمة تكتبها. يمكن تبديل الفروع المتشابهة في الشكل." : "Complete every node. For a leaf, its first two words are enough, and every word you type must be right. Branches with the same shape can be entered in either order."}</p>}
       <div dir="rtl">
-        <NavButtons>
-          <Button size="lg" variant="muted" aria-label={hintLabel} title={hintLabel} onClick={() => (onHints ?? setOwn)(addHint(question, values, hints))}><Lightbulb aria-hidden /></Button>
-        </NavButtons>
+        {inRow
+          ? <UnderCard><Button size="lg" variant="muted" aria-label={hintLabel} title={hintLabel} onClick={() => (onHints ?? setOwn)(addHint(question, values, hints))}><Lightbulb aria-hidden /></Button></UnderCard>
+          : <NavButtons>
+            <Button size="lg" variant="muted" aria-label={hintLabel} title={hintLabel} onClick={() => (onHints ?? setOwn)(addHint(question, values, hints))}><Lightbulb aria-hidden /></Button>
+          </NavButtons>}
         {write.field({ "aria-label": ar ? "اكتب الكلمة" : "Write the word" })}
         <MatrixInputs question={question} values={values} hints={shown} write={write} names={names ?? {}} ar={ar} />
       </div>
-      <div className="flex flex-wrap gap-2">
-      <Button variant="primary" type="submit" disabled={!started && !sendEmpty}>
+      {/* In a feed card they join the row of icons under the card (owner: no buttons in a card); `form` keeps «تحقق» submitting. */}
+      <UnderCard><div className={inRow ? "contents" : "flex flex-wrap gap-2"}>
+      <Button variant={inRow ? "muted" : "primary"} size={inRow ? "lg" : undefined} type="submit" form={formId} disabled={!started && !sendEmpty} aria-label={inRow ? (ar ? "تحقق" : "Check") : undefined} title={inRow ? (ar ? "تحقق" : "Check") : undefined}>
         <FontAwesomeIcon icon={faCheckDouble} />
-        {ar ? "تحقق" : "Check"}
+        {!inRow && (ar ? "تحقق" : "Check")}
       </Button>
-      <Button disabled={!started} onClick={() => onChange(emptyBranchAnswers(question))}><Eraser size={16} aria-hidden />{ar ? "مسح الإجابات" : "Clear answers"}</Button>
-      </div>
+      <Button variant={inRow ? "muted" : undefined} size={inRow ? "lg" : undefined} disabled={!started} onClick={() => onChange(emptyBranchAnswers(question))} aria-label={inRow ? (ar ? "مسح الإجابات" : "Clear answers") : undefined} title={inRow ? (ar ? "مسح الإجابات" : "Clear answers") : undefined}><Eraser size={16} aria-hidden />{!inRow && (ar ? "مسح الإجابات" : "Clear answers")}</Button>
+      </div></UnderCard>
     </form>
   );
 }

@@ -1,7 +1,7 @@
 import { createContext, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
 import { AppState, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, BookOpenText, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, Link2, MessagesSquare, MoreHorizontal, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpenText, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, Link2, MessagesSquare, MoreHorizontal, Network, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, History, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
@@ -11,15 +11,20 @@ import { isMemorized, memorizedPrefer, memorizedQuestions, readMemorized, recall
 import { FEED_QUIZ_NAMES, feedQuizSeed, OPENINGS, openingSurah, seededRandom, type FeedQuizKind } from '@shared/quiz/feedQuiz';
 import { answeredQuestion, dueSeeds, readMissed } from '@shared/quiz/missedQuestions';
 import { activeInterests, INTERESTS, interestById, interestOf, pickedInterests, surpriseMe, toggledInterest, type FeedCardKind } from '@shared/interests';
-import { bookmarkKind, cardBookmarkId, cardOfBookmark, isCardBookmark } from '@shared/bookmarkKind';
+import { bookmarkKind, cardMenuSaveId, cardOfBookmark, isCardBookmark } from '@shared/bookmarkKind';
 import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
 import { allVirtues, dayStart, feedBooks, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, prayerSoon, type FeedSlot } from '@shared/homeFeed';
 import { pageLabel, sayerLine } from '@shared/tarajim';
-import { GRAPH, PEOPLE, personName, tiePairs } from '@/lib/tarajim';
+import { findPerson, GRAPH, PEOPLE, personName, tiePairs, unvowelled } from '@/lib/tarajim';
+import { kunyaFacts, laqabFacts, type NameFact } from '@shared/tarajimNames';
+import { Credit } from '@/screens/person';
 import { chainSentence } from '@shared/tarajimGraph';
 import TiesChain from './TiesChain';
+import LifeTimeline from './LifeTimeline';
+import { personLife } from '@/lib/life';
+import { drawsLine } from '@shared/events/lifeTimeline';
 import balaghaTerms from '@shared/data/quran/balaghaTerms';
 import { plainName, examplesOf } from '@shared/quran/balaghaTerms';
 import { BookWords, ExampleAyat, ayatName, quotesTitle } from './BalaghaTerm';
@@ -42,7 +47,8 @@ import type { AppMomentBattle } from '@shared/battles/battle';
 import { battleLine, Moment } from './battles/BattleParts';
 import { STORIES } from '@/lib/stories';
 import { FORTY, fortyEntry, shamelaPage } from '@/lib/hadith';
-import { fromCompanion, rajabFeedPassages, type RajabChapter } from '@shared/hadith';
+import { fromCompanion, fromSahihayn, rajabFeedPassages, recordedIn, type RajabChapter } from '@shared/hadith';
+import HadithBooks from '@/components/HadithBooks';
 import rajab from '@shared/data/hadith/ibnRajab.json';
 import IbnRajab from '@/components/IbnRajab';
 import { Report, StoryAyat } from './stories/StoryParts';
@@ -105,7 +111,7 @@ import { QuizFeedback, QuizInputs } from './QuizTree';
 import { type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
-import Card from '@/ui/Card';
+import Card, { CardWithRow } from '@/ui/Card';
 import { openExternal } from '@/ui/ExternalLink';
 import FloatingMenu, { type MenuAt } from '@/ui/FloatingMenu';
 import ActButton from '@/ui/ActButton';
@@ -131,8 +137,8 @@ function Post({ head, actions, bar, palette, press, children }: { head: React.Re
   return (
     <View style={{ gap: 4 }}>
       {head}
-      <Card palette={palette} pad={0} clip onPress={press?.onPress} accessibilityLabel={press?.label}>{children}</Card>
-      {(bar || actions) && <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', gap: bar ? 4 : 0, marginTop: bar ? 4 : 0 }}>{bar}{actions}</View>}
+      {/* What the card's content hands up with UnderCard joins the row under the card, before the post's own buttons. */}
+      <CardWithRow palette={palette} pad={0} clip onPress={press?.onPress} accessibilityLabel={press?.label} bar={bar} row={actions}>{children}</CardWithRow>
     </View>
   );
 }
@@ -148,15 +154,12 @@ type CardMenu = { kind: FeedCardKind | FeedQuizKind; item?: string; interest: st
   savedOnly?: boolean };
 const CardMenuContext = createContext<CardMenu | null>(null);
 
-/** The kinds that save themselves on their own card (the tree's double tap, the compare card's button), so the menu does not. */
-const SAVES_ITSELF: readonly string[] = ['pair', 'tree'];
-
 /** A feed card's «…»: the reader's long-press menu (icons with their names), to save the card or say it is not for them. */
 function CardMenuButton({ menu, title, sub, palette }: { menu: CardMenu; title: string; sub?: string; palette: Palette }) {
   const box = useRef<ComponentRef<typeof View>>(null);
   const [at, setAt] = useState<MenuAt | null>(null);
   const saved = useSyncExternalStore(subscribeBookmarks, readBookmarks);
-  const id = menu.item !== undefined && !SAVES_ITSELF.includes(menu.kind) ? cardBookmarkId(menu.kind, menu.item) : null;
+  const id = cardMenuSaveId(menu.kind, menu.item);
   const on = !!id && saved.some(item => item.id === id);
   const name = interestById(menu.interest)?.name ?? '';
   const picked = useSyncExternalStore(pickedInterests.subscribe, pickedInterests.read, pickedInterests.server);
@@ -450,6 +453,52 @@ function TiePost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
+/**
+ * «الألقاب» and «الكنى» (owner, 2026-11-19; sketch titles-quiz/sketch-dark.png, screen 3): one person's laqab or kunya large,
+ * the person under it, the book's words when they say more than the name, and the person page's own folded reference.
+ * The head opens the person's page.
+ */
+function NamePost({ kind, id, palette }: { kind: 'laqab' | 'kunya'; id: string; palette: Palette }) {
+  const pick = nameList(kind).find(each => nameId(each) === id);
+  if (!pick) return null;
+  const { person, name, fact } = pick;
+  const who = personName(person);
+  const open = () => router.push({ pathname: '/person', params: { slug: person.slug } });
+  const quote = unvowelled(fact.text).trim() !== name ? fact.text : '';
+  return (
+    <Post palette={palette} head={<PostHead Icon={Users} title={kind === 'laqab' ? 'لقب وصاحبه' : 'كنية وصاحبها'} sub={who} palette={palette} open={{ onPress: open, label: `افتح ترجمة ${who}` }} />}>
+      <View style={{ padding: 14, gap: 4 }}>
+        <Text style={{ color: palette.accent, fontSize: 30, lineHeight: 48, fontWeight: '700', textAlign: 'right' }}>{name}</Text>
+        <Text style={{ color: palette.ink, fontSize: 19, lineHeight: 30, textAlign: 'right' }}>{who}</Text>
+        {quote ? <Text style={{ color: palette.muted, fontSize: 16, lineHeight: 28, textAlign: 'right' }}>«{quote}»{fact.by.length ? ` ${sayerLine(fact)}` : ''}</Text> : null}
+        <Credit facts={[fact]} palette={palette} />
+      </View>
+    </Post>
+  );
+}
+
+/**
+ * «من حياته» (owner 2026-11-19: every feature gets a feed card, drawn with its own view): a person's «حياته» timeline as
+ * his page draws it, the rail a year a line; the head opens his page.
+ */
+function LifePost({ slug, palette }: { slug: string; palette: Palette }) {
+  const person = findPerson(slug);
+  if (!person) return null;
+  const items = personLife(person);
+  const she = person.sex === 'FEMALE';
+  const open = () => router.push({ pathname: '/person', params: { slug } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={History} title={she ? 'من حياتها' : 'من حياته'} sub={personName(person)} palette={palette} open={{ onPress: open, label: `افتح ترجمة ${personName(person)}` }} />}>
+      <View style={{ paddingVertical: 14, paddingHorizontal: 10 }}>
+        <LifeTimeline items={items} palette={palette} inCard compact linked={false} />
+      </View>
+    </Post>
+  );
+}
+
+/** The people whose life the feed can draw. */
+const lifePeople = () => PEOPLE.filter(person => drawsLine(personLife(person))).map(person => person.slug);
+
 /** The book a quiz kind asks from: its card stays out while that book is off the phone, as the book's own ayah card does. */
 const QUIZ_BOOKS: Partial<Record<FeedQuizKind, BookId>> = { TAFSIR: 'sadi', BALAGHA: 'itqan', TERM: 'itqan', IRAB: 'irab-words' };
 
@@ -699,7 +748,7 @@ function SiraPost({ id, palette }: { id: string; palette: Palette }) {
 }
 
 /** The Forty al-Nawawi took whole from the Sahihayn, the most authentic first (owner, 2026-11-18), for the hadith card. */
-const FEED_FORTY = FORTY.entries.filter(entry => !entry.partial && entry.records.length > 0 && entry.records.every(record => record.book === 'bukhari' || record.book === 'muslim'));
+const FEED_FORTY = FORTY.entries.filter(fromSahihayn);
 
 /** Ibn Rajab's explanations of a phrase of those hadith, for his card. */
 const RAJAB_PASSAGES = rajabFeedPassages(rajab as RajabChapter[], FORTY.entries);
@@ -776,6 +825,25 @@ function SahihPost({ slug, id, palette }: { slug: SahihSlug; id: string; palette
   );
 }
 
+/**
+ * «من أخرجه» (owner, 2026-11-19; sketch /mnt/project-files/hadith-sciences, frame 3b): the start of one of the Forty al-Nawawi
+ * takes whole from the Sahihayn and the drawing of the places that record it. The head opens its page.
+ */
+function RecordedPost({ id, palette }: { id: string; palette: Palette }) {
+  const entry = FEED_FORTY.find(each => String(each.n) === id);
+  if (!entry) return null;
+  const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={Network} title="من أخرجه" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} palette={palette} open={{ onPress: open, label: `افتح ${entry.heading}` }} />}
+      actions={<Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
+        <Text numberOfLines={3} style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>{entry.text}</Text>
+        <HadithBooks top={entry.heading} boxes={recordedIn(entry)} palette={palette} />
+      </View>
+    </Post>
+  );
+}
+
 /** The lines of a term's definition a card shows before its page. */
 const TERM_LINES = 5;
 
@@ -805,7 +873,7 @@ function TermPost({ id, day, palette }: { id: string; day: number; palette: Pale
         {example && <>
           <View style={{ height: 1, backgroundColor: palette.rule, opacity: 0.6, marginVertical: 4 }} />
           <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>من أمثلته</Text>
-          <View pointerEvents="none"><ExampleAyat example={example} palette={palette} size={22} /></View>
+          <View pointerEvents="none"><ExampleAyat example={example} palette={palette} /></View>
           <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{ayatName(example.ayat)}</Text>
         </>}
       </View>
@@ -923,6 +991,9 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
 let virtues: { person: (typeof PEOPLE)[number]; index: number }[] | undefined;
 const virtueList = () => (virtues ??= allVirtues(PEOPLE));
 const virtueOf = (id: string) => virtueList().find(each => `${each.person.slug}-${each.index}` === id);
+const nameLists: Partial<Record<'laqab' | 'kunya', NameFact[]>> = {};
+const nameList = (kind: 'laqab' | 'kunya') => (nameLists[kind] ??= kind === 'laqab' ? laqabFacts(PEOPLE) : kunyaFacts(PEOPLE));
+const nameId = (each: NameFact) => `${each.person.slug}|${each.name}`;
 
 /** The content cards drawn from a list (pairs and trees have their own picks): each kind's items, by a lasting id. */
 type ListKind = Exclude<FeedCardKind, 'pair' | 'tree'>;
@@ -936,11 +1007,15 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   bukhari: () => sahihNumbers('bukhari'),
   muslim: () => sahihNumbers('muslim'),
   rajab: () => RAJAB_PASSAGES.map(rajabId),
+  recorded: () => FEED_FORTY.map(entry => String(entry.n)),
   prophets: () => STORY_GROUPS.map(group => `${group.slug}-${group.phase}`),
   sira: () => STORIES.filter(story => story.reports[0]).map(story => story.slug),
   moment: () => MOMENTS.map(momentId),
   tarajim: () => virtueList().map(each => `${each.person.slug}-${each.index}`),
   tie: () => tiePairs().map(pair => `${pair.a},${pair.b}`),
+  laqab: () => nameList('laqab').map(nameId),
+  kunya: () => nameList('kunya').map(nameId),
+  life: lifePeople,
 };
 const itemsOf = (kind: ListKind) => (itemLists[kind] ??= LIST_OF[kind]());
 const LIST_KINDS = Object.keys(LIST_OF) as ListKind[];
@@ -969,11 +1044,14 @@ function ContentPost({ kind, item, day, palette }: { kind: ListKind; item: strin
     case 'hadith': return <HadithPost id={item} palette={palette} />;
     case 'rajab': return <RajabPost id={item} palette={palette} />;
     case 'bukhari': case 'muslim': return <SahihPost slug={kind} id={item} palette={palette} />;
+    case 'recorded': return <RecordedPost id={item} palette={palette} />;
     case 'prophets': { const at = item.lastIndexOf('-'); return <StoryPost slug={item.slice(0, at)} phase={Number(item.slice(at + 1))} palette={palette} />; }
     case 'sira': return <SiraPost id={item} palette={palette} />;
     case 'moment': return <MomentPost id={item} palette={palette} />;
     case 'tarajim': return <TarajimPost id={item} palette={palette} />;
     case 'tie': return <TiePost id={item} palette={palette} />;
+    case 'laqab': case 'kunya': return <NamePost kind={kind} id={item} palette={palette} />;
+    case 'life': return <LifePost slug={item} palette={palette} />;
     default: return null;
   }
 }

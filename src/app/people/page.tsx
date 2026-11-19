@@ -1,198 +1,45 @@
-'use client';
-
-import React, { useEffect, useRef, useState } from 'react';
-import { useLanguage } from '@/components/language/LanguageContext';
-import { useSearchParams } from 'next/navigation';
-import { useInView } from 'react-intersection-observer';
-import translations from '@/components/language/translations';
-import PeopleSearch from '@/components/people/PeopleSearch';
-import type { Title } from '@/generated/prisma';
-import LoadingDots from '@/components/common/LoadingDots';
-import PersonCard from '@/components/people/PersonCard';
-import { PersonWithTitles } from '@/types/person';
-import useSWR from 'swr';
-import useSWRInfinite from 'swr/infinite';
-import type { Pagination } from '@/types/pagination';
-import { fetcher } from '@/lib/swr';
-import ErrorMessage from '@/components/common/ErrorMessage';
-import { useNavigatingRouter } from '@/components/common/NavigationLoader';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import Chip from '@/components/common/Chip';
 import Empty from '@/components/common/Empty';
+import PeopleSearchBox from '@/components/tarajim/PeopleSearchBox';
+import PersonRowList from '@/components/tarajim/PersonRowList';
+import { peopleList } from '@/lib/tarajim';
 
-const PAGE_SIZE = 12;
+export const metadata: Metadata = { title: 'كل التراجم' };
 
-const getKey = (
-  pageIndex: number,
-  previousPageData: { pagination: Pagination } | null,
-  title: string,
-  search: string
-) => {
-  // Reached the end if no more pages
-  if (previousPageData && !previousPageData.pagination.hasNextPage) return null;
-
-  const params = new URLSearchParams({
-    page: (pageIndex + 1).toString(),
-    limit: PAGE_SIZE.toString(),
-    ...(title ? { title } : {}),
-    ...(search ? { search } : {}),
-  });
-
-  return `/api/people?${params.toString()}`;
-};
-
-const PeoplePage = () => {
-  const { language } = useLanguage();
-  const searchParams = useSearchParams();
-  const router = useNavigatingRouter();
-  const { ref: loadMoreRef, inView } = useInView({
-    threshold: 0.1,
-    triggerOnce: false,
-  });
-  // Debounce timer ref for infinite scroll
-  const loadMoreTimeoutRef = useRef<number | null>(null);
-  // Track previous inView to only trigger on rising-edge
-  const prevInViewRef = useRef<boolean>(false);
-
-  // Read initial filters from URL
-  const initialTitle = searchParams.get('title') || '';
-  const initialSearch = searchParams.get('search') || '';
-  const [titleFilter, setTitleFilter] = useState(initialTitle);
-  const [search, setSearch] = useState(initialSearch);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
-
-  // SWR Infinite hook for pagination
-  const {
-    data: peoplePages,
-    error: peopleError,
-    setSize,
-    isValidating,
-  } = useSWRInfinite<{ data: PersonWithTitles[]; pagination: Pagination }>(
-    (pageIndex, previousPageData) => getKey(pageIndex, previousPageData, titleFilter, search),
-    fetcher,
-    {
-      revalidateFirstPage: false,
-    }
-  );
-
-  // Flatten the paginated data into a single array of people
-  const allPeople = React.useMemo(() => {
-    return peoplePages?.flatMap(page => page.data) || [];
-  }, [peoplePages]);
-
-  // Determine if there are more pages to load
-  const hasNextPage = React.useMemo(() => {
-    if (!peoplePages || peoplePages.length === 0) return true;
-    const last = peoplePages[peoplePages.length - 1];
-    return !!last?.pagination?.hasNextPage;
-  }, [peoplePages]);
-
-  const { data: titles, error: titlesError, isLoading: isLoadingTitles } = useSWR<Title[]>("/api/titles", fetcher);
-
-  // Load more when scroll to bottom
-  useEffect(() => {
-    const isRisingEdge = inView && !prevInViewRef.current;
-    if (isRisingEdge && !isValidating && !isInitialLoad && hasNextPage) {
-      // Clear any pending debounce
-      if (loadMoreTimeoutRef.current) {
-        clearTimeout(loadMoreTimeoutRef.current);
-      }
-      // Debounce the load-more to avoid rapid successive triggers
-      loadMoreTimeoutRef.current = window.setTimeout(() => {
-        setSize((prev) => prev + 1);
-      }, 250);
-    }
-    // Cleanup on dependency change/unmount
-    return () => {
-      if (loadMoreTimeoutRef.current) {
-        clearTimeout(loadMoreTimeoutRef.current);
-        loadMoreTimeoutRef.current = null;
-      }
-    };
-  }, [inView, isValidating, isInitialLoad, hasNextPage, setSize]);
-
-  // Update previous inView after effect runs
-  useEffect(() => {
-    prevInViewRef.current = inView;
-  }, [inView]);
-
-  // Mark initial load completed once mounted
-  useEffect(() => {
-    if (isInitialLoad) setIsInitialLoad(false);
-  }, [isInitialLoad]);
-
-  // Update filters when URL changes (for back/forward navigation)
-  // Depend on the serialized search params rather than the unstable object reference
-  useEffect(() => {
-    const newTitle = searchParams.get('title') || '';
-    const newSearch = searchParams.get('search') || '';
-
-    if (newTitle !== titleFilter) setTitleFilter(newTitle);
-    if (newSearch !== search) setSearch(newSearch);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams.toString()]);
-
-  const isArabic = language === 'ar';
-
-  // Update URL when filters change
-  const handleTitleChange = (value: string) => {
-    setTitleFilter(value);
-    const params = new URLSearchParams(searchParams.toString());
-    if (value) {
-      params.set('title', value);
-    } else {
-      params.delete('title');
-    }
-    router.replace(`/people?${params.toString()}`);
+/**
+ * «كل التراجم» (owner, 2026-11-19; the app's screens/people.tsx): every converted person, under the part of the book their
+ * entry is in, as rows in one card per part; a group chip narrows it to one group the scholars name (`title`), the field
+ * to a name (`search`). Replaces the old list of every catalog name loaded as you scroll.
+ */
+export default async function PeoplePage({ searchParams }: { searchParams: Promise<{ title?: string; search?: string }> }) {
+  const { title, search = '' } = await searchParams;
+  const list = peopleList(search, title);
+  const href = (key?: string) => {
+    const params = new URLSearchParams();
+    if (search) params.set('search', search);
+    if (key) params.set('title', key);
+    const query = params.toString();
+    return query ? `/people?${query}` : '/people';
   };
-
-  const handleSearchChange = (value: string) => {
-    setSearch(value);
-    const params = new URLSearchParams(searchParams.toString());
-    if (value) {
-      params.set('search', value);
-    } else {
-      params.delete('search');
-    }
-    router.replace(`/people?${params.toString()}`);
-  };
-
   return (
-    <div className="w-full px-4 py-8" dir={isArabic ? 'rtl' : 'ltr'} style={{ textAlign: isArabic ? 'right' : 'left' }}>
-      <PeopleSearch
-        titles={titles || []}
-        selectedTitle={titleFilter}
-        onTitleChange={handleTitleChange}
-        search={search}
-        onSearchChange={handleSearchChange}
-        language={language as 'en' | 'ar'}
-      />
-      {peopleError || titlesError ? (
-        <ErrorMessage title={translations[language]?.personLoadError || 'Error loading people.'} />
-      ) : null}
-
-      {(isInitialLoad && (!peoplePages || peoplePages.length === 0)) || isLoadingTitles ? (
-        <LoadingDots fill="page" />
-      ) : (
-        <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
-            {allPeople.map((person) => (
-              <div key={person.slug}>
-                <PersonCard person={person} language={language} />
-              </div>
-            ))}
-          </div>
-
-          {/* Loading spinner at the bottom when loading more */}
-          <div ref={loadMoreRef} className="mt-8 flex justify-center">
-            {isValidating && !isInitialLoad && <LoadingDots fill />}
-          </div>
-
-          {!isValidating && peoplePages && allPeople.length === 0 && (
-            <Empty text={translations[language]?.noResults || 'No results found'} />
-          )}
-        </>
-      )}
+    <div dir="rtl" className="mx-auto flex w-full max-w-2xl flex-col gap-2.5 p-4 text-[var(--home-ink)]">
+      <h1 className="text-3xl">{list.heading}</h1>
+      <PeopleSearchBox live initial={search} title={list.title} placeholder={list.title ? 'ابحث في هذه المجموعة' : 'ابحث في التراجم'} />
+      <nav aria-label="المجموعات" className="flex flex-wrap gap-1.5">
+        <Link href={href()}><Chip label="الكل" on={!list.title} /></Link>
+        {list.groups.map(group => (
+          <Link key={group.key} href={href(list.title === group.key ? undefined : group.key)}><Chip label={group.name} on={list.title === group.key} /></Link>
+        ))}
+      </nav>
+      {list.count === 0 && <Empty text="لا أحد بهذا الاسم في التراجم المضافة بعد" />}
+      {list.parts.map(part => (
+        <section key={part.heading} className="flex flex-col gap-1.5">
+          <h2 className="mt-1.5 text-base text-[var(--home-accent)]">{part.heading}</h2>
+          <PersonRowList rows={part.rows} />
+        </section>
+      ))}
     </div>
   );
-};
-
-export default PeoplePage;
+}

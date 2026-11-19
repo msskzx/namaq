@@ -19,7 +19,7 @@ export function sahihText(slug: SahihSlug): Promise<SahihText> {
 }
 
 /** The ones of al-Nawawi's Forty whose records hold this hadith, so its page links to them. */
-export const fortyOf = (slug: SahihSlug, n: number) => FORTY.entries.filter(entry => entry.records.some(record => record.book === slug && record.number === n)).map(({ n: at, heading }) => ({ n: at, heading }));
+export const fortyOf = (slug: SahihSlug, n: number) => FORTY.entries.filter(entry => entry.records.some(record => record.book === slug && record.number === n))
 
 /** A hadith as a kitab's list shows it: numbers, the narrator, the opening of its words. */
 export const hadithItem = (hadith: SahihHadith) => ({

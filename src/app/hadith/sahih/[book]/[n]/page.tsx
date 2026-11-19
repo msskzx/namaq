@@ -7,6 +7,8 @@ import { num } from '@shared/quran/arabicNumber';
 import Button from '@/components/common/Button';
 import Card from '@/components/common/Card';
 import { SahihHadithView } from '@/components/hadith/SahihParts';
+import HadithBooks from '@/components/hadith/HadithBooks';
+import { recordedIn } from '@shared/hadith';
 import { RememberOpened } from '@/components/hadith/SahihContinue';
 import { SAHIH, fortyOf, isSahihSlug, sahihText } from '@/lib/sahih';
 
@@ -48,6 +50,9 @@ export default async function SahihHadithPage({ params }: { params: Params }) {
       <Card className="p-4"><SahihHadithView book={bookOf(book)} hadith={hadith} /></Card>
       {forty.length > 0 && (
         <div className="flex flex-col gap-2">
+          <h2 className="text-[1.0625rem] font-bold">من أخرجه</h2>
+          {forty.map(entry => <HadithBooks key={entry.n} top={`${book.title} ${num(hadith.n)}`} boxes={recordedIn(entry)}
+            hrefOf={box => { const [at, number] = box.key.split(':'); return isSahihSlug(at) && number ? `/hadith/sahih/${at}/${number}` : undefined; }} />)}
           <p className="text-[0.9375rem] text-[var(--home-muted)]">من الأربعين النووية</p>
           <div className="flex flex-wrap gap-2">{forty.map(entry => <Button key={entry.n} href={`/hadith/forty/${entry.n}`}><MessagesSquare size={18} aria-hidden />{entry.heading}</Button>)}</div>
         </div>

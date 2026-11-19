@@ -1,0 +1,10 @@
+/*
+ * No card in a card (owner, 2026-11-19): a Card (common/Card.tsx) drawn inside another card (a feed post's card too) loses its
+ * frame and fill and keeps a rule above to part it from what comes before, as the app's ui/Card does. Unlayered, so it wins
+ * over the card's own utilities.
+ */
+[data-card] [data-card] {
+  border-width: 1px 0 0 0;
+  border-radius: 0;
+  background: transparent;
+}

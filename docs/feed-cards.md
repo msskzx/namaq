@@ -14,13 +14,17 @@ al-Suyuti's examples, opening the term's page in «مصطلحات البلاغة
 the ayat folded under it, opening the story's page), one of al-Nawawi's Forty (من الحديث, his text for an entry he takes whole
 from the Sahihayn, opening the hadith's page; `HadithPost`), a passage of Ibn Rajab's
 commentary (من شرح ابن رجب, a paragraph where he explains a phrase of one of those hadith, opening the hadith's page;
-`RajabPost` drawn by `components/IbnRajab`, the page's own view), a hadith of Sahih al-Bukhari or Sahih Muslim whole
+`RajabPost` drawn by `components/IbnRajab`, the page's own view), the books that record one of the Forty (من أخرجه, the
+start of one al-Nawawi takes whole from the Sahihayn and the «من أخرجه» drawing of each book and number; `RecordedPost` drawn
+by `components/HadithBooks`, the page's own view), a hadith of Sahih al-Bukhari or Sahih Muslim whole
 (من صحيح البخاري / من صحيح مسلم, its kitab › bab in the head, Muslim's bab marked «تبويب النووي», drawn by `SahihHadithView`, the
 hadith page's own view, opening the hadith's page; `SahihPost`, only once the book is downloaded on the phone), and the quiz cards in `FEED_QUIZ_NAMES`
 (`shared/quiz/feedQuiz.ts`): في أي سورة؟, أكمل المتشابهات, سمّع بقية الآية, قارن الموضعين,
 أوائل السور, سمّع الآية, ما معنى؟, the four ayah quizzes below, ما المصطلح؟ (`shared/quiz/balaghaTermQuiz.ts`: a term's
-definition with its name hidden, four terms to pick from, each choice linking to its definition once answered), the three Tuhfat al-Atfal questions, السيرة والغزوات (shared/quiz/sira.ts), the two tarajim questions
-(أين يلتقي النسبان؟, صاحب المنقبة and ما صلته به؟, `shared/quiz/tarajim.ts`), the three hadith questions (من راوي الحديث؟, أكمل الحديث and من أخرجه؟,
+definition with its name hidden, four terms to pick from, each choice linking to its definition once answered), the three Tuhfat al-Atfal questions, السيرة والغزوات (shared/quiz/sira.ts), the four tarajim questions
+(أين يلتقي النسبان؟, صاحب المنقبة and ما صلته به؟, `shared/quiz/tarajim.ts`; في أي سنة كان؟, `shared/quiz/life.ts`:
+the year of an event or story of someone's «حياته», or of a person's death (battles are the sira quiz's); two years where
+the sources give two, the wrong choices of the same shape and none near; the look-up his timeline), بمَ لُقّب؟ and ما كنيته؟ (each its own interest), أسماء النبي ﷺ (several right choices, under السيرة), and the three hadith questions (من راوي الحديث؟, أكمل الحديث and من أخرجه؟,
 `shared/quiz/hadith.ts`), and في أيّ كتاب؟ (`shared/quiz/sahih.ts`: a bab heading of either Sahih and the kitab it stands in).
 
 The ayah quizzes (`shared/quiz/ayahQuizzes.ts`), whose questions are built once by `scripts/quran/buildAyahQuizzes.ts`
@@ -41,6 +45,12 @@ its page; the head opens the person's page.
 صلة (`TiePost`): two converted people joined through someone else, the nearest chain of ties as one sentence
 («صفية أمُّ الزبير، و…») with the pages that state each tie; the head opens «بينه وبين…» with the two picked
 (pairs from `linkedPairs` in `shared/tarajimGraph.ts`).
+
+من حياته (`LifePost`): a converted person's «حياته» timeline as his page draws it (the strip of years, the kinds as
+chips), the rail a year a line; the head opens his page. Only people whose strip has two years or more (`drawsLine`).
+
+لقب وصاحبه / كنية وصاحبها (`NamePost`, interests «الألقاب» and «الكنى»): one person's laqab or kunya large, the person
+under it, the book's words when they say more, and the person page's folded reference (lists from `shared/tarajimNames.ts`).
 
 The ayah cards (`AyahNotePost` in `HomeFeed.tsx`, lists in `shared/quran/ayahNotes.ts`), each kind under its own interest:
 من التفسير (an ayah al-Sa'di explains alone), من البلاغة (an ayah al-Suyuti surely names), من الإعراب (one word's line),
@@ -90,4 +100,4 @@ timeline), رتّب, من شهدها؟ / من أمير السرية؟, فيمَ 
 - Search, share and videos, settings, «ما أحفظه», «اهتماماتي»: tools, not content.
 - الأذكار: an interest once its card or question is built (owner agreed it is one, 2026-11-19).
 - Party quizzes: played with others, not from the feed.
-- Tarajim: the battles have the moment card and the sira stories the story card; the people have «من التراجم» and «صلة».
+- Tarajim: the battles have the moment card and the sira stories the story card; the people have «من التراجم», «صلة», «من حياته», «لقب وصاحبه» and «كنية وصاحبها».

@@ -70,8 +70,8 @@ describe('the balagha sheet', () => {
     const itqanTab = await screen.findByRole('tab', { name: 'الإتقان للسيوطي' });
     expect(itqanTab.getAttribute('aria-selected')).toBe('true');
     expect(screen.getByText(/«الِاسْتِعَارَةُ» · النَّوْعُ الثَّامِنُ/)).toBeTruthy();
-    expect(screen.getByText('شَيۡبࣰا').className).toMatch(/20%/);
-    expect(screen.getByText('قَالَ').className).not.toMatch(/20%/);
+    expect(screen.getByText('شَيۡبࣰا').closest('mark')).toBeTruthy();
+    expect(screen.getByText('قَالَ').closest('mark')).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'الإتقان للسيوطي ٣/١٥٠–١٥١' }));
     expect(screen.getByText('اقرأ الصفحة').getAttribute('href')).toBe('https://shamela.ws/book/11728/1000');
     fireEvent.click(screen.getByRole('tab', { name: 'الكشاف للزمخشري' }));

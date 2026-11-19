@@ -8,7 +8,7 @@ import Chip from '@/components/common/Chip';
 import Empty from '@/components/common/Empty';
 import ExternalLink from '@/components/common/ExternalLink';
 import { SearchField } from '@/components/common/Field';
-import QuranWords from '@/components/quran/text/QuranWords';
+import LitAyat from '@/components/quran/text/LitAyat';
 import { num } from '@shared/quran/arabicNumber';
 import { QIRAAT_SOURCE, READERS, RIWAYAT, whoReads, type WordDifference } from '@shared/quran/qiraat';
 import { qiraatOf } from '@shared/quran/qiraatData';
@@ -50,19 +50,16 @@ export function QiraatPlace({ ayah, words, text = [], mark = [], lines, max, mor
   const shown = max ? every.slice(0, max) : every;
   // A phrase the source quotes across the end of the ayah before (89:20 «لمّا وتحبون») is not banded.
   const fits = (word: WordDifference) => word.readings[0].text.split(/\s+/).filter(Boolean).join(' ') === text.slice(word.at[0], word.at[1] + 1).join(' ');
-  const lit = (i: number) => shown.some(word => fits(word) && i >= word.at[0] && i <= word.at[1]);
+  // qiraat.json counts the ۞ mark as a word; the page words drawn here leave it out (as the app's QiraatPlace).
+  const before = (at: number) => text.slice(0, at).filter(w => w === '۞').length;
+  const lit = shown.filter(fits).map(word => [word.at[0] - before(word.at[0]), word.at[1] - before(word.at[1])] as [number, number]);
   const [surah, number] = ayah.split(':').map(Number);
   const meaning = QIRAAT_MEANINGS[ayah];
   return (
     <Frame lines={!!lines} id={`a${ayah.replace(':', '-')}`}>
       {lines ?? <>
         <span className="text-sm text-[var(--home-muted)]">{`${surahName(surah)} ${num(number)}`}</span>
-        <p className="text-[1.35rem] leading-[2.4] text-justify [text-align-last:right]">
-          <QuranWords>
-            {text.map((w, i) => (w === '۞' ? null : <span key={i}>{lit(i) ? <mark className="rounded-sm bg-[color-mix(in_srgb,var(--home-ink)_20%,transparent)] text-inherit">{w}</mark> : w}{' '}</span>))}
-            {num(number)}
-          </QuranWords>
-        </p>
+        <LitAyat ayat={[{ words: text.filter(w => w !== '۞'), lit, number }]} />
       </>}
       <hr className="border-[var(--home-rule)] opacity-60" />
       {shown.map((word, i) => <div key={`${i}@${word.at.join("-")}`} className={i ? 'border-t border-dashed border-[var(--home-rule)]' : ''}><Word word={word} mark={mark} /></div>)}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import QuranWords from '@/components/quran/text/QuranWords';
 import { IRAB_SOURCES, ukbariCredit, ukbariOf, ukbariPage, type UkbariData } from '@shared/quran/irab';
 import { tafsirRuns } from '@shared/quran/tafsirSadi';
 import { corpusWords } from '@shared/quran/words';
@@ -44,7 +45,7 @@ export default function IrabPanel({ ayah, data }: { ayah: string; data: IrabAyah
             <OpenInBook book="ukbari" ayah={ayah} />
           </div>
           <p className="mt-1 whitespace-pre-line text-[1.125rem] leading-[1.9]">
-            {tafsirRuns(passage.text).map((run, j) => (run.quran ? <span key={j} className="font-quran text-[var(--home-accent)]">{run.text}</span> : run.text))}
+            {tafsirRuns(passage.text).map((run, j) => (run.quran ? <QuranWords key={j} className="text-[var(--home-accent)]">{run.text}</QuranWords> : run.text))}
           </p>
         </Card>
       )) : <p className="px-0.5 text-[0.9375rem] text-[var(--home-muted)]">لم يتكلم العكبري على هذه الكلمة ولا على آيتها.</p>}

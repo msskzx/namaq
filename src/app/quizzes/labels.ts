@@ -27,6 +27,10 @@ export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   TARAJIM_NASAB: { en: "Where two lineages meet", ar: "أين يلتقي النسبان؟" },
   TARAJIM_VIRTUE: { en: "Whose virtue?", ar: "صاحب المنقبة" },
   TARAJIM_TIE: { en: "How are they related?", ar: "ما صلته به؟" },
+  TARAJIM_LIFE: { en: "In which year?", ar: "في أي سنة كان؟" },
+  TARAJIM_LAQAB: { en: "What was he called?", ar: "بمَ لُقّب؟" },
+  TARAJIM_KUNYA: { en: "What is his kunya?", ar: "ما كنيته؟" },
+  PROPHET_NAMES: { en: "The Prophet's names", ar: "أسماء النبي ﷺ" },
   SIRA: { en: "Sira and battles", ar: "السيرة والغزوات" },
   HADITH_NARRATOR: { en: "Who narrated it?", ar: "من راوي الحديث؟" },
   HADITH_COMPLETE: { en: "Complete the hadith", ar: "أكمل الحديث" },
@@ -37,8 +41,8 @@ export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
 export const TOPIC_GROUPS: { en: string; ar: string; topics: QuizTopic[] }[] = [
   { en: "Quran", ar: "القرآن", topics: ["BRANCHES", "COMPARE", "SURAH", "RECITE", "OPENINGS", "ENDS", "MEANING", "TAFSIR", "BALAGHA", "TERM", "IRAB", "QIRAAT", "QIRAAT_WHO"] },
   { en: "Tuhfat al-Atfal", ar: "تحفة الأطفال", topics: ["TUHFA_COMPLETE", "TUHFA_NEXT", "TUHFA_RULE"] },
-  { en: "Tarajim", ar: "التراجم", topics: ["TARAJIM_NASAB", "TARAJIM_VIRTUE", "TARAJIM_TIE"] },
-  { en: "Sira", ar: "السيرة", topics: ["SIRA"] },
+  { en: "Tarajim", ar: "التراجم", topics: ["TARAJIM_NASAB", "TARAJIM_VIRTUE", "TARAJIM_TIE", "TARAJIM_LIFE", "TARAJIM_LAQAB", "TARAJIM_KUNYA"] },
+  { en: "Sira", ar: "السيرة", topics: ["SIRA", "PROPHET_NAMES"] },
   { en: "Hadith", ar: "الحديث", topics: ["HADITH_NARRATOR", "HADITH_COMPLETE", "HADITH_BOOK", "SAHIH_KITAB"] },
 ];
 

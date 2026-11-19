@@ -5,6 +5,7 @@ import { pageGroups, type MushafPage as MushafPageData } from '@shared/quran/rea
 import { isSajda, juzName, quarterLabel } from '@shared/quran/mushafMarks';
 import { num } from '@shared/quran/arabicNumber';
 import styles from './Mushaf.module.css';
+import { flowFontSize } from '@shared/quran/quranText/flow';
 import type { WriteBlank } from '@shared/quiz/writeBlanks';
 import type { WriteBlanks } from '@/components/recite/useRecite';
 
@@ -69,7 +70,7 @@ function fit(body: HTMLElement, centred: boolean, zoom: number, sliced = false) 
   });
   // Flowing text: about the printed page's size at 1, the same on every page; the lines are the browser's.
   if (zoom > 1) {
-    body.style.fontSize = `${body.clientWidth * 0.063 * zoom}px`;
+    body.style.fontSize = `${flowFontSize(body.clientWidth, zoom)}px`;
     return;
   }
   const natural = lines.map(line => {

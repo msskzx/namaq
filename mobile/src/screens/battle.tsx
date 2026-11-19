@@ -1,3 +1,4 @@
+import { useRef, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { Text } from '@/ui/Text';
@@ -6,6 +7,7 @@ import Card from '@/ui/Card';
 import { Section } from '@/components/QuizForm';
 import { usePalette, type Palette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
+import { useTabRetap } from '@/lib/tabRetap';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { back } from '@/lib/ways';
 import { battleOf } from '@/lib/battles';
@@ -47,13 +49,15 @@ export default function BattleScreen() {
   const palette = usePalette();
   const onScroll = useShrinkOnScroll();
   const bottom = useTabBarSpace();
+  const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
+  useTabRetap('battle', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   const { slug = '' } = useLocalSearchParams<{ slug?: string }>();
   const battle = battleOf(slug);
   if (!battle) return <View style={{ flex: 1, backgroundColor: palette.paper }}><TopBar back={back} /></View>;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar back={back} hideOnScroll />
-      <ScrollView onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 14 }}>
+      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 14 }}>
         <BattleView battle={battle} palette={palette} />
       </ScrollView>
     </View>

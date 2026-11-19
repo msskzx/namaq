@@ -1,4 +1,4 @@
-import { expect, open, readerPage, returningUser, stored, test } from './fixtures';
+import { expect, open, readerPage, reciteBarsHidden, returningUser, stored, test } from './fixtures';
 import { surahName as S } from '../../shared/quran/surahNames';
 import * as adhan from 'adhan';
 import { DEFAULT_PRAYER_SETTINGS, prayerDay, type Adhan } from '../../shared/prayer';
@@ -47,6 +47,32 @@ test.describe('a new user', () => {
       await expect(page.getByRole('button', { name: 'استوديو القراءة' }).first()).toBeAttached();
       await page.getByRole('button', { name: 'افتحها في المقارنة' }).first().click();
       await expect(page).toHaveURL(/\/compare/);
+    });
+
+    // Owner, 2026-11-19: no box inside a feed card, and the buttons sit in the row under the card, not in it.
+    test('the tree quiz card holds no box and keeps its buttons under the card, before and after the answer', async ({ page }) => {
+      await open(page, '/');
+      const head = page.getByRole('heading', { name: 'أكمل المتشابهات', exact: true }).first();
+      await expect(head).toBeAttached({ timeout: 20_000 });
+      await head.scrollIntoViewIfNeeded();
+      const post = head.locator('xpath=ancestor::div[.//*[@data-testid="feed-card"]][1]');
+      const card = post.getByTestId('feed-card');
+      const row = post.locator('xpath=.//*[@aria-label="اختبار فردي"]/..');
+      const boxes = () => card.evaluate(root => [...root.querySelectorAll('*')].filter(el => {
+        if (el.closest('[role="button"], button, input, textarea')) return false;
+        const style = getComputedStyle(el);
+        const sides = ['Top', 'Right', 'Bottom', 'Left'].every(side => parseFloat(style.getPropertyValue(`border-${side.toLowerCase()}-width`)) > 0);
+        return sides && parseFloat(style.borderTopLeftRadius) >= 10;
+      }).length);
+      expect(await boxes()).toBe(0);
+      // The hint is the card's own button: it waits in the row with the quiz buttons.
+      await expect(row.getByRole('button', { name: /^تلميح/ })).toHaveCount(1);
+      await expect(card.getByRole('button', { name: /^تلميح/ })).toHaveCount(0);
+      await row.getByRole('button', { name: 'إظهار الإجابة' }).click();
+      // Answered, the matrix draws no frame of its own, and its buttons join the same row.
+      await expect(row.getByRole('button', { name: 'الآيات المحيطة' })).toHaveCount(1);
+      await expect(card.getByRole('button', { name: 'الآيات المحيطة' })).toHaveCount(0);
+      expect(await boxes()).toBe(0);
     });
 
     test.describe('with the tree picked in settings', () => {
@@ -185,7 +211,7 @@ test.describe('a new user', () => {
     test.setTimeout(180_000);
     // Each round asks about half the interests, each in its own kind in turn by the round and the day.
     const kinds = ['في أي سورة؟', 'أكمل المتشابهات', 'سمّع بقية الآية', 'قارن الموضعين', 'أوائل السور', 'ما معنى؟', 'لأي آية هذا التفسير؟', 'ما الأسلوب؟', 'ما المصطلح؟', 'ما إعرابها؟', 'كيف يقرؤها؟',
-      'التحفة: أكمل البيت', 'التحفة: البيت التالي', 'التحفة: حكم الحرف', 'أين يلتقي النسبان؟', 'صاحب المنقبة', 'ما صلته به؟', 'السيرة والغزوات', 'من راوي الحديث؟', 'أكمل الحديث'];
+      'التحفة: أكمل البيت', 'التحفة: البيت التالي', 'التحفة: حكم الحرف', 'أين يلتقي النسبان؟', 'صاحب المنقبة', 'ما صلته به؟', 'في أي سنة كان؟', 'السيرة والغزوات', 'من راوي الحديث؟', 'أكمل الحديث'];
     const seen = new Set<string>();
     for (const days of [0, 1, 2, 3, 4, 5, 6]) {
       await page.clock.setFixedTime(new Date(Date.now() + days * 86_400_000));
@@ -366,7 +392,7 @@ test.describe('a returning user', () => {
     await open(page, '/');
     await page.getByRole('button', { name: 'راجع ما نسيت' }).click();
     await expect.poll(() => readerPage(page)).toBe(294);
-    await expect(page.getByRole('button', { name: 'أظهر الآية التالية' })).toBeVisible();
+    await reciteBarsHidden(page);
   });
 
   test('the notes list in «مدونتي» lists the notes, and a note can be deleted', async ({ page }) => {
