@@ -1,9 +1,14 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it } from 'vitest';
-import { clearForgotten, markAyah, markWord, wordMarkKey, dueMarks, markForgotten, readAyahMarks, readDueMarks, mostForgotten, rememberAyah } from './ayahMarks';
+import { ayahHref, clearForgotten, markAyah, markWord, wordMarkKey, dueMarks, markForgotten, readAyahMarks, readDueMarks, mostForgotten, rememberAyah } from './ayahMarks';
 
 describe('ayahMarks', () => {
   beforeEach(() => localStorage.clear());
+
+  it('opens a forgotten word\'s ayah', () => {
+    expect(ayahHref('2:255')).toBe('/quran/read/ayah/2/255');
+    expect(ayahHref('2:255:3')).toBe('/quran/read/ayah/2/255');
+  });
 
   it('counts each time an ayah is forgotten', () => {
     markForgotten('57:3');

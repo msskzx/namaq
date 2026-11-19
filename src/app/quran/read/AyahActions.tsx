@@ -30,8 +30,10 @@ function Act({ label, name, on = false, tint = 'var(--home-accent)', pressed, po
  * its compare cards, the trees that hold it, how the ten readers differ in its words and al-Sa'di's tafsir, each previewed
  * in a sheet (AyahPreviewSheet). The first three show only when there are any; every ayah has its tafsir.
  */
-export default function AyahActions({ ayah, x, y, below, forgot, saved, noted = false, ar, links, irab = false, words, scope = 'ayah', text = '', undo = false, onScope, onCopy, onPlaces, onShareWords, onListen, onRecite, onForgot, onClear, onSave, onNote, onPreview, onTopics, onShare, onClose, onDismiss = onClose }: {
+export default function AyahActions({ ayah, x, y, below, due, forgot, saved, noted = false, ar, links, irab = false, words, scope = 'ayah', text = '', undo = false, onScope, onCopy, onPlaces, onShareWords, onListen, onRecite, onForgot, onClear, onSave, onNote, onPreview, onTopics, onShare, onClose, onDismiss = onClose }: {
   ayah: string;
+  /** Something in the ayah is due for review (the ayah or one of its words): «تذكّرتها» shows. Defaults to `forgot > 0`. */
+  due?: boolean;
   /** Where the pressed word ends below: the buttons open there when there is no room above it. */
   below?: number;
   /** The pressed word, or the words dragged over after the long press: a tab switches the buttons to theirs (owner, 2026-11-19). */
@@ -121,7 +123,7 @@ export default function AyahActions({ ayah, x, y, below, forgot, saved, noted = 
       {scope === 'ayah' ? <>
         {onListen && <Act label={ar ? 'استمع من هذه الآية' : 'Listen from this ayah'} name={ar ? 'استمع' : 'Listen'} onClick={() => { onListen(); onClose(); }}><Play aria-hidden /></Act>}
         {onRecite && <Act label={ar ? 'سمّع من هذه الآية' : 'Recite from this ayah'} name={ar ? 'سمّع' : 'Recite'} onClick={() => { onRecite(); onClose(); }}><EyeOff aria-hidden /></Act>}
-        {forgot > 0 && <Act label={clearLabel} name={ar ? 'تذكّرتها' : 'Recalled'} onClick={() => { onClear(); onClose(); }}><Check aria-hidden className="text-[var(--home-green)]" /></Act>}
+        {(due ?? forgot > 0) && <Act label={clearLabel} name={ar ? 'تذكّرتها' : 'Recalled'} onClick={() => { onClear(); onClose(); }}><Check aria-hidden className="text-[var(--home-green)]" /></Act>}
         <Act label={saveLabel} name={ar ? 'احفظ' : 'Save'} on={saved} tint="var(--home-root)" pressed={saved} onClick={() => { onSave(); onClose(); }}><Bookmark aria-hidden fill={saved ? 'currentColor' : 'none'} /></Act>
         {onNote && <Act label={noteLabel} name={ar ? NOTE_NAME : 'Note'} on={noted} pressed={noted} onClick={() => { onNote(); onClose(); }}><NotebookPen aria-hidden /></Act>}
         {onTopics && <Act label={ar ? 'موضوع الآية في السورة' : 'Topic of this ayah'} name={ar ? 'الموضوعات' : 'Topics'} popup onClick={() => { onTopics(); onClose(); }}><TableOfContents aria-hidden /></Act>}

@@ -80,6 +80,8 @@ export type Write = { key: string; targets: number[]; typed: Record<number, stri
 /** A checked ayah: its right and wrong words, and what was typed for each wrong one (shown struck through above it). */
 export type Checked = { key: string; right: number[]; wrong: number[]; typed: Record<number, string> };
 
+/** How far a finger selecting words may go from the word it pressed: anywhere on the screen. */
+const HOLD = { top: 4000, bottom: 4000, left: 4000, right: 4000 };
 const tint = (hex: string, alpha: number) => `${hex}${Math.round(alpha * 255).toString(16).padStart(2, '0')}`;
 
 function Word({ press, onLayout, hold, children }: { press?: object; onLayout?: (event: LayoutChangeEvent) => void; hold?: (view: ComponentRef<typeof View> | null) => void; children: React.ReactNode }) {
@@ -266,7 +268,10 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
   const holdWord = (key: string, word: number) => (view: ComponentRef<typeof View> | null) => { wordViews.current[`${key}:${word}`] = view; };
   /** The drag after a long press: the pressed word, the one under the finger now, and the ayah's words' boxes on screen. */
   const dragging = useRef<{ key: string; anchor: number; now: number; boxes: (Box | null)[] } | null>(null);
+  // While it drags, the pressed word keeps the finger however far it goes: a press lets go once the finger leaves its box.
+  const [selecting, setSelecting] = useState<string | null>(null);
   const startDrag = (key: string, anchor: number) => {
+    setSelecting(key);
     const views = Object.entries(wordViews.current).filter(([id, view]) => view && id.startsWith(`${key}:`) && id.split(':').length === 3);
     const session = { key, anchor, now: anchor, boxes: [] as (Box | null)[] };
     dragging.current = session;
@@ -293,9 +298,11 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
       const session = dragging.current;
       if (!session) return;
       dragging.current = null;
+      setSelecting(null);
       onSelect?.(session.key, session.anchor, session.now, event.nativeEvent.pageX, event.nativeEvent.pageY, true);
     },
     delayLongPress: 500,
+    ...(key && selecting === key ? { pressRetentionOffset: HOLD } : {}),
   });
 
   // A highlighted ayah is one band behind its words on each line (the gaps between words included), not a box per word.
