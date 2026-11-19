@@ -50,7 +50,8 @@ export function hadithCards(day: number, slots: number[]): HadithCard[] {
     const kind = KINDS[slot % KINDS.length];
     if (kind === 'recorded') {
       if (!FEED_FORTY.length) return [];
-      const entry = FEED_FORTY[turnOf(day, turn, FEED_FORTY.length)];
+      // Half the list on from the hadith card of its group, so the two never show the same hadith side by side.
+      const entry = FEED_FORTY[turnOf(day, turn + Math.ceil(FEED_FORTY.length / 2), FEED_FORTY.length)];
       return [{ slot, kind, entry: short(entry), books, boxes: recordedIn(entry) }];
     }
     if (kind === 'hadith') return FEED_FORTY.length ? [{ slot, kind: 'hadith', entry: short(FEED_FORTY[turnOf(day, turn, FEED_FORTY.length)]), books }] : [];

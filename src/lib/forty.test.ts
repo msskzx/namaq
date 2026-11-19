@@ -13,6 +13,8 @@ describe('the Forty in the feed', () => {
   it('carries only the Forty al-Nawawi takes whole from the Sahihayn (the most authentic first), in every card', () => {
     const cards = hadithCards(20000, Array.from({ length: 90 }, (_, i) => i));
     expect(cards.some(card => card.kind === 'recorded')).toBe(true);
+    // A group's hadith card and its «من أخرجه» card are never the same hadith.
+    for (const card of cards.filter(each => each.kind === 'recorded')) expect(cards.find(each => each.slot === card.slot - 2)!.entry.n).not.toBe(card.entry.n);
     for (const card of cards) {
       const entry = fortyEntry(card.entry.n)!;
       expect(entry.partial, `${card.kind} ${entry.n}`).toBeFalsy();

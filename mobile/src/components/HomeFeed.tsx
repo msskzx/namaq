@@ -746,8 +746,8 @@ function HadithPost({ id, palette }: { id: string; palette: Palette }) {
 }
 
 /**
- * «من أخرجه» (owner, 2026-11-19; sketch /mnt/project-files/hadith-sciences, frame 3b): the start of one of the Forty, the
- * drawing of the books that record it, and what a collector said of his own record, in his words. The head opens its page.
+ * «من أخرجه» (owner, 2026-11-19; sketch /mnt/project-files/hadith-sciences, frame 3b): the start of one of the Forty al-Nawawi
+ * takes whole from the Sahihayn and the drawing of the places that record it. The head opens its page.
  */
 function RecordedPost({ id, palette }: { id: string; palette: Palette }) {
   const entry = FEED_FORTY.find(each => String(each.n) === id);
