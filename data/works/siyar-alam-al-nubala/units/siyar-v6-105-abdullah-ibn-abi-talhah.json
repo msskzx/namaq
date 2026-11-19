@@ -263,7 +263,7 @@
     {
       "id": "m_at2_c_abdullah",
       "parent": "sp_at2_sons",
-      "exact": "وَعَبْدُ اللهِ بنُ عَبْدِ اللهِ",
+      "exact": "عَبْدُ اللهِ بنُ عَبْدِ اللهِ",
       "occurrence": 1,
       "role": "SUBJECT"
     }
@@ -517,7 +517,8 @@
         "object": "m_at2_f"
       },
       "restsOn": [
-        "st_at2_ten"
+        "st_at2_ten",
+        "st_at2_sons"
       ],
       "status": "PROPOSED"
     },
@@ -529,7 +530,8 @@
         "object": "m_at2_f"
       },
       "restsOn": [
-        "st_at2_ten"
+        "st_at2_ten",
+        "st_at2_sons"
       ],
       "status": "PROPOSED"
     }

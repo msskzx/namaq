@@ -130,6 +130,14 @@
       "prefix": "رَوَتْ عَنِ "
     },
     {
+      "id": "sp_sf_marasil",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "508",
+      "layer": "MAIN",
+      "exact": "وَهَذَا مِنْ أَقْوَى المَرَاسِيلِ"
+    },
+    {
       "id": "sp_sf_ibnuha",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
@@ -221,6 +229,14 @@
       "report": "r_sf0",
       "spans": [
         "sp_sf_nabi"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sf_marasil",
+      "report": "r_sf0",
+      "spans": [
+        "sp_sf_marasil"
       ],
       "role": "AUTHOR_REPORT"
     },
@@ -469,7 +485,8 @@
       },
       "restsOn": [
         "st_sf_ruya",
-        "st_sf_daraqutni"
+        "st_sf_daraqutni",
+        "st_sf_marasil"
       ],
       "status": "DISPUTED"
     },

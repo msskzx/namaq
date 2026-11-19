@@ -115,7 +115,17 @@
       "volume": 6,
       "page": "486",
       "layer": "MAIN",
-      "exact": "وَبَعْضُهُم عَدَّهُ فِي الصَّحَابَةِ، بِاعْتِبَارِ إِدْرَاكِ زَمَنِ النُّبُوَّةِ"
+      "exact": "وَبَعْضُهُم عَدَّهُ فِي الصَّحَابَةِ",
+      "suffix": "، بِاعْتِبَارِ"
+    },
+    {
+      "id": "sp_hu_itibar",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "بِاعْتِبَارِ إِدْرَاكِ زَمَنِ النُّبُوَّةِ",
+      "prefix": "عَدَّهُ فِي الصَّحَابَةِ، "
     }
   ],
   "reports": [
@@ -189,6 +199,14 @@
         "sp_hu_suhbah"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_hu_itibar",
+      "report": "r_hu0",
+      "spans": [
+        "sp_hu_itibar"
+      ],
+      "role": "AUTHOR_REPORT"
     }
   ],
   "mentions": [
@@ -513,9 +531,10 @@
         "object": "m_hu_comp_prophet"
       },
       "restsOn": [
-        "st_hu_suhbah"
+        "st_hu_suhbah",
+        "st_hu_itibar"
       ],
-      "status": "PROPOSED"
+      "status": "DISPUTED"
     }
   ]
 }

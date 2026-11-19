@@ -15,10 +15,14 @@ Entries 110–113 (عبد الله بن شداد، كعب الأحبار، زي�
 contested Companion (siyar-index, docs/data-pipelines.md «Companion scope»). They are not converted.
 
 **#117 al-Sunabihi (عبد الرحمن بن عسيلة) is left out too**, though the index marked him «contested». Read in full
-(p505–507), the entry settles it: «قدم المدينة بعد وفاة النبي ﷺ بليال» (the author) and his own words «ما فاتني النبي ﷺ
-إلا بخمس ليال، قبض وأنا بالجحفة». The two «له صحبة» on his pages are about other men: Ibn Ma'in's «وعبد الله الصنابحي
-يشبه أن يكون له صحبة» is about عبد الله الصنابحي, whom «بعضهم يهم فيه» confuses with him, and Ibn al-Madini's is about
-الصنابح بن الأعسر الأحمسي. So nobody on the page claims companionship for him, and he stays out with entries 110–113.
+(p505–507), the author settles it against: «قدم المدينة بعد وفاة النبي ﷺ بليال», and his own words agree («ما فاتني
+النبي ﷺ إلا بخمس ليال»). Ibn Ma'in's «وعبد الله الصنابحي يشبه أن يكون له صحبة» is about the name «عبد الله», which the
+author calls a mistake for this man («وبعضهم يهم فيه»), and Ibn al-Madini's «له صحبة» is about الصنابح بن الأعسر.
+
+**#104 Muhammad ibn Abi Bakr and the other «born in the Prophet's ﷺ lifetime» entries stay in** with no COMPANION_OF:
+siyar-index takes in an entry whose subject was born in the Prophet's lifetime (here «ولدته… في حجة الوداع», p481) as a
+Companion by age, per docs/data-pipelines.md («excluding a real Companion costs a silent hole»). The tie itself is only
+modeled where the page states one.
 
 ## Classified diff (`npm run model:diff -- <slug>`)
 
@@ -46,6 +50,20 @@ Sixteen of the eighteen have no catalog entry («no catalog entry»), so every v
 | 115 | abdullah-ibn-thalabah-ibn-suayr | name, father, kunya, COMPANION_OF (the Prophet ﷺ wiped his head, author), virtues «شاعرا، فصيحا، نسابة» (author; quiz skip, general) and al-Zuhri learning nasab from him (editor: sahih chain, after Ibn Hajar), death 89 (Khalifah and others) | «وقيل: بل ولد عام الفتح» and the author's answer (no birth predicate; it is within the Prophet's lifetime, so it does not contest the tie) |
 | 116 | abdullah-ibn-rabiah-as-sulami | name, father, COMPANION_OF ×2, each DISPUTED (GUIDE 3a): the unnamed «قيل: له صحبة» with the author's «فإن لم تكن، فحديثه من قبيل المرسل», and Shu'bah's «وكانت له صحبة» with the author's «هكذا قال» | «توفي بعد الثمانين» (no year). The entry never names the Prophet ﷺ, so the tie's object is his name in the editor's note on Shu'bah's hadith (al-Nasa'i, «أنه كان مع رسول الله ﷺ في سفر»); the note is not a statement the tie rests on |
 | 118 | safiyyah-bint-shaybah | name (heading + nasab across p507–508), father Shaybah ibn Uthman, kunya, virtue «الفقيهة، العالمة» (quiz skip, general), COMPANION_OF DISPUTED (GUIDE 3a: «يقال: لها رؤية» against «ووهّى هذا: الدارقطني»), son Mansur | Ibn Hajar's reply to al-Daraqutni, quoted in the editor's note (al-Bukhari's ta'liq; Abu Dawud's chain «حسن» per al-Mizzi): an editor's quotation, not a statement in the book, so the tie stays «على خلاف»; the Ibn Majah report of her seeing him at the Ka'bah (p509 note: «فيه عنعنة ابن إسحاق»); «أحسب أنها عاشت إلى دولة الوليد» (no year) |
+
+## Second-agent review (fixed before the PR)
+
+- #106 Abd al-Rahman ibn al-Harith: the author's «ولا صحبة لعبد الرحمن، بل له رؤية» settles it, so the COMPANION_OF is removed (GUIDE 3a, ADR 0025); the sentence stays a statement.
+- #108 Hashim: «وبعضهم عده في الصحابة» (unnamed) and the author's «باعتبار إدراك زمن النبوة» are now two statements, and the tie is DISPUTED on both.
+- #109 Tariq: the sayer of «رأيت رسول الله ﷺ وغزوت…» is Tariq, not Qays ibn Muslim who transmits it.
+- #97 Abu al-Tufayl: the sayer of the year 110 is Jarir, Wahb's father («سمعت أبي»), not Wahb.
+- #99 Amr ibn al-Zubayr: Ubaydah's «قد أجرته» sits inside a «قيل» story, so it is an unnamed report; appearance is «بديع الجمال» only.
+- #101, #105: relatives named without the conjunction («ميمونة», «عبد الله بن عبد الله»); #105's sons rest on the sentence that names them too.
+- #100 Amr ibn Akhtab: the tie rests on the author's «من مشاهير الصحابة»; «وغزا معه ثلاث عشرة غزوة» is no longer a virtue (the editor says only «رجاله ثقات»).
+- #107 Mahmud ibn Labid and #118 Safiyyah: the author's «يرسلها» / «وهذا من أقوى المراسيل» join the DISPUTED tie.
+- #114: Zayd is named by the author's nominative «زيد».
+
+Left for the main Tarajim thread: a relative's name is taken from the first unit's mention text, so an accusative print («عمرا»، «زيدا» in older units) can show as the name; #105 shows as «عبد الله بن أبي طلحة زيد»; #105's tie rests on a newborn's tahnik (PROPOSED); #116 is the first tie whose Prophet mention sits in the editor's notes.
 
 ## Quiz check (GUIDE check 4)
 

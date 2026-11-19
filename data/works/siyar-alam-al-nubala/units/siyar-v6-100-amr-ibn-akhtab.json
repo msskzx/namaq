@@ -76,6 +76,14 @@
       "page": "474",
       "layer": "MAIN",
       "exact": "وَغَزَا مَعَهُ ثَلاَثَ عَشْرَةَ غَزْوَةً"
+    },
+    {
+      "id": "sp_ak_mashahir",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "474",
+      "layer": "MAIN",
+      "exact": "مِنْ مَشَاهِيْرِ الصَّحَابَةِ الَّذِيْنَ نَزَلُوا البَصْرَةَ"
     }
   ],
   "reports": [
@@ -133,6 +141,14 @@
         "sp_ak_ghazwa_v"
       ],
       "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ak_mashahir",
+      "report": "r_ak0",
+      "spans": [
+        "sp_ak_mashahir"
+      ],
+      "role": "AUTHOR_REPORT"
     }
   ],
   "mentions": [
@@ -175,6 +191,13 @@
       "id": "m_ak_gh",
       "parent": "sp_ak_ghazwa_v",
       "exact": "وَغَزَا",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ak_ms",
+      "parent": "sp_ak_mashahir",
+      "exact": "مَشَاهِيْرِ",
       "occurrence": 1,
       "role": "REFERENT"
     },
@@ -238,6 +261,18 @@
     {
       "id": "i_ak_gh",
       "mention": "m_ak_gh",
+      "agent": "amr-ibn-akhtab",
+      "basis": [
+        {
+          "span": "sp_ak_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ak_ms",
+      "mention": "m_ak_ms",
       "agent": "amr-ibn-akhtab",
       "basis": [
         {
@@ -319,27 +354,14 @@
       "status": "PROPOSED"
     },
     {
-      "id": "a_ak_v_ghazwa",
-      "subject": "m_ak_gh",
-      "predicate": "virtue",
-      "value": {
-        "spans": [
-          "sp_ak_ghazwa_v"
-        ]
-      },
-      "restsOn": [
-        "st_ak_ghazwa"
-      ],
-      "status": "PROPOSED"
-    },
-    {
       "id": "a_ak_comp",
-      "subject": "m_ak_gh",
+      "subject": "m_ak_ms",
       "predicate": "COMPANION_OF",
       "value": {
         "object": "m_ak_comp_prophet"
       },
       "restsOn": [
+        "st_ak_mashahir",
         "st_ak_ghazwa"
       ],
       "status": "PROPOSED"
