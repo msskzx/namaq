@@ -70,7 +70,16 @@
       "exact": "كَانَ مَوْصُوَفاً بِالشَّجَاعَةِ وَالفُرُوْسِيَّةِ."
     },
     {
-      "id": "sp_zh20",
+      "id": "sp_zh18",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "382",
+      "layer": "MAIN",
+      "exact": "كَانَ مَوْصُوَفاً بِالشَّجَاعَةِ وَالفُرُوْسِيَّةِ",
+      "suffix": "."
+    },
+    {
+      "id": "sp_zh21",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "382",
@@ -78,7 +87,7 @@
       "exact": "قَالَ ابْنُ سَعْدٍ: أَخْبَرَنَا مُحَمَّدُ بنُ عُمَرَ، حَدَّثَنِي هِشَامُ بنُ عُمَارَةَ، عَنْ أَبِي الحُوَيْرِثِ، قَالَ:"
     },
     {
-      "id": "sp_zh23",
+      "id": "sp_zh24",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "382",
@@ -86,7 +95,7 @@
       "exact": "أَوَّلُ مَنْ قُتِلَ يَوْمَ أَجْنَادِيْنَ بَطْرِيقٌ، بَرَزَ يَدْعُو إِلَى البِرَازِ، فَبَرَزَ إِلَيْهِ عَبْدُ اللهِ بنُ الزُّبَيْرِ بنِ عَبْدِ المُطَّلِبِ"
     },
     {
-      "id": "sp_zh26",
+      "id": "sp_zh27",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "382",
@@ -108,13 +117,13 @@
       "chainState": "COMPLETE"
     },
     {
-      "id": "r_zh22",
+      "id": "r_zh23",
       "unit": "siyar-v6-55-ibn-az-zubayr-hashimi",
       "ordinal": 2,
       "voice": "TRANSMITTED",
-      "isnadSpan": "sp_zh20",
+      "isnadSpan": "sp_zh21",
       "origin": {
-        "mention": "m_zh21"
+        "mention": "m_zh22"
       },
       "chainState": "DEFERRED"
     }
@@ -139,7 +148,7 @@
       "role": "AUTHOR_REPORT"
     },
     {
-      "id": "st_zh18",
+      "id": "st_zh19",
       "report": "r_zh0",
       "spans": [
         "sp_zh17"
@@ -147,10 +156,10 @@
       "role": "AUTHOR_REPORT"
     },
     {
-      "id": "st_zh29",
-      "report": "r_zh22",
+      "id": "st_zh30",
+      "report": "r_zh23",
       "spans": [
-        "sp_zh23"
+        "sp_zh24"
       ],
       "role": "TRANSMITTED"
     }
@@ -178,22 +187,22 @@
       "role": "REFERENT"
     },
     {
-      "id": "m_zh21",
-      "parent": "sp_zh20",
+      "id": "m_zh22",
+      "parent": "sp_zh21",
       "exact": "أَبِي الحُوَيْرِثِ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
     {
-      "id": "m_zh24",
-      "parent": "sp_zh23",
+      "id": "m_zh25",
+      "parent": "sp_zh24",
       "exact": "عَبْدُ اللهِ",
       "occurrence": 1,
       "role": "SUBJECT"
     },
     {
-      "id": "m_zh27",
-      "parent": "sp_zh23",
+      "id": "m_zh28",
+      "parent": "sp_zh24",
       "exact": "أَجْنَادِيْنَ",
       "occurrence": 1,
       "role": "REFERENT"
@@ -237,8 +246,8 @@
       "status": "PROPOSED"
     },
     {
-      "id": "i_zh25",
-      "mention": "m_zh24",
+      "id": "i_zh26",
+      "mention": "m_zh25",
       "agent": "abdullah-ibn-az-zubayr-ibn-abd-al-muttalib",
       "basis": [
         {
@@ -249,12 +258,12 @@
       "status": "PROPOSED"
     },
     {
-      "id": "i_zh28",
-      "mention": "m_zh27",
+      "id": "i_zh29",
+      "mention": "m_zh28",
       "event": "ajnadayn",
       "basis": [
         {
-          "span": "sp_zh26",
+          "span": "sp_zh27",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -316,28 +325,28 @@
       "status": "PROPOSED"
     },
     {
-      "id": "a_zh19",
+      "id": "a_zh20",
       "subject": "m_zh3",
       "predicate": "virtue",
       "value": {
         "spans": [
-          "sp_zh17"
+          "sp_zh18"
         ]
       },
       "restsOn": [
-        "st_zh18"
+        "st_zh19"
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "a_zh30",
-      "subject": "m_zh24",
+      "id": "a_zh31",
+      "subject": "m_zh25",
       "predicate": "PARTICIPATED_IN",
       "value": {
-        "object": "m_zh27"
+        "object": "m_zh28"
       },
       "restsOn": [
-        "st_zh29"
+        "st_zh30"
       ],
       "status": "PROPOSED"
     }

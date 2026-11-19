@@ -149,7 +149,33 @@
       "exact": "شَهِدْتُ ابْنَ زِيَادٍ حَيْثُ أُتِيَ بِرَأْسِ الحُسَيْنِ، فَجَعَلَ يَنكُتُ بِقَضِيْبٍ مَعَهُ، فَقُلْتُ: أَمَا إِنَّهُ كَانَ أَشْبَهَهُمَا بِالنَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ -."
     },
     {
-      "id": "sp_hu38",
+      "id": "sp_hu36",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "281",
+      "layer": "MAIN",
+      "exact": "أَمَا إِنَّهُ كَانَ أَشْبَهَهُمَا بِالنَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ -",
+      "prefix": "فَقُلْتُ:"
+    },
+    {
+      "id": "sp_hu39",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "281",
+      "layer": "MAIN",
+      "exact": "كُنْتُ عِنْدَ ابْنِ عُمَرَ، فَسَأَلَهُ رَجُلٌ عَنْ دَمِ البَعُوضِ"
+    },
+    {
+      "id": "sp_hu40",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "281",
+      "layer": "MAIN",
+      "exact": "كُنْتُ عِنْدَ ابْنِ عُمَرَ",
+      "suffix": "، فَسَأَلَهُ"
+    },
+    {
+      "id": "sp_hu41",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "281",
@@ -157,7 +183,7 @@
       "exact": "مُحَمَّدُ بنُ عَبْدِ اللهِ بنِ أَبِي يَعْقُوْبَ: عَنِ ابْنِ أَبِي نُعْمٍ، قَالَ:"
     },
     {
-      "id": "sp_hu41",
+      "id": "sp_hu45",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "281",
@@ -168,20 +194,12 @@
       "id": "sp_hu46",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
-      "page": "282",
+      "page": "281",
       "layer": "MAIN",
-      "exact": "وَعَنِ الحَارِثِ، عَنْ عَلِيٍّ، مَرْفُوعاً"
+      "exact": "(هُمَا رَيْحَانَتَايَ مِنَ الدُّنْيَا)"
     },
     {
       "id": "sp_hu49",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 6,
-      "page": "282",
-      "layer": "MAIN",
-      "exact": "(الحَسَنُ وَالحُسَيْنُ: سَيِّدَا شَبَابِ أَهْلِ الجَنَّةِ"
-    },
-    {
-      "id": "sp_hu54",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "318",
@@ -190,7 +208,7 @@
       "prefix": "سَنَةً."
     },
     {
-      "id": "sp_hu57",
+      "id": "sp_hu52",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "318",
@@ -199,7 +217,7 @@
       "prefix": "قَالَ الجَمَاعَةُ:"
     },
     {
-      "id": "sp_hu58",
+      "id": "sp_hu53",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "318",
@@ -208,7 +226,7 @@
       "prefix": "مَاتَ يَوْمَ عَاشُورَاءَ،"
     },
     {
-      "id": "sp_hu61",
+      "id": "sp_hu56",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "321",
@@ -216,7 +234,7 @@
       "exact": "فَأَولاَدُ الحُسَيْنِ هُمْ: عَلِيٌّ الأَكْبَرُ الَّذِي قُتِلَ مَعَ أَبِيْهِ، وَعَلِيٌّ زِينُ العَابِديْنَ، وَذُرِّيَتُهُ عَدَدٌ كَثِيْرٌ، وَجَعْفَرٌ وَعَبْدُ اللهِ، وَلَمْ يُعْقِبَا."
     },
     {
-      "id": "sp_hu65",
+      "id": "sp_hu60",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "321",
@@ -224,7 +242,7 @@
       "exact": "عَلِيٌّ الأَكْبَرُ الَّذِي قُتِلَ مَعَ أَبِيْهِ"
     },
     {
-      "id": "sp_hu66",
+      "id": "sp_hu61",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "321",
@@ -232,7 +250,7 @@
       "exact": "اسْتوصِ بعَلِيِّ بنِ الحُسَيْنِ خَيراً"
     },
     {
-      "id": "sp_hu67",
+      "id": "sp_hu62",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "321",
@@ -240,7 +258,7 @@
       "exact": "وَجَعْفَرٌ وَعَبْدُ اللهِ، وَلَمْ يُعْقِبَا"
     },
     {
-      "id": "sp_hu68",
+      "id": "sp_hu63",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "321",
@@ -285,39 +303,29 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_hu40",
+      "id": "r_hu44",
       "unit": "siyar-v6-48-husayn",
       "ordinal": 4,
       "voice": "TRANSMITTED",
-      "isnadSpan": "sp_hu38",
+      "frame": [
+        "sp_hu40"
+      ],
+      "isnadSpan": "sp_hu41",
       "origin": {
-        "mention": "m_hu39"
+        "mention": "m_hu42"
       },
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_hu48",
+      "id": "r_hu51",
       "unit": "siyar-v6-48-husayn",
       "ordinal": 5,
       "voice": "TRANSMITTED",
       "frame": [
-        "sp_hu46"
+        "sp_hu49"
       ],
       "origin": {
-        "mention": "m_hu47"
-      },
-      "chainState": "DEFERRED"
-    },
-    {
-      "id": "r_hu56",
-      "unit": "siyar-v6-48-husayn",
-      "ordinal": 6,
-      "voice": "TRANSMITTED",
-      "frame": [
-        "sp_hu54"
-      ],
-      "origin": {
-        "mention": "m_hu55"
+        "mention": "m_hu50"
       },
       "chainState": "DEFERRED"
     }
@@ -351,7 +359,7 @@
       "role": "AUTHOR_REPORT"
     },
     {
-      "id": "st_hu36",
+      "id": "st_hu37",
       "report": "r_hu32",
       "spans": [
         "sp_hu33"
@@ -359,34 +367,26 @@
       "role": "TRANSMITTED"
     },
     {
-      "id": "st_hu44",
-      "report": "r_hu40",
+      "id": "st_hu47",
+      "report": "r_hu44",
       "spans": [
-        "sp_hu41"
+        "sp_hu45"
       ],
       "role": "TRANSMITTED"
     },
     {
-      "id": "st_hu52",
-      "report": "r_hu48",
+      "id": "st_hu54",
+      "report": "r_hu51",
       "spans": [
-        "sp_hu49"
+        "sp_hu52"
       ],
       "role": "TRANSMITTED"
     },
     {
-      "id": "st_hu59",
-      "report": "r_hu56",
-      "spans": [
-        "sp_hu57"
-      ],
-      "role": "TRANSMITTED"
-    },
-    {
-      "id": "st_hu62",
+      "id": "st_hu57",
       "report": "r_hu0",
       "spans": [
-        "sp_hu61"
+        "sp_hu56"
       ],
       "role": "AUTHOR_REPORT"
     }
@@ -428,71 +428,50 @@
       "role": "SUBJECT"
     },
     {
-      "id": "m_hu39",
-      "parent": "sp_hu38",
-      "exact": "ابْنِ أَبِي نُعْمٍ",
-      "occurrence": 1,
-      "role": "SPEAKER"
-    },
-    {
       "id": "m_hu42",
-      "parent": "sp_hu41",
-      "exact": "ابْنَ رَسُوْلِ اللهِ",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
-      "id": "m_hu47",
-      "parent": "sp_hu46",
-      "exact": "الحَارِثِ",
+      "parent": "sp_hu40",
+      "exact": "ابْنِ عُمَرَ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
     {
       "id": "m_hu50",
       "parent": "sp_hu49",
-      "exact": "وَالحُسَيْنُ",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
-      "id": "m_hu55",
-      "parent": "sp_hu54",
       "exact": "الجَمَاعَةُ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
     {
-      "id": "m_hu63",
-      "parent": "sp_hu61",
+      "id": "m_hu58",
+      "parent": "sp_hu56",
       "exact": "الحُسَيْنِ",
       "occurrence": 1,
       "role": "SUBJECT"
     },
     {
-      "id": "m_hu69",
-      "parent": "sp_hu61",
+      "id": "m_hu64",
+      "parent": "sp_hu56",
       "exact": "عَلِيٌّ الأَكْبَرُ",
       "occurrence": 1,
       "role": "REFERENT"
     },
     {
-      "id": "m_hu72",
-      "parent": "sp_hu61",
+      "id": "m_hu67",
+      "parent": "sp_hu56",
       "exact": "عَلِيٌّ زِينُ العَابِديْنَ",
       "occurrence": 1,
       "role": "REFERENT"
     },
     {
-      "id": "m_hu75",
-      "parent": "sp_hu61",
+      "id": "m_hu70",
+      "parent": "sp_hu56",
       "exact": "جَعْفَرٌ",
       "occurrence": 1,
       "role": "REFERENT"
     },
     {
-      "id": "m_hu78",
-      "parent": "sp_hu61",
+      "id": "m_hu73",
+      "parent": "sp_hu56",
       "exact": "عَبْدُ اللهِ",
       "occurrence": 1,
       "role": "REFERENT"
@@ -538,6 +517,18 @@
     {
       "id": "i_hu43",
       "mention": "m_hu42",
+      "agent": "abdullah-ibn-umar",
+      "basis": [
+        {
+          "span": "sp_hu39",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_hu59",
+      "mention": "m_hu58",
       "agent": "al-husayn-ibn-ali",
       "basis": [
         {
@@ -548,72 +539,48 @@
       "status": "PROPOSED"
     },
     {
-      "id": "i_hu51",
-      "mention": "m_hu50",
-      "agent": "al-husayn-ibn-ali",
-      "basis": [
-        {
-          "span": "sp_hu_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_hu64",
-      "mention": "m_hu63",
-      "agent": "al-husayn-ibn-ali",
-      "basis": [
-        {
-          "span": "sp_hu_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_hu70",
-      "mention": "m_hu69",
+      "id": "i_hu65",
+      "mention": "m_hu64",
       "agent": "ali-al-akbar-ibn-al-husayn",
       "basis": [
         {
-          "span": "sp_hu65",
+          "span": "sp_hu60",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "i_hu73",
-      "mention": "m_hu72",
+      "id": "i_hu68",
+      "mention": "m_hu67",
       "agent": "ali-ibn-al-husayn",
       "basis": [
         {
-          "span": "sp_hu66",
+          "span": "sp_hu61",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "i_hu76",
-      "mention": "m_hu75",
+      "id": "i_hu71",
+      "mention": "m_hu70",
       "agent": "jafar-ibn-al-husayn",
       "basis": [
         {
-          "span": "sp_hu67",
+          "span": "sp_hu62",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "i_hu79",
-      "mention": "m_hu78",
+      "id": "i_hu74",
+      "mention": "m_hu73",
       "agent": "abdullah-ibn-al-husayn",
       "basis": [
         {
-          "span": "sp_hu68",
+          "span": "sp_hu63",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -739,107 +706,93 @@
       "status": "PROPOSED"
     },
     {
-      "id": "a_hu37",
+      "id": "a_hu38",
       "subject": "m_hu34",
       "predicate": "virtue",
       "value": {
         "spans": [
-          "sp_hu33"
+          "sp_hu36"
         ]
       },
       "restsOn": [
-        "st_hu36"
+        "st_hu37"
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "a_hu45",
-      "subject": "m_hu42",
+      "id": "a_hu48",
+      "subject": "m_hu5",
       "predicate": "virtue",
       "value": {
         "spans": [
-          "sp_hu41"
+          "sp_hu46"
         ]
       },
       "restsOn": [
-        "st_hu44"
+        "st_hu47"
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "a_hu53",
-      "subject": "m_hu50",
-      "predicate": "virtue",
-      "value": {
-        "spans": [
-          "sp_hu49"
-        ]
-      },
-      "restsOn": [
-        "st_hu52"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_hu60",
+      "id": "a_hu55",
       "subject": "m_hu5",
       "predicate": "died.year",
       "value": {
         "parsed": 61,
         "spans": [
-          "sp_hu58"
+          "sp_hu53"
         ]
       },
       "restsOn": [
-        "st_hu59"
+        "st_hu54"
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "a_hu71",
-      "subject": "m_hu69",
+      "id": "a_hu66",
+      "subject": "m_hu64",
       "predicate": "CHILD_OF",
       "value": {
-        "object": "m_hu63"
+        "object": "m_hu58"
       },
       "restsOn": [
-        "st_hu62"
+        "st_hu57"
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "a_hu74",
-      "subject": "m_hu72",
+      "id": "a_hu69",
+      "subject": "m_hu67",
       "predicate": "CHILD_OF",
       "value": {
-        "object": "m_hu63"
+        "object": "m_hu58"
       },
       "restsOn": [
-        "st_hu62"
+        "st_hu57"
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "a_hu77",
-      "subject": "m_hu75",
+      "id": "a_hu72",
+      "subject": "m_hu70",
       "predicate": "CHILD_OF",
       "value": {
-        "object": "m_hu63"
+        "object": "m_hu58"
       },
       "restsOn": [
-        "st_hu62"
+        "st_hu57"
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "a_hu80",
-      "subject": "m_hu78",
+      "id": "a_hu75",
+      "subject": "m_hu73",
       "predicate": "CHILD_OF",
       "value": {
-        "object": "m_hu63"
+        "object": "m_hu58"
       },
       "restsOn": [
-        "st_hu62"
+        "st_hu57"
       ],
       "status": "PROPOSED"
     }

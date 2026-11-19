@@ -189,14 +189,6 @@
       "page": "245",
       "layer": "MAIN",
       "exact": "قُتِلَتْ قَيْسٌ بِمَرْجِ رَاهِطٍ مَقْتَلَةً لَمْ تُقْتَلْهَا قَطُّ فِي نِصْفِ ذِي الحِجَّةِ، سَنَةَ أَرْبَعٍ وَسِتِّيْنَ."
-    },
-    {
-      "id": "sp_dh59",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 6,
-      "page": "245",
-      "layer": "MAIN",
-      "exact": "سَنَةَ أَرْبَعٍ وَسِتِّيْنَ"
     }
   ],
   "reports": [
@@ -344,14 +336,6 @@
       "report": "r_dh48",
       "spans": [
         "sp_dh49"
-      ],
-      "role": "TRANSMITTED"
-    },
-    {
-      "id": "st_dh60",
-      "report": "r_dh57",
-      "spans": [
-        "sp_dh58"
       ],
       "role": "TRANSMITTED"
     }
@@ -631,21 +615,6 @@
       },
       "restsOn": [
         "st_dh53"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_dh61",
-      "subject": "m_dh2",
-      "predicate": "died.year",
-      "value": {
-        "parsed": 64,
-        "spans": [
-          "sp_dh59"
-        ]
-      },
-      "restsOn": [
-        "st_dh60"
       ],
       "status": "PROPOSED"
     }

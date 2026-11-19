@@ -133,7 +133,7 @@
       "exact": "عِكْرِمَةُ بنُ عَمَّارٍ: حَدَّثَنَا إِيَاسٌ، عَنْ أَبِيْهِ، قَالَ:"
     },
     {
-      "id": "sp_sa36",
+      "id": "sp_sa37",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "329",
@@ -141,7 +141,7 @@
       "exact": "(خَيْرُ فُرْسَانِنَا: أَبُو قَتَادَةَ، وَخَيْرُ رَجَّالَتِنَا: سَلَمَةُ)"
     },
     {
-      "id": "sp_sa41",
+      "id": "sp_sa42",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "331",
@@ -149,7 +149,7 @@
       "exact": "قَالَ الوَاقِدِيُّ، وَجَمَاعَةٌ"
     },
     {
-      "id": "sp_sa44",
+      "id": "sp_sa45",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "331",
@@ -158,7 +158,7 @@
       "prefix": "وَجَمَاعَةٌ:"
     },
     {
-      "id": "sp_sa45",
+      "id": "sp_sa46",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "331",
@@ -206,7 +206,7 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_sa35",
+      "id": "r_sa36",
       "unit": "siyar-v6-50-salamah-akwa",
       "ordinal": 4,
       "voice": "TRANSMITTED",
@@ -217,15 +217,15 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_sa43",
+      "id": "r_sa44",
       "unit": "siyar-v6-50-salamah-akwa",
       "ordinal": 5,
       "voice": "TRANSMITTED",
       "frame": [
-        "sp_sa41"
+        "sp_sa42"
       ],
       "origin": {
-        "mention": "m_sa42"
+        "mention": "m_sa43"
       },
       "chainState": "DEFERRED"
     }
@@ -268,18 +268,18 @@
       "role": "AUTHOR_REPORT"
     },
     {
-      "id": "st_sa39",
-      "report": "r_sa35",
+      "id": "st_sa40",
+      "report": "r_sa36",
       "spans": [
-        "sp_sa36"
+        "sp_sa37"
       ],
       "role": "TRANSMITTED"
     },
     {
-      "id": "st_sa46",
-      "report": "r_sa43",
+      "id": "st_sa47",
+      "report": "r_sa44",
       "spans": [
-        "sp_sa44"
+        "sp_sa45"
       ],
       "role": "TRANSMITTED"
     }
@@ -323,20 +323,20 @@
     {
       "id": "m_sa34",
       "parent": "sp_sa33",
-      "exact": "إِيَاسٌ",
+      "exact": "أَبِيْهِ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
     {
-      "id": "m_sa37",
-      "parent": "sp_sa36",
+      "id": "m_sa38",
+      "parent": "sp_sa37",
       "exact": "سَلَمَةُ",
       "occurrence": 1,
       "role": "SUBJECT"
     },
     {
-      "id": "m_sa42",
-      "parent": "sp_sa41",
+      "id": "m_sa43",
+      "parent": "sp_sa42",
       "exact": "الوَاقِدِيُّ",
       "occurrence": 1,
       "role": "SPEAKER"
@@ -380,8 +380,20 @@
       "status": "PROPOSED"
     },
     {
-      "id": "i_sa38",
-      "mention": "m_sa37",
+      "id": "i_sa35",
+      "mention": "m_sa34",
+      "agent": "salamah-ibn-al-akwa",
+      "basis": [
+        {
+          "span": "sp_sa_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sa39",
+      "mention": "m_sa38",
       "agent": "salamah-ibn-al-akwa",
       "basis": [
         {
@@ -489,31 +501,31 @@
       "status": "PROPOSED"
     },
     {
-      "id": "a_sa40",
-      "subject": "m_sa37",
+      "id": "a_sa41",
+      "subject": "m_sa38",
       "predicate": "virtue",
       "value": {
         "spans": [
-          "sp_sa36"
+          "sp_sa37"
         ]
       },
       "restsOn": [
-        "st_sa39"
+        "st_sa40"
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "a_sa47",
+      "id": "a_sa48",
       "subject": "m_sa6",
       "predicate": "died.year",
       "value": {
         "parsed": 74,
         "spans": [
-          "sp_sa45"
+          "sp_sa46"
         ]
       },
       "restsOn": [
-        "st_sa46"
+        "st_sa47"
       ],
       "status": "PROPOSED"
     }

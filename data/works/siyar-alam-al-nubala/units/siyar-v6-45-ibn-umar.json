@@ -175,35 +175,10 @@
       "volume": 6,
       "page": "210",
       "layer": "MAIN",
-      "exact": "وَقَالَ مُجَاهِدٌ",
-      "suffix": ": شَهِدَ ابْنُ عُمَرَ"
-    },
-    {
-      "id": "sp_iu54",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 6,
-      "page": "210",
-      "layer": "MAIN",
-      "exact": "شَهِدَ ابْنُ عُمَرَ الفَتْحَ، وَلَهُ عِشْرُوْنَ سَنَةً."
-    },
-    {
-      "id": "sp_iu57",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 6,
-      "page": "210",
-      "layer": "MAIN",
-      "exact": "ابْنُ عُمَرَ الفَتْحَ، وَلَهُ"
-    },
-    {
-      "id": "sp_iu62",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 6,
-      "page": "210",
-      "layer": "MAIN",
       "exact": "فَذَكَرْتُهَا لِحَفْصَةَ، فَقَصَّتْهَا حَفْصَةُ عَلَى رَسُوْلِ اللهِ"
     },
     {
-      "id": "sp_iu63",
+      "id": "sp_iu52",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "210",
@@ -211,7 +186,7 @@
       "exact": "وَرَوَى: سَالِمٌ، عَنْ أَبِيْهِ، قَالَ:"
     },
     {
-      "id": "sp_iu67",
+      "id": "sp_iu56",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "210",
@@ -219,23 +194,7 @@
       "exact": "نِعْمَ الرَّجُلُ عَبْدُ اللهِ، لَوْ كَانَ يُصَلِّي مِنَ اللَّيْلِ"
     },
     {
-      "id": "sp_iu72",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 6,
-      "page": "211",
-      "layer": "MAIN",
-      "exact": "قَالَ إِبْرَاهِيْمُ: قَالَ ابْنُ مَسْعُوْدٍ"
-    },
-    {
-      "id": "sp_iu75",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 6,
-      "page": "211",
-      "layer": "MAIN",
-      "exact": "إِنَّ مِنْ أَمْلَكِ شَبَابِ قُرَيْشٍ لِنَفْسهِ عَنِ الدُّنْيَا عَبْدَ اللهِ بنَ عُمَرَ"
-    },
-    {
-      "id": "sp_iu80",
+      "id": "sp_iu61",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "238",
@@ -243,7 +202,7 @@
       "exact": "وَأَوْلاَدُهُ مِنْ صَفِيَّةَ بِنْتِ أَبِي عُبَيْدٍ بنِ مَسْعُوْدٍ الثَّقَفِيِّ: أَبُو بَكْرٍ، وَوَاقِدٌ، وَعَبْدُ اللهِ، وَأَبُو عُبَيْدَةَ، وَعُمَرُ، وَحَفْصَةُ، وَسَوْدَةُ."
     },
     {
-      "id": "sp_iu82",
+      "id": "sp_iu63",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "238",
@@ -251,7 +210,7 @@
       "exact": "صَفِيَّةَ بِنْتِ أَبِي عُبَيْدٍ بنِ مَسْعُوْدٍ الثَّقَفِيِّ"
     },
     {
-      "id": "sp_iu86",
+      "id": "sp_iu67",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "231",
@@ -260,7 +219,7 @@
       "suffix": ": مَاتَ أَبِي"
     },
     {
-      "id": "sp_iu89",
+      "id": "sp_iu70",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "231",
@@ -268,7 +227,7 @@
       "exact": "مَاتَ أَبِي بِمَكَّةَ، وَدُفِنَ بفَخٍّ، سَنَةَ أَرْبَعٍ وَسَبْعِيْنَ، وَهُوَ ابْنُ أَرْبَعٍ وَثَمَانِيْنَ"
     },
     {
-      "id": "sp_iu91",
+      "id": "sp_iu72",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "231",
@@ -277,7 +236,7 @@
       "prefix": "وَدُفِنَ بفَخٍّ،"
     },
     {
-      "id": "sp_iu93",
+      "id": "sp_iu74",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "231",
@@ -286,7 +245,7 @@
       "prefix": "وَهُوَ"
     },
     {
-      "id": "sp_iu95",
+      "id": "sp_iu76",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "231",
@@ -296,7 +255,7 @@
       "suffix": "، وَدُفِنَ"
     },
     {
-      "id": "sp_iu97",
+      "id": "sp_iu78",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "232",
@@ -305,7 +264,7 @@
       "suffix": ": مَاتَ ابْنُ عُمَرَ"
     },
     {
-      "id": "sp_iu100",
+      "id": "sp_iu81",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "232",
@@ -313,7 +272,7 @@
       "exact": "مَاتَ ابْنُ عُمَرَ سَنَةَ ثَلاَثٍ وَسَبْعِيْنَ."
     },
     {
-      "id": "sp_iu101",
+      "id": "sp_iu82",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "232",
@@ -322,7 +281,7 @@
       "prefix": "مَاتَ ابْنُ عُمَرَ"
     },
     {
-      "id": "sp_iu104",
+      "id": "sp_iu85",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "232",
@@ -331,7 +290,7 @@
       "suffix": ": بَلغَ ابْنُ عُمَرَ"
     },
     {
-      "id": "sp_iu107",
+      "id": "sp_iu88",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "232",
@@ -339,7 +298,7 @@
       "exact": "بَلغَ ابْنُ عُمَرَ سَبْعاً وَثَمَانِيْنَ سَنَةً."
     },
     {
-      "id": "sp_iu108",
+      "id": "sp_iu89",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "232",
@@ -347,7 +306,7 @@
       "exact": "سَبْعاً وَثَمَانِيْنَ سَنَةً"
     },
     {
-      "id": "sp_iu111",
+      "id": "sp_iu92",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "232",
@@ -356,7 +315,7 @@
       "suffix": ": مَاتَ سَنَةَ ثَلاَثٍ"
     },
     {
-      "id": "sp_iu114",
+      "id": "sp_iu95",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "232",
@@ -365,7 +324,7 @@
       "prefix": "وَعِدَّةٌ:"
     },
     {
-      "id": "sp_iu115",
+      "id": "sp_iu96",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "232",
@@ -374,7 +333,7 @@
       "prefix": "وَعِدَّةٌ: مَاتَ"
     },
     {
-      "id": "sp_iu118",
+      "id": "sp_iu99",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "232",
@@ -383,7 +342,7 @@
       "suffix": ": مَاتَ سَنَةَ أَرْبَعٍ"
     },
     {
-      "id": "sp_iu121",
+      "id": "sp_iu102",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "232",
@@ -392,7 +351,7 @@
       "prefix": "وَغَيْرُهُمَا:"
     },
     {
-      "id": "sp_iu122",
+      "id": "sp_iu103",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "232",
@@ -401,7 +360,7 @@
       "prefix": "وَغَيْرُهُمَا: مَاتَ"
     },
     {
-      "id": "sp_iu125",
+      "id": "sp_iu106",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "232",
@@ -410,7 +369,7 @@
       "suffix": ": تُوُفِّيَ بِمَكَّةَ، وَدُفِنَ بذِي طُوَىً."
     },
     {
-      "id": "sp_iu128",
+      "id": "sp_iu109",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "232",
@@ -418,7 +377,7 @@
       "exact": "تُوُفِّيَ بِمَكَّةَ، وَدُفِنَ بذِي طُوَىً."
     },
     {
-      "id": "sp_iu129",
+      "id": "sp_iu110",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "232",
@@ -428,7 +387,7 @@
       "suffix": "، وَدُفِنَ بذِي طُوَىً."
     },
     {
-      "id": "sp_iu132",
+      "id": "sp_iu113",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "233",
@@ -436,7 +395,7 @@
       "exact": "يَكُوْنُ عُمُرُهُ خَمْساً وَثَمَانِيْنَ سَنَةً"
     },
     {
-      "id": "sp_iu133",
+      "id": "sp_iu114",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "233",
@@ -444,7 +403,7 @@
       "exact": "خَمْساً وَثَمَانِيْنَ سَنَةً"
     },
     {
-      "id": "sp_iu134",
+      "id": "sp_iu115",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
       "page": "232",
@@ -479,117 +438,91 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_iu53",
+      "id": "r_iu55",
       "unit": "siyar-v6-45-ibn-umar",
       "ordinal": 3,
       "voice": "TRANSMITTED",
-      "frame": [
-        "sp_iu51"
-      ],
+      "isnadSpan": "sp_iu52",
       "origin": {
-        "mention": "m_iu52"
+        "mention": "m_iu53"
       },
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_iu66",
+      "id": "r_iu69",
       "unit": "siyar-v6-45-ibn-umar",
       "ordinal": 4,
       "voice": "TRANSMITTED",
-      "isnadSpan": "sp_iu63",
+      "frame": [
+        "sp_iu67"
+      ],
       "origin": {
-        "mention": "m_iu64"
+        "mention": "m_iu68"
       },
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_iu74",
+      "id": "r_iu80",
       "unit": "siyar-v6-45-ibn-umar",
       "ordinal": 5,
       "voice": "TRANSMITTED",
       "frame": [
-        "sp_iu72"
+        "sp_iu78"
       ],
       "origin": {
-        "mention": "m_iu73"
+        "mention": "m_iu79"
       },
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_iu88",
+      "id": "r_iu87",
       "unit": "siyar-v6-45-ibn-umar",
       "ordinal": 6,
       "voice": "TRANSMITTED",
       "frame": [
-        "sp_iu86"
+        "sp_iu85"
       ],
       "origin": {
-        "mention": "m_iu87"
+        "mention": "m_iu86"
       },
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_iu99",
+      "id": "r_iu94",
       "unit": "siyar-v6-45-ibn-umar",
       "ordinal": 7,
       "voice": "TRANSMITTED",
       "frame": [
-        "sp_iu97"
+        "sp_iu92"
       ],
       "origin": {
-        "mention": "m_iu98"
+        "mention": "m_iu93"
       },
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_iu106",
+      "id": "r_iu101",
       "unit": "siyar-v6-45-ibn-umar",
       "ordinal": 8,
       "voice": "TRANSMITTED",
       "frame": [
-        "sp_iu104"
+        "sp_iu99"
       ],
       "origin": {
-        "mention": "m_iu105"
+        "mention": "m_iu100"
       },
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_iu113",
+      "id": "r_iu108",
       "unit": "siyar-v6-45-ibn-umar",
       "ordinal": 9,
       "voice": "TRANSMITTED",
       "frame": [
-        "sp_iu111"
+        "sp_iu106"
       ],
       "origin": {
-        "mention": "m_iu112"
-      },
-      "chainState": "DEFERRED"
-    },
-    {
-      "id": "r_iu120",
-      "unit": "siyar-v6-45-ibn-umar",
-      "ordinal": 10,
-      "voice": "TRANSMITTED",
-      "frame": [
-        "sp_iu118"
-      ],
-      "origin": {
-        "mention": "m_iu119"
-      },
-      "chainState": "DEFERRED"
-    },
-    {
-      "id": "r_iu127",
-      "unit": "siyar-v6-45-ibn-umar",
-      "ordinal": 11,
-      "voice": "TRANSMITTED",
-      "frame": [
-        "sp_iu125"
-      ],
-      "origin": {
-        "mention": "m_iu126"
+        "mention": "m_iu107"
       },
       "chainState": "DEFERRED"
     }
@@ -640,91 +573,75 @@
       "role": "TRANSMITTED"
     },
     {
-      "id": "st_iu60",
-      "report": "r_iu53",
+      "id": "st_iu59",
+      "report": "r_iu55",
       "spans": [
-        "sp_iu54"
+        "sp_iu56"
       ],
       "role": "TRANSMITTED"
     },
     {
-      "id": "st_iu70",
-      "report": "r_iu66",
-      "spans": [
-        "sp_iu67"
-      ],
-      "role": "TRANSMITTED"
-    },
-    {
-      "id": "st_iu78",
-      "report": "r_iu74",
-      "spans": [
-        "sp_iu75"
-      ],
-      "role": "TRANSMITTED"
-    },
-    {
-      "id": "st_iu81",
+      "id": "st_iu62",
       "report": "r_iu0",
       "spans": [
-        "sp_iu80"
+        "sp_iu61"
       ],
       "role": "AUTHOR_REPORT"
     },
     {
+      "id": "st_iu71",
+      "report": "r_iu69",
+      "spans": [
+        "sp_iu70"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_iu83",
+      "report": "r_iu80",
+      "spans": [
+        "sp_iu81"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
       "id": "st_iu90",
-      "report": "r_iu88",
+      "report": "r_iu87",
       "spans": [
-        "sp_iu89"
+        "sp_iu88"
       ],
       "role": "TRANSMITTED"
     },
     {
-      "id": "st_iu102",
-      "report": "r_iu99",
+      "id": "st_iu97",
+      "report": "r_iu94",
       "spans": [
-        "sp_iu100"
+        "sp_iu95"
       ],
       "role": "TRANSMITTED"
     },
     {
-      "id": "st_iu109",
-      "report": "r_iu106",
+      "id": "st_iu104",
+      "report": "r_iu101",
       "spans": [
-        "sp_iu107"
+        "sp_iu102"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_iu111",
+      "report": "r_iu108",
+      "spans": [
+        "sp_iu109"
       ],
       "role": "TRANSMITTED"
     },
     {
       "id": "st_iu116",
-      "report": "r_iu113",
-      "spans": [
-        "sp_iu114"
-      ],
-      "role": "TRANSMITTED"
-    },
-    {
-      "id": "st_iu123",
-      "report": "r_iu120",
-      "spans": [
-        "sp_iu121"
-      ],
-      "role": "TRANSMITTED"
-    },
-    {
-      "id": "st_iu130",
-      "report": "r_iu127",
-      "spans": [
-        "sp_iu128"
-      ],
-      "role": "TRANSMITTED"
-    },
-    {
-      "id": "st_iu135",
       "report": "r_iu0",
       "spans": [
-        "sp_iu134",
-        "sp_iu132"
+        "sp_iu115",
+        "sp_iu113"
       ],
       "role": "AUTHOR_REPORT"
     }
@@ -794,99 +711,64 @@
       "role": "SUBJECT"
     },
     {
-      "id": "m_iu52",
-      "parent": "sp_iu51",
-      "exact": "مُجَاهِدٌ",
-      "occurrence": 1,
-      "role": "SPEAKER"
-    },
-    {
-      "id": "m_iu55",
-      "parent": "sp_iu54",
-      "exact": "ابْنُ عُمَرَ",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
-      "id": "m_iu58",
-      "parent": "sp_iu54",
-      "exact": "الفَتْحَ",
-      "occurrence": 1,
-      "role": "REFERENT"
-    },
-    {
-      "id": "m_iu64",
-      "parent": "sp_iu63",
+      "id": "m_iu53",
+      "parent": "sp_iu52",
       "exact": "أَبِيْهِ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
     {
-      "id": "m_iu68",
-      "parent": "sp_iu67",
+      "id": "m_iu57",
+      "parent": "sp_iu56",
       "exact": "عَبْدُ اللهِ",
       "occurrence": 1,
       "role": "SUBJECT"
     },
     {
-      "id": "m_iu73",
-      "parent": "sp_iu72",
-      "exact": "ابْنُ مَسْعُوْدٍ",
-      "occurrence": 1,
-      "role": "SPEAKER"
-    },
-    {
-      "id": "m_iu76",
-      "parent": "sp_iu75",
-      "exact": "عَبْدَ اللهِ",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
-      "id": "m_iu83",
-      "parent": "sp_iu80",
+      "id": "m_iu64",
+      "parent": "sp_iu61",
       "exact": "صَفِيَّةَ بِنْتِ أَبِي عُبَيْدٍ",
       "occurrence": 1,
       "role": "REFERENT"
     },
     {
-      "id": "m_iu87",
-      "parent": "sp_iu86",
+      "id": "m_iu68",
+      "parent": "sp_iu67",
       "exact": "سَالِمِ بنِ عَبْدِ اللهِ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
     {
-      "id": "m_iu98",
-      "parent": "sp_iu97",
+      "id": "m_iu79",
+      "parent": "sp_iu78",
       "exact": "ضَمْرَةُ بنُ رَبِيْعَةَ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
     {
-      "id": "m_iu105",
-      "parent": "sp_iu104",
+      "id": "m_iu86",
+      "parent": "sp_iu85",
       "exact": "مَالِكٌ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
     {
-      "id": "m_iu112",
-      "parent": "sp_iu111",
+      "id": "m_iu93",
+      "parent": "sp_iu92",
       "exact": "أَبُو نُعَيْمٍ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
     {
-      "id": "m_iu119",
-      "parent": "sp_iu118",
+      "id": "m_iu100",
+      "parent": "sp_iu99",
       "exact": "سَعِيْدُ بنُ عُفَيْرٍ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
     {
-      "id": "m_iu126",
-      "parent": "sp_iu125",
+      "id": "m_iu107",
+      "parent": "sp_iu106",
       "exact": "أَبُو بَكْرٍ بنُ البَرْقِيِّ",
       "occurrence": 1,
       "role": "SPEAKER"
@@ -990,24 +872,24 @@
       "status": "PROPOSED"
     },
     {
-      "id": "i_iu56",
-      "mention": "m_iu55",
+      "id": "i_iu54",
+      "mention": "m_iu53",
       "agent": "abdullah-ibn-umar",
       "basis": [
         {
-          "span": "sp_iu_heading",
+          "span": "sp_iu51",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "i_iu59",
-      "mention": "m_iu58",
-      "event": "fath-makkah",
+      "id": "i_iu58",
+      "mention": "m_iu57",
+      "agent": "abdullah-ibn-umar",
       "basis": [
         {
-          "span": "sp_iu57",
+          "span": "sp_iu_heading",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -1016,46 +898,10 @@
     {
       "id": "i_iu65",
       "mention": "m_iu64",
-      "agent": "abdullah-ibn-umar",
-      "basis": [
-        {
-          "span": "sp_iu62",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_iu69",
-      "mention": "m_iu68",
-      "agent": "abdullah-ibn-umar",
-      "basis": [
-        {
-          "span": "sp_iu_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_iu77",
-      "mention": "m_iu76",
-      "agent": "abdullah-ibn-umar",
-      "basis": [
-        {
-          "span": "sp_iu_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_iu84",
-      "mention": "m_iu83",
       "agent": "safiyyah-bint-abi-ubayd",
       "basis": [
         {
-          "span": "sp_iu82",
+          "span": "sp_iu63",
           "role": "NASAB"
         }
       ],
@@ -1195,187 +1041,161 @@
       "status": "PROPOSED"
     },
     {
-      "id": "a_iu61",
-      "subject": "m_iu55",
-      "predicate": "PARTICIPATED_IN",
-      "value": {
-        "object": "m_iu58"
-      },
-      "restsOn": [
-        "st_iu60"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_iu71",
-      "subject": "m_iu68",
+      "id": "a_iu60",
+      "subject": "m_iu57",
       "predicate": "virtue",
       "value": {
         "spans": [
-          "sp_iu67"
+          "sp_iu56"
         ]
       },
       "restsOn": [
-        "st_iu70"
+        "st_iu59"
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "a_iu79",
-      "subject": "m_iu76",
-      "predicate": "virtue",
-      "value": {
-        "spans": [
-          "sp_iu75"
-        ]
-      },
-      "restsOn": [
-        "st_iu78"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_iu85",
+      "id": "a_iu66",
       "subject": "m_iu5",
       "predicate": "MARRIED",
       "value": {
-        "object": "m_iu83"
+        "object": "m_iu64"
       },
       "restsOn": [
-        "st_iu81"
+        "st_iu62"
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "a_iu92",
+      "id": "a_iu73",
       "subject": "m_iu5",
       "predicate": "died.year",
       "value": {
         "parsed": 74,
         "spans": [
-          "sp_iu91"
+          "sp_iu72"
         ]
       },
       "restsOn": [
-        "st_iu90"
+        "st_iu71"
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "a_iu94",
+      "id": "a_iu75",
       "subject": "m_iu5",
       "predicate": "died.age",
       "value": {
         "parsed": 84,
         "spans": [
-          "sp_iu93"
+          "sp_iu74"
         ]
       },
       "restsOn": [
-        "st_iu90"
+        "st_iu71"
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "a_iu96",
+      "id": "a_iu77",
       "subject": "m_iu5",
       "predicate": "died.place",
       "value": {
         "spans": [
-          "sp_iu95"
+          "sp_iu76"
         ]
       },
       "restsOn": [
-        "st_iu90"
+        "st_iu71"
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "a_iu103",
+      "id": "a_iu84",
       "subject": "m_iu5",
       "predicate": "died.year",
       "value": {
         "parsed": 73,
         "spans": [
-          "sp_iu101"
+          "sp_iu82"
         ]
       },
       "restsOn": [
-        "st_iu102"
+        "st_iu83"
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "a_iu110",
+      "id": "a_iu91",
       "subject": "m_iu5",
       "predicate": "died.age",
       "value": {
         "parsed": 87,
         "spans": [
-          "sp_iu108"
+          "sp_iu89"
         ]
       },
       "restsOn": [
-        "st_iu109"
+        "st_iu90"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iu98",
+      "subject": "m_iu5",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 73,
+        "spans": [
+          "sp_iu96"
+        ]
+      },
+      "restsOn": [
+        "st_iu97"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iu105",
+      "subject": "m_iu5",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 74,
+        "spans": [
+          "sp_iu103"
+        ]
+      },
+      "restsOn": [
+        "st_iu104"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iu112",
+      "subject": "m_iu5",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "sp_iu110"
+        ]
+      },
+      "restsOn": [
+        "st_iu111"
       ],
       "status": "PROPOSED"
     },
     {
       "id": "a_iu117",
       "subject": "m_iu5",
-      "predicate": "died.year",
-      "value": {
-        "parsed": 73,
-        "spans": [
-          "sp_iu115"
-        ]
-      },
-      "restsOn": [
-        "st_iu116"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_iu124",
-      "subject": "m_iu5",
-      "predicate": "died.year",
-      "value": {
-        "parsed": 74,
-        "spans": [
-          "sp_iu122"
-        ]
-      },
-      "restsOn": [
-        "st_iu123"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_iu131",
-      "subject": "m_iu5",
-      "predicate": "died.place",
-      "value": {
-        "spans": [
-          "sp_iu129"
-        ]
-      },
-      "restsOn": [
-        "st_iu130"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_iu136",
-      "subject": "m_iu5",
       "predicate": "died.age",
       "value": {
         "parsed": 85,
         "spans": [
-          "sp_iu133"
+          "sp_iu114"
         ]
       },
       "restsOn": [
-        "st_iu135"
+        "st_iu116"
       ],
       "status": "PROPOSED"
     }

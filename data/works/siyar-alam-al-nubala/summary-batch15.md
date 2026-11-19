@@ -37,17 +37,24 @@ Per person:
 - **Abd al-Rahman ibn Abza**: Nafi''s «عالم بالفرائض، قارئ لكتاب الله» (Muslim 817) stays out of the quiz (general
   praise).
 - **Abu Juhayfah**: the name is «وهب بن عبد الله» («واسمه»), with the kunya from the heading. Death 74 is «والأصح».
-- **Abdullah ibn Umar**: Badr through Ali ibn Jud'an is weak and left out. Salim's «عن أبيه» names Ibn Umar himself,
-  so the sayer of «نعم الرجل عبد الله» reads as him. Every death year (73, 74) and age (84, 87, 85) keeps its sayer.
+- **Abdullah ibn Umar**: left out as unsound: Badr through Ali ibn Jud'an (weak); Mujahid's «شهد ابن عمر الفتح»
+  (Mujahid was born after it, no grade); Ibn Mas'ud's «إن من أملك شباب قريش» through Ibrahim (broken, no grade).
+  Salim's «عن أبيه» names Ibn Umar himself, so the sayer of «نعم الرجل عبد الله» reads as him. Every death year
+  (73, 74) and age (84, 87, 85) keeps its sayer.
 - **al-Dahhak ibn Qais**: four kunyas (one from the author, three «وقيل»). His sister is left out (the speaker is
-  unclear).
-- **al-Hasan ibn Ali**: the catalog's «سيد شباب أهل الجنة» and «caliph» titles are **unsupported in his own entry**
-  (the first is in al-Husayn's entry, said of both). Abu Nu'aym al-Mula'i's 58 is **DISPUTED**: the author says
+  unclear). No death year: al-Waqidi's «سنة أربع وستين» dates the battle of Marj Rahit and does not name him.
+- **al-Hasan ibn Ali**: «سيد شباب أهل الجنة» is a virtue from Abu Sa'id (p251, «صححه: الترمذي»), said of both
+  brothers, so it is modeled here for each of them and kept out of the quiz (the author also gives it in his heading,
+  p246). The catalog's «caliph» title is not modeled (`office` is not shown yet). His mother rests on Abu Rafi'
+  (al-Haythami: «حديث حسن») and his brother on Usamah's «هذان ابناي وابنا بنتي» («وحسن الترمذي»); Ikrimah's
+  unwitnessed report of the naming is left out. Abu Nu'aym al-Mula'i's 58 is **DISPUTED**: the author says
   «وغلط». The resemblance to the Prophet ﷺ stays out of the quiz, since al-Husayn's entry says it of him too.
-- **al-Husayn ibn Ali**: «هما ريحانتاي», «سيدا شباب أهل الجنة» and Anas's «أشبههما» stay on the page and out of the
-  quiz (said of both brothers). His age is not stated.
+- **al-Husayn ibn Ali**: «هما ريحانتاي» (Ibn Umar, al-Bukhari 3753) and Anas's «أشبههما» stay on the page and out
+  of the quiz (said of both brothers). «سيدا شباب أهل الجنة» through al-Harith (weak) is left out; the sound report
+  is in al-Hasan's unit. His age is not stated.
 - **Abdullah ibn Hanzalah**: his death at al-Harrah has no catalog event and no year in his own statement.
-- **Salamah ibn al-Akwa'**: Mu'tah is «قيل», kept anonymous.
+- **Salamah ibn al-Akwa'**: Mu'tah is «قيل», kept anonymous. «خير رجالتنا: سلمة» is reported by Salamah himself
+  («عن أبيه» in Iyas's words).
 - **Abdullah ibn Abbas**: died 68 (Ibn al-Madini; al-Waqidi, al-Haytham and Abu Nu'aym) or 67 (Ibn al-Madini).
   «سنة ثمان» is printed without its decade. The units span is kept as printed, and the decade comes from «سبع وستين»
   in Ibn al-Madini's sentence (`decadeFrom`, GUIDE rule 16). His daughters Lubabah and Asma are left out (no «بنت»).
@@ -65,8 +72,8 @@ Per person:
   quiz as general praise); copying the mushafs (al-Bukhari) is out of the quiz, since four men share it. Died Jumada
   al-Akhirah 73 (Ibn Ishaq and others). Damrah and Abu Nu'aym's 72 is **DISPUTED** by the author's «ووهم», and its
   decade comes from «سنة ثلاث وسبعين» (rule 16).
-  Left out: «وقيل: سنة إحدى» for his birth (the date reader cannot read «إحدى» alone; born.year is not shown in the
-  app); his caliphate (the author says some scholars do not count him, and `office` is not shown yet); the ungraded
+  Left out: his birth year (the author gives 2 and «وقيل» 1; the date reader cannot read «إحدى» alone, and keeping
+  only 2 would pick a side); his caliphate (the author says some scholars do not count him, and `office` is not shown yet); the ungraded
   worship and appearance reports; the «يلحد بمكة» hadith (the author: «في إسناده مقال»); Ibn Umar's words at the
   cross (weak chain in the text; the editor gives the Muslim 2545 wording only in a footnote); «نيفا وسبعين» as his age.
 - **al-Mundhir ibn al-Zubayr** (new): name, kunya, father; his daughter Fatimah bint al-Mundhir (author). Killed
@@ -85,7 +92,10 @@ Per person:
 
 - `npm run model:check`: 221 units (203 on main + 18).
 - `npm run model:app-people`: re-run; 18 new people, none with an empty section or «ص ٠–٠».
-- `npx vitest run shared/ src/lib/model`: all pass except `shared/tapSize.test.ts`, which cannot load in this
-  container (the mobile app's packages are not installed).
+- `npx vitest run shared/ src/lib/model`: all pass.
+- Second-agent review: all must-fix items applied (unsound reports dropped or moved to graded ones, sayers fixed,
+  value spans trimmed, stale quiz-skip keys removed). Left for the main Tarajim thread: facts from historians who give
+  no chain (Ibn al-Athir's office for Ibn Abza, Ibn Asakir's battles for al-Dahhak, Abu Ishaq's description of Ibn
+  Umar), and the kunya-only headings (Abu Umamah, Abu Juhayfah) named by «واسمه» as earlier batches did.
 - Quiz read: kunya, laqab, tie and virtue questions for the 18 people read by hand. Shared virtues are in
   `virtueQuizSkip.json`.
