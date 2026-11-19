@@ -18,6 +18,7 @@ export async function GET(request: Request) {
   } catch (error) {
     if (error instanceof SyncError && ['resync_required', 'token_filter_mismatch', 'cursor_filter_mismatch', 'cursor_per_page_mismatch'].includes(error.code ?? '')) return NextResponse.json({ resync: true });
     console.error('listen-sync', error);
-    return NextResponse.json({ error: 'Sync failed' }, { status: error instanceof SyncError ? error.status : 500 });
+    // The reason (no secrets: a status and Quran Foundation's error name) so a failed download can be told apart from the phone.
+    return NextResponse.json({ error: 'Sync failed', ...(error instanceof SyncError ? { reason: error.message } : {}) }, { status: error instanceof SyncError ? error.status : 500 });
   }
 }
