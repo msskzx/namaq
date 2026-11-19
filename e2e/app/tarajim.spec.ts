@@ -39,7 +39,7 @@ test('the nasab tree shows where two lines meet', async ({ page }) => {
 // and «بينه وبين…» drawing the nearest chain between the people picked.
 test('the ties view draws a person with his ties and walks to a relative', async ({ page }) => {
   await open(page, '/person?slug=az-zubayr-ibn-al-awwam');
-  await page.getByRole('button', { name: 'ارسم صلاته' }).click();
+  await page.getByRole('button', { name: 'تنقّل في صلاته' }).click();
   await expect(page).toHaveURL(/\/ties\?slug=az-zubayr-ibn-al-awwam/);
   await expect(page.getByRole('heading', { name: 'الزبير بن العوام' })).toBeVisible();
   await page.getByRole('link', { name: /^أمه: صفية/ }).click();
@@ -54,4 +54,29 @@ test('between two people shows the chain that joins them, with its pages', async
   await page.getByRole('button', { name: 'أضف' }).click();
   await page.getByRole('button', { name: /^العباس/ }).click();
   await expect(page.getByRole('link', { name: /^العباس/ })).toBeVisible();
+});
+
+// The person page draws what we have of him (owner, 2026-11-19): «نسبه» as text or as the tree, «حياته» on the timeline
+// (sketch timeline-events/sketch-dark.png, screens 1 and 4), «صلاته» as the ring.
+test('the person page draws his nasab tree, his life and his ties', async ({ page }) => {
+  await open(page, '/person?slug=az-zubayr-ibn-al-awwam');
+  // The text first; the tree on the toggle, ending at him.
+  await expect(page.getByRole('tab', { name: 'النص', selected: true })).toBeVisible();
+  await page.getByRole('tab', { name: 'الشجرة' }).click();
+  await expect(page.getByRole('link', { name: 'الزبير' })).toBeVisible();
+  // His ties round him: his mother opens her own page.
+  await expect(page.getByRole('link', { name: /^أمه: صفية/ })).toBeVisible();
+  // His life: a raid filter keeps Badr and drops the battle of the Camel; Badr opens its page.
+  await expect(page.getByRole('link', { name: /معركة الجمل/ })).toBeVisible();
+  await page.getByRole('button', { name: 'الغزوات' }).click();
+  await expect(page.getByRole('link', { name: /معركة الجمل/ })).toHaveCount(0);
+  await page.getByRole('link', { name: 'غزوة بدر' }).click();
+  await expect(page).toHaveURL(/\/battle\?slug=badr/);
+});
+
+test('his life beside another\'s puts what they shared on one row', async ({ page }) => {
+  await open(page, '/life?slugs=az-zubayr-ibn-al-awwam,abu-bakr-as-siddiq');
+  // Both were at Badr: one box each, side by side; only al-Zubayr at the Camel.
+  await expect(page.getByRole('link', { name: 'غزوة بدر' })).toHaveCount(2);
+  await expect(page.getByRole('link', { name: 'معركة الجمل' })).toHaveCount(1);
 });

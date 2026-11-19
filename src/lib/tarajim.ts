@@ -8,6 +8,11 @@ import { bareName, chainOf, foldTop, lineOf, meetingOf, nasabTree, type NasabNod
 import { chainSentence, groupWord, linkedPairs, peopleGraph, stepClause, tieGroups, tieWord, type GraphNode, type TieKind } from '@shared/tarajimGraph';
 import { allVirtues } from '@shared/homeFeed';
 import { sourceById } from '@shared/sources';
+import lifeData from '@shared/data/events/life.json';
+import battlesData from '@shared/data/battles/battles.json';
+import type { AppLife } from '@shared/events/life';
+import type { AppBattle } from '@shared/battles/battle';
+import { lifeColumns, lifeItems, type LifeItem } from '@shared/events/lifeTimeline';
 
 export const PROPHET = 'prophet-muhammad';
 
@@ -168,4 +173,30 @@ export function tarajimCards(day: number, slots: number[]): TarajimCard[] {
       pages: [...new Set(pair.steps.map(step => pageLabel(step.link.refs)))].join(' · '),
     }];
   });
+}
+
+/** A person's «حياته» rows (shared/events/lifeTimeline.ts), as the app's lib/life.ts reads them. */
+export function personLife(person: AppPerson): LifeItem[] {
+  const [first, ...rest] = person.died.year.filter(fact => typeof fact.value === 'number');
+  const cite = (fact: PersonFact) => ({ text: unvowelled(fact.text), cite: pageLabel(fact.refs) });
+  const death = first && {
+    year: first.value as number, label: person.sex === 'FEMALE' ? 'وفاتها' : 'وفاته', refs: [cite(first)],
+    others: rest.map(fact => ({ text: unvowelled(fact.text), refs: [cite(fact)] })),
+  };
+  return lifeItems((lifeData as AppLife)[person.slug] ?? [], slug => battleKinds.get(slug), death || undefined);
+}
+const battleKinds = new Map((battlesData as AppBattle[]).map(battle => [battle.slug, battle.kind?.value]));
+
+/** What the person page draws for someone whose entry is converted: his name as the book writes it, his nasab tree, his life and his ties. */
+export type DrawingsView = PersonHead & { fullName?: string; nasab: NasabView; life: LifeItem[]; ties?: TiesView };
+export function drawingsView(slug: string): DrawingsView | undefined {
+  const person = findPerson(slug);
+  if (!person) return undefined;
+  return { ...head(person), fullName: person.fullName?.text, nasab: nasabView([slug], false), life: personLife(person), ties: tiesView(slug) };
+}
+
+/** Lives side by side, for the website's «حياتهما» page. */
+export function lifeCompare(slugs: string[]) {
+  const people = slugs.map(findPerson).filter((p): p is AppPerson => !!p);
+  return { people: people.map(head), places: lifeColumns(people.map(personLife)) };
 }

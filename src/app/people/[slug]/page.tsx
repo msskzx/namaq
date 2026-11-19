@@ -26,13 +26,15 @@ import ClaimEvidence from '@/components/common/ClaimEvidence';
 import SourceAccountReader from '@/components/people/SourceAccountReader';
 import ModelEntries from '@/components/people/ModelEntries';
 import ProfileHadith from '@/components/people/ProfileHadith';
-import PersonAppLinks from '@/components/tarajim/PersonAppLinks';
+import { LifeSection, NasabToggle, TiesSection, useDrawings } from '@/components/tarajim/PersonDrawings';
 
 function PersonDetailPage() {
   const { language } = useLanguage();
   const t = translations[language];
   const { slug } = useParams<{ slug: string }>();
   const { data: person, error, isLoading } = useSWR<PersonFull>(slug ? `/api/people/${slug}` : null, fetcher);
+  // A converted entry's drawings (the app's person page): its nasab tree, «حياته» and ties ring take the older parts' place.
+  const drawings = useDrawings(slug);
   const otherModelEntries = (person?.modelEntries ?? []).filter((entry) => entry.predicate !== 'virtue');
 
   if (error) {
@@ -81,7 +83,8 @@ function PersonDetailPage() {
               <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
                 <FontAwesomeIcon icon={faPenNib} className="w-7 h-7 text-amber-500 me-2" />
                 {t.fullName}</h2>
-              <p className="text-gray-800 dark:text-gray-200 text-lg">{person.fullName}</p>
+              {drawings ? <NasabToggle view={drawings} text={<p className="text-gray-800 dark:text-gray-200 text-lg">{drawings.fullName ?? person.fullName}</p>} />
+                : <p className="text-gray-800 dark:text-gray-200 text-lg">{person.fullName}</p>}
             </div>
           )}
           {person.kunya && (
@@ -152,17 +155,20 @@ function PersonDetailPage() {
             </div>
           )}
 
-          <PersonAppLinks slug={slug} />
+          {drawings ? <>
+            <LifeSection view={drawings} />
+            <TiesSection view={drawings} />
+          </> : <>
+            <Timeline events={person.events || []} participations={person.participations || []} death={person} />
 
-          <Timeline events={person.events || []} participations={person.participations || []} death={person} />
-
-          <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
-            <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
-              <FontAwesomeIcon icon={faHexagonNodes} className="w-7 h-7 text-amber-500 me-2" />
-              {t.relations}
-            </h2>
-            <GraphCanvas targetSlug={slug} />
-          </div>
+            <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
+              <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
+                <FontAwesomeIcon icon={faHexagonNodes} className="w-7 h-7 text-amber-500 me-2" />
+                {t.relations}
+              </h2>
+              <GraphCanvas targetSlug={slug} />
+            </div>
+          </>}
 
           {otherModelEntries.length > 0 && <ModelEntries entries={otherModelEntries} spans={person.modelSpans ?? []} />}
           {person.hadith && person.hadith.length > 0 && <ProfileHadith slug={slug} hadith={person.hadith} />}

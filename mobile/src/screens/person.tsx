@@ -1,4 +1,5 @@
-import { ScrollView, View } from 'react-native';
+import { useMemo, useState } from 'react';
+import { ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Network } from 'lucide-react-native';
 import { kunyaName, pageLabel, sayer, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
@@ -18,6 +19,12 @@ import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { toTab } from '@/lib/ways';
 import { findPerson, personName, unvowelled } from '@/lib/tarajim';
+import { personLife } from '@/lib/life';
+import LifeTimeline from '@/components/LifeTimeline';
+import Tabs from '@/ui/Tabs';
+import { NasabTree } from './nasab';
+import TiesRing, { TieSheet } from '@/components/TiesRing';
+import type { Tie } from '@shared/tarajimGraph';
 
 const siyar = sourceById('siyar')!;
 const SIYAR = { title: siyar.title.ar, edition: siyar.edition ?? '', url: siyar.link.url };
@@ -26,11 +33,14 @@ const muted = (palette: Palette) => ({ color: palette.muted, fontSize: 14, textA
 const openPerson = (slug: string) => router.push({ pathname: '/person', params: { slug } });
 
 /** A section: its name in the accent, numbered as on the sketch («١ · نسبه»), then its card. */
-function Part({ n, title, palette, children }: { n: number; title: string; palette: Palette; children: React.ReactNode }) {
+function Part({ n, title, palette, children, drawing }: { n: number; title: string; palette: Palette; children?: React.ReactNode;
+  /** A drawing above the card, on the page itself (no card in a card): the «حياته» timeline, the ties ring. */
+  drawing?: React.ReactNode }) {
   return (
     <View style={{ gap: 8 }}>
       <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 15, textAlign: 'right' }}>{num(n)} · {title}</Text>
-      <Card palette={palette} gap={10}>{children}</Card>
+      {drawing}
+      {children ? <Card palette={palette} gap={10}>{children}</Card> : null}
     </View>
   );
 }
@@ -140,13 +150,21 @@ export default function PersonScreen() {
   const onScroll = useShrinkOnScroll();
   const bottom = useTabBarSpace();
   const { slug = '' } = useLocalSearchParams<{ slug?: string }>();
+  const { width } = useWindowDimensions();
+  const [tie, setTie] = useState<Tie | undefined>();
+  // «نسبه» as the book writes it, or drawn as the tree of fathers (owner 2026-11-19: a toggle, the text first).
+  const [nasabView, setNasabView] = useState<'text' | 'tree'>('text');
   const person = findPerson(slug);
+  const lifeItems = useMemo(() => (person ? personLife(person) : []), [person]);
   const back = () => (router.canGoBack() ? router.back() : toTab('/tarajim'));
   if (!person) return <View style={{ flex: 1, backgroundColor: palette.paper }}><TopBar back={back} /></View>;
   const tree = () => router.push({ pathname: '/nasab', params: { slug: person.slug } });
   const names = [...person.kunya.map(fact => ({ label: `كنيت${suffixOf(person)}`, fact, kunya: true })), ...person.laqab.map(fact => ({ label: `لقب${suffixOf(person)}`, fact, kunya: false }))];
   const f = person.sex === 'FEMALE';
-  const life = [...person.islamAge, ...person.battles, ...person.absentFrom, ...person.died.year, ...person.died.month, ...person.died.age, ...person.died.place];
+  // A battle the timeline draws is not named again under it; one the entry names that the timeline lacks stays in the line.
+  const drawn = new Set(lifeItems.map(item => item.open?.slug));
+  const battles = uniq(person.battles).filter(b => !drawn.has(b.slug));
+  const life = [...person.islamAge, ...battles, ...person.absentFrom, ...person.died.year, ...person.died.month, ...person.died.age, ...person.died.place];
   const tieList = ties(person);
   const { book, part } = volumeLabel(person.entry.volume);
   let n = 0;
@@ -171,7 +189,13 @@ export default function PersonScreen() {
         </View>
 
         {person.fullName && (
-          <Part n={++n} title={person.sex === 'FEMALE' ? 'نسبها' : 'نسبه'} palette={palette}>
+          <Part n={++n} title={person.sex === 'FEMALE' ? 'نسبها' : 'نسبه'} palette={palette}
+            drawing={<>
+              <Tabs palette={palette} label="كيف يُعرض النسب" value={nasabView} onChange={setNasabView}
+                options={[{ key: 'text', label: 'النص' }, { key: 'tree', label: 'الشجرة' }] as const} />
+              {nasabView === 'tree' && <NasabTree slugs={[person.slug]} palette={palette} meetings={false} />}
+            </>}>
+            {nasabView === 'text' && <>
             <Text style={body(palette)}>{person.fullName.text}</Text>
             {person.otherNames?.length ? <>
               <Sayer fact={person.fullName} palette={palette} many />
@@ -188,8 +212,9 @@ export default function PersonScreen() {
                 <Sayer fact={fact} palette={palette} many />
               </View>
             ))}
-            <Row><Button label="الشجرة" onPress={tree} /></Row>
+            <Row><Button label={person.sex === 'FEMALE' ? 'قارن نسبها بغيرها' : 'قارن نسبه بغيره'} onPress={tree} /></Row>
             <Credit facts={[person.fullName, ...(person.otherNames ?? []), ...person.nameVariants]} palette={palette} />
+            </>}
           </Part>
         )}
 
@@ -219,14 +244,16 @@ export default function PersonScreen() {
           </Part>
         )}
 
-        {life.length > 0 && (
-          <Part n={++n} title={person.sex === 'FEMALE' ? 'حياتها' : 'حياته'} palette={palette}>
+        {(life.length > 0 || lifeItems.length > 0) && (
+          <Part n={++n} title={person.sex === 'FEMALE' ? 'حياتها' : 'حياته'} palette={palette}
+            drawing={lifeItems.length > 0 ? <LifeTimeline items={lifeItems} palette={palette} onCompare={() => router.push({ pathname: '/life', params: { slugs: person.slug } })} /> : undefined}>
+            {life.length > 0 ? <>
             {person.islamAge.map((fact, i) => (
               <Line key={`i${i}`} label={f ? 'أسلمت وعمرها' : 'أسلم وعمره'} palette={palette}>
                 <Text style={body(palette)}>{ageOf(fact)}</Text><Sayer fact={fact} palette={palette} many={person.islamAge.length > 1} />
               </Line>
             ))}
-            {person.battles.length > 0 && <Line label={f ? 'شهدت' : 'شهد'} palette={palette}><Names links={uniq(person.battles)} palette={palette} /></Line>}
+            {battles.length > 0 && <Line label={f ? 'شهدت' : 'شهد'} palette={palette}><Names links={battles} palette={palette} /></Line>}
             {person.absentFrom.length > 0 && <Line label={f ? 'غابت عن' : 'غاب عن'} palette={palette}><Names links={uniq(person.absentFrom)} palette={palette} /></Line>}
             {person.died.year.map((fact, i) => (
               <Line key={`y${i}`} label={f ? 'وفاتها' : 'وفاته'} palette={palette}>
@@ -240,14 +267,16 @@ export default function PersonScreen() {
               <Line key={`a${i}`} label={f ? 'عمرها' : 'عمره'} palette={palette}><Text style={body(palette)}>{ageOf(fact)}</Text><Sayer fact={fact} palette={palette} many={person.died.age.length > 1} /></Line>
             ))}
             <Credit facts={life} palette={palette} quotes />
+            </> : null}
           </Part>
         )}
 
         {tieList.length > 0 && (
-          <Part n={++n} title={person.sex === 'FEMALE' ? 'صلاتها' : 'صلاته'} palette={palette}>
+          <Part n={++n} title={person.sex === 'FEMALE' ? 'صلاتها' : 'صلاته'} palette={palette}
+            drawing={<TiesRing slug={person.slug} width={Math.min(width - 32, 480)} palette={palette} onPick={openPerson} onShow={setTie} />}>
             {tieList.map(tie => <Line key={tie.label} label={tie.label} palette={palette}><Names links={tie.links} palette={palette} /></Line>)}
             <Row>
-              <Button label={person.sex === 'FEMALE' ? 'ارسم صلاتها' : 'ارسم صلاته'} onPress={() => router.push({ pathname: '/ties', params: { slug: person.slug } })} />
+              <Button label={person.sex === 'FEMALE' ? 'تنقّل في صلاتها' : 'تنقّل في صلاته'} onPress={() => router.push({ pathname: '/ties', params: { slug: person.slug } })} />
               <Button label={person.sex === 'FEMALE' ? 'بينها وبين…' : 'بينه وبين…'} onPress={() => router.push({ pathname: '/between', params: { slugs: person.slug } })} />
             </Row>
             <Credit facts={tieList.flatMap(tie => tie.links)} palette={palette} quotes />
@@ -274,6 +303,7 @@ export default function PersonScreen() {
           <ExternalLink url={SIYAR.url} color={palette.accent} size={15} style={{ textAlign: 'right' }}>اقرأها على المكتبة الشاملة</ExternalLink>
         </Part>
       </ScrollView>
+      <TieSheet tie={tie} onClose={() => setTie(undefined)} palette={palette} />
     </View>
   );
 }

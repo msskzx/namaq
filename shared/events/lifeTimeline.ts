@@ -1,0 +1,115 @@
+// A person's «حياته» drawn (owner, 2026-11-18; sketch timeline-events/sketch-dark.png, screens 1 and 4): a strip of dots,
+// one column per hijri year and one dot per thing in it, then the same things down a rail by year. The app's
+// components/LifeTimeline.tsx and the website's components/tarajim/LifeTimeline.tsx both draw what this file lays out.
+import type { AppCite, AppReading } from '../battles/battle';
+import type { AppLifeEntry } from './life';
+
+/** What a row is: a raid the Prophet ﷺ went out on himself, one he sent, a later battle, an event, a story, or the person's own fact. */
+export type LifeKind = 'ghazwah' | 'sariyyah' | 'battle' | 'event' | 'story' | 'own';
+
+export type LifeItem = {
+  key: string;
+  kind: LifeKind;
+  name: string;
+  /** The battle's or story's page; none for an event or the person's own fact. */
+  open?: { to: 'battle' | 'story'; slug: string };
+  /** The year as the sources give it first; none for an undated story. */
+  year?: number;
+  /** Where the sources give the year otherwise: each saying in its words, with its pages, shown on a tap. */
+  others: AppReading[];
+  /** «استشهد فيها» and the like, said small after the name. */
+  note?: string;
+  /** The sentences that place the person there, with their pages. */
+  refs: AppCite[];
+};
+
+/** The chips over the rail, in the sketch's order; a chip shows only when the person has something of its kind. */
+export const LIFE_FILTERS: { kinds: LifeKind[]; label: string }[] = [
+  { kinds: ['ghazwah'], label: 'الغزوات' },
+  { kinds: ['sariyyah'], label: 'السرايا' },
+  { kinds: ['battle'], label: 'المعارك' },
+  { kinds: ['event'], label: 'الأحداث' },
+  { kinds: ['story'], label: 'القصص' },
+];
+
+/** A battle's kind word as its page gives it («غزوة», «سرية», «معركة»). */
+const KIND_OF: Record<string, LifeKind> = { 'غزوة': 'ghazwah', 'سرية': 'sariyyah', 'معركة': 'battle' };
+
+/**
+ * The rows of one person's life: the catalog's entries (shared/data/events/life.json), each battle's kind read from its
+ * page, and the person's death where the entry dates it (owner 2026-11-18: a person's own death is a field shown on the
+ * timeline, not an event row).
+ */
+export function lifeItems(entries: AppLifeEntry[], battleKind: (slug: string) => string | undefined,
+  death?: { year: number; refs: AppCite[]; label: string; others: AppReading[] }): LifeItem[] {
+  const items: LifeItem[] = entries.map(entry => {
+    const kind: LifeKind = entry.kind === 'battle' ? KIND_OF[battleKind(entry.slug) ?? ''] ?? 'battle' : entry.kind;
+    const { name } = entry;
+    return {
+      key: `${entry.kind}:${entry.slug}`, kind, name, year: entry.year?.value, others: entry.year?.others ?? [],
+      open: entry.kind === 'event' ? undefined : { to: entry.kind === 'story' ? 'story' : 'battle', slug: entry.slug },
+      note: entry.role === 'استشهد فيها' ? entry.role : undefined, refs: entry.refs,
+    };
+  });
+  if (death) items.push({ key: 'own:death', kind: 'own', name: death.label, year: death.year, others: death.others, refs: death.refs });
+  return items;
+}
+
+/** A year's place: before the hijra all in one place (as the book groups them), then each year after it. */
+export type LifeYear = { key: string; year?: number; before?: boolean; items: LifeItem[] };
+
+const placeOf = (item: LifeItem) => (item.year === undefined ? 'undated' : item.year < 1 ? 'before' : String(item.year));
+
+/**
+ * The rail: the places that hold something, before the hijra first, then by year, then what has no year. Within a
+ * place the rows keep the catalog's order (life.json is already in the book's order), the person's death last.
+ */
+export function lifeRail(items: LifeItem[]): LifeYear[] {
+  const before = items.filter(item => placeOf(item) === 'before').sort((a, b) => a.year! - b.year!);
+  const years = [...new Set(items.filter(item => item.year !== undefined && item.year >= 1).map(item => item.year!))].sort((a, b) => a - b);
+  const undated = items.filter(item => item.year === undefined);
+  return [
+    ...(before.length ? [{ key: 'before', before: true, items: before }] : []),
+    ...years.map(year => ({ key: String(year), year, items: items.filter(item => item.year === year) })),
+    ...(undated.length ? [{ key: 'undated', items: undated }] : []),
+  ];
+}
+
+/**
+ * The strip: one column for before the hijra (when there is something there) and one for every year from the first
+ * to the last, empty years included, so the gaps in a life show as gaps. Undated rows are not on it.
+ */
+export function lifeStrip(items: LifeItem[]): LifeYear[] {
+  const dated = items.filter(item => item.year !== undefined && item.year >= 1).map(item => item.year!);
+  const before = items.filter(item => placeOf(item) === 'before');
+  const columns: LifeYear[] = before.length ? [{ key: 'before', before: true, items: before }] : [];
+  if (dated.length) {
+    for (let year = Math.min(...dated); year <= Math.max(...dated); year++) {
+      columns.push({ key: String(year), year, items: items.filter(item => item.year === year) });
+    }
+  }
+  return columns;
+}
+
+/** The filters this person's rows call for: only kinds he has, and none at all when everything is one kind. */
+export function lifeFilters(items: LifeItem[]) {
+  const shown = LIFE_FILTERS.filter(filter => items.some(item => filter.kinds.includes(item.kind)));
+  return shown.length > 1 ? shown : [];
+}
+
+/**
+ * Lives side by side (sketch screen 4, «حياتهما»): every place any of them has, in order, and in it one row per thing,
+ * each person's cell holding it where he was in it. A row two or more share (the same battle or event, not a death)
+ * is `shared`, drawn joined across.
+ */
+export function lifeColumns(lives: LifeItem[][]) {
+  const rails = lives.map(items => new Map(lifeRail(items).map(place => [place.key, place.items])));
+  return lifeRail(lives.flat()).map(place => {
+    const keys = [...new Set(place.items.map(item => item.key))];
+    const rows = keys.map(key => {
+      const cells = rails.map(rail => rail.get(place.key)?.find(item => item.key === key));
+      return { key, cells, shared: !key.startsWith('own:') && cells.filter(Boolean).length > 1 };
+    });
+    return { key: place.key, year: place.year, before: place.before, rows };
+  });
+}
