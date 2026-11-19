@@ -3,12 +3,17 @@
 import { Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText, SquareArrowOutUpLeft, Swords } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Cookies from 'js-cookie';
 import StoryMap from '@/app/quran/prophets/[slug]/StoryMap';
-import type { SavedContent, StoryCard } from '@/lib/homeFeed';
+import type { SavedContent, SiraCard, StoryCard } from '@/lib/homeFeed';
+import { Report } from '@/components/stories/StoryView';
+import StoryAyatLines from '@/components/stories/StoryAyatLines';
+import { Moment } from '@/components/battles/BattleMoments';
+import { battleLine } from '@shared/battles/battle';
+import { rangeName } from '@shared/stories/story';
 import { bookmarkKind, isCardBookmark } from '@shared/bookmarkKind';
 import type { Bookmark as SavedItem } from '@shared/bookmarks';
 import { useRouter } from 'next/navigation';
@@ -55,6 +60,7 @@ import { ayahNoteAt } from '@shared/quran/ayahNotes';
 import { QiraatPlace } from '@/app/quran/qiraat/QiraatView';
 import { surahName } from '@shared/quran/surahNames';
 import Card from '@/components/common/Card';
+import ExternalLink from '@/components/common/ExternalLink';
 
 /**
  * The website's home feed, as the app's (mobile/src/components/HomeFeed.tsx): story circles, the page the mushaf was left on,
@@ -171,9 +177,12 @@ function Post({ head, actions, bar, labelledBy, children }: { head: React.ReactN
 }
 
 /** One icon button of a post's row: a link with `href`, else a button; `on` lights it, `tone` colours it. */
-function Action({ Icon, label, href, onClick, on, tone, disabled }: { Icon: typeof BookOpen; label: string; href?: string; onClick?: () => void; on?: boolean; tone?: 'green'; disabled?: boolean }) {
+function Action({ Icon, label, href, onClick, on, tone, disabled, external }: { Icon: typeof BookOpen; label: string; href?: string; onClick?: () => void; on?: boolean; tone?: 'green'; disabled?: boolean;
+  /** `href` leaves Namaq (a source's page): it opens in a new tab. */
+  external?: boolean }) {
   const className = [styles.action, on && styles.actionOn, tone === 'green' && styles.green].filter(Boolean).join(' ');
   const icon = <Icon size={22} aria-hidden />;
+  if (href && external) return <ExternalLink href={href} mark={false} aria-label={label} title={label} className={className}>{icon}</ExternalLink>;
   return href
     ? <Link href={href} onClick={onClick} aria-label={label} title={label} className={className}>{icon}</Link>
     : <button type="button" onClick={onClick} disabled={disabled} aria-label={label} title={label} aria-pressed={on} className={className}>{icon}</button>;
@@ -322,6 +331,36 @@ function StoryPost({ card }: { card: StoryCard }) {
   </Post>;
 }
 
+/**
+ * A sira story as a post (the app's SiraPost): its first report whole, so a first reader has what led to the words and what
+ * came of them; the ayat it turns on folded under it. The head opens the story's page.
+ */
+function SiraPost({ card }: { card: Extract<SiraCard, { kind: 'sira' }> }) {
+  const href = `/stories/${card.slug}`;
+  return <Post head={<PostHead Icon={ScrollText} title="من قصص السيرة" sub={card.name} href={href} label={`افتح ${card.name}`} />}
+    actions={<>
+      <Action Icon={ScrollText} label={`افتح ${card.name}`} href={href} />
+      <Action Icon={SquareArrowOutUpLeft} label={`المصدر: ${card.report.cite}`} href={card.report.url} external />
+    </>}>
+    <div className="flex flex-col gap-3 p-4" lang="ar">
+      <Report report={card.report} plain />
+      {card.ayat.map((item, i) => <StoryAyatLines key={item.from} credit={`${item.label}: ${rangeName(item.from, item.to)}`} pages={card.pages[i] ?? []} folded />)}
+    </div>
+  </Post>;
+}
+
+/** A moment of a battle in the source's words (the app's MomentPost); the head opens the battle's page. */
+function MomentPost({ card }: { card: Extract<SiraCard, { kind: 'moment' }> }) {
+  const href = `/battles/${card.battle.slug}`;
+  return <Post head={<PostHead Icon={Swords} title={`من ${card.battle.name}`} sub={battleLine(card.battle)} href={href} label={`افتح ${card.battle.name}`} />}
+    actions={<>
+      <Action Icon={Swords} label={`افتح ${card.battle.name}`} href={href} />
+      <Action Icon={SquareArrowOutUpLeft} label={`المصدر: ${card.moment.cite}`} href={card.moment.url} external />
+    </>}>
+    <div className="p-4" lang="ar"><Moment moment={card.moment} n={card.n} plain /></div>
+  </Post>;
+}
+
 type Tree = TreePreview & { text: string };
 
 /** A saved ayah as a post: the ayah in the mushaf's own lines, as the recall card shows it once revealed. */
@@ -443,6 +482,10 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
   const storySlots = shows('prophets') ? Array.from({ length: batches }, (_, i) => i).filter(hasStoryCard) : [];
   const { data: stories } = useSWR(day && storySlots.length ? `/api/home/feed?day=${day}&s=${storySlots.join(',')}` : null,
     () => inPieces<StoryCard[]>(some => `/api/home/feed?day=${day}&s=${some.join(',')}`, storySlots).then(all => all.flat()), swr);
+  // The sira and battle-moment cards, one a batch, worked out on the server (a story card brings its ayat's mushaf pages with it).
+  const siraSlots = shows('sira') || shows('moment') ? Array.from({ length: batches }, (_, i) => i) : [];
+  const { data: sira } = useSWR(day && siraSlots.length ? `/api/home/feed?day=${day}&sira=${siraSlots.join(',')}` : null,
+    () => inPieces<SiraCard[]>(some => `/api/home/feed?day=${day}&sira=${some.join(',')}`, siraSlots).then(all => all.flat()), swr);
   // Pairs and trees load only for the interests shown, so what is not shown is never fetched or counted as seen.
   const content = pairContent || treeContent ? { pairs: pairContent?.pairs ?? [], trees: treeContent?.trees ?? [] } : undefined;
   const ready = (!shows('pair') || !!pairContent) && (!shows('tree') || !!treeContent);
@@ -483,6 +526,9 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
     if (readings) posts.push(<QiraatPost key={`r${readings}`} ayah={readings} />);
     const story = shows('prophets') ? stories?.find(card => card.slot === i) : undefined;
     if (story) posts.push(<StoryPost key={`s${day}-${i}`} card={story} />);
+    const siraCard = sira?.find(card => card.slot === i);
+    if (siraCard?.kind === 'sira' && shows('sira')) posts.push(<SiraPost key={`sira${day}-${i}`} card={siraCard} />);
+    if (siraCard?.kind === 'moment' && shows('moment')) posts.push(<MomentPost key={`m${day}-${i}`} card={siraCard} />);
   }
   return <section className={styles.feed} aria-label="للتأمل اليوم">
     {posts}

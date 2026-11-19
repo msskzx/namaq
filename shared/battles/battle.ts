@@ -1,6 +1,7 @@
 // A battle as the phone app shows it (owner, 2026-11-18), written from the catalog by scripts/battles/buildAppBattles.ts
 // into shared/data/battles/battles.json, since the app is offline.
 import type { LonLat } from './map';
+import { num } from '../quran/arabicNumber';
 
 /** One quote a value stands on, with the page it cites. */
 export type AppCite = { text: string; cite: string; url?: string };
@@ -49,3 +50,7 @@ export type AppMomentBattle = Pick<AppBattle, 'slug' | 'name' | 'kind' | 'year' 
 
 /** The heading over a battle's moments: «مجرى الغزوة», «مجرى السرية», else «مجرى المعركة» (the app's and the website's battle pages). */
 export const courseTitle = (kind?: string): string => ({ 'غزوة': 'مجرى الغزوة', 'سرية': 'مجرى السرية' } as Record<string, string>)[kind ?? ''] ?? 'مجرى المعركة';
+
+/** «غزوة · السنة ٢ للهجرة»: a battle's kind and year in one line (the app's and the website's battle cards and pages). */
+export const battleLine = (battle: Pick<AppBattle, 'kind' | 'year'>) =>
+  [battle.kind?.value, battle.year && `السنة ${num(battle.year.value)} للهجرة`].filter(Boolean).join(' · ');

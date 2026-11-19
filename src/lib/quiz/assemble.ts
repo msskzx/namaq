@@ -40,6 +40,7 @@ export interface AssembledQuestion {
   whereOf?: ChoiceQuestion['whereOf'];
   terms?: ChoiceQuestion['terms'];
   note?: ChoiceQuestion['note'];
+  look?: ChoiceQuestion['look'];
   evidence: { claimKeys: string[] };
 }
 

@@ -9,9 +9,7 @@ import SplitBar from '@/ui/SplitBar';
 import Step from '@/ui/Step';
 import type { Palette } from '@/lib/theme';
 
-/** «غزوة · السنة ٢ للهجرة» */
-export const battleLine = (battle: Pick<AppBattle, 'kind' | 'year'>) =>
-  [battle.kind?.value, battle.year && `السنة ${num(battle.year.value)} للهجرة`].filter(Boolean).join(' · ');
+export { battleLine } from '@shared/battles/battle';
 
 /** A section's folded reference; nothing while the evidence is owed. */
 export function Refs({ refs, palette }: { refs: AppCite[]; palette: Palette }) {
