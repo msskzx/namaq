@@ -1,3 +1,4 @@
+import type { Page } from '@playwright/test';
 import { expect, open, readerPage, tab, test } from './fixtures';
 import { surahName as S } from '../../shared/quran/surahNames';
 
@@ -21,10 +22,11 @@ test('the surah order narrows to a juz and cites its books', async ({ page }) =>
   await page.evaluate(() => { window.open = url => { (window as unknown as { externalUrl: string }).externalUrl = String(url); return null; }; });
   await page.getByRole('link', { name: 'السيوطي، تناسق الدرر ص٥٣' }).click();
   await expect.poll(() => page.evaluate(() => (window as unknown as { externalUrl: string }).externalUrl)).toBe('https://shamela.ws/book/9992/51');
+  // The strip is an inverted list (mirrored), so its far end is the largest scrollLeft; scrollTo() does not move it.
   await page.getByRole('button', { name: '١', exact: true }).evaluate(element => {
     let strip = element.parentElement;
     while (strip && strip.scrollWidth <= strip.clientWidth) strip = strip.parentElement;
-    strip?.scrollTo({ left: strip.scrollWidth, behavior: 'instant' });
+    if (strip) strip.scrollLeft = strip.scrollWidth;
   });
   await page.getByRole('button', { name: '٣٠', exact: true }).click();
   await expect(page.getByRole('heading', { name: `${S(78)}` })).toBeVisible();
@@ -59,12 +61,6 @@ test('every matrix has one studio: the read-along, and on a book matrix a switch
     }
     return found;
   };
-  const swipe = async () => {
-    await page.mouse.move(80, 400);
-    await page.mouse.down();
-    await page.mouse.move(330, 400, { steps: 8 });
-    await page.mouse.up();
-  };
   await open(page, '/branches');
   await expect(page.getByLabel(/^الشجرة ١ من /)).toBeAttached();
   await expect.poll(async () => (await onScreen('استوديو القراءة')).length).toBe(1);
@@ -73,12 +69,17 @@ test('every matrix has one studio: the read-along, and on a book matrix a switch
   await page.getByRole('button', { name: 'اقرأ مع التظليل' }).click();
   await expect(page.getByRole('button', { name: 'إيقاف مؤقت' })).toBeVisible();
   await page.getByRole('button', { name: 'إغلاق الاستوديو' }).click();
-  // The seventh tree (al-Baqarah 6–7 with Ya Sin 10–11) has book connections.
-  for (let i = 0; i < 6; i++) {
-    await swipe();
-    await expect(page.getByLabel(`الشجرة ${['٢', '٣', '٤', '٥', '٦', '٧'][i]} من`, { exact: false })).toBeAttached();
-  }
-  // Every card opens on the default view, the matrix.
+  // A swipe turns to the next card.
+  await page.mouse.move(80, 400);
+  await page.mouse.down();
+  await page.mouse.move(330, 400, { steps: 8 });
+  await page.mouse.up();
+  await expect(page.getByLabel(/^الشجرة ٢ من /)).toBeAttached();
+  // al-Baqarah 6–7 with Ya Sin 10–11 has book connections.
+  await page.getByRole('button', { name: 'ابحث' }).click();
+  const box = page.getByLabel('ابحث عن عبارة مشتركة بين آيتين أو أكثر');
+  await box.fill('سواء عليهم أأنذرتهم أم لم تنذرهم لا يؤمنون');
+  await box.press('Enter');
   await expect.poll(async () => (await onScreen('استوديو الروابط')).length).toBe(1);
   expect(await onScreen('استوديو القراءة')).toHaveLength(0);
   await (await onScreen('استوديو الروابط'))[0].click();
@@ -91,6 +92,12 @@ test('every matrix has one studio: the read-along, and on a book matrix a switch
 test.describe('branches', () => {
   // These tests are about the tree, so they run for a reader who picked it.
   test.use({ seed: { 'branches-view': '"tree"' } });
+  // The trees searched for below are our own (no book compares them), so they sit under «تدبّر».
+  const openPondering = async (page: Page) => {
+    await open(page, '/branches');
+    await page.getByRole('tab', { name: 'تدبّر' }).click();
+    await expect(page.getByRole('tab', { name: 'تدبّر' })).toHaveAttribute('aria-selected', 'true');
+  };
 
   test('the tree switches to the matrix and back', async ({ page }) => {
     await open(page, '/branches');
@@ -111,7 +118,7 @@ test.describe('branches', () => {
   });
 
   test('the search narrows the trees to a phrase', async ({ page }) => {
-    await open(page, '/branches');
+    await openPondering(page);
     await page.getByRole('button', { name: 'ابحث' }).click();
     const box = page.getByLabel('ابحث عن عبارة مشتركة بين آيتين أو أكثر');
     await box.fill('إن المتقين');
@@ -121,7 +128,7 @@ test.describe('branches', () => {
   });
 
   test('the studio grows a tree to its end', async ({ page }) => {
-    await open(page, '/branches');
+    await openPondering(page);
     await page.getByRole('button', { name: 'ابحث' }).click();
     const box = page.getByLabel('ابحث عن عبارة مشتركة بين آيتين أو أكثر');
     await box.fill('إن المتقين في');
@@ -136,7 +143,7 @@ test.describe('branches', () => {
   });
 
   test('the tree video draws each box from where the app laid out its labels and words', async ({ page }) => {
-    await open(page, '/branches');
+    await openPondering(page);
     await page.getByRole('button', { name: 'ابحث' }).click();
     const box = page.getByLabel('ابحث عن عبارة مشتركة بين آيتين أو أكثر');
     await box.fill('إن المتقين في');
@@ -165,7 +172,7 @@ test.describe('branches', () => {
   });
 
   test('the tree video draws a braid as the app does: each strand outlined with its words, and its curves; the tree whole in the frame', async ({ page }) => {
-    await open(page, '/branches');
+    await openPondering(page);
     await page.getByRole('button', { name: 'ابحث' }).click();
     const box = page.getByLabel('ابحث عن عبارة مشتركة بين آيتين أو أكثر');
     await box.fill('عليكم الميتة والدم ولحم الخنزير وما أهل');
@@ -194,7 +201,7 @@ test.describe('branches', () => {
   });
 
   test('any box only one path runs through toggles that path, however quickly the boxes are tapped', async ({ page }) => {
-    await open(page, '/branches');
+    await openPondering(page);
     await page.getByRole('button', { name: 'ابحث' }).click();
     const box = page.getByLabel('ابحث عن عبارة مشتركة بين آيتين أو أكثر');
     await box.fill('بدت لهما سوآتهما وطفقا يخصفان');
@@ -219,7 +226,7 @@ test.describe('branches', () => {
   });
 
   test('the tree card keeps its buttons in place when a path is lit', async ({ page }) => {
-    await open(page, '/branches');
+    await openPondering(page);
     await page.getByRole('button', { name: 'ابحث' }).click();
     const box = page.getByLabel('ابحث عن عبارة مشتركة بين آيتين أو أكثر');
     await box.fill('إن المتقين في');
