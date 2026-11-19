@@ -18,6 +18,7 @@ export interface PageRef {
  */
 export const OTHER_WORKS: Record<string, { book: string; author: string; source: string }> = {
   'zad-al-maad': { book: 'زاد المعاد', author: 'ابن القيم', source: 'zad-al-maad' },
+  'sunan-al-tirmidhi': { book: 'سنن الترمذي', author: 'الترمذي', source: 'sunan-tirmidhi' },
 };
 
 /** The books a list of pages comes from, the Siyar as «siyar», each once, in the order met. */

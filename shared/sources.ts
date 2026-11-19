@@ -113,7 +113,7 @@ export const SOURCES: Source[] = [
   {
     id: 'sunan-tirmidhi', group: 'books',
     title: { ar: 'سنن الترمذي', en: 'Sunan al-Tirmidhi' }, author: { ar: 'محمد بن عيسى الترمذي', en: 'al-Tirmidhi' },
-    edition: 'تحقيق أحمد محمد شاكر ومحمد فؤاد عبد الباقي وإبراهيم عطوة عوض، مصطفى البابي الحلبي، مصر، الطبعة الثانية ١٣٩٥هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٩', link: shamela(1435), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+    edition: 'تحقيق أحمد محمد شاكر ومحمد فؤاد عبد الباقي وإبراهيم عطوة عوض، مصطفى البابي الحلبي، مصر، الطبعة الثانية ١٣٩٥هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٩', link: shamela(1435), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.people],
   },
   {
     id: 'sunan-nasai', group: 'books',
