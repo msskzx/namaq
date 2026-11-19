@@ -1,0 +1,531 @@
+{
+  "unit": {
+    "id": "siyar-v4-83-al-numan-ibn-muqarrin",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٨٣"
+    }
+  },
+  "spans": [
+    {
+      "id": "hd",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "403",
+      "layer": "MAIN",
+      "exact": "٨٣ - النُّعْمَانُ بنُ مُقَرِّنٍ أَبُو عَمْرٍو المُزَنِيُّ"
+    },
+    {
+      "id": "n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "403",
+      "layer": "MAIN",
+      "exact": "النُّعْمَانُ بنُ عَمْرِو بنِ مُقرِّنِ بنِ عَائِذِ بنِ مِيْجَا بنِ هُجَيْرِ بن نَصْرِ بنِ حُبْشِيَّةَ بنِ كَعْبِ بنِ ثَوْرِ بنِ هُذْمَةَ بنِ لاَطِمِ بنِ عُثْمَانَ بنِ مُزَيْنَةَ"
+    },
+    {
+      "id": "l",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "403",
+      "layer": "MAIN",
+      "exact": "أَبُو عَمْرٍو المُزَنِيُّ، الأَمِيْرُ."
+    },
+    {
+      "id": "ku",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "403",
+      "layer": "MAIN",
+      "exact": "أَبُو عَمْرٍو",
+      "prefix": "مُزَيْنَةَ."
+    },
+    {
+      "id": "am",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "403",
+      "layer": "MAIN",
+      "exact": "الأَمِيْرُ",
+      "prefix": "المُزَنِيُّ،"
+    },
+    {
+      "id": "m",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "403",
+      "layer": "MAIN",
+      "exact": "أَوَّلُ مَشَاهِدِهِ الأَحْزَابُ، وَشَهِدَ بَيْعَةَ الرِّضْوَانِ، وَنَزَلَ الكُوْفَةَ، وَلِيَ كَسْكَرَ لِعُمَرَ، ثُمَّ صَرَفَهُ، وَبَعَثَهُ عَلَى المُسْلِمِيْنَ يَوْمَ وَقْعَةِ نَهَاوَنْدَ، فَكَانَ يَوْمَئِذٍ أَوَّلَ شَهِيْدٍ"
+    },
+    {
+      "id": "m_a",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "403",
+      "layer": "MAIN",
+      "exact": "الأَحْزَابُ",
+      "prefix": "مَشَاهِدِهِ"
+    },
+    {
+      "id": "m_r",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "403",
+      "layer": "MAIN",
+      "exact": "بَيْعَةَ الرِّضْوَانِ",
+      "prefix": "وَشَهِدَ"
+    },
+    {
+      "id": "m_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "403",
+      "layer": "MAIN",
+      "exact": "وَقْعَةِ نَهَاوَنْدَ",
+      "prefix": "يَوْمَ"
+    },
+    {
+      "id": "m_k",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "403",
+      "layer": "MAIN",
+      "exact": "وَلِيَ كَسْكَرَ لِعُمَرَ",
+      "prefix": "الكُوْفَةَ،"
+    },
+    {
+      "id": "qf",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "404",
+      "layer": "MAIN",
+      "exact": "وَقِيْلَ: كُنْيَةُ النُّعْمَانِ"
+    },
+    {
+      "id": "qk",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "404",
+      "layer": "MAIN",
+      "exact": "أَبُو حَكِيْمٍ",
+      "prefix": "النُّعْمَانِ:"
+    },
+    {
+      "id": "if",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "404",
+      "layer": "MAIN",
+      "exact": "قَالَ ابْنُ إِسْحَاقَ",
+      "prefix": "وَجَمَاعَةٌ."
+    },
+    {
+      "id": "iq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "404",
+      "layer": "MAIN",
+      "exact": "قُتِلَ وَهُوَ أَمِيْرُ النَّاسِ، سَنَةَ إِحْدَى وَعِشْرِيْنَ"
+    },
+    {
+      "id": "iy",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "404",
+      "layer": "MAIN",
+      "exact": "سَنَةَ إِحْدَى وَعِشْرِيْنَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r0",
+      "unit": "siyar-v4-83-al-numan-ibn-muqarrin",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "hd",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_19",
+      "unit": "siyar-v4-83-al-numan-ibn-muqarrin",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "frame": [
+        "qf"
+      ],
+      "origin": {
+        "mention": "m_sp18"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_24",
+      "unit": "siyar-v4-83-al-numan-ibn-muqarrin",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "if"
+      ],
+      "origin": {
+        "mention": "m_sp23"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_1",
+      "report": "r0",
+      "spans": [
+        "n1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_5",
+      "report": "r0",
+      "spans": [
+        "l"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_9",
+      "report": "r0",
+      "spans": [
+        "m"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_20",
+      "report": "r_19",
+      "spans": [
+        "qk"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_25",
+      "report": "r_24",
+      "spans": [
+        "iq"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_s2",
+      "parent": "n1",
+      "exact": "النُّعْمَانُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_s6",
+      "parent": "l",
+      "exact": "أَبُو عَمْرٍو",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_s10",
+      "parent": "m",
+      "exact": "مَشَاهِدِهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_e11",
+      "parent": "m",
+      "exact": "الأَحْزَابُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_e13",
+      "parent": "m",
+      "exact": "بَيْعَةَ الرِّضْوَانِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_e15",
+      "parent": "m",
+      "exact": "نَهَاوَنْدَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_sp18",
+      "parent": "qf",
+      "exact": "وَقِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_s21",
+      "parent": "qf",
+      "exact": "النُّعْمَانِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sp23",
+      "parent": "if",
+      "exact": "ابْنُ إِسْحَاقَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_s26",
+      "parent": "iq",
+      "exact": "قُتِلَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_s2",
+      "mention": "m_s2",
+      "agent": "al-numan-ibn-muqarrin",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s6",
+      "mention": "m_s6",
+      "agent": "al-numan-ibn-muqarrin",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s10",
+      "mention": "m_s10",
+      "agent": "al-numan-ibn-muqarrin",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_e11",
+      "mention": "m_e11",
+      "event": "khandaq",
+      "basis": [
+        {
+          "span": "m_a",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_e13",
+      "mention": "m_e13",
+      "event": "hudaybiyyah",
+      "basis": [
+        {
+          "span": "m_r",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_e15",
+      "mention": "m_e15",
+      "event": "nahavand",
+      "basis": [
+        {
+          "span": "m_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s21",
+      "mention": "m_s21",
+      "agent": "al-numan-ibn-muqarrin",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s26",
+      "mention": "m_s26",
+      "agent": "al-numan-ibn-muqarrin",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_3",
+      "subject": "m_s2",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "n1"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_4",
+      "subject": "m_s2",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "n1"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_7",
+      "subject": "m_s6",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "ku"
+        ]
+      },
+      "restsOn": [
+        "st_5"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_8",
+      "subject": "m_s6",
+      "predicate": "office",
+      "value": {
+        "classified": "amir",
+        "spans": [
+          "am"
+        ]
+      },
+      "restsOn": [
+        "st_5"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_12",
+      "subject": "m_s10",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_e11"
+      },
+      "restsOn": [
+        "st_9"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_14",
+      "subject": "m_s10",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_e13"
+      },
+      "restsOn": [
+        "st_9"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_16",
+      "subject": "m_s10",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_e15"
+      },
+      "restsOn": [
+        "st_9"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_17",
+      "subject": "m_s10",
+      "predicate": "office",
+      "value": {
+        "classified": "amir",
+        "spans": [
+          "m_k"
+        ]
+      },
+      "restsOn": [
+        "st_9"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_22",
+      "subject": "m_s21",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "qk"
+        ]
+      },
+      "restsOn": [
+        "st_20"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_27",
+      "subject": "m_s26",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 21,
+        "spans": [
+          "iy"
+        ]
+      },
+      "restsOn": [
+        "st_25"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
