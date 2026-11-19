@@ -36,7 +36,7 @@ describe('Tuhfa questions', () => {
   const all = [...completeQuestions(seeded()), ...nextQuestions(seeded(2)), ...ruleQuestions(seeded(3))];
 
   it('asks every verse, every next verse and every letter once', () => {
-    expect(all).toHaveLength(61 + 60 + 28 * 3);
+    expect(all).toHaveLength(verses.length + (verses.length - 1) + ALPHABET.length * 3);
     expect(new Set(all.map(question => question.key)).size).toBe(all.length);
   });
 
