@@ -10,8 +10,8 @@ import { ayahMushafWords } from './irab';
  */
 export type GharibAyah = { words: string[]; word: number; gharib: GharibAt[]; mufradat: MufradatEntry | null };
 
-export async function gharibAyah(key: string, page?: number, n?: number): Promise<GharibAyah> {
-  const { words, word } = await ayahMushafWords(key, page, n);
+export async function gharibAyah(key: string, page?: number, n?: number, w?: number): Promise<GharibAyah> {
+  const { words, word } = await ayahMushafWords(key, page, n, w);
   const all = gharibAt(gharib, key);
   const own = gharibOfWord(all, word);
   const article = mufradatOf(mufradat, key, word);

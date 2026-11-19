@@ -7,6 +7,26 @@ import ExternalLink from '@/components/common/ExternalLink';
 import { numberVerses, type Poem } from '@shared/tajwid/poem';
 import styles from './Poem.module.css';
 
+/**
+ * The poem's chapters, verse by verse (the poem's page and the quiz's look-up). `mark` lights one verse: the look-up shows
+ * only its chapter once the answer is given, as the app's TuhfaLook.
+ */
+export function PoemChapters({ chapters, mark }: { chapters: ReturnType<typeof numberVerses>; mark?: number }) {
+  return chapters.map((chapter, i) => (
+    <section key={chapter.title} id={`bab-${i + 1}`} className={styles.chapter} aria-labelledby={`bab-${i + 1}-title`}>
+      <h2 id={`bab-${i + 1}-title`}>{chapter.title}</h2>
+      {chapter.verses.map(({ number, first, second }) => (
+        <p key={number} id={`bayt-${number}`} className={`${styles.bayt} ${number === mark ? 'text-[var(--home-green)]' : ''}`}
+          aria-current={number === mark ? 'true' : undefined}>
+          <span className={styles.number}>{num(number)}</span>
+          <span className={styles.shatr}>{first}</span>
+          <span className={styles.shatr}>{second}</span>
+        </p>
+      ))}
+    </section>
+  ));
+}
+
 export default function PoemView({ poem }: { poem: Poem }) {
   const ar = useLanguage().language === 'ar';
   const { title, author, composed, transcription, edition } = poem;
@@ -33,18 +53,7 @@ export default function PoemView({ poem }: { poem: Poem }) {
           ))}</ol>
         </nav>
         <article className={styles.poem} dir="rtl" lang="ar" aria-label={title}>
-          {chapters.map((chapter, i) => (
-            <section key={chapter.title} id={`bab-${i + 1}`} className={styles.chapter} aria-labelledby={`bab-${i + 1}-title`}>
-              <h2 id={`bab-${i + 1}-title`}>{chapter.title}</h2>
-              {chapter.verses.map(({ number, first, second }) => (
-                <p key={number} id={`bayt-${number}`} className={styles.bayt}>
-                  <span className={styles.number}>{num(number)}</span>
-                  <span className={styles.shatr}>{first}</span>
-                  <span className={styles.shatr}>{second}</span>
-                </p>
-              ))}
-            </section>
-          ))}
+          <PoemChapters chapters={chapters} />
         </article>
       </div>
     </div>

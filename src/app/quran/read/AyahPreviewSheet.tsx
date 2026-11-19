@@ -6,7 +6,7 @@ import useSWR from 'swr';
 import { ArrowLeftRight, BookOpenText, BookOpen, ChevronLeft, Layers, ListTree, Sparkles, X } from 'lucide-react';
 import { num } from '@shared/quran/arabicNumber';
 import { QIRAAT_SOURCE, whoReads, type WordDifference } from '@shared/quran/qiraat';
-import { tafsirRuns, tafsirSadiCredit, tafsirSadiPage, type TafsirPassage } from '@shared/quran/tafsirSadi';
+import { tafsirSadiCredit, tafsirSadiPage, type TafsirPassage } from '@shared/quran/tafsirSadi';
 import ExternalLink from '@/components/common/ExternalLink';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
@@ -14,6 +14,7 @@ import TreeViewCard from '@/app/quran/branches/TreeViewCard';
 import type { AyahPreview } from './ayahPreview';
 import IrabPanel from './IrabPanel';
 import OpenInBook from '@/components/quran/OpenInBook';
+import SadiText from '@/components/quran/SadiText';
 import type { IrabAyah } from './irab';
 import BalaghaPanel from './BalaghaPanel';
 import GharibPanel from './GharibPanel';
@@ -88,11 +89,7 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
         </div>
         <div className="flex min-h-0 flex-col gap-2.5 overflow-y-auto px-4 pb-1">
           {readings && <Readings qiraat={readings} />}
-          {tafsirKey && tafsir && (
-            <p className="whitespace-pre-line px-0.5 text-[1.1875rem] leading-[1.9]">
-              {tafsirRuns(tafsir.text).map((run, i) => (run.quran ? <span key={i} className="font-quran text-[var(--home-accent)]">{run.text}</span> : run.text))}
-            </p>
-          )}
+          {tafsirKey && tafsir && <SadiText text={tafsir.text} />}
           {balaghaKey && balagha && <BalaghaPanel key={balaghaKey} ayah={balaghaKey} data={balagha} />}
           {gharib && gharibData && <GharibPanel key={`${gharib.key}/${gharib.page}/${gharib.n}`} data={gharibData} />}
           {irab && irabData && <IrabPanel key={`${irab.key}/${irab.page}/${irab.n}`} ayah={irab.key} data={irabData} />}
