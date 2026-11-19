@@ -1,0 +1,379 @@
+{
+  "unit": {
+    "id": "siyar-v4-25-suhail",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٢٥"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_su_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "194",
+      "layer": "MAIN",
+      "exact": "٢٥ - سُهَيْلُ بنُ عَمْرٍو: أَبُوْهُمَا"
+    },
+    {
+      "id": "sp_su_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "194",
+      "layer": "MAIN",
+      "exact": "سُهَيْلُ بنُ عَمْرٍو",
+      "prefix": "٢٥ - "
+    },
+    {
+      "id": "sp_su_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "194",
+      "layer": "MAIN",
+      "exact": "سُهَيْلُ بنُ",
+      "prefix": "٢٥ - "
+    },
+    {
+      "id": "sp_su_kunya_line",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "194",
+      "layer": "MAIN",
+      "exact": "يُكْنَى: أَبَا يَزِيْدَ",
+      "suffix": " . وَكَانَ خَطِيْبَ"
+    },
+    {
+      "id": "sp_su_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "194",
+      "layer": "MAIN",
+      "exact": "أَبَا يَزِيْدَ",
+      "prefix": "يُكْنَى: "
+    },
+    {
+      "id": "sp_su_v1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "194",
+      "layer": "MAIN",
+      "exact": "وَكَانَ خَطِيْبَ قُرَيْشٍ، وَفَصِيْحَهُم، وَمِنْ أَشْرَافِهِم"
+    },
+    {
+      "id": "sp_su_v2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "194",
+      "layer": "MAIN",
+      "exact": "وَقَدْ قَامَ بِمَكَّةَ خَطِيْباً عِنْدَ وَفَاةِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِنَحْوٍ مِنْ خُطْبَةِ الصِّدِّيْقِ بِالمَدِيْنَةِ، فَسَكَّنَهُم، وَعَظَّمَ الإِسْلاَمَ"
+    },
+    {
+      "id": "sp_su_zb_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "195",
+      "layer": "MAIN",
+      "exact": "قَالَ الزُّبَيْرُ بنُ بَكَّارٍ:"
+    },
+    {
+      "id": "sp_su_v3",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "195",
+      "layer": "MAIN",
+      "exact": "كَانَ سُهَيْلُ بَعْدُ كَثِيْرَ الصَّلاَةِ وَالصَّوْمِ وَالصَّدَقَةِ، خَرَجَ بِجَمَاعَتِهِ إِلَى الشَّامِ مُجَاهِداً"
+    },
+    {
+      "id": "sp_su_yarmuk",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "195",
+      "layer": "MAIN",
+      "exact": "وَكَانَ أَمِيْراً عَلَى كُرْدُوْسٍ (١) يَوْم اليَرْمُوْكِ"
+    },
+    {
+      "id": "sp_su_yarmuk_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "195",
+      "layer": "MAIN",
+      "exact": "يَوْم اليَرْمُوْكِ",
+      "prefix": "كُرْدُوْسٍ (١) "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_su0",
+      "unit": "siyar-v4-25-suhail",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_su_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_su_zb",
+      "unit": "siyar-v4-25-suhail",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_su_zb_frame"
+      ],
+      "origin": {
+        "mention": "m_su_zb"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_su_name",
+      "report": "r_su0",
+      "spans": [
+        "sp_su_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_su_kunya",
+      "report": "r_su0",
+      "spans": [
+        "sp_su_kunya_line"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_su_v1",
+      "report": "r_su0",
+      "spans": [
+        "sp_su_v1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_su_v2",
+      "report": "r_su0",
+      "spans": [
+        "sp_su_v2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_su_yarmuk",
+      "report": "r_su0",
+      "spans": [
+        "sp_su_yarmuk"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_su_v3",
+      "report": "r_su_zb",
+      "spans": [
+        "sp_su_v3"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_su",
+      "parent": "sp_su_name",
+      "exact": "سُهَيْلُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_su_father",
+      "parent": "sp_su_name",
+      "exact": "عَمْرٍو",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_su_zb",
+      "parent": "sp_su_zb_frame",
+      "exact": "الزُّبَيْرُ بنُ بَكَّارٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_su_z",
+      "parent": "sp_su_v3",
+      "exact": "سُهَيْلُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_su_yarmuk",
+      "parent": "sp_su_yarmuk",
+      "exact": "اليَرْمُوْكِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_su",
+      "mention": "m_su",
+      "agent": "suhail-ibn-amr",
+      "basis": [
+        {
+          "span": "sp_su_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_su_z",
+      "mention": "m_su_z",
+      "agent": "suhail-ibn-amr",
+      "basis": [
+        {
+          "span": "sp_su_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_su_father",
+      "mention": "m_su_father",
+      "agent": "amr-ibn-abd-shams",
+      "basis": [
+        {
+          "span": "siyar-v4-23-abu-jandal#sp_aj1",
+          "role": "RIJAL_ENTRY"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_su_yarmuk",
+      "mention": "m_su_yarmuk",
+      "event": "yarmuk",
+      "basis": [
+        {
+          "span": "sp_su_yarmuk_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_su_name",
+      "subject": "m_su",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_su_name"
+        ]
+      },
+      "restsOn": [
+        "st_su_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_su_sex",
+      "subject": "m_su",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_su_sex"
+        ]
+      },
+      "restsOn": [
+        "st_su_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_su_kunya",
+      "subject": "m_su",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_su_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_su_kunya"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_su_father",
+      "subject": "m_su",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_su_father"
+      },
+      "restsOn": [
+        "st_su_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_su_v1",
+      "subject": "m_su",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_su_v1"
+        ]
+      },
+      "restsOn": [
+        "st_su_v1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_su_v2",
+      "subject": "m_su",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_su_v2"
+        ]
+      },
+      "restsOn": [
+        "st_su_v2"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_su_v3",
+      "subject": "m_su_z",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_su_v3"
+        ]
+      },
+      "restsOn": [
+        "st_su_v3"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_su_yarmuk",
+      "subject": "m_su",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_su_yarmuk"
+      },
+      "restsOn": [
+        "st_su_yarmuk"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
