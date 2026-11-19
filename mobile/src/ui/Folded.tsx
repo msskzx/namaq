@@ -1,8 +1,9 @@
 import { useState, type ReactNode } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { ChevronDown, ChevronUp } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import type { Palette } from '@/lib/theme';
+import { Tap } from '@/ui/Tap';
 
 /**
  * A passage's credit under a rule at the foot of its card (the book and page), folded; a tap opens the edition and the
@@ -14,12 +15,12 @@ export default function Folded({ credit, children, palette, extra, startOpen = f
   const [open, setOpen] = useState(startOpen);
   return (
     <>
-      <Pressable onPress={() => setOpen(was => !was)} accessibilityRole="button" aria-expanded={open}
+      <Tap onPress={() => setOpen(was => !was)} accessibilityRole="button" aria-expanded={open}
         style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 8, paddingTop: 8, borderTopWidth: 1, borderColor: palette.rule, minHeight: 36 }}>
         {open ? <ChevronUp size={16} color={palette.muted} /> : <ChevronDown size={16} color={palette.muted} />}
         <Text style={{ flex: 1, color: palette.muted, fontSize: 14 }}>{credit}</Text>
         {extra}
-      </Pressable>
+      </Tap>
       {open && <View style={{ gap: 4 }}>{children}</View>}
     </>
   );

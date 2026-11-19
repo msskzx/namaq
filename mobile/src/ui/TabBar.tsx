@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
 import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated';
 import { hiddenProps, useHidden, useSlideAway } from '@/ui/motion';
@@ -14,6 +14,7 @@ import { retapTab } from '@/lib/tabRetap';
 import { setCompact, useCompact, useImmersive } from '@/lib/chrome';
 import { openPage, tapOnOpen } from '@/lib/tabGroups';
 import { toTab } from '@/lib/ways';
+import { Tap } from '@/ui/Tap';
 
 // Five buttons at most (owner, 2026-11-13). Arabic runs right to left, so the first sits on the right:
 // Quran, hadith, home, tarajim, quizzes (owner, 2026-11-18). Keys are the tab routes; each but the quizzes holds a page stack (lib/tabGroups.ts).
@@ -74,12 +75,12 @@ export default function TabBar({ state, navigateToTab }: BottomTabBarProps) {
             if (route) navigateToTab(route.key);
           };
           return (
-            <Pressable key={key} onPress={press} accessibilityRole="tab" accessibilityState={{ selected: lit }} aria-selected={lit} accessibilityLabel={label}
+            <Tap key={key} onPress={press} accessibilityRole="tab" accessibilityState={{ selected: lit }} aria-selected={lit} accessibilityLabel={label}
               style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
               <Animated.View style={icon}>
                 <Icon size={26} color={lit ? palette.accent : palette.muted} strokeWidth={lit ? 2.25 : 1.75} />
               </Animated.View>
-            </Pressable>
+            </Tap>
           );
         })}
       </Animated.View>

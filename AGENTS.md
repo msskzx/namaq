@@ -331,6 +331,8 @@ decision.
 | Controls and boxes | `mobile/src/ui/` (app), `src/components/common/` (website) | `shared/sharedFirst.test.ts` |
 | Icon without Latin letters | lucide icons, minus those that draw a letter or a Western digit (owner, 2026-11-19) | `shared/noLatinIcons.test.ts` |
 | Surah name | `surahName` / `SURAH_NAMES` in `shared/quran/surahNames.ts` (pause form with tashkeel, «البَقَرَةْ»); `SURAH_TITLES` only for a mushaf page's surah headers; the plain `name` only for matching | `shared/quran/oneSurahName.test.ts` |
+| Tap size (44 × 44 pt at least, owner 2026-11-19) | app: `Tap` in `mobile/src/ui/Tap.tsx` widens its hit slop to `MIN_TAP` (`mobile/src/ui/tapSize.ts`); website: `Button`'s `TAP_FLOOR` | `shared/tapSize.test.ts` |
+| Bar floating over a page | `FloatingBar` (`mobile/src/ui/FloatingBar.tsx`, `src/components/common/FloatingBar.tsx`), places in `shared/barPlaces.ts` | `e2e/app/mushaf.spec.ts` (the recite bar floats) |
 
 ### Quran text
 
@@ -567,6 +569,14 @@ time), so no screen converts a word; book quotes keep the book's own spelling.
   component, or add one if none exists. Add recognizable icons when they clarify
   an action at a glance. Keep text labels for clarity, give icon-only buttons
   accessible names, and follow the app's existing icon style and RTL direction.
+- Everything tappable gives the finger at least 44 × 44 points (owner,
+  2026-11-19), counting its box and hit slop, never by making the icon bigger.
+  Build presses from `Tap`/`Button`, which reach the floor on their own. Hit
+  slop cannot reach past a parent that clips (`overflow: hidden`) or, on
+  Android, past the parent's bounds: there, give the box itself 44 points.
+- A bar over the reader's page floats (`FloatingBar`): the page never shrinks
+  for it, it goes wherever it is dragged and stays there, and it folds into a
+  circle (owner, 2026-11-19).
 
 ## Documentation
 

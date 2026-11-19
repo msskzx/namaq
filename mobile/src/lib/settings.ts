@@ -95,5 +95,3 @@ export const adhkarAlerts = setting<AdhkarAlerts>('adhkar-alerts', NO_ADHKAR_ALE
 export type UtilityView = 'times' | 'qibla' | 'calendar' | 'adhkar';
 export const utilityView = setting<UtilityView>('utilities-view', 'times', (value): value is UtilityView => value === 'times' || value === 'qibla' || value === 'calendar' || value === 'adhkar');
 
-/** Where the reader's recite bar sits, dragged near the thumb (owner, 2026-11-17). */
-export const reciteBarEdge = setting<'top' | 'bottom'>('recite-bar-edge', 'bottom', (value): value is 'top' | 'bottom' => value === 'top' || value === 'bottom');

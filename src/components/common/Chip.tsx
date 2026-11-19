@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import { Check, X } from 'lucide-react';
 import { num } from '@shared/quran/arabicNumber';
 import QuranWords from '@/components/quran/text/QuranWords';
+import { TAP_FLOOR } from './Button';
 
 /**
  * The one chip, as the app's `ui/Chip`: a round, framed word to pick among others in a row (filters, a topic, a surah).
@@ -30,7 +31,7 @@ export default function Chip({ label, on = false, onClick, role = 'button', name
   const size = small ? 'h-7 px-2.5 text-sm' : quran ? 'px-3.5 text-[1.375rem] leading-[1.8]' : 'min-h-9 px-3 text-[0.9375rem]';
   const base = `inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border ${size}`;
   if (onClear || clearHref) {
-    const x = 'grid size-6 place-items-center rounded-full text-[var(--home-muted)] hover:bg-[var(--home-paper-deep)] hover:text-[var(--home-ink)]';
+    const x = `${TAP_FLOOR} relative grid size-6 place-items-center rounded-full text-[var(--home-muted)] hover:bg-[var(--home-paper-deep)] hover:text-[var(--home-ink)]`;
     return <span className={`inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-[var(--home-rule)] ps-3 pe-1 ${small ? 'h-7 text-sm' : 'min-h-9 text-[0.9375rem]'} text-[var(--home-ink)] ${className}`}>
       {label}
       {clearHref ? <Link href={clearHref} scroll={false} aria-label={clearLabel} title={clearLabel} className={x}><X size={14} aria-hidden /></Link>

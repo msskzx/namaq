@@ -7,7 +7,7 @@ type IconType = (props: LucideProps) => React.ReactNode;
 
 /** The two sizes: `bar` for top, bottom and card button rows; `small` for a button inside a line of text or a list row. */
 export const ICON_BUTTON = {
-  bar: { icon: 22, box: 40 },
+  bar: { icon: 22, box: 44 },
   small: { icon: 18, box: 28 },
   /** A filled round button: the main action of a bar (play, send, record). */
   round: { icon: 22, box: 44 },

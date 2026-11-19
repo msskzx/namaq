@@ -1,7 +1,7 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { Pause, Play, Repeat, X } from 'lucide-react-native';
+import { Minimize2, Pause, Play, Repeat, X } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import { num } from '@shared/quran/arabicNumber';
 import { ONCE, reciterName, reciterOf } from '@shared/quran/recitation';
@@ -10,6 +10,7 @@ import { readListenPlan, serverListenPlan, subscribeListenPlan } from '@shared/l
 
 import type { Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import { Tap } from '@/ui/Tap';
 import { surahName } from '@shared/quran/surahNames';
 
 export const LISTEN_BAR = 58;
@@ -23,10 +24,11 @@ export const rangeText = (from: string, to: string) =>
   from.split(':')[0] === to.split(':')[0] ? `من ${named(from)} إلى ${num(Number(to.split(':')[1]))}` : `من ${named(from)} إلى ${named(to)}`;
 
 /**
- * The recitation playing, as a frosted bar over the bottom of the mushaf (owner's sketch, 2026-11-17): pause or play, the
- * repeat settings, the ayah being read with its reciter and range, and stop. No counts.
+ * The recitation playing, as a frosted bar floating over the mushaf (owner's sketch, 2026-11-17; floating, 2026-11-19):
+ * pause or play, the repeat settings, the ayah being read with its reciter and range, fold, and stop. No counts.
+ * The reader floats it in ui/FloatingBar, which places it.
  */
-export default function ListenBar({ bottom, side, onRepeat, palette }: { bottom: number; side: number; onRepeat: () => void; palette: Palette }) {
+export default function ListenBar({ width, onRepeat, onFold, palette }: { width: number; onRepeat: () => void; onFold: () => void; palette: Palette }) {
   const listening = useListening();
   const plan = useSyncExternalStore(subscribeListenPlan, readListenPlan, serverListenPlan);
   // A file that starts at once (downloaded) never shows that it was loading; a slow stream does after a moment.
@@ -44,18 +46,19 @@ export default function ListenBar({ bottom, side, onRepeat, palette }: { bottom:
   const note = failed ? 'تعذّر تشغيل الآية' : slow && loading ? 'جارٍ التحميل…' : null;
   return (
     <View accessibilityRole="toolbar" accessibilityLabel="الاستماع"
-      style={{ position: 'absolute', left: side, right: side, bottom, height: LISTEN_BAR, flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8, borderRadius: 16, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }}>
+      style={{ width, height: LISTEN_BAR, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 6, borderRadius: 16, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }}>
       <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
       <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: palette.glass }]} />
       {/* A failed ayah shows play, not a retry arrow: pressing it plays the ayah again, and the line beside it says why. */}
       <IconButton Icon={playing ? Pause : Play} label={failed ? 'أعد المحاولة' : playing ? 'إيقاف مؤقت' : 'استمع'} onPress={togglePlaying} round />
       <IconButton Icon={Repeat} label="التكرار والقارئ" onPress={onRepeat} on={repeating} tone="ink" />
-      <Pressable onPress={onRepeat} accessibilityRole="button" accessibilityLabel={`${named(listening.key)}، ${reciterName(reciterOf(listening.reciter))}`} style={{ flex: 1, paddingHorizontal: 4 }}>
+      <Tap onPress={onRepeat} accessibilityRole="button" accessibilityLabel={`${named(listening.key)}، ${reciterName(reciterOf(listening.reciter))}`} style={{ flex: 1, paddingHorizontal: 4 }}>
         <Text numberOfLines={1} style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>{named(listening.key)}</Text>
         <Text numberOfLines={1} style={{ color: palette.muted, fontSize: 12, textAlign: 'right' }}>
           {note ?? `${reciterOf(listening.reciter).name} · ${rangeText(listening.keys[0], listening.keys[listening.keys.length - 1])}`}
         </Text>
-      </Pressable>
+      </Tap>
+      <IconButton Icon={Minimize2} label="اطوِ الشريط في دائرة" onPress={onFold} />
       <IconButton Icon={X} label="أوقف الاستماع" onPress={stopListening} />
     </View>
   );

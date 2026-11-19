@@ -35,7 +35,7 @@ export default function FloatingMenu({ at, label, onClose, overlay = false, top:
         position: 'absolute', opacity: size ? 1 : 0, maxWidth: width - 16,
         top: size ? place : at.y + 20,
         left: size ? Math.min(width - size.width - 8, Math.max(8, at.x - size.width / 2)) : 8,
-        flexDirection: 'row', flexWrap: 'wrap', gap: 2, padding: 5, borderRadius: 12, borderWidth: 1, borderColor: palette.rule,
+        flexDirection: 'row', flexWrap: 'wrap', padding: 5, borderRadius: 12, borderWidth: 1, borderColor: palette.rule,
         backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6,
       }}>
       {children}

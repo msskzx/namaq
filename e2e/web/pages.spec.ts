@@ -89,6 +89,46 @@ test.describe('pages with the database', () => {
     await noErrorPage(page);
   });
 
+  test('the reader\'s recite bar floats, goes where it is dragged (even by a button, which a drag never presses), stays there and folds into a circle', async ({ page }) => {
+    // On a phone the reading tools are put away, so recite starts from an ayah's long press.
+    const recite = async () => {
+      const word = page.getByText('ٱهۡدِنَا', { exact: true }).first();
+      await expect(word).toBeVisible();
+      await page.waitForTimeout(500);
+      const box = (await word.boundingBox())!;
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.down(); await page.waitForTimeout(900); await page.mouse.up();
+      await page.getByRole('button', { name: 'سمّع من هذه الآية' }).click();
+    };
+    await page.goto('/quran/read/1');
+    await recite();
+    const bar = page.getByRole('toolbar', { name: 'أدوات التسميع' });
+    await expect(bar).toBeVisible();
+    // Dragged by its end button: a press of it would end the recitation and take the bar away.
+    const pen = bar.getByRole('button', { name: 'إنهاء التسميع' });
+    await page.waitForTimeout(500);
+    const from = (await pen.boundingBox())!;
+    await page.mouse.move(from.x + from.width / 2, from.y + from.height / 2);
+    await page.mouse.down();
+    for (let step = 1; step <= 10; step++) { await page.mouse.move(from.x + from.width / 2 - step * 10, from.y + from.height / 2 - step * 30); await page.waitForTimeout(16); }
+    await page.mouse.up();
+    await expect.poll(async () => (await pen.boundingBox())!.y).toBeLessThan(from.y - 250);
+    await expect(bar).toBeVisible();
+    await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('floating-bars') ?? '{}').recite?.folded)).toBe(false);
+    const dropped = (await bar.boundingBox())!;
+    // Reloaded, the recitation and its bar come back where the bar was left.
+    await page.reload();
+    await expect(page.getByText('ٱهۡدِنَا', { exact: true }).first()).toBeVisible();
+    if (!(await bar.isVisible())) await recite();
+    await expect.poll(async () => Math.round((await bar.boundingBox())?.y ?? 0)).toBe(Math.round(dropped.y));
+    await bar.getByRole('button', { name: 'اطوِ الشريط في دائرة' }).click();
+    const circle = page.getByRole('button', { name: 'افتح أدوات التسميع' });
+    await expect(circle).toBeVisible();
+    await circle.click();
+    await expect(bar).toBeVisible();
+    await noErrorPage(page);
+  });
+
   test('the home recall card reveals a word at a time, and with the pen takes what the pen setting asks in write boxes and grades it', async ({ page }) => {
     await page.addInitScript(() => localStorage.setItem('ayah-forgot', JSON.stringify({ '18:10': { forgot: 1, at: Date.now() - 86_400_000 } })));
     await page.goto('/');
