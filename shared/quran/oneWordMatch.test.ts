@@ -30,8 +30,6 @@ const ALLOWED: Record<string, string> = {
   'shared/quiz/branchQuestions.ts': 'the tree quiz\'s next-word class; should move into shared/quran',
   'src/lib/quran/lemmas.ts': 'turns the corpus\'s Buckwalter letters into Arabic when building lemmas',
   'src/lib/quran/mutashabih/engine.ts': 'the website\'s mutashabih engine compares words itself; should use shared/quran/wordMatch',
-  'src/app/people/[slug]/life/LifePage.tsx': 'people\'s names',
-  'src/app/people/[slug]/nasab/NasabPage.tsx': 'people\'s names',
   'src/lib/model/appPeople.ts': 'people\'s names',
   'src/lib/tarajim.ts': 'people\'s names',
   'shared/tarajim.ts': 'people\'s names',
