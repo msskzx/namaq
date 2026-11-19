@@ -88,7 +88,10 @@ export default function TopBar({ children, title, middle, away: putAway = false,
           : title ? <Text accessibilityRole="header" numberOfLines={1} style={{ flexShrink: 1, color: palette.ink, fontSize: 17, fontWeight: '600' }}>{title}</Text> : null}
         {center && <View pointerEvents="box-none" style={{ position: 'absolute', top: 0, bottom: 0, left: side, right: side, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>{children}</View>}
         {/* The bar's buttons, then the page's, from the right edge; a search field or chips among them take the free room. */}
-        <View pointerEvents="box-none" style={{ flexGrow: middle ? 0 : 1, flexShrink: 0, minWidth: 0, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: 4 }}>
+        {/* With a search, the group takes exactly the room left by the logo and the back arrow (flexBasis 0, may shrink): on the
+            phone (Yoga) a shrink-proof group sized by its content pushed the logo off the screen (owner, 2026-11-19). */}
+        <View pointerEvents="box-none" style={[{ flexGrow: middle ? 0 : 1, flexShrink: 0, minWidth: 0, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: 4 },
+          search ? { flexGrow: 1, flexShrink: 1, flexBasis: 0 } : null]}>
           {withSettings && <IconButton Icon={Settings} label="الإعدادات" onPress={() => setSettings(true)} />}
           {search && <View style={{ flex: 1, minWidth: 0, maxWidth: TOP_BAR_SEARCH_MAX }}>
             {typeof search === 'function'
@@ -101,7 +104,7 @@ export default function TopBar({ children, title, middle, away: putAway = false,
         {help && <IconButton Icon={CircleHelp} label="مساعدة" onPress={help} />}
         {/* The logo only on home (owner, 2026-11-17): elsewhere it was a second home button beside the home tab. Home is
             the one page with the gear, so the gear and the logo go together. */}
-        {withSettings && <Tap onPress={() => toTab('/')} accessibilityRole="button" accessibilityLabel="الصفحة الرئيسية" hitSlop={8}>
+        {withSettings && <Tap onPress={() => toTab('/')} accessibilityRole="button" accessibilityLabel="الصفحة الرئيسية" hitSlop={8} style={{ flexShrink: 0 }}>
           <Logo size={34} />
         </Tap>}
       </Animated.View>
