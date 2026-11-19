@@ -1,0 +1,325 @@
+{
+  "unit": {
+    "id": "siyar-v6-90-qudamah-ibn-abdullah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٩٠"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_qu_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "451",
+      "layer": "MAIN",
+      "exact": "٩٠ - قُدَامَةُ بنُ عَبْدِ اللهِ بنِ عَمَّارٍ الكِلاَبِيُّ العَامِرِيُّ"
+    },
+    {
+      "id": "sp_qu_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "451",
+      "layer": "MAIN",
+      "exact": "قُدَامَةُ بنُ عَبْدِ اللهِ بنِ عَمَّارٍ الكِلاَبِيُّ العَامِرِيُّ",
+      "prefix": "٩٠ - "
+    },
+    {
+      "id": "sp_qu_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "451",
+      "layer": "MAIN",
+      "exact": "قُدَامَةُ بنُ",
+      "prefix": "٩٠ - "
+    },
+    {
+      "id": "sp_qu_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "451",
+      "layer": "MAIN",
+      "exact": "عَبْدِ اللهِ بنِ عَمَّارٍ",
+      "prefix": "قُدَامَةُ بنُ "
+    },
+    {
+      "id": "sp_qu_suhba",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "451",
+      "layer": "MAIN",
+      "exact": "عِدَادُهُ فِي صِغَارِ الصَّحَابَةِ الَّذِيْنَ لَهُم رُؤْيَةٌ، رَأَى النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - يَرْمِي الجِمَارَ"
+    },
+    {
+      "id": "sp_qu_suhba_p",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "451",
+      "layer": "MAIN",
+      "exact": "النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - يَرْمِي الجِمَارَ",
+      "prefix": "رُؤْيَةٌ، رَأَى "
+    },
+    {
+      "id": "sp_qu_jamrah_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "451",
+      "layer": "MAIN",
+      "exact": "عَنْ أَيْمَنَ (٣) بنِ نَابِلٍ؛ عَنْ قُدَامَةَ بنِ عَبْدِ اللهِ"
+    },
+    {
+      "id": "sp_qu_jamrah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "451",
+      "layer": "MAIN",
+      "exact": "رَأَيْتُ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - يَرْمِي الجَمْرَةَ عَلَى نَاقَةٍ صَهْبَاءَ، لاَ ضَرْبَ، وَلاَ طَرْدَ، وَلاَ جَلْدَ، وَلاَ إِلَيْكَ إِلَيْكَ"
+    },
+    {
+      "id": "sp_qu_kunya_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "451",
+      "layer": "MAIN",
+      "exact": "كَنَّاهُ أَبُو العَبَّاسِ الدَّغُوْلِيُّ"
+    },
+    {
+      "id": "sp_qu_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "451",
+      "layer": "MAIN",
+      "exact": "أَبَا عِمْرَانَ",
+      "prefix": "الدَّغُوْلِيُّ: "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_qu0",
+      "unit": "siyar-v6-90-qudamah-ibn-abdullah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_qu_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_qu_jamrah",
+      "unit": "siyar-v6-90-qudamah-ibn-abdullah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_qu_jamrah_isnad",
+      "origin": {
+        "mention": "m_qu_jamrah_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_qu_kunya",
+      "unit": "siyar-v6-90-qudamah-ibn-abdullah",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_qu_kunya_frame"
+      ],
+      "origin": {
+        "mention": "m_qu_kunya_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_qu_name",
+      "report": "r_qu0",
+      "spans": [
+        "sp_qu_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_qu_suhba",
+      "report": "r_qu0",
+      "spans": [
+        "sp_qu_suhba"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_qu_jamrah",
+      "report": "r_qu_jamrah",
+      "spans": [
+        "sp_qu_jamrah"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_qu_kunya",
+      "report": "r_qu_kunya",
+      "spans": [
+        "sp_qu_kunya"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_qu",
+      "parent": "sp_qu_name",
+      "exact": "قُدَامَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_qu_father",
+      "parent": "sp_qu_name",
+      "exact": "عَبْدِ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_qu_prophet",
+      "parent": "sp_qu_suhba",
+      "exact": "النَّبِيَّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_qu_jamrah_by",
+      "parent": "sp_qu_jamrah_isnad",
+      "exact": "قُدَامَةَ بنِ عَبْدِ اللهِ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_qu_kunya_by",
+      "parent": "sp_qu_kunya_frame",
+      "exact": "أَبُو العَبَّاسِ الدَّغُوْلِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_qu",
+      "mention": "m_qu",
+      "agent": "qudamah-ibn-abdullah-al-kilabi",
+      "basis": [
+        {
+          "span": "sp_qu_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_qu_father",
+      "mention": "m_qu_father",
+      "agent": "abdullah-ibn-ammar-al-kilabi",
+      "basis": [
+        {
+          "span": "sp_qu_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_qu_prophet",
+      "mention": "m_qu_prophet",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_qu_suhba_p",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_qu_jamrah_by",
+      "mention": "m_qu_jamrah_by",
+      "agent": "qudamah-ibn-abdullah-al-kilabi",
+      "basis": [
+        {
+          "span": "sp_qu_name",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_qu_name",
+      "subject": "m_qu",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_qu_name"
+        ]
+      },
+      "restsOn": [
+        "st_qu_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_qu_sex",
+      "subject": "m_qu",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_qu_sex"
+        ]
+      },
+      "restsOn": [
+        "st_qu_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_qu_father",
+      "subject": "m_qu",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_qu_father"
+      },
+      "restsOn": [
+        "st_qu_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_qu_comp",
+      "subject": "m_qu",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_qu_prophet"
+      },
+      "restsOn": [
+        "st_qu_suhba",
+        "st_qu_jamrah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_qu_kunya",
+      "subject": "m_qu",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_qu_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_qu_kunya"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
