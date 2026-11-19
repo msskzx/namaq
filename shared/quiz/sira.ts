@@ -9,7 +9,7 @@ import type { AppBattle, AppCite, AppPersonLink } from '../battles/battle';
 import { rangeName, type AppStory } from '../stories/story';
 import { num } from '../quran/arabicNumber';
 import { shuffle, type Random } from './random';
-import type { ChoiceKind, ChoiceQuestion } from './choiceKinds';
+import type { ChoiceKind, ChoiceQuestion, QuizLook } from './choiceKinds';
 
 export const SIRA = 'SIRA';
 export const SIRA_NAME = 'السيرة والغزوات';
@@ -26,7 +26,7 @@ const source = (refs: AppCite[]) => ({ label: 'المصدر', text: [...new Set(
 const was = (name: string) => (/^(غزوة|سرية|معركة|بدر|وقعة)/.test(name) ? 'كانت' : 'كان');
 const yearName = (year: number) => (year < 0 ? `${num(-year)} قبل الهجرة` : `السنة ${num(year)} للهجرة`);
 
-function ask(key: string, promptArabic: string, right: string, wrong: string[], refs: AppCite[], random: Random): ChoiceQuestion | null {
+function ask(key: string, promptArabic: string, right: string, wrong: string[], refs: AppCite[], look: QuizLook, random: Random): ChoiceQuestion | null {
   const others = [...new Set(wrong.filter(label => label !== right))];
   if (others.length < CHOICES - 1) return null;
   const choices = shuffle([right, ...shuffle(others, random).slice(0, CHOICES - 1)], random);
@@ -37,6 +37,7 @@ function ask(key: string, promptArabic: string, right: string, wrong: string[], 
     choices: choices.map((label, i) => ({ value: String(i), labelArabic: label })),
     correctAnswer: String(choices.indexOf(right)),
     note: source(refs),
+    look,
     evidence: { claimKeys: [] },
   };
 }
@@ -48,7 +49,7 @@ function recited(story: AppStory, random: Random) {
     const right = [`${rangeName(ayat.from, ayat.to)}${reading ? ` ${reading}` : ''}`, ...(ayat.others ?? []).map(other => other.text)].join('، ');
     const length = Number(ayat.to.split(':')[1]) - Number(ayat.from.split(':')[1]);
     const wrong = OPENING_SURAHS.filter(key => key.split(':')[0] !== ayat.from.split(':')[0]).map(key => rangeName(key, `${key.split(':')[0]}:${1 + length}`));
-    return ask(`recited:${story.slug}:${ayat.from}`, `أي آيات قُرئت في قصة «${story.name}»؟`, right, wrong, [...ayat.refs, ...(ayat.others ?? []).flatMap(other => other.refs)], random);
+    return ask(`recited:${story.slug}:${ayat.from}`, `أي آيات قُرئت في قصة «${story.name}»؟`, right, wrong, [...ayat.refs, ...(ayat.others ?? []).flatMap(other => other.refs)], { view: 'story', slug: story.slug }, random);
   });
 }
 
@@ -65,7 +66,7 @@ function revealedAbout(story: AppStory, random: Random) {
     if (!about) return null;
     const inStory = new Set(story.people.map(person => person.slug));
     const wrong = named().filter(person => !inStory.has(person.slug)).map(person => person.name);
-    return ask(`revealed:${story.slug}:${ayat.from}`, `في من نزلت آيات ${rangeName(ayat.from, ayat.to)}؟`, about.name, wrong, ayat.refs, random);
+    return ask(`revealed:${story.slug}:${ayat.from}`, `في من نزلت آيات ${rangeName(ayat.from, ayat.to)}؟`, about.name, wrong, ayat.refs, { view: 'story', slug: story.slug }, random);
   });
 }
 
@@ -75,7 +76,7 @@ function revealedAbout(story: AppStory, random: Random) {
  */
 function next(name: string, key: string, titles: string[], refs: AppCite[], random: Random) {
   return titles.slice(0, -1).map((title, i) =>
-    ask(`next:${key}:${i}`, `في ${name}، ما الذي جاء بعد «${title}»؟`, titles[i + 1], titles.filter((_, at) => at !== i && at !== i + 1), refs, random));
+    ask(`next:${key}:${i}`, `في ${name}، ما الذي جاء بعد «${title}»؟`, titles[i + 1], titles.filter((_, at) => at !== i && at !== i + 1), refs, { view: 'story', slug: key }, random));
 }
 
 /** «في أي سنة كانت …؟»: a cited year; the wrong years are other battles' years, none next to it. */
@@ -85,7 +86,7 @@ function battleYear(battle: AppBattle, random: Random) {
   const right = [yearName(year.value), ...(year.others ?? []).map(other => other.text)].join('، ');
   const wrong = [...new Set(BATTLES.flatMap(other => (other.year ? [other.year.value] : [])))]
     .filter(other => Math.abs(other - year.value) > 1).map(yearName);
-  return ask(`year:${battle.slug}`, `في أي سنة ${was(battle.name)} ${battle.name}؟`, right, wrong, [...year.refs, ...(year.others ?? []).flatMap(other => other.refs)], random);
+  return ask(`year:${battle.slug}`, `في أي سنة ${was(battle.name)} ${battle.name}؟`, right, wrong, [...year.refs, ...(year.others ?? []).flatMap(other => other.refs)], { view: 'battle', slug: battle.slug }, random);
 }
 
 /** «أين كانت …؟»: the place as the source names it; the wrong ones are the other battles' places. */
@@ -93,7 +94,7 @@ function battlePlace(battle: AppBattle, random: Random) {
   const place = battle.location;
   if (!place) return null;
   const wrong = BATTLES.flatMap(other => (other.location && other.slug !== battle.slug ? [other.location.value] : []));
-  return ask(`place:${battle.slug}`, `أين ${was(battle.name)} ${battle.name}؟`, place.value, wrong, place.refs, random);
+  return ask(`place:${battle.slug}`, `أين ${was(battle.name)} ${battle.name}؟`, place.value, wrong, place.refs, { view: 'battle', slug: battle.slug }, random);
 }
 
 /** Every question the stories and battles hold, in random order. */

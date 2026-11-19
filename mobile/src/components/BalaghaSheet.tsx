@@ -48,7 +48,8 @@ export default function BalaghaSheet({ ayah, onClose, palette }: { ayah: string 
   );
 }
 
-function BalaghaBody({ ayah, palette, onClose }: { ayah: string; palette: Palette; onClose: () => void }) {
+/** The sheet's inside: a quiz that looks the ayah up draws it too, without `onClose` and so without the ways out of the quiz. */
+export function BalaghaBody({ ayah, palette, onClose }: { ayah: string; palette: Palette; onClose?: () => void }) {
   useBooks();
   const itqanOn = bookState('itqan') === 'on';
   const paragraphs = useMemo(() => (itqanOn ? itqanAt(itqan, ayah) : []), [ayah, itqanOn]);
@@ -75,7 +76,7 @@ function BalaghaBody({ ayah, palette, onClose }: { ayah: string; palette: Palett
   );
 }
 
-function Itqan({ paragraphs, palette, onSpan, onClose }: { paragraphs: ItqanParagraph[]; palette: Palette; onSpan: (span: [number, number][]) => void; onClose: () => void }) {
+function Itqan({ paragraphs, palette, onSpan, onClose }: { paragraphs: ItqanParagraph[]; palette: Palette; onSpan: (span: [number, number][]) => void; onClose?: () => void }) {
   useBooks();
   const [picked, setPicked] = useState(0);
   useEffect(() => { onSpan(paragraphs[picked]?.words ?? []); }, [paragraphs, picked, onSpan]);
@@ -97,9 +98,9 @@ function Itqan({ paragraphs, palette, onSpan, onClose }: { paragraphs: ItqanPara
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, paddingTop: 4 }}>
             {paragraph.matches.map(key => {
               const [surah, number] = key.split(':').map(Number);
-              return <Chip key={key} small label={`${surahNames[surah] ?? num(surah)} ${num(number)}`} on={false} palette={palette}
-                accessibilityLabel={`افتح ${surahNames[surah] ?? num(surah)} ${num(number)} في المصحف`}
-                onPress={() => { onClose(); openIntent({ tab: 'read', at: key }); }} />;
+              return <Chip key={key} small role={onClose ? 'button' : 'text'} label={`${surahNames[surah] ?? num(surah)} ${num(number)}`} on={false} palette={palette}
+                accessibilityLabel={onClose ? `افتح ${surahNames[surah] ?? num(surah)} ${num(number)} في المصحف` : undefined}
+                onPress={onClose && (() => { onClose(); openIntent({ tab: 'read', at: key }); })} />;
             })}
           </View>
         </Folded>
@@ -115,9 +116,9 @@ function Itqan({ paragraphs, palette, onSpan, onClose }: { paragraphs: ItqanPara
 }
 
 /** The term his paragraph stands under, a tap from its page in «مصطلحات البلاغة». */
-function TermLink({ paragraph, palette, onClose }: { paragraph: ItqanParagraph; palette: Palette; onClose: () => void }) {
+function TermLink({ paragraph, palette, onClose }: { paragraph: ItqanParagraph; palette: Palette; onClose?: () => void }) {
   const term = termOfParagraph(itqan, paragraph);
-  if (!term) return null;
+  if (!term || !onClose) return null;
   const label = `تعريف ${plainName(term)}`;
   return (
     <View style={{ flexDirection: 'row', paddingVertical: 4 }}>
@@ -127,7 +128,7 @@ function TermLink({ paragraph, palette, onClose }: { paragraph: ItqanParagraph; 
   );
 }
 
-function Kashshaf({ ayah, palette, onSpan, onClose }: { ayah: string; palette: Palette; onSpan: (span: [number, number][]) => void; onClose: () => void }) {
+function Kashshaf({ ayah, palette, onSpan, onClose }: { ayah: string; palette: Palette; onSpan: (span: [number, number][]) => void; onClose?: () => void }) {
   useBooks();
   const on = bookState('kashshaf') === 'on';
   // null while reading the file, false when it cannot be read.

@@ -79,3 +79,11 @@ describe('Tuhfa questions', () => {
     expect(qaf.note?.label).toBe('البيت ١٦');
   });
 });
+
+describe('looking a verse up', () => {
+  it('opens the poem, marking the verse that answers', () => {
+    expect(completeQuestions(seeded()).every(question => question.look?.view === 'tuhfa' && verses[question.look.mark! - 1].second === question.correctAnswer)).toBe(true);
+    expect(nextQuestions(seeded()).every(question => question.look?.view === 'tuhfa' && verses[question.look.mark! - 1].first === question.correctAnswer)).toBe(true);
+    expect(ruleQuestions(seeded()).every(question => question.look?.view === 'tuhfa' && question.note?.text.includes(verses[question.look.mark! - 1].first))).toBe(true);
+  });
+});

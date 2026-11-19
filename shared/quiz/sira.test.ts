@@ -41,4 +41,11 @@ describe('the sira and battles quiz', () => {
     expect(byKey('year:fath-makkah').promptArabic).toBe('في أي سنة كان فتح مكة؟');
     expect(byKey('year:badr').promptArabic).toBe('في أي سنة كانت غزوة بدر؟');
   });
+
+  it('looks a story question up in its story and a battle question in its battle', () => {
+    expect(byKey('next:utbah-offers-and-hears-fussilat:0').look).toEqual({ view: 'story', slug: 'utbah-offers-and-hears-fussilat' });
+    expect(byKey('revealed:al-walid-hears-the-quran:74:11').look).toEqual({ view: 'story', slug: 'al-walid-hears-the-quran' });
+    expect(byKey('year:badr').look).toEqual({ view: 'battle', slug: 'badr' });
+    expect(questions.every(question => question.look)).toBe(true);
+  });
 });

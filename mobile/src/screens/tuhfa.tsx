@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, type ComponentRef } from 'react';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Pressable, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
+import { Pressable, ScrollView, View, type LayoutChangeEvent, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { Check } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
-import { numberVerses, type Poem } from '@shared/tajwid/poem';
+import { numberVerses, type NumberedVerse, type Poem } from '@shared/tajwid/poem';
 import poemData from '@shared/tajwid/tuhfat-al-atfal.json';
 import { Text } from '@/ui/Text';
 import Sheet from '@/ui/Sheet';
@@ -12,11 +12,25 @@ import TopBar from '@/ui/TopBar';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
-import { usePalette } from '@/lib/theme';
+import { usePalette, type Palette } from '@/lib/theme';
 
 const poem = poemData as Poem;
 const chapters = numberVerses(poem);
 const count = chapters.reduce((sum, chapter) => sum + chapter.verses.length, 0);
+
+/** One verse, its first half on the right and its second on the left, its number on the right (a quiz that looks the poem up draws it too). */
+export function TuhfaVerse({ verse, marked, palette, onLayout }: { verse: NumberedVerse; marked: boolean; palette: Palette; onLayout?: (event: LayoutChangeEvent) => void }) {
+  return (
+    <View accessible accessibilityLabel={`${num(verse.number)}: ${verse.first}، ${verse.second}`} onLayout={onLayout}
+      style={{ flexDirection: 'row', gap: 10, paddingVertical: 6, borderBottomWidth: 1, borderColor: `${palette.rule}40`, borderRadius: 8, backgroundColor: marked ? palette.paperDeep : 'transparent' }}>
+      <Text style={{ width: 22, color: palette.muted, fontSize: 13, paddingTop: 6, textAlign: 'right' }}>{num(verse.number)}</Text>
+      <View style={{ flex: 1 }}>
+        <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{verse.first}</Text>
+        <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'left' }}>{verse.second}</Text>
+      </View>
+    </View>
+  );
+}
 
 /**
  * The website's /quran/tajwid/tuhfat-al-atfal on the phone: the whole poem in al-Warraqi's vowelling, one verse under the other,
@@ -80,17 +94,8 @@ export default function TuhfaScreen() {
         {chapters.map((part, i) => (
           <View key={part.title} onLayout={event => { tops.current[i] = event.nativeEvent.layout.y; toVerse(); }} style={{ marginTop: 18 }}>
             <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 18, fontWeight: '700', textAlign: 'center', marginBottom: 6 }}>{part.title}</Text>
-            {part.verses.map(verse => (
-              <View key={verse.number} accessible accessibilityLabel={`${num(verse.number)}: ${verse.first}، ${verse.second}`}
-                onLayout={event => { verseY.current[verse.number] = event.nativeEvent.layout.y; }}
-                style={{ flexDirection: 'row', gap: 10, paddingVertical: 6, borderBottomWidth: 1, borderColor: `${palette.rule}40`, borderRadius: 8, backgroundColor: marked === verse.number ? palette.paperDeep : 'transparent' }}>
-                <Text style={{ width: 22, color: palette.muted, fontSize: 13, paddingTop: 6, textAlign: 'right' }}>{num(verse.number)}</Text>
-                <View style={{ flex: 1 }}>
-                  <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{verse.first}</Text>
-                  <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'left' }}>{verse.second}</Text>
-                </View>
-              </View>
-            ))}
+            {part.verses.map(verse => <TuhfaVerse key={verse.number} verse={verse} marked={marked === verse.number} palette={palette}
+              onLayout={event => { verseY.current[verse.number] = event.nativeEvent.layout.y; }} />)}
           </View>
         ))}
       </ScrollView>

@@ -47,6 +47,7 @@ function question(asked: number, others: number[], random: Random): ChoiceQuesti
     choices: shuffle(all, random).map(at => ({ value: String(at), labelArabic: gharib.meanings[at] })),
     correctAnswer: String(asked),
     ayahKey: place.key,
+    look: { view: 'word', key: place.key, word: place.from },
     explains,
     note: { label: 'المصدر', text: `كل الخيارات من ${first === last ? gharibCredit({ page: first }) : `${GHARIB_SHORT}، ص ${num(first)}–${num(last)}`}` },
     evidence: { claimKeys: [] },

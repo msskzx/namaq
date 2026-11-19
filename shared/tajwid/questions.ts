@@ -62,6 +62,7 @@ export function completeQuestions(random: Random): ChoiceQuestion[] {
     choices: halfChoices(second, number, 'second', number, random),
     correctAnswer: second,
     note: noteOf(number),
+    look: { view: 'tuhfa', mark: number },
     evidence: { claimKeys: [] },
   }));
 }
@@ -75,6 +76,7 @@ export function nextQuestions(random: Random): ChoiceQuestion[] {
     choices: halfChoices(verse(number + 1).first, number + 1, 'first', number, random),
     correctAnswer: verse(number + 1).first,
     note: noteOf(number + 1),
+    look: { view: 'tuhfa', mark: number + 1 },
     evidence: { claimKeys: [] },
   }));
 }
@@ -90,6 +92,7 @@ function letterQuestions(name: string, rules: Rules, prompt: (letter: string) =>
       choices: shuffle([rule, ...others], random).map(text => ({ value: text, labelArabic: text })),
       correctAnswer: rule,
       note: noteOf(number),
+      look: { view: 'tuhfa', mark: number },
       evidence: { claimKeys: [] },
     };
   }));
