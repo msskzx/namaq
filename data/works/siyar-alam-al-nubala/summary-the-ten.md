@@ -1,16 +1,20 @@
-# «العشرة المبشرون بالجنة» for the four caliphs (2026-11-19)
+# «العشرة المبشرون بالجنة»: all ten (2026-11-19)
 
-The caliphs' own entries never say «أحد العشرة», so the app listed only five of the Ten. Their title now rests on:
+The caliphs' and Abu Ubaydah's own Siyar entries never say «أحد العشرة», so the app listed only five of the Ten. Their
+title now rests on:
 
-- **v3/237 (Ali's entry, `siyar-v3-ali`)**: «وعليه أبو بكر، وعمر، وعثمان، وعلي. وذكر بقية العشرة», from Sa'id ibn Zayd's
-  Hira hadith. The Risalah editor grades the hadith «صحيح بطرقه» at v4/105 note (٤) (Abu Dawud 4648, Tirmidhi 3728 «حسن صحيح»).
-- **v4/103 (Sa'd's entry, `siyar-v4-5-saad-ibn-abi-waqqas`)**: Sa'id ibn Zayd's report «أبو بكر في الجنة، وعمر في الجنة، وعلي
-  في الجنة، وعثمان في الجنة…», note (٢) «إسناده صحيح» (Ahmad 1/187, Abu Dawud 4650, Ibn Majah 133).
+- **Sunan al-Tirmidhi 3747 (Shakir/Halabi 5/647, new work `sunan-al-tirmidhi`)**: the Prophet ﷺ names all ten, Abu
+  Ubaydah included: «أبو بكر في الجنة، وعمر في الجنة… وأبو عبيدة بن الجراح في الجنة». Graded «صحيح» under the hadith in
+  Shamela 1435 (al-Albani's grading in that copy; the export prints the word alone), and Shu'ayb al-Arna'ut calls this
+  same chain «رجاله ثقات» (Siyar v4/104 note ٣). Cited for all ten. Al-Tirmidhi prefers the Sa'id ibn Zayd route (3748)
+  as «أصح»; it carries the same content («نحو هذا»). Not used as a quoted saying in the feed or quizzes for now, since its
+  versions differ in wording.
+- **Siyar v3/237 (Ali's entry)**: «وعليه أبو بكر، وعمر، وعثمان، وعلي. وذكر بقية العشرة», from Sa'id ibn Zayd's Hira
+  hadith, graded «صحيح بطرقه» by the editor at v4/105 note (٤).
+- **Siyar v4/103 (Sa'd's entry)**: Sa'id ibn Zayd's «أبو بكر في الجنة، وعمر في الجنة، وعلي في الجنة، وعثمان في الجنة…»,
+  note (٢) «إسناده صحيح».
 
-Left out:
-- v4/104, the Ibn Abi Fudayk route «عشرة في الجنة… وسمى فيهم أبا عبيدة»: note (٣) «وكلاهما ضعيف». So **Abu Ubaydah has no
-  «العشرة» title yet**: his own entry says only «شهد له النبي ﷺ بالجنة» (v4/6, already a virtue). A sound source naming
-  him among the Ten (e.g. Tirmidhi 3747, Abd al-Rahman ibn Awf) is not printed on these pages.
+Left out: Siyar v4/104, the Ibn Abi Fudayk route («وسمى فيهم أبا عبيدة»), note (٣) «وكلاهما ضعيف».
 
-Second-agent review: done; its must-fix items (drop the weak p104 route, use a text that says «العشرة», a mention
-occurrence) are applied. Scripts: conversion/batch1/saad.py and conversion/batch6/ali.py in the project files.
+Second-agent review: done twice; its must-fix items are applied. Scripts in the project files: conversion/batch1/saad.py,
+conversion/batch6/ali.py, conversion/the-ten/tirmidhi.py.
