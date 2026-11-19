@@ -22,7 +22,9 @@ import { Credit } from './person';
 export const kindColor = (palette: Palette, kind: TieKind) =>
   ({ parent: palette.amber, spouse: palette.accent, child: palette.root, sibling: palette.ink, cousin: palette.path, companion: palette.green, accompanied: palette.green })[kind];
 
-const NODE_H = 46;
+const NODE_H = 62;
+/** Room a node has to grow away from the middle when its name takes another line, so its line still meets its edge. */
+const GROW = 26;
 const GAP = 10;
 const ROW = NODE_H + 46;
 const nodeName = (node: GraphNode) => personName(node).replace(/\s+بن\s+.*$/u, (rest) => (rest.length > 18 ? '' : rest));
@@ -51,11 +53,12 @@ function layout(count: number, width: number) {
   const sides = cols >= 3 ? Math.max(0, count - 2 * cols) : 0;
   const below = count - top - sides;
   const row = (n: number, y: number) => Array.from({ length: n }, (_, i) => ({ x: width / 2 + (i - (n - 1) / 2) * (w + GAP), y }));
-  const mid = NODE_H / 2 + (top > 0 ? ROW : 0);
+  const first = GROW + NODE_H / 2;
+  const mid = top > 0 ? first + ROW : first;
   const side = [{ x: width - w / 2, y: mid }, { x: w / 2, y: mid }].slice(0, sides);
   // The middle card is wider than the others, but never over the sides of its row.
   const middleW = sides > 0 ? Math.min(w * 1.2, width - 2 * (w + GAP)) : Math.min(w * 1.8, width);
-  return { places: [...row(top, NODE_H / 2), ...side, ...row(below, mid + ROW)], middle: mid, middleW, height: mid + NODE_H / 2 + (below > 0 ? ROW : 0), w };
+  return { places: [...row(top, first), ...side, ...row(below, mid + ROW)], middle: mid, middleW, height: mid + NODE_H / 2 + GROW + (below > 0 ? ROW : 0), w };
 }
 
 /** Where the line from `a` to `b` leaves a box of half sizes `hw`×`hh` round `a`, so a faded box shows no line through it. */
@@ -139,18 +142,23 @@ export default function TiesScreen() {
         <View style={{ width: drawW, height: drawH, alignSelf: 'center' }}>
           <Svg width={drawW} height={drawH} style={{ position: 'absolute' }}>
             {placed.map(spot => {
-              const from = edge(centre, spot, middleW / 2, NODE_H / 2);
+              const from = edge(centre, spot, middleW / 2, 26);
               const to = edge(spot, centre, NODE_W / 2, NODE_H / 2);
               return <Line key={spot.key} x1={from.x} y1={from.y} x2={to.x} y2={to.y} stroke={kindColor(palette, spot.kind)} strokeWidth={2} strokeOpacity={0.8} />;
             })}
           </Svg>
-          <View style={{ position: 'absolute', left: drawW / 2 - middleW / 2, top: middle - NODE_H / 2, width: middleW }}>
+          <View style={{ position: 'absolute', left: drawW / 2 - middleW / 2, top: middle - (NODE_H + GROW) / 2, height: NODE_H + GROW, width: middleW, justifyContent: 'center' }}>
             <Card palette={palette} pad={[8, 10]} picked accessibilityRole="header" accessibilityLabel={personName(person)}>
               <Text numberOfLines={2} style={{ color: palette.ink, fontSize: 17, textAlign: 'center' }}>{personName(person)}</Text>
             </Card>
           </View>
           {placed.map(spot => {
-            const style = { position: 'absolute' as const, left: spot.x - NODE_W / 2, top: spot.y - NODE_H / 2, width: NODE_W };
+            // Above the middle a node grows upwards, below it downwards, beside it both ways: its inner edge stays where its line ends.
+            const grows = spot.y < middle ? 'flex-end' as const : spot.y > middle ? 'flex-start' as const : 'center' as const;
+            const style = {
+              position: 'absolute' as const, left: spot.x - NODE_W / 2, width: NODE_W, height: NODE_H + GROW, justifyContent: grows,
+              top: grows === 'flex-end' ? spot.y + NODE_H / 2 - NODE_H - GROW : grows === 'flex-start' ? spot.y - NODE_H / 2 : spot.y - (NODE_H + GROW) / 2,
+            };
             if ('group' in spot) {
               const label = `${groupWord(spot.group, person.sex, spot.count)} ${num(spot.count)}`;
               return (
@@ -168,6 +176,8 @@ export default function TiesScreen() {
               <View key={spot.key} style={style}>
                 <Card palette={palette} pad={[6, 8]} picked={node.inApp} faded={!node.inApp} accessibilityRole={node.inApp ? 'link' : 'button'} accessibilityLabel={label}
                   onPress={node.inApp ? () => go(node.slug) : () => setShown(spot.tie)} onLongPress={() => setShown(spot.tie)}>
+                  {/* What this person is to the one in the middle, on the node itself, so a line's colour is never the only clue. */}
+                  <Text style={{ color: kindColor(palette, spot.kind), fontSize: 12, textAlign: 'center' }}>{tieWord(spot.kind, node.sex, person.sex)}</Text>
                   <Text numberOfLines={2} style={{ color: node.inApp ? palette.accent : palette.muted, fontSize: 14, textAlign: 'center' }}>{nodeName(node)}</Text>
                 </Card>
               </View>
@@ -204,11 +214,11 @@ export default function TiesScreen() {
           </View>
         </>}
         {person.titles.length > 0 && <>
-          <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>من</Text>
+          <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{person.sex === 'FEMALE' ? 'ألقابها وأوصافها' : 'ألقابه وأوصافه'}</Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
             {person.titles.map(title => (
               <Chip key={title.title} label={title.name} on={false} palette={palette}
-                onPress={() => router.navigate({ pathname: '/tarajim', params: { title: title.title, at: String(Date.now()) } })} />
+                onPress={title.shared ? () => router.navigate({ pathname: '/tarajim', params: { title: title.title, at: String(Date.now()) } }) : undefined} />
             ))}
           </View>
         </>}

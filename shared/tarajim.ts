@@ -42,6 +42,8 @@ export interface PersonLink extends PersonFact {
 export interface PersonTitle extends PersonFact {
   title: string;
   name: string;
+  /** Held by others too (a group such as «العشرة المبشرون بالجنة»), so it opens the list of them; a title of one person does not. */
+  shared?: true;
 }
 
 export interface AppPerson {

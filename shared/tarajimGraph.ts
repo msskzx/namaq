@@ -192,16 +192,25 @@ export function tieOf(kind: TieKind, toSex: GraphNode['sex']) {
 /** A name after a word that governs it («أمُّ أبي العاص», «من أبي سفيان»): a leading kunya or «ذو» in the genitive. */
 export const genitive = (name: string) => name.replace(/^أب[وا](?= )/u, 'أبي').replace(/^ذو(?= )/u, 'ذي');
 
-/** A chain as one sentence, each step «صفية بنت عبد المطلب أمُّ الزبير بن العوام»: «… ، و…»; a disputed tie says so. */
+/**
+ * One step as a clause, «صفية بنت عبد المطلب أمُّ الزبير بن العوام»: who `to` is to `from`, with both names, so a word such
+ * as «ابنُ» never leaves the reader guessing which of the two is the son. A disputed tie says so.
+ */
+export function stepClause(graph: PeopleGraph, step: Step, nameOf: (node: GraphNode) => string = (n) => n.name) {
+  const from = graph.nodes.get(step.from)!;
+  const to = graph.nodes.get(step.to)!;
+  const doubt = step.link.disputed ? ' على خلاف' : step.link.anonymous ? ' فيما قيل' : '';
+  // «to is the one `from` accompanied» reads from the companion's side: «أبو بكر صاحبُ محمد ﷺ».
+  if (step.kind === 'accompanied') return `${nameOf(from)} ${tieOf('companion', from.sex)} ${genitive(nameOf(to))}${doubt}`;
+  return `${nameOf(to)} ${tieOf(step.kind, to.sex)} ${genitive(nameOf(from))}${doubt}`;
+}
+
+/**
+ * A chain as one sentence that reads along it, each clause starting from the person the last one ended on: «رقية بنت محمد
+ * بنتُ محمد ﷺ، ومحمد ﷺ زوجُ حفصة بنت عمر» (owner, 2026-11-19: the other order read as a list).
+ */
 export function chainSentence(graph: PeopleGraph, steps: readonly Step[], nameOf: (node: GraphNode) => string = (n) => n.name) {
-  return steps.map((step) => {
-    const from = graph.nodes.get(step.from)!;
-    const to = graph.nodes.get(step.to)!;
-    const doubt = step.link.disputed ? ' على خلاف' : step.link.anonymous ? ' فيما قيل' : '';
-    // «to is the one `from` accompanied» reads from the companion's side: «أبو بكر صاحبُ محمد ﷺ».
-    if (step.kind === 'accompanied') return `${nameOf(from)} ${tieOf('companion', from.sex)} ${genitive(nameOf(to))}${doubt}`;
-    return `${nameOf(to)} ${tieOf(step.kind, to.sex)} ${genitive(nameOf(from))}${doubt}`;
-  }).join('، و');
+  return [...steps].reverse().map((step) => stepClause(graph, step, nameOf)).join('، و');
 }
 
 /**

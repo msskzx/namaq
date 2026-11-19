@@ -39,7 +39,8 @@ export function personLine(person: AppPerson) {
 /** Each title the people hold, once, in the order they first come, for the list's filter chips. */
 export function titleFilters(people: AppPerson[] = PEOPLE) {
   const seen = new Map<string, string>();
-  for (const person of people) for (const title of person.titles) if (!seen.has(title.title)) seen.set(title.title, title.name);
+  // Only titles several people hold: «الفاروق» as a filter would list one man.
+  for (const person of people) for (const title of person.titles) if (title.shared && !seen.has(title.title)) seen.set(title.title, title.name);
   return [...seen].map(([key, name]) => ({ key, name }));
 }
 

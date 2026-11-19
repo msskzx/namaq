@@ -85,6 +85,9 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
   const battles = new Map(catalog.battles.map((battle) => [battle.slug, battle.name]));
   const events = new Map(catalog.events.map((event) => [event.slug, event.name]));
   const titleNames = new Map(catalog.people.flatMap((person) => person.titles.map((title) => [title.title, title.name] as const)));
+  // How many people the catalog gives each title: «الفاروق» is one man's, «العشرة المبشرون بالجنة» a group's.
+  const holders = new Map<string, number>();
+  for (const person of catalog.people) for (const key of new Set(person.titles.map((title) => title.title))) holders.set(key, (holders.get(key) ?? 0) + 1);
   // A person is in the app once an entry of their own is converted: the unit whose full name they are.
   const ownUnit = new Map([...profiles.entries()].flatMap(([slug, entries]) => {
     const name = entries.find((entry) => entry.predicate === 'name.full');
@@ -124,7 +127,7 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
     return taken ? short(slug, 3) : firstNames.get(slug)!;
   };
 
-  return [...ownUnit.entries()].map(([slug, unitId]) => {
+  const all = [...ownUnit.entries()].map(([slug, unitId]) => {
     const entries = profiles.get(slug)!;
     const file = units.get(unitId)!;
     const refsOf = (entry: ProfileEntry): PageRef[] => {
@@ -217,4 +220,11 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
       ],
     };
   }).sort((a, b) => a.name.localeCompare(b.name, 'ar'));
+  // A title is shared when the catalog or the converted entries give it to more than one person.
+  const converted = new Map<string, number>();
+  for (const person of all) for (const key of new Set(person.titles.map((title) => title.title))) converted.set(key, (converted.get(key) ?? 0) + 1);
+  return all.map((person) => ({
+    ...person,
+    titles: person.titles.map((title) => (Math.max(holders.get(title.title) ?? 0, converted.get(title.title) ?? 0) > 1 ? { ...title, shared: true as const } : title)),
+  }));
 }
