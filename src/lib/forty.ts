@@ -60,8 +60,12 @@ export function hadithCards(day: number, slots: number[]): HadithCard[] {
     }
     if (kind === 'isnad') {
       if (!FEED_CHAINS.length) return [];
-      // A quarter of the list on, and past the group's hadith and «من أخرجه» cards, so no group shows one hadith twice.
-      const taken = FEED_FORTY.length ? [FEED_FORTY[turnOf(day, turn, FEED_FORTY.length)].n, FEED_FORTY[turnOf(day, turn + Math.ceil(FEED_FORTY.length / 2), FEED_FORTY.length)].n] : [];
+      // A quarter of the list on, and past the group's hadith, Ibn Rajab and «من أخرجه» cards, so it never repeats one of them.
+      const all = rajabPassages();
+      const taken = [
+        ...(FEED_FORTY.length ? [FEED_FORTY[turnOf(day, turn, FEED_FORTY.length)].n, FEED_FORTY[turnOf(day, turn + Math.ceil(FEED_FORTY.length / 2), FEED_FORTY.length)].n] : []),
+        ...(all.length ? [all[turnOf(day, turn, all.length)].chapter.n] : []),
+      ];
       const start = turnOf(day, turn + Math.ceil(FEED_CHAINS.length / 4), FEED_CHAINS.length);
       const entry = Array.from({ length: FEED_CHAINS.length }, (_, i) => FEED_CHAINS[(start + i) % FEED_CHAINS.length]).find(each => !taken.includes(each.n)) ?? FEED_CHAINS[start];
       const record = drawnBukhari(entry)!;

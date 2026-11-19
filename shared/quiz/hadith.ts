@@ -155,17 +155,19 @@ export const HADITH_CHAIN_NAME = 'من حدّث به؟';
 
 /** A narrator's name as a key: no harakat, one alif, so «يَحْيَى بْنِ سَعِيدٍ» and «يحيى بن سعيد» are one name. */
 const nameKey = (name: string) => bare(name).replace(/[أإآٱ]/g, 'ا');
+const plain = (text: string) => text.replace(/[ً-ْٰ]/g, '');
 /** A name as the question shows it: no harakat, and «أبي/أبا فلان» as «أبو فلان», so no case ending tells its place. */
-const shownName = (name: string) => name.replace(/[ً-ْٰ]/g, '').replace(/^(?:أبي|أبا) /, 'أبو ');
+const shownName = (name: string) => plain(name).replace(/^(?:أبي|أبا) /, 'أبو ');
 /** «أبي» alone is «my father», a name only inside its own chain. */
 const ownFather = (name: string) => /^(?:أبي|أبيه)$/.test(shownName(name));
 
-/** Two names that may be one man: one is the other's start, word by word («سفيان» and «سفيان بن عيينة»). */
+/** The words that tell a man apart: not «بن», «ابن», «أبو/أبي», «هو». */
+const telling = (name: string) => nameKey(name).split(' ').filter(word => !/^(?:بن|ابن|ابو|ابي|ابا|هو)$/.test(word));
+/** Two names that may be one man: every telling word of one is in the other («الأعمش» and «سليمان الأعمش», «سفيان» and «سفيان بن عيينة»). */
 const maySame = (a: string, b: string) => {
-  const [x, y] = [nameKey(a).split(' '), nameKey(b).split(' ')];
-  const short = x.length <= y.length ? x : y;
-  const long = short === x ? y : x;
-  return short.every((word, i) => long[i] === word);
+  const [x, y] = [telling(a), telling(b)];
+  const [short, long] = x.length <= y.length ? [x, y] : [y, x];
+  return short.length > 0 && short.every(word => long.includes(word));
 };
 
 /** The chain of a drawn Bukhari record from al-Bukhari's teacher to the Companion, each with the word he narrated it by. */
@@ -186,12 +188,15 @@ export function chainQuestions(random: Random): ChoiceQuestion[] {
     const told = bare(entry.records.map(each => each.text).join(' ')).replace(/[أإآٱ]/g, 'ا');
     return chain.slice(1, -1).flatMap((link, k) => {
       const at = k + 1;
+      // «حدثنا أبي» names no one outside its own chain, so that place is not asked.
+      if (ownFather(link.name)) return [];
       const near = (spread: number) => chains.filter(other => other.record !== record)
         .flatMap(other => other.chain.slice(Math.max(1, at - spread), Math.min(other.chain.length - 1, at + spread + 1)).map(each => each.name))
         .filter(name => !ownFather(name) && !chain.some(own => maySame(own.name, name)) && !told.includes(nameKey(name)));
       const pool = near(1).length >= CHOICES - 1 ? near(1) : near(chain.length);
       const wrong = pool.filter((name, i) => pool.findIndex(other => maySame(other, name)) === i).map(shownName);
-      const shown = chain.map((each, i) => `${shownName(each.by)} ${i === at ? '…' : shownName(each.name)}`).join('، ');
+      // The chain keeps its own case («عن أبي صالح»); only the choices are put in one form.
+      const shown = chain.map((each, i) => `${plain(each.by)} ${i === at ? '…' : plain(each.name)}`).join('، ');
       const question = choose(`${record.number}:${at}`, HADITH_CHAIN, `${recordName(record, num)}:\n${shown}\nمن حدّث به في موضع «…»؟`, shownName(link.name), wrong,
         source(entry, record), entry, random);
       return question ? [question] : [];

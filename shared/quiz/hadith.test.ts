@@ -209,6 +209,10 @@ describe('«من حدّث به؟»', () => {
         expect(told).not.toContain(plain(choice.labelArabic));
         expect(choice.labelArabic).not.toMatch(/^أبي$/);
       }
+      // Never «أبي» («my father») as an answer, nor the right man twice under two names («الأعمش» and «سليمان الأعمش»).
+      expect(question.choices.map(choice => choice.labelArabic)).not.toContain('أبي');
+      const shortNames = question.choices.map(choice => plain(choice.labelArabic).split(' ').filter(word => !/^(?:بن|ابن|ابو|ابي)$/.test(word)));
+      for (const [i, a] of shortNames.entries()) for (const b of shortNames.slice(i + 1)) expect(a.every(word => b.includes(word)) || b.every(word => a.includes(word)), question.key).toBe(false);
       // No case ending in the chain or the choices tells the place.
       expect(question.promptArabic.split('\n')[1] + question.choices.map(choice => choice.labelArabic).join(' ')).not.toMatch(/[ً-ْ]/);
     }
