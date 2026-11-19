@@ -32,6 +32,7 @@ import { QIRAAT_SOURCE } from '@shared/quran/qiraat';
 import { tafsirSadiCredit, tafsirSadiPage, type TafsirPassage } from '@shared/quran/tafsirSadi';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
 import { num } from '@shared/quran/arabicNumber';
+import { LOOKED_POINTS, POINTS } from '@shared/quiz/score';
 import { plainName, type BalaghaTerm } from '@shared/quran/balaghaTerms';
 import { TermQuotes } from '@/components/balagha/TermParts';
 import { FortyCard, FortyHadith } from '@/components/hadith/FortyParts';
@@ -213,16 +214,31 @@ export function LookView({ look, shown }: { look: QuizLook; shown: boolean }) {
   return <div dir="rtl" lang="ar" className="flex flex-col gap-2.5 text-[var(--home-ink)]">{view}</div>;
 }
 
-/** «ابحث عن الجواب» under a question's choices (the app's LookButton): opens its view in a sheet, with a way back to the question. */
-export function LookButton({ look }: { look: QuizLook }) {
+/**
+ * «ابحث عن الجواب» under a question's choices (the app's LookButton): opens its view in a sheet, with a way back to the
+ * question. `onLook` runs as it opens (a party counts the look then, found or not); `costs` says under the button what a
+ * look costs in a party; `top` stays in sight above the view, such as a party's clock (owner, 2026-11-19).
+ */
+export function LookButton({ look, onLook, costs = false, top }: { look: QuizLook; onLook?: () => void; costs?: boolean; top?: ReactNode }) {
   const [open, setOpen] = useState(false);
-  return <>
-    <Button className="mt-3" size="sm" onClick={() => setOpen(true)}><Search size={16} aria-hidden />ابحث عن الجواب</Button>
+  return <div className="mt-3 flex flex-col items-start gap-1">
+    <Button size="sm" onClick={() => { setOpen(true); onLook?.(); }}><Search size={16} aria-hidden />ابحث عن الجواب</Button>
+    {costs && <p dir="rtl" lang="ar" className="text-sm text-[var(--home-muted)]">{`بعد البحث للإجابة الصحيحة ${num(LOOKED_POINTS)} نقاط بدل ${num(POINTS)}.`}</p>}
     <Sheet open={open} onClose={() => setOpen(false)} label="ابحث عن الجواب" className="overflow-y-auto">
-      {open && <div className="flex flex-col gap-3 p-4">
-        <LookView look={look} shown={false} />
-        <Button className="self-start" onClick={() => setOpen(false)}>رجوع إلى السؤال</Button>
-      </div>}
+      {open && <>
+        {top && <div className="sticky top-0 z-10 flex justify-center bg-[var(--home-paper)] pt-3 pb-2">{top}</div>}
+        <div className="flex flex-col gap-3 p-4">
+          <LookView look={look} shown={false} />
+          <Button className="self-start" onClick={() => setOpen(false)}>رجوع إلى السؤال</Button>
+        </div>
+      </>}
     </Sheet>
-  </>;
+  </div>;
+}
+
+/** What a party player sees after looking (the app's LookedNote): a right answer now earns half the points. */
+export function LookedNote() {
+  return <p dir="rtl" lang="ar" className="mt-3 flex items-center gap-1.5 text-[var(--home-amber)]">
+    <Search size={15} aria-hidden />{`بحثتَ عنه · للإجابة الصحيحة ${num(LOOKED_POINTS)} نقاط`}
+  </p>;
 }
