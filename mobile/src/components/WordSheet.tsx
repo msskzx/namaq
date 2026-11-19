@@ -9,6 +9,7 @@ import { ayahOf, surahNames } from '@/lib/branches';
 import { readAyah } from '@/lib/openReader';
 import { corpusText, words } from '@/lib/words';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
+import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
 import Sheet from '@/ui/Sheet';
 import SurahStrip from './SurahStrip';
 import Card from '@/ui/Card';
@@ -82,9 +83,9 @@ function WordPlaces({ lemmas, onClose, palette }: { lemmas: number[]; onClose: (
                 tops.current.set(key, y);
                 if (pending.current === key) { pending.current = null; scroll.current?.scrollTo({ y, animated: false }); }
               }} accessibilityRole="button" accessibilityLabel={`افتح ${place} في المصحف`}>
-              <Text style={{ fontFamily: QURAN_FONT, fontSize: 20, lineHeight: 38, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
-                {text.map((word, i) => <Text key={i} style={{ fontFamily: QURAN_FONT, color: marked.includes(i) ? palette.accent : palette.ink }}>{`${i ? ' ' : ''}${mushafText(word)}`}</Text>)}
-              </Text>
+              <AyahFlow color={palette.ink}>
+                {text.map((word, i) => <AyahWords key={i} look={marked.includes(i) ? { color: palette.accent } : undefined}>{`${i ? ' ' : ''}${word}`}</AyahWords>)}
+              </AyahFlow>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 2 }}>
                 <BookOpen size={16} color={palette.muted} />
                 <Text style={{ color: palette.muted, fontSize: 13 }}>{place}</Text>

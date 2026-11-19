@@ -23,6 +23,7 @@ import type { BalaghaAyah } from './balagha';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
 import Button from '@/components/common/Button';
 import Sheet from '@/components/common/Sheet';
+import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
 import Card from '@/components/common/Card';
 
 /** Trees, compare and tafsir load their preview; readings come with the page (ayahLinks.ts). Readings and tafsir have no page of their own. */
@@ -109,9 +110,9 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
                 <span>{item.partner}</span>
                 <ChevronLeft size={16} aria-hidden />
               </span>
-              <span className="mt-1 block text-justify font-quran text-xl leading-[1.9] [text-align-last:right]">
-                {item.words.map((word, i) => <span key={i} className={word.shared ? 'text-[var(--home-accent)]' : undefined}>{`${i ? ' ' : ''}${word.text}`}</span>)}
-              </span>
+              <AyahFlow className="mt-1">
+                {item.words.map((word, i) => <AyahWords key={i} className={word.shared ? 'text-[var(--home-accent)]' : undefined}>{`${i ? ' ' : ''}${word.text}`}</AyahWords>)}
+              </AyahFlow>
             </Card>
           ))}
         </div>
