@@ -15,7 +15,7 @@ vi.mock('./listenFiles', () => ({ localAyah: () => null, streamUrl: (_: number, 
 vi.mock('./mushaf', () => ({ ayahCounts: new Map([[1, 7]]), surahNames: [] }));
 
 const status = (over: Partial<AudioStatus>) => ({ playing: false, isLoaded: true, didJustFinish: false, duration: 3, currentTime: 0.25, error: null, ...over }) as AudioStatus;
-const heard = () => onStatus(status({ playing: true }));
+const heard = () => { onStatus(status({ playing: true })); onStatus(status({ playing: true, currentTime: 0.5 })); };
 const ended = () => onStatus(status({ didJustFinish: true }));
 
 let listen: typeof import('./listen');
@@ -80,6 +80,23 @@ describe('playback', () => {
     onStatus(status({ isLoaded: false, currentTime: 0 }));
     ended();
     expect(listen.readListening()!.key).toBe('1:2');
+  });
+
+  it('one status at the start does not count the file as heard: the pause\'s silence reports that way', () => {
+    listen.listen('1:1', '1:3');
+    onStatus(status({ playing: true, currentTime: 0.9 }));
+    expect(listen.readListening()!.loading).toBe(true);
+  });
+
+  it('an error while paused fails at once, with nothing asked again', () => {
+    listen.listen('1:1', '1:3');
+    heard();
+    listen.togglePlaying();
+    listen.applyReciter(2);
+    onStatus(status({ error: 'offline' }));
+    vi.advanceTimersByTime(2000);
+    expect(listen.readListening()!.failed).toBe(true);
+    expect(asked).toEqual(['1:1', '1:1']);
   });
 
   it('paused while waiting to ask again, nothing is asked', () => {

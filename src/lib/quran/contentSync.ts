@@ -63,11 +63,11 @@ async function get<T>(path: string): Promise<T> {
     if (!response.ok) {
       const body = await response.json().catch(() => ({})) as { error?: { code?: string } | string; code?: string };
       const code = typeof body.error === 'object' ? body.error?.code : body.code ?? (typeof body.error === 'string' ? body.error : undefined);
-      throw new SyncError(`${path.split("?")[0]}: ${response.status}${code ? ` ${code}` : ""}`, response.status, code);
+      throw new SyncError(`${path.split('?')[0]}: ${response.status}${code ? ` ${code}` : ''}`, response.status, code);
     }
     return response.json() as Promise<T>;
   }
-  throw new SyncError(`${path}: unauthorised`, 502);
+  throw new SyncError(`${path.split('?')[0]}: unauthorised`, 502);
 }
 
 type Page = { sync?: { mutations?: Mutation[]; has_more?: boolean; next_page_url?: string | null; next_sync_token?: string | null } } & { mutations?: Mutation[]; has_more?: boolean; next_page_url?: string | null; next_sync_token?: string | null };

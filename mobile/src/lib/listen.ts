@@ -68,7 +68,7 @@ const clearLoad = () => { if (loadTimer) { clearTimeout(loadTimer); loadTimer = 
 
 function fail() {
   clearLoad();
-  if (state && current && current.tries < RETRIES) {
+  if (state?.playing && current && current.tries < RETRIES) {
     // A dropped connection or a slow first byte: try the same ayah again before telling the reader.
     const tries = current.tries + 1;
     const step = state.step;
@@ -88,7 +88,9 @@ function onStatus(status: AudioStatus) {
   if (!state || state.quiet || !current || current.key !== state.key) return;
   if (status.error) { fail(); return; }
   if (!status.didJustFinish) {
-    if (!status.isLoaded || status.currentTime < 1) current.started = true;
+    // Heard only on a status after the one that showed the file at its start: turning the pause's loop off reports the
+    // one-second silence (loaded, playing, under a second in) just as the next file is asked for.
+    if (!current.started) { if (!status.isLoaded || status.currentTime < 1) current.started = true; return; }
     if (status.playing && status.isLoaded && current.started && !current.heard) {
       current.heard = true;
       clearLoad();
