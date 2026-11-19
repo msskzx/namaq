@@ -188,7 +188,7 @@ export function LookView({ look, shown, palette }: { look: QuizLook; shown: bool
     case 'virtues': return <VirtuesLook slugs={look.slugs} mark={shown ? look.mark : undefined} palette={palette} />;
     case 'terms': return <TermsLook names={look.names} mark={shown ? look.mark : undefined} palette={palette} />;
     case 'hadith': return <HadithLook mark={shown ? look.mark : undefined} palette={palette} />;
-    case 'story': { const story = storyOf(look.slug); return story ? <View style={{ gap: 14 }}><StoryView story={story} palette={palette} /></View> : null; }
+    case 'story': { const story = storyOf(look.slug); return story ? <View style={{ gap: 14 }}><StoryView story={story} palette={palette} titled /></View> : null; }
     case 'battle': { const battle = battleOf(look.slug); return battle ? <View style={{ gap: 14 }}><BattleView battle={battle} palette={palette} /></View> : null; }
     case 'word': return <View style={bleed}><GharibBody key={`${look.key}/${look.word}`} target={{ key: look.key, word: look.word }} palette={palette} /></View>;
     case 'balagha': return <View style={bleed}><BalaghaBody key={look.key} ayah={look.key} palette={palette} /></View>;

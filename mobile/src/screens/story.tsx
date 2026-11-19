@@ -3,7 +3,6 @@ import { useLocalSearchParams } from 'expo-router';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Card from '@/ui/Card';
-import { Section } from '@/components/QuizForm';
 import { usePalette, type Palette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
@@ -14,8 +13,8 @@ import { People, Refs } from '@/components/battles/BattleParts';
 import Folded from '@/ui/Folded';
 import { Report, StoryAyat, Tags } from '@/components/stories/StoryParts';
 
-/** A story whole: its name and place, the report in moments, the ayat it turns on, the other reports folded and who is in it. The story page draws it, and so does a quiz that looks it up. */
-export function StoryView({ story, palette }: { story: AppStory; palette: Palette }) {
+/** A story whole: its name and place, its tags, who is in it, the report, the ayat it turns on and the other reports folded. The story page draws it, and so does a quiz that looks it up (`titled`, for the questions that ask by a moment's title). */
+export function StoryView({ story, palette, titled }: { story: AppStory; palette: Palette; titled?: boolean }) {
   const [main, ...rest] = story.reports;
   return <>
     <View style={{ gap: 6 }}>
@@ -23,19 +22,20 @@ export function StoryView({ story, palette }: { story: AppStory; palette: Palett
       {story.place ? <Text style={{ color: palette.muted, fontSize: 16, textAlign: 'right' }}>{story.place.value}</Text> : null}
       {story.place ? <Refs refs={story.place.refs} palette={palette} /> : null}
       <Tags story={story} palette={palette} />
+      {/* Who is in it, once, under the title (owner, 2026-11-19), not repeated under each moment. */}
+      <People people={story.people} palette={palette} />
     </View>
-    {main ? <Card palette={palette} pad={16} gap={0}><Report report={main} palette={palette} /></Card> : null}
+    {main ? <Card palette={palette} pad={16} gap={0}><Report report={main} palette={palette} titled={titled} /></Card> : null}
     {story.ayat.map(ayat => <StoryAyat key={ayat.from} ayat={ayat} palette={palette} />)}
     {rest.length ? (
       <View style={{ gap: 10 }}>
         <Folded credit={rest.length === 1 ? 'رواية أخرى في الكتاب' : 'روايات أخرى في الكتاب'} palette={palette}>
           <View style={{ gap: 10 }}>
-            {rest.map(report => <Card key={report.url + (report.isnad ?? '')} palette={palette} pad={16} gap={0}><Report report={report} palette={palette} /></Card>)}
+            {rest.map(report => <Card key={report.url + (report.isnad ?? '')} palette={palette} pad={16} gap={0}><Report report={report} palette={palette} titled={titled} /></Card>)}
           </View>
         </Folded>
       </View>
     ) : null}
-    <Section title="من في القصة" palette={palette}><People people={story.people} palette={palette} /></Section>
   </>;
 }
 
