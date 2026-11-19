@@ -12,11 +12,13 @@ Continue reading, today's juz, prayer time, books, scenes (مشاهد), saved an
 ayat, surah openings, a balagha term (من مصطلحات البلاغة: its name, its definition in the scholar's words and one of
 al-Suyuti's examples, opening the term's page in «مصطلحات البلاغة»; `TermPost`, every fourth batch from the third), a battle's moment (من غزوة …, opening the battle's page), a sira story whole (من قصص السيرة, its first report with
 the ayat folded under it, opening the story's page), one of al-Nawawi's Forty (من الحديث, his text for an entry he takes whole
-from the Sahihayn, opening the hadith's page; `HadithPost`, every fourth batch from the fifth), and the quiz cards in `FEED_QUIZ_NAMES`
+from the Sahihayn, opening the hadith's page; `HadithPost`, every fourth batch from the fifth), a passage of Ibn Rajab's
+commentary (من شرح ابن رجب, a paragraph where he explains a phrase of one of those hadith, opening the hadith's page;
+`RajabPost` drawn by `components/IbnRajab`, the page's own view, every fourth batch from the third), and the quiz cards in `FEED_QUIZ_NAMES`
 (`shared/quiz/feedQuiz.ts`): في أي سورة؟, أكمل المتشابهات, سمّع بقية الآية, قارن الموضعين,
 أوائل السور, سمّع الآية, ما معنى؟, the four ayah quizzes below, ما المصطلح؟ (`shared/quiz/balaghaTermQuiz.ts`: a term's
 definition with its name hidden, four terms to pick from, each choice linking to its definition once answered), the three Tuhfat al-Atfal questions, السيرة والغزوات (shared/quiz/sira.ts), the two tarajim questions
-(أين يلتقي النسبان؟, صاحب المنقبة and ما صلته به؟, `shared/quiz/tarajim.ts`), and the two hadith questions (من راوي الحديث؟ and أكمل الحديث,
+(أين يلتقي النسبان؟, صاحب المنقبة and ما صلته به؟, `shared/quiz/tarajim.ts`), and the three hadith questions (من راوي الحديث؟, أكمل الحديث and من أخرجه؟,
 `shared/quiz/hadith.ts`).
 
 The ayah quizzes (`shared/quiz/ayahQuizzes.ts`), whose questions are built once by `scripts/quran/buildAyahQuizzes.ts`

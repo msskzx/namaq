@@ -13,7 +13,7 @@ import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, se
 import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
-import { feedBooks, hadithOfSlot, hasBooksCard, hasHadithCard, hasJuzCard, hasMomentCard, hasSceneCard, hasSiraCard, hasTarajimCard, hasTermCard, hasTieCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, siraOfSlot, tarajimOfSlot, termOfSlot, tieOfSlot } from '@shared/homeFeed';
+import { feedBooks, hadithOfSlot, hasBooksCard, hasHadithCard, hasRajabCard, rajabOfSlot, hasJuzCard, hasMomentCard, hasSceneCard, hasSiraCard, hasTarajimCard, hasTermCard, hasTieCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, siraOfSlot, tarajimOfSlot, termOfSlot, tieOfSlot } from '@shared/homeFeed';
 import { pageLabel, sayer } from '@shared/tarajim';
 import { GRAPH, PEOPLE, personName, tiePairs } from '@/lib/tarajim';
 import { chainSentence } from '@shared/tarajimGraph';
@@ -39,8 +39,10 @@ import momentBattles from '@shared/data/battles/moments.json';
 import type { AppMomentBattle } from '@shared/battles/battle';
 import { battleLine, Moment } from './battles/BattleParts';
 import { STORIES } from '@/lib/stories';
-import { FORTY, shamelaPage } from '@/lib/hadith';
-import { fromCompanion } from '@shared/hadith';
+import { FORTY, fortyEntry, shamelaPage } from '@/lib/hadith';
+import { fromCompanion, rajabFeedPassages, type RajabChapter } from '@shared/hadith';
+import rajab from '@shared/data/hadith/ibnRajab.json';
+import IbnRajab from '@/components/IbnRajab';
 import { Report, StoryAyat } from './stories/StoryParts';
 import CompareCard from './CompareCard';
 import TreePager from './TreePager';
@@ -629,7 +631,33 @@ function SiraPost({ day, slot, palette }: { day: number; slot: number; palette: 
 }
 
 /** The Forty al-Nawawi took whole from the Sahihayn, the most authentic first (owner, 2026-11-18), for the hadith card. */
-const FEED_FORTY = FORTY.entries.filter(entry => !entry.partial && entry.records.length > 0);
+const FEED_FORTY = FORTY.entries.filter(entry => !entry.partial && entry.records.length > 0 && entry.records.every(record => record.book === 'bukhari' || record.book === 'muslim'));
+
+/** Ibn Rajab's explanations of a phrase of those hadith, for his card. */
+const RAJAB_PASSAGES = rajabFeedPassages(rajab as RajabChapter[], FORTY.entries);
+
+/**
+ * A passage of Ibn Rajab's Jami' al-'Ulum wal-Hikam (owner, 2026-11-18: every feature gets a card), where he explains a phrase
+ * of one of the Forty; the head opens the hadith's page, his whole chapter at its foot.
+ */
+function RajabPost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
+  const picked = RAJAB_PASSAGES[rajabOfSlot(RAJAB_PASSAGES.length, day, slot)];
+  if (!picked) return null;
+  const entry = fortyEntry(picked.chapter.n);
+  if (!entry) return null;
+  const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={BookOpenText} title="من شرح ابن رجب" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} palette={palette} open={{ onPress: open, label: `افتح ${entry.heading}` }} />}
+      actions={<>
+        <Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />
+        <Action Icon={ExternalLinkIcon} label={`المصدر: ${FORTY.books.ibnrajab.title}`} onPress={() => openExternal(shamelaPage('ibnrajab', picked.passage[0].shamela))} palette={palette} />
+      </>}>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
+        <IbnRajab chapter={picked.chapter} only={picked.passage} palette={palette} />
+      </View>
+    </Post>
+  );
+}
 
 /** One of al-Nawawi's Forty in his words, with the books he names; the head opens the hadith's page with its records. */
 function HadithPost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
@@ -855,6 +883,7 @@ export function Feed({ palette, nearEnd, screenBottom }: { palette: Palette; nea
     if (hasBooksCard(i)) posts.push(<BooksPost key={`k${day}-${i}`} day={day} palette={palette} />);
     if (hasSiraCard(i) && STORIES.length) posts.push(<SiraPost key={`r${day}-${i}`} day={day} slot={i} palette={palette} />);
     if (hasHadithCard(i) && FEED_FORTY.length) posts.push(<HadithPost key={`h${day}-${i}`} day={day} slot={i} palette={palette} />);
+    if (hasRajabCard(i) && RAJAB_PASSAGES.length) posts.push(<RajabPost key={`ir${day}-${i}`} day={day} slot={i} palette={palette} />);
     if (hasMomentCard(i) && MOMENTS.length) posts.push(<MomentPost key={`w${day}-${i}`} day={day} slot={i} palette={palette} />);
     if (hasTarajimCard(i)) posts.push(<TarajimPost key={`tj${day}-${i}`} day={day} slot={i} palette={palette} />);
     if (hasTieCard(i)) posts.push(<TiePost key={`tl${day}-${i}`} day={day} slot={i} palette={palette} />);
