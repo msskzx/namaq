@@ -15,7 +15,8 @@ describe('the four ayah quizzes', () => {
     expect(tafsirQuiz.count(whole)).toBe(data.tafsir.length);
     expect(balaghaQuiz.count(whole)).toBe(data.balagha.questions.length);
     expect(irabQuiz.count(whole)).toBe(data.irab.questions.length);
-    expect(qiraatQuiz.count(whole)).toBe(data.qiraat.length);
+    // All but 'Asim's: the page is his reading, so asking it gives the answer away (giveaway.test.ts).
+    expect(qiraatQuiz.count(whole)).toBe(data.qiraat.filter(row => READERS[row[2]].id !== 'asim').length);
     for (const kind of [tafsirQuiz, balaghaQuiz, irabQuiz, qiraatQuiz]) expect(kind.count(whole)).toBeGreaterThan(50);
   });
 

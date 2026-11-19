@@ -155,7 +155,7 @@ function Typed({ row, palette }: { row: Correction; palette: Palette }) {
     <Text style={{ fontSize: 15, color: palette.muted, textAlign: 'right' }}>
       {'كتبتَ: '}
       {typed.length === 0 ? 'لا شيء' : <Text style={{ fontFamily: QURAN_FONT, fontSize: 17 }}>{typed.map((word, i) => (
-        <Text key={i} style={i < row.right ? { color: palette.green } : { color: palette.accent, textDecorationLine: 'line-through' }}>{i > 0 ? ' ' : ''}{word}</Text>
+        <Text key={i} style={row.marks[i] ? { color: palette.green } : { color: palette.accent, textDecorationLine: 'line-through' }}>{i > 0 ? ' ' : ''}{word}</Text>
       ))}</Text>}
     </Text>
   );
@@ -205,10 +205,13 @@ function TreeActions({ phrase, text, palette, onShare }: { phrase: string; text:
 }
 
 /**
- * The graded answer as the matrix: each ayah's row with how its asked node was graded; a tap opens its ayat. It can show the
+ * The graded answer as the matrix: each ayah's row with how its asked node was graded. A tap on a word lights its matches and
+ * nothing else (owner, 2026-11-19: no sheet over the light); each row's book button opens it in the reader. It can show the
  * surrounding ayat, and be saved, shared or opened on the branches tab.
  */
-export function QuizFeedback({ question, typed, palette, names: _names, onTap, header, hints, onFit }: { question: TreeQuestion; typed: string[]; palette: Palette; names: Record<number, string>; onTap?: (keys: string[]) => void; header?: React.ReactNode;
+const NO_SHEET = () => {};
+
+export function QuizFeedback({ question, typed, palette, names: _names, header, hints, onFit }: { question: TreeQuestion; typed: string[]; palette: Palette; names: Record<number, string>; header?: React.ReactNode;
   /** The hints used on this question, marked with a small bulb. */
   hints?: Hints;
   /** In a feed card that follows its content: how much taller it is than its room (lib/useFit.ts). */
@@ -232,7 +235,7 @@ export function QuizFeedback({ question, typed, palette, names: _names, onTap, h
       <View style={{ flex: 1 }}>
         {header}
         <View style={{ flex: 1 }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
-          {size && <MatrixCard presentation={presentation} palette={palette} view={size} around={around} onTap={ayahKeys => ayahKeys && onTap?.(ayahKeys)} onMove={() => {}} onFit={onFit}
+          {size && <MatrixCard presentation={presentation} palette={palette} view={size} around={around} onTap={NO_SHEET} onMove={() => {}} onFit={onFit}
             note={key => { const row = correctionOf(graded.rows, key); return row ? <MatrixMark row={row} palette={palette} hinted={!!hints?.[row.index]} /> : null; }} />}
         </View>
       </View>

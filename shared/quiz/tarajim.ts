@@ -142,10 +142,42 @@ export function virtueQuestions(people: AppPerson[] = PEOPLE, random: Random = M
   return questions;
 }
 
+/** A name's words as names are matched, «أبي» and «أبا» read «أبو». */
+const nameWords = (name: string) => bareName(name.replace(/ﷺ/g, '')).split(' ').filter(Boolean).map(word => (/^اب[يا]$/u.test(word) ? 'ابو' : word));
+const COMPOUND_WORD = /^(?:عبد|ابو|ام|ذو|ذي)$/u;
+/** The name at the start of `words` («عبد الله», «أبو سفيان», «عمر»). */
+const headName = (words: string[]) => (COMPOUND_WORD.test(words[0] ?? '') ? words.slice(0, 2) : words.slice(0, 1)).join(' ');
+/** A person's own name as shown, and the father the shown name gives («زينب بنت محمد» → محمد). */
+function shownName(name: string) {
+  const words = nameWords(name);
+  const at = words.findIndex(word => word === 'بن' || word === 'بنت');
+  return { own: headName(words), father: at > 0 ? headName(words.slice(at + 1)) : '', kunya: /^(?:ابو|ام) /u.test(headName(words)) ? headName(words).split(' ')[1] : '' };
+}
+
+/**
+ * The tie the two names alone tell (owner, 2026-11-19: «ما صلة عمر بن أبي سلمة بأبي سلمة؟» is answered by the name): «X بن
+ * B» is B's son, «أم سلمة» is Salamah's mother, two people «بن» one father are brothers. None when the names tell nothing.
+ */
+export function tieTold(a: string, b: string): TieKind | undefined {
+  const [x, y] = [shownName(a), shownName(b)];
+  if (x.father && x.father === y.own) return 'child';
+  if (y.father && y.father === x.own) return 'parent';
+  if (x.kunya && x.kunya === y.own) return 'parent';
+  if (y.kunya && y.kunya === x.own) return 'child';
+  if (x.father && x.father === y.father) return 'sibling';
+  // «أم سلمة» and «أبو سلمة» are wife and husband; «أم سلمة» and «عمر بن أبي سلمة» mother and son.
+  if (x.kunya && x.kunya === y.kunya && x.own !== y.own) return 'spouse';
+  if (x.kunya && y.father === `ابو ${x.kunya}`) return 'parent';
+  if (y.kunya && x.father === `ابو ${y.kunya}`) return 'child';
+  return undefined;
+}
+
 /**
  * «ما صلته به؟» (owner, 2026-11-18; graph sketch, screen 4): what one converted person is to another the entries tie him
- * to directly («ما الزبير بن العوام من صفية بنت عبد المطلب؟» → «ابنها»). The choices are the other kinds of tie, never
- * one that also holds between the two (al-Zubayr is the Prophet's ﷺ kin and his companion: «صاحبه» is not offered).
+ * to directly, asked in plain words (owner, 2026-11-19): «ما صلة الزبير بن العوام بصفية بنت عبد المطلب؟» → «ابنها». The
+ * choices are the other kinds of tie, never one that also holds between the two (al-Zubayr is the Prophet's ﷺ kin and his
+ * companion: «صاحبه» is not offered). Not asked when the answer is in the question: the names tell the tie (tieTold), or
+ * a Companion is asked of the Prophet ﷺ, where «أبوه»، «ابنه»، «أخوه» beside «صاحبه» leave one choice anyone could pick.
  */
 export function tieQuestions(people: AppPerson[] = PEOPLE): ChoiceQuestion[] {
   const graph = peopleGraph(people);
@@ -165,6 +197,8 @@ export function tieQuestions(people: AppPerson[] = PEOPLE): ChoiceQuestion[] {
       const kinds = new Set(ties.map(t => t.kind));
       const answer = TIE_KINDS.find(kind => kinds.has(kind))!;
       if (answer === 'accompanied') continue;
+      if (tieTold(nameOf(a), nameOf(b)) === answer) continue;
+      if (answer === 'companion' && (a.slug === 'prophet-muhammad' || b.slug === 'prophet-muhammad')) continue;
       const word = (kind: TieKind) => tieWord(kind, a.sex, b.sex);
       // Wrong choices are family kinds not stated between the two; «قريبه» is never offered beside a family answer, since
       // a father or a brother is a relative too.
@@ -176,7 +210,7 @@ export function tieQuestions(people: AppPerson[] = PEOPLE): ChoiceQuestion[] {
       questions.push({
         key: `${TARAJIM_TIE}:${a.slug}:${b.slug}`,
         family: TARAJIM_TIE,
-        promptArabic: `ما ${nameOf(a)} من ${genitive(nameOf(b))}؟`,
+        promptArabic: `ما صلة ${genitive(nameOf(a))} ب${genitive(nameOf(b))}؟`,
         choices: [word(answer), ...wrong.slice(0, 3)].map(w => ({ value: w, labelArabic: w })),
         correctAnswer: word(answer),
         note: { label: 'المصدر', text: `${link.text ? `${link.text}\n` : ''}${sayer(link)} · ${pageLabel(link.refs)}` },

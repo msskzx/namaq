@@ -208,7 +208,8 @@ export function LookView({ look, shown, palette }: { look: QuizLook; shown: bool
  * «ابحث عن الجواب» under a question's choices: opens its view in a sheet. `onLook` runs as it opens (a party counts the
  * look then, whether or not the answer is found). `costs` says under the button what a look costs in a party.
  */
-export function LookButton({ look, onLook, costs = false, palette }: { look: QuizLook; onLook?: () => void; costs?: boolean; palette: Palette }) {
+/** `top`: kept in sight above the looked-up view, such as a party's clock (owner, 2026-11-19: the time left shows while looking). */
+export function LookButton({ look, onLook, costs = false, palette, top }: { look: QuizLook; onLook?: () => void; costs?: boolean; palette: Palette; top?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   return (
     <View style={{ gap: 4, alignItems: 'flex-start' }}>
@@ -217,6 +218,7 @@ export function LookButton({ look, onLook, costs = false, palette }: { look: Qui
         {`بعد البحث للإجابة الصحيحة ${num(LOOKED_POINTS)} نقاط بدل ${num(POINTS)}.`}
       </Text>}
       <Sheet open={open} onClose={() => setOpen(false)} palette={palette} tall>
+        {top && <View style={{ paddingTop: 8 }}>{top}</View>}
         <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ padding: 16, gap: 12 }} keyboardShouldPersistTaps="handled">
           <LookView look={look} shown={false} palette={palette} />
           <View style={{ alignItems: 'flex-start' }}><Button label="رجوع إلى السؤال" onPress={() => setOpen(false)} /></View>

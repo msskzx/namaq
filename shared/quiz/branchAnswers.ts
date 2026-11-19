@@ -54,6 +54,36 @@ export function rightWords(given: string, words: string[]): number {
   return 0;
 }
 
+/**
+ * Each typed word, right or wrong, read word by word against the node's words (owner, 2026-11-19: one extra letter marks
+ * that word alone, not every word after it): the longest run of typed words found in order among the node's words is
+ * right, the rest wrong, so a word typed twice, missed or misspelled is the only one marked.
+ */
+export function typedMarks(given: string, words: string[]): boolean[] {
+  const tokens = given.trim().split(/\s+/).filter(Boolean);
+  // «و بأيمانهم»: a lone و or ف typed apart from its word is read with it, and marked with it.
+  const units: number[][] = [];
+  tokens.forEach((token, at) => {
+    const last = units[units.length - 1];
+    if (last && last.length === 1 && /^[وف]$/.test(letters(tokens[last[0]]))) last.push(at);
+    else units.push([at]);
+  });
+  const typed = units.map(unit => unit.map(at => tokens[at]).join(''));
+  const target = spoken(words);
+  const same = (a: string, b: string) => matchedWords(a, [b]) === 1;
+  // The longest common run in order (LCS), then walked back to mark the typed words in it.
+  const table = Array.from({ length: typed.length + 1 }, () => new Array<number>(target.length + 1).fill(0));
+  for (let i = typed.length - 1; i >= 0; i--) for (let j = target.length - 1; j >= 0; j--)
+    table[i][j] = same(typed[i], target[j]) ? table[i + 1][j + 1] + 1 : Math.max(table[i + 1][j], table[i][j + 1]);
+  const marks = tokens.map(() => false);
+  for (let i = 0, j = 0; i < typed.length && j < target.length;) {
+    if (same(typed[i], target[j]) && table[i][j] === table[i + 1][j + 1] + 1) { units[i].forEach(at => { marks[at] = true; }); i++; j++; }
+    else if (table[i + 1][j] >= table[i][j + 1]) i++;
+    else j++;
+  }
+  return marks;
+}
+
 export function leadingWords(given: string, words: string[]): number {
   const typed = given.trim().split(/\s+/).filter(Boolean);
   return matchedWords(typed.slice(0, rightWords(given, words)).join(' '), words);

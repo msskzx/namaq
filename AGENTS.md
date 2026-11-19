@@ -142,6 +142,23 @@ the sources disagree on as settled.
 
 ## Quiz questions
 
+- **No question gives its answer away** (owner, 2026-11-17 and again 2026-11-19). This holds for every
+  quiz kind, the ones built in code in `shared/quiz/` (`CHOICE_KINDS`) as much as the reviewed bank
+  below. Judge each kind by the reader's eye, not by a number: the answer must not be written in the
+  question (a raid asked "where" when its name is the place, «سرية أبي سلمة إلى قطن»; an ayah that says
+  its own surah's name), told by the names (a father and son «X بن Y» asked how they are related; «أم
+  سلمة» and «أبو سلمة»), already on the page (how 'Asim reads a word on a Hafs page), said beside the
+  asked word (a meaning the ayah states next to it), or picked out by the choices' look (the only long
+  choice, the only one with a second reading). `shared/quiz/giveaway.test.ts` runs every registered kind
+  through `givesAway` (`shared/quiz/giveaway.ts`); what only the subject shows (names, a page's reading)
+  is checked in the kind's own builder and test. Before a PR that adds or changes a kind, its author and
+  its reviewer each read twenty of its questions as a reader would, and the PR says so.
+- **Wrong choices come from the part of the Quran the quiz is set to** (owner, 2026-11-19): a juz 30
+  quiz offers no surah or ayah of juz 29. A kind whose choices are places checks them against the scope,
+  as `whichSurah`, `tafsirQuiz`, `meaningQuiz` and `compareQuiz` do; `giveaway.test.ts` checks it.
+- **Mutashabih quizzes ask only what the mutashabih books set side by side** («في كتب المتشابهات»,
+  category `mutashabeh`), never our own «تدبّر» pairs (owner, 2026-11-19): `quizFilters` fixes the kind.
+
 - Quiz candidates and review decisions are authored under `data/quiz/` and
   projected into PostgreSQL. Whenever an agent generates or changes the bank,
   it must follow [docs/quiz-question-review.md](docs/quiz-question-review.md),

@@ -1,5 +1,8 @@
 # Reviewing quiz questions
 
+This page is for the reviewed bank in `data/quiz/`. The kinds built in code (`shared/quiz/`) follow the same
+"no question gives its answer away" rule through AGENTS.md "Quiz questions" and `shared/quiz/giveaway.test.ts`.
+
 Review every pending candidate as one complete multiple-choice question: read
 the Arabic prompt, all four displayed choices, the marked answer and every
 claim named as evidence. Question review checks whether the quiz item works; it

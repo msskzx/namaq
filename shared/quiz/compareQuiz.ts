@@ -7,6 +7,8 @@ import { braidOf, type BraidStrand } from '../quran/braid';
 import { shownCards, type PairCard, type StoredCards } from '../quran/compareCards';
 import { writtenLinks } from '../quran/compareCardLook';
 import { filteredAyat } from '../quran/mutashabih/browse';
+import { branchInventory } from '../quran/branchInventory';
+import { QUIZ_CATEGORIES } from './scopeParams';
 import { likeness } from '../quran/wordMatch';
 import { spoken } from './branchAnswers';
 import { byDifficulty, levelOf, treeScore, type Difficulty } from './difficulty';
@@ -51,7 +53,10 @@ function index() {
   const ayat = new Map((corpus.ayat as BranchAyah[]).map(ayah => [ayah.key, ayah]));
   const words = (key: string) => ayat.get(key)?.words;
   const asks: Asked[] = [];
+  // Only two ayat the mutashabih books set side by side, in one of their entries (owner, 2026-11-19): never our own «تدبّر» pairs.
+  const together = new Set(branchInventory({ categories: QUIZ_CATEGORIES }, null).flatMap(piece => piece.keys.flatMap(a => piece.keys.map(b => `${a}|${b}`))));
   for (const pair of stored.listed) for (const card of shownCards(stored, words, pair.a, pair.b)) {
+    if (!card.sides.every(side => side.ayat.length === 1) || !together.has(`${card.sides[0].surah}:${card.sides[0].ayat[0].number}|${card.sides[1].surah}:${card.sides[1].ayat[0].number}`)) continue;
     if (card.many || card.pairs || card.sides.some(side => side.ayat.length !== 1)) continue;
     const strands = braidOf(card.sides);
     const [a, b] = lines(card, strands);

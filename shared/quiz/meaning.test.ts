@@ -6,8 +6,13 @@ const seeded = (seed: number) => () => ((seed = (seed * 16807) % 2147483647) - 1
 const whole = { range: null, filters: {} };
 
 describe('«ما معنى؟»', () => {
-  it('asks every question of the bank over the whole Quran', () => {
-    expect(meaningQuiz.count(whole)).toBe(gharib.questions.length);
+  it('asks every question of the bank over the whole Quran but those whose ayah says the meaning («هذا عذب فرات»)', () => {
+    const asked = new Set(meaningQuiz.questions(whole, 'medium', seeded(1)).map(question => Number(question.correctAnswer)));
+    expect(asked.size).toBe(meaningQuiz.count(whole));
+    // «فرات» (al-Furqan 53, its seventh word) is «العذب», said just before it.
+    const furat = gharib.questions.find(([at]) => gharib.entries[at][0] === 25 && gharib.entries[at][4][0][0] === 53 && gharib.entries[at][4][0][1] === 6)!;
+    expect(furat).toBeDefined();
+    expect(asked.has(furat[0])).toBe(false);
   });
 
   it("offers his meaning of the word and three of his others, each wrong one naming its word, the asked word marked", () => {

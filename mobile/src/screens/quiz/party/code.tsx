@@ -39,6 +39,9 @@ import { usePalette, type Palette } from '@/lib/theme';
 import Field from '@/ui/Field';
 
 type Send = (action: PlayerAction) => void;
+/** A choice question sent with nothing picked. */
+const SKIPPED = '';
+
 type Question = PartyQuestion & { promptArabic?: string; choices?: QuestionChoice[]; look?: QuizLook };
 
 const ERRORS: Record<ActionError, string> = {
@@ -53,7 +56,6 @@ const ERRORS: Record<ActionError, string> = {
 };
 
 const duration = (seconds: number) => seconds < 60 ? `${num(seconds)} ث` : `${num(seconds / 60)} د`;
-const openAyat = (keys: string[]) => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } });
 const isTree = (question: Question): question is Question & TreeQuestion => Boolean(question.tree);
 const isCompare = (question: Question): question is Question & { compare: CompareAsk } => Boolean(question.compare);
 
@@ -330,7 +332,6 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
   };
   // A party counts a look before the answer is sent: a right answer after it earns LOOKED_POINTS (shared/quiz/score.ts).
   const look = () => { if (!view.looked) send({ type: 'look' }); };
-  const started = typed.some((text, index) => (question.compare || question.asked?.includes(index)) && text.trim());
 
   if (!revealed && sent) return (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 16 }}>
@@ -347,7 +348,7 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
       {isCompare(question)
         ? <View style={{ height: 420 }}><CompareFeedback key={question.key} question={question} typed={Array.isArray(view.answer) ? view.answer : []} palette={palette} /></View>
         : isTree(question)
-        ? <View style={{ height: 420 }}><QuizFeedback key={question.key} question={question} typed={Array.isArray(view.answer) ? view.answer : emptyBranchAnswers(question)} palette={palette} names={view.surahNames} onTap={openAyat} /></View>
+        ? <View style={{ height: 420 }}><QuizFeedback key={question.key} question={question} typed={Array.isArray(view.answer) ? view.answer : emptyBranchAnswers(question)} palette={palette} names={view.surahNames} /></View>
         : isAyahChoice(question) ? <QuizChoice question={question} picked={typeof view.answer === 'string' ? view.answer : ''} shown palette={palette} onOpen={readAyah} scroll={false} written={Array.isArray(view.answer) ? view.answer : null} />
         : <>
           <Choices question={question} answer={view.answer} revealed onPick={() => {}} palette={palette} />
@@ -355,7 +356,7 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
         </>}
       {view.result && (
         <Text style={{ color: palette.ink, fontSize: 17, fontWeight: '600', textAlign: 'right', paddingHorizontal: 16 }}>
-          {question.tree || question.compare || question.write ? `${num(view.result.earned)} من ${num(view.result.total)} ${question.compare ? 'فراغات' : question.write ? 'كلمات' : 'أطراف'}` : view.answer === null ? 'لم تجب في الوقت.' : view.result.earned ? 'إجابة صحيحة' : 'إجابة خاطئة'}
+          {question.tree || question.compare || question.write ? `${num(view.result.earned)} من ${num(view.result.total)} ${question.compare ? 'فراغات' : question.write ? 'كلمات' : 'أطراف'}` : view.answer === null ? 'لم تجب في الوقت.' : view.answer === SKIPPED ? 'لم تجب.' : view.result.earned ? 'إجابة صحيحة' : 'إجابة خاطئة'}
         </Text>
       )}
       <View style={{ paddingHorizontal: 16, gap: 12 }}>
@@ -366,10 +367,13 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
       </View>
     </ScrollView>
   );
+  // Sent with nothing picked or typed (owner, 2026-11-19): a player who does not know need not wait out the clock.
+  const skip = <View style={{ paddingHorizontal: 16, paddingTop: 8, alignItems: 'flex-start' }}><Button Icon={Send} label="أرسل بلا إجابة" onPress={() => send({ type: 'submit', answer: SKIPPED })} /></View>;
+  const clock = view.deadline !== null ? <Countdown deadline={view.deadline} total={total} offset={offset} palette={palette} /> : undefined;
   return (
     <View style={{ flex: 1 }}>
       <View style={{ paddingTop: 10, gap: 8 }}>
-        {view.deadline !== null && <Countdown deadline={view.deadline} total={total} offset={offset} palette={palette} />}
+        {clock}
         {!isTree(question) && !isCompare(question) && prompt}
       </View>
       {isTree(question) || isCompare(question) ? (
@@ -380,19 +384,21 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
               : <QuizInputs question={question} typed={typed} onType={(node, text) => setTyped(values => values.map((value, i) => i === node ? text : value))} palette={palette} names={view.surahNames} header={prompt} />}
           </View>
           {!typing && <View style={{ padding: 12, paddingBottom: insets.bottom + 12, borderTopWidth: 1, borderColor: palette.rule, alignItems: 'flex-start' }}>
-            <Button big variant="primary" Icon={Check} label="أرسل" disabled={!started} onPress={() => send({ type: 'submit', answer: typed })} />
+            <Button big variant="primary" Icon={Check} label="أرسل" onPress={() => send({ type: 'submit', answer: typed })} />
           </View>}
         </>
       ) : isAyahChoice(question)
         ? <View style={{ flex: 1 }}><QuizChoice question={question} shown palette={palette} onOpen={readAyah} onPick={value => send({ type: 'submit', answer: value })}
-          pen={view.settings.pen} onWrite={write} onLook={look} costs={!view.looked}
-          header={view.looked ? <View style={{ paddingHorizontal: 16 }}><LookedNote palette={palette} /></View> : undefined} /></View>
+          pen={view.settings.pen} onWrite={write} onLook={look} costs={!view.looked} lookTop={clock}
+          header={view.looked ? <View style={{ paddingHorizontal: 16 }}><LookedNote palette={palette} /></View> : undefined} />
+          {!question.write && skip}</View>
         : <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}>
           <Choices question={question} answer={view.answer} revealed={false} onPick={value => send({ type: 'submit', answer: value })} palette={palette} />
+          {skip}
           {question.look && (
             <View style={{ paddingHorizontal: 16, gap: 8 }}>
               {view.looked && <LookedNote palette={palette} />}
-              <LookButton look={question.look} onLook={look} costs={!view.looked} palette={palette} />
+              <LookButton look={question.look} onLook={look} costs={!view.looked} palette={palette} top={clock} />
             </View>
           )}
         </ScrollView>}
@@ -404,7 +410,7 @@ function FinalResults({ view, send, palette }: { view: PartyView; send: Send; pa
   const insets = useSafeAreaInsets();
   const [review, setReview] = useState<number | null>(null);
   const entries = view.review ?? [];
-  const states: QuestionState[] = entries.map(entry => entry.result.earned === entry.result.total ? 'correct' : entry.result.earned > 0 ? 'partial' : entry.answer === null ? 'unanswered' : 'incorrect');
+  const states: QuestionState[] = entries.map(entry => entry.result.earned === entry.result.total ? 'correct' : entry.result.earned > 0 ? 'partial' : entry.answer === null || entry.answer === SKIPPED ? 'unanswered' : 'incorrect');
   const entry = review !== null ? entries[review] : null;
   const question = entry?.question as Question | undefined;
   return (
@@ -415,7 +421,7 @@ function FinalResults({ view, send, palette }: { view: PartyView; send: Send; pa
       {entry && question && (isCompare(question)
         ? <View style={{ height: 420 }}><CompareFeedback key={question.key} question={question} typed={Array.isArray(entry.answer) ? entry.answer : []} palette={palette} /></View>
         : isTree(question)
-        ? <View style={{ height: 420 }}><QuizFeedback key={question.key} question={question} typed={Array.isArray(entry.answer) ? entry.answer : emptyBranchAnswers(question)} palette={palette} names={view.surahNames} onTap={openAyat} /></View>
+        ? <View style={{ height: 420 }}><QuizFeedback key={question.key} question={question} typed={Array.isArray(entry.answer) ? entry.answer : emptyBranchAnswers(question)} palette={palette} names={view.surahNames} /></View>
         : isAyahChoice(question) ? <QuizChoice question={question} picked={typeof entry.answer === 'string' ? entry.answer : ''} shown palette={palette} onOpen={readAyah} scroll={false} written={Array.isArray(entry.answer) ? entry.answer : null} />
         : <>
           <Choices question={question} answer={entry.answer} revealed onPick={() => {}} palette={palette} />

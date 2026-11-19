@@ -49,7 +49,8 @@ function nameOf(unit: FilterUnit, n: number) {
 /** A range end as a number; a missing or broken one falls back to the unit's end. */
 const toNumber = (value: string, fallback: number) => { const n = Number(value); return Number.isInteger(n) && n > 0 ? n : fallback; };
 
-/** The sheet's fields: saved only and the part of the Quran; the branches tab adds the comparison kinds, differences and sort (the quiz all but sort).
+/** The sheet's fields: saved only and the part of the Quran; the branches tab adds the comparison kinds, differences and sort (the quiz
+ *  only differences: it asks just the books' mutashabihat, owner 2026-11-19).
  *  The compare tab shows the first two inside its pair list, since it has no other filters (owner, 2026-11-10). */
 /** Without `trees` (a quiz with no tree questions) only the part of the Quran is asked. */
 export function FilterFields({ draft, setDraft, palette, compare = false, sort = true, savedOnly = true, trees = true }: { draft: FilterDraft; setDraft: (draft: FilterDraft) => void; palette: Palette; compare?: boolean; sort?: boolean; savedOnly?: boolean; trees?: boolean }) {
@@ -94,10 +95,10 @@ export function FilterFields({ draft, setDraft, palette, compare = false, sort =
           onPress={() => setDraft({ ...draft, picked: draft.picked.includes(item.n) ? draft.picked.filter(n => n !== item.n) : [...draft.picked, item.n] })} />)}
       </View>}
       {!compare && trees && <>
-      <Group title="نوع المقارنة" palette={palette}>
+      {sort && <Group title="نوع المقارنة" palette={palette}>
         {Object.entries(CATEGORIES).map(([id, label]) => <Chip check key={id} label={label} on={categories.split(',').includes(id)} palette={palette}
           onPress={() => setFilter('categories', toggleFilter(categories, id) || 'none')} />)}
-      </Group>
+      </Group>}
       <Group title="نوع الاختلاف" palette={palette}>
         {Object.entries(SUPPORTED_TAGS).map(([id, label]) => <Chip check key={id} label={label.ar} on={(draft.filters.differences ?? '').split(',').includes(id)} palette={palette}
           onPress={() => setFilter('differences', toggleFilter(draft.filters.differences, id))} />)}

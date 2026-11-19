@@ -10,6 +10,7 @@ import { gharibCredit, type GharibEntry, GHARIB_SHORT } from '../quran/gharib';
 import { num } from '../quran/arabicNumber';
 import { SURAH_NAMES } from '../quran/surahNames';
 import { shuffle, type Random } from './random';
+import { givesAway } from './giveaway';
 import type { ChoiceKind, ChoiceQuestion, ChoiceScope } from './choiceKinds';
 
 export const MEANING = 'MEANING';
@@ -54,17 +55,31 @@ function question(asked: number, others: number[], random: Random): ChoiceQuesti
   };
 }
 
-/** The questions whose word is in the scope, in random order. */
+/**
+ * The questions whose word is in the scope, in random order; the wrong meanings' words too (owner, 2026-11-19: a quiz on
+ * juz 30 offers nothing from juz 29), as each question's choices were read by hand and are not swapped.
+ */
 function candidates(scope: ChoiceScope, random: Random) {
   const inScope = filteredAyat(ayatByKey(), scope.filters, scope.range);
-  return shuffle(gharib.questions.filter(([asked]) => inScope.has(placeOf(gharib.entries[asked]).key)), random);
+  return shuffle(gharib.questions.filter(question => question.every(at => inScope.has(placeOf(gharib.entries[at]).key))), random);
 }
+
+/**
+ * Not asked: a meaning the ayah already says beside its word («فرات» is «العذب» in «هذا عذب فرات»، «قبس» is «النار» after
+ * «آنست نارا»; owner, 2026-11-19: no question holds its answer). Worked out once a question.
+ */
+const told = new Map<number, boolean>();
+const tellsItself = (row: number[]) => {
+  let found = told.get(row[0]);
+  if (found === undefined) told.set(row[0], (found = !!givesAway(question(row[0], row.slice(1), () => 0))));
+  return found;
+};
 
 export const meaningQuiz: ChoiceKind = {
   id: MEANING,
   name: MEANING_NAME,
   party: true,
   questions: (scope, _difficulty, random, limit = Infinity) =>
-    candidates(scope, random).slice(0, limit).map(([asked, ...others]) => question(asked, others, random)),
-  count: scope => candidates(scope, Math.random).length,
+    candidates(scope, random).filter(row => !tellsItself(row)).slice(0, limit).map(([asked, ...others]) => question(asked, others, random)),
+  count: scope => candidates(scope, Math.random).filter(row => !tellsItself(row)).length,
 };

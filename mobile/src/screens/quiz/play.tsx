@@ -23,7 +23,6 @@ import { setRun, useRun } from '@/lib/soloStore';
 import { usePalette, type Palette } from '@/lib/theme';
 import Empty from '@/ui/Empty';
 
-const openAyat = (keys: string[]) => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } });
 
 function Results({ run, palette }: { run: SoloRun; palette: Palette }) {
   const insets = useSafeAreaInsets();
@@ -44,7 +43,7 @@ function Results({ run, palette }: { run: SoloRun; palette: Palette }) {
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right', paddingHorizontal: 16 }}>
             {`${num(points[review].earned)} من ${num(points[review].total)} أطراف`}
           </Text>
-          <QuizFeedback key={question.key} question={question} typed={run.checked[review] ? run.typed[review] : emptyBranchAnswers(question)} palette={palette} names={surahNames} onTap={openAyat} hints={run.hints?.[review]} />
+          <QuizFeedback key={question.key} question={question} typed={run.checked[review] ? run.typed[review] : emptyBranchAnswers(question)} palette={palette} names={surahNames} hints={run.hints?.[review]} />
         </> : <View style={{ flex: 1 }}>
           <QuizChoice key={question.key} question={question} picked={run.typed[review][0] ?? ''} shown palette={palette} onOpen={readAyah}
             header={<QuizPrompt text={question.promptArabic} palette={palette} />} />
@@ -114,7 +113,7 @@ export default function QuizPlay() {
                   update(pick(run, value));
                 }} />
               : checked
-              ? <QuizFeedback key={question.key} question={question} typed={run.typed[current]} palette={palette} names={surahNames} onTap={openAyat} header={top} hints={run.hints?.[current]} />
+              ? <QuizFeedback key={question.key} question={question} typed={run.typed[current]} palette={palette} names={surahNames} header={top} hints={run.hints?.[current]} />
               : <QuizInputs key={question.key} question={question} typed={run.typed[current]} onType={(node, text) => update(typeAnswer(run, node, text))} palette={palette} names={surahNames} header={top}
                 hints={run.hints?.[current] ?? {}} onHints={hints => update(setHints(run, hints))} />}
           </QuestionSwipe>

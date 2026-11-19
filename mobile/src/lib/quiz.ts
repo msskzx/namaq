@@ -5,6 +5,7 @@ import type { BranchAyah } from '@shared/quran/branches';
 import { branchQuestionPool, branchQuiz, type AskedBranchQuestion } from '@shared/quiz/branchQuestions';
 import { branchesCorrect, emptyBranchAnswers, isAsked, questionPoints } from '@shared/quiz/score';
 import { DEFAULT_LEAVES, QUIZ_LEAVES, QUIZ_LENGTHS } from '@shared/quiz/settings';
+import { QUIZ_CATEGORIES } from '@shared/quiz/scopeParams';
 import { DEFAULT_DIFFICULTY, parseDifficulty, type Difficulty } from '@shared/quiz/difficulty';
 import type { Random } from '@shared/quiz/random';
 import type { Hints } from '@shared/quiz/hints';
@@ -23,7 +24,7 @@ export type QuizList = { filters: GroupFilters; range: JuzRange | null; saved: b
 /** The kinds of question a solo quiz mixes (owner, 2026-11-13): the trees and the Quran choice kinds (shared/quiz/kinds.ts). */
 export const SOLO_KINDS: QuizTopic[] = ['BRANCHES', ...CHOICE_TOPICS];
 export type SoloSettings = { kinds: QuizTopic[]; list: QuizList; difficulty: Difficulty; leaves: number; length: number };
-export const DEFAULT_LIST: QuizList = { filters: { categories: 'mutashabeh,pondering' }, range: null, saved: false };
+export const DEFAULT_LIST: QuizList = { filters: { categories: QUIZ_CATEGORIES }, range: null, saved: false };
 export const DEFAULT_SOLO: SoloSettings = { kinds: ['BRANCHES'], list: DEFAULT_LIST, difficulty: DEFAULT_DIFFICULTY, leaves: DEFAULT_LEAVES, length: 5 };
 
 const juz = (value: unknown, fallback: number) => Number.isInteger(value) && (value as number) >= 1 && (value as number) <= 30 ? value as number : fallback;

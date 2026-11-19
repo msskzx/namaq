@@ -67,11 +67,12 @@ const levelOf = (alike: Alike[] | undefined): Difficulty => !alike?.length ? 'ea
  * not point at the answer: with no look-alike, a run of four surahs with the answer anywhere in it (not always in the
  * middle); with look-alikes, neighbours of the answer and of the look-alikes' surahs alike, so no choice stands apart.
  */
-function wrongSurahs(surah: number, alike: Alike[], difficulty: Difficulty, random: Random): number[] {
+function wrongSurahs(surah: number, alike: Alike[], difficulty: Difficulty, random: Random, allowed: Set<number>): number[] {
   const picked: number[] = [];
-  const free = (n: number) => n !== surah && !picked.includes(n) && n >= 1 && n <= 114;
+  // Only surahs inside the chosen part of the Quran (owner, 2026-11-19: a quiz on juz 30 offers no surah of juz 29).
+  const free = (n: number) => n !== surah && !picked.includes(n) && allowed.has(n);
   const take = (candidates: number[]) => { for (const n of candidates) if (picked.length < CHOICES - 1 && free(n)) picked.push(n); };
-  const every = Array.from({ length: 114 }, (_, i) => i + 1);
+  const every = [...allowed].sort((a, b) => a - b);
   if (difficulty === 'easy') take(shuffle(every.filter(n => Math.abs(n - surah) > FAR), random));
   else {
     take([...new Set(alike.map(item => surahOf(item.key)))]);
@@ -94,9 +95,9 @@ function wrongSurahs(surah: number, alike: Alike[], difficulty: Difficulty, rand
   return picked;
 }
 
-function question(ayah: BranchAyah, alike: Alike[], difficulty: Difficulty, random: Random): ChoiceQuestion {
+function question(ayah: BranchAyah, alike: Alike[], difficulty: Difficulty, random: Random, allowed: Set<number>): ChoiceQuestion {
   const surah = surahOf(ayah.key);
-  const wrong = wrongSurahs(surah, alike, difficulty, random);
+  const wrong = wrongSurahs(surah, alike, difficulty, random, allowed);
   const closest = Object.fromEntries(wrong.flatMap(n => {
     const found = alike.find(item => surahOf(item.key) === n);
     return found ? [[String(n), { key: found.key, words: index().ayat.get(found.key)!.words }]] : [];
@@ -116,18 +117,43 @@ function question(ayah: BranchAyah, alike: Alike[], difficulty: Difficulty, rand
   };
 }
 
+/** A word as a surah's name is matched: bare, without a joined «و ف ب ل ك» or the article. */
+const nameWord = (word: string) => normalizeWord(word).replace(/[^ء-ي]/g, '').replace(/^[وفبلك](?=ال)/, '').replace(/^ال/, '');
+let surahWords: Map<number, string[]> | undefined;
+/**
+ * Whether the ayah says its own surah's name («حتى تأتيهم البينة» in al-Bayyinah, «يوسف» in Yusuf): the name is the answer,
+ * so it is not asked (owner, 2026-11-19: no question holds its answer).
+ */
+export function namesItsSurah(ayah: BranchAyah) {
+  surahWords ??= new Map(Object.entries(names).map(([n, name]) => [Number(n), String(name).split(/\s+/).map(nameWord).filter(Boolean)]));
+  const own = surahWords.get(surahOf(ayah.key)) ?? [];
+  // «هودًا»، «فتحًا»: the accusative's alif is no other word.
+  const words = new Set(ayah.words.map(nameWord).flatMap(word => [word, word.replace(/ا$/, '')]));
+  return own.length > 0 && own.every(word => words.has(word));
+}
+
+/** The ayat in the scope that can be asked, and the scope's surahs the wrong choices come from. */
+function inScope(scope: ChoiceScope) {
+  const { ayat, answerable } = index();
+  const scoped = [...filteredAyat(ayat, scope.filters, scope.range).values()];
+  const allowed = new Set(scoped.map(ayah => surahOf(ayah.key)));
+  // Fewer surahs than choices leave too little to choose between (juz 1 is al-Fatihah and al-Baqarah).
+  return { allowed, asked: allowed.size < CHOICES ? [] : scoped.filter(ayah => answerable(ayah) && !namesItsSurah(ayah)) };
+}
+
 /** The ayat in the scope that can be asked, in random order, the chosen difficulty's first. */
-function candidates(scope: ChoiceScope, difficulty: Difficulty, random: Random) {
-  const { ayat, answerable, alike } = index();
-  const inScope = [...filteredAyat(ayat, scope.filters, scope.range).values()].filter(answerable);
-  return byDifficulty(shuffle(inScope, random), difficulty, ayah => levelOf(alike.get(ayah.key)));
+function candidates(asked: BranchAyah[], difficulty: Difficulty, random: Random) {
+  const { alike } = index();
+  return byDifficulty(shuffle(asked, random), difficulty, ayah => levelOf(alike.get(ayah.key)));
 }
 
 export const whichSurah: ChoiceKind = {
   id: WHICH_SURAH,
   name: 'في أي سورة؟',
   party: true,
-  questions: (scope, difficulty, random, limit = Infinity) =>
-    candidates(scope, difficulty, random).slice(0, limit).map(ayah => question(ayah, index().alike.get(ayah.key) ?? [], difficulty, random)),
-  count: scope => { const { ayat, answerable } = index(); return [...filteredAyat(ayat, scope.filters, scope.range).values()].filter(answerable).length; },
+  questions: (scope, difficulty, random, limit = Infinity) => {
+    const { allowed, asked } = inScope(scope);
+    return candidates(asked, difficulty, random).slice(0, limit).map(ayah => question(ayah, index().alike.get(ayah.key) ?? [], difficulty, random, allowed));
+  },
+  count: scope => inScope(scope).asked.length,
 };

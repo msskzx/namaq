@@ -109,7 +109,7 @@ function Mark({ row, palette, hinted }: { row: Correction; palette: Palette; hin
       {!row.correct && <Text style={{ fontSize: 15, color: palette.muted, textAlign: 'right' }}>
         {'كتبتَ: '}
         {typed.length === 0 ? 'لا شيء' : <Text style={{ fontFamily: QURAN_FONT, fontSize: 17 }}>{typed.map((word, i) => (
-          <Text key={i} style={i < row.right ? { color: palette.green } : { color: palette.accent, textDecorationLine: 'line-through' }}>{i > 0 ? ' ' : ''}{word}</Text>
+          <Text key={i} style={row.marks[i] ? { color: palette.green } : { color: palette.accent, textDecorationLine: 'line-through' }}>{i > 0 ? ' ' : ''}{word}</Text>
         ))}</Text>}
       </Text>}
     </View>

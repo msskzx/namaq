@@ -83,7 +83,7 @@ function TypedWords({ row, ar }: { row: Correction; ar: boolean }) {
   if (!row.typed) return <span className="text-[var(--home-muted)]">{ar ? "لم تكتب شيئًا" : "Nothing typed"}</span>;
   return <span className="font-quran text-lg">{row.typed.split(/\s+/).map((word, at) => <React.Fragment key={at}>
     {at > 0 && " "}
-    {at < row.right ? <span className="text-[var(--home-green)]">{word}</span> : <del className="text-[var(--home-accent)]">{word}</del>}
+    {row.marks[at] ? <span className="text-[var(--home-green)]">{word}</span> : <del className="text-[var(--home-accent)]">{word}</del>}
   </React.Fragment>)}</span>;
 }
 
@@ -120,9 +120,11 @@ export function BranchFeedback({ question: givenQuestion, typed: givenTyped, nam
   );
 }
 
-export function BranchInputs({ question, typed, onChange, onCheck, ar, names, hints: kept, onHints }: { question: Question; typed: string[]; onChange: (typed: string[]) => void; onCheck: () => void; ar: boolean; names?: Names;
+export function BranchInputs({ question, typed, onChange, onCheck, ar, sendEmpty = false, names, hints: kept, onHints }: { question: Question; typed: string[]; onChange: (typed: string[]) => void; onCheck: () => void; ar: boolean; names?: Names;
   /** The hints shown so far, when the quiz keeps them (solo, so the review can mark them); otherwise they live here. */
-  hints?: Hints; onHints?: (hints: Hints) => void }) {
+  hints?: Hints; onHints?: (hints: Hints) => void;
+  /** A party may send it empty (owner, 2026-11-19): a player who does not know need not wait out the clock. */
+  sendEmpty?: boolean }) {
   const [own, setOwn] = React.useState<Hints>({});
   if (!question.tree) return null;
   const values = emptyBranchAnswers(question).map((value, index) => isAsked(question, index) ? typed[index] ?? "" : value);
@@ -141,7 +143,7 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar, names, hi
   return (
     <form className="flex flex-col gap-3" onSubmit={(event) => {
       event.preventDefault();
-      if (started) onCheck();
+      if (started || sendEmpty) onCheck();
     }}>
       {!question.asked && <p className="text-sm text-[var(--home-muted)]">{ar ? "أكمل كل عقدة. وفي نهاية كل فرع تكفي كلمتاه الأوليان، على أن تصح كل كلمة تكتبها. يمكن تبديل الفروع المتشابهة في الشكل." : "Complete every node. For a leaf, its first two words are enough, and every word you type must be right. Branches with the same shape can be entered in either order."}</p>}
       <div dir="rtl">
@@ -151,7 +153,7 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar, names, hi
         <MatrixInputs question={question} values={values} input={index => box(index, "w-32")} names={names ?? {}} />
       </div>
       <div className="flex flex-wrap gap-2">
-      <Button variant="primary" type="submit" disabled={!started}>
+      <Button variant="primary" type="submit" disabled={!started && !sendEmpty}>
         <FontAwesomeIcon icon={faCheckDouble} />
         {ar ? "تحقق" : "Check"}
       </Button>
