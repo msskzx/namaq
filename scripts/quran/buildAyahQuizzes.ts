@@ -252,9 +252,8 @@ function qiraatBank() {
     const words = byKey.get(key)?.words ?? [];
     qiraatOf(key).forEach((difference, at) => {
       const { readings } = difference;
-      const all = readings.flatMap(reading => reading.rawis);
       const length = difference.at[1] - difference.at[0] + 1;
-      if (new Set(all).size !== all.length || dropped(`qiraat:${key}:${at}`)) return;
+      if (dropped(`qiraat:${key}:${at}`)) return;
       // Each reading must be the marked words, read another way: as many words, and the first one the mushaf's own.
       if (readings.some(reading => reading.text.trim().split(/\s+/).length !== length)) return;
       const shown = words.slice(difference.at[0], difference.at[1] + 1).map(normalizeWord).join(' ');
@@ -277,7 +276,10 @@ function qiraatBank() {
       if (new Set(readings.map(reading => reading.text.trim())).size !== readings.length) return;
       const whole = READERS.flatMap((reader, i) => {
         const own = RIWAYAT.flatMap((riwaya, n) => (riwaya.reader === reader.id ? [n + 1] : []));
-        const reading = readings.findIndex(r => own.every(n => r.rawis.includes(n)));
+        // A reader is asked only when all his riwayat read one way and none of them the other (owner 2026-11-19): where a
+        // riwaya reads both ways (al-Bazzi at 10:16), a single reading would be half right, so he is not asked, and the
+        // answered card names that riwaya under both.
+        const reading = readings.findIndex(r => own.every(n => r.rawis.includes(n)) && readings.every(o => o === r || !own.some(n => o.rawis.includes(n))));
         return reading < 0 ? [] : [{ reader: i, reading }];
       });
       reseed(`qiraat:${key}:${at}`);

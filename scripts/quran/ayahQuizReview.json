@@ -1328,6 +1328,10 @@
   "qiraat:3:145:1": "The ha of نُؤۡتِهِۦ is a disputed point: Qalun reads it with ikhtilas or sila by two ways and Hisham has three ways, so Nafi's reading is not clean and the groupings (Qalun, Hisham, Ya'qub, Abu Ja'far) are oversimplified.",
   "qiraat:4:115:1": "The ha of وَنُصۡلِهِۦ is a disputed point: Qalun and Ya'qub read it with ikhtilas (not sila), Hisham has several ways and Abu Ja'far's narrators differ, so the riwayat groupings are wrong even though al-Kisa'i's own reading is right.",
   "qiraat:10:51:0": "The only difference between ءَآلۡـَٰٔنَ and ءَآلَٰنَ is naql, which is performance and not a reading difference the card may test.",
-  "qiraat:10:91:0": "The only difference between ءَآلۡـَٰٔنَ and ءَآلَٰنَ is naql, which is performance and not a reading difference the card may test."
+  "qiraat:10:91:0": "The only difference between ءَآلۡـَٰٔنَ and ءَآلَٰنَ is naql, which is performance and not a reading difference the card may test.",
+  "qiraat:7:202:0": "Two choices have the identical text يُمِدُّونَهُمۡ (one for Nafi', one for Qalun and Abu Ja'far), split only by sila of the mim, which is performance; Ibn Kathir also does sila of the mim but is grouped with Hafs.",
+  "qiraat:14:19:1": "Hamza reads خَٰلِقُ ٱلسَّمَٰوَٰتِ وَٱلۡأَرۡضِ with no khulf for either riwaya, but the data puts Khalaf 'an Hamza (11) under the Hafs reading وَٱلۡأَرۡضَ and Khallad (12) under both, so the riwaya labels are wrong.",
+  "qiraat:52:37:0": "The second choice is misspelled الۡمُصَيۡطِرُونَ with a bare alif instead of hamzat al-wasl ٱلۡمُصَيۡطِرُونَ, and the two choices differ only by the small sin mark.",
+  "qiraat:59:14:1": "The third choice تَحۡسِبَهُمُ wrongly has fatha on the ba (the verb is marfu', تَحۡسِبُهُمُ), and it differs from the second choice only by sila of the mim, which is performance."
  }
 }
