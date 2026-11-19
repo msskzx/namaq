@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { MessagesSquare } from 'lucide-react-native';
-import { RECORD_BOOKS, fromCompanion, recordName, recordedIn, type FortyEntry, type FortyGrade, type FortyRecord, type RajabChapter } from '@shared/hadith';
+import { RECORD_BOOKS, compilerOf, fromCompanion, recordName, recordedIn, type FortyEntry, type FortyGrade, type FortyRecord, type RajabChapter } from '@shared/hadith';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
@@ -115,13 +115,15 @@ function Grades({ grades, palette }: { grades: FortyGrade[]; palette: Palette })
   );
 }
 
-/** al-Nawawi's text as he printed it, with his page; the books he names are in «من أخرجه» under it. */
-function Nawawi({ entry, palette }: { entry: FortyEntry; palette: Palette }) {
-  const book = FORTY.books.nawawi;
+/** The compiler's text as he printed it (al-Nawawi's, or Ibn Rajab's for his eight), with his page; the books he names are in «من أخرجه» under it. */
+function Compiled({ entry, palette }: { entry: FortyEntry; palette: Palette }) {
+  const { book: key } = compilerOf(entry);
+  const book = FORTY.books[key];
+  const where = entry.volume ? `${num(entry.volume)}/ ${num(entry.pages[0])}` : pagesName(entry.pages);
   return (
     <Card palette={palette} gap={8}>
       <Text style={body(palette)}>{entry.text}</Text>
-      <Cite title={`${book.title}، ${pagesName(entry.pages)}`} edition={`${book.title}، ${book.edition}`} url={shamelaPage('nawawi', entry.shamela)} palette={palette} />
+      <Cite title={`${book.title}، ${where}`} edition={`${book.title}، ${book.edition}`} url={shamelaPage(key, entry.shamela)} palette={palette} />
     </Card>
   );
 }
@@ -138,9 +140,9 @@ export function FortyHadith({ entry, palette, jibril }: { entry: FortyEntry; pal
   return <>
     <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 26, textAlign: 'right' }}>{entry.heading}</Text>
     <Text style={{ color: palette.muted, fontSize: 16, textAlign: 'right', marginTop: -8 }}>{fromCompanion(entry.companion)}</Text>
-    <Nawawi entry={entry} palette={palette} />
+    <Compiled entry={entry} palette={palette} />
     <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, textAlign: 'right' }}>من أخرجه</Text>
-    <HadithBooks top={entry.heading} boxes={recordedIn(entry)} palette={palette} />
+    <HadithBooks top={entry.heading} boxes={recordedIn(entry)} namer={compilerOf(entry).name} palette={palette} />
     {jibril}
     {drawn && <Tabs label="طريقة العرض" options={MODES} value={mode} onChange={setMode} palette={palette} />}
     {entry.partial && entry.records.length > 0 && <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>في الصحيحين بعض لفظ الحديث</Text>}

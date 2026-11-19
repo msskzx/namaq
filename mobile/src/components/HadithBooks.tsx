@@ -21,8 +21,9 @@ function Branch({ first, last, palette }: { first: boolean; last: boolean; palet
   );
 }
 
-export default function HadithBooks({ top, boxes, onOpen, palette }: { top: string; boxes: BookBox[]; onOpen?: (box: BookBox) => void; palette: Palette }) {
-  const said = (box: BookBox) => [box.number ? `${box.name} ${num(box.number)}` : box.name, ...(box.named ? ['سمّاه النووي'] : []), ...box.notes].join('، ');
+/** `namer` is who names the books marked `named` (al-Nawawi, or Ibn Rajab for the eight he adds). */
+export default function HadithBooks({ top, boxes, onOpen, namer = 'النووي', palette }: { top: string; boxes: BookBox[]; onOpen?: (box: BookBox) => void; namer?: string; palette: Palette }) {
+  const said = (box: BookBox) => [box.number ? `${box.name} ${num(box.number)}` : box.name, ...(box.named ? [`سمّاه ${namer}`] : []), ...box.notes].join('، ');
   return (
     <View accessible={!onOpen} accessibilityLabel={boxes.map(said).join('؛ ')} style={{ alignItems: 'center' }}>
       <Card palette={palette} pad={[2, 14]}><Text style={{ color: palette.green, fontSize: 15.5, textAlign: 'center' }}>{top}</Text></Card>
@@ -36,7 +37,7 @@ export default function HadithBooks({ top, boxes, onOpen, palette }: { top: stri
               <Text style={{ color: palette.ink, fontSize: 15, textAlign: 'center' }}>{box.name}</Text>
               {box.number ? <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'center' }}>{num(box.number)}</Text> : null}
             </Card>
-            {box.named && <Text style={{ color: palette.accent, fontSize: 12.5, textAlign: 'center', marginTop: 3 }}>سمّاه النووي</Text>}
+            {box.named && <Text style={{ color: palette.accent, fontSize: 12.5, textAlign: 'center', marginTop: 3 }}>{`سمّاه ${namer}`}</Text>}
             {box.notes.map(note => <Text key={note} style={{ color: palette.muted, fontSize: 12.5, textAlign: 'center' }}>{note}</Text>)}
           </View>
         ))}

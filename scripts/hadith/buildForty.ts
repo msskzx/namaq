@@ -192,6 +192,8 @@ interface GradeRef { by: string; say: string; to?: string; in: string }
 interface MapEntry {
   n: number; companion: string; named: string[]; errata?: [string, string, string][]; alsoFrom?: string[]; bukhari?: Ref[]; muslim?: Ref[];
   others?: OtherRef[]; grades?: GradeRef[]; partial?: boolean; note?: string;
+  /** One of the eight Ibn Rajab adds (43–50): its text is his quotation at the head of his chapter. */
+  source?: 'ibnrajab';
 }
 const refOf = (ref: Ref) => (typeof ref === 'number' ? { n: ref } : ref);
 
@@ -200,15 +202,15 @@ interface Paragraph { text: string; volume: number; page: number; shamela: numbe
 const ENDS = /[.:؟!»"\])﴾]$/;
 
 /**
- * Ibn Rajab's chapters on the Forty (1–42), his words only: each page's text above the editors' notes, in paragraphs, a
+ * Ibn Rajab's fifty chapters (the Forty, then the eight he adds), his words only: each page's text above the editors' notes, in paragraphs, a
  * paragraph a page break cuts joined to the page before it (one with no full stop at its end).
  */
 function ibnRajabChapters(pages: Page[]) {
   const heads = pages.flatMap((p, i) => (/<span data-type="title"[^>]*>الحديثُ? [^<]+<\/span>/.test(p.text) ? [i] : []));
   if (heads.length !== 50) throw new Error(`Ibn Rajab: ${heads.length} chapters, not 50`);
-  return heads.slice(0, 42).map((start, c) => {
+  return heads.map((start, c) => {
     const paragraphs: Paragraph[] = [];
-    for (let i = start; i < heads[c + 1]; i++) {
+    for (let i = start; i < (heads[c + 1] ?? pages.length); i++) {
       // A footnote mark taken out leaves its space before the comma or stop it stood at.
       const lines = body(pages[i].text, undefined, NUMBERED_LINE).split('\n').map(line => line.replace(/\s+/g, ' ').replace(/\s+([،.:؛])/g, '$1').trim()).filter(Boolean);
       lines.forEach((line, k) => {
@@ -221,7 +223,8 @@ function ibnRajabChapters(pages: Page[]) {
         else paragraphs.push({ text: line, volume: Number(pages[i].vol ?? 1), page: pages[i].page!, shamela: i + 1 });
       });
     }
-    return { n: c + 1, shamela: start + 1, paragraphs };
+    const heading = /<span data-type="title"[^>]*>(الحديثُ? [^<]+)<\/span>/.exec(pages[start].text)![1].replace(/[\u064B-\u0652]/g, '');
+    return { n: c + 1, heading, shamela: start + 1, paragraphs };
   });
 }
 
@@ -282,7 +285,12 @@ export function buildForty() {
     return others.get(key)!;
   };
   const chapters = ibnRajabChapters(load(BOOKS.ibnrajab.id));
-  const entries = nawawi.map(entry => {
+  // The eight Ibn Rajab adds: his quotation at the head of his chapter, as al-Nawawi's text is for the Forty.
+  const added = chapters.slice(42).map(chapter => {
+    const [first] = chapter.paragraphs;
+    return { n: chapter.n, heading: chapter.heading, volume: first.volume, shamela: first.shamela, pages: [first.page, ...(first.turns ?? []).map(turn => turn.page)], text: first.text };
+  });
+  const entries = [...nawawi, ...added].map(entry => {
     const m = map.entries.find(e => e.n === entry.n);
     if (!m) throw new Error(`al-Nawawi ${entry.n} is not in forty-map.json`);
     const text = (m.errata ?? []).reduce((now, [wrong, right]) => {
@@ -306,6 +314,7 @@ export function buildForty() {
       named: m.named,
       ...(m.partial ? { partial: true } : {}),
       ...(m.note ? { note: m.note } : {}),
+      ...(m.source ? { source: m.source } : {}),
       records,
       ...(m.grades ? { grades: gradesOf(entry.n, m.grades, { ...entry, text }, records, chapters[entry.n - 1]) } : {}),
     };
