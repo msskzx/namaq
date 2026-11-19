@@ -22,6 +22,8 @@ import type { RecitePosition } from '@shared/quran/recite';
 import type { HomepageData } from '@/lib/homepageData';
 
 export const TOUR_SEEN = 'tour-seen';
+/** Sent on the window when the tour ends, so what waits for it (the interests asked at first open) can come. */
+export const TOUR_DONE = 'namaq-tour-done';
 type Step = 'opening' | 'matrix' | 'tree' | 'view' | 'timeline' | 'recite';
 type Props = { tour: HomepageData['tour']; story?: HomepageData['tourStory']; recite?: HomepageData['tourRecite']; names: Record<number, string> };
 
@@ -48,6 +50,7 @@ export default function Tour(props: Props) {
   if (!run) return null;
   function finish() {
     try { localStorage.setItem(TOUR_SEEN, '1'); } catch { /* the tour shows again next visit */ }
+    window.dispatchEvent(new Event(TOUR_DONE));
     setRun(0);
     if (replay) router.replace('/', { scroll: false });
   }

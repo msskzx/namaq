@@ -11,7 +11,7 @@ import Button from '@/ui/Button';
 import SettingRow from '@/ui/SettingRow';
 import type { Palette } from '@/lib/theme';
 
-const usePicked = () => useSyncExternalStore(pickedInterests.subscribe, pickedInterests.read, pickedInterests.server);
+export const usePicked = () => useSyncExternalStore(pickedInterests.subscribe, pickedInterests.read, pickedInterests.server);
 
 /** A short line for what is picked: the names, or «الكل» while nothing is. */
 export const interestsLabel = (picked: readonly string[]) =>
@@ -46,9 +46,11 @@ function SurpriseToggle({ palette }: { palette: Palette }) {
   return <Toggle on={on} onChange={value => { surpriseMe.write(value); newVisit(); }} label="فاجئني من غير اهتماماتي" palette={palette} />;
 }
 
-/** The picker in a sheet (home's pencil); closing it starts the feed afresh with the new interests. */
+/** The picker in a sheet (home's pencil); closing it starts the feed afresh when the interests changed. */
 export function InterestsSheet({ open, onClose, palette }: { open: boolean; onClose: () => void; palette: Palette }) {
-  const close = () => { onClose(); newVisit(); };
+  const before = useRef('');
+  if (open && !before.current) before.current = JSON.stringify(pickedInterests.read());
+  const close = () => { onClose(); if (JSON.stringify(pickedInterests.read()) !== before.current) newVisit(); before.current = ''; };
   return (
     <Sheet open={open} onClose={close} palette={palette}>
       <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 14 }}>
@@ -67,12 +69,13 @@ export function InterestsSheet({ open, onClose, palette }: { open: boolean; onCl
 export function InterestsSetting({ palette }: { palette: Palette }) {
   const picked = usePicked();
   // A change starts the feed afresh once the row folds or settings close, never under the reader's eyes.
-  const shown = useRef(picked);
-  const refresh = () => { if (shown.current !== pickedInterests.read()) { shown.current = pickedInterests.read(); newVisit(); } };
+  const read = () => JSON.stringify(pickedInterests.read());
+  const shown = useRef(read());
+  const refresh = () => { if (shown.current !== read()) { shown.current = read(); newVisit(); } };
   useEffect(() => refresh, []); // eslint-disable-line react-hooks/exhaustive-deps -- on leaving settings
   return (
     <View style={{ gap: 6 }}>
-      <SettingRow Icon={Sparkles} title="اهتماماتي" value={interestsLabel(picked)} onFold={open => { if (!open) refresh(); }} palette={palette}>
+      <SettingRow Icon={Sparkles} title="اهتماماتي" value={interestsLabel(picked)} onFold={open => { if (open) shown.current = read(); else refresh(); }} palette={palette}>
         <InterestPicker palette={palette} />
       </SettingRow>
       <SurpriseToggle palette={palette} />
@@ -100,6 +103,9 @@ export function InterestsWelcome({ palette }: { palette: Palette }) {
     </Sheet>
   );
 }
+
+/** The one interest shown alone, while it is still among the picks (none picked means all). */
+export const onlyOf = (only: string | null, picked: readonly string[]) => (only && (!picked.length || picked.includes(only)) ? only : null);
 
 /**
  * The chip row over the feed (owner, 2026-11-19): «لك» (the mixed feed) and each interest picked; a tap shows that

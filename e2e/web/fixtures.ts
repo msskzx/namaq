@@ -18,11 +18,12 @@ export const test = base.extend<{ errors: string[] }>({
     expect(errors, 'errors on the page').toEqual([]);
   }, { auto: true }],
   page: async ({ page }, use) => {
-    // The homepage tour and the cookie banner are marked as seen.
+    // The homepage tour, the interests asked at first open and the cookie banner are marked as seen.
     await page.addInitScript(() => {
       if (sessionStorage.getItem('e2e-seeded')) return;
       sessionStorage.setItem('e2e-seeded', '1');
       localStorage.setItem('tour-seen', '1');
+      localStorage.setItem('interests-asked', '1');
       localStorage.setItem('cookie-consent', 'declined');
     });
     await use(page);
