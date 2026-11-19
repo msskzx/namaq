@@ -6,8 +6,9 @@ import { useLanguage } from '../language/LanguageContext';
 import styles from './NavBar.module.css';
 
 /**
- * A page's search box in the top bar. Desktop shows the box; phones show a search icon that opens
- * the box across the whole bar, with a close button.
+ * A page's search box in the top bar, the one way a page puts a search there. Desktop shows the box, no wider than the
+ * bar's search width (owner, 2026-11-19: never the whole bar); phones show a search icon that opens the box across the
+ * whole bar, with a close button. The search page itself uses NavSearchShown: its box is always out, on phones too.
  */
 /** `active`: a search is set, shown as a dot on the phone's search icon (like the filter's dot). */
 export default function NavSearch({ children, active = false }: { children: React.ReactNode; active?: boolean }) {
@@ -40,4 +41,9 @@ export default function NavSearch({ children, active = false }: { children: Reac
       </div>
     </>
   );
+}
+
+/** The search page's box: always out, on phones too, at the same width as every top-bar search. */
+export function NavSearchShown({ children }: { children: React.ReactNode }) {
+  return <div className={`${styles.search} ${styles.searchShown}`}><div className="min-w-0 flex-1">{children}</div></div>;
 }

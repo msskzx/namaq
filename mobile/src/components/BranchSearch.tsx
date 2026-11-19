@@ -11,7 +11,6 @@ import { draftValid, FilterActions, FilterFields } from './FilterFields';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import TopBar from '@/ui/TopBar';
 import { surahName } from '@shared/quran/surahNames';
-import { SearchField } from '@/ui/Field';
 
 type Props = { state: ListState; bookmarks: Bookmark[]; palette: Palette; onClose: () => void;
   /** The new list, and where it opens: a picked phrase, else the search's best tree. */
@@ -43,10 +42,8 @@ export default function BranchSearch({ state, bookmarks, palette, onClose, onApp
     <KeyboardAvoidingView behavior="padding"
       style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, backgroundColor: palette.paper, zIndex: 10 }}>
       <Pressable accessible={false} onPress={Keyboard.dismiss}>
-        <TopBar back={onClose}>
-          <SearchField value={query} onChangeText={setQuery} placeholder="ابحث" label="ابحث عن عبارة مشتركة بين آيتين أو أكثر"
-            onSubmitEditing={() => apply({}, { query: query.trim() })} palette={palette} style={{ flex: 1 }} />
-        </TopBar>
+        <TopBar back={onClose} search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث', label: 'ابحث عن عبارة مشتركة بين آيتين أو أكثر',
+          onSubmitEditing: () => apply({}, { query: query.trim() }) }} />
       </Pressable>
       {!suggesting && <>
         <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ flexGrow: 1 }}>

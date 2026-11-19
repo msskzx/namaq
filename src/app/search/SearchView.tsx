@@ -11,6 +11,7 @@ import { surahPairHref } from '@shared/quran/curatedComparisons';
 import { mushafText } from '@shared/quran/mushafText';
 import { holdsTerms, SEARCH_ORDER, type SearchGroup, type SearchHit, type SearchKind } from '@shared/quran/searchAll';
 import { NavActions } from '@/components/common/NavBar';
+import { NavSearchShown } from '@/components/common/NavSearch';
 import TreeIcon from '@/components/common/TreeIcon';
 import styles from './Search.module.css';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
@@ -121,7 +122,9 @@ export default function SearchView() {
   return <div className={styles.page} dir="rtl">
     <h1 className="sr-only">البحث</h1>
     <NavActions>
-      <SearchField label="ابحث في كل شيء" placeholder="ابحث" value={query} onChangeText={setQuery} className="min-w-0 flex-1" />
+      <NavSearchShown>
+        <SearchField label="ابحث في كل شيء" placeholder="ابحث" value={query} onChangeText={setQuery} className="w-full" />
+      </NavSearchShown>
     </NavActions>
     {!waiting && found.query && !groups.length && <Empty text="لا توجد نتيجة مطابقة." />}
     {groups.map(group => {
