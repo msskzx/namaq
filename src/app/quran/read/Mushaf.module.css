@@ -106,6 +106,8 @@
 /* The long-pressed word inside its ayah's band, a stronger box (the app's markWord: the accent at 30%). */
 .marked.pressedWord { border-radius: 4px; background: var(--home-band-word); }
 .marked + .marked.pressedWord::before, .marked.pressedWord + .marked::before { background: var(--home-band-mark); }
+/* Selected words side by side are one band, the gap between them included (the app's). */
+.marked.pressedWord + .marked.pressedWord::before { background: var(--home-band-word); }
 
 .titleRow {
   display: flex;

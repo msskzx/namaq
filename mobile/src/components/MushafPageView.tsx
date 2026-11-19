@@ -314,6 +314,17 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
       return old && old.x === x && old.y === y && old.w === w && old.h === h ? prev : { ...prev, [id]: { x, y, w, h } };
     });
   };
+  /** The lit words' runs on a line: words side by side. */
+  const litRuns = (cells: Cell[]) => {
+    const runs: number[][] = [];
+    cells.forEach((cell, at) => {
+      if (!cell.word) return;
+      const run = runs[runs.length - 1];
+      if (run && run[run.length - 1] === at - 1) run.push(at);
+      else runs.push([at]);
+    });
+    return runs;
+  };
   const bands = (line: string, cells: Cell[]) => {
     const runs: number[][] = [];
     cells.forEach((cell, at) => {
@@ -330,9 +341,13 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
       const top = Math.min(...found.map(box => box.y));
       const bottom = Math.max(...found.map(box => box.y + box.h));
       return <View key={`b${run[0]}`} pointerEvents="none" style={{ position: 'absolute', left, top, width: right - left, height: bottom - top, borderRadius: 4, backgroundColor: BAND_TINT[cells[run[0]].band!](palette) }} />;
-    }).concat(cells.map((cell, at) => {
-      const box = cell.word ? boxes[`${line}:${at}`] : undefined;
-      return box ? <View key={`w${at}`} pointerEvents="none" style={{ position: 'absolute', left: box.x, top: box.y, width: box.w, height: box.h, borderRadius: 4, backgroundColor: palette.bands.word }} /> : null;
+    }).concat(litRuns(cells).map(run => {
+      // The selected words on a line are one band, the gaps between them included, as the ayah's is.
+      const found = run.map(at => boxes[`${line}:${at}`]).filter(Boolean);
+      if (!found.length) return null;
+      const left = Math.min(...found.map(box => box.x)), right = Math.max(...found.map(box => box.x + box.w));
+      const top = Math.min(...found.map(box => box.y)), bottom = Math.max(...found.map(box => box.y + box.h));
+      return <View key={`w${run[0]}`} pointerEvents="none" style={{ position: 'absolute', left, top, width: right - left, height: bottom - top, borderRadius: 4, backgroundColor: palette.bands.word }} />;
     }));
   };
 

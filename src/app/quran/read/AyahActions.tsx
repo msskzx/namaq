@@ -79,7 +79,7 @@ export default function AyahActions({ ayah, x, y, below, due, forgot, saved, not
 }) {
   const box = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    box.current?.querySelector<HTMLElement>('button')?.focus({ preventScroll: true });
+    box.current?.querySelector<HTMLElement>('button:not([role="tab"])')?.focus({ preventScroll: true });
     const outside = (event: PointerEvent) => { if (!box.current?.contains(event.target as Node)) onDismiss(); };
     const key = (event: KeyboardEvent) => { if (event.key === 'Escape') { event.preventDefault(); onClose(); } };
     document.addEventListener('pointerdown', outside, true);
@@ -110,12 +110,14 @@ export default function AyahActions({ ayah, x, y, below, due, forgot, saved, not
   const tafsirLabel = ar ? 'تفسير السعدي' : 'Al-Sa‘di’s tafsir';
   const count = scope === 'words' ? 4 : scope === 'word' ? 5 : 2 + (onListen ? 1 : 0) + (onRecite ? 1 : 0) + (forgot > 0 ? 1 : 0) + (onNote ? 1 : 0) + (onTopics ? 1 : 0) + (links?.compare.length ? 1 : 0) + (links?.trees ? 1 : 0) + (links?.qiraat ? 1 : 0) + (onPreview ? 2 : 0) + (onShare ? 1 : 0);
   // On a narrow phone the buttons wrap onto a second row rather than run off the screen.
-  const half = typeof window === 'undefined' ? 0 : Math.min(Math.max(count, 4) * 27 + 8, window.innerWidth / 2 - 8);
+  // As wide as its buttons in one row, up to the screen (the tab row above them takes that width too).
+  const width = typeof window === 'undefined' ? undefined : Math.min(window.innerWidth - 16, Math.max(count, 4) * 54 + 14);
+  const half = width === undefined ? 0 : width / 2;
   const left = typeof window === 'undefined' ? x : Math.min(window.innerWidth - half, Math.max(half, x));
   const preview = (kind: Kind) => () => { onPreview?.(kind); onClose(); };
   const forgotButton = <Act label={forgotLabel} name={ar ? 'نسيت' : 'Forgot'} on={scope === 'ayah' ? !!forgot : undo} onClick={() => { onForgot(); onClose(); }}><LightbulbOff aria-hidden /></Act>;
   return (
-    <div ref={box} role="dialog" aria-label={label} data-ayah-actions className={styles.ayahActions} style={under ? { left, top: below! + 8, transform: 'translate(-50%, 0)' } : { left, top: Math.max(64, y) }}>
+    <div ref={box} role="dialog" aria-label={label} data-ayah-actions className={styles.ayahActions} style={under ? { left, width, top: below! + 8, transform: 'translate(-50%, 0)' } : { left, width, top: Math.max(64, y) }}>
       {words && onScope && <Segmented tabs fill label={ar ? 'ما تعمل عليه الأزرار' : 'What the buttons act on'} className="basis-full mb-1"
         options={[{ key: 'ayah', label: ar ? SCOPE_NAMES.ayah : 'Ayah', current: scope === 'ayah', onClick: () => onScope('ayah') },
           { key: 'words', label: ar ? SCOPE_NAMES[wordScope(words)] : wordScope(words) === 'words' ? 'Words' : 'Word', current: scope !== 'ayah', onClick: () => onScope(wordScope(words)) }]} />}
