@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import bukhariIndex from './data/hadith/bukhari.json';
+import muslimIndex from './data/hadith/muslim.json';
 import { findHadith, placeOf, searchSahih, type SahihIndex, type SahihText } from './sahih';
 import { sahihKitabQuestions } from './quiz/sahih';
 import { seededRandom } from './quiz/feedQuiz';
@@ -37,22 +38,31 @@ describe('the Sahihayn', () => {
 });
 
 describe('«في أيّ كتاب؟»', () => {
-  const bare = (s: string) => s.replace(/[ً-ْٰ]/g, '').replace(/[.،]+$/, '').trim();
+  const bare = (text: string) => text.replace(/[ً-ْٰ]/g, '').replace(/[أإآ]/g, 'ا').replace(/[.،]+$/, '').trim();
+  const books = { bukhari: index, muslim: muslimIndex as SahihIndex };
   const questions = sahihKitabQuestions(seededRandom(3));
 
-  it('the right kitab holds the bab, and no wrong one holds a bab of the same heading', () => {
-    for (const question of questions.filter(each => each.key.includes(':bukhari:'))) {
-      const [, , kitabN, babAt] = question.key.split(':');
-      const kitab = index.kitabs.find(each => each.n === Number(kitabN))!;
+  it('the right kitab holds the bab, and no wrong one holds a bab of the same heading, in both books', () => {
+    expect(questions.some(each => each.key.includes(':muslim:'))).toBe(true);
+    for (const question of questions) {
+      const [, slug, kitabN, babAt] = question.key.split(':');
+      const book = books[slug as keyof typeof books];
+      const kitab = book.kitabs.find(each => each.n === Number(kitabN))!;
       const heading = kitab.babs[Number(babAt)].title;
-      expect(question.choices.find(choice => choice.value === question.correctAnswer)!.labelArabic).toBe(bare(kitab.title));
-      const wrong = question.choices.filter(choice => choice.value !== question.correctAnswer).map(choice => index.kitabs.find(each => bare(each.title) === choice.labelArabic)!);
+      expect(question.choices.find(choice => choice.value === question.correctAnswer)!.labelArabic).toBe(kitab.title.replace(/[ً-ْٰ]/g, '').replace(/[.،]+$/, '').trim());
+      // Matched with their hamzas: Muslim has «كتاب الإيمان» and «كتاب الأيمان» (oaths).
+      const label = (title: string) => title.replace(/[ً-ْٰ]/g, '').replace(/[.،]+$/, '').trim();
+      const wrong = question.choices.filter(choice => choice.value !== question.correctAnswer).map(choice => book.kitabs.find(each => label(each.title) === choice.labelArabic)!);
       for (const other of wrong) expect(other.babs.some(bab => bare(bab.title) === bare(heading)), `${heading} in ${other.title}`).toBe(false);
     }
   });
 
-  it('never asks a bab whose heading names its kitab («باب فضل الوضوء» in «كتاب الوضوء»)', () => {
-    const wudu = index.kitabs.find(kitab => bare(kitab.title) === 'كتاب الوضوء')!;
-    expect(questions.some(question => question.key.startsWith(`SAHIH_KITAB:bukhari:${wudu.n}:`) && /الوضوء/.test(bare(question.promptArabic)))).toBe(false);
+  it('never shows a heading that holds a word of the right kitab\'s name («باب فضل الوضوء» under «كتاب الوضوء»)', () => {
+    for (const question of questions) {
+      const right = bare(question.choices.find(choice => choice.value === question.correctAnswer)!.labelArabic);
+      const heading = bare(question.promptArabic.split('\n')[0]);
+      const subject = right.split(' ').map(word => word.replace(/^(?:و?ال)/, '').replace(/ة$/, '')).filter(word => word.length >= 3 && !['كتاب', 'باب', 'ابواب', 'وغيرها', 'رضي', 'الله', 'تعالى', 'عنهم'].includes(word));
+      for (const word of subject) expect(heading.includes(word), `${heading} / ${right}`).toBe(false);
+    }
   });
 });

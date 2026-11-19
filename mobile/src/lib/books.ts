@@ -112,13 +112,20 @@ export function removeBook(id: BookId) {
 }
 
 /** A downloaded book's data, read from its file once; null when it is not on the phone or cannot be read. */
+const reading = new Map<BookId, Promise<unknown>>();
 export async function readBook<T>(id: BookId): Promise<T | null> {
   if (bookState(id) !== 'on' || bookOf(id).builtIn) return null;
   if (loaded.has(id)) return loaded.get(id) as T;
+  // Pages and cards that open together share one read: a whole Sahih is parsed once.
+  if (!reading.has(id)) reading.set(id, readFromFile(id).finally(() => reading.delete(id)));
+  return reading.get(id) as Promise<T | null>;
+}
+
+async function readFromFile(id: BookId): Promise<unknown> {
   try {
     const data = readable(id, web ? await (await fetch(`${WEBSITE}${bookPath(id)}`)).json() : JSON.parse(await fileOf(id).text()));
     loaded.set(id, data);
-    return data as T;
+    return data;
   } catch {
     return null;
   }

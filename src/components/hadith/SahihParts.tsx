@@ -6,7 +6,7 @@ import { lastLink, sahihName, searchSahih, splitRoute, type SahihBook, type Sahi
 import { num } from '@shared/quran/arabicNumber';
 import Card from '@/components/common/Card';
 import Folded from '@/components/common/Folded';
-import ExternalLink from '@/components/common/ExternalLink';
+import Reference from '@/components/common/Reference';
 import Segmented from '@/components/common/Segmented';
 import TapRow from '@/components/common/TapRow';
 import Empty from '@/components/common/Empty';
@@ -54,10 +54,8 @@ export function SahihRouteView({ book, n, route, mode, big = false }: { book: Sa
       {mode === 'drawing' && route.chain
         ? <><SahihChain book={book} route={route} /><p className={body}>{words}</p></>
         : <p className={body}><span className="text-[var(--home-muted)]">{chain}</span>{words}</p>}
-      <Folded credit={`${sahihName(book, n, num, route.route)}، ج ${num(route.volume)}، ${pagesName(route.pages)}`}>
-        <p>{`${book.title}، ${book.edition}`}</p>
-        <ExternalLink href={sahihPage(book, route.shamela)}>الصفحة في المكتبة الشاملة</ExternalLink>
-      </Folded>
+      <Reference title={`${sahihName(book, n, num, route.route)}، ج ${num(route.volume)}، ${pagesName(route.pages)}`}
+        quotes={[{ text: `${book.title}، ${book.edition}` }]} links={[{ label: 'الصفحة في المكتبة الشاملة', url: sahihPage(book, route.shamela) }]} />
     </div>
   );
 }
@@ -98,9 +96,10 @@ export function SahihHadithCard({ n, also, from, start, routes, href }: { n: num
 
 /**
  * A Sahih's kitabs as rows in one card (the app's SahihKitabList), each its number, name and hadith numbers; `mark` checks
- * one (a quiz's answer). The book's page links each kitab (`hrefOf`); a quiz's look-up opens its bab headings under it.
+ * one (a quiz's answer). The book's page links each kitab (`kitabHref`, the kitab's number after it); a quiz's look-up opens
+ * its bab headings under it.
  */
-export function SahihKitabList({ book, hrefOf, mark }: { book: SahihIndex; hrefOf?: (kitab: number) => string; mark?: number }) {
+export function SahihKitabList({ book, kitabHref, mark }: { book: SahihIndex; kitabHref?: string; mark?: number }) {
   const [open, setOpen] = useState<number>();
   return (
     <Card className="flex flex-col px-3.5 py-1">
@@ -113,7 +112,7 @@ export function SahihKitabList({ book, hrefOf, mark }: { book: SahihIndex; hrefO
         </>;
         return (
           <div key={kitab.n} className={i ? 'border-t border-[var(--home-rule)]' : ''}>
-            {hrefOf ? <TapRow href={hrefOf(kitab.n)} className="gap-2.5 py-2">{inside}</TapRow>
+            {kitabHref ? <TapRow href={`${kitabHref}${kitab.n}`} className="gap-2.5 py-2">{inside}</TapRow>
               : <TapRow onClick={() => setOpen(was => (was === kitab.n ? undefined : kitab.n))} className="gap-2.5 py-2">{inside}</TapRow>}
             {open === kitab.n && kitab.babs.filter(bab => bab.title).map((bab, at) => <p key={at} className="pb-1.5 leading-[1.7] text-[var(--home-muted)]">{bab.title}</p>)}
           </div>
@@ -126,7 +125,7 @@ export function SahihKitabList({ book, hrefOf, mark }: { book: SahihIndex; hrefO
 /** A quiz's look-up for «في أيّ كتاب؟» (the app's SahihLook): a search over the book's bab headings, or its kitabs. */
 export function SahihLook({ book, mark }: { book: SahihIndex; mark?: number }) {
   const [query, setQuery] = useState('');
-  const found = query.trim() ? searchSahih([{ index: book }], query, 40).babs : null;
+  const found = query.trim() ? searchSahih([{ index: book }], query, Infinity).babs : null;
   return (
     <div dir="rtl" lang="ar" className="flex flex-col gap-3">
       <SearchField label={`ابحث في أبواب ${book.title}`} placeholder="ابحث بكلمات من الباب" value={query} onChangeText={setQuery} />

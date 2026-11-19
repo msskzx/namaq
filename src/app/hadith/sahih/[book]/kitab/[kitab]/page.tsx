@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { num } from '@shared/quran/arabicNumber';
 import Chip from '@/components/common/Chip';
@@ -30,7 +31,7 @@ export default async function SahihKitabPage({ params }: { params: Params }) {
   return (
     <div dir="rtl" lang="ar" className="mx-auto flex w-full max-w-2xl flex-col gap-3 p-4 text-[var(--home-ink)]">
       <div className="flex flex-col gap-0.5">
-        <a href={`/hadith/sahih/${book.slug}`} className="text-sm text-[var(--home-muted)] hover:underline">{book.title}</a>
+        <Link href={`/hadith/sahih/${book.slug}`} className="text-sm text-[var(--home-muted)] hover:underline">{book.title}</Link>
         <h1 className="text-[1.625rem]">{kitab.title}</h1>
         {kitab.from > 0 && <p className="text-sm text-[var(--home-muted)]">{`الأحاديث ${num(kitab.from)}–${num(kitab.to)}`}</p>}
       </div>

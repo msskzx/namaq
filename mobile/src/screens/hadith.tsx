@@ -1,6 +1,6 @@
-import { useDeferredValue, useMemo, useRef, useState, type ComponentRef } from 'react';
-import { ScrollView, View } from 'react-native';
-import { router } from 'expo-router';
+import { useCallback, useDeferredValue, useMemo, useRef, useState, type ComponentRef } from 'react';
+import { ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
+import { router, useFocusEffect } from 'expo-router';
 import { fromCompanion, sayingStart, type FortyEntry } from '@shared/hadith';
 import { placeOf, searchSahih, type SahihHit, type SahihSlug } from '@shared/sahih';
 import { num } from '@shared/quran/arabicNumber';
@@ -10,6 +10,7 @@ import Card from '@/ui/Card';
 import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
 import Empty from '@/ui/Empty';
+import LoadingDots from '@/ui/LoadingDots';
 import { SearchField } from '@/ui/Field';
 import { usePalette, type Palette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
@@ -17,6 +18,7 @@ import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useTabRetap } from '@/lib/tabRetap';
 import { FORTY } from '@/lib/hadith';
 import { SAHIH, SAHIH_SLUGS, lastOpened, useSahihTexts } from '@/lib/sahih';
+import { bookState, useBooks } from '@/lib/books';
 import { findHadith } from '@shared/sahih';
 import { opening } from '@/components/Sahih';
 
@@ -56,7 +58,8 @@ function BookCard({ title, by, size, last, onOpen, onContinue, palette }: {
   );
 }
 
-const SEARCH_LIMIT = 30;
+/** Hits drawn at a time; more come as the list nears its end, so every hit shows without drawing thousands at once. */
+const SEARCH_STEP = 40;
 
 /** A search hit: the bab heading (or the hadith's opening) with its book and kitab. */
 function Hit({ hit, line, palette }: { hit: SahihHit; line: string; palette: Palette }) {
@@ -82,27 +85,41 @@ export default function HadithScreen() {
   useTabRetap('hadith', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   const [query, setQuery] = useState('');
   const typed = useDeferredValue(query.trim());
-  const texts = useSahihTexts();
-  const found = useMemo(() => (typed ? searchSahih(SAHIH_SLUGS.map(slug => ({ index: SAHIH[slug], text: texts[slug] })), typed, SEARCH_LIMIT) : null), [typed, texts]);
-  const missing = SAHIH_SLUGS.filter(slug => !texts[slug]);
+  useBooks();
+  const { texts, reading } = useSahihTexts(!!typed);
+  const found = useMemo(() => (typed ? searchSahih(SAHIH_SLUGS.map(slug => ({ index: SAHIH[slug], text: texts[slug] })), typed, Infinity) : null), [typed, texts]);
+  const [drawn, setDrawn] = useState({ typed: '', count: SEARCH_STEP });
+  const count = drawn.typed === typed ? drawn.count : SEARCH_STEP;
+  const missing = SAHIH_SLUGS.filter(slug => bookState(slug) !== 'on');
+  // «تابع» reads the last hadith again each time the tab comes back into view.
+  const [, setSeen] = useState(0);
+  useFocusEffect(useCallback(() => { setSeen(was => was + 1); }, []));
+  const scrolled = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    onScroll(event);
+    const { contentOffset, layoutMeasurement, contentSize } = event.nativeEvent;
+    if (found && contentOffset.y + layoutMeasurement.height > contentSize.height - 800) setDrawn({ typed, count: count + SEARCH_STEP });
+  };
+  const babs = found ? found.babs.slice(0, count) : [];
+  const hadithHits = found ? found.hadith.slice(0, Math.max(0, count - found.babs.length)) : [];
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar hideOnScroll />
-      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 12 }}>
+      <ScrollView ref={scroll} onScroll={scrolled} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 12 }}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>الحديث</Text>
         <SearchField palette={palette} label="ابحث في الصحيحين" placeholder="ابحث في الأبواب والأحاديث" value={query} onChangeText={setQuery} />
         {found ? <>
           <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>في الأبواب</Text>
-          {found.babs.length ? found.babs.map(hit => {
+          {found.babs.length ? babs.map(hit => {
             const kitab = SAHIH[hit.book].kitabs.find(each => each.n === hit.kitab);
             return <Hit key={`b-${hit.book}-${hit.kitab}-${hit.bab}`} hit={hit} line={kitab?.babs[hit.bab ?? 0]?.title ?? ''} palette={palette} />;
           }) : <Empty text="لا باب فيه هذه الكلمات" palette={palette} />}
           <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>في الأحاديث</Text>
-          {found.hadith.map(hit => {
+          {hadithHits.map(hit => {
             const hadith = texts[hit.book] && findHadith(texts[hit.book]!, hit.n)?.hadith;
             return hadith ? <Hit key={`h-${hit.book}-${hit.n}`} hit={hit} line={opening(hadith)} palette={palette} /> : null;
           })}
-          {!found.hadith.length && <Empty text={missing.length === SAHIH_SLUGS.length ? 'نزّل الصحيحين من المكتبة ليبحث في نص الأحاديث' : 'لا حديث فيه هذه الكلمات'} palette={palette} />}
+          {reading ? <LoadingDots label="يقرأ نص الصحيحين" />
+            : !found.hadith.length && <Empty text={missing.length === SAHIH_SLUGS.length ? 'نزّل الصحيحين من المكتبة ليبحث في نص الأحاديث' : 'لا حديث فيه هذه الكلمات'} palette={palette} />}
           {missing.length > 0 && missing.length < SAHIH_SLUGS.length && <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{`نزّل ${SAHIH[missing[0]].title} من المكتبة ليبحث فيه أيضًا`}</Text>}
         </> : <>
           {SAHIH_SLUGS.map(slug => {

@@ -72,7 +72,7 @@ export function SahihRouteView({ book, n, route, mode, palette, big }: { book: S
  * when its chain is drawn, and in Muslim its other routes folded under the first. The page, the feed card and a quiz's
  * look-up all draw it.
  */
-export function SahihHadithView({ book, hadith, palette, folded = true }: { book: SahihIndex; hadith: SahihHadith; palette: Palette; folded?: boolean }) {
+export function SahihHadithView({ book, hadith, palette }: { book: SahihIndex; hadith: SahihHadith; palette: Palette }) {
   const [mode, setMode] = useState<Mode>('drawing');
   const [first, ...rest] = hadith.routes;
   const from = lastLink(first);
@@ -82,7 +82,7 @@ export function SahihHadithView({ book, hadith, palette, folded = true }: { book
       {from && <Text style={{ color: palette.muted, fontSize: 16, textAlign: 'right' }}>{from}</Text>}
       {drawn && <Tabs label="طريقة العرض" options={MODES} value={mode} onChange={setMode} palette={palette} />}
       <SahihRouteView book={book} n={hadith.n} route={first} mode={mode} palette={palette} big />
-      {rest.length > 0 && folded && (
+      {rest.length > 0 && (
         <Folded credit={`طرق أخرى عند ${book.slug === 'muslim' ? 'مسلم' : 'البخاري'} (${num(rest.length)})`} palette={palette}>
           {rest.map((route, i) => <SahihRouteView key={`${route.route}-${i}`} book={book} n={hadith.n} route={route} mode={mode} palette={palette} />)}
         </Folded>
@@ -148,7 +148,7 @@ export function SahihKitabList({ book, onOpen, mark, open, palette }: { book: Sa
 export function SahihLook({ book, mark, palette }: { book: SahihIndex; mark?: number; palette: Palette }) {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState<number | undefined>();
-  const found = query.trim() ? searchSahih([{ index: book }], query, 40).babs : null;
+  const found = query.trim() ? searchSahih([{ index: book }], query, Infinity).babs : null;
   return (
     <View style={{ gap: 12 }}>
       <SearchField palette={palette} label={`ابحث في أبواب ${book.title}`} placeholder="ابحث بكلمات من الباب" value={query} onChangeText={setQuery} />

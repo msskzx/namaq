@@ -27,10 +27,13 @@ export const hadithItem = (hadith: SahihHadith) => ({
 });
 export type SahihItem = ReturnType<typeof hadithItem>;
 
-/** A search over both books, each hit with its line: the bab heading, or the hadith's opening. */
-export async function searchBoth(query: string) {
+/** A search over both books, each hit with its line (the bab heading, or the hadith's opening): the first `count` hits, and how many there are. */
+export async function searchBoth(query: string, count: number) {
   const books = await Promise.all(SAHIH_SLUGS.map(async slug => ({ index: SAHIH[slug], text: await sahihText(slug) })));
-  const { babs, hadith } = searchSahih(books, query, 30);
+  const all = searchSahih(books, query, Infinity);
+  const total = all.babs.length + all.hadith.length;
+  const babs = all.babs.slice(0, count);
+  const hadith = all.hadith.slice(0, Math.max(0, count - babs.length));
   const where = (hit: SahihHit) => `${SAHIH[hit.book].title}${hit.n ? ` ${num(hit.n)}` : ''}، ${SAHIH[hit.book].kitabs.find(kitab => kitab.n === hit.kitab)?.title ?? ''}`;
   return {
     babs: babs.map(hit => ({ ...hit, where: where(hit), line: SAHIH[hit.book].kitabs.find(kitab => kitab.n === hit.kitab)?.babs[hit.bab ?? 0]?.title ?? '' })),
@@ -38,6 +41,9 @@ export async function searchBoth(query: string) {
       const found = findHadith(books.find(book => book.index.slug === hit.book)!.text, hit.n);
       return { ...hit, where: where(hit), line: found ? hadithItem(found.hadith).start : '' };
     }),
+    babCount: all.babs.length,
+    hadithCount: all.hadith.length,
+    total,
   };
 }
 export type SahihSearch = Awaited<ReturnType<typeof searchBoth>>;

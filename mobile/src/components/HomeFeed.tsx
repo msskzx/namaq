@@ -759,7 +759,8 @@ function SahihPost({ slug, id, palette }: { slug: SahihSlug; id: string; palette
   const book = SAHIH[slug];
   const found = text ? findHadith(text, Number(id)) : undefined;
   const place = placeOf(book, Number(id));
-  if (!found || !place || found.hadith.n !== Number(id)) return null;
+  // A number Abd al-Baqi gives a record printed under another shows that record.
+  if (!found || !place) return null;
   const open = () => toTab({ pathname: '/hadith-sahih', params: { book: slug, n: id } });
   const where = `${place.kitab.title}${place.bab?.title ? ` › ${place.bab.title}` : ''}${book.headingsBy === 'nawawi' && place.bab?.title ? ' (تبويب النووي)' : ''}`;
   return (

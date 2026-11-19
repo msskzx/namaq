@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import bukhari from '@shared/data/hadith/bukhari.json';
 import muslim from '@shared/data/hadith/muslim.json';
 import type { SahihIndex, SahihSlug, SahihText } from '@shared/sahih';
@@ -12,24 +12,25 @@ export const SAHIH_SLUGS: SahihSlug[] = ['bukhari', 'muslim'];
 export const isSahihSlug = (slug: string | undefined): slug is SahihSlug => slug === 'bukhari' || slug === 'muslim';
 
 /** A Sahih's text once it is on the phone, read from its file; `state` says whether it is there, coming or failed. */
-export function useSahihText(slug: SahihSlug | undefined): { state: BookState; text: SahihText | null } {
+export function useSahihText(slug: SahihSlug | undefined, wanted = true): { state: BookState; text: SahihText | null } {
   useBooks();
   const state = slug ? bookState(slug) : 'off';
   const [text, setText] = useState<SahihText | null>(null);
   useEffect(() => {
     let live = true;
-    if (!slug || state !== 'on') { setText(null); return; }
+    if (!slug || state !== 'on' || !wanted) { setText(null); return; }
     readBook<SahihText>(slug).then(data => { if (live) setText(data); });
     return () => { live = false; };
-  }, [slug, state]);
+  }, [slug, state, wanted]);
   return { state, text };
 }
 
-/** Both books' texts that are on the phone, for search over every hadith. */
-export function useSahihTexts(): Partial<Record<SahihSlug, SahihText>> {
-  const { text: b } = useSahihText('bukhari');
-  const { text: m } = useSahihText('muslim');
-  return { ...(b && { bukhari: b }), ...(m && { muslim: m }) };
+/** Both books' texts that are on the phone, for search over every hadith; read only once `wanted` (something is typed). */
+export function useSahihTexts(wanted: boolean): { texts: Partial<Record<SahihSlug, SahihText>>; reading: boolean } {
+  const b = useSahihText('bukhari', wanted);
+  const m = useSahihText('muslim', wanted);
+  const texts = useMemo(() => ({ ...(b.text && { bukhari: b.text }), ...(m.text && { muslim: m.text }) }), [b.text, m.text]);
+  return { texts, reading: wanted && ((b.state === 'on' && !b.text) || (m.state === 'on' && !m.text)) };
 }
 
 /** The last hadith opened in each book, for its card's «تابع». */

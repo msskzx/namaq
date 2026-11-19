@@ -5,7 +5,7 @@ const SAHIH_FILES = ['./data/hadith/sahih/*.json'];
 
 const nextConfig: NextConfig = {
   // The book reader reads its books from disk (src/lib/books/readerBook.ts), the hadith pages the Sahihayn (src/lib/sahih.ts).
-  outputFileTracingIncludes: { '/quran/books/**': BOOK_FILES, '/api/books/**': [...BOOK_FILES, ...SAHIH_FILES], '/hadith/**': SAHIH_FILES, '/api/hadith/**': SAHIH_FILES, '/api/quiz/**': SAHIH_FILES, '/': SAHIH_FILES },
+  outputFileTracingIncludes: { '/quran/books/**': BOOK_FILES, '/api/books/**': [...BOOK_FILES, ...SAHIH_FILES], '/hadith/**': SAHIH_FILES, '/api/hadith/**': SAHIH_FILES, '/api/home/**': SAHIH_FILES },
   async redirects() {
     return [
       { source: '/quran/shifts', destination: '/quran/compare', permanent: true },

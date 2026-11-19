@@ -94,13 +94,21 @@ export const sahihName = (book: Pick<SahihBook, 'title'>, n: number, digits: (n:
 /** Text without marks, hamzas folded and punctuation set aside, for search. */
 export const plainText = (text: string) => normalizeWord(text).replace(/[^ء-ي\s]/g, ' ').replace(/\s+/g, ' ').trim();
 
+const plains = new WeakMap<SahihRoute, string>();
+/** A route's text for search, worked out once per route: a search runs on every letter typed. */
+const plainOf = (route: SahihRoute) => {
+  let plain = plains.get(route);
+  if (plain === undefined) plains.set(route, plain = plainText(route.text));
+  return plain;
+};
+
 export interface SahihHit { book: SahihSlug; n: number; kitab: number; bab?: number; at?: number }
 
 /**
  * Every bab heading, then every hadith, holding all the words typed, marks and hamzas set aside. Babs come from the
  * index (on the phone always); hadith only from the books whose text is at hand.
  */
-export function searchSahih(books: { index: SahihIndex; text?: SahihText | null }[], query: string, limit = 50): { babs: SahihHit[]; hadith: SahihHit[] } {
+export function searchSahih(books: { index: SahihIndex; text?: SahihText | null }[], query: string, limit = Infinity): { babs: SahihHit[]; hadith: SahihHit[] } {
   const words = plainText(query).split(' ').filter(Boolean);
   const babs: SahihHit[] = [];
   const hadith: SahihHit[] = [];
@@ -112,7 +120,7 @@ export function searchSahih(books: { index: SahihIndex; text?: SahihText | null 
     });
     for (const file of text?.kitabs ?? []) for (const item of file.hadith) {
       if (hadith.length >= limit) break;
-      if (item.routes.some(route => holds(plainText(route.text)))) hadith.push({ book: index.slug, n: item.n, kitab: file.n, bab: item.bab });
+      if (item.routes.some(route => holds(plainOf(route)))) hadith.push({ book: index.slug, n: item.n, kitab: file.n, bab: item.bab });
     }
   }
   return { babs, hadith };

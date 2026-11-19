@@ -6,6 +6,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Chip from '@/ui/Chip';
+import LoadingDots from '@/ui/LoadingDots';
 import { usePalette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
@@ -49,7 +50,7 @@ export default function HadithKitabScreen() {
           <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{book.title}</Text>
           <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 26, textAlign: 'right' }}>{kitab.title}</Text>
           {kitab.from > 0 && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{`الأحاديث ${num(kitab.from)}–${num(kitab.to)}`}</Text>}
-          {state !== 'on' && <SahihDownload slug={book.slug} state={state} palette={palette} />}
+          {state !== 'on' ? <SahihDownload slug={book.slug} state={state} palette={palette} /> : !text && <LoadingDots />}
         </View>}
         renderItem={({ item: row }) => row.kind === 'bab'
           ? <View style={{ gap: 6, marginTop: 8 }}>
