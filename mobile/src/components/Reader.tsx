@@ -9,13 +9,13 @@ import { useIsFocused } from 'expo-router';
 import { ArrowLeft, ArrowLeftRight, BookOpenText, BookOpen, Bookmark, Check, Copy, EyeOff, Headphones, Layers, LightbulbOff, ListTree, NotebookPen, History, Play, Pointer, Search, Send, Sparkles, TableOfContents, TextSearch } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
-import { ayahBookmarkId, ayahHref, clearForgotten, markAyah, markWord, wordMarkKey, readAyahMarks, subscribeAyahMarks, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
+import { ayahBookmarkId, ayahHref, clearForgotten, markAyah, wordMarkKey, readAyahMarks, subscribeAyahMarks, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { readFasilas, serverFasilas, setQuranFasila, subscribeFasilas } from '@shared/readingMarks';
 import { readGestures, type Gesture as Touching, type GestureAction } from '@shared/readerGestures';
 import { allForgotten, forgotKeys, forgotLabel, NOTE_NAME, SCOPE_NAMES, selectedText, selectionOf, wordScope, type Scope, type Selection } from '@shared/quran/selection';
 import Tabs from '@/ui/Tabs';
-import { compareKeys, forgottenOrder, isKey, nextForgotten, type RecitePosition } from '@shared/quran/recite';
+import { compareKeys, forgottenOrder, isKey, nextForgotten, reviewPosition, type RecitePosition } from '@shared/quran/recite';
 import TabHint from './TabHint';
 import TopBar, { TOP_BAR } from '@/ui/TopBar';
 import { TAB_BAR, tabBarBottom, tabBarTop } from '@/ui/tabBarSpace';
@@ -199,11 +199,11 @@ export default function Reader() {
     setMark(to.mark && !position ? { key: to.key, page: to.page } : null);
     if (recite === 'review') {
       setReviewing(true);
-      setPosition({ start: markAyah(to.key), ...(markWord(to.key) !== undefined ? { word: markWord(to.key) } : {}), shown: null, words: 0 });
+      setPosition(reviewPosition(to.key));
     } else if (position) {
       // While reciting, a link starts the recitation again from where it leads.
       setReviewing(false);
-      setPosition({ start: markAyah(to.key), ...(markWord(to.key) !== undefined ? { word: markWord(to.key) } : {}), shown: null, words: 0 });
+      setPosition(reviewPosition(to.key));
     }
   }, [position]);
 

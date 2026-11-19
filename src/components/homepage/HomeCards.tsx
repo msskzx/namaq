@@ -7,10 +7,10 @@ import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark, type Bookmark as Saved } from '@shared/bookmarks';
-import { ayahHref, markAyah, readDueMarks, rememberAyah, mostForgotten, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
+import { ayahHref, markAyah, markWord, readDueMarks, rememberAyah, mostForgotten, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { notesByDate, readAyahNotes, serverAyahNotes, subscribeAyahNotes, writeAyahNote } from '@shared/ayahNotes';
 import NoteDialog from '@/components/quran/NoteDialog';
-import { forgottenOrder } from '@shared/quran/recite';
+import { forgottenOrder, reviewHref } from '@shared/quran/recite';
 import { bookmarkReferences } from '@/lib/bookmarkReferences';
 import { BOOKMARK_KIND_LABEL, bookmarkKind, type BookmarkKind } from '@shared/bookmarkKind';
 import { num } from '@shared/quran/arabicNumber';
@@ -23,8 +23,6 @@ import Card from '@/components/common/Card';
 
 /** The same icons as the tab bar, so a saved card says which feature it opens in. */
 const KIND_ICONS: Record<BookmarkKind, typeof BookOpen | typeof TreeIcon> = { tree: TreeIcon, compare: ArrowLeftRight, ayah: BookOpen, card: Bookmark };
-/** A forgotten word is reviewed with its ayah here, until the website reviews the word alone as the app does. */
-export const reviewHref = (key: string) => `${ayahHref(key)}?recite=${markAyah(key)}&review=1`;
 /** The context endpoint takes up to 200 ayat a call. */
 const CHUNK = 200;
 
@@ -38,9 +36,9 @@ const menuAt = (event: MouseEvent<HTMLElement>) => {
   return event.detail ? { x: event.clientX, y: event.clientY } : { x: box.left + box.width / 2, y: box.top };
 };
 
-/** The words of the forgotten ayat, fetched once per list. */
+/** The words of the forgotten ayat (as the Madina page prints them, the ۞ mark left out), fetched once per list. */
 export function useAyahTexts(keys: string[]) {
-  const [texts, setTexts] = useState<Record<string, string>>({});
+  const [texts, setTexts] = useState<Record<string, readonly string[]>>({});
   const wanted = keys.join(',');
   useEffect(() => {
     if (!wanted) return;
@@ -48,7 +46,7 @@ export function useAyahTexts(keys: string[]) {
     const all = wanted.split(',');
     const chunks = Array.from({ length: Math.ceil(all.length / CHUNK) }, (_, at) => all.slice(at * CHUNK, (at + 1) * CHUNK));
     Promise.all(chunks.map(quranContexts))
-      .then(parts => { if (live) setTexts(Object.fromEntries(parts.flat().map(context => [context.ayah.key, context.ayah.words.join(' ')]))); })
+      .then(parts => { if (live) setTexts(Object.fromEntries(parts.flat().map(context => [context.ayah.key, context.ayah.words]))); })
       .catch(() => {});
     return () => { live = false; };
   }, [wanted]);
@@ -116,14 +114,18 @@ export function useHomeCards(data: CardData, forgottenShown = Infinity) {
       <span className={styles.bookText} lang="ar" dir="rtl">{kind === 'card' ? item.text : <MushafText>{item.text}</MushafText>}</span>
     </Card>;
   };
+  /** A forgotten word's card shows the word itself, a forgotten ayah's the ayah (the app's). */
   const forgottenCard = (key: string, wide = false) => {
     const [surah, ayah] = key.split(':').map(Number);
+    const words = texts[markAyah(key)];
+    const word = markWord(key);
+    const text = words && (word === undefined ? words.join(' ') : words[word]);
     return <Card as="button" spine key={key} className={`${styles.book} ${wide ? styles.wide : ''}`} aria-haspopup="dialog" onClick={event => forgottenMenu(key, event)}>
       <span className={styles.bookHead}>
         <span className={styles.bookKind} role="img" aria-label={forgottenLabel} title={forgottenLabel}><LightbulbOff size={16} aria-hidden /></span>
         <span className={styles.bookReferences} lang="ar" dir="rtl"><span>{names.get(surah)} <bdi>{ar ? num(ayah) : ayah}</bdi></span></span>
       </span>
-      <span className={styles.bookText} lang="ar" dir="rtl">{texts[markAyah(key)] && <MushafText>{texts[markAyah(key)]}</MushafText>}</span>
+      <span className={styles.bookText} lang="ar" dir="rtl">{text && <MushafText>{text}</MushafText>}</span>
     </Card>;
   };
   /** A note: the ayah's name over the reader's own words, which are not in the mushaf font. */
