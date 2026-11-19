@@ -107,7 +107,6 @@
     "src/app/quran/openings/OpeningsView.tsx": 1,
     "src/app/quran/prophets/[slug]/ProphetView.tsx": 1,
     "src/app/quran/prophets/[slug]/StoryMap.tsx": 2,
-    "src/app/quran/qiraat/QiraatView.tsx": 1,
     "src/app/quran/read/AyahActions.tsx": 1,
     "src/app/quran/read/BalaghaPanel.tsx": 2,
     "src/app/quran/read/ListenBar.tsx": 4,

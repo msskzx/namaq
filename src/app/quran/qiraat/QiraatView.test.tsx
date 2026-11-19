@@ -1,100 +1,45 @@
 // @vitest-environment jsdom
-import React from 'react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it } from 'vitest';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { ayahWordsOf } from '@shared/quran/quranText/ayahWords';
+import type { MushafPage } from '@shared/quran/readerPage';
+import { qiraatAyat } from '@shared/quran/qiraatData';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import QiraatView from './QiraatView';
-import { variants } from './data/variants';
-import hafs from './data/hafs.fixture.json';
 
-vi.mock('@/components/language/LanguageContext', () => ({
-  useLanguage: () => ({ language: 'ar' }),
-}));
-
-const texts = hafs as Record<string, string>;
-const go = (surah: number, ayah: string) => {
-  fireEvent.change(screen.getByRole('combobox'), { target: { value: String(surah) } });
-  fireEvent.click(screen.getByRole('button', { name: new RegExp(`^${ayah}`) }));
-};
-const entries = variants.map(variant => ({ variant, text: texts[`${variant.surah}:${variant.ayah}`] }));
+// The first 17 pages, as the server reads them: up to 2:106, whose ayah opens with the hizb mark ۞.
+const pages = Array.from({ length: 17 }, (_, i) => JSON.parse(readFileSync(join(__dirname, `../../../../shared/data/quran/mushaf/${i + 1}.json`), 'utf8')) as MushafPage);
+const texts = ayahWordsOf(pages);
 
 afterEach(cleanup);
 
-describe('QiraatView', () => {
-  it('indexes every place by surah, then ayah, and starts on 1:4', () => {
-    const { container } = render(<QiraatView entries={entries} />);
-    expect(screen.getByRole('combobox').querySelectorAll('option')).toHaveLength(new Set(variants.map(v => v.surah)).size);
-    expect(screen.getByRole('navigation', { name: 'المواضع' }).querySelectorAll('button')).toHaveLength(1);
-    expect(container.querySelectorAll('li[data-state]')).toHaveLength(20);
-    expect(container.textContent).toContain('فرق على مستوى الكلمة، وليس نص مصحف تلك الرواية');
+describe('QiraatView: the website\'s «القراءات»', () => {
+  it('lists every place under its surah, the differing words banded in the page words', () => {
+    const { container } = render(<QiraatView texts={texts} />);
+    expect(container.querySelectorAll('article')).toHaveLength(qiraatAyat().length);
+    const place = container.querySelector('#a2-9')!;
+    expect(place.textContent).toContain(texts['2:9'][1]);
+    expect([...place.querySelectorAll('mark')].map(m => m.textContent)).toEqual([texts['2:9'][5]]);
+    expect(place.textContent).toContain('يُخَٰدِعُونَ');
+    // qiraat.json counts the ۞ as a word, so the band stays on نَنسَخۡ and نُنسِهَا, not the word after each.
+    expect([...container.querySelectorAll('#a2-106 mark')].map(m => m.textContent)).toEqual([texts['2:106'][2], texts['2:106'][6]]);
+    expect(texts['2:106'][0]).toBe('۞');
   });
 
-  it('shows the Hafs/Shu\'ba split on 5:6 and withholds the meaning', () => {
-    const { container } = render(<QiraatView entries={entries} />);
-    go(5, '٦');
-    const chip = (name: string) => screen.getByText(name).closest('li')!.getAttribute('data-state');
-    expect(chip('حفص')).toBe('0');
-    expect(chip('شعبة')).toBe('1');
-    expect(container.textContent).toContain('لا يُعرض شرح هنا لأنه موضع خلاف فقهي');
+  it("narrows to a reader, shades his reading, and offers his two riwayat", () => {
+    const { container } = render(<QiraatView texts={texts} />);
+    fireEvent.click(screen.getByRole('tab', { name: 'حمزة' }));
+    expect(container.querySelector('#a2-9')).toBeNull();
+    const place = container.querySelector('#a2-36')!;
+    expect(place.querySelector('[data-marked]')?.textContent).toContain('فَأَزَالَهُمَا');
+    expect(within(screen.getByRole('tablist', { name: 'الرواة' })).getAllByRole('tab').map(t => t.textContent)).toEqual(['حمزة', 'خلف عن حمزة', 'خلاد']);
   });
 
-  it('shows no unreviewed label on an unsourced meaning and greys every chip on 18:86', () => {
-    const { container } = render(<QiraatView entries={entries} />);
-    go(2, '٩');
-    expect(container.textContent).not.toContain('غير موثق');
-    go(18, '٨٦');
-    expect(container.querySelectorAll('li[data-state="unknown"]')).toHaveLength(20);
-  });
-
-  it('lists the places of juz\' 30 under their surah', () => {
-    render(<QiraatView entries={entries} />);
-    fireEvent.change(screen.getByRole('combobox'), { target: { value: '89' } });
-    expect((screen.getByRole('combobox') as HTMLSelectElement).value).toBe('89');
-    expect(screen.getByRole('navigation', { name: 'المواضع' }).querySelectorAll('button')).toHaveLength(variants.filter(v => v.surah === 89).length);
-  });
-
-  it('shows no meaning block for a place that has none', () => {
-    const { container } = render(<QiraatView entries={entries} />);
-    go(89, '٤');
-    expect(container.textContent).not.toContain('المعنى');
-  });
-
-  it('shows both words of 78:37 in one place, coloring only the differing words, with al-Tabari on what the difference changes', () => {
-    const { container } = render(<QiraatView entries={entries} />);
-    go(78, '٣٧');
-    const cards = [...container.querySelectorAll('.row-span-2')];
-    expect(cards).toHaveLength(3);
-    expect(cards.map(c => c.querySelectorAll('mark').length)).toEqual([2, 2, 2]);
-    expect(container.textContent).toContain('المعنى');
-    expect(container.textContent).toContain('الطبري');
-  });
-
-  it('colors the only differing word on 1:4, which differs by one letter', () => {
-    const { container } = render(<QiraatView entries={entries} />);
-    expect([...container.querySelectorAll('.row-span-2')].map(c => c.querySelectorAll('mark').length)).toEqual([1, 1]);
-  });
-
-  it('colors the riwaya pills below by reading and leaves the names above the ayah plain', () => {
-    const { container } = render(<QiraatView entries={entries} />);
-    const hafs = screen.getByText('حفص', { selector: 'li[data-state] *' }).closest('li')!;
-    expect(hafs.className + hafs.innerHTML).toContain('var(--home-highlight-border)');
-    expect(container.querySelector('.row-span-2 p')!.className).not.toMatch(/amber|sky|emerald|rose/);
-  });
-
-  it('nests each imam\'s two riwat under him', () => {
-    render(<QiraatView entries={entries} />);
-    const imams = screen.getByRole('list', { name: 'الأئمة ورواتهم' }).children;
-    expect(imams).toHaveLength(10);
-    for (const imam of imams) expect(imam.querySelectorAll('li[data-state]')).toHaveLength(2);
-  });
-
-  it('says so when no ayah is stored', () => {
-    const { container } = render(<QiraatView entries={[]} />);
-    expect(container.textContent).toContain('لا توجد آيات');
-  });
-
-  it('shows a notice instead of a word-level block when the word is not in the ayah', () => {
-    const broken = [{ ...entries[0], text: 'كتاب' }];
-    const { container } = render(<QiraatView entries={broken} />);
-    expect(container.textContent).toContain('تعذر تحديد الكلمة');
+  it('finds a word without its vowels', () => {
+    const { container } = render(<QiraatView texts={texts} />);
+    fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'يخادعون' } });
+    expect([...container.querySelectorAll('article')].map(a => a.id)).toContain('a2-9');
+    expect(container.querySelectorAll('article').length).toBeLessThan(qiraatAyat().length);
   });
 });

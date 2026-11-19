@@ -130,14 +130,20 @@ export function SadiText({ text, palette }: { text: string; palette: Palette }) 
 }
 
 /** One word the readers differ on: Hafs's reading first, then the others in the accent colour, each with who reads it (the feed's readings card too). */
-export function QiraatWord({ word, palette, bare = false }: { word: WordDifference; palette: Palette;
-  /** Inside another card (the feed's), the rows without a card of their own. */
-  bare?: boolean }) {
-  const rows = word.readings.map((reading, i) => (
-    <View key={i} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 6, borderTopWidth: i ? 1 : 0, borderTopColor: palette.rule }}>
-      <Text style={{ minWidth: 104, maxWidth: '62%', flexShrink: 1, fontFamily: QURAN_FONT, fontSize: 24, lineHeight: 44, textAlign: 'right', writingDirection: 'rtl', color: i ? palette.accent : palette.ink }}>{reading.text}</Text>
-      <Text style={{ flex: 1, fontSize: 14, lineHeight: 22, textAlign: 'right', color: palette.muted }}>{whoReads(reading, word.readings)}</Text>
-    </View>
-  ));
-  return bare ? <View style={{ paddingHorizontal: 14 }}>{rows}</View> : <Card palette={palette} pad={[0, 14]}>{rows}</Card>;
+export function QiraatWord({ word, palette, bare = false, inset = 14, mark }: { word: WordDifference; palette: Palette;
+  /** Inside another card (the feed's), the rows without a card of their own, `inset` from its sides. */
+  bare?: boolean; inset?: number;
+  /** The riwayat the «القراءات» page is narrowed to: their readings are shaded. */
+  mark?: readonly number[] }) {
+  const rows = word.readings.map((reading, i) => {
+    const marked = !!mark?.length && reading.rawis.some(n => mark.includes(n));
+    return (
+      <View key={i} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 6, borderTopWidth: i ? 1 : 0, borderTopColor: palette.rule,
+        ...(marked ? { backgroundColor: `${palette.accent}1f`, paddingHorizontal: 8, marginHorizontal: -8 } : null) }}>
+        <Text style={{ minWidth: 104, maxWidth: '62%', flexShrink: 1, fontFamily: QURAN_FONT, fontSize: 24, lineHeight: 44, textAlign: 'right', writingDirection: 'rtl', color: i ? palette.accent : palette.ink }}>{reading.text}</Text>
+        <Text style={{ flex: 1, fontSize: 14, lineHeight: 22, textAlign: 'right', color: marked ? palette.ink : palette.muted }}>{whoReads(reading, word.readings)}</Text>
+      </View>
+    );
+  });
+  return bare ? <View style={{ paddingHorizontal: inset }}>{rows}</View> : <Card palette={palette} pad={[0, 14]}>{rows}</Card>;
 }
