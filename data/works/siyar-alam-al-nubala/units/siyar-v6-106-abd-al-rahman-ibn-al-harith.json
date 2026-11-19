@@ -78,14 +78,6 @@
       "exact": "وَلاَ صُحْبَةَ لِعَبْدِ الرَّحْمَنِ، بَلْ لَهُ رُؤْيَةٌ، وَتِلْكَ صُحْبَةٌ مُقَيَّدَةٌ"
     },
     {
-      "id": "sp_ah_aisha",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 6,
-      "page": "485",
-      "layer": "MAIN",
-      "exact": "مِنْ أَنْ يَكُوْنَ لِي عَشْرَةُ أَوْلاَدٍ مِنْ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - مِثْلِ عَبْدِ الرَّحْمَنِ بنِ الحَارِثِ"
-    },
-    {
       "id": "sp_ah_nubala",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
@@ -192,13 +184,6 @@
       "id": "m_ah_ruya",
       "parent": "sp_ah_ruya",
       "exact": "لِعَبْدِ الرَّحْمَنِ",
-      "occurrence": 1,
-      "role": "REFERENT"
-    },
-    {
-      "id": "m_ah_comp_prophet",
-      "parent": "sp_ah_aisha",
-      "exact": "رَسُوْلِ اللهِ",
       "occurrence": 1,
       "role": "REFERENT"
     },
@@ -364,18 +349,6 @@
       },
       "restsOn": [
         "st_ah_kunya"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_ah_comp",
-      "subject": "m_ah_ruya",
-      "predicate": "COMPANION_OF",
-      "value": {
-        "object": "m_ah_comp_prophet"
-      },
-      "restsOn": [
-        "st_ah_ruya"
       ],
       "status": "PROPOSED"
     },

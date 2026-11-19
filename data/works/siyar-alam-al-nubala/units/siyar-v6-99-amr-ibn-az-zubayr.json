@@ -61,6 +61,14 @@
       "exact": "وَكَانَ بَيْنَهُ وَبَيْنَ أَخِيْهِ عَبْدِ اللهِ بنِ الزُّبَيْرِ شَرٌّ وَتَقَاطُعٌ"
     },
     {
+      "id": "sp_az_ubaydah_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "473",
+      "layer": "MAIN",
+      "exact": "قِيْلَ: كَتَبَ يَزِيْدُ إِلَى نَائِبِهِ"
+    },
+    {
       "id": "sp_az_ubaydah",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
@@ -75,6 +83,16 @@
       "page": "472",
       "layer": "MAIN",
       "exact": "وَكَانَ بَدِيعَ الجَمَالِ، شَدِيدَ العَارِضَةِ، جَرِيئاً، مَنِيعاً"
+    },
+    {
+      "id": "sp_az_jamal_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "472",
+      "layer": "MAIN",
+      "exact": "بَدِيعَ الجَمَالِ",
+      "prefix": "وَكَانَ ",
+      "suffix": "، شَدِيدَ"
     }
   ],
   "reports": [
@@ -88,6 +106,19 @@
         "workAuthor": true
       },
       "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_az_ubaydah",
+      "unit": "siyar-v6-99-amr-ibn-az-zubayr",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "frame": [
+        "sp_az_ubaydah_frame"
+      ],
+      "origin": {
+        "mention": "m_az_ubaydah_by"
+      },
+      "chainState": "DEFERRED"
     }
   ],
   "statements": [
@@ -109,11 +140,11 @@
     },
     {
       "id": "st_az_ubaydah",
-      "report": "r_az0",
+      "report": "r_az_ubaydah",
       "spans": [
         "sp_az_ubaydah"
       ],
-      "role": "AUTHOR_REPORT"
+      "role": "TRANSMITTED"
     },
     {
       "id": "st_az_jamal",
@@ -152,6 +183,13 @@
       "exact": "عَبْدِ اللهِ بنِ الزُّبَيْرِ",
       "occurrence": 1,
       "role": "REFERENT"
+    },
+    {
+      "id": "m_az_ubaydah_by",
+      "parent": "sp_az_ubaydah_frame",
+      "exact": "قِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
     },
     {
       "id": "m_az_b2",
@@ -337,7 +375,7 @@
       "predicate": "appearance",
       "value": {
         "spans": [
-          "sp_az_jamal"
+          "sp_az_jamal_v"
         ]
       },
       "restsOn": [

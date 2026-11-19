@@ -410,9 +410,10 @@
         "object": "m_ml_comp_prophet"
       },
       "restsOn": [
-        "st_ml_bukhari"
+        "st_ml_bukhari",
+        "st_ml_born"
       ],
-      "status": "PROPOSED"
+      "status": "DISPUTED"
     },
     {
       "id": "a_ml_d97",

@@ -373,8 +373,8 @@
     },
     {
       "id": "m_ku_zayd",
-      "parent": "sp_ku_zuhri",
-      "exact": "زَيْداً",
+      "parent": "sp_ku_ibnuha",
+      "exact": "زَيْدٌ",
       "occurrence": 1,
       "role": "SUBJECT"
     },
@@ -725,7 +725,8 @@
         "object": "m_ku_z_umar"
       },
       "restsOn": [
-        "st_ku_zuhri"
+        "st_ku_zuhri",
+        "st_ku_ibnuha"
       ],
       "status": "PROPOSED"
     },
