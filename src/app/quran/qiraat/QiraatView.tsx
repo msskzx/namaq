@@ -1,180 +1,110 @@
 "use client";
 
-// docs/plans/quran-qiraat.md
-import React, { useState } from 'react';
-import Badge from '@/components/common/Badge';
-import ExternalLink from '@/components/common/ExternalLink';
-import { AyahCard } from '@/components/quran/AyahCard';
-import type { Ayah } from '@/types/quran';
-import { ayahWords } from '@shared/quran/normalize';
-import { chipStates, neighbors, READERS, RIWAYAT, type Variant } from '@/lib/quran/qiraat';
-import { num } from '@shared/quran/arabicNumber';
-import { wordDiff } from '@shared/quran/wordDiff';
-import { mushafText } from '@shared/quran/mushafText';
-import { surahName } from '@shared/quran/surahNames';
+// The website's «القراءات», as the app's page (mobile/src/screens/qiraat.tsx): every place the ten readers differ, under its
+// surah, found by a word or a surah's name, narrowed to a reader or one of his riwayat. docs/plans/quran-qiraat.md
+import { useMemo, useState, type ReactNode } from 'react';
 import Card from '@/components/common/Card';
 import Chip from '@/components/common/Chip';
+import Empty from '@/components/common/Empty';
+import ExternalLink from '@/components/common/ExternalLink';
+import { SearchField } from '@/components/common/Field';
+import QuranWords from '@/components/quran/text/QuranWords';
+import { num } from '@shared/quran/arabicNumber';
+import { QIRAAT_SOURCE, READERS, RIWAYAT, whoReads, type WordDifference } from '@shared/quran/qiraat';
+import { qiraatOf } from '@shared/quran/qiraatData';
+import { filterName, filterRawis, qiraatPlaces, riwayatOf, type QiraatFilter } from '@shared/quran/qiraatPlaces';
+import { surahName } from '@shared/quran/surahNames';
+import { QIRAAT_MEANINGS } from './data/meanings';
 
-export type QiraatEntry = { variant: Variant; text: string };
+/** Each ayah's words as the Madina page prints them, the ۞ mark kept, as qiraat.json counts them. */
+export type AyahTexts = Record<string, string[]>;
 
-const BADGE_COLORS = ['amber', 'blue', 'emerald', 'rose'];
-const WORD_COLORS = ['text-amber-600 dark:text-amber-400', 'text-sky-600 dark:text-sky-400', 'text-emerald-600 dark:text-emerald-400', 'text-rose-600 dark:text-rose-400'];
-const UNCONFIRMED = 'غير مؤكد';
-const SECOND_LABEL = 'فرق على مستوى الكلمة، وليس نص مصحف تلك الرواية';
-
-const sameWord = (w: string) => w.replace(/[\u2060\u0652\u06D6-\u06ED\u08D3-\u08FF]/g, '').replace(/[ىی]/g, 'ي').replace(/ٱ/g, 'ا').replace(/([\u064B-\u0650])\u0651/g, '\u0651$1');
-
-const key = (v: Variant) => `${v.surah}:${v.ayah}`;
-const pediaUrl = (v: Variant) => `https://quranpedia.net/ayahs/${v.surah}/${v.ayah}`;
-
-function Meaning({ meaning }: { meaning: NonNullable<Variant['meaning']> }) {
-  if (meaning.kind === 'quote') {
+function Word({ word, mark }: { word: WordDifference; mark: number[] }) {
+  return word.readings.map((reading, i) => {
+    const marked = mark.length > 0 && reading.rawis.some(n => mark.includes(n));
     return (
-      <div className="flex flex-col gap-1">
-        {meaning.quotes.map(q => <blockquote key={q} className="border-s-2 border-amber-400 ps-3">«{q}»</blockquote>)}
-        <ExternalLink href={meaning.url} className="text-sm underline">{meaning.source}</ExternalLink>
+      <div key={i} data-marked={marked || undefined} className={`flex items-center gap-3 py-1.5 ${i ? 'border-t border-[var(--home-rule)]' : ''} ${marked ? 'bg-[color-mix(in_srgb,var(--home-accent)_12%,transparent)] px-2 -mx-2' : ''}`}>
+        <span className={`min-w-[6.5rem] font-quran text-2xl leading-[1.9] ${i ? 'text-[var(--home-accent)]' : ''}`}>{reading.text}</span>
+        <span className={`flex-1 text-sm leading-6 ${marked ? '' : 'text-[var(--home-muted)]'}`}>{whoReads(reading, word.readings)}</span>
       </div>
     );
-  }
-  return <p>{meaning.text}</p>;
+  });
 }
 
-function hafsWordOf({ variant, text }: QiraatEntry) {
-  const words = ayahWords(text, false);
-  const found = neighbors(words.norm, variant.hafsWord, variant.occurrence);
-  return found ? words.display.slice(found.start, found.end).join(' ') : '';
+/** The page's own card; inside the feed's post, which is a card already, a plain block. */
+function Frame({ lines, id, children }: { lines: boolean; id: string; children: ReactNode }) {
+  return lines
+    ? <div className="flex flex-col gap-1 px-4 py-2.5">{children}</div>
+    : <Card as="article" id={id} className="flex flex-col gap-1 px-4 py-2.5 [content-visibility:auto] [contain-intrinsic-size:auto_16rem]">{children}</Card>;
 }
 
-function VariantView({ entry }: { entry: QiraatEntry }) {
-  const { variant, text } = entry;
-  const words = ayahWords(text, false);
-  const found = neighbors(words.norm, variant.hafsWord, variant.occurrence);
-  const states = chipStates(variant);
-  const hafsWord = hafsWordOf(entry);
-  const rows = variant.readings.map((r, i) => (i === 0 ? hafsWord : r.text ?? ''));
-  const spans = rows.map(r => r.split(' ').filter(Boolean));
-  const differing = spans.map(() => new Set<number>());
-  spans.slice(1).forEach((span, n) => {
-    const d = wordDiff(spans[0].map(sameWord), span.map(sameWord));
-    d.a.forEach(k => differing[0].add(k));
-    d.b.forEach(k => differing[n + 1].add(k));
-  });
-  spans.forEach((span, i) => {
-    if (i > 0 && span.length === spans[0].length) differing[0].forEach(k => differing[i].add(k));
-  });
-  const slots = found ? Object.fromEntries([...differing[0]].map(k => [found.start + k, 0])) : undefined;
-  const ayah = { id: key(variant), number: variant.ayah, text: words.display.join(' '), surah: { number: variant.surah } } as unknown as Ayah;
-  const around = (side: readonly [number, number]) => mushafText(words.display.slice(side[0], side[1]).join(' '));
-
+/**
+ * One place: the ayah with the words the readers differ on banded, then each of those words as every reader reads it. Built
+ * once and drawn by this page and the home feed's readings card, which sets the ayah in the mushaf's own lines instead
+ * (`lines`) and lists at most `max` words before «المزيد».
+ */
+export function QiraatPlace({ ayah, words, text = [], mark = [], lines, max, more }: { ayah: string; words?: number[]; text?: string[]; mark?: number[];
+  lines?: ReactNode; max?: number; more?: string }) {
+  const all = qiraatOf(ayah);
+  const every = (words ?? all.map((_, i) => i)).map(i => all[i]);
+  const shown = max ? every.slice(0, max) : every;
+  const lit = (i: number) => shown.some(word => i >= word.at[0] && i <= word.at[1]);
+  const [surah, number] = ayah.split(':').map(Number);
+  const meaning = QIRAAT_MEANINGS[ayah];
   return (
-    <section className="flex flex-col gap-4">
-      <AyahCard ayah={ayah} slots={slots} />
-      {!found && <Card as="p" className="p-4 text-[var(--home-accent)]">تعذر تحديد الكلمة المختلف فيها في نص الآية، فلا يُعرض الفرق.</Card>}
-      {found && (
-        <div className="flex flex-col gap-3">
-          <div className="grid gap-3 md:grid-cols-2">
-            {rows.map((_, i) => (
-              <Card key={i} className="row-span-2 grid grid-rows-subgrid gap-2 p-4">
-                <p className="text-sm text-[var(--home-muted)]">{states.filter(c => c.state === i).map(c => c.name).join('، ')}</p>
-                <p className="text-2xl leading-[2.2] font-quran">
-                  {around(found.before)}{' '}
-                  {spans[i].length === 0 && <mark className={`bg-transparent font-sans ${WORD_COLORS[i]}`}>{UNCONFIRMED}</mark>}
-                  {spans[i].map((w, k) => (
-                    <React.Fragment key={k}>
-                      {differing[i].has(k) ? <mark className={`bg-transparent ${WORD_COLORS[i]}`}>{mushafText(w)}</mark> : mushafText(w)}{' '}
-                    </React.Fragment>
-                  ))}
-                  {around(found.after)}
-                </p>
-              </Card>
-            ))}
-          </div>
-          <p className="text-sm text-[var(--home-muted)]">{SECOND_LABEL}</p>
+    <Frame lines={!!lines} id={`a${ayah.replace(':', '-')}`}>
+      {lines ?? <>
+        <span className="text-sm text-[var(--home-muted)]">{`${surahName(surah)} ${num(number)}`}</span>
+        <p className="text-[1.35rem] leading-[2.4] text-justify [text-align-last:right]">
+          <QuranWords>
+            {text.map((w, i) => (w === '۞' ? null : <span key={i}>{lit(i) ? <mark className="rounded-sm bg-[color-mix(in_srgb,var(--home-ink)_20%,transparent)] text-inherit">{w}</mark> : w}{' '}</span>))}
+            {num(number)}
+          </QuranWords>
+        </p>
+      </>}
+      <hr className="border-[var(--home-rule)] opacity-60" />
+      {shown.map((word, i) => <div key={`${i}@${word.at.join("-")}`} className={i ? 'border-t border-dashed border-[var(--home-rule)]' : ''}><Word word={word} mark={mark} /></div>)}
+      {shown.length < every.length && more && <a href={more} className="text-sm text-[var(--home-accent)]">المزيد</a>}
+      {!lines && meaning && (
+        <div className="flex flex-col gap-1 pt-2">
+          {meaning.quotes.map(q => <blockquote key={q} className="border-s-2 border-[var(--home-rule)] ps-3">«{q}»</blockquote>)}
+          <ExternalLink href={meaning.url} className="text-sm text-[var(--home-muted)] underline">{meaning.source}</ExternalLink>
         </div>
       )}
-      <div className="flex flex-col gap-2">
-        <ul className="grid gap-3 sm:grid-cols-2" aria-label="الأئمة ورواتهم">
-          {READERS.map(reader => {
-            const mine = states.filter(c => RIWAYAT.find(r => r.id === c.id)?.reader === reader.id);
-            const same = mine.every(c => c.state === mine[0].state);
-            return (
-              <Card as="li" key={reader.id} className="flex flex-col gap-2 p-3">
-                <Badge size="sm" text={reader.name} color={same && mine[0].state !== null ? BADGE_COLORS[mine[0].state!] : 'gray'} />
-                <ul aria-label="الرواة" className="flex flex-wrap gap-2 ms-4 ps-3 border-s-2 border-[var(--home-rule)]">
-                  {mine.map(s => (
-                    <li key={s.id} data-state={s.state ?? 'unknown'}>
-                      <Badge size="sm" text={s.name} color={s.state === null ? 'gray' : BADGE_COLORS[s.state]} />
-                    </li>
-                  ))}
-                </ul>
-              </Card>
-            );
-          })}
-        </ul>
-        <div className="flex flex-wrap items-center gap-2 text-sm">
-          {states.some(c => c.state === null) && <Badge size="sm" color="gray" text={UNCONFIRMED} />}
-        </div>
-        {variant.note && <p className="text-sm text-[var(--home-muted)]">{variant.note}</p>}
+    </Frame>
+  );
+}
+
+export default function QiraatView({ texts }: { texts: AyahTexts }) {
+  const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState<QiraatFilter>({});
+  const surahs = useMemo(() => qiraatPlaces(filter, query), [filter, query]);
+  const mark = filterRawis(filter);
+  return (
+    <div dir="rtl" className="max-w-3xl mx-auto p-4 flex flex-col gap-3 text-[var(--home-ink)]">
+      <h1 className="text-3xl">القراءات</h1>
+      <SearchField label="ابحث عن كلمة أو سورة" placeholder="ابحث عن كلمة أو سورة" value={query} onChangeText={setQuery} className="w-full" />
+      <div role="tablist" aria-label="القرّاء" className="flex flex-wrap gap-2">
+        <Chip role="tab" label="الكل" on={!filter.reader} onClick={() => setFilter({})} />
+        {READERS.map(r => <Chip key={r.id} role="tab" label={r.name} on={filter.reader === r.id} onClick={() => setFilter({ reader: r.id })} />)}
       </div>
-      {variant.meaning && (
-        <div>
-          <h3 className="text-lg">المعنى</h3>
-          <Meaning meaning={variant.meaning} />
-        </div>
+      {filter.reader && (
+        <>
+          <div role="tablist" aria-label="الرواة" className="flex flex-wrap gap-2">
+            <Chip role="tab" label={READERS.find(r => r.id === filter.reader)!.name} on={!filter.riwaya} onClick={() => setFilter({ reader: filter.reader })} />
+            {riwayatOf(filter.reader).map(n => <Chip key={n} role="tab" label={RIWAYAT[n - 1].name} on={filter.riwaya === n} onClick={() => setFilter({ reader: filter.reader, riwaya: n })} />)}
+          </div>
+          <p className="text-[var(--home-muted)]">{`المواضع التي يقرأ فيها ${filterName(filter)} بغير قراءة حفص`}</p>
+        </>
       )}
-      <ExternalLink href={pediaUrl(variant)} className="text-sm underline">
-        قوائم القرّاء من موسوعة القرآن: <bdi dir="ltr">{pediaUrl(variant)}</bdi>
-      </ExternalLink>
-    </section>
-  );
-}
-
-const JUZ_AMMA_FROM = 78;
-const surahLabel = (_entries: QiraatEntry[], surah: number) => surahName(surah);
-
-export default function QiraatView({ entries }: { entries: QiraatEntry[] }) {
-  const [selected, setSelected] = useState(0);
-  if (entries.length === 0) return <p dir="rtl" className="max-w-3xl mx-auto p-4">لا توجد آيات محفوظة لعرض القراءات.</p>;
-  const surah = entries[selected].variant.surah;
-  const surahs = [...new Set(entries.map(e => e.variant.surah))];
-  const here = entries.flatMap((e, i) => (e.variant.surah === surah ? [{ e, i }] : []));
-  const option = (n: number) => (
-    <option key={n} value={n}>{`${surahLabel(entries, n)} (${num(entries.filter(e => e.variant.surah === n).length)})`}</option>
-  );
-  return (
-    <div dir="rtl" className="max-w-3xl mx-auto p-4 flex flex-col gap-4 text-[var(--home-ink)]">
-      <header className="flex flex-col gap-2">
-        <h1 className="flex items-center gap-2 text-3xl">
-          القراءات: الآية نفسها في أكثر من قراءة
-        </h1>
-        <p>
-          {num(entries.length)} موضعًا اختيرت للتجربة، من الفاتحة إلى المسد، وأرقام آياتها على عدّ حفص (الكوفي). في رواية ورش لا تُعدّ البسملة آية في الفاتحة، فتكون «مالك يوم الدين» الآية ٣ لا ٤.
-          وسورة البقرة {num(286)} آية في العدّ الكوفي و{num(287)} في البصري و{num(285)} في المدني.
-        </p>
-        <p>
-          قوائم القرّاء من موسوعة القرآن (Quranpedia): الآيات الأولى من صفحة كل آية، مثل <bdi dir="ltr">https://quranpedia.net/ayahs/1/4</bdi>، وآيات جزء عمّ من ملف بيانات الموسوعة الرسمي للقراءات. ولا تسمّي الموسوعة الكتاب الذي نقلت عنه، وستُراجع على «النشر» في مرحلة التوثيق. القراءات العشر كلها متواترة، والصفحة لا ترجّح بينها.
-        </p>
-      </header>
-      <Card className="flex flex-col gap-3 p-4">
-        <label className="flex flex-wrap items-center gap-3">
-          <span>السورة</span>
-          <select
-            value={surah}
-            onChange={ev => setSelected(entries.findIndex(e => e.variant.surah === Number(ev.target.value)))}
-            className="rounded-lg border border-[var(--home-rule)] bg-[var(--home-card)] px-3 py-2"
-          >
-            <optgroup label="سور أخرى">{surahs.filter(n => n < JUZ_AMMA_FROM).map(option)}</optgroup>
-            <optgroup label="جزء عمّ">{surahs.filter(n => n >= JUZ_AMMA_FROM).map(option)}</optgroup>
-          </select>
-        </label>
-        <nav className="flex flex-wrap items-center gap-2" aria-label="المواضع">
-          <span>الآية</span>
-          {here.map(({ e, i }) => (
-            <Chip key={i} on={i === selected} onClick={() => setSelected(i)} label={num(e.variant.ayah)} />
-          ))}
-        </nav>
-      </Card>
-      <VariantView key={selected} entry={entries[selected]} />
+      {!surahs.length && <Empty text="لا موضع بهذه الكلمة. جرّب كلمة أقصر." />}
+      {surahs.map(({ surah, places }) => (
+        <section key={surah} className="flex flex-col gap-2.5">
+          <h2 className="mt-1.5 text-[var(--home-muted)]">{surahName(surah)}</h2>
+          {places.map(place => <QiraatPlace key={place.key} ayah={place.key} words={place.words} text={texts[place.key] ?? []} mark={mark} />)}
+        </section>
+      ))}
+      {surahs.length > 0 && <ExternalLink href={QIRAAT_SOURCE.url} className="text-sm text-[var(--home-muted)]">{`المصدر: ${QIRAAT_SOURCE.name}`}</ExternalLink>}
     </div>
   );
 }

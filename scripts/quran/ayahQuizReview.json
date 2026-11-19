@@ -1219,6 +1219,8 @@
   ]
  },
  "drop": {
+    "qiraat:2:235:0": "The dump's يَوۡ against أَوۡ is no reading of this word and looks like a slip in the source; not yet checked in al-Nashr (second agent, 2026-11-19)",
+    "qiraat:51:60:0": "Abu Amr is put with يَوۡمِهُمُ, which looks like a slip in the source; not yet checked in al-Nashr (second agent, 2026-11-19)",
   "balagha:6:97": "The marked words «قد فصلنا الآيات لقوم يعلمون» contain no wish or wishing particle, so nothing on the card connects them to the heading «التمني»; the citation looks mismatched to this ayah",
   "balagha:70:22": "Only «إلا المصلين» is shown, an exception cut off from the verse it belongs to (70:19); nothing figurative is visible, so the answer «المجاز» cannot be worked out from the card, and the bare «إلا» points readers to «الحصر والاختصاص»",
   "balagha:4:102": "span runs across two whole ayat (4:102–103, about 1,580 characters) for a few marked words such as «فليصلوا معك» and «فأقيموا الصلاة»; far too long for a phone card.",
@@ -1323,7 +1325,7 @@
   "qiraat:69:20:1": "Ya'qub's dropped ha (كتابيه، حسابيه، سلطانيه) only shows when joining across the end of the ayah",
   "qiraat:69:25:0": "Ya'qub's dropped ha (كتابيه، حسابيه، سلطانيه) only shows when joining across the end of the ayah",
   "qiraat:69:26:0": "Ya'qub's dropped ha (كتابيه، حسابيه، سلطانيه) only shows when joining across the end of the ayah",
-  "qiraat:69:29:1": "Ya'qub's dropped ha (كتابيه، حسابيه، سلطانيه) only shows when joining across the end of the ayah",
+  "qiraat:69:28:0": "Ya'qub's dropped ha (كتابيه، حسابيه، سلطانيه) only shows when joining across the end of the ayah",
   "qiraat:2:245:0": "The reading فَيُضَعِّفُهُ for Ibn Kathir and Abu Ja'far is missing the small waw of the ha's sila (it should be فَيُضَعِّفُهُۥ like the others), so a choice is incompletely vowelled and gives itself away.",
   "qiraat:3:145:1": "The ha of نُؤۡتِهِۦ is a disputed point: Qalun reads it with ikhtilas or sila by two ways and Hisham has three ways, so Nafi's reading is not clean and the groupings (Qalun, Hisham, Ya'qub, Abu Ja'far) are oversimplified.",
   "qiraat:4:115:1": "The ha of وَنُصۡلِهِۦ is a disputed point: Qalun and Ya'qub read it with ikhtilas (not sila), Hisham has several ways and Abu Ja'far's narrators differ, so the riwayat groupings are wrong even though al-Kisa'i's own reading is right.",

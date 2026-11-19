@@ -58,6 +58,7 @@ const USE = {
   balaghaQuiz: { ar: 'اختبار «ما الأسلوب؟»', en: 'the «which style?» quiz', href: '/quizzes' },
   irabQuiz: { ar: 'اختبار «ما إعرابها؟»', en: 'the «what is its i‘rab?» quiz', href: '/quizzes' },
   qiraatQuiz: { ar: 'اختبار «كيف يقرؤها؟»', en: 'the «how does he read it?» quiz', href: '/quizzes' },
+  qiraatWhoQuiz: { ar: 'اختبار «مَن يقرأ هكذا؟»', en: 'the «who reads it so?» quiz', href: '/quizzes' },
   words: { ar: 'عدد الكلمات والكلمات المتقابلة', en: 'word counts and opposite words', href: '/quran/words' },
   trees: { ar: 'الأشجار والمقارنة والبحث', en: 'trees, compare and search', href: '/quran/branches' },
   tuhfa: { ar: 'تحفة الأطفال', en: 'Tuhfat al-Atfal', href: '/quran/tajwid/tuhfat-al-atfal' },
@@ -399,7 +400,7 @@ export const SOURCES: Source[] = [
       ar: 'رخصة الموسوعة: الاستعمال داخل التطبيقات لا يشترط الإسناد، ونذكرها مع الإصدار على كل حال. نشر البيانات ملفًا للتنزيل يلزم فيه ذكرها مع الرابط ورقم الإصدار.',
       en: 'Quranpedia’s licence: use inside apps needs no credit, and we credit it with the version anyway. Republishing the data as a download needs the name, a link and the version.',
     },
-    uses: [USE.qiraat, USE.reader, USE.tafsir, USE.topics, USE.irab, USE.qiraatQuiz],
+    uses: [USE.qiraat, USE.reader, USE.tafsir, USE.topics, USE.irab, USE.qiraatQuiz, USE.qiraatWhoQuiz],
   },
   {
     id: 'gharib-ibn-qutaybah', group: 'books',

@@ -71,3 +71,16 @@ export function whoReads(reading: WordReading, all: WordReading[], sayRest = tru
   }
   return names.join('، ');
 }
+
+/**
+ * The readers both of whose riwayat read a word one way, and none of them another (owner 2026-11-19): where a riwaya reads it
+ * both ways (al-Bazzi at 10:16) a single reading would be half right, so that reader is not asked about it. Each with the
+ * reading he reads (its place in `readings`).
+ */
+export function wholeReaders(readings: WordReading[]): { reader: number; reading: number }[] {
+  return READERS.flatMap((reader, i) => {
+    const own = RIWAYAT.flatMap((riwaya, n) => (riwaya.reader === reader.id ? [n + 1] : []));
+    const reading = readings.findIndex(r => own.every(n => r.rawis.includes(n)) && readings.every(o => o === r || !own.some(n => o.rawis.includes(n))));
+    return reading < 0 ? [] : [{ reader: i, reading }];
+  });
+}

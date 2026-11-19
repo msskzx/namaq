@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Cookies from 'js-cookie';
@@ -50,6 +50,9 @@ import AyahLines, { PageTop, useAyahPage, type Page } from './AyahLines';
 import { useMemorized } from './Memorized';
 import styles from './Homepage.module.css';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
+import { qiraatAyat } from '@shared/quran/qiraatData';
+import { ayahNoteAt } from '@shared/quran/ayahNotes';
+import { QiraatPlace } from '@/app/quran/qiraat/QiraatView';
 import { surahName } from '@shared/quran/surahNames';
 import Card from '@/components/common/Card';
 
@@ -358,6 +361,20 @@ function TreePost({ tree }: { tree: Tree }) {
   </article>;
 }
 
+/**
+ * A place the readers differ, as the app's readings card (owner, 2026-11-19: every phone feature on the website too): the
+ * ayah in the mushaf's own lines and at most two of its words as each reader reads them, the «القراءات» page's own view
+ * (QiraatPlace), and a button that opens that page at this ayah.
+ */
+function QiraatPost({ ayah }: { ayah: string }) {
+  const { pages } = useAyahPage(ayah);
+  const [surah, number] = ayah.split(':').map(Number);
+  const href = `/quran/qiraat#a${ayah.replace(':', '-')}`;
+  return <Post head={<PostHead Icon={Layers} title="من القراءات" sub={`${names[surah]} ${num(number)}`} />} actions={<Action Icon={Layers} label="القراءات كاملة" href={href} />}>
+    <QiraatPlace ayah={ayah} max={2} more={href} lines={pages ? <AyahLines ayah={ayah} pages={pages} shown whole checked={null} /> : <LoadingDots label="جارٍ التحميل" />} />
+  </Post>;
+}
+
 /** Batches added each time the page nears the feed's end. */
 const MORE = 3;
 type Ids = { pairs: (string | null)[]; trees: (string | null)[]; pairKeys?: string[][]; treeKeys?: string[][] };
@@ -452,6 +469,9 @@ export function Feed() {
     if (tree) posts.push(<TreePost key={`t${tree.id}`} tree={tree} />);
     const savedItem = savedOfSlot(saved, day ?? 0, i);
     if (savedItem) posts.push(<SavedPost key={`b${savedItem.id}-${i}`} item={savedItem} />);
+    // A readings card in every batch after the first, as the app's feed has one among its ayah cards.
+    const readings = i > 0 && day && shows('note-qiraat') ? qiraatAyat()[ayahNoteAt(qiraatAyat().length, day, i)] : undefined;
+    if (readings) posts.push(<QiraatPost key={`r${readings}`} ayah={readings} />);
     const story = shows('prophets') ? stories?.find(card => card.slot === i) : undefined;
     if (story) posts.push(<StoryPost key={`s${day}-${i}`} card={story} />);
   }

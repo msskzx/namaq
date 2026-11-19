@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import bank from '../data/quran/ayahQuizzes.json';
-import { balaghaQuiz, irabQuiz, qiraatQuiz, tafsirQuiz, type AyahQuizzes } from './ayahQuizzes';
+import { balaghaQuiz, irabQuiz, qiraatQuiz, qiraatWhoQuiz, tafsirQuiz, type AyahQuizzes } from './ayahQuizzes';
 import { hideQuotes, quotesOf, stem } from './ayahQuizText';
 import { num } from '../quran/arabicNumber';
 import { qiraatOf } from '../quran/qiraatData';
-import { READERS, RIWAYAT } from '../quran/qiraat';
+import { READERS, RIWAYAT, wholeReaders } from '../quran/qiraat';
 
 const data = bank as AyahQuizzes;
 const seeded = (seed: number) => () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
@@ -20,7 +20,7 @@ describe('the four ayah quizzes', () => {
   });
 
   it('every question has its right answer among distinct choices, and an ayah to open', () => {
-    for (const kind of [tafsirQuiz, balaghaQuiz, irabQuiz, qiraatQuiz]) {
+    for (const kind of [tafsirQuiz, balaghaQuiz, irabQuiz, qiraatQuiz, qiraatWhoQuiz]) {
       for (const question of kind.questions(whole, 'medium', seeded(1), 80)) {
         const values = question.choices.map(choice => choice.value);
         expect(new Set(values).size).toBe(values.length);
@@ -70,7 +70,7 @@ describe('the four ayah quizzes', () => {
   });
 
   it('keeps to the scope', () => {
-    for (const kind of [tafsirQuiz, balaghaQuiz, irabQuiz, qiraatQuiz]) {
+    for (const kind of [tafsirQuiz, balaghaQuiz, irabQuiz, qiraatQuiz, qiraatWhoQuiz]) {
       for (const question of kind.questions({ range: { from: 30, to: 30 }, filters: {} }, 'medium', seeded(5))) {
         expect(Number(question.ayahKey!.split(':')[0])).toBeGreaterThanOrEqual(78);
       }
@@ -101,5 +101,23 @@ describe('hiding the quotes', () => {
     expect(stem('وَٱلۡكِتَٰبِ')).toBe('كتب');
     expect(stem('بِٱلۡحَقِّ')).toBe('');
     expect(stem('في')).toBe('');
+  });
+
+  it('«مَن يقرأ هكذا؟» shows one reading of the coloured word; the right reader reads it so, every wrong one wholly another way', () => {
+    expect(qiraatWhoQuiz.count(whole)).toBeGreaterThan(50);
+    for (const question of qiraatWhoQuiz.questions(whole, 'medium', seeded(5), 200)) {
+      const readings = qiraatOf(question.ayahKey!)[Number(question.key.split(':').at(-1))].readings;
+      const shown = readings.findIndex(r => `﴿${r.text.trim()}﴾` === question.passage);
+      expect(shown).toBeGreaterThanOrEqual(0);
+      const whole = wholeReaders(readings);
+      for (const choice of question.choices) {
+        const reads = whole.find(w => w.reader === Number(choice.value))?.reading;
+        expect(reads === shown).toBe(choice.value === question.correctAnswer);
+        expect(reads).toBeDefined();
+      }
+      expect(question.choices.length).toBeGreaterThanOrEqual(2);
+      expect(question.choices.length).toBeLessThanOrEqual(4);
+      expect(READERS[Number(question.correctAnswer)].name).toBe(question.choices.find(c => c.value === question.correctAnswer)!.labelArabic);
+    }
   });
 });

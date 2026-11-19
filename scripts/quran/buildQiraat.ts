@@ -8,6 +8,7 @@ import { farshGroups, sameForm, type DumpReading } from './qiraatFarsh';
 import { madinaSpelling } from './madinaSpelling';
 import { fullyVowelled, officialForm } from './qiraatVowels';
 import handVowels from './qiraatVowels.json';
+import { trimShared } from './qiraatTrim';
 
 // docs/plans/quran-qiraat.md: the word differences (farsh) of the ten readers per ayah, from Quranpedia's qira'at dump,
 // anchored to the words of the bundled Hafs mushaf. Writes shared/data/quran/qiraat.json and a review list.
@@ -183,6 +184,8 @@ const spell = (text: string) => madinaSpelling(text).replace(/ا\u06E1/g, 'ا\u0
 const unvowelled: string[] = [];
 const handUsed = new Set<string>();
 let fromOfficial = 0;
+const trimProblems: string[] = [];
+const moved: { key: string; word: Out }[] = [];
 for (const [key, list] of Object.entries(ayat)) {
   for (const word of list) {
     // Each reading is stored in the Madina page's spelling, the form the screens show.
@@ -213,10 +216,43 @@ for (const [key, list] of Object.entries(ayat)) {
       review.push(`- ${key} «${reading.text}»: the same as another reading once vowelled, merged`);
     }
     word.readings = merged;
+    // Only the words the readers differ on: the context words every reading shares are trimmed (qiraatTrim.ts). A phrase
+    // quoted across the end of an ayah (anchor) starts with `lead` words of the ayah before; a difference left wholly
+    // there moves to that ayah.
+    const lead = word.readings[0].text.split(/\s+/).filter(Boolean).length - (word.at[1] - word.at[0] + 1);
+    const trimmed = trimShared(word.readings.map(r => r.text));
+    const problem = 'problem' in trimmed ? trimmed.problem : trimmed.start < lead && trimmed.end > lead ? 'runs across the end of the ayah before' : '';
+    if (problem || 'problem' in trimmed) { review.push(`- ${key} «${word.readings[0].text}»: ${problem}, shown untrimmed`); trimProblems.push(`${key}:${word.at[0]}`); continue; }
+    word.readings = word.readings.map((r, i) => ({ ...r, text: trimmed.texts[i] }));
+    if (trimmed.end <= lead) {
+      const [s, a] = key.split(':').map(Number);
+      const before = hafs.get(`${s}:${a - 1}`)!;
+      moved.push({ key: `${s}:${a - 1}`, word: { at: [before.length - lead + trimmed.start, before.length - lead + trimmed.end - 1], readings: word.readings } });
+      review.push(`- ${key} «${word.readings[0].text}»: moved to ${s}:${a - 1}, the ayah its word is in`);
+      word.readings = [];
+    } else word.at = [word.at[0] + trimmed.start - lead, word.at[0] + trimmed.end - 1 - lead];
   }
   ayat[key] = list.filter(word => word.readings.length > 1);
   if (!ayat[key].length) delete ayat[key];
 }
+for (const { key, word } of moved) {
+  const list = (ayat[key] ??= []);
+  const clash = list.find(w => w.at[0] <= word.at[1] && word.at[0] <= w.at[1]);
+  if (!clash) { list.push(word); continue; }
+  if (JSON.stringify(clash) !== JSON.stringify(word)) review.push(`- ${key} «${word.readings[0].text}»: moved here but the ayah already has a difference on that word, the moved one left out`);
+}
+// Trimmed, a word the dump quoted twice (alone and with a neighbour, 36:9 «سدا») shows up twice: the same readings once
+// are kept, different ones (3:80) left out, as above.
+for (const [key, list] of Object.entries(ayat)) {
+  const same = (a: Out, b: Out) => a.at[0] === b.at[0] && a.at[1] === b.at[1];
+  const unique = list.filter((w, i) => !list.slice(0, i).some(p => same(p, w) && JSON.stringify(p.readings) === JSON.stringify(w.readings)));
+  const clash = unique.filter(w => unique.some(o => o !== w && same(o, w)));
+  for (const w of clash) review.push(`- ${key} «${w.readings[0].text}»: listed twice with different readings once trimmed, left out`);
+  ayat[key] = unique.filter(w => !clash.includes(w));
+  if (!ayat[key].length) delete ayat[key];
+}
+const overlaps = Object.entries(ayat).filter(([, list]) => list.some((w, i) => list.some((o, j) => i !== j && w.at[0] <= o.at[1] && o.at[0] <= w.at[1])));
+for (const [key] of overlaps) review.push(`- ${key}: two differences share a word`);
 console.log(`vowelled from the King Fahd texts ${fromOfficial}, by hand ${handUsed.size}, still unvowelled ${unvowelled.length}`);
 writeFileSync(join(tmpdir(), 'qiraat-unvowelled.jsonl'), `${unvowelled.join('\n')}\n`);
 const unused = Object.keys(hand).filter(id => !handUsed.has(id));
