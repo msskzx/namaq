@@ -87,6 +87,27 @@ function Nawawi({ entry, palette }: { entry: FortyEntry; palette: Palette }) {
 }
 
 /**
+ * One of the Forty whole: its heading and Companion, al-Nawawi's text, then each book he names with its records, drawn or
+ * read. The hadith's page draws it, and so does a quiz that looks a hadith up. `jibril` goes under al-Nawawi's text.
+ */
+export function FortyHadith({ entry, palette, jibril }: { entry: FortyEntry; palette: Palette; jibril?: React.ReactNode }) {
+  const [mode, setMode] = useState<Mode>('drawing');
+  const bukhari = entry.records.filter(record => record.book === 'bukhari');
+  const muslim = entry.records.filter(record => record.book === 'muslim');
+  const drawn = entry.records.some(record => record.isnad);
+  return <>
+    <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 26, textAlign: 'right' }}>{entry.heading}</Text>
+    <Text style={{ color: palette.muted, fontSize: 16, textAlign: 'right', marginTop: -8 }}>{fromCompanion(entry.companion)}</Text>
+    <Nawawi entry={entry} palette={palette} />
+    {jibril}
+    {drawn && <Tabs label="طريقة العرض" options={MODES} value={mode} onChange={setMode} palette={palette} />}
+    {entry.partial && entry.records.length > 0 && <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>في الصحيحين بعض لفظ الحديث</Text>}
+    {bukhari.length > 0 && <BookRecords title="في صحيح البخاري" records={bukhari} mode={mode} palette={palette} />}
+    {muslim.length > 0 && <BookRecords title="في صحيح مسلم" records={muslim} mode={mode} palette={palette} />}
+  </>;
+}
+
+/**
  * One of al-Nawawi's Forty (owner, 2026-11-18): his text, then each book he names with the records found there, every chain
  * the edition links drawn («الرسم») or the whole text read («النص كاملًا»). No. 2 opens the Jibril pages with their scenes.
  */
@@ -96,30 +117,19 @@ export default function HadithFortyScreen() {
   const bottom = useTabBarSpace();
   const { n = '' } = useLocalSearchParams<{ n?: string }>();
   const entry = fortyEntry(Number(n));
-  const [mode, setMode] = useState<Mode>('drawing');
   const back = () => (router.canGoBack() ? router.back() : toTab('/hadith'));
   if (!entry) return <View style={{ flex: 1, backgroundColor: palette.paper }}><TopBar back={back} /></View>;
-  const bukhari = entry.records.filter(record => record.book === 'bukhari');
-  const muslim = entry.records.filter(record => record.book === 'muslim');
-  const drawn = entry.records.some(record => record.isnad);
   const unit = (id: string) => router.push({ pathname: '/hadith-unit', params: { unit: id } });
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar back={back} title={entry.heading} hideOnScroll />
       <ScrollView onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 14 }}>
-        <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 26, textAlign: 'right' }}>{entry.heading}</Text>
-        <Text style={{ color: palette.muted, fontSize: 16, textAlign: 'right', marginTop: -8 }}>{fromCompanion(entry.companion)}</Text>
-        <Nawawi entry={entry} palette={palette} />
-        {entry.n === 2 && (
+        <FortyHadith entry={entry} palette={palette} jibril={entry.n === 2 && (
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
             <Button Icon={MessagesSquare} label="المشاهد في صحيح مسلم" onPress={() => unit(JIBRIL.muslim)} />
             <Button Icon={MessagesSquare} label="رواية أبي هريرة في البخاري" onPress={() => unit(JIBRIL.bukhari)} />
           </View>
-        )}
-        {drawn && <Tabs label="طريقة العرض" options={MODES} value={mode} onChange={setMode} palette={palette} />}
-        {entry.partial && entry.records.length > 0 && <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>في الصحيحين بعض لفظ الحديث</Text>}
-        {bukhari.length > 0 && <BookRecords title="في صحيح البخاري" records={bukhari} mode={mode} palette={palette} />}
-        {muslim.length > 0 && <BookRecords title="في صحيح مسلم" records={muslim} mode={mode} palette={palette} />}
+        )} />
       </ScrollView>
     </View>
   );

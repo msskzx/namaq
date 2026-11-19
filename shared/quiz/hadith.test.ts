@@ -63,3 +63,14 @@ describe('the hadith quizzes', () => {
     }
   });
 });
+
+describe('ابحث عن الجواب', () => {
+  it('looks a hadith up in the Forty, the asked one marked for after the answer', () => {
+    const forty = (fortyData as AppForty).entries;
+    for (const question of [...narratorQuestions(() => 0.3), ...completeQuestions(() => 0.3)]) {
+      const look = question.look as { view: string; mark: number };
+      expect(look.view).toBe('hadith');
+      expect(forty.some(entry => entry.n === look.mark && entry.records.some(record => question.key.endsWith(`:${record.number}`)))).toBe(true);
+    }
+  });
+});

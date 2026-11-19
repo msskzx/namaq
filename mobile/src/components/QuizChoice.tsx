@@ -8,6 +8,7 @@ import QuizPage from './QuizPage';
 import QuranWords from './quran/text/QuranWords';
 import BookRuns from './quran/text/BookRuns';
 import TermChips from './TermSheet';
+import { LookButton, LookView } from './QuizLook';
 import type { WriteAsk } from '@shared/quiz/score';
 import type { PenRule } from '@shared/quran/writeAyah';
 import { num } from '@shared/quran/arabicNumber';
@@ -32,13 +33,15 @@ function Words({ words, marked, palette }: { words: string[]; marked?: number[];
  * then the choices. Once picked, the right one turns green and a wrong one red; a wrong surah with a look-alike shows it,
  * the words where the two part marked in both.
  */
-export default function QuizChoice({ question, picked, shown, onPick, onReveal, onOpen, header, palette, scroll = true, pen, onWrite, written }: {
+export default function QuizChoice({ question, picked, shown, onPick, onReveal, onOpen, header, palette, scroll = true, pen, onWrite, written, onLook, costs }: {
   question: ChoiceQuestion; picked?: string; shown: boolean; onPick?: (value: string) => void; onReveal?: () => void;
   /** A party's recited ayah (`question.write`): the host's pen rule, what was written sent with `onWrite`, and once revealed, what was `written` (null for nothing). */
   pen?: PenRule; onWrite?: (answer: string[], done: boolean) => void; written?: string[] | null;
   /** The mushaf button under the answer. A card leaves it out and puts it in its own button row (owner, 2026-11-15). */
   onOpen?: (key: string) => void;
   header?: React.ReactNode; palette: Palette;
+  /** «ابحث عن الجواب» was opened (a party counts it); `costs` says under the button what it costs there. */
+  onLook?: () => void; costs?: boolean;
   /** Inside a screen that already scrolls, it does not scroll on its own. */
   scroll?: boolean;
 }) {
@@ -108,6 +111,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
           })}
         </View>
       )}
+      {!answered && revealed && question.look && onPick && <View style={{ paddingHorizontal: 16 }}><LookButton look={question.look} onLook={onLook} costs={costs} palette={palette} /></View>}
       {answered && question.terms && <TermChips names={question.choices.map(choice => question.terms![choice.value]).filter(Boolean)} palette={palette} />}
       {alike && diff && (
         <View style={{ marginHorizontal: 16, borderTopWidth: 1, borderStyle: 'dashed', borderColor: palette.rule, paddingTop: 10, gap: 4 }}>
@@ -123,6 +127,8 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
           <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 28, textAlign: 'right' }}>{question.note.text}</Text>
         </View>
       )}
+      {/* After the answer, the view it was looked up in, the answer lit there, so everyone learns from it (owner, 2026-11-19). */}
+      {answered && question.look && <View style={{ paddingHorizontal: 16 }}><LookView look={question.look} shown palette={palette} /></View>}
       {answered && question.ayahKey && onOpen && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}><Button Icon={BookOpen} accessibilityLabel="في المصحف" onPress={() => onOpen(question.ayahKey!)} /></View>}
     </Box>
   );

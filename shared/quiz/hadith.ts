@@ -31,7 +31,7 @@ const sayingOf = (record: FortyRecord) => {
 const source = (entry: FortyEntry, record: FortyRecord) =>
   `${recordName(record, num)}، ج ${num(record.volume)}، ص ${num(record.pages[0])}؛ الأربعون النووية، ${entry.heading}`;
 
-function choose(key: string, family: string, promptArabic: string, right: string, wrong: string[], note: string, random: Random): ChoiceQuestion | null {
+function choose(key: string, family: string, promptArabic: string, right: string, wrong: string[], note: string, entry: FortyEntry, random: Random): ChoiceQuestion | null {
   const others = [...new Map(wrong.filter(label => bare(label) !== bare(right)).map(label => [bare(label), label])).values()];
   if (others.length < CHOICES - 1) return null;
   const choices = shuffle([right, ...shuffle(others, random).slice(0, CHOICES - 1)], random);
@@ -42,6 +42,8 @@ function choose(key: string, family: string, promptArabic: string, right: string
     choices: choices.map((label, i) => ({ value: String(i), labelArabic: label })),
     correctAnswer: String(choices.indexOf(right)),
     note: { label: 'المصدر', text: note },
+    // Looked up in the Forty, searched by its words; after the answer, this hadith's page.
+    look: { view: 'hadith', mark: entry.n },
     evidence: { claimKeys: [] },
   };
 }
@@ -60,7 +62,7 @@ export function narratorQuestions(random: Random): ChoiceQuestion[] {
     if (namesOf(entry.companion).some(name => bare(saying).includes(name))) return [];
     const also = new Set([entry.companion, ...(entry.alsoFrom ?? [])].map(bare));
     const wrong = all.map(other => other.entry.companion).filter(name => !also.has(bare(name)));
-    const question = choose(`${record.number}`, HADITH_NARRATOR, `${saying}\nعن أي صحابي روى البخاري هذا الحديث؟`, entry.companion, wrong, source(entry, record), random);
+    const question = choose(`${record.number}`, HADITH_NARRATOR, `${saying}\nعن أي صحابي روى البخاري هذا الحديث؟`, entry.companion, wrong, source(entry, record), entry, random);
     return question ? [question] : [];
   }), random);
 }
@@ -84,7 +86,7 @@ export function completeQuestions(random: Random): ChoiceQuestion[] {
     const wrong = shuffle(all.filter(other => other.record !== record), random)
       .filter(other => !seen.has(bare(other.end)) && seen.add(bare(other.end))).slice(0, CHOICES - 1);
     const from = wrong.map(other => `«${other.end}» من ${recordName(other.record, num)}`).join('، ');
-    const question = choose(`${record.number}`, HADITH_COMPLETE, `${start} …»`, end, wrong.map(other => other.end), `${source(entry, record)}. والخيارات الأخرى أواخر أحاديث أخرى: ${from}`, random);
+    const question = choose(`${record.number}`, HADITH_COMPLETE, `${start} …»`, end, wrong.map(other => other.end), `${source(entry, record)}. والخيارات الأخرى أواخر أحاديث أخرى: ${from}`, entry, random);
     return question ? [question] : [];
   }), random);
 }

@@ -65,8 +65,10 @@ export function tiesOf(slug: string): TieGroup[] {
  * list when even that does not fit). The «صلاته» screen draws it, and so may a quiz or a card: `onPick` gets a person
  * with a page, `onShow` a tie to show its sentence.
  */
-export default function TiesRing({ slug, width, palette, onPick, onShow }: {
+export default function TiesRing({ slug, width, palette, onPick, onShow, marked }: {
   slug: string; width: number; palette: Palette;
+  /** A person whose node is framed in green: the answer a quiz asked about, once it is shown. */
+  marked?: string;
   /** A person with a page was tapped. */
   onPick: (slug: string) => void;
   /** A tie to show the sentence that states it (a long press, or a tap on someone with no page). */
@@ -147,7 +149,7 @@ export default function TiesRing({ slug, width, palette, onPick, onShow }: {
             const label = `${tieWord(spot.kind, node.sex, person.sex)}: ${personName(node)}`;
             return (
               <View key={spot.key} style={style}>
-                <Card palette={palette} pad={[6, 8]} picked={node.inApp} faded={!node.inApp} accessibilityRole={node.inApp ? 'link' : 'button'} accessibilityLabel={label}
+                <Card palette={palette} pad={[6, 8]} picked={node.inApp && node.slug !== marked} faded={!node.inApp} outline={node.slug === marked ? palette.green : undefined} accessibilityRole={node.inApp ? 'link' : 'button'} accessibilityLabel={label}
                   onPress={node.inApp ? () => go(node.slug) : () => setShown(spot.tie)} onLongPress={() => setShown(spot.tie)}>
                   {/* What this person is to the one in the middle, on the node itself, so a line's colour is never the only clue. */}
                   <Text style={{ color: kindColor(palette, spot.kind), fontSize: 12, textAlign: 'center' }}>{tieWord(spot.kind, node.sex, person.sex)}</Text>

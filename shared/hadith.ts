@@ -2,6 +2,7 @@
  * The hadith as the website and the phone app show them (src/lib/model/hadithView.ts builds a unit's view; the app reads
  * them from data/hadith/units.json, written by scripts/model/buildAppHadith.ts), and what both draw them with.
  */
+import { normalizeWord } from './quran/normalize';
 
 export type ChainLink =
   | { gap: true }
@@ -154,6 +155,20 @@ export interface FortyEntry {
 export interface AppForty {
   books: Record<'nawawi' | 'bukhari' | 'muslim', { shamela: number; title: string; edition: string }>;
   entries: FortyEntry[];
+}
+
+/**
+ * The Forty holding every word typed (in its number's heading, its Companion or al-Nawawi's text), marks, hamzas and
+ * punctuation set aside: what a quiz's «ابحث عن الجواب» lists.
+ */
+export function searchForty<T extends Pick<FortyEntry, 'heading' | 'companion' | 'text'>>(entries: T[], query: string): T[] {
+  const plain = (text: string) => normalizeWord(text).replace(/[^\u0621-\u064A\s]/g, ' ');
+  const words = plain(query).split(/\s+/).filter(Boolean);
+  if (!words.length) return entries;
+  return entries.filter(entry => {
+    const hay = plain(`${entry.heading} ${entry.companion} ${entry.text}`);
+    return words.every(word => hay.includes(word));
+  });
 }
 
 /** «صحيح البخاري ٥٤» or «صحيح مسلم ١٩٠٧ (١٥٥)», a record's short reference. */
