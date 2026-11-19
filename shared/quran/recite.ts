@@ -1,3 +1,5 @@
+import { ayahHref } from '../ayahMarks';
+
 /**
  * Recite mode (تسميع) in the Quran reader: ayat from a starting ayah on are hidden in place on the page,
  * and the reader reveals them one ayah, or one word, at a time.
@@ -6,6 +8,7 @@ export type AyahKey = string; // "57:1"
 export type RecitePosition = {
   /** First hidden ayah when reciting began; ayat before it stay visible as context. */
   start: AyahKey;
+  /** A forgotten word under review: its place in `start` (from 0, the ۞ mark not counted), the one word hidden and asked. */
   word?: number;
   /** Last ayah revealed in full, or null before the first reveal. */
   shown: AyahKey | null;
@@ -62,19 +65,34 @@ export function stepBack(position: RecitePosition, counts: ReadonlyMap<number, n
 
 export const atStart = (position: RecitePosition) => !position.shown && position.words === 0;
 
-/** URL form: ?recite=57:1&upto=57:4&w=2 */
+/** URL form: ?recite=57:1&upto=57:4&w=2, and ?recite=57:1&word=3 for one forgotten word of the ayah. */
 export function readPosition(params: { get(name: string): string | null }): RecitePosition | null {
   const start = params.get('recite');
   if (!isKey(start)) return null;
   const upto = params.get('upto');
   const words = Number(params.get('w'));
-  return { start, shown: isKey(upto) && compareKeys(upto, start) >= 0 ? upto : null, words: Number.isInteger(words) && words > 0 ? words : 0 };
+  const word = params.get('word');
+  return {
+    start,
+    ...(word !== null && /^(?:0|[1-9]\d*)$/.test(word) ? { word: Number(word) } : {}),
+    shown: isKey(upto) && compareKeys(upto, start) >= 0 ? upto : null,
+    words: Number.isInteger(words) && words > 0 ? words : 0,
+  };
 }
 
 export function positionQuery(position: RecitePosition, extra: Record<string, string> = {}) {
-  const params = new URLSearchParams({ recite: position.start, ...(position.shown ? { upto: position.shown } : {}), ...(position.words ? { w: String(position.words) } : {}), ...extra });
+  const params = new URLSearchParams({ recite: position.start, ...(position.word !== undefined ? { word: String(position.word) } : {}), ...(position.shown ? { upto: position.shown } : {}), ...(position.words ? { w: String(position.words) } : {}), ...extra });
   return params.toString();
 }
+
+/** A forgotten mark (an ayah, or one word of it as "s:a:w") as the first place of a review: only that ayah, or only that word, hidden. */
+export function reviewPosition(mark: string): RecitePosition {
+  const [surah, ayah, word] = mark.split(':');
+  return { start: `${surah}:${ayah}`, ...(word !== undefined ? { word: Number(word) } : {}), shown: null, words: 0 };
+}
+
+/** The website's link that reviews the forgotten ayat from `mark` on, in mushaf order (the app's reviewForgotten). */
+export const reviewHref = (mark: string) => `${ayahHref(mark)}?${positionQuery(reviewPosition(mark), { review: '1' }).replace(/%3A/g, ':')}`;
 
 /** Forgotten ayat in mushaf order, and the one after `current` (wrapping to the first). */
 export function forgottenOrder(keys: Iterable<AyahKey>) {

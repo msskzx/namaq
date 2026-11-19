@@ -33,18 +33,20 @@ export function useAyahPage(ayah: string) {
  * (MushafPage) cut to the lines around the ayah, words in their places. What comes before it shows, the ayah and what
  * follows are hidden, and `write` puts the boxes where the asked words are. `shown` reveals it, `checked` colouring what was written.
  */
-export default function AyahLines({ ayah, pages, write, checked, shown, words = 0, whole = false }: { ayah: string; pages: Pages; write?: Omit<Write, 'before'>; checked: Omit<Checked, 'before'> | null; shown: boolean;
+export default function AyahLines({ ayah, pages, write, checked, shown, words = 0, whole = false, targetWord }: { ayah: string; pages: Pages; write?: Omit<Write, 'before'>; checked: Omit<Checked, 'before'> | null; shown: boolean;
   /** The ayah's first words shown so far, as recite mode's next-word button shows them. */
   words?: number;
   /** The lines as the page sets them, nothing hidden (a saved ayah). */
-  whole?: boolean }) {
+  whole?: boolean;
+  /** A forgotten word under review: its place in the ayah, the one word hidden (the app's). */
+  targetWord?: number }) {
   const parts = useMemo(() => {
     const model = pageModel(pages.data, pages.top);
     const slice = ayahSlice(model.lines, pages.data.items, ayah);
     return slice && { model, slice };
   }, [pages, ayah]);
   const previous = useMemo(() => (pages.previous ? pageEnd(pages.previous.data.items) : null), [pages]);
-  const view = useMemo(() => (parts ? reciteView(parts.model, { start: ayah, shown: shown ? ayah : null, words: shown ? 0 : words }) : null), [parts, ayah, shown, words]);
+  const view = useMemo(() => (parts ? reciteView(parts.model, { start: ayah, ...(targetWord !== undefined ? { word: targetWord } : {}), shown: shown ? ayah : null, words: shown ? 0 : words }) : null), [parts, ayah, shown, words, targetWord]);
   if (!parts || !view) return null;
   return <div lang="ar">
     {parts.slice.before && pages.previous && previous && <MushafPage page={pages.previous.page} data={pages.previous.data} top={pages.previous.top} names={NAMES} slice={previous} />}

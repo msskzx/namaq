@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { markForgotten, rememberAyah, wordMarkKey } from '@shared/ayahMarks';
+import { markForgotten, readDueMarks, rememberAyah, wordMarkKey } from '@shared/ayahMarks';
 import { atStart, revealAyah, stepBack, type RecitePosition } from '@shared/quran/recite';
 import { reciteView, type PageModel } from '@shared/quran/recitePage';
 import { penTargets, type PenRule } from '@shared/quran/writeAyah';
@@ -42,7 +42,8 @@ export function useRecite({ model, position, setPosition, writing, pen, until = 
     setChecked({ key: writeKey, ...graded });
     const key = position.word === undefined ? writeKey : wordMarkKey(writeKey, position.word);
     if (graded.wrong.length) markForgotten(key);
-    else rememberAyah(key);
+    // A right answer rests a mark only when it is due, so a resting one is not pushed further by recitations between reviews.
+    else if (readDueMarks()[key]) rememberAyah(key);
     setPosition(revealAyah(position, writeKey));
     onWritten?.(writeKey, graded);
   } });
