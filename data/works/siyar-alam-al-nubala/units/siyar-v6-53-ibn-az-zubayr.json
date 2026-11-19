@@ -1,0 +1,1138 @@
+{
+  "unit": {
+    "id": "siyar-v6-53-ibn-az-zubayr",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٥٣"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_iz_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "363",
+      "layer": "MAIN",
+      "exact": "٥٣ - عَبْدُ اللهِ بنُ الزُّبَيْرِ بنِ العَوَّامِ بنِ خُوَيْلِدٍ الأَسَدِيُّ"
+    },
+    {
+      "id": "sp_iz_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "363",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ الزُّبَيْرِ بنِ العَوَّامِ بنِ خُوَيْلِدٍ الأَسَدِيُّ",
+      "prefix": "٥٣ -"
+    },
+    {
+      "id": "sp_iz1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "363",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ الزُّبَيْرِ بنِ العَوَّامِ بنِ خُوَيْلِدٍ",
+      "prefix": "٥٣ -",
+      "suffix": "الأَسَدِيُّ"
+    },
+    {
+      "id": "sp_iz2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "363",
+      "layer": "MAIN",
+      "exact": "ابْنِ أَسَدِ بنِ عَبْدِ العُزَّى بنِ قُصَيِّ بنِ كِلاَبِ بنِ مُرَّةَ",
+      "suffix": "، أَمِيْرُ المُؤْمِنِيْنَ،"
+    },
+    {
+      "id": "sp_iz3",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "363",
+      "layer": "MAIN",
+      "exact": "أَبُو بَكْرٍ",
+      "prefix": "أَمِيْرُ المُؤْمِنِيْنَ،",
+      "suffix": "، وَأَبُو خُبَيْبٍ"
+    },
+    {
+      "id": "sp_iz4",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "363",
+      "layer": "MAIN",
+      "exact": "أَبُو خُبَيْبٍ",
+      "prefix": "أَبُو بَكْرٍ، وَ",
+      "suffix": "القُرَشِيُّ،"
+    },
+    {
+      "id": "sp_iz12",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "363",
+      "layer": "MAIN",
+      "exact": "الزُّبَيْرِ بنِ العَوَّامِ بنِ خُوَيْلِدٍ",
+      "prefix": "عَبْدُ اللهِ بنُ"
+    },
+    {
+      "id": "sp_iz16",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "363",
+      "layer": "MAIN",
+      "exact": "كَانَ عَبْدُ اللهِ أَوَّلَ مَولُودٍ لِلْمُهَاجِرِينَ بِالمَدِيْنَةِ."
+    },
+    {
+      "id": "sp_iz19",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "363",
+      "layer": "MAIN",
+      "exact": "أَوَّلَ مَولُودٍ لِلْمُهَاجِرِينَ بِالمَدِيْنَةِ",
+      "prefix": "كَانَ عَبْدُ اللهِ"
+    },
+    {
+      "id": "sp_iz22",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "363",
+      "layer": "MAIN",
+      "exact": "وُلِدَ: سَنَةَ اثْنَتَيْنِ."
+    },
+    {
+      "id": "sp_iz23",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "363",
+      "layer": "MAIN",
+      "exact": "سَنَةَ اثْنَتَيْنِ",
+      "prefix": "وُلِدَ:"
+    },
+    {
+      "id": "sp_iz26",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "364",
+      "layer": "MAIN",
+      "exact": "أَخُوْهُ؛ عُرْوَةُ الفَقِيْهُ، وَابْنَاهُ عَامِرٌ وَعَبَّادٌ",
+      "prefix": "حَدَّثَ عَنْهُ:"
+    },
+    {
+      "id": "sp_iz28",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "380",
+      "layer": "MAIN",
+      "exact": "عُرْوَةُ بنُ الزُّبَيْرِ الفَقِيْهُ",
+      "prefix": "وَمِنْ أَوْلاَدِهَا:"
+    },
+    {
+      "id": "sp_iz32",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "366",
+      "layer": "MAIN",
+      "exact": "سَمِعْتُ عَامِرَ بنَ عَبْدِ اللهِ بنِ الزُّبَيْرِ: سَمِعْتُ أَبِي يَقُوْلُ"
+    },
+    {
+      "id": "sp_iz33",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "364",
+      "layer": "MAIN",
+      "exact": "وَيَحْيَى بنُ عَبَّادِ بنِ عَبْدِ اللهِ"
+    },
+    {
+      "id": "sp_iz40",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "365",
+      "layer": "MAIN",
+      "exact": "قَالَتْ أَسْمَاءُ",
+      "prefix": "بِقُبَاءَ."
+    },
+    {
+      "id": "sp_iz41",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "365",
+      "layer": "MAIN",
+      "exact": "شُعَيْبُ بنُ إِسْحَاقَ: عَنْ هِشَامِ بنِ عُرْوَةَ، عَنْ أَبِيْهِ، وَزَوْجَتِهِ فَاطِمَةَ، قَالاَ:"
+    },
+    {
+      "id": "sp_iz44",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "365",
+      "layer": "MAIN",
+      "exact": "فَجَاءَ عَبْدُ اللهِ بَعْدَ سَبْعِ سِنِيْنَ لِيُبَايِعَ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - أَمَرَهُ بِذَلِكَ أَبُوْهُ الزُّبَيْرُ، فَتَبَسَّمَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - حِيْنَ رَآهُ مُقْبِلاً، ثُمَّ بَايَعَهُ."
+    },
+    {
+      "id": "sp_iz51",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "365",
+      "layer": "MAIN",
+      "exact": "وَفِي البُخَارِيِّ، عَنْ عُرْوَةَ"
+    },
+    {
+      "id": "sp_iz54",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "365",
+      "layer": "MAIN",
+      "exact": "أَنَّ الزُّبَيْرَ أَركَبَ وَلَدَهُ عَبْدَ اللهِ يَوْمَ اليَرْمُوْكِ فَرَساً وَهُوَ ابْنُ عَشْرِ سِنِيْنَ"
+    },
+    {
+      "id": "sp_iz57",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "365",
+      "layer": "MAIN",
+      "exact": "يَوْمَ اليَرْمُوْكِ فَرَساً"
+    },
+    {
+      "id": "sp_iz62",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "367",
+      "layer": "MAIN",
+      "exact": "ذُكِرَ ابْنُ الزُّبَيْرِ عِنْدَ ابْنِ عَبَّاسٍ، فَقَالَ"
+    },
+    {
+      "id": "sp_iz63",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "367",
+      "layer": "MAIN",
+      "exact": "ابْنُ جُرَيْجٍ: عَنِ ابْنِ أَبِي مُلَيْكَةَ، قَالَ:"
+    },
+    {
+      "id": "sp_iz66",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "367",
+      "layer": "MAIN",
+      "exact": "قَارِئٌ لِكِتَابِ اللهِ، عَفِيْفٌ فِي الإِسْلاَمِ، أَبُوْهُ الزُّبَيْرُ، وَأُمُّهُ أَسْمَاءُ"
+    },
+    {
+      "id": "sp_iz68",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "367",
+      "layer": "MAIN",
+      "exact": "قَارِئٌ لِكِتَابِ اللهِ",
+      "suffix": "، عَفِيْفٌ"
+    },
+    {
+      "id": "sp_iz69",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "367",
+      "layer": "MAIN",
+      "exact": "عَفِيْفٌ فِي الإِسْلاَمِ",
+      "prefix": "قَارِئٌ لِكِتَابِ اللهِ،"
+    },
+    {
+      "id": "sp_iz72",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "379",
+      "layer": "MAIN",
+      "exact": "أَسْمَاءَ بِنْتَ أَبِي بَكْرٍ غَسَّلَتِ ابْنَ الزُّبَيْرِ"
+    },
+    {
+      "id": "sp_iz76",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "370",
+      "layer": "MAIN",
+      "exact": "إِبْرَاهِيْمُ بنُ سَعْدٍ: عَنِ الزُّهْرِيِّ، عَنْ أَنَسٍ:"
+    },
+    {
+      "id": "sp_iz79",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "370",
+      "layer": "MAIN",
+      "exact": "أَنَّ عُثْمَانَ أَمَرَ زَيْداً، وَابْنَ الزُّبَيْرِ، وَسَعِيْدَ بنَ العَاصِ، وَعَبْدَ الرَّحْمَنِ بنَ الحَارِثِ بنِ هِشَامٍ، فَنَسَخُوا المَصَاحِفَ"
+    },
+    {
+      "id": "sp_iz84",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "372",
+      "layer": "MAIN",
+      "exact": "قَالَ مُصْعَبُ بنُ عَبْدِ اللهِ، وَغَيْرُهُ"
+    },
+    {
+      "id": "sp_iz87",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "372",
+      "layer": "MAIN",
+      "exact": "كَانَ يُقَالُ لابْنِ الزُّبَيْرِ: عَائِذُ بَيْتِ اللهِ"
+    },
+    {
+      "id": "sp_iz90",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "372",
+      "layer": "MAIN",
+      "exact": "عَائِذُ بَيْتِ اللهِ",
+      "prefix": "كَانَ يُقَالُ لابْنِ الزُّبَيْرِ:"
+    },
+    {
+      "id": "sp_iz93",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "379",
+      "layer": "MAIN",
+      "exact": "قَالَ ابْنُ إِسْحَاقَ، وَعِدَّةٌ"
+    },
+    {
+      "id": "sp_iz96",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "379",
+      "layer": "MAIN",
+      "exact": "قُتِلَ فِي جُمَادَى الآخِرَةِ، سَنَةَ ثَلاَثٍ وَسَبْعِيْنَ."
+    },
+    {
+      "id": "sp_iz98",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "379",
+      "layer": "MAIN",
+      "exact": "سَنَةَ ثَلاَثٍ وَسَبْعِيْنَ",
+      "prefix": "فِي جُمَادَى الآخِرَةِ،"
+    },
+    {
+      "id": "sp_iz100",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "379",
+      "layer": "MAIN",
+      "exact": "فِي جُمَادَى الآخِرَةِ، سَنَةَ ثَلاَثٍ",
+      "prefix": "قُتِلَ"
+    },
+    {
+      "id": "sp_iz102",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "379",
+      "layer": "MAIN",
+      "exact": "وَوَهِمَ ضَمْرَةُ، وَأَبُو نُعَيْمٍ، فَقَالاَ"
+    },
+    {
+      "id": "sp_iz105",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "379",
+      "layer": "MAIN",
+      "exact": "قُتِلَ سَنَةَ اثْنَتَيْنِ.",
+      "prefix": "فَقَالاَ:"
+    },
+    {
+      "id": "sp_iz106",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "379",
+      "layer": "MAIN",
+      "exact": "وَوَهِمَ ضَمْرَةُ، وَأَبُو نُعَيْمٍ",
+      "suffix": "، فَقَالاَ:"
+    },
+    {
+      "id": "sp_iz108",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "379",
+      "layer": "MAIN",
+      "exact": "سَنَةَ اثْنَتَيْنِ",
+      "prefix": "فَقَالاَ: قُتِلَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_iz0",
+      "unit": "siyar-v6-53-ibn-az-zubayr",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_iz_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_iz43",
+      "unit": "siyar-v6-53-ibn-az-zubayr",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_iz40"
+      ],
+      "isnadSpan": "sp_iz41",
+      "origin": {
+        "mention": "m_iz42"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_iz53",
+      "unit": "siyar-v6-53-ibn-az-zubayr",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_iz51"
+      ],
+      "origin": {
+        "mention": "m_iz52"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_iz65",
+      "unit": "siyar-v6-53-ibn-az-zubayr",
+      "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_iz62"
+      ],
+      "isnadSpan": "sp_iz63",
+      "origin": {
+        "mention": "m_iz64"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_iz78",
+      "unit": "siyar-v6-53-ibn-az-zubayr",
+      "ordinal": 5,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_iz76",
+      "origin": {
+        "mention": "m_iz77"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_iz86",
+      "unit": "siyar-v6-53-ibn-az-zubayr",
+      "ordinal": 6,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_iz84"
+      ],
+      "origin": {
+        "mention": "m_iz85"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_iz95",
+      "unit": "siyar-v6-53-ibn-az-zubayr",
+      "ordinal": 7,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_iz93"
+      ],
+      "origin": {
+        "mention": "m_iz94"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_iz104",
+      "unit": "siyar-v6-53-ibn-az-zubayr",
+      "ordinal": 8,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_iz102"
+      ],
+      "origin": {
+        "mention": "m_iz103"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_iz5",
+      "report": "r_iz0",
+      "spans": [
+        "sp_iz_name",
+        "sp_iz1",
+        "sp_iz2",
+        "sp_iz3",
+        "sp_iz4"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_iz20",
+      "report": "r_iz0",
+      "spans": [
+        "sp_iz16"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_iz24",
+      "report": "r_iz0",
+      "spans": [
+        "sp_iz22"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_iz27",
+      "report": "r_iz0",
+      "spans": [
+        "sp_iz26"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_iz45",
+      "report": "r_iz43",
+      "spans": [
+        "sp_iz44"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_iz60",
+      "report": "r_iz53",
+      "spans": [
+        "sp_iz54"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_iz67",
+      "report": "r_iz65",
+      "spans": [
+        "sp_iz66"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_iz82",
+      "report": "r_iz78",
+      "spans": [
+        "sp_iz79"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_iz91",
+      "report": "r_iz86",
+      "spans": [
+        "sp_iz87"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_iz97",
+      "report": "r_iz95",
+      "spans": [
+        "sp_iz96"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_iz107",
+      "report": "r_iz0",
+      "spans": [
+        "sp_iz106"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_iz109",
+      "report": "r_iz104",
+      "spans": [
+        "sp_iz105"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_iz6",
+      "parent": "sp_iz_name",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_iz13",
+      "parent": "sp_iz_name",
+      "exact": "الزُّبَيْرِ بنِ العَوَّامِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_iz17",
+      "parent": "sp_iz16",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_iz29",
+      "parent": "sp_iz26",
+      "exact": "عُرْوَةُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_iz34",
+      "parent": "sp_iz26",
+      "exact": "عَامِرٌ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_iz37",
+      "parent": "sp_iz26",
+      "exact": "عَبَّادٌ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_iz42",
+      "parent": "sp_iz40",
+      "exact": "أَسْمَاءُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_iz46",
+      "parent": "sp_iz44",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_iz48",
+      "parent": "sp_iz44",
+      "exact": "النَّبِيَّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_iz52",
+      "parent": "sp_iz51",
+      "exact": "عُرْوَةَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_iz55",
+      "parent": "sp_iz54",
+      "exact": "عَبْدَ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_iz58",
+      "parent": "sp_iz54",
+      "exact": "اليَرْمُوْكِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_iz64",
+      "parent": "sp_iz62",
+      "exact": "ابْنِ عَبَّاسٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_iz73",
+      "parent": "sp_iz66",
+      "exact": "أَسْمَاءُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_iz77",
+      "parent": "sp_iz76",
+      "exact": "أَنَسٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_iz80",
+      "parent": "sp_iz79",
+      "exact": "وَابْنَ الزُّبَيْرِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_iz85",
+      "parent": "sp_iz84",
+      "exact": "مُصْعَبُ بنُ عَبْدِ اللهِ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_iz88",
+      "parent": "sp_iz87",
+      "exact": "لابْنِ الزُّبَيْرِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_iz94",
+      "parent": "sp_iz93",
+      "exact": "ابْنُ إِسْحَاقَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_iz103",
+      "parent": "sp_iz102",
+      "exact": "ضَمْرَةُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_iz7",
+      "mention": "m_iz6",
+      "agent": "abdullah-ibn-az-zubayr",
+      "basis": [
+        {
+          "span": "sp_iz_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_iz14",
+      "mention": "m_iz13",
+      "agent": "az-zubayr-ibn-al-awwam",
+      "basis": [
+        {
+          "span": "sp_iz12",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_iz18",
+      "mention": "m_iz17",
+      "agent": "abdullah-ibn-az-zubayr",
+      "basis": [
+        {
+          "span": "sp_iz_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_iz30",
+      "mention": "m_iz29",
+      "agent": "urwah-ibn-az-zubayr",
+      "basis": [
+        {
+          "span": "sp_iz28",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_iz35",
+      "mention": "m_iz34",
+      "agent": "amir-ibn-abdullah-ibn-az-zubayr",
+      "basis": [
+        {
+          "span": "sp_iz32",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_iz38",
+      "mention": "m_iz37",
+      "agent": "abbad-ibn-abdullah-ibn-az-zubayr",
+      "basis": [
+        {
+          "span": "sp_iz33",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_iz47",
+      "mention": "m_iz46",
+      "agent": "abdullah-ibn-az-zubayr",
+      "basis": [
+        {
+          "span": "sp_iz_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_iz56",
+      "mention": "m_iz55",
+      "agent": "abdullah-ibn-az-zubayr",
+      "basis": [
+        {
+          "span": "sp_iz_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_iz59",
+      "mention": "m_iz58",
+      "event": "yarmuk",
+      "basis": [
+        {
+          "span": "sp_iz57",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_iz74",
+      "mention": "m_iz73",
+      "agent": "asma-bint-abi-bakr",
+      "basis": [
+        {
+          "span": "sp_iz72",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_iz81",
+      "mention": "m_iz80",
+      "agent": "abdullah-ibn-az-zubayr",
+      "basis": [
+        {
+          "span": "sp_iz_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_iz89",
+      "mention": "m_iz88",
+      "agent": "abdullah-ibn-az-zubayr",
+      "basis": [
+        {
+          "span": "sp_iz_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_iz8",
+      "subject": "m_iz6",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_iz1",
+          "sp_iz2"
+        ]
+      },
+      "restsOn": [
+        "st_iz5"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iz9",
+      "subject": "m_iz6",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_iz1"
+        ]
+      },
+      "restsOn": [
+        "st_iz5"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iz10",
+      "subject": "m_iz6",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_iz3"
+        ]
+      },
+      "restsOn": [
+        "st_iz5"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iz11",
+      "subject": "m_iz6",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_iz4"
+        ]
+      },
+      "restsOn": [
+        "st_iz5"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iz15",
+      "subject": "m_iz6",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_iz13"
+      },
+      "restsOn": [
+        "st_iz5"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iz21",
+      "subject": "m_iz17",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_iz19"
+        ]
+      },
+      "restsOn": [
+        "st_iz20"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iz25",
+      "subject": "m_iz6",
+      "predicate": "born.year",
+      "value": {
+        "parsed": 2,
+        "spans": [
+          "sp_iz23"
+        ]
+      },
+      "restsOn": [
+        "st_iz24"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iz31",
+      "subject": "m_iz6",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_iz29"
+      },
+      "restsOn": [
+        "st_iz27"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iz36",
+      "subject": "m_iz34",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_iz6"
+      },
+      "restsOn": [
+        "st_iz27"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iz39",
+      "subject": "m_iz37",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_iz6"
+      },
+      "restsOn": [
+        "st_iz27"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iz49",
+      "subject": "m_iz46",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_iz48"
+      },
+      "restsOn": [
+        "st_iz45"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iz50",
+      "subject": "m_iz46",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_iz44"
+        ]
+      },
+      "restsOn": [
+        "st_iz45"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iz61",
+      "subject": "m_iz55",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_iz58"
+      },
+      "restsOn": [
+        "st_iz60"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iz70",
+      "subject": "m_iz6",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_iz68"
+        ]
+      },
+      "restsOn": [
+        "st_iz67"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iz71",
+      "subject": "m_iz6",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_iz69"
+        ]
+      },
+      "restsOn": [
+        "st_iz67"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iz75",
+      "subject": "m_iz6",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_iz73"
+      },
+      "restsOn": [
+        "st_iz67"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iz83",
+      "subject": "m_iz80",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_iz79"
+        ]
+      },
+      "restsOn": [
+        "st_iz82"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iz92",
+      "subject": "m_iz88",
+      "predicate": "name.laqab",
+      "value": {
+        "spans": [
+          "sp_iz90"
+        ]
+      },
+      "restsOn": [
+        "st_iz91"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iz99",
+      "subject": "m_iz6",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 73,
+        "spans": [
+          "sp_iz98"
+        ]
+      },
+      "restsOn": [
+        "st_iz97"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iz101",
+      "subject": "m_iz6",
+      "predicate": "died.month",
+      "value": {
+        "parsed": 6,
+        "spans": [
+          "sp_iz100"
+        ]
+      },
+      "restsOn": [
+        "st_iz97"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_iz110",
+      "subject": "m_iz6",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 72,
+        "spans": [
+          "sp_iz108"
+        ],
+        "decadeFrom": "sp_iz98"
+      },
+      "restsOn": [
+        "st_iz109",
+        "st_iz107"
+      ],
+      "status": "DISPUTED"
+    }
+  ]
+}

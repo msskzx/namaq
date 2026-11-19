@@ -138,6 +138,21 @@ describe('coverageOf', () => {
     ).toThrow(/page 42 is missing/);
   });
 
+  it('ends an entry at a next heading printed without a space after the dash («٤ -عبد»)', () => {
+    const pages = { '41': '٣ - الزُّبَيْرُ بنُ العَوَّامِ\n\nنَصٌّ هُنَا.\n\n٤ -عَبْدُ الرَّحْمَنِ\n\nخَامِسٌ.' };
+    const cov = coverageFor((f) => (f.spans = [heading]), pages);
+    expect(cov.bounded).toBe(true);
+    expect(cov.notModeled.map((s) => s.text)).not.toContain('خَامِسٌ.');
+  });
+
+  it('reads on past a printed page the manifest lists as skipped', () => {
+    const pages = { '41': '٣ - الزُّبَيْرُ بنُ العَوَّامِ\n\nنَصٌّ هُنَا.', '43': 'بَاقٍ.\n\n٤ - عَبْدُ الرَّحْمَنِ' };
+    const manifest = { slug: 'wit', title: 't', volumes: [{ number: 4, lastPrintedPage: 50, skippedPrintedPages: [42] }] };
+    const cov = coverageFor((f) => (f.spans = [heading]), pages, manifest);
+    expect(cov.bounded).toBe(true);
+    expect(cov.notModeled.map((s) => s.text)).toContain('بَاقٍ.');
+  });
+
   it('reports an entry with no next heading and no known last page as not bounded', () => {
     const pages = { '41': '٣ - الزُّبَيْرُ بنُ العَوَّامِ\n\nنَصٌّ هُنَا.' };
     expect(coverageFor((f) => (f.spans = [heading]), pages).bounded).toBe(false);

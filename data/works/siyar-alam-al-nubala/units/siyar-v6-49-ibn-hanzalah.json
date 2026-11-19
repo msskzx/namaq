@@ -1,0 +1,282 @@
+{
+  "unit": {
+    "id": "siyar-v6-49-ibn-hanzalah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٤٩"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ah_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "321",
+      "layer": "MAIN",
+      "exact": "٤٩ - عَبْدُ اللهِ بنُ حَنْظَلَةَ الغَسِيْلِ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sp_ah_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "321",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ حَنْظَلَةَ الغَسِيْلِ الأَنْصَارِيُّ",
+      "prefix": "٤٩ -"
+    },
+    {
+      "id": "sp_ah1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "321",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ حَنْظَلَةَ",
+      "prefix": "٤٩ -",
+      "suffix": "الغَسِيْلِ"
+    },
+    {
+      "id": "sp_ah2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "321",
+      "layer": "MAIN",
+      "exact": "ابْنِ أَبِي عَامِرٍ الرَّاهبِ عَبْدِ عَمْرٍو بنِ صَيفِيِّ بنِ النُّعْمَانِ",
+      "suffix": "، أَبُو عَبْدِ الرَّحْمَنِ"
+    },
+    {
+      "id": "sp_ah8",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "321",
+      "layer": "MAIN",
+      "exact": "أَبُو عَبْدِ الرَّحْمَنِ",
+      "prefix": "بنِ النُّعْمَانِ،"
+    },
+    {
+      "id": "sp_ah13",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "322",
+      "layer": "MAIN",
+      "exact": "وَقَدْ رَأَى النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - يَطُوْفُ بِالبَيْتِ عَلَى نَاقَةٍ."
+    },
+    {
+      "id": "sp_ah14",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "322",
+      "layer": "MAIN",
+      "exact": "إِسْنَادُهُ حَسَنٌ.",
+      "prefix": "نَاقَةٍ."
+    },
+    {
+      "id": "sp_ah18",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "322",
+      "layer": "MAIN",
+      "exact": "وَهُوَ: ابْنُ جَمِيْلَةَ بِنْتِ عَبْدِ اللهِ بنِ أُبَيِّ ابْنِ سَلُوْلٍ."
+    },
+    {
+      "id": "sp_ah20",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "322",
+      "layer": "MAIN",
+      "exact": "جَمِيْلَةَ بِنْتِ عَبْدِ اللهِ",
+      "prefix": "وَهُوَ: ابْنُ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ah0",
+      "unit": "siyar-v6-49-ibn-hanzalah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ah_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ah3",
+      "report": "r_ah0",
+      "spans": [
+        "sp_ah_name",
+        "sp_ah2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ah15",
+      "report": "r_ah0",
+      "spans": [
+        "sp_ah13",
+        "sp_ah14"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ah19",
+      "report": "r_ah0",
+      "spans": [
+        "sp_ah18"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ah4",
+      "parent": "sp_ah_name",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ah10",
+      "parent": "sp_ah_name",
+      "exact": "حَنْظَلَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ah16",
+      "parent": "sp_ah13",
+      "exact": "النَّبِيَّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ah21",
+      "parent": "sp_ah18",
+      "exact": "جَمِيْلَةَ بِنْتِ عَبْدِ اللهِ بنِ أُبَيِّ ابْنِ سَلُوْلٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ah5",
+      "mention": "m_ah4",
+      "agent": "abdullah-ibn-hanzalah",
+      "basis": [
+        {
+          "span": "sp_ah_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ah11",
+      "mention": "m_ah10",
+      "agent": "hanzalah-ibn-abi-amir",
+      "basis": [
+        {
+          "span": "sp_ah2",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ah22",
+      "mention": "m_ah21",
+      "agent": "jamilah-bint-abdullah-ibn-ubayy",
+      "basis": [
+        {
+          "span": "sp_ah20",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ah6",
+      "subject": "m_ah4",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ah1",
+          "sp_ah2"
+        ]
+      },
+      "restsOn": [
+        "st_ah3"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ah7",
+      "subject": "m_ah4",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ah1"
+        ]
+      },
+      "restsOn": [
+        "st_ah3"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ah9",
+      "subject": "m_ah4",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_ah8"
+        ]
+      },
+      "restsOn": [
+        "st_ah3"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ah12",
+      "subject": "m_ah4",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ah10"
+      },
+      "restsOn": [
+        "st_ah3"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ah17",
+      "subject": "m_ah4",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_ah16"
+      },
+      "restsOn": [
+        "st_ah15"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ah23",
+      "subject": "m_ah4",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ah21"
+      },
+      "restsOn": [
+        "st_ah19"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

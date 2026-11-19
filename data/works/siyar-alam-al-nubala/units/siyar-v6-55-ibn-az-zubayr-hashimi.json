@@ -1,0 +1,345 @@
+{
+  "unit": {
+    "id": "siyar-v6-55-ibn-az-zubayr-hashimi",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٥٥"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_zh_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "381",
+      "layer": "MAIN",
+      "exact": "٥٥ - عَبْدُ اللهِ بنُ الزُّبَيْرِ بنِ عَبْدِ المُطَّلِبِ الهَاشِمِيُّ"
+    },
+    {
+      "id": "sp_zh_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "381",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ الزُّبَيْرِ بنِ عَبْدِ المُطَّلِبِ الهَاشِمِيُّ",
+      "prefix": "٥٥ -"
+    },
+    {
+      "id": "sp_zh1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "381",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ الزُّبَيْرِ بنِ عَبْدِ المُطَّلِبِ",
+      "prefix": "٥٥ -",
+      "suffix": "الهَاشِمِيُّ"
+    },
+    {
+      "id": "sp_zh7",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "381",
+      "layer": "MAIN",
+      "exact": "الزُّبَيْرِ بنِ عَبْدِ المُطَّلِبِ",
+      "prefix": "عَبْدُ اللهِ بنُ"
+    },
+    {
+      "id": "sp_zh11",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "381",
+      "layer": "MAIN",
+      "exact": "وَأُمُّهُ: عَاتِكَةُ بِنْتُ أَبِي وَهْبٍ المَخْزُوْمِيَّةُ، مِنْ مُسْلِمَةِ الفَتْحِ."
+    },
+    {
+      "id": "sp_zh12",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "381",
+      "layer": "MAIN",
+      "exact": "عَاتِكَةُ بِنْتُ أَبِي وَهْبٍ",
+      "prefix": "وَأُمُّهُ:"
+    },
+    {
+      "id": "sp_zh17",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "382",
+      "layer": "MAIN",
+      "exact": "كَانَ مَوْصُوَفاً بِالشَّجَاعَةِ وَالفُرُوْسِيَّةِ."
+    },
+    {
+      "id": "sp_zh20",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "382",
+      "layer": "MAIN",
+      "exact": "قَالَ ابْنُ سَعْدٍ: أَخْبَرَنَا مُحَمَّدُ بنُ عُمَرَ، حَدَّثَنِي هِشَامُ بنُ عُمَارَةَ، عَنْ أَبِي الحُوَيْرِثِ، قَالَ:"
+    },
+    {
+      "id": "sp_zh23",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "382",
+      "layer": "MAIN",
+      "exact": "أَوَّلُ مَنْ قُتِلَ يَوْمَ أَجْنَادِيْنَ بَطْرِيقٌ، بَرَزَ يَدْعُو إِلَى البِرَازِ، فَبَرَزَ إِلَيْهِ عَبْدُ اللهِ بنُ الزُّبَيْرِ بنِ عَبْدِ المُطَّلِبِ"
+    },
+    {
+      "id": "sp_zh26",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "382",
+      "layer": "MAIN",
+      "exact": "وَأَجْنَادِيْنُ",
+      "prefix": "قَالَ الوَاقِدِيُّ:"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_zh0",
+      "unit": "siyar-v6-55-ibn-az-zubayr-hashimi",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_zh_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_zh22",
+      "unit": "siyar-v6-55-ibn-az-zubayr-hashimi",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_zh20",
+      "origin": {
+        "mention": "m_zh21"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_zh2",
+      "report": "r_zh0",
+      "spans": [
+        "sp_zh_name",
+        "sp_zh1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zh15",
+      "report": "r_zh0",
+      "spans": [
+        "sp_zh11",
+        "sp_zh_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zh18",
+      "report": "r_zh0",
+      "spans": [
+        "sp_zh17"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_zh29",
+      "report": "r_zh22",
+      "spans": [
+        "sp_zh23"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_zh3",
+      "parent": "sp_zh_name",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zh8",
+      "parent": "sp_zh_name",
+      "exact": "الزُّبَيْرِ بنِ عَبْدِ المُطَّلِبِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zh13",
+      "parent": "sp_zh11",
+      "exact": "عَاتِكَةُ بِنْتُ أَبِي وَهْبٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_zh21",
+      "parent": "sp_zh20",
+      "exact": "أَبِي الحُوَيْرِثِ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_zh24",
+      "parent": "sp_zh23",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_zh27",
+      "parent": "sp_zh23",
+      "exact": "أَجْنَادِيْنَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_zh4",
+      "mention": "m_zh3",
+      "agent": "abdullah-ibn-az-zubayr-ibn-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_zh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zh9",
+      "mention": "m_zh8",
+      "agent": "al-zubayr-ibn-abd-al-muttalib-al-hashimi",
+      "basis": [
+        {
+          "span": "sp_zh7",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zh14",
+      "mention": "m_zh13",
+      "agent": "atikah-bint-abi-wahb",
+      "basis": [
+        {
+          "span": "sp_zh12",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zh25",
+      "mention": "m_zh24",
+      "agent": "abdullah-ibn-az-zubayr-ibn-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_zh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_zh28",
+      "mention": "m_zh27",
+      "event": "ajnadayn",
+      "basis": [
+        {
+          "span": "sp_zh26",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_zh5",
+      "subject": "m_zh3",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_zh1"
+        ]
+      },
+      "restsOn": [
+        "st_zh2"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zh6",
+      "subject": "m_zh3",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_zh1"
+        ]
+      },
+      "restsOn": [
+        "st_zh2"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zh10",
+      "subject": "m_zh3",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_zh8"
+      },
+      "restsOn": [
+        "st_zh2"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zh16",
+      "subject": "m_zh3",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_zh13"
+      },
+      "restsOn": [
+        "st_zh15"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zh19",
+      "subject": "m_zh3",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_zh17"
+        ]
+      },
+      "restsOn": [
+        "st_zh18"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_zh30",
+      "subject": "m_zh24",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_zh27"
+      },
+      "restsOn": [
+        "st_zh29"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
