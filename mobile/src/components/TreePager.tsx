@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Pressable, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { Text } from '@/ui/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
@@ -119,6 +120,28 @@ function ConnectionChips({ group, selected, onToggle, palette }: { group: Group;
         );
       })}
     </View>
+  );
+}
+
+/**
+ * A tree on the branches tab as a page that scrolls (owner, 2026-11-19): the tree keeps its frame, a lit path's ayat are added
+ * under it at their whole height, and the page scrolls down to them instead of the tree shrinking for a small box of its own.
+ * With nothing lit there is nothing to scroll, so every drag is the tree's (its pull down still opens the search).
+ */
+function ScrollingTree({ view, studio, children }: { view: Size; studio: boolean;
+  children: (view: Size, ayatRoom: { height: number; set: (height: number) => void; most: number } | undefined, inScroll: boolean) => React.ReactNode }) {
+  const [room, setRoom] = useState(0);
+  // Past a page of cards they scroll inside, so the page never scrolls the tree wholly away.
+  const ayatRoom = useMemo(() => ({ height: room, set: setRoom, most: Math.round(view.height * 0.9) }), [room, view.height]);
+  // The studio keeps its ayah card in the frame, as before, so the tree it grows stays in sight.
+  const added = studio ? 0 : room;
+  const scroller = useRef<React.ComponentRef<typeof ScrollView>>(null);
+  useEffect(() => { if (!added) scroller.current?.scrollTo({ y: 0, animated: false }); }, [added]);
+  return (
+    // The page keeps its top bar while it scrolls: hiding it would resize the page, and with it the tree.
+    <ScrollView ref={scroller} scrollEnabled={added > 0} showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
+      {children({ width: view.width, height: view.height + added }, studio ? undefined : ayatRoom, added > 0)}
+    </ScrollView>
   );
 }
 
@@ -368,10 +391,16 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
                   growth={current && growth.studio && growth.kind !== 'tree' ? { hidden: growth.hidden, now: growth.now, ask: growth.ask } : undefined}
                   reading={current && growth.studio && growth.kind === 'read'} onScroll={current && !embedded ? shrink : undefined}
                   below={group?.citations.length && !embedded ? <BookQuote citations={group.citations} onMore={() => setEvidence(group)} palette={palette} /> : undefined} />
-                : <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={atAround}
-                  rotated={rotatedId === pieces[at].id} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined} shareRef={at === index ? shareRef : undefined}
-                  initialCamera={at === index ? restore.current : undefined}
-                  onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio ? onPull : undefined} footer={footer} footHeight={FOOT} actions={actions} chips inScroll={!!embedded && embedded.inScroll !== false} fixed={!embedded || !!embedded.ayatRoom} lit={embedded?.lit ? [embedded.lit] : undefined} ayatRoom={embedded?.ayatRoom} framed={!!embedded?.ayatRoom} />}
+                : embedded
+                  ? <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={atAround}
+                    rotated={rotatedId === pieces[at].id} shareRef={at === index ? shareRef : undefined}
+                    onTap={tap} onMove={move} footer={footer} footHeight={FOOT} actions={actions} chips inScroll={embedded.inScroll !== false} fixed={!!embedded.ayatRoom} lit={embedded.lit ? [embedded.lit] : undefined} ayatRoom={embedded.ayatRoom} framed={!!embedded.ayatRoom} />
+                  : <ScrollingTree view={view} studio={at === index && !!treeGrowth}>{(page, ayatRoom, inScroll) => (
+                    <TreeCard piece={pieces[at]} list={list} palette={palette} view={page} lane={at === index ? lane : undefined} around={atAround}
+                      rotated={rotatedId === pieces[at].id} growth={at === index ? treeGrowth : undefined} sceneRef={at === index ? sceneRef : undefined} shareRef={at === index ? shareRef : undefined}
+                      initialCamera={at === index ? restore.current : undefined}
+                      onCamera={at === index ? remember : undefined} onTap={tap} onMove={move} onPull={at === index && !growth.studio && !inScroll ? onPull : undefined} footer={footer} footHeight={FOOT} actions={actions} chips inScroll={inScroll} fixed ayatRoom={ayatRoom} />
+                  )}</ScrollingTree>}
             </View>
             );
           })}

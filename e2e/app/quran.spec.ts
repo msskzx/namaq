@@ -233,6 +233,8 @@ test.describe('branches', () => {
     await box.press('Enter');
     const save = page.getByRole('button', { name: 'حفظ الشجرة' }).first();
     await expect(save).toBeVisible();
+    // The tab's first-visit hint lies over the chips under a full-height tree.
+    await page.getByRole('button', { name: /اضغط لإخفاء التلميح/ }).click();
     const before = await save.boundingBox();
     await page.getByRole('button', { name: `سورة ${S(15)}` }).click();
     await expect(page.getByRole('button', { name: `قارن ${S(15)} ٤٥` })).toBeVisible();

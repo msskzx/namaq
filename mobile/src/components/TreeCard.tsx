@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { View, type LayoutChangeEvent } from 'react-native';
+import { useWindowDimensions, View, type LayoutChangeEvent } from 'react-native';
 import { Gesture, GestureDetector, type GestureType } from 'react-native-gesture-handler';
 import Animated, { cancelAnimation, useAnimatedStyle, useSharedValue, withTiming, type SharedValue } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
@@ -68,13 +68,17 @@ type Props = {
    * In a feed (home): the room under the chips for a lit path's ayat is added below by the page (`height`, asked for with
    * `set`) instead of kept empty, so the card is short until a path is lit and the tree never changes size.
    */
-  ayatRoom?: { height: number; set: (height: number) => void };
+  ayatRoom?: { height: number; set: (height: number) => void;
+    /** The most room the cards take before they scroll inside: the page's own height, where the page is shorter than the screen. */
+    most?: number };
   /** The tree in a card's own frame (home), its buttons under the frame, as the compare card has them. */
   framed?: boolean;
 };
 
 /** The room the fixed frame keeps under the chips for the lit ayat; more than fit there scroll. */
 export const AYAH_SPACE = 184;
+/** The most of the screen's height a lit path's ayat take below the tree before they scroll inside. */
+const AYAH_SCREEN = 0.85;
 const AYAH_GAP = 8;
 
 const BIG = 20000;
@@ -116,8 +120,12 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
   // so a long ayah or several read whole and the tree gives up only what they need; more than that scrolls. In the studio it
   // stays AYAH_SPACE, so the tree keeps still while the ayat take turns.
   const [ayatHeight, setAyatHeight] = useState(0);
-  // In a feed the frame already holds the room it asked for, so half is taken of the frame without it, or the room feeds its own cap.
-  const fitted = Math.round(Math.min(Math.max(AYAH_SPACE, ayatHeight + AYAH_GAP + 8), Math.max(AYAH_SPACE, (full.height - (ayatRoom?.height ?? 0)) * 0.5)));
+  const { height: screen } = useWindowDimensions();
+  // When the page adds the room below (a feed, the branches tab), the cards grow the page instead (owner, 2026-11-19): the tree keeps
+  // its size, the ayat read whole and the page scrolls; only more than about a screen of them scrolls inside.
+  const grown = Math.round(ayatHeight ? Math.min(ayatHeight + AYAH_GAP + 8, ayatRoom?.most ?? screen * AYAH_SCREEN) : AYAH_SPACE);
+  // In the fixed frame alone the tree gives the cards what they need, up to half the frame.
+  const fitted = ayatRoom ? grown : Math.round(Math.min(Math.max(AYAH_SPACE, ayatHeight + AYAH_GAP + 8), Math.max(AYAH_SPACE, full.height * 0.5)));
   const room = growth || !readKeys.length ? AYAH_SPACE : fitted;
   const strip = fixed ? ayatRoom?.height ?? room : readKeys.length ? stripHeight : 0;
   const askRoom = ayatRoom?.set;
@@ -236,6 +244,28 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
       mode.value = 'idle';
     });
 
+  // On the ayah card only a sideways drag is taken, as a swipe to the next tree; up and down stay the page's.
+  const cardSwipe = Gesture.Pan()
+    .activeOffsetX([-10, 10]).failOffsetY([-10, 10])
+    .onStart(() => {
+      if (!lane) return;
+      cancelAnimation(lane.offset);
+      from.value = Math.round(lane.offset.value / lane.width);
+      scheduleOnRN(onMove);
+    })
+    .onUpdate(event => {
+      if (!lane) return;
+      const forward = event.translationX > 0;
+      const open = forward ? from.value + 1 < lane.count : from.value > 0;
+      lane.offset.value = from.value * lane.width + (open ? event.translationX : event.translationX / 4);
+    })
+    .onEnd(event => {
+      if (!lane) return;
+      scheduleOnRN(onMove);
+      lane.settle(from.value, event.translationX, event.velocityX);
+    });
+  if (alongside) cardSwipe.simultaneousWithExternalGesture(alongside);
+
   if (inScroll && !zoomed) pan.activeOffsetX([-10, 10]).failOffsetY([-10, 10]);
   else pan.minDistance(8);
   if (alongside) pan.simultaneousWithExternalGesture(alongside);
@@ -246,11 +276,14 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
     transform: [{ translateX: camera.value.x }, { translateY: camera.value.y }, { scale: camera.value.s }],
   }));
 
-  // The fixed frame's ayah card scrolls on its own, outside the tree's gestures, so a drag on it is not a swipe or a pull.
+  // The fixed frame's ayah card is outside the tree's gestures, so a drag up or down on it scrolls the page (or the cards) and never
+  // moves a zoomed tree; a sideways swipe on it still brings the next tree (owner, 2026-11-19).
   const ayahCard = fixed && (
+    <GestureDetector gesture={cardSwipe} touchAction="pan-y">
     <View style={{ position: 'absolute', left: 0, right: 0, top: view.height + footHeight + AYAH_GAP - rise, direction: 'ltr', opacity: content ? 1 : 0 }}>
       <PathAyat ayahKeys={readKeys} presentation={card.presentation} width={full.width} palette={palette} maxHeight={(ayatRoom?.height ?? room) - AYAH_GAP - 8} onContent={setAyatHeight} shown={shownWords} around={around} reading={touring ? growth!.now : undefined} />
     </View>
+    </GestureDetector>
   );
   return (
     <View style={{ width: full.width, height: full.height }}>
