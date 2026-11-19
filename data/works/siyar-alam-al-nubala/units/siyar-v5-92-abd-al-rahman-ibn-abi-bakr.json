@@ -1,0 +1,368 @@
+{
+  "unit": {
+    "id": "siyar-v5-92-abd-al-rahman-ibn-abi-bakr",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٩٢"
+    }
+  },
+  "spans": [
+    {
+      "id": "hd",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "471",
+      "layer": "MAIN",
+      "exact": "٩٢ - عَبْدُ الرَّحْمَنِ بنُ أَبِي بَكْرٍ الصِّدِّيْقِ"
+    },
+    {
+      "id": "n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "471",
+      "layer": "MAIN",
+      "exact": "عَبْدُ الرَّحْمَنِ بنُ أَبِي بَكْرٍ الصِّدِّيْقِ"
+    },
+    {
+      "id": "sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "471",
+      "layer": "MAIN",
+      "exact": "عَبْدُ الرَّحْمَنِ بنُ",
+      "prefix": "-"
+    },
+    {
+      "id": "fa",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "471",
+      "layer": "MAIN",
+      "exact": "أَبِي بَكْرٍ الصِّدِّيْقِ"
+    },
+    {
+      "id": "sb",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "471",
+      "layer": "MAIN",
+      "exact": "شَقِيْقُ أُمِّ المُؤْمِنِيْنَ عَائِشَةَ."
+    },
+    {
+      "id": "sb_a",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "471",
+      "layer": "MAIN",
+      "exact": "أُمِّ المُؤْمِنِيْنَ عَائِشَةَ"
+    },
+    {
+      "id": "v1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "471",
+      "layer": "MAIN",
+      "exact": "قَتَلَ يَوْمَ اليَمَامَةِ سَبْعَةً مِنْ كِبَارِهِمْ."
+    },
+    {
+      "id": "d1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "472",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ: فِي سَنَةِ ثَلاَثٍ وَخَمْسِيْنَ. هكَذَا وَرَّخُوْهُ"
+    },
+    {
+      "id": "d1y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "472",
+      "layer": "MAIN",
+      "exact": "سَنَةِ ثَلاَثٍ وَخَمْسِيْنَ"
+    },
+    {
+      "id": "d1n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "472",
+      "layer": "MAIN",
+      "exact": "وَلاَ يَسْتَقِيْمُ؛ فَإِنَّ فِي (صَحِيْحِ مُسْلِمٍ) : أَنَّهُ دَخَلَ عَلَى عَائِشَةَ يَوْمَ مَوْتِ سَعْدٍ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r0",
+      "unit": "siyar-v5-92-abd-al-rahman-ibn-abi-bakr",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "hd",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_15",
+      "unit": "siyar-v5-92-abd-al-rahman-ibn-abi-bakr",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_sp14"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_1",
+      "report": "r0",
+      "spans": [
+        "n1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_7",
+      "report": "r0",
+      "spans": [
+        "sb"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_11",
+      "report": "r0",
+      "spans": [
+        "v1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_16",
+      "report": "r_15",
+      "spans": [
+        "d1"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_18",
+      "report": "r0",
+      "spans": [
+        "d1n"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_s2",
+      "parent": "n1",
+      "exact": "عَبْدُ الرَّحْمَنِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o5",
+      "parent": "n1",
+      "exact": "أَبِي بَكْرٍ الصِّدِّيْقِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_s8",
+      "parent": "sb",
+      "exact": "شَقِيْقُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o9",
+      "parent": "sb",
+      "exact": "عَائِشَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_s12",
+      "parent": "v1",
+      "exact": "قَتَلَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sp14",
+      "parent": "d1",
+      "exact": "وَرَّخُوْهُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_s17",
+      "parent": "d1",
+      "exact": "تُوُفِّيَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_s2",
+      "mention": "m_s2",
+      "agent": "abd-al-rahman-ibn-abi-bakr",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o5",
+      "mention": "m_o5",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "fa",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s8",
+      "mention": "m_s8",
+      "agent": "abd-al-rahman-ibn-abi-bakr",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o9",
+      "mention": "m_o9",
+      "agent": "aisha-bint-abi-bakr",
+      "basis": [
+        {
+          "span": "sb_a",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s12",
+      "mention": "m_s12",
+      "agent": "abd-al-rahman-ibn-abi-bakr",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s17",
+      "mention": "m_s17",
+      "agent": "abd-al-rahman-ibn-abi-bakr",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_3",
+      "subject": "m_s2",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "n1"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_4",
+      "subject": "m_s2",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sex"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_6",
+      "subject": "m_s2",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_o5"
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_10",
+      "subject": "m_s8",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_o9"
+      },
+      "restsOn": [
+        "st_7"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_13",
+      "subject": "m_s12",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "v1"
+        ]
+      },
+      "restsOn": [
+        "st_11"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_19",
+      "subject": "m_s17",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 53,
+        "spans": [
+          "d1y"
+        ]
+      },
+      "restsOn": [
+        "st_16",
+        "st_18"
+      ],
+      "status": "DISPUTED"
+    }
+  ]
+}

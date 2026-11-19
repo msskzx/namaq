@@ -77,6 +77,50 @@ Neither item gets a counter. The Quran selection's counter counts a complete
 reading of the three surahs, never individual ayat. In round 2 it must render
 through the agreed Quran module, preserving all mushaf signs.
 
+## Batch 1: morning and evening (2026-11-19)
+
+The owner asked to grow the page toward the report's ~200 graded items, one occasion at a time. The book has 1,263
+numbered entries in 336 chapters (Shamela 1956's own numbering). This batch reads every report of «باب ما يقال عند
+الصباح وعند المساء» (205–239, pp. 76–85) and adds the twelve whose hadith has a named sahih or hasan judgment, all
+checked by `npm run adhkar:check` against both books.
+
+| Item | Report | Named judgment |
+| --- | --- | --- |
+| `morning-evening-master-forgiveness` | 205 | al-Bukhari's Sahih, as al-Nawawi names it (`in-sahih`) |
+| `morning-evening-hundred-praise` | 206 | Ibn Hajar, 2:343, sahih; counter 100 |
+| `evening-kingdom` | 210 | Ibn Hajar, 2:355, sahih |
+| `evening-perfect-words` | 211 | Ibn Hajar, 2:356, sahih |
+| `evening-pleased` | 214 | Ibn Hajar, 2:371, hasan |
+| `morning-bear-witness` | 215 | Ibn Hajar, 2:375, hasan; counter 4 («فإن قالها أربعًا») |
+| `morning-thanks` | 216 | Ibn Hajar, 2:380, hasan |
+| `morning-evening-oneness` | 219 | Ibn Hajar, 2:386, sahih |
+| `morning-evening-wellness` | 221 | Ibn Hajar, 2:390, hasan; Abu Bakrah's three times quoted, no counter |
+| `morning-fitra` | 225 | Ibn Hajar, 2:401, hasan |
+| `morning-evening-living` | 230 | Ibn Hajar, 2:407, hasan |
+| `morning-knowledge` | 232 | Ibn Hajar, 2:411, hasan |
+
+Left out, each weak or *gharib* with a weak narrator in Ibn Hajar's or al-Nawawi's words: 220, 222, 223, 224, 226,
+227, 228, 229, 231, 233, 235, 236, 237 (only one narrator lifts it to the Prophet ﷺ; the others stop at Abu
+al-Darda'), 238, 239. Report 234 is not a dhikr to say. Report 209 (travel before dawn) waits for the travel batch and
+218 (at bedtime) for the sleep batch. Where al-Nawawi gives only the start of the other time's wording («أصبحنا وأصبح
+الملك لله ...») or says «مثل ذلك», only the time with full printed words is shown, as with report 208.
+
+Two judgments al-Nawawi quotes are not shown because Ibn Hajar answers them on the cited pages: al-Tirmidhi's «حسن
+صحيح غريب» for 214 (Ibn Hajar, 2:371: al-Tirmidhi's book has «حسن غريب», «ولم أر لفظة صحيح في كتاب الترمذي») and
+al-Nawawi's «بإسناد صحيح» for 225 (2:402: «لا يتأتى الحكم بصحته»). Ibn Hajar's own hasan stands for both. Report
+221's times come from Abu Bakrah's own practice («تعيدها حين تصبح ثلاثًا، وثلاثًا حين تُمسي»), which he says follows
+the Prophet ﷺ («إني سمعتُ رسولَ الله ﷺ يدعو بهنّ»); both are quoted in its reference. Report 230 names no collection
+of its own («وروينا فيه», Ibn al-Sunni's book per Ibn Hajar), so its card lists none.
+
+Three new fields keep the words as printed: `content.parts` (the pieces either side of a narrator's remark or a line
+end, joined for display), `noteQuote` (that remark, shown in the reference) and `fixes`. A fix corrects a printing slip
+only from a named source, shown in the reference: report 225's «نبِيِّا» reads «نبِيِّنا» from al-Nawawi's own
+comment under it; report 214's «نَبِيًَّا» reads as in al-Nawawi's note under it. Two fixes rest on the same words printed in
+another hadith of the book, not this one, and say so by their citation: 214's «رَبًَّا» as in report 29, p. 18, and
+221's «أعُوذَ بِكَ مِنْ عَذَابِ» as «أعُوذُ» in report 174, p. 68. The second reviewer flagged these two as by analogy.
+
+The website has no adhkar page, so this batch changes the app only; the website's search leaves the adhkar out as before.
+
 ## Dark-mode sketch
 
 The sketch imports the real app Card, Tabs, TopBar, Reference, Button, IconButton,

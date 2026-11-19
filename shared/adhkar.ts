@@ -10,8 +10,12 @@ export type AdhkarCitation = {
 };
 
 export type DhikrGrade = {
-  /** `isnad-sahih` is a judgment on the chain alone («بإسناد صحيح», «صحيح الإسناد»), not on the hadith. */
-  rank: 'sahih' | 'hasan' | 'hasan-sahih' | 'isnad-sahih';
+  /**
+   * `isnad-sahih` is a judgment on the chain alone («بإسناد صحيح», «صحيح الإسناد»), not on the hadith.
+   * `in-sahih` is the compiler's own judgment by placing it in his Sahih («صحيح البخاري», «صحيح مسلم»), as al-Nawawi
+   * names the book; used only where Ibn Hajar's Nata'ij has no sentence of its own on that route.
+   */
+  rank: 'sahih' | 'hasan' | 'hasan-sahih' | 'isnad-sahih' | 'in-sahih';
   scholar: string;
   quote: string;
   citation: AdhkarCitation;
@@ -21,7 +25,11 @@ export type DhikrGrade = {
 export type Dhikr = {
   id: string;
   occasions: readonly AdhkarOccasion[];
-  content: { kind: 'text'; text: string } | {
+  /**
+   * `parts`: where the book breaks the words (a narrator's remark, a line end), the pieces as printed, in order;
+   * `text` is them joined by spaces, after any `fixes`.
+   */
+  content: { kind: 'text'; text: string; parts?: readonly string[] } | {
     kind: 'quran';
     ranges: readonly { surah: number; from: number; to: number }[];
   };
@@ -32,6 +40,13 @@ export type Dhikr = {
   repeat?: { count: number; quote: string; scope: 'whole-selection' };
   instructionQuote?: string;
   virtueQuote?: string;
+  /** A remark in the report shown with the reference (a narrator's doubt, the Prophet ﷺ as the source of a companion's words). */
+  noteQuote?: string;
+  /**
+   * Printing slips corrected in the shown text, each from a named source (owner, 2026-11-19: every fix comes from a
+   * source): `printed` is in the book, `reads` is what is shown, `quote` at `citation` gives the right reading.
+   */
+  fixes?: readonly { printed: string; reads: string; quote: string; citation: AdhkarCitation }[];
 };
 
 export const ADHKAR: readonly Dhikr[] = [
@@ -499,6 +514,502 @@ export const ADHKAR: readonly Dhikr[] = [
       }
     ],
     "occasionQuote": "حين يُمسي وحين يُصبح"
+  },
+  {
+    "id": "morning-evening-master-forgiveness",
+    "occasions": [
+      "morning",
+      "evening"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "اللَّهُمَّ أنْتَ رَبِّي لا إِلهَ إِلاَّ أنْتَ، خَلَقْتَنِي وأنا عَبْدُكَ وأنا على عَهْدِكَ وَوَعْدِكَ ما اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرّ مَا صَنَعْتُ، أبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأبُوءُ بِذَنبي فاغْفِرْ لي فإنَّه لا يَغْفِرُ الذُّنُوبَ إِلاَّ أَنْتَ"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 76,
+      "url": "https://shamela.ws/book/1956/74",
+      "report": 205
+    },
+    "collections": [
+      "صحيح البخاري"
+    ],
+    "grades": [
+      {
+        "rank": "in-sahih",
+        "scholar": "البخاري",
+        "quote": "صحيح البخاري",
+        "citation": {
+          "source": "adhkar-nawawi",
+          "volume": 1,
+          "page": 76,
+          "url": "https://shamela.ws/book/1956/74",
+          "report": 205
+        },
+        "reportedBy": "النووي"
+      }
+    ],
+    "occasionQuote": "إذا قال ذلك حين يُمسي فمات من ليلته دخل الجنة، أو كانَ من أهل الجنة، وإذا قال ذلك حين يُصبح فَمَاتَ مِنْ يَوْمِهِ ... مثله",
+    "virtueQuote": "دخل الجنة، أو كانَ من أهل الجنة",
+    "noteQuote": "سَيِّدُ الاسْتِغْفَارِ"
+  },
+  {
+    "id": "morning-evening-hundred-praise",
+    "occasions": [
+      "morning",
+      "evening"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "سُبْحانَ اللَّهِ وبحمده"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 76,
+      "url": "https://shamela.ws/book/1956/74",
+      "report": 206
+    },
+    "collections": [
+      "صحيح مسلم"
+    ],
+    "grades": [
+      {
+        "rank": "sahih",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث صحيح، أخرجه مسلم والترمذي",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 2,
+          "page": 343,
+          "url": "https://shamela.ws/book/30108/931"
+        }
+      }
+    ],
+    "occasionQuote": "مَنْ قالَ حِينَ يُصْبحُ وَحِينَ يُمْسِي",
+    "repeat": {
+      "count": 100,
+      "quote": "مائة مَرَّةٍ",
+      "scope": "whole-selection"
+    },
+    "virtueQuote": "لَمْ يأْتِ أحَدٌ يَوْمَ القِيامَةِ بأفْضَلَ مِمَّا جاءَ بِهِ إِلاَّ أحَدٌ قالَ مثْلَ ما قالَ أوْ زَادَ عليه"
+  },
+  {
+    "id": "evening-kingdom",
+    "occasions": [
+      "evening"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "أمْسَيْنا وأمْسَى المُلْكُ لِلَّهِ، والحَمْدُ لِلَّهِ، لا إِلهَ إِلاَّ الله وحده لا شريك له لَهُ المُلْكُ وَلَهُ الحَمْدُ وَهُوَ على كُلّ شئ قَديرٌ، رَبّ أسألُكَ خَيْرَ ما فِي هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَها وأعُوذ بِكَ مِنْ شَرّ ما في هَذِهِ اللَّيْلَةِ وَشَرّ مَا بَعْدَهَا، رَبّ أَعُوذُ بِكَ مِنَ الكَسَل وَسُوءِ الكِبَرِ، أعُوذُ بِكَ مِنْ عَذَابٍ في النَّارِ وَعَذَابٍ في القَبْرِ",
+      "parts": [
+        "أمْسَيْنا وأمْسَى المُلْكُ لِلَّهِ، والحَمْدُ لِلَّهِ، لا إِلهَ إِلاَّ الله وحده لا شريك له",
+        "لَهُ المُلْكُ وَلَهُ الحَمْدُ وَهُوَ على كُلّ شئ قَديرٌ، رَبّ أسألُكَ خَيْرَ ما فِي هَذِهِ اللَّيْلَةِ وَخَيْرَ مَا بَعْدَها وأعُوذ بِكَ مِنْ شَرّ ما في هَذِهِ",
+        "اللَّيْلَةِ وَشَرّ مَا بَعْدَهَا، رَبّ أَعُوذُ بِكَ مِنَ الكَسَل وَسُوءِ الكِبَرِ، أعُوذُ بِكَ مِنْ عَذَابٍ في النَّارِ وَعَذَابٍ في القَبْرِ"
+      ]
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 77,
+      "url": "https://shamela.ws/book/1956/75",
+      "report": 210
+    },
+    "collections": [
+      "صحيح مسلم"
+    ],
+    "grades": [
+      {
+        "rank": "sahih",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث صحيح، أخرجه مسلم والنسائي",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 2,
+          "page": 355,
+          "url": "https://shamela.ws/book/30108/944"
+        }
+      }
+    ],
+    "occasionQuote": "كان النبي ﷺ إذا أمسى قال",
+    "noteQuote": "قال الراوي: أراه قال"
+  },
+  {
+    "id": "evening-perfect-words",
+    "occasions": [
+      "evening"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "أعُوذُ بكلمات الله التامات من شر ما خَلَقَ"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 78,
+      "url": "https://shamela.ws/book/1956/76",
+      "report": 211
+    },
+    "collections": [
+      "صحيح مسلم"
+    ],
+    "grades": [
+      {
+        "rank": "sahih",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث صحيح، أخرجه مسلم عن أبي الطاهر",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 2,
+          "page": 356,
+          "url": "https://shamela.ws/book/30108/945"
+        }
+      }
+    ],
+    "occasionQuote": "لَوْ قُلْتَ حِينَ أمْسَيْتَ",
+    "virtueQuote": "لَمْ تَضُرَّكَ"
+  },
+  {
+    "id": "evening-pleased",
+    "occasions": [
+      "evening"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "رَضِيتُ بالله رَبًّا، وبالإسلام دينا، وبمحمد ﷺ نَبِيًّا"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 79,
+      "url": "https://shamela.ws/book/1956/77",
+      "report": 214
+    },
+    "collections": [
+      "كتاب الترمذي"
+    ],
+    "grades": [
+      {
+        "rank": "hasan",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث حسن، أخرجه الترمذي",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 2,
+          "page": 371,
+          "url": "https://shamela.ws/book/30108/963"
+        }
+      }
+    ],
+    "occasionQuote": "مَنْ قالَ حِينَ يُمْسِي",
+    "virtueQuote": "كانَ حَقًّا على الله تعالى أنْ يُرْضِيَهُ",
+    "fixes": [
+      {
+        "printed": "رَبًَّا",
+        "reads": "رَبًّا",
+        "quote": "رَضِيتُ بالله رَبًّا",
+        "citation": {
+          "source": "adhkar-nawawi",
+          "volume": 1,
+          "page": 18,
+          "url": "https://shamela.ws/book/1956/16",
+          "report": 29
+        }
+      },
+      {
+        "printed": "نَبِيًَّا",
+        "reads": "نَبِيًّا",
+        "quote": "نبيًّا",
+        "citation": {
+          "source": "adhkar-nawawi",
+          "volume": 1,
+          "page": 79,
+          "url": "https://shamela.ws/book/1956/77",
+          "report": 214
+        }
+      }
+    ]
+  },
+  {
+    "id": "morning-bear-witness",
+    "occasions": [
+      "morning"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "اللَّهُمَّ إِنِّي أصْبَحْتُ أُشْهِدُكَ وأُشْهِدُ حَمَلَةَ عَرْشِكَ وَمَلائِكَتَكَ وَجَمِيعَ خَلْقِكَ أنَّكَ أنتَ الله الذي لا إِلهَ إِلاَّ أنْتَ، وأنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 79,
+      "url": "https://shamela.ws/book/1956/77",
+      "report": 215
+    },
+    "collections": [
+      "سنن أبي داود"
+    ],
+    "grades": [
+      {
+        "rank": "hasan",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث حسن غريب، أخرجه أبو داود",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 2,
+          "page": 375,
+          "url": "https://shamela.ws/book/30108/968"
+        }
+      }
+    ],
+    "occasionQuote": "مَن قالَ حينَ يُصْبحُ أوْ يُمْسِي",
+    "repeat": {
+      "count": 4,
+      "quote": "فإنْ قالَهَا أَرْبَعًا",
+      "scope": "whole-selection"
+    },
+    "virtueQuote": "أعْتَقَ اللَّهُ رُبُعَهُ مِنَ النَّارِ، فَمَنْ قَالَهَا مَرَّتَيْنِ أعْتَقَ اللَّهُ نصْفَهُ مِنَ النَّار، وَمَنْ قَالَها ثَلاثًا أَعْتَقَ الله ثَلاثَةَ أرْبَاعِهِ، فإنْ قالَهَا أَرْبَعًا أعْتَقَه اللَّهُ تَعالى مِنَ النَّارِ"
+  },
+  {
+    "id": "morning-thanks",
+    "occasions": [
+      "morning"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "اللَّهُمَّ ما أصْبَحَ بِي مِنْ نِعْمَةٍ فَمِنْكَ وَحْدَكَ لا شَرِيكَ لَكَ، لَكَ الحَمْدُ وَلَكَ الشُّكْرُ"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 79,
+      "url": "https://shamela.ws/book/1956/77",
+      "report": 216
+    },
+    "collections": [
+      "سنن أبي داود"
+    ],
+    "grades": [
+      {
+        "rank": "hasan",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث حسن، أخرجه النسائي في الكبرى",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 2,
+          "page": 380,
+          "url": "https://shamela.ws/book/30108/974"
+        }
+      }
+    ],
+    "occasionQuote": "مَنْ قالَ حِينَ يُصْبحُ",
+    "virtueQuote": "فَقَدْ أدَّى شُكْرَ يَوْمِهِ"
+  },
+  {
+    "id": "morning-evening-oneness",
+    "occasions": [
+      "morning",
+      "evening"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "لا إلهَ إِلاَّ اللَّهُ وَحْدَهُ لاَ شَريكَ لَهُ، لَهُ المُلْكُ وَلَهُ الحَمْدُ وَهُوَ على كُلّ شئ قَدِيرٌ"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 80,
+      "url": "https://shamela.ws/book/1956/78",
+      "report": 219
+    },
+    "collections": [
+      "سنن أبي داود",
+      "ابن ماجه"
+    ],
+    "grades": [
+      {
+        "rank": "sahih",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث صحيح، أخرجه أحمد",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 2,
+          "page": 386,
+          "url": "https://shamela.ws/book/30108/981"
+        }
+      }
+    ],
+    "occasionQuote": "مَنْ قالَ إِذَا أصْبَحَ",
+    "instructionQuote": "وَإنْ قَالَهَا إِذَا أمْسَى كانَ له مِثْلُ ذلكَ حتى يصبح",
+    "virtueQuote": "كانَ لَهُ عِدْلُ رَقَبَةٍ مِنْ وَلَدِ إسْمَاعِيلَ ﷺ، وكُتِبَ لَهُ عَشْرُ حَسَنَاتٍ، وَحُطَّ عَنْهُ عَشْرُ سَيِّئاتٍ، وَرُفِعَ لَهُ عَشْرُ دَرَجاتٍ، وكانَ فِي حِرْزٍ مِنَ الشَّيْطانِ حتى يُمْسِيَ"
+  },
+  {
+    "id": "morning-evening-wellness",
+    "occasions": [
+      "morning",
+      "evening"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "اللَّهُمَّ عافِني فِي بَدَني، اللَّهُمَّ عافِنِي في سَمْعِي، اللَّهُمَّ عافِني في بَصَري، اللَّهُمَّ إني أعُوذُ بِكَ مِنَ الكُفْرِ وَالفَقْرِ، اللَّهُمَّ إني أعُوذُ بِكَ مِنْ عَذَابِ القَبرِ، لا إِلهَ إِلاَّ أنْتَ"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 81,
+      "url": "https://shamela.ws/book/1956/79",
+      "report": 221
+    },
+    "collections": [
+      "سنن أبي داود"
+    ],
+    "grades": [
+      {
+        "rank": "hasan",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث حسن، أخرجه أبو داود والنسائي",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 2,
+          "page": 390,
+          "url": "https://shamela.ws/book/30108/986"
+        }
+      }
+    ],
+    "occasionQuote": "إني أسمعك تدعو كلّ غداة",
+    "instructionQuote": "تعيدها حين تصبح ثلاثًا، وثلاثًا حين تُمسي",
+    "noteQuote": "إني سمعتُ رسولَ الله ﷺ يدعو بهنّ",
+    "fixes": [
+      {
+        "printed": "أعُوذَ بِكَ مِنْ عَذَابِ",
+        "reads": "أعُوذُ بِكَ مِنْ عَذَابِ",
+        "quote": "اللَّهُمَّ إني أعُوذُ بِكَ مِنْ عَذَابِ القَبْرِ",
+        "citation": {
+          "source": "adhkar-nawawi",
+          "volume": 1,
+          "page": 68,
+          "url": "https://shamela.ws/book/1956/66",
+          "report": 174
+        }
+      }
+    ]
+  },
+  {
+    "id": "morning-fitra",
+    "occasions": [
+      "morning"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "أصْبَحْنَا على فِطْرَةِ الإِسْلامِ، وكَلِمَةِ الإِخْلاصِ، وَدِيْنِ نبِيِّنا مُحَمَّدٍ ﷺ، وَمِلَّةِ إِبْرَاهِيمَ ﷺ حَنِيفًا مُسْلِمًا ومَا أنا مِنَ المُشْرِكِينَ"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 82,
+      "url": "https://shamela.ws/book/1956/80",
+      "report": 225
+    },
+    "collections": [
+      "كتاب ابن السني"
+    ],
+    "grades": [
+      {
+        "rank": "hasan",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث حسن، أخرجه ابن السني",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 2,
+          "page": 401,
+          "url": "https://shamela.ws/book/30108/998"
+        }
+      }
+    ],
+    "occasionQuote": "كان رسول الله ﷺ إذا أصبح قال",
+    "fixes": [
+      {
+        "printed": "نبِيِّا",
+        "reads": "نبِيِّنا",
+        "quote": "ودين نبيّنا محمد",
+        "citation": {
+          "source": "adhkar-nawawi",
+          "volume": 1,
+          "page": 82,
+          "url": "https://shamela.ws/book/1956/80",
+          "report": 225
+        }
+      }
+    ]
+  },
+  {
+    "id": "morning-evening-living",
+    "occasions": [
+      "morning",
+      "evening"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "يا حَيُّ يَا قَيُّومُ بِكَ أسْتَغِيثُ فأصْلِحْ لي شأنِي كُلَّهُ وَلاَ تَكِلْني إلى نَفْسِي طَرْفَةَ عَيْنِ"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 83,
+      "url": "https://shamela.ws/book/1956/81",
+      "report": 230
+    },
+    "collections": [],
+    "grades": [
+      {
+        "rank": "hasan",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث حسن غريب، أخرجه النسائي",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 2,
+          "page": 407,
+          "url": "https://shamela.ws/book/30108/1005"
+        }
+      }
+    ],
+    "occasionQuote": "تَقُولِينَ إذَا أصْبَحْتِ وَإذَا أمْسَيْتِ"
+  },
+  {
+    "id": "morning-knowledge",
+    "occasions": [
+      "morning"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "اللَّهُمَّ إني أسألُكَ عِلْمًا نافعًا، وَرِزْقًا طَيِّبًا، وَعَمَلًا مُتَقَبَّلًا"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 83,
+      "url": "https://shamela.ws/book/1956/81",
+      "report": 232
+    },
+    "collections": [
+      "سنن ابن ماجه",
+      "كتاب ابن السني"
+    ],
+    "grades": [
+      {
+        "rank": "hasan",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث حسن، أخرجه ابن السني عن أبي يعلى",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 2,
+          "page": 411,
+          "url": "https://shamela.ws/book/30108/1010"
+        }
+      }
+    ],
+    "occasionQuote": "كان إذا أصبح قال"
   },
   {
     "id": "sleep-life",

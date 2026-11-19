@@ -1,0 +1,315 @@
+{
+  "unit": {
+    "id": "siyar-v5-102-muayqib",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٠٢"
+    }
+  },
+  "spans": [
+    {
+      "id": "hd",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "491",
+      "layer": "MAIN",
+      "exact": "١٠٢ - مُعَيْقِيْبُ بنُ أَبِي فَاطِمَةَ الدَّوْسِيُّ"
+    },
+    {
+      "id": "n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "491",
+      "layer": "MAIN",
+      "exact": "مُعَيْقِيْبُ بنُ أَبِي فَاطِمَةَ الدَّوْسِيُّ"
+    },
+    {
+      "id": "sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "491",
+      "layer": "MAIN",
+      "exact": "مُعَيْقِيْبُ بنُ",
+      "prefix": "-"
+    },
+    {
+      "id": "fa",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "491",
+      "layer": "MAIN",
+      "exact": "أَبِي فَاطِمَةَ الدَّوْسِيُّ"
+    },
+    {
+      "id": "v1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "491",
+      "layer": "MAIN",
+      "exact": "وَكَانَ أَمِيْناً عَلَى خَاتَمِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-."
+    },
+    {
+      "id": "bd",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "491",
+      "layer": "MAIN",
+      "exact": "وَذَكَرَ أَبُو عَبْدِ اللهِ بنُ مَنْدَةَ - وَحْدَهُ -: أَنَّهُ شَهِدَ بَدْراً."
+    },
+    {
+      "id": "bd_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "491",
+      "layer": "MAIN",
+      "exact": "بَدْراً",
+      "prefix": "شَهِدَ"
+    },
+    {
+      "id": "bn",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "491",
+      "layer": "MAIN",
+      "exact": "وَلاَ يَصِحُّ هَذَا.",
+      "prefix": "بَدْراً."
+    }
+  ],
+  "reports": [
+    {
+      "id": "r0",
+      "unit": "siyar-v5-102-muayqib",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "hd",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_11",
+      "unit": "siyar-v5-102-muayqib",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "bd"
+      ],
+      "origin": {
+        "mention": "m_sp10"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_1",
+      "report": "r0",
+      "spans": [
+        "n1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_7",
+      "report": "r0",
+      "spans": [
+        "v1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_12",
+      "report": "r_11",
+      "spans": [
+        "bd"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_15",
+      "report": "r0",
+      "spans": [
+        "bn"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_s2",
+      "parent": "n1",
+      "exact": "مُعَيْقِيْبُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o5",
+      "parent": "n1",
+      "exact": "أَبِي فَاطِمَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_s8",
+      "parent": "v1",
+      "exact": "وَكَانَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sp10",
+      "parent": "bd",
+      "exact": "أَبُو عَبْدِ اللهِ بنُ مَنْدَةَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_s13",
+      "parent": "bd",
+      "exact": "أَنَّهُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_e14",
+      "parent": "bd",
+      "exact": "بَدْراً",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_s2",
+      "mention": "m_s2",
+      "agent": "muayqib-ibn-abi-fatimah-al-dawsi",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o5",
+      "mention": "m_o5",
+      "agent": "abu-fatimah-al-dawsi",
+      "basis": [
+        {
+          "span": "fa",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s8",
+      "mention": "m_s8",
+      "agent": "muayqib-ibn-abi-fatimah-al-dawsi",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s13",
+      "mention": "m_s13",
+      "agent": "muayqib-ibn-abi-fatimah-al-dawsi",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_e14",
+      "mention": "m_e14",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "bd_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_3",
+      "subject": "m_s2",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "n1"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_4",
+      "subject": "m_s2",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sex"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_6",
+      "subject": "m_s2",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_o5"
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_9",
+      "subject": "m_s8",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "v1"
+        ]
+      },
+      "restsOn": [
+        "st_7"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_16",
+      "subject": "m_s13",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_e14"
+      },
+      "restsOn": [
+        "st_12",
+        "st_15"
+      ],
+      "status": "DISPUTED"
+    }
+  ]
+}
