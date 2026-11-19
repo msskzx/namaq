@@ -40,7 +40,8 @@ import type { FortyListItem, FortyPage } from '@/lib/forty';
 import { searchForty } from '@shared/hadith';
 import Empty from '@/components/common/Empty';
 import { SearchField } from '@/components/common/Field';
-import type { NasabView, PersonHead, TiesView, VirtuesView } from '@/lib/tarajim';
+import type { DrawingsView, NasabView, PersonHead, TiesView, VirtuesView } from '@/lib/tarajim';
+import LifeTimeline from '@/components/tarajim/LifeTimeline';
 import { NasabTree, TiesRing, Virtues } from '@/components/tarajim/TarajimParts';
 
 type Looked = { story: AppStory; ayat: AyatPage[][] } | { battle: AppBattle };
@@ -137,7 +138,7 @@ function TuhfaLook({ mark }: { mark?: number }) {
 }
 
 /** The looks the website draws so far; the rest come with their features (the app draws every kind, mobile/src/components/QuizLook.tsx). */
-const DRAWN: QuizLook['view'][] = ['story', 'battle', 'terms', 'hadith', 'word', 'irab', 'balagha', 'qiraat', 'tafsir', 'tuhfa', 'ties', 'nasab', 'virtues'];
+const DRAWN: QuizLook['view'][] = ['story', 'battle', 'terms', 'hadith', 'word', 'irab', 'balagha', 'qiraat', 'tafsir', 'tuhfa', 'ties', 'nasab', 'virtues', 'life'];
 export const canLook = (look: QuizLook | undefined): look is QuizLook => !!look && DRAWN.includes(look.view);
 
 /** A person's ties round him (the app's TiesLook): anyone found by a search or clicked on the ring moves to the middle; the trail goes back. */
@@ -207,6 +208,7 @@ export function LookView({ look, shown }: { look: QuizLook; shown: boolean }) {
       case 'ties': return <TiesLook key={`${look.slug}/${shown ? look.mark ?? '' : ''}`} slug={look.slug} mark={shown ? look.mark : undefined} />;
       case 'nasab': return <Fetched<NasabView> url={`/api/tarajim?nasab=${look.slugs.map(encodeURIComponent).join(',')}${shown && look.mark ? '' : '&meetings=0'}`}>{data => <NasabTree view={data} linked={false} />}</Fetched>;
       case 'virtues': return <VirtuesLook key={`${look.slugs.join()}/${shown ? look.mark?.slug ?? '' : ''}`} slugs={look.slugs} mark={shown ? look.mark : undefined} />;
+      case 'life': return <Fetched<DrawingsView> url={`/api/tarajim?drawings=${encodeURIComponent(look.slug)}`}>{data => <LifeTimeline items={data.life} inCard linked={false} marked={shown ? look.mark : undefined} />}</Fetched>;
       case 'tuhfa': return <TuhfaLook mark={shown ? look.mark : undefined} />;
       default: return null;
     }
