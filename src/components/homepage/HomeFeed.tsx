@@ -11,6 +11,8 @@ import StoryMap from '@/app/quran/prophets/[slug]/StoryMap';
 import type { SavedContent, SiraCard, StoryCard } from '@/lib/homeFeed';
 import type { TermCard } from '@/lib/balaghaTerms';
 import type { HadithCard } from '@/lib/forty';
+import type { SahihCard } from '@/lib/sahih';
+import { SahihHadithView, sahihPage } from '@/components/hadith/SahihParts';
 import type { NameCard, TarajimCard } from '@/lib/tarajim';
 import { CreditFold, TiesChain, tiesHref } from '@/components/tarajim/TarajimParts';
 import LifeTimeline from '@/components/tarajim/LifeTimeline';
@@ -443,6 +445,20 @@ function HadithPost({ card }: { card: HadithCard }) {
   </Post>;
 }
 
+/** A hadith of Sahih al-Bukhari or Sahih Muslim whole (the app's SahihPost); the head opens its page. */
+function SahihPost({ card }: { card: SahihCard }) {
+  const { book, hadith } = card;
+  const href = `/hadith/sahih/${book.slug}/${hadith.n}`;
+  const name = `${book.title} ${num(hadith.n)}`;
+  return <Post head={<PostHead Icon={MessagesSquare} title={`من ${book.title}`} sub={card.where} href={href} label={`افتح ${name}`} />}
+    actions={<>
+      <Action Icon={MessagesSquare} label={`افتح ${name}`} href={href} />
+      <Action Icon={SquareArrowOutUpLeft} label={`المصدر: ${book.title}`} href={sahihPage(book, hadith.routes[0].shamela)} external />
+    </>}>
+    <div className="px-4 py-3"><SahihHadithView book={book} hadith={hadith} /></div>
+  </Post>;
+}
+
 /**
  * «من التراجم» (the app's TarajimPost): a virtue from a converted Siyar entry, in the book's words with who says it and its
  * page; the head opens the person's page.
@@ -636,6 +652,10 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
   const hadithSlots = shows('hadith') || shows('rajab') || shows('recorded') || shows('isnad') ? Array.from({ length: batches }, (_, i) => i) : [];
   const { data: hadith } = useSWR(day && hadithSlots.length ? `/api/home/feed?day=${day}&hadith=${hadithSlots.join(',')}` : null,
     () => inPieces<HadithCard[]>(some => `/api/home/feed?day=${day}&hadith=${some.join(',')}`, hadithSlots).then(all => all.flat()), swr);
+  // The Sahih cards, one a batch, al-Bukhari and Muslim in turn, worked out on the server (the books' texts stay there).
+  const sahihSlots = shows('bukhari') || shows('muslim') ? Array.from({ length: batches }, (_, i) => i) : [];
+  const { data: sahih } = useSWR(day && sahihSlots.length ? `/api/home/feed?day=${day}&sahih=${sahihSlots.join(',')}` : null,
+    () => inPieces<SahihCard[]>(some => `/api/home/feed?day=${day}&sahih=${some.join(',')}`, sahihSlots).then(all => all.flat()), swr);
   // The virtue and «صلة» cards, one a batch, worked out on the server (the people's entries stay there).
   const tarajimSlots = shows('tarajim') || shows('tie') || shows('life') ? Array.from({ length: batches }, (_, i) => i) : [];
   const { data: tarajim } = useSWR(day && tarajimSlots.length ? `/api/home/feed?day=${day}&tarajim=${tarajimSlots.join(',')}` : null,
@@ -690,6 +710,8 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
     if (story) posts.push(<StoryPost key={`s${day}-${i}`} card={story} />);
     const hadithCard = hadith?.find(card => card.slot === i);
     if (hadithCard && shows(hadithCard.kind)) posts.push(<HadithPost key={`h${day}-${i}`} card={hadithCard} />);
+    const sahihCard = sahih?.find(card => card.slot === i);
+    if (sahihCard && shows(sahihCard.kind)) posts.push(<SahihPost key={`sahih${day}-${i}`} card={sahihCard} />);
     const termCard = shows('term') ? termCards?.find(card => card.slot === i) : undefined;
     if (termCard) posts.push(<TermPost key={`term${day}-${i}`} card={termCard} />);
     const siraCard = sira?.find(card => card.slot === i);

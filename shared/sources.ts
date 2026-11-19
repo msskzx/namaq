@@ -72,6 +72,7 @@ const USE = {
   hijri: { ar: 'التاريخ الهجري وجزء اليوم', en: 'the Hijri date and today’s juz', href: '/utilities' },
   people: { ar: 'التراجم والأنساب والمعارك', en: 'biographies, lineages and battles', href: '/people' },
   forty: { ar: 'الأربعون النووية ورواياتها في كتب الحديث، في تطبيق الهاتف', en: 'al-Nawawi’s Forty and their records in the hadith books, in the phone app' },
+  sahih: { ar: 'الصحيحان كاملين: الكتب والأبواب والأحاديث', en: 'the two Sahihs whole: their kitabs, babs and hadith', href: '/hadith' },
   everywhere: { ar: 'كل الصفحات', en: 'every page' },
 } satisfies Record<string, SourceUse>;
 
@@ -103,14 +104,14 @@ export const SOURCES: Source[] = [
     edition: 'دار المنهاج، بيروت، الطبعة الأولى ١٤٣٠هـ، عناية قصي محمد نورس الحلاق وأنور بن أبي بكر الشيخي؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(12836), licence: PUBLIC_DOMAIN, uses: [USE.forty],
   },
   {
-    id: 'sahih-bukhari', group: 'books',
+    id: 'sahih-bukhari', group: 'books', files: ['shared/data/hadith/bukhari.json'],
     title: { ar: 'صحيح البخاري', en: 'Sahih al-Bukhari' }, author: { ar: 'محمد بن إسماعيل البخاري', en: 'al-Bukhari' },
-    edition: 'الطبعة السلطانية، بولاق ١٣١١هـ، مصوّرة دار طوق النجاة ١٤٢٢هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1681), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+    edition: 'الطبعة السلطانية، بولاق ١٣١١هـ، مصوّرة دار طوق النجاة ١٤٢٢هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1681), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih],
   },
   {
-    id: 'sahih-muslim', group: 'books',
+    id: 'sahih-muslim', group: 'books', files: ['shared/data/hadith/muslim.json'],
     title: { ar: 'صحيح مسلم', en: 'Sahih Muslim' }, author: { ar: 'مسلم بن الحجاج النيسابوري', en: 'Muslim' },
-    edition: 'تحقيق محمد فؤاد عبد الباقي، مطبعة عيسى البابي الحلبي، القاهرة ١٣٧٤هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1727), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+    edition: 'تحقيق محمد فؤاد عبد الباقي، مطبعة عيسى البابي الحلبي، القاهرة ١٣٧٤هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1727), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih],
   },
   {
     id: 'sunan-tirmidhi', group: 'books',

@@ -65,10 +65,13 @@ export default function LibraryScreen() {
 export function BookCard({ book, palette, editing, fasila, width }: { book: Book; palette: Palette; editing: boolean; fasila: string | null; width?: number }) {
   const state = bookState(book.id);
   const reads = isReaderBook(book.id);
-  const open = reads && state === 'on' ? () => toTab({ pathname: '/book', params: { id: book.id } }) : undefined;
+  // A Sahih opens its kitabs on the hadith tab, there on the phone or not (its kitabs ship with the app).
+  const open = book.kind === 'hadith' ? () => toTab({ pathname: '/hadith-book', params: { book: book.id } })
+    : reads && state === 'on' ? () => toTab({ pathname: '/book', params: { id: book.id } }) : undefined;
   // The card's last line: the فاصلة, or what the book is when there is none.
   const foot = state === 'failed' ? { text: 'تعذّر التنزيل', accent: true }
     : fasila && state === 'on' && !editing ? { text: `فاصلتك: ${fasila}`, accent: true, fasila: true }
+    : book.kind === 'hadith' && state === 'on' && !editing ? { text: 'يُقرأ من تبويب الحديث', accent: false }
     : !reads && state === 'on' && !editing ? { text: 'يُقرأ من أزرار الآية', accent: false }
     : state === 'off' && !book.builtIn ? { text: size(book), accent: false }
     : editing ? { text: book.builtIn ? (state === 'off' ? 'مخفي' : 'مع التطبيق') : 'على هاتفك', accent: false }

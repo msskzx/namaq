@@ -14,7 +14,7 @@ const RULE = /^shared\/(quran|data)\//;
  * a file that comes to compare Quran words moves its code into shared/quran.
  */
 const ALLOWED: Record<string, string> = {
-  'mobile/src/lib/tarajim.ts': 'people\'s names in the tarajim search, not Quran words',
+  'shared/tarajimGroups.ts': 'people\'s names in the tarajim lists, not Quran words',
   'src/lib/graphIntegrity.ts': 'people\'s names in the graph checks',
   'src/lib/model/hadithView.ts': 'a hadith\'s «قال» lead, not Quran words',
   'src/lib/model/name.ts': '«ابن» in people\'s names',
@@ -39,6 +39,7 @@ const ALLOWED: Record<string, string> = {
   'shared/quiz/tarajim.ts': 'people\'s names in the tarajim quizzes',
   'shared/quiz/sira.ts': 'names in the sira quiz',
   'shared/quiz/hadith.ts': 'hadith text',
+  'shared/quiz/sahih.ts': 'the Sahihayn\'s kitab and bab headings, not Quran words',
   'shared/quiz/balaghaTermQuiz.ts': 'balagha term names',
   'shared/prayer.ts': 'city names in the prayer-times search',
   'shared/quiz/hints.ts': 'the letters a quiz hint shows; strips marks of its own and should move into shared/quran',

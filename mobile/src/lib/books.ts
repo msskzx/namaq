@@ -40,8 +40,13 @@ export const useBooks = () => useSyncExternalStore(subscribe, () => version);
 const folder = () => new Directory(Paths.document, 'books');
 /** Where each downloaded book keeps a passage's text in its entries (shared/quran/kashshaf.ts, shared/quran/irab.ts). */
 const TEXT_AT: Partial<Record<BookId, number>> = { kashshaf: 6, ukbari: 5 };
-/** A book's data must be a book: its source and a list of passages, each with its text where that book keeps it. */
+/** A book's data must be a book: its source and a list of passages, each with its text where that book keeps it; a hadith book its kitabs (shared/sahih.ts). */
 const readable = (id: BookId, data: unknown) => {
+  if (bookOf(id).kind === 'hadith') {
+    const kitabs = (data as { kitabs?: unknown } | null)?.kitabs;
+    if (!Array.isArray(kitabs) || !kitabs.length || !kitabs.every(kitab => kitab && Array.isArray(kitab.hadith))) throw new Error('not a hadith book');
+    return data;
+  }
   const book = data as { source?: unknown; entries?: unknown } | null;
   const at = TEXT_AT[id] ?? -1;
   if (!book || typeof book !== 'object' || !book.source || typeof book.source !== 'object' || !Array.isArray(book.entries)
@@ -107,13 +112,20 @@ export function removeBook(id: BookId) {
 }
 
 /** A downloaded book's data, read from its file once; null when it is not on the phone or cannot be read. */
+const reading = new Map<BookId, Promise<unknown>>();
 export async function readBook<T>(id: BookId): Promise<T | null> {
   if (bookState(id) !== 'on' || bookOf(id).builtIn) return null;
   if (loaded.has(id)) return loaded.get(id) as T;
+  // Pages and cards that open together share one read: a whole Sahih is parsed once.
+  if (!reading.has(id)) reading.set(id, readFromFile(id).finally(() => reading.delete(id)));
+  return reading.get(id) as Promise<T | null>;
+}
+
+async function readFromFile(id: BookId): Promise<unknown> {
   try {
     const data = readable(id, web ? await (await fetch(`${WEBSITE}${bookPath(id)}`)).json() : JSON.parse(await fileOf(id).text()));
     loaded.set(id, data);
-    return data as T;
+    return data;
   } catch {
     return null;
   }

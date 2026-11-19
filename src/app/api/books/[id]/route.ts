@@ -1,10 +1,13 @@
 import { NextResponse } from 'next/server';
 import type { BookId } from '@shared/books';
+import { sahihText } from '@/lib/sahih';
 
 /** The books the phone downloads to keep (shared/books.ts); built-in books ship with the app and are not served here. */
 const FILES: Partial<Record<BookId, () => Promise<unknown>>> = {
   ukbari: async () => (await import('@shared/data/quran/irabUkbari')).default,
   kashshaf: async () => (await import('@shared/data/quran/kashshaf')).default,
+  bukhari: async () => sahihText('bukhari'),
+  muslim: async () => sahihText('muslim'),
 };
 
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
