@@ -149,3 +149,60 @@ export const hadithBookQuiz: ChoiceKind = {
   questions: (_scope, _difficulty, random, limit = Infinity) => bookQuestions(random).slice(0, limit),
   count: () => bookQuestions(Math.random).length,
 };
+
+export const HADITH_CHAIN = 'HADITH_CHAIN';
+export const HADITH_CHAIN_NAME = 'من حدّث به؟';
+
+/** A narrator's name as a key: no harakat, one alif, so «يَحْيَى بْنِ سَعِيدٍ» and «يحيى بن سعيد» are one name. */
+const nameKey = (name: string) => bare(name).replace(/[أإآٱ]/g, 'ا');
+/** A name as the question shows it: no harakat, and «أبي/أبا فلان» as «أبو فلان», so no case ending tells its place. */
+const shownName = (name: string) => name.replace(/[ً-ْٰ]/g, '').replace(/^(?:أبي|أبا) /, 'أبو ');
+/** «أبي» alone is «my father», a name only inside its own chain. */
+const ownFather = (name: string) => /^(?:أبي|أبيه)$/.test(shownName(name));
+
+/** Two names that may be one man: one is the other's start, word by word («سفيان» and «سفيان بن عيينة»). */
+const maySame = (a: string, b: string) => {
+  const [x, y] = [nameKey(a).split(' '), nameKey(b).split(' ')];
+  const short = x.length <= y.length ? x : y;
+  const long = short === x ? y : x;
+  return short.every((word, i) => long[i] === word);
+};
+
+/** The chain of a drawn Bukhari record from al-Bukhari's teacher to the Companion, each with the word he narrated it by. */
+const chainOf = (record: FortyRecord) => {
+  const nodes = (record.isnad?.nodes ?? []).filter(node => node.id !== 'c').sort((a, b) => Number(a.id.slice(1)) - Number(b.id.slice(1)));
+  return nodes.map(node => ({ name: node.label, by: record.isnad!.edges.find(edge => edge.from === node.id)?.label ?? '' }));
+};
+
+/**
+ * «من حدّث به؟» (owner, 2026-11-19; plan /mnt/project-files/hadith-sciences, feature 1): al-Bukhari's chain for one of the
+ * Forty as he prints it, one narrator between his teacher and the Companion left out, and who stands there. A fact of the
+ * record: the wrong choices are narrators of the other chains, never one who may be the same man, nor one named anywhere in
+ * this hadith's records (another route could have him). Names without harakat, so no case ending tells the place.
+ */
+export function chainQuestions(random: Random): ChoiceQuestion[] {
+  const chains = bukhari().flatMap(({ entry, record }) => (record.isnad ? [{ entry, record, chain: chainOf(record) }] : []));
+  return shuffle(chains.flatMap(({ entry, record, chain }) => {
+    const told = bare(entry.records.map(each => each.text).join(' ')).replace(/[أإآٱ]/g, 'ا');
+    return chain.slice(1, -1).flatMap((link, k) => {
+      const at = k + 1;
+      const near = (spread: number) => chains.filter(other => other.record !== record)
+        .flatMap(other => other.chain.slice(Math.max(1, at - spread), Math.min(other.chain.length - 1, at + spread + 1)).map(each => each.name))
+        .filter(name => !ownFather(name) && !chain.some(own => maySame(own.name, name)) && !told.includes(nameKey(name)));
+      const pool = near(1).length >= CHOICES - 1 ? near(1) : near(chain.length);
+      const wrong = pool.filter((name, i) => pool.findIndex(other => maySame(other, name)) === i).map(shownName);
+      const shown = chain.map((each, i) => `${shownName(each.by)} ${i === at ? '…' : shownName(each.name)}`).join('، ');
+      const question = choose(`${record.number}:${at}`, HADITH_CHAIN, `${recordName(record, num)}:\n${shown}\nمن حدّث به في موضع «…»؟`, shownName(link.name), wrong,
+        source(entry, record), entry, random);
+      return question ? [question] : [];
+    });
+  }), random);
+}
+
+export const hadithChainQuiz: ChoiceKind = {
+  id: HADITH_CHAIN,
+  name: HADITH_CHAIN_NAME,
+  party: true,
+  questions: (_scope, _difficulty, random, limit = Infinity) => chainQuestions(random).slice(0, limit),
+  count: () => chainQuestions(Math.random).length,
+};

@@ -96,3 +96,15 @@ test.describe('the «من أخرجه» card', () => {
     await expect(page).toHaveURL(/\/hadith-forty\?n=15/);
   });
 });
+
+test.describe('the «من الإسناد» card', () => {
+  test.use({ seed: { bookmarks: [{ id: 'card:isnad:15', text: '', href: '', savedAt: Date.now() }] } });
+
+  // Owner, 2026-11-19: al-Bukhari's chain drawn as on the hadith's page, and its head opens that page.
+  test('a saved card draws al-Bukhari\'s chain and opens its hadith', async ({ page }) => {
+    await open(page, '/library');
+    await expect(page.getByLabel(/^الإسناد: البخاري، قُتَيْبَةُ/)).toBeVisible();
+    await page.getByRole('button', { name: 'افتح الحديث الخامس عشر' }).first().click();
+    await expect(page).toHaveURL(/\/hadith-forty\?n=15/);
+  });
+});

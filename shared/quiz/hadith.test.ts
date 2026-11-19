@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import fortyData from '../data/hadith/forty.json';
 import rajabData from '../data/hadith/ibnRajab.json';
 import { rajabFeedPassages, rajabOpening, sayingStart, type AppForty, type RajabChapter } from '../hadith';
-import { bookQuestions, completeQuestions, namedBooks, narratorQuestions } from './hadith';
+import { bookQuestions, chainQuestions, completeQuestions, namedBooks, narratorQuestions } from './hadith';
 
 const FORTY = fortyData as AppForty;
 const RAJAB = rajabData as RajabChapter[];
@@ -181,5 +181,36 @@ describe('the eight Ibn Rajab adds (43–50)', () => {
   it('is never asked as one of al-Nawawi\'s citations, nor in the Bukhari quizzes until the other Companions al-Bukhari has each from are listed', () => {
     for (const question of bookQuestions(() => 0.3)) expect(Number(question.key.split(':')[1])).toBeLessThanOrEqual(42);
     for (const question of [...narrator, ...complete]) expect(question.look?.mark).toBeLessThanOrEqual(42);
+  });
+});
+
+describe('«من حدّث به؟»', () => {
+  const questions = chainQuestions(() => 0.42);
+  const plain = (text: string) => text.replace(/[ً-ْٰ]/g, '').replace(/[أإآٱ]/g, 'ا');
+
+  it('hides one narrator between al-Bukhari\'s teacher and the Companion, and he is the right choice', () => {
+    expect(questions.length).toBeGreaterThan(0);
+    for (const question of questions) {
+      const [, number, at] = question.key.split(':').map(Number);
+      const record = FORTY.entries.flatMap(entry => entry.records).find(each => each.book === 'bukhari' && each.number === number && each.isnad)!;
+      const narrators = record.isnad!.nodes.filter(node => node.id !== 'c');
+      expect(at).toBeGreaterThan(0);
+      expect(at).toBeLessThan(narrators.length - 1);
+      const right = question.choices.find(choice => choice.value === question.correctAnswer)!.labelArabic;
+      expect(plain(right).replace(/^ابو /, '')).toBe(plain(narrators.find(node => node.id === `n${at}`)!.label).replace(/^(?:ابي|ابا|ابو) /, ''));
+    }
+  });
+
+  it('offers no wrong choice named anywhere in the hadith\'s records, so none can be right by another route', () => {
+    for (const question of questions) {
+      const entry = FORTY.entries[Number(question.look!.mark) - 1];
+      const told = plain(entry.records.map(record => record.text).join(' '));
+      for (const choice of question.choices.filter(each => each.value !== question.correctAnswer)) {
+        expect(told).not.toContain(plain(choice.labelArabic));
+        expect(choice.labelArabic).not.toMatch(/^أبي$/);
+      }
+      // No case ending in the chain or the choices tells the place.
+      expect(question.promptArabic.split('\n')[1] + question.choices.map(choice => choice.labelArabic).join(' ')).not.toMatch(/[ً-ْ]/);
+    }
   });
 });

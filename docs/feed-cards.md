@@ -16,13 +16,15 @@ from the Sahihayn, opening the hadith's page; `HadithPost`), a passage of Ibn Ra
 commentary (من شرح ابن رجب, a paragraph where he explains a phrase of one of those hadith, opening the hadith's page;
 `RajabPost` drawn by `components/IbnRajab`, the page's own view), the books that record one of the Forty (من أخرجه, the
 start of one al-Nawawi takes whole from the Sahihayn and the «من أخرجه» drawing of each book and number; `RecordedPost` drawn
-by `components/HadithBooks`, the page's own view), and the quiz cards in `FEED_QUIZ_NAMES`
+by `components/HadithBooks`, the page's own view), al-Bukhari's chain for one (من الإسناد, the drawing «الرسم» of his record
+for one of those hadith with the start of the saying, opening the hadith's page; `IsnadPost` drawn by `components/Isnad`), and the quiz cards in `FEED_QUIZ_NAMES`
 (`shared/quiz/feedQuiz.ts`): في أي سورة؟, أكمل المتشابهات, سمّع بقية الآية, قارن الموضعين,
 أوائل السور, سمّع الآية, ما معنى؟, the four ayah quizzes below, ما المصطلح؟ (`shared/quiz/balaghaTermQuiz.ts`: a term's
 definition with its name hidden, four terms to pick from, each choice linking to its definition once answered), the three Tuhfat al-Atfal questions, السيرة والغزوات (shared/quiz/sira.ts), the four tarajim questions
 (أين يلتقي النسبان؟, صاحب المنقبة and ما صلته به؟, `shared/quiz/tarajim.ts`; في أي سنة كان؟, `shared/quiz/life.ts`:
 the year of an event or story of someone's «حياته», or of a person's death (battles are the sira quiz's); two years where
-the sources give two, the wrong choices of the same shape and none near; the look-up his timeline), بمَ لُقّب؟ and ما كنيته؟ (each its own interest), أسماء النبي ﷺ (several right choices, under السيرة), and the three hadith questions (من راوي الحديث؟, أكمل الحديث and من أخرجه؟,
+the sources give two, the wrong choices of the same shape and none near; the look-up his timeline), بمَ لُقّب؟ and ما كنيته؟ (each its own interest), أسماء النبي ﷺ (several right choices, under السيرة), and the four hadith questions (من راوي الحديث؟, أكمل الحديث, من أخرجه؟ and من حدّث به؟: al-Bukhari's chain
+with one narrator left out, the wrong choices narrators of other chains named nowhere in this hadith's records;
 `shared/quiz/hadith.ts`).
 
 The ayah quizzes (`shared/quiz/ayahQuizzes.ts`), whose questions are built once by `scripts/quran/buildAyahQuizzes.ts`
