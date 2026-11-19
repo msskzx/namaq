@@ -1,7 +1,7 @@
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Network } from 'lucide-react-native';
-import { kunyaName, pageLabel, sayer, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
+import { kunyaName, pageLabel, sayer, sourcesOf, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
 import { surahName } from '@shared/quran/surahNames';
 import { counted, num } from '@shared/quran/arabicNumber';
 import { sourceById } from '@shared/sources';
@@ -44,8 +44,13 @@ export function Credit({ facts, palette, quotes = false }: { facts: PersonFact[]
       {quotes && facts.filter(fact => fact.text).map((fact, i) => (
         <Text key={i} style={{ color: palette.ink, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>«{fact.text}» <Text style={muted(palette)}>{pageLabel(fact.refs)}</Text></Text>
       ))}
-      <Text style={muted(palette)}>{SIYAR.title}، {SIYAR.edition}</Text>
-      <ExternalLink url={SIYAR.url} color={palette.accent} size={14} style={{ textAlign: 'right' }}>الكتاب على المكتبة الشاملة</ExternalLink>
+      {/* Each book the pages come from: the Siyar, and another book where one is cited too (Zad al-Ma'ad). */}
+      {sourcesOf(refs).map(id => sourceById(id)).filter(book => book !== undefined).map(book => (
+        <View key={book.id} style={{ gap: 2 }}>
+          <Text style={muted(palette)}>{book.title.ar}، {book.edition ?? ''}</Text>
+          <ExternalLink url={book.link.url} color={palette.accent} size={14} style={{ textAlign: 'right' }}>الكتاب على المكتبة الشاملة</ExternalLink>
+        </View>
+      ))}
     </Folded>
   );
 }
@@ -107,14 +112,25 @@ function Names({ links, palette }: { links: PersonLink[]; palette: Palette }) {
 /** «ـه» or «ـها»: the labels follow the person's sex. */
 const suffixOf = (person: AppPerson) => (person.sex === 'FEMALE' ? 'ها' : 'ه');
 
+/**
+ * The Prophet's ﷺ wives: the eleven «أمهات المؤمنين» first, each holding that title in her own entry (Ibn al-Qayyim,
+ * Zad al-Ma'ad 1/110: «فهؤلاء نساؤه المعروفات اللاتي دخل بهن»), then the others the books name, on their own line.
+ */
+const MOTHER_OF_BELIEVERS = 'mother-of-believers';
+const isMother = (link: PersonLink) => findPerson(link.slug)?.titles.some(title => title.title === MOTHER_OF_BELIEVERS) ?? false;
+
 function ties(person: AppPerson) {
   const s = suffixOf(person);
+  const wives = person.spouses.filter(isMother);
+  const spouses = wives.length ? wives : person.spouses;
+  const others = wives.length ? person.spouses.filter(link => !isMother(link)) : [];
   const fathers = person.parents.filter(p => p.sex !== 'FEMALE');
   const mothers = person.parents.filter(p => p.sex === 'FEMALE');
   return [
     { label: `أبو${s}`, links: fathers },
     { label: `أم${s}`, links: mothers },
-    { label: person.spouses.length > 1 ? `أزواج${s}` : `زوج${s}`, links: person.spouses },
+    { label: spouses.length > 1 ? `أزواج${s}` : `زوج${s}`, links: spouses },
+    { label: 'وذُكر أنه تزوج', links: others },
     { label: `أولاد${s}`, links: person.children },
     { label: `إخوت${s}`, links: person.siblings },
     { label: `قرابت${s}`, links: person.cousins },
@@ -269,7 +285,10 @@ export default function PersonScreen() {
         )}
 
         <Part n={++n} title={person.sex === 'FEMALE' ? 'ترجمتها في الكتاب' : 'ترجمته في الكتاب'} palette={palette}>
-          <Text style={body(palette)}>{book}{part !== undefined ? ` ${num(part)}` : ''}{person.entry.from ? `، ص ${num(Number(person.entry.from))}${person.entry.to && person.entry.to !== person.entry.from ? `–${num(Number(person.entry.to))}` : ''}` : ''}</Text>
+          {/* An entry that runs into the next volume (the Sira) names both: «السيرة النبوية ١/٢٩ – ٢/٤٩٥». */}
+          <Text style={body(palette)}>{person.entry.toVolume !== undefined && part !== undefined
+            ? `${book} ${num(part)}/${num(Number(person.entry.from))} – ${num(volumeLabel(person.entry.toVolume).part ?? person.entry.toVolume)}/${num(Number(person.entry.to))}`
+            : `${book}${part !== undefined ? ` ${num(part)}` : ''}${person.entry.from ? `، ص ${num(Number(person.entry.from))}${person.entry.to && person.entry.to !== person.entry.from ? `–${num(Number(person.entry.to))}` : ''}` : ''}`}</Text>
           <Text style={muted(palette)}>{SIYAR.edition}</Text>
           <ExternalLink url={SIYAR.url} color={palette.accent} size={15} style={{ textAlign: 'right' }}>اقرأها على المكتبة الشاملة</ExternalLink>
         </Part>

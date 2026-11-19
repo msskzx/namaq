@@ -52,8 +52,12 @@ export function CreditFold({ credit }: { credit?: Credit }) {
   return (
     <Folded credit={credit.pages}>
       {credit.quotes?.map((quote, i) => <p key={i} className="text-[var(--home-ink)]">«{quote.text}» <span className="text-[var(--home-muted)]">{quote.pages}</span></p>)}
-      <p>{credit.title}</p>
-      <ExternalLink href={credit.url} className="w-fit text-[var(--home-accent)]">الكتاب على المكتبة الشاملة</ExternalLink>
+      {credit.books.map(book => (
+        <div key={book.url} className="flex flex-col gap-0.5">
+          <p>{book.title}</p>
+          <ExternalLink href={book.url} className="w-fit text-[var(--home-accent)]">الكتاب على المكتبة الشاملة</ExternalLink>
+        </div>
+      ))}
     </Folded>
   );
 }

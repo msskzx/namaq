@@ -8,7 +8,20 @@
 export interface PageRef {
   volume: number;
   page: string;
+  /** Another book than the Siyar (data/works/<work>), named in OTHER_WORKS; left out for the Siyar. */
+  work?: string;
 }
+
+/**
+ * Books other than the Siyar that a person's values are cited from, by their data/works slug: the book's short name for
+ * a page label, its author for the line under a value he says himself, and its entry in shared/sources.ts.
+ */
+export const OTHER_WORKS: Record<string, { book: string; author: string; source: string }> = {
+  'zad-al-maad': { book: 'زاد المعاد', author: 'ابن القيم', source: 'zad-al-maad' },
+};
+
+/** The books a list of pages comes from, the Siyar as «siyar», each once, in the order met. */
+export const sourcesOf = (refs: PageRef[]) => [...new Set(refs.map((ref) => (ref.work ? OTHER_WORKS[ref.work]?.source ?? ref.work : 'siyar')))];
 
 /** One value as the book prints it, with who says it. `by` is empty when the author says it himself. */
 export interface PersonFact {
@@ -51,7 +64,8 @@ export interface AppPerson {
   name: string;
   sex?: 'MALE' | 'FEMALE';
   /** The entry in the book: its number as printed, volume and pages. */
-  entry: { unit: string; number?: string; volume: number; from: string; to: string };
+  /** The entry's pages; `toVolume` when it runs into the next volume (the Sira, ١/٢٩ to ٢/٤٩٥). */
+  entry: { unit: string; number?: string; volume: number; from: string; to: string; toVolume?: number };
   fullName?: PersonFact;
   /** The book's other readings of the full name, each with its sayer («وقيل…»). */
   otherNames?: PersonFact[];
@@ -112,7 +126,8 @@ export function volumeLabel(volume: number) {
 export function pageLabel(refs: PageRef[]) {
   const books = new Map<string, string[]>();
   for (const ref of refs) {
-    const { book, part } = volumeLabel(ref.volume);
+    const other = ref.work ? OTHER_WORKS[ref.work] : undefined;
+    const { book, part } = other ? { book: other.book, part: ref.volume as number | undefined } : volumeLabel(ref.volume);
     const at = part === undefined ? arabic(ref.page) : `${arabic(part)}/${arabic(ref.page)}`;
     const list = books.get(book) ?? [];
     if (!list.includes(at)) list.push(at);
