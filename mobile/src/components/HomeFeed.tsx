@@ -17,7 +17,9 @@ import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
 import { allVirtues, dayStart, feedBooks, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, prayerSoon, type FeedSlot } from '@shared/homeFeed';
 import { pageLabel, sayerLine } from '@shared/tarajim';
-import { findPerson, GRAPH, PEOPLE, personName, tiePairs } from '@/lib/tarajim';
+import { findPerson, GRAPH, PEOPLE, personName, tiePairs, unvowelled } from '@/lib/tarajim';
+import { kunyaFacts, laqabFacts, type NameFact } from '@shared/tarajimNames';
+import { Credit } from '@/screens/person';
 import { chainSentence } from '@shared/tarajimGraph';
 import TiesChain from './TiesChain';
 import LifeTimeline from './LifeTimeline';
@@ -445,6 +447,30 @@ function TiePost({ id, palette }: { id: string; palette: Palette }) {
         <TiesChain nodes={nodes} steps={pair.steps} first={pair.a} picked={[pair.a, pair.b]} width={Math.min(width - 60, 480)} palette={palette} inCard />
         <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{chainSentence(GRAPH, pair.steps, personName)}.</Text>
         <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{[...new Set(pair.steps.map(step => pageLabel(step.link.refs)))].join(' · ')}</Text>
+      </View>
+    </Post>
+  );
+}
+
+/**
+ * «الألقاب» and «الكنى» (owner, 2026-11-19; sketch titles-quiz/sketch-dark.png, screen 3): one person's laqab or kunya large,
+ * the person under it, the book's words when they say more than the name, and the person page's own folded reference.
+ * The head opens the person's page.
+ */
+function NamePost({ kind, id, palette }: { kind: 'laqab' | 'kunya'; id: string; palette: Palette }) {
+  const pick = nameList(kind).find(each => nameId(each) === id);
+  if (!pick) return null;
+  const { person, name, fact } = pick;
+  const who = personName(person);
+  const open = () => router.push({ pathname: '/person', params: { slug: person.slug } });
+  const quote = unvowelled(fact.text).trim() !== name ? fact.text : '';
+  return (
+    <Post palette={palette} head={<PostHead Icon={Users} title={kind === 'laqab' ? 'لقب وصاحبه' : 'كنية وصاحبها'} sub={who} palette={palette} open={{ onPress: open, label: `افتح ترجمة ${who}` }} />}>
+      <View style={{ padding: 14, gap: 4 }}>
+        <Text style={{ color: palette.accent, fontSize: 30, lineHeight: 48, fontWeight: '700', textAlign: 'right' }}>{name}</Text>
+        <Text style={{ color: palette.ink, fontSize: 19, lineHeight: 30, textAlign: 'right' }}>{who}</Text>
+        {quote ? <Text style={{ color: palette.muted, fontSize: 16, lineHeight: 28, textAlign: 'right' }}>«{quote}»{fact.by.length ? ` ${sayerLine(fact)}` : ''}</Text> : null}
+        <Credit facts={[fact]} palette={palette} />
       </View>
     </Post>
   );
@@ -916,6 +942,9 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
 let virtues: { person: (typeof PEOPLE)[number]; index: number }[] | undefined;
 const virtueList = () => (virtues ??= allVirtues(PEOPLE));
 const virtueOf = (id: string) => virtueList().find(each => `${each.person.slug}-${each.index}` === id);
+const nameLists: Partial<Record<'laqab' | 'kunya', NameFact[]>> = {};
+const nameList = (kind: 'laqab' | 'kunya') => (nameLists[kind] ??= kind === 'laqab' ? laqabFacts(PEOPLE) : kunyaFacts(PEOPLE));
+const nameId = (each: NameFact) => `${each.person.slug}|${each.name}`;
 
 /** The content cards drawn from a list (pairs and trees have their own picks): each kind's items, by a lasting id. */
 type ListKind = Exclude<FeedCardKind, 'pair' | 'tree'>;
@@ -932,6 +961,8 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   moment: () => MOMENTS.map(momentId),
   tarajim: () => virtueList().map(each => `${each.person.slug}-${each.index}`),
   tie: () => tiePairs().map(pair => `${pair.a},${pair.b}`),
+  laqab: () => nameList('laqab').map(nameId),
+  kunya: () => nameList('kunya').map(nameId),
   life: lifePeople,
 };
 const itemsOf = (kind: ListKind) => (itemLists[kind] ??= LIST_OF[kind]());
@@ -965,6 +996,7 @@ function ContentPost({ kind, item, day, palette }: { kind: ListKind; item: strin
     case 'moment': return <MomentPost id={item} palette={palette} />;
     case 'tarajim': return <TarajimPost id={item} palette={palette} />;
     case 'tie': return <TiePost id={item} palette={palette} />;
+    case 'laqab': case 'kunya': return <NamePost kind={kind} id={item} palette={palette} />;
     case 'life': return <LifePost slug={item} palette={palette} />;
     default: return null;
   }

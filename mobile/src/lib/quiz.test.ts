@@ -119,3 +119,13 @@ describe('solo quiz on the phone', () => {
     expect(questionState(submit(run), 1)).toBe('unanswered');
   });
 });
+
+describe('kunya questions never come first (guard 9, owner 2026-11-18)', () => {
+  it('starts the Tarajim questions of a mixed quiz with another kind than a kunya, whatever the seed', () => {
+    for (let seed = 1; seed <= 20; seed += 1) {
+      const run = startSolo(cleanSolo({ kinds: ['TARAJIM_KUNYA', 'TARAJIM_LAQAB', 'TARAJIM_VIRTUE'], length: 6 }), seeded(seed));
+      const first = run.questions.find(question => question.family.startsWith('TARAJIM_'));
+      expect(first?.family).not.toBe('TARAJIM_KUNYA');
+    }
+  }, 30_000);
+});

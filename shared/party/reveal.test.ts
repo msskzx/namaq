@@ -18,6 +18,7 @@ const SHOWN: Record<string, string> = {
   promptArabic: 'the question itself (giveaway.test.ts checks it)',
   choices: 'the offered choices',
   correctAnswer: 'sent empty',
+  correctAnswers: 'sent empty on a question with several right choices: it only tells the screen to draw ticks',
   quran: 'the Quran words shown under the prompt',
   number: 'the ayah number shown after its words',
   page: 'how the mushaf page is drawn; it names no surah',
@@ -67,6 +68,7 @@ describe('a party phone gets nothing that answers the question before the reveal
         const sent = Object.entries(view).filter(([, value]) => value !== undefined).map(([field]) => field);
         expect(sent.filter(field => !(field in SHOWN) && !(view.tree && TREE_KNOWN.has(field))), question.key).toEqual([]);
         expect(view.correctAnswer).toBe('');
+        if (view.correctAnswers) expect(view.correctAnswers).toEqual([]);
         expect(view.key).not.toBe(question.key);
         expect((view.look as { mark?: unknown } | undefined)?.mark).toBeUndefined();
         if (view.ayahKey !== undefined) expect(view.write, question.key).toBeDefined();

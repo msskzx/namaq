@@ -15,6 +15,7 @@ import type { JuzRange } from '@shared/quran/juz';
 import { quizTrees } from '@shared/quiz/treeScope';
 import { isCompareBookmark } from '@shared/compareBookmarks';
 import { mixQuestions, questionAyat, type ChoiceQuestion, type ChoiceScope } from '@shared/quiz/choiceKinds';
+import { kunyaNotFirst } from '@shared/quiz/tarajim';
 import { emptyCompareAnswers, type CompareAsk } from '@shared/quiz/compareAnswers';
 import { CHOICE_KINDS } from '@shared/quiz/kinds';
 import { CHOICE_TOPICS, type QuizTopic } from '@shared/quiz/settings';
@@ -109,7 +110,7 @@ export type SoloRun = {
 export function startSolo(settings: SoloSettings, random: Random = Math.random, bookmarks?: Bookmark[]): SoloRun {
   const trees = settings.kinds.includes('BRANCHES') ? branchQuiz(poolFor(settings.list, bookmarks), settings.length, settings.leaves, random, settings.difficulty) : [];
   const kinds = kindsOf(settings).map(kind => kind.questions(scopeOf(settings.list), settings.difficulty, random, settings.length * 3));
-  const questions = mixQuestions<SoloQuestion>([trees, ...kinds], settings.length, random, questionAyat);
+  const questions = kunyaNotFirst(mixQuestions<SoloQuestion>([trees, ...kinds], settings.length, random, questionAyat));
   return { settings, questions, typed: questions.map(emptyOf), checked: questions.map(() => false), current: 0, submitted: false };
 }
 
@@ -159,6 +160,10 @@ export function questionState(run: SoloRun, index: number): QuestionState {
   const question = run.questions[index];
   if (isCompare(question)) {
     const { earned, total } = questionPoints(question, run.typed[index]);
+    return earned === total ? 'correct' : earned > 0 ? 'partial' : 'incorrect';
+  }
+  if (!isTree(question) && 'correctAnswers' in question && question.correctAnswers) {
+    const { earned, total } = questionPoints(question, run.typed[index][0]);
     return earned === total ? 'correct' : earned > 0 ? 'partial' : 'incorrect';
   }
   if (!isTree(question)) return run.typed[index][0] === question.correctAnswer ? 'correct' : 'incorrect';

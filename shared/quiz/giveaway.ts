@@ -3,7 +3,7 @@
 // They catch what can be seen from the question alone; what needs knowledge of the subject (a son named «X بن Y» asked
 // about Y) stays with each kind's own builder and test, and with the reviewer reading the kind's questions.
 import { normalizeWord } from '../quran/normalize';
-import type { ChoiceQuestion } from './choiceKinds';
+import { isRightChoice, type ChoiceQuestion } from './choiceKinds';
 
 /** Words as answers are matched: no marks, one alif, no joined «و ف ب ل ك» before the article, no article, no punctuation. */
 const words = (text: string) => text.split(/\s+/).map(word => normalizeWord(word).replace(/[^ء-ي]/g, ''))
@@ -25,9 +25,19 @@ function standsIn(label: string, shown: string[]) {
  */
 export function givesAway(question: ChoiceQuestion): string | null {
   if (question.choices.length < 2) return null;
-  const right = question.choices.find(choice => choice.value === question.correctAnswer);
-  if (!right) return 'no right choice';
-  const wrong = question.choices.filter(choice => choice !== right);
+  // A question of several right choices is checked for each of them against the wrong ones.
+  const rights = question.choices.filter(choice => isRightChoice(question, choice.value));
+  if (!rights.length) return 'no right choice';
+  const wrong = question.choices.filter(choice => !rights.includes(choice));
+  if (!wrong.length) return null;
+  for (const right of rights) {
+    const why = givenAway(question, right, wrong);
+    if (why) return why;
+  }
+  return null;
+}
+
+function givenAway(question: ChoiceQuestion, right: ChoiceQuestion['choices'][number], wrong: ChoiceQuestion['choices']) {
   // The words the question asks about (coloured, `marked`) are not the answer's giveaway: a reading or a meaning of them is asked.
   const quran = (question.quran ?? []).filter((_, i) => !question.marked?.includes(i));
   const shown = words([question.promptArabic, question.passage ?? '', ...quran].join(' '));
