@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { AppLifeEntry } from './life';
-import { lifeColumns, lifeFilters, lifeItems, lifeRail, lifeStrip } from './lifeTimeline';
+import { lifeColumns, lifeFilters, lifeItems, lifeRail, lifeStrip, stripLabels } from './lifeTimeline';
 import data from '../data/events/life.json';
 
 const entry = (slug: string, kind: AppLifeEntry['kind'], year?: number): AppLifeEntry =>
@@ -24,9 +24,19 @@ describe('a life on the timeline', () => {
 
   it('gives the strip every year from the first to the last, empty ones too, and no undated column', () => {
     const strip = lifeStrip(items);
+    const years = strip.slice(1).map(column => column.year!);
     expect(strip[0].key).toBe('before');
-    expect(strip.slice(1).map(column => column.year)).toEqual(Array.from({ length: 35 }, (_, i) => i + 2));
+    expect(years[0]).toBe(2);
+    expect(years[years.length - 1]).toBe(36);
+    expect(years.every((year, i) => i === 0 || year === years[i - 1] + 1)).toBe(true);
     expect(strip.find(column => column.year === 3)!.items).toEqual([]);
+  });
+
+  it('names a strip column only where its label does not touch the last one named', () => {
+    const strip = lifeStrip(lifeItems([entry('a', 'event', 1), entry('b', 'event', 2), entry('c', 'event', 3), entry('d', 'event', 9)], () => undefined));
+    // Wide columns: every year with something is named; narrow ones: 2 sits under 1's label and is skipped, 3 is clear.
+    expect([...stripLabels(strip, 40, 22)]).toEqual(['1', '2', '3', '9']);
+    expect([...stripLabels(strip, 12, 22)]).toEqual(['1', '3', '9']);
   });
 
   it('offers only the kinds the person has, and no chips when all are one kind', () => {
@@ -42,10 +52,14 @@ describe('a life on the timeline', () => {
     ]);
   });
 
-  it('draws the catalog: every entry lands on the rail once', () => {
+  it('draws each thing in the catalog once per person, keeping the sentences of an entry listed twice', () => {
     for (const entries of Object.values(data as Record<string, AppLifeEntry[]>)) {
-      const rail = lifeRail(lifeItems(entries, () => 'غزوة'));
-      expect(rail.flatMap(place => place.items).length).toBe(entries.length);
+      const keys = lifeRail(lifeItems(entries, () => undefined)).flatMap(place => place.items.map(item => item.key));
+      expect(new Set(keys).size).toBe(keys.length);
+      expect(new Set(keys)).toEqual(new Set(entries.map(e => `${e.kind}:${e.slug}`)));
     }
+    const twice = lifeItems([{ ...entry('uhud', 'battle', 3), refs: [{ text: 'أ', cite: '١' }] }, { ...entry('uhud', 'battle', 3), refs: [{ text: 'ب', cite: '٢' }] }], slug => kinds[slug]);
+    expect(twice).toHaveLength(1);
+    expect(twice[0].refs.map(ref => ref.text)).toEqual(['أ', 'ب']);
   });
 });

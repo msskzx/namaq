@@ -12,7 +12,7 @@ import lifeData from '@shared/data/events/life.json';
 import battlesData from '@shared/data/battles/battles.json';
 import type { AppLife } from '@shared/events/life';
 import type { AppBattle } from '@shared/battles/battle';
-import { lifeColumns, lifeItems, type LifeItem } from '@shared/events/lifeTimeline';
+import { lifeColumns, personLifeItems, type LifeItem } from '@shared/events/lifeTimeline';
 
 export const PROPHET = 'prophet-muhammad';
 
@@ -176,15 +176,7 @@ export function tarajimCards(day: number, slots: number[]): TarajimCard[] {
 }
 
 /** A person's «حياته» rows (shared/events/lifeTimeline.ts), as the app's lib/life.ts reads them. */
-export function personLife(person: AppPerson): LifeItem[] {
-  const [first, ...rest] = person.died.year.filter(fact => typeof fact.value === 'number');
-  const cite = (fact: PersonFact) => ({ text: unvowelled(fact.text), cite: pageLabel(fact.refs) });
-  const death = first && {
-    year: first.value as number, label: person.sex === 'FEMALE' ? 'وفاتها' : 'وفاته', refs: [cite(first)],
-    others: rest.map(fact => ({ text: unvowelled(fact.text), refs: [cite(fact)] })),
-  };
-  return lifeItems((lifeData as AppLife)[person.slug] ?? [], slug => battleKinds.get(slug), death || undefined);
-}
+export const personLife = (person: AppPerson): LifeItem[] => personLifeItems(person, (lifeData as AppLife)[person.slug] ?? [], slug => battleKinds.get(slug));
 const battleKinds = new Map((battlesData as AppBattle[]).map(battle => [battle.slug, battle.kind?.value]));
 
 /** What the person page draws for someone whose entry is converted: his name as the book writes it, his nasab tree, his life and his ties. */

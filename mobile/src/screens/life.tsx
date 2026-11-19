@@ -6,6 +6,7 @@ import { lifeColumns, type LifeItem } from '@shared/events/lifeTimeline';
 import { Text } from '@/ui/Text';
 import Svg, { Circle } from 'react-native-svg';
 import Card from '@/ui/Card';
+import { MIN_TAP } from '@/ui/tapSize';
 import TopBar from '@/ui/TopBar';
 import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
@@ -24,7 +25,7 @@ function Cell({ item, palette, show }: { item?: LifeItem; palette: Palette; show
   return (
     <View style={{ flex: 1 }}>
       <Card palette={palette} pad={[6, 8]} onPress={() => openItem(item, show)} onLongPress={() => show(item)} accessibilityRole={item.open ? 'link' : 'button'}
-        style={{ flexGrow: 1, minHeight: 44, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+        style={{ flexGrow: 1, minHeight: MIN_TAP, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
         <Svg width={7} height={7}><Circle cx={3.5} cy={3.5} r={3.5} fill={lifeColor(palette, item.kind)} /></Svg>
         <Text style={{ flex: 1, color: item.kind === 'own' ? palette.muted : palette.ink, fontSize: 15, lineHeight: 22, textAlign: 'center' }}>{item.name}</Text>
       </Card>
@@ -50,7 +51,7 @@ export default function LifeScreen() {
   const join = { width: 8, height: 1.5, backgroundColor: palette.rule, alignSelf: 'center' as const };
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar back={back} title={picked.length === 2 ? 'حياتهما' : 'حياتهم'} />
+      <TopBar back={back} title={picked.length === 2 ? 'حياتهما' : picked.length > 2 ? 'حياتهم' : findPerson(picked[0] ?? '')?.sex === 'FEMALE' ? 'حياتها' : 'حياته'} />
       <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 12 }}>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           {picked.map(s => <Chip key={s} label={name(s)} on palette={palette} onClear={picked.length > 1 ? () => setPicked(picked.filter(p => p !== s)) : undefined} />)}

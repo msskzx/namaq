@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Plus } from 'lucide-react';
 import { num } from '@shared/quran/arabicNumber';
-import { lifeFilters, lifeRail, lifeStrip, type LifeItem, type LifeKind } from '@shared/events/lifeTimeline';
+import { lifeFilters, lifeRail, lifeStrip, openLabel, stripLabels, type LifeItem, type LifeKind } from '@shared/events/lifeTimeline';
 import Card from '@/components/common/Card';
 import Chip from '@/components/common/Chip';
 import Button from '@/components/common/Button';
@@ -55,26 +55,39 @@ export function LifeSheet({ item, onClose }: { item?: LifeItem; onClose: () => v
               {reading.refs.map((ref, j) => <p key={j} className="text-sm text-[var(--home-muted)]">{ref.cite}</p>)}
             </div>
           ))}
-          {href && <div><Button href={href}>{item.open!.to === 'battle' ? 'صفحة الغزوة' : 'القصة'}</Button></div>}
+          {href && <div><Button href={href}>{openLabel(item)}</Button></div>}
         </div>
       )}
     </Sheet>
   );
 }
 
+/** Room a year's label takes under the strip, as in the app. */
+const LABEL_W = 22;
+
 function Strip({ items, on }: { items: LifeItem[]; on: (item: LifeItem) => boolean }) {
+  const box = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(0);
+  useEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    const watch = new ResizeObserver(() => setWidth(el.clientWidth));
+    watch.observe(el);
+    return () => watch.disconnect();
+  }, []);
   const columns = lifeStrip(items);
   if (columns.length === 0) return null;
+  const named = stripLabels(columns, width / (columns.length + (columns[0].before ? 1 : 0)), LABEL_W);
   return (
-    <Card className="px-2 py-3">
-      <div className="flex items-end" role="img" aria-label={`على سنوات الهجرة، من ${placeLabel(columns[0])} إلى ${placeLabel(columns[columns.length - 1])}`}>
+    <Card className="px-5 py-3">
+      <div ref={box} className="flex items-end" role="img" aria-label={`على سنوات الهجرة، من ${placeLabel(columns[0])} إلى ${placeLabel(columns[columns.length - 1])}`}>
         {columns.map(column => (
           <div key={column.key} className="flex min-w-0 flex-col items-center gap-[3px]" style={{ flex: column.before ? 2 : 1 }}>
             {column.items.slice().reverse().map(item => (
               <Dot key={item.key} color={on(item) ? lifeColor(item.kind) : 'var(--home-muted)'} hollow={!on(item)} />
             ))}
             <span className="mt-0.5 min-h-4 w-10 text-center text-xs text-[var(--home-muted)]">
-              {column.items.length ? (column.before ? 'قبل' : num(column.year!)) : ''}
+              {named.has(column.key) ? (column.before ? 'قبل' : num(column.year!)) : ''}
             </span>
           </div>
         ))}

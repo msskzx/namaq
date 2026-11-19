@@ -34,7 +34,7 @@ function PersonDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const { data: person, error, isLoading } = useSWR<PersonFull>(slug ? `/api/people/${slug}` : null, fetcher);
   // A converted entry's drawings (the app's person page): its nasab tree, «حياته» and ties ring take the older parts' place.
-  const drawings = useDrawings(slug);
+  const { view: drawings, loading: drawingsLoading } = useDrawings(slug);
   const otherModelEntries = (person?.modelEntries ?? []).filter((entry) => entry.predicate !== 'virtue');
 
   if (error) {
@@ -155,8 +155,10 @@ function PersonDetailPage() {
             </div>
           )}
 
-          {drawings ? <>
-            <LifeSection view={drawings} />
+          {/* Until it is known whether the entry is converted, neither the drawings nor the older parts show (no swap). */}
+          {drawingsLoading ? null : drawings ? <>
+            {drawings.life.length > 0 ? <LifeSection view={drawings} />
+              : <Timeline events={person.events || []} participations={person.participations || []} death={person} />}
             <TiesSection view={drawings} />
           </> : <>
             <Timeline events={person.events || []} participations={person.participations || []} death={person} />

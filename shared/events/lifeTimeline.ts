@@ -3,6 +3,7 @@
 // components/LifeTimeline.tsx and the website's components/tarajim/LifeTimeline.tsx both draw what this file lays out.
 import type { AppCite, AppReading } from '../battles/battle';
 import type { AppLifeEntry } from './life';
+import { pageLabel, type AppPerson, type PersonFact } from '../tarajim';
 
 /** What a row is: a raid the Prophet ﷺ went out on himself, one he sent, a later battle, an event, a story, or the person's own fact. */
 export type LifeKind = 'ghazwah' | 'sariyyah' | 'battle' | 'event' | 'story' | 'own';
@@ -38,21 +39,64 @@ const KIND_OF: Record<string, LifeKind> = { 'غزوة': 'ghazwah', 'سرية': '
 /**
  * The rows of one person's life: the catalog's entries (shared/data/events/life.json), each battle's kind read from its
  * page, and the person's death where the entry dates it (owner 2026-11-18: a person's own death is a field shown on the
- * timeline, not an event row).
+ * timeline, not an event row). An entry the catalog lists twice is one row with the sentences of both.
  */
 export function lifeItems(entries: AppLifeEntry[], battleKind: (slug: string) => string | undefined,
   death?: { year: number; refs: AppCite[]; label: string; others: AppReading[] }): LifeItem[] {
-  const items: LifeItem[] = entries.map(entry => {
+  const items = new Map<string, LifeItem>();
+  for (const entry of entries) {
+    const key = `${entry.kind}:${entry.slug}`;
+    const seen = items.get(key);
+    if (seen) {
+      seen.refs = [...seen.refs, ...entry.refs.filter(ref => !seen.refs.some(had => had.text === ref.text && had.cite === ref.cite))];
+      continue;
+    }
     const kind: LifeKind = entry.kind === 'battle' ? KIND_OF[battleKind(entry.slug) ?? ''] ?? 'battle' : entry.kind;
     const { name } = entry;
-    return {
-      key: `${entry.kind}:${entry.slug}`, kind, name, year: entry.year?.value, others: entry.year?.others ?? [],
+    items.set(key, {
+      key, kind, name, year: entry.year?.value, others: entry.year?.others ?? [],
       open: entry.kind === 'event' ? undefined : { to: entry.kind === 'story' ? 'story' : 'battle', slug: entry.slug },
       note: entry.role === 'استشهد فيها' ? entry.role : undefined, refs: entry.refs,
-    };
+    });
+  }
+  if (death) items.set('own:death', { key: 'own:death', kind: 'own', name: death.label, year: death.year, others: death.others, refs: death.refs });
+  return [...items.values()];
+}
+
+const bareText = (text: string) => text.replace(/[\u064B-\u0652\u0670\u0640]/g, '');
+
+/**
+ * A converted person's rows, the same on the app and the website: his catalog entries, and his death where his entry gives
+ * its year as a number (the first saying; the others shown on a tap, in their words).
+ */
+export function personLifeItems(person: AppPerson, entries: AppLifeEntry[], battleKind: (slug: string) => string | undefined): LifeItem[] {
+  const [first, ...rest] = person.died.year.filter(fact => typeof fact.value === 'number');
+  const cite = (fact: PersonFact) => ({ text: bareText(fact.text), cite: pageLabel(fact.refs) });
+  const death = first && {
+    year: first.value as number, label: person.sex === 'FEMALE' ? 'وفاتها' : 'وفاته', refs: [cite(first)],
+    others: rest.map(fact => ({ text: bareText(fact.text), refs: [cite(fact)] })),
+  };
+  return lifeItems(entries, battleKind, death || undefined);
+}
+
+/** The words of the button that opens a row's page: its own kind's page, or the story. */
+export const openLabel = (item: LifeItem) =>
+  ({ ghazwah: 'صفحة الغزوة', sariyyah: 'صفحة السرية', battle: 'صفحة المعركة', story: 'القصة' } as Partial<Record<LifeKind, string>>)[item.kind] ?? 'صفحتها';
+
+/**
+ * Which strip columns carry their year under them, so that no two labels overlap: a column with something in it is
+ * named when the last named one is at least a label's width away (`columnWidth`, `labelWidth` as measured on screen).
+ */
+export function stripLabels(columns: LifeYear[], columnWidth: number, labelWidth: number): Set<string> {
+  const named = new Set<string>();
+  let last = -Infinity;
+  columns.forEach((column, i) => {
+    if (column.items.length === 0) return;
+    if ((i - last) * columnWidth < labelWidth) return;
+    named.add(column.key);
+    last = i;
   });
-  if (death) items.push({ key: 'own:death', kind: 'own', name: death.label, year: death.year, others: death.others, refs: death.refs });
-  return items;
+  return named;
 }
 
 /** A year's place: before the hijra all in one place (as the book groups them), then each year after it. */

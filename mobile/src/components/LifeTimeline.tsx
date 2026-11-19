@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { router } from 'expo-router';
 import { Plus } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
-import { lifeFilters, lifeRail, lifeStrip, type LifeItem, type LifeKind } from '@shared/events/lifeTimeline';
+import { lifeFilters, lifeRail, lifeStrip, openLabel, stripLabels, type LifeItem, type LifeKind } from '@shared/events/lifeTimeline';
 import { Text } from '@/ui/Text';
 import Svg, { Circle } from 'react-native-svg';
 import TapRow from '@/ui/TapRow';
@@ -30,6 +30,8 @@ export function openItem(item: LifeItem, show: (item: LifeItem) => void) {
 }
 
 const DOT = 9;
+/** Room a year's label takes under the strip: two digits at its size with a little air, so labels never touch. */
+const LABEL_W = 22;
 
 /** A dot of the strip or the rail, filled, or a ring for a row of another kind than the one picked. */
 function Dot({ color, hollow = false }: { color: string; hollow?: boolean }) {
@@ -42,19 +44,22 @@ function Dot({ color, hollow = false }: { color: string; hollow?: boolean }) {
 
 /** The strip (sketch screen 1): a column per year, a dot per thing in it, filled when it is of the kind picked. */
 function Strip({ items, on, palette }: { items: LifeItem[]; on: (item: LifeItem) => boolean; palette: Palette }) {
+  const [width, setWidth] = useState(0);
   const columns = lifeStrip(items);
   if (columns.length === 0) return null;
+  // The before-hijra column is twice as wide as a year's.
+  const named = stripLabels(columns, width / (columns.length + (columns[0].before ? 1 : 0)), LABEL_W);
   return (
-    <Card palette={palette} pad={[10, 8]}>
-      <View style={{ flexDirection: 'row', alignItems: 'flex-end' }} accessible accessibilityLabel={`على سنوات الهجرة، من ${placeLabel(columns[0])} إلى ${placeLabel(columns[columns.length - 1])}`}>
+    <Card palette={palette} pad={[10, 18]}>
+      <View onLayout={event => setWidth(event.nativeEvent.layout.width)} style={{ flexDirection: 'row', alignItems: 'flex-end' }} accessible accessibilityLabel={`على سنوات الهجرة، من ${placeLabel(columns[0])} إلى ${placeLabel(columns[columns.length - 1])}`}>
         {columns.map(column => (
           <View key={column.key} style={{ flex: column.before ? 2 : 1, alignItems: 'center', gap: 3 }}>
             {column.items.slice().reverse().map(item => (
               <Dot key={item.key} color={on(item) ? lifeColor(palette, item.kind) : palette.muted} hollow={!on(item)} />
             ))}
-            {/* Every year with something in it is named; an empty year keeps its place unnamed, so a long life stays readable. */}
+            {/* A year with something in it is named where its label has room; an empty year keeps its place unnamed. */}
             <Text numberOfLines={1} style={{ width: 40, marginHorizontal: -20, color: palette.muted, fontSize: 12, marginTop: 2, minHeight: 16, textAlign: 'center' }}>
-              {column.items.length ? (column.before ? 'قبل' : num(column.year!)) : ''}
+              {named.has(column.key) ? (column.before ? 'قبل' : num(column.year!)) : ''}
             </Text>
           </View>
         ))}
@@ -103,7 +108,7 @@ export function LifeSheet({ item, onClose, palette }: { item?: LifeItem; onClose
               {reading.refs.map((ref, j) => <Text key={j} style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{ref.cite}</Text>)}
             </View>
           ))}
-          {item.open && <Row><Button label={item.open.to === 'battle' ? 'صفحة الغزوة' : 'القصة'} onPress={() => { onClose(); openItem(item, () => undefined); }} /></Row>}
+          {item.open && <Row><Button label={openLabel(item)} onPress={() => { onClose(); openItem(item, () => undefined); }} /></Row>}
         </View>
       )}
     </Sheet>

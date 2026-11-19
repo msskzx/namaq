@@ -15,10 +15,10 @@ import LifeTimeline, { lifeHref } from './LifeTimeline';
 
 const fetchJson = (url: string) => fetch(url).then(res => (res.ok ? res.json() : undefined));
 
-/** The drawings of a converted person; undefined for anyone else (who keeps the page's older parts). */
+/** The drawings of a converted person (`view`); none for anyone else, who keeps the page's older parts. `loading` until it is known which. */
 export function useDrawings(slug: string) {
-  const { data } = useSWR<DrawingsView | undefined>(slug ? `/api/tarajim?drawings=${encodeURIComponent(slug)}` : null, fetchJson, { revalidateOnFocus: false });
-  return data;
+  const { data, isLoading } = useSWR<DrawingsView | undefined>(slug ? `/api/tarajim?drawings=${encodeURIComponent(slug)}` : null, fetchJson, { revalidateOnFocus: false });
+  return { view: data, loading: isLoading };
 }
 
 /** A section as the page draws them: its name, then its body on the page itself. */
