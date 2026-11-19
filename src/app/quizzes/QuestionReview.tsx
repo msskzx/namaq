@@ -12,6 +12,8 @@ import { num } from "@shared/quran/arabicNumber";
 import { BranchFeedback } from "./BranchAnswers";
 import { CompareFeedback } from "./CompareAnswers";
 import { mushafText } from '@shared/quran/mushafText';
+import { canLook, LookView } from "@/components/quiz/QuizLook";
+import type { QuizLook } from "@shared/quiz/choiceKinds";
 import { ChoiceAfter, ChoiceLabel, ChoiceQuran, type ChoiceParts } from "./ChoiceParts";
 import { PICKS, picksOf, ticks } from "@shared/quiz/choiceKinds";
 
@@ -22,6 +24,7 @@ type ReviewQuestion = ScoredQuestion & ChoiceParts & {
   choiceDetails?: Record<string, { text: string; reference: string }>;
   ayah?: { text: string; reference: string } | null;
   evidence?: { reference: QuizReference | null };
+  look?: QuizLook;
 };
 
 export type ReviewEntry = { question: ReviewQuestion; answer: QuestionAnswer | null; result: { earned: number; total: number }; hints?: Hints };
@@ -67,6 +70,7 @@ export default function QuestionReview({ entries, names, ar }: { entries: Review
       <div>{typeof answer === "string" && answer ? choiceText(answer) : ar ? "بدون إجابة" : "No answer"}</div>
       {!correct && <div>{ar ? "الصحيح: " : "Correct: "}{choiceText(question.correctAnswer ?? "")}</div>}
       <ChoiceAfter question={question} given={typeof answer === "string" && answer ? answer : undefined} ar={ar} surahName={value => question.choices.find(item => item.value === value)?.labelArabic} />
+      {canLook(question.look) && <LookView look={question.look} shown />}
     </>}
     {question.evidence?.reference && <Button className="self-start" size="sm" onClick={() => setSource(true)}><BookOpen size={16} aria-hidden />{ar ? "المصدر" : "Source"}</Button>}
     <nav className="flex justify-between gap-2" aria-label={ar ? "التنقل في المراجعة" : "Review navigation"}>

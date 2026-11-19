@@ -17,8 +17,10 @@ commentary (من شرح ابن رجب, a paragraph where he explains a phrase of
 `RajabPost` drawn by `components/IbnRajab`, the page's own view), and the quiz cards in `FEED_QUIZ_NAMES`
 (`shared/quiz/feedQuiz.ts`): في أي سورة؟, أكمل المتشابهات, سمّع بقية الآية, قارن الموضعين,
 أوائل السور, سمّع الآية, ما معنى؟, the four ayah quizzes below, ما المصطلح؟ (`shared/quiz/balaghaTermQuiz.ts`: a term's
-definition with its name hidden, four terms to pick from, each choice linking to its definition once answered), the three Tuhfat al-Atfal questions, السيرة والغزوات (shared/quiz/sira.ts), the two tarajim questions
-(أين يلتقي النسبان؟, صاحب المنقبة and ما صلته به؟, `shared/quiz/tarajim.ts`), بمَ لُقّب؟ and ما كنيته؟ (each its own interest), أسماء النبي ﷺ (several right choices, under السيرة), and the three hadith questions (من راوي الحديث؟, أكمل الحديث and من أخرجه؟,
+definition with its name hidden, four terms to pick from, each choice linking to its definition once answered), the three Tuhfat al-Atfal questions, السيرة والغزوات (shared/quiz/sira.ts), the four tarajim questions
+(أين يلتقي النسبان؟, صاحب المنقبة and ما صلته به؟, `shared/quiz/tarajim.ts`; في أي سنة كان؟, `shared/quiz/life.ts`:
+the year of an event or story of someone's «حياته», or of a person's death (battles are the sira quiz's); two years where
+the sources give two, the wrong choices of the same shape and none near; the look-up his timeline), بمَ لُقّب؟ and ما كنيته؟ (each its own interest), أسماء النبي ﷺ (several right choices, under السيرة), and the three hadith questions (من راوي الحديث؟, أكمل الحديث and من أخرجه؟,
 `shared/quiz/hadith.ts`).
 
 The ayah quizzes (`shared/quiz/ayahQuizzes.ts`), whose questions are built once by `scripts/quran/buildAyahQuizzes.ts`
@@ -39,6 +41,9 @@ its page; the head opens the person's page.
 صلة (`TiePost`): two converted people joined through someone else, the nearest chain of ties as one sentence
 («صفية أمُّ الزبير، و…») with the pages that state each tie; the head opens «بينه وبين…» with the two picked
 (pairs from `linkedPairs` in `shared/tarajimGraph.ts`).
+
+من حياته (`LifePost`): a converted person's «حياته» timeline as his page draws it (the strip of years, the kinds as
+chips), the rail a year a line; the head opens his page. Only people whose strip has two years or more (`drawsLine`).
 
 لقب وصاحبه / كنية وصاحبها (`NamePost`, interests «الألقاب» and «الكنى»): one person's laqab or kunya large, the person
 under it, the book's words when they say more, and the person page's folded reference (lists from `shared/tarajimNames.ts`).
@@ -91,4 +96,4 @@ timeline), رتّب, من شهدها؟ / من أمير السرية؟, فيمَ 
 - Search, share and videos, settings, «ما أحفظه», «اهتماماتي»: tools, not content.
 - الأذكار: an interest once its card or question is built (owner agreed it is one, 2026-11-19).
 - Party quizzes: played with others, not from the feed.
-- Tarajim: the battles have the moment card and the sira stories the story card; the people have «من التراجم», «صلة», «لقب وصاحبه» and «كنية وصاحبها».
+- Tarajim: the battles have the moment card and the sira stories the story card; the people have «من التراجم», «صلة», «من حياته», «لقب وصاحبه» and «كنية وصاحبها».

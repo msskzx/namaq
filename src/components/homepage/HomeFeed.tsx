@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText, SquareArrowOutUpLeft, Swords, BookOpenText, ListTree, MessagesSquare, Link2 } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText, SquareArrowOutUpLeft, Swords, BookOpenText, ListTree, MessagesSquare, Link2, History } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Cookies from 'js-cookie';
@@ -13,6 +13,7 @@ import type { TermCard } from '@/lib/balaghaTerms';
 import type { HadithCard } from '@/lib/forty';
 import type { NameCard, TarajimCard } from '@/lib/tarajim';
 import { CreditFold, TiesChain, tiesHref } from '@/components/tarajim/TarajimParts';
+import LifeTimeline from '@/components/tarajim/LifeTimeline';
 import { IbnRajab, shamelaPage } from '@/components/hadith/FortyParts';
 import { fromCompanion } from '@shared/hadith';
 import { LitAyat, ayatName, quotesTitle, termHref } from '@/components/balagha/TermParts';
@@ -475,6 +476,17 @@ function TiePost({ card }: { card: Extract<TarajimCard, { kind: 'tie' }> }) {
   </Post>;
 }
 
+/** «من حياته» (the app's LifePost): a person's «حياته» timeline as his page draws it, the rail a year a line; the head opens his page. */
+function LifePost({ card }: { card: Extract<TarajimCard, { kind: 'life' }> }) {
+  const href = `/people/${card.person.slug}`;
+  return <Post head={<PostHead Icon={History} title={card.person.sex === 'FEMALE' ? 'من حياتها' : 'من حياته'} sub={card.person.name} href={href} label={`افتح ترجمة ${card.person.name}`} />}
+    actions={<Action Icon={Users} label={`افتح ترجمة ${card.person.name}`} href={href} />}>
+    <div className="px-2.5 py-3.5">
+      <LifeTimeline items={card.items} inCard compact linked={false} />
+    </div>
+  </Post>;
+}
+
 type Tree = TreePreview & { text: string };
 
 /** A saved ayah as a post: the ayah in the mushaf's own lines, as the recall card shows it once revealed. */
@@ -605,7 +617,7 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
   const { data: hadith } = useSWR(day && hadithSlots.length ? `/api/home/feed?day=${day}&hadith=${hadithSlots.join(',')}` : null,
     () => inPieces<HadithCard[]>(some => `/api/home/feed?day=${day}&hadith=${some.join(',')}`, hadithSlots).then(all => all.flat()), swr);
   // The virtue and «صلة» cards, one a batch, worked out on the server (the people's entries stay there).
-  const tarajimSlots = shows('tarajim') || shows('tie') ? Array.from({ length: batches }, (_, i) => i) : [];
+  const tarajimSlots = shows('tarajim') || shows('tie') || shows('life') ? Array.from({ length: batches }, (_, i) => i) : [];
   const { data: tarajim } = useSWR(day && tarajimSlots.length ? `/api/home/feed?day=${day}&tarajim=${tarajimSlots.join(',')}` : null,
     () => inPieces<TarajimCard[]>(some => `/api/home/feed?day=${day}&tarajim=${some.join(',')}`, tarajimSlots).then(all => all.flat()), swr);
   // The laqab and kunya cards, one of each a batch, worked out on the server like the virtue cards.
@@ -666,6 +678,7 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
     const tarajimCard = tarajim?.find(card => card.slot === i);
     if (tarajimCard?.kind === 'tarajim' && shows('tarajim')) posts.push(<TarajimPost key={`tj${day}-${i}`} card={tarajimCard} />);
     if (tarajimCard?.kind === 'tie' && shows('tie')) posts.push(<TiePost key={`tie${day}-${i}`} card={tarajimCard} />);
+    if (tarajimCard?.kind === 'life' && shows('life')) posts.push(<LifePost key={`life${day}-${i}`} card={tarajimCard} />);
     // Laqab on even batches, kunya on odd ones, so the two do not stand together; every batch when only one is shown.
     const nameKind = shows('laqab') && shows('kunya') ? (i % 2 ? 'kunya' : 'laqab') : shows('kunya') ? 'kunya' : 'laqab';
     const nameCard = names?.find(card => card.slot === i && card.kind === nameKind);

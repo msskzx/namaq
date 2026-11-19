@@ -1,7 +1,7 @@
 import { createContext, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
 import { AppState, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, BookOpenText, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, Link2, MessagesSquare, MoreHorizontal, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpenText, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, Link2, MessagesSquare, MoreHorizontal, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, History, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
@@ -17,11 +17,14 @@ import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
 import { allVirtues, dayStart, feedBooks, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, prayerSoon, type FeedSlot } from '@shared/homeFeed';
 import { pageLabel, sayerLine } from '@shared/tarajim';
-import { GRAPH, PEOPLE, personName, tiePairs, unvowelled } from '@/lib/tarajim';
+import { findPerson, GRAPH, PEOPLE, personName, tiePairs, unvowelled } from '@/lib/tarajim';
 import { kunyaFacts, laqabFacts, type NameFact } from '@shared/tarajimNames';
 import { Credit } from '@/screens/person';
 import { chainSentence } from '@shared/tarajimGraph';
 import TiesChain from './TiesChain';
+import LifeTimeline from './LifeTimeline';
+import { personLife } from '@/lib/life';
+import { drawsLine } from '@shared/events/lifeTimeline';
 import balaghaTerms from '@shared/data/quran/balaghaTerms';
 import { plainName, examplesOf } from '@shared/quran/balaghaTerms';
 import { BookWords, ExampleAyat, ayatName, quotesTitle } from './BalaghaTerm';
@@ -472,6 +475,28 @@ function NamePost({ kind, id, palette }: { kind: 'laqab' | 'kunya'; id: string; 
     </Post>
   );
 }
+
+/**
+ * «من حياته» (owner 2026-11-19: every feature gets a feed card, drawn with its own view): a person's «حياته» timeline as
+ * his page draws it, the rail a year a line; the head opens his page.
+ */
+function LifePost({ slug, palette }: { slug: string; palette: Palette }) {
+  const person = findPerson(slug);
+  if (!person) return null;
+  const items = personLife(person);
+  const she = person.sex === 'FEMALE';
+  const open = () => router.push({ pathname: '/person', params: { slug } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={History} title={she ? 'من حياتها' : 'من حياته'} sub={personName(person)} palette={palette} open={{ onPress: open, label: `افتح ترجمة ${personName(person)}` }} />}>
+      <View style={{ paddingVertical: 14, paddingHorizontal: 10 }}>
+        <LifeTimeline items={items} palette={palette} inCard compact linked={false} />
+      </View>
+    </Post>
+  );
+}
+
+/** The people whose life the feed can draw. */
+const lifePeople = () => PEOPLE.filter(person => drawsLine(personLife(person))).map(person => person.slug);
 
 /** The book a quiz kind asks from: its card stays out while that book is off the phone, as the book's own ayah card does. */
 const QUIZ_BOOKS: Partial<Record<FeedQuizKind, BookId>> = { TAFSIR: 'sadi', BALAGHA: 'itqan', TERM: 'itqan', IRAB: 'irab-words' };
@@ -938,6 +963,7 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   tie: () => tiePairs().map(pair => `${pair.a},${pair.b}`),
   laqab: () => nameList('laqab').map(nameId),
   kunya: () => nameList('kunya').map(nameId),
+  life: lifePeople,
 };
 const itemsOf = (kind: ListKind) => (itemLists[kind] ??= LIST_OF[kind]());
 const LIST_KINDS = Object.keys(LIST_OF) as ListKind[];
@@ -971,6 +997,7 @@ function ContentPost({ kind, item, day, palette }: { kind: ListKind; item: strin
     case 'tarajim': return <TarajimPost id={item} palette={palette} />;
     case 'tie': return <TiePost id={item} palette={palette} />;
     case 'laqab': case 'kunya': return <NamePost kind={kind} id={item} palette={palette} />;
+    case 'life': return <LifePost slug={item} palette={palette} />;
     default: return null;
   }
 }

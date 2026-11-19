@@ -147,7 +147,7 @@
   "webBoxes": {
     "src/app/events/[slug]/page.tsx": 2,
     "src/app/globals.css": 1,
-    "src/app/people/[slug]/page.tsx": 8,
+    "src/app/people/[slug]/page.tsx": 7,
     "src/app/privacy/page.tsx": 1,
     "src/app/quizzes/BranchAnswers.tsx": 1,
     "src/app/quizzes/CompareAnswers.tsx": 1,

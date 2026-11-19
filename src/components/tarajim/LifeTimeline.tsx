@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Plus } from 'lucide-react';
 import { num } from '@shared/quran/arabicNumber';
 import { lifeFilters, lifeRail, lifeStrip, openLabel, stripLabels, type LifeItem, type LifeKind } from '@shared/events/lifeTimeline';
@@ -65,7 +65,12 @@ export function LifeSheet({ item, onClose }: { item?: LifeItem; onClose: () => v
 /** Room a year's label takes under the strip, as in the app. */
 const LABEL_W = 22;
 
-function Strip({ items, on }: { items: LifeItem[]; on: (item: LifeItem) => boolean }) {
+/** The strip's frame: its own card on a page; inside a card (a feed post, a quiz's look-up) only its padding, no card in a card. */
+function Frame({ inCard, children }: { inCard: boolean; children: ReactNode }) {
+  return inCard ? <div className="px-5 py-1">{children}</div> : <Card className="px-5 py-3">{children}</Card>;
+}
+
+function Strip({ items, on, inCard }: { items: LifeItem[]; on: (item: LifeItem) => boolean; inCard: boolean }) {
   const box = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
   useEffect(() => {
@@ -79,7 +84,7 @@ function Strip({ items, on }: { items: LifeItem[]; on: (item: LifeItem) => boole
   if (columns.length === 0) return null;
   const named = stripLabels(columns, width / (columns.length + (columns[0].before ? 1 : 0)), LABEL_W);
   return (
-    <Card className="px-5 py-3">
+    <Frame inCard={inCard}>
       <div ref={box} className="flex items-end" role="img" aria-label={`على سنوات الهجرة، من ${placeLabel(columns[0])} إلى ${placeLabel(columns[columns.length - 1])}`}>
         {columns.map(column => (
           <div key={column.key} className="flex min-w-0 flex-col items-center gap-[3px]" style={{ flex: column.before ? 2 : 1 }}>
@@ -92,19 +97,19 @@ function Strip({ items, on }: { items: LifeItem[]; on: (item: LifeItem) => boole
           </div>
         ))}
       </div>
-    </Card>
+    </Frame>
   );
 }
 
 /** One row on the rail: its dot on the line and its name, a link to its page; a row with no page shows its sentences. */
-function Item({ item, show, last }: { item: LifeItem; show: (item: LifeItem) => void; last: boolean }) {
+function Item({ item, show, last, linked, marked }: { item: LifeItem; show: (item: LifeItem) => void; last: boolean; linked: boolean; marked: boolean }) {
   const href = itemHref(item);
   const label = <>
     {item.name}
     {item.note && <small className="ms-2 text-sm text-[var(--home-muted)]">{item.note}</small>}
     {item.others.length > 0 && <small className="ms-2 text-sm text-[var(--home-muted)]">وقيل غير ذلك</small>}
   </>;
-  const text = `py-2 text-lg leading-[1.7] ${item.kind === 'own' ? 'text-[var(--home-muted)]' : ''}`;
+  const text = `py-2 text-lg leading-[1.7] ${marked ? 'text-[var(--home-green)]' : item.kind === 'own' ? 'text-[var(--home-muted)]' : ''}`;
   return (
     <div className="flex min-h-11 items-stretch">
       <div className="relative w-[18px] shrink-0">
@@ -112,15 +117,38 @@ function Item({ item, show, last }: { item: LifeItem; show: (item: LifeItem) => 
         <span className="absolute inset-x-0 top-[17px] flex justify-center"><Dot color={lifeColor(item.kind)} /></span>
       </div>
       <div className="flex flex-1 items-center gap-2 ps-2">
-        <TapRow href={href} onClick={() => show(item)} className={text}><span>{label}</span></TapRow>
-        {href && <Button size="sm" variant="ghost" onClick={() => show(item)}>من الكتاب</Button>}
+        {linked ? <TapRow href={href} onClick={() => show(item)} className={text}><span>{label}</span></TapRow> : <p className={text}>{label}</p>}
+        {linked && href && <Button size="sm" variant="ghost" onClick={() => show(item)}>من الكتاب</Button>}
       </div>
     </div>
   );
 }
 
-/** A person's «حياته»: the strip, the chips and the rail. `compare` is the «+ قارن» page with him first. */
-export default function LifeTimeline({ items, compare }: { items: LifeItem[]; compare?: string }) {
+/** A year on the compact rail (the feed card's): one dot, its things in one line, each in its kind's colour. */
+function Line({ items, last }: { items: LifeItem[]; last: boolean }) {
+  return (
+    <div className="flex min-h-9 items-stretch">
+      <div className="relative w-[18px] shrink-0">
+        <span className="absolute inset-x-0 top-0 mx-auto w-[1.5px] bg-[var(--home-rule)]" style={{ bottom: last ? '50%' : 0 }} />
+        <span className="absolute inset-x-0 top-[13px] flex justify-center"><Dot color={lifeColor(items[0].kind)} /></span>
+      </div>
+      <p className="flex-1 ps-2 py-1 text-base leading-[1.65]">
+        {items.map((item, i) => (
+          <span key={item.key} className={item.kind === 'own' ? 'text-[var(--home-muted)]' : ''}>{i > 0 ? ' · ' : ''}{item.name}</span>
+        ))}
+      </p>
+    </div>
+  );
+}
+
+/**
+ * A person's «حياته»: the strip, the chips and the rail. `compare` is the «+ قارن» page with him first. Inside a card
+ * (`inCard`: a feed post, a quiz's look-up) the strip draws no card of its own; `compact` is the feed's rail, a year a
+ * line; `linked` false keeps rows from opening pages (a quiz would close under them); `marked` lights a quiz's answer.
+ */
+export default function LifeTimeline({ items, compare, inCard = false, compact = false, linked = true, marked }: {
+  items: LifeItem[]; compare?: string; inCard?: boolean; compact?: boolean; linked?: boolean; marked?: string;
+}) {
   const [filter, setFilter] = useState<number | undefined>();
   const [shown, setShown] = useState<LifeItem | undefined>();
   const filters = lifeFilters(items);
@@ -130,7 +158,7 @@ export default function LifeTimeline({ items, compare }: { items: LifeItem[]; co
   if (items.length === 0) return null;
   return (
     <div className="flex flex-col gap-3" lang="ar" dir="rtl">
-      <Strip items={items} on={on} />
+      <Strip items={items} on={on} inCard={inCard} />
       {(filters.length > 0 || compare) && (
         <div className="flex flex-wrap gap-2">
           {filters.length > 0 && <Chip label="الكل" on={filter === undefined} onClick={() => setFilter(undefined)} />}
@@ -143,7 +171,10 @@ export default function LifeTimeline({ items, compare }: { items: LifeItem[]; co
           <div key={place.key} className="flex">
             <span className={`w-[52px] shrink-0 pt-3 text-center ${place.year === undefined ? 'text-[var(--home-muted)]' : 'text-[var(--home-accent)]'}`}>{placeLabel(place)}</span>
             <div className="flex-1">
-              {place.items.map((item, i) => <Item key={item.key} item={item} show={setShown} last={p === rail.length - 1 && i === place.items.length - 1} />)}
+              {compact
+                ? <Line items={place.items} last={p === rail.length - 1} />
+                : place.items.map((item, i) => <Item key={item.key} item={item} show={setShown} linked={linked} marked={item.key === marked}
+                  last={p === rail.length - 1 && i === place.items.length - 1} />)}
             </div>
           </div>
         ))}

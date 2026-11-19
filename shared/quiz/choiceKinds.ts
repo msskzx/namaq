@@ -82,6 +82,7 @@ export type ChoiceQuestion = {
  * The feature's view a question opens to look its answer up (owner, 2026-11-19: the same view as its page and its feed
  * card, never a stand-in). `mark` points at the answer in it, so a party keeps it back until the reveal.
  * - `ties`: the person's ties round him (TiesRing), the asked person marked.
+ * - `life`: the person's «حياته» timeline (LifeTimeline), the asked row marked.
  * - `nasab`: the nasab tree of the people, where they meet named.
  * - `virtues`: the virtues each person's entry gives, the asked one marked.
  * - `terms`: the definition of each balagha term offered, the asked one marked.
@@ -94,6 +95,7 @@ export type ChoiceQuestion = {
  */
 export type QuizLook =
   | { view: 'ties'; slug: string; mark?: string }
+  | { view: 'life'; slug: string; mark?: string }
   | { view: 'nasab'; slugs: string[]; mark?: boolean }
   | { view: 'virtues'; slugs: string[]; mark?: { slug: string; index: number } }
   | { view: 'terms'; names: string[]; mark?: string }

@@ -13,7 +13,7 @@ import lifeData from '@shared/data/events/life.json';
 import battlesData from '@shared/data/battles/battles.json';
 import type { AppLife } from '@shared/events/life';
 import type { AppBattle } from '@shared/battles/battle';
-import { lifeColumns, personLifeItems, type LifeItem } from '@shared/events/lifeTimeline';
+import { drawsLine, lifeColumns, personLifeItems, type LifeItem } from '@shared/events/lifeTimeline';
 
 export const PROPHET = 'prophet-muhammad';
 
@@ -139,21 +139,32 @@ export function virtuesView(slug: string): VirtuesView | undefined {
 /** A chain of ties between two people, as TiesChain draws it: the people and each line's clause. */
 export type ChainView = { nodes: { slug: string; name: string; inApp: boolean }[]; steps: { from: string; to: string; kind: TieKind; clause: string }[]; first: string; picked: string[] };
 
-/** The «من التراجم» card (a virtue) and the «صلة» card (two people and the chain that joins them), one a batch in turn. */
+/**
+ * The «من التراجم» card (a virtue), the «صلة» card (two people and the chain that joins them) and the «من حياته» card (a
+ * person's timeline), one a batch in turn.
+ */
 export type TarajimCard =
   | { slot: number; kind: 'tarajim'; person: PersonHead; virtue: VirtueLine; pages: string }
-  | { slot: number; kind: 'tie'; a: PersonHead; b: PersonHead; chain: ChainView; sentence: string; pages: string };
+  | { slot: number; kind: 'tie'; a: PersonHead; b: PersonHead; chain: ChainView; sentence: string; pages: string }
+  | { slot: number; kind: 'life'; person: PersonHead; items: LifeItem[] };
 
 let virtues: ReturnType<typeof allVirtues<AppPerson>> | undefined;
 let pairs: ReturnType<typeof linkedPairs> | undefined;
+let lives: AppPerson[] | undefined;
 const turnOf = (day: number, at: number, count: number) => ((((day * 41 + at) % count) + count) % count);
 
 export function tarajimCards(day: number, slots: number[]): TarajimCard[] {
   virtues ??= allVirtues(PEOPLE);
   pairs ??= linkedPairs(GRAPH);
+  lives ??= PEOPLE.filter(person => drawsLine(personLife(person)));
   return slots.flatMap((slot): TarajimCard[] => {
-    const turn = Math.floor(slot / 2);
-    if (slot % 2 === 0) {
+    const turn = Math.floor(slot / 3);
+    if (slot % 3 === 2) {
+      if (!lives!.length) return [];
+      const person = lives![turnOf(day, turn, lives!.length)];
+      return [{ slot, kind: 'life', person: head(person), items: personLife(person) }];
+    }
+    if (slot % 3 === 0) {
       if (!virtues!.length) return [];
       const { person, index } = virtues![turnOf(day, turn, virtues!.length)];
       const fact = person.virtues[index];
