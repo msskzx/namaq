@@ -30,6 +30,13 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 
 ## Testing
 
+- Only meaningful tests (owner, 2026-11-19). Every agent building a feature
+  cleans up that feature's tests: each test protects an owner rule or a past
+  bug, and you can say which in one sentence. No filler tests (render-only,
+  class names, constants repeated) and no magic numbers: a hard-coded count
+  becomes a rule that holds for every item plus "there is at least one". A
+  guard's shrink-only baseline is not a magic number.
+  [docs/ship-checklist.md](docs/ship-checklist.md) section 9 has examples.
 - New functionality must be covered by automated tests. **Search and graph
   features are the highest priority**
 - Colocate tests next to the code they cover, named `<file>.test.ts(x)`
@@ -53,6 +60,10 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 
 ## Review before a PR
 
+- Run [docs/ship-checklist.md](docs/ship-checklist.md) before opening any PR:
+  tick the sections your change touches and paste them under `## Checks` in
+  the PR body. It holds the owner's standing feedback; rules a test could
+  check are proposed in [docs/plans/guard-proposals.md](docs/plans/guard-proposals.md).
 - A subagent reviews the diff before any PR is opened, and it is not the agent
   that wrote the code or the tests under review. Run one review cycle: the
   reviewer reads the diff and reports defects, and you fix or answer each one.
