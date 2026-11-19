@@ -11,7 +11,7 @@ import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@shared/quran/arabicNumber';
-import { ayahEnds, ayatLabel, branchesHref, endSign, keys, linkable, linkId, shownAyat, spell, withStarts, type Branch, type BranchAyah, type BranchesView, type Variant } from '@shared/quran/branches';
+import { ayahEnds, ayatLabel, branchesHref, closingSign, endedIn, keys, linkable, linkId, shownAyat, spell, withStarts, type Branch, type BranchAyah, type BranchesView, type Variant } from '@shared/quran/branches';
 import type { JuzRange } from '@shared/quran/juz';
 import { bare } from '@shared/quran/quranText/ayahWords';
 import { writtenForms, writtenPieces, writtenStrands } from '@shared/quran/writtenForms';
@@ -182,8 +182,7 @@ function Node({ node, parent, path, spelledPath = [], start, names, tags, lead, 
   const id = nodeId(indices.get(node)!);
   const subject = (root ? shownWords : node.words).join(' ');
   // Every box that ends an ayah closes with its sign, as the mushaf writes it (owner, 2026-11-14).
-  const last = shownWords[shownWords.length - 1] ?? '';
-  const sign = last === '۝' || last.startsWith('﴿') ? [] : endSign(node.ayat.map(key => ended[key][ended[key].length - 1]));
+  const sign = closingSign(shownWords, endedIn(node, path));
   const subtreeHref = subtreeLinks ? subtreeLinks[keys(node).join(' ')] : linkable(spelled) ? branchesHref(linkId(spelled, keys(node).flatMap(key => (tags[key] ? [tags[key].conj] : []))), juz, { ...view, partition: node.partition }) : undefined;
   const entries: FanEntry[] = [...node.children.map((child, i) => ({ key: `n${i}`, keys: keys(child), item: <>
     {bare && <BeforeFan ayahKeys={keys(child)} around={around} />}
