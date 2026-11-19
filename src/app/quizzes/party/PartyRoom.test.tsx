@@ -133,6 +133,40 @@ describe('party question', () => {
   });
 });
 
+describe('looking an answer up in a party', () => {
+  const looked = { ...question, look: { view: 'tuhfa', mark: 5 } };
+  const asked = () => party([{ type: 'start', playerId: 'p0', early: true }, { type: 'loaded', questions: [looked], surahNames: {} }]);
+
+  it('counts the look as it opens, says what it costs, and keeps the clock in sight over the view', () => {
+    show(asked(), 'p1');
+    expect(screen.getByText(/٥ نقاط بدل ١٠/)).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: /ابحث عن الجواب/ }));
+    expect(socket.send).toHaveBeenCalledWith({ type: 'look' });
+    const sheet = screen.getByRole('dialog', { name: 'ابحث عن الجواب' });
+    expect(within(sheet).getByRole('timer')).toBeTruthy();
+    // The verse that answers is not lit before the reveal.
+    expect(sheet.querySelector('[aria-current="true"]')).toBeNull();
+  });
+
+  it('after a look, tells the player a right answer now earns half, and does not count a second look', () => {
+    show(reduce(asked(), { type: 'look', playerId: 'p1' }, 0).state, 'p1');
+    expect(screen.getByText(/بحثتَ عنه/)).toBeTruthy();
+    expect(screen.queryByText(/بدل/)).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: /ابحث عن الجواب/ }));
+    expect(socket.send).not.toHaveBeenCalled();
+  });
+
+  it('shows at the reveal who looked it up, and the view with the answer lit', () => {
+    const state = [{ type: 'look', playerId: 'p1' }, { type: 'submit', playerId: 'p1', answer: 'a' }, { type: 'submit', playerId: 'p0', answer: 'a' }]
+      .reduce((current: PartyState, action) => reduce(current, action as Action, 0).state, asked());
+    show(state);
+    const board = screen.getByRole('region', { name: 'Leaderboard' });
+    expect(within(board.querySelector('[data-player="Amina"]') as HTMLElement).getByLabelText('Looked it up')).toBeTruthy();
+    expect(within(board.querySelector('[data-player="Host"]') as HTMLElement).queryByLabelText('Looked it up')).toBeNull();
+    expect(document.querySelector('[aria-current="true"]')?.id).toBe('bayt-5');
+  });
+});
+
 describe('a recited ayah in a party', () => {
   const words = ['قُلۡ', 'هُوَ', 'ٱللَّهُ', 'أَحَدٌ'];
   const written = { key: 'ENDS:112:1', family: 'ENDS', correctAnswer: '1', promptArabic: 'سمّع آية الإخلاص ١.', choices: [{ value: '1', labelArabic: 'حفظتها' }, { value: '0', labelArabic: 'نسيتها' }],
