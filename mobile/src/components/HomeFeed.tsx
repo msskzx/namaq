@@ -47,7 +47,7 @@ import type { AppMomentBattle } from '@shared/battles/battle';
 import { battleLine, Moment } from './battles/BattleParts';
 import { STORIES } from '@/lib/stories';
 import { FORTY, fortyEntry, shamelaPage } from '@/lib/hadith';
-import { fromCompanion, fromSahihayn, rajabFeedPassages, recordedIn, type RajabChapter } from '@shared/hadith';
+import { compilerOf, fromCompanion, fromSahihayn, rajabFeedPassages, recordedIn, type RajabChapter } from '@shared/hadith';
 import HadithBooks from '@/components/HadithBooks';
 import rajab from '@shared/data/hadith/ibnRajab.json';
 import IbnRajab from '@/components/IbnRajab';
@@ -747,7 +747,7 @@ function SiraPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/** The Forty al-Nawawi took whole from the Sahihayn, the most authentic first (owner, 2026-11-18), for the hadith card. */
+/** The Forty (and Ibn Rajab's eight) taken whole from the Sahihayn, the most authentic first (owner, 2026-11-18), for the hadith cards. */
 const FEED_FORTY = FORTY.entries.filter(fromSahihayn);
 
 /** Ibn Rajab's explanations of a phrase of those hadith, for his card. */
@@ -778,16 +778,17 @@ function RajabPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/** One of al-Nawawi's Forty in his words, with the books he names; the head opens the hadith's page with its records. */
+/** One of the Forty in al-Nawawi's words (Ibn Rajab's for his eight); the head opens the hadith's page with its records. */
 function HadithPost({ id, palette }: { id: string; palette: Palette }) {
   const entry = FEED_FORTY.find(each => String(each.n) === id);
   if (!entry) return null;
+  const { book } = compilerOf(entry);
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
     <Post palette={palette} head={<PostHead Icon={MessagesSquare} title="من الحديث" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} palette={palette} open={{ onPress: open, label: `افتح ${entry.heading}` }} />}
       actions={<>
         <Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />
-        <Action Icon={ExternalLinkIcon} label={`المصدر: ${FORTY.books.nawawi.title}`} onPress={() => openExternal(shamelaPage('nawawi', entry.shamela))} palette={palette} />
+        <Action Icon={ExternalLinkIcon} label={`المصدر: ${FORTY.books[book].title}`} onPress={() => openExternal(shamelaPage(book, entry.shamela))} palette={palette} />
       </>}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
         <Text style={{ color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right' }}>{entry.text}</Text>
@@ -838,7 +839,7 @@ function RecordedPost({ id, palette }: { id: string; palette: Palette }) {
       actions={<Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
         <Text numberOfLines={3} style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>{entry.text}</Text>
-        <HadithBooks top={entry.heading} boxes={recordedIn(entry)} palette={palette} />
+        <HadithBooks top={entry.heading} boxes={recordedIn(entry)} namer={compilerOf(entry).name} palette={palette} />
       </View>
     </Post>
   );

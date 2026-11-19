@@ -172,6 +172,10 @@ export interface FortyEntry {
   records: FortyRecord[];
   /** What the scholars said of its grade, each quoted (the hadith outside the Sahihayn). */
   grades?: FortyGrade[];
+  /** One of the eight Ibn Rajab adds (43–50): `text` is his quotation at the head of his chapter, `named` the books he names. */
+  source?: 'ibnrajab';
+  /** The volume of Ibn Rajab's book `pages` are in, on one of his eight. */
+  volume?: number;
 }
 
 export interface AppForty {
@@ -255,6 +259,10 @@ const GRADED_SAHIH = new Set([11, 18, 28, 29]);
 export const fromSahihayn = (entry: Pick<FortyEntry, 'partial' | 'records'>) =>
   !entry.partial && entry.records.length > 0 && entry.records.every(record => record.book === 'bukhari' || record.book === 'muslim');
 
+/** Who compiled the entry and in which book: al-Nawawi in his Forty, or Ibn Rajab for the eight he adds (43–50). */
+export const compilerOf = (entry: Pick<FortyEntry, 'source'>) =>
+  entry.source === 'ibnrajab' ? { book: 'ibnrajab' as const, name: 'ابن رجب' } : { book: 'nawawi' as const, name: 'النووي' };
+
 /** One of the Forty a quiz may carry: wholly from the Sahihayn, or graded sahih undisputed. */
 export const authentic = (entry: Pick<FortyEntry, 'n' | 'records'>) => GRADED_SAHIH.has(entry.n)
   || (entry.records.length > 0 && entry.records.every(record => record.book === 'bukhari' || record.book === 'muslim'));
@@ -265,9 +273,10 @@ export const fromCompanion = (companion: string) => `عن ${companion.replace(/^
 
 /** al-Nawawi's text after his opening «عن فلان رضي الله عنه», for a short preview; a «قال:» that opens what is left goes too. */
 export function sayingStart(text: string): string {
-  const at = /رضي الله (?:تعالى )?عن(?:هما|هم|ها|ه)(?: أيضًا)?\s*[:،]?\s*/.exec(text);
+  // Ibn Rajab's eight set the blessing between dashes («- رضي الله عنهما - قَالَ:») and keep their harakat.
+  const at = /رضي الله (?:تعالى )?عن(?:هما|هم|ها|ه)(?: أيضًا)?[\s-]*[:،]?\s*/.exec(text);
   const rest = at ? text.slice(at.index + at[0].length) : text.replace(/^«/, '');
-  return rest.replace(/^(?:قالت?|يقول)\s*:\s*/, '');
+  return rest.replace(/^(?:ق\p{Mn}*ا\p{Mn}*ل\p{Mn}*(?:ت\p{Mn}*)?|يقول)\s*:\s*/u, '');
 }
 
 

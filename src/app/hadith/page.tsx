@@ -37,7 +37,7 @@ export default function HadithPage() {
             </div>
           );
         })}
-        <BookCard href="/hadith/forty" title={FORTY.books.nawawi.title} by="يحيى بن شرف النووي" size={`${num(FORTY.entries.length)} حديثًا`} />
+        <BookCard href="/hadith/forty" title={FORTY.books.nawawi.title} by="يحيى بن شرف النووي" size={`${num(FORTY.entries.filter(entry => !entry.source).length)} حديثًا، و${num(FORTY.entries.filter(entry => entry.source === 'ibnrajab').length)} زادها ابن رجب`} />
       </HadithSearch>
     </div>
   );

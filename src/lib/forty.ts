@@ -16,8 +16,8 @@ export const rajabChapter = (n: number): RajabChapter | undefined => RAJAB.find(
 export const JIBRIL = { muslim: 'muslim-jibril', bukhari: 'bukhari-jibril' } as const;
 
 /** A hadith in a list (the hadith tab's card, the quiz's look-up): its number, the Companion, al-Nawawi's text and the books he names. */
-export type FortyListItem = Pick<FortyEntry, 'n' | 'heading' | 'companion' | 'text' | 'named'> & { start: string };
-export const fortyList = (): FortyListItem[] => FORTY.entries.map(({ n, heading, companion, text, named }) => ({ n, heading, companion, text, named, start: sayingStart(text) }));
+export type FortyListItem = Pick<FortyEntry, 'n' | 'heading' | 'companion' | 'text' | 'named' | 'source'> & { start: string };
+export const fortyList = (): FortyListItem[] => FORTY.entries.map(({ n, heading, companion, text, named, source }) => ({ n, heading, companion, text, named, ...(source ? { source } : {}), start: sayingStart(text) }));
 
 /** One hadith's page: the entry, the books' titles and editions, Ibn Rajab's chapter on it, and the steps its chains are placed in. */
 export const fortyPage = (n: number) => {
@@ -34,9 +34,9 @@ const turnOf = (day: number, at: number, count: number) => ((((day * 37 + at) % 
 
 /**
  * The «الحديث» cards (the app's HadithPost, RajabPost and RecordedPost), taking turns batch by batch: one of the Forty in
- * al-Nawawi's words, a passage of Ibn Rajab's explanation of one, or the books that record one («من أخرجه»).
+ * al-Nawawi's words (Ibn Rajab's for his eight), a passage of Ibn Rajab's explanation of one, or the books that record one («من أخرجه»).
  */
-export type HadithCard = { slot: number; entry: Pick<FortyEntry, 'n' | 'heading' | 'companion' | 'text' | 'shamela'>; books: Pick<FortyBooks, 'nawawi' | 'ibnrajab'> } & (
+export type HadithCard = { slot: number; entry: Pick<FortyEntry, 'n' | 'heading' | 'companion' | 'text' | 'shamela' | 'source'>; books: Pick<FortyBooks, 'nawawi' | 'ibnrajab'> } & (
   | { kind: 'hadith' }
   | { kind: 'rajab'; passage: RajabParagraph[] }
   | { kind: 'recorded'; boxes: BookBox[] });
@@ -44,7 +44,7 @@ const KINDS = ['hadith', 'rajab', 'recorded'] as const;
 
 export function hadithCards(day: number, slots: number[]): HadithCard[] {
   const books = { nawawi: FORTY.books.nawawi, ibnrajab: FORTY.books.ibnrajab };
-  const short = ({ n, heading, companion, text, shamela }: FortyEntry) => ({ n, heading, companion, text, shamela });
+  const short = ({ n, heading, companion, text, shamela, source }: FortyEntry) => ({ n, heading, companion, text, shamela, ...(source ? { source } : {}) });
   return slots.flatMap((slot): HadithCard[] => {
     const turn = Math.floor(slot / KINDS.length);
     const kind = KINDS[slot % KINDS.length];

@@ -18,7 +18,7 @@ import { CreditFold, TiesChain, tiesHref } from '@/components/tarajim/TarajimPar
 import LifeTimeline from '@/components/tarajim/LifeTimeline';
 import { IbnRajab, shamelaPage } from '@/components/hadith/FortyParts';
 import HadithBooks from '@/components/hadith/HadithBooks';
-import { fromCompanion } from '@shared/hadith';
+import { compilerOf, fromCompanion } from '@shared/hadith';
 import { ExampleAyat, ayatName, quotesTitle, termHref } from '@/components/balagha/TermParts';
 import BookRuns from '@/components/quran/text/BookRuns';
 import { plainName } from '@shared/quran/balaghaTerms';
@@ -407,7 +407,7 @@ function TermPost({ card }: { card: TermCard }) {
 }
 
 /**
- * One of al-Nawawi's Forty in his words (the app's HadithPost), a passage of Ibn Rajab's explanation of one (its RajabPost), or
+ * One of the Forty in al-Nawawi's words, or Ibn Rajab's for his eight (the app's HadithPost), a passage of Ibn Rajab's explanation of one (its RajabPost), or
  * the books that record one (its RecordedPost); the head and the first button open the hadith's page with its records.
  */
 function HadithPost({ card }: { card: HadithCard }) {
@@ -418,11 +418,11 @@ function HadithPost({ card }: { card: HadithCard }) {
   if (card.kind === 'recorded') return <Post head={<PostHead Icon={Network} title="من أخرجه" sub={sub} href={href} label={`افتح ${entry.heading}`} />} actions={open}>
     <div className="flex flex-col gap-3 px-4 py-3" lang="ar">
       <p className="line-clamp-3 text-[1.125rem] leading-[1.9]">{entry.text}</p>
-      <HadithBooks top={entry.heading} boxes={card.boxes} />
+      <HadithBooks top={entry.heading} boxes={card.boxes} namer={compilerOf(entry).name} />
     </div>
   </Post>;
   const rajab = card.kind === 'rajab';
-  const source = rajab ? { title: books.ibnrajab.title, url: shamelaPage(books, 'ibnrajab', card.passage[0].shamela) } : { title: books.nawawi.title, url: shamelaPage(books, 'nawawi', entry.shamela) };
+  const source = rajab ? { title: books.ibnrajab.title, url: shamelaPage(books, 'ibnrajab', card.passage[0].shamela) } : { title: books[compilerOf(entry).book].title, url: shamelaPage(books, compilerOf(entry).book, entry.shamela) };
   return <Post head={<PostHead Icon={rajab ? BookOpenText : MessagesSquare} title={rajab ? 'من شرح ابن رجب' : 'من الحديث'} sub={sub} href={href} label={`افتح ${entry.heading}`} />}
     actions={<>
       {open}

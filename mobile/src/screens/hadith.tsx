@@ -58,6 +58,9 @@ function BookCard({ title, by, size, last, onOpen, onContinue, palette }: {
   );
 }
 
+/** al-Nawawi's Forty and the eight Ibn Rajab adds, as the book card counts them. */
+const FORTY_SIZE = `${num(FORTY.entries.filter(entry => !entry.source).length)} حديثًا، و${num(FORTY.entries.filter(entry => entry.source === 'ibnrajab').length)} زادها ابن رجب`;
+
 /** Hits drawn at a time; more come as the list nears its end, so every hit shows without drawing thousands at once. */
 const SEARCH_STEP = 40;
 
@@ -130,7 +133,7 @@ export default function HadithScreen() {
             return <BookCard key={slug} title={book.title} by={`${book.author} (ت ${num(book.died)}هـ)`} size={`${num(book.kitabs.length)} كتابًا، ${num(count)} حديثًا`}
               last={last && kitab ? `${num(last)}، ${kitab.title}` : undefined} onOpen={() => openBook(slug)} onContinue={last ? () => openSahih(slug, last) : undefined} palette={palette} />;
           })}
-          <BookCard title={FORTY.books.nawawi.title} by="يحيى بن شرف النووي" size={`${num(FORTY.entries.length)} حديثًا`} onOpen={() => openBook('forty')} palette={palette} />
+          <BookCard title={FORTY.books.nawawi.title} by="يحيى بن شرف النووي" size={FORTY_SIZE} onOpen={() => openBook('forty')} palette={palette} />
         </>}
       </ScrollView>
     </View>

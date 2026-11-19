@@ -2,7 +2,7 @@
 // questions from al-Nawawi's Forty as al-Bukhari prints them (shared/data/hadith/forty.json), the most authentic first.
 // Every choice is a real name or a real phrase of another hadith, and the reference is under the choices.
 import fortyData from '../data/hadith/forty.json';
-import { COLLECTOR, authentic, recordName, type AppForty, type FortyEntry, type FortyRecord } from '../hadith';
+import { COLLECTOR, authentic, compilerOf, recordName, type AppForty, type FortyEntry, type FortyRecord } from '../hadith';
 import { num } from '../quran/arabicNumber';
 import { shuffle, type Random } from './random';
 import type { ChoiceKind, ChoiceQuestion } from './choiceKinds';
@@ -17,8 +17,9 @@ const FORTY = fortyData as AppForty;
 const bare = (text: string) => text.replace(/[ً-ْٰ]/g, '').replace(/[أإآ]/g, 'ا').replace(/\s+/g, ' ').trim();
 
 /** Al-Bukhari's whole records of the Forty: each entry al-Nawawi takes whole from the Sahihayn, each record holding his wording. */
+// Not Ibn Rajab's eight yet: their other Companions in al-Bukhari (`alsoFrom`) are not listed, so a wrong choice could be right.
 const bukhari = (): { entry: FortyEntry; record: FortyRecord }[] =>
-  FORTY.entries.filter(entry => !entry.partial).flatMap(entry =>
+  FORTY.entries.filter(entry => !entry.partial && !entry.source).flatMap(entry =>
     entry.records.filter(record => record.book === 'bukhari' && !record.partial && record.isnadEnd).map(record => ({ entry, record })));
 
 /** The saying as printed, from its opening quote mark to its closing one. */
@@ -29,7 +30,7 @@ const sayingOf = (record: FortyRecord) => {
 };
 
 const source = (entry: FortyEntry, record: FortyRecord) =>
-  `${recordName(record, num)}، ج ${num(record.volume)}، ص ${num(record.pages[0])}؛ الأربعون النووية، ${entry.heading}`;
+  `${recordName(record, num)}، ج ${num(record.volume)}، ص ${num(record.pages[0])}؛ ${FORTY.books[compilerOf(entry).book].title}، ${entry.heading}`;
 
 function choose(key: string, family: string, promptArabic: string, right: string, wrong: string[], note: string, entry: FortyEntry, random: Random): ChoiceQuestion | null {
   const others = [...new Map(wrong.filter(label => bare(label) !== bare(right)).map(label => [bare(label), label])).values()];
@@ -127,10 +128,10 @@ const citedWhole = (entry: FortyEntry) => !entry.partial && !/وغيره/.test(e
 
 /**
  * «من أخرجه؟» (owner, 2026-11-18: every feature a quiz kind): al-Nawawi's quotation, and the books he names for it. The
- * question asks his citation, a fact of his book, not where else a report is found; the wrong choices are other entries' citations.
+ * question asks his citation, a fact of his book (so not Ibn Rajab's eight), not where else a report is found; the wrong choices are other entries' citations.
  */
 export function bookQuestions(random: Random): ChoiceQuestion[] {
-  const all = FORTY.entries.filter(entry => authentic(entry) && citedWhole(entry)).flatMap(entry => { const quotation = quotationOf(entry); return quotation ? [{ entry, quotation, books: namedBooks(entry.named) }] : []; });
+  const all = FORTY.entries.filter(entry => !entry.source && authentic(entry) && citedWhole(entry)).flatMap(entry => { const quotation = quotationOf(entry); return quotation ? [{ entry, quotation, books: namedBooks(entry.named) }] : []; });
   // «مسلم» against «البخاري ومسلم» is half right, so a choice sharing any book with the right one is never offered.
   const apart = (a: readonly string[], b: readonly string[]) => !a.some(book => b.includes(book));
   return shuffle(all.flatMap(({ entry, quotation, books }) => {

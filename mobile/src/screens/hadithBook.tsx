@@ -1,5 +1,6 @@
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
+import type { FortyEntry } from '@shared/hadith';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
@@ -26,6 +27,7 @@ export default function HadithBookScreen() {
   const { state } = useSahihText(sahih?.slug);
   const back = () => (router.canGoBack() ? router.back() : toTab('/hadith'));
   const title = sahih?.title ?? FORTY.books.nawawi.title;
+  const card = (entry: FortyEntry) => <FortyCard key={entry.n} entry={entry} palette={palette} onPress={() => router.push({ pathname: '/hadith-forty', params: { n: String(entry.n) } })} />;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar back={back} title={title} hideOnScroll />
@@ -37,9 +39,12 @@ export default function HadithBookScreen() {
           {state !== 'on' && <SahihDownload slug={sahih.slug} state={state} palette={palette} />}
           <SahihKitabList book={sahih} onOpen={kitab => openKitab(sahih.slug, kitab)} palette={palette} />
           <Reference title={sahih.title} quotes={[{ text: `${sahih.title}، ${sahih.edition}` }]} links={[{ label: 'الكتاب في المكتبة الشاملة', url: `https://shamela.ws/book/${sahih.shamela}` }]} palette={palette} />
-        </> : FORTY.entries.map(entry => (
-          <FortyCard key={entry.n} entry={entry} palette={palette} onPress={() => router.push({ pathname: '/hadith-forty', params: { n: String(entry.n) } })} />
-        ))}
+        </> : <>
+          {FORTY.entries.filter(entry => !entry.source).map(card)}
+          <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 22, textAlign: 'right', marginTop: 8 }}>ما زاده ابن رجب</Text>
+          <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right', marginTop: -8 }}>{FORTY.books.ibnrajab.title}</Text>
+          {FORTY.entries.filter(entry => entry.source === 'ibnrajab').map(card)}
+        </>}
       </ScrollView>
     </View>
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, type ReactNode } from 'react';
-import { RECORD_BOOKS, fromCompanion, lastPage, recordedIn, rajabOpening, recordName, type AppHadith, type FortyBook, type FortyEntry, type FortyGrade, type FortyRecord, type RajabChapter, type RajabParagraph } from '@shared/hadith';
+import { RECORD_BOOKS, compilerOf, fromCompanion, lastPage, recordedIn, rajabOpening, recordName, type AppHadith, type FortyBook, type FortyEntry, type FortyGrade, type FortyRecord, type RajabChapter, type RajabParagraph } from '@shared/hadith';
 import { num } from '@shared/quran/arabicNumber';
 import Button from '@/components/common/Button';
 import Card from '@/components/common/Card';
@@ -147,6 +147,9 @@ export function FortyHadith({ entry, books, chapter, size, inset = false, jibril
   const Heading = inset ? 'h3' : 'h2';
   const grouped = RECORD_BOOKS.map(book => ({ book, records: entry.records.filter(record => record.book === book) })).filter(({ records }) => records.length > 0);
   const drawn = entry.records.some(record => record.isnad);
+  // al-Nawawi's text, or Ibn Rajab's for the eight he adds (43–50).
+  const compiler = compilerOf(entry);
+  const book = books[compiler.book];
   return (
     <div dir="rtl" lang="ar" className="flex flex-col gap-3.5 text-[var(--home-ink)]">
       <div className="flex flex-col gap-0.5">
@@ -155,10 +158,10 @@ export function FortyHadith({ entry, books, chapter, size, inset = false, jibril
       </div>
       <Card className="flex flex-col gap-2 p-4">
         <p className={BODY}>{entry.text}</p>
-        <Cite title={`${books.nawawi.title}، ${pagesName(entry.pages)}`} edition={`${books.nawawi.title}، ${books.nawawi.edition}`} url={shamelaPage(books, 'nawawi', entry.shamela)} />
+        <Cite title={`${book.title}، ${entry.volume ? `${num(entry.volume)}/ ${num(entry.pages[0])}` : pagesName(entry.pages)}`} edition={`${book.title}، ${book.edition}`} url={shamelaPage(books, compiler.book, entry.shamela)} />
       </Card>
       <Heading className="text-lg">من أخرجه</Heading>
-      <HadithBooks top={entry.heading} boxes={recordedIn(entry)} />
+      <HadithBooks top={entry.heading} boxes={recordedIn(entry)} namer={compiler.name} />
       {jibril}
       {drawn && <Segmented tabs label="طريقة العرض" className="self-start" options={MODES.map(item => ({ ...item, current: mode === item.key, onClick: () => setMode(item.key) }))} />}
       {entry.partial && entry.records.length > 0 && <p className="text-[0.9375rem] text-[var(--home-muted)]">في الصحيحين بعض لفظ الحديث</p>}
