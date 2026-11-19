@@ -1,11 +1,11 @@
 import { createContext, useContext, useState, type ReactNode } from 'react';
-import { View, type TextStyle, type ViewStyle } from 'react-native';
+import { useWindowDimensions, View, type TextStyle, type ViewStyle } from 'react-native';
 import { Text } from '@/ui/Text';
 import { QURAN_FONT } from '@/lib/theme';
 import { FLOW_LINE, flowFontSize } from '@shared/quran/quranText/flow';
 import { mushafText } from '@shared/quran/mushafText';
 
-/** The font size the AyahFlow around takes from its width; 0 until it has measured. */
+/** The font size the AyahFlow around takes from its width (0 outside one). */
 const FlowSize = createContext({ size: 0, color: '' });
 
 /** The Quran text size where it is drawn: write boxes and signs beside the words take it too. */
@@ -19,13 +19,17 @@ export const useAyahSize = () => useContext(FlowSize).size;
 export default function AyahFlow({ children, color, row = false, style }: { children: ReactNode; color: string;
   /** Pieces side by side, wrapping (words and boxes in a matrix row); otherwise one justified paragraph. */
   row?: boolean; style?: ViewStyle }) {
-  const [size, setSize] = useState(0);
+  // Until it has measured its own width, it guesses from the screen's (less a card's margins), so it is drawn at about its
+  // height from the first pass: a list that scrolls to an item by its laid-out place finds it there.
+  const screen = useWindowDimensions().width;
+  const [measured, setMeasured] = useState(0);
+  const size = measured || flowFontSize(screen - 64);
   return (
-    <View style={style} onLayout={event => setSize(flowFontSize(event.nativeEvent.layout.width))}>
+    <View style={style} onLayout={event => setMeasured(flowFontSize(event.nativeEvent.layout.width))}>
       <FlowSize.Provider value={{ size, color }}>
-        {size > 0 && (row
+        {row
           ? <View style={{ direction: 'rtl', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: size * 0.35 }}>{children}</View>
-          : <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, color, textAlign: 'justify', writingDirection: 'rtl' }}>{children}</Text>)}
+          : <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, color, textAlign: 'justify', writingDirection: 'rtl' }}>{children}</Text>}
       </FlowSize.Provider>
     </View>
   );

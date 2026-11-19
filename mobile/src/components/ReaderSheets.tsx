@@ -8,7 +8,7 @@ import { corpusIndex as ayahIndex } from '@shared/quran/corpusIndex';
 import { GESTURES, MODE_ACTIONS, readGestures, serverGestures, setGesture, subscribeGestures, type Gesture, type GestureAction, type ReaderMode } from '@shared/readerGestures';
 import Sheet from '@/ui/Sheet';
 import { pageOfAyah, surahs } from '@/lib/mushaf';
-import { QURAN_FONT, type Palette } from '@/lib/theme';
+import type { Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
 import { quranText } from '@/lib/quranText';
 import { surahName } from '@shared/quran/surahNames';
