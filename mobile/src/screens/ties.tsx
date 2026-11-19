@@ -1,20 +1,18 @@
 import { useMemo, useState } from 'react';
 import { ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { pageLabel } from '@shared/tarajim';
 import type { Tie } from '@shared/tarajimGraph';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Chip from '@/ui/Chip';
 import Button, { Row } from '@/ui/Button';
-import Sheet from '@/ui/Sheet';
 import { usePalette } from '@/lib/theme';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { toTab } from '@/lib/ways';
 import { battleOf } from '@/lib/battles';
-import { findPerson, GRAPH, personName, unvowelled } from '@/lib/tarajim';
+import { findPerson, personName, unvowelled } from '@/lib/tarajim';
 import { Credit } from './person';
-import TiesRing, { tiesOf } from '@/components/TiesRing';
+import TiesRing, { TieSheet, tiesOf } from '@/components/TiesRing';
 
 /**
  * «صلاته» (owner, 2026-11-18; sketches tarajim-app/graph/sketch-dark.png and sketch2-dark.png): the person in the middle
@@ -77,16 +75,7 @@ export default function TiesScreen() {
         </Row>
         {groups.length === 0 && <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>لا صلات مذكورة في الترجمة.</Text>}
       </ScrollView>
-      <Sheet open={!!shown} onClose={() => setShown(undefined)} palette={palette}>
-        {shown && (
-          <View style={{ padding: 16, gap: 8 }}>
-            <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{shown.link.text || personName(GRAPH.nodes.get(shown.to)!)}</Text>
-            <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>
-              {shown.link.refs.length ? pageLabel(shown.link.refs) : ''}{shown.reversed ? ' · من ترجمة الآخر' : ''}
-            </Text>
-          </View>
-        )}
-      </Sheet>
+      <TieSheet tie={shown} onClose={() => setShown(undefined)} palette={palette} />
     </View>
   );
 }
