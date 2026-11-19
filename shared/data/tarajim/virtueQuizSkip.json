@@ -1,6 +1,8 @@
 {
   "about": "Virtues the «صاحب المنقبة» quiz does not ask, keyed by the virtue's id (unit#assertion), each with why. They stay on the person's page. A virtue goes here when another person in the app could rightly be its answer too: general praise («من كبراء الصحابة», «من أشراف قومه»), or one shared by a group. The batch threads add to it when they read the generated questions (conversion GUIDE.md, check 4).",
   "skip": {
+    "siyar-v5-51-asma-bint-umays#a_au_v_hijratan": "Shared: «ولكم هجرتان» was said to all who emigrated to Abyssinia, Ja'far among them.",
+    "siyar-v5-57-umm-al-fadl#a_uf_v_mustad": "Her son Abdullah says it of himself and his mother together.",
     "siyar-v4-32-abu-sufyan-harith#a_sf_v_hunayn": "Shared: the same words name al-Abbas beside him, and Nawfal also stood firm that day.",
     "siyar-v4-37-ibn-rawahah#a_r_v_kuttab": "Shared by a group: other Ansar wrote for the Prophet too.",
     "siyar-v4-36-zaid-harithah#a_z_v_asbaq": "Out of its sentence («سيد الموالي وأسبقهم») it reads as first to Islam, said of others too.",
