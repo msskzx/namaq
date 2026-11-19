@@ -9,7 +9,7 @@ below. Never copy one into a screen.
 | --- | --- | --- |
 | `Button` (+ `Row`) | Filled, outlined or plain button with an icon; `Row` wraps a row of them | every tap that reads as a button, icon-only included (`variant="plain"`) |
 | `IconButton` | Icon-only button: `bar` (22 in 40) or `small` (18 in 28), tone muted/ink/accent/green, `on` colours the icon (no square), `round` filled accent circle for a bar's main action, `dot`, `expanded`, `role="link"` | every button that shows only an icon |
-| `ActButton` | Icon with its name under it; coloured icon when on; `wide` for a longer name | long-press and card menus, the home feed cards' «…» menu |
+| `ActButton` | Icon with its name under it; coloured icon when on; `wide` for a longer name; `quran` sets the name in the mushaf font; `onPressAt` hands where the button is (to open a bubble over it), `expanded` while that is open | long-press and card menus, the home feed cards' «…» menu |
 | `TopBar` | Back (or the hub grid, or the shelf) first on the right, then `title` or `middle`, then the page buttons; help at the far left; the logo beside the gear on home only; see-through, hides on scroll | every screen's top bar, pushed screens included |
 | `BarPicker` | A top bar's dropdown: text, chevron, no border; optional icon and count | the open list or item in a top bar (timeline, saved lists, compare, Tuhfa) |
 | `Card` | The one card: radius 14, one colour, rule border; `pad` (or [top and bottom, sides]), `gap`, `spine`, `dashed`, `outline`, `picked`, `faded`, `clip`; with `onPress` the whole card is one button; a `Card` inside a card draws flat (no fill, no frame, a rule above), and `useInsideCard()` tells a self-framed piece (the matrix) to draw no frame. `CardWithRow` is a card with the row of buttons under it (the feed post); a feature's own buttons inside it go there with `UnderCard` (`useCardRow()` says they will) | every boxed block of content (feed posts, shelves, books, quizzes, Quran tools, sheets, share images) |
@@ -20,7 +20,7 @@ below. Never copy one into a screen.
 | `motion` (`useSlideAway`, `useHidden`, `hiddenProps`) | The one hide motion: slide off the edge and fade, hide 200ms ease-in, show 260ms ease-out | every bar that hides or comes back |
 | `GlassBar` | A floating frosted bar of buttons, as tall as one icon button; `small` is a shorter pill sized to small buttons, sharing its row | recite mode's bar (`components/recite/RecitePill`, `small` on the home recall card) |
 | `TabBar`, `tabBarSpace` | The floating bottom tab bar and its height | room under content |
-| `FloatingMenu` (+ `MenuAt`) | A row of ActButtons over what was pressed, wrapping, above or below the finger; `overlay` dims behind and closes on a tap outside | the mushaf and book long press, the home cards menu |
+| `FloatingMenu` (+ `MenuAt`) | A row of ActButtons over what was pressed, wrapping, above or below the finger; `groups` lays them in groups with a thin line between; `bubble` (+ `span`, the button's height) is the round reaction pop-up over one button of an open menu; `overlay` dims behind and closes on a tap outside | the mushaf and book long press, the home cards menu |
 | `Sheet` | Rises from the bottom, tap outside or swipe down closes; `tall` one height above the keyboard, `full` whole screen with title and close | every sheet, full-screen ones included (share, video) |
 | `Toggle` | On means knob on the right | every on/off setting |
 | `NumberPicker` (+ `NumberList`) | Drop-down number list | picking a number (no steppers) |

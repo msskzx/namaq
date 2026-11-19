@@ -328,10 +328,8 @@ test.describe('pages with the database', () => {
       await page.mouse.down();
       await page.waitForTimeout(700);
       await page.mouse.up();
-      await expect(page.getByRole('tab', { name: 'الكلمة', exact: true })).toBeVisible({ timeout: 1000 });
+      await expect(page.getByRole('button', { name: 'إعراب الكلمة' })).toBeVisible({ timeout: 1000 });
     }).toPass({ timeout: 20_000 });
-    // The long press opens the ayah's buttons; the tab turns to the pressed word's (owner, 2026-11-19).
-    await page.getByRole('tab', { name: 'الكلمة', exact: true }).click();
     await page.getByRole('button', { name: 'إعراب الكلمة' }).click();
     const sheet = page.getByRole('dialog', { name: 'إعراب الكلمة' });
     await expect(sheet.getByRole('tab', { name: 'كُفُوًا' })).toHaveAttribute('aria-selected', 'true');
@@ -352,10 +350,12 @@ test.describe('pages with the database', () => {
       await page.waitForTimeout(900);
       for (let step = 1; step <= 6; step++) await page.mouse.move(a.x + a.width / 2 + (b.x - a.x) * step / 6, a.y + a.height / 2, { steps: 2 });
       await page.mouse.up();
-      await expect(page.getByRole('tab', { name: 'الكلمات', exact: true })).toHaveAttribute('aria-selected', 'true', { timeout: 1000 });
+      // The words' places are searched as one phrase.
+      await expect(page.getByRole('button', { name: /^مواضع «.+ .+ .+» في القرآن$/ })).toBeVisible({ timeout: 1000 });
     }).toPass({ timeout: 20_000 });
-    await expect(page.getByRole('dialog', { name: '«ٱلۡحَمۡدُ لِلَّهِ رَبِّ»' })).toBeVisible();
-    await page.getByRole('button', { name: 'نسيت هذه الكلمات', exact: true }).click();
+    // «نسيت» opens its bubble over the button: the ayah, or the lit words (owner, 2026-11-19).
+    await page.getByRole('button', { name: 'نسيت: الآية أو ما أضاءته', exact: true }).click();
+    await page.getByRole('group', { name: 'ما نسيت' }).getByRole('button', { name: /^نسيت «/ }).click();
     await expect.poll(() => page.evaluate(() => Object.keys(JSON.parse(localStorage.getItem('ayah-forgot') ?? '{}')).sort())).toEqual(['1:2:0', '1:2:1', '1:2:2']);
     await noErrorPage(page);
   });
