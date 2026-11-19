@@ -12,8 +12,9 @@ const right = (question: (typeof narrator)[number]) => question.choices.find(cho
 const bare = (text: string) => text.replace(/[ً-ْٰ]/g, '');
 
 describe('the Forty as al-Nawawi printed them', () => {
-  it('holds all forty-two, and every record starts with its own number on the page it cites', () => {
-    expect(FORTY.entries.map(entry => entry.n)).toEqual(Array.from({ length: 42 }, (_, i) => i + 1));
+  it('holds all forty-two, then the eight Ibn Rajab adds, and every record starts with its own number on the page it cites', () => {
+    expect(FORTY.entries.map(entry => entry.n)).toEqual(Array.from({ length: 50 }, (_, i) => i + 1));
+    expect(FORTY.entries.filter(entry => entry.source === 'ibnrajab').map(entry => entry.n)).toEqual([43, 44, 45, 46, 47, 48, 49, 50]);
     for (const record of FORTY.entries.flatMap(entry => entry.records)) {
       expect(record.pages).toEqual([...record.pages].sort((a, b) => a - b));
       if (record.isnadEnd) expect(record.isnadEnd).toBeLessThan(record.text.length);
@@ -27,7 +28,7 @@ describe('the hadith pages', () => {
   });
 
   it('starts every preview on a whole word after the opening «عن فلان رضي الله عنه»', () => {
-    for (const entry of FORTY.entries) expect(sayingStart(entry.text)).toMatch(/^(?:سمعت|بينما|حدثنا|قال|أن|حفظت|خادم|عن|كنت|قلت|وعظنا|أخذ)\s/);
+    for (const entry of FORTY.entries) expect(bare(sayingStart(entry.text))).toMatch(/^(?:سمعت|بينما|حدثنا|قال|أن|حفظت|خادم|عن|كنت|قلت|وعظنا|أخذ)\s/);
   });
 
   it('carries the corrected wording of the digital transcription', () => {
@@ -43,7 +44,7 @@ describe('the hadith quizzes', () => {
     for (const question of [...narrator, ...complete]) {
       expect(question.choices).toHaveLength(4);
       expect(new Set(question.choices.map(choice => bare(choice.labelArabic))).size).toBe(4);
-      expect(question.note?.text).toMatch(/صحيح البخاري .*ص .*الأربعون النووية/);
+      expect(question.note?.text).toMatch(/صحيح البخاري .*ص .*(?:الأربعون النووية|جامع العلوم والحكم)/);
     }
   });
 
@@ -95,8 +96,8 @@ describe('the hadith outside the Sahihayn', () => {
 });
 
 describe('Ibn Rajab on the Forty', () => {
-  it('has a chapter for each, opening on the hadith al-Nawawi quotes', () => {
-    expect(RAJAB.map(chapter => chapter.n)).toEqual(Array.from({ length: 42 }, (_, i) => i + 1));
+  it('has a chapter for each of the fifty, opening on the hadith it explains', () => {
+    expect(RAJAB.map(chapter => chapter.n)).toEqual(Array.from({ length: 50 }, (_, i) => i + 1));
     expect(RAJAB[18].paragraphs.some(paragraph => paragraph.text.includes('احفَظِ الله يَحفَظْكَ'))).toBe(true);
     for (const chapter of RAJAB) {
       const opening = rajabOpening(chapter);
@@ -156,5 +157,29 @@ describe('ابحث عن الجواب', () => {
       expect(forty.some(entry => entry.n === look.mark && entry.records.some(record => question.key.endsWith(`:${record.number}`)))).toBe(true);
     }
     for (const question of bookQuestions(() => 0.3)) expect(question.look).toEqual({ view: 'hadith', mark: Number(question.key.split(':')[1]) });
+  });
+});
+
+describe('the eight Ibn Rajab adds (43–50)', () => {
+  const added = FORTY.entries.filter(entry => entry.source === 'ibnrajab');
+
+  it('names only the books he names at the head of his chapter', () => {
+    for (const entry of added) {
+      const text = bare(entry.text);
+      const citation = text.slice(Math.max(text.lastIndexOf('خرجه'), text.lastIndexOf('رواه')));
+      for (const book of entry.named) expect(citation).toContain(book);
+    }
+    // He gives no. 46 to al-Bukhari alone, though Muslim has it too.
+    expect(added.find(entry => entry.n === 46)!.named).toEqual(['البخاري']);
+  });
+
+  it('quotes the grade for each one outside the Sahihayn, his words and al-Tirmidhi\'s own', () => {
+    for (const entry of added.filter(each => each.records.some(record => record.book !== 'bukhari' && record.book !== 'muslim'))) {
+      expect(entry.grades!.map(grade => grade.by)).toEqual(['ابن رجب', 'الترمذي']);
+    }
+  });
+
+  it('is never asked as one of al-Nawawi\'s citations', () => {
+    for (const question of bookQuestions(() => 0.3)) expect(Number(question.key.split(':')[1])).toBeLessThanOrEqual(42);
   });
 });

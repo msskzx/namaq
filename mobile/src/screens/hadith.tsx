@@ -12,6 +12,10 @@ import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useTabRetap } from '@/lib/tabRetap';
 import { FORTY } from '@/lib/hadith';
 
+/** al-Nawawi's Forty (1–42), then the eight Ibn Rajab adds to them in his commentary (43–50). */
+const nawawi = FORTY.entries.filter(entry => !entry.source);
+const added = FORTY.entries.filter(entry => entry.source === 'ibnrajab');
+
 /** One of the Forty in a list: his number, the Companion, the opening of his text and the books he names. */
 export function FortyCard({ entry, palette, onPress }: { entry: FortyEntry; palette: Palette; onPress: () => void }) {
   return (
@@ -30,7 +34,7 @@ export function FortyCard({ entry, palette, onPress }: { entry: FortyEntry; pale
 
 /**
  * The hadith tab (owner, 2026-11-18): al-Nawawi's Forty in his order, each card his number, the Companion, the opening of
- * his text and the books he names; a card opens the hadith with the records it comes from.
+ * his text and the books he names, then the eight Ibn Rajab adds; a card opens the hadith with the records it comes from.
  */
 export default function HadithScreen() {
   const palette = usePalette();
@@ -38,13 +42,17 @@ export default function HadithScreen() {
   const bottom = useTabBarSpace();
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   useTabRetap('hadith', () => scroll.current?.scrollTo({ y: 0, animated: true }));
+  const card = (entry: FortyEntry) => <FortyCard key={entry.n} entry={entry} palette={palette} onPress={() => router.push({ pathname: '/hadith-forty', params: { n: String(entry.n) } })} />;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar hideOnScroll />
       <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 12 }}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>الحديث</Text>
         <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right', marginTop: -8 }}>{FORTY.books.nawawi.title}</Text>
-        {FORTY.entries.map(entry => <FortyCard key={entry.n} entry={entry} palette={palette} onPress={() => router.push({ pathname: '/hadith-forty', params: { n: String(entry.n) } })} />)}
+        {nawawi.map(card)}
+        <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 22, textAlign: 'right', marginTop: 8 }}>ما زاده ابن رجب</Text>
+        <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right', marginTop: -8 }}>{FORTY.books.ibnrajab.title}</Text>
+        {added.map(card)}
       </ScrollView>
     </View>
   );

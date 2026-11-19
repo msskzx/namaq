@@ -21,6 +21,18 @@ test('the hadith tab lists the Forty, and one opens with its chain drawn or its 
   await expect(page).toHaveURL(/\/hadith$/);
 });
 
+// Ibn Rajab's eight (Jami' al-'Ulum wal-Hikam, chapters 43–50) under the Forty: his text, and the books he names marked as his.
+test('the hadith tab lists the eight Ibn Rajab adds, each opening on his text and the books he names', async ({ page }) => {
+  await open(page, '/');
+  await tab(page, 'الحديث').click();
+  await expect(page.getByRole('heading', { name: 'ما زاده ابن رجب' })).toBeVisible();
+  await page.getByRole('link', { name: /^الحديث السابع والأربعون، عن المقدام/ }).click();
+  await expect(page).toHaveURL(/\/hadith-forty\?n=47/);
+  await expect(page.getByLabel(/^الترمذي ٢٣٨٠، سمّاه ابن رجب؛/)).toBeVisible();
+  await expect(page.getByText('سمّاه النووي')).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: 'ما قاله العلماء في درجته' })).toBeVisible();
+});
+
 test('the hadith of Jibril opens its scenes in al-Bukhari and in Muslim', async ({ page }) => {
   await open(page, '/hadith-forty?n=2');
   await page.getByRole('button', { name: 'رواية أبي هريرة في البخاري' }).click();
