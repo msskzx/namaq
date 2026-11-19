@@ -24,7 +24,7 @@ export default function PathAyat({ ayahKeys, presentation, palette, width, onLay
   /** In the studio, while the ayah grows: only its first `shown` words show, the rest keep their place unseen. */
   shown?: number;
   onLayout?: (height: number) => void;
-  /** In a fixed frame: the cards keep within this height, and ayat that don't fit scroll. */
+  /** In a fixed frame: the cards keep within this height, and ayat that don't fit scroll; cards that fit leave every drag to the page. */
   maxHeight?: number }) {
   const [choosing, setChoosing] = useState<CompareTarget[] | null>(null);
   // While an ayah grows (`shown`), its card counts from the ayah's own start, so the surrounding ayat join only once it has grown.
@@ -63,7 +63,7 @@ export default function PathAyat({ ayahKeys, presentation, palette, width, onLay
   return (
     // Laid out as the matrix lays its cards out (ltr, its buttons at the end); dir is what the web build reads.
     <View {...({ dir: 'ltr' } as object)} onLayout={event => onLayout?.(event.nativeEvent.layout.height)} style={{ paddingHorizontal: 12, paddingBottom: 8, marginTop: maxHeight ? 0 : -18, direction: 'ltr' }}>
-      <ScrollView ref={scroller} scrollEnabled={!!maxHeight} style={{ maxHeight }}
+      <ScrollView ref={scroller} nestedScrollEnabled scrollEnabled={!!maxHeight && heights.content > heights.view + 1} style={{ maxHeight }}
         onLayout={event => { const view = event.nativeEvent.layout.height; setHeights(old => old.view === view ? old : { ...old, view }); }}
         onContentSizeChange={(_w, content) => { onContent?.(content); setHeights(old => old.content === content ? old : { ...old, content }); }} contentContainerStyle={{ gap: 8 }} showsVerticalScrollIndicator={false}>
         {ayahKeys.map(key => {
