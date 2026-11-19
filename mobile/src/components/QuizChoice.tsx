@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Card from '@/ui/Card';
 import { Pressable, ScrollView, View } from 'react-native';
 import { BookOpen, Check, Eye, Square, SquareCheck, X } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
@@ -82,13 +83,13 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
             onWritten={!answered && onPick ? graded => onPick(graded.wrong.length ? FORGOT : RECITED) : undefined} />
         </View>
       ) : question.quran && (
-        <View style={{ marginHorizontal: 16, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, padding: 16 }}>
+        <Card palette={palette} pad={16} style={{ marginHorizontal: 16 }}>
           <Text style={{ fontFamily: QURAN_FONT, fontSize: SIZE, lineHeight: SIZE * 1.9, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
             <Words words={question.quran} marked={diff?.a ?? question.marked} palette={palette} />
             {question.number !== undefined && <Text style={{ color: palette.accent }}>{' '}{num(question.number)}</Text>}
             {question.reveal && (revealed ? <Text style={{ color: palette.accent }}>{' '}<Words words={question.reveal} palette={palette} /></Text> : ' …')}
           </Text>
-        </View>
+        </Card>
       )}
       {!revealed && !onPage && onReveal && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}><Button variant="primary" Icon={Eye} label="أظهر الآية" onPress={onReveal} /></View>}
       {revealed && !write && (

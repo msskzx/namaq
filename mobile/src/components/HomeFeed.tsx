@@ -104,7 +104,7 @@ import { QuizFeedback, QuizInputs } from './QuizTree';
 import { type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
-import Card from '@/ui/Card';
+import Card, { CardWithRow } from '@/ui/Card';
 import { openExternal } from '@/ui/ExternalLink';
 import FloatingMenu, { type MenuAt } from '@/ui/FloatingMenu';
 import ActButton from '@/ui/ActButton';
@@ -130,8 +130,8 @@ function Post({ head, actions, bar, palette, press, children }: { head: React.Re
   return (
     <View style={{ gap: 4 }}>
       {head}
-      <Card palette={palette} pad={0} clip onPress={press?.onPress} accessibilityLabel={press?.label}>{children}</Card>
-      {(bar || actions) && <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', gap: bar ? 4 : 0, marginTop: bar ? 4 : 0 }}>{bar}{actions}</View>}
+      {/* What the card's content hands up with UnderCard joins the row under the card, before the post's own buttons. */}
+      <CardWithRow palette={palette} pad={0} clip onPress={press?.onPress} accessibilityLabel={press?.label} bar={bar} row={actions}>{children}</CardWithRow>
     </View>
   );
 }

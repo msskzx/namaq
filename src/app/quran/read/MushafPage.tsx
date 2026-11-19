@@ -5,6 +5,8 @@ import { pageGroups, type MushafPage as MushafPageData } from '@shared/quran/rea
 import { isSajda, juzName, quarterLabel } from '@shared/quran/mushafMarks';
 import { num } from '@shared/quran/arabicNumber';
 import styles from './Mushaf.module.css';
+import type { WriteBlank } from '@shared/quiz/writeBlanks';
+import type { WriteBlanks } from '@/components/recite/useRecite';
 
 const BASMALA = 'بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ';
 /** The end-of-ayah ornament with no number in it (U+06DD in the Hafs font). */
@@ -105,14 +107,38 @@ export type Checked = { key: string; right: number[]; wrong: number[]; typed: Re
  * A word to write, in write mode (the app's WriteBox): the hidden word's own box in its place on the line, so it is as wide
  * as the word, holding what was typed. The box being written has the accent border.
  */
-export function WriteBox({ word, typed, active, onPick }: { word: string; typed: string; active: boolean; onPick: () => void }) {
+export function WriteBox({ word, typed, active, onPick, hint, label }: { word: string; typed: string; active: boolean; onPick: () => void;
+  /** A quiz's hint (its bulb): the word's first letters, faint, while the box is empty. */
+  hint?: string;
+  /** A quiz blank's own name for the box («الطرف ١، الكلمة ٢»), what was typed after it. */
+  label?: string }) {
   return (
-    <button type="button" data-write-active={active || undefined} aria-pressed={active} aria-label={typed ? `كلمة مكتوبة: ${typed}` : 'اكتب هذه الكلمة'}
+    <button type="button" data-write-active={active || undefined} aria-pressed={active} aria-label={label ? `${label}${typed ? `: ${typed}` : ''}` : typed ? `كلمة مكتوبة: ${typed}` : 'اكتب هذه الكلمة'}
       className={styles.writeBox} onPointerDown={event => event.preventDefault()} onClick={onPick}>
       <span aria-hidden className={styles.writeWord}>{word}</span>
-      <span aria-hidden className={styles.typed}>{typed}</span>
+      <span aria-hidden className={`${styles.typed} ${typed ? '' : styles.hint}`.trim()}>{typed || hint}</span>
     </button>
   );
+}
+
+/** A box's place in its blank, in the blank name's language. */
+const wordName = (at: number, name: string) => (/[a-z]/i.test(name) ? `word ${at + 1}` : `الكلمة ${num(at + 1)}`);
+
+/**
+ * A quiz blank in recite mode's boxes (owner, 2026-11-19; useWriteBlanks), as the app's BlankBoxes: the words it asks are
+ * WriteBoxes, the rest of its words the faint boxes the pen leaves. Without `write` (an example) the boxes take no typing.
+ */
+export function BlankBoxes({ blank, index, write, hint, name }: { blank: WriteBlank; index: number; write?: WriteBlanks; hint?: string;
+  /** The blank's name («الطرف ١»); each box adds its word's place. */
+  name: string }) {
+  return <>{blank.words.map((word, at) => {
+    if (at >= blank.write) return <span key={at} aria-hidden className={`${styles.veiled} ${styles.faint} ${styles.unwritten}`}>{word}</span>;
+    const label = `${name}، ${wordName(at, name)}`;
+    // An example's box only shows where you write: no button.
+    if (!write) return <span key={at} role="img" aria-label={label} className={`${styles.writeBox} ${styles.unwritten}`}><span aria-hidden className={styles.writeWord}>{word}</span></span>;
+    const box = write.box(index, at);
+    return <WriteBox key={at} word={word} typed={box.typed} active={box.active} onPick={box.pick} hint={at === 0 ? hint : undefined} label={label} />;
+  })}</>;
 }
 
 /** A word written in write mode, once checked: green when right, amber when wrong with what was typed struck through above it. */
@@ -121,8 +147,6 @@ export function WrittenWord({ word, right, mistyped }: { word: string; right: bo
     ? <span className={`${styles.wrong} ${styles.mistake}`}>{word}{mistyped ? <span role="note" aria-label={`كتبت: ${mistyped}`} className={styles.mistyped}>{mistyped}</span> : null}</span>
     : <span className={right ? styles.right : undefined}>{word}</span>;
 }
-
-/** A hidden word that is not written, beside the write boxes: a faint dashed box its width. */
 
 export default function MushafPage({
   page,

@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import { Fragment, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { useFitReport, type OnFit } from '@/lib/useFit';
-import { Text, TextInput } from '@/ui/Text';
+import { Text } from '@/ui/Text';
 import { Bookmark, Lightbulb, Send, SquareArrowOutUpLeft, UnfoldHorizontal, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayatLabel, branchesHref, keys, shownAyat, type Branch, type Variant } from '@shared/quran/branches';
@@ -22,35 +22,26 @@ import { around as aroundSetting } from '@/lib/settings';
 import { useKeyboardShown } from '@/lib/keyboard';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { toTab } from '@/lib/ways';
-import Card from '@/ui/Card';
+import Card, { UnderCard } from '@/ui/Card';
+import { BlankBoxes } from './MushafPageView';
+import { useWriteBlanks, type WriteBlanks } from './recite/useRecite';
+import { writeBlank, type WriteBlank } from '@shared/quiz/writeBlanks';
 
 export type TreeQuestion = ScoredQuestion & { tree: Branch; prefixes?: Variant[] };
 
 /** The size the matrix draws its words in. */
 const LEAF_SIZE = 20;
 
-/** The input for one asked node. */
-function blank(question: TreeQuestion, index: number, value: string, onType: (node: number, text: string) => void, palette: Palette, width = 150, hint = '', readOnly = false) {
-  const asked = question.asked ?? [];
-  return <TextInput editable={!readOnly} value={value} onChangeText={text => onType(index, text)} placeholder={hint} placeholderTextColor={palette.muted}
-    accessibilityLabel={`الطرف ${num(asked.indexOf(index) + 1)}`}
-    autoCorrect={false} autoCapitalize="none" spellCheck={false} autoComplete="off"
-    style={{ width, minHeight: 40, fontFamily: QURAN_FONT, fontSize: LEAF_SIZE, color: palette.ink, textAlign: 'right', writingDirection: 'rtl', paddingVertical: 6, borderBottomWidth: 1.5, borderColor: palette.accent }} />;
+/** The ayah signs an asked node opens with (﴿١٧﴾ where its ayah reads on into the next): given before its boxes, never typed. */
+function LeadingSigns({ node, palette }: { node: Branch; palette: Palette }) {
+  const signs = leadingSigns(node.words);
+  return signs.length ? <Text style={{ fontFamily: QURAN_FONT, fontSize: LEAF_SIZE, lineHeight: LEAF_SIZE * 1.9, color: palette.muted }}>{quranText(signs.join(' '))}</Text> : null;
 }
 
-/**
- * An asked node as the tree draws it: the ayah sign it opens with (﴿١٧﴾ where its ayah reads on into the next) given, then
- * the box to type in. Every other node is drawn by BranchTree itself, as on the branches tab.
- */
-export function askedBox(node: Branch, input: React.ReactNode, palette: Palette) {
-  const signs = leadingSigns(node.words);
-  if (!signs.length) return input;
-  return (
-    <View style={{ direction: 'rtl', flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-      <Text style={{ fontFamily: QURAN_FONT, fontSize: LEAF_SIZE, lineHeight: LEAF_SIZE * 1.9, color: palette.muted }}>{quranText(signs.join(' '))}</Text>
-      {input}
-    </View>
-  );
+/** The asked nodes as blanks to write: a leaf's first two words, or all the words of a node above leaves. */
+export function treeBlanks(question: TreeQuestion): WriteBlank[] {
+  const nodes = branchNodes(question.tree);
+  return nodes.flatMap((node, index) => isAsked(question, index) ? [writeBlank(index, node.words, node.children.length > 0)] : []);
 }
 
 type MatrixRow = { leaf: Branch; path: number[]; words: string[]; before: string[]; ayahKeys: string[] };
@@ -82,12 +73,14 @@ function rowsOf(tree: Branch, prefixes: Variant[]): MatrixRow[] {
   return rows;
 }
 
-/** The matrix view of a question: one row per ayah, the shared start in colour, an empty box where a node is asked. */
-export function MatrixInputs({ question, values, hints, onType, palette, names, readOnly }: { question: TreeQuestion; values: string[]; hints: string[]; onType: (node: number, text: string) => void; palette: Palette; names: Record<number, string>;
-  /** The settings' example: the boxes show where you type, without taking typing. */
-  readOnly?: boolean }) {
+/**
+ * The matrix view of a question: one row per ayah, the shared start in colour, and each asked node's words as recite mode's
+ * boxes (BlankBoxes). Without `write` (the settings' example) the boxes show where you write, without taking typing.
+ */
+export function MatrixInputs({ question, values, hints, write, palette, names }: { question: TreeQuestion; values: string[]; hints: string[]; write?: WriteBlanks; palette: Palette; names: Record<number, string> }) {
   const rows = useMemo(() => rowsOf(question.tree, question.prefixes ?? []), [question.tree, question.prefixes]);
   const nodes = useMemo(() => branchNodes(question.tree), [question.tree]);
+  const blanks = useMemo(() => treeBlanks(question), [question]);
   const text = { fontFamily: QURAN_FONT, fontSize: LEAF_SIZE, lineHeight: LEAF_SIZE * 1.9, color: palette.ink, writingDirection: 'rtl' as const };
   return (
     <View style={{ gap: 10, paddingHorizontal: 12, paddingVertical: 8 }}>
@@ -101,9 +94,15 @@ export function MatrixInputs({ question, values, hints, onType, palette, names, 
             <View style={{ direction: 'rtl', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 8 }}>
               {before.length > 0 && <Text style={text}>{quranText(before.join(' '))}</Text>}
               <Text style={[text, { color: palette.accent, fontWeight: '700' }]}>{quranText(givenAnswer(question.tree))}</Text>
-              {path.map(index => isAsked(question, index)
-                ? <View key={index}>{askedBox(nodes[index], blank(question, index, values[index], onType, palette, 130, hints[index], readOnly), palette)}</View>
-                : <Text key={index} style={text}>{quranText(values[index])}</Text>)}
+              {path.map(index => {
+                const at = blanks.findIndex(blank => blank.id === index);
+                return at < 0
+                  ? <Text key={index} style={text}>{quranText(values[index])}</Text>
+                  : <Fragment key={index}>
+                    <LeadingSigns node={nodes[index]} palette={palette} />
+                    <BlankBoxes blank={blanks[at]} index={at} write={write} size={LEAF_SIZE} palette={palette} hint={hints[index]} name={`الطرف ${num(at + 1)}`} />
+                  </Fragment>;
+              })}
             </View>
           </Card>
         );
@@ -128,14 +127,17 @@ export function QuizInputs({ question, typed, onType, palette, names, header, hi
   const hints = kept ?? own;
   const shown = useMemo(() => hintsOf(question, hints), [question, hints]);
   const hint = () => (onHints ?? setOwn)(addHint(question, values, hints));
+  const blanks = useMemo(() => treeBlanks(question), [question]);
+  const write = useWriteBlanks({ id: JSON.stringify(question.asked) + givenAnswer(question.tree), blanks, texts: values, onType });
   const typing = useKeyboardShown();
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView {...fit} style={{ flex: 1 }} keyboardShouldPersistTaps="handled">{header}<MatrixInputs question={question} values={values} hints={shown} onType={onType} palette={palette} names={names} /></ScrollView>
+      {write.field}
+      <ScrollView {...fit} style={{ flex: 1 }} keyboardShouldPersistTaps="handled">{header}<MatrixInputs question={question} values={values} hints={shown} write={write} palette={palette} names={names} /></ScrollView>
       {/* The buttons sit on the right, as action buttons do across the app (owner, 2026-11-17). */}
-      {!typing && <View style={{ direction: 'rtl', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 8 }}>
+      {!typing && <UnderCard><View style={{ direction: 'rtl', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 8 }}>
         <Bar label="تلميح: حرف آخر من كل طرف فارغ" onPress={hint} Icon={Lightbulb} palette={palette} />
-      </View>}
+      </View></UnderCard>}
     </View>
   );
 }
@@ -148,7 +150,7 @@ function Badge({ row, palette }: { row: Correction; palette: Palette }) {
   );
 }
 
-/** What was typed for a wrong answer: the right words green, the rest struck through. */
+/** What was typed for a wrong answer: each right word green, each wrong one struck through. */
 function Typed({ row, palette }: { row: Correction; palette: Palette }) {
   const typed = row.typed ? row.typed.split(/\s+/) : [];
   return (
@@ -239,10 +241,10 @@ export function QuizFeedback({ question, typed, palette, names: _names, header, 
             note={key => { const row = correctionOf(graded.rows, key); return row ? <MatrixMark row={row} palette={palette} hinted={!!hints?.[row.index]} /> : null; }} />}
         </View>
       </View>
-      <View style={{ direction: 'rtl', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, gap: 2 }}>
+      <UnderCard><View style={{ direction: 'rtl', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, gap: 2 }}>
         {question.phrase && <TreeActions phrase={question.phrase} text={question.tree.words.join(' ')} palette={palette} onShare={share} />}
         <Bar label="الآيات المحيطة" onPress={() => setAround(!around)} Icon={UnfoldHorizontal} palette={palette} on={around} />
-      </View>
+      </View></UnderCard>
     </View>
   );
 }

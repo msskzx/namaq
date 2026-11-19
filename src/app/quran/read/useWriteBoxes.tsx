@@ -8,14 +8,19 @@ export type Graded = ReturnType<typeof gradeWritten>;
  * holds, the box being written, and the out-of-sight field the keyboard types into. `onDone` gets the grade once the last
  * box is written.
  */
-export function useWriteBoxes({ ayah, words, asked, autoFocus = false, onDone }: { ayah: string | null; words: string[]; asked: number[]; autoFocus?: boolean; onDone: (graded: Graded, typed: Record<number, string>) => void }) {
-  const [boxes, setBoxes] = useState<Boxes>(() => freshBoxes(asked));
+export function useWriteBoxes({ ayah, words, asked, autoFocus = false, start, onEnter, onDone }: { ayah: string | null; words: string[]; asked: number[]; autoFocus?: boolean;
+  /** What the boxes hold when they open (a quiz's saved answer); empty when left out. */
+  start?: Record<number, string>;
+  /** Enter on the last box: what the place does then (a quiz checks its answer); otherwise the last box is graded. */
+  onEnter?: () => void;
+  onDone: (graded: Graded, typed: Record<number, string>) => void }) {
+  const [boxes, setBoxes] = useState<Boxes>(() => ({ ...freshBoxes(asked), typed: start ?? {} }));
   const input = useRef<HTMLInputElement>(null);
   // A new ayah starts with empty boxes at once, so letters typed quickly after the last box go into its first box.
   const [writeFor, setWriteFor] = useState(ayah);
   if (writeFor !== ayah) {
     setWriteFor(ayah);
-    setBoxes(freshBoxes(asked));
+    setBoxes({ ...freshBoxes(asked), typed: start ?? {} });
   } else if (boxes.current !== null && asked.length && !asked.includes(boxes.current)) {
     // A word revealed by the next-word button while its box was being written has no box any more.
     setBoxes({ ...boxes, current: asked[0] });
@@ -36,7 +41,13 @@ export function useWriteBoxes({ ayah, words, asked, autoFocus = false, onDone }:
       onChange={event => step(typeInBox(boxes, asked, words, event.target.value, (event.nativeEvent as InputEvent).isComposing))}
       onCompositionEnd={event => step(typeInBox(boxes, asked, words, event.currentTarget.value))}
       onKeyDown={event => {
-        if (event.key === 'Enter') { event.preventDefault(); step(nextBox(boxes, asked)); return; }
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          const moved = nextBox(boxes, asked);
+          if (moved.finished && onEnter) onEnter();
+          else step(moved);
+          return;
+        }
         if (event.key === 'Backspace' && empty && back()) event.preventDefault();
       }}
       // Android keyboards often send no Backspace key for an empty field, only a delete input.
@@ -49,6 +60,8 @@ export function useWriteBoxes({ ayah, words, asked, autoFocus = false, onDone }:
     current: boxes.current,
     /** Empties the last box written and writes it again; false when none is written. */
     clearLast: () => { const cleared = clearLastBox(boxes, asked); if (cleared) { setBoxes(cleared); input.current?.focus({ preventScroll: true }); } return !!cleared; },
+    /** Puts these words in the boxes, writing the first (a quiz's answers cleared or loaded). */
+    load: (typed: Record<number, string>) => setBoxes({ ...freshBoxes(asked), typed }),
     /** A click on a box: write it. */
     pick: (at: number) => { setBoxes(current => ({ ...current, current: at })); input.current?.focus({ preventScroll: true }); },
     focus: () => input.current?.focus({ preventScroll: true }),

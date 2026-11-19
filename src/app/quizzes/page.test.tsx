@@ -2,6 +2,10 @@ vi.mock('@/components/common/MushafText', () => ({ default: ({ children }: { chi
 import React from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { firstBoxes, writeBlank } from './writeBlankTesting';
+import example from '@shared/data/quiz/example.json';
+import { branchNodes } from '@shared/quiz/branchAnswers';
+import type { Branch } from '@shared/quran/branches';
 
 const nav = vi.hoisted(() => {
   let url = '/quizzes';
@@ -132,12 +136,12 @@ describe('QuizzesPage', () => {
     try {
       nav.reset('/quizzes?topic=BRANCHES&length=5');
       render(<QuizzesPage />);
-      fireEvent.change(screen.getAllByLabelText('Node 1')[0], { target: { value: 'فينبئهم' } });
+      writeBlank('Node 1', 'فينبئهم');
       fireEvent.click(screen.getByRole('button', { name: 'Show answer' }));
       expect(screen.getByRole('button', { name: 'Question 1 - incorrect' })).toBeTruthy();
       expect(screen.queryByRole('textbox')).toBeNull();
       fireEvent.click(screen.getByRole('button', { name: 'Start over' }));
-      expect(screen.getAllByLabelText('Node 1')[0]).toHaveProperty('value', '');
+      expect(firstBoxes('Node 1')[0].getAttribute('aria-label')).toBe('Node 1، word 1');
       expect(screen.getByRole('button', { name: 'Question 1 - unanswered' })).toBeTruthy();
       fireEvent.click(screen.getByRole('button', { name: 'Exit to setup' }));
       expect(nav.getUrl()).toBe('/quizzes?topic=BRANCHES');
@@ -433,7 +437,7 @@ describe('QuizzesPage', () => {
     try {
       nav.reset('/quizzes?topic=BRANCHES&length=5');
       render(<QuizzesPage />);
-      fireEvent.change(screen.getAllByLabelText('Node 4')[0], { target: { value: 'خطأ' } });
+      writeBlank('Node 4', 'خطأ');
       fireEvent.click(screen.getByRole('button', { name: 'Check' }));
       expect(screen.getByRole('button', { name: 'Question 1 - incorrect' })).toBeTruthy();
     } finally {
@@ -448,10 +452,10 @@ describe('QuizzesPage', () => {
       nav.reset('/quizzes?topic=BRANCHES&length=5');
       render(<QuizzesPage />);
 
-      // Matrix rows: the node 58:6 and 58:7 share is asked in both their rows.
-      expect(screen.getAllByRole('textbox')).toHaveLength(5);
-      fireEvent.change(screen.getAllByLabelText('Node 1')[0], { target: { value: 'فينبئهم' } });
-      fireEvent.change(screen.getAllByLabelText('Node 4')[0], { target: { value: 'فيحلفون له' } });
+      // Matrix rows: the node 58:6 and 58:7 share is asked in the row of each leaf under it.
+      expect(firstBoxes('Node 1')).toHaveLength((branchQuestion as unknown as { tree: Branch }).tree.children[0].children.length);
+      writeBlank('Node 1', 'فينبئهم');
+      writeBlank('Node 4', 'فيحلفون له');
       fireEvent.click(screen.getByRole('button', { name: 'Check' }));
 
       expect(screen.getByRole('button', { name: 'Question 1 - partly correct' })).toBeTruthy();
@@ -471,7 +475,7 @@ describe('QuizzesPage', () => {
       nav.reset('/quizzes?topic=BRANCHES&length=5');
       render(<QuizzesPage />);
       for (const [index, value] of ['فينبئهم', 'بما عملوا', 'على كل شي شهيد', 'فيحلفون له'].entries()) {
-        fireEvent.change(screen.getAllByLabelText(`Node ${index + 1}`)[0], { target: { value } });
+        writeBlank(`Node ${index + 1}`, value);
       }
       fireEvent.click(screen.getByRole('button', { name: 'Check' }));
       expect(screen.getByRole('button', { name: 'Question 1 - correct' })).toBeTruthy();
@@ -550,11 +554,12 @@ describe('QuizzesPage', () => {
     const group = screen.getByRole('group', { name: 'Answers per question' });
     expect(within(group).getAllByRole('button').map((button) => button.textContent)).toEqual(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']);
     expect(within(group).getByRole('button', { name: '3' }).getAttribute('aria-pressed')).toBe('true');
-    expect(screen.getAllByText('You type this')).toHaveLength(3);
+    expect(firstBoxes('Node \\d+')).toHaveLength(3);
     fireEvent.click(within(group).getByRole('button', { name: '10' }));
     expect(new URLSearchParams(nav.getUrl().split('?')[1]).get('leaves')).toBe('10');
     expect(nav.push).toHaveBeenLastCalledWith(expect.any(String), { scroll: false });
-    expect(screen.getAllByText('You type this')).toHaveLength(6);
+    // The example tree has fewer leaves than ten: every one of them is asked.
+    expect(firstBoxes('Node \\d+')).toHaveLength(branchNodes(example.tree as Branch).filter(node => !node.children.length).length);
   });
 
   it('types only the asked leaves and gives the rest of the tree', () => {
@@ -563,9 +568,10 @@ describe('QuizzesPage', () => {
     try {
       nav.reset('/quizzes?topic=BRANCHES&length=5');
       render(<QuizzesPage />);
-      expect(screen.getAllByRole('textbox')).toHaveLength(1);
+      expect(firstBoxes('Node \\d+')).toHaveLength(1);
+      expect(firstBoxes('Node 4')).toHaveLength(1);
       expect(document.body.textContent).toContain('فَيُنَبِّئُهُمْ');
-      fireEvent.change(screen.getAllByLabelText('Node 4')[0], { target: { value: 'فيحلفون له' } });
+      writeBlank('Node 4', 'فيحلفون له');
       fireEvent.click(screen.getByRole('button', { name: 'Check' }));
       expect(screen.getByRole('button', { name: 'Question 1 - correct' })).toBeTruthy();
     } finally {

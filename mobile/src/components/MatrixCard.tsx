@@ -21,6 +21,7 @@ import type { Group, Tag } from '@shared/quran/mutashabih/types';
 import { BACK_EDGE_SLOP } from '@/lib/stackOptions';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
+import { useInsideCard } from '@/ui/Card';
 
 type Props = {
   /** In a feed card that follows its content: how much taller the rows are than the card (lib/useFit.ts). */
@@ -193,7 +194,10 @@ export default function MatrixCard({ onFit, presentation, palette, view, lane, a
   const count = matrix.columns.length;
   // One column fills the card; with the ayat around it, its neighbours peek in from the sides.
   // On home the card's frame is the view's edge; on the branches page it keeps a margin from the screen's.
-  const width = count === 1 ? view.width - 2 * PAD - (pinFooter ? 0 : 2 * EDGE) : Math.round(view.width * SHARE);
+  // Inside a card (a checked quiz in a feed card) the matrix draws no frame of its own: no box in a box (owner, 2026-11-19).
+  const inside = useInsideCard();
+  const framed = !pinFooter && !inside;
+  const width = count === 1 ? view.width - 2 * PAD - (framed ? 2 * EDGE : 0) : Math.round(view.width * SHARE);
   const step = width + GAP;
   // Columns run right to left like the text: the ayah before on the right, the ayah after on the left.
   const xOf = (i: number) => PAD + (count - 1 - i) * step;
@@ -275,10 +279,10 @@ export default function MatrixCard({ onFit, presentation, palette, view, lane, a
   return (
     <GestureDetector gesture={pan}>
       <View collapsable={false} style={{ width: view.width, height: view.height, overflow: 'hidden', direction: 'ltr' }}>
-        <ScrollView {...fit} nestedScrollEnabled onScroll={onScroll} scrollEventThrottle={16} style={pinFooter ? { flex: 1, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD } : { flex: 1 }} contentContainerStyle={{ paddingVertical: pinFooter ? 0 : 12 }} showsVerticalScrollIndicator={false}>
+        <ScrollView {...fit} nestedScrollEnabled onScroll={onScroll} scrollEventThrottle={16} style={pinFooter && !inside ? { flex: 1, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD } : { flex: 1 }} contentContainerStyle={{ paddingVertical: framed ? 12 : 0 }} showsVerticalScrollIndicator={false}>
           <Words.Provider value={connections ? lines.registry : null}>
           {/* One card as wide as all its columns (owner, 2026-11-14): the rows parted by rules, solid between surahs and dashed within one. */}
-          <Animated.View ref={lines.frame} onLayout={lines.measure} collapsable={false} style={[{ width: count * step - GAP + 2 * PAD, paddingHorizontal: PAD, paddingVertical: 4 }, !pinFooter && { backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD }, lanes]}>
+          <Animated.View ref={lines.frame} onLayout={lines.measure} collapsable={false} style={[{ width: count * step - GAP + 2 * PAD, paddingHorizontal: PAD, paddingVertical: 4 }, framed && { backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD }, lanes]}>
             {matrix.rows.map((row, r) => (
               <Fragment key={r}>
               {r > 0 && <RowRule dashed={surahOf(row.ayah) === surahOf(matrix.rows[r - 1].ayah)} color={palette.rule} />}

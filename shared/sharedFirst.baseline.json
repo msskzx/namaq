@@ -63,7 +63,7 @@
     "mobile/src/components/OpenInBook.tsx": 1,
     "mobile/src/components/PageVideo.tsx": 1,
     "mobile/src/components/QuestionDots.tsx": 1,
-    "mobile/src/components/QuizChoice.tsx": 2,
+    "mobile/src/components/QuizChoice.tsx": 1,
     "mobile/src/components/QuizCompare.tsx": 1,
     "mobile/src/components/QuizTree.tsx": 2,
     "mobile/src/components/Reader.tsx": 2,
@@ -88,8 +88,6 @@
     "mobile/src/screens/tuhfa.tsx": 2
   },
   "webControls": {
-    "src/app/quizzes/BranchAnswers.tsx": 1,
-    "src/app/quizzes/CompareAnswers.tsx": 1,
     "src/app/quizzes/PersonPicker.tsx": 1,
     "src/app/quizzes/QuizPage.tsx": 1,
     "src/app/quizzes/party/PartyRoom.tsx": 1,
@@ -151,8 +149,8 @@
     "src/app/globals.css": 1,
     "src/app/people/[slug]/page.tsx": 8,
     "src/app/privacy/page.tsx": 1,
-    "src/app/quizzes/BranchAnswers.tsx": 3,
-    "src/app/quizzes/CompareAnswers.tsx": 2,
+    "src/app/quizzes/BranchAnswers.tsx": 1,
+    "src/app/quizzes/CompareAnswers.tsx": 1,
     "src/app/quizzes/PersonPicker.tsx": 1,
     "src/app/quizzes/QuizPage.tsx": 1,
     "src/app/quizzes/party/PartyRoom.tsx": 5,

@@ -1,5 +1,6 @@
 "use client";
 
+import { UnderCard, useCardRow } from "@/components/common/UnderCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
@@ -87,6 +88,7 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
   names: Record<number, string>; ar: boolean;
   onReveal: () => void; onType: (value: string[]) => void; onHints: (value: Hints) => void; onAnswer: (value: string) => void;
 }) {
+  const inRow = useCardRow();
   const locked = given !== undefined;
   const several = ticks(question);
   // The ticks of a question of several right choices, kept with their question so the next one starts empty.
@@ -162,10 +164,12 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
       surahName={(value) => question.choices.find((choice) => choice.value === value)?.labelArabic} />}
     {/* After the answer, the view it was looked up in, so everyone learns from it (owner, 2026-11-19; the app's QuizChoice). */}
     {locked && canLook(question.look) && <div className="mt-4"><LookView look={question.look} shown /></div>}
-    {!locked && !recited(question) && <Button className="mt-3" size="sm" onClick={() => {
+    {/* In a feed card it joins the row of icons under the card (owner, 2026-11-19: no buttons in a card). */}
+    {!locked && !recited(question) && <UnderCard><Button className={inRow ? undefined : "mt-3"} size={inRow ? "lg" : "sm"} variant={inRow ? "muted" : undefined}
+      aria-label={inRow ? (ar ? "إظهار الإجابة" : "Show answer") : undefined} title={inRow ? (ar ? "إظهار الإجابة" : "Show answer") : undefined} onClick={() => {
       if (question.tree) onType(emptyBranchAnswers(question));
       if (question.compare) onType(emptyCompareAnswers(question));
       onAnswer("");
-    }}><Eye size={16} aria-hidden />{ar ? "إظهار الإجابة" : "Show answer"}</Button>}
+    }}><Eye size={inRow ? undefined : 16} aria-hidden />{!inRow && (ar ? "إظهار الإجابة" : "Show answer")}</Button></UnderCard>}
   </>;
 }

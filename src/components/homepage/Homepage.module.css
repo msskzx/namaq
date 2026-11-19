@@ -41,6 +41,7 @@ a.hijri:hover { text-decoration: underline; }
 .storyLabel { font-size: 0.8125rem; white-space: nowrap; }
 .postWrap { display: flex; flex-direction: column; gap: 0.25rem; }
 .postActions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; }
+.postActions:not(:has(button, a, [role="toolbar"])) { display: none; }
 .action { display: inline-flex; align-items: center; justify-content: center; min-width: 2.5rem; min-height: 2.5rem; padding: 0.5rem; border-radius: 10px; color: var(--home-muted); background: none; text-decoration: none; }
 .action:hover:not(:disabled) { color: var(--home-ink); background: var(--home-paper-deep); }
 .action:disabled { opacity: 0.4; }

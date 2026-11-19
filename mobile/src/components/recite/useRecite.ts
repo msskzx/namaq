@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { markForgotten, readDueMarks, rememberAyah, wordMarkKey } from '@shared/ayahMarks';
 import { atStart, revealAyah, stepBack, type RecitePosition } from '@shared/quran/recite';
 import { reciteView, type PageModel } from '@shared/quran/recitePage';
 import { penTargets, type PenRule } from '@shared/quran/writeAyah';
+import { blankBoxes, blankText, boxesOf, type WriteBlank } from '@shared/quiz/writeBlanks';
 import { ayahCounts } from '@/lib/mushaf';
 import { useWriteBoxes, type Graded } from '@/lib/useWriteBoxes';
 import type { Checked } from '../MushafPageView';
@@ -79,3 +80,42 @@ export function useRecite({ model, position, setPosition, writing, pen, until = 
 }
 
 export type Recite = ReturnType<typeof useRecite>;
+
+/**
+ * The written quizzes' blanks (متشابهات and the compare quiz) in recite mode's boxes (owner, 2026-11-19): every word to write
+ * is a WriteBox, typed through the one hidden field, a space or a full box moving on to the next. The quiz keeps one text a
+ * blank (`texts`, by blank id), so its grading is unchanged: `onType` hands back the blank the reader changed, one at a time,
+ * and answers changed from outside (cleared, a party's copy) go back into the boxes. A saved answer is never rewritten
+ * until its own boxes are typed in.
+ */
+export function useWriteBlanks({ id, blanks, texts, onType }: { id: string; blanks: WriteBlank[]; texts: string[]; onType: (blank: number, text: string) => void }) {
+  const layout = useMemo(() => blankBoxes(blanks), [blanks]);
+  const incoming = blanks.map(blank => texts[blank.id] ?? '');
+  const boxes = useWriteBoxes({ ayah: id, words: layout.words, asked: layout.asked, start: boxesOf(blanks, layout.first, incoming), onDone: () => boxes.blur() });
+  const written = blanks.map((blank, index) => blankText(blank, layout.first[index], boxes.typed));
+  // The last render of this question: what changed since, and who changed it.
+  const last = useRef({ id, written, incoming });
+  useEffect(() => {
+    const before = last.current;
+    last.current = { id, written, incoming };
+    // A new question: its own saved answers stand.
+    if (before.id !== id || before.written.length !== written.length) return;
+    // From outside: an answer that changed to something the boxes don't hold.
+    if (incoming.some((text, index) => text !== before.incoming[index] && text !== written[index])) {
+      boxes.load(boxesOf(blanks, layout.first, incoming));
+      return;
+    }
+    // From the boxes: the blank the reader is writing.
+    blanks.forEach((blank, index) => { if (written[index] !== before.written[index] && written[index] !== incoming[index]) onType(blank.id, written[index]); });
+  });
+  return {
+    field: boxes.field,
+    /** The box of a blank's word (by its place among the blank's written words), as WriteBox takes it. */
+    box: (index: number, at: number) => {
+      const slot = layout.first[index] + at;
+      return { typed: boxes.typed[slot] ?? '', active: boxes.current === slot, pick: () => boxes.pick(slot) };
+    },
+  };
+}
+
+export type WriteBlanks = ReturnType<typeof useWriteBlanks>;
