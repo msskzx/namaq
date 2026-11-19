@@ -3,7 +3,7 @@ import { ScrollView, useWindowDimensions, View } from 'react-native';
 import Svg, { Line } from 'react-native-svg';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Plus } from 'lucide-react-native';
-import { chainSentence, joining, tieOf, type Step } from '@shared/tarajimGraph';
+import { chainSentence, joining, stepClause, type GraphNode, type Step } from '@shared/tarajimGraph';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Card from '@/ui/Card';
@@ -22,6 +22,9 @@ const NODE_W = 220;
 const GAP = 8;
 const NODE_H = 44;
 const ROW = 92;
+const LABEL_W = 170;
+/** The name before «بن» or «بنت», for the short clause on a line: «الزبير ابنُ صفية». */
+const firstName = (node: GraphNode) => personName(node).split(/\s+بنت?\s+/u)[0];
 
 /**
  * Rows for the joining graph: each person on the row of his distance from the first one picked, so the chains read top
@@ -96,13 +99,20 @@ export default function BetweenScreen() {
                 return <Line key={`${step.from}>${step.to}`} x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke={kindColor(palette, step.kind)} strokeWidth={2} />;
               })}
             </Svg>
-            {steps.map(step => {
+            {steps.map((step, i) => {
               const a = place.get(step.from)!;
               const b = place.get(step.to)!;
-              const to = GRAPH.nodes.get(step.to)!;
+              // Lines between the same two rows have their words side by side: each takes the room to its neighbour.
+              const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+              const room = Math.min(LABEL_W, ...steps.filter((_, j) => j !== i).map(other => {
+                const p = place.get(other.from)!;
+                const q = place.get(other.to)!;
+                return Math.abs((p.y + q.y) / 2 - mid.y) < 24 ? Math.abs((p.x + q.x) / 2 - mid.x) - 6 : Infinity;
+              }));
+              // The whole tie on its line, both names in it, so «ابنُ» says who is whose son (owner, 2026-11-19).
               return (
-                <Text key={`l${step.from}>${step.to}`} style={{ position: 'absolute', left: (a.x + b.x) / 2 - 40, top: (a.y + b.y) / 2 - 10, width: 80, textAlign: 'center', color: kindColor(palette, step.kind), fontSize: 13, backgroundColor: palette.paper }}>
-                  {tieOf(step.kind, to.sex)}
+                <Text key={`l${step.from}>${step.to}`} numberOfLines={2} style={{ position: 'absolute', left: Math.max(0, Math.min(drawW - room, mid.x - room / 2)), top: mid.y - (room < LABEL_W ? 18 : 10), width: room, textAlign: 'center', color: kindColor(palette, step.kind), fontSize: 13, backgroundColor: palette.paper }}>
+                  {stepClause(GRAPH, step, firstName)}
                 </Text>
               );
             })}
