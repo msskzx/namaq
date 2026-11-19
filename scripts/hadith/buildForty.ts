@@ -9,7 +9,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import type { AppForty, AppIsnad, FortyGrade, FortyRecord } from '../../shared/hadith';
+import { COLLECTOR, type AppForty, type AppIsnad, type FortyGrade, type FortyRecord } from '../../shared/hadith';
 import { layoutIsnad } from '../../src/lib/model/isnadGraph';
 import { spellSigns } from '../quran/signs';
 
@@ -37,7 +37,7 @@ type BookKey = keyof typeof BOOKS;
 export type RecordBook = Exclude<BookKey, 'nawawi' | 'ibnrajab'>;
 const PINS: Record<number, string> = JSON.parse(readFileSync('data/hadith/forty-pins.json', 'utf8'));
 
-function load(id: number): Page[] {
+export function load(id: number): Page[] {
   const path = join(tmpdir(), `turath-${id}.json`);
   if (!existsSync(path)) writeFileSync(path, execFileSync('curl', ['-fsSL', `https://files.turath.io/books-v3/${id}.json`], { maxBuffer: 64 * 1024 * 1024 }));
   const raw = readFileSync(path);
@@ -46,9 +46,9 @@ function load(id: number): Page[] {
   return (JSON.parse(raw.toString('utf8')) as { pages: Page[] }).pages;
 }
 
-const AR = '٠١٢٣٤٥٦٧٨٩';
-const ar = (n: number) => String(n).replace(/\d/g, d => AR[+d]);
-const en = (s: string) => Number(s.replace(/[٠-٩]/g, d => String(AR.indexOf(d))));
+export const AR = '٠١٢٣٤٥٦٧٨٩';
+export const ar = (n: number) => String(n).replace(/\d/g, d => AR[+d]);
+export const en = (s: string) => Number(s.replace(/[٠-٩]/g, d => String(AR.indexOf(d))));
 
 const RECORD_LINE = /^\s*(?:[٠-٩]+ - |(?:[٠-٩]+ ?)?(?:- )?(?:م(?: [٠-٩]+)? ?)?(?:- )?\([٠-٩]+\)(?: -)?\s|<span data-type="title")/;
 
@@ -56,7 +56,7 @@ const RECORD_LINE = /^\s*(?:[٠-٩]+ - |(?:[٠-٩]+ ?)?(?:- )?(?:م(?: [٠-٩]+)
  * A page's own text: the notes under a rule (Bukhari's "_____", Muslim's <hr>) go, up to the next record or heading
  * printed after them on the same page; footnote marks and tags go too.
  */
-function withoutNotes(text: string, recordLine = RECORD_LINE): string {
+export function withoutNotes(text: string, recordLine = RECORD_LINE): string {
   const [first, ...rest] = text.split(/\n?_{5,}|<hr\s*\/?>|\n\[تعليق المحقق\]/);
   return [first, ...rest.map(part => {
     const lines = part.split('\n');
@@ -65,7 +65,7 @@ function withoutNotes(text: string, recordLine = RECORD_LINE): string {
   })].join('\n');
 }
 
-function body(text: string, marks?: RegExp, recordLine?: RegExp): string {
+export function body(text: string, marks?: RegExp, recordLine?: RegExp): string {
   return spellSigns(withoutNotes(text, recordLine))
     .replace(marks ?? /$^/g, '')
     .replace(/(?:\([٠-٩]+\) ?)?<span data-type=["']title["'][^>]*>(.*?)<\/span>/g, '\n⟪باب⟫$1\n')
@@ -77,7 +77,7 @@ function body(text: string, marks?: RegExp, recordLine?: RegExp): string {
 }
 
 /** The book as one string with a page marker (⟦vol:page⟧) wherever a page starts, so a record knows its pages. */
-function joined(pages: Page[], marks?: RegExp, recordLine?: RegExp): string {
+export function joined(pages: Page[], marks?: RegExp, recordLine?: RegExp): string {
   return pages.map((p, i) => `⟦${p.vol ?? 1}:${p.page ?? 0}:${i + 1}⟧${body(p.text, marks, recordLine)}`).join('\n');
 }
 
@@ -88,7 +88,7 @@ const NUMBERED_LINE = /^\s*(?:[٠-٩]+ ?- |<span data-type=["']title["'])/;
 const BARE_MARKS: Partial<Record<RecordBook, RegExp>> = { ahmad: / ?\([٠-٩]+\)/g };
 
 /** A record from its start to before the next record or chapter: its text without markers, and the pages it spans. */
-function cut(book: string, start: number, end: number) {
+export function cut(book: string, start: number, end: number) {
   const before = /⟦(\d+):(\d+):(\d+)⟧/.exec(book.slice(book.lastIndexOf('⟦', start)));
   const pages = [`${before![1]}:${before![2]}`];
   const raw = book.slice(start, end);
@@ -98,7 +98,7 @@ function cut(book: string, start: number, end: number) {
 }
 
 const MODES = /(?:^|\s)(?:حدثنا|حدثني|أخبرنا|أخبرني|عن|سمعت|سمع|أنبأنا)[\s:،]*$/;
-const bare = (text: string) => text.replace(/[\u064B-\u0652\u0670]/g, '');
+export const bare = (text: string) => text.replace(/[\u064B-\u0652\u0670]/g, '');
 /** The word a narrator narrated with, as printed, when the words before his name end with one. */
 const modeOf = (before: string) => (MODES.test(bare(before)) ? before.trim().replace(/[:،]$/, '').split(/\s+/).pop() : undefined);
 
@@ -106,7 +106,7 @@ const modeOf = (before: string) => (MODES.test(bare(before)) ? before.trim().rep
  * A record's text with Shamela's narrator links taken out, and its chain when the links make it plain: one line of
  * narrators before the first quote mark, each after the word he narrated with, with no ح (a second route) among them.
  */
-function narrated(marked: string) {
+export function narrated(marked: string) {
   const text = marked.replace(/⁅\d+⁆([^⁆]*)⁆/g, '$1').replace(/\s+([،.:؛])/g, '$1');
   const quote = text.search(/[«"]/);
   const links: { name: string; mode: string }[] = [];
@@ -125,7 +125,7 @@ function narrated(marked: string) {
   return { text, ...(quote > 0 ? { isnadEnd: quote } : {}), ...(single && links.length > 1 ? { chain: links } : {}) };
 }
 
-const bareText = (text: string) => bare(text).replace(/[أإآ]/g, 'ا').replace(/\s+/g, ' ');
+export const bareText = (text: string) => bare(text).replace(/[أإآ]/g, 'ا').replace(/\s+/g, ' ');
 
 /**
  * A book's record N, printed «N - …» at a line's start (al-Bukhari, the Sunan, the Musnads), to the next record or chapter
@@ -151,7 +151,7 @@ const NEXT_ROUTE = new RegExp(`(?:^|\\n|⟧)\\s*(?:${ROUTE_HEAD}[٠-٩]+\\)(?: -
  * Every route Muslim prints under Abd al-Baqi's number N, each to the next route or chapter heading. A route's head is
  * "k - (N)", "k - م - (N)", "k م - (N)", "k - م 2 - (N)" or a bare "(N) -"; its label is the head as printed.
  */
-function muslimRoutes(book: string, n: number, keep?: string[]) {
+export function muslimRoutes(book: string, n: number, keep?: string[]) {
   const re = new RegExp(`(?:^|\\n|⟧)\\s*${ROUTE_HEAD}${ar(n)}\\)(?: -)?\\s`, 'g');
   const routes = [...book.matchAll(re)].map(m => {
     const start = m.index! + m[0].search(/[^\s⟧]/);
@@ -192,6 +192,8 @@ interface GradeRef { by: string; say: string; to?: string; in: string }
 interface MapEntry {
   n: number; companion: string; named: string[]; errata?: [string, string, string][]; alsoFrom?: string[]; bukhari?: Ref[]; muslim?: Ref[];
   others?: OtherRef[]; grades?: GradeRef[]; partial?: boolean; note?: string;
+  /** One of the eight Ibn Rajab adds (43–50): its text is his quotation at the head of his chapter. */
+  source?: 'ibnrajab';
 }
 const refOf = (ref: Ref) => (typeof ref === 'number' ? { n: ref } : ref);
 
@@ -200,15 +202,15 @@ interface Paragraph { text: string; volume: number; page: number; shamela: numbe
 const ENDS = /[.:؟!»"\])﴾]$/;
 
 /**
- * Ibn Rajab's chapters on the Forty (1–42), his words only: each page's text above the editors' notes, in paragraphs, a
+ * Ibn Rajab's fifty chapters (the Forty, then the eight he adds), his words only: each page's text above the editors' notes, in paragraphs, a
  * paragraph a page break cuts joined to the page before it (one with no full stop at its end).
  */
 function ibnRajabChapters(pages: Page[]) {
   const heads = pages.flatMap((p, i) => (/<span data-type="title"[^>]*>الحديثُ? [^<]+<\/span>/.test(p.text) ? [i] : []));
   if (heads.length !== 50) throw new Error(`Ibn Rajab: ${heads.length} chapters, not 50`);
-  return heads.slice(0, 42).map((start, c) => {
+  return heads.map((start, c) => {
     const paragraphs: Paragraph[] = [];
-    for (let i = start; i < heads[c + 1]; i++) {
+    for (let i = start; i < (heads[c + 1] ?? pages.length); i++) {
       // A footnote mark taken out leaves its space before the comma or stop it stood at.
       const lines = body(pages[i].text, undefined, NUMBERED_LINE).split('\n').map(line => line.replace(/\s+/g, ' ').replace(/\s+([،.:؛])/g, '$1').trim()).filter(Boolean);
       lines.forEach((line, k) => {
@@ -221,7 +223,8 @@ function ibnRajabChapters(pages: Page[]) {
         else paragraphs.push({ text: line, volume: Number(pages[i].vol ?? 1), page: pages[i].page!, shamela: i + 1 });
       });
     }
-    return { n: c + 1, shamela: start + 1, paragraphs };
+    const heading = /<span data-type="title"[^>]*>(الحديثُ? [^<]+)<\/span>/.exec(pages[start].text)![1].replace(/[\u064B-\u0652]/g, '');
+    return { n: c + 1, heading, shamela: start + 1, paragraphs };
   });
 }
 
@@ -282,7 +285,12 @@ export function buildForty() {
     return others.get(key)!;
   };
   const chapters = ibnRajabChapters(load(BOOKS.ibnrajab.id));
-  const entries = nawawi.map(entry => {
+  // The eight Ibn Rajab adds: his quotation at the head of his chapter, as al-Nawawi's text is for the Forty.
+  const added = chapters.slice(42).map(chapter => {
+    const [first] = chapter.paragraphs;
+    return { n: chapter.n, heading: chapter.heading, volume: first.volume, shamela: first.shamela, pages: [first.page, ...(first.turns ?? []).map(turn => turn.page)], text: first.text };
+  });
+  const entries = [...nawawi, ...added].map(entry => {
     const m = map.entries.find(e => e.n === entry.n);
     if (!m) throw new Error(`al-Nawawi ${entry.n} is not in forty-map.json`);
     const text = (m.errata ?? []).reduce((now, [wrong, right]) => {
@@ -306,6 +314,7 @@ export function buildForty() {
       named: m.named,
       ...(m.partial ? { partial: true } : {}),
       ...(m.note ? { note: m.note } : {}),
+      ...(m.source ? { source: m.source } : {}),
       records,
       ...(m.grades ? { grades: gradesOf(entry.n, m.grades, { ...entry, text }, records, chapters[entry.n - 1]) } : {}),
     };
@@ -330,11 +339,6 @@ function chainIsnad(collector: string, chain: { name: string; mode: string }[]):
  * The phone's copy (shared/data/hadith/forty.json): the same texts, with each linked chain drawn. A record that holds only
  * part of al-Nawawi's wording, or an entry he takes only partly from the Sahihayn, keeps its text and gets no drawing.
  */
-const COLLECTORS: Record<RecordBook, string> = {
-  bukhari: 'البخاري', muslim: 'مسلم', tirmidhi: 'الترمذي', nasai: 'النسائي', abudawud: 'أبو داود', ibnmajah: 'ابن ماجه', daraqutni: 'الدارقطني',
-  bayhaqi: 'البيهقي', ahmad: 'أحمد', darimi: 'الدارمي', muwatta: 'مالك', abd: 'عبد بن حميد',
-};
-
 export function appForty(built: Built): AppForty {
   const { books } = built;
   return {
@@ -347,7 +351,7 @@ export function appForty(built: Built): AppForty {
         records: entry.records.map((record): FortyRecord => {
           const { chain, ...rest } = record as typeof record & { chain?: { name: string; mode: string }[] };
           const drawn = chain && !entry.partial && !rest.partial;
-          return { ...(rest as FortyRecord), ...(drawn ? { isnad: chainIsnad(COLLECTORS[record.book], chain) } : {}) };
+          return { ...(rest as FortyRecord), ...(drawn ? { isnad: chainIsnad(COLLECTOR[record.book], chain) } : {}) };
         }),
       };
     }),

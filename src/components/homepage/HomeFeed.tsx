@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText, SquareArrowOutUpLeft, Swords, BookOpenText, ListTree, MessagesSquare, Link2, History } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText, SquareArrowOutUpLeft, Swords, BookOpenText, ListTree, MessagesSquare, Link2, History, Network, GitCommitVertical } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Cookies from 'js-cookie';
@@ -11,11 +11,15 @@ import StoryMap from '@/app/quran/prophets/[slug]/StoryMap';
 import type { SavedContent, SiraCard, StoryCard } from '@/lib/homeFeed';
 import type { TermCard } from '@/lib/balaghaTerms';
 import type { HadithCard } from '@/lib/forty';
+import type { SahihCard } from '@/lib/sahih';
+import { SahihHadithView, sahihPage } from '@/components/hadith/SahihParts';
 import type { NameCard, TarajimCard } from '@/lib/tarajim';
 import { betweenHref, CreditFold, TiesChain, tiesHref } from '@/components/tarajim/TarajimParts';
 import LifeTimeline from '@/components/tarajim/LifeTimeline';
 import { IbnRajab, shamelaPage } from '@/components/hadith/FortyParts';
-import { fromCompanion } from '@shared/hadith';
+import HadithBooks from '@/components/hadith/HadithBooks';
+import FortyIsnad from '@/components/hadith/FortyIsnad';
+import { compilerOf, fromCompanion } from '@shared/hadith';
 import { ExampleAyat, ayatName, quotesTitle, termHref } from '@/components/balagha/TermParts';
 import BookRuns from '@/components/quran/text/BookRuns';
 import { plainName } from '@shared/quran/balaghaTerms';
@@ -404,22 +408,54 @@ function TermPost({ card }: { card: TermCard }) {
 }
 
 /**
- * One of al-Nawawi's Forty in his words (the app's HadithPost), or a passage of Ibn Rajab's explanation of one (its
- * RajabPost); the head and the first button open the hadith's page with its records.
+ * One of the Forty in al-Nawawi's words, or Ibn Rajab's for his eight (the app's HadithPost), a passage of Ibn Rajab's explanation of one (its RajabPost), or
+ * the books that record one (its RecordedPost); the head and the first button open the hadith's page with its records.
  */
 function HadithPost({ card }: { card: HadithCard }) {
   const { entry, books } = card;
   const href = `/hadith/forty/${entry.n}`;
-  const rajab = card.kind === 'rajab';
-  const source = rajab ? { title: books.ibnrajab.title, url: shamelaPage(books, 'ibnrajab', card.passage[0].shamela) } : { title: books.nawawi.title, url: shamelaPage(books, 'nawawi', entry.shamela) };
-  return <Post head={<PostHead Icon={rajab ? BookOpenText : MessagesSquare} title={rajab ? 'من شرح ابن رجب' : 'من الحديث'} sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} href={href} label={`افتح ${entry.heading}`} />}
+  const open = <Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} href={href} />;
+  const sub = `${entry.heading}، ${fromCompanion(entry.companion)}`;
+  if (card.kind === 'recorded') return <Post head={<PostHead Icon={Network} title="من أخرجه" sub={sub} href={href} label={`افتح ${entry.heading}`} />} actions={open}>
+    <div className="flex flex-col gap-3 px-4 py-3" lang="ar">
+      <p className="line-clamp-3 text-[1.125rem] leading-[1.9]">{entry.text}</p>
+      <HadithBooks top={entry.heading} boxes={card.boxes} namer={compilerOf(entry).name} />
+    </div>
+  </Post>;
+  if (card.kind === 'isnad') return <Post head={<PostHead Icon={GitCommitVertical} title="من الإسناد" sub={sub} href={href} label={`افتح ${entry.heading}`} />}
     actions={<>
-      <Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} href={href} />
+      {open}
+      <Action Icon={SquareArrowOutUpLeft} label={`المصدر: ${card.bukhari.title} ${num(card.record.number)}`} href={shamelaPage({ bukhari: card.bukhari }, 'bukhari', card.record.shamela)} external />
+    </>}>
+    <div className="flex flex-col gap-3 px-4 py-3" lang="ar">
+      <FortyIsnad isnad={card.record.isnad} size={card.size} />
+      <p className="line-clamp-3 text-[1.125rem] leading-[1.9]">{card.record.saying}</p>
+    </div>
+  </Post>;
+  const rajab = card.kind === 'rajab';
+  const source = rajab ? { title: books.ibnrajab.title, url: shamelaPage(books, 'ibnrajab', card.passage[0].shamela) } : { title: books[compilerOf(entry).book].title, url: shamelaPage(books, compilerOf(entry).book, entry.shamela) };
+  return <Post head={<PostHead Icon={rajab ? BookOpenText : MessagesSquare} title={rajab ? 'من شرح ابن رجب' : 'من الحديث'} sub={sub} href={href} label={`افتح ${entry.heading}`} />}
+    actions={<>
+      {open}
       <Action Icon={SquareArrowOutUpLeft} label={`المصدر: ${source.title}`} href={source.url} external />
     </>}>
     <div className="px-4 py-3" lang="ar">
       {card.kind === 'rajab' ? <IbnRajab only={card.passage} books={books} /> : <p className="text-[1.1875rem] leading-[1.9]">{entry.text}</p>}
     </div>
+  </Post>;
+}
+
+/** A hadith of Sahih al-Bukhari or Sahih Muslim whole (the app's SahihPost); the head opens its page. */
+function SahihPost({ card }: { card: SahihCard }) {
+  const { book, hadith } = card;
+  const href = `/hadith/sahih/${book.slug}/${hadith.n}`;
+  const name = `${book.title} ${num(hadith.n)}`;
+  return <Post head={<PostHead Icon={MessagesSquare} title={`من ${book.title}`} sub={card.where} href={href} label={`افتح ${name}`} />}
+    actions={<>
+      <Action Icon={MessagesSquare} label={`افتح ${name}`} href={href} />
+      <Action Icon={SquareArrowOutUpLeft} label={`المصدر: ${book.title}`} href={sahihPage(book, hadith.routes[0].shamela)} external />
+    </>}>
+    <div className="px-4 py-3"><SahihHadithView book={book} hadith={hadith} /></div>
   </Post>;
 }
 
@@ -612,10 +648,14 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
   const siraSlots = shows('sira') || shows('moment') ? Array.from({ length: batches }, (_, i) => i) : [];
   const { data: sira } = useSWR(day && siraSlots.length ? `/api/home/feed?day=${day}&sira=${siraSlots.join(',')}` : null,
     () => inPieces<SiraCard[]>(some => `/api/home/feed?day=${day}&sira=${some.join(',')}`, siraSlots).then(all => all.flat()), swr);
-  // The hadith and Ibn Rajab cards, one a batch, worked out on the server (the records and Ibn Rajab's book stay there).
-  const hadithSlots = shows('hadith') || shows('rajab') ? Array.from({ length: batches }, (_, i) => i) : [];
+  // The hadith, Ibn Rajab, «من أخرجه» and «من الإسناد» cards, one a batch, worked out on the server (the records and Ibn Rajab's book stay there).
+  const hadithSlots = shows('hadith') || shows('rajab') || shows('recorded') || shows('isnad') ? Array.from({ length: batches }, (_, i) => i) : [];
   const { data: hadith } = useSWR(day && hadithSlots.length ? `/api/home/feed?day=${day}&hadith=${hadithSlots.join(',')}` : null,
     () => inPieces<HadithCard[]>(some => `/api/home/feed?day=${day}&hadith=${some.join(',')}`, hadithSlots).then(all => all.flat()), swr);
+  // The Sahih cards, one a batch, al-Bukhari and Muslim in turn, worked out on the server (the books' texts stay there).
+  const sahihSlots = shows('bukhari') || shows('muslim') ? Array.from({ length: batches }, (_, i) => i) : [];
+  const { data: sahih } = useSWR(day && sahihSlots.length ? `/api/home/feed?day=${day}&sahih=${sahihSlots.join(',')}` : null,
+    () => inPieces<SahihCard[]>(some => `/api/home/feed?day=${day}&sahih=${some.join(',')}`, sahihSlots).then(all => all.flat()), swr);
   // The virtue and «صلة» cards, one a batch, worked out on the server (the people's entries stay there).
   const tarajimSlots = shows('tarajim') || shows('tie') || shows('life') ? Array.from({ length: batches }, (_, i) => i) : [];
   const { data: tarajim } = useSWR(day && tarajimSlots.length ? `/api/home/feed?day=${day}&tarajim=${tarajimSlots.join(',')}` : null,
@@ -670,6 +710,8 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
     if (story) posts.push(<StoryPost key={`s${day}-${i}`} card={story} />);
     const hadithCard = hadith?.find(card => card.slot === i);
     if (hadithCard && shows(hadithCard.kind)) posts.push(<HadithPost key={`h${day}-${i}`} card={hadithCard} />);
+    const sahihCard = sahih?.find(card => card.slot === i);
+    if (sahihCard && shows(sahihCard.kind)) posts.push(<SahihPost key={`sahih${day}-${i}`} card={sahihCard} />);
     const termCard = shows('term') ? termCards?.find(card => card.slot === i) : undefined;
     if (termCard) posts.push(<TermPost key={`term${day}-${i}`} card={termCard} />);
     const siraCard = sira?.find(card => card.slot === i);

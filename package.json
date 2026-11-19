@@ -42,6 +42,8 @@
     "quran:story-apply": "tsx scripts/quran/applyStoryReviewLog.ts",
     "quran:branches": "tsx scripts/quran/buildBranches.ts",
     "quran:similar": "tsx scripts/quran/buildSimilar.ts",
+    "hadith:sahihayn": "tsx scripts/hadith/buildSahihayn.ts",
+    "hadith:sahihayn-check": "tsx scripts/hadith/checkSahihayn.ts",
     "people:sync": "tsx scripts/people/syncCanonicalPeople.ts",
     "people:validate": "tsx scripts/people/syncCanonicalPeople.ts --strict",
     "people:sync-companions": "tsx scripts/people/syncCompanionRelations.ts",

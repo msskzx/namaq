@@ -35,6 +35,8 @@ export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   HADITH_NARRATOR: { en: "Who narrated it?", ar: "من راوي الحديث؟" },
   HADITH_COMPLETE: { en: "Complete the hadith", ar: "أكمل الحديث" },
   HADITH_BOOK: { en: "Which books?", ar: "من أخرجه؟" },
+  HADITH_CHAIN: { en: "Who is missing from the chain?", ar: "من حدّث به؟" },
+  SAHIH_KITAB: { en: "Which kitab?", ar: "في أيّ كتاب؟" },
 };
 
 export const TOPIC_GROUPS: { en: string; ar: string; topics: QuizTopic[] }[] = [
@@ -42,7 +44,7 @@ export const TOPIC_GROUPS: { en: string; ar: string; topics: QuizTopic[] }[] = [
   { en: "Tuhfat al-Atfal", ar: "تحفة الأطفال", topics: ["TUHFA_COMPLETE", "TUHFA_NEXT", "TUHFA_RULE"] },
   { en: "Tarajim", ar: "التراجم", topics: ["TARAJIM_NASAB", "TARAJIM_VIRTUE", "TARAJIM_TIE", "TARAJIM_LIFE", "TARAJIM_LAQAB", "TARAJIM_KUNYA"] },
   { en: "Sira", ar: "السيرة", topics: ["SIRA", "PROPHET_NAMES"] },
-  { en: "Hadith", ar: "الحديث", topics: ["HADITH_NARRATOR", "HADITH_COMPLETE", "HADITH_BOOK"] },
+  { en: "Hadith", ar: "الحديث", topics: ["HADITH_NARRATOR", "HADITH_COMPLETE", "HADITH_BOOK", "HADITH_CHAIN", "SAHIH_KITAB"] },
 ];
 
 export const DIFFICULTY_LABELS: Record<Difficulty, { en: string; ar: string }> = {
