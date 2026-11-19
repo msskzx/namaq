@@ -16,14 +16,16 @@ from the Sahihayn, opening the hadith's page; `HadithPost`), a passage of Ibn Ra
 commentary (من شرح ابن رجب, a paragraph where he explains a phrase of one of those hadith, opening the hadith's page;
 `RajabPost` drawn by `components/IbnRajab`, the page's own view), the books that record one of the Forty (من أخرجه, the
 start of one al-Nawawi takes whole from the Sahihayn and the «من أخرجه» drawing of each book and number; `RecordedPost` drawn
-by `components/HadithBooks`, the page's own view), and the quiz cards in `FEED_QUIZ_NAMES`
+by `components/HadithBooks`, the page's own view), a hadith of Sahih al-Bukhari or Sahih Muslim whole
+(من صحيح البخاري / من صحيح مسلم, its kitab › bab in the head, Muslim's bab marked «تبويب النووي», drawn by `SahihHadithView`, the
+hadith page's own view, opening the hadith's page; `SahihPost`, only once the book is downloaded on the phone), and the quiz cards in `FEED_QUIZ_NAMES`
 (`shared/quiz/feedQuiz.ts`): في أي سورة؟, أكمل المتشابهات, سمّع بقية الآية, قارن الموضعين,
 أوائل السور, سمّع الآية, ما معنى؟, the four ayah quizzes below, ما المصطلح؟ (`shared/quiz/balaghaTermQuiz.ts`: a term's
 definition with its name hidden, four terms to pick from, each choice linking to its definition once answered), the three Tuhfat al-Atfal questions, السيرة والغزوات (shared/quiz/sira.ts), the four tarajim questions
 (أين يلتقي النسبان؟, صاحب المنقبة and ما صلته به؟, `shared/quiz/tarajim.ts`; في أي سنة كان؟, `shared/quiz/life.ts`:
 the year of an event or story of someone's «حياته», or of a person's death (battles are the sira quiz's); two years where
 the sources give two, the wrong choices of the same shape and none near; the look-up his timeline), بمَ لُقّب؟ and ما كنيته؟ (each its own interest), أسماء النبي ﷺ (several right choices, under السيرة), and the three hadith questions (من راوي الحديث؟, أكمل الحديث and من أخرجه؟,
-`shared/quiz/hadith.ts`).
+`shared/quiz/hadith.ts`), and في أيّ كتاب؟ (`shared/quiz/sahih.ts`: a bab heading of either Sahih and the kitab it stands in).
 
 The ayah quizzes (`shared/quiz/ayahQuizzes.ts`), whose questions are built once by `scripts/quran/buildAyahQuizzes.ts`
 (the app and the website only read the bank; hand review in `scripts/quran/ayahQuizReview.json`):

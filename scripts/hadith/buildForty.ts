@@ -37,7 +37,7 @@ type BookKey = keyof typeof BOOKS;
 export type RecordBook = Exclude<BookKey, 'nawawi' | 'ibnrajab'>;
 const PINS: Record<number, string> = JSON.parse(readFileSync('data/hadith/forty-pins.json', 'utf8'));
 
-function load(id: number): Page[] {
+export function load(id: number): Page[] {
   const path = join(tmpdir(), `turath-${id}.json`);
   if (!existsSync(path)) writeFileSync(path, execFileSync('curl', ['-fsSL', `https://files.turath.io/books-v3/${id}.json`], { maxBuffer: 64 * 1024 * 1024 }));
   const raw = readFileSync(path);
@@ -46,9 +46,9 @@ function load(id: number): Page[] {
   return (JSON.parse(raw.toString('utf8')) as { pages: Page[] }).pages;
 }
 
-const AR = '٠١٢٣٤٥٦٧٨٩';
-const ar = (n: number) => String(n).replace(/\d/g, d => AR[+d]);
-const en = (s: string) => Number(s.replace(/[٠-٩]/g, d => String(AR.indexOf(d))));
+export const AR = '٠١٢٣٤٥٦٧٨٩';
+export const ar = (n: number) => String(n).replace(/\d/g, d => AR[+d]);
+export const en = (s: string) => Number(s.replace(/[٠-٩]/g, d => String(AR.indexOf(d))));
 
 const RECORD_LINE = /^\s*(?:[٠-٩]+ - |(?:[٠-٩]+ ?)?(?:- )?(?:م(?: [٠-٩]+)? ?)?(?:- )?\([٠-٩]+\)(?: -)?\s|<span data-type="title")/;
 
@@ -56,7 +56,7 @@ const RECORD_LINE = /^\s*(?:[٠-٩]+ - |(?:[٠-٩]+ ?)?(?:- )?(?:م(?: [٠-٩]+)
  * A page's own text: the notes under a rule (Bukhari's "_____", Muslim's <hr>) go, up to the next record or heading
  * printed after them on the same page; footnote marks and tags go too.
  */
-function withoutNotes(text: string, recordLine = RECORD_LINE): string {
+export function withoutNotes(text: string, recordLine = RECORD_LINE): string {
   const [first, ...rest] = text.split(/\n?_{5,}|<hr\s*\/?>|\n\[تعليق المحقق\]/);
   return [first, ...rest.map(part => {
     const lines = part.split('\n');
@@ -65,7 +65,7 @@ function withoutNotes(text: string, recordLine = RECORD_LINE): string {
   })].join('\n');
 }
 
-function body(text: string, marks?: RegExp, recordLine?: RegExp): string {
+export function body(text: string, marks?: RegExp, recordLine?: RegExp): string {
   return spellSigns(withoutNotes(text, recordLine))
     .replace(marks ?? /$^/g, '')
     .replace(/(?:\([٠-٩]+\) ?)?<span data-type=["']title["'][^>]*>(.*?)<\/span>/g, '\n⟪باب⟫$1\n')
@@ -77,7 +77,7 @@ function body(text: string, marks?: RegExp, recordLine?: RegExp): string {
 }
 
 /** The book as one string with a page marker (⟦vol:page⟧) wherever a page starts, so a record knows its pages. */
-function joined(pages: Page[], marks?: RegExp, recordLine?: RegExp): string {
+export function joined(pages: Page[], marks?: RegExp, recordLine?: RegExp): string {
   return pages.map((p, i) => `⟦${p.vol ?? 1}:${p.page ?? 0}:${i + 1}⟧${body(p.text, marks, recordLine)}`).join('\n');
 }
 
@@ -88,7 +88,7 @@ const NUMBERED_LINE = /^\s*(?:[٠-٩]+ ?- |<span data-type=["']title["'])/;
 const BARE_MARKS: Partial<Record<RecordBook, RegExp>> = { ahmad: / ?\([٠-٩]+\)/g };
 
 /** A record from its start to before the next record or chapter: its text without markers, and the pages it spans. */
-function cut(book: string, start: number, end: number) {
+export function cut(book: string, start: number, end: number) {
   const before = /⟦(\d+):(\d+):(\d+)⟧/.exec(book.slice(book.lastIndexOf('⟦', start)));
   const pages = [`${before![1]}:${before![2]}`];
   const raw = book.slice(start, end);
@@ -98,7 +98,7 @@ function cut(book: string, start: number, end: number) {
 }
 
 const MODES = /(?:^|\s)(?:حدثنا|حدثني|أخبرنا|أخبرني|عن|سمعت|سمع|أنبأنا)[\s:،]*$/;
-const bare = (text: string) => text.replace(/[\u064B-\u0652\u0670]/g, '');
+export const bare = (text: string) => text.replace(/[\u064B-\u0652\u0670]/g, '');
 /** The word a narrator narrated with, as printed, when the words before his name end with one. */
 const modeOf = (before: string) => (MODES.test(bare(before)) ? before.trim().replace(/[:،]$/, '').split(/\s+/).pop() : undefined);
 
@@ -106,7 +106,7 @@ const modeOf = (before: string) => (MODES.test(bare(before)) ? before.trim().rep
  * A record's text with Shamela's narrator links taken out, and its chain when the links make it plain: one line of
  * narrators before the first quote mark, each after the word he narrated with, with no ح (a second route) among them.
  */
-function narrated(marked: string) {
+export function narrated(marked: string) {
   const text = marked.replace(/⁅\d+⁆([^⁆]*)⁆/g, '$1').replace(/\s+([،.:؛])/g, '$1');
   const quote = text.search(/[«"]/);
   const links: { name: string; mode: string }[] = [];
@@ -125,7 +125,7 @@ function narrated(marked: string) {
   return { text, ...(quote > 0 ? { isnadEnd: quote } : {}), ...(single && links.length > 1 ? { chain: links } : {}) };
 }
 
-const bareText = (text: string) => bare(text).replace(/[أإآ]/g, 'ا').replace(/\s+/g, ' ');
+export const bareText = (text: string) => bare(text).replace(/[أإآ]/g, 'ا').replace(/\s+/g, ' ');
 
 /**
  * A book's record N, printed «N - …» at a line's start (al-Bukhari, the Sunan, the Musnads), to the next record or chapter
@@ -151,7 +151,7 @@ const NEXT_ROUTE = new RegExp(`(?:^|\\n|⟧)\\s*(?:${ROUTE_HEAD}[٠-٩]+\\)(?: -
  * Every route Muslim prints under Abd al-Baqi's number N, each to the next route or chapter heading. A route's head is
  * "k - (N)", "k - م - (N)", "k م - (N)", "k - م 2 - (N)" or a bare "(N) -"; its label is the head as printed.
  */
-function muslimRoutes(book: string, n: number, keep?: string[]) {
+export function muslimRoutes(book: string, n: number, keep?: string[]) {
   const re = new RegExp(`(?:^|\\n|⟧)\\s*${ROUTE_HEAD}${ar(n)}\\)(?: -)?\\s`, 'g');
   const routes = [...book.matchAll(re)].map(m => {
     const start = m.index! + m[0].search(/[^\s⟧]/);

@@ -37,6 +37,8 @@ import { LOOKED_POINTS, POINTS } from '@shared/quiz/score';
 import { plainName, type BalaghaTerm } from '@shared/quran/balaghaTerms';
 import { TermQuotes } from '@/components/balagha/TermParts';
 import { FortyCard, FortyHadith } from '@/components/hadith/FortyParts';
+import { SahihLook } from '@/components/hadith/SahihParts';
+import type { SahihIndex } from '@shared/sahih';
 import type { FortyListItem, FortyPage } from '@/lib/forty';
 import { searchForty } from '@shared/hadith';
 import Empty from '@/components/common/Empty';
@@ -139,7 +141,7 @@ function TuhfaLook({ mark }: { mark?: number }) {
 }
 
 /** The looks the website draws so far; the rest come with their features (the app draws every kind, mobile/src/components/QuizLook.tsx). */
-const DRAWN: QuizLook['view'][] = ['story', 'battle', 'terms', 'hadith', 'word', 'irab', 'balagha', 'qiraat', 'tafsir', 'tuhfa', 'ties', 'nasab', 'virtues', 'life'];
+const DRAWN: QuizLook['view'][] = ['story', 'battle', 'terms', 'hadith', 'sahih', 'word', 'irab', 'balagha', 'qiraat', 'tafsir', 'tuhfa', 'ties', 'nasab', 'virtues', 'life'];
 export const canLook = (look: QuizLook | undefined): look is QuizLook => !!look && DRAWN.includes(look.view);
 
 /** A person's ties round him (the app's TiesLook): anyone found by a search or clicked on the ring moves to the middle; the trail goes back. */
@@ -206,6 +208,7 @@ export function LookView({ look, shown }: { look: QuizLook; shown: boolean }) {
       case 'tafsir': return <TafsirLook key={`${look.keys.join()}/${shown ? look.mark ?? '' : ''}`} keys={look.keys} mark={shown ? look.mark : undefined} />;
       case 'terms': return <TermsLook key={`${look.names.join()}/${shown ? look.mark ?? '' : ''}`} names={look.names} mark={shown ? look.mark : undefined} />;
       case 'hadith': return <HadithLook key={shown ? look.mark ?? '' : ''} mark={shown ? look.mark : undefined} />;
+      case 'sahih': return <Fetched<SahihIndex> url={`/api/hadith/search?book=${look.book}`}>{book => <SahihLook book={book} mark={shown ? look.mark : undefined} />}</Fetched>;
       case 'ties': return <TiesLook key={`${look.slug}/${shown ? look.mark ?? '' : ''}`} slug={look.slug} mark={shown ? look.mark : undefined} />;
       case 'nasab': return <Fetched<NasabView> url={`/api/tarajim?nasab=${look.slugs.map(encodeURIComponent).join(',')}${shown && look.mark ? '' : '&meetings=0'}`}>{data => <NasabTree view={data} linked={false} />}</Fetched>;
       case 'virtues': return <VirtuesLook key={`${look.slugs.join()}/${shown ? look.mark?.slug ?? '' : ''}`} slugs={look.slugs} mark={shown ? look.mark : undefined} />;
