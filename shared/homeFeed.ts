@@ -34,6 +34,12 @@ export const hasHadithCard = (slot: number) => slot > 0 && slot % 4 === 0;
 /** The hadith of a batch, the same all day; each hadith batch brings the next one. */
 export const hadithOfSlot = (count: number, day: number, slot: number) => (count ? (((day + (slot - 4) / 4) % count) + count) % count : -1);
 
+/** A passage of Ibn Rajab's commentary on the Forty (owner, 2026-11-18) on every fourth batch from the third, with a term. */
+export const hasRajabCard = (slot: number) => slot % 4 === 2;
+
+/** The Ibn Rajab passage of a batch, the same all day; each such batch brings the next one. */
+export const rajabOfSlot = (count: number, day: number, slot: number) => (count ? (((day * 7 + (slot - 2) / 4) % count) + count) % count : -1);
+
 /** The scene of a batch, the same all day; the next scene batch brings the next one. */
 export const sceneOfSlot = (count: number, day: number, slot: number) => (count ? (((day * 5 + slot / 2) % count) + count) % count : -1);
 

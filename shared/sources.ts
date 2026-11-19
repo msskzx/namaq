@@ -68,7 +68,7 @@ const USE = {
   battles: { ar: 'خرائط الغزوات والمعارك في تطبيق الهاتف', en: 'the battle maps in the phone app' },
   hijri: { ar: 'التاريخ الهجري وجزء اليوم', en: 'the Hijri date and today’s juz', href: '/utilities' },
   people: { ar: 'التراجم والأنساب والمعارك', en: 'biographies, lineages and battles', href: '/people' },
-  forty: { ar: 'الأربعون النووية ورواياتها في الصحيحين، في تطبيق الهاتف', en: 'al-Nawawi’s Forty and their Sahihayn records, in the phone app' },
+  forty: { ar: 'الأربعون النووية ورواياتها في كتب الحديث، في تطبيق الهاتف', en: 'al-Nawawi’s Forty and their records in the hadith books, in the phone app' },
   everywhere: { ar: 'كل الصفحات', en: 'every page' },
 } satisfies Record<string, SourceUse>;
 
@@ -108,6 +108,61 @@ export const SOURCES: Source[] = [
     id: 'sahih-muslim', group: 'books',
     title: { ar: 'صحيح مسلم', en: 'Sahih Muslim' }, author: { ar: 'مسلم بن الحجاج النيسابوري', en: 'Muslim' },
     edition: 'تحقيق محمد فؤاد عبد الباقي، مطبعة عيسى البابي الحلبي، القاهرة ١٣٧٤هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1727), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+  },
+  {
+    id: 'sunan-tirmidhi', group: 'books',
+    title: { ar: 'سنن الترمذي', en: 'Sunan al-Tirmidhi' }, author: { ar: 'محمد بن عيسى الترمذي', en: 'al-Tirmidhi' },
+    edition: 'تحقيق أحمد محمد شاكر ومحمد فؤاد عبد الباقي وإبراهيم عطوة عوض، مصطفى البابي الحلبي، مصر، الطبعة الثانية ١٣٩٥هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٩', link: shamela(1435), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+  },
+  {
+    id: 'sunan-nasai', group: 'books',
+    title: { ar: 'سنن النسائي', en: 'Sunan al-Nasa’i' }, author: { ar: 'أحمد بن شعيب النسائي', en: 'al-Nasa’i' },
+    edition: 'المطبعة المصرية، المكتبة التجارية الكبرى، القاهرة، الطبعة الأولى ١٣٤٨هـ، بترقيم عبد الفتاح أبي غدة؛ من نسخة turath.io، ٢٠٢٦-١١-١٩', link: shamela(829), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+  },
+  {
+    id: 'sunan-abi-dawud', group: 'books',
+    title: { ar: 'سنن أبي داود', en: 'Sunan Abi Dawud' }, author: { ar: 'سليمان بن الأشعث السجستاني', en: 'Abu Dawud' },
+    edition: 'تحقيق محمد محيي الدين عبد الحميد، المكتبة العصرية، صيدا وبيروت؛ من نسخة turath.io، ٢٠٢٦-١١-١٩', link: shamela(1726), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+  },
+  {
+    id: 'sunan-ibn-majah', group: 'books',
+    title: { ar: 'سنن ابن ماجه', en: 'Sunan Ibn Majah' }, author: { ar: 'محمد بن يزيد ابن ماجه القزويني', en: 'Ibn Majah' },
+    edition: 'تحقيق محمد فؤاد عبد الباقي، دار إحياء الكتب العربية، فيصل عيسى البابي الحلبي؛ من نسخة turath.io، ٢٠٢٦-١١-١٩', link: shamela(1198), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+  },
+  {
+    id: 'musnad-ahmad', group: 'books',
+    title: { ar: 'مسند أحمد', en: 'Musnad Ahmad' }, author: { ar: 'أحمد بن حنبل', en: 'Ahmad ibn Hanbal' },
+    edition: 'تحقيق شعيب الأرنؤوط وآخرين، مؤسسة الرسالة، الطبعة الأولى ١٤٢١هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٩', link: shamela(25794), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+  },
+  {
+    id: 'musnad-darimi', group: 'books',
+    title: { ar: 'مسند الدارمي', en: 'Musnad al-Darimi' }, author: { ar: 'عبد الله بن عبد الرحمن الدارمي', en: 'al-Darimi' },
+    edition: 'تحقيق حسين سليم أسد الداراني، دار المغني، الطبعة الأولى ١٤١٢هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٩', link: shamela(21795), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+  },
+  {
+    id: 'muwatta', group: 'books',
+    title: { ar: 'موطأ مالك', en: 'al-Muwatta’' }, author: { ar: 'مالك بن أنس', en: 'Malik ibn Anas' },
+    edition: 'رواية يحيى الليثي، تحقيق محمد فؤاد عبد الباقي، دار إحياء التراث العربي، بيروت ١٤٠٦هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٩', link: shamela(1699), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+  },
+  {
+    id: 'sunan-daraqutni', group: 'books',
+    title: { ar: 'سنن الدارقطني', en: 'Sunan al-Daraqutni' }, author: { ar: 'علي بن عمر الدارقطني', en: 'al-Daraqutni' },
+    edition: 'تحقيق شعيب الأرنؤوط وآخرين، مؤسسة الرسالة، بيروت، الطبعة الأولى ١٤٢٤هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٩', link: shamela(9771), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+  },
+  {
+    id: 'sunan-bayhaqi', group: 'books',
+    title: { ar: 'السنن الكبرى', en: 'al-Sunan al-Kubra' }, author: { ar: 'أحمد بن الحسين البيهقي', en: 'al-Bayhaqi' },
+    edition: 'تحقيق محمد عبد القادر عطا، دار الكتب العلمية، بيروت، الطبعة الثالثة ١٤٢٤هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٩', link: shamela(7861), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+  },
+  {
+    id: 'muntakhab-abd', group: 'books',
+    title: { ar: 'المنتخب من مسند عبد بن حميد', en: 'al-Muntakhab min Musnad ‘Abd ibn Humayd' }, author: { ar: 'عبد بن حميد', en: '‘Abd ibn Humayd' },
+    edition: 'تحقيق صبحي البدري السامرائي ومحمود محمد خليل الصعيدي، مكتبة السنة، القاهرة، الطبعة الأولى ١٤٠٨هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٩', link: shamela(13170), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+  },
+  {
+    id: 'jami-ulum-hikam', group: 'books',
+    title: { ar: 'جامع العلوم والحكم', en: 'Jami‘ al-‘Ulum wa al-Hikam' }, author: { ar: 'ابن رجب الحنبلي', en: 'Ibn Rajab' },
+    edition: 'تحقيق شعيب الأرنؤوط وإبراهيم باجس، مؤسسة الرسالة، بيروت، الطبعة السابعة ١٤١٧هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٩', link: shamela(4268), licence: PUBLIC_DOMAIN, uses: [USE.forty],
   },
   {
     id: 'siyar', group: 'books',

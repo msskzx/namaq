@@ -114,13 +114,22 @@ export function sceneSlots(scenes: SceneView[], count: number): Map<string, numb
   });
 }
 
-/** A Bukhari record or one printed Muslim route that al-Nawawi's hadith comes from (data/hadith/forty.json). */
+/** The books the Forty's records come from: the Sahihayn first, then the books al-Nawawi names for the rest. */
+export const RECORD_BOOKS = ['bukhari', 'muslim', 'tirmidhi', 'abudawud', 'nasai', 'ibnmajah', 'ahmad', 'darimi', 'muwatta', 'daraqutni', 'bayhaqi', 'abd'] as const;
+export type RecordBook = (typeof RECORD_BOOKS)[number];
+export type FortyBook = RecordBook | 'nawawi' | 'ibnrajab';
+
+/** A record al-Nawawi's hadith comes from (data/hadith/forty.json): al-Bukhari's, one printed Muslim route, or a record in another book. */
 export interface FortyRecord {
-  book: 'bukhari' | 'muslim';
-  /** Bukhari's printed number, or Abd al-Baqi's number for Muslim. */
+  book: RecordBook;
+  /** The record's printed number (Abd al-Baqi's for Muslim and Ibn Majah; for the Muwatta, its number within its book). */
   number: number;
-  /** Muslim's route under that number as printed («١٥٥», «١ م»); empty when printed bare. */
+  /** Muslim's route under that number as printed («١٥٥», «١ م»); the Muwatta's book («كتاب الأقضية»). */
   route?: string;
+  /** The Companion as the record names him, when another than al-Nawawi's (Ibn Majah has «لا ضرر» from Ubada, not Abu Sa'id). */
+  from?: string;
+  /** Told without a Companion: «from» is the Follower it stops at (Ali b. Husayn in al-Tirmidhi; Malik's teacher in the Muwatta). */
+  mursal?: boolean;
   /** Shamela's id of the record's first page. */
   shamela: number;
   volume: number;
@@ -133,6 +142,17 @@ export interface FortyRecord {
   partial?: boolean;
   /** The chain drawn (one line of narrators the edition links), for «الرسم». */
   isnad?: AppIsnad;
+}
+
+/** A scholar's grade, quoted as printed in the book it is from (al-Nawawi's entry, a record, Ibn Rajab's chapter). */
+export interface FortyGrade {
+  by: string;
+  book: FortyBook;
+  number?: number;
+  quote: string;
+  volume: number;
+  pages: number[];
+  shamela: number;
 }
 
 /** One of al-Nawawi's Forty: his own text as printed, the Companion, the books he names, and the records found. */
@@ -149,16 +169,24 @@ export interface FortyEntry {
   /** Other Companions al-Bukhari has the same hadith from, in another wording or in part. */
   alsoFrom?: string[];
   records: FortyRecord[];
+  /** What the scholars said of its grade, each quoted (the hadith outside the Sahihayn). */
+  grades?: FortyGrade[];
 }
 
 export interface AppForty {
-  books: Record<'nawawi' | 'bukhari' | 'muslim', { shamela: number; title: string; edition: string }>;
+  books: Record<FortyBook, { shamela: number; title: string; edition: string }>;
   entries: FortyEntry[];
 }
 
-/** «صحيح البخاري ٥٤» or «صحيح مسلم ١٩٠٧ (١٥٥)», a record's short reference. */
-export const recordName = (record: Pick<FortyRecord, 'book' | 'number' | 'route'>, digits: (n: number) => string) =>
-  `${record.book === 'bukhari' ? 'صحيح البخاري' : 'صحيح مسلم'} ${digits(record.number)}${record.route ? ` (${record.route})` : ''}`;
+/** A paragraph of Ibn Rajab's Jami' al-'Ulum wal-Hikam (shared/data/hadith/ibnRajab.json), with the page it starts on. */
+export interface RajabParagraph { text: string; volume: number; page: number; shamela: number; turns?: { at: number; page: number }[] }
+/** Ibn Rajab's chapter on al-Nawawi's hadith n, his words only. */
+export interface RajabChapter { n: number; shamela: number; paragraphs: RajabParagraph[] }
+
+const SAHIHAYN: Partial<Record<RecordBook, string>> = { bukhari: 'صحيح البخاري', muslim: 'صحيح مسلم' };
+/** «صحيح البخاري ٥٤», «صحيح مسلم ١٩٠٧ (١٥٥)» or «سنن الترمذي ٢٥١٨», a record's short reference. */
+export const recordName = (record: Pick<FortyRecord, 'book' | 'number' | 'route'>, digits: (n: number) => string, titles?: AppForty['books']) =>
+  `${SAHIHAYN[record.book] ?? titles?.[record.book].title ?? record.book} ${digits(record.number)}${record.route ? ` (${record.route})` : ''}`;
 
 /** «عن أبي هريرة»: the Companion after «عن», a kunya in the genitive. */
 export const fromCompanion = (companion: string) => `عن ${companion.replace(/^أبو /, 'أبي ')}`;
@@ -170,3 +198,28 @@ export function sayingStart(text: string): string {
   return rest.replace(/^(?:قالت?|يقول)\s*:\s*/, '');
 }
 
+
+/** A paragraph where Ibn Rajab explains a phrase of the hadith: «وقوله ﷺ: …», «فقوله: …», «ومعنى هذا الحديث …». */
+const EXPLAINS = /^(?:[فو]?قوله|ومعنى|وأما معنى|فأما)/;
+
+/**
+ * The opening a hadith page shows of Ibn Rajab's chapter: from his first paragraph that explains the hadith to the next one,
+ * past the hadith he quotes and his paragraphs on its routes; a chapter with none opens on the paragraph after the hadith.
+ */
+export function rajabOpening(chapter: RajabChapter): RajabParagraph[] {
+  const at = chapter.paragraphs.findIndex((paragraph, i) => i > 0 && EXPLAINS.test(paragraph.text));
+  const from = at > 0 ? at : Math.min(1, chapter.paragraphs.length - 1);
+  return chapter.paragraphs.slice(from, from + 1);
+}
+
+/**
+ * The passages the feed's Ibn Rajab card shows (owner, 2026-11-18: every feature gets a card): each paragraph where he
+ * explains a phrase of a hadith al-Nawawi took whole from the Sahihayn, short enough to read whole on a phone screen.
+ */
+export function rajabFeedPassages(chapters: readonly RajabChapter[], entries: readonly FortyEntry[]) {
+  const sahihayn = new Set(entries.filter(entry => !entry.partial && entry.records.length > 0 && entry.records.every(record => record.book === 'bukhari' || record.book === 'muslim')).map(entry => entry.n));
+  return chapters.filter(chapter => sahihayn.has(chapter.n)).flatMap(chapter =>
+    chapter.paragraphs.filter(paragraph => /^[فو]?قوله/.test(paragraph.text) && paragraph.text.length <= SCREEN_PASSAGE).map(paragraph => ({ chapter, paragraph })));
+}
+/** About what a phone screen holds of Ibn Rajab's text at the feed's size, so a card never scrolls inside. */
+const SCREEN_PASSAGE = 700;
