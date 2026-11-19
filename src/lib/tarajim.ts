@@ -3,7 +3,7 @@
 // him (mobile/src/components/TiesRing.tsx), the nasab tree (mobile/src/screens/nasab.tsx), the virtues (person.tsx), and
 // the «من التراجم» and «صلة» feed cards. The client parts in src/components/tarajim draw what these return.
 import peopleJson from '@shared/data/tarajim/people.json';
-import { pageLabel, sayer, type AppPerson, type PersonFact } from '@shared/tarajim';
+import { pageLabel, sayerLine, sourcesOf, type AppPerson, type PersonFact } from '@shared/tarajim';
 import { bareName, chainOf, foldTop, lineOf, meetingOf, nasabTree, type NasabNode } from '@shared/tarajimLine';
 import { chainSentence, groupWord, linkedPairs, peopleGraph, stepClause, tieGroups, tieWord, type GraphNode, type TieKind } from '@shared/tarajimGraph';
 import { allVirtues } from '@shared/homeFeed';
@@ -36,14 +36,15 @@ export function searchPeople(query: string) {
   });
 }
 
-const siyar = sourceById('siyar')!;
-/** The pages a part rests on, with the edition and its link: the app's Credit. */
-export type Credit = { pages: string; title: string; url: string; quotes?: { text: string; pages: string }[] };
+/** The pages a part rests on, with each book's edition and link (the Siyar, and Zad al-Ma'ad where it is cited): the app's Credit. */
+export type Credit = { pages: string; label: string; books: { title: string; url: string; label: string }[]; quotes?: { text: string; pages: string }[] };
 export function creditOf(facts: PersonFact[], quotes = false): Credit | undefined {
   const refs = facts.flatMap(fact => fact.refs);
   if (!refs.length) return undefined;
+  const books = sourcesOf(refs).map(id => sourceById(id)).filter(book => book !== undefined)
+    .map(book => ({ title: `${book.title.ar}، ${book.edition ?? ''}`, url: book.link.url, label: `${book.title.ar}، ${book.author?.ar ?? ''}` }));
   return {
-    pages: pageLabel(refs), title: `${siyar.title.ar}، ${siyar.edition ?? ''}`, url: siyar.link.url,
+    pages: pageLabel(refs), books, label: books.map(book => book.label).join(' · '),
     ...(quotes ? { quotes: facts.filter(fact => fact.text).map(fact => ({ text: fact.text!, pages: pageLabel(fact.refs) })) } : {}),
   };
 }
@@ -122,7 +123,7 @@ export function nasabView(slugs: string[], meetings = true): NasabView {
 export type VirtueLine = { text: string; by?: string };
 export type VirtuesView = PersonHead & { virtues: VirtueLine[]; credit?: Credit };
 
-const sayerOf = (fact: PersonFact) => (fact.anonymous ? 'قيل' : fact.by.length ? sayer(fact) : undefined);
+const sayerOf = (fact: PersonFact) => (fact.anonymous ? 'قيل' : fact.by.length ? sayerLine(fact) : undefined);
 export function virtuesView(slug: string): VirtuesView | undefined {
   const person = findPerson(slug);
   if (!person) return undefined;

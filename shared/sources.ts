@@ -172,6 +172,12 @@ export const SOURCES: Source[] = [
     uses: [USE.people, { ar: 'الأحاديث', en: 'hadith', href: '/hadith' }], shelf: 'siyar-alam-al-nubala-risalah',
   },
   {
+    id: 'zad-al-maad', group: 'books',
+    title: { ar: 'زاد المعاد في هدي خير العباد', en: 'Zad al-Ma‘ad fi Hady Khayr al-‘Ibad' }, author: { ar: 'ابن قيم الجوزية', en: 'Ibn Qayyim al-Jawziyya' },
+    edition: 'تحقيق شعيب الأرنؤوط وعبد القادر الأرنؤوط، مؤسسة الرسالة، الإصدار الثاني، الطبعة الأولى ١٤١٧هـ/١٩٩٦م', link: shamela(21713), licence: PUBLIC_DOMAIN,
+    uses: [USE.people],
+  },
+  {
     id: 'nazm-al-durar', group: 'books',
     title: { ar: 'نظم الدرر في تناسب الآيات والسور', en: 'Nazm al-Durar' }, author: { ar: 'برهان الدين البقاعي', en: 'al-Biqa‘i' },
     edition: 'دار الكتاب الإسلامي، القاهرة (طبعة حيدر آباد)، ٢٢ جزءًا', link: shamela(9098), licence: PUBLIC_DOMAIN, uses: [USE.order, USE.topics],

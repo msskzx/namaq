@@ -1,0 +1,20 @@
+{
+  "editions": [
+    {
+      "slug": "zad-risalah-1417-arnaut",
+      "work": "zad-al-maad",
+      "publisher": "muassasat-al-risalah",
+      "editors": ["shuayb-al-arnaut", "abd-al-qadir-al-arnaut"],
+      "printing": "second-issue-first-1417-1996"
+    }
+  ],
+  "witnesses": [
+    {
+      "slug": "zad-al-maad-risalah",
+      "edition": "zad-risalah-1417-arnaut",
+      "vowelled": true,
+      "hasFootnotes": false,
+      "checkedAgainstPrint": false
+    }
+  ]
+}
