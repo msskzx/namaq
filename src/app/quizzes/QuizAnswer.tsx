@@ -17,6 +17,8 @@ import { BranchFeedback, BranchInputs } from "./BranchAnswers";
 import { CompareFeedback, CompareInputs } from "./CompareAnswers";
 import { comparePoints, emptyCompareAnswers, type CompareAsk } from "@shared/quiz/compareAnswers";
 import { ChoiceAfter, ChoiceLabel, ChoiceQuran, type ChoiceParts } from "./ChoiceParts";
+import type { ChoiceQuestion } from "@shared/quiz/choiceKinds";
+import { canLook, LookButton, LookView } from "@/components/quiz/QuizLook";
 
 export type QuizData = { questions: QuizQuestionView[]; surahNames?: Record<number, string> };
 
@@ -45,6 +47,8 @@ export interface QuizQuestionView {
   quranChoices?: ChoiceParts["quranChoices"];
   whereOf?: ChoiceParts["whereOf"];
   note?: ChoiceParts["note"];
+  /** What «ابحث عن الجواب» opens, and after the answer what shows under it (shared/quiz/choiceKinds.ts). */
+  look?: ChoiceQuestion["look"];
   ayah?: { text: string; reference: string } | null;
   choiceDetails: Record<string, { text: string; reference: string }>;
   correctAnswer: string;
@@ -126,8 +130,11 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
         );
       })}
     </div>}
+    {!locked && canLook(question.look) && <LookButton look={question.look} />}
     {locked && <ChoiceAfter question={question} given={given} ar={ar} mushaf={mushaf}
       surahName={(value) => question.choices.find((choice) => choice.value === value)?.labelArabic} />}
+    {/* After the answer, the view it was looked up in, so everyone learns from it (owner, 2026-11-19; the app's QuizChoice). */}
+    {locked && canLook(question.look) && <div className="mt-4"><LookView look={question.look} /></div>}
     {!locked && !recited(question) && <Button className="mt-3" size="sm" onClick={() => {
       if (question.tree) onType(emptyBranchAnswers(question));
       if (question.compare) onType(emptyCompareAnswers(question));

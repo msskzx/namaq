@@ -16,6 +16,11 @@ import verdictData from '@shared/quran/prophets/verdicts.json';
 import { keptViews, type PlaceVerdicts } from '@shared/quran/prophets/review';
 import { hasStoryCard, storyGroupOfDay } from '@shared/quran/prophets/storyGroup';
 import { withUnappliedStoryReviews } from '@/lib/quran/curation/storyReviewLog';
+import momentsData from '@shared/data/battles/moments.json';
+import type { AppMoment, AppMomentBattle } from '@shared/battles/battle';
+import type { AppReport, AppStory } from '@shared/stories/story';
+import { STORIES as SIRA_STORIES, storyAyat } from '@/lib/stories';
+import type { AyatPage } from '@/lib/storyAyat';
 
 
 let fits: BranchPiece[] | undefined;
@@ -93,6 +98,30 @@ export function storyCards(day: number, slots: number[]): StoryCard[] {
       story: events.map(event => story.events.findIndex(at => at.title === event.title)),
     }];
   });
+}
+
+/**
+ * The «السيرة والمغازي» cards (the app's SiraPost and MomentPost, mobile/src/components/HomeFeed.tsx): a sira story's first
+ * report whole with its ayat in the mushaf's lines, or one moment of a battle, taking turns batch by batch.
+ */
+export type SiraCard = { slot: number } & (
+  | { kind: 'sira'; slug: string; name: string; report: AppReport; ayat: AppStory['ayat']; pages: AyatPage[][] }
+  | { kind: 'moment'; battle: Pick<AppMomentBattle, 'slug' | 'name' | 'kind' | 'year'>; moment: AppMoment; n: number });
+
+const SIRA_FEED = SIRA_STORIES.filter(story => story.reports[0]);
+const MOMENT_FEED = (momentsData as AppMomentBattle[]).flatMap(battle => battle.moments.map((moment, i) => ({ battle, moment, n: i + 1 })));
+const turnOf = (day: number, at: number, count: number) => ((((day * 37 + at) % count) + count) % count);
+
+export async function siraCards(day: number, slots: number[]): Promise<SiraCard[]> {
+  return Promise.all(slots.map(async (slot): Promise<SiraCard> => {
+    // A story in even batches, a battle's moment in odd ones, each list in the day's turn.
+    if (slot % 2 === 0 && SIRA_FEED.length) {
+      const story = SIRA_FEED[turnOf(day, slot / 2, SIRA_FEED.length)];
+      return { slot, kind: 'sira', slug: story.slug, name: story.name, report: story.reports[0], ayat: story.ayat, pages: await storyAyat(story) };
+    }
+    const { battle, moment, n } = MOMENT_FEED[turnOf(day, (slot - 1) / 2, MOMENT_FEED.length)];
+    return { slot, kind: 'moment', battle: { slug: battle.slug, name: battle.name, kind: battle.kind, year: battle.year }, moment, n };
+  }));
 }
 
 /** A saved item drawn as its own card in the feed: the tree card's tree or the pair card's pair; a saved ayah needs nothing here. */
