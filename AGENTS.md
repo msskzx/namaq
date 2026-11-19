@@ -156,6 +156,12 @@ the sources disagree on as settled.
 - **Wrong choices come from the part of the Quran the quiz is set to** (owner, 2026-11-19): a juz 30
   quiz offers no surah or ayah of juz 29. A kind whose choices are places checks them against the scope,
   as `whichSurah`, `tafsirQuiz`, `meaningQuiz` and `compareQuiz` do; `giveaway.test.ts` checks it.
+- **A question about a man offers men, one about a woman offers women** (owner, 2026-11-19; it was in
+  `docs/quiz-question-review.md` only, so the code-built kinds missed it): every person or name a choice
+  holds is of the asked person's sex («أم المساكين» is never offered for al-Zubayr). The Prophet's ﷺ
+  names are never a wrong choice; they are asked about on their own. Each kind's test checks both.
+- **Each thing about a person is its own kind and its own interest** (owner, 2026-11-19): kunya, laqab,
+  virtue, ties… so a reader who does not want kunyas turns them off alone (`shared/interests.ts`).
 - **Mutashabih quizzes ask only what the mutashabih books set side by side** («في كتب المتشابهات»,
   category `mutashabeh`), never our own «تدبّر» pairs (owner, 2026-11-19): `quizFilters` fixes the kind.
 

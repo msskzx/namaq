@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { termCard } from '@/lib/balaghaTerms';
 import { hadithCards } from '@/lib/forty';
-import { tarajimCards } from '@/lib/tarajim';
+import { nameCards, tarajimCards } from '@/lib/tarajim';
 import { dayNumber } from '@shared/dailyPick';
 import { ayahPages, FEED_AHEAD, FEED_FAR, feedContent, feedIds, pageSlice, savedContent, siraCards, storyCards } from '@/lib/homeFeed';
 
@@ -37,6 +37,7 @@ export async function GET(request: Request) {
   // The reader's day is within a day of the server's anywhere on earth; anything else would only fill the server's caches.
   if (!Number.isInteger(day) || Math.abs(day - dayNumber(new Date())) > 2) return NextResponse.json({ error: 'Provide today\'s day number' }, { status: 400 });
   if (params.has('tarajim')) return NextResponse.json(tarajimCards(day, offsets(params.get('tarajim'))), { headers: CACHE });
+  if (params.has('names')) return NextResponse.json(nameCards(day, offsets(params.get('names'))), { headers: CACHE });
   if (params.has('hadith')) return NextResponse.json(hadithCards(day, offsets(params.get('hadith'))), { headers: CACHE });
   if (params.has('term')) return NextResponse.json(await Promise.all(offsets(params.get('term')).map(slot => termCard(day, slot))), { headers: CACHE });
   if (params.has('sira')) return NextResponse.json(await siraCards(day, offsets(params.get('sira'))), { headers: CACHE });

@@ -4,7 +4,8 @@
 // page is the way to check it.
 import peopleJson from '../data/tarajim/people.json';
 import virtueSkip from '../data/tarajim/virtueQuizSkip.json';
-import { pageLabel, sayer, type AppPerson } from '../tarajim';
+import { pageLabel, sayer, sayerLine, type AppPerson } from '../tarajim';
+import { kunyaFacts, laqabFacts, type NameFact } from '../tarajimNames';
 import { bareName, chainOf, lineOf, meetingOf, type LineName } from '../tarajimLine';
 import { genitive, peopleGraph, TIE_KINDS, tieWord, type TieKind } from '../tarajimGraph';
 import { shuffle, type Random } from './random';
@@ -16,6 +17,10 @@ export const TARAJIM_TIE = 'TARAJIM_TIE';
 export const TARAJIM_NASAB_NAME = 'أين يلتقي النسبان؟';
 export const TARAJIM_VIRTUE_NAME = 'صاحب المنقبة';
 export const TARAJIM_TIE_NAME = 'ما صلته به؟';
+export const TARAJIM_KUNYA = 'TARAJIM_KUNYA';
+export const TARAJIM_LAQAB = 'TARAJIM_LAQAB';
+export const TARAJIM_KUNYA_NAME = 'ما كنيته؟';
+export const TARAJIM_LAQAB_NAME = 'بمَ لُقّب؟';
 
 const PEOPLE = peopleJson as AppPerson[];
 const plain = (text: string) => text.replace(/[ً-ْٰـ]/g, '');
@@ -222,7 +227,41 @@ export function tieQuestions(people: AppPerson[] = PEOPLE): ChoiceQuestion[] {
   return questions;
 }
 
-const kind = (id: typeof TARAJIM_NASAB | typeof TARAJIM_VIRTUE | typeof TARAJIM_TIE, name: string, all: (random: Random) => ChoiceQuestion[]): ChoiceKind => ({
+/**
+ * «ما كنيته؟» and «بمَ لُقّب؟» (owner, 2026-11-19; sketch titles-quiz/sketch-dark.png, screens 1 and 2): one person's
+ * kunya or laqab, and three other people's of the same sex (owner: a question about a woman offers women's), each as one
+ * says it. Never a name the person also bears, nor two that read the same; a kunya after a name in the question
+ * («أبو سلمة» for عمر بن أبي سلمة) is not offered, since it only misleads. The Prophet's ﷺ names are never a choice
+ * (kunyaFacts, laqabFacts leave him out). The note gives the book's words and page; there is no «ابحث عن الجواب», since
+ * the person's page would show the answer itself.
+ */
+export function nameQuestions(family: typeof TARAJIM_KUNYA | typeof TARAJIM_LAQAB, people: AppPerson[] = PEOPLE, random: Random = Math.random): ChoiceQuestion[] {
+  const facts: NameFact[] = family === TARAJIM_KUNYA ? kunyaFacts(people) : laqabFacts(people);
+  const ownNames = new Map<string, Set<string>>();
+  for (const { person, name } of facts) ownNames.set(person.slug, (ownNames.get(person.slug) ?? new Set()).add(bareName(name)));
+  return facts.flatMap(({ person, name, fact }, k) => {
+    const words = new Set(nameWords(person.name));
+    const own = ownNames.get(person.slug)!;
+    const others = shuffle(facts.filter(other => other.person.sex === person.sex && other.person.slug !== person.slug
+      && !own.has(bareName(other.name)) && !(family === TARAJIM_KUNYA && nameWords(other.name).slice(1).some(word => words.has(word)))), random)
+      .filter((other, i, all) => all.findIndex(each => bareName(each.name) === bareName(other.name)) === i)
+      .slice(0, 3);
+    if (others.length < 3) return [];
+    const female = person.sex === 'FEMALE';
+    const promptArabic = family === TARAJIM_KUNYA ? `ما كنية ${genitive(nameOf(person))}؟` : `بمَ ${female ? 'لُقّبت' : 'لُقّب'} ${nameOf(person)}؟`;
+    return [{
+      key: `${family}:${person.slug}:${k}`,
+      family,
+      promptArabic,
+      choices: shuffle([name, ...others.map(other => other.name)], random).map(each => ({ value: each, labelArabic: each })),
+      correctAnswer: name,
+      note: { label: 'المصدر', text: `«${fact.text}»\n${fact.by.length ? `${sayerLine(fact)} · ` : ''}${pageLabel(fact.refs)}، في ترجمة ${genitive(nameOf(person))}` },
+      evidence: { claimKeys: [] },
+    }];
+  });
+}
+
+const kind = (id: typeof TARAJIM_NASAB | typeof TARAJIM_VIRTUE | typeof TARAJIM_TIE | typeof TARAJIM_KUNYA | typeof TARAJIM_LAQAB, name: string, all: (random: Random) => ChoiceQuestion[]): ChoiceKind => ({
   id,
   name,
   party: true,
@@ -241,3 +280,5 @@ export const tarajimNasab = kind(TARAJIM_NASAB, TARAJIM_NASAB_NAME, random => na
 const tieAll = once(() => tieQuestions());
 export const tarajimTie = kind(TARAJIM_TIE, TARAJIM_TIE_NAME, random => tieAll().map(q => ({ ...q, choices: shuffle(q.choices, random) })));
 export const tarajimVirtue = kind(TARAJIM_VIRTUE, TARAJIM_VIRTUE_NAME, random => virtueQuestions(PEOPLE, random));
+export const tarajimKunya = kind(TARAJIM_KUNYA, TARAJIM_KUNYA_NAME, random => nameQuestions(TARAJIM_KUNYA, PEOPLE, random));
+export const tarajimLaqab = kind(TARAJIM_LAQAB, TARAJIM_LAQAB_NAME, random => nameQuestions(TARAJIM_LAQAB, PEOPLE, random));

@@ -17,7 +17,7 @@ export type SectionId = (typeof SECTIONS)[number]['id'];
 
 /** The feed's content cards, by kind; each app card (mobile/src/components/HomeFeed.tsx) draws one. */
 export const FEED_CARD_KINDS = ['pair', 'tree', 'note-tafsir', 'note-qiraat', 'note-irab', 'note-balagha', 'term', 'scene',
-  'hadith', 'rajab', 'prophets', 'sira', 'moment', 'tarajim', 'tie'] as const;
+  'hadith', 'rajab', 'prophets', 'sira', 'moment', 'tarajim', 'tie', 'laqab', 'kunya'] as const;
 export type FeedCardKind = (typeof FEED_CARD_KINDS)[number];
 
 export type Interest = {
@@ -40,6 +40,9 @@ export const INTERESTS: readonly Interest[] = [
   { id: 'prophets', name: 'قصص الأنبياء', section: 'history', ours: true, cards: ['prophets'], quizzes: [] },
   { id: 'sira', name: 'السيرة والمغازي', section: 'history', cards: ['sira', 'moment'], quizzes: ['SIRA'] },
   { id: 'tarajim', name: 'التراجم', section: 'history', cards: ['tarajim', 'tie'], quizzes: ['TARAJIM_NASAB', 'TARAJIM_VIRTUE', 'TARAJIM_TIE'] },
+  // Each thing about a person its own interest (owner, 2026-11-19), so a reader who does not want kunyas turns them off alone.
+  { id: 'laqab', name: 'الألقاب', section: 'history', cards: ['laqab'], quizzes: ['TARAJIM_LAQAB'] },
+  { id: 'kunya', name: 'الكنى', section: 'history', cards: ['kunya'], quizzes: ['TARAJIM_KUNYA'] },
 ];
 
 export const interestById = (id: string) => INTERESTS.find(interest => interest.id === id);
