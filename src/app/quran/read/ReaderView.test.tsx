@@ -389,8 +389,17 @@ describe('Recite mode', () => {
     expect(veiled(container)).toEqual([]);
     longPress(container.querySelector('[data-ayah="2:2"]')!);
     const actions = within(screen.getByRole('dialog'));
-    fireEvent.click(actions.getByRole('button', { name: 'نسيت الآية' }));
+    // A pressed word is lit, so «نسيت» asks in its bubble: the ayah, or the word.
+    fireEvent.click(actions.getByRole('button', { name: 'نسيت: الآية أو ما أضاءته' }));
+    fireEvent.click(within(screen.getByRole('group', { name: 'ما نسيت' })).getByRole('button', { name: 'نسيت الآية' }));
     expect(JSON.parse(localStorage.getItem('ayah-forgot')!)['2:2'].forgot).toBe(1);
+    // The buttons stay open, the bulb crossed, until let go.
+    expect(within(screen.getByRole('group', { name: 'ما نسيت' })).getByRole('button', { name: 'تذكّرت الآية' }).getAttribute('aria-pressed')).toBe('true');
+    // Escape lets go of the bubble first, then of the buttons.
+    fireEvent.keyDown(window, { key: 'Escape' });
+    expect(screen.queryByRole('group', { name: 'ما نسيت' })).toBeNull();
+    expect(screen.getByRole('dialog')).toBeTruthy();
+    fireEvent.keyDown(window, { key: 'Escape' });
     expect(container.querySelector('[data-ayah="2:2"]')?.className).toMatch(/forgot/);
     expect(container.querySelector('[data-ayah="2:1"]')?.className ?? '').not.toMatch(/forgot/);
     longPress(container.querySelector('[data-ayah="2:2"]')!);

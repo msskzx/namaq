@@ -56,11 +56,23 @@ const data = ['src', 'mobile/src', 'shared']
   .filter(path => !inside(path, SOURCE) && !inside(path, BOOKS) && !NOT_HAFS.includes(path))
   .filter(path => (readFileSync(join(ROOT, path), 'utf8').match(WASLA)?.length ?? 0) >= 20);
 
+/** A size: the app's fontSize or lineHeight, the website's text-size or leading class. Colour classes (text-[var(…)]) are not one. */
+const SIZE = String.raw`(fontSize|lineHeight|\b(text-(xs|sm|base|lg|\d*xl|\[\d)|leading-))`;
+/** The size on the Quran words themselves (QuranWords, or a website AyahWords, whose class may set anything). */
+const QURAN_SIZED = new RegExp(String.raw`<(QuranWords|AyahWords)\b[^>]*${SIZE}`);
+/** The size on the tag right around them (`<Text style={{ fontSize: 21 }}><QuranWords>`); a book's sized text with runs in between is the exception. */
+const WRAP_SIZED = new RegExp(String.raw`${SIZE}[^<>]*>\s*<QuranWords\b`);
+
 const breaks = {
   /** Sets the Quran font itself (app QURAN_FONT, website font-quran / --font-quran or the face's name) instead of going through the module. */
   font: code.filter(file => !inside(file.path, [...MODULE, ...FONT_HOME]) && /\bQURAN_FONT\b|--font-quran|\bfont-quran\b|KFGQPC[\s_]*Hafs|UthmanicHafs/i.test(file.text)).map(file => file.path).sort(),
   /** Turns the old text into page-looking text word by word (mushafText and its aliases), dropping every waqf, sajda and hizb sign. */
   convert: code.filter(file => !inside(file.path, MODULE) && file.path !== 'shared/quran/mushafText.ts' && /\b(mushafText|MushafText)\b|lib\/quranText'/.test(file.text)).map(file => file.path).sort(),
+  /**
+   * Gives Quran words a size of its own (owner, 2026-11-19: every ayah view keeps the mushaf's line size and height). Ayah
+   * text off the page goes in the module's AyahFlow, which sizes it from its width as the reader does and takes no size.
+   */
+  sized: code.filter(file => !inside(file.path, MODULE) && (QURAN_SIZED.test(file.text) || WRAP_SIZED.test(file.text))).map(file => file.path).sort(),
   /** Holds a copy of Quran text other than the Madina pages. */
   copies: data.sort(),
 };

@@ -13,6 +13,7 @@ import { bookState, readBook, useBooks } from '@/lib/books';
 import { surahNames } from '@/lib/branches';
 import { ayahMushafWords } from '@/lib/mushaf';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
+import QuranWords from './quran/text/QuranWords';
 import { BookList } from './Books';
 import Sheet from '@/ui/Sheet';
 import Card from '@/ui/Card';
@@ -118,7 +119,7 @@ function Passage({ passage, onWord, palette, onClose }: { passage: BookPassage; 
         <OpenInBook book="ukbari" ayah={`${passage.surah}:${passage.ayah}`} onClose={onClose} palette={palette} />
       </View>
       <Text selectable style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' }}>
-        {tafsirRuns(passage.text).map((run, i) => (run.quran ? <Text key={i} style={{ fontFamily: QURAN_FONT, color: palette.accent }}>{run.text}</Text> : run.text))}
+        {tafsirRuns(passage.text).map((run, i) => (run.quran ? <QuranWords key={i} style={{ color: palette.accent }}>{run.text}</QuranWords> : run.text))}
       </Text>
     </Card>
   );

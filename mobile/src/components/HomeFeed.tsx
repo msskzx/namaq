@@ -1,7 +1,7 @@
 import { createContext, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
 import { AppState, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, BookOpenText, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, Link2, MessagesSquare, MoreHorizontal, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, History, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpenText, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, MoreHorizontal, Network, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, History, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
@@ -11,13 +11,15 @@ import { isMemorized, memorizedPrefer, memorizedQuestions, readMemorized, recall
 import { FEED_QUIZ_NAMES, feedQuizSeed, OPENINGS, openingSurah, seededRandom, type FeedQuizKind } from '@shared/quiz/feedQuiz';
 import { answeredQuestion, dueSeeds, readMissed } from '@shared/quiz/missedQuestions';
 import { activeInterests, INTERESTS, interestById, interestOf, pickedInterests, surpriseMe, toggledInterest, type FeedCardKind } from '@shared/interests';
-import { bookmarkKind, cardBookmarkId, cardOfBookmark, isCardBookmark } from '@shared/bookmarkKind';
+import { bookmarkKind, cardMenuSaveId, cardOfBookmark, isCardBookmark } from '@shared/bookmarkKind';
 import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
 import { allVirtues, dayStart, feedBooks, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, prayerSoon, type FeedSlot } from '@shared/homeFeed';
 import { pageLabel, sayerLine } from '@shared/tarajim';
-import { findPerson, GRAPH, PEOPLE, personName, tiePairs } from '@/lib/tarajim';
+import { findPerson, GRAPH, PEOPLE, personName, tiePairs, unvowelled } from '@/lib/tarajim';
+import { kunyaFacts, laqabFacts, type NameFact } from '@shared/tarajimNames';
+import { Credit } from '@/screens/person';
 import { chainSentence } from '@shared/tarajimGraph';
 import TiesChain from './TiesChain';
 import LifeTimeline from './LifeTimeline';
@@ -45,7 +47,9 @@ import type { AppMomentBattle } from '@shared/battles/battle';
 import { battleLine, Moment } from './battles/BattleParts';
 import { STORIES } from '@/lib/stories';
 import { FORTY, fortyEntry, shamelaPage } from '@/lib/hadith';
-import { fromCompanion, rajabFeedPassages, type RajabChapter } from '@shared/hadith';
+import { compilerOf, drawnBukhari, fromCompanion, fromSahihayn, rajabFeedPassages, recordedIn, type RajabChapter } from '@shared/hadith';
+import Isnad from '@/components/Isnad';
+import HadithBooks from '@/components/HadithBooks';
 import rajab from '@shared/data/hadith/ibnRajab.json';
 import IbnRajab from '@/components/IbnRajab';
 import { Report, StoryAyat } from './stories/StoryParts';
@@ -74,6 +78,9 @@ import { around as aroundSetting, branchView, penRule, prayerPlace, prayerSettin
 import { showsOtherView } from '@shared/quran/branchView';
 import { timesFor, useMinute } from '@/lib/prayer';
 import { bookState, useBooks } from '@/lib/books';
+import { SAHIH, isSahihSlug, useSahihText } from '@/lib/sahih';
+import { SahihHadithView, sahihPage } from '@/components/Sahih';
+import { findHadith, placeOf, type SahihSlug } from '@shared/sahih';
 import type { BookId } from '@shared/books';
 import { BookCard, Shelf, TUHFA } from '@/screens/books';
 import { IltifatActions, IltifatScene } from './Iltifat';
@@ -148,15 +155,12 @@ type CardMenu = { kind: FeedCardKind | FeedQuizKind; item?: string; interest: st
   savedOnly?: boolean };
 const CardMenuContext = createContext<CardMenu | null>(null);
 
-/** The kinds that save themselves on their own card (the tree's double tap, the compare card's button), so the menu does not. */
-const SAVES_ITSELF: readonly string[] = ['pair', 'tree'];
-
 /** A feed card's «…»: the reader's long-press menu (icons with their names), to save the card or say it is not for them. */
 function CardMenuButton({ menu, title, sub, palette }: { menu: CardMenu; title: string; sub?: string; palette: Palette }) {
   const box = useRef<ComponentRef<typeof View>>(null);
   const [at, setAt] = useState<MenuAt | null>(null);
   const saved = useSyncExternalStore(subscribeBookmarks, readBookmarks);
-  const id = menu.item !== undefined && !SAVES_ITSELF.includes(menu.kind) ? cardBookmarkId(menu.kind, menu.item) : null;
+  const id = cardMenuSaveId(menu.kind, menu.item);
   const on = !!id && saved.some(item => item.id === id);
   const name = interestById(menu.interest)?.name ?? '';
   const picked = useSyncExternalStore(pickedInterests.subscribe, pickedInterests.read, pickedInterests.server);
@@ -451,6 +455,30 @@ function TiePost({ id, palette }: { id: string; palette: Palette }) {
 }
 
 /**
+ * «الألقاب» and «الكنى» (owner, 2026-11-19; sketch titles-quiz/sketch-dark.png, screen 3): one person's laqab or kunya large,
+ * the person under it, the book's words when they say more than the name, and the person page's own folded reference.
+ * The head opens the person's page.
+ */
+function NamePost({ kind, id, palette }: { kind: 'laqab' | 'kunya'; id: string; palette: Palette }) {
+  const pick = nameList(kind).find(each => nameId(each) === id);
+  if (!pick) return null;
+  const { person, name, fact } = pick;
+  const who = personName(person);
+  const open = () => router.push({ pathname: '/person', params: { slug: person.slug } });
+  const quote = unvowelled(fact.text).trim() !== name ? fact.text : '';
+  return (
+    <Post palette={palette} head={<PostHead Icon={Users} title={kind === 'laqab' ? 'لقب وصاحبه' : 'كنية وصاحبها'} sub={who} palette={palette} open={{ onPress: open, label: `افتح ترجمة ${who}` }} />}>
+      <View style={{ padding: 14, gap: 4 }}>
+        <Text style={{ color: palette.accent, fontSize: 30, lineHeight: 48, fontWeight: '700', textAlign: 'right' }}>{name}</Text>
+        <Text style={{ color: palette.ink, fontSize: 19, lineHeight: 30, textAlign: 'right' }}>{who}</Text>
+        {quote ? <Text style={{ color: palette.muted, fontSize: 16, lineHeight: 28, textAlign: 'right' }}>«{quote}»{fact.by.length ? ` ${sayerLine(fact)}` : ''}</Text> : null}
+        <Credit facts={[fact]} palette={palette} />
+      </View>
+    </Post>
+  );
+}
+
+/**
  * «من حياته» (owner 2026-11-19: every feature gets a feed card, drawn with its own view): a person's «حياته» timeline as
  * his page draws it, the rail a year a line; the head opens his page.
  */
@@ -720,8 +748,8 @@ function SiraPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/** The Forty al-Nawawi took whole from the Sahihayn, the most authentic first (owner, 2026-11-18), for the hadith card. */
-const FEED_FORTY = FORTY.entries.filter(entry => !entry.partial && entry.records.length > 0 && entry.records.every(record => record.book === 'bukhari' || record.book === 'muslim'));
+/** The Forty (and Ibn Rajab's eight) taken whole from the Sahihayn, the most authentic first (owner, 2026-11-18), for the hadith cards. */
+const FEED_FORTY = FORTY.entries.filter(fromSahihayn);
 
 /** Ibn Rajab's explanations of a phrase of those hadith, for his card. */
 const RAJAB_PASSAGES = rajabFeedPassages(rajab as RajabChapter[], FORTY.entries);
@@ -751,19 +779,95 @@ function RajabPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/** One of al-Nawawi's Forty in his words, with the books he names; the head opens the hadith's page with its records. */
+/** One of the Forty in al-Nawawi's words (Ibn Rajab's for his eight); the head opens the hadith's page with its records. */
 function HadithPost({ id, palette }: { id: string; palette: Palette }) {
   const entry = FEED_FORTY.find(each => String(each.n) === id);
   if (!entry) return null;
+  const { book } = compilerOf(entry);
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
     <Post palette={palette} head={<PostHead Icon={MessagesSquare} title="من الحديث" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} palette={palette} open={{ onPress: open, label: `افتح ${entry.heading}` }} />}
       actions={<>
         <Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />
-        <Action Icon={ExternalLinkIcon} label={`المصدر: ${FORTY.books.nawawi.title}`} onPress={() => openExternal(shamelaPage('nawawi', entry.shamela))} palette={palette} />
+        <Action Icon={ExternalLinkIcon} label={`المصدر: ${FORTY.books[book].title}`} onPress={() => openExternal(shamelaPage(book, entry.shamela))} palette={palette} />
       </>}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
         <Text style={{ color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right' }}>{entry.text}</Text>
+      </View>
+    </Post>
+  );
+}
+
+/** Every hadith number of a Sahih, from its kitabs, for its card; drawn only once its text is on the phone. */
+const sahihNumbers = (slug: SahihSlug) => SAHIH[slug].kitabs.flatMap(kitab => (kitab.from ? Array.from({ length: kitab.to - kitab.from + 1 }, (_, i) => String(kitab.from + i)) : []));
+
+/**
+ * A hadith of Sahih al-Bukhari or Sahih Muslim whole (owner's sketch, 2026-11-19): the head names the book and its kitab › bab
+ * (in Muslim the bab is al-Nawawi's, and says so), the hadith drawn as its page draws it; the head opens its page.
+ */
+function SahihPost({ slug, id, palette }: { slug: SahihSlug; id: string; palette: Palette }) {
+  const { text } = useSahihText(slug);
+  const book = SAHIH[slug];
+  const found = text ? findHadith(text, Number(id)) : undefined;
+  const place = placeOf(book, Number(id));
+  // A number Abd al-Baqi gives a record printed under another shows that record.
+  if (!found || !place) return null;
+  const open = () => toTab({ pathname: '/hadith-sahih', params: { book: slug, n: id } });
+  const where = `${place.kitab.title}${place.bab?.title ? ` › ${place.bab.title}` : ''}${book.headingsBy === 'nawawi' && place.bab?.title ? ' (تبويب النووي)' : ''}`;
+  return (
+    <Post palette={palette} head={<PostHead Icon={MessagesSquare} title={`من ${book.title}`} sub={where} palette={palette} open={{ onPress: open, label: `افتح ${book.title} ${num(Number(id))}` }} />}
+      actions={<>
+        <Action Icon={MessagesSquare} label={`افتح ${book.title} ${num(Number(id))}`} onPress={open} palette={palette} />
+        <Action Icon={ExternalLinkIcon} label={`المصدر: ${book.title}`} onPress={() => openExternal(sahihPage(book, found.hadith.routes[0].shamela))} palette={palette} />
+      </>}>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
+        <SahihHadithView book={book} hadith={found.hadith} palette={palette} />
+      </View>
+    </Post>
+  );
+}
+
+/**
+ * «من أخرجه» (owner, 2026-11-19; sketch /mnt/project-files/hadith-sciences, frame 3b): the start of one of the Forty al-Nawawi
+ * takes whole from the Sahihayn and the drawing of the places that record it. The head opens its page.
+ */
+function RecordedPost({ id, palette }: { id: string; palette: Palette }) {
+  const entry = FEED_FORTY.find(each => String(each.n) === id);
+  if (!entry) return null;
+  const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={Network} title="من أخرجه" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} palette={palette} open={{ onPress: open, label: `افتح ${entry.heading}` }} />}
+      actions={<Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
+        <Text numberOfLines={3} style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>{entry.text}</Text>
+        <HadithBooks top={entry.heading} boxes={recordedIn(entry)} namer={compilerOf(entry).name} palette={palette} />
+      </View>
+    </Post>
+  );
+}
+
+/** The hadith of the feed with a chain al-Bukhari's record draws, for «من الإسناد». */
+const FEED_CHAINS = FEED_FORTY.filter(entry => drawnBukhari(entry));
+
+/**
+ * «من الإسناد» (owner, 2026-11-19; plan /mnt/project-files/hadith-sciences, feature 1): al-Bukhari's chain for one of the
+ * Forty as the hadith's page draws it («الرسم»), the start of the saying under it; the head opens the page.
+ */
+function IsnadPost({ id, palette }: { id: string; palette: Palette }) {
+  const entry = FEED_CHAINS.find(each => String(each.n) === id);
+  const record = entry && drawnBukhari(entry);
+  if (!entry || !record) return null;
+  const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
+  const where = `${FORTY.books.bukhari.title} ${num(record.number)}`;
+  return (
+    <Post palette={palette} head={<PostHead Icon={GitCommitVertical} title="من الإسناد" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} palette={palette} open={{ onPress: open, label: `افتح ${entry.heading}` }} />}
+      actions={<>
+        <Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />
+        <Action Icon={ExternalLinkIcon} label={`المصدر: ${where}`} onPress={() => openExternal(shamelaPage('bukhari', record.shamela))} palette={palette} />
+      </>}>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
+        <Isnad isnad={record.isnad!} palette={palette} />
+        <Text numberOfLines={3} style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>{record.text.slice(record.isnadEnd)}</Text>
       </View>
     </Post>
   );
@@ -798,7 +902,7 @@ function TermPost({ id, day, palette }: { id: string; day: number; palette: Pale
         {example && <>
           <View style={{ height: 1, backgroundColor: palette.rule, opacity: 0.6, marginVertical: 4 }} />
           <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>من أمثلته</Text>
-          <View pointerEvents="none"><ExampleAyat example={example} palette={palette} size={22} /></View>
+          <View pointerEvents="none"><ExampleAyat example={example} palette={palette} /></View>
           <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{ayatName(example.ayat)}</Text>
         </>}
       </View>
@@ -916,6 +1020,9 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
 let virtues: { person: (typeof PEOPLE)[number]; index: number }[] | undefined;
 const virtueList = () => (virtues ??= allVirtues(PEOPLE));
 const virtueOf = (id: string) => virtueList().find(each => `${each.person.slug}-${each.index}` === id);
+const nameLists: Partial<Record<'laqab' | 'kunya', NameFact[]>> = {};
+const nameList = (kind: 'laqab' | 'kunya') => (nameLists[kind] ??= kind === 'laqab' ? laqabFacts(PEOPLE) : kunyaFacts(PEOPLE));
+const nameId = (each: NameFact) => `${each.person.slug}|${each.name}`;
 
 /** The content cards drawn from a list (pairs and trees have their own picks): each kind's items, by a lasting id. */
 type ListKind = Exclude<FeedCardKind, 'pair' | 'tree'>;
@@ -926,12 +1033,18 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   term: () => balaghaTerms.terms.map(term => term.name),
   scene: () => sceneList().map(scene => scene.key),
   hadith: () => FEED_FORTY.map(entry => String(entry.n)),
+  bukhari: () => sahihNumbers('bukhari'),
+  muslim: () => sahihNumbers('muslim'),
   rajab: () => RAJAB_PASSAGES.map(rajabId),
+  recorded: () => FEED_FORTY.map(entry => String(entry.n)),
+  isnad: () => FEED_CHAINS.map(entry => String(entry.n)),
   prophets: () => STORY_GROUPS.map(group => `${group.slug}-${group.phase}`),
   sira: () => STORIES.filter(story => story.reports[0]).map(story => story.slug),
   moment: () => MOMENTS.map(momentId),
   tarajim: () => virtueList().map(each => `${each.person.slug}-${each.index}`),
   tie: () => tiePairs().map(pair => `${pair.a},${pair.b}`),
+  laqab: () => nameList('laqab').map(nameId),
+  kunya: () => nameList('kunya').map(nameId),
   life: lifePeople,
 };
 const itemsOf = (kind: ListKind) => (itemLists[kind] ??= LIST_OF[kind]());
@@ -960,11 +1073,15 @@ function ContentPost({ kind, item, day, palette }: { kind: ListKind; item: strin
     case 'scene': return <ScenePost id={item} palette={palette} />;
     case 'hadith': return <HadithPost id={item} palette={palette} />;
     case 'rajab': return <RajabPost id={item} palette={palette} />;
+    case 'bukhari': case 'muslim': return <SahihPost slug={kind} id={item} palette={palette} />;
+    case 'recorded': return <RecordedPost id={item} palette={palette} />;
+    case 'isnad': return <IsnadPost id={item} palette={palette} />;
     case 'prophets': { const at = item.lastIndexOf('-'); return <StoryPost slug={item.slice(0, at)} phase={Number(item.slice(at + 1))} palette={palette} />; }
     case 'sira': return <SiraPost id={item} palette={palette} />;
     case 'moment': return <MomentPost id={item} palette={palette} />;
     case 'tarajim': return <TarajimPost id={item} palette={palette} />;
     case 'tie': return <TiePost id={item} palette={palette} />;
+    case 'laqab': case 'kunya': return <NamePost kind={kind} id={item} palette={palette} />;
     case 'life': return <LifePost slug={item} palette={palette} />;
     default: return null;
   }
@@ -1132,7 +1249,7 @@ export function Feed({ palette, nearEnd, screenBottom, only = null }: { palette:
         item = items[slot.kind as ListKind]?.[at];
         key = `${slot.kind}:${item ?? at}`;
         const note = NOTE_OF[slot.kind];
-        post = item !== undefined && (!note || noteBookOn(note)) ? <ContentPost kind={slot.kind as ListKind} item={item} day={day} palette={palette} /> : null;
+        post = item !== undefined && (!note || noteBookOn(note)) && (!isSahihSlug(slot.kind) || bookState(slot.kind) === 'on') ? <ContentPost kind={slot.kind as ListKind} item={item} day={day} palette={palette} /> : null;
       }
       if (!post) return;
       if (removedKeys.has(key)) {

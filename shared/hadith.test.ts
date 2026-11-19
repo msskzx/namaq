@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import forty from './data/hadith/forty.json';
-import { searchForty, type AppForty } from './hadith';
+import { COLLECTOR, recordedIn, searchForty, type AppForty } from './hadith';
 
 const ENTRIES = (forty as AppForty).entries;
 
@@ -14,5 +14,29 @@ describe('searchForty', () => {
 
   it('lists them all while nothing is typed', () => {
     expect(searchForty(ENTRIES, '  ')).toHaveLength(ENTRIES.length);
+  });
+});
+
+describe('recordedIn («من أخرجه»)', () => {
+  it('shows every book al-Nawawi names, marked as his, and marks no book he does not name', () => {
+    for (const entry of ENTRIES) {
+      const boxes = recordedIn(entry);
+      for (const name of entry.named) expect(boxes.some(box => box.name === name && box.named), `${entry.n}: ${name}`).toBe(true);
+      // A named book we hold a record of is one numbered box, never a second unnumbered one beside it.
+      for (const record of entry.records) expect(boxes.filter(box => box.number === undefined && box.name === COLLECTOR[record.book]), `${entry.n}: ${record.book}`).toEqual([]);
+      for (const box of boxes) expect(box.named, `${entry.n}: ${box.name}`).toBe(entry.named.includes(box.name));
+    }
+  });
+
+  it('gives a Muslim number once, however many routes are printed under it', () => {
+    const many = ENTRIES.find(entry => entry.records.filter(record => record.book === 'muslim').length > 1)!;
+    const numbers = recordedIn(many).filter(box => box.name === 'مسلم').map(box => box.number);
+    expect(new Set(numbers).size).toBe(numbers.length);
+  });
+
+  it('says «بعضه» under the Sahihayn when al-Nawawi says only part of it is there (no. 33)', () => {
+    const boxes = recordedIn(ENTRIES.find(entry => entry.n === 33)!);
+    expect(boxes.filter(box => box.name === 'البخاري' || box.name === 'مسلم').every(box => box.notes.includes('بعضه'))).toBe(true);
+    expect(boxes.find(box => box.name === 'البيهقي')!.notes).not.toContain('بعضه');
   });
 });

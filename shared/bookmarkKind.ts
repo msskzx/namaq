@@ -10,6 +10,10 @@ export type BookmarkKind = 'tree' | 'compare' | 'ayah' | 'card';
 const CARD = 'card:';
 export const isCardBookmark = (id: string) => id.startsWith(CARD);
 export const cardBookmarkId = (kind: string, item: string) => `${CARD}${kind}:${item}`;
+/** The feed cards that save themselves on their own card (the tree's double tap, the compare card's button), so their «…» menu does not. */
+export const SAVES_ITSELF: readonly string[] = ['pair', 'tree'];
+/** The id a feed card's «…» menu saves it under, or null when the card saves itself or has no item. */
+export const cardMenuSaveId = (kind: string, item: string | undefined) => (item !== undefined && !SAVES_ITSELF.includes(kind) ? cardBookmarkId(kind, item) : null);
 /** A saved feed card's kind and item, or null for any other saved thing. */
 export function cardOfBookmark(id: string): { kind: string; item: string } | null {
   if (!isCardBookmark(id)) return null;

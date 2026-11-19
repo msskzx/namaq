@@ -1,9 +1,12 @@
-import { expect, longPress, open, readerPage, stored, test } from './fixtures';
+import { expect, longPress, open, readerPage, reciteBarsHidden, stored, test } from './fixtures';
 import { surahName as S } from '../../shared/quran/surahNames';
 
 // Words are matched as the mushaf data writes them (shared/data/quran/mushaf/1.json).
 const HAMD = 'ٱلۡحَمۡدُ';
 const IHDINA = 'ٱهۡدِنَا';
+const LILLAH = 'لِلَّهِ';
+const ALAMIN = 'ٱلۡعَٰلَمِينَ';
+const RABB = 'رَبِّ';
 
 const pressWord = async (page: import('@playwright/test').Page, word: string) => {
   const target = page.getByText(word, { exact: true }).first();
@@ -14,8 +17,11 @@ const pressWord = async (page: import('@playwright/test').Page, word: string) =>
     await expect(page.getByRole('toolbar')).toBeVisible({ timeout: 1500 });
   }).toPass({ timeout: 15_000 });
 };
-/** The long press's menu opens on the ayah's actions; its tab turns to the pressed word's (owner, 2026-11-19). */
-const wordTab = (page: import('@playwright/test').Page, name = 'الكلمة') => page.getByRole('tab', { name, exact: true }).click();
+/** «نسيت» opens a bubble over the button: the ayah, or the lit words (owner, 2026-11-19). */
+const bubble = async (page: import('@playwright/test').Page, button: string, choice: string) => {
+  await page.getByRole('button', { name: button, exact: true }).click();
+  await page.getByRole('button', { name: choice, exact: true }).click();
+};
 
 test('a tap on an ayah shows the bars, the index finds a surah', async ({ page }) => {
   await open(page, '/read');
@@ -42,15 +48,12 @@ test('the index lists every ayah a search finds', async ({ page }) => {
   await expect.poll(() => readerPage(page)).toBe(561);
 });
 
-test('a long press saves an ayah and marks it forgotten', async ({ page }) => {
+test('a long press saves an ayah', async ({ page }) => {
   await open(page, '/read');
   await pressWord(page, HAMD);
   await expect(page.getByRole('toolbar', { name: 'الآية ٢ من السورة ١' })).toBeVisible();
   await page.getByRole('button', { name: 'احفظ الآية' }).click();
   await expect.poll(async () => (await stored<{ id: string }[]>(page, 'bookmarks'))?.map(b => b.id)).toContain('ayah:1:2');
-  await pressWord(page, HAMD);
-  await page.getByRole('button', { name: 'نسيت الآية' }).click();
-  await expect.poll(async () => Object.keys((await stored<object>(page, 'ayah-forgot')) ?? {})).toContain('1:2');
 });
 
 test('a reflection note is written from the long-press menu', async ({ page }) => {
@@ -98,7 +101,6 @@ test('a word\'s i\'rab shows its short line, and al-\'Ukbari once his book is do
   }));
   await open(page, '/read');
   await pressWord(page, HAMD);
-  await wordTab(page);
   await page.getByRole('button', { name: 'إعراب الكلمة' }).click();
   await expect(page.getByRole('heading', { name: `${S(1)} ٢` })).toBeVisible();
   await expect(page.getByRole('tab', { name: HAMD })).toHaveAttribute('aria-selected', 'true');
@@ -114,7 +116,6 @@ test('a word\'s i\'rab shows its short line, and al-\'Ukbari once his book is do
 test('a word\'s meaning shows al-Raghib\'s article on its root, and Ibn Qutaybah on the ayah behind the other pill', async ({ page }) => {
   await open(page, '/read');
   await pressWord(page, HAMD);
-  await wordTab(page);
   await page.getByRole('button', { name: 'معنى الكلمة' }).click();
   await expect(page.getByRole('heading', { name: `${S(1)} ٢` })).toBeVisible();
   // Ibn Qutaybah explains «ٱلۡعَٰلَمِينَ» in this ayah, not the pressed word, so the sheet opens on al-Raghib's root article.
@@ -190,7 +191,6 @@ test.describe('surah topics', () => {
 test('a word long press shows where else it comes', async ({ page }) => {
   await open(page, '/read');
   await pressWord(page, HAMD);
-  await wordTab(page);
   await page.getByRole('button', { name: /^مواضع «/ }).click();
   await expect(page.getByRole('button', { name: /^افتح .* في المصحف$/ }).first()).toBeVisible();
 });
@@ -248,28 +248,32 @@ test('listening starts from a long press, and its sheet keeps the repeats and th
 });
 });
 
-test('a forgotten word persists on its own and undo leaves an ayah mark intact', async ({ page }) => {
+test('«نسيت» toggles the ayah or the lit word from its bubble, each on its own', async ({ page }) => {
   await open(page, '/read');
   await pressWord(page, HAMD);
-  // One «نسيت»: on the ayah's tab it marks the ayah, on the word's tab the word.
-  await expect(page.getByRole('tab', { name: 'الآية', exact: true })).toHaveAttribute('aria-selected', 'true');
-  await wordTab(page);
-  await page.getByRole('button', { name: 'نسيت الكلمة', exact: true }).click();
+  await bubble(page, 'نسيت: الآية أو ما أضاءته', `نسيت «${HAMD}»`);
   await expect.poll(() => stored(page, 'ayah-forgot')).toEqual({ '1:2:0': { forgot: 1, at: expect.any(Number) } });
-  await page.reload();
-  await pressWord(page, HAMD);
+  // The same bulb again: remembered, so the word rests until its next review.
+  await page.getByRole('button', { name: `تذكّرت «${HAMD}»`, exact: true }).click();
+  await expect.poll(async () => (await stored<Record<string, { step?: number }>>(page, 'ayah-forgot'))?.['1:2:0']?.step).toBe(1);
   await page.getByRole('button', { name: 'نسيت الآية', exact: true }).click();
+  await expect.poll(async () => Object.keys((await stored<object>(page, 'ayah-forgot')) ?? {}).sort()).toEqual(['1:2', '1:2:0']);
+});
+
+test('«نسخ» copies the whole ayah with its place, even with a word lit', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await open(page, '/read');
   await pressWord(page, HAMD);
-  await wordTab(page);
-  await page.getByRole('button', { name: 'تذكّرت هذه الكلمة', exact: true }).click();
-  await expect.poll(async () => Object.keys((await stored<object>(page, 'ayah-forgot')) ?? {})).toEqual(['1:2']);
+  await page.getByRole('button', { name: 'انسخ الآية', exact: true }).click();
+  await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toBe(`«${HAMD} ${LILLAH} ${RABB} ${ALAMIN}»\n${S(1)} ٢`);
 });
 
 test('dragging after a long press selects several words, and «نسيت» marks each one', async ({ page }) => {
   await open(page, '/read');
-  // ٱلۡحَمۡدُ لِلَّهِ رَبِّ: from the first word to the third, right to left.
+  // From the first word to the third, right to left.
+  const phrase = `${HAMD} ${LILLAH} ${RABB}`;
   const from = page.getByText(HAMD, { exact: true }).first();
-  const to = page.getByText('رَبِّ', { exact: true }).first();
+  const to = page.getByText(RABB, { exact: true }).first();
   await expect(to).toBeVisible();
   await expect(async () => {
     const a = (await from.boundingBox())!, b = (await to.boundingBox())!;
@@ -278,10 +282,10 @@ test('dragging after a long press selects several words, and «نسيت» marks 
     await page.waitForTimeout(900);
     for (let step = 1; step <= 6; step++) await page.mouse.move(a.x + a.width / 2 + ((b.x + b.width / 2) - (a.x + a.width / 2)) * step / 6, a.y + a.height / 2, { steps: 2 });
     await page.mouse.up();
-    await expect(page.getByRole('tab', { name: 'الكلمات', exact: true })).toHaveAttribute('aria-selected', 'true', { timeout: 1500 });
+    // The words' places are searched as one phrase.
+    await expect(page.getByRole('button', { name: `مواضع «${phrase}» في القرآن`, exact: true })).toBeVisible({ timeout: 1500 });
   }).toPass({ timeout: 15_000 });
-  await expect(page.getByRole('toolbar', { name: `«${HAMD} لِلَّهِ رَبِّ»` })).toBeVisible();
-  await page.getByRole('button', { name: 'نسيت هذه الكلمات', exact: true }).click();
+  await bubble(page, 'نسيت: الآية أو ما أضاءته', `نسيت «${phrase}»`);
   await expect.poll(async () => Object.keys((await stored<object>(page, 'ayah-forgot')) ?? {}).sort()).toEqual(['1:2:0', '1:2:1', '1:2:2']);
 });
 
@@ -354,6 +358,7 @@ test('recite from the top bar starts at the page start', async ({ page }) => {
   await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
   await page.getByRole('button', { name: 'سمّع من أول الصفحة' }).click();
   await expect.poll(start).toBe('1:1');
+  await reciteBarsHidden(page);
 });
 
 test('the eye offers the selected ayah, and nothing to continue or review on a first visit', async ({ page }) => {
@@ -394,6 +399,7 @@ test('recite from an ayah\'s long-press menu starts at that ayah', async ({ page
   await page.getByRole('button', { name: 'سمّع من هذه الآية' }).click();
   await expect(page.getByRole('button', { name: 'أظهر الآية التالية' })).toBeVisible();
   await expect.poll(start).toBe('1:6');
+  await reciteBarsHidden(page);
 });
 
 test('the recite bar floats over a full-size page, goes wherever it is dragged, stays there, and folds into a circle', async ({ page }) => {

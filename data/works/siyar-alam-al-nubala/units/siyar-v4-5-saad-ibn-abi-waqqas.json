@@ -528,6 +528,66 @@
       "page": "100",
       "layer": "MAIN",
       "exact": "مَا سَمِعْتُ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَجْمَعُ أَبَوَيْهِ لأَحَدٍ غَيْرَ سَعْدٍ"
+    },
+    {
+      "id": "sp_sd_ten_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "103",
+      "layer": "MAIN",
+      "exact": "يَحْيَى القَطَّانُ، وَجَمَاعَةٌ: عَنْ صَدَقَةَ بنِ المُثَنَّى، حَدَّثَنِي جَدِّي رِيَاحِ بنِ الحَارِثِ"
+    },
+    {
+      "id": "sp_sd_ten_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "103",
+      "layer": "MAIN",
+      "exact": "فَأَنَا أَشْهَدُ عَلَى رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بِمَا سَمِعْتْ أُذُنَايَ"
+    },
+    {
+      "id": "sp_sd_tenlist",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "103",
+      "layer": "MAIN",
+      "exact": "أَبُو بَكْرٍ فِي الجَنَّةِ، وَعُمَرُ فِي الجَنَّةِ، وَعلِيٌّ فِي الجَنَّةِ، وَعُثْمَانُ فِي الجَنَّةِ، وَطَلْحَةُ فِي الجَنَّةِ، وَالزُّبَيْرُ فِي الجَنَّةِ، وَعَبْدُ الرَّحْمَنِ فِي الجَنَّةِ، وَسَعْدُ بنُ مَالِكٍ فِي الجَنَّةِ"
+    },
+    {
+      "id": "sp_sd_ten_ab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "103",
+      "layer": "MAIN",
+      "exact": "أَبُو بَكْرٍ فِي الجَنَّةِ",
+      "suffix": "، وَعُمَرُ"
+    },
+    {
+      "id": "sp_sd_ten_um",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "103",
+      "layer": "MAIN",
+      "exact": "وَعُمَرُ فِي الجَنَّةِ",
+      "prefix": "أَبُو بَكْرٍ فِي الجَنَّةِ، "
+    },
+    {
+      "id": "sp_sd_ten_al",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "103",
+      "layer": "MAIN",
+      "exact": "وَعلِيٌّ فِي الجَنَّةِ",
+      "prefix": "وَعُمَرُ فِي الجَنَّةِ، "
+    },
+    {
+      "id": "sp_sd_ten_uth",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "103",
+      "layer": "MAIN",
+      "exact": "وَعُثْمَانُ فِي الجَنَّةِ",
+      "prefix": "وَعلِيٌّ فِي الجَنَّةِ، "
     }
   ],
   "reports": [
@@ -715,6 +775,20 @@
       "isnadSpan": "sp_sd_ali_isnad",
       "origin": {
         "mention": "m_sd_ali"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sd_ten",
+      "unit": "siyar-v4-5-saad-ibn-abi-waqqas",
+      "ordinal": 17,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_sd_ten_frame"
+      ],
+      "isnadSpan": "sp_sd_ten_isnad",
+      "origin": {
+        "mention": "m_sd_ten_p"
       },
       "chainState": "DEFERRED"
     }
@@ -911,6 +985,14 @@
       "report": "r_sd_ali",
       "spans": [
         "sp_sd_ali"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_sd_ten",
+      "report": "r_sd_ten",
+      "spans": [
+        "sp_sd_tenlist"
       ],
       "role": "TRANSMITTED"
     }
@@ -1165,6 +1247,41 @@
       "id": "m_sd_al",
       "parent": "sp_sd_ali",
       "exact": "سَعْدٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sd_ten_p",
+      "parent": "sp_sd_ten_frame",
+      "exact": "رَسُوْلِ اللهِ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sd_ten_ab",
+      "parent": "sp_sd_tenlist",
+      "exact": "أَبُو بَكْرٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sd_ten_um",
+      "parent": "sp_sd_tenlist",
+      "exact": "عُمَرُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sd_ten_al",
+      "parent": "sp_sd_tenlist",
+      "exact": "علِيٌّ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sd_ten_uth",
+      "parent": "sp_sd_tenlist",
+      "exact": "عُثْمَانُ",
       "occurrence": 1,
       "role": "SUBJECT"
     }
@@ -1466,6 +1583,54 @@
         {
           "span": "sp_sd_heading",
           "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sd_ten_ab",
+      "mention": "m_sd_ten_ab",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "siyar-v3-abu-bakr#sp_ab_heading",
+          "role": "RIJAL_ENTRY"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sd_ten_um",
+      "mention": "m_sd_ten_um",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "siyar-v3-umar#sp_u_heading",
+          "role": "RIJAL_ENTRY"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sd_ten_al",
+      "mention": "m_sd_ten_al",
+      "agent": "ali-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "siyar-v3-ali#sp_l_heading",
+          "role": "RIJAL_ENTRY"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sd_ten_uth",
+      "mention": "m_sd_ten_uth",
+      "agent": "uthman-ibn-affan",
+      "basis": [
+        {
+          "span": "siyar-v3-uthman#sp_o_heading",
+          "role": "RIJAL_ENTRY"
         }
       ],
       "status": "PROPOSED"
@@ -1959,6 +2124,66 @@
       },
       "restsOn": [
         "st_sd_ali"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sd_ten_ab",
+      "subject": "m_sd_ten_ab",
+      "predicate": "title",
+      "value": {
+        "classified": "the-ten-promised-paradise",
+        "spans": [
+          "sp_sd_ten_ab"
+        ]
+      },
+      "restsOn": [
+        "st_sd_ten"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sd_ten_um",
+      "subject": "m_sd_ten_um",
+      "predicate": "title",
+      "value": {
+        "classified": "the-ten-promised-paradise",
+        "spans": [
+          "sp_sd_ten_um"
+        ]
+      },
+      "restsOn": [
+        "st_sd_ten"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sd_ten_al",
+      "subject": "m_sd_ten_al",
+      "predicate": "title",
+      "value": {
+        "classified": "the-ten-promised-paradise",
+        "spans": [
+          "sp_sd_ten_al"
+        ]
+      },
+      "restsOn": [
+        "st_sd_ten"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sd_ten_uth",
+      "subject": "m_sd_ten_uth",
+      "predicate": "title",
+      "value": {
+        "classified": "the-ten-promised-paradise",
+        "spans": [
+          "sp_sd_ten_uth"
+        ]
+      },
+      "restsOn": [
+        "st_sd_ten"
       ],
       "status": "PROPOSED"
     }

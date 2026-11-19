@@ -4,8 +4,8 @@
  * from the website and kept on the phone. The website fetches what a sheet shows, so it has nothing to manage.
  * The default tafsir can change later to a better book.
  */
-export type BookKind = 'tafsir' | 'irab' | 'balagha' | 'gharib';
-export type BookId = 'sadi' | 'irab-words' | 'ukbari' | 'itqan' | 'kashshaf' | 'gharib' | 'mufradat';
+export type BookKind = 'tafsir' | 'irab' | 'balagha' | 'gharib' | 'hadith';
+export type BookId = 'sadi' | 'irab-words' | 'ukbari' | 'itqan' | 'kashshaf' | 'gharib' | 'mufradat' | 'bukhari' | 'muslim';
 export type Book = { id: BookId; kind: BookKind; title: string; by: string; builtIn: boolean; megabytes: number };
 
 export const BOOKS: Book[] = [
@@ -16,6 +16,9 @@ export const BOOKS: Book[] = [
   { id: 'kashshaf', kind: 'balagha', title: 'الكشاف عن حقائق التنزيل', by: 'الزمخشري (ت ٥٣٨هـ)', builtIn: false, megabytes: 2.2 },
   { id: 'gharib', kind: 'gharib', title: 'تفسير غريب القرآن', by: 'ابن قتيبة (ت ٢٧٦هـ)', builtIn: true, megabytes: 0.8 },
   { id: 'mufradat', kind: 'gharib', title: 'المفردات في غريب القرآن', by: 'الراغب الأصفهاني (ت ٥٠٢هـ)', builtIn: true, megabytes: 2.9 },
+  // The Sahihayn whole (owner, 2026-11-19): their kitabs and babs ship with the app, their text is downloaded once.
+  { id: 'bukhari', kind: 'hadith', title: 'صحيح البخاري', by: 'البخاري (ت ٢٥٦هـ)', builtIn: false, megabytes: 10.9 },
+  { id: 'muslim', kind: 'hadith', title: 'صحيح مسلم', by: 'مسلم (ت ٢٦١هـ)', builtIn: false, megabytes: 7 },
 ];
 
 export const BOOK_KINDS: { kind: BookKind; title: string }[] = [
@@ -23,6 +26,7 @@ export const BOOK_KINDS: { kind: BookKind; title: string }[] = [
   { kind: 'irab', title: 'الإعراب' },
   { kind: 'balagha', title: 'البلاغة' },
   { kind: 'gharib', title: 'معاني الكلمات' },
+  { kind: 'hadith', title: 'الحديث' },
 ];
 
 export const bookOf = (id: BookId) => BOOKS.find(book => book.id === id)!;

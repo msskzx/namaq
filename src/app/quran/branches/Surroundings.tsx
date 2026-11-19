@@ -12,7 +12,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { likenessOf, sharedByAll, type Neighbour, type Surrounding } from '@shared/quran/ayahContext';
 import { LIKENESS_TITLE } from '@shared/quran/wordMatch';
 import { MARK_CLASS } from '@/lib/markMode';
-import { endSign } from '@shared/quran/branches';
+import { closingSign } from '@shared/quran/branches';
 import { quranSurrounding } from '@/lib/quran/quranText';
 import LoadingDots from '@/components/common/LoadingDots';
 
@@ -154,7 +154,7 @@ export function NeighbourBox({ neighbour, of, side, around, nodeId }: { nodeId?:
         <span className="block"><span>{neighbour.words.map((word, i) => {
           const kind = likenessOf(match, i);
           return <React.Fragment key={i}>{i > 0 && ' '}{kind ? <mark className={`bg-transparent ${MARK_CLASS[kind]}`} title={ar ? LIKENESS_TITLE[kind].ar : LIKENESS_TITLE[kind].en}><MushafText>{word}</MushafText></mark> : <MushafText>{word}</MushafText>}</React.Fragment>;
-        })}</span>{endSign([neighbour.key]).map(sign => <React.Fragment key="end">{' '}<span data-end><MushafText>{sign}</MushafText></span></React.Fragment>)}</span>
+        })}</span>{closingSign(neighbour.words, [neighbour.key]).map(sign => <React.Fragment key="end">{' '}<span data-end><MushafText>{sign}</MushafText></span></React.Fragment>)}</span>
         {side === 'before' && basmala}
       </span>
       <span className="mt-1 block text-xs">{ref}</span>

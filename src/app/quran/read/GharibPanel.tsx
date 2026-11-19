@@ -7,12 +7,11 @@ import Card from '@/components/common/Card';
 import Segmented from '@/components/common/Segmented';
 import Folded from '@/components/common/Folded';
 import Pickable from '@/components/common/Pickable';
-import QuranWords from '@/components/quran/text/QuranWords';
+import LitAyat from '@/components/quran/text/LitAyat';
 import BookRuns from '@/components/quran/text/BookRuns';
 import type { GharibAyah } from './gharib';
 
 // The lit words: BalaghaPanel's deeper band.
-const PICKED = 'bg-[color-mix(in_srgb,var(--home-ink)_20%,var(--home-card))]';
 const BOOKS = { gharib: 'غريب القرآن لابن قتيبة', mufradat: 'المفردات للراغب' } as const;
 type Book = keyof typeof BOOKS;
 
@@ -30,8 +29,8 @@ export default function GharibPanel({ data }: { data: GharibAyah }) {
   const lit: [number, number][] = showing === 'gharib' && picked !== null ? gharib[picked]?.words ?? [] : [[word, word]];
   return (
     <>
-      <Card as="p" className="block shrink-0 px-3.5 py-2.5 text-2xl leading-[2]">
-        <QuranWords>{words.map((text, i) => <span key={i} className={lit.some(([from, to]) => i >= from && i <= to) ? PICKED : undefined}>{`${i ? ' ' : ''}${text}`}</span>)}</QuranWords>
+      <Card className="block shrink-0 px-3.5 py-2.5">
+        <LitAyat ayat={[{ words, lit }]} />
       </Card>
       {books.length > 1 && (
         <Segmented tabs label="الكتاب" className="shrink-0 self-start"

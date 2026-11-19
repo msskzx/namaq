@@ -1,0 +1,189 @@
+{
+  "about": "Abd al-Baqi numbers the pinned turath export (book 1727) prints wrongly. The build finds each: a route head ahead of the numbering, or a number no route carries. Each fix was checked against the fawazahmed0 hadith-api ara-muslim edition, whose text under the right number is the same (scripts/hadith/checkSahihayn.ts). `absent` are numbers neither the export nor that witness prints.",
+  "fixes": [
+    {
+      "page": 636,
+      "printed": 399,
+      "n": 299
+    },
+    {
+      "page": 827,
+      "printed": 397,
+      "n": 396
+    },
+    {
+      "page": 993,
+      "printed": 468,
+      "n": 467
+    },
+    {
+      "page": 2297,
+      "printed": 1034,
+      "n": 1024
+    },
+    {
+      "page": 2399,
+      "printed": 1566,
+      "n": 1066
+    },
+    {
+      "page": 3415,
+      "printed": 1437,
+      "n": 1427
+    },
+    {
+      "page": 3416,
+      "printed": 1437,
+      "n": 1427
+    },
+    {
+      "page": 3417,
+      "printed": 1437,
+      "n": 1427
+    },
+    {
+      "page": 3419,
+      "printed": 1437,
+      "n": 1427
+    },
+    {
+      "page": 4337,
+      "printed": 1689,
+      "n": 1683
+    },
+    {
+      "page": 5946,
+      "printed": 3409,
+      "n": 2309
+    },
+    {
+      "page": 6505,
+      "printed": 4575,
+      "n": 2575
+    },
+    {
+      "page": 6971,
+      "printed": 2880,
+      "n": 2780
+    },
+    {
+      "page": 6972,
+      "printed": 2880,
+      "n": 2780
+    },
+    {
+      "page": 1838,
+      "printed": 722,
+      "n": 822
+    },
+    {
+      "page": 1839,
+      "printed": 722,
+      "n": 822
+    },
+    {
+      "page": 1840,
+      "printed": 722,
+      "n": 822
+    },
+    {
+      "page": 1841,
+      "printed": 722,
+      "n": 822
+    },
+    {
+      "page": 1842,
+      "printed": 722,
+      "n": 822
+    },
+    {
+      "page": 2098,
+      "printed": 936,
+      "n": 937
+    },
+    {
+      "page": 2157,
+      "printed": 960,
+      "n": 961
+    },
+    {
+      "page": 2158,
+      "printed": 960,
+      "n": 961
+    },
+    {
+      "page": 2389,
+      "printed": 1064,
+      "n": 1065
+    },
+    {
+      "page": 2390,
+      "printed": 1064,
+      "n": 1065
+    },
+    {
+      "page": 2391,
+      "printed": 1064,
+      "n": 1065
+    },
+    {
+      "page": 2392,
+      "printed": 1064,
+      "n": 1065
+    },
+    {
+      "page": 2393,
+      "printed": 1064,
+      "n": 1065
+    },
+    {
+      "page": 2421,
+      "printed": 1067,
+      "n": 1076
+    },
+    {
+      "page": 2711,
+      "printed": 1172,
+      "n": 1173
+    },
+    {
+      "page": 2712,
+      "printed": 1172,
+      "n": 1173
+    },
+    {
+      "page": 3250,
+      "printed": 1366,
+      "n": 1367
+    },
+    {
+      "page": 5625,
+      "printed": 2138,
+      "n": 2183
+    },
+    {
+      "page": 5626,
+      "printed": 2138,
+      "n": 2183
+    },
+    {
+      "page": 5667,
+      "printed": 2203,
+      "n": 2202
+    },
+    {
+      "page": 6338,
+      "printed": 2195,
+      "n": 2495
+    },
+    {
+      "page": 6616,
+      "printed": 2602,
+      "n": 2620
+    }
+  ],
+  "absent": [
+    1824,
+    2483
+  ]
+}

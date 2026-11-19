@@ -1,5 +1,6 @@
-import { kunyaName, type AppPerson, type PersonFact } from '@shared/tarajim';
-import { bareName } from '@shared/tarajimLine';
+import { type AppPerson, type PersonFact } from '@shared/tarajim';
+import { byVolume, heldGroups as heldIn, kunyaLine, personLine, unvowelled } from '@shared/tarajimGroups';
+import { matchesQuery, namesHay } from '@shared/tarajimLine';
 import { linkedPairs, peopleGraph } from '@shared/tarajimGraph';
 import peopleJson from '@shared/data/tarajim/people.json';
 
@@ -28,14 +29,6 @@ export function personName(person: { slug: string; name: string }) {
   return person.slug === PROPHET && !person.name.includes('ﷺ') ? `${person.name} ﷺ` : person.name;
 }
 
-/** Text without its vowels, for short lines under a name (the book's vowels stay in quotes). */
-export const unvowelled = (text: string) => text.replace(/[\u064B-\u0652\u0670\u0640]/g, '');
-
-/** The line under a name: the kunya, then the laqab when it is a name alone (not a sentence that gives it). */
-export function personLine(person: AppPerson) {
-  return [person.kunya[0] && kunyaName(person.kunya[0].text), person.titles[0]?.name].filter(Boolean).map(text => unvowelled(text!)).join(' · ');
-}
-
 /** Each title the people hold, once, in the order they first come, for the list's filter chips. */
 export function titleFilters(people: AppPerson[] = PEOPLE) {
   const seen = new Map<string, string>();
@@ -46,14 +39,16 @@ export function titleFilters(people: AppPerson[] = PEOPLE) {
 
 /** People whose name, full name, kunya or laqab holds the words typed, ignoring vowels and hamza forms. */
 export function searchPeople(query: string, title?: string, people: AppPerson[] = PEOPLE) {
-  const words = bareName(query).split(/\s+/u).filter(Boolean);
   return people.filter(person => {
     if (title && !person.titles.some(t => t.title === title)) return false;
-    if (words.length === 0) return true;
-    const hay = bareName([person.name, person.fullName?.text, ...person.kunya.map(k => k.text), ...person.laqab.map(l => l.text)].filter(Boolean).join(' '));
-    return words.every(word => hay.includes(word));
+    return !query.trim() || matchesQuery(namesHay(person), query);
   });
 }
 
 /** Every page a list of values rests on, for a section's reference. */
 export const refsOf = (facts: PersonFact[]) => facts.flatMap(fact => fact.refs);
+
+/** The hub's groups that the converted people hold (shared/tarajimGroups.ts). */
+export const heldGroups = () => heldIn(PEOPLE);
+
+export { byVolume, kunyaLine, personLine, unvowelled };

@@ -1,23 +1,30 @@
-import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
+import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router } from 'expo-router';
+import { counted } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Card from '@/ui/Card';
-import Chip from '@/ui/Chip';
 import Empty from '@/ui/Empty';
 import { SearchField } from '@/ui/Field';
 import { BATTLES } from '@/lib/battles';
-import { STORY_TAGS } from '@/lib/stories';
-import { usePalette } from '@/lib/theme';
+import { usePalette, type Palette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useTabRetap } from '@/lib/tabRetap';
-import { personLine, personName, searchPeople, titleFilters } from '@/lib/tarajim';
+import { heldGroups, searchPeople } from '@/lib/tarajim';
+import PersonRows from '@/components/tarajim/PersonRows';
+import WayCard from '@/components/tarajim/WayCard';
+
+/** A hub section's heading: short and muted, as on the hadith hub. */
+export function HubHeading({ text, palette }: { text: string; palette: Palette }) {
+  return <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 16, textAlign: 'right', marginTop: 8 }}>{text}</Text>;
+}
 
 /**
- * The tarajim tab (owner, 2026-11-18; sketch tarajim-app/sketch-dark.png, screen 1): the sira stories and the battles, a search, the book's
- * own titles as filters, then a card for each person whose entry is converted. A person not converted yet is not listed.
+ * The tarajim tab (owner, 2026-11-19; sketch tarajim-hub/sketch-dark.png): a hub, not a list. Search first; typing shows the
+ * people found as rows in one card in place of the sections. Then the groups the scholars name, the sira and its battles,
+ * the ties between people, and the whole list on its own page in the book's order (nothing capped, nothing dumped here).
  */
 export default function TarajimScreen() {
   const palette = usePalette();
@@ -25,50 +32,45 @@ export default function TarajimScreen() {
   const bottom = useTabBarSpace();
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   useTabRetap('tarajim', () => scroll.current?.scrollTo({ y: 0, animated: true }));
-  const params = useLocalSearchParams<{ title?: string; at?: string }>();
   const [query, setQuery] = useState('');
-  const [title, setTitle] = useState<string | undefined>(params.title);
-  // The list stays mounted under the person's page, so a title tapped there arrives as new params, not a new screen;
-  // `at` changes on every tap, so the same title tapped again after clearing the filter still sets it.
-  useEffect(() => { if (params.title) setTitle(params.title); }, [params.title, params.at]);
-  const filters = useMemo(() => titleFilters(), []);
-  const people = useMemo(() => searchPeople(query, title), [query, title]);
+  const groups = useMemo(() => heldGroups(), []);
+  const found = useMemo(() => (query.trim() ? searchPeople(query) : []), [query]);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar hideOnScroll />
       <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 12 }}>
+        contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 10 }}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>التراجم</Text>
-        <Card palette={palette} pad={16} gap={4} accessibilityRole="link" accessibilityLabel="قصص السيرة" onPress={() => router.push('/stories')}>
-          <Text style={{ color: palette.ink, fontSize: 20, textAlign: 'right' }}>قصص السيرة</Text>
-          <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{STORY_TAGS.join(' · ')}</Text>
-        </Card>
-        <Card palette={palette} pad={16} gap={4} accessibilityRole="link" accessibilityLabel="الغزوات والمعارك" onPress={() => router.push('/battles')}>
-          <Text style={{ color: palette.ink, fontSize: 20, textAlign: 'right' }}>الغزوات والمعارك</Text>
-          <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`${BATTLES[0].name} … ${BATTLES[BATTLES.length - 1].name}`}</Text>
-        </Card>
-        <Card palette={palette} pad={16} gap={4} accessibilityRole="link" accessibilityLabel="بين عدة أشخاص" onPress={() => router.push('/between')}>
-          <Text style={{ color: palette.ink, fontSize: 20, textAlign: 'right' }}>بين عدة أشخاص</Text>
-          <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>اختر شخصين أو أكثر لترى أقرب الصلات بينهم</Text>
-        </Card>
-        <SearchField palette={palette} label="ابحث في التراجم" value={query} onChangeText={setQuery} />
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-          <Chip label="الكل" on={!title} onPress={() => setTitle(undefined)} palette={palette} />
-          {filters.map(filter => (
-            <Chip key={filter.key} label={filter.name} on={title === filter.key} onPress={() => setTitle(title === filter.key ? undefined : filter.key)} palette={palette} />
-          ))}
-        </View>
-        {people.length === 0 && <Empty text="لا أحد بهذا الاسم في التراجم المضافة بعد" palette={palette} />}
-        {people.map(person => {
-          const line = personLine(person);
-          return (
-            <Card key={person.slug} palette={palette} pad={16} gap={4} accessibilityRole="link" accessibilityLabel={personName(person)}
-              onPress={() => router.push({ pathname: '/person', params: { slug: person.slug } })}>
-              <Text style={{ color: palette.ink, fontSize: 20, fontWeight: '700', textAlign: 'right' }}>{personName(person)}</Text>
-              {line ? <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{line}</Text> : null}
-            </Card>
-          );
-        })}
+        <SearchField palette={palette} label="ابحث في التراجم" placeholder="ابحث باسم أو كنية أو لقب" value={query} onChangeText={setQuery} />
+        {query.trim() ? (
+          found.length === 0
+            ? <Empty text="لا أحد بهذا الاسم في التراجم المضافة بعد" palette={palette} />
+            : <>
+                <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{counted(found.length, ['ترجمة', 'ترجمتان', 'تراجم'])}</Text>
+                <PersonRows people={found} palette={palette} />
+              </>
+        ) : (
+          <>
+            <HubHeading text="كما جمعهم العلماء" palette={palette} />
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+              {groups.map(group => (
+                <Card key={group.key} palette={palette} pad={[10, 14]} accessibilityRole="link" accessibilityLabel={group.name}
+                  onPress={() => router.push({ pathname: '/people', params: { title: group.key } })}
+                  style={{ flexBasis: '47%', flexGrow: 1, minHeight: 52, justifyContent: 'center' }}>
+                  <Text style={{ color: palette.ink, fontSize: 18, textAlign: 'right' }}>{group.name}</Text>
+                </Card>
+              ))}
+            </View>
+            <HubHeading text="السيرة والأحداث" palette={palette} />
+            <WayCard title="قصص السيرة" line="كل قصة كما يرويها الكتاب بإسنادها" palette={palette} onPress={() => router.push('/stories')} />
+            <WayCard title="الغزوات والمعارك" line={`من ${BATTLES[0].name} إلى ${BATTLES[BATTLES.length - 1].name}، ومن شهد كل واحدة`} palette={palette} onPress={() => router.push('/battles')} />
+            <HubHeading text="الصلات" palette={palette} />
+            <WayCard title="بين عدة أشخاص" line="اختر شخصين أو أكثر لترى أقرب الصلات بينهم" palette={palette} onPress={() => router.push('/between')} />
+            <WayCard title="حياتهم جنبًا إلى جنب" line="قارن حياة اثنين أو أكثر عامًا بعام" palette={palette} onPress={() => router.push('/life')} />
+            <HubHeading text="كل التراجم" palette={palette} />
+            <WayCard title="كل التراجم بترتيب الكتاب" line="السيرة النبوية، ثم الخلفاء الراشدون، ثم أجزاء السير" palette={palette} onPress={() => router.push('/people')} />
+          </>
+        )}
       </ScrollView>
     </View>
   );

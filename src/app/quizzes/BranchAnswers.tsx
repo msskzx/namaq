@@ -10,7 +10,7 @@ import { NavButtons } from "@/components/common/NavBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckDouble } from "@fortawesome/free-solid-svg-icons";
 import Button from "@/components/common/Button";
-import MushafText from "@/components/common/MushafText";
+import AyahFlow, { AyahWords } from "@/components/quran/text/AyahFlow";
 import { askedNodes, branchNodes, givenAnswer, leadingSigns } from "@shared/quiz/branchAnswers";
 import { correctionOf, gradedTree, verdict, type Correction } from "@shared/quiz/feedback";
 import { emptyBranchAnswers, isAsked, type ScoredQuestion } from "@shared/quiz/score";
@@ -29,7 +29,7 @@ type Names = Record<number, string>;
 /** The ayah signs an asked node opens with (﴿١٧﴾ where its ayah reads on): given before its boxes, never typed. */
 function LeadingSigns({ node }: { node: Branch }) {
   const signs = leadingSigns(node.words);
-  return signs.length ? <span className="font-quran text-lg text-[var(--home-muted)]"><MushafText>{signs.join(" ")}</MushafText></span> : null;
+  return signs.length ? <AyahWords className="text-[var(--home-muted)]">{signs.join(" ")}</AyahWords> : null;
 }
 
 type MatrixRow = { leaf: Branch; path: number[]; words: string[]; before: string[]; ayahKeys: string[] };
@@ -75,16 +75,16 @@ function MatrixInputs({ question, values, hints, write, names, ar }: { question:
       const spans = shownAyat(leaf, words);
       return <Card key={`${path.join("-")}:${ayahKeys[0]}`} className="p-2.5">
         <p className="text-xs text-[var(--home-muted)]">{ayahKeys.map(key => ayatLabel(spans[key], names)).join(" · ")}</p>
-        <p className="flex flex-wrap items-center gap-x-2 font-quran text-lg leading-loose text-[var(--home-ink)]">
-          {before.length > 0 && <MushafText>{before.join(" ")}</MushafText>}
-          <span className="font-bold text-[var(--home-accent)]"><MushafText>{givenAnswer(tree)}</MushafText></span>
+        <AyahFlow row className="text-[var(--home-ink)]">
+          {before.length > 0 && <AyahWords>{before.join(" ")}</AyahWords>}
+          <AyahWords className="font-bold text-[var(--home-accent)]">{givenAnswer(tree)}</AyahWords>
           {path.map(index => {
             const at = blanks.findIndex(blank => blank.id === index);
             return at < 0
-              ? <MushafText key={index}>{values[index]}</MushafText>
+              ? <AyahWords key={index}>{values[index]}</AyahWords>
               : <React.Fragment key={index}><LeadingSigns node={nodes[index]} /><BlankBoxes blank={blanks[at]} index={at} write={write} hint={hints[index] || undefined} name={ar ? `العقدة ${num(index + 1)}` : `Node ${index + 1}`} /></React.Fragment>;
           })}
-        </p>
+        </AyahFlow>
       </Card>;
     })}
   </div>;
@@ -96,7 +96,7 @@ function Badge({ row, ar }: { row: Correction; ar: boolean }) {
 
 function TypedWords({ row, ar }: { row: Correction; ar: boolean }) {
   if (!row.typed) return <span className="text-[var(--home-muted)]">{ar ? "لم تكتب شيئًا" : "Nothing typed"}</span>;
-  return <span className="font-quran text-lg">{row.typed.split(/\s+/).map((word, at) => <React.Fragment key={at}>
+  return <span className="text-base">{row.typed.split(/\s+/).map((word, at) => <React.Fragment key={at}>
     {at > 0 && " "}
     {row.marks[at] ? <span className="text-[var(--home-green)]">{word}</span> : <del className="text-[var(--home-accent)]">{word}</del>}
   </React.Fragment>)}</span>;

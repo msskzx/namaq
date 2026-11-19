@@ -8,7 +8,8 @@ import { corpusIndex as ayahIndex } from '@shared/quran/corpusIndex';
 import { GESTURES, MODE_ACTIONS, readGestures, serverGestures, setGesture, subscribeGestures, type Gesture, type GestureAction, type ReaderMode } from '@shared/readerGestures';
 import Sheet from '@/ui/Sheet';
 import { pageOfAyah, surahs } from '@/lib/mushaf';
-import { QURAN_FONT, type Palette } from '@/lib/theme';
+import type { Palette } from '@/lib/theme';
+import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
 import { quranText } from '@/lib/quranText';
 import { surahName } from '@shared/quran/surahNames';
 import Tabs from '@/ui/Tabs';
@@ -129,12 +130,12 @@ export function IndexSheet({ open, onClose, onJump, palette, page, recite, query
             <Pressable onPress={() => go({ page: row.page, key: row.key, mark: true })} accessibilityRole="link"
               style={{ paddingHorizontal: 16, paddingVertical: 8, borderBottomWidth: 1, borderColor: palette.rule, gap: 2 }}>
               <Text style={{ color: palette.accent, fontSize: 13 }}>{name(surahs[surah - 1])} {num(ayah)}</Text>
-              <Text style={{ color: palette.ink, fontSize: 20, lineHeight: 36, fontFamily: QURAN_FONT }}>
-                {/* The whole ayah, its found words coloured (owner, 2026-11-17). */}
-                {join(row.words.slice(0, row.from))}
-                <Text style={{ color: palette.accent }}>{join(row.words.slice(row.from, row.to + 1))}</Text>
-                {join(row.words.slice(row.to + 1))}
-              </Text>
+              {/* The whole ayah, its found words coloured (owner, 2026-11-17). */}
+              <AyahFlow color={palette.ink}>
+                <AyahWords>{join(row.words.slice(0, row.from))}</AyahWords>
+                <AyahWords look={{ color: palette.accent }}>{join(row.words.slice(row.from, row.to + 1))}</AyahWords>
+                <AyahWords>{join(row.words.slice(row.to + 1))}</AyahWords>
+              </AyahFlow>
             </Pressable>
           );
         }} />
