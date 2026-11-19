@@ -1,0 +1,443 @@
+{
+  "unit": {
+    "id": "siyar-v5-78-uthman-ibn-abi-al-as",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٧٨"
+    }
+  },
+  "spans": [
+    {
+      "id": "hd",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "374",
+      "layer": "MAIN",
+      "exact": "٧٨ - عُثْمَانُ بنُ أَبِي العَاصِ، أَبُو عَبْدِ اللهِ الثَّقَفِيُّ"
+    },
+    {
+      "id": "n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "374",
+      "layer": "MAIN",
+      "exact": "عُثْمَانُ بنُ أَبِي العَاصِ"
+    },
+    {
+      "id": "sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "374",
+      "layer": "MAIN",
+      "exact": "عُثْمَانُ بنُ",
+      "prefix": "-"
+    },
+    {
+      "id": "ku",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "374",
+      "layer": "MAIN",
+      "exact": "أَبُو عَبْدِ اللهِ الثَّقَفِيُّ *"
+    },
+    {
+      "id": "ku_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "374",
+      "layer": "MAIN",
+      "exact": "أَبُو عَبْدِ اللهِ",
+      "prefix": "العَاصِ،"
+    },
+    {
+      "id": "fa",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "374",
+      "layer": "MAIN",
+      "exact": "أَبِي العَاصِ،",
+      "prefix": "بنُ"
+    },
+    {
+      "id": "wafd",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "374",
+      "layer": "MAIN",
+      "exact": "قَدِمَ فِي وَفْدِ ثَقِيْفٍ عَلَى النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فِي سَنَةِ تِسْعٍ، فَأَسْلَمُوا، وَأَمَّرَهُ عَلَيْهِم لِمَا رَأَى مِنْ عَقْلِهِ وَحِرْصِهِ عَلَى الخَيْرِ وَالِدِّيْنِ، وَكَانَ أَصْغَرَ الوَفْدِ سِنّاً"
+    },
+    {
+      "id": "nabi",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "374",
+      "layer": "MAIN",
+      "exact": "النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فِي سَنَةِ تِسْعٍ"
+    },
+    {
+      "id": "wafd_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "374",
+      "layer": "MAIN",
+      "exact": "وَأَمَّرَهُ عَلَيْهِم لِمَا رَأَى مِنْ عَقْلِهِ وَحِرْصِهِ عَلَى الخَيْرِ وَالِدِّيْنِ"
+    },
+    {
+      "id": "hasan",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "375",
+      "layer": "MAIN",
+      "exact": "ذَكَرَهُ: الحَسَنُ البَصْرِيُّ، فَقَالَ: مَا رَأَيْتُ أَحَداً أَفْضَلَ مِنْهُ."
+    },
+    {
+      "id": "hasan_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "375",
+      "layer": "MAIN",
+      "exact": "مَا رَأَيْتُ أَحَداً أَفْضَلَ مِنْهُ."
+    },
+    {
+      "id": "d",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "375",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ -رَضِيَ اللهُ عَنْهُ-: سَنَةَ إِحْدَى وَخَمْسِيْنَ."
+    },
+    {
+      "id": "dy",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "375",
+      "layer": "MAIN",
+      "exact": "سَنَةَ إِحْدَى وَخَمْسِيْنَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r0",
+      "unit": "siyar-v5-78-uthman-ibn-abi-al-as",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "hd",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_16",
+      "unit": "siyar-v5-78-uthman-ibn-abi-al-as",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "hasan"
+      ],
+      "origin": {
+        "mention": "m_sp15"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_1",
+      "report": "r0",
+      "spans": [
+        "n1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_7",
+      "report": "r0",
+      "spans": [
+        "hd"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_10",
+      "report": "r0",
+      "spans": [
+        "wafd"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_17",
+      "report": "r_16",
+      "spans": [
+        "hasan_v"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_20",
+      "report": "r0",
+      "spans": [
+        "d"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_s2",
+      "parent": "n1",
+      "exact": "عُثْمَانُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o5",
+      "parent": "n1",
+      "exact": "أَبِي العَاصِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_s8",
+      "parent": "hd",
+      "exact": "أَبُو عَبْدِ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_s11",
+      "parent": "wafd",
+      "exact": "قَدِمَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o12",
+      "parent": "wafd",
+      "exact": "النَّبِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_sp15",
+      "parent": "hasan",
+      "exact": "الحَسَنُ البَصْرِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_s18",
+      "parent": "hasan",
+      "exact": "ذَكَرَهُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_s21",
+      "parent": "d",
+      "exact": "تُوُفِّيَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_s2",
+      "mention": "m_s2",
+      "agent": "uthman-ibn-abi-al-as",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o5",
+      "mention": "m_o5",
+      "agent": "abu-al-as-al-thaqafi",
+      "basis": [
+        {
+          "span": "fa",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s8",
+      "mention": "m_s8",
+      "agent": "uthman-ibn-abi-al-as",
+      "basis": [
+        {
+          "span": "n1",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s11",
+      "mention": "m_s11",
+      "agent": "uthman-ibn-abi-al-as",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o12",
+      "mention": "m_o12",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "nabi",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s18",
+      "mention": "m_s18",
+      "agent": "uthman-ibn-abi-al-as",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s21",
+      "mention": "m_s21",
+      "agent": "uthman-ibn-abi-al-as",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_3",
+      "subject": "m_s2",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "n1"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_4",
+      "subject": "m_s2",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sex"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_6",
+      "subject": "m_s2",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_o5"
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_9",
+      "subject": "m_s8",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "ku_w"
+        ]
+      },
+      "restsOn": [
+        "st_7"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_13",
+      "subject": "m_s11",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_o12"
+      },
+      "restsOn": [
+        "st_10"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_14",
+      "subject": "m_s11",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "wafd_v"
+        ]
+      },
+      "restsOn": [
+        "st_10"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_19",
+      "subject": "m_s18",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "hasan_v"
+        ]
+      },
+      "restsOn": [
+        "st_17"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_22",
+      "subject": "m_s21",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 51,
+        "spans": [
+          "dy"
+        ]
+      },
+      "restsOn": [
+        "st_20"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
