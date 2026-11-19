@@ -145,7 +145,7 @@ function question(right: BalaghaTerm, random: Random): ChoiceQuestion | null {
     passage: hideName(text, right.name),
     choices: offered.map(term => ({ value: term.name, labelArabic: plainName(term.name) })),
     correctAnswer: right.name,
-    terms: Object.fromEntries(choices.map(term => [term.name, term.name])),
+    terms: Object.fromEntries(offered.map(term => [term.name, term.name])),
     note: { label: 'المصدر', text: [...new Set(pages)].join('؛ ') },
     look: { view: 'terms', names: offered.map(term => term.name), mark: right.name },
     evidence: { claimKeys: [] },

@@ -159,7 +159,7 @@ describe('party questions', () => {
   it('keeps what a look points at hidden until the reveal', () => {
     const look = { view: 'ties', slug: 'b', mark: 'a' };
     const state = playing([{ ...choice('q1'), look }]);
-    expect(viewFor(state, 'p1', 0).question?.look).toEqual({ view: 'ties', slug: 'b', mark: undefined });
+    expect(JSON.parse(JSON.stringify(viewFor(state, 'p1', 0).question?.look))).toStrictEqual({ view: 'ties', slug: 'b' });
     const revealed = run(state, ['p0', 'p1', 'p2'].map(playerId => ({ type: 'submit', playerId, answer: 'b' }) as Action));
     expect(viewFor(revealed, 'p1', 0).question?.look).toEqual(look);
   });

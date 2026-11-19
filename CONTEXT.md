@@ -509,6 +509,8 @@ _Avoid_: Result (one player's outcome on a question)
 
 **Leaderboard**:
 The players ranked by total score, shown after every reveal and at the end of
-the party. A party scores answers as a quiz taken alone does. A shared-openings
-question earns one point per correct leaf the player was asked to type, and any
-other question earns one point. There is no speed bonus.
+the party. A party grades answers as a quiz taken alone does and gives ten
+points for each thing asked that is right: each leaf of a tree, each blank, each
+written word, or a choice question. A right answer given after the player
+opened «ابحث عن الجواب» earns five instead (owner, 2026-11-19). There is no
+speed bonus.

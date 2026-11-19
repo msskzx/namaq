@@ -94,7 +94,8 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
     const size = () => groups.reduce((sum, g) => sum + (folded.has(g.kind) ? 1 : g.ties.length), 0);
     for (const g of [...groups].sort((a, b) => b.ties.length - a.ties.length)) {
       if (size() <= room) break;
-      if (g.ties.length > 1) folded.add(g.kind);
+      // The marked person's kind stays open, so the answer is a node of its own.
+      if (g.ties.length > 1 && !g.ties.some(tie => tie.to === marked)) folded.add(g.kind);
     }
     return groups.flatMap((g): Item[] => (folded.has(g.kind) ? [{ group: g.kind, count: g.ties.length, kind: g.kind }] : g.ties.map(tie => ({ tie, kind: tie.kind }))));
   })();

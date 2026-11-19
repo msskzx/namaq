@@ -85,7 +85,9 @@ describe('ابحث عن الجواب', () => {
     for (const virtue of virtueQuestions(undefined, seededRandom(3))) {
       expect(virtue.look?.view).toBe('virtues');
       expect(virtue.look && 'slugs' in virtue.look && virtue.look.slugs).toEqual(virtue.choices.map(c => c.value));
-      expect(virtue.look?.mark).toMatchObject({ slug: virtue.correctAnswer });
+      const [, slug, index] = virtue.key.split(':');
+      expect(virtue.look?.mark).toEqual({ slug, index: Number(index) });
+      expect(slug).toBe(virtue.correctAnswer);
     }
   });
 });

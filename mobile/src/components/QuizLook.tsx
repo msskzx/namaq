@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ScrollView, View, useWindowDimensions } from 'react-native';
-import { Search } from 'lucide-react-native';
+import { Check, Search } from 'lucide-react-native';
 import type { QuizLook } from '@shared/quiz/choiceKinds';
 import { LOOKED_POINTS, POINTS } from '@shared/quiz/score';
 import { num } from '@shared/quran/arabicNumber';
@@ -64,7 +64,8 @@ function VirtuesLook({ slugs, mark, palette }: { slugs: string[]; mark?: { slug:
   return (
     <View style={{ gap: 12 }}>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-        {people.map(p => <Chip key={p.slug} label={personName(p)} on={p.slug === person.slug} palette={palette} onPress={() => setAt(p.slug)} />)}
+        {people.map(p => <Chip key={p.slug} label={personName(p)} on={p.slug === person.slug} palette={palette} onPress={() => setAt(p.slug)}
+          Icon={p.slug === mark?.slug ? Check : undefined} accessibilityLabel={p.slug === mark?.slug ? `${personName(p)}، الجواب` : undefined} />)}
       </View>
       <Card palette={palette} gap={10}>
         <Text style={{ color: palette.accent, fontSize: 15, textAlign: 'right' }}>{person.sex === 'FEMALE' ? 'مناقبها' : 'مناقبه'}</Text>
@@ -84,7 +85,8 @@ function TermsLook({ names, mark, palette }: { names: string[]; mark?: string; p
   return (
     <View style={{ gap: 12 }}>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-        {offered.map(name => <Chip key={name} label={plainName(name)} on={name === at} palette={palette} onPress={() => setAt(name)} />)}
+        {offered.map(name => <Chip key={name} label={plainName(name)} on={name === at} palette={palette} onPress={() => setAt(name)}
+          Icon={name === mark ? Check : undefined} accessibilityLabel={name === mark ? `${plainName(name)}، الجواب` : undefined} />)}
       </View>
       {term && <TermQuotes term={term} palette={palette} />}
     </View>
@@ -139,7 +141,7 @@ export function LookButton({ look, onLook, costs = false, palette }: { look: Qui
     <View style={{ gap: 4, alignItems: 'flex-start' }}>
       <Button Icon={Search} label="ابحث عن الجواب" onPress={() => { setOpen(true); onLook?.(); }} />
       {costs && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right', alignSelf: 'stretch' }}>
-        {`الإجابة الصحيحة بعد البحث بـ${num(LOOKED_POINTS)} نقاط بدل ${num(POINTS)}.`}
+        {`بعد البحث للإجابة الصحيحة ${num(LOOKED_POINTS)} نقاط بدل ${num(POINTS)}.`}
       </Text>}
       <Sheet open={open} onClose={() => setOpen(false)} palette={palette} tall>
         <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ padding: 16, gap: 12 }} keyboardShouldPersistTaps="handled">
@@ -156,7 +158,7 @@ export function LookedNote({ palette }: { palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start' }}>
       <Search size={15} color={palette.amber} />
-      <Text style={{ color: palette.amber, fontSize: 15 }}>{`بحثتَ عنه · الإجابة الصحيحة بـ${num(LOOKED_POINTS)} نقاط`}</Text>
+      <Text style={{ color: palette.amber, fontSize: 15 }}>{`بحثتَ عنه · للإجابة الصحيحة ${num(LOOKED_POINTS)} نقاط`}</Text>
     </View>
   );
 }

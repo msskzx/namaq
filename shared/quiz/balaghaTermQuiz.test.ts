@@ -66,6 +66,8 @@ describe('ابحث عن الجواب', () => {
   it('lists the offered terms in the order shown, so the list never gives the answer away', () => {
     for (const question of termQuiz.questions(scope, 'medium', seededRandom(5), 30)) {
       expect(question.look).toEqual({ view: 'terms', names: question.choices.map(choice => choice.value), mark: question.correctAnswer });
+      // A party sends `terms` before the reveal: its keys follow the choices too.
+      expect(Object.keys(question.terms!)).toEqual(question.choices.map(choice => choice.value));
     }
   });
 });
