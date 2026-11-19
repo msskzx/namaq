@@ -73,12 +73,15 @@ describe('the al-Adhkar selection', () => {
   });
 
   it('has only attributed sahih/hasan judgments, quoted within their source context', () => {
-    const words = { 'in-sahih': /^(صحيح (البخاري|مسلم)|الصحيحين)$/, 'sahih': /صحيح/, 'hasan': /حسن/, 'hasan-sahih': /حسن صحيح/, 'isnad-sahih': /بإسناد صحيح|صحيح الإ.?سناد/ };
+    const words = { 'in-sahih': /^(صحيح (البخاري|مسلم)|الصحيحين|أخرجه البخاري .*)$/, 'sahih': /صحيح/, 'hasan': /حسن/, 'hasan-sahih': /حسن صحيح/, 'isnad-sahih': /بإسناد صحيح|صحيح الإ.?سناد/ };
     const pages = new Map(Object.entries(witness.gradingPages));
     for (const item of ADHKAR) {
       for (const grade of item.grades.filter(grade => grade.rank === 'in-sahih')) {
-        expect(item.collections, `${item.id}: the Sahih al-Nawawi names`).toContain(grade.quote);
-        expect(grade.reportedBy).toBe('النووي');
+        // The Sahih as al-Nawawi names it, or, where Ibn Hajar answers that, his own word on who put it out.
+        if (grade.citation.source === 'adhkar-nawawi') {
+          expect(item.collections, `${item.id}: the Sahih al-Nawawi names`).toContain(grade.quote);
+          expect(grade.reportedBy).toBe('النووي');
+        } else expect(grade.reportedBy).toBe('ابن حجر العسقلاني');
       }
       expect(item.grades.some(grade => grade.rank !== 'isnad-sahih'), `${item.id} needs a grade of the hadith, not only its chain`).toBe(true);
       for (const grade of item.grades) {

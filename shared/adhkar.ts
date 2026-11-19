@@ -1187,22 +1187,19 @@ export const ADHKAR: readonly Dhikr[] = [
       "url": "https://shamela.ws/book/1956/88",
       "report": 255
     },
-    "collections": [
-      "الصحيحين"
-    ],
+    "collections": [],
     "grades": [
       {
         "rank": "in-sahih",
-        "scholar": "البخاري ومسلم",
-        "quote": "الصحيحين",
+        "scholar": "البخاري",
+        "quote": "أخرجه البخاري وأبو داود والترمذي والنسائي جميعًا عن قتيبة",
         "citation": {
-          "source": "adhkar-nawawi",
-          "volume": 1,
-          "page": 90,
-          "url": "https://shamela.ws/book/1956/88",
-          "report": 255
+          "source": "nataij-afkar",
+          "volume": 3,
+          "page": 40,
+          "url": "https://shamela.ws/book/30108/1087"
         },
-        "reportedBy": "النووي"
+        "reportedBy": "ابن حجر العسقلاني"
       }
     ],
     "occasionQuote": "ثم نفث فيهما وقرأ فيهما",
@@ -1483,40 +1480,6 @@ export const ADHKAR: readonly Dhikr[] = [
     "virtueQuote": "فإنَّها بَرَاءَةٌ مِنَ الشِّرْكِ"
   },
   {
-    "id": "sleep-gave-plenty",
-    "occasions": [
-      "sleep"
-    ],
-    "content": {
-      "kind": "text",
-      "text": "الحَمْدُ لِلَّهِ الَّذي كفاني وآوَانِي وأطْعَمَنِي وَسَقَانِي، وَالَّذِي مَنَّ عَليَّ فأفْضَلَ، وَالَّذي أعطانِي فأجْزَل، الحَمْدُ لِلَّهِ على كُلّ حالٍ ; اللَّهُمَّ رَبَّ كل شئ وَمَلِيكَهُ، وَإِلهَ كُلِّ شئ، أعُوذُ بِكَ مِنَ النَّارِ"
-    },
-    "citation": {
-      "source": "adhkar-nawawi",
-      "volume": 1,
-      "page": 92,
-      "url": "https://shamela.ws/book/1956/90",
-      "report": 268
-    },
-    "collections": [
-      "سنن أبي داود"
-    ],
-    "grades": [
-      {
-        "rank": "hasan",
-        "scholar": "ابن حجر العسقلاني",
-        "quote": "هذا حديث حسن، أخرجه أبو داود والنسائي",
-        "citation": {
-          "source": "nataij-afkar",
-          "volume": 3,
-          "page": 67,
-          "url": "https://shamela.ws/book/30108/1117"
-        }
-      }
-    ],
-    "occasionQuote": "كان يقول إذا أخذ مضجعه"
-  },
-  {
     "id": "sleep-created-my-soul",
     "occasions": [
       "sleep"
@@ -1572,7 +1535,7 @@ export const ADHKAR: readonly Dhikr[] = [
       {
         "rank": "hasan",
         "scholar": "ابن حجر العسقلاني",
-        "quote": "هذا حديث حسن، ورجاله من شيخ الطبراني",
+        "quote": "هذا حديث حسن، ورجاله من شيخ الطبراني إلى منتهاه مصريون",
         "citation": {
           "source": "nataij-afkar",
           "volume": 3,
