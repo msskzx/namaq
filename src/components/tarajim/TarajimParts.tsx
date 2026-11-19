@@ -17,6 +17,8 @@ import ExternalLink from '@/components/common/ExternalLink';
 
 /** A person's ties page on the website. */
 export const tiesHref = (slug: string) => `/people/${slug}/ties`;
+/** «بين عدة أشخاص» with these people picked. */
+export const betweenHref = (slugs: string[]) => `/between${slugs.length ? `?slugs=${slugs.join(',')}` : ''}`;
 export const nasabHref = (slugs: string[]) => `/people/${slugs[0]}/nasab${slugs.length > 1 ? `?with=${slugs.slice(1).join(',')}` : ''}`;
 
 /** Each kind of tie has its colour, for its lines and its group, as in the app. */

@@ -14,7 +14,7 @@ import type { HadithCard } from '@/lib/forty';
 import type { SahihCard } from '@/lib/sahih';
 import { SahihHadithView, sahihPage } from '@/components/hadith/SahihParts';
 import type { NameCard, TarajimCard } from '@/lib/tarajim';
-import { CreditFold, TiesChain, tiesHref } from '@/components/tarajim/TarajimParts';
+import { betweenHref, CreditFold, TiesChain, tiesHref } from '@/components/tarajim/TarajimParts';
 import LifeTimeline from '@/components/tarajim/LifeTimeline';
 import { IbnRajab, shamelaPage } from '@/components/hadith/FortyParts';
 import HadithBooks from '@/components/hadith/HadithBooks';
@@ -496,10 +496,10 @@ function NamePost({ card }: { card: NameCard }) {
 
 /**
  * «صلة» (the app's TiePost): two converted people and the nearest chain of ties that joins them, drawn as «بينه وبين…»
- * draws it, then in one sentence with the pages that state each tie.
+ * draws it, then in one sentence with the pages that state each tie; the head opens «بينه وبين…» with the two picked.
  */
 function TiePost({ card }: { card: Extract<TarajimCard, { kind: 'tie' }> }) {
-  return <Post head={<PostHead Icon={Link2} title="صلة" sub={`${card.a.name} و${card.b.name}`} href={tiesHref(card.a.slug)} label={`افتح صلات ${card.a.name}`} />}
+  return <Post head={<PostHead Icon={Link2} title="صلة" sub={`${card.a.name} و${card.b.name}`} href={betweenHref([card.a.slug, card.b.slug])} label={`ارسم الصلة بين ${card.a.name} و${card.b.name}`} />}
     actions={<>
       <Action Icon={Link2} label={`صلات ${card.a.name}`} href={tiesHref(card.a.slug)} />
       <Action Icon={Link2} label={`صلات ${card.b.name}`} href={tiesHref(card.b.slug)} />

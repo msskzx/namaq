@@ -25,6 +25,14 @@ export function bareName(name: string) {
     .replace(/ى$/u, 'ي').replace(/\s+/g, ' ').trim();
 }
 
+/** Each word of a text bare, so a final «ى» inside a phrase («أبو يحيى بن») matches as it does at the end. */
+const bareWords = (text: string) => text.split(/\s+/u).filter(Boolean).map(bareName);
+/** What a people search looks in: the name, full name, kunyas and laqabs, bare. */
+export const namesHay = (person: { name: string; fullName?: { text: string }; kunya: { text: string }[]; laqab: { text: string }[] }) =>
+  bareWords([person.name, person.fullName?.text, ...person.kunya.map(k => k.text), ...person.laqab.map(l => l.text)].filter(Boolean).join(' ')).join(' ');
+/** Whether a `namesHay` holds every word typed: the people search of the app and the website. */
+export const matchesQuery = (hay: string, query: string) => bareWords(query).every(word => hay.includes(word));
+
 /** The first word of a name of two words («عبد الله», «أبي طالب»), which is no name with a laqab after it. */
 const COMPOUND = /^(?:عبد|ابي|ابو|ام|ذي|ذو|امري|امرئ)$/u;
 

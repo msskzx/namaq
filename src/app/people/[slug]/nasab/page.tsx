@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { findPerson, nasabView, PEOPLE, personName } from '@/lib/tarajim';
+import { findPerson, nasabView, pickPeople, personName } from '@/lib/tarajim';
 import NasabPage from './NasabPage';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -16,6 +16,5 @@ export default async function PersonNasabPage({ params, searchParams }: { params
   const { slug } = await params;
   if (!findPerson(slug)) notFound();
   const others = ((await searchParams).with ?? '').split(',').filter(s => s && s !== slug && findPerson(s)).slice(0, 7);
-  const people = PEOPLE.map(person => ({ slug: person.slug, name: personName(person) }));
-  return <NasabPage view={nasabView([slug, ...others])} people={people} />;
+  return <NasabPage view={nasabView([slug, ...others])} people={pickPeople()} />;
 }
