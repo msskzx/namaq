@@ -1,6 +1,11 @@
 import type { Page } from '@playwright/test';
 import { branchNodes, givenAnswer } from '../../shared/quiz/branchAnswers';
 import type { Branch } from '../../shared/quran/branches';
+import { num } from '../../shared/quran/arabicNumber';
+import { numberVerses, type Poem } from '../../shared/tajwid/poem';
+import poemData from '../../shared/tajwid/tuhfat-al-atfal.json';
+
+const chapters = numberVerses(poemData as Poem);
 import { expect, open, stored, tab, test } from './fixtures';
 
 type Run = { questions: { tree: Branch; asked: number[] }[]; current: number };
@@ -164,4 +169,27 @@ test('a solo quiz of the sira and battles: pick the right answers, each shows it
     await page.getByRole('button', { name: index === run!.questions.length - 1 ? 'إرسال' : 'التالي' }).click();
   }
   await expect(page.getByText(/^النتيجة: ٥ من ٥/)).toBeVisible();
+});
+
+test('a solo quiz looks an answer up in the poem, and after the answer shows the verse that gives it', async ({ page }) => {
+  await open(page, '/quiz/solo');
+  await page.getByRole('button', { name: 'التحفة: أكمل البيت' }).click();
+  await page.getByRole('button', { name: 'متشابهات القرآن', exact: true }).click();
+  await page.getByRole('button', { name: 'ابدأ الاختبار' }).click();
+  await expect(page).toHaveURL(/\/quiz\/play/);
+  await expect.poll(() => stored(page, 'quiz-solo-run')).not.toBeNull();
+  const run = await stored<{ questions: { correctAnswer: string; look: { mark: number } }[] }>(page, 'quiz-solo-run');
+  const question = run!.questions[0];
+  await page.getByRole('button', { name: 'ابحث عن الجواب' }).click();
+  // The whole poem, its first chapter and its last.
+  await expect(page.getByRole('heading', { name: chapters[0].title })).toBeVisible();
+  await expect(page.getByRole('heading', { name: chapters.at(-1)!.title })).toBeAttached();
+  await page.getByRole('button', { name: 'رجوع إلى السؤال' }).click();
+  await page.getByRole('button', { name: question.correctAnswer, exact: true }).click();
+  await expect(page.getByRole('button', { name: 'ابحث عن الجواب' })).toHaveCount(0);
+  // Only the chapter of the verse that answers, the verse lit.
+  await expect(page.getByLabel(`${num(question.look.mark)}: `, { exact: false }).first()).toBeVisible();
+  const chapter = chapters.find(part => part.verses.some(verse => verse.number === question.look.mark))!;
+  await expect(page.getByRole('heading', { name: chapter.title })).toBeVisible();
+  for (const other of chapters.filter(part => part !== chapter)) await expect(page.getByRole('heading', { name: other.title, exact: true })).toHaveCount(0);
 });

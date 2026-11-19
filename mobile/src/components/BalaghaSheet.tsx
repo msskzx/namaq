@@ -98,7 +98,7 @@ function Itqan({ paragraphs, palette, onSpan, onClose }: { paragraphs: ItqanPara
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, paddingTop: 4 }}>
             {paragraph.matches.map(key => {
               const [surah, number] = key.split(':').map(Number);
-              return <Chip key={key} small label={`${surahNames[surah] ?? num(surah)} ${num(number)}`} on={false} palette={palette}
+              return <Chip key={key} small role={onClose ? 'button' : 'text'} label={`${surahNames[surah] ?? num(surah)} ${num(number)}`} on={false} palette={palette}
                 accessibilityLabel={onClose ? `افتح ${surahNames[surah] ?? num(surah)} ${num(number)} في المصحف` : undefined}
                 onPress={onClose && (() => { onClose(); openIntent({ tab: 'read', at: key }); })} />;
             })}
