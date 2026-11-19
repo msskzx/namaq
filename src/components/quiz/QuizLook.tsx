@@ -32,6 +32,8 @@ import { QIRAAT_SOURCE } from '@shared/quran/qiraat';
 import { tafsirSadiCredit, tafsirSadiPage, type TafsirPassage } from '@shared/quran/tafsirSadi';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
 import { num } from '@shared/quran/arabicNumber';
+import { plainName, type BalaghaTerm } from '@shared/quran/balaghaTerms';
+import { TermQuotes } from '@/components/balagha/TermParts';
 
 type Looked = { story: AppStory; ayat: AyatPage[][] } | { battle: AppBattle };
 
@@ -75,6 +77,23 @@ function TafsirLook({ keys, mark }: { keys: string[]; mark?: string }) {
   </div>;
 }
 
+/** The definition of each term offered, one at a time (the terms page's own card); once shown, the asked one first and checked. */
+function TermsLook({ names, mark }: { names: string[]; mark?: string }) {
+  const [at, setAt] = useState(mark ?? names[0]);
+  return <Fetched<BalaghaTerm[]> url={`/api/terms?${names.map(name => `n=${encodeURIComponent(name)}`).join('&')}`}>
+    {terms => {
+      const term = terms.find(each => each.name === at || plainName(each.name) === plainName(at ?? '')) ?? terms[0];
+      return <div className="flex flex-col gap-3">
+        <div className="flex flex-wrap gap-2">
+          {terms.map(each => <Chip key={each.name} role="tab" on={each === term} onClick={() => setAt(each.name)}
+            label={<>{each.name === mark && <Check size={13} aria-hidden />}{plainName(each.name)}</>} name={each.name === mark ? `${plainName(each.name)}، الجواب` : undefined} />)}
+        </div>
+        <TermQuotes term={term} />
+      </div>;
+    }}
+  </Fetched>;
+}
+
 /** The ayah in the mushaf's lines with each word the readers differ on, as the readings page and its feed card draw it. */
 function QiraatLook({ ayah }: { ayah: string }) {
   const { pages } = useAyahPage(ayah);
@@ -91,7 +110,7 @@ function TuhfaLook({ mark }: { mark?: number }) {
 }
 
 /** The looks the website draws so far; the rest come with their features (the app draws every kind, mobile/src/components/QuizLook.tsx). */
-const DRAWN: QuizLook['view'][] = ['story', 'battle', 'word', 'irab', 'balagha', 'qiraat', 'tafsir', 'tuhfa'];
+const DRAWN: QuizLook['view'][] = ['story', 'battle', 'terms', 'word', 'irab', 'balagha', 'qiraat', 'tafsir', 'tuhfa'];
 export const canLook = (look: QuizLook | undefined): look is QuizLook => !!look && DRAWN.includes(look.view);
 
 /**
@@ -108,6 +127,7 @@ export function LookView({ look, shown }: { look: QuizLook; shown: boolean }) {
       case 'balagha': return <Fetched<BalaghaAyah> url={`/api/quran/balagha?k=${encodeURIComponent(look.key)}`}>{data => <BalaghaPanel ayah={look.key} data={data} />}</Fetched>;
       case 'qiraat': return <QiraatLook ayah={look.key} />;
       case 'tafsir': return <TafsirLook key={`${look.keys.join()}/${shown ? look.mark ?? '' : ''}`} keys={look.keys} mark={shown ? look.mark : undefined} />;
+      case 'terms': return <TermsLook key={`${look.names.join()}/${shown ? look.mark ?? '' : ''}`} names={look.names} mark={shown ? look.mark : undefined} />;
       case 'tuhfa': return <TuhfaLook mark={shown ? look.mark : undefined} />;
       default: return null;
     }

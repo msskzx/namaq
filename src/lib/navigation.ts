@@ -67,14 +67,17 @@ export const EXPERIMENT_SECTIONS: NavSection[] = [
 ];
 
 
-/** The Quran tab's tools, as in the app's Quran hub (owner, 2026-11-13); the Quran tab is lit on the hub and on each of them. */
+/** The Quran tab's tools, as in the app's Quran hub (owner, 2026-11-13; its QURAN_TILES order); the Quran tab is lit on the hub and on each of them. */
 export const QURAN_TOOLS: NavItem[] = [
   { href: '/quran/branches', label: { ar: 'متشابهات القرآن', en: 'Phrase trees' }, purpose: { ar: '', en: '' } },
   { href: '/quran/compare', label: { ar: 'مقارنة السور', en: 'Compare surahs' }, purpose: { ar: '', en: '' } },
   { href: '/quran/prophets', label: { ar: 'قصص الأنبياء', en: 'Prophets’ stories' }, purpose: { ar: '', en: '' } },
   { href: '/quran/tajwid/tuhfat-al-atfal', label: { ar: 'تحفة الأطفال', en: 'Tuhfat al-Atfal' }, purpose: { ar: '', en: '' } },
+  { href: '/quran/words', label: { ar: 'ألفاظ القرآن', en: 'Words of the Quran' }, purpose: { ar: '', en: '' } },
   { href: '/quran/oaths', label: { ar: 'الأقسام', en: 'Oaths' }, purpose: { ar: '', en: '' } },
   { href: '/quran/lataif', label: { ar: 'مشاهد', en: 'Scenes' }, purpose: { ar: '', en: '' } },
+  { href: '/quran/terms', label: { ar: 'مصطلحات البلاغة', en: 'Balagha terms' }, purpose: { ar: '', en: '' } },
+  { href: '/quran/qiraat', label: { ar: 'القراءات', en: 'Readings' }, purpose: { ar: '', en: '' } },
   { href: '/quran/openings', label: { ar: 'افتتاح السور', en: 'Surah openings' }, purpose: { ar: '', en: '' } },
   { href: '/quran/order', label: { ar: 'ترتيب السور', en: 'Surah order' }, purpose: { ar: '', en: '' } },
 ];

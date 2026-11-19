@@ -15,8 +15,10 @@ import { TAP_FLOOR } from './Button';
  * Without `onClick` it is only a label. With `onClear` or `clearHref` it is a filter in use, removed by its ×.
  * A few views of one thing are tabs (Segmented), not chips. `className` is for its place only.
  */
-export default function Chip({ label, on = false, onClick, role = 'button', name, check = false, lit = false, quran = false, dashed = false, small = false, count, onClear, clearHref, clearLabel, disabled = false, tapThrough = false, className = '' }: {
+export default function Chip({ label, on = false, onClick, href, role = 'button', name, check = false, lit = false, quran = false, dashed = false, small = false, count, onClear, clearHref, clearLabel, disabled = false, tapThrough = false, className = '' }: {
   label: ReactNode; on?: boolean; onClick?: () => void;
+  /** A chip that opens a page (an ayah in the mushaf). */
+  href?: string;
   /** `tab` for one word of several, `radio` for one of a set, `button` for a filter. */
   role?: 'button' | 'radio' | 'tab';
   /** What a screen reader says, when the label alone is not enough. */
@@ -48,6 +50,7 @@ export default function Chip({ label, on = false, onClick, role = 'button', name
     {quran ? <QuranWords>{label}</QuranWords> : label}
     {count !== undefined && <span className="text-xs opacity-70">{num(count)}</span>}
   </>;
+  if (href) return <Link href={href} aria-label={name} title={name} className={`${base} ${look} hover:border-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--home-accent)] ${className}`}>{body}</Link>;
   if (!onClick) return <span className={`${base} ${look} ${className}`}>{body}</span>;
   const state = role === 'tab' ? { role: 'tab', 'aria-selected': on } : role === 'radio' ? { role: 'radio', 'aria-checked': on } : { 'aria-pressed': on };
   return <button type="button" {...state} data-tap-through={tapThrough || undefined} onClick={onClick} disabled={disabled} aria-label={name} title={name}
