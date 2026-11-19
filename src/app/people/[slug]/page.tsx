@@ -26,6 +26,7 @@ import ClaimEvidence from '@/components/common/ClaimEvidence';
 import SourceAccountReader from '@/components/people/SourceAccountReader';
 import ModelEntries from '@/components/people/ModelEntries';
 import ProfileHadith from '@/components/people/ProfileHadith';
+import PersonAppLinks from '@/components/tarajim/PersonAppLinks';
 
 function PersonDetailPage() {
   const { language } = useLanguage();
@@ -150,6 +151,8 @@ function PersonDetailPage() {
               </ul>
             </div>
           )}
+
+          <PersonAppLinks slug={slug} />
 
           <Timeline events={person.events || []} participations={person.participations || []} death={person} />
 
