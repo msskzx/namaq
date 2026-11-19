@@ -1,10 +1,11 @@
 import type { Page } from '@playwright/test';
 import { num } from '../../shared/quran/arabicNumber';
 import { branchNodes, givenAnswer } from '../../shared/quiz/branchAnswers';
-import { expect, open, test } from './fixtures';
+import { expect, firstBoxes, open, test, writeBlank } from './fixtures';
 import { PartyServer } from './partyServer';
 
-const leaves = (page: Page) => page.getByLabel(/^الطرف /);
+/** Each asked leaf's first box (recite mode's boxes, owner 2026-11-19). */
+const leaves = (page: Page) => firstBoxes(page, 'الطرف \\S+');
 
 test('a party quiz: host and guest join, answer each question and see the final ranking', async ({ page, browser, errors }) => {
   test.setTimeout(90_000);
@@ -40,10 +41,10 @@ test('a party quiz: host and guest join, answer each question and see the final 
     await expect.poll(() => server.state?.current).toBe(index);
     const question = server.question!;
     const nodes = branchNodes(question.tree!);
-    const right = question.asked!.map(node => givenAnswer(nodes[node]));
-    for (const [i, answer] of right.entries()) await leaves(page).nth(i).fill(answer);
+    const right = [...question.asked!].sort((a, b) => a - b).map(node => givenAnswer(nodes[node]));
+    for (const [i, answer] of right.entries()) await writeBlank(page, `الطرف ${num(i + 1)}`, answer);
     await page.getByRole('button', { name: 'أرسل', exact: true }).click();
-    await leaves(guest).first().fill('كلام خطأ');
+    await writeBlank(guest, 'الطرف ١', 'كلام خطأ');
     await guest.getByRole('button', { name: 'أرسل', exact: true }).click();
     await expect(page.getByText(`${num(right.length)} من ${num(right.length)} أطراف`)).toBeVisible();
     await expect(guest.getByText(new RegExp(`^٠ من ${num(right.length)} أطراف$`))).toBeVisible();

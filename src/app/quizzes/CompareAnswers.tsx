@@ -15,6 +15,9 @@ import { addCompareHint, blankWords, compareCorrections, compareHintsOf, compare
 import { neededCut, verdict, type Correction } from "@shared/quiz/feedback";
 import type { Hints } from "@shared/quiz/hints";
 import Card from '@/components/common/Card';
+import { BlankBoxes } from "@/app/quran/read/MushafPage";
+import { useWriteBlanks } from "@/components/recite/useRecite";
+import { writeBlank } from "@shared/quiz/writeBlanks";
 
 type Question = { compare?: CompareAsk };
 
@@ -49,14 +52,20 @@ export function CompareInputs({ question, typed, onChange, onCheck, ar, sendEmpt
   sendEmpty?: boolean }) {
   const [own, setOwn] = React.useState<Hints>({});
   const ask = question.compare;
+  // Each blank in recite mode's boxes (owner, 2026-11-19): its first two words to write, the rest faint.
+  const blanks = React.useMemo(() => ask ? ask.blanks.map((_, blank) => writeBlank(blank, blankWords(ask, blank))) : [], [ask]);
+  const values = ask ? ask.blanks.map((_, index) => typed[index] ?? "") : [];
+  const write = useWriteBlanks({ id: ask ? `${ask.card}:${ask.asked.key}` : "", blanks, texts: values, onType: (blank, text) => onChange(values.map((value, at) => at === blank ? text : value)),
+    // Enter on the last box checks, as Enter in a field did.
+    onEnd: () => { if (values.some(value => value.trim())) onCheck(); } });
   if (!ask) return null;
-  const values = ask.blanks.map((_, index) => typed[index] ?? "");
   const hints = kept ?? own;
   const shown = compareHintsOf(ask, hints);
   const started = values.some(value => value.trim());
   const hintLabel = ar ? "تلميح: حرف آخر من كل فراغ" : "Hint: one more letter in each empty blank";
   return (
     <form className="flex flex-col gap-3" onSubmit={(event) => { event.preventDefault(); if (started || sendEmpty) onCheck(); }}>
+      {write.field({ "aria-label": ar ? "اكتب الكلمة" : "Write the word" })}
       <div dir="rtl" className="flex flex-col gap-2.5" data-quiz-compare>
         <NavButtons>
           <Button size="lg" variant="muted" aria-label={hintLabel} title={hintLabel} onClick={() => (onHints ?? setOwn)(addCompareHint(ask, values, hints))}><Lightbulb aria-hidden /></Button>
@@ -65,12 +74,7 @@ export function CompareInputs({ question, typed, onChange, onCheck, ar, sendEmpt
         <Line line={ask.asked} ar={ar}>
           {comparePieces(ask).map((piece, i) => "given" in piece
             ? <Words key={i} line={ask.asked} at={piece.given} />
-            : <label key={i} className="flex w-32 max-w-full flex-col">
-              <span className="sr-only">{ar ? `الفراغ ${num(piece.blank + 1)}` : `Blank ${piece.blank + 1}`}</span>
-              <input type="text" dir="rtl" lang="ar" autoComplete="off" spellCheck={false} value={values[piece.blank]} placeholder={shown[piece.blank] || undefined}
-                onChange={(event) => onChange(values.map((value, at) => at === piece.blank ? event.target.value : value))}
-                className="w-full rounded-sm border border-[var(--home-rule)] bg-transparent px-3 py-2 font-quran text-lg text-[var(--home-ink)] focus:border-[var(--home-accent)]" />
-            </label>)}
+            : <BlankBoxes key={i} blank={blanks[piece.blank]} index={piece.blank} write={write} hint={shown[piece.blank] || undefined} name={ar ? `الفراغ ${num(piece.blank + 1)}` : `Blank ${piece.blank + 1}`} />)}
         </Line>
       </div>
       <div className="flex flex-wrap gap-2">

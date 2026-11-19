@@ -12,7 +12,6 @@ import { surahNames } from '@/lib/branches';
 // The إن المتقين في tree, built by the same builder as every quiz tree (shared/quiz/branchQuestions.test.ts keeps it equal).
 const tree = example.tree as Branch;
 const prefixes = example.prefixes as Variant[];
-const NO_TYPING = () => {};
 
 /**
  * How a متشابهات question works: what you type, the example question as the quiz draws it (the matrix, each ayah reading on
@@ -29,7 +28,7 @@ export default function QuizExplainer({ leaves, palette }: { leaves: number; pal
       <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 24, textAlign: 'right' }}>
         {`تكمل ${num(leaves)} من الآيات المتشابهة، ويُعرض باقيها مكتوبًا. فإن كانت أقل طُلبت كلها.`}
       </Text>
-      <MatrixInputs question={question} values={values} hints={[]} onType={NO_TYPING} palette={palette} names={surahNames} readOnly />
+      <MatrixInputs question={question} values={values} hints={[]} palette={palette} names={surahNames} />
       {rule('التصحيح: ', 'تكفي من كل طرف كلمتاه الأوليان، ويجب أن تصح كل كلمة تكتبها وبترتيبها. اكتب بالإملاء المعتاد لا برسم المصحف، والهمزة على أي كرسي. لكل طرف صحيح نقطة، والأطراف المتشابهة في الشكل تقبل أي ترتيب.')}
       {rule('الكلمة الملوّنة: ', 'بعد التحقق، كلمة تكتبها الآيات بضبط مختلف، مثل «إِن» و«إِنْ»، تُرسم باللون الكهرماني كما في متشابهات القرآن. اضغط الآية لتراها في سياقها.')}
       {rule('الكلمة الأولى: ', 'إذا بدأت بعض الآيات بالواو أو الفاء جاءت كل صيغة في صفها.')}

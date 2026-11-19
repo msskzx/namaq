@@ -54,3 +54,4 @@ export function neededCut(words: string[], needed: number) {
   let seen = 0;
   return words.findIndex(word => spoken([word]).length > 0 && ++seen === needed) + 1;
 }
+

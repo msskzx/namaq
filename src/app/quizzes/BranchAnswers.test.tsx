@@ -5,7 +5,9 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render as renderUI, screen } from '@testing-library/react';
 import { NavSlotElement } from '@/components/common/NavBar';
 import { BranchFeedback, BranchInputs, BranchPreview } from './BranchAnswers';
+import { firstBoxes, writeBlank as write } from './writeBlankTesting';
 import { branchesCorrect, emptyBranchAnswers } from '@shared/quiz/score';
+import { branchNodes } from '@shared/quiz/branchAnswers';
 import { readBookmarks } from '@shared/bookmarks';
 import { branchesHref } from '@shared/quran/branches';
 import { SWRConfig } from 'swr';
@@ -77,13 +79,13 @@ describe('complete branch tree answers', () => {
     expect(screen.queryByText(/اكتب كل طرف فارغ/)).toBeNull();
   });
 
-  it('shows the example as the matrix, as many empty boxes as the answers chosen', () => {
+  it('shows the example as the matrix, with recite-mode boxes for as many answers as chosen', () => {
     const { rerender } = render(<BranchPreview leaves={2} ar={false} />);
-    expect(document.querySelectorAll('[data-quiz-matrix] > div')).toHaveLength(6);
-    expect(screen.getAllByText('You type this')).toHaveLength(2);
+    expect(firstBoxes('Node \\d+')).toHaveLength(2);
+    expect(screen.queryByRole('textbox')).toBeNull();
     expect(screen.queryByRole('button', { name: /Tree/ })).toBeNull();
     rerender(<BranchPreview leaves={1} ar={false} />);
-    expect(screen.getAllByText('You type this')).toHaveLength(1);
+    expect(firstBoxes('Node \\d+')).toHaveLength(1);
   });
 
   it('shows the beginnings before the shared root without answer-stage controls', () => {
@@ -93,8 +95,10 @@ describe('complete branch tree answers', () => {
     expect(screen.getByText('وقال')).toBeTruthy();
     // No way off the page mid-quiz.
     expect(container.querySelectorAll('a')).toHaveLength(0);
-    // The node 56:17 and 76:19 share is asked in both their rows.
-    expect(screen.getAllByRole('textbox')).toHaveLength(5);
+    // The node 56:17 and 76:19 share is asked in the row of each leaf under it, with a box for each of its words.
+    const shared = tree.children[1];
+    expect(firstBoxes('العقدة ٢')).toHaveLength(shared.children.length);
+    expect(screen.getAllByLabelText(/^العقدة ٢، الكلمة /)).toHaveLength(shared.children.length * shared.words.length);
   });
 
   it('keeps original spelling references out of the unanswered quiz tree', () => {
@@ -108,7 +112,7 @@ describe('complete branch tree answers', () => {
     render(<BranchInputs question={own} typed={[]} onChange={vi.fn()} onCheck={vi.fn()} ar />);
     expect(document.querySelector('[data-differs]')).toBeNull();
     expect(screen.queryByRole('link')).toBeNull();
-    expect(screen.getAllByRole('textbox')).toHaveLength(3);
+    expect(firstBoxes('العقدة \\S+')).toHaveLength(own.tree.children.length);
   });
 
   it('requires intermediate nodes and every leaf, with every word in each node', () => {
@@ -127,17 +131,17 @@ describe('complete branch tree answers', () => {
     expect(branchesCorrect(question, [typed[2], typed[1], typed[0], typed[3]])).toBe(false);
   });
 
-  it('shows fields at every non-root node without leaking their text or citations', () => {
+  it('shows recite-mode boxes at every non-root node without showing their text or citations', () => {
     const onChange = vi.fn();
     const onCheck = vi.fn();
     render(<BranchInputs question={question} typed={emptyBranchAnswers(question)} onChange={onChange} onCheck={onCheck} ar={false} />);
-    expect(screen.getAllByRole('textbox')).toHaveLength(5);
+    branchNodes(tree).forEach((_, index) => expect(firstBoxes(`Node ${index + 1}`).length).toBeGreaterThan(0));
     expect(screen.getAllByText('يَطُوفُ عَلَيْهِمْ').length).toBeGreaterThan(0);
     expect(screen.queryByText('غِلْمَانٌ لَهُمْ')).toBeNull();
     expect(screen.queryAllByRole('link')).toHaveLength(0);
     expect(screen.getByRole('button', { name: 'Check' }).hasAttribute('disabled')).toBe(true);
-    fireEvent.change(screen.getByRole('textbox', { name: 'Node 4' }), { target: { value: 'إذا رأيتهم' } });
-    expect(onChange).toHaveBeenCalledWith(['', '', '', 'إذا رأيتهم']);
+    write('Node 4', 'إذا رأيتهم');
+    expect(onChange).toHaveBeenLastCalledWith(['', '', '', 'إذا رأيتهم']);
     fireEvent.submit(screen.getByRole('button', { name: 'Check' }).closest('form')!);
     expect(onCheck).not.toHaveBeenCalled();
   });
