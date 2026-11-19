@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHexagonNodes, faPeopleGroup, faSeedling, faSignature, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faHexagonNodes, faPeopleGroup, faSeedling, faPenNib, faUser } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 import { useLanguage } from '@/components/language/LanguageContext';
 import translations from '@/components/language/translations';
@@ -78,7 +78,7 @@ function PersonDetailPage() {
           {person.fullName && (
             <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
               <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
-                <FontAwesomeIcon icon={faSignature} className="w-7 h-7 text-amber-500 me-2" />
+                <FontAwesomeIcon icon={faPenNib} className="w-7 h-7 text-amber-500 me-2" />
                 {t.fullName}</h2>
               <p className="text-gray-800 dark:text-gray-200 text-lg">{person.fullName}</p>
             </div>
@@ -86,7 +86,7 @@ function PersonDetailPage() {
           {person.kunya && (
             <div className="bg-gray-50 dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg p-4">
               <h2 className="text-3xl mb-4 text-gray-900 dark:text-gray-200">
-                <FontAwesomeIcon icon={faSignature} className="w-7 h-7 text-amber-500 me-2" />
+                <FontAwesomeIcon icon={faPenNib} className="w-7 h-7 text-amber-500 me-2" />
                 {t.kunya}</h2>
               <p className="text-gray-800 dark:text-gray-200 text-lg">{person.kunya}</p>
             </div>

@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { Check, X } from 'lucide-react-native';
+import { Check, X, type LucideIcon } from 'lucide-react-native';
 import IconButton from '@/ui/IconButton';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
@@ -14,7 +14,7 @@ import QuranWords from '@/components/quran/text/QuranWords';
  * With `onClear` it is a filter in use, removed by its ×.
  * A few views of one thing are tabs (ui/Tabs), not chips.
  */
-export default function Chip({ label, on, onPress, palette, role = 'button', check = false, lit = false, tint, quran = false, dashed = false, small = false, count, onClear, accessibilityLabel }: {
+export default function Chip({ label, on, onPress, palette, role = 'button', check = false, lit = false, tint, quran = false, dashed = false, small = false, count, onClear, Icon, accessibilityLabel }: {
   label: string; on: boolean; onPress?: () => void; palette: Palette;
   /** `radio` for one of a set (a setting), `tab` for one word of several, `button` for a filter. */
   role?: 'button' | 'radio' | 'tab' | 'text';
@@ -29,6 +29,8 @@ export default function Chip({ label, on, onPress, palette, role = 'button', che
   small?: boolean;
   /** A number after the label (how many ayat). */
   count?: number;
+  /** An icon before the label: «+ أضف» at the end of a row of removable chips, the same size as them. */
+  Icon?: LucideIcon;
   /** Removable: an × that clears this filter (a search's terms); the chip itself does not press. */
   onClear?: () => void;
   accessibilityLabel?: string;
@@ -49,6 +51,7 @@ export default function Chip({ label, on, onPress, palette, role = 'button', che
         borderWidth: 1, borderStyle: dashed ? 'dashed' : 'solid', borderColor: on || dashed ? accent : palette.rule,
         backgroundColor: filled ? accent : on ? palette.paperDeep : 'transparent', opacity: pressed ? 0.6 : 1 })}>
       {check && on && <Check size={13} color={color} />}
+      {Icon && <Icon size={15} color={color} />}
       {quran ? <QuranWords style={{ fontSize: 22, lineHeight: 40, color }}>{label}</QuranWords> : <Text style={{ fontSize: small ? 14 : 15, color }}>{label}</Text>}
       {count !== undefined && <Text style={{ color: on ? accent : palette.muted, fontSize: 11 }}>{num(count)}</Text>}
     </Tap>

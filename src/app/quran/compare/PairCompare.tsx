@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
-import { ArrowDown01, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, CircleHelp, Clapperboard, GalleryHorizontal, Pause, Play, RotateCcw, Send, UnfoldHorizontal, X } from 'lucide-react';
+import { BookOpen, ArrowDownWideNarrow, ArrowLeftRight, Bookmark, BookmarkCheck, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, CircleHelp, Clapperboard, GalleryHorizontal, Pause, Play, RotateCcw, Send, UnfoldHorizontal, X } from 'lucide-react';
 import Button from '@/components/common/Button';
 import Sheet from '@/components/common/Sheet';
 import Segmented from '@/components/common/Segmented';
@@ -230,7 +230,7 @@ function PairList({ pairs: listed, names, a, b, lead = a, autoFocus = false, onP
         {review && <TodoOnly a={lead} b={lead === a ? b : a} todo={todo} juz={juz} />}
       </CompareFilter>
       <Segmented label={ar ? 'ترتيب القائمة' : 'Sort the list'} className="w-full [&>*]:flex-1" options={[
-        { key: 'mushaf', label: ar ? 'ترتيب المصحف' : 'Mushaf order', icon: <ArrowDown01 size={16} aria-hidden />, current: !byCount, onClick: () => { setByCount(false); writeSort(false); } },
+        { key: 'mushaf', label: ar ? 'ترتيب المصحف' : 'Mushaf order', icon: <BookOpen size={16} aria-hidden />, current: !byCount, onClick: () => { setByCount(false); writeSort(false); } },
         { key: 'count', label: ar ? 'الأكثر تشابهًا' : 'Most similar', icon: <ArrowDownWideNarrow size={16} aria-hidden />, current: byCount, onClick: () => { setByCount(true); writeSort(true); } },
       ]} />
       <div ref={list} className="min-h-0 flex-1 overflow-y-auto">

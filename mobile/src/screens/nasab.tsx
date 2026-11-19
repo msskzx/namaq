@@ -89,7 +89,7 @@ export default function NasabScreen() {
             <Chip key={s} label={personName(findPerson(s)!)} on palette={palette}
               onClear={picked.length > 1 ? () => setPicked(picked.filter(p => p !== s)) : undefined} />
           ))}
-          <Button Icon={Plus} label="أضف" onPress={() => setAdding(true)} />
+          <Chip Icon={Plus} label="أضف" on={false} small palette={palette} onPress={() => setAdding(true)} />
         </View>
         {roots.map((root, r) => {
           // One person: his whole line. Several: from where they part, the shared fathers above folded into a line.

@@ -230,6 +230,15 @@ pieces. Plan and inventory: `docs/plans/shared-first.md`.
 - Feature pieces shared by several screens (the recite controls in
   `components/recite/`, the tree, the Quran text module) are built from the
   pieces in the shared folder too.
+- One view per feature (owner, 2026-11-19): a feature's view is one shared
+  component that its page, its feed card and its quiz all draw, never a copy
+  per place. Build it as a component from the start, since every feature gets
+  a feed card and a quiz. Example: `mobile/src/components/TiesChain.tsx` draws
+  a chain of ties in «بينه وبين…» and in the «صلة» feed card.
+- No icon draws a Latin letter or a Western digit (owner, 2026-11-19): this is
+  an Arabic app, so «A», «Aa», «AZ», «01» or «H1» in an icon reads as foreign.
+  `shared/noLatinIcons.test.ts` fails on any such lucide icon in the app or the
+  website; add an icon to its list when a new one draws a letter.
 - Every PR that touches UI has a line before `Records used:`:
   `Shared pieces: used Button, Sheet; added Chip` (or `none`).
 - `shared/sharedFirst.test.ts` counts, per file, what is drawn outside the
@@ -317,6 +326,7 @@ decision.
 | Recite mode (تسميع) | `useRecite` (state) + `RecitePill` (bar) in `src/components/recite/` and `mobile/src/components/recite/`; the pen rule is a setting (`PenSetting`) | `shared/quran/oneRecite.test.ts` |
 | Button | `src/components/common/Button.tsx` (website), `mobile/src/ui/Button.tsx` (app) | `shared/sharedFirst.test.ts` counts raw buttons per file (no new ones) |
 | Controls and boxes | `mobile/src/ui/` (app), `src/components/common/` (website) | `shared/sharedFirst.test.ts` |
+| Icon without Latin letters | lucide icons, minus those that draw a letter or a Western digit (owner, 2026-11-19) | `shared/noLatinIcons.test.ts` |
 | Surah name | `surahName` / `SURAH_NAMES` in `shared/quran/surahNames.ts` (pause form with tashkeel, «البَقَرَةْ»); `SURAH_TITLES` only for a mushaf page's surah headers; the plain `name` only for matching | `shared/quran/oneSurahName.test.ts` |
 
 ### Quran text

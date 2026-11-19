@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, BookA, Bookmark, BookOpen, BookOpenText, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, Link2, MessagesSquare, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpenText, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, Link2, MessagesSquare, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { bookmarkKind } from '@shared/bookmarkKind';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
@@ -17,6 +17,7 @@ import { feedBooks, hadithOfSlot, hasBooksCard, hasHadithCard, hasRajabCard, raj
 import { pageLabel, sayer } from '@shared/tarajim';
 import { GRAPH, PEOPLE, personName, tiePairs } from '@/lib/tarajim';
 import { chainSentence } from '@shared/tarajimGraph';
+import TiesChain from './TiesChain';
 import balaghaTerms from '@shared/data/quran/balaghaTerms';
 import { plainName, examplesOf } from '@shared/quran/balaghaTerms';
 import { BookWords, ExampleAyat, ayatName, quotesTitle } from './BalaghaTerm';
@@ -365,13 +366,17 @@ function TarajimPost({ day, slot, palette }: { day: number; slot: number; palett
  * that joins them, in one sentence with the pages that state each tie; the head opens «بينه وبين…» with the two picked.
  */
 function TiePost({ day, slot, palette }: { day: number; slot: number; palette: Palette }) {
+  const { width } = useWindowDimensions();
   const pair = tieOfSlot(tiePairs(), day, slot);
   if (!pair) return null;
+  const nodes = [...new Set(pair.steps.flatMap(step => [step.from, step.to]))];
   const name = (slug: string) => personName(GRAPH.nodes.get(slug)!);
   const open = () => router.push({ pathname: '/between', params: { slugs: `${pair.a},${pair.b}` } });
   return (
     <Post palette={palette} head={<PostHead Icon={Link2} title="صلة" sub={`${name(pair.a)} و${name(pair.b)}`} palette={palette} open={{ onPress: open, label: `ارسم الصلة بين ${name(pair.a)} و${name(pair.b)}` }} />}>
       <View style={{ padding: 14, gap: 6 }}>
+        {/* The same drawing as «بينه وبين…» (owner, 2026-11-19: the feature exists, so the card shows it). */}
+        <TiesChain nodes={nodes} steps={pair.steps} first={pair.a} picked={[pair.a, pair.b]} width={Math.min(width - 60, 480)} palette={palette} inCard />
         <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{chainSentence(GRAPH, pair.steps, personName)}.</Text>
         <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{[...new Set(pair.steps.map(step => pageLabel(step.link.refs)))].join(' · ')}</Text>
       </View>
@@ -688,9 +693,9 @@ function TermPost({ day, slot, palette }: { day: number; slot: number; palette: 
   const example = examples[(day + slot) % Math.max(examples.length, 1)];
   const open = () => toTab({ pathname: '/term', params: { name: term.name } });
   return (
-    <Post palette={palette} head={<PostHead Icon={BookA} title="من مصطلحات البلاغة" sub={quote.book === 'itqan' ? 'الإتقان للسيوطي' : 'تلخيص المفتاح للقزويني'} palette={palette} open={{ onPress: open, label: `افتح ${name}` }} />}
+    <Post palette={palette} head={<PostHead Icon={BookOpenText} title="من مصطلحات البلاغة" sub={quote.book === 'itqan' ? 'الإتقان للسيوطي' : 'تلخيص المفتاح للقزويني'} palette={palette} open={{ onPress: open, label: `افتح ${name}` }} />}
       actions={<>
-        <Action Icon={BookA} label={`${name}: تعريفه وأمثلته`} onPress={open} palette={palette} />
+        <Action Icon={BookOpenText} label={`${name}: تعريفه وأمثلته`} onPress={open} palette={palette} />
         <Action Icon={ListTree} label="مصطلحات البلاغة" onPress={() => toTab('/terms')} palette={palette} />
       </>}
       press={{ onPress: open, label: `${name}: تعريفه وأمثلته` }}>
