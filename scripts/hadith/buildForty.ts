@@ -153,7 +153,7 @@ function nawawiEntries(pages: Page[]) {
 }
 
 type Ref = number | { n: number; partial?: boolean; routes?: string[] };
-interface MapEntry { n: number; companion: string; named: string[]; errata?: [string, string][]; alsoFrom?: string[]; bukhari?: Ref[]; muslim?: Ref[]; partial?: boolean; note?: string }
+interface MapEntry { n: number; companion: string; named: string[]; errata?: [string, string, string][]; alsoFrom?: string[]; bukhari?: Ref[]; muslim?: Ref[]; partial?: boolean; note?: string }
 const refOf = (ref: Ref) => (typeof ref === 'number' ? { n: ref } : ref);
 
 export function buildForty() {
