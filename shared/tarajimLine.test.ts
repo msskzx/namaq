@@ -35,6 +35,11 @@ describe('meetingOf', () => {
     expect(meet('talhah-ibn-ubaydullah', 'az-zubayr-ibn-al-awwam')).toBe('مرة');
     expect(meet('hamzah-ibn-abd-al-muttalib', 'safiyyah-bint-abd-al-muttalib')).toBe('عبد المطلب');
   });
+
+  it('meets at a father one line names by kunya and name and the other by his name alone', () => {
+    // Sa'id ibn al-As's grandfather is «أبي أحيحة سعيد»; Khalid ibn Sa'id is that Sa'id's son.
+    expect(meet('said-ibn-al-as-ibn-said', 'khalid-ibn-said')).toBe('أبي أحيحة سعيد');
+  });
 });
 
 describe('nasabTree', () => {

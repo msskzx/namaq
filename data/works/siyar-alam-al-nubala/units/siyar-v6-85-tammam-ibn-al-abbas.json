@@ -1,0 +1,317 @@
+{
+  "unit": {
+    "id": "siyar-v6-85-tammam-ibn-al-abbas",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٨٥"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ta_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "443",
+      "layer": "MAIN",
+      "exact": "٨٥ - تَمَّامُ بنُ العَبَّاسِ بنِ عَبْدِ المُطَّلِبِ الهَاشِمِيُّ"
+    },
+    {
+      "id": "sp_ta_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "443",
+      "layer": "MAIN",
+      "exact": "تَمَّامُ بنُ العَبَّاسِ بنِ عَبْدِ المُطَّلِبِ الهَاشِمِيُّ",
+      "prefix": "٨٥ - "
+    },
+    {
+      "id": "sp_ta_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "443",
+      "layer": "MAIN",
+      "exact": "تَمَّامُ بنُ",
+      "prefix": "٨٥ - "
+    },
+    {
+      "id": "sp_ta_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "443",
+      "layer": "MAIN",
+      "exact": "العَبَّاسِ بنِ عَبْدِ المُطَّلِبِ",
+      "prefix": "تَمَّامُ بنُ "
+    },
+    {
+      "id": "sp_ta_shaqiq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "443",
+      "layer": "MAIN",
+      "exact": "مِنْ أُمِّ وَلَدٍ، وَهُوَ شَقِيْقُ كَثِيْرٍ"
+    },
+    {
+      "id": "sp_ta_shaqiq_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "443",
+      "layer": "MAIN",
+      "exact": "شَقِيْقُ كَثِيْرٍ",
+      "prefix": "وَهُوَ "
+    },
+    {
+      "id": "sp_ta_batsh_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "443",
+      "layer": "MAIN",
+      "exact": "قَالَ ابْنُ سَعْدٍ",
+      "suffix": ": كَانَ تَمَّامٌ"
+    },
+    {
+      "id": "sp_ta_batsh",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "443",
+      "layer": "MAIN",
+      "exact": "كَانَ تَمَّامٌ مِنْ أَشَدِّ أَهْلِ زَمَانِهِ بَطْشاً"
+    },
+    {
+      "id": "sp_ta_batsh_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "443",
+      "layer": "MAIN",
+      "exact": "تَمَّامٌ",
+      "prefix": "كَانَ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ta0",
+      "unit": "siyar-v6-85-tammam-ibn-al-abbas",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ta_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ta_batsh",
+      "unit": "siyar-v6-85-tammam-ibn-al-abbas",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ta_batsh_frame"
+      ],
+      "origin": {
+        "mention": "m_ta_batsh_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ta_name",
+      "report": "r_ta0",
+      "spans": [
+        "sp_ta_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ta_shaqiq",
+      "report": "r_ta0",
+      "spans": [
+        "sp_ta_shaqiq"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ta_batsh",
+      "report": "r_ta_batsh",
+      "spans": [
+        "sp_ta_batsh"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ta",
+      "parent": "sp_ta_name",
+      "exact": "تَمَّامُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ta_father",
+      "parent": "sp_ta_name",
+      "exact": "العَبَّاسِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ta_s",
+      "parent": "sp_ta_shaqiq",
+      "exact": "وَهُوَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ta_kathir",
+      "parent": "sp_ta_shaqiq",
+      "exact": "كَثِيْرٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ta_batsh_by",
+      "parent": "sp_ta_batsh_frame",
+      "exact": "ابْنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ta_b",
+      "parent": "sp_ta_batsh",
+      "exact": "تَمَّامٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ta",
+      "mention": "m_ta",
+      "agent": "tammam-ibn-al-abbas",
+      "basis": [
+        {
+          "span": "sp_ta_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ta_father",
+      "mention": "m_ta_father",
+      "agent": "al-abbas-ibn-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_ta_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ta_s",
+      "mention": "m_ta_s",
+      "agent": "tammam-ibn-al-abbas",
+      "basis": [
+        {
+          "span": "sp_ta_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ta_kathir",
+      "mention": "m_ta_kathir",
+      "agent": "kathir-ibn-al-abbas",
+      "basis": [
+        {
+          "span": "sp_ta_shaqiq_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ta_b",
+      "mention": "m_ta_b",
+      "agent": "tammam-ibn-al-abbas",
+      "basis": [
+        {
+          "span": "sp_ta_batsh_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ta_name",
+      "subject": "m_ta",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ta_name"
+        ]
+      },
+      "restsOn": [
+        "st_ta_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ta_sex",
+      "subject": "m_ta",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ta_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ta_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ta_father",
+      "subject": "m_ta",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ta_father"
+      },
+      "restsOn": [
+        "st_ta_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ta_kathir",
+      "subject": "m_ta_s",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_ta_kathir"
+      },
+      "restsOn": [
+        "st_ta_shaqiq"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ta_v_batsh",
+      "subject": "m_ta_b",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ta_batsh"
+        ]
+      },
+      "restsOn": [
+        "st_ta_batsh"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

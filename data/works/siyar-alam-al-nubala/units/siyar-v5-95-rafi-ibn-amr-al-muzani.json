@@ -1,0 +1,229 @@
+{
+  "unit": {
+    "id": "siyar-v5-95-rafi-ibn-amr-al-muzani",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٩٥"
+    }
+  },
+  "spans": [
+    {
+      "id": "hd",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "478",
+      "layer": "MAIN",
+      "exact": "٩٥ - رَافِعُ بنُ عَمْرٍو المُزَنِيُّ البَصْرِيُّ"
+    },
+    {
+      "id": "n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "478",
+      "layer": "MAIN",
+      "exact": "رَافِعُ بنُ عَمْرٍو المُزَنِيُّ"
+    },
+    {
+      "id": "sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "478",
+      "layer": "MAIN",
+      "exact": "رَافِعُ بنُ",
+      "prefix": "-"
+    },
+    {
+      "id": "fa",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "478",
+      "layer": "MAIN",
+      "exact": "عَمْرٍو المُزَنِيُّ",
+      "prefix": "بنُ"
+    },
+    {
+      "id": "br",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "478",
+      "layer": "MAIN",
+      "exact": "أَخُوْ عَائِذٍ، فَآخَرُ، وَلَهُمَا صُحْبَةٌ."
+    },
+    {
+      "id": "br_a",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "478",
+      "layer": "MAIN",
+      "exact": "عَائِذٍ",
+      "prefix": "أَخُوْ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r0",
+      "unit": "siyar-v5-95-rafi-ibn-amr-al-muzani",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "hd",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_1",
+      "report": "r0",
+      "spans": [
+        "n1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_7",
+      "report": "r0",
+      "spans": [
+        "br"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_s2",
+      "parent": "n1",
+      "exact": "رَافِعُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o5",
+      "parent": "n1",
+      "exact": "عَمْرٍو",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_s8",
+      "parent": "br",
+      "exact": "أَخُوْ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o9",
+      "parent": "br",
+      "exact": "عَائِذٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_s2",
+      "mention": "m_s2",
+      "agent": "rafi-ibn-amr-al-muzani",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o5",
+      "mention": "m_o5",
+      "agent": "amr-al-muzani",
+      "basis": [
+        {
+          "span": "fa",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s8",
+      "mention": "m_s8",
+      "agent": "rafi-ibn-amr-al-muzani",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o9",
+      "mention": "m_o9",
+      "agent": "aidh-ibn-amr-al-muzani",
+      "basis": [
+        {
+          "span": "br_a",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_3",
+      "subject": "m_s2",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "n1"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_4",
+      "subject": "m_s2",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sex"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_6",
+      "subject": "m_s2",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_o5"
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_10",
+      "subject": "m_s8",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_o9"
+      },
+      "restsOn": [
+        "st_7"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

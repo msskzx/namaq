@@ -38,12 +38,15 @@ const COMPOUND = /^(?:عبد|ابي|ابو|ام|ذي|ذو|امري|امرئ)$/u;
 
 /**
  * Two bare names for the same father: the same, or one the other with a laqab after it («مالك الأغر» is «مالك»).
- * Never for a name of two words («عبد الله» is not «عبد»), and the added word must be a laqab («ال…»).
+ * Never for a name of two words («عبد الله» is not «عبد»), and the added word must be a laqab («ال…»). A kunya
+ * before the name («أبي أحيحة سعيد» is «سعيد») is the same man too.
  */
 export function sameName(a: string, b: string) {
   if (a === b) return true;
   const [short, long] = a.length < b.length ? [a, b] : [b, a];
   const words = long.split(' ');
+  // A kunya before the name is the same man: Sa'id ibn al-As's grandfather «أبي أحيحة سعيد» is Khalid's father «سعيد».
+  if (words.length > 2 && /^اب[ويا]$/u.test(words[0]) && words.slice(2).join(' ') === short) return true;
   return words.length === 2 && words[0] === short && !COMPOUND.test(short) && words[1].startsWith('ال');
 }
 
