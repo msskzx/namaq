@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { SahihLook } from '@/components/Sahih';
+import { SAHIH } from '@/lib/sahih';
 import { ScrollView, View, useWindowDimensions } from 'react-native';
 import { Check, Search } from 'lucide-react-native';
 import type { QuizLook } from '@shared/quiz/choiceKinds';
@@ -188,6 +190,7 @@ export function LookView({ look, shown, palette }: { look: QuizLook; shown: bool
     case 'virtues': return <VirtuesLook slugs={look.slugs} mark={shown ? look.mark : undefined} palette={palette} />;
     case 'terms': return <TermsLook names={look.names} mark={shown ? look.mark : undefined} palette={palette} />;
     case 'hadith': return <HadithLook mark={shown ? look.mark : undefined} palette={palette} />;
+    case 'sahih': return <SahihLook book={SAHIH[look.book]} mark={shown ? look.mark : undefined} palette={palette} />;
     case 'story': { const story = storyOf(look.slug); return story ? <View style={{ gap: 14 }}><StoryView story={story} palette={palette} titled /></View> : null; }
     case 'battle': { const battle = battleOf(look.slug); return battle ? <View style={{ gap: 14 }}><BattleView battle={battle} palette={palette} /></View> : null; }
     case 'word': return <View style={bleed}><GharibBody key={`${look.key}/${look.word}`} target={{ key: look.key, word: look.word }} palette={palette} /></View>;

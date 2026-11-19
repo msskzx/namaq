@@ -118,26 +118,5 @@ export function searchSahih(books: { index: SahihIndex; text?: SahihText | null 
   return { babs, hadith };
 }
 
-/** Four-word runs of a text, marks set aside: two texts that share one carry the same words. */
-const runs = (text: string) => {
-  const words = plainText(text).split(' ');
-  return new Set(words.slice(0, Math.max(0, words.length - 3)).map((_, i) => words.slice(i, i + 4).join(' ')));
-};
-const routeRuns = new WeakMap<SahihRoute, Set<string>>();
-const runsOf = (route: SahihRoute) => {
-  if (!routeRuns.has(route)) routeRuns.set(route, runs(splitRoute(route).words));
-  return routeRuns.get(route)!;
-};
-
-/**
- * The kitabs a wrong choice may come from for «في أيّ كتاب من صحيح البخاري هذا الحديث؟»: those with no hadith sharing a
- * four-word run of its words, so a kitab where al-Bukhari brings it again is never offered as wrong.
- */
-export function kitabsWithout(text: SahihText, words: string): number[] {
-  const mine = runs(words);
-  return text.kitabs.filter(file => !file.hadith.some(item => item.routes.some(route => {
-    const theirs = runsOf(route);
-    for (const run of mine) if (theirs.has(run)) return true;
-    return false;
-  }))).map(file => file.n);
-}
+/** A book's title, author and edition without its kitabs, for a page or card that shows one hadith (the index stays behind). */
+export const bookOf = ({ slug, title, author, died, edition, shamela, headingsBy }: SahihIndex): SahihBook => ({ slug, title, author, died, edition, shamela, headingsBy });

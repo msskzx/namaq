@@ -71,6 +71,9 @@ import { around as aroundSetting, branchView, penRule, prayerPlace, prayerSettin
 import { showsOtherView } from '@shared/quran/branchView';
 import { timesFor, useMinute } from '@/lib/prayer';
 import { bookState, useBooks } from '@/lib/books';
+import { SAHIH, isSahihSlug, useSahihText } from '@/lib/sahih';
+import { SahihHadithView, sahihPage } from '@/components/Sahih';
+import { findHadith, placeOf, type SahihSlug } from '@shared/sahih';
 import type { BookId } from '@shared/books';
 import { BookCard, Shelf, TUHFA } from '@/screens/books';
 import { IltifatActions, IltifatScene } from './Iltifat';
@@ -744,6 +747,34 @@ function HadithPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
+/** Every hadith number of a Sahih, from its kitabs, for its card; drawn only once its text is on the phone. */
+const sahihNumbers = (slug: SahihSlug) => SAHIH[slug].kitabs.flatMap(kitab => (kitab.from ? Array.from({ length: kitab.to - kitab.from + 1 }, (_, i) => String(kitab.from + i)) : []));
+
+/**
+ * A hadith of Sahih al-Bukhari or Sahih Muslim whole (owner's sketch, 2026-11-19): the head names the book and its kitab › bab
+ * (in Muslim the bab is al-Nawawi's, and says so), the hadith drawn as its page draws it; the head opens its page.
+ */
+function SahihPost({ slug, id, palette }: { slug: SahihSlug; id: string; palette: Palette }) {
+  const { text } = useSahihText(slug);
+  const book = SAHIH[slug];
+  const found = text ? findHadith(text, Number(id)) : undefined;
+  const place = placeOf(book, Number(id));
+  if (!found || !place || found.hadith.n !== Number(id)) return null;
+  const open = () => toTab({ pathname: '/hadith-sahih', params: { book: slug, n: id } });
+  const where = `${place.kitab.title}${place.bab?.title ? ` › ${place.bab.title}` : ''}${book.headingsBy === 'nawawi' && place.bab?.title ? ' (تبويب النووي)' : ''}`;
+  return (
+    <Post palette={palette} head={<PostHead Icon={MessagesSquare} title={`من ${book.title}`} sub={where} palette={palette} open={{ onPress: open, label: `افتح ${book.title} ${num(Number(id))}` }} />}
+      actions={<>
+        <Action Icon={MessagesSquare} label={`افتح ${book.title} ${num(Number(id))}`} onPress={open} palette={palette} />
+        <Action Icon={ExternalLinkIcon} label={`المصدر: ${book.title}`} onPress={() => openExternal(sahihPage(book, found.hadith.routes[0].shamela))} palette={palette} />
+      </>}>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
+        <SahihHadithView book={book} hadith={found.hadith} palette={palette} />
+      </View>
+    </Post>
+  );
+}
+
 /** The lines of a term's definition a card shows before its page. */
 const TERM_LINES = 5;
 
@@ -901,6 +932,8 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   term: () => balaghaTerms.terms.map(term => term.name),
   scene: () => sceneList().map(scene => scene.key),
   hadith: () => FEED_FORTY.map(entry => String(entry.n)),
+  bukhari: () => sahihNumbers('bukhari'),
+  muslim: () => sahihNumbers('muslim'),
   rajab: () => RAJAB_PASSAGES.map(rajabId),
   prophets: () => STORY_GROUPS.map(group => `${group.slug}-${group.phase}`),
   sira: () => STORIES.filter(story => story.reports[0]).map(story => story.slug),
@@ -934,6 +967,7 @@ function ContentPost({ kind, item, day, palette }: { kind: ListKind; item: strin
     case 'scene': return <ScenePost id={item} palette={palette} />;
     case 'hadith': return <HadithPost id={item} palette={palette} />;
     case 'rajab': return <RajabPost id={item} palette={palette} />;
+    case 'bukhari': case 'muslim': return <SahihPost slug={kind} id={item} palette={palette} />;
     case 'prophets': { const at = item.lastIndexOf('-'); return <StoryPost slug={item.slice(0, at)} phase={Number(item.slice(at + 1))} palette={palette} />; }
     case 'sira': return <SiraPost id={item} palette={palette} />;
     case 'moment': return <MomentPost id={item} palette={palette} />;
@@ -1105,7 +1139,7 @@ export function Feed({ palette, nearEnd, screenBottom, only = null }: { palette:
         item = items[slot.kind as ListKind]?.[at];
         key = `${slot.kind}:${item ?? at}`;
         const note = NOTE_OF[slot.kind];
-        post = item !== undefined && (!note || noteBookOn(note)) ? <ContentPost kind={slot.kind as ListKind} item={item} day={day} palette={palette} /> : null;
+        post = item !== undefined && (!note || noteBookOn(note)) && (!isSahihSlug(slot.kind) || bookState(slot.kind) === 'on') ? <ContentPost kind={slot.kind as ListKind} item={item} day={day} palette={palette} /> : null;
       }
       if (!post) return;
       if (removedKeys.has(key)) {

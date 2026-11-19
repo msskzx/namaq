@@ -70,6 +70,7 @@ export type ChoiceQuestion = {
  * - `virtues`: the virtues each person's entry gives, the asked one marked.
  * - `terms`: the definition of each balagha term offered, the asked one marked.
  * - `hadith`: al-Nawawi's Forty with a search; the asked hadith once marked.
+ * - `sahih`: a Sahih's kitabs and bab headings with a search; the asked kitab once marked.
  * - `story` / `battle`: the sira story or battle whole, as its page draws it.
  * - `word`: the meaning books on a word of an ayah (the reader's word sheet).
  * - `tafsir`: al-Sa'di on each offered ayah, the asked one marked.
@@ -82,6 +83,7 @@ export type QuizLook =
   | { view: 'virtues'; slugs: string[]; mark?: { slug: string; index: number } }
   | { view: 'terms'; names: string[]; mark?: string }
   | { view: 'hadith'; mark?: number }
+  | { view: 'sahih'; book: 'bukhari' | 'muslim'; mark?: number }
   | { view: 'story'; slug: string; mark?: undefined }
   | { view: 'battle'; slug: string; mark?: undefined }
   | { view: 'word'; key: string; word: number; mark?: undefined }

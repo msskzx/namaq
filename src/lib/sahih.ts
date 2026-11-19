@@ -1,6 +1,8 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import type { SahihIndex, SahihSlug, SahihText } from '@shared/sahih';
+import { bookOf, findHadith, lastLink, placeOf, searchSahih, splitRoute, type SahihHadith, type SahihHit, type SahihIndex, type SahihSlug, type SahihText } from '@shared/sahih';
+import { num } from '@shared/quran/arabicNumber';
+import { FORTY } from '@/lib/forty';
 import bukhariIndex from '@shared/data/hadith/bukhari.json';
 import muslimIndex from '@shared/data/hadith/muslim.json';
 
@@ -15,3 +17,47 @@ export function sahihText(slug: SahihSlug): Promise<SahihText> {
   if (!texts.has(slug)) texts.set(slug, readFile(path.join(process.cwd(), 'data', 'hadith', 'sahih', `${slug}.json`), 'utf8').then(raw => JSON.parse(raw) as SahihText));
   return texts.get(slug)!;
 }
+
+/** The ones of al-Nawawi's Forty whose records hold this hadith, so its page links to them. */
+export const fortyOf = (slug: SahihSlug, n: number) => FORTY.entries.filter(entry => entry.records.some(record => record.book === slug && record.number === n)).map(({ n: at, heading }) => ({ n: at, heading }));
+
+/** A hadith as a kitab's list shows it: numbers, the narrator, the opening of its words. */
+export const hadithItem = (hadith: SahihHadith) => ({
+  n: hadith.n, also: hadith.also, from: lastLink(hadith.routes[0]), start: splitRoute(hadith.routes[0]).words.trim().slice(0, 400), routes: hadith.routes.length,
+});
+export type SahihItem = ReturnType<typeof hadithItem>;
+
+/** A search over both books, each hit with its line: the bab heading, or the hadith's opening. */
+export async function searchBoth(query: string) {
+  const books = await Promise.all(SAHIH_SLUGS.map(async slug => ({ index: SAHIH[slug], text: await sahihText(slug) })));
+  const { babs, hadith } = searchSahih(books, query, 30);
+  const where = (hit: SahihHit) => `${SAHIH[hit.book].title}${hit.n ? ` ${num(hit.n)}` : ''}، ${SAHIH[hit.book].kitabs.find(kitab => kitab.n === hit.kitab)?.title ?? ''}`;
+  return {
+    babs: babs.map(hit => ({ ...hit, where: where(hit), line: SAHIH[hit.book].kitabs.find(kitab => kitab.n === hit.kitab)?.babs[hit.bab ?? 0]?.title ?? '' })),
+    hadith: hadith.map(hit => {
+      const found = findHadith(books.find(book => book.index.slug === hit.book)!.text, hit.n);
+      return { ...hit, where: where(hit), line: found ? hadithItem(found.hadith).start : '' };
+    }),
+  };
+}
+export type SahihSearch = Awaited<ReturnType<typeof searchBoth>>;
+
+/**
+ * The «من صحيح البخاري» and «من صحيح مسلم» cards (the app's SahihPost), taking turns batch by batch, each a hadith of the day's
+ * turn with its kitab › bab; the books' texts stay on the server.
+ */
+export async function sahihCards(day: number, slots: number[]) {
+  return (await Promise.all(slots.map(async slot => {
+    const slug = SAHIH_SLUGS[slot % SAHIH_SLUGS.length];
+    const book = bookOf(SAHIH[slug]);
+    const text = await sahihText(slug);
+    const all = text.kitabs.flatMap(file => file.hadith);
+    if (!all.length) return [];
+    const turn = Math.floor(slot / SAHIH_SLUGS.length);
+    const hadith = all[(((day * 37 + turn) % all.length) + all.length) % all.length];
+    const place = placeOf(SAHIH[slug], hadith.n);
+    const where = place ? `${place.kitab.title}${place.bab?.title ? ` › ${place.bab.title}` : ''}${book.headingsBy === 'nawawi' && place.bab?.title ? ' (تبويب النووي)' : ''}` : '';
+    return [{ slot, kind: slug, book, hadith, where }];
+  }))).flat();
+}
+export type SahihCard = Awaited<ReturnType<typeof sahihCards>>[number];

@@ -241,7 +241,7 @@ export function buildBukhari() {
   const heads = headings(book, entries.slice(startAt), isKitab);
   const marks = bukhariMarks(book, heads[0].at, 7563, JSON.parse(readFileSync('data/hadith/bukhari-numbers.json', 'utf8')));
   const cuts = marks.map((m, i) => ({ start: m.at, end: marks[i + 1]?.at ?? book.length, n: m.n, also: m.also }));
-  return assemble(book, heads, cuts, { slug: 'bukhari', title: BOOKS.bukhari.title, author: 'محمد بن إسماعيل البخاري', died: 256, edition: BOOKS.bukhari.edition, shamela: BOOKS.bukhari.id, headingsBy: 'author', kitabs: [] }, false);
+  return assemble(book, heads, cuts, { slug: 'bukhari', title: BOOKS.bukhari.title, author: 'محمد بن إسماعيل البخاري', died: 256, edition: BOOKS.bukhari.edition, shamela: BOOKS.bukhari.id, headingsBy: 'author' }, false);
 }
 
 export function buildMuslim() {
@@ -250,10 +250,10 @@ export function buildMuslim() {
   // Muslim's own introduction comes first: Abd al-Baqi numbers its reports 1–7, before «كتاب الإيمان» opens at 8.
   const startAt = entries.findIndex(e => /مقدمة المصنف/.test(e.title));
   const isKitab = (e: TocEntry) => e.level === 1;
-  const heads = headings(book, entries.slice(startAt), isKitab).map(head => ({ ...head, title: head.level === 1 ? head.title.replace(/^[٠-٩]+ ?- ?/, '').replace(/^مقدمة المصنف$/, 'المقدمة') : head.title.replace(/^\([٠-٩]+\) ?/, '') }));
+  const heads = headings(book, entries.slice(startAt), isKitab).map(head => ({ ...head, title: head.level === 1 ? head.title.replace(/^[٠-٩]+ ?- ?/, '').replace(/^مقدمة المصنف$/, 'المقدمة') : head.title.replace(/^\([٠-٩]+\) ?/, '').replace(/^[٠-٩]+ ?- ?/, '') }));
   const routes = muslimMarks(book, heads[0].at, 3033, JSON.parse(readFileSync('data/hadith/muslim-numbers.json', 'utf8')));
   const cuts = routes.map((r, i) => ({ start: r.at, end: routes[i + 1]?.at ?? book.length, n: r.n, route: r.label, also: r.also }));
-  return assemble(book, heads, cuts, { slug: 'muslim', title: BOOKS.muslim.title, author: 'مسلم بن الحجاج النيسابوري', died: 261, edition: BOOKS.muslim.edition, shamela: BOOKS.muslim.id, headingsBy: 'nawawi', kitabs: [] }, true);
+  return assemble(book, heads, cuts, { slug: 'muslim', title: BOOKS.muslim.title, author: 'مسلم بن الحجاج النيسابوري', died: 261, edition: BOOKS.muslim.edition, shamela: BOOKS.muslim.id, headingsBy: 'nawawi' }, true);
 }
 
 if (process.argv[1]?.endsWith('buildSahihayn.ts')) {
