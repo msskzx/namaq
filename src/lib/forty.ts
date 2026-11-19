@@ -3,7 +3,7 @@
 import forty from '@shared/data/hadith/forty.json';
 import rajab from '@shared/data/hadith/ibnRajab.json';
 import units from '@shared/data/hadith/units.json';
-import { fromSahihayn, rajabFeedPassages, recordedIn, sayingStart, type AppForty, type BookBox, type AppHadith, type FortyEntry, type RajabChapter, type RajabParagraph } from '@shared/hadith';
+import { drawnBukhari, fromSahihayn, rajabFeedPassages, recordedIn, sayingStart, type AppForty, type AppIsnad, type BookBox, type AppHadith, type FortyEntry, type RajabChapter, type RajabParagraph } from '@shared/hadith';
 
 export const FORTY = forty as AppForty;
 const RAJAB = rajab as RajabChapter[];
@@ -34,13 +34,17 @@ const turnOf = (day: number, at: number, count: number) => ((((day * 37 + at) % 
 
 /**
  * The «الحديث» cards (the app's HadithPost, RajabPost and RecordedPost), taking turns batch by batch: one of the Forty in
- * al-Nawawi's words (Ibn Rajab's for his eight), a passage of Ibn Rajab's explanation of one, or the books that record one («من أخرجه»).
+ * al-Nawawi's words (Ibn Rajab's for his eight), a passage of Ibn Rajab's explanation of one, the books that record one («من أخرجه»),
+ * or al-Bukhari's chain for one drawn («من الإسناد», the app's IsnadPost).
  */
 export type HadithCard = { slot: number; entry: Pick<FortyEntry, 'n' | 'heading' | 'companion' | 'text' | 'shamela' | 'source'>; books: Pick<FortyBooks, 'nawawi' | 'ibnrajab'> } & (
   | { kind: 'hadith' }
   | { kind: 'rajab'; passage: RajabParagraph[] }
-  | { kind: 'recorded'; boxes: BookBox[] });
-const KINDS = ['hadith', 'rajab', 'recorded'] as const;
+  | { kind: 'recorded'; boxes: BookBox[] }
+  | { kind: 'isnad'; record: { number: number; shamela: number; isnad: AppIsnad; saying: string }; size: AppHadith['size']; bukhari: FortyBooks['bukhari'] });
+const KINDS = ['hadith', 'rajab', 'recorded', 'isnad'] as const;
+/** The hadith with al-Bukhari's chain drawn, for «من الإسناد». */
+const FEED_CHAINS = FEED_FORTY.filter(entry => drawnBukhari(entry));
 
 export function hadithCards(day: number, slots: number[]): HadithCard[] {
   const books = { nawawi: FORTY.books.nawawi, ibnrajab: FORTY.books.ibnrajab };
@@ -53,6 +57,20 @@ export function hadithCards(day: number, slots: number[]): HadithCard[] {
       // Half the list on from the hadith card of its group, so the two never show the same hadith side by side.
       const entry = FEED_FORTY[turnOf(day, turn + Math.ceil(FEED_FORTY.length / 2), FEED_FORTY.length)];
       return [{ slot, kind, entry: short(entry), books, boxes: recordedIn(entry) }];
+    }
+    if (kind === 'isnad') {
+      if (!FEED_CHAINS.length) return [];
+      // A quarter of the list on, and past the group's hadith, Ibn Rajab and «من أخرجه» cards, so it never repeats one of them.
+      const all = rajabPassages();
+      const taken = [
+        ...(FEED_FORTY.length ? [FEED_FORTY[turnOf(day, turn, FEED_FORTY.length)].n, FEED_FORTY[turnOf(day, turn + Math.ceil(FEED_FORTY.length / 2), FEED_FORTY.length)].n] : []),
+        ...(all.length ? [all[turnOf(day, turn, all.length)].chapter.n] : []),
+      ];
+      const start = turnOf(day, turn + Math.ceil(FEED_CHAINS.length / 4), FEED_CHAINS.length);
+      const entry = Array.from({ length: FEED_CHAINS.length }, (_, i) => FEED_CHAINS[(start + i) % FEED_CHAINS.length]).find(each => !taken.includes(each.n)) ?? FEED_CHAINS[start];
+      const record = drawnBukhari(entry)!;
+      return [{ slot, kind, entry: short(entry), books, size: (units as AppHadith).size, bukhari: FORTY.books.bukhari,
+        record: { number: record.number, shamela: record.shamela, isnad: record.isnad!, saying: record.text.slice(record.isnadEnd) } }];
     }
     if (kind === 'hadith') return FEED_FORTY.length ? [{ slot, kind: 'hadith', entry: short(FEED_FORTY[turnOf(day, turn, FEED_FORTY.length)]), books }] : [];
     const all = rajabPassages();

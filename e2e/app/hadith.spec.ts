@@ -6,6 +6,8 @@ test('the hadith tab lists the Forty, and one opens with its chain drawn or its 
   await open(page, '/');
   await tab(page, 'الحديث').click();
   await expect(page.getByRole('heading', { name: 'الحديث', exact: true })).toBeVisible();
+  // The tab lists the books (the hadith tab redesign); the Forty is one of them.
+  await page.getByRole('link', { name: 'الأربعون النووية', exact: true }).click();
   await expect(page.getByRole('link', { name: 'الحديث الأول، عن عمر بن الخطاب' })).toBeVisible();
   await page.getByRole('link', { name: 'الحديث الخامس عشر، عن أبي هريرة' }).click();
   await expect(page).toHaveURL(/\/hadith-forty\?n=15/);
@@ -16,15 +18,16 @@ test('the hadith tab lists the Forty, and one opens with its chain drawn or its 
   await page.getByRole('tab', { name: 'النص كاملًا' }).click();
   await expect(page.getByLabel(/^الإسناد: البخاري/)).toHaveCount(0);
   await expect(page.getByText(/^٦٠١٨ - /)).toBeVisible();
-  // The hadith button tapped on a hadith goes back to the list.
+  // The hadith button tapped on a hadith goes back to the list it was opened from.
   await tab(page, 'الحديث').click();
-  await expect(page).toHaveURL(/\/hadith$/);
+  await expect(page).toHaveURL(/\/hadith-book\?book=forty$/);
 });
 
 // Ibn Rajab's eight (Jami' al-'Ulum wal-Hikam, chapters 43–50) under the Forty: his text, and the books he names marked as his.
 test('the hadith tab lists the eight Ibn Rajab adds, each opening on his text and the books he names', async ({ page }) => {
   await open(page, '/');
   await tab(page, 'الحديث').click();
+  await page.getByRole('link', { name: 'الأربعون النووية', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'ما زاده ابن رجب' })).toBeVisible();
   await page.getByRole('link', { name: /^الحديث السابع والأربعون، عن المقدام/ }).click();
   await expect(page).toHaveURL(/\/hadith-forty\?n=47/);
@@ -92,6 +95,18 @@ test.describe('the «من أخرجه» card', () => {
   test('a saved card draws the books and opens its hadith', async ({ page }) => {
     await open(page, '/library');
     await expect(page.getByLabel('البخاري ٦٠١٨، سمّاه النووي؛ مسلم ٤٧، سمّاه النووي')).toBeVisible();
+    await page.getByRole('button', { name: 'افتح الحديث الخامس عشر' }).first().click();
+    await expect(page).toHaveURL(/\/hadith-forty\?n=15/);
+  });
+});
+
+test.describe('the «من الإسناد» card', () => {
+  test.use({ seed: { bookmarks: [{ id: 'card:isnad:15', text: '', href: '', savedAt: Date.now() }] } });
+
+  // Owner, 2026-11-19: al-Bukhari's chain drawn as on the hadith's page, and its head opens that page.
+  test('a saved card draws al-Bukhari\'s chain and opens its hadith', async ({ page }) => {
+    await open(page, '/library');
+    await expect(page.getByLabel(/^الإسناد: البخاري، قُتَيْبَةُ/)).toBeVisible();
     await page.getByRole('button', { name: 'افتح الحديث الخامس عشر' }).first().click();
     await expect(page).toHaveURL(/\/hadith-forty\?n=15/);
   });

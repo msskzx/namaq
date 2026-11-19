@@ -259,6 +259,9 @@ const GRADED_SAHIH = new Set([11, 18, 28, 29]);
 export const fromSahihayn = (entry: Pick<FortyEntry, 'partial' | 'records'>) =>
   !entry.partial && entry.records.length > 0 && entry.records.every(record => record.book === 'bukhari' || record.book === 'muslim');
 
+/** The entry's first al-Bukhari record with its chain drawn, whole and his wording: what «من الإسناد» draws. */
+export const drawnBukhari = (entry: Pick<FortyEntry, 'records'>) => entry.records.find(record => record.book === 'bukhari' && record.isnad && !record.partial && record.isnadEnd);
+
 /** Who compiled the entry and in which book: al-Nawawi in his Forty, or Ibn Rajab for the eight he adds (43–50). */
 export const compilerOf = (entry: Pick<FortyEntry, 'source'>) =>
   entry.source === 'ibnrajab' ? { book: 'ibnrajab' as const, name: 'ابن رجب' } : { book: 'nawawi' as const, name: 'النووي' };

@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText, SquareArrowOutUpLeft, Swords, BookOpenText, ListTree, MessagesSquare, Link2, History, Network } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText, SquareArrowOutUpLeft, Swords, BookOpenText, ListTree, MessagesSquare, Link2, History, Network, GitCommitVertical } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Cookies from 'js-cookie';
@@ -18,6 +18,7 @@ import { CreditFold, TiesChain, tiesHref } from '@/components/tarajim/TarajimPar
 import LifeTimeline from '@/components/tarajim/LifeTimeline';
 import { IbnRajab, shamelaPage } from '@/components/hadith/FortyParts';
 import HadithBooks from '@/components/hadith/HadithBooks';
+import FortyIsnad from '@/components/hadith/FortyIsnad';
 import { compilerOf, fromCompanion } from '@shared/hadith';
 import { ExampleAyat, ayatName, quotesTitle, termHref } from '@/components/balagha/TermParts';
 import BookRuns from '@/components/quran/text/BookRuns';
@@ -421,6 +422,16 @@ function HadithPost({ card }: { card: HadithCard }) {
       <HadithBooks top={entry.heading} boxes={card.boxes} namer={compilerOf(entry).name} />
     </div>
   </Post>;
+  if (card.kind === 'isnad') return <Post head={<PostHead Icon={GitCommitVertical} title="من الإسناد" sub={sub} href={href} label={`افتح ${entry.heading}`} />}
+    actions={<>
+      {open}
+      <Action Icon={SquareArrowOutUpLeft} label={`المصدر: ${card.bukhari.title} ${num(card.record.number)}`} href={shamelaPage({ bukhari: card.bukhari }, 'bukhari', card.record.shamela)} external />
+    </>}>
+    <div className="flex flex-col gap-3 px-4 py-3" lang="ar">
+      <FortyIsnad isnad={card.record.isnad} size={card.size} />
+      <p className="line-clamp-3 text-[1.125rem] leading-[1.9]">{card.record.saying}</p>
+    </div>
+  </Post>;
   const rajab = card.kind === 'rajab';
   const source = rajab ? { title: books.ibnrajab.title, url: shamelaPage(books, 'ibnrajab', card.passage[0].shamela) } : { title: books[compilerOf(entry).book].title, url: shamelaPage(books, compilerOf(entry).book, entry.shamela) };
   return <Post head={<PostHead Icon={rajab ? BookOpenText : MessagesSquare} title={rajab ? 'من شرح ابن رجب' : 'من الحديث'} sub={sub} href={href} label={`افتح ${entry.heading}`} />}
@@ -637,8 +648,8 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
   const siraSlots = shows('sira') || shows('moment') ? Array.from({ length: batches }, (_, i) => i) : [];
   const { data: sira } = useSWR(day && siraSlots.length ? `/api/home/feed?day=${day}&sira=${siraSlots.join(',')}` : null,
     () => inPieces<SiraCard[]>(some => `/api/home/feed?day=${day}&sira=${some.join(',')}`, siraSlots).then(all => all.flat()), swr);
-  // The hadith, Ibn Rajab and «من أخرجه» cards, one a batch, worked out on the server (the records and Ibn Rajab's book stay there).
-  const hadithSlots = shows('hadith') || shows('rajab') || shows('recorded') ? Array.from({ length: batches }, (_, i) => i) : [];
+  // The hadith, Ibn Rajab, «من أخرجه» and «من الإسناد» cards, one a batch, worked out on the server (the records and Ibn Rajab's book stay there).
+  const hadithSlots = shows('hadith') || shows('rajab') || shows('recorded') || shows('isnad') ? Array.from({ length: batches }, (_, i) => i) : [];
   const { data: hadith } = useSWR(day && hadithSlots.length ? `/api/home/feed?day=${day}&hadith=${hadithSlots.join(',')}` : null,
     () => inPieces<HadithCard[]>(some => `/api/home/feed?day=${day}&hadith=${some.join(',')}`, hadithSlots).then(all => all.flat()), swr);
   // The Sahih cards, one a batch, al-Bukhari and Muslim in turn, worked out on the server (the books' texts stay there).
