@@ -23,6 +23,11 @@ Rules a test already enforces are listed at the end.
 | 11 | `shared/quiz/branchAnswers.test.ts` (#1000) |
 | 12 | `e2e/app/party.spec.ts` |
 | 13 | `shared/quran/oneRecite.test.ts` (#1002) |
+| 3 | `shared/oneText.test.ts` |
+| 15 | `shared/tapSize.test.ts`: the website floor and the app floor read one value; the "is 44" line is gone |
+| 16 | `shared/topBarSearch.test.ts` |
+| 17 | `shared/colourLiterals.test.ts`, with a shrink-only list of the colours still outside the themes |
+| 21 | `shared/firstFrame.test.ts`. Follows value imports only: `import type` lines are erased at build, and the type graph reaches the data through harmless card shapes. It found six tab pages that ignored a tap on their open button (battle, battles, story, stories, life, term); fixed |
 
 ## Bugs the review found in today's code
 

@@ -13,8 +13,6 @@ const ROOT = join(__dirname, '..');
 const read = (path: string) => readFileSync(join(ROOT, path), 'utf8');
 
 describe('tap floor', () => {
-  it('is 44 points', () => expect(MIN_TAP).toBe(44));
-
   it('widens a small press to the floor and leaves a big one as it is', () => {
     for (const size of [{ width: 18, height: 18 }, { width: 28, height: 28 }, { width: 120, height: 20 }, { width: 30, height: 60 }]) {
       const touch = touchOf(size, slopFor(size));
@@ -41,7 +39,9 @@ describe('tap floor', () => {
   it('is applied to every website Button and to the chip\'s clear button', () => {
     expect(read('src/components/common/Chip.tsx')).toMatch(/const x = `\$\{TAP_FLOOR\} relative /);
     const button = read('src/components/common/Button.tsx');
-    expect(button).toContain(`export const TAP_FLOOR = "after:absolute after:content-[''] after:inset-[min(0px,calc((100%_-_44px)/2))]";`);
+    // The website and the app keep one floor.
+    expect(button).toContain(`(100%_-_${MIN_TAP}px)/2`);
+    expect(button).toMatch(/export const TAP_FLOOR = "after:absolute after:content-\[''\] after:inset-\[min\(0px,calc\(\(100%_-_\d+px\)\/2\)\)\]";/);
     expect(button).toMatch(/'inline-flex items-center justify-center gap-2 transition', TAP_FLOOR,/);
   });
 });
