@@ -11,12 +11,12 @@ import StoryMap from '@/app/quran/prophets/[slug]/StoryMap';
 import type { SavedContent, SiraCard, StoryCard } from '@/lib/homeFeed';
 import type { TermCard } from '@/lib/balaghaTerms';
 import type { HadithCard } from '@/lib/forty';
-import type { TarajimCard } from '@/lib/tarajim';
-import { TiesChain, tiesHref } from '@/components/tarajim/TarajimParts';
+import type { NameCard, TarajimCard } from '@/lib/tarajim';
+import { CreditFold, TiesChain, tiesHref } from '@/components/tarajim/TarajimParts';
 import LifeTimeline from '@/components/tarajim/LifeTimeline';
 import { IbnRajab, shamelaPage } from '@/components/hadith/FortyParts';
 import { fromCompanion } from '@shared/hadith';
-import { LitAyat, ayatName, quotesTitle, termHref } from '@/components/balagha/TermParts';
+import { ExampleAyat, ayatName, quotesTitle, termHref } from '@/components/balagha/TermParts';
 import BookRuns from '@/components/quran/text/BookRuns';
 import { plainName } from '@shared/quran/balaghaTerms';
 import { Report } from '@/components/stories/StoryView';
@@ -396,7 +396,7 @@ function TermPost({ card }: { card: TermCard }) {
       {card.example && <>
         <hr className="my-1 border-[var(--home-rule)] opacity-60" />
         <p className="text-sm text-[var(--home-muted)]">من أمثلته</p>
-        <LitAyat lines={card.example.lines} size="text-[1.375rem]" />
+        <ExampleAyat lines={card.example.lines} />
         <p className="text-[0.8125rem] text-[var(--home-muted)]">{ayatName(card.example.ayat)}</p>
       </>}
     </div>
@@ -437,6 +437,23 @@ function TarajimPost({ card }: { card: Extract<TarajimCard, { kind: 'tarajim' }>
     <div className="flex flex-col gap-1.5 px-4 py-3" lang="ar">
       <p className="text-[1.125rem] leading-[1.85]">{card.virtue.text}</p>
       <p className="text-sm text-[var(--home-muted)]">{card.virtue.by ? `${card.virtue.by} · ` : ''}{card.pages}</p>
+    </div>
+  </Post>;
+}
+
+/**
+ * «الألقاب» and «الكنى» (the app's NamePost): one person's laqab or kunya large, the person under it, the book's words when
+ * they say more than the name, and the person page's folded reference; the head opens the person's page.
+ */
+function NamePost({ card }: { card: NameCard }) {
+  const href = `/people/${card.person.slug}`;
+  return <Post head={<PostHead Icon={Users} title={card.kind === 'laqab' ? 'لقب وصاحبه' : 'كنية وصاحبها'} sub={card.person.name} href={href} label={`افتح ترجمة ${card.person.name}`} />}
+    actions={<Action Icon={Users} label={`افتح ترجمة ${card.person.name}`} href={href} />}>
+    <div className="flex flex-col gap-1 px-4 py-3" lang="ar">
+      <p className="text-[1.875rem] font-bold leading-[1.6] text-[var(--home-accent)]">{card.name}</p>
+      <p className="text-[1.1875rem] leading-[1.6]">{card.person.name}</p>
+      {card.quote && <p className="text-base leading-[1.75] text-[var(--home-muted)]">«{card.quote}»{card.by ? ` ${card.by}` : ''}</p>}
+      <CreditFold credit={card.credit} />
     </div>
   </Post>;
 }
@@ -603,6 +620,10 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
   const tarajimSlots = shows('tarajim') || shows('tie') || shows('life') ? Array.from({ length: batches }, (_, i) => i) : [];
   const { data: tarajim } = useSWR(day && tarajimSlots.length ? `/api/home/feed?day=${day}&tarajim=${tarajimSlots.join(',')}` : null,
     () => inPieces<TarajimCard[]>(some => `/api/home/feed?day=${day}&tarajim=${some.join(',')}`, tarajimSlots).then(all => all.flat()), swr);
+  // The laqab and kunya cards, one of each a batch, worked out on the server like the virtue cards.
+  const nameSlots = shows('laqab') || shows('kunya') ? Array.from({ length: batches }, (_, i) => i) : [];
+  const { data: names } = useSWR(day && nameSlots.length ? `/api/home/feed?day=${day}&names=${nameSlots.join(',')}` : null,
+    () => inPieces<NameCard[]>(some => `/api/home/feed?day=${day}&names=${some.join(',')}`, nameSlots).then(all => all.flat()), swr);
   // The balagha term cards, in every other batch, worked out on the server (al-Suyuti's book stays there).
   const termSlots = shows('term') ? Array.from({ length: batches }, (_, i) => i).filter(i => i % 2 === 1) : [];
   const { data: termCards } = useSWR(day && termSlots.length ? `/api/home/feed?day=${day}&term=${termSlots.join(',')}` : null,
@@ -658,6 +679,10 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
     if (tarajimCard?.kind === 'tarajim' && shows('tarajim')) posts.push(<TarajimPost key={`tj${day}-${i}`} card={tarajimCard} />);
     if (tarajimCard?.kind === 'tie' && shows('tie')) posts.push(<TiePost key={`tie${day}-${i}`} card={tarajimCard} />);
     if (tarajimCard?.kind === 'life' && shows('life')) posts.push(<LifePost key={`life${day}-${i}`} card={tarajimCard} />);
+    // Laqab on even batches, kunya on odd ones, so the two do not stand together; every batch when only one is shown.
+    const nameKind = shows('laqab') && shows('kunya') ? (i % 2 ? 'kunya' : 'laqab') : shows('kunya') ? 'kunya' : 'laqab';
+    const nameCard = names?.find(card => card.slot === i && card.kind === nameKind);
+    if (nameCard && shows(nameCard.kind)) posts.push(<NamePost key={`n${nameCard.kind}${day}-${i}`} card={nameCard} />);
   }
   return <section className={styles.feed} aria-label="للتأمل اليوم">
     {posts}

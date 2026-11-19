@@ -166,7 +166,9 @@ const PARTY_KINDS: { id: QuizTopic; name: string }[] = [{ id: 'BRANCHES', name: 
 
 /** A choice question with something over its choices (an ayah, a page, a book's passage), or its plain choices. */
 const isAyahChoice = (question: Question): question is Question & ChoiceQuestion => Array.isArray((question as { quran?: unknown }).quran) || !!(question as { page?: unknown }).page
-  || typeof (question as { passage?: unknown }).passage === 'string';
+  || typeof (question as { passage?: unknown }).passage === 'string'
+  // Several right choices tick boxes, which QuizChoice draws.
+  || Array.isArray((question as { correctAnswers?: unknown }).correctAnswers);
 
 /** What the host chose; the host can change it until the quiz starts, everyone else only reads it. */
 function Settings({ settings, editable, send, palette }: { settings: PartySettings; editable: boolean; send: Send; palette: Palette }) {
@@ -356,7 +358,8 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
         </>}
       {view.result && (
         <Text style={{ color: palette.ink, fontSize: 17, fontWeight: '600', textAlign: 'right', paddingHorizontal: 16 }}>
-          {question.tree || question.compare || question.write ? `${num(view.result.earned)} من ${num(view.result.total)} ${question.compare ? 'فراغات' : question.write ? 'كلمات' : 'أطراف'}` : view.answer === null ? 'لم تجب في الوقت.' : view.answer === SKIPPED ? 'لم تجب.' : view.result.earned ? 'إجابة صحيحة' : 'إجابة خاطئة'}
+          {question.tree || question.compare || question.write ? `${num(view.result.earned)} من ${num(view.result.total)} ${question.compare ? 'فراغات' : question.write ? 'كلمات' : 'أطراف'}` : view.answer === null ? 'لم تجب في الوقت.' : view.answer === SKIPPED ? 'لم تجب.'
+            : Array.isArray(question.correctAnswers) ? `${num(view.result.earned)} من ${num(view.result.total)} صحيحة` : view.result.earned ? 'إجابة صحيحة' : 'إجابة خاطئة'}
         </Text>
       )}
       <View style={{ paddingHorizontal: 16, gap: 12 }}>
@@ -389,7 +392,7 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
         </>
       ) : isAyahChoice(question)
         ? <View style={{ flex: 1 }}><QuizChoice question={question} shown palette={palette} onOpen={readAyah} onPick={value => send({ type: 'submit', answer: value })}
-          pen={view.settings.pen} onWrite={write} onLook={look} costs={!view.looked} lookTop={clock}
+          pen={view.settings.pen} onWrite={write} onLook={look} costs={!view.looked} lookTop={clock} onTicks={answer => send({ type: 'draft', answer })}
           header={view.looked ? <View style={{ paddingHorizontal: 16 }}><LookedNote palette={palette} /></View> : undefined} />
           {!question.write && skip}</View>
         : <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}>

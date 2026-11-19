@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { act, cleanSettings, createParty, expired, HOST_GRACE_MS, IDLE_MS, leaderboard, LOADING_MS, nextWake, quizQuery, viewFor, type Action, type PartyQuestion, type PartyState } from './rules';
+import { PICKS } from '../quiz/choiceKinds';
 
 const choice = (key: string, correctAnswer = 'a'): PartyQuestion => ({ key, correctAnswer, choices: [{ value: 'a', labelArabic: 'أ' }, { value: 'b', labelArabic: 'ب' }] });
 const tree: PartyQuestion = {
@@ -154,6 +155,20 @@ describe('party questions', () => {
     expect(view.players.map(player => [player.earned, player.looked])).toEqual([[5, true], [0, true], [10, false]]);
     state = run(state, [{ type: 'next', playerId: 'p0' }, { type: 'submit', playerId: 'p0', answer: 'a' }]);
     expect(viewFor(state, 'p0', 0).looked).toBe(false);
+  });
+
+  it('scores a question of several right choices per choice, ten in all, and keeps which are right hidden until the reveal', () => {
+    const several: PartyQuestion = { key: 'names', correctAnswer: `a${PICKS}b`, correctAnswers: ['a', 'b'], choices: ['a', 'b', 'c', 'd'].map(value => ({ value, labelArabic: value })) };
+    let state = playing([several]);
+    expect(viewFor(state, 'p1', 0).question?.correctAnswers).toEqual([]);
+    state = run(state, [
+      { type: 'submit', playerId: 'p0', answer: `a${PICKS}b` },
+      { type: 'submit', playerId: 'p1', answer: ['a'] },
+      { type: 'submit', playerId: 'p2', answer: ['a', 'c'] },
+    ]);
+    // All right: ten; one of two: five; one right and one wrong: nothing.
+    expect(state.players.map(player => player.score)).toEqual([10, 5, 0]);
+    expect(viewFor(state, 'p1', 0).question?.correctAnswers).toEqual(['a', 'b']);
   });
 
   it('keeps what a look points at hidden until the reveal', () => {

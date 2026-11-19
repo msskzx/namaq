@@ -20,12 +20,12 @@ import { BranchFeedback, BranchInputs } from "../BranchAnswers";
 import { CompareFeedback, CompareInputs } from "../CompareAnswers";
 import { emptyCompareAnswers } from "@shared/quiz/compareAnswers";
 import PartySettingsPanel from "./PartySettings";
-import { Eye, Search } from "lucide-react";
+import { Eye, Search, Square, SquareCheck } from "lucide-react";
 import { canLook, LookButton, LookedNote, LookView } from "@/components/quiz/QuizLook";
-import type { QuizLook } from "@shared/quiz/choiceKinds";
+import { isRightChoice, PICKS, picksOf, ticks, type QuizLook } from "@shared/quiz/choiceKinds";
 import QuestionReview from "../QuestionReview";
 import { ChoiceAfter, ChoiceLabel, ChoiceQuran, type ChoiceParts } from "../ChoiceParts";
-import { mushafText } from '@shared/quran/mushafText';
+import AyahFlow, { AyahWords } from "@/components/quran/text/AyahFlow";
 import Card from '@/components/common/Card';
 import Field from '@/components/common/Field';
 
@@ -225,7 +225,7 @@ function ChoiceText({ question, value, answered }: { question: Question; value: 
   const detail = question.choiceDetails?.[value];
   if (!choice) return null;
   if (!detail) return <ChoiceLabel question={question} value={value} label={choice.labelArabic} answered={answered} />;
-  return <span><span className="block font-quran leading-relaxed">{mushafText(detail.text)}</span><span className="text-xs text-[var(--home-muted)]">{detail.reference}</span></span>;
+  return <span className="w-full"><AyahFlow><AyahWords>{detail.text}</AyahWords></AyahFlow><span className="text-xs text-[var(--home-muted)]">{detail.reference}</span></span>;
 }
 
 function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: ReturnType<typeof usePartySocket>["send"]; offset: number; ar: boolean }) {
@@ -268,7 +268,7 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
         <p dir="rtl" lang="ar" className={`mb-4 ${question.tree || question.compare ? "text-base leading-relaxed" : "text-xl leading-loose font-semibold"}`}>{question.promptArabic}</p>
         {question.ayah && (
           <blockquote dir="rtl" lang="ar" className="mb-4 border-s-2 border-[var(--home-accent)] ps-4">
-            <p className="font-quran text-xl leading-loose text-[var(--home-ink)]">{mushafText(question.ayah.text)}</p>
+            <AyahFlow className="text-[var(--home-ink)]"><AyahWords>{question.ayah.text}</AyahWords></AyahFlow>
             <p className="text-sm text-[var(--home-muted)]">{question.ayah.reference}</p>
           </blockquote>
         )}
@@ -280,7 +280,10 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
         ) : question.tree ? (
           revealed ? <BranchFeedback question={question} typed={Array.isArray(view.answer) ? view.answer : emptyBranchAnswers(question)} names={view.surahNames} ar={ar} />
             : <BranchInputs question={question} typed={typed} onChange={setTyped} onCheck={() => send({ type: "submit", answer: typed })} ar={ar} sendEmpty />
-        ) : question.write ? null : (
+        ) : question.write ? null : ticks(question) ? (
+          <Ticks key={question.key} question={question} answer={typeof view.answer === "string" ? view.answer : null} revealed={revealed} sent={sent} ar={ar}
+            onSend={(answer) => send({ type: "submit", answer })} onDraft={(answer) => send({ type: "draft", answer })} />
+        ) : (
           <div className="flex flex-col gap-2">
             {question.choices.map((choice) => {
               const given = view.answer === choice.value;
@@ -312,7 +315,9 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
             ? (ar ? `${num(view.result.earned)} من ${num(view.result.total)} أطراف` : `${view.result.earned} of ${view.result.total} leaves`)
             : question.write
             ? (ar ? `${num(view.result.earned)} من ${num(view.result.total)} كلمات` : `${view.result.earned} of ${view.result.total} words`)
-            : view.answer === null ? (ar ? "لم تجب في الوقت." : "No answer in time.") : view.answer === "" ? (ar ? "لم تجب." : "No answer.") : view.result.earned ? (ar ? "إجابة صحيحة" : "Correct") : (ar ? "إجابة خاطئة" : "Incorrect")}</p>
+            : view.answer === null ? (ar ? "لم تجب في الوقت." : "No answer in time.") : view.answer === "" ? (ar ? "لم تجب." : "No answer.")
+            : ticks(question) ? (ar ? `${num(view.result.earned)} من ${num(view.result.total)} صحيحة` : `${view.result.earned} of ${view.result.total} right`)
+            : view.result.earned ? (ar ? "إجابة صحيحة" : "Correct") : (ar ? "إجابة خاطئة" : "Incorrect")}</p>
         )}
         {revealed && view.answer !== null && view.answer !== "" && !question.tree && !question.compare && !question.write && <ChoiceAfter question={question} given={view.answer as string} ar={ar}
           surahName={(value) => question.choices.find((choice) => choice.value === value)?.labelArabic} />}
@@ -394,3 +399,49 @@ export default function PartyRoom({ code }: { code: string }) {
     </div>
   );
 }
+
+/**
+ * A question of several right choices in a party (the app's QuizChoice): tick each that holds and send; once revealed, the
+ * right ones ticked green, a wrong one ticked red, a right one left unticked amber «فاتك» (owner, 2026-11-19).
+ */
+function Ticks({ question, answer, revealed, sent, ar, onSend, onDraft }: {
+  question: { choices: { value: string; labelArabic: string }[]; correctAnswer: string; correctAnswers?: string[] };
+  answer: string | null; revealed: boolean; sent: boolean; ar: boolean; onSend: (answer: string) => void;
+  /** Each tick goes to the party as a draft, so what is ticked when time runs out is graded (rules.ts reveal). */
+  onDraft: (answer: string) => void;
+}) {
+  const [ticked, setTicked] = useState<string[]>([]);
+  const joined = (values: string[]) => question.choices.map(choice => choice.value).filter(value => values.includes(value)).join(PICKS);
+  const picks = revealed || sent ? picksOf(answer ?? undefined) : ticked;
+  return (
+    <div className="flex flex-col gap-2">
+      {question.choices.map((choice) => {
+        const given = picks.includes(choice.value);
+        const isRight = revealed && isRightChoice(question, choice.value);
+        const missed = isRight && !given;
+        const wrong = revealed && given && !isRight;
+        const color = isRight && given ? "var(--home-green)" : missed ? "var(--home-amber)" : wrong || given ? "var(--home-accent)" : undefined;
+        return (
+          <Button key={choice.value} variant="outline" role="checkbox" aria-checked={given} className="justify-start text-start"
+            style={color ? { borderColor: color, color, borderStyle: missed ? "dashed" : "solid" } : undefined}
+            onClick={() => {
+              if (sent || revealed) return;
+              const next = ticked.includes(choice.value) ? ticked.filter(value => value !== choice.value) : [...ticked, choice.value];
+              setTicked(next);
+              onDraft(joined(next));
+            }}>
+            {given ? <SquareCheck size={18} aria-hidden /> : <Square size={18} aria-hidden />}
+            <span>{choice.labelArabic}</span>
+            {missed && <span className="text-xs font-semibold">{ar ? "فاتك" : "Missed"}</span>}
+          </Button>
+        );
+      })}
+      {!sent && !revealed && <div className="flex flex-wrap gap-2">
+        <Button variant="primary" disabled={!ticked.length} onClick={() => onSend(joined(ticked))}>
+          <FontAwesomeIcon icon={faPaperPlane} />{ar ? "أرسل" : "Send"}</Button>
+        <Button onClick={() => onSend("")}><FontAwesomeIcon icon={faPaperPlane} />{ar ? "أرسل بلا إجابة" : "Send with no answer"}</Button>
+      </div>}
+    </div>
+  );
+}
+

@@ -8,6 +8,7 @@ import { byVolume, heldGroups, kunyaLine, personLine } from '@shared/tarajimGrou
 import { bareName, chainOf, foldTop, lineOf, meetingOf, nasabTree, type NasabNode } from '@shared/tarajimLine';
 import { chainSentence, groupWord, linkedPairs, peopleGraph, stepClause, tieGroups, tieWord, type GraphNode, type TieKind } from '@shared/tarajimGraph';
 import { allVirtues } from '@shared/homeFeed';
+import { kunyaFacts, laqabFacts, type NameFact } from '@shared/tarajimNames';
 import { sourceById } from '@shared/sources';
 import lifeData from '@shared/data/events/life.json';
 import battlesData from '@shared/data/battles/battles.json';
@@ -230,3 +231,21 @@ export function peopleList(search = '', title?: string) {
 
 /** The scholars' groups for the website's Tarajim hub, as the app's hub tiles. */
 export const hubGroups = () => heldGroups(PEOPLE);
+
+/**
+ * The «الألقاب» and «الكنى» cards (the app's NamePost), one of each a batch: a person's laqab or kunya, the person, the
+ * book's words when they say more than the name, and the person page's folded reference.
+ */
+export type NameCard = { slot: number; kind: 'laqab' | 'kunya'; person: PersonHead; name: string; quote?: string; by?: string; credit?: Credit };
+let nameLists: { laqab: NameFact[]; kunya: NameFact[] } | undefined;
+const bare = (text: string) => text.replace(/[\u064B-\u0652\u0670\u0640]/g, '').trim();
+export function nameCards(day: number, slots: number[]): NameCard[] {
+  nameLists ??= { laqab: laqabFacts(PEOPLE), kunya: kunyaFacts(PEOPLE) };
+  return slots.flatMap(slot => (['laqab', 'kunya'] as const).flatMap((kind): NameCard[] => {
+    const list = nameLists![kind];
+    if (!list.length) return [];
+    const { person, name, fact } = list[turnOf(day * 2 + (kind === 'kunya' ? 1 : 0), slot, list.length)];
+    const quote = bare(fact.text) !== name ? { quote: fact.text, ...(fact.by.length ? { by: sayerLine(fact) } : {}) } : {};
+    return [{ slot, kind, person: head(person), name, ...quote, credit: creditOf([fact]) }];
+  }));
+}

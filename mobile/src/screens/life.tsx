@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Plus } from 'lucide-react-native';
@@ -13,6 +13,7 @@ import Button from '@/ui/Button';
 import Sheet from '@/ui/Sheet';
 import { SearchField } from '@/ui/Field';
 import { usePalette, type Palette } from '@/lib/theme';
+import { useTabRetap } from '@/lib/tabRetap';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { toTab } from '@/lib/ways';
 import { findPerson, personName, searchPeople } from '@/lib/tarajim';
@@ -40,6 +41,8 @@ function Cell({ item, palette, show }: { item?: LifeItem; palette: Palette; show
 export default function LifeScreen() {
   const palette = usePalette();
   const bottom = useTabBarSpace();
+  const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
+  useTabRetap('life', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   const { slugs = '' } = useLocalSearchParams<{ slugs?: string }>();
   const [picked, setPicked] = useState(() => slugs.split(',').filter(s => findPerson(s)));
   const [adding, setAdding] = useState(picked.length < 2);
@@ -52,7 +55,7 @@ export default function LifeScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar back={back} title={picked.length === 2 ? 'حياتهما' : picked.length > 2 ? 'حياتهم' : findPerson(picked[0] ?? '')?.sex === 'FEMALE' ? 'حياتها' : 'حياته'} />
-      <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 12 }}>
+      <ScrollView ref={scroll} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 12 }}>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
           {picked.map(s => <Chip key={s} label={name(s)} on palette={palette} onClear={picked.length > 1 ? () => setPicked(picked.filter(p => p !== s)) : undefined} />)}
           <Chip Icon={Plus} label="أضف" on={false} small palette={palette} onPress={() => setAdding(true)} />

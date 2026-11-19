@@ -20,6 +20,16 @@ export const FORGOT = '0';
  * A question the reader recites or writes and then grades (حفظتها or نسيتها): what it asks stays hidden until it is shown,
  * its two answers keep their order, and نسيتها puts the ayah on the forgotten shelf.
  */
+/** What joins the ticks of a question of several right choices into one answer (a character no label holds). */
+export const PICKS = '\u001f';
+export const picksOf = (answer: string | undefined) => (answer ? answer.split(PICKS) : []);
+/** Several right choices: the question ticks boxes (in a party before the reveal the list is empty, still saying so). */
+export const ticks = (question: { correctAnswers?: string[] }) => Array.isArray(question.correctAnswers);
+
+/** Whether a choice is a right one: the one answer, or one of several. */
+export const isRightChoice = (question: { correctAnswer: string; correctAnswers?: string[] }, value: string) =>
+  question.correctAnswers ? question.correctAnswers.includes(value) : value === question.correctAnswer;
+
 export const recited = (question: { reveal?: unknown; page?: { recite?: unknown } }) => !!(question.reveal || question.page?.recite);
 
 export type ChoiceQuestion = {
@@ -35,6 +45,12 @@ export type ChoiceQuestion = {
   reveal?: string[];
   choices: { value: string; labelArabic: string }[];
   correctAnswer: string;
+  /**
+   * A question with more than one right choice (owner, 2026-11-19; sketch titles-quiz/multi-select-dark.png): the reader
+   * ticks every one that holds, then checks. Both are in the choices' order, and `correctAnswer` is these joined by PICKS,
+   * as a reader's ticks are sent (`picksOf` reads them back), so «all of them and nothing else» is still one string.
+   */
+  correctAnswers?: string[];
   /** The ayah (`surah:ayah`) the question is about, opened in the mushaf after answering. */
   ayahKey?: string;
   /** Asked on the ayah's own mushaf page instead of the words above (QuizPage): how much shows, what is written, the surah title. */

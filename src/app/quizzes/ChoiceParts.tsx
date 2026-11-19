@@ -7,17 +7,17 @@ import { alikeDiff, FORGOT, RECITED, type ChoiceQuestion } from "@shared/quiz/ch
 import QuizPage from "./QuizPage";
 import type { WriteAsk } from "@shared/quiz/score";
 import type { PenRule } from "@shared/quran/writeAyah";
-import { mushafText } from "@shared/quran/mushafText";
 import { num } from "@shared/quran/arabicNumber";
 import Card from '@/components/common/Card';
 import QuranWords from '@/components/quran/text/QuranWords';
 import BookRuns from '@/components/quran/text/BookRuns';
+import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
 
 export type ChoiceParts = Partial<Pick<ChoiceQuestion, "quran" | "number" | "reveal" | "page" | "ayahKey" | "alike" | "note" | "marked" | "explains" | "passage" | "quranChoices" | "whereOf">> & { correctAnswer?: string; family?: string; write?: WriteAsk };
 
 function Words({ words, marked }: { words: string[]; marked?: number[] }) {
   // A run of ayat carries each ayah's number between them, drawn as the end mark after the last one is.
-  return <>{words.map((word, at) => <span key={at} className={marked?.includes(at) || AYAH_NUMBER.test(word) ? "text-[var(--home-accent)]" : undefined}>{mushafText(word)}{at < words.length - 1 ? " " : ""}</span>)}</>;
+  return <>{words.map((word, at) => <AyahWords key={at} className={marked?.includes(at) || AYAH_NUMBER.test(word) ? "text-[var(--home-accent)]" : undefined}>{`${word}${at < words.length - 1 ? " " : ""}`}</AyahWords>)}</>;
 }
 
 const AYAH_NUMBER = /^[٠-٩]+$/;
@@ -28,8 +28,8 @@ const AYAH_NUMBER = /^[٠-٩]+$/;
  */
 export function ChoiceLabel({ question, value, label, answered }: { question: ChoiceParts; value: string; label: string; answered: boolean }) {
   const where = answered ? question.whereOf?.[value] : undefined;
-  const text = question.quranChoices ? <QuranWords className="text-xl leading-loose">{label}</QuranWords> : label;
-  return where ? <span className="flex flex-col items-start"><span>{text}</span><span className="text-xs text-[var(--home-muted)]">{where}</span></span> : <>{text}</>;
+  const text = question.quranChoices ? <AyahFlow><AyahWords>{label}</AyahWords></AyahFlow> : label;
+  return where ? <span className="flex w-full flex-col items-start"><span className="w-full">{text}</span><span className="text-xs text-[var(--home-muted)]">{where}</span></span> : <>{text}</>;
 }
 
 /** A book's text the question asks about («لأي آية هذا التفسير؟»), its quotes of the ayah hidden. */
@@ -60,10 +60,12 @@ export function ChoiceQuran({ question, given, revealed, onReveal, onAnswer, ar,
   const alike = given !== undefined && given !== question.correctAnswer ? question.alike?.[given] : undefined;
   const marked = alike ? alikeDiff(question.quran, alike.words).a : question.marked;
   return <div className="mb-4" dir="rtl" lang="ar">
-    <Card as="p" className="p-4 text-justify font-quran text-2xl leading-loose text-[var(--home-ink)] [text-align-last:right]">
-      <Words words={question.quran} marked={marked} />
-      {question.number !== undefined && <span className="text-[var(--home-accent)]"> {num(question.number)}</span>}
-      {question.reveal && (revealed ? <span className="text-[var(--home-accent)]"> <Words words={question.reveal} /></span> : " …")}
+    <Card className="p-4 text-[var(--home-ink)]">
+      <AyahFlow>
+        <Words words={question.quran} marked={marked} />
+        {question.number !== undefined && <span className="text-[var(--home-accent)]"> {num(question.number)}</span>}
+        {question.reveal && (revealed ? <span className="text-[var(--home-accent)]"> <Words words={question.reveal} /></span> : " …")}
+      </AyahFlow>
     </Card>
     {question.reveal && !revealed && onReveal && <Button className="mt-3" variant="primary" onClick={onReveal}><Eye size={16} aria-hidden />{ar ? "أظهر الآية" : "Show the ayah"}</Button>}
   </div>;
@@ -77,7 +79,7 @@ export function ChoiceAfter({ question, given, surahName, ar, mushaf = true }: {
   return <div className="mt-4 flex flex-col gap-3" dir="rtl" lang="ar">
     {alike && question.quran && <div className="border-t border-dashed border-[var(--home-rule)] pt-3">
       <p className="text-sm text-[var(--home-muted)]">{`آية ${surahName?.(given!) ?? ""} التي تشبهها، ${num(Number(alike.key.split(":")[1]))}`}</p>
-      <p className="text-justify font-quran text-xl leading-loose [text-align-last:right]"><Words words={alike.words} marked={alikeDiff(question.quran, alike.words).b} /></p>
+      <AyahFlow><Words words={alike.words} marked={alikeDiff(question.quran, alike.words).b} /></AyahFlow>
     </div>}
     {/* What each wrong choice is («معنى «فراتا»، المرسلات ٢٧»): solo, party and the review all draw this. */}
     {question.explains && <ul className="flex flex-col gap-1 text-sm text-[var(--home-muted)]">

@@ -44,7 +44,8 @@ export function datedThings(people: AppPerson[] = PEOPLE, life: AppLife = LIFE):
     for (const entry of (life[person.slug] ?? []) as AppLifeEntry[]) {
       const key = `${entry.kind}:${entry.slug}`;
       if (entry.kind === 'battle' || !entry.year || entry.year.others?.length || things.has(key)) continue;
-      things.set(key, { key, name: entry.name, years: [entry.year.value], cites: entry.year.refs.map(ref => ref.cite), slug: person.slug, mark: key });
+      const { name } = entry;
+      things.set(key, { key, name, years: [entry.year.value], cites: entry.year.refs.map(ref => ref.cite), slug: person.slug, mark: key });
     }
     const deaths = person.died.year.filter((fact): fact is PersonFact & { value: number } => typeof fact.value === 'number');
     if (deaths.length) {
