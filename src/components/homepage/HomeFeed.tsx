@@ -412,7 +412,6 @@ function HadithPost({ card }: { card: HadithCard }) {
     <div className="flex flex-col gap-3 px-4 py-3" lang="ar">
       <p className="line-clamp-3 text-[1.125rem] leading-[1.9]">{entry.text}</p>
       <HadithBooks top={entry.heading} boxes={card.boxes} />
-      {card.grades.map(grade => <p key={`${grade.by}${grade.quote}`} className="text-[0.9375rem] text-[var(--home-muted)]">{`قال ${grade.by}: «${grade.quote}»`}</p>)}
     </div>
   </Post>;
   const rajab = card.kind === 'rajab';

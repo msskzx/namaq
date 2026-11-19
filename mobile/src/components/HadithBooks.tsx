@@ -24,7 +24,7 @@ function Branch({ first, last, palette }: { first: boolean; last: boolean; palet
 export default function HadithBooks({ top, boxes, onOpen, palette }: { top: string; boxes: BookBox[]; onOpen?: (box: BookBox) => void; palette: Palette }) {
   const said = (box: BookBox) => [box.number ? `${box.name} ${num(box.number)}` : box.name, ...(box.named ? ['سمّاه النووي'] : []), ...box.notes].join('، ');
   return (
-    <View accessible={!onOpen} accessibilityLabel={`من أخرجه: ${boxes.map(said).join('؛ ')}`} style={{ alignItems: 'center' }}>
+    <View accessible={!onOpen} accessibilityLabel={boxes.map(said).join('؛ ')} style={{ alignItems: 'center' }}>
       <Card palette={palette} pad={[2, 14]}><Text style={{ color: palette.green, fontSize: 15.5, textAlign: 'center' }}>{top}</Text></Card>
       <View style={{ width: 1, height: STEM, backgroundColor: palette.rule }} />
       <View style={{ flexDirection: 'row', alignSelf: 'stretch' }}>
@@ -33,7 +33,7 @@ export default function HadithBooks({ top, boxes, onOpen, palette }: { top: stri
             <Branch first={i === 0} last={i === boxes.length - 1} palette={palette} />
             <Card palette={palette} pad={[2, 8]} style={{ alignItems: 'center', maxWidth: '94%' }}
               onPress={onOpen ? () => onOpen(box) : undefined} accessibilityLabel={onOpen ? said(box) : undefined}>
-              <Text numberOfLines={1} adjustsFontSizeToFit style={{ color: palette.ink, fontSize: 15, textAlign: 'center' }}>{box.name}</Text>
+              <Text style={{ color: palette.ink, fontSize: 15, textAlign: 'center' }}>{box.name}</Text>
               {box.number ? <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'center' }}>{num(box.number)}</Text> : null}
             </Card>
             {box.named && <Text style={{ color: palette.accent, fontSize: 12.5, textAlign: 'center', marginTop: 3 }}>سمّاه النووي</Text>}

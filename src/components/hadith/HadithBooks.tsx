@@ -10,14 +10,14 @@ const said = (box: BookBox) => [box.number ? `${box.name} ${num(box.number)}` : 
 export default function HadithBooks({ top, boxes, hrefOf }: { top: string; boxes: BookBox[]; hrefOf?: (box: BookBox) => string | undefined }) {
   const line = (shown: boolean) => <span className={`h-px flex-1 ${shown ? 'bg-[var(--home-rule)]' : ''}`} />;
   return (
-    <div role={hrefOf ? undefined : 'img'} aria-label={hrefOf ? undefined : `من أخرجه: ${boxes.map(said).join('؛ ')}`} className="flex flex-col items-center">
+    <div role={hrefOf ? undefined : 'img'} aria-label={hrefOf ? undefined : boxes.map(said).join('؛ ')} className="flex flex-col items-center">
       <Card className="px-3.5 py-0.5 text-center text-[0.97rem] text-[var(--home-green)]">{top}</Card>
       <span className="h-3 w-px bg-[var(--home-rule)]" />
       <div className="flex self-stretch">
         {boxes.map((box, i) => {
           const href = hrefOf?.(box);
           const inside = <>
-            <span className="block truncate text-[0.94rem]">{box.name}</span>
+            <span className="block break-words text-[0.94rem] leading-snug">{box.name}</span>
             {box.number ? <span className="block text-[0.8125rem] text-[var(--home-muted)]">{num(box.number)}</span> : null}
           </>;
           return (

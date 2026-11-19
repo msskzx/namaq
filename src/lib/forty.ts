@@ -3,7 +3,7 @@
 import forty from '@shared/data/hadith/forty.json';
 import rajab from '@shared/data/hadith/ibnRajab.json';
 import units from '@shared/data/hadith/units.json';
-import { authentic, compilerGrades, rajabFeedPassages, recordedIn, sayingStart, type AppForty, type BookBox, type FortyGrade, type AppHadith, type FortyEntry, type RajabChapter, type RajabParagraph } from '@shared/hadith';
+import { fromSahihayn, rajabFeedPassages, recordedIn, sayingStart, type AppForty, type BookBox, type AppHadith, type FortyEntry, type RajabChapter, type RajabParagraph } from '@shared/hadith';
 
 export const FORTY = forty as AppForty;
 const RAJAB = rajab as RajabChapter[];
@@ -27,9 +27,7 @@ export const fortyPage = (n: number) => {
 export type FortyPage = NonNullable<ReturnType<typeof fortyPage>>;
 
 /** The Forty al-Nawawi took whole from the Sahihayn, the most authentic first (owner, 2026-11-18), for the hadith card. */
-const FEED_FORTY = FORTY.entries.filter(entry => !entry.partial && entry.records.length > 0 && entry.records.every(record => record.book === 'bukhari' || record.book === 'muslim'));
-/** The Forty a «من أخرجه» card carries (the app's FEED_RECORDED): the most authentic first, those al-Nawawi names books for. */
-const FEED_RECORDED = FORTY.entries.filter(entry => authentic(entry) && entry.records.length > 0);
+const FEED_FORTY = FORTY.entries.filter(fromSahihayn);
 let passages: ReturnType<typeof rajabFeedPassages> | undefined;
 const rajabPassages = () => (passages ??= rajabFeedPassages(RAJAB, FORTY.entries));
 const turnOf = (day: number, at: number, count: number) => ((((day * 37 + at) % count) + count) % count);
@@ -41,7 +39,7 @@ const turnOf = (day: number, at: number, count: number) => ((((day * 37 + at) % 
 export type HadithCard = { slot: number; entry: Pick<FortyEntry, 'n' | 'heading' | 'companion' | 'text' | 'shamela'>; books: Pick<FortyBooks, 'nawawi' | 'ibnrajab'> } & (
   | { kind: 'hadith' }
   | { kind: 'rajab'; passage: RajabParagraph[] }
-  | { kind: 'recorded'; boxes: BookBox[]; grades: Pick<FortyGrade, 'by' | 'quote'>[] });
+  | { kind: 'recorded'; boxes: BookBox[] });
 const KINDS = ['hadith', 'rajab', 'recorded'] as const;
 
 export function hadithCards(day: number, slots: number[]): HadithCard[] {
@@ -51,9 +49,9 @@ export function hadithCards(day: number, slots: number[]): HadithCard[] {
     const turn = Math.floor(slot / KINDS.length);
     const kind = KINDS[slot % KINDS.length];
     if (kind === 'recorded') {
-      if (!FEED_RECORDED.length) return [];
-      const entry = FEED_RECORDED[turnOf(day, turn, FEED_RECORDED.length)];
-      return [{ slot, kind, entry: short(entry), books, boxes: recordedIn(entry), grades: compilerGrades(entry).map(({ by, quote }) => ({ by, quote })) }];
+      if (!FEED_FORTY.length) return [];
+      const entry = FEED_FORTY[turnOf(day, turn, FEED_FORTY.length)];
+      return [{ slot, kind, entry: short(entry), books, boxes: recordedIn(entry) }];
     }
     if (kind === 'hadith') return FEED_FORTY.length ? [{ slot, kind: 'hadith', entry: short(FEED_FORTY[turnOf(day, turn, FEED_FORTY.length)]), books }] : [];
     const all = rajabPassages();

@@ -246,18 +246,19 @@ export function recordedIn(entry: Pick<FortyEntry, 'named' | 'records' | 'partia
 }
 
 /**
- * The hadith outside the Sahihayn a card or quiz may carry (owner, 2026-11-18: the most authentic first, undisputed): al-Tirmidhi's
+ * The hadith outside the Sahihayn a quiz may carry (owner, 2026-11-18: the most authentic first, undisputed): al-Tirmidhi's
  * «حسن صحيح» on nos. 11, 18, 28 and 29, printed in his Sunan beside each. Not no. 42, which his printed Sunan grades «حسن غريب»,
  * nor 12, 31 and 39, which Ibn Rajab weakens.
  */
 const GRADED_SAHIH = new Set([11, 18, 28, 29]);
-/** One of the Forty a card or quiz may carry: wholly from the Sahihayn, or graded sahih undisputed. */
+/** One of the Forty al-Nawawi takes whole from the Sahihayn: what the feed's hadith cards carry, the most authentic first. */
+export const fromSahihayn = (entry: Pick<FortyEntry, 'partial' | 'records'>) =>
+  !entry.partial && entry.records.length > 0 && entry.records.every(record => record.book === 'bukhari' || record.book === 'muslim');
+
+/** One of the Forty a quiz may carry: wholly from the Sahihayn, or graded sahih undisputed. */
 export const authentic = (entry: Pick<FortyEntry, 'n' | 'records'>) => GRADED_SAHIH.has(entry.n)
   || (entry.records.length > 0 && entry.records.every(record => record.book === 'bukhari' || record.book === 'muslim'));
 
-/** What a collector says of his own record, as printed under it («قال الترمذي: هذا حديث حسن صحيح»); not a later scholar's. */
-export const compilerGrades = (entry: Pick<FortyEntry, 'grades'>) =>
-  (entry.grades ?? []).filter(grade => grade.book !== 'nawawi' && grade.book !== 'ibnrajab' && grade.by === COLLECTOR[grade.book]);
 
 /** «عن أبي هريرة»: the Companion after «عن», a kunya in the genitive. */
 export const fromCompanion = (companion: string) => `عن ${companion.replace(/^أبو /, 'أبي ')}`;
@@ -312,7 +313,7 @@ export function rajabOpening(chapter: RajabChapter): RajabParagraph[] {
  * a phrase of a hadith al-Nawawi took whole from the Sahihayn, short enough to read whole on a phone screen.
  */
 export function rajabFeedPassages(chapters: readonly RajabChapter[], entries: readonly FortyEntry[]) {
-  const sahihayn = new Set(entries.filter(entry => !entry.partial && entry.records.length > 0 && entry.records.every(record => record.book === 'bukhari' || record.book === 'muslim')).map(entry => entry.n));
+  const sahihayn = new Set(entries.filter(fromSahihayn).map(entry => entry.n));
   return chapters.filter(chapter => sahihayn.has(chapter.n)).flatMap(chapter => chapter.paragraphs.flatMap((paragraph, i) => {
     if (!/^[فو]?قوله/.test(bare(paragraph.text))) return [];
     const passage = passageFrom(chapter.paragraphs, i);

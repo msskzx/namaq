@@ -42,7 +42,7 @@ import type { AppMomentBattle } from '@shared/battles/battle';
 import { battleLine, Moment } from './battles/BattleParts';
 import { STORIES } from '@/lib/stories';
 import { FORTY, fortyEntry, shamelaPage } from '@/lib/hadith';
-import { authentic, compilerGrades, fromCompanion, rajabFeedPassages, recordedIn, type RajabChapter } from '@shared/hadith';
+import { fromCompanion, fromSahihayn, rajabFeedPassages, recordedIn, type RajabChapter } from '@shared/hadith';
 import HadithBooks from '@/components/HadithBooks';
 import rajab from '@shared/data/hadith/ibnRajab.json';
 import IbnRajab from '@/components/IbnRajab';
@@ -697,7 +697,7 @@ function SiraPost({ id, palette }: { id: string; palette: Palette }) {
 }
 
 /** The Forty al-Nawawi took whole from the Sahihayn, the most authentic first (owner, 2026-11-18), for the hadith card. */
-const FEED_FORTY = FORTY.entries.filter(entry => !entry.partial && entry.records.length > 0 && entry.records.every(record => record.book === 'bukhari' || record.book === 'muslim'));
+const FEED_FORTY = FORTY.entries.filter(fromSahihayn);
 
 /** Ibn Rajab's explanations of a phrase of those hadith, for his card. */
 const RAJAB_PASSAGES = rajabFeedPassages(rajab as RajabChapter[], FORTY.entries);
@@ -745,15 +745,12 @@ function HadithPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/** The Forty a «من أخرجه» card carries: the most authentic first (owner, 2026-11-18), those al-Nawawi names books for. */
-const FEED_RECORDED = FORTY.entries.filter(entry => authentic(entry) && entry.records.length > 0);
-
 /**
  * «من أخرجه» (owner, 2026-11-19; sketch /mnt/project-files/hadith-sciences, frame 3b): the start of one of the Forty, the
  * drawing of the books that record it, and what a collector said of his own record, in his words. The head opens its page.
  */
 function RecordedPost({ id, palette }: { id: string; palette: Palette }) {
-  const entry = FEED_RECORDED.find(each => String(each.n) === id);
+  const entry = FEED_FORTY.find(each => String(each.n) === id);
   if (!entry) return null;
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
@@ -762,7 +759,6 @@ function RecordedPost({ id, palette }: { id: string; palette: Palette }) {
       <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
         <Text numberOfLines={3} style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>{entry.text}</Text>
         <HadithBooks top={entry.heading} boxes={recordedIn(entry)} palette={palette} />
-        {compilerGrades(entry).map(grade => <Text key={`${grade.book}${grade.number}${grade.quote}`} style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`قال ${grade.by}: «${grade.quote}»`}</Text>)}
       </View>
     </Post>
   );
@@ -926,7 +922,7 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   scene: () => sceneList().map(scene => scene.key),
   hadith: () => FEED_FORTY.map(entry => String(entry.n)),
   rajab: () => RAJAB_PASSAGES.map(rajabId),
-  recorded: () => FEED_RECORDED.map(entry => String(entry.n)),
+  recorded: () => FEED_FORTY.map(entry => String(entry.n)),
   prophets: () => STORY_GROUPS.map(group => `${group.slug}-${group.phase}`),
   sira: () => STORIES.filter(story => story.reports[0]).map(story => story.slug),
   moment: () => MOMENTS.map(momentId),

@@ -10,6 +10,8 @@ test('the hadith tab lists the Forty, and one opens with its chain drawn or its 
   await page.getByRole('link', { name: 'الحديث الخامس عشر، عن أبي هريرة' }).click();
   await expect(page).toHaveURL(/\/hadith-forty\?n=15/);
   await expect(page.getByRole('heading', { name: 'في صحيح البخاري' })).toBeVisible();
+  // «من أخرجه» (owner, 2026-11-19): each book with its number, al-Nawawi's own marked.
+  await expect(page.getByLabel('البخاري ٦٠١٨، سمّاه النووي؛ مسلم ٤٧، سمّاه النووي')).toBeVisible();
   await expect(page.getByLabel(/^الإسناد: البخاري، قُتَيْبَةُ/)).toBeVisible();
   await page.getByRole('tab', { name: 'النص كاملًا' }).click();
   await expect(page.getByLabel(/^الإسناد: البخاري/)).toHaveCount(0);
