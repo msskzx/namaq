@@ -35,6 +35,11 @@ describe('no question gives its answer away', () => {
     });
   }
 
+  it('keeps no read exemption that the check no longer flags', () => {
+    const all = CHOICE_KINDS.flatMap(kind => kind.questions(ALL, 'medium', seededRandom(5)));
+    for (const key of Object.keys(READ)) expect(all.some(question => question.key === key && givesAway(question)), key).toBe(true);
+  });
+
   it('«ما صلته به؟» never asks two people whose names already say the tie', () => {
     expect(tieTold('عمر بن أبي سلمة', 'أبو سلمة بن عبد الأسد')).toBe('child');
     expect(tieTold('عمر بن الخطاب', 'حفصة بنت عمر')).toBe('parent');
@@ -43,11 +48,12 @@ describe('no question gives its answer away', () => {
     expect(tieTold('أم سلمة', 'عمر بن أبي سلمة')).toBe('parent');
     expect(tieTold('زينب بنت محمد', 'محمد ﷺ')).toBe('child');
     expect(tieTold('صفية بنت عبد المطلب', 'الزبير بن العوام')).toBeUndefined();
-    for (const question of tieQuestions()) {
-      const [, a, b] = question.promptArabic.match(/^ما صلة (.+) ب(.+)؟$/u) ?? [];
-      expect(a && b, question.promptArabic).toBeTruthy();
-      expect(question.correctAnswer).not.toBe('صاحبه');
-    }
+    const ties = tieQuestions();
+    // Asked plainly (owner, 2026-11-19): «ما صلة A بB؟».
+    for (const question of ties) expect(question.promptArabic, question.promptArabic).toMatch(/^ما صلة .+ ب.+؟$/u);
+    // Umar ibn Abi Salamah is Abu Salamah's son, as his name says: not asked; nor a Companion asked of the Prophet ﷺ.
+    expect(ties.some(question => question.key.includes('umar-ibn-abi-salamah') && /:abu-salamah/.test(question.key))).toBe(false);
+    expect(ties.some(question => question.key.includes('prophet-muhammad') && question.correctAnswer === 'صاحبه')).toBe(false);
   });
 
   it('mutashabih quizzes ask only the books\' pairs, whatever kinds a stored setting carries', () => {
@@ -61,7 +67,7 @@ describe('wrong choices come from inside the chosen part of the Quran', () => {
   const inside = (key: string) => inJuzRange(key, juz30.range);
   it('«في أي سورة؟» offers only surahs of juz 30 on a juz 30 quiz', () => {
     const kind = CHOICE_KINDS.find(k => k.id === 'SURAH')!;
-    for (const question of kind.questions(juz30, 'medium', seededRandom(2))) for (const choice of question.choices) expect(Number(choice.value)).toBeGreaterThanOrEqual(78);
+    for (const question of kind.questions(juz30, 'medium', seededRandom(2))) for (const choice of question.choices) expect(inside(`${choice.value}:1`) || inside(`${choice.value}:2`)).toBe(true);
   });
   it('«لأي آية هذا التفسير؟» and «ما معنى؟» offer only ayat inside it', () => {
     for (const id of ['TAFSIR', 'MEANING']) {

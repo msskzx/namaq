@@ -11,7 +11,7 @@ conditions: "CHOICE_KINDS as of 2026-11-19 (22 kinds). The generic check cannot 
 evidence: "shared/quiz/giveaway.ts, shared/quiz/giveaway.test.ts, AGENTS.md \"Quiz questions\""
 implication: "A rule kept in a doc for one pipeline does not reach code that makes the same thing another way. Put a rule where every producer passes (a registry-wide test), and name in AGENTS.md what the test cannot see."
 date: "2026-11-19"
-topics: ["quiz"]
+topics: ["testing","agent-review"]
 buildsOn: []
 ---
 

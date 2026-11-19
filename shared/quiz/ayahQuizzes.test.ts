@@ -15,8 +15,7 @@ describe('the four ayah quizzes', () => {
     expect(tafsirQuiz.count(whole)).toBe(data.tafsir.length);
     expect(balaghaQuiz.count(whole)).toBe(data.balagha.questions.length);
     expect(irabQuiz.count(whole)).toBe(data.irab.questions.length);
-    // All but 'Asim's: the page is his reading, so asking it gives the answer away (giveaway.test.ts).
-    expect(qiraatQuiz.count(whole)).toBe(data.qiraat.filter(row => READERS[row[2]].id !== 'asim').length);
+    expect(qiraatQuiz.count(whole)).toBe(qiraatQuiz.questions(whole, 'medium', seeded(1)).length);
     for (const kind of [tafsirQuiz, balaghaQuiz, irabQuiz, qiraatQuiz]) expect(kind.count(whole)).toBeGreaterThan(50);
   });
 
@@ -120,5 +119,10 @@ describe('hiding the quotes', () => {
       expect(question.choices.length).toBeLessThanOrEqual(4);
       expect(READERS[Number(question.correctAnswer)].name).toBe(question.choices.find(c => c.value === question.correctAnswer)!.labelArabic);
     }
+  });
+
+  it('never asks how \'Asim reads a word, nor offers him: the Hafs page shows his reading', () => {
+    for (const question of qiraatQuiz.questions(whole, 'medium', seeded(2))) expect(question.promptArabic).not.toContain('عاصم');
+    for (const question of qiraatWhoQuiz.questions(whole, 'medium', seeded(3))) expect(question.choices.map(choice => choice.labelArabic)).not.toContain('عاصم');
   });
 });

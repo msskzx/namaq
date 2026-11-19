@@ -158,7 +158,7 @@ function PartyFilters({ settings, change, palette }: { settings: PartySettings; 
     const applied = applyDraft(next);
     if (applied) change({ juzFrom: applied.range?.from ?? 1, juzTo: applied.range?.to ?? 30, filters: applied.filters });
   };
-  return <FilterFields draft={draft} setDraft={setDraft} palette={palette} sort={false} savedOnly={false} trees={settings.topics.includes('BRANCHES')} />;
+  return <FilterFields draft={draft} setDraft={setDraft} palette={palette} sort={false} kinds={false} savedOnly={false} trees={settings.topics.includes('BRANCHES')} />;
 }
 
 /** The kinds a party can mix (a recited snippet stays solo: the reader grades it alone). */
