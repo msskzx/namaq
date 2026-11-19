@@ -96,4 +96,5 @@ export const serverAyahMarks = () => NONE;
 
 /** Bookmark id and link for one saved ayah. */
 export const ayahBookmarkId = (key: string) => `ayah:${key}`;
-export const ayahHref = (key: string) => `/quran/read/ayah/${key.replace(':', '/')}`;
+/** An ayah's page on the website; a forgotten word's key opens its ayah. */
+export const ayahHref = (key: string) => `/quran/read/ayah/${markAyah(key).replace(':', '/')}`;

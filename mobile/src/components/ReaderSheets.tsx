@@ -32,8 +32,10 @@ type Row =
   | { kind: 'ayah'; key: string; page: number; words: string[]; from: number; to: number };
 
 /** The index of surahs and juz', and the search for a surah, an ayah number or words. */
-export function IndexSheet({ open, onClose, onJump, palette, page, recite }: {
+export function IndexSheet({ open, onClose, onJump, palette, page, recite, query: asked }: {
   open: boolean;
+  /** Opens searching these words: a selection's «المواضع» (owner, 2026-11-19). */
+  query?: string | null;
   /** The page open in the reader: the index opens at its surah. */
   page: number;
   onClose: () => void;
@@ -43,6 +45,7 @@ export function IndexSheet({ open, onClose, onJump, palette, page, recite }: {
   recite?: boolean;
 }) {
   const [query, setQuery] = useState('');
+  useEffect(() => { if (open && asked) setQuery(asked); }, [open, asked]);
   const groups = useMemo(() => juzGroups(surahs), []);
   const reference = parseReference(query, surahs);
   const words = !reference && searchable(query) ? query.trim() : '';

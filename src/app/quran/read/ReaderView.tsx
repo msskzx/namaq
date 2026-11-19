@@ -6,12 +6,13 @@ import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronUp, EyeOff, File, List, Search } from 'lucide-react';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import NoteDialog from '@/components/quran/NoteDialog';
-import { ayahBookmarkId, ayahHref, markForgotten, rememberAyah, readDueMarks, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
+import { ayahBookmarkId, ayahHref, clearForgotten, markAyah, markForgotten, rememberAyah, readAyahMarks, readDueMarks, serverAyahMarks, subscribeAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
+import { allForgotten, forgotKeys, selectedText, selectionOf, wordScope, type Scope, type Selection } from '@shared/quran/selection';
 import { sectionAt, surahTopicsOf } from '@shared/quran/surahTopics';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { readFasilas, serverFasilas, setQuranFasila, subscribeFasilas } from '@shared/readingMarks';
 import FasilaIcon from '@/components/quran/FasilaIcon';
-import { readGestures, serverGestures, subscribeGestures, type GestureAction } from '@shared/readerGestures';
+import { readGestures, serverGestures, subscribeGestures, type Gesture, type GestureAction } from '@shared/readerGestures';
 import RecitePill from '@/components/recite/RecitePill';
 import FloatingBar from '@/components/common/FloatingBar';
 import { useRecite } from '@/components/recite/useRecite';
@@ -167,7 +168,8 @@ export default function ReaderView({
   const hiddenOn = (index: number) => position
     ? (key: string, word: number) => isHidden(position, key, word + shown.slice(0, index).reduce((sum, _, at) => sum + (countsOn(at)[key] ?? 0), 0), upcoming)
     : undefined;
-  const forgotten = useMemo(() => forgottenOrder(Object.keys(forgot)), [forgot]);
+  // A forgotten word is reviewed with its ayah here, until the website reviews the word alone as the app does.
+  const forgotten = useMemo(() => forgottenOrder(new Set(Object.keys(forgot).map(markAyah))), [forgot]);
   // The ayah under review counts even after it is cleared from the list.
   const reviewAt = position ? forgotten.filter(key => compareKeys(key, position.start) < 0).length + 1 : 1;
   const reviewTotal = forgotten.length + (position && !forgotten.includes(position.start) ? 1 : 0);
@@ -248,7 +250,17 @@ export default function ReaderView({
   };
   const writeOn = (index: number): Write | null => writeKey ? { key: writeKey, targets: asked, typed, current, before: before(index, writeKey), onBox: boxes.pick } : null;
   const checkedOn = (index: number): Checked | null => checked && position ? { ...checked, before: before(index, checked.key) } : null;
-  const [actions, setActions] = useState<{ key: string; x: number; y: number; word?: { page: number; n: number } } | null>(null);
+  /**
+   * The long press's buttons (the app's, owner 2026-11-19): the ayah's, and with a pressed word a tab to the word's own, or
+   * the words' own once the finger dragged over more after the long press. `word` is the pressed word's place on its page
+   * for the i'rab sheet; `words` the selection by place in the ayah. `holding` while the pressing finger is down (the page
+   * holds still for the drag), `dragging` once it reached another word (the buttons step aside until it lifts).
+   */
+  const [actions, setActions] = useState<{ key: string; x: number; y: number; below?: number; word?: { page: number; n: number }; words?: Selection; anchor?: number; scope: Scope; holding?: boolean; dragging?: boolean } | null>(null);
+  const actionsNow = useRef(actions);
+  actionsNow.current = actions;
+  const allForgot = useSyncExternalStore(subscribeAyahMarks, readAyahMarks, serverAyahMarks);
+  const [searchFor, setSearchFor] = useState<string | null>(null);
   const [noting, setNoting] = useState<string | null>(null);
   const [sharing, setSharing] = useState<string | null>(null);
   // Listening (the app's Reader): the recitation playing, its sheet, and the pages following the ayah being read until the reader turns away.
@@ -411,14 +423,33 @@ export default function ReaderView({
     return `${words.join(' ')}${endsOn(key) ? '' : ' …'}`;
   };
   const toggleSaved = (key: string) => toggleBookmark({ id: ayahBookmarkId(key), text: ayahText(key), href: ayahHref(key) });
-  const openActions = (key: string, element: Element) => {
+  /** The ayah's words by their place in it, the ۞ sign not counted (the places a selection counts). */
+  const ayahWords = (key: string) => groups.flatMap(lines => lines.flatMap(line => line?.filter(group => group.word && group.word !== '۞' && `${group.surah}:${group.ayah}` === key).map(group => group.word) ?? []));
+  const openActions = (key: string, element: Element, long: boolean) => {
     const box = element.getBoundingClientRect();
-    // The pressed word's place on its page, for the i'rab sheet (src/app/api/quran/irab).
-    const n = (element as HTMLElement).dataset?.word;
+    // The pressed word's place on its page, for the i'rab sheet (src/app/api/quran/irab), and in its ayah, for the selection.
+    const { word: n, at } = (element as HTMLElement).dataset ?? {};
     const page = (element.closest('[data-page]') as HTMLElement | null)?.dataset.page;
-    setActions({ key, x: box.left + box.width / 2, y: box.top, word: n !== undefined && page ? { page: Number(page), n: Number(n) } : undefined });
+    const anchor = at === undefined ? undefined : Number(at);
+    setActions({ key, x: box.left + box.width / 2, y: box.top, below: box.bottom, scope: 'ayah', word: n !== undefined && page ? { page: Number(page), n: Number(n) } : undefined,
+      ...(anchor === undefined ? {} : { words: selectionOf(key, anchor), anchor, holding: long }) });
   };
-  const runGesture = (action: GestureAction, target: Element) => {
+  // The finger that long-pressed a word drags over its ayah's words: they are selected, and the buttons open again where it
+  // lifts on their own actions (the app's onSelect).
+  const selected = useRef(-Infinity);
+  const onDrag = (x: number, y: number, done: boolean) => {
+    const current = actionsNow.current;
+    if (!current?.holding || current.anchor === undefined) return;
+    if (done) selected.current = performance.now();
+    const under = document.elementFromPoint(x, y)?.closest<HTMLElement>('[data-ayah][data-at]');
+    const now = under?.dataset.ayah === current.key ? Number(under.dataset.at) : current.words ? (current.words.from === current.anchor ? current.words.to : current.words.from) : current.anchor;
+    const picked = selectionOf(current.key, current.anchor, now);
+    const dragged = !!current.dragging || picked.to > picked.from;
+    setActions(done
+      ? { ...current, words: picked, holding: false, dragging: false, ...(dragged ? { x, y: y - 24, below: y + 24, scope: wordScope(picked) } : {}) }
+      : { ...current, words: picked, dragging: dragged });
+  };
+  const runGesture = (action: GestureAction, target: Element, gesture?: Gesture) => {
     const word = target.closest<HTMLElement>('[data-ayah]:not([data-veiled])');
     const key = word?.dataset.ayah;
     if (action === 'tools') {
@@ -427,7 +458,7 @@ export default function ReaderView({
     } else if (action === 'next-ayah') revealNextAyah();
     else if (action === 'next-word') revealNextWord();
     else if (action === 'back') stepBackOne();
-    else if (key && word && action === 'actions') openActions(key, word);
+    else if (key && word && action === 'actions') openActions(key, word, gesture === 'long');
     else if (key && action === 'forgot') markForgotten(key);
     else if (key && action === 'save') toggleSaved(key);
   };
@@ -494,7 +525,8 @@ export default function ReaderView({
   const LayoutIcon = two ? File : BookOpen;
   const { justSwiped } = useSwipe(stage, phone, {
     forward: dx => dx > 0,
-    canStep: forward => !(forward ? last : first),
+    // A selection's drag is no swipe, even as the finger lifts (the selection ends just before the swipe does).
+    canStep: forward => !actionsNow.current?.holding && performance.now() - selected.current > 400 && !(forward ? last : first),
     drag: () => {},
     step: forward => go(forward ? 1 : -1),
     cancel: () => {},
@@ -506,11 +538,18 @@ export default function ReaderView({
       // While writing, a touch on the page only brings the keyboard back; the boxes pick a word themselves.
       if (writeKey) { input.current?.focus({ preventScroll: true }); return; }
       setActions(null);
-      runGesture(gestures[mode][gesture], target);
+      runGesture(gestures[mode][gesture], target, gesture);
     },
+    onDrag,
     waitForDouble: () => gestures[mode].double !== 'none',
     ignore: () => justSwiped() || performance.now() - dismissed.current < 800,
   });
+  // What «نسيت» marks for the open tab: the ayah, or each selected word (owner, 2026-11-19: one forgot button).
+  const forgetting = actions ? forgotKeys(actions.scope, actions.words ?? selectionOf(actions.key, 0)) : [];
+  const undoForgot = !!actions && actions.scope !== 'ayah' && allForgotten(forgetting, allForgot);
+  // The ayah's due marks, its own and its words': «تذكّرتها» rests them all.
+  const dueHere = actions ? Object.keys(forgot).filter(key => markAyah(key) === actions.key) : [];
+  const picked = actions?.words ? selectedText(ayahWords(actions.key), actions.words) : '';
   const reciteLabel = reciting ? (ar ? 'إنهاء التسميع' : 'Stop reciting') : (ar ? 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' : 'Recite: hide the ayat and reveal them one by one');
   const reciteToggle = <Button size="lg" variant={reciting ? 'primary' : 'muted'} aria-pressed={reciting} onClick={() => (reciting ? stopRecite() : startRecite())} aria-label={reciteLabel} title={reciteLabel}><EyeOff aria-hidden /></Button>;
   // The فاصلة is a page (owner, 2026-11-17): the ribbon fills on its page, and a tap puts it on the page open or takes it off.
@@ -539,7 +578,7 @@ export default function ReaderView({
     </SwipePanel>
     <Button size="lg" variant="muted" popoverTarget={searchId} aria-label={search} title={search}><Search aria-hidden /></Button>
     <SwipePanel id={searchId} aria-label={search}>
-      <SurahIndex surahs={surahs} fontClass={fontClass} onNavigate={() => document.getElementById(searchId)?.hidePopover?.()} />
+      <SurahIndex surahs={surahs} fontClass={fontClass} query={searchFor} onNavigate={() => document.getElementById(searchId)?.hidePopover?.()} />
     </SwipePanel>
   </>;
   return (
@@ -609,12 +648,15 @@ export default function ReaderView({
         </Button>}
         {shown.map((entry, at) => (
           <MushafPage key={entry.page} page={entry.page} data={entry.data} names={names} top={entry.top} mark={mark} playing={listening?.key}
-            pressed={actions && (!actions.word || actions.word.page === entry.page) ? { key: actions.key, word: actions.word?.n } : actions ? { key: actions.key } : null} hidden={hiddenOn(at)} titled={titledOn(at)} next={upcoming} forgot={forgot} saved={saved}
+            pressed={actions && (!actions.word || actions.word.page === entry.page) ? { key: actions.key, words: actions.words } : actions ? { key: actions.key } : null} hidden={hiddenOn(at)} titled={titledOn(at)} next={upcoming} forgot={forgot} saved={saved}
             write={writeOn(at)} checked={checkedOn(at)} zoom={zoom} />
         ))}
       </article>
-      {actions && <AyahActions ayah={actions.key} x={actions.x} y={actions.y} ar={ar} forgot={forgot[actions.key]?.forgot ?? 0} saved={saved.has(actions.key)} noted={!!notes[actions.key]} links={links[actions.key]}
-        onForgot={() => markForgotten(actions.key)} onClear={() => rememberAyah(actions.key)} onSave={() => toggleSaved(actions.key)} onNote={() => setNoting(actions.key)} onShare={() => setSharing(actions.key)}
+      {actions && !actions.dragging && <AyahActions ayah={actions.key} x={actions.x} y={actions.y} below={actions.below} ar={ar} due={dueHere.length > 0} forgot={forgot[actions.key]?.forgot ?? 0} saved={saved.has(actions.key)} noted={!!notes[actions.key]} links={links[actions.key]}
+        words={actions.words} scope={actions.scope} text={picked} undo={undoForgot} onScope={scope => setActions(was => was && { ...was, scope })}
+        onCopy={() => void navigator.clipboard?.writeText(picked)} onPlaces={() => { setSearchFor(picked); document.getElementById(searchId)?.showPopover?.(); }}
+        onShareWords={() => { const text = `«${picked}»\n${surahOfKey(actions.key)} ${ar ? num(Number(actions.key.split(':')[1])) : actions.key.split(':')[1]}\n${window.location.origin}${ayahHref(actions.key)}`; if (navigator.share) void navigator.share({ text }).catch(() => {}); else void navigator.clipboard?.writeText(text); }}
+        onForgot={() => { for (const key of forgetting) { if (undoForgot) clearForgotten(key); else markForgotten(key); } }} onClear={() => dueHere.forEach(key => rememberAyah(key))} onSave={() => toggleSaved(actions.key)} onNote={() => setNoting(actions.key)} onShare={() => setSharing(actions.key)}
         onTopics={!position && surahTopicsOf(Number(actions.key.split(':')[0])) ? () => { const [surah, ayah] = actions.key.split(':').map(Number); setTopic({ surah, section: Math.max(0, sectionAt(surah, ayah)) }); } : undefined}
         irab={!!actions.word} onListen={() => listen(actions.key)} onRecite={() => startRecite(actions.key)} onPreview={kind => setPreview(kind === 'irab' || kind === 'gharib' ? { kind, key: actions.key, ...actions.word! } : kind === 'tafsir' || kind === 'balagha' ? { kind, key: actions.key } : kind === 'readings' ? { kind, key: actions.key, qiraat: links[actions.key]?.qiraat ?? [] } : { kind, key: actions.key, all: kind === 'trees' ? links[actions.key]?.trees ?? '/quran/branches' : `/quran/compare?a=${actions.key.split(':')[0]}` })} onClose={closeActions} onDismiss={dismissActions} />}
       {fasila && !position && !actions && !shown.some(entry => entry.page === fasila.page) && <div className={mushaf.reciteBar}>

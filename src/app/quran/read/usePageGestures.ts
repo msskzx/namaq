@@ -17,14 +17,18 @@ const SLOP = 10;
  */
 export function usePageGestures(
   ref: RefObject<HTMLElement | null>,
-  handlers: { onGesture: (gesture: Gesture, target: Element, mouse: boolean) => void; waitForDouble: () => boolean; ignore?: () => boolean },
+  handlers: {
+    onGesture: (gesture: Gesture, target: Element, mouse: boolean) => void; waitForDouble: () => boolean; ignore?: () => boolean;
+    /** After a long press the finger may drag on without lifting (the app's word selection, owner 2026-11-19): where it is, and `done` when it lifts. */
+    onDrag?: (x: number, y: number, done: boolean) => void;
+  },
 ) {
   const latest = useRef(handlers);
   latest.current = handlers;
   useEffect(() => {
     const element = ref.current;
     if (!element) return;
-    let press: { x: number; y: number; id: number; target: Element; timer: ReturnType<typeof setTimeout>; long: boolean } | null = null;
+    let press: { x: number; y: number; id: number; target: Element; timer: ReturnType<typeof setTimeout>; long: boolean; last: { x: number; y: number } } | null = null;
     let touch = false;
     let pending: { timer: ReturnType<typeof setTimeout>; target: Element } | null = null;
     const fire = (gesture: Gesture, target: Element) => latest.current.onGesture(gesture, target, !touch);
@@ -34,7 +38,7 @@ export function usePageGestures(
       if (event.isPrimary === false || event.button > 0 || skip(event.target)) return;
       if (press) clearTimeout(press.timer);
       const target = event.target as Element;
-      press = { x: event.clientX, y: event.clientY, id: event.pointerId, target, long: false, timer: setTimeout(() => {
+      press = { x: event.clientX, y: event.clientY, id: event.pointerId, target, long: false, last: { x: event.clientX, y: event.clientY }, timer: setTimeout(() => {
         if (!press) return;
         press.long = true;
         if (pending) { clearTimeout(pending.timer); pending = null; }
@@ -42,6 +46,12 @@ export function usePageGestures(
       }, LONG_PRESS) };
     };
     const move = (event: PointerEvent) => {
+      if (press?.long && event.pointerId === press.id) {
+        press.last = { x: event.clientX, y: event.clientY };
+        window.getSelection()?.removeAllRanges();
+        latest.current.onDrag?.(event.clientX, event.clientY, false);
+        return;
+      }
       if (press && event.pointerId === press.id && Math.hypot(event.clientX - press.x, event.clientY - press.y) > SLOP) {
         clearTimeout(press.timer);
         press = null;
@@ -52,7 +62,8 @@ export function usePageGestures(
       const done = press;
       press = null;
       clearTimeout(done.timer);
-      if (done.long || latest.current.ignore?.() || window.getSelection()?.toString()) return;
+      if (done.long) { latest.current.onDrag?.(event.clientX, event.clientY, true); return; }
+      if (latest.current.ignore?.() || window.getSelection()?.toString()) return;
       if (pending) {
         clearTimeout(pending.timer);
         pending = null;
@@ -62,7 +73,13 @@ export function usePageGestures(
       if (!latest.current.waitForDouble()) { fire('tap', done.target); return; }
       pending = { target: done.target, timer: setTimeout(() => { const was = pending; pending = null; if (was) fire('tap', was.target); }, DOUBLE_TAP) };
     };
-    const cancel = () => { if (press) clearTimeout(press.timer); press = null; };
+    const cancel = () => {
+      if (press) clearTimeout(press.timer);
+      if (press?.long) latest.current.onDrag?.(press.last.x, press.last.y, true);
+      press = null;
+    };
+    // Once a long press holds, the finger's moves select words: the page does not scroll under it.
+    const hold = (event: TouchEvent) => { if (press?.long) event.preventDefault(); };
     // A long press by finger would otherwise open the phone's text menu; a mouse keeps its right-click menu.
     const menu = (event: Event) => { if (touch && !skip(event.target)) event.preventDefault(); };
     element.addEventListener('pointerdown', down);
@@ -70,6 +87,7 @@ export function usePageGestures(
     element.addEventListener('pointerup', up);
     element.addEventListener('pointercancel', cancel);
     element.addEventListener('contextmenu', menu);
+    element.addEventListener('touchmove', hold, { passive: false });
     return () => {
       cancel();
       if (pending) clearTimeout(pending.timer);
@@ -78,6 +96,7 @@ export function usePageGestures(
       element.removeEventListener('pointerup', up);
       element.removeEventListener('pointercancel', cancel);
       element.removeEventListener('contextmenu', menu);
+      element.removeEventListener('touchmove', hold);
     };
   }, [ref]);
 }

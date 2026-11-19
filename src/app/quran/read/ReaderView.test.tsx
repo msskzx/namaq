@@ -389,7 +389,7 @@ describe('Recite mode', () => {
     expect(veiled(container)).toEqual([]);
     longPress(container.querySelector('[data-ayah="2:2"]')!);
     const actions = within(screen.getByRole('dialog'));
-    fireEvent.click(actions.getByRole('button', { name: 'نسيتها' }));
+    fireEvent.click(actions.getByRole('button', { name: 'نسيت الآية' }));
     expect(JSON.parse(localStorage.getItem('ayah-forgot')!)['2:2'].forgot).toBe(1);
     expect(container.querySelector('[data-ayah="2:2"]')?.className).toMatch(/forgot/);
     expect(container.querySelector('[data-ayah="2:1"]')?.className ?? '').not.toMatch(/forgot/);

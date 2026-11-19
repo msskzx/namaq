@@ -37,6 +37,8 @@ type Props = {
   scroll?: GestureType;
   /** Told when two fingers start and stop pinching, so the reader holds the page still meanwhile. */
   onPinch?: (on: boolean) => void;
+  /** A finger is selecting words on the page (a drag after a long press): the pages hold still under it. */
+  hold?: boolean;
 };
 
 /**
@@ -45,7 +47,7 @@ type Props = {
  * A pinch changes the text size. While the fingers are down the page is only stretched as a preview; when they lift
  * the page is set again at the new size, sharp.
  */
-export default function ReaderPager({ page, count, width, height, onPage, onMove, render, onPull, zoom = 1, onZoom, backEdge, scrollTop = 0, scroll, onPinch }: Props) {
+export default function ReaderPager({ page, count, width, height, onPage, onMove, render, onPull, zoom = 1, onZoom, backEdge, scrollTop = 0, scroll, onPinch, hold = false }: Props) {
   const offset = useSharedValue((page - 1) * width);
   const from = useSharedValue(0);
   const settled = useRef(page);
@@ -81,6 +83,7 @@ export default function ReaderPager({ page, count, width, height, onPage, onMove
 
   const last = (count - 1) * width;
   const pan = Gesture.Pan()
+    .enabled(!hold)
     .maxPointers(1)
     .hitSlop(backEdge ? BACK_EDGE_SLOP : {})
     .activeOffsetX([-12, 12])
@@ -104,7 +107,7 @@ export default function ReaderPager({ page, count, width, height, onPage, onMove
     });
 
   const pull = Gesture.Pan()
-    .enabled(!!onPull && zoom === 1)
+    .enabled(!!onPull && zoom === 1 && !hold)
     .maxPointers(1)
     .activeOffsetY(24)
     .failOffsetX([-16, 16])

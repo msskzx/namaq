@@ -35,11 +35,12 @@ describe("the reader's ayah buttons", () => {
   it('opens the note, filled when the ayah has one', () => {
     const onNote = vi.fn();
     render(<AyahActions {...props} onNote={onNote} />);
-    fireEvent.click(screen.getByLabelText('اكتب تأملًا'));
+    fireEvent.click(screen.getByLabelText('دوّن عن الآية'));
+    expect(screen.getByLabelText('دوّن عن الآية').textContent).toBe('دوّن');
     expect(onNote).toHaveBeenCalled();
     cleanup();
     render(<AyahActions {...props} noted onNote={onNote} />);
-    expect(screen.getByLabelText('تأملك في الآية').getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByLabelText('ما دوّنته عن الآية').getAttribute('aria-pressed')).toBe('true');
   });
 
   it('names each button under its icon, and shows the readings button only for an ayah whose words the readers differ in', () => {
@@ -61,13 +62,38 @@ describe("the reader's ayah buttons", () => {
     expect(onPreview).toHaveBeenLastCalledWith('tafsir');
   });
 
-  it('opens a pressed word\'s i\'rab, and has no i\'rab button when no word was pressed', () => {
+  it('opens a pressed word\'s i\'rab on its tab, and has no tab or i\'rab button when no word was pressed', () => {
     const onPreview = vi.fn();
     render(<AyahActions {...props} onPreview={onPreview} />);
     expect(screen.queryByLabelText('إعراب الكلمة')).toBeNull();
+    expect(screen.queryByRole('tablist')).toBeNull();
     cleanup();
-    render(<AyahActions {...props} onPreview={onPreview} irab />);
+    const onScope = vi.fn();
+    render(<AyahActions {...props} onPreview={onPreview} irab words={{ key: '2:49', from: 1, to: 1 }} text="نَجَّيۡنَٰكُم" onScope={onScope} />);
+    // The long press opens on the ayah's buttons; the tab turns to the word's.
+    expect(screen.getByRole('tab', { name: 'الآية' }).getAttribute('aria-selected')).toBe('true');
+    expect(screen.queryByLabelText('إعراب الكلمة')).toBeNull();
+    fireEvent.click(screen.getByRole('tab', { name: 'الكلمة' }));
+    expect(onScope).toHaveBeenLastCalledWith('word');
+    cleanup();
+    render(<AyahActions {...props} onPreview={onPreview} irab words={{ key: '2:49', from: 1, to: 1 }} scope="word" text="نَجَّيۡنَٰكُم" onScope={onScope} onCopy={vi.fn()} />);
+    expect(screen.getByLabelText('نسيت الكلمة').textContent).toBe('نسيت');
+    expect(screen.queryByLabelText('احفظ الآية')).toBeNull();
     fireEvent.click(screen.getByLabelText('إعراب الكلمة'));
     expect(onPreview).toHaveBeenLastCalledWith('irab');
+  });
+
+  it('acts on several dragged words with one forgot button, their places, copy and share', () => {
+    const onForgot = vi.fn(), onPlaces = vi.fn(), onCopy = vi.fn(), onShareWords = vi.fn();
+    render(<AyahActions {...props} onPreview={vi.fn()} irab words={{ key: '2:49', from: 0, to: 2 }} scope="words" text="وَإِذۡ نَجَّيۡنَٰكُم مِّنۡ" onScope={vi.fn()}
+      onForgot={onForgot} onPlaces={onPlaces} onCopy={onCopy} onShareWords={onShareWords} />);
+    expect(screen.getByRole('dialog').getAttribute('aria-label')).toBe('«وَإِذۡ نَجَّيۡنَٰكُم مِّنۡ»');
+    expect(screen.getByRole('tab', { name: 'الكلمات' }).getAttribute('aria-selected')).toBe('true');
+    expect(screen.queryByLabelText('إعراب الكلمة')).toBeNull();
+    fireEvent.click(screen.getByLabelText('نسيت هذه الكلمات'));
+    fireEvent.click(screen.getByLabelText('مواضع «وَإِذۡ نَجَّيۡنَٰكُم مِّنۡ» في القرآن'));
+    fireEvent.click(screen.getByLabelText('انسخ الكلمات'));
+    fireEvent.click(screen.getByLabelText('مشاركة الكلمات'));
+    expect([onForgot, onPlaces, onCopy, onShareWords].every(fn => fn.mock.calls.length === 1)).toBe(true);
   });
 });

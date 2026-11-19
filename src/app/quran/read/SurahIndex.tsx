@@ -23,12 +23,15 @@ const AROUND = 6;
 const DELAY = 100;
 
 /** With `recite`, every link opens the reader in recite mode from that place, and `children` sits above the index. */
-export default function SurahIndex({ surahs, fontClass, onNavigate, recite = false, children }: { surahs: IndexSurah[]; fontClass?: string; onNavigate?: () => void; recite?: boolean; children?: React.ReactNode }) {
+export default function SurahIndex({ surahs, fontClass, onNavigate, recite = false, query: asked, children }: { surahs: IndexSurah[]; fontClass?: string; onNavigate?: () => void; recite?: boolean;
+  /** Search these words: a selection's «المواضع» in the reader (owner, 2026-11-19). */
+  query?: string | null; children?: React.ReactNode }) {
   const { language, languageLoaded } = useLanguage();
   const ar = !languageLoaded || language === 'ar';
   const n = (value: number) => (ar ? num(value) : String(value));
   const router = useNavigatingRouter();
   const [query, setQuery] = useState('');
+  useEffect(() => { if (asked) setQuery(asked); }, [asked]);
   const groups = useMemo(() => juzGroups(surahs), [surahs]);
   const reference = parseReference(query, surahs);
   const from = (surah: number, ayah: number) => (recite ? `?recite=${surah}:${ayah}` : '');
