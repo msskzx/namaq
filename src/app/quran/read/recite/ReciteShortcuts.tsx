@@ -4,8 +4,8 @@ import { useMemo, useSyncExternalStore } from 'react';
 import { LightbulbOff, Play } from 'lucide-react';
 import Button from '@/components/common/Button';
 import { useLanguage } from '@/components/language/LanguageContext';
-import { ayahHref, markAyah, readDueMarks, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
-import { forgottenOrder } from '@shared/quran/recite';
+import { readDueMarks, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
+import { forgottenOrder, reviewHref } from '@shared/quran/recite';
 import { LAST_RECITE_KEY } from '../ReaderView';
 
 const readLast = () => { try { return localStorage.getItem(LAST_RECITE_KEY); } catch { return null; } };
@@ -21,7 +21,7 @@ export default function ReciteShortcuts() {
   if (!last && !forgotten.length) return null;
   return <div className="mb-5 flex flex-wrap gap-2">
     {last?.startsWith('/quran/read/') && <Button href={last}><Play size={18} aria-hidden />{ar ? 'تابع من حيث توقفت' : 'Continue where you stopped'}</Button>}
-    {forgotten.length > 0 && <Button href={`${ayahHref(forgotten[0])}?recite=${markAyah(forgotten[0])}&review=1`}>
+    {forgotten.length > 0 && <Button href={reviewHref(forgotten[0])}>
       <LightbulbOff size={18} aria-hidden />{ar ? 'راجع ما نسيت' : 'Review what you forgot'}
     </Button>}
   </div>;

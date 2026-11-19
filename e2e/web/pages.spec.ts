@@ -360,6 +360,42 @@ test.describe('pages with the database', () => {
     await noErrorPage(page);
   });
 
+  test.describe('forgotten word review', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.addInitScript(() => {
+        if (sessionStorage.getItem('seeded')) return;
+        sessionStorage.setItem('seeded', '1');
+        localStorage.setItem('ayah-forgot', JSON.stringify({ '1:2:1': { forgot: 1, at: 1 } }));
+        localStorage.setItem('quran-reader-write', 'on');
+      });
+    });
+
+    test('the review link asks only the marked word and a right answer rests the word mark', async ({ page }) => {
+      await page.goto('/quran/read/recite');
+      await page.getByRole('link', { name: 'راجع ما نسيت' }).click();
+      await expect(page).toHaveURL(/recite=1(:|%3A)2&word=1/);
+      await expect(page.getByRole('button', { name: 'اكتب هذه الكلمة', exact: true })).toHaveCount(1);
+      await expect(page.getByText('ٱلۡحَمۡدُ', { exact: true }).first()).toBeVisible();
+      await page.getByLabel('اكتب الكلمة').fill('لله ');
+      await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('ayah-forgot') ?? '{}')['1:2:1']?.step)).toBe(1);
+      await expect.poll(() => page.evaluate(() => Object.keys(JSON.parse(localStorage.getItem('ayah-forgot') ?? '{}')))).toEqual(['1:2:1']);
+      await noErrorPage(page);
+    });
+
+    test('a wrong answer counts only the word mark again', async ({ page }) => {
+      await page.goto('/quran/read/ayah/1/2?recite=1:2&word=1&review=1');
+      await expect(page.getByRole('button', { name: 'اكتب هذه الكلمة', exact: true })).toHaveCount(1);
+      await page.getByLabel('اكتب الكلمة').fill('رب ');
+      await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('ayah-forgot') ?? '{}'))).toEqual({ '1:2:1': { forgot: 2, at: expect.any(Number) } });
+    });
+
+    test('the forgotten shelf shows the word itself', async ({ page }) => {
+      await page.goto('/library?tab=forgotten');
+      await expect(page.getByRole('button', { name: /لِلَّهِ/ }).first()).toBeVisible();
+      await expect(page.getByRole('button', { name: /رَبِّ/ })).toHaveCount(0);
+    });
+  });
+
   test('an ayah\'s buttons open the surah\'s topics', async ({ page }) => {
     await page.goto('/quran/read/582');
     const word = page.getByText('عَنِ', { exact: true }).first();

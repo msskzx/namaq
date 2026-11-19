@@ -43,7 +43,7 @@ import { useNow } from '@/components/utilities/Utilities';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
 import { continuePage, readFasilas, serverFasilas, subscribeFasilas } from '@shared/readingMarks';
-import { ayahBookmarkId, ayahHref, markAyah, markForgotten, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
+import { ayahBookmarkId, ayahHref, markAyah, markWord, wordMarkKey, markForgotten, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { isMemorized, memorizedFilters, memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized, type Memorized } from '@shared/memorized';
 import { FEED_QUIZ_NAMES, feedQuizSeed, OPENINGS, openingSurah, type FeedQuizKind } from '@shared/quiz/feedQuiz';
 import { activeInterests, INTERESTS, pickedInterests } from '@shared/interests';
@@ -51,7 +51,7 @@ import QuizAnswer, { type QuizData } from '@/app/quizzes/QuizAnswer';
 import type { Hints } from '@shared/quiz/hints';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { backToVisit, FEED_AHEAD, FEED_FAR, growingPicks, hasStoryCard, savedOfSlot, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, serverFeedSeen, serverStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, STORIES, type StoryId } from '@shared/feedSeen';
-import { forgottenOrder, type RecitePosition } from '@shared/quran/recite';
+import { forgottenOrder, reviewHref, type RecitePosition } from '@shared/quran/recite';
 import type { PairCard } from '@shared/quran/compareCards';
 import { hijriDate, juzLabel, todaysJuz } from '@shared/hijri';
 import { JUZ_INDEX } from '@shared/quran/juzIndex';
@@ -59,7 +59,6 @@ import { num } from '@shared/quran/arabicNumber';
 import { ayahPlaces } from '@shared/quran/ayahPlaces';
 import { dayNumber } from '@shared/dailyPick';
 import surahRows from '@shared/data/quran/surahs.json';
-import { reviewHref } from './HomeCards';
 import AyahLines, { PageTop, useAyahPage, type Page } from './AyahLines';
 import { useMemorized } from './Memorized';
 import styles from './Homepage.module.css';
@@ -224,7 +223,7 @@ const RECALL_WRITE = 'recall-write';
  * memorized (`review` absent) has «نسيتها» too.
  */
 function ForgottenPost({ ayah: mark, review, title = 'هل تذكرها؟' }: { ayah: string; review?: string; title?: string }) {
-  // A forgotten word is asked with its ayah, until the website asks the word alone as the app does.
+  // A forgotten word is asked alone, in its ayah's lines (the app's).
   const ayah = markAyah(mark);
   const [, setGone] = useState(0);
   const [writing, setWriting] = useState(false);
@@ -232,7 +231,7 @@ function ForgottenPost({ ayah: mark, review, title = 'هل تذكرها؟' }: { 
   const toggleWriting = () => setWriting(on => { try { localStorage.setItem(RECALL_WRITE, String(!on)); } catch {} return !on; });
   const [surah, number] = ayah.split(':').map(Number);
   if (!review && recalled.has(ayah)) return null;
-  return <Recall key={`${ayah}-${writing}`} ayah={ayah} title={title} sub={`${names[surah]} ${num(number)}`} writing={writing} onWriting={toggleWriting}>
+  return <Recall key={`${mark}-${writing}`} ayah={ayah} targetWord={markWord(mark)} title={title} sub={`${names[surah]} ${num(number)}`} writing={writing} onWriting={toggleWriting}>
     <Action Icon={Check} label="تذكّرتها" tone="green" onClick={() => { if (review) rememberAyah(mark); else { recalled.add(ayah); setGone(n => n + 1); } }} />
     {!review && <Action Icon={LightbulbOff} label="نسيتها" onClick={() => { recalled.add(ayah); markForgotten(ayah); setGone(n => n + 1); }} />}
     {review && <Action Icon={EyeOff} label="راجع ما نسيت" href={review} />}
@@ -246,10 +245,10 @@ function ForgottenPost({ ayah: mark, review, title = 'هل تذكرها؟' }: { 
  * (the reader's gesture settings, read/usePageGestures); the pen writes what the pen setting asks. Drawn afresh for each way
  * of asking (`writing`).
  */
-function Recall({ ayah, title, sub, writing, onWriting, children }: { ayah: string; title: string; sub: string; writing: boolean; onWriting: () => void; children: React.ReactNode }) {
+function Recall({ ayah, targetWord, title, sub, writing, onWriting, children }: { ayah: string; targetWord?: number; title: string; sub: string; writing: boolean; onWriting: () => void; children: React.ReactNode }) {
   const { pages, words } = useAyahPage(ayah);
   const model = useMemo(() => (pages ? pageModel(pages.data, pages.top) : null), [pages]);
-  const [position, setPosition] = useState<RecitePosition>({ start: ayah, shown: null, words: 0 });
+  const [position, setPosition] = useState<RecitePosition>({ start: ayah, ...(targetWord !== undefined ? { word: targetWord } : {}), shown: null, words: 0 });
   const pen = usePenRule();
   const recite = useRecite({ model, position, setPosition, writing, pen, until: ayah });
   const run = (action: GestureAction, key: string | undefined) => {
@@ -257,7 +256,7 @@ function Recall({ ayah, title, sub, writing, onWriting, children }: { ayah: stri
     else if (action === 'next-word') recite.nextWord();
     else if (action === 'back') recite.back();
     else if (key !== ayah) return;
-    else if (action === 'forgot') markForgotten(ayah);
+    else if (action === 'forgot') markForgotten(targetWord === undefined ? ayah : wordMarkKey(ayah, targetWord));
     else if (action === 'save' && words) toggleBookmark({ id: ayahBookmarkId(ayah), text: words.join(' '), href: ayahHref(ayah) });
   };
   const lines = useRef<HTMLDivElement>(null);
@@ -274,7 +273,7 @@ function Recall({ ayah, title, sub, writing, onWriting, children }: { ayah: stri
     actions={children}>
     <div ref={lines} className={styles.recall}>
       {!pages && <LoadingDots label="جارٍ التحميل" />}
-      {pages && <AyahLines ayah={ayah} pages={pages} shown={recite.done} words={position.words} checked={recite.checked} write={recite.write ?? undefined} />}
+      {pages && <AyahLines ayah={ayah} targetWord={targetWord} pages={pages} shown={recite.done} words={position.words} checked={recite.checked} write={recite.write ?? undefined} />}
       {recite.write && recite.boxes.field({ 'aria-label': 'اكتب الكلمة' })}
     </div>
   </Post>;

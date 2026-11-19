@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { compareKeys, forgottenOrder, isHidden, nextAyah, nextForgotten, positionQuery, previousKey, readPosition, revealAyah, revealWord, stepBack, type RecitePosition } from './recite';
+import { compareKeys, forgottenOrder, isHidden, nextAyah, nextForgotten, positionQuery, previousKey, readPosition, revealAyah, reviewHref, reviewPosition, revealWord, stepBack, type RecitePosition } from './recite';
 
 const counts = new Map([[56, 96], [57, 29]]);
 const order = ['56:95', '56:96', '57:1', '57:2', '57:3'];
@@ -39,6 +39,26 @@ describe('recite', () => {
     expect(readPosition(new URLSearchParams(positionQuery(position)))).toEqual(position);
     expect(readPosition(new URLSearchParams('recite=x'))).toBeNull();
     expect(readPosition(new URLSearchParams('recite=57:5&upto=57:4'))).toEqual({ start: '57:5', shown: null, words: 0 });
+  });
+
+  it('carries a forgotten word under review through the URL', () => {
+    const position = { start: '1:2', word: 0, shown: null, words: 0 };
+    expect(readPosition(new URLSearchParams(positionQuery(position)))).toEqual(position);
+    expect(readPosition(new URLSearchParams('recite=1:2&word=x'))).toEqual({ start: '1:2', shown: null, words: 0 });
+    expect(readPosition(new URLSearchParams('recite=1:2&word=-1'))).toEqual({ start: '1:2', shown: null, words: 0 });
+  });
+
+  it('reviews a forgotten ayah whole and a forgotten word alone', () => {
+    expect(reviewPosition('2:255')).toEqual({ start: '2:255', shown: null, words: 0 });
+    expect(reviewPosition('2:255:3')).toEqual({ start: '2:255', word: 3, shown: null, words: 0 });
+    expect(reviewHref('2:255')).toBe('/quran/read/ayah/2/255?recite=2:255&review=1');
+    expect(reviewHref('2:255:3')).toBe('/quran/read/ayah/2/255?recite=2:255&word=3&review=1');
+  });
+
+  it('walks forgotten words between ayat in mushaf order', () => {
+    const keys = forgottenOrder(['1:3', '1:2:1', '1:2', '1:2:0']);
+    expect(keys).toEqual(['1:2', '1:2:0', '1:2:1', '1:3']);
+    expect(nextForgotten(keys, '1:2:0')).toBe('1:2:1');
   });
 
   it('walks forgotten ayat in mushaf order', () => {

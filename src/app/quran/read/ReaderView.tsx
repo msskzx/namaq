@@ -6,7 +6,7 @@ import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { ArrowLeft, ArrowRight, BookOpen, ChevronDown, ChevronUp, EyeOff, File, List, Search } from 'lucide-react';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import NoteDialog from '@/components/quran/NoteDialog';
-import { ayahBookmarkId, ayahHref, clearForgotten, markAyah, markForgotten, rememberAyah, readAyahMarks, readDueMarks, serverAyahMarks, subscribeAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
+import { ayahBookmarkId, ayahHref, clearForgotten, markAyah, markForgotten, rememberAyah, wordMarkKey, readAyahMarks, readDueMarks, serverAyahMarks, subscribeAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { allForgotten, forgotKeys, selectedText, selectionOf, wordScope, type Scope, type Selection } from '@shared/quran/selection';
 import { sectionAt, surahTopicsOf } from '@shared/quran/surahTopics';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
@@ -19,7 +19,7 @@ import { useRecite } from '@/components/recite/useRecite';
 import { usePenRule } from '@/lib/penRule';
 import { joinModels, pageModel } from '@shared/quran/recitePage';
 import { WRITE_KEY } from './writeKey';
-import { compareKeys, forgottenOrder, previousKey, isHidden, nextAyah, nextForgotten, positionQuery, readPosition, type RecitePosition } from '@shared/quran/recite';
+import { compareKeys, forgottenOrder, previousKey, isHidden, nextAyah, nextForgotten, positionQuery, readPosition, reviewHref, type RecitePosition } from '@shared/quran/recite';
 import AyahActions from './AyahActions';
 import ListenBar, { ListenSheet } from './ListenBar';
 import { listen, setFollowing, shouldFollow, useFollowing, useListening } from '@/lib/listen';
@@ -165,15 +165,20 @@ export default function ReaderView({
     titled.forEach((steps, surah) => { counts[`${surah}:1`] = (counts[`${surah}:1`] ?? 0) + steps; });
     return counts;
   };
+  // A forgotten word under review (the app's): only that word is hidden, its place counted across the spread's pages.
   const hiddenOn = (index: number) => position
-    ? (key: string, word: number) => isHidden(position, key, word + shown.slice(0, index).reduce((sum, _, at) => sum + (countsOn(at)[key] ?? 0), 0), upcoming)
+    ? position.word !== undefined
+      ? (key: string, word: number) => !!reciter.view?.hidden(key, word + shown.slice(0, index).reduce((sum, _, at) => sum + (wordCounts[at][key] ?? 0), 0))
+      : (key: string, word: number) => isHidden(position, key, word + shown.slice(0, index).reduce((sum, _, at) => sum + (countsOn(at)[key] ?? 0), 0), upcoming)
     : undefined;
-  // A forgotten word is reviewed with its ayah here, until the website reviews the word alone as the app does.
-  const forgotten = useMemo(() => forgottenOrder(new Set(Object.keys(forgot).map(markAyah))), [forgot]);
-  // The ayah under review counts even after it is cleared from the list.
-  const reviewAt = position ? forgotten.filter(key => compareKeys(key, position.start) < 0).length + 1 : 1;
-  const reviewTotal = forgotten.length + (position && !forgotten.includes(position.start) ? 1 : 0);
-  const reviewNext = reviewing && position ? nextForgotten(forgotten, position.start) : null;
+  // Forgotten ayat and forgotten words, each reviewed on its own as the app reviews them (a word alone, owner 2026-11-19).
+  const forgotten = useMemo(() => forgottenOrder(Object.keys(forgot)), [forgot]);
+  /** The mark under review: the ayah, or the one word of it. */
+  const reviewKey = position ? position.word === undefined ? position.start : wordMarkKey(position.start, position.word) : '';
+  // The mark under review counts even after it is cleared from the list.
+  const reviewAt = position ? forgotten.filter(key => compareKeys(key, reviewKey) < 0).length + 1 : 1;
+  const reviewTotal = forgotten.length + (position && !forgotten.includes(reviewKey) ? 1 : 0);
+  const reviewNext = reviewing && position ? nextForgotten(forgotten, reviewKey) : null;
 
   // Write mode (the app's, owner 2026-11-13): the next ayah's words stay boxes in their places, and the reader writes its
   // first and last few words, one box each; a full box moves on by itself. The last box shows the ayah, the written words
@@ -186,7 +191,7 @@ export default function ReaderView({
   const reciter = useRecite({ model: spreadModel, position, setPosition, writing, pen, autoFocus: true,
     until: reviewing ? position?.start ?? null : null,
     onPastEnd: () => {
-      if (reviewing) { if (reviewNext) router.push(`${ayahHref(reviewNext)}?recite=${reviewNext}&review=1`); }
+      if (reviewing) { if (reviewNext) router.push(reviewHref(reviewNext)); }
       else if ((two ? spreadOf(page)[1] : page) < 604) go(1);
     } });
   const { boxes, checked, setChecked } = reciter;
@@ -423,6 +428,8 @@ export default function ReaderView({
     return `${words.join(' ')}${endsOn(key) ? '' : ' …'}`;
   };
   const toggleSaved = (key: string) => toggleBookmark({ id: ayahBookmarkId(key), text: ayahText(key), href: ayahHref(key) });
+  /** «نسيت» while a forgotten word is under review marks that word again, not its ayah (the app's). */
+  const forgetKey = (key: string) => (position?.start === key && position.word !== undefined ? wordMarkKey(key, position.word) : key);
   /** The ayah's words by their place in it, the ۞ sign not counted (the places a selection counts). */
   const ayahWords = (key: string) => groups.flatMap(lines => lines.flatMap(line => line?.filter(group => group.word && group.word !== '۞' && `${group.surah}:${group.ayah}` === key).map(group => group.word) ?? []));
   const openActions = (key: string, element: Element, long: boolean) => {
@@ -441,7 +448,7 @@ export default function ReaderView({
     const current = actionsNow.current;
     if (!current?.holding || current.anchor === undefined) return;
     if (done) selected.current = performance.now();
-    const under = document.elementFromPoint(x, y)?.closest<HTMLElement>('[data-ayah][data-at]');
+    const under = document.elementFromPoint?.(x, y)?.closest<HTMLElement>('[data-ayah][data-at]');
     const now = under?.dataset.ayah === current.key ? Number(under.dataset.at) : current.words ? (current.words.from === current.anchor ? current.words.to : current.words.from) : current.anchor;
     const picked = selectionOf(current.key, current.anchor, now);
     const dragged = !!current.dragging || picked.to > picked.from;
@@ -459,7 +466,7 @@ export default function ReaderView({
     else if (action === 'next-word') revealNextWord();
     else if (action === 'back') stepBackOne();
     else if (key && word && action === 'actions') openActions(key, word, gesture === 'long');
-    else if (key && action === 'forgot') markForgotten(key);
+    else if (key && action === 'forgot') markForgotten(forgetKey(key));
     else if (key && action === 'save') toggleSaved(key);
   };
 
@@ -503,7 +510,7 @@ export default function ReaderView({
       else if (reciting && (event.key === ' ' || event.key === 'Enter') && !(event.target instanceof Element && event.target.closest('button, a'))) revealNextAyah();
       else if (reciting && event.key.toLowerCase() === 'w') revealNextWord();
       else if (reciting && event.key === 'Backspace') stepBackOne();
-      else if (event.key.toLowerCase() === 'f' && keyAyah) markForgotten(keyAyah);
+      else if (event.key.toLowerCase() === 'f' && keyAyah) markForgotten(forgetKey(keyAyah));
       else if (event.key.toLowerCase() === 'b' && keyAyah) toggleSaved(keyAyah);
       else return;
       event.preventDefault();

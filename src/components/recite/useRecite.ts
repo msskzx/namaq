@@ -1,7 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { markForgotten } from '@shared/ayahMarks';
+import { useEffect, useMemo, useState } from 'react';
+import { markForgotten, rememberAyah, wordMarkKey } from '@shared/ayahMarks';
 import { atStart, revealAyah, stepBack, type RecitePosition } from '@shared/quran/recite';
 import { reciteView, type PageModel } from '@shared/quran/recitePage';
 import { penTargets, type PenRule } from '@shared/quran/writeAyah';
@@ -36,13 +36,18 @@ export function useRecite({ model, position, setPosition, writing, pen, until = 
   const words = useMemo(() => (writeKey && model ? model.lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === writeKey).map(group => group.word!) ?? []) : []), [writeKey, model]);
   const offset = writeKey?.endsWith(':1') ? view?.titled.get(Number(writeKey.split(':')[0])) ?? 0 : 0;
   // Words already shown (by the next-word button) are not asked.
-  const asked = writeKey && view ? penTargets(words, pen).filter(at => view.hidden(writeKey, at + offset)) : [];
+  // A forgotten word under review is the one word asked, whatever the pen asks of a whole ayah.
+  const asked = writeKey && view ? (position?.word === undefined ? penTargets(words, pen) : words.map((_, at) => at)).filter(at => view.hidden(writeKey, at + offset)) : [];
   const [checked, setChecked] = useState<Omit<Checked, 'before'> | null>(null);
-  const boxes = useWriteBoxes({ ayah: writeKey, words, asked, autoFocus, onDone: (graded, typed) => {
+  useEffect(() => setChecked(null), [position?.start, position?.word]);
+  const boxes = useWriteBoxes({ ayah: writeKey && position?.word !== undefined ? wordMarkKey(writeKey, position.word) : writeKey, words, asked, autoFocus, onDone: (graded, typed) => {
     if (!writeKey || !position) return;
     if (onSubmit) { onSubmit(writeKey, typed); return; }
     setChecked({ key: writeKey, ...graded });
-    if (graded.wrong.length) markForgotten(writeKey);
+    // A word under review is marked, or rested, as the word; a whole ayah as the ayah.
+    const key = position.word === undefined ? writeKey : wordMarkKey(writeKey, position.word);
+    if (graded.wrong.length) markForgotten(key);
+    else rememberAyah(key);
     setPosition(revealAyah(position, writeKey));
     onWritten?.(writeKey, graded);
   } });

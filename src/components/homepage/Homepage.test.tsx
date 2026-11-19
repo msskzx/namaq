@@ -175,6 +175,20 @@ describe('home', () => {
     expect(screen.queryByText('هل تذكرها؟')).toBeNull();
   });
 
+  it('asks a forgotten word alone, as the app does, and a right answer rests the word mark, not the ayah', async () => {
+    localStorage.setItem('ayah-forgot', JSON.stringify({ '2:255:1': { forgot: 1, at: 5 }, '2:255': { forgot: 1, at: 4 } }));
+    localStorage.setItem('recall-write', 'true');
+    render(<Homepage data={data} />);
+    const post = (await screen.findByText('هل تذكرها؟')).closest('article')!;
+    // Only the marked word is a box, whatever the pen asks of a whole ayah.
+    await waitFor(() => expect(within(post).getAllByRole('button', { name: 'اكتب هذه الكلمة' })).toHaveLength(1));
+    expect(within(post).getByRole('link', { name: 'راجع ما نسيت' }).getAttribute('href')).toBe('/quran/read/ayah/2/255?recite=2:255&review=1');
+    fireEvent.change(within(post).getByLabelText('اكتب الكلمة'), { target: { value: 'لا ' } });
+    const marks = JSON.parse(localStorage.getItem('ayah-forgot')!);
+    expect(marks['2:255:1'].step).toBe(1);
+    expect(marks['2:255'].step).toBeUndefined();
+  });
+
   it('asks once what is memorized: × closes it for good, «اختر» picks in the card', async () => {
     const { unmount } = render(<Homepage data={data} />);
     const card = screen.getByRole('region', { name: 'ما الذي تحفظه؟' });
