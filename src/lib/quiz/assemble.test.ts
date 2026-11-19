@@ -115,3 +115,16 @@ describe('approved quiz assembly', () => {
     }
   });
 });
+
+describe('kunya questions never come first (guard 9, owner 2026-11-18)', () => {
+  it('starts the Tarajim questions of a mixed quiz with another kind than a kunya, whatever the seed', async () => {
+    findMany.mockResolvedValue([]);
+    for (let seed = 1; seed <= 40; seed += 1) {
+      let state = seed;
+      const random = () => (state = (state * 16807) % 2147483647) / 2147483647;
+      const questions = await assembleQuiz({ topics: ['TARAJIM_KUNYA', 'TARAJIM_LAQAB', 'TARAJIM_VIRTUE'], length: 5, random });
+      const first = questions.find(question => String(question.family).startsWith('TARAJIM_'));
+      expect(first?.family).not.toBe('TARAJIM_KUNYA');
+    }
+  });
+});

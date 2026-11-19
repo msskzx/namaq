@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { bareName } from '../tarajimLine';
-import { nameQuestions, nasabQuestions, TARAJIM_KUNYA, TARAJIM_LAQAB, virtueQuestions } from './tarajim';
+import { nameQuestions, nasabQuestions, prophetNameQuestions, prophetNames, TARAJIM_KUNYA, TARAJIM_LAQAB, virtueQuestions } from './tarajim';
 import { kunyaFacts, laqabFacts } from '../tarajimNames';
 import peopleJson from '../data/tarajim/people.json';
 import namesSkip from '../data/tarajim/namesQuizSkip.json';
@@ -102,7 +102,7 @@ describe('بمَ لُقّب؟ and ما كنيته؟', () => {
 
   it('offers only names of people of the asked person’s sex, never one of the Prophet’s ﷺ, and never one the person also bears', () => {
     const prophet = people.find(p => p.slug === 'prophet-muhammad')!;
-    const prophetNames = new Set([...prophet.titles, ...prophet.laqab, ...prophet.kunya].map(f => bareName('name' in f ? f.name : f.text)));
+    const his = new Set([...prophet.titles, ...prophet.laqab, ...prophet.kunya].map(f => bareName('name' in f ? (f.name as string) : f.text)));
     for (const [family, facts] of kinds) {
       const questions = nameQuestions(family, people, seededRandom(1));
       expect(questions.length).toBeGreaterThan(0);
@@ -113,7 +113,7 @@ describe('بمَ لُقّب؟ and ما كنيته؟', () => {
           const holders = facts.filter(f => bareName(f.name) === bareName(choice.value)).map(f => f.person);
           expect(holders.length).toBeGreaterThan(0);
           expect(holders.every(p => p.sex === asked.sex)).toBe(true);
-          expect(prophetNames.has(bareName(choice.value))).toBe(false);
+          expect(his.has(bareName(choice.value))).toBe(false);
           expect(own).not.toContain(bareName(choice.value));
         }
       }
@@ -133,6 +133,23 @@ describe('بمَ لُقّب؟ and ما كنيته؟', () => {
     for (const [id, why] of Object.entries(namesSkip.skip as Record<string, string>)) {
       expect(ids.has(id)).toBe(true);
       expect(why.length).toBeGreaterThan(0);
+    }
+  });
+});
+
+describe('أسماء النبي ﷺ (several right choices)', () => {
+  const people = peopleJson as AppPerson[];
+  it('offers four choices, one to four of them his names as the hadith gives them, the rest Companions’ laqabs', () => {
+    const names = new Set(prophetNames(people).map(title => title.name));
+    expect(names.has('نبي')).toBe(false);
+    const questions = prophetNameQuestions(people, seededRandom(3), 30);
+    expect(questions.length).toBeGreaterThan(0);
+    for (const q of questions) {
+      expect(q.choices).toHaveLength(4);
+      const right = q.correctAnswers!;
+      expect(right.length).toBeGreaterThanOrEqual(1);
+      expect(right.every(name => names.has(name))).toBe(true);
+      expect(q.choices.filter(c => !right.includes(c.value)).every(c => !names.has(c.value))).toBe(true);
     }
   });
 });

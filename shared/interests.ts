@@ -38,7 +38,7 @@ export const INTERESTS: readonly Interest[] = [
   { id: 'balagha', name: 'البلاغة', section: 'lisan', cards: ['note-balagha', 'term', 'scene'], quizzes: ['BALAGHA', 'TERM'] },
   { id: 'hadith', name: 'الحديث', section: 'hadith', cards: ['hadith', 'rajab'], quizzes: ['HADITH_NARRATOR', 'HADITH_COMPLETE', 'HADITH_BOOK'] },
   { id: 'prophets', name: 'قصص الأنبياء', section: 'history', ours: true, cards: ['prophets'], quizzes: [] },
-  { id: 'sira', name: 'السيرة والمغازي', section: 'history', cards: ['sira', 'moment'], quizzes: ['SIRA'] },
+  { id: 'sira', name: 'السيرة والمغازي', section: 'history', cards: ['sira', 'moment'], quizzes: ['SIRA', 'PROPHET_NAMES'] },
   { id: 'tarajim', name: 'التراجم', section: 'history', cards: ['tarajim', 'tie'], quizzes: ['TARAJIM_NASAB', 'TARAJIM_VIRTUE', 'TARAJIM_TIE'] },
   // Each thing about a person its own interest (owner, 2026-11-19), so a reader who does not want kunyas turns them off alone.
   { id: 'laqab', name: 'الألقاب', section: 'history', cards: ['laqab'], quizzes: ['TARAJIM_LAQAB'] },

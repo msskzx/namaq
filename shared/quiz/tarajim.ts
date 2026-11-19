@@ -9,7 +9,7 @@ import { kunyaFacts, laqabFacts, type NameFact } from '../tarajimNames';
 import { bareName, chainOf, lineOf, meetingOf, type LineName } from '../tarajimLine';
 import { genitive, peopleGraph, TIE_KINDS, tieWord, type TieKind } from '../tarajimGraph';
 import { shuffle, type Random } from './random';
-import type { ChoiceKind, ChoiceQuestion } from './choiceKinds';
+import { PICKS, type ChoiceKind, type ChoiceQuestion } from './choiceKinds';
 
 export const TARAJIM_NASAB = 'TARAJIM_NASAB';
 export const TARAJIM_VIRTUE = 'TARAJIM_VIRTUE';
@@ -21,6 +21,8 @@ export const TARAJIM_KUNYA = 'TARAJIM_KUNYA';
 export const TARAJIM_LAQAB = 'TARAJIM_LAQAB';
 export const TARAJIM_KUNYA_NAME = 'ما كنيته؟';
 export const TARAJIM_LAQAB_NAME = 'بمَ لُقّب؟';
+export const PROPHET_NAMES = 'PROPHET_NAMES';
+export const PROPHET_NAMES_NAME = 'أسماء النبي ﷺ';
 
 const PEOPLE = peopleJson as AppPerson[];
 const plain = (text: string) => text.replace(/[ً-ْٰـ]/g, '');
@@ -261,7 +263,53 @@ export function nameQuestions(family: typeof TARAJIM_KUNYA | typeof TARAJIM_LAQA
   });
 }
 
-const kind = (id: typeof TARAJIM_NASAB | typeof TARAJIM_VIRTUE | typeof TARAJIM_TIE | typeof TARAJIM_KUNYA | typeof TARAJIM_LAQAB, name: string, all: (random: Random) => ChoiceQuestion[]): ChoiceKind => ({
+/**
+ * The Prophet's ﷺ names as the hadith al-Dhahabi quotes gives them («وأنا أحمد، وأنا الحاشر…»): his titles whose name stands
+ * in the quoted words. Not «نبي» or «رسول», which every prophet is.
+ */
+export function prophetNames(people: AppPerson[] = PEOPLE) {
+  const prophet = people.find(p => p.slug === 'prophet-muhammad');
+  return (prophet?.titles ?? []).filter(title => !title.shared && !/^(?:نبي|رسول)$/u.test(title.name)
+    && ` ${bareName(title.text)} `.includes(` ${bareName(title.name)} `));
+}
+
+/** How many of the four choices are right (owner, 2026-11-19): mostly two or three, some one, now and then all four. */
+const RIGHT_COUNTS = [1, 2, 2, 3, 3, 1, 2, 3, 4];
+
+/**
+ * «أيّ هذه من أسماء النبي ﷺ؟» (owner, 2026-11-19; sketch titles-quiz/multi-select-dark.png): four choices, one to four of
+ * them his names, the others Companions' laqabs (laqabFacts) that share no word with his names, so none is half right.
+ * Scored per choice (score.ts pickedPoints). The note quotes each of his names offered with its page.
+ */
+export function prophetNameQuestions(people: AppPerson[] = PEOPLE, random: Random = Math.random, count = 12): ChoiceQuestion[] {
+  const names = prophetNames(people);
+  const nameWordsOf = new Set(names.flatMap(title => nameWords(title.name)).filter(word => word !== 'نبي'));
+  const others = laqabFacts(people).filter(fact => fact.person.sex === 'MALE' && !nameWords(fact.name).some(word => nameWordsOf.has(word)))
+    .map(fact => fact.name).filter((name, i, all) => all.indexOf(name) === i);
+  if (names.length < 4 || others.length < 3) return [];
+  const questions = new Map<string, ChoiceQuestion>();
+  for (let tries = 0; questions.size < count && tries < count * 10; tries += 1) {
+    const right = shuffle(names, random).slice(0, RIGHT_COUNTS[Math.floor(random() * RIGHT_COUNTS.length)]);
+    const wrong = shuffle(others, random).slice(0, 4 - right.length);
+    const choices = shuffle([...right.map(title => title.name), ...wrong], random);
+    const correctAnswers = choices.filter(name => right.some(title => title.name === name));
+    const key = `${PROPHET_NAMES}:${[...choices].sort().join('|')}`;
+    if (questions.has(key)) continue;
+    questions.set(key, {
+      key,
+      family: PROPHET_NAMES,
+      promptArabic: 'أيّ هذه من أسماء النبي ﷺ؟ اختر كل ما يصح.',
+      choices: choices.map(name => ({ value: name, labelArabic: name })),
+      correctAnswer: correctAnswers.join(PICKS),
+      correctAnswers,
+      note: { label: 'المصدر', text: right.map(title => `«${title.text}» · ${pageLabel(title.refs)}`).join('\n') },
+      evidence: { claimKeys: [] },
+    });
+  }
+  return [...questions.values()];
+}
+
+const kind = (id: typeof TARAJIM_NASAB | typeof TARAJIM_VIRTUE | typeof TARAJIM_TIE | typeof TARAJIM_KUNYA | typeof TARAJIM_LAQAB | typeof PROPHET_NAMES, name: string, all: (random: Random) => ChoiceQuestion[]): ChoiceKind => ({
   id,
   name,
   party: true,
@@ -282,3 +330,20 @@ export const tarajimTie = kind(TARAJIM_TIE, TARAJIM_TIE_NAME, random => tieAll()
 export const tarajimVirtue = kind(TARAJIM_VIRTUE, TARAJIM_VIRTUE_NAME, random => virtueQuestions(PEOPLE, random));
 export const tarajimKunya = kind(TARAJIM_KUNYA, TARAJIM_KUNYA_NAME, random => nameQuestions(TARAJIM_KUNYA, PEOPLE, random));
 export const tarajimLaqab = kind(TARAJIM_LAQAB, TARAJIM_LAQAB_NAME, random => nameQuestions(TARAJIM_LAQAB, PEOPLE, random));
+export const prophetNamesQuiz = kind(PROPHET_NAMES, PROPHET_NAMES_NAME, random => prophetNameQuestions(PEOPLE, random));
+
+/**
+ * A kunya is the hardest thing to ask of a person (owner, 2026-11-18: include kunyas, but not first), so in a mixed quiz the
+ * first Tarajim question is never a kunya one while another Tarajim question is there to go before it: the first of those
+ * changes places with it. A quiz of kunyas alone stays as it is.
+ */
+export function kunyaNotFirst<T extends { family: string }>(questions: T[]): T[] {
+  const tarajim = (question: T) => question.family.startsWith('TARAJIM_');
+  const first = questions.findIndex(tarajim);
+  if (first === -1 || questions[first].family !== TARAJIM_KUNYA) return questions;
+  const other = questions.findIndex(question => tarajim(question) && question.family !== TARAJIM_KUNYA);
+  if (other === -1) return questions;
+  const out = [...questions];
+  [out[first], out[other]] = [out[other], out[first]];
+  return out;
+}

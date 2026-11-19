@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
-import { BookOpen, Check, Eye, X } from 'lucide-react-native';
+import { BookOpen, Check, Eye, Square, SquareCheck, X } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import Button from '@/ui/Button';
-import { alikeDiff, FORGOT, recited, RECITED, type ChoiceQuestion } from '@shared/quiz/choiceKinds';
+import { alikeDiff, FORGOT, isRightChoice, PICKS, picksOf, recited, RECITED, ticks, type ChoiceQuestion } from '@shared/quiz/choiceKinds';
 import QuizPage from './QuizPage';
 import QuranWords from './quran/text/QuranWords';
 import BookRuns from './quran/text/BookRuns';
@@ -31,7 +31,9 @@ function Words({ words, marked, palette }: { words: string[]; marked?: number[];
  * A choice question (shared/quiz/choiceKinds.ts): a book's passage it asks about, the ayah in the mushaf's font, or for a question asked on the page its whole
  * mushaf page (QuizPage, owner 2026-11-17), where what it asks to write is written in boxes and its grade picks حفظتها or نسيتها; a recited snippet's rest behind a button,
  * then the choices. Once picked, the right one turns green and a wrong one red; a wrong surah with a look-alike shows it,
- * the words where the two part marked in both.
+ * the words where the two part marked in both. A question of several right choices (owner, 2026-11-19; sketch
+ * titles-quiz/multi-select-dark.png) ticks boxes and checks: then what was ticked right is green, ticked wrong red, and a right
+ * one left unticked is marked «فاتك»; `picked` is the ticks joined (PICKS).
  */
 export default function QuizChoice({ question, picked, shown, onPick, onReveal, onOpen, header, palette, scroll = true, pen, onWrite, written, onLook, costs, lookTop }: {
   question: ChoiceQuestion; picked?: string; shown: boolean; onPick?: (value: string) => void; onReveal?: () => void;
@@ -55,7 +57,13 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
   // A party grades a recited ayah by the words written, so it has no choices to pick.
   const write = (question as ChoiceQuestion & { write?: WriteAsk }).write;
   const revealed = shown || answered || !recited(question) || pageShown === question.key;
-  const alike = answered && picked !== question.correctAnswer ? question.alike?.[picked] : undefined;
+  const several = ticks(question);
+  // The ticks belong to their question: a screen that keeps this component for the next one starts it empty.
+  const [tickState, setTickState] = useState<{ key: string; values: string[] }>({ key: question.key, values: [] });
+  const ticked = tickState.key === question.key ? tickState.values : [];
+  const toggle = (value: string) => setTickState({ key: question.key, values: ticked.includes(value) ? ticked.filter(each => each !== value) : [...ticked, value] });
+  const picks = several && answered ? picksOf(picked) : [];
+  const alike = answered && !several && picked !== question.correctAnswer ? question.alike?.[picked] : undefined;
   const diff = alike && question.quran ? alikeDiff(question.quran, alike.words) : undefined;
   const name = (value: string) => question.choices.find(choice => choice.value === value)?.labelArabic ?? '';
   return (
@@ -86,18 +94,24 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
       {revealed && !write && (
         <View style={{ paddingHorizontal: 16, gap: 10 }}>
           {question.choices.map(choice => {
-            const right = answered && choice.value === question.correctAnswer;
-            const wrong = answered && choice.value === picked && !right;
-            const color = right ? palette.green : wrong ? palette.accent : palette.ink;
+            const chosen = several ? (answered ? picks : ticked).includes(choice.value) : choice.value === picked;
+            const isRight = answered && isRightChoice(question, choice.value);
+            const right = isRight && (!several || chosen);
+            const wrong = answered && chosen && !isRight;
+            // A right one left unticked: amber, «فاتك».
+            const missed = several && isRight && !chosen;
+            const color = right ? palette.green : wrong ? palette.accent : missed ? palette.amber : palette.ink;
+            const Box = chosen ? SquareCheck : Square;
             return (
-              <Pressable key={choice.value} disabled={answered || !onPick} onPress={() => onPick?.(choice.value)} accessibilityRole="button" accessibilityLabel={answered && question.explains?.[choice.value] ? `${choice.labelArabic} معنى ${question.explains[choice.value].quote}، ${question.explains[choice.value].where}`
+              <Pressable key={choice.value} disabled={answered || !onPick}
+                onPress={() => (several ? toggle(choice.value) : onPick?.(choice.value))} accessibilityRole="button" accessibilityLabel={answered && question.explains?.[choice.value] ? `${choice.labelArabic} معنى ${question.explains[choice.value].quote}، ${question.explains[choice.value].where}`
                 : answered && question.whereOf?.[choice.value] ? `${choice.labelArabic}، ${question.whereOf[choice.value]}` : choice.labelArabic}
-                accessibilityState={{ selected: choice.value === picked, disabled: answered }}
-                style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderWidth: right || wrong ? 1.5 : 1, borderColor: right || wrong ? color : palette.rule, ...CARD, paddingVertical: 12, paddingHorizontal: 16, backgroundColor: pressed ? palette.paperDeep : 'transparent' })}>
+                accessibilityState={several ? { checked: chosen, disabled: answered } : { selected: chosen, disabled: answered }}
+                style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderWidth: right || wrong || missed ? 1.5 : 1, borderColor: right || wrong || missed ? color : palette.rule, borderStyle: missed ? 'dashed' : 'solid', ...CARD, paddingVertical: 12, paddingHorizontal: 16, backgroundColor: pressed ? palette.paperDeep : 'transparent' })}>
                 <View style={{ flexShrink: 1, gap: 2 }}>
                   {question.quranChoices
                     ? <Text style={{ color, fontSize: 21, lineHeight: 40, textAlign: 'right' }}><QuranWords>{choice.labelArabic}</QuranWords></Text>
-                    : <Text style={{ color, fontSize: 19, fontWeight: right ? '700' : '400' }}>{choice.labelArabic}</Text>}
+                    : <Text style={{ color, fontSize: 19, fontWeight: right ? '700' : '400' }}>{choice.labelArabic}{missed ? ' · فاتك' : ''}</Text>}
                   {/* What a choice is, once answered: an ayah's place, a reading's readers. */}
                   {answered && question.whereOf?.[choice.value] && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{question.whereOf[choice.value]}</Text>}
                   {/* What a choice is, once answered («معنى «فراتا»، المرسلات ٢٧»). */}
@@ -107,10 +121,17 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
                     </Text>
                   )}
                 </View>
-                {right ? <Check size={20} color={color} /> : wrong ? <X size={20} color={color} /> : null}
+                {several ? <Box size={22} color={chosen ? (answered ? color : palette.accent) : palette.rule} />
+                  : right ? <Check size={20} color={color} /> : wrong ? <X size={20} color={color} /> : null}
               </Pressable>
             );
           })}
+        </View>
+      )}
+      {several && !answered && onPick && (
+        <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}>
+          <Button variant="primary" Icon={Check} label="تحقق" disabled={ticked.length === 0}
+            onPress={() => onPick(question.choices.map(choice => choice.value).filter(value => ticked.includes(value)).join(PICKS))} />
         </View>
       )}
       {!answered && revealed && question.look && onPick && <View style={{ paddingHorizontal: 16 }}><LookButton look={question.look} onLook={onLook} costs={costs} palette={palette} top={lookTop} /></View>}

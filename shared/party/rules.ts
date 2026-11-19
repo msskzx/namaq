@@ -1,5 +1,5 @@
 // docs/adr/0031-a-live-party-runs-in-one-durable-object.md
-import { partyPoints, questionPoints, type QuestionAnswer, type ScoredQuestion } from '../quiz/score';
+import { partyPoints, questionPoints, share, type QuestionAnswer, type ScoredQuestion } from '../quiz/score';
 import { unmarked, type QuizLook } from '../quiz/choiceKinds';
 import { QUIZ_LEAVES, QUIZ_LENGTHS, QUIZ_TOPICS, RANGED_TOPICS, WRITTEN_TOPICS, type QuizTopic } from '../quiz/settings';
 import { isPenRule, type PenRule } from '../quran/writeAyah';
@@ -153,7 +153,7 @@ function reveal(state: PartyState): PartyState {
   const results = Object.fromEntries(state.players.map(player => [player.id, questionPoints(question, answers[player.id])]));
   const history = [...(state.history ?? [])];
   history[state.current] = answers;
-  const gained = Object.fromEntries(state.players.map(player => [player.id, partyPoints(results[player.id].earned, !!state.looked?.[player.id])]));
+  const gained = Object.fromEntries(state.players.map(player => [player.id, partyPoints(share(question, results[player.id]), !!state.looked?.[player.id])]));
   return { ...state, phase: 'reveal', deadline: null, results, gained, history, players: state.players.map(player => ({ ...player, score: player.score + gained[player.id] })) };
 }
 
@@ -302,7 +302,7 @@ export function viewFor(state: PartyState, playerId: string, now: number): Party
   // A choice question's key, ayah and look-alikes name its surah, so they wait for the reveal too. A written ayah names its
   // place in the question and is drawn on its page, so its ayah stays; its words and its rest wait.
   const written = question?.write as { asked: number[] } | undefined;
-  const hidden = question && !revealed ? { ...question, key: `q${state.current}`, correctAnswer: '', evidence: undefined, ayahKey: written ? question.ayahKey : undefined, alike: undefined, explains: undefined, whereOf: undefined, note: undefined, look: unmarked(question.look as QuizLook | undefined),
+  const hidden = question && !revealed ? { ...question, key: `q${state.current}`, correctAnswer: '', ...(question.correctAnswers ? { correctAnswers: [] } : {}), evidence: undefined, ayahKey: written ? question.ayahKey : undefined, alike: undefined, explains: undefined, whereOf: undefined, note: undefined, look: unmarked(question.look as QuizLook | undefined),
     ...(written ? { write: { asked: written.asked }, reveal: undefined } : {}) } : question;
   return {
     code: state.code,

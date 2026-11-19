@@ -227,8 +227,8 @@ export default function QuizzesPage() {
     const given = answers[index];
     if (given === undefined) return 'unanswered' as const;
     if (given === questions[index].correctAnswer) return 'correct' as const;
-    // A tree with some of its asked leaves right is partly solved, not wrong.
-    return (questions[index].tree || questions[index].compare) && points[index].earned > 0 ? 'partial' as const : 'incorrect' as const;
+    // A tree with some of its asked leaves right is partly solved, not wrong; so are some of several right choices.
+    return (questions[index].tree || questions[index].compare || questions[index].correctAnswers) && points[index].earned > 0 ? 'partial' as const : 'incorrect' as const;
   };
   const stateLabel = (state: ReturnType<typeof questionState>) =>
     ar ? ({ correct: 'صحيح', partial: 'صحيح جزئيًا', incorrect: 'خطأ', unanswered: 'بدون إجابة' } as const)[state]

@@ -2,14 +2,15 @@
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck, faCircleXmark } from "@fortawesome/free-solid-svg-icons";
-import { Eye } from "lucide-react";
+import { useState } from "react";
+import { Check, Eye, Square, SquareCheck } from "lucide-react";
 import Button from "@/components/common/Button";
 import type { QuestionChoice, QuestionFamily, QuizTopic } from "@/lib/quiz/types";
 import type { QuizReference } from "@/lib/quiz/quizReference";
 import type { BranchAnswer, BranchQuestion } from "@shared/quiz/branchQuestions";
 import type { Branch, Variant } from "@shared/quran/branches";
 import type { Hints } from "@shared/quiz/hints";
-import { FORGOT, recited } from "@shared/quiz/choiceKinds";
+import { FORGOT, isRightChoice, PICKS, picksOf, recited, ticks } from "@shared/quiz/choiceKinds";
 import { markForgotten } from "@shared/ayahMarks";
 import { mushafText } from "@shared/quran/mushafText";
 import { branchesCorrect, emptyBranchAnswers } from "@shared/quiz/score";
@@ -52,6 +53,8 @@ export interface QuizQuestionView {
   ayah?: { text: string; reference: string } | null;
   choiceDetails: Record<string, { text: string; reference: string }>;
   correctAnswer: string;
+  /** Several right choices: the reader ticks boxes, then checks (shared/quiz/choiceKinds.ts). */
+  correctAnswers?: string[];
   evidence: { reference: QuizReference | null };
 }
 
@@ -85,6 +88,11 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
   onReveal: () => void; onType: (value: string[]) => void; onHints: (value: Hints) => void; onAnswer: (value: string) => void;
 }) {
   const locked = given !== undefined;
+  const several = ticks(question);
+  // The ticks of a question of several right choices, kept with their question so the next one starts empty.
+  const [tickState, setTickState] = useState<{ key: string; values: string[] }>({ key: question.key, values: [] });
+  const ticked = tickState.key === question.key ? tickState.values : [];
+  const picks = several && locked ? picksOf(given) : ticked;
   const answers = typed ?? (question.compare ? emptyCompareAnswers(question) : emptyBranchAnswers(question));
   return <>
     {question.ayah && <AskedAyah ayah={question.ayah} />}
@@ -107,9 +115,25 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
           onCheck={() => onAnswer(branchesCorrect(question, answers) ? question.correctAnswer : "")} ar={ar} />
       )
     ) : recited(question) && !revealed && !locked ? null : <div className="flex flex-col gap-2">
+      {several && <p className="text-sm text-[var(--home-muted)]">{ar ? "اختر كل ما يصح، وقد يكون أكثر من واحد." : "Tick every one that is right; there may be more than one."}</p>}
       {question.choices.map((choice) => {
-        const isAnswer = choice.value === question.correctAnswer;
-        const isGiven = given === choice.value;
+        const isAnswer = isRightChoice(question, choice.value);
+        const isGiven = several ? picks.includes(choice.value) : given === choice.value;
+        // A right one left unticked, once checked: amber, «فاتك».
+        const missed = several && locked && isAnswer && !isGiven;
+        if (several) return (
+          <Button key={choice.value} variant="outline" role="checkbox" aria-checked={isGiven}
+            style={{ borderColor: locked && isAnswer && isGiven ? 'var(--home-green)' : missed ? 'var(--home-amber)' : locked && isGiven ? 'var(--home-accent)' : isGiven ? 'var(--home-accent)' : 'var(--home-rule)',
+              borderStyle: missed ? 'dashed' : 'solid',
+              color: locked && isAnswer && isGiven ? 'var(--home-green)' : missed ? 'var(--home-amber)' : locked && isGiven ? 'var(--home-accent)' : 'var(--home-ink)' }}
+            onClick={() => { if (!locked) setTickState({ key: question.key, values: isGiven ? ticked.filter(value => value !== choice.value) : [...ticked, choice.value] }); }}>
+            {isGiven ? <SquareCheck size={18} aria-hidden /> : <Square size={18} aria-hidden />}
+            {answerContent(question, choice.value, locked)}
+            {locked && isAnswer && isGiven ? <span className="text-xs font-semibold">{ar ? 'صحيح' : 'Correct'}</span> : null}
+            {missed ? <span className="text-xs font-semibold">{ar ? 'فاتك' : 'Missed'}</span> : null}
+            {locked && isGiven && !isAnswer ? <span className="text-xs font-semibold">{ar ? 'خطأ' : 'Incorrect'}</span> : null}
+          </Button>
+        );
         return (
           // As the app's choices (QuizChoice): ink on a quiet border until answered, then the right answer green and a wrong
           // pick accent (owner, 2026-11-15: a correct pick was filled with the accent, and every choice was accent before any).
@@ -130,6 +154,9 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
         );
       })}
     </div>}
+    {several && !locked && <Button className="mt-3 w-fit" variant="primary" disabled={ticked.length === 0}
+      onClick={() => onAnswer(question.choices.map(choice => choice.value).filter(value => ticked.includes(value)).join(PICKS))}>
+      <Check size={16} aria-hidden />{ar ? "تحقق" : "Check"}</Button>}
     {!locked && canLook(question.look) && <LookButton look={question.look} />}
     {locked && <ChoiceAfter question={question} given={given} ar={ar} mushaf={mushaf}
       surahName={(value) => question.choices.find((choice) => choice.value === value)?.labelArabic} />}
