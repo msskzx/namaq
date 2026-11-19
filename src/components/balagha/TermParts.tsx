@@ -11,7 +11,7 @@ import Chip from '@/components/common/Chip';
 import Folded from '@/components/common/Folded';
 import ExternalLink from '@/components/common/ExternalLink';
 import BookRuns from '@/components/quran/text/BookRuns';
-import QuranWords from '@/components/quran/text/QuranWords';
+import LitAyat from '@/components/quran/text/LitAyat';
 import type { ExampleAyah, ExampleView } from '@/lib/balaghaTerms';
 
 /**
@@ -58,25 +58,14 @@ export function TermQuotes({ term }: { term: BalaghaTerm }) {
   );
 }
 
-/** Ayat in the mushaf's font, the words he quotes on the band, each ayah's number after it (the app's LitAyat). */
-export function LitAyat({ lines, size = 'text-2xl' }: { lines: ExampleAyah[]; size?: string }) {
-  return (
-    <p className={`${size} leading-[2] text-justify [text-align-last:right]`}>
-      <QuranWords>
-        {lines.map((ayah, k) => <span key={ayah.key}>
-          {ayah.words.map((word, i) => <span key={i} className={ayah.lit.some(([from, to]) => i >= from && i <= to) ? 'bg-[color-mix(in_srgb,var(--home-ink)_20%,transparent)]' : undefined}>{`${k || i ? ' ' : ''}${word}`}</span>)}
-          {` ${num(ayah.number)}`}
-        </span>)}
-      </QuranWords>
-    </p>
-  );
-}
+/** An example's ayat as the page sets them, the words he quotes on the band, each ayah's number after it (the app's ExampleAyat). */
+export const ExampleAyat = ({ lines }: { lines: ExampleAyah[] }) => <LitAyat ayat={lines} />;
 
 /** One example: the ayat with his quoted words lit, his paragraph whole (unless the definition already quotes it), the ayat as links to the mushaf, and its credit. */
 export function TermExampleCard({ example }: { example: ExampleView }) {
   return (
     <Card className="flex flex-col gap-1.5 px-3.5 py-2.5">
-      <LitAyat lines={example.lines} />
+      <ExampleAyat lines={example.lines} />
       <hr className="border-[var(--home-rule)] opacity-60" />
       {example.inDefinition
         ? <p className="text-[var(--home-muted)]">ذكرها في كلامه المنقول في التعريف أعلاه.</p>

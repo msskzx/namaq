@@ -71,8 +71,8 @@ export function TermQuotes({ term, palette }: { term: BalaghaTerm; palette: Pale
 export const ayatName = (ayat: string[]) => placesLabel(ayat, surahNames);
 
 /** The ayat of an example in the mushaf's font, with the words he quotes lit and each ayah's number after it. */
-export function ExampleAyat({ example, palette, size = 23 }: { example: Pick<TermExample, 'entry' | 'ayat'>; palette: Palette; size?: number }) {
-  return <LitAyat ayat={example.ayat.map(key => ({ words: ayahMushafWords(key), lit: exampleWords(itqan, example, key), number: Number(key.split(':')[1]) }))} palette={palette} size={size} />;
+export function ExampleAyat({ example, palette }: { example: Pick<TermExample, 'entry' | 'ayat'>; palette: Palette }) {
+  return <LitAyat ayat={example.ayat.map(key => ({ words: ayahMushafWords(key), lit: exampleWords(itqan, example, key), number: Number(key.split(':')[1]) }))} palette={palette} />;
 }
 
 /** One example: the ayat with his quoted words lit, his paragraph whole (unless the definition above already quotes it), its credit, and the ayat as links to the mushaf. */

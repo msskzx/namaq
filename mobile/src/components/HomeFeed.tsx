@@ -824,7 +824,7 @@ function TermPost({ id, day, palette }: { id: string; day: number; palette: Pale
         {example && <>
           <View style={{ height: 1, backgroundColor: palette.rule, opacity: 0.6, marginVertical: 4 }} />
           <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>من أمثلته</Text>
-          <View pointerEvents="none"><ExampleAyat example={example} palette={palette} size={22} /></View>
+          <View pointerEvents="none"><ExampleAyat example={example} palette={palette} /></View>
           <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{ayatName(example.ayat)}</Text>
         </>}
       </View>

@@ -95,10 +95,9 @@
   ],
   "sized": [
     "mobile/src/components/HomeFeed.tsx",
+    "mobile/src/ui/ActButton.tsx",
     "mobile/src/ui/Chip.tsx",
-    "src/app/quran/qiraat/QiraatView.tsx",
-    "src/app/quran/read/GharibPanel.tsx",
-    "src/components/balagha/TermParts.tsx"
+    "src/app/quran/read/AyahActions.tsx"
   ],
   "copies": [
     "shared/data/quran/trees.json"

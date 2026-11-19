@@ -16,7 +16,7 @@ import { CreditFold, TiesChain, tiesHref } from '@/components/tarajim/TarajimPar
 import LifeTimeline from '@/components/tarajim/LifeTimeline';
 import { IbnRajab, shamelaPage } from '@/components/hadith/FortyParts';
 import { fromCompanion } from '@shared/hadith';
-import { LitAyat, ayatName, quotesTitle, termHref } from '@/components/balagha/TermParts';
+import { ExampleAyat, ayatName, quotesTitle, termHref } from '@/components/balagha/TermParts';
 import BookRuns from '@/components/quran/text/BookRuns';
 import { plainName } from '@shared/quran/balaghaTerms';
 import { Report } from '@/components/stories/StoryView';
@@ -396,7 +396,7 @@ function TermPost({ card }: { card: TermCard }) {
       {card.example && <>
         <hr className="my-1 border-[var(--home-rule)] opacity-60" />
         <p className="text-sm text-[var(--home-muted)]">من أمثلته</p>
-        <LitAyat lines={card.example.lines} size="text-[1.375rem]" />
+        <ExampleAyat lines={card.example.lines} />
         <p className="text-[0.8125rem] text-[var(--home-muted)]">{ayatName(card.example.ayat)}</p>
       </>}
     </div>
