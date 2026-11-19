@@ -57,8 +57,42 @@ export type ChoiceQuestion = {
   note?: { label: string; text: string };
   /** A compare question (compareQuiz.ts): typed into its blanks, not picked from choices. */
   compare?: CompareAsk;
+  /** What «ابحث عن الجواب» opens, and after the answer what shows under it: the feature's own view (QuizLook). */
+  look?: QuizLook;
   evidence: { claimKeys: string[] };
 };
+
+/**
+ * The feature's view a question opens to look its answer up (owner, 2026-11-19: the same view as its page and its feed
+ * card, never a stand-in). `mark` points at the answer in it, so a party keeps it back until the reveal.
+ * - `ties`: the person's ties round him (TiesRing), the asked person marked.
+ * - `nasab`: the nasab tree of the people, where they meet named.
+ * - `virtues`: the virtues each person's entry gives, the asked one marked.
+ * - `terms`: the definition of each balagha term offered, the asked one marked.
+ * - `hadith`: al-Nawawi's Forty with a search; the asked hadith once marked.
+ * - `story` / `battle`: the sira story or battle whole, as its page draws it.
+ * - `word`: the meaning books on a word of an ayah (the reader's word sheet).
+ * - `tafsir`: al-Sa'di on each offered ayah, the asked one marked.
+ * - `balagha` / `irab` / `qiraat`: the reader's balagha, i'rab or readings sheet of the ayah.
+ * - `tuhfa`: the poem; once marked, the chapter of the verse that answers, the verse lit.
+ */
+export type QuizLook =
+  | { view: 'ties'; slug: string; mark?: string }
+  | { view: 'nasab'; slugs: string[]; mark?: boolean }
+  | { view: 'virtues'; slugs: string[]; mark?: { slug: string; index: number } }
+  | { view: 'terms'; names: string[]; mark?: string }
+  | { view: 'hadith'; mark?: number }
+  | { view: 'story'; slug: string; mark?: undefined }
+  | { view: 'battle'; slug: string; mark?: undefined }
+  | { view: 'word'; key: string; word: number; mark?: undefined }
+  | { view: 'tafsir'; keys: string[]; mark?: string }
+  | { view: 'balagha'; key: string; mark?: undefined }
+  | { view: 'irab'; key: string; word: number; mark?: undefined }
+  | { view: 'qiraat'; key: string; mark?: undefined }
+  | { view: 'tuhfa'; mark?: number };
+
+/** A look as a party shows it before the reveal: without what points at the answer. */
+export const unmarked = (look: QuizLook | undefined): QuizLook | undefined => look && ({ ...look, mark: undefined });
 
 /** What part of the Quran a quiz asks: the trees' juz range and range filters (kinds and differences mean nothing here). */
 export type ChoiceScope = { range: JuzRange | null; filters: ScopeFilters };

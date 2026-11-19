@@ -1,5 +1,6 @@
 // docs/adr/0031-a-live-party-runs-in-one-durable-object.md
-import { questionPoints, type QuestionAnswer, type ScoredQuestion } from '../quiz/score';
+import { partyPoints, questionPoints, type QuestionAnswer, type ScoredQuestion } from '../quiz/score';
+import { unmarked, type QuizLook } from '../quiz/choiceKinds';
 import { QUIZ_LEAVES, QUIZ_LENGTHS, QUIZ_TOPICS, RANGED_TOPICS, WRITTEN_TOPICS, type QuizTopic } from '../quiz/settings';
 import { isPenRule, type PenRule } from '../quran/writeAyah';
 import { DEFAULT_DIFFICULTY, DIFFICULTIES, type Difficulty } from '../quiz/difficulty';
@@ -50,6 +51,10 @@ export type PartyState = {
   /** What each player has written so far on a recited ayah, graded if the time runs out before they send it. */
   drafts?: Record<string, QuestionAnswer>;
   results: Record<string, Points>;
+  /** Who opened «ابحث عن الجواب» on this question before answering: a right answer then earns LOOKED_POINTS. */
+  looked?: Record<string, true>;
+  /** What each player's answer added to the score this question. */
+  gained?: Record<string, number>;
   history?: Record<string, QuestionAnswer>[];
   hostAwaySince: number | null;
   removed: string[];
@@ -66,6 +71,7 @@ export type PlayerAction =
   | { type: 'start'; early?: boolean }
   | { type: 'submit'; answer: QuestionAnswer }
   | { type: 'draft'; answer: QuestionAnswer }
+  | { type: 'look' }
   | { type: 'next' }
   | { type: 'again' };
 
@@ -137,7 +143,7 @@ function nextHost(players: Player[], hostId: string, connected: boolean) {
 }
 
 function ask(state: PartyState, index: number, now: number): PartyState {
-  return { ...state, phase: 'question', current: index, answers: {}, drafts: {}, results: {}, deadline: now + secondsFor(state, state.questions[index]) };
+  return { ...state, phase: 'question', current: index, answers: {}, drafts: {}, results: {}, looked: {}, gained: {}, deadline: now + secondsFor(state, state.questions[index]) };
 }
 
 function reveal(state: PartyState): PartyState {
@@ -147,7 +153,8 @@ function reveal(state: PartyState): PartyState {
   const results = Object.fromEntries(state.players.map(player => [player.id, questionPoints(question, answers[player.id])]));
   const history = [...(state.history ?? [])];
   history[state.current] = answers;
-  return { ...state, phase: 'reveal', deadline: null, results, history, players: state.players.map(player => ({ ...player, score: player.score + results[player.id].earned })) };
+  const gained = Object.fromEntries(state.players.map(player => [player.id, partyPoints(results[player.id].earned, !!state.looked?.[player.id])]));
+  return { ...state, phase: 'reveal', deadline: null, results, gained, history, players: state.players.map(player => ({ ...player, score: player.score + gained[player.id] })) };
 }
 
 const everyoneAnswered = (state: PartyState) => state.players.length > 0 && state.players.every(player => player.id in state.answers);
@@ -221,6 +228,11 @@ function apply(state: PartyState, action: Action, now: number): { state: PartySt
     if (player.id in state.answers) return { state };
     return { state: settle({ ...state, answers: { ...state.answers, [player.id]: action.answer } }) };
   }
+  // Looking after the answer is sent is for learning: it changes nothing.
+  if (action.type === 'look') {
+    if (state.phase !== 'question' || player.id in state.answers || state.looked?.[player.id]) return { state };
+    return { state: { ...state, looked: { ...state.looked, [player.id]: true } } };
+  }
   if (action.type === 'draft') {
     if (state.phase !== 'question' || player.id in state.answers) return { state };
     return { state: { ...state, drafts: { ...state.drafts, [player.id]: action.answer } } };
@@ -260,7 +272,8 @@ export function nextWake(state: PartyState) {
 
 export const expired = (state: PartyState, now: number) => now >= state.touched + IDLE_MS;
 
-export type PlayerView = Player & { submitted: boolean; earned: number | null };
+/** `earned` is what this question added to the score once revealed; `looked` whether they looked it up first, shown only then. */
+export type PlayerView = Player & { submitted: boolean; earned: number | null; looked: boolean | null };
 export type PartyView = {
   code: string;
   you: string;
@@ -276,6 +289,8 @@ export type PartyView = {
   now: number;
   answer: QuestionAnswer | null;
   result: Points | null;
+  /** Whether you opened «ابحث عن الجواب» before answering this question. */
+  looked: boolean;
   review?: { question: PartyQuestion; answer: QuestionAnswer | null; result: Points }[];
   error: string | null;
 };
@@ -287,7 +302,7 @@ export function viewFor(state: PartyState, playerId: string, now: number): Party
   // A choice question's key, ayah and look-alikes name its surah, so they wait for the reveal too. A written ayah names its
   // place in the question and is drawn on its page, so its ayah stays; its words and its rest wait.
   const written = question?.write as { asked: number[] } | undefined;
-  const hidden = question && !revealed ? { ...question, key: `q${state.current}`, correctAnswer: '', evidence: undefined, ayahKey: written ? question.ayahKey : undefined, alike: undefined, explains: undefined, whereOf: undefined, note: undefined,
+  const hidden = question && !revealed ? { ...question, key: `q${state.current}`, correctAnswer: '', evidence: undefined, ayahKey: written ? question.ayahKey : undefined, alike: undefined, explains: undefined, whereOf: undefined, note: undefined, look: unmarked(question.look as QuizLook | undefined),
     ...(written ? { write: { asked: written.asked }, reveal: undefined } : {}) } : question;
   return {
     code: state.code,
@@ -295,7 +310,7 @@ export function viewFor(state: PartyState, playerId: string, now: number): Party
     hostId: state.hostId,
     phase: state.phase,
     settings: state.settings,
-    players: state.players.map(player => ({ ...player, submitted: player.id in state.answers, earned: revealed ? state.results[player.id]?.earned ?? 0 : null })),
+    players: state.players.map(player => ({ ...player, submitted: player.id in state.answers, earned: revealed ? state.gained?.[player.id] ?? 0 : null, looked: revealed ? !!state.looked?.[player.id] : null })),
     index: state.current,
     total: state.questions.length,
     question: hidden,
@@ -304,6 +319,7 @@ export function viewFor(state: PartyState, playerId: string, now: number): Party
     now,
     answer: (revealed ? state.history?.[state.current]?.[playerId] : undefined) ?? state.answers[playerId] ?? null,
     result: revealed ? state.results[playerId] ?? null : null,
+    looked: !!state.looked?.[playerId],
     review: state.phase === 'final' && state.players.some(player => player.id === playerId) ? state.questions.map((question, index) => {
       const answer = state.history?.[index]?.[playerId] ?? (index === state.current ? state.answers[playerId] : undefined);
       return { question, answer: answer ?? null, result: questionPoints(question, answer) };

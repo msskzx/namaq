@@ -3,7 +3,7 @@ import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Share, View } fr
 import { Text } from '@/ui/Text';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Check, Circle, CircleCheck, Crown, Hourglass, LogOut, Play, RotateCcw, Send, UserCheck, X } from 'lucide-react-native';
+import { Check, Circle, CircleCheck, Crown, Hourglass, LogOut, Play, RotateCcw, Search, Send, UserCheck, X } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { PEN_NAMES } from '@/components/recite/PenSetting';
 import { WRITTEN_TOPICS } from '@shared/quiz/settings';
@@ -12,8 +12,9 @@ import { leaderboard, NAME_MAX, QUESTION_SECONDS, TREE_SECONDS, type ActionError
 import { emptyBranchAnswers, type QuestionAnswer } from '@shared/quiz/score';
 import { QUIZ_LENGTHS, RANGED_TOPICS, type QuizTopic } from '@shared/quiz/settings';
 import { CHOICE_KINDS } from '@shared/quiz/kinds';
-import type { ChoiceQuestion } from '@shared/quiz/choiceKinds';
+import type { ChoiceQuestion, QuizLook } from '@shared/quiz/choiceKinds';
 import QuizChoice, { QuizPrompt } from '@/components/QuizChoice';
+import { LookButton, LookedNote, LookView } from '@/components/QuizLook';
 import { readAyah } from '@/lib/openReader';
 type QuestionChoice = { value: string; labelArabic: string };
 import TopBar from '@/ui/TopBar';
@@ -38,7 +39,7 @@ import { usePalette, type Palette } from '@/lib/theme';
 import Field from '@/ui/Field';
 
 type Send = (action: PlayerAction) => void;
-type Question = PartyQuestion & { promptArabic?: string; choices?: QuestionChoice[] };
+type Question = PartyQuestion & { promptArabic?: string; choices?: QuestionChoice[]; look?: QuizLook };
 
 const ERRORS: Record<ActionError, string> = {
   'name-taken': 'في الفريق من يحمل هذا الاسم.',
@@ -117,10 +118,12 @@ function Leaderboard({ players, you, palette, final, answering }: { players: Pla
               {/* Faded green is the score before this question, full green what this question added. */}
               <View style={{ flexDirection: 'row', height: 8, borderRadius: 4, overflow: 'hidden', backgroundColor: palette.rule }}>
                 <View style={{ width: `${(earlier / top) * 100}%`, backgroundColor: palette.green, opacity: final ? 1 : 0.5 }} />
-                {!final && !!player.earned && <View style={{ width: `${(player.earned / top) * 100}%`, backgroundColor: palette.green }} />}
+                {!final && !!player.earned && <View style={{ width: `${(player.earned / top) * 100}%`, backgroundColor: player.looked ? palette.amber : palette.green }} />}
               </View>
             </View>
-            {player.earned !== null && !final && <Text style={{ color: player.earned ? palette.green : palette.muted, fontSize: 14 }}>{`+${num(player.earned)}`}</Text>}
+            {/* Who looked the answer up shows only once it is revealed: the magnifier, and its points in amber. */}
+            {player.earned !== null && !final && player.looked && <Search size={14} color={palette.amber} accessibilityLabel="بحث عن الجواب" />}
+            {player.earned !== null && !final && <Text style={{ color: !player.earned ? palette.muted : player.looked ? palette.amber : palette.green, fontSize: 14 }}>{`+${num(player.earned)}`}</Text>}
             <Text style={{ color: palette.ink, fontWeight: '700', minWidth: 28, textAlign: 'left' }}>{num(player.score)}</Text>
           </View>
         );
@@ -325,12 +328,16 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
     if (done) finished.current = answer;
     send({ type: done ? 'submit' : 'draft', answer });
   };
+  // A party counts a look before the answer is sent: a right answer after it earns LOOKED_POINTS (shared/quiz/score.ts).
+  const look = () => { if (!view.looked) send({ type: 'look' }); };
   const started = typed.some((text, index) => (question.compare || question.asked?.includes(index)) && text.trim());
 
   if (!revealed && sent) return (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 16 }}>
       {view.deadline !== null && <Countdown big deadline={view.deadline} total={total} offset={offset} palette={palette} />}
       <Label palette={palette} muted>أُرسلت إجابتك، وتظهر الإجابة حين يجيب الجميع.</Label>
+      {/* Looking once the answer is sent is for learning: it costs nothing. */}
+      {question.look && <LookButton look={question.look} palette={palette} />}
       <Leaderboard players={view.players} you={view.you} palette={palette} answering />
     </ScrollView>
   );
@@ -342,7 +349,10 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
         : isTree(question)
         ? <View style={{ height: 420 }}><QuizFeedback key={question.key} question={question} typed={Array.isArray(view.answer) ? view.answer : emptyBranchAnswers(question)} palette={palette} names={view.surahNames} onTap={openAyat} /></View>
         : isAyahChoice(question) ? <QuizChoice question={question} picked={typeof view.answer === 'string' ? view.answer : ''} shown palette={palette} onOpen={readAyah} scroll={false} written={Array.isArray(view.answer) ? view.answer : null} />
-        : <Choices question={question} answer={view.answer} revealed onPick={() => {}} palette={palette} />}
+        : <>
+          <Choices question={question} answer={view.answer} revealed onPick={() => {}} palette={palette} />
+          {question.look && <View style={{ paddingHorizontal: 16 }}><LookView look={question.look} shown palette={palette} /></View>}
+        </>}
       {view.result && (
         <Text style={{ color: palette.ink, fontSize: 17, fontWeight: '600', textAlign: 'right', paddingHorizontal: 16 }}>
           {question.tree || question.compare || question.write ? `${num(view.result.earned)} من ${num(view.result.total)} ${question.compare ? 'فراغات' : question.write ? 'كلمات' : 'أطراف'}` : view.answer === null ? 'لم تجب في الوقت.' : view.result.earned ? 'إجابة صحيحة' : 'إجابة خاطئة'}
@@ -375,8 +385,17 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
         </>
       ) : isAyahChoice(question)
         ? <View style={{ flex: 1 }}><QuizChoice question={question} shown palette={palette} onOpen={readAyah} onPick={value => send({ type: 'submit', answer: value })}
-          pen={view.settings.pen} onWrite={write} /></View>
-        : <Choices question={question} answer={view.answer} revealed={false} onPick={value => send({ type: 'submit', answer: value })} palette={palette} />}
+          pen={view.settings.pen} onWrite={write} onLook={look} costs={!view.looked}
+          header={view.looked ? <View style={{ paddingHorizontal: 16 }}><LookedNote palette={palette} /></View> : undefined} /></View>
+        : <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}>
+          <Choices question={question} answer={view.answer} revealed={false} onPick={value => send({ type: 'submit', answer: value })} palette={palette} />
+          {question.look && (
+            <View style={{ paddingHorizontal: 16, gap: 8 }}>
+              {view.looked && <LookedNote palette={palette} />}
+              <LookButton look={question.look} onLook={look} costs={!view.looked} palette={palette} />
+            </View>
+          )}
+        </ScrollView>}
     </View>
   );
 }
@@ -398,7 +417,10 @@ function FinalResults({ view, send, palette }: { view: PartyView; send: Send; pa
         : isTree(question)
         ? <View style={{ height: 420 }}><QuizFeedback key={question.key} question={question} typed={Array.isArray(entry.answer) ? entry.answer : emptyBranchAnswers(question)} palette={palette} names={view.surahNames} onTap={openAyat} /></View>
         : isAyahChoice(question) ? <QuizChoice question={question} picked={typeof entry.answer === 'string' ? entry.answer : ''} shown palette={palette} onOpen={readAyah} scroll={false} written={Array.isArray(entry.answer) ? entry.answer : null} />
-        : <Choices question={question} answer={entry.answer} revealed onPick={() => {}} palette={palette} />)}
+        : <>
+          <Choices question={question} answer={entry.answer} revealed onPick={() => {}} palette={palette} />
+          {question.look && <LookView look={question.look} shown palette={palette} />}
+        </>)}
       {view.you === view.hostId && <View style={{ alignItems: 'flex-start' }}><Button big variant="primary" Icon={RotateCcw} label="اختبار آخر بالفريق نفسه" onPress={() => send({ type: 'again' })} /></View>}
     </ScrollView>
   );

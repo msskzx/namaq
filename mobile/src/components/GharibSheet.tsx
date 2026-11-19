@@ -40,7 +40,8 @@ export default function GharibSheet({ target, onClose, palette }: { target: Ghar
   );
 }
 
-function GharibBody({ target, palette }: { target: GharibTarget; palette: Palette }) {
+/** The sheet's inside, which a quiz that looks the word up draws too. */
+export function GharibBody({ target, palette }: { target: GharibTarget; palette: Palette }) {
   useBooks();
   const { key, word } = target;
   const [surah, ayah] = key.split(':').map(Number);

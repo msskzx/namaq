@@ -94,3 +94,44 @@ test('a party of recited ayat: each player writes the ayah with the pen, and the
   await expect(page.getByRole('button', { name: 'اختبار آخر بالفريق نفسه' })).toBeVisible();
   await guestContext.close();
 });
+
+test('a party question looked up: the look opens the graph, a right answer after it earns half, and who looked shows at the reveal', async ({ page, browser, errors }) => {
+  test.setTimeout(90_000);
+  const server = new PartyServer('ties');
+  await server.attach(page.context());
+  const guestContext = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, locale: 'ar' });
+  await guestContext.addInitScript(() => localStorage.setItem('tour-seen', 'true'));
+  await server.attach(guestContext);
+  const guest = await guestContext.newPage();
+  guest.on('pageerror', error => errors.push(`guest pageerror: ${error.message}`));
+
+  await open(page, '/quiz/party');
+  await page.getByLabel('اسمك').fill('المضيف');
+  await page.getByRole('button', { name: 'ابدأ', exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`/quiz/party/${server.code}`));
+  await open(guest, `/quiz/party/${server.code}`);
+  await expect(guest.getByLabel('اسمك').last()).toBeFocused();
+  await guest.keyboard.type('الضيف');
+  await guest.keyboard.press('Enter');
+  await guest.getByRole('button', { name: 'أنا مستعد' }).click();
+  await expect(page.getByText('الضيف')).toBeVisible();
+  await page.getByRole('button', { name: 'ابدأ الاختبار' }).click();
+
+  // The host looks it up: al-Zubayr's ties round him, his mother among them, and the look is counted at once.
+  await page.getByRole('button', { name: 'ابحث عن الجواب' }).click();
+  await expect(page.getByRole('heading', { name: 'الزبير بن العوام' })).toBeVisible();
+  await expect.poll(() => server.state?.looked).toEqual({ [server.state!.hostId]: true });
+  await page.getByRole('button', { name: 'رجوع إلى السؤال' }).click();
+  await expect(page.getByText(/^بحثتَ عنه/)).toBeVisible();
+  await page.getByRole('button', { name: 'أمه', exact: true }).click();
+  await guest.getByRole('button', { name: 'أمه', exact: true }).click();
+
+  // Both right: the guest who knew gets ten, the host who looked five, and the host's magnifier shows now.
+  await expect(page.getByText('+٥')).toBeVisible();
+  await expect(page.getByText('+١٠')).toBeVisible();
+  await expect(guest.getByLabel('بحث عن الجواب')).toHaveCount(1);
+  // Under the answer, the same graph for everyone to learn from.
+  await expect(guest.getByRole('heading', { name: 'الزبير بن العوام' })).toBeVisible();
+  expect(server.state!.players.map(player => player.score)).toEqual([5, 10]);
+  await guestContext.close();
+});

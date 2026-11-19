@@ -73,18 +73,20 @@ function bankKind<T extends [string, ...unknown[]]>(id: keyof typeof AYAH_QUIZ_N
 export const tafsirQuiz = bankKind(TAFSIR_QUIZ, () => data.tafsir, ([key, ...rest], random): ChoiceQuestion => {
   const [first, second, hidden] = rest as [string, string, number[]];
   const passage = tafsirSadiOf(key)!;
-  const keys = [key, first, second];
+  // Shuffled once: the look lists the ayat in the choices' order, so neither order says which is asked.
+  const keys = shuffle([key, first, second], random);
   return {
     key: `${TAFSIR_QUIZ}:${key}`,
     family: TAFSIR_QUIZ,
     promptArabic: AYAH_QUIZ_NAMES[TAFSIR_QUIZ],
     passage: hideQuotes(withoutOpeningQuote(passage.text), hidden),
     // Each ayah as the pipeline copies it: its page words and its number, drawn as the mushaf's end mark.
-    choices: shuffle(keys, random).map(value => ({ value, labelArabic: `${wordsOf(value).join(' ')} ${num(Number(value.split(':')[1]))}` })),
+    choices: keys.map(value => ({ value, labelArabic: `${wordsOf(value).join(' ')} ${num(Number(value.split(':')[1]))}` })),
     quranChoices: true,
     whereOf: Object.fromEntries(keys.map(value => [value, where(value)])),
     correctAnswer: key,
     ayahKey: key,
+    look: { view: 'tafsir', keys, mark: key },
     note: { label: 'المصدر', text: tafsirSadiCredit(passage) },
     evidence: { claimKeys: [] },
   };
@@ -118,6 +120,7 @@ export const balaghaQuiz = bankKind(BALAGHA_QUIZ, () => data.balagha.questions, 
     // The labels are the terms of «مصطلحات البلاغة» (scripts/quran/buildAyahQuizzes.ts reads them through termOf).
     terms: Object.fromEntries([right, ...wrong].map(label => [String(label), data.balagha.labels[label]])),
     ayahKey: key,
+    look: { view: 'balagha', key },
     note: { label: 'المصدر', text: itqanCredit({ part, pages: [firstPage, lastPage] }) },
     evidence: { claimKeys: [] },
   };
@@ -137,6 +140,7 @@ export const irabQuiz = bankKind(IRAB_QUIZ, () => data.irab.questions, ([key, ..
     choices: shuffle([right, ...wrong], random).map(role => ({ value: String(role), labelArabic: data.irab.roles[role] })),
     correctAnswer: String(right),
     ayahKey: key,
+    look: { view: 'irab', key, word: at },
     note: { label: 'الشجرة النحوية للقرآن والمدونة القرآنية', text: line?.morph ?? '' },
     evidence: { claimKeys: [] },
   };
@@ -159,6 +163,7 @@ export const qiraatQuiz = bankKind(QIRAAT_QUIZ, () => data.qiraat, ([key, ...res
     whereOf: Object.fromEntries(difference.readings.map((reading, i) => [String(i), whoReads(reading, difference.readings, false)])),
     correctAnswer: String(right),
     ayahKey: key,
+    look: { view: 'qiraat', key },
     note: { label: 'المصدر', text: 'الموسوعة القرآنية' },
     evidence: { claimKeys: [] },
   };

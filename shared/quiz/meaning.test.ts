@@ -38,4 +38,11 @@ describe('«ما معنى؟»', () => {
     expect(juz30.length).toBeGreaterThan(20);
     for (const question of juz30) expect(Number(question.ayahKey!.split(':')[0])).toBeGreaterThanOrEqual(78);
   });
+
+  it('looks the word up in the meaning books, at the first word asked', () => {
+    for (const question of meaningQuiz.questions(whole, 'medium', seeded(2), 40)) {
+      expect(question.look).toEqual({ view: 'word', key: question.ayahKey, word: question.marked![0] });
+    }
+  });
+
 });
