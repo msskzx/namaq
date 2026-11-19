@@ -195,3 +195,20 @@ test('a solo quiz looks an answer up in the poem, and after the answer shows the
   await expect(page.getByRole('heading', { name: chapter.title })).toBeVisible();
   for (const other of chapters.filter(part => part !== chapter)) await expect(page.getByRole('heading', { name: other.title, exact: true })).toHaveCount(0);
 });
+
+test('a solo quiz of the year of a thing looks it up on the timeline, then names the book', async ({ page }) => {
+  await open(page, '/quiz/solo');
+  await page.getByRole('button', { name: 'في أي سنة كان؟' }).click();
+  await page.getByRole('button', { name: 'متشابهات القرآن', exact: true }).click();
+  await page.getByRole('button', { name: 'ابدأ الاختبار' }).click();
+  await expect(page).toHaveURL(/\/quiz\/play/);
+  await expect.poll(() => stored(page, 'quiz-solo-run')).not.toBeNull();
+  const run = await stored<{ questions: { promptArabic: string; correctAnswer: string; choices: { value: string; labelArabic: string }[] }[] }>(page, 'quiz-solo-run');
+  const question = run!.questions[0];
+  // The look-up is a timeline: its strip of years and its filter chips.
+  await page.getByRole('button', { name: 'ابحث عن الجواب' }).click();
+  await expect(page.getByLabel(/^على سنوات الهجرة/).last()).toBeVisible();
+  await page.getByRole('button', { name: 'رجوع إلى السؤال' }).click();
+  await page.getByRole('button', { name: question.choices[Number(question.correctAnswer)].labelArabic, exact: true }).click();
+  await expect(page.getByText('سير أعلام النبلاء').first()).toBeVisible();
+});

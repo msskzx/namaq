@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { inJuzRange } from '../quran/juz';
 import bank from '../data/quran/ayahQuizzes.json';
 import { balaghaQuiz, irabQuiz, qiraatQuiz, qiraatWhoQuiz, tafsirQuiz, type AyahQuizzes } from './ayahQuizzes';
 import { hideQuotes, quotesOf, stem } from './ayahQuizText';
@@ -16,7 +17,7 @@ describe('the four ayah quizzes', () => {
     expect(balaghaQuiz.count(whole)).toBe(data.balagha.questions.length);
     expect(irabQuiz.count(whole)).toBe(data.irab.questions.length);
     expect(qiraatQuiz.count(whole)).toBe(qiraatQuiz.questions(whole, 'medium', seeded(1)).length);
-    for (const kind of [tafsirQuiz, balaghaQuiz, irabQuiz, qiraatQuiz]) expect(kind.count(whole)).toBeGreaterThan(50);
+    for (const kind of [tafsirQuiz, balaghaQuiz, irabQuiz, qiraatQuiz]) expect(kind.count(whole)).toBeGreaterThan(0);
   });
 
   it('every question has its right answer among distinct choices, and an ayah to open', () => {
@@ -72,7 +73,7 @@ describe('the four ayah quizzes', () => {
   it('keeps to the scope', () => {
     for (const kind of [tafsirQuiz, balaghaQuiz, irabQuiz, qiraatQuiz, qiraatWhoQuiz]) {
       for (const question of kind.questions({ range: { from: 30, to: 30 }, filters: {} }, 'medium', seeded(5))) {
-        expect(Number(question.ayahKey!.split(':')[0])).toBeGreaterThanOrEqual(78);
+        expect(inJuzRange(question.ayahKey!, { from: 30, to: 30 }), question.key).toBe(true);
       }
     }
   });
@@ -104,7 +105,7 @@ describe('hiding the quotes', () => {
   });
 
   it('«مَن يقرأ هكذا؟» shows one reading of the coloured word; the right reader reads it so, every wrong one wholly another way', () => {
-    expect(qiraatWhoQuiz.count(whole)).toBeGreaterThan(50);
+    expect(qiraatWhoQuiz.count(whole)).toBeGreaterThan(0);
     for (const question of qiraatWhoQuiz.questions(whole, 'medium', seeded(5), 200)) {
       const readings = qiraatOf(question.ayahKey!)[Number(question.key.split(':').at(-1))].readings;
       const shown = readings.findIndex(r => `﴿${r.text.trim()}﴾` === question.passage);

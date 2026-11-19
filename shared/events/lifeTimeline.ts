@@ -16,6 +16,8 @@ export type LifeItem = {
   open?: { to: 'battle' | 'story'; slug: string };
   /** The year as the sources give it first; none for an undated story. */
   year?: number;
+  /** The sentences that give the year (the book's year heading, a narrator's «in year five»). */
+  yearRefs: AppCite[];
   /** Where the sources give the year otherwise: each saying in its words, with its pages, shown on a tap. */
   others: AppReading[];
   /** «استشهد فيها» and the like, said small after the name. */
@@ -54,12 +56,12 @@ export function lifeItems(entries: AppLifeEntry[], battleKind: (slug: string) =>
     const kind: LifeKind = entry.kind === 'battle' ? KIND_OF[battleKind(entry.slug) ?? ''] ?? 'battle' : entry.kind;
     const { name } = entry;
     items.set(key, {
-      key, kind, name, year: entry.year?.value, others: entry.year?.others ?? [],
+      key, kind, name, year: entry.year?.value, yearRefs: entry.year?.refs ?? [], others: entry.year?.others ?? [],
       open: entry.kind === 'event' ? undefined : { to: entry.kind === 'story' ? 'story' : 'battle', slug: entry.slug },
       note: entry.role === 'استشهد فيها' ? entry.role : undefined, refs: entry.refs,
     });
   }
-  if (death) items.set('own:death', { key: 'own:death', kind: 'own', name: death.label, year: death.year, others: death.others, refs: death.refs });
+  if (death) items.set('own:death', { key: 'own:death', kind: 'own', name: death.label, year: death.year, yearRefs: death.refs, others: death.others, refs: death.refs });
   return [...items.values()];
 }
 
@@ -118,6 +120,9 @@ export function lifeRail(items: LifeItem[]): LifeYear[] {
     ...(undated.length ? [{ key: 'undated', items: undated }] : []),
   ];
 }
+
+/** A life the feed draws: one with more than one column on the strip, since a line needs two points. */
+export const drawsLine = (items: LifeItem[]) => lifeStrip(items).length > 1;
 
 /**
  * The strip: one column for before the hijra (when there is something there) and one for every year from the first
