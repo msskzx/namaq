@@ -1,7 +1,7 @@
 import { createContext, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
 import { AppState, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, BookOpenText, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, Link2, MessagesSquare, MoreHorizontal, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpenText, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, Layers, LibraryBig, Link2, MessagesSquare, MoreHorizontal, Network, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
@@ -42,7 +42,8 @@ import type { AppMomentBattle } from '@shared/battles/battle';
 import { battleLine, Moment } from './battles/BattleParts';
 import { STORIES } from '@/lib/stories';
 import { FORTY, fortyEntry, shamelaPage } from '@/lib/hadith';
-import { fromCompanion, rajabFeedPassages, type RajabChapter } from '@shared/hadith';
+import { authentic, compilerGrades, fromCompanion, rajabFeedPassages, recordedIn, type RajabChapter } from '@shared/hadith';
+import HadithBooks from '@/components/HadithBooks';
 import rajab from '@shared/data/hadith/ibnRajab.json';
 import IbnRajab from '@/components/IbnRajab';
 import { Report, StoryAyat } from './stories/StoryParts';
@@ -744,6 +745,29 @@ function HadithPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
+/** The Forty a «من أخرجه» card carries: the most authentic first (owner, 2026-11-18), those al-Nawawi names books for. */
+const FEED_RECORDED = FORTY.entries.filter(entry => authentic(entry) && entry.records.length > 0);
+
+/**
+ * «من أخرجه» (owner, 2026-11-19; sketch /mnt/project-files/hadith-sciences, frame 3b): the start of one of the Forty, the
+ * drawing of the books that record it, and what a collector said of his own record, in his words. The head opens its page.
+ */
+function RecordedPost({ id, palette }: { id: string; palette: Palette }) {
+  const entry = FEED_RECORDED.find(each => String(each.n) === id);
+  if (!entry) return null;
+  const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={Network} title="من أخرجه" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} palette={palette} open={{ onPress: open, label: `افتح ${entry.heading}` }} />}
+      actions={<Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
+        <Text numberOfLines={3} style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>{entry.text}</Text>
+        <HadithBooks top={entry.heading} boxes={recordedIn(entry)} palette={palette} />
+        {compilerGrades(entry).map(grade => <Text key={`${grade.book}${grade.number}${grade.quote}`} style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`قال ${grade.by}: «${grade.quote}»`}</Text>)}
+      </View>
+    </Post>
+  );
+}
+
 /** The lines of a term's definition a card shows before its page. */
 const TERM_LINES = 5;
 
@@ -902,6 +926,7 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   scene: () => sceneList().map(scene => scene.key),
   hadith: () => FEED_FORTY.map(entry => String(entry.n)),
   rajab: () => RAJAB_PASSAGES.map(rajabId),
+  recorded: () => FEED_RECORDED.map(entry => String(entry.n)),
   prophets: () => STORY_GROUPS.map(group => `${group.slug}-${group.phase}`),
   sira: () => STORIES.filter(story => story.reports[0]).map(story => story.slug),
   moment: () => MOMENTS.map(momentId),
@@ -934,6 +959,7 @@ function ContentPost({ kind, item, day, palette }: { kind: ListKind; item: strin
     case 'scene': return <ScenePost id={item} palette={palette} />;
     case 'hadith': return <HadithPost id={item} palette={palette} />;
     case 'rajab': return <RajabPost id={item} palette={palette} />;
+    case 'recorded': return <RecordedPost id={item} palette={palette} />;
     case 'prophets': { const at = item.lastIndexOf('-'); return <StoryPost slug={item.slice(0, at)} phase={Number(item.slice(at + 1))} palette={palette} />; }
     case 'sira': return <SiraPost id={item} palette={palette} />;
     case 'moment': return <MomentPost id={item} palette={palette} />;

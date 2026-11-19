@@ -203,6 +203,62 @@ const SAHIHAYN: Partial<Record<RecordBook, string>> = { bukhari: 'صحيح ال�
 export const recordName = (record: Pick<FortyRecord, 'book' | 'number' | 'route'>, digits: (n: number) => string, titles?: AppForty['books']) =>
   `${SAHIHAYN[record.book] ?? titles?.[record.book].title ?? record.book} ${digits(record.number)}${record.route ? ` (${record.route})` : ''}`;
 
+/** Each book's collector as al-Nawawi names him after a hadith («رواه البخاري»), the Muwatta's as «مالك». */
+export const COLLECTOR: Record<RecordBook, string> = {
+  bukhari: 'البخاري', muslim: 'مسلم', tirmidhi: 'الترمذي', nasai: 'النسائي', abudawud: 'أبو داود', ibnmajah: 'ابن ماجه', daraqutni: 'الدارقطني',
+  bayhaqi: 'البيهقي', ahmad: 'أحمد', darimi: 'الدارمي', muwatta: 'مالك', abd: 'عبد بن حميد',
+};
+
+/** One place a hadith is recorded, for «من أخرجه»: the collector, the record's number, and what to say under it. */
+export interface BookBox {
+  key: string;
+  name: string;
+  number?: number;
+  /** al-Nawawi names this book for the hadith. */
+  named: boolean;
+  /** «بعضه» for a record holding only part of the wording; «عن فلان» or «مرسلًا» for one from another than al-Nawawi's Companion. */
+  notes: string[];
+}
+
+/**
+ * Where one of the Forty is recorded (owner, 2026-11-19; sketch /mnt/project-files/hadith-sciences, row 3): one box per record
+ * number, in the books' order (a Muslim number's routes are one box; «بعضه» under the Sahihayn when al-Nawawi says only part
+ * is there, no. 33), then each book al-Nawawi names that we hold no record
+ * of (no. 41's «كتاب الحجة»), without a number.
+ */
+export function recordedIn(entry: Pick<FortyEntry, 'named' | 'records' | 'partial'>): BookBox[] {
+  const boxes = new Map<string, BookBox>();
+  for (const book of RECORD_BOOKS) {
+    for (const record of entry.records.filter(each => each.book === book)) {
+      const key = `${book}:${record.number}`;
+      if (boxes.has(key)) continue;
+      const routes = entry.records.filter(each => each.book === book && each.number === record.number);
+      const notes = [
+        ...(routes.every(each => each.partial) || (entry.partial && (book === 'bukhari' || book === 'muslim')) ? ['بعضه'] : []),
+        ...(record.from ? [record.mursal ? 'مرسلًا' : fromCompanion(record.from)] : []),
+      ];
+      boxes.set(key, { key, name: COLLECTOR[book], number: record.number, named: entry.named.includes(COLLECTOR[book]), notes });
+    }
+  }
+  const held = new Set([...boxes.values()].map(box => box.name));
+  for (const name of entry.named.filter(each => !held.has(each))) boxes.set(name, { key: name, name, named: true, notes: [] });
+  return [...boxes.values()];
+}
+
+/**
+ * The hadith outside the Sahihayn a card or quiz may carry (owner, 2026-11-18: the most authentic first, undisputed): al-Tirmidhi's
+ * «حسن صحيح» on nos. 11, 18, 28 and 29, printed in his Sunan beside each. Not no. 42, which his printed Sunan grades «حسن غريب»,
+ * nor 12, 31 and 39, which Ibn Rajab weakens.
+ */
+const GRADED_SAHIH = new Set([11, 18, 28, 29]);
+/** One of the Forty a card or quiz may carry: wholly from the Sahihayn, or graded sahih undisputed. */
+export const authentic = (entry: Pick<FortyEntry, 'n' | 'records'>) => GRADED_SAHIH.has(entry.n)
+  || (entry.records.length > 0 && entry.records.every(record => record.book === 'bukhari' || record.book === 'muslim'));
+
+/** What a collector says of his own record, as printed under it («قال الترمذي: هذا حديث حسن صحيح»); not a later scholar's. */
+export const compilerGrades = (entry: Pick<FortyEntry, 'grades'>) =>
+  (entry.grades ?? []).filter(grade => grade.book !== 'nawawi' && grade.book !== 'ibnrajab' && grade.by === COLLECTOR[grade.book]);
+
 /** «عن أبي هريرة»: the Companion after «عن», a kunya in the genitive. */
 export const fromCompanion = (companion: string) => `عن ${companion.replace(/^أبو /, 'أبي ')}`;
 

@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText, SquareArrowOutUpLeft, Swords, BookOpenText, ListTree, MessagesSquare, Link2 } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText, SquareArrowOutUpLeft, Swords, BookOpenText, ListTree, MessagesSquare, Link2, Network } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Cookies from 'js-cookie';
@@ -14,6 +14,7 @@ import type { HadithCard } from '@/lib/forty';
 import type { TarajimCard } from '@/lib/tarajim';
 import { TiesChain, tiesHref } from '@/components/tarajim/TarajimParts';
 import { IbnRajab, shamelaPage } from '@/components/hadith/FortyParts';
+import HadithBooks from '@/components/hadith/HadithBooks';
 import { fromCompanion } from '@shared/hadith';
 import { LitAyat, ayatName, quotesTitle, termHref } from '@/components/balagha/TermParts';
 import BookRuns from '@/components/quran/text/BookRuns';
@@ -399,17 +400,26 @@ function TermPost({ card }: { card: TermCard }) {
 }
 
 /**
- * One of al-Nawawi's Forty in his words (the app's HadithPost), or a passage of Ibn Rajab's explanation of one (its
- * RajabPost); the head and the first button open the hadith's page with its records.
+ * One of al-Nawawi's Forty in his words (the app's HadithPost), a passage of Ibn Rajab's explanation of one (its RajabPost), or
+ * the books that record one (its RecordedPost); the head and the first button open the hadith's page with its records.
  */
 function HadithPost({ card }: { card: HadithCard }) {
   const { entry, books } = card;
   const href = `/hadith/forty/${entry.n}`;
+  const open = <Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} href={href} />;
+  const sub = `${entry.heading}، ${fromCompanion(entry.companion)}`;
+  if (card.kind === 'recorded') return <Post head={<PostHead Icon={Network} title="من أخرجه" sub={sub} href={href} label={`افتح ${entry.heading}`} />} actions={open}>
+    <div className="flex flex-col gap-3 px-4 py-3" lang="ar">
+      <p className="line-clamp-3 text-[1.125rem] leading-[1.9]">{entry.text}</p>
+      <HadithBooks top={entry.heading} boxes={card.boxes} />
+      {card.grades.map(grade => <p key={`${grade.by}${grade.quote}`} className="text-[0.9375rem] text-[var(--home-muted)]">{`قال ${grade.by}: «${grade.quote}»`}</p>)}
+    </div>
+  </Post>;
   const rajab = card.kind === 'rajab';
   const source = rajab ? { title: books.ibnrajab.title, url: shamelaPage(books, 'ibnrajab', card.passage[0].shamela) } : { title: books.nawawi.title, url: shamelaPage(books, 'nawawi', entry.shamela) };
-  return <Post head={<PostHead Icon={rajab ? BookOpenText : MessagesSquare} title={rajab ? 'من شرح ابن رجب' : 'من الحديث'} sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} href={href} label={`افتح ${entry.heading}`} />}
+  return <Post head={<PostHead Icon={rajab ? BookOpenText : MessagesSquare} title={rajab ? 'من شرح ابن رجب' : 'من الحديث'} sub={sub} href={href} label={`افتح ${entry.heading}`} />}
     actions={<>
-      <Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} href={href} />
+      {open}
       <Action Icon={SquareArrowOutUpLeft} label={`المصدر: ${source.title}`} href={source.url} external />
     </>}>
     <div className="px-4 py-3" lang="ar">
@@ -579,8 +589,8 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
   const siraSlots = shows('sira') || shows('moment') ? Array.from({ length: batches }, (_, i) => i) : [];
   const { data: sira } = useSWR(day && siraSlots.length ? `/api/home/feed?day=${day}&sira=${siraSlots.join(',')}` : null,
     () => inPieces<SiraCard[]>(some => `/api/home/feed?day=${day}&sira=${some.join(',')}`, siraSlots).then(all => all.flat()), swr);
-  // The hadith and Ibn Rajab cards, one a batch, worked out on the server (the records and Ibn Rajab's book stay there).
-  const hadithSlots = shows('hadith') || shows('rajab') ? Array.from({ length: batches }, (_, i) => i) : [];
+  // The hadith, Ibn Rajab and «من أخرجه» cards, one a batch, worked out on the server (the records and Ibn Rajab's book stay there).
+  const hadithSlots = shows('hadith') || shows('rajab') || shows('recorded') ? Array.from({ length: batches }, (_, i) => i) : [];
   const { data: hadith } = useSWR(day && hadithSlots.length ? `/api/home/feed?day=${day}&hadith=${hadithSlots.join(',')}` : null,
     () => inPieces<HadithCard[]>(some => `/api/home/feed?day=${day}&hadith=${some.join(',')}`, hadithSlots).then(all => all.flat()), swr);
   // The virtue and «صلة» cards, one a batch, worked out on the server (the people's entries stay there).
