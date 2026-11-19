@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { bareName } from '../tarajimLine';
-import { nasabQuestions, virtueQuestions } from './tarajim';
+import { nameQuestions, nasabQuestions, prophetNameQuestions, prophetNames, TARAJIM_KUNYA, TARAJIM_LAQAB, virtueQuestions } from './tarajim';
+import { kunyaFacts, laqabFacts } from '../tarajimNames';
+import peopleJson from '../data/tarajim/people.json';
+import namesSkip from '../data/tarajim/namesQuizSkip.json';
+import type { AppPerson } from '../tarajim';
 import { seededRandom } from './feedQuiz';
 
 describe('أين يلتقي النسبان؟', () => {
@@ -88,6 +92,67 @@ describe('ابحث عن الجواب', () => {
       const [, slug, index] = virtue.key.split(':');
       expect(virtue.look?.mark).toEqual({ slug, index: Number(index) });
       expect(slug).toBe(virtue.correctAnswer);
+    }
+  });
+});
+
+describe('بمَ لُقّب؟ and ما كنيته؟', () => {
+  const people = peopleJson as AppPerson[];
+  const kinds = [[TARAJIM_LAQAB, laqabFacts(people)], [TARAJIM_KUNYA, kunyaFacts(people)]] as const;
+
+  it('offers only names of people of the asked person’s sex, never one of the Prophet’s ﷺ, and never one the person also bears', () => {
+    const prophet = people.find(p => p.slug === 'prophet-muhammad')!;
+    const his = new Set([...prophet.titles, ...prophet.laqab, ...prophet.kunya].map(f => bareName('name' in f ? (f.name as string) : f.text)));
+    for (const [family, facts] of kinds) {
+      const questions = nameQuestions(family, people, seededRandom(1));
+      expect(questions.length).toBeGreaterThan(0);
+      for (const q of questions) {
+        const asked = people.find(p => q.key.startsWith(`${family}:${p.slug}:`))!;
+        const own = facts.filter(f => f.person.slug === asked.slug).map(f => bareName(f.name));
+        for (const choice of q.choices.filter(c => c.value !== q.correctAnswer)) {
+          const holders = facts.filter(f => bareName(f.name) === bareName(choice.value)).map(f => f.person);
+          expect(holders.length).toBeGreaterThan(0);
+          expect(holders.every(p => p.sex === asked.sex)).toBe(true);
+          expect(his.has(bareName(choice.value))).toBe(false);
+          expect(own).not.toContain(bareName(choice.value));
+        }
+      }
+    }
+  });
+
+  it('does not ask a kunya the name already shows, nor a laqab the sources do not give to one person alone', () => {
+    const kunya = nameQuestions(TARAJIM_KUNYA, people, seededRandom(1)).map(q => q.key.split(':')[1]);
+    expect(kunya).not.toContain('ukkashah-ibn-mihsan');
+    expect(kunya).not.toContain('abu-dharr-al-ghifari');
+    const laqab = nameQuestions(TARAJIM_LAQAB, people, seededRandom(1));
+    expect(laqab.some(q => q.correctAnswer === 'قاتل أبي جهل')).toBe(false);
+  });
+
+  it('skips only laqabs that exist, each with its source', () => {
+    const ids = new Set(people.flatMap(p => [...p.laqab, ...p.titles].map(f => f.id)));
+    for (const [id, why] of Object.entries(namesSkip.skip as Record<string, string>)) {
+      expect(ids.has(id)).toBe(true);
+      expect(why.length).toBeGreaterThan(0);
+    }
+  });
+});
+
+describe('أسماء النبي ﷺ (several right choices)', () => {
+  const people = peopleJson as AppPerson[];
+  it('offers four choices, one to four of them his names as the hadith gives them, the rest Companions’ laqabs', () => {
+    const names = new Set(prophetNames(people).map(title => title.name));
+    expect(names.has('نبي')).toBe(false);
+    // A name the hadith joins with «و» is his too.
+    expect(names.has('نبي التوبة')).toBe(true);
+    expect(names.has('خاتم النبيين')).toBe(true);
+    const questions = prophetNameQuestions(people, seededRandom(3), 30);
+    expect(questions.length).toBeGreaterThan(0);
+    for (const q of questions) {
+      expect(q.choices).toHaveLength(4);
+      const right = q.correctAnswers!;
+      expect(right.length).toBeGreaterThanOrEqual(1);
+      expect(right.every(name => names.has(name))).toBe(true);
+      expect(q.choices.filter(c => !right.includes(c.value)).every(c => !names.has(c.value))).toBe(true);
     }
   });
 });

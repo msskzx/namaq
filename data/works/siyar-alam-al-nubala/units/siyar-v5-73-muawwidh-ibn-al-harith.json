@@ -1,0 +1,326 @@
+{
+  "unit": {
+    "id": "siyar-v5-73-muawwidh-ibn-al-harith",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٧٣"
+    }
+  },
+  "spans": [
+    {
+      "id": "hd",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "359",
+      "layer": "MAIN",
+      "exact": "٧٣ - مُعَوِّذُ بنُ الحَارِث بنِ رِفَاعَةَ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "359",
+      "layer": "MAIN",
+      "exact": "مُعَوِّذُ بنُ الحَارِث بنِ رِفَاعَةَ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "359",
+      "layer": "MAIN",
+      "exact": "مُعَوِّذُ بنُ",
+      "prefix": "-"
+    },
+    {
+      "id": "fa",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "359",
+      "layer": "MAIN",
+      "exact": "الحَارِث بنِ رِفَاعَةَ"
+    },
+    {
+      "id": "kids",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "359",
+      "layer": "MAIN",
+      "exact": "ابْنُ عَفْرَاءَ، وَهُوَ وَالِدُ الرُّبَيِّعِ بِنْتِ مُعَوِّذٍ، وَأُخْتُهَا عُمَيْرَةُ."
+    },
+    {
+      "id": "ibnafra",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "359",
+      "layer": "MAIN",
+      "exact": "ابْنُ عَفْرَاءَ، وَهُوَ",
+      "prefix": "*"
+    },
+    {
+      "id": "rub",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "359",
+      "layer": "MAIN",
+      "exact": "الرُّبَيِّعِ بِنْتِ مُعَوِّذٍ"
+    },
+    {
+      "id": "umr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "359",
+      "layer": "MAIN",
+      "exact": "وَأُخْتُهَا عُمَيْرَةُ",
+      "prefix": "مُعَوِّذٍ،"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r0",
+      "unit": "siyar-v5-73-muawwidh-ibn-al-harith",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "hd",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_1",
+      "report": "r0",
+      "spans": [
+        "n1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_7",
+      "report": "r0",
+      "spans": [
+        "kids"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_s2",
+      "parent": "n1",
+      "exact": "مُعَوِّذُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o5",
+      "parent": "n1",
+      "exact": "الحَارِث بنِ رِفَاعَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_s8",
+      "parent": "kids",
+      "exact": "وَهُوَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_s9",
+      "parent": "kids",
+      "exact": "ابْنُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o10",
+      "parent": "kids",
+      "exact": "عَفْرَاءَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_o12",
+      "parent": "kids",
+      "exact": "الرُّبَيِّعِ بِنْتِ مُعَوِّذٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o14",
+      "parent": "kids",
+      "exact": "عُمَيْرَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_s2",
+      "mention": "m_s2",
+      "agent": "muawwidh-ibn-afra",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o5",
+      "mention": "m_o5",
+      "agent": "al-harith-ibn-rifaah-al-najjari",
+      "basis": [
+        {
+          "span": "fa",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s8",
+      "mention": "m_s8",
+      "agent": "muawwidh-ibn-afra",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s9",
+      "mention": "m_s9",
+      "agent": "muawwidh-ibn-afra",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o10",
+      "mention": "m_o10",
+      "agent": "afra-bint-ubayd",
+      "basis": [
+        {
+          "span": "ibnafra",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o12",
+      "mention": "m_o12",
+      "agent": "al-rubayyi-bint-muawwidh",
+      "basis": [
+        {
+          "span": "rub",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o14",
+      "mention": "m_o14",
+      "agent": "umayrah-bint-muawwidh",
+      "basis": [
+        {
+          "span": "umr",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_3",
+      "subject": "m_s2",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "n1"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_4",
+      "subject": "m_s2",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sex"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_6",
+      "subject": "m_s2",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_o5"
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_11",
+      "subject": "m_s9",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_o10"
+      },
+      "restsOn": [
+        "st_7"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_13",
+      "subject": "m_o12",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_s8"
+      },
+      "restsOn": [
+        "st_7"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_15",
+      "subject": "m_o14",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_s8"
+      },
+      "restsOn": [
+        "st_7"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

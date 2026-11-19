@@ -1,5 +1,6 @@
 "use client";
 
+import { UnderCard } from "@/components/common/UnderCard";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { RecitePosition } from "@shared/quran/recite";
 import { pageModel } from "@shared/quran/recitePage";
@@ -94,7 +95,8 @@ export default function QuizPage({ ayah, ask, shown, onWritten, onShown, party, 
       <MushafPage page={pages.page} data={pages.data} top={pages.top} names={NAMES} hidden={view.hidden} titled={view.titled} next={view.next} anonymous={!before || nameless}
         write={write ? { ...write, before: 0 } : null} checked={marked ? { ...marked, before: 0 } : recite.checked ? { ...recite.checked, before: 0 } : null} />
     </div>
-    {ask.recite && !shown && !sent && <RecitePill recite={recite} writing={writing || !!party} onWriting={toggleWriting} ar={ar} className="self-center" />}
+    {/* In a feed card the bar joins the row under the card (owner: no buttons in a card). */}
+    {ask.recite && !shown && !sent && <UnderCard><RecitePill recite={recite} writing={writing || !!party} onWriting={toggleWriting} ar={ar} className="self-center" /></UnderCard>}
     {write && recite.boxes.field({ "aria-label": ar ? "اكتب الكلمة" : "Write the word" })}
   </div>;
 }

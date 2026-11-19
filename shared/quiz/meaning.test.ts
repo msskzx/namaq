@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { inJuzRange } from '../quran/juz';
 import gharib from '../data/quran/gharib';
 import { meaningQuiz } from './meaning';
 
@@ -40,8 +41,8 @@ describe('«ما معنى؟»', () => {
 
   it('keeps to the scope', () => {
     const juz30 = meaningQuiz.questions({ range: { from: 30, to: 30 }, filters: {} }, 'medium', seeded(3));
-    expect(juz30.length).toBeGreaterThan(20);
-    for (const question of juz30) expect(Number(question.ayahKey!.split(':')[0])).toBeGreaterThanOrEqual(78);
+    expect(juz30.length).toBeGreaterThan(0);
+    for (const question of juz30) expect(inJuzRange(question.ayahKey!, { from: 30, to: 30 }), question.key).toBe(true);
   });
 
   it('looks the word up in the meaning books, at the first word asked', () => {

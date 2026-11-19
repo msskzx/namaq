@@ -1,3 +1,5 @@
+import { FLOW_LINE, flowFontSize } from '@shared/quran/quranText/flow';
+
 /**
  * Reader text size. 1 is the printed page: 15 lines fitted to the screen. Bigger is a bigger font, not a bigger picture:
  * the page's words wrap onto more lines at the screen's width and the page grows taller, read by scrolling down
@@ -12,10 +14,9 @@ export function settleZoom(zoom: number) {
 }
 
 /** The font size of a page set as flowing text, from the page body's width: about the printed page's size at 1, the same on every page. */
-export const flowSize = (bodyWidth: number, zoom: number) => bodyWidth * 0.063 * zoom;
+export const flowSize = (bodyWidth: number, zoom: number) => flowFontSize(bodyWidth, zoom);
 
-/** The height of one flowing line, for the font size: the Hafs font's marks sit far above and below its letters. */
-export const FLOW_LINE = 1.7;
+export { FLOW_LINE };
 
 /**
  * Breaks a run of words into lines no wider than `width`. `widths` are the words' widths at the drawn size and `gap` the

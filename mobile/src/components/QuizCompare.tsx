@@ -10,18 +10,16 @@ import { markColour } from '@shared/quran/compareCardLook';
 import { addCompareHint, blankWords, compareCorrections, compareHintsOf, compareLabel, comparePieces, type CompareAsk, type CompareLine, type Tone } from '@shared/quiz/compareAnswers';
 import { neededCut, verdict, type Correction } from '@shared/quiz/feedback';
 import type { Hints } from '@shared/quiz/hints';
-import { quranText } from '@/lib/quranText';
 import { useKeyboardShown } from '@/lib/keyboard';
 import { openCompare } from '@/lib/ways';
-import { QURAN_FONT, type Palette } from '@/lib/theme';
+import { type Palette } from '@/lib/theme';
+import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
 import IconButton from '@/ui/IconButton';
-import Card from '@/ui/Card';
+import Card, { UnderCard } from '@/ui/Card';
 import { BlankBoxes } from './MushafPageView';
 import { useWriteBlanks } from './recite/useRecite';
 import { writeBlank } from '@shared/quiz/writeBlanks';
 
-const SIZE = 20;
-const quran = (palette: Palette, color?: string) => ({ fontFamily: QURAN_FONT, fontSize: SIZE, lineHeight: SIZE * 1.9, color: color ?? palette.ink });
 const toneColour = (tone: Tone, palette: Palette) => markColour(tone === 'written' ? 'exact' : tone, palette, tone === 'written');
 const ayahOf = (key: string) => Number(key.split(':')[1]);
 
@@ -29,17 +27,17 @@ type Asked = { compare: CompareAsk };
 
 /** Given words in the app-wide word-match colours: same words terracotta, written differently amber, same root purple. */
 const Words = ({ line, at, palette }: { line: CompareLine; at: number[]; palette: Palette }) =>
-  <>{at.map(i => <Text key={i} style={quran(palette, toneColour(line.tones[i], palette))}>{quranText(line.words[i])}</Text>)}</>;
+  <>{at.map(i => <AyahWords key={i} look={{ color: toneColour(line.tones[i], palette) ?? palette.ink }}>{line.words[i]}</AyahWords>)}</>;
 
 /** One ayah of the matrix in its card: its reference above, its words flowing right to left, then its number. */
 function Line({ line, palette, children, after }: { line: CompareLine; palette: Palette; children: React.ReactNode; after?: React.ReactNode }) {
   return (
     <Card palette={palette} pad={10} gap={2}>
       <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{compareLabel(line.key)}</Text>
-      <View style={{ direction: 'rtl', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 7 }}>
+      <AyahFlow row color={palette.ink}>
         {children}
-        <Text style={quran(palette, palette.muted)}>{num(ayahOf(line.key))}</Text>
-      </View>
+        <AyahWords look={{ color: palette.muted }}>{num(ayahOf(line.key))}</AyahWords>
+      </AyahFlow>
       {after}
     </Card>
   );
@@ -53,7 +51,7 @@ function Bar({ label, onPress, Icon, palette }: { label: string; onPress: () => 
 
 /** The buttons under a question, on the right as across the app. */
 const Buttons = ({ children }: { children: React.ReactNode }) =>
-  <View style={{ direction: 'rtl', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 8 }}>{children}</View>;
+  <UnderCard><View style={{ direction: 'rtl', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 8 }}>{children}</View></UnderCard>;
 
 /** The question: the given ayah, then the asked one with a box in each part, and the hint bulb. */
 export function CompareInputs({ question, typed, onType, palette, header, hints: kept, onHints, onFit }: { question: Asked; typed: string[]; onType: (blank: number, text: string) => void; palette: Palette; header?: React.ReactNode;
@@ -82,7 +80,7 @@ export function CompareInputs({ question, typed, onType, palette, header, hints:
           <Line line={ask.asked} palette={palette}>
             {pieces.map((piece, i) => 'given' in piece
               ? <Words key={i} line={ask.asked} at={piece.given} palette={palette} />
-              : <BlankBoxes key={i} blank={blanks[piece.blank]} index={piece.blank} write={write} size={SIZE} palette={palette} hint={shown[piece.blank]} name={`الفراغ ${num(piece.blank + 1)}`} />)}
+              : <BlankBoxes key={i} blank={blanks[piece.blank]} index={piece.blank} write={write} palette={palette} hint={shown[piece.blank]} name={`الفراغ ${num(piece.blank + 1)}`} />)}
           </Line>
         </View>
       </ScrollView>
@@ -113,7 +111,7 @@ function Mark({ row, palette, hinted }: { row: Correction; palette: Palette; hin
       </View>
       {!row.correct && <Text style={{ fontSize: 15, color: palette.muted, textAlign: 'right' }}>
         {'كتبتَ: '}
-        {typed.length === 0 ? 'لا شيء' : <Text style={{ fontFamily: QURAN_FONT, fontSize: 17 }}>{typed.map((word, i) => (
+        {typed.length === 0 ? 'لا شيء' : <Text style={{ fontSize: 17 }}>{typed.map((word, i) => (
           <Text key={i} style={row.marks[i] ? { color: palette.green } : { color: palette.accent, textDecorationLine: 'line-through' }}>{i > 0 ? ' ' : ''}{word}</Text>
         ))}</Text>}
       </Text>}
@@ -151,7 +149,7 @@ export function CompareFeedback({ question, typed, palette, header, hints, onFit
               const words = blankWords(ask, piece.blank);
               const cut = neededCut(words, row.needed);
               return [<Badge key={`b${i}`} row={row} palette={palette} />, ...words.map((word, at) => (
-                <Text key={`${i}:${at}`} style={[quran(palette), at < cut ? { textDecorationLine: 'underline', textDecorationColor: palette.accent } : null]}>{quranText(word)}</Text>
+                <AyahWords key={`${i}:${at}`} look={at < cut ? { textDecorationLine: 'underline', textDecorationColor: palette.accent } : undefined}>{word}</AyahWords>
               ))];
             })}
           </Line>

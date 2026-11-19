@@ -8,8 +8,9 @@ import { biggerFirst, branchQuestions, type BranchAnswer, type BranchQuestion } 
 import { shuffle, type Random } from '@shared/quiz/random';
 import { byDifficulty, DEFAULT_DIFFICULTY, type Difficulty } from '@shared/quiz/difficulty';
 import { quizTrees, type TreeScope } from '@shared/quiz/treeScope';
-import { mixQuestions, questionAyat, recited, type ChoiceQuestion, type ChoiceScope } from '@shared/quiz/choiceKinds';
+import { mixQuestions, questionAyat, recited, ticks, type ChoiceQuestion, type ChoiceScope } from '@shared/quiz/choiceKinds';
 import { CHOICE_KINDS } from '@shared/quiz/kinds';
+import { kunyaNotFirst } from '@shared/quiz/tarajim';
 import { CHOICE_TOPICS } from '@shared/quiz/settings';
 import { DEFAULT_LEAVES } from './types';
 import type { QuestionChoice, QuestionFamily, QuizLength, QuizTopic, QuizTopics } from './types';
@@ -21,6 +22,7 @@ export interface AssembledQuestion {
   promptArabic: string;
   choices: QuestionChoice[];
   correctAnswer: string;
+  correctAnswers?: ChoiceQuestion['correctAnswers'];
   phrase?: string;
   branches?: BranchAnswer[];
   tree?: Branch;
@@ -119,9 +121,10 @@ export async function assembleQuiz({ topics, personSlug, juz = null, scope = {},
   const trees: AssembledQuestion[] = byDifficulty(bigger, difficulty, question => question.level).slice(0, length * 3);
   const kinds = kindsOf(topics).map((kind) => kind.questions(choiceScope(juz, scope), difficulty, random, length * 3) as AssembledQuestion[]);
   // Each kind gets its share of the quiz, never two questions on one ayah (choiceKinds.ts mixQuestions); extra are drawn for those skipped.
-  return mixQuestions<AssembledQuestion>([shuffle(bank, random), trees, ...kinds], length, random, questionAyat).map((question) => ({
+  return kunyaNotFirst(mixQuestions<AssembledQuestion>([shuffle(bank, random), trees, ...kinds], length, random, questionAyat)).map((question) => ({
     ...question,
-    choices: recited(question) ? question.choices : shuffle(question.choices, random),
+    // Several right choices keep their order: their `correctAnswer` is the right ones in it (choiceKinds.ts PICKS).
+    choices: recited(question) || ticks(question) ? question.choices : shuffle(question.choices, random),
     ...(question.tree && { asked: askedNodes(question.tree, leaves, random) }),
   }));
 }

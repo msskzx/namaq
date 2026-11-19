@@ -3,12 +3,31 @@
 Rules from [ship-checklist.md](../ship-checklist.md) that a test could check.
 Owner rule: a guard needs a second agent's vote, then the owner's sign-off,
 before anyone builds it. Reviewer A wrote each proposal; reviewer B, a separate
-agent that read the code, voted on it. Nothing here is built yet. Each one
-names its single entry point and asserts a rule over every item, never a
-hard-coded count.
+agent that read the code, voted on it. The owner signed them off on
+2026-11-19. Each one names its single entry point and asserts a rule over
+every item, never a hard-coded count.
 
 Votes: 9 yes, 2 no, 17 change (B's change is folded into the proposal below).
 Rules a test already enforces are listed at the end.
+
+## Status
+
+| No. | Where |
+| --- | --- |
+| 1 | Quran pipeline thread (`oneQuranText.test.ts`) |
+| 2 | `shared/quiz/quranWords.test.ts` |
+| 5 | `shared/quiz/integrity.test.ts`, plus counts replaced in nine other tests |
+| 6, 8, 10 | `shared/quiz/giveaway.test.ts` (#1000) |
+| 7 | `shared/party/reveal.test.ts`. Known break kept on its list: tree questions send their tree, ayat and answers before the reveal, and compare questions their blanks' words |
+| 9 | kunya thread (`kunyaNotFirst`) |
+| 11 | `shared/quiz/branchAnswers.test.ts` (#1000) |
+| 12 | `e2e/app/party.spec.ts` |
+| 13 | `shared/quran/oneRecite.test.ts` (#1002) |
+| 3 | `shared/oneText.test.ts` |
+| 15 | `shared/tapSize.test.ts`: the website floor and the app floor read one value; the "is 44" line is gone |
+| 16 | `shared/topBarSearch.test.ts` |
+| 17 | `shared/colourLiterals.test.ts`, with a shrink-only list of the colours still outside the themes |
+| 21 | `shared/firstFrame.test.ts`. Follows value imports only: `import type` lines are erased at build, and the type graph reaches the data through harmless card shapes. It found six tab pages that ignored a tap on their open button (battle, battles, story, stories, life, term); fixed |
 
 ## Bugs the review found in today's code
 

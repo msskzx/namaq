@@ -9,10 +9,11 @@ import { ayahEnds, surahOpenings } from './pageKinds';
 import { reciteSnippet } from './reciteSnippet';
 import { siraQuiz } from './sira';
 import { hadithBookQuiz, hadithCompleteQuiz, hadithNarratorQuiz } from './hadith';
-import { tarajimNasab, tarajimTie, tarajimVirtue } from './tarajim';
+import { prophetNamesQuiz, tarajimKunya, tarajimLaqab, tarajimNasab, tarajimTie, tarajimVirtue } from './tarajim';
+import { tarajimLife } from './life';
 import { tuhfaComplete, tuhfaNext, tuhfaRule } from './tuhfa';
 import { whichSurah } from './whichSurah';
 
-export const CHOICE_KINDS: ChoiceKind[] = [compareQuiz, whichSurah, reciteSnippet, surahOpenings, ayahEnds, meaningQuiz, tafsirQuiz, balaghaQuiz, termQuiz, irabQuiz, qiraatQuiz, qiraatWhoQuiz, tuhfaComplete, tuhfaNext, tuhfaRule, tarajimNasab, tarajimVirtue, tarajimTie, siraQuiz, hadithNarratorQuiz, hadithCompleteQuiz, hadithBookQuiz];
+export const CHOICE_KINDS: ChoiceKind[] = [compareQuiz, whichSurah, reciteSnippet, surahOpenings, ayahEnds, meaningQuiz, tafsirQuiz, balaghaQuiz, termQuiz, irabQuiz, qiraatQuiz, qiraatWhoQuiz, tuhfaComplete, tuhfaNext, tuhfaRule, tarajimNasab, tarajimVirtue, tarajimTie, tarajimLife, tarajimLaqab, tarajimKunya, prophetNamesQuiz, siraQuiz, hadithNarratorQuiz, hadithCompleteQuiz, hadithBookQuiz];
 
 export const choiceKind = (topic: QuizTopic) => CHOICE_KINDS.find(kind => kind.id === topic);
