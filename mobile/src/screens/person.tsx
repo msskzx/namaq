@@ -1,7 +1,7 @@
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Network } from 'lucide-react-native';
-import { kunyaName, pageLabel, sayer, sourcesOf, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
+import { kunyaName, pageLabel, sayer, sayerLine, sourcesOf, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
 import { surahName } from '@shared/quran/surahNames';
 import { counted, num } from '@shared/quran/arabicNumber';
 import { sourceById } from '@shared/sources';
@@ -64,7 +64,8 @@ export function Credit({ facts, palette, quotes = false }: { facts: PersonFact[]
  */
 function Sayer({ fact, palette, many = false }: { fact: PersonFact; palette: Palette; many?: boolean }) {
   if (fact.anonymous) return <Text style={muted(palette)}>قيل</Text>;
-  return fact.by.length || many ? <Text style={muted(palette)}>{many ? `عند ${sayer(fact)}` : sayer(fact)}</Text> : null;
+  if (many) return <Text style={muted(palette)}>عند {sayer(fact)}</Text>;
+  return fact.by.length ? <Text style={muted(palette)}>{sayerLine(fact)}</Text> : null;
 }
 
 /** One quote from the entry, with who says it; a `marked` one (a quiz's answer, once shown) in green. */
@@ -115,25 +116,15 @@ function Names({ links, palette }: { links: PersonLink[]; palette: Palette }) {
 /** «ـه» or «ـها»: the labels follow the person's sex. */
 const suffixOf = (person: AppPerson) => (person.sex === 'FEMALE' ? 'ها' : 'ه');
 
-/**
- * The Prophet's ﷺ wives: the eleven «أمهات المؤمنين» first, each holding that title in her own entry (Ibn al-Qayyim,
- * Zad al-Ma'ad 1/110: «فهؤلاء نساؤه المعروفات اللاتي دخل بهن»), then the others the books name, on their own line.
- */
-const MOTHER_OF_BELIEVERS = 'mother-of-believers';
-const isMother = (link: PersonLink) => findPerson(link.slug)?.titles.some(title => title.title === MOTHER_OF_BELIEVERS) ?? false;
-
 function ties(person: AppPerson) {
   const s = suffixOf(person);
-  const wives = person.spouses.filter(isMother);
-  const spouses = wives.length ? wives : person.spouses;
-  const others = wives.length ? person.spouses.filter(link => !isMother(link)) : [];
+  const spouses = person.spouses;
   const fathers = person.parents.filter(p => p.sex !== 'FEMALE');
   const mothers = person.parents.filter(p => p.sex === 'FEMALE');
   return [
     { label: `أبو${s}`, links: fathers },
     { label: `أم${s}`, links: mothers },
     { label: spouses.length > 1 ? `أزواج${s}` : `زوج${s}`, links: spouses },
-    { label: 'وذُكر أنه تزوج', links: others },
     { label: `أولاد${s}`, links: person.children },
     { label: `إخوت${s}`, links: person.siblings },
     { label: `قرابت${s}`, links: person.cousins },

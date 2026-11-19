@@ -3,7 +3,7 @@
 // him (mobile/src/components/TiesRing.tsx), the nasab tree (mobile/src/screens/nasab.tsx), the virtues (person.tsx), and
 // the «من التراجم» and «صلة» feed cards. The client parts in src/components/tarajim draw what these return.
 import peopleJson from '@shared/data/tarajim/people.json';
-import { pageLabel, sayer, sourcesOf, type AppPerson, type PersonFact } from '@shared/tarajim';
+import { pageLabel, sayerLine, sourcesOf, type AppPerson, type PersonFact } from '@shared/tarajim';
 import { bareName, chainOf, foldTop, lineOf, meetingOf, nasabTree, type NasabNode } from '@shared/tarajimLine';
 import { chainSentence, groupWord, linkedPairs, peopleGraph, stepClause, tieGroups, tieWord, type GraphNode, type TieKind } from '@shared/tarajimGraph';
 import { allVirtues } from '@shared/homeFeed';
@@ -123,7 +123,7 @@ export function nasabView(slugs: string[], meetings = true): NasabView {
 export type VirtueLine = { text: string; by?: string };
 export type VirtuesView = PersonHead & { virtues: VirtueLine[]; credit?: Credit };
 
-const sayerOf = (fact: PersonFact) => (fact.anonymous ? 'قيل' : fact.by.length ? sayer(fact) : undefined);
+const sayerOf = (fact: PersonFact) => (fact.anonymous ? 'قيل' : fact.by.length ? sayerLine(fact) : undefined);
 export function virtuesView(slug: string): VirtuesView | undefined {
   const person = findPerson(slug);
   if (!person) return undefined;

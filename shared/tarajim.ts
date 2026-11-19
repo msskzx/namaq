@@ -109,6 +109,16 @@ export function sayer(fact: PersonFact) {
   return fact.by.length === 0 ? TITLE_SPEAKER_AUTHOR : fact.by.join('، ');
 }
 
+/**
+ * The line under a quote that a narrator or the Prophet ﷺ says: «قاله البراء», «من قوله ﷺ». A bare name under a quote
+ * read oddly (owner 2026-11-19).
+ */
+export function sayerLine(fact: PersonFact) {
+  if (fact.by.length === 1 && fact.by[0] === PROPHET_NAME) return 'من قوله ﷺ';
+  return `قاله ${fact.by.map(name => (name === PROPHET_NAME ? 'النبي ﷺ' : name)).join('، ')}`;
+}
+const PROPHET_NAME = 'محمد ﷺ';
+
 const ARABIC_DIGITS = '٠١٢٣٤٥٦٧٨٩';
 const arabic = (value: string | number) => String(value).replace(/\d/g, (d) => ARABIC_DIGITS[Number(d)]);
 

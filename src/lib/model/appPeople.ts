@@ -122,6 +122,19 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
   const reverse = (slug: string, predicate: ProfileEntry['predicate']) => [...profiles.entries()]
     .flatMap(([other, entries]) => entries.filter((entry) => entry.predicate === predicate && entry.object === slug).map((entry) => ({ other, entry })));
 
+  // The Prophet's ﷺ wives are those his own entry gives as his (the nine he left, Zaynab bint Khuzaymah, Khadijah; Zad
+  // al-Ma'ad's eleven). Another woman a book names is not shown as his wife on either page: al-Dhahabi brings them «للتعجب
+  // لا للتقرير» (sira 2/495), and Ibn al-Qayyim says the scholars of the sira do not know them (Zad 1/110). Owner
+  // 2026-11-19: what the book doubts is not taught.
+  const CLOSED_SPOUSES = ['prophet-muhammad'];
+  const ownSpouses = new Map(CLOSED_SPOUSES.map((slug) => [slug, new Set((profiles.get(slug) ?? [])
+    .filter((entry) => entry.predicate === 'MARRIED' && entry.status !== 'DISPUTED' && entry.object).map((entry) => entry.object!))]));
+  const shownSpouse = (slug: string) => (link: PersonLink) => {
+    const closed = ownSpouses.get(slug) ?? ownSpouses.get(link.slug);
+    const other = ownSpouses.has(slug) ? link.slug : slug;
+    return !closed || closed.has(other);
+  };
+
   // A person the catalog does not hold is named by the name and the father; where that is another person's name too
   // («عبد الله بن الحارث»: Ibn Jaz' and the Hashimi), the grandfather is added («عبد الله بن الحارث بن جزء»).
   const nasabs = new Map([...ownUnit.keys()].map((slug) => {
@@ -244,7 +257,7 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
       parents: merge(links('CHILD_OF')),
       children: merge(back('CHILD_OF')),
       siblings: merge([...links('SIBLING_OF'), ...back('SIBLING_OF')]),
-      spouses: merge([...links('MARRIED'), ...back('MARRIED')]),
+      spouses: merge([...links('MARRIED'), ...back('MARRIED')]).filter(shownSpouse(slug)),
       cousins: merge([...links('PATERNAL_COUSIN'), ...back('PATERNAL_COUSIN')]),
       companionOf: merge(links('COMPANION_OF')),
       ...attendance(merge(links('PARTICIPATED_IN')),
