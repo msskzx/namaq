@@ -13,7 +13,7 @@ export const returningUser = (now = Date.now()): Seed => ({
 });
 
 type Fixtures = {
-  /** Keys to put in localStorage before the page loads. The tour is marked seen unless `tour-seen` is set to null. */
+  /** Keys to put in localStorage before the page loads. The tour is marked seen unless `tour-seen` is set to null, and the interests asked unless `interests-asked` is. */
   seed: Seed;
   /** Uncaught errors and console errors; each test fails if any are left at the end. */
   errors: string[];
@@ -33,7 +33,7 @@ export const test = base.extend<Fixtures>({
     expect(errors, 'errors on the page').toEqual([]);
   }, { auto: true }],
   page: async ({ page, seed }, use) => {
-    const values = { 'tour-seen': true, ...seed };
+    const values = { 'tour-seen': true, 'interests-asked': '1', ...seed };
     await page.addInitScript(entries => {
       if (sessionStorage.getItem('e2e-seeded')) return;
       sessionStorage.setItem('e2e-seeded', '1');

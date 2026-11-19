@@ -9,7 +9,9 @@ import { Tap } from '@/ui/Tap';
  * On (saved, forgotten, noted), the icon and its name take the mark's colour, filled where the icon has a body, with
  * nothing behind them (owner, 2026-11-17: no coloured square, as the فاصلة in the top bar).
  */
-export default function ActButton({ Icon, label, name, onPress, palette, on = false, color, tint, filled = false }: { Icon: (props: LucideProps) => React.ReactNode; label: string; name: string; onPress: () => void; palette: Palette; on?: boolean; color?: string;
+export default function ActButton({ Icon, label, name, onPress, palette, on = false, color, tint, filled = false, wide = false }: { Icon: (props: LucideProps) => React.ReactNode; label: string; name: string; onPress: () => void; palette: Palette; on?: boolean; color?: string;
+  /** As wide as its name, for a name of a few words (a feed card's «ليس من اهتماماتي»). */
+  wide?: boolean;
   /** The colour when on: the mark's own (purple for saved), the accent otherwise. */
   tint?: string;
   /** Fill the icon when on (the bookmark). */
@@ -17,7 +19,7 @@ export default function ActButton({ Icon, label, name, onPress, palette, on = fa
   const onColor = tint ?? palette.accent;
   return (
     <Tap onPress={onPress} accessibilityRole="button" accessibilityLabel={label} accessibilityState={{ selected: on }}
-      style={{ width: ACT_WIDTH, alignItems: 'center', gap: 3, paddingTop: 7, paddingBottom: 5, borderRadius: 10 }}>
+      style={{ ...(wide ? { minWidth: ACT_WIDTH, paddingHorizontal: 8 } : { width: ACT_WIDTH }), alignItems: 'center', gap: 3, paddingTop: 7, paddingBottom: 5, borderRadius: 10 }}>
       <Icon size={22} color={on ? onColor : color ?? palette.ink} fill={on && filled ? onColor : 'none'} strokeWidth={on ? 2.25 : 2} />
       <Text numberOfLines={1} style={{ fontSize: 11, color: on ? onColor : palette.muted }}>{name}</Text>
     </Tap>

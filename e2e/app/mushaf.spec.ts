@@ -290,7 +290,8 @@ for (const theme of ['light', 'dark'] as const) {
       await capture('reader');
       await page.goto('/');
       await page.getByText('هل تذكرها؟', { exact: true }).scrollIntoViewIfNeeded();
-      await expect(page.getByRole('toolbar', { name: 'أدوات التسميع' })).toBeVisible();
+      // The review card leads the feed; a recite question further down has its own bar.
+      await expect(page.getByRole('toolbar', { name: 'أدوات التسميع' }).first()).toBeVisible();
       await expect(page.getByText(HAMD, { exact: true }).first()).toBeVisible();
       await capture('review');
       const next = page.getByRole('toolbar', { name: 'أدوات التسميع' }).first().getByRole('button', { name: 'أظهر الكلمة التالية' });

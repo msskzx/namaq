@@ -1,74 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { feedBooks, hadithOfSlot, hasBooksCard, hasHadithCard, hasJuzCard, hasMomentCard, hasSceneCard, hasSiraCard, hasTermCard, hasTieCard, inMinutes, insertAt, momentOfSlot, prayerSoon, sceneOfSlot, siraOfSlot, termOfSlot, tieOfSlot } from './homeFeed';
-import { hasStoryCard } from './feedSeen';
+import { dayStart, feedBooks, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, prayerSoon } from './homeFeed';
+import { INTERESTS } from './interests';
 import type { PrayerDay } from './prayer';
 
 const at = (hours: number, minutes = 0) => new Date(2026, 10, 18, hours, minutes);
 const day: PrayerDay = { fajr: at(6, 1), sunrise: at(7, 40), dhuhr: at(12, 5), asr: at(14, 22), maghrib: at(16, 28), isha: at(18, 12) };
 
 describe('home feed cards', () => {
-  it('puts today\'s juz in the first batch, scenes on even batches after it and books on every fourth from the second', () => {
+  it('puts today\'s juz in the first batch and books on every fourth from the second', () => {
     expect([0, 1, 2, 3, 4].filter(hasJuzCard)).toEqual([0]);
-    expect([0, 1, 2, 3, 4, 5, 6].filter(hasSceneCard)).toEqual([2, 4, 6]);
     expect([0, 1, 2, 3, 4, 5, 6, 7, 8, 9].filter(hasBooksCard)).toEqual([1, 5, 9]);
-    // A scene never shares a batch with the prophets card.
-    for (let slot = 0; slot < 20; slot++) expect(hasSceneCard(slot) && hasStoryCard(slot)).toBe(false);
-  });
-
-  it('picks a scene for each scene batch, the same all day and a different one in the next batch', () => {
-    expect(sceneOfSlot(7, 100, 2)).toBe(sceneOfSlot(7, 100, 2));
-    expect(sceneOfSlot(7, 100, 4)).not.toBe(sceneOfSlot(7, 100, 2));
-    for (let d = 0; d < 30; d++) expect(sceneOfSlot(7, d, 2)).toBeGreaterThanOrEqual(0);
-    expect(sceneOfSlot(0, 3, 2)).toBe(-1);
-  });
-
-  it('puts a battle\'s moment on every fourth batch from the fourth, never with the books or a scene', () => {
-    expect([0, 1, 2, 3, 4, 5, 6, 7, 8].filter(hasMomentCard)).toEqual([3, 7]);
-    for (let slot = 0; slot < 20; slot++) expect(hasMomentCard(slot) && (hasBooksCard(slot) || hasSceneCard(slot))).toBe(false);
-  });
-
-  it('puts a sira story on every fourth batch from the second, never with a battle\'s moment or a scene', () => {
-    expect([0, 1, 2, 3, 4, 5, 6].filter(hasSiraCard)).toEqual([1, 5]);
-    for (let slot = 0; slot < 20; slot++) expect(hasSiraCard(slot) && (hasMomentCard(slot) || hasSceneCard(slot))).toBe(false);
-  });
-
-  it('picks a sira story for each story batch, the same all day and the next one in the next', () => {
-    expect(siraOfSlot(3, 10, 1)).toBe(siraOfSlot(3, 10, 1));
-    expect(siraOfSlot(3, 10, 5)).toBe((siraOfSlot(3, 10, 1) + 1) % 3);
-    expect(siraOfSlot(3, 11, 1)).toBe((siraOfSlot(3, 10, 1) + 1) % 3);
-    expect(siraOfSlot(0, 3, 1)).toBe(-1);
-  });
-
-  it('puts one of the Forty on every fourth batch from the fifth, never with a balagha term, a sira story or a battle\'s moment', () => {
-    expect([0, 1, 2, 3, 4, 5, 6, 7, 8].filter(hasHadithCard)).toEqual([4, 8]);
-    for (let slot = 0; slot < 20; slot++) expect(hasHadithCard(slot) && (hasTermCard(slot) || hasSiraCard(slot) || hasMomentCard(slot))).toBe(false);
-  });
-
-  it('picks a hadith for each hadith batch, the same all day and the next one in the next', () => {
-    expect(hadithOfSlot(28, 10, 8)).toBe((hadithOfSlot(28, 10, 4) + 1) % 28);
-    expect(hadithOfSlot(28, 11, 4)).toBe((hadithOfSlot(28, 10, 4) + 1) % 28);
-    expect(new Set(Array.from({ length: 28 }, (_, day) => hadithOfSlot(28, day, 4))).size).toBe(28);
-    expect(hadithOfSlot(0, 3, 4)).toBe(-1);
-  });
-
-  it('puts a balagha term on every fourth batch from the third, never with the books, a sira story or a battle\'s moment', () => {
-    expect([0, 1, 2, 3, 4, 5, 6, 7].filter(hasTermCard)).toEqual([2, 6]);
-    for (let slot = 0; slot < 20; slot++) expect(hasTermCard(slot) && (hasBooksCard(slot) || hasSiraCard(slot) || hasMomentCard(slot))).toBe(false);
-  });
-
-  it('picks a term for each term batch, the same all day and a different one in the next', () => {
-    expect(termOfSlot(67, 100, 2)).toBe(termOfSlot(67, 100, 2));
-    expect(termOfSlot(67, 100, 6)).not.toBe(termOfSlot(67, 100, 2));
-    expect(termOfSlot(67, 101, 2)).not.toBe(termOfSlot(67, 100, 2));
-    for (let d = 0; d < 30; d++) expect(termOfSlot(67, d, 2)).toBeGreaterThanOrEqual(0);
-    expect(termOfSlot(0, 3, 2)).toBe(-1);
-  });
-
-  it('picks a moment for each moment batch, the same all day and a different one in the next', () => {
-    expect(momentOfSlot(7, 100, 3)).toBe(momentOfSlot(7, 100, 3));
-    expect(momentOfSlot(7, 100, 7)).not.toBe(momentOfSlot(7, 100, 3));
-    for (let d = 0; d < 30; d++) expect(momentOfSlot(7, d, 3)).toBeGreaterThanOrEqual(0);
-    expect(momentOfSlot(0, 3, 3)).toBe(-1);
   });
 
   it('lists the books with a فاصلة first, then turns the others by the day', () => {
@@ -105,10 +46,60 @@ describe('the prayer card', () => {
     expect(insertAt([900], 844)).toBe(0);
   });
 
-  it('puts the «صلة» card on every fourth batch from the seventh, the same pair all day and the next pair the next card', () => {
-    expect([0, 1, 2, 3, 4, 5, 6, 10].filter(hasTieCard)).toEqual([6, 10]);
-    expect(tieOfSlot([], 3, 2)).toBeNull();
-    expect(tieOfSlot(['a', 'b', 'c'], 3, 2)).toBe(tieOfSlot(['a', 'b', 'c'], 3, 2));
-    expect(tieOfSlot(['a', 'b', 'c'], 3, 10)).not.toBe(tieOfSlot(['a', 'b', 'c'], 3, 6));
+});
+
+describe('the feed by interests', () => {
+  const all = INTERESTS;
+  const some = INTERESTS.filter(interest => ['tafsir', 'hadith', 'tajwid'].includes(interest.id));
+
+  it('brings every interest once a round, and the same round all day', () => {
+    for (const list of [all, some]) {
+      for (let round = 0; round < 6; round++) {
+        const slots = feedRound(list, round, 9);
+        expect(slots.map(slot => slot.interest).sort()).toEqual(list.map(interest => interest.id).sort());
+        expect(feedRound(list, round, 9)).toEqual(slots);
+      }
+    }
+  });
+
+  it('gives each slot a card or question of its own interest', () => {
+    for (let round = 0; round < 6; round++) {
+      for (const slot of feedRound(all, round, 3)) {
+        const interest = all.find(item => item.id === slot.interest)!;
+        expect(((slot.quiz ? interest.quizzes : interest.cards) as readonly string[]).includes(slot.kind)).toBe(true);
+      }
+    }
+  });
+
+  it('never puts two questions side by side, nor one interest across a round\'s end', () => {
+    for (let day = 0; day < 20; day++) {
+      const rounds = [0, 1, 2, 3, 4].map(round => feedRound(all, round, day));
+      for (const round of rounds) for (let i = 1; i < round.length; i++) expect(round[i - 1].quiz && round[i].quiz).toBe(false);
+      for (let r = 1; r < rounds.length; r++) expect(rounds[r][0].interest).not.toBe(rounds[r - 1].at(-1)!.interest);
+    }
+  });
+
+  it('asks every interest\'s questions over the rounds, even when questions outnumber cards', () => {
+    const asked = new Set<string>();
+    for (let round = 0; round < 12; round++) for (const slot of feedRound(all, round, 4)) if (slot.quiz) asked.add(slot.interest);
+    expect([...asked].sort()).toEqual(all.filter(interest => interest.quizzes.length).map(interest => interest.id).sort());
+  });
+
+  it('adds one surprise from an interest not picked, and none without one', () => {
+    const others = INTERESTS.filter(interest => !some.includes(interest));
+    const slots = feedRound(some, 2, 5, others);
+    const surprises = slots.filter(slot => slot.surprise);
+    expect(surprises).toHaveLength(1);
+    expect(others.map(interest => interest.id)).toContain(surprises[0].interest);
+    expect(feedRound(some, 2, 5).some(slot => slot.surprise)).toBe(false);
+  });
+
+  it('starts a list at a place of the day', () => {
+    expect(dayStart(0, 4, 1)).toBe(0);
+    for (let d = 0; d < 30; d++) {
+      expect(dayStart(10, d, 2)).toBeGreaterThanOrEqual(0);
+      expect(dayStart(10, d, 2)).toBeLessThan(10);
+    }
+    expect(dayStart(10, 7, 2)).toBe(dayStart(10, 7, 2));
   });
 });

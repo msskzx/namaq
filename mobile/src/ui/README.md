@@ -9,7 +9,7 @@ below. Never copy one into a screen.
 | --- | --- | --- |
 | `Button` (+ `Row`) | Filled, outlined or plain button with an icon; `Row` wraps a row of them | every tap that reads as a button, icon-only included (`variant="plain"`) |
 | `IconButton` | Icon-only button: `bar` (22 in 40) or `small` (18 in 28), tone muted/ink/accent/green, `on` colours the icon (no square), `round` filled accent circle for a bar's main action, `dot`, `expanded`, `role="link"` | every button that shows only an icon |
-| `ActButton` | Icon with its name under it; coloured icon when on | long-press and card menus |
+| `ActButton` | Icon with its name under it; coloured icon when on; `wide` for a longer name | long-press and card menus, the home feed cards' «…» menu |
 | `TopBar` | Back (or the hub grid, or the shelf) first on the right, then `title` or `middle`, then the page buttons; help at the far left; the logo beside the gear on home only; see-through, hides on scroll | every screen's top bar, pushed screens included |
 | `BarPicker` | A top bar's dropdown: text, chevron, no border; optional icon and count | the open list or item in a top bar (timeline, saved lists, compare, Tuhfa) |
 | `Card` | The one card: radius 14, one colour, rule border; `pad` (or [top and bottom, sides]), `gap`, `spine`, `dashed`, `outline`, `picked`, `faded`, `clip`; with `onPress` the whole card is one button | every boxed block of content (feed posts, shelves, books, quizzes, Quran tools, sheets, share images) |
@@ -28,6 +28,7 @@ below. Never copy one into a screen.
 | `ExternalLink` (+ `openExternal`) | Opens a page outside the app | every link out of Namaq |
 | `Reference` | A book's quote with its page as a link | the sources of a section |
 | `Folded` | A passage's credit under a rule at its card's foot, folded; opens to the edition and the page's link | each passage in the reader's book sheets (balagha, meaning); the ayat a balagha quote fits when al-Suyuti names none |
+| `SettingRow` | A settings row that folds: icon, name, what is chosen; a tap opens the picker under it | settings' «ما أحفظه» and «اهتماماتي» |
 | `Pickable` | A block of a card that picks it on a tap, `aria-pressed` | a book's paragraph that lights the ayah words it quotes |
 | `Bubble` | A speech bubble: the speaker's name in his colour, his side, his corner sharp; `framed` | a conversation drawn as a chat (the dialog scenes of «مشاهد», a hadith's scenes) |
 | `Step` | A numbered step: the number in an accent ring, its content beside it | a sequence told in order (a battle's moments) |

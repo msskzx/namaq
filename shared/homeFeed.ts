@@ -1,47 +1,14 @@
 import { nextPrayer, type PrayerDay, type PrayerKey } from './prayer';
 import { counted } from './quran/arabicNumber';
+import type { FeedQuizKind } from './quiz/feedQuiz';
+import type { FeedCardKind, Interest } from './interests';
 
 /**
- * Which batch of the home feed carries the cards added on 2026-11-18 (owner): today's juz in the first, a scene from «مشاهد»
- * on the even batches after it (with the saved card), the books on every fourth from the second. The prophets card keeps
- * the odd batches (feedSeen.ts hasStoryCard).
+ * The reader's own cards, not any interest's (owner, 2026-11-18/19): today's juz in the feed's first round, the books on
+ * every fourth from the second.
  */
 export const hasJuzCard = (slot: number) => slot === 0;
-export const hasSceneCard = (slot: number) => slot > 0 && slot % 2 === 0;
 export const hasBooksCard = (slot: number) => slot % 4 === 1;
-
-/** A battle's moment (owner, 2026-11-18) on every fourth batch from the fourth, between the books and the scenes. */
-export const hasMomentCard = (slot: number) => slot % 4 === 3;
-
-/** The moment of a batch, the same all day; each moment batch brings the next one. */
-export const momentOfSlot = (count: number, day: number, slot: number) => (count ? (((day * 3 + (slot - 3) / 4) % count) + count) % count : -1);
-
-/** A balagha term with its definition (owner, 2026-11-18) on every fourth batch from the third, with a scene. */
-export const hasTermCard = (slot: number) => slot % 4 === 2;
-
-/** The term of a batch, the same all day; each term batch brings the next one. */
-export const termOfSlot = (count: number, day: number, slot: number) => (count ? (((day * 5 + (slot - 2) / 4) % count) + count) % count : -1);
-
-/** A sira story, whole (owner, 2026-11-18), on every fourth batch from the second, with the books. */
-export const hasSiraCard = (slot: number) => slot % 4 === 1;
-
-/** The sira story of a batch, the same all day; each story batch brings the next one. */
-export const siraOfSlot = (count: number, day: number, slot: number) => (count ? (((day + (slot - 1) / 4) % count) + count) % count : -1);
-
-/** One of al-Nawawi's Forty (owner, 2026-11-18) on every fourth batch from the fifth, after the moments. */
-export const hasHadithCard = (slot: number) => slot > 0 && slot % 4 === 0;
-
-/** The hadith of a batch, the same all day; each hadith batch brings the next one. */
-export const hadithOfSlot = (count: number, day: number, slot: number) => (count ? (((day + (slot - 4) / 4) % count) + count) % count : -1);
-
-/** A passage of Ibn Rajab's commentary on the Forty (owner, 2026-11-18) on every fourth batch from the third, with a term. */
-export const hasRajabCard = (slot: number) => slot % 4 === 2;
-
-/** The Ibn Rajab passage of a batch, the same all day; each such batch brings the next one. */
-export const rajabOfSlot = (count: number, day: number, slot: number) => (count ? (((day * 7 + (slot - 2) / 4) % count) + count) % count : -1);
-
-/** The scene of a batch, the same all day; the next scene batch brings the next one. */
-export const sceneOfSlot = (count: number, day: number, slot: number) => (count ? (((day * 5 + slot / 2) % count) + count) % count : -1);
 
 /** A few books for the books card: those with a فاصلة first, then the others turning by the day. */
 export function feedBooks<T extends { id: string }>(books: readonly T[], hasFasila: (id: string) => boolean, day: number, count = 4): T[] {
@@ -74,22 +41,95 @@ export function insertAt(tops: readonly number[], screenBottom: number): number 
   return at === -1 ? tops.length : at;
 }
 
-/** The tarajim card («من التراجم», owner 2026-11-18) comes on every fourth batch from the fourth. */
-export const hasTarajimCard = (slot: number) => slot % 4 === 3;
+/** Every virtue of every converted person, in the people's order: the «من التراجم» card's list. */
+export const allVirtues = <P extends { slug: string; virtues: readonly unknown[] }>(people: readonly P[]) =>
+  people.flatMap(person => person.virtues.map((_, index) => ({ person, index })));
 
-/** The virtue a tarajim card shows, the same all day: every person's virtues in turn, the next card the next one. */
-export function tarajimOfSlot<P extends { slug: string; virtues: readonly unknown[] }>(people: readonly P[], day: number, slot: number) {
-  const all = people.flatMap(person => person.virtues.map((_, index) => ({ person, index })));
-  if (all.length === 0) return null;
-  const at = (((day * 7 + Math.floor(slot / 4)) % all.length) + all.length) % all.length;
-  return all[at];
+/** One card of a round: an interest's content card or its question, and which turn of that kind it is in the visit. */
+export type FeedSlot = { interest: string; kind: FeedCardKind | FeedQuizKind; quiz: boolean; surprise?: true };
+
+const spin = (n: number, count: number) => ((n % count) + count) % count;
+
+/** Same numbers, same order: a list shuffled by a seed (the day and the round), so a round reads the same all day. */
+function shuffled<T>(list: readonly T[], seed: number): T[] {
+  const out = [...list];
+  let state = seed >>> 0;
+  for (let i = out.length - 1; i > 0; i--) {
+    state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
+    const j = state % (i + 1);
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
 }
 
-/** The «صلة» card (owner, 2026-11-18): two people and the chain that joins them, on every fourth batch from the seventh. */
-export const hasTieCard = (slot: number) => slot > 2 && slot % 4 === 2;
-
-/** The pair a «صلة» card shows, the same all day, the next card the next pair. */
-export function tieOfSlot<T>(pairs: readonly T[], day: number, slot: number): T | null {
-  if (pairs.length === 0) return null;
-  return pairs[(((day * 5 + Math.floor(slot / 4)) % pairs.length) + pairs.length) % pairs.length];
+/** The kind an interest gives in a round: its content cards and its questions take turns, each list in turn by the day. */
+function slotOf(interest: Interest, at: number, round: number, day: number, cardOnly = false): FeedSlot | null {
+  const { cards, quizzes } = interest;
+  if (!cards.length && !quizzes.length) return null;
+  const both = cards.length > 0 && quizzes.length > 0;
+  // Interests take turns starting on a card or a question, so a round holds both (owner, 2026-11-19: learn, then test).
+  const quiz = cardOnly && cards.length ? false : both ? (round + at) % 2 === 1 : quizzes.length > 0;
+  const turn = both ? Math.floor((round + (at % 2)) / 2) : round;
+  const list = quiz ? quizzes : cards;
+  return { interest: interest.id, kind: list[spin(turn + day, list.length)], quiz };
 }
+
+/** A round's cards before the spacing: each interest once, the order shuffled by the day. */
+function plainRound(interests: readonly Interest[], round: number, day: number): FeedSlot[] {
+  const slots = interests.flatMap((interest, at) => slotOf(interest, at, round, day) ?? []);
+  // More questions than cards to put between them: an interest with cards gives its card this round instead.
+  const count = (quiz: boolean) => slots.filter(slot => slot.quiz === quiz).length;
+  // Which ones give way turns with the round and the day, so no interest's questions are always the ones left out.
+  const seed = day * 7919 + round * 104729;
+  for (const i of shuffled(slots.map((_, at) => at), seed + 2)) {
+    if (count(true) <= count(false) + 1) break;
+    const interest = interests.find(item => item.id === slots[i].interest)!;
+    if (slots[i].quiz && interest.cards.length) slots[i] = slotOf(interest, interests.indexOf(interest), round, day, true)!;
+  }
+  const cards = shuffled(slots.filter(slot => !slot.quiz), seed);
+  const quizzes = shuffled(slots.filter(slot => slot.quiz), seed + 1);
+  // Never two questions side by side: a card between each, the spare cards first. Only when the interests picked have too
+  // few cards (questions alone) do the last questions meet.
+  const out: FeedSlot[] = [];
+  let card = 0;
+  let quiz = 0;
+  while (cards.length - card > quizzes.length - quiz) out.push(cards[card++]);
+  if (quizzes.length - quiz > cards.length - card) out.push(quizzes[quiz++]);
+  while (card < cards.length) out.push(cards[card++], quizzes[quiz++]);
+  while (quiz < quizzes.length) out.push(quizzes[quiz++]);
+  return out;
+}
+
+/**
+ * The feed's round `round` (owner, 2026-11-19): one card from each interest in `interests`, content and questions taking
+ * turns, never two questions side by side, and a round never starting with the interest the round before ended on. With
+ * `others` (the interests not picked, when «فاجئني من غير اهتماماتي» is on), one card from one of them, marked `surprise`.
+ */
+export function feedRound(interests: readonly Interest[], round: number, day: number, others: readonly Interest[] = []): FeedSlot[] {
+  const slots = plainRound(interests, round, day);
+  if (round > 0 && slots.length > 1) {
+    const before = plainRound(interests, round - 1, day);
+    const last = before[before.length - 1]?.interest;
+    if (slots[0].interest === last) {
+      // Never the last slot, so the round ends where its plain order ends and the next round can see it.
+      const swap = slots.findIndex((slot, i) => i > 0 && i < slots.length - 1 && slot.quiz === slots[0].quiz && slot.interest !== last);
+      if (swap > 0) [slots[0], slots[swap]] = [slots[swap], slots[0]];
+    }
+  }
+  if (others.length) {
+    const other = others[spin(round + day, others.length)];
+    const extra = slotOf(other, 0, other.cards.length ? round * 2 : round, day);
+    if (extra) {
+      // Near the middle, and a question only between two cards.
+      const fits = (at: number) => !extra.quiz || (!slots[at - 1]?.quiz && !slots[at]?.quiz);
+      const middle = Math.ceil(slots.length / 2);
+      const at = [...Array(slots.length + 1).keys()].sort((a, b) => Math.abs(a - middle) - Math.abs(b - middle)).find(fits);
+      const place = at ?? middle;
+      slots.splice(place, 0, { ...(at === undefined && extra.quiz ? slotOf(other, 0, round, day, true) ?? extra : extra), surprise: true });
+    }
+  }
+  return slots;
+}
+
+/** Where a kind's list starts on a day, so each day begins elsewhere; the feed walks on from there. */
+export const dayStart = (count: number, day: number, salt: number) => (count ? spin(day * 7 + salt * 13, count) : 0);

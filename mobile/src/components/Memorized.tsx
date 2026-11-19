@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { ScrollView, View } from 'react-native';
-import { BookOpenCheck, Check, ChevronDown, ChevronUp, X } from 'lucide-react-native';
+import { BookOpenCheck, Check, X } from 'lucide-react-native';
 import { memorizedPrefer, memorizedQuestions, readMemorized, readMemorizedAsked, setMemorizedAsked, subscribeMemorized, subscribeMemorizedAsked, writeMemorized, type Memorized } from '@shared/memorized';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
@@ -11,6 +11,7 @@ import { type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
 import Card from '@/ui/Card';
+import SettingRow from '@/ui/SettingRow';
 
 const useMemorized = () => useSyncExternalStore(subscribeMemorized, readMemorized);
 
@@ -93,21 +94,13 @@ export function MemorizedPicker({ palette }: { palette: Palette }) {
 /** The settings section «ما أحفظه»: what is picked (tap to change), and the two preferences that use it. */
 export function MemorizedSetting({ palette }: { palette: Palette }) {
   const memorized = useMemorized();
-  const [open, setOpen] = useState(false);
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
   const prefer = useSyncExternalStore(memorizedPrefer.subscribe, memorizedPrefer.read);
   return (
     <View style={{ gap: 6 }}>
-      <Tap onPress={() => setOpen(value => !value)} accessibilityRole="button" accessibilityState={{ expanded: open }} accessibilityLabel={`ما أحفظه: ${memorizedLabel(memorized)}`}
-        style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 6 }}>
-        <BookOpenCheck size={20} color={palette.accent} />
-        <View style={{ flex: 1 }}>
-          <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>ما أحفظه</Text>
-          <Text numberOfLines={1} style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{memorizedLabel(memorized)}</Text>
-        </View>
-        {open ? <ChevronUp size={18} color={palette.muted} /> : <ChevronDown size={18} color={palette.muted} />}
-      </Tap>
-      {open && <MemorizedPicker palette={palette} />}
+      <SettingRow Icon={BookOpenCheck} title="ما أحفظه" value={memorizedLabel(memorized)} palette={palette}>
+        <MemorizedPicker palette={palette} />
+      </SettingRow>
       <Toggle on={questions} onChange={memorizedQuestions.write} label="الأسئلة مما أحفظ فقط" palette={palette} />
       <Toggle on={prefer} onChange={memorizedPrefer.write} label="قدّم ما أحفظه في التأمل" palette={palette} />
     </View>

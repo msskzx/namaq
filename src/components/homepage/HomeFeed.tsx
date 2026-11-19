@@ -9,7 +9,7 @@ import LoadingDots from '@/components/common/LoadingDots';
 import Cookies from 'js-cookie';
 import StoryMap from '@/app/quran/prophets/[slug]/StoryMap';
 import type { SavedContent, StoryCard } from '@/lib/homeFeed';
-import { bookmarkKind } from '@shared/bookmarkKind';
+import { bookmarkKind, isCardBookmark } from '@shared/bookmarkKind';
 import type { Bookmark as SavedItem } from '@shared/bookmarks';
 import { useRouter } from 'next/navigation';
 import TreeViewCard from '@/app/quran/branches/TreeViewCard';
@@ -31,7 +31,8 @@ import { savedAs } from '@shared/compareBookmarks';
 import { continuePage, readFasilas, serverFasilas, subscribeFasilas } from '@shared/readingMarks';
 import { ayahBookmarkId, ayahHref, markForgotten, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { isMemorized, memorizedFilters, memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized, type Memorized } from '@shared/memorized';
-import { FEED_QUIZ_NAMES, feedQuizKind, feedQuizSeed, OPENINGS, openingSurah, type FeedQuizKind } from '@shared/quiz/feedQuiz';
+import { FEED_QUIZ_NAMES, feedQuizSeed, OPENINGS, openingSurah, type FeedQuizKind } from '@shared/quiz/feedQuiz';
+import { activeInterests, pickedInterests } from '@shared/interests';
 import QuizAnswer, { type QuizData } from '@/app/quizzes/QuizAnswer';
 import type { Hints } from '@shared/quiz/hints';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
@@ -338,7 +339,7 @@ function SavedAyahPost({ ayah }: { ayah: string }) {
  */
 function SavedPost({ item }: { item: SavedItem }) {
   const kind = bookmarkKind(item);
-  const { data } = useSWR(kind === 'ayah' ? null : `/api/home/feed?saved=${encodeURIComponent(item.id)}`, fetchJson<SavedContent>, { revalidateOnFocus: false });
+  const { data } = useSWR(kind === 'ayah' || kind === 'card' ? null : `/api/home/feed?saved=${encodeURIComponent(item.id)}`, fetchJson<SavedContent>, { revalidateOnFocus: false });
   if (kind === 'ayah') { const ayah = item.id.slice('ayah:'.length); return /^\d+:\d+$/.test(ayah) && names[Number(ayah.split(':')[0])] ? <SavedAyahPost ayah={ayah} /> : null; }
   if (data?.tree) return <TreePost tree={data.tree} />;
   return data?.pair ? <PairPost pair={data.pair} /> : null;
@@ -375,7 +376,13 @@ export function Feed() {
   // The saved items as they were when the visit began (once read in the browser), so saving or unsaving a card does not move the cards on screen.
   const savedAtVisit = useRef<{ visit: number; list: typeof bookmarks } | null>(null);
   if (!savedAtVisit.current || savedAtVisit.current.visit !== visit || (!savedAtVisit.current.list.length && bookmarks.length)) savedAtVisit.current = { visit, list: bookmarks };
-  const saved = savedAtVisit.current.list;
+  // Feed cards saved in the app are drawn by the app's cards only; the website's feed shows trees, pairs and ayat.
+  const saved = savedAtVisit.current.list.filter(item => !isCardBookmark(item.id));
+  // The interests picked on this device (shared/interests.ts): the feed brings only theirs, questions in turn by them.
+  const interests = useSyncExternalStore(pickedInterests.subscribe, pickedInterests.read, pickedInterests.server);
+  const active = activeInterests(interests);
+  const quizKinds = active.flatMap(interest => interest.quizzes);
+  const shows = (kind: string) => active.some(interest => (interest.cards as readonly string[]).includes(kind));
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks, serverAyahMarks);
   const forgotten = mostForgotten(due)[0];
   // The settings under «ما أحفظه»: questions come from the memorized range, pondering puts it first.
@@ -429,23 +436,23 @@ export function Feed() {
   }, [visit, batches, pairsLoading, treesLoading]);
   const posts: React.ReactNode[] = [];
   for (let i = 0; i < batches; i++) {
-    const pair = content?.pairs[i];
+    const pair = shows('pair') ? content?.pairs[i] : undefined;
     if (pair) posts.push(<PairPost key={`p${pair.id}`} pair={pair} />);
     if (i === 0 && forgotten) posts.push(<ForgottenPost key={`ask${forgotten}`} ayah={forgotten} review={reviewHref(forgottenOrder(Object.keys(due))[0])} />);
     else if (i === 0 && recall) posts.push(<ForgottenPost key={`ask${recall}`} ayah={recall} />);
     // A question card in every batch after the first (whose question is the recall card), each kind in turn.
-    if (i > 0 && day) {
-      const kind = feedQuizKind(day, i);
+    if (i > 0 && day && quizKinds.length) {
+      const kind = quizKinds[(day + i) % quizKinds.length];
       const seed = feedQuizSeed(day, i);
       posts.push(kind === OPENINGS
         ? <OpeningPost key={`q${day}-${i}`} seed={seed} memorized={questions ? memorized : null} />
         : <QuizPost key={`q${day}-${i}-${questions ? JSON.stringify(memorizedFilters(memorized)) : ''}`} kind={kind} seed={seed} scope={questions ? memorizedFilters(memorized) : {}} />);
     }
-    const tree = content?.trees[i];
+    const tree = shows('tree') ? content?.trees[i] : undefined;
     if (tree) posts.push(<TreePost key={`t${tree.id}`} tree={tree} />);
     const savedItem = savedOfSlot(saved, day ?? 0, i);
     if (savedItem) posts.push(<SavedPost key={`b${savedItem.id}-${i}`} item={savedItem} />);
-    const story = stories?.find(card => card.slot === i);
+    const story = shows('prophets') ? stories?.find(card => card.slot === i) : undefined;
     if (story) posts.push(<StoryPost key={`s${day}-${i}`} card={story} />);
   }
   return <section className={styles.feed} aria-label="للتأمل اليوم">

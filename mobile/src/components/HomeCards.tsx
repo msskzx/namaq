@@ -26,7 +26,7 @@ import { followWay, openIntent } from '@/lib/ways';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import Card from '@/ui/Card';
 
-const KIND_ICONS: Record<BookmarkKind, (props: LucideProps) => React.ReactNode> = { tree: TreeIcon, compare: ArrowLeftRight, ayah: BookOpen };
+const KIND_ICONS: Record<BookmarkKind, (props: LucideProps) => React.ReactNode> = { tree: TreeIcon, compare: ArrowLeftRight, ayah: BookOpen, card: Bookmark };
 const WAYS: Record<CardWay['to'], { label: string; name: string; Icon: (props: LucideProps) => React.ReactNode }> = {
   mushaf: { label: 'في المصحف', name: 'المصحف', Icon: BookOpen },
   tree: { label: 'الشجرة', name: 'الشجرة', Icon: TreeIcon },
