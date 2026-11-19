@@ -11,7 +11,7 @@ import { isMemorized, memorizedPrefer, memorizedQuestions, readMemorized, recall
 import { FEED_QUIZ_NAMES, feedQuizSeed, OPENINGS, openingSurah, seededRandom, type FeedQuizKind } from '@shared/quiz/feedQuiz';
 import { answeredQuestion, dueSeeds, readMissed } from '@shared/quiz/missedQuestions';
 import { activeInterests, INTERESTS, interestById, interestOf, pickedInterests, surpriseMe, toggledInterest, type FeedCardKind } from '@shared/interests';
-import { bookmarkKind, cardBookmarkId, cardOfBookmark, isCardBookmark } from '@shared/bookmarkKind';
+import { bookmarkKind, cardMenuSaveId, cardOfBookmark, isCardBookmark } from '@shared/bookmarkKind';
 import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
@@ -151,15 +151,12 @@ type CardMenu = { kind: FeedCardKind | FeedQuizKind; item?: string; interest: st
   savedOnly?: boolean };
 const CardMenuContext = createContext<CardMenu | null>(null);
 
-/** The kinds that save themselves on their own card (the tree's double tap, the compare card's button), so the menu does not. */
-const SAVES_ITSELF: readonly string[] = ['pair', 'tree'];
-
 /** A feed card's «…»: the reader's long-press menu (icons with their names), to save the card or say it is not for them. */
 function CardMenuButton({ menu, title, sub, palette }: { menu: CardMenu; title: string; sub?: string; palette: Palette }) {
   const box = useRef<ComponentRef<typeof View>>(null);
   const [at, setAt] = useState<MenuAt | null>(null);
   const saved = useSyncExternalStore(subscribeBookmarks, readBookmarks);
-  const id = menu.item !== undefined && !SAVES_ITSELF.includes(menu.kind) ? cardBookmarkId(menu.kind, menu.item) : null;
+  const id = cardMenuSaveId(menu.kind, menu.item);
   const on = !!id && saved.some(item => item.id === id);
   const name = interestById(menu.interest)?.name ?? '';
   const picked = useSyncExternalStore(pickedInterests.subscribe, pickedInterests.read, pickedInterests.server);

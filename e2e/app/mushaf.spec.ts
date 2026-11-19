@@ -1,4 +1,4 @@
-import { expect, longPress, open, readerPage, stored, test } from './fixtures';
+import { expect, longPress, open, readerPage, reciteBarsHidden, stored, test } from './fixtures';
 import { surahName as S } from '../../shared/quran/surahNames';
 
 // Words are matched as the mushaf data writes them (shared/data/quran/mushaf/1.json).
@@ -358,6 +358,7 @@ test('recite from the top bar starts at the page start', async ({ page }) => {
   await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
   await page.getByRole('button', { name: 'سمّع من أول الصفحة' }).click();
   await expect.poll(start).toBe('1:1');
+  await reciteBarsHidden(page);
 });
 
 test('the eye offers the selected ayah, and nothing to continue or review on a first visit', async ({ page }) => {
@@ -398,6 +399,7 @@ test('recite from an ayah\'s long-press menu starts at that ayah', async ({ page
   await page.getByRole('button', { name: 'سمّع من هذه الآية' }).click();
   await expect(page.getByRole('button', { name: 'أظهر الآية التالية' })).toBeVisible();
   await expect.poll(start).toBe('1:6');
+  await reciteBarsHidden(page);
 });
 
 test('the recite bar floats over a full-size page, goes wherever it is dragged, stays there, and folds into a circle', async ({ page }) => {

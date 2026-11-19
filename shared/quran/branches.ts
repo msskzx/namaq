@@ -372,6 +372,22 @@ export function endSign(ayat: string[]) {
   return numbers.length === 0 ? [] : numbers.length === 1 ? [`﴿${num(numbers[0])}﴾`] : [END];
 }
 
+/** Whether a word is an ayah-end sign already (﴿n﴾ or the bare ۝). */
+export const isEndSign = (word: string) => word === END || word.startsWith('﴿');
+
+/**
+ * The sign a tree box closes with, after `words` (the words the box shows), for the ayat that end in it: every box that
+ * ends an ayah shows it, as the mushaf writes it (owner, 2026-11-14), unless its words already end with one. Both tree
+ * drawers call this, for the tree's boxes and the dashed neighbour boxes alike (guard proposal 4).
+ */
+export const closingSign = (words: string[], ended: string[]) => (isEndSign(words[words.length - 1] ?? '') ? [] : endSign(ended));
+
+/** The ayat that end in a tree box: each of the node's ayat, as the last of the run `shownAyat` gives it. */
+export function endedIn(node: Branch, path: string[] = []) {
+  const runs = shownAyat(node, path);
+  return node.ayat.map(key => runs[key][runs[key].length - 1]);
+}
+
 /** A label for the ayat `shownAyat` gives: «البقرة ٣», «البقرة ٣–٤», or «الصافات ١٨٢ ثم ص ١» into another surah. */
 export function ayatLabel(ayat: string[], names: Record<number, string>) {
   const [surah, ayah] = ayat[0].split(':').map(Number);

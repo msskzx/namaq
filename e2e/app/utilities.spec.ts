@@ -66,7 +66,7 @@ test('the adhkar: each time\'s cards, a counter that stops at its number and sta
   await expect(page.getByText('«قال الترمذي: هذا حديث حسن صحيح»', { exact: false }).filter({ visible: true }).first()).toBeVisible();
 
   await open(page, '/search');
-  await page.getByLabel(/ابحث/).first().fill('أنت السلام ومنك السلام');
+  await page.getByRole('textbox', { name: /ابحث/ }).first().fill('أنت السلام ومنك السلام');
   const peace = dhikrById('prayer-peace')!.content;
   await page.getByRole('link', { name: peace.kind === 'text' ? peace.text : '' }).first().click();
   await expect(page.getByRole('tab', { name: 'صلاة' }).filter({ visible: true }).first()).toHaveAttribute('aria-selected', 'true');
@@ -74,7 +74,7 @@ test('the adhkar: each time\'s cards, a counter that stops at its number and sta
 
   // A morning card sits under the whole Quran page, which is drawn after the cards are first laid out.
   await open(page, '/search');
-  await page.getByLabel(/ابحث/).first().fill('بك أصبحنا وبك أمسينا');
+  await page.getByRole('textbox', { name: /ابحث/ }).first().fill('بك أصبحنا وبك أمسينا');
   const morning = dhikrById('morning-by-you')!.content;
   await page.getByRole('link', { name: morning.kind === 'text' ? morning.text : '' }).first().click();
   await expect(page.getByRole('button', { name: /^الأذكار ٧٧ ح٢٠٨/ }).filter({ visible: true }).first()).toBeInViewport();
