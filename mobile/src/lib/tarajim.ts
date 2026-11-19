@@ -1,6 +1,6 @@
 import { type AppPerson, type PersonFact } from '@shared/tarajim';
 import { byVolume, heldGroups as heldIn, kunyaLine, personLine, unvowelled } from '@shared/tarajimGroups';
-import { bareName } from '@shared/tarajimLine';
+import { matchesQuery, namesHay } from '@shared/tarajimLine';
 import { linkedPairs, peopleGraph } from '@shared/tarajimGraph';
 import peopleJson from '@shared/data/tarajim/people.json';
 
@@ -39,12 +39,9 @@ export function titleFilters(people: AppPerson[] = PEOPLE) {
 
 /** People whose name, full name, kunya or laqab holds the words typed, ignoring vowels and hamza forms. */
 export function searchPeople(query: string, title?: string, people: AppPerson[] = PEOPLE) {
-  const words = bareName(query).split(/\s+/u).filter(Boolean);
   return people.filter(person => {
     if (title && !person.titles.some(t => t.title === title)) return false;
-    if (words.length === 0) return true;
-    const hay = bareName([person.name, person.fullName?.text, ...person.kunya.map(k => k.text), ...person.laqab.map(l => l.text)].filter(Boolean).join(' '));
-    return words.every(word => hay.includes(word));
+    return !query.trim() || matchesQuery(namesHay(person), query);
   });
 }
 

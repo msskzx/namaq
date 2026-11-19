@@ -43,8 +43,8 @@ export default function BiographiesPage() {
       <Way href="/battles" title="الغزوات والمعارك" line={`من ${battles[0].name} إلى ${battles[battles.length - 1].name}، ومن شهد كل واحدة`} />
       <Way href="/events" title="الأحداث" line="الأحداث ومن شهدها" />
       <Heading text="الصلات" />
-      <Way href="/graphs" title="استكشاف الشبكة" line="استكشف الصلات بين الأشخاص وصفّها بحسب نوع العلاقة" />
-      <Way href="/nasab" title="النسب" line="تتبّع سلاسل الآباء وقارن أنساب عدة أشخاص" />
+      <Way href="/between" title="بين عدة أشخاص" line="اختر شخصين أو أكثر لترى أقرب الصلات بينهم" />
+      <Way href="/life" title="حياتهم جنبًا إلى جنب" line="قارن حياة اثنين أو أكثر عامًا بعام" />
       <Heading text="كل التراجم" />
       <Way href="/people" title="كل التراجم بترتيب الكتاب" line="السيرة النبوية، ثم الخلفاء الراشدون، ثم أجزاء السير" />
       <Way href="/titles" title="الألقاب" line="الألقاب ومن عُرف بها" />

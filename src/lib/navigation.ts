@@ -55,8 +55,8 @@ export const EXPERIMENT_SECTIONS: NavSection[] = [
       { href: '/events', label: { ar: 'الأحداث', en: 'Events' }, purpose: { ar: 'الأحداث والغزوات ومن شهدها', en: 'Events and battles, and who took part' } },
     ] },
     { title: { ar: 'شبكة العلاقات', en: 'Relationships' }, items: [
-      { href: '/graphs', label: { ar: 'استكشاف الشبكة', en: 'Explore the graph' }, purpose: { ar: 'استكشف الصلات بين الأشخاص وصفّها بحسب نوع العلاقة', en: 'Explore the connections between people and filter them by relationship' } },
-      { href: '/nasab', label: { ar: 'النسب', en: 'Lineage' }, purpose: { ar: 'تتبّع سلاسل الآباء وقارن أنساب عدة أشخاص', en: 'Trace paternal lines and compare several people’s ancestry' } },
+      { href: '/between', label: { ar: 'بين عدة أشخاص', en: 'Between people' }, purpose: { ar: 'اختر شخصين أو أكثر لترى أقرب الصلات بينهم', en: 'Pick two people or more to see the nearest ties between them' } },
+      { href: '/life', label: { ar: 'حياتهم جنبًا إلى جنب', en: 'Lives side by side' }, purpose: { ar: 'قارن حياة اثنين أو أكثر عامًا بعام', en: 'Compare two lives or more, year by year' } },
     ] },
   ] },
   { href: '/sources', label: { ar: 'المصادر', en: 'Sources' }, groups: [{ items: [
@@ -100,7 +100,7 @@ export const NAV_SECTIONS: (NavSection & { paths?: string[] })[] = [
   { href: '/quran', label: { ar: 'القرآن', en: 'Quran' }, groups: [], paths: QURAN_HUB.map(tool => tool.href) },
   { href: '/hadith', label: { ar: 'الحديث', en: 'Hadith' }, groups: [] },
   { href: '/', label: { ar: 'الرئيسية', en: 'Home' }, groups: [], paths: [LIBRARY, '/search', '/utilities'] },
-  { href: '/biographies', label: { ar: 'التراجم', en: 'Biographies' }, groups: [], paths: ['/biographies', '/stories', '/people', '/titles', '/events', '/battles', '/graphs', '/nasab'] },
+  { href: '/biographies', label: { ar: 'التراجم', en: 'Biographies' }, groups: [], paths: ['/biographies', '/stories', '/people', '/titles', '/events', '/battles', '/between', '/life', '/graphs', '/nasab'] },
   { href: '/quizzes', label: { ar: 'الاختبارات', en: 'Quizzes' }, groups: [] },
 ];
 
