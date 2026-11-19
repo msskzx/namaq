@@ -37,6 +37,7 @@ const MUSHAF_HEADERS = [
   'src/app/quran/read/[page]/page.tsx',
   'src/lib/homepageData.ts',
   'src/components/homepage/AyahLines.tsx',
+  'src/components/stories/StoryAyatLines.tsx',
   'src/app/quizzes/QuizPage.tsx',
   'mobile/src/components/AyahLines.tsx',
   'mobile/src/components/QuizPage.tsx',

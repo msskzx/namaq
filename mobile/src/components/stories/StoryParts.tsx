@@ -15,17 +15,22 @@ export function Tags({ story, palette }: { story: AppStory; palette: Palette }) 
 /**
  * One report whole (owner, 2026-11-18): its chain first, then its moments, each our few words naming it over the source's
  * words, which together are the report as the book has it; then the book's words on who has it, and the page. It reads as
- * the book prints it (owner, 2026-11-19): a paragraph per moment, no titles or numbers, and the people once, in the
- * story's «من في القصة». The moments' titles stay in the data for the quiz.
+ * the book prints it (owner, 2026-11-19): a paragraph per moment, no titles or numbers, and the people once, under the
+ * story's name. The moments' titles show only where a quiz asks by them (`titled`).
  */
-export function Report({ report, palette, plain }: { report: AppReport; palette: Palette;
+export function Report({ report, palette, plain, titled }: { report: AppReport; palette: Palette;
   /** In a feed card the page is plain text, and its link is a button under the card. */
-  plain?: boolean }) {
+  plain?: boolean;
+  /** Our few words naming each moment, small over it: the «what came next?» question asks by them (QuizLook). */
+  titled?: boolean }) {
   return (
     <View style={{ gap: 12 }}>
       {report.isnad ? <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 24, textAlign: 'right' }}>{report.isnad}</Text> : null}
       {report.moments.map(moment => (
-        <Text key={moment.title} style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>{moment.text}</Text>
+        <View key={moment.title} style={{ gap: 2 }}>
+          {titled ? <Text style={{ color: palette.accent, fontSize: 14, fontWeight: '700', textAlign: 'right' }}>{moment.title}</Text> : null}
+          <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>{moment.text}</Text>
+        </View>
       ))}
       <Text style={{ color: palette.muted, fontSize: 13, lineHeight: 22, textAlign: 'right' }}>
         {report.grading ? `${report.grading} · ` : ''}
