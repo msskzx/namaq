@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, BookA, BookOpen, ChevronLeft, Layers, ListTree, Sparkles, X } from 'lucide-react';
+import { ArrowLeftRight, BookOpenText, BookOpen, ChevronLeft, Layers, ListTree, Sparkles, X } from 'lucide-react';
 import { num } from '@shared/quran/arabicNumber';
 import { QIRAAT_SOURCE, whoReads, type WordDifference } from '@shared/quran/qiraat';
 import { tafsirRuns, tafsirSadiCredit, tafsirSadiPage, type TafsirPassage } from '@shared/quran/tafsirSadi';
@@ -75,7 +75,7 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
   const run = tafsirKey ? tafsir : null;
   const trees = shown?.kind === 'trees';
   const readings = shown?.kind === 'readings' ? shown.qiraat : null;
-  const Icon = trees ? TreeIcon : readings ? Layers : tafsirKey ? BookOpen : irab ? ListTree : gharib ? BookA : balaghaKey ? Sparkles : ArrowLeftRight;
+  const Icon = trees ? TreeIcon : readings ? Layers : tafsirKey ? BookOpen : irab ? ListTree : gharib ? BookOpenText : balaghaKey ? Sparkles : ArrowLeftRight;
   return (
     <Sheet ref={sheet} open={!!preview} onClose={onClose} label={shown ? (trees ? 'متشابهات الآية' : readings ? 'القراءات العشر في كلمات الآية' : tafsirKey ? 'تفسير السعدي' : irab ? 'إعراب الكلمة' : gharib ? 'معنى الكلمة' : balaghaKey ? 'البلاغة في الآية' : 'مواضع الآية في المقارنة') : undefined}>
       {shown && <div className="flex max-h-[85dvh] flex-col pb-[max(0.75rem,env(safe-area-inset-bottom))]">

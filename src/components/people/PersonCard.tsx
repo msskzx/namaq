@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import type { PersonWithTitles } from '@/types/person';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faSignature } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faPenNib } from '@fortawesome/free-solid-svg-icons';
 import Badge from '@/components/common/Badge';
 import { titleName } from '@/lib/titleName';
 
@@ -39,7 +39,7 @@ function PersonCard({ person, language = 'ar', titleLimit = 7 }: PersonCardProps
         </div>
         {person.fullName && (
           <div className="flex items-center gap-2 text-gray-800 dark:text-gray-300 text-sm mt-4">
-            <FontAwesomeIcon icon={faSignature} className="text-indigo-400 w-4 h-4" />
+            <FontAwesomeIcon icon={faPenNib} className="text-indigo-400 w-4 h-4" />
             <span>{person.fullName}</span>
           </div>
         )}

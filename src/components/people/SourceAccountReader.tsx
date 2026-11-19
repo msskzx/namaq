@@ -6,7 +6,7 @@ import Link from 'next/link';
 import useSWR from 'swr';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faCompress, faExpand, faList, faGear, faXmark, faFont, faSun, faMoon, faPalette, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faCompress, faExpand, faList, faGear, faXmark, faPenNib, faSun, faMoon, faPalette, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import ErrorMessage from '@/components/common/ErrorMessage';
 import LoadingDots from '@/components/common/LoadingDots';
 import Button from '@/components/common/Button';
@@ -411,7 +411,7 @@ export default function SourceAccountReader({
           {settingsOpen && (
             <div className="grid gap-4 sm:grid-cols-3">
               <fieldset className="flex flex-wrap gap-2"><legend className="mb-2 w-full text-sm font-semibold">{t ? 'الخط' : 'Font'}</legend>
-                <Button size="sm" active={font === 'amiri'} onClick={() => writeSettings({ font: 'amiri' })}><FontAwesomeIcon icon={faFont} />{t ? 'أميري' : 'Amiri'}</Button><Button size="sm" active={font === 'sans'} onClick={() => writeSettings({ font: 'sans' })}><FontAwesomeIcon icon={faFont} />{t ? 'خط النظام' : 'Sans'}</Button>
+                <Button size="sm" active={font === 'amiri'} onClick={() => writeSettings({ font: 'amiri' })}><FontAwesomeIcon icon={faPenNib} />{t ? 'أميري' : 'Amiri'}</Button><Button size="sm" active={font === 'sans'} onClick={() => writeSettings({ font: 'sans' })}><FontAwesomeIcon icon={faPenNib} />{t ? 'خط النظام' : 'Sans'}</Button>
               </fieldset>
               <fieldset className="flex flex-wrap gap-2"><legend className="mb-2 w-full text-sm font-semibold">{t ? 'حجم الخط' : 'Text size'}</legend>
                 <label className="flex w-full items-center gap-3 text-sm">

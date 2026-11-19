@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { FlatList, Pressable, ScrollView, View } from 'react-native';
 import Sheet from '@/ui/Sheet';
 import { Text } from '@/ui/Text';
-import { ArrowDown01, ArrowDownWideNarrow, ChevronDown, Funnel, RotateCcw } from 'lucide-react-native';
+import { BookOpen, ArrowDownWideNarrow, ChevronDown, Funnel, RotateCcw } from 'lucide-react-native';
 import type { SurahPair } from '@shared/quran/compareCards';
 import { num } from '@shared/quran/arabicNumber';
 import { filterOfList, listOfFilter, pairMatches, storiesIn, surahName, type PairFilter } from '@/lib/compare';
@@ -124,7 +124,7 @@ export default function CompareSheet({ open, onClose, pairs, filter, onFilter, l
       <View style={{ flex: 1, paddingHorizontal: 12, gap: 8 }}>
           <SearchField value={query} onChangeText={setQuery} placeholder="ابحث عن سورة: الطور، ٥٢…" label="ابحث عن سورة" palette={palette} />
           <View style={{ flexDirection: 'row', borderWidth: 1, borderColor: palette.rule, borderRadius: 10, padding: 2 }} accessibilityLabel="ترتيب القائمة">
-            {[{ count: false, label: 'ترتيب المصحف', Icon: ArrowDown01 }, { count: true, label: 'الأكثر تشابهًا', Icon: ArrowDownWideNarrow }].map(({ count, label, Icon }) => (
+            {[{ count: false, label: 'ترتيب المصحف', Icon: BookOpen }, { count: true, label: 'الأكثر تشابهًا', Icon: ArrowDownWideNarrow }].map(({ count, label, Icon }) => (
               <Pressable key={label} onPress={() => { setByCount(count); writeJson(SORT_KEY, count); }} accessibilityRole="button" accessibilityState={{ selected: byCount === count }} style={sortButton(byCount === count)}>
                 <Icon size={16} color={byCount === count ? palette.onAccent : palette.muted} />
                 <Text style={{ fontSize: 15, color: byCount === count ? palette.onAccent : palette.ink }}>{label}</Text>
