@@ -1,7 +1,7 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { Pause, Play, Repeat, RotateCcw, X } from 'lucide-react-native';
+import { Pause, Play, Repeat, X } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import { num } from '@shared/quran/arabicNumber';
 import { ONCE, reciterName, reciterOf } from '@shared/quran/recitation';
@@ -47,7 +47,8 @@ export default function ListenBar({ bottom, side, onRepeat, palette }: { bottom:
       style={{ position: 'absolute', left: side, right: side, bottom, height: LISTEN_BAR, flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8, borderRadius: 16, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }}>
       <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
       <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: palette.glass }]} />
-      <IconButton Icon={failed ? RotateCcw : playing ? Pause : Play} label={failed ? 'أعد المحاولة' : playing ? 'إيقاف مؤقت' : 'استمع'} onPress={togglePlaying} round />
+      {/* A failed ayah shows play, not a retry arrow: pressing it plays the ayah again, and the line beside it says why. */}
+      <IconButton Icon={playing ? Pause : Play} label={failed ? 'أعد المحاولة' : playing ? 'إيقاف مؤقت' : 'استمع'} onPress={togglePlaying} round />
       <IconButton Icon={Repeat} label="التكرار والقارئ" onPress={onRepeat} on={repeating} tone="ink" />
       <Pressable onPress={onRepeat} accessibilityRole="button" accessibilityLabel={`${named(listening.key)}، ${reciterName(reciterOf(listening.reciter))}`} style={{ flex: 1, paddingHorizontal: 4 }}>
         <Text numberOfLines={1} style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>{named(listening.key)}</Text>

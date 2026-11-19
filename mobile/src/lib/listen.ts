@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from 'react';
-import { createAudioPlayer, preload, setAudioModeAsync, type AudioPlayer, type AudioStatus } from 'expo-audio';
+import { createAudioPlayer, setAudioModeAsync, type AudioPlayer, type AudioStatus } from 'expo-audio';
 import { ayatOf, FIRST, nextStep, pauseAfter, reciterName, reciterOf, surahEnd, type Range, type Step } from '@shared/quran/recitation';
 import { num } from '@shared/quran/arabicNumber';
 import { ayahCounts } from './mushaf';
@@ -10,7 +10,9 @@ import { surahName } from '@shared/quran/surahNames';
 /**
  * The one recitation playing in the app: a range of ayat, read by one reciter, with each ayah's and the range's repeats
  * and a pause to say the ayah back. It lives outside any screen, so turning pages or closing a sheet never stops it.
- * One player reads one ayah file at a time; the next file is fetched ahead. A pause plays a second of silence on a loop,
+ * One player reads one ayah file at a time. Nothing is fetched ahead into a second player: handing a file buffered by
+ * another player over (expo-audio `preload`) left the next ayah silent on the owner's iPhone (2026-11-19), and an ayah
+ * file is small enough to start at once. A pause plays a second of silence on a loop,
  * which keeps the phone's audio session (and so the app) awake with the screen off.
  */
 export type Listening = {
@@ -40,7 +42,11 @@ let loadTimer: ReturnType<typeof setTimeout> | null = null;
  * A status still on its way from the file before cannot tell which file it is for, so the file counts as heard only
  * after one status shows it at its start (not loaded yet, or under a second in).
  */
-let current: { key: string; started: boolean; heard: boolean } | null = null;
+let current: { key: string; started: boolean; heard: boolean; tries: number } | null = null;
+/** A stream that fails is asked for once more on its own before the bar says it could not be played. */
+const RETRIES = 1;
+let retryTimer: ReturnType<typeof setTimeout> | null = null;
+const clearRetry = () => { if (retryTimer) { clearTimeout(retryTimer); retryTimer = null; } };
 /** A file that has not started after this long has failed: a stream with no connection can wait without an error. */
 const LOAD_LIMIT = 15000;
 
@@ -62,6 +68,15 @@ const clearLoad = () => { if (loadTimer) { clearTimeout(loadTimer); loadTimer = 
 
 function fail() {
   clearLoad();
+  if (state?.playing && current && current.tries < RETRIES) {
+    // A dropped connection or a slow first byte: try the same ayah again before telling the reader.
+    const tries = current.tries + 1;
+    const step = state.step;
+    current = null;
+    player?.pause();
+    retryTimer = setTimeout(() => { retryTimer = null; if (state?.playing && !state.failed) go(step, true, tries); }, 1000);
+    return;
+  }
   current = null;
   // The lock screen's play would play past the app, which no longer follows a failed file.
   player?.pause();
@@ -73,7 +88,9 @@ function onStatus(status: AudioStatus) {
   if (!state || state.quiet || !current || current.key !== state.key) return;
   if (status.error) { fail(); return; }
   if (!status.didJustFinish) {
-    if (!status.isLoaded || status.currentTime < 1) current.started = true;
+    // Heard only on a status after the one that showed the file at its start: turning the pause's loop off reports the
+    // one-second silence (loaded, playing, under a second in) just as the next file is asked for.
+    if (!current.started) { if (!status.isLoaded || status.currentTime < 1) current.started = true; return; }
     if (status.playing && status.isLoaded && current.started && !current.heard) {
       current.heard = true;
       clearLoad();
@@ -81,7 +98,9 @@ function onStatus(status: AudioStatus) {
     }
     return;
   }
-  if (!current.heard) return;
+  // An end before any tick of this file is the file before's; one after it started is this file's, heard or not, so a
+  // file that played without a tick counted as heard still moves playback on.
+  if (!current.heard && !current.started) return;
   current = null;
   const plan = readListenPlan();
   const next = nextStep(state.step, state.keys.length, plan);
@@ -96,23 +115,22 @@ function onStatus(status: AudioStatus) {
   quietTimer = setTimeout(() => { quietTimer = null; if (state) go(next); }, pause * 1000);
 }
 
-function go(step: Step, playing = true) {
+function go(step: Step, playing = true, tries = 0) {
   if (!state) return;
   if (quietTimer) { clearTimeout(quietTimer); quietTimer = null; }
   clearLoad();
+  clearRetry();
   const p = ensurePlayer();
   const key = state.keys[step.at];
   const plan = readListenPlan();
-  p.replace({ uri: sourceOf(state.reciter, key) });
+  // Off before the swap: a player still looping the pause's silence copies the new file into its loop as it arrives.
   p.loop = false;
+  p.replace({ uri: sourceOf(state.reciter, key) });
   p.setPlaybackRate(plan.speed, 'high');
-  current = { key, started: false, heard: false };
+  current = { key, started: false, heard: false, tries };
   if (playing) { p.play(); loadTimer = setTimeout(() => { loadTimer = null; if (current && !current.heard) fail(); }, LOAD_LIMIT); }
   p.setActiveForLockScreen(true, { title: title(key), artist: reciterName(reciterOf(state.reciter)) });
   emit({ ...state, step, key, playing, quiet: false, loading: playing, failed: false });
-  const ahead = nextStep(step, state.keys.length, plan);
-  const aheadKey = ahead && state.keys[ahead.at];
-  if (aheadKey && aheadKey !== key && !localAyah(state.reciter, aheadKey)) Promise.resolve(preload({ uri: streamUrl(state.reciter, aheadKey) })).catch(() => {});
 }
 
 /** Starts a range; with no end, from the ayah to its surah's end. */
@@ -129,6 +147,7 @@ export function togglePlaying() {
   if (state.playing) {
     if (quietTimer) { clearTimeout(quietTimer); quietTimer = null; }
     clearLoad();
+    clearRetry();
     player.pause();
     emit({ ...state, playing: false, loading: false });
   } else if (state.quiet) {
@@ -157,6 +176,7 @@ export function applyReciter(reciter: number) {
 export function stopListening() {
   if (quietTimer) { clearTimeout(quietTimer); quietTimer = null; }
   clearLoad();
+  clearRetry();
   current = null;
   if (player) { player.pause(); player.clearLockScreenControls(); }
   emit(null);

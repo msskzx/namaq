@@ -15,7 +15,7 @@ vi.mock('./listenFiles', () => ({ localAyah: () => null, streamUrl: (_: number, 
 vi.mock('./mushaf', () => ({ ayahCounts: new Map([[1, 7]]), surahNames: [] }));
 
 const status = (over: Partial<AudioStatus>) => ({ playing: false, isLoaded: true, didJustFinish: false, duration: 3, currentTime: 0.25, error: null, ...over }) as AudioStatus;
-const heard = () => onStatus(status({ playing: true }));
+const heard = () => { onStatus(status({ playing: true })); onStatus(status({ playing: true, currentTime: 0.5 })); };
 const ended = () => onStatus(status({ didJustFinish: true }));
 
 let listen: typeof import('./listen');
@@ -45,19 +45,67 @@ describe('playback', () => {
     expect(listen.readListening()!.key).toBe('1:2');
   });
 
-  it('fails when the player reports an error, and play asks for the ayah again', async () => {
+  it('asks once more by itself, then fails when the player reports an error, and play asks for the ayah again', async () => {
     listen.listen('1:1', '1:3');
+    onStatus(status({ error: 'offline' }));
+    expect(listen.readListening()!.failed).toBe(false);
+    vi.advanceTimersByTime(1000);
+    expect(asked).toEqual(['1:1', '1:1']);
     onStatus(status({ error: 'offline' }));
     expect(listen.readListening()).toMatchObject({ playing: false, failed: true, loading: false });
     listen.togglePlaying();
     expect(listen.readListening()).toMatchObject({ key: '1:1', playing: true, failed: false });
+    expect(asked).toEqual(['1:1', '1:1', '1:1']);
+  });
+
+  it('a retry that recovers plays on', async () => {
+    listen.listen('1:1', '1:3');
+    onStatus(status({ error: 'offline' }));
+    vi.advanceTimersByTime(1000);
+    heard();
+    ended();
+    expect(listen.readListening()).toMatchObject({ key: '1:2', failed: false });
+  });
+
+  it('fails when a stream never starts, after asking once more', async () => {
+    listen.listen('1:1', '1:3');
+    vi.advanceTimersByTime(15000);
+    expect(listen.readListening()!.failed).toBe(false);
+    vi.advanceTimersByTime(16000);
+    expect(listen.readListening()!.failed).toBe(true);
+  });
+
+  it('an ayah that started but never ticked as playing still moves on when it ends', () => {
+    listen.listen('1:1', '1:3');
+    onStatus(status({ isLoaded: false, currentTime: 0 }));
+    ended();
+    expect(listen.readListening()!.key).toBe('1:2');
+  });
+
+  it('one status at the start does not count the file as heard: the pause\'s silence reports that way', () => {
+    listen.listen('1:1', '1:3');
+    onStatus(status({ playing: true, currentTime: 0.9 }));
+    expect(listen.readListening()!.loading).toBe(true);
+  });
+
+  it('an error while paused fails at once, with nothing asked again', () => {
+    listen.listen('1:1', '1:3');
+    heard();
+    listen.togglePlaying();
+    listen.applyReciter(2);
+    onStatus(status({ error: 'offline' }));
+    vi.advanceTimersByTime(2000);
+    expect(listen.readListening()!.failed).toBe(true);
     expect(asked).toEqual(['1:1', '1:1']);
   });
 
-  it('fails when a stream never starts', async () => {
+  it('paused while waiting to ask again, nothing is asked', () => {
     listen.listen('1:1', '1:3');
-    vi.advanceTimersByTime(15000);
-    expect(listen.readListening()!.failed).toBe(true);
+    onStatus(status({ error: 'offline' }));
+    listen.togglePlaying();
+    vi.advanceTimersByTime(2000);
+    expect(asked).toEqual(['1:1']);
+    expect(listen.readListening()!.playing).toBe(false);
   });
 
   it('a started ayah is not failed by the wait', async () => {
@@ -73,7 +121,7 @@ describe('playback', () => {
     listen.applyReciter(2);
     onStatus(status({ playing: true, currentTime: 2.5 }));
     expect(listen.readListening()!.loading).toBe(true);
-    vi.advanceTimersByTime(15000);
+    vi.advanceTimersByTime(31000);
     expect(listen.readListening()!.failed).toBe(true);
   });
 });

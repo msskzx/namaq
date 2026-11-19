@@ -16,22 +16,40 @@ export class SyncError extends Error {
 }
 
 let cached: { token: string; until: number } | null = null;
+/**
+ * Older Quran Foundation keys hold the one scope `content`; a backend app made since the granular scopes asks for the ones
+ * it calls and gets `invalid_scope` for `content` (https://api-docs.quran.com/docs/quickstart/manual-authentication/).
+ * Content Sync needs the sync scope, and the recitation snapshots the audio one. The one that worked is kept.
+ */
+const SCOPES = ['content', 'content.sync.read content.audio.read'];
+let scopeAt = 0;
 
 async function accessToken(fresh = false): Promise<string> {
   if (!fresh && cached && cached.until > Date.now()) return cached.token;
   const id = process.env.QF_CLIENT_ID;
   const secret = process.env.QF_CLIENT_SECRET;
   if (!id || !secret) throw new SyncError('Quran Foundation key is not set', 503);
-  const response = await fetch(`${hosts().auth}/oauth2/token`, {
-    method: 'POST',
-    headers: { Authorization: `Basic ${Buffer.from(`${id}:${secret}`).toString('base64')}`, 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: 'grant_type=client_credentials&scope=content',
-    cache: 'no-store',
-  });
-  if (!response.ok) throw new SyncError(`token: ${response.status}`, 502);
-  const body = await response.json() as { access_token: string; expires_in?: number };
-  cached = { token: body.access_token, until: Date.now() + ((body.expires_in ?? 3600) - 120) * 1000 };
-  return cached.token;
+  let failure = '';
+  for (let tried = 0; tried < SCOPES.length; tried++) {
+    const at = (scopeAt + tried) % SCOPES.length;
+    const response = await fetch(`${hosts().auth}/oauth2/token`, {
+      method: 'POST',
+      headers: { Authorization: `Basic ${Buffer.from(`${id}:${secret}`).toString('base64')}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ grant_type: 'client_credentials', scope: SCOPES[at] }).toString(),
+      cache: 'no-store',
+    });
+    if (response.ok) {
+      scopeAt = at;
+      const body = await response.json() as { access_token: string; expires_in?: number };
+      cached = { token: body.access_token, until: Date.now() + ((body.expires_in ?? 3600) - 120) * 1000 };
+      return cached.token;
+    }
+    const body = await response.json().catch(() => ({})) as { error?: string };
+    failure = `token: ${response.status}${body.error ? ` ${body.error}` : ''}`;
+    // Only a scope this key does not hold is worth asking again with the other scope.
+    if (body.error !== 'invalid_scope') break;
+  }
+  throw new SyncError(failure, 502, 'token');
 }
 
 /** One authorised GET to the Content API, with one retry on an expired token. */
@@ -45,11 +63,11 @@ async function get<T>(path: string): Promise<T> {
     if (!response.ok) {
       const body = await response.json().catch(() => ({})) as { error?: { code?: string } | string; code?: string };
       const code = typeof body.error === 'object' ? body.error?.code : body.code ?? (typeof body.error === 'string' ? body.error : undefined);
-      throw new SyncError(`${path}: ${response.status}`, response.status, code);
+      throw new SyncError(`${path.split('?')[0]}: ${response.status}${code ? ` ${code}` : ''}`, response.status, code);
     }
     return response.json() as Promise<T>;
   }
-  throw new SyncError(`${path}: unauthorised`, 502);
+  throw new SyncError(`${path.split('?')[0]}: unauthorised`, 502);
 }
 
 type Page = { sync?: { mutations?: Mutation[]; has_more?: boolean; next_page_url?: string | null; next_sync_token?: string | null } } & { mutations?: Mutation[]; has_more?: boolean; next_page_url?: string | null; next_sync_token?: string | null };
