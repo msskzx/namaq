@@ -8,7 +8,7 @@ import { Text } from '@/ui/Text';
 import { num } from '@shared/quran/arabicNumber';
 import { markColour } from '@shared/quran/compareCardLook';
 import { addCompareHint, blankWords, compareCorrections, compareHintsOf, compareLabel, comparePieces, type CompareAsk, type CompareLine, type Tone } from '@shared/quiz/compareAnswers';
-import { neededCut, typedMarks, verdict, type Correction } from '@shared/quiz/feedback';
+import { neededCut, verdict, type Correction } from '@shared/quiz/feedback';
 import type { Hints } from '@shared/quiz/hints';
 import { quranText } from '@/lib/quranText';
 import { useKeyboardShown } from '@/lib/keyboard';
@@ -103,7 +103,7 @@ function Badge({ row, palette }: { row: Correction; palette: Palette }) {
 
 /** A checked blank under the asked ayah: its number and verdict, a bulb when hinted, and what was typed when wrong. */
 function Mark({ row, palette, hinted }: { row: Correction; palette: Palette; hinted: boolean }) {
-  const typed = typedMarks(row);
+  const typed = row.typed ? row.typed.split(/\s+/) : [];
   return (
     <View style={{ direction: 'rtl', gap: 2 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
@@ -113,8 +113,8 @@ function Mark({ row, palette, hinted }: { row: Correction; palette: Palette; hin
       </View>
       {!row.correct && <Text style={{ fontSize: 15, color: palette.muted, textAlign: 'right' }}>
         {'كتبتَ: '}
-        {typed.length === 0 ? 'لا شيء' : <Text style={{ fontFamily: QURAN_FONT, fontSize: 17 }}>{typed.map(({ word, right }, i) => (
-          <Text key={i} style={right ? { color: palette.green } : { color: palette.accent, textDecorationLine: 'line-through' }}>{i > 0 ? ' ' : ''}{word}</Text>
+        {typed.length === 0 ? 'لا شيء' : <Text style={{ fontFamily: QURAN_FONT, fontSize: 17 }}>{typed.map((word, i) => (
+          <Text key={i} style={row.marks[i] ? { color: palette.green } : { color: palette.accent, textDecorationLine: 'line-through' }}>{i > 0 ? ' ' : ''}{word}</Text>
         ))}</Text>}
       </Text>}
     </View>

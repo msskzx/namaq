@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookOpen, faCircle, faCircleCheck, faCircleXmark, faCopy, faCrown, faHourglassHalf, faPlay, faRightFromBracket, faRotateLeft, faUserCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faBookOpen, faCircle, faCircleCheck, faCircleXmark, faCopy, faCrown, faHourglassHalf, faPaperPlane, faPlay, faRightFromBracket, faRotateLeft, faUserCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { renderSVG } from "uqr";
 import styles from "@/components/common/PaperPage.module.css";
 import Button from "@/components/common/Button";
@@ -266,10 +266,10 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
           pen={view.settings.pen} onWrite={write} written={revealed ? (Array.isArray(view.answer) ? view.answer : null) : undefined} />
         {question.compare ? (
           revealed ? <CompareFeedback question={question} typed={Array.isArray(view.answer) ? view.answer : []} ar={ar} />
-            : <CompareInputs question={question} typed={typed} onChange={setTyped} onCheck={() => send({ type: "submit", answer: typed })} ar={ar} />
+            : <CompareInputs question={question} typed={typed} onChange={setTyped} onCheck={() => send({ type: "submit", answer: typed })} ar={ar} sendEmpty />
         ) : question.tree ? (
           revealed ? <BranchFeedback question={question} typed={Array.isArray(view.answer) ? view.answer : emptyBranchAnswers(question)} names={view.surahNames} ar={ar} />
-            : <BranchInputs question={question} typed={typed} onChange={setTyped} onCheck={() => send({ type: "submit", answer: typed })} ar={ar} />
+            : <BranchInputs question={question} typed={typed} onChange={setTyped} onCheck={() => send({ type: "submit", answer: typed })} ar={ar} sendEmpty />
         ) : question.write ? null : (
           <div className="flex flex-col gap-2">
             {question.choices.map((choice) => {
@@ -287,6 +287,7 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
                 </Button>
               );
             })}
+            {!sent && !revealed && <Button className="self-start" onClick={() => send({ type: "submit", answer: "" })}><FontAwesomeIcon icon={faPaperPlane} />{ar ? "أرسل بلا إجابة" : "Send with no answer"}</Button>}
           </div>
         )}
         {revealed && view.result && (
@@ -296,11 +297,11 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
             ? (ar ? `${num(view.result.earned)} من ${num(view.result.total)} أطراف` : `${view.result.earned} of ${view.result.total} leaves`)
             : question.write
             ? (ar ? `${num(view.result.earned)} من ${num(view.result.total)} كلمات` : `${view.result.earned} of ${view.result.total} words`)
-            : view.answer === null ? (ar ? "لم تجب في الوقت." : "No answer in time.") : view.result.earned ? (ar ? "إجابة صحيحة" : "Correct") : (ar ? "إجابة خاطئة" : "Incorrect")}</p>
+            : view.answer === null ? (ar ? "لم تجب في الوقت." : "No answer in time.") : view.answer === "" ? (ar ? "لم تجب." : "No answer.") : view.result.earned ? (ar ? "إجابة صحيحة" : "Correct") : (ar ? "إجابة خاطئة" : "Incorrect")}</p>
         )}
-        {revealed && view.answer !== null && !question.tree && !question.compare && !question.write && <ChoiceAfter question={question} given={view.answer as string} ar={ar}
+        {revealed && view.answer !== null && view.answer !== "" && !question.tree && !question.compare && !question.write && <ChoiceAfter question={question} given={view.answer as string} ar={ar}
           surahName={(value) => question.choices.find((choice) => choice.value === value)?.labelArabic} />}
-        {revealed && (view.answer === null || question.write) && question.ayahKey && <ChoiceAfter question={question} ar={ar} />}
+        {revealed && (view.answer === null || view.answer === "" || question.write) && question.ayahKey && <ChoiceAfter question={question} ar={ar} />}
         {revealed && question.evidence?.reference && (
           <Button className="mt-3" size="sm" variant="outline" onClick={() => setSource(true)}><FontAwesomeIcon icon={faBookOpen} />{ar ? "المصدر" : "Source"}</Button>
         )}

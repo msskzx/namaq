@@ -7,12 +7,13 @@ describe('quiz tree scope', () => {
     expect([...SCOPE_KEYS]).toEqual(FILTER_KEYS.filter(key => key !== 'sort'));
   });
 
-  it('asks both kinds, the books and ours, unless other kinds are picked, and drops sort', () => {
-    expect(quizFilters({ sort: 'closest', differences: 'taqdim' })).toEqual({ differences: 'taqdim', categories: 'mutashabeh,pondering' });
+  it('asks only the books\' kind, whatever kinds are picked, and drops sort', () => {
+    expect(quizFilters({ sort: 'closest', differences: 'taqdim' })).toEqual({ differences: 'taqdim', categories: 'mutashabeh' });
+    expect(quizFilters({ categories: 'pondering,words' }).categories).toBe('mutashabeh');
   });
 
   it('goes through query parameters and back', () => {
-    const scope = { filters: { categories: 'mutashabeh,words', surahs: '2,36' }, saved: ['a', 'b'] };
+    const scope = { filters: { categories: 'mutashabeh', surahs: '2,36' }, saved: ['a', 'b'] };
     expect(parseTreeScope(new URLSearchParams(treeScopeParams(scope)))).toEqual(scope);
     expect(treeScopeParams({})).toEqual([]);
   });

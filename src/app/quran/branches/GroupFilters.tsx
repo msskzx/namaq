@@ -13,12 +13,13 @@ const categories = {
   words: { ar: 'أشجار الكلمات', en: 'Word trees' },
 };
 
-export default function GroupFilterControls({ filters: draft, onChange, sort = true, defaultCategories = PAGE_DEFAULT_KIND }: { filters: GroupFilters; onChange: (filters: GroupFilters) => void; sort?: boolean; defaultCategories?: string }) {
+/** Without `kinds` (the quiz, which asks only the books' mutashabihat) the comparison kinds are not offered. */
+export default function GroupFilterControls({ filters: draft, onChange, sort = true, kinds = true, defaultCategories = PAGE_DEFAULT_KIND }: { filters: GroupFilters; onChange: (filters: GroupFilters) => void; sort?: boolean; kinds?: boolean; defaultCategories?: string }) {
   const { language } = useLanguage();
   const ar = language === 'ar';
   const set = (key: keyof GroupFilters, value: string) => onChange(groupFilters({ ...draft, [key]: value }));
   const groups = [
-    { label: ar ? 'نوع المقارنة' : 'Comparison category', key: 'categories' as const, values: categories },
+    ...(kinds ? [{ label: ar ? 'نوع المقارنة' : 'Comparison category', key: 'categories' as const, values: categories }] : []),
     { label: ar ? 'نوع الاختلاف' : 'Difference', key: 'differences' as const, values: SUPPORTED_TAGS },
   ];
   const sorts = ar ? ['ترتيب المصحف', 'الأقرب', 'الأكثر مواضع', 'الأقل اختلافًا'] : ['Mushaf order', 'Closest', 'Most places', 'Fewest differences'];

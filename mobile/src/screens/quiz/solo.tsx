@@ -95,7 +95,7 @@ export default function SoloSetup() {
           <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>اختر نوعًا أو أكثر، فتأتي أسئلتها مخلوطة في اختبار واحد.</Text>
         </Section>
         {ranged && <Section title={trees ? 'الأشجار' : 'النطاق'} palette={palette}>
-          <FilterFields draft={draft} setDraft={setDraft} palette={palette} sort={false} trees={trees} />
+          <FilterFields draft={draft} setDraft={setDraft} palette={palette} sort={false} kinds={false} trees={trees} />
         </Section>}
         <Section title="الصعوبة" palette={palette}>
           <DifficultyPicker value={settings.difficulty} onChange={difficulty => change({ difficulty })} palette={palette} kinds={settings.kinds} />

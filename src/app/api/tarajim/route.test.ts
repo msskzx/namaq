@@ -17,6 +17,13 @@ describe('GET /api/tarajim', () => {
     expect(virtues).toHaveLength(1);
     expect((await (await get('?q=الزبير')).json()).some((p: { slug: string }) => p.slug === 'az-zubayr-ibn-al-awwam')).toBe(true);
     expect((await get('?ties=nobody')).status).toBe(404);
+    // The person page's drawings: his life on the timeline (Badr, with the sentence that places him there) and his ring.
+    const drawings = await (await get('?drawings=az-zubayr-ibn-al-awwam')).json();
+    const badr = drawings.life.find((item: { key: string }) => item.key === 'battle:badr');
+    expect(badr).toMatchObject({ kind: 'ghazwah', year: 2, open: { to: 'battle', slug: 'badr' } });
+    expect(badr.refs.length).toBeGreaterThan(0);
+    expect(drawings.ties.groups.length).toBeGreaterThan(0);
+    expect((await get('?drawings=nobody')).status).toBe(404);
     expect((await get('')).status).toBe(400);
   });
 });

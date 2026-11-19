@@ -3,7 +3,7 @@
 // Light on purpose: the party server grades with it (score.ts).
 import { num } from '../quran/arabicNumber';
 import type { Likeness } from '../quran/wordMatch';
-import { LEAF_WORDS, matchedWords, rightWords, spoken, withoutRepeat } from './branchAnswers';
+import { LEAF_WORDS, matchedWords, rightWords, spoken, typedMarks, withoutRepeat } from './branchAnswers';
 import type { Correction } from './feedback';
 import { hintLetters, hintText, type Hints } from './hints';
 import { SURAH_NAMES } from '../quran/surahNames';
@@ -32,7 +32,7 @@ export function compareCorrections(ask: CompareAsk, typed: string[]): Correction
     const text = withoutRepeat(typed[index] ?? '', words, spoken(ask.asked.words.slice(0, from)));
     const needed = Math.min(LEAF_WORDS, words.length);
     return { index, number: index + 1, node: { words: blankWords(ask, index), ayat: [ask.asked.key], children: [] }, typed: text,
-      correct: matchedWords(text, words) >= needed, right: rightWords(text, words), needed };
+      correct: matchedWords(text, words) >= needed, right: rightWords(text, words), marks: typedMarks(text, words), needed };
   });
 }
 

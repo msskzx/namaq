@@ -33,7 +33,7 @@ function Words({ words, marked, palette }: { words: string[]; marked?: number[];
  * then the choices. Once picked, the right one turns green and a wrong one red; a wrong surah with a look-alike shows it,
  * the words where the two part marked in both.
  */
-export default function QuizChoice({ question, picked, shown, onPick, onReveal, onOpen, header, palette, scroll = true, pen, onWrite, written, onLook, costs }: {
+export default function QuizChoice({ question, picked, shown, onPick, onReveal, onOpen, header, palette, scroll = true, pen, onWrite, written, onLook, costs, lookTop }: {
   question: ChoiceQuestion; picked?: string; shown: boolean; onPick?: (value: string) => void; onReveal?: () => void;
   /** A party's recited ayah (`question.write`): the host's pen rule, what was written sent with `onWrite`, and once revealed, what was `written` (null for nothing). */
   pen?: PenRule; onWrite?: (answer: string[], done: boolean) => void; written?: string[] | null;
@@ -42,6 +42,8 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
   header?: React.ReactNode; palette: Palette;
   /** «ابحث عن الجواب» was opened (a party counts it); `costs` says under the button what it costs there. */
   onLook?: () => void; costs?: boolean;
+  /** Kept in sight above the looked-up view (a party's clock). */
+  lookTop?: React.ReactNode;
   /** Inside a screen that already scrolls, it does not scroll on its own. */
   scroll?: boolean;
 }) {
@@ -111,7 +113,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
           })}
         </View>
       )}
-      {!answered && revealed && question.look && onPick && <View style={{ paddingHorizontal: 16 }}><LookButton look={question.look} onLook={onLook} costs={costs} palette={palette} /></View>}
+      {!answered && revealed && question.look && onPick && <View style={{ paddingHorizontal: 16 }}><LookButton look={question.look} onLook={onLook} costs={costs} palette={palette} top={lookTop} /></View>}
       {answered && question.terms && <TermChips names={question.choices.map(choice => question.terms![choice.value]).filter(Boolean)} palette={palette} />}
       {alike && diff && (
         <View style={{ marginHorizontal: 16, borderTopWidth: 1, borderStyle: 'dashed', borderColor: palette.rule, paddingTop: 10, gap: 4 }}>

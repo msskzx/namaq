@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { blankBoxes, blankText, boxesOf, writeBlank } from './writeBlanks';
 import { compareCorrections } from './compareAnswers';
-import { typedMarks } from './feedback';
 import { LEAF_WORDS } from './branchAnswers';
 
 const leaf = writeBlank(3, ['﴿١٧﴾', 'غِلْمَانٌ', 'لَهُمْ', 'كَأَنَّهُمْ']);
@@ -37,6 +36,6 @@ describe('typed words in the checked answer', () => {
   it('marks only the misspelled word wrong, not the right words after it', () => {
     const ask = { card: 'c', shown: { key: '1:1', words: ['أ'], tones: [] }, asked: { key: '57:12', words: ['يَسْعَىٰ', 'نُورُهُم', 'بَيْنَ', 'أَيْدِيهِمْ'], tones: [] }, blanks: [[0, 4]] as [number, number][] };
     const [row] = compareCorrections(ask, ['يسعى نوررهم بين أيديهم']);
-    expect(typedMarks(row).map(mark => mark.right)).toEqual([true, false, true, true]);
+    expect(row.marks).toEqual([true, false, true, true]);
   });
 });

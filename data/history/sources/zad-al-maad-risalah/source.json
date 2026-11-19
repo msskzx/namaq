@@ -1,0 +1,15 @@
+{
+  "slug": "zad-al-maad-risalah",
+  "title": "زاد المعاد في هدي خير العباد",
+  "author": "ابن قيم الجوزية",
+  "editor": "شعيب الأرنؤوط وعبد القادر الأرنؤوط",
+  "publisher": "مؤسسة الرسالة",
+  "publicationYear": "1417/1996",
+  "edition": "الإصدار الثاني المنقح المزيد، الطبعة الأولى",
+  "digitalHost": "turath.io (المكتبة الشاملة 21713)",
+  "url": "https://shamela.ws/book/21713",
+  "notes": "Pages are the author's text only, from turath.io's export of Shamela 21713 (files.turath.io/books-v3/21713.json, fetched 2026-11-19), with the HTML tags taken out and one blank line between paragraphs. The export carries no footnotes on these pages. Only the pages a unit cites are stored.",
+  "volumes": [
+    { "number": 1, "name": "الجزء الأول", "firstPrintedPage": 35, "lastPrintedPage": 513 }
+  ]
+}

@@ -8,7 +8,7 @@ import { ayatLabel, branchesHref, keys, shownAyat, type Branch, type Variant } f
 import { num } from '@shared/quran/arabicNumber';
 import { quranText } from '@/lib/quranText';
 import { branchNodes, givenAnswer, leadingSigns } from '@shared/quiz/branchAnswers';
-import { correctionOf, gradedTree, typedMarks, verdict, type Correction } from '@shared/quiz/feedback';
+import { correctionOf, gradedTree, verdict, type Correction } from '@shared/quiz/feedback';
 import { emptyBranchAnswers, isAsked, type ScoredQuestion } from '@shared/quiz/score';
 import { addHint, hintsOf, type Hints } from '@shared/quiz/hints';
 import MatrixCard, { MatrixShare } from './MatrixCard';
@@ -152,12 +152,12 @@ function Badge({ row, palette }: { row: Correction; palette: Palette }) {
 
 /** What was typed for a wrong answer: each right word green, each wrong one struck through. */
 function Typed({ row, palette }: { row: Correction; palette: Palette }) {
-  const typed = typedMarks(row);
+  const typed = row.typed ? row.typed.split(/\s+/) : [];
   return (
     <Text style={{ fontSize: 15, color: palette.muted, textAlign: 'right' }}>
       {'كتبتَ: '}
-      {typed.length === 0 ? 'لا شيء' : <Text style={{ fontFamily: QURAN_FONT, fontSize: 17 }}>{typed.map(({ word, right }, i) => (
-        <Text key={i} style={right ? { color: palette.green } : { color: palette.accent, textDecorationLine: 'line-through' }}>{i > 0 ? ' ' : ''}{word}</Text>
+      {typed.length === 0 ? 'لا شيء' : <Text style={{ fontFamily: QURAN_FONT, fontSize: 17 }}>{typed.map((word, i) => (
+        <Text key={i} style={row.marks[i] ? { color: palette.green } : { color: palette.accent, textDecorationLine: 'line-through' }}>{i > 0 ? ' ' : ''}{word}</Text>
       ))}</Text>}
     </Text>
   );
@@ -207,10 +207,13 @@ function TreeActions({ phrase, text, palette, onShare }: { phrase: string; text:
 }
 
 /**
- * The graded answer as the matrix: each ayah's row with how its asked node was graded; a tap opens its ayat. It can show the
+ * The graded answer as the matrix: each ayah's row with how its asked node was graded. A tap on a word lights its matches and
+ * nothing else (owner, 2026-11-19: no sheet over the light); each row's book button opens it in the reader. It can show the
  * surrounding ayat, and be saved, shared or opened on the branches tab.
  */
-export function QuizFeedback({ question, typed, palette, names: _names, onTap, header, hints, onFit }: { question: TreeQuestion; typed: string[]; palette: Palette; names: Record<number, string>; onTap?: (keys: string[]) => void; header?: React.ReactNode;
+const NO_SHEET = () => {};
+
+export function QuizFeedback({ question, typed, palette, names: _names, header, hints, onFit }: { question: TreeQuestion; typed: string[]; palette: Palette; names: Record<number, string>; header?: React.ReactNode;
   /** The hints used on this question, marked with a small bulb. */
   hints?: Hints;
   /** In a feed card that follows its content: how much taller it is than its room (lib/useFit.ts). */
@@ -234,7 +237,7 @@ export function QuizFeedback({ question, typed, palette, names: _names, onTap, h
       <View style={{ flex: 1 }}>
         {header}
         <View style={{ flex: 1 }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
-          {size && <MatrixCard presentation={presentation} palette={palette} view={size} around={around} onTap={ayahKeys => ayahKeys && onTap?.(ayahKeys)} onMove={() => {}} onFit={onFit}
+          {size && <MatrixCard presentation={presentation} palette={palette} view={size} around={around} onTap={NO_SHEET} onMove={() => {}} onFit={onFit}
             note={key => { const row = correctionOf(graded.rows, key); return row ? <MatrixMark row={row} palette={palette} hinted={!!hints?.[row.index]} /> : null; }} />}
         </View>
       </View>
