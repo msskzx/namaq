@@ -11,8 +11,6 @@ export type TermListItem = { name: string; plain: string; line: string; count: n
 
 export const TERMS = terms;
 export const termOf = (name: string): BalaghaTerm | undefined => termNamed(terms, name);
-/** The address of a term's page: its plain name. */
-export const termHref = (term: Pick<BalaghaTerm, 'name'>) => `/quran/terms/${encodeURIComponent(plainName(term.name))}`;
 
 /** Every term under al-Suyuti's chapters, each with the first line of its definition and how many examples he gives. */
 export const termChapters = (): { title: string; items: TermListItem[] }[] => termsByChapter(terms).map(([kind, list]) => ({

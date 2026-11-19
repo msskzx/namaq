@@ -34,6 +34,11 @@ import { SURAH_NAMES } from '@shared/quran/surahNames';
 import { num } from '@shared/quran/arabicNumber';
 import { plainName, type BalaghaTerm } from '@shared/quran/balaghaTerms';
 import { TermQuotes } from '@/components/balagha/TermParts';
+import { FortyCard, FortyHadith } from '@/components/hadith/FortyParts';
+import type { FortyListItem, FortyPage } from '@/lib/forty';
+import { searchForty } from '@shared/hadith';
+import Empty from '@/components/common/Empty';
+import { SearchField } from '@/components/common/Field';
 
 type Looked = { story: AppStory; ayat: AyatPage[][] } | { battle: AppBattle };
 
@@ -94,6 +99,25 @@ function TermsLook({ names, mark }: { names: string[]; mark?: string }) {
   </Fetched>;
 }
 
+/** Al-Nawawi's Forty with a search over their words; a hadith opens whole, as on its page. Once shown, the asked one is open. */
+function HadithLook({ mark }: { mark?: number }) {
+  const [query, setQuery] = useState('');
+  const [open, setOpen] = useState(mark);
+  if (open !== undefined) return <div className="flex flex-col gap-3.5">
+    <Button className="self-start" onClick={() => setOpen(undefined)}>رجوع إلى الأحاديث</Button>
+    <Fetched<FortyPage> url={`/api/forty?n=${open}`}>{page => <FortyHadith {...page} inset />}</Fetched>
+  </div>;
+  return <Fetched<FortyListItem[]> url="/api/forty">
+    {list => {
+      const found = searchForty(list, query);
+      return <div className="flex flex-col gap-3">
+        <SearchField label="ابحث في الأربعين" placeholder="ابحث بكلمات من الحديث" value={query} onChangeText={setQuery} />
+        {found.length ? found.map(item => <FortyCard key={item.n} item={item} onClick={() => setOpen(item.n)} />) : <Empty text="لا حديث فيه هذه الكلمات." />}
+      </div>;
+    }}
+  </Fetched>;
+}
+
 /** The ayah in the mushaf's lines with each word the readers differ on, as the readings page and its feed card draw it. */
 function QiraatLook({ ayah }: { ayah: string }) {
   const { pages } = useAyahPage(ayah);
@@ -110,7 +134,7 @@ function TuhfaLook({ mark }: { mark?: number }) {
 }
 
 /** The looks the website draws so far; the rest come with their features (the app draws every kind, mobile/src/components/QuizLook.tsx). */
-const DRAWN: QuizLook['view'][] = ['story', 'battle', 'terms', 'word', 'irab', 'balagha', 'qiraat', 'tafsir', 'tuhfa'];
+const DRAWN: QuizLook['view'][] = ['story', 'battle', 'terms', 'hadith', 'word', 'irab', 'balagha', 'qiraat', 'tafsir', 'tuhfa'];
 export const canLook = (look: QuizLook | undefined): look is QuizLook => !!look && DRAWN.includes(look.view);
 
 /**
@@ -128,6 +152,7 @@ export function LookView({ look, shown }: { look: QuizLook; shown: boolean }) {
       case 'qiraat': return <QiraatLook ayah={look.key} />;
       case 'tafsir': return <TafsirLook key={`${look.keys.join()}/${shown ? look.mark ?? '' : ''}`} keys={look.keys} mark={shown ? look.mark : undefined} />;
       case 'terms': return <TermsLook key={`${look.names.join()}/${shown ? look.mark ?? '' : ''}`} names={look.names} mark={shown ? look.mark : undefined} />;
+      case 'hadith': return <HadithLook key={shown ? look.mark ?? '' : ''} mark={shown ? look.mark : undefined} />;
       case 'tuhfa': return <TuhfaLook mark={shown ? look.mark : undefined} />;
       default: return null;
     }

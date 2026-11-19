@@ -8,6 +8,7 @@ import Card from '@/components/common/Card';
 import Empty from '@/components/common/Empty';
 import { SearchField } from '@/components/common/Field';
 import type { TermListItem } from '@/lib/balaghaTerms';
+import { termHref } from '@/components/balagha/TermParts';
 
 /** The terms under their chapters with a search over their names (the app's terms screen); each card opens the term's page. */
 export default function TermsList({ chapters }: { chapters: { title: string; items: TermListItem[] }[] }) {
@@ -23,7 +24,7 @@ export default function TermsList({ chapters }: { chapters: { title: string; ite
       <section key={chapter.title} className="flex flex-col gap-2">
         <h2 className="mt-1.5 text-[0.9375rem] text-[var(--home-muted)]">{chapter.title}</h2>
         {chapter.items.map(item => (
-          <Card key={item.name} href={`/quran/terms/${encodeURIComponent(item.plain)}`} className="flex items-center gap-2.5 px-3.5 py-2.5">
+          <Card key={item.name} href={termHref(item.name)} className="flex items-center gap-2.5 px-3.5 py-2.5">
             <span className="flex min-w-0 flex-1 flex-col">
               <span className="text-[1.1875rem]">{item.plain}</span>
               <span className="truncate text-sm text-[var(--home-muted)]">{item.line}</span>

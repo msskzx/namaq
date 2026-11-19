@@ -5,7 +5,7 @@ import { SURAH_NAMES } from '@shared/quran/surahNames';
 import { placesLabel } from '@shared/quran/branches';
 import { ayahHref } from '@shared/ayahMarks';
 import { ITQAN_BOOK, ITQAN_EDITION, itqanCredit, itqanPage } from '@shared/quran/itqanBalagha';
-import { termCredit, termPage, type BalaghaTerm, type TermQuote } from '@shared/quran/balaghaTerms';
+import { plainName, termCredit, termPage, type BalaghaTerm, type TermQuote } from '@shared/quran/balaghaTerms';
 import Card from '@/components/common/Card';
 import Chip from '@/components/common/Chip';
 import Folded from '@/components/common/Folded';
@@ -21,6 +21,9 @@ import type { ExampleAyah, ExampleView } from '@/lib/balaghaTerms';
 const TALKHIS_EDITION = 'تلخيص المفتاح لجلال الدين القزويني (ت ٧٣٩هـ)، متنًا فوق شرح بهاء الدين السبكي «عروس الأفراح في شرح تلخيص المفتاح»، تحقيق عبد الحميد هنداوي، المكتبة العصرية، ١٤٢٣هـ/٢٠٠٣م';
 const BY: Record<TermQuote['book'], string> = { itqan: 'قال السيوطي في الإتقان:', talkhis: 'قال القزويني في تلخيص المفتاح:' };
 const names: Record<number, string> = SURAH_NAMES;
+
+/** The address of a term's page: its plain name. */
+export const termHref = (name: string) => `/quran/terms/${encodeURIComponent(plainName(name))}`;
 
 /** What heads a term's quotes: «تعريفه» where they define it, otherwise his words on it. */
 export const quotesTitle = (term: Pick<BalaghaTerm, 'defines'>) => (term.defines ? 'تعريفه' : 'من كلام السيوطي عليه');

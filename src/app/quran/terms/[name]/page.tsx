@@ -7,7 +7,8 @@ import { TermExampleCard, TermQuotes } from '@/components/balagha/TermParts';
 
 export const generateStaticParams = () => TERMS.terms.map(term => ({ name: plainName(term.name) }));
 
-const nameOf = async (params: Promise<{ name: string }>) => decodeURIComponent((await params).name);
+// Next hands the param decoded already.
+const nameOf = async (params: Promise<{ name: string }>) => (await params).name;
 
 export async function generateMetadata({ params }: { params: Promise<{ name: string }> }): Promise<Metadata> {
   const term = termOf(await nameOf(params));
