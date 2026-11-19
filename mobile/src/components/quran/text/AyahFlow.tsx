@@ -1,0 +1,41 @@
+import { createContext, useContext, useState, type ReactNode } from 'react';
+import { View, type TextStyle, type ViewStyle } from 'react-native';
+import { Text } from '@/ui/Text';
+import { QURAN_FONT } from '@/lib/theme';
+import { FLOW_LINE, flowFontSize } from '@shared/quran/quranText/flow';
+import { mushafText } from '@shared/quran/mushafText';
+
+/** The font size the AyahFlow around takes from its width; 0 until it has measured. */
+const FlowSize = createContext({ size: 0, color: '' });
+
+/** The Quran text size where it is drawn: write boxes and signs beside the words take it too. */
+export const useAyahSize = () => useContext(FlowSize).size;
+
+/**
+ * Ayah text off the page (owner, 2026-11-19: every ayah view keeps the mushaf's line size and height): the room the words
+ * flow in, sized from its own width as the reader's flowing text is (shared/quran/quranText/flow.ts). Its AyahWords (and
+ * write boxes, by useAyahSize) take that size; the place sets only colour, never a size.
+ */
+export default function AyahFlow({ children, color, row = false, style }: { children: ReactNode; color: string;
+  /** Pieces side by side, wrapping (words and boxes in a matrix row); otherwise one justified paragraph. */
+  row?: boolean; style?: ViewStyle }) {
+  const [size, setSize] = useState(0);
+  return (
+    <View style={style} onLayout={event => setSize(flowFontSize(event.nativeEvent.layout.width))}>
+      <FlowSize.Provider value={{ size, color }}>
+        {size > 0 && (row
+          ? <View style={{ direction: 'rtl', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: size * 0.35 }}>{children}</View>
+          : <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, color, textAlign: 'justify', writingDirection: 'rtl' }}>{children}</Text>)}
+      </FlowSize.Provider>
+    </View>
+  );
+}
+
+/** What a place may set on ayah words: colour and marks, never their size or font. */
+export type WordLook = Pick<TextStyle, 'color' | 'fontWeight' | 'textDecorationLine' | 'textDecorationColor' | 'backgroundColor'>;
+
+/** Page words in an AyahFlow, at its size (as a paragraph's run, or a piece of a row). */
+export function AyahWords({ children, look }: { children: string; look?: WordLook }) {
+  const { size, color } = useContext(FlowSize);
+  return <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, color, writingDirection: 'rtl', ...look }}>{mushafText(children)}</Text>;
+}

@@ -13,7 +13,7 @@ import type { Branch, Variant } from "@shared/quran/branches";
 import type { Hints } from "@shared/quiz/hints";
 import { FORGOT, isRightChoice, PICKS, picksOf, recited, ticks } from "@shared/quiz/choiceKinds";
 import { markForgotten } from "@shared/ayahMarks";
-import { mushafText } from "@shared/quran/mushafText";
+import AyahFlow, { AyahWords } from "@/components/quran/text/AyahFlow";
 import { branchesCorrect, emptyBranchAnswers } from "@shared/quiz/score";
 import { BranchFeedback, BranchInputs } from "./BranchAnswers";
 import { CompareFeedback, CompareInputs } from "./CompareAnswers";
@@ -62,7 +62,7 @@ export interface QuizQuestionView {
 function AskedAyah({ ayah }: { ayah: { text: string; reference: string } }) {
   return (
     <blockquote dir="rtl" lang="ar" className="mb-4 border-s-2 border-[var(--home-accent)] ps-4">
-      <p className="font-quran text-xl leading-loose text-[var(--home-ink)]">{mushafText(ayah.text)}</p>
+      <AyahFlow className="text-[var(--home-ink)]"><AyahWords>{ayah.text}</AyahWords></AyahFlow>
       <p className="text-sm text-[var(--home-muted)]">{ayah.reference}</p>
     </blockquote>
   );
@@ -73,7 +73,7 @@ const answerContent = (question: QuizQuestionView, value: string | undefined, an
   if (!choice) return null;
   const detail = question.choiceDetails?.[choice.value];
   if (!detail) return <ChoiceLabel question={question} value={choice.value} label={choice.labelArabic} answered={answered} />;
-  return <span><span className="block font-quran leading-relaxed">{mushafText(detail.text)}</span><span className="text-xs text-[var(--home-muted)]">{detail.reference}</span></span>;
+  return <span className="w-full"><AyahFlow><AyahWords>{detail.text}</AyahWords></AyahFlow><span className="text-xs text-[var(--home-muted)]">{detail.reference}</span></span>;
 };
 
 /**

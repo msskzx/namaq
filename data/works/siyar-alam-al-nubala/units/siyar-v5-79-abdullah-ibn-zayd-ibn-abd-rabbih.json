@@ -1,0 +1,309 @@
+{
+  "unit": {
+    "id": "siyar-v5-79-abdullah-ibn-zayd-ibn-abd-rabbih",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٧٩"
+    }
+  },
+  "spans": [
+    {
+      "id": "hd",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "375",
+      "layer": "MAIN",
+      "exact": "٧٩ - عَبْدُ اللهِ بنُ زَيْدِ بنِ عَبْدِ رَبِّهِ بنِ ثَعْلَبَةَ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "375",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ زَيْدِ بنِ عَبْدِ رَبِّهِ بنِ ثَعْلَبَةَ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "375",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ",
+      "prefix": "-"
+    },
+    {
+      "id": "fa",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "375",
+      "layer": "MAIN",
+      "exact": "زَيْدِ بنِ عَبْدِ رَبِّهِ",
+      "prefix": "بنُ"
+    },
+    {
+      "id": "sh",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "376",
+      "layer": "MAIN",
+      "exact": "شَهِدَ: العَقَبَةَ، وَبَدْراً، وَهُوَ الَّذِي أُرِيَ الأَذَانَ ، وَكَانَ ذَلِكَ فِي السَّنَةِ الأُوْلَى منَ الهِجْرَةِ."
+    },
+    {
+      "id": "badr_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "376",
+      "layer": "MAIN",
+      "exact": "وَبَدْراً",
+      "prefix": "العَقَبَةَ،"
+    },
+    {
+      "id": "adhan",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "376",
+      "layer": "MAIN",
+      "exact": "وَهُوَ الَّذِي أُرِيَ الأَذَانَ ، وَكَانَ ذَلِكَ فِي السَّنَةِ الأُوْلَى منَ الهِجْرَةِ."
+    },
+    {
+      "id": "d",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "376",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ: سَنَةَ اثْنَتَيْنِ وَثَلاَثِيْنَ."
+    },
+    {
+      "id": "dy",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "376",
+      "layer": "MAIN",
+      "exact": "سَنَةَ اثْنَتَيْنِ وَثَلاَثِيْنَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r0",
+      "unit": "siyar-v5-79-abdullah-ibn-zayd-ibn-abd-rabbih",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "hd",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_1",
+      "report": "r0",
+      "spans": [
+        "n1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_7",
+      "report": "r0",
+      "spans": [
+        "sh"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_12",
+      "report": "r0",
+      "spans": [
+        "d"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_s2",
+      "parent": "n1",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o5",
+      "parent": "n1",
+      "exact": "زَيْدِ بنِ عَبْدِ رَبِّهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_s8",
+      "parent": "sh",
+      "exact": "شَهِدَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_e9",
+      "parent": "sh",
+      "exact": "بَدْراً",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_s13",
+      "parent": "d",
+      "exact": "تُوُفِّيَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_s2",
+      "mention": "m_s2",
+      "agent": "abdullah-ibn-zayd-ibn-abd-rabbih",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o5",
+      "mention": "m_o5",
+      "agent": "zayd-ibn-abd-rabbih",
+      "basis": [
+        {
+          "span": "fa",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s8",
+      "mention": "m_s8",
+      "agent": "abdullah-ibn-zayd-ibn-abd-rabbih",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_e9",
+      "mention": "m_e9",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "badr_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s13",
+      "mention": "m_s13",
+      "agent": "abdullah-ibn-zayd-ibn-abd-rabbih",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_3",
+      "subject": "m_s2",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "n1"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_4",
+      "subject": "m_s2",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sex"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_6",
+      "subject": "m_s2",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_o5"
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_10",
+      "subject": "m_s8",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_e9"
+      },
+      "restsOn": [
+        "st_7"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_11",
+      "subject": "m_s8",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "adhan"
+        ]
+      },
+      "restsOn": [
+        "st_7"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_14",
+      "subject": "m_s13",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 32,
+        "spans": [
+          "dy"
+        ]
+      },
+      "restsOn": [
+        "st_12"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

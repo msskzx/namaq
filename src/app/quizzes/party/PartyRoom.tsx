@@ -25,7 +25,7 @@ import { canLook, LookButton, LookedNote, LookView } from "@/components/quiz/Qui
 import { isRightChoice, PICKS, picksOf, ticks, type QuizLook } from "@shared/quiz/choiceKinds";
 import QuestionReview from "../QuestionReview";
 import { ChoiceAfter, ChoiceLabel, ChoiceQuran, type ChoiceParts } from "../ChoiceParts";
-import { mushafText } from '@shared/quran/mushafText';
+import AyahFlow, { AyahWords } from "@/components/quran/text/AyahFlow";
 import Card from '@/components/common/Card';
 import Field from '@/components/common/Field';
 
@@ -225,7 +225,7 @@ function ChoiceText({ question, value, answered }: { question: Question; value: 
   const detail = question.choiceDetails?.[value];
   if (!choice) return null;
   if (!detail) return <ChoiceLabel question={question} value={value} label={choice.labelArabic} answered={answered} />;
-  return <span><span className="block font-quran leading-relaxed">{mushafText(detail.text)}</span><span className="text-xs text-[var(--home-muted)]">{detail.reference}</span></span>;
+  return <span className="w-full"><AyahFlow><AyahWords>{detail.text}</AyahWords></AyahFlow><span className="text-xs text-[var(--home-muted)]">{detail.reference}</span></span>;
 }
 
 function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: ReturnType<typeof usePartySocket>["send"]; offset: number; ar: boolean }) {
@@ -268,7 +268,7 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
         <p dir="rtl" lang="ar" className={`mb-4 ${question.tree || question.compare ? "text-base leading-relaxed" : "text-xl leading-loose font-semibold"}`}>{question.promptArabic}</p>
         {question.ayah && (
           <blockquote dir="rtl" lang="ar" className="mb-4 border-s-2 border-[var(--home-accent)] ps-4">
-            <p className="font-quran text-xl leading-loose text-[var(--home-ink)]">{mushafText(question.ayah.text)}</p>
+            <AyahFlow className="text-[var(--home-ink)]"><AyahWords>{question.ayah.text}</AyahWords></AyahFlow>
             <p className="text-sm text-[var(--home-muted)]">{question.ayah.reference}</p>
           </blockquote>
         )}

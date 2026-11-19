@@ -1,3 +1,4 @@
+import { useRef, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
 import { Text } from '@/ui/Text';
@@ -5,6 +6,7 @@ import TopBar from '@/ui/TopBar';
 import Card from '@/ui/Card';
 import { usePalette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
+import { useTabRetap } from '@/lib/tabRetap';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { back } from '@/lib/ways';
 import { BATTLES } from '@/lib/battles';
@@ -15,10 +17,12 @@ export default function BattlesScreen() {
   const palette = usePalette();
   const onScroll = useShrinkOnScroll();
   const bottom = useTabBarSpace();
+  const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
+  useTabRetap('battles', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar back={back} hideOnScroll />
-      <ScrollView onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 10 }}>
+      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 10 }}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>الغزوات والمعارك</Text>
         {BATTLES.map(battle => (
           <Card key={battle.slug} palette={palette} pad={[10, 14]} gap={2} accessibilityRole="link" accessibilityLabel={battle.name}
