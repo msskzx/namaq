@@ -9,8 +9,10 @@ type Tag = 'div' | 'li' | 'article' | 'section' | 'aside' | 'fieldset' | 'p' | '
  * the one to look at first, `faded` one set aside. `className` is for its place and its inner layout (padding, flex, text),
  * never its frame or colour.
  */
-export default function Card({ as: Element = 'div', href, spine = false, picked = false, dashed = false, faded = false, className = '', ref, children, ...rest }: HTMLAttributes<HTMLElement> & {
+export default function Card({ as: Element = 'div', href, spine = false, picked = false, dashed = false, faded = false, outline, className = '', ref, children, style, ...rest }: HTMLAttributes<HTMLElement> & {
   as?: Tag;
+  /** A border in this colour, as the app's Card `outline` (a kind of tie on the ties ring, the answer in green). */
+  outline?: string;
   href?: string;
   spine?: boolean;
   picked?: boolean;
@@ -20,9 +22,10 @@ export default function Card({ as: Element = 'div', href, spine = false, picked 
   children?: ReactNode;
 }) {
   const look = `rounded-[var(--card-radius)] border bg-[var(--home-card)] ${picked ? 'border-[var(--home-ink)]' : 'border-[var(--home-rule)]'} ${dashed ? 'border-dashed' : ''} ${spine ? 'border-s-[5px]' : ''} ${faded ? 'opacity-60' : ''}`;
+  if (outline) style = { ...style, borderColor: outline };
   const press = 'block cursor-pointer text-start transition hover:border-[var(--home-accent)]';
-  if (href) return <Link href={href} ref={ref as Ref<HTMLAnchorElement>} {...rest} className={`${press} ${look} ${className}`}>{children}</Link>;
-  if (Element === 'button') return <button type="button" ref={ref as Ref<HTMLButtonElement>} {...rest} className={`${press} ${look} ${className}`}>{children}</button>;
+  if (href) return <Link href={href} ref={ref as Ref<HTMLAnchorElement>} {...rest} style={style} className={`${press} ${look} ${className}`}>{children}</Link>;
+  if (Element === 'button') return <button type="button" ref={ref as Ref<HTMLButtonElement>} {...rest} style={style} className={`${press} ${look} ${className}`}>{children}</button>;
   const Box = Element as 'div';
-  return <Box ref={ref as Ref<HTMLDivElement>} {...rest} className={`${look} ${className}`}>{children}</Box>;
+  return <Box ref={ref as Ref<HTMLDivElement>} {...rest} style={style} className={`${look} ${className}`}>{children}</Box>;
 }

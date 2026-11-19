@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText, SquareArrowOutUpLeft, Swords, BookOpenText, ListTree, MessagesSquare } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText, SquareArrowOutUpLeft, Swords, BookOpenText, ListTree, MessagesSquare, Link2 } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Cookies from 'js-cookie';
@@ -11,6 +11,8 @@ import StoryMap from '@/app/quran/prophets/[slug]/StoryMap';
 import type { SavedContent, SiraCard, StoryCard } from '@/lib/homeFeed';
 import type { TermCard } from '@/lib/balaghaTerms';
 import type { HadithCard } from '@/lib/forty';
+import type { TarajimCard } from '@/lib/tarajim';
+import { TiesChain, tiesHref } from '@/components/tarajim/TarajimParts';
 import { IbnRajab, shamelaPage } from '@/components/hadith/FortyParts';
 import { fromCompanion } from '@shared/hadith';
 import { LitAyat, ayatName, quotesTitle, termHref } from '@/components/balagha/TermParts';
@@ -415,6 +417,42 @@ function HadithPost({ card }: { card: HadithCard }) {
   </Post>;
 }
 
+/**
+ * «من التراجم» (the app's TarajimPost): a virtue from a converted Siyar entry, in the book's words with who says it and its
+ * page; the head opens the person's page.
+ */
+function TarajimPost({ card }: { card: Extract<TarajimCard, { kind: 'tarajim' }> }) {
+  const href = `/people/${card.person.slug}`;
+  return <Post head={<PostHead Icon={Users} title="من التراجم" sub={card.person.name} href={href} label={`افتح ترجمة ${card.person.name}`} />}
+    actions={<>
+      <Action Icon={Users} label={`افتح ترجمة ${card.person.name}`} href={href} />
+      <Action Icon={Link2} label={card.person.sex === 'FEMALE' ? 'صلاتها' : 'صلاته'} href={tiesHref(card.person.slug)} />
+    </>}>
+    <div className="flex flex-col gap-1.5 px-4 py-3" lang="ar">
+      <p className="text-[1.125rem] leading-[1.85]">{card.virtue.text}</p>
+      <p className="text-sm text-[var(--home-muted)]">{card.virtue.by ? `${card.virtue.by} · ` : ''}{card.pages}</p>
+    </div>
+  </Post>;
+}
+
+/**
+ * «صلة» (the app's TiePost): two converted people and the nearest chain of ties that joins them, drawn as «بينه وبين…»
+ * draws it, then in one sentence with the pages that state each tie.
+ */
+function TiePost({ card }: { card: Extract<TarajimCard, { kind: 'tie' }> }) {
+  return <Post head={<PostHead Icon={Link2} title="صلة" sub={`${card.a.name} و${card.b.name}`} href={tiesHref(card.a.slug)} label={`افتح صلات ${card.a.name}`} />}
+    actions={<>
+      <Action Icon={Link2} label={`صلات ${card.a.name}`} href={tiesHref(card.a.slug)} />
+      <Action Icon={Link2} label={`صلات ${card.b.name}`} href={tiesHref(card.b.slug)} />
+    </>}>
+    <div className="flex flex-col gap-1.5 px-4 py-3" lang="ar">
+      <TiesChain chain={card.chain} inCard />
+      <p className="text-[1.125rem] leading-[1.85]">{card.sentence}</p>
+      <p className="text-sm text-[var(--home-muted)]">{card.pages}</p>
+    </div>
+  </Post>;
+}
+
 type Tree = TreePreview & { text: string };
 
 /** A saved ayah as a post: the ayah in the mushaf's own lines, as the recall card shows it once revealed. */
@@ -544,6 +582,10 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
   const hadithSlots = shows('hadith') || shows('rajab') ? Array.from({ length: batches }, (_, i) => i) : [];
   const { data: hadith } = useSWR(day && hadithSlots.length ? `/api/home/feed?day=${day}&hadith=${hadithSlots.join(',')}` : null,
     () => inPieces<HadithCard[]>(some => `/api/home/feed?day=${day}&hadith=${some.join(',')}`, hadithSlots).then(all => all.flat()), swr);
+  // The virtue and «صلة» cards, one a batch, worked out on the server (the people's entries stay there).
+  const tarajimSlots = shows('tarajim') || shows('tie') ? Array.from({ length: batches }, (_, i) => i) : [];
+  const { data: tarajim } = useSWR(day && tarajimSlots.length ? `/api/home/feed?day=${day}&tarajim=${tarajimSlots.join(',')}` : null,
+    () => inPieces<TarajimCard[]>(some => `/api/home/feed?day=${day}&tarajim=${some.join(',')}`, tarajimSlots).then(all => all.flat()), swr);
   // The balagha term cards, in every other batch, worked out on the server (al-Suyuti's book stays there).
   const termSlots = shows('term') ? Array.from({ length: batches }, (_, i) => i).filter(i => i % 2 === 1) : [];
   const { data: termCards } = useSWR(day && termSlots.length ? `/api/home/feed?day=${day}&term=${termSlots.join(',')}` : null,
@@ -595,6 +637,9 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
     const siraCard = sira?.find(card => card.slot === i);
     if (siraCard?.kind === 'sira' && shows('sira')) posts.push(<SiraPost key={`sira${day}-${i}`} card={siraCard} />);
     if (siraCard?.kind === 'moment' && shows('moment')) posts.push(<MomentPost key={`m${day}-${i}`} card={siraCard} />);
+    const tarajimCard = tarajim?.find(card => card.slot === i);
+    if (tarajimCard?.kind === 'tarajim' && shows('tarajim')) posts.push(<TarajimPost key={`tj${day}-${i}`} card={tarajimCard} />);
+    if (tarajimCard?.kind === 'tie' && shows('tie')) posts.push(<TiePost key={`tie${day}-${i}`} card={tarajimCard} />);
   }
   return <section className={styles.feed} aria-label="للتأمل اليوم">
     {posts}
