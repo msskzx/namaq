@@ -10,6 +10,7 @@ export const TAGS = {
   particle: { ar: 'إبدال حرف', en: 'Particle replacement' },
   word: { ar: 'إبدال كلمة', en: 'Word replacement' },
   assimilation: { ar: 'إدغام وتركه', en: 'Assimilation' },
+  repetition: { ar: 'تكرار', en: 'Repetition' },
   gender: { ar: 'تذكير وتأنيث', en: 'Gender', extension: true },
   pronoun: { ar: 'إظهار وإضمار', en: 'Noun and pronoun', extension: true },
   case: { ar: 'رفع ونصب', en: 'Case', extension: true },
