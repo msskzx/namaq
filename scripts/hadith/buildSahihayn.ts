@@ -169,7 +169,7 @@ function muslimMarks(book: string, start: number, last: number, { fixes, absent 
   return routes;
 }
 
-const clean = (text: string) => text.replace(/⟦[\d:]*⟧?/g, ' ').replace(/⦗[٠-٩]+⦘/g, ' ').replace(/⟪باب⟫/g, '').replace(/\s+/g, ' ').replace(/\s+([،.:؛])/g, '$1').trim();
+const clean = (text: string) => text.replace(/⁅\d+⁆([^⁆]*)⁆/g, '$1').replace(/\[\d+\]/g, '').replace(/⟦[\d:]*⟧?/g, ' ').replace(/⦗[٠-٩]+⦘/g, ' ').replace(/⟪باب⟫/g, '').replace(/\s+/g, ' ').replace(/\s+([،.:؛])/g, '$1').trim();
 
 interface Cut { start: number; end: number; n: number; route?: string; also?: number[] }
 interface Built { index: SahihIndex; files: SahihKitabFile[] }
@@ -206,7 +206,9 @@ function assemble(book: string, heads: Heading[], cuts: Cut[], meta: SahihBook, 
     const end = Math.min(c.end, sorted[h]?.at ?? book.length);
     const piece = cut(book, c.start, Math.ceil(end));
     // The number heading the text («٨ - », «١٩ - (١٦) ») is shown apart from it.
-    const text = piece.text.replace(/^[٠-٩]+(?: \(م\))?(?:(?: ?- ?| )[٠-٩]+)* ?-?(?: ?[٠-٩]+ ?-?)*\s*/, '').replace(/^(?:[٠-٩]+ ?)?(?:- )?(?:٠ )?(?:م(?: [٠-٩]+)? ?)?(?:- )?\([٠-٩]+(?:\/ ?[٠-٩]+)?\)(?: -)?\s*/, '');
+    // The next number's digits can stay at the end, after the closing mark («… إِلَيْهِ». ٢»): they are its head, not this text.
+    // A bab heading the table of contents places after its first word leaves «بَابُ» at the end of the hadith before it.
+    const text = piece.text.replace(/\s+بَ?ا?بٌ?ُ?:?$/, '').replace(/([».،:؟])\s*[٠-٩]+(?:\s*-\s*[٠-٩]+)*\s*-?$/, '$1').replace(/^[٠-٩]+(?: \(م\))?(?:(?: ?- ?| )[٠-٩]+)* ?-?(?: ?[٠-٩]+ ?-?)*\s*/, '').replace(/^(?:[٠-٩]+ ?)?(?:- )?(?:٠ )?(?:م(?: [٠-٩]+)? ?)?(?:- )?\([٠-٩]+(?:\/ ?[٠-٩]+)?\)(?: -)?\s*/, '');
     const route: SahihRoute = { ...(c.route ? { route: c.route } : {}), ...(piece.chain ? { chain: piece.chain } : {}), text, volume: piece.volume, pages: piece.pages, shamela: piece.shamela };
     const earlier = muslim ? byNumber.get(c.n) : undefined;
     if (earlier) { earlier.routes.push(route); continue; }

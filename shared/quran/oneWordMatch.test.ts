@@ -39,6 +39,7 @@ const ALLOWED: Record<string, string> = {
   'shared/quiz/tarajim.ts': 'people\'s names in the tarajim quizzes',
   'shared/quiz/sira.ts': 'names in the sira quiz',
   'shared/quiz/hadith.ts': 'hadith text',
+  'shared/quiz/sahih.ts': 'the Sahihayn\'s kitab and bab headings, not Quran words',
   'shared/quiz/balaghaTermQuiz.ts': 'balagha term names',
   'shared/prayer.ts': 'city names in the prayer-times search',
   'shared/quiz/hints.ts': 'the letters a quiz hint shows; strips marks of its own and should move into shared/quran',

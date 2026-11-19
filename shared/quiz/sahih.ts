@@ -15,7 +15,9 @@ const CHOICES = 4;
 const BOOKS = [bukhari, muslim] as SahihIndex[];
 
 /** A heading's words as matched: no marks, one alif, no article, no «باب» or «كتاب». */
-const words = (text: string) => text.split(/\s+/).map(word => normalizeWord(word).replace(/[^ء-ي]/g, '').replace(/^(?:[وفبلك]?ال)(?=\S{2})/, ''))
+const seen = new Map<string, string[]>();
+const words = (text: string) => seen.get(text) ?? seen.set(text, wordsOf(text)).get(text)!;
+const wordsOf = (text: string) => text.split(/\s+/).map(word => normalizeWord(word).replace(/[^ء-ي]/g, '').replace(/^(?:[وفبلك]?ال)(?=\S{2})/, ''))
   .filter(word => word && word !== 'باب' && word !== 'كتاب' && word !== 'ابواب');
 
 /** Little words a kitab's name holds that say nothing of its subject. */
@@ -29,19 +31,25 @@ const core = (word: string) => word.replace(/^[وفبلك]?(?:ال|لل)/, '').r
  * it, nor offered as wrong. It errs on the side of leaving a question out.
  */
 /** A word's letters without the long vowels, hamza, «ة» and «ت», near enough its root: «اعتمار» and «عمرة» both «عمر». */
-const skeleton = (word: string) => core(word).replace(/[اويىءئؤةهت]/g, '');
+const skeletons = new Map<string, string>();
+const skeleton = (word: string) => skeletons.get(word) ?? skeletons.set(word, core(word).replace(/[اويىءئؤةهت]/g, '')).get(word)!;
 const near = (a: string, b: string) => a.includes(b) || (a.length >= 3 && b.includes(a))
   || (skeleton(a).length >= 3 && skeleton(b).length >= 3 && (skeleton(a).includes(skeleton(b)) || skeleton(b).includes(skeleton(a))));
+const kitabWords = new Map<SahihKitab, string[]>();
+const cores = new Map<string, string[]>();
 const named = (kitab: SahihKitab, title: string) => {
-  const mine = words(title).map(core);
-  return words(kitab.title).filter(word => !LITTLE.has(word)).map(core).some(word => word.length >= 2 && mine.some(other => near(other, word)));
+  const mine = cores.get(title) ?? cores.set(title, words(title).map(core)).get(title)!;
+  if (!kitabWords.has(kitab)) kitabWords.set(kitab, words(kitab.title).filter(word => !LITTLE.has(word)).map(core).filter(word => word.length >= 2));
+  return kitabWords.get(kitab)!.some(word => mine.some(other => near(other, word)));
 };
-
 /** A kitab as a choice: the print marks some kitab names and not others, so all are shown bare, lest the marked one stand out. */
 const label = (kitab: SahihKitab) => kitab.title.replace(/[ً-ْٰ]/g, '').replace(/[.،]+$/, '').trim();
 
-export function sahihKitabQuestions(random: Random): ChoiceQuestion[] {
-  return shuffle(BOOKS.flatMap(book => {
+type Asked = { book: SahihIndex; kitab: SahihKitab; i: number; wrong: SahihKitab[] };
+let asked: Asked[] | undefined;
+/** Every bab that may be asked and the kitabs that may be offered against it, worked out once (the matching is slow). */
+function askable(): Asked[] {
+  return asked ??= BOOKS.flatMap(book => {
     // A heading printed in more than one kitab (al-Bukhari repeats some) answers to each: those kitabs are never wrong.
     const homes = new Map<string, Set<number>>();
     for (const kitab of book.kitabs) for (const bab of kitab.babs) {
@@ -49,34 +57,40 @@ export function sahihKitabQuestions(random: Random): ChoiceQuestion[] {
       homes.set(key, (homes.get(key) ?? new Set()).add(kitab.n));
     }
     return book.kitabs.flatMap(kitab => kitab.babs.flatMap((bab, i) => {
-      const key = words(bab.title).join(' ');
+      const said = words(bab.title);
       // A heading of two words or fewer after «باب» («باب» alone, as al-Bukhari leaves some) says too little to ask.
-      if (words(bab.title).length < 3 || !bab.from || named(kitab, bab.title)) return [];
+      if (said.length < 3 || !bab.from || named(kitab, bab.title)) return [];
       // An ayah as a heading («باب قول الله تعالى…», «باب قوله…») stands in tafsir and in its subject's kitab alike, and a
       // heading that is a chain («باب حدثنا…») names no subject: neither is asked.
-      if (/^و?(?:قول|قوله|قولوا|حدثنا)$/.test(words(bab.title)[0] ?? '') || /﴿/.test(bab.title)) return [];
-      const wrong = shuffle(book.kitabs.filter(other => !homes.get(key)!.has(other.n) && !named(other, bab.title)), random).slice(0, CHOICES - 1);
-      if (wrong.length < CHOICES - 1) return [];
-      const choices = shuffle([kitab, ...wrong], random);
-      const asked = book.headingsBy === 'nawawi' ? `في أيّ كتاب من ${book.title} بوّب النووي هذا الباب؟` : `في أيّ كتاب من ${book.title} هذا الباب؟`;
-      return [{
-        key: `${SAHIH_KITAB}:${book.slug}:${kitab.n}:${i}`,
-        family: SAHIH_KITAB,
-        promptArabic: `${bab.title}\n${asked}`,
-        choices: choices.map((each, at) => ({ value: String(at), labelArabic: label(each) })),
-        correctAnswer: String(choices.indexOf(kitab)),
-        note: { label: 'المصدر', text: `${book.title}، ${kitab.title}، الحديث ${num(bab.from)}${book.headingsBy === 'nawawi' ? '، وتراجم الأبواب للنووي' : ''}` },
-        look: { view: 'sahih', book: book.slug, mark: kitab.n },
-        evidence: { claimKeys: [] },
-      } satisfies ChoiceQuestion];
+      if (/^و?(?:قول|قوله|قولوا|حدثنا)$/.test(said[0] ?? '') || /﴿/.test(bab.title)) return [];
+      const wrong = book.kitabs.filter(other => !homes.get(said.join(' '))!.has(other.n) && !named(other, bab.title));
+      return wrong.length >= CHOICES - 1 ? [{ book, kitab, i, wrong }] : [];
     }));
-  }), random);
+  });
+}
+
+export function sahihKitabQuestions(random: Random, limit = Infinity): ChoiceQuestion[] {
+  return shuffle(askable(), random).slice(0, limit).map(({ book, kitab, i, wrong }) => {
+    const bab = kitab.babs[i];
+    const choices = shuffle([kitab, ...shuffle(wrong, random).slice(0, CHOICES - 1)], random);
+    const ask = book.headingsBy === 'nawawi' ? `في أيّ كتاب من ${book.title} بوّب النووي هذا الباب؟` : `في أيّ كتاب من ${book.title} هذا الباب؟`;
+    return {
+      key: `${SAHIH_KITAB}:${book.slug}:${kitab.n}:${i}`,
+      family: SAHIH_KITAB,
+      promptArabic: `${bab.title}\n${ask}`,
+      choices: choices.map((each, at) => ({ value: String(at), labelArabic: label(each) })),
+      correctAnswer: String(choices.indexOf(kitab)),
+      note: { label: 'المصدر', text: `${book.title}، ${kitab.title}، الحديث ${num(bab.from)}${book.headingsBy === 'nawawi' ? '، وتراجم الأبواب للنووي' : ''}` },
+      look: { view: 'sahih', book: book.slug, mark: kitab.n },
+      evidence: { claimKeys: [] },
+    } satisfies ChoiceQuestion;
+  });
 }
 
 export const sahihKitabQuiz: ChoiceKind = {
   id: SAHIH_KITAB,
   name: SAHIH_KITAB_NAME,
   party: true,
-  questions: (_scope, _difficulty, random, limit = Infinity) => sahihKitabQuestions(random).slice(0, limit),
-  count: () => sahihKitabQuestions(Math.random).length,
+  questions: (_scope, _difficulty, random, limit = Infinity) => sahihKitabQuestions(random, limit),
+  count: () => askable().length,
 };
