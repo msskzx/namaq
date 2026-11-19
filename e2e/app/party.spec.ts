@@ -1,8 +1,18 @@
-import type { Page } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 import { num } from '../../shared/quran/arabicNumber';
 import { branchNodes, givenAnswer } from '../../shared/quiz/branchAnswers';
 import { expect, firstBoxes, open, test, writeBlank } from './fixtures';
 import { PartyServer } from './partyServer';
+
+/** Whether the element is on screen and the topmost thing at its middle, so no sheet or bar covers it. */
+async function uncovered(target: Locator) {
+  await expect(target).toBeInViewport();
+  return target.evaluate(element => {
+    const box = element.getBoundingClientRect();
+    const top = document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2);
+    return !!top && element.contains(top);
+  });
+}
 
 /** Each asked leaf's first box (recite mode's boxes, owner 2026-11-19). */
 const leaves = (page: Page) => firstBoxes(page, 'الطرف \\S+');
@@ -122,6 +132,8 @@ test('a party question looked up: the look opens the graph, a right answer after
   await page.getByRole('button', { name: 'ابحث عن الجواب' }).click();
   await expect(page.getByRole('heading', { name: 'الزبير بن العوام' })).toBeVisible();
   await expect.poll(() => server.state?.looked).toEqual({ [server.state!.hostId]: true });
+  // The look-up sheet keeps the clock in sight (owner, 2026-11-19): nothing covers its middle.
+  await expect(uncovered(page.getByRole('dialog').getByLabel('الوقت المتبقي'))).resolves.toBe(true);
   await page.getByRole('button', { name: 'رجوع إلى السؤال' }).click();
   await expect(page.getByText(/^بحثتَ عنه/)).toBeVisible();
   await page.getByRole('button', { name: 'أمه', exact: true }).click();
@@ -134,5 +146,33 @@ test('a party question looked up: the look opens the graph, a right answer after
   // Under the answer, the same graph for everyone to learn from.
   await expect(guest.getByRole('heading', { name: 'الزبير بن العوام' })).toBeVisible();
   expect(server.state!.players.map(player => player.score)).toEqual([5, 10]);
+  await guestContext.close();
+});
+
+test('a party player may send no answer, and the reveal says so', async ({ page, browser, errors }) => {
+  test.setTimeout(90_000);
+  const server = new PartyServer('ties');
+  await server.attach(page.context());
+  const guestContext = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, locale: 'ar' });
+  await guestContext.addInitScript(() => localStorage.setItem('tour-seen', 'true'));
+  await server.attach(guestContext);
+  const guest = await guestContext.newPage();
+  guest.on('pageerror', error => errors.push(`guest pageerror: ${error.message}`));
+
+  await open(page, '/quiz/party');
+  await page.getByLabel('اسمك').fill('المضيف');
+  await page.getByRole('button', { name: 'ابدأ', exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`/quiz/party/${server.code}`));
+  await open(guest, `/quiz/party/${server.code}`);
+  await expect(guest.getByLabel('اسمك').last()).toBeFocused();
+  await guest.keyboard.type('الضيف');
+  await guest.keyboard.press('Enter');
+  await guest.getByRole('button', { name: 'أنا مستعد' }).click();
+  await expect(page.getByText('الضيف')).toBeVisible();
+  await page.getByRole('button', { name: 'ابدأ الاختبار' }).click();
+
+  await guest.getByRole('button', { name: 'أرسل بلا إجابة' }).click();
+  await page.getByRole('button', { name: 'أمه', exact: true }).click();
+  await expect(guest.getByText('لم تجب.')).toBeVisible();
   await guestContext.close();
 });
