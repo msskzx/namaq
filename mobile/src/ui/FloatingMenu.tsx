@@ -12,8 +12,10 @@ export type MenuAt = { x: number; y: number };
  * screen sideways. The mushaf's long press draws it in the page; a home card's tap passes `overlay`, which lays a light
  * dim behind it (the card reads as behind the menu) and a tap outside closes it.
  */
-export default function FloatingMenu({ at, label, onClose, overlay = false, top: clear, palette, children }: {
+export default function FloatingMenu({ at, label, onClose, overlay = false, top: clear, palette, head, children }: {
   at: MenuAt | null; label: string; onClose: () => void; overlay?: boolean;
+  /** A row above the buttons, across the menu's width: the reader's tab between an ayah's actions and its word's. */
+  head?: React.ReactNode;
   /** What it must stay below (the mushaf's recite bar at the top); the status bar otherwise. */
   top?: number; palette: Palette; children: React.ReactNode;
 }) {
@@ -35,10 +37,11 @@ export default function FloatingMenu({ at, label, onClose, overlay = false, top:
         position: 'absolute', opacity: size ? 1 : 0, maxWidth: width - 16,
         top: size ? place : at.y + 20,
         left: size ? Math.min(width - size.width - 8, Math.max(8, at.x - size.width / 2)) : 8,
-        flexDirection: 'row', flexWrap: 'wrap', padding: 5, borderRadius: 12, borderWidth: 1, borderColor: palette.rule,
+        padding: 5, gap: 4, borderRadius: 12, borderWidth: 1, borderColor: palette.rule,
         backgroundColor: palette.paper, shadowColor: '#000', shadowOpacity: 0.15, shadowRadius: 10, elevation: 6,
       }}>
-      {children}
+      {head}
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>{children}</View>
     </View>
   );
   if (!overlay) return bar || null;

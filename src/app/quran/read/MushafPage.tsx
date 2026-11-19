@@ -151,7 +151,7 @@ export default function MushafPage({
   /** The ayah being recited aloud (listening): a band in the accent. */
   playing?: string | null;
   /** The ayah a long press opened the buttons of, lit as one band, and in it the pressed word (its data-word), lit stronger (the app's markWord). */
-  pressed?: { key: string; word?: number } | null;
+  pressed?: { key: string; words?: { from: number; to: number } } | null;
   /** Recite mode: whether a word is still hidden; `word` counts that ayah's words on this page from 0. */
   hidden?: (key: string, word: number) => boolean;
   /** Recite mode: the ayah the next reveal shows. */
@@ -178,6 +178,7 @@ export default function MushafPage({
   const current = first && 'surah' in first ? first.surah : top;
   const marked = (surah?: number, ayah?: number) => !!mark && surah === mark.surah && ayah === mark.ayah;
   const counts: Record<string, number> = {};
+  const plain: Record<string, number> = {};
   /** While reciting, a surah's name stays hidden until its first ayah shows, so the reader recalls which surah comes next. */
   // A titled surah's title (and basmala) are the first words of its first ayah, so that ayah's own words count after them.
   titled?.forEach((steps, surah) => { counts[`${surah}:1`] = steps - 1; });
@@ -215,6 +216,9 @@ export default function MushafPage({
                     const on = marked(group.surah, group.ayah) || pressed?.key === key;
                     const word = group.word ? (counts[key] = (counts[key] ?? -1) + 1) : 0;
                     const veiled = !!hidden?.(key, word);
+                    // The word's place in its ayah with the ۞ sign not counted, as the app counts it: what a selection holds.
+                    const place = group.word && group.word !== '۞' ? (plain[key] = (plain[key] ?? -1) + 1) : undefined;
+                    const lit = !!pressed?.words && pressed.key === key && place !== undefined && place >= pressed.words.from && place <= pressed.words.to;
                     const endHidden = (end: number) => !!hidden?.(`${group.surah}:${end}`, Number.MAX_SAFE_INTEGER);
                     // The word's place in its ayah, past a titled surah's title and basmala steps and the ayah's words on the page before (write mode counts words only).
                     const rel = word - (group.ayah === 1 && group.surah !== undefined ? titled?.get(group.surah) ?? 0 : 0);
@@ -222,8 +226,8 @@ export default function MushafPage({
                     const graded = !veiled && checked?.key === key ? (checked.right.includes(rel + checked.before) ? styles.right : checked.wrong.includes(rel + checked.before) ? styles.wrong : '') : '';
                     const mistyped = graded === styles.wrong && group.word ? checked!.typed[rel + checked!.before] : '';
                     return (
-                      <span key={at} data-marked={on || undefined} data-ayah={key} data-word={group.word ? rel : undefined} data-veiled={veiled || undefined}
-                        className={[!veiled && playing === key ? styles.playing : '', !veiled && on ? styles.marked : '', !veiled && pressed?.key === key && group.word && pressed.word === rel ? styles.pressedWord : '', !veiled && !on && forgot?.[key] ? styles.forgot : '', graded].join(' ').trim() || undefined}>
+                      <span key={at} data-marked={on || undefined} data-ayah={key} data-word={group.word ? rel : undefined} data-at={place} data-veiled={veiled || undefined}
+                        className={[!veiled && playing === key ? styles.playing : '', !veiled && on ? styles.marked : '', !veiled && lit ? styles.pressedWord : '', !veiled && !on && (forgot?.[key] || (place !== undefined && forgot?.[`${key}:${place}`])) ? styles.forgot : '', graded].join(' ').trim() || undefined}>
                         {/* While hidden, the word and its ayah number are separate boxes, so an empty page still shows where each ayah ends. */}
                         {writing && write.targets.includes(rel + write.before)
                           ? <WriteBox word={group.word} typed={write.typed[rel + write.before] ?? ''} active={write.current === rel + write.before} onPick={() => write.onBox(rel + write.before)} />

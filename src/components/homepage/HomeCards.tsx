@@ -7,7 +7,7 @@ import Button from '@/components/common/Button';
 import MushafText from '@/components/common/MushafText';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark, type Bookmark as Saved } from '@shared/bookmarks';
-import { ayahHref, readDueMarks, rememberAyah, mostForgotten, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
+import { ayahHref, markAyah, readDueMarks, rememberAyah, mostForgotten, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { notesByDate, readAyahNotes, serverAyahNotes, subscribeAyahNotes, writeAyahNote } from '@shared/ayahNotes';
 import NoteDialog from '@/components/quran/NoteDialog';
 import { forgottenOrder } from '@shared/quran/recite';
@@ -23,7 +23,8 @@ import Card from '@/components/common/Card';
 
 /** The same icons as the tab bar, so a saved card says which feature it opens in. */
 const KIND_ICONS: Record<BookmarkKind, typeof BookOpen | typeof TreeIcon> = { tree: TreeIcon, compare: ArrowLeftRight, ayah: BookOpen, card: Bookmark };
-export const reviewHref = (key: string) => `${ayahHref(key)}?recite=${key}&review=1`;
+/** A forgotten word is reviewed with its ayah here, until the website reviews the word alone as the app does. */
+export const reviewHref = (key: string) => `${ayahHref(key)}?recite=${markAyah(key)}&review=1`;
 /** The context endpoint takes up to 200 ayat a call. */
 const CHUNK = 200;
 
@@ -64,7 +65,7 @@ export function useHomeCards(data: CardData, forgottenShown = Infinity) {
   const marks = useSyncExternalStore(subscribeDueMarks, readDueMarks, serverAyahMarks);
   const forgotten = forgottenOrder(Object.keys(marks));
   const recent = mostForgotten(marks);
-  const texts = useAyahTexts(recent.slice(0, forgottenShown));
+  const texts = useAyahTexts([...new Set(recent.slice(0, forgottenShown).map(markAyah))]);
   const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes, serverAyahNotes);
   const noted = notesByDate(notes);
   const [noting, setNoting] = useState<string | null>(null);
@@ -122,7 +123,7 @@ export function useHomeCards(data: CardData, forgottenShown = Infinity) {
         <span className={styles.bookKind} role="img" aria-label={forgottenLabel} title={forgottenLabel}><LightbulbOff size={16} aria-hidden /></span>
         <span className={styles.bookReferences} lang="ar" dir="rtl"><span>{names.get(surah)} <bdi>{ar ? num(ayah) : ayah}</bdi></span></span>
       </span>
-      <span className={styles.bookText} lang="ar" dir="rtl">{texts[key] && <MushafText>{texts[key]}</MushafText>}</span>
+      <span className={styles.bookText} lang="ar" dir="rtl">{texts[markAyah(key)] && <MushafText>{texts[markAyah(key)]}</MushafText>}</span>
     </Card>;
   };
   /** A note: the ayah's name over the reader's own words, which are not in the mushaf font. */

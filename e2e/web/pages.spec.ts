@@ -328,13 +328,35 @@ test.describe('pages with the database', () => {
       await page.mouse.down();
       await page.waitForTimeout(700);
       await page.mouse.up();
-      await expect(page.getByRole('button', { name: 'إعراب الكلمة' })).toBeVisible({ timeout: 1000 });
+      await expect(page.getByRole('tab', { name: 'الكلمة', exact: true })).toBeVisible({ timeout: 1000 });
     }).toPass({ timeout: 20_000 });
+    // The long press opens the ayah's buttons; the tab turns to the pressed word's (owner, 2026-11-19).
+    await page.getByRole('tab', { name: 'الكلمة', exact: true }).click();
     await page.getByRole('button', { name: 'إعراب الكلمة' }).click();
     const sheet = page.getByRole('dialog', { name: 'إعراب الكلمة' });
     await expect(sheet.getByRole('tab', { name: 'كُفُوًا' })).toHaveAttribute('aria-selected', 'true');
     await expect(sheet.getByText('خبر يكن')).toBeVisible();
     await expect(sheet.getByRole('link', { name: /التبيان في إعراب القرآن للعكبري، ص ١٣٠٩/ })).toBeVisible();
+    await noErrorPage(page);
+  });
+
+  test('dragging after a long press selects several words, and «نسيت» marks each one', async ({ page }) => {
+    await page.goto('/quran/read/1');
+    const from = page.getByText('ٱلۡحَمۡدُ', { exact: true }).first();
+    const to = page.getByText('رَبِّ', { exact: true }).first();
+    await expect(to).toBeVisible();
+    await expect(async () => {
+      const a = (await from.boundingBox())!, b = (await to.boundingBox())!;
+      await page.mouse.move(a.x + a.width / 2, a.y + a.height / 2);
+      await page.mouse.down();
+      await page.waitForTimeout(900);
+      for (let step = 1; step <= 6; step++) await page.mouse.move(a.x + a.width / 2 + (b.x - a.x) * step / 6, a.y + a.height / 2, { steps: 2 });
+      await page.mouse.up();
+      await expect(page.getByRole('tab', { name: 'الكلمات', exact: true })).toHaveAttribute('aria-selected', 'true', { timeout: 1000 });
+    }).toPass({ timeout: 20_000 });
+    await expect(page.getByRole('dialog', { name: '«ٱلۡحَمۡدُ لِلَّهِ رَبِّ»' })).toBeVisible();
+    await page.getByRole('button', { name: 'نسيت هذه الكلمات', exact: true }).click();
+    await expect.poll(() => page.evaluate(() => Object.keys(JSON.parse(localStorage.getItem('ayah-forgot') ?? '{}')).sort())).toEqual(['1:2:0', '1:2:1', '1:2:2']);
     await noErrorPage(page);
   });
 

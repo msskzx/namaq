@@ -34,7 +34,7 @@ import { useNow } from '@/components/utilities/Utilities';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
 import { continuePage, readFasilas, serverFasilas, subscribeFasilas } from '@shared/readingMarks';
-import { ayahBookmarkId, ayahHref, markForgotten, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
+import { ayahBookmarkId, ayahHref, markAyah, markForgotten, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { isMemorized, memorizedFilters, memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized, type Memorized } from '@shared/memorized';
 import { FEED_QUIZ_NAMES, feedQuizSeed, OPENINGS, openingSurah, type FeedQuizKind } from '@shared/quiz/feedQuiz';
 import { activeInterests, INTERESTS, pickedInterests } from '@shared/interests';
@@ -214,7 +214,9 @@ const RECALL_WRITE = 'recall-write';
  * reader. A forgotten ayah that is due comes with the review link and «تذكّرتها» rests it; an ayah of the day from what is
  * memorized (`review` absent) has «نسيتها» too.
  */
-function ForgottenPost({ ayah, review, title = 'هل تذكرها؟' }: { ayah: string; review?: string; title?: string }) {
+function ForgottenPost({ ayah: mark, review, title = 'هل تذكرها؟' }: { ayah: string; review?: string; title?: string }) {
+  // A forgotten word is asked with its ayah, until the website asks the word alone as the app does.
+  const ayah = markAyah(mark);
   const [, setGone] = useState(0);
   const [writing, setWriting] = useState(false);
   useEffect(() => { try { setWriting(localStorage.getItem(RECALL_WRITE) === 'true'); } catch {} }, []);
@@ -222,7 +224,7 @@ function ForgottenPost({ ayah, review, title = 'هل تذكرها؟' }: { ayah: 
   const [surah, number] = ayah.split(':').map(Number);
   if (!review && recalled.has(ayah)) return null;
   return <Recall key={`${ayah}-${writing}`} ayah={ayah} title={title} sub={`${names[surah]} ${num(number)}`} writing={writing} onWriting={toggleWriting}>
-    <Action Icon={Check} label="تذكّرتها" tone="green" onClick={() => { if (review) rememberAyah(ayah); else { recalled.add(ayah); setGone(n => n + 1); } }} />
+    <Action Icon={Check} label="تذكّرتها" tone="green" onClick={() => { if (review) rememberAyah(mark); else { recalled.add(ayah); setGone(n => n + 1); } }} />
     {!review && <Action Icon={LightbulbOff} label="نسيتها" onClick={() => { recalled.add(ayah); markForgotten(ayah); setGone(n => n + 1); }} />}
     {review && <Action Icon={EyeOff} label="راجع ما نسيت" href={review} />}
     <Action Icon={BookOpen} label="في المصحف" href={ayahHref(ayah)} />

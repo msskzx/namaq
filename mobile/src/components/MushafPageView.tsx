@@ -5,6 +5,7 @@ import { Text } from '@/ui/Text';
 import type { MushafPage, WordGroup } from '@shared/quran/readerPage';
 import { isSajda, juzName, quarterLabel } from '@shared/quran/mushafMarks';
 import { num } from '@shared/quran/arabicNumber';
+import { wordAtPoint } from '@shared/quran/selection';
 import type { PageModel, reciteView } from '@shared/quran/recitePage';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { breakLines, FLOW_LINE, flowSize } from '@/lib/pageZoom';
@@ -41,13 +42,16 @@ type Props = {
   mark?: string | null;
   /** The ayah being recited aloud (listening): a band in the accent, over the selection. */
   playing?: string | null;
-  /** The word of the marked ayah a long press landed on (its place in the ayah, from 0, the ۞ mark not counted): lit inside the ayah's band. */
-  markWord?: number | null;
+  /** The words of the marked ayah a long press selected (their places in the ayah, from 0, the ۞ mark not counted): lit inside the ayah's band. */
+  markWords?: { from: number; to: number } | null;
   recite?: Recite | null;
   forgot: Readonly<Record<string, unknown>>;
   saved: ReadonlySet<string>;
   /** A touch on a word gives its ayah and the word's place in it (from 0, the ۞ mark not counted); a touch elsewhere on the page (or on a hidden word) gives null. */
   onTouch: (touch: Touch, key: string | null, x: number, y: number, word?: number) => void;
+  /** After a long press on a word, the finger dragged over its ayah's words: the pressed word to the one under the finger,
+   * and where the finger is; `done` when it lifts (owner, 2026-11-19: several words are selected this way). */
+  onSelect?: (key: string, anchor: number, now: number, x: number, y: number, done: boolean) => void;
   /** Write mode: the next ayah's words to write (by place in the ayah, from 0), what each holds, and the box being written; a tap on a box picks it. */
   write?: Write | null;
   /** The last written ayah once shown: its written words, right ones green and wrong ones amber. */
@@ -78,8 +82,8 @@ export type Checked = { key: string; right: number[]; wrong: number[]; typed: Re
 
 const tint = (hex: string, alpha: number) => `${hex}${Math.round(alpha * 255).toString(16).padStart(2, '0')}`;
 
-function Word({ press, onLayout, children }: { press?: object; onLayout?: (event: LayoutChangeEvent) => void; children: React.ReactNode }) {
-  return press ? <Pressable {...press} onLayout={onLayout}>{children}</Pressable> : <View onLayout={onLayout}>{children}</View>;
+function Word({ press, onLayout, hold, children }: { press?: object; onLayout?: (event: LayoutChangeEvent) => void; hold?: (view: ComponentRef<typeof View> | null) => void; children: React.ReactNode }) {
+  return press ? <Pressable ref={hold} {...press} onLayout={onLayout}>{children}</Pressable> : <View onLayout={onLayout}>{children}</View>;
 }
 
 type Box = { x: number; y: number; w: number; h: number };
@@ -141,7 +145,7 @@ export function Mistyped({ text, size, palette }: { text: string; size: number; 
 
 const groupText = (word: string, marks: number[]) => `${word}${marks.map(end => `${word ? ' ' : ''}${num(end)}`).join('')}`;
 
-function MushafPageView({ page, data, model, palette, width, height, top, names, mark, playing = null, markWord = null, recite, forgot, saved, onTouch, write, checked, zoom = 1, onHeight, focus, onFocus, slice, anonymous = false }: Props) {
+function MushafPageView({ page, data, model, palette, width, height, top, names, mark, playing = null, markWords = null, recite, forgot, saved, onTouch, onSelect, write, checked, zoom = 1, onHeight, focus, onFocus, slice, anonymous = false }: Props) {
   const flowing = zoom > 1;
   // The body's size at the printed page and with flowing text, each kept, so a pinch back to the printed page sets its
   // lines at once at the size they had (record R0058).
@@ -257,9 +261,40 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
   const veiled = { color: 'transparent', backgroundColor: tint(palette.muted, 0.1), borderRadius: 4 } as const;
   const upcoming = { backgroundColor: palette.paper } as const;
   const small = Math.max(11, width * 0.026);
+  // Each pressable word by its ayah and place, so a drag after a long press can tell which word the finger is on.
+  const wordViews = useRef<Record<string, ComponentRef<typeof View> | null>>({});
+  const holdWord = (key: string, word: number) => (view: ComponentRef<typeof View> | null) => { wordViews.current[`${key}:${word}`] = view; };
+  /** The drag after a long press: the pressed word, the one under the finger now, and the ayah's words' boxes on screen. */
+  const dragging = useRef<{ key: string; anchor: number; now: number; boxes: (Box | null)[] } | null>(null);
+  const startDrag = (key: string, anchor: number) => {
+    const views = Object.entries(wordViews.current).filter(([id, view]) => view && id.startsWith(`${key}:`) && id.split(':').length === 3);
+    const session = { key, anchor, now: anchor, boxes: [] as (Box | null)[] };
+    dragging.current = session;
+    for (const [id, view] of views) {
+      const at = Number(id.split(':')[2]);
+      view!.measure((_x: number, _y: number, w: number, h: number, x: number, y: number) => { session.boxes[at] = { x, y, w, h }; });
+    }
+  };
   const press = (key: string | null, word?: number) => ({
     onPress: (event: GestureResponderEvent) => onTouch('tap', key, event.nativeEvent.pageX, event.nativeEvent.pageY, word),
-    onLongPress: (event: GestureResponderEvent) => onTouch('long', key, event.nativeEvent.pageX, event.nativeEvent.pageY, word),
+    onLongPress: (event: GestureResponderEvent) => {
+      if (key && word !== undefined && onSelect) startDrag(key, word);
+      onTouch('long', key, event.nativeEvent.pageX, event.nativeEvent.pageY, word);
+    },
+    onPressMove: (event: GestureResponderEvent) => {
+      const session = dragging.current;
+      if (!session) return;
+      const now = wordAtPoint(Array.from(session.boxes, box => box ?? null), event.nativeEvent.pageX, event.nativeEvent.pageY);
+      if (now === null || now === session.now) return;
+      session.now = now;
+      onSelect?.(session.key, session.anchor, now, event.nativeEvent.pageX, event.nativeEvent.pageY, false);
+    },
+    onPressOut: (event: GestureResponderEvent) => {
+      const session = dragging.current;
+      if (!session) return;
+      dragging.current = null;
+      onSelect?.(session.key, session.anchor, session.now, event.nativeEvent.pageX, event.nativeEvent.pageY, true);
+    },
     delayLongPress: 500,
   });
 
@@ -378,8 +413,9 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                 // The word's place in its ayah, past a titled surah's title and basmala steps (write mode counts words only).
                 const rel = word - (group.ayah === 1 && group.surah !== undefined ? titled?.get(group.surah) ?? 0 : 0);
                 // A selected ayah sits on a neutral band and keeps its ink (owner, 2026-11-14); a forgotten one on a faint accent band.
-                const band: Band = wordHidden ? null : playing === key ? 'playing' : mark === key && markWord === at ? 'mark' : forgot[key] || (at !== undefined && forgot[`${key}:${at}`]) ? 'forgot' : mark === key ? 'mark' : null;
-                return { group, key, wordHidden, rel, at, band, word: band === 'mark' && markWord !== null && at === markWord };
+                const lit = mark === key && !!markWords && at !== undefined && at >= markWords.from && at <= markWords.to;
+                const band: Band = wordHidden ? null : playing === key ? 'playing' : lit ? 'mark' : forgot[key] || (at !== undefined && forgot[`${key}:${at}`]) ? 'forgot' : mark === key ? 'mark' : null;
+                return { group, key, wordHidden, rel, at, band, word: band === 'mark' && lit };
               });
               const holdsFocus = flowing && !!focus && !focused.taken && cells.some(cell => cell.key === focus) && (focused.taken = true);
               return (
@@ -397,7 +433,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                       return (
                         // A hidden word is no target: a touch on it goes to the page, as on the website.
                         // Every word tells its place, so a band that appears later (a tap) is laid at once where the words are now.
-                        <Word key={at} press={wordHidden ? undefined : press(key, wordAt)} onLayout={place(`${row.id}:${at}`)}>
+                        <Word key={at} press={wordHidden ? undefined : press(key, wordAt)} hold={wordHidden || wordAt === undefined ? undefined : holdWord(key, wordAt)} onLayout={place(`${row.id}:${at}`)}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         {/* While hidden, the word and its ayah number are separate boxes, so an empty page still shows where each ayah ends. */}
                         {writing && write.targets.includes(rel)
