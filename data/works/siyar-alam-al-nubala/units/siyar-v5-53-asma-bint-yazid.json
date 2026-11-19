@@ -66,8 +66,8 @@
       "volume": 5,
       "page": "296",
       "layer": "MAIN",
-      "exact": "وَأُمُّ سَلَمَةَ",
-      "prefix": "أُمُّ عَامِرٍ * (ع)"
+      "exact": "أُمُّ سَلَمَةَ",
+      "prefix": "أُمُّ عَامِرٍ * (ع) وَ"
     },
     {
       "id": "sp_ay_muadh_n",
@@ -396,18 +396,6 @@
         "spans": [
           "sp_ay_kunya2"
         ]
-      },
-      "restsOn": [
-        "st_ay_line"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_ay_muadh",
-      "subject": "m_ay_l",
-      "predicate": "PATERNAL_COUSIN",
-      "value": {
-        "object": "m_ay_muadh"
       },
       "restsOn": [
         "st_ay_line"

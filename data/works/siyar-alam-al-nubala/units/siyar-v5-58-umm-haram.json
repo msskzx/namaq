@@ -78,6 +78,14 @@
       "prefix": "وَزَوْجَةُ"
     },
     {
+      "id": "sp_uh_awwalin_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "317",
+      "layer": "MAIN",
+      "exact": "قُلْتُ: يَا رَسُوْلَ اللهِ! ادْعُ اللهَ أَنْ يَجْعَلَنِي مِنْهُم. قَالَ:"
+    },
+    {
       "id": "sp_uh_awwalin_isnad",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 5,
@@ -91,7 +99,7 @@
       "volume": 5,
       "page": "317",
       "layer": "MAIN",
-      "exact": "قُلْتُ: يَا رَسُوْلَ اللهِ! ادْعُ اللهَ أَنْ يَجْعَلَنِي مِنْهُم. قَالَ: (أَنْتِ مِنَ الأَوَّلِيْنَ)"
+      "exact": "أَنْتِ مِنَ الأَوَّلِيْنَ"
     }
   ],
   "reports": [
@@ -111,6 +119,9 @@
       "unit": "siyar-v5-58-umm-haram",
       "ordinal": 2,
       "voice": "TRANSMITTED",
+      "frame": [
+        "sp_uh_awwalin_frame"
+      ],
       "isnadSpan": "sp_uh_awwalin_isnad",
       "origin": {
         "mention": "m_uh_awwalin_by"
@@ -183,14 +194,14 @@
     },
     {
       "id": "m_uh_awwalin_by",
-      "parent": "sp_uh_awwalin_isnad",
-      "exact": "أُمُّ حَرَامٍ",
+      "parent": "sp_uh_awwalin_frame",
+      "exact": "رَسُوْلَ اللهِ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
     {
       "id": "m_uh_aw",
-      "parent": "sp_uh_awwalin",
+      "parent": "sp_uh_awwalin_frame",
       "exact": "يَجْعَلَنِي",
       "occurrence": 1,
       "role": "SUBJECT"
@@ -215,7 +226,7 @@
       "agent": "milhan-ibn-khalid-al-najjari",
       "basis": [
         {
-          "span": "sp_uh_name2",
+          "span": "sp_uh_father_n",
           "role": "NASAB"
         }
       ],

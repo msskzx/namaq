@@ -121,6 +121,14 @@
       "prefix": "ابْنُهَا"
     },
     {
+      "id": "sp_hn_ajarna_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "313",
+      "layer": "MAIN",
+      "exact": "فَقُلْتُ: يَا رَسُوْلَ اللهِ! زَعَمَ ابْنُ أُمِّي"
+    },
+    {
       "id": "sp_hn_ajarna_isnad",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 5,
@@ -154,6 +162,9 @@
       "unit": "siyar-v5-56-umm-hani",
       "ordinal": 2,
       "voice": "TRANSMITTED",
+      "frame": [
+        "sp_hn_ajarna_frame"
+      ],
       "isnadSpan": "sp_hn_ajarna_isnad",
       "origin": {
         "mention": "m_hn_ajarna_by"
@@ -251,7 +262,7 @@
     {
       "id": "m_hn_jaafar",
       "parent": "sp_hn_ukht",
-      "exact": "وَجَعْفَرٍ",
+      "exact": "جَعْفَرٍ",
       "occurrence": 1,
       "role": "REFERENT"
     },
@@ -299,8 +310,8 @@
     },
     {
       "id": "m_hn_ajarna_by",
-      "parent": "sp_hn_ajarna_isnad",
-      "exact": "أُمَّ هَانِئ",
+      "parent": "sp_hn_ajarna_frame",
+      "exact": "رَسُوْلَ اللهِ",
       "occurrence": 1,
       "role": "SPEAKER"
     },

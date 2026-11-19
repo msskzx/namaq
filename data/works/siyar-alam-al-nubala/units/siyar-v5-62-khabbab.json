@@ -139,6 +139,15 @@
       "prefix": "وَقِيْلَ: عَاشَ"
     },
     {
+      "id": "sp_kb_majlis_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "324",
+      "layer": "MAIN",
+      "exact": "قَالَ عُمَرُ لِخَبَّابٍ:",
+      "prefix": "قَالَ:"
+    },
+    {
       "id": "sp_kb_majlis_isnad",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 5,
@@ -192,6 +201,9 @@
       "unit": "siyar-v5-62-khabbab",
       "ordinal": 4,
       "voice": "TRANSMITTED",
+      "frame": [
+        "sp_kb_majlis_frame"
+      ],
       "isnadSpan": "sp_kb_majlis_isnad",
       "origin": {
         "mention": "m_kb_majlis_by"
@@ -331,8 +343,8 @@
     },
     {
       "id": "m_kb_majlis_by",
-      "parent": "sp_kb_majlis_isnad",
-      "exact": "أَبِي لَيْلَى الكِنْدِيِّ",
+      "parent": "sp_kb_majlis_frame",
+      "exact": "عُمَرُ",
       "occurrence": 1,
       "role": "SPEAKER"
     },

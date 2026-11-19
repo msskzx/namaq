@@ -41,6 +41,23 @@
       "page": "318",
       "layer": "MAIN",
       "exact": "وَهِيَ الَّتِي غَسَّلَتْ بِنْتَ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- زَيْنَبَ"
+    },
+    {
+      "id": "sp_ut_n_kaab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "318",
+      "layer": "MAIN",
+      "exact": "وَقِيْلَ: نَسِيْبَةُ بِنْتُ كَعْبٍ"
+    },
+    {
+      "id": "sp_ut_n_kaab_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "318",
+      "layer": "MAIN",
+      "exact": "نَسِيْبَةُ بِنْتُ كَعْبٍ",
+      "prefix": "وَقِيْلَ:"
     }
   ],
   "reports": [
@@ -54,6 +71,16 @@
         "workAuthor": true
       },
       "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ut_n_kaab",
+      "unit": "siyar-v5-59-umm-atiyyah",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_ut_n_kaab_by"
+      },
+      "chainState": "DEFERRED"
     }
   ],
   "statements": [
@@ -72,6 +99,14 @@
         "sp_ut_ghasl"
       ],
       "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ut_n_kaab",
+      "report": "r_ut_n_kaab",
+      "spans": [
+        "sp_ut_n_kaab"
+      ],
+      "role": "TRANSMITTED"
     }
   ],
   "mentions": [
@@ -86,6 +121,20 @@
       "id": "m_ut_g",
       "parent": "sp_ut_ghasl",
       "exact": "وَهِيَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ut_n_kaab_by",
+      "parent": "sp_ut_n_kaab",
+      "exact": "قِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ut_n2",
+      "parent": "sp_ut_n_kaab",
+      "exact": "نَسِيْبَةُ",
       "occurrence": 1,
       "role": "SUBJECT"
     }
@@ -106,6 +155,18 @@
     {
       "id": "i_ut_g",
       "mention": "m_ut_g",
+      "agent": "umm-atiyyah-al-ansariyyah",
+      "basis": [
+        {
+          "span": "sp_ut_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ut_n2",
+      "mention": "m_ut_n2",
       "agent": "umm-atiyyah-al-ansariyyah",
       "basis": [
         {
@@ -171,6 +232,20 @@
       },
       "restsOn": [
         "st_ut_ghasl"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ut_name2",
+      "subject": "m_ut_n2",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ut_n_kaab_v"
+        ]
+      },
+      "restsOn": [
+        "st_ut_n_kaab"
       ],
       "status": "PROPOSED"
     }

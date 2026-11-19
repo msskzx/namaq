@@ -193,16 +193,49 @@
       "volume": 5,
       "page": "306",
       "layer": "MAIN",
-      "exact": "لَمْ يَكُنْ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَدْخُلُ بَيْتاً غَيْرَ بَيْتِ أُمِّ سُلَيْمٍ، فَقِيْلَ لَهُ، فَقَالَ: (إِنِّي أَرْحَمُهَا، قُتِلَ"
+      "exact": "لَمْ يَكُنْ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَدْخُلُ بَيْتاً غَيْرَ بَيْتِ أُمِّ سُلَيْمٍ"
     },
     {
-      "id": "sp_sl_arham_1",
+      "id": "sp_sl_arham2_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "306",
+      "layer": "MAIN",
+      "exact": "لَمْ يَكُنْ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- يَدْخُلُ بَيْتاً غَيْرَ بَيْتِ أُمِّ سُلَيْمٍ، فَقِيْلَ لَهُ، فَقَالَ:"
+    },
+    {
+      "id": "sp_sl_arham2_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "306",
+      "layer": "MAIN",
+      "exact": "هَمَّامٌ: حَدَّثَنَا إِسْحَاقُ بنُ عَبْدِ اللهِ، عَنْ أَنَسٍ"
+    },
+    {
+      "id": "sp_sl_arham2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "306",
+      "layer": "MAIN",
+      "exact": "إِنِّي أَرْحَمُهَا، قُتِلَ"
+    },
+    {
+      "id": "sp_sl_arham2_1",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 5,
       "page": "307",
       "layer": "MAIN",
       "exact": "أَخُوْهَا مَعِي",
       "suffix": ")"
+    },
+    {
+      "id": "sp_sl_jannah_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "309",
+      "layer": "MAIN",
+      "exact": "قَالَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-:",
+      "prefix": "عَنْ أَنَسٍ، قَالَ:"
     },
     {
       "id": "sp_sl_jannah_isnad",
@@ -266,10 +299,27 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_sl_jannah",
+      "id": "r_sl_arham2",
       "unit": "siyar-v5-55-umm-sulaym",
       "ordinal": 5,
       "voice": "TRANSMITTED",
+      "frame": [
+        "sp_sl_arham2_frame"
+      ],
+      "isnadSpan": "sp_sl_arham2_isnad",
+      "origin": {
+        "mention": "m_sl_arham2_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_sl_jannah",
+      "unit": "siyar-v5-55-umm-sulaym",
+      "ordinal": 6,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_sl_jannah_frame"
+      ],
       "isnadSpan": "sp_sl_jannah_isnad",
       "origin": {
         "mention": "m_sl_jannah_by"
@@ -339,8 +389,16 @@
       "id": "st_sl_arham",
       "report": "r_sl_arham",
       "spans": [
-        "sp_sl_arham",
-        "sp_sl_arham_1"
+        "sp_sl_arham"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_sl_arham2",
+      "report": "r_sl_arham2",
+      "spans": [
+        "sp_sl_arham2",
+        "sp_sl_arham2_1"
       ],
       "role": "TRANSMITTED"
     },
@@ -495,9 +553,23 @@
       "role": "SUBJECT"
     },
     {
+      "id": "m_sl_arham2_by",
+      "parent": "sp_sl_arham2_frame",
+      "exact": "رَسُوْلُ اللهِ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sl_arham2",
+      "parent": "sp_sl_arham2",
+      "exact": "أَرْحَمُهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
       "id": "m_sl_jannah_by",
-      "parent": "sp_sl_jannah_isnad",
-      "exact": "أَنَسٍ",
+      "parent": "sp_sl_jannah_frame",
+      "exact": "النَّبِيُّ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
@@ -705,6 +777,18 @@
     {
       "id": "i_sl_arham",
       "mention": "m_sl_arham",
+      "agent": "umm-sulaym-al-ghumaysa",
+      "basis": [
+        {
+          "span": "sp_sl_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sl_arham2",
+      "mention": "m_sl_arham2",
       "agent": "umm-sulaym-al-ghumaysa",
       "basis": [
         {
@@ -952,12 +1036,26 @@
       "predicate": "virtue",
       "value": {
         "spans": [
-          "sp_sl_arham",
-          "sp_sl_arham_1"
+          "sp_sl_arham"
         ]
       },
       "restsOn": [
         "st_sl_arham"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sl_v_arham2",
+      "subject": "m_sl_arham2",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_sl_arham2",
+          "sp_sl_arham2_1"
+        ]
+      },
+      "restsOn": [
+        "st_sl_arham2"
       ],
       "status": "PROPOSED"
     },

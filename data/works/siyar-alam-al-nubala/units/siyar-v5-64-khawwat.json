@@ -493,20 +493,6 @@
         "st_kw_death"
       ],
       "status": "PROPOSED"
-    },
-    {
-      "id": "a_kw_look",
-      "subject": "m_kw_d",
-      "predicate": "appearance",
-      "value": {
-        "spans": [
-          "sp_kw_rabah"
-        ]
-      },
-      "restsOn": [
-        "st_kw_death"
-      ],
-      "status": "PROPOSED"
     }
   ]
 }
