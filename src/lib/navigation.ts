@@ -49,6 +49,7 @@ export const EXPERIMENT_SECTIONS: NavSection[] = [
   ] }] },
   { href: '/biographies', label: { ar: 'التراجم', en: 'Biographies' }, groups: [
     { title: { ar: 'الأشخاص والأحداث', en: 'People and events' }, items: [
+      { href: '/stories', label: { ar: 'قصص السيرة', en: 'Sira stories' }, purpose: { ar: 'القصة كاملة كما يرويها الكتاب، بإسنادها', en: 'Each story whole as the book tells it, with its chain' } },
       { href: '/people', label: { ar: 'الأعلام', en: 'Notable people' }, purpose: { ar: 'الأسماء والأنساب والأحوال مع مصادرها', en: 'Names, lineage and lives, with their sources' } },
       { href: '/titles', label: { ar: 'الألقاب', en: 'Titles' }, purpose: { ar: 'الألقاب ومن عُرف بها', en: 'Titles and the people known by them' } },
       { href: '/events', label: { ar: 'الأحداث', en: 'Events' }, purpose: { ar: 'الأحداث والغزوات ومن شهدها', en: 'Events and battles, and who took part' } },
@@ -96,7 +97,7 @@ export const NAV_SECTIONS: (NavSection & { paths?: string[] })[] = [
   { href: '/quran', label: { ar: 'القرآن', en: 'Quran' }, groups: [], paths: QURAN_HUB.map(tool => tool.href) },
   { href: '/hadith', label: { ar: 'الحديث', en: 'Hadith' }, groups: [] },
   { href: '/', label: { ar: 'الرئيسية', en: 'Home' }, groups: [], paths: [LIBRARY, '/search', '/utilities'] },
-  { href: '/biographies', label: { ar: 'التراجم', en: 'Biographies' }, groups: [], paths: ['/biographies', '/people', '/titles', '/events', '/battles', '/graphs', '/nasab'] },
+  { href: '/biographies', label: { ar: 'التراجم', en: 'Biographies' }, groups: [], paths: ['/biographies', '/stories', '/people', '/titles', '/events', '/battles', '/graphs', '/nasab'] },
   { href: '/quizzes', label: { ar: 'الاختبارات', en: 'Quizzes' }, groups: [] },
 ];
 

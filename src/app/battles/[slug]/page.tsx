@@ -18,12 +18,19 @@ import { PersonBase } from "@/types/person";
 import { Battle } from "@/types/battle";
 import { fetcher } from '@/lib/swr';
 import ErrorMessage from '@/components/common/ErrorMessage';
+import BattleMoments from '@/components/battles/BattleMoments';
+import appMoments from '@shared/data/battles/moments.json';
+import type { AppMomentBattle } from '@shared/battles/battle';
+
+// The key moments the app's battle page shows (owner, 2026-11-19: every phone feature on the website too).
+const MOMENTS = appMoments as AppMomentBattle[];
 
 export default function BattleDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const { language } = useLanguage();
   const t = translations[language];
   const { data: battle, error, isLoading } = useSWR<Battle>(slug ? `/api/battles/${slug}` : null, fetcher);
+  const moments = MOMENTS.find(entry => entry.slug === slug);
 
   return (
     <div className="min-h-screen bg-white dark:bg-black" dir={language === 'ar' ? 'rtl' : 'ltr'}>
@@ -69,6 +76,7 @@ export default function BattleDetailPage() {
                   </div>
                 )}
                 <BattleCounts battle={battle} />
+                {moments && <div className="mt-6"><BattleMoments moments={moments.moments} kind={moments.kind?.value} /></div>}
                 {battle.description && (
                   <div className="mt-6">
                     <p className="text-gray-800 dark:text-gray-200 text-2xl/8 text-justify ">{battle.description}</p>

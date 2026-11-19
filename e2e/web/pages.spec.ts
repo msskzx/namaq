@@ -176,8 +176,9 @@ test.describe('pages with the database', () => {
 
   test('the home feed asks a question of every Quran quiz kind in turn, each card with the quiz buttons', async ({ page }) => {
     test.setTimeout(120_000);
-    // Batches take the kinds in turn, one a batch; five batches on the days either side of today hold all seven, well inside
+    // The Quran interests' questions take turns, one a batch (shared/interests.ts); nine batches hold all eight, well inside
     // the server's two days.
+    await page.addInitScript(() => localStorage.setItem('interests', '["hifz","mutashabih","tajwid"]'));
     const kinds = ['في أي سورة؟', 'أكمل المتشابهات', 'سمّع بقية الآية', 'أوائل السور', 'التحفة: أكمل البيت', 'التحفة: البيت التالي', 'التحفة: حكم الحرف'];
     const seen = new Set<string>();
     for (const days of [-1, 1]) {
@@ -185,7 +186,7 @@ test.describe('pages with the database', () => {
       await page.goto('/');
       await expect(async () => {
         await page.evaluate(() => window.scrollBy(0, 3000));
-        expect(await page.getByRole('link', { name: 'افتح الشجرة في متشابهات القرآن' }).count()).toBeGreaterThan(5);
+        expect(await page.getByRole('link', { name: 'افتح الشجرة في متشابهات القرآن' }).count()).toBeGreaterThan(8);
       }).toPass({ timeout: 40_000 });
       // The first five question cards, each a kind of its own.
       const here = new Set<string>();
@@ -202,13 +203,14 @@ test.describe('pages with the database', () => {
 
   test('a home «which surah» card shows the ayah number and marks the surah picked', async ({ page }) => {
     test.setTimeout(120_000);
+    await page.addInitScript(() => localStorage.setItem('interests', '["hifz","mutashabih","tajwid"]'));
     const heading = page.getByRole('heading', { name: 'في أي سورة؟', exact: true });
     for (const days of [-1, 1]) {
       await page.clock.setFixedTime(new Date(Date.now() + days * 86_400_000));
       await page.goto('/');
       await expect(async () => {
         await page.evaluate(() => window.scrollBy(0, 3000));
-        expect(await page.getByRole('link', { name: 'افتح الشجرة في متشابهات القرآن' }).count()).toBeGreaterThan(5);
+        expect(await page.getByRole('link', { name: 'افتح الشجرة في متشابهات القرآن' }).count()).toBeGreaterThan(8);
       }).toPass({ timeout: 40_000 });
       if (await heading.count() || await heading.first().waitFor({ timeout: 10_000 }).then(() => true, () => false)) break;
     }

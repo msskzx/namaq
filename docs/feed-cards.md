@@ -65,7 +65,8 @@ A new card or quiz kind goes into an interest's `cards` or `quizzes` in the same
   are kept for the visit, and a card taken out leaves a line with «تراجع».
 - Today's juz, the forgotten ayat, books, the prayer card and saved items stay outside the rounds.
 - The chips over the feed: «لك» and each interest picked; a tap shows that interest's cards alone.
-- The website reads the same picks; its picker waits (later).
+- The website has the same picker (first open, settings, the chip row and its pencil, `src/components/homepage/Interests.tsx`);
+  «فاجئني» is the app's alone, since the website's feed has no surprise card.
 
 ## Cards to add
 

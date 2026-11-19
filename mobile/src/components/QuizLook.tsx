@@ -28,12 +28,12 @@ import { battleOf } from '@/lib/battles';
 import { GharibBody } from './GharibSheet';
 import { BalaghaBody } from './BalaghaSheet';
 import { IrabBody } from './IrabSheet';
-import { QiraatWord, SadiText } from './AyahPreviewSheet';
+import { SadiText } from './AyahPreviewSheet';
+import QiraatPlace from './QiraatPlace';
 import { BookList } from './Books';
 import ExternalLink from '@/ui/ExternalLink';
 import { bookState, useBooks } from '@/lib/books';
 import { surahNames } from '@/lib/branches';
-import { qiraatOf } from '@shared/quran/qiraatData';
 import { QIRAAT_SOURCE } from '@shared/quran/qiraat';
 import { tafsirSadiOf } from '@shared/quran/tafsirSadiData';
 import { tafsirSadiCredit, tafsirSadiPage } from '@shared/quran/tafsirSadi';
@@ -188,14 +188,14 @@ export function LookView({ look, shown, palette }: { look: QuizLook; shown: bool
     case 'virtues': return <VirtuesLook slugs={look.slugs} mark={shown ? look.mark : undefined} palette={palette} />;
     case 'terms': return <TermsLook names={look.names} mark={shown ? look.mark : undefined} palette={palette} />;
     case 'hadith': return <HadithLook mark={shown ? look.mark : undefined} palette={palette} />;
-    case 'story': { const story = storyOf(look.slug); return story ? <View style={{ gap: 14 }}><StoryView story={story} palette={palette} /></View> : null; }
+    case 'story': { const story = storyOf(look.slug); return story ? <View style={{ gap: 14 }}><StoryView story={story} palette={palette} titled /></View> : null; }
     case 'battle': { const battle = battleOf(look.slug); return battle ? <View style={{ gap: 14 }}><BattleView battle={battle} palette={palette} /></View> : null; }
     case 'word': return <View style={bleed}><GharibBody key={`${look.key}/${look.word}`} target={{ key: look.key, word: look.word }} palette={palette} /></View>;
     case 'balagha': return <View style={bleed}><BalaghaBody key={look.key} ayah={look.key} palette={palette} /></View>;
     case 'irab': return <View style={bleed}><IrabBody key={`${look.key}/${look.word}`} target={{ key: look.key, word: look.word }} palette={palette} /></View>;
     case 'qiraat': return (
       <View style={{ gap: 10 }}>
-        {qiraatOf(look.key).map(word => <QiraatWord key={word.at.join('-')} word={word} palette={palette} />)}
+        <QiraatPlace ayah={look.key} palette={palette} />
         <ExternalLink url={QIRAAT_SOURCE.url} color={palette.muted} size={14} style={{ textAlign: 'right' }}>{`المصدر: ${QIRAAT_SOURCE.name}`}</ExternalLink>
       </View>
     );

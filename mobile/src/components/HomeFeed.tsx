@@ -59,6 +59,7 @@ import RecitePill from './recite/RecitePill';
 import { useRecite } from './recite/useRecite';
 import { usePageTouch } from '@/lib/usePageTouch';
 import AyahLines, { pageWords, PageTop } from './AyahLines';
+import QiraatPlace from './QiraatPlace';
 import { pairOfDayNumber, treeOfDay } from '@/lib/daily';
 import { cardsFor, sideKeys, sideLabel } from '@/lib/compare';
 import { surahNames as shortNames } from '@/lib/branches';
@@ -85,7 +86,7 @@ import { qiraatAyat, qiraatOf } from '@shared/quran/qiraatData';
 import { singleAyahPassages, tafsirSadiOf } from '@shared/quran/tafsirSadiData';
 import { tafsirRuns } from '@shared/quran/tafsirSadi';
 import { corpusWords } from '@shared/quran/words';
-import AyahPreviewSheet, { QiraatWord } from './AyahPreviewSheet';
+import AyahPreviewSheet from './AyahPreviewSheet';
 import type { WordDifference } from '@shared/quran/qiraat';
 import BalaghaSheet from './BalaghaSheet';
 import IrabSheet from './IrabSheet';
@@ -859,9 +860,9 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
   return (
     <>
       {on && <Post palette={palette} head={<PostHead Icon={head.Icon} title={head.title} sub={[`${shortNames[surah] ?? ''} ${num(number)}`, 'source' in note ? note.source : ''].filter(Boolean).join(' · ')} palette={palette} />}
-        actions={<Action Icon={head.Icon} label={head.open} onPress={show} palette={palette} />}
+        actions={<Action Icon={head.Icon} label={head.open} onPress={kind === 'qiraat' ? () => toTab({ pathname: '/qiraat', params: { ayah: note.key, at: String(Date.now()) } }) : show} palette={palette} />}
         press={{ onPress: show, label: `${head.open}، ${shortNames[surah] ?? ''} ${num(number)}` }}>
-        <View style={{ paddingVertical: 10, gap: 6 }}>
+        {'readings' in note ? <View style={{ paddingVertical: 10 }}><QiraatPlace ayah={note.key} max={2} lines bare palette={palette} /></View> : <View style={{ paddingVertical: 10, gap: 6 }}>
           <View pointerEvents="none" style={{ paddingHorizontal: 12 }}>
             <AyahLines ayah={note.key} palette={palette} shown whole write={null} checked={null} />
           </View>
@@ -878,11 +879,7 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
             <Text style={{ color: palette.ink, fontSize: 19, lineHeight: 31, textAlign: 'right' }}>{note.role}</Text>
             <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>{note.morph}</Text>
           </View>}
-          {'readings' in note && <>
-            {note.readings.slice(0, 2).map(word => <QiraatWord key={word.at.join('-')} word={word} palette={palette} bare />)}
-            {note.readings.length > 2 && more}
-          </>}
-        </View>
+        </View>}
       </Post>}
       {(kind === 'tafsir' || kind === 'qiraat') && <AyahPreviewSheet preview={open ? { kind: kind === 'tafsir' ? 'tafsir' : 'readings', key: note.key } : null} onClose={close} palette={palette} />}
       {kind === 'balagha' && <BalaghaSheet ayah={open ? note.key : null} onClose={close} palette={palette} />}

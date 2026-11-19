@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
-import { BookOpenCheck, Check, ChevronDown, ChevronUp, X } from 'lucide-react';
+import { BookOpenCheck, Check, X } from 'lucide-react';
 import Toggle from '@/components/common/Toggle';
 import Segmented from '@/components/common/Segmented';
 import { memorizedPrefer, memorizedQuestions, readMemorized, readMemorizedAsked, serverMemorized, serverMemorizedAsked, setMemorizedAsked, subscribeMemorized, subscribeMemorizedAsked, writeMemorized, type Memorized } from '@shared/memorized';
@@ -9,6 +9,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
 import Button from '@/components/common/Button';
 import Card from '@/components/common/Card';
+import SettingRow from '@/components/common/SettingRow';
 
 /**
  * «ما أحفظه» on the website, as the app's (mobile/src/components/Memorized.tsx): the range picker, the settings section
@@ -78,20 +79,11 @@ export function MemorizedPicker() {
 /** The settings section «ما أحفظه»: what is picked (click to change), and the two preferences that use it. */
 export function MemorizedSetting() {
   const memorized = useMemorized();
-  const [open, setOpen] = useState(false);
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read, memorizedQuestions.server);
   const prefer = useSyncExternalStore(memorizedPrefer.subscribe, memorizedPrefer.read, memorizedPrefer.server);
   const label = memorizedLabel(memorized);
   return <div className="flex flex-col gap-1" dir="rtl">
-    <button type="button" aria-expanded={open} aria-label={`ما أحفظه: ${label}`} onClick={() => setOpen(value => !value)} className="flex items-center gap-3 py-1.5 text-start">
-      <BookOpenCheck size={20} aria-hidden className="text-[var(--home-accent)]" />
-      <span className="flex min-w-0 flex-1 flex-col">
-        <span className="text-[var(--home-ink)]">ما أحفظه</span>
-        <span className="truncate text-sm text-[var(--home-muted)]">{label}</span>
-      </span>
-      {open ? <ChevronUp size={18} aria-hidden /> : <ChevronDown size={18} aria-hidden />}
-    </button>
-    {open && <MemorizedPicker />}
+    <SettingRow Icon={BookOpenCheck} title="ما أحفظه" value={label}><MemorizedPicker /></SettingRow>
     <Row label="الأسئلة مما أحفظ فقط" on={questions} onChange={memorizedQuestions.write} />
     <Row label="قدّم ما أحفظه في التأمل" on={prefer} onChange={memorizedPrefer.write} />
   </div>;

@@ -1,15 +1,25 @@
 import { pageAyat, type BranchAyah } from '@shared/quran/branches';
 import type { MushafPage } from '@shared/quran/readerPage';
 import treeData from '@shared/quran/quranText/corpus';
+import { ayahWordsOf, type AyahWords } from '@shared/quran/quranText/ayahWords';
+
+let pages: Promise<MushafPage[]> | undefined;
+const loadPages = () => pages ??= Promise.all(Array.from({ length: 604 }, (_, i) => import(`../../../shared/data/quran/mushaf/${i + 1}.json`)))
+  .then(list => list.map(page => page.default as MushafPage))
+  .catch(error => { pages = undefined; throw error; });
+
+let tokens: Promise<AyahWords> | undefined;
+/** Every ayah's page words with its hizb mark «۞» kept as a token, as built data counts an ayah's words (qiraat.json). */
+export const loadAyahTokens = () => tokens ??= loadPages().then(ayahWordsOf);
 
 let source: Promise<BranchAyah[]> | undefined;
 
 /** Every ayah's words as the Madina pages print them (AGENTS.md, "Quran text"), with the corpus roots and lemmas the trees carry. */
 export function loadReaderAyat(): Promise<BranchAyah[]> {
-  return source ??= Promise.all(Array.from({ length: 604 }, (_, i) => import(`../../../shared/data/quran/mushaf/${i + 1}.json`)))
+  return source ??= loadPages()
     .then(pages => {
       const morphology = new Map(treeData.ayat.map(ayah => [ayah.key, ayah]));
-      return pageAyat(pages.map(page => page.default as MushafPage)).map(ayah => {
+      return pageAyat(pages).map(ayah => {
         const source = morphology.get(ayah.key);
         return { ...ayah, roots: source?.roots, lemmas: source?.lemmas };
       });

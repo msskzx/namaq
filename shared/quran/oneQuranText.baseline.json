@@ -101,7 +101,6 @@
     "src/app/quran/lataif/LataifView.tsx",
     "src/app/quran/openings/OpeningsView.tsx",
     "src/app/quran/prophets/[slug]/PlaceText.tsx",
-    "src/app/quran/qiraat/QiraatView.tsx",
     "src/app/quran/read/ayahPreview.ts",
     "src/app/quran/words/OppositesChart.tsx",
     "src/app/quran/words/WordCounts.tsx",

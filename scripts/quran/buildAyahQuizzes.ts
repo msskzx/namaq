@@ -9,7 +9,7 @@ import { withoutOpeningQuote } from '../../shared/quran/ayahNotes';
 import { irabWordsAt } from '../../shared/quran/irabData';
 import { corpusWords } from '../../shared/quran/words';
 import { qiraatAyat, qiraatOf } from '../../shared/quran/qiraatData';
-import { READERS, RIWAYAT } from '../../shared/quran/qiraat';
+import { wholeReaders } from '../../shared/quran/qiraat';
 import { normalizeWord } from '../../shared/quran/normalize';
 import { seededRandom } from '../../shared/quiz/feedQuiz';
 import { shuffle } from '../../shared/quiz/random';
@@ -263,6 +263,17 @@ function qiraatBank() {
       // Words whose readers differ by a rule of pronunciation the grouping does not carry: «عليهُم» of Hamza and Ya'qub,
       // Khalaf's إشمام in صراط, the eased hamza of أرأيت، ها أنتم، أئذا، أئنا (the second agent's sample review).
       if (/عليهم|اليهم|لديهم|صرط|صراط|ارايت|اريت|هانتم|ها انتم|اءذا|ائذا|اءنا|ائنا|اءن|ائن/.test(shown)) return;
+      // The alif of «أنا» before a hamza (Nafi' and Abu Ja'far) is a rule of pronunciation too.
+      if (/^و?انا$/.test(shown)) return;
+      // So is a last vowel set by what follows (second agent's review, 2026-11-19): the vowel that breaks two sukuns before a
+      // wasla (وَأَنِ / وَأَنُ), and the joined mim of a plural (جَآءَهُمُ / جَآءَهُم). Only kasra, damma or none differ there.
+      const ends = readings.map(reading => reading.text.trim().normalize('NFD').replace(/[\u06D6-\u06ED]+$/, ''));
+      const stem = (text: string) => text.replace(/[\u064B-\u0652\u06E1]+$/, '');
+      const end = (text: string) => text.slice(stem(text).length).replace(/\u0651/g, '');
+      const body = (text: string) => stem(text).replace(/[\u0670\u0652\u06E1]/g, ''); // the page's small alif, the dump's plain spelling
+      if (ends.every(text => body(text) === body(ends[0])) && ends.every(text => /^[\u064F\u0650\u0652\u06E1]?$/.test(end(text)))) {
+        if (words[difference.at[1] + 1]?.startsWith('ٱ') || /م$/.test(stem(ends[0]))) return;
+      }
       // A reading only one narrator has is most often such a rule too (إمالة، إشمام، إدغام).
       if (readings.some(reading => reading.rawis.length === 1)) return;
       // Readings apart only by how the hamza is said.
@@ -274,14 +285,7 @@ function qiraatBank() {
       // A reading told in words («بالسين»، «بإشمام الصاد زايًا») is not one to draw as Quran words.
       if (readings.some(reading => !/[\u064B-\u0652]/.test(reading.text))) return;
       if (new Set(readings.map(reading => reading.text.trim())).size !== readings.length) return;
-      const whole = READERS.flatMap((reader, i) => {
-        const own = RIWAYAT.flatMap((riwaya, n) => (riwaya.reader === reader.id ? [n + 1] : []));
-        // A reader is asked only when all his riwayat read one way and none of them the other (owner 2026-11-19): where a
-        // riwaya reads both ways (al-Bazzi at 10:16), a single reading would be half right, so he is not asked, and the
-        // answered card names that riwaya under both.
-        const reading = readings.findIndex(r => own.every(n => r.rawis.includes(n)) && readings.every(o => o === r || !own.some(n => o.rawis.includes(n))));
-        return reading < 0 ? [] : [{ reader: i, reading }];
-      });
+      const whole = wholeReaders(readings);
       reseed(`qiraat:${key}:${at}`);
       const wanted = whole.filter(({ reading }) => (reading === 0) === mushafTurn);
       const pick = (wanted.length ? wanted : whole)[Math.floor(random() * (wanted.length || whole.length))];

@@ -51,12 +51,15 @@ export function ayahText(key: string): string {
 }
 
 /** All of an ayah's words as the mushaf writes them, the ۞ mark left out, across a page turn when the ayah runs over one. */
-export function ayahMushafWords(key: string): string[] {
+export const ayahMushafWords = (key: string): string[] => ayahMushafTokens(key).filter(word => word !== '۞');
+
+/** The same with the ۞ mark kept, as the built data counts an ayah's words (qiraat.json). */
+export function ayahMushafTokens(key: string): string[] {
   const start = pageOfAyah(key);
   if (!start) return [];
   const found: string[] = [];
   for (let page = start; page <= PAGES; page++) {
-    const words = ayahWords(key, pageData(page), surahBefore(page)).filter(word => word !== '۞');
+    const words = ayahWords(key, pageData(page), surahBefore(page));
     if (!words.length) break;
     found.push(...words);
   }

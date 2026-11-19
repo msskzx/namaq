@@ -16,7 +16,7 @@ import { itqanCredit, type ItqanData } from '../quran/itqanBalagha';
 import { irabWordsAt } from '../quran/irabData';
 import { corpusWords } from '../quran/words';
 import { qiraatOf } from '../quran/qiraatData';
-import { READERS, RIWAYAT, whoReads } from '../quran/qiraat';
+import { READERS, RIWAYAT, wholeReaders, whoReads } from '../quran/qiraat';
 import { hideQuotes } from './ayahQuizText';
 import { shuffle, type Random } from './random';
 import type { ChoiceKind, ChoiceQuestion, ChoiceScope } from './choiceKinds';
@@ -38,7 +38,8 @@ export const TAFSIR_QUIZ = 'TAFSIR';
 export const BALAGHA_QUIZ = 'BALAGHA';
 export const IRAB_QUIZ = 'IRAB';
 export const QIRAAT_QUIZ = 'QIRAAT';
-export const AYAH_QUIZ_NAMES = { [TAFSIR_QUIZ]: 'لأي آية هذا التفسير؟', [BALAGHA_QUIZ]: 'ما الأسلوب؟', [IRAB_QUIZ]: 'ما إعرابها؟', [QIRAAT_QUIZ]: 'كيف يقرؤها؟' } as const;
+export const QIRAAT_WHO_QUIZ = 'QIRAAT_WHO';
+export const AYAH_QUIZ_NAMES = { [TAFSIR_QUIZ]: 'لأي آية هذا التفسير؟', [BALAGHA_QUIZ]: 'ما الأسلوب؟', [IRAB_QUIZ]: 'ما إعرابها؟', [QIRAAT_QUIZ]: 'كيف يقرؤها؟', [QIRAAT_WHO_QUIZ]: 'مَن يقرأ هكذا؟' } as const;
 
 let ayat: Map<string, BranchAyah> | undefined;
 const ayatByKey = () => (ayat ??= new Map((corpus.ayat as BranchAyah[]).map(ayah => [ayah.key, ayah])));
@@ -162,6 +163,40 @@ export const qiraatQuiz = bankKind(QIRAAT_QUIZ, () => data.qiraat, ([key, ...res
     quranChoices: true,
     whereOf: Object.fromEntries(difference.readings.map((reading, i) => [String(i), whoReads(reading, difference.readings, false)])),
     correctAnswer: String(right),
+    ayahKey: key,
+    look: { view: 'qiraat', key },
+    note: { label: 'المصدر', text: 'الموسوعة القرآنية' },
+    evidence: { claimKeys: [] },
+  };
+});
+
+/** The readers who read another way than the asked reader, each wholly one way (wholeReaders): the wrong choices of «مَن يقرأ هكذا؟». */
+const otherReaders = ([key, at, reader]: [string, number, number]) => {
+  const readings = qiraatOf(key)[at].readings;
+  const whole = wholeReaders(readings);
+  const asked = whole.find(w => w.reader === reader)?.reading;
+  return whole.filter(w => w.reading !== asked).map(w => w.reader);
+};
+
+/**
+ * مَن يقرأ هكذا؟ (owner 2026-11-19): the ayah with a word coloured, one reading of it, and readers to pick who reads it so;
+ * the same bank as «كيف يقرؤها؟», read the other way. The wrong readers read it another way, each wholly one way.
+ */
+export const qiraatWhoQuiz = bankKind(QIRAAT_WHO_QUIZ, () => data.qiraat.filter(row => otherReaders(row).length), (row, random): ChoiceQuestion => {
+  const [key, at, reader] = row;
+  const difference = qiraatOf(key)[at];
+  const reading = difference.readings.findIndex(r => r.rawis.some(n => RIWAYAT[n - 1].reader === READERS[reader].id));
+  const wrong = shuffle(otherReaders(row), random).slice(0, 3);
+  return {
+    key: `${QIRAAT_WHO_QUIZ}:${key}:${at}`,
+    family: QIRAAT_WHO_QUIZ,
+    promptArabic: 'مَن يقرأ ما لُوِّن هكذا؟',
+    quran: wordsOf(key),
+    number: Number(key.split(':')[1]),
+    marked: span(difference.at[1] - difference.at[0] + 1, difference.at[0]),
+    passage: `﴿${difference.readings[reading].text.trim()}﴾`,
+    choices: shuffle([reader, ...wrong], random).map(r => ({ value: String(r), labelArabic: READERS[r].name })),
+    correctAnswer: String(reader),
     ayahKey: key,
     look: { view: 'qiraat', key },
     note: { label: 'المصدر', text: 'الموسوعة القرآنية' },
