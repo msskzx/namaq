@@ -1,0 +1,374 @@
+{
+  "unit": {
+    "id": "siyar-v6-101-abu-asib",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٠١"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_aa_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "475",
+      "layer": "MAIN",
+      "exact": "١٠١ - أَبُو عَسِيْبٍ",
+      "suffix": " *\n\nمَوْلَى النَّبِيِّ"
+    },
+    {
+      "id": "sp_aa_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "475",
+      "layer": "MAIN",
+      "exact": "أَبُو عَسِيْبٍ",
+      "prefix": "١٠١ - "
+    },
+    {
+      "id": "sp_aa_ahmar",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "475",
+      "layer": "MAIN",
+      "exact": "يُقَالُ: اسْمُهُ أَحْمَرُ"
+    },
+    {
+      "id": "sp_aa_ahmar_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "475",
+      "layer": "MAIN",
+      "exact": "أَحْمَرُ",
+      "prefix": "يُقَالُ: اسْمُهُ "
+    },
+    {
+      "id": "sp_aa_mawla",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "475",
+      "layer": "MAIN",
+      "exact": "مَوْلَى النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - مِمَّنْ نَزَلَ البَصْرَةَ، وَطَالَ عُمُرُهُ"
+    },
+    {
+      "id": "sp_aa_salih",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "475",
+      "layer": "MAIN",
+      "exact": "وَكَانَ مِنَ الصُّلَحَاءِ العُبَّادِ"
+    },
+    {
+      "id": "sp_aa_bint",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "475",
+      "layer": "MAIN",
+      "exact": "وَمَيْمُوْنَةُ بِنْتُ أَبِي عَسِيْبٍ"
+    },
+    {
+      "id": "sp_aa_bint_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "475",
+      "layer": "MAIN",
+      "exact": "بِنْتُ أَبِي عَسِيْبٍ",
+      "prefix": "وَمَيْمُوْنَةُ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_aa0",
+      "unit": "siyar-v6-101-abu-asib",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_aa_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_aa_ahmar",
+      "unit": "siyar-v6-101-abu-asib",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_aa_ahmar_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_aa_name",
+      "report": "r_aa0",
+      "spans": [
+        "sp_aa_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_aa_ahmar",
+      "report": "r_aa_ahmar",
+      "spans": [
+        "sp_aa_ahmar"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_aa_mawla",
+      "report": "r_aa0",
+      "spans": [
+        "sp_aa_mawla"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_aa_salih",
+      "report": "r_aa0",
+      "spans": [
+        "sp_aa_salih"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_aa_bint",
+      "report": "r_aa0",
+      "spans": [
+        "sp_aa_bint"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_aa",
+      "parent": "sp_aa_name",
+      "exact": "أَبُو عَسِيْبٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_aa_ahmar_by",
+      "parent": "sp_aa_ahmar",
+      "exact": "يُقَالُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_aa_ahmar",
+      "parent": "sp_aa_ahmar",
+      "exact": "اسْمُهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aa_mawla",
+      "parent": "sp_aa_mawla",
+      "exact": "مَوْلَى",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aa_comp_prophet",
+      "parent": "sp_aa_mawla",
+      "exact": "النَّبِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aa_salih",
+      "parent": "sp_aa_salih",
+      "exact": "وَكَانَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aa_f",
+      "parent": "sp_aa_bint",
+      "exact": "أَبِي عَسِيْبٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aa_c_maymunah",
+      "parent": "sp_aa_bint",
+      "exact": "وَمَيْمُوْنَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_aa",
+      "mention": "m_aa",
+      "agent": "abu-asib",
+      "basis": [
+        {
+          "span": "sp_aa_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aa_ahmar",
+      "mention": "m_aa_ahmar",
+      "agent": "abu-asib",
+      "basis": [
+        {
+          "span": "sp_aa_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aa_mawla",
+      "mention": "m_aa_mawla",
+      "agent": "abu-asib",
+      "basis": [
+        {
+          "span": "sp_aa_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aa_salih",
+      "mention": "m_aa_salih",
+      "agent": "abu-asib",
+      "basis": [
+        {
+          "span": "sp_aa_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aa_f",
+      "mention": "m_aa_f",
+      "agent": "abu-asib",
+      "basis": [
+        {
+          "span": "sp_aa_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aa_c_maymunah",
+      "mention": "m_aa_c_maymunah",
+      "agent": "maymunah-bint-abi-asib",
+      "basis": [
+        {
+          "span": "sp_aa_bint_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_aa_name",
+      "subject": "m_aa",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_aa_name"
+        ]
+      },
+      "restsOn": [
+        "st_aa_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aa_kunya",
+      "subject": "m_aa",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_aa_name"
+        ]
+      },
+      "restsOn": [
+        "st_aa_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aa_sex",
+      "subject": "m_aa",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_aa_name"
+        ]
+      },
+      "restsOn": [
+        "st_aa_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aa_name2",
+      "subject": "m_aa_ahmar",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_aa_ahmar_n"
+        ]
+      },
+      "restsOn": [
+        "st_aa_ahmar"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aa_comp",
+      "subject": "m_aa_mawla",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_aa_comp_prophet"
+      },
+      "restsOn": [
+        "st_aa_mawla"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aa_v_salih",
+      "subject": "m_aa_salih",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_aa_salih"
+        ]
+      },
+      "restsOn": [
+        "st_aa_salih"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aa_c_maymunah_0",
+      "subject": "m_aa_c_maymunah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_aa_f"
+      },
+      "restsOn": [
+        "st_aa_bint"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

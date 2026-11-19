@@ -1,0 +1,537 @@
+{
+  "unit": {
+    "id": "siyar-v6-105-abdullah-ibn-abi-talhah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٠٥"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_at2_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "482",
+      "layer": "MAIN",
+      "exact": "١٠٥ - عَبْدُ اللهِ بنُ أَبِي طَلْحَةَ زَيْدِ بنِ سَهْلٍ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sp_at2_n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "482",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ أَبِي طَلْحَةَ زَيْدِ بنِ سَهْلٍ الأَنْصَارِيُّ",
+      "prefix": "١٠٥ - "
+    },
+    {
+      "id": "sp_at2_n2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "482",
+      "layer": "MAIN",
+      "exact": "ابْنِ الأَسْوَدِ بنِ حَرَامٍ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sp_at2_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "482",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ",
+      "prefix": "١٠٥ - "
+    },
+    {
+      "id": "sp_at2_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "482",
+      "layer": "MAIN",
+      "exact": "أَبِي طَلْحَةَ زَيْدِ بنِ سَهْلٍ",
+      "prefix": "١٠٥ - عَبْدُ اللهِ بنُ "
+    },
+    {
+      "id": "sp_at2_anas",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "482",
+      "layer": "MAIN",
+      "exact": "أَخُو أَنَسِ بنِ مَالِكٍ لأُمِّهِ"
+    },
+    {
+      "id": "sp_at2_anas_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "482",
+      "layer": "MAIN",
+      "exact": "أَنَسِ بنِ مَالِكٍ",
+      "prefix": "أَخُو "
+    },
+    {
+      "id": "sp_at2_tahnik",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "483",
+      "layer": "MAIN",
+      "exact": "وُلِدَ: فِي حَيَاةِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - فَحَنَّكَهُ"
+    },
+    {
+      "id": "sp_at2_mother",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "483",
+      "layer": "MAIN",
+      "exact": "وَهُوَ الَّذِي حَمَلَتْ بِهِ أُمُّ سُلَيْمٍ لَيْلَةَ مَاتَ وَلَدُهَا"
+    },
+    {
+      "id": "sp_at2_mother_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "483",
+      "layer": "MAIN",
+      "exact": "أُمُّ سُلَيْمٍ لَيْلَةَ مَاتَ وَلَدُهَا، فَكَتَمَتْ أَبَا طَلْحَةَ مَوْتَهُ"
+    },
+    {
+      "id": "sp_at2_ten",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "483",
+      "layer": "MAIN",
+      "exact": "فَنَشَأَ عَبْدُ اللهِ، وَقَرَأَ العِلْمَ، وَجَاءهُ عَشْرَةُ أَوْلاَدٍ قَرَؤُوا القُرْآنَ"
+    },
+    {
+      "id": "sp_at2_sons",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "483",
+      "layer": "MAIN",
+      "exact": "مِنْهُم: إِسْحَاقُ بنُ عَبْدِ اللهِ بنِ أَبِي طَلْحَةَ - شَيْخُ مَالِكٍ - وَعَبْدُ اللهِ بنُ عَبْدِ اللهِ"
+    },
+    {
+      "id": "sp_at2_sons_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "483",
+      "layer": "MAIN",
+      "exact": "إِسْحَاقُ بنُ عَبْدِ اللهِ بنِ أَبِي طَلْحَةَ",
+      "prefix": "مِنْهُم: "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_at20",
+      "unit": "siyar-v6-105-abdullah-ibn-abi-talhah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_at2_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_at2_name",
+      "report": "r_at20",
+      "spans": [
+        "sp_at2_n1",
+        "sp_at2_n2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_at2_anas",
+      "report": "r_at20",
+      "spans": [
+        "sp_at2_anas"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_at2_tahnik",
+      "report": "r_at20",
+      "spans": [
+        "sp_at2_tahnik"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_at2_mother",
+      "report": "r_at20",
+      "spans": [
+        "sp_at2_mother"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_at2_ten",
+      "report": "r_at20",
+      "spans": [
+        "sp_at2_ten"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_at2_sons",
+      "report": "r_at20",
+      "spans": [
+        "sp_at2_sons"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_at2",
+      "parent": "sp_at2_n1",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_at2_father",
+      "parent": "sp_at2_n1",
+      "exact": "أَبِي طَلْحَةَ زَيْدِ بنِ سَهْلٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_at2_b",
+      "parent": "sp_at2_anas",
+      "exact": "أَخُو",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_at2_anas",
+      "parent": "sp_at2_anas",
+      "exact": "أَنَسِ بنِ مَالِكٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_at2_t",
+      "parent": "sp_at2_tahnik",
+      "exact": "فَحَنَّكَهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_at2_comp_prophet",
+      "parent": "sp_at2_tahnik",
+      "exact": "رَسُوْلِ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_at2_m",
+      "parent": "sp_at2_mother",
+      "exact": "بِهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_at2_mother",
+      "parent": "sp_at2_mother",
+      "exact": "أُمُّ سُلَيْمٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_at2_ten",
+      "parent": "sp_at2_ten",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_at2_f",
+      "parent": "sp_at2_ten",
+      "exact": "وَجَاءهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_at2_c_ishaq",
+      "parent": "sp_at2_sons",
+      "exact": "إِسْحَاقُ بنُ عَبْدِ اللهِ بنِ أَبِي طَلْحَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_at2_c_abdullah",
+      "parent": "sp_at2_sons",
+      "exact": "وَعَبْدُ اللهِ بنُ عَبْدِ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_at2",
+      "mention": "m_at2",
+      "agent": "abdullah-ibn-abi-talhah",
+      "basis": [
+        {
+          "span": "sp_at2_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_at2_father",
+      "mention": "m_at2_father",
+      "agent": "abu-talha-al-ansari",
+      "basis": [
+        {
+          "span": "sp_at2_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_at2_b",
+      "mention": "m_at2_b",
+      "agent": "abdullah-ibn-abi-talhah",
+      "basis": [
+        {
+          "span": "sp_at2_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_at2_anas",
+      "mention": "m_at2_anas",
+      "agent": "anas-ibn-malik",
+      "basis": [
+        {
+          "span": "sp_at2_anas_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_at2_t",
+      "mention": "m_at2_t",
+      "agent": "abdullah-ibn-abi-talhah",
+      "basis": [
+        {
+          "span": "sp_at2_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_at2_m",
+      "mention": "m_at2_m",
+      "agent": "abdullah-ibn-abi-talhah",
+      "basis": [
+        {
+          "span": "sp_at2_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_at2_mother",
+      "mention": "m_at2_mother",
+      "agent": "umm-sulaym-al-ghumaysa",
+      "basis": [
+        {
+          "span": "sp_at2_mother_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_at2_ten",
+      "mention": "m_at2_ten",
+      "agent": "abdullah-ibn-abi-talhah",
+      "basis": [
+        {
+          "span": "sp_at2_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_at2_f",
+      "mention": "m_at2_f",
+      "agent": "abdullah-ibn-abi-talhah",
+      "basis": [
+        {
+          "span": "sp_at2_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_at2_c_ishaq",
+      "mention": "m_at2_c_ishaq",
+      "agent": "ishaq-ibn-abdullah-ibn-abi-talhah",
+      "basis": [
+        {
+          "span": "sp_at2_sons_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_at2_c_abdullah",
+      "mention": "m_at2_c_abdullah",
+      "agent": "abdullah-ibn-abdullah-ibn-abi-talhah",
+      "basis": [
+        {
+          "span": "sp_at2_sons_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_at2_name",
+      "subject": "m_at2",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_at2_n1",
+          "sp_at2_n2"
+        ]
+      },
+      "restsOn": [
+        "st_at2_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_at2_sex",
+      "subject": "m_at2",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_at2_sex"
+        ]
+      },
+      "restsOn": [
+        "st_at2_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_at2_father",
+      "subject": "m_at2",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_at2_father"
+      },
+      "restsOn": [
+        "st_at2_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_at2_anas",
+      "subject": "m_at2_b",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_at2_anas"
+      },
+      "restsOn": [
+        "st_at2_anas"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_at2_v_tahnik",
+      "subject": "m_at2_t",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_at2_tahnik"
+        ]
+      },
+      "restsOn": [
+        "st_at2_tahnik"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_at2_comp",
+      "subject": "m_at2_t",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_at2_comp_prophet"
+      },
+      "restsOn": [
+        "st_at2_tahnik"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_at2_mother",
+      "subject": "m_at2_m",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_at2_mother"
+      },
+      "restsOn": [
+        "st_at2_mother"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_at2_v_ten",
+      "subject": "m_at2_ten",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_at2_ten"
+        ]
+      },
+      "restsOn": [
+        "st_at2_ten"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_at2_c_ishaq_0",
+      "subject": "m_at2_c_ishaq",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_at2_f"
+      },
+      "restsOn": [
+        "st_at2_ten"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_at2_c_abdullah_0",
+      "subject": "m_at2_c_abdullah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_at2_f"
+      },
+      "restsOn": [
+        "st_at2_ten"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

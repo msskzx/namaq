@@ -1,0 +1,409 @@
+{
+  "unit": {
+    "id": "siyar-v6-106-abd-al-rahman-ibn-al-harith",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٠٦"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ah_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "484",
+      "layer": "MAIN",
+      "exact": "١٠٦ - عَبْدُ الرَّحْمَنِ بنُ الحَارِثِ بنِ هِشَامٍ المَخْزُوْمِيُّ"
+    },
+    {
+      "id": "sp_ah_n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "484",
+      "layer": "MAIN",
+      "exact": "عَبْدُ الرَّحْمَنِ بنُ الحَارِثِ بنِ هِشَامٍ المَخْزُوْمِيُّ",
+      "prefix": "١٠٦ - "
+    },
+    {
+      "id": "sp_ah_n2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "484",
+      "layer": "MAIN",
+      "exact": "ابْنِ المُغِيْرَةِ بنِ عَبْدِ اللهِ",
+      "suffix": "، أَبُو مُحَمَّدٍ"
+    },
+    {
+      "id": "sp_ah_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "484",
+      "layer": "MAIN",
+      "exact": "عَبْدُ الرَّحْمَنِ بنُ",
+      "prefix": "١٠٦ - "
+    },
+    {
+      "id": "sp_ah_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "484",
+      "layer": "MAIN",
+      "exact": "الحَارِثِ بنِ هِشَامٍ",
+      "prefix": "١٠٦ - عَبْدُ الرَّحْمَنِ بنُ "
+    },
+    {
+      "id": "sp_ah_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "484",
+      "layer": "MAIN",
+      "exact": "أَبُو مُحَمَّدٍ، مِنْ أَشْرَافِ بَنِي مَخْزُوْمٍ"
+    },
+    {
+      "id": "sp_ah_kunya_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "484",
+      "layer": "MAIN",
+      "exact": "أَبُو مُحَمَّدٍ",
+      "suffix": "، مِنْ أَشْرَافِ"
+    },
+    {
+      "id": "sp_ah_ruya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "484",
+      "layer": "MAIN",
+      "exact": "وَلاَ صُحْبَةَ لِعَبْدِ الرَّحْمَنِ، بَلْ لَهُ رُؤْيَةٌ، وَتِلْكَ صُحْبَةٌ مُقَيَّدَةٌ"
+    },
+    {
+      "id": "sp_ah_aisha",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "485",
+      "layer": "MAIN",
+      "exact": "مِنْ أَنْ يَكُوْنَ لِي عَشْرَةُ أَوْلاَدٍ مِنْ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - مِثْلِ عَبْدِ الرَّحْمَنِ بنِ الحَارِثِ"
+    },
+    {
+      "id": "sp_ah_nubala",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "485",
+      "layer": "MAIN",
+      "exact": "وَكَانَ مِنْ نُبَلاَءِ الرِّجَالِ"
+    },
+    {
+      "id": "sp_ah_son",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "484",
+      "layer": "MAIN",
+      "exact": "ابْنُهُ؛ الإِمَامُ أَبُو بَكْرٍ بنُ عَبْدِ الرَّحْمَنِ - أَحَدُ الفُقَهَاءِ السَّبْعَةِ -"
+    },
+    {
+      "id": "sp_ah_son_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "484",
+      "layer": "MAIN",
+      "exact": "ابْنُهُ؛ الإِمَامُ أَبُو بَكْرٍ بنُ عَبْدِ الرَّحْمَنِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ah0",
+      "unit": "siyar-v6-106-abd-al-rahman-ibn-al-harith",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ah_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ah_name",
+      "report": "r_ah0",
+      "spans": [
+        "sp_ah_n1",
+        "sp_ah_n2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ah_kunya",
+      "report": "r_ah0",
+      "spans": [
+        "sp_ah_kunya"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ah_ruya",
+      "report": "r_ah0",
+      "spans": [
+        "sp_ah_ruya"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ah_nubala",
+      "report": "r_ah0",
+      "spans": [
+        "sp_ah_nubala"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ah_son",
+      "report": "r_ah0",
+      "spans": [
+        "sp_ah_son"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ah",
+      "parent": "sp_ah_n1",
+      "exact": "عَبْدُ الرَّحْمَنِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ah_father",
+      "parent": "sp_ah_n1",
+      "exact": "الحَارِثِ بنِ هِشَامٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ah_k",
+      "parent": "sp_ah_kunya",
+      "exact": "أَبُو مُحَمَّدٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ah_ruya",
+      "parent": "sp_ah_ruya",
+      "exact": "لِعَبْدِ الرَّحْمَنِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ah_comp_prophet",
+      "parent": "sp_ah_aisha",
+      "exact": "رَسُوْلِ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ah_n",
+      "parent": "sp_ah_nubala",
+      "exact": "وَكَانَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ah_f",
+      "parent": "sp_ah_son",
+      "exact": "ابْنُهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ah_c_abubakr",
+      "parent": "sp_ah_son",
+      "exact": "أَبُو بَكْرٍ بنُ عَبْدِ الرَّحْمَنِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ah",
+      "mention": "m_ah",
+      "agent": "abd-al-rahman-ibn-al-harith-ibn-hisham",
+      "basis": [
+        {
+          "span": "sp_ah_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ah_father",
+      "mention": "m_ah_father",
+      "agent": "al-harith-ibn-hisham",
+      "basis": [
+        {
+          "span": "sp_ah_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ah_k",
+      "mention": "m_ah_k",
+      "agent": "abd-al-rahman-ibn-al-harith-ibn-hisham",
+      "basis": [
+        {
+          "span": "sp_ah_n2",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ah_ruya",
+      "mention": "m_ah_ruya",
+      "agent": "abd-al-rahman-ibn-al-harith-ibn-hisham",
+      "basis": [
+        {
+          "span": "sp_ah_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ah_n",
+      "mention": "m_ah_n",
+      "agent": "abd-al-rahman-ibn-al-harith-ibn-hisham",
+      "basis": [
+        {
+          "span": "sp_ah_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ah_f",
+      "mention": "m_ah_f",
+      "agent": "abd-al-rahman-ibn-al-harith-ibn-hisham",
+      "basis": [
+        {
+          "span": "sp_ah_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ah_c_abubakr",
+      "mention": "m_ah_c_abubakr",
+      "agent": "abu-bakr-ibn-abd-al-rahman",
+      "basis": [
+        {
+          "span": "sp_ah_son_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ah_name",
+      "subject": "m_ah",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ah_n1",
+          "sp_ah_n2"
+        ]
+      },
+      "restsOn": [
+        "st_ah_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ah_sex",
+      "subject": "m_ah",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ah_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ah_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ah_father",
+      "subject": "m_ah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ah_father"
+      },
+      "restsOn": [
+        "st_ah_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ah_kunya",
+      "subject": "m_ah_k",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_ah_kunya_v"
+        ]
+      },
+      "restsOn": [
+        "st_ah_kunya"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ah_comp",
+      "subject": "m_ah_ruya",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_ah_comp_prophet"
+      },
+      "restsOn": [
+        "st_ah_ruya"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ah_v_nubala",
+      "subject": "m_ah_n",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ah_nubala"
+        ]
+      },
+      "restsOn": [
+        "st_ah_nubala"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ah_c_abubakr_0",
+      "subject": "m_ah_c_abubakr",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ah_f"
+      },
+      "restsOn": [
+        "st_ah_son"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

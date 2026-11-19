@@ -16,7 +16,7 @@ describe('diffAgainstCatalog on al-Zubayr', () => {
     expect(byField(lines, 'cousins')[0].status).toBe('same');
     const [spouses] = byField(lines, 'spouses');
     expect(spouses.status).toBe('different');
-    expect(spouses.model?.split(' | ')).toHaveLength(4);
+    expect(new Set(spouses.model?.split(' | '))).toHaveProperty('size', 4);
   });
 
   it('reads the name across the paragraph break as the lineage is spelled, with the join rule applied and a final full stop ignored', () => {

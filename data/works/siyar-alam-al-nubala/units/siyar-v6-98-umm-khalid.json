@@ -1,0 +1,546 @@
+{
+  "unit": {
+    "id": "siyar-v6-98-umm-khalid",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٩٨"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_uk_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "470",
+      "layer": "MAIN",
+      "exact": "٩٨ - أُمُّ خَالِدٍ أَمَةُ بِنْتُ خَالِدٍ الأُمَوِيَّةُ"
+    },
+    {
+      "id": "sp_uk_n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "470",
+      "layer": "MAIN",
+      "exact": "أَمَةُ بِنْتُ خَالِدٍ الأُمَوِيَّةُ",
+      "prefix": "٩٨ - أُمُّ خَالِدٍ "
+    },
+    {
+      "id": "sp_uk_n2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "470",
+      "layer": "MAIN",
+      "exact": "ابْنِ أَبِي أُحَيْحَةَ سَعِيْدِ بنِ العَاصِ بنِ أُمَيَّةَ بنِ عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ القُرَشِيَّةُ"
+    },
+    {
+      "id": "sp_uk_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "470",
+      "layer": "MAIN",
+      "exact": "أَمَةُ بِنْتُ",
+      "prefix": "٩٨ - أُمُّ خَالِدٍ "
+    },
+    {
+      "id": "sp_uk_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "470",
+      "layer": "MAIN",
+      "exact": "أُمُّ خَالِدٍ",
+      "prefix": "٩٨ - "
+    },
+    {
+      "id": "sp_uk_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "470",
+      "layer": "MAIN",
+      "exact": "ابْنِ أَبِي أُحَيْحَةَ سَعِيْدِ بنِ العَاصِ",
+      "suffix": " بنِ أُمَيَّةَ بنِ عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ القُرَشِيَّةُ"
+    },
+    {
+      "id": "sp_uk_suhbah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "471",
+      "layer": "MAIN",
+      "exact": "لَهَا صُحْبَةٌ، وَرَوَتْ حَدِيْثَيْنِ"
+    },
+    {
+      "id": "sp_uk_zubayr",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "471",
+      "layer": "MAIN",
+      "exact": "وَتَزَوَّجَهَا الزُّبَيْرُ بنُ العَوَّامِ، فَوَلَدَتْ لَهُ: عَمْراً وَخَالِداً"
+    },
+    {
+      "id": "sp_uk_zubayr_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "471",
+      "layer": "MAIN",
+      "exact": "الزُّبَيْرُ بنُ العَوَّامِ",
+      "prefix": "وَتَزَوَّجَهَا "
+    },
+    {
+      "id": "sp_uk_kids_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "471",
+      "layer": "MAIN",
+      "exact": "فَوَلَدَتْ لَهُ: عَمْراً وَخَالِداً"
+    },
+    {
+      "id": "sp_uk_khamisa_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "471",
+      "layer": "MAIN",
+      "exact": "حَدَّثَتْنِي أُمُّ خَالِدٍ بِنْتُ خَالِدٍ، قَالَتْ:"
+    },
+    {
+      "id": "sp_uk_khamisa_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "471",
+      "layer": "MAIN",
+      "exact": "الطَّيَالِسِيُّ: حَدَّثَنَا إِسْحَاقُ بنُ سَعِيْدٍ، حَدَّثَنِي أَبِي، قَالَ:"
+    },
+    {
+      "id": "sp_uk_khamisa",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "471",
+      "layer": "MAIN",
+      "exact": "أُتِيَ رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - بِثِيَابٍ فِيْهَا خَمِيْصَةٌ سَوْدَاءُ صَغِيْرَةٌ"
+    },
+    {
+      "id": "sp_uk_khamisa_1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "471",
+      "layer": "MAIN",
+      "exact": "فَأُتِي بِي أُحْمَلُ، فَأَلْبَسَنِيْهَا بِيَدِهِ، وَقَالَ: (أَبْلِي وَأَخْلِقِي)"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_uk0",
+      "unit": "siyar-v6-98-umm-khalid",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_uk_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_uk_khamisa",
+      "unit": "siyar-v6-98-umm-khalid",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_uk_khamisa_frame"
+      ],
+      "isnadSpan": "sp_uk_khamisa_isnad",
+      "origin": {
+        "mention": "m_uk_khamisa_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_uk_name",
+      "report": "r_uk0",
+      "spans": [
+        "sp_uk_n1",
+        "sp_uk_n2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uk_heading",
+      "report": "r_uk0",
+      "spans": [
+        "sp_uk_heading"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uk_suhbah",
+      "report": "r_uk0",
+      "spans": [
+        "sp_uk_suhbah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uk_zubayr",
+      "report": "r_uk0",
+      "spans": [
+        "sp_uk_zubayr"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uk_khamisa",
+      "report": "r_uk_khamisa",
+      "spans": [
+        "sp_uk_khamisa",
+        "sp_uk_khamisa_1"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_uk",
+      "parent": "sp_uk_n1",
+      "exact": "أَمَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uk_father",
+      "parent": "sp_uk_n1",
+      "exact": "خَالِدٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uk_h",
+      "parent": "sp_uk_heading",
+      "exact": "أُمُّ خَالِدٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uk_suhbah",
+      "parent": "sp_uk_suhbah",
+      "exact": "لَهَا",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uk_w",
+      "parent": "sp_uk_zubayr",
+      "exact": "وَتَزَوَّجَهَا",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uk_zubayr",
+      "parent": "sp_uk_zubayr",
+      "exact": "الزُّبَيْرُ بنُ العَوَّامِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uk_c_amr",
+      "parent": "sp_uk_zubayr",
+      "exact": "عَمْراً",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uk_c_khalid",
+      "parent": "sp_uk_zubayr",
+      "exact": "خَالِداً",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uk_khamisa_by",
+      "parent": "sp_uk_khamisa_frame",
+      "exact": "أُمُّ خَالِدٍ بِنْتُ خَالِدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_uk_kh",
+      "parent": "sp_uk_khamisa_1",
+      "exact": "بِي",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uk_comp_prophet",
+      "parent": "sp_uk_khamisa",
+      "exact": "رَسُوْلُ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_uk",
+      "mention": "m_uk",
+      "agent": "umm-khalid-bint-khalid",
+      "basis": [
+        {
+          "span": "sp_uk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_father",
+      "mention": "m_uk_father",
+      "agent": "khalid-ibn-said",
+      "basis": [
+        {
+          "span": "sp_uk_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_h",
+      "mention": "m_uk_h",
+      "agent": "umm-khalid-bint-khalid",
+      "basis": [
+        {
+          "span": "sp_uk_n2",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_suhbah",
+      "mention": "m_uk_suhbah",
+      "agent": "umm-khalid-bint-khalid",
+      "basis": [
+        {
+          "span": "sp_uk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_w",
+      "mention": "m_uk_w",
+      "agent": "umm-khalid-bint-khalid",
+      "basis": [
+        {
+          "span": "sp_uk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_zubayr",
+      "mention": "m_uk_zubayr",
+      "agent": "az-zubayr-ibn-al-awwam",
+      "basis": [
+        {
+          "span": "sp_uk_zubayr_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_c_amr",
+      "mention": "m_uk_c_amr",
+      "agent": "amr-ibn-az-zubayr",
+      "basis": [
+        {
+          "span": "sp_uk_kids_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_c_khalid",
+      "mention": "m_uk_c_khalid",
+      "agent": "khalid-ibn-az-zubayr",
+      "basis": [
+        {
+          "span": "sp_uk_kids_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_khamisa_by",
+      "mention": "m_uk_khamisa_by",
+      "agent": "umm-khalid-bint-khalid",
+      "basis": [
+        {
+          "span": "sp_uk_n1",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uk_kh",
+      "mention": "m_uk_kh",
+      "agent": "umm-khalid-bint-khalid",
+      "basis": [
+        {
+          "span": "sp_uk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_uk_name",
+      "subject": "m_uk",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_uk_n1",
+          "sp_uk_n2"
+        ]
+      },
+      "restsOn": [
+        "st_uk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_sex",
+      "subject": "m_uk",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_uk_sex"
+        ]
+      },
+      "restsOn": [
+        "st_uk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_father",
+      "subject": "m_uk",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_uk_father"
+      },
+      "restsOn": [
+        "st_uk_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_kunya",
+      "subject": "m_uk_h",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_uk_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_uk_heading"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_married",
+      "subject": "m_uk_zubayr",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_uk_w"
+      },
+      "restsOn": [
+        "st_uk_zubayr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_c_amr_0",
+      "subject": "m_uk_c_amr",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_uk_w"
+      },
+      "restsOn": [
+        "st_uk_zubayr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_c_amr_1",
+      "subject": "m_uk_c_amr",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_uk_zubayr"
+      },
+      "restsOn": [
+        "st_uk_zubayr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_c_khalid_0",
+      "subject": "m_uk_c_khalid",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_uk_w"
+      },
+      "restsOn": [
+        "st_uk_zubayr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_c_khalid_1",
+      "subject": "m_uk_c_khalid",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_uk_zubayr"
+      },
+      "restsOn": [
+        "st_uk_zubayr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_v_khamisa",
+      "subject": "m_uk_kh",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_uk_khamisa",
+          "sp_uk_khamisa_1"
+        ]
+      },
+      "restsOn": [
+        "st_uk_khamisa"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uk_comp",
+      "subject": "m_uk_suhbah",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_uk_comp_prophet"
+      },
+      "restsOn": [
+        "st_uk_suhbah"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

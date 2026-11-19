@@ -1,0 +1,449 @@
+{
+  "unit": {
+    "id": "siyar-v6-107-mahmud-ibn-labid",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٠٧"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ml_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "485",
+      "layer": "MAIN",
+      "exact": "١٠٧ - مَحْمُودُ بنُ لَبِيْدِ بنِ عُقْبَةَ بنِ رَافِعٍ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sp_ml_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "485",
+      "layer": "MAIN",
+      "exact": "مَحْمُودُ بنُ لَبِيْدِ بنِ عُقْبَةَ بنِ رَافِعٍ الأَنْصَارِيُّ",
+      "prefix": "١٠٧ - "
+    },
+    {
+      "id": "sp_ml_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "485",
+      "layer": "MAIN",
+      "exact": "مَحْمُودُ بنُ",
+      "prefix": "١٠٧ - "
+    },
+    {
+      "id": "sp_ml_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "485",
+      "layer": "MAIN",
+      "exact": "لَبِيْدِ بنِ عُقْبَةَ",
+      "prefix": "١٠٧ - مَحْمُودُ بنُ "
+    },
+    {
+      "id": "sp_ml_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "485",
+      "layer": "MAIN",
+      "exact": "أَبُو نُعَيْمٍ الأَنْصَارِيُّ، الأَوْسِيُّ، الأَشْهَلِيُّ، المَدَنِيُّ"
+    },
+    {
+      "id": "sp_ml_kunya_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "485",
+      "layer": "MAIN",
+      "exact": "أَبُو نُعَيْمٍ",
+      "suffix": " الأَنْصَارِيُّ، الأَوْسِيُّ"
+    },
+    {
+      "id": "sp_ml_born",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "485",
+      "layer": "MAIN",
+      "exact": "وُلِدَ: بِالمَدِيْنَةِ، فِي حَيَاةِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - وَرَوَى عَنْهُ أَحَادِيْثَ يُرْسِلُهَا"
+    },
+    {
+      "id": "sp_ml_bukhari_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "485",
+      "layer": "MAIN",
+      "exact": "قَالَ البُخَارِيُّ:",
+      "suffix": " لَهُ صُحْبَةٌ"
+    },
+    {
+      "id": "sp_ml_bukhari",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "485",
+      "layer": "MAIN",
+      "exact": "لَهُ صُحْبَةٌ",
+      "prefix": "قَالَ البُخَارِيُّ: "
+    },
+    {
+      "id": "sp_ml_d97",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ ابْنُ لَبِيْدٍ فِي سَنَةِ سَبْعٍ وَتِسْعِيْنَ"
+    },
+    {
+      "id": "sp_ml_y97",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "سَنَةِ سَبْعٍ وَتِسْعِيْنَ",
+      "prefix": "لَبِيْدٍ فِي "
+    },
+    {
+      "id": "sp_ml_d96",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "وَيُقَالُ: فِي سَنَةِ سِتٍّ"
+    },
+    {
+      "id": "sp_ml_y96",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "سَنَةِ سِتٍّ",
+      "prefix": "وَيُقَالُ: فِي "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ml0",
+      "unit": "siyar-v6-107-mahmud-ibn-labid",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ml_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ml_bukhari",
+      "unit": "siyar-v6-107-mahmud-ibn-labid",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ml_bukhari_frame"
+      ],
+      "origin": {
+        "mention": "m_ml_bukhari_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ml_d96",
+      "unit": "siyar-v6-107-mahmud-ibn-labid",
+      "ordinal": 3,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_ml_d96_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ml_name",
+      "report": "r_ml0",
+      "spans": [
+        "sp_ml_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ml_kunya",
+      "report": "r_ml0",
+      "spans": [
+        "sp_ml_kunya"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ml_born",
+      "report": "r_ml0",
+      "spans": [
+        "sp_ml_born"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ml_bukhari",
+      "report": "r_ml_bukhari",
+      "spans": [
+        "sp_ml_bukhari"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ml_d97",
+      "report": "r_ml0",
+      "spans": [
+        "sp_ml_d97"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ml_d96",
+      "report": "r_ml_d96",
+      "spans": [
+        "sp_ml_d96"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ml",
+      "parent": "sp_ml_name",
+      "exact": "مَحْمُودُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ml_father",
+      "parent": "sp_ml_name",
+      "exact": "لَبِيْدِ بنِ عُقْبَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ml_k",
+      "parent": "sp_ml_kunya",
+      "exact": "أَبُو نُعَيْمٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ml_bukhari_by",
+      "parent": "sp_ml_bukhari_frame",
+      "exact": "البُخَارِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ml_b",
+      "parent": "sp_ml_bukhari",
+      "exact": "لَهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ml_comp_prophet",
+      "parent": "sp_ml_born",
+      "exact": "رَسُوْلِ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ml_d",
+      "parent": "sp_ml_d97",
+      "exact": "ابْنُ لَبِيْدٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ml_d96_by",
+      "parent": "sp_ml_d96",
+      "exact": "وَيُقَالُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ml_d2",
+      "parent": "sp_ml_d96",
+      "exact": "سَنَةِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ml",
+      "mention": "m_ml",
+      "agent": "mahmud-ibn-labid",
+      "basis": [
+        {
+          "span": "sp_ml_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ml_father",
+      "mention": "m_ml_father",
+      "agent": "labid-ibn-uqbah",
+      "basis": [
+        {
+          "span": "sp_ml_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ml_k",
+      "mention": "m_ml_k",
+      "agent": "mahmud-ibn-labid",
+      "basis": [
+        {
+          "span": "sp_ml_name",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ml_b",
+      "mention": "m_ml_b",
+      "agent": "mahmud-ibn-labid",
+      "basis": [
+        {
+          "span": "sp_ml_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ml_d",
+      "mention": "m_ml_d",
+      "agent": "mahmud-ibn-labid",
+      "basis": [
+        {
+          "span": "sp_ml_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ml_d2",
+      "mention": "m_ml_d2",
+      "agent": "mahmud-ibn-labid",
+      "basis": [
+        {
+          "span": "sp_ml_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ml_name",
+      "subject": "m_ml",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ml_name"
+        ]
+      },
+      "restsOn": [
+        "st_ml_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ml_sex",
+      "subject": "m_ml",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ml_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ml_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ml_father",
+      "subject": "m_ml",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ml_father"
+      },
+      "restsOn": [
+        "st_ml_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ml_kunya",
+      "subject": "m_ml_k",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_ml_kunya_v"
+        ]
+      },
+      "restsOn": [
+        "st_ml_kunya"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ml_comp",
+      "subject": "m_ml_b",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_ml_comp_prophet"
+      },
+      "restsOn": [
+        "st_ml_bukhari"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ml_d97",
+      "subject": "m_ml_d",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 97,
+        "spans": [
+          "sp_ml_y97"
+        ]
+      },
+      "restsOn": [
+        "st_ml_d97"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ml_d96",
+      "subject": "m_ml_d2",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 96,
+        "spans": [
+          "sp_ml_y96"
+        ],
+        "decadeFrom": "sp_ml_y97"
+      },
+      "restsOn": [
+        "st_ml_d96"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
