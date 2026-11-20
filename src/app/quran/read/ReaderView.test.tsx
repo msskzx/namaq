@@ -84,11 +84,12 @@ describe('ReaderView', () => {
   it('draws the page right to left with the surah title, basmala and one rosette per ayah', () => {
     const { container } = render(<ReaderView page={3} pages={one(3, opening)} names={names} />);
     expect(container.querySelector('article')?.getAttribute('dir')).toBe('rtl');
-    expect(screen.getByRole('heading', { level: 2 }).textContent).toBe(names[2]);
+    expect(screen.getByRole('heading', { level: 2, name: names[2] })).not.toBeNull();
     expect(screen.getAllByText(/بِسۡمِ/)).toHaveLength(1);
-    expect(container.querySelectorAll('[data-line]')).toHaveLength(2);
-    expect(screen.getByText('١')).not.toBeNull();
-    expect(screen.getByText('٢')).not.toBeNull();
+    const lines = [...container.querySelectorAll<HTMLElement>('[data-line]')];
+    expect(lines).toHaveLength(2);
+    expect(within(lines[0]).getByText('١')).not.toBeNull();
+    expect(within(lines[1]).getByText('٢')).not.toBeNull();
   });
 
   it('heads a page with its juz in words and the surah it continues', () => {
@@ -365,13 +366,14 @@ describe('Recite mode', () => {
     expect(screen.getByRole('toolbar', { name: 'أدوات التسميع' })).toBeTruthy();
   });
 
-  it('hides the next surah\'s title and basmala until taps reveal them, before its first ayah', () => {
+  it('hides the next surah\'s title, its number (owner, 2026-11-20) and basmala until taps reveal them, before its first ayah', () => {
     const turn = data({ line: ['ٱلضَّآلِّينَ', 7] }, { surah: 2 }, { basmala: true }, { line: ['الٓمٓ', 1] });
     const { container } = render(<ReaderView page={1} pages={one(1, turn, 1)} names={names} surahs={surahs} recite={{ start: '1:7', shown: null, words: 0 }} />);
     const title = () => screen.getByRole('heading', { name: names[2] });
     const bar = within(screen.getByRole('toolbar', { name: 'أدوات التسميع' }));
     const next = () => fireEvent.click(bar.getByRole('button', { name: 'أظهر الآية التالية' }));
     expect(title().className).toMatch(/veiled/);
+    expect(within(title()).queryByText('٢')).toBeNull();
     next();
     expect(veiled(container)).toEqual(['الٓمٓ ۝']);
     expect(title().className).toMatch(/veiled/);
@@ -379,6 +381,7 @@ describe('Recite mode', () => {
     expect(basmala()).toMatch(/veiled/);
     next();
     expect(title().className).not.toMatch(/veiled/);
+    expect(within(title()).getByText('٢')).not.toBeNull();
     expect(basmala()).toMatch(/veiled/);
     expect(veiled(container)).toEqual(['الٓمٓ ۝']);
     next();

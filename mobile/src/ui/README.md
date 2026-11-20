@@ -32,7 +32,7 @@ below. Never copy one into a screen.
 | `SourceLine` | A home card's source line under its buttons: a book icon and the books, a tap opening a sheet with where in them; `sourcesOf` turns a question's `QuizSource[]` into its entries. A `Reference` inside a `CardWithRow` hands itself up to the line (`sourceSlot.ts`) | every home card (owner 2026-11-20) |
 | `Folded` | A passage's credit under a rule at its card's foot, folded; opens to the edition and the page's link | each passage in the reader's book sheets (balagha, meaning); the ayat a balagha quote fits when al-Suyuti names none |
 | `SettingRow` | A settings row that folds: icon, name, what is chosen; a tap opens the picker under it | settings' «ما أحفظه» and «اهتماماتي» |
-| `TapRow` | A frameless row of a drawing: a tap opens what it names, a long press shows its source; 44 tall | the rows of the «حياته» timeline |
+| `TapRow` | A frameless row of a drawing: a tap opens what it names, a long press shows its source; 44 tall | the rows of the «حياته» timeline; a year's column on the battles timeline (`style` turns it into a column) |
 | `Pickable` | A block of a card that picks it on a tap, `aria-pressed` | a book's paragraph that lights the ayah words it quotes |
 | `Saying` | Someone's words with who says them on a muted line before them («قال فلان:»); `by` left out draws the words alone | every quote from a book with its sayer (a person's virtues, a laqab's words, a tie's sentence) |
 | `Bubble` | A speech bubble: the speaker's name in his colour, his side, his corner sharp; `framed` | a conversation drawn as a chat (the dialog scenes of «مشاهد», a hadith's scenes) |

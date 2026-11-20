@@ -126,7 +126,25 @@
   /* The opening pages draw bigger words, but the title still fits its one-line box. */
   font-size: min(0.8em, calc(var(--one-line, 1em) * 0.46));
   line-height: 1;
+  position: relative;
 }
+
+/* The surah's number at the title box's right end: a ring about half the title line, as the app's (MushafPageView SurahNumber). */
+.surahNumber {
+  position: absolute;
+  top: 50%;
+  right: 0.66em;
+  display: flex;
+  width: 2.2em;
+  height: 2.2em;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-50%);
+  color: var(--home-muted);
+  font-size: 0.5em;
+}
+
+.surahNumber svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 
 /* Pages 1 and 2: the block sits in the middle of the page, its lines inside a double-ruled oval. */
 .opening {
