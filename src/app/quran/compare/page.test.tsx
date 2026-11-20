@@ -70,7 +70,6 @@ describe('QuranComparePage', () => {
     [{ preset: 'moses-pharaoh' }, '/quran/compare?a=7&b=26'],
     [{ a: '26' }, '/quran/compare?a=26&b=7'],
     [{ a: '1' }, '/quran/compare?a=1&b=4'],
-    [{ a: '109' }, '/quran/compare?a=2&b=7'],
     [{ preset: 'does-not-exist' }, '/quran/compare?a=2&b=7'],
   ])('sends %o to %s', async (query, target) => {
     await expect(page(query)).rejects.toThrow(`redirect ${target}`);

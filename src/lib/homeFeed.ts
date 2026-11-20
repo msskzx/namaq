@@ -1,3 +1,4 @@
+import { tanasubLink, tanasubSource } from '@shared/quran/tanasubCards';
 import { dailyIndex, feedTrees } from '@shared/dailyPick';
 import { lastNumber, momentItem, storyItem } from '@shared/feedItems';
 import { FEED_AHEAD, FEED_FAR } from '@shared/feedSeen';
@@ -52,7 +53,11 @@ export function feedIds(day: number, count = FEED_AHEAD) {
 export type FeedPair = PairCard & { sources: QuizSource[] };
 export type FeedTree = TreePreview & { text: string; sources: QuizSource[] };
 const pairGroup = (pair: PairCard) => (pair.group ? treeInventory().find(piece => piece.id === pair.group || [piece.legacyId, ...(piece.legacyIds ?? []), ...(piece.group?.aliases ?? [])].includes(pair.group!))?.group : undefined);
-const feedPair = (pair: PairCard): FeedPair => ({ ...pair, sources: pieceSources(pair.sides.flatMap(side => side.ayat.map(ayah => `${side.surah}:${ayah.number}`)), pairGroup(pair)) });
+const feedPair = (pair: PairCard): FeedPair => {
+  // A surah-order book's card names its book after the mushaf (shared/quran/tanasubCards.ts).
+  const link = pair.book ? tanasubLink(pair.book) : undefined;
+  return { ...pair, sources: [...pieceSources(pair.sides.flatMap(side => side.ayat.map(ayah => `${side.surah}:${ayah.number}`)), pairGroup(pair)), ...(link ? [tanasubSource(link)] : [])] };
+};
 const feedTree = (piece: BranchPiece): FeedTree => ({ ...treePreviewOf(piece), text: piece.text, sources: pieceSources(piece.keys, piece.group) });
 
 export function feedContent(day: number, pairOffsets: number[], treeOffsets: number[]): { pairs: FeedPair[]; trees: FeedTree[] } {

@@ -29,6 +29,8 @@ import { toTab } from '@/lib/ways';
 import { compareMatrixOnly } from '@shared/quran/compareViews';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
+import SourceLine, { sourcesOf } from '@/ui/SourceLine';
+import { TANASUB_KIND, tanasubLink, tanasubSource } from '@shared/quran/tanasubCards';
 
 const DOUBLE_TAP = 280;
 
@@ -342,14 +344,20 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
   );
   // Share as image: the card as it is now (view, folded parts, lit words), drawn afresh for the image.
   const cardBox = { backgroundColor: palette.card, borderWidth: COMPARE_CARD.border, borderColor: palette.rule, borderRadius: COMPARE_CARD.radius, padding: COMPARE_CARD.padding, gap: COMPARE_CARD.gap };
-  const share = () => shareCard({ content: width => <View style={{ ...cardBox, width }}>{body}</View>, link: cardLink(card), onVideo: record, onPageVideo });
+  const share = () => shareCard({ content: width => <View style={{ ...cardBox, width }}>{body}{quote}</View>, link: cardLink(card), onVideo: record, onPageVideo });
+  // A surah-order book's card: its quote as written under the ayat, its book on the source line (owner, 2026-11-20).
+  const link = card.book ? tanasubLink(card.book) : undefined;
+  const sources = useMemo(() => (link ? sourcesOf([tanasubSource(link)]) : []), [link]);
+  const quote = link && <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'justify', writingDirection: 'rtl', borderTopWidth: tree ? 0 : 1, borderTopColor: palette.rule, paddingTop: 6 }}>«{link.text}»</Text>;
   const saveButton = <IconButton Icon={Bookmark} label={saved ? 'إزالة من المحفوظة' : 'حفظ'} onPress={() => toggleCardSaved(card)} on={saved} fill
     render={icon => <Animated.View style={popped}><Bookmark {...icon} /></Animated.View>} />;
   return (
     <View style={{ gap: 4 }}>
+      {link && <Text style={{ color: palette.amber, fontSize: 14, textAlign: 'right', paddingHorizontal: 6 }}>{TANASUB_KIND}</Text>}
       {/* A tree stands on the page as the branches trees do, its boxes the cards; the matrix is one card. */}
       <Tap onPress={tap} accessibilityHint="انقر مرتين للحفظ" style={tree ? { gap: COMPARE_CARD.gap } : cardBox}>
         {body}
+        {quote}
       </Tap>
       {read.studio ? <Studio read={read} palette={palette} record={record} /> : (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
@@ -369,6 +377,8 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
           {aside ? <><View style={{ flex: 1 }} />{aside}</> : null}
         </View>
       )}
+      {/* In the feed the post's own source line names the book (HomeFeed PairPost). */}
+      {!onOpen && <SourceLine named={sources} sources={sources} palette={palette} />}
       <VideoSheet page={video} onClose={() => setVideo(null)} palette={palette} />
     </View>
   );
