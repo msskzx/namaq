@@ -49,4 +49,13 @@ describe('GET /api/home/feed', () => {
     // The day turns the lists, the same day sends the same cards.
     expect(await get(`day=${today}&sira=0,1,2,3`)).toEqual(cards);
   });
+
+  // Owner, 2026-11-20: the drawings built for their pages come into home too, each kind only while its interest is shown,
+  // each card naming the sources its own data gives.
+  it('sends the drawings\' cards of the kinds asked, one a batch in turn, each with its sources', async () => {
+    const cards = await get(`day=${today}&draw=0,1,2,3&kinds=battle,nasab`);
+    expect(cards.map((card: { slot: number; kind: string }) => [card.slot, card.kind])).toEqual([[0, 'nasab'], [1, 'battle'], [2, 'nasab'], [3, 'battle']]);
+    for (const card of cards) expect(card.sources.length).toBeGreaterThan(0);
+    expect(await get(`day=${today}&draw=0,1&kinds=`)).toEqual([]);
+  });
 });

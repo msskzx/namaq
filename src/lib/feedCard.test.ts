@@ -9,6 +9,8 @@ import { siraCards, storyCards } from './homeFeed';
 import { sahihCards } from './sahih';
 import { nameCards, tarajimCards } from './tarajim';
 import { termCard } from './balaghaTerms';
+import { drawingCards } from './drawingCards';
+import { DRAWING_CARD_KINDS } from '@shared/interests';
 
 /** Any day: the feed's turns differ day by day, the ids do not. */
 const DAY = 20412;
@@ -21,6 +23,7 @@ describe('a saved feed card', () => {
       ...(await siraCards(DAY, SLOTS)), ...(await sahihCards(DAY, [0, 1])),
       ...storyCards(DAY, SLOTS).map(card => ({ ...card, kind: 'prophets' })),
       { ...(await termCard(DAY, 1)), kind: 'term' },
+      ...(await drawingCards(DAY, DRAWING_CARD_KINDS.map((_, slot) => slot), [...DRAWING_CARD_KINDS])),
     ];
     // Every kind the website's feed draws from the server.
     expect([...new Set(drawn.map(card => card.kind)), 'note-qiraat'].sort()).toEqual([...WEB_CARD_KINDS].sort());

@@ -6,6 +6,8 @@ import { siraCardOf, storyCardOf, type SiraCard, type StoryCard } from '@/lib/ho
 import { isSahihSlug, sahihCardOf, type SahihCard } from '@/lib/sahih';
 import { nameCardOf, tarajimCardOf, type NameCard, type TarajimCard } from '@/lib/tarajim';
 import { cardOfBookmark } from '@shared/bookmarkKind';
+import { DRAWING_CARD_KINDS, type DrawingCardKind } from '@shared/interests';
+import { drawingCardOf, type DrawingCard } from '@/lib/drawingCards';
 
 export type SavedFeedCard =
   | { kind: 'hadith' | 'rajab' | 'recorded' | 'isnad'; card: HadithCard }
@@ -15,7 +17,8 @@ export type SavedFeedCard =
   | { kind: 'sira' | 'moment'; card: SiraCard }
   | { kind: 'prophets'; card: StoryCard }
   | { kind: 'term'; card: TermCard }
-  | { kind: 'note-qiraat'; ayah: string };
+  | { kind: 'note-qiraat'; ayah: string }
+  | { kind: DrawingCardKind; card: DrawingCard };
 
 /** The card a `card:` bookmark names, or null when the website does not draw that kind or the data no longer holds it. */
 export async function savedFeedCard(id: string, day: number): Promise<SavedFeedCard | null> {
@@ -31,6 +34,7 @@ export async function savedFeedCard(id: string, day: number): Promise<SavedFeedC
     case 'term': { const card = await termCardOf(item, day); return card ? { kind, card } : null; }
     case 'note-qiraat': return /^\d{1,3}:\d{1,3}$/.test(item) ? { kind, ayah: item } : null;
     default: {
+      if ((DRAWING_CARD_KINDS as readonly string[]).includes(kind)) { const card = await drawingCardOf(kind, item); return card ? { kind: card.kind, card } : null; }
       if (!isSahihSlug(kind)) return null;
       const card = await sahihCardOf(kind, item);
       return card ? { kind, card } : null;

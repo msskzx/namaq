@@ -46,7 +46,7 @@ import { continuePage, readFasilas, serverFasilas, subscribeFasilas } from '@sha
 import { Text } from '@/ui/Text';
 import momentBattles from '@shared/data/battles/moments.json';
 import type { AppMomentBattle } from '@shared/battles/battle';
-import { battleLine, Moment } from './battles/BattleParts';
+import { battleLine, Counts, Moment } from './battles/BattleParts';
 import { STORIES } from '@/lib/stories';
 import { FORTY, fortyEntry } from '@/lib/hadith';
 import { compilerOf, drawnBukhari, fromCompanion, fromSahihayn, rajabFeedPassages, recordedIn, type RajabChapter } from '@shared/hadith';
@@ -55,6 +55,23 @@ import HadithBooks from '@/components/HadithBooks';
 import rajab from '@shared/data/hadith/ibnRajab.json';
 import IbnRajab from '@/components/IbnRajab';
 import { Report, StoryAyat } from './stories/StoryParts';
+import { battleHeadSources, battleItems, battleOnCard, eventItems, eventOf, eventSources, nasabPeople, nasabSources, oathItems, oathSources, openingItems, openingSources, sceneItems, sceneOf, sceneSources, tiesPeople, tiesSources } from '@shared/drawingCards';
+import { NasabTree } from '@/screens/nasab';
+import { OpeningRows } from '@/screens/openings';
+import TiesRing, { TieSheet } from './TiesRing';
+import type { Tie } from '@shared/tarajimGraph';
+import BattleMap from './battles/BattleMap';
+import { BATTLES, battleOf } from '@/lib/battles';
+import HadithScene from './HadithScene';
+import { HADITH } from '@/lib/hadith';
+import { sceneSlots } from '@shared/hadith';
+import { openingCards, type OpeningCard } from '@shared/quran/openingKinds';
+import { ayahOf } from '@/lib/branches';
+import OathWords from './OathWords';
+import { buildOaths, oathPlace, type OathView } from '@shared/quran/oaths';
+import EventPlaces from './EventPlaces';
+import { placesOf as eventPlaces } from '@shared/quran/prophets/story';
+import { STORIES as STORY_EVENTS } from '@shared/quran/prophets/stories';
 import CompareCard from './CompareCard';
 import TreePager from './TreePager';
 import { aliasesOf, EMPTY_LIST } from '@/lib/branchList';
@@ -531,6 +548,143 @@ function LifePost({ slug, palette }: { slug: string; palette: Palette }) {
       source={sourcesOf(uniqueSources(items.flatMap(item => [...item.refs, ...item.yearRefs]).map(citeSource)))}>
       <View style={{ paddingVertical: 14, paddingHorizontal: 10 }}>
         <LifeTimeline items={items} palette={palette} inCard compact linked={false} />
+      </View>
+    </Post>
+  );
+}
+
+/** The drawings' cards share the person's head: «نسبه» or «صلاته», the person under it. */
+const herOrHis = (slug: string, his: string, hers: string) => (findPerson(slug)?.sex === 'FEMALE' ? hers : his);
+
+/**
+ * «نسبه» (owner, 2026-11-20: the drawings home was missing; sketch layout-cleanup panel 6): a person's nasab tree as his
+ * nasab page draws it, long runs of fathers folded; its open button opens that page.
+ */
+function NasabPost({ slug, palette }: { slug: string; palette: Palette }) {
+  const person = findPerson(slug);
+  if (!person) return null;
+  const open = () => router.push({ pathname: '/nasab', params: { slug } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={Network} title={herOrHis(slug, 'نسبه', 'نسبها')} sub={personName(person)} palette={palette} />}
+      open={<Action Icon={Network} label={`افتح نسب ${personName(person)}`} onPress={open} palette={palette} />}
+      source={sourcesOf(nasabSources(person, PEOPLE))}>
+      <View style={{ padding: 14, gap: 10 }}><NasabTree slugs={[slug]} palette={palette} meetings={false} text={false} inCard /></View>
+    </Post>
+  );
+}
+
+/** «صلاته»: a person's ties ring as his ties page draws it; a person on it opens his page, and its open button the ties page. */
+function TiesPost({ slug, palette }: { slug: string; palette: Palette }) {
+  const { width } = useWindowDimensions();
+  const [tie, setTie] = useState<Tie | undefined>();
+  const person = findPerson(slug);
+  if (!person) return null;
+  const title = herOrHis(slug, 'صلاته', 'صلاتها');
+  const open = () => router.push({ pathname: '/ties', params: { slug } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={Link2} title={title} sub={personName(person)} palette={palette} />}
+      open={<Action Icon={Link2} label={`افتح ${title}: ${personName(person)}`} onPress={open} palette={palette} />}
+      source={sourcesOf(tiesSources(GRAPH, slug))}>
+      <View style={{ padding: 14 }}>
+        <TiesRing slug={slug} width={Math.min(width - 60, 480)} palette={palette} onPick={to => router.push({ pathname: '/person', params: { slug: to } })} onShow={setTie} />
+      </View>
+      <TieSheet tie={tie} onClose={() => setTie(undefined)} palette={palette} />
+    </Post>
+  );
+}
+
+/**
+ * A battle (sketch panel 6): its place on the still map and the two sides' numbers, as its page draws them; a fitna battle
+ * shows no numbers (shared/drawingCards.ts battleOnCard). Its open button opens the battle's page.
+ */
+function BattlePost({ slug, palette }: { slug: string; palette: Palette }) {
+  const found = battleOf(slug);
+  if (!found) return null;
+  const battle = battleOnCard(found);
+  const open = () => toTab({ pathname: '/battle', params: { slug } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={Swords} title={battle.name} sub={battleLine(battle)} palette={palette} />}
+      open={<Action Icon={Swords} label={`افتح ${battle.name}`} onPress={open} palette={palette} />}
+      source={sourcesOf(battleHeadSources(battle))}>
+      {battle.place ? <>
+        <BattleMap place={battle.place} palette={palette} />
+        <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right', paddingHorizontal: 12, paddingTop: 6 }}>موضع تقريبي على خريطة اليوم، من عندنا.</Text>
+      </> : null}
+      <View style={{ padding: 14 }}><Counts battle={battle} palette={palette} /></View>
+    </Post>
+  );
+}
+
+/** A hadith's scene drawn as a chat, as its page draws it (sketch panel 6); its open button opens the hadith's page. */
+function HadithScenePost({ id, palette }: { id: string; palette: Palette }) {
+  const found = sceneOf(HADITH.units, id);
+  if (!found) return null;
+  const { unit, report, scene, at } = found;
+  const slots = sceneSlots(report.scenes, palette.slots.length)[at];
+  const open = () => toTab({ pathname: '/hadith-unit', params: { unit: unit.id } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={MessagesSquare} title={`من ${unit.book}`} sub={[unit.kitab, `المشهد ${num(scene.ordinal)}`].filter(Boolean).join(' · ')} palette={palette} />}
+      open={<Action Icon={MessagesSquare} label={`افتح الحديث في ${unit.book}`} onPress={open} palette={palette} />}
+      source={sourcesOf(sceneSources(unit))}>
+      <View style={{ paddingHorizontal: 14, paddingVertical: 12 }}><HadithScene lines={scene.lines} slots={slots} palette={palette} /></View>
+    </Post>
+  );
+}
+
+let openings: OpeningCard[] | undefined;
+const openingList = () => (openings ??= openingCards(ayahOf));
+
+/** «فواتح السور»: a card of surahs whose openings go together, as the openings page draws it; its open button opens it there. */
+function OpeningCardPost({ id, palette }: { id: string; palette: Palette }) {
+  const card = openingList().find(each => each.id === id);
+  if (!card) return null;
+  const open = () => toTab({ pathname: '/openings', params: { at: id } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={ListStart} title="من فواتح السور" sub={card.title} palette={palette} />}
+      open={<Action Icon={ListStart} label={`افتح «${card.title}» في فواتح السور`} onPress={open} palette={palette} />}
+      source={sourcesOf(openingSources(card))}>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 9 }}><OpeningRows card={card} palette={palette} /></View>
+    </Post>
+  );
+}
+
+let oaths: OathView[] | undefined;
+const oathList = () => (oaths ??= [...buildOaths('allah', ayahMushafWords), ...buildOaths('others', ayahMushafWords)]);
+
+/** «الأقسام»: an oath's ayat, the words sworn by in colour, as the oaths page draws it; its open button opens it there. */
+function OathPost({ id, palette }: { id: string; palette: Palette }) {
+  const oath = oathList().find(each => each.id === id);
+  if (!oath) return null;
+  const place = oathPlace(oath, num);
+  const open = () => toTab({ pathname: '/oaths', params: { at: id } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={Feather} title="من الأقسام" sub={[place, oath.who].filter(Boolean).join(' · ')} palette={palette} />}
+      open={<Action Icon={Feather} label={`افتح ${place} في الأقسام`} onPress={open} palette={palette} />}
+      actions={<Action Icon={BookOpen} label={`افتح ${place} في المصحف`} onPress={() => readAyah(oath.id)} palette={palette} />}
+      source={sourcesOf(oathSources(id))}>
+      <View style={{ paddingHorizontal: 14, paddingVertical: 6 }}><OathWords oath={oath} palette={palette} /></View>
+    </Post>
+  );
+}
+
+/**
+ * A prophet's event read across the surahs that tell it (sketch panel 6): the story page's own places, shared words in
+ * colour, its buttons left on the page; the open button opens the story at this event.
+ */
+function EventPost({ id, palette }: { id: string; palette: Palette }) {
+  const found = eventOf(STORY_EVENTS, id);
+  const prophet = found ? prophetStory(found.slug) : undefined;
+  if (!found || !prophet) return null;
+  const event = prophet.events[found.at];
+  const phase = prophet.story.phases[event.phase];
+  const open = () => router.push({ pathname: '/prophets/[slug]', params: { slug: found.slug, event: String(found.at) } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={ScrollText} title={prophet.title} sub={phase} palette={palette} />}
+      open={<Action Icon={BookOpen} label={`افتح ${event.title} في القصة`} onPress={open} palette={palette} />}
+      source={sourcesOf(eventSources(found.event))}>
+      <View style={{ paddingVertical: 12 }}>
+        <EventPlaces event={event} places={eventPlaces(event)} phase={phase} readable={false} palette={palette}
+          onStep={() => {}} hasPrev={false} hasNext={false} onLayoutPlace={() => {}} />
       </View>
     </Post>
   );
@@ -1088,6 +1242,13 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   laqab: () => nameList('laqab').map(nameId),
   kunya: () => nameList('kunya').map(nameId),
   life: lifePeople,
+  nasab: () => nasabPeople(PEOPLE),
+  ties: () => tiesPeople(PEOPLE, GRAPH),
+  battle: () => battleItems(BATTLES),
+  'hadith-scene': () => sceneItems(HADITH.units),
+  opening: () => openingItems(openingList()),
+  oath: () => oathItems(oathList()),
+  event: () => eventItems(STORY_EVENTS),
 };
 const itemsOf = (kind: ListKind) => (itemLists[kind] ??= LIST_OF[kind]());
 const LIST_KINDS = Object.keys(LIST_OF) as ListKind[];
@@ -1125,6 +1286,13 @@ function ContentPost({ kind, item, day, palette }: { kind: ListKind; item: strin
     case 'tie': return <TiePost id={item} palette={palette} />;
     case 'laqab': case 'kunya': return <NamePost kind={kind} id={item} palette={palette} />;
     case 'life': return <LifePost slug={item} palette={palette} />;
+    case 'nasab': return <NasabPost slug={item} palette={palette} />;
+    case 'ties': return <TiesPost slug={item} palette={palette} />;
+    case 'battle': return <BattlePost slug={item} palette={palette} />;
+    case 'hadith-scene': return <HadithScenePost id={item} palette={palette} />;
+    case 'opening': return <OpeningCardPost id={item} palette={palette} />;
+    case 'oath': return <OathPost id={item} palette={palette} />;
+    case 'event': return <EventPost id={item} palette={palette} />;
     default: return null;
   }
 }

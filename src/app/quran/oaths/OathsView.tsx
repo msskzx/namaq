@@ -28,11 +28,30 @@ async function shareOath(oath: OathView) {
   } catch {}
 }
 
+/** An oath's ayat, the words sworn by in the accent and each ayah's number in amber: the page's card and its feed card. */
+export function OathWords({ oath }: { oath: OathView }) {
+  return (
+    <AyahFlow>
+      {oath.lines.map(line => (
+        <span key={line.ayah}>
+          {line.words.map((word, i) => (
+            <span key={i} data-sworn={word.sworn || undefined} className={word.sworn ? 'text-[var(--home-accent)]' : undefined}>{`${word.text} `}</span>
+          ))}
+          <span className="text-[var(--home-amber)]">{`${num(line.ayah)} `}</span>
+        </span>
+      ))}
+    </AyahFlow>
+  );
+}
+
+/** The id an oath's card has on the page, so a link can open the page at it (the home feed's card). */
+export const oathAnchor = (id: string) => `oath-${id.replace(':', '-')}`;
+
 function OathCard({ oath }: { oath: OathView }) {
   const place = oathPlace(oath, num);
   const quotes = OATH_QUOTES[oath.id];
   return (
-    <li className="flex flex-col gap-1">
+    <li id={oathAnchor(oath.id)} className="flex scroll-mt-24 flex-col gap-1">
       {/* The home feed's head (owner, 2026-11-16): a bold title, a muted line under it, then the card. */}
       <div className="flex flex-col px-1">
         <h3 className="text-base font-bold">{place}</h3>
@@ -40,16 +59,7 @@ function OathCard({ oath }: { oath: OathView }) {
         {quotes && <Reference title={citesOf(quotes)} quotes={quotes} />}
       </div>
       <Card as="article" className="px-4 py-1.5">
-        <AyahFlow>
-          {oath.lines.map(line => (
-            <span key={line.ayah}>
-              {line.words.map((word, i) => (
-                <span key={i} data-sworn={word.sworn || undefined} className={word.sworn ? 'text-[var(--home-accent)]' : undefined}>{`${word.text} `}</span>
-              ))}
-              <span className="text-[var(--home-amber)]">{`${num(line.ayah)} `}</span>
-            </span>
-          ))}
-        </AyahFlow>
+        <OathWords oath={oath} />
       </Card>
       <div className="flex items-center gap-1">
         <Button size="round" variant="muted" href={ayahHref(oath.id)} aria-label={`افتح ${place} في المصحف`} title="في المصحف"><BookOpen aria-hidden /></Button>

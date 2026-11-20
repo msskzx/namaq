@@ -4,6 +4,7 @@ import { hadithCards } from '@/lib/forty';
 import { nameCards, tarajimCards } from '@/lib/tarajim';
 import { sahihCards } from '@/lib/sahih';
 import { savedFeedCard } from '@/lib/feedCard';
+import { drawingCards } from '@/lib/drawingCards';
 import { dayNumber } from '@shared/dailyPick';
 import { ayahPages, FEED_AHEAD, FEED_FAR, feedContent, feedIds, pageSlice, savedContent, siraCards, storyCards } from '@/lib/homeFeed';
 
@@ -16,7 +17,8 @@ const offsets = (value: string | null) => (value ? value.split(',').map(Number).
  * `?saved=ID` a saved tree's or compare card's content (a saved card in the feed), `?ayah=S:A` the page an ayah is on and the page before it (the recall card's lines), `?day=D&s=1,3` the prophets cards of those batches,
  * `?day=D&sira=0,1` the sira and battle-moment cards of those batches, `?day=D&term=1,3` the balagha term cards of those batches,
  * `?day=D&hadith=0,1` the hadith and Ibn Rajab cards of those batches, `?day=D&tarajim=0,1` the virtue («من التراجم») and
- * «صلة» cards of those batches, `?day=D&sahih=0,1` the Sahih al-Bukhari and Sahih Muslim cards of those batches, `?day=D&card=card:KIND:ITEM` a saved feed card (src/lib/feedCard.ts).
+ * «صلة» cards of those batches, `?day=D&sahih=0,1` the Sahih al-Bukhari and Sahih Muslim cards of those batches, `?day=D&card=card:KIND:ITEM` a saved feed card (src/lib/feedCard.ts),
+ * `?day=D&draw=0,1&kinds=nasab,battle` the drawings' cards of those batches, of those kinds (src/lib/drawingCards.ts).
  */
 export async function GET(request: Request) {
   const params = new URL(request.url).searchParams;
@@ -40,6 +42,7 @@ export async function GET(request: Request) {
   if (!Number.isInteger(day) || Math.abs(day - dayNumber(new Date())) > 2) return NextResponse.json({ error: 'Provide today\'s day number' }, { status: 400 });
   const card = params.get('card');
   if (params.has('card')) return NextResponse.json((card && card.length <= 200 ? await savedFeedCard(card, day) : null) ?? {}, { headers: CACHE });
+  if (params.has('draw')) return NextResponse.json(await drawingCards(day, offsets(params.get('draw')), (params.get('kinds') ?? '').split(',')), { headers: CACHE });
   if (params.has('tarajim')) return NextResponse.json(tarajimCards(day, offsets(params.get('tarajim'))), { headers: CACHE });
   if (params.has('sahih')) return NextResponse.json(await sahihCards(day, offsets(params.get('sahih'))), { headers: CACHE });
   if (params.has('names')) return NextResponse.json(nameCards(day, offsets(params.get('names'))), { headers: CACHE });
