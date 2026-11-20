@@ -76,30 +76,6 @@
       "exact": "وَهُوَ الَّذِي فَتَحَ إِفْرِيْقِيَةَ"
     },
     {
-      "id": "sp_sa_layth_frame",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 6,
-      "page": "34",
-      "layer": "MAIN",
-      "exact": "أَبُو صَالِحٍ: عَنِ اللَّيْثِ، قَالَ"
-    },
-    {
-      "id": "sp_sa_layth",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 6,
-      "page": "34",
-      "layer": "MAIN",
-      "exact": "ثُمَّ غَزَا ذَاتِ الصَّوَارِي، فَلَقَوْا أَلْفَ مَرْكَبٍ لِلرُّوْمِ"
-    },
-    {
-      "id": "sp_sa_sawari_w",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 6,
-      "page": "34",
-      "layer": "MAIN",
-      "exact": "ثُمَّ غَزَا ذَاتِ الصَّوَارِي"
-    },
-    {
       "id": "sp_sa_q59",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
@@ -137,22 +113,9 @@
       "chainState": "COMPLETE"
     },
     {
-      "id": "r_sa_layth",
-      "unit": "siyar-v6-8-ibn-abi-sarh",
-      "ordinal": 2,
-      "voice": "TRANSMITTED",
-      "frame": [
-        "sp_sa_layth_frame"
-      ],
-      "origin": {
-        "mention": "m_sa_layth_by"
-      },
-      "chainState": "DEFERRED"
-    },
-    {
       "id": "r_sa_q59",
       "unit": "siyar-v6-8-ibn-abi-sarh",
-      "ordinal": 3,
+      "ordinal": 2,
       "voice": "REPORTED_ANONYMOUS",
       "origin": {
         "mention": "m_sa_q59_by"
@@ -194,14 +157,6 @@
       "role": "AUTHOR_REPORT"
     },
     {
-      "id": "st_sa_layth",
-      "report": "r_sa_layth",
-      "spans": [
-        "sp_sa_layth"
-      ],
-      "role": "TRANSMITTED"
-    },
-    {
       "id": "st_sa_q59",
       "report": "r_sa_q59",
       "spans": [
@@ -237,27 +192,6 @@
       "id": "m_sa_misr",
       "parent": "sp_sa_misr",
       "exact": "وَلِيَ",
-      "occurrence": 1,
-      "role": "REFERENT"
-    },
-    {
-      "id": "m_sa_layth_by",
-      "parent": "sp_sa_layth_frame",
-      "exact": "اللَّيْثِ",
-      "occurrence": 1,
-      "role": "SPEAKER"
-    },
-    {
-      "id": "m_sa_l",
-      "parent": "sp_sa_layth",
-      "exact": "غَزَا",
-      "occurrence": 1,
-      "role": "REFERENT"
-    },
-    {
-      "id": "m_sa_sawari",
-      "parent": "sp_sa_layth",
-      "exact": "ذَاتِ الصَّوَارِي",
       "occurrence": 1,
       "role": "REFERENT"
     },
@@ -301,30 +235,6 @@
       "basis": [
         {
           "span": "sp_sa_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_sa_l",
-      "mention": "m_sa_l",
-      "agent": "abdullah-ibn-saad-ibn-abi-sarh",
-      "basis": [
-        {
-          "span": "sp_sa_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "i_sa_sawari",
-      "mention": "m_sa_sawari",
-      "event": "zat-as-sawari",
-      "basis": [
-        {
-          "span": "sp_sa_sawari_w",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -413,18 +323,6 @@
       },
       "restsOn": [
         "st_sa_ifriqiyah"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_sa_sawari",
-      "subject": "m_sa_l",
-      "predicate": "PARTICIPATED_IN",
-      "value": {
-        "object": "m_sa_sawari"
-      },
-      "restsOn": [
-        "st_sa_layth"
       ],
       "status": "PROPOSED"
     },

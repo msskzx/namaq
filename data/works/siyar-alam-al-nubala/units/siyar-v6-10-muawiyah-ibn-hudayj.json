@@ -190,6 +190,23 @@
       "page": "40",
       "layer": "MAIN",
       "exact": "سَنَةِ اثْنَتَيْنِ وَخَمْسِيْنَ"
+    },
+    {
+      "id": "sp_mh_son",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "37",
+      "layer": "MAIN",
+      "exact": "ابْنُهُ؛ عَبْدُ الرَّحْمَنِ"
+    },
+    {
+      "id": "sp_mh_son_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "37",
+      "layer": "MAIN",
+      "exact": "ابْنُهُ",
+      "prefix": "عَنْهُ:"
     }
   ],
   "reports": [
@@ -314,6 +331,14 @@
         "sp_mh_yunus"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_mh_son",
+      "report": "r_mh0",
+      "spans": [
+        "sp_mh_son"
+      ],
+      "role": "AUTHOR_REPORT"
     }
   ],
   "mentions": [
@@ -372,6 +397,20 @@
       "exact": "ابْنُ يُوْنُسَ",
       "occurrence": 1,
       "role": "SPEAKER"
+    },
+    {
+      "id": "m_mh_s",
+      "parent": "sp_mh_son",
+      "exact": "ابْنُهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_mh_c_abd_al_rahman",
+      "parent": "sp_mh_son",
+      "exact": "عَبْدُ الرَّحْمَنِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
     }
   ],
   "identifications": [
@@ -430,6 +469,30 @@
       "basis": [
         {
           "span": "sp_mh_yarmuk_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mh_s",
+      "mention": "m_mh_s",
+      "agent": "muawiyah-ibn-hudayj",
+      "basis": [
+        {
+          "span": "sp_mh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mh_c_abd_al_rahman",
+      "mention": "m_mh_c_abd_al_rahman",
+      "agent": "abd-al-rahman-ibn-muawiyah-ibn-hudayj",
+      "basis": [
+        {
+          "span": "sp_mh_son_b",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -588,6 +651,18 @@
       },
       "restsOn": [
         "st_mh_yunus"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mh_c_abd_al_rahman_0",
+      "subject": "m_mh_c_abd_al_rahman",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_mh_s"
+      },
+      "restsOn": [
+        "st_mh_son"
       ],
       "status": "PROPOSED"
     }

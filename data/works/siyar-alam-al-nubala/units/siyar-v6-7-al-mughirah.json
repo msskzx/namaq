@@ -410,7 +410,7 @@
       "id": "r_mg_jamaah",
       "unit": "siyar-v6-7-al-mughirah",
       "ordinal": 9,
-      "voice": "REPORTED_ANONYMOUS",
+      "voice": "TRANSMITTED",
       "frame": [
         "sp_mg_jamaah_frame"
       ],

@@ -187,20 +187,12 @@
       "exact": "سَكَنَ البَصْرَةَ، وَكَانَ مِنْ فُقَهَاءِ الصَّحَابَةِ"
     },
     {
-      "id": "sp_bk_hasan_frame",
+      "id": "sp_bk_faqih_v",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
-      "page": "10",
+      "page": "6",
       "layer": "MAIN",
-      "exact": "وَرَوَيْنَا عَنِ: الحَسَنِ البَصْرِيِّ، قَالَ"
-    },
-    {
-      "id": "sp_bk_hasan",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 6,
-      "page": "10",
-      "layer": "MAIN",
-      "exact": "لَمْ يَنْزِلِ البَصْرَةَ أَفْضَلُ مِنْ أَبِي بَكْرَةَ، وَعِمْرَانَ بنِ حُصَيْنٍ"
+      "exact": "وَكَانَ مِنْ فُقَهَاءِ الصَّحَابَةِ"
     },
     {
       "id": "sp_bk_saad_frame",
@@ -318,22 +310,9 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_bk_hasan",
-      "unit": "siyar-v6-1-abu-bakrah",
-      "ordinal": 5,
-      "voice": "TRANSMITTED",
-      "frame": [
-        "sp_bk_hasan_frame"
-      ],
-      "origin": {
-        "mention": "m_bk_hasan_by"
-      },
-      "chainState": "DEFERRED"
-    },
-    {
       "id": "r_bk_saad",
       "unit": "siyar-v6-1-abu-bakrah",
-      "ordinal": 6,
+      "ordinal": 5,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_bk_saad_frame"
@@ -346,7 +325,7 @@
     {
       "id": "r_bk_q51",
       "unit": "siyar-v6-1-abu-bakrah",
-      "ordinal": 7,
+      "ordinal": 6,
       "voice": "REPORTED_ANONYMOUS",
       "origin": {
         "mention": "m_bk_q51_by"
@@ -356,7 +335,7 @@
     {
       "id": "r_bk_khalifah",
       "unit": "siyar-v6-1-abu-bakrah",
-      "ordinal": 8,
+      "ordinal": 7,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_bk_khalifah_frame"
@@ -439,14 +418,6 @@
         "sp_bk_faqih"
       ],
       "role": "AUTHOR_REPORT"
-    },
-    {
-      "id": "st_bk_hasan",
-      "report": "r_bk_hasan",
-      "spans": [
-        "sp_bk_hasan"
-      ],
-      "role": "TRANSMITTED"
     },
     {
       "id": "st_bk_saad",
@@ -545,6 +516,20 @@
       "role": "SPEAKER"
     },
     {
+      "id": "m_bk_o",
+      "parent": "sp_bk_own",
+      "exact": "نُفَيْعُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_bk_masruh2",
+      "parent": "sp_bk_own",
+      "exact": "مَسْرُوْحٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
       "id": "m_bk_s",
       "parent": "sp_bk_sons",
       "exact": "بَنُوْهُ",
@@ -620,20 +605,6 @@
       "exact": "زِيَادِ بنِ أَبِيْهِ",
       "occurrence": 1,
       "role": "REFERENT"
-    },
-    {
-      "id": "m_bk_hasan_by",
-      "parent": "sp_bk_hasan_frame",
-      "exact": "الحَسَنِ البَصْرِيِّ",
-      "occurrence": 1,
-      "role": "SPEAKER"
-    },
-    {
-      "id": "m_bk_h",
-      "parent": "sp_bk_hasan",
-      "exact": "أَبِي بَكْرَةَ",
-      "occurrence": 1,
-      "role": "SUBJECT"
     },
     {
       "id": "m_bk_saad_by",
@@ -750,6 +721,30 @@
         {
           "span": "sp_bk_heading",
           "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_bk_o",
+      "mention": "m_bk_o",
+      "agent": "abu-bakrah-al-thaqafi",
+      "basis": [
+        {
+          "span": "sp_bk_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_bk_masruh2",
+      "mention": "m_bk_masruh2",
+      "agent": "masruh-father-of-abu-bakrah",
+      "basis": [
+        {
+          "span": "sp_bk_masruh_n",
+          "role": "NASAB"
         }
       ],
       "status": "PROPOSED"
@@ -885,18 +880,6 @@
         }
       ],
       "status": "PROPOSED"
-    },
-    {
-      "id": "i_bk_h",
-      "mention": "m_bk_h",
-      "agent": "abu-bakrah-al-thaqafi",
-      "basis": [
-        {
-          "span": "sp_bk_heading",
-          "role": "SAME_WORK_EXPLICIT"
-        }
-      ],
-      "status": "PROPOSED"
     }
   ],
   "assertions": [
@@ -985,10 +968,10 @@
     },
     {
       "id": "a_bk_masruh_own",
-      "subject": "m_bk_q",
+      "subject": "m_bk_o",
       "predicate": "CHILD_OF",
       "value": {
-        "object": "m_bk_masruh"
+        "object": "m_bk_masruh2"
       },
       "restsOn": [
         "st_bk_own",
@@ -1098,25 +1081,11 @@
       "predicate": "virtue",
       "value": {
         "spans": [
-          "sp_bk_faqih"
+          "sp_bk_faqih_v"
         ]
       },
       "restsOn": [
         "st_bk_faqih"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_bk_v_hasan",
-      "subject": "m_bk_h",
-      "predicate": "virtue",
-      "value": {
-        "spans": [
-          "sp_bk_hasan"
-        ]
-      },
-      "restsOn": [
-        "st_bk_hasan"
       ],
       "status": "PROPOSED"
     },

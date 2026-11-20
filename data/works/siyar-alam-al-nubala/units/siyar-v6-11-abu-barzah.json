@@ -332,6 +332,24 @@
       "page": "43",
       "layer": "MAIN",
       "exact": "سَنَةَ أَرْبَعٍ وَسِتِّيْنَ"
+    },
+    {
+      "id": "sp_bz_son",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "41",
+      "layer": "MAIN",
+      "exact": "ابْنُهُ؛ المُغِيْرَةُ",
+      "prefix": "عَنْهُ:"
+    },
+    {
+      "id": "sp_bz_son_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "41",
+      "layer": "MAIN",
+      "exact": "ابْنُهُ",
+      "prefix": "عَنْهُ:"
     }
   ],
   "reports": [
@@ -604,6 +622,14 @@
         "sp_bz_hakim"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_bz_son",
+      "report": "r_bz0",
+      "spans": [
+        "sp_bz_son"
+      ],
+      "role": "AUTHOR_REPORT"
     }
   ],
   "mentions": [
@@ -746,6 +772,20 @@
       "exact": "الحَاكِمُ",
       "occurrence": 1,
       "role": "SPEAKER"
+    },
+    {
+      "id": "m_bz_ibn",
+      "parent": "sp_bz_son",
+      "exact": "ابْنُهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_bz_c_mughirah",
+      "parent": "sp_bz_son",
+      "exact": "المُغِيْرَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
     }
   ],
   "identifications": [
@@ -840,6 +880,30 @@
       "basis": [
         {
           "span": "sp_bz_khaybarw_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_bz_ibn",
+      "mention": "m_bz_ibn",
+      "agent": "abu-barzah-al-aslami",
+      "basis": [
+        {
+          "span": "sp_bz_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_bz_c_mughirah",
+      "mention": "m_bz_c_mughirah",
+      "agent": "al-mughirah-ibn-abi-barzah",
+      "basis": [
+        {
+          "span": "sp_bz_son_b",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -1105,6 +1169,18 @@
       },
       "restsOn": [
         "st_bz_hakim"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_bz_c_mughirah_0",
+      "subject": "m_bz_c_mughirah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_bz_ibn"
+      },
+      "restsOn": [
+        "st_bz_son"
       ],
       "status": "PROPOSED"
     }

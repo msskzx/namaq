@@ -57,23 +57,6 @@
       "page": "52",
       "layer": "MAIN",
       "exact": "كَانَ صَلِيْباً، مَهِيْباً"
-    },
-    {
-      "id": "sp_hh_zuhri_frame",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 6,
-      "page": "52",
-      "layer": "MAIN",
-      "exact": "وَقَالَ الزُّهْرِيُّ",
-      "prefix": "مَهِيْباً."
-    },
-    {
-      "id": "sp_hh_zuhri",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 6,
-      "page": "52",
-      "layer": "MAIN",
-      "exact": "كَانَ يَأْمُرُ بِالمَعْرُوْفِ، وَيَنْهَى عَنِ المُنْكَرِ"
     }
   ],
   "reports": [
@@ -100,19 +83,6 @@
         "mention": "m_hh_saad_by"
       },
       "chainState": "DEFERRED"
-    },
-    {
-      "id": "r_hh_zuhri",
-      "unit": "siyar-v6-13-hisham-ibn-hakim",
-      "ordinal": 3,
-      "voice": "TRANSMITTED",
-      "frame": [
-        "sp_hh_zuhri_frame"
-      ],
-      "origin": {
-        "mention": "m_hh_zuhri_by"
-      },
-      "chainState": "DEFERRED"
     }
   ],
   "statements": [
@@ -129,14 +99,6 @@
       "report": "r_hh_saad",
       "spans": [
         "sp_hh_saad"
-      ],
-      "role": "TRANSMITTED"
-    },
-    {
-      "id": "st_hh_zuhri",
-      "report": "r_hh_zuhri",
-      "spans": [
-        "sp_hh_zuhri"
       ],
       "role": "TRANSMITTED"
     }
@@ -160,13 +122,6 @@
       "id": "m_hh_saad_by",
       "parent": "sp_hh_saad_frame",
       "exact": "ابْنُ سَعْدٍ",
-      "occurrence": 1,
-      "role": "SPEAKER"
-    },
-    {
-      "id": "m_hh_zuhri_by",
-      "parent": "sp_hh_zuhri_frame",
-      "exact": "الزُّهْرِيُّ",
       "occurrence": 1,
       "role": "SPEAKER"
     }
@@ -250,20 +205,6 @@
       },
       "restsOn": [
         "st_hh_saad"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_hh_v_amr",
-      "subject": "m_hh",
-      "predicate": "virtue",
-      "value": {
-        "spans": [
-          "sp_hh_zuhri"
-        ]
-      },
-      "restsOn": [
-        "st_hh_zuhri"
       ],
       "status": "PROPOSED"
     }

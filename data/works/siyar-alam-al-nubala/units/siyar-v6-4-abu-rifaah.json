@@ -86,6 +86,22 @@
       "exact": "هُوَ مِنْ فُضَلاَءِ الصَّحَابَةِ"
     },
     {
+      "id": "sp_rf_khalifah_ism",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "14",
+      "layer": "MAIN",
+      "exact": "وَقَالَ: هُوَ عَبْدُ اللهِ بنُ الحَارِثِ"
+    },
+    {
+      "id": "sp_rf_ism2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "14",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ الحَارِثِ"
+    },
+    {
       "id": "sp_rf_baqarah_frame",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
@@ -180,6 +196,14 @@
       "report": "r_rf_khalifah",
       "spans": [
         "sp_rf_khalifah"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_rf_khalifah_ism",
+      "report": "r_rf_khalifah",
+      "spans": [
+        "sp_rf_khalifah_ism"
       ],
       "role": "TRANSMITTED"
     },
@@ -379,6 +403,20 @@
       },
       "restsOn": [
         "st_rf_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rf_variant",
+      "subject": "m_rf",
+      "predicate": "name.variant",
+      "value": {
+        "spans": [
+          "sp_rf_ism2"
+        ]
+      },
+      "restsOn": [
+        "st_rf_khalifah_ism"
       ],
       "status": "PROPOSED"
     },

@@ -162,6 +162,15 @@
       "exact": "نَزَلَ حِمْصَ، وَلَهُ بِهَا دَارٌ"
     },
     {
+      "id": "sp_th_saad_p",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "16",
+      "layer": "MAIN",
+      "exact": "حِمْصَ",
+      "prefix": ": نَزَلَ"
+    },
+    {
       "id": "sp_th_thawr_frame",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
@@ -728,6 +737,21 @@
         ]
       },
       "restsOn": [
+        "st_th_saad"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_th_place_saad",
+      "subject": "m_th",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "sp_th_saad_p"
+        ]
+      },
+      "restsOn": [
+        "st_th_saad_hims",
         "st_th_saad"
       ],
       "status": "PROPOSED"

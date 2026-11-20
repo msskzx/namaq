@@ -116,7 +116,6 @@
     "siyar-v6-4-abu-rifaah#a_rf_v_fudala": "General: «من فضلاء الصحابة» fits many Companions.",
     "siyar-v6-4-abu-rifaah#a_rf_v_taabbud": "General: devotion and night prayer fit many.",
     "siyar-v6-5-thawban#a_th_v_ilm": "General: many Companions memorised much knowledge from the Prophet ﷺ.",
-    "siyar-v6-6-abdullah-ibn-amir#a_ia_v_sakhi": "General: generosity fits many.",
     "siyar-v6-6-abdullah-ibn-amir#a_ia_v_muluk": "General: «من كبار ملوك العرب، وشجعانهم، وأجوادهم» fits others (Mu'awiyah, Ibn Hudayj).",
     "siyar-v6-6-abdullah-ibn-amir#a_ia_v_rifq": "General: gentleness and forbearance fit many.",
     "siyar-v6-7-al-mughirah#a_mg_v_kibar": "General: «من كبار الصحابة» fits many; cunning is said of Amr ibn al-As too.",
@@ -124,7 +123,6 @@
     "siyar-v6-12-hakim-ibn-hizam#a_hk_v_ashraf": "General praise: other people in the app could rightly be its answer too.",
     "siyar-v6-12-hakim-ibn-hizam#a_hk_v_nasab": "Shared: Jubair ibn Mut'im and Aqil are also called masters of lineage.",
     "siyar-v6-13-hisham-ibn-hakim#a_hh_v_salib": "General praise: other people in the app could rightly be its answer too.",
-    "siyar-v6-13-hisham-ibn-hakim#a_hh_v_amr": "General: enjoining good and forbidding evil fits many.",
     "siyar-v6-15-amr-ibn-al-as#a_am_v_dahiyah": "Shared: al-Sha'bi counts four «دهاة العرب» (Mu'awiyah, Amr, al-Mughirah, Ziyad).",
     "siyar-v6-15-amr-ibn-al-as#a_am_v_rijal": "General praise: other people in the app could rightly be its answer too.",
     "siyar-v6-15-amr-ibn-al-as#a_am_v_muminan": "Shared: «ابنا العاص» are Amr and Hisham together.",
@@ -136,6 +134,9 @@
     "siyar-v6-18-jubair-ibn-mutim#a_jb_v_musab": "Shared: Hakim ibn Hizam and Aqil are also called masters of lineage.",
     "siyar-v6-19-aqil#a_aq_v_nasab": "Shared: Hakim ibn Hizam and Jubair ibn Mut'im are also called masters of lineage.",
     "siyar-v5-118-umayr#a_u2_v_salih": "General praise: other people in the app could rightly be its answer too.",
-    "siyar-v5-118-umayr#a_u2_v_zuhd": "General: «من الزهاد» fits many (Abu al-Darda', Shaddad ibn Aws)."
+    "siyar-v5-118-umayr#a_u2_v_zuhd": "General: «من الزهاد» fits many (Abu al-Darda', Shaddad ibn Aws).",
+    "siyar-v6-2-uthman-ibn-talhah#a_ut_v_hajib": "Shared: the keepers of the Ka'bah's key were a family (Banu Shaybah); Shaybah ibn Uthman holds it too.",
+    "siyar-v6-3-shaybah-ibn-uthman#a_sb_v_sidanah": "Shared: the keeping of the Ka'bah (al-sidanah) was his family's; Uthman ibn Talhah holds it too.",
+    "siyar-v6-16-hisham-ibn-al-as#a_ha_v_qadim": "General: early Islam fits many Companions."
   }
 }

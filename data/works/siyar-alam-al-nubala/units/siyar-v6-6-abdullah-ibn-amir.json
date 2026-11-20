@@ -132,14 +132,6 @@
       "exact": "وَلاَّهُ مُعَاوِيَةُ البَصْرَةَ"
     },
     {
-      "id": "sp_ia_sakhi",
-      "edition": "siyar-risalah-1405-arnaut",
-      "volume": 6,
-      "page": "19",
-      "layer": "MAIN",
-      "exact": "وَكَانَ سَخِيّاً كَرِيْماً"
-    },
-    {
       "id": "sp_ia_muluk",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
@@ -266,14 +258,6 @@
       "report": "r_ia0",
       "spans": [
         "sp_ia_basra2"
-      ],
-      "role": "AUTHOR_REPORT"
-    },
-    {
-      "id": "st_ia_sakhi",
-      "report": "r_ia0",
-      "spans": [
-        "sp_ia_sakhi"
       ],
       "role": "AUTHOR_REPORT"
     },
@@ -614,20 +598,6 @@
       },
       "restsOn": [
         "st_ia_basra2"
-      ],
-      "status": "PROPOSED"
-    },
-    {
-      "id": "a_ia_v_sakhi",
-      "subject": "m_ia",
-      "predicate": "virtue",
-      "value": {
-        "spans": [
-          "sp_ia_sakhi"
-        ]
-      },
-      "restsOn": [
-        "st_ia_sakhi"
       ],
       "status": "PROPOSED"
     },

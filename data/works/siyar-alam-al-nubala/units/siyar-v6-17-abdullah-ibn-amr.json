@@ -244,6 +244,30 @@
       "exact": "كَانَ عَلَى مَيْمَنَةِ مُعَاوِيَةَ يَوْمَ صِفِّيْنَ"
     },
     {
+      "id": "sp_aa_mulaykah_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "92",
+      "layer": "MAIN",
+      "exact": "قَالَ عَبْدُ اللهِ بنُ عَمْرٍو -رَضِيَ اللهُ عَنْهُ -"
+    },
+    {
+      "id": "sp_aa_mulaykah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "92",
+      "layer": "MAIN",
+      "exact": "مَا لِيَ وَلِصِفِّيْنَ، مَا لِيَ وَلِقِتَالِ المُسْلِمِيْنَ"
+    },
+    {
+      "id": "sp_aa_mulaykah_1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "92",
+      "layer": "MAIN",
+      "exact": "أَمَا وَاللهِ عَلَى ذَلِكَ مَا ضَرَبْتُ بِسَيْفٍ، وَلاَ رَمَيْتُ بِسَهْمٍ"
+    },
+    {
       "id": "sp_aa_siffin_w",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
@@ -467,9 +491,22 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_aa_kufah",
+      "id": "r_aa_mulaykah",
       "unit": "siyar-v6-17-abdullah-ibn-amr",
       "ordinal": 8,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_aa_mulaykah_frame"
+      ],
+      "origin": {
+        "mention": "m_aa_mulaykah_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_aa_kufah",
+      "unit": "siyar-v6-17-abdullah-ibn-amr",
+      "ordinal": 9,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_aa_kufah_frame"
@@ -482,7 +519,7 @@
     {
       "id": "r_aa_ahmad",
       "unit": "siyar-v6-17-abdullah-ibn-amr",
-      "ordinal": 9,
+      "ordinal": 10,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_aa_ahmad_frame"
@@ -495,7 +532,7 @@
     {
       "id": "r_aa_bukayr",
       "unit": "siyar-v6-17-abdullah-ibn-amr",
-      "ordinal": 10,
+      "ordinal": 11,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_aa_bukayr_frame"
@@ -508,7 +545,7 @@
     {
       "id": "r_aa_d65b0",
       "unit": "siyar-v6-17-abdullah-ibn-amr",
-      "ordinal": 11,
+      "ordinal": 12,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_aa_d65b_frame"
@@ -521,7 +558,7 @@
     {
       "id": "r_aa_d65b1",
       "unit": "siyar-v6-17-abdullah-ibn-amr",
-      "ordinal": 12,
+      "ordinal": 13,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_aa_d65b_frame"
@@ -534,7 +571,7 @@
     {
       "id": "r_aa_d65b2",
       "unit": "siyar-v6-17-abdullah-ibn-amr",
-      "ordinal": 13,
+      "ordinal": 14,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_aa_d65b_frame"
@@ -547,7 +584,7 @@
     {
       "id": "r_aa_d65b3",
       "unit": "siyar-v6-17-abdullah-ibn-amr",
-      "ordinal": 14,
+      "ordinal": 15,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_aa_d65b_frame"
@@ -560,7 +597,7 @@
     {
       "id": "r_aa_taif",
       "unit": "siyar-v6-17-abdullah-ibn-amr",
-      "ordinal": 15,
+      "ordinal": 16,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_aa_taif_frame"
@@ -573,7 +610,7 @@
     {
       "id": "r_aa_makkah",
       "unit": "siyar-v6-17-abdullah-ibn-amr",
-      "ordinal": 16,
+      "ordinal": 17,
       "voice": "REPORTED_ANONYMOUS",
       "origin": {
         "mention": "m_aa_makkah_by"
@@ -684,6 +721,15 @@
       "report": "r_aa_ubayd",
       "spans": [
         "sp_aa_ubayd"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_aa_mulaykah",
+      "report": "r_aa_mulaykah",
+      "spans": [
+        "sp_aa_mulaykah",
+        "sp_aa_mulaykah_1"
       ],
       "role": "TRANSMITTED"
     },
@@ -865,6 +911,13 @@
       "exact": "كَانَ",
       "occurrence": 1,
       "role": "REFERENT"
+    },
+    {
+      "id": "m_aa_mulaykah_by",
+      "parent": "sp_aa_mulaykah_frame",
+      "exact": "عَبْدُ اللهِ بنُ عَمْرٍو",
+      "occurrence": 1,
+      "role": "SPEAKER"
     },
     {
       "id": "m_aa_siffin",
@@ -1063,6 +1116,18 @@
     {
       "id": "i_aa_sf",
       "mention": "m_aa_sf",
+      "agent": "abdullah-ibn-amr-ibn-al-as",
+      "basis": [
+        {
+          "span": "sp_aa_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aa_mulaykah_by",
+      "mention": "m_aa_mulaykah_by",
       "agent": "abdullah-ibn-amr-ibn-al-as",
       "basis": [
         {
@@ -1322,7 +1387,8 @@
         "object": "m_aa_siffin"
       },
       "restsOn": [
-        "st_aa_ubayd"
+        "st_aa_ubayd",
+        "st_aa_mulaykah"
       ],
       "status": "PROPOSED"
     },

@@ -12,6 +12,10 @@
     "abdullah-ibn-as-saib": {
       "at": "عُمَرَ",
       "note": "Siyar v6 p388 prints «صيفي بن عابد بن عمر بن مخزوم», leaving out «عبد الله» between Abid and Umar: Abid is the son of Abdullah ibn Umar ibn Makhzum (al-Isti'ab; Tahdhib al-Kamal), the brother of Hilal (Abu Salamah's line, p406) and of Uthman (Amr ibn Hurayth's line, p417). His line stops at «عابد» so it does not meet them at «عمر»."
+    },
+    "abu-rifaah-al-adawi": {
+      "at": "عَدِيِّ",
+      "note": "Not a slip but a shortened line: the entry (Siyar 6/14) prints «تميم بن أسيد، ابن عدي بن عبد مناة بن أد بن طابخة», which names the tribe he belongs to (Banu Adi ibn Abd Manat) rather than a father-by-father line; the generations between Usayd and Adi are not printed. The line stops before Adi so the tree joins no one through the skipped generations."
     }
   }
 }

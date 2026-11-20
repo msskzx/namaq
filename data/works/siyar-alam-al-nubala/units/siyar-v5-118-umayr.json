@@ -33,6 +33,15 @@
       "exact": "العَبْدُ الصَّالِحُ، الأَمِيْرُ"
     },
     {
+      "id": "sp_u2_salih_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "557",
+      "layer": "MAIN",
+      "exact": "العَبْدُ الصَّالِحُ",
+      "prefix": "الأَوْسِيُّ،"
+    },
+    {
       "id": "sp_u2_dimashq",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 5,
@@ -228,7 +237,7 @@
       "predicate": "virtue",
       "value": {
         "spans": [
-          "sp_u2_salih"
+          "sp_u2_salih_v"
         ]
       },
       "restsOn": [

@@ -161,6 +161,15 @@
       "exact": "كَانَ عَمْرٌو قَصِيْراً، يَخْضِبُ بِالسَّوَادِ"
     },
     {
+      "id": "sp_am_misr_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "56",
+      "layer": "MAIN",
+      "exact": "قَالَ البُخَارِيُّ",
+      "prefix": "مِنْهَا."
+    },
+    {
       "id": "sp_am_misr",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
@@ -201,6 +210,15 @@
       "layer": "MAIN",
       "exact": "النَّبِيُّ",
       "prefix": "قَالَ:\n\nقَالَ"
+    },
+    {
+      "id": "sp_am_hisham_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "56",
+      "layer": "MAIN",
+      "exact": "عَمْرٌو وَهِشَامٌ",
+      "prefix": "مُؤْمِنَانِ،"
     },
     {
       "id": "sp_am_amana_frame",
@@ -434,9 +452,22 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_am_muminan",
+      "id": "r_am_misr",
       "unit": "siyar-v6-15-amr-ibn-al-as",
       "ordinal": 5,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_am_misr_frame"
+      ],
+      "origin": {
+        "mention": "m_am_misr_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_am_muminan",
+      "unit": "siyar-v6-15-amr-ibn-al-as",
+      "ordinal": 6,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_am_muminan_frame"
@@ -449,7 +480,7 @@
     {
       "id": "r_am_amana",
       "unit": "siyar-v6-15-amr-ibn-al-as",
-      "ordinal": 6,
+      "ordinal": 7,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_am_amana_frame"
@@ -462,7 +493,7 @@
     {
       "id": "r_am_mal",
       "unit": "siyar-v6-15-amr-ibn-al-as",
-      "ordinal": 7,
+      "ordinal": 8,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_am_mal_frame"
@@ -475,7 +506,7 @@
     {
       "id": "r_am_salasil",
       "unit": "siyar-v6-15-amr-ibn-al-as",
-      "ordinal": 8,
+      "ordinal": 9,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_am_salasil_frame"
@@ -488,7 +519,7 @@
     {
       "id": "r_am_d430",
       "unit": "siyar-v6-15-amr-ibn-al-as",
-      "ordinal": 9,
+      "ordinal": 10,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_am_d43_frame"
@@ -501,7 +532,7 @@
     {
       "id": "r_am_d431",
       "unit": "siyar-v6-15-amr-ibn-al-as",
-      "ordinal": 10,
+      "ordinal": 11,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_am_d43_frame"
@@ -514,7 +545,7 @@
     {
       "id": "r_am_d432",
       "unit": "siyar-v6-15-amr-ibn-al-as",
-      "ordinal": 11,
+      "ordinal": 12,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_am_d43_frame"
@@ -527,7 +558,7 @@
     {
       "id": "r_am_numayr",
       "unit": "siyar-v6-15-amr-ibn-al-as",
-      "ordinal": 12,
+      "ordinal": 13,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_am_numayr_frame"
@@ -540,7 +571,7 @@
     {
       "id": "r_am_bukayr",
       "unit": "siyar-v6-15-amr-ibn-al-as",
-      "ordinal": 13,
+      "ordinal": 14,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_am_bukayr_frame"
@@ -618,11 +649,11 @@
     },
     {
       "id": "st_am_misr",
-      "report": "r_am0",
+      "report": "r_am_misr",
       "spans": [
         "sp_am_misr"
       ],
-      "role": "AUTHOR_REPORT"
+      "role": "TRANSMITTED"
     },
     {
       "id": "st_am_muminan",
@@ -802,11 +833,32 @@
       "role": "SPEAKER"
     },
     {
+      "id": "m_am_misr_by",
+      "parent": "sp_am_misr_frame",
+      "exact": "البُخَارِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
       "id": "m_am_muminan_by",
       "parent": "sp_am_muminan_frame",
       "exact": "النَّبِيُّ",
       "occurrence": 1,
       "role": "SPEAKER"
+    },
+    {
+      "id": "m_am_hisham",
+      "parent": "sp_am_muminan",
+      "exact": "وَهِشَامٌ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_am_mu",
+      "parent": "sp_am_muminan",
+      "exact": "عَمْرٌو",
+      "occurrence": 1,
+      "role": "SUBJECT"
     },
     {
       "id": "m_am_amana_by",
@@ -987,6 +1039,30 @@
       "basis": [
         {
           "span": "sp_am_muminan_pb",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_am_hisham",
+      "mention": "m_am_hisham",
+      "agent": "hisham-ibn-al-as",
+      "basis": [
+        {
+          "span": "sp_am_hisham_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_am_mu",
+      "mention": "m_am_mu",
+      "agent": "amr-ibn-al-as",
+      "basis": [
+        {
+          "span": "sp_am_heading",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -1264,6 +1340,18 @@
       "status": "PROPOSED"
     },
     {
+      "id": "a_am_hisham",
+      "subject": "m_am_mu",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_am_hisham"
+      },
+      "restsOn": [
+        "st_am_muminan"
+      ],
+      "status": "PROPOSED"
+    },
+    {
       "id": "a_am_v_amana",
       "subject": "m_am_amana",
       "predicate": "virtue",
@@ -1380,7 +1468,7 @@
       "value": {
         "classified": "amir",
         "spans": [
-          "sp_am_egypt"
+          "sp_am_egypt_o"
         ]
       },
       "restsOn": [
