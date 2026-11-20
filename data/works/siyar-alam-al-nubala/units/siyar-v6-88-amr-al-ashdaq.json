@@ -1,0 +1,146 @@
+{
+  "unit": {
+    "id": "siyar-v6-88-amr-al-ashdaq",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٨٨"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_as_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "449",
+      "layer": "MAIN",
+      "exact": "٨٨ - عَمْرٌو الأَشْدَقُ بنُ العَاصِ الأُمَوِيُّ"
+    },
+    {
+      "id": "sp_as_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "449",
+      "layer": "MAIN",
+      "exact": "عَمْرٌو الأَشْدَقُ بنُ العَاصِ الأُمَوِيُّ",
+      "prefix": "٨٨ - "
+    },
+    {
+      "id": "sp_as_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "449",
+      "layer": "MAIN",
+      "exact": "عَمْرٌو الأَشْدَقُ",
+      "prefix": "٨٨ - "
+    },
+    {
+      "id": "sp_as_dimashq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "449",
+      "layer": "MAIN",
+      "exact": "اسْتَخْلَفَهُ عَبْدُ المَلِكِ بنُ مَرْوَانَ عَلَى دِمَشْقَ لَمَّا سَارَ لِيَمْلِكَ العِرَاقَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_as0",
+      "unit": "siyar-v6-88-amr-al-ashdaq",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_as_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_as_name",
+      "report": "r_as0",
+      "spans": [
+        "sp_as_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_as_dimashq",
+      "report": "r_as0",
+      "spans": [
+        "sp_as_dimashq"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_as",
+      "parent": "sp_as_name",
+      "exact": "عَمْرٌو",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_as",
+      "mention": "m_as",
+      "agent": "amr-ibn-said-al-ashdaq",
+      "basis": [
+        {
+          "span": "sp_as_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_as_name",
+      "subject": "m_as",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_as_name"
+        ]
+      },
+      "restsOn": [
+        "st_as_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_as_sex",
+      "subject": "m_as",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_as_sex"
+        ]
+      },
+      "restsOn": [
+        "st_as_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_as_dimashq",
+      "subject": "m_as",
+      "predicate": "office",
+      "value": {
+        "classified": "amir",
+        "spans": [
+          "sp_as_dimashq"
+        ]
+      },
+      "restsOn": [
+        "st_as_dimashq"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

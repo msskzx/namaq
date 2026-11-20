@@ -439,6 +439,14 @@
       "layer": "MAIN",
       "exact": "حَلَبٍ",
       "prefix": "مَاتَ بِلاَلٌ بِ"
+    },
+    {
+      "id": "sp_bl_saad_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "351",
+      "layer": "MAIN",
+      "exact": "بِلاَلُ بنُ عَبْدِ اللهِ"
     }
   ],
   "reports": [
@@ -707,6 +715,14 @@
       "report": "r_bl_saad",
       "spans": [
         "sp_bl_saad"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_bl_saad_name",
+      "report": "r_bl_saad",
+      "spans": [
+        "sp_bl_saad_name"
       ],
       "role": "TRANSMITTED"
     },
@@ -1732,6 +1748,20 @@
       },
       "restsOn": [
         "st_bl_halab"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_bl_variant",
+      "subject": "m_bl",
+      "predicate": "name.variant",
+      "value": {
+        "spans": [
+          "sp_bl_saad_name"
+        ]
+      },
+      "restsOn": [
+        "st_bl_saad_name"
       ],
       "status": "PROPOSED"
     }

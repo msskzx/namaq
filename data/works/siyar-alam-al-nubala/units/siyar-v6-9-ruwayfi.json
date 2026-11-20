@@ -1,0 +1,395 @@
+{
+  "unit": {
+    "id": "siyar-v6-9-ruwayfi",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٩"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_rw_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "36",
+      "layer": "MAIN",
+      "exact": "٩ - رُوَيفِعُ بنُ ثَابِتٍ الأَنْصَارِيُّ النَّجَّارِيُّ"
+    },
+    {
+      "id": "sp_rw_head",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "36",
+      "layer": "MAIN",
+      "exact": "رُوَيفِعُ بنُ ثَابِتٍ الأَنْصَارِيُّ النَّجَّارِيُّ"
+    },
+    {
+      "id": "sp_rw_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "36",
+      "layer": "MAIN",
+      "exact": "رُوَيفِعُ بنُ",
+      "prefix": "-"
+    },
+    {
+      "id": "sp_rw_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "36",
+      "layer": "MAIN",
+      "exact": "ثَابِتٍ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sp_rw_tarabulus",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "36",
+      "layer": "MAIN",
+      "exact": "وَوَلِيَ طَرَابُلْسَ المَغْرِبِ لِمُعَاوِيَةَ فِي سَنَةِ سِتٍّ وَأَرْبَعِيْنَ"
+    },
+    {
+      "id": "sp_rw_barqi_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "36",
+      "layer": "MAIN",
+      "exact": "قَالَ أَحْمَدُ بنُ البَرْقِيِّ"
+    },
+    {
+      "id": "sp_rw_barqi",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "36",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ رُوَيْفِعٌ بِبَرْقَةَ، وَهُوَ أَمِيْرٌ عَلَيْهَا"
+    },
+    {
+      "id": "sp_rw_barqi_p",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "36",
+      "layer": "MAIN",
+      "exact": "بِبَرْقَةَ",
+      "prefix": "رُوَيْفِعٌ"
+    },
+    {
+      "id": "sp_rw_yunus_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "36",
+      "layer": "MAIN",
+      "exact": "وَقَالَ أَبُو سَعِيْدٍ بنُ يُوْنُسَ"
+    },
+    {
+      "id": "sp_rw_yunus",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "36",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ بِبَرْقَةَ أَمِيْراً عَلَيْهَا لِمَسْلَمَةَ بنِ مُخَلَّدٍ فِي سَنَةِ سِتٍّ وَخَمْسِيْنَ"
+    },
+    {
+      "id": "sp_rw_yunus_p",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "36",
+      "layer": "MAIN",
+      "exact": "بِبَرْقَةَ",
+      "prefix": "تُوُفِّيَ"
+    },
+    {
+      "id": "sp_rw_yunus_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "36",
+      "layer": "MAIN",
+      "exact": "سَنَةِ سِتٍّ وَخَمْسِيْنَ",
+      "prefix": "فِي"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_rw0",
+      "unit": "siyar-v6-9-ruwayfi",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_rw_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_rw_barqi",
+      "unit": "siyar-v6-9-ruwayfi",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_rw_barqi_frame"
+      ],
+      "origin": {
+        "mention": "m_rw_barqi_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_rw_yunus",
+      "unit": "siyar-v6-9-ruwayfi",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_rw_yunus_frame"
+      ],
+      "origin": {
+        "mention": "m_rw_yunus_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_rw_head",
+      "report": "r_rw0",
+      "spans": [
+        "sp_rw_head"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_rw_tarabulus",
+      "report": "r_rw0",
+      "spans": [
+        "sp_rw_tarabulus"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_rw_barqi",
+      "report": "r_rw_barqi",
+      "spans": [
+        "sp_rw_barqi"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_rw_yunus",
+      "report": "r_rw_yunus",
+      "spans": [
+        "sp_rw_yunus"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_rw",
+      "parent": "sp_rw_head",
+      "exact": "رُوَيفِعُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_rw_father",
+      "parent": "sp_rw_head",
+      "exact": "ثَابِتٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_rw_t",
+      "parent": "sp_rw_tarabulus",
+      "exact": "وَوَلِيَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_rw_barqi_by",
+      "parent": "sp_rw_barqi_frame",
+      "exact": "أَحْمَدُ بنُ البَرْقِيِّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_rw_b",
+      "parent": "sp_rw_barqi",
+      "exact": "رُوَيْفِعٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_rw_yunus_by",
+      "parent": "sp_rw_yunus_frame",
+      "exact": "أَبُو سَعِيْدٍ بنُ يُوْنُسَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_rw",
+      "mention": "m_rw",
+      "agent": "ruwayfi-ibn-thabit",
+      "basis": [
+        {
+          "span": "sp_rw_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rw_father",
+      "mention": "m_rw_father",
+      "agent": "thabit-father-of-ruwayfi",
+      "basis": [
+        {
+          "span": "sp_rw_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rw_t",
+      "mention": "m_rw_t",
+      "agent": "ruwayfi-ibn-thabit",
+      "basis": [
+        {
+          "span": "sp_rw_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rw_b",
+      "mention": "m_rw_b",
+      "agent": "ruwayfi-ibn-thabit",
+      "basis": [
+        {
+          "span": "sp_rw_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_rw_name",
+      "subject": "m_rw",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_rw_head"
+        ]
+      },
+      "restsOn": [
+        "st_rw_head"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rw_sex",
+      "subject": "m_rw",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_rw_sex"
+        ]
+      },
+      "restsOn": [
+        "st_rw_head"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rw_father",
+      "subject": "m_rw",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_rw_father"
+      },
+      "restsOn": [
+        "st_rw_head"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rw_office",
+      "subject": "m_rw_t",
+      "predicate": "office",
+      "value": {
+        "classified": "amir",
+        "spans": [
+          "sp_rw_tarabulus"
+        ]
+      },
+      "restsOn": [
+        "st_rw_tarabulus"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rw_place",
+      "subject": "m_rw_b",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "sp_rw_barqi_p"
+        ]
+      },
+      "restsOn": [
+        "st_rw_barqi"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rw_place_y",
+      "subject": "m_rw",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "sp_rw_yunus_p"
+        ]
+      },
+      "restsOn": [
+        "st_rw_yunus"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rw_d56",
+      "subject": "m_rw",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 56,
+        "spans": [
+          "sp_rw_yunus_y"
+        ]
+      },
+      "restsOn": [
+        "st_rw_yunus"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rw_office_barqah",
+      "subject": "m_rw",
+      "predicate": "office",
+      "value": {
+        "classified": "amir",
+        "spans": [
+          "sp_rw_yunus"
+        ]
+      },
+      "restsOn": [
+        "st_rw_yunus"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

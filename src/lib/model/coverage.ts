@@ -74,19 +74,22 @@ export function coverageOf(folder: WorkFolder, file: UnitFile, root: string): Co
   if (!witness) throw new Error(`${file.unit.id}: edition "${main[0].edition}" has no witness`);
   const volume = main[0].volume;
   const printed = file.unit.numbers.printed;
-  const heading = new RegExp(`(^|\\n\\n)${printed} - `);
+  const heading = new RegExp(`(^|\\n\\n)${printed} - ?`);
   // Shamela sometimes prints the next number on a line of its own («١٣٦\n\n- حكيم بن جبلة», Siyar v6 p531).
-  const stop = new RegExp(`(^|\\n\\n)${nextNumber(printed)}(?: |\\n\\n)- `);
+  const stop = new RegExp(`(^|\\n\\n)${nextNumber(printed)}(?: |\\n\\n)- ?`);
   const first = Math.min(...main.filter((span) => span.volume === volume).map((span) => Number(span.page)));
   const manifest = existsSync(join(root, sourcesRoot, witness.slug, 'source.json'))
     ? loadSourceManifest(root, witness.slug)
     : undefined;
   const lastPage = manifest?.volumes.find((v) => v.number === volume)?.lastPrintedPage ?? undefined;
+  // A printed number the host never shows (v6 goes from 239 to 241) is not a gap in the store.
+  const skipped = manifest?.volumes.find((v) => v.number === volume)?.skippedPrintedPages ?? [];
 
   const segments: { page: string; body: string; start: number; end: number }[] = [];
   let ended = false;
   for (let page = first; ; page += 1) {
     const loaded = loadStorePage(root, witness.slug, volume, String(page));
+    if (!loaded && skipped.includes(page) && segments.length > 0) continue;
     if (!loaded) {
       if (lastPage !== undefined && page <= lastPage && segments.length > 0) {
         throw new Error(`${file.unit.id}: page ${page} is missing from the store before the entry ends`);
