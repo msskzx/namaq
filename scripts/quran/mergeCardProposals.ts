@@ -9,7 +9,7 @@
  */
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { type CardProposals, type CardReviewEntry, type CardReviewIndex } from '../../src/lib/quran/curation/cardReviewIndex';
+import { type CardProposal, type CardProposals, type CardReviewEntry, type CardReviewIndex } from '../../src/lib/quran/curation/cardReviewIndex';
 
 const dir = process.argv[2];
 if (!dir) throw new Error('Usage: tsx scripts/quran/mergeCardProposals.ts <dir>');
@@ -40,6 +40,10 @@ for (const entry of index.cards) {
 
 // Each agent's line names its card by the key it was given (cards sharing a compare pair share a key): the n-th line for a key
 // is the n-th card of that key in the agent's shard. A card judged again (an agent resumed over its own batch) keeps its last line.
+// A later file re-judges cards of an earlier one (Z1: reshaped word trees judged again under the brief's clarifications). Where the
+// verdict or the rows change, the second agent's view was of the earlier verdict, so it is left off.
+const superseded = new Set<string>();
+const shape = (proposal?: CardProposal) => proposal && JSON.stringify([proposal.keep, proposal.cards ?? null]);
 for (const file of files('out')) {
   const ids = new Map<string, string[]>();
   for (const { key, id } of jsonl(join(dir, 'shards', file))) ids.set(key, [...ids.get(key) ?? [], id]);
@@ -50,14 +54,16 @@ for (const file of files('out')) {
     const n = seen.get(key) ?? 0;
     seen.set(key, n + 1);
     const id = candidates[Math.min(n, candidates.length - 1)];
+    const before = shape(proposals[id]);
     proposals[id] = { keep, why, ...(cards ? { cards } : {}), ...(changes ? { changes } : {}), ...(relation ? { relation } : {}), ...(flags?.length ? { flags } : {}), ...(unsure ? { unsure } : {}) };
+    if (before && before !== shape(proposals[id])) superseded.add(id);
   }
 }
 
 // The second agent's view, by the same key: it applies to every card of that key.
 const byKey = new Map<string, string[]>();
 for (const file of files('out')) for (const { key, id } of jsonl(join(dir, 'shards', file))) byKey.set(key, [...new Set([...byKey.get(key) ?? [], id])]);
-for (const file of files('check')) for (const { key, agree, why } of jsonl(join(dir, 'check', file))) for (const id of byKey.get(key) ?? []) if (proposals[id]) proposals[id].check = { agree, why };
+for (const file of files('check')) for (const { key, agree, why } of jsonl(join(dir, 'check', file))) for (const id of byKey.get(key) ?? []) if (proposals[id] && !superseded.has(id)) proposals[id].check = { agree, why };
 
 // The compare card of one pair shares its tree twin's verdict, so it shows the twin's proposal (the agents judged it there).
 const twinOf = new Map(index.cards.filter(entry => entry.twin && proposals[entry.id]).map(entry => [entry.twin!, entry.id]));
