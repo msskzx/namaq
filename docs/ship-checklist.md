@@ -57,7 +57,7 @@ in [records](records/README.md), `AGENTS` a rule already in AGENTS.md.
 
 - [ ] Read every new or changed question. Drop any where a wrong choice could also be right, is ambiguous, or is too close to the answer. The owner checks a sample before it ships. (owner 11-18)
 - [ ] No question gives its answer away: not in its prompt, not in another question of the same quiz, not in data sent to party phones before the reveal. (owner 11-19, R0029)
-- [ ] Wrong choices come from the same scope and filters the questions come from: a juz 30 quiz never offers a juz 29 surah. (owner 11-19)
+- [ ] Wrong choices come from the same scope and filters the questions come from: a juz 30 quiz never offers a juz 29 surah. (owner 11-19) Exception: «في أي سورة؟» in a range of too few surahs fills the missing choices with the surahs nearest the range, rather than skip the question. (owner 11-20)
 - [ ] A weak question gets new wrong choices first. Drop it only if that fails. (owner 11-18)
 - [ ] Wrong choices are plainly wrong but plausible: from the same book, the same sex for a virtue, the same rhyme for a verse. Never a broad term that covers the answer, and never another companion who also narrates it.
 - [ ] Meaning quizzes: no wrong choice from the question's own ayah, and pointer meanings («يعني: القرآن») are never wrong choices. A meaning given for a non-Hafs reading, or followed by «ويقال» or «وقيل», is not asked. (owner 11-18)
