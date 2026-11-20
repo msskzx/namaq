@@ -419,6 +419,8 @@ export default function ReaderView({
     setPosition({ start: order[0], shown: null, words: 0 });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- once, when the page opens with ?write=1
   }, [startWriting]);
+  // The bar's reset (owner, 2026-11-20): the whole page hidden again, recited from its first ayah, without leaving recite mode.
+  const restartPage = () => { setActions(null); setReviewing(false); setChecked(null); setPosition({ start: order[0], shown: null, words: 0 }); };
   const stopRecite = () => { setActions(null); setReviewing(false); setPosition(null); setChecked(null); input.current?.blur(); };
   const revealNextAyah = reciter.nextAyah;
   const revealNextWord = reciter.nextWord;
@@ -687,7 +689,7 @@ export default function ReaderView({
       {sharing && <AyahShareDialog ayah={sharing} name={surahOfKey(sharing)} note={notes[sharing]?.text} onClose={() => setSharing(null)} />}
       {/* The recite bar floats over the page, goes wherever it is dragged and folds into a circle (owner, 2026-11-19). */}
       {position && <FloatingBar id="recite" openLabel={ar ? 'افتح أدوات التسميع' : 'Open the recite tools'} Icon={EyeOff} className={mushaf.reciteBar}>
-        {fold => <RecitePill recite={reciter} writing={writing} onWriting={toggleWriting} onClose={stopRecite} onFold={fold} ar={ar} more={reviewing ? !!reviewNext : !last}
+        {fold => <RecitePill recite={reciter} writing={writing} onWriting={toggleWriting} onClose={stopRecite} onRestart={reviewing ? undefined : restartPage} onFold={fold} ar={ar} more={reviewing ? !!reviewNext : !last}
           after={reviewing ? { Icon: ar ? ArrowLeft : ArrowRight, label: ar ? 'الآية المنسية التالية' : 'Next forgotten ayah' } : undefined}
           lead={reviewing ? <span className="px-2 text-sm text-[var(--home-muted)]">{ar ? `مراجعة ${num(reviewAt)} من ${num(reviewTotal)}` : `Review ${reviewAt} of ${reviewTotal}`}</span> : null} />}
       </FloatingBar>}

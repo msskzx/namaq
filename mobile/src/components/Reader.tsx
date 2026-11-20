@@ -226,6 +226,8 @@ export default function Reader() {
     setMark(null);
     setPosition({ start: from, shown: null, words: 0 });
   };
+  // The bar's reset (owner, 2026-11-20): the whole page hidden again, recited from its first ayah, without leaving recite mode.
+  const restartPage = () => { setActions(null); setReviewing(false); setChecked(null); setPosition({ start: model.order[0], shown: null, words: 0 }); };
   const stopRecite = () => { setActions(null); setReviewing(false); setPosition(null); setChecked(null); boxes.blur(); };
   const reviewKey = position ? position.word === undefined ? position.start : wordMarkKey(position.start, position.word) : '';
   const reviewNext = reviewing && position ? nextForgotten(forgotten, reviewKey) : null;
@@ -523,7 +525,7 @@ export default function Reader() {
         <FloatingBar id="recite" label="أدوات التسميع" Icon={EyeOff} screen={size} clear={barClear} palette={palette}
           start={{ x: size.width / 2, y: size.height - barClear.bottom - RECITE_BAR / 2 }}>
           {fold => (
-            <RecitePill recite={recite} writing={writing} onWriting={toggleWriting} onClose={stopRecite} palette={palette} onFold={fold}
+            <RecitePill recite={recite} writing={writing} onWriting={toggleWriting} onClose={stopRecite} onRestart={reviewing ? undefined : restartPage} palette={palette} onFold={fold}
               more={reviewing ? !!reviewNext : page < PAGES} after={reviewing ? { Icon: ArrowLeft, label: 'الآية المنسية التالية' } : undefined}
               lead={reviewing ? <Text style={{ color: palette.muted, fontSize: 13, paddingHorizontal: 8 }}>مراجعة {num(reviewAt)} من {num(reviewTotal)}</Text> : null} />
           )}

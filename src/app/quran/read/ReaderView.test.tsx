@@ -272,6 +272,13 @@ describe('Recite mode', () => {
     expect(veiled(container)).toEqual(['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ۝']);
     fireEvent.click(bar.getByRole('button', { name: 'أظهر الآية التالية' }));
     expect(veiled(container)).toEqual([]);
+    // The reset hides the whole page again, still reciting (owner, 2026-11-20).
+    fireEvent.click(bar.getByRole('button', { name: 'أخفِ الصفحة وسمّع من أولها' }));
+    expect(veiled(container)).toEqual(['الٓمٓ ۝', 'ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ۝']);
+    expect(bar.getByRole('button', { name: 'ارجع خطوة' }).hasAttribute('disabled')).toBe(true);
+    fireEvent.click(bar.getByRole('button', { name: 'أظهر الآية التالية' }));
+    fireEvent.click(bar.getByRole('button', { name: 'أظهر الآية التالية' }));
+    expect(veiled(container)).toEqual([]);
     fireEvent.click(bar.getByRole('button', { name: 'أظهر الآية التالية' }));
     expect(push).toHaveBeenLastCalledWith('/quran/read/4?recite=2%3A1&upto=2%3A2');
     fireEvent.click(bar.getByRole('button', { name: 'إنهاء التسميع' }));
