@@ -51,6 +51,10 @@ const readable = (id: BookId, data: unknown) => {
   const at = TEXT_AT[id] ?? -1;
   if (!book || typeof book !== 'object' || !book.source || typeof book.source !== 'object' || !Array.isArray(book.entries)
     || !book.entries.every(entry => Array.isArray(entry) && typeof entry[at] === 'string')) throw new Error('not a book');
+  // A book of mutashabih carries its own page breaks (shared/readerBooks.ts MutashabihBookData).
+  const pageBreaks = (book as { breaks?: unknown }).breaks;
+  if (bookOf(id).kind === 'mutashabih' && !(Array.isArray(pageBreaks) && pageBreaks.length
+    && pageBreaks.every(row => Array.isArray(row) && row.length === 4 && row.every(Number.isInteger)))) throw new Error('not a book');
   return data;
 };
 const fileOf = (id: BookId) => new File(folder(), `${id}.json`);

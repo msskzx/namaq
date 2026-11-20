@@ -31,7 +31,7 @@ async function load(id: ReaderBookId): Promise<ReaderBook | null> {
   const revision = bookRevision(id);
   if (id === 'sadi') return make(id, sadiEntries(sadi.passages), revision);
   if (id === 'kashshaf') { const data = await readBook<KashshafData>(id); return data && make(id, kashshafEntries(data), revision); }
-  if (id !== 'ukbari') { const data = await readBook<MutashabihBookData>(id); return data && make(id, mutashabihEntries(data), revision, data.breaks); }
+  if (id === 'kirmani' || id === 'iskafi' || id === 'zubayr') { const data = await readBook<MutashabihBookData>(id); return data && make(id, mutashabihEntries(data), revision, data.breaks); }
   const data = await readBook<UkbariData>(id);
   return data && make(id, ukbariEntries(data), revision);
 }
