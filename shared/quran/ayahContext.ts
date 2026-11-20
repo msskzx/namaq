@@ -34,7 +34,6 @@ const tokens = (ayah: BranchAyah) => {
   return { norm, keys: norm.map((_, i) => ayah.roots?.[i] ? `r:${ayah.roots[i]}` : ayah.lemmas?.[i] ? `p:${ayah.lemmas[i]!.replace(/\d+$/, '')}` : fallback[i]) };
 };
 
-/** Index pairs `a`↔`b` on a longest in-order run of words the two share (LCS), so a repeated word is matched where it lines up. */
 /** The longest LCS lining up of `a[ai..aj)` with `b[bi..bj)`, added to `pairs`. */
 function lcsPairs(a: string[], b: string[], ai: number, aj: number, bi: number, bj: number, pairs: Map<number, number>) {
   const n = aj - ai, m = bj - bi;
