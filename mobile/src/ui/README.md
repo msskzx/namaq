@@ -34,6 +34,7 @@ below. Never copy one into a screen.
 | `SettingRow` | A settings row that folds: icon, name, what is chosen; a tap opens the picker under it | settings' «ما أحفظه» and «اهتماماتي» |
 | `TapRow` | A frameless row of a drawing: a tap opens what it names, a long press shows its source; 44 tall | the rows of the «حياته» timeline |
 | `Pickable` | A block of a card that picks it on a tap, `aria-pressed` | a book's paragraph that lights the ayah words it quotes |
+| `Saying` | Someone's words with who says them on a muted line before them («قال فلان:»); `by` left out draws the words alone | every quote from a book with its sayer (a person's virtues, a laqab's words, a tie's sentence) |
 | `Bubble` | A speech bubble: the speaker's name in his colour, his side, his corner sharp; `framed` | a conversation drawn as a chat (the dialog scenes of «مشاهد», a hadith's scenes) |
 | `Step` | A numbered step: the number in an accent ring, its content beside it | a sequence told in order (a battle's moments) |
 | `SplitBar` | Two amounts on one bar, each its share, accent then rule colour | comparing two sides (a battle's numbers) |

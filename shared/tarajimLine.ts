@@ -141,9 +141,12 @@ export function lineOf(person: AppPerson, people: readonly AppPerson[]): LineNam
   return line;
 }
 
+/** A father's name after «بن», in the genitive, as a line carried on through his own entry may print him nominative. */
+const afterBin = (name: string) => name.replace(/(^|\s)أبو(?=\s)/gu, '$1أبي').replace(/(^|\s)ذو(?=\s)/gu, '$1ذي').replace(/(^|\s)امرؤ(?=\s)/gu, '$1امرئ');
+
 /** The fathers' chain from a person up to index `to`, unvowelled: «بنت» after a woman's name, «بن» between the rest. */
 export function chainOf(person: { sex?: string }, line: LineName[], to: number) {
-  return line.slice(0, to + 1).map((n) => n.name.replace(/[ً-ْٰـ]/g, ''))
+  return line.slice(0, to + 1).map((n, k) => { const bare = n.name.replace(/[ً-ْٰـ]/g, ''); return k === 0 ? bare : afterBin(bare); })
     .reduce((text, name, k) => (k === 0 ? name : `${text} ${k === 1 && person.sex === 'FEMALE' ? 'بنت' : 'بن'} ${name}`), '');
 }
 
@@ -171,9 +174,19 @@ export function meetingOf(a: LineName[], b: LineName[]): { a: number; b: number 
   return undefined;
 }
 
+/**
+ * A father's name standing alone in a box, unvowelled and in the nominative (owner 2026-11-20): the line prints him after
+ * «بن», in the genitive («أبي طالب», «أبي قحافة عثمان», «ذي يزن»); the box reads «أبو طالب», «أبو قحافة عثمان», «ذو يزن».
+ */
+export function boxName(name: string) {
+  return name.replace(/[ً-ْٰـ]/g, '').trim()
+    .replace(/(^|\s)(?:أبي|أبا)(?=\s)/gu, '$1أبو').replace(/(^|\s)(?:ذي|ذا)(?=\s)/gu, '$1ذو').replace(/(^|\s)امرئ(?=\s)/gu, '$1امرؤ');
+}
+
 /** One father in the nasab tree: his name, the people picked whose line ends at him (they are he), and his sons on the lines. */
 export interface NasabNode {
   key: string;
+  /** As a box shows it (boxName). */
   name: string;
   /** The picked people this node is. */
   people: string[];
@@ -189,7 +202,7 @@ export function nasabTree(picked: { slug: string; line: LineName[] }[]): NasabNo
   const roots: NasabNode[] = [];
   const parentOf = new Map<NasabNode, NasabNode>();
   const placed: { line: LineName[]; nodes: NasabNode[] }[] = [];
-  const node = (n: LineName): NasabNode => ({ key: n.bare, name: n.name, people: [], children: [] });
+  const node = (n: LineName): NasabNode => ({ key: n.bare, name: boxName(n.name), people: [], children: [] });
   const adopt = (parent: NasabNode, child: NasabNode) => {
     parent.children.push(child);
     parentOf.set(child, parent);
@@ -250,4 +263,18 @@ export function foldTop(root: NasabNode): { above: string[]; start: NasabNode } 
     node = node.children[0];
   }
   return { above, start: node };
+}
+
+/** The fewest fathers a straight run folds into one «…» box: fewer are drawn as they are. */
+export const FOLD_RUN = 3;
+
+/**
+ * The straight run that starts at `node` (owner 2026-11-20): fathers with one son on the drawn lines, no picked person
+ * among them, and whose son is no picked person either, so the meeting father above, each person's father and the people
+ * stay drawn. The tree folds a run of FOLD_RUN or more into one «…» box that opens in place. Empty when `node` is kept.
+ */
+export function straightRun<T extends { children: T[] }>(node: T, picked: (node: T) => boolean): T[] {
+  const run: T[] = [];
+  for (let at = node; at.children.length === 1 && !picked(at) && !picked(at.children[0]); at = at.children[0]) run.push(at);
+  return run;
 }

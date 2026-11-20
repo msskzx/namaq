@@ -191,7 +191,7 @@ export function LookView({ look, shown, palette }: { look: QuizLook; shown: bool
   switch (look.view) {
     case 'ties': return <TiesLook key={look.slug} slug={look.slug} mark={shown ? look.mark : undefined} width={drawW} palette={palette} />;
     case 'life': { const person = findPerson(look.slug); return person ? <LifeTimeline items={personLife(person)} palette={palette} inCard linked={false} marked={shown ? look.mark : undefined} /> : null; }
-    case 'nasab': return <View style={{ gap: 16 }}><NasabTree slugs={look.slugs} palette={palette} meetings={shown && !!look.mark} linked={false} /></View>;
+    case 'nasab': return <View style={{ gap: 16 }}><NasabTree slugs={look.slugs} palette={palette} meetings={shown && !!look.mark} linked={false} start={look.text ? 'text' : 'drawing'} /></View>;
     case 'virtues': return <VirtuesLook slugs={look.slugs} mark={shown ? look.mark : undefined} palette={palette} />;
     case 'terms': return <TermsLook names={look.names} mark={shown ? look.mark : undefined} palette={palette} />;
     case 'hadith': return <HadithLook mark={shown ? look.mark : undefined} palette={palette} />;

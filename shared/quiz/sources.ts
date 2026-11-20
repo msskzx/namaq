@@ -78,7 +78,7 @@ export const MUSHAF_LINE = 'المصحف';
  * The references under an answer or a home card, one collapsed line for each book (owner, 2026-11-19: only the book's
  * name, maybe its author; a tap opens the rest), written «book · author» (owner, 2026-11-20). The mushaf's line names the
  * ayat instead («المصحف · الإخلاص ٣»). Opened, each place cited in it: the book's words with the place, linked where the
- * book is online, and who says them under them.
+ * book is online, who says them on the line before them.
  */
 export function referenceGroups(sources: QuizSource[]): { title: string; lines: ReferenceLine[] }[] {
   const groups = new Map<string, ReferenceLine[]>();
@@ -92,9 +92,10 @@ export function referenceGroups(sources: QuizSource[]): { title: string; lines: 
     const title = source.author ? `${source.book} · ${source.author}` : source.book;
     const at = source.at ?? '';
     const lines = groups.get(title) ?? [];
+    // Who says it before his words (owner 2026-11-20), as the hadith and the sira put the speaker first.
+    if (source.by) lines.push({ text: source.by });
     if (source.url) lines.push({ text: source.quote ?? '', cite: at, url: source.url });
     else lines.push({ text: source.quote ? `«${source.quote}»${at ? `، ${at}` : ''}` : at });
-    if (source.by) lines.push({ text: source.by });
     groups.set(title, lines);
   }
   return [...groups].map(([title, lines]) => ({ title, lines: lines.filter(line => line.text || line.url) }));

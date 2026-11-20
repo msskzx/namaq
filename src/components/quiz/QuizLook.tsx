@@ -210,7 +210,7 @@ export function LookView({ look, shown }: { look: QuizLook; shown: boolean }) {
       case 'hadith': return <HadithLook key={shown ? look.mark ?? '' : ''} mark={shown ? look.mark : undefined} />;
       case 'sahih': return <Fetched<SahihIndex> url={`/api/hadith/search?book=${look.book}`}>{book => <SahihLook book={book} mark={shown ? look.mark : undefined} />}</Fetched>;
       case 'ties': return <TiesLook key={`${look.slug}/${shown ? look.mark ?? '' : ''}`} slug={look.slug} mark={shown ? look.mark : undefined} />;
-      case 'nasab': return <Fetched<NasabView> url={`/api/tarajim?nasab=${look.slugs.map(encodeURIComponent).join(',')}${shown && look.mark ? '' : '&meetings=0'}`}>{data => <NasabTree view={data} linked={false} />}</Fetched>;
+      case 'nasab': return <Fetched<NasabView> url={`/api/tarajim?nasab=${look.slugs.map(encodeURIComponent).join(',')}${shown && look.mark ? '' : '&meetings=0'}`}>{data => <NasabTree view={data} linked={false} start={look.text ? 'text' : 'drawing'} />}</Fetched>;
       case 'virtues': return <VirtuesLook key={`${look.slugs.join()}/${shown ? look.mark?.slug ?? '' : ''}`} slugs={look.slugs} mark={shown ? look.mark : undefined} />;
       case 'life': return <Fetched<DrawingsView> url={`/api/tarajim?drawings=${encodeURIComponent(look.slug)}`}>{data => <LifeTimeline items={data.life} inCard linked={false} marked={shown ? look.mark : undefined} />}</Fetched>;
       case 'tuhfa': return <TuhfaLook mark={shown ? look.mark : undefined} />;

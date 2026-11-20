@@ -9,7 +9,8 @@ import Card from '@/ui/Card';
 import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
 import Sheet from '@/ui/Sheet';
-import { pageLabel } from '@shared/tarajim';
+import { pageLabel, saidBy } from '@shared/tarajim';
+import Saying from '@/ui/Saying';
 import type { Palette } from '@/lib/theme';
 import { findPerson, GRAPH, personName } from '@/lib/tarajim';
 import { edge, kindColor } from './TiesChain';
@@ -193,7 +194,9 @@ export function TieSheet({ tie, onClose, palette }: { tie?: Tie; onClose: () => 
     <Sheet open={!!tie} onClose={onClose} palette={palette}>
       {tie && (
         <View style={{ padding: 16, gap: 8 }}>
-          <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{tie.link.text || personName(GRAPH.nodes.get(tie.to)!)}</Text>
+          <Saying by={tie.link.text ? saidBy(tie.link) : undefined} palette={palette}>
+            <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{tie.link.text || personName(GRAPH.nodes.get(tie.to)!)}</Text>
+          </Saying>
           <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>
             {tie.link.refs.length ? pageLabel(tie.link.refs) : ''}{tie.reversed ? ' · من ترجمة الآخر' : ''}
           </Text>
