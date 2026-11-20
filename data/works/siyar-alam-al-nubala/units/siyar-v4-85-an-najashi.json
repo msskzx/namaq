@@ -1,0 +1,220 @@
+{
+  "unit": {
+    "id": "siyar-v4-85-an-najashi",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٨٥"
+    }
+  },
+  "spans": [
+    {
+      "id": "hd",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "428",
+      "layer": "MAIN",
+      "exact": "النَّجَاشِيِّ مَلِكِ الحَبَشَةِ"
+    },
+    {
+      "id": "n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "428",
+      "layer": "MAIN",
+      "exact": "أَصْحَمَةُ",
+      "prefix": "وَاسْمُهُ:"
+    },
+    {
+      "id": "nl",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "428",
+      "layer": "MAIN",
+      "exact": "وَاسْمُهُ: أَصْحَمَةُ، مَلِكُ الحَبَشَةِ، مَعْدُوْدٌ فِي الصَّحَابَةِ"
+    },
+    {
+      "id": "v1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "428",
+      "layer": "MAIN",
+      "exact": "وَكَانَ مِمَّنْ حَسُنَ إِسْلاَمُهُ، وَلَمْ يُهَاجِرْ، وَلاَ لَهُ رُؤْيَةٌ، فَهُوَ تَابِعِيٌّ مِنْ وَجْهٍ، صَاحِبٌ مِنْ وَجْهٍ"
+    },
+    {
+      "id": "v1v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "428",
+      "layer": "MAIN",
+      "exact": "وَكَانَ مِمَّنْ حَسُنَ إِسْلاَمُهُ"
+    },
+    {
+      "id": "v2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "428",
+      "layer": "MAIN",
+      "exact": "وَقَدْ تُوُفِّيَ فِي حَيَاةِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فَصَلَّى عَلَيْهِ بِالنَّاسِ صَلاَةَ الغَائِبِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r0",
+      "unit": "siyar-v4-85-an-najashi",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "hd",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_1",
+      "report": "r0",
+      "spans": [
+        "nl"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_5",
+      "report": "r0",
+      "spans": [
+        "v1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_8",
+      "report": "r0",
+      "spans": [
+        "v2"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_s2",
+      "parent": "nl",
+      "exact": "أَصْحَمَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_s6",
+      "parent": "v1",
+      "exact": "وَكَانَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_s9",
+      "parent": "v2",
+      "exact": "تُوُفِّيَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_s2",
+      "mention": "m_s2",
+      "agent": "an-najashi",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s6",
+      "mention": "m_s6",
+      "agent": "an-najashi",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s9",
+      "mention": "m_s9",
+      "agent": "an-najashi",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_3",
+      "subject": "m_s2",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "n1"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_4",
+      "subject": "m_s2",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "hd"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_7",
+      "subject": "m_s6",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "v1v"
+        ]
+      },
+      "restsOn": [
+        "st_5"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_10",
+      "subject": "m_s9",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "v2"
+        ]
+      },
+      "restsOn": [
+        "st_8"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

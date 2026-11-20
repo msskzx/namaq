@@ -1,0 +1,365 @@
+{
+  "unit": {
+    "id": "siyar-v6-116-abdullah-ibn-rubayyiah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١١٦"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_rb_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "504",
+      "layer": "MAIN",
+      "exact": "١١٦ - عَبْدُ اللهِ بنُ رُبَيِّعَةَ بنِ فَرْقَدٍ السُّلَمِيُّ"
+    },
+    {
+      "id": "sp_rb_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "504",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ رُبَيِّعَةَ بنِ فَرْقَدٍ السُّلَمِيُّ",
+      "prefix": "١١٦ - "
+    },
+    {
+      "id": "sp_rb_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "504",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ",
+      "prefix": "١١٦ - "
+    },
+    {
+      "id": "sp_rb_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "504",
+      "layer": "MAIN",
+      "exact": "رُبَيِّعَةَ بنِ فَرْقَدٍ",
+      "prefix": "١١٦ - عَبْدُ اللهِ بنُ "
+    },
+    {
+      "id": "sp_rb_qila",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "504",
+      "layer": "MAIN",
+      "exact": "قِيْلَ: لَهُ صُحْبَةٌ",
+      "suffix": "، فَإِنْ لَمْ تَكُنْ"
+    },
+    {
+      "id": "sp_rb_mursal",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "504",
+      "layer": "MAIN",
+      "exact": "فَإِنْ لَمْ تَكُنْ، فَحَدِيْثُهُ مِنْ قَبِيْلِ المُرْسَلِ"
+    },
+    {
+      "id": "sp_rb_shubah_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "504",
+      "layer": "MAIN",
+      "exact": "شُعْبَةُ: عَنِ الحَكَمِ، عَنْ عَبْدِ الرَّحْمَنِ بنِ أَبِي لَيْلَى، عَنْ عَبْدِ اللهِ بنِ رُبَيِّعَةَ؛"
+    },
+    {
+      "id": "sp_rb_shubah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "504",
+      "layer": "MAIN",
+      "exact": "وَكَانَتْ لَهُ صُحْبَةٌ",
+      "prefix": "عَبْدِ اللهِ بنِ رُبَيِّعَةَ؛ "
+    },
+    {
+      "id": "sp_rb_hakadha",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "504",
+      "layer": "MAIN",
+      "exact": "هَكَذَا قَالَ",
+      "suffix": " (١) ."
+    },
+    {
+      "id": "sp_rb_nabi_note",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "504",
+      "layer": "NOTES",
+      "exact": "أنه كان مع رسول الله صلى الله عليه وسلم في سفر"
+    },
+    {
+      "id": "sp_rb_nabi_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "504",
+      "layer": "NOTES",
+      "exact": "رسول الله صلى الله عليه وسلم في سفر",
+      "prefix": "أنه كان مع "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_rb0",
+      "unit": "siyar-v6-116-abdullah-ibn-rubayyiah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_rb_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_rb_qila",
+      "unit": "siyar-v6-116-abdullah-ibn-rubayyiah",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_rb_qila_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_rb_shubah",
+      "unit": "siyar-v6-116-abdullah-ibn-rubayyiah",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_rb_shubah_isnad",
+      "origin": {
+        "mention": "m_rb_shubah_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_rb_name",
+      "report": "r_rb0",
+      "spans": [
+        "sp_rb_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_rb_qila",
+      "report": "r_rb_qila",
+      "spans": [
+        "sp_rb_qila"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_rb_mursal",
+      "report": "r_rb0",
+      "spans": [
+        "sp_rb_mursal"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_rb_shubah",
+      "report": "r_rb_shubah",
+      "spans": [
+        "sp_rb_shubah"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_rb_hakadha",
+      "report": "r_rb0",
+      "spans": [
+        "sp_rb_hakadha"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_rb",
+      "parent": "sp_rb_name",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_rb_father",
+      "parent": "sp_rb_name",
+      "exact": "رُبَيِّعَةَ بنِ فَرْقَدٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_rb_qila_by",
+      "parent": "sp_rb_qila",
+      "exact": "قِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_rb_shubah_by",
+      "parent": "sp_rb_shubah_isnad",
+      "exact": "شُعْبَةُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_rb_prophet",
+      "parent": "sp_rb_nabi_note",
+      "exact": "رسول الله",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_rb_q",
+      "parent": "sp_rb_qila",
+      "exact": "لَهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_rb_s",
+      "parent": "sp_rb_shubah",
+      "exact": "لَهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_rb",
+      "mention": "m_rb",
+      "agent": "abdullah-ibn-rabiah-as-sulami",
+      "basis": [
+        {
+          "span": "sp_rb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rb_father",
+      "mention": "m_rb_father",
+      "agent": "rubayyiah-ibn-farqad",
+      "basis": [
+        {
+          "span": "sp_rb_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rb_prophet",
+      "mention": "m_rb_prophet",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_rb_nabi_b",
+          "role": "EDITOR_NOTE"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rb_q",
+      "mention": "m_rb_q",
+      "agent": "abdullah-ibn-rabiah-as-sulami",
+      "basis": [
+        {
+          "span": "sp_rb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rb_s",
+      "mention": "m_rb_s",
+      "agent": "abdullah-ibn-rabiah-as-sulami",
+      "basis": [
+        {
+          "span": "sp_rb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_rb_name",
+      "subject": "m_rb",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_rb_name"
+        ]
+      },
+      "restsOn": [
+        "st_rb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rb_sex",
+      "subject": "m_rb",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_rb_sex"
+        ]
+      },
+      "restsOn": [
+        "st_rb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rb_father",
+      "subject": "m_rb",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_rb_father"
+      },
+      "restsOn": [
+        "st_rb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rb_comp_q",
+      "subject": "m_rb_q",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_rb_prophet"
+      },
+      "restsOn": [
+        "st_rb_qila",
+        "st_rb_mursal"
+      ],
+      "status": "DISPUTED"
+    },
+    {
+      "id": "a_rb_comp_s",
+      "subject": "m_rb_s",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_rb_prophet"
+      },
+      "restsOn": [
+        "st_rb_shubah",
+        "st_rb_hakadha"
+      ],
+      "status": "DISPUTED"
+    }
+  ]
+}

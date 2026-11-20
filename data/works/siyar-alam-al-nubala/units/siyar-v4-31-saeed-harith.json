@@ -1,0 +1,210 @@
+{
+  "unit": {
+    "id": "siyar-v4-31-saeed-harith",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٣١"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_sh_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "202",
+      "layer": "MAIN",
+      "exact": "٣١ - سَعِيْدُ بنُ الحَارِثِ بنِ عَبْدِ المُطَّلِبِ"
+    },
+    {
+      "id": "sp_sh_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "202",
+      "layer": "MAIN",
+      "exact": "سَعِيْدُ بنُ الحَارِثِ بنِ عَبْدِ المُطَّلِبِ",
+      "prefix": "٣١ - "
+    },
+    {
+      "id": "sp_sh_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "202",
+      "layer": "MAIN",
+      "exact": "سَعِيْدُ بنُ",
+      "prefix": "٣١ - "
+    },
+    {
+      "id": "sp_sh_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "202",
+      "layer": "MAIN",
+      "exact": "الحَارِثِ بنِ عَبْدِ المُطَّلِبِ",
+      "prefix": "سَعِيْدُ بنُ "
+    },
+    {
+      "id": "sp_sh_cousin",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "202",
+      "layer": "MAIN",
+      "exact": "ابْنُ عَمِّ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-",
+      "prefix": "عَبْدِ المُطَّلِبِ * "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_sh0",
+      "unit": "siyar-v4-31-saeed-harith",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_sh_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_sh_name",
+      "report": "r_sh0",
+      "spans": [
+        "sp_sh_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_sh_cousin",
+      "report": "r_sh0",
+      "spans": [
+        "sp_sh_cousin"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_sh",
+      "parent": "sp_sh_name",
+      "exact": "سَعِيْدُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sh_father",
+      "parent": "sp_sh_name",
+      "exact": "الحَارِثِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_sh_c",
+      "parent": "sp_sh_cousin",
+      "exact": "ابْنُ عَمِّ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sh_prophet",
+      "parent": "sp_sh_cousin",
+      "exact": "رَسُوْلِ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_sh",
+      "mention": "m_sh",
+      "agent": "saeed-ibn-al-harith",
+      "basis": [
+        {
+          "span": "sp_sh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sh_c",
+      "mention": "m_sh_c",
+      "agent": "saeed-ibn-al-harith",
+      "basis": [
+        {
+          "span": "sp_sh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sh_father",
+      "mention": "m_sh_father",
+      "agent": "al-harith-ibn-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_sh_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_sh_name",
+      "subject": "m_sh",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_sh_name"
+        ]
+      },
+      "restsOn": [
+        "st_sh_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sh_sex",
+      "subject": "m_sh",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_sh_sex"
+        ]
+      },
+      "restsOn": [
+        "st_sh_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sh_father",
+      "subject": "m_sh",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_sh_father"
+      },
+      "restsOn": [
+        "st_sh_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_sh_cousin",
+      "subject": "m_sh_c",
+      "predicate": "PATERNAL_COUSIN",
+      "value": {
+        "object": "m_sh_prophet"
+      },
+      "restsOn": [
+        "st_sh_cousin"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

@@ -1,0 +1,440 @@
+{
+  "unit": {
+    "id": "siyar-v6-83-mabad-ibn-al-abbas",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٨٣"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ma_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "٨٣ - مَعْبَدُ بنُ عَبَّاسِ بنِ عَبْدِ المُطَّلِبِ الهَاشِمِيُّ"
+    },
+    {
+      "id": "sp_ma_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "مَعْبَدُ بنُ عَبَّاسِ بنِ عَبْدِ المُطَّلِبِ الهَاشِمِيُّ",
+      "prefix": "٨٣ - "
+    },
+    {
+      "id": "sp_ma_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "مَعْبَدُ بنُ",
+      "prefix": "٨٣ - "
+    },
+    {
+      "id": "sp_ma_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "عَبَّاسِ بنِ عَبْدِ المُطَّلِبِ",
+      "prefix": "مَعْبَدُ بنُ "
+    },
+    {
+      "id": "sp_ma_mother",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "مِنْ صِغَارِ وَلَدِ العَبَّاسِ، وَهُوَ مِنْ أُمِّ الفَضْلِ"
+    },
+    {
+      "id": "sp_ma_mother_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "أُمِّ الفَضْلِ",
+      "prefix": "وَهُوَ مِنْ "
+    },
+    {
+      "id": "sp_ma_kids_a",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "لَهُ أَوْلاَدٌ؛ عَبْدُ اللهِ، وَعَبَّاسٌ، وَمَيْمُوْنَةُ"
+    },
+    {
+      "id": "sp_ma_kids_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "وَأُمُّهُم: أُمُّ جَمِيْلٍ عَامِرِيَّةٌ"
+    },
+    {
+      "id": "sp_ma_kids_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "أَوْلاَدٌ؛ عَبْدُ اللهِ",
+      "prefix": "لَهُ "
+    },
+    {
+      "id": "sp_ma_ummjamil_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "442",
+      "layer": "MAIN",
+      "exact": "أُمُّ جَمِيْلٍ عَامِرِيَّةٌ",
+      "prefix": "وَأُمُّهُم: "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ma0",
+      "unit": "siyar-v6-83-mabad-ibn-al-abbas",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ma_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ma_name",
+      "report": "r_ma0",
+      "spans": [
+        "sp_ma_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ma_mother",
+      "report": "r_ma0",
+      "spans": [
+        "sp_ma_mother"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ma_kids",
+      "report": "r_ma0",
+      "spans": [
+        "sp_ma_kids_a",
+        "sp_ma_kids_b"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ma",
+      "parent": "sp_ma_name",
+      "exact": "مَعْبَدُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ma_father",
+      "parent": "sp_ma_name",
+      "exact": "عَبَّاسِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ma_mo",
+      "parent": "sp_ma_mother",
+      "exact": "وَهُوَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ma_ummfadl",
+      "parent": "sp_ma_mother",
+      "exact": "أُمِّ الفَضْلِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ma_k",
+      "parent": "sp_ma_kids_a",
+      "exact": "لَهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ma_ummjamil",
+      "parent": "sp_ma_kids_b",
+      "exact": "أُمُّ جَمِيْلٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ma_c_abdullah",
+      "parent": "sp_ma_kids_a",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ma_c_abbas",
+      "parent": "sp_ma_kids_a",
+      "exact": "َعَبَّاسٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ma_c_maymunah",
+      "parent": "sp_ma_kids_a",
+      "exact": "َمَيْمُوْنَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ma",
+      "mention": "m_ma",
+      "agent": "mabad-ibn-al-abbas",
+      "basis": [
+        {
+          "span": "sp_ma_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_father",
+      "mention": "m_ma_father",
+      "agent": "al-abbas-ibn-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_ma_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_mo",
+      "mention": "m_ma_mo",
+      "agent": "mabad-ibn-al-abbas",
+      "basis": [
+        {
+          "span": "sp_ma_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_ummfadl",
+      "mention": "m_ma_ummfadl",
+      "agent": "umm-al-fadl-bint-al-harith",
+      "basis": [
+        {
+          "span": "sp_ma_mother_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_k",
+      "mention": "m_ma_k",
+      "agent": "mabad-ibn-al-abbas",
+      "basis": [
+        {
+          "span": "sp_ma_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_ummjamil",
+      "mention": "m_ma_ummjamil",
+      "agent": "umm-jamil-al-amiriyyah",
+      "basis": [
+        {
+          "span": "sp_ma_ummjamil_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_c_abdullah",
+      "mention": "m_ma_c_abdullah",
+      "agent": "abdullah-ibn-mabad-ibn-al-abbas",
+      "basis": [
+        {
+          "span": "sp_ma_kids_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_c_abbas",
+      "mention": "m_ma_c_abbas",
+      "agent": "abbas-ibn-mabad-ibn-al-abbas",
+      "basis": [
+        {
+          "span": "sp_ma_kids_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ma_c_maymunah",
+      "mention": "m_ma_c_maymunah",
+      "agent": "maymunah-bint-mabad-ibn-al-abbas",
+      "basis": [
+        {
+          "span": "sp_ma_kids_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ma_name",
+      "subject": "m_ma",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ma_name"
+        ]
+      },
+      "restsOn": [
+        "st_ma_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_sex",
+      "subject": "m_ma",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ma_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ma_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_father",
+      "subject": "m_ma",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ma_father"
+      },
+      "restsOn": [
+        "st_ma_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_mother",
+      "subject": "m_ma_mo",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ma_ummfadl"
+      },
+      "restsOn": [
+        "st_ma_mother"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_c_abdullah_0",
+      "subject": "m_ma_c_abdullah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ma_k"
+      },
+      "restsOn": [
+        "st_ma_kids"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_c_abdullah_1",
+      "subject": "m_ma_c_abdullah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ma_ummjamil"
+      },
+      "restsOn": [
+        "st_ma_kids"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_c_abbas_0",
+      "subject": "m_ma_c_abbas",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ma_k"
+      },
+      "restsOn": [
+        "st_ma_kids"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_c_abbas_1",
+      "subject": "m_ma_c_abbas",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ma_ummjamil"
+      },
+      "restsOn": [
+        "st_ma_kids"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_c_maymunah_0",
+      "subject": "m_ma_c_maymunah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ma_k"
+      },
+      "restsOn": [
+        "st_ma_kids"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ma_c_maymunah_1",
+      "subject": "m_ma_c_maymunah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ma_ummjamil"
+      },
+      "restsOn": [
+        "st_ma_kids"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

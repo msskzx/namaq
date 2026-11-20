@@ -1,0 +1,274 @@
+{
+  "unit": {
+    "id": "siyar-v6-128-abdullah-ibn-amir-ibn-rabiah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٢٨"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ar_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "521",
+      "layer": "MAIN",
+      "exact": "١٢٨ - عَبْدُ اللهِ بنُ عَامِرِ بنِ رَبِيْعَةَ أَبُو مُحَمَّدٍ العَنْزِيُّ"
+    },
+    {
+      "id": "sp_ar_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "521",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ عَامِرِ بنِ رَبِيْعَةَ",
+      "prefix": "١٢٨ - ",
+      "suffix": " أَبُو مُحَمَّدٍ"
+    },
+    {
+      "id": "sp_ar_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "521",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ",
+      "prefix": "١٢٨ - "
+    },
+    {
+      "id": "sp_ar_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "521",
+      "layer": "MAIN",
+      "exact": "أَبُو مُحَمَّدٍ",
+      "suffix": " العَنْزِيُّ"
+    },
+    {
+      "id": "sp_ar_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "521",
+      "layer": "MAIN",
+      "exact": "وَكَانَ أَبُوْهُمَا عَامِرُ بنُ رَبِيْعَةَ بنِ كَعْبِ بنِ مَالِكٍ مِنْ كِبَارِ المُهَاجِرِيْنَ البَدْرِيِّيْنَ"
+    },
+    {
+      "id": "sp_ar_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "521",
+      "layer": "MAIN",
+      "exact": "عَامِرُ بنُ رَبِيْعَةَ بنِ كَعْبِ بنِ مَالِكٍ",
+      "prefix": "أَبُوْهُمَا "
+    },
+    {
+      "id": "sp_ar_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "521",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ: سَنَةَ خَمْسٍ وَثَمَانِيْنَ"
+    },
+    {
+      "id": "sp_ar_y85",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "521",
+      "layer": "MAIN",
+      "exact": "سَنَةَ خَمْسٍ وَثَمَانِيْنَ",
+      "prefix": "تُوُفِّيَ: "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ar0",
+      "unit": "siyar-v6-128-abdullah-ibn-amir-ibn-rabiah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ar_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ar_name",
+      "report": "r_ar0",
+      "spans": [
+        "sp_ar_heading"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ar_father",
+      "report": "r_ar0",
+      "spans": [
+        "sp_ar_father"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ar_death",
+      "report": "r_ar0",
+      "spans": [
+        "sp_ar_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ar",
+      "parent": "sp_ar_heading",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ar_f",
+      "parent": "sp_ar_father",
+      "exact": "أَبُوْهُمَا",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ar_father",
+      "parent": "sp_ar_father",
+      "exact": "عَامِرُ بنُ رَبِيْعَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ar_d",
+      "parent": "sp_ar_death",
+      "exact": "تُوُفِّيَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ar",
+      "mention": "m_ar",
+      "agent": "abdullah-ibn-amir-ibn-rabiah",
+      "basis": [
+        {
+          "span": "sp_ar_name",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ar_f",
+      "mention": "m_ar_f",
+      "agent": "abdullah-ibn-amir-ibn-rabiah",
+      "basis": [
+        {
+          "span": "sp_ar_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ar_father",
+      "mention": "m_ar_father",
+      "agent": "amir-ibn-rabiah",
+      "basis": [
+        {
+          "span": "sp_ar_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ar_d",
+      "mention": "m_ar_d",
+      "agent": "abdullah-ibn-amir-ibn-rabiah",
+      "basis": [
+        {
+          "span": "sp_ar_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ar_name",
+      "subject": "m_ar",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ar_name"
+        ]
+      },
+      "restsOn": [
+        "st_ar_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ar_sex",
+      "subject": "m_ar",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ar_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ar_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ar_kunya",
+      "subject": "m_ar",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_ar_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_ar_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ar_father",
+      "subject": "m_ar_f",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ar_father"
+      },
+      "restsOn": [
+        "st_ar_father",
+        "st_ar_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ar_d85",
+      "subject": "m_ar_d",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 85,
+        "spans": [
+          "sp_ar_y85"
+        ]
+      },
+      "restsOn": [
+        "st_ar_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

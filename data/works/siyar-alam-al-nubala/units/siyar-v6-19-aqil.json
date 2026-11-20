@@ -1,0 +1,369 @@
+{
+  "unit": {
+    "id": "siyar-v6-19-aqil",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٩"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_aq_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "99",
+      "layer": "MAIN",
+      "exact": "١٩ - عَقِيْلُ بنُ أَبِي طَالِبٍ الهَاشِمِيُّ"
+    },
+    {
+      "id": "sp_aq_head",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "99",
+      "layer": "MAIN",
+      "exact": "عَقِيْلُ بنُ أَبِي طَالِبٍ الهَاشِمِيُّ"
+    },
+    {
+      "id": "sp_aq_l2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "99",
+      "layer": "MAIN",
+      "exact": "ابْنُ عَمِّ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - أَبُو يَزِيْدَ، وَأَبُو عِيْسَى"
+    },
+    {
+      "id": "sp_aq_kunya1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "99",
+      "layer": "MAIN",
+      "exact": "أَبُو يَزِيْدَ",
+      "prefix": "-"
+    },
+    {
+      "id": "sp_aq_kunya2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "99",
+      "layer": "MAIN",
+      "exact": "أَبُو عِيْسَى",
+      "prefix": "وَ"
+    },
+    {
+      "id": "sp_aq_l2_pb",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "99",
+      "layer": "MAIN",
+      "exact": "رَسُوْلِ اللهِ",
+      "prefix": "عَمِّ"
+    },
+    {
+      "id": "sp_aq_ikhwah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "99",
+      "layer": "MAIN",
+      "exact": "وَكَانَ أَسَنَّ مِنْ أَخِيْهِ عَلِيٍّ بِعِشْرِيْنَ سَنَةً؛ وَمِنْ أَخِيْهِ جَعْفَرٍ الطَّيَّارِ بِعَشْرِ سِنِيْنَ"
+    },
+    {
+      "id": "sp_aq_ali_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "99",
+      "layer": "MAIN",
+      "exact": "أَخِيْهِ عَلِيٍّ",
+      "prefix": "مِنْ"
+    },
+    {
+      "id": "sp_aq_jaafar_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "99",
+      "layer": "MAIN",
+      "exact": "أَخِيْهِ جَعْفَرٍ الطَّيَّارِ"
+    },
+    {
+      "id": "sp_aq_mutah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "99",
+      "layer": "MAIN",
+      "exact": "هَاجَرَ فِي مُدَّةِ الهُدْنَةِ، وَشَهِدَ غَزْوَةَ مُؤْتَةَ"
+    },
+    {
+      "id": "sp_aq_mutahw_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "99",
+      "layer": "MAIN",
+      "exact": "وَشَهِدَ غَزْوَةَ مُؤْتَةَ"
+    },
+    {
+      "id": "sp_aq_nasab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "99",
+      "layer": "MAIN",
+      "exact": "وَكَانَ بَسَّاماً، مَزَّاحاً، عَلاَّمَةٌ بِالنَّسَبِ وَأَيَّامِ العَرَبِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_aq0",
+      "unit": "siyar-v6-19-aqil",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_aq_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_aq_l2",
+      "report": "r_aq0",
+      "spans": [
+        "sp_aq_l2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_aq_ikhwah",
+      "report": "r_aq0",
+      "spans": [
+        "sp_aq_ikhwah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_aq_mutah",
+      "report": "r_aq0",
+      "spans": [
+        "sp_aq_mutah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_aq_nasab",
+      "report": "r_aq0",
+      "spans": [
+        "sp_aq_nasab"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_aq",
+      "parent": "sp_aq_head",
+      "exact": "عَقِيْلُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_aq_p",
+      "parent": "sp_aq_l2",
+      "exact": "رَسُوْلِ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aq_ali",
+      "parent": "sp_aq_ikhwah",
+      "exact": "عَلِيٍّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aq_jaafar",
+      "parent": "sp_aq_ikhwah",
+      "exact": "جَعْفَرٍ الطَّيَّارِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aq_m",
+      "parent": "sp_aq_mutah",
+      "exact": "هَاجَرَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_aq_mutahw",
+      "parent": "sp_aq_mutah",
+      "exact": "غَزْوَةَ مُؤْتَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_aq",
+      "mention": "m_aq",
+      "agent": "aqil-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_aq_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aq_p",
+      "mention": "m_aq_p",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_aq_l2_pb",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aq_ali",
+      "mention": "m_aq_ali",
+      "agent": "ali-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_aq_ali_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aq_jaafar",
+      "mention": "m_aq_jaafar",
+      "agent": "jaafar-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_aq_jaafar_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aq_m",
+      "mention": "m_aq_m",
+      "agent": "aqil-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_aq_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aq_mutahw",
+      "mention": "m_aq_mutahw",
+      "event": "mutah",
+      "basis": [
+        {
+          "span": "sp_aq_mutahw_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_aq_kunya1",
+      "subject": "m_aq",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_aq_kunya1"
+        ]
+      },
+      "restsOn": [
+        "st_aq_l2"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aq_kunya2",
+      "subject": "m_aq",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_aq_kunya2"
+        ]
+      },
+      "restsOn": [
+        "st_aq_l2"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aq_cousin",
+      "subject": "m_aq",
+      "predicate": "PATERNAL_COUSIN",
+      "value": {
+        "object": "m_aq_p"
+      },
+      "restsOn": [
+        "st_aq_l2"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aq_ali",
+      "subject": "m_aq",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_aq_ali"
+      },
+      "restsOn": [
+        "st_aq_ikhwah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aq_jaafar",
+      "subject": "m_aq",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_aq_jaafar"
+      },
+      "restsOn": [
+        "st_aq_ikhwah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aq_mutahw",
+      "subject": "m_aq_m",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_aq_mutahw"
+      },
+      "restsOn": [
+        "st_aq_mutah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aq_v_nasab",
+      "subject": "m_aq",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_aq_nasab"
+        ]
+      },
+      "restsOn": [
+        "st_aq_nasab"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

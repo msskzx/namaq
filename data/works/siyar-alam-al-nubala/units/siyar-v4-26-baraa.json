@@ -1,0 +1,534 @@
+{
+  "unit": {
+    "id": "siyar-v4-26-baraa",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٢٦"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_br_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "195",
+      "layer": "MAIN",
+      "exact": "٢٦ - البَرَاءُ بنُ مَالِكِ بنِ النَّضْرِ بنِ ضَمْضَمٍ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sp_br1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "195",
+      "layer": "MAIN",
+      "exact": "البَرَاءُ بنُ مَالِكِ بنِ النَّضْرِ بنِ ضَمْضَمٍ",
+      "prefix": "٢٦ - "
+    },
+    {
+      "id": "sp_br2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "195",
+      "layer": "MAIN",
+      "exact": "ابْنِ زَيْدِ بنِ حَرَامِ بنِ جُنْدَبِ بنِ عَامِرِ بنِ غَنْمِ بنِ عَدِيِّ بنِ النَّجَّارِ"
+    },
+    {
+      "id": "sp_br_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "195",
+      "layer": "MAIN",
+      "exact": "البَرَاءُ بنُ",
+      "prefix": "٢٦ - "
+    },
+    {
+      "id": "sp_br_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "195",
+      "layer": "MAIN",
+      "exact": "مَالِكِ بنِ النَّضْرِ بنِ ضَمْضَمٍ",
+      "prefix": "البَرَاءُ بنُ "
+    },
+    {
+      "id": "sp_br_epithets",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "195",
+      "layer": "MAIN",
+      "exact": "البَطَلُ الكَرَّارُ، صَاحِبُ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَأَخُوْ خَادِمِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- أَنَسِ بنِ مَالِكٍ"
+    },
+    {
+      "id": "sp_br_anas_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "195",
+      "layer": "MAIN",
+      "exact": "أَنَسِ بنِ مَالِكٍ",
+      "prefix": "وَسَلَّمَ- "
+    },
+    {
+      "id": "sp_br_uhud",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "195",
+      "layer": "MAIN",
+      "exact": "شَهِدَ أُحُداً، وَبَايَعَ تَحْتَ الشَّجَرَةِ"
+    },
+    {
+      "id": "sp_br_uhud_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "195",
+      "layer": "MAIN",
+      "exact": "شَهِدَ أُحُداً",
+      "suffix": "، وَبَايَعَ"
+    },
+    {
+      "id": "sp_br_hundred",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "196",
+      "layer": "MAIN",
+      "exact": "وَقَدِ اشْتُهِرَ أَنَّ البَرَاءَ قَتَلَ فِي حُرُوْبِهِ مَائَةَ نَفْسٍ مِنَ الشُّجْعَانِ مُبَارَزَةً"
+    },
+    {
+      "id": "sp_br_aqsam_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "197",
+      "layer": "MAIN",
+      "exact": "سَلاَمَةُ: عَنْ عَمِّهِ عقِيْلٍ، عَنِ الزُّهْرِيِّ:"
+    },
+    {
+      "id": "sp_br_aqsam_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "197",
+      "layer": "MAIN",
+      "exact": "عَنْ أَنَسٍ مَرْفُوْعاً، قَالَ:"
+    },
+    {
+      "id": "sp_br_aqsam",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "197",
+      "layer": "MAIN",
+      "exact": "كَمْ مِنْ ضَعِيْفٍ مُتَضَعِّفٍ ذِي طِمْرَيْنِ، لَوْ أَقْسَمَ عَلَى اللهِ لأَبَرَّهُ، مِنْهُم: البَرَاءُ بنُ مَالِكٍ"
+    },
+    {
+      "id": "sp_br_aqsam_prophet",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "197",
+      "layer": "MAIN",
+      "exact": "إِنَّ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- قَالَ: إِنَّكَ لَوْ أَقْسَمْتَ عَلَى اللهِ لأَبَرَّكَ"
+    },
+    {
+      "id": "sp_br_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "198",
+      "layer": "MAIN",
+      "exact": "اسْتُشْهِدَ يَوْمَ فَتْحِ تُسْتَرَ، سَنَةَ عِشْرِيْنَ"
+    },
+    {
+      "id": "sp_br_place",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "198",
+      "layer": "MAIN",
+      "exact": "تُسْتَرَ",
+      "prefix": "يَوْمَ فَتْحِ ",
+      "suffix": "، سَنَةَ"
+    },
+    {
+      "id": "sp_br_year",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "198",
+      "layer": "MAIN",
+      "exact": "سَنَةَ عِشْرِيْنَ",
+      "prefix": "تُسْتَرَ، "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_br0",
+      "unit": "siyar-v4-26-baraa",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_br_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_br_aqsam",
+      "unit": "siyar-v4-26-baraa",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_br_aqsam_frame"
+      ],
+      "isnadSpan": "sp_br_aqsam_isnad",
+      "origin": {
+        "mention": "m_br_prophet"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_br_name",
+      "report": "r_br0",
+      "spans": [
+        "sp_br1",
+        "sp_br2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_br_epithets",
+      "report": "r_br0",
+      "spans": [
+        "sp_br_epithets"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_br_uhud",
+      "report": "r_br0",
+      "spans": [
+        "sp_br_uhud"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_br_hundred",
+      "report": "r_br0",
+      "spans": [
+        "sp_br_hundred"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_br_death",
+      "report": "r_br0",
+      "spans": [
+        "sp_br_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_br_aqsam",
+      "report": "r_br_aqsam",
+      "spans": [
+        "sp_br_aqsam"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_br",
+      "parent": "sp_br1",
+      "exact": "البَرَاءُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_br_father",
+      "parent": "sp_br1",
+      "exact": "مَالِكِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_br_e",
+      "parent": "sp_br_epithets",
+      "exact": "صَاحِبُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_br_prophet_e",
+      "parent": "sp_br_epithets",
+      "exact": "رَسُوْلِ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_br_anas",
+      "parent": "sp_br_epithets",
+      "exact": "أَنَسِ بنِ مَالِكٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_br_uhud",
+      "parent": "sp_br_uhud",
+      "exact": "أُحُداً",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_br_tree",
+      "parent": "sp_br_uhud",
+      "exact": "تَحْتَ الشَّجَرَةِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_br_prophet",
+      "parent": "sp_br_aqsam_frame",
+      "exact": "مَرْفُوْعاً",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_br_aq",
+      "parent": "sp_br_aqsam",
+      "exact": "البَرَاءُ بنُ مَالِكٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_br",
+      "mention": "m_br",
+      "agent": "al-baraa-ibn-malik",
+      "basis": [
+        {
+          "span": "sp_br_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_e",
+      "mention": "m_br_e",
+      "agent": "al-baraa-ibn-malik",
+      "basis": [
+        {
+          "span": "sp_br_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_aq",
+      "mention": "m_br_aq",
+      "agent": "al-baraa-ibn-malik",
+      "basis": [
+        {
+          "span": "sp_br_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_father",
+      "mention": "m_br_father",
+      "agent": "malik-ibn-an-nadr-al-najjari",
+      "basis": [
+        {
+          "span": "sp_br_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_anas",
+      "mention": "m_br_anas",
+      "agent": "anas-ibn-malik",
+      "basis": [
+        {
+          "span": "sp_br_anas_name",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_uhud",
+      "mention": "m_br_uhud",
+      "event": "uhud",
+      "basis": [
+        {
+          "span": "sp_br_uhud_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_prophet",
+      "mention": "m_br_prophet",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_br_aqsam_prophet",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_br_name",
+      "subject": "m_br",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_br1",
+          "sp_br2"
+        ]
+      },
+      "restsOn": [
+        "st_br_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_sex",
+      "subject": "m_br",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_br_sex"
+        ]
+      },
+      "restsOn": [
+        "st_br_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_father",
+      "subject": "m_br",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_br_father"
+      },
+      "restsOn": [
+        "st_br_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_comp",
+      "subject": "m_br_e",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_br_prophet_e"
+      },
+      "restsOn": [
+        "st_br_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_anas",
+      "subject": "m_br_e",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_br_anas"
+      },
+      "restsOn": [
+        "st_br_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_uhud",
+      "subject": "m_br",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_br_uhud"
+      },
+      "restsOn": [
+        "st_br_uhud"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_tree",
+      "subject": "m_br",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_br_tree"
+      },
+      "restsOn": [
+        "st_br_uhud"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_v_hundred",
+      "subject": "m_br",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_br_hundred"
+        ]
+      },
+      "restsOn": [
+        "st_br_hundred"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_v_aqsam",
+      "subject": "m_br_aq",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_br_aqsam"
+        ]
+      },
+      "restsOn": [
+        "st_br_aqsam"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_place",
+      "subject": "m_br",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "sp_br_place"
+        ]
+      },
+      "restsOn": [
+        "st_br_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_year",
+      "subject": "m_br",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 20,
+        "spans": [
+          "sp_br_year"
+        ]
+      },
+      "restsOn": [
+        "st_br_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

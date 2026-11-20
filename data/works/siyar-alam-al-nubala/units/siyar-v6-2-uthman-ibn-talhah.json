@@ -1,0 +1,446 @@
+{
+  "unit": {
+    "id": "siyar-v6-2-uthman-ibn-talhah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٢"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ut_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "10",
+      "layer": "MAIN",
+      "exact": "٢ - عُثْمَانُ بنُ طَلْحَةَ بنِ أَبِي طَلْحَةَ عَبْدِ اللهِ العَبْدَرِيُّ"
+    },
+    {
+      "id": "sp_ut_n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "10",
+      "layer": "MAIN",
+      "exact": "عُثْمَانُ بنُ طَلْحَةَ بنِ أَبِي طَلْحَةَ عَبْدِ اللهِ"
+    },
+    {
+      "id": "sp_ut_n2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "10",
+      "layer": "MAIN",
+      "exact": "ابْنِ عَبْدِ العُزَّى بنِ عُثْمَانَ بنِ عَبْدِ الدَّارِ بنِ قُصَيِّ بنِ كِلاَبٍ القُرَشِيُّ، العَبْدَرِيُّ، الحَجَبِيُّ"
+    },
+    {
+      "id": "sp_ut_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "10",
+      "layer": "MAIN",
+      "exact": "عُثْمَانُ بنُ",
+      "prefix": "-"
+    },
+    {
+      "id": "sp_ut_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "10",
+      "layer": "MAIN",
+      "exact": "طَلْحَةَ بنِ أَبِي طَلْحَةَ"
+    },
+    {
+      "id": "sp_ut_hajib",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "10",
+      "layer": "MAIN",
+      "exact": "حَاجِبُ البَيْتِ الحَرَامِ، وَأَحَدُ المُهَاجِرِيْنَ"
+    },
+    {
+      "id": "sp_ut_miftah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "11",
+      "layer": "MAIN",
+      "exact": "ثُمَّ دَفَعَ إِلَيْهِ النَّبِيُّ - صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - مِفْتَاحَ الكَعْبَةِ يَوْمَ الفَتْحِ"
+    },
+    {
+      "id": "sp_ut_cousin",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "11",
+      "layer": "MAIN",
+      "exact": "وَابْنُ عَمِّهِ؛ شَيْبَةُ بنُ عُثْمَانَ الحَاجِبُ"
+    },
+    {
+      "id": "sp_ut_cousin_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "11",
+      "layer": "MAIN",
+      "exact": "شَيْبَةُ بنُ عُثْمَانَ",
+      "prefix": "عَمِّهِ؛"
+    },
+    {
+      "id": "sp_ut_d_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "12",
+      "layer": "MAIN",
+      "exact": "قَالَ الهَيْثَمُ، وَالمَدَائِنِيُّ"
+    },
+    {
+      "id": "sp_ut_d",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "12",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ سَنَةَ إِحْدَى وَأَرْبَعِيْنَ"
+    },
+    {
+      "id": "sp_ut_khalifah_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "12",
+      "layer": "MAIN",
+      "exact": "وَقَالَ خَلِيْفَةُ",
+      "prefix": "وَأَرْبَعِيْنَ."
+    },
+    {
+      "id": "sp_ut_khalifah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "12",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ سَنَةَ اثْنَتَيْنِ وَأَرْبَعِيْنَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ut0",
+      "unit": "siyar-v6-2-uthman-ibn-talhah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ut_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ut_haytham",
+      "unit": "siyar-v6-2-uthman-ibn-talhah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ut_d_frame"
+      ],
+      "origin": {
+        "mention": "m_ut_haytham"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ut_madaini",
+      "unit": "siyar-v6-2-uthman-ibn-talhah",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ut_d_frame"
+      ],
+      "origin": {
+        "mention": "m_ut_madaini"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ut_khalifah",
+      "unit": "siyar-v6-2-uthman-ibn-talhah",
+      "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ut_khalifah_frame"
+      ],
+      "origin": {
+        "mention": "m_ut_khalifah_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ut_name",
+      "report": "r_ut0",
+      "spans": [
+        "sp_ut_n1",
+        "sp_ut_n2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ut_hajib",
+      "report": "r_ut0",
+      "spans": [
+        "sp_ut_hajib"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ut_miftah",
+      "report": "r_ut0",
+      "spans": [
+        "sp_ut_miftah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ut_cousin",
+      "report": "r_ut0",
+      "spans": [
+        "sp_ut_cousin"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ut_d_haytham",
+      "report": "r_ut_haytham",
+      "spans": [
+        "sp_ut_d"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ut_d_madaini",
+      "report": "r_ut_madaini",
+      "spans": [
+        "sp_ut_d"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ut_khalifah",
+      "report": "r_ut_khalifah",
+      "spans": [
+        "sp_ut_khalifah"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ut",
+      "parent": "sp_ut_n1",
+      "exact": "عُثْمَانُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ut_father",
+      "parent": "sp_ut_n1",
+      "exact": "طَلْحَةَ بنِ أَبِي طَلْحَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ut_c",
+      "parent": "sp_ut_cousin",
+      "exact": "وَابْنُ عَمِّهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ut_shaybah",
+      "parent": "sp_ut_cousin",
+      "exact": "شَيْبَةُ بنُ عُثْمَانَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ut_haytham",
+      "parent": "sp_ut_d_frame",
+      "exact": "الهَيْثَمُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ut_madaini",
+      "parent": "sp_ut_d_frame",
+      "exact": "المَدَائِنِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ut_khalifah_by",
+      "parent": "sp_ut_khalifah_frame",
+      "exact": "خَلِيْفَةُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ut",
+      "mention": "m_ut",
+      "agent": "uthman-ibn-talhah",
+      "basis": [
+        {
+          "span": "sp_ut_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ut_father",
+      "mention": "m_ut_father",
+      "agent": "talhah-ibn-abdullah-ibn-abd-al-uzza",
+      "basis": [
+        {
+          "span": "sp_ut_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ut_c",
+      "mention": "m_ut_c",
+      "agent": "uthman-ibn-talhah",
+      "basis": [
+        {
+          "span": "sp_ut_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ut_shaybah",
+      "mention": "m_ut_shaybah",
+      "agent": "shaybah-ibn-uthman",
+      "basis": [
+        {
+          "span": "sp_ut_cousin_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ut_name",
+      "subject": "m_ut",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ut_n1",
+          "sp_ut_n2"
+        ]
+      },
+      "restsOn": [
+        "st_ut_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ut_sex",
+      "subject": "m_ut",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ut_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ut_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ut_father",
+      "subject": "m_ut",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ut_father"
+      },
+      "restsOn": [
+        "st_ut_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ut_v_hajib",
+      "subject": "m_ut",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ut_hajib"
+        ]
+      },
+      "restsOn": [
+        "st_ut_hajib"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ut_v_miftah",
+      "subject": "m_ut",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ut_miftah"
+        ]
+      },
+      "restsOn": [
+        "st_ut_miftah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ut_cousin",
+      "subject": "m_ut_shaybah",
+      "predicate": "PATERNAL_COUSIN",
+      "value": {
+        "object": "m_ut_c"
+      },
+      "restsOn": [
+        "st_ut_cousin"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ut_d41",
+      "subject": "m_ut",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 41,
+        "spans": [
+          "sp_ut_d"
+        ]
+      },
+      "restsOn": [
+        "st_ut_d_haytham",
+        "st_ut_d_madaini"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ut_d42",
+      "subject": "m_ut",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 42,
+        "spans": [
+          "sp_ut_khalifah"
+        ]
+      },
+      "restsOn": [
+        "st_ut_khalifah"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

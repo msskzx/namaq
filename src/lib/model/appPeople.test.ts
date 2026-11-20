@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { loadCatalog } from '../catalog/loadCatalog';
-import { appPeople, nasabOf, shortName } from './appPeople';
+import { appPeople, nasabOf, nominativeName, shortName } from './appPeople';
 
 describe('the phone app people', () => {
   it('are the converted entries as they are now (npm run model:app-people writes them again)', async () => {
@@ -24,6 +24,9 @@ describe('the phone app people', () => {
     const zubayr = appPeople(await loadCatalog()).find((person) => person.slug === 'az-zubayr-ibn-al-awwam')!;
     expect(zubayr.islamAge.map((fact) => [fact.value, fact.by])).toEqual([[16, []], [8, ['عروة']]]);
     expect(zubayr.companionOf[0].by).toEqual(['الزبير بن العوام']);
+    // A sayer with a converted entry and no catalog file is named by that entry, not by the narrator's word («عن أبيه»).
+    const ibnUmar = appPeople(await loadCatalog()).find((person) => person.slug === 'abdullah-ibn-umar')!;
+    expect(ibnUmar.virtues.find((fact) => fact.text.includes('نِعْمَ الرَّجُلُ'))?.by).toEqual([ibnUmar.name]);
   }, 30_000);
 
   it('joins a tie stated in two entries into one, with both entries\' pages', async () => {
@@ -59,5 +62,11 @@ describe('the phone app people', () => {
     expect(shortName(nasabOf('عَبْدُ اللهِ بنُ أَبِي أَوْفَى عَلْقَمَةَ بنِ خَالِدِ'))).toBe('عَبْدُ اللهِ بن أَبِي أَوْفَى عَلْقَمَةَ');
     expect(shortName(nasabOf('المِقْدَامُ بنُ مَعْدِ يْكَرِبَ بنِ عَمْرِو'))).toBe('المِقْدَامُ بن مَعْدِ يْكَرِبَ');
     expect(shortName(nasabOf('العِرْبَاضُ بنُ سَارِيَةَ السُّلَمِيُّ'))).toBe('العِرْبَاضُ بن سَارِيَةَ');
+  });
+
+  it('names another reading of a name in the nominative when the book prints it in the accusative', () => {
+    // Ibn Umm Maktum: «وأما أهل العراق: فسموه عَمْراً» (Siyar 1/360) is «عمرو», never «عمر».
+    expect(nominativeName('عَمْراً')).toBe('عَمْرو');
+    expect(nominativeName('عَبْدُ اللهِ بنُ قَيْسٍ')).toBe('عَبْدُ اللهِ بنُ قَيْسٍ');
   });
 });

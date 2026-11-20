@@ -1,0 +1,281 @@
+{
+  "unit": {
+    "id": "siyar-v6-135-abdullah-ibn-al-harith-ibn-nawfal",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٣٥"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_hn_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "529",
+      "layer": "MAIN",
+      "exact": "١٣٥ - عَبْدُ اللهِ بنُ الحَارِثِ بنِ نَوْفَلٍ القُرَشِيُّ"
+    },
+    {
+      "id": "sp_hn_n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "529",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ الحَارِثِ بنِ نَوْفَلٍ القُرَشِيُّ",
+      "prefix": "١٣٥ - "
+    },
+    {
+      "id": "sp_hn_kunya_st",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "529",
+      "layer": "MAIN",
+      "exact": "السَّيِّدُ، الأَمِيْرُ، أَبُو مُحَمَّدٍ القُرَشِيُّ، الهَاشِمِيُّ، المَدَنِيُّ"
+    },
+    {
+      "id": "sp_hn_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "529",
+      "layer": "MAIN",
+      "exact": "أَبُو مُحَمَّدٍ",
+      "prefix": "الأَمِيْرُ، "
+    },
+    {
+      "id": "sp_hn_tahnik",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "530",
+      "layer": "MAIN",
+      "exact": "وَكَانَ قَدْ أَتَى بِوَلَدِهِ بَبَّةَ إِلَى رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - فَحَنَّكَهُ"
+    },
+    {
+      "id": "sp_hn_babbah_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "529",
+      "layer": "MAIN",
+      "exact": "وَلَقَبُهُ: بَبَّةُ",
+      "prefix": "المَدَنِيُّ، "
+    },
+    {
+      "id": "sp_hn_ibnsaad_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "530",
+      "layer": "MAIN",
+      "exact": "قَالَ مُحَمَّدُ بنُ سَعْدٍ:",
+      "suffix": " ثِقَةٌ، تَابِعِيٌّ"
+    },
+    {
+      "id": "sp_hn_ibnsaad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "530",
+      "layer": "MAIN",
+      "exact": "ثِقَةٌ، تَابِعِيٌّ",
+      "prefix": "قَالَ مُحَمَّدُ بنُ سَعْدٍ: "
+    },
+    {
+      "id": "sp_hn_sadah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "531",
+      "layer": "MAIN",
+      "exact": "وَكَانَ مِنْ سَادَةِ بَنِي هَاشِمٍ، يَصْلُحُ لِلْخِلاَفَةِ لِعِلْمِهِ، وَسُؤْدُدِهِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_hn0",
+      "unit": "siyar-v6-135-abdullah-ibn-al-harith-ibn-nawfal",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_hn_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_hn_ibnsaad",
+      "unit": "siyar-v6-135-abdullah-ibn-al-harith-ibn-nawfal",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_hn_ibnsaad_frame"
+      ],
+      "origin": {
+        "mention": "m_hn_ibnsaad_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_hn_kunya_st",
+      "report": "r_hn0",
+      "spans": [
+        "sp_hn_kunya_st"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_hn_tahnik",
+      "report": "r_hn0",
+      "spans": [
+        "sp_hn_tahnik"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_hn_ibnsaad",
+      "report": "r_hn_ibnsaad",
+      "spans": [
+        "sp_hn_ibnsaad"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_hn_sadah",
+      "report": "r_hn0",
+      "spans": [
+        "sp_hn_sadah"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_hn_k",
+      "parent": "sp_hn_kunya_st",
+      "exact": "أَبُو مُحَمَّدٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_hn_t",
+      "parent": "sp_hn_tahnik",
+      "exact": "بَبَّةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_hn_prophet",
+      "parent": "sp_hn_tahnik",
+      "exact": "رَسُوْلِ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_hn_ibnsaad_by",
+      "parent": "sp_hn_ibnsaad_frame",
+      "exact": "مُحَمَّدُ بنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_hn_s",
+      "parent": "sp_hn_sadah",
+      "exact": "وَكَانَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_hn_k",
+      "mention": "m_hn_k",
+      "agent": "abdullah-ibn-al-harith-ibn-nawfal",
+      "basis": [
+        {
+          "span": "sp_hn_n1",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_hn_t",
+      "mention": "m_hn_t",
+      "agent": "abdullah-ibn-al-harith-ibn-nawfal",
+      "basis": [
+        {
+          "span": "sp_hn_babbah_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_hn_s",
+      "mention": "m_hn_s",
+      "agent": "abdullah-ibn-al-harith-ibn-nawfal",
+      "basis": [
+        {
+          "span": "sp_hn_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_hn_kunya",
+      "subject": "m_hn_k",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_hn_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_hn_kunya_st"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hn_v_tahnik",
+      "subject": "m_hn_t",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_hn_tahnik"
+        ]
+      },
+      "restsOn": [
+        "st_hn_tahnik"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hn_comp",
+      "subject": "m_hn_t",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_hn_prophet"
+      },
+      "restsOn": [
+        "st_hn_tahnik",
+        "st_hn_ibnsaad"
+      ],
+      "status": "DISPUTED"
+    },
+    {
+      "id": "a_hn_v_sadah",
+      "subject": "m_hn_s",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_hn_sadah"
+        ]
+      },
+      "restsOn": [
+        "st_hn_sadah"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

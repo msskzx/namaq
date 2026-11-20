@@ -1,0 +1,281 @@
+{
+  "unit": {
+    "id": "siyar-v4-23-abu-jandal",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٢٣"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_aj_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "192",
+      "layer": "MAIN",
+      "exact": "٢٣ - أَبُو جَنْدَلٍ العَاصُ بنُ سُهَيْلِ بنِ عَمْرٍو العَامِرِيُّ"
+    },
+    {
+      "id": "sp_aj1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "192",
+      "layer": "MAIN",
+      "exact": "أَبُو جَنْدَلٍ العَاصُ بنُ سُهَيْلِ بنِ عَمْرٍو",
+      "prefix": "٢٣ - "
+    },
+    {
+      "id": "sp_aj2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "192",
+      "layer": "MAIN",
+      "exact": "ابْنِ عَبْدِ شَمْسٍ بنِ عَبْدِ وُدٍّ بنِ نَصْرِ بنِ حِسْلِ بنِ عَامِرِ بنِ لُؤَيِّ بنِ غَالِبِ بنِ فِهْرٍ"
+    },
+    {
+      "id": "sp_aj_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "192",
+      "layer": "MAIN",
+      "exact": "العَاصُ بنُ",
+      "prefix": "أَبُو جَنْدَلٍ "
+    },
+    {
+      "id": "sp_aj_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "192",
+      "layer": "MAIN",
+      "exact": "أَبُو جَنْدَلٍ",
+      "prefix": "٢٣ - "
+    },
+    {
+      "id": "sp_aj_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "192",
+      "layer": "MAIN",
+      "exact": "سُهَيْلِ بنِ عَمْرٍو",
+      "prefix": "العَاصُ بنُ "
+    },
+    {
+      "id": "sp_aj_virtue",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "192",
+      "layer": "MAIN",
+      "exact": "كَانَ مِنْ خِيَارِ الصَّحَابَةِ، وَقَدْ أَسْلَمَ وَحَبَسَهُ أَبُوْهُ وَقَيَّدَهُ، فَلَمَّا كَانَ يَوْمُ صُلْحِ الحُدَيْبِيَةِ هَرَبَ يَحْجِلُ فِي قُيُوْدِهِ"
+    },
+    {
+      "id": "sp_aj_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "193",
+      "layer": "MAIN",
+      "exact": "فَتُوُفِّيَ شَهِيْداً فِي طَاعُوْنِ عَمَوَاسَ بِالأُرْدُنِّ سَنَةَ ثَمَانِيَ عَشْرَةَ"
+    },
+    {
+      "id": "sp_aj_place",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "193",
+      "layer": "MAIN",
+      "exact": "الأُرْدُنِّ",
+      "prefix": "عَمَوَاسَ بِ"
+    },
+    {
+      "id": "sp_aj_year",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "193",
+      "layer": "MAIN",
+      "exact": "سَنَةَ ثَمَانِيَ عَشْرَةَ",
+      "prefix": "بِالأُرْدُنِّ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_aj0",
+      "unit": "siyar-v4-23-abu-jandal",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_aj_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_aj_name",
+      "report": "r_aj0",
+      "spans": [
+        "sp_aj1",
+        "sp_aj2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_aj_virtue",
+      "report": "r_aj0",
+      "spans": [
+        "sp_aj_virtue"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_aj_death",
+      "report": "r_aj0",
+      "spans": [
+        "sp_aj_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_aj",
+      "parent": "sp_aj1",
+      "exact": "أَبُو جَنْدَلٍ العَاصُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_aj_father",
+      "parent": "sp_aj1",
+      "exact": "سُهَيْلِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_aj",
+      "mention": "m_aj",
+      "agent": "abu-jandal",
+      "basis": [
+        {
+          "span": "sp_aj_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_aj_father",
+      "mention": "m_aj_father",
+      "agent": "suhail-ibn-amr",
+      "basis": [
+        {
+          "span": "sp_aj_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_aj_name",
+      "subject": "m_aj",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_aj1",
+          "sp_aj2"
+        ]
+      },
+      "restsOn": [
+        "st_aj_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aj_sex",
+      "subject": "m_aj",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_aj_sex"
+        ]
+      },
+      "restsOn": [
+        "st_aj_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aj_kunya",
+      "subject": "m_aj",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_aj_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_aj_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aj_father",
+      "subject": "m_aj",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_aj_father"
+      },
+      "restsOn": [
+        "st_aj_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aj_virtue",
+      "subject": "m_aj",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_aj_virtue"
+        ]
+      },
+      "restsOn": [
+        "st_aj_virtue"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aj_place",
+      "subject": "m_aj",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "sp_aj_place"
+        ]
+      },
+      "restsOn": [
+        "st_aj_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aj_year",
+      "subject": "m_aj",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 18,
+        "spans": [
+          "sp_aj_year"
+        ]
+      },
+      "restsOn": [
+        "st_aj_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

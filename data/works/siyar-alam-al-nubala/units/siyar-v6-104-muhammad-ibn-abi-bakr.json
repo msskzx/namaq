@@ -1,0 +1,305 @@
+{
+  "unit": {
+    "id": "siyar-v6-104-muhammad-ibn-abi-bakr",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٠٤"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_mb_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "481",
+      "layer": "MAIN",
+      "exact": "١٠٤ - مُحَمَّدُ بنُ أَبِي بَكْرٍ الصِّدِّيْقِ"
+    },
+    {
+      "id": "sp_mb_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "481",
+      "layer": "MAIN",
+      "exact": "مُحَمَّدُ بنُ أَبِي بَكْرٍ الصِّدِّيْقِ",
+      "prefix": "١٠٤ - "
+    },
+    {
+      "id": "sp_mb_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "481",
+      "layer": "MAIN",
+      "exact": "مُحَمَّدُ بنُ",
+      "prefix": "١٠٤ - "
+    },
+    {
+      "id": "sp_mb_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "481",
+      "layer": "MAIN",
+      "exact": "أَبِي بَكْرٍ الصِّدِّيْقِ",
+      "prefix": "١٠٤ - مُحَمَّدُ بنُ "
+    },
+    {
+      "id": "sp_mb_mother",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "482",
+      "layer": "MAIN",
+      "exact": "وَلَدَتْهُ: أَسْمَاءُ بِنْتُ عُمَيْسٍ فِي حَجَّةِ الوَدَاعِ، وَقْتَ الإِحْرَامِ"
+    },
+    {
+      "id": "sp_mb_mother_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "482",
+      "layer": "MAIN",
+      "exact": "أَسْمَاءُ بِنْتُ عُمَيْسٍ",
+      "prefix": "وَلَدَتْهُ: "
+    },
+    {
+      "id": "sp_mb_son",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "482",
+      "layer": "MAIN",
+      "exact": "أَرْسَلَ عَنْهُ: ابْنُهُ؛ القَاسِمُ بنُ مُحَمَّدٍ الفَقِيْهُ"
+    },
+    {
+      "id": "sp_mb_son_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "482",
+      "layer": "MAIN",
+      "exact": "ابْنُهُ؛ القَاسِمُ بنُ مُحَمَّدٍ",
+      "prefix": "أَرْسَلَ عَنْهُ: "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_mb0",
+      "unit": "siyar-v6-104-muhammad-ibn-abi-bakr",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_mb_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_mb_name",
+      "report": "r_mb0",
+      "spans": [
+        "sp_mb_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_mb_mother",
+      "report": "r_mb0",
+      "spans": [
+        "sp_mb_mother"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_mb_son",
+      "report": "r_mb0",
+      "spans": [
+        "sp_mb_son"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_mb",
+      "parent": "sp_mb_name",
+      "exact": "مُحَمَّدُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_mb_father",
+      "parent": "sp_mb_name",
+      "exact": "أَبِي بَكْرٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_mb_m",
+      "parent": "sp_mb_mother",
+      "exact": "وَلَدَتْهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_mb_mother",
+      "parent": "sp_mb_mother",
+      "exact": "أَسْمَاءُ بِنْتُ عُمَيْسٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_mb_f",
+      "parent": "sp_mb_son",
+      "exact": "عَنْهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_mb_c_qasim",
+      "parent": "sp_mb_son",
+      "exact": "القَاسِمُ بنُ مُحَمَّدٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_mb",
+      "mention": "m_mb",
+      "agent": "muhammad-ibn-abi-bakr",
+      "basis": [
+        {
+          "span": "sp_mb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mb_father",
+      "mention": "m_mb_father",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "sp_mb_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mb_m",
+      "mention": "m_mb_m",
+      "agent": "muhammad-ibn-abi-bakr",
+      "basis": [
+        {
+          "span": "sp_mb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mb_mother",
+      "mention": "m_mb_mother",
+      "agent": "asma-bint-umays",
+      "basis": [
+        {
+          "span": "sp_mb_mother_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mb_f",
+      "mention": "m_mb_f",
+      "agent": "muhammad-ibn-abi-bakr",
+      "basis": [
+        {
+          "span": "sp_mb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_mb_c_qasim",
+      "mention": "m_mb_c_qasim",
+      "agent": "al-qasim-ibn-muhammad-ibn-abi-bakr",
+      "basis": [
+        {
+          "span": "sp_mb_son_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_mb_name",
+      "subject": "m_mb",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_mb_name"
+        ]
+      },
+      "restsOn": [
+        "st_mb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mb_sex",
+      "subject": "m_mb",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_mb_sex"
+        ]
+      },
+      "restsOn": [
+        "st_mb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mb_father",
+      "subject": "m_mb",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_mb_father"
+      },
+      "restsOn": [
+        "st_mb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mb_mother",
+      "subject": "m_mb_m",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_mb_mother"
+      },
+      "restsOn": [
+        "st_mb_mother"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_mb_c_qasim_0",
+      "subject": "m_mb_c_qasim",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_mb_f"
+      },
+      "restsOn": [
+        "st_mb_son"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

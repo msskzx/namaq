@@ -1,0 +1,466 @@
+{
+  "unit": {
+    "id": "siyar-v6-4-abu-rifaah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٤"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_rf_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "14",
+      "layer": "MAIN",
+      "exact": "٤ - أَبُو رِفَاعَةَ العَدَوِيُّ تَمِيْمُ بنُ أُسَيْدٍ"
+    },
+    {
+      "id": "sp_rf_head",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "14",
+      "layer": "MAIN",
+      "exact": "أَبُو رِفَاعَةَ العَدَوِيُّ تَمِيْمُ بنُ أُسَيْدٍ"
+    },
+    {
+      "id": "sp_rf_ism",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "14",
+      "layer": "MAIN",
+      "exact": "تَمِيْمُ بنُ أُسَيْدٍ",
+      "prefix": "العَدَوِيُّ"
+    },
+    {
+      "id": "sp_rf_n2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "14",
+      "layer": "MAIN",
+      "exact": "ابْنِ عَدِيِّ بنِ عَبْدِ مَنَاةَ بنِ أُدِّ بنِ طَابِخَةَ المُضَرِيُّ"
+    },
+    {
+      "id": "sp_rf_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "14",
+      "layer": "MAIN",
+      "exact": "تَمِيْمُ بنُ",
+      "prefix": "العَدَوِيُّ"
+    },
+    {
+      "id": "sp_rf_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "14",
+      "layer": "MAIN",
+      "exact": "أَبُو رِفَاعَةَ",
+      "prefix": "-"
+    },
+    {
+      "id": "sp_rf_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "14",
+      "layer": "MAIN",
+      "exact": "أُسَيْدٍ",
+      "prefix": "بنُ"
+    },
+    {
+      "id": "sp_rf_khalifah_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "14",
+      "layer": "MAIN",
+      "exact": "قَالَ خَلِيْفَةُ",
+      "prefix": "وَآخَرُوْنَ."
+    },
+    {
+      "id": "sp_rf_khalifah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "14",
+      "layer": "MAIN",
+      "exact": "هُوَ مِنْ فُضَلاَءِ الصَّحَابَةِ"
+    },
+    {
+      "id": "sp_rf_khalifah_ism",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "14",
+      "layer": "MAIN",
+      "exact": "وَقَالَ: هُوَ عَبْدُ اللهِ بنُ الحَارِثِ"
+    },
+    {
+      "id": "sp_rf_ism2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "14",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ الحَارِثِ"
+    },
+    {
+      "id": "sp_rf_baqarah_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "15",
+      "layer": "MAIN",
+      "exact": "كَانَ أَبُو رِفَاعَةَ العَدَوِيُّ يَقُوْلُ"
+    },
+    {
+      "id": "sp_rf_baqarah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "15",
+      "layer": "MAIN",
+      "exact": "مَا عَزَبَتْ عَنِّي سُوْرَةُ البَقَرَةِ مُنْذُ عَلَّمَنِيْهَا رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - أَخَذْتُ مَعَهَا مَا أَخَذْتُ مِنَ القُرْآنِ، وَمَا وَجِعَ ظَهْرِي مِنْ قِيَامِ اللَّيْلِ قَطُّ"
+    },
+    {
+      "id": "sp_rf_taabbud",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "15",
+      "layer": "MAIN",
+      "exact": "وَكَانَ أَبُو رِفَاعَةَ ذَا تَعَبُّدٍ وَتَهَجُّدٍ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_rf0",
+      "unit": "siyar-v6-4-abu-rifaah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_rf_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_rf_khalifah",
+      "unit": "siyar-v6-4-abu-rifaah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_rf_khalifah_frame"
+      ],
+      "origin": {
+        "mention": "m_rf_khalifah_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_rf_baqarah",
+      "unit": "siyar-v6-4-abu-rifaah",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_rf_baqarah_frame"
+      ],
+      "origin": {
+        "mention": "m_rf_baqarah_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_rf_head",
+      "report": "r_rf0",
+      "spans": [
+        "sp_rf_head"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_rf_n2",
+      "report": "r_rf0",
+      "spans": [
+        "sp_rf_n2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_rf_name",
+      "report": "r_rf0",
+      "spans": [
+        "sp_rf_ism",
+        "sp_rf_n2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_rf_khalifah",
+      "report": "r_rf_khalifah",
+      "spans": [
+        "sp_rf_khalifah"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_rf_khalifah_ism",
+      "report": "r_rf_khalifah",
+      "spans": [
+        "sp_rf_khalifah_ism"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_rf_baqarah",
+      "report": "r_rf_baqarah",
+      "spans": [
+        "sp_rf_baqarah"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_rf_taabbud",
+      "report": "r_rf0",
+      "spans": [
+        "sp_rf_taabbud"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_rf",
+      "parent": "sp_rf_head",
+      "exact": "تَمِيْمُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_rf_father",
+      "parent": "sp_rf_head",
+      "exact": "أُسَيْدٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_rf_khalifah_by",
+      "parent": "sp_rf_khalifah_frame",
+      "exact": "خَلِيْفَةُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_rf_kh",
+      "parent": "sp_rf_khalifah",
+      "exact": "هُوَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_rf_baqarah_by",
+      "parent": "sp_rf_baqarah_frame",
+      "exact": "أَبُو رِفَاعَةَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_rf_bq",
+      "parent": "sp_rf_baqarah",
+      "exact": "عَلَّمَنِيْهَا",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_rf_tb",
+      "parent": "sp_rf_taabbud",
+      "exact": "أَبُو رِفَاعَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_rf",
+      "mention": "m_rf",
+      "agent": "abu-rifaah-al-adawi",
+      "basis": [
+        {
+          "span": "sp_rf_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rf_father",
+      "mention": "m_rf_father",
+      "agent": "asid-father-of-abu-rifaah",
+      "basis": [
+        {
+          "span": "sp_rf_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rf_kh",
+      "mention": "m_rf_kh",
+      "agent": "abu-rifaah-al-adawi",
+      "basis": [
+        {
+          "span": "sp_rf_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rf_baqarah_by",
+      "mention": "m_rf_baqarah_by",
+      "agent": "abu-rifaah-al-adawi",
+      "basis": [
+        {
+          "span": "sp_rf_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rf_bq",
+      "mention": "m_rf_bq",
+      "agent": "abu-rifaah-al-adawi",
+      "basis": [
+        {
+          "span": "sp_rf_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rf_tb",
+      "mention": "m_rf_tb",
+      "agent": "abu-rifaah-al-adawi",
+      "basis": [
+        {
+          "span": "sp_rf_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_rf_name",
+      "subject": "m_rf",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_rf_ism",
+          "sp_rf_n2"
+        ]
+      },
+      "restsOn": [
+        "st_rf_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rf_sex",
+      "subject": "m_rf",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_rf_sex"
+        ]
+      },
+      "restsOn": [
+        "st_rf_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rf_kunya",
+      "subject": "m_rf",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_rf_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_rf_head"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rf_father",
+      "subject": "m_rf",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_rf_father"
+      },
+      "restsOn": [
+        "st_rf_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rf_variant",
+      "subject": "m_rf",
+      "predicate": "name.variant",
+      "value": {
+        "spans": [
+          "sp_rf_ism2"
+        ]
+      },
+      "restsOn": [
+        "st_rf_khalifah_ism"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rf_v_fudala",
+      "subject": "m_rf_kh",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_rf_khalifah"
+        ]
+      },
+      "restsOn": [
+        "st_rf_khalifah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rf_v_baqarah",
+      "subject": "m_rf_bq",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_rf_baqarah"
+        ]
+      },
+      "restsOn": [
+        "st_rf_baqarah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rf_v_taabbud",
+      "subject": "m_rf_tb",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_rf_taabbud"
+        ]
+      },
+      "restsOn": [
+        "st_rf_taabbud"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
