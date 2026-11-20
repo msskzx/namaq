@@ -8,17 +8,15 @@ import type { BranchAyah } from '../quran/branches';
 import { filteredAyat } from '../quran/mutashabih/browse';
 import { num } from '../quran/arabicNumber';
 import { SURAH_NAMES } from '../quran/surahNames';
-import { tafsirSadiPage } from '../quran/tafsirSadi';
 import { tafsirSadiOf } from '../quran/tafsirSadiData';
 import { withoutOpeningQuote } from '../quran/ayahNotes';
 import itqan from '../data/quran/itqanBalagha';
-import { ITQAN_BOOK, itqanPage, type ItqanData } from '../quran/itqanBalagha';
+import type { ItqanData } from '../quran/itqanBalagha';
 import { irabWordsAt } from '../quran/irabData';
 import { corpusWords } from '../quran/words';
 import { qiraatOf } from '../quran/qiraatData';
-import { QIRAAT_SOURCE, READERS, RIWAYAT, wholeReaders, whoReads } from '../quran/qiraat';
-import { IRAB_SOURCES } from '../quran/irab';
-import { ayahPlace, type QuizSource } from './sources';
+import { READERS, RIWAYAT, wholeReaders, whoReads } from '../quran/qiraat';
+import { irabSources, itqanSource, qiraatSources, sadiSource } from './bookSources';
 import { hideQuotes } from './ayahQuizText';
 import { shuffle, type Random } from './random';
 import type { ChoiceKind, ChoiceQuestion, ChoiceScope } from './choiceKinds';
@@ -52,8 +50,6 @@ const where = (key: string) => {
 };
 const span = (count: number, from = 0) => Array.from({ length: count }, (_, i) => from + i);
 /** The role is the treebank's; the word's morphology under it, the corpus's. */
-const irabSources = (key: string): QuizSource[] => IRAB_SOURCES.slice().reverse().map(source => ({ book: source.name, at: ayahPlace(key), url: source.url }));
-const qiraatSources = (key: string): QuizSource[] => [{ book: QIRAAT_SOURCE.name, at: ayahPlace(key), url: QIRAAT_SOURCE.url }];
 
 /** A kind over one of the bank's lists: its questions whose ayah is in the scope, in random order. */
 function bankKind<T extends [string, ...unknown[]]>(id: keyof typeof AYAH_QUIZ_NAMES, list: () => T[], ask: (row: T, random: Random) => ChoiceQuestion): ChoiceKind {
@@ -93,7 +89,7 @@ export const tafsirQuiz = bankKind(TAFSIR_QUIZ, () => data.tafsir, ([key, ...res
     correctAnswer: key,
     ayahKey: key,
     look: { view: 'tafsir', keys, mark: key },
-    sources: [{ book: 'تيسير الكريم الرحمن', author: 'السعدي', at: `ص ${num(passage.pages[0])}`, url: tafsirSadiPage(passage) }],
+    sources: [sadiSource(passage)],
     evidence: { claimKeys: [] },
   };
 });
@@ -127,7 +123,7 @@ export const balaghaQuiz = bankKind(BALAGHA_QUIZ, () => data.balagha.questions, 
     terms: Object.fromEntries([right, ...wrong].map(label => [String(label), data.balagha.labels[label]])),
     ayahKey: key,
     look: { view: 'balagha', key },
-    sources: [{ book: ITQAN_BOOK, author: 'السيوطي', at: `${num(part)}/${num(firstPage)}${lastPage !== firstPage ? `–${num(lastPage)}` : ''}`, url: itqanPage({ id }) }],
+    sources: [itqanSource({ part, pages: [firstPage, lastPage], id })],
     evidence: { claimKeys: [] },
   };
 });

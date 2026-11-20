@@ -14,9 +14,9 @@ describe('QuizSources', () => {
       { book: 'زاد المعاد', author: 'ابن القيم', at: '١/٧٧' },
     ]} />);
     const lines = [...container.querySelectorAll('details')];
-    expect(lines.map(line => line.querySelector('summary')!.textContent)).toEqual(['سير أعلام النبلاء، الذهبي', 'زاد المعاد، ابن القيم']);
+    expect(lines.map(line => line.querySelector('summary')!.textContent)).toEqual(['سير أعلام النبلاء · الذهبي', 'زاد المعاد · ابن القيم']);
     expect(lines.every(line => !line.open)).toBe(true);
-    fireEvent.click(screen.getByText('سير أعلام النبلاء، الذهبي'));
+    fireEvent.click(screen.getByText('سير أعلام النبلاء · الذهبي'));
     expect(lines[0].open).toBe(true);
     expect(screen.getByRole('link', { name: /١\/٤١/ }).getAttribute('href')).toBe('https://shamela.ws/book/10906/41');
     expect(screen.getByText('«وقيل غير ذلك»، ١/٤٤')).toBeTruthy();

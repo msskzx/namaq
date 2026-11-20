@@ -19,7 +19,7 @@ export function Tags({ story, palette }: { story: AppStory; palette: Palette }) 
  * story's name. The moments' titles show only where a quiz asks by them (`titled`).
  */
 export function Report({ report, palette, plain, titled }: { report: AppReport; palette: Palette;
-  /** In a feed card the page is plain text, and its link is a button under the card. */
+  /** In a feed card the page is in the card's source line under its buttons (owner, 2026-11-20); the grading stays. */
   plain?: boolean;
   /** Our few words naming each moment, small over it: the «what came next?» question asks by them (QuizLook). */
   titled?: boolean }) {
@@ -32,10 +32,11 @@ export function Report({ report, palette, plain, titled }: { report: AppReport; 
           <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>{moment.text}</Text>
         </View>
       ))}
-      <Text style={{ color: palette.muted, fontSize: 13, lineHeight: 22, textAlign: 'right' }}>
-        {report.grading ? `${report.grading} · ` : ''}
-        {plain ? report.cite : <ExternalLink url={report.url} color={palette.muted} size={13}>{report.cite}</ExternalLink>}
-      </Text>
+      {plain ? (report.grading ? <Text style={{ color: palette.muted, fontSize: 13, lineHeight: 22, textAlign: 'right' }}>{report.grading}</Text> : null)
+        : <Text style={{ color: palette.muted, fontSize: 13, lineHeight: 22, textAlign: 'right' }}>
+          {report.grading ? `${report.grading} · ` : ''}
+          <ExternalLink url={report.url} color={palette.muted} size={13}>{report.cite}</ExternalLink>
+        </Text>}
     </View>
   );
 }

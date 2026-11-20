@@ -190,6 +190,42 @@ test.describe('a new user', () => {
     });
   });
 
+  test.describe('with the tafsir picked', () => {
+    test.use({ seed: { interests: '["tafsir","hifz"]', 'interests-surprise': '0' } });
+
+    test('a card\'s buttons sit on the right, open first, «ليس من اهتماماتي» alone on the left, and its source line opens a sheet', async ({ page }) => {
+      // Owner, 2026-11-20 (sketch reference-place/every-card-2-dark.png): like an Instagram post.
+      await open(page, '/');
+      const head = page.getByRole('heading', { name: 'من التفسير', exact: true }).first();
+      await expect(async () => {
+        await page.mouse.move(380, 500);
+        await page.mouse.wheel(0, 2000);
+        await expect(head).toBeAttached({ timeout: 1000 });
+      }).toPass({ timeout: 30_000 });
+      const card = head.locator('xpath=ancestor::div[.//*[starts-with(@aria-label, "المصدر: ")]][1]');
+      await card.scrollIntoViewIfNeeded();
+      const box = async (name: string | RegExp) => (await card.getByRole('button', { name, exact: typeof name === 'string' }).boundingBox())!;
+      const opens = await box('التفسير كاملًا');
+      const save = await box('احفظ البطاقة');
+      const notMine = await box(/ليس من اهتماماتي$/);
+      // The row's buttons, right to left: the open button first, «ليس من اهتماماتي» alone at the far left.
+      const row = (await Promise.all((await card.getByRole('button').all()).map(button => button.boundingBox())))
+        .filter((found): found is NonNullable<typeof found> => !!found && Math.abs(found.y - save.y) < 4).sort((a, b) => b.x - a.x);
+      expect(row[0].x).toBe(opens.x);
+      expect(row.at(-1)!.x).toBe(notMine.x);
+      expect(save.x).toBeGreaterThan(notMine.x);
+      // Apart from the group: more room before it than a button's width.
+      expect(row.at(-2)!.x - notMine.x).toBeGreaterThan(2 * notMine.width);
+      const line = card.getByRole('button', { name: 'المصدر: تيسير الكريم الرحمن · السعدي' });
+      expect((await line.boundingBox())!.y).toBeGreaterThan(save.y);
+      await line.click();
+      await expect(page.getByRole('heading', { name: 'المصدر', exact: true })).toBeVisible();
+      await expect(page.getByRole('link', { name: /^ص [٠-٩]+/ }).last()).toBeVisible();
+      // The Quran's own cards have a line too: the mushaf at the ayah.
+      await expect(page.getByRole('button', { name: /^المصدر: المصحف · / }).first()).toBeAttached({ timeout: 20_000 });
+    });
+  });
+
   test.describe('with a prayer near', () => {
     const cairo = { name: 'القاهرة', lat: 30.0444, lng: 31.2357 };
     test.use({ seed: { 'prayer-place': JSON.stringify(cairo) } });
@@ -249,7 +285,7 @@ test.describe('a new user', () => {
       await expect(card.getByRole('button', { name: 'في المصحف' })).toHaveCount(0);
       await choice.click();
       await expect(choice).toBeDisabled();
-      // Answered, the mushaf button joins the row under the card, right before the quiz buttons, and opens the reader.
+      // Answered, the mushaf button joins the row under the card, first (owner, 2026-11-20), and opens the reader.
       const row = card.locator('xpath=.//*[@aria-label="اختبار فردي"]/..');
       await expect(row.getByRole('button', { name: 'في المصحف' })).toHaveCount(1);
       await expect(card.getByRole('button', { name: 'في المصحف' })).toHaveCount(1);

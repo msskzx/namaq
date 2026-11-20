@@ -71,15 +71,25 @@ export function citationSource(citation: Pick<Citation, 'id' | 'book' | 'locator
 /** A line of an opened reference, as both Reference components draw it: the book's words with the place as a link. */
 export type ReferenceLine = { text: string; cite?: string; url?: string };
 
+/** The mushaf's short name on a reference line: «المصحف · الإخلاص ٣» (owner, 2026-11-20: every card has a line, the Quran too). */
+export const MUSHAF_LINE = 'المصحف';
+
 /**
- * The references under an answer, one collapsed line for each book (owner, 2026-11-19: only the book's name, maybe its
- * author; a tap opens the rest). Opened, each place cited in it: the book's words with the place, linked where the book
- * is online, and who says them under them.
+ * The references under an answer or a home card, one collapsed line for each book (owner, 2026-11-19: only the book's
+ * name, maybe its author; a tap opens the rest), written «book · author» (owner, 2026-11-20). The mushaf's line names the
+ * ayat instead («المصحف · الإخلاص ٣»). Opened, each place cited in it: the book's words with the place, linked where the
+ * book is online, and who says them under them.
  */
 export function referenceGroups(sources: QuizSource[]): { title: string; lines: ReferenceLine[] }[] {
   const groups = new Map<string, ReferenceLine[]>();
+  const mushaf = sources.filter(source => source.book === MUSHAF_BOOK);
+  if (mushaf.length) {
+    const places = [...new Set(mushaf.flatMap(source => (source.at ? [source.at.split('، ص ')[0]] : [])))].join('، ');
+    groups.set(places ? `${MUSHAF_LINE} · ${places}` : MUSHAF_LINE, [{ text: MUSHAF_BOOK }, ...mushaf.flatMap(source => (source.at ? [{ text: source.at }] : []))]);
+  }
   for (const source of sources) {
-    const title = source.author ? `${source.book}، ${source.author}` : source.book;
+    if (source.book === MUSHAF_BOOK) continue;
+    const title = source.author ? `${source.book} · ${source.author}` : source.book;
     const at = source.at ?? '';
     const lines = groups.get(title) ?? [];
     if (source.url) lines.push({ text: source.quote ?? '', cite: at, url: source.url });

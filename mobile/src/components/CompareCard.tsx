@@ -152,11 +152,11 @@ function Studio({ read, palette, record }: { read: ReturnType<typeof useReadAlon
 }
 
 /** One compare card: both sides stacked, tap a coloured word to light its partner, double tap to save, the studio reads along. */
-function CompareCard({ card, palette, onPageVideo, onOpen, extra }: { card: PairCard; palette: Palette; /** Opens the whole pair page's video, offered in the share sheet. */ onPageVideo?: () => void;
-  /** Set where the card shows outside the compare tab (the home feed): a button that opens it there. */
+function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: PairCard; palette: Palette; /** Opens the whole pair page's video, offered in the share sheet. */ onPageVideo?: () => void;
+  /** Set where the card shows outside the compare tab (the home feed): a button that opens it there, first in the row (owner, 2026-11-20). */
   onOpen?: () => void;
-  /** The feed's own buttons for this card (HomeFeed CardMenuActions), before share. */
-  extra?: React.ReactNode }) {
+  /** The feed's «ليس من اهتماماتي», alone at the row's left end (owner, 2026-11-20). */
+  aside?: React.ReactNode }) {
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const saved = savedIdsOf(card, bookmarks).length > 0;
   const read = useReadAlong(card);
@@ -343,6 +343,8 @@ function CompareCard({ card, palette, onPageVideo, onOpen, extra }: { card: Pair
   // Share as image: the card as it is now (view, folded parts, lit words), drawn afresh for the image.
   const cardBox = { backgroundColor: palette.card, borderWidth: COMPARE_CARD.border, borderColor: palette.rule, borderRadius: COMPARE_CARD.radius, padding: COMPARE_CARD.padding, gap: COMPARE_CARD.gap };
   const share = () => shareCard({ content: width => <View style={{ ...cardBox, width }}>{body}</View>, link: cardLink(card), onVideo: record, onPageVideo });
+  const saveButton = <IconButton Icon={Bookmark} label={saved ? 'إزالة من المحفوظة' : 'حفظ'} onPress={() => toggleCardSaved(card)} on={saved} fill
+    render={icon => <Animated.View style={popped}><Bookmark {...icon} /></Animated.View>} />;
   return (
     <View style={{ gap: 4 }}>
       {/* A tree stands on the page as the branches trees do, its boxes the cards; the matrix is one card. */}
@@ -351,8 +353,8 @@ function CompareCard({ card, palette, onPageVideo, onOpen, extra }: { card: Pair
       </Tap>
       {read.studio ? <Studio read={read} palette={palette} record={record} /> : (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-          <IconButton Icon={Bookmark} label={saved ? 'إزالة من المحفوظة' : 'حفظ'} onPress={() => toggleCardSaved(card)} on={saved} fill
-            render={icon => <Animated.View style={popped}><Bookmark {...icon} /></Animated.View>} />
+          {onOpen && <IconButton Icon={ArrowLeftRight} label="افتحها في المقارنة" onPress={onOpen} />}
+          {!onOpen && saveButton}
           <IconButton Icon={Clapperboard} label="استوديو القراءة" onPress={read.open} />
           {/* A story card's parts show no surrounding ayat, so it has no switch for them. */}
           {!parts && <IconButton Icon={UnfoldHorizontal} label="الآيات المحيطة" onPress={() => setAround(!aroundOn)} on={aroundOn} />}
@@ -360,10 +362,11 @@ function CompareCard({ card, palette, onPageVideo, onOpen, extra }: { card: Pair
           {!matrixOnly && <IconButton Icon={view === 'tree' ? GalleryHorizontal : TreeIcon} label={view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} onPress={() => setView(view === 'tree' ? 'matrix' : 'tree')} />}
           {/* In matrix view this button sits on the first ayah's line instead, as on the website. */}
           {tree && card.group && <IconButton Icon={TreeIcon} label="افتح في متشابهات القرآن" onPress={() => toTab({ pathname: '/branches', params: { tree: card.group } })} />}
-          {onOpen && <IconButton Icon={ArrowLeftRight} label="افتحها في المقارنة" onPress={onOpen} />}
-          {extra}
-          {/* Share is always the last button (the left end), as on the branches tab. */}
+          {/* In the feed, save comes after the card's tools, just before share (owner, 2026-11-20). */}
+          {onOpen && saveButton}
+          {/* Share is always the last of the group, as on the branches tab. */}
           <IconButton Icon={Send} label="مشاركة" onPress={() => share()} />
+          {aside ? <><View style={{ flex: 1 }} />{aside}</> : null}
         </View>
       )}
       <VideoSheet page={video} onClose={() => setVideo(null)} palette={palette} />

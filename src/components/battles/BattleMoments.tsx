@@ -6,7 +6,7 @@ import ExternalLink from '@/components/common/ExternalLink';
 export function Moment({ moment, n, plain = false, inset = false }: { moment: AppMoment; n: number;
   /** Under a heading one level lower (the quiz's look-up). */
   inset?: boolean;
-  /** In a feed card the source is plain text, and its link is a button under the card (the app's `plain`). */
+  /** In a feed card the source is in the card's source line under its buttons (owner, 2026-11-20); the grading stays. */
   plain?: boolean }) {
   const Title = inset ? 'h4' : 'h3';
   return (
@@ -14,7 +14,7 @@ export function Moment({ moment, n, plain = false, inset = false }: { moment: Ap
       <Title className="text-lg font-bold"><span className="text-[var(--home-accent)]">{n}. </span>{moment.title}</Title>
       {moment.isnad && <p className="text-sm leading-7 text-[var(--home-muted)]">{moment.isnad}</p>}
       <p className="text-lg leading-9">{moment.quote}</p>
-      <p className="text-sm text-[var(--home-muted)]">{moment.grading} · {plain ? moment.cite : <ExternalLink href={moment.url} className="text-[var(--home-muted)]">{moment.cite}</ExternalLink>}</p>
+      <p className="text-sm text-[var(--home-muted)]">{moment.grading}{!plain && <> · <ExternalLink href={moment.url} className="text-[var(--home-muted)]">{moment.cite}</ExternalLink></>}</p>
       {moment.people.length > 0 && <div className="flex flex-wrap gap-1.5">{moment.people.map(person => <Chip key={person.slug} label={person.name} small />)}</div>}
     </div>
   );

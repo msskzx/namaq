@@ -1,5 +1,6 @@
 'use client';
 
+import { useLiftSource } from '@/components/common/sourceSlot';
 import { useState, type ReactNode } from 'react';
 import { RECORD_BOOKS, compilerOf, fromCompanion, lastPage, recordedIn, rajabOpening, recordName, type AppHadith, type FortyBook, type FortyEntry, type FortyGrade, type FortyRecord, type RajabChapter, type RajabParagraph } from '@shared/hadith';
 import { num } from '@shared/quran/arabicNumber';
@@ -29,6 +30,8 @@ export const shamelaPage = (books: Pick<FortyBooks, FortyBook> | Partial<FortyBo
 
 /** A source's page as the section's reference: the book, volume and page, opening to the edition and Shamela's page. */
 function Cite({ title, edition, url }: { title: string; edition: string; url: string }) {
+  // On a home card it joins the card's source line (owner 2026-11-20), as a Reference does.
+  if (useLiftSource({ line: title, quotes: [{ text: edition }], links: [{ label: 'الصفحة في المكتبة الشاملة', url }] })) return null;
   return <Folded credit={title}><p>{edition}</p><ExternalLink href={url}>الصفحة في المكتبة الشاملة</ExternalLink></Folded>;
 }
 

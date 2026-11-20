@@ -1,4 +1,5 @@
 import type { QuizSource } from './quiz/sources';
+import { sourceById } from './sources';
 
 /**
  * The people as the phone app shows them (owner, 2026-11-18). The app reads only the new model: each person comes from
@@ -147,17 +148,18 @@ export function volumeLabel(volume: number) {
  * says them, when given. The three books of the Risalah printing (the Sira, the Caliphs, the Siyar) are al-Dhahabi's.
  */
 export function pageSources(refs: PageRef[], quote?: { text: string; by?: string }): QuizSource[] {
-  const books = new Map<string, { author: string; pages: string[] }>();
+  const books = new Map<string, { author: string; pages: string[]; url?: string }>();
   for (const ref of refs) {
     const other = ref.work ? OTHER_WORKS[ref.work] : undefined;
     const { book, part } = other ? { book: other.book, part: ref.volume as number | undefined } : volumeLabel(ref.volume);
     const at = part === undefined ? arabic(ref.page) : `${arabic(part)}/${arabic(ref.page)}`;
-    const entry = books.get(book) ?? { author: other?.author ?? 'الذهبي', pages: [] };
+    // The book online (shared/sources.ts), so a card's sheet links to it as the person page's reference did.
+    const entry = books.get(book) ?? { author: other?.author ?? 'الذهبي', pages: [], url: sourceById(other?.source ?? 'siyar')?.link.url };
     if (!entry.pages.includes(at)) entry.pages.push(at);
     books.set(book, entry);
   }
-  return [...books].map(([book, { author, pages }]) => ({
-    book, author, at: pages.join('، '),
+  return [...books].map(([book, { author, pages, url }]) => ({
+    book, author, at: pages.join('، '), ...(url && { url }),
     ...(quote?.text && { quote: quote.text }), ...(quote?.by && { by: quote.by }),
   }));
 }

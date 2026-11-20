@@ -4,6 +4,8 @@ import forty from '@shared/data/hadith/forty.json';
 import rajab from '@shared/data/hadith/ibnRajab.json';
 import units from '@shared/data/hadith/units.json';
 import { rajabItem } from '@shared/feedItems';
+import { compiledSource, recordSource } from '@shared/quiz/hadith';
+import { uniqueSources, type QuizSource } from '@shared/quiz/sources';
 import { drawnBukhari, fromSahihayn, rajabFeedPassages, recordedIn, sayingStart, type AppForty, type AppIsnad, type BookBox, type AppHadith, type FortyEntry, type RajabChapter, type RajabParagraph } from '@shared/hadith';
 
 export const FORTY = forty as AppForty;
@@ -40,7 +42,9 @@ const turnOf = (day: number, at: number, count: number) => ((((day * 37 + at) % 
  */
 export type HadithCard = { slot: number;
   /** The card's lasting id, as the app's feed saves it (shared/feedItems.ts). */
-  item: string; entry: Pick<FortyEntry, 'n' | 'heading' | 'companion' | 'text' | 'shamela' | 'source'>; books: Pick<FortyBooks, 'nawawi' | 'ibnrajab'> } & (
+  item: string; entry: Pick<FortyEntry, 'n' | 'heading' | 'companion' | 'text' | 'shamela' | 'source'>; books: Pick<FortyBooks, 'nawawi' | 'ibnrajab'>;
+  /** The books the card stands on, for its source line (owner, 2026-11-20). */
+  sources: QuizSource[] } & (
   | { kind: 'hadith' }
   | { kind: 'rajab'; passage: RajabParagraph[] }
   | { kind: 'recorded'; boxes: BookBox[] }
@@ -51,16 +55,18 @@ const FEED_CHAINS = FEED_FORTY.filter(entry => drawnBukhari(entry));
 
 const books = () => ({ nawawi: FORTY.books.nawawi, ibnrajab: FORTY.books.ibnrajab });
 const short = ({ n, heading, companion, text, shamela, source }: FortyEntry) => ({ n, heading, companion, text, shamela, ...(source ? { source } : {}) });
-const recordedCard = (slot: number, entry: FortyEntry): HadithCard => ({ slot, kind: 'recorded', item: String(entry.n), entry: short(entry), books: books(), boxes: recordedIn(entry) });
-const plainCard = (slot: number, entry: FortyEntry): HadithCard => ({ slot, kind: 'hadith', item: String(entry.n), entry: short(entry), books: books() });
+const recordedCard = (slot: number, entry: FortyEntry): HadithCard => ({ slot, kind: 'recorded', item: String(entry.n), entry: short(entry), books: books(), boxes: recordedIn(entry),
+  sources: uniqueSources([...entry.records.map(recordSource), compiledSource(entry)]) });
+const plainCard = (slot: number, entry: FortyEntry): HadithCard => ({ slot, kind: 'hadith', item: String(entry.n), entry: short(entry), books: books(), sources: [compiledSource(entry)] });
 function isnadCard(slot: number, entry: FortyEntry): HadithCard {
   const record = drawnBukhari(entry)!;
-  return { slot, kind: 'isnad', item: String(entry.n), entry: short(entry), books: books(), size: (units as AppHadith).size, bukhari: FORTY.books.bukhari,
+  return { slot, kind: 'isnad', item: String(entry.n), entry: short(entry), books: books(), sources: [recordSource(record)], size: (units as AppHadith).size, bukhari: FORTY.books.bukhari,
     record: { number: record.number, shamela: record.shamela, isnad: record.isnad!, saying: record.text.slice(record.isnadEnd) } };
 }
 function rajabCard(slot: number, { chapter, passage }: ReturnType<typeof rajabPassages>[number]): HadithCard | null {
   const entry = fortyEntry(chapter.n);
-  return entry ? { slot, kind: 'rajab', item: rajabItem(chapter.n, chapter.paragraphs.indexOf(passage[0])), entry: short(entry), books: books(), passage } : null;
+  return entry ? { slot, kind: 'rajab', item: rajabItem(chapter.n, chapter.paragraphs.indexOf(passage[0])), entry: short(entry), books: books(), passage,
+    sources: [{ book: FORTY.books.ibnrajab.title, author: 'ابن رجب' }] } : null;
 }
 
 export function hadithCards(day: number, slots: number[]): HadithCard[] {

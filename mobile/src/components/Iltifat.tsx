@@ -129,11 +129,13 @@ export function IltifatScene({ view, palette }: { view: ExampleView; palette: Pa
 const iltifatTitle = (view: ExampleView) => `${view.name} ${rangeLabel(view)}`;
 
 /** An example's mushaf and share buttons: inside its card on «مشاهد», under the card in the home feed. */
-export function IltifatActions({ view, palette }: { view: ExampleView; palette: Palette }) {
+export function IltifatActions({ view, palette, only }: { view: ExampleView; palette: Palette;
+  /** One of the two, where a feed card puts them apart: open first in its row, share after save (owner, 2026-11-20). */
+  only?: 'open' | 'share' }) {
   const title = iltifatTitle(view);
   return <>
-    <IconButton Icon={BookOpen} label={`افتح ${title} في المصحف`} onPress={() => readAyah(`${view.surah}:${view.from}`)} />
-    <IconButton Icon={Send} label={`شارك ${title}`} onPress={() => shareCard({ content: width => <View style={{ width }}><IltifatCard view={view} palette={palette} image /></View> })} />
+    {only !== 'share' && <IconButton Icon={BookOpen} label={`افتح ${title} في المصحف`} onPress={() => readAyah(`${view.surah}:${view.from}`)} />}
+    {only !== 'open' && <IconButton Icon={Send} label={`شارك ${title}`} onPress={() => shareCard({ content: width => <View style={{ width }}><IltifatCard view={view} palette={palette} image /></View> })} />}
   </>;
 }
 

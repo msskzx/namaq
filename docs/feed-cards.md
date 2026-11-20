@@ -74,9 +74,13 @@ A new card or quiz kind goes into an interest's `cards` or `quizzes` in the same
 - Only three open rules move a card up: what is picked, a question answered wrong comes back after the ayah rests
   (`shared/quiz/missedQuestions.ts`), and a story opened goes on from where it stopped. Nothing is learned from taps.
 - Every card walks its own list with what was seen (`shared/feedSeen.ts`), so a card is new until the list is done.
-- Each card's row under it holds «احفظ» (a `card:` bookmark, shown in the library and among the saved cards) and
-  «ليس من اهتماماتي» (HomeFeed `CardMenuActions`), before share; there is no «…» menu (owner 2026-11-20: one layout for
-  every card). A card from outside the reader's interests is added from its line above («أضفه»). Nothing on screen moves:
+- Each card's row under it (owner 2026-11-20, like an Instagram post; the rule is in docs/ship-checklist.md section 4)
+  holds, from the right, the button that opens the item in its own reader, the card's tools, «احفظ» (a `card:` bookmark,
+  shown in the library and among the saved cards) and share; «ليس من اهتماماتي» sits alone at the left (app only so far:
+  the website's feed has no way to take an interest out yet). There is no «…» menu. Under the row, the source line:
+  a book icon and the books the card stands on («المصحف · الإخلاص ٣» for the Quran), a tap opening a sheet with where in
+  them (HomeFeed `Post` `source`; a `Reference` inside a card joins it on its own, ui/sourceSlot.ts). The books card is
+  the one card with no line: its books are the card. A card from outside the reader's interests is added from its line above («أضفه»). Nothing on screen moves:
   interests are kept for the visit, and a card taken out leaves a line with «تراجع».
 - Today's juz, the forgotten ayat, books, the prayer card and saved items stay outside the rounds.
 - The chips over the feed: «لك» and each interest picked; a tap shows that interest's cards alone.

@@ -76,7 +76,7 @@ export function People({ people, palette }: { people: AppPersonLink[]; palette: 
 
 /** A numbered moment: our few words naming it, the source's words, where the source says the report is found, and its page. */
 export function Moment({ moment, n, palette, plain }: { moment: AppMoment; n: number; palette: Palette;
-  /** In a feed card the source is plain text, and its link is a button under the card (owner, 2026-11-18). */
+  /** In a feed card the source is in the card's source line under its buttons (owner, 2026-11-20); the grading stays. */
   plain?: boolean }) {
   return (
     <Step n={n} palette={palette}>
@@ -84,7 +84,7 @@ export function Moment({ moment, n, palette, plain }: { moment: AppMoment; n: nu
       {moment.isnad ? <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 24, textAlign: 'right' }}>{moment.isnad}</Text> : null}
       <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>{moment.quote}</Text>
       <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>
-        {moment.grading} · {plain ? moment.cite : <ExternalLink url={moment.url} color={palette.muted} size={13}>{moment.cite}</ExternalLink>}
+        {moment.grading}{plain ? null : <> · <ExternalLink url={moment.url} color={palette.muted} size={13}>{moment.cite}</ExternalLink></>}
       </Text>
       {moment.people.length ? <People people={moment.people} palette={palette} /> : null}
     </Step>

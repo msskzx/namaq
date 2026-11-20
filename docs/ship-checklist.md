@@ -28,7 +28,7 @@ in [records](records/README.md), `AGENTS` a rule already in AGENTS.md.
 - [ ] A quote is pinned only to an item the quoted sentence itself names, not the page around it. A quote that fits several ayat lists every place, with no cap. (R0026, R0044, owner 11-18)
 - [ ] Only the author's text: modern editors' footnotes stripped, no chain attached to words that lack one, and a book whose attribution is disputed labelled «المنسوب».
 - [ ] Modern works (al-Muyassar, Hisn al-Muslim, al-Albani's annotated books) ship only with written permission. Until then, quote a short attributed line and link out. A public-domain author's own text may ship whole, with its page and a link to the edition. (AGENTS)
-- [ ] Every page shows its sources, inline where something is quoted, each section with its own reference. A reference is collapsed to the book name (and author); a tap opens volume, page, edition and link. No global sources sheet. (owner 11-16, 11-19)
+- [ ] Every page shows its sources, inline where something is quoted, each section with its own reference. A reference is collapsed to the book name (and author); a tap opens volume, page, edition and link. On a home card it is the source line under the buttons (section 4). No global sources sheet. (owner 11-16, 11-19)
 - [ ] A reference gives the surah name first, then the ayah: «الطور ١٧». (owner 11-14)
 - [ ] No review labels ("unreviewed", "pending") in the UI. A value without a book page still shows plainly; its review status stays in the data (ADR 0008). (owner 11-17, 11-18)
 - [ ] Prophets carry «عليه السلام» and the Prophet ﷺ. ﷺ is the only honorific kept as a sign; the others are spelled out.
@@ -77,7 +77,9 @@ in [records](records/README.md), `AGENTS` a rule already in AGENTS.md.
 - [ ] The card draws the feature's own shared view component, never a text-only stand-in or a redraw. Its taps open the real page at that item. (owner 11-13, 11-19, R0031)
 - [ ] The card has a UI test that uses it (swipe, zoom, typing, the tap that opens its page), not just a screenshot. (R0031)
 - [ ] One item per card. The card grows with its content up to screen height, with no inner scroll below that. Ayah cards stay small and open a sheet on tap. (owner 11-14, 11-18)
-- [ ] Every home card follows the one agreed layout: the head over the card, the card, and every button in the row under it, save first and share last. No buttons inside the card and no «…» menu. (owner 11-14, 11-15, 11-20)
+- [ ] Every home card follows the one agreed layout, like an Instagram post: the head over the card, the card, the row of buttons right under it, then the source line. No buttons inside the card and no «…» menu. (owner 11-14, 11-15, 11-20)
+- [ ] The row's buttons are grouped on the right: the one that opens the item in its own reader first (the mushaf at the ayah, the hadith in its book), then the card's own tools, then save, then share. «ليس من اهتماماتي» sits alone at the far left. (owner 11-20)
+- [ ] Every card has a source line under its buttons, the Quran too («المصحف · الإخلاص ٣»): a book icon, then the book and its author, no arrow. A tap anywhere on the line opens a sheet with the details (volume, page, edition, link). A question's line comes after it is answered, so it never gives the answer away. (owner 11-20)
 - [ ] The feed learns nothing from taps yet. Only open rules move a card, and any hidden logic becomes a setting. (owner 11-19)
 - [ ] No stats, counts, streaks, likes or forgot-counts anywhere. Counters are live only (adhkar).
 - [ ] Questions use the memorized range. Pondering cards may use everything but prefer the memorized range. Trees are always drawn whole. (owner 11-13)
