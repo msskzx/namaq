@@ -1,5 +1,6 @@
 'use client';
 
+import AyahFlow from '@/components/quran/text/AyahFlow';
 import { useState } from 'react';
 import Link from 'next/link';
 import { BookOpen } from 'lucide-react';
@@ -30,9 +31,9 @@ function Source({ cite }: { cite: Cite }) {
 function PairAyah({ ayah }: { ayah: OrderAyah }) {
   return <>
     <span className="whitespace-nowrap pt-1.5 text-sm text-[var(--home-muted)]">{ayah.place}</span>
-    <span className="font-quran text-xl leading-[2]">
+    <AyahFlow>
       {ayah.words.map((w, i) => <span key={i} data-shared={w.shared || undefined} className={w.shared ? 'text-[var(--home-accent)]' : undefined}>{`${w.text} `}</span>)}
-    </span>
+    </AyahFlow>
   </>;
 }
 
@@ -55,9 +56,9 @@ function SurahCard({ s }: { s: OrderSurah }) {
   return (
     <Card as="li" className="px-4 pt-2.5 pb-1">
       <h2 className="flex items-baseline gap-2"><span className="text-2xl text-[var(--home-accent)]">{s.name}</span><span className="text-sm text-[var(--home-muted)]">{num(s.surah)}</span></h2>
-      <p className="font-quran text-2xl leading-[2.1] [text-align:justify] [text-align-last:right]">
+      <AyahFlow>
         {s.opening.map(a => <span key={a.ayah}>{`${a.text} `}<span className="text-[var(--home-amber)]">{`${num(a.ayah)} `}</span></span>)}
-      </p>
+      </AyahFlow>
       <p className="mt-1 text-lg leading-loose">«{s.aim.text}»</p>
       <Source cite={s.aim.src} />
       <div className="flex gap-1">

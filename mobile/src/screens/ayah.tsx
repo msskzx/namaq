@@ -4,9 +4,9 @@ import TopBar from '@/ui/TopBar';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { num } from '@shared/quran/arabicNumber';
-import { mushafText } from '@shared/quran/mushafText';
 import { ayahOf, surahNames } from '@/lib/branches';
-import { QURAN_FONT, usePalette } from '@/lib/theme';
+import { usePalette } from '@/lib/theme';
+import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
 import Card from '@/ui/Card';
 
 /** The ayat under a tree node, opened by tapping it; the native back swipe returns to the same tree and zoom. */
@@ -24,9 +24,10 @@ export default function AyahScreen() {
           return (
             <Card key={ayah.key} palette={palette}>
               <Text style={{ color: palette.muted, fontSize: 13, marginBottom: 4 }}>{surahNames[surah]} {num(number)}</Text>
-              <Text style={{ fontFamily: QURAN_FONT, fontSize: 24, lineHeight: 48, color: palette.ink, writingDirection: 'rtl', textAlign: 'right' }}>
-                {mushafText(ayah.words.join(' '))} <Text style={{ color: palette.accent }}>{num(number)}</Text>
-              </Text>
+              <AyahFlow color={palette.ink}>
+                <AyahWords>{`${ayah.words.join(' ')} `}</AyahWords>
+                <AyahWords look={{ color: palette.accent }}>{num(number)}</AyahWords>
+              </AyahFlow>
             </Card>
           );
         })}

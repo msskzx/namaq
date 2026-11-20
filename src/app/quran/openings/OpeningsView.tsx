@@ -1,5 +1,6 @@
 'use client';
 
+import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ChevronDown, PenLine } from 'lucide-react';
@@ -7,7 +8,6 @@ import ExternalLink from '@/components/common/ExternalLink';
 import Reference from '@/components/common/Reference';
 import { ShareImageButton } from '@/components/share/ShareImage';
 import { num } from '@shared/quran/arabicNumber';
-import { mushafText } from '@shared/quran/mushafText';
 import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, inKind, soleCard, type ConditionRole, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
 import Card from '@/components/common/Card';
 import Chip from '@/components/common/Chip';
@@ -22,17 +22,17 @@ const ROLE: Record<ConditionRole, string> = {
 };
 
 function Words({ words }: { words: OpeningWord[] }) {
-  return <>{words.map((word, i) => <span key={i}>{i > 0 && ' '}{'end' in word ? num(word.end) : <span data-mark={word.mark?.kind} data-some={word.mark?.some || undefined} style={word.mark ? { color: word.mark.some ? `color-mix(in srgb, var(--mark-${word.mark.kind}) var(--mark-some), var(--home-muted))` : `var(--mark-${word.mark.kind})` } : undefined}>{mushafText(word.text)}</span>}</span>)}</>;
+  return <>{words.map((word, i) => <span key={i}>{i > 0 && ' '}{'end' in word ? num(word.end) : <span data-mark={word.mark?.kind} data-some={word.mark?.some || undefined} style={word.mark ? { color: word.mark.some ? `color-mix(in srgb, var(--mark-${word.mark.kind}) var(--mark-some), var(--home-muted))` : `var(--mark-${word.mark.kind})` } : undefined}><AyahWords>{word.text}</AyahWords></span>}</span>)}</>;
 }
 
 function Conditions({ lines }: { lines: ConditionText[string] }) {
   return (
     <div className="flex flex-col gap-1 pt-1">
       {lines.map(line => (
-        <p key={line.key} data-role={line.role} className={`font-quran text-xl leading-[2.1] border-s-2 ps-2 ${ROLE[line.role]}`}>
-          {mushafText(line.words.join(' '))} {num(Number(line.key.split(':')[1]))}
+        <div key={line.key} data-role={line.role} className={`border-s-2 ps-2 ${ROLE[line.role]}`}><AyahFlow>
+          <AyahWords>{`${line.words.join(' ')} ${num(Number(line.key.split(':')[1]))}`}</AyahWords>
           {line.role !== 'condition' && <span className="font-sans text-xs text-[var(--home-muted)] ms-2">{line.role === 'answer' ? (line.ours ? 'الجواب، قراءتنا' : 'الجواب') : 'موضع الخلاف في الجواب'}</span>}
-        </p>
+        </AyahFlow></div>
       ))}
     </div>
   );
@@ -59,7 +59,7 @@ function OpeningItem({ card, names, conditions }: { card: OpeningCard; names: Re
             </div>
             {open && conditions[row.surah]
               ? <Conditions lines={conditions[row.surah]} />
-              : <p className="font-quran text-2xl leading-[2.1] text-justify"><Words words={row.words} />{row.cut && <span className="text-[var(--home-muted)]"> …</span>}</p>}
+              : <AyahFlow><Words words={row.words} />{row.cut && <span className="text-[var(--home-muted)]"> …</span>}</AyahFlow>}
           </div>
         ))}
         {open && <div data-share-skip className="flex flex-col gap-1 border-t border-[var(--home-rule)]/40 pt-2 text-sm leading-relaxed text-[var(--home-muted)]">

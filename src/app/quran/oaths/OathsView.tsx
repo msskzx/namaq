@@ -1,5 +1,6 @@
 'use client';
 
+import AyahFlow from '@/components/quran/text/AyahFlow';
 import { useState } from 'react';
 import { BookOpen, Send } from 'lucide-react';
 import Segmented from '@/components/common/Segmented';
@@ -39,7 +40,7 @@ function OathCard({ oath }: { oath: OathView }) {
         {quotes && <Reference title={citesOf(quotes)} quotes={quotes} />}
       </div>
       <Card as="article" className="px-4 py-1.5">
-        <p className="font-quran text-2xl leading-[2.1] [text-align:justify] [text-align-last:right]">
+        <AyahFlow>
           {oath.lines.map(line => (
             <span key={line.ayah}>
               {line.words.map((word, i) => (
@@ -48,7 +49,7 @@ function OathCard({ oath }: { oath: OathView }) {
               <span className="text-[var(--home-amber)]">{`${num(line.ayah)} `}</span>
             </span>
           ))}
-        </p>
+        </AyahFlow>
       </Card>
       <div className="flex items-center gap-1">
         <Button size="round" variant="muted" href={ayahHref(oath.id)} aria-label={`افتح ${place} في المصحف`} title="في المصحف"><BookOpen aria-hidden /></Button>

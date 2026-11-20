@@ -18,6 +18,7 @@ import { useTabRetap } from '@/lib/tabRetap';
 import { openAdhkar } from '@/lib/adhkar';
 import { back, openIntent as go, toTab } from '@/lib/ways';
 import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
 import Card from '@/ui/Card';
 import Empty from '@/ui/Empty';
 
@@ -58,14 +59,14 @@ function HitRow({ hit, palette, onWord }: { hit: SearchHit; palette: Palette; on
       const { start, end } = around(hit);
       return (
         <Card palette={palette} pad={[8, 12]} onPress={() => go({ tab: 'read', at: hit.key })} accessibilityRole="link" accessibilityLabel={ayahLabel(hit.key)} style={{ marginBottom: 8 }}>
-          <Text style={{ fontFamily: QURAN_FONT, fontSize: 19, lineHeight: 38, color: palette.ink, textAlign: 'right' }}>
-            {start > 0 ? '… ' : ''}
+          <AyahFlow color={palette.ink}>
+            {start > 0 ? <AyahWords>… </AyahWords> : null}
             {hit.words.slice(start, end).map((word, at) => {
               const i = start + at;
-              return <Text key={i} style={i >= hit.from && i <= hit.to ? { color: palette.accent } : null}>{`${mushafText(word)} `}</Text>;
+              return <AyahWords key={i} look={i >= hit.from && i <= hit.to ? { color: palette.accent } : undefined}>{`${word} `}</AyahWords>;
             })}
-            {end < hit.words.length ? '…' : ''}
-          </Text>
+            {end < hit.words.length ? <AyahWords>…</AyahWords> : null}
+          </AyahFlow>
           <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{ayahLabel(hit.key)}</Text>
         </Card>
       );
