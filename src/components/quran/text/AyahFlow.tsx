@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
-import { FLOW_LINE, FLOW_SIZE } from '@shared/quran/quranText/flow';
+import { CARD_MARGINS, FLOW_LINE, FLOW_SIZE, PHONE_WIDTH } from '@shared/quran/quranText/flow';
 import { mushafText } from '@shared/quran/mushafText';
 
 /** Tailwind needs each clamp written out whole; a clamp is its own box, so it stands in for `block`. */
@@ -27,4 +27,15 @@ export default function AyahFlow({ children, row = false, lines, className = '' 
 /** Page words in an AyahFlow, at its size; `className` sets colour and marks only. */
 export function AyahWords({ children, className }: { children: string; className?: string }) {
   return <span className={className}>{mushafText(children)}</span>;
+}
+
+/** A word on its own, as the app's wordFontSize: the size an ayah has in a card on a phone, never bigger on a wider window. */
+const WORD_SIZE: CSSProperties = { fontSize: `calc(${FLOW_SIZE} * (min(100vw, ${PHONE_WIDTH}px) - ${CARD_MARGINS}px))`, lineHeight: FLOW_LINE };
+
+/**
+ * A Quran word (or a few) on its own, outside an ayah (owner, 2026-11-20: one word size), as the app's QuranWord: a word
+ * list's row, the picked word of an i'rab sheet, a reading, a legend's sample. `className` sets colour and room only.
+ */
+export function QuranWord({ children, className = '' }: { children: string; className?: string }) {
+  return <span lang="ar" dir="rtl" className={`font-quran ${className}`} style={WORD_SIZE}>{mushafText(children)}</span>;
 }

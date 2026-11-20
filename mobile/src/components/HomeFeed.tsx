@@ -115,6 +115,7 @@ import { Tap } from '@/ui/Tap';
 import Card, { CardWithRow } from '@/ui/Card';
 import { openExternal } from '@/ui/ExternalLink';
 import Button from '@/ui/Button';
+import { QuranWord } from '@/components/quran/text/AyahFlow';
 
 type IconType = (props: LucideProps) => React.ReactNode;
 
@@ -985,7 +986,7 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
             {more}
           </>}
           {'word' in note && <View style={{ paddingHorizontal: 14, gap: 2 }}>
-            <Text style={{ textAlign: 'right', writingDirection: 'rtl' }}><QuranWords style={{ fontSize: 26, lineHeight: 48, color: palette.accent }}>{note.shown}</QuranWords></Text>
+            <QuranWord look={{ color: palette.accent }} place={{ textAlign: 'right' }}>{note.shown}</QuranWord>
             <Text style={{ color: palette.ink, fontSize: 19, lineHeight: 31, textAlign: 'right' }}>{note.role}</Text>
             <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>{note.morph}</Text>
           </View>}

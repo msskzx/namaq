@@ -18,8 +18,8 @@ import type { BranchPiece } from '@shared/quran/branchInventory';
 import { surahNames } from '@/lib/branches';
 import { surahName } from '@/lib/compare';
 import { openCompare, openIntent, openTreesOf } from '@/lib/ways';
-import { QURAN_FONT, type Palette } from '@/lib/theme';
-import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
+import type { Palette } from '@/lib/theme';
+import AyahFlow, { AyahWords, QuranWord } from './quran/text/AyahFlow';
 import QuranWords from './quran/text/QuranWords';
 import Sheet from '@/ui/Sheet';
 import TreeIcon from './TreeIcon';
@@ -142,7 +142,7 @@ export function QiraatWord({ word, palette, bare = false, inset = 14, mark }: { 
     return (
       <View key={i} style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 6, borderTopWidth: i ? 1 : 0, borderTopColor: palette.rule,
         ...(marked ? { backgroundColor: `${palette.accent}1f`, paddingHorizontal: 8, marginHorizontal: -8 } : null) }}>
-        <Text style={{ minWidth: 104, maxWidth: '62%', flexShrink: 1, fontFamily: QURAN_FONT, fontSize: 24, lineHeight: 44, textAlign: 'right', writingDirection: 'rtl', color: i ? palette.accent : palette.ink }}>{reading.text}</Text>
+        <QuranWord look={{ color: i ? palette.accent : palette.ink }} place={{ minWidth: 104, maxWidth: '62%', flexShrink: 1, textAlign: 'right' }}>{reading.text}</QuranWord>
         <Text style={{ flex: 1, fontSize: 14, lineHeight: 22, textAlign: 'right', color: marked ? palette.ink : palette.muted }}>{whoReads(reading, word.readings)}</Text>
       </View>
     );

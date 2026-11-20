@@ -1,7 +1,6 @@
 import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { num } from '@shared/quran/arabicNumber';
-import { mushafText } from '@shared/quran/mushafText';
 import { searchWords, WORDS_COUNTING, WORDS_SOURCE } from '@shared/quran/words';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
@@ -10,10 +9,11 @@ import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
 import { words } from '@/lib/words';
-import { QURAN_FONT, usePalette } from '@/lib/theme';
+import { usePalette } from '@/lib/theme';
 import Reference from '@/ui/Reference';
 import { sourceById } from '@shared/sources';
 import { SearchField } from '@/ui/Field';
+import { QuranWord } from '@/components/quran/text/AyahFlow';
 
 /** Words listed with no search (the most frequent) and at most with one. */
 export const WORDS_SHOWN = 40;
@@ -54,7 +54,7 @@ export default function WordsScreen() {
           return (
             <Pressable key={id} onPress={() => setOpen([id])} accessibilityRole="button" accessibilityLabel={`${name}، ${num(count)} مرة`}
               style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 10, minHeight: 52, paddingHorizontal: 6, borderBottomWidth: 1, borderColor: `${palette.rule}60`, backgroundColor: pressed ? palette.paperDeep : 'transparent' })}>
-              <Text style={{ fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 42, color: palette.ink }}>{mushafText(name)}</Text>
+              <QuranWord look={{ color: palette.ink }}>{name}</QuranWord>
               <Text style={{ flex: 1, color: palette.muted, fontSize: 14, textAlign: 'right' }}>{root}</Text>
               <Text style={{ color: palette.accent, fontSize: 16 }}>{num(count)}</Text>
             </Pressable>

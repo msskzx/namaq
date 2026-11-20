@@ -70,7 +70,7 @@
 .legend ul { display: flex; flex-direction: column; gap: 0.25rem; }
 .legend li { display: flex; align-items: center; gap: 0.75rem; }
 .legend p { color: var(--home-muted); font-size: 0.875rem; }
-.legendWord { min-width: 4rem; text-align: center; font-family: var(--font-quran); font-size: 1.25rem; }
+.legendWord { min-width: 4rem; text-align: center; }
 
 @media (max-width: 600px) {
   .spread { column-gap: 0.5rem; }

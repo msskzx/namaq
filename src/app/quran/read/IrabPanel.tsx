@@ -10,6 +10,7 @@ import OpenInBook from '@/components/quran/OpenInBook';
 import type { IrabAyah } from './irab';
 import Card from '@/components/common/Card';
 import Chip from '@/components/common/Chip';
+import { QuranWord } from '@/components/quran/text/AyahFlow';
 
 /**
  * The app's i'rab sheet (mobile/src/components/IrabSheet.tsx) on the website, which fetches it and keeps no books: the
@@ -30,7 +31,7 @@ export default function IrabPanel({ ayah, data }: { ayah: string; data: IrabAyah
         ))}
       </div>
       <Card className="block shrink-0 px-3.5 py-2.5">
-        <p className="font-quran text-[1.875rem] leading-[1.8] text-[var(--home-accent)]">{data.words[picked]}</p>
+        <QuranWord className="block text-[var(--home-accent)]">{data.words[picked]}</QuranWord>
         {corpus.map(i => data.lines[i] && (
           <div key={i}>
             {data.lines[i].role && <p className="text-[1.3125rem] leading-[1.6]">{data.lines[i].role}</p>}

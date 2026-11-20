@@ -3,8 +3,9 @@ import { Text } from '@/ui/Text';
 import Sheet from '@/ui/Sheet';
 import ExternalLink from '@/ui/ExternalLink';
 import { BOOKS, ORDER_HELP } from '@shared/quran/surahOrder';
-import { QURAN_FONT, blend, type Palette } from '@/lib/theme';
+import { blend, type Palette } from '@/lib/theme';
 import { LEGEND_SOURCE, MARK_LEGEND } from '@shared/quran/wordMatch';
+import { QuranWord } from '@/components/quran/text/AyahFlow';
 
 export type HelpTopic = 'branches' | 'compare' | 'prophets' | 'order';
 
@@ -20,7 +21,7 @@ function Legend({ palette }: { palette: Palette }) {
 function Key({ word, color, text, palette }: { word: string; color: string; text: string; palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-      <Text style={{ fontFamily: QURAN_FONT, fontSize: 20, lineHeight: 34, color, minWidth: 64, textAlign: 'center' }}>{word}</Text>
+      <QuranWord look={{ color }} place={{ minWidth: 64, textAlign: 'center' }}>{word}</QuranWord>
       <Text style={{ flex: 1, color: palette.ink, fontSize: 15, textAlign: 'right' }}>{text}</Text>
     </View>
   );

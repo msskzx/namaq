@@ -46,6 +46,7 @@ import Frame from '@/components/common/Card';
 import Chip from '@/components/common/Chip';
 import { SearchField } from '@/components/common/Field';
 import Empty from '@/components/common/Empty';
+import { QuranWord } from '@/components/quran/text/AyahFlow';
 
 export type SurahName = { ar: string; en?: string };
 type Names = Record<number, SurahName>;
@@ -121,7 +122,7 @@ function CompareFilter({ a, b, review, todo, scope, names, savedOnly, onSavedOnl
 /** The compare page's help, the app's (mobile/src/components/HelpSheet.tsx), with its colour legend. */
 const COMPARE_HELP = <>
   <p>كل صفحة تجمع سورتين، وكل بطاقة تضع آية من كل سورة جنبًا إلى جنب. اختيرت البطاقات لأن الآيتين في المشهد نفسه أو تشتركان في عبارة نادرة، لا لعدد الكلمات المشتركة. اضغط كلمة ملوّنة لتضيء نظيرتها في الآية الأخرى. النص برواية حفص.</p>
-  <MatchLegend ar extra={<li className="flex items-center gap-3 [:root[data-marks=none]_&]:hidden"><span className="min-w-16 text-center font-quran text-xl text-[color-mix(in_srgb,var(--mark-root)_45%,var(--home-muted))]">بَيَانٌ</span><span>من جذر مشترك بلفظ مختلف، وقد يختلف المعنى</span></li>} />
+  <MatchLegend ar extra={<li className="flex items-center gap-3 [:root[data-marks=none]_&]:hidden"><QuranWord className="min-w-16 text-center text-[color-mix(in_srgb,var(--mark-root)_45%,var(--home-muted))]">بَيَانٌ</QuranWord><span>من جذر مشترك بلفظ مختلف، وقد يختلف المعنى</span></li>} />
 </>;
 
 /** A chevron beside the pair title: previous on the reading side's start, next on its end. Greyed out at either end of the list. */
