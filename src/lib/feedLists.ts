@@ -12,6 +12,7 @@ import { hadithItems } from '@/lib/forty';
 import { sahihItems } from '@/lib/sahih';
 import { tarajimItems } from '@/lib/tarajim';
 import { storyItems } from '@/lib/homeFeed';
+import { drawingItems } from '@/lib/drawingCards';
 
 const lists: Partial<Record<ListKind, readonly string[]>> = {};
 const LIST_OF: Record<ListKind, () => readonly string[]> = {
@@ -23,6 +24,8 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   bukhari: () => sahihItems('bukhari'), muslim: () => sahihItems('muslim'),
   prophets: () => storyItems('prophets'), sira: () => storyItems('sira'), moment: () => storyItems('moment'),
   tarajim: () => tarajimItems('tarajim'), tie: () => tarajimItems('tie'), life: () => tarajimItems('life'), laqab: () => tarajimItems('laqab'), kunya: () => tarajimItems('kunya'),
+  nasab: () => drawingItems('nasab'), ties: () => drawingItems('ties'), battle: () => drawingItems('battle'), 'hadith-scene': () => drawingItems('hadith-scene'),
+  opening: () => drawingItems('opening'), oath: () => drawingItems('oath'), event: () => drawingItems('event'),
 };
 export const itemsOf = (kind: ListKind) => (lists[kind] ??= LIST_OF[kind]());
 

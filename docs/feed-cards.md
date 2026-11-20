@@ -61,6 +61,22 @@ The ayah cards (`AyahNotePost` in `HomeFeed.tsx`, lists in `shared/quran/ayahNot
 من القراءات. Each is small: the ayah, a little of the book, and a tap opens the reader's own sheet with the whole text
 (owner, 2026-11-18).
 
+The drawings built for their pages (owner, 2026-11-20; items and sources in `shared/drawingCards.ts`, the website's
+cards in `src/lib/drawingCards.ts`). Each draws the page's own component and its open button opens that page at the item.
+An item whose own data names no source is left out:
+- نسبه (`NasabPost`, under التراجم): the nasab tree with its long runs folded, credited to the entries each name comes from.
+- صلاته (`TiesPost`, under التراجم): the ties ring; a person on it opens his page.
+- غزوة … (`BattlePost`, under السيرة والمغازي): the battle's map and the two sides' numbers. Jamal, Siffin and Nahrawan show only
+  their name, year, place and people, whatever their data holds (`FITNA_BATTLES`); Siffin and Nahrawan have no cited
+  year or place yet, so they stay out.
+- من صحيح … (`HadithScenePost`, under الحديث): one scene of a hadith drawn as a chat, only scenes where someone speaks.
+- من فواتح السور (`OpeningCardPost`, under الحفظ والمراجعة): one card of «فواتح السور», only those a scholar groups (al-Suyuti);
+  our own groupings stay out.
+- من الأقسام (`OathPost`, under التفسير): the oath's words, sworn words coloured, with the scholar's sentence on it (Ibn
+  al-Qayyim, al-Suyuti), so only oaths in `OATH_QUOTES`.
+- A prophet's event (`EventPost`, under قصص الأنبياء): an event told in more than one surah, its places side by side. The
+  story card draws the map of the whole story; this one draws one event's ayat.
+
 ## Interests: which card comes when
 
 The feed comes in rounds by the reader's interests (owner, 2026-11-19; plan "Plan: a better home feed with interests",
@@ -97,7 +113,7 @@ A new card or quiz kind goes into an interest's `cards` or `quizzes` in the same
 ## Cards to add
 
 من ألفاظ القرآن (built in the word-meanings
-work as «ما معنى؟»), من الأقسام, من ترتيب السور, موضوعات السورة, أذكار الصباح/المساء,
+work as «ما معنى؟»), من ترتيب السور, موضوعات السورة, أذكار الصباح/المساء,
 من ملاحظاتك.
 
 ## Quiz kinds to add
@@ -114,4 +130,4 @@ timeline), رتّب, من شهدها؟ / من أمير السرية؟, فيمَ 
 - Search, share and videos, settings, «ما أحفظه», «اهتماماتي»: tools, not content.
 - الأذكار: an interest once its card or question is built (owner agreed it is one, 2026-11-19).
 - Party quizzes: played with others, not from the feed.
-- Tarajim: the battles have the moment card and the sira stories the story card; the people have «من التراجم», «صلة», «من حياته», «لقب وصاحبه» and «كنية وصاحبها».
+- Tarajim: the battles have the moment card and the sira stories the story card; the people have «من التراجم», «صلة», «من حياته», «لقب وصاحبه», «كنية وصاحبها», «نسبه» and «صلاته».

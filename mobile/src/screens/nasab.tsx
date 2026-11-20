@@ -31,7 +31,7 @@ function Box({ node, palette, linked, scale }: { node: NasabNode; palette: Palet
   const slug = node.people[0];
   const name = node.name + (slug === PROPHET ? ' ﷺ' : '');
   return (
-    <Card node palette={palette} pad={[6 * scale, 12 * scale]} picked={!!slug} accessibilityRole={slug && linked ? 'link' : undefined} accessibilityLabel={slug ? name : undefined}
+    <Card palette={palette} node pad={[6 * scale, 12 * scale]} picked={!!slug} accessibilityRole={slug && linked ? 'link' : undefined} accessibilityLabel={slug ? name : undefined}
       onPress={slug && linked ? () => router.push({ pathname: '/person', params: { slug } }) : undefined}>
       <Text style={{ color: slug ? palette.accent : palette.ink, fontSize: 16 * scale, textAlign: 'center' }}>{name}</Text>
     </Card>
@@ -55,7 +55,7 @@ function Branch({ node, path, tree }: { node: NasabNode; path: string; tree: Tre
     const names = run.map(n => n.name).join('، ');
     return (
       <View style={{ alignItems: 'center' }}>
-        <Card node palette={palette} pad={[6 * scale, 12 * scale]} dashed accessibilityRole="button" accessibilityLabel={`أظهر ${num(run.length)} آباء: ${names}`} onPress={() => onOpen(key)}>
+        <Card palette={palette} node pad={[6 * scale, 12 * scale]} dashed accessibilityRole="button" accessibilityLabel={`أظهر ${num(run.length)} آباء: ${names}`} onPress={() => onOpen(key)}>
           <Text style={{ color: palette.muted, fontSize: 16 * scale, textAlign: 'center' }}>… {num(run.length)}</Text>
         </Card>
         <View style={stem} />
@@ -110,7 +110,9 @@ function Fitted({ children }: { children: (scale: number) => React.ReactNode }) 
  * first): each one's chain of fathers written out, or with `meetings`, where each pair meets and the chain to it. The
  * «النسب» screen draws it, and so does a quiz that asks where two nasabs meet (the meetings only after the answer).
  */
-export function NasabTree({ slugs, palette, meetings: showMeetings = true, linked = true, text: withText = true, start = 'drawing' }: { slugs: string[]; palette: Palette; meetings?: boolean;
+export function NasabTree({ slugs, palette, meetings: showMeetings = true, linked = true, text: withText = true, start = 'drawing', inCard = false }: { slugs: string[]; palette: Palette; meetings?: boolean;
+  /** In a home card, whose source line names the entries (owner 2026-11-20: no folded credit inside a card). */
+  inCard?: boolean;
   /** A picked person's name opens his page; not inside a quiz, which would close under it. */
   linked?: boolean;
   /** The «الرسم | النص» switch; without it only the tree (the person page has its own switch, the text being the book's). */
@@ -170,7 +172,7 @@ export function NasabTree({ slugs, palette, meetings: showMeetings = true, linke
     <Text style={{ color: palette.muted, fontSize: 13, lineHeight: 22, textAlign: 'right' }}>
       الأسماء كما في نسب كل علَم في سير أعلام النبلاء؛ وإذا وقف نسبه عند جدٍّ أكمله نسبُ علَمٍ آخر يذكر الآباء أنفسهم.
     </Text>
-    <Credit facts={sources} palette={palette} />
+    {!inCard && <Credit facts={sources} palette={palette} />}
   </>;
   // On its own page the tree is a section in the home card's shape, its books on the line under it (owner 2026-11-20).
   return <>

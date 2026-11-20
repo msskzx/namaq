@@ -22,7 +22,8 @@ export function sceneColours(scenes: HadithUnitView['reports'][number]['scenes']
 
 export { bubbleSides };
 
-function Bubbles({
+/** A scene as a chat: the hadith page's and its feed card's. */
+export function Bubbles({
   lines,
   colours,
   highlight,

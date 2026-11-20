@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { dayNumber } from '@shared/dailyPick';
+import { DRAWING_CARD_KINDS } from '@shared/interests';
 import { GET } from './route';
 
 const today = dayNumber(new Date());
@@ -44,4 +45,16 @@ describe('GET /api/home/feed', () => {
     expect(await get(`day=${today}&items=sira&n=2&after=${encodeURIComponent(ids[0])}`)).toEqual(ids.slice(1, 3));
     expect((await GET(new Request(`http://localhost/api/home/feed?day=${today}&items=pair&n=3`))).status).toBe(400);
   });
+
+  // Owner, 2026-11-20: the drawings built for their pages come into home too, walked as every other kind, each card naming
+  // the sources its own data gives.
+  it.each(DRAWING_CARD_KINDS)('lists the %s drawing\'s items, and each one\'s card names its sources', async kind => {
+    const ids: string[] = await get(`day=${today}&items=${kind}&n=2`);
+    expect(ids.length).toBeGreaterThan(0);
+    for (const id of ids) {
+      const card = await get(`day=${today}&card=${encodeURIComponent(`card:${kind}:${id}`)}`);
+      expect([card.kind, card.card?.item]).toEqual([kind, id]);
+      expect(card.card.sources.length, id).toBeGreaterThan(0);
+    }
+  }, 60_000);
 });

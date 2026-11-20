@@ -1,4 +1,5 @@
-import { useMemo, useRef, useState, type ComponentRef } from 'react';
+import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
+import { useLocalSearchParams } from 'expo-router';
 import { FlatList, Share, View } from 'react-native';
 import { BookOpen, Send } from 'lucide-react-native';
 import { ayahHref } from '@shared/ayahMarks';
@@ -16,7 +17,7 @@ import { useShrinkOnScroll } from '@/lib/chrome';
 import { readAyah } from '@/lib/openReader';
 import { useTabRetap } from '@/lib/tabRetap';
 import { usePalette, type Palette } from '@/lib/theme';
-import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
+import OathWords from '@/components/OathWords';
 import IconButton from '@/ui/IconButton';
 import { CardWithRow } from '@/ui/Card';
 import Tabs from '@/ui/Tabs';
@@ -49,12 +50,7 @@ function OathCard({ oath, palette }: { oath: OathView; palette: Palette }) {
       <CardWithRow palette={palette} pad={[6, 14]} source={[...(quotes ? [{ line: citesOf(quotes), quotes }] : []), ...sourcesOf([mushafSource(oath.id)])]}
         lead={<IconButton Icon={BookOpen} label={`افتح ${place} في المصحف`} onPress={() => readAyah(oath.id)} />}
         row={<IconButton Icon={Send} label={`شارك ${place}`} onPress={() => shareOath(oath)} />}>
-        <AyahFlow color={palette.ink}>
-          {oath.lines.map(line => [
-            ...line.words.map((word, i) => <AyahWords key={`${line.ayah}-${i}`} look={word.sworn ? { color: palette.accent } : undefined}>{`${word.text} `}</AyahWords>),
-            <AyahWords key={`${line.ayah}-n`} look={{ color: palette.amber }}>{`${num(line.ayah)} `}</AyahWords>,
-          ])}
-        </AyahFlow>
+        <OathWords oath={oath} palette={palette} />
       </CardWithRow>
     </View>
   );
@@ -71,9 +67,15 @@ export default function OathsScreen() {
   const bottom = useTabBarSpace();
   const list = useRef<ComponentRef<typeof FlatList<Row>>>(null);
   const top = useRef(0);
-  const [kind, setKind] = useState<OathKind>('allah');
+  // Opened at an oath (`at`, its id: the home feed's card), on its kind's tab and scrolled to it.
+  const { at } = useLocalSearchParams<{ at?: string }>();
+  const [kind, setKind] = useState<OathKind>(() => (BUILT.others.some(oath => oath.id === at) ? 'others' : 'allah'));
   const [by, setBy] = useState<OathBy | null>(null);
   const rows = useMemo(() => rowsOf(kind, by), [kind, by]);
+  const atRow = at ? rows.findIndex(row => 'oath' in row && row.oath.id === at) : -1;
+  useEffect(() => {
+    if (atRow >= 0) requestAnimationFrame(() => list.current?.scrollToIndex({ index: atRow, animated: false, viewOffset: 8 }));
+  }, [atRow]);
   useTabRetap('oaths', () => { if (top.current > 4) list.current?.scrollToOffset({ offset: 0, animated: true }); else setBy(null); });
   const pick = (next: OathKind) => { setKind(next); setBy(null); list.current?.scrollToOffset({ offset: 0, animated: false }); };
   const chip = (label: string, value: OathBy | null) => <Chip key={label} label={label} on={by === value} onPress={() => setBy(value)} palette={palette} />;
@@ -86,6 +88,11 @@ export default function OathsScreen() {
       {/* The references and chips scroll with the list, as on the website, so an open reference never pins the cards down. */}
       <FlatList ref={list} data={rows} keyExtractor={row => ('head' in row ? row.head.on : row.oath.id)} onScroll={event => { top.current = event.nativeEvent.contentOffset.y; shrink(event); }} scrollEventThrottle={16}
         contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: bottom, gap: 10 }}
+        // The rows are not all drawn yet: go near it, then to it once drawn.
+        onScrollToIndexFailed={({ index, averageItemLength }) => {
+          list.current?.scrollToOffset({ offset: index * averageItemLength, animated: false });
+          setTimeout(() => list.current?.scrollToIndex({ index, animated: false, viewOffset: 8 }), 50);
+        }}
         ListHeaderComponent={
           <View style={{ gap: 4 }}>
             <SourceLine key={kind} sources={[{ line: citesOf(kindQuotes(kind)), quotes: kindQuotes(kind) }]} palette={palette} />

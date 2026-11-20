@@ -41,7 +41,7 @@ export function Counts({ battle, palette }: { battle: AppBattle; palette: Palett
     { label: 'القتلى', ours: muslimsKilled, theirs: othersKilled },
   ].filter(row => row.ours || row.theirs);
   if (!rows.length) return null;
-  const side = (value: number | undefined) => <Text style={{ color: palette.ink, fontSize: 18, width: 44, textAlign: 'center' }}>{value === undefined ? '—' : num(value)}</Text>;
+  const side = (value: number | undefined) => <Text numberOfLines={1} style={{ color: palette.ink, fontSize: 18, minWidth: 44, textAlign: 'center' }}>{value === undefined ? '—' : num(value)}</Text>;
   return (
     <View style={{ gap: 10 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

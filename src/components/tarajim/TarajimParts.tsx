@@ -394,7 +394,9 @@ function Fitted({ children }: { children: ReactNode }) {
  * of names that opens. «الرسم | النص» shows the tree or the text (owner 2026-11-20, the drawing first): with meetings,
  * where each pair meets and the chain to it; else each one's chain of fathers written out.
  */
-export function NasabTree({ view, linked = true, text: withText = true, start = 'drawing', children }: { view: NasabView;
+export function NasabTree({ view, linked = true, text: withText = true, start = 'drawing', inCard = false, children }: { view: NasabView;
+  /** In a home card, whose source line names the entries (owner 2026-11-20: no folded credit inside a card). */
+  inCard?: boolean;
   /** A picked person's name opens his page; not inside a quiz. */
   linked?: boolean;
   /** The «الرسم | النص» switch; without it only the tree (the person page has its own switch, the text being the book's). */
@@ -442,7 +444,7 @@ export function NasabTree({ view, linked = true, text: withText = true, start = 
       <p className="text-[0.8125rem] leading-6 text-[var(--home-muted)]">
         الأسماء كما في نسب كل علَم في سير أعلام النبلاء؛ وإذا وقف نسبه عند جدٍّ أكمله نسبُ علَمٍ آخر يذكر الآباء أنفسهم.
       </p>
-      <BookCredit credit={view.credit} />
+      {!inCard && <BookCredit credit={view.credit} />}
       </CardWithRow>
     </div>
   );

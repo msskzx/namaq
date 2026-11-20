@@ -15,9 +15,13 @@ export const SECTIONS = [
 ] as const;
 export type SectionId = (typeof SECTIONS)[number]['id'];
 
+/** The cards of the drawings built for their pages (owner, 2026-11-20; their items in shared/drawingCards.ts). */
+export const DRAWING_CARD_KINDS = ['nasab', 'ties', 'battle', 'hadith-scene', 'opening', 'oath', 'event'] as const;
+export type DrawingCardKind = (typeof DRAWING_CARD_KINDS)[number];
+
 /** The feed's content cards, by kind; each app card (mobile/src/components/HomeFeed.tsx) draws one. */
 export const FEED_CARD_KINDS = ['pair', 'tree', 'note-tafsir', 'note-qiraat', 'note-irab', 'note-balagha', 'term', 'scene',
-  'hadith', 'rajab', 'recorded', 'isnad', 'bukhari', 'muslim', 'prophets', 'sira', 'moment', 'tarajim', 'tie', 'life', 'laqab', 'kunya'] as const;
+  'hadith', 'rajab', 'recorded', 'isnad', 'bukhari', 'muslim', 'prophets', 'sira', 'moment', 'tarajim', 'tie', 'life', 'laqab', 'kunya', ...DRAWING_CARD_KINDS] as const;
 export type FeedCardKind = (typeof FEED_CARD_KINDS)[number];
 
 export type Interest = {
@@ -28,18 +32,18 @@ export type Interest = {
 };
 
 export const INTERESTS: readonly Interest[] = [
-  { id: 'hifz', name: 'الحفظ والمراجعة', section: 'quran', ours: true, cards: [], quizzes: ['RECITE', 'OPENINGS', 'SURAH', 'ORDER'] },
+  { id: 'hifz', name: 'الحفظ والمراجعة', section: 'quran', ours: true, cards: ['opening'], quizzes: ['RECITE', 'OPENINGS', 'SURAH', 'ORDER'] },
   { id: 'mutashabih', name: 'المتشابه اللفظي', section: 'quran', ours: true, cards: ['pair', 'tree'], quizzes: ['BRANCHES', 'COMPARE'] },
-  { id: 'tafsir', name: 'التفسير', section: 'quran', cards: ['note-tafsir'], quizzes: ['TAFSIR'] },
+  { id: 'tafsir', name: 'التفسير', section: 'quran', cards: ['note-tafsir', 'oath'], quizzes: ['TAFSIR'] },
   { id: 'gharib', name: 'غريب القرآن', section: 'quran', ours: true, cards: [], quizzes: ['MEANING'] },
   { id: 'qiraat', name: 'القراءات', section: 'quran', cards: ['note-qiraat'], quizzes: ['QIRAAT', 'QIRAAT_WHO'] },
   { id: 'tajwid', name: 'التجويد', section: 'quran', ours: true, cards: [], quizzes: ['TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE'] },
   { id: 'irab', name: 'الإعراب', section: 'lisan', cards: ['note-irab'], quizzes: ['IRAB'] },
   { id: 'balagha', name: 'البلاغة', section: 'lisan', cards: ['note-balagha', 'term', 'scene'], quizzes: ['BALAGHA', 'TERM'] },
-  { id: 'hadith', name: 'الحديث', section: 'hadith', cards: ['hadith', 'rajab', 'recorded', 'isnad', 'bukhari', 'muslim'], quizzes: ['HADITH_NARRATOR', 'HADITH_COMPLETE', 'HADITH_BOOK', 'HADITH_CHAIN', 'SAHIH_KITAB'] },
-  { id: 'prophets', name: 'قصص الأنبياء', section: 'history', ours: true, cards: ['prophets'], quizzes: [] },
-  { id: 'sira', name: 'السيرة والمغازي', section: 'history', cards: ['sira', 'moment'], quizzes: ['SIRA', 'PROPHET_NAMES'] },
-  { id: 'tarajim', name: 'التراجم', section: 'history', cards: ['tarajim', 'tie', 'life'], quizzes: ['TARAJIM_NASAB', 'TARAJIM_NASAB_FILL', 'TARAJIM_VIRTUE', 'TARAJIM_TIE', 'TARAJIM_LIFE'] },
+  { id: 'hadith', name: 'الحديث', section: 'hadith', cards: ['hadith', 'rajab', 'recorded', 'isnad', 'bukhari', 'muslim', 'hadith-scene'], quizzes: ['HADITH_NARRATOR', 'HADITH_COMPLETE', 'HADITH_BOOK', 'HADITH_CHAIN', 'SAHIH_KITAB'] },
+  { id: 'prophets', name: 'قصص الأنبياء', section: 'history', ours: true, cards: ['prophets', 'event'], quizzes: [] },
+  { id: 'sira', name: 'السيرة والمغازي', section: 'history', cards: ['sira', 'moment', 'battle'], quizzes: ['SIRA', 'PROPHET_NAMES'] },
+  { id: 'tarajim', name: 'التراجم', section: 'history', cards: ['tarajim', 'tie', 'life', 'nasab', 'ties'], quizzes: ['TARAJIM_NASAB', 'TARAJIM_NASAB_FILL', 'TARAJIM_VIRTUE', 'TARAJIM_TIE', 'TARAJIM_LIFE'] },
   // Each thing about a person its own interest (owner, 2026-11-19), so a reader who does not want kunyas turns them off alone.
   { id: 'laqab', name: 'الألقاب', section: 'history', cards: ['laqab'], quizzes: ['TARAJIM_LAQAB'] },
   { id: 'kunya', name: 'الكنى', section: 'history', cards: ['kunya'], quizzes: ['TARAJIM_KUNYA'] },
