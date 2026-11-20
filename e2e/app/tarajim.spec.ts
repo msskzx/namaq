@@ -19,8 +19,8 @@ test('the tarajim tab opens the list of converted people, filters by title, and 
   await expect(page).toHaveURL(/\/person\?slug=safiyyah-bint-abd-al-muttalib/);
   await expect(page.getByRole('heading', { name: /نسبها/ })).toBeVisible();
   await expect(page.getByRole('heading', { name: /صلاتها/ })).toBeVisible();
-  // Her son has a page too: his name opens it.
-  await page.getByRole('button', { name: 'الزبير بن العوام' }).click();
+  // Her son has a page too: his node on her ties ring opens it.
+  await page.getByRole('link', { name: /^ابنها: الزبير/ }).click();
   await expect(page).toHaveURL(/slug=az-zubayr-ibn-al-awwam/);
   await expect(page.getByRole('heading', { name: /مناقبه/ })).toBeVisible();
 });
@@ -30,8 +30,21 @@ test('the nasab tree shows where two lines meet', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'العباس' })).toBeVisible();
   await page.getByRole('button', { name: 'أضف' }).click();
   await page.getByRole('button', { name: 'محمد ﷺ' }).click();
-  await expect(page.getByText('يلتقيان في: عبد المطلب')).toBeVisible();
+  // The drawing first (owner, 2026-11-20); where they meet is the text.
   await expect(page.getByRole('link', { name: 'محمد ﷺ' })).toBeVisible();
+  await page.getByRole('tab', { name: 'النص' }).click();
+  await expect(page.getByText('يلتقيان في: عبد المطلب')).toBeVisible();
+});
+
+// The hub's «النسب» opens the nasab page on its search of people (owner, 2026-11-20).
+test('the tarajim hub opens the nasab search, and a pick draws his tree', async ({ page }) => {
+  await open(page, '/');
+  await tab(page, 'التراجم').click();
+  await page.getByRole('link', { name: /^النسب/ }).click();
+  await page.getByLabel('ابحث في التراجم').fill('أبو بكر');
+  await page.getByRole('button', { name: 'أبو بكر الصديق' }).click();
+  // A box stands alone, so it names his father in the nominative: «أبو قحافة», never «أبي قحافة».
+  await expect(page.getByText(/^أبو قحافة/)).toBeVisible();
 });
 
 // The people graph (owner, 2026-11-18; sketch tarajim-app/graph/sketch2-dark.png): one person in the middle with his ties,
@@ -48,21 +61,24 @@ test('the ties view draws a person with his ties and walks to a relative', async
 
 test('between two people shows the chain that joins them, with its pages', async ({ page }) => {
   await open(page, '/between?slugs=az-zubayr-ibn-al-awwam,hamzah-ibn-abd-al-muttalib');
-  await expect(page.getByText(/أمُّ الزبير بن العوام/)).toBeVisible();
+  // The drawing first; the sentence that says it on «النص» (owner, 2026-11-20).
   await expect(page.getByRole('link', { name: 'حمزة بن عبد المطلب' })).toBeVisible();
+  await page.getByRole('tab', { name: 'النص' }).click();
+  await expect(page.getByText(/أمُّ الزبير بن العوام/)).toBeVisible();
+  await page.getByRole('tab', { name: 'الرسم' }).click();
   await page.getByRole('button', { name: 'أضف' }).click();
   await page.getByRole('button', { name: /^العباس/ }).click();
   await expect(page.getByRole('link', { name: /^العباس/ })).toBeVisible();
 });
 
-// The person page draws what we have of him (owner, 2026-11-19): «نسبه» as text or as the tree, «حياته» on the timeline
+// The person page draws what we have of him (owner, 2026-11-19): «نسبه» as the tree or as text (the drawing first, 2026-11-20), «حياته» on the timeline
 // (sketch timeline-events/sketch-dark.png, screens 1 and 4), «صلاته» as the ring.
 test('the person page draws his nasab tree, his life and his ties', async ({ page }) => {
   await open(page, '/person?slug=az-zubayr-ibn-al-awwam');
-  // The text first; the tree on the toggle, ending at him.
-  await expect(page.getByRole('tab', { name: 'النص', selected: true })).toBeVisible();
-  await page.getByRole('tab', { name: 'الشجرة' }).click();
+  // The tree first (owner, 2026-11-20), ending at him; the book's words on «النص».
   await expect(page.getByRole('link', { name: 'الزبير' })).toBeVisible();
+  await page.getByRole('tab', { name: 'النص' }).first().click();
+  await expect(page.getByRole('button', { name: 'قارن نسبه بغيره' })).toBeVisible();
   // His ties round him: his mother opens her own page.
   await expect(page.getByRole('link', { name: /^أمه: صفية/ })).toBeVisible();
   // His life: a raid filter keeps Badr and drops the battle of the Camel; Badr opens its page.

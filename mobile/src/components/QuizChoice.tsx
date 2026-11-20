@@ -4,8 +4,9 @@ import { Pressable, ScrollView, View } from 'react-native';
 import { BookOpen, Check, Eye, Square, SquareCheck, X } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import Button from '@/ui/Button';
-import { alikeDiff, FORGOT, isRightChoice, orders, PICKS, picksOf, recited, RECITED, ticks, type ChoiceQuestion } from '@shared/quiz/choiceKinds';
+import { alikeDiff, BOX_ASKED, FORGOT, isRightChoice, orders, PICKS, picksOf, recited, RECITED, ticks, type ChoiceQuestion } from '@shared/quiz/choiceKinds';
 import OrderRows from '@/ui/OrderRows';
+import Chip from '@/ui/Chip';
 import QuizPage from './QuizPage';
 import QuranWords from './quran/text/QuranWords';
 import BookRuns from './quran/text/BookRuns';
@@ -81,6 +82,19 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
       {/* A book's text the question asks about («لأي آية هذا التفسير؟»), its quotes of the ayah hidden: plain text, no card in the card. */}
       {question.passage && (
         <BookRuns text={question.passage} quran={palette.accent} style={{ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'right', paddingHorizontal: 16 }} />
+      )}
+      {/* A chain drawn as boxes («أكمل النسب»): «؟» the box asked, framed in the accent; once answered it holds the right name. */}
+      {question.boxes && (
+        <View accessibilityLabel="النسب" style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 6, paddingHorizontal: 16 }}>
+          {question.boxes.map((box, i) => (
+            <View key={i} style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              {i > 0 && <Text style={{ color: palette.muted, fontSize: 15 }}>←</Text>}
+              {box === BOX_ASKED
+                ? <Chip role="text" label={answered ? name(question.correctAnswer) : box} on={answered} lit dashed={!answered} palette={palette} />
+                : <Chip role="text" label={box} on={false} palette={palette} />}
+            </View>
+          ))}
+        </View>
       )}
       {question.ayahKey && question.page ? (
         <View style={{ marginHorizontal: 16 }}>

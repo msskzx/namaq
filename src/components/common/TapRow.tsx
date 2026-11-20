@@ -3,7 +3,8 @@ import type { ReactNode } from 'react';
 
 /**
  * A row of a drawing with no frame of its own, as the app's `ui/TapRow`: a link to what it names (`href`), or a button
- * that shows its source (`onClick`). At least 44 tall. The rows of the «حياته» timeline (components/tarajim/LifeTimeline.tsx).
+ * that shows its source (`onClick`). At least 44 tall. The rows of the «حياته» timeline (components/tarajim/LifeTimeline.tsx);
+ * with `flex-col` in `className`, a year's column on the battles timeline (components/battles/BattleTimeline.tsx).
  */
 export default function TapRow({ href, onClick, label, className = '', children }: { href?: string; onClick?: () => void;
   /** Its name for a screen reader, where the words shown are not all of it (a card's source line: «المصدر: …»). */
