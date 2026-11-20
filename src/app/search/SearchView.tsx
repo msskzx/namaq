@@ -1,5 +1,6 @@
 'use client';
 
+import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
 import React, { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { ArrowLeftRight, BookOpen, ChevronDown, ChevronLeft, HandHeart, List, NotebookPen, ScrollText, TextSearch, Users, type LucideProps } from 'lucide-react';
@@ -60,11 +61,11 @@ function HitBody({ hit }: { hit: SearchHit }) {
       const start = Math.max(0, hit.from - AROUND);
       const end = Math.min(hit.words.length, hit.to + 1 + AROUND);
       return <span className={styles.grow}>
-        <span className={styles.quran}>
+        <AyahFlow>
           {start > 0 ? '… ' : ''}
-          {hit.words.slice(start, end).map((word, at) => <span key={at} className={start + at >= hit.from && start + at <= hit.to ? styles.hit : undefined}>{`${mushafText(word)} `}</span>)}
+          {hit.words.slice(start, end).map((word, at) => <AyahWords key={at} className={start + at >= hit.from && start + at <= hit.to ? styles.hit : undefined}>{`${word} `}</AyahWords>)}
           {end < hit.words.length ? '…' : ''}
-        </span>
+        </AyahFlow>
         <span className={`${styles.muted} block`}>{ayahLabel(hit.key)}</span>
       </span>;
     }

@@ -1,10 +1,10 @@
 'use client';
 
+import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
 import { useCallback, useEffect, useState, useSyncExternalStore, type MouseEvent } from 'react';
 import { ArrowLeftRight, Bookmark, BookOpen, Check, ChevronLeft, ChevronRight, EyeOff, LightbulbOff, NotebookPen, Send, Trash2 } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import Button from '@/components/common/Button';
-import MushafText from '@/components/common/MushafText';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark, type Bookmark as Saved } from '@shared/bookmarks';
 import { ayahHref, markAyah, markWord, readDueMarks, rememberAyah, mostForgotten, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
@@ -111,7 +111,7 @@ export function useHomeCards(data: CardData, forgottenShown = Infinity) {
         </span>}
       </span>
       {/* A saved feed card from the app keeps its title, which is not Quran text. */}
-      <span className={styles.bookText} lang="ar" dir="rtl">{kind === 'card' ? item.text : <MushafText>{item.text}</MushafText>}</span>
+      {kind === 'card' ? <span className={styles.bookTitle} lang="ar" dir="rtl">{item.text}</span> : <AyahFlow className={styles.bookText}><AyahWords>{item.text}</AyahWords></AyahFlow>}
     </Card>;
   };
   /** A forgotten word's card shows the word itself, a forgotten ayah's the ayah (the app's). */
@@ -125,7 +125,7 @@ export function useHomeCards(data: CardData, forgottenShown = Infinity) {
         <span className={styles.bookKind} role="img" aria-label={forgottenLabel} title={forgottenLabel}><LightbulbOff size={16} aria-hidden /></span>
         <span className={styles.bookReferences} lang="ar" dir="rtl"><span>{names.get(surah)} <bdi>{ar ? num(ayah) : ayah}</bdi></span></span>
       </span>
-      <span className={styles.bookText} lang="ar" dir="rtl">{text && <MushafText>{text}</MushafText>}</span>
+      {text && <AyahFlow className={styles.bookText}><AyahWords>{text}</AyahWords></AyahFlow>}
     </Card>;
   };
   /** A note: the ayah's name over the reader's own words, which are not in the mushaf font. */
