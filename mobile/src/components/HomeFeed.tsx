@@ -16,7 +16,10 @@ import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
 import { allVirtues, feedBooks, LIST_KINDS, listStart, type ListKind, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, isKahfDay, KAHF_SLOT, prayerSoon, type FeedSlot } from '@shared/homeFeed';
-import { pageSources, sayerLine } from '@shared/tarajim';
+import { pageSources, saidBy } from '@shared/tarajim';
+import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
+import Saying from '@/ui/Saying';
+import Tabs from '@/ui/Tabs';
 import { findPerson, GRAPH, PEOPLE, personName, tiePairs, unvowelled } from '@/lib/tarajim';
 import { kunyaFacts, laqabFacts, type NameFact } from '@shared/tarajimNames';
 import { chainSentence } from '@shared/tarajimGraph';
@@ -444,8 +447,9 @@ function TarajimPost({ id, palette }: { id: string; palette: Palette }) {
       open={<Action Icon={Users} label={`افتح ترجمة ${personName(pick.person)}`} onPress={open} palette={palette} />}
       source={sourcesOf(pageSources(virtue.refs))}>
       <View style={{ padding: 14, gap: 6 }}>
-        <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{virtue.text}</Text>
-        {virtue.by.length ? <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{sayerLine(virtue)}</Text> : null}
+        <Saying by={saidBy(virtue)} palette={palette}>
+          <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{virtue.text}</Text>
+        </Saying>
       </View>
     </Post>
   );
@@ -457,6 +461,7 @@ function TarajimPost({ id, palette }: { id: string; palette: Palette }) {
  */
 function TiePost({ id, palette }: { id: string; palette: Palette }) {
   const { width } = useWindowDimensions();
+  const [shown, setShown] = useState<DrawingOrText>('drawing');
   const pair = tiePairs().find(each => `${each.a},${each.b}` === id);
   if (!pair) return null;
   const nodes = [...new Set(pair.steps.flatMap(step => [step.from, step.to]))];
@@ -467,9 +472,11 @@ function TiePost({ id, palette }: { id: string; palette: Palette }) {
       open={<Action Icon={Link2} label={`ارسم الصلة بين ${name(pair.a)} و${name(pair.b)}`} onPress={open} palette={palette} />}
       source={sourcesOf(pageSources(pair.steps.flatMap(step => step.link.refs)))}>
       <View style={{ padding: 14, gap: 6 }}>
-        {/* The same drawing as «بينه وبين…» (owner, 2026-11-19: the feature exists, so the card shows it). */}
-        <TiesChain nodes={nodes} steps={pair.steps} first={pair.a} picked={[pair.a, pair.b]} width={Math.min(width - 60, 480)} palette={palette} inCard />
-        <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{chainSentence(GRAPH, pair.steps, personName)}.</Text>
+        {/* The same drawing as «بينه وبين…» (owner, 2026-11-19), or the sentence that says it: one at a time, the drawing first (owner, 2026-11-20). */}
+        <Tabs palette={palette} label="كيف تُعرض الصلة" value={shown} onChange={setShown} options={DRAWING_OR_TEXT} />
+        {shown === 'drawing'
+          ? <TiesChain nodes={nodes} steps={pair.steps} first={pair.a} picked={[pair.a, pair.b]} width={Math.min(width - 60, 480)} palette={palette} inCard />
+          : <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{chainSentence(GRAPH, pair.steps, personName)}.</Text>}
       </View>
     </Post>
   );
@@ -494,7 +501,7 @@ function NamePost({ kind, id, palette }: { kind: 'laqab' | 'kunya'; id: string; 
       <View style={{ padding: 14, gap: 4 }}>
         <Text style={{ color: palette.accent, fontSize: 30, lineHeight: 48, fontWeight: '700', textAlign: 'right' }}>{name}</Text>
         <Text style={{ color: palette.ink, fontSize: 19, lineHeight: 30, textAlign: 'right' }}>{who}</Text>
-        {quote ? <Text style={{ color: palette.muted, fontSize: 16, lineHeight: 28, textAlign: 'right' }}>«{quote}»{fact.by.length ? ` ${sayerLine(fact)}` : ''}</Text> : null}
+        {quote ? <Saying by={saidBy(fact)} palette={palette}><Text style={{ color: palette.muted, fontSize: 16, lineHeight: 28, textAlign: 'right' }}>«{quote}»</Text></Saying> : null}
       </View>
     </Post>
   );

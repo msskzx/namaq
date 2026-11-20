@@ -44,6 +44,11 @@ describe('how a reference is written', () => {
     expect(groups[0].lines.map(line => line.text)).toEqual([MUSHAF_BOOK, `${ayahPlace('112:3')}، ص ٦٠٤`]);
   });
 
+  it('names who says the words before them (owner, 2026-11-20)', () => {
+    const [group] = referenceGroups([{ book: 'سير أعلام النبلاء', at: '١/٤١', quote: 'إن لكل نبي حواريًا', by: 'قال النبي ﷺ:' }]);
+    expect(group.lines.map(line => line.text)).toEqual(['قال النبي ﷺ:', '«إن لكل نبي حواريًا»، ١/٤١']);
+  });
+
   it('reads the book apart from the place in a sira reference, so the collapsed line shows the book alone', () => {
     expect(citeSource({ text: 'خرج رسول الله', cite: 'سير أعلام النبلاء، السيرة ١، ص ٢٩٧', url: 'https://shamela.ws/book/10906/1' }))
       .toEqual({ book: 'سير أعلام النبلاء', at: 'السيرة ١، ص ٢٩٧', quote: 'خرج رسول الله', url: 'https://shamela.ws/book/10906/1' });

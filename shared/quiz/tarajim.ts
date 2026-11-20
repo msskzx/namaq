@@ -4,7 +4,7 @@
 // page is the way to check it.
 import peopleJson from '../data/tarajim/people.json';
 import virtueSkip from '../data/tarajim/virtueQuizSkip.json';
-import { pageSources, sayer, sayerLine, type AppPerson } from '../tarajim';
+import { pageSources, saidBy, type AppPerson } from '../tarajim';
 import { uniqueSources } from './sources';
 import { kunyaFacts, laqabFacts, type NameFact } from '../tarajimNames';
 import { bareName, chainOf, lineOf, meetingOf, type LineName } from '../tarajimLine';
@@ -139,10 +139,10 @@ export function virtueQuestions(people: AppPerson[] = PEOPLE, random: Random = M
       questions.push({
         key: `${TARAJIM_VIRTUE}:${person.slug}:${k}`,
         family: TARAJIM_VIRTUE,
-        promptArabic: `«${virtue.text}»${virtue.by.length ? ` — ${sayer(virtue)}` : ''}\nفيمن قيل هذا؟`,
+        promptArabic: `${virtue.by.length ? `${saidBy(virtue)} ` : ''}«${virtue.text}»\nفيمن قيل هذا؟`,
         choices,
         correctAnswer: person.slug,
-        sources: pageSources(virtue.refs, { text: virtue.text, by: virtue.by.length ? sayerLine(virtue) : undefined }),
+        sources: pageSources(virtue.refs, { text: virtue.text, by: saidBy(virtue) }),
         look: { view: 'virtues', slugs: choices.map(choice => choice.value), mark: { slug: person.slug, index: k } },
         evidence: { claimKeys: [] },
       });
@@ -222,7 +222,7 @@ export function tieQuestions(people: AppPerson[] = PEOPLE): ChoiceQuestion[] {
         promptArabic: `ما صلة ${genitive(nameOf(a))} ب${genitive(nameOf(b))}؟`,
         choices: [word(answer), ...wrong.slice(0, 3)].map(w => ({ value: w, labelArabic: w })),
         correctAnswer: word(answer),
-        sources: pageSources(link.refs, { text: link.text, by: link.by.length ? sayerLine(link) : undefined }),
+        sources: pageSources(link.refs, { text: link.text, by: saidBy(link) }),
         look: { view: 'ties', slug: b.slug, mark: a.slug },
         evidence: { claimKeys: [] },
       });
@@ -262,7 +262,7 @@ export function nameQuestions(family: typeof TARAJIM_KUNYA | typeof TARAJIM_LAQA
       promptArabic,
       choices: shuffle([name, ...others.map(other => other.name)], random).map(each => ({ value: each, labelArabic: each })),
       correctAnswer: name,
-      sources: pageSources(fact.refs, { text: fact.text, by: fact.by.length ? sayerLine(fact) : undefined }),
+      sources: pageSources(fact.refs, { text: fact.text, by: saidBy(fact) }),
       evidence: { claimKeys: [] },
     }];
   });

@@ -20,7 +20,7 @@ function standsIn(label: string, shown: string[]) {
 
 /**
  * Why a question gives its answer away, or null:
- * - the right choice is written in what the question shows (its prompt, passage or Quran words) and no wrong one is;
+ * - the right choice is written in what the question shows (its prompt, passage, Quran words or boxes) and no wrong one is;
  * - the right choice stands apart by its look: the only one holding a second reading («… وقيل …», «… أو …»).
  */
 export function givesAway(question: ChoiceQuestion): string | null {
@@ -40,7 +40,7 @@ export function givesAway(question: ChoiceQuestion): string | null {
 function givenAway(question: ChoiceQuestion, right: ChoiceQuestion['choices'][number], wrong: ChoiceQuestion['choices']) {
   // The words the question asks about (coloured, `marked`) are not the answer's giveaway: a reading or a meaning of them is asked.
   const quran = (question.quran ?? []).filter((_, i) => !question.marked?.includes(i));
-  const shown = words([question.promptArabic, question.passage ?? '', ...quran].join(' '));
+  const shown = words([question.promptArabic, question.passage ?? '', ...quran, ...(question.boxes ?? [])].join(' '));
   if (standsIn(right.labelArabic, shown) && !wrong.some(choice => standsIn(choice.labelArabic, shown))) return `«${right.labelArabic}» is in the question`;
   const second = (label: string) => /\s(?:أو|وقيل|وقال|وفي رواية)\s/u.test(` ${label} `);
   if (second(right.labelArabic) && !wrong.some(choice => second(choice.labelArabic))) return `«${right.labelArabic}» alone holds a second reading`;

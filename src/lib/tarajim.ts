@@ -4,7 +4,7 @@
 // the «من التراجم» and «صلة» feed cards. The client parts in src/components/tarajim draw what these return.
 import { nameItem, tieItem, virtueItem } from '@shared/feedItems';
 import peopleJson from '@shared/data/tarajim/people.json';
-import { pageLabel, pageSources, sayerLine, sourcesOf, type AppPerson, type PersonFact } from '@shared/tarajim';
+import { pageLabel, pageSources, saidBy, sourcesOf, type AppPerson, type PersonFact } from '@shared/tarajim';
 import { citeSource, uniqueSources, type QuizSource } from '@shared/quiz/sources';
 import { byVolume, heldGroups, kunyaLine, personLine } from '@shared/tarajimGroups';
 import { chainOf, matchesQuery, namesHay, foldTop, lineOf, meetingOf, nasabTree, type NasabNode } from '@shared/tarajimLine';
@@ -62,7 +62,7 @@ export type PersonHead = { slug: string; name: string; sex?: 'MALE' | 'FEMALE' }
 const head = (person: AppPerson): PersonHead => ({ slug: person.slug, name: personName(person), sex: person.sex });
 
 /** A tie on the ring: what the person is to the one in the middle, and the book's sentence that states it. */
-export type RingTie = { to: string; kind: TieKind; word: string; name: string; short: string; inApp: boolean; says: string; pages: string; reversed?: true };
+export type RingTie = { to: string; kind: TieKind; word: string; name: string; short: string; inApp: boolean; says: string; /** Who says it, before it («قال فلان:»). */ by?: string; pages: string; reversed?: true };
 export type RingGroup = { kind: TieKind; word: string; ties: RingTie[] };
 export type TiesView = PersonHead & { groups: RingGroup[]; credit?: Credit };
 
@@ -81,7 +81,7 @@ export function tiesView(slug: string): TiesView | undefined {
       ties: g.ties.map(tie => {
         const node = GRAPH.nodes.get(tie.to)!;
         return { to: tie.to, kind: tie.kind, word: tieWord(tie.kind, node.sex, person.sex), name: personName(node), short: ringName(node), inApp: node.inApp,
-          says: tie.link.text || personName(node), pages: pageLabel(tie.link.refs), ...(tie.reversed ? { reversed: true as const } : {}) };
+          says: tie.link.text || personName(node), ...(tie.link.text && saidBy(tie.link) ? { by: saidBy(tie.link) } : {}), pages: pageLabel(tie.link.refs), ...(tie.reversed ? { reversed: true as const } : {}) };
       }),
     })),
     credit: creditOf(groups.flatMap(g => g.ties.map(tie => tie.link))),
@@ -94,6 +94,8 @@ export type NasabView = {
   people: PersonHead[];
   /** Each tree: the shared fathers above folded into a line (several people), and the tree from where they part. */
   trees: { key: string; above: string[]; start: NasabBox }[];
+  /** Each person's whole chain of fathers written out: the text the tree draws (one person, or before the meetings show). */
+  chains: string[];
   /** Where the first person's line meets each other's, with both chains written out; none when they never meet. */
   meetings: { slug: string; at?: string; chains: string[]; apart: string }[];
   credit?: Credit;
@@ -115,6 +117,7 @@ export function nasabView(slugs: string[], meetings = true): NasabView {
   return {
     people: lines.map(({ slug }) => head(findPerson(slug)!)),
     trees,
+    chains: lines.map(({ slug, line }) => chainOf(findPerson(slug)!, line, line.length - 1)),
     meetings: meetings && first ? lines.slice(1).map(other => {
       const at = meetingOf(first.line, other.line);
       return {
@@ -132,7 +135,7 @@ export function nasabView(slugs: string[], meetings = true): NasabView {
 export type VirtueLine = { text: string; by?: string };
 export type VirtuesView = PersonHead & { virtues: VirtueLine[]; credit?: Credit };
 
-const sayerOf = (fact: PersonFact) => (fact.anonymous ? 'قيل' : fact.by.length ? sayerLine(fact) : undefined);
+const sayerOf = (fact: PersonFact) => saidBy(fact);
 export function virtuesView(slug: string): VirtuesView | undefined {
   const person = findPerson(slug);
   if (!person) return undefined;
@@ -277,7 +280,7 @@ export type NameCard = { kind: 'laqab' | 'kunya'; /** The card's lasting id (sha
 let nameLists: { laqab: NameFact[]; kunya: NameFact[] } | undefined;
 const bare = (text: string) => text.replace(/[\u064B-\u0652\u0670\u0640]/g, '').trim();
 function nameCard(kind: 'laqab' | 'kunya', { person, name, fact }: NameFact): NameCard {
-  const quote = bare(fact.text) !== name ? { quote: fact.text, ...(fact.by.length ? { by: sayerLine(fact) } : {}) } : {};
+  const quote = bare(fact.text) !== name ? { quote: fact.text, ...(saidBy(fact) ? { by: saidBy(fact) } : {}) } : {};
   return { kind, item: nameItem(person.slug, name), person: head(person), name, ...quote, sources: pageSources(fact.refs) };
 }
 const names = () => (nameLists ??= { laqab: laqabFacts(PEOPLE), kunya: kunyaFacts(PEOPLE) });

@@ -27,6 +27,7 @@ const SHOWN: Record<string, string> = {
   marked: 'the word the question asks about, marked on screen',
   look: 'the look-up view, its mark removed',
   passage: 'the book text the question asks about',
+  boxes: 'the chain shown over the choices, the asked box «؟» and the other blanks «…»',
   quranChoices: 'how the choices are drawn',
   terms: 'the term each choice names, for every choice alike',
   // Known break, listed so it can only be fixed, never widened: the typed blanks' words travel in compare.asked, because

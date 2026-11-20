@@ -6,6 +6,9 @@ import useSWR from 'swr';
 import { ArrowLeftRight, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, Feather, Layers, LibraryBig, Users, EyeOff, LightbulbOff, Plus, Presentation, ScrollText, Sparkles, Undo2, Swords, BookOpenText, ListTree, MessagesSquare, Link2, History, Network, GitCommitVertical } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
+import Segmented from '@/components/common/Segmented';
+import Saying from '@/components/common/Saying';
+import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import Cookies from 'js-cookie';
 import StoryMap from '@/app/quran/prophets/[slug]/StoryMap';
 import type { FeedPair, FeedTree, SavedContent, SiraCard, StoryCard } from '@/lib/homeFeed';
@@ -521,8 +524,7 @@ function TarajimPost({ card }: { card: Extract<TarajimCard, { kind: 'tarajim' }>
     actions={<Action Icon={Link2} label={card.person.sex === 'FEMALE' ? 'صلاتها' : 'صلاته'} href={tiesHref(card.person.slug)} />}
     source={card.sources}>
     <div className="flex flex-col gap-1.5 px-4 py-3" lang="ar">
-      <p className="text-[1.125rem] leading-[1.85]">{card.virtue.text}</p>
-      {card.virtue.by && <p className="text-sm text-[var(--home-muted)]">{card.virtue.by}</p>}
+      <Saying by={card.virtue.by}><p className="text-[1.125rem] leading-[1.85]">{card.virtue.text}</p></Saying>
     </div>
   </Post>;
 }
@@ -538,7 +540,7 @@ function NamePost({ card }: { card: NameCard }) {
     <div className="flex flex-col gap-1 px-4 py-3" lang="ar">
       <p className="text-[1.875rem] font-bold leading-[1.6] text-[var(--home-accent)]">{card.name}</p>
       <p className="text-[1.1875rem] leading-[1.6]">{card.person.name}</p>
-      {card.quote && <p className="text-base leading-[1.75] text-[var(--home-muted)]">«{card.quote}»{card.by ? ` ${card.by}` : ''}</p>}
+      {card.quote && <Saying by={card.by}><p className="text-base leading-[1.75] text-[var(--home-muted)]">«{card.quote}»</p></Saying>}
     </div>
   </Post>;
 }
@@ -548,6 +550,7 @@ function NamePost({ card }: { card: NameCard }) {
  * draws it, then in one sentence with the pages that state each tie; the head opens «بينه وبين…» with the two picked.
  */
 function TiePost({ card }: { card: Extract<TarajimCard, { kind: 'tie' }> }) {
+  const [shown, setShown] = useState<DrawingOrText>('drawing');
   return <Post save={card} head={<PostHead Icon={Link2} title="صلة" sub={`${card.a.name} و${card.b.name}`} href={betweenHref([card.a.slug, card.b.slug])} label={`ارسم الصلة بين ${card.a.name} و${card.b.name}`} />}
     open={<Action Icon={Link2} label={`ارسم الصلة بين ${card.a.name} و${card.b.name}`} href={betweenHref([card.a.slug, card.b.slug])} />}
     source={card.sources}
@@ -556,8 +559,10 @@ function TiePost({ card }: { card: Extract<TarajimCard, { kind: 'tie' }> }) {
       <Action Icon={Link2} label={`صلات ${card.b.name}`} href={tiesHref(card.b.slug)} />
     </>}>
     <div className="flex flex-col gap-1.5 px-4 py-3" lang="ar">
-      <TiesChain chain={card.chain} inCard />
-      <p className="text-[1.125rem] leading-[1.85]">{card.sentence}</p>
+      {/* The drawing or the sentence that says it: one at a time, the drawing first (owner, 2026-11-20). */}
+      <Segmented tabs label="كيف تُعرض الصلة" className="self-start"
+        options={DRAWING_OR_TEXT.map(item => ({ ...item, current: shown === item.key, onClick: () => setShown(item.key) }))} />
+      {shown === 'drawing' ? <TiesChain chain={card.chain} inCard /> : <p className="text-[1.125rem] leading-[1.85]">{card.sentence}</p>}
     </div>
   </Post>;
 }

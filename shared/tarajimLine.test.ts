@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { AppPerson } from './tarajim';
-import { bareName, foldTop, lineOf, meetingOf, nasabTree, type NasabNode } from './tarajimLine';
+import { bareName, chainOf, foldTop, FOLD_RUN, lineOf, meetingOf, nasabTree, straightRun, type NasabNode } from './tarajimLine';
 import peopleJson from './data/tarajim/people.json';
 
 const people = peopleJson as AppPerson[];
@@ -144,5 +144,43 @@ describe('names in a line', () => {
     const at = meetingOf(lineOf(thabit, all), lineOf(saad, all))!;
     expect(bareName(lineOf(thabit, all)[at.a].name)).toBe('مالك');
     expect(at.a).toBe(3);
+  });
+});
+
+describe('the tree as drawn (owner, 2026-11-20)', () => {
+  const tree = (...slugs: string[]) => nasabTree(slugs.map((slug) => ({ slug, line: lineOf(person(slug), people) })));
+  const all = (node: NasabNode): NasabNode[] => [node, ...node.children.flatMap(all)];
+  const picked = (node: NasabNode) => node.people.length > 0;
+
+  it('names each father in his box in the nominative, while the chain after «بن» keeps the genitive', () => {
+    const boxes = all(tree('prophet-muhammad', 'abu-bakr-as-siddiq', 'ali-ibn-abi-talib')[0]).map((n) => n.name);
+    expect(boxes.some((name) => name.startsWith('أبو قحافة'))).toBe(true);
+    expect(boxes.some((name) => name.startsWith('أبو طالب'))).toBe(true);
+    expect(boxes.filter((name) => /(^|\s)أبي\s/u.test(name))).toEqual([]);
+    const ali = person('ali-ibn-abi-talib');
+    const line = lineOf(ali, people);
+    expect(chainOf(ali, line, 1)).toMatch(/^علي بن أبي طالب/u);
+  });
+
+  it('folds only fathers between the meeting and each person\'s father, one person\'s tree too', () => {
+    for (const slugs of [['prophet-muhammad'], ['prophet-muhammad', 'abu-bakr-as-siddiq', 'ali-ibn-abi-talib']]) {
+      const roots = tree(...slugs);
+      const start = slugs.length > 1 ? foldTop(roots[0]).start : roots[0];
+      const runs = all(start).filter((node) => node !== start).map((node) => straightRun(node, picked)).filter((run) => run.length >= FOLD_RUN);
+      // A long nasab has something to fold, and nothing folded is a person, his father, or a father where lines part.
+      expect(runs.length).toBeGreaterThan(0);
+      for (const run of runs) for (const node of run) {
+        expect(node.people).toEqual([]);
+        expect(node.children).toHaveLength(1);
+        expect(node.children[0].people).toEqual([]);
+      }
+      // Each picked person and his father stay drawn.
+      const folded = new Set(runs.flat());
+      for (const node of all(start).filter(picked)) {
+        expect(folded.has(node)).toBe(false);
+        const father = all(start).find((n) => n.children.includes(node));
+        if (father) expect(folded.has(father)).toBe(false);
+      }
+    }
   });
 });

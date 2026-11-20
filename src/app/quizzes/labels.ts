@@ -26,6 +26,7 @@ export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   TUHFA_NEXT: { en: "The next verse", ar: "البيت التالي" },
   TUHFA_RULE: { en: "A letter's rule", ar: "حكم الحرف" },
   TARAJIM_NASAB: { en: "Where two lineages meet", ar: "أين يلتقي النسبان؟" },
+  TARAJIM_NASAB_FILL: { en: "Complete the lineage", ar: "أكمل النسب" },
   TARAJIM_VIRTUE: { en: "Whose virtue?", ar: "صاحب المنقبة" },
   TARAJIM_TIE: { en: "How are they related?", ar: "ما صلته به؟" },
   TARAJIM_LIFE: { en: "In which year?", ar: "في أي سنة كان؟" },
@@ -43,7 +44,7 @@ export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
 export const TOPIC_GROUPS: { en: string; ar: string; topics: QuizTopic[] }[] = [
   { en: "Quran", ar: "القرآن", topics: ["BRANCHES", "COMPARE", "SURAH", "ORDER", "RECITE", "OPENINGS", "ENDS", "MEANING", "TAFSIR", "BALAGHA", "TERM", "IRAB", "QIRAAT", "QIRAAT_WHO"] },
   { en: "Tuhfat al-Atfal", ar: "تحفة الأطفال", topics: ["TUHFA_COMPLETE", "TUHFA_NEXT", "TUHFA_RULE"] },
-  { en: "Tarajim", ar: "التراجم", topics: ["TARAJIM_NASAB", "TARAJIM_VIRTUE", "TARAJIM_TIE", "TARAJIM_LIFE", "TARAJIM_LAQAB", "TARAJIM_KUNYA"] },
+  { en: "Tarajim", ar: "التراجم", topics: ["TARAJIM_NASAB", "TARAJIM_NASAB_FILL", "TARAJIM_VIRTUE", "TARAJIM_TIE", "TARAJIM_LIFE", "TARAJIM_LAQAB", "TARAJIM_KUNYA"] },
   { en: "Sira", ar: "السيرة", topics: ["SIRA", "PROPHET_NAMES"] },
   { en: "Hadith", ar: "الحديث", topics: ["HADITH_NARRATOR", "HADITH_COMPLETE", "HADITH_BOOK", "HADITH_CHAIN", "SAHIH_KITAB"] },
 ];

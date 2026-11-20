@@ -39,6 +39,10 @@ export const isRightChoice = (question: { correctAnswer: string; correctAnswers?
 
 export const recited = (question: { reveal?: unknown; page?: { recite?: unknown } }) => !!(question.reveal || question.page?.recite);
 
+/** In a question's `boxes`, the box asked about and another blank one. */
+export const BOX_ASKED = '؟';
+export const BOX_BLANK = '…';
+
 export type ChoiceQuestion = {
   key: string;
   /** The kind's id. */
@@ -70,6 +74,8 @@ export type ChoiceQuestion = {
   explains?: Record<string, { quote: string; where: string }>;
   /** For a wrong choice, the ayah in it that looks like the asked one, shown when it is picked. */
   alike?: Record<string, { key: string; words: string[] }>;
+  /** A chain drawn as a row of boxes over the choices (a nasab, «أكمل النسب»): BOX_ASKED the box asked, BOX_BLANK another blank. */
+  boxes?: string[];
   /** A book's text the question asks about, drawn over the choices; its own quotes of the Quran (﴿…﴾) in the mushaf's font («لأي آية هذا التفسير؟»). */
   passage?: string;
   /** The choices are Quran words (whole ayat, or a word as a reader reads it), drawn in the mushaf's font. */
@@ -94,7 +100,7 @@ export type ChoiceQuestion = {
  * card, never a stand-in). `mark` points at the answer in it, so a party keeps it back until the reveal.
  * - `ties`: the person's ties round him (TiesRing), the asked person marked.
  * - `life`: the person's «حياته» timeline (LifeTimeline), the asked row marked.
- * - `nasab`: the nasab tree of the people, where they meet named.
+ * - `nasab`: the nasab tree of the people, where they meet named; `text` opens it on the chain written out.
  * - `virtues`: the virtues each person's entry gives, the asked one marked.
  * - `terms`: the definition of each balagha term offered, the asked one marked.
  * - `hadith`: al-Nawawi's Forty with a search; the asked hadith once marked.
@@ -108,7 +114,7 @@ export type ChoiceQuestion = {
 export type QuizLook =
   | { view: 'ties'; slug: string; mark?: string }
   | { view: 'life'; slug: string; mark?: string }
-  | { view: 'nasab'; slugs: string[]; mark?: boolean }
+  | { view: 'nasab'; slugs: string[]; mark?: boolean; text?: true }
   | { view: 'virtues'; slugs: string[]; mark?: { slug: string; index: number } }
   | { view: 'terms'; names: string[]; mark?: string }
   | { view: 'hadith'; mark?: number }

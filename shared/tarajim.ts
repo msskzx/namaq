@@ -113,14 +113,19 @@ export function sayer(fact: PersonFact) {
   return fact.by.length === 0 ? TITLE_SPEAKER_AUTHOR : fact.by.join('، ');
 }
 
+/** A woman who says it: «قالت» before her name. The book names her by her name, her kunya «أم …», or «امرأة …». */
+const WOMAN = /^(?:أم|امرأة)\s|\sبنت\s|^(?:عائشة|أسماء|فاطمة|حفصة|زينب|صفية|خديجة|ميمونة|سودة|جويرية|رملة|سمية)(?:\s|$)/u;
+
 /**
- * The line under a quote that a narrator or the Prophet ﷺ says: «قاله البراء», «من قوله ﷺ». A bare name under a quote
- * read oddly (owner 2026-11-19).
+ * Who says it, on a muted line before the quote (owner 2026-11-20, as the hadith and the sira put the speaker first):
+ * «قال البراء:», «قالت عائشة:», «قال النبي ﷺ:», «قيل:». None for the author's own words. A sayer is stored as the book's
+ * sentence has him («عن أبي هريرة»); after «قال» he is the subject: «قال أبو هريرة».
  */
-export function sayerLine(fact: PersonFact) {
-  if (fact.by.length === 1 && fact.by[0] === PROPHET_NAME) return 'من قوله ﷺ';
-  // A sayer is stored as the book's sentence has him («عن أبي هريرة»); after «قاله» he is the subject: «قاله أبو هريرة».
-  return `قاله ${fact.by.map(name => (name === PROPHET_NAME ? 'النبي ﷺ' : name.replace(/^(?:أبي|أبا)(?= )/u, 'أبو'))).join('، ')}`;
+export function saidBy(fact: PersonFact) {
+  if (fact.anonymous) return 'قيل:';
+  if (fact.by.length === 0) return undefined;
+  const names = fact.by.map(name => (name === PROPHET_NAME ? 'النبي ﷺ' : name.replace(/^(?:أبي|أبا)(?= )/u, 'أبو').replace(/^رجلا(?= )/u, 'رجل')));
+  return `${WOMAN.test(names[0].replace(/[ً-ْٰـ]/g, '')) ? 'قالت' : 'قال'} ${names.join('، ')}:`;
 }
 const PROPHET_NAME = 'محمد ﷺ';
 

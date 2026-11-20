@@ -3,7 +3,7 @@
 import { BookOpen, Eye } from "lucide-react";
 import Button from "@/components/common/Button";
 import { ayahHref } from "@shared/ayahMarks";
-import { alikeDiff, FORGOT, RECITED, type ChoiceQuestion } from "@shared/quiz/choiceKinds";
+import { alikeDiff, BOX_ASKED, FORGOT, RECITED, type ChoiceQuestion } from "@shared/quiz/choiceKinds";
 import QuizPage from "./QuizPage";
 import type { WriteAsk } from "@shared/quiz/score";
 import type { PenRule } from "@shared/quran/writeAyah";
@@ -13,8 +13,9 @@ import QuranWords from '@/components/quran/text/QuranWords';
 import BookRuns from '@/components/quran/text/BookRuns';
 import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
 import QuizSources from "@/components/quiz/QuizSources";
+import Chip from "@/components/common/Chip";
 
-export type ChoiceParts = Partial<Pick<ChoiceQuestion, "quran" | "number" | "reveal" | "page" | "ayahKey" | "alike" | "note" | "sources" | "marked" | "explains" | "passage" | "quranChoices" | "whereOf">> & { correctAnswer?: string; family?: string; write?: WriteAsk };
+export type ChoiceParts = Partial<Pick<ChoiceQuestion, "quran" | "number" | "reveal" | "page" | "ayahKey" | "alike" | "note" | "sources" | "marked" | "explains" | "passage" | "boxes" | "quranChoices" | "whereOf">> & { correctAnswer?: string; family?: string; write?: WriteAsk };
 
 function Words({ words, marked }: { words: string[]; marked?: number[] }) {
   // A run of ayat carries each ayah's number between them, drawn as the end mark after the last one is.
@@ -39,6 +40,19 @@ function ChoicePassage({ text }: { text: string }) {
 }
 
 /**
+ * A chain drawn as boxes («أكمل النسب», the app's QuizChoice): each name a chip, «؟» the box asked (framed in the accent),
+ * «…» another blank; once answered the asked box holds the right name.
+ */
+function ChoiceBoxes({ boxes, answer }: { boxes: string[]; answer?: string }) {
+  return <ol className="mb-4 flex flex-wrap items-center gap-1.5" dir="rtl" lang="ar" aria-label="النسب">
+    {boxes.map((box, i) => <li key={i} className="flex items-center gap-1.5">
+      {i > 0 && <span aria-hidden className="text-[var(--home-muted)]">←</span>}
+      {box === BOX_ASKED ? <Chip label={answer ?? box} on={answer !== undefined} lit dashed={answer === undefined} /> : <Chip label={box} />}
+    </li>)}
+  </ol>;
+}
+
+/**
  * The ayah a choice question asks about, and a recited snippet's hidden rest until it is shown. A question asked on the page
  * draws it as its whole mushaf page (QuizPage, as the app's QuizChoice), where what it asks is written in boxes and its grade
  * answers حفظتها or نسيتها.
@@ -56,6 +70,7 @@ export function ChoiceQuran({ question, given, revealed, onReveal, onAnswer, ar,
     </div>;
   }
   if (question.passage) return <div dir="rtl" lang="ar"><ChoicePassage text={question.passage} /></div>;
+  if (question.boxes) return <ChoiceBoxes boxes={question.boxes} answer={given !== undefined ? question.correctAnswer : undefined} />;
   if (!question.quran) return null;
   // After a wrong pick with a look-alike, the words where the two part are marked in both.
   const alike = given !== undefined && given !== question.correctAnswer ? question.alike?.[given] : undefined;

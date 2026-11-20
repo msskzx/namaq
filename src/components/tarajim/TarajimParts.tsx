@@ -1,15 +1,19 @@
 'use client';
 
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { Check, ChevronDown, ChevronUp } from 'lucide-react';
 import { num } from '@shared/quran/arabicNumber';
 import type { TieKind } from '@shared/tarajimGraph';
+import { FOLD_RUN, straightRun } from '@shared/tarajimLine';
+import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import type { ChainView, Credit, NasabBox, NasabView, RingTie, TiesView, VirtuesView } from '@/lib/tarajim';
 import Card from '@/components/common/Card';
 import Chip from '@/components/common/Chip';
 import Button from '@/components/common/Button';
 import Folded from '@/components/common/Folded';
 import ExternalLink from '@/components/common/ExternalLink';
+import Saying from '@/components/common/Saying';
+import Segmented from '@/components/common/Segmented';
 
 // The app's Tarajim views on the website (owner, 2026-11-19: parity): the ties ring (mobile/src/components/TiesRing.tsx),
 // a chain of ties (TiesChain.tsx), the nasab tree (screens/nasab.tsx) and the virtues (screens/person.tsx). The data is
@@ -70,9 +74,8 @@ export function CreditFold({ credit }: { credit?: Credit }) {
 export function Virtues({ view, marked }: { view: VirtuesView; marked?: number }) {
   return <>
     {view.virtues.map((virtue, i) => (
-      <div key={i} className="flex flex-col gap-0.5" aria-current={i === marked || undefined}>
-        <p className={`text-[1.0625rem] leading-[1.85] ${i === marked ? 'text-[var(--home-green)]' : ''}`}>{virtue.text}</p>
-        {virtue.by && <p className="text-sm text-[var(--home-muted)]">{virtue.by}</p>}
+      <div key={i} aria-current={i === marked || undefined}>
+        <Saying by={virtue.by}><p className={`text-[1.0625rem] leading-[1.85] ${i === marked ? 'text-[var(--home-green)]' : ''}`}>{virtue.text}</p></Saying>
       </div>
     ))}
     <CreditFold credit={view.credit} />
@@ -220,7 +223,7 @@ export function TiesRing({ view, marked, onPick, onShow }: { view: TiesView;
 export function TieSays({ tie }: { tie: RingTie }) {
   return (
     <Card className="flex flex-col gap-1 p-4" lang="ar">
-      <p className="text-lg leading-[1.8]">{tie.says}</p>
+      <Saying by={tie.by}><p className="text-lg leading-[1.8]">{tie.says}</p></Saying>
       <p className="text-sm text-[var(--home-muted)]">{tie.pages}{tie.reversed ? ' · من ترجمة الآخر' : ''}</p>
     </Card>
   );
@@ -315,10 +318,30 @@ function NasabName({ node, linked }: { node: NasabBox; linked: boolean }) {
     : <Card picked={!!node.slug} className="whitespace-nowrap px-3 py-1.5 text-center">{text}</Card>;
 }
 
-/** A node and his sons under him, joined by lines: a stem down from the father, a bar across the sons, a stem to each. */
-function Branch({ node, linked }: { node: NasabBox; linked: boolean }) {
+const picked = (node: NasabBox) => !!node.slug;
+type Folds = { open: string[]; onOpen: (key: string) => void };
+
+/**
+ * A node and his sons under him, joined by lines: a stem down from the father, a bar across the sons, a stem to each. A
+ * long straight run of fathers under him is one «…» box that opens in place (the app's Branch, owner 2026-11-20).
+ */
+function Branch({ node, path, linked, folds }: { node: NasabBox; path: string; linked: boolean; folds: Folds }) {
   const stem = 'mx-auto h-4 w-[1.5px] bg-[var(--home-muted)]';
   const many = node.children.length > 1;
+  const below = (child: NasabBox) => {
+    const key = `${path}/${child.key}`;
+    const run = straightRun(child, picked);
+    if (run.length < FOLD_RUN || folds.open.includes(key)) return <Branch node={child} path={key} linked={linked} folds={folds} />;
+    return (
+      <div className="flex flex-col items-center">
+        <Button variant="outline" size="sm" onClick={() => folds.onOpen(key)} aria-label={`أظهر ${run.map(n => n.name).join('، ')}`}>
+          <ChevronDown size={16} aria-hidden />… {num(run.length)}
+        </Button>
+        <div className={stem} />
+        <Branch node={run[run.length - 1].children[0]} path={`${key}…`} linked={linked} folds={folds} />
+      </div>
+    );
+  };
   return (
     <div className="flex flex-col items-center">
       <NasabName node={node} linked={linked} />
@@ -333,7 +356,7 @@ function Branch({ node, linked }: { node: NasabBox; linked: boolean }) {
               </div>
             )}
             {many && <div className={stem} />}
-            <Branch node={child} linked={linked} />
+            {below(child)}
           </div>
         ))}
       </div>
@@ -341,36 +364,86 @@ function Branch({ node, linked }: { node: NasabBox; linked: boolean }) {
   );
 }
 
+/** The smallest a wide tree is drawn to fit the width; past it, it scrolls sideways. */
+const MIN_ZOOM = 0.5;
+
+/** A wide tree opens fitted to the width (owner): drawn smaller until it fits, down to MIN_ZOOM. */
+function Fitted({ children }: { children: ReactNode }) {
+  const room = useRef<HTMLDivElement>(null);
+  const tree = useRef<HTMLDivElement>(null);
+  const [zoom, setZoom] = useState(1);
+  const drawn = useRef(1);
+  useLayoutEffect(() => {
+    const outer = room.current;
+    const inner = tree.current;
+    if (!outer || !inner) return;
+    const fit = () => {
+      // The width as drawn now, back to its full size.
+      const width = inner.getBoundingClientRect().width / drawn.current;
+      if (!width || !outer.clientWidth) return;
+      const next = Math.max(MIN_ZOOM, Math.min(1, outer.clientWidth / width));
+      if (Math.abs(next - drawn.current) < 0.01) return;
+      drawn.current = next;
+      setZoom(next);
+    };
+    fit();
+    const watch = new ResizeObserver(fit);
+    watch.observe(outer);
+    watch.observe(inner);
+    return () => watch.disconnect();
+  }, []);
+  return (
+    <div ref={room} className="overflow-x-auto">
+      <div className="mx-auto w-fit" style={{ zoom }}><div ref={tree} className="w-fit">{children}</div></div>
+    </div>
+  );
+}
+
 /**
  * The nasab tree (the app's NasabTree): the tree of the picked people's fathers, the shared line above folded into one line
- * of names that opens; with meetings, where each pair meets and the chain to it, written out.
+ * of names that opens. «الرسم | النص» shows the tree or the text (owner 2026-11-20, the drawing first): with meetings,
+ * where each pair meets and the chain to it; else each one's chain of fathers written out.
  */
-export function NasabTree({ view, linked = true, children }: { view: NasabView;
+export function NasabTree({ view, linked = true, text: withText = true, start = 'drawing', children }: { view: NasabView;
   /** A picked person's name opens his page; not inside a quiz. */
-  linked?: boolean; children?: ReactNode }) {
+  linked?: boolean;
+  /** The «الرسم | النص» switch; without it only the tree (the person page has its own switch, the text being the book's). */
+  text?: boolean;
+  /** Which of the two shows first: a quiz on the nasab's words opens on the text. */
+  start?: DrawingOrText; children?: ReactNode }) {
   const [open, setOpen] = useState<string[]>([]);
+  const [runs, setRuns] = useState<string[]>([]);
+  const [shown, setShown] = useState<DrawingOrText>(start);
+  const drawing = shown === 'drawing' || !withText;
+  const folds = { open: runs, onOpen: (key: string) => setRuns([...runs, key]) };
   return (
     <div className="flex flex-col gap-4" lang="ar">
-      {view.trees.map(tree => {
-        const shown = open.includes(tree.key);
+      {withText && <Segmented tabs label="كيف يُعرض النسب" className="self-start"
+        options={DRAWING_OR_TEXT.map(item => ({ ...item, current: shown === item.key, onClick: () => setShown(item.key) }))} />}
+      {drawing && view.trees.map(tree => {
+        const aboveShown = open.includes(tree.key);
         return (
           <div key={tree.key} className="flex flex-col gap-2.5">
             {tree.above.length > 0 && (
-              <Button variant="ghost" aria-expanded={shown} onClick={() => setOpen(shown ? open.filter(k => k !== tree.key) : [...open, tree.key])} className="justify-start text-start">
-                {shown ? <ChevronUp size={16} aria-hidden /> : <ChevronDown size={16} aria-hidden />}
-                {`${(shown ? tree.above : tree.above.slice(0, 3)).join(' · ')}${!shown && tree.above.length > 3 ? ' …' : ''}`}
+              <Button variant="ghost" aria-expanded={aboveShown} onClick={() => setOpen(aboveShown ? open.filter(k => k !== tree.key) : [...open, tree.key])} className="justify-start text-start">
+                {aboveShown ? <ChevronUp size={16} aria-hidden /> : <ChevronDown size={16} aria-hidden />}
+                {`${(aboveShown ? tree.above : tree.above.slice(0, 3)).join(' · ')}${!aboveShown && tree.above.length > 3 ? ' …' : ''}`}
               </Button>
             )}
-            <div className="overflow-x-auto"><div className="mx-auto w-fit"><Branch node={tree.start} linked={linked} /></div></div>
+            <Fitted><Branch node={tree.start} path={tree.key} linked={linked} folds={folds} /></Fitted>
           </div>
         );
       })}
-      {view.meetings.map(meeting => (
+      {!drawing && (view.meetings.length > 0 ? view.meetings.map(meeting => (
         <Card key={meeting.slug} className="flex flex-col gap-1.5 p-4">
           {meeting.at ? <>
             <p className="text-sm text-[var(--home-muted)]">يلتقيان في: {meeting.at}</p>
             {meeting.chains.map((chain, i) => <p key={i} className="text-[1.0625rem] leading-[1.85]">{chain}</p>)}
           </> : <p className="text-[0.9375rem] text-[var(--home-muted)]">{meeting.apart}</p>}
+        </Card>
+      )) : (
+        <Card className="flex flex-col gap-2.5 p-4">
+          {view.chains.map((chain, i) => <p key={i} className="text-[1.0625rem] leading-[1.85]">{chain}</p>)}
         </Card>
       ))}
       {children}

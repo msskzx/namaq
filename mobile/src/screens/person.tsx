@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Network } from 'lucide-react-native';
-import { kunyaName, pageLabel, sayerAt, sayerLine, sourcesOf, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
+import { kunyaName, pageLabel, saidBy, sayerAt, sourcesOf, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
 import { surahName } from '@shared/quran/surahNames';
 import { counted, num } from '@shared/quran/arabicNumber';
 import { sourceById } from '@shared/sources';
@@ -22,6 +22,8 @@ import { findPerson, personName, unvowelled } from '@/lib/tarajim';
 import { personLife } from '@/lib/life';
 import LifeTimeline from '@/components/LifeTimeline';
 import Tabs from '@/ui/Tabs';
+import Saying from '@/ui/Saying';
+import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import { NasabTree } from './nasab';
 import TiesRing, { TieSheet } from '@/components/TiesRing';
 import type { Tie } from '@shared/tarajimGraph';
@@ -69,22 +71,20 @@ export function Credit({ facts, palette, quotes = false }: { facts: PersonFact[]
 }
 
 /**
- * Who says it, under a quote: a narrator's or the Prophet's ﷺ words always carry the line; the author's own words carry
- * it only where the book gives more than one value (`many`), so each of them reads as one saying among others.
+ * Who says it, on the line before the value (owner 2026-11-20: the speaker first): a narrator's or the Prophet's ﷺ words
+ * always carry the line; the author's own words carry it only where the book gives more than one value (`many`), so each
+ * of them reads as one saying among others.
  */
-function Sayer({ fact, palette, many = false }: { fact: PersonFact; palette: Palette; many?: boolean }) {
-  if (fact.anonymous) return <Text style={muted(palette)}>قيل</Text>;
-  if (many) return <Text style={muted(palette)}>{sayerAt(fact)}</Text>;
-  return fact.by.length ? <Text style={muted(palette)}>{sayerLine(fact)}</Text> : null;
-}
+const sayerOf = (fact: PersonFact, many = false) => (fact.anonymous ? 'قيل:' : many ? sayerAt(fact) : saidBy(fact));
 
-/** One quote from the entry, with who says it; a `marked` one (a quiz's answer, once shown) in green. */
-function Quote({ fact, palette, marked = false }: { fact: PersonFact; palette: Palette; marked?: boolean }) {
+/** A value from the entry, with who says it before it; a `marked` one (a quiz's answer, once shown) in green. */
+function Quote({ fact, palette, marked = false, many = false, children }: { fact: PersonFact; palette: Palette; marked?: boolean; many?: boolean;
+  /** What is shown for the fact, when not its words as printed (a year, an age, a kunya as one says it). */
+  children?: React.ReactNode }) {
   return (
-    <View style={{ gap: 2 }}>
-      <Text style={marked ? { ...body(palette), color: palette.green } : body(palette)}>{fact.text}</Text>
-      <Sayer fact={fact} palette={palette} />
-    </View>
+    <Saying by={sayerOf(fact, many)} palette={palette}>
+      {children ?? <Text style={marked ? { ...body(palette), color: palette.green } : body(palette)}>{fact.text}</Text>}
+    </Saying>
   );
 }
 
@@ -162,8 +162,10 @@ export default function PersonScreen() {
   const { slug = '' } = useLocalSearchParams<{ slug?: string }>();
   const { width } = useWindowDimensions();
   const [tie, setTie] = useState<Tie | undefined>();
-  // «نسبه» as the book writes it, or drawn as the tree of fathers (owner 2026-11-19: a toggle, the text first).
-  const [nasabView, setNasabView] = useState<'text' | 'tree'>('text');
+  // «نسبه» drawn as the tree of fathers or as the book writes it (owner 2026-11-20: «الرسم | النص», the drawing first).
+  const [nasabView, setNasabView] = useState<DrawingOrText>('drawing');
+  // «صلاته» as the ring or as the lines of names, which name the same people (the drawing first).
+  const [tiesView, setTiesView] = useState<DrawingOrText>('drawing');
   const person = findPerson(slug);
   const lifeItems = useMemo(() => (person ? personLife(person) : []), [person]);
   const back = () => (router.canGoBack() ? router.back() : toTab('/tarajim'));
@@ -201,27 +203,15 @@ export default function PersonScreen() {
         {person.fullName && (
           <Part n={++n} title={person.sex === 'FEMALE' ? 'نسبها' : 'نسبه'} palette={palette}
             drawing={<>
-              <Tabs palette={palette} label="كيف يُعرض النسب" value={nasabView} onChange={setNasabView}
-                options={[{ key: 'text', label: 'النص' }, { key: 'tree', label: 'الشجرة' }] as const} />
-              {nasabView === 'tree' && <NasabTree slugs={[person.slug]} palette={palette} meetings={false} />}
+              <Tabs palette={palette} label="كيف يُعرض النسب" value={nasabView} onChange={setNasabView} options={DRAWING_OR_TEXT} />
+              {nasabView === 'drawing' && <NasabTree slugs={[person.slug]} palette={palette} meetings={false} text={false} />}
             </>}>
             {nasabView === 'text' && <>
-            <Text style={body(palette)}>{person.fullName.text}</Text>
-            {person.otherNames?.length ? <>
-              <Sayer fact={person.fullName} palette={palette} many />
-              {person.otherNames.map((fact, i) => (
-                <View key={i} style={{ gap: 2 }}>
-                  <Text style={body(palette)}>وقيل: {fact.text}</Text>
-                  <Sayer fact={fact} palette={palette} many />
-                </View>
-              ))}
-            </> : null}
-            {person.nameVariants.map((fact, i) => (
-              <View key={`v${i}`} style={{ gap: 2 }}>
-                <Text style={body(palette)}>{fact.text}</Text>
-                <Sayer fact={fact} palette={palette} many />
-              </View>
+            <Quote fact={person.fullName} palette={palette} many={!!person.otherNames?.length} />
+            {person.otherNames?.map((fact, i) => (
+              <Quote key={i} fact={fact} palette={palette} many><Text style={body(palette)}>وقيل: {fact.text}</Text></Quote>
             ))}
+            {person.nameVariants.map((fact, i) => <Quote key={`v${i}`} fact={fact} palette={palette} many />)}
             <Row><Button label={person.sex === 'FEMALE' ? 'قارن نسبها بغيرها' : 'قارن نسبه بغيره'} onPress={tree} /></Row>
             <Credit facts={[person.fullName, ...(person.otherNames ?? []), ...person.nameVariants]} palette={palette} />
             </>}
@@ -233,7 +223,7 @@ export default function PersonScreen() {
             {names.map(({ label, fact, kunya }, i) => (
               <Line key={i} label={label} palette={palette}>
                 {/* A kunya reads as a name (nominative); the book's own words are in the sources below. */}
-                {kunya ? <View style={{ gap: 2 }}><Text style={body(palette)}>{kunyaName(fact.text)}</Text><Sayer fact={fact} palette={palette} /></View>
+                {kunya ? <Quote fact={fact} palette={palette}><Text style={body(palette)}>{kunyaName(fact.text)}</Text></Quote>
                   : <Quote fact={fact} palette={palette} />}
               </Line>
             ))}
@@ -260,21 +250,21 @@ export default function PersonScreen() {
             {life.length > 0 ? <>
             {person.islamAge.map((fact, i) => (
               <Line key={`i${i}`} label={f ? 'أسلمت وعمرها' : 'أسلم وعمره'} palette={palette}>
-                <Text style={body(palette)}>{ageOf(fact)}</Text><Sayer fact={fact} palette={palette} many={person.islamAge.length > 1} />
+                <Quote fact={fact} palette={palette} many={person.islamAge.length > 1}><Text style={body(palette)}>{ageOf(fact)}</Text></Quote>
               </Line>
             ))}
             {battles.length > 0 && <Line label={f ? 'شهدت' : 'شهد'} palette={palette}><Names links={battles} palette={palette} /></Line>}
             {person.absentFrom.length > 0 && <Line label={f ? 'غابت عن' : 'غاب عن'} palette={palette}><Names links={uniq(person.absentFrom)} palette={palette} /></Line>}
             {person.died.year.map((fact, i) => (
               <Line key={`y${i}`} label={f ? 'وفاتها' : 'وفاته'} palette={palette}>
-                <Text style={body(palette)}>{yearOf(fact)}</Text><Sayer fact={fact} palette={palette} many={person.died.year.length > 1} />
+                <Quote fact={fact} palette={palette} many={person.died.year.length > 1}><Text style={body(palette)}>{yearOf(fact)}</Text></Quote>
               </Line>
             ))}
             {person.died.month.map((fact, i) => (
-              <Line key={`m${i}`} label={f ? 'شهر وفاتها' : 'شهر وفاته'} palette={palette}><Text style={body(palette)}>{unvowelled(fact.text)}</Text><Sayer fact={fact} palette={palette} many={person.died.month.length > 1} /></Line>
+              <Line key={`m${i}`} label={f ? 'شهر وفاتها' : 'شهر وفاته'} palette={palette}><Quote fact={fact} palette={palette} many={person.died.month.length > 1}><Text style={body(palette)}>{unvowelled(fact.text)}</Text></Quote></Line>
             ))}
             {person.died.age.map((fact, i) => (
-              <Line key={`a${i}`} label={f ? 'عمرها' : 'عمره'} palette={palette}><Text style={body(palette)}>{ageOf(fact)}</Text><Sayer fact={fact} palette={palette} many={person.died.age.length > 1} /></Line>
+              <Line key={`a${i}`} label={f ? 'عمرها' : 'عمره'} palette={palette}><Quote fact={fact} palette={palette} many={person.died.age.length > 1}><Text style={body(palette)}>{ageOf(fact)}</Text></Quote></Line>
             ))}
             <Credit facts={life} palette={palette} quotes />
             </> : null}
@@ -283,8 +273,11 @@ export default function PersonScreen() {
 
         {tieList.length > 0 && (
           <Part n={++n} title={person.sex === 'FEMALE' ? 'صلاتها' : 'صلاته'} palette={palette}
-            drawing={<TiesRing slug={person.slug} width={Math.min(width - 32, 480)} palette={palette} onPick={openPerson} onShow={setTie} />}>
-            {tieList.map(tie => <Line key={tie.label} label={tie.label} palette={palette}><Names links={tie.links} palette={palette} /></Line>)}
+            drawing={<>
+              <Tabs palette={palette} label="كيف تُعرض الصلات" value={tiesView} onChange={setTiesView} options={DRAWING_OR_TEXT} />
+              {tiesView === 'drawing' && <TiesRing slug={person.slug} width={Math.min(width - 32, 480)} palette={palette} onPick={openPerson} onShow={setTie} />}
+            </>}>
+            {tiesView === 'text' && tieList.map(tie => <Line key={tie.label} label={tie.label} palette={palette}><Names links={tie.links} palette={palette} /></Line>)}
             <Row>
               <Button label={person.sex === 'FEMALE' ? 'تنقّل في صلاتها' : 'تنقّل في صلاته'} onPress={() => router.push({ pathname: '/ties', params: { slug: person.slug } })} />
               <Button label={person.sex === 'FEMALE' ? 'بينها وبين…' : 'بينه وبين…'} onPress={() => router.push({ pathname: '/between', params: { slugs: person.slug } })} />
