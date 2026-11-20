@@ -96,7 +96,8 @@ in [records](records/README.md), `AGENTS` a rule already in AGENTS.md.
 - [ ] Where a parent clips (`overflow: hidden`, or Android bounds), the box itself is 44 pt. Neighbouring hit slops do not overlap. (AGENTS, owner 11-19)
 - [ ] Chips, pills and buttons in one row share one size. No card inside a card. Keep the 12 pt margin, padding and card borders.
 - [ ] A new card is built from the shared `Card` (one 14 px radius, the card colour) and the compare page's mark styles. No new card style and no background highlight for matches. (owner 11-13, 11-14)
-- [ ] Colours mark kinds of sameness by the mutashabih books' categories, with al-Zarkashi's terms in the legend. Matrix: words every row shares in full colour, words some rows share faded, a tapped word lit in every row. Rows are linked only by shared phrases of two or more words that include a rare-root word. (owner 11-11, 11-13, 11-14)
+- [ ] Colours mark kinds of sameness by the mutashabih books' categories, with al-Zarkashi's terms in the legend. Colouring goes word by word. Matrix: words every row shares in full colour, words some rows share faded, a tapped word lit in every row. (owner 11-11, 11-13, 11-14)
+- [ ] Whether ayat make a group at all is a separate rule: it weighs how many words they share and what kind of words they are (the books' mutashabih, or for «تدبّر» a few rare words). The colouring rule never decides it. (owner 11-18, 11-20)
 - [ ] Toggles run left to right everywhere: on means the knob is on the right. (owner 11-09)
 - [ ] Numbers on the phone are picked with `NumberPicker` or chips, never typed, and there are no +/- steppers. The party join code is the one exception. (owner 11-10)
 - [ ] The keyboard never covers a filter, sheet or submit button. Search does not auto-focus, and tapping empty space dismisses the keyboard. (owner 11-10, 11-11)

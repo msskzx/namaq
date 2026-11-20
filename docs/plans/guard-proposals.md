@@ -33,7 +33,7 @@ Rules a test already enforces are listed at the end.
 | 19 | Not a test: the blank tree was seen on a phone only, so it is on the real-phone checklist |
 | 20 | `e2e/app/fixtures.ts` `noNestedButtons`: the page each app UI test ends on has no button inside a button |
 | 4 | `shared/quran/closingSign.test.ts`: both tree drawers (and the website's neighbour boxes) take the sign from `closingSign`; every built tree is walked through it |
-| 23 | `shared/quran/oneWordMatch.test.ts`: no file outside `shared/quran` strips marks or letters itself, except a listed few (names, hadith and book text, plus four Quran ones marked "should move": the website's mutashabih engine, quiz checks, hints, tajwid). Not built: "every matrix link is a phrase of two or more words with a rare-root word". Today a matrix link is one word lined up across the rows (`sharedByAll`), so this would change what the matrix lights; it waits for the owner |
+| 23 | `shared/quran/oneWordMatch.test.ts`: no file outside `shared/quran` strips marks or letters itself, except a listed few (names, hadith and book text, plus four Quran ones marked "should move": the website's mutashabih engine, quiz checks, hints, tajwid). |
 | 24 | `shared/sourceFiles.test.ts`: sources name their files (`files` in `shared/sources.ts`); 25 older files wait on a shrink-only list; no non-commercial licence |
 | 25 | `shared/quran/droppedCards.test.ts`: only `compareCards.ts` reads the stored compare cards. Known: the review page (on purpose) and the app's tree-to-compare links, which keep their own copy of the rule. Trees and compare cards are judged by different verdicts, so the two filters stay two |
 | 26 | `shared/quran/storyCards.test.ts`: an ayah on a part of a story sits on no other card of its page. 50 places break it today, kept on a shrink-only list |
@@ -177,8 +177,11 @@ Rules a test already enforces are listed at the end.
 23. **One word-match rule for tree, matrix and compare.** Vote: change. Matrix
     tones come from `ayahContexts`/`sharedByAll` (`shared/quran/ayahContext.ts`)
     through `mobile/src/lib/marks.ts`; no file outside `shared/quran` compares
-    words with its own letter or normalize code. Plus: every matrix link is a
-    phrase of two or more words with a rare-root word.
+    words with its own letter or normalize code. (The "plus" first written here,
+    "every matrix link is a phrase of two or more words with a rare-root word",
+    mixed two rules and is dropped, owner 2026-11-20: colouring goes word by
+    word; whether ayat are a group at all depends on how many and what kind of
+    words they share.)
 
 ### Content and data
 
