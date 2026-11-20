@@ -1,24 +1,16 @@
-import { createContext, useContext, useId, useLayoutEffect, useMemo, useState } from 'react';
-import { View, type AccessibilityRole, type GestureResponderEvent, type LayoutChangeEvent, type StyleProp, type ViewStyle } from 'react-native';
+import { useContext, useId, useLayoutEffect, useMemo, useState } from 'react';
+import { ScrollView, View, useWindowDimensions, type AccessibilityRole, type GestureResponderEvent, type LayoutChangeEvent, type StyleProp, type ViewStyle } from 'react-native';
+import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
+import { CARD_CAP_SHARE } from '@shared/homeFeed';
 import { CARD, type Palette } from '@/lib/theme';
 import { Tap } from '@/ui/Tap';
+import { Text } from '@/ui/Text';
+import Sheet from '@/ui/Sheet';
+import MoreMenu, { type MoreItem } from '@/ui/MoreMenu';
 import { SourceSlotContext, type Source } from '@/ui/sourceSlot';
+import { InsideCard, RowSlot, type Slot } from '@/ui/cardContext';
 
-/** True inside a card: a box drawn there would be a card in a card, so the shared pieces draw flat instead. */
-const InsideCard = createContext(false);
-
-/**
- * Inside a card (owner, 2026-11-19: no box in a box): a piece that frames itself (the matrix, a quiz's ayah) asks this and
- * draws no frame of its own there. A `Card` inside a card already draws flat by itself.
- */
-export const useInsideCard = () => useContext(InsideCard);
-
-type Slot = { set: (id: string, node: React.ReactNode | null) => void };
-/** Where `UnderCard` puts its buttons: the row under the card of a feed post (`CardWithRow`). */
-const RowSlot = createContext<Slot | null>(null);
-
-/** True where `UnderCard` puts its buttons in a card's row, so a piece can draw them the row's size (small, icon only). */
-export const useCardRow = () => !!useContext(RowSlot);
+export { OutsideCard, useCardRow, useInsideCard } from '@/ui/cardContext';
 
 /**
  * A feature's own buttons (a quiz's hint, a checked tree's save and share): in the row under the card when the card has one
@@ -33,16 +25,33 @@ export function UnderCard({ children }: { children: React.ReactNode }) {
   return slot ? null : <>{children}</>;
 }
 
+/** What a feature hands up with `UnderCard`, by id, and the slot that takes it. */
+function useLifted() {
+  const [lifted, setLifted] = useState<[string, React.ReactNode][]>([]);
+  const slot = useMemo<Slot>(() => ({ set: (id, node) => setLifted(now => keyed(now, id, node)) }), []);
+  return [lifted, slot] as const;
+}
+
+/** In the sheet that shows a capped card whole, the card's references stay on the source line at the sheet's foot. */
+const NO_SOURCES = { set: () => {} };
+
+/** How tall the fade at the foot of a capped card is. */
+const FADE = 72;
+
 /**
  * A card with the row of buttons under it (the feed post's shape): `row` is the post's own buttons, after what its content
- * hands up with `UnderCard`. The row starts on the right, as across the app.
+ * hands up with `UnderCard`. The row starts on the right, as across the app, and the «⋯» of `menu` sits alone at its far left.
+ * With `cap`, content taller than CARD_CAP_SHARE of the screen stops there with a fade, and «اقرأ كاملًا» under the card
+ * opens it whole in a sheet with the same buttons and source line at its foot (owner, 2026-11-20).
  */
-export function CardWithRow({ lead, row, aside, source, sourceLine, bar, children, ...card }: Omit<React.ComponentProps<typeof Card>, 'children'> & {
+export function CardWithRow({ lead, row, menu, cap = false, source, sourceLine, bar, children, ...card }: Omit<React.ComponentProps<typeof Card>, 'children'> & {
   /** The button that opens the item in its own reader, first in the row before the card's own tools (owner 2026-11-20). */
   lead?: React.ReactNode;
   row?: React.ReactNode;
-  /** A button alone at the row's far end (the left), away from the others: «ليس من اهتماماتي» (owner 2026-11-20). */
-  aside?: React.ReactNode;
+  /** The choices of the «⋯» alone at the row's far left (owner 2026-11-20: «ليس من اهتماماتي»); none, no «⋯». */
+  menu?: MoreItem[];
+  /** Content that can run long stops at CARD_CAP_SHARE of the screen, the rest one tap away in a sheet. */
+  cap?: boolean;
   /** The card's sources, named on the line under its buttons (owner 2026-11-20); a `Reference` inside the card joins the sheet. */
   source?: Source[];
   /**
@@ -52,23 +61,56 @@ export function CardWithRow({ lead, row, aside, source, sourceLine, bar, childre
   sourceLine?: (named: Source[], all: Source[]) => React.ReactNode;
   /** A bar of the feature's own leading the row (recite mode's small bar, on the recall card). */
   bar?: React.ReactNode; children: React.ReactNode }) {
-  const [lifted, setLifted] = useState<[string, React.ReactNode][]>([]);
-  const slot = useMemo<Slot>(() => ({ set: (id, node) => setLifted(now => keyed(now, id, node)) }), []);
+  const [lifted, slot] = useLifted();
+  const [liftedWhole, slotWhole] = useLifted();
   const [handed, setHanded] = useState<[string, Source | null][]>([]);
   const sourceSlot = useMemo(() => ({ set: (id: string, given: Source | null) => setHanded(now => keyed(now, id, given)) }), []);
   const inner = handed.map(([, given]) => given).filter((given): given is Source => !!given);
   const own = source ?? [];
-  const buttons = lifted.length > 0 || !!row || !!aside || !!lead;
+  const { height: screen } = useWindowDimensions();
+  const most = Math.round(screen * CARD_CAP_SHARE);
+  const [tall, setTall] = useState(0);
+  const capped = cap && tall > most;
+  const [whole, setWhole] = useState(false);
+  const { palette } = card;
+  const buttonRow = (handedUp: [string, React.ReactNode][], more?: MoreItem[]) => (bar || lead || row || handedUp.length > 0 || !!more?.length) && (
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', gap: bar ? 4 : 0, marginTop: bar ? 4 : 0 }}>
+      {bar}{lead}{handedUp.map(([id, node]) => <View key={id} style={{ flexDirection: 'row', alignItems: 'center' }}>{node}</View>)}{row}
+      {more?.length ? <><View style={{ flex: 1 }} /><MoreMenu items={more} /></> : null}
+    </View>
+  );
+  const sources = own.length + inner.length > 0 && sourceLine?.(own.length ? own : inner, [...own, ...inner]);
   return (
     <>
       <SourceSlotContext.Provider value={sourceSlot}>
-        <RowSlot.Provider value={slot}><Card testID="feed-card" {...card}>{children}</Card></RowSlot.Provider>
+        <RowSlot.Provider value={slot}>
+          <Card testID="feed-card" {...card}>
+            {cap ? (
+              <View style={capped ? { maxHeight: most, overflow: 'hidden' } : undefined}>
+                <View onLayout={event => setTall(event.nativeEvent.layout.height)}>{children}</View>
+                {capped && <Svg pointerEvents="none" width="100%" height={FADE} style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }}>
+                  <Defs><LinearGradient id="cap" x1="0" y1="0" x2="0" y2="1"><Stop offset="0" stopColor={palette.card} stopOpacity={0} /><Stop offset="1" stopColor={palette.card} stopOpacity={1} /></LinearGradient></Defs>
+                  <Rect width="100%" height={FADE} fill="url(#cap)" />
+                </Svg>}
+              </View>
+            ) : children}
+          </Card>
+        </RowSlot.Provider>
       </SourceSlotContext.Provider>
-      {(bar || buttons) && <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', gap: bar ? 4 : 0, marginTop: bar ? 4 : 0 }}>
-        {bar}{lead}{lifted.map(([id, node]) => <View key={id} style={{ flexDirection: 'row', alignItems: 'center' }}>{node}</View>)}{row}
-        {aside ? <><View style={{ flex: 1 }} />{aside}</> : null}
-      </View>}
-      {own.length + inner.length > 0 && sourceLine?.(own.length ? own : inner, [...own, ...inner])}
+      {capped && <Tap onPress={() => setWhole(true)} accessibilityRole="button" style={{ alignSelf: 'flex-start', paddingHorizontal: 12, minHeight: 32, justifyContent: 'center' }}>
+        <Text style={{ color: palette.accent, fontSize: 15 }}>اقرأ كاملًا</Text>
+      </Tap>}
+      {buttonRow(lifted, menu)}
+      {sources}
+      {(capped || whole) && <Sheet open={whole} onClose={() => setWhole(false)} palette={palette}>
+        <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 12, paddingBottom: 12, gap: 4 }}>
+          <SourceSlotContext.Provider value={NO_SOURCES}>
+            <RowSlot.Provider value={slotWhole}><Card palette={palette} pad={card.pad} gap={card.gap} clip={card.clip}>{children}</Card></RowSlot.Provider>
+          </SourceSlotContext.Provider>
+          {buttonRow(liftedWhole)}
+          {sources}
+        </ScrollView>
+      </Sheet>}
     </>
   );
 }
@@ -142,9 +184,4 @@ export default function Card({ palette, pad = 14, gap, spine = false, picked = f
       {inner}
     </Tap>
   );
-}
-
-/** What opens over the screen (a sheet, a menu) starts outside every card, wherever it is drawn from. */
-export function OutsideCard({ children }: { children: React.ReactNode }) {
-  return <InsideCard.Provider value={false}><RowSlot.Provider value={null}>{children}</RowSlot.Provider></InsideCard.Provider>;
 }

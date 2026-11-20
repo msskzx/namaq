@@ -16,10 +16,12 @@ type Props = {
   big?: boolean;
   /** Grows to share the row's width with its neighbours, with a little less side padding so three fit on a phone. */
   grow?: boolean;
+  /** Round ends: the one labelled button in a feed card's row of icons («ابحث عن الجواب», owner 2026-11-20). */
+  pill?: boolean;
 };
 
 /** The app's button: a filled terracotta primary, an outlined one, or a plain icon button. */
-export default function Button({ label, Icon, onPress, variant = 'outline', active, disabled, accessibilityLabel, big, grow }: Props) {
+export default function Button({ label, Icon, onPress, variant = 'outline', active, disabled, accessibilityLabel, big, grow, pill = false }: Props) {
   const palette = usePalette();
   // A disabled button is never filled: faded text on the accent was hard to read.
   const filled = !disabled && (variant === 'primary' || active);
@@ -29,7 +31,7 @@ export default function Button({ label, Icon, onPress, variant = 'outline', acti
       accessibilityState={{ disabled, selected: active }} hitSlop={6}
       style={({ pressed }) => ({
         flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
-        minHeight: big ? 50 : 42, minWidth: label ? undefined : 42, paddingHorizontal: label ? (big ? 20 : grow ? 10 : 14) : 8, borderRadius: 10, flexGrow: grow ? 1 : 0,
+        minHeight: big ? 50 : 42, minWidth: label ? undefined : 42, paddingHorizontal: label ? (big ? 20 : grow ? 10 : 14) : 8, borderRadius: pill ? (big ? 25 : 21) : 10, flexGrow: grow ? 1 : 0,
         backgroundColor: filled ? palette.accent : 'transparent',
         borderWidth: variant === 'plain' ? 0 : 1, borderColor: filled ? palette.accent : palette.rule,
         opacity: disabled ? 0.6 : pressed ? 0.7 : 1,

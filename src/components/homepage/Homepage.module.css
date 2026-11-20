@@ -59,8 +59,8 @@ a.hijri:hover { text-decoration: underline; }
 .feed { display: flex; flex-direction: column; gap: 0.875rem; }
 .divider { display: flex; align-items: center; gap: 0.625rem; color: var(--home-muted); font-size: 0.9375rem; font-weight: 700; }
 .divider::after { content: ''; flex: 1; border-top: 1px solid var(--home-rule); }
-/* As the app's story card: 62% of a taller screen, never under 460px. */
-.storyMap { --story-map-bg: var(--home-card); max-height: max(460px, 62svh); overflow: auto; padding: 0 0.75rem 0.25rem; overscroll-behavior: contain; }
+/* As the app's story card: no scroll down inside the card (owner, 2026-11-20), a long map stops as every long card does; sideways it scrolls. */
+.storyMap { --story-map-bg: var(--home-card); overflow-x: auto; overflow-y: hidden; padding: 0 0.75rem 0.25rem; overscroll-behavior-x: contain; }
 .question { padding: 0.25rem 0.75rem 0.5rem; }
 .recall { padding: 0.25rem 0.75rem 0; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 .green { border-color: var(--home-green, #506449); color: var(--home-green, #506449); }

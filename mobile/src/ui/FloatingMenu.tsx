@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { OutsideCard } from '@/ui/Card';
+import { OutsideCard } from '@/ui/cardContext';
 import { Modal, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { Palette } from '@/lib/theme';

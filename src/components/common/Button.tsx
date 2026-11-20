@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 
 export type ButtonVariant = 'primary' | 'outline' | 'highlight' | 'ghost' | 'muted' | 'neutral';
-export type ButtonSize = 'sm' | 'md' | 'icon' | 'lg' | 'round';
+export type ButtonSize = 'sm' | 'md' | 'icon' | 'lg' | 'round' | 'pill' | 'act';
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   ghost: 'text-[var(--home-accent)] hover:bg-[var(--home-paper-deep)]',
@@ -19,6 +19,10 @@ const SIZE_CLASSES: Record<ButtonSize, string> = {
   lg: 'size-11 shrink-0 [&_svg]:size-5',
   /** An icon alone in a circle, beside a title or under a card (close, share, open in the mushaf). */
   round: 'size-9 shrink-0 [&_svg]:size-[18px]',
+  /** Round ends, icon and words: the one labelled button in a feed card's row of icons («ابحث عن الجواب», owner 2026-11-20). */
+  pill: 'min-h-10 shrink-0 px-3.5 text-sm [&_svg]:size-[18px]',
+  /** The icon with its name under it, as the app's ActButton: a choice of a card's «⋯» menu. */
+  act: 'min-w-14 flex-col gap-1 px-2 py-1.5 text-xs [&_svg]:size-[22px]',
 };
 /**
  * Every button gives the finger at least 44 × 44 px (owner, 2026-11-19, as the app's ui/tapSize.ts): an invisible
@@ -28,7 +32,7 @@ const SIZE_CLASSES: Record<ButtonSize, string> = {
 export const TAP_FLOOR = "after:absolute after:content-[''] after:inset-[min(0px,calc((100%_-_44px)/2))]";
 const placed = (className?: string) => /(^|[\s:])(absolute|fixed|sticky)(\s|$)/.test(className ?? '');
 function classesFor(variant: ButtonVariant, size: ButtonSize, active: boolean, className?: string) {
-  return ['inline-flex items-center justify-center gap-2 transition', TAP_FLOOR, placed(className) ? '' : 'relative', size === 'round' ? 'rounded-full' : 'rounded-sm', 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--home-accent)] disabled:opacity-50 disabled:cursor-not-allowed', SIZE_CLASSES[size], VARIANT_CLASSES[active ? 'primary' : variant], active && (variant === 'outline' || variant === 'neutral') ? 'border border-[var(--button-color,var(--home-accent))]' : '', className].filter(Boolean).join(' ');
+  return ['inline-flex items-center justify-center gap-2 transition', TAP_FLOOR, placed(className) ? '' : 'relative', size === 'round' || size === 'pill' ? 'rounded-full' : 'rounded-sm', 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--home-accent)] disabled:opacity-50 disabled:cursor-not-allowed', SIZE_CLASSES[size], VARIANT_CLASSES[active ? 'primary' : variant], active && (variant === 'outline' || variant === 'neutral') ? 'border border-[var(--button-color,var(--home-accent))]' : '', className].filter(Boolean).join(' ');
 }
 
 type CommonProps = {
