@@ -23,10 +23,12 @@ import { AroundButton, RotateButton } from './Surroundings';
  * `mixed`: for a reader who picked the tree, one tree in ten opens as the matrix, as the home feed does.
  */
 /** `frameClassName` draws the tree in a card of its own (home's posts); the matrix is a card already, so it goes without. */
-export default function TreeViewCard({ tree, height, names, mixed = false, actionsClassName, frameClassName, lead }: {
+export default function TreeViewCard({ tree, height, names, mixed = false, actionsClassName, frameClassName, lead, aside }: {
   tree: TreePreview; height: string; names: Record<number, string>; mixed?: boolean; actionsClassName?: string; frameClassName?: string;
   /** The home feed's open button, first in the row (CardActions `lead`). */
   lead?: React.ReactNode;
+  /** The home feed's «ليس من اهتماماتي» (CardActions `aside`). */
+  aside?: React.ReactNode;
 }) {
   const [chosen, setView] = useState<BranchView>(() => {
     const pref = defaultBranchView(Cookies.get(BRANCH_VIEW_COOKIE));
@@ -45,7 +47,7 @@ export default function TreeViewCard({ tree, height, names, mixed = false, actio
       </DoubleTapSave>
     </div>
     <div className={actionsClassName ?? 'px-2 py-1'}>
-      <CardActions id={tree.id} text={tree.text} href={tree.href} lead={lead} toggles={<>
+      <CardActions id={tree.id} text={tree.text} href={tree.href} lead={lead} aside={aside} toggles={<>
         {!tree.matrixOnly && <Button size="lg" variant="muted" onClick={() => setView(view === 'tree' ? 'cards' : 'tree')} aria-label={viewLabel} title={viewLabel}>{view === 'tree' ? <GalleryHorizontal aria-hidden /> : <TreeIcon aria-hidden />}</Button>}
         <AroundButton card={tree.id} />
         {view === 'tree' && <RotateButton card={tree.id} />}

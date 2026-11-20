@@ -129,9 +129,11 @@ function ComparePicker({ links, label, ar }: { links: CompareLink[]; label: stri
 }
 
 /** Under the tree or matrix, as on a post: save, the card's own switches (`toggles`), share, then compare. */
-export function CardActions({ id, text, href, aliases = [], details, compareLinks = [], toggles, lead }: { id: string; text: string; href?: string; aliases?: string[]; details?: React.ReactNode; compareLinks?: CompareLink[]; toggles?: React.ReactNode;
+export function CardActions({ id, text, href, aliases = [], details, compareLinks = [], toggles, lead, aside }: { id: string; text: string; href?: string; aliases?: string[]; details?: React.ReactNode; compareLinks?: CompareLink[]; toggles?: React.ReactNode;
   /** In the home feed: the button that opens the tree on the branches page, first, and save after the tools, before share (owner, 2026-11-20). */
-  lead?: React.ReactNode }) {
+  lead?: React.ReactNode;
+  /** In the home feed: «ليس من اهتماماتي», alone at the row's far end. */
+  aside?: React.ReactNode }) {
   const ar = useLanguage().language === 'ar';
   const saved = useBookmarks().some(item => item.id === id || aliases.includes(item.id));
   const label = saved ? (ar ? 'إزالة من المحفوظة' : 'Remove from saved') : (ar ? 'حفظ' : 'Save');
@@ -143,7 +145,8 @@ export function CardActions({ id, text, href, aliases = [], details, compareLink
   const studio = useGrowth().studio;
   const videoLabel = ar ? 'مشاركة كفيديو' : 'Share as video';
   const compareLabel = ar ? 'في المقارنة' : 'Also in compare';
-  return <div className="flex flex-col gap-1">
+  // `grow`: in the home feed's row it takes the whole width, so `aside` reaches the far end.
+  return <div className="flex grow flex-col gap-1">
     <GrowProgress />
     <div className="flex flex-wrap items-center gap-1">
     {!studio && lead}
@@ -157,6 +160,7 @@ export function CardActions({ id, text, href, aliases = [], details, compareLink
     </>}
     {!studio && compareLinks.length === 1 && <Button size="lg" variant="muted" href={compareLinks[0].href} aria-label={compareLabel} title={compareLabel}><ArrowLeftRight aria-hidden /></Button>}
     {!studio && compareLinks.length > 1 && <ComparePicker links={compareLinks} label={compareLabel} ar={ar} />}
+    {!studio && aside}
     </div>
     {details}
     <GrowVideo />

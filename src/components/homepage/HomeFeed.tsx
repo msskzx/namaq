@@ -1,9 +1,9 @@
 'use client';
 
-import { Fragment, isValidElement, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { createContext, Fragment, isValidElement, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText, Swords, BookOpenText, ListTree, MessagesSquare, Link2, History, Network, GitCommitVertical } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, CircleMinus, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText, Undo2, Swords, BookOpenText, ListTree, MessagesSquare, Link2, History, Network, GitCommitVertical } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Cookies from 'js-cookie';
@@ -52,7 +52,7 @@ import { continuePage, readFasilas, serverFasilas, subscribeFasilas } from '@sha
 import { ayahBookmarkId, ayahHref, markAyah, markWord, wordMarkKey, markForgotten, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { isMemorized, memorizedFilters, memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized, type Memorized } from '@shared/memorized';
 import { FEED_QUIZ_NAMES, feedQuizSeed, OPENINGS, openingSurah, type FeedQuizKind } from '@shared/quiz/feedQuiz';
-import { activeInterests, INTERESTS, pickedInterests } from '@shared/interests';
+import { activeInterests, INTERESTS, interestById, interestOf, pickedInterests, restoredInterest, type FeedCardKind } from '@shared/interests';
 import QuizAnswer, { type QuizData } from '@/app/quizzes/QuizAnswer';
 import type { Hints } from '@shared/quiz/hints';
 import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
@@ -74,6 +74,7 @@ import { ayahNoteAt } from '@shared/quran/ayahNotes';
 import { QiraatPlace } from '@/app/quran/qiraat/QiraatView';
 import { surahName } from '@shared/quran/surahNames';
 import Card from '@/components/common/Card';
+import Button from '@/components/common/Button';
 import { CardRowProvider, useRowSlot } from '@/components/common/UnderCard';
 import SourceLine, { sourcesOf } from '@/components/common/SourceLine';
 import { SourceSlotContext, type Source } from '@/components/common/sourceSlot';
@@ -211,7 +212,7 @@ function Post({ head, open, actions, share, source, bar, labelledBy, save, child
     {head}
     <Card className="overflow-hidden"><SourceSlotContext.Provider value={sourceSlot}><CardRowProvider slot={slot}>{children}</CardRowProvider></SourceSlotContext.Provider></Card>
     {bar && <div className="mt-2 flex justify-center" data-share-skip>{bar}</div>}
-    <div className={styles.postActions} data-share-skip>{open}<span ref={setSlot} className="contents" />{actions}{save && <SaveCard {...save} head={head} />}{share}</div>
+    <div className={styles.postActions} data-share-skip>{open}<span ref={setSlot} className="contents" />{actions}{save && <SaveCard {...save} head={head} />}{share}<NotMine /></div>
     {own.length + inner.length > 0 && <SourceLine named={own.length ? own : inner} sources={[...own, ...inner]} />}
   </>;
   // The reading card is a section of the page named by its head (`labelledBy`); the feed's posts are articles.
@@ -228,6 +229,28 @@ function SaveCard({ kind, item, head }: { kind: string; item: string; head: Reac
   const on = saved.some(each => each.id === id);
   const text = isValidElement<{ title?: string; sub?: string }>(head) ? [head.props.title, head.props.sub].filter(Boolean).join(' · ') : '';
   return <Action Icon={Bookmark} label={on ? 'أزلها من المحفوظات' : 'احفظ البطاقة'} on={on} onClick={() => toggleBookmark({ id, text, href: '' })} />;
+}
+
+/**
+ * The feed card's interest and what «ليس من اهتماماتي» does on it (the app's CardMenuContext): set by the feed around each
+ * card of an interest, absent on the saved shelf and the library, so the button shows only in the feed.
+ */
+const NotMineContext = createContext<{ interest: string; notMine?: () => void } | null>(null);
+
+/** «ليس من اهتماماتي», alone at the row's far left (owner, 2026-11-20, the app's NotMineAction). */
+function NotMine() {
+  const menu = useContext(NotMineContext);
+  if (!menu?.notMine) return null;
+  return <span className="ms-auto"><Action Icon={CircleMinus} label={`«${interestById(menu.interest)?.name ?? ''}» ليس من اهتماماتي`} onClick={menu.notMine} /></span>;
+}
+
+/** In a card's place after «ليس من اهتماماتي»: what was taken out, and a button to put it back (the app's RemovedLine). */
+function RemovedLine({ interest, onUndo }: { interest: string; onUndo: () => void }) {
+  const name = interestById(interest)?.name ?? '';
+  return <Card dashed dir="rtl" className="flex items-center gap-2 px-3 py-2">
+    <p className="flex-1 text-[var(--home-ink)]">{`أُزيل «${name}» من اهتماماتك`}</p>
+    <Button variant="muted" onClick={() => { pickedInterests.write(restoredInterest(pickedInterests.read(), interest)); onUndo(); }}><Undo2 aria-hidden />تراجع</Button>
+  </Card>;
 }
 
 /** One icon button of a post's row: a link with `href`, else a button; `on` lights it, `tone` colours it. */
@@ -249,7 +272,7 @@ function PairPost({ pair }: { pair: FeedPair }) {
   return <article dir="rtl">
     <PostHead Icon={ArrowLeftRight} title="آيتان متشابهتان" sub={`${label(a)} · ${label(b)}`} />
     <ul className="list-none p-0">
-      <CompareCard card={pair} names={compareNames} ar savedIds={savedAs(pair.id, bookmarks)} page={surahPairHref(a.surah, b.surah)} view={defaultBranchView(Cookies.get(BRANCH_VIEW_COOKIE))} />
+      <CompareCard card={pair} names={compareNames} ar savedIds={savedAs(pair.id, bookmarks)} page={surahPairHref(a.surah, b.surah)} view={defaultBranchView(Cookies.get(BRANCH_VIEW_COOKIE))} aside={<NotMine />} />
     </ul>
     <SourceLine named={sourcesOf(pair.sources)} sources={sourcesOf(pair.sources)} />
   </article>;
@@ -600,7 +623,7 @@ function TreePost({ tree }: { tree: Tree }) {
   return <article className={styles.postWrap} dir="rtl">
     <PostHead Icon={TreeIcon} title="من متشابهات القرآن" sub={ayahPlaces(tree.ayat?.map(ayah => ayah.key) ?? [], names)} href={tree.href} label="افتح الشجرة في متشابهات القرآن" />
     <TreeViewCard tree={tree} height={TREE_HEIGHT} names={names} mixed frameClassName={styles.post} actionsClassName={styles.postActions}
-      lead={<Action Icon={TreeIcon} label="افتح الشجرة في متشابهات القرآن" href={tree.href} />} />
+      lead={<Action Icon={TreeIcon} label="افتح الشجرة في متشابهات القرآن" href={tree.href} />} aside={<NotMine />} />
     <SourceLine named={sourcesOf(tree.sources)} sources={sourcesOf(tree.sources)} />
   </article>;
 }
@@ -727,10 +750,31 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
     watch.observe(mark);
     return () => watch.disconnect();
   }, [view, batches, pairsLoading, treesLoading]);
+  // Cards taken out with «ليس من اهتماماتي» this visit, by key: each leaves a line in its place, the others stay as they are
+  // (the app's feed). The button is not on one interest's own view, nor on the only interest left (none picked means all),
+  // nor on a card whose interest was already taken out.
+  const [removed, setRemoved] = useState<{ visit: number; keys: ReadonlySet<string> }>({ visit, keys: new Set() });
+  const removedKeys = removed.visit === visit ? removed.keys : new Set<string>();
+  const showing = new Set(activeInterests(interests).map(interest => interest.id));
   const posts: React.ReactNode[] = [];
+  /** Adds a card of `kind`, with its interest's «ليس من اهتماماتي», or the line that replaced it. */
+  const put = (post: React.ReactElement, kind: string) => {
+    const key = String(post.key);
+    const interest = interestOf(kind as FeedCardKind)?.id;
+    if (!interest) { posts.push(post); return; }
+    if (removedKeys.has(key)) {
+      posts.push(<RemovedLine key={key} interest={interest} onUndo={() => setRemoved({ visit, keys: new Set([...removedKeys].filter(each => each !== key)) })} />);
+      return;
+    }
+    const notMine = only || !showing.has(interest) || showing.size === 1 ? undefined : () => {
+      setRemoved({ visit, keys: new Set([...removedKeys, key]) });
+      pickedInterests.write(activeInterests(pickedInterests.read()).map(each => each.id).filter(id => id !== interest));
+    };
+    posts.push(<NotMineContext.Provider key={key} value={{ interest, notMine }}>{post}</NotMineContext.Provider>);
+  };
   for (let i = 0; i < batches; i++) {
     const pair = shows('pair') ? content?.pairs[i] : undefined;
-    if (pair) posts.push(<PairPost key={`p${pair.id}`} pair={pair} />);
+    if (pair) put(<PairPost key={`p${pair.id}`} pair={pair} />, 'pair');
     if (i === 0 && forgotten && !only) posts.push(<ForgottenPost key={`ask${forgotten}`} ayah={forgotten} review={reviewHref(forgottenOrder(Object.keys(due))[0])} />);
     else if (i === 0 && recall && !only) posts.push(<ForgottenPost key={`ask${recall}`} ayah={recall} />);
     // A question card in every batch after the first (whose question is the recall card), each kind in turn; from the first
@@ -738,36 +782,36 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
     if ((i > 0 || only) && day && quizKinds.length) {
       const kind = quizKinds[(day + i) % quizKinds.length];
       const seed = feedQuizSeed(day, i);
-      posts.push(kind === OPENINGS
+      put(kind === OPENINGS
         ? <OpeningPost key={`q${day}-${i}`} seed={seed} memorized={questions ? memorized : null} />
-        : <QuizPost key={`q${day}-${i}-${questions ? JSON.stringify(memorizedFilters(memorized)) : ''}`} kind={kind} seed={seed} scope={questions ? memorizedFilters(memorized) : {}} />);
+        : <QuizPost key={`q${day}-${i}-${questions ? JSON.stringify(memorizedFilters(memorized)) : ''}`} kind={kind} seed={seed} scope={questions ? memorizedFilters(memorized) : {}} />, kind);
     }
     const tree = shows('tree') ? content?.trees[i] : undefined;
-    if (tree) posts.push(<TreePost key={`t${tree.id}`} tree={tree} />);
+    if (tree) put(<TreePost key={`t${tree.id}`} tree={tree} />, 'tree');
     const savedItem = only ? undefined : savedOfSlot(saved, day ?? 0, i);
     if (savedItem) posts.push(<SavedPost key={`b${savedItem.id}-${i}`} item={savedItem} />);
     // A readings card in every batch after the first, as the app's feed has one among its ayah cards.
     const readings = i > 0 && day && shows('note-qiraat') ? qiraatAyat()[ayahNoteAt(qiraatAyat().length, day, i)] : undefined;
-    if (readings) posts.push(<QiraatPost key={`r${readings}`} ayah={readings} />);
+    if (readings) put(<QiraatPost key={`r${readings}`} ayah={readings} />, 'note-qiraat');
     const story = shows('prophets') ? stories?.find(card => card.slot === i) : undefined;
-    if (story) posts.push(<StoryPost key={`s${day}-${i}`} card={story} />);
+    if (story) put(<StoryPost key={`s${day}-${i}`} card={story} />, 'prophets');
     const hadithCard = hadith?.find(card => card.slot === i);
-    if (hadithCard && shows(hadithCard.kind)) posts.push(<HadithPost key={`h${day}-${i}`} card={hadithCard} />);
+    if (hadithCard && shows(hadithCard.kind)) put(<HadithPost key={`h${day}-${i}`} card={hadithCard} />, hadithCard.kind);
     const sahihCard = sahih?.find(card => card.slot === i);
-    if (sahihCard && shows(sahihCard.kind)) posts.push(<SahihPost key={`sahih${day}-${i}`} card={sahihCard} />);
+    if (sahihCard && shows(sahihCard.kind)) put(<SahihPost key={`sahih${day}-${i}`} card={sahihCard} />, sahihCard.kind);
     const termCard = shows('term') ? termCards?.find(card => card.slot === i) : undefined;
-    if (termCard) posts.push(<TermPost key={`term${day}-${i}`} card={termCard} />);
+    if (termCard) put(<TermPost key={`term${day}-${i}`} card={termCard} />, 'term');
     const siraCard = sira?.find(card => card.slot === i);
-    if (siraCard?.kind === 'sira' && shows('sira')) posts.push(<SiraPost key={`sira${day}-${i}`} card={siraCard} />);
-    if (siraCard?.kind === 'moment' && shows('moment')) posts.push(<MomentPost key={`m${day}-${i}`} card={siraCard} />);
+    if (siraCard?.kind === 'sira' && shows('sira')) put(<SiraPost key={`sira${day}-${i}`} card={siraCard} />, 'sira');
+    if (siraCard?.kind === 'moment' && shows('moment')) put(<MomentPost key={`m${day}-${i}`} card={siraCard} />, 'moment');
     const tarajimCard = tarajim?.find(card => card.slot === i);
-    if (tarajimCard?.kind === 'tarajim' && shows('tarajim')) posts.push(<TarajimPost key={`tj${day}-${i}`} card={tarajimCard} />);
-    if (tarajimCard?.kind === 'tie' && shows('tie')) posts.push(<TiePost key={`tie${day}-${i}`} card={tarajimCard} />);
-    if (tarajimCard?.kind === 'life' && shows('life')) posts.push(<LifePost key={`life${day}-${i}`} card={tarajimCard} />);
+    if (tarajimCard?.kind === 'tarajim' && shows('tarajim')) put(<TarajimPost key={`tj${day}-${i}`} card={tarajimCard} />, 'tarajim');
+    if (tarajimCard?.kind === 'tie' && shows('tie')) put(<TiePost key={`tie${day}-${i}`} card={tarajimCard} />, 'tie');
+    if (tarajimCard?.kind === 'life' && shows('life')) put(<LifePost key={`life${day}-${i}`} card={tarajimCard} />, 'life');
     // Laqab on even batches, kunya on odd ones, so the two do not stand together; every batch when only one is shown.
     const nameKind = shows('laqab') && shows('kunya') ? (i % 2 ? 'kunya' : 'laqab') : shows('kunya') ? 'kunya' : 'laqab';
     const nameCard = names?.find(card => card.slot === i && card.kind === nameKind);
-    if (nameCard && shows(nameCard.kind)) posts.push(<NamePost key={`n${nameCard.kind}${day}-${i}`} card={nameCard} />);
+    if (nameCard && shows(nameCard.kind)) put(<NamePost key={`n${nameCard.kind}${day}-${i}`} card={nameCard} />, nameCard.kind);
   }
   return <section className={styles.feed} aria-label="للتأمل اليوم">
     {posts}

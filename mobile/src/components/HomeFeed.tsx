@@ -10,7 +10,7 @@ import { readGestures, type GestureAction } from '@shared/readerGestures';
 import { isMemorized, memorizedPrefer, memorizedQuestions, readMemorized, recallOfDay, subscribeMemorized, touchesMemorized, withMemorizedScope } from '@shared/memorized';
 import { FEED_QUIZ_NAMES, feedQuizSeed, OPENINGS, openingSurah, seededRandom, type FeedQuizKind } from '@shared/quiz/feedQuiz';
 import { answeredQuestion, dueSeeds, readMissed } from '@shared/quiz/missedQuestions';
-import { activeInterests, INTERESTS, interestById, interestOf, pickedInterests, surpriseMe, toggledInterest, type FeedCardKind } from '@shared/interests';
+import { activeInterests, INTERESTS, interestById, interestOf, pickedInterests, restoredInterest, surpriseMe, toggledInterest, type FeedCardKind } from '@shared/interests';
 import { bookmarkKind, cardMenuSaveId, cardOfBookmark, isCardBookmark } from '@shared/bookmarkKind';
 import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
@@ -1136,7 +1136,7 @@ function RemovedLine({ interest, onUndo, palette }: { interest: string; onUndo: 
     <Card palette={palette} dashed pad={[8, 12]}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
         <Text style={{ flex: 1, color: palette.ink, fontSize: 15, textAlign: 'right' }}>{`أُزيل «${name}» من اهتماماتك`}</Text>
-        <Button label="تراجع" variant="plain" onPress={() => { pickedInterests.write(toggledInterest(pickedInterests.read(), interest)); onUndo(); }} />
+        <Button label="تراجع" variant="plain" onPress={() => { pickedInterests.write(restoredInterest(pickedInterests.read(), interest)); onUndo(); }} />
       </View>
     </Card>
   );
@@ -1279,8 +1279,8 @@ export function Feed({ palette, nearEnd, screenBottom, only = null }: { palette:
       rendered.push(...(item !== undefined && !slot.quiz ? [slot.kind === 'pair' || slot.kind === 'tree' ? item : `${slot.kind}:${item}`] : []));
       const menu: CardMenu = {
         kind: slot.kind, item, interest: slot.interest, surprise: slot.surprise,
-        // Not on the only interest left (none picked means all) nor on one interest's own view.
-        notMine: only || (showing.size === 1 && showing.has(slot.interest)) ? undefined : () => {
+        // Not on the only interest left (none picked means all), on one interest's own view, nor on one already taken out.
+        notMine: only || !showing.has(slot.interest) || showing.size === 1 ? undefined : () => {
           setRemoved({ visit, keys: new Set([...removedKeys, key]) });
           pickedInterests.write(activeInterests(pickedInterests.read()).map(each => each.id).filter(id => id !== slot.interest));
         },

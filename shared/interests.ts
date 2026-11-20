@@ -75,6 +75,8 @@ export const surpriseMe = { read: surprise.read, subscribe: surprise.subscribe, 
 
 /** Picks `id` or puts it back, keeping the rest. */
 export const toggledInterest = (list: readonly string[], id: string) => (list.includes(id) ? list.filter(other => other !== id) : [...list, id]);
+/** The picks with `id` back in, after «ليس من اهتماماتي» took it out: undone twice, or once it was picked again, it stays in. */
+export const restoredInterest = (list: readonly string[], id: string) => (list.includes(id) ? [...list] : [...list, id]);
 
 /** The interests the feed brings: those picked, or all when none is. */
 export const activeInterests = (list: readonly string[], kinds: (interest: Interest) => boolean = () => true) => {

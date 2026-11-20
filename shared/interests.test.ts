@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it } from 'vitest';
 import { FEED_QUIZ_KINDS } from './quiz/feedQuiz';
-import { activeInterests, FEED_CARD_KINDS, INTERESTS, interestOf, pickedInterests, SECTIONS, surpriseMe, toggledInterest, UNPLACED_QUIZ_KINDS } from './interests';
+import { activeInterests, FEED_CARD_KINDS, INTERESTS, interestOf, pickedInterests, SECTIONS, restoredInterest, surpriseMe, toggledInterest, UNPLACED_QUIZ_KINDS } from './interests';
 
 describe('interests', () => {
   beforeEach(() => localStorage.clear());
@@ -30,6 +30,9 @@ describe('interests', () => {
     expect(pickedInterests.read()).toEqual(['tafsir', 'sira']);
     expect(toggledInterest(['tafsir', 'sira'], 'sira')).toEqual(['tafsir']);
     expect(toggledInterest(['tafsir'], 'irab')).toEqual(['tafsir', 'irab']);
+    // Undo after «ليس من اهتماماتي» puts the interest back, and a second undo (or one after picking it again) never takes it out.
+    expect(restoredInterest(['tafsir'], 'hadith')).toEqual(['tafsir', 'hadith']);
+    expect(restoredInterest(['tafsir', 'hadith'], 'hadith')).toEqual(['tafsir', 'hadith']);
     expect(activeInterests([]).length).toBe(INTERESTS.length);
     expect(activeInterests(['irab']).map(interest => interest.id)).toEqual(['irab']);
     // Picks with nothing of the kind asked fall back to all that have it.
