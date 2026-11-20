@@ -468,7 +468,7 @@
     {
       "id": "m_sp25",
       "parent": "apf",
-      "exact": "أَبِيْهِ",
+      "exact": "الوَلِيْدِ بنِ عُبَادَةَ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
@@ -619,6 +619,18 @@
       "basis": [
         {
           "span": "ip",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_sp25",
+      "mention": "m_sp25",
+      "agent": "al-walid-ibn-ubadah-ibn-al-samit",
+      "basis": [
+        {
+          "span": "so_n",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
