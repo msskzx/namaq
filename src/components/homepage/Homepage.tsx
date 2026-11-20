@@ -5,12 +5,13 @@ import type { HomepageData } from '@/lib/homepageData';
 import styles from './Homepage.module.css';
 import Tour from './Tour';
 import { useHomeCards } from './HomeCards';
-import { ContinueReading, Feed, Stories } from './HomeFeed';
+import { ContinueReading, Feed } from './HomeFeed';
+import HomeButtons from './HomeButtons';
 import { MemorizedPrompt } from './Memorized';
 import { InterestChips, InterestsWelcome, onlyOf, usePicked } from './Interests';
 
 /**
- * Home, as the app's (owner, 2026-11-13): reading and learning first, like a social app's home. Story circles, the page the
+ * Home, as the app's (owner, 2026-11-13): reading and learning first, like a social app's home. A few buttons (owner, 2026-11-18, in the story circles' place), the page the
  * mushaf was left on, then a feed that loads more as it nears its end (owner, 2026-11-14: no tools below; prayer times live on the
  * utilities page, saved cards behind their story circle). A reload (a phone browser's pull to refresh) starts a new visit, as every page load does (shared/feedSeen.ts).
  */
@@ -24,7 +25,7 @@ export default function Homepage({ data }: { data: HomepageData }) {
     {(data.tour || data.tourStory || data.tourRecite) && <Tour tour={data.tour} story={data.tourStory} recite={data.tourRecite} names={Object.fromEntries(names)} />}
 
     <InterestsWelcome tour={Boolean(data.tour || data.tourStory || data.tourRecite)} />
-    <Stories />
+    <HomeButtons />
     <InterestChips only={only} onOnly={setOnly} />
     {!only && <><ContinueReading /><MemorizedPrompt /></>}
     <Feed only={only} />

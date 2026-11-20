@@ -33,7 +33,6 @@ export type FortyPage = NonNullable<ReturnType<typeof fortyPage>>;
 const FEED_FORTY = FORTY.entries.filter(fromSahihayn);
 let passages: ReturnType<typeof rajabFeedPassages> | undefined;
 const rajabPassages = () => (passages ??= rajabFeedPassages(RAJAB, FORTY.entries));
-const turnOf = (day: number, at: number, count: number) => ((((day * 37 + at) % count) + count) % count);
 
 /**
  * The «الحديث» cards (the app's HadithPost, RajabPost and RecordedPost), taking turns batch by batch: one of the Forty in
@@ -49,9 +48,16 @@ export type HadithCard = { slot: number;
   | { kind: 'rajab'; passage: RajabParagraph[] }
   | { kind: 'recorded'; boxes: BookBox[] }
   | { kind: 'isnad'; record: { number: number; shamela: number; isnad: AppIsnad; saying: string }; size: AppHadith['size']; bukhari: FortyBooks['bukhari'] });
-const KINDS = ['hadith', 'rajab', 'recorded', 'isnad'] as const;
+type HadithKind = 'hadith' | 'rajab' | 'recorded' | 'isnad';
+
 /** The hadith with al-Bukhari's chain drawn, for «من الإسناد». */
 const FEED_CHAINS = FEED_FORTY.filter(entry => drawnBukhari(entry));
+
+/** Every item of a hadith card kind, in the list's order (the app's LIST_OF in mobile/src/components/HomeFeed.tsx). */
+export function hadithItems(kind: HadithKind): string[] {
+  if (kind === 'rajab') return rajabPassages().map(({ chapter, passage }) => rajabItem(chapter.n, chapter.paragraphs.indexOf(passage[0])));
+  return (kind === 'isnad' ? FEED_CHAINS : FEED_FORTY).map(entry => String(entry.n));
+}
 
 const books = () => ({ nawawi: FORTY.books.nawawi, ibnrajab: FORTY.books.ibnrajab });
 const short = ({ n, heading, companion, text, shamela, source }: FortyEntry) => ({ n, heading, companion, text, shamela, ...(source ? { source } : {}) });
@@ -69,33 +75,6 @@ function rajabCard(slot: number, { chapter, passage }: ReturnType<typeof rajabPa
     sources: [{ book: FORTY.books.ibnrajab.title, author: 'ابن رجب' }] } : null;
 }
 
-export function hadithCards(day: number, slots: number[]): HadithCard[] {
-  return slots.flatMap((slot): HadithCard[] => {
-    const turn = Math.floor(slot / KINDS.length);
-    const kind = KINDS[slot % KINDS.length];
-    if (kind === 'recorded') {
-      if (!FEED_FORTY.length) return [];
-      // Half the list on from the hadith card of its group, so the two never show the same hadith side by side.
-      return [recordedCard(slot, FEED_FORTY[turnOf(day, turn + Math.ceil(FEED_FORTY.length / 2), FEED_FORTY.length)])];
-    }
-    if (kind === 'isnad') {
-      if (!FEED_CHAINS.length) return [];
-      // A quarter of the list on, and past the group's hadith, Ibn Rajab and «من أخرجه» cards, so it never repeats one of them.
-      const all = rajabPassages();
-      const taken = [
-        ...(FEED_FORTY.length ? [FEED_FORTY[turnOf(day, turn, FEED_FORTY.length)].n, FEED_FORTY[turnOf(day, turn + Math.ceil(FEED_FORTY.length / 2), FEED_FORTY.length)].n] : []),
-        ...(all.length ? [all[turnOf(day, turn, all.length)].chapter.n] : []),
-      ];
-      const start = turnOf(day, turn + Math.ceil(FEED_CHAINS.length / 4), FEED_CHAINS.length);
-      const entry = Array.from({ length: FEED_CHAINS.length }, (_, i) => FEED_CHAINS[(start + i) % FEED_CHAINS.length]).find(each => !taken.includes(each.n)) ?? FEED_CHAINS[start];
-      return [isnadCard(slot, entry)];
-    }
-    if (kind === 'hadith') return FEED_FORTY.length ? [plainCard(slot, FEED_FORTY[turnOf(day, turn, FEED_FORTY.length)])] : [];
-    const all = rajabPassages();
-    const card = all.length ? rajabCard(slot, all[turnOf(day, turn, all.length)]) : null;
-    return card ? [card] : [];
-  });
-}
 
 /** A saved hadith card by its item (shared/feedItems.ts), as the feed drew it; null when the data no longer holds it. */
 export function hadithCardOf(kind: string, item: string): HadithCard | null {

@@ -1,8 +1,7 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { backToVisit, leftVisit, visitStart } from '@shared/feedSeen';
 import Homepage from './Homepage';
-import { Stories } from './HomeFeed';
 
 const { state } = vi.hoisted(() => ({ state: { language: 'ar' } }));
 vi.mock('@/components/language/LanguageContext', () => ({ useLanguage: () => state }));
@@ -23,7 +22,9 @@ const data = {
 };
 
 const side = (surah: number, number: number, words: string[]) => ({ surah, ayah: number, ayat: [{ number, words, marks: { 0: { kind: 'exact' as const } } }] });
-const pairs = [{ id: '2:35|7:19', sides: [side(2, 35, ['وقلنا', 'يا']), side(7, 19, ['ويا', 'آدم'])] }, { id: '2:48|2:123', sides: [side(2, 48, ['واتقوا', 'يوما']), side(3, 9, ['ربنا', 'إنك'])] }];
+const pairs = [{ id: '2:35|7:19', sides: [side(2, 35, ['وقلنا', 'يا']), side(7, 19, ['ويا', 'آدم'])] }, { id: '2:48|2:123', sides: [side(2, 48, ['واتقوا', 'يوما']), side(3, 9, ['ربنا', 'إنك'])] }]
+  // More than one visit shows, so a new visit has fresh ones to bring.
+  .concat(Array.from({ length: 10 }, (_, i) => ({ id: `4:${i + 1}|5:${i + 1}`, sides: [side(4, i + 1, ['زوج', `أول${i}`]), side(5, i + 1, ['زوج', `ثان${i}`])] })));
 const fetched: string[] = [];
 // The recall card's page (?ayah=): one made-up line holding the ayah before and the ayah, or its surah's title then the ayah.
 const ayahWordsOf: Record<string, string[]> = { '2:255': ['الله', 'لا', 'إله', 'إلا', 'هو'] };
@@ -41,7 +42,8 @@ const fetchMock = vi.fn(async (url: string) => {
   const body = query.has('page') ? { surah: 18, page: Number(query.get('page')), top: 17, data: { juz: 15, items: [{ surah: 18 }, { line: ['ٱلۡحَمۡدُ', 'لِلَّهِ', 1] }] } }
     : query.has('ayah') ? ayahPage(query.get('ayah')!)
     // No prophets cards and no question cards here: they have tests of their own in the browser (e2e/web/pages.spec.ts).
-    : query.has('s') ? []
+    : query.has('items') ? []
+    : query.has('card') ? {}
     : url.startsWith('/api/quiz') ? { questions: [] }
     : query.has('p') || query.has('t') ? { pairs: (query.get('p') ?? '').split(',').filter(Boolean).map(Number).map(at => pairs[at]).filter(Boolean).map(pair => ({ ...pair, sources: [] })), trees: [] }
     : { pairs: pairs.map(pair => pair.id), trees: [null, null], pairKeys: pairs.map(pair => pair.sides.map(side => `${side.surah}:${side.ayah}`)), treeKeys: [[], []] };
@@ -57,35 +59,26 @@ vi.stubGlobal('IntersectionObserver', class {
   disconnect() { if (this.seen) observed.delete(this.seen); }
 });
 
+// The look-alike pairs alone (mutashabih, no surprise card): the other interests' cards have tests of their own (src/lib/feedCard.test.ts).
+const onlyPairs = () => { localStorage.setItem('interests', JSON.stringify(['mutashabih'])); localStorage.setItem('interests-surprise', '0'); localStorage.setItem('interests-asked', '1'); };
+beforeEach(onlyPairs);
 afterEach(() => { cleanup(); localStorage.clear(); state.language = 'ar'; fetched.length = 0; });
 
 describe('home', () => {
   it('puts reading and then the feed, with no tools below', async () => {
     render(<Homepage data={data} />);
-    const stories = screen.getByRole('navigation', { name: 'اختصارات' });
+    const buttons = screen.getByRole('navigation', { name: 'اختصارات' });
     const reading = screen.getByRole('region', { name: 'ابدأ القراءة' });
     const feed = screen.getByRole('region', { name: 'للتأمل اليوم' });
-    for (const [a, b] of [[stories, reading], [reading, feed]]) expect(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(within(stories).getByRole('link', { name: 'الأنبياء' }).getAttribute('href')).toBe('/quran/prophets');
+    for (const [a, b] of [[buttons, reading], [reading, feed]]) expect(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    // The app's buttons in the story circles' place (owner, 2026-11-18), each opening its page.
+    expect(within(buttons).getAllByRole('link').map(link => [link.textContent, link.getAttribute('href')])).toEqual([
+      ['القبلة', '/utilities?view=qibla'], ['الأذكار', '/utilities?view=adhkar'], ['المكتبة', '/quran/books'], ['مشاهد', '/quran/lataif'], ['مدونتي', '/library?tab=saved']]);
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('نمق');
     for (const name of ['المحفوظات', 'اختبارات القرآن', 'ما نسيته']) expect(screen.queryByRole('region', { name })).toBeNull();
     expect(screen.queryByRole('link', { name: 'مواقيت الصلاة' })).toBeNull();
     await waitFor(() => expect(screen.getAllByRole('article').length).toBeGreaterThan(0));
     expect(screen.queryByRole('button', { name: 'المزيد للتأمل' })).toBeNull();
-  });
-
-  it('updates the daily juz after midnight while home stays open', () => {
-    vi.useFakeTimers();
-    vi.setSystemTime(new Date(2026, 10, 13, 23, 59, 45));
-    try {
-      render(<Stories />);
-      const before = screen.getByRole('link', { name: /^جزء اليوم:/ }).getAttribute('aria-label');
-      act(() => { vi.advanceTimersByTime(30_000); });
-      expect(screen.getByRole('link', { name: /^جزء اليوم:/ }).getAttribute('aria-label')).not.toBe(before);
-    } finally {
-      cleanup();
-      vi.useRealTimers();
-    }
   });
 
   it('continues reading on the page the mushaf was left on', async () => {
@@ -126,14 +119,16 @@ describe('home', () => {
     await waitFor(() => expect(screen.getAllByRole('article')[0].textContent).toContain('واتقوا يوما'));
     const feed = screen.getByRole('region', { name: 'للتأمل اليوم' });
     expect(feed.textContent).not.toContain('وقلنا يا');
+    const shown = () => within(feed).queryAllByText('آيتان متشابهتان').length;
+    const before = shown();
     act(() => observed.forEach(see => see()));
-    // Everything was seen: the feed starts again from the seen pair.
-    await waitFor(() => expect(feed.textContent).toContain('وقلنا يا'));
+    await waitFor(() => expect(shown()).toBeGreaterThan(before));
   });
 
   it('replaces seen posts after returning from a long time away', async () => {
     render(<Homepage data={data} />);
-    await waitFor(() => expect(screen.getAllByRole('article')[0].textContent).toContain('وقلنا يا'));
+    const firstPair = () => screen.getAllByRole('article').find(post => post.textContent?.includes('افتحها في المقارنة') || /يا|يوما|زوج/.test(post.textContent ?? ''))?.textContent;
+    await waitFor(() => expect(firstPair()).toContain('وقلنا يا'));
     const start = visitStart();
     const clock = vi.spyOn(Date, 'now');
     try {
@@ -143,7 +138,7 @@ describe('home', () => {
       clock.mockReturnValue(start + 31 * 60_000);
       vi.spyOn(document, 'hidden', 'get').mockReturnValue(false);
       fireEvent(document, new Event('visibilitychange'));
-      await waitFor(() => expect(screen.getAllByRole('article')[0].textContent).toContain('واتقوا يوما'));
+      await waitFor(() => expect(firstPair()).toContain('زوج'));
     } finally {
       cleanup();
       vi.restoreAllMocks();
@@ -221,18 +216,8 @@ describe('home', () => {
   it('puts first a pair touching what is memorized, while that setting is on', async () => {
     localStorage.setItem('memorized', JSON.stringify({ unit: 'surah', picked: [3] }));
     render(<Homepage data={data} />);
-    await waitFor(() => expect(screen.getAllByRole('article')[0].textContent).toContain('واتقوا يوما'));
-  });
-
-  it('lights a story ring while it holds something new, until it is opened', async () => {
-    localStorage.setItem('ayah-forgot', JSON.stringify({ '2:255': { forgot: 1, at: 5 } }));
-    quranContexts.mockResolvedValue([]);
-    render(<Homepage data={data} />);
-    const story = screen.getByRole('link', { name: 'ما نسيته' });
-    await waitFor(() => expect(story.querySelector('[data-lit]')).toBeTruthy());
-    expect(screen.getByRole('link', { name: 'المحفوظات' }).querySelector('[data-lit]')).toBeNull();
-    fireEvent.click(story);
-    await waitFor(() => expect(story.querySelector('[data-lit]')).toBeNull());
+    // After the recall card from what is memorized.
+    await waitFor(() => expect(screen.getAllByRole('article').find(post => /وقلنا يا|واتقوا يوما/.test(post.textContent ?? ''))?.textContent).toContain('واتقوا يوما'));
   });
 
 });

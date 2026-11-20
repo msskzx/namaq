@@ -17,7 +17,7 @@ import { buildStory, storyMap, type EventView, type StoryMap } from '@shared/qur
 import { STORIES } from '@shared/quran/prophets/stories';
 import verdictData from '@shared/quran/prophets/verdicts.json';
 import { keptViews, type PlaceVerdicts } from '@shared/quran/prophets/review';
-import { hasStoryCard, storyGroupOfDay } from '@shared/quran/prophets/storyGroup';
+import { STORY_GROUPS } from '@shared/quran/prophets/storyGroup';
 import { withUnappliedStoryReviews } from '@/lib/quran/curation/storyReviewLog';
 import momentsData from '@shared/data/battles/moments.json';
 import type { AppMoment, AppMomentBattle } from '@shared/battles/battle';
@@ -89,13 +89,6 @@ export async function ayahPages(key: string) {
 /** The prophets card's story, as the prophets page shows it to readers (kept places only), cut to what its map needs. */
 export type StoryCard = { slot: number; /** The card's lasting id (shared/feedItems.ts storyItem). */ item: string; slug: string; title: string; phase: number; phases: readonly string[]; map: StoryMap; events: EventView[]; story: number[] };
 
-export function storyCards(day: number, slots: number[]): StoryCard[] {
-  return slots.filter(hasStoryCard).flatMap(slot => {
-    const { slug, phase } = storyGroupOfDay(day, slot);
-    const card = storyCard(slot, slug, phase);
-    return card ? [card] : [];
-  });
-}
 function storyCard(slot: number, slug: string, phase: number): StoryCard | null {
   const prophet = findProphet(slug);
   if (!prophet) return null;
@@ -124,24 +117,15 @@ export type SiraCard = { slot: number; /** The card's lasting id: the story's sl
 
 const SIRA_FEED = SIRA_STORIES.filter(story => story.reports[0]);
 const MOMENT_FEED = (momentsData as AppMomentBattle[]).flatMap(battle => battle.moments.map((moment, i) => ({ battle, moment, n: i + 1 })));
-const turnOf = (day: number, at: number, count: number) => ((((day * 37 + at) % count) + count) % count);
 
-export async function siraCards(day: number, slots: number[]): Promise<SiraCard[]> {
-  const cards = await Promise.all(slots.map(async (slot): Promise<SiraCard | null> => {
-    // A story in even batches, a battle's moment in odd ones, each list in the day's turn; a list with nothing in it brings no card.
-    const turn = Math.floor(slot / 2);
-    if (slot % 2 === 0) {
-      if (!SIRA_FEED.length) return null;
-      const story = SIRA_FEED[turnOf(day, turn, SIRA_FEED.length)];
-      return { slot, kind: 'sira', item: story.slug, slug: story.slug, name: story.name, report: story.reports[0], ayat: story.ayat, pages: await storyAyat(story) };
-    }
-    if (!MOMENT_FEED.length) return null;
-    return momentCard(slot, MOMENT_FEED[turnOf(day, turn, MOMENT_FEED.length)]);
-  }));
-  return cards.filter((card): card is SiraCard => card !== null);
-}
 const momentCard = (slot: number, { battle, moment, n }: (typeof MOMENT_FEED)[number]): SiraCard =>
   ({ slot, kind: 'moment', item: momentItem(battle.slug, n), battle: { slug: battle.slug, name: battle.name, kind: battle.kind, year: battle.year }, moment, n });
+
+/** Every item of the prophets, sira and battle-moment cards, in the list's order (the app's LIST_OF). */
+export function storyItems(kind: 'prophets' | 'sira' | 'moment'): string[] {
+  if (kind === 'prophets') return STORY_GROUPS.map(group => storyItem(group.slug, group.phase));
+  return kind === 'sira' ? SIRA_FEED.map(story => story.slug) : MOMENT_FEED.map(({ battle, n }) => momentItem(battle.slug, n));
+}
 
 /** A saved item drawn as its own card in the feed: the tree card's tree or the pair card's pair; a saved ayah needs nothing here. */
 export type SavedContent = { pair?: FeedPair; tree?: FeedTree };

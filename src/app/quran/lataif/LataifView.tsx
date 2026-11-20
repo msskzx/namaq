@@ -94,17 +94,24 @@ function Dialog({ turns }: { turns: TurnView[] }) {
   );
 }
 
-function ExampleCard({ view }: { view: ExampleView }) {
-  const title = `${view.name} ${rangeLabel(view)}`;
-  return (
-    <Card as="article" id={view.key} data-share-card aria-label={title} className="flex scroll-mt-20 flex-col gap-2.5 px-4 pt-3.5 pb-1.5">
-      <h3 className="text-base text-[var(--home-muted)]">{title}</h3>
+/** An example's picture: the voices' strip over the ayat, the two-word tree, or the dialog (the page's card and the feed's). */
+export function ExampleScene({ view }: { view: ExampleView }) {
+  return <>
       {view.kind === 'strip' && <>
         <Strip steps={view.steps} />
         <AyahFlow className="text-[var(--home-ink)]"><Words lines={view.lines} /></AyahFlow>
       </>}
       {view.kind === 'tree' && <Tree trunk={view.trunk} leaves={view.leaves} />}
       {view.kind === 'dialog' && <Dialog turns={view.turns} />}
+  </>;
+}
+
+function ExampleCard({ view }: { view: ExampleView }) {
+  const title = `${view.name} ${rangeLabel(view)}`;
+  return (
+    <Card as="article" id={view.key} data-share-card aria-label={title} className="flex scroll-mt-20 flex-col gap-2.5 px-4 pt-3.5 pb-1.5">
+      <h3 className="text-base text-[var(--home-muted)]">{title}</h3>
+      <ExampleScene view={view} />
       <div data-share-skip className="flex gap-1">
         <Link href={`/quran/read/ayah/${view.surah}/${view.from}`} aria-label={`افتح ${title} في المصحف`} title="افتح في المصحف" className={ICON}><BookOpen size={20} strokeWidth={1.6} aria-hidden /></Link>
         <ShareImageButton size="icon" iconSize={20} href={`/quran/lataif#${view.key}`} />

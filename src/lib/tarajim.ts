@@ -180,7 +180,6 @@ export type TarajimCard = { slot: number; /** The card's lasting id, as the app'
 let virtues: ReturnType<typeof allVirtues<AppPerson>> | undefined;
 let pairs: ReturnType<typeof linkedPairs> | undefined;
 let lives: AppPerson[] | undefined;
-const turnOf = (day: number, at: number, count: number) => ((((day * 41 + at) % count) + count) % count);
 
 const lists = () => {
   virtues ??= allVirtues(PEOPLE);
@@ -208,14 +207,14 @@ function tieCard(slot: number, pair: NonNullable<typeof pairs>[number]): Tarajim
   };
 }
 
-export function tarajimCards(day: number, slots: number[]): TarajimCard[] {
+
+/** Every item of a person card kind, in the list's order (the app's LIST_OF). */
+export function tarajimItems(kind: 'tarajim' | 'tie' | 'life' | 'laqab' | 'kunya'): string[] {
+  if (kind === 'laqab' || kind === 'kunya') return names()[kind].map(each => nameItem(each.person.slug, each.name));
   const { virtues: all, pairs: ties, lives: lived } = lists();
-  return slots.flatMap((slot): TarajimCard[] => {
-    const turn = Math.floor(slot / 3);
-    if (slot % 3 === 2) return lived.length ? [lifeCard(slot, lived[turnOf(day, turn, lived.length)])] : [];
-    if (slot % 3 === 0) return all.length ? [virtueCard(slot, all[turnOf(day, turn, all.length)])] : [];
-    return ties.length ? [tieCard(slot, ties[turnOf(day, turn, ties.length)])] : [];
-  });
+  if (kind === 'life') return lived.map(person => person.slug);
+  if (kind === 'tie') return ties.map(pair => tieItem(pair.a, pair.b));
+  return all.map(each => virtueItem(each.person.slug, each.index));
 }
 
 /** A saved «من التراجم», «صلة» or «من حياته» card by its item (shared/feedItems.ts); null when the data no longer holds it. */
@@ -282,12 +281,6 @@ function nameCard(slot: number, kind: 'laqab' | 'kunya', { person, name, fact }:
   return { slot, kind, item: nameItem(person.slug, name), person: head(person), name, ...quote, sources: pageSources(fact.refs) };
 }
 const names = () => (nameLists ??= { laqab: laqabFacts(PEOPLE), kunya: kunyaFacts(PEOPLE) });
-export function nameCards(day: number, slots: number[]): NameCard[] {
-  return slots.flatMap(slot => (['laqab', 'kunya'] as const).flatMap((kind): NameCard[] => {
-    const list = names()[kind];
-    return list.length ? [nameCard(slot, kind, list[turnOf(day * 2 + (kind === 'kunya' ? 1 : 0), slot, list.length)])] : [];
-  }));
-}
 /** A saved laqab or kunya card by its item; null when the data no longer holds it. */
 export function nameCardOf(kind: 'laqab' | 'kunya', item: string): NameCard | null {
   const found = names()[kind].find(each => nameItem(each.person.slug, each.name) === item);

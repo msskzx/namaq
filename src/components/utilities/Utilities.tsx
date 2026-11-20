@@ -64,6 +64,9 @@ export function useNow() {
 }
 
 const VIEWS: View[] = ['times', 'qibla', 'calendar', 'adhkar'];
+
+/** A day's prayer times at `place` by the reader's settings (the times page's and the home prayer card's). */
+export const prayerTimes = (place: Place, now: Date, settings: PrayerSettings) => prayerDay(lib, place, now, settings);
 const noop = () => () => {};
 
 /**

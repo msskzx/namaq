@@ -140,3 +140,15 @@ export function feedRound(interests: readonly Interest[], round: number, day: nu
 
 /** Where a kind's list starts on a day, so each day begins elsewhere; the feed walks on from there. */
 export const dayStart = (count: number, day: number, salt: number) => (count ? spin(day * 7 + salt * 13, count) : 0);
+
+/** The content cards drawn from a list of items (pairs and trees have their own picks), in the order that salts each one's start. */
+export const LIST_KINDS = ['note-tafsir', 'note-qiraat', 'note-irab', 'note-balagha', 'term', 'scene', 'hadith', 'bukhari', 'muslim', 'rajab',
+  'recorded', 'isnad', 'prophets', 'sira', 'moment', 'tarajim', 'tie', 'laqab', 'kunya', 'life'] as const satisfies readonly FeedCardKind[];
+export type ListKind = (typeof LIST_KINDS)[number];
+
+/**
+ * Where a kind's walk through its list starts: just after `after` when a story opened from the feed continues (owner,
+ * 2026-11-19: the next phase, moment or story), else where the day begins.
+ */
+export const listStart = (list: readonly string[], kind: ListKind, day: number, after?: string) =>
+  after !== undefined && list.includes(after) ? list.indexOf(after) + 1 : dayStart(list.length, day, LIST_KINDS.indexOf(kind));
