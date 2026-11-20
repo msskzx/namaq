@@ -92,7 +92,7 @@ describe('home', () => {
     localStorage.setItem('quran-reader-page', '294');
     render(<Homepage data={data} />);
     const reading = await screen.findByRole('region', { name: 'تابع القراءة' });
-    expect(within(reading).getByRole('link', { name: 'اقرأ' }).getAttribute('href')).toBe('/quran/read/294');
+    expect(within(reading).getByRole('link', { name: 'افتح المصحف حيث توقفت' }).getAttribute('href')).toBe('/quran/read/294');
     await waitFor(() => expect(reading.textContent).toContain('ٱلۡحَمۡدُ'));
     expect(fetched).toContain('/api/home/feed?page=294');
   });
@@ -102,8 +102,7 @@ describe('home', () => {
     localStorage.setItem('reading-fasila', JSON.stringify({ quran: { key: '2:6', page: 3 } }));
     render(<Homepage data={data} />);
     const reading = await screen.findByRole('region', { name: 'تابع القراءة' });
-    await waitFor(() => expect(within(reading).getByRole('link', { name: 'اقرأ' }).getAttribute('href')).toBe('/quran/read/3'));
-    expect(within(reading).getByRole('link', { name: 'افتح المصحف عند فاصلتك' })).toBeTruthy();
+    await waitFor(() => expect(within(reading).getByRole('link', { name: 'افتح المصحف عند فاصلتك' }).getAttribute('href')).toBe('/quran/read/3'));
     await waitFor(() => expect(fetched).toContain('/api/home/feed?page=3'));
     localStorage.removeItem('reading-fasila');
   });

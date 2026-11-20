@@ -132,7 +132,7 @@ function ComparePicker({ links, label, ar }: { links: CompareLink[]; label: stri
 export function CardActions({ id, text, href, aliases = [], details, compareLinks = [], toggles, lead, aside }: { id: string; text: string; href?: string; aliases?: string[]; details?: React.ReactNode; compareLinks?: CompareLink[]; toggles?: React.ReactNode;
   /** In the home feed: the button that opens the tree on the branches page, first, and save after the tools, before share (owner, 2026-11-20). */
   lead?: React.ReactNode;
-  /** In the home feed: «ليس من اهتماماتي», alone at the row's far end. */
+  /** In the home feed: its «⋯» (common/MoreMenu), alone at the row's far end. */
   aside?: React.ReactNode }) {
   const ar = useLanguage().language === 'ar';
   const saved = useBookmarks().some(item => item.id === id || aliases.includes(item.id));

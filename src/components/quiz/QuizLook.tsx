@@ -227,7 +227,8 @@ export function LookView({ look, shown }: { look: QuizLook; shown: boolean }) {
  */
 export function LookButton({ look, onLook, costs = false, top }: { look: QuizLook; onLook?: () => void; costs?: boolean; top?: ReactNode }) {
   const [open, setOpen] = useState(false);
-  // In a feed card the button joins the row of icons under the card (owner: no buttons in a card).
+  // In a feed card the button joins the row of icons under the card (owner: no buttons in a card), framed with its words so it
+  // does not read as a search (owner, 2026-11-20).
   const inRow = useCardRow();
   const sheet = <Sheet open={open} onClose={() => setOpen(false)} label="ابحث عن الجواب" className="overflow-y-auto">
       {open && <>
@@ -240,7 +241,7 @@ export function LookButton({ look, onLook, costs = false, top }: { look: QuizLoo
     </Sheet>;
   const openLook = () => { setOpen(true); onLook?.(); };
   if (inRow) return <>
-    <UnderCard><Button size="lg" variant="muted" aria-label="ابحث عن الجواب" title="ابحث عن الجواب" onClick={openLook}><Search aria-hidden /></Button></UnderCard>
+    <UnderCard><Button size="pill" onClick={openLook}><Search aria-hidden />ابحث عن الجواب</Button></UnderCard>
     {sheet}
   </>;
   return <div className="mt-3 flex flex-col items-start gap-1">

@@ -47,8 +47,10 @@ test.describe('with balagha and the sira picked', () => {
     const bookmarks = await stored(page, 'bookmarks');
     expect(bookmarks).toContain('card:');
     await page.getByRole('radio', { name: 'لك', exact: true }).click();
-    const notMine = page.getByRole('button', { name: /ليس من اهتماماتي$/ }).first();
-    await notMine.scrollIntoViewIfNeeded();
+    const more = page.getByRole('button', { name: 'خيارات البطاقة' }).first();
+    await more.scrollIntoViewIfNeeded();
+    await more.click();
+    const notMine = page.getByRole('button', { name: /ليس من اهتماماتي$/ });
     const name = (await notMine.getAttribute('aria-label'))!.match(/«(.+)»/)![1];
     await notMine.click();
     await expect(page.getByText(`أُزيل «${name}» من اهتماماتك`).first()).toBeVisible();

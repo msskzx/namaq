@@ -331,10 +331,11 @@ const anchorOf = (card: PairCard) => compareAnchor(card.sides[0], card.sides[1])
 
 /**
  * One compare card with its buttons. `page` is set where it shows outside its compare page (the home feed): the page's
- * address, for an open button and for the shared link.
+ * address, for an open button and for the shared link; there the sides' own buttons (read in the mushaf, the tree) move
+ * from their heads to the row under the card (owner, 2026-11-20: no button in a card), the tree's once.
  */
 export function Card({ card, names, ar, savedIds, review, view: preferred = 'cards', onPageVideo, page, aside }: { card: PairCard; names: Names; ar: boolean; savedIds: string[]; review?: { a: number; b: number }; view?: BranchView; /** The whole page's video, offered in the share dialog beside the card's own. */ onPageVideo?: () => void; page?: string;
-  /** The home feed's «ليس من اهتماماتي», alone at the row's far end. */ aside?: React.ReactNode }) {
+  /** The home feed's «⋯» (common/MoreMenu), alone at the row's far end. */ aside?: React.ReactNode }) {
   const [tapped, setLit] = useState<string | null>(null);
   const read = useReadAlong(card);
   const step = read.step;
@@ -438,15 +439,20 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'car
         </div> : <div onClick={event => pick(event.target)}>
           <PageSpread compact stackOnMobile ruled={!!shownSides[0].rows} pages={shownSides.map((side, i) => withNeighbours(sidePage(side, names, ar, lit, i === 0 && card.group ? (
             <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={16} aria-hidden /></Link>
-          ) : undefined, card.many?.side === i ? partners(side) : undefined, step?.side === i ? step : undefined, written), i)).map(foldPage)} />
+          ) : undefined, card.many?.side === i ? partners(side) : undefined, step?.side === i ? step : undefined, written), i)).map(foldPage).map(shown => (page ? { ...shown, action: undefined } : shown))} />
         </div>}
       </DoubleTapSave>
       </div>
-      {read.studio ? <ReadStudio read={read} ar={ar} card={card} names={names} /> : <div className="flex justify-start">
+      {read.studio ? <ReadStudio read={read} ar={ar} card={card} names={names} /> : <div className="flex flex-wrap justify-start">
         {review && <CardReview a={review.a} b={review.b} card={card} />}
         {/* Shown outside the compare page (the home feed), the button that opens it there leads the row (owner, 2026-11-20). */}
         {page && <Button size="icon" variant="muted" href={`${page}#${anchor}`} aria-label={ar ? 'افتحها في المقارنة' : 'Open in compare'} title={ar ? 'افتحها في المقارنة' : 'Open in compare'}><ArrowLeftRight size={18} aria-hidden /></Button>}
-        {tree && card.group && <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={18} aria-hidden /></Link>}
+        {page && shownSides.map((side, i) => {
+          const name = `${ar ? surahName(side.surah) : names[side.surah]?.en ?? String(side.surah)} ${ar ? num(side.ayah) : side.ayah}`;
+          const label = ar ? `اقرأ ${name} في المصحف` : `Read ${name} in the mushaf`;
+          return <Button key={i} size="icon" variant="muted" href={`/quran/read/ayah/${side.surah}/${side.ayah}`} aria-label={label} title={label}><BookOpen size={18} aria-hidden /></Button>;
+        })}
+        {(tree || page) && card.group && <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={18} aria-hidden /></Link>}
         {!matrixOnly && <Button size="icon" variant="muted" onClick={() => setView(view === 'tree' ? 'cards' : 'tree')} aria-label={viewLabel} title={viewLabel}>
           {view === 'tree' ? <GalleryHorizontal size={18} aria-hidden /> : <TreeIcon size={18} aria-hidden />}
         </Button>}
