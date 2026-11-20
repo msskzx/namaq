@@ -34,8 +34,8 @@ export default function RecitePill({ recite, writing, onWriting, onClose, onRest
     // Floating, the bar hugs its buttons, each a full 44-point box side by side, so no touch between them is lost.
     <GlassBar label="أدوات التسميع" style={onFold ? { paddingHorizontal: 4 } : style} small={small}>
       {lead}
-      <IconButton Icon={Undo2} label="ارجع خطوة" size={size} tone="ink" disabled={recite.atStart} onPress={recite.back} />
       {onRestart && <IconButton Icon={RotateCcw} label="أخفِ الصفحة وسمّع من أولها" size={size} tone="ink" onPress={onRestart} />}
+      <IconButton Icon={Undo2} label="ارجع خطوة" size={size} tone="ink" disabled={recite.atStart} onPress={recite.back} />
       <IconButton Icon={ChevronLeft} label="أظهر الكلمة التالية" size={size} tone="ink" disabled={recite.done} onPress={recite.nextWord} />
       {/* In a party the next ayah waits for everyone, and the pen is on for all (owner, 2026-11-17). */}
       {!recite.party && <IconButton Icon={next.Icon} label={next.label} size={size} tone="ink" disabled={ended && !more} onPress={recite.nextAyah} />}

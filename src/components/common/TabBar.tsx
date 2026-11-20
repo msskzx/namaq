@@ -5,14 +5,13 @@ import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { PenSetting } from '@/components/recite/PenSetting';
-import { BookOpen, CircleHelp, Compass, Library, Feather, House, Play, ScrollText, Search, Settings, ShieldCheck, Users, type LucideIcon } from 'lucide-react';
+import { BookOpen, BookOpenText, CircleHelp, Compass, Library, Feather, House, Play, ScrollText, Search, Settings, ShieldCheck, Users, type LucideIcon } from 'lucide-react';
 import { usePageHelp } from './SettingsHelp';
 import ThemeTiles from '@/components/theme/ThemeTiles';
 import { useLanguage } from '../language/LanguageContext';
 import { NAV_SECTIONS, activeSection } from '@/lib/navigation';
 import Emblem from './Emblem';
 import { RailSlotContext } from './NavBar';
-import TreeIcon from './TreeIcon';
 import BranchAroundSetting from '@/components/quran/BranchAroundSetting';
 import BranchConnectorSetting from '@/components/quran/BranchConnectorSetting';
 import MarkModeSetting from '@/components/quran/MarkModeSetting';
@@ -25,8 +24,9 @@ import PageHint, { resetHints } from './PageHint';
 import styles from './NavBar.module.css';
 import Segmented from './Segmented';
 
-export const SECTION_ICONS: Record<string, LucideIcon | typeof TreeIcon> = {
-  '/quran': TreeIcon,
+export const SECTION_ICONS: Record<string, LucideIcon> = {
+  // The mushaf, the tab's first tool, not the trees (owner, 2026-11-20).
+  '/quran': BookOpenText,
   '/hadith': ScrollText,
   '/': House,
   '/biographies': Users,
