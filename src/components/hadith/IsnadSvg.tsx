@@ -27,15 +27,11 @@ export default function IsnadSvg({
   ar?: boolean;
 }) {
   const { nodes, edges, rows, width, height } = layoutIsnad(graph);
+  // No arrowheads (owner, 2026-11-20): an arrow could read as the chain going the other way; the order down the page and the word on each line say who heard from whom.
   const at = new Map(nodes.map((n) => [n.id, n]));
   return (
     <div className="overflow-x-auto">
       <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className="mx-auto" style={{ direction: 'ltr', maxWidth: '100%', minWidth: Math.min(width, 640), height: 'auto' }} aria-hidden="true">
-        <defs>
-          <marker id="isnad-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-            <path d="M0 0L10 5L0 10z" className="fill-gray-500 dark:fill-gray-400" />
-          </marker>
-        </defs>
         {edges.map((edge, i) => {
           const from = at.get(edge.from)!;
           const to = at.get(edge.to)!;
@@ -52,7 +48,6 @@ export default function IsnadSvg({
                 y1={y1}
                 x2={x2}
                 y2={y2}
-                markerEnd="url(#isnad-arrow)"
                 className={level ? 'stroke-amber-500' : 'stroke-gray-500 dark:stroke-gray-400'}
               />
               {edge.label && (

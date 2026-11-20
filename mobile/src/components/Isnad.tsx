@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { View } from 'react-native';
-import Svg, { Line, Path } from 'react-native-svg';
+import Svg, { Line } from 'react-native-svg';
 import type { AppIsnad } from '@shared/hadith';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
@@ -41,11 +41,7 @@ export default function Isnad({ isnad, palette }: { isnad: AppIsnad; palette: Pa
     const y2 = (level ? to.y + NODE_H / 2 : to.y + NODE_H) * k;
     return { i, edge, level, x1, y1, x2, y2 };
   });
-  const arrow = (x1: number, y1: number, x2: number, y2: number) => {
-    const angle = Math.atan2(y2 - y1, x2 - x1);
-    const side = (turn: number) => `${x2 - 7 * Math.cos(angle + turn)} ${y2 - 7 * Math.sin(angle + turn)}`;
-    return `M${x2} ${y2}L${side(0.45)}L${side(-0.45)}Z`;
-  };
+  // No arrowheads (owner, 2026-11-20): an arrow could read as the chain going the other way; the order down the page and the word on each line say who heard from whom.
   const tabaqat = isnad.rows.filter(row => row.kind === 'tabaqa' && row.name);
   return (
     <View style={{ gap: 10 }} onLayout={event => setRoom(event.nativeEvent.layout.width)}>
@@ -53,10 +49,7 @@ export default function Isnad({ isnad, palette }: { isnad: AppIsnad; palette: Pa
         <Svg width={width * k} height={height * k} style={{ position: 'absolute' }}>
           {lines.map(({ i, level, x1, y1, x2, y2 }) => {
             const colour = level ? palette.amber : palette.rule;
-            return [
-              <Line key={`l${i}`} x1={x1} y1={y1} x2={x2} y2={y2} stroke={colour} strokeWidth={1.25} />,
-              <Path key={`a${i}`} d={arrow(x1, y1, x2, y2)} fill={colour} />,
-            ];
+            return <Line key={`l${i}`} x1={x1} y1={y1} x2={x2} y2={y2} stroke={colour} strokeWidth={1.25} />;
           })}
         </Svg>
         {/* The word on a line; between two narrators of one row the gap is too narrow, so it stands over their row. */}
