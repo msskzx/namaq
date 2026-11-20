@@ -424,6 +424,7 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'car
   // A surah-order book's card: its heading, its quote as written under the ayat, its book on the source line (owner, 2026-11-20).
   const link = card.book ? tanasubLink(card.book) : undefined;
   const sources = link ? sourcesOf([tanasubSource(link)]) : [];
+  const quote = link && <p data-book-quote className={`pt-2 text-lg leading-loose text-justify ${tree ? 'px-3' : 'mt-2 border-t border-[var(--home-rule)]'}`}>«{link.text}»</p>;
   return (
     <li id={anchor} data-share-card className={`scroll-mt-20 ${card.verdict?.keep === false && !card.verdict.ask ? 'opacity-60' : ''}`}>
       {link && <p className="px-1.5 pb-1 text-sm text-[var(--home-amber)]">{TANASUB_KIND}</p>}
@@ -445,10 +446,13 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'car
         </div> : <div onClick={event => pick(event.target)}>
           <PageSpread compact stackOnMobile ruled={!!shownSides[0].rows} pages={shownSides.map((side, i) => withNeighbours(sidePage(side, names, ar, lit, i === 0 && card.group ? (
             <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={16} aria-hidden /></Link>
-          ) : undefined, card.many?.side === i ? partners(side) : undefined, step?.side === i ? step : undefined, written), i)).map(foldPage)} />
+          ) : undefined, card.many?.side === i ? partners(side) : undefined, step?.side === i ? step : undefined, written), i)).map(foldPage)
+            // A book card's quote closes the card, under the second side, as in the app.
+            .map((page, i) => (quote && i === 1 ? { ...page, footer: <>{page.footer}{quote}</> } : page))} />
         </div>}
       </DoubleTapSave>
-      {link && <p data-book-quote className="px-3 pt-2 text-lg leading-loose text-justify">«{link.text}»</p>}
+      {/* A tree has no card frame, so the quote follows it. */}
+      {tree && quote}
       </div>
       {read.studio ? <ReadStudio read={read} ar={ar} card={card} names={names} /> : <div className="flex justify-start">
         {review && <CardReview a={review.a} b={review.b} card={card} />}
