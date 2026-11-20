@@ -138,19 +138,25 @@ test.describe('a new user', () => {
     await expect(page).toHaveURL(/\/read/);
   });
 
-  test('a scene from «مشاهد» and a few books with their authors come up in the feed', async ({ page }) => {
-    await open(page, '/');
-    await page.mouse.move(380, 500);
-    const scene = page.getByRole('button', { name: 'افتح المشاهد' }).first();
-    const books = page.getByRole('button', { name: 'افتح المكتبة' }).first();
-    await expect(async () => {
-      await page.mouse.wheel(0, 3000);
-      await expect(scene).toBeAttached({ timeout: 1000 });
-      await expect(books).toBeAttached({ timeout: 1000 });
-    }).toPass({ timeout: 30_000 });
-    await expect(page.getByText('السعدي (ت ١٣٧٦هـ)').first()).toBeAttached();
-    await page.getByRole('link', { name: 'تيسير الكريم الرحمن' }).first().click();
-    await expect(page).toHaveURL(/\/book/);
+  // Scenes are one of balagha's cards; with every interest on, the feed holds so many kinds that one may come only after
+  // many screens, so the user here picks balagha alone. The books card stays outside the interests' rounds.
+  test.describe('with balagha picked', () => {
+    test.use({ seed: { interests: '["balagha"]', 'interests-surprise': '0' } });
+
+    test('a scene from «مشاهد» and a few books with their authors come up in the feed', async ({ page }) => {
+      await open(page, '/');
+      await page.mouse.move(380, 500);
+      const scene = page.getByRole('button', { name: 'افتح المشاهد' }).first();
+      const books = page.getByRole('button', { name: 'افتح المكتبة' }).first();
+      await expect(async () => {
+        await page.mouse.wheel(0, 3000);
+        await expect(scene).toBeAttached({ timeout: 1000 });
+        await expect(books).toBeAttached({ timeout: 1000 });
+      }).toPass({ timeout: 30_000 });
+      await expect(page.getByText('السعدي (ت ١٣٧٦هـ)').first()).toBeAttached();
+      await page.getByRole('link', { name: 'تيسير الكريم الرحمن' }).first().click();
+      await expect(page).toHaveURL(/\/book/);
+    });
   });
 
   test.describe('with the ayah books picked', () => {
