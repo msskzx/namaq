@@ -101,8 +101,8 @@ checked by `npm run adhkar:check` against both books.
 
 Left out, each weak or *gharib* with a weak narrator in Ibn Hajar's or al-Nawawi's words: 220, 222, 223, 224, 226,
 227, 228, 229, 231, 233, 235, 236, 237 (only one narrator lifts it to the Prophet ﷺ; the others stop at Abu
-al-Darda'), 238, 239. Report 234 is not a dhikr to say. Report 209 (travel before dawn) waits for the travel batch and
-218 (at bedtime) for the sleep batch. Where al-Nawawi gives only the start of the other time's wording («أصبحنا وأصبح
+al-Darda'), 238, 239. Report 234 is not a dhikr to say. Report 209 (travel before dawn) waits for the travel batch; 218
+(at bedtime) came in with the sleep batch as report 261. Where al-Nawawi gives only the start of the other time's wording («أصبحنا وأصبح
 الملك لله ...») or says «مثل ذلك», only the time with full printed words is shown, as with report 208.
 
 Two judgments al-Nawawi quotes are not shown because Ibn Hajar answers them on the cited pages: al-Tirmidhi's «حسن
@@ -120,6 +120,41 @@ another hadith of the book, not this one, and say so by their citation: 214's «
 221's «أعُوذَ بِكَ مِنْ عَذَابِ» as «أعُوذُ» in report 174, p. 68. The second reviewer flagged these two as by analogy.
 
 The website has no adhkar page, so this batch changes the app only; the website's search leaves the adhkar out as before.
+
+## Batch 2: sleep (2026-11-19)
+
+Every report of «باب ما يقول إذا أراد النوم واضطجع على فراشه» (251–282, pp. 89–95) was read. Already in: 251, 253,
+257, 262 (and 212's «وإذا أخذت مضجعك»). Added, ten:
+
+| Item | Report | Named judgment |
+| --- | --- | --- |
+| `sleep-three-surahs` | 255 | al-Bukhari, in Ibn Hajar's words, 3:40 (`in-sahih`): «أخرجه البخاري وأبو داود والترمذي والنسائي»; counter 3 («يفعل ذلك ثلاثَ مرّاتٍ»), Madina page 604 |
+| `sleep-baqarah-end` | 256 | the Sahihayn (`in-sahih`); al-Baqara 285–286 |
+| `sleep-kursi` | 258 | Ibn Hajar, 3:47, sahih; al-Baqara 255 |
+| `sleep-punishment` | 259 | Ibn Hajar, 3:49, hasan, on Hafsa's route with «ثلاث مرات»; counter 3 |
+| `sleep-lord-of-heavens` | 260 | Ibn Hajar, 3:56, sahih |
+| `sleep-noble-face` | 261 | Ibn Hajar, 2:385, hasan (he refers back to report 218) |
+| `sleep-cast-out` | 263 | Ibn Hajar, 3:60, hasan |
+| `sleep-kafirun` | 264 | Ibn Hajar, 3:61, hasan; al-Kafirun whole |
+| `sleep-created-my-soul` | 273 | Ibn Hajar, 3:71, sahih |
+| `sleep-in-your-name-forgive` | 277 | Ibn Hajar, 3:80, hasan |
+
+Report 256 takes `in-sahih` from al-Nawawi's «الصحيحين», which Ibn Hajar confirms (3:41) without a sentence of his own.
+For 255 (with its short form 254) Ibn Hajar answers al-Nawawi's «الصحيحين»: this wording is al-Bukhari's and the
+Sunan's, and Muslim's is a fuller one given later in the book (3:40–41). So its card names no collection and its
+`in-sahih` grade is al-Bukhari, quoted from Ibn Hajar. Report 255 runs from p. 89 to p. 90; its card cites p. 90,
+where its action and count are printed.
+
+Left out: 268, whose hasan Ibn Hajar follows with a doubt that its chain is joined («وهذا الكلام يتوقف معه في وصل
+الحديث», 3:67); 265 and 269 (gharib, with a matruk or weak narrator), 272 and 275 (weak), 279 (Ibn Hajar grades only other
+companions' hadiths of like meaning, not 'A'isha's), 281 ('A'isha's own words, «موقوف»), 254 (the short form of 255), 270 and 271
+(the evening words already in from Muslim, report 211), 274 (already in as 212). Reports 276, 278, 280 and 282 describe the practice or its reward
+without words to say. Waiting for later: 252 (33/33/34 at bedtime) needs a counter for a sequence; 266 («المسبحات»,
+not listed) and 267 (al-Isra' and al-Zumar whole, 186 ayat), both hasan in Ibn Hajar (3:63, 3:65), are recitation habits
+too long for a card.
+
+A Quran item with one passage now draws it as the reader does (`AyatRange`, the mushaf's own lines); several whole
+surahs still show their whole Madina page.
 
 ## Dark-mode sketch
 

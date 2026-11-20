@@ -24,6 +24,9 @@ describe('the phone app people', () => {
     const zubayr = appPeople(await loadCatalog()).find((person) => person.slug === 'az-zubayr-ibn-al-awwam')!;
     expect(zubayr.islamAge.map((fact) => [fact.value, fact.by])).toEqual([[16, []], [8, ['عروة']]]);
     expect(zubayr.companionOf[0].by).toEqual(['الزبير بن العوام']);
+    // A sayer with a converted entry and no catalog file is named by that entry, not by the narrator's word («عن أبيه»).
+    const ibnUmar = appPeople(await loadCatalog()).find((person) => person.slug === 'abdullah-ibn-umar')!;
+    expect(ibnUmar.virtues.find((fact) => fact.text.includes('نِعْمَ الرَّجُلُ'))?.by).toEqual([ibnUmar.name]);
   }, 30_000);
 
   it('joins a tie stated in two entries into one, with both entries\' pages', async () => {

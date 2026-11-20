@@ -189,6 +189,8 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
         const mention = report.origin.mention;
         const agent = agentOfMention(from, mention);
         const text = from.mentions.find((m) => m.id === mention)?.exact ?? '';
+        // A sayer with a converted entry but no catalog file («أبي أمامة», «أبيه» in Salim's words) reads by that entry's name.
+        if (agent && !people.has(agent) && ownUnit.has(agent)) return [appName(agent)];
         return [agent && people.has(agent) ? people.get(agent)!.name : sayerName(strip(text))];
       })),
       ...(entry.status === 'LEGACY' && { legacy: true as const }),
