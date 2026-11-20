@@ -4,7 +4,9 @@ import { searchPhrases, textHolds, type Opening } from './branches';
 export const ALL_KINDS = 'mutashabeh,pondering,words';
 
 /** The branches page's two kinds, as tabs over the list (owner 2026-11-18): the books' cards, opened first, and ours. */
-export const PAGE_KINDS = [{ id: 'mutashabeh', ar: 'في كتب المتشابهات', en: 'In the mutashabih books' }, { id: 'pondering', ar: 'تدبّر', en: 'Pondering' }] as const;
+export const PAGE_KINDS = [{ id: 'mutashabeh', ar: 'في كتب المتشابهات', en: 'In the mutashabih books' }, { id: 'pondering', ar: 'تدبّر', en: 'Pondering' },
+  // The surah-order books' cards, the same as on compare (owner 2026-11-20).
+  { id: 'tanasub', ar: 'في كتب تناسب السور', en: 'In the surah-order books' }] as const;
 export const PAGE_DEFAULT_KIND = 'mutashabeh';
 
 

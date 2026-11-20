@@ -23,7 +23,7 @@ import { WEBSITE } from '@/lib/website';
 import { compareTargetsFor, type CompareTarget } from '@/lib/compare';
 import { setIntent } from '@/lib/intent';
 import EvidenceSheet from './EvidenceSheet';
-import BookQuote from './BookQuote';
+import BookQuote, { TanasubQuote } from './BookQuote';
 import CompareTargetsSheet from './CompareTargetsSheet';
 import { TAGS, type Group, type Tag } from '@shared/quran/mutashabih/types';
 import { connectionTone } from '@shared/quran/mutashabih/connections';
@@ -399,7 +399,8 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
                   connections={linked ? { group: linked, tags: current && growth.studio && growth.kind === 'matrix' ? studioTags : tagsOf(pieces[at], linked) } : undefined}
                   growth={current && growth.studio && growth.kind !== 'tree' ? { hidden: growth.hidden, now: growth.now, ask: growth.ask } : undefined}
                   reading={current && growth.studio && growth.kind === 'read'} onScroll={current && !embedded ? shrink : undefined}
-                  below={group?.citations.length && !embedded ? <BookQuote citations={group.citations} onMore={() => setEvidence(group)} palette={palette} /> : undefined} />
+                  below={embedded ? undefined : group?.citations.length ? <BookQuote citations={group.citations} onMore={() => setEvidence(group)} palette={palette} />
+                    : pieces[at].group?.tanasub ? <TanasubQuote link={pieces[at].group!.tanasub!} palette={palette} /> : undefined} />
                 : embedded
                   ? <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={atAround}
                     rotated={rotatedId === pieces[at].id} shareRef={at === index ? shareRef : undefined}

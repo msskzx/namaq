@@ -4,6 +4,8 @@
 import { BOOKS, citeLabel, citeUrl, ORDER_LINKS, type Link } from './surahOrder';
 import { num } from './arabicNumber';
 import type { QuizSource } from '../quiz/sources';
+import type { PhraseOccurrence } from './phraseTrees';
+import treeData from '../data/quran/tanasubTrees.json';
 
 /** The heading a book card carries (owner, 2026-11-20). */
 export const TANASUB_KIND = 'في كتب تناسب السور';
@@ -38,3 +40,11 @@ export function tanasubSource(link: Link): QuizSource {
   const { title, short } = BOOKS[link.src.book];
   return { book: title.split('، ل')[0], author: short.split('،')[0], quote: link.text, at: citeLabel(link.src, num), url: citeUrl(link.src) };
 }
+
+const trees = (treeData as unknown as { trees: Record<string, [PhraseOccurrence, PhraseOccurrence]> }).trees;
+
+/**
+ * The trunk of a book card's tree on each side, or undefined when the card has no meaningful tree (owner 2026-11-20: several
+ * pairs, or ayat the book joins by meaning only). Written by `npm run quran:compare-cards` (buildCards.ts tanasubTrees).
+ */
+export const tanasubTree = (key: number): [PhraseOccurrence, PhraseOccurrence] | undefined => trees[key];

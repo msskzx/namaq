@@ -10,6 +10,7 @@ import { PAGE_DEFAULT_KIND } from '@shared/quran/branchSearch';
 const categories = {
   mutashabeh: { ar: 'في كتب المتشابهات', en: 'In the mutashabih books' },
   pondering: { ar: 'تدبّر', en: 'Pondering' },
+  tanasub: { ar: 'في كتب تناسب السور', en: 'In the surah-order books' },
   words: { ar: 'أشجار الكلمات', en: 'Word trees' },
 };
 
