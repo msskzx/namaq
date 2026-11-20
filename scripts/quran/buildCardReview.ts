@@ -1,0 +1,96 @@
+/**
+ * Builds the index the owner's card review page reads (src/lib/quran/curation/cardReview.json): every tree card of the review
+ * pool and every compare card, each with the rows its matrix draws today and its verdict. The page reads only this file and the
+ * agents' proposals, so a page of cards opens without building trees (owner 2026-11-20: performance matters).
+ *
+ * With `--agents <dir>`, it also writes the agents' input: one JSON line per card with every row's ayah text.
+ */
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import corpus from '../../shared/quran/quranText/corpus';
+import { reviewPool, type BranchPiece } from '../../shared/quran/branchInventory';
+import { ayahEnds, ownEnds, twoEnds, uncoveredRows } from '../../shared/quran/branches';
+import { phrasePresentation } from '../../shared/quran/phraseTrees';
+import { groupPresentation } from '../../shared/quran/mutashabih/presentation';
+import { branchVerdictFor, matrixOnly, ownAyatOnly, twinOf, twoAyat } from '../../shared/quran/branchVerdicts';
+import { cardReviewKind, compareCardId, type CardReviewEntry, type CardReviewIndex } from '../../src/lib/quran/curation/cardReviewIndex';
+
+const OUT = 'src/lib/quran/curation/cardReview.json';
+const ayat = corpus.ayat;
+const byKey = new Map(ayat.map(ayah => [ayah.key, ayah]));
+const positions = new Map(ayat.map((ayah, i) => [ayah.key, i]));
+const textOf = (key: string) => byKey.get(key)!.words.join(' ');
+
+/** The rows the website's matrix draws for a card: each ayah run on to its end, rows inside another row left out (as matrixOf). */
+function rowsOf(piece: BranchPiece): string[][] {
+  const presentation = piece.group ? groupPresentation(piece.group, byKey, null, {}) : phrasePresentation(piece.phrase, ayat, true, true);
+  const ends = ownAyatOnly(piece) ? ownEnds(presentation.tree) : twoAyat(piece) ? twoEnds(presentation.tree, key => positions.has(key)) : ayahEnds(presentation.tree);
+  const passages = presentation.ayat.map(ayah => ayat.slice(positions.get(ayah.key)!, positions.get(ends[ayah.key] ?? ayah.key)! + 1).map(item => item.key));
+  return uncoveredRows(passages).map(i => passages[i]);
+}
+
+type Verdict = { keep: boolean; why: string; checked?: boolean; ask?: string };
+type CompareCard = { p: string[]; a?: number[][] };
+
+function compareCards() {
+  const source = readFileSync('shared/data/quran/compareCards.js', 'utf8');
+  const data = JSON.parse(JSON.parse(source.slice(source.indexOf('JSON.parse(') + 11, source.lastIndexOf(')')))) as { cards: Record<string, CompareCard[]>; stories: Record<string, CompareCard[]> };
+  return [...Object.entries(data.cards), ...Object.entries(data.stories)].flatMap(([page, cards]) => cards.map(card => ({ page, card })));
+}
+
+function compareRows(page: string, card: CompareCard): string[][] {
+  const [a, b] = page.split(':');
+  if (card.a) return [card.a[0].map(n => `${a}:${n}`), card.a[1].map(n => `${b}:${n}`)];
+  const sides = [new Set<string>(), new Set<string>()];
+  for (const pair of card.p) pair.split('|').forEach((key, side) => sides[side].add(key));
+  return [...sides[0], ...[...sides[1]].filter(key => !sides[0].has(key))].map(key => [key]);
+}
+
+const cardVerdict = (verdicts: Verdict[]): CardReviewEntry['verdict'] => {
+  if (!verdicts.length) return undefined;
+  const keep = verdicts.some(verdict => verdict.keep);
+  const why = [...new Set(verdicts.map(verdict => verdict.why))].join('\n');
+  return { keep, why, ...(verdicts.every(verdict => verdict.checked) ? { checked: true } : {}), ...(verdicts.some(verdict => verdict.ask) ? { ask: true } : {}) };
+};
+
+const entries: CardReviewEntry[] = [];
+for (const piece of reviewPool()) {
+  const verdict = branchVerdictFor(piece);
+  const twin = twinOf(piece);
+  entries.push({
+    id: piece.id,
+    kind: cardReviewKind(piece),
+    title: piece.text,
+    rows: rowsOf(piece),
+    ...(piece.group?.citations.length ? { books: [...new Set(piece.group.citations.map(citation => citation.book))] } : {}),
+    ...(matrixOnly(piece) ? { matrix: true } : {}),
+    ...(verdict ? { verdict: { keep: verdict.keep, why: verdict.why, ...(verdict.checked ? { checked: true } : {}), ...(verdict.ask ? { ask: true } : {}) } } : {}),
+    ...(twin ? { twin: twin.pair } : {}),
+  });
+}
+const pairs = (JSON.parse(readFileSync('src/lib/quran/curation/comparePairs.json', 'utf8')) as { pairs: Record<string, Verdict> }).pairs;
+for (const { page, card } of compareCards()) {
+  entries.push({
+    id: compareCardId(card.p),
+    kind: 'compare',
+    page: page.replace(':', '/'),
+    title: '',
+    rows: compareRows(page, card),
+    pairs: card.p,
+    verdict: cardVerdict(card.p.flatMap(pair => pairs[pair] ? [pairs[pair]] : [])),
+  });
+}
+
+const index: CardReviewIndex = { built: 'npm run quran:card-review', cards: entries };
+writeFileSync(OUT, `${JSON.stringify(index)}\n`);
+console.log(`${entries.length} cards → ${OUT}`);
+
+const at = process.argv.indexOf('--agents');
+if (at > 0) {
+  const dir = process.argv[at + 1];
+  mkdirSync(dir, { recursive: true });
+  const lines = entries.map(entry => JSON.stringify({ ...entry, text: Object.fromEntries(entry.rows.flat().map(key => [key, textOf(key)])) }));
+  writeFileSync(join(dir, 'cards.jsonl'), `${lines.join('\n')}\n`);
+  writeFileSync(join(dir, 'ayat.json'), JSON.stringify(Object.fromEntries(ayat.map(ayah => [ayah.key, textOf(ayah.key)]))));
+  console.log(`agents' input → ${dir}`);
+}
