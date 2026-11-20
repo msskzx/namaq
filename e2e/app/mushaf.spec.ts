@@ -400,6 +400,13 @@ test('recite from an ayah\'s long-press menu starts at that ayah', async ({ page
   await expect(page.getByRole('button', { name: 'أظهر الآية التالية' })).toBeVisible();
   await expect.poll(start).toBe('1:6');
   await reciteBarsHidden(page);
+  // The bar's reset hides the whole page again and recites it from its first ayah (owner, 2026-11-20).
+  const shown = async () => (await stored<{ position: { start: string; shown: string | null } }>(page, 'reader-recite-last'))?.position;
+  await page.getByRole('button', { name: 'أظهر الآية التالية' }).click();
+  await expect.poll(async () => (await shown())?.shown).toBe('1:6');
+  await page.getByRole('button', { name: 'أخفِ الصفحة وسمّع من أولها' }).click();
+  await expect.poll(shown).toEqual({ start: '1:1', shown: null, words: 0 });
+  await expect(page.getByRole('button', { name: 'ارجع خطوة' })).toBeDisabled();
 });
 
 test('the recite bar floats over a full-size page, goes wherever it is dragged, stays there, and folds into a circle', async ({ page }) => {
