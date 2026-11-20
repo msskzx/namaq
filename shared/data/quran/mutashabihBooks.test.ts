@@ -5,6 +5,7 @@ import evidence from '../../quran/mutashabih/evidence.json';
 import kirmani from './mutashabihKirmani';
 import iskafi from './mutashabihIskafi';
 import zubayr from './mutashabihZubayr';
+import { spellSigns } from '../../../scripts/quran/signs';
 
 const BOOKS: Record<string, MutashabihBookData> = { kirmani, iskafi, zubayr };
 const built = Object.fromEntries(Object.entries(BOOKS).map(([id, data]) => {
@@ -34,7 +35,8 @@ describe.each(Object.keys(BOOKS))('the book of mutashabih %s', id => {
 });
 
 // «اقرأ في الكتاب» on a branch card opens the book at the citation's page: the words it quotes are on it or on a page beside it
-// (a quote can start on the page before, or be a later question of the section that starts there).
+// (a quote can start on the page before, or be a later question of the section that starts there). The books spell out the
+// signs the quotes keep («﵎»), as scripts/quran/signs.ts does.
 describe("a branch card's citation of these books", () => {
   const cited = evidence.cases.filter(row => citationInBook(row));
 
@@ -47,7 +49,7 @@ describe("a branch card's citation of these books", () => {
       const at = pageOfPrinted(pages, part, page);
       expect(pages[at], row.id).toMatchObject({ part, page });
       const text = [at - 1, at, at + 1].filter(i => pages[i]).map(i => pages[i].slices.map(slice => entries[slice.entry].text.slice(slice.from, slice.to)).join(' ')).join(' ');
-      expect(words(text), row.id).toContain(words(row.quote).split(' ').slice(0, 3).join(' '));
+      expect(words(text), row.id).toContain(words(spellSigns(row.quote)).split(' ').slice(0, 3).join(' '));
     }
   });
 });

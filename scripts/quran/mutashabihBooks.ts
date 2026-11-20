@@ -1,5 +1,6 @@
 import surahs from '../../shared/data/quran/surahs.json';
 import type { PageBreak } from '../../shared/bookReader';
+import { spellSigns } from './signs';
 
 /**
  * The three books of mutashabih for the book reader (docs/plans/book-reader.md): Turath's pages cut into the books' surah
@@ -45,7 +46,8 @@ export function authorsWords(text: string): string {
     .replace(/\s*\(\s*بياض[^)]*\)/g, '')
     .replace(/^\s*صفحة فارغة\s*$/gm, '');
   for (const pattern of EDITOR) out = out.replace(pattern, '');
-  return out
+  // Every sign but ﷺ spelled out, as in the other books (scripts/quran/signs.ts).
+  return spellSigns(out)
     .replace(new RegExp(`\\s*(?:و(?=[٠-٩]))?${DIGITS}`, 'g'), '')
     .replace(/:\s*[،,-]+(?:\s*[،,-])*/g, ':')
     .replace(/:(?:[ \t]*:)+/g, ':')
@@ -135,7 +137,7 @@ export function chaptersOf(pages: TurathPage[], levels: number[]): { chapters: C
     for (const match of text.matchAll(TITLE)) {
       add(text.slice(at, match.index));
       at = match.index + match[0].length;
-      const heading = match[2].replace(/\s+/g, ' ').trim();
+      const heading = spellSigns(match[2]).replace(/\s+/g, ' ').trim();
       if (levels[Number(match[1]) - 1] !== 1) { add(`\n${heading}\n`); continue; }
       const found = surahOfHeading(heading, surah);
       if (found === null) throw new Error(`no surah for the heading «${heading}» after ${surah}`);
