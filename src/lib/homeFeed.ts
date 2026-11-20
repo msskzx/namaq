@@ -1,4 +1,5 @@
 import { dailyIndex, feedTrees } from '@shared/dailyPick';
+import { lastNumber, momentItem, storyItem } from '@shared/feedItems';
 import { FEED_AHEAD, FEED_FAR } from '@shared/feedSeen';
 export { FEED_AHEAD, FEED_FAR };
 import { pageOfAyah, pageStart, type MushafPage } from '@shared/quran/readerPage';
@@ -77,34 +78,38 @@ export async function ayahPages(key: string) {
 }
 
 /** The prophets card's story, as the prophets page shows it to readers (kept places only), cut to what its map needs. */
-export type StoryCard = { slot: number; slug: string; title: string; phase: number; phases: readonly string[]; map: StoryMap; events: EventView[]; story: number[] };
+export type StoryCard = { slot: number; /** The card's lasting id (shared/feedItems.ts storyItem). */ item: string; slug: string; title: string; phase: number; phases: readonly string[]; map: StoryMap; events: EventView[]; story: number[] };
 
 export function storyCards(day: number, slots: number[]): StoryCard[] {
-  const all = withUnappliedStoryReviews(verdictData.places as PlaceVerdicts);
   return slots.filter(hasStoryCard).flatMap(slot => {
     const { slug, phase } = storyGroupOfDay(day, slot);
-    const prophet = findProphet(slug);
-    if (!prophet) return [];
-    const story = STORIES[slug];
-    const verdicts = Object.fromEntries(Object.entries(all).filter(([key]) => key.startsWith(`${slug}/`)));
-    const events = keptViews(slug, buildStory(story.events, quranStoryText), verdicts);
-    const whole = storyMap(events);
-    // The words stay behind: the map needs only each place's count.
-    const map = { ...whole, places: whole.places.map(places => places.map(place => ({ ...place, segments: [] }))) };
-    return [{
-      slot, slug, title: storyTitle(prophet), phase, phases: story.phases, map,
-      events: events.map(event => ({ ...event, segments: [] })),
-      // Each event's place in the whole story (the kept story can drop events), for the page's ?event=.
-      story: events.map(event => story.events.findIndex(at => at.title === event.title)),
-    }];
+    const card = storyCard(slot, slug, phase);
+    return card ? [card] : [];
   });
+}
+function storyCard(slot: number, slug: string, phase: number): StoryCard | null {
+  const prophet = findProphet(slug);
+  if (!prophet) return null;
+  const all = withUnappliedStoryReviews(verdictData.places as PlaceVerdicts);
+  const story = STORIES[slug];
+  const verdicts = Object.fromEntries(Object.entries(all).filter(([key]) => key.startsWith(`${slug}/`)));
+  const events = keptViews(slug, buildStory(story.events, quranStoryText), verdicts);
+  const whole = storyMap(events);
+  // The words stay behind: the map needs only each place's count.
+  const map = { ...whole, places: whole.places.map(places => places.map(place => ({ ...place, segments: [] }))) };
+  return {
+    slot, item: storyItem(slug, phase), slug, title: storyTitle(prophet), phase, phases: story.phases, map,
+    events: events.map(event => ({ ...event, segments: [] })),
+    // Each event's place in the whole story (the kept story can drop events), for the page's ?event=.
+    story: events.map(event => story.events.findIndex(at => at.title === event.title)),
+  };
 }
 
 /**
  * The «السيرة والمغازي» cards (the app's SiraPost and MomentPost, mobile/src/components/HomeFeed.tsx): a sira story's first
  * report whole with its ayat in the mushaf's lines, or one moment of a battle, taking turns batch by batch.
  */
-export type SiraCard = { slot: number } & (
+export type SiraCard = { slot: number; /** The card's lasting id: the story's slug, or shared/feedItems.ts momentItem. */ item: string } & (
   | { kind: 'sira'; slug: string; name: string; report: AppReport; ayat: AppStory['ayat']; pages: AyatPage[][] }
   | { kind: 'moment'; battle: Pick<AppMomentBattle, 'slug' | 'name' | 'kind' | 'year'>; moment: AppMoment; n: number });
 
@@ -119,14 +124,15 @@ export async function siraCards(day: number, slots: number[]): Promise<SiraCard[
     if (slot % 2 === 0) {
       if (!SIRA_FEED.length) return null;
       const story = SIRA_FEED[turnOf(day, turn, SIRA_FEED.length)];
-      return { slot, kind: 'sira', slug: story.slug, name: story.name, report: story.reports[0], ayat: story.ayat, pages: await storyAyat(story) };
+      return { slot, kind: 'sira', item: story.slug, slug: story.slug, name: story.name, report: story.reports[0], ayat: story.ayat, pages: await storyAyat(story) };
     }
     if (!MOMENT_FEED.length) return null;
-    const { battle, moment, n } = MOMENT_FEED[turnOf(day, turn, MOMENT_FEED.length)];
-    return { slot, kind: 'moment', battle: { slug: battle.slug, name: battle.name, kind: battle.kind, year: battle.year }, moment, n };
+    return momentCard(slot, MOMENT_FEED[turnOf(day, turn, MOMENT_FEED.length)]);
   }));
   return cards.filter((card): card is SiraCard => card !== null);
 }
+const momentCard = (slot: number, { battle, moment, n }: (typeof MOMENT_FEED)[number]): SiraCard =>
+  ({ slot, kind: 'moment', item: momentItem(battle.slug, n), battle: { slug: battle.slug, name: battle.name, kind: battle.kind, year: battle.year }, moment, n });
 
 /** A saved item drawn as its own card in the feed: the tree card's tree or the pair card's pair; a saved ayah needs nothing here. */
 export type SavedContent = { pair?: PairCard; tree?: TreePreview & { text: string } };
@@ -142,4 +148,21 @@ export function savedContent(id: string): SavedContent | null {
   const surahs = [...new Set(compareBookmarkAyat({ id }).map(key => Number(key.split(':')[0])))].sort((a, b) => a - b);
   const pair = surahs.length ? pairCards(surahs[0], surahs[1] ?? surahs[0]).find(card => savedAs(card.id, [{ id }]).length) : undefined;
   return pair ? { pair } : null;
+}
+
+/**
+ * A saved feed card by its kind and item (`card:<kind>:<item>`, shared/bookmarkKind.ts), drawn as the feed drew it: the
+ * story and sira cards here, the others from their own modules (src/lib/feedCard.ts gathers them).
+ */
+export async function siraCardOf(kind: string, item: string): Promise<SiraCard | null> {
+  if (kind === 'sira') {
+    const story = SIRA_FEED.find(each => each.slug === item);
+    return story ? { slot: 0, kind: 'sira', item: story.slug, slug: story.slug, name: story.name, report: story.reports[0], ayat: story.ayat, pages: await storyAyat(story) } : null;
+  }
+  const found = kind === 'moment' ? MOMENT_FEED.find(each => momentItem(each.battle.slug, each.n) === item) : undefined;
+  return found ? momentCard(0, found) : null;
+}
+export function storyCardOf(item: string): StoryCard | null {
+  const split = lastNumber(item);
+  return split && STORIES[split.head] && split.n >= 0 && split.n < STORIES[split.head].phases.length ? storyCard(0, split.head, split.n) : null;
 }

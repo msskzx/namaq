@@ -101,6 +101,7 @@ import type { WordDifference } from '@shared/quran/qiraat';
 import BalaghaSheet from './BalaghaSheet';
 import IrabSheet from './IrabSheet';
 import QuranWords from './quran/text/QuranWords';
+import { momentItem, nameItem, rajabItem, storyItem, tieItem, virtueItem } from '@shared/feedItems';
 import { FIT_SHARE, useFitHeight } from '@/lib/useFit';
 import { storyMap } from '@shared/quran/prophets/story';
 import { STORY_GROUPS } from '@shared/quran/prophets/storyGroup';
@@ -737,7 +738,7 @@ const FEED_FORTY = FORTY.entries.filter(fromSahihayn);
 /** Ibn Rajab's explanations of a phrase of those hadith, for his card. */
 const RAJAB_PASSAGES = rajabFeedPassages(rajab as RajabChapter[], FORTY.entries);
 /** A passage's lasting id: its hadith's number and its first paragraph's place in the chapter. */
-const rajabId = ({ chapter, passage }: (typeof RAJAB_PASSAGES)[number]) => `${chapter.n}-${chapter.paragraphs.indexOf(passage[0])}`;
+const rajabId = ({ chapter, passage }: (typeof RAJAB_PASSAGES)[number]) => rajabItem(chapter.n, chapter.paragraphs.indexOf(passage[0]));
 
 /**
  * A passage of Ibn Rajab's Jami' al-'Ulum wal-Hikam (owner, 2026-11-18: every feature gets a card), where he explains a phrase
@@ -895,7 +896,7 @@ function TermPost({ id, day, palette }: { id: string; day: number; palette: Pale
 
 /** Every battle's moments, in the battles' order, for the moment card. */
 const MOMENTS = (momentBattles as AppMomentBattle[]).flatMap(battle => battle.moments.map((moment, i) => ({ battle, moment, n: i + 1 })));
-const momentId = (item: (typeof MOMENTS)[number]) => `${item.battle.slug}-${item.n}`;
+const momentId = (item: (typeof MOMENTS)[number]) => momentItem(item.battle.slug, item.n);
 
 /** A moment of a battle in the source's words (owner, 2026-11-18); the head opens the battle's page. */
 function MomentPost({ id, palette }: { id: string; palette: Palette }) {
@@ -1002,10 +1003,10 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
 /** Every virtue of the converted people, read once: the «من التراجم» card's list. */
 let virtues: { person: (typeof PEOPLE)[number]; index: number }[] | undefined;
 const virtueList = () => (virtues ??= allVirtues(PEOPLE));
-const virtueOf = (id: string) => virtueList().find(each => `${each.person.slug}-${each.index}` === id);
+const virtueOf = (id: string) => virtueList().find(each => virtueItem(each.person.slug, each.index) === id);
 const nameLists: Partial<Record<'laqab' | 'kunya', NameFact[]>> = {};
 const nameList = (kind: 'laqab' | 'kunya') => (nameLists[kind] ??= kind === 'laqab' ? laqabFacts(PEOPLE) : kunyaFacts(PEOPLE));
-const nameId = (each: NameFact) => `${each.person.slug}|${each.name}`;
+const nameId = (each: NameFact) => nameItem(each.person.slug, each.name);
 
 /** The content cards drawn from a list (pairs and trees have their own picks): each kind's items, by a lasting id. */
 type ListKind = Exclude<FeedCardKind, 'pair' | 'tree'>;
@@ -1021,11 +1022,11 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   rajab: () => RAJAB_PASSAGES.map(rajabId),
   recorded: () => FEED_FORTY.map(entry => String(entry.n)),
   isnad: () => FEED_CHAINS.map(entry => String(entry.n)),
-  prophets: () => STORY_GROUPS.map(group => `${group.slug}-${group.phase}`),
+  prophets: () => STORY_GROUPS.map(group => storyItem(group.slug, group.phase)),
   sira: () => STORIES.filter(story => story.reports[0]).map(story => story.slug),
   moment: () => MOMENTS.map(momentId),
-  tarajim: () => virtueList().map(each => `${each.person.slug}-${each.index}`),
-  tie: () => tiePairs().map(pair => `${pair.a},${pair.b}`),
+  tarajim: () => virtueList().map(each => virtueItem(each.person.slug, each.index)),
+  tie: () => tiePairs().map(pair => tieItem(pair.a, pair.b)),
   laqab: () => nameList('laqab').map(nameId),
   kunya: () => nameList('kunya').map(nameId),
   life: lifePeople,

@@ -55,4 +55,20 @@ test.describe('interests on the website', () => {
     await page.getByRole('dialog', { name: 'الإعدادات' }).getByRole('button', { name: 'الحديث', exact: true }).click();
     expect(JSON.parse((await stored(page, 'interests'))!)).toEqual(['hadith']);
   });
+
+  test('the save under a feed card keeps it, and the library draws the saved card whole', async ({ page }) => {
+    await page.addInitScript(() => { localStorage.setItem('interests', '["hadith"]'); localStorage.setItem('interests-asked', '1'); });
+    await page.goto('/');
+    const save = page.getByRole('button', { name: 'احفظ البطاقة' }).first();
+    await expect(save).toBeVisible({ timeout: 30_000 });
+    const post = page.locator('article').filter({ has: save });
+    const title = (await post.getByRole('heading').first().textContent())!;
+    await save.click();
+    expect(await stored(page, 'bookmarks')).toContain('card:');
+    await page.goto('/library?tab=saved');
+    const saved = page.getByRole('heading', { name: title, exact: true });
+    await expect(saved).toBeVisible({ timeout: 30_000 });
+    // Its save is lit there, and takes it off the list.
+    await expect(page.getByRole('button', { name: 'أزلها من المحفوظات' }).first()).toBeVisible();
+  });
 });
