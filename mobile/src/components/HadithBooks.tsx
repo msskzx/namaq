@@ -26,13 +26,13 @@ export default function HadithBooks({ top, boxes, onOpen, namer = 'النووي'
   const said = (box: BookBox) => [box.number ? `${box.name} ${num(box.number)}` : box.name, ...(box.named ? [`سمّاه ${namer}`] : []), ...box.notes].join('، ');
   return (
     <View accessible={!onOpen} accessibilityLabel={boxes.map(said).join('؛ ')} style={{ alignItems: 'center' }}>
-      <Card palette={palette} pad={[2, 14]}><Text style={{ color: palette.green, fontSize: 15.5, textAlign: 'center' }}>{top}</Text></Card>
+      <Card palette={palette} pad={[2, 14]} node><Text style={{ color: palette.green, fontSize: 15.5, textAlign: 'center' }}>{top}</Text></Card>
       <View style={{ width: 1, height: STEM, backgroundColor: palette.rule }} />
       <View style={{ flexDirection: 'row', alignSelf: 'stretch' }}>
         {boxes.map((box, i) => (
           <View key={box.key} style={{ flex: 1, minWidth: 0, alignItems: 'center' }}>
             <Branch first={i === 0} last={i === boxes.length - 1} palette={palette} />
-            <Card palette={palette} pad={[2, 8]} style={{ alignItems: 'center', maxWidth: '94%' }}
+            <Card palette={palette} pad={[2, 8]} node style={{ alignItems: 'center', maxWidth: '94%' }}
               onPress={onOpen ? () => onOpen(box) : undefined} accessibilityLabel={onOpen ? said(box) : undefined}>
               <Text style={{ color: palette.ink, fontSize: 15, textAlign: 'center' }}>{box.name}</Text>
               {box.number ? <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'center' }}>{num(box.number)}</Text> : null}

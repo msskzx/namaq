@@ -62,7 +62,7 @@ export default function FortyIsnad({ isnad, size }: { isnad: AppIsnad; size: App
           </span>
         ))}
         {placed.map(node => (
-          <Card key={node.id} aria-hidden className="absolute flex flex-col items-center justify-center px-1 text-center"
+          <Card key={node.id} node aria-hidden className="absolute flex flex-col items-center justify-center px-1 text-center"
             style={{ left: node.x * k, top: node.y * k, width: NODE_W * k, height: NODE_H * k }}>
             <span className="line-clamp-2" style={{ fontSize: 14 * k, lineHeight: `${19 * k}px` }}>{node.label}</span>
             {node.row && rowName(node.row) ? <span className="text-[var(--home-muted)]" style={{ fontSize: 10 * k, lineHeight: `${14 * k}px` }}>{rowName(node.row)}</span> : null}

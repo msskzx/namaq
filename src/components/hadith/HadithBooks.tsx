@@ -12,7 +12,7 @@ export default function HadithBooks({ top, boxes, hrefOf, namer = 'النووي'
   const line = (shown: boolean) => <span className={`h-px flex-1 ${shown ? 'bg-[var(--home-rule)]' : ''}`} />;
   return (
     <div role={hrefOf ? undefined : 'img'} aria-label={hrefOf ? undefined : boxes.map(box => said(box, namer)).join('؛ ')} className="flex flex-col items-center">
-      <Card className="px-3.5 py-0.5 text-center text-[0.97rem] text-[var(--home-green)]">{top}</Card>
+      <Card node className="px-3.5 py-0.5 text-center text-[0.97rem] text-[var(--home-green)]">{top}</Card>
       <span className="h-3 w-px bg-[var(--home-rule)]" />
       <div className="flex self-stretch">
         {boxes.map((box, i) => {
@@ -26,8 +26,8 @@ export default function HadithBooks({ top, boxes, hrefOf, namer = 'النووي'
               <span className="flex self-stretch">{line(i > 0)}{line(i < boxes.length - 1)}</span>
               <span className="h-3 w-px bg-[var(--home-rule)]" />
               {href
-                ? <Card href={href} aria-label={said(box, namer)} className="max-w-[94%] px-2 py-0.5 text-center">{inside}</Card>
-                : <Card className="max-w-[94%] px-2 py-0.5 text-center">{inside}</Card>}
+                ? <Card node href={href} aria-label={said(box, namer)} className="max-w-[94%] px-2 py-0.5 text-center">{inside}</Card>
+                : <Card node className="max-w-[94%] px-2 py-0.5 text-center">{inside}</Card>}
               {box.named && <span className="mt-0.5 text-center text-[0.78rem] text-[var(--home-accent)]">سمّاه {namer}</span>}
               {box.notes.map(note => <span key={note} className="text-center text-[0.78rem] text-[var(--home-muted)]">{note}</span>)}
             </div>

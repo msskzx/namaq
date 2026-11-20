@@ -111,3 +111,13 @@ test.describe('the «من الإسناد» card', () => {
     await expect(page).toHaveURL(/\/hadith-forty\?n=15/);
   });
 });
+
+// Owner, 2026-11-20: the isnad is boxes joined by lines, even inside the record's card (a drawing's box is not a card in a card).
+test('each narrator of a drawn chain keeps his box inside the record\'s card', async ({ page }) => {
+  await open(page, '/hadith-forty?n=1');
+  const box = page.getByText('مَالِكٌ', { exact: true }).first().locator('..');
+  await expect(box).toBeVisible();
+  for (const side of ['borderLeftWidth', 'borderRightWidth', 'borderBottomWidth'] as const) {
+    expect(await box.evaluate((el, key) => getComputedStyle(el)[key], side)).toBe('1px');
+  }
+});
