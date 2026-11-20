@@ -29493,7 +29493,11 @@
   },
   "tree:1plttd31fuflmt": {
    "keep": true,
-   "why": "Mulkus samawati wal-ardi wa ma baynahuma/fihinna/lakum"
+   "why": "Same «ملك السماوات والأرض وما» with a different word after: «بينهما» (5:17, 5:18, 38:10, 43:85) or «فيهن» (5:120). 2:107 is left out: its «وما» starts a new sentence («وما لكم من دون الله»).",
+   "checked": true,
+   "without": [
+    "2:107"
+   ]
   },
   "tree:168ey9l04k2uy1": {
    "keep": true,

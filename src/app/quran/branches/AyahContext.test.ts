@@ -41,3 +41,21 @@ describe('sharedMarks', () => {
   });
 });
 
+
+describe('the shared phrase is the one lined up', () => {
+  it('links «ولله ملك السماوات والأرض» in al-Ma\'ida 17 and 18, not their earlier «الله» and «يملك»', async () => {
+    const { default: data } = await import('@shared/quran/quranText/corpus');
+    const { treeContexts } = await import('@shared/quran/ayahContext');
+    const keys = ['3:189', '5:17', '5:18', '5:120', '24:42', '42:49', '45:27', '48:14'];
+    const rows = keys.map(key => data.ayat.find(ayah => ayah.key === key)!);
+    const contexts = sharedByAll(treeContexts(rows as never));
+    const phraseLink = (n: number, word: RegExp) => {
+      const { ayah, match } = contexts[n];
+      const at = ayah.words.findIndex((item, i) => word.test(normalizeWord(item)) && /^ملك/.test(normalizeWord(ayah.words[i + 1] ?? '')));
+      return match!.links![at]?.link;
+    };
+    const first = phraseLink(0, /لله/);
+    expect(first).toBeDefined();
+    for (let n = 1; n < keys.length; n++) expect([keys[n], phraseLink(n, /لله/)]).toEqual([keys[n], first]);
+  });
+});

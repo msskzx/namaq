@@ -34,15 +34,38 @@ const tokens = (ayah: BranchAyah) => {
   return { norm, keys: norm.map((_, i) => ayah.roots?.[i] ? `r:${ayah.roots[i]}` : ayah.lemmas?.[i] ? `p:${ayah.lemmas[i]!.replace(/\d+$/, '')}` : fallback[i]) };
 };
 
-/** Index pairs `a`↔`b` on a longest in-order run of words the two share (LCS), so a repeated word is matched where it lines up. */
-function alignedPairs(a: string[], b: string[]) {
-  const table = Array.from({ length: a.length + 1 }, () => new Array<number>(b.length + 1).fill(0));
-  for (let i = a.length - 1; i >= 0; i--) for (let j = b.length - 1; j >= 0; j--)
-    table[i][j] = a[i] === b[j] ? table[i + 1][j + 1] + 1 : Math.max(table[i + 1][j], table[i][j + 1]);
-  const pairs = new Map<number, number>();
-  for (let i = 0, j = 0; i < a.length && j < b.length;) {
-    if (a[i] === b[j]) { pairs.set(i, j); i++; j++; } else if (table[i + 1][j] >= table[i][j + 1]) i++; else j++;
+/** The longest LCS lining up of `a[ai..aj)` with `b[bi..bj)`, added to `pairs`. */
+function lcsPairs(a: string[], b: string[], ai: number, aj: number, bi: number, bj: number, pairs: Map<number, number>) {
+  const n = aj - ai, m = bj - bi;
+  const table = Array.from({ length: n + 1 }, () => new Array<number>(m + 1).fill(0));
+  for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--)
+    table[i][j] = a[ai + i] === b[bi + j] ? table[i + 1][j + 1] + 1 : Math.max(table[i + 1][j], table[i][j + 1]);
+  for (let i = 0, j = 0; i < n && j < m;) {
+    if (a[ai + i] === b[bi + j]) { pairs.set(ai + i, bi + j); i++; j++; } else if (table[i + 1][j] >= table[i][j + 1]) i++; else j++;
   }
+}
+
+/**
+ * Lines up two ayat word by word. The longest run of words they share in a row is lined up first, then the words before and
+ * after it, the same way: so where a word repeats, the one inside the shared phrase is the one paired (al-Ma'ida 17's «ولله ملك»,
+ * not its earlier «إن الله»). Single words left over are lined up as a plain longest common subsequence.
+ */
+function alignedPairs(a: string[], b: string[]) {
+  const pairs = new Map<number, number>();
+  const split = (ai: number, aj: number, bi: number, bj: number) => {
+    if (ai >= aj || bi >= bj) return;
+    let best = 0, at = 0, bt = 0;
+    const run = new Array<number>(bj - bi + 1).fill(0);
+    for (let i = aj - 1; i >= ai; i--) for (let j = bi; j < bj; j++) {
+      run[j - bi] = a[i] === b[j] ? (run[j - bi + 1] ?? 0) + 1 : 0;
+      if (run[j - bi] > best) { best = run[j - bi]; at = i; bt = j; }
+    }
+    if (best < 2) { lcsPairs(a, b, ai, aj, bi, bj, pairs); return; }
+    for (let k = 0; k < best; k++) pairs.set(at + k, bt + k);
+    split(ai, at, bi, bt);
+    split(at + best, aj, bt + best, bj);
+  };
+  split(0, a.length, 0, b.length);
   return pairs;
 }
 

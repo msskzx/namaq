@@ -8,7 +8,7 @@ import { groups } from './mutashabih/data';
 import { phraseTreeId } from './mutashabih/identity';
 import type { Group } from './mutashabih/types';
 import type { JuzRange } from './juz';
-import { droppedBranch } from './branchVerdicts';
+import { droppedBranch, withoutLeftOut } from './branchVerdicts';
 
 export type BranchPiece = Opening & { legacyId: string; legacyIds?: string[]; keys: string[]; phrase: TreeGroup; opening: Opening; group?: Group };
 const ayat = new Map<string, BranchAyah>(corpus.ayat.map(ayah => [ayah.key, ayah]));
@@ -87,7 +87,7 @@ function allBranchPieces(filters: GroupFilters, range: JuzRange | null): BranchP
     words ??= [...new Map<string, TreeGroup>([...buildPhraseGroups(corpus.ayat), ...corpus.trees as TreeGroup[], ...subtreeIndex(corpus.trees as TreeGroup[], corpus.subtrees).groups].map(tree => [tree.id, tree])).values()];
     const visible = filteredAyat(ayat, effective, range);
     for (const tree of words) {
-      const occurrences = tree.occurrences.filter(occurrence => visible.has(occurrence.key));
+      const occurrences = withoutLeftOut(phraseTreeId(tree), tree.occurrences.filter(occurrence => visible.has(occurrence.key)));
       if (new Set(occurrences.map(occurrence => occurrence.key)).size < 2) continue;
       const scoped = piece(tree);
       scoped.phrase = { ...tree, occurrences };

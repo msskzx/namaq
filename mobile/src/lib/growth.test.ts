@@ -3,7 +3,7 @@ import { keys } from '@shared/quran/branches';
 import { matrixOnly } from '@shared/quran/branchVerdicts';
 import { growthPlan, growthWords } from '@shared/quran/growth';
 import { ALL_WORDS, connectionBeats, grownIds, growthBeats, lineId, nodeId, nodeIndices } from './growth';
-import { aroundOf, cardOf, growthParts, matrixOf, mixedBefore, readId, treeList, withPathReading } from './branches';
+import { aroundOf, cardOf, growthParts, matrixOf, mixedBefore, readId, rowOf, treeList, withPathReading } from './branches';
 
 const list = treeList();
 const presentationOf = (index: number) => cardOf(list[index]).presentation;
@@ -25,7 +25,8 @@ describe('a tree growing in the studio', () => {
   it('shows each growing ayah\'s card word by word with its boxes: the words before the phrase and the root\'s first, all at its end', () => {
     for (const presentation of list.slice(0, 150).map(piece => cardOf(piece).presentation)) {
       const beats = growthBeats(presentation.tree, { offsets: presentation.offsets });
-      const passage = new Map(matrixOf(presentation, false).rows.map((row, i) => [presentation.ayat[i].key, row.ayah!.ayat.flatMap(ayah => ayah.words)]));
+      const matrix = matrixOf(presentation, false);
+      const passage = { get: (key: string) => rowOf(matrix, key)?.row.ayah!.ayat.flatMap(ayah => ayah.words) };
       for (const key of new Set(beats.map(beat => beat.key))) {
         const own = beats.filter(beat => beat.key === key);
         const counts = own.map(beat => beat.words!);

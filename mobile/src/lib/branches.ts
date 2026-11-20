@@ -5,7 +5,7 @@ import type { BranchPiece } from '@shared/quran/branchInventory';
 import { ayahContexts, sharedByAll, surrounding, treeContexts, type AyahContext, type Neighbour } from '@shared/quran/ayahContext';
 import type { Likeness } from '@shared/quran/wordMatch';
 import { ownAyatOnly, twoAyat } from '@shared/quran/branchVerdicts';
-import { ayahEnds, ownAyat, ownEnds, twoEnds, branchesHref, keys, textHolds, type Branch, type BranchAyah, type Variant } from '@shared/quran/branches';
+import { ayahEnds, ownAyat, ownEnds, twoEnds, uncoveredRows, branchesHref, keys, textHolds, type Branch, type BranchAyah, type Variant } from '@shared/quran/branches';
 import { readBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { filteredAyat } from '@shared/quran/mutashabih/browse';
 import { groupPresentation } from '@shared/quran/mutashabih/presentation';
@@ -150,11 +150,27 @@ export type Matrix = { columns: MatrixColumn[]; rows: Record<MatrixColumn, Matri
 
 const positions = new Map(all.map((ayah, i) => [ayah.key, i]));
 
+/**
+ * The matrix row that draws an ayah, by row index. An ayah whose row was left out because another row already reads on into it
+ * (uncoveredRows) is found in that row, its cells from that ayah on, so a path card still shows the ayah in the matrix's colours.
+ */
+export function rowOf(matrix: Matrix, key: string): { r: number; row: Matrix['rows'][number] } | null {
+  const own = matrix.rows.findIndex(row => row.ayah?.ayat[0]?.key === key);
+  if (own >= 0) return { r: own, row: matrix.rows[own] };
+  const r = matrix.rows.findIndex(row => row.ayah?.ayat.some(ayah => ayah.key === key));
+  if (r < 0) return null;
+  const ayat = matrix.rows[r].ayah!.ayat;
+  return { r, row: { before: null, ayah: { ayat: ayat.slice(ayat.findIndex(ayah => ayah.key === key)) }, after: matrix.rows[r].after } };
+}
+
 /** The website's ayah matrix: a row per ayah of the tree, and with the switch on the ayah before and after each. */
 export function matrixOf(presentation: Presentation, withAround: boolean): Matrix {
   const ends = curatedEnds.get(presentation) ?? ayahEnds(presentation.tree);
-  const starts = presentation.ayat.map(ayah => ayah.key);
-  const passages = starts.map(key => all.slice(positions.get(key)!, positions.get(ends[key] ?? key)! + 1));
+  const every = presentation.ayat.map(ayah => ayah.key);
+  const drawn = every.map(key => all.slice(positions.get(key)!, positions.get(ends[key] ?? key)! + 1));
+  const kept = uncoveredRows(drawn.map(passage => passage.map(ayah => ayah.key)));
+  const starts = kept.map(i => every[i]);
+  const passages = kept.map(i => drawn[i]);
   const steps = Math.max(0, ...passages.map(passage => passage.length));
   const matched = new Map<string, Shared & { links: Map<number, MatrixLink> }>();
   for (let step = 0; step < steps; step++) {
@@ -202,12 +218,12 @@ export function matrixReading(presentation: Presentation): Beat[] {
  * word read lit in the card under the tree, at the read-along's pace. The beats keep the ayah (`key`) whose path is lit.
  */
 export function withPathReading(presentation: Presentation, beats: Beat[]): Beat[] {
-  const rows = matrixOf(presentation, false).rows;
-  const starts = presentation.ayat.map(ayah => ayah.key);
+  const matrix = matrixOf(presentation, false);
   return beats.flatMap(beat => {
-    const r = starts.indexOf(beat.key);
-    const ayat = beat.path ? rows[r]?.ayah?.ayat : undefined;
-    if (!ayat?.length) return [beat];
+    const found = beat.path ? rowOf(matrix, beat.key) : null;
+    const ayat = found?.row.ayah?.ayat;
+    if (!found || !ayat?.length) return [beat];
+    const { r } = found;
     return ayat.flatMap((ayah, a) => ayah.words.map((_, i): Beat => ({ ...beat, ms: stepTime({ side: 0, ayah: a, word: i, link: undefined, last: i === ayah.words.length - 1 && a === ayat.length - 1 }, 1), now: [readId(r, ayah.key, i)] })));
   });
 }
