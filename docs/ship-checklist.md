@@ -15,6 +15,15 @@ off, check it here by hand.
 Source tags, where a line has one: `owner 11-18` is the owner's word on that date, `R00xx` a record
 in [records](records/README.md), `AGENTS` a rule already in AGENTS.md.
 
+## 0. Learning first and one look (owner 11-20)
+
+- [ ] The app is for learning. Every page teaches correct information, gives the student the text itself to read, and shows a drawing that helps them learn where one exists. (owner 11-20)
+- [ ] A drawing we built shows wherever its feature appears: its page, its feed card, and its quiz look-up. A feature with a drawing and no feed card is named in the PR. (owner 11-20)
+- [ ] When a drawing and a text say the same thing, a «الرسم | النص» switch shows one of them, drawing first, never both stacked. Keep both only when the text holds more than the drawing. (owner 11-20)
+- [ ] Each section of a page uses the home card's shape: the card, the row of buttons under it, then the book line (a book icon; a tap opens the details in a sheet). No buttons inside the card and no open «المصدر» links. Any other look needs a good reason (it reads better, or the logic differs), and the PR names it. (owner 11-20)
+- [ ] A quote's speaker comes before the quote, on a muted line («قال فلان:»), as in the manaqib and the hadith. (owner 11-20)
+- [ ] Long content never makes a card taller than the screen. It opens whole in a sheet or on the item's own page. (owner 11-20)
+
 ## 1. Content and sources
 
 - [ ] Only correct, established information. If the book's author or editor calls something weak or unknown, reports it only "for wonder", or gives it by a broken chain with no grade, it does not ship. (owner 11-18, 11-19)
