@@ -64,7 +64,7 @@ function useSaved(piece: BranchPiece) {
 function Actions({ piece, palette, pop, current, embedded, extra, onVideo, onShare, onEvidence, onCompare, onRotate, onView, onAround, choice }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void; onShare: () => void; onEvidence: (group: Group) => void; onCompare: (targets: CompareTarget[]) => void; onRotate?: () => void;
   /** A pager embedded elsewhere (the home feed): no studio. */
   embedded?: boolean;
-  /** The feed's: its open button, first in the row, and «ليس من اهتماماتي», alone at the row's left end (owner, 2026-11-20). */
+  /** The feed's: its open button, first in the row, and its «⋯» (ui/MoreMenu), alone at the row's left end (owner, 2026-11-20). */
   extra?: { lead?: React.ReactNode; aside?: React.ReactNode };
   /** Each card's own switches (owner, 2026-11-14): tree or matrix, and the surrounding ayat; the settings only give their defaults. */
   onView?: { mode: BranchView; toggle: () => void }; onAround: { on: boolean; toggle: () => void };
@@ -176,7 +176,7 @@ type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: B
     ayatRoom?: { height: number; set: (height: number) => void };
     /** In a feed card that follows its content: the matrix's overflow, or null when the card shows the tree (lib/useFit.ts). */
     onFit?: (overflow: number | null) => boolean;
-    /** The feed's own buttons for this card: its open button first, «ليس من اهتماماتي» at the left end. */
+    /** The feed's own buttons for this card: its open button first, its «⋯» at the left end. */
     extra?: { lead?: React.ReactNode; aside?: React.ReactNode };
   }; };
 

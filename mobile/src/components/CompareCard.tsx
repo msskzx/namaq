@@ -95,27 +95,28 @@ function RunningAyat({ ayat, before, after, palette, light, lane = false }: { ay
   );
 }
 
-function SideHead({ label, keys, palette, group }: { label: string; keys: string[]; palette: Palette; group?: string }) {
+/** `bare`: the head is the name alone, its buttons in the row under the card (the home feed, owner 2026-11-20). */
+function SideHead({ label, keys, palette, group, bare = false }: { label: string; keys: string[]; palette: Palette; group?: string; bare?: boolean }) {
   const read = `اقرأ ${label} في المصحف`;
   return (
     // The buttons at the right edge, in the thumb's reach, and the surah's name and number in the middle (owner, 2026-11-15).
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-      <View style={{ position: 'absolute', right: 0, flexDirection: 'row-reverse', alignItems: 'center', zIndex: 1 }}>
+      {!bare && <View style={{ position: 'absolute', right: 0, flexDirection: 'row-reverse', alignItems: 'center', zIndex: 1 }}>
         <IconButton Icon={BookOpen} label={read} onPress={() => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } })} size="small" />
         {group && <IconButton Icon={TreeIcon} label="افتح في متشابهات القرآن" onPress={() => toTab({ pathname: '/branches', params: { tree: group } })} size="small" />}
-      </View>
-      <Text style={{ flex: 1, color: palette.muted, fontSize: COMPARE_CARD.labelSize, textAlign: 'center', paddingHorizontal: group ? 64 : 32, minHeight: 30, lineHeight: 30 }}>{label}</Text>
+      </View>}
+      <Text style={{ flex: 1, color: palette.muted, fontSize: COMPARE_CARD.labelSize, textAlign: 'center', paddingHorizontal: bare ? 0 : group ? 64 : 32, minHeight: 30, lineHeight: 30 }}>{label}</Text>
     </View>
   );
 }
 
 /** A lane's head side by side: the surah and its ayat, then its buttons, all on one line to fit half the card. */
-function LaneHead({ label, keys, palette, group }: { label: string; keys: string[]; palette: Palette; group?: string }) {
+function LaneHead({ label, keys, palette, group, bare = false }: { label: string; keys: string[]; palette: Palette; group?: string; bare?: boolean }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', minHeight: 30 }}>
       <Text style={{ color: palette.muted, fontSize: COMPARE_CARD.labelSize, textAlign: 'center', flexShrink: 1 }}>{label}</Text>
-      <IconButton Icon={BookOpen} label={`اقرأ ${label} في المصحف`} onPress={() => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } })} size="small" />
-      {group && <IconButton Icon={TreeIcon} label="افتح في متشابهات القرآن" onPress={() => toTab({ pathname: '/branches', params: { tree: group } })} size="small" />}
+      {!bare && <IconButton Icon={BookOpen} label={`اقرأ ${label} في المصحف`} onPress={() => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } })} size="small" />}
+      {!bare && group && <IconButton Icon={TreeIcon} label="افتح في متشابهات القرآن" onPress={() => toTab({ pathname: '/branches', params: { tree: group } })} size="small" />}
     </View>
   );
 }
@@ -155,9 +156,12 @@ function Studio({ read, palette, record }: { read: ReturnType<typeof useReadAlon
 
 /** One compare card: both sides stacked, tap a coloured word to light its partner, double tap to save, the studio reads along. */
 function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: PairCard; palette: Palette; /** Opens the whole pair page's video, offered in the share sheet. */ onPageVideo?: () => void;
-  /** Set where the card shows outside the compare tab (the home feed): a button that opens it there, first in the row (owner, 2026-11-20). */
+  /**
+   * Set where the card shows outside the compare tab (the home feed): a button that opens it there, first in the row, and the
+   * sides' own buttons (read in the mushaf, the tree) move from their heads to the row (owner, 2026-11-20: no button in a card).
+   */
   onOpen?: () => void;
-  /** The feed's «ليس من اهتماماتي», alone at the row's left end (owner, 2026-11-20). */
+  /** The feed's «⋯» (ui/MoreMenu), alone at the row's left end (owner, 2026-11-20). */
   aside?: React.ReactNode }) {
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const saved = savedIdsOf(card, bookmarks).length > 0;
@@ -211,7 +215,7 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
     const many = card.many && card.many.side === i && !view.refrain;
     return (
       <View key={i} style={{ gap: many ? COMPARE_CARD.optionsGap : COMPARE_CARD.sideGap }}>
-        <SideHead label={sideTitle(view.name, surahName)} keys={keys} palette={palette} group={i === 0 ? card.group : undefined} />
+        <SideHead label={sideTitle(view.name, surahName)} keys={keys} palette={palette} group={i === 0 ? card.group : undefined} bare={!!onOpen} />
         {/* Story cards run in the first surah's order, so this surah tells this part before the last card's. */}
         {view.back && <Text style={{ color: palette.muted, fontSize: COMPARE_CARD.noteSize, textAlign: 'right' }}>قبلُ في السورة</Text>}
         {view.pieces.map((piece, k) => {
@@ -279,7 +283,7 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
           const keys = view.name.listed ? view.name.numbers.map(n => `${cardSide.surah}:${n}`) : sideKeys(cardSide);
           return (
             <View key={i} style={{ flex: 1 }}>
-              <LaneHead label={sideTitle(view.name, surahName)} keys={keys} palette={palette} group={i === 0 ? card.group : undefined} />
+              <LaneHead label={sideTitle(view.name, surahName)} keys={keys} palette={palette} group={i === 0 ? card.group : undefined} bare={!!onOpen} />
               {view.back && <Text style={{ color: palette.muted, fontSize: COMPARE_CARD.noteSize, textAlign: 'center' }}>قبلُ في السورة</Text>}
             </View>
           );
@@ -360,16 +364,22 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
         {quote}
       </Tap>
       {read.studio ? <Studio read={read} palette={palette} record={record} /> : (
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
           {onOpen && <IconButton Icon={ArrowLeftRight} label="افتحها في المقارنة" onPress={onOpen} />}
+          {onOpen && ([0, 1] as const).map(i => {
+            const view = sideView(card, i, selected, []);
+            const keys = view.name.listed ? view.name.numbers.map(n => `${sides[i].surah}:${n}`) : sideKeys(sides[i]);
+            const label = sideTitle(view.name, surahName);
+            return <IconButton key={i} Icon={BookOpen} label={`اقرأ ${label} في المصحف`} onPress={() => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } })} />;
+          })}
           {!onOpen && saveButton}
           <IconButton Icon={Clapperboard} label="استوديو القراءة" onPress={read.open} />
           {/* A story card's parts show no surrounding ayat, so it has no switch for them. */}
           {!parts && <IconButton Icon={UnfoldHorizontal} label="الآيات المحيطة" onPress={() => setAround(!aroundOn)} on={aroundOn} />}
           {!tree && <IconButton Icon={beside ? Rows2 : Columns2} label={beside ? 'السورتان بعضهما تحت بعض' : 'السورتان جنبًا إلى جنب'} onPress={() => setBeside(!beside)} />}
           {!matrixOnly && <IconButton Icon={view === 'tree' ? GalleryHorizontal : TreeIcon} label={view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} onPress={() => setView(view === 'tree' ? 'matrix' : 'tree')} />}
-          {/* In matrix view this button sits on the first ayah's line instead, as on the website. */}
-          {tree && card.group && <IconButton Icon={TreeIcon} label="افتح في متشابهات القرآن" onPress={() => toTab({ pathname: '/branches', params: { tree: card.group } })} />}
+          {/* In matrix view this button sits on the first ayah's line instead, as on the website; in the feed it is always here. */}
+          {(tree || onOpen) && card.group && <IconButton Icon={TreeIcon} label="افتح في متشابهات القرآن" onPress={() => toTab({ pathname: '/branches', params: { tree: card.group } })} />}
           {/* In the feed, save comes after the card's tools, just before share (owner, 2026-11-20). */}
           {onOpen && saveButton}
           {/* Share is always the last of the group, as on the branches tab. */}

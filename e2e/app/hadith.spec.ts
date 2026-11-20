@@ -77,7 +77,7 @@ test('the bar is Quran, hadith, home, tarajim and quizzes, and the mushaf opens 
   await page.getByRole('link', { name: 'الأقسام', exact: true }).click();
   await expect(page).toHaveURL(/\/oaths/);
   await tab(page, 'الرئيسية').click();
-  await page.getByRole('button', { name: 'اقرأ', exact: true }).first().click();
+  await page.getByRole('button', { name: /^افتح المصحف حيث توقفت/ }).first().click();
   await expect(page).toHaveURL(/\/read/);
   // A tap on the page brings the bars back.
   await expect(async () => {

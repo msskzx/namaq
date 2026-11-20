@@ -4,13 +4,14 @@ import { useState, type ReactNode } from 'react';
 import useSWR from 'swr';
 import { useRouter } from 'next/navigation';
 import type { DrawingsView, RingTie } from '@/lib/tarajim';
+import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import Segmented from '@/components/common/Segmented';
 import Button from '@/components/common/Button';
 import { betweenHref, NasabTree, nasabHref, TieSays, TiesRing, tiesHref } from './TarajimParts';
 import LifeTimeline, { lifeHref } from './LifeTimeline';
 
 // What the person page draws for someone whose Siyar entry is converted (owner 2026-11-19: "the profile page does not
-// show any graphs"): «نسبه» as text or as the tree (a toggle, the text first), «حياته» on the timeline, «صلاته» as the
+// show any graphs"): «نسبه» as the tree or as text (owner 2026-11-20: the drawing first), «حياته» on the timeline, «صلاته» as the
 // ring. The same views as the app's person page (mobile/src/screens/person.tsx), drawn by the shared Tarajim parts.
 
 const fetchJson = (url: string) => fetch(url).then(res => (res.ok ? res.json() : undefined));
@@ -31,16 +32,14 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-/** «نسبه»: the name as the book writes it, or the tree of his fathers; the text first (owner 2026-11-19). */
+/** «نسبه»: the tree of his fathers, or the name as the book writes it (owner 2026-11-20: «الرسم | النص», the drawing first). */
 export function NasabToggle({ view, text }: { view: DrawingsView; text: ReactNode }) {
-  const [shown, setShown] = useState<'text' | 'tree'>('text');
+  const [shown, setShown] = useState<DrawingOrText>('drawing');
   return (
     <div className="flex flex-col gap-3" lang="ar" dir="rtl">
-      <Segmented label="كيف يُعرض النسب" tabs options={[
-        { key: 'text', label: 'النص', current: shown === 'text', onClick: () => setShown('text') },
-        { key: 'tree', label: 'الشجرة', current: shown === 'tree', onClick: () => setShown('tree') },
-      ]} />
-      {shown === 'text' ? text : <NasabTree view={view.nasab} />}
+      <Segmented label="كيف يُعرض النسب" tabs className="self-start"
+        options={DRAWING_OR_TEXT.map(item => ({ ...item, current: shown === item.key, onClick: () => setShown(item.key) }))} />
+      {shown === 'text' ? text : <NasabTree view={view.nasab} text={false} />}
       <div><Button size="sm" href={nasabHref([view.slug])}>{view.sex === 'FEMALE' ? 'قارن نسبها بغيرها' : 'قارن نسبه بغيره'}</Button></div>
     </div>
   );

@@ -39,6 +39,7 @@ export interface AssembledQuestion {
   marked?: ChoiceQuestion['marked'];
   explains?: ChoiceQuestion['explains'];
   passage?: ChoiceQuestion['passage'];
+  boxes?: ChoiceQuestion['boxes'];
   quranChoices?: ChoiceQuestion['quranChoices'];
   whereOf?: ChoiceQuestion['whereOf'];
   terms?: ChoiceQuestion['terms'];
