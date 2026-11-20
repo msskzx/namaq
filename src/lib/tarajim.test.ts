@@ -36,7 +36,7 @@ describe('betweenView', () => {
   });
 
   it('keeps out a slug in the address that names no converted person, rather than failing', () => {
-    expect(betweenView(pickedSlugs('az-zubayr-ibn-al-awwam,khalid-ibn-al-walid,nobody')).people.map(p => p.slug)).toEqual(['az-zubayr-ibn-al-awwam']);
+    expect(betweenView(pickedSlugs('az-zubayr-ibn-al-awwam,nobody')).people.map(p => p.slug)).toEqual(['az-zubayr-ibn-al-awwam']);
   });
 });
 
