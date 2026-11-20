@@ -156,6 +156,44 @@ too long for a card.
 A Quran item with one passage now draws it as the reader does (`AyatRange`, the mushaf's own lines); several whole
 surahs still show their whole Madina page.
 
+## Batch 3: after the prayers (2026-11-20)
+
+Every report of «باب الأذكار بعد الصلاة» and «باب الحث على ذكر الله تعالى بعد صلاة الصبح» (179–203, pp. 71–75) was
+read, with Ibn Hajar's section on each (Nata'ij 2:263–335). Already in: 183, 184, 192. Added, six:
+
+| Item | Report | Named judgment |
+| --- | --- | --- |
+| `prayer-ibn-zubayr` | 185 | Ibn Hajar, 2:264, sahih; note «قال ابن الزبير: وكان رسول الله ﷺ يهلّل بهنّ دُبُرَ كُلِّ صَلاةٍ» |
+| `prayer-cowardice` | 189 | Ibn Hajar, 2:280, sahih |
+| `prayer-three-refuges` | 191 | Ibn Hajar, 2:290, sahih; al-Ikhlas, al-Falaq and al-Nas whole, as al-Nawawi says to read them |
+| `prayer-disbelief-poverty` | 197 | Ibn Hajar, 2:309, hasan |
+| `maghrib-fajr-refuge-fire` | 201 | Ibn Hajar, 2:326, hasan; counter 7, after maghrib, and «وإذَا صَلَّيْتَ الصُّبْحَ فَقُلْ كذَلِكَ» |
+| `fajr-knowledge` | 202 | Ibn Hajar, 2:330, hasan; after subh (the same words said on waking are report 232, a separate card) |
+
+Report 191: al-Nawawi gives «بالمعوذتين», notes Abu Dawud's «بالمعوذات», and says to read al-Ikhlas with the two.
+In the Nata'ij Ibn Hajar questions that: «وفيه نظر لاحتمال أن يراد بالمعوذات آيات السورتين» (2:291). In Fath al-Bari,
+though, he says he first allowed the two-surah reading and then saw that «المعوذات» means the three:
+«ثم ظهر من حديث هذا الباب أنه على الظاهر، وأن المراد بأنه كان يقرأ بالمعوذات أي السور الثلاث» (Fath al-Bari, Salafiyya
+ed., 9:62, https://shamela.ws/book/1673/5151). There he also cites 'Uqba's own hadith in the three Sunan, Ahmad, Ibn
+Khuzayma and Ibn Hibban: «قل هو الله أحد، وقل أعوذ برب الفلق، وقل أعوذ برب الناس تعوذ بهن … اقرأ المعوذات دبر كل
+صلاة فذكرهن». The commentaries of al-Qari (al-Hirz al-Thamin, quoting Ibn Hajar: «وهو المعتمد») and al-Saharanfuri's notes on
+al-Bukhari («أو هما والإخلاص على التغليب وهو المعتمد») say the same. So the card shows the three surahs, as al-Nawawi
+says. Each surah is drawn from its title as the reader draws it; the bedtime three (255) are drawn the same way, which
+gives the same lines as the whole page did.
+
+Report 189: Ibn Hajar's graded route (2:280) adds «وأعوذ بك من البخل»; the card shows al-Nawawi's words as printed.
+
+Report 197 names no collection (al-Nawawi's «وروينا فيه» points back to Ibn al-Sunni's book), so its card names none.
+
+Left out: 200 (ten tahlil after subh): the «هذا حديث حسن غريب» on 2:321 is al-Tirmidhi's, and Ibn Hajar follows it
+with «كذا قال الترمذي … وهي غلط؛ لأن سنده مضطرب، وشهر بن حوشب مختلف في توثيقه» (2:321–322). 193 (Ibn Hajar: Zayd al-'Ammi is weak, 2:301), 194 (gharib; 'Ubayd Allah b. Zahr and 'Ali b. Yazid weak,
+2:302–303), 195 (gharib; Abu Harun very weak, 2:305–306), 196 (Abu Malik al-Nakha'i weak, 2:308). 203 (Suhayb): Ibn
+Hajar grades his fuller route sahih (2:333), and that route places it «أيام خيبر» with «ولم يكن يفعله». Our reading,
+not his words, is that it was a supplication of those days rather than a daily one after fajr, so it waits. 198 has no set words (praise, then prayer on the Prophet ﷺ, then any du'a), and
+al-Nawawi calls its chain weak where Ibn Hajar calls it sahih (2:311). 179 is said inside the prayer; 180–182 and 199
+describe the time or the reward with no words to say. Waiting for a sequence counter: 186, 187, 188 (33 each, then the
+tahlil that completes the hundred) and 190 (10 each).
+
 ## Dark-mode sketch
 
 The sketch imports the real app Card, Tabs, TopBar, Reference, Button, IconButton,
@@ -219,7 +257,7 @@ from the books, so the tests check the data against it, not against the books.
 They also check each rank against the words of its quote, each Nata'ij link
 against the page it names, and that each Nata'ij passage is about the item's
 own hadith. `npm run adhkar:check` downloads both books and checks every string,
-printed page and link against them; it passes for all 15 items. They also test all
+printed page and link against them; it passes for all 43 items. They also test all
 occasion selectors, exact-id selection, variant separation, Quran positions and
 counts that belong to an action instead of the following utterance. These are
 ordinary content/behavior tests, not a proposed architectural guard.

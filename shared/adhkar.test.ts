@@ -114,7 +114,7 @@ describe('the al-Adhkar selection', () => {
 
   it('gives a counter only the sourced target and the whole selection as its unit', () => {
     const counted = ADHKAR.filter(item => item.repeat);
-    expect(counted.map(item => [item.citation.report, item.repeat!.count])).toEqual([[207, 3], [213, 3], [206, 100], [215, 4], [255, 3], [259, 3]]);
+    expect(counted.map(item => [item.citation.report, item.repeat!.count])).toEqual([[201, 7], [207, 3], [213, 3], [206, 100], [215, 4], [255, 3], [259, 3]]);
     for (const item of counted) {
       expect(item.repeat!.scope).toBe('whole-selection');
       expect(authorReport(item.citation.report)).toContain(item.repeat!.quote);
