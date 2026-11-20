@@ -333,7 +333,8 @@ const anchorOf = (card: PairCard) => compareAnchor(card.sides[0], card.sides[1])
  * One compare card with its buttons. `page` is set where it shows outside its compare page (the home feed): the page's
  * address, for an open button and for the shared link.
  */
-export function Card({ card, names, ar, savedIds, review, view: preferred = 'cards', onPageVideo, page }: { card: PairCard; names: Names; ar: boolean; savedIds: string[]; review?: { a: number; b: number }; view?: BranchView; /** The whole page's video, offered in the share dialog beside the card's own. */ onPageVideo?: () => void; page?: string }) {
+export function Card({ card, names, ar, savedIds, review, view: preferred = 'cards', onPageVideo, page, aside }: { card: PairCard; names: Names; ar: boolean; savedIds: string[]; review?: { a: number; b: number }; view?: BranchView; /** The whole page's video, offered in the share dialog beside the card's own. */ onPageVideo?: () => void; page?: string;
+  /** The home feed's «ليس من اهتماماتي», alone at the row's far end. */ aside?: React.ReactNode }) {
   const [tapped, setLit] = useState<string | null>(null);
   const read = useReadAlong(card);
   const step = read.step;
@@ -455,6 +456,7 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'car
         {/* Save comes after the card's tools, just before share (owner, 2026-11-20). */}
         {saveButton}
         <ShareImageButton size="icon" iconSize={18} href={`${page ?? ''}#${anchor}`} onVideo={canRecord() ? read.open : undefined} onPageVideo={onPageVideo} />
+        {aside}
       </div>}
       {verdicts.map(({ id: pair, verdict }) => <div key={pair} dir="ltr" className="mt-1 text-sm">
         {verdict.ask && <p data-ask className="mb-1 rounded-md border border-[var(--home-accent)] bg-[var(--home-paper-deep)] px-2 py-1 font-semibold text-[var(--home-accent)]">? Needs your feedback: {verdict.ask}</p>}
