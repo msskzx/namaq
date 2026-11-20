@@ -11,7 +11,7 @@ import { tafsirRuns } from '@shared/quran/tafsirSadi';
 import { bookState, readBook, useBooks } from '@/lib/books';
 import { surahNames } from '@/lib/branches';
 import { ayahMushafWords } from '@/lib/mushaf';
-import { QURAN_FONT, type Palette } from '@/lib/theme';
+import type { Palette } from '@/lib/theme';
 import QuranWords from './quran/text/QuranWords';
 import { BookList } from './Books';
 import LoadingDots from '@/ui/LoadingDots';
@@ -154,9 +154,9 @@ function Kashshaf({ ayah, palette, onSpan, onClose }: { ayah: string; palette: P
             {kashshafRuns(passage).map((run, i) => (
               <Text key={i} onPress={run.lit !== null ? () => setPicked(run.lit) : undefined}
                 accessibilityState={run.lit !== null ? { selected: run.lit === lit } : undefined}
-                style={[run.quran ? { fontFamily: QURAN_FONT, color: palette.accent } : null, run.lit !== null ? { backgroundColor: run.lit === lit ? deepBand(palette) : band(palette) } : null]}>
+                style={run.lit !== null ? { backgroundColor: run.lit === lit ? deepBand(palette) : band(palette) } : undefined}>
                 {run.opens && <Text style={{ fontSize: 14, color: palette.muted }}>{` ${run.devices.map(device => `«${device}»`).join(' ')} `}</Text>}
-                {run.text}
+                {run.quran ? <QuranWords style={{ color: palette.accent }}>{run.text}</QuranWords> : run.text}
               </Text>
             ))}
           </Text>
