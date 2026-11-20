@@ -9,7 +9,8 @@ export type Shipped = [number, number, number, number, number];
 export type TreeSizes = Record<string, Sized>;
 
 const bundled = sizes as Record<string, number[]> as Record<string, Shipped>;
-const SAVED = 'tree-sizes';
+/** Renamed when the tree's words changed size (2026-11-20: the reader's word size), so sizes measured before are dropped. */
+const SAVED = 'tree-sizes-2';
 const KEEP = 400;
 
 export const sizeKey = (id: string, around: boolean) => around ? `${id}+` : id;

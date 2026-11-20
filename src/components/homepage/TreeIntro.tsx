@@ -80,7 +80,7 @@ async function play(root: HTMLElement, marker: HTMLElement, view: View, signal: 
     undo.push(() => { piece.style.opacity = opacity; });
   });
   const blank = (box: HTMLElement) => {
-    const words = box.querySelector<HTMLElement>('.font-quran');
+    const words = box.querySelector<HTMLElement>('[data-tree-text]');
     if (!words?.textContent) return async () => {};
     const position = box.style.position;
     if (getComputedStyle(box).position === 'static') box.style.position = 'relative';

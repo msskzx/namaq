@@ -16,10 +16,12 @@ import type { Around, Beside, Matches, Presentation } from '@/lib/branches';
 import { aroundOf, likenessAt, mixedBefore, NOTHING_SHARED, subtreeOf, type Shared as SharedWords } from '@/lib/branches';
 import { lineId, nodeIndices, nodeId } from '@/lib/growth';
 import { CURVE, litSpine, type Span } from '@/lib/litSpine';
-import { blend, QURAN_FONT, toneOf, UI_FONT, type Palette, CARD } from '@/lib/theme';
+import { blend, toneOf, UI_FONT, type Palette, CARD } from '@/lib/theme';
 import Hourglass from '@/ui/Hourglass';
 import TreeIcon from './TreeIcon';
 import type { SceneBox, SceneEdge, ScenePart, SceneText, TreeScene } from '@/lib/scene';
+import { TreeText, useWordSize } from './quran/text/AyahFlow';
+import { FLOW_LINE } from '@shared/quran/quranText/flow';
 
 /** A tap on a box; `lightPath` lights its path, which the host runs unless the tap meant something else (a double tap). */
 type Tap = (ayahKeys: string[], lightPath?: () => void) => void;
@@ -35,7 +37,7 @@ const NO_GROWTH: TreeGrowth = { hidden: new Set(), now: new Set(), lit: null };
 /** Draws a node's own content instead of its words, e.g. a quiz input; `index` counts nodes below the root as `branchNodes` does. */
 /** Draws a node's box in place of its words; `path` is the words above it. */
 export type RenderNode = (node: Branch, index: number, path: string[]) => React.ReactNode | undefined;
-type Shared = { spellings: boolean; palette: Palette; names: Record<number, string>; matches: Matches; offsets: Record<string, number>; onTap: Tap; down: boolean; indices: Map<Branch, number>; around?: Around; edges: SceneEdge[]; render?: RenderNode; paths?: Paths; actions?: NodeActions; inTree: Set<string>;
+type Shared = { /** The tree's word size: a word on its own, the reader's (useWordSize). */ size: number; spellings: boolean; palette: Palette; names: Record<number, string>; matches: Matches; offsets: Record<string, number>; onTap: Tap; down: boolean; indices: Map<Branch, number>; around?: Around; edges: SceneEdge[]; render?: RenderNode; paths?: Paths; actions?: NodeActions; inTree: Set<string>;
   /** The ayat whose ayah before the one before is drawn too (a mixed tree with the surrounding ayat on, see `required`). */
   earlier: Set<string> };
 /** A lit path: the ayah growing while the studio is open, else the paths a tap or a search lit. */
@@ -165,8 +167,8 @@ function BraidEdge({ count, join, palette }: { count: number; join?: boolean; pa
 
 /** One word of a node that holds a braid, in its own place so the video finds it where the app put it. */
 function Word({ form, color, size, palette }: { form: WrittenForm; color: string; size: number; palette: Palette }) {
-  const part = usePart({ size, words: [{ text: quranText(form.word), color }], lineHeight: size * 1.9 });
-  return <Text ref={part} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * 1.9, color, writingDirection: 'rtl' }}><Written form={form} palette={palette} /></Text>;
+  const part = usePart({ size, words: [{ text: quranText(form.word), color }], lineHeight: size * FLOW_LINE });
+  return <TreeText ref={part} look={{ color }}><Written form={form} palette={palette} /></TreeText>;
 }
 
 /** A word as the node's ayat write it, with the stop signs only some of them carry faint (shared/quran/writtenForms.ts). */
@@ -178,11 +180,11 @@ function Written({ form, palette }: { form: WrittenForm; palette: Palette }) {
 function Strand({ words, refs, size, palette }: { words: string; refs: string; size: number; palette: Palette }) {
   const frame = usePart({ size: 0, frame: true });
   const ink = palette.marks.written ?? palette.ink;
-  const text = usePart({ size, words: [{ text: words, color: ink }], lineHeight: size * 1.6 });
+  const text = usePart({ size, words: [{ text: words, color: ink }], lineHeight: size * FLOW_LINE });
   const label = usePart({ label: refs, size: 11, align: 'center' });
   return (
     <View ref={frame} testID="strand" style={{ alignItems: 'center', borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 8 }}>
-      <Text ref={text} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * 1.6, color: ink, writingDirection: 'rtl' }}>{words}</Text>
+      <TreeText ref={text} look={{ color: ink }}>{words}</TreeText>
       <Text ref={label} style={{ fontFamily: UI_FONT, fontSize: 11, lineHeight: 14, color: palette.muted, marginTop: -4, paddingBottom: 2, maxWidth: 200, textAlign: 'center' }}>{refs}</Text>
     </View>
   );
@@ -198,11 +200,11 @@ function Words({ words, ayahKeys, at, shared, size, marks, color, forms, differs
   const part = usePart(sceneWords({ words, ayahKeys, at, shared, size, marks, color, forms, differs, tones: given }));
   if (!braided) {
     return (
-      <Text ref={part} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * 1.9, color: color ?? palette.ink, textAlign: 'center', writingDirection: 'rtl' }}>
+      <TreeText ref={part} center look={{ color: color ?? palette.ink }}>
         {pieces.map((piece, n) => piece.kind === 'word' && (
           <Text key={n} style={tones[piece.index] ? { color: tones[piece.index] } : undefined}>{n > 0 ? ' ' : ''}<Written form={writtenForms({ forms }, piece.index, words[piece.index], shared.paths?.lit)[0]} palette={palette} /></Text>
         ))}
-      </Text>
+      </TreeText>
     );
   }
   // With a braid the words sit in a row of their own pieces (the app lays out right to left, so a row starts on the
@@ -235,7 +237,7 @@ function Words({ words, ayahKeys, at, shared, size, marks, color, forms, differs
 /** The same words as data, for the video: each word as the node shows it (a braid's words come as their own pieces). */
 const sceneWords = ({ words, ayahKeys, at, shared, size, marks, color, forms, differs, tones: given }: WordsProps) => {
   const tones = tonesOf(words, ayahKeys, at, shared, marks, forms, differs, given);
-  return { size, lineHeight: size * 1.9, words: words.map((word, i) => ({ text: quranText(writtenForms({ forms }, i, word, shared.paths?.lit)[0].word), color: tones[i] ?? color ?? shared.palette.ink })) };
+  return { size, lineHeight: size * FLOW_LINE, words: words.map((word, i) => ({ text: quranText(writtenForms({ forms }, i, word, shared.paths?.lit)[0].word), color: tones[i] ?? color ?? shared.palette.ink })) };
 };
 
 function Tool({ label, Icon, onPress, palette, on }: { label: string; Icon: (props: LucideProps) => React.ReactNode; onPress: () => void; palette: Palette; on?: boolean }) {
@@ -307,8 +309,8 @@ function Box({ id, ayahKeys, leaf, shared, muted, text, tools, width, children }
 /** An ayah's end mark between two parts of a branch, drawn without a box. */
 function Mark({ id, text, shared }: { id: string; text: string; shared: Shared }) {
   const registry = useContext(Boxes);
-  const register = (view: Host | null) => { if (registry) registry.set(id, { view, text: { size: 18, words: [{ text, color: shared.palette.muted }], bare: true } }); };
-  return <View ref={register}><Text style={{ fontFamily: QURAN_FONT, fontSize: 18, color: shared.palette.muted, paddingHorizontal: 4 }}>{text}</Text></View>;
+  const register = (view: Host | null) => { if (registry) registry.set(id, { view, text: { size: shared.size, words: [{ text, color: shared.palette.muted }], bare: true } }); };
+  return <View ref={register} style={{ paddingHorizontal: 4 }}><TreeText look={{ color: shared.palette.muted }}>{text}</TreeText></View>;
 }
 
 /**
@@ -452,17 +454,17 @@ function Join({ entries, spans, shared }: { entries: Entry[]; spans: Span[]; sha
 function NeighbourBox({ id, beside, of, shared }: { id: string; beside: Beside; of: string; shared: Shared }) {
   const [surah, ayah] = beside.key.split(':').map(Number);
   const ref = shared.names[surah] ? `${shared.names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`;
-  const basmala = beside.basmala ? sceneWords({ words: beside.basmala, ayahKeys: [], at: 0, shared, size: 17, marks: NOTHING_SHARED, color: shared.palette.muted }).words : [];
+  const basmala = beside.basmala ? sceneWords({ words: beside.basmala, ayahKeys: [], at: 0, shared, size: shared.size, marks: NOTHING_SHARED, color: shared.palette.muted }).words : [];
   const closed = [...beside.words, ...closingSign(beside.words, [beside.key])];
   // Drawn as every box is (owner, 2026-11-15: the dashed, muted look drew more attention than it should): same border, card,
   // text size and ink; only the basmala stays muted, as it is not the ayah's text.
-  const own = sceneWords({ words: closed, ayahKeys: [], at: 0, shared, size: 20, marks: beside });
-  const text: SceneText = { size: 20, words: id.startsWith('a') ? [...basmala, ...own.words] : [...own.words, ...basmala], footer: ref };
+  const own = sceneWords({ words: closed, ayahKeys: [], at: 0, shared, size: shared.size, marks: beside });
+  const text: SceneText = { size: shared.size, words: id.startsWith('a') ? [...basmala, ...own.words] : [...own.words, ...basmala], footer: ref };
   return (
     <Box id={id} ayahKeys={[of]} leaf shared={shared} text={text} tools={<Tools shared={shared} inTree={shared.inTree.has(beside.key) ? beside.key : undefined} />}>
-      {beside.basmala && id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={17} marks={NOTHING_SHARED} color={shared.palette.muted} />}
-      <Words words={closed} ayahKeys={[]} at={0} shared={shared} size={20} marks={beside} />
-      {beside.basmala && !id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={17} marks={NOTHING_SHARED} color={shared.palette.muted} />}
+      {beside.basmala && id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={shared.size} marks={NOTHING_SHARED} color={shared.palette.muted} />}
+      <Words words={closed} ayahKeys={[]} at={0} shared={shared} size={shared.size} marks={beside} />
+      {beside.basmala && !id.startsWith('a') && <Words words={beside.basmala} ayahKeys={[]} at={0} shared={shared} size={shared.size} marks={NOTHING_SHARED} color={shared.palette.muted} />}
       <References text={ref} shared={shared} center />
     </Box>
   );
@@ -513,7 +515,7 @@ function Node({ node, path, shared, starts }: { node: Branch; path: string[]; sh
   if (!bare) entries.forEach(entry => edge(shared, id, entry.id));
   if (rejoinId) node.children.forEach(child => edge(shared, nodeId(shared.indices.get(child)!), rejoinId));
   const references = runs.map(run => ayatLabel(run, shared.names)).join(' · ');
-  const shownWords = { words: [...words, ...closingSign(words, endedIn(node, path))], ayahKeys: all, at: path.length, shared, size: root ? 22 : 20, forms: shared.spellings ? node.forms : undefined, differs: shared.spellings ? node.differs : undefined, tones: node.tones };
+  const shownWords = { words: [...words, ...closingSign(words, endedIn(node, path))], ayahKeys: all, at: path.length, shared, size: shared.size, forms: shared.spellings ? node.forms : undefined, differs: shared.spellings ? node.differs : undefined, tones: node.tones };
   const start = starts && startLabel(shared, starts, node.ayat);
   const text: SceneText = { ...sceneWords(shownWords), ...(runs.length ? singleSurah ? { header: references } : { footer: references } : {}), ...(start ? { header: singleSurah ? `${start} · ${references}` : start } : {}) };
   return (
@@ -566,7 +568,8 @@ type Props = { presentation: Presentation; matches: Matches; names: Record<numbe
 function BranchTree({ presentation: given, matches, names, palette, onTap, onLayout, direction = 'side', around, growth = NO_GROWTH, sceneRef, renderNode, paths, actions, spellings }: Props) {
   const presentation = { ...given, prefixes: withStarts(given.prefixes, keys(given.tree)) };
   const down = direction === 'down';
-  const shared: Shared = { spellings: spellings ?? !renderNode, palette, names, matches, offsets: presentation.offsets, onTap, down, indices: nodeIndices(presentation.tree), around, edges: [], render: renderNode, paths, actions, inTree: new Set(keys(presentation.tree)), earlier: new Set() };
+  const size = useWordSize();
+  const shared: Shared = { size, spellings: spellings ?? !renderNode, palette, names, matches, offsets: presentation.offsets, onTap, down, indices: nodeIndices(presentation.tree), around, edges: [], render: renderNode, paths, actions, inTree: new Set(keys(presentation.tree)), earlier: new Set() };
   const registry = useRef<Registry>(new Map()).current;
   const parts = useRef<Parts>(new Map()).current;
   const rootView = useRef<Host>(null);
@@ -579,7 +582,7 @@ function BranchTree({ presentation: given, matches, names, palette, onTap, onLay
   const before: Entry[] = presentation.prefixes.length === 0 ? (opensApart ? [] : befores(all, shared)) : presentation.prefixes.flatMap((prefix, i): Entry[] => {
     if (prefix.word) {
       const lead = befores(prefix.keys, shared);
-      const prefixWords = { words: prefix.words ?? prefix.word.split(' '), ayahKeys: prefix.keys, at: 0, shared: { ...shared, offsets: {} }, size: 20, forms: shared.spellings ? prefix.forms : undefined, differs: shared.spellings ? prefix.differs : undefined, color: prefix.conj ? toneOf(palette, prefix.conj) : undefined };
+      const prefixWords = { words: prefix.words ?? prefix.word.split(' '), ayahKeys: prefix.keys, at: 0, shared: { ...shared, offsets: {} }, size: shared.size, forms: shared.spellings ? prefix.forms : undefined, differs: shared.spellings ? prefix.differs : undefined, color: prefix.conj ? toneOf(palette, prefix.conj) : undefined };
       lead.forEach(entry => edge(shared, `p${i}`, entry.id, true));
       const start = startLabel(shared, prefix.keys);
       const box = <Box id={`p${i}`} ayahKeys={prefix.keys} leaf shared={shared} text={{ ...sceneWords(prefixWords), ...(start ? { header: start } : {}) }}>
