@@ -3,7 +3,6 @@ import { Pressable, ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
 import { ChevronDown, ChevronUp, PenLine, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
-import { mushafText } from '@shared/quran/mushafText';
 import { CONDITION_NOTES, CONDITION_SOURCES, CONDITION_SPANS, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, conditionLines, inKind, soleCard, openingCards, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
 import { someTone } from '@/lib/marks';
 import { Text } from '@/ui/Text';
@@ -17,7 +16,8 @@ import { readAyah } from '@/lib/openReader';
 import { shareCard } from '@/lib/shareImage';
 import { readSettings, writeSettings } from '@/lib/soloStore';
 import { useTabRetap } from '@/lib/tabRetap';
-import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import { usePalette, type Palette } from '@/lib/theme';
+import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
 import IconButton from '@/ui/IconButton';
 import Card from '@/ui/Card';
 
@@ -29,12 +29,12 @@ function tone(palette: Palette, kind: keyof Palette['marks'], some: boolean) {
   return colour && (some ? someTone(palette, colour) : colour);
 }
 
-function Ayah({ words: list, cut, palette, size = 22 }: { words: OpeningWord[]; cut?: boolean; palette: Palette; size?: number }) {
+function Ayah({ words: list, cut, palette }: { words: OpeningWord[]; cut?: boolean; palette: Palette }) {
   return (
-    <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * 1.9, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
-      {list.map((word, i) => <Text key={i} style={'text' in word && word.mark ? { color: tone(palette, word.mark.kind, word.mark.some) } : undefined}>{i > 0 ? ' ' : ''}{'end' in word ? num(word.end) : mushafText(word.text)}</Text>)}
-      {cut ? <Text style={{ color: palette.muted }}> …</Text> : null}
-    </Text>
+    <AyahFlow color={palette.ink}>
+      {list.map((word, i) => <AyahWords key={i} look={'text' in word && word.mark ? { color: tone(palette, word.mark.kind, word.mark.some) } : undefined}>{`${i > 0 ? ' ' : ''}${'end' in word ? num(word.end) : word.text}`}</AyahWords>)}
+      {cut ? <AyahWords look={{ color: palette.muted }}> …</AyahWords> : null}
+    </AyahFlow>
   );
 }
 
@@ -44,7 +44,7 @@ function Conditions({ surah, palette }: { surah: number; palette: Palette }) {
       {conditionLines(surah).map(line => (
         <View key={line.key} style={{ borderRightWidth: 2, borderStyle: line.role === 'disputed' ? 'dashed' : 'solid', borderColor: line.role === 'answer' ? palette.green : line.role === 'disputed' ? palette.muted : palette.rule, paddingRight: 8 }}>
           {line.role !== 'condition' && <Text style={{ color: palette.muted, fontSize: 12, textAlign: 'right' }}>{line.role === 'answer' ? (line.ours ? 'الجواب، قراءتنا' : 'الجواب') : 'موضع الخلاف في الجواب'}</Text>}
-          <Ayah palette={palette} size={19} words={[...words(line.key).map(text => ({ text })), { end: Number(line.key.split(':')[1]) }]} />
+          <Ayah palette={palette} words={[...words(line.key).map(text => ({ text })), { end: Number(line.key.split(':')[1]) }]} />
         </View>
       ))}
     </View>

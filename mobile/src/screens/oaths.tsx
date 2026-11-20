@@ -14,7 +14,8 @@ import { WEBSITE } from '@/lib/website';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { readAyah } from '@/lib/openReader';
 import { useTabRetap } from '@/lib/tabRetap';
-import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import { usePalette, type Palette } from '@/lib/theme';
+import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
 import IconButton from '@/ui/IconButton';
 import Card from '@/ui/Card';
 import Tabs from '@/ui/Tabs';
@@ -45,12 +46,12 @@ function OathCard({ oath, palette }: { oath: OathView; palette: Palette }) {
         {quotes && <Reference title={citesOf(quotes)} quotes={quotes} palette={palette} />}
       </View>
       <Card palette={palette} pad={[6, 14]}>
-        <Text style={{ fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 42, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
+        <AyahFlow color={palette.ink}>
           {oath.lines.map(line => [
-            ...line.words.map((word, i) => <Text key={`${line.ayah}-${i}`} style={{ fontFamily: QURAN_FONT, color: word.sworn ? palette.accent : palette.ink }}>{`${word.text} `}</Text>),
-            <Text key={`${line.ayah}-n`} style={{ fontFamily: QURAN_FONT, color: palette.amber }}>{`${num(line.ayah)} `}</Text>,
+            ...line.words.map((word, i) => <AyahWords key={`${line.ayah}-${i}`} look={word.sworn ? { color: palette.accent } : undefined}>{`${word.text} `}</AyahWords>),
+            <AyahWords key={`${line.ayah}-n`} look={{ color: palette.amber }}>{`${num(line.ayah)} `}</AyahWords>,
           ])}
-        </Text>
+        </AyahFlow>
       </Card>
       {/* Card actions under the card, on the right (owner): the mushaf, then share last. */}
       <View style={{ flexDirection: 'row', gap: 4 }}>
