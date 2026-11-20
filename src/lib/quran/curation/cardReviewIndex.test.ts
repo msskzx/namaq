@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { agentsChanged, comparePages, pageOf, pressesByCard, pressOf, rowsChanged, selectCards, type CardPress, type CardReviewEntry } from './cardReviewIndex';
 
-const tree = (id: string, rows: string[][], extra: Partial<CardReviewEntry> = {}): CardReviewEntry => ({ id, kind: 'word', title: '', rows, verdict: { keep: true, why: 'old' }, ...extra });
+const tree = (id: string, rows: string[][], extra: Partial<CardReviewEntry> = {}): CardReviewEntry => ({ id, kind: 'word', rows, verdict: { keep: true, why: 'old' }, ...extra });
 const press = (id: string, action: CardPress['action'], t = 0): CardPress => ({ t, id, action, version: 'original' });
 
 describe('card review', () => {
   it('a press on a tree card that is one compare pair is the press of the compare card of that pair too (one verdict)', () => {
     const twin = tree('tree:a', [['2:8'], ['3:114']], { twin: '2:8|3:114' });
-    const compare: CardReviewEntry = { id: 'cmp-card:2:8|3:114', kind: 'compare', title: '', rows: [['2:8'], ['3:114']], pairs: ['2:8|3:114'], page: '2/3' };
+    const compare: CardReviewEntry = { id: 'cmp-card:2:8|3:114', kind: 'compare', rows: [['2:8'], ['3:114']], pairs: ['2:8|3:114'], page: '2/3' };
     const other = tree('tree:b', [['2:9'], ['3:115']]);
     const pressed = pressesByCard([{ t: 1, id: 'tree:a', shared: '2:8|3:114', action: 'keep', version: 'original' }]);
     expect(pressOf(compare, pressed)?.action).toBe('keep');
@@ -40,8 +40,8 @@ describe('card review', () => {
       tree('w1', [['2:1'], ['3:1']]),
       tree('w2', [['2:2'], ['3:2']]),
       tree('b1', [['2:3'], ['3:3']], { kind: 'book' }),
-      { id: 'c1', kind: 'compare', title: '', rows: [], page: '2/3', pairs: ['2:4|3:4'] } as CardReviewEntry,
-      { id: 'c2', kind: 'compare', title: '', rows: [], page: '2/5', pairs: ['2:5|5:5', '2:6|5:6'] } as CardReviewEntry,
+      { id: 'c1', kind: 'compare', rows: [], page: '2/3', pairs: ['2:4|3:4'] } as CardReviewEntry,
+      { id: 'c2', kind: 'compare', rows: [], page: '2/5', pairs: ['2:5|5:5', '2:6|5:6'] } as CardReviewEntry,
     ];
     const ids = (list: CardReviewEntry[]) => list.map(entry => entry.id);
     expect(ids(selectCards(cards, {}, new Map(), { kind: 'word' }))).toEqual(['w1', 'w2']);
@@ -59,7 +59,7 @@ describe('card review', () => {
   });
 
   it('orders compare surah pairs as the mushaf does, with their card counts', () => {
-    const at = (page: string): CardReviewEntry => ({ id: page, kind: 'compare', title: '', rows: [], page });
+    const at = (page: string): CardReviewEntry => ({ id: page, kind: 'compare', rows: [], page });
     expect(comparePages([at('10/12'), at('2/3'), at('2/10'), at('2/3')])).toEqual([{ page: '2/3', count: 2 }, { page: '2/10', count: 1 }, { page: '10/12', count: 1 }]);
   });
 });

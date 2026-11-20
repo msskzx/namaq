@@ -23,8 +23,8 @@ export function parseCardsReview(params: Record<string, string | string[] | unde
   };
 }
 
-/** The address of a query, or with `asParams` its parameters (for the go-to-page form). Defaults are left out. */
-export function cardsReviewHref(query: Partial<CardsReviewQuery>, asParams = false): string | Record<string, string> {
+/** The address of a query; defaults are left out. */
+export function cardsReviewHref(query: Partial<CardsReviewQuery>): string {
   const params: Record<string, string> = {};
   if (query.kind) params.kind = query.kind;
   if (query.kind === 'compare' && query.pair) params.pair = query.pair;
@@ -32,7 +32,6 @@ export function cardsReviewHref(query: Partial<CardsReviewQuery>, asParams = fal
   if (query.changed) params.changed = '1';
   if (query.todo) params.todo = '1';
   if (query.page && query.page > 1) params.page = String(query.page);
-  if (asParams) return params;
   const search = new URLSearchParams(params).toString();
   return `/quran/cards-review${search ? `?${search}` : ''}`;
 }

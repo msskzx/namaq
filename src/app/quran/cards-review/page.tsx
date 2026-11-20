@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Segmented from '@/components/common/Segmented';
 import Chip from '@/components/common/Chip';
@@ -9,7 +8,7 @@ import { CARD_KINDS, comparePages, pageOf, pressesByCard, pressOf, selectCards, 
 import { cardProposals, cardReviewIndex } from '@/lib/quran/curation/cardReviewData';
 import { readCardPresses } from '@/lib/quran/curation/cardReviewLog';
 import ReviewCard from './ReviewCard';
-import PairPicker from './PairPicker';
+import Pager from './Pager';
 import { cardsReviewHref, PAGE_SIZES, parseCardsReview } from './query';
 
 export const dynamic = 'force-dynamic';
@@ -31,21 +30,13 @@ export default async function CardsReview({ searchParams }: { searchParams: Prom
   const list = selectCards(index.cards, proposals, pressed, query);
   const { items, page, pages } = pageOf(list, query.size, query.page);
   const counts = Object.fromEntries(CARD_KINDS.map(kind => [kind.id, index.cards.filter(entry => entry.kind === kind.id).length])) as Record<CardKind, number>;
-  const href = (change: Partial<typeof query>) => cardsReviewHref({ ...query, page: 1, ...change }) as string;
+  const href = (change: Partial<typeof query>) => cardsReviewHref({ ...query, page: 1, ...change });
   const first = (page - 1) * query.size;
-  const pager = pages > 1 && <nav aria-label="الصفحات" className="flex flex-wrap items-center gap-2 text-sm" dir="rtl">
-    {page > 1 && <Link className="underline" href={href({ page: page - 1 })}>السابقة</Link>}
-    <span>صفحة {page} من {pages}</span>
-    {page < pages && <Link className="underline" href={href({ page: page + 1 })}>التالية</Link>}
-    <form action="/quran/cards-review" className="flex items-center gap-1">
-      {Object.entries(cardsReviewHref({ ...query, page: undefined }, true) as Record<string, string>).map(([name, value]) => <input key={name} type="hidden" name={name} value={value} />)}
-      <label className="flex items-center gap-1">إلى صفحة <input name="page" type="number" min={1} max={pages} defaultValue={page} className="w-20 rounded border border-[var(--home-rule)] bg-[var(--home-paper)] px-2 py-1 text-base" /></label>
-    </form>
-  </nav>;
+  const pager = <Pager page={page} hrefs={Array.from({ length: pages }, (_, i) => href({ page: i + 1 }))} />;
   return <main className={`${styles.page} mx-auto flex max-w-3xl flex-col gap-4 px-4 py-6`} dir="rtl">
     <h1 className="text-xl">مراجعة البطاقات</h1>
     <Segmented label="نوع البطاقات" options={CARD_KINDS.map(kind => ({ key: kind.id, label: `${kind.ar} (${counts[kind.id]})`, current: query.kind === kind.id, href: href({ kind: kind.id }) }))} />
-    {query.kind === 'compare' && <PairPicker pairs={pairs} current={query.pair!} names={names} hrefOf={Object.fromEntries(pairs.map(pair => [pair.page, href({ pair: pair.page })]))} />}
+    {query.kind === 'compare' && <Pager label="السورتان" page={pairs.findIndex(pair => pair.page === query.pair) + 1} hrefs={pairs.map(pair => href({ pair: pair.page }))} labels={pairs.map(pair => `${pair.page.split('/').map(n => names[Number(n)]).join(' و')} (${pair.count})`)} />}
     <div className="flex flex-wrap items-center gap-2">
       <Chip label="ما غيّره الوكلاء فقط" on={query.changed} href={href({ changed: !query.changed })} />
       <Chip label="غير المراجَعة فقط" on={query.todo} href={href({ todo: !query.todo })} />

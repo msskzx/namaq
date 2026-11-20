@@ -74,7 +74,6 @@ export default function ReviewCard({ number, entry, shared, proposal, pressed, n
       <span>{kind.ar}</span>
       {entry.books?.map(book => <span key={book}>{book}</span>)}
       {shared && <span>حكم واحد مع المقارنة</span>}
-      {entry.title && <span className="text-[var(--home-ink)]">{entry.title}</span>}
     </header>
     {reshaped && <Segmented label="أي نسخة" options={[
       { key: 'original', label: 'الأصل', current: version === 'original', onClick: () => setVersion('original') },

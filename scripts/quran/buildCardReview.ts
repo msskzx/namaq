@@ -75,7 +75,6 @@ for (const piece of reviewPool()) {
   entries.push({
     id: piece.id,
     kind: cardReviewKind(piece),
-    title: piece.text,
     rows: rowsOf(piece),
     ...(piece.group?.citations.length ? { books: [...new Set(piece.group.citations.map(citation => citation.book))] } : {}),
     ...(matrixOnly(piece) ? { matrix: true } : {}),
@@ -89,7 +88,6 @@ for (const { page, card } of compareCards()) {
     id: compareCardId(card.p),
     kind: 'compare',
     page: page.replace(':', '/'),
-    title: '',
     rows: compareRows(page, card),
     pairs: card.p,
     verdict: cardVerdict(card.p.flatMap(pair => pairs[pair] ? [pairs[pair]] : [])),

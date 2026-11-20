@@ -13,11 +13,10 @@ export const CARD_KINDS: { id: CardKind; ar: string; en: string }[] = [
 
 type Verdict = { keep: boolean; why: string; checked?: boolean; ask?: boolean };
 
-/** One card as it is today. `rows`: each matrix row's ayat, in order. `twin`: the compare pair this tree card shares its verdict with. */
+/** One card as it is today (no Quran words: the page draws them through the Quran text pipeline). `rows`: each matrix row's ayat, in order. `twin`: the compare pair this tree card shares its verdict with. */
 export type CardReviewEntry = {
   id: string;
   kind: CardKind;
-  title: string;
   rows: string[][];
   books?: string[];
   matrix?: boolean;

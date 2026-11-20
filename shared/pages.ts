@@ -58,6 +58,7 @@ export const PAGES: readonly PageEntry[] = [
   { id: 'quizzes', app: ['(tabs)/quizzes.tsx', 'quiz/solo.tsx', 'quiz/play.tsx'], web: ['quizzes'] },
   { id: 'party', app: ['quiz/party/index.tsx'], web: ['quizzes/party'] },
   { id: 'party-room', app: ['quiz/party/[code].tsx'], web: ['quizzes/party/[code]'] },
+  { id: 'cards-review', web: ['quran/cards-review'], only: { side: 'web', why: 'review-tool', note: 'the owner\'s review of every tree and compare card' } },
   { id: 'question-bank', web: ['quizzes/questions'], only: { side: 'web', why: 'review-tool', note: 'the owner\'s review of the question bank' } },
   { id: 'tree-sizes', app: ['tree-sizes.tsx'], only: { side: 'app', why: 'review-tool', note: 'a measuring tool for scripts, not a screen people open' } },
   { id: 'sources', web: ['sources', 'sources/[slug]'] },
