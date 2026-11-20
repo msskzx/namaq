@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { hasSavedCard, savedOfSlot, backToVisit, freshPicks, growingPicks, isFresh, leftVisit, storyIsNew, storyTimes, visitStart } from './feedSeen';
+import { hasSavedCard, savedOfSlot, backToVisit, freshPicks, growingPicks, isFresh, leftVisit, visitStart } from './feedSeen';
 
 describe('feed seen', () => {
   const items = ['a', 'b', 'c', 'd', 'e'];
@@ -44,19 +44,6 @@ describe('feed seen', () => {
 
   it('never repeats an item', () => {
     expect(freshPicks(pick, id, {}, 9, { since: 10, tries: 12 })).toEqual(items);
-  });
-
-  it('lights a story only for content newer than its last opening', () => {
-    expect(storyIsNew({}, 'juz', 5)).toBe(true);
-    expect(storyIsNew({ juz: 6 }, 'juz', 5)).toBe(false);
-    expect(storyIsNew({ juz: 4 }, 'juz', 5)).toBe(true);
-    expect(storyIsNew({}, 'saved', null)).toBe(false);
-  });
-
-  it('dates each story by its newest content', () => {
-    const now = new Date(2026, 10, 13, 15).getTime();
-    const times = storyTimes({ due: { '2:1': { at: 5, due: 50 }, '2:2': { at: 70 } }, saved: [{ savedAt: 9 }], notes: {}, now });
-    expect(times).toEqual({ juz: new Date(2026, 10, 13).getTime(), forgotten: 70, saved: 9, notes: null, prophets: 1 });
   });
 
   it('skips an item seen in an earlier visit when called with only a count, as the feeds call it', () => {

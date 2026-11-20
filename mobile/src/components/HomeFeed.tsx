@@ -15,7 +15,7 @@ import { bookmarkKind, cardMenuSaveId, cardOfBookmark, isCardBookmark } from '@s
 import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
-import { allVirtues, dayStart, feedBooks, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, isKahfDay, KAHF_SLOT, prayerSoon, type FeedSlot } from '@shared/homeFeed';
+import { allVirtues, feedBooks, LIST_KINDS, listStart, type ListKind, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, isKahfDay, KAHF_SLOT, prayerSoon, type FeedSlot } from '@shared/homeFeed';
 import { pageSources, saidBy } from '@shared/tarajim';
 import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import Saying from '@/ui/Saying';
@@ -91,7 +91,8 @@ import StoryMap from './StoryMap';
 import { ayahPlaces } from '@shared/quran/ayahPlaces';
 import itqan from '@shared/data/quran/itqanBalagha';
 import surahCounts from '@shared/data/quran/surahs.json';
-import { allAyat, balaghaNote, itqanSureAyat, withoutOpeningQuote, type AyahNote } from '@shared/quran/ayahNotes';
+import { allAyat, itqanSureAyat, type AyahNote } from '@shared/quran/ayahNotes';
+import { noteBody } from '@shared/quran/ayahNoteBody';
 import { itqanAt } from '@shared/quran/itqanBalagha';
 import { irabWordsAt } from '@shared/quran/irabData';
 import { qiraatAyat, qiraatOf } from '@shared/quran/qiraatData';
@@ -983,7 +984,6 @@ const NOTE_HEADS: Record<AyahNote, { Icon: IconType; title: string; open: string
   irab: { Icon: ListTree, title: 'من الإعراب', open: 'إعراب الآية' },
   qiraat: { Icon: Layers, title: 'من القراءات', open: 'القراءات كاملة' },
 };
-type NoteBody = { key: string; sources: QuizSource[] } & ({ text: string; heading?: string } | { word: number; shown: string; role: string; morph: string } | { readings: WordDifference[] });
 /** The lines of a book's words a card shows; the row's open button shows them all. */
 const NOTE_LINES = 4;
 
@@ -999,28 +999,7 @@ const noteBookOn = (kind: AyahNote) => (kind === 'tafsir' ? bookState('sadi') ==
 const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { kind: AyahNote; id: string; day: number; palette: Palette }) {
   useBooks();
   const on = noteBookOn(kind);
-  const note = useMemo((): NoteBody | null => {
-    const key = id;
-    if (kind === 'tafsir') { const passage = tafsirSadiOf(key); return passage ? { key, text: withoutOpeningQuote(passage.text), sources: [sadiSource(passage)] } : null; }
-    if (kind === 'balagha') {
-      const paragraphs = itqanAt(itqan, key);
-      const found = balaghaNote(paragraphs);
-      const paragraph = paragraphs.find(each => each.places === 1);
-      return found && paragraph ? { key, ...found, sources: [itqanSource(paragraph)] } : null;
-    }
-    if (kind === 'irab') {
-      const words = ayahMushafWords(key);
-      const lines = irabWordsAt(key);
-      const order = words.map((_, i) => (i + day) % words.length);
-      // A word with a role; a noun or verb before a lone particle («حرف جر»), which says little on its own.
-      const hasRole = (i: number) => corpusWords(key, i).some(c => lines[c]?.role);
-      const particle = (i: number) => corpusWords(key, i).every(c => lines[c]?.morph.startsWith('حرف'));
-      const word = order.find(i => hasRole(i) && !particle(i)) ?? order.find(hasRole);
-      if (word === undefined) return null;
-      return { key, sources: irabSources(key), word, shown: words[word], role: corpusWords(key, word).map(c => lines[c]?.role).filter(Boolean).join('، '), morph: corpusWords(key, word).map(c => lines[c]?.morph).filter(Boolean).join(' · ') };
-    }
-    return { key, sources: qiraatSources(key), readings: qiraatOf(key) };
-  }, [kind, id, day]);
+  const note = useMemo(() => noteBody(kind, id, day, kind === 'irab' ? ayahMushafWords(id) : []), [kind, id, day]);
   const [open, setOpen] = useState(false);
   // The sheet stays while it is open, even when its book is taken off the phone from inside it.
   if (!note || (!on && !open)) return null;
@@ -1067,7 +1046,6 @@ const nameList = (kind: 'laqab' | 'kunya') => (nameLists[kind] ??= kind === 'laq
 const nameId = (each: NameFact) => nameItem(each.person.slug, each.name);
 
 /** The content cards drawn from a list (pairs and trees have their own picks): each kind's items, by a lasting id. */
-type ListKind = Exclude<FeedCardKind, 'pair' | 'tree'>;
 const NOTE_OF: Record<string, AyahNote> = { 'note-tafsir': 'tafsir', 'note-qiraat': 'qiraat', 'note-irab': 'irab', 'note-balagha': 'balagha' };
 const itemLists: Partial<Record<ListKind, readonly string[]>> = {};
 const LIST_OF: Record<ListKind, () => readonly string[]> = {
@@ -1090,7 +1068,6 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   life: lifePeople,
 };
 const itemsOf = (kind: ListKind) => (itemLists[kind] ??= LIST_OF[kind]());
-const LIST_KINDS = Object.keys(LIST_OF) as ListKind[];
 
 /**
  * A story opened from the feed continues (owner, 2026-11-19): that kind's next card is the one after it in the list (the
@@ -1133,7 +1110,7 @@ function ContentPost({ kind, item, day, palette }: { kind: ListKind; item: strin
 export function SavedFeedCard({ id, palette }: { id: string; palette: Palette }) {
   const card = cardOfBookmark(id);
   const { day } = useToday();
-  if (!card || !(LIST_KINDS as string[]).includes(card.kind) || !itemsOf(card.kind as ListKind).includes(card.item)) return null;
+  if (!card || !(LIST_KINDS as readonly string[]).includes(card.kind) || !itemsOf(card.kind as ListKind).includes(card.item)) return null;
   const kind = card.kind as ListKind;
   const menu: CardMenu = { kind, item: card.item, interest: interestOf(kind)?.id ?? '', savedOnly: true };
   return <CardMenuContext.Provider value={menu}><ContentPost kind={kind} item={card.item} day={day} palette={palette} /></CardMenuContext.Provider>;
@@ -1246,12 +1223,11 @@ export function Feed({ palette, nearEnd, screenBottom, only = null }: { palette:
   const turn = useSyncExternalStore(subscribeContinued, readContinued);
   const items = useMemo(() => {
     const out: Partial<Record<ListKind, string[]>> = {};
-    LIST_KINDS.forEach((kind, salt) => {
+    LIST_KINDS.forEach(kind => {
       const need = counts[kind] ?? 0;
       if (!need) return;
       const list = itemsOf(kind);
-      const after = continued.get(kind);
-      const start = after !== undefined && list.includes(after) ? list.indexOf(after) + 1 : dayStart(list.length, day, salt);
+      const start = listStart(list, kind, day, continued.get(kind));
       out[kind] = growingPicks(holders[kind] ??= { list: [] }, [view, day], offset => list[(start + offset) % list.length], item => `${kind}:${item}`, seen, need,
         { since: visit, tries: list.length });
     });
@@ -1323,8 +1299,9 @@ export function Feed({ palette, nearEnd, screenBottom, only = null }: { palette:
     }
   }
   if (!only && isKahfDay(now)) posts.splice(Math.min(KAHF_SLOT, posts.length), 0, <KahfPost key={`kahf${day}`} palette={palette} />);
-  const renderedKey = rendered.join('|');
-  useEffect(() => { if (renderedKey) markFeedSeen(renderedKey.split('|')); }, [renderedKey]);
+  // Pair ids hold «|», so the list is kept on lines.
+  const renderedKey = rendered.join('\n');
+  useEffect(() => { if (renderedKey) markFeedSeen(renderedKey.split('\n')); }, [renderedKey]);
   // A prayer that is near comes in once, before the first post below the screen, so what the reader looks at stays put (owner,
   // 2026-11-18). One near when home opens leads the feed. A card the reader has passed or is looking at stays; one still
   // below the screen gives way to the next prayer's.
