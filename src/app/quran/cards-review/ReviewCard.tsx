@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { branchesHref } from '@shared/quran/branches';
 import Segmented from '@/components/common/Segmented';
 import AyahCards from '../branches/AyahCards';
+import SourceLine, { sourcesOf } from '@/components/common/SourceLine';
+import { TANASUB_KIND, tanasubLink, tanasubSource } from '@shared/quran/tanasubCards';
 import { CARD_KINDS, OPEN_RULES, rowsChanged, type CardPress, type CardProposal, type CardReviewEntry, type ReviewVersion } from '@/lib/quran/curation/cardReviewIndex';
 
 type Action = Exclude<CardPress['action'], 'undo'>;
@@ -62,6 +64,9 @@ export default function ReviewCard({ number, entry, shared, proposal, pressed, n
   };
   const cards = version === 'agents' && proposal?.cards ? proposal.cards : [entry.rows];
   const kind = CARD_KINDS.find(option => option.id === entry.kind)!;
+  // A surah-order book's compare card: its heading, the book's words under the ayat and its source line, as on the compare page.
+  const link = entry.link ? tanasubLink(entry.link) : undefined;
+  const sources = link ? sourcesOf([tanasubSource(link)]) : [];
   const choices = [
     { action: 'keep' as const, label: 'إبقاء', Icon: Check },
     { action: 'drop' as const, label: 'حذف', Icon: X },
@@ -71,7 +76,7 @@ export default function ReviewCard({ number, entry, shared, proposal, pressed, n
   return <article className="flex flex-col gap-3 border-t border-[var(--home-rule)] pt-4" data-review-card={entry.id}>
     <header className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[var(--home-muted)]">
       <span>{number}</span>
-      <span>{kind.ar}</span>
+      <span>{link ? TANASUB_KIND : kind.ar}</span>
       {entry.books?.map(book => <span key={book}>{book}</span>)}
       {shared && <span>حكم واحد مع المقارنة</span>}
     </header>
@@ -83,6 +88,8 @@ export default function ReviewCard({ number, entry, shared, proposal, pressed, n
       {cards.length > 1 && <p className="text-sm text-[var(--home-muted)]">البطاقة {i + 1} من {cards.length}</p>}
       <LazyMatrix rows={rows} names={names} />
     </div>)}
+    {link && <p className="text-lg leading-loose text-justify">«{link.text}»</p>}
+    {link && <div className="-ms-3"><SourceLine named={sources} sources={sources} /></div>}
     <div dir="ltr" className="flex flex-col gap-2 text-sm">
       <div data-verdict="original">
         <p className="font-semibold">Before: {entry.verdict ? `${keepLabel(entry.verdict.keep)}${entry.verdict.checked ? ' (owner checked)' : ' (draft)'}` : 'no verdict'}</p>

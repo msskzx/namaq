@@ -69,7 +69,7 @@ for (const file of files('check')) for (const { key, agree, why } of jsonl(join(
 const twinOf = new Map(index.cards.filter(entry => entry.twin && proposals[entry.id]).map(entry => [entry.twin!, entry.id]));
 for (const entry of index.cards) {
   const pair = entry.kind === 'compare' && entry.pairs?.length === 1 ? entry.pairs[0] : undefined;
-  if (pair && !proposals[entry.id] && twinOf.has(pair)) {
+  if (pair && !entry.link && !proposals[entry.id] && twinOf.has(pair)) {
     const verdict = { ...proposals[twinOf.get(pair)!] };
     delete verdict.cards;
     delete verdict.changes;
@@ -79,9 +79,13 @@ for (const entry of index.cards) {
 
 // The open rule on reading on: a card of ours whose rows read on into the next ayah is flagged, whatever the agents said.
 for (const [id, proposal] of Object.entries(proposals)) {
-  const entry = known.get(id)!;
-  if (entry.kind !== 'book' && entry.kind !== 'compare' && entry.rows.some(row => row.length > 1) && !proposal.flags?.includes('runOn')) proposal.flags = [...proposal.flags ?? [], 'runOn'];
+  const entry = known.get(id);
+  if (entry && entry.kind !== 'book' && entry.kind !== 'compare' && entry.rows.some(row => row.length > 1) && !proposal.flags?.includes('runOn')) proposal.flags = [...proposal.flags ?? [], 'runOn'];
 }
+
+// A surah-order book's compare card is the book's and is never judged; a card no longer in the index (ours, given way to a
+// book card) has nothing to show.
+for (const id of Object.keys(proposals)) if (!known.has(id) || known.get(id)!.link) delete proposals[id];
 
 writeFileSync(OUT, `${JSON.stringify({ built: 'scripts/quran/mergeCardProposals.ts', cards: proposals })}\n`);
 console.log(`${Object.keys(proposals).length} proposals → ${OUT}`);

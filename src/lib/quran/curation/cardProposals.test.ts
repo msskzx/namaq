@@ -35,6 +35,10 @@ describe("the review page's cards and the agents' proposals", () => {
     expect(Object.entries(proposals).filter(([key, proposal]) => byId.get(key)!.kind === 'book' && proposal.cards).map(([key]) => key)).toEqual([]);
   });
 
+  it("leaves a surah-order book's compare card to the book: no proposal", () => {
+    expect(index.cards.filter(entry => entry.link && proposals[entry.id]).map(entry => entry.id)).toEqual([]);
+  });
+
   it('never mixes Arabic and English on one line of a reason (owner 2026-11-20)', () => {
     const mixed = Object.entries(proposals).flatMap(([key, proposal]) => [proposal.why, proposal.changes, proposal.relation, proposal.check?.why]
       .flatMap(text => (text ?? '').split('\n')).filter(line => /[؀-ۿ]/.test(line) && /[A-Za-z]/.test(line)).map(line => `${key}: ${line}`));

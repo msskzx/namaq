@@ -13,6 +13,7 @@ import { ayahEnds, ownEnds, twoEnds, uncoveredRows } from '../../shared/quran/br
 import { phrasePresentation } from '../../shared/quran/phraseTrees';
 import { groupPresentation } from '../../shared/quran/mutashabih/presentation';
 import { branchVerdictFor, matrixOnly, ownAyatOnly, twinOf, twoAyat } from '../../shared/quran/branchVerdicts';
+import { tanasubLink, tanasubSource } from '../../shared/quran/tanasubCards';
 import { cardReviewKind, compareCardId, type CardReviewEntry, type CardReviewIndex } from '../../src/lib/quran/curation/cardReviewIndex';
 
 const OUT = 'src/lib/quran/curation/cardReview.json';
@@ -30,7 +31,7 @@ function rowsOf(piece: BranchPiece): string[][] {
 }
 
 type Verdict = { keep: boolean; why: string; checked?: boolean; ask?: string };
-type CompareCard = { p: string[]; a?: number[][] };
+type CompareCard = { p: string[]; k?: number; a?: number[][] };
 
 function compareCards() {
   const source = readFileSync('shared/data/quran/compareCards.js', 'utf8');
@@ -90,6 +91,8 @@ for (const { page, card } of compareCards()) {
     page: page.replace(':', '/'),
     rows: compareRows(page, card),
     pairs: card.p,
+    // A surah-order book's card: exactly the ayat the book names, never dropped (owner 2026-11-20).
+    ...(card.k ? { link: card.k, books: [tanasubSource(tanasubLink(card.k)!).book] } : {}),
     verdict: cardVerdict(card.p.flatMap(pair => pairs[pair] ? [pairs[pair]] : [])),
   });
 }

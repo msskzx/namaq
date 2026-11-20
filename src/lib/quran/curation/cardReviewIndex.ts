@@ -25,6 +25,8 @@ export type CardReviewEntry = {
   /** Compare only: the surah page ("2/3") and the ayah pairs the card holds. */
   page?: string;
   pairs?: string[];
+  /** Compare only: a surah-order book's card, the key of its link in ORDER_LINKS (shared/quran/tanasubCards.ts). Never judged by the agents. */
+  link?: number;
 };
 export type CardReviewIndex = { built: string; cards: CardReviewEntry[] };
 
