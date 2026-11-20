@@ -10,8 +10,7 @@ import Reference, { type Quote } from '@/ui/Reference';
 import Button from '@/ui/Button';
 import IconButton from '@/ui/IconButton';
 import { Text } from '@/ui/Text';
-import { AyatRange, PageTop, PAGE_LINES } from './AyahLines';
-import { pageOfAyah } from '@/lib/mushaf';
+import { AyatRange } from './AyahLines';
 import { buzz } from '@/lib/haptics';
 import { ALERTS_SUPPORTED, allowAlerts, alertsAllowed, openPhoneSettings, useForeground } from '@/lib/adhan';
 import { reachedAdhkar, showAdhkar, useAdhkarPlace } from '@/lib/adhkar';
@@ -59,15 +58,18 @@ function quotes(item: Dhikr): Quote[] {
 }
 
 /**
- * The Quran selection in the mushaf's own lines: one passage (آية الكرسي, the end of al-Baqara) as the reader draws its
- * ayat; several surahs (al-Ikhlas and al-Mu'awwidhatayn, which fill page 604) as their whole Madina page.
+ * The Quran selection in the mushaf's own lines, each passage as the reader draws its ayat (آية الكرسي, the end of
+ * al-Baqara; al-Falaq and al-Nas each from its title, so al-Ikhlas shows only where it is chosen).
  */
 function QuranPage({ item, palette }: { item: Dhikr; palette: Palette }) {
   if (item.content.kind !== 'quran') return null;
-  const [first, ...rest] = item.content.ranges;
-  if (!rest.length) return <AyatRange from={`${first.surah}:${first.from}`} to={`${first.surah}:${first.to}`} palette={palette} />;
-  const page = pageOfAyah(`${first.surah}:${first.from}`);
-  return page ? <PageTop page={page} palette={palette} lines={PAGE_LINES} /> : null;
+  return (
+    <View>
+      {item.content.ranges.map(range => (
+        <AyatRange key={range.surah} from={`${range.surah}:${range.from}`} to={`${range.surah}:${range.to}`} palette={palette} />
+      ))}
+    </View>
+  );
 }
 
 /** The fajr or asr reminder for the open tab, if it has one; switching it on asks for notifications the first time. */
