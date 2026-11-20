@@ -4,7 +4,8 @@ import { Pressable, ScrollView, View } from 'react-native';
 import { BookOpen, Check, Eye, Square, SquareCheck, X } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import Button from '@/ui/Button';
-import { alikeDiff, FORGOT, isRightChoice, PICKS, picksOf, recited, RECITED, ticks, type ChoiceQuestion } from '@shared/quiz/choiceKinds';
+import { alikeDiff, FORGOT, isRightChoice, orders, PICKS, picksOf, recited, RECITED, ticks, type ChoiceQuestion } from '@shared/quiz/choiceKinds';
+import OrderRows from '@/ui/OrderRows';
 import QuizPage from './QuizPage';
 import QuranWords from './quran/text/QuranWords';
 import BookRuns from './quran/text/BookRuns';
@@ -34,7 +35,7 @@ function Words({ words, marked, palette }: { words: string[]; marked?: number[];
  * then the choices. Once picked, the right one turns green and a wrong one red; a wrong surah with a look-alike shows it,
  * the words where the two part marked in both. A question of several right choices (owner, 2026-11-19; sketch
  * titles-quiz/multi-select-dark.png) ticks boxes and checks: then what was ticked right is green, ticked wrong red, and a right
- * one left unticked is marked «فاتك»; `picked` is the ticks joined (PICKS).
+ * one left unticked is marked «فاتك»; `picked` is the ticks joined (PICKS). Choices to put in order are drawn by OrderRows.
  */
 export default function QuizChoice({ question, picked, shown, onPick, onReveal, onOpen, header, palette, scroll = true, pen, onWrite, written, onLook, costs, lookTop, onTicks }: {
   question: ChoiceQuestion; picked?: string; shown: boolean; onPick?: (value: string) => void; onReveal?: () => void;
@@ -99,7 +100,9 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
         </Card>
       )}
       {!revealed && !onPage && onReveal && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}><Button variant="primary" Icon={Eye} label="أظهر الآية" onPress={onReveal} /></View>}
-      {revealed && !write && (
+      {/* Choices to put in order («رتّب السور»): dragged into place, then checked; a party's moves go as drafts. */}
+      {orders(question) && <OrderRows key={question.key} question={question} picked={picked} palette={palette} onPick={answered ? undefined : onPick} onDraft={onTicks} />}
+      {revealed && !write && !orders(question) && (
         <View style={{ paddingHorizontal: 16, gap: 10 }}>
           {question.choices.map(choice => {
             const chosen = several ? (answered ? picks : ticked).includes(choice.value) : choice.value === picked;

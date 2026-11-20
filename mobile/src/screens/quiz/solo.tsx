@@ -104,6 +104,9 @@ export default function SoloSetup() {
           <LeavesPicker value={settings.leaves} onChange={leaves => change({ leaves })} palette={palette} />
           <QuizExplainer leaves={settings.leaves} palette={palette} />
         </Section>}
+        {settings.kinds.includes('ORDER') && <Section title="رتّب السور" palette={palette}>
+          <Toggle on={!!settings.apart} onChange={apart => change({ apart })} label="سور متباعدة" palette={palette} />
+        </Section>}
         {onPage && <Section title="صفحة المصحف" palette={palette}>
           <Toggle on={pageBefore} onChange={setPageBefore} label="اكتب الآيات قبلها في الصفحة" palette={palette} />
           <QuizPenSetting palette={palette} />

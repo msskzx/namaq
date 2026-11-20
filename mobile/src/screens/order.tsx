@@ -1,4 +1,5 @@
-import { useMemo, useRef, useState, type ComponentRef } from 'react';
+import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
+import { useLocalSearchParams } from 'expo-router';
 import { FlatList, View } from 'react-native';
 import { BookOpen } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
@@ -92,7 +93,11 @@ export default function OrderScreen() {
   const bottom = useTabBarSpace();
   const list = useRef<ComponentRef<typeof FlatList<Row>>>(null);
   const top = useRef(0);
-  const [juz, setJuz] = useState<number | null>(null);
+  // `juz` opens the list at a juz, as «رتّب السور» links it after an answer.
+  const asked = Number(useLocalSearchParams<{ juz?: string }>().juz);
+  const opened = ORDER_JUZ.includes(asked) ? asked : null;
+  const [juz, setJuz] = useState<number | null>(opened);
+  useEffect(() => { if (opened) setJuz(opened); }, [opened]);
   const [help, setHelp] = useState(false);
   const rows = useMemo(() => orderInJuz(SURAHS, juz).flatMap((s, i): Row[] => [
     ...(s.link && i > 0 ? [{ kind: 'link' as const, surah: s.surah, link: s.link }] : []),

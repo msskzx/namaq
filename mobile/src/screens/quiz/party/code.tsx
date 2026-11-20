@@ -18,6 +18,7 @@ import { LookButton, LookedNote, LookView } from '@/components/QuizLook';
 import { readAyah } from '@/lib/openReader';
 type QuestionChoice = { value: string; labelArabic: string };
 import TopBar from '@/ui/TopBar';
+import Toggle from '@/ui/Toggle';
 import Button, { Row } from '@/ui/Button';
 import LoadingDots from '@/ui/LoadingDots';
 import QuestionDots from '@/components/QuestionDots';
@@ -156,7 +157,8 @@ function PartyFilters({ settings, change, palette }: { settings: PartySettings; 
   const setDraft = (next: FilterDraft) => {
     setDraftState(next);
     const applied = applyDraft(next);
-    if (applied) change({ juzFrom: applied.range?.from ?? 1, juzTo: applied.range?.to ?? 30, filters: applied.filters });
+    // «سور متباعدة» is no range filter, so a range picked keeps it.
+    if (applied) change({ juzFrom: applied.range?.from ?? 1, juzTo: applied.range?.to ?? 30, filters: { ...applied.filters, ...(settings.filters?.apart && { apart: settings.filters.apart }) } });
   };
   return <FilterFields draft={draft} setDraft={setDraft} palette={palette} sort={false} kinds={false} savedOnly={false} trees={settings.topics.includes('BRANCHES')} />;
 }
@@ -168,7 +170,9 @@ const PARTY_KINDS: { id: QuizTopic; name: string }[] = [{ id: 'BRANCHES', name: 
 const isAyahChoice = (question: Question): question is Question & ChoiceQuestion => Array.isArray((question as { quran?: unknown }).quran) || !!(question as { page?: unknown }).page
   || typeof (question as { passage?: unknown }).passage === 'string'
   // Several right choices tick boxes, which QuizChoice draws.
-  || Array.isArray((question as { correctAnswers?: unknown }).correctAnswers);
+  || Array.isArray((question as { correctAnswers?: unknown }).correctAnswers)
+  // So do choices put in order, which QuizChoice hands to OrderRows.
+  || Array.isArray((question as { order?: unknown }).order);
 
 /** What the host chose; the host can change it until the quiz starts, everyone else only reads it. */
 function Settings({ settings, editable, send, palette }: { settings: PartySettings; editable: boolean; send: Send; palette: Palette }) {
@@ -216,6 +220,8 @@ function Settings({ settings, editable, send, palette }: { settings: PartySettin
           <DifficultyPicker value={settings.difficulty ?? DEFAULT_DIFFICULTY} onChange={difficulty => change({ difficulty })} palette={palette} kinds={settings.topics} />
         </>
       )}
+      {settings.topics.includes('ORDER') && <Toggle on={!!settings.filters?.apart} label="رتّب السور: سور متباعدة" palette={palette}
+        onChange={apart => change({ filters: { ...settings.filters, apart: apart ? '1' : undefined } })} />}
       {branches && (
         <>
           <LeavesPicker value={settings.leaves} onChange={leaves => change({ leaves })} palette={palette} />
@@ -359,6 +365,7 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
       {view.result && (
         <Text style={{ color: palette.ink, fontSize: 17, fontWeight: '600', textAlign: 'right', paddingHorizontal: 16 }}>
           {question.tree || question.compare || question.write ? `${num(view.result.earned)} من ${num(view.result.total)} ${question.compare ? 'فراغات' : question.write ? 'كلمات' : 'أطراف'}` : view.answer === null ? 'لم تجب في الوقت.' : view.answer === SKIPPED ? 'لم تجب.'
+            : Array.isArray(question.order) ? `${num(view.result.earned)} من ${num(view.result.total)} في مكانها`
             : Array.isArray(question.correctAnswers) ? `${num(view.result.earned)} من ${num(view.result.total)} صحيحة` : view.result.earned ? 'إجابة صحيحة' : 'إجابة خاطئة'}
         </Text>
       )}

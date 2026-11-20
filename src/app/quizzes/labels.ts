@@ -10,6 +10,7 @@ export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   PERSON_CIRCLE: { en: "A person's circle", ar: "دائرة شخص" },
   BRANCHES: { en: "Shared Quranic wording", ar: "متشابهات القرآن" },
   SURAH: { en: "Which surah?", ar: "في أي سورة؟" },
+  ORDER: { en: "Order the surahs", ar: "رتّب السور" },
   RECITE: { en: "Recite the rest", ar: "سمّع بقية الآية" },
   COMPARE: { en: "Compare two places", ar: "قارن الموضعين" },
   OPENINGS: { en: "Surah openings", ar: "أوائل السور" },
@@ -40,7 +41,7 @@ export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
 };
 
 export const TOPIC_GROUPS: { en: string; ar: string; topics: QuizTopic[] }[] = [
-  { en: "Quran", ar: "القرآن", topics: ["BRANCHES", "COMPARE", "SURAH", "RECITE", "OPENINGS", "ENDS", "MEANING", "TAFSIR", "BALAGHA", "TERM", "IRAB", "QIRAAT", "QIRAAT_WHO"] },
+  { en: "Quran", ar: "القرآن", topics: ["BRANCHES", "COMPARE", "SURAH", "ORDER", "RECITE", "OPENINGS", "ENDS", "MEANING", "TAFSIR", "BALAGHA", "TERM", "IRAB", "QIRAAT", "QIRAAT_WHO"] },
   { en: "Tuhfat al-Atfal", ar: "تحفة الأطفال", topics: ["TUHFA_COMPLETE", "TUHFA_NEXT", "TUHFA_RULE"] },
   { en: "Tarajim", ar: "التراجم", topics: ["TARAJIM_NASAB", "TARAJIM_VIRTUE", "TARAJIM_TIE", "TARAJIM_LIFE", "TARAJIM_LAQAB", "TARAJIM_KUNYA"] },
   { en: "Sira", ar: "السيرة", topics: ["SIRA", "PROPHET_NAMES"] },

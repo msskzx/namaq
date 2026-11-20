@@ -223,7 +223,7 @@ export default function QuizzesPage() {
     if (given === undefined) return 'unanswered' as const;
     if (given === questions[index].correctAnswer || (questions[index].correctAnswers && points[index].earned === points[index].total)) return 'correct' as const;
     // A tree with some of its asked leaves right is partly solved, not wrong; so are some of several right choices.
-    return (questions[index].tree || questions[index].compare || questions[index].correctAnswers) && points[index].earned > 0 ? 'partial' as const : 'incorrect' as const;
+    return (questions[index].tree || questions[index].compare || questions[index].correctAnswers || questions[index].order) && points[index].earned > 0 ? 'partial' as const : 'incorrect' as const;
   };
   const stateLabel = (state: ReturnType<typeof questionState>) =>
     ar ? ({ correct: 'صحيح', partial: 'صحيح جزئيًا', incorrect: 'خطأ', unanswered: 'بدون إجابة' } as const)[state]
@@ -292,6 +292,10 @@ export default function QuizzesPage() {
                     <Chip key={value} on={leaves === value} onClick={() => setParam({ leaves: value === DEFAULT_LEAVES ? undefined : String(value) })} label={ar ? num(value) : value} />
                   ))}
                 </div>
+              </div>}
+              {topics.includes("ORDER") && <div className="flex basis-full items-center justify-between gap-3">
+                <span className="text-sm font-semibold text-[var(--home-ink)]">{ar ? "رتّب السور: سور متباعدة" : "Order the surahs: surahs apart"}</span>
+                <Toggle checked={!!treeFilters.apart} label={ar ? "رتّب السور: سور متباعدة" : "Order the surahs: surahs apart"} onChange={(on) => setParam({ apart: on ? "1" : undefined, length: undefined })} />
               </div>}
               {onPage && <div className="flex basis-full items-center justify-between gap-3">
                 <span id="quiz-page-before" className="text-sm font-semibold text-[var(--home-ink)]">{ar ? "اكتب الآيات قبلها في الصفحة" : "Write the ayat before it on the page"}</span>

@@ -1,6 +1,8 @@
 // The quiz's tree filters as plain data, light enough for the party server: the branches page's filter keys
 // (shared/quran/mutashabih/browse.ts FILTER_KEYS) but sort, which means nothing for a random quiz.
-export const SCOPE_KEYS = ['categories', 'relations', 'differences', 'surahs', 'juz', 'surahFrom', 'surahTo', 'pageFrom', 'pageTo', 'cited'] as const;
+// `apart` is the quiz's own: «رتّب السور» asks surahs spread apart instead of neighbours (owner, 2026-11-20).
+export const QUIZ_ONLY_KEYS = ['apart'] as const;
+export const SCOPE_KEYS = ['categories', 'relations', 'differences', 'surahs', 'juz', 'surahFrom', 'surahTo', 'pageFrom', 'pageTo', 'cited', ...QUIZ_ONLY_KEYS] as const;
 export type ScopeFilters = Partial<Record<typeof SCOPE_KEYS[number], string>>;
 export type TreeScope = { filters?: ScopeFilters; saved?: string[] };
 

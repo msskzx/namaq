@@ -20,7 +20,8 @@ import { emptyCompareAnswers } from "@shared/quiz/compareAnswers";
 import PartySettingsPanel from "./PartySettings";
 import { Eye, Search, Square, SquareCheck } from "lucide-react";
 import { canLook, LookButton, LookedNote, LookView } from "@/components/quiz/QuizLook";
-import { isRightChoice, PICKS, picksOf, ticks, type QuizLook } from "@shared/quiz/choiceKinds";
+import { isRightChoice, orders, PICKS, picksOf, ticks, type QuizLook } from "@shared/quiz/choiceKinds";
+import OrderRows from "@/components/common/OrderRows";
 import QuestionReview from "../QuestionReview";
 import { ChoiceAfter, ChoiceLabel, ChoiceQuran, type ChoiceParts } from "../ChoiceParts";
 import AyahFlow, { AyahWords } from "@/components/quran/text/AyahFlow";
@@ -276,7 +277,10 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
         ) : question.tree ? (
           revealed ? <BranchFeedback question={question} typed={Array.isArray(view.answer) ? view.answer : emptyBranchAnswers(question)} names={view.surahNames} ar={ar} />
             : <BranchInputs question={question} typed={typed} onChange={setTyped} onCheck={() => send({ type: "submit", answer: typed })} ar={ar} sendEmpty />
-        ) : question.write ? null : ticks(question) ? (
+        ) : question.write ? null : orders(question) ? (
+          <OrderRows key={question.key} question={question} given={revealed ? (typeof view.answer === "string" ? view.answer : "") : undefined} sent={sent} ar={ar}
+            onAnswer={(answer) => send({ type: "submit", answer })} onDraft={(answer) => send({ type: "draft", answer })} />
+        ) : ticks(question) ? (
           <Ticks key={question.key} question={question} answer={typeof view.answer === "string" ? view.answer : null} revealed={revealed} sent={sent} ar={ar}
             onSend={(answer) => send({ type: "submit", answer })} onDraft={(answer) => send({ type: "draft", answer })} />
         ) : (
@@ -312,6 +316,7 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
             : question.write
             ? (ar ? `${num(view.result.earned)} من ${num(view.result.total)} كلمات` : `${view.result.earned} of ${view.result.total} words`)
             : view.answer === null ? (ar ? "لم تجب في الوقت." : "No answer in time.") : view.answer === "" ? (ar ? "لم تجب." : "No answer.")
+            : orders(question) ? (ar ? `${num(view.result.earned)} من ${num(view.result.total)} في مكانها` : `${view.result.earned} of ${view.result.total} in place`)
             : ticks(question) ? (ar ? `${num(view.result.earned)} من ${num(view.result.total)} صحيحة` : `${view.result.earned} of ${view.result.total} right`)
             : view.result.earned ? (ar ? "إجابة صحيحة" : "Correct") : (ar ? "إجابة خاطئة" : "Incorrect")}</p>
         )}

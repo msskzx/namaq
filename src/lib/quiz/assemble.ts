@@ -8,7 +8,7 @@ import { biggerFirst, branchQuestions, type BranchAnswer, type BranchQuestion } 
 import { shuffle, type Random } from '@shared/quiz/random';
 import { byDifficulty, DEFAULT_DIFFICULTY, type Difficulty } from '@shared/quiz/difficulty';
 import { quizTrees, type TreeScope } from '@shared/quiz/treeScope';
-import { mixQuestions, questionAyat, recited, ticks, type ChoiceQuestion, type ChoiceScope } from '@shared/quiz/choiceKinds';
+import { mixQuestions, orders, questionAyat, recited, ticks, type ChoiceQuestion, type ChoiceScope } from '@shared/quiz/choiceKinds';
 import { CHOICE_KINDS } from '@shared/quiz/kinds';
 import { kunyaNotFirst } from '@shared/quiz/tarajim';
 import { CHOICE_TOPICS } from '@shared/quiz/settings';
@@ -23,6 +23,7 @@ export interface AssembledQuestion {
   choices: QuestionChoice[];
   correctAnswer: string;
   correctAnswers?: ChoiceQuestion['correctAnswers'];
+  order?: ChoiceQuestion['order'];
   phrase?: string;
   branches?: BranchAnswer[];
   tree?: Branch;
@@ -125,8 +126,9 @@ export async function assembleQuiz({ topics, personSlug, juz = null, scope = {},
   // Each kind gets its share of the quiz, never two questions on one ayah (choiceKinds.ts mixQuestions); extra are drawn for those skipped.
   return kunyaNotFirst(mixQuestions<AssembledQuestion>([shuffle(bank, random), trees, ...kinds], length, random, questionAyat)).map((question) => ({
     ...question,
-    // Several right choices keep their order: their `correctAnswer` is the right ones in it (choiceKinds.ts PICKS).
-    choices: recited(question) || ticks(question) ? question.choices : shuffle(question.choices, random),
+    // Several right choices keep their order: their `correctAnswer` is the right ones in it (choiceKinds.ts PICKS). An
+    // order to put right comes shuffled already, never in the right order.
+    choices: recited(question) || ticks(question) || orders(question) ? question.choices : shuffle(question.choices, random),
     ...(question.tree && { asked: askedNodes(question.tree, leaves, random) }),
   }));
 }
