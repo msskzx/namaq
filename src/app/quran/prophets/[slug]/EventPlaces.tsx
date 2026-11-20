@@ -19,7 +19,9 @@ import Card from '@/components/common/Card';
  * One event read across the surahs that tell it: a card for each surah, one under another, words another surah also has in colour.
  * A sideways swipe steps to the next or previous event; the step buttons show on wider screens only.
  */
-export default function EventPlaces({ slug, compare, event, places, phase, focus, onStep, hasPrev, hasNext, review }: {
+export default function EventPlaces({ slug, compare, event, places, phase, focus, onStep, hasPrev, hasNext, review, readable = true }: {
+  /** The step, mushaf, compare and share buttons, and the swipe: off in a home card, whose row opens the story at this event. */
+  readable?: boolean;
   review?: StoryReview;
   slug: string;
   /** A place's compare pages, by its review key. */
@@ -38,7 +40,7 @@ export default function EventPlaces({ slug, compare, event, places, phase, focus
   const [settling, setSettling] = useState(false);
   const back = () => { setSettling(true); setX(0); setTimeout(() => setSettling(false), SLIDE); };
   // A finger moving right goes on to the next event, as an Arabic page turns.
-  useSwipe(box, hasPrev || hasNext, {
+  useSwipe(box, readable && (hasPrev || hasNext), {
     forward: dx => dx > 0,
     canStep: forward => (forward ? hasNext : hasPrev),
     start: () => setSettling(false),
@@ -48,16 +50,16 @@ export default function EventPlaces({ slug, compare, event, places, phase, focus
   });
   const icon = 'rounded p-1 text-[var(--home-muted)] hover:text-[var(--home-ink)]';
   return (
-    <section ref={box} aria-labelledby="event-heading" className={`flex flex-col gap-4 ${settling ? 'transition-transform duration-[250ms]' : ''}`} style={x ? { transform: `translateX(${x}px)` } : undefined}>
+    <section ref={box} aria-labelledby={readable ? 'event-heading' : undefined} aria-label={readable ? undefined : event.title} className={`flex flex-col gap-4 ${settling ? 'transition-transform duration-[250ms]' : ''}`} style={x ? { transform: `translateX(${x}px)` } : undefined}>
       <div className="flex items-center gap-3">
         <div className="flex flex-1 flex-col">
           <p className="text-sm font-semibold" style={{ color: groupColor(event.phase) }}>{phase}</p>
-          <h2 id="event-heading" className="text-2xl font-bold leading-snug">{event.title}</h2>
+          <h2 id={readable ? 'event-heading' : undefined} className="text-2xl font-bold leading-snug">{event.title}</h2>
         </div>
-        <span className="hidden sm:contents">
+        {readable && <span className="hidden sm:contents">
           <Button size="round" variant="outline" onClick={() => onStep(-1)} disabled={!hasPrev} aria-label="الحدث السابق"><ArrowRight aria-hidden /></Button>
           <Button size="round" variant="outline" onClick={() => onStep(1)} disabled={!hasNext} aria-label="الحدث التالي"><ArrowLeft aria-hidden /></Button>
-        </span>
+        </span>}
       </div>
       <div className="flex max-w-4xl flex-col gap-3">
         {places.map((place, k) => (
@@ -78,13 +80,13 @@ export default function EventPlaces({ slug, compare, event, places, phase, focus
             <header className="flex items-center gap-2">
               <h3 className="font-semibold">{place.name}</h3>
               <span className="text-xs text-[var(--home-muted)]">{place.segments.map(g => rangeText(g.range)).join('، ')}</span>
-              <span data-share-skip className="ms-auto flex items-center gap-2">
+              {readable && <span data-share-skip className="ms-auto flex items-center gap-2">
                 <Link href={`/quran/read/ayah/${place.surah}/${place.segments[0].range[0]}`} aria-label={`افتح ${place.name} في المصحف`} title="افتح في المصحف" className={icon}>
                   <BookOpen size={16} aria-hidden />
                 </Link>
                 <CompareLinks links={compare[placeKeyOf(slug, place)] ?? []} label={`قارن ${place.name}`} className={icon} />
                 <ShareImageButton size="icon" iconSize={16} href={`/quran/read/ayah/${place.surah}/${place.segments[0].range[0]}`} />
-              </span>
+              </span>}
             </header>
             <PlaceText place={place} shared={shared[k]} />
             {review && <PlaceReview key={placeKeyOf(review.slug, place)} id={placeKeyOf(review.slug, place)} verdict={review.verdicts[placeKeyOf(review.slug, place)]} />}

@@ -127,7 +127,7 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
             })}
           </Svg>
           <View style={{ position: 'absolute', left: drawW / 2 - middleW / 2, top: middle - (NODE_H + GROW) / 2, height: NODE_H + GROW, width: middleW, justifyContent: 'center' }}>
-            <Card palette={palette} pad={[8, 10]} picked accessibilityRole="header" accessibilityLabel={personName(person)}>
+            <Card palette={palette} node pad={[8, 10]} picked accessibilityRole="header" accessibilityLabel={personName(person)}>
               <Text numberOfLines={2} style={{ color: palette.ink, fontSize: 17, textAlign: 'center' }}>{personName(person)}</Text>
             </Card>
           </View>
@@ -143,7 +143,7 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
               return (
                 <View key={spot.key} style={style}>
                   {/* A kind folded with the marked person in it is framed green: he is a tap away. */}
-                  <Card palette={palette} pad={[6, 8]} outline={groups.find(g => g.kind === spot.group)?.ties.some(tie => tie.to === marked) ? palette.green : kindColor(palette, spot.kind)} accessibilityRole="button" accessibilityLabel={label}
+                  <Card palette={palette} node pad={[6, 8]} outline={groups.find(g => g.kind === spot.group)?.ties.some(tie => tie.to === marked) ? palette.green : kindColor(palette, spot.kind)} accessibilityRole="button" accessibilityLabel={label}
                     onPress={() => setOpen({ slug, kind: spot.group })}>
                     <Text style={{ color: kindColor(palette, spot.kind), fontSize: 15, textAlign: 'center' }}>{label}</Text>
                   </Card>
@@ -154,7 +154,7 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
             const label = `${tieWord(spot.kind, node.sex, person.sex)}: ${personName(node)}`;
             return (
               <View key={spot.key} style={style}>
-                <Card palette={palette} pad={[6, 8]} picked={node.inApp && node.slug !== marked} faded={!node.inApp} outline={node.slug === marked ? palette.green : undefined} accessibilityRole={node.inApp ? 'link' : 'button'} accessibilityLabel={label}
+                <Card palette={palette} node pad={[6, 8]} picked={node.inApp && node.slug !== marked} faded={!node.inApp} outline={node.slug === marked ? palette.green : undefined} accessibilityRole={node.inApp ? 'link' : 'button'} accessibilityLabel={label}
                   onPress={node.inApp ? () => go(node.slug) : () => setShown(spot.tie)} onLongPress={() => setShown(spot.tie)}>
                   {/* What this person is to the one in the middle, on the node itself, so a line's colour is never the only clue. */}
                   <Text style={{ color: kindColor(palette, spot.kind), fontSize: 12, textAlign: 'center' }}>{tieWord(spot.kind, node.sex, person.sex)}</Text>

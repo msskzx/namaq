@@ -56,11 +56,11 @@ export function withoutCoveredFamilies(pieces: BranchPiece[]): BranchPiece[] {
 
 /**
  * The cards to browse. Cards the owner dropped are left out unless `withDropped` (review) asks for them.
- * A card a book of mutashabih cites always shows: every book entry is a card (owner 2026-11-18).
+ * A card a book of mutashabih or of surah order names always shows: every book entry is a card (owner 2026-11-18, 2026-11-20).
  */
 export function branchInventory(filters: GroupFilters, range: JuzRange | null, withDropped = false): BranchPiece[] {
   const all = allBranchPieces(filters, range);
-  return withDropped ? all : all.filter(piece => !!piece.group?.citations.length || !droppedBranch(piece));
+  return withDropped ? all : all.filter(piece => !!piece.group?.citations.length || !!piece.group?.tanasub || !droppedBranch(piece));
 }
 
 export const REVIEW_MAX = 35;

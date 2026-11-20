@@ -2,12 +2,12 @@ import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { BookOpen } from 'lucide-react-native';
-import { bubbleSides, sceneSlots, type ReaderPage, type SceneLine } from '@shared/hadith';
+import { sceneSlots, type ReaderPage } from '@shared/hadith';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Tabs from '@/ui/Tabs';
-import Bubble from '@/ui/Bubble';
+import HadithScene from '@/components/HadithScene';
 import { Section } from '@/components/QuizForm';
 import Button from '@/ui/Button';
 import { usePalette, type Palette } from '@/lib/theme';
@@ -21,31 +21,6 @@ type Mode = 'scenes' | 'text';
 const MODES = [{ key: 'scenes', label: 'الرسم' }, { key: 'text', label: 'النص كاملًا' }] as const;
 
 const body = (palette: Palette) => ({ color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right' as const });
-
-/** A scene as a conversation (the website's bubbles): each speaker his colour, a new speaker on the other side. */
-function Scene({ lines, slots, palette }: { lines: SceneLine[]; slots: Map<string, number>; palette: Palette }) {
-  const sides = bubbleSides(lines);
-  return (
-    <View style={{ gap: 10 }}>
-      {lines.map((line, i) => {
-        const colour = palette.slots[slots.get(line.speaker ?? '') ?? 0];
-        if (line.kind === 'narration') {
-          return (
-            <View key={i} style={{ paddingHorizontal: 4 }}>
-              {line.speaker ? <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{line.speaker}</Text> : null}
-              <Text style={[body(palette), { color: palette.muted, fontSize: 17, lineHeight: 32 }]}>{line.text}</Text>
-            </View>
-          );
-        }
-        return (
-          <Bubble key={i} who={line.speaker} colour={colour} start={!sides[i]} palette={palette}>
-            <Text style={[body(palette), { fontSize: 18, lineHeight: 34 }]}>{line.text}</Text>
-          </Bubble>
-        );
-      })}
-    </View>
-  );
-}
 
 /** A commentary's printed pages, one at a time, what it says about the hadith marked. */
 function Pages({ pages, palette }: { pages: ReaderPage[]; palette: Palette }) {
@@ -100,7 +75,7 @@ export default function HadithUnitScreen() {
               {report.scenes.map((scene, i) => (
                 <View key={scene.ordinal} style={{ gap: 8 }}>
                   <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, textAlign: 'right' }}>المشهد {num(scene.ordinal)}</Text>
-                  <Scene lines={scene.lines} slots={slots.get(report.id)![i]} palette={palette} />
+                  <HadithScene lines={scene.lines} slots={slots.get(report.id)![i]} palette={palette} />
                 </View>
               ))}
             </>}

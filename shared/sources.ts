@@ -191,7 +191,8 @@ export const SOURCES: Source[] = [
     link: shamela(1404), licence: PUBLIC_DOMAIN, uses: [USE.order, USE.topics],
   },
   {
-    id: 'tanasuq-al-durar', group: 'books',
+    // tanasubTrees.json: the trunks of the surah-order books' cards that grow a tree (all four, from al-Suyuti's links).
+    id: 'tanasuq-al-durar', group: 'books', files: ['shared/data/quran/tanasubTrees.json'],
     title: { ar: 'تناسق الدرر في تناسب السور', en: 'Tanasuq al-Durar' }, author: { ar: 'جلال الدين السيوطي', en: 'al-Suyuti' },
     edition: 'دار الفضيلة، ٢٠٠٢م', link: shamela(9992), licence: PUBLIC_DOMAIN, uses: [USE.order],
   },

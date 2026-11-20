@@ -19,7 +19,7 @@ function Readings({ values }: { values: readonly (AppCited<unknown> | undefined)
 /** A count, or a dash read out as «غير مذكور» when the source gives none (the app's label says so). */
 const count = (value: AppCited<number> | undefined) => (value ? num(value.value) : <><span aria-hidden>—</span><span className="sr-only">غير مذكور</span></>);
 
-function Counts({ battle, Heading }: { battle: AppBattle; Heading: 'h2' | 'h3' }) {
+export function Counts({ battle, Heading }: { battle: AppBattle; Heading: 'h2' | 'h3' }) {
   const { muslims, others, muslimsKilled, othersKilled } = battle.counts;
   const rows = [
     { label: 'في الميدان', ours: muslims, theirs: others },
