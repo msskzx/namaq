@@ -1,12 +1,13 @@
 import { useEffect, useReducer, useRef, useState } from 'react';
 import { AppState, View } from 'react-native';
 import { Bell, BellOff, Check, RotateCcw } from 'lucide-react-native';
-import { ADHKAR_OCCASIONS, adhkarFor, type AdhkarCitation, type AdhkarOccasion, type Dhikr } from '@shared/adhkar';
+import { ADHKAR_OCCASIONS, adhkarFor, type AdhkarOccasion, type Dhikr } from '@shared/adhkar';
+import { ADHKAR_LABELS, ADHKAR_TABS, adhkarQuotes, adhkarTitle } from '@shared/adhkarCite';
 import { num } from '@shared/quran/arabicNumber';
 import type { AdhkarTime } from '@shared/adhanAlerts';
 import Card from '@/ui/Card';
 import Tabs from '@/ui/Tabs';
-import Reference, { type Quote } from '@/ui/Reference';
+import Reference from '@/ui/Reference';
 import Button from '@/ui/Button';
 import IconButton from '@/ui/IconButton';
 import { Text } from '@/ui/Text';
@@ -18,44 +19,13 @@ import { countOf, counting } from '@shared/adhkarCount';
 import { adhkarAlerts, prayerPlace } from '@/lib/settings';
 import type { Palette } from '@/lib/theme';
 
-const LABELS: Record<AdhkarOccasion, string> = { morning: 'صباح', evening: 'مساء', waking: 'يقظة', sleep: 'نوم', 'after-prayer': 'صلاة' };
-const ORDER: AdhkarOccasion[] = ['morning', 'evening', 'sleep', 'waking', 'after-prayer'];
-const TABS = ORDER.filter(key => ADHKAR_OCCASIONS.includes(key)).map(key => ({ key, label: LABELS[key] }));
+const TABS = ADHKAR_TABS.filter(key => ADHKAR_OCCASIONS.includes(key)).map(key => ({ key, label: ADHKAR_LABELS[key] }));
 /** Room between the cards. */
 const GAP = 16;
-const BOOK: Record<AdhkarCitation['source'], string> = { 'adhkar-nawawi': 'الأذكار', 'nataij-afkar': 'نتائج الأفكار' };
 const REMINDER: Partial<Record<AdhkarOccasion, { time: AdhkarTime; label: string }>> = {
   morning: { time: 'morning', label: 'تذكير بأذكار الصباح بعد الفجر' },
   evening: { time: 'evening', label: 'تذكير بأذكار المساء بعد العصر' },
 };
-
-/** «الأذكار ٧٨ ح٢١٣», with the volume before the page when the book has several («نتائج الأفكار ٢/٢٩٧»). */
-const cite = (citation: AdhkarCitation) =>
-  `${BOOK[citation.source]} ${citation.volume > 1 ? `${num(citation.volume)}/` : ''}${num(citation.page)}${citation.report ? ` ح${num(citation.report)}` : ''}`;
-
-/**
- * A card's reference: al-Nawawi's words on when, how often and what to do, any remark in the report, each corrected
- * printing slip with the words that give the right reading, then every grade in its scholar's words with its own page.
- */
-function quotes(item: Dhikr): Quote[] {
-  const at = { cite: cite(item.citation), url: item.citation.url };
-  return [
-    { text: item.occasionQuote, ...at },
-    ...(item.repeat ? [{ text: item.repeat.quote, ...at }] : []),
-    ...(item.instructionQuote ? [{ text: item.instructionQuote, ...at }] : []),
-    ...(item.noteQuote ? [{ text: item.noteQuote, ...at }] : []),
-    ...(item.fixes ?? []).map(fix => ({
-      text: fix.quote,
-      cite: `في المطبوع «${fix.printed}»، والصواب «${fix.reads}» كما هنا: ${cite(fix.citation)}`,
-      url: fix.citation.url,
-    })),
-    ...item.grades.map(grade => ({
-      text: grade.quote,
-      cite: `${grade.scholar}${grade.reportedBy ? `، نقله ${grade.reportedBy}` : ''}، ${cite(grade.citation)}`,
-      url: grade.citation.url,
-    })),
-  ];
-}
 
 /**
  * The Quran selection in the mushaf's own lines, each passage as the reader draws its ayat (آية الكرسي, the end of
@@ -156,7 +126,7 @@ export default function Adhkar({ palette, on, onPlace, scrollTo }: { palette: Pa
                 {counted > 0 && <Button Icon={RotateCcw} variant="plain" accessibilityLabel="من جديد" onPress={() => dispatch({ type: 'reset' })} />}
               </View>
             )}
-            <Reference title={`${cite(item.citation)} · ${item.collections.join('، ')}`} palette={palette} quotes={quotes(item)} />
+            <Reference title={adhkarTitle(item)} palette={palette} quotes={adhkarQuotes(item)} />
           </Card>
         );
       })}

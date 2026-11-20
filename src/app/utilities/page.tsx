@@ -6,11 +6,11 @@ import { ayatPages } from '@/lib/storyAyat';
 
 export const metadata: Metadata = { title: 'الأدوات: مواقيت الصلاة والقبلة والتقويم الهجري والأذكار' };
 
-/** The adhkar's Quran selections in the mushaf's own lines, one range after another, as the app's AyatRange draws them. */
+/** The adhkar's Quran selections in the mushaf's own lines, each range on its own, as the app's AyatRange draws them. */
 async function adhkarQuran() {
   const quran = ADHKAR.flatMap(item => (item.content.kind === 'quran' ? [{ id: item.id, ranges: item.content.ranges }] : []));
   const pages = await Promise.all(quran.map(async ({ id, ranges }) =>
-    [id, (await Promise.all(ranges.map(range => ayatPages(`${range.surah}:${range.from}`, `${range.surah}:${range.to}`)))).flat()] as const));
+    [id, await Promise.all(ranges.map(range => ayatPages(`${range.surah}:${range.from}`, `${range.surah}:${range.to}`)))] as const));
   return Object.fromEntries(pages);
 }
 

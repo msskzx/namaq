@@ -6,7 +6,7 @@ import { BookOpen, CalendarDays, Check, ChevronLeft, ChevronRight, Clock, Compas
 import Segmented from '@/components/common/Segmented';
 import { keyStore } from '@shared/storage';
 import { hijriDate, juzLabel, todaysJuz } from '@shared/hijri';
-import { JUZ_INDEX } from '@shared/quran/juzIndex';
+import { JUZ_STARTS } from '@shared/quran/juz';
 import { ayahHref } from '@shared/ayahMarks';
 import Button from '@/components/common/Button';
 import type { AyatPage } from '@/lib/storyAyat';
@@ -71,16 +71,21 @@ const noop = () => () => {};
  * A sideways swipe (or trackpad) follows the finger and snaps to the next one (owner, 2026-11-15); the icons jump to one.
  * In Arabic the first is on the right, so swiping right brings the next from the left, as in the app.
  */
-export default function Utilities({ quran }: { /** The adhkar's Quran selections in the mushaf's lines, by card. */ quran: Record<string, AyatPage[]> }) {
+export default function Utilities({ quran }: { /** The adhkar's Quran selections in the mushaf's lines, by card. */ quran: Record<string, AyatPage[][]> }) {
   const [view, setView] = useStore(viewStore, 'times');
-  // A search hit opens the adhkar on its card's tab (adhkarHref).
+  // A link may open one view (the home buttons, ?view=) or the adhkar on a card's tab (a search hit, adhkarHref). The
+  // address goes back to plain /utilities after, so a reload opens the view last left, as every visit does.
   const [start, setStart] = useState<{ occasion: AdhkarOccasion; id?: string }>();
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    const asked = params.get('view');
     const occasion = params.get('adhkar') as AdhkarOccasion | null;
-    if (!occasion || !ADHKAR_OCCASIONS.includes(occasion)) return;
-    setStart({ occasion, id: params.get('id') ?? undefined });
-    viewStore.write(JSON.stringify('adhkar'));
+    if (occasion && ADHKAR_OCCASIONS.includes(occasion)) {
+      setStart({ occasion, id: params.get('id') ?? undefined });
+      viewStore.write(JSON.stringify('adhkar'));
+    } else if (asked && (VIEWS as string[]).includes(asked)) viewStore.write(JSON.stringify(asked));
+    else return;
+    window.history.replaceState(null, '', '/utilities');
   }, []);
   const [place] = useStore(placeStore, null);
   const [picking, setPicking] = useState(false);
@@ -390,7 +395,7 @@ function Calendar() {
         <button type="button" className={styles.arrow} onClick={() => setOffset(offset + 1)} aria-label="الشهر التالي"><ChevronLeft size={22} aria-hidden /></button>
       </div>
       {/* Today's juz, which follows the Hijri day (the app's: its shortcut lives here and as a card on home). */}
-      {juz && <div className="flex justify-center"><Button href={ayahHref(`${JUZ_INDEX[juz[0] - 1].surah}:${JUZ_INDEX[juz[0] - 1].ayah}`)}><BookOpen aria-hidden />{`اقرأ جزء اليوم: ${juzLabel(juz)}`}</Button></div>}
+      {juz && <div className="flex justify-center"><Button href={ayahHref(JUZ_STARTS[juz[0] - 1])}><BookOpen aria-hidden />{`اقرأ جزء اليوم: ${juzLabel(juz)}`}</Button></div>}
       <div className={styles.grid}>
         {WEEK.map(day => <span key={day} className={styles.week}>{day}</span>)}
         {Array.from({ length: month.lead }, (_, i) => <span key={`lead-${i}`} />)}
