@@ -1,3 +1,4 @@
+import RowScroll from '@/ui/RowScroll';
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { ScrollView, View } from 'react-native';
 import { Check, Pencil, Sparkles } from 'lucide-react-native';
@@ -117,14 +118,11 @@ export function InterestChips({ only, onOnly, palette }: { only: string | null; 
   const shown = INTERESTS.filter(interest => !picked.length || picked.includes(interest.id));
   return (
     <>
-      {/* Inverted in a left-to-right box, as the shelves are, so the first chip sits on the right on every platform. */}
-      <View style={{ direction: 'ltr', marginHorizontal: -16 }}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexDirection: 'row-reverse', gap: 8, paddingHorizontal: 16 }}>
-          <Chip label="لك" role="radio" on={!only} onPress={() => onOnly(null)} palette={palette} />
-          {shown.map(interest => <Chip key={interest.id} role="radio" label={interest.name} on={only === interest.id} onPress={() => onOnly(only === interest.id ? null : interest.id)} palette={palette} />)}
-          <Chip label="" Icon={Pencil} on={false} onPress={() => setEditing(true)} accessibilityLabel="عدّل اهتماماتي" palette={palette} />
-        </ScrollView>
-      </View>
+      <RowScroll>
+        <Chip label="لك" role="radio" on={!only} onPress={() => onOnly(null)} palette={palette} />
+        {shown.map(interest => <Chip key={interest.id} role="radio" label={interest.name} on={only === interest.id} onPress={() => onOnly(only === interest.id ? null : interest.id)} palette={palette} />)}
+        <Chip label="" Icon={Pencil} on={false} onPress={() => setEditing(true)} accessibilityLabel="عدّل اهتماماتي" palette={palette} />
+      </RowScroll>
       <InterestsSheet open={editing} onClose={() => setEditing(false)} palette={palette} />
     </>
   );

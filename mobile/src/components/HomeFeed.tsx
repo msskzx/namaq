@@ -15,7 +15,7 @@ import { bookmarkKind, cardMenuSaveId, cardOfBookmark, isCardBookmark } from '@s
 import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
-import { allVirtues, dayStart, feedBooks, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, prayerSoon, type FeedSlot } from '@shared/homeFeed';
+import { allVirtues, dayStart, feedBooks, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, isKahfDay, KAHF_SLOT, prayerSoon, type FeedSlot } from '@shared/homeFeed';
 import { pageSources, sayerLine } from '@shared/tarajim';
 import { findPerson, GRAPH, PEOPLE, personName, tiePairs, unvowelled } from '@/lib/tarajim';
 import { kunyaFacts, laqabFacts, type NameFact } from '@shared/tarajimNames';
@@ -114,6 +114,7 @@ import { type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
 import Card, { CardWithRow } from '@/ui/Card';
+import RowScroll from '@/ui/RowScroll';
 import SourceLine, { sourcesOf } from '@/ui/SourceLine';
 import type { Source } from '@/ui/sourceSlot';
 import { citeSource, mushafSource, MUSHAF_BOOK, uniqueSources, type QuizSource } from '@shared/quiz/sources';
@@ -648,6 +649,18 @@ function JuzPost({ palette }: { palette: Palette }) {
   );
 }
 
+/** Friday's card (owner, 2026-11-20): Surat al-Kahf's first page, a tap opens the mushaf there. */
+function KahfPost({ palette }: { palette: Palette }) {
+  const page = pageOfAyah('18:1') ?? 293;
+  const read = () => openIntent({ tab: 'read', at: '18:1' });
+  return (
+    <Post palette={palette} head={<PostHead Icon={BookOpen} title="سورة الكهف" sub="يوم الجمعة" palette={palette} />}
+      open={<Action Icon={BookOpen} label="اقرأ سورة الكهف" onPress={read} palette={palette} />} source={mushafOf('18:1')}>
+      <View style={{ paddingHorizontal: 12, paddingVertical: 6 }}><PageTop page={page} palette={palette} /></View>
+    </Post>
+  );
+}
+
 /**
  * The prayer card (owner, 2026-11-18): when a prayer is near it comes into the feed where the reader is, with the time left,
  * the five times of the day and the Hijri date. Its buttons open the prayer times and the qibla.
@@ -724,17 +737,14 @@ function BooksPost({ day, palette }: { day: number; palette: Palette }) {
   return (
     <View style={{ gap: 4 }}>
       <PostHead Icon={LibraryBig} title="من المكتبة" palette={palette} open={{ onPress: () => toTab('/books'), label: 'افتح المكتبة' }} />
-      {/* Inverted in a left-to-right box, as the shelves are, so the first book sits on the right on every platform. */}
-      <View style={{ direction: 'ltr', marginHorizontal: -16 }}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexDirection: 'row-reverse', flexGrow: 1, justifyContent: 'flex-start', gap: 12, paddingHorizontal: 16 }}>
+      <RowScroll gap={12}>
           {picks.map(book => {
             if (book.id === TUHFA.id) return <Shelf key={book.id} palette={palette} label={TUHFA.title} onPress={() => toTab('/tuhfa')} kind={TUHFA.kind} title={TUHFA.title} by={TUHFA.by} width={FEED_BOOK} />;
             const mark = 'kind' in book && isReaderBook(book.id) ? fasilas[book.id] : undefined;
             return 'builtIn' in book ? <BookCard key={book.id} book={book} palette={palette} editing={false} width={FEED_BOOK}
               fasila={mark && isReaderBook(book.id) ? pageName(book.id, mark.part, mark.page) : null} /> : null;
           })}
-        </ScrollView>
-      </View>
+      </RowScroll>
     </View>
   );
 }
@@ -1162,6 +1172,7 @@ export function Feed({ palette, nearEnd, screenBottom, only = null }: { palette:
   /** One interest's id: its cards alone. */
   only?: string | null }) {
   const { day, juz } = useToday();
+  const now = useMinute();
   const visit = useSyncExternalStore(subscribeVisit, visitStart, serverVisit);
   // A new visit (pulled to refresh, or back after long away), or another chip, starts again from one round.
   const view = `${visit}|${only ?? ''}`;
@@ -1302,6 +1313,7 @@ export function Feed({ palette, nearEnd, screenBottom, only = null }: { palette:
       if (hasBooksCard(at)) posts.push(<BooksPost key={`k${day}-${at}`} day={day} palette={palette} />);
     }
   }
+  if (!only && isKahfDay(now)) posts.splice(Math.min(KAHF_SLOT, posts.length), 0, <KahfPost key={`kahf${day}`} palette={palette} />);
   const renderedKey = rendered.join('|');
   useEffect(() => { if (renderedKey) markFeedSeen(renderedKey.split('|')); }, [renderedKey]);
   // A prayer that is near comes in once, before the first post below the screen, so what the reader looks at stays put (owner,

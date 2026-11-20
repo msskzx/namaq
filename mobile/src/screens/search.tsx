@@ -17,7 +17,8 @@ import { useTabRetap } from '@/lib/tabRetap';
 import { openAdhkar } from '@/lib/adhkar';
 import { back, openIntent as go, toTab } from '@/lib/ways';
 import { usePalette, type Palette } from '@/lib/theme';
-import AyahFlow, { AyahWords, QuranWord } from '@/components/quran/text/AyahFlow';
+import { QuranWord } from '@/components/quran/text/AyahFlow';
+import LitAyat from '@/components/quran/text/LitAyat';
 import Card from '@/ui/Card';
 import Empty from '@/ui/Empty';
 
@@ -37,8 +38,6 @@ const GROUPS: Record<SearchKind, { title: string; Icon: (props: LucideProps) => 
 };
 
 /** Words shown each side of the found words, as the mushaf's index search shows them. */
-const AROUND = 6;
-const around = (hit: { words: string[]; from: number; to: number }) => ({ start: Math.max(0, hit.from - AROUND), end: Math.min(hit.words.length, hit.to + 1 + AROUND) });
 
 const ayahLabel = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return `${surahName(surah)} ${num(ayah)}`; };
 
@@ -54,22 +53,15 @@ function HitRow({ hit, palette, onWord }: { hit: SearchHit; palette: Palette; on
           <Text style={{ flex: 1, color: palette.ink, fontSize: 17, textAlign: 'right' }}>{hit.name}</Text>
         </Pressable>
       );
-    case 'ayah': {
-      const { start, end } = around(hit);
+    case 'ayah':
+      // The whole ayah as the page sets it, its number after it, the words found on the band (the Quran text pipeline:
+      // an ayah is never cut to a few words around the find).
       return (
         <Card palette={palette} pad={[8, 12]} onPress={() => go({ tab: 'read', at: hit.key })} accessibilityRole="link" accessibilityLabel={ayahLabel(hit.key)} style={{ marginBottom: 8 }}>
-          <AyahFlow color={palette.ink}>
-            {start > 0 ? <AyahWords>… </AyahWords> : null}
-            {hit.words.slice(start, end).map((word, at) => {
-              const i = start + at;
-              return <AyahWords key={i} look={i >= hit.from && i <= hit.to ? { color: palette.accent } : undefined}>{`${word} `}</AyahWords>;
-            })}
-            {end < hit.words.length ? <AyahWords>…</AyahWords> : null}
-          </AyahFlow>
+          <LitAyat ayat={[{ words: hit.words, lit: [[hit.from, hit.to]], number: Number(hit.key.split(':')[1]) }]} palette={palette} />
           <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{ayahLabel(hit.key)}</Text>
         </Card>
       );
-    }
     case 'word':
       return (
         <Pressable onPress={() => onWord(hit.id)} accessibilityRole="button" accessibilityLabel={`${hit.name}، ${num(hit.count)} مرة`} style={({ pressed: on }) => [row, pressed(on)]}>

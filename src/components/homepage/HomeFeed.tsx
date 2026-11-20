@@ -64,6 +64,7 @@ import { JUZ_INDEX } from '@shared/quran/juzIndex';
 import { num } from '@shared/quran/arabicNumber';
 import { ayahPlaces } from '@shared/quran/ayahPlaces';
 import { dayNumber } from '@shared/dailyPick';
+import { isKahfDay, KAHF_SLOT } from '@shared/homeFeed';
 import surahRows from '@shared/data/quran/surahs.json';
 import AyahLines, { PageTop, useAyahPage, type Page } from './AyahLines';
 import { useMemorized } from './Memorized';
@@ -110,7 +111,20 @@ const juzHref = (juz: number) => ayahHref(`${JUZ_INDEX[juz - 1].surah}:${JUZ_IND
 /** The reader's own day, worked out in the browser (null while the page is drawn on the server). */
 function useToday() {
   const now = useNow();
-  return useMemo(() => now ? { day: dayNumber(now), date: hijriDate(now), juz: todaysJuz(now) } : null, [now]);
+  return useMemo(() => now ? { day: dayNumber(now), date: hijriDate(now), juz: todaysJuz(now), kahf: isKahfDay(now) } : null, [now]);
+}
+
+/** Friday's card (owner, 2026-11-20), the app's KahfPost: Surat al-Kahf's first page, a click opens the mushaf there. */
+function KahfPost() {
+  const { data } = useSWR('/api/home/feed?ayah=18:1', fetchJson<Page>, { revalidateOnFocus: false });
+  const href = ayahHref('18:1');
+  return <Post labelledBy="kahf-title" head={<PostHead Icon={BookOpen} id="kahf-title" title="سورة الكهف" sub="يوم الجمعة" />}
+    open={<Action Icon={BookOpen} label="اقرأ سورة الكهف" href={href} />}
+    source={data ? [mushafSource('18:1', data.page)] : undefined}>
+    <Link href={href} className={styles.pageSlice} aria-label="اقرأ سورة الكهف" lang="ar">
+      {data ? <PageTop page={data} /> : <span className={styles.pageLines} />}
+    </Link>
+  </Post>;
 }
 
 const STORY: Record<StoryId, { label: string; Icon: typeof BookOpen | typeof TreeIcon; href: string }> = {
@@ -813,6 +827,7 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
     const nameCard = names?.find(card => card.slot === i && card.kind === nameKind);
     if (nameCard && shows(nameCard.kind)) put(<NamePost key={`n${nameCard.kind}${day}-${i}`} card={nameCard} />, nameCard.kind);
   }
+  if (today?.kahf && !only) posts.splice(Math.min(KAHF_SLOT, posts.length), 0, <KahfPost key={`kahf${day}`} />);
   return <section className={styles.feed} aria-label="للتأمل اليوم">
     {posts}
     {!ready && <p className="py-6 text-center"><LoadingDots label="جارٍ التحميل" /></p>}
