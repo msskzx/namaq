@@ -22,16 +22,17 @@ describe('the adhkar counter', () => {
     expect(run([tap('a'), tap('a'), { type: 'leave' }])).toBeNull();
   });
 
-  it('writes nothing to the phone: the page and its counter use no storage', () => {
-    const page = readFileSync(new URL('../components/Adhkar.tsx', import.meta.url), 'utf8');
-    const libs = ['./adhkar.ts', './adhkarCount.ts'].map(file => readFileSync(new URL(file, import.meta.url), 'utf8'));
-    for (const source of [page, ...libs]) {
+  it('writes nothing to the phone or the browser: the pages and their counter use no storage', () => {
+    const page = readFileSync(new URL('../mobile/src/components/Adhkar.tsx', import.meta.url), 'utf8');
+    const web = readFileSync(new URL('../src/components/utilities/Adhkar.tsx', import.meta.url), 'utf8');
+    const libs = ['../mobile/src/lib/adhkar.ts', './adhkarCount.ts'].map(file => readFileSync(new URL(file, import.meta.url), 'utf8'));
+    for (const source of [page, web, ...libs]) {
       expect(source).not.toMatch(/storage|writeJson|AsyncStorage|SecureStore|MMKV/);
       // Settings it touches: which utility is open, the reminder switches and the place they need. Never a count.
       // (`boxes.current.set` is the card sizes kept in a ref for the search scroll, not a setting.)
       const settings = [...source.matchAll(/\b(\w+)\.(?:set|use)\(/g)].map(match => match[1]).filter(name => name !== 'current');
       expect(settings.every(name => ['utilityView', 'adhkarAlerts', 'prayerPlace'].includes(name))).toBe(true);
     }
-    expect(page).toMatch(/useReducer\(counting, null\)/);
+    for (const source of [page, web]) expect(source).toMatch(/useReducer\(counting, null\)/);
   });
 });

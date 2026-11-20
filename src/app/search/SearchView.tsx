@@ -18,6 +18,7 @@ import styles from './Search.module.css';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
 import { SearchField } from '@/components/common/Field';
 import Empty from '@/components/common/Empty';
+import { adhkarHref } from '@/components/utilities/adhkarHref';
 
 /** Results a group shows until its arrow opens the rest; at most this many when open (shared/quran/searchSources.ts). */
 export const GROUP_SHOWN = 3;
@@ -47,8 +48,7 @@ export function hitHref(hit: SearchHit): string {
     case 'compare': return surahPairHref(hit.a, hit.b);
     case 'event': return `/quran/prophets/${hit.slug}?event=${hit.event}`;
     case 'tuhfa': return `/quran/tajwid/tuhfat-al-atfal#bayt-${hit.verse}`;
-    // The adhkar are in the phone app only; the website's search never lists them (shared/quran/searchAll.ts).
-    case 'adhkar': return '/utilities';
+    case 'adhkar': return adhkarHref(hit.occasion, hit.id);
   }
 }
 

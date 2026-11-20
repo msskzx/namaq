@@ -2,10 +2,16 @@
 
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import * as adhan from 'adhan';
-import { CalendarDays, Check, ChevronLeft, ChevronRight, Clock, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin } from 'lucide-react';
+import { BookOpen, CalendarDays, Check, ChevronLeft, ChevronRight, Clock, Compass, HandHeart, Infinity as InfinityIcon, List, LocateFixed, MapPin } from 'lucide-react';
 import Segmented from '@/components/common/Segmented';
 import { keyStore } from '@shared/storage';
-import { hijriDate } from '@shared/hijri';
+import { hijriDate, juzLabel, todaysJuz } from '@shared/hijri';
+import { JUZ_INDEX } from '@shared/quran/juzIndex';
+import { ayahHref } from '@shared/ayahMarks';
+import Button from '@/components/common/Button';
+import type { AyatPage } from '@/lib/storyAyat';
+import { ADHKAR_OCCASIONS, type AdhkarOccasion } from '@shared/adhkar';
+import Adhkar from './Adhkar';
 import {
   ALL, clock, dayDigits, DEFAULT_PRAYER_SETTINGS, FACING, hijriMonth, isPlace, isPrayerSettings, METHODS, MY_LOCATION, nextPrayer,
   prayerDay, PRAYER_NAMES, qiblaBearing, qiblaLabel, searchPlaces, turnTo, type Adhan, type MethodId, type Place, type PrayerSettings,
@@ -16,7 +22,7 @@ import Card from '@/components/common/Card';
 import { SearchField } from '@/components/common/Field';
 
 const lib = adhan as unknown as Adhan;
-type View = 'times' | 'qibla' | 'calendar';
+type View = 'times' | 'qibla' | 'calendar' | 'adhkar';
 
 const parse = <T,>(valid: (value: unknown) => value is T, fallback: T) => (raw: string | null): T => {
   try { const value: unknown = raw ? JSON.parse(raw) : null; return valid(value) ? value : fallback; } catch { return fallback; }
@@ -24,7 +30,7 @@ const parse = <T,>(valid: (value: unknown) => value is T, fallback: T) => (raw: 
 // The same keys as the app's settings (mobile/src/lib/settings.ts).
 export const placeStore = keyStore<Place | null>('prayer-place', parse((value): value is Place | null => value === null || isPlace(value), null));
 export const settingsStore = keyStore<PrayerSettings>('prayer-settings', parse(isPrayerSettings, DEFAULT_PRAYER_SETTINGS));
-export const viewStore = keyStore<View>('utilities-view', parse((value): value is View => value === 'times' || value === 'qibla' || value === 'calendar', 'times'));
+export const viewStore = keyStore<View>('utilities-view', parse((value): value is View => value === 'times' || value === 'qibla' || value === 'calendar' || value === 'adhkar', 'times'));
 
 function useStore<T>(store: { read(): T; subscribe(listener: () => void): () => void; write(raw: string): void }, server: T) {
   const value = useSyncExternalStore(store.subscribe, store.read, () => server);
@@ -57,16 +63,25 @@ export function useNow() {
   return now;
 }
 
-const VIEWS: View[] = ['times', 'qibla', 'calendar'];
+const VIEWS: View[] = ['times', 'qibla', 'calendar', 'adhkar'];
 const noop = () => () => {};
 
 /**
- * The three icons at the top, then prayer times, the qibla and the Hijri calendar side by side: the app's utilities tab.
+ * The four icons at the top, then prayer times, the qibla, the Hijri calendar and the adhkar side by side: the app's utilities tab.
  * A sideways swipe (or trackpad) follows the finger and snaps to the next one (owner, 2026-11-15); the icons jump to one.
  * In Arabic the first is on the right, so swiping right brings the next from the left, as in the app.
  */
-export default function Utilities() {
+export default function Utilities({ quran }: { /** The adhkar's Quran selections in the mushaf's lines, by card. */ quran: Record<string, AyatPage[]> }) {
   const [view, setView] = useStore(viewStore, 'times');
+  // A search hit opens the adhkar on its card's tab (adhkarHref).
+  const [start, setStart] = useState<{ occasion: AdhkarOccasion; id?: string }>();
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const occasion = params.get('adhkar') as AdhkarOccasion | null;
+    if (!occasion || !ADHKAR_OCCASIONS.includes(occasion)) return;
+    setStart({ occasion, id: params.get('id') ?? undefined });
+    viewStore.write(JSON.stringify('adhkar'));
+  }, []);
   const [place] = useStore(placeStore, null);
   const [picking, setPicking] = useState(false);
   const strip = useRef<HTMLDivElement>(null);
@@ -145,7 +160,7 @@ export default function Utilities() {
     return () => { element.removeEventListener('scroll', follow); window.removeEventListener('resize', follow); };
   }, []);
   const pick = () => setPicking(true);
-  const options = ([['times', 'مواقيت الصلاة', <Clock key="t" aria-hidden />], ['qibla', 'القبلة', <Compass key="q" aria-hidden />], ['calendar', 'التقويم الهجري', <CalendarDays key="c" aria-hidden />]] as const)
+  const options = ([['times', 'مواقيت الصلاة', <Clock key="t" aria-hidden />], ['qibla', 'القبلة', <Compass key="q" aria-hidden />], ['calendar', 'التقويم الهجري', <CalendarDays key="c" aria-hidden />], ['adhkar', 'الأذكار', <HandHeart key="a" aria-hidden />]] as const)
     .map(([key, label, icon]) => ({ key, label, icon }));
   return (
     <div className={styles.wrap} dir="rtl" lang="ar">
@@ -161,6 +176,7 @@ export default function Utilities() {
           <section key={id} ref={node => { if (node) pages.current.set(id, node); else pages.current.delete(id); }} className={styles.page}
             aria-label={options.find(option => option.key === id)?.label} inert={id !== view}>
             {id === 'calendar' ? <Calendar />
+              : id === 'adhkar' ? <Adhkar key={start ? 'asked' : 'plain'} quran={quran} on={view === 'adhkar'} start={start} />
               : !place ? <FirstUse onPick={pick} />
               : id === 'times' ? <Times place={place} onPlace={pick} />
               : <Qibla place={place} onPlace={pick} on={view === 'qibla'} />}
@@ -362,6 +378,7 @@ function Calendar() {
   const month = useMemo(() => now && hijriMonth(now, offset), [dayKey, offset]); // eslint-disable-line react-hooks/exhaustive-deps
   if (!now) return null;
   if (!month) return <p className={styles.note}>لا يدعم هذا المتصفح التقويم الهجري.</p>;
+  const juz = todaysJuz(now);
   return (
     <div className="grid gap-3">
       <div className={styles.monthHead}>
@@ -372,6 +389,8 @@ function Calendar() {
         </div>
         <button type="button" className={styles.arrow} onClick={() => setOffset(offset + 1)} aria-label="الشهر التالي"><ChevronLeft size={22} aria-hidden /></button>
       </div>
+      {/* Today's juz, which follows the Hijri day (the app's: its shortcut lives here and as a card on home). */}
+      {juz && <div className="flex justify-center"><Button href={ayahHref(`${JUZ_INDEX[juz[0] - 1].surah}:${JUZ_INDEX[juz[0] - 1].ayah}`)}><BookOpen aria-hidden />{`اقرأ جزء اليوم: ${juzLabel(juz)}`}</Button></div>}
       <div className={styles.grid}>
         {WEEK.map(day => <span key={day} className={styles.week}>{day}</span>)}
         {Array.from({ length: month.lead }, (_, i) => <span key={`lead-${i}`} />)}

@@ -9,9 +9,12 @@ import type { AyatPage } from '@/lib/storyAyat';
 export default function StoryAyatLines({ credit, pages, folded = false }: { credit: string; pages: AyatPage[]; folded?: boolean }) {
   return (
     <Folded credit={credit} startOpen={!folded} bare>
-      <div lang="ar">
-        {pages.map(part => <MushafPage key={part.page} page={part.page} data={part.data} top={part.top} names={SURAH_TITLES} slice={part.slice} />)}
-      </div>
+      <AyatLines pages={pages} />
     </Folded>
   );
+}
+
+/** Ayat in the mushaf's own lines, page after page (the app's AyatRange): a story's ayat, an adhkar card's Quran selection. */
+export function AyatLines({ pages }: { pages: AyatPage[] }) {
+  return <div lang="ar">{pages.map(part => <MushafPage key={part.page} page={part.page} data={part.data} top={part.top} names={SURAH_TITLES} slice={part.slice} />)}</div>;
 }

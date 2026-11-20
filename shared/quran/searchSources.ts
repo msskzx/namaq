@@ -10,8 +10,9 @@ import { PROPHETS, prophetName } from './prophets';
 import { STORIES } from './prophets/stories';
 import { searchWords, type WordsData } from './words';
 import { numberVerses, type Poem } from '../tajwid/poem';
-import { holdsTerms, type CompareItem, type EventItem, type SearchSources, type TuhfaItem } from './searchAll';
+import { holdsTerms, type AdhkarItem, type CompareItem, type EventItem, type SearchSources, type TuhfaItem } from './searchAll';
 import { SURAH_NAMES } from './surahNames';
+import { ADHKAR } from '../adhkar';
 
 /** Results a group lists at most when opened in full; the finders return one more, so a page can say there are more. */
 export const GROUP_MAX = 100;
@@ -55,3 +56,6 @@ export function bundledSources(pairs: { a: number; b: number }[]): SearchSources
     ...staticLists(pairs),
   };
 }
+
+/** The adhkar's own words, each opening its card on its first occasion's tab. The Quran selection is found among the ayat. */
+export const ADHKAR_ITEMS: AdhkarItem[] = ADHKAR.flatMap(item => (item.content.kind === 'text' ? [{ id: item.id, occasion: item.occasions[0], text: item.content.text }] : []));

@@ -29,3 +29,12 @@ describe('/api/search events', () => {
     for (const hit of hits) expect(STORIES[hit.slug as string].events[hit.event as number].title).toBe(hit.title);
   });
 });
+
+describe('/api/search adhkar', () => {
+  it('finds an adhkar card by its words, and its link opens the utilities on that card (website parity, owner 2026-11-19)', async () => {
+    const { hitHref } = await import('@/app/search/SearchView');
+    const hits = (await search('أنت السلام ومنك السلام')).find(group => group.kind === 'adhkar')?.hits ?? [];
+    expect(hits).toContainEqual(expect.objectContaining({ id: 'prayer-peace', occasion: 'after-prayer' }));
+    expect(hitHref({ kind: 'adhkar', id: 'prayer-peace', occasion: 'after-prayer', text: '' })).toBe('/utilities?adhkar=after-prayer&id=prayer-peace');
+  });
+});

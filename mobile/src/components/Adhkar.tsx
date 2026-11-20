@@ -14,7 +14,7 @@ import { AyatRange } from './AyahLines';
 import { buzz } from '@/lib/haptics';
 import { ALERTS_SUPPORTED, allowAlerts, alertsAllowed, openPhoneSettings, useForeground } from '@/lib/adhan';
 import { reachedAdhkar, showAdhkar, useAdhkarPlace } from '@/lib/adhkar';
-import { countOf, counting } from '@/lib/adhkarCount';
+import { countOf, counting } from '@shared/adhkarCount';
 import { adhkarAlerts, prayerPlace } from '@/lib/settings';
 import type { Palette } from '@/lib/theme';
 

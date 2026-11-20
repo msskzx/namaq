@@ -35,7 +35,7 @@ export type SearchSources = {
   events?: EventItem[];
   tuhfa?: TuhfaItem[];
   notes?: { key: string; text: string }[];
-  /** The phone app's adhkar (shared/adhkar.ts); the website has no adhkar page, so its search leaves them out. */
+  /** The adhkar (shared/adhkar.ts), each opening its card in the utilities. */
   adhkar?: AdhkarItem[];
 };
 
