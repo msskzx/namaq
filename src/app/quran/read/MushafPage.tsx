@@ -227,7 +227,16 @@ export default function MushafPage({
   const rows = data.items.map((item, index) => (slice && (index < slice.from || index > slice.to) ? null :
             <div key={index} className={`${styles.row} ${'surah' in item ? styles.titleRow : ''}`}>
               {'surah' in item ? (
-                <h2 aria-hidden={(anonymous && surahHidden(item.surah)) || undefined} className={[styles.title, surahHidden(item.surah) ? styles.veiled : '', surahHidden(item.surah) && next === `${item.surah}:1` ? styles.upcoming : ''].join(' ').trim()}>{names[item.surah]}</h2>
+                <h2 aria-hidden={(anonymous && surahHidden(item.surah)) || undefined} className={[styles.title, surahHidden(item.surah) ? styles.veiled : '', surahHidden(item.surah) && next === `${item.surah}:1` ? styles.upcoming : ''].join(' ').trim()}>
+                  {names[item.surah]}
+                  {/* The surah's place in the mushaf, in a ring at the box's right end (owner, 2026-11-20); hidden with a veiled name. */}
+                  {!surahHidden(item.surah) && names[item.surah] && (
+                    <span aria-hidden className={styles.surahNumber}>
+                      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" strokeWidth={1} vectorEffect="non-scaling-stroke" /></svg>
+                      {num(item.surah)}
+                    </span>
+                  )}
+                </h2>
               ) : 'basmala' in item ? (
                 (() => {
                   const surah = surahOf[index];

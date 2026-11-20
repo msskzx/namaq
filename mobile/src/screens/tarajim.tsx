@@ -24,7 +24,7 @@ export function HubHeading({ text, palette }: { text: string; palette: Palette }
 /**
  * The tarajim tab (owner, 2026-11-19; sketch tarajim-hub/sketch-dark.png): a hub, not a list. Search first; typing shows the
  * people found as rows in one card in place of the sections. Then the groups the scholars name, the sira and its battles,
- * the ties between people, and the whole list on its own page in the book's order (nothing capped, nothing dumped here).
+ * the ties between people and the nasab search, and the whole list on its own page in the book's order (nothing capped, nothing dumped here).
  */
 export default function TarajimScreen() {
   const palette = usePalette();
@@ -66,6 +66,7 @@ export default function TarajimScreen() {
             <WayCard title="الغزوات والمعارك" line={`من ${BATTLES[0].name} إلى ${BATTLES[BATTLES.length - 1].name}، ومن شهد كل واحدة`} palette={palette} onPress={() => router.push('/battles')} />
             <HubHeading text="الصلات" palette={palette} />
             <WayCard title="بين عدة أشخاص" line="اختر شخصين أو أكثر لترى أقرب الصلات بينهم" palette={palette} onPress={() => router.push('/between')} />
+            <WayCard title="النسب" line="ابحث عن شخص لترى شجرة نسبه، وأين يلتقي بغيره" palette={palette} onPress={() => router.push({ pathname: '/nasab', params: { pick: '1' } })} />
             <WayCard title="حياتهم جنبًا إلى جنب" line="قارن حياة اثنين أو أكثر عامًا بعام" palette={palette} onPress={() => router.push('/life')} />
             <HubHeading text="كل التراجم" palette={palette} />
             <WayCard title="كل التراجم بترتيب الكتاب" line="السيرة النبوية، ثم الخلفاء الراشدون، ثم أجزاء السير" palette={palette} onPress={() => router.push('/people')} />

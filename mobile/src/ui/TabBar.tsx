@@ -6,8 +6,7 @@ import { hiddenProps, useHidden, useSlideAway } from '@/ui/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, useSegments } from 'expo-router';
 import type { BottomTabBarProps } from 'expo-router/js-tabs';
-import { Feather, House, ScrollText, Users, type LucideProps } from 'lucide-react-native';
-import TreeIcon from '@/components/TreeIcon';
+import { BookOpenText, Feather, House, ScrollText, Users, type LucideProps } from 'lucide-react-native';
 import { TAB_BAR, tabBarBottom } from '@/ui/tabBarSpace';
 import { usePalette } from '@/lib/theme';
 import { retapTab } from '@/lib/tabRetap';
@@ -20,7 +19,8 @@ import { Tap } from '@/ui/Tap';
 // Quran, hadith, home, tarajim, quizzes (owner, 2026-11-18). Keys are the tab routes; each but the quizzes holds a page stack (lib/tabGroups.ts).
 // The mushaf opens from the Quran hub and from home's cards, and lights the Quran button; the library and the utilities open from home.
 const BUTTONS: { key: string; label: string; Icon: (props: LucideProps) => React.ReactNode }[] = [
-  { key: '(quran)', label: 'القرآن', Icon: TreeIcon },
+  // The mushaf, the tab's first tool, not the trees (owner, 2026-11-20).
+  { key: '(quran)', label: 'القرآن', Icon: BookOpenText },
   { key: '(hadith)', label: 'الحديث', Icon: ScrollText },
   { key: '(home)', label: 'الرئيسية', Icon: House },
   { key: '(tarajim)', label: 'التراجم', Icon: Users },

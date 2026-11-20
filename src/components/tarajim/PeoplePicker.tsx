@@ -14,10 +14,12 @@ import { SearchField } from '@/components/common/Field';
  * its × (the first stays when `keepFirst`, the last one when `keepLast`), and «أضف» opening a search of the converted
  * entries by name, kunya or laqab. Each pick is a link, so the page's address holds the people picked.
  */
-export default function PeoplePicker({ picked, people, hrefOf, keepFirst = false, keepLast = true }: {
+export default function PeoplePicker({ picked, people, hrefOf, keepFirst = false, keepLast = true, startOpen = picked.length < 2 && !keepFirst }: {
   picked: PersonHead[]; people: PickPerson[]; hrefOf: (slugs: string[]) => string; keepFirst?: boolean; keepLast?: boolean;
+  /** The search opens with the page (the nasab search from the tarajim hub); by default when fewer than two are picked. */
+  startOpen?: boolean;
 }) {
-  const [adding, setAdding] = useState(picked.length < 2 && !keepFirst);
+  const [adding, setAdding] = useState(startOpen);
   const [query, setQuery] = useState('');
   const slugs = picked.map(p => p.slug);
   const offered = people.filter(p => !slugs.includes(p.slug) && matchesQuery(p.hay, query));

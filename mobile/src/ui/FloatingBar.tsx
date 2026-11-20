@@ -68,9 +68,10 @@ export default function FloatingBar({ id, label, Icon, screen, clear, start, pal
   };
   // Past Tap's 10 points, so a finger that moved enough to drag never also presses a button.
   const pan = Gesture.Pan().activeOffsetX([-12, 12]).activeOffsetY([-12, 12])
-    .onBegin(() => { from.value = { x: cx.value, y: cy.value }; })
+    // Where the finger is on the screen, against where it first touched: the bar keeps the same spot under the finger.
+    .onBegin(event => { from.value = { x: cx.value - event.absoluteX, y: cy.value - event.absoluteY }; })
     .onStart(() => { dragging.value = true; })
-    .onUpdate(event => { cx.value = from.value.x + event.translationX; cy.value = from.value.y + event.translationY; })
+    .onUpdate(event => { cx.value = from.value.x + event.absoluteX; cy.value = from.value.y + event.absoluteY; })
     .onEnd(() => {
       // It stays where it shows, so the stored place is the one inside the screen.
       const at = box();
@@ -82,8 +83,10 @@ export default function FloatingBar({ id, label, Icon, screen, clear, start, pal
     .onFinalize(() => { dragging.value = false; });
   // Moved by a transform, not by top and left: a transform is drawn on the UI thread every frame, while top and left
   // are layout and wait for a layout pass, so the bar only jumped to the finger once it was lifted (owner, 2026-11-19).
+  // The shared values are read here, not only inside box(): an animated style is run again only for the shared values its
+  // own closure holds, so through box() alone it ran once on release and the bar jumped then (owner, 2026-11-20).
   const placed = useAnimatedStyle(() => {
-    const at = box();
+    const at = clampBox({ x: cx.value, y: cy.value }, { width: w.value, height: h.value }, { width, height }, edges);
     return { transform: [{ translateX: at.left }, { translateY: at.top }] };
   });
   return (

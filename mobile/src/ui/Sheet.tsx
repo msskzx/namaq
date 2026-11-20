@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { OutsideCard } from '@/ui/Card';
+import { OutsideCard } from '@/ui/cardContext';
 import { Modal, Pressable, View, useWindowDimensions } from 'react-native';
 import { useKeyboardHeight } from '@/lib/keyboard';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';

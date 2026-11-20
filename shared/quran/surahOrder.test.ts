@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import corpus from './quranText/corpus';
 import surahRows from '../data/quran/surahs.json';
 import { num } from './arabicNumber';
-import { BOOKS, citeLabel, citeUrl, ORDER_AIMS, ORDER_LINKS, ORDER_JUZ, orderInJuz, orderSurahs } from './surahOrder';
+import { BOOKS, citeLabel, citeUrl, ORDER_AIMS, ORDER_LINKS, ORDER_JUZ, linkShows, orderInJuz, orderSurahs, toggledJuz } from './surahOrder';
 
 const pageWords = new Map(corpus.ayat.map(ayah => [ayah.key, ayah.words]));
 const data = (key: string) => pageWords.get(key);
@@ -16,7 +16,7 @@ describe('surah order data', () => {
 
   it('covers every juz and keeps the Ghafir–Fussilat boundary connected', () => {
     expect(ORDER_JUZ).toEqual(Array.from({ length: 30 }, (_, i) => i + 1));
-    expect(orderInJuz(surahs, 1).map(s => s.surah)).toEqual([1, 2]);
+    expect(orderInJuz(surahs, [1]).map(s => s.surah)).toEqual([1, 2]);
     expect(surahs.find(s => s.surah === 41)!.link).toMatchObject({ src: { book: 'tanasuq', page: 130, sh: 131 } });
     expect(surahs[0].link).toBeUndefined();
   });
@@ -69,11 +69,27 @@ describe('orderSurahs', () => {
   });
 
   it('keeps a surah under every juz it runs through', () => {
-    expect(orderInJuz(surahs, 30).map(s => s.surah)).toEqual(Array.from({ length: 37 }, (_, k) => 78 + k));
-    expect(orderInJuz(surahs, 25).map(s => s.surah)).toEqual([41, 42, 43, 44, 45]);
-    expect(orderInJuz(surahs, 27).map(s => s.surah)).toContain(51);
-    expect(orderInJuz(surahs, 26).map(s => s.surah)).toContain(51);
-    expect(orderInJuz(surahs, null)).toBe(surahs);
+    expect(orderInJuz(surahs, [30]).map(s => s.surah)).toEqual(Array.from({ length: 37 }, (_, k) => 78 + k));
+    expect(orderInJuz(surahs, [25]).map(s => s.surah)).toEqual([41, 42, 43, 44, 45]);
+    expect(orderInJuz(surahs, [27]).map(s => s.surah)).toContain(51);
+    expect(orderInJuz(surahs, [26]).map(s => s.surah)).toContain(51);
+    expect(orderInJuz(surahs, [])).toBe(surahs);
+  });
+
+  it('shows several juz together, each surah once, and a link only after the surah before it', () => {
+    const shown = orderInJuz(surahs, [1, 30]);
+    expect(shown.map(s => s.surah)).toEqual([1, 2, ...Array.from({ length: 37 }, (_, k) => 78 + k)]);
+    // al-Naba' follows al-Baqara here, but its link is to al-Mursalat, which is not shown.
+    expect(shown.map((_, i) => linkShows(shown, i)).filter(Boolean)).toHaveLength(1 + 36);
+    expect(linkShows(shown, 2)).toBe(false);
+    // Juz 26 and 27 share al-Dhariyat: it shows once.
+    expect(orderInJuz(surahs, [26, 27]).filter(s => s.surah === 51)).toHaveLength(1);
+  });
+
+  it('picks a juz chip, puts it back, and keeps the picks in the mushaf order', () => {
+    expect(toggledJuz([30], 1)).toEqual([1, 30]);
+    expect(toggledJuz([1, 30], 30)).toEqual([1]);
+    expect(toggledJuz([1], 1)).toEqual([]);
   });
 });
 

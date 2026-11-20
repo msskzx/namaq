@@ -101,6 +101,19 @@ type Cell = { band: Band; word?: boolean };
 
 const groupText = (word: string, marks: number[]) => `${word}${marks.map(end => `${word ? ' ' : ''}${num(end)}`).join('')}`;
 
+/** The surah number's ring, as a share of the title line, so it scales with the page, a slice and flowing text alike. */
+const NUMBER_RING = 0.5;
+
+/** The surah's place in the mushaf, small and muted in a ring at the right end of its title box (owner, 2026-11-20); the name stays centred. */
+function SurahNumber({ surah, ring, palette }: { surah: number; ring: number; palette: Palette }) {
+  return (
+    <View accessible={false} importantForAccessibility="no-hide-descendants" pointerEvents="none"
+      style={{ position: 'absolute', right: ring * 0.3, width: ring, height: ring, borderRadius: ring / 2, borderWidth: 1, borderColor: palette.muted, alignItems: 'center', justifyContent: 'center' }}>
+      <Text style={{ color: palette.muted, fontSize: ring * 0.42, lineHeight: ring * 0.9 }}>{num(surah)}</Text>
+    </View>
+  );
+}
+
 function MushafPageView({ page, data, model, palette, width, height, top, names, mark, playing = null, markWords = null, recite, forgot, saved, onTouch, onSelect, write, checked, zoom = 1, onHeight, focus, onFocus, slice, anonymous = false }: Props) {
   const flowing = zoom > 1;
   // The body's size at the printed page and with flowing text, each kept, so a pinch back to the printed page sets its
@@ -362,6 +375,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                       <View style={{ height: titleLine * 0.94, borderWidth: 1, borderColor: palette.rule, padding: 2 }}>
                         <View style={{ flex: 1, borderWidth: 1, borderColor: palette.rule, alignItems: 'center', justifyContent: 'center' }}>
                           <Text style={[{ fontFamily: QURAN_FONT, fontSize: Math.min(size * 0.8, titleLine * 0.46), color: palette.accent }, veil ? veiled : null, veil && next === `${item.surah}:1` ? upcoming : null]}>{names[item.surah]}</Text>
+                          {!veil && names[item.surah] ? <SurahNumber surah={item.surah} ring={titleLine * NUMBER_RING} palette={palette} /> : null}
                         </View>
                       </View>
                     </View>
@@ -389,8 +403,9 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                 // The word's place in its ayah, past a titled surah's title and basmala steps (write mode counts words only).
                 const rel = word - (group.ayah === 1 && group.surah !== undefined ? titled?.get(group.surah) ?? 0 : 0);
                 // A selected ayah sits on a neutral band and keeps its ink (owner, 2026-11-14); a forgotten one on a faint accent band.
+                // The selection is over the forgotten band, as on the website: a tap on a forgotten ayah showed no change.
                 const lit = mark === key && !!markWords && at !== undefined && at >= markWords.from && at <= markWords.to;
-                const band: Band = wordHidden ? null : playing === key ? 'playing' : lit ? 'mark' : forgot[key] || (at !== undefined && forgot[`${key}:${at}`]) ? 'forgot' : mark === key ? 'mark' : null;
+                const band: Band = wordHidden ? null : playing === key ? 'playing' : mark === key ? 'mark' : forgot[key] || (at !== undefined && forgot[`${key}:${at}`]) ? 'forgot' : null;
                 return { group, key, wordHidden, rel, at, band, word: band === 'mark' && lit };
               });
               const holdsFocus = flowing && !!focus && !focused.taken && cells.some(cell => cell.key === focus) && (focused.taken = true);

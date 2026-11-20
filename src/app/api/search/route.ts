@@ -5,7 +5,7 @@ import { keptViews, type PlaceVerdicts } from '@shared/quran/prophets/review';
 import data from '@shared/quran/prophets/verdicts.json';
 import { withUnappliedStoryReviews } from '@/lib/quran/curation/storyReviewLog';
 import { searchAll, type SearchSources } from '@shared/quran/searchAll';
-import { bundledSources } from '@shared/quran/searchSources';
+import { ADHKAR_ITEMS, bundledSources } from '@shared/quran/searchSources';
 import { listedPairs } from '@/app/quran/compare/pairCards';
 
 /** The website's story pages show only the kept events, so events the review dropped whole are not offered. */
@@ -14,7 +14,7 @@ function websiteSources(): SearchSources {
   const verdicts = withUnappliedStoryReviews(data.places as PlaceVerdicts);
   const kept = new Set(Object.entries(STORIES).flatMap(([slug, story]) =>
     keptViews(slug, buildStory(story.events, { ayah: () => '' }), verdicts).map(event => `${slug}|${event.title}`)));
-  return { ...sources, events: sources.events?.filter(event => kept.has(`${event.slug}|${event.title}`)) };
+  return { ...sources, adhkar: ADHKAR_ITEMS, events: sources.events?.filter(event => kept.has(`${event.slug}|${event.title}`)) };
 }
 
 let sources: SearchSources | undefined;

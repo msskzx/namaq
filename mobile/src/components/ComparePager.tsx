@@ -7,17 +7,34 @@ import CompareCard from './CompareCard';
 import { setCompact, useShrinkOnScroll } from '@/lib/chrome';
 import PageVideo from './PageVideo';
 import Empty from '@/ui/Empty';
+import { Text } from '@/ui/Text';
+import SourceLine, { sourcesOf } from '@/ui/SourceLine';
+import { pairNote, tanasubSource } from '@shared/quran/tanasubCards';
+import type { Link } from '@shared/quran/surahOrder';
 
 const GAP = 14;
 
 /** A pair page to open on the card of these ayat (see focusIndex). */
 export type Focus = { visit: string; ayat: string[] };
 
+/** What a surah-order book says joins two neighbouring surahs when it names no ayah pair: a note atop their page, tied to no ayah. */
+function PairNote({ link, palette }: { link: Link; palette: Palette }) {
+  const sources = sourcesOf([tanasubSource(link)]);
+  return (
+    <View accessibilityLabel="بين السورتين" style={{ borderStartWidth: 2, borderColor: palette.rule, paddingStart: 12, marginHorizontal: 4, gap: 2 }}>
+      <Text style={{ color: palette.amber, fontSize: 14, textAlign: 'right' }}>بين السورتين</Text>
+      <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'justify', writingDirection: 'rtl' }}>«{link.text}»</Text>
+      <View style={{ marginStart: -12 }}><SourceLine named={sources} sources={sources} palette={palette} /></View>
+    </View>
+  );
+}
+
 /** One page: the cards of a surah pair, scrolled up and down; `focus` scrolls to the card of those ayat. */
 const PairPage = memo(function PairPage({ visit, width, height, palette, savedOnly, savedIds, focus, onLanded }: { visit: Visit; width: number; height: number; palette: Palette; savedOnly: boolean; savedIds: (id: string) => boolean; focus?: string[]; onLanded?: () => void }) {
   const all = cardsFor(visit.lead, visit.other);
   const cards = savedOnly ? all.filter(card => savedIds(card.id)) : all;
   const list = useRef<FlatList<(typeof cards)[number]>>(null);
+  const note = savedOnly ? undefined : pairNote(visit.lead, visit.other);
   const target = focus ? focusIndex(cards, focus) : -1;
   const landed = useRef(onLanded);
   landed.current = onLanded;
@@ -26,6 +43,8 @@ const PairPage = memo(function PairPage({ visit, width, height, palette, savedOn
   // They keep arriving for a moment after the page opens, so it lands again each time, until the reader scrolls or the moment passes.
   const pending = useRef(target);
   const heights = useRef<number[]>([]);
+  /** The note atop the page, with its gap: the cards start below it. */
+  const header = useRef(0);
   useEffect(() => {
     pending.current = target;
     if (target < 0) return;
@@ -35,7 +54,7 @@ const PairPage = memo(function PairPage({ visit, width, height, palette, savedOn
   const land = useCallback(() => {
     const at = pending.current;
     if (at <= 0 || heights.current.slice(0, at).filter(Boolean).length < at) return;
-    const offset = heights.current.slice(0, at).reduce((sum, height) => sum + height + GAP, 0);
+    const offset = heights.current.slice(0, at).reduce((sum, height) => sum + height + GAP, header.current);
     list.current?.scrollToOffset({ offset, animated: false });
   }, []);
   const stop = useCallback(() => { pending.current = -1; landed.current?.(); }, []);
@@ -49,6 +68,7 @@ const PairPage = memo(function PairPage({ visit, width, height, palette, savedOn
       <PageVideo lead={visit.lead} other={visit.other} cards={cards} open={video} onClose={() => setVideo(false)} palette={palette} />
       <FlatList ref={list} data={cards} keyExtractor={card => card.id} initialNumToRender={Math.max(4, target + 2)} windowSize={5} onContentSizeChange={land} onLayout={land} onScrollBeginDrag={stop} onScroll={shrink} scrollEventThrottle={16}
         contentContainerStyle={{ padding: 12, gap: GAP, paddingBottom: 32 }}
+        ListHeaderComponent={note && <View onLayout={event => { header.current = event.nativeEvent.layout.height + GAP; land(); }}><PairNote link={note} palette={palette} /></View>}
         ListEmptyComponent={<Empty palette={palette} text={savedOnly ? 'لا بطاقات محفوظة بين السورتين.' : 'لا آيات متشابهة بين السورتين.'} />}
         renderItem={({ item, index }) => <View onLayout={event => { heights.current[index] = event.nativeEvent.layout.height; land(); }}><CompareCard card={item} palette={palette} onPageVideo={pageVideo} /></View>} />
     </View>

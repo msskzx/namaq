@@ -47,6 +47,7 @@ export interface QuizQuestionView {
   marked?: ChoiceParts["marked"];
   explains?: ChoiceParts["explains"];
   passage?: ChoiceParts["passage"];
+  boxes?: ChoiceParts["boxes"];
   quranChoices?: ChoiceParts["quranChoices"];
   whereOf?: ChoiceParts["whereOf"];
   note?: ChoiceParts["note"];

@@ -9,6 +9,8 @@ import Card from '@/ui/Card';
 import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
 import Sheet from '@/ui/Sheet';
+import Tabs from '@/ui/Tabs';
+import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import { SearchField } from '@/ui/Field';
 import { usePalette } from '@/lib/theme';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
@@ -30,6 +32,8 @@ export default function BetweenScreen() {
   const [picked, setPicked] = useState(() => slugs.split(',').filter(s => findPerson(s)));
   const [adding, setAdding] = useState(picked.length < 2);
   const [query, setQuery] = useState('');
+  // The chain drawn or said in one sentence: one at a time, the drawing first (owner, 2026-11-20).
+  const [shown, setShown] = useState<DrawingOrText>('drawing');
   const { nodes, steps, apart } = useMemo(() => joining(GRAPH, picked), [picked]);
   const drawW = Math.min(width - 32, 480);
   const back = () => (router.canGoBack() ? router.back() : toTab('/tarajim'));
@@ -47,13 +51,15 @@ export default function BetweenScreen() {
         </View>
         {picked.length < 2 && <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>اختر شخصين أو أكثر لترى أقرب الصلات بينهم.</Text>}
         {picked.length > 1 && <>
-          {sentence ? <Card palette={palette}><Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{sentence}.</Text></Card> : null}
           {apart.length > 0 && (
             <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>
               لا صلة معروفة بعد بين {name(picked[0])} و{apart.map(name).join(' و')} في التراجم المضافة.
             </Text>
           )}
-          <TiesChain nodes={nodes} steps={steps} first={picked[0]} picked={picked} width={drawW} palette={palette} />
+          {sentence ? <Tabs palette={palette} label="كيف تُعرض الصلة" value={shown} onChange={setShown} options={DRAWING_OR_TEXT} /> : null}
+          {shown === 'text' && sentence
+            ? <Card palette={palette}><Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{sentence}.</Text></Card>
+            : <TiesChain nodes={nodes} steps={steps} first={picked[0]} picked={picked} width={drawW} palette={palette} />}
           <Credit facts={steps.map(step => step.link)} palette={palette} quotes />
         </>}
       </ScrollView>

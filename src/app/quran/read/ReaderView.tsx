@@ -419,6 +419,8 @@ export default function ReaderView({
     setPosition({ start: order[0], shown: null, words: 0 });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- once, when the page opens with ?write=1
   }, [startWriting]);
+  // The bar's reset (owner, 2026-11-20): the whole page hidden again, recited from its first ayah, without leaving recite mode.
+  const restartPage = () => { setActions(null); setReviewing(false); setChecked(null); setPosition({ start: order[0], shown: null, words: 0 }); };
   const stopRecite = () => { setActions(null); setReviewing(false); setPosition(null); setChecked(null); input.current?.blur(); };
   const revealNextAyah = reciter.nextAyah;
   const revealNextWord = reciter.nextWord;
@@ -666,7 +668,7 @@ export default function ReaderView({
         onCopy={() => copy(actions.key, ayahText(actions.key))} onPlaces={() => { setSearchFor(picked); document.getElementById(searchId)?.showPopover?.(); }}
         onForgot={what => toggleForgot(what === 'lit' ? litKeys : [actions.key])} onSave={() => toggleSaved(actions.key)} onNote={() => setNoting(actions.key)} onShare={() => setSharing(actions.key)}
         onTopics={!position && surahTopicsOf(Number(actions.key.split(':')[0])) ? () => { const [surah, ayah] = actions.key.split(':').map(Number); setTopic({ surah, section: Math.max(0, sectionAt(surah, ayah)) }); } : undefined}
-        irab={!!actions.word} onListen={() => listen(actions.key)} onRecite={() => startRecite(actions.key)} onPreview={kind => setPreview(kind === 'irab' || kind === 'gharib' ? { kind, key: actions.key, ...actions.word! } : kind === 'tafsir' || kind === 'balagha' ? { kind, key: actions.key } : kind === 'readings' ? { kind, key: actions.key, qiraat: links[actions.key]?.qiraat ?? [] } : { kind, key: actions.key, all: kind === 'trees' ? links[actions.key]?.trees ?? '/quran/branches' : `/quran/compare?a=${actions.key.split(':')[0]}` })} onClose={closeActions} onDismiss={dismissActions} />}
+        irab={!!actions.word} onListen={() => listen(actions.key)} onRecite={() => startRecite(actions.key)} onPreview={kind => setPreview(kind === 'irab' ? { kind, key: actions.key, ...actions.word! } : kind === 'gharib' ? { kind, key: actions.key, ...actions.word! } : kind === 'tafsir' || kind === 'balagha' ? { kind, key: actions.key } : kind === 'readings' ? { kind, key: actions.key, qiraat: links[actions.key]?.qiraat ?? [] } : { kind, key: actions.key, all: kind === 'trees' ? links[actions.key]?.trees ?? '/quran/branches' : `/quran/compare?a=${actions.key.split(':')[0]}` })} onClose={closeActions} onDismiss={dismissActions} />}
       {fasila && !position && !actions && !shown.some(entry => entry.page === fasila.page) && <div className={mushaf.reciteBar}>
         <Button size="md" variant="muted" href={`/quran/read/${fasila.page}`} className={mushaf.fasilaPill}>
           <FasilaIcon aria-hidden className="text-[var(--home-accent)]" width={18} height={18} />
@@ -687,7 +689,7 @@ export default function ReaderView({
       {sharing && <AyahShareDialog ayah={sharing} name={surahOfKey(sharing)} note={notes[sharing]?.text} onClose={() => setSharing(null)} />}
       {/* The recite bar floats over the page, goes wherever it is dragged and folds into a circle (owner, 2026-11-19). */}
       {position && <FloatingBar id="recite" openLabel={ar ? 'افتح أدوات التسميع' : 'Open the recite tools'} Icon={EyeOff} className={mushaf.reciteBar}>
-        {fold => <RecitePill recite={reciter} writing={writing} onWriting={toggleWriting} onClose={stopRecite} onFold={fold} ar={ar} more={reviewing ? !!reviewNext : !last}
+        {fold => <RecitePill recite={reciter} writing={writing} onWriting={toggleWriting} onClose={stopRecite} onRestart={reviewing ? undefined : restartPage} onFold={fold} ar={ar} more={reviewing ? !!reviewNext : !last}
           after={reviewing ? { Icon: ar ? ArrowLeft : ArrowRight, label: ar ? 'الآية المنسية التالية' : 'Next forgotten ayah' } : undefined}
           lead={reviewing ? <span className="px-2 text-sm text-[var(--home-muted)]">{ar ? `مراجعة ${num(reviewAt)} من ${num(reviewTotal)}` : `Review ${reviewAt} of ${reviewTotal}`}</span> : null} />}
       </FloatingBar>}

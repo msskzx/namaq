@@ -22,10 +22,12 @@ for one of those hadith with the start of the saying, opening the hadith's page;
 hadith page's own view, opening the hadith's page; `SahihPost`, only once the book is downloaded on the phone), and the quiz cards in `FEED_QUIZ_NAMES`
 (`shared/quiz/feedQuiz.ts`): في أي سورة؟, أكمل المتشابهات, سمّع بقية الآية, قارن الموضعين,
 أوائل السور, سمّع الآية, ما معنى؟, the four ayah quizzes below, ما المصطلح؟ (`shared/quiz/balaghaTermQuiz.ts`: a term's
-definition with its name hidden, four terms to pick from, each choice linking to its definition once answered), the three Tuhfat al-Atfal questions, السيرة والغزوات (shared/quiz/sira.ts), the four tarajim questions
+definition with its name hidden, four terms to pick from, each choice linking to its definition once answered), the three Tuhfat al-Atfal questions, السيرة والغزوات (shared/quiz/sira.ts), the five tarajim questions
 (أين يلتقي النسبان؟, صاحب المنقبة and ما صلته به؟, `shared/quiz/tarajim.ts`; في أي سنة كان؟, `shared/quiz/life.ts`:
 the year of an event or story of someone's «حياته», or of a person's death (battles are the sira quiz's); two years where
-the sources give two, the wrong choices of the same shape and none near; the look-up his timeline), بمَ لُقّب؟ and ما كنيته؟ (each its own interest), أسماء النبي ﷺ (several right choices, under السيرة), and the four hadith questions (من راوي الحديث؟, أكمل الحديث, من أخرجه؟ and من حدّث به؟: al-Bukhari's chain
+the sources give two, the wrong choices of the same shape and none near; the look-up his timeline; أكمل النسب,
+`shared/quiz/nasabFill.ts`: a person's nasab as boxes, every other one blank, one blank asked at a time from other fathers
+the entries name, of the answer's shape; the look-up the nasab written out), بمَ لُقّب؟ and ما كنيته؟ (each its own interest), أسماء النبي ﷺ (several right choices, under السيرة), and the four hadith questions (من راوي الحديث؟, أكمل الحديث, من أخرجه؟ and من حدّث به؟: al-Bukhari's chain
 with one narrator left out, the wrong choices narrators of other chains named nowhere in this hadith's records;
 `shared/quiz/hadith.ts`), and في أيّ كتاب؟ (`shared/quiz/sahih.ts`: a bab heading of either Sahih and the kitab it stands in).
 
@@ -76,12 +78,17 @@ A new card or quiz kind goes into an interest's `cards` or `quizzes` in the same
 - Every card walks its own list with what was seen (`shared/feedSeen.ts`), so a card is new until the list is done.
 - Each card's row under it (owner 2026-11-20, like an Instagram post; the rule is in docs/ship-checklist.md section 4)
   holds, from the right, the button that opens the item in its own reader, the card's tools, «احفظ» (a `card:` bookmark,
-  shown in the library and among the saved cards) and share; «ليس من اهتماماتي» sits alone at the left (app only so far:
-  the website's feed has no way to take an interest out yet). There is no «…» menu. Under the row, the source line:
+  shown in the library and among the saved cards) and share; a «⋯» alone at the left opens a small menu with «ليس من
+  اهتماماتي» (`ui/MoreMenu`, `common/MoreMenu`), and a card with no such choice has no «⋯». The open button is the one way to
+  the item: the head and the card are not buttons for it too. Under the row, the source line:
   a book icon and the books the card stands on («المصحف · الإخلاص ٣» for the Quran), a tap opening a sheet with where in
   them (HomeFeed `Post` `source`; a `Reference` inside a card joins it on its own, ui/sourceSlot.ts). The books card is
   the one card with no line: its books are the card. A card from outside the reader's interests is added from its line above («أضفه»). Nothing on screen moves:
   interests are kept for the visit, and a card taken out leaves a line with «تراجع».
+- No card is taller than two thirds of the screen (`CARD_CAP_SHARE` in `shared/homeFeed.ts`, owner 2026-11-20): longer
+  content stops with a fade and «اقرأ كاملًا» opens it whole in a sheet with the row and the source line at its foot
+  (app `CardWithRow` `cap`, website `common/CappedCard`). Nothing scrolls inside a card. Question cards and recall cards
+  are never capped: a question shows all its choices, a recall card its whole ayah.
 - Today's juz, the forgotten ayat, books, the prayer card and saved items stay outside the rounds.
 - The chips over the feed: «لك» and each interest picked; a tap shows that interest's cards alone.
 - The website has the same picker (first open, settings, the chip row and its pencil, `src/components/homepage/Interests.tsx`);

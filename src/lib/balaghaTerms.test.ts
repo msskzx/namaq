@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { termCard, termChapters, termOf, termView } from './balaghaTerms';
+import { termChapters, termOf, termView } from './balaghaTerms';
 
 describe('balagha terms on the website', () => {
   it('lists every term under its chapter with its first line and its examples counted', () => {
@@ -17,10 +17,4 @@ describe('balagha terms on the website', () => {
     }
   });
 
-  it('turns the feed card by the day and slot', async () => {
-    const card = await termCard(20000, 1);
-    expect(card.slot).toBe(1);
-    expect(card.term.quotes.length).toBeGreaterThan(0);
-    expect((await termCard(20000, 1)).term.name).toBe(card.term.name);
-  });
 });

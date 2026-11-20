@@ -8,7 +8,7 @@ import { SettingsHelp } from '@/components/common/SettingsHelp';
 import ExternalLink from '@/components/common/ExternalLink';
 import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
-import { BOOKS, citeLabel, citeUrl, ORDER_HELP, ORDER_JUZ, orderInJuz, type Cite, type OrderAyah, type OrderLinkView, type OrderSurah } from '@shared/quran/surahOrder';
+import { BOOKS, citeLabel, citeUrl, ORDER_HELP, linkShows, ORDER_JUZ, orderInJuz, toggledJuz, type Cite, type OrderAyah, type OrderLinkView, type OrderSurah } from '@shared/quran/surahOrder';
 import Card from '@/components/common/Card';
 import Chip from '@/components/common/Chip';
 
@@ -73,11 +73,12 @@ function SurahCard({ s }: { s: OrderSurah }) {
  * surahs what joins them, all quoted from al-Biqa'i, al-Suyuti and Ibn al-Zubayr with their pages. A juz chip narrows the list.
  */
 export default function OrderView({ surahs, juz: opened = null }: { surahs: OrderSurah[]; juz?: number | null }) {
-  const [juz, setJuz] = useState<number | null>(opened);
+  // Several juz at once (owner, 2026-11-20); none picked shows them all.
+  const [juz, setJuz] = useState<readonly number[]>(opened ? [opened] : []);
   const shown = orderInJuz(surahs, juz);
   const chip = (label: string, value: number | null) => (
     <li key={label}>
-      <Chip label={label} on={juz === value} onClick={() => setJuz(value)} />
+      <Chip label={label} on={value === null ? !juz.length : juz.includes(value)} onClick={() => setJuz(value === null ? [] : toggledJuz(juz, value))} />
     </li>
   );
   return (
@@ -90,7 +91,7 @@ export default function OrderView({ surahs, juz: opened = null }: { surahs: Orde
       </ul>
       <ol aria-label="السور" className="flex flex-col gap-2.5">
         {shown.flatMap((s, i) => [
-          ...(s.link && i > 0 ? [<LinkBlock key={`link-${s.surah}`} link={s.link} />] : []),
+          ...(linkShows(shown, i) ? [<LinkBlock key={`link-${s.surah}`} link={s.link!} />] : []),
           <SurahCard key={s.surah} s={s} />,
         ])}
       </ol>

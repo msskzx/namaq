@@ -21,7 +21,7 @@ function Way({ href, title, line }: { href: string; title: string; line: string 
 
 /**
  * The tarajim tab (owner, 2026-11-19; sketch tarajim-hub/sketch-dark.png, the app's screens/tarajim.tsx): a hub, not a list.
- * Search first, then the groups the scholars name, the sira and its events, the ties between people, and the whole list
+ * Search first, then the groups the scholars name, the sira and its events, the ties between people and the nasab search, and the whole list
  * and the titles on their own pages. The site's own chrome (side rail, bottom bar) stays as it is.
  */
 export default function BiographiesPage() {
@@ -44,6 +44,7 @@ export default function BiographiesPage() {
       <Way href="/events" title="الأحداث" line="الأحداث ومن شهدها" />
       <Heading text="الصلات" />
       <Way href="/between" title="بين عدة أشخاص" line="اختر شخصين أو أكثر لترى أقرب الصلات بينهم" />
+      <Way href="/nasab" title="النسب" line="ابحث عن شخص لترى شجرة نسبه، وأين يلتقي بغيره" />
       <Way href="/life" title="حياتهم جنبًا إلى جنب" line="قارن حياة اثنين أو أكثر عامًا بعام" />
       <Heading text="كل التراجم" />
       <Way href="/people" title="كل التراجم بترتيب الكتاب" line="السيرة النبوية، ثم الخلفاء الراشدون، ثم أجزاء السير" />

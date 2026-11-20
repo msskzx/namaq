@@ -46,6 +46,9 @@ import Frame from '@/components/common/Card';
 import Chip from '@/components/common/Chip';
 import { SearchField } from '@/components/common/Field';
 import Empty from '@/components/common/Empty';
+import SourceLine, { sourcesOf } from '@/components/common/SourceLine';
+import { pairNote, TANASUB_KIND, tanasubLink, tanasubSource } from '@shared/quran/tanasubCards';
+import type { Link as OrderLink } from '@shared/quran/surahOrder';
 import { QuranWord } from '@/components/quran/text/AyahFlow';
 
 export type SurahName = { ar: string; en?: string };
@@ -331,10 +334,11 @@ const anchorOf = (card: PairCard) => compareAnchor(card.sides[0], card.sides[1])
 
 /**
  * One compare card with its buttons. `page` is set where it shows outside its compare page (the home feed): the page's
- * address, for an open button and for the shared link.
+ * address, for an open button and for the shared link; there the sides' own buttons (read in the mushaf, the tree) move
+ * from their heads to the row under the card (owner, 2026-11-20: no button in a card), the tree's once.
  */
 export function Card({ card, names, ar, savedIds, review, view: preferred = 'cards', onPageVideo, page, aside }: { card: PairCard; names: Names; ar: boolean; savedIds: string[]; review?: { a: number; b: number }; view?: BranchView; /** The whole page's video, offered in the share dialog beside the card's own. */ onPageVideo?: () => void; page?: string;
-  /** The home feed's «ليس من اهتماماتي», alone at the row's far end. */ aside?: React.ReactNode }) {
+  /** The home feed's «⋯» (common/MoreMenu), alone at the row's far end. */ aside?: React.ReactNode }) {
   const [tapped, setLit] = useState<string | null>(null);
   const read = useReadAlong(card);
   const step = read.step;
@@ -418,8 +422,13 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'car
       pick: { selected, labels: options.map(item => `${name} ${ar ? num(item.ayah.number) : item.ayah.number}`), onPick: (row: number) => { if (step) return; if (row !== selected) { setSelected(row); setLit(null); } } },
     };
   };
+  // A surah-order book's card: its heading, its quote as written under the ayat, its book on the source line (owner, 2026-11-20).
+  const link = card.book ? tanasubLink(card.book) : undefined;
+  const sources = link ? sourcesOf([tanasubSource(link)]) : [];
+  const quote = link && <p data-book-quote className={`pt-2 text-lg leading-loose text-justify ${tree ? 'px-3' : 'mt-2 border-t border-[var(--home-rule)]'}`}>«{link.text}»</p>;
   return (
     <li id={anchor} data-share-card className={`scroll-mt-20 ${card.verdict?.keep === false && !card.verdict.ask ? 'opacity-60' : ''}`}>
+      {link && <p className="px-1.5 pb-1 text-sm text-[var(--home-amber)]">{TANASUB_KIND}</p>}
       <div data-share-image>
       <DoubleTapSave id={id} text={bookmark.text} href={bookmark.href} aliases={savedIds}>
         {/* A tree stands in the branches tree's own frame, as on the branches page; the matrix is one card. */}
@@ -438,15 +447,24 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'car
         </div> : <div onClick={event => pick(event.target)}>
           <PageSpread compact stackOnMobile ruled={!!shownSides[0].rows} pages={shownSides.map((side, i) => withNeighbours(sidePage(side, names, ar, lit, i === 0 && card.group ? (
             <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={16} aria-hidden /></Link>
-          ) : undefined, card.many?.side === i ? partners(side) : undefined, step?.side === i ? step : undefined, written), i)).map(foldPage)} />
+          ) : undefined, card.many?.side === i ? partners(side) : undefined, step?.side === i ? step : undefined, written), i)).map(foldPage).map(shown => (page ? { ...shown, action: undefined } : shown))
+            // A book card's quote closes the card, under the second side, as in the app.
+            .map((shown, i) => (quote && i === 1 ? { ...shown, footer: <>{shown.footer}{quote}</> } : shown))} />
         </div>}
       </DoubleTapSave>
+      {/* A tree has no card frame, so the quote follows it. */}
+      {tree && quote}
       </div>
-      {read.studio ? <ReadStudio read={read} ar={ar} card={card} names={names} /> : <div className="flex justify-start">
+      {read.studio ? <ReadStudio read={read} ar={ar} card={card} names={names} /> : <div className="flex flex-wrap justify-start">
         {review && <CardReview a={review.a} b={review.b} card={card} />}
         {/* Shown outside the compare page (the home feed), the button that opens it there leads the row (owner, 2026-11-20). */}
         {page && <Button size="icon" variant="muted" href={`${page}#${anchor}`} aria-label={ar ? 'افتحها في المقارنة' : 'Open in compare'} title={ar ? 'افتحها في المقارنة' : 'Open in compare'}><ArrowLeftRight size={18} aria-hidden /></Button>}
-        {tree && card.group && <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={18} aria-hidden /></Link>}
+        {page && shownSides.map((side, i) => {
+          const name = `${ar ? surahName(side.surah) : names[side.surah]?.en ?? String(side.surah)} ${ar ? num(side.ayah) : side.ayah}`;
+          const label = ar ? `اقرأ ${name} في المصحف` : `Read ${name} in the mushaf`;
+          return <Button key={i} size="icon" variant="muted" href={`/quran/read/ayah/${side.surah}/${side.ayah}`} aria-label={label} title={label}><BookOpen size={18} aria-hidden /></Button>;
+        })}
+        {(tree || page) && card.group && <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={18} aria-hidden /></Link>}
         {!matrixOnly && <Button size="icon" variant="muted" onClick={() => setView(view === 'tree' ? 'cards' : 'tree')} aria-label={viewLabel} title={viewLabel}>
           {view === 'tree' ? <GalleryHorizontal size={18} aria-hidden /> : <TreeIcon size={18} aria-hidden />}
         </Button>}
@@ -458,6 +476,8 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'car
         <ShareImageButton size="icon" iconSize={18} href={`${page ?? ''}#${anchor}`} onVideo={canRecord() ? read.open : undefined} onPageVideo={onPageVideo} />
         {aside}
       </div>}
+      {/* In the feed the post's own source line names the book (HomeFeed PairPost). */}
+      {!page && <SourceLine named={sources} sources={sources} />}
       {verdicts.map(({ id: pair, verdict }) => <div key={pair} dir="ltr" className="mt-1 text-sm">
         {verdict.ask && <p data-ask className="mb-1 rounded-md border border-[var(--home-accent)] bg-[var(--home-paper-deep)] px-2 py-1 font-semibold text-[var(--home-accent)]">? Needs your feedback: {verdict.ask}</p>}
         <p className={verdict.keep ? 'text-[var(--home-green)]' : 'text-[var(--home-accent)]'}>
@@ -519,6 +539,16 @@ function ReadStudio({ read, ar, card, names }: { read: ReturnType<typeof useRead
   </div>;
 }
 
+/** What a surah-order book says joins two neighbouring surahs when it names no ayah pair: a note atop their page, tied to no ayah. */
+function PairNote({ link }: { link: OrderLink }) {
+  const sources = sourcesOf([tanasubSource(link)]);
+  return <section aria-label="بين السورتين" dir="rtl" className="border-s-2 border-[var(--home-rule)] ps-3">
+    <p className="text-sm text-[var(--home-amber)]">بين السورتين</p>
+    <p className="text-lg leading-loose text-justify">«{link.text}»</p>
+    <div className="-ms-3"><SourceLine named={sources} sources={sources} /></div>
+  </section>;
+}
+
 export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, names, review = false, states, editable = false, todo = false, scope: juz, spans = { juz: {}, page: {} }, view }: { a: number; b: number; lead?: number; cards: PairCard[]; pairs: SurahPair[]; names: Names; review?: boolean; states?: Record<string, ReviewState>; editable?: boolean; todo?: boolean; scope?: CompareScope; spans?: SurahSpans; /** The default view from settings: tree or matrix. */ view?: BranchView }) {
   const pairs = juz ? allPairs.filter(pair => pageInScope(pair, spans, juz)) : allPairs;
   const ar = useLanguage().language === 'ar';
@@ -544,6 +574,7 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
   }, [cards]);
   const label = ar ? 'اختر سورتين' : 'Choose two surahs';
   const story = curatedFor(a, b);
+  const note = pairNote(a, b);
   // Steps follow the side pane: the pairs under the surah being browsed, then the next surah's.
   const other = lead === a ? b : a;
   // This page seen from its other surah is skipped, so 2·7 steps on to 7·11, not to 7·2.
@@ -619,6 +650,7 @@ export default function PairCompare({ a, b, lead = a, cards, pairs: allPairs, na
         {pageVideo && <PageVideo cards={shown} title={title(lead, other)} {...(story ? { subtitle: ar ? story.name.ar : story.name.en } : {})} label={sideNamer(plain, ar)} names={videoNames(plain, ar)} ar={ar} onClose={() => setPageVideo(false)} />}
         <PairSwipe key={`${lead}-${other}`} previous={previousStep} next={nextStep} ar={ar}>
           {editable && <ReviewButtons a={a} b={b} cards={cards} nextHref={nextTodo && pairHref(nextTodo.lead, nextTodo.other, true, todo, juz)} />}
+          {!savedOnly && note && <PairNote link={note} />}
           {shown.length === 0 ? <Empty text={savedOnly ? (ar ? 'لا بطاقات محفوظة بين السورتين.' : 'No saved cards between these surahs.') : ar ? 'لا آيات متشابهة بين السورتين. اختر سورتين من القائمة.' : 'No similar ayat between these surahs. Choose two surahs from the list.'} />
             : <ol className="flex flex-col gap-4">{shown.map(card => <Card key={card.id} card={card} names={names} ar={ar} savedIds={savedAs(card.id, bookmarks)} review={editable ? { a, b } : undefined} view={view} onPageVideo={canShare ? openPageVideo : undefined} />)}</ol>}
         </PairSwipe>
