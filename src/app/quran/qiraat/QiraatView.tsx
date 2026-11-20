@@ -15,6 +15,7 @@ import { qiraatOf } from '@shared/quran/qiraatData';
 import { filterName, filterRawis, qiraatPlaces, riwayatOf, type QiraatFilter } from '@shared/quran/qiraatPlaces';
 import { surahName } from '@shared/quran/surahNames';
 import { QIRAAT_MEANINGS } from './data/meanings';
+import { QuranWord } from '@/components/quran/text/AyahFlow';
 
 /** Each ayah's words as the Madina page prints them, the ۞ mark kept, as qiraat.json counts them. */
 export type AyahTexts = Record<string, string[]>;
@@ -24,7 +25,7 @@ function Word({ word, mark }: { word: WordDifference; mark: number[] }) {
     const marked = mark.length > 0 && reading.rawis.some(n => mark.includes(n));
     return (
       <div key={i} data-marked={marked || undefined} className={`flex items-center gap-3 py-1.5 ${i ? 'border-t border-[var(--home-rule)]' : ''} ${marked ? 'bg-[color-mix(in_srgb,var(--home-accent)_12%,transparent)] px-2 -mx-2' : ''}`}>
-        <span className={`min-w-[6.5rem] font-quran text-2xl leading-[1.9] ${i ? 'text-[var(--home-accent)]' : ''}`}>{reading.text}</span>
+        <QuranWord className={`min-w-[6.5rem] ${i ? 'text-[var(--home-accent)]' : ''}`}>{reading.text}</QuranWord>
         <span className={`flex-1 text-sm leading-6 ${marked ? '' : 'text-[var(--home-muted)]'}`}>{whoReads(reading, word.readings)}</span>
       </div>
     );

@@ -4,6 +4,7 @@ import Rope from '@/components/common/Rope';
 import { num } from '@shared/quran/arabicNumber';
 import styles from './PageSpread.module.css';
 import { LEGEND_SOURCE, MARK_LEGEND } from '@shared/quran/wordMatch';
+import { QuranWord } from '@/components/quran/text/AyahFlow';
 
 /** `link` names the matched pair a word belongs to; `lit` shows it while its pair is selected. */
 /** `some`: a word only some of the rows share, drawn faded. */
@@ -55,7 +56,7 @@ export function MatchLegend({ ar, extra }: { ar: boolean; extra?: React.ReactNod
       <ul>
         {MARK_LEGEND.map(item => (
           <li key={item.kind}>
-            {item.kind === 'plain' ? <span className={styles.legendWord}>{item.word}</span> : <mark className={`${styles[item.kind] ?? ''} ${styles.legendWord}`}>{item.word}</mark>}
+            {item.kind === 'plain' ? <QuranWord className={styles.legendWord}>{item.word}</QuranWord> : <mark className={`${styles[item.kind] ?? ''} ${styles.legendWord}`}><QuranWord>{item.word}</QuranWord></mark>}
             <span>{ar ? item.ar : item.en}</span>
           </li>
         ))}
