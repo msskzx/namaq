@@ -49,3 +49,17 @@ export function QuranWord({ children, className = '' }: { children: string; clas
 export function TreeText({ children, className = '' }: { children: ReactNode; className?: string }) {
   return <span lang="ar" data-tree-text className={`block font-quran ${className}`} style={WORD_SIZE}>{children}</span>;
 }
+
+/**
+ * Ayat a card lays out itself, line against line (the website's matrix and compare spreads, PageSpread): the size an ayah
+ * has in a card on a phone, as the app's matrix and compare cards, with the flowing line height. Spread on the lines' box.
+ */
+export const CARD_AYAT = { className: 'font-quran', style: WORD_SIZE } as const;
+
+/**
+ * Quran words in a settings tile's small picture, as the app's MiniQuran: the module's font at a share of a word on its own.
+ * It lays nothing out itself (display: contents), so the picture's own boxes keep their layout.
+ */
+export function MiniQuran({ share, children }: { share: number; children: ReactNode }) {
+  return <span className="contents font-quran" style={{ fontSize: `calc(${share} * ${WORD_SIZE.fontSize})`, lineHeight: FLOW_LINE }}>{children}</span>;
+}

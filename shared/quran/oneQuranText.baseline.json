@@ -1,9 +1,5 @@
 {
-  "font": [
-    "mobile/src/components/ThemeTiles.tsx",
-    "src/components/quran/PageSpread.module.css",
-    "src/components/theme/ThemeTiles.module.css"
-  ],
+  "font": [],
   "convert": [
     "mobile/src/components/BranchTree.tsx",
     "mobile/src/components/CompareCard.tsx",

@@ -5,18 +5,21 @@ import { useTheme } from 'next-themes';
 import { Check } from 'lucide-react';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { MODE_PREVIEW, THEME_TILES, cardColour, currentTile, tintSurfaces, type CardMode } from '@shared/cardTint';
-import { SAMPLE_AYAH } from '@shared/viewPreview';
+import { SAMPLE_AYAH, TILE_SHARE } from '@shared/viewPreview';
 import { readCardTint, setCardTint } from '@/lib/cardTint';
 import styles from './ThemeTiles.module.css';
+import { MiniQuran } from '@/components/quran/text/AyahFlow';
 
 /** A small page with a card on it: the tile's page colour, card tint and the sample ayah, its ending in the accent. */
-function Mini({ mode, tint }: { mode: CardMode; tint: string }) {
+function Mini({ mode, tint, half = false }: { mode: CardMode; tint: string; half?: boolean }) {
   const colours = MODE_PREVIEW[mode];
   const card = cardColour(mode, tint);
   return <span className={styles.page} style={{ background: tintSurfaces(mode, tint)?.paper ?? colours.page }}>
     <span className={styles.card} style={{ background: card, color: colours.ink, borderColor: colours.rule }}>
-      <span>{SAMPLE_AYAH.start}</span>
-      <span>{SAMPLE_AYAH.end} <b style={{ color: colours.accent }}>{SAMPLE_AYAH.ending}</b></span>
+      <MiniQuran share={half ? TILE_SHARE.half : TILE_SHARE.tile}>
+        <span>{SAMPLE_AYAH.start}</span>
+        <span>{SAMPLE_AYAH.end} <b style={{ color: colours.accent }}>{SAMPLE_AYAH.ending}</b></span>
+      </MiniQuran>
     </span>
   </span>;
 }
@@ -43,7 +46,7 @@ export default function ThemeTiles() {
         return <button key={tile.key} type="button" aria-pressed={on} title={name} onClick={choose} className={styles.tile}>
           <span className={styles.thumb} aria-hidden>
             {tile.mode === 'system'
-              ? <span className={styles.split}><Mini mode="light" tint={tints.light} /><Mini mode="dark" tint={tints.dark} /></span>
+              ? <span className={styles.split}><Mini mode="light" tint={tints.light} half /><Mini mode="dark" tint={tints.dark} half /></span>
               : <Mini mode={tile.mode} tint={tile.key} />}
             {on && <span className={styles.check}><Check size={10} strokeWidth={3} aria-hidden /></span>}
           </span>
