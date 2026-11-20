@@ -181,3 +181,4 @@ counts for neither.
 | [R0066](R0066-a-server-prop-array-loses-its-trailing-empty-slots.md) | A server prop array loses its trailing empty slots | challenge | solved |
 | [R0067](R0067-an-editors-addition-is-told-by-its-digits.md) | An editor's addition in an old book is told by its digits | obstacle | solved |
 | [R0068](R0068-a-sections-outside-quotes-are-mostly-proof.md) | A book section's outside quotes are mostly proof, not pairs | challenge | solved |
+| [R0069](R0069-an-animated-style-sees-only-its-own-shared-values.md) | An animated style runs again only for the shared values in its own closure | detour | solved |

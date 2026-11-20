@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Minimize2, PenLine, Undo2, X, type LucideIcon } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Minimize2, PenLine, RotateCcw, Undo2, X, type LucideIcon } from 'lucide-react';
 import Button from '@/components/common/Button';
 import mushaf from '@/app/quran/read/Mushaf.module.css';
 import type { Recite } from './useRecite';
@@ -18,8 +18,10 @@ export function penLabel(writing: boolean, pen: Recite['pen'], ar: boolean) {
  * (`onClose`), and says what the next-ayah button does once its ayat are done (`after`: the reader's next forgotten ayah)
  * and whether there is anything after (`more`: the next page).
  */
-export default function RecitePill({ recite, writing, onWriting, onClose, onFold, after, more = false, lead, ar = true, className }: {
+export default function RecitePill({ recite, writing, onWriting, onClose, onRestart, onFold, after, more = false, lead, ar = true, className }: {
   recite: Recite; writing: boolean; onWriting: () => void; onClose?: () => void;
+  /** The mushaf's reset: the whole page hidden again, to recite it from its start once more (owner, 2026-11-20). */
+  onRestart?: () => void;
   /** The reader's bar floats over the page (common/FloatingBar), with a last button that folds it into a circle. */
   onFold?: () => void;
   after?: { Icon: LucideIcon; label: string }; more?: boolean; lead?: React.ReactNode; ar?: boolean; className?: string;
@@ -31,7 +33,10 @@ export default function RecitePill({ recite, writing, onWriting, onClose, onFold
   const pen = penLabel(writing, recite.pen, ar);
   return <div className={`${mushaf.recitePill} ${className ?? ''}`} dir={ar ? 'rtl' : 'ltr'} role="toolbar" aria-label={ar ? 'أدوات التسميع' : 'Recite tools'}>
     {lead}
+    {/* The first button (owner, 2026-11-20). */}
+    {onRestart && <Button size="lg" variant="muted" {...tip(ar ? 'أخفِ الصفحة وسمّع من أولها' : 'Hide the page and recite it from the start')} onClick={onRestart}><RotateCcw aria-hidden /></Button>}
     <Button size="lg" variant="muted" {...tip(ar ? 'ارجع خطوة' : 'Step back')} disabled={recite.atStart} onClick={recite.back}><Undo2 aria-hidden /></Button>
+    {onRestart && <Button size="lg" variant="muted" {...tip(ar ? 'أخفِ الصفحة وسمّع من أولها' : 'Hide the page and recite it from the start')} onClick={onRestart}><RotateCcw aria-hidden /></Button>}
     <Button size="lg" variant="muted" {...tip(ar ? 'أظهر الكلمة التالية' : 'Reveal the next word')} disabled={recite.done} onClick={recite.nextWord}><Word aria-hidden /></Button>
     {/* In a party the next ayah waits for everyone, and the pen is on for all (owner, 2026-11-17). */}
     {!recite.party && <Button size="lg" variant="ghost" {...tip(next.label)} disabled={ended && !more} onClick={recite.nextAyah}><next.Icon aria-hidden /></Button>}

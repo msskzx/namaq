@@ -400,6 +400,13 @@ test('recite from an ayah\'s long-press menu starts at that ayah', async ({ page
   await expect(page.getByRole('button', { name: 'أظهر الآية التالية' })).toBeVisible();
   await expect.poll(start).toBe('1:6');
   await reciteBarsHidden(page);
+  // The bar's reset hides the whole page again and recites it from its first ayah (owner, 2026-11-20).
+  const shown = async () => (await stored<{ position: { start: string; shown: string | null } }>(page, 'reader-recite-last'))?.position;
+  await page.getByRole('button', { name: 'أظهر الآية التالية' }).click();
+  await expect.poll(async () => (await shown())?.shown).toBe('1:6');
+  await page.getByRole('button', { name: 'أخفِ الصفحة وسمّع من أولها' }).click();
+  await expect.poll(shown).toEqual({ start: '1:1', shown: null, words: 0 });
+  await expect(page.getByRole('button', { name: 'ارجع خطوة' })).toBeDisabled();
 });
 
 test('the recite bar floats over a full-size page, goes wherever it is dragged, stays there, and folds into a circle', async ({ page }) => {
@@ -426,8 +433,9 @@ test('the recite bar floats over a full-size page, goes wherever it is dragged, 
   await page.mouse.move(grab.x, grab.y);
   await page.mouse.down();
   for (let step = 1; step <= 10; step++) { await page.mouse.move(grab.x - step * 3, grab.y - step * 35); await page.waitForTimeout(16); }
-  await page.mouse.up();
+  // It is under the finger while the finger is still down, not only once it lifts (owner, 2026-11-20).
   await expect.poll(async () => (await box()).y).toBeLessThan(from.y - 300);
+  await page.mouse.up();
   const dropped = await box();
   // Its place is kept where it shows, for next time.
   const screen = page.viewportSize()!.height;

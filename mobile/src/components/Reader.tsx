@@ -226,6 +226,8 @@ export default function Reader() {
     setMark(null);
     setPosition({ start: from, shown: null, words: 0 });
   };
+  // The bar's reset (owner, 2026-11-20): the whole page hidden again, recited from its first ayah, without leaving recite mode.
+  const restartPage = () => { setActions(null); setReviewing(false); setChecked(null); setPosition({ start: model.order[0], shown: null, words: 0 }); };
   const stopRecite = () => { setActions(null); setReviewing(false); setPosition(null); setChecked(null); boxes.blur(); };
   const reviewKey = position ? position.word === undefined ? position.start : wordMarkKey(position.start, position.word) : '';
   const reviewNext = reviewing && position ? nextForgotten(forgotten, reviewKey) : null;
@@ -377,12 +379,15 @@ export default function Reader() {
     jump({ page: to, key, mark: true });
   }, [jump]);
   const focus = flowing ? (position ? view?.upcoming ?? null : mark?.page === page ? mark.key : null) : null;
+  // What the page lights: the selected ayah while reading; while reciting, the ayah (and words) a long press opened the
+  // menu on, as the website does (owner, 2026-11-20: a selection drew nothing in recite mode).
+  const selected = position ? (actions ? { key: actions.key, page, words: actions.words } : null) : mark;
   const render = (at: number) => {
     const atModel = modelOf(at);
     return (
       <MushafPageView page={at} data={pageData(at)} model={atModel} palette={palette} width={size?.width ?? 0} height={height}
         zoom={zoom} onHeight={onHeight} focus={at === page ? focus : null} onFocus={onFocus}
-        top={surahBefore(at)} names={SURAH_TITLES} mark={!position && mark?.page === at ? mark.key : null} markWords={!position && mark?.page === at ? mark.words ?? null : null}
+        top={surahBefore(at)} names={SURAH_TITLES} mark={selected?.page === at ? selected.key : null} markWords={selected?.page === at ? selected.words ?? null : null}
         recite={position ? reciteView(atModel, position) : null} playing={listening?.key ?? null} forgot={forgot} saved={saved} onTouch={onTouch} onSelect={onSelect}
         write={at === page ? write : null} checked={position && at === page ? checked : null} />
     );
@@ -520,7 +525,7 @@ export default function Reader() {
         <FloatingBar id="recite" label="أدوات التسميع" Icon={EyeOff} screen={size} clear={barClear} palette={palette}
           start={{ x: size.width / 2, y: size.height - barClear.bottom - RECITE_BAR / 2 }}>
           {fold => (
-            <RecitePill recite={recite} writing={writing} onWriting={toggleWriting} onClose={stopRecite} palette={palette} onFold={fold}
+            <RecitePill recite={recite} writing={writing} onWriting={toggleWriting} onClose={stopRecite} onRestart={reviewing ? undefined : restartPage} palette={palette} onFold={fold}
               more={reviewing ? !!reviewNext : page < PAGES} after={reviewing ? { Icon: ArrowLeft, label: 'الآية المنسية التالية' } : undefined}
               lead={reviewing ? <Text style={{ color: palette.muted, fontSize: 13, paddingHorizontal: 8 }}>مراجعة {num(reviewAt)} من {num(reviewTotal)}</Text> : null} />
           )}
