@@ -1,14 +1,15 @@
 'use client';
 
-import { useLiftSource } from '@/components/common/sourceSlot';
 import { useState, type ReactNode } from 'react';
 import { RECORD_BOOKS, compilerOf, fromCompanion, lastPage, recordedIn, rajabOpening, recordName, type AppHadith, type FortyBook, type FortyEntry, type FortyGrade, type FortyRecord, type RajabChapter, type RajabParagraph } from '@shared/hadith';
 import { num } from '@shared/quran/arabicNumber';
 import Button from '@/components/common/Button';
 import Card from '@/components/common/Card';
+import CardWithRow from '@/components/common/CardWithRow';
+import Reference from '@/components/common/Reference';
+import { UnderCard } from '@/components/common/UnderCard';
 import Chip from '@/components/common/Chip';
 import Folded from '@/components/common/Folded';
-import ExternalLink from '@/components/common/ExternalLink';
 import Segmented from '@/components/common/Segmented';
 import type { FortyBooks, FortyListItem } from '@/lib/forty';
 import FortyIsnad from './FortyIsnad';
@@ -28,16 +29,13 @@ const pagesName = (pages: number[]) => (pages.length > 1 ? `ص ${num(pages[0])}�
 /** A page of one of the Forty's books on Shamela, by the page's id there. */
 export const shamelaPage = (books: Pick<FortyBooks, FortyBook> | Partial<FortyBooks>, book: FortyBook, id: number) => `https://shamela.ws/book/${books[book]!.shamela}/${id}`;
 
-/** A source's page as the section's reference: the book, volume and page, opening to the edition and Shamela's page. */
-function Cite({ title, edition, url }: { title: string; edition: string; url: string }) {
-  // On a home card it joins the card's source line (owner 2026-11-20), as a Reference does.
-  if (useLiftSource({ line: title, quotes: [{ text: edition }], links: [{ label: 'الصفحة في المكتبة الشاملة', url }] })) return null;
-  return <Folded credit={title}><p>{edition}</p><ExternalLink href={url}>الصفحة في المكتبة الشاملة</ExternalLink></Folded>;
+/** A source's page: the book on its card's line, the place (linked to Shamela's page) and the edition in its sheet (the app's Cite). */
+function Cite({ book, place, url }: { book: { title: string; edition: string }; place: string; url: string }) {
+  return <Reference title={book.title} quotes={[{ text: '', cite: place, url }, { text: `${book.title}، ${book.edition}` }]} />;
 }
 
 /** One record: the drawn chain with the saying under it, or the whole text, the chain in muted ink before the saying. */
 function Record({ record, mode, books, size }: { record: FortyRecord; mode: Mode; books: FortyBooks; size: AppHadith['size'] }) {
-  const book = books[record.book];
   const chain = record.isnadEnd ? record.text.slice(0, record.isnadEnd) : '';
   const saying = record.text.slice(chain.length);
   return (
@@ -46,7 +44,7 @@ function Record({ record, mode, books, size }: { record: FortyRecord; mode: Mode
         ? <><FortyIsnad isnad={record.isnad} size={size} /><p className={BODY}>{saying}</p></>
         : <p className={BODY}><span className="text-[var(--home-muted)]">{chain}</span>{saying}</p>}
       {record.from && <p className="text-sm text-[var(--home-muted)]">{record.mursal ? `مرسلًا، عن ${record.from}` : `من حديث ${record.from}`}</p>}
-      <Cite title={`${recordName(record, num, books)}، ج ${num(record.volume)}، ${pagesName(record.pages)}`} edition={`${book.title}، ${book.edition}`} url={shamelaPage(books, record.book, record.shamela)} />
+      <Cite book={books[record.book]} place={`${recordName(record, num, books)}، ج ${num(record.volume)}، ${pagesName(record.pages)}`} url={shamelaPage(books, record.book, record.shamela)} />
     </div>
   );
 }
@@ -56,7 +54,7 @@ function BookRecords({ title, records, mode, books, size, heading: Heading = 'h2
   const firstWhole = records.find(record => !record.partial) ?? records[0];
   const rest = records.filter(record => record !== firstWhole);
   return (
-    <Card className="flex flex-col gap-2.5 p-4">
+    <CardWithRow className="flex flex-col gap-2.5 p-4">
       <Heading className="text-[1.0625rem] font-bold">{title}</Heading>
       {firstWhole.partial && <p className="text-sm text-[var(--home-muted)]">فيه بعض لفظ الحديث</p>}
       <Record record={firstWhole} mode={mode} books={books} size={size} />
@@ -70,7 +68,7 @@ function BookRecords({ title, records, mode, books, size, heading: Heading = 'h2
           ))}
         </Folded>
       )}
-    </Card>
+    </CardWithRow>
   );
 }
 
@@ -88,13 +86,12 @@ const LONG_GRADE = 300;
 function Grade({ grade, books }: { grade: FortyGrade; books: FortyBooks }) {
   const [open, setOpen] = useState(false);
   const long = grade.quote.length > LONG_GRADE;
-  const book = books[grade.book];
   return (
     <div className="flex flex-col gap-1 border-s-2 border-[var(--home-rule)] ps-2.5">
       <p className="text-sm text-[var(--home-muted)]">{grade.by}</p>
       <p className={`${BODY} ${long && !open ? 'line-clamp-5' : ''}`}>{grade.quote}</p>
       {long && <Button variant="ghost" size="sm" className="self-start" onClick={() => setOpen(was => !was)} aria-label={open ? 'اطو الكلام' : `اقرأ كلام ${grade.by} كاملًا`}>{open ? 'أقل' : 'المزيد'}</Button>}
-      <Cite title={gradePlace(grade, books)} edition={`${book.title}، ${book.edition}`} url={shamelaPage(books, grade.book, grade.shamela)} />
+      <Cite book={books[grade.book]} place={gradePlace(grade, books)} url={shamelaPage(books, grade.book, grade.shamela)} />
     </div>
   );
 }
@@ -133,9 +130,9 @@ export function IbnRajab({ chapter, only, books }: { chapter?: RajabChapter; onl
           </span>)}</p>
         </div>
       ))}
-      {!only && chapter && <Button variant="ghost" size="sm" className="self-start" onClick={() => setWhole(was => !was)}
-        aria-label={whole ? 'اطو الشرح' : 'اقرأ شرح ابن رجب للحديث كاملًا'}>{whole ? 'أقل' : 'الشرح كاملًا'}</Button>}
-      <Cite title={rajabRange(book.title, shown[0], shown[shown.length - 1])} edition={`${book.title}، ${book.edition}`} url={`https://shamela.ws/book/${book.shamela}/${shown[0].shamela}`} />
+      {!only && chapter && <UnderCard><Button variant="ghost" size="sm" onClick={() => setWhole(was => !was)}
+        aria-label={whole ? 'اطو الشرح' : 'اقرأ شرح ابن رجب للحديث كاملًا'}>{whole ? 'أقل' : 'الشرح كاملًا'}</Button></UnderCard>}
+      <Cite book={book} place={rajabRange(book.title, shown[0], shown[shown.length - 1])} url={`https://shamela.ws/book/${book.shamela}/${shown[0].shamela}`} />
     </div>
   );
 }
@@ -159,26 +156,23 @@ export function FortyHadith({ entry, books, chapter, size, inset = false, jibril
         <Name className="text-[1.625rem]">{entry.heading}</Name>
         <p className="text-[var(--home-muted)]">{fromCompanion(entry.companion)}</p>
       </div>
-      <Card className="flex flex-col gap-2 p-4">
+      <CardWithRow className="flex flex-col gap-2 p-4">
         <p className={BODY}>{entry.text}</p>
-        <Cite title={`${book.title}، ${entry.volume ? `${num(entry.volume)}/ ${num(entry.pages[0])}` : pagesName(entry.pages)}`} edition={`${book.title}، ${book.edition}`} url={shamelaPage(books, compiler.book, entry.shamela)} />
-      </Card>
+        <Cite book={book} place={`${book.title}، ${entry.volume ? `${num(entry.volume)}/ ${num(entry.pages[0])}` : pagesName(entry.pages)}`} url={shamelaPage(books, compiler.book, entry.shamela)} />
+      </CardWithRow>
       <Heading className="text-lg">من أخرجه</Heading>
       <HadithBooks top={entry.heading} boxes={recordedIn(entry)} namer={compiler.name} />
       {jibril}
       {drawn && <Segmented tabs label="طريقة العرض" className="self-start" options={MODES.map(item => ({ ...item, current: mode === item.key, onClick: () => setMode(item.key) }))} />}
       {entry.partial && entry.records.length > 0 && <p className="text-[0.9375rem] text-[var(--home-muted)]">في الصحيحين بعض لفظ الحديث</p>}
-      {entry.grades && <Card className="flex flex-col gap-3.5 p-4">
+      {entry.grades && <CardWithRow className="flex flex-col gap-3.5 p-4">
         <Heading className="text-[1.0625rem] font-bold">ما قاله العلماء في درجته</Heading>
         {entry.grades.map((grade, i) => <Grade key={`${grade.by}-${i}`} grade={grade} books={books} />)}
-      </Card>}
+      </CardWithRow>}
       {grouped.map(({ book, records }) => <BookRecords key={book} title={`في ${books[book].title}`} records={records} mode={mode} books={books} size={size} heading={Heading} />)}
       {chapter && <>
-        <div className="flex items-baseline justify-between">
-          <Heading className="text-lg">من شرح ابن رجب</Heading>
-          <span className="text-[0.8125rem] text-[var(--home-muted)]">{books.ibnrajab.title}</span>
-        </div>
-        <Card className="p-4"><IbnRajab chapter={chapter} books={books} /></Card>
+        <Heading className="text-lg">من شرح ابن رجب</Heading>
+        <CardWithRow className="flex flex-col p-4"><IbnRajab chapter={chapter} books={books} /></CardWithRow>
       </>}
     </div>
   );

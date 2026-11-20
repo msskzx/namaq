@@ -1,5 +1,7 @@
 import { courseTitle, type AppMoment } from '@shared/battles/battle';
 import Chip from '@/components/common/Chip';
+import CardWithRow from '@/components/common/CardWithRow';
+import { citeSource, sourceEntries, uniqueSources } from '@shared/quiz/sources';
 import ExternalLink from '@/components/common/ExternalLink';
 
 /** A numbered moment: our few words naming it, the source's words, where the source says the report is found, its page, and who is in it. */
@@ -30,10 +32,11 @@ export default function BattleMoments({ moments, kind, inset = false }: { moment
   inset?: boolean }) {
   const Heading = inset ? 'h3' : 'h2';
   if (!moments.length) return null;
+  // One card in the home card's shape, each moment's book and page on the line under it (owner 2026-11-20).
   return (
-    <section dir="rtl" className="flex flex-col gap-5 text-[var(--home-ink)]">
+    <CardWithRow className="flex flex-col gap-5 p-4 text-[var(--home-ink)]" source={sourceEntries(uniqueSources(moments.map(moment => citeSource({ text: '', cite: moment.cite, url: moment.url }))))}>
       <Heading className="text-2xl">{courseTitle(kind)}</Heading>
-      {moments.map((moment, i) => <Moment key={moment.title} moment={moment} n={i + 1} inset={inset} />)}
-    </section>
+      {moments.map((moment, i) => <Moment key={moment.title} moment={moment} n={i + 1} inset={inset} plain />)}
+    </CardWithRow>
   );
 }

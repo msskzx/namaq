@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext, useMemo, useState, type ReactNode } from 'react';
+import { useContext, useMemo, useState, type HTMLAttributes, type ReactNode } from 'react';
 import Card from './Card';
 import CappedCard from './CappedCard';
 import MoreMenu, { type MoreItem } from './MoreMenu';
@@ -22,7 +22,7 @@ const ROW = 'flex flex-wrap items-center justify-start [&:not(:has(button,a,[rol
  * alone at the row's far end. `source` names the card's books on the line; a `Reference` inside the card joins its sheet.
  * With `cap`, long content stops at two thirds of the screen and «اقرأ كاملًا» opens it whole in a sheet.
  */
-export default function CardWithRow({ lead, row, menu = [], cap = false, source = [], bar, className = '', children }: {
+export default function CardWithRow({ lead, row, menu = [], cap = false, source = [], bar, className = '', card, children }: {
   lead?: ReactNode;
   row?: ReactNode;
   menu?: MoreItem[];
@@ -32,6 +32,8 @@ export default function CardWithRow({ lead, row, menu = [], cap = false, source 
   bar?: ReactNode;
   /** The card's inner layout (padding, flex), as on `Card`. */
   className?: string;
+  /** The card's own attributes (an `id` to link to, `data-share-image` for the picture it shares); not on a capped card. */
+  card?: HTMLAttributes<HTMLElement> & { as?: 'article' | 'section' } & Record<`data-${string}`, string | boolean | undefined>;
   children: ReactNode;
 }) {
   const [slot, setSlot] = useRowSlot();
@@ -63,7 +65,7 @@ export default function CardWithRow({ lead, row, menu = [], cap = false, source 
       <Card className={look}><SourceSlotContext.Provider value={NO_SOURCES}><CardRowProvider slot={sheetSlot}>{children}</CardRowProvider></SourceSlotContext.Provider></Card>
       {buttons(setSheetSlot)}
       {sources}
-    </>}>{content}</CappedCard> : <Card className={look}>{content}</Card>}
+    </>}>{content}</CappedCard> : <Card {...card} className={look}>{content}</Card>}
     {buttons(setSlot, <MoreMenu items={menu} />)}
     {sources}
   </div>;

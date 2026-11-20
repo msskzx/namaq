@@ -4,13 +4,14 @@ import AyahFlow from '@/components/quran/text/AyahFlow';
 import { useState } from 'react';
 import { BookOpen, Send } from 'lucide-react';
 import Segmented from '@/components/common/Segmented';
-import Reference from '@/components/common/Reference';
+import SourceLine, { sourcesOf } from '@/components/common/SourceLine';
+import { mushafSource } from '@shared/quiz/sources';
 import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
 import { BY_QUOTES, OATH_BY, OATH_QUOTES, citesOf, kindQuotes, oathSections, sectionQuotes, type OathBy } from '@shared/quran/oathSources';
 import { oathPlace, oathShareText, type OathKind, type OathView } from '@shared/quran/oaths';
 import Button from '@/components/common/Button';
-import Card from '@/components/common/Card';
+import CardWithRow from '@/components/common/CardWithRow';
 import Chip from '@/components/common/Chip';
 
 export const OATH_KINDS: { kind: OathKind; label: string }[] = [
@@ -37,9 +38,11 @@ function OathCard({ oath }: { oath: OathView }) {
       <div className="flex flex-col px-1">
         <h3 className="text-base font-bold">{place}</h3>
         {oath.who && <p className="text-sm text-[var(--home-muted)]">{oath.who}</p>}
-        {quotes && <Reference title={citesOf(quotes)} quotes={quotes} />}
       </div>
-      <Card as="article" className="px-4 py-1.5">
+      {/* The home card's shape (owner 2026-11-20): the mushaf first in the row, share last, the books on the line. */}
+      <CardWithRow className="px-4 py-1.5" source={[...(quotes ? [{ line: citesOf(quotes), quotes }] : []), ...sourcesOf([mushafSource(oath.id)])]}
+        lead={<Button size="lg" variant="muted" href={ayahHref(oath.id)} aria-label={`افتح ${place} في المصحف`} title="في المصحف"><BookOpen aria-hidden /></Button>}
+        row={<Button size="lg" variant="muted" onClick={() => shareOath(oath)} aria-label={`شارك ${place}`} title="شارك"><Send aria-hidden /></Button>}>
         <AyahFlow>
           {oath.lines.map(line => (
             <span key={line.ayah}>
@@ -50,11 +53,7 @@ function OathCard({ oath }: { oath: OathView }) {
             </span>
           ))}
         </AyahFlow>
-      </Card>
-      <div className="flex items-center gap-1">
-        <Button size="round" variant="muted" href={ayahHref(oath.id)} aria-label={`افتح ${place} في المصحف`} title="في المصحف"><BookOpen aria-hidden /></Button>
-        <Button size="round" variant="muted" onClick={() => shareOath(oath)} aria-label={`شارك ${place}`} title="شارك"><Send aria-hidden /></Button>
-      </div>
+      </CardWithRow>
     </li>
   );
 }
@@ -85,7 +84,7 @@ export default function OathsView({ allah, others }: { allah: OathView[]; others
       <Segmented label="من أقسم" className="w-full [&>button]:flex-1" options={OATH_KINDS.map(option => ({
         key: option.kind, label: option.label, current: kind === option.kind, onClick: () => { setKind(option.kind); setBy(null); },
       }))} />
-      <Reference key={kind} title={citesOf(kindQuotes(kind))} quotes={kindQuotes(kind)} />
+      <SourceLine key={kind} sources={[{ line: citesOf(kindQuotes(kind)), quotes: kindQuotes(kind) }]} />
       {kind === 'others' ? (
         <section aria-label="أقسم غيره" className="flex flex-col gap-2">
           <h2 className="sr-only">أقسم غيره</h2>
@@ -98,13 +97,13 @@ export default function OathsView({ allah, others }: { allah: OathView[]; others
               {chip('الكل', null)}
               {OATH_BY.map(b => chip(b.label, b.by))}
             </ul>
-            <Reference title={citesOf(BY_QUOTES)} quotes={BY_QUOTES} />
+            <SourceLine sources={[{ line: citesOf(BY_QUOTES), quotes: BY_QUOTES }]} />
           </div>
           {oathSections(by).map(section => (
             <section key={section.on} aria-label={section.title} className="flex flex-col gap-2">
               <div className="flex flex-col gap-0.5 pt-2">
                 <h2 className="text-xl font-bold text-[var(--home-accent)]">{section.title}</h2>
-                <Reference title={citesOf(sectionQuotes(section))} quotes={sectionQuotes(section)} />
+                <SourceLine sources={[{ line: citesOf(sectionQuotes(section)), quotes: sectionQuotes(section) }]} />
               </div>
               <OathList label={section.title} oaths={section.oaths.map(id => byId.get(id)!)} />
             </section>

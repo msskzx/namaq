@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { BATTLES, battleOf } from '@/lib/stories';
 import BattleView from './BattleView';
 
@@ -28,5 +28,17 @@ describe('BattleView', () => {
     if (!half) return;
     render(<BattleView battle={half} />);
     expect(screen.getAllByText('غير مذكور').length).toBeGreaterThan(0);
+  });
+
+  it("puts the moments' pages on the book line under their card, not as links inside it (owner, 2026-11-20)", () => {
+    const badr = battleOf('badr')!;
+    const { container } = render(<BattleView battle={badr} />);
+    const card = screen.getByRole('heading', { level: 2, name: 'مجرى الغزوة' }).closest('[data-card]') as HTMLElement;
+    expect(within(card).queryAllByRole('link')).toEqual([]);
+    const books = [...new Set(badr.moments.map(moment => moment.cite.split('، ')[0]))];
+    const line = [...container.querySelectorAll('button')].find(button => button.getAttribute('aria-label') === `المصدر: ${books.join('، ')}`)!;
+    expect(line).toBeTruthy();
+    fireEvent.click(line);
+    for (const moment of badr.moments) expect(screen.getAllByRole('link').some(link => link.getAttribute('href') === moment.url)).toBe(true);
   });
 });

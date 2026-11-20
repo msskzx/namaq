@@ -3,14 +3,16 @@
 // The website's «القراءات», as the app's page (mobile/src/screens/qiraat.tsx): every place the ten readers differ, under its
 // surah, found by a word or a surah's name, narrowed to a reader or one of his riwayat. docs/plans/quran-qiraat.md
 import { useMemo, useState, type ReactNode } from 'react';
-import Card from '@/components/common/Card';
+import CardWithRow from '@/components/common/CardWithRow';
+import { sourcesOf } from '@/components/common/SourceLine';
+import type { Source } from '@/components/common/sourceSlot';
 import Chip from '@/components/common/Chip';
 import Empty from '@/components/common/Empty';
-import ExternalLink from '@/components/common/ExternalLink';
 import { SearchField } from '@/components/common/Field';
 import LitAyat from '@/components/quran/text/LitAyat';
 import { num } from '@shared/quran/arabicNumber';
-import { QIRAAT_SOURCE, READERS, RIWAYAT, whoReads, type WordDifference } from '@shared/quran/qiraat';
+import { READERS, RIWAYAT, whoReads, type WordDifference } from '@shared/quran/qiraat';
+import { qiraatSources } from '@shared/quiz/bookSources';
 import { qiraatOf } from '@shared/quran/qiraatData';
 import { filterName, filterRawis, qiraatPlaces, riwayatOf, type QiraatFilter } from '@shared/quran/qiraatPlaces';
 import { surahName } from '@shared/quran/surahNames';
@@ -32,11 +34,14 @@ function Word({ word, mark }: { word: WordDifference; mark: number[] }) {
   });
 }
 
-/** The page's own card; inside the feed's post, which is a card already, a plain block. */
-function Frame({ lines, id, children }: { lines: boolean; id: string; children: ReactNode }) {
+/**
+ * The page's own card in the home card's shape, the readings' book (and a meaning's) on the line under it (owner
+ * 2026-11-20); inside the feed's post, which is a card already, a plain block.
+ */
+function Frame({ lines, id, source, children }: { lines: boolean; id: string; source: Source[]; children: ReactNode }) {
   return lines
     ? <div className="flex flex-col gap-1 px-4 py-2.5">{children}</div>
-    : <Card as="article" id={id} className="flex flex-col gap-1 px-4 py-2.5">{children}</Card>;
+    : <CardWithRow card={{ as: 'article', id }} source={source} className="flex flex-col gap-1 px-4 py-2.5">{children}</CardWithRow>;
 }
 
 /**
@@ -57,7 +62,8 @@ export function QiraatPlace({ ayah, words, text = [], mark = [], lines, max, mor
   const [surah, number] = ayah.split(':').map(Number);
   const meaning = QIRAAT_MEANINGS[ayah];
   return (
-    <Frame lines={!!lines} id={`a${ayah.replace(':', '-')}`}>
+    <Frame lines={!!lines} id={`a${ayah.replace(':', '-')}`}
+      source={[...sourcesOf(qiraatSources(ayah)), ...(meaning ? [{ line: meaning.source, quotes: [], links: [{ label: meaning.source, url: meaning.url }] }] : [])]}>
       {lines ?? <>
         <span className="text-sm text-[var(--home-muted)]">{`${surahName(surah)} ${num(number)}`}</span>
         <LitAyat ayat={[{ words: text.filter(w => w !== '۞'), lit, number }]} />
@@ -68,7 +74,6 @@ export function QiraatPlace({ ayah, words, text = [], mark = [], lines, max, mor
       {!lines && meaning && (
         <div className="flex flex-col gap-1 pt-2">
           {meaning.quotes.map(q => <blockquote key={q} className="border-s-2 border-[var(--home-rule)] ps-3">«{q}»</blockquote>)}
-          <ExternalLink href={meaning.url} className="text-sm text-[var(--home-muted)] underline">{meaning.source}</ExternalLink>
         </div>
       )}
     </Frame>
@@ -104,7 +109,6 @@ export default function QiraatView({ texts }: { texts: AyahTexts }) {
           {places.map(place => <QiraatPlace key={place.key} ayah={place.key} words={place.words} text={texts[place.key] ?? []} mark={mark} />)}
         </section>
       ))}
-      {surahs.length > 0 && <ExternalLink href={QIRAAT_SOURCE.url} className="text-sm text-[var(--home-muted)]">{`المصدر: ${QIRAAT_SOURCE.name}`}</ExternalLink>}
     </div>
   );
 }
