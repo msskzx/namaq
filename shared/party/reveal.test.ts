@@ -19,6 +19,7 @@ const SHOWN: Record<string, string> = {
   choices: 'the offered choices',
   correctAnswer: 'sent empty',
   correctAnswers: 'sent empty on a question with several right choices: it only tells the screen to draw ticks',
+  order: 'sent empty on a question that puts its choices in order: it only tells the screen to draw the rows to drag',
   quran: 'the Quran words shown under the prompt',
   number: 'the ayah number shown after its words',
   page: 'how the mushaf page is drawn; it names no surah',

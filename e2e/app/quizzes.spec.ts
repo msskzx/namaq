@@ -220,3 +220,37 @@ test('a solo quiz of the year of a thing looks it up on the timeline, then names
   await page.getByRole('button', { name: question.choices[Number(question.correctAnswer)].labelArabic, exact: true }).click();
   await expect(page.getByText('سير أعلام النبلاء').first()).toBeVisible();
 });
+
+test.describe('«رتّب السور»', () => {
+  test.use({ seed: { 'quiz-solo-settings': { kinds: ['ORDER'], list: { filters: { categories: 'mutashabeh' }, range: { from: 30, to: 30 }, saved: false }, difficulty: 'medium', leaves: 3, length: 5 } } });
+
+  test('a dragged surah lands where the finger leaves it, and each surah in its place earns its share', async ({ page }) => {
+    await open(page, '/quiz/solo');
+    await page.getByRole('button', { name: 'ابدأ الاختبار' }).click();
+    await expect(page.getByText('اسحب كل سورة', { exact: false })).toBeVisible();
+    await expect.poll(() => stored(page, 'quiz-solo-run')).not.toBeNull();
+    const run = await stored<{ questions: { choices: { value: string; labelArabic: string }[]; order: string[] }[] }>(page, 'quiz-solo-run');
+    const { choices, order } = run!.questions[0];
+    // The first surah in the mushaf, held and dragged to the top row.
+    const first = choices.find(choice => choice.value === order[0])!;
+    const row = (await page.getByLabel(first.labelArabic, { exact: true }).boundingBox())!;
+    const top = (await page.getByLabel(choices[0].labelArabic, { exact: true }).boundingBox())!;
+    await page.mouse.move(row.x + 30, row.y + row.height / 2);
+    await page.mouse.down();
+    await page.waitForTimeout(400);
+    for (let step = 1; step <= 10; step++) await page.mouse.move(row.x + 30, row.y + row.height / 2 - (row.y - top.y) * step / 10);
+    await page.mouse.up();
+    await page.getByRole('button', { name: 'تحقق' }).click();
+    // The run reaches storage a moment after the answer (mobile/src/lib/soloStore.ts).
+    const answer = async () => (await stored<{ typed: (string | undefined)[][] }>(page, 'quiz-solo-run'))!.typed[0][0];
+    await expect.poll(answer).toBeDefined();
+    const given = (await answer())!.split('\u001f');
+    expect(given[0]).toBe(order[0]);
+    // The first surah is graded in its place; any other the reader left elsewhere says where he put it.
+    await expect(page.getByLabel(`${first.labelArabic}، في مكانها`)).toBeVisible();
+    for (const value of order.filter((value, at) => given[at] !== value)) {
+      const name = choices.find(choice => choice.value === value)!.labelArabic;
+      await expect(page.getByLabel(new RegExp(`^${name}، جعلتها`))).toBeVisible();
+    }
+  });
+});

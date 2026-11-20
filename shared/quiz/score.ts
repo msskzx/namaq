@@ -7,7 +7,7 @@ import { PICKS } from './choiceKinds';
 
 /** An ayah written with the pen in a party: its words as its page sets them, and the places the host's pen rule asks. */
 export type WriteAsk = { asked: number[]; words?: string[] };
-export type ScoredQuestion = { correctAnswer?: string; correctAnswers?: string[]; phrase?: string; branches?: BranchAnswer[]; tree?: Branch; variants?: Variant[]; prefixes?: Variant[]; asked?: number[]; compare?: CompareAsk; write?: WriteAsk };
+export type ScoredQuestion = { correctAnswer?: string; correctAnswers?: string[]; order?: string[]; phrase?: string; branches?: BranchAnswer[]; tree?: Branch; variants?: Variant[]; prefixes?: Variant[]; asked?: number[]; compare?: CompareAsk; write?: WriteAsk };
 export type QuestionAnswer = string | string[];
 
 export const isAsked = (question: ScoredQuestion, index: number) => !question.asked || question.asked.includes(index);
@@ -36,6 +36,7 @@ export function questionPoints(question: ScoredQuestion, answer: QuestionAnswer 
   if (question.write?.words) return { earned: writtenGrade(question.write as Required<WriteAsk>, answer).right.length, total: question.write.asked.length };
   if (question.compare) return comparePoints(question, Array.isArray(answer) ? answer : []);
   if (question.tree) return branchPoints(question, Array.isArray(answer) ? answer : emptyBranchAnswers(question));
+  if (question.order) return orderPoints(question.order, Array.isArray(answer) ? answer : answer ? answer.split(PICKS) : []);
   if (question.correctAnswers) return pickedPoints(question.correctAnswers, Array.isArray(answer) ? answer : answer ? answer.split(PICKS) : []);
   return { earned: Number(answer !== undefined && answer === question.correctAnswer), total: 1 };
 }
@@ -51,9 +52,14 @@ export function pickedPoints(right: readonly string[], picked: readonly string[]
   return { earned: Math.max(0, hits - (ticked.size - hits)), total: right.length };
 }
 
-/** What a question's points are worth in a party: one per thing asked, but a question of several right choices counts once in all. */
+/** Choices put in order (owner, 2026-11-20: partial answers accepted): each one in its right place earns a share. */
+export function orderPoints(right: readonly string[], given: readonly string[]) {
+  return { earned: right.filter((value, at) => given[at] === value).length, total: right.length };
+}
+
+/** What a question's points are worth in a party: one per thing asked, but a question of several right choices or an order counts once in all. */
 export const share = (question: ScoredQuestion, points: { earned: number; total: number }) =>
-  question.correctAnswers && points.total ? points.earned / points.total : points.earned;
+  (question.correctAnswers || question.order) && points.total ? points.earned / points.total : points.earned;
 
 /**
  * A party's points (owner, 2026-11-19; sketch /mnt/project-files/quiz-lookup): ten for each thing asked that is answered

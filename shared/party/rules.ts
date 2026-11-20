@@ -302,7 +302,7 @@ export function viewFor(state: PartyState, playerId: string, now: number): Party
   // A choice question's key, ayah and look-alikes name its surah, so they wait for the reveal too. A written ayah names its
   // place in the question and is drawn on its page, so its ayah stays; its words and its rest wait.
   const written = question?.write as { asked: number[] } | undefined;
-  const hidden = question && !revealed ? { ...question, key: `q${state.current}`, correctAnswer: '', ...(question.correctAnswers ? { correctAnswers: [] } : {}), evidence: undefined, ayahKey: written ? question.ayahKey : undefined, alike: undefined, explains: undefined, whereOf: undefined, note: undefined, sources: undefined, look: unmarked(question.look as QuizLook | undefined),
+  const hidden = question && !revealed ? { ...question, key: `q${state.current}`, correctAnswer: '', ...(question.correctAnswers ? { correctAnswers: [] } : {}), ...(question.order ? { order: [] } : {}), evidence: undefined, ayahKey: written ? question.ayahKey : undefined, alike: undefined, explains: undefined, whereOf: undefined, note: undefined, sources: undefined, look: unmarked(question.look as QuizLook | undefined),
     ...(written ? { write: { asked: written.asked }, reveal: undefined } : {}) } : question;
   return {
     code: state.code,

@@ -28,7 +28,7 @@ export type Interest = {
 };
 
 export const INTERESTS: readonly Interest[] = [
-  { id: 'hifz', name: 'الحفظ والمراجعة', section: 'quran', ours: true, cards: [], quizzes: ['RECITE', 'OPENINGS', 'SURAH'] },
+  { id: 'hifz', name: 'الحفظ والمراجعة', section: 'quran', ours: true, cards: [], quizzes: ['RECITE', 'OPENINGS', 'SURAH', 'ORDER'] },
   { id: 'mutashabih', name: 'المتشابه اللفظي', section: 'quran', ours: true, cards: ['pair', 'tree'], quizzes: ['BRANCHES', 'COMPARE'] },
   { id: 'tafsir', name: 'التفسير', section: 'quran', cards: ['note-tafsir'], quizzes: ['TAFSIR'] },
   { id: 'gharib', name: 'غريب القرآن', section: 'quran', ours: true, cards: [], quizzes: ['MEANING'] },

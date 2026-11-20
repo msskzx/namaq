@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { ArrowLeft, ArrowRight, Check, X } from "lucide-react";
 import Button from "@/components/common/Button";
 import QuizSources from "@/components/quiz/QuizSources";
+import OrderRows from "@/components/common/OrderRows";
 import type { QuestionChoice } from "@/lib/quiz/types";
 import { emptyBranchAnswers, type QuestionAnswer, type ScoredQuestion } from "@shared/quiz/score";
 import { num } from "@shared/quran/arabicNumber";
@@ -58,12 +59,17 @@ export default function QuestionReview({ entries, names, ar }: { entries: Review
       ? (ar ? `${num(result.earned)} من ${num(result.total)} أطراف` : `${result.earned} of ${result.total} leaves`)
       : question.write
       ? (ar ? `${num(result.earned)} من ${num(result.total)} كلمات` : `${result.earned} of ${result.total} words`)
+      : question.order && !correct
+      ? (ar ? `${num(result.earned)} من ${num(result.total)} في مكانها` : `${result.earned} of ${result.total} in place`)
       : ticks(question) && !correct
       ? (ar ? `${num(result.earned)} من ${num(result.total)} صحيحة` : `${result.earned} of ${result.total} right`)
       : (ar ? (correct ? "صحيح" : "خطأ") : correct ? "Correct" : "Incorrect")}</p>
     {question.ayah && <blockquote dir="rtl" lang="ar"><AyahFlow><AyahWords>{question.ayah.text}</AyahWords></AyahFlow><p className="text-sm text-[var(--home-muted)]">{question.ayah.reference}</p></blockquote>}
     <ChoiceQuran question={question} given={typeof answer === "string" ? answer : undefined} revealed ar={ar} written={Array.isArray(answer) ? answer : null} />
-    {question.compare ? <CompareFeedback key={question.key} question={question} typed={Array.isArray(answer) ? answer : []} ar={ar} hints={entries[index].hints} /> : question.tree ? <BranchFeedback key={question.key} question={question} typed={Array.isArray(answer) ? answer : emptyBranchAnswers(question)} names={names} ar={ar} hints={entries[index].hints} /> : question.write ? <QuizSources sources={question.sources} /> : <>
+    {question.compare ? <CompareFeedback key={question.key} question={question} typed={Array.isArray(answer) ? answer : []} ar={ar} hints={entries[index].hints} /> : question.tree ? <BranchFeedback key={question.key} question={question} typed={Array.isArray(answer) ? answer : emptyBranchAnswers(question)} names={names} ar={ar} hints={entries[index].hints} /> : question.write ? <QuizSources sources={question.sources} /> : question.order ? <>
+      <OrderRows question={question} given={typeof answer === "string" ? answer : ""} ar={ar} />
+      <ChoiceAfter question={question} given={typeof answer === "string" && answer ? answer : undefined} ar={ar} />
+    </> : <>
       <div>{typeof answer === "string" && answer ? choiceText(answer) : ar ? "بدون إجابة" : "No answer"}</div>
       {!correct && <div>{ar ? "الصحيح: " : "Correct: "}{choiceText(question.correctAnswer ?? "")}</div>}
       <ChoiceAfter question={question} given={typeof answer === "string" && answer ? answer : undefined} ar={ar} surahName={value => question.choices.find(item => item.value === value)?.labelArabic} />

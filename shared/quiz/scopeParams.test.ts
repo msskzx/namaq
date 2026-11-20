@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { FILTER_KEYS } from '../quran/mutashabih/browse';
-import { parseTreeScope, quizFilters, SCOPE_KEYS, treeScopeParams } from './scopeParams';
+import { parseTreeScope, QUIZ_ONLY_KEYS, quizFilters, SCOPE_KEYS, treeScopeParams } from './scopeParams';
 
 describe('quiz tree scope', () => {
   it('knows every branches filter but sort', () => {
-    expect([...SCOPE_KEYS]).toEqual(FILTER_KEYS.filter(key => key !== 'sort'));
+    expect(SCOPE_KEYS.filter(key => !(QUIZ_ONLY_KEYS as readonly string[]).includes(key))).toEqual(FILTER_KEYS.filter(key => key !== 'sort'));
   });
 
   it('asks only the books\' kind, whatever kinds are picked, and drops sort', () => {

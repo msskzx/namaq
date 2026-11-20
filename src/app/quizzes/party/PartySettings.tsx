@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Toggle from "@/components/common/Toggle";
 import useSWR from "swr";
 import TreeFilters from "../TreeFilters";
 import { scopeSummary } from "@shared/quiz/scopeSummary";
@@ -98,6 +99,11 @@ export default function PartySettingsPanel({ settings, editable, onChange, ar }:
             {DIFFICULTIES.map((value) => <Chip key={value} on={(settings.difficulty ?? DEFAULT_DIFFICULTY) === value} onClick={() => onChange({ difficulty: value })} label={DIFFICULTY_LABELS[value][ar ? "ar" : "en"]} />)}
             {settings.topics.flatMap((topic) => DIFFICULTY_NOTES[topic] ? [<p key={topic} className="basis-full text-sm text-[var(--home-muted)]">{DIFFICULTY_NOTES[topic]![ar ? "ar" : "en"]}</p>] : [])}
           </Row>
+          {settings.topics.includes("ORDER") && <div className="flex basis-full items-center justify-between gap-3">
+            <span className="text-sm font-semibold text-[var(--home-ink)]">{ar ? "رتّب السور: سور متباعدة" : "Order the surahs: surahs apart"}</span>
+            <Toggle checked={!!settings.filters?.apart} label={ar ? "رتّب السور: سور متباعدة" : "Order the surahs: surahs apart"}
+              onChange={(on) => onChange({ filters: { ...settings.filters, apart: on ? "1" : undefined } })} />
+          </div>}
           {branches && <Row label={ar ? "عدد الإجابات في كل سؤال" : "Answers per question"}>
             {QUIZ_LEAVES.map((value) => (
               <Chip key={value} on={settings.leaves === value} onClick={() => onChange({ leaves: value })} label={n(value, ar)} />

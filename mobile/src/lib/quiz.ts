@@ -24,7 +24,8 @@ import { CHOICE_TOPICS, type QuizTopic } from '@shared/quiz/settings';
 export type QuizList = { filters: GroupFilters; range: JuzRange | null; saved: boolean };
 /** The kinds of question a solo quiz mixes (owner, 2026-11-13): the trees and the Quran choice kinds (shared/quiz/kinds.ts). */
 export const SOLO_KINDS: QuizTopic[] = ['BRANCHES', ...CHOICE_TOPICS];
-export type SoloSettings = { kinds: QuizTopic[]; list: QuizList; difficulty: Difficulty; leaves: number; length: number };
+/** `apart`: «رتّب السور» asks surahs spread apart instead of neighbours (owner, 2026-11-20). */
+export type SoloSettings = { kinds: QuizTopic[]; list: QuizList; difficulty: Difficulty; leaves: number; length: number; apart?: boolean };
 export const DEFAULT_LIST: QuizList = { filters: { categories: QUIZ_CATEGORIES }, range: null, saved: false };
 export const DEFAULT_SOLO: SoloSettings = { kinds: ['BRANCHES'], list: DEFAULT_LIST, difficulty: DEFAULT_DIFFICULTY, leaves: DEFAULT_LEAVES, length: 5 };
 
@@ -51,6 +52,7 @@ export function cleanSolo(settings: Partial<SoloSettings> & { juzFrom?: number; 
     difficulty: parseDifficulty(settings?.difficulty),
     leaves: (QUIZ_LEAVES as readonly number[]).includes(settings?.leaves as number) ? settings!.leaves! : DEFAULT_SOLO.leaves,
     length: (QUIZ_LENGTHS as readonly number[]).includes(settings?.length as number) ? settings!.length! : DEFAULT_SOLO.length,
+    ...(settings?.apart === true && { apart: true }),
   };
 }
 
@@ -73,13 +75,13 @@ function poolFor(list: QuizList, bookmarks: Bookmark[] = readBookmarks()): Pool 
   return pool;
 }
 
-const scopeOf = (list: QuizList): ChoiceScope => ({ range: list.range, filters: list.filters });
+const scopeOf = (settings: Pick<SoloSettings, 'list' | 'apart'>): ChoiceScope => ({ range: settings.list.range, filters: { ...settings.list.filters, ...(settings.apart && { apart: '1' }) } });
 const kindsOf = (settings: Pick<SoloSettings, 'kinds'>) => CHOICE_KINDS.filter(kind => settings.kinds.includes(kind.id));
 
 /** How many questions the kinds hold over the filters, and the quiz lengths they fill. */
-export function availability(settings: Pick<SoloSettings, 'kinds' | 'list'>, bookmarks?: Bookmark[]) {
+export function availability(settings: Pick<SoloSettings, 'kinds' | 'list' | 'apart'>, bookmarks?: Bookmark[]) {
   const trees = settings.kinds.includes('BRANCHES') ? poolFor(settings.list, bookmarks).candidates.length : 0;
-  const available = trees + kindsOf(settings).reduce((sum, kind) => sum + kind.count(scopeOf(settings.list)), 0);
+  const available = trees + kindsOf(settings).reduce((sum, kind) => sum + kind.count(scopeOf(settings)), 0);
   return { available, lengths: QUIZ_LENGTHS.filter(length => length <= available) };
 }
 
@@ -109,7 +111,7 @@ export type SoloRun = {
 
 export function startSolo(settings: SoloSettings, random: Random = Math.random, bookmarks?: Bookmark[]): SoloRun {
   const trees = settings.kinds.includes('BRANCHES') ? branchQuiz(poolFor(settings.list, bookmarks), settings.length, settings.leaves, random, settings.difficulty) : [];
-  const kinds = kindsOf(settings).map(kind => kind.questions(scopeOf(settings.list), settings.difficulty, random, settings.length * 3));
+  const kinds = kindsOf(settings).map(kind => kind.questions(scopeOf(settings), settings.difficulty, random, settings.length * 3));
   const questions = kunyaNotFirst(mixQuestions<SoloQuestion>([trees, ...kinds], settings.length, random, questionAyat));
   return { settings, questions, typed: questions.map(emptyOf), checked: questions.map(() => false), current: 0, submitted: false };
 }
@@ -162,7 +164,7 @@ export function questionState(run: SoloRun, index: number): QuestionState {
     const { earned, total } = questionPoints(question, run.typed[index]);
     return earned === total ? 'correct' : earned > 0 ? 'partial' : 'incorrect';
   }
-  if (!isTree(question) && 'correctAnswers' in question && question.correctAnswers) {
+  if (!isTree(question) && (('correctAnswers' in question && question.correctAnswers) || ('order' in question && question.order))) {
     const { earned, total } = questionPoints(question, run.typed[index][0]);
     return earned === total ? 'correct' : earned > 0 ? 'partial' : 'incorrect';
   }

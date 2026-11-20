@@ -11,7 +11,8 @@ import type { QuizReference } from "@/lib/quiz/quizReference";
 import type { BranchAnswer, BranchQuestion } from "@shared/quiz/branchQuestions";
 import type { Branch, Variant } from "@shared/quran/branches";
 import type { Hints } from "@shared/quiz/hints";
-import { FORGOT, isRightChoice, PICKS, picksOf, recited, ticks } from "@shared/quiz/choiceKinds";
+import { FORGOT, isRightChoice, orders, PICKS, picksOf, recited, ticks } from "@shared/quiz/choiceKinds";
+import OrderRows from "@/components/common/OrderRows";
 import { markForgotten } from "@shared/ayahMarks";
 import AyahFlow, { AyahWords } from "@/components/quran/text/AyahFlow";
 import { branchesCorrect, emptyBranchAnswers } from "@shared/quiz/score";
@@ -56,6 +57,8 @@ export interface QuizQuestionView {
   correctAnswer: string;
   /** Several right choices: the reader ticks boxes, then checks (shared/quiz/choiceKinds.ts). */
   correctAnswers?: string[];
+  /** Choices to put in order: the right order (shared/quiz/choiceKinds.ts `orders`). */
+  order?: string[];
   /** Where the answer comes from, shown once answered (shared/quiz/sources.ts); a bank question's cited passage among them. */
   sources?: ChoiceQuestion["sources"];
   evidence: { reference: QuizReference | null };
@@ -118,6 +121,8 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
         <BranchInputs key={question.key} question={question} typed={answers} onChange={onType} hints={hints ?? {}} onHints={onHints}
           onCheck={() => onAnswer(branchesCorrect(question, answers) ? question.correctAnswer : "")} ar={ar} />
       )
+    ) : orders(question) ? (
+      <OrderRows question={question} given={given} ar={ar} onAnswer={onAnswer} />
     ) : recited(question) && !revealed && !locked ? null : <div className="flex flex-col gap-2">
       {question.choices.map((choice) => {
         const isAnswer = isRightChoice(question, choice.value);

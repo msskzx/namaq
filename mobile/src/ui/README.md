@@ -23,6 +23,7 @@ below. Never copy one into a screen.
 | `FloatingMenu` (+ `MenuAt`) | A row of ActButtons over what was pressed, wrapping, above or below the finger; `groups` lays them in groups with a thin line between; `bubble` (+ `span`, the button's height) is the round reaction pop-up over one button of an open menu; `overlay` dims behind and closes on a tap outside | the mushaf and book long press, the home cards menu |
 | `Sheet` | Rises from the bottom, tap outside or swipe down closes; `tall` one height above the keyboard, `full` whole screen with title and close | every sheet, full-screen ones included (share, video) |
 | `Toggle` | On means knob on the right | every on/off setting |
+| `OrderRows` | Rows to drag into order, the row following the finger (at once from its grip, after a short hold elsewhere) and the others making room; then «تحقق»; once answered, the right order with where each was put | a question that puts its choices in order («رتّب السور») |
 | `NumberPicker` (+ `NumberList`) | Drop-down number list | picking a number (no steppers) |
 | `Text` | Amiri text with the interface scale | every non-Quran text |
 | `ExternalLink` (+ `openExternal`) | Opens a page outside the app | every link out of Namaq |
