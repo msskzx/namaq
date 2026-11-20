@@ -1,0 +1,289 @@
+{
+  "unit": {
+    "id": "siyar-v6-96-hujr-ibn-yazid",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٩٦"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_hy_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "467",
+      "layer": "MAIN",
+      "exact": "٩٦ - حُجْرٌ الشَّرُّ حُجْرُ بنُ يَزِيْدَ بنِ سَلَمَةَ الكِنْدِيُّ"
+    },
+    {
+      "id": "sp_hy_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "467",
+      "layer": "MAIN",
+      "exact": "حُجْرُ بنُ يَزِيْدَ بنِ سَلَمَةَ بنِ مُرَّةَ بنِ حُجْرِ بنِ عَدِيِّ بنِ رَبِيْعَةَ بنِ مُعَاوِيَةَ الأَكْرَمِيْنَ الكِنْدِيُّ",
+      "prefix": "وَهُوَ "
+    },
+    {
+      "id": "sp_hy_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "467",
+      "layer": "MAIN",
+      "exact": "حُجْرُ بنُ",
+      "prefix": "وَهُوَ "
+    },
+    {
+      "id": "sp_hy_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "467",
+      "layer": "MAIN",
+      "exact": "يَزِيْدَ بنِ سَلَمَةَ بنِ مُرَّةَ",
+      "prefix": "وَهُوَ حُجْرُ بنُ "
+    },
+    {
+      "id": "sp_hy_laqab",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "467",
+      "layer": "MAIN",
+      "exact": "حُجْرٌ الشَّرُّ",
+      "prefix": "٩٦ - "
+    },
+    {
+      "id": "sp_hy_wafd_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "467",
+      "layer": "MAIN",
+      "exact": "قَالَهُ: ابْنُ سَعْدٍ",
+      "prefix": "أَرْمِيْنِيَةَ. "
+    },
+    {
+      "id": "sp_hy_wafd",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "467",
+      "layer": "MAIN",
+      "exact": "وَفَدَ إِلَى النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ -",
+      "suffix": " ثُمَّ كَانَ مِنْ شِيْعَةِ عَلِيٍّ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_hy0",
+      "unit": "siyar-v6-96-hujr-ibn-yazid",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_hy_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_hy_wafd",
+      "unit": "siyar-v6-96-hujr-ibn-yazid",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_hy_wafd_frame"
+      ],
+      "origin": {
+        "mention": "m_hy_wafd_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_hy_name",
+      "report": "r_hy0",
+      "spans": [
+        "sp_hy_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_hy_heading",
+      "report": "r_hy0",
+      "spans": [
+        "sp_hy_heading"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_hy_wafd",
+      "report": "r_hy_wafd",
+      "spans": [
+        "sp_hy_wafd"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_hy",
+      "parent": "sp_hy_name",
+      "exact": "حُجْرُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_hy_father",
+      "parent": "sp_hy_name",
+      "exact": "يَزِيْدَ بنِ سَلَمَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_hy_h",
+      "parent": "sp_hy_heading",
+      "exact": "حُجْرٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_hy_wafd_by",
+      "parent": "sp_hy_wafd_frame",
+      "exact": "ابْنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_hy_wafd",
+      "parent": "sp_hy_wafd",
+      "exact": "وَفَدَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_hy_prophet",
+      "parent": "sp_hy_wafd",
+      "exact": "النَّبِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_hy",
+      "mention": "m_hy",
+      "agent": "hujr-ibn-yazid",
+      "basis": [
+        {
+          "span": "sp_hy_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_hy_father",
+      "mention": "m_hy_father",
+      "agent": "yazid-ibn-salamah-al-kindi",
+      "basis": [
+        {
+          "span": "sp_hy_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_hy_h",
+      "mention": "m_hy_h",
+      "agent": "hujr-ibn-yazid",
+      "basis": [
+        {
+          "span": "sp_hy_name",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_hy_wafd",
+      "mention": "m_hy_wafd",
+      "agent": "hujr-ibn-yazid",
+      "basis": [
+        {
+          "span": "sp_hy_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_hy_name",
+      "subject": "m_hy",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_hy_name"
+        ]
+      },
+      "restsOn": [
+        "st_hy_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hy_sex",
+      "subject": "m_hy",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_hy_sex"
+        ]
+      },
+      "restsOn": [
+        "st_hy_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hy_father",
+      "subject": "m_hy",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_hy_father"
+      },
+      "restsOn": [
+        "st_hy_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hy_laqab",
+      "subject": "m_hy_h",
+      "predicate": "name.laqab",
+      "value": {
+        "spans": [
+          "sp_hy_laqab"
+        ]
+      },
+      "restsOn": [
+        "st_hy_heading"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_hy_comp",
+      "subject": "m_hy_wafd",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_hy_prophet"
+      },
+      "restsOn": [
+        "st_hy_wafd"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

@@ -43,11 +43,7 @@ export default function FortyIsnad({ isnad, size }: { isnad: AppIsnad; size: App
       x1: (from.x + NODE_W / 2 + (level ? (toward * NODE_W) / 2 : 0)) * k, y1: (level ? from.y + NODE_H / 2 : from.y) * k,
       x2: (to.x + NODE_W / 2 - (level ? (toward * NODE_W) / 2 : 0)) * k, y2: (level ? to.y + NODE_H / 2 : to.y + NODE_H) * k };
   });
-  const arrow = (x1: number, y1: number, x2: number, y2: number) => {
-    const angle = Math.atan2(y2 - y1, x2 - x1);
-    const side = (turn: number) => `${x2 - 7 * Math.cos(angle + turn)} ${y2 - 7 * Math.sin(angle + turn)}`;
-    return `M${x2} ${y2}L${side(0.45)}L${side(-0.45)}Z`;
-  };
+  // No arrowheads (owner, 2026-11-20): an arrow could read as the chain going the other way; the order down the page and the word on each line say who heard from whom.
   const tabaqat = isnad.rows.filter(row => row.kind === 'tabaqa' && row.name);
   return (
     <div ref={box} className="flex flex-col gap-2.5">
@@ -55,7 +51,7 @@ export default function FortyIsnad({ isnad, size }: { isnad: AppIsnad; size: App
         <svg width={width * k} height={height * k} className="absolute inset-0" aria-hidden>
           {lines.map(({ i, level, x1, y1, x2, y2 }) => {
             const colour = level ? 'var(--home-amber)' : 'var(--home-rule)';
-            return <g key={i}><line x1={x1} y1={y1} x2={x2} y2={y2} stroke={colour} strokeWidth={1.25} /><path d={arrow(x1, y1, x2, y2)} fill={colour} /></g>;
+            return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={colour} strokeWidth={1.25} />;
           })}
         </svg>
         {/* The word on a line; between two narrators of one row the gap is too narrow, so it stands over their row. */}
@@ -66,7 +62,7 @@ export default function FortyIsnad({ isnad, size }: { isnad: AppIsnad; size: App
           </span>
         ))}
         {placed.map(node => (
-          <Card key={node.id} aria-hidden className="absolute flex flex-col items-center justify-center px-1 text-center"
+          <Card key={node.id} node aria-hidden className="absolute flex flex-col items-center justify-center px-1 text-center"
             style={{ left: node.x * k, top: node.y * k, width: NODE_W * k, height: NODE_H * k }}>
             <span className="line-clamp-2" style={{ fontSize: 14 * k, lineHeight: `${19 * k}px` }}>{node.label}</span>
             {node.row && rowName(node.row) ? <span className="text-[var(--home-muted)]" style={{ fontSize: 10 * k, lineHeight: `${14 * k}px` }}>{rowName(node.row)}</span> : null}

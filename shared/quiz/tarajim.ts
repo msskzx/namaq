@@ -243,11 +243,14 @@ export function nameQuestions(family: typeof TARAJIM_KUNYA | typeof TARAJIM_LAQA
   const facts: NameFact[] = family === TARAJIM_KUNYA ? kunyaFacts(people) : laqabFacts(people);
   const ownNames = new Map<string, Set<string>>();
   for (const { person, name } of facts) ownNames.set(person.slug, (ownNames.get(person.slug) ?? new Set()).add(bareName(name)));
+  // Another man's kunya can be the Prophet's ﷺ own («أبو القاسم», Muhammad ibn Abi Hudhayfah): never a wrong choice.
+  const prophet = people.find(p => p.slug === 'prophet-muhammad');
+  const his = new Set(prophet ? [...prophet.titles, ...prophet.laqab, ...prophet.kunya].map(f => bareName('name' in f ? (f.name as string) : f.text)) : []);
   return facts.flatMap(({ person, name, fact }, k) => {
     const words = new Set(nameWords(person.name));
     const own = ownNames.get(person.slug)!;
     const others = shuffle(facts.filter(other => other.person.sex === person.sex && other.person.slug !== person.slug
-      && !own.has(bareName(other.name)) && !(family === TARAJIM_KUNYA && nameWords(other.name).slice(1).some(word => words.has(word)))), random)
+      && !own.has(bareName(other.name)) && !his.has(bareName(other.name)) && !(family === TARAJIM_KUNYA && nameWords(other.name).slice(1).some(word => words.has(word)))), random)
       .filter((other, i, all) => all.findIndex(each => bareName(each.name) === bareName(other.name)) === i)
       .slice(0, 3);
     if (others.length < 3) return [];

@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Network } from 'lucide-react-native';
-import { kunyaName, pageLabel, sayer, sayerLine, sourcesOf, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
+import { kunyaName, pageLabel, sayerAt, sayerLine, sourcesOf, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
 import { surahName } from '@shared/quran/surahNames';
 import { counted, num } from '@shared/quran/arabicNumber';
 import { sourceById } from '@shared/sources';
@@ -74,7 +74,7 @@ export function Credit({ facts, palette, quotes = false }: { facts: PersonFact[]
  */
 function Sayer({ fact, palette, many = false }: { fact: PersonFact; palette: Palette; many?: boolean }) {
   if (fact.anonymous) return <Text style={muted(palette)}>قيل</Text>;
-  if (many) return <Text style={muted(palette)}>عند {sayer(fact)}</Text>;
+  if (many) return <Text style={muted(palette)}>{sayerAt(fact)}</Text>;
   return fact.by.length ? <Text style={muted(palette)}>{sayerLine(fact)}</Text> : null;
 }
 
@@ -191,7 +191,7 @@ export default function PersonScreen() {
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
               {person.titles.map(title => (
                 <Chip key={title.title} label={title.name} on={false} small palette={palette}
-                  onPress={title.shared ? () => router.navigate({ pathname: '/tarajim', params: { title: title.title, at: String(Date.now()) } }) : undefined} />
+                  onPress={title.shared ? () => router.navigate({ pathname: '/people', params: { title: title.title, at: String(Date.now()) } }) : undefined} />
               ))}
             </View>
           )}

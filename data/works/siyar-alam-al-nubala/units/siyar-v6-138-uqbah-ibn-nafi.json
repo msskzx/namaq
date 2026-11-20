@@ -1,0 +1,487 @@
+{
+  "unit": {
+    "id": "siyar-v6-138-uqbah-ibn-nafi",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٣٨"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_un_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "532",
+      "layer": "MAIN",
+      "exact": "١٣٨ - عُقْبَةُ بنُ نَافِعٍ القُرَشِيُّ الفِهْرِيُّ"
+    },
+    {
+      "id": "sp_un_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "532",
+      "layer": "MAIN",
+      "exact": "عُقْبَةُ بنُ نَافِعٍ القُرَشِيُّ الفِهْرِيُّ",
+      "prefix": "١٣٨ - "
+    },
+    {
+      "id": "sp_un_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "532",
+      "layer": "MAIN",
+      "exact": "عُقْبَةُ بنُ",
+      "prefix": "١٣٨ - "
+    },
+    {
+      "id": "sp_un_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "532",
+      "layer": "MAIN",
+      "exact": "نَافِعٍ القُرَشِيُّ",
+      "prefix": "١٣٨ - عُقْبَةُ بنُ "
+    },
+    {
+      "id": "sp_un_amir",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "532",
+      "layer": "MAIN",
+      "exact": "الأَمِيْرُ، نَائِبُ إِفْرِيْقِيَةَ لِمُعَاوِيَةَ، وَلِيَزِيْدَ، وَهُوَ الَّذِي أَنْشَأَ"
+    },
+    {
+      "id": "sp_un_qayrawan",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "533",
+      "layer": "MAIN",
+      "exact": "القَيْرَوَانَ، وَأَسْكَنَهَا النَّاسَ"
+    },
+    {
+      "id": "sp_un_office",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "532",
+      "layer": "MAIN",
+      "exact": "نَائِبُ إِفْرِيْقِيَةَ لِمُعَاوِيَةَ، وَلِيَزِيْدَ",
+      "prefix": "الأَمِيْرُ، "
+    },
+    {
+      "id": "sp_un_desc",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "533",
+      "layer": "MAIN",
+      "exact": "وَكَانَ ذَا شَجَاعَةٍ، وَحَزْمٍ، وَديَانَةٍ، لَمْ يَصِحَّ لَهُ صُحْبَةٌ"
+    },
+    {
+      "id": "sp_un_desc_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "533",
+      "layer": "MAIN",
+      "exact": "وَكَانَ ذَا شَجَاعَةٍ، وَحَزْمٍ، وَديَانَةٍ",
+      "suffix": "، لَمْ يَصِحَّ"
+    },
+    {
+      "id": "sp_un_son",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "533",
+      "layer": "MAIN",
+      "exact": "حَكَى عَنْهُ: ابْنُهُ؛ الأَمِيْرُ أَبُو عُبَيْدَةَ",
+      "suffix": " مَرَّةً"
+    },
+    {
+      "id": "sp_un_son_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "533",
+      "layer": "MAIN",
+      "exact": "الأَمِيْرُ أَبُو عُبَيْدَةَ",
+      "prefix": "ابْنُهُ؛ "
+    },
+    {
+      "id": "sp_un_d63_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "534",
+      "layer": "MAIN",
+      "exact": "وَقَالَ ابْنُ يُوْنُسَ:",
+      "suffix": " قُتِلَ"
+    },
+    {
+      "id": "sp_un_d63",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "534",
+      "layer": "MAIN",
+      "exact": "قُتِلَ سَنَةَ ثَلاَثٍ وَسِتِّيْنَ"
+    },
+    {
+      "id": "sp_un_y63",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "534",
+      "layer": "MAIN",
+      "exact": "سَنَةَ ثَلاَثٍ وَسِتِّيْنَ",
+      "prefix": "قُتِلَ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_un0",
+      "unit": "siyar-v6-138-uqbah-ibn-nafi",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_un_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_un_d63",
+      "unit": "siyar-v6-138-uqbah-ibn-nafi",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_un_d63_frame"
+      ],
+      "origin": {
+        "mention": "m_un_d63_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_un_name",
+      "report": "r_un0",
+      "spans": [
+        "sp_un_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_un_amir",
+      "report": "r_un0",
+      "spans": [
+        "sp_un_amir"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_un_qayrawan",
+      "report": "r_un0",
+      "spans": [
+        "sp_un_amir",
+        "sp_un_qayrawan"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_un_desc",
+      "report": "r_un0",
+      "spans": [
+        "sp_un_desc"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_un_son",
+      "report": "r_un0",
+      "spans": [
+        "sp_un_son"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_un_d63",
+      "report": "r_un_d63",
+      "spans": [
+        "sp_un_d63"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_un",
+      "parent": "sp_un_name",
+      "exact": "عُقْبَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_un_father",
+      "parent": "sp_un_name",
+      "exact": "نَافِعٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_un_o",
+      "parent": "sp_un_amir",
+      "exact": "نَائِبُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_un_q",
+      "parent": "sp_un_amir",
+      "exact": "وَهُوَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_un_d",
+      "parent": "sp_un_desc",
+      "exact": "وَكَانَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_un_s",
+      "parent": "sp_un_son",
+      "exact": "عَنْهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_un_c_abuubaydah",
+      "parent": "sp_un_son",
+      "exact": "أَبُو عُبَيْدَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_un_d63_by",
+      "parent": "sp_un_d63_frame",
+      "exact": "ابْنُ يُوْنُسَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_un_k",
+      "parent": "sp_un_d63",
+      "exact": "قُتِلَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_un",
+      "mention": "m_un",
+      "agent": "uqbah-ibn-nafi",
+      "basis": [
+        {
+          "span": "sp_un_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_un_father",
+      "mention": "m_un_father",
+      "agent": "nafi-al-fihri",
+      "basis": [
+        {
+          "span": "sp_un_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_un_o",
+      "mention": "m_un_o",
+      "agent": "uqbah-ibn-nafi",
+      "basis": [
+        {
+          "span": "sp_un_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_un_q",
+      "mention": "m_un_q",
+      "agent": "uqbah-ibn-nafi",
+      "basis": [
+        {
+          "span": "sp_un_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_un_d",
+      "mention": "m_un_d",
+      "agent": "uqbah-ibn-nafi",
+      "basis": [
+        {
+          "span": "sp_un_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_un_s",
+      "mention": "m_un_s",
+      "agent": "uqbah-ibn-nafi",
+      "basis": [
+        {
+          "span": "sp_un_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_un_c_abuubaydah",
+      "mention": "m_un_c_abuubaydah",
+      "agent": "abu-ubaydah-ibn-uqbah-ibn-nafi",
+      "basis": [
+        {
+          "span": "sp_un_son_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_un_k",
+      "mention": "m_un_k",
+      "agent": "uqbah-ibn-nafi",
+      "basis": [
+        {
+          "span": "sp_un_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_un_name",
+      "subject": "m_un",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_un_name"
+        ]
+      },
+      "restsOn": [
+        "st_un_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_un_sex",
+      "subject": "m_un",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_un_sex"
+        ]
+      },
+      "restsOn": [
+        "st_un_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_un_father",
+      "subject": "m_un",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_un_father"
+      },
+      "restsOn": [
+        "st_un_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_un_office",
+      "subject": "m_un_o",
+      "predicate": "office",
+      "value": {
+        "classified": "amir",
+        "spans": [
+          "sp_un_office"
+        ]
+      },
+      "restsOn": [
+        "st_un_qayrawan"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_un_v_qayrawan",
+      "subject": "m_un_q",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_un_amir",
+          "sp_un_qayrawan"
+        ]
+      },
+      "restsOn": [
+        "st_un_qayrawan"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_un_v_desc",
+      "subject": "m_un_d",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_un_desc_v"
+        ]
+      },
+      "restsOn": [
+        "st_un_desc"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_un_c_abuubaydah_0",
+      "subject": "m_un_c_abuubaydah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_un_s"
+      },
+      "restsOn": [
+        "st_un_son"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_un_d63",
+      "subject": "m_un_k",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 63,
+        "spans": [
+          "sp_un_y63"
+        ]
+      },
+      "restsOn": [
+        "st_un_d63"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

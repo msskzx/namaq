@@ -4,8 +4,9 @@
 // the «من التراجم» and «صلة» feed cards. The client parts in src/components/tarajim draw what these return.
 import peopleJson from '@shared/data/tarajim/people.json';
 import { pageLabel, sayerLine, sourcesOf, type AppPerson, type PersonFact } from '@shared/tarajim';
-import { bareName, chainOf, foldTop, lineOf, meetingOf, nasabTree, type NasabNode } from '@shared/tarajimLine';
-import { chainSentence, groupWord, linkedPairs, peopleGraph, stepClause, tieGroups, tieWord, type GraphNode, type TieKind } from '@shared/tarajimGraph';
+import { byVolume, heldGroups, kunyaLine, personLine } from '@shared/tarajimGroups';
+import { chainOf, matchesQuery, namesHay, foldTop, lineOf, meetingOf, nasabTree, type NasabNode } from '@shared/tarajimLine';
+import { chainSentence, groupWord, joining, linkedPairs, peopleGraph, stepClause, tieGroups, tieWord, type GraphNode, type Step, type TieKind } from '@shared/tarajimGraph';
 import { allVirtues } from '@shared/homeFeed';
 import { kunyaFacts, laqabFacts, type NameFact } from '@shared/tarajimNames';
 import { sourceById } from '@shared/sources';
@@ -34,13 +35,13 @@ const firstName = (node: GraphNode) => personName(node).split(/\s+بنت?\s+/u)[
 const ringName = (node: GraphNode) => personName(node).replace(/\s+بن\s+.*$/u, rest => (rest.length > 18 ? '' : rest));
 
 /** People whose name, full name, kunya or laqab holds the words typed, ignoring vowels and hamza forms (the app's searchPeople). */
-export function searchPeople(query: string) {
-  const words = bareName(query).split(/\s+/u).filter(Boolean);
-  return PEOPLE.filter(person => {
-    const hay = bareName([person.name, person.fullName?.text, ...person.kunya.map(k => k.text), ...person.laqab.map(l => l.text)].filter(Boolean).join(' '));
-    return words.every(word => hay.includes(word));
-  });
-}
+export const searchPeople = (query: string) => PEOPLE.filter(person => matchesQuery(namesHay(person), query));
+
+/** Everyone a picker («أضف») offers, with what its search looks in, so the page searches as the app does. */
+export type PickPerson = { slug: string; name: string; hay: string };
+export const pickPeople = (): PickPerson[] => PEOPLE.map(person => ({ slug: person.slug, name: personName(person), hay: namesHay(person) }));
+/** The slugs of a `?slugs=a,b` (or `?with=`) list that name a converted person, each once. */
+export const pickedSlugs = (list = '') => [...new Set(list.split(',').filter(slug => findPerson(slug)))];
 
 /** The pages a part rests on, with each book's edition and link (the Siyar, and Zad al-Ma'ad where it is cited): the app's Credit. */
 export type Credit = { pages: string; label: string; books: { title: string; url: string; label: string }[]; quotes?: { text: string; pages: string }[] };
@@ -138,6 +139,32 @@ export function virtuesView(slug: string): VirtuesView | undefined {
 
 /** A chain of ties between two people, as TiesChain draws it: the people and each line's clause. */
 export type ChainView = { nodes: { slug: string; name: string; inApp: boolean }[]; steps: { from: string; to: string; kind: TieKind; clause: string }[]; first: string; picked: string[] };
+function chainView(nodes: string[], steps: Step[], picked: string[]): ChainView {
+  const node = (slug: string) => GRAPH.nodes.get(slug)!;
+  return {
+    nodes: nodes.map(slug => ({ slug, name: personName(node(slug)), inApp: node(slug).inApp })),
+    steps: steps.map(step => ({ from: step.from, to: step.to, kind: step.kind, clause: stepClause(GRAPH, step, firstName) })),
+    first: picked[0], picked,
+  };
+}
+
+/**
+ * «بين عدة أشخاص» (the app's between screen): the people picked, the nearest ties that join the first to each of the
+ * others, said in one sentence with the book's sentence and page for each tie, and those no known tie joins.
+ */
+export type BetweenView = { people: PersonHead[]; chain: ChainView; sentence: string; apart: PersonHead[]; credit?: Credit };
+export function betweenView(slugs: string[]): BetweenView {
+  const picked = slugs.filter(slug => GRAPH.nodes.has(slug));
+  const { nodes, steps, apart } = joining(GRAPH, picked);
+  const headOf = (slug: string) => { const node = GRAPH.nodes.get(slug)!; return { slug, name: personName(node), sex: node.sex }; };
+  return {
+    people: picked.map(headOf),
+    chain: chainView(nodes, steps, picked),
+    sentence: steps.length ? `${chainSentence(GRAPH, steps, personName)}.` : '',
+    apart: apart.map(headOf),
+    credit: creditOf(steps.map(step => step.link), true),
+  };
+}
 
 /**
  * The «من التراجم» card (a virtue), the «صلة» card (two people and the chain that joins them) and the «من حياته» card (a
@@ -177,11 +204,7 @@ export function tarajimCards(day: number, slots: number[]): TarajimCard[] {
     return [{
       slot, kind: 'tie',
       a: { slug: pair.a, name: personName(node(pair.a)), sex: node(pair.a).sex }, b: { slug: pair.b, name: personName(node(pair.b)), sex: node(pair.b).sex },
-      chain: {
-        nodes: nodes.map(slug => ({ slug, name: personName(node(slug)), inApp: node(slug).inApp })),
-        steps: pair.steps.map(step => ({ from: step.from, to: step.to, kind: step.kind, clause: stepClause(GRAPH, step, firstName) })),
-        first: pair.a, picked: [pair.a, pair.b],
-      },
+      chain: chainView(nodes, pair.steps, [pair.a, pair.b]),
       sentence: `${chainSentence(GRAPH, pair.steps, personName)}.`,
       pages: [...new Set(pair.steps.map(step => pageLabel(step.link.refs)))].join(' · '),
     }];
@@ -200,11 +223,36 @@ export function drawingsView(slug: string): DrawingsView | undefined {
   return { ...head(person), fullName: person.fullName?.text, nasab: nasabView([slug], false), life: personLife(person), ties: tiesView(slug) };
 }
 
-/** Lives side by side, for the website's «حياتهما» page. */
+/** Lives side by side, for the website's «حياتهما» page; `lived` are those with life entries (the app's lifeOf). */
 export function lifeCompare(slugs: string[]) {
   const people = slugs.map(findPerson).filter((p): p is AppPerson => !!p);
-  return { people: people.map(head), places: lifeColumns(people.map(personLife)) };
+  return { people: people.map(head), places: lifeColumns(people.map(personLife)), lived: people.filter(p => ((lifeData as AppLife)[p.slug] ?? []).length > 0).map(p => p.slug) };
 }
+
+/**
+ * «كل التراجم» on the website, as the app's people screen: the converted people a search and a group pick out, under the
+ * part of the book their entry is in, each a row with its muted line (the kunya alone inside a group). `groups` are the
+ * scholars' groups the converted people hold, then any other title several people hold, for the chips.
+ */
+export function peopleList(search = '', title?: string) {
+  const held = heldGroups(PEOPLE);
+  const shared = new Map<string, string>();
+  for (const person of PEOPLE) for (const t of person.titles) if (t.shared && !shared.has(t.title)) shared.set(t.title, t.name);
+  const groups = [...held, ...[...shared].filter(([key]) => !held.some(group => group.key === key)).map(([key, name]) => ({ key, name }))];
+  const picked = title && groups.some(group => group.key === title) ? title : undefined;
+  const people = (search.trim() ? searchPeople(search) : PEOPLE).filter(person => !picked || person.titles.some(t => t.title === picked));
+  const line = picked ? kunyaLine : personLine;
+  return {
+    groups,
+    title: picked,
+    heading: picked ? groups.find(group => group.key === picked)!.name : 'كل التراجم',
+    count: people.length,
+    parts: byVolume(people).map(part => ({ heading: part.heading, rows: part.people.map(person => ({ slug: person.slug, name: personName(person), line: line(person) })) })),
+  };
+}
+
+/** The scholars' groups for the website's Tarajim hub, as the app's hub tiles. */
+export const hubGroups = () => heldGroups(PEOPLE);
 
 /**
  * The «الألقاب» and «الكنى» cards (the app's NamePost), one of each a batch: a person's laqab or kunya, the person, the

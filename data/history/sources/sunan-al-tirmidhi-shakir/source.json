@@ -1,0 +1,15 @@
+{
+  "slug": "sunan-al-tirmidhi-shakir",
+  "title": "سنن الترمذي",
+  "author": "محمد بن عيسى الترمذي",
+  "editor": "أحمد محمد شاكر (ج ١-٢)، محمد فؤاد عبد الباقي (ج ٣)، إبراهيم عطوة عوض (ج ٤-٥)",
+  "publisher": "مصطفى البابي الحلبي، مصر",
+  "publicationYear": "1395/1975",
+  "edition": "الطبعة الثانية",
+  "digitalHost": "turath.io (المكتبة الشاملة 1435)",
+  "url": "https://shamela.ws/book/1435",
+  "notes": "Pages are the book's text from turath.io's export of Shamela 1435 (files.turath.io/books-v3/1435.json, fetched 2026-11-19), with the HTML tags taken out, and each export page cut at the print's page mark («⦗٦٤٨⦘») so a stored page holds only its printed page. The .notes.md beside a page holds what the export prints under the page's rule: al-Albani's grading of the hadith that ends on that export page (5/647: 3747 «صحيح»; 5/648: 3748), which the Shamela copy appends to each hadith. Only the pages a unit cites are stored.",
+  "volumes": [
+    { "number": 5, "name": "الجزء الخامس" }
+  ]
+}

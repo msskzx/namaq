@@ -12,6 +12,7 @@ import { bookState, readBook, useBooks } from '@/lib/books';
 import { surahNames } from '@/lib/branches';
 import { ayahMushafWords } from '@/lib/mushaf';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
+import QuranWords from './quran/text/QuranWords';
 import { BookList } from './Books';
 import LoadingDots from '@/ui/LoadingDots';
 import Sheet from '@/ui/Sheet';
@@ -87,11 +88,12 @@ function Itqan({ paragraphs, palette, onSpan, onClose }: { paragraphs: ItqanPara
       {/* The paragraph lights the words it quotes; its reference below is a control of its own. */}
       <Pickable picked={picked === i} onPick={() => setPicked(i)}>
       <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 22, textAlign: 'right' }}>{paragraph.heading ? `«${paragraph.heading}» · ${paragraph.kind}` : paragraph.kind}</Text>
-      <TermLink paragraph={paragraph} palette={palette} onClose={onClose} />
       <Text selectable style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' }}>
-        {tafsirRuns(paragraph.text).map((run, j) => <Text key={j} style={run.quran ? { fontFamily: QURAN_FONT, color: palette.accent } : undefined}>{run.text}</Text>)}
+        {tafsirRuns(paragraph.text).map((run, j) => run.quran ? <QuranWords key={j} style={{ color: palette.accent }}>{run.text}</QuranWords> : <Text key={j}>{run.text}</Text>)}
       </Text>
       </Pickable>
+      {/* Under the paragraph, not in it: a button inside the pressable paragraph is lost on the web and to screen readers (R0055). */}
+      <TermLink paragraph={paragraph} palette={palette} onClose={onClose} />
       {/* A quote that names no ayah: every ayah it fits, listed, none chosen for him (owner, 2026-11-18). */}
       {paragraph.matches.length > 0 && (
         <Folded credit={`مواضع الشاهد في القرآن: ${num(paragraph.matches.length)}، ولم يعيّن السيوطي أحدها`} palette={palette}>

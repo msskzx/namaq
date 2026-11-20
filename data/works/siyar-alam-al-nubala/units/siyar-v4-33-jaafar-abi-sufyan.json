@@ -1,0 +1,250 @@
+{
+  "unit": {
+    "id": "siyar-v4-33-jaafar-abi-sufyan",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٣٣"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ja_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "205",
+      "layer": "MAIN",
+      "exact": "٣٣ - وَل ِـ: جَعْفَرِ بنِ أَبِي سُفْيَانَ"
+    },
+    {
+      "id": "sp_ja_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "205",
+      "layer": "MAIN",
+      "exact": "جَعْفَرِ بنِ أَبِي سُفْيَانَ",
+      "prefix": "ِـ: "
+    },
+    {
+      "id": "sp_ja_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "205",
+      "layer": "MAIN",
+      "exact": "جَعْفَرِ بنِ",
+      "prefix": "ِـ: "
+    },
+    {
+      "id": "sp_ja_saad_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "205",
+      "layer": "MAIN",
+      "exact": "قَالَهُ: ابْنُ سَعْدٍ",
+      "prefix": "خِلاَفَةِ مُعَاوِيَةَ. "
+    },
+    {
+      "id": "sp_ja_hunayn",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "205",
+      "layer": "MAIN",
+      "exact": "وَثَبَتَ مَعَهُ هُوَ وَأَبُوْهُ يَوْمَ حُنَيْنٍ"
+    },
+    {
+      "id": "sp_ja_hunayn_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "205",
+      "layer": "MAIN",
+      "exact": "يَوْمَ حُنَيْنٍ",
+      "prefix": "وَأَبُوْهُ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ja0",
+      "unit": "siyar-v4-33-jaafar-abi-sufyan",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ja_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ja_saad",
+      "unit": "siyar-v4-33-jaafar-abi-sufyan",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ja_saad_frame"
+      ],
+      "origin": {
+        "mention": "m_ja_saad"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ja_name",
+      "report": "r_ja0",
+      "spans": [
+        "sp_ja_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ja_hunayn",
+      "report": "r_ja_saad",
+      "spans": [
+        "sp_ja_hunayn"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ja",
+      "parent": "sp_ja_name",
+      "exact": "جَعْفَرِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ja_father",
+      "parent": "sp_ja_name",
+      "exact": "أَبِي سُفْيَانَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ja_saad",
+      "parent": "sp_ja_saad_frame",
+      "exact": "ابْنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ja_h",
+      "parent": "sp_ja_hunayn",
+      "exact": "هُوَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ja_hunayn",
+      "parent": "sp_ja_hunayn",
+      "exact": "حُنَيْنٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ja",
+      "mention": "m_ja",
+      "agent": "jaafar-ibn-abi-sufyan-al-hashimi",
+      "basis": [
+        {
+          "span": "sp_ja_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ja_h",
+      "mention": "m_ja_h",
+      "agent": "jaafar-ibn-abi-sufyan-al-hashimi",
+      "basis": [
+        {
+          "span": "sp_ja_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ja_father",
+      "mention": "m_ja_father",
+      "agent": "abu-sufyan-ibn-al-harith",
+      "basis": [
+        {
+          "span": "sp_ja_heading",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ja_hunayn",
+      "mention": "m_ja_hunayn",
+      "event": "hunayn",
+      "basis": [
+        {
+          "span": "sp_ja_hunayn_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ja_name",
+      "subject": "m_ja",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ja_name"
+        ]
+      },
+      "restsOn": [
+        "st_ja_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ja_sex",
+      "subject": "m_ja",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ja_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ja_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ja_father",
+      "subject": "m_ja",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ja_father"
+      },
+      "restsOn": [
+        "st_ja_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ja_hunayn",
+      "subject": "m_ja_h",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_ja_hunayn"
+      },
+      "restsOn": [
+        "st_ja_hunayn"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

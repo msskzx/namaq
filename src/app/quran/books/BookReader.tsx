@@ -160,7 +160,7 @@ function BookSheet({ id, tab, onTab, onClose, contents, page, saved }: {
       <div id="book-sheet-panel" role="tabpanel" aria-labelledby={`book-tab-${tab}`} className={styles.sheetBody}>
         {tab === 'contents' && contents.map(item => (
           <Link key={item.surah} href={`/quran/books/${id}/${item.page}`} onClick={onClose} aria-label={`${item.name}، الصفحة ${num(item.page)}`} data-here={item.surah === here || undefined} className={styles.row}>
-            <span className="w-8 text-sm text-[var(--home-accent)]">{num(item.surah)}</span>
+            <span className="w-8 text-sm text-[var(--home-accent)]">{item.surah ? num(item.surah) : ''}</span>
             <span className="flex-1">{item.name}</span>
           </Link>
         ))}

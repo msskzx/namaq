@@ -19,6 +19,8 @@ export type Source = {
   uses: SourceUse[];
   /** The website's reader for a book whose pages Namaq holds (/sources/<shelf>). */
   shelf?: string;
+  /** The data files and fonts built from it, as paths from the repo root; a path ending in / is a whole folder (guard proposal 24). */
+  files?: string[];
 };
 
 export const GROUPS: { group: SourceGroup; title: Bi }[] = [
@@ -70,6 +72,7 @@ const USE = {
   hijri: { ar: 'التاريخ الهجري وجزء اليوم', en: 'the Hijri date and today’s juz', href: '/utilities' },
   people: { ar: 'التراجم والأنساب والمعارك', en: 'biographies, lineages and battles', href: '/people' },
   forty: { ar: 'الأربعون النووية ورواياتها في كتب الحديث، في تطبيق الهاتف', en: 'al-Nawawi’s Forty and their records in the hadith books, in the phone app' },
+  sahih: { ar: 'الصحيحان كاملين: الكتب والأبواب والأحاديث', en: 'the two Sahihs whole: their kitabs, babs and hadith', href: '/hadith' },
   everywhere: { ar: 'كل الصفحات', en: 'every page' },
 } satisfies Record<string, SourceUse>;
 
@@ -96,24 +99,24 @@ export const SOURCES: Source[] = [
     uses: [USE.adhkar],
   },
   {
-    id: 'arbain-nawawi', group: 'books',
+    id: 'arbain-nawawi', group: 'books', files: ['shared/data/hadith/forty.json'],
     title: { ar: 'الأربعون النووية', en: 'al-Arba‘un al-Nawawiyya' }, author: { ar: 'يحيى بن شرف النووي', en: 'al-Nawawi' },
     edition: 'دار المنهاج، بيروت، الطبعة الأولى ١٤٣٠هـ، عناية قصي محمد نورس الحلاق وأنور بن أبي بكر الشيخي؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(12836), licence: PUBLIC_DOMAIN, uses: [USE.forty],
   },
   {
-    id: 'sahih-bukhari', group: 'books',
+    id: 'sahih-bukhari', group: 'books', files: ['shared/data/hadith/bukhari.json'],
     title: { ar: 'صحيح البخاري', en: 'Sahih al-Bukhari' }, author: { ar: 'محمد بن إسماعيل البخاري', en: 'al-Bukhari' },
-    edition: 'الطبعة السلطانية، بولاق ١٣١١هـ، مصوّرة دار طوق النجاة ١٤٢٢هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1681), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+    edition: 'الطبعة السلطانية، بولاق ١٣١١هـ، مصوّرة دار طوق النجاة ١٤٢٢هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1681), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih],
   },
   {
-    id: 'sahih-muslim', group: 'books',
+    id: 'sahih-muslim', group: 'books', files: ['shared/data/hadith/muslim.json'],
     title: { ar: 'صحيح مسلم', en: 'Sahih Muslim' }, author: { ar: 'مسلم بن الحجاج النيسابوري', en: 'Muslim' },
-    edition: 'تحقيق محمد فؤاد عبد الباقي، مطبعة عيسى البابي الحلبي، القاهرة ١٣٧٤هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1727), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+    edition: 'تحقيق محمد فؤاد عبد الباقي، مطبعة عيسى البابي الحلبي، القاهرة ١٣٧٤هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1727), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih],
   },
   {
     id: 'sunan-tirmidhi', group: 'books',
     title: { ar: 'سنن الترمذي', en: 'Sunan al-Tirmidhi' }, author: { ar: 'محمد بن عيسى الترمذي', en: 'al-Tirmidhi' },
-    edition: 'تحقيق أحمد محمد شاكر ومحمد فؤاد عبد الباقي وإبراهيم عطوة عوض، مصطفى البابي الحلبي، مصر، الطبعة الثانية ١٣٩٥هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٩', link: shamela(1435), licence: PUBLIC_DOMAIN, uses: [USE.forty],
+    edition: 'تحقيق أحمد محمد شاكر ومحمد فؤاد عبد الباقي وإبراهيم عطوة عوض، مصطفى البابي الحلبي، مصر، الطبعة الثانية ١٣٩٥هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٩', link: shamela(1435), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.people],
   },
   {
     id: 'sunan-nasai', group: 'books',
@@ -161,7 +164,7 @@ export const SOURCES: Source[] = [
     edition: 'تحقيق صبحي البدري السامرائي ومحمود محمد خليل الصعيدي، مكتبة السنة، القاهرة، الطبعة الأولى ١٤٠٨هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٩', link: shamela(13170), licence: PUBLIC_DOMAIN, uses: [USE.forty],
   },
   {
-    id: 'jami-ulum-hikam', group: 'books',
+    id: 'jami-ulum-hikam', group: 'books', files: ['shared/data/hadith/ibnRajab.json'],
     title: { ar: 'جامع العلوم والحكم', en: 'Jami‘ al-‘Ulum wa al-Hikam' }, author: { ar: 'ابن رجب الحنبلي', en: 'Ibn Rajab' },
     edition: 'تحقيق شعيب الأرنؤوط وإبراهيم باجس، مؤسسة الرسالة، بيروت، الطبعة السابعة ١٤١٧هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٩', link: shamela(4268), licence: PUBLIC_DOMAIN, uses: [USE.forty],
   },
@@ -198,7 +201,7 @@ export const SOURCES: Source[] = [
     link: shamela(1388), licence: PUBLIC_DOMAIN, uses: [USE.order],
   },
   {
-    id: 'itqan', group: 'books',
+    id: 'itqan', group: 'books', files: ['shared/data/quran/itqanBalagha.js', 'shared/data/quran/itqanBalagha.d.ts'],
     title: { ar: 'الإتقان في علوم القرآن', en: 'al-Itqan fi ‘Ulum al-Quran' }, author: { ar: 'جلال الدين السيوطي', en: 'al-Suyuti' },
     edition: 'تحقيق محمد أبو الفضل إبراهيم، الهيئة المصرية العامة للكتاب، ١٣٩٤هـ/١٩٧٤م، ٤ أجزاء', link: shamela(11728), licence: PUBLIC_DOMAIN, uses: [USE.openings, USE.iltifat, USE.oaths, USE.balagha, USE.balaghaQuiz, USE.balaghaTerms],
   },
@@ -228,19 +231,34 @@ export const SOURCES: Source[] = [
     edition: 'تحقيق محمد أبو الفضل إبراهيم، دار إحياء الكتب العربية، ١٣٧٦هـ', link: shamela(11436), licence: PUBLIC_DOMAIN, uses: [USE.branches, USE.iltifat, USE.openings],
   },
   {
-    id: 'asrar-al-tikrar', group: 'books',
+    id: 'asrar-al-tikrar', group: 'books', files: ['shared/data/quran/mutashabihKirmani.js', 'shared/data/quran/mutashabihKirmani.d.ts'],
     title: { ar: 'أسرار التكرار في القرآن', en: 'Asrar al-Tikrar fi al-Quran' }, author: { ar: 'تاج القراء الكرماني', en: 'al-Kirmani' },
-    edition: 'تحقيق عبد القادر أحمد عطا، دار الفضيلة', link: shamela(3580), licence: PUBLIC_DOMAIN, uses: [USE.branches],
+    edition: 'تحقيق عبد القادر أحمد عطا، دار الفضيلة', link: shamela(3580),
+    licence: {
+      ar: 'توفي المؤلف قبل قرون، فنصه في الملك العام. نعرض كلامه وحده كاملًا في قارئ الكتب، دون حواشي المحقق وزياداته (أرقام المسائل والآيات، والإحالات، وما بين المعقوفين)، مع رقم الصفحة. لا يأتي مع التطبيق، بل ينزّله من يختاره إلى هاتفه.',
+      en: 'The author died centuries ago, so his text is in the public domain. The book reader shows his words alone and whole, without the editor’s footnotes and additions (numbers of entries and ayat, references, and what he put in square brackets), with the page number. It does not ship with the app; whoever wants it downloads it to their phone.',
+    },
+    uses: [USE.branches, USE.books],
   },
   {
-    id: 'durrat-al-tanzil', group: 'books',
+    id: 'durrat-al-tanzil', group: 'books', files: ['shared/data/quran/mutashabihIskafi.js', 'shared/data/quran/mutashabihIskafi.d.ts'],
     title: { ar: 'درة التنزيل وغرة التأويل', en: 'Durrat al-Tanzil' }, author: { ar: 'الخطيب الإسكافي', en: 'al-Khatib al-Iskafi' },
-    edition: 'تحقيق محمد مصطفى آيدين، جامعة أم القرى، ١٤٢٢هـ', link: shamela(1340), licence: PUBLIC_DOMAIN, uses: [USE.branches],
+    edition: 'تحقيق محمد مصطفى آيدين، جامعة أم القرى، ١٤٢٢هـ', link: shamela(1340),
+    licence: {
+      ar: 'توفي المؤلف قبل قرون، فنصه في الملك العام. نعرض كلامه وحده كاملًا في قارئ الكتب، دون حواشي المحقق وزياداته (أرقام المسائل والآيات، والإحالات، وما بين المعقوفين)، ودون دراسته في أول المجلد الأول، مع رقم الصفحة. لا يأتي مع التطبيق، بل ينزّله من يختاره إلى هاتفه.',
+      en: 'The author died centuries ago, so his text is in the public domain. The book reader shows his words alone and whole, without the editor’s footnotes and additions (numbers of entries and ayat, references, and what he put in square brackets) and without his study that opens volume 1, with the page number. It does not ship with the app; whoever wants it downloads it to their phone.',
+    },
+    uses: [USE.branches, USE.books],
   },
   {
-    id: 'milak-al-tawil', group: 'books',
+    id: 'milak-al-tawil', group: 'books', files: ['shared/data/quran/mutashabihZubayr.js', 'shared/data/quran/mutashabihZubayr.d.ts'],
     title: { ar: 'ملاك التأويل القاطع بذوي الإلحاد والتعطيل', en: 'Milak al-Ta’wil' }, author: { ar: 'ابن الزبير الغرناطي', en: 'Ibn al-Zubayr al-Gharnati' },
-    edition: 'وضع حواشيه عبد الغني محمد علي الفاسي، دار الكتب العلمية، بيروت', link: shamela(1419), licence: PUBLIC_DOMAIN, uses: [USE.branches],
+    edition: 'وضع حواشيه عبد الغني محمد علي الفاسي، دار الكتب العلمية، بيروت', link: shamela(1419),
+    licence: {
+      ar: 'توفي المؤلف قبل قرون، فنصه في الملك العام. نعرض كلامه وحده كاملًا في قارئ الكتب، دون حواشي المحقق وزياداته (أرقام المسائل والآيات، والإحالات، وما بين المعقوفين)، مع رقم الصفحة. لا يأتي مع التطبيق، بل ينزّله من يختاره إلى هاتفه.',
+      en: 'The author died centuries ago, so his text is in the public domain. The book reader shows his words alone and whole, without the editor’s footnotes and additions (numbers of entries and ayat, references, and what he put in square brackets), with the page number. It does not ship with the app; whoever wants it downloads it to their phone.',
+    },
+    uses: [USE.branches, USE.books],
   },
   {
     id: 'qisas-al-anbiya', group: 'books',
@@ -260,7 +278,7 @@ export const SOURCES: Source[] = [
     link: { url: 'https://quran.ksu.edu.sa', label: 'مصحف جامعة الملك سعود' }, licence: PUBLIC_DOMAIN, uses: [USE.openings, USE.iltifat],
   },
   {
-    id: 'tafsir-sadi', group: 'books',
+    id: 'tafsir-sadi', group: 'books', files: ['shared/data/quran/tafsirSadi.json'],
     title: { ar: 'تيسير الكريم الرحمن في تفسير كلام المنان', en: 'Taysir al-Karim al-Rahman' }, author: { ar: 'عبد الرحمن بن ناصر السعدي', en: 'al-Sa‘di' },
     edition: 'مؤسسة الرسالة، الطبعة الأولى ١٤٢٠هـ/٢٠٠٠م، تحقيق عبد الرحمن بن معلا اللويحق', link: { url: 'https://quranpedia.net/book/3', label: 'الموسوعة القرآنية' },
     licence: {
@@ -270,7 +288,7 @@ export const SOURCES: Source[] = [
     uses: [USE.tafsir, USE.books, USE.oaths, USE.tafsirQuiz],
   },
   {
-    id: 'tibyan-ukbari', group: 'books',
+    id: 'tibyan-ukbari', group: 'books', files: ['shared/data/quran/irabUkbari.js', 'shared/data/quran/irabUkbari.d.ts'],
     title: { ar: 'التبيان في إعراب القرآن', en: 'al-Tibyan fi I‘rab al-Quran' }, author: { ar: 'أبو البقاء العكبري', en: 'Abu al-Baqa’ al-‘Ukbari' },
     edition: 'عيسى البابي الحلبي وشركاه', link: { url: 'https://quranpedia.net/book/309', label: 'الموسوعة القرآنية' },
     licence: {
@@ -280,7 +298,7 @@ export const SOURCES: Source[] = [
     uses: [USE.irab, USE.books],
   },
   {
-    id: 'kashshaf', group: 'books',
+    id: 'kashshaf', group: 'books', files: ['shared/data/quran/kashshaf.js', 'shared/data/quran/kashshaf.d.ts'],
     title: { ar: 'الكشاف عن حقائق التنزيل وعيون الأقاويل في وجوه التأويل', en: 'al-Kashshaf' }, author: { ar: 'جار الله الزمخشري', en: 'al-Zamakhshari' },
     edition: 'دار الكتاب العربي، بيروت، الطبعة الثالثة ١٤٠٧هـ', link: { url: 'https://quranpedia.net/book/346', label: 'الموسوعة القرآنية' },
     licence: {
@@ -290,7 +308,7 @@ export const SOURCES: Source[] = [
     uses: [USE.balagha, USE.books],
   },
   {
-    id: 'tafsir-mawdui', group: 'books',
+    id: 'tafsir-mawdui', group: 'books', files: ['shared/data/quran/surahTopics.json'],
     title: { ar: 'التفسير الموضوعي لسور القرآن الكريم', en: 'al-Tafsir al-Mawdu‘i li-Suwar al-Quran al-Karim' },
     author: { ar: 'نخبة من علماء التفسير وعلوم القرآن، بإشراف مصطفى مسلم', en: 'a group of scholars, ed. Mustafa Muslim' },
     edition: 'جامعة الشارقة، ١٤٣١هـ/٢٠١٠م، ١٠ مجلدات', link: { url: 'https://archive.org/details/20260607_20260607_1233', label: 'archive.org' },
@@ -312,7 +330,7 @@ export const SOURCES: Source[] = [
   },
   // Quran text
   {
-    id: 'kfgqpc-hafs', group: 'quran',
+    id: 'kfgqpc-hafs', group: 'quran', files: ['shared/data/quran/mushaf/'],
     title: { ar: 'مصحف المدينة برواية حفص، طبعة ١٤٤١هـ', en: 'The Madinah mushaf, Hafs, 1441 edition' }, author: { ar: 'مجمع الملك فهد لطباعة المصحف الشريف', en: 'King Fahd Glorious Quran Printing Complex' },
     link: { url: 'https://qurancomplex.gov.sa/en/techquran/dev/', label: 'qurancomplex.gov.sa' },
     licence: {
@@ -399,7 +417,7 @@ export const SOURCES: Source[] = [
     uses: [USE.tafsir],
   },
   {
-    id: 'quranpedia', group: 'data',
+    id: 'quranpedia', group: 'data', files: ['shared/data/quran/surahTopics.json', 'shared/data/quran/qiraat.json'],
     title: { ar: 'الموسوعة القرآنية: ملفات القراءات والتفسير والسور', en: 'Quranpedia: the qira’at, tafsir and surahs dumps' },
     edition: 'القراءات إصدار ٢٠٢٦-١١-١٤، تفسير السعدي إصدار ٢٠٢٦-٠٨-١٠، السور إصدار ٢٠٢٦-١١-١٤، الصرف والإعراب النحوي إصدار ٢٠٢٦-١١-١٤، التبيان للعكبري إصدار ٢٠٢٦-٠٨-١٠', link: { url: 'https://quranpedia.net/dumps', label: 'quranpedia.net' },
     licence: {
@@ -409,7 +427,7 @@ export const SOURCES: Source[] = [
     uses: [USE.qiraat, USE.reader, USE.tafsir, USE.topics, USE.irab, USE.qiraatQuiz, USE.qiraatWhoQuiz],
   },
   {
-    id: 'gharib-ibn-qutaybah', group: 'books',
+    id: 'gharib-ibn-qutaybah', group: 'books', files: ['shared/data/quran/gharib.js', 'shared/data/quran/gharib.d.ts'],
     title: { ar: 'تفسير غريب القرآن', en: 'Tafsir Gharib al-Quran' }, author: { ar: 'ابن قتيبة الدينوري', en: 'Ibn Qutaybah' },
     edition: 'تحقيق السيد أحمد صقر، دار الكتب العلمية، ١٣٩٨هـ/١٩٧٨م', link: shamela(3259),
     licence: {
@@ -419,7 +437,7 @@ export const SOURCES: Source[] = [
     uses: [USE.meaning, USE.meaningQuiz],
   },
   {
-    id: 'mufradat-raghib', group: 'books',
+    id: 'mufradat-raghib', group: 'books', files: ['shared/data/quran/mufradat.js', 'shared/data/quran/mufradat.d.ts'],
     title: { ar: 'المفردات في غريب القرآن', en: 'al-Mufradat fi Gharib al-Quran' }, author: { ar: 'الراغب الأصفهاني', en: 'al-Raghib al-Isfahani' },
     edition: 'تحقيق صفوان عدنان الداودي، دار القلم والدار الشامية، الطبعة الأولى ١٤١٢هـ', link: shamela(23636),
     licence: {
@@ -429,27 +447,27 @@ export const SOURCES: Source[] = [
     uses: [USE.meaning],
   },
   {
-    id: 'natural-earth', group: 'data',
+    id: 'natural-earth', group: 'data', files: ['shared/data/battles/land.json'],
     title: { ar: 'Natural Earth: اليابسة بمقياس ١:٥٠ مليون', en: 'Natural Earth: 1:50m land' },
     edition: 'ne_50m_land، مقصوصة على ما بين مصر وفارس', link: { url: 'https://www.naturalearthdata.com', label: 'naturalearthdata.com' },
     licence: { ar: 'ملك عام. مواضع الغزوات على الخريطة من عندنا، تقريبية.', en: 'Public domain. Where each battle is pinned is our own, approximate.' }, uses: [USE.battles],
   },
   {
-    id: 'quranic-arabic-corpus', group: 'data',
+    id: 'quranic-arabic-corpus', group: 'data', files: ['shared/data/quran/irab.js', 'shared/data/quran/irab.d.ts'],
     title: { ar: 'المدوّنة القرآنية العربية', en: 'Quranic Arabic Corpus' }, author: { ar: 'Kais Dukes، جامعة ليدز', en: 'Kais Dukes, University of Leeds' },
     edition: 'التحليل الصرفي، الإصدار ٠٫٤', link: { url: 'https://corpus.quran.com', label: 'corpus.quran.com' },
     licence: { ar: 'GNU GPL، مع إبقاء حقوق النشر والرابط دون تغيير.', en: 'GNU GPL, with the copyright notice and link kept unchanged.' },
     uses: [USE.words, { ar: 'الجذور في الأشجار', en: 'roots in the trees', href: '/quran/branches' }, USE.irab, USE.meaning, USE.irabQuiz],
   },
   {
-    id: 'quranic-treebank', group: 'data',
+    id: 'quranic-treebank', group: 'data', files: ['shared/data/quran/irab.js', 'shared/data/quran/irab.d.ts'],
     title: { ar: 'الشجرة النحوية للقرآن', en: 'The Quranic Treebank' }, author: { ar: 'NoorBayan، على المدوّنة القرآنية', en: 'NoorBayan, built on the Quranic Arabic Corpus' },
     edition: 'العلاقات النحوية بالعربية، من ملف الموسوعة القرآنية', link: { url: 'https://github.com/NoorBayan/Quranic', label: 'NoorBayan/Quranic' },
     licence: { ar: 'بترخيص MIT. نأخذ منه موقع كل كلمة من الإعراب (خبر، فاعل، صفة…) والكلمة التي تتعلق بها.', en: 'MIT licensed. We take each word’s grammatical role (khabar, fa‘il, sifa…) and the word it attaches to.' },
     uses: [USE.irab, USE.irabQuiz],
   },
   {
-    id: 'quran-qcf4', group: 'data',
+    id: 'quran-qcf4', group: 'data', files: ['shared/data/quran/mushaf/'],
     title: { ar: 'أسطر صفحات مصحف المدينة ١٤٤١هـ', en: 'Line layout of the 1441 Madinah mushaf' },
     link: { url: 'https://www.npmjs.com/package/quran-qcf4', label: 'quran-qcf4' },
     licence: { ar: 'بيانات الأسطر بترخيص MIT. لا نستعمل خطوط الصفحات التي فيه.', en: 'The line data is MIT licensed. We do not use its page fonts.' },
@@ -467,14 +485,14 @@ export const SOURCES: Source[] = [
   },
   // Fonts
   {
-    id: 'kfgqpc-font', group: 'fonts',
+    id: 'kfgqpc-font', group: 'fonts', files: ['mobile/assets/fonts/UthmanicHafs1Ver18.ttf', 'public/fonts/UthmanicHafs1Ver18.ttf'],
     title: { ar: 'خط حفص العثماني، الإصدار ١٨', en: 'KFGQPC HAFS Uthmanic Script, version 18' }, author: { ar: 'مجمع الملك فهد لطباعة المصحف الشريف', en: 'King Fahd Glorious Quran Printing Complex' },
     link: { url: 'https://qurancomplex.gov.sa/en/techquran/dev/', label: 'qurancomplex.gov.sa' },
     licence: { ar: 'رخصة المجمع: الاستعمال والنسخ والتوزيع مجانًا، دون بيع أو تعديل.', en: 'The Complex’s licence: free to use, copy and distribute, not to sell or change.' },
     uses: [{ ar: 'كل نص قرآني', en: 'all Quran text' }],
   },
   {
-    id: 'amiri', group: 'fonts',
+    id: 'amiri', group: 'fonts', files: ['mobile/assets/fonts/Amiri-Regular.ttf', 'mobile/assets/fonts/Amiri-Bold.ttf'],
     title: { ar: 'خط أميري', en: 'Amiri' }, author: { ar: 'خالد حسني', en: 'Khaled Hosny' },
     link: { url: 'https://github.com/aliftype/amiri', label: 'aliftype/amiri' },
     licence: { ar: 'SIL Open Font License 1.1', en: 'SIL Open Font License 1.1' }, uses: [USE.everywhere],

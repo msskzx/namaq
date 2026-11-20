@@ -62,6 +62,7 @@ const questions = Array.from({ length: 5 }, (_, index) => ({
   ],
   correctAnswer: 'right',
   choiceDetails: {},
+  sources: undefined as ReturnType<typeof referenceSource>[] | undefined,
   evidence: { reference: null as typeof reference | null },
 }));
 

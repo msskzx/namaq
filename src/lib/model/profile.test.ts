@@ -114,7 +114,8 @@ describe('profilesFromModel on the al-Zubayr entry', () => {
   });
 
   it('names each of the four wives as a catalog person', () => {
-    const spouses = of('MARRIED').map((m) => m.object);
+    // Umm Khalid's own entry (v6 #98) states her marriage too, so she comes from two units: count each wife once.
+    const spouses = [...new Set(of('MARRIED').map((m) => m.object))];
     expect(spouses.sort()).toEqual([
       'asma-bint-abi-bakr',
       'atikah-bint-zayd',

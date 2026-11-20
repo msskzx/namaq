@@ -16,6 +16,8 @@ import Segmented from '@/components/common/Segmented';
 import Folded from '@/components/common/Folded';
 import Pickable from '@/components/common/Pickable';
 import Chip from '@/components/common/Chip';
+import LitAyat from '@/components/quran/text/LitAyat';
+import QuranWords from '@/components/quran/text/QuranWords';
 
 // The reader's neutral band (Mushaf.module.css .marked), seen on a card in both themes.
 const LIT = 'bg-[var(--home-band-mark)]';
@@ -42,8 +44,8 @@ export default function BalaghaPanel({ ayah, data }: { ayah: string; data: Balag
   const span: [number, number][] = shown === 'itqan' ? itqan[paragraph]?.words ?? [] : kashshafWords ? [kashshafWords] : [];
   return (
     <>
-      <Card as="p" className="block shrink-0 px-3.5 py-2.5 font-quran text-2xl leading-[2]">
-        {words.map((word, i) => <span key={i} className={span.some(([from, to]) => i >= from && i <= to) ? PICKED : undefined}>{`${i ? ' ' : ''}${word}`}</span>)}
+      <Card className="block shrink-0 px-3.5 py-2.5">
+        <LitAyat ayat={[{ words, lit: span }]} />
       </Card>
       <Segmented tabs label="الكتاب" className="shrink-0 self-start"
         options={(Object.keys(BOOKS) as Book[]).map(book => ({ key: book, label: BOOKS[book], current: shown === book, onClick: () => setShown(book) }))} />
@@ -53,7 +55,7 @@ export default function BalaghaPanel({ ayah, data }: { ayah: string; data: Balag
           <Pickable picked={paragraph === i} onPick={() => setParagraph(i)}>
           <p className="text-sm leading-6 text-[var(--home-muted)]">{item.heading ? `«${item.heading}» · ${item.kind}` : item.kind}</p>
           <p className="text-[1.125rem] leading-[1.9]">
-            {tafsirRuns(item.text).map((run, j) => (run.quran ? <span key={j} className="font-quran text-[var(--home-accent)]">{run.text}</span> : run.text))}
+            {tafsirRuns(item.text).map((run, j) => (run.quran ? <QuranWords key={j} className="text-[var(--home-accent)]">{run.text}</QuranWords> : run.text))}
           </p>
           </Pickable>
           {/* A quote that names no ayah: every ayah it fits, listed, none chosen for him (owner, 2026-11-18). */}
@@ -78,7 +80,7 @@ export default function BalaghaPanel({ ayah, data }: { ayah: string; data: Balag
         <Card className="block shrink-0 px-3.5 py-2.5">
           <p className="whitespace-pre-line text-[1.125rem] leading-[1.9]">
             {kashshafRuns(passage).map((run, i) => {
-              const text = run.quran ? <span className="font-quran text-[var(--home-accent)]">{run.text}</span> : run.text;
+              const text = run.quran ? <QuranWords className="text-[var(--home-accent)]">{run.text}</QuranWords> : run.text;
               if (run.lit === null) return <span key={i}>{text}</span>;
               const at = run.lit;
               return (

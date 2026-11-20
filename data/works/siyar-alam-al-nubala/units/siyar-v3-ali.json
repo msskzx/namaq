@@ -437,6 +437,22 @@
       "layer": "MAIN",
       "exact": "فاطمة بنت رسول الله صلى الله عليه وسلم",
       "prefix": "قلت لأمي اكفي "
+    },
+    {
+      "id": "sp_l_ten_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "237",
+      "layer": "MAIN",
+      "exact": "وعن سعيد بن زيد أن رسول الله صلى الله عليه وسلم قال"
+    },
+    {
+      "id": "sp_l_ten",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 3,
+      "page": "237",
+      "layer": "MAIN",
+      "exact": "وعليه أبو بكر، وعمر، وعثمان، وعلي. وذكر بقية العشرة"
     }
   ],
   "reports": [
@@ -613,6 +629,19 @@
         "mention": "m_l_aisha"
       },
       "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_l_ten",
+      "unit": "siyar-v3-ali",
+      "ordinal": 14,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_l_ten_frame"
+      ],
+      "origin": {
+        "mention": "m_l_ten_s"
+      },
+      "chainState": "DEFERRED"
     }
   ],
   "statements": [
@@ -744,6 +773,14 @@
       "report": "r_l_zawj",
       "spans": [
         "sp_l_zawj"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_l_ten",
+      "report": "r_l_ten",
+      "spans": [
+        "sp_l_ten"
       ],
       "role": "TRANSMITTED"
     }
@@ -944,6 +981,41 @@
       "exact": "فاطمة",
       "occurrence": 1,
       "role": "REFERENT"
+    },
+    {
+      "id": "m_l_ten_s",
+      "parent": "sp_l_ten_frame",
+      "exact": "سعيد بن زيد",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_l_ten_ab",
+      "parent": "sp_l_ten",
+      "exact": "أبو بكر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_l_ten_um",
+      "parent": "sp_l_ten",
+      "exact": "عمر",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_l_ten_uth",
+      "parent": "sp_l_ten",
+      "exact": "عثمان",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_l_ten_al",
+      "parent": "sp_l_ten",
+      "exact": "علي",
+      "occurrence": 2,
+      "role": "SUBJECT"
     }
   ],
   "identifications": [
@@ -1146,6 +1218,66 @@
       "basis": [
         {
           "span": "sp_l_fatimah_name",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_ten_s",
+      "mention": "m_l_ten_s",
+      "agent": "saeed-ibn-zaid",
+      "basis": [
+        {
+          "span": "siyar-v4-6-saeed-ibn-zaid#sp_sz_heading",
+          "role": "RIJAL_ENTRY"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_ten_ab",
+      "mention": "m_l_ten_ab",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "siyar-v3-abu-bakr#sp_ab_heading",
+          "role": "RIJAL_ENTRY"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_ten_um",
+      "mention": "m_l_ten_um",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "siyar-v3-umar#sp_u_heading",
+          "role": "RIJAL_ENTRY"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_ten_uth",
+      "mention": "m_l_ten_uth",
+      "agent": "uthman-ibn-affan",
+      "basis": [
+        {
+          "span": "siyar-v3-uthman#sp_o_heading",
+          "role": "RIJAL_ENTRY"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_l_ten_al",
+      "mention": "m_l_ten_al",
+      "agent": "ali-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "sp_l_heading",
           "role": "SAME_WORK_EXPLICIT"
         }
       ],
@@ -1458,6 +1590,66 @@
       },
       "restsOn": [
         "st_l_zawj"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_ten_ab",
+      "subject": "m_l_ten_ab",
+      "predicate": "title",
+      "value": {
+        "classified": "the-ten-promised-paradise",
+        "spans": [
+          "sp_l_ten"
+        ]
+      },
+      "restsOn": [
+        "st_l_ten"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_ten_um",
+      "subject": "m_l_ten_um",
+      "predicate": "title",
+      "value": {
+        "classified": "the-ten-promised-paradise",
+        "spans": [
+          "sp_l_ten"
+        ]
+      },
+      "restsOn": [
+        "st_l_ten"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_ten_uth",
+      "subject": "m_l_ten_uth",
+      "predicate": "title",
+      "value": {
+        "classified": "the-ten-promised-paradise",
+        "spans": [
+          "sp_l_ten"
+        ]
+      },
+      "restsOn": [
+        "st_l_ten"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_l_ten_al",
+      "subject": "m_l_ten_al",
+      "predicate": "title",
+      "value": {
+        "classified": "the-ten-promised-paradise",
+        "spans": [
+          "sp_l_ten"
+        ]
+      },
+      "restsOn": [
+        "st_l_ten"
       ],
       "status": "PROPOSED"
     }

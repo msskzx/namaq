@@ -17,9 +17,15 @@ type Fixtures = {
   seed: Seed;
   /** Uncaught errors and console errors; each test fails if any are left at the end. */
   errors: string[];
+  /** Whether the end-of-test check for a button inside a button runs (on by default). */
+  nested: boolean;
+  noNestedButtons: void;
 };
 
 const IGNORED = /Download the React DevTools|favicon/;
+const BUTTON = ':is(button, [role="button"])';
+/** A button that sits inside another; exported for its own test. */
+export const NESTED = `${BUTTON} ${BUTTON}`;
 
 export const test = base.extend<Fixtures>({
   seed: [{}, { option: true }],
@@ -31,6 +37,18 @@ export const test = base.extend<Fixtures>({
     });
     await use(errors);
     expect(errors, 'errors on the page').toEqual([]);
+  }, { auto: true }],
+  /**
+   * No button inside another button on the page a test ends on (guard proposal 20, R0055): a pressable card that holds a
+   * button disables it on the web and hides it from screen readers on phones. Set `nested` to false where a test ends on
+   * a page closed or gone.
+   */
+  nested: [true, { option: true }],
+  noNestedButtons: [async ({ page, nested }, use) => {
+    await use();
+    if (!nested || page.isClosed()) return;
+    const inner = await page.locator(NESTED).evaluateAll(found => found.map(element => element.getAttribute('aria-label') ?? element.textContent?.slice(0, 40) ?? ''));
+    expect(inner, 'buttons inside another button').toEqual([]);
   }, { auto: true }],
   page: async ({ page, seed }, use) => {
     const values = { 'tour-seen': true, 'interests-asked': '1', ...seed };
@@ -67,6 +85,16 @@ export async function longPress(page: Page, target: Locator, ms = 900) {
 
 /** The tab bar at the bottom (mobile/src/ui/TabBar.tsx). */
 export const tab = (page: Page, name: 'القرآن' | 'الحديث' | 'الرئيسية' | 'التراجم' | 'الاختبارات') => page.getByRole('tab', { name, exact: true });
+
+/**
+ * Reciting hides the mushaf's top bar and the tab bar, whichever way it began (guard proposal 18; Reader.tsx hides them in
+ * one place). A hidden bar slides off the screen, so its buttons leave the viewport.
+ */
+export async function reciteBarsHidden(page: Page) {
+  await expect(page.getByRole('button', { name: 'أظهر الآية التالية' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'فهرس السور والبحث' })).not.toBeInViewport();
+  await expect(tab(page, 'القرآن')).not.toBeInViewport();
+}
 
 /** What the app keeps under a localStorage key, parsed. */
 export const stored = <T = unknown>(page: Page, key: string) =>

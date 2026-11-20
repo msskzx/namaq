@@ -16,7 +16,7 @@ export default function LitAyat({ ayat, className }: { ayat: { words: string[]; 
       {ayat.map((ayah, k) => ayah.words.map((word, i) => (
         <Fragment key={`${k}/${i}`}>
           {k || i ? ' ' : ''}
-          {ayah.lit.some(([from, to]) => i >= from && i <= to) ? <mark className={`rounded-sm text-inherit ${BAND}`}><AyahWords>{word}</AyahWords></mark> : <AyahWords>{word}</AyahWords>}
+          {ayah.lit.some(([from, to]) => i >= from && i <= to) ? <mark className={`text-inherit ${BAND}`}><AyahWords>{word}</AyahWords></mark> : <AyahWords>{word}</AyahWords>}
         </Fragment>
       )).concat(ayah.number !== undefined ? [<AyahWords key={`${k}#`}>{` ${num(ayah.number)}`}</AyahWords>] : []))}
     </AyahFlow>

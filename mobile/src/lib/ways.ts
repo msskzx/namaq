@@ -67,6 +67,8 @@ export function followWay(way: CardWay, target?: CompareTarget) {
 
 /** Opens a book in the book reader at the passage on an ayah, lit (a reader sheet's book button). */
 export const openBookAt = (id: string, ayah: string) => toTab({ pathname: '/book', params: { id, ayah } });
+/** Opens a book at a printed page, «part:page» (a branch card's citation of it). */
+export const openBookPage = (id: string, printed: string) => toTab({ pathname: '/book', params: { id, printed } });
 
 /** Opens the utilities on one of them: the qibla, the prayer times, the adhkar. */
 export const openUtility = (view: UtilityView) => { utilityView.set(view); toTab('/utilities'); };

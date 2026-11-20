@@ -9,7 +9,7 @@ type Tag = 'div' | 'li' | 'article' | 'section' | 'aside' | 'fieldset' | 'p' | '
  * the one to look at first, `faded` one set aside. `className` is for its place and its inner layout (padding, flex, text),
  * never its frame or colour.
  */
-export default function Card({ as: Element = 'div', href, spine = false, picked = false, dashed = false, faded = false, outline, className = '', ref, children, style, ...rest }: HTMLAttributes<HTMLElement> & {
+export default function Card({ as: Element = 'div', href, spine = false, picked = false, dashed = false, faded = false, node = false, outline, className = '', ref, children, style, ...rest }: HTMLAttributes<HTMLElement> & {
   as?: Tag;
   /** A border in this colour, as the app's Card `outline` (a kind of tie on the ties ring, the answer in green). */
   outline?: string;
@@ -18,6 +18,8 @@ export default function Card({ as: Element = 'div', href, spine = false, picked 
   picked?: boolean;
   dashed?: boolean;
   faded?: boolean;
+  /** A box of a drawing (an isnad's narrator, a book in «من أخرجه»), as the app's Card `node`: keeps its frame inside a card. */
+  node?: boolean;
   ref?: Ref<HTMLElement>;
   children?: ReactNode;
 }) {
@@ -25,8 +27,8 @@ export default function Card({ as: Element = 'div', href, spine = false, picked 
   if (outline) style = { ...style, borderColor: outline };
   // `data-card`: a card inside a card draws flat (globals.css), as the app's Card does: no card in a card (owner, 2026-11-19).
   const press = 'block cursor-pointer text-start transition hover:border-[var(--home-accent)]';
-  if (href) return <Link href={href} ref={ref as Ref<HTMLAnchorElement>} data-card="" {...rest} style={style} className={`${press} ${look} ${className}`}>{children}</Link>;
-  if (Element === 'button') return <button type="button" ref={ref as Ref<HTMLButtonElement>} data-card="" {...rest} style={style} className={`${press} ${look} ${className}`}>{children}</button>;
+  if (href) return <Link href={href} ref={ref as Ref<HTMLAnchorElement>} data-card="" {...(node ? { "data-node": "" } : {})} {...rest} style={style} className={`${press} ${look} ${className}`}>{children}</Link>;
+  if (Element === 'button') return <button type="button" ref={ref as Ref<HTMLButtonElement>} data-card="" {...(node ? { "data-node": "" } : {})} {...rest} style={style} className={`${press} ${look} ${className}`}>{children}</button>;
   const Box = Element as 'div';
-  return <Box ref={ref as Ref<HTMLDivElement>} data-card="" {...rest} style={style} className={`${look} ${className}`}>{children}</Box>;
+  return <Box ref={ref as Ref<HTMLDivElement>} data-card="" {...(node ? { "data-node": "" } : {})} {...rest} style={style} className={`${look} ${className}`}>{children}</Box>;
 }

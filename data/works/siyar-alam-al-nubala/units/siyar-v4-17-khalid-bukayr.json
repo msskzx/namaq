@@ -1,0 +1,390 @@
+{
+  "unit": {
+    "id": "siyar-v4-17-khalid-bukayr",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٧"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_kb_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "186",
+      "layer": "MAIN",
+      "exact": "١٧ - خَالِدُ بنُ البُكَيْرِ بنِ عَبْدِ يَا لَيْلَ بنِ نَاشِبٍ اللَّيْثِيُّ"
+    },
+    {
+      "id": "sp_kb_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "186",
+      "layer": "MAIN",
+      "exact": "خَالِدُ بنُ البُكَيْرِ بنِ عَبْدِ يَا لَيْلَ بنِ نَاشِبٍ اللَّيْثِيُّ",
+      "prefix": "١٧ - "
+    },
+    {
+      "id": "sp_kb_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "186",
+      "layer": "MAIN",
+      "exact": "خَالِدُ بنُ",
+      "prefix": "١٧ - "
+    },
+    {
+      "id": "sp_kb_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "186",
+      "layer": "MAIN",
+      "exact": "البُكَيْرِ بنِ عَبْدِ يَا لَيْلَ",
+      "prefix": "خَالِدُ بنُ "
+    },
+    {
+      "id": "sp_kb_saad_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "186",
+      "layer": "MAIN",
+      "exact": "قَالَ ابْنُ سَعْدٍ:",
+      "suffix": " آخَى رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- بَيْنَهُ وَبَيْنَ زَيْدِ"
+    },
+    {
+      "id": "sp_kb_life",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "186",
+      "layer": "MAIN",
+      "exact": "شَهِدَ خَالِدٌ بَدْراً، وَأُحُداً، وَقُتِلَ يَوْمَ الرَّجِيْعِ (٢) فِي صَفَرٍ سَنَةَ أَرْبَعٍ، وَلَهُ أَرْبَعٌ وَثَلاَثُوْنَ سَنَةً"
+    },
+    {
+      "id": "sp_kb_badr_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "186",
+      "layer": "MAIN",
+      "exact": "بَدْراً، وَأُحُداً",
+      "prefix": "شَهِدَ خَالِدٌ "
+    },
+    {
+      "id": "sp_kb_raji_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "186",
+      "layer": "MAIN",
+      "exact": "يَوْمَ الرَّجِيْعِ",
+      "prefix": "وَقُتِلَ "
+    },
+    {
+      "id": "sp_kb_month",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "186",
+      "layer": "MAIN",
+      "exact": "صَفَرٍ",
+      "prefix": "الرَّجِيْعِ (٢) فِي "
+    },
+    {
+      "id": "sp_kb_year",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "186",
+      "layer": "MAIN",
+      "exact": "سَنَةَ أَرْبَعٍ",
+      "prefix": "فِي صَفَرٍ "
+    },
+    {
+      "id": "sp_kb_age",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "186",
+      "layer": "MAIN",
+      "exact": "وَلَهُ أَرْبَعٌ وَثَلاَثُوْنَ سَنَةً",
+      "prefix": "سَنَةَ أَرْبَعٍ، "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_kb0",
+      "unit": "siyar-v4-17-khalid-bukayr",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_kb_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_kb_saad",
+      "unit": "siyar-v4-17-khalid-bukayr",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_kb_saad_frame"
+      ],
+      "origin": {
+        "mention": "m_kb_saad"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_kb_name",
+      "report": "r_kb0",
+      "spans": [
+        "sp_kb_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_kb_life",
+      "report": "r_kb_saad",
+      "spans": [
+        "sp_kb_life"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_kb",
+      "parent": "sp_kb_name",
+      "exact": "خَالِدُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_kb_father",
+      "parent": "sp_kb_name",
+      "exact": "البُكَيْرِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_kb_saad",
+      "parent": "sp_kb_saad_frame",
+      "exact": "ابْنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_kb_l",
+      "parent": "sp_kb_life",
+      "exact": "خَالِدٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_kb_badr",
+      "parent": "sp_kb_life",
+      "exact": "بَدْراً",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_kb_uhud",
+      "parent": "sp_kb_life",
+      "exact": "أُحُداً",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_kb_raji",
+      "parent": "sp_kb_life",
+      "exact": "الرَّجِيْعِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_kb",
+      "mention": "m_kb",
+      "agent": "khalid-ibn-al-bukayr",
+      "basis": [
+        {
+          "span": "sp_kb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_kb_l",
+      "mention": "m_kb_l",
+      "agent": "khalid-ibn-al-bukayr",
+      "basis": [
+        {
+          "span": "sp_kb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_kb_father",
+      "mention": "m_kb_father",
+      "agent": "al-bukayr-ibn-abd-yalil",
+      "basis": [
+        {
+          "span": "sp_kb_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_kb_badr",
+      "mention": "m_kb_badr",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_kb_badr_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_kb_uhud",
+      "mention": "m_kb_uhud",
+      "event": "uhud",
+      "basis": [
+        {
+          "span": "sp_kb_badr_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_kb_name",
+      "subject": "m_kb",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_kb_name"
+        ]
+      },
+      "restsOn": [
+        "st_kb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kb_sex",
+      "subject": "m_kb",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_kb_sex"
+        ]
+      },
+      "restsOn": [
+        "st_kb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kb_father",
+      "subject": "m_kb",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_kb_father"
+      },
+      "restsOn": [
+        "st_kb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kb_badr",
+      "subject": "m_kb_l",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_kb_badr"
+      },
+      "restsOn": [
+        "st_kb_life"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kb_uhud",
+      "subject": "m_kb_l",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_kb_uhud"
+      },
+      "restsOn": [
+        "st_kb_life"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kb_raji",
+      "subject": "m_kb_l",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_kb_raji"
+      },
+      "restsOn": [
+        "st_kb_life"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kb_year",
+      "subject": "m_kb_l",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 4,
+        "spans": [
+          "sp_kb_year"
+        ]
+      },
+      "restsOn": [
+        "st_kb_life"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kb_month",
+      "subject": "m_kb_l",
+      "predicate": "died.month",
+      "value": {
+        "parsed": 2,
+        "spans": [
+          "sp_kb_month"
+        ]
+      },
+      "restsOn": [
+        "st_kb_life"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_kb_age",
+      "subject": "m_kb_l",
+      "predicate": "died.age",
+      "value": {
+        "parsed": 34,
+        "spans": [
+          "sp_kb_age"
+        ]
+      },
+      "restsOn": [
+        "st_kb_life"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

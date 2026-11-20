@@ -80,10 +80,15 @@ export default function FloatingBar({ id, label, Icon, screen, clear, start, pal
       scheduleOnRN(keep, cx.value, cy.value, folded);
     })
     .onFinalize(() => { dragging.value = false; });
-  const placed = useAnimatedStyle(() => box());
+  // Moved by a transform, not by top and left: a transform is drawn on the UI thread every frame, while top and left
+  // are layout and wait for a layout pass, so the bar only jumped to the finger once it was lifted (owner, 2026-11-19).
+  const placed = useAnimatedStyle(() => {
+    const at = box();
+    return { transform: [{ translateX: at.left }, { translateY: at.top }] };
+  });
   return (
     <GestureDetector gesture={pan}>
-      <Animated.View style={[{ position: 'absolute', maxWidth: width - SIDE * 2 }, placed]}
+      <Animated.View style={[{ position: 'absolute', left: 0, top: 0, maxWidth: width - SIDE * 2 }, placed]}
         onLayout={event => { w.value = event.nativeEvent.layout.width; h.value = event.nativeEvent.layout.height; }}>
         {folded ? (
           <GlassBar label={label} style={styles.circle} plain>

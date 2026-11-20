@@ -32,7 +32,7 @@ export const placeLabel = (place: { year?: number; before?: boolean }) => (place
 /** A row's page on the website: a battle's or a story's; none for an event or the person's own fact. */
 export const itemHref = (item: LifeItem) => (item.open ? `/${item.open.to === 'battle' ? 'battles' : 'stories'}/${item.open.slug}` : undefined);
 
-export const lifeHref = (slugs: string[]) => `/people/${slugs[0]}/life${slugs.length > 1 ? `?with=${slugs.slice(1).join(',')}` : ''}`;
+export const lifeHref = (slugs: string[]) => `/life${slugs.length ? `?slugs=${slugs.join(',')}` : ''}`;
 
 /** The sentences that place the person in a row, with their pages, and where the sources give its year otherwise. */
 export function LifeSheet({ item, onClose }: { item?: LifeItem; onClose: () => void }) {

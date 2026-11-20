@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import type { DrawingsView, RingTie } from '@/lib/tarajim';
 import Segmented from '@/components/common/Segmented';
 import Button from '@/components/common/Button';
-import { NasabTree, nasabHref, TieSays, TiesRing, tiesHref } from './TarajimParts';
+import { betweenHref, NasabTree, nasabHref, TieSays, TiesRing, tiesHref } from './TarajimParts';
 import LifeTimeline, { lifeHref } from './LifeTimeline';
 
 // What the person page draws for someone whose Siyar entry is converted (owner 2026-11-19: "the profile page does not
@@ -68,6 +68,7 @@ export function TiesSection({ view }: { view: DrawingsView }) {
       {shown && <TieSays tie={shown} />}
       <div className="flex flex-wrap gap-2">
         <Button size="sm" href={tiesHref(view.slug)}>{she ? 'تنقّل في صلاتها' : 'تنقّل في صلاته'}</Button>
+        <Button size="sm" href={betweenHref([view.slug])}>{she ? 'بينها وبين…' : 'بينه وبين…'}</Button>
       </div>
     </Section>
   );

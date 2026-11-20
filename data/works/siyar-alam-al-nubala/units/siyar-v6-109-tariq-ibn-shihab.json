@@ -1,0 +1,462 @@
+{
+  "unit": {
+    "id": "siyar-v6-109-tariq-ibn-shihab",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٠٩"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ts_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "١٠٩ - طَارِقُ بنُ شِهَابِ بنِ عَبْدِ شَمْسٍ بنِ سَلَمَةَ الأَحْمَسِيُّ"
+    },
+    {
+      "id": "sp_ts_n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "طَارِقُ بنُ شِهَابِ بنِ عَبْدِ شَمْسٍ بنِ سَلَمَةَ الأَحْمَسِيُّ",
+      "prefix": "١٠٩ - "
+    },
+    {
+      "id": "sp_ts_n2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "البَجَلِيُّ، الكُوْفِيُّ"
+    },
+    {
+      "id": "sp_ts_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "طَارِقُ بنُ",
+      "prefix": "١٠٩ - "
+    },
+    {
+      "id": "sp_ts_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "486",
+      "layer": "MAIN",
+      "exact": "شِهَابِ بنِ عَبْدِ شَمْسٍ",
+      "prefix": "١٠٩ - طَارِقُ بنُ "
+    },
+    {
+      "id": "sp_ts_saw",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "487",
+      "layer": "MAIN",
+      "exact": "رَأَى النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - وَغَزَا فِي خِلاَفَةِ أَبِي بَكْرٍ غَيْرَ مَرَّةٍ، وَأَرْسَلَ عَنِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ -"
+    },
+    {
+      "id": "sp_ts_own_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "487",
+      "layer": "MAIN",
+      "exact": "قَالَ قَيْسُ بنُ مُسْلِمٍ: سَمِعْتُهُ يَقُوْلُ:"
+    },
+    {
+      "id": "sp_ts_own",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "487",
+      "layer": "MAIN",
+      "exact": "رَأَيتُ رَسُوْلَ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - وَغَزَوتُ فِي خِلاَفَةِ أَبِي بَكْرٍ وَعُمَرَ بِضْعاً وَثَلاَثِيْنَ -أَوْ قَالَ: بِضْعاً وَأَرْبَعِيْنَ - مِنْ بَيْنِ غَزْوَةٍ وَسَرِيَّةٍ"
+    },
+    {
+      "id": "sp_ts_d83",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "487",
+      "layer": "MAIN",
+      "exact": "مَاتَ: فِي سَنَةِ ثَلاَثٍ وَثَمَانِيْنَ"
+    },
+    {
+      "id": "sp_ts_y83",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "487",
+      "layer": "MAIN",
+      "exact": "سَنَةِ ثَلاَثٍ وَثَمَانِيْنَ",
+      "prefix": "مَاتَ: فِي "
+    },
+    {
+      "id": "sp_ts_d82",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "487",
+      "layer": "MAIN",
+      "exact": "وَقِيْلَ: بَلْ تُوُفِّيَ سَنَةَ اثْنَتَيْنِ وَثَمَانِيْنَ"
+    },
+    {
+      "id": "sp_ts_y82",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "487",
+      "layer": "MAIN",
+      "exact": "سَنَةَ اثْنَتَيْنِ وَثَمَانِيْنَ",
+      "prefix": "تُوُفِّيَ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ts0",
+      "unit": "siyar-v6-109-tariq-ibn-shihab",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ts_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ts_own",
+      "unit": "siyar-v6-109-tariq-ibn-shihab",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ts_own_frame"
+      ],
+      "origin": {
+        "mention": "m_ts_own_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ts_d82",
+      "unit": "siyar-v6-109-tariq-ibn-shihab",
+      "ordinal": 3,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_ts_d82_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ts_name",
+      "report": "r_ts0",
+      "spans": [
+        "sp_ts_n1",
+        "sp_ts_n2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ts_saw",
+      "report": "r_ts0",
+      "spans": [
+        "sp_ts_saw"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ts_own",
+      "report": "r_ts_own",
+      "spans": [
+        "sp_ts_own"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ts_d83",
+      "report": "r_ts0",
+      "spans": [
+        "sp_ts_d83"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ts_d82",
+      "report": "r_ts_d82",
+      "spans": [
+        "sp_ts_d82"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ts",
+      "parent": "sp_ts_n1",
+      "exact": "طَارِقُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ts_father",
+      "parent": "sp_ts_n1",
+      "exact": "شِهَابِ بنِ عَبْدِ شَمْسٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ts_saw",
+      "parent": "sp_ts_saw",
+      "exact": "رَأَى",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ts_comp_saw_prophet",
+      "parent": "sp_ts_saw",
+      "exact": "النَّبِيَّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ts_own_by",
+      "parent": "sp_ts_n1",
+      "exact": "طَارِقُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ts_own",
+      "parent": "sp_ts_own",
+      "exact": "رَأَيتُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ts_comp_own_prophet",
+      "parent": "sp_ts_own",
+      "exact": "رَسُوْلَ اللهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ts_d",
+      "parent": "sp_ts_d83",
+      "exact": "مَاتَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ts_d82_by",
+      "parent": "sp_ts_d82",
+      "exact": "وَقِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ts_d2",
+      "parent": "sp_ts_d82",
+      "exact": "تُوُفِّيَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ts",
+      "mention": "m_ts",
+      "agent": "tariq-ibn-shihab",
+      "basis": [
+        {
+          "span": "sp_ts_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ts_father",
+      "mention": "m_ts_father",
+      "agent": "shihab-ibn-abd-shams-al-ahmasi",
+      "basis": [
+        {
+          "span": "sp_ts_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ts_saw",
+      "mention": "m_ts_saw",
+      "agent": "tariq-ibn-shihab",
+      "basis": [
+        {
+          "span": "sp_ts_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ts_own_by",
+      "mention": "m_ts_own_by",
+      "agent": "tariq-ibn-shihab",
+      "basis": [
+        {
+          "span": "sp_ts_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ts_own",
+      "mention": "m_ts_own",
+      "agent": "tariq-ibn-shihab",
+      "basis": [
+        {
+          "span": "sp_ts_n1",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ts_d",
+      "mention": "m_ts_d",
+      "agent": "tariq-ibn-shihab",
+      "basis": [
+        {
+          "span": "sp_ts_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ts_d2",
+      "mention": "m_ts_d2",
+      "agent": "tariq-ibn-shihab",
+      "basis": [
+        {
+          "span": "sp_ts_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ts_name",
+      "subject": "m_ts",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ts_n1",
+          "sp_ts_n2"
+        ]
+      },
+      "restsOn": [
+        "st_ts_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ts_sex",
+      "subject": "m_ts",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ts_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ts_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ts_father",
+      "subject": "m_ts",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ts_father"
+      },
+      "restsOn": [
+        "st_ts_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ts_comp_saw",
+      "subject": "m_ts_saw",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_ts_comp_saw_prophet"
+      },
+      "restsOn": [
+        "st_ts_saw"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ts_comp_own",
+      "subject": "m_ts_own",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_ts_comp_own_prophet"
+      },
+      "restsOn": [
+        "st_ts_own"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ts_v_ghazw",
+      "subject": "m_ts_own",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ts_own"
+        ]
+      },
+      "restsOn": [
+        "st_ts_own"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ts_d83",
+      "subject": "m_ts_d",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 83,
+        "spans": [
+          "sp_ts_y83"
+        ]
+      },
+      "restsOn": [
+        "st_ts_d83"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ts_d82",
+      "subject": "m_ts_d2",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 82,
+        "spans": [
+          "sp_ts_y82"
+        ]
+      },
+      "restsOn": [
+        "st_ts_d82"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

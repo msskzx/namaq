@@ -6,12 +6,15 @@ import { TAGS, type Group } from '@shared/quran/mutashabih/types';
 import Sheet from '@/ui/Sheet';
 import type { Palette } from '@/lib/theme';
 import DifferenceWords from '@/components/quran/text/DifferenceWords';
+import OpenInBook from '@/components/OpenInBook';
+import { citationInBook } from '@shared/readerBooks';
 
 const arabicDigits = (text: string) => text.replace(/\d/g, digit => '٠١٢٣٤٥٦٧٨٩'[Number(digit)]);
 
 /**
  * The website's details under a tree (src/app/quran/branches/GroupDetails.tsx): the kinds of difference the books name,
- * each with its example words, then each book's citation with its quote and a link to the page.
+ * each with its example words, then each book's citation with its quote, a link to the page and, for a book the reader holds, the
+ * book itself at that page.
  * `group` is already cut to the ayat shown (evidenceGroup).
  */
 export default function EvidenceSheet({ group, onClose, palette }: { group: Group | null; onClose: () => void; palette: Palette }) {
@@ -33,7 +36,9 @@ export default function EvidenceSheet({ group, onClose, palette }: { group: Grou
             );
           })}
         </View>}
-        {group.citations.map(citation => (
+        {group.citations.map(citation => {
+          const inBook = citationInBook(citation);
+          return (
           <View key={citation.id} style={{ gap: 4, borderTopWidth: 1, borderColor: palette.rule, paddingTop: 10 }}>
             <Text style={{ color: palette.ink, fontSize: 15, fontWeight: '600', textAlign: 'right' }}>{citation.book}</Text>
             <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>
@@ -41,11 +46,15 @@ export default function EvidenceSheet({ group, onClose, palette }: { group: Grou
               <Text style={{ writingDirection: 'ltr' }}>{arabicDigits(citation.places.join(' ↔ '))}</Text>
             </Text>
             <Text style={{ color: palette.ink, fontSize: 15, lineHeight: 24, textAlign: 'right', writingDirection: 'rtl' }}>{`«${citation.quote}»`}</Text>
-            <ExternalLink url={citation.url} color={palette.accent} accessibilityLabel={`افتح ${citation.book} ${arabicDigits(citation.locator)}`} style={{ textAlign: 'right', paddingVertical: 4 }}>
-              {arabicDigits(citation.locator)}
-            </ExternalLink>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+              <ExternalLink url={citation.url} color={palette.accent} accessibilityLabel={`افتح ${citation.book} ${arabicDigits(citation.locator)}`} style={{ textAlign: 'right', paddingVertical: 4 }}>
+                {arabicDigits(citation.locator)}
+              </ExternalLink>
+              {inBook && <OpenInBook book={inBook.book} printed={inBook.printed} onClose={onClose} palette={palette} />}
+            </View>
           </View>
-        ))}
+          );
+        })}
       </ScrollView>}
     </Sheet>
   );

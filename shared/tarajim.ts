@@ -20,6 +20,7 @@ export interface PageRef {
  */
 export const OTHER_WORKS: Record<string, { book: string; author: string; source: string }> = {
   'zad-al-maad': { book: 'زاد المعاد', author: 'ابن القيم', source: 'zad-al-maad' },
+  'sunan-al-tirmidhi': { book: 'سنن الترمذي', author: 'الترمذي', source: 'sunan-tirmidhi' },
 };
 
 /** The books a list of pages comes from, the Siyar as «siyar», each once, in the order met. */
@@ -121,6 +122,11 @@ export function sayerLine(fact: PersonFact) {
   return `قاله ${fact.by.map(name => (name === PROPHET_NAME ? 'النبي ﷺ' : name.replace(/^(?:أبي|أبا)(?= )/u, 'أبو'))).join('، ')}`;
 }
 const PROPHET_NAME = 'محمد ﷺ';
+
+/** «عند فلان» under one reading among several: after «عند» a kunya is genitive («عند أبي نعيم», not «عند أبو نعيم»). */
+export function sayerAt(fact: PersonFact) {
+  return `عند ${sayer(fact).split('، ').map(name => name.replace(/^(?:أبو|أبا)(?= )/u, 'أبي')).join('، ')}`;
+}
 
 const ARABIC_DIGITS = '٠١٢٣٤٥٦٧٨٩';
 const arabic = (value: string | number) => String(value).replace(/\d/g, (d) => ARABIC_DIGITS[Number(d)]);

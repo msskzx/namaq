@@ -1,0 +1,416 @@
+{
+  "unit": {
+    "id": "tirmidhi-3747",
+    "work": "sunan-al-tirmidhi",
+    "type": "hadith",
+    "numbers": {
+      "printed": "٣٧٤٧"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_tr_isnad",
+      "edition": "tirmidhi-halabi-1395-shakir",
+      "volume": 5,
+      "page": "647",
+      "layer": "MAIN",
+      "exact": "حَدَّثَنَا قُتَيْبَةُ قَالَ: حَدَّثَنَا عَبْدُ العَزِيزِ بْنُ مُحَمَّدٍ، عَنْ عَبْدِ الرَّحْمَنِ بْنِ حُمَيْدٍ، عَنْ أَبِيهِ، عَنْ عَبْدِ الرَّحْمَنِ بْنِ عَوْفٍ"
+    },
+    {
+      "id": "sp_tr_frame",
+      "edition": "tirmidhi-halabi-1395-shakir",
+      "volume": 5,
+      "page": "647",
+      "layer": "MAIN",
+      "exact": "قَالَ: قَالَ رَسُولُ اللَّهِ ﷺ",
+      "prefix": "عَنْ عَبْدِ الرَّحْمَنِ بْنِ عَوْفٍ، "
+    },
+    {
+      "id": "sp_tr_matn",
+      "edition": "tirmidhi-halabi-1395-shakir",
+      "volume": 5,
+      "page": "647",
+      "layer": "MAIN",
+      "exact": "أَبُو بَكْرٍ فِي الجَنَّةِ، وَعُمَرُ فِي الجَنَّةِ، وَعُثْمَانُ فِي الجَنَّةِ، وَعَلِيٌّ فِي الجَنَّةِ، وَطَلْحَةُ فِي الجَنَّةِ وَالزُّبَيْرُ فِي الجَنَّةِ، وَعَبْدُ الرَّحْمَنِ بْنُ عَوْفٍ فِي الجَنَّةِ، وَسَعْدٌ فِي الجَنَّةِ، وَسَعِيدٌ فِي الجَنَّةِ، وَأَبُو عُبَيْدَةَ بْنُ الجَرَّاحِ فِي الجَنَّةِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_tr",
+      "unit": "tirmidhi-3747",
+      "ordinal": 1,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_tr_frame"
+      ],
+      "isnadSpan": "sp_tr_isnad",
+      "origin": {
+        "mention": "m_tr_p"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_tr",
+      "report": "r_tr",
+      "spans": [
+        "sp_tr_matn"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_tr_p",
+      "parent": "sp_tr_frame",
+      "exact": "رَسُولُ اللَّهِ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_tr_ab",
+      "parent": "sp_tr_matn",
+      "exact": "أَبُو بَكْرٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_tr_um",
+      "parent": "sp_tr_matn",
+      "exact": "عُمَرُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_tr_uth",
+      "parent": "sp_tr_matn",
+      "exact": "عُثْمَانُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_tr_al",
+      "parent": "sp_tr_matn",
+      "exact": "عَلِيٌّ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_tr_t",
+      "parent": "sp_tr_matn",
+      "exact": "طَلْحَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_tr_zb",
+      "parent": "sp_tr_matn",
+      "exact": "الزُّبَيْرُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_tr_aw",
+      "parent": "sp_tr_matn",
+      "exact": "عَبْدُ الرَّحْمَنِ بْنُ عَوْفٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_tr_sd",
+      "parent": "sp_tr_matn",
+      "exact": "سَعْدٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_tr_sz",
+      "parent": "sp_tr_matn",
+      "exact": "سَعِيدٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_tr_au",
+      "parent": "sp_tr_matn",
+      "exact": "أَبُو عُبَيْدَةَ بْنُ الجَرَّاحِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_tr_ab",
+      "mention": "m_tr_ab",
+      "agent": "abu-bakr-as-siddiq",
+      "basis": [
+        {
+          "span": "siyar-v3-abu-bakr#sp_ab_heading",
+          "role": "RIJAL_ENTRY"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tr_um",
+      "mention": "m_tr_um",
+      "agent": "umar-ibn-al-khattab",
+      "basis": [
+        {
+          "span": "siyar-v3-umar#sp_u_heading",
+          "role": "RIJAL_ENTRY"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tr_uth",
+      "mention": "m_tr_uth",
+      "agent": "uthman-ibn-affan",
+      "basis": [
+        {
+          "span": "siyar-v3-uthman#sp_o_heading",
+          "role": "RIJAL_ENTRY"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tr_al",
+      "mention": "m_tr_al",
+      "agent": "ali-ibn-abi-talib",
+      "basis": [
+        {
+          "span": "siyar-v3-ali#sp_l_heading",
+          "role": "RIJAL_ENTRY"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tr_t",
+      "mention": "m_tr_t",
+      "agent": "talhah-ibn-ubaydullah",
+      "basis": [
+        {
+          "span": "siyar-v4-2-talhah#sp_t_heading",
+          "role": "RIJAL_ENTRY"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tr_zb",
+      "mention": "m_tr_zb",
+      "agent": "az-zubayr-ibn-al-awwam",
+      "basis": [
+        {
+          "span": "siyar-v4-3-az-zubayr#sp_zb_heading",
+          "role": "RIJAL_ENTRY"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tr_aw",
+      "mention": "m_tr_aw",
+      "agent": "abdur-rahman-ibn-awf",
+      "basis": [
+        {
+          "span": "siyar-v4-4-abdur-rahman-ibn-awf#sp_aw_heading",
+          "role": "RIJAL_ENTRY"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tr_sd",
+      "mention": "m_tr_sd",
+      "agent": "saad-ibn-abi-waqqas",
+      "basis": [
+        {
+          "span": "siyar-v4-5-saad-ibn-abi-waqqas#sp_sd_heading",
+          "role": "RIJAL_ENTRY"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tr_sz",
+      "mention": "m_tr_sz",
+      "agent": "saeed-ibn-zaid",
+      "basis": [
+        {
+          "span": "siyar-v4-6-saeed-ibn-zaid#sp_sz_heading",
+          "role": "RIJAL_ENTRY"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tr_au",
+      "mention": "m_tr_au",
+      "agent": "abu-ubaydah-ibn-al-jarrah",
+      "basis": [
+        {
+          "span": "siyar-v4-1-abu-ubaydah#sp_au_heading",
+          "role": "RIJAL_ENTRY"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_tr_ab",
+      "subject": "m_tr_ab",
+      "predicate": "title",
+      "value": {
+        "classified": "the-ten-promised-paradise",
+        "spans": [
+          "sp_tr_matn"
+        ]
+      },
+      "restsOn": [
+        "st_tr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tr_um",
+      "subject": "m_tr_um",
+      "predicate": "title",
+      "value": {
+        "classified": "the-ten-promised-paradise",
+        "spans": [
+          "sp_tr_matn"
+        ]
+      },
+      "restsOn": [
+        "st_tr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tr_uth",
+      "subject": "m_tr_uth",
+      "predicate": "title",
+      "value": {
+        "classified": "the-ten-promised-paradise",
+        "spans": [
+          "sp_tr_matn"
+        ]
+      },
+      "restsOn": [
+        "st_tr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tr_al",
+      "subject": "m_tr_al",
+      "predicate": "title",
+      "value": {
+        "classified": "the-ten-promised-paradise",
+        "spans": [
+          "sp_tr_matn"
+        ]
+      },
+      "restsOn": [
+        "st_tr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tr_t",
+      "subject": "m_tr_t",
+      "predicate": "title",
+      "value": {
+        "classified": "the-ten-promised-paradise",
+        "spans": [
+          "sp_tr_matn"
+        ]
+      },
+      "restsOn": [
+        "st_tr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tr_zb",
+      "subject": "m_tr_zb",
+      "predicate": "title",
+      "value": {
+        "classified": "the-ten-promised-paradise",
+        "spans": [
+          "sp_tr_matn"
+        ]
+      },
+      "restsOn": [
+        "st_tr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tr_aw",
+      "subject": "m_tr_aw",
+      "predicate": "title",
+      "value": {
+        "classified": "the-ten-promised-paradise",
+        "spans": [
+          "sp_tr_matn"
+        ]
+      },
+      "restsOn": [
+        "st_tr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tr_sd",
+      "subject": "m_tr_sd",
+      "predicate": "title",
+      "value": {
+        "classified": "the-ten-promised-paradise",
+        "spans": [
+          "sp_tr_matn"
+        ]
+      },
+      "restsOn": [
+        "st_tr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tr_sz",
+      "subject": "m_tr_sz",
+      "predicate": "title",
+      "value": {
+        "classified": "the-ten-promised-paradise",
+        "spans": [
+          "sp_tr_matn"
+        ]
+      },
+      "restsOn": [
+        "st_tr"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tr_au",
+      "subject": "m_tr_au",
+      "predicate": "title",
+      "value": {
+        "classified": "the-ten-promised-paradise",
+        "spans": [
+          "sp_tr_matn"
+        ]
+      },
+      "restsOn": [
+        "st_tr"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

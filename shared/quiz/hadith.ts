@@ -2,7 +2,7 @@
 // questions from al-Nawawi's Forty as al-Bukhari prints them (shared/data/hadith/forty.json), the most authentic first.
 // Every choice is a real name or a real phrase of another hadith, and the reference is under the choices.
 import fortyData from '../data/hadith/forty.json';
-import { recordName, type AppForty, type FortyEntry, type FortyRecord } from '../hadith';
+import { COLLECTOR, authentic, compilerOf, recordName, type AppForty, type FortyEntry, type FortyRecord } from '../hadith';
 import { num } from '../quran/arabicNumber';
 import { shuffle, type Random } from './random';
 import type { ChoiceKind, ChoiceQuestion } from './choiceKinds';
@@ -18,8 +18,9 @@ const FORTY = fortyData as AppForty;
 const bare = (text: string) => text.replace(/[ً-ْٰ]/g, '').replace(/[أإآ]/g, 'ا').replace(/\s+/g, ' ').trim();
 
 /** Al-Bukhari's whole records of the Forty: each entry al-Nawawi takes whole from the Sahihayn, each record holding his wording. */
+// Not Ibn Rajab's eight yet: their other Companions in al-Bukhari (`alsoFrom`) are not listed, so a wrong choice could be right.
 const bukhari = (): { entry: FortyEntry; record: FortyRecord }[] =>
-  FORTY.entries.filter(entry => !entry.partial).flatMap(entry =>
+  FORTY.entries.filter(entry => !entry.partial && !entry.source).flatMap(entry =>
     entry.records.filter(record => record.book === 'bukhari' && !record.partial && record.isnadEnd).map(record => ({ entry, record })));
 
 /** The saying as printed, from its opening quote mark to its closing one. */
@@ -30,13 +31,15 @@ const sayingOf = (record: FortyRecord) => {
 };
 
 const shamela = (book: keyof AppForty['books'], id: number) => `https://shamela.ws/book/${FORTY.books[book].shamela}/${id}`;
-/** al-Nawawi's entry in his Forty. */
-const nawawi = (entry: FortyEntry): QuizSource =>
-  ({ book: FORTY.books.nawawi.title, author: 'النووي', at: `${entry.heading}، ص ${num(entry.pages[entry.pages.length - 1])}`, url: shamela('nawawi', entry.shamela) });
-/** The record the saying is quoted from, then al-Nawawi's entry that holds it. */
+/** The entry in the book that gathers it: al-Nawawi's Forty, or Ibn Rajab's additions in Jami' al-'Ulum. */
+const compiled = (entry: FortyEntry): QuizSource => {
+  const { book, name } = compilerOf(entry);
+  return { book: FORTY.books[book].title, author: name, at: `${entry.heading}، ص ${num(entry.pages[entry.pages.length - 1])}`, url: shamela(book, entry.shamela) };
+};
+/** The record the saying is quoted from, then the entry that holds it. */
 const sources = (entry: FortyEntry, record: FortyRecord): QuizSource[] => [
   { book: FORTY.books[record.book].title, at: `رقم ${num(record.number)}${record.route ? ` (${record.route})` : ''}، ج ${num(record.volume)}، ص ${num(record.pages[0])}`, url: shamela(record.book, record.shamela) },
-  nawawi(entry),
+  compiled(entry),
 ];
 
 function choose(key: string, family: string, promptArabic: string, right: string, wrong: string[], cited: { sources: QuizSource[]; note?: string }, entry: FortyEntry, random: Random): ChoiceQuestion | null {
@@ -129,34 +132,23 @@ function quotationOf(entry: FortyEntry) {
   return entry.text.slice(0, end + 1);
 }
 
-const BOOK_OF: Record<string, string> = {
-  البخاري: 'bukhari', مسلم: 'muslim', الترمذي: 'tirmidhi', النسائي: 'nasai', 'أبو داود': 'abudawud', 'ابن ماجه': 'ibnmajah', أحمد: 'ahmad',
-  الدارمي: 'darimi', الدارقطني: 'daraqutni', البيهقي: 'bayhaqi', مالك: 'muwatta',
-};
 /** Every book al-Nawawi names holds the hadith whole from his Companion in our records: not no. 33 (part in the Sahihayn), no. 32 (Ibn Majah has it from others) or no. 41 (al-Hujja not at hand). */
 const citedWhole = (entry: FortyEntry) => !entry.partial && !/وغيره/.test(entry.text.slice(entry.text.lastIndexOf('»')))
-  && entry.named.every(name => entry.records.some(record => record.book === BOOK_OF[name] && !record.partial && !record.from));
+  && entry.named.every(name => entry.records.some(record => COLLECTOR[record.book] === name && !record.partial && !record.from));
 
-/**
- * The hadith outside the Sahihayn a quiz may carry (owner, 2026-11-18: quizzes start with the Sahihayn or what a named scholar
- * graded sahih, undisputed): al-Tirmidhi's «حسن صحيح» on nos. 11, 18, 28 and 29, printed in his Sunan beside each. Not no. 42,
- * which his printed Sunan grades «حسن غريب», nor 12, 31 and 39, which Ibn Rajab weakens.
- */
-const GRADED_SAHIH = new Set([11, 18, 28, 29]);
-const sahih = (entry: FortyEntry) => GRADED_SAHIH.has(entry.n) || (entry.records.length > 0 && entry.records.every(record => record.book === 'bukhari' || record.book === 'muslim'));
 
 /**
  * «من أخرجه؟» (owner, 2026-11-18: every feature a quiz kind): al-Nawawi's quotation, and the books he names for it. The
- * question asks his citation, a fact of his book, not where else a report is found; the wrong choices are other entries' citations.
+ * question asks his citation, a fact of his book (so not Ibn Rajab's eight), not where else a report is found; the wrong choices are other entries' citations.
  */
 export function bookQuestions(random: Random): ChoiceQuestion[] {
-  const all = FORTY.entries.filter(entry => sahih(entry) && citedWhole(entry)).flatMap(entry => { const quotation = quotationOf(entry); return quotation ? [{ entry, quotation, books: namedBooks(entry.named) }] : []; });
+  const all = FORTY.entries.filter(entry => !entry.source && authentic(entry) && citedWhole(entry)).flatMap(entry => { const quotation = quotationOf(entry); return quotation ? [{ entry, quotation, books: namedBooks(entry.named) }] : []; });
   // «مسلم» against «البخاري ومسلم» is half right, so a choice sharing any book with the right one is never offered.
   const apart = (a: readonly string[], b: readonly string[]) => !a.some(book => b.includes(book));
   return shuffle(all.flatMap(({ entry, quotation, books }) => {
     const wrong = all.filter(other => apart(other.entry.named, entry.named)).map(other => other.books);
     const question = choose(`${entry.n}`, HADITH_BOOK, `${quotation}\nإلى أي كتب عزاه النووي؟`, books, wrong,
-      { sources: [nawawi(entry)] }, entry, random);
+      { sources: [compiled(entry)] }, entry, random);
     return question ? [question] : [];
   }), random);
 }
@@ -167,4 +159,66 @@ export const hadithBookQuiz: ChoiceKind = {
   party: true,
   questions: (_scope, _difficulty, random, limit = Infinity) => bookQuestions(random).slice(0, limit),
   count: () => bookQuestions(Math.random).length,
+};
+
+export const HADITH_CHAIN = 'HADITH_CHAIN';
+export const HADITH_CHAIN_NAME = 'من حدّث به؟';
+
+/** A narrator's name as a key: no harakat, one alif, so «يَحْيَى بْنِ سَعِيدٍ» and «يحيى بن سعيد» are one name. */
+const nameKey = (name: string) => bare(name).replace(/[أإآٱ]/g, 'ا');
+const plain = (text: string) => text.replace(/[ً-ْٰ]/g, '');
+/** A name as the question shows it: no harakat, and «أبي/أبا فلان» as «أبو فلان», so no case ending tells its place. */
+const shownName = (name: string) => plain(name).replace(/^(?:أبي|أبا) /, 'أبو ');
+/** «أبي» alone is «my father», a name only inside its own chain. */
+const ownFather = (name: string) => /^(?:أبي|أبيه)$/.test(shownName(name));
+
+/** The words that tell a man apart: not «بن», «ابن», «أبو/أبي», «هو». */
+const telling = (name: string) => nameKey(name).split(' ').filter(word => !/^(?:بن|ابن|ابو|ابي|ابا|هو)$/.test(word));
+/** Two names that may be one man: every telling word of one is in the other («الأعمش» and «سليمان الأعمش», «سفيان» and «سفيان بن عيينة»). */
+const maySame = (a: string, b: string) => {
+  const [x, y] = [telling(a), telling(b)];
+  const [short, long] = x.length <= y.length ? [x, y] : [y, x];
+  return short.length > 0 && short.every(word => long.includes(word));
+};
+
+/** The chain of a drawn Bukhari record from al-Bukhari's teacher to the Companion, each with the word he narrated it by. */
+const chainOf = (record: FortyRecord) => {
+  const nodes = (record.isnad?.nodes ?? []).filter(node => node.id !== 'c').sort((a, b) => Number(a.id.slice(1)) - Number(b.id.slice(1)));
+  return nodes.map(node => ({ name: node.label, by: record.isnad!.edges.find(edge => edge.from === node.id)?.label ?? '' }));
+};
+
+/**
+ * «من حدّث به؟» (owner, 2026-11-19; plan /mnt/project-files/hadith-sciences, feature 1): al-Bukhari's chain for one of the
+ * Forty as he prints it, one narrator between his teacher and the Companion left out, and who stands there. A fact of the
+ * record: the wrong choices are narrators of the other chains, never one who may be the same man, nor one named anywhere in
+ * this hadith's records (another route could have him). Names without harakat, so no case ending tells the place.
+ */
+export function chainQuestions(random: Random): ChoiceQuestion[] {
+  const chains = bukhari().flatMap(({ entry, record }) => (record.isnad ? [{ entry, record, chain: chainOf(record) }] : []));
+  return shuffle(chains.flatMap(({ entry, record, chain }) => {
+    const told = bare(entry.records.map(each => each.text).join(' ')).replace(/[أإآٱ]/g, 'ا');
+    return chain.slice(1, -1).flatMap((link, k) => {
+      const at = k + 1;
+      // «حدثنا أبي» names no one outside its own chain, so that place is not asked.
+      if (ownFather(link.name)) return [];
+      const near = (spread: number) => chains.filter(other => other.record !== record)
+        .flatMap(other => other.chain.slice(Math.max(1, at - spread), Math.min(other.chain.length - 1, at + spread + 1)).map(each => each.name))
+        .filter(name => !ownFather(name) && !chain.some(own => maySame(own.name, name)) && !told.includes(nameKey(name)));
+      const pool = near(1).length >= CHOICES - 1 ? near(1) : near(chain.length);
+      const wrong = pool.filter((name, i) => pool.findIndex(other => maySame(other, name)) === i).map(shownName);
+      // The chain keeps its own case («عن أبي صالح»); only the choices are put in one form.
+      const shown = chain.map((each, i) => `${plain(each.by)} ${i === at ? '…' : plain(each.name)}`).join('، ');
+      const question = choose(`${record.number}:${at}`, HADITH_CHAIN, `${recordName(record, num)}:\n${shown}\nمن حدّث به في موضع «…»؟`, shownName(link.name), wrong,
+        { sources: sources(entry, record) }, entry, random);
+      return question ? [question] : [];
+    });
+  }), random);
+}
+
+export const hadithChainQuiz: ChoiceKind = {
+  id: HADITH_CHAIN,
+  name: HADITH_CHAIN_NAME,
+  party: true,
+  questions: (_scope, _difficulty, random, limit = Infinity) => chainQuestions(random).slice(0, limit),
+  count: () => chainQuestions(Math.random).length,
 };

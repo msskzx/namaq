@@ -1,0 +1,361 @@
+{
+  "unit": {
+    "id": "siyar-v4-20-mistah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٢٠"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ms_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "187",
+      "layer": "MAIN",
+      "exact": "٢٠ - مِسْطَحُ بنُ أُثَاثَةَ بنِ عَبَّادِ بنِ المُطَّلِبِ المُطَّلِبِيُّ"
+    },
+    {
+      "id": "sp_ms1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "187",
+      "layer": "MAIN",
+      "exact": "مِسْطَحُ بنُ أُثَاثَةَ بنِ عَبَّادِ بنِ المُطَّلِبِ",
+      "prefix": "٢٠ - "
+    },
+    {
+      "id": "sp_ms2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "187",
+      "layer": "MAIN",
+      "exact": "ابْنِ عَبْدِ مَنَافٍ بنِ قُصَيٍّ",
+      "suffix": "، المُطَّلِبِيُّ، المُهَاجِرِيُّ"
+    },
+    {
+      "id": "sp_ms_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "187",
+      "layer": "MAIN",
+      "exact": "مِسْطَحُ بنُ",
+      "prefix": "٢٠ - "
+    },
+    {
+      "id": "sp_ms_father",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "187",
+      "layer": "MAIN",
+      "exact": "أُثَاثَةَ بنِ عَبَّادِ",
+      "prefix": "مِسْطَحُ بنُ "
+    },
+    {
+      "id": "sp_ms_epithets",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "187",
+      "layer": "MAIN",
+      "exact": "المُطَّلِبِيُّ، المُهَاجِرِيُّ، البَدْرِيُّ، المَذْكُوْرُ فِي قِصَّةِ الإِفْكِ"
+    },
+    {
+      "id": "sp_ms_badri",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "187",
+      "layer": "MAIN",
+      "exact": "البَدْرِيُّ",
+      "prefix": "المُهَاجِرِيُّ، "
+    },
+    {
+      "id": "sp_ms_saad_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "188",
+      "layer": "MAIN",
+      "exact": "ذَكَرَهُ ابْنُ سَعْدٍ، فَقَالَ:"
+    },
+    {
+      "id": "sp_ms_app",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "188",
+      "layer": "MAIN",
+      "exact": "كَانَ قَصِيْراً، غَائِرَ العَيْنَيْنِ، شَثْنَ الأَصَابِع"
+    },
+    {
+      "id": "sp_ms_age",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "188",
+      "layer": "MAIN",
+      "exact": "عَاشَ سِتّاً وَخَمْسِيْنَ سَنَةً"
+    },
+    {
+      "id": "sp_ms_death_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "188",
+      "layer": "MAIN",
+      "exact": "قَالَ:",
+      "suffix": " وَتُوُفِّيَ سَنَةَ"
+    },
+    {
+      "id": "sp_ms_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "188",
+      "layer": "MAIN",
+      "exact": "وَتُوُفِّيَ سَنَةَ أَرْبَعٍ وَثَلاَثِيْنَ"
+    },
+    {
+      "id": "sp_ms_death_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "188",
+      "layer": "MAIN",
+      "exact": "سَنَةَ أَرْبَعٍ وَثَلاَثِيْنَ",
+      "prefix": "وَتُوُفِّيَ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ms0",
+      "unit": "siyar-v4-20-mistah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ms_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ms_saad",
+      "unit": "siyar-v4-20-mistah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ms_saad_frame",
+        "sp_ms_death_frame"
+      ],
+      "origin": {
+        "mention": "m_ms_saad"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ms_name",
+      "report": "r_ms0",
+      "spans": [
+        "sp_ms1",
+        "sp_ms2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ms_epithets",
+      "report": "r_ms0",
+      "spans": [
+        "sp_ms_epithets"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ms_app",
+      "report": "r_ms_saad",
+      "spans": [
+        "sp_ms_app"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ms_age",
+      "report": "r_ms_saad",
+      "spans": [
+        "sp_ms_age"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ms_death",
+      "report": "r_ms_saad",
+      "spans": [
+        "sp_ms_death"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ms",
+      "parent": "sp_ms1",
+      "exact": "مِسْطَحُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ms_father",
+      "parent": "sp_ms1",
+      "exact": "أُثَاثَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ms_saad",
+      "parent": "sp_ms_saad_frame",
+      "exact": "ابْنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ms_badr",
+      "parent": "sp_ms_epithets",
+      "exact": "البَدْرِيُّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ms",
+      "mention": "m_ms",
+      "agent": "mistah-ibn-uthathah",
+      "basis": [
+        {
+          "span": "sp_ms_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ms_father",
+      "mention": "m_ms_father",
+      "agent": "uthathah-ibn-abbad",
+      "basis": [
+        {
+          "span": "sp_ms_father",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ms_badr",
+      "mention": "m_ms_badr",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "sp_ms_badri",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ms_name",
+      "subject": "m_ms",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ms1",
+          "sp_ms2"
+        ]
+      },
+      "restsOn": [
+        "st_ms_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ms_sex",
+      "subject": "m_ms",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ms_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ms_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ms_father",
+      "subject": "m_ms",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ms_father"
+      },
+      "restsOn": [
+        "st_ms_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ms_badr",
+      "subject": "m_ms",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_ms_badr"
+      },
+      "restsOn": [
+        "st_ms_epithets"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ms_app",
+      "subject": "m_ms",
+      "predicate": "appearance",
+      "value": {
+        "spans": [
+          "sp_ms_app"
+        ]
+      },
+      "restsOn": [
+        "st_ms_app"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ms_age",
+      "subject": "m_ms",
+      "predicate": "died.age",
+      "value": {
+        "parsed": 56,
+        "spans": [
+          "sp_ms_age"
+        ]
+      },
+      "restsOn": [
+        "st_ms_age"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ms_death",
+      "subject": "m_ms",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 34,
+        "spans": [
+          "sp_ms_death_y"
+        ]
+      },
+      "restsOn": [
+        "st_ms_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

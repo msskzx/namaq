@@ -8,7 +8,9 @@ export type Quote = { text: string; cite?: string; url?: string };
  * A section's reference, collapsed to the book and page it cites (a muted line with a chevron); a tap opens the quotes,
  * the first in ink, the rest smaller. The phone app has the same in mobile/src/ui/Reference.tsx.
  */
-export default function Reference({ title, quotes }: { title: string; quotes: Quote[] }) {
+export default function Reference({ title, quotes, links = [] }: { title: string; quotes: Quote[];
+  /** Links under the quotes when open (the source's own page), as the app's. */
+  links?: { label: string; url: string }[] }) {
   return (
     <details className="group text-[var(--home-muted)]">
       <summary className="flex w-fit cursor-pointer list-none items-center gap-1 text-sm [&::-webkit-details-marker]:hidden">
@@ -21,6 +23,7 @@ export default function Reference({ title, quotes }: { title: string; quotes: Qu
             {quote.url ? <>{quote.text && `«${quote.text}» `}<ExternalLink className="whitespace-nowrap text-sm text-[var(--home-muted)]" href={quote.url}>{quote.cite}</ExternalLink></> : quote.text}
           </p>
         ))}
+        {links.map(link => <ExternalLink key={link.url} href={link.url} className="text-[var(--home-accent)]">{link.label}</ExternalLink>)}
       </div>
     </details>
   );

@@ -1,9 +1,10 @@
-import { entryLabel, paragraphsOf, runsIn, type BookEntry, type BookPage, type ReaderBookId } from '@shared/bookReader';
+import { entryAyah, entryLabel, paragraphsOf, runsIn, type BookEntry, type BookPage, type ReaderBookId } from '@shared/bookReader';
 import { ayahHref } from '@shared/ayahMarks';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
 
 const names: Record<number, string> = SURAH_NAMES;
-export const surahName = (surah: number) => names[surah] ?? String(surah);
+/** A surah's name, and «المقدمة» for a book's preface (shared/bookReader.ts BookEntry). */
+export const surahName = (surah: number) => (surah ? names[surah] ?? String(surah) : 'المقدمة');
 
 export type ViewParagraph = { entry: number; at: number; runs: { text: string; quran: boolean }[] };
 /** A passage's part on a page: its pill (when the passage starts here) and its paragraphs. */
@@ -16,10 +17,10 @@ export function pageView(book: ReaderBookId, entries: BookEntry[], page: BookPag
     const previous = entries[slice.entry - 1];
     // Al-'Ukbari speaks on several words of one ayah in a row: the pill shows over the first only.
     const heads = slice.from === 0 && !(book === 'ukbari' && previous && previous.surah === entry.surah && previous.from === entry.from);
-    const ayah = `${entry.surah}:${entry.from}`;
+    const ayah = entryAyah(entry) ?? '';
     return {
       key: `${slice.entry}:${slice.from}`,
-      head: heads ? { label: entryLabel(entry, surahName(entry.surah)), href: ayahHref(ayah) } : undefined,
+      head: heads && ayah ? { label: entryLabel(entry, surahName(entry.surah)), href: ayahHref(ayah) } : undefined,
       ayah,
       paragraphs: paragraphsOf(entry.text, slice).map(({ at, end }) => ({ entry: slice.entry, at, runs: runsIn(entry.text, at, end) })),
     };

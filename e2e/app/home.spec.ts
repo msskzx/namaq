@@ -1,4 +1,4 @@
-import { expect, open, readerPage, returningUser, stored, test } from './fixtures';
+import { expect, open, readerPage, reciteBarsHidden, returningUser, stored, test } from './fixtures';
 import { surahName as S } from '../../shared/quran/surahNames';
 import * as adhan from 'adhan';
 import { DEFAULT_PRAYER_SETTINGS, prayerDay, type Adhan } from '../../shared/prayer';
@@ -392,7 +392,7 @@ test.describe('a returning user', () => {
     await open(page, '/');
     await page.getByRole('button', { name: 'راجع ما نسيت' }).click();
     await expect.poll(() => readerPage(page)).toBe(294);
-    await expect(page.getByRole('button', { name: 'أظهر الآية التالية' })).toBeVisible();
+    await reciteBarsHidden(page);
   });
 
   test('the notes list in «مدونتي» lists the notes, and a note can be deleted', async ({ page }) => {

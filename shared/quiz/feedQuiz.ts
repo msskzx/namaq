@@ -7,7 +7,7 @@ export const OPENINGS = 'OPENINGS';
 export type FeedQuizKind = QuizTopic | typeof OPENINGS;
 
 /** The kinds in the order they take turns: the Quran's, then the tarajim's three built on the converted entries, then the sira stories and battles, then the hadith (owner, 2026-11-18). */
-export const FEED_QUIZ_KINDS: readonly FeedQuizKind[] = ['SURAH', 'BRANCHES', 'RECITE', 'COMPARE', OPENINGS, 'MEANING', 'TAFSIR', 'BALAGHA', 'TERM', 'IRAB', 'QIRAAT', 'QIRAAT_WHO', 'TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE', 'TARAJIM_NASAB', 'TARAJIM_VIRTUE', 'TARAJIM_TIE', 'TARAJIM_LIFE', 'TARAJIM_LAQAB', 'TARAJIM_KUNYA', 'PROPHET_NAMES', 'SIRA', 'HADITH_NARRATOR', 'HADITH_COMPLETE', 'HADITH_BOOK'];
+export const FEED_QUIZ_KINDS: readonly FeedQuizKind[] = ['SURAH', 'BRANCHES', 'RECITE', 'COMPARE', OPENINGS, 'MEANING', 'TAFSIR', 'BALAGHA', 'TERM', 'IRAB', 'QIRAAT', 'QIRAAT_WHO', 'TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE', 'TARAJIM_NASAB', 'TARAJIM_VIRTUE', 'TARAJIM_TIE', 'TARAJIM_LIFE', 'TARAJIM_LAQAB', 'TARAJIM_KUNYA', 'PROPHET_NAMES', 'SIRA', 'HADITH_NARRATOR', 'HADITH_COMPLETE', 'HADITH_BOOK', 'HADITH_CHAIN', 'SAHIH_KITAB'];
 
 /** Each kind's card title, the quiz's own names for them (shared/quiz/kinds.ts), without loading the kinds' data. */
 export const FEED_QUIZ_NAMES: Record<FeedQuizKind & string, string> = {
@@ -15,7 +15,7 @@ export const FEED_QUIZ_NAMES: Record<FeedQuizKind & string, string> = {
   TAFSIR: 'لأي آية هذا التفسير؟', BALAGHA: 'ما الأسلوب؟', TERM: 'ما المصطلح؟', IRAB: 'ما إعرابها؟', QIRAAT: 'كيف يقرؤها؟', QIRAAT_WHO: 'مَن يقرأ هكذا؟',
   TUHFA_COMPLETE: 'التحفة: أكمل البيت', TUHFA_NEXT: 'التحفة: البيت التالي', TUHFA_RULE: 'التحفة: حكم الحرف',
   TARAJIM_NASAB: 'أين يلتقي النسبان؟', TARAJIM_VIRTUE: 'صاحب المنقبة', TARAJIM_TIE: 'ما صلته به؟', TARAJIM_LIFE: 'في أي سنة كان؟', TARAJIM_LAQAB: 'بمَ لُقّب؟', TARAJIM_KUNYA: 'ما كنيته؟', PROPHET_NAMES: 'أسماء النبي ﷺ', SIRA: 'السيرة والغزوات',
-  HADITH_NARRATOR: 'من راوي الحديث؟', HADITH_COMPLETE: 'أكمل الحديث', HADITH_BOOK: 'من أخرجه؟',
+  HADITH_NARRATOR: 'من راوي الحديث؟', HADITH_COMPLETE: 'أكمل الحديث', HADITH_BOOK: 'من أخرجه؟', HADITH_CHAIN: 'من حدّث به؟', SAHIH_KITAB: 'في أيّ كتاب؟',
 } as Record<FeedQuizKind & string, string>;
 
 /** The kind of the feed's question card in batch `slot` on a day: the turn moves on one kind a day, so each day starts elsewhere. */

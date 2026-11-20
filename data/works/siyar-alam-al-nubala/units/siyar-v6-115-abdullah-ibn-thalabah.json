@@ -1,0 +1,461 @@
+{
+  "unit": {
+    "id": "siyar-v6-115-abdullah-ibn-thalabah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١١٥"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_tb_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "503",
+      "layer": "MAIN",
+      "exact": "١١٥ - عَبْدُ اللهِ بنُ ثَعْلَبَةَ بنِ صُعَيْرٍ العُذْرِيُّ"
+    },
+    {
+      "id": "sp_tb_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "503",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ ثَعْلَبَةَ بنِ صُعَيْرٍ العُذْرِيُّ",
+      "prefix": "١١٥ - "
+    },
+    {
+      "id": "sp_tb_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "503",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ",
+      "prefix": "١١٥ - "
+    },
+    {
+      "id": "sp_tb_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "503",
+      "layer": "MAIN",
+      "exact": "ثَعْلَبَةَ بنِ صُعَيْرٍ",
+      "prefix": "١١٥ - عَبْدُ اللهِ بنُ "
+    },
+    {
+      "id": "sp_tb_kunya_st",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "503",
+      "layer": "MAIN",
+      "exact": "الشَّيْخُ، أَبُو مُحَمَّدٍ العُذْرِيُّ، المَدَنِيُّ، حَلِيْفُ بَنِي زُهْرَةَ"
+    },
+    {
+      "id": "sp_tb_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "503",
+      "layer": "MAIN",
+      "exact": "أَبُو مُحَمَّدٍ",
+      "prefix": "الشَّيْخُ، "
+    },
+    {
+      "id": "sp_tb_masah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "503",
+      "layer": "MAIN",
+      "exact": "مَسَحَ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - رَأْسَهُ، فَوَعَى ذَلِكَ"
+    },
+    {
+      "id": "sp_tb_nassabah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "503",
+      "layer": "MAIN",
+      "exact": "وَكَانَ شَاعِراً، فَصِيْحاً، نَسَّابَةً"
+    },
+    {
+      "id": "sp_tb_zuhri_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "503",
+      "layer": "MAIN",
+      "exact": "رَوَى: مَالِكٌ، عَنِ ابْنِ شِهَابٍ:"
+    },
+    {
+      "id": "sp_tb_zuhri",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "503",
+      "layer": "MAIN",
+      "exact": "أَنَّهُ كَانَ يُجَالِسُ عَبْدَ اللهِ بنَ ثَعْلَبَةَ، وَكَانَ يَتَعَلَّمُ مِنْهُ النَّسَبَ"
+    },
+    {
+      "id": "sp_tb_d89_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "503",
+      "layer": "MAIN",
+      "exact": "قَالَ خَلِيْفَةُ بنُ خَيَّاطٍ، وَغَيْرُهُ:"
+    },
+    {
+      "id": "sp_tb_d89",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "503",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ سَنَةَ تِسْعٍ وَثَمَانِيْنَ"
+    },
+    {
+      "id": "sp_tb_y89",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "503",
+      "layer": "MAIN",
+      "exact": "سَنَةَ تِسْعٍ وَثَمَانِيْنَ",
+      "prefix": "تُوُفِّيَ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_tb0",
+      "unit": "siyar-v6-115-abdullah-ibn-thalabah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_tb_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_tb_zuhri",
+      "unit": "siyar-v6-115-abdullah-ibn-thalabah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_tb_zuhri_frame"
+      ],
+      "origin": {
+        "mention": "m_tb_zuhri_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_tb_d89",
+      "unit": "siyar-v6-115-abdullah-ibn-thalabah",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_tb_d89_frame"
+      ],
+      "origin": {
+        "mention": "m_tb_d89_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_tb_name",
+      "report": "r_tb0",
+      "spans": [
+        "sp_tb_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_tb_kunya_st",
+      "report": "r_tb0",
+      "spans": [
+        "sp_tb_kunya_st"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_tb_masah",
+      "report": "r_tb0",
+      "spans": [
+        "sp_tb_masah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_tb_nassabah",
+      "report": "r_tb0",
+      "spans": [
+        "sp_tb_nassabah"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_tb_zuhri",
+      "report": "r_tb_zuhri",
+      "spans": [
+        "sp_tb_zuhri"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_tb_d89",
+      "report": "r_tb_d89",
+      "spans": [
+        "sp_tb_d89"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_tb",
+      "parent": "sp_tb_name",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_tb_father",
+      "parent": "sp_tb_name",
+      "exact": "ثَعْلَبَةَ بنِ صُعَيْرٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_tb_masah",
+      "parent": "sp_tb_masah",
+      "exact": "رَأْسَهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_tb_comp_prophet",
+      "parent": "sp_tb_masah",
+      "exact": "النَّبِيُّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_tb_nassabah",
+      "parent": "sp_tb_nassabah",
+      "exact": "وَكَانَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_tb_zuhri_by",
+      "parent": "sp_tb_zuhri_frame",
+      "exact": "ابْنِ شِهَابٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_tb_z",
+      "parent": "sp_tb_zuhri",
+      "exact": "عَبْدَ اللهِ بنَ ثَعْلَبَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_tb_d89_by",
+      "parent": "sp_tb_d89_frame",
+      "exact": "خَلِيْفَةُ بنُ خَيَّاطٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_tb_d",
+      "parent": "sp_tb_d89",
+      "exact": "تُوُفِّيَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_tb",
+      "mention": "m_tb",
+      "agent": "abdullah-ibn-thalabah-ibn-suayr",
+      "basis": [
+        {
+          "span": "sp_tb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tb_father",
+      "mention": "m_tb_father",
+      "agent": "thalabah-ibn-suayr",
+      "basis": [
+        {
+          "span": "sp_tb_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tb_masah",
+      "mention": "m_tb_masah",
+      "agent": "abdullah-ibn-thalabah-ibn-suayr",
+      "basis": [
+        {
+          "span": "sp_tb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tb_nassabah",
+      "mention": "m_tb_nassabah",
+      "agent": "abdullah-ibn-thalabah-ibn-suayr",
+      "basis": [
+        {
+          "span": "sp_tb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tb_z",
+      "mention": "m_tb_z",
+      "agent": "abdullah-ibn-thalabah-ibn-suayr",
+      "basis": [
+        {
+          "span": "sp_tb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_tb_d",
+      "mention": "m_tb_d",
+      "agent": "abdullah-ibn-thalabah-ibn-suayr",
+      "basis": [
+        {
+          "span": "sp_tb_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_tb_name",
+      "subject": "m_tb",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_tb_name"
+        ]
+      },
+      "restsOn": [
+        "st_tb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tb_sex",
+      "subject": "m_tb",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_tb_sex"
+        ]
+      },
+      "restsOn": [
+        "st_tb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tb_father",
+      "subject": "m_tb",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_tb_father"
+      },
+      "restsOn": [
+        "st_tb_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tb_kunya",
+      "subject": "m_tb",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_tb_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_tb_kunya_st"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tb_comp",
+      "subject": "m_tb_masah",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_tb_comp_prophet"
+      },
+      "restsOn": [
+        "st_tb_masah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tb_v_nassabah",
+      "subject": "m_tb_nassabah",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_tb_nassabah"
+        ]
+      },
+      "restsOn": [
+        "st_tb_nassabah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tb_v_nasab",
+      "subject": "m_tb_z",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_tb_zuhri"
+        ]
+      },
+      "restsOn": [
+        "st_tb_zuhri"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_tb_d89",
+      "subject": "m_tb_d",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 89,
+        "spans": [
+          "sp_tb_y89"
+        ]
+      },
+      "restsOn": [
+        "st_tb_d89"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

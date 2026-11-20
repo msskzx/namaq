@@ -25,17 +25,28 @@ export function bareName(name: string) {
     .replace(/ى$/u, 'ي').replace(/\s+/g, ' ').trim();
 }
 
+/** Each word of a text bare, so a final «ى» inside a phrase («أبو يحيى بن») matches as it does at the end. */
+const bareWords = (text: string) => text.split(/\s+/u).filter(Boolean).map(bareName);
+/** What a people search looks in: the name, full name, kunyas and laqabs, bare. */
+export const namesHay = (person: { name: string; fullName?: { text: string }; kunya: { text: string }[]; laqab: { text: string }[] }) =>
+  bareWords([person.name, person.fullName?.text, ...person.kunya.map(k => k.text), ...person.laqab.map(l => l.text)].filter(Boolean).join(' ')).join(' ');
+/** Whether a `namesHay` holds every word typed: the people search of the app and the website. */
+export const matchesQuery = (hay: string, query: string) => bareWords(query).every(word => hay.includes(word));
+
 /** The first word of a name of two words («عبد الله», «أبي طالب»), which is no name with a laqab after it. */
 const COMPOUND = /^(?:عبد|ابي|ابو|ام|ذي|ذو|امري|امرئ)$/u;
 
 /**
  * Two bare names for the same father: the same, or one the other with a laqab after it («مالك الأغر» is «مالك»).
- * Never for a name of two words («عبد الله» is not «عبد»), and the added word must be a laqab («ال…»).
+ * Never for a name of two words («عبد الله» is not «عبد»), and the added word must be a laqab («ال…»). A kunya
+ * before the name («أبي أحيحة سعيد» is «سعيد») is the same man too.
  */
 export function sameName(a: string, b: string) {
   if (a === b) return true;
   const [short, long] = a.length < b.length ? [a, b] : [b, a];
   const words = long.split(' ');
+  // A kunya before the name is the same man: Sa'id ibn al-As's grandfather «أبي أحيحة سعيد» is Khalid's father «سعيد».
+  if (words.length > 2 && /^اب[ويا]$/u.test(words[0]) && words.slice(2).join(' ') === short) return true;
   return words.length === 2 && words[0] === short && !COMPOUND.test(short) && words[1].startsWith('ال');
 }
 
