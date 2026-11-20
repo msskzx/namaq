@@ -39,4 +39,18 @@ describe('OrderView', () => {
     expect(within(list).getAllByLabelText('الصلة بما قبلها')).toHaveLength(36);
     expect(screen.getByRole('button', { name: '٣٠' }).getAttribute('aria-pressed')).toBe('true');
   });
+
+  it('shows several juz together and puts a chip back on a second press', () => {
+    render(<OrderView surahs={surahs} />);
+    fireEvent.click(screen.getByRole('button', { name: '١' }));
+    fireEvent.click(screen.getByRole('button', { name: '٣٠' }));
+    const list = screen.getByRole('list', { name: 'السور' });
+    expect(within(list).getAllByRole('heading')).toHaveLength(2 + 37);
+    // al-Naba' comes after al-Baqara here, so its link to al-Mursalat does not show.
+    expect(within(list).getAllByLabelText('الصلة بما قبلها')).toHaveLength(1 + 36);
+    fireEvent.click(screen.getByRole('button', { name: '١' }));
+    expect(within(screen.getByRole('list', { name: 'السور' })).getAllByRole('heading')).toHaveLength(37);
+    fireEvent.click(screen.getByRole('button', { name: 'الكل' }));
+    expect(within(screen.getByRole('list', { name: 'السور' })).getAllByRole('heading')).toHaveLength(114);
+  });
 });

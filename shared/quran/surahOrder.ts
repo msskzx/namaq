@@ -315,8 +315,18 @@ export function orderSurahs(ayahWords: AyahWordsOf, num: (n: number) => string):
   });
 }
 
-/** The surahs a juz chip leaves showing; a surah that runs over two juz shows under both. */
-export const orderInJuz = (surahs: OrderSurah[], juz: number | null) => (juz ? surahs.filter(s => s.juz[0] <= juz && juz <= s.juz[1]) : surahs);
+/**
+ * The surahs the juz chips leave showing: every surah in any picked juz (owner, 2026-11-20: several juz at once), all of
+ * them when none is picked. A surah that runs over two juz shows under both.
+ */
+export const orderInJuz = (surahs: OrderSurah[], juz: readonly number[]) =>
+  (juz.length ? surahs.filter(s => juz.some(j => s.juz[0] <= j && j <= s.juz[1])) : surahs);
+
+/** A juz chip pressed: picked if it was not, put back if it was, the rest kept in the mushaf's order. */
+export const toggledJuz = (juz: readonly number[], j: number) => (juz.includes(j) ? juz.filter(other => other !== j) : [...juz, j].sort((a, b) => a - b));
+
+/** Whether the link into the `i`th shown surah shows: only when the surah before it in the mushaf shows above it. */
+export const linkShows = (shown: OrderSurah[], i: number) => !!shown[i].link && i > 0 && shown[i - 1].surah === shown[i].surah - 1;
 
 /** «السيوطي، تناسق الدرر ص١٥٩» or «البقاعي، نظم الدرر ٢٢/٦٩». */
 export const citeLabel = (c: Cite, num: (n: number) => string) => {
