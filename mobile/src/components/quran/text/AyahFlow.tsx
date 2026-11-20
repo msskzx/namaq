@@ -16,9 +16,11 @@ export const useAyahSize = () => useContext(FlowSize).size;
  * flow in, sized from its own width as the reader's flowing text is (shared/quran/quranText/flow.ts). Its AyahWords (and
  * write boxes, by useAyahSize) take that size; the place sets only colour, never a size.
  */
-export default function AyahFlow({ children, color, row = false, style }: { children: ReactNode; color: string;
+export default function AyahFlow({ children, color, row = false, center = false, style }: { children: ReactNode; color: string;
   /** Pieces side by side, wrapping (words and boxes in a matrix row); otherwise one justified paragraph. */
-  row?: boolean; style?: ViewStyle }) {
+  row?: boolean;
+  /** Lines centred instead of justified: the matrix and compare cards, which centre each ayah under its heading. */
+  center?: boolean; style?: ViewStyle }) {
   // Until it has measured its own width, it guesses from the screen's (less a card's margins), so it is drawn at about its
   // height from the first pass: a list that scrolls to an item by its laid-out place finds it there.
   const screen = useWindowDimensions().width;
@@ -28,8 +30,8 @@ export default function AyahFlow({ children, color, row = false, style }: { chil
     <View style={style} onLayout={event => setMeasured(flowFontSize(event.nativeEvent.layout.width))}>
       <FlowSize.Provider value={{ size, color }}>
         {row
-          ? <View style={{ direction: 'rtl', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: size * 0.35 }}>{children}</View>
-          : <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, color, textAlign: 'justify', writingDirection: 'rtl' }}>{children}</Text>}
+          ? <View style={{ direction: 'rtl', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: center ? 'center' : 'flex-start', columnGap: size * 0.35 }}>{children}</View>
+          : <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, color, textAlign: center ? 'center' : 'justify', writingDirection: 'rtl' }}>{children}</Text>}
       </FlowSize.Provider>
     </View>
   );
