@@ -50,7 +50,8 @@ describe('TabBar', () => {
     expect(tabs.map(tab => tab.getAttribute('href'))).toEqual(['/quran', '/hadith', '/', '/biographies', '/quizzes']);
     expect(tabs.every(tab => tab.textContent === '' && tab.getAttribute('aria-label') && tab.querySelector('svg'))).toBe(true);
     expect(tabs.filter(tab => tab.getAttribute('aria-current')).map(tab => tab.getAttribute('href'))).toEqual(['/quizzes']);
-    expect(tabs[0].querySelector('svg')?.getAttribute('class')).toContain('-rotate-90');
+    // The Quran tab is the mushaf, not the trees (owner, 2026-11-20).
+    expect(tabs[0].querySelector('svg')?.getAttribute('class')).toContain('lucide-book-open-text');
   });
 
   it('opens settings with language, theme, about, sources and privacy, and closes with Escape', () => {
