@@ -22,6 +22,15 @@ const arabicCommas = (text: string) => text.replace(/,/g, '،');
 // Names that end in a long alif or a hamza («زكريا», «عطاء») are left as printed.
 // The book's author, marked so he is named only beside another sayer: alone, an empty line already reads as his.
 const AUTHOR = '\u0000author';
+/**
+ * A one-word name printed in the accusative with tanwin («سموه عَمْراً») in the nominative: «عَمْرو». Only «عمرو» takes
+ * tanwin of the two, since «عُمَر» is diptote, so a tanwin «عمر» is always «عمرو».
+ */
+export const nominativeName = (text: string) => {
+  const m = /^([^\s]+?)(?:ًا|اً)$/u.exec(text.trim());
+  if (!m) return text;
+  return strip(m[1]) === 'عمر' ? `${m[1]}و` : m[1];
+};
 const sayerName = (text: string) => (/^[^\s]{2,}[^\sيءى]ا$/u.test(text) ? text.slice(0, -1) : text);
 
 /**
@@ -246,7 +255,7 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
       },
       ...(fullName && { fullName }),
       // The book's other readings of the name («وقيل: …», each with its sayer), shown after the heading's.
-      ...(facts('name.full').length > 1 && { otherNames: facts('name.full').slice(1) }),
+      ...(facts('name.full').length > 1 && { otherNames: facts('name.full').slice(1).map((fact) => ({ ...fact, text: nominativeName(fact.text) })) }),
       nasab: fullName ? nasabOf(fullName.text) : [],
       kunya: facts('name.kunya'),
       laqab: facts('name.laqab'),

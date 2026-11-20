@@ -121,6 +121,11 @@ export function sayerLine(fact: PersonFact) {
 }
 const PROPHET_NAME = 'محمد ﷺ';
 
+/** «عند فلان» under one reading among several: after «عند» a kunya is genitive («عند أبي نعيم», not «عند أبو نعيم»). */
+export function sayerAt(fact: PersonFact) {
+  return `عند ${sayer(fact).split('، ').map(name => name.replace(/^(?:أبو|أبا)(?= )/u, 'أبي')).join('، ')}`;
+}
+
 const ARABIC_DIGITS = '٠١٢٣٤٥٦٧٨٩';
 const arabic = (value: string | number) => String(value).replace(/\d/g, (d) => ARABIC_DIGITS[Number(d)]);
 

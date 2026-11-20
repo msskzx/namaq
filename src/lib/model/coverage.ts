@@ -74,8 +74,9 @@ export function coverageOf(folder: WorkFolder, file: UnitFile, root: string): Co
   if (!witness) throw new Error(`${file.unit.id}: edition "${main[0].edition}" has no witness`);
   const volume = main[0].volume;
   const printed = file.unit.numbers.printed;
-  const heading = new RegExp(`(^|\\n\\n)${printed} - ?`);
-  const stop = new RegExp(`(^|\\n\\n)${nextNumber(printed)} - ?`);
+  // The print may break the line after the number (Siyar 1/501: «٨٩» then «- خبيب بن يساف»), or join the dash to the name.
+  const heading = new RegExp(`(^|\\n\\n)${printed}(?: |\\n\\n)- ?`);
+  const stop = new RegExp(`(^|\\n\\n)${nextNumber(printed)}(?: |\\n\\n)- ?`);
   const first = Math.min(...main.filter((span) => span.volume === volume).map((span) => Number(span.page)));
   const manifest = existsSync(join(root, sourcesRoot, witness.slug, 'source.json'))
     ? loadSourceManifest(root, witness.slug)
