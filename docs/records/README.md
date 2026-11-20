@@ -179,3 +179,4 @@ counts for neither.
 | [R0064](R0064-a-quoted-readings-context-words-are-trimmed-not-kept.md) | A reading's quoted context words are trimmed, not shown | obstacle | solved |
 | [R0065](R0065-a-quiz-rule-binds-only-where-its-check-runs.md) | A quiz rule binds only where its check runs | challenge | solved |
 | [R0066](R0066-a-server-prop-array-loses-its-trailing-empty-slots.md) | A server prop array loses its trailing empty slots | challenge | solved |
+| [R0067](R0067-an-editors-addition-is-told-by-its-digits.md) | An editor's addition in an old book is told by its digits | obstacle | solved |

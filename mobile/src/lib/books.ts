@@ -38,8 +38,8 @@ export function bookState(id: BookId): BookState {
 export const useBooks = () => useSyncExternalStore(subscribe, () => version);
 
 const folder = () => new Directory(Paths.document, 'books');
-/** Where each downloaded book keeps a passage's text in its entries (shared/quran/kashshaf.ts, shared/quran/irab.ts). */
-const TEXT_AT: Partial<Record<BookId, number>> = { kashshaf: 6, ukbari: 5 };
+/** Where each downloaded book keeps a passage's text in its entries (shared/quran/kashshaf.ts, shared/quran/irab.ts, shared/readerBooks.ts). */
+const TEXT_AT: Partial<Record<BookId, number>> = { kashshaf: 6, ukbari: 5, kirmani: 1, iskafi: 1, zubayr: 1 };
 /** A book's data must be a book: its source and a list of passages, each with its text where that book keeps it; a hadith book its kitabs (shared/sahih.ts). */
 const readable = (id: BookId, data: unknown) => {
   if (bookOf(id).kind === 'hadith') {
@@ -51,6 +51,10 @@ const readable = (id: BookId, data: unknown) => {
   const at = TEXT_AT[id] ?? -1;
   if (!book || typeof book !== 'object' || !book.source || typeof book.source !== 'object' || !Array.isArray(book.entries)
     || !book.entries.every(entry => Array.isArray(entry) && typeof entry[at] === 'string')) throw new Error('not a book');
+  // A book of mutashabih carries its own page breaks (shared/readerBooks.ts MutashabihBookData).
+  const pageBreaks = (book as { breaks?: unknown }).breaks;
+  if (bookOf(id).kind === 'mutashabih' && !(Array.isArray(pageBreaks) && pageBreaks.length
+    && pageBreaks.every(row => Array.isArray(row) && row.length === 4 && row.every(Number.isInteger)))) throw new Error('not a book');
   return data;
 };
 const fileOf = (id: BookId) => new File(folder(), `${id}.json`);

@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const BOOK_FILES = ['./shared/data/quran/tafsirSadi.json', './shared/data/quran/kashshaf.js', './shared/data/quran/irabUkbari.js'];
+const BOOK_FILES = ['./shared/data/quran/tafsirSadi.json', './shared/data/quran/kashshaf.js', './shared/data/quran/irabUkbari.js', './shared/data/quran/mutashabih[KIZ]*.js'];
 const SAHIH_FILES = ['./data/hadith/sahih/*.json'];
 
 const nextConfig: NextConfig = {

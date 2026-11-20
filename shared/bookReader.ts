@@ -5,8 +5,8 @@ import { num } from './quran/arabicNumber';
  * scripts/quran/buildBookPages.ts finds where each printed page starts inside the passages (bookPages.json); a page is
  * the run of text from its start to the next page's.
  */
-export type ReaderBookId = 'sadi' | 'kashshaf' | 'ukbari';
-/** A passage: the ayat it is on and its text, Quran quotes in ﴿…﴾. */
+export type ReaderBookId = 'sadi' | 'kashshaf' | 'ukbari' | 'kirmani' | 'iskafi' | 'zubayr';
+/** A passage: the ayat it is on and its text, Quran quotes in ﴿…﴾. `from` 0 is a chapter on its whole surah, surah 0 the author's preface. */
 export type BookEntry = { surah: number; from: number; to: number; text: string };
 /** [passage, offset in its text, part (volume), page]. */
 export type PageBreak = [number, number, number, number];
@@ -94,9 +94,19 @@ export function runsIn(text: string, from: number, to: number): { text: string; 
   return runs;
 }
 
-/** The pill over a passage's start: its surah and ayat. */
+/** The pill over a passage's start: its surah and ayat, or the surah alone over a chapter on all of it. */
 export const entryLabel = (entry: Pick<BookEntry, 'from' | 'to'>, surahName: string) =>
-  `${surahName} ${entry.from === entry.to ? num(entry.from) : `${num(entry.from)}–${num(entry.to)}`}`;
+  !entry.from ? surahName : `${surahName} ${entry.from === entry.to ? num(entry.from) : `${num(entry.from)}–${num(entry.to)}`}`;
+
+/** The ayah a passage opens at in the mushaf: its first, or a whole surah's first; none for a preface. */
+export const entryAyah = (entry: Pick<BookEntry, 'surah' | 'from'>): string | null => (entry.surah ? `${entry.surah}:${entry.from || 1}` : null);
+
+/** The page (index in `pages`) printed with this part and page number, or the nearest before it. */
+export function pageOfPrinted(pages: BookPage[], part: number, page: number): number {
+  let found = 0;
+  pages.forEach((item, i) => { if (item.part < part || (item.part === part && item.page <= page)) found = i; });
+  return found;
+}
 
 const MARKS = '[\\u064B-\\u065F\\u0670\\u0640\\u06D6-\\u06ED]*';
 const LETTERS: Record<string, string> = { 'ا': '[اأإآٱ]', 'أ': '[اأإآٱ]', 'إ': '[اأإآٱ]', 'آ': '[اأإآٱ]', 'ٱ': '[اأإآٱ]', 'ه': '[هة]', 'ة': '[هة]', 'ي': '[يى]', 'ى': '[يى]' };

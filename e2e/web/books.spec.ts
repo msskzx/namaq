@@ -42,3 +42,13 @@ test('the mushaf puts its فاصلة on the page open from the top bar, nothing 
   await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('reading-fasila') ?? '{}').quran)).toEqual({ key: '2:1', page: 2 });
   await expect(page.getByRole('button', { name: 'أزل الفاصلة من هذه الصفحة' }).first()).toHaveAttribute('aria-pressed', 'true');
 });
+
+// A branch card's citation of a book of mutashabih opens that book at the cited printed page (shared/readerBooks.ts citationInBook).
+test("a book of mutashabih opens at a citation's printed page, with the preface named in its contents", async ({ page }) => {
+  await page.goto('/quran/books/iskafi?printed=2:490');
+  await expect(page).toHaveURL(/\/quran\/books\/iskafi\/\d+$/);
+  await expect(page.getByRole('link', { name: 'ص ٤٩٠' })).toBeVisible();
+  await expect(page.getByText(/للسائل أن يسأل/).first()).toBeVisible();
+  await page.getByRole('button', { name: 'فهرس الكتاب ومحفوظاته' }).first().click();
+  await expect(page.getByRole('link', { name: /^المقدمة،/ })).toBeVisible();
+});
