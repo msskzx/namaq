@@ -7,7 +7,8 @@ import { num } from '@shared/quran/arabicNumber';
 import Sheet from '@/ui/Sheet';
 import { Text } from '@/ui/Text';
 import { ayahText } from '@/lib/mushaf';
-import { QURAN_FONT, type Palette } from '@/lib/theme';
+import type { Palette } from '@/lib/theme';
+import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
 import IconButton from '@/ui/IconButton';
 import { onLeave } from '@/lib/storage';
 import { surahName } from '@shared/quran/surahNames';
@@ -52,7 +53,7 @@ export default function NoteSheet({ ayah, onClose, palette }: { ayah: string | n
             <IconButton Icon={Send} label="مشاركة" onPress={() => { flush(); onClose(); shareAyah(shown, palette, text.trim(), true); }} />
           )}
         </View>
-        {shown && <Text numberOfLines={2} style={{ color: palette.muted, fontFamily: QURAN_FONT, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>{ayahText(shown)}</Text>}
+        {shown && <AyahFlow lines={2} color={palette.muted}><AyahWords>{ayahText(shown)}</AyahWords></AyahFlow>}
         <Field value={text} onChangeText={edit} multiline autoFocus={!!shown && !readAyahNotes()[shown]} placeholder="تأملك في هذه الآية" label="تأملك في هذه الآية" palette={palette} style={{ flex: 1 }} />
       </View>
     </Sheet>

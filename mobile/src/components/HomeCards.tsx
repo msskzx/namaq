@@ -23,7 +23,8 @@ import { ayahMushafWords, ayahText } from '@/lib/mushaf';
 import type { CompareTarget } from '@/lib/compare';
 import { cardWays, forgottenCard, forgottenWays, noteCard, savedCard, shownBookmarks, shelfText, type CardWay, type SavedCard } from '@/lib/home';
 import { followWay, openIntent } from '@/lib/ways';
-import { QURAN_FONT, type Palette } from '@/lib/theme';
+import type { Palette } from '@/lib/theme';
+import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
 import Card from '@/ui/Card';
 
 const KIND_ICONS: Record<BookmarkKind, (props: LucideProps) => React.ReactNode> = { tree: TreeIcon, compare: ArrowLeftRight, ayah: BookOpen, card: Bookmark };
@@ -65,7 +66,7 @@ export function ShelfCard({ card, palette, onPress, wide = false, note = false, 
       </View>
       {note
         ? <Text numberOfLines={wide ? undefined : 6} style={{ color: palette.ink, fontSize: 17, lineHeight: 28, textAlign: 'right' }}>{card.text}</Text>
-        : <Text numberOfLines={wide ? undefined : 5} style={{ marginVertical: 'auto', color: palette.ink, fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 40, textAlign: 'right' }}>{shelfText(card)}</Text>}
+        : <AyahFlow lines={wide ? undefined : 5} color={palette.ink} style={{ marginVertical: 'auto' }}><AyahWords>{shelfText(card)}</AyahWords></AyahFlow>}
     </Card>
   );
 }
