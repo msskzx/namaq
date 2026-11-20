@@ -1,0 +1,1466 @@
+{
+ "tree:1w0rfil01piu5h": {
+  "keep": true,
+  "why": "Same closing with a different lead-in: «ذلك هو الضلال البعيد» in 14:18 and 22:12 versus «في العذاب والضلال البعيد» in 34:8."
+ },
+ "tree:05f7jt01sk3il6": {
+  "keep": true,
+  "why": "Same hypocrites' oath «إن أردنا إلا» ending «إحسانا وتوفيقا» in 4:62 versus «الحسنى» in 9:107."
+ },
+ "tree:04xz9je1w8c1xm": {
+  "keep": true,
+  "why": "Same clause «في الأرض ولا في السماء» closing 3:5 and 14:38 (both «لا يخفى/وما يخفى على الله») but continuing in 10:61 and 29:22, the set the books also compare for the order of earth and sky."
+ },
+ "tree:1plttd31fuflmt": {
+  "keep": true,
+  "why": "Same «ملك السماوات والأرض وما» with a different word after: «بينهما» (5:17, 5:18, 38:10, 43:85), «فيهن» (5:120) or «لكم من دون الله» (2:107)."
+ },
+ "tree:1y14g0w07p8mrw": {
+  "keep": true,
+  "why": "Same «هو الذي يحيي ويميت» followed by «وله اختلاف الليل والنهار» in 23:80 versus «فإذا قضى أمرا» in 40:68."
+ },
+ "tree:17l1khf1falshb": {
+  "keep": true,
+  "why": "Same sentence «ومن يضلل الله فما له من» ending «هاد», «ولي من بعده» or «سبيل», with the reversed «ومن يهد الله فما له من مضل» (39:37) and «ومن يهن الله فما له من مكرم» (22:18)."
+ },
+ "tree:0d7m3yn1pey2zv": {
+  "keep": true,
+  "why": "Same «فإن تولوا فإن الله» ending «لا يحب الكافرين» in 3:32 versus «عليم بالمفسدين» in 3:63, in the same surah."
+ },
+ "tree:0gu2m6v134zp63": {
+  "keep": true,
+  "why": "Same statement «الذي خلق الأزواج كلها» opened by «سبحان» in 36:36 and by «و» in 43:12, then continuing differently."
+ },
+ "tree:0t3ldzx0va7zjd": {
+  "keep": true,
+  "why": "Same closing «إلا نذير مبين» after «إن هو» (7:184), «إن أنا» (26:115) and «وما أنا» (46:9)."
+ },
+ "tree:1unreyf0ro1tfx": {
+  "keep": false,
+  "why": "Only «من قبله من» is shared; Qarun's destroyed generations (28:78) and the Prophet not reciting a book before (29:48) have nothing to tell apart."
+ },
+ "tree:0x5b27e1n6a69i": {
+  "keep": false,
+  "why": "The six ayat share only the closing «في السماوات والأرض وهو العزيز الحكيم»; the good card is the openers 57:1, 59:1 and 61:1 («سبح لله ما في السماوات (وما في) الأرض»), which the books already compare, while 30:27 and 45:37 do not belong.",
+  "before": {
+   "keep": true,
+   "why": "mutashabih: the places differ by a word or two, worth a tree"
+  }
+ },
+ "tree:0aqzrsd1u0zs5x": {
+  "keep": false,
+  "why": "Only «قالوا إنا كنا» is shared; the doomed confessing wrongdoing (7:5) and the people of the Garden recalling their fear (52:26) are unrelated.",
+  "before": {
+   "keep": true,
+   "why": "qalu inna kunna zalimin (7:5) vs qablu fi ahlina (52:26)"
+  }
+ },
+ "tree:0d3zhqt1oo9lor": {
+  "keep": false,
+  "why": "Only «شيئا إن الله عليم» across an ayah end; conjecture (10:36) and old age (16:70) are unrelated and the closings are stock names.",
+  "before": {
+   "keep": true,
+   "why": "10:36 alimun bima yaf'alun vs 16:70 alimun qadir"
+  }
+ },
+ "tree:130w31i085j9r0": {
+  "keep": false,
+  "why": "Only «أهل الكتاب من» is shared, in unrelated sentences (3:75 trustworthiness, 4:123 wishful thinking)."
+ },
+ "tree:0sbas6q1lvrfmg": {
+  "keep": false,
+  "why": "Only «تقدموا بين يدي» is shared: not going ahead of Allah and His Messenger (49:1) versus charity before private counsel (58:13)."
+ },
+ "tree:0q8lfkp1cudozr": {
+  "keep": true,
+  "why": "Same «إن في ذلك لذكرى» ending «لأولي الألباب» in 39:21 versus «لمن كان له قلب» in 50:37."
+ },
+ "tree:11c56vn1tzrptt": {
+  "keep": false,
+  "why": "Only «ما كان لكم أن» is shared, in unrelated subjects (trees in 27:60, the Prophet's house in 33:53)."
+ },
+ "tree:0vpdozg0682rja": {
+  "keep": true,
+  "why": "Same exception «إلا من (تاب و)آمن وعمل صالحا فأولئك» followed by «يدخلون الجنة» in 19:60 versus «لهم جزاء الضعف» in 34:37."
+ },
+ "tree:14z8kxm0c1ct52": {
+  "keep": false,
+  "why": "Only the phrase «من عمل الشيطان» is shared; wine and gambling (5:90) and Musa striking the man (28:15) have nothing to confuse.",
+  "before": {
+   "keep": true,
+   "why": "Min 'amalish shaytan: 5:90 vs Musa 28:15"
+  }
+ },
+ "tree:12k3hd41kyldv8": {
+  "keep": false,
+  "why": "Only «الأرض إنه كان» plus stock divine names is shared; 25:6 and 35:44 are otherwise unrelated.",
+  "before": {
+   "keep": true,
+   "why": "'innahu kana' ghafuran rahima vs 'aliman qadira"
+  }
+ },
+ "tree:0jq5i2d16zejsr": {
+  "keep": false,
+  "why": "Keep only 8:28 and 9:22 («أن الله عنده أجر عظيم», already a checked card); 31:34 «عنده علم الساعة» does not belong.",
+  "before": {
+   "keep": true,
+   "why": "indahu ajrun azim vs indahu ilm al-sa'a"
+  }
+ },
+ "tree:1dpjk7s00g0nc6": {
+  "keep": true,
+  "why": "Same rain sign «نزل من السماء ماء» then reviving dead land in different words: «فأحيا به الأرض من بعد موتها» (29:63) versus «بقدر فأنشرنا به بلدة ميتا» (43:11)."
+ },
+ "tree:0u07gz30t1na97": {
+  "keep": false,
+  "why": "Only the stock closing «وأنت أرحم الراحمين» is shared; Musa's prayer (7:151) and Ayyub's call (21:83) are otherwise different.",
+  "before": {
+   "keep": true,
+   "why": "wa-anta arhamu ar-rahimin: Musa's prayer vs Ayyub's"
+  }
+ },
+ "tree:1qxa24n0d9kep7": {
+  "keep": true,
+  "why": "Same condition «وإن تؤمنوا وتتقوا» with a different reward: «فلكم أجر عظيم» (3:179) versus «يؤتكم أجوركم» (47:36)."
+ },
+ "tree:0m0ptwh1kyva2z": {
+  "keep": true,
+  "why": "Same command in one surah «أطيعوا الله ورسوله ولا» followed by «تولوا عنه» (8:20) versus «تنازعوا فتفشلوا» (8:46)."
+ },
+ "tree:0hmbzay0wky7n6": {
+  "keep": false,
+  "why": "Only «ما خلق الله في» is shared, in a divorce ruling (2:228) and a sign of creation (10:6)."
+ },
+ "tree:0v455xi1ocvaj8": {
+  "keep": true,
+  "why": "Same «لكن الذين اتقوا ربهم لهم» with «جنات» (3:198) versus «غرف من فوقها غرف» (39:20), and «وسيق الذين اتقوا ربهم» (39:73)."
+ },
+ "tree:1via7v40wvgmzy": {
+  "keep": false,
+  "why": "Keep only 41:52 and 46:10 («قل أرأيتم إن كان من عند الله» then «ثم كفرتم به» versus «وكفرتم به»), which the books compare; 4:82 «من عند غير الله» does not belong.",
+  "before": {
+   "keep": true,
+   "why": "41:52 vs 46:10 in kana min indi Allah thumma kafartum / wa kafartum"
+  }
+ },
+ "tree:104h1xi0tjywko": {
+  "keep": false,
+  "why": "Only «من قبل قد» is shared, across an unrelated Day-of-Judgement scene (7:53) and Yusuf's dream (12:100)."
+ },
+ "tree:0pch9nl1jixevf": {
+  "keep": true,
+  "why": "Same «الساعة بغتة» with a different continuation: «قالوا يا حسرتنا» (6:31), «وهم لا يشعرون» (12:107), «أو يأتيهم عذاب يوم عقيم» (22:55)."
+ },
+ "tree:0th0z3t0xwrdnh": {
+  "keep": true,
+  "why": "Same opening «لقد أرسلنا نوحا إلى قومه» followed by «فقال يا قوم اعبدوا الله» (7:59, 23:23, with different endings), «إني لكم نذير مبين» (11:25) or «فلبث فيهم» (29:14)."
+ },
+ "tree:0lcwgjy0f3oura": {
+  "keep": true,
+  "why": "Same «ولو شئنا ل» with three different consequences: «لرفعناه بها» (7:176), «لبعثنا في كل قرية نذيرا» (25:51), «لآتينا كل نفس هداها» (32:13)."
+ },
+ "tree:09z8zab0m2ukir": {
+  "keep": true,
+  "why": "Same closing «عما يصفون» after different glorifications: «سبحانه وتعالى» (6:100), «سبحان الله رب العرش» (21:22), «سبحان الله» (23:91, 37:159), «سبحان ربك رب العزة» (37:180), «سبحان رب السماوات والأرض رب العرش» (43:82)."
+ },
+ "tree:0n1rqks0vvpagk": {
+  "keep": false,
+  "why": "Nine ayat share only «الذين اتقوا» and are too different for one card; the good card is 3:198, 39:20 and 39:73 («الذين اتقوا ربهم»), which tree:0v455xi1ocvaj8 already holds.",
+  "before": {
+   "keep": true,
+   "why": "Holds the lakin alladhina ittaqaw rabbahum pair; places branch distinctly"
+  }
+ },
+ "tree:1ocbvfe0lzqjda": {
+  "keep": false,
+  "why": "Only «يكن لهم» is shared, across four unrelated places."
+ },
+ "tree:0mk1y1z0nxnjcb": {
+  "keep": true,
+  "why": "Same «يريكم البرق خوفا وطمعا» followed by «وينشئ السحاب الثقال» (13:12) versus «وينزل من السماء ماء» (30:24)."
+ },
+ "tree:1etqhut1r1bkf5": {
+  "keep": true,
+  "why": "Same opener «من كان يريد» with a different object each time: «ثواب الدنيا» (4:134), «الحياة الدنيا وزينتها» (11:15), «العاجلة» (17:18), «العزة» (35:10), «حرث الآخرة» (42:20)."
+ },
+ "tree:0swe5hy0ktw1fi": {
+  "keep": true,
+  "why": "Same opener «كلا بل» continuing «لا يخافون» (74:53), «تحبون» (75:20), «تكذبون» (82:9), «ران» (83:14), «لا تكرمون» (89:17), and «هو الله» (34:27)."
+ },
+ "tree:0bb07lo1mgsl70": {
+  "keep": true,
+  "why": "Same surah opener «تنزيل الكتاب» with «لا ريب فيه من رب العالمين» (32:2) versus «من الله العزيز الحكيم» (39:1, 45:2, 46:2) versus «العزيز العليم» (40:2)."
+ },
+ "tree:0o9qfw91283ynh": {
+  "keep": false,
+  "why": "Only «ما ليس لكم به علم» is shared, in a debate with the People of the Book (3:66) and the slander (24:15), with nothing to tell apart.",
+  "before": {
+   "keep": true,
+   "why": "Rare clause ma laysa lakum bihi 'ilm with different continuations"
+  }
+ },
+ "tree:1ussthb1ac8rcx": {
+  "keep": true,
+  "why": "Same «الذين لا يؤمنون بالله» with «ولا باليوم الآخر» in 9:29 versus «واليوم الآخر» in 9:45, in the same surah."
+ },
+ "tree:1dr5v2n1fmtvvn": {
+  "keep": false,
+  "why": "Only «في قلوبكم» is shared, across six unrelated places."
+ },
+ "tree:17glh171srpdz1": {
+  "keep": false,
+  "why": "Keep only 3:133 and 57:21 («وسارعوا» versus «سابقوا إلى مغفرة من ربكم وجنة عرضها»), which the books compare; 3:136, 47:15 and 57:20 share only «مغفرة من».",
+  "before": {
+   "keep": true,
+   "why": "Sari'u 3:133 vs sabiqu 57:21 ila maghfiratin min rabbikum"
+  }
+ },
+ "tree:0trgpn80vtk9j0": {
+  "keep": false,
+  "why": "Only «في المدينة» is shared, across six unrelated stories."
+ },
+ "tree:01q9lzr0sj0h81": {
+  "keep": true,
+  "why": "Same ruling on forbidden meat, with «فمن اضطر غير باغ ولا عاد» closing «فلا إثم عليه إن الله» (2:173), «فإن ربك» (6:145) or «فإن الله» (16:115), and 5:3 worded differently."
+ },
+ "tree:0y9qicf12ms5s9": {
+  "keep": true,
+  "why": "Same «وأغرقنا آل فرعون» closing with «وأنتم تنظرون» (2:50) versus «وكل كانوا ظالمين» (8:54)."
+ },
+ "tree:0o5n9wp0owy5tz": {
+  "keep": false,
+  "why": "Only «ما يريد» is shared; «يحكم ما يريد» (5:1) and «يفعل ما يريد» (22:14) are stock closings in unrelated ayat."
+ },
+ "tree:0uwktw410o2jl2": {
+  "keep": false,
+  "why": "Only «لما قضي/قضى» is shared, in four unrelated scenes."
+ },
+ "tree:0gqeeop0hkjk5f": {
+  "keep": false,
+  "why": "Keep only 5:1 and 22:30 («أحلت لكم (بهيمة) الأنعام إلا ما يتلى عليكم»), which the books compare; 4:127 and 33:34 share only «ما يتلى».",
+  "before": {
+   "keep": true,
+   "why": "Illa ma yutla 'alaykum 5:1 vs 22:30, and 4:127"
+  }
+ },
+ "tree:07li8va05ockpo": {
+  "keep": false,
+  "why": "Only «من الجنة» ties these together; the pair worth a card is 29:58 and 39:74 («لنبوئنهم من الجنة» versus «نتبوأ من الجنة», both ending «نعم أجر العاملين»).",
+  "before": {
+   "keep": true,
+   "why": "Adam's expulsion minal janna 7:27 vs 20:117"
+  }
+ },
+ "tree:0jr6nzn1rfiwmf": {
+  "keep": false,
+  "why": "«يا أيها الذين آمنوا اتقوا الله» is a common opener here followed by seven unrelated commands, so there is nothing to tell apart.",
+  "before": {
+   "keep": true,
+   "why": "Ittaqu Allah wa: dharu / haqqa tuqatihi / ibtaghu / kunu / qulu"
+  }
+ },
+ "tree:0nf8oxt02h8jdt": {
+  "keep": true,
+  "why": "Same cry «قالوا يا ويلنا» ending «إنا كنا ظالمين» (21:14) versus «إنا كنا طاغين» (68:31), with «من بعثنا» (36:52) and «هذا يوم الدين» (37:20)."
+ },
+ "tree:0rzgpdk0laqgyi": {
+  "keep": true,
+  "why": "Same «فبلغن أجلهن» followed by «فأمسكوهن بمعروف أو سرحوهن/فارقوهن» (2:231, 65:2), «فلا تعضلوهن» (2:232) or «فلا جناح عليكم» (2:234)."
+ },
+ "tree:1m7aixd03hycqv": {
+  "keep": true,
+  "why": "Same «الأسماء الحسنى» introduced by «ولله» (7:180) or «له/فله» (17:110, 20:8, 59:24), each continuing differently."
+ },
+ "tree:17vpc461p4flhw": {
+  "keep": true,
+  "why": "Same «الذي له ملك السماوات والأرض» followed by «لا إله إلا هو» (7:158), «ولم يتخذ ولدا» (25:2), «وما بينهما» (43:85) or «والله على كل شيء شهيد» (85:9)."
+ },
+ "tree:0pzernp1g4254n": {
+  "keep": true,
+  "why": "Same «إنا أعتدنا» with «للظالمين نارا» (18:29), «جهنم للكافرين نزلا» (18:102), «للكافرين سعيرا» (48:13) and «للكافرين سلاسل وأغلالا وسعيرا» (76:4)."
+ },
+ "tree:0lr2pgm0hvrjm2": {
+  "keep": true,
+  "why": "Same «رب أوزعني أن أشكر نعمتك» in 27:19 and 46:15 with different endings, beside «أن اشكر لله» (31:12) and «أن اشكر لي ولوالديك» (31:14)."
+ },
+ "tree:01w76c41mpae26": {
+  "keep": true,
+  "why": "Same closing «صراطا مستقيما» after «ولهديناهم» (4:68), «ويهديهم إليه» (4:175), «ويهديك» (48:2) and «ويهديكم» (48:20)."
+ },
+ "tree:1qok6eb15k7g8t": {
+  "keep": false,
+  "why": "Only the stock closing «أعتدنا لهم عذابا أليما» is shared, after unrelated lead-ins, so there is nothing to tell apart.",
+  "before": {
+   "keep": true,
+   "why": "Identical closing in 4:18 and 17:10, different lead-ins"
+  }
+ },
+ "tree:1ftoon00u0367w": {
+  "keep": false,
+  "why": "Keep only Lut's words in 7:80 and 29:28 («أتأتون» versus «إنكم لتأتون الفاحشة ما سبقكم بها من أحد من العالمين»); the other four share only «أحد من».",
+  "before": {
+   "keep": true,
+   "why": "Lut pair 7:80/29:28 identical; other four places are noise"
+  }
+ },
+ "tree:1pu6xow03ubjnk": {
+  "keep": false,
+  "why": "Keep only 6:6, 7:43, 10:9 and 18:31 («تجري من تحتهم الأنهار»); 39:16 «ومن تحتهم ظلل» does not belong.",
+  "before": {
+   "keep": true,
+   "why": "Tajri min tahtihimul anhar 7:43/10:9/18:31 vs 6:6, 39:16"
+  }
+ },
+ "tree:0m4yxp41ucasg4": {
+  "keep": false,
+  "why": "Only «فيها من كل الثمرات» is shared, between the burnt garden parable (2:266) and the rivers of the Garden (47:15), with nothing to confuse.",
+  "before": {
+   "keep": true,
+   "why": "lahu fiha min kulli al-thamarat (2:266) vs wa lahum (47:15)"
+  }
+ },
+ "tree:0g10fzm15i51l2": {
+  "keep": true,
+  "why": "Same «فلا تبتئس بما كانوا» ending «يفعلون» for Nuh (11:36) versus «يعملون» for Yusuf (12:69)."
+ },
+ "tree:0hpbcrh15enhd9": {
+  "keep": true,
+  "why": "Same «فبلغن أجلهن فلا» followed by «تعضلوهن» (2:232) versus «جناح عليكم» (2:234), in neighbouring ayat."
+ },
+ "tree:1y37y8t1b7olt9": {
+  "keep": false,
+  "why": "Keep only 7:101, 10:74 and 30:59 («كذلك يطبع الله على قلوب الكافرين / نطبع على قلوب المعتدين / يطبع الله على قلوب الذين لا يعلمون»); 47:24 «أم على قلوب أقفالها» does not belong.",
+  "before": {
+   "keep": true,
+   "why": "kadhalika yatba'u/natba'u ala qulub al-kafirin / mu'tadin / alladhina"
+  }
+ },
+ "tree:0swimoj1nrfqkt": {
+  "keep": false,
+  "why": "Only the opener «اعلموا أنما» is shared, followed by five unrelated statements.",
+  "before": {
+   "keep": true,
+   "why": "'i'lamu annama' 'ala rasulina / amwalukum / ghanimtum / al-hayat"
+  }
+ },
+ "tree:1k11fsb18arc3h": {
+  "keep": true,
+  "why": "Same «قرآنا عربيا» followed by «وصرفنا فيه من الوعيد» (20:113), «غير ذي عوج» (39:28), «لقوم يعلمون» (41:3) and «لتنذر أم القرى» (42:7)."
+ },
+ "tree:0rtf4ta11sp6dw": {
+  "keep": true,
+  "why": "Same words «إني لكم نذير مبين» from Nuh, after «ولقد أرسلنا نوحا إلى قومه» (11:25) versus «قال يا قوم» (71:2)."
+ },
+ "tree:15y4u2z01yurgh": {
+  "keep": false,
+  "why": "Keep only 2:94, 62:6 and 3:168 («الموت إن كنتم صادقين»); 2:180 «حضر أحدكم الموت إن ترك خيرا» does not belong.",
+  "before": {
+   "keep": true,
+   "why": "الموت إن كنتم صادقين trio vs إن ترك خيرا (2:180)"
+  }
+ },
+ "tree:0iv6ycb1b5t6oz": {
+  "keep": true,
+  "why": "Same «قال الذين كفروا للذين آمنوا» with four different sayings: «أي الفريقين خير» (19:73), «اتبعوا سبيلنا» (29:12), «أنطعم» (36:47), «لو كان خيرا» (46:11)."
+ },
+ "tree:070eh5n0qj4vxr": {
+  "keep": false,
+  "why": "Only «من يشاء ومن» is shared, between wisdom given (2:269) and guidance and misguidance (39:23)."
+ },
+ "tree:1x8tiu71yjxzt1": {
+  "keep": false,
+  "why": "Keep only 6:90, 11:51 and 42:23 («لا أسألكم عليه أجرا» then «إن هو / إن أجري / إلا المودة»); 18:77 «لاتخذت عليه أجرا» is a different story.",
+  "before": {
+   "keep": true,
+   "why": "la as'alukum alayhi ajran in (6:90, 11:51) vs illa (42:23)"
+  }
+ },
+ "tree:1u9t5ya0s2fspa": {
+  "keep": true,
+  "why": "Rare pair «العداوة والبغضاء» with «بينكم» from Satan through wine (5:91) versus «بيننا وبينكم» in Ibrahim's disavowal (60:4)."
+ },
+ "tree:1um4l4f1n4dpkl": {
+  "keep": false,
+  "why": "Keep only 19:11 and 28:79 («فخرج على قومه» «من المحراب» versus «في زينته»); 6:83 and 36:28 share only «على قومه».",
+  "before": {
+   "keep": true,
+   "why": "fa-kharaja ala qawmihi min al-mihrab (19:11) vs fi zinatihi (28:79)"
+  }
+ },
+ "tree:1qm9hgb1gs1xt3": {
+  "keep": false,
+  "why": "Only the conditional «إن خفتم ألا» is shared, across unrelated rulings (divorce ransom in 2:229, orphans and polygamy in 4:3).",
+  "before": {
+   "keep": true,
+   "why": "fa-in khiftum alla yuqima hududa Allah vs wa-in khiftum alla tuqsitu"
+  }
+ },
+ "tree:03f1p3d0g9lvq9": {
+  "keep": false,
+  "why": "Only particles «الذين كفروا إن» are shared between 4:101 and 21:30."
+ },
+ "tree:1rd8qjw0b89gx6": {
+  "keep": true,
+  "why": "Same sign: «وأنزل لكم» (27:60) versus «وأنزلنا» (31:10) «من السماء ماء فأنبتنا» «به حدائق» versus «فيها من كل زوج كريم», better seen stacked.",
+  "view": "matrix"
+ },
+ "tree:08396bi0ogxtqo": {
+  "keep": false,
+  "why": "Two separate good cards share only «على آثارهم»: 43:22 and 43:23 («مهتدون» versus «مقتدون») and 5:46 and 57:27 («وقفينا على آثارهم»); 18:6 and 37:70 do not belong.",
+  "before": {
+   "keep": true,
+   "why": "ala atharihim muhtadun vs muqtadun (43:22/23), qaffayna pair too"
+  }
+ },
+ "tree:0i0fxwm1hxi27y": {
+  "keep": true,
+  "why": "Same greeting scene with Ibrahim's guests: «قالوا سلاما قال سلام» then «فما لبث» (11:69) or «قوم منكرون» (51:25) versus «إنا منكم وجلون» (15:52)."
+ },
+ "tree:1pir5yk086mo8e": {
+  "keep": false,
+  "why": "The closing «لعلهم يتقون» is a common formula across six unrelated ayat; 20:113 and 39:28 already sit in the «قرآنا عربيا» card.",
+  "before": {
+   "keep": true,
+   "why": "la'allahum yattaqun vs wa la'allahum, 20:113 aw yuhdithu"
+  }
+ },
+ "tree:0o615371ccjlxh": {
+  "keep": true,
+  "why": "Same «انظر كيف» with «نبين لهم الآيات ثم انظر أنى يؤفكون» (5:75) versus «نصرف الآيات ثم هم يصدفون» (6:46)."
+ },
+ "tree:11ynsy70xyn70t": {
+  "keep": false,
+  "why": "Only «من فضله والله» is shared, with marriage (24:32) and the men of the mosques (24:38) closing on unrelated names.",
+  "before": {
+   "keep": true,
+   "why": "Same surah 24:32 wasi'un 'alim vs 24:38 yarzuqu"
+  }
+ },
+ "tree:03oxyih17wd51t": {
+  "keep": true,
+  "why": "Same expulsion of the People of the Book with «وقذف في قلوبهم الرعب»: «من صياصيهم» (33:26) versus «من ديارهم» (59:2)."
+ },
+ "tree:06j4p6905dcl5x": {
+  "keep": false,
+  "why": "Seven ayat share only «أنزلنا إليك»; the good card is 4:105, 5:48 and 39:2 («إنا أنزلنا / وأنزلنا إليك الكتاب بالحق»), which tree:1hpgg0s1tifhtg «الكتاب بالحق» covers.",
+  "before": {
+   "keep": true,
+   "why": "anzalna ilayka: al-kitab bil-haqq set, adh-dhikr, ayatin bayyinat"
+  }
+ },
+ "tree:0oeba1r0xdnwox": {
+  "keep": false,
+  "why": "Only «اليوم في» is shared, between wrongdoers in error (19:38) and the people of the Garden (36:55)."
+ },
+ "tree:0nsxyfr1j6bju9": {
+  "keep": true,
+  "why": "Same «وما أرسلناك» followed by «إلا مبشرا ونذيرا» (17:105, 25:56), «إلا كافة للناس» (34:28), «إلا رحمة للعالمين» (21:107) or «عليهم حفيظا / وكيلا» (4:80, 42:48, 17:54)."
+ },
+ "tree:0jfp8h51wxs3h1": {
+  "keep": true,
+  "why": "Same «أعتدنا للظالمين» with «نارا أحاط بهم سرادقها» (18:29) versus «عذابا أليما» (25:37)."
+ },
+ "tree:1ft5wx517jtnpn": {
+  "keep": true,
+  "why": "Same «موسى بآياتنا إلى فرعون وملئه» after «ثم بعثنا من بعدهم» then «فظلموا بها» (7:103) versus «ولقد أرسلنا» then «فقال إني رسول» (43:46)."
+ },
+ "tree:1uhcsq705cvmtl": {
+  "keep": false,
+  "why": "Seven ayat share only «المؤمنين والمؤمنات»; the good card is 9:72, 48:5 and 57:12 («جنات تجري من تحتها الأنهار خالدين فيها» with «الفوز العظيم» / «فوزا عظيما»).",
+  "before": {
+   "keep": true,
+   "why": "Believing men and women: جنات (9:72, 48:5) vs others"
+  }
+ },
+ "tree:1hpgg0s1tifhtg": {
+  "keep": true,
+  "why": "Same «الكتاب بالحق» after «نزل», «أنزل» or «أنزلنا إليك» and continuing «مصدقا», «ليحكم / لتحكم», «فاعبد الله» or «والميزان»."
+ },
+ "tree:1n577sy0lbd04o": {
+  "keep": true,
+  "why": "Same closing «(يبين / يفصل / بينا) لكم الآيات لعلكم» ending «تتفكرون» (2:219, 2:266), «تعقلون» (24:61, 57:17) or «بلقاء ربكم توقنون» (13:2)."
+ },
+ "tree:1dhoj831tyi2k5": {
+  "keep": true,
+  "why": "As-Saffat refrain «إنا كذلك نجزي المحسنين» versus «نفعل بالمجرمين» (37:34), with 37:105 adding «قد صدقت الرؤيا» and 77:44 outside the surah."
+ },
+ "tree:039zthv0e57ht3": {
+  "keep": true,
+  "why": "Same «لبئس ما كانوا» ending «يعملون» (5:62), «يصنعون» (5:63) and «يفعلون» (5:79), in one surah."
+ },
+ "tree:1bjyp3512df2br": {
+  "keep": true,
+  "why": "Same «على سفر» clause: «فعدة من أيام أخر» (2:184, 2:185), «أو جاء أحد منكم من الغائط» (4:43, 5:6) and «ولم تجدوا كاتبا» (2:283) against «فلم تجدوا ماء»."
+ },
+ "tree:1yeo29l05demd3": {
+  "keep": true,
+  "why": "Same words «إني لكم رسول أمين» repeated by five prophets in ash-Shu'ara and by Musa in 44:18 after «أن أدوا إلي عباد الله»."
+ },
+ "tree:1j9crza0f5cgs2": {
+  "keep": true,
+  "why": "Same «نعمتي التي أنعمت عليكم» in 2:40, 2:47, 2:122 (different continuations) and «نعمتك التي أنعمت علي» in 27:19 and 46:15."
+ },
+ "tree:0n8c7z40b6zgfe": {
+  "keep": false,
+  "why": "Only «أكبر من» is shared, across six unrelated comparisons."
+ },
+ "tree:1qredas15hz4ss": {
+  "keep": true,
+  "why": "Rare «الله يجتبي» with «من رسله من يشاء» (3:179) versus «إليه من يشاء» (42:13)."
+ },
+ "tree:1jrjmry0gccwk4": {
+  "keep": false,
+  "why": "Only «إن لك في» is shared, between the Samiri (20:97) and the Prophet's daytime work (73:7)."
+ },
+ "tree:1i7cr4z1dcnysx": {
+  "keep": true,
+  "why": "Same closing «إليه تحشرون» after «الذي» (5:96, 58:9), «وهو الذي» (6:72), «أنكم» (2:203), «وأنه» (8:24) and «وهو الذي ذرأكم في الأرض وإليه» (23:79, 67:24)."
+ },
+ "tree:0wwfj4b0g93xm3": {
+  "keep": false,
+  "why": "Only 6:96, 36:38 and 41:12 share «ذلك تقدير العزيز العليم» and would make the good card; 27:78, 40:2 and 43:9 share just the closing names.",
+  "before": {
+   "keep": true,
+   "why": "ذلك تقدير العزيز العليم thrice vs other lead-ins"
+  }
+ },
+ "tree:1ru03m30lf3cff": {
+  "keep": false,
+  "why": "«من لا» is particle glue joining five unrelated ayat, so there is nothing to tell apart."
+ },
+ "tree:1gkiwra0u5mv54": {
+  "keep": false,
+  "why": "Drop 16:68 (the bee told «اتخذي من الجبال بيوتا»); the good card is 7:74, 15:82 and 26:149, where «تنحتون من الجبال بيوتا» ends with «آمنين», «فارهين» or goes on «فاذكروا آلاء الله».",
+  "before": {
+   "keep": true,
+   "why": "'min al-jibali buyutan' aminin / farihin / fadhkuru / wa min al-shajar"
+  }
+ },
+ "tree:0e4qxbr1p6m4dn": {
+  "keep": true,
+  "why": "«أين شركائي الذين كنتم تزعمون» repeats in 6:22, 28:62 and 28:74, while 16:27 has «تشاقون فيهم», a real slip point."
+ },
+ "tree:04wuymj0hhxlgr": {
+  "keep": false,
+  "why": "«حتى حين» is a short stock ending with unrelated lead-ins; only 37:174 and 37:178 («فتول» against «وتول») make a card.",
+  "before": {
+   "keep": true,
+   "why": "Ending 'hatta hin' in six places with different lead-ins"
+  }
+ },
+ "tree:0kwl9p612w7olq": {
+  "keep": true,
+  "why": "After «فقد ضل» the endings part: «سواء السبيل» in 2:108, 5:12, 60:1, «ضلالا بعيدا» in 4:116, 4:136, «ضلالا مبينا» in 33:36."
+ },
+ "tree:1q0lit602e955w": {
+  "keep": false,
+  "why": "«على نفسه» is scattered across unrelated ayat; only 6:12 and 6:54 («كتب على نفسه الرحمة») belong together."
+ },
+ "tree:0po26901s1ea5e": {
+  "keep": true,
+  "why": "Same command «يا أيها الذين آمنوا لا تتخذوا ... أولياء ومن يتولهم منكم», ending «فإنه منهم» in 5:51 and «فأولئك هم الظالمون» in 9:23."
+ },
+ "tree:13r6rdf1leequx": {
+  "keep": true,
+  "why": "Same rescue of Nuh, «فنجيناه وأهله من الكرب العظيم» in 21:76 against «ونجيناه» in 37:76."
+ },
+ "tree:02b61cs0fux4jo": {
+  "keep": false,
+  "why": "Two separate families share only «قال ربك»: «وإذ قال ربك للملائكة إني» in 2:30, 15:28, 38:71 and «كذلك قال ربك هو علي هين» in 19:9, 19:21 (with 51:30), each a card of its own.",
+  "before": {
+   "keep": true,
+   "why": "idh qala rabbuka lil-mala'ika inni ja'il/khaliq; kadhalika qala rabbuka huwa"
+  }
+ },
+ "tree:085bfdt089e12r": {
+  "keep": true,
+  "why": "Nearly the same ayah, «أفلم يهد لهم» with «قبلهم» against «أولم يهد لهم» with «من قبلهم», ending «لأولي النهى» or «أفلا يسمعون»; best stacked.",
+  "view": "matrix"
+ },
+ "tree:1ix68mf1y9kkbv": {
+  "keep": true,
+  "why": "«فإن لله ما في السماوات وما في الأرض» in 4:131 against «وإن تكفروا فإن لله ما في السماوات والأرض» in 4:170 and «ألا إن لله» in 10:55 and 24:64, each with a different continuation."
+ },
+ "tree:09l2fp80j3gm7w": {
+  "keep": true,
+  "why": "The rare «ولو كان ذا قربى» sits in three rulings (witnesses, justice in speech, no one bears another's load), and the card shows which follows where."
+ },
+ "tree:1vmunqb0w1ypkf": {
+  "keep": true,
+  "why": "«وصية من الله والله عليم حليم» in 4:12 against «فريضة من الله والله عليم حكيم» in 9:60: the classic swap of word and closing name."
+ },
+ "tree:1lbvucs13ytgjw": {
+  "keep": true,
+  "why": "«ولينصرن الله من ينصره إن الله لقوي عزيز» in 22:40 against «وليعلم الله من ينصره ورسله بالغيب إن الله قوي عزيز» in 57:25."
+ },
+ "tree:14gnf3q0eotpby": {
+  "keep": true,
+  "why": "The rare «إذا انقلبوا إلى أهلهم» leads to «لعلهم يرجعون» in 12:62 and to «انقلبوا فكهين» in 83:31."
+ },
+ "tree:11ws5r91wuzvsz": {
+  "keep": false,
+  "why": "«من يرد» opens four unrelated statements, so there is nothing to tell apart."
+ },
+ "tree:0etnoro1uswt96": {
+  "keep": true,
+  "why": "«وإن كنا عن دراستهم لغافلين» in 6:156 against «إن كنا عن عبادتكم لغافلين» in 10:29: same closing, different object."
+ },
+ "tree:1dqw51a0m2y7q0": {
+  "keep": false,
+  "why": "«في قلوب» is too broad for six ayat; the good cards are 3:151 with 8:12 («سنلقي / سألقي في قلوب الذين كفروا الرعب») and 15:12 with 26:200 («نسلكه / سلكناه في قلوب المجرمين»).",
+  "before": {
+   "keep": true,
+   "why": "sa-nulqi/sa-ulqi fi qulub alladhina kafaru, nasluku fi qulub al-mujrimin"
+  }
+ },
+ "tree:1kbfj021b3bvyo": {
+  "keep": false,
+  "why": "«الكتاب إلا» joins seven unrelated ayat; only 3:19 and 98:4 («وما اختلف / وما تفرق الذين أوتوا الكتاب إلا من بعد ما جاءهم / جاءتهم») make a card.",
+  "before": {
+   "keep": true,
+   "why": "3:19 vs 98:4 أوتوا الكتاب إلا من بعد ما جاءهم/جاءتهم; rest noise"
+  }
+ },
+ "tree:1k9azhi0io1jac": {
+  "keep": true,
+  "why": "Identical closing «وما يذكر إلا أولو الألباب» in 2:269 and 3:7, worth knowing which ayat end this way."
+ },
+ "tree:00uv8ez0tb9dy3": {
+  "keep": false,
+  "why": "«وإذا سمعوا» is followed by unrelated scenes (revelation bringing tears, idle talk turned from), with nothing to confuse."
+ },
+ "tree:04nik420wkeegu": {
+  "keep": true,
+  "why": "«فمنهم من آمن به ومنهم من صد عنه» in 4:55 against «ومنهم من يؤمن به ومنهم من لا يؤمن به» in 10:40."
+ },
+ "tree:0edpchu1dbfmt2": {
+  "keep": false,
+  "why": "«الذين أساءوا» appears in two unrelated ayat, so there is nothing to tell apart."
+ },
+ "tree:13fgido0stdoe0": {
+  "keep": false,
+  "why": "«الله ربكم» before two different «لا» (the creed in 6:102, a divorce ruling in 65:1) gives no slip."
+ },
+ "tree:0bjyoul0vrfoxf": {
+  "keep": false,
+  "why": "Drop 3:101; the good card is 23:66, 23:105 and 45:31, where «آياتي تتلى عليكم» goes on «فكنتم على أعقابكم تنكصون», «فكنتم بها تكذبون» or «فاستكبرتم».",
+  "before": {
+   "keep": true,
+   "why": "'ayati tutla alaykum fakuntum' 23:66 vs 23:105 vs 45:31 fastakbartum"
+  }
+ },
+ "tree:19o0d851ed151r": {
+  "keep": true,
+  "why": "The rare «ما لهم / ما لكم من الله من عاصم» in 10:27 and 40:33, with different surroundings."
+ },
+ "tree:1driogo04fvgti": {
+  "keep": true,
+  "why": "«أليس الله» then «بأعلم بالشاكرين», «بكاف عبده», «بعزيز ذي انتقام», «بأحكم الحاكمين»: which word follows where."
+ },
+ "tree:0g3whfi1vzorz4": {
+  "keep": true,
+  "why": "Closing «التواب الرحيم» with different lead-ins («إنه هو», «إنك أنت», «وأنا», «وأن الله هو», «إن الله هو»), a real recitation slip."
+ },
+ "tree:0eu7i5p1yj8emf": {
+  "keep": true,
+  "why": "Same description «يفسدون في الأرض ولا يصلحون» of Thamud's ringleaders in 26:152 and 27:48."
+ },
+ "tree:0aic3qm1lbiaz4": {
+  "keep": false,
+  "why": "«في الفلك» mixes riding ships with the rescue of Nuh; the good card is 7:64, 10:73 and 26:119 («فأنجيناه / فنجيناه ... في الفلك» then «وأغرقنا» or «المشحون»).",
+  "before": {
+   "keep": true,
+   "why": "fa-anjaynahu wa man ma'ahu fil-fulk + wa aghraqna / wa ja'alnahum / al-mashhun"
+  }
+ },
+ "tree:19zq8s900g2mz3": {
+  "keep": false,
+  "why": "2:272 and 74:31 share only «يهدي من يشاء وما» by chance, with unrelated continuations.",
+  "before": {
+   "keep": true,
+   "why": "Wa ma tunfiqu (2:272) vs wa ma ya'lamu junud (74:31)"
+  }
+ },
+ "tree:0m0bxz615mb3f8": {
+  "keep": true,
+  "why": "«فآمنوا بالله ورسله» in 3:179 and 4:171 against «فآمنوا بالله ورسوله» in 7:158 and 64:8, then different continuations."
+ },
+ "tree:1uylo2v0wpvk83": {
+  "keep": true,
+  "why": "Two charges in the same surah: «إن هو إلا رجل به جنة» in 23:25 against «إن هو إلا رجل افترى على الله كذبا» in 23:38."
+ },
+ "tree:0kc8vo90x81amp": {
+  "keep": false,
+  "why": "Drop 28:44 («قضينا إلى موسى الأمر»); 7:117, 7:160, 10:87, 20:77, 26:52 and 26:63 («وأوحينا إلى موسى أن ألق / أسر / اضرب») make the good card, best as a matrix as the owner chose for this family.",
+  "before": {
+   "keep": true,
+   "why": "وأوحينا إلى موسى أن ألق / أسر / اضرب; إذ استسقاه"
+  }
+ },
+ "tree:132jhkc1cjmnlo": {
+  "keep": true,
+  "why": "«لهم مغفرة وأجر عظيم» in 5:9 and 49:3 against «مغفرة وأجر كبير» in 11:11, 35:7 and 67:12."
+ },
+ "tree:0kttqjf0p2hq5r": {
+  "keep": true,
+  "why": "«أولئك شر مكانا وأضل عن سواء السبيل» in 5:60 against «وأضل سبيلا» in 25:34."
+ },
+ "tree:1ejvz7v0butp5j": {
+  "keep": false,
+  "why": "«من بعدي» appears in four unrelated stories, so there is nothing to tell apart."
+ },
+ "tree:029elh70sjf301": {
+  "keep": false,
+  "why": "Forty years of wandering and the age of forty are unrelated, with nothing to confuse."
+ },
+ "tree:1nlqrqx0mhsbk3": {
+  "keep": true,
+  "why": "«ثم أخذتهم فكيف كان عقاب» in 13:32 against «فأخذتهم فكيف كان عقاب» in 40:5."
+ },
+ "tree:1byyhkg0xtugco": {
+  "keep": true,
+  "why": "«ولقد أرسلنا من قبلك في شيع الأولين» in 15:10 against «وكذلك ما أرسلنا من قبلك في قرية من نذير» in 43:23."
+ },
+ "tree:1dy2hja0llbpvq": {
+  "keep": true,
+  "why": "«أخذناهم بغتة» ends «فإذا هم مبلسون» in 6:44 and «وهم لا يشعرون» in 7:95."
+ },
+ "tree:1jpu1jn1bm0vof": {
+  "keep": false,
+  "why": "«في اليم» joins the mother of Musa, the Samiri and Pharaoh; the good card is 28:40 and 51:40 («فنبذناهم في اليم» then «فانظر كيف كان عاقبة الظالمين» or «وهو مليم»).",
+  "before": {
+   "keep": true,
+   "why": "fa-nabadhnahum fil-yamm fa-unzur (28:40) vs wa huwa mulim (51:40)"
+  }
+ },
+ "tree:1oikvnn0i3jh7v": {
+  "keep": true,
+  "why": "The scales in 7:8-9 and 23:102-103, word for word until «خسروا أنفسهم» then «بما كانوا بآياتنا يظلمون» against «في جهنم خالدون»."
+ },
+ "tree:1de297g1a3z81o": {
+  "keep": false,
+  "why": "Drop 2:58 and 17:60, which share only «وإذ قلنا»; 2:34, 17:61, 18:50 and 20:116 («اسجدوا لآدم فسجدوا إلا إبليس» with different endings) make the good card.",
+  "before": {
+   "keep": true,
+   "why": "'qulna lil-mala'ikati usjudu' x4 with different endings after Iblis"
+  }
+ },
+ "tree:1ve50is0uwv9sm": {
+  "keep": false,
+  "why": "«الرحمن الرحيم» is the basmala and a pair of divine names, a formula with nothing to tell apart; the real pair 1:1 and 1:3 is already a book card.",
+  "before": {
+   "keep": true,
+   "why": "Name pair after بسم الله / هو / تنزيل من; which lead-in where"
+  }
+ },
+ "tree:0tdsc0l11yxhrv": {
+  "keep": true,
+  "why": "«كتاب أنزلناه إليك لتخرج الناس» in 14:1 against «كتاب أنزلناه إليك مبارك ليدبروا آياته» in 38:29."
+ },
+ "tree:1f5j6ew14tveus": {
+  "keep": false,
+  "why": "«قال هل» opens five unrelated questions, so there is nothing to tell apart."
+ },
+ "tree:0co07el0jxwgv9": {
+  "keep": true,
+  "why": "«قالوا لن نؤمن حتى نؤتى» in 6:124 against «لن نؤمن لك حتى تفجر» in 17:90."
+ },
+ "tree:0gqv9m00vacj0c": {
+  "keep": true,
+  "why": "Closing «الذين آمنوا وكانوا يتقون», with «وأنجينا» in 27:53, «ونجينا» in 41:18 and no verb in 10:63."
+ },
+ "tree:1pw30371pubipb": {
+  "keep": true,
+  "why": "The rare exception «إلا من ظلم» goes on «وكان الله سميعا عليما» in 4:148 and «ثم بدل حسنا بعد سوء» in 27:11."
+ },
+ "tree:18i520f1hysl85": {
+  "keep": true,
+  "why": "Identical closing «وما للظالمين من أنصار» in 2:270, 3:192 and 5:72, worth knowing which ayat end this way."
+ },
+ "tree:1a2400a0otzs3q": {
+  "keep": true,
+  "why": "Musa's forty nights: «وإذ واعدنا موسى أربعين ليلة ثم اتخذتم العجل» in 2:51 against «ووعدنا موسى ثلاثين ليلة وأتممناها بعشر» in 7:142."
+ },
+ "tree:12vyfv30o59lkb": {
+  "keep": false,
+  "why": "Only the closing «ثم إلى ربكم ترجعون» is shared, and the two ayat are otherwise unrelated; 45:15 belongs with 41:46 («من عمل صالحا فلنفسه»).",
+  "before": {
+   "keep": true,
+   "why": "Ending 'thumma ila rabbikum turja'un' in 32:11 and 45:15"
+  }
+ },
+ "tree:1wuafef0m7ep35": {
+  "keep": false,
+  "why": "Drop 40:21 and 53:52, where «كانوا هم» is followed by a comparison; 7:92, 26:40, 37:116 and 43:76 («كانوا هم الخاسرين / الغالبين / الظالمين») would make the card.",
+  "before": {
+   "keep": true,
+   "why": "kanu hum al-khasirin / al-ghalibin / al-zalimin closings"
+  }
+ },
+ "tree:0csow5x096kah3": {
+  "keep": false,
+  "why": "Two unrelated pairs share only «إن هذه»: 21:92 with 23:52 («فاعبدون» against «فاتقون») and 73:19 with 76:29, each a card of its own.",
+  "before": {
+   "keep": true,
+   "why": "ummatukum ummatan wahida: fa-'buduni vs fa-ttaquni; and tadhkira pair"
+  }
+ },
+ "tree:0wwurjh1sq29m1": {
+  "keep": false,
+  "why": "«الله في الدنيا والآخرة» joins two different scenes with nothing to tell apart."
+ },
+ "tree:1glb1nb0xrp06x": {
+  "keep": true,
+  "why": "Same surah: «ليوم لا ريب فيه» goes on «إن الله لا يخلف الميعاد» in 3:9 and «ووفيت كل نفس ما كسبت» in 3:25."
+ },
+ "tree:07nooi80jsx970": {
+  "keep": false,
+  "why": "Drop 2:96 and 29:14; only 32:5 («مقداره ألف سنة مما تعدون») and 70:4 («مقداره خمسين ألف سنة») make the card.",
+  "before": {
+   "keep": true,
+   "why": "مقداره ألف سنة (32:5) vs خمسين ألف سنة (70:4); others"
+  }
+ },
+ "tree:0kuavp219cu0q4": {
+  "keep": true,
+  "why": "Closing «من محيص» with «ما لنا», «ما لهم» or «هل» before it, an ending a student can mix up."
+ },
+ "tree:18y9srt027m1n5": {
+  "keep": true,
+  "why": "«وما ربك بغافل عما يعملون» in 6:132 against «عما تعملون» in 11:123 and 27:93, and «وما ربك بظلام للعبيد» in 41:46."
+ },
+ "tree:0naq7np1rkfxe3": {
+  "keep": true,
+  "why": "«وسع ربي كل شيء علما» in 6:80, «وسع ربنا» in 7:89, «وسع كل شيء علما» in 20:98 and «أحاط بكل شيء علما» in 65:12."
+ },
+ "tree:0aw50nn1ltudhz": {
+  "keep": true,
+  "why": "«كنتم قوما» then «فاسقين», «طاغين», «مسرفين», «مجرمين», «بورا»: which ending goes where."
+ },
+ "tree:114znwc0uyfu7a": {
+  "keep": true,
+  "why": "«حتى إذا رأوا ما يوعدون» goes on «إما العذاب وإما الساعة فسيعلمون من هو شر مكانا» in 19:75 and «فسيعلمون من أضعف ناصرا» in 72:24."
+ },
+ "tree:14j76u30eyxrmz": {
+  "keep": true,
+  "why": "«فلا تك في مرية منه / مما» in 11:17 and 11:109, «فلا تكن في مرية من لقائه» in 32:23, with «في مرية منه» and «من لقاء ربهم» in 22:55 and 41:54."
+ },
+ "tree:1rw3l5z14s0djn": {
+  "keep": false,
+  "why": "Drop 6:145 and 53:10; 6:106, 18:27 and 29:45 («اتبع / اتل ما أوحي إليك من ربك / من كتاب ربك / من الكتاب») make the good card.",
+  "before": {
+   "keep": true,
+   "why": "Ittabi'/utlu ma uhiya ilayka"
+  }
+ },
+ "tree:04bvo0u1jrlf3y": {
+  "keep": true,
+  "why": "«الذين يدعون من دون الله» goes on «فيسبوا الله» in 6:108, «شركاء» in 10:66 and «لا يخلقون شيئا» in 16:20."
+ },
+ "tree:0eb6na80kmewok": {
+  "keep": false,
+  "why": "«يخرج من» is too broad; only 24:43 and 30:48 («فترى الودق يخرج من خلاله») make a card.",
+  "before": {
+   "keep": true,
+   "why": "Fa-tara al-wadq yakhruju min khilalihi: 24:43 vs 30:48; others differ"
+  }
+ },
+ "tree:1s32zms1d6991c": {
+  "keep": true,
+  "why": "«الذين قالوا إنا نصارى» goes on «أخذنا ميثاقهم» in 5:14 and «ذلك بأن منهم قسيسين» in 5:82."
+ },
+ "tree:05j01r90tmxnu5": {
+  "keep": false,
+  "why": "Drop 4:58 and 29:2, which share only «الناس أن»; 17:94 and 18:55 («وما منع الناس أن يؤمنوا إذ جاءهم الهدى») make the card.",
+  "before": {
+   "keep": true,
+   "why": "وما منع الناس أن يؤمنوا: إلا أن قالوا (17:94) vs ويستغفروا (18:55)"
+  }
+ },
+ "tree:1s2rnwe05vgg30": {
+  "keep": false,
+  "why": "Drop 37:158 («ولقد علمت الجنة»); 11:79, 17:102 and 21:65 («لقد علمت ما لنا / ما أنزل / ما هؤلاء ينطقون») would make the card.",
+  "before": {
+   "keep": true,
+   "why": "la-qad alimta ma lana / ma anzala / ma ha'ula'i yantiqun"
+  }
+ },
+ "tree:0td92ck1t22qes": {
+  "keep": false,
+  "why": "«أن يضعن» joins two unrelated rulings with nothing to confuse."
+ },
+ "tree:0ptqp2q1u3i6ac": {
+  "keep": true,
+  "why": "«إنا أعتدنا للكافرين سعيرا» in 48:13 against «سلاسل وأغلالا وسعيرا» in 76:4."
+ },
+ "tree:1mv965t1dsio77": {
+  "keep": true,
+  "why": "«إنه لمن» then «المسرفين», «الصادقين», «الظالمين», «الكاذبين», with 24:6 and 24:8 the closest pair."
+ },
+ "tree:04dt8ep09u54zz": {
+  "keep": true,
+  "why": "Same opening «تلك آيات الكتاب الحكيم», after «الر» in 10:1 and «الم» in 31:1-2."
+ },
+ "tree:0o0u0z11hy8dxj": {
+  "keep": true,
+  "why": "«قالوا آمنا به» goes on «إنه الحق من ربنا» in 28:53 and «وأنى لهم التناوش» in 34:52."
+ },
+ "tree:1ye8skf0sjc8jl": {
+  "keep": true,
+  "why": "«فدعوهم فلم يستجيبوا لهم» in 18:52 and 28:64, against «لم يستجيبوا له» in 13:18 and «لك» in 28:50."
+ },
+ "tree:1crluti140ysgw": {
+  "keep": true,
+  "why": "Endings with «من سبيل»: «هل إلى مرد من سبيل» in 42:44 against «فهل إلى خروج من سبيل» in 40:11, «فما له من سبيل» in 42:46, «ما عليهم / ما على المحسنين من سبيل» in 42:41 and 9:91."
+ },
+ "tree:10vzcx60ryv03m": {
+  "keep": true,
+  "why": "«وقضي بينهم بالحق» goes on «وهم لا يظلمون» in 39:69 and «وقيل الحمد لله رب العالمين» in 39:75."
+ },
+ "tree:0rd3aho1767lre": {
+  "keep": true,
+  "why": "«وللكافرين عذاب» then «مهين» in 2:90 and 58:5, «أليم» in 2:104 and 58:4, «النار» in 8:14."
+ },
+ "tree:0uh3lv81424dem": {
+  "keep": false,
+  "why": "Drop 62:6 and 109:1, which address others; 7:158, 10:104, 10:108 and 22:49 («قل يا أيها الناس» then four different openings) make the good card.",
+  "before": {
+   "keep": true,
+   "why": "qul ya ayyuha al-nas inni rasul / in kuntum / qad ja'akum / innama ana"
+  }
+ },
+ "tree:0dsq4bc0w3ue96": {
+  "keep": false,
+  "why": "«إن عدنا» in Shuayb's reply and the plea from the Fire are unrelated, with no slip."
+ },
+ "tree:0k8llgj1jpwkez": {
+  "keep": true,
+  "why": "«لبئس ما كانوا يعملون / يصنعون / يفعلون» in 5:62, 5:63, 5:79, with «لبئس ما قدمت لهم أنفسهم» in 5:80 and «ولبئس ما شروا به» in 2:102."
+ },
+ "tree:1xgfuyp1h5tytj": {
+  "keep": false,
+  "why": "«اليوم من» joins Satan's boast and Nuh's son, with nothing to tell apart."
+ },
+ "tree:1u4ucwr03ivdin": {
+  "keep": true,
+  "why": "«وما ظلمناهم ولكن كانوا أنفسهم يظلمون» in 16:118 against «ولكن كانوا هم الظالمين» in 43:76."
+ },
+ "tree:08j2wq00nyjwte": {
+  "keep": false,
+  "why": "«من ما ملكت أيمانكم من» joins a marriage ruling and a parable, with no realistic slip."
+ },
+ "tree:0fl7lgt17ntcwt": {
+  "keep": true,
+  "why": "Closing «من الشاهدين»: «وأنا معكم» in 3:81 against «وأنا على ذلكم» in 21:56, with «ونكون عليها» in 5:113 and «وما كنت» in 28:44."
+ },
+ "tree:0eqewch0zb2gth": {
+  "keep": false,
+  "why": "Drop 63:7 (the hypocrites' «لا تنفقوا»); 3:16, 4:75, 25:65 and 25:74 («الذين يقولون ربنا» with different prayers) make the good card.",
+  "before": {
+   "keep": true,
+   "why": "'Those who say Our Lord' supplications differ by place"
+  }
+ },
+ "tree:0ehmi2r1fd4xzr": {
+  "keep": true,
+  "why": "«لو كنتم في بيوتكم» in 3:154 against «ولو كنتم في بروج مشيدة» in 4:78, both on death that cannot be escaped."
+ },
+ "tree:13enea90nm96o7": {
+  "keep": false,
+  "why": "«وكان الله عليما حكيما» is a stock closing shared by six otherwise unrelated ayat, with nothing to tell apart.",
+  "before": {
+   "keep": true,
+   "why": "Closing alima hakima, six places in Nisa and Fath"
+  }
+ },
+ "tree:0swa8gf02w4yj7": {
+  "keep": true,
+  "why": "The rare «أقسط عند الله» goes on «وأقوم للشهادة» in 2:282 and «فإن لم تعلموا آباءهم» in 33:5."
+ },
+ "tree:0ghu9ay1iamh56": {
+  "keep": true,
+  "why": "«لا يذكرون اسم الله عليها افتراء» in 6:138 against «فاذكروا اسم الله عليها صواف» in 22:36, both on livestock."
+ },
+ "tree:1rpenay0pme6zk": {
+  "keep": true,
+  "why": "«لكم فيها منافع» then «إلى أجل مسمى», «كثيرة», «ومشارب» or «ولتبلغوا عليها»: which follows where."
+ },
+ "tree:1fbjgp60psxelu": {
+  "keep": true,
+  "why": "The singular command «أقم الصلاة» goes on «طرفي النهار», «لدلوك الشمس», «لذكري», «إن الصلاة تنهى» or «وأمر بالمعروف»."
+ },
+ "tree:0oxcrt41nouqcm": {
+  "keep": false,
+  "why": "«إن الدين» means religion in 3:19 and judgment in 51:6, with nothing to tell apart."
+ },
+ "tree:1udh20z0iao2aj": {
+  "keep": false,
+  "why": "«ثم لم» is particle glue across six unrelated ayat."
+ },
+ "tree:0dy619i0f68f2i": {
+  "keep": false,
+  "why": "«من رزق» appears in five unrelated contexts, so there is nothing to tell apart."
+ },
+ "tree:020rlb40rt7u7e": {
+  "keep": false,
+  "why": "«ما كان لكم أن» is a common construction joining plants and the Prophet's wives."
+ },
+ "tree:1cxnqpc13d05ag": {
+  "keep": false,
+  "why": "«إذ أنتم» is particle glue across five unrelated contexts."
+ },
+ "tree:1cr0hw41urz16g": {
+  "keep": true,
+  "why": "«وإن الفجار لفي جحيم» in 82:14 against «إن كتاب الفجار لفي سجين» in 83:7, neighbouring surahs."
+ },
+ "tree:0w847rn10obxh1": {
+  "keep": false,
+  "why": "Ten ayat with only «من ولي ولا» in common; the good card is 2:107, 9:116, 29:22 and 42:31 «وما لكم من دون الله من ولي ولا نصير» (with the 2:120 and 13:37 pair «ما لك من الله من ولي ولا نصير / واق» as a second card), while 9:74, 18:26, 32:4 and 42:8 end differently."
+ },
+ "tree:1y2b2ec10y1cxa": {
+  "keep": false,
+  "why": "«أن تقولوا» joins seven unrelated ayat; only 2:169 and 7:33 share «وأن تقولوا على الله ما لا تعلمون», and 6:156 with 7:172 share the excuse ending «غافلين», which would make two small cards.",
+  "before": {
+   "keep": true,
+   "why": "wa-an taqulu ala Allah ma la ta'lamun pair plus an taqulu excuse ayat"
+  }
+ },
+ "tree:0h08ybm0aysrny": {
+  "keep": true,
+  "why": "Same closing «من العالمين»: Lut's «ما سبقكم بها من أحد من العالمين» (7:80, 29:28) and «أتأتون الذكران من العالمين» (26:165) against «أحدا من العالمين» in al-Ma'ida (5:20, 5:115)."
+ },
+ "tree:08k51171n54imh": {
+  "keep": true,
+  "why": "Near-identical blessings of the sea, but the order flips: 16:14 «وترى الفلك مواخر فيه ولتبتغوا» vs 35:12 «وترى الفلك فيه مواخر لتبتغوا», so the ayat read better stacked.",
+  "view": "matrix"
+ },
+ "tree:1wgynfm1ipz678": {
+  "keep": false,
+  "why": "Only the closing formula «واعلموا أن الله غفور» is shared, in two unrelated rulings (betrothal in 2:235, repentant brigands in 5:34).",
+  "before": {
+   "keep": true,
+   "why": "ghafurun halim vs ghafurun rahim"
+  }
+ },
+ "tree:041vh1d0wpxscr": {
+  "keep": true,
+  "why": "Rare phrase «الذين حق عليهم القول»: 28:63 «قال الذين حق عليهم القول ربنا» vs 46:18 «أولئك الذين حق عليهم القول في أمم قد خلت»."
+ },
+ "tree:1gm8tgv1ilkjcx": {
+  "keep": true,
+  "why": "Same declaration «إنا إلى ربنا» with a different end: «منقلبون» (7:125, 26:50), «لمنقلبون» (43:14), «راغبون» (68:32), and 9:59 «إنا إلى الله راغبون»."
+ },
+ "tree:13a2m461scp1a2": {
+  "keep": true,
+  "why": "Same opening «لقد أنزلنا» with a different object: «إليك ءايات بينات» (2:99), «إليكم كتابا» (21:10), «إليكم ءايات مبينات» (24:34), «ءايات مبينات» (24:46)."
+ },
+ "tree:10bws0k0jh0y0w": {
+  "keep": true,
+  "why": "Same sign «يولج الليل في النهار ويولج النهار في الليل» with different follow-ons in 3:27 («تولج»), 22:61, 31:29, 35:13 and 57:6; 6:13 is an outlier."
+ },
+ "tree:1c5o6vz0d4jtlj": {
+  "keep": true,
+  "why": "Same surah, same exception: «إلا الذين عاهدتم من المشركين» (9:4) vs «إلا الذين عاهدتم عند المسجد الحرام» (9:7), both closing «إن الله يحب المتقين»."
+ },
+ "tree:1suxxhl0e7tg8j": {
+  "keep": false,
+  "why": "«أدنى من» is a two-word phrase in two unrelated ayat (secret counsels in 58:7, night prayer in 73:20)."
+ },
+ "tree:0dtolnh0tybazp": {
+  "keep": false,
+  "why": "Only 3:100 and 3:149 belong together («يا أيها الذين ءامنوا إن تطيعوا فريقا من الذين أوتوا الكتاب / الذين كفروا يردوكم»); 48:16 and 49:14 use «إن تطيعوا» in other settings.",
+  "before": {
+   "keep": true,
+   "why": "Ya ayyuha alladhina amanu in tuti'u fariqan vs alladhina kafaru (3:100, 3:149)"
+  }
+ },
+ "tree:1q6wadw1rrtpkw": {
+  "keep": true,
+  "why": "Same creation clause: «من صلصال من حمإ مسنون» three times in al-Hijr (15:26, 15:28, 15:33) vs «من صلصال كالفخار» in 55:14."
+ },
+ "tree:1jgvama0eqslhe": {
+  "keep": true,
+  "why": "Rare clause «ما ليس لي به علم»: Nuh's «أن أسألك ما ليس لي به علم» (11:47) vs the believer's «وأشرك به ما ليس لي به علم» (40:42)."
+ },
+ "tree:0bbxwyv0j1qnt9": {
+  "keep": true,
+  "why": "Same surah, same opening «فإذا جاء وعد الآخرة»: «ليسوءوا وجوهكم» (17:7) vs «جئنا بكم لفيفا» (17:104)."
+ },
+ "tree:1bpno1p0dhifv9": {
+  "keep": true,
+  "why": "Same opening «تبارك الذي» three times in al-Furqan (25:1 «نزل الفرقان», 25:10 «إن شاء جعل لك», 25:61 «جعل في السماء بروجا») and 43:85 «وتبارك الذي له ملك»."
+ },
+ "tree:0huv4hq0xqkcrk": {
+  "keep": true,
+  "why": "Adjacent ayat in Yusuf ending «إلا قليلا مما تأكلون» (12:47) vs «إلا قليلا مما تحصنون» (12:48)."
+ },
+ "tree:0fgns1s0vpe162": {
+  "keep": false,
+  "why": "«من قوم موسى» is all that 7:159 (a guided group) and 28:76 (Qarun) share."
+ },
+ "tree:1c5redn1ixzn8b": {
+  "keep": true,
+  "why": "Same command «فاستقم كما أمرت»: 11:112 goes on «ومن تاب معك ولا تطغوا» while 42:15 goes on «ولا تتبع أهواءهم»."
+ },
+ "tree:1isiy1i0li9tb4": {
+  "keep": true,
+  "why": "Same reply «قال كذلك» to the miracle births: «الله يفعل ما يشاء» (3:40) vs «الله يخلق ما يشاء» (3:47), and «قال ربك هو علي هين» (19:9, 19:21); 20:126 is an outlier."
+ },
+ "tree:12wua6x0i4e61h": {
+  "keep": false,
+  "why": "«إنا جعلنا» introduces four unrelated statements (devils as allies, adornment of the earth, veils on hearts, iron collars)."
+ },
+ "tree:0x9i0dy0yraeeq": {
+  "keep": false,
+  "why": "Seven ayat share only «إن كثيرا»; the good card is 5:49, 10:92 and 30:8 «وإن كثيرا من الناس» ending «لفاسقون / عن ءاياتنا لغافلون / بلقاء ربهم لكافرون» (with 5:32 «لمسرفون»), while 6:119, 9:34 and 38:24 go elsewhere.",
+  "before": {
+   "keep": true,
+   "why": "wa-inna kathiran: la-musrifun, la-fasiqun, la-ghafilun, la-kafirun"
+  }
+ },
+ "tree:129n1u01fdwch6": {
+  "keep": false,
+  "why": "Only 33:21 and 60:6 belong together («لقد كان لكم ... أسوة حسنة لمن كان يرجو الله واليوم الآخر», parting at «وذكر الله كثيرا» vs «ومن يتول»); 50:37 and 54:14 share just «لمن كان».",
+  "before": {
+   "keep": true,
+   "why": "li-man kana yarju Allah (33:21, 60:6) vs lahu qalb vs kufir"
+  }
+ },
+ "tree:1cpdwx50gx8jib": {
+  "keep": false,
+  "why": "«إن الذي» is all that the promise of return (28:85) and the revived earth (41:39) share."
+ },
+ "tree:1o3gjox0cvaxed": {
+  "keep": false,
+  "why": "«أنزلنا على» with four unrelated objects: punishment, the day of al-Furqan, the dividers and an army from the sky."
+ },
+ "tree:1bvxeto0nkgypg": {
+  "keep": false,
+  "why": "«الله إنه» in seven unrelated ayat; nothing to tell apart."
+ },
+ "tree:0x0fi9w0qnmqps": {
+  "keep": false,
+  "why": "«ارجعوا إلى» your father (12:81) vs your luxury (21:13): two words in unrelated scenes."
+ },
+ "tree:1vy7byr03l5ux1": {
+  "keep": true,
+  "why": "Rare clause «إن يظهروا عليكم», only here: the idolaters «لا يرقبوا فيكم إلا ولا ذمة» (9:8) vs the people of the cave «يرجموكم» (18:20)."
+ },
+ "tree:1warcco0oqkr04": {
+  "keep": true,
+  "why": "Same promise that the earth is inherited by Allah's servants, easy to mix: 7:128 «إن الأرض لله يورثها من يشاء من عباده» vs 21:105 «أن الأرض يرثها عبادي الصالحون»; the shared words are broken, so stack them.",
+  "view": "matrix",
+  "before": {
+   "keep": false,
+   "why": "Earth is Allah's vs righteous inherit; إن vs أن, no slip"
+  }
+ },
+ "tree:0c9x5a20ji88ky": {
+  "keep": false,
+  "why": "«قد ضلوا» in four scattered contexts with nothing to compare."
+ },
+ "tree:0t5jsqa02ohn6g": {
+  "keep": true,
+  "why": "Same verdict «والذين كفروا وكذبوا بآياتنا أولئك أصحاب الجحيم» (5:10, 5:86, 57:19) vs 22:51 «والذين سعوا في ءاياتنا معاجزين»; 2:119 and 9:113 are outliers."
+ },
+ "tree:0izl9on127msfx": {
+  "keep": false,
+  "why": "Only the closing «إن الله سميع عليم», a stock formula, after six unrelated rulings."
+ },
+ "tree:0anx5k00zlwuzu": {
+  "keep": true,
+  "why": "Same charge of disputing without knowledge: «يجادل في الله بغير علم» (22:3, 22:8, 31:20) vs «يجادلون في ءايات الله بغير سلطان أتاهم» (40:35, 40:56), with 31:6 «ليضل عن سبيل الله بغير علم»."
+ },
+ "tree:19v2i5w0altdui": {
+  "keep": true,
+  "why": "Same ending «إلا في ضلال» with a different subject: «وما دعاء الكافرين» (13:14, 40:50) vs «وما كيد الكافرين» (40:25)."
+ },
+ "tree:0b1qoku054oj0a": {
+  "keep": true,
+  "why": "Same rebuke «بالسيئة قبل الحسنة»: «ويستعجلونك» (13:6) vs Salih's «لم تستعجلون» (27:46)."
+ },
+ "tree:0qrfknv1gmjkmj": {
+  "keep": true,
+  "why": "Same ending «إلا ذكر للعالمين» with «إن هو» (12:104, 38:87, 81:27) vs «وما هو» (68:52)."
+ },
+ "tree:0vhs6rg0vq9gdm": {
+  "keep": true,
+  "why": "Same pardon «عفا الله» with different objects: «عنهم» (3:155), «عما سلف» (5:95), «عنها» (5:101), «عنك» (9:43); 3:155 and 5:101 both close «غفور حليم»."
+ },
+ "tree:15jj4jr17ryuh9": {
+  "keep": false,
+  "why": "«الذين فسقوا» in two unrelated settings with fully different continuations."
+ },
+ "tree:1mesn4l0cm983j": {
+  "keep": true,
+  "why": "Same «أنشأكم من» with a different origin: «نفس واحدة» (6:98), «ذرية قوم ءاخرين» (6:133), «الأرض» (11:61, 53:32)."
+ },
+ "tree:0wuwfsa1vsp9v0": {
+  "keep": true,
+  "why": "Same «ذلك أدنى» closing rulings, each with its own purpose: «ألا تعولوا» (4:3), «أن يأتوا بالشهادة» (5:108), «أن تقر أعينهن» (33:51), «أن يعرفن» (33:59)."
+ },
+ "tree:06vm0qj0e9iiu7": {
+  "keep": true,
+  "why": "Same judgment on the Day: 2:113 «فالله يحكم بينهم يوم القيامة فيما كانوا فيه يختلفون» vs 39:3 «إن الله يحكم بينهم في ما هم فيه يختلفون»."
+ },
+ "tree:0hg0f9y085g6a8": {
+  "keep": true,
+  "why": "Same reply to deniers with a different subject: «الله أعلم بما تعملون» (22:68) vs Shu'ayb's «ربي أعلم بما تعملون» (26:188)."
+ },
+ "tree:00e6zpl1g1cerz": {
+  "keep": true,
+  "why": "Same «بما كانوا بآياتنا» with a different verb: «يظلمون» (7:9), «يجحدون» (7:51, 41:15, 41:28), «لا يوقنون» (27:82), «يوقنون» (32:24)."
+ },
+ "tree:1imf2n81tc1d6s": {
+  "keep": true,
+  "why": "Same reward «جنات النعيم» with a different lead-in: «في» (10:9, 22:56, 37:43, 56:12), «لهم» (31:8), «عند ربهم» (68:34), «ولأدخلناهم» (5:65)."
+ },
+ "tree:1r5amyq0ah4xt0": {
+  "keep": false,
+  "why": "«أن يقولوا» in four unrelated contexts."
+ },
+ "tree:0r6br9i0b8uljk": {
+  "keep": false,
+  "why": "Only 6:77 and 6:78 belong together (Ibrahim: «فلما رأى القمر بازغا» vs «فلما رأى الشمس بازغة»); 11:70, 12:28 and 33:22 share just «لما رأى».",
+  "before": {
+   "keep": true,
+   "why": "fa lamma ra'a al-qamara bazighan vs al-shamsa bazighatan"
+  }
+ },
+ "tree:1pmd4z80kvgqu6": {
+  "keep": true,
+  "why": "Same «أنزلنا عليك الكتاب» with a different purpose: «إلا لتبين لهم» (16:64), «لتشقى» (20:2), «يتلى عليهم» (29:51), «للناس بالحق» (39:41)."
+ },
+ "tree:0q04mn11pzav4p": {
+  "keep": false,
+  "why": "Only 6:70 and 10:4 belong together (same threat «لهم شراب من حميم وعذاب أليم بما كانوا يكفرون»); 37:67, 40:18 and 56:93 share only the word «حميم».",
+  "before": {
+   "keep": true,
+   "why": "Lahum sharabun min hamimin wa 'adhabun alim 6:70 vs 10:4"
+  }
+ },
+ "tree:0j8nt5b0o5sghb": {
+  "keep": false,
+  "why": "«الكتاب الذي» in two unrelated contexts."
+ },
+ "tree:04l0pay1cm64w6": {
+  "keep": false,
+  "why": "Only 21:12 and 43:47 belong together («فلما ... إذا هم منها يركضون / يضحكون»); 15:48 and 27:66 share just «هم منها».",
+  "before": {
+   "keep": true,
+   "why": "Idha hum minha yarkudun (21:12) vs yadhakun (43:47)"
+  }
+ },
+ "tree:0vqn941067pem3": {
+  "keep": true,
+  "why": "Same prayer ending «وقنا عذاب النار» (2:201, 3:16) vs «فقنا عذاب النار» (3:191)."
+ },
+ "tree:1136y150isp1br": {
+  "keep": true,
+  "why": "Same sign «يرسل الرياح بشرا بين يدي رحمته» with three different continuations (7:57, 25:48 «أرسل», 27:63)."
+ },
+ "tree:05qdfzc1dikypk": {
+  "keep": false,
+  "why": "Only 7:17, 36:9 and 41:14 belong together («من بين أيديهم ومن خلفهم» then «وعن أيمانهم / سدا / ألا تعبدوا»); 3:170 and 4:9 share just «من خلفهم».",
+  "before": {
+   "keep": true,
+   "why": "Min khalfihim with different continuations"
+  }
+ },
+ "tree:1glhchk01juku0": {
+  "keep": false,
+  "why": "Only 34:2 and 57:4 share the long run «يعلم ما يلج في الأرض ... وما يعرج فيها» and part at «وهو»; the other three share two common words."
+ },
+ "tree:17gwjkv11s5vwl": {
+  "keep": true,
+  "why": "Rare phrase «لكل امرئ منهم»: «ما اكتسب من الإثم» (24:11) vs «يومئذ شأن يغنيه» (80:37)."
+ },
+ "tree:06lr7tg0gtmq02": {
+  "keep": true,
+  "why": "Same surah, same «كان عند الله»: «عظيما» (33:53) vs «وجيها» (33:69)."
+ },
+ "tree:0pf6sj00jp69ym": {
+  "keep": false,
+  "why": "«لمن أراد أن» in two unrelated ayat (nursing in 2:233, night and day in 25:62)."
+ },
+ "tree:0kbrt0q0qxtgr8": {
+  "keep": true,
+  "why": "Same prayer «رب هب لي» with a different request: «من لدنك ذرية طيبة» (3:38), «من لدنك وليا» (19:5), «حكما» (26:83), «من الصالحين» (37:100), «ملكا» (38:35)."
+ },
+ "cmp:0g1d0bi14gwiu8": {
+  "keep": true,
+  "why": "Same opening «ولقد صرفنا في هذا القرآن»: «ليذكروا» (17:41) vs «للناس من كل مثل» (18:54)."
+ },
+ "tree:0x5v7rd0r654uf": {
+  "keep": true,
+  "why": "Same «الله الذي لا إله إلا هو» with a different continuation: «وسع كل شيء علما» (20:98), «عالم الغيب والشهادة» (59:22), «الملك القدوس» (59:23); 25:58 is an outlier."
+ },
+ "tree:01pns8y12wt8fg": {
+  "keep": false,
+  "why": "«من بعد موسى» is all that 2:246 and 46:30 share."
+ },
+ "tree:0hyu4h01tkd1mw": {
+  "keep": false,
+  "why": "«أنزل عليكم من» the Book (2:231) vs after the grief (3:154): unrelated."
+ },
+ "tree:0uldg6w15y1shg": {
+  "keep": true,
+  "why": "Rare closing «أحسن الخالقين»: «فتبارك الله» (23:14) vs «وتذرون» (37:125)."
+ },
+ "tree:05bew6r0a4fkcl": {
+  "keep": true,
+  "why": "Same surah, same «واتبعوا أمر»: «كل جبار عنيد» (11:59) vs «فرعون» (11:97)."
+ },
+ "cmp:0m37zmw0f1fjaw": {
+  "keep": true,
+  "why": "Same «الله لا إله إلا هو له»: «الأسماء الحسنى» (20:8) vs «الحمد في الأولى والآخرة» (28:70)."
+ },
+ "tree:1q1q5k61x9e4q0": {
+  "keep": true,
+  "why": "Same permission «أحلت لكم بهيمة الأنعام» (5:1) vs «وأحلت لكم الأنعام» (22:30), both «إلا ما يتلى عليكم»."
+ },
+ "cmp:0rfsb3j0359ntr": {
+  "keep": true,
+  "why": "Same opening «يوم لا ينفع»: «مال ولا بنون» (26:88) vs «الظالمين معذرتهم» (40:52)."
+ },
+ "tree:053ay100zls8i4": {
+  "keep": true,
+  "why": "Same «أولئك في» with a different end: «ضلال بعيد» (14:3), «ضلال مبين» (39:22, 46:32), «العذاب محضرون» (30:16, 34:38), «الأذلين» (58:20), «جنات مكرمون» (70:35)."
+ },
+ "tree:0mxu35c1olq4n8": {
+  "keep": true,
+  "why": "Same surah, same «إلى الأرض التي باركنا فيها»: «للعالمين» (21:71) vs «وكنا بكل شيء عالمين» (21:81)."
+ },
+ "tree:08ch5gc1dltgva": {
+  "keep": true,
+  "why": "Same «وشهدوا على أنفسهم أنهم كانوا كافرين» (6:130, 7:37) vs «أنهم كانوا كاذبين» (16:39); 28:64 is an outlier."
+ },
+ "tree:17jpnea0iw7goy": {
+  "keep": true,
+  "why": "Same command «واذكروا الله كثيرا لعلكم تفلحون» after facing the enemy (8:45) and after the Friday prayer (62:10)."
+ },
+ "tree:1s68pto0oecpq0": {
+  "keep": true,
+  "why": "Same sign «يولج الليل في النهار ويولج النهار في الليل» with different follow-ons in 3:27, 22:61, 31:29, 35:13 and 57:6; 73:7 is an outlier."
+ },
+ "tree:0cki54e1xs3tpc": {
+  "keep": true,
+  "why": "Adjacent ayat in Yusuf: «وإن كان قميصه قد من دبر» (12:27) vs «فلما رأى قميصه قد من دبر» (12:28)."
+ },
+ "tree:0pwed781sk17n4": {
+  "keep": true,
+  "why": "Same «شاء ربك»: «إلا ما شاء ربك» in 11:107 and 11:108 (parting at «إن ربك فعال» vs «عطاء غير مجذوذ») and «ولو شاء ربك» in 6:112, 10:99 and 11:118."
+ },
+ "tree:0hkhihq12e8t28": {
+  "keep": true,
+  "why": "Same opening «ويوم يحشرهم»: «جميعا يا معشر الجن» (6:128), «كأن لم يلبثوا» (10:45), «وما يعبدون» (25:17), «جميعا ثم يقول للملائكة» (34:40)."
+ },
+ "tree:1hgkrrc1o1zcng": {
+  "keep": false,
+  "why": "«على بني إسرائيل» with different verbs and contexts; nothing to tell apart."
+ },
+ "tree:1lxnm6g03c2pe4": {
+  "keep": true,
+  "why": "Same reply «قالوا إنا بما»: believers' «أرسل به مؤمنون» (7:75) vs deniers' «أرسلتم به كافرون» (43:24)."
+ },
+ "tree:0cr9ujv1229hip": {
+  "keep": true,
+  "why": "Rare image «أصابعهم في ءاذانهم»: «يجعلون ... من الصواعق» (2:19) vs «جعلوا ... واستغشوا ثيابهم» (71:7)."
+ },
+ "tree:1x213jw08oqhfo": {
+  "keep": true,
+  "why": "Same «ذو فضل على» with a different end: «الناس ولكن أكثر الناس / أكثرهم لا يشكرون» (2:243, 10:60, 27:73, 40:61), «العالمين» (2:251), «المؤمنين» (3:152)."
+ },
+ "tree:018oho119cfebv": {
+  "keep": false,
+  "why": "«من دونه إلا» is all that 4:117 and 12:40 share; the wording otherwise differs."
+ },
+ "tree:1jyhoa000zwqhi": {
+  "keep": true,
+  "why": "Same «الذين ينفقون أموالهم» with a different manner: «في سبيل الله» (2:261, 2:262), «ابتغاء مرضات الله» (2:265), «بالليل والنهار» (2:274), «رئاء الناس» (4:38), and 3:134 «في السراء والضراء»."
+ },
+ "tree:0mnla9h07pf8cb": {
+  "keep": false,
+  "why": "«أن تبتغوا» in two unrelated rulings (trade during hajj, dowry)."
+ },
+ "tree:0bhhdzi0isgg30": {
+  "keep": true,
+  "why": "Same question «هل يستوي»: «الأعمى والبصير» (6:50, 13:16), «هو ومن يأمر بالعدل» (16:76), «الذين يعلمون» (39:9)."
+ },
+ "tree:0mxouam14290no": {
+  "keep": true,
+  "why": "Same «وهم عن ... معرضون / غافلون»: «ءاياتها» (21:32), «ذكر ربهم» (21:42), «ذكرهم» (23:71), «اللغو» (23:3) vs «ءاياتنا» (10:7), «الآخرة هم» (30:7), «دعائهم» (46:5), and 107:5 «ساهون»."
+ },
+ "tree:1kwgxp503rs659": {
+  "keep": false,
+  "why": "«إن أردتم» in two different family rulings (nursing, exchanging a wife); nothing to tell apart."
+ },
+ "tree:00gp14n025g88f": {
+  "keep": true,
+  "why": "Same reward «لهم ما يشاءون» with a different place: «فيها» (16:31, 25:16, 50:35) vs «عند ربهم» (39:34, 42:22), each with its own ending."
+ },
+ "tree:1s69e830ni6vhf": {
+  "keep": false,
+  "why": "Only the final word «من حميم» is shared by 37:67 «لشوبا من حميم» and 56:93 «فنزل من حميم»; two words are not a card.",
+  "before": {
+   "keep": true,
+   "why": "Ayah-final min hamim 37:67 vs 56:93"
+  }
+ },
+ "tree:13xqivo1n279mo": {
+  "keep": true,
+  "why": "Adjacent ayat in al-Tawba: «ولا على الذين لا يجدون ما ينفقون» (9:91) vs «ولا على الذين إذا ما أتوك» (9:92), ending «ألا يجدوا ما ينفقون»."
+ },
+ "tree:0ilmemg0m1ygcc": {
+  "keep": true,
+  "why": "Same reward «أولئك لهم مغفرة» then «وأجر كبير» (11:11) vs «ورزق كريم» (34:4)."
+ },
+ "tree:0mlcgc2133ihx6": {
+  "keep": true,
+  "why": "Rare phrase «اجتنبوا الطاغوت»: «فمنهم من هدى الله» (16:36) vs «أن يعبدوها» (39:17)."
+ },
+ "tree:05992i21btfmlc": {
+  "keep": true,
+  "why": "Same reaction «بينات قالوا ما هذا إلا»: «سحر مفترى» (28:36) vs «رجل يريد أن يصدكم» (34:43)."
+ },
+ "tree:0tq0mn80g5vs54": {
+  "keep": true,
+  "why": "Same «أنزلنا من السماء ماء» with a different continuation: «فأسقيناكموه» (15:22), «بقدر» (23:18), «طهورا» (25:48), «فأنبتنا» (31:10)."
+ },
+ "tree:0hqqna60t525d8": {
+  "keep": true,
+  "why": "Same judgment «فيما كانوا فيه يختلفون» with a different verb before it: «يحكم» (2:113, 16:124), «يقضي» (10:93, 45:17), «يفصل» (32:25), «تحكم» (39:46); 12:20 and 15:63 are outliers."
+ },
+ "tree:0oy0j2i0lw2p5o": {
+  "keep": true,
+  "why": "Same denial of a son: «لم يتخذ ولدا ولم يكن له شريك في الملك» (17:111, 25:2) vs «أن يتخذ ولدا» (19:92, 39:4)."
+ },
+ "cmp:0qrtmo0183j37w": {
+  "keep": true,
+  "why": "Same words «وقالوا اتخذ الرحمن ولدا», with 21:26 adding «سبحانه بل عباد مكرمون»."
+ },
+ "tree:1dbxpc816i3elm": {
+  "keep": false,
+  "why": "Only 3:124, 3:125 and 8:9 belong together (angels sent as help: «بثلاثة ءالاف ... منزلين», «بخمسة ءالاف ... مسومين», «بألف ... مردفين»); 17:40 and 22:75 share just «من الملائكة».",
+  "before": {
+   "keep": true,
+   "why": "Bi-thalathati/khamsati/alfin minal mala'ika munzalin/musawwimin/murdifin"
+  }
+ },
+ "tree:1tpargg0vyqcx2": {
+  "keep": false,
+  "why": "«ظلموا أنفسهم» is a stock phrase in six unrelated contexts."
+ },
+ "cmp:1qa65760xu34dy": {
+  "keep": true,
+  "why": "Same «إن أتبع إلا ما يوحى إلي» with a different continuation: «قل هل يستوي» (6:50), «إني أخاف» (10:15), «وما أنا إلا نذير مبين» (46:9)."
+ },
+ "tree:1m20zve1hu982o": {
+  "keep": true,
+  "why": "Same «عنهم ما كانوا» with a different verb: «وضل ... يفترون» (6:24, 7:53, 10:30, 11:21, 16:87, 28:75), «يدعون» (41:48), «فما أغنى ... يكسبون» (15:84, 39:50, 40:82), «يمتعون» (26:207), «لحبط ... يعملون» (6:88)."
+ },
+ "tree:1gaw0gy1lq0to2": {
+  "keep": true,
+  "why": "Same «به جنة بل»: «جاءهم بالحق» (23:70) vs «الذين لا يؤمنون بالآخرة» (34:8)."
+ }
+}
