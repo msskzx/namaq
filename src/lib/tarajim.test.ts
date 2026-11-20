@@ -1,20 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import { matchesQuery } from '@shared/tarajimLine';
-import { betweenView, PEOPLE, pickedSlugs, pickPeople, tarajimCards } from './tarajim';
+import { betweenView, PEOPLE, pickedSlugs, pickPeople, tarajimCardOf, tarajimItems } from './tarajim';
 
-describe('tarajimCards', () => {
-  it('takes a virtue, a «صلة» chain and a «حياته» timeline in turn, the same all day', () => {
-    const cards = tarajimCards(20000, [0, 1, 2, 3]);
-    expect(cards.map(card => card.kind)).toEqual(['tarajim', 'tie', 'life', 'tarajim']);
-    const life = cards[2];
-    if (life.kind !== 'life') throw new Error('life');
-    expect(new Set(life.items.map(item => item.year)).size).toBeGreaterThan(1);
-    const tie = cards[1];
-    if (tie.kind !== 'tie') throw new Error('tie');
+describe('the person cards', () => {
+  it('draw a «صلة» chain whose every step is a cited tie, and a «حياته» timeline across years', () => {
+    const tie = tarajimCardOf('tie', tarajimItems('tie')[0]);
+    if (tie?.kind !== 'tie') throw new Error('tie');
     expect(tie.chain.steps.length).toBeGreaterThan(1);
     expect(tie.chain.steps.every(step => tie.chain.nodes.some(node => node.slug === step.from) && step.clause.length > 0)).toBe(true);
     expect(tie.sentence.endsWith('.')).toBe(true);
-    expect(tarajimCards(20000, [0, 1])).toEqual(cards.slice(0, 2));
+    const life = tarajimCardOf('life', tarajimItems('life')[0]);
+    if (life?.kind !== 'life') throw new Error('life');
+    expect(new Set(life.items.map(item => item.year)).size).toBeGreaterThan(1);
   });
 });
 

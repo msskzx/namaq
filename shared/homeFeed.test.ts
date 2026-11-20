@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { dayStart, feedBooks, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, prayerSoon } from './homeFeed';
-import { INTERESTS } from './interests';
+import { dayStart, feedBooks, LIST_KINDS, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, prayerSoon } from './homeFeed';
+import { FEED_CARD_KINDS, INTERESTS } from './interests';
 import type { PrayerDay } from './prayer';
 
 const at = (hours: number, minutes = 0) => new Date(2026, 10, 18, hours, minutes);
@@ -19,6 +19,13 @@ describe('home feed cards', () => {
     expect(feedBooks(books, marked, 1, 3).map(book => book.id)).toEqual(['d', 'b', 'c']);
     expect(feedBooks(books, () => false, 5, 5).map(book => book.id)).toEqual(['a', 'b', 'c', 'd', 'e']);
     expect(feedBooks([], marked, 2)).toEqual([]);
+  });
+});
+
+describe('the feed\'s item lists', () => {
+  it('cover every card kind but the pairs and trees, which come by their own ids', () => {
+    // A kind left out would never fill its slots, on the website or in the app.
+    expect([...LIST_KINDS, 'pair', 'tree'].sort()).toEqual([...FEED_CARD_KINDS].sort());
   });
 });
 

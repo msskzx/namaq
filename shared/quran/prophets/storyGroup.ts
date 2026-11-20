@@ -1,6 +1,5 @@
 // The home feed's prophets card (owner, 2026-11-14): one group of a prophet's story map, the same dots and all its surahs,
-// narrow enough to need no sideways scroll; a tap on a dot opens the story there.
-import { dailyIndex } from '../../dailyPick';
+// narrow enough to need no sideways scroll; a tap on a dot opens the story there. The feed walks them in order (LIST_OF).
 import { STORIES } from './stories';
 
 /** The most events a group may have to fit a phone's card without scrolling sideways (a column is about 2.4rem). */
@@ -13,8 +12,3 @@ export const STORY_GROUPS: StoryGroup[] = Object.entries(STORIES).flatMap(([slug
   const count = story.events.filter(event => event.phase === phase).length;
   return count >= 2 && count <= STORY_CARD_EVENTS ? [{ slug, phase }] : [];
 }));
-
-/** The group the prophets card in batch `slot` shows on a day: spread so that the day's cards and following days differ. */
-export const storyGroupOfDay = (day: number, slot: number): StoryGroup => STORY_GROUPS[dailyIndex(day * 31 + slot, STORY_GROUPS.length)];
-
-export { hasStoryCard } from '../../feedSeen';

@@ -97,6 +97,26 @@ describe('PairCompare', () => {
     expect(screen.queryByRole('button', { name: 'عرض المصفوفة' })).toBeNull();
   });
 
+  it('shows a surah-order book card under its heading with the quote as written, and opens its book from the source line', () => {
+    const book: PairCard = { id: '87:11-12|88:3-4', book: 88, pairs: [{ id: '87:11|88:3' }, { id: '87:12|88:4' }], sides: [
+      { surah: 87, ayah: 11, ayat: [{ number: 11, words: ['ويتجنبها', 'الأشقى'] }, { number: 12, words: ['الذي', 'يصلى', 'النار', 'الكبرى'] }] },
+      { surah: 88, ayah: 3, ayat: [{ number: 3, words: ['عاملة', 'ناصبة'] }, { number: 4, words: ['تصلى', 'نارا', 'حامية'] }] },
+    ] };
+    render(<PairCompare view="tree" a={87} b={88} cards={[book]} pairs={[{ a: 87, b: 88, count: 2 }]} names={names} />);
+    expect(screen.getByText('في كتب تناسب السور')).toBeTruthy();
+    expect(document.querySelector('[data-book-quote]')!.textContent).toContain('﴿عاملة ناصبة﴾ في مقابل');
+    // No run of two shared words: the book makes the pair, so the card stays its matrix, with no tree button.
+    expect(screen.queryByRole('button', { name: 'عرض المصفوفة' })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: /^المصدر: تناسق الدرر في تناسب السور · السيوطي/ }));
+    expect(screen.getByRole('link', { name: /السيوطي، تناسق الدرر ص/ }).getAttribute('href')).toMatch(/^https:\/\/shamela\.ws\/book\/9992\//);
+  });
+
+  it('notes atop two neighbouring surahs what the book says joins them when it names no ayat', () => {
+    render(<PairCompare view="cards" a={85} b={86} cards={cards} pairs={[{ a: 85, b: 86, count: 1 }]} names={names} />);
+    const note = screen.getByRole('region', { name: 'بين السورتين' });
+    expect(note.textContent).toContain('هما متآخيتان فقرنتا');
+  });
+
   it('lights the matching word on the other side when a word is tapped', () => {
     const { container } = render(<PairCompare view="cards" a={52} b={68} cards={cards} pairs={pairs} names={names} />);
     const [first] = container.querySelectorAll('mark[data-link="1"]');
