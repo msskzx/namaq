@@ -10,7 +10,7 @@ import AyahCards from '../branches/AyahCards';
 import { CARD_KINDS, OPEN_RULES, rowsChanged, type CardPress, type CardProposal, type CardReviewEntry, type ReviewVersion } from '@/lib/quran/curation/cardReviewIndex';
 
 type Action = Exclude<CardPress['action'], 'undo'>;
-type Pressed = { action: Action; version: ReviewVersion } | undefined;
+type Pressed = { action: Action; version: ReviewVersion; t?: number } | undefined;
 
 /** Text that may hold Arabic lines: each line takes its own direction, so Arabic never sits inside an English line. */
 const Lines = ({ text }: { text: string }) => <>{text.split('\n').map((line, i) => <span key={i} dir="auto" className="block">{line}</span>)}</>;
@@ -36,23 +36,29 @@ const keepLabel = (keep: boolean) => (keep ? 'Keep' : 'Drop');
  * One card on the review page: the card as it is, the agents' version behind a switch when they changed its ayat, both verdicts,
  * and the owner's three choices. A press appends to the log for the version on screen; pressing the same choice again undoes it.
  */
-export default function ReviewCard({ number, entry, reviewId, proposal, pressed, names }: { number: number; entry: CardReviewEntry; reviewId: string; proposal?: CardProposal; pressed: Pressed; names: Record<number, string> }) {
+export default function ReviewCard({ number, entry, shared, proposal, pressed, names }: { number: number; entry: CardReviewEntry; shared?: string; proposal?: CardProposal; pressed: Pressed; names: Record<number, string> }) {
   const reshaped = rowsChanged(entry, proposal);
   const [version, setVersion] = useState<ReviewVersion>('original');
   const [chosen, setChosen] = useState<Pressed | null>(null);
   const [failed, setFailed] = useState(false);
+  // Presses go out one after another, so the log ends on the choice on screen however fast the buttons are pressed.
+  const queue = useRef<Promise<void>>(Promise.resolve());
   const current = chosen === null ? pressed : chosen;
-  const send = async (action: Action) => {
-    const undo = current?.action === action && current.version === version;
+  const send = (action: Action) => {
+    const before = current;
+    const undo = before?.action === action && before.version === version;
     setChosen(undo ? undefined : { action, version });
     setFailed(false);
-    try {
-      const response = await fetch('/api/quran/card-review', { method: 'POST', keepalive: true, headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id: reviewId, action: undo ? 'undo' : action, version }) });
-      if (!response.ok) throw new Error(String(response.status));
-    } catch {
-      setChosen(null);
-      setFailed(true);
-    }
+    const body = JSON.stringify({ id: entry.id, ...(shared ? { shared } : {}), action: undo ? 'undo' : action, version });
+    queue.current = queue.current.then(async () => {
+      try {
+        const response = await fetch('/api/quran/card-review', { method: 'POST', keepalive: true, headers: { 'content-type': 'application/json' }, body });
+        if (!response.ok) throw new Error(String(response.status));
+      } catch {
+        setChosen(before);
+        setFailed(true);
+      }
+    });
   };
   const cards = version === 'agents' && proposal?.cards ? proposal.cards : [entry.rows];
   const kind = CARD_KINDS.find(option => option.id === entry.kind)!;
@@ -67,7 +73,7 @@ export default function ReviewCard({ number, entry, reviewId, proposal, pressed,
       <span>{number}</span>
       <span>{kind.ar}</span>
       {entry.books?.map(book => <span key={book}>{book}</span>)}
-      {entry.twin && <span>مشتركة مع المقارنة</span>}
+      {shared && <span>حكم واحد مع المقارنة</span>}
       {entry.title && <span className="text-[var(--home-ink)]">{entry.title}</span>}
     </header>
     {reshaped && <Segmented label="أي نسخة" options={[

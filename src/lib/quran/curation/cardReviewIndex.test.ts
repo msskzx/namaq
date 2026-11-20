@@ -1,15 +1,22 @@
 import { describe, expect, it } from 'vitest';
-import { agentsChanged, comparePages, pageOf, pressesByCard, reviewKey, rowsChanged, selectCards, type CardPress, type CardReviewEntry } from './cardReviewIndex';
+import { agentsChanged, comparePages, pageOf, pressesByCard, pressOf, rowsChanged, selectCards, type CardPress, type CardReviewEntry } from './cardReviewIndex';
 
 const tree = (id: string, rows: string[][], extra: Partial<CardReviewEntry> = {}): CardReviewEntry => ({ id, kind: 'word', title: '', rows, verdict: { keep: true, why: 'old' }, ...extra });
 const press = (id: string, action: CardPress['action'], t = 0): CardPress => ({ t, id, action, version: 'original' });
 
 describe('card review', () => {
-  it('a tree card that is one compare pair and the compare card of that pair answer to one key (one verdict)', () => {
+  it('a press on a tree card that is one compare pair is the press of the compare card of that pair too (one verdict)', () => {
     const twin = tree('tree:a', [['2:8'], ['3:114']], { twin: '2:8|3:114' });
     const compare: CardReviewEntry = { id: 'cmp-card:2:8|3:114', kind: 'compare', title: '', rows: [['2:8'], ['3:114']], pairs: ['2:8|3:114'], page: '2/3' };
-    expect(reviewKey(twin)).toBe(reviewKey(compare));
-    expect(reviewKey({ id: 'cmp-card:x', pairs: ['2:1|3:1', '2:2|3:2'] })).toBe('cmp-card:x');
+    const other = tree('tree:b', [['2:9'], ['3:115']]);
+    const pressed = pressesByCard([{ t: 1, id: 'tree:a', shared: '2:8|3:114', action: 'keep', version: 'original' }]);
+    expect(pressOf(compare, pressed)?.action).toBe('keep');
+    expect(pressOf(other, pressed)).toBeUndefined();
+    // A later press on the compare card is the last word for both; undoing it clears both.
+    const later = pressesByCard([{ t: 1, id: 'tree:a', shared: '2:8|3:114', action: 'keep', version: 'original' }, { t: 2, id: compare.id, shared: '2:8|3:114', action: 'drop', version: 'original' }]);
+    expect(pressOf(twin, later)?.action).toBe('drop');
+    const undone = pressesByCard([{ t: 1, id: 'tree:a', shared: '2:8|3:114', action: 'keep', version: 'original' }, { t: 2, id: compare.id, shared: '2:8|3:114', action: 'undo', version: 'original' }]);
+    expect(pressOf(compare, undone)).toBeUndefined();
   });
 
   it("counts as changed by the agents only another verdict, other rows or a split", () => {
@@ -40,8 +47,8 @@ describe('card review', () => {
     expect(ids(selectCards(cards, {}, new Map(), { kind: 'word' }))).toEqual(['w1', 'w2']);
     expect(ids(selectCards(cards, {}, new Map(), { kind: 'compare', pair: '2/5' }))).toEqual(['c2']);
     expect(ids(selectCards(cards, { w2: { keep: false, why: 'x' } }, new Map(), { kind: 'word', changed: true }))).toEqual(['w2']);
-    // The compare card of one pair is pressed under the pair.
-    expect(ids(selectCards(cards, {}, pressesByCard([press('2:4|3:4', 'keep')]), { kind: 'compare', todo: true }))).toEqual(['c2']);
+    // The compare card of one pair counts as reviewed when its tree twin was pressed.
+    expect(ids(selectCards(cards, {}, pressesByCard([{ ...press('tree:x', 'keep'), shared: '2:4|3:4' }]), { kind: 'compare', todo: true }))).toEqual(['c2']);
   });
 
   it('keeps the page number inside the list', () => {

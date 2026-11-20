@@ -5,7 +5,7 @@ import Segmented from '@/components/common/Segmented';
 import Chip from '@/components/common/Chip';
 import styles from '@/components/common/PaperPage.module.css';
 import { surahName } from '@shared/quran/surahNames';
-import { CARD_KINDS, comparePages, pageOf, pressesByCard, reviewKey, selectCards, type CardKind } from '@/lib/quran/curation/cardReviewIndex';
+import { CARD_KINDS, comparePages, pageOf, pressesByCard, pressOf, selectCards, sharedKey, type CardKind } from '@/lib/quran/curation/cardReviewIndex';
 import { cardProposals, cardReviewIndex } from '@/lib/quran/curation/cardReviewData';
 import { readCardPresses } from '@/lib/quran/curation/cardReviewLog';
 import ReviewCard from './ReviewCard';
@@ -55,9 +55,9 @@ export default async function CardsReview({ searchParams }: { searchParams: Prom
     {pager}
     <ol className="flex flex-col gap-4">
       {items.map((entry, i) => {
-        const key = reviewKey(entry);
-        const press = pressed.get(key);
-        return <li key={entry.id}><ReviewCard number={first + i + 1} entry={entry} reviewId={key} proposal={proposals[key]} pressed={press ? { action: press.action, version: press.version } : undefined} names={names} /></li>;
+        const press = pressOf(entry, pressed);
+        const shared = sharedKey(entry);
+        return <li key={entry.id}><ReviewCard number={first + i + 1} entry={entry} shared={shared} proposal={proposals[entry.id]} pressed={press && { action: press.action as Exclude<typeof press.action, 'undo'>, version: press.version, t: press.t }} names={names} /></li>;
       })}
     </ol>
     {pager}

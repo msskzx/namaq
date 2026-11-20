@@ -35,12 +35,27 @@ type CompareCard = { p: string[]; a?: number[][] };
 function compareCards() {
   const source = readFileSync('shared/data/quran/compareCards.js', 'utf8');
   const data = JSON.parse(JSON.parse(source.slice(source.indexOf('JSON.parse(') + 11, source.lastIndexOf(')')))) as { cards: Record<string, CompareCard[]>; stories: Record<string, CompareCard[]> };
-  return [...Object.entries(data.cards), ...Object.entries(data.stories)].flatMap(([page, cards]) => cards.map(card => ({ page, card })));
+  // A story card is listed in `cards` too: each card once.
+  const seen = new Set<string>();
+  return [...Object.entries(data.cards), ...Object.entries(data.stories)].flatMap(([page, cards]) => cards.flatMap(card => {
+    const id = compareCardId(card.p);
+    if (seen.has(id)) return [];
+    seen.add(id);
+    return [{ page, card }];
+  }));
 }
+
+const runs = (numbers: number[]) => numbers.reduce<number[][]>((all, n) => {
+  const last = all[all.length - 1];
+  if (last && n === last[last.length - 1] + 1) last.push(n);
+  else all.push([n]);
+  return all;
+}, []);
 
 function compareRows(page: string, card: CompareCard): string[][] {
   const [a, b] = page.split(':');
-  if (card.a) return [card.a[0].map(n => `${a}:${n}`), card.a[1].map(n => `${b}:${n}`)];
+  // A passage card: each side's ayat, a row for each run of consecutive ayat.
+  if (card.a) return card.a.flatMap((side, i) => runs(side).map(run => run.map(n => `${i ? b : a}:${n}`)));
   const sides = [new Set<string>(), new Set<string>()];
   for (const pair of card.p) pair.split('|').forEach((key, side) => sides[side].add(key));
   return [...sides[0], ...[...sides[1]].filter(key => !sides[0].has(key))].map(key => [key]);

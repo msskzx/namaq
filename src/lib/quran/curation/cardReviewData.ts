@@ -1,14 +1,21 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import type { CardProposals, CardReviewIndex } from './cardReviewIndex';
 
 /**
- * The review page's two files, read from disk once per server (not bundled: the index is several MB). The index is rebuilt by
- * `npm run quran:card-review`; the proposals are the agents' merged verdicts (scripts/quran/mergeCardProposals.ts).
+ * The review page's two files, read from disk (not bundled: the index is several MB) and read again only when a file changes, so
+ * a rebuilt index (`npm run quran:card-review`) or newly merged proposals (`npm run quran:card-proposals`) show on the next load.
  */
-let index: CardReviewIndex | undefined;
-let proposals: CardProposals | undefined;
-const read = <T>(file: string): T => JSON.parse(readFileSync(join(process.cwd(), 'src/lib/quran/curation', file), 'utf8')) as T;
+const cache = new Map<string, { mtime: number; data: unknown }>();
+function read<T>(file: string): T {
+  const path = join(process.cwd(), 'src/lib/quran/curation', file);
+  const mtime = statSync(path).mtimeMs;
+  const hit = cache.get(path);
+  if (hit?.mtime === mtime) return hit.data as T;
+  const data = JSON.parse(readFileSync(path, 'utf8')) as T;
+  cache.set(path, { mtime, data });
+  return data;
+}
 
-export const cardReviewIndex = () => (index ??= read<CardReviewIndex>('cardReview.json'));
-export const cardProposals = () => (proposals ??= read<{ cards: CardProposals }>('cardProposals.json').cards);
+export const cardReviewIndex = () => read<CardReviewIndex>('cardReview.json');
+export const cardProposals = () => read<{ cards: CardProposals }>('cardProposals.json').cards;

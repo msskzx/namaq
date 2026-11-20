@@ -57,7 +57,8 @@ export type CardProposal = {
 export type CardProposals = Record<string, CardProposal>;
 
 export type ReviewVersion = 'original' | 'agents';
-export type CardPress = { t: number; id: string; action: 'keep' | 'drop' | 'discuss' | 'undo'; version: ReviewVersion };
+/** `shared`: the compare pair a card shares its verdict with, so a press on either card is the press of both. */
+export type CardPress = { t: number; id: string; shared?: string; action: 'keep' | 'drop' | 'discuss' | 'undo'; version: ReviewVersion };
 
 export const compareCardId = (pairs: string[]) => `cmp-card:${pairs.join(',')}`;
 
@@ -65,10 +66,10 @@ export const cardReviewKind = (piece: { group?: { citations: unknown[] } }): Exc
   piece.group?.citations.length ? 'book' : piece.group ? 'ours' : 'word';
 
 /**
- * The key a card's verdict and presses live under. A tree card that is one compare pair shares that pair's verdict (owner
- * 2026-11-18, 2026-11-20), and so does a compare card of that one pair: both answer to the pair.
+ * The compare pair whose one verdict a card shares (owner 2026-11-18, 2026-11-20): a tree card that is one compare pair, and the
+ * compare card of that one pair. Each card keeps its own id for the agents' proposal; a press is the press of every card sharing the pair.
  */
-export const reviewKey = (entry: Pick<CardReviewEntry, 'id' | 'twin' | 'pairs'>) => entry.twin ?? (entry.pairs?.length === 1 ? entry.pairs[0] : entry.id);
+export const sharedKey = (entry: Pick<CardReviewEntry, 'twin' | 'pairs'>): string | undefined => entry.twin ?? (entry.pairs?.length === 1 ? entry.pairs[0] : undefined);
 
 const rowsKey = (rows: string[][]) => rows.map(row => row.join('+')).join(',');
 
@@ -82,14 +83,27 @@ export function agentsChanged(entry: CardReviewEntry, proposal: CardProposal | u
   return !entry.verdict || proposal.keep !== entry.verdict.keep || rowsChanged(entry, proposal);
 }
 
-/** The owner's last word on each card from the log, in order: a later press replaces an earlier one, undo clears it. */
+/**
+ * The owner's last word from the log, in order, by card id and by shared compare pair: a later press replaces an earlier one, undo
+ * clears it. Read a card's with `pressOf`.
+ */
 export function pressesByCard(presses: CardPress[]): Map<string, CardPress> {
   const last = new Map<string, CardPress>();
   for (const press of presses) {
-    if (press.action === 'undo') last.delete(press.id);
-    else last.set(press.id, press);
+    for (const key of press.shared ? [press.id, press.shared] : [press.id]) {
+      if (press.action === 'undo') last.delete(key);
+      else last.set(key, press);
+    }
   }
   return last;
+}
+
+/** A card's last press: its own, or a later one on a card sharing its compare pair. */
+export function pressOf(entry: Pick<CardReviewEntry, 'id' | 'twin' | 'pairs'>, pressed: Map<string, CardPress>): CardPress | undefined {
+  const own = pressed.get(entry.id);
+  const shared = sharedKey(entry);
+  const other = shared ? pressed.get(shared) : undefined;
+  return !own || other && other.t > own.t ? other : own;
 }
 
 export type CardQuery = { kind: CardKind; changed?: boolean; todo?: boolean; pair?: string };
@@ -98,8 +112,8 @@ export type CardQuery = { kind: CardKind; changed?: boolean; todo?: boolean; pai
 export function selectCards(cards: CardReviewEntry[], proposals: CardProposals, pressed: Map<string, CardPress>, query: CardQuery): CardReviewEntry[] {
   return cards.filter(entry => entry.kind === query.kind
     && (!query.pair || entry.page === query.pair)
-    && (!query.changed || agentsChanged(entry, proposals[reviewKey(entry)]))
-    && (!query.todo || !pressed.has(reviewKey(entry))));
+    && (!query.changed || agentsChanged(entry, proposals[entry.id]))
+    && (!query.todo || !pressOf(entry, pressed)));
 }
 
 /** One page of a list: the page number is kept inside the list, and `pages` is at least 1. */

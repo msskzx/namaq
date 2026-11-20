@@ -8,11 +8,13 @@ const VERSIONS = ['original', 'agents'];
 export async function POST(request: Request) {
   if (process.env.NODE_ENV !== 'development') return new NextResponse(null, { status: 404 });
   const origin = request.headers.get('origin');
-  if (origin && new URL(origin).host !== request.headers.get('host')) return new NextResponse(null, { status: 403 });
-  const { id, action, version } = await request.json();
-  if (typeof id !== 'string' || !/^[\w:|,\-]{1,400}$/.test(id) || !ACTIONS.includes(action) || !VERSIONS.includes(version)) {
+  if (origin && URL.parse(origin)?.host !== request.headers.get('host')) return new NextResponse(null, { status: 403 });
+  const body = await request.json().catch(() => null);
+  const { id, shared, action, version } = body ?? {};
+  const valid = (key: unknown) => typeof key === 'string' && /^[\w:|,\-]{1,400}$/.test(key);
+  if (!valid(id) || shared !== undefined && !/^\d+:\d+\|\d+:\d+$/.test(shared) || !ACTIONS.includes(action) || !VERSIONS.includes(version)) {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   }
-  appendCardPress({ t: Date.now(), id, action, version });
+  appendCardPress({ t: Date.now(), id, ...(shared ? { shared } : {}), action, version });
   return NextResponse.json({ ok: true });
 }
