@@ -6,11 +6,9 @@
     "mobile/src/components/BranchSearch.tsx",
     "mobile/src/components/BranchTree.tsx",
     "mobile/src/components/HelpSheet.tsx",
-    "mobile/src/components/HomeCards.tsx",
     "mobile/src/components/Iltifat.tsx",
     "mobile/src/components/IrabSheet.tsx",
     "mobile/src/components/MushafPageView.tsx",
-    "mobile/src/components/NoteSheet.tsx",
     "mobile/src/components/ThemeTiles.tsx",
     "mobile/src/components/WordSheet.tsx",
     "mobile/src/lib/compareVideo.ts",
@@ -40,7 +38,6 @@
     "src/components/homepage/Tour.tsx",
     "src/components/homepage/TreeIntro.tsx",
     "src/components/quran/AyahCard.tsx",
-    "src/components/quran/NoteDialog.tsx",
     "src/components/quran/PageSpread.module.css",
     "src/components/share/AyahShare.tsx",
     "src/components/theme/ThemeTiles.module.css"
@@ -70,7 +67,6 @@
     "src/components/homepage/HomeCards.tsx",
     "src/components/homepage/Tour.tsx",
     "src/components/quran/AyahCard.tsx",
-    "src/components/quran/NoteDialog.tsx",
     "src/components/quran/PageSpread.tsx",
     "src/components/share/AyahShare.tsx"
   ],
