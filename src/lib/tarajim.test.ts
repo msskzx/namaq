@@ -32,7 +32,7 @@ describe('betweenView', () => {
     expect(joined.length).toBeGreaterThan(1);
     expect(joined.every(p => reached.has(p.slug))).toBe(true);
     expect(view.sentence.endsWith('.')).toBe(true);
-    expect(view.credit?.quotes?.length).toBeGreaterThan(0);
+    expect(view.credit?.sources.flatMap(source => source.quotes).some(quote => quote.text)).toBe(true);
   });
 
   it('keeps out a slug in the address that names no converted person, rather than failing', () => {

@@ -10,8 +10,8 @@ import type { ChainView, Credit, NasabBox, NasabView, RingTie, TiesView, Virtues
 import Card from '@/components/common/Card';
 import Chip from '@/components/common/Chip';
 import Button from '@/components/common/Button';
-import Folded from '@/components/common/Folded';
-import ExternalLink from '@/components/common/ExternalLink';
+import Reference from '@/components/common/Reference';
+import CardWithRow from '@/components/common/CardWithRow';
 import Saying from '@/components/common/Saying';
 import Segmented from '@/components/common/Segmented';
 
@@ -52,22 +52,12 @@ function useRoom(max: number) {
   return { box, width: Math.min(room, max) };
 }
 
-/** The pages a part rests on, folded at its foot; open, the edition and its link on al-Shamela (the app's Credit). */
-export function CreditFold({ credit }: { credit?: Credit }) {
-  if (!credit) return null;
-  return (
-    // Folded, only the books and their authors (owner 2026-11-19); open, the pages, the quotes and the edition.
-    <Folded credit={credit.label}>
-      <p className="text-[var(--home-muted)]">{credit.pages}</p>
-      {credit.quotes?.map((quote, i) => <p key={i} className="text-[var(--home-ink)]">«{quote.text}» <span className="text-[var(--home-muted)]">{quote.pages}</span></p>)}
-      {credit.books.map(book => (
-        <div key={book.url} className="flex flex-col gap-0.5">
-          <p>{book.title}</p>
-          <ExternalLink href={book.url} className="w-fit text-[var(--home-accent)]">الكتاب على المكتبة الشاملة</ExternalLink>
-        </div>
-      ))}
-    </Folded>
-  );
+/**
+ * The books a part rests on (the app's Credit): in a card with a row they join its book line (owner 2026-11-20), the pages,
+ * quotes, edition and link in its sheet; elsewhere each is a collapsed reference.
+ */
+export function BookCredit({ credit }: { credit?: Credit }) {
+  return <>{credit?.sources.map(source => <Reference key={source.line} title={source.line} quotes={source.quotes} links={source.links} />)}</>;
 }
 
 /** A person's virtues as the entry gives them, with who says each; a `marked` one (a quiz's answer, once shown) in green. */
@@ -78,7 +68,7 @@ export function Virtues({ view, marked }: { view: VirtuesView; marked?: number }
         <Saying by={virtue.by}><p className={`text-[1.0625rem] leading-[1.85] ${i === marked ? 'text-[var(--home-green)]' : ''}`}>{virtue.text}</p></Saying>
       </div>
     ))}
-    <CreditFold credit={view.credit} />
+    <BookCredit credit={view.credit} />
   </>;
 }
 
@@ -163,7 +153,7 @@ export function TiesRing({ view, marked, onPick, onShow }: { view: TiesView;
               })}
             </svg>
             <div className="absolute flex items-center" style={{ left: drawW / 2 - middleW / 2, top: middle - (RING_H + GROW) / 2, height: RING_H + GROW, width: middleW }}>
-              <Card picked className="w-full px-2.5 py-2 text-center text-[1.0625rem]"><h2 className="line-clamp-2">{view.name}</h2></Card>
+              <Card node picked className="w-full px-2.5 py-2 text-center text-[1.0625rem]"><h2 className="line-clamp-2">{view.name}</h2></Card>
             </div>
             {placed.map(spot => {
               const grows = spot.y < middle ? 'justify-end' : spot.y > middle ? 'justify-start' : 'justify-center';
@@ -174,7 +164,7 @@ export function TiesRing({ view, marked, onPick, onShow }: { view: TiesView;
                 const hasMark = groups.find(g => g.kind === spot.group)?.ties.some(tie => tie.to === marked);
                 return (
                   <div key={spot.key} className={`absolute flex flex-col ${grows}`} style={style}>
-                    <Card as="button" onClick={() => setOpen({ slug: view.slug, kind: spot.group })} className={nodeBox}
+                    <Card node as="button" onClick={() => setOpen({ slug: view.slug, kind: spot.group })} className={nodeBox}
                       outline={hasMark ? 'var(--home-green)' : kindColor(spot.kind)}><span style={{ color: kindColor(spot.kind) }}>{label}</span></Card>
                   </div>
                 );
@@ -185,7 +175,7 @@ export function TiesRing({ view, marked, onPick, onShow }: { view: TiesView;
                 <span className="text-xs" style={{ color: kindColor(spot.kind) }}>{tie.word}</span>
                 <span className={`line-clamp-2 text-sm ${tie.inApp ? 'text-[var(--home-accent)]' : 'text-[var(--home-muted)]'}`}>{tie.short}</span>
               </>;
-              const card = { className: nodeBox, picked: tie.inApp, faded: !tie.inApp, outline: tie.to === marked ? 'var(--home-green)' : undefined, 'aria-label': label };
+              const card = { node: true, className: nodeBox, picked: tie.inApp, faded: !tie.inApp, outline: tie.to === marked ? 'var(--home-green)' : undefined, 'aria-label': label };
               return (
                 <div key={spot.key} className={`absolute flex flex-col ${grows}`} style={style}>
                   {tie.inApp && !onPick
@@ -314,8 +304,8 @@ export function TiesChain({ chain, inCard = false }: { chain: ChainView; inCard?
 function NasabName({ node, linked }: { node: NasabBox; linked: boolean }) {
   const text = <span className={node.slug ? 'text-[var(--home-accent)]' : ''}>{node.name}</span>;
   return node.slug && linked
-    ? <Card href={`/people/${node.slug}`} picked className="flex min-h-11 items-center justify-center whitespace-nowrap px-3 py-1.5 text-center">{text}</Card>
-    : <Card picked={!!node.slug} className="whitespace-nowrap px-3 py-1.5 text-center">{text}</Card>;
+    ? <Card node href={`/people/${node.slug}`} picked className="flex min-h-11 items-center justify-center whitespace-nowrap px-3 py-1.5 text-center">{text}</Card>
+    : <Card node picked={!!node.slug} className="whitespace-nowrap px-3 py-1.5 text-center">{text}</Card>;
 }
 
 const picked = (node: NasabBox) => !!node.slug;
@@ -420,6 +410,8 @@ export function NasabTree({ view, linked = true, text: withText = true, start = 
     <div className="flex flex-col gap-4" lang="ar">
       {withText && <Segmented tabs label="كيف يُعرض النسب" className="self-start"
         options={DRAWING_OR_TEXT.map(item => ({ ...item, current: shown === item.key, onClick: () => setShown(item.key) }))} />}
+      {/* The tree in the home card's shape, its books on the line under it (owner 2026-11-20). */}
+      <CardWithRow className="flex flex-col gap-4 p-4">
       {drawing && view.trees.map(tree => {
         const aboveShown = open.includes(tree.key);
         return (
@@ -450,7 +442,8 @@ export function NasabTree({ view, linked = true, text: withText = true, start = 
       <p className="text-[0.8125rem] leading-6 text-[var(--home-muted)]">
         الأسماء كما في نسب كل علَم في سير أعلام النبلاء؛ وإذا وقف نسبه عند جدٍّ أكمله نسبُ علَمٍ آخر يذكر الآباء أنفسهم.
       </p>
-      <CreditFold credit={view.credit} />
+      <BookCredit credit={view.credit} />
+      </CardWithRow>
     </div>
   );
 }

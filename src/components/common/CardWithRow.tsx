@@ -57,7 +57,8 @@ export default function CardWithRow({ lead, row, menu = [], cap = false, source 
   const sources = source.length + inner.length > 0 && <SourceLine named={source.length ? source : inner} sources={[...source, ...inner]} />;
   const content = <SourceSlotContext.Provider value={sourceSlot}><CardRowProvider slot={slot}>{children}</CardRowProvider></SourceSlotContext.Provider>;
   const look = `overflow-hidden ${className}`;
-  return <>
+  // One block, so a page's gaps part its sections, not a card from its own row and line.
+  return <div className="flex flex-col gap-1">
     {cap ? <CappedCard className={look} whole={<>
       <Card className={look}><SourceSlotContext.Provider value={NO_SOURCES}><CardRowProvider slot={sheetSlot}>{children}</CardRowProvider></SourceSlotContext.Provider></Card>
       {buttons(setSheetSlot)}
@@ -65,5 +66,5 @@ export default function CardWithRow({ lead, row, menu = [], cap = false, source 
     </>}>{content}</CappedCard> : <Card className={look}>{content}</Card>}
     {buttons(setSlot, <MoreMenu items={menu} />)}
     {sources}
-  </>;
+  </div>;
 }

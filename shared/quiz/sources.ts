@@ -124,3 +124,6 @@ export function mergeSources<T extends SourceEntry>(sources: T[]): SourceEntry[]
   }
   return [...books.values()];
 }
+
+/** A card's books as source-line entries, one for each book (referenceGroups): what the line names and its sheet opens to. */
+export const sourceEntries = (sources: QuizSource[]): SourceEntry[] => referenceGroups(sources).map(group => ({ line: group.title, quotes: group.lines }));

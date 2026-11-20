@@ -4,14 +4,13 @@
 // the «من التراجم» and «صلة» feed cards. The client parts in src/components/tarajim draw what these return.
 import { nameItem, tieItem, virtueItem } from '@shared/feedItems';
 import peopleJson from '@shared/data/tarajim/people.json';
-import { pageLabel, pageSources, saidBy, sourcesOf, type AppPerson, type PersonFact } from '@shared/tarajim';
-import { citeSource, uniqueSources, type QuizSource } from '@shared/quiz/sources';
+import { factSources, pageLabel, pageSources, saidBy, type AppPerson, type PersonFact } from '@shared/tarajim';
+import { citeSource, sourceEntries, uniqueSources, type QuizSource, type SourceEntry } from '@shared/quiz/sources';
 import { byVolume, heldGroups, kunyaLine, personLine } from '@shared/tarajimGroups';
 import { chainOf, matchesQuery, namesHay, foldTop, lineOf, meetingOf, nasabTree, type NasabNode } from '@shared/tarajimLine';
 import { chainSentence, groupWord, joining, linkedPairs, peopleGraph, stepClause, tieGroups, tieWord, type GraphNode, type Step, type TieKind } from '@shared/tarajimGraph';
 import { allVirtues } from '@shared/homeFeed';
 import { kunyaFacts, laqabFacts, type NameFact } from '@shared/tarajimNames';
-import { sourceById } from '@shared/sources';
 import lifeData from '@shared/data/events/life.json';
 import battlesData from '@shared/data/battles/battles.json';
 import type { AppLife } from '@shared/events/life';
@@ -45,17 +44,14 @@ export const pickPeople = (): PickPerson[] => PEOPLE.map(person => ({ slug: pers
 /** The slugs of a `?slugs=a,b` (or `?with=`) list that name a converted person, each once. */
 export const pickedSlugs = (list = '') => [...new Set(list.split(',').filter(slug => findPerson(slug)))];
 
-/** The pages a part rests on, with each book's edition and link (the Siyar, and Zad al-Ma'ad where it is cited): the app's Credit. */
-export type Credit = { pages: string; label: string; books: { title: string; url: string; label: string }[]; quotes?: { text: string; pages: string }[] };
+/**
+ * The books a part rests on, each value's words with who says them at its pages when `quotes`, with each book's edition
+ * and link: the entries of its card's book line (owner 2026-11-20), the app's Credit.
+ */
+export type Credit = { sources: SourceEntry[] };
 export function creditOf(facts: PersonFact[], quotes = false): Credit | undefined {
-  const refs = facts.flatMap(fact => fact.refs);
-  if (!refs.length) return undefined;
-  const books = sourcesOf(refs).map(id => sourceById(id)).filter(book => book !== undefined)
-    .map(book => ({ title: `${book.title.ar}، ${book.edition ?? ''}`, url: book.link.url, label: `${book.title.ar}، ${book.author?.ar ?? ''}` }));
-  return {
-    pages: pageLabel(refs), books, label: books.map(book => book.label).join(' · '),
-    ...(quotes ? { quotes: facts.filter(fact => fact.text).map(fact => ({ text: fact.text!, pages: pageLabel(fact.refs) })) } : {}),
-  };
+  const sources = sourceEntries(factSources(facts, quotes));
+  return sources.length ? { sources } : undefined;
 }
 
 export type PersonHead = { slug: string; name: string; sex?: 'MALE' | 'FEMALE' };

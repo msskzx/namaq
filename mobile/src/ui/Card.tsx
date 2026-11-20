@@ -88,8 +88,9 @@ export function CardWithRow({ lead, row, menu, cap = false, source, sourceLine, 
   // buttons join that card's row and its books that card's line, or show as collapsed references where it has none.
   if (inside) return <>{children}<UnderCard>{lead}{row}</UnderCard>{own.map(given => <Reference key={given.line} title={given.line} quotes={given.quotes} links={given.links} palette={palette} />)}</>;
   const sources = own.length + inner.length > 0 && (sourceLine ? sourceLine(named, [...own, ...inner]) : <SourceLine named={named} sources={[...own, ...inner]} palette={palette} />);
+  // One block, so a page's gaps part its sections, not a card from its own row and line.
   return (
-    <>
+    <View style={{ gap: 4 }}>
       <SourceSlotContext.Provider value={sourceSlot}>
         <RowSlot.Provider value={slot}>
           <Card testID="feed-card" {...card}>
@@ -119,7 +120,7 @@ export function CardWithRow({ lead, row, menu, cap = false, source, sourceLine, 
           {sources}
         </ScrollView>
       </Sheet>}
-    </>
+    </View>
   );
 }
 

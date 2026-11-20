@@ -2,14 +2,14 @@
 
 import { useState } from 'react';
 import { BookMarked } from 'lucide-react';
-import { mergeSources, referenceGroups, type QuizSource } from '@shared/quiz/sources';
+import { mergeSources, sourceEntries, type QuizSource } from '@shared/quiz/sources';
 import ExternalLink from './ExternalLink';
 import Sheet from './Sheet';
 import TapRow from './TapRow';
 import type { Source } from './sourceSlot';
 
 /** A card's books as source-line entries, one for each book (shared/quiz/sources.ts referenceGroups). */
-export const sourcesOf = (sources: QuizSource[]): Source[] => referenceGroups(sources).map(group => ({ line: group.title, quotes: group.lines }));
+export const sourcesOf = (sources: QuizSource[]): Source[] => sourceEntries(sources);
 
 /**
  * A home card's source line (owner 2026-11-20, like an Instagram post's line under its buttons): a book icon and the
