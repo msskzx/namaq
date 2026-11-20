@@ -3,7 +3,7 @@
 import { createContext, Fragment, isValidElement, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, Feather, Layers, LibraryBig, Users, EyeOff, LightbulbOff, Plus, Presentation, ScrollText, Sparkles, Undo2, Swords, BookOpenText, ListTree, MessagesSquare, Link2, History, Network, GitCommitVertical } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, Feather, Layers, LibraryBig, Users, EyeOff, LightbulbOff, Plus, Presentation, ScrollText, Sparkles, Undo2, Swords, BookOpenText, ListTree, ListStart, MessagesSquare, Link2, History, Network, GitCommitVertical } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Segmented from '@/components/common/Segmented';
@@ -17,7 +17,16 @@ import type { HadithCard } from '@/lib/forty';
 import type { SahihCard } from '@/lib/sahih';
 import { SahihHadithView } from '@/components/hadith/SahihParts';
 import type { NameCard, TarajimCard } from '@/lib/tarajim';
-import { betweenHref, TiesChain, tiesHref } from '@/components/tarajim/TarajimParts';
+import { betweenHref, NasabTree, nasabHref, TieSays, TiesChain, tiesHref, TiesRing } from '@/components/tarajim/TarajimParts';
+import type { RingTie } from '@/lib/tarajim';
+import type { DrawingCard } from '@/lib/drawingCards';
+import BattleMap from '@/components/battles/BattleMap';
+import { Counts } from '@/components/battles/BattleView';
+import { Bubbles, sceneColours } from '@/components/hadith/HadithBody';
+import { OpeningRows } from '@/app/quran/openings/OpeningsView';
+import { OathWords, oathAnchor } from '@/app/quran/oaths/OathsView';
+import EventPlaces from '@/app/quran/prophets/[slug]/EventPlaces';
+import { oathPlace } from '@shared/quran/oaths';
 import LifeTimeline from '@/components/tarajim/LifeTimeline';
 import { IbnRajab } from '@/components/hadith/FortyParts';
 import HadithBooks from '@/components/hadith/HadithBooks';
@@ -596,6 +605,70 @@ function LifePost({ card }: { card: Extract<TarajimCard, { kind: 'life' }> }) {
   </Post>;
 }
 
+/**
+ * The drawings built for their pages, each as its page draws it (the app's NasabPost, TiesPost, BattlePost, HadithScenePost,
+ * OpeningCardPost, OathPost and EventPost; owner 2026-11-20, sketch layout-cleanup panel 6); the row's open button opens the
+ * page at the item.
+ */
+function DrawingPost({ card }: { card: DrawingCard }) {
+  const [tie, setTie] = useState<RingTie>();
+  const save = { kind: card.kind, item: card.item };
+  switch (card.kind) {
+    case 'nasab': {
+      const title = card.person.sex === 'FEMALE' ? 'نسبها' : 'نسبه';
+      return <Post save={save} head={<PostHead Icon={Network} title={title} sub={card.person.name} />}
+        open={<Action Icon={Network} label={`افتح نسب ${card.person.name}`} href={nasabHref([card.person.slug])} />} source={card.sources}>
+        <div className="px-4 py-3"><NasabTree view={card.nasab} text={false} inCard /></div>
+      </Post>;
+    }
+    case 'ties': {
+      const title = card.person.sex === 'FEMALE' ? 'صلاتها' : 'صلاته';
+      return <Post save={save} head={<PostHead Icon={Link2} title={title} sub={card.person.name} />}
+        open={<Action Icon={Link2} label={`افتح ${title}: ${card.person.name}`} href={tiesHref(card.person.slug)} />} source={card.sources}>
+        <div className="flex flex-col gap-3 px-4 py-3"><TiesRing view={card.ties} onShow={setTie} />{tie && <TieSays tie={tie} />}</div>
+      </Post>;
+    }
+    case 'battle': {
+      const { battle } = card;
+      return <Post save={save} head={<PostHead Icon={Swords} title={battle.name} sub={battleLine(battle)} />}
+        open={<Action Icon={Swords} label={`افتح ${battle.name}`} href={`/battles/${battle.slug}`} />} source={card.sources}>
+        <div lang="ar">
+          {battle.place && <><BattleMap place={battle.place} /><p className="px-3 pt-1.5 text-sm text-[var(--home-muted)]">موضع تقريبي على خريطة اليوم، من عندنا.</p></>}
+          <div className="px-4 py-3"><Counts battle={battle} Heading="h3" /></div>
+        </div>
+      </Post>;
+    }
+    case 'hadith-scene': {
+      const scene = card.scenes[card.at];
+      return <Post save={save} head={<PostHead Icon={MessagesSquare} title={`من ${card.unit.book}`} sub={[card.unit.kitab, `المشهد ${num(scene.ordinal)}`].filter(Boolean).join(' · ')} />}
+        open={<Action Icon={MessagesSquare} label={`افتح الحديث في ${card.unit.book}`} href={`/hadith/${card.unit.id}`} />} source={card.sources}>
+        <div className="px-4 py-3"><Bubbles lines={scene.lines} colours={sceneColours(card.scenes)[card.at]} /></div>
+      </Post>;
+    }
+    case 'opening':
+      return <Post save={save} head={<PostHead Icon={ListStart} title="من فواتح السور" sub={card.card.title} />}
+        open={<Action Icon={ListStart} label={`افتح «${card.card.title}» في فواتح السور`} href={`/quran/openings?kind=${card.card.kind}#${card.card.id}`} />} source={card.sources}>
+        <div className="px-4 py-2" lang="ar"><OpeningRows card={card.card} names={names} /></div>
+      </Post>;
+    case 'oath': {
+      const place = oathPlace(card.oath, num);
+      return <Post save={save} head={<PostHead Icon={Feather} title="من الأقسام" sub={[place, card.oath.who].filter(Boolean).join(' · ')} />}
+        open={<Action Icon={Feather} label={`افتح ${place} في الأقسام`} href={`/quran/oaths#${oathAnchor(card.oath.id)}`} />}
+        actions={<Action Icon={BookOpen} label={`افتح ${place} في المصحف`} href={ayahHref(card.oath.id)} />} source={card.sources}>
+        <div className="px-4 py-1.5" lang="ar"><OathWords oath={card.oath} /></div>
+      </Post>;
+    }
+    case 'event':
+      return <Post save={save} head={<PostHead Icon={ScrollText} title={card.title} sub={card.phase} />}
+        open={<Action Icon={BookOpen} label={`افتح ${card.event.title} في القصة`} href={`/quran/prophets/${card.slug}?event=${card.at}`} />} source={card.sources}>
+        <div className="px-4 py-3" lang="ar">
+          <EventPlaces slug={card.slug} compare={{}} event={card.event} places={card.places} phase={card.phase} readable={false}
+            onStep={() => {}} hasPrev={false} hasNext={false} />
+        </div>
+      </Post>;
+  }
+}
+
 type Tree = FeedTree;
 
 /** A saved ayah as a post: the ayah in the mushaf's own lines, as the recall card shows it once revealed. */
@@ -629,6 +702,7 @@ export function SavedCardPost({ id }: { id: string }) {
     case 'note-qiraat': return <QiraatPost ayah={data.ayah} />;
     case 'note-tafsir': case 'note-irab': case 'note-balagha': return <AyahNotePost kind={data.kind} note={data.note} />;
     case 'scene': return <ScenePost view={data.view} reference={data.reference} />;
+    default: return <DrawingPost card={data.card} />;
   }
 }
 

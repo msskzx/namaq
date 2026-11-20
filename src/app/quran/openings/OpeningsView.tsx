@@ -41,6 +41,23 @@ function Conditions({ lines }: { lines: ConditionText[string] }) {
 /** A card's own part labels (الزمر and الحواميم, or what each lone oath swears by), shown over the part's first row. */
 const partAt = (card: OpeningCard, surah: number) => card.parts?.find(part => part.surahs[0] === surah)?.label;
 
+/** A card's surahs, each its name (a link to the mushaf) over its opening ayah, or its condition and answer when `open`: the page's card and its feed card. */
+export function OpeningRows({ card, names, conditions, open = false }: { card: OpeningCard; names: Record<number, string>; conditions?: ConditionText; open?: boolean }) {
+  return <>
+    {card.rows.map((row, r) => (
+      <div key={row.surah} className={`${r ? 'border-t border-[var(--home-rule)]/40' : ''} py-1.5`}>
+        {partAt(card, row.surah) && <p data-part className="pb-1 text-sm font-semibold">{partAt(card, row.surah)}</p>}
+        <div className="flex items-center gap-2 text-sm text-[var(--home-muted)]">
+          <Link href={`/quran/read/ayah/${row.surah}/1`} className="hover:underline" title="افتح في المصحف">{names[row.surah]}</Link>
+        </div>
+        {open && conditions?.[row.surah]
+          ? <Conditions lines={conditions[row.surah]} />
+          : <AyahFlow><Words words={row.words} />{row.cut && <span className="text-[var(--home-muted)]"> …</span>}</AyahFlow>}
+      </div>
+    ))}
+  </>;
+}
+
 function OpeningItem({ card, names, conditions }: { card: OpeningCard; names: Record<number, string>; conditions: ConditionText }) {
   const [open, setOpen] = useState(false);
   const expandable = card.rows.some(row => conditions[row.surah]);
@@ -51,17 +68,7 @@ function OpeningItem({ card, names, conditions }: { card: OpeningCard; names: Re
           ? <h3 data-share-only hidden className="text-xl text-[var(--home-accent)]">{card.title}</h3>
           : <h3 className="text-xl text-[var(--home-accent)]">{card.title}</h3>}
         {card.refs && !soleCard(card) && <div data-share-skip><Reference title={card.refs[0].cite!} quotes={card.refs} /></div>}
-        {card.rows.map((row, r) => (
-          <div key={row.surah} className={`${r ? 'border-t border-[var(--home-rule)]/40' : ''} py-1.5`}>
-            {partAt(card, row.surah) && <p data-part className="pb-1 text-sm font-semibold">{partAt(card, row.surah)}</p>}
-            <div className="flex items-center gap-2 text-sm text-[var(--home-muted)]">
-              <Link href={`/quran/read/ayah/${row.surah}/1`} className="hover:underline" title="افتح في المصحف">{names[row.surah]}</Link>
-            </div>
-            {open && conditions[row.surah]
-              ? <Conditions lines={conditions[row.surah]} />
-              : <AyahFlow><Words words={row.words} />{row.cut && <span className="text-[var(--home-muted)]"> …</span>}</AyahFlow>}
-          </div>
-        ))}
+        <OpeningRows card={card} names={names} conditions={conditions} open={open} />
         {open && <div data-share-skip className="flex flex-col gap-1 border-t border-[var(--home-rule)]/40 pt-2 text-sm leading-relaxed text-[var(--home-muted)]">
           {CONDITION_NOTES.map(n => <p key={n}>{n}</p>)}
           {CONDITION_SOURCES.map(c => <ExternalLink key={c.url} href={c.url}>{c.title}</ExternalLink>)}

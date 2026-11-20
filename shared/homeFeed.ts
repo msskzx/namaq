@@ -1,7 +1,7 @@
 import { nextPrayer, type PrayerDay, type PrayerKey } from './prayer';
 import { counted } from './quran/arabicNumber';
 import type { FeedQuizKind } from './quiz/feedQuiz';
-import type { FeedCardKind, Interest } from './interests';
+import { DRAWING_CARD_KINDS, type FeedCardKind, type Interest } from './interests';
 
 /**
  * The reader's own cards, not any interest's (owner, 2026-11-18/19): today's juz in the feed's first round, the books on
@@ -149,7 +149,7 @@ export const dayStart = (count: number, day: number, salt: number) => (count ? s
 
 /** The content cards drawn from a list of items (pairs and trees have their own picks), in the order that salts each one's start. */
 export const LIST_KINDS = ['note-tafsir', 'note-qiraat', 'note-irab', 'note-balagha', 'term', 'scene', 'hadith', 'bukhari', 'muslim', 'rajab',
-  'recorded', 'isnad', 'prophets', 'sira', 'moment', 'tarajim', 'tie', 'laqab', 'kunya', 'life'] as const satisfies readonly FeedCardKind[];
+  'recorded', 'isnad', 'prophets', 'sira', 'moment', 'tarajim', 'tie', 'laqab', 'kunya', 'life', ...DRAWING_CARD_KINDS] as const satisfies readonly FeedCardKind[];
 export type ListKind = (typeof LIST_KINDS)[number];
 
 /**
