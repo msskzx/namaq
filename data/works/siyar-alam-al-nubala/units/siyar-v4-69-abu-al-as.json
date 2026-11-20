@@ -192,6 +192,22 @@
       "page": "334",
       "layer": "MAIN",
       "exact": "رَدَّ عَلَيْهِ النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- زَيْنَبَ عَلَى النِّكَاحِ الأَوَّلِ، لَمْ يُحْدِثْ شَيْئاً"
+    },
+    {
+      "id": "sp_aas_qila",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "وَقِيْلَ: اسْمُ أَبِيْهِ رَبِيْعَةُ"
+    },
+    {
+      "id": "sp_aas_qila_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "331",
+      "layer": "MAIN",
+      "exact": "اسْمُ أَبِيْهِ رَبِيْعَةُ"
     }
   ],
   "reports": [
@@ -230,6 +246,16 @@
       ],
       "origin": {
         "mention": "m_aas_ia"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_aas_qila",
+      "unit": "siyar-v4-69-abu-al-as",
+      "ordinal": 4,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_aas_qila_by"
       },
       "chainState": "DEFERRED"
     }
@@ -289,6 +315,14 @@
       "report": "r_aas_ia",
       "spans": [
         "sp_aas_ia"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_aas_qila",
+      "report": "r_aas_qila",
+      "spans": [
+        "sp_aas_qila"
       ],
       "role": "TRANSMITTED"
     }
@@ -398,6 +432,13 @@
       "exact": "زَيْنَبَ",
       "occurrence": 1,
       "role": "REFERENT"
+    },
+    {
+      "id": "m_aas_qila_by",
+      "parent": "sp_aas_qila",
+      "exact": "وَقِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
     }
   ],
   "identifications": [
@@ -740,6 +781,20 @@
       },
       "restsOn": [
         "st_aas_ia"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_aas_variant",
+      "subject": "m_aas",
+      "predicate": "name.variant",
+      "value": {
+        "spans": [
+          "sp_aas_qila_v"
+        ]
+      },
+      "restsOn": [
+        "st_aas_qila"
       ],
       "status": "PROPOSED"
     }

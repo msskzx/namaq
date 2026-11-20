@@ -1,0 +1,660 @@
+{
+  "unit": {
+    "id": "siyar-v6-6-abdullah-ibn-amir",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٦"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ia_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "18",
+      "layer": "MAIN",
+      "exact": "٦ - عَبْدُ اللهِ بنُ عَامِرِ بنِ كُرَيْزِ بنِ رَبِيْعَةَ بنِ حَبِيْبٍ العَبْشَمِيُّ"
+    },
+    {
+      "id": "sp_ia_head",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "18",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ عَامِرِ بنِ كُرَيْزِ بنِ رَبِيْعَةَ بنِ حَبِيْبٍ العَبْشَمِيُّ"
+    },
+    {
+      "id": "sp_ia_n2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "18",
+      "layer": "MAIN",
+      "exact": "ابْنِ عَبْدِ شَمْسٍ بنِ عَبْدِ مَنَافٍ بنِ قُصَيٍّ"
+    },
+    {
+      "id": "sp_ia_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "18",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ بنُ",
+      "prefix": "-"
+    },
+    {
+      "id": "sp_ia_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "18",
+      "layer": "MAIN",
+      "exact": "عَامِرِ بنِ كُرَيْزِ",
+      "prefix": "بنُ"
+    },
+    {
+      "id": "sp_ia_l2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "18",
+      "layer": "MAIN",
+      "exact": "الأَمِيْرُ، أَبُو عَبْدِ الرَّحْمَنِ القُرَشِيُّ، العَبْشَمِيُّ، الَّذِي افْتَتَحَ إِقْلِيْمَ خُرَاسَانَ"
+    },
+    {
+      "id": "sp_ia_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "18",
+      "layer": "MAIN",
+      "exact": "أَبُو عَبْدِ الرَّحْمَنِ"
+    },
+    {
+      "id": "sp_ia_khurasan",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "18",
+      "layer": "MAIN",
+      "exact": "الَّذِي افْتَتَحَ إِقْلِيْمَ خُرَاسَانَ"
+    },
+    {
+      "id": "sp_ia_abuh",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "18",
+      "layer": "MAIN",
+      "exact": "وَأَبُوْهُ عَامِرٌ: هُوَ ابْنُ عَمَّةِ رَسُوْلِ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - البَيْضَاءِ بِنْتِ عَبْدِ المُطَّلِبِ"
+    },
+    {
+      "id": "sp_ia_bayda_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "18",
+      "layer": "MAIN",
+      "exact": "البَيْضَاءِ بِنْتِ عَبْدِ المُطَّلِبِ"
+    },
+    {
+      "id": "sp_ia_amir_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "18",
+      "layer": "MAIN",
+      "exact": "وَأَبُوْهُ عَامِرٌ",
+      "prefix": "عُثْمَانَ،"
+    },
+    {
+      "id": "sp_ia_basra",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "18",
+      "layer": "MAIN",
+      "exact": "وَلِيَ البَصْرَةَ لِعُثْمَانَ، ثُمَّ وَفَدَ عَلَى مُعَاوِيَةَ، فَزَوَّجَهُ بِابْنَتِهِ هِنْدٍ"
+    },
+    {
+      "id": "sp_ia_basra_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "18",
+      "layer": "MAIN",
+      "exact": "وَلِيَ البَصْرَةَ لِعُثْمَانَ"
+    },
+    {
+      "id": "sp_ia_hind_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "18",
+      "layer": "MAIN",
+      "exact": "فَزَوَّجَهُ بِابْنَتِهِ هِنْدٍ"
+    },
+    {
+      "id": "sp_ia_basra2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "21",
+      "layer": "MAIN",
+      "exact": "وَلاَّهُ مُعَاوِيَةُ البَصْرَةَ"
+    },
+    {
+      "id": "sp_ia_muluk",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "21",
+      "layer": "MAIN",
+      "exact": "وَكَانَ مِنْ كِبَارِ مُلُوْكِ العَرَبِ، وَشُجْعَانِهِم، وَأَجَوَادِهِم"
+    },
+    {
+      "id": "sp_ia_rifq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "21",
+      "layer": "MAIN",
+      "exact": "وَكَانَ فِيْهِ رِفْقُ وَحِلْمٌ"
+    },
+    {
+      "id": "sp_ia_qila",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "19",
+      "layer": "MAIN",
+      "exact": "وَقِيْلَ: وُلِدَ عَبْدُ اللهِ بَعْدَ الهِجْرَةِ، فَلَمَّا قَدِمَ رَسُوْلُ اللهِ مُعْتَمِراً عُمْرَةَ القَضَاءِ، حُمِلَ إِلَيْهِ ابْنُ عَامِرٍ وَهُوَ ابْنُ ثَلاَثِ سِنِيْنَ، فَحَنَّكَهُ، وَوُلِدَ لَهُ عَبْدُ الرَّحْمَنِ وَهُوَ ابْنُ ثَلاَثَ عَشْرَةَ سَنَةً"
+    },
+    {
+      "id": "sp_ia_son_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "19",
+      "layer": "MAIN",
+      "exact": "وَوُلِدَ لَهُ عَبْدُ الرَّحْمَنِ"
+    },
+    {
+      "id": "sp_ia_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "21",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ: قَبْلَ مُعَاوِيَةَ، فِي سَنَةِ تِسْعٍ وَخَمْسِيْنَ"
+    },
+    {
+      "id": "sp_ia_death_y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "21",
+      "layer": "MAIN",
+      "exact": "سَنَةِ تِسْعٍ وَخَمْسِيْنَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ia0",
+      "unit": "siyar-v6-6-abdullah-ibn-amir",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ia_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ia_qila",
+      "unit": "siyar-v6-6-abdullah-ibn-amir",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_ia_qila_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ia_head",
+      "report": "r_ia0",
+      "spans": [
+        "sp_ia_head"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ia_n2",
+      "report": "r_ia0",
+      "spans": [
+        "sp_ia_n2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ia_name",
+      "report": "r_ia0",
+      "spans": [
+        "sp_ia_head",
+        "sp_ia_n2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ia_l2",
+      "report": "r_ia0",
+      "spans": [
+        "sp_ia_l2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ia_abuh",
+      "report": "r_ia0",
+      "spans": [
+        "sp_ia_abuh"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ia_basra",
+      "report": "r_ia0",
+      "spans": [
+        "sp_ia_basra"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ia_basra2",
+      "report": "r_ia0",
+      "spans": [
+        "sp_ia_basra2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ia_muluk",
+      "report": "r_ia0",
+      "spans": [
+        "sp_ia_muluk"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ia_rifq",
+      "report": "r_ia0",
+      "spans": [
+        "sp_ia_rifq"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ia_qila",
+      "report": "r_ia_qila",
+      "spans": [
+        "sp_ia_qila"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ia_death",
+      "report": "r_ia0",
+      "spans": [
+        "sp_ia_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ia",
+      "parent": "sp_ia_head",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ia_father",
+      "parent": "sp_ia_head",
+      "exact": "عَامِرِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ia_amir",
+      "parent": "sp_ia_abuh",
+      "exact": "عَامِرٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ia_bayda",
+      "parent": "sp_ia_abuh",
+      "exact": "البَيْضَاءِ بِنْتِ عَبْدِ المُطَّلِبِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ia_b",
+      "parent": "sp_ia_basra",
+      "exact": "وَلِيَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ia_hind",
+      "parent": "sp_ia_basra",
+      "exact": "هِنْدٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ia_b2",
+      "parent": "sp_ia_basra2",
+      "exact": "وَلاَّهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ia_qila_by",
+      "parent": "sp_ia_qila",
+      "exact": "وَقِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ia_q",
+      "parent": "sp_ia_qila",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ia_son",
+      "parent": "sp_ia_qila",
+      "exact": "عَبْدُ الرَّحْمَنِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ia",
+      "mention": "m_ia",
+      "agent": "abdullah-ibn-amir",
+      "basis": [
+        {
+          "span": "sp_ia_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ia_father",
+      "mention": "m_ia_father",
+      "agent": "amir-ibn-kurayz",
+      "basis": [
+        {
+          "span": "sp_ia_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ia_amir",
+      "mention": "m_ia_amir",
+      "agent": "amir-ibn-kurayz",
+      "basis": [
+        {
+          "span": "sp_ia_amir_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ia_bayda",
+      "mention": "m_ia_bayda",
+      "agent": "al-bayda-bint-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_ia_bayda_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ia_b",
+      "mention": "m_ia_b",
+      "agent": "abdullah-ibn-amir",
+      "basis": [
+        {
+          "span": "sp_ia_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ia_hind",
+      "mention": "m_ia_hind",
+      "agent": "hind-bint-muawiyah",
+      "basis": [
+        {
+          "span": "sp_ia_hind_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ia_b2",
+      "mention": "m_ia_b2",
+      "agent": "abdullah-ibn-amir",
+      "basis": [
+        {
+          "span": "sp_ia_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ia_q",
+      "mention": "m_ia_q",
+      "agent": "abdullah-ibn-amir",
+      "basis": [
+        {
+          "span": "sp_ia_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ia_son",
+      "mention": "m_ia_son",
+      "agent": "abd-al-rahman-ibn-abdullah-ibn-amir",
+      "basis": [
+        {
+          "span": "sp_ia_son_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ia_name",
+      "subject": "m_ia",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ia_head",
+          "sp_ia_n2"
+        ]
+      },
+      "restsOn": [
+        "st_ia_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ia_sex",
+      "subject": "m_ia",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ia_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ia_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ia_father",
+      "subject": "m_ia",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ia_father"
+      },
+      "restsOn": [
+        "st_ia_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ia_kunya",
+      "subject": "m_ia",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_ia_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_ia_l2"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ia_v_khurasan",
+      "subject": "m_ia",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ia_khurasan"
+        ]
+      },
+      "restsOn": [
+        "st_ia_l2"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ia_amir_mother",
+      "subject": "m_ia_amir",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ia_bayda"
+      },
+      "restsOn": [
+        "st_ia_abuh"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ia_office_uthman",
+      "subject": "m_ia_b",
+      "predicate": "office",
+      "value": {
+        "classified": "amir",
+        "spans": [
+          "sp_ia_basra_v"
+        ]
+      },
+      "restsOn": [
+        "st_ia_basra"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ia_married",
+      "subject": "m_ia_b",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_ia_hind"
+      },
+      "restsOn": [
+        "st_ia_basra"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ia_office_muawiyah",
+      "subject": "m_ia_b2",
+      "predicate": "office",
+      "value": {
+        "classified": "amir",
+        "spans": [
+          "sp_ia_basra2"
+        ]
+      },
+      "restsOn": [
+        "st_ia_basra2"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ia_v_muluk",
+      "subject": "m_ia",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ia_muluk"
+        ]
+      },
+      "restsOn": [
+        "st_ia_muluk"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ia_v_rifq",
+      "subject": "m_ia",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ia_rifq"
+        ]
+      },
+      "restsOn": [
+        "st_ia_rifq"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ia_son",
+      "subject": "m_ia_son",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ia_q"
+      },
+      "restsOn": [
+        "st_ia_qila"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ia_d59",
+      "subject": "m_ia",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 59,
+        "spans": [
+          "sp_ia_death_y"
+        ]
+      },
+      "restsOn": [
+        "st_ia_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
