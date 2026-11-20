@@ -87,8 +87,8 @@ A new card or quiz kind goes into an interest's `cards` or `quizzes` in the same
   interests are kept for the visit, and a card taken out leaves a line with «تراجع».
 - No card is taller than two thirds of the screen (`CARD_CAP_SHARE` in `shared/homeFeed.ts`, owner 2026-11-20): longer
   content stops with a fade and «اقرأ كاملًا» opens it whole in a sheet with the row and the source line at its foot
-  (app `CardWithRow` `cap`, website `common/CappedCard`). Nothing scrolls inside a card; a tree or compare question keeps
-  its own fitted height.
+  (app `CardWithRow` `cap`, website `common/CappedCard`). Nothing scrolls inside a card. Question cards and recall cards
+  are never capped: a question shows all its choices, a recall card its whole ayah.
 - Today's juz, the forgotten ayat, books, the prayer card and saved items stay outside the rounds.
 - The chips over the feed: «لك» and each interest picked; a tap shows that interest's cards alone.
 - The website has the same picker (first open, settings, the chip row and its pencil, `src/components/homepage/Interests.tsx`);

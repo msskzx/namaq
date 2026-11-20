@@ -216,7 +216,7 @@ function Post({ head, open, actions, share, source, bar, labelledBy, save, whole
   bar?: React.ReactNode; labelledBy?: string;
   /** The card's kind and item, saved as `card:<kind>:<item>` by the first button of its row (owner 2026-11-20, as the app's CardMenuActions). */
   save?: { kind: string; item: string };
-  /** Content that keeps its own height (a tree or compare question): never capped. */
+  /** Never capped (owner, 2026-11-20): a question shows all its choices, a recall card its whole ayah. */
   whole?: boolean; children: React.ReactNode }) {
   // What the card's content hands up with UnderCard lands at the start of the row under the card (owner: buttons under the
   // card, never in it); the row hides while it holds no button.
@@ -370,7 +370,7 @@ function Recall({ ayah, targetWord, title, sub, writing, onWriting, open, childr
     },
     waitForDouble: () => readGestures().recite.double !== 'none',
   });
-  return <Post head={<PostHead Icon={LightbulbOff} title={title} sub={sub} />}
+  return <Post head={<PostHead Icon={LightbulbOff} title={title} sub={sub} />} whole
     bar={<RecitePill recite={recite} writing={writing} onWriting={onWriting} />}
     open={open} actions={children} source={[mushafSource(ayah, pages?.page)]}>
     <div ref={lines} className={styles.recall}>
@@ -406,7 +406,7 @@ function QuizPost({ kind, seed, scope }: { kind: string; seed: number; scope: Re
   const [revealed, setRevealed] = useState(false);
   const question = data?.questions?.[0];
   if (!question) return null;
-  return <Post head={<PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind as FeedQuizKind]} />} whole={!!question.tree || !!question.compare}
+  return <Post head={<PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind as FeedQuizKind]} />} whole
     // After the answer, the ayah's mushaf button leads the card's row, as in the app (owner, 2026-11-15 and 2026-11-20).
     open={given !== undefined && question.ayahKey ? <Action Icon={BookOpen} label="في المصحف" href={ayahHref(question.ayahKey)} /> : undefined}
     actions={<QuizActions />}>

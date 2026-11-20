@@ -154,7 +154,10 @@ function Post({ head, open, actions, share, source, bar, palette, whole = false,
   share?: React.ReactNode;
   /** The books the card stands on, named on its source line; a `Reference` inside the card joins its sheet. */
   source?: Source[];
-  /** Content that keeps its own height (a tree or compare question that fits itself): never capped. */
+  /**
+   * Never capped (owner, 2026-11-20): a question shows all its choices so it can be answered on the card, and a recall card
+   * its whole ayah with one write box.
+   */
   whole?: boolean;
   /** A bar of the feature's own under the card, leading the buttons' row (recite mode's small bar, on the recall card; owner 2026-11-17). */
   bar?: React.ReactNode; palette: Palette; children: React.ReactNode }) {
@@ -336,7 +339,7 @@ function Recall({ ayah, targetWord, title, writing, onWriting, open, marks, pale
   const onTouch: typeof touches.touch = (...touch) => (recite.write ? recite.boxes.focus() : touches.touch(...touch));
   const [surah, number] = ayah.split(':').map(Number);
   return (
-    <Post palette={palette} head={<PostHead Icon={LightbulbOff} title={title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />}
+    <Post palette={palette} head={<PostHead Icon={LightbulbOff} title={title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />} whole
       bar={<RecitePill recite={recite} writing={writing} onWriting={onWriting} palette={palette} small />}
       open={open} actions={marks} source={mushafOf(ayah)}>
       <View style={{ padding: 12 }}>
@@ -392,7 +395,7 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
   const checked = run.checked[0];
   const prompt = question.promptArabic && question.promptArabic !== FEED_QUIZ_NAMES[kind] ? <QuizPrompt text={question.promptArabic} palette={palette} /> : undefined;
   return (
-    <Post palette={palette} head={<PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind]} palette={palette} />} whole={isTree(question) || isCompare(question)}
+    <Post palette={palette} head={<PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind]} palette={palette} />} whole
       open={!isTree(question) && !isCompare(question) && question.ayahKey && run.typed[0][0] !== undefined
         ? <Action Icon={BookOpen} label="في المصحف" onPress={() => readAyah(question.ayahKey!)} palette={palette} />
         // «رتّب السور» opens the surah order page at the asked surahs' juz.
