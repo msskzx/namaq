@@ -86,3 +86,17 @@ Also pinned: 57:1 and 57:2 both pair with 64:1 and 64:1 is shown once; 7 with 26
 gains only 7:123 and 7:124 against 26:49; 15 with 38 gains nothing; 55:46-61 with
 55:62-77 gives sixteen pairs in step, 46 with 62 through 61 with 77. The fixture
 also holds surahs 7, 26, 55, 57 and 64.
+
+## Surah-order book cards
+
+Owner, 2026-11-20. Each link on `/quran/order` that names an ayah on both sides (`ORDER_LINKS` in
+`shared/quran/surahOrder.ts`, 42 links, 50 ayah pairs) is a compare card headed «في كتب تناسب السور»
+(`shared/quran/tanasubCards.ts`). The card holds exactly the ayat the quote names, one card per quote, and
+shows the quote as written under them. Its book sits on the source line under the buttons. Stored cards
+carry the link's key as `k` (`PairCard.book`) and list their ayat in `a`. The engine's word alignment marks
+what the two sides share, with no threshold, since the book decides the pair. A card of ours whose pairs a book
+card already holds is left out, and no verdict hides a book card. A book card with no run of two shared
+words stays its matrix (`compareMatrixOnly`). Every surah pair a book names gets a page.
+
+A link that names no ayah pair is a note, «بين السورتين», at the top of its two neighbouring surahs' page
+(`pairNote`), the same quote the order page shows between them. It is tied to no ayah.

@@ -28,7 +28,7 @@ import Card from '@/components/common/Card';
 
 /** Trees, compare and tafsir load their preview; readings come with the page (ayahLinks.ts). Readings and tafsir have no page of their own. */
 export type Preview = { kind: 'trees' | 'compare'; key: string; all: string } | { kind: 'readings'; key: string; qiraat: WordDifference[] } | { kind: 'tafsir'; key: string } | { kind: 'balagha'; key: string }
-  | { kind: 'irab'; key: string; page: number; n: number } | { kind: 'gharib'; key: string; page: number; n: number };
+  | { kind: 'irab'; key: string; page: number; n: number } | { kind: 'irab'; key: string; w: number } | { kind: 'gharib'; key: string; page: number; n: number };
 
 const names: Record<number, string> = SURAH_NAMES;
 const load = async <T,>(api: string, key: string): Promise<T> => {
@@ -62,8 +62,10 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
   const tafsirKey = shown?.kind === 'tafsir' ? shown.key : null;
   const balaghaKey = shown?.kind === 'balagha' ? shown.key : null;
   const irab = shown?.kind === 'irab' ? shown : null;
-  const { data: irabData, error: irabError } = useSWR(irab ? ['irab', irab.key, irab.page, irab.n] : null,
-    async ([, key, page, n]) => { const response = await fetch(`/api/quran/irab?k=${encodeURIComponent(key)}&p=${page}&n=${n}`); if (!response.ok) throw new Error('irab'); return response.json() as Promise<IrabAyah>; },
+  // A word pressed on a page (its page and nth word there), or a word by its place in the ayah (a feed card's).
+  const irabAt = irab ? ('w' in irab ? `w=${irab.w}` : `p=${irab.page}&n=${irab.n}`) : '';
+  const { data: irabData, error: irabError } = useSWR(irab ? ['irab', irab.key, irabAt] : null,
+    async ([, key, at]) => { const response = await fetch(`/api/quran/irab?k=${encodeURIComponent(key)}&${at}`); if (!response.ok) throw new Error('irab'); return response.json() as Promise<IrabAyah>; },
     { revalidateOnFocus: false });
   const gharib = shown?.kind === 'gharib' ? shown : null;
   const { data: gharibData, error: gharibError } = useSWR(gharib ? ['gharib', gharib.key, gharib.page, gharib.n] : null,
@@ -93,7 +95,7 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
           {tafsirKey && tafsir && <SadiText text={tafsir.text} />}
           {balaghaKey && balagha && <BalaghaPanel key={balaghaKey} ayah={balaghaKey} data={balagha} />}
           {gharib && gharibData && <GharibPanel key={`${gharib.key}/${gharib.page}/${gharib.n}`} data={gharibData} />}
-          {irab && irabData && <IrabPanel key={`${irab.key}/${irab.page}/${irab.n}`} ayah={irab.key} data={irabData} />}
+          {irab && irabData && <IrabPanel key={`${irab.key}/${irabAt}`} ayah={irab.key} data={irabData} />}
           {!readings && !(tafsirKey ? tafsir : irab ? irabData : gharib ? gharibData : balaghaKey ? balagha : data) && !error && <p className="py-6 text-center"><LoadingDots label="جارٍ التحميل" /></p>}
           {error && <p role="alert" className="py-6 text-center text-sm text-[var(--home-muted)]">تعذّر التحميل.</p>}
           {/* Each tree is the branches page's own card (owner, 2026-11-14): zoom, pan, a path lit on a click, its own tree/matrix switch, opening in the settings' view. */}

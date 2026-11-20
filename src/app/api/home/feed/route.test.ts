@@ -38,15 +38,10 @@ describe('GET /api/home/feed', () => {
     expect((await GET(new Request(`http://localhost/api/home/feed?day=${today + 100}`))).status).toBe(400);
   });
 
-  it('sends the sira cards: a story in even batches with its ayat pages, a battle moment in odd ones', async () => {
-    const cards = await get(`day=${today}&sira=0,1,2,3`);
-    expect(cards.map((card: { slot: number; kind: string }) => [card.slot, card.kind])).toEqual([[0, 'sira'], [1, 'moment'], [2, 'sira'], [3, 'moment']]);
-    const [story, moment] = cards;
-    expect(story.report.moments.length).toBeGreaterThan(0);
-    expect(story.pages.length).toBe(story.ayat.length);
-    expect(moment.moment.quote).toBeTruthy();
-    expect(moment.n).toBeGreaterThan(0);
-    // The day turns the lists, the same day sends the same cards.
-    expect(await get(`day=${today}&sira=0,1,2,3`)).toEqual(cards);
+  it('lists the items of a kind from where the day starts, and continues just after a story opened from the feed (owner 2026-11-19)', async () => {
+    const ids: string[] = await get(`day=${today}&items=sira&n=3`);
+    expect(ids).toHaveLength(3);
+    expect(await get(`day=${today}&items=sira&n=2&after=${encodeURIComponent(ids[0])}`)).toEqual(ids.slice(1, 3));
+    expect((await GET(new Request(`http://localhost/api/home/feed?day=${today}&items=pair&n=3`))).status).toBe(400);
   });
 });

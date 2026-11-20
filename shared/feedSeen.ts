@@ -115,45 +115,6 @@ export function growingPicks<T>(holder: { reset?: unknown[]; list: T[] }, reset:
   return holder.list;
 }
 
-/**
- * The stories row: when each circle was last opened (ms), kept for good. A circle's ring lights when its content is newer than that
- * (a new juz day, an ayah newly due, a new save or note).
- */
-export type StoriesOpened = Record<string, number>;
-const stories = keyStore('stories-opened', raw => parse(raw) as StoriesOpened);
-export const readStoriesOpened = stories.read;
-export const subscribeStoriesOpened = stories.subscribe;
-export const serverStoriesOpened = () => NONE as StoriesOpened;
-export function markStoryOpened(id: string, now = Date.now()) {
-  stories.write(JSON.stringify({ ...stories.read(), [id]: now }));
-}
-/** Whether a circle has something it has not shown: content dated `newest` (ms) after it was last opened. */
-export const storyIsNew = (opened: StoriesOpened, id: string, newest: number | null | undefined) => !!newest && newest > (opened[id] ?? 0);
-
-/** The stories row's circles, right to left. */
-export const STORIES = ['juz', 'forgotten', 'saved', 'notes', 'prophets'] as const;
-export type StoryId = (typeof STORIES)[number];
-
-/**
- * When each circle's content last changed (ms): today's juz from local midnight, an ayah from when it came due (or was forgotten),
- * a save or note from when it was made. The prophets circle lights only until it is first opened.
- */
-export function storyTimes({ due, saved, notes, now = Date.now() }: { due: Record<string, { at: number; due?: number }>; saved: { savedAt: number }[]; notes: Record<string, { at: number }>; now?: number }): Record<StoryId, number | null> {
-  const latest = (times: number[]) => (times.length ? Math.max(...times) : null);
-  const midnight = new Date(now);
-  midnight.setHours(0, 0, 0, 0);
-  return {
-    juz: midnight.getTime(),
-    forgotten: latest(Object.values(due).map(mark => mark.due ?? mark.at)),
-    saved: latest(saved.map(item => item.savedAt)),
-    notes: latest(Object.values(notes).map(note => note.at)),
-    prophets: 1,
-  };
-}
-
-/** The batches that carry a prophets card (shared/quran/prophets/storyGroup.ts): every other one after the first. */
-export const hasStoryCard = (slot: number) => slot % 2 === 1;
-
 /** The batches that carry a saved card (owner, 2026-11-14: saved cards come up in the feed now and then): every other one from the third. */
 export const hasSavedCard = (slot: number) => slot > 0 && slot % 2 === 0;
 

@@ -3,7 +3,7 @@
 import { createContext, Fragment, isValidElement, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, CircleMinus, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText, Undo2, Swords, BookOpenText, ListTree, MessagesSquare, Link2, History, Network, GitCommitVertical } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, Feather, Layers, LibraryBig, Users, EyeOff, LightbulbOff, Plus, Presentation, ScrollText, Sparkles, Undo2, Swords, BookOpenText, ListTree, MessagesSquare, Link2, History, Network, GitCommitVertical } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Segmented from '@/components/common/Segmented';
@@ -31,7 +31,7 @@ import StoryAyatLines from '@/components/stories/StoryAyatLines';
 import { Moment } from '@/components/battles/BattleMoments';
 import { battleLine } from '@shared/battles/battle';
 import { rangeName } from '@shared/stories/story';
-import { bookmarkKind, cardMenuSaveId, isCardBookmark } from '@shared/bookmarkKind';
+import { bookmarkKind, cardBookmarkId, cardMenuSaveId, isCardBookmark } from '@shared/bookmarkKind';
 import { drawsCard } from '@/lib/feedCardKinds';
 import type { SavedFeedCard } from '@/lib/feedCard';
 import type { Bookmark as SavedItem } from '@shared/bookmarks';
@@ -48,22 +48,35 @@ import { readGestures, type GestureAction } from '@shared/readerGestures';
 import { surahPairHref } from '@shared/quran/curatedComparisons';
 import { LAST_PAGE_KEY } from '@/app/quran/read/ReaderView';
 import { lastPage } from '@/app/quran/read/OpenLastPage';
-import { useNow } from '@/components/utilities/Utilities';
+import { placeStore, prayerTimes, settingsStore, useNow } from '@/components/utilities/Utilities';
+import { clock, DEFAULT_PRAYER_SETTINGS, FIVE, METHODS, PRAYER_NAMES, type PrayerDay, type PrayerKey } from '@shared/prayer';
+import { feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, feedBooks, LIST_KINDS, prayerSoon, type FeedSlot, type ListKind } from '@shared/homeFeed';
+import { answeredQuestion, dueSeeds, readMissed } from '@shared/quiz/missedQuestions';
+import { questionPoints } from '@shared/quiz/score';
+import type { NoteBody } from '@shared/quran/ayahNoteBody';
+import AyahPreviewSheet, { type Preview } from '@/app/quran/read/AyahPreviewSheet';
+import SadiText from '@/components/quran/SadiText';
+import { QuranWord } from '@/components/quran/text/AyahFlow';
+import { ExampleScene } from '@/app/quran/lataif/LataifView';
+import type { ExampleView } from '@shared/quran/iltifat';
+import { topicOf, type LataifReference } from '@shared/quran/lataif';
+import { BOOKS } from '@shared/books';
+import { isReaderBook } from '@shared/readerBooks';
+import { BookCard, TuhfaCard } from '@/app/quran/books/BooksShelf';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
 import { continuePage, readFasilas, serverFasilas, subscribeFasilas } from '@shared/readingMarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, wordMarkKey, markForgotten, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { isMemorized, memorizedFilters, memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized, type Memorized } from '@shared/memorized';
 import { FEED_QUIZ_NAMES, feedQuizSeed, OPENINGS, openingSurah, type FeedQuizKind } from '@shared/quiz/feedQuiz';
-import { activeInterests, INTERESTS, interestById, interestOf, pickedInterests, restoredInterest, type FeedCardKind } from '@shared/interests';
+import { activeInterests, INTERESTS, interestById, pickedInterests, restoredInterest, surpriseMe, toggledInterest } from '@shared/interests';
 import QuizAnswer, { type QuizData } from '@/app/quizzes/QuizAnswer';
 import type { Hints } from '@shared/quiz/hints';
-import { readAyahNotes, serverAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
-import { backToVisit, FEED_AHEAD, FEED_FAR, growingPicks, hasStoryCard, savedOfSlot, leftVisit, markFeedSeen, markStoryOpened, readFeedSeen, readStoriesOpened, serverFeedSeen, serverStoriesOpened, storyIsNew, storyTimes, subscribeFeedSeen, subscribeStoriesOpened, subscribeVisit, visitStart, serverVisit, STORIES, type StoryId } from '@shared/feedSeen';
+import { backToVisit, FEED_AHEAD, FEED_FAR, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, serverFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit, type Seen } from '@shared/feedSeen';
 import { forgottenOrder, reviewHref, type RecitePosition } from '@shared/quran/recite';
 import type { PairCard } from '@shared/quran/compareCards';
 import { hijriDate, juzLabel, todaysJuz } from '@shared/hijri';
-import { JUZ_INDEX } from '@shared/quran/juzIndex';
+import { JUZ_STARTS } from '@shared/quran/juz';
 import { num } from '@shared/quran/arabicNumber';
 import { ayahPlaces } from '@shared/quran/ayahPlaces';
 import { dayNumber } from '@shared/dailyPick';
@@ -73,8 +86,6 @@ import AyahLines, { PageTop, useAyahPage, type Page } from './AyahLines';
 import { useMemorized } from './Memorized';
 import styles from './Homepage.module.css';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
-import { qiraatAyat } from '@shared/quran/qiraatData';
-import { ayahNoteAt } from '@shared/quran/ayahNotes';
 import { QiraatPlace } from '@/app/quran/qiraat/QiraatView';
 import { surahName } from '@shared/quran/surahNames';
 import Card from '@/components/common/Card';
@@ -89,8 +100,8 @@ import { storySource } from '@shared/quran/pieceSources';
 import { termSource } from '@shared/quran/balaghaTerms';
 
 /**
- * The website's home feed, as the app's (mobile/src/components/HomeFeed.tsx): story circles, the page the mushaf was left on,
- * a feed of pairs and trees that skips what this browser has seen (shared/feedSeen.ts) and loads more on request, and the prayer row.
+ * The website's home feed, as the app's (mobile/src/components/HomeFeed.tsx): the page the mushaf was left on, then the
+ * app's feed in its order (shared/homeFeed.ts feedRound), skipping what this browser has seen (shared/feedSeen.ts) and loading more near the end.
  */
 
 const names: Record<number, string> = SURAH_NAMES;
@@ -110,7 +121,6 @@ const fetchPiece = <T,>(url: string): Promise<T> => {
 const inPieces = <T,>(url: (offsets: number[]) => string, offsets: number[]): Promise<T[]> =>
   Promise.all(Array.from({ length: Math.ceil(offsets.length / FEED_AHEAD) }, (_, at) => fetchPiece<T>(url(offsets.slice(at * FEED_AHEAD, (at + 1) * FEED_AHEAD)))));
 
-const juzHref = (juz: number) => ayahHref(`${JUZ_INDEX[juz - 1].surah}:${JUZ_INDEX[juz - 1].ayah}`);
 
 /** The reader's own day, worked out in the browser (null while the page is drawn on the server). */
 function useToday() {
@@ -131,36 +141,6 @@ function KahfPost() {
   </Post>;
 }
 
-const STORY: Record<StoryId, { label: string; Icon: typeof BookOpen | typeof TreeIcon; href: string }> = {
-  juz: { label: 'جزء اليوم', Icon: BookOpen, href: '' },
-  forgotten: { label: 'ما نسيته', Icon: LightbulbOff, href: '/library?tab=forgotten' },
-  saved: { label: 'المحفوظات', Icon: Bookmark, href: '/library?tab=saved' },
-  notes: { label: 'تأملاتي', Icon: NotebookPen, href: '/library?tab=notes' },
-  prophets: { label: 'الأنبياء', Icon: ScrollText, href: '/quran/prophets' },
-};
-
-/** The circles at the top: a ring in the accent while a circle holds something newer than its last opening. Nothing counted. */
-export function Stories() {
-  const today = useToday();
-  const due = useSyncExternalStore(subscribeDueMarks, readDueMarks, serverAyahMarks);
-  const saved = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
-  const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes, serverAyahNotes);
-  const opened = useSyncExternalStore(subscribeStoriesOpened, readStoriesOpened, serverStoriesOpened);
-  const times = today ? storyTimes({ due, saved, notes }) : null;
-  const ids = STORIES.filter(id => id !== 'juz' || today?.juz);
-  return <nav className={styles.stories} aria-label="اختصارات" dir="rtl">
-    {ids.map(id => {
-      const { label, Icon, href } = STORY[id];
-      const lit = !!times && storyIsNew(opened, id, times[id]);
-      return <Link key={id} href={id === 'juz' && today?.juz ? juzHref(today.juz[0]) : href} onClick={() => markStoryOpened(id)} className={styles.story}
-        aria-label={id === 'juz' && today?.juz ? `${label}: ${juzLabel(today.juz)}` : label}>
-        <span className={styles.ring} data-lit={lit || undefined}><span><Icon size={22} aria-hidden /></span></span>
-        <span className={styles.storyLabel}>{label}</span>
-      </Link>;
-    })}
-  </nav>;
-}
-
 /** The reading card: the first lines of the page at the mushaf's فاصلة (else the page it was left on), a button there, and today's date and juz. */
 export function ContinueReading() {
   const today = useToday();
@@ -178,9 +158,8 @@ export function ContinueReading() {
   return <Post labelledBy="reading-title" head={<PostHead Icon={BookOpen} id="reading-title" title={fasila || (page && page > 1) ? 'تابع القراءة' : 'ابدأ القراءة'} sub={where || undefined} />}
     open={<Action Icon={BookOpen} label={fasila ? 'افتح المصحف عند فاصلتك' : 'افتح المصحف حيث توقفت'} href={href} />}
     source={data ? [{ book: MUSHAF_BOOK, at: `${names[data.surah]}، ص ${num(data.page)}` }] : undefined}
-    actions={<>
-      {today?.juz && <Link href={juzHref(today.juz[0])} onClick={() => markStoryOpened('juz')} className={`${styles.action} ${styles.accent} text-sm`} aria-label={`اقرأ ${juzLabel(today.juz)}، جزء اليوم`}>{juzLabel(today.juz)}</Link>}
-    </>}>
+    // The juz of the page it opens on (the app's): today's juz is its own card in the feed (owner, 2026-11-18).
+    actions={data ? <span className="p-2 text-sm text-[var(--home-muted)]">{juzLabel([data.data.juz])}</span> : undefined}>
     <div className={styles.pageSlice} lang="ar">
       {/* The page's first half as the reader draws it (owner, 2026-11-14). */}
       {data ? <PageTop page={data} /> : <span className={styles.pageLines} />}
@@ -203,7 +182,7 @@ function PostHead({ Icon, title, sub, id }: { Icon: typeof BookOpen | typeof Tre
  * the item's page (owner, 2026-11-20: one control per destination). A long card stops at two thirds of the screen, the rest
  * in a sheet (common/CappedCard).
  */
-function Post({ head, open, actions, share, source, bar, labelledBy, save, whole = false, children }: { head: React.ReactNode;
+function Post({ head, open, actions, share, source, lines = [], bar, labelledBy, save, whole = false, children }: { head: React.ReactNode;
   /** Opens the item in its own reader (the mushaf at the ayah, the hadith in its book): first in the row. */
   open?: React.ReactNode;
   actions?: React.ReactNode;
@@ -211,6 +190,8 @@ function Post({ head, open, actions, share, source, bar, labelledBy, save, whole
   share?: React.ReactNode;
   /** The books the card stands on, named on its source line; a `Reference` inside the card joins its sheet. */
   source?: QuizSource[];
+  /** A source line of the card's own that is not a book (the prayer card's way of working out the times; a scene's reference). */
+  lines?: Source[];
   /** A bar of the card's own between it and its buttons (recall's recite bar). */
   bar?: React.ReactNode; labelledBy?: string;
   /** The card's kind and item, saved as `card:<kind>:<item>` by the first button of its row (owner 2026-11-20, as the app's CardMenuActions). */
@@ -220,10 +201,11 @@ function Post({ head, open, actions, share, source, bar, labelledBy, save, whole
   // What the card's content hands up with UnderCard lands at the start of the row under the card, before the post's own
   // buttons (common/CardWithRow); share stays last.
   const menu = notMineItems(useContext(NotMineContext));
+  const own = [...(source ? sourcesOf(source) : []), ...lines];
   const body = <>
     {head}
     <CardWithRow cap={!whole} bar={bar} lead={open} row={<>{actions}{save && <SaveCard {...save} head={head} />}{share}</>} menu={menu}
-      source={source ? sourcesOf(source) : undefined}>{children}</CardWithRow>
+      source={own}>{children}</CardWithRow>
   </>;
   // The reading card is a section of the page named by its head (`labelledBy`); the feed's posts are articles.
   return labelledBy
@@ -381,6 +363,15 @@ function QuizPost({ kind, seed, scope }: { kind: string; seed: number; scope: Re
   const [hints, setHints] = useState<Hints>();
   const [revealed, setRevealed] = useState(false);
   const question = data?.questions?.[0];
+  // Answered wrong (or looked up first), the question comes back after a rest; right, it goes (shared/quiz/missedQuestions.ts).
+  const answer = (value: string) => {
+    if (given === undefined && question) {
+      // Several right choices or an order are right only when every part is (the quiz page's and the app's grading).
+      const { earned, total } = questionPoints(question, value);
+      answeredQuestion(kind, seed, !revealed && (value === question.correctAnswer || earned === total));
+    }
+    setGiven(value);
+  };
   if (!question) return null;
   return <Post head={<PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind as FeedQuizKind]} />} whole
     // After the answer, the ayah's mushaf button leads the card's row, as in the app (owner, 2026-11-15 and 2026-11-20).
@@ -389,7 +380,7 @@ function QuizPost({ kind, seed, scope }: { kind: string; seed: number; scope: Re
     <div className={styles.question} lang="ar">
       {question.promptArabic !== FEED_QUIZ_NAMES[kind as FeedQuizKind] && <p className="mb-3 pt-2 text-base leading-loose">{question.promptArabic}</p>}
       <QuizAnswer question={question} given={given} typed={typed} hints={hints} revealed={revealed} names={data?.surahNames ?? {}} ar mushaf={false}
-        onReveal={() => setRevealed(true)} onType={setTyped} onHints={setHints} onAnswer={setGiven} />
+        onReveal={() => setRevealed(true)} onType={setTyped} onHints={setHints} onAnswer={answer} />
     </div>
   </Post>;
 }
@@ -409,9 +400,10 @@ function OpeningPost({ seed, memorized }: { seed: number; memorized: Memorized |
 function StoryPost({ card }: { card: StoryCard }) {
   const router = useRouter();
   const href = `/quran/prophets/${card.slug}`;
-  const read = () => router.push(href);
+  const opened = () => continueAfter('prophets', card.item);
+  const read = () => { opened(); router.push(href); };
   return <Post save={{ kind: 'prophets', item: card.item }} head={<PostHead Icon={ScrollText} title={card.title} sub={card.phases[card.phase]} />}
-    open={<Action Icon={BookOpen} label="افتح القصة" href={href} />}
+    open={<Action Icon={BookOpen} label="افتح القصة" href={href} onClick={opened} />}
     source={[storySource(card.events, card.phase)]}>
     <div className={styles.storyMap} data-story-scroll>
       <StoryMap map={card.map} events={card.events} phases={card.phases} at={card.phase} onRead={read} />
@@ -425,8 +417,9 @@ function StoryPost({ card }: { card: StoryCard }) {
  */
 function SiraPost({ card }: { card: Extract<SiraCard, { kind: 'sira' }> }) {
   const href = `/stories/${card.slug}`;
+  const opened = () => continueAfter('sira', card.item);
   return <Post save={card} head={<PostHead Icon={ScrollText} title="من قصص السيرة" sub={card.name} />}
-    open={<Action Icon={ScrollText} label={`افتح ${card.name}`} href={href} />}
+    open={<Action Icon={ScrollText} label={`افتح ${card.name}`} href={href} onClick={opened} />}
     source={[citeSource({ text: '', cite: card.report.cite, url: card.report.url })]}>
     <div className="flex flex-col gap-3 p-4" lang="ar">
       <Report report={card.report} plain />
@@ -438,8 +431,9 @@ function SiraPost({ card }: { card: Extract<SiraCard, { kind: 'sira' }> }) {
 /** A moment of a battle in the source's words (the app's MomentPost); its open button opens the battle's page. */
 function MomentPost({ card }: { card: Extract<SiraCard, { kind: 'moment' }> }) {
   const href = `/battles/${card.battle.slug}`;
+  const opened = () => continueAfter('moment', card.item);
   return <Post save={card} head={<PostHead Icon={Swords} title={`من ${card.battle.name}`} sub={battleLine(card.battle)} />}
-    open={<Action Icon={Swords} label={`افتح ${card.battle.name}`} href={href} />}
+    open={<Action Icon={Swords} label={`افتح ${card.battle.name}`} href={href} onClick={opened} />}
     source={[citeSource({ text: '', cite: card.moment.cite, url: card.moment.url })]}>
     <div className="p-4" lang="ar"><Moment moment={card.moment} n={card.n} plain /></div>
   </Post>;
@@ -610,6 +604,8 @@ export function SavedCardPost({ id }: { id: string }) {
     case 'prophets': return <StoryPost card={data.card} />;
     case 'term': return <TermPost card={data.card} />;
     case 'note-qiraat': return <QiraatPost ayah={data.ayah} />;
+    case 'note-tafsir': case 'note-irab': case 'note-balagha': return <AyahNotePost kind={data.kind} note={data.note} />;
+    case 'scene': return <ScenePost view={data.view} reference={data.reference} />;
   }
 }
 
@@ -655,37 +651,230 @@ function QiraatPost({ ayah }: { ayah: string }) {
   </Post>;
 }
 
-/** Batches added each time the page nears the feed's end. */
-const MORE = 3;
+const NOTE_HEADS: Record<'note-tafsir' | 'note-irab' | 'note-balagha', { note: 'tafsir' | 'irab' | 'balagha'; Icon: typeof BookOpen; title: string; open: string }> = {
+  'note-tafsir': { note: 'tafsir', Icon: BookOpen, title: 'من التفسير', open: 'التفسير كاملًا' },
+  'note-balagha': { note: 'balagha', Icon: Sparkles, title: 'من البلاغة', open: 'البلاغة كاملة' },
+  'note-irab': { note: 'irab', Icon: ListTree, title: 'من الإعراب', open: 'إعراب الآية' },
+};
+
+/**
+ * An ayah with a little of what a book says on it (the app's AyahNotePost, owner 2026-11-18: small cards, the whole text one
+ * tap away): al-Sa'di on an ayah he explains alone, al-Suyuti's balagha paragraph on an ayah he surely names, or a word's
+ * i'rab. The open button brings the reader's own sheet for it.
+ */
+function AyahNotePost({ kind, note }: { kind: keyof typeof NOTE_HEADS; note: NoteBody }) {
+  const { pages } = useAyahPage(note.key);
+  const [open, setOpen] = useState(false);
+  const head = NOTE_HEADS[kind];
+  const [surah, number] = note.key.split(':').map(Number);
+  const preview: Preview = head.note === 'irab' ? { kind: 'irab', key: note.key, w: 'word' in note ? note.word : 0 } : { kind: head.note, key: note.key };
+  return <>
+    <Post save={{ kind, item: note.key }} head={<PostHead Icon={head.Icon} title={head.title} sub={`${names[surah]} ${num(number)}`} />}
+      open={<Action Icon={head.Icon} label={head.open} onClick={() => setOpen(true)} />} source={note.sources}>
+      <div className="flex flex-col gap-1.5 py-2.5" lang="ar">
+        <div className="px-3">{pages ? <AyahLines ayah={note.key} pages={pages} shown whole checked={null} /> : <LoadingDots label="جارٍ التحميل" />}</div>
+        <hr className="mx-3.5 border-[var(--home-rule)] opacity-60" />
+        {'heading' in note && note.heading && <p className="px-3.5 text-sm text-[var(--home-muted)]">{note.heading}</p>}
+        {'text' in note && <div className="line-clamp-4 px-3.5 [&_p]:px-0 [&_p]:text-[1.0625rem] [&_p]:leading-[1.85]"><SadiText text={note.text} /></div>}
+        {'word' in note && <div className="flex flex-col gap-0.5 px-3.5">
+          <QuranWord className="text-[var(--home-accent)]">{note.shown}</QuranWord>
+          <p className="text-[1.1875rem] leading-[1.6]">{note.role}</p>
+          <p className="text-[0.9375rem] leading-[1.6] text-[var(--home-muted)]">{note.morph}</p>
+        </div>}
+      </div>
+    </Post>
+    <AyahPreviewSheet preview={open ? preview : null} onClose={() => setOpen(false)} />
+  </>;
+}
+
+/** A scene from «مشاهد» as a post (the app's ScenePost, owner 2026-11-18): the page's own picture; the head opens «مشاهد», as the app's. */
+function ScenePost({ view, reference }: { view: ExampleView; reference: LataifReference }) {
+  const href = `/quran/lataif#${view.key}`;
+  return <Post save={{ kind: 'scene', item: view.key }} head={<Link href={href} aria-label="افتح المشاهد" className="block hover:opacity-80"><PostHead Icon={Presentation} title="من المشاهد" sub={topicOf(view).name} /></Link>}
+    open={<Action Icon={BookOpen} label="افتح في المصحف" href={ayahHref(`${view.surah}:${view.from}`)} />}
+    lines={[{ line: reference.title, quotes: reference.quotes }]}>
+    <div className="flex flex-col gap-2.5 px-4 py-3" lang="ar"><ExampleScene view={view} /></div>
+  </Post>;
+}
+
+/** Today's juz as a post (the app's JuzPost, owner 2026-11-18): its first page's top lines; the button opens the mushaf there. */
+function JuzPost({ juz, date }: { juz: number[]; date?: string | null }) {
+  const key = JUZ_STARTS[juz[0] - 1];
+  const { pages } = useAyahPage(key);
+  const href = ayahHref(key);
+  return <Post labelledBy="juz-title" head={<PostHead Icon={BookOpen} id="juz-title" title="جزء اليوم" sub={[juzLabel(juz), date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ')} />}
+    open={<Action Icon={BookOpen} label={`اقرأ ${juzLabel(juz)}`} href={href} />} source={[mushafSource(key, pages?.page)]}>
+    <Link href={href} className={styles.pageSlice} aria-label={`اقرأ ${juzLabel(juz)}، جزء اليوم`} lang="ar">
+      {pages ? <PageTop page={pages} /> : <span className={styles.pageLines} />}
+    </Link>
+  </Post>;
+}
+
+type Soon = { key: string; prayer: Exclude<PrayerKey, 'sunrise'>; times: PrayerDay };
+
+/** The prayer that is near now at the place the utilities keep, with its day's times, or null. */
+function soonNow(): Soon | null {
+  const place = placeStore.read();
+  if (!place) return null;
+  const now = new Date();
+  const times = prayerTimes(place, now, settingsStore.read());
+  const soon = prayerSoon(times, now);
+  return soon ? { key: `${now.toDateString()}-${soon.key}`, prayer: soon.key, times } : null;
+}
+
+/** The prayer that is near, checked every half minute and when the tab comes back; it changes only when it becomes another. */
+function usePrayerSoon() {
+  const [soon, setSoon] = useState<Soon | null>(null);
+  useEffect(() => {
+    const check = () => setSoon(now => { const next = soonNow(); return next?.key === now?.key ? now : next; });
+    check();
+    const timer = setInterval(check, 30_000);
+    document.addEventListener('visibilitychange', check);
+    return () => { clearInterval(timer); document.removeEventListener('visibilitychange', check); };
+  }, []);
+  return soon;
+}
+
+/** A prayer that is near as a post (the app's PrayerPost, owner 2026-11-18): the five times, the near one lit, and how it is worked out. */
+function PrayerPost({ prayer, times }: { prayer: Exclude<PrayerKey, 'sunrise'>; times: PrayerDay }) {
+  const now = useNow();
+  const place = useSyncExternalStore(placeStore.subscribe, placeStore.read, () => null);
+  const settings = useSyncExternalStore(settingsStore.subscribe, settingsStore.read, () => DEFAULT_PRAYER_SETTINGS);
+  const method = METHODS.find(each => each.id === settings.method)?.label ?? '';
+  const left = now ? Math.ceil((times[prayer].getTime() - now.getTime()) / 60_000) : 1;
+  const title = left > 0 ? `${PRAYER_NAMES[prayer]} ${inMinutes(left)}` : `حان وقت ${PRAYER_NAMES[prayer]}`;
+  return <Post head={<PostHead Icon={Clock} title={title} sub={[now && hijriDate(now), place?.name].filter(Boolean).join(' · ')} />}
+    actions={<>
+      <Action Icon={Clock} label="مواقيت الصلاة" href="/utilities?view=times" />
+      <Action Icon={Compass} label="القبلة" href="/utilities?view=qibla" />
+    </>}
+    lines={[{ line: `طريقة الحساب · ${method}`, quotes: [{ text: `حُسبت المواقيت بطريقة ${method}${settings.hanafi ? '، والعصر على مذهب الحنفية' : ''}، وتُغيَّر من مواقيت الصلاة.` }] }]}>
+    <div className="flex justify-between px-3.5 py-3">
+      {FIVE.map(key => <p key={key} className="flex flex-col items-center gap-0.5" aria-label={`${PRAYER_NAMES[key]} ${clock(times[key], true)}`}>
+        <span aria-hidden className={`text-[0.8125rem] ${key === prayer ? 'text-[var(--home-accent)]' : 'text-[var(--home-muted)]'}`}>{PRAYER_NAMES[key]}</span>
+        <span aria-hidden className={key === prayer ? 'text-[var(--home-accent)]' : ''}>{clock(times[key])}</span>
+      </p>)}
+    </div>
+  </Post>;
+}
+
+/**
+ * A few books from the library as a post (the app's BooksPost, owner 2026-11-18): the shelf's own cards, those with a فاصلة
+ * first, in a row that scrolls; the head opens the library.
+ */
+function BooksPost({ day }: { day: number }) {
+  const fasilas = useSyncExternalStore(subscribeFasilas, readFasilas, serverFasilas);
+  const shelf = [...BOOKS.filter(book => isReaderBook(book.id)), { id: 'tuhfa' }];
+  const picks = feedBooks(shelf, id => id in fasilas, day);
+  return <section className={styles.postWrap} dir="rtl" aria-labelledby={`books-${day}`}>
+    <Link href="/quran/books" aria-label="افتح المكتبة" className="block hover:opacity-80"><PostHead Icon={LibraryBig} id={`books-${day}`} title="من المكتبة" /></Link>
+    <ul className="flex gap-3 overflow-x-auto pb-1 [scrollbar-width:none]">
+      {picks.map(book => <li key={book.id} className="w-[150px] shrink-0">
+        {'title' in book ? <BookCard book={book} fasila={isReaderBook(book.id) ? fasilas[book.id] : undefined} /> : <TuhfaCard />}
+      </li>)}
+    </ul>
+  </section>;
+}
+
+/** The line over a card from outside the reader's interests (the app's SurpriseLine), with a button to add it. */
+function SurpriseLine({ interest, added }: { interest: string; added: boolean }) {
+  const name = interestById(interest)?.name ?? '';
+  // Once added the line stays, saying so, so the card under it does not move.
+  return <div dir="rtl" className="flex items-center gap-2 px-3">
+    <p className="flex-1 text-[0.8125rem] text-[var(--home-muted)]">{added ? `أُضيف «${name}» إلى اهتماماتك` : `من غير اهتماماتك: ${name}`}</p>
+    <Button variant="muted" aria-label={added ? `أزل «${name}» من اهتماماتي` : `أضف «${name}» إلى اهتماماتي`}
+      onClick={() => pickedInterests.write(toggledInterest(pickedInterests.read(), interest))}>{added ? <Check aria-hidden /> : <Plus aria-hidden />}{added ? 'تراجع' : 'أضفه'}</Button>
+  </div>;
+}
+
+/**
+ * A story opened from the feed continues (owner, 2026-11-19, the app's): that kind's next card is the one after it in the list
+ * (the next phase of a prophet's story, the next moment of the battle, the next sira story).
+ */
+const continued = new Map<ListKind, string>();
+const continuedListeners = new Set<() => void>();
+let continuedVersion = 0;
+function continueAfter(kind: ListKind, item: string) {
+  continued.set(kind, item);
+  continuedVersion++;
+  continuedListeners.forEach(listener => listener());
+}
+const subscribeContinued = (listener: () => void) => { continuedListeners.add(listener); return () => { continuedListeners.delete(listener); }; };
+const readContinued = () => continuedVersion;
+
+/** A prayer that comes this soon after home opens leads the feed, as one near when it opens does. */
+const OPENING_MS = 3000;
+/** About how many cards come at a time, as the page opens and each time it nears its end: a round of every interest. */
+const STEP_CARDS = INTERESTS.length;
 type Ids = { pairs: (string | null)[]; trees: (string | null)[]; pairKeys?: string[][]; treeKeys?: string[][] };
 type Content = { pairs: FeedPair[]; trees: FeedTree[] };
+/** A list kind's ids are asked for in steps of this many, so the same few requests serve a growing feed. */
+const ITEMS_STEP = 20;
 
-/** The home feed: pairs and trees not seen before, a forgotten ayah that is due, and more each time the page nears its end. */
-/** `only`: one interest's id, its cards alone (the chip row over the feed). */
+/** The ids of one list kind's next items from the day's start (or just after a continued story), enough to pass the seen ones. */
+function useItemIds(kind: ListKind, day: number | undefined, need: number, seen: Seen, after?: string) {
+  const seenOfKind = useMemo(() => Object.keys(seen).filter(id => id.startsWith(`${kind}:`)).length, [seen, kind]);
+  const n = Math.min(FEED_FAR, Math.ceil((need + seenOfKind) / ITEMS_STEP) * ITEMS_STEP);
+  const query = day && need ? `/api/home/feed?day=${day}&items=${kind}&n=${n}${after ? `&after=${encodeURIComponent(after)}` : ''}` : null;
+  return useSWR(query, fetchJson<string[]>, { revalidateOnFocus: false, keepPreviousData: true }).data;
+}
+
+/** The items each list kind shows, as the app's feed picks them (shared/feedSeen.ts growingPicks): fresh ones first, kept in place as more come. */
+function useListItems(counts: Record<string, number>, day: number | undefined, seen: Seen, view: string, visit: number) {
+  const turn = useSyncExternalStore(subscribeContinued, readContinued, readContinued);
+  const fetched = Object.fromEntries(LIST_KINDS.map(kind => [kind,
+    // One hook per kind, in a fixed order.
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useItemIds(kind, day, counts[kind] ?? 0, seen, continued.get(kind))])) as Record<ListKind, string[] | undefined>;
+  const holders = useRef<Partial<Record<ListKind, { reset?: unknown[]; list: string[] }>>>({}).current;
+  const key = LIST_KINDS.map(kind => fetched[kind]?.join(',') ?? '').join('|');
+  return useMemo(() => {
+    const out: Partial<Record<ListKind, string[]>> = {};
+    for (const kind of LIST_KINDS) {
+      const list = fetched[kind];
+      const need = counts[kind] ?? 0;
+      if (!list || !need) continue;
+      out[kind] = growingPicks(holders[kind] ??= { list: [] }, [view, day], offset => list[offset], item => `${kind}:${item}`, seen, need, { since: visit, tries: list.length });
+    }
+    return out;
+    // `turn` (a story opened) recomputes without a reset, as the app's: cards on screen stay, later ones continue after it.
+  }, [key, counts, day, seen, view, visit, turn]); // eslint-disable-line react-hooks/exhaustive-deps -- `key` stands for the fetched lists
+}
+
+/**
+ * The home feed, the app's (mobile/src/components/HomeFeed.tsx Feed, owner 2026-11-19): the reader's own cards at the top (a
+ * forgotten ayah that is due, today's juz, the prayer when near), then rounds, each one card from every interest picked
+ * (shared/homeFeed.ts feedRound), content and questions taking turns, with a card from outside the interests when the
+ * reader allows it, a saved item and the books now and then; more rounds as the page nears its end. What was shown before is
+ * skipped (shared/feedSeen.ts), a question answered wrong comes back after a rest, and a story opened continues.
+ * `only`: one interest's id, its cards alone (the chip row over the feed).
+ */
 export function Feed({ only = null }: { only?: string | null } = {}) {
   const today = useToday();
   const day = today?.day;
   const visit = useSyncExternalStore(subscribeVisit, visitStart, serverVisit);
-  // «More» counts per visit, so a new visit starts again at one batch in the same render that picks it.
-  // «More» counts per visit and chip, so either starts again at one batch in the same render that picks it.
+  // A new visit, or another chip, starts again from one step of rounds.
   const view = `${visit}|${only ?? ''}`;
-  const [more, setMore] = useState({ view, batches: 1 });
-  const batches = more.view === view ? more.batches : 1;
+  const [more, setMore] = useState({ view, batches: 0 });
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen, serverFeedSeen);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
   // The saved items as they were when the visit began (once read in the browser), so saving or unsaving a card does not move the cards on screen.
   const savedAtVisit = useRef<{ visit: number; list: typeof bookmarks } | null>(null);
   if (!savedAtVisit.current || savedAtVisit.current.visit !== visit || (!savedAtVisit.current.list.length && bookmarks.length)) savedAtVisit.current = { visit, list: bookmarks };
-  // Saved cards join only when the website draws their kind; the others stay on the library's list.
   const saved = savedAtVisit.current.list.filter(item => !isCardBookmark(item.id) || drawsCard(item.id));
-  // The interests picked on this device (shared/interests.ts), as they were when the visit began (a change starts a new
-  // visit, so the cards on screen never move): the feed brings only theirs, questions in turn by them.
-  const interests = useSyncExternalStore(pickedInterests.subscribe, pickedInterests.read, pickedInterests.server);
-  const picksAtVisit = useRef<{ visit: number; list: typeof interests } | null>(null);
-  if (!picksAtVisit.current || picksAtVisit.current.visit !== visit) picksAtVisit.current = { visit, list: interests };
-  const active = only ? INTERESTS.filter(interest => interest.id === only) : activeInterests(picksAtVisit.current.list);
-  const quizKinds = active.flatMap(interest => interest.quizzes);
-  const shows = (kind: string) => active.some(interest => (interest.cards as readonly string[]).includes(kind));
+  // The interests and «فاجئني» as they were when the visit began (a change starts a new visit, so the cards on screen never move).
+  const picked = useSyncExternalStore(pickedInterests.subscribe, pickedInterests.read, pickedInterests.server);
+  const surprise = useSyncExternalStore(surpriseMe.subscribe, surpriseMe.read, surpriseMe.server);
+  const frozen = useRef<{ visit: number; picked: typeof picked; surprise: boolean } | null>(null);
+  if (!frozen.current || frozen.current.visit !== visit) frozen.current = { visit, picked, surprise };
+  const { active, others } = useMemo(() => {
+    if (only) return { active: INTERESTS.filter(interest => interest.id === only), others: [] };
+    const chosen = activeInterests(frozen.current!.picked);
+    return { active: chosen, others: frozen.current!.surprise && frozen.current!.picked.length ? INTERESTS.filter(interest => !chosen.includes(interest)) : [] };
+  }, [only, visit]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
+  // Rounds of few interests are short: as many rounds at a time as make about a round of all; the books and a saved item come once a step.
+  const step = Math.max(1, Math.ceil(STEP_CARDS / (active.length + (others.length ? 1 : 0))));
+  const batches = more.view === view && more.batches ? more.batches : step;
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks, serverAyahMarks);
   const forgotten = mostForgotten(due)[0];
   // The settings under «ما أحفظه»: questions come from the memorized range, pondering puts it first.
@@ -693,143 +882,140 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read, memorizedQuestions.server);
   const prefer = useSyncExternalStore(memorizedPrefer.subscribe, memorizedPrefer.read, memorizedPrefer.server);
   const recall = useMemo(() => (memorized && day ? recallOfDay(questions ? memorized : { all: true }, day) : undefined), [memorized, questions, day]);
+  const rounds = useMemo(() => (day ? Array.from({ length: batches }, (_, round) => feedRound(active, round, day, others)) : []), [active, others, batches, day]);
+  // The questions answered wrong that are due again, as they were when the visit began.
+  const missed = useMemo(() => ({ list: readMissed(), at: Date.now() }), [visit]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
   // A tab hidden for long and shown again starts a new visit (shared/feedSeen.ts).
   useEffect(() => {
     const change = () => (document.hidden ? leftVisit() : backToVisit());
     document.addEventListener('visibilitychange', change);
     return () => document.removeEventListener('visibilitychange', change);
   }, []);
-  // The ids reach FEED_AHEAD past the batches shown, so the fresh ones can be found further on; never a limit (owner, 2026-11-18).
-  const reach = Math.min(FEED_FAR, (Math.floor(batches / FEED_AHEAD) + 2) * FEED_AHEAD);
-  const { data: ids } = useSWR(day ? `/api/home/feed?day=${day}&n=${reach}` : null, fetchJson<Ids>, { revalidateOnFocus: false, keepPreviousData: true });
-  // The offsets picked: fresh ids first, in the day's order.
-  // The offsets already shown stay in place as more come; a new visit, day or setting picks afresh.
+  const counts = useMemo(() => {
+    const count: Record<string, number> = {};
+    for (const slot of rounds.flat()) count[slot.kind] = (count[slot.kind] ?? 0) + 1;
+    return count;
+  }, [rounds]);
+  // Pairs and trees: their ids reach FEED_AHEAD past those shown, so the fresh ones can be found further on (owner, 2026-11-18: never a limit).
+  const wanted = Math.max(counts.pair ?? 0, counts.tree ?? 0);
+  const reach = Math.min(FEED_FAR, (Math.floor(wanted / FEED_AHEAD) + 2) * FEED_AHEAD);
+  const { data: ids } = useSWR(day && wanted ? `/api/home/feed?day=${day}&n=${reach}` : null, fetchJson<Ids>, { revalidateOnFocus: false, keepPreviousData: true });
   const shownPairs = useRef<{ reset?: unknown[]; list: number[] }>({ list: [] }).current;
   const shownTrees = useRef<{ reset?: unknown[]; list: number[] }>({ list: [] }).current;
-  const picked = useMemo(() => {
-    if (!ids) return null;
-    const pick = (holder: typeof shownPairs, list: (string | null)[], keys: string[][] | undefined, count: number) => growingPicks(holder, [visit, day, prefer, memorized],
+  const offsets = useMemo(() => {
+    if (!ids) return { pairs: [], trees: [] };
+    const pick = (holder: typeof shownPairs, list: (string | null)[], keys: string[][] | undefined, count: number) => growingPicks(holder, [view, day, prefer, memorized],
       offset => (list[offset] ? offset : undefined), offset => list[offset]!, seen, count,
       { since: visit, tries: list.length, prefer: prefer && keys ? offset => touchesMemorized(keys[offset] ?? [], memorized) : undefined });
-    return { pairs: pick(shownPairs, ids.pairs, ids.pairKeys, batches), trees: pick(shownTrees, ids.trees, ids.treeKeys, batches) };
-  }, [ids, seen, batches, prefer, memorized, visit, day, shownPairs, shownTrees]);
-  // Pairs and trees load apart, so the pairs show while the trees are still being worked out.
+    return { pairs: pick(shownPairs, ids.pairs, ids.pairKeys, counts.pair ?? 0), trees: pick(shownTrees, ids.trees, ids.treeKeys, counts.tree ?? 0) };
+  }, [ids, seen, counts, prefer, memorized, visit, view, day, shownPairs, shownTrees]);
   const swr = { revalidateOnFocus: false, keepPreviousData: true };
-  const pieces = (kind: 'p' | 't', offsets: number[]) => () => inPieces<Content>(some => `/api/home/feed?day=${day}&${kind}=${some.join(',')}`, offsets)
+  const pieces = (kind: 'p' | 't', some: number[]) => () => inPieces<Content>(part => `/api/home/feed?day=${day}&${kind}=${part.join(',')}`, some)
     .then(all => ({ pairs: all.flatMap(piece => piece.pairs), trees: all.flatMap(piece => piece.trees) }));
-  const { data: pairContent, isValidating: pairsLoading } = useSWR(day && picked && shows('pair') ? `/api/home/feed?day=${day}&p=${picked.pairs.join(',')}` : null, picked ? pieces('p', picked.pairs) : null, swr);
-  const { data: treeContent, isValidating: treesLoading } = useSWR(day && picked && shows('tree') ? `/api/home/feed?day=${day}&t=${picked.trees.join(',')}` : null, picked ? pieces('t', picked.trees) : null, swr);
-  // The prophets cards of the batches shown, worked out on the server (the stories' ayat stay there).
-  const storySlots = shows('prophets') ? Array.from({ length: batches }, (_, i) => i).filter(hasStoryCard) : [];
-  const { data: stories } = useSWR(day && storySlots.length ? `/api/home/feed?day=${day}&s=${storySlots.join(',')}` : null,
-    () => inPieces<StoryCard[]>(some => `/api/home/feed?day=${day}&s=${some.join(',')}`, storySlots).then(all => all.flat()), swr);
-  // The sira and battle-moment cards, one a batch, worked out on the server (a story card brings its ayat's mushaf pages with it).
-  const siraSlots = shows('sira') || shows('moment') ? Array.from({ length: batches }, (_, i) => i) : [];
-  const { data: sira } = useSWR(day && siraSlots.length ? `/api/home/feed?day=${day}&sira=${siraSlots.join(',')}` : null,
-    () => inPieces<SiraCard[]>(some => `/api/home/feed?day=${day}&sira=${some.join(',')}`, siraSlots).then(all => all.flat()), swr);
-  // The hadith, Ibn Rajab, «من أخرجه» and «من الإسناد» cards, one a batch, worked out on the server (the records and Ibn Rajab's book stay there).
-  const hadithSlots = shows('hadith') || shows('rajab') || shows('recorded') || shows('isnad') ? Array.from({ length: batches }, (_, i) => i) : [];
-  const { data: hadith } = useSWR(day && hadithSlots.length ? `/api/home/feed?day=${day}&hadith=${hadithSlots.join(',')}` : null,
-    () => inPieces<HadithCard[]>(some => `/api/home/feed?day=${day}&hadith=${some.join(',')}`, hadithSlots).then(all => all.flat()), swr);
-  // The Sahih cards, one a batch, al-Bukhari and Muslim in turn, worked out on the server (the books' texts stay there).
-  const sahihSlots = shows('bukhari') || shows('muslim') ? Array.from({ length: batches }, (_, i) => i) : [];
-  const { data: sahih } = useSWR(day && sahihSlots.length ? `/api/home/feed?day=${day}&sahih=${sahihSlots.join(',')}` : null,
-    () => inPieces<SahihCard[]>(some => `/api/home/feed?day=${day}&sahih=${some.join(',')}`, sahihSlots).then(all => all.flat()), swr);
-  // The virtue and «صلة» cards, one a batch, worked out on the server (the people's entries stay there).
-  const tarajimSlots = shows('tarajim') || shows('tie') || shows('life') ? Array.from({ length: batches }, (_, i) => i) : [];
-  const { data: tarajim } = useSWR(day && tarajimSlots.length ? `/api/home/feed?day=${day}&tarajim=${tarajimSlots.join(',')}` : null,
-    () => inPieces<TarajimCard[]>(some => `/api/home/feed?day=${day}&tarajim=${some.join(',')}`, tarajimSlots).then(all => all.flat()), swr);
-  // The laqab and kunya cards, one of each a batch, worked out on the server like the virtue cards.
-  const nameSlots = shows('laqab') || shows('kunya') ? Array.from({ length: batches }, (_, i) => i) : [];
-  const { data: names } = useSWR(day && nameSlots.length ? `/api/home/feed?day=${day}&names=${nameSlots.join(',')}` : null,
-    () => inPieces<NameCard[]>(some => `/api/home/feed?day=${day}&names=${some.join(',')}`, nameSlots).then(all => all.flat()), swr);
-  // The balagha term cards, in every other batch, worked out on the server (al-Suyuti's book stays there).
-  const termSlots = shows('term') ? Array.from({ length: batches }, (_, i) => i).filter(i => i % 2 === 1) : [];
-  const { data: termCards } = useSWR(day && termSlots.length ? `/api/home/feed?day=${day}&term=${termSlots.join(',')}` : null,
-    () => inPieces<TermCard[]>(some => `/api/home/feed?day=${day}&term=${some.join(',')}`, termSlots).then(all => all.flat()), swr);
-  // Pairs and trees load only for the interests shown, so what is not shown is never fetched or counted as seen.
-  const content = pairContent || treeContent ? { pairs: pairContent?.pairs ?? [], trees: treeContent?.trees ?? [] } : undefined;
-  const ready = (!shows('pair') || !!pairContent) && (!shows('tree') || !!treeContent);
-  useEffect(() => { if (pairContent) markFeedSeen(pairContent.pairs.map(pair => pair.id)); }, [pairContent]);
-  useEffect(() => { if (treeContent) markFeedSeen(treeContent.trees.map(tree => tree.id)); }, [treeContent]);
-  // A mark below the posts: when it comes near the screen, the next batch is added.
+  const { data: pairContent } = useSWR(day && offsets.pairs.length ? `/api/home/feed?day=${day}&p=${offsets.pairs.join(',')}` : null, pieces('p', offsets.pairs), swr);
+  const { data: treeContent } = useSWR(day && offsets.trees.length ? `/api/home/feed?day=${day}&t=${offsets.trees.join(',')}` : null, pieces('t', offsets.trees), swr);
+  const items = useListItems(counts, day, seen, view, visit);
+  // Cards taken out with «ليس من اهتماماتي» this visit, by key: each leaves a line in its place, the others stay as they are.
+  const [removed, setRemoved] = useState<{ visit: number; keys: ReadonlySet<string> }>({ visit, keys: new Set() });
+  const removedKeys = removed.visit === visit ? removed.keys : new Set<string>();
+  const showing = new Set(activeInterests(picked).map(interest => interest.id));
+  const posts: React.ReactElement[] = [];
+  // Only what is drawn counts as seen.
+  const rendered: string[] = [];
+  const used: Record<string, number> = {};
+  const next = (kind: string) => { const at = used[kind] ?? 0; used[kind] = at + 1; return at; };
+  for (let round = 0; round < rounds.length; round++) {
+    if (round === 0 && !only) {
+      if (forgotten) posts.push(<ForgottenPost key={`ask${forgotten}`} ayah={forgotten} review={reviewHref(forgottenOrder(Object.keys(due))[0])} />);
+      else if (recall) posts.push(<ForgottenPost key={`ask${recall}`} ayah={recall} />);
+      if (hasJuzCard(round) && today?.juz) posts.push(<JuzPost key={`j${day}`} juz={today.juz} date={today.date} />);
+    }
+    rounds[round].forEach((slot: FeedSlot) => {
+      const at = next(slot.kind);
+      let key: string;
+      let post: React.ReactElement | null = null;
+      let item: string | undefined;
+      if (slot.quiz) {
+        const kind = slot.kind as FeedQuizKind;
+        const seed = dueSeeds(missed.list, kind, missed.at)[at] ?? feedQuizSeed(day!, round);
+        key = `q${kind}-${seed}-${round}`;
+        post = kind === OPENINGS
+          ? <OpeningPost seed={seed} memorized={questions ? memorized : null} />
+          : <QuizPost key={questions ? JSON.stringify(memorizedFilters(memorized)) : ''} kind={kind} seed={seed} scope={questions ? memorizedFilters(memorized) : {}} />;
+      } else if (slot.kind === 'pair' || slot.kind === 'tree') {
+        const offset = (slot.kind === 'pair' ? offsets.pairs : offsets.trees)[at];
+        const content = slot.kind === 'pair' ? pairContent?.pairs.find(pair => pair.id === ids?.pairs[offset]) : treeContent?.trees.find(tree => tree.id === ids?.trees[offset]);
+        item = content?.id;
+        key = `${slot.kind === 'pair' ? 'p' : 't'}${item ?? at}`;
+        post = !content ? null : slot.kind === 'pair' ? <PairPost pair={content as FeedPair} /> : <TreePost tree={content as FeedTree} />;
+      } else {
+        item = items[slot.kind as ListKind]?.[at];
+        key = `${slot.kind}:${item ?? at}`;
+        post = item !== undefined ? <SavedCardPost id={cardBookmarkId(slot.kind, item)} /> : null;
+      }
+      if (!post) return;
+      if (removedKeys.has(key)) {
+        posts.push(<RemovedLine key={key} interest={slot.interest} onUndo={() => setRemoved({ visit, keys: new Set([...removedKeys].filter(each => each !== key)) })} />);
+        return;
+      }
+      if (item !== undefined) rendered.push(slot.kind === 'pair' || slot.kind === 'tree' ? item : `${slot.kind}:${item}`);
+      // Not on the only interest left (none picked means all), on one interest's own view, on a surprise card, nor on one already taken out.
+      const notMine = only || slot.surprise || !showing.has(slot.interest) || showing.size === 1 ? undefined : () => {
+        setRemoved({ visit, keys: new Set([...removedKeys, key]) });
+        pickedInterests.write(activeInterests(pickedInterests.read()).map(each => each.id).filter(id => id !== slot.interest));
+      };
+      posts.push(<NotMineContext.Provider key={key} value={{ interest: slot.interest, notMine }}>
+        {slot.surprise ? <div className="flex flex-col gap-1"><SurpriseLine interest={slot.interest} added={picked.includes(slot.interest)} />{post}</div> : post}
+      </NotMineContext.Provider>);
+    });
+    if (!only && round % step === step - 1) {
+      const at = (round + 1) / step - 1;
+      const savedItem = savedOfSlot(saved, day ?? 0, at);
+      if (savedItem) posts.push(<SavedPost key={`b${savedItem.id}-${at}`} item={savedItem} />);
+      if (hasBooksCard(at) && day) posts.push(<BooksPost key={`k${day}-${at}`} day={day} />);
+    }
+  }
+  if (today?.kahf && !only) posts.splice(Math.min(KAHF_SLOT, posts.length), 0, <KahfPost key={`kahf${day}`} />);
+  // Pair ids hold «|», so the list is kept on lines.
+  const renderedKey = rendered.join('\n');
+  useEffect(() => { if (renderedKey) markFeedSeen(renderedKey.split('\n')); }, [renderedKey]);
+  // A prayer that is near comes in once, before the first post below the screen, so what the reader looks at stays put (owner,
+  // 2026-11-18); one near when home opens leads the feed. A new visit starts again with the prayer near now leading.
+  const soon = usePrayerSoon();
+  const feed = useRef<HTMLElement>(null);
+  const [cards, setCards] = useState<{ visit: number; list: (Soon & { after: string | null })[] }>({ visit, list: [] });
+  // When home opened, or a new visit began: a prayer near then leads the feed.
+  const began = useRef({ visit, at: 0 });
+  useEffect(() => { began.current = { visit, at: Date.now() }; }, [visit]);
+  const prayers = cards.visit === visit ? cards.list : [];
+  const keys = posts.map(post => String(post.key));
+  useEffect(() => {
+    if (!soon || prayers.some(card => card.key === soon.key)) return;
+    const tops = keys.map(key => feed.current?.querySelector<HTMLElement>(`[data-post="${CSS.escape(key)}"]`)?.getBoundingClientRect().top ?? Infinity);
+    const opening = began.current.visit === visit && Date.now() - began.current.at < OPENING_MS;
+    const at = opening ? 0 : insertAt(tops, window.innerHeight);
+    setCards({ visit, list: [...prayers.filter(card => (feed.current?.querySelector<HTMLElement>(`[data-post="pr${card.key}"]`)?.getBoundingClientRect().top ?? Infinity) < window.innerHeight), { ...soon, after: at ? keys[at - 1] : null }] });
+  }, [soon?.key, visit]); // eslint-disable-line react-hooks/exhaustive-deps -- once for each prayer and visit
+  for (const card of only ? [] : prayers) {
+    const at = card.after === null ? 0 : keys.indexOf(card.after) + 1;
+    posts.splice(at, 0, <PrayerPost key={`pr${card.key}`} prayer={card.prayer} times={card.times} />);
+    keys.splice(at, 0, `pr${card.key}`);
+  }
+  // A mark below the posts: when it comes near the screen, the next step of rounds is added.
   const end = useRef<HTMLDivElement>(null);
+  const ready = rounds.length > 0;
   useEffect(() => {
     const mark = end.current;
     if (!mark) return;
     const watch = new IntersectionObserver(entries => {
-      if (entries.some(entry => entry.isIntersecting)) setMore(now => ({ view, batches: (now.view === view ? now.batches : 1) + MORE }));
+      if (entries.some(entry => entry.isIntersecting)) setMore(now => ({ view, batches: (now.view === view && now.batches ? now.batches : step) + step }));
     }, { rootMargin: '0px 0px 1200px 0px' });
     watch.observe(mark);
     return () => watch.disconnect();
-  }, [view, batches, pairsLoading, treesLoading]);
-  // Cards taken out with «ليس من اهتماماتي» this visit, by key: each leaves a line in its place, the others stay as they are
-  // (the app's feed). The button is not on one interest's own view, nor on the only interest left (none picked means all),
-  // nor on a card whose interest was already taken out.
-  const [removed, setRemoved] = useState<{ visit: number; keys: ReadonlySet<string> }>({ visit, keys: new Set() });
-  const removedKeys = removed.visit === visit ? removed.keys : new Set<string>();
-  const showing = new Set(activeInterests(interests).map(interest => interest.id));
-  const posts: React.ReactNode[] = [];
-  /** Adds a card of `kind`, with its interest's «ليس من اهتماماتي», or the line that replaced it. */
-  const put = (post: React.ReactElement, kind: string) => {
-    const key = String(post.key);
-    const interest = interestOf(kind as FeedCardKind)?.id;
-    if (!interest) { posts.push(post); return; }
-    if (removedKeys.has(key)) {
-      posts.push(<RemovedLine key={key} interest={interest} onUndo={() => setRemoved({ visit, keys: new Set([...removedKeys].filter(each => each !== key)) })} />);
-      return;
-    }
-    const notMine = only || !showing.has(interest) || showing.size === 1 ? undefined : () => {
-      setRemoved({ visit, keys: new Set([...removedKeys, key]) });
-      pickedInterests.write(activeInterests(pickedInterests.read()).map(each => each.id).filter(id => id !== interest));
-    };
-    posts.push(<NotMineContext.Provider key={key} value={{ interest, notMine }}>{post}</NotMineContext.Provider>);
-  };
-  for (let i = 0; i < batches; i++) {
-    const pair = shows('pair') ? content?.pairs[i] : undefined;
-    if (pair) put(<PairPost key={`p${pair.id}`} pair={pair} />, 'pair');
-    if (i === 0 && forgotten && !only) posts.push(<ForgottenPost key={`ask${forgotten}`} ayah={forgotten} review={reviewHref(forgottenOrder(Object.keys(due))[0])} />);
-    else if (i === 0 && recall && !only) posts.push(<ForgottenPost key={`ask${recall}`} ayah={recall} />);
-    // A question card in every batch after the first (whose question is the recall card), each kind in turn; from the first
-    // when one interest is shown alone.
-    if ((i > 0 || only) && day && quizKinds.length) {
-      const kind = quizKinds[(day + i) % quizKinds.length];
-      const seed = feedQuizSeed(day, i);
-      put(kind === OPENINGS
-        ? <OpeningPost key={`q${day}-${i}`} seed={seed} memorized={questions ? memorized : null} />
-        : <QuizPost key={`q${day}-${i}-${questions ? JSON.stringify(memorizedFilters(memorized)) : ''}`} kind={kind} seed={seed} scope={questions ? memorizedFilters(memorized) : {}} />, kind);
-    }
-    const tree = shows('tree') ? content?.trees[i] : undefined;
-    if (tree) put(<TreePost key={`t${tree.id}`} tree={tree} />, 'tree');
-    const savedItem = only ? undefined : savedOfSlot(saved, day ?? 0, i);
-    if (savedItem) posts.push(<SavedPost key={`b${savedItem.id}-${i}`} item={savedItem} />);
-    // A readings card in every batch after the first, as the app's feed has one among its ayah cards.
-    const readings = i > 0 && day && shows('note-qiraat') ? qiraatAyat()[ayahNoteAt(qiraatAyat().length, day, i)] : undefined;
-    if (readings) put(<QiraatPost key={`r${readings}`} ayah={readings} />, 'note-qiraat');
-    const story = shows('prophets') ? stories?.find(card => card.slot === i) : undefined;
-    if (story) put(<StoryPost key={`s${day}-${i}`} card={story} />, 'prophets');
-    const hadithCard = hadith?.find(card => card.slot === i);
-    if (hadithCard && shows(hadithCard.kind)) put(<HadithPost key={`h${day}-${i}`} card={hadithCard} />, hadithCard.kind);
-    const sahihCard = sahih?.find(card => card.slot === i);
-    if (sahihCard && shows(sahihCard.kind)) put(<SahihPost key={`sahih${day}-${i}`} card={sahihCard} />, sahihCard.kind);
-    const termCard = shows('term') ? termCards?.find(card => card.slot === i) : undefined;
-    if (termCard) put(<TermPost key={`term${day}-${i}`} card={termCard} />, 'term');
-    const siraCard = sira?.find(card => card.slot === i);
-    if (siraCard?.kind === 'sira' && shows('sira')) put(<SiraPost key={`sira${day}-${i}`} card={siraCard} />, 'sira');
-    if (siraCard?.kind === 'moment' && shows('moment')) put(<MomentPost key={`m${day}-${i}`} card={siraCard} />, 'moment');
-    const tarajimCard = tarajim?.find(card => card.slot === i);
-    if (tarajimCard?.kind === 'tarajim' && shows('tarajim')) put(<TarajimPost key={`tj${day}-${i}`} card={tarajimCard} />, 'tarajim');
-    if (tarajimCard?.kind === 'tie' && shows('tie')) put(<TiePost key={`tie${day}-${i}`} card={tarajimCard} />, 'tie');
-    if (tarajimCard?.kind === 'life' && shows('life')) put(<LifePost key={`life${day}-${i}`} card={tarajimCard} />, 'life');
-    // Laqab on even batches, kunya on odd ones, so the two do not stand together; every batch when only one is shown.
-    const nameKind = shows('laqab') && shows('kunya') ? (i % 2 ? 'kunya' : 'laqab') : shows('kunya') ? 'kunya' : 'laqab';
-    const nameCard = names?.find(card => card.slot === i && card.kind === nameKind);
-    if (nameCard && shows(nameCard.kind)) put(<NamePost key={`n${nameCard.kind}${day}-${i}`} card={nameCard} />, nameCard.kind);
-  }
-  if (today?.kahf && !only) posts.splice(Math.min(KAHF_SLOT, posts.length), 0, <KahfPost key={`kahf${day}`} />);
-  return <section className={styles.feed} aria-label="للتأمل اليوم">
-    {posts}
+  }, [view, step, batches, ready]);
+  return <section ref={feed} className={styles.feed} aria-label="للتأمل اليوم">
+    {posts.map((post, i) => <div key={keys[i]} data-post={keys[i]}>{post}</div>)}
     {!ready && <p className="py-6 text-center"><LoadingDots label="جارٍ التحميل" /></p>}
-    {ready && !pairsLoading && !treesLoading && <div ref={end} aria-hidden className="h-px" />}
+    {ready && <div ref={end} aria-hidden className="h-px" />}
   </section>;
 }

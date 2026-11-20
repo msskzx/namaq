@@ -23,13 +23,15 @@ export type CardSide = { surah: number; ayah: number; ayat: CardAyah[]; rows?: n
 /** One ayah against several far ones: `side` holds the partners. `shared` is the one ayah with the marks of that pairing. */
 export type ManyOption = { id: string; ayah: CardAyah; shared: CardAyah };
 /** `pairs` lists the ayah pairs of a range or one-to-many card; a single-pair card has `verdict` instead. */
-export type PairCard = { id: string; group?: string; verdict?: Verdict; pairs?: { id: string; verdict?: Verdict }[]; many?: { side: 0 | 1; options: ManyOption[] }; span?: [number, number][]; sides: [CardSide, CardSide] };
+/** `book`: a card a surah-order book names (shared/quran/tanasubCards.ts), the key of its link in ORDER_LINKS. */
+export type PairCard = { id: string; group?: string; book?: number; verdict?: Verdict; pairs?: { id: string; verdict?: Verdict }[]; many?: { side: 0 | 1; options: ManyOption[] }; span?: [number, number][]; sides: [CardSide, CardSide] };
 
 /**
  * One card as stored: its pair ids, tree link, range, word marks (`m`, or `n` and `o` for one-to-many) and `x` when only review shows it.
+ * `k`: a book card of the surah-order books, its link's key in ORDER_LINKS; it lists exactly the ayat the book names (`a`).
  * A card as a page shows it also lists each side's ayat (`a`); a story part keeps its single pair under `pairs` (`t`), its rows (`r`) and the sides that step back (`b`).
  */
-export type StoredCard = { p: string[]; g?: string; s?: [number, number][]; m?: number[][]; n?: 0 | 1; o?: number[][][]; x?: 1; a?: number[][]; t?: 1; r?: number[][][]; b?: (0 | 1)[] };
+export type StoredCard = { p: string[]; g?: string; k?: number; s?: [number, number][]; m?: number[][]; n?: 0 | 1; o?: number[][][]; x?: 1; a?: number[][]; t?: 1; r?: number[][][]; b?: (0 | 1)[] };
 /** `stories`: for each page with a prophet's story, its cards as the website shows them, story parts in place. */
 export type StoredCards = { listed: SurahPair[]; review: SurahPair[]; cards: Record<string, StoredCard[]>; stories?: Record<string, StoredCard[]> };
 
@@ -75,10 +77,12 @@ function rangeCard(item: StoredCard, words: WordsOf, verdicts: Verdicts): PairCa
     return { surah, ayah: shown[0], to: shown[shown.length - 1], ayat: ayatOf(words, surah, shown, item.m![side]) };
   });
   const rangeId = (side: (typeof sides)[number]) => `${side.surah}:${side.ayah}${side.to > side.ayah ? `-${side.to}` : ''}`;
-  const verdict = item.p.length === 1 && !item.t ? verdicts?.[item.p[0]] : undefined;
+  // A book card is the book's, so a verdict on the same pair of ours never shows on it.
+  const verdict = item.p.length === 1 && !item.t && !item.k ? verdicts?.[item.p[0]] : undefined;
   return {
     id: item.p.length === 1 && !item.t ? item.p[0] : `${rangeId(sides[0])}|${rangeId(sides[1])}`,
     ...(item.g && !droppedBranch({ id: item.g }) ? { group: item.g } : {}),
+    ...(item.k ? { book: item.k } : {}),
     ...(verdict ? { verdict } : {}),
     ...(item.p.length > 1 || item.t ? { pairs: item.p.map(pairVerdict(verdicts)) } : {}),
     sides: sides.map(({ surah, ayah, ayat }, s) => ({ surah, ayah, ayat, ...(item.r ? { rows: item.r[s] } : {}), ...(item.b?.[s] ? { back: true } : {}) })) as PairCard['sides'],
@@ -138,7 +142,7 @@ export function encodeAyat(ayat: CardAyah[], links: Map<string, number>) {
 /** A card a page shows, as stored under `stories`: each side's ayat listed, so a story part's broken stretches come back as they were. */
 export function encodeShownCard(card: PairCard): StoredCard {
   const links = new Map<string, number>();
-  const base: StoredCard = { p: card.pairs?.map(pair => pair.id) ?? [card.id], ...(card.group ? { g: card.group } : {}) };
+  const base: StoredCard = { p: card.pairs?.map(pair => pair.id) ?? [card.id], ...(card.group ? { g: card.group } : {}), ...(card.book ? { k: card.book } : {}) };
   if (card.many) return { ...base, n: card.many.side, o: card.many.options.map(option => [encodeAyat([option.shared], links), encodeAyat([option.ayah], links)]) };
   // Only a story part lists a single pair under `pairs`; every other one-pair card is that pair.
   const story = card.pairs?.length === 1;
