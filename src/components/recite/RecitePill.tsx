@@ -33,6 +33,8 @@ export default function RecitePill({ recite, writing, onWriting, onClose, onRest
   const pen = penLabel(writing, recite.pen, ar);
   return <div className={`${mushaf.recitePill} ${className ?? ''}`} dir={ar ? 'rtl' : 'ltr'} role="toolbar" aria-label={ar ? 'أدوات التسميع' : 'Recite tools'}>
     {lead}
+    {/* The first button (owner, 2026-11-20). */}
+    {onRestart && <Button size="lg" variant="muted" {...tip(ar ? 'أخفِ الصفحة وسمّع من أولها' : 'Hide the page and recite it from the start')} onClick={onRestart}><RotateCcw aria-hidden /></Button>}
     <Button size="lg" variant="muted" {...tip(ar ? 'ارجع خطوة' : 'Step back')} disabled={recite.atStart} onClick={recite.back}><Undo2 aria-hidden /></Button>
     {onRestart && <Button size="lg" variant="muted" {...tip(ar ? 'أخفِ الصفحة وسمّع من أولها' : 'Hide the page and recite it from the start')} onClick={onRestart}><RotateCcw aria-hidden /></Button>}
     <Button size="lg" variant="muted" {...tip(ar ? 'أظهر الكلمة التالية' : 'Reveal the next word')} disabled={recite.done} onClick={recite.nextWord}><Word aria-hidden /></Button>
