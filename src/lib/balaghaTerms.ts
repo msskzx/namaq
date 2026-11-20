@@ -31,9 +31,17 @@ export async function termView(term: BalaghaTerm) {
 
 /** The feed's term card (the app's TermPost): a term in the day's turn, and one of its examples. */
 export async function termCard(day: number, slot: number) {
-  const term = terms.terms[(((day * 37 + slot) % terms.terms.length) + terms.terms.length) % terms.terms.length];
+  return termCardFor(terms.terms[(((day * 37 + slot) % terms.terms.length) + terms.terms.length) % terms.terms.length], day, slot);
+}
+async function termCardFor(term: BalaghaTerm, day: number, slot: number) {
   const examples = examplesOf(itqan, term);
   const example = examples.length ? await exampleView(examples[day % examples.length]) : null;
-  return { slot, term, example };
+  // The card's lasting id is the term's name, as the app's feed saves it.
+  return { slot, item: term.name, term, example };
+}
+/** A saved term card by the term's name, with the day's example; null when there is no such term. */
+export async function termCardOf(item: string, day: number) {
+  const term = terms.terms.find(each => each.name === item);
+  return term ? termCardFor(term, day, 0) : null;
 }
 export type TermCard = Awaited<ReturnType<typeof termCard>>;
