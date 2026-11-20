@@ -75,6 +75,14 @@
       "exact": "المِقْدَادُ بنُ الأَسْوَدِ"
     },
     {
+      "id": "yl",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "385",
+      "layer": "MAIN",
+      "exact": "وَيُقَالُ لَهُ: المِقْدَادُ بنُ الأَسْوَدِ؛ لأَنَّهُ رُبِّي فِي حَجْرِ الأَسْوَدِ بنِ عَبْدِ يَغُوْثَ"
+    },
+    {
       "id": "bd",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 4,
@@ -154,28 +162,15 @@
       "chainState": "COMPLETE"
     },
     {
-      "id": "r_13",
+      "id": "r_21",
       "unit": "siyar-v4-81-al-miqdad-ibn-amr",
       "ordinal": 2,
-      "voice": "REPORTED_ANONYMOUS",
-      "frame": [
-        "yf"
-      ],
-      "origin": {
-        "mention": "m_sp12"
-      },
-      "chainState": "DEFERRED"
-    },
-    {
-      "id": "r_23",
-      "unit": "siyar-v4-81-al-miqdad-ibn-amr",
-      "ordinal": 3,
       "voice": "REPORTED_ANONYMOUS",
       "frame": [
         "qf"
       ],
       "origin": {
-        "mention": "m_sp22"
+        "mention": "m_sp20"
       },
       "chainState": "DEFERRED"
     }
@@ -198,15 +193,15 @@
       "role": "AUTHOR_REPORT"
     },
     {
-      "id": "st_14",
-      "report": "r_13",
+      "id": "st_12",
+      "report": "r0",
       "spans": [
-        "yq"
+        "yl"
       ],
-      "role": "TRANSMITTED"
+      "role": "AUTHOR_REPORT"
     },
     {
-      "id": "st_17",
+      "id": "st_15",
       "report": "r0",
       "spans": [
         "bd"
@@ -214,15 +209,15 @@
       "role": "AUTHOR_REPORT"
     },
     {
-      "id": "st_24",
-      "report": "r_23",
+      "id": "st_22",
+      "report": "r_21",
       "spans": [
         "qa"
       ],
       "role": "TRANSMITTED"
     },
     {
-      "id": "st_27",
+      "id": "st_25",
       "report": "r0",
       "spans": [
         "d"
@@ -260,49 +255,42 @@
       "role": "REFERENT"
     },
     {
-      "id": "m_sp12",
-      "parent": "yf",
-      "exact": "وَيُقَالُ",
-      "occurrence": 1,
-      "role": "SPEAKER"
-    },
-    {
-      "id": "m_s15",
+      "id": "m_s13",
       "parent": "yq",
       "exact": "المِقْدَادُ",
       "occurrence": 1,
       "role": "SUBJECT"
     },
     {
-      "id": "m_s18",
+      "id": "m_s16",
       "parent": "bd",
       "exact": "شَهِدَ",
       "occurrence": 1,
       "role": "SUBJECT"
     },
     {
-      "id": "m_e19",
+      "id": "m_e17",
       "parent": "bd",
       "exact": "بَدْراً",
       "occurrence": 1,
       "role": "REFERENT"
     },
     {
-      "id": "m_sp22",
+      "id": "m_sp20",
       "parent": "qf",
       "exact": "وَقِيْلَ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
     {
-      "id": "m_s25",
+      "id": "m_s23",
       "parent": "qa",
       "exact": "كَانَ",
       "occurrence": 1,
       "role": "SUBJECT"
     },
     {
-      "id": "m_s28",
+      "id": "m_s26",
       "parent": "d",
       "exact": "عَاشَ",
       "occurrence": 1,
@@ -359,8 +347,8 @@
       "status": "PROPOSED"
     },
     {
-      "id": "i_s15",
-      "mention": "m_s15",
+      "id": "i_s13",
+      "mention": "m_s13",
       "agent": "al-miqdad-ibn-amr",
       "basis": [
         {
@@ -371,8 +359,8 @@
       "status": "PROPOSED"
     },
     {
-      "id": "i_s18",
-      "mention": "m_s18",
+      "id": "i_s16",
+      "mention": "m_s16",
       "agent": "al-miqdad-ibn-amr",
       "basis": [
         {
@@ -383,8 +371,8 @@
       "status": "PROPOSED"
     },
     {
-      "id": "i_e19",
-      "mention": "m_e19",
+      "id": "i_e17",
+      "mention": "m_e17",
       "event": "badr",
       "basis": [
         {
@@ -395,8 +383,8 @@
       "status": "PROPOSED"
     },
     {
-      "id": "i_s25",
-      "mention": "m_s25",
+      "id": "i_s23",
+      "mention": "m_s23",
       "agent": "al-miqdad-ibn-amr",
       "basis": [
         {
@@ -407,8 +395,8 @@
       "status": "PROPOSED"
     },
     {
-      "id": "i_s28",
-      "mention": "m_s28",
+      "id": "i_s26",
+      "mention": "m_s26",
       "agent": "al-miqdad-ibn-amr",
       "basis": [
         {
@@ -489,8 +477,8 @@
       "status": "PROPOSED"
     },
     {
-      "id": "a_16",
-      "subject": "m_s15",
+      "id": "a_14",
+      "subject": "m_s13",
       "predicate": "name.full",
       "value": {
         "spans": [
@@ -498,25 +486,25 @@
         ]
       },
       "restsOn": [
-        "st_14"
+        "st_12"
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "a_20",
-      "subject": "m_s18",
+      "id": "a_18",
+      "subject": "m_s16",
       "predicate": "PARTICIPATED_IN",
       "value": {
-        "object": "m_e19"
+        "object": "m_e17"
       },
       "restsOn": [
-        "st_17"
+        "st_15"
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "a_21",
-      "subject": "m_s18",
+      "id": "a_19",
+      "subject": "m_s16",
       "predicate": "virtue",
       "value": {
         "spans": [
@@ -524,13 +512,13 @@
         ]
       },
       "restsOn": [
-        "st_17"
+        "st_15"
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "a_26",
-      "subject": "m_s25",
+      "id": "a_24",
+      "subject": "m_s23",
       "predicate": "appearance",
       "value": {
         "spans": [
@@ -538,13 +526,13 @@
         ]
       },
       "restsOn": [
-        "st_24"
+        "st_22"
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "a_29",
-      "subject": "m_s28",
+      "id": "a_27",
+      "subject": "m_s26",
       "predicate": "died.age",
       "value": {
         "parsed": 70,
@@ -553,13 +541,13 @@
         ]
       },
       "restsOn": [
-        "st_27"
+        "st_25"
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "a_30",
-      "subject": "m_s28",
+      "id": "a_28",
+      "subject": "m_s26",
       "predicate": "died.year",
       "value": {
         "parsed": 33,
@@ -568,7 +556,7 @@
         ]
       },
       "restsOn": [
-        "st_27"
+        "st_25"
       ],
       "status": "PROPOSED"
     }

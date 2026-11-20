@@ -410,6 +410,20 @@
         "mention": "m_sp58"
       },
       "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_62",
+      "unit": "siyar-v4-87-abdullah-ibn-masud",
+      "ordinal": 10,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "yf",
+        "bf"
+      ],
+      "origin": {
+        "mention": "m_sp61"
+      },
+      "chainState": "DEFERRED"
     }
   ],
   "statements": [
@@ -505,6 +519,14 @@
     {
       "id": "st_60",
       "report": "r_59",
+      "spans": [
+        "bq"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_63",
+      "report": "r_62",
       "spans": [
         "bq"
       ],
@@ -674,7 +696,14 @@
       "role": "SPEAKER"
     },
     {
-      "id": "m_s61",
+      "id": "m_sp61",
+      "parent": "yf",
+      "exact": "يَحْيَى بنُ أَبِي عُتْبَةَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_s64",
       "parent": "bq",
       "exact": "مَاتَ",
       "occurrence": 1,
@@ -851,8 +880,8 @@
       "status": "PROPOSED"
     },
     {
-      "id": "i_s61",
-      "mention": "m_s61",
+      "id": "i_s64",
+      "mention": "m_s64",
       "agent": "abdullah-ibn-masud",
       "basis": [
         {
@@ -1100,8 +1129,8 @@
       "status": "PROPOSED"
     },
     {
-      "id": "a_62",
-      "subject": "m_s61",
+      "id": "a_65",
+      "subject": "m_s64",
       "predicate": "died.year",
       "value": {
         "parsed": 33,
@@ -1110,7 +1139,8 @@
         ]
       },
       "restsOn": [
-        "st_60"
+        "st_60",
+        "st_63"
       ],
       "status": "PROPOSED"
     }

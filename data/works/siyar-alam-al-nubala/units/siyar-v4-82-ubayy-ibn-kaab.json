@@ -420,15 +420,41 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_61",
+      "id": "r_59",
       "unit": "siyar-v4-82-ubayy-ibn-kaab",
       "ordinal": 10,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "nmf"
+      ],
+      "origin": {
+        "mention": "m_sp58"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_62",
+      "unit": "siyar-v4-82-ubayy-ibn-kaab",
+      "ordinal": 11,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "nmf"
+      ],
+      "origin": {
+        "mention": "m_sp61"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_67",
+      "unit": "siyar-v4-82-ubayy-ibn-kaab",
+      "ordinal": 12,
       "voice": "TRANSMITTED",
       "frame": [
         "kf"
       ],
       "origin": {
-        "mention": "m_sp60"
+        "mention": "m_sp66"
       },
       "chainState": "DEFERRED"
     }
@@ -532,8 +558,24 @@
       "role": "TRANSMITTED"
     },
     {
-      "id": "st_62",
-      "report": "r_61",
+      "id": "st_60",
+      "report": "r_59",
+      "spans": [
+        "nm"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_63",
+      "report": "r_62",
+      "spans": [
+        "nm"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_68",
+      "report": "r_67",
       "spans": [
         "kq"
       ],
@@ -689,21 +731,35 @@
       "role": "SPEAKER"
     },
     {
-      "id": "m_s58",
+      "id": "m_sp58",
+      "parent": "nmf",
+      "exact": "أَبُو عُبَيْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_sp61",
+      "parent": "nmf",
+      "exact": "أَبُو عُمَرَ الضَّرِيْرُ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_s64",
       "parent": "nm",
       "exact": "مَاتَ",
       "occurrence": 1,
       "role": "SUBJECT"
     },
     {
-      "id": "m_sp60",
+      "id": "m_sp66",
       "parent": "kf",
       "exact": "خَلِيْفَةُ",
       "occurrence": 1,
       "role": "SPEAKER"
     },
     {
-      "id": "m_s63",
+      "id": "m_s69",
       "parent": "kq",
       "exact": "مَاتَ",
       "occurrence": 1,
@@ -868,8 +924,8 @@
       "status": "PROPOSED"
     },
     {
-      "id": "i_s58",
-      "mention": "m_s58",
+      "id": "i_s64",
+      "mention": "m_s64",
       "agent": "ubayy-ibn-kaab",
       "basis": [
         {
@@ -880,8 +936,8 @@
       "status": "PROPOSED"
     },
     {
-      "id": "i_s63",
-      "mention": "m_s63",
+      "id": "i_s69",
+      "mention": "m_s69",
       "agent": "ubayy-ibn-kaab",
       "basis": [
         {
@@ -1119,8 +1175,8 @@
       "status": "PROPOSED"
     },
     {
-      "id": "a_59",
-      "subject": "m_s58",
+      "id": "a_65",
+      "subject": "m_s64",
       "predicate": "died.year",
       "value": {
         "parsed": 22,
@@ -1129,13 +1185,15 @@
         ]
       },
       "restsOn": [
-        "st_57"
+        "st_57",
+        "st_60",
+        "st_63"
       ],
       "status": "PROPOSED"
     },
     {
-      "id": "a_64",
-      "subject": "m_s63",
+      "id": "a_70",
+      "subject": "m_s69",
       "predicate": "died.year",
       "value": {
         "parsed": 32,
@@ -1144,7 +1202,7 @@
         ]
       },
       "restsOn": [
-        "st_62"
+        "st_68"
       ],
       "status": "PROPOSED"
     }

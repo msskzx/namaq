@@ -164,6 +164,46 @@
       "page": "426",
       "layer": "MAIN",
       "exact": "ثَلاَثاً وَتِسْعِيْنَ سَنَةً"
+    },
+    {
+      "id": "vqs",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "406",
+      "layer": "MAIN",
+      "exact": "وَقِيْلَ: بَيْنَ قَيْسٍ وَالوَذِيْمِ"
+    },
+    {
+      "id": "vq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "406",
+      "layer": "MAIN",
+      "exact": "حُصَيْنُ بنُ الوَذِيْمِ بنِ ثَعْلَبَةَ بنِ عَوْفِ بنِ حَارِثَةَ بنِ عَامِرٍ الأَكْبَرِ بنِ يَامِ بنِ عَنْسٍ"
+    },
+    {
+      "id": "bf1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "418",
+      "layer": "MAIN",
+      "exact": "أَمَرَنَا رَسُوْلُ اللهِ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-"
+    },
+    {
+      "id": "bf2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "419",
+      "layer": "MAIN",
+      "exact": "خَالِدٌ الحَذَّاءُ: عَنْ عِكْرِمَةَ، سَمِعَ أَبَا سَعِيْدٍ بِهَذَا، وَلَفْظُهُ"
+    },
+    {
+      "id": "bq",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 4,
+      "page": "419",
+      "layer": "MAIN",
+      "exact": "وَيْحَ ابْنِ سُمَيَّةَ، تَقْتُلُهُ الفِئَةُ البَاغِيَةُ، يَدْعُوْهُم إِلَى الجَنَّةِ، وَيدْعُوْنَهُ إِلَى النَّارِ"
     }
   ],
   "reports": [
@@ -216,6 +256,33 @@
         "mention": "m_sp29"
       },
       "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_35",
+      "unit": "siyar-v4-84-ammar-ibn-yasir",
+      "ordinal": 5,
+      "voice": "REPORTED_ANONYMOUS",
+      "frame": [
+        "vqs"
+      ],
+      "origin": {
+        "mention": "m_sp34"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_40",
+      "unit": "siyar-v4-84-ammar-ibn-yasir",
+      "ordinal": 6,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "bf1",
+        "bf2"
+      ],
+      "origin": {
+        "mention": "m_sp39"
+      },
+      "chainState": "DEFERRED"
     }
   ],
   "statements": [
@@ -265,6 +332,22 @@
       "report": "r_30",
       "spans": [
         "gq"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_36",
+      "report": "r_35",
+      "spans": [
+        "vq"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_41",
+      "report": "r_40",
+      "spans": [
+        "bq"
       ],
       "role": "TRANSMITTED"
     }
@@ -358,6 +441,34 @@
       "id": "m_s32",
       "parent": "gq",
       "exact": "عَمَّارٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sp34",
+      "parent": "vqs",
+      "exact": "وَقِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_s37",
+      "parent": "n1",
+      "exact": "عَمَّارُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sp39",
+      "parent": "bf1",
+      "exact": "رَسُوْلُ اللهِ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_s42",
+      "parent": "bq",
+      "exact": "ابْنِ سُمَيَّةَ",
       "occurrence": 1,
       "role": "SUBJECT"
     }
@@ -474,6 +585,30 @@
     {
       "id": "i_s32",
       "mention": "m_s32",
+      "agent": "ammar-ibn-yasir",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s37",
+      "mention": "m_s37",
+      "agent": "ammar-ibn-yasir",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s42",
+      "mention": "m_s42",
       "agent": "ammar-ibn-yasir",
       "basis": [
         {
@@ -632,6 +767,34 @@
       },
       "restsOn": [
         "st_31"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_38",
+      "subject": "m_s37",
+      "predicate": "name.variant",
+      "value": {
+        "spans": [
+          "vq"
+        ]
+      },
+      "restsOn": [
+        "st_36"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_43",
+      "subject": "m_s42",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "bq"
+        ]
+      },
+      "restsOn": [
+        "st_41"
       ],
       "status": "PROPOSED"
     }

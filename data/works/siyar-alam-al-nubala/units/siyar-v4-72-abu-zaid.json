@@ -622,7 +622,7 @@
     {
       "id": "a_31",
       "subject": "m_s30",
-      "predicate": "name.full",
+      "predicate": "name.variant",
       "value": {
         "spans": [
           "q0"
@@ -631,12 +631,12 @@
       "restsOn": [
         "st_29"
       ],
-      "status": "PROPOSED"
+      "status": "DISPUTED"
     },
     {
       "id": "a_36",
       "subject": "m_s35",
-      "predicate": "name.full",
+      "predicate": "name.variant",
       "value": {
         "spans": [
           "q1"
@@ -645,7 +645,7 @@
       "restsOn": [
         "st_34"
       ],
-      "status": "PROPOSED"
+      "status": "DISPUTED"
     }
   ]
 }

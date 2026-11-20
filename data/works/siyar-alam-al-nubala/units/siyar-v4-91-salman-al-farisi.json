@@ -289,7 +289,7 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_29",
+      "id": "r_27",
       "unit": "siyar-v4-91-salman-al-farisi",
       "ordinal": 6,
       "voice": "TRANSMITTED",
@@ -297,7 +297,7 @@
         "zj"
       ],
       "origin": {
-        "mention": "m_sp28"
+        "mention": "m_sp26"
       },
       "chainState": "DEFERRED"
     },
@@ -404,8 +404,8 @@
       "role": "TRANSMITTED"
     },
     {
-      "id": "st_30",
-      "report": "r_29",
+      "id": "st_28",
+      "report": "r_27",
       "spans": [
         "wq"
       ],
@@ -517,18 +517,18 @@
       "role": "SPEAKER"
     },
     {
-      "id": "m_s26",
-      "parent": "wq",
-      "exact": "سَلْمَانُ",
-      "occurrence": 1,
-      "role": "SUBJECT"
-    },
-    {
-      "id": "m_sp28",
+      "id": "m_sp26",
       "parent": "zj",
       "exact": "ابْنُ زَنْجَوَيْه",
       "occurrence": 1,
       "role": "SPEAKER"
+    },
+    {
+      "id": "m_s29",
+      "parent": "wq",
+      "exact": "سَلْمَانُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
     },
     {
       "id": "m_sp31",
@@ -656,8 +656,8 @@
       "status": "PROPOSED"
     },
     {
-      "id": "i_s26",
-      "mention": "m_s26",
+      "id": "i_s29",
+      "mention": "m_s29",
       "agent": "salman-al-farisi",
       "basis": [
         {
@@ -815,8 +815,8 @@
       "status": "PROPOSED"
     },
     {
-      "id": "a_27",
-      "subject": "m_s26",
+      "id": "a_30",
+      "subject": "m_s29",
       "predicate": "died.place",
       "value": {
         "spans": [
@@ -824,7 +824,8 @@
         ]
       },
       "restsOn": [
-        "st_25"
+        "st_25",
+        "st_28"
       ],
       "status": "PROPOSED"
     },
