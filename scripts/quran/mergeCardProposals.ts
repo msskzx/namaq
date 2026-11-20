@@ -64,7 +64,9 @@ const twinOf = new Map(index.cards.filter(entry => entry.twin && proposals[entry
 for (const entry of index.cards) {
   const pair = entry.kind === 'compare' && entry.pairs?.length === 1 ? entry.pairs[0] : undefined;
   if (pair && !proposals[entry.id] && twinOf.has(pair)) {
-    const { cards: _rows, changes: _changes, ...verdict } = proposals[twinOf.get(pair)!];
+    const verdict = { ...proposals[twinOf.get(pair)!] };
+    delete verdict.cards;
+    delete verdict.changes;
     proposals[entry.id] = verdict;
   }
 }
