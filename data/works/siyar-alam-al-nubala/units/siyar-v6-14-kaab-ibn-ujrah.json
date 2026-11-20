@@ -1,0 +1,594 @@
+{
+  "unit": {
+    "id": "siyar-v6-14-kaab-ibn-ujrah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٤"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ku_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "52",
+      "layer": "MAIN",
+      "exact": "١٤ - كَعْبُ بنُ عُجْرَةَ الأَنْصَارِيُّ السَّالِمِيُّ المَدَنِيُّ"
+    },
+    {
+      "id": "sp_ku_head",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "52",
+      "layer": "MAIN",
+      "exact": "كَعْبُ بنُ عُجْرَةَ الأَنْصَارِيُّ السَّالِمِيُّ المَدَنِيُّ"
+    },
+    {
+      "id": "sp_ku_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "52",
+      "layer": "MAIN",
+      "exact": "كَعْبُ بنُ",
+      "prefix": "-"
+    },
+    {
+      "id": "sp_ku_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "52",
+      "layer": "MAIN",
+      "exact": "عُجْرَةَ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sp_ku_ridwan",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "52",
+      "layer": "MAIN",
+      "exact": "مِنْ أَهْلِ بَيْعَةِ الرُّضْوَانِ"
+    },
+    {
+      "id": "sp_ku_hudaybiyyah_w",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "52",
+      "layer": "MAIN",
+      "exact": "بَيْعَةِ الرُّضْوَانِ",
+      "prefix": "أَهْلِ"
+    },
+    {
+      "id": "sp_ku_sons",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "52",
+      "layer": "MAIN",
+      "exact": "بَنُوْهُ؛ سَعْدٌ، وَمُحَمَّدٌ، وَعَبْدُ المَلِكِ، وَرَبِيْعٌ"
+    },
+    {
+      "id": "sp_ku_sons_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "52",
+      "layer": "MAIN",
+      "exact": "بَنُوْهُ",
+      "prefix": "عَنْهُ:"
+    },
+    {
+      "id": "sp_ku_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "53",
+      "layer": "MAIN",
+      "exact": "مَاتَ: سَنَةَ اثْنَتَيْنِ وَخَمْسِيْنَ"
+    },
+    {
+      "id": "sp_ku_d52",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "53",
+      "layer": "MAIN",
+      "exact": "سَنَةَ اثْنَتَيْنِ وَخَمْسِيْنَ"
+    },
+    {
+      "id": "sp_ku_fidyah_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "53",
+      "layer": "MAIN",
+      "exact": "قَالَ كَعْبٌ",
+      "prefix": "وَخَمْسِيْنَ."
+    },
+    {
+      "id": "sp_ku_fidyah",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "53",
+      "layer": "MAIN",
+      "exact": "كُنْتُ مَعَ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - بِالحُدَيْبِيَةِ وَنَحْنُ مُحْرِمُوْنَ"
+    },
+    {
+      "id": "sp_ku_fidyah_1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "53",
+      "layer": "MAIN",
+      "exact": "وَنَزَلَتْ فِيَّ آيَةُ الفِدْيَةِ"
+    },
+    {
+      "id": "sp_ku_fidyah_pb",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "53",
+      "layer": "MAIN",
+      "exact": "النَّبِيِّ",
+      "prefix": "مَعَ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ku0",
+      "unit": "siyar-v6-14-kaab-ibn-ujrah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ku_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ku_fidyah",
+      "unit": "siyar-v6-14-kaab-ibn-ujrah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ku_fidyah_frame"
+      ],
+      "origin": {
+        "mention": "m_ku_fidyah_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ku_head",
+      "report": "r_ku0",
+      "spans": [
+        "sp_ku_head"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ku_ridwan",
+      "report": "r_ku0",
+      "spans": [
+        "sp_ku_ridwan"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ku_sons",
+      "report": "r_ku0",
+      "spans": [
+        "sp_ku_sons"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ku_death",
+      "report": "r_ku0",
+      "spans": [
+        "sp_ku_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ku_fidyah",
+      "report": "r_ku_fidyah",
+      "spans": [
+        "sp_ku_fidyah",
+        "sp_ku_fidyah_1"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ku",
+      "parent": "sp_ku_head",
+      "exact": "كَعْبُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ku_father",
+      "parent": "sp_ku_head",
+      "exact": "عُجْرَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ku_r",
+      "parent": "sp_ku_ridwan",
+      "exact": "أَهْلِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ku_hudaybiyyah",
+      "parent": "sp_ku_ridwan",
+      "exact": "بَيْعَةِ الرُّضْوَانِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ku_s",
+      "parent": "sp_ku_sons",
+      "exact": "بَنُوْهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ku_c_saad",
+      "parent": "sp_ku_sons",
+      "exact": "سَعْدٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ku_c_muhammad",
+      "parent": "sp_ku_sons",
+      "exact": "وَمُحَمَّدٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ku_c_abd_al_malik",
+      "parent": "sp_ku_sons",
+      "exact": "وَعَبْدُ المَلِكِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ku_c_rabi",
+      "parent": "sp_ku_sons",
+      "exact": "وَرَبِيْعٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ku_fidyah_by",
+      "parent": "sp_ku_fidyah_frame",
+      "exact": "كَعْبٌ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ku_fidyah_p",
+      "parent": "sp_ku_fidyah",
+      "exact": "النَّبِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ku_f",
+      "parent": "sp_ku_fidyah",
+      "exact": "كُنْتُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ku_f2",
+      "parent": "sp_ku_fidyah_1",
+      "exact": "فِيَّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ku",
+      "mention": "m_ku",
+      "agent": "kaab-ibn-ujrah",
+      "basis": [
+        {
+          "span": "sp_ku_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_father",
+      "mention": "m_ku_father",
+      "agent": "ujrah-father-of-kaab",
+      "basis": [
+        {
+          "span": "sp_ku_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_r",
+      "mention": "m_ku_r",
+      "agent": "kaab-ibn-ujrah",
+      "basis": [
+        {
+          "span": "sp_ku_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_hudaybiyyah",
+      "mention": "m_ku_hudaybiyyah",
+      "event": "hudaybiyyah",
+      "basis": [
+        {
+          "span": "sp_ku_hudaybiyyah_w",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_s",
+      "mention": "m_ku_s",
+      "agent": "kaab-ibn-ujrah",
+      "basis": [
+        {
+          "span": "sp_ku_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_c_saad",
+      "mention": "m_ku_c_saad",
+      "agent": "saad-ibn-kaab-ibn-ujrah",
+      "basis": [
+        {
+          "span": "sp_ku_sons_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_c_muhammad",
+      "mention": "m_ku_c_muhammad",
+      "agent": "muhammad-ibn-kaab-ibn-ujrah",
+      "basis": [
+        {
+          "span": "sp_ku_sons_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_c_abd_al_malik",
+      "mention": "m_ku_c_abd_al_malik",
+      "agent": "abd-al-malik-ibn-kaab-ibn-ujrah",
+      "basis": [
+        {
+          "span": "sp_ku_sons_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_c_rabi",
+      "mention": "m_ku_c_rabi",
+      "agent": "rabi-ibn-kaab-ibn-ujrah",
+      "basis": [
+        {
+          "span": "sp_ku_sons_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_fidyah_by",
+      "mention": "m_ku_fidyah_by",
+      "agent": "kaab-ibn-ujrah",
+      "basis": [
+        {
+          "span": "sp_ku_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_fidyah_p",
+      "mention": "m_ku_fidyah_p",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_ku_fidyah_pb",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_f",
+      "mention": "m_ku_f",
+      "agent": "kaab-ibn-ujrah",
+      "basis": [
+        {
+          "span": "sp_ku_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ku_f2",
+      "mention": "m_ku_f2",
+      "agent": "kaab-ibn-ujrah",
+      "basis": [
+        {
+          "span": "sp_ku_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ku_name",
+      "subject": "m_ku",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ku_head"
+        ]
+      },
+      "restsOn": [
+        "st_ku_head"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_sex",
+      "subject": "m_ku",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ku_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ku_head"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_father",
+      "subject": "m_ku",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ku_father"
+      },
+      "restsOn": [
+        "st_ku_head"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_hudaybiyyah",
+      "subject": "m_ku_r",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_ku_hudaybiyyah"
+      },
+      "restsOn": [
+        "st_ku_ridwan"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_c_saad_0",
+      "subject": "m_ku_c_saad",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ku_s"
+      },
+      "restsOn": [
+        "st_ku_sons"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_c_muhammad_0",
+      "subject": "m_ku_c_muhammad",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ku_s"
+      },
+      "restsOn": [
+        "st_ku_sons"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_c_abd_al_malik_0",
+      "subject": "m_ku_c_abd_al_malik",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ku_s"
+      },
+      "restsOn": [
+        "st_ku_sons"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_c_rabi_0",
+      "subject": "m_ku_c_rabi",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ku_s"
+      },
+      "restsOn": [
+        "st_ku_sons"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_d52",
+      "subject": "m_ku",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 52,
+        "spans": [
+          "sp_ku_d52"
+        ]
+      },
+      "restsOn": [
+        "st_ku_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_companion",
+      "subject": "m_ku_f",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_ku_fidyah_p"
+      },
+      "restsOn": [
+        "st_ku_fidyah"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ku_ayah",
+      "subject": "m_ku_f2",
+      "predicate": "ABOUT_AYAH",
+      "value": {
+        "classified": "2:196",
+        "spans": [
+          "sp_ku_fidyah_1"
+        ]
+      },
+      "restsOn": [
+        "st_ku_fidyah"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
