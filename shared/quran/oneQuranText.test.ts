@@ -25,7 +25,9 @@ const FONT_HOME = ['src/app/globals.css', 'mobile/src/lib/fonts.ts', 'mobile/src
   // The app's theme hands the font's name on from fonts.ts.
   'mobile/src/lib/theme.ts'];
 /** The mushaf page itself (level 1, the pipeline's first level): the reader's page styles set the page's own font and size. */
-const PAGE = ['src/app/quran/read/Mushaf.module.css'];
+const PAGE = ['src/app/quran/read/Mushaf.module.css',
+  // The app's mushaf page draws its own lines, titles and basmala at the page's size (its zoom too); its write boxes live in the module (WriteBoxes).
+  'mobile/src/components/MushafPageView.tsx'];
 /** Books quote the Quran in their own words and spelling (the exception): tafsir, i'rab, balagha, printed pages. */
 const BOOKS = ['tafsirSadi', 'kashshaf', 'irab', 'irabUkbari', 'itqanBalagha', 'bookPages'].map(name => `shared/data/quran/${name}.`);
 /**

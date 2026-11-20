@@ -1,4 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
+import QuranWords from '@/components/quran/text/QuranWords';
 import { router, useLocalSearchParams } from 'expo-router';
 import { FlatList, Pressable, ScrollView, Share, StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
@@ -24,7 +25,7 @@ import { useReaderBook, type ReaderBook } from '@/lib/readerBook';
 import { setIntent } from '@/lib/intent';
 import { toTab } from '@/lib/ways';
 import { buzz } from '@/lib/haptics';
-import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import { usePalette, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import Tabs from '@/ui/Tabs';
 import { SearchField } from '@/ui/Field';
@@ -237,7 +238,7 @@ const BookPageView = memo(function BookPageView({ book, entries, page, index, pa
                   {saved.has(key) && <View style={{ position: 'absolute', right: -MARGIN + 4, top: 6 }}><FasilaRibbon color={palette.root} height={16} width={8} /></View>}
                   <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 36, textAlign: 'justify', writingDirection: 'rtl' }}>
                     {runsIn(entry.text, at, end).map((run, i) => (run.quran
-                      ? <Text key={i} onPress={entry.surah ? () => onAyah(entry.surah, ayah) : undefined} style={{ fontFamily: QURAN_FONT, color: palette.accent }}>{run.text}</Text>
+                      ? <Text key={i} onPress={entry.surah ? () => onAyah(entry.surah, ayah) : undefined}><QuranWords style={{ color: palette.accent }}>{run.text}</QuranWords></Text>
                       : run.text))}
                   </Text>
                 </Pressable>
