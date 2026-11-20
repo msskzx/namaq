@@ -1,0 +1,214 @@
+{
+  "unit": {
+    "id": "siyar-v6-84-kathir-ibn-al-abbas",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٨٤"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ka_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "443",
+      "layer": "MAIN",
+      "exact": "٨٤ - كَثِيْرُ بنُ العَبَّاسِ بنِ عَبْدِ المُطَّلِبِ الهَاشِمِيُّ"
+    },
+    {
+      "id": "sp_ka_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "443",
+      "layer": "MAIN",
+      "exact": "كَثِيْرُ بنُ العَبَّاسِ بنِ عَبْدِ المُطَّلِبِ الهَاشِمِيُّ",
+      "prefix": "٨٤ - "
+    },
+    {
+      "id": "sp_ka_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "443",
+      "layer": "MAIN",
+      "exact": "كَثِيْرُ بنُ",
+      "prefix": "٨٤ - "
+    },
+    {
+      "id": "sp_ka_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "443",
+      "layer": "MAIN",
+      "exact": "العَبَّاسِ بنِ عَبْدِ المُطَّلِبِ",
+      "prefix": "كَثِيْرُ بنُ "
+    },
+    {
+      "id": "sp_ka_ibnsaad_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "443",
+      "layer": "MAIN",
+      "exact": "قَالَهُ: ابْنُ سَعْدٍ",
+      "suffix": "."
+    },
+    {
+      "id": "sp_ka_ibnsaad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "443",
+      "layer": "MAIN",
+      "exact": "وَكَانَ فَقِيْهاً، جَلِيْلاً، صَالِحاً، ثِقَةً"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ka0",
+      "unit": "siyar-v6-84-kathir-ibn-al-abbas",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ka_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ka_ibnsaad",
+      "unit": "siyar-v6-84-kathir-ibn-al-abbas",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ka_ibnsaad_frame"
+      ],
+      "origin": {
+        "mention": "m_ka_ibnsaad_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ka_name",
+      "report": "r_ka0",
+      "spans": [
+        "sp_ka_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ka_ibnsaad",
+      "report": "r_ka_ibnsaad",
+      "spans": [
+        "sp_ka_ibnsaad"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ka",
+      "parent": "sp_ka_name",
+      "exact": "كَثِيْرُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ka_father",
+      "parent": "sp_ka_name",
+      "exact": "العَبَّاسِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ka_ibnsaad_by",
+      "parent": "sp_ka_ibnsaad_frame",
+      "exact": "ابْنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ka",
+      "mention": "m_ka",
+      "agent": "kathir-ibn-al-abbas",
+      "basis": [
+        {
+          "span": "sp_ka_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ka_father",
+      "mention": "m_ka_father",
+      "agent": "al-abbas-ibn-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_ka_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ka_name",
+      "subject": "m_ka",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ka_name"
+        ]
+      },
+      "restsOn": [
+        "st_ka_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ka_sex",
+      "subject": "m_ka",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ka_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ka_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ka_father",
+      "subject": "m_ka",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ka_father"
+      },
+      "restsOn": [
+        "st_ka_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ka_v_faqih",
+      "subject": "m_ka",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ka_ibnsaad"
+        ]
+      },
+      "restsOn": [
+        "st_ka_ibnsaad"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

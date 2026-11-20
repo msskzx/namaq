@@ -28,8 +28,12 @@ async function main() {
     for (const quote of quotes) if (quote && !text.includes(quote)) problems.push(`${label}: not on the page: ${quote.slice(0, 60)}`);
   };
   for (const item of ADHKAR) {
-    check(item.id, item.citation, item.content.kind === 'text' ? item.content.text : undefined,
-      item.occasionQuote, item.repeat?.quote, item.virtueQuote, item.instructionQuote);
+    // The words as the book prints them: each part, or the text with any fix undone; a fix's own words are on its own page.
+    let printed = item.content.kind === 'text' ? item.content.text : undefined;
+    for (const fix of item.fixes ?? []) printed = printed?.replace(fix.reads, fix.printed);
+    const words = item.content.kind === 'text' && item.content.parts ? item.content.parts : [printed];
+    check(item.id, item.citation, ...words, item.occasionQuote, item.repeat?.quote, item.virtueQuote, item.instructionQuote, item.noteQuote);
+    for (const fix of item.fixes ?? []) check(`${item.id} / fix`, fix.citation, fix.quote);
     for (const grade of item.grades) check(`${item.id} / ${grade.scholar}`, grade.citation, grade.quote);
   }
   console.log(problems.length ? problems.join('\n') : `All ${ADHKAR.length} items match both books.`);

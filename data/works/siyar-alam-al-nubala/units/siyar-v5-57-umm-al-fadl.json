@@ -1,0 +1,542 @@
+{
+  "unit": {
+    "id": "siyar-v5-57-umm-al-fadl",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٥٧"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_uf_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "314",
+      "layer": "MAIN",
+      "exact": "٥٧ - أُمُّ الفَضْلِ لُبَابَةُ بِنْتُ الحَارِثِ بنِ حَزْنِ بنِ بُجَيْرٍ الهِلاَلِيَّةُ"
+    },
+    {
+      "id": "sp_uf_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "314",
+      "layer": "MAIN",
+      "exact": "أُمُّ الفَضْلِ لُبَابَةُ بِنْتُ الحَارِثِ بنِ حَزْنِ بنِ بُجَيْرٍ الهِلاَلِيَّةُ",
+      "prefix": "٥٧ -"
+    },
+    {
+      "id": "sp_uf_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "314",
+      "layer": "MAIN",
+      "exact": "أُمُّ الفَضْلِ",
+      "prefix": "٥٧ -"
+    },
+    {
+      "id": "sp_uf_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "314",
+      "layer": "MAIN",
+      "exact": "الحَارِثِ بنِ حَزْنِ",
+      "prefix": "٥٧ - أُمُّ الفَضْلِ لُبَابَةُ بِنْتُ"
+    },
+    {
+      "id": "sp_uf_abbas",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "314",
+      "layer": "MAIN",
+      "exact": "زَوْجَةُ العَبَّاسِ عَمِّ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- وَأُمُّ أَوْلاَدِهِ الرِّجَالِ السِّتَّةِ النُّجَبَاءِ"
+    },
+    {
+      "id": "sp_uf_abbas_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "314",
+      "layer": "MAIN",
+      "exact": "العَبَّاسِ عَمِّ النَّبِيِّ",
+      "prefix": "زَوْجَةُ"
+    },
+    {
+      "id": "sp_uf_ukht",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "314",
+      "layer": "MAIN",
+      "exact": "وَهِيَ أُخْتُ أُمِّ المُؤْمِنِيْنَ مَيْمُوْنَةَ، وَخَالَةُ خَالِدِ بنِ الوَلِيْدِ، وَأُخْتُ أَسْمَاءَ بِنْتِ عُمَيْسٍ لأُمِّهَا"
+    },
+    {
+      "id": "sp_uf_maymunah_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "314",
+      "layer": "MAIN",
+      "exact": "أُمِّ المُؤْمِنِيْنَ مَيْمُوْنَةَ",
+      "prefix": "وَهِيَ أُخْتُ"
+    },
+    {
+      "id": "sp_uf_asma_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "314",
+      "layer": "MAIN",
+      "exact": "أَسْمَاءَ بِنْتِ عُمَيْسٍ"
+    },
+    {
+      "id": "sp_uf_walada",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "315",
+      "layer": "MAIN",
+      "exact": "وَلَدَاهَا؛ عَبْدُ اللهِ وَتَمَّامٌ",
+      "prefix": "حَدَّثَ عَنْهَا:"
+    },
+    {
+      "id": "sp_uf_walada_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "315",
+      "layer": "MAIN",
+      "exact": "عَبْدُ اللهِ وَتَمَّامٌ",
+      "prefix": "وَلَدَاهَا؛"
+    },
+    {
+      "id": "sp_uf_mustad_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "315",
+      "layer": "MAIN",
+      "exact": "فَكَانَ ابْنُهَا عَبْدُ اللهِ يَقُوْلُ"
+    },
+    {
+      "id": "sp_uf_mustad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "315",
+      "layer": "MAIN",
+      "exact": "كُنْتُ أَنَا وَأُمِّي مِنَ المُسْتَضْعَفِيْنَ مِنَ النِّسَاءِ وَالوِلْدَانِ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_uf0",
+      "unit": "siyar-v5-57-umm-al-fadl",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_uf_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_uf_mustad",
+      "unit": "siyar-v5-57-umm-al-fadl",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_uf_mustad_frame"
+      ],
+      "origin": {
+        "mention": "m_uf_mustad_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_uf_name",
+      "report": "r_uf0",
+      "spans": [
+        "sp_uf_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uf_abbas",
+      "report": "r_uf0",
+      "spans": [
+        "sp_uf_abbas"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uf_ukht",
+      "report": "r_uf0",
+      "spans": [
+        "sp_uf_ukht"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uf_walada",
+      "report": "r_uf0",
+      "spans": [
+        "sp_uf_walada"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_uf_mustad",
+      "report": "r_uf_mustad",
+      "spans": [
+        "sp_uf_mustad"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_uf",
+      "parent": "sp_uf_name",
+      "exact": "أُمُّ الفَضْلِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uf_father",
+      "parent": "sp_uf_name",
+      "exact": "الحَارِثِ بنِ حَزْنِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uf_z",
+      "parent": "sp_uf_abbas",
+      "exact": "زَوْجَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uf_abbas",
+      "parent": "sp_uf_abbas",
+      "exact": "العَبَّاسِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uf_u",
+      "parent": "sp_uf_ukht",
+      "exact": "وَهِيَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uf_maymunah",
+      "parent": "sp_uf_ukht",
+      "exact": "مَيْمُوْنَةَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uf_asma",
+      "parent": "sp_uf_ukht",
+      "exact": "أَسْمَاءَ بِنْتِ عُمَيْسٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_uf_w",
+      "parent": "sp_uf_walada",
+      "exact": "وَلَدَاهَا",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uf_abdullah",
+      "parent": "sp_uf_walada",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uf_tammam",
+      "parent": "sp_uf_walada",
+      "exact": "تَمَّامٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_uf_mustad_by",
+      "parent": "sp_uf_mustad_frame",
+      "exact": "عَبْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_uf_m",
+      "parent": "sp_uf_mustad",
+      "exact": "وَأُمِّي",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_uf",
+      "mention": "m_uf",
+      "agent": "umm-al-fadl-bint-al-harith",
+      "basis": [
+        {
+          "span": "sp_uf_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uf_father",
+      "mention": "m_uf_father",
+      "agent": "al-harith-ibn-hazn-al-hilali",
+      "basis": [
+        {
+          "span": "sp_uf_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uf_z",
+      "mention": "m_uf_z",
+      "agent": "umm-al-fadl-bint-al-harith",
+      "basis": [
+        {
+          "span": "sp_uf_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uf_abbas",
+      "mention": "m_uf_abbas",
+      "agent": "al-abbas-ibn-abd-al-muttalib",
+      "basis": [
+        {
+          "span": "sp_uf_abbas_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uf_u",
+      "mention": "m_uf_u",
+      "agent": "umm-al-fadl-bint-al-harith",
+      "basis": [
+        {
+          "span": "sp_uf_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uf_maymunah",
+      "mention": "m_uf_maymunah",
+      "agent": "maymunah-bint-al-harith",
+      "basis": [
+        {
+          "span": "sp_uf_maymunah_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uf_asma",
+      "mention": "m_uf_asma",
+      "agent": "asma-bint-umays",
+      "basis": [
+        {
+          "span": "sp_uf_asma_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uf_w",
+      "mention": "m_uf_w",
+      "agent": "umm-al-fadl-bint-al-harith",
+      "basis": [
+        {
+          "span": "sp_uf_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uf_abdullah",
+      "mention": "m_uf_abdullah",
+      "agent": "abdullah-ibn-abbas",
+      "basis": [
+        {
+          "span": "sp_uf_walada_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uf_tammam",
+      "mention": "m_uf_tammam",
+      "agent": "tammam-ibn-al-abbas",
+      "basis": [
+        {
+          "span": "sp_uf_walada_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_uf_m",
+      "mention": "m_uf_m",
+      "agent": "umm-al-fadl-bint-al-harith",
+      "basis": [
+        {
+          "span": "sp_uf_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_uf_name",
+      "subject": "m_uf",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_uf_name"
+        ]
+      },
+      "restsOn": [
+        "st_uf_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uf_sex",
+      "subject": "m_uf",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_uf_name"
+        ]
+      },
+      "restsOn": [
+        "st_uf_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uf_father",
+      "subject": "m_uf",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_uf_father"
+      },
+      "restsOn": [
+        "st_uf_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uf_kunya",
+      "subject": "m_uf",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_uf_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_uf_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uf_abbas",
+      "subject": "m_uf_z",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_uf_abbas"
+      },
+      "restsOn": [
+        "st_uf_abbas"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uf_maymunah",
+      "subject": "m_uf_u",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_uf_maymunah"
+      },
+      "restsOn": [
+        "st_uf_ukht"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uf_asma",
+      "subject": "m_uf_u",
+      "predicate": "SIBLING_OF",
+      "value": {
+        "object": "m_uf_asma"
+      },
+      "restsOn": [
+        "st_uf_ukht"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uf_abdullah",
+      "subject": "m_uf_abdullah",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_uf_w"
+      },
+      "restsOn": [
+        "st_uf_walada"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uf_tammam",
+      "subject": "m_uf_tammam",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_uf_w"
+      },
+      "restsOn": [
+        "st_uf_walada"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_uf_v_mustad",
+      "subject": "m_uf_m",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_uf_mustad"
+        ]
+      },
+      "restsOn": [
+        "st_uf_mustad"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

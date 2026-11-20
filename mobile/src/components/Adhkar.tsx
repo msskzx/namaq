@@ -10,7 +10,7 @@ import Reference, { type Quote } from '@/ui/Reference';
 import Button from '@/ui/Button';
 import IconButton from '@/ui/IconButton';
 import { Text } from '@/ui/Text';
-import { PageTop, PAGE_LINES } from './AyahLines';
+import { AyatRange, PageTop, PAGE_LINES } from './AyahLines';
 import { pageOfAyah } from '@/lib/mushaf';
 import { buzz } from '@/lib/haptics';
 import { ALERTS_SUPPORTED, allowAlerts, alertsAllowed, openPhoneSettings, useForeground } from '@/lib/adhan';
@@ -34,13 +34,22 @@ const REMINDER: Partial<Record<AdhkarOccasion, { time: AdhkarTime; label: string
 const cite = (citation: AdhkarCitation) =>
   `${BOOK[citation.source]} ${citation.volume > 1 ? `${num(citation.volume)}/` : ''}${num(citation.page)}${citation.report ? ` ح${num(citation.report)}` : ''}`;
 
-/** A card's reference: al-Nawawi's words on when, how often and what to do, then every grade in its scholar's words with its own page. */
+/**
+ * A card's reference: al-Nawawi's words on when, how often and what to do, any remark in the report, each corrected
+ * printing slip with the words that give the right reading, then every grade in its scholar's words with its own page.
+ */
 function quotes(item: Dhikr): Quote[] {
   const at = { cite: cite(item.citation), url: item.citation.url };
   return [
     { text: item.occasionQuote, ...at },
     ...(item.repeat ? [{ text: item.repeat.quote, ...at }] : []),
     ...(item.instructionQuote ? [{ text: item.instructionQuote, ...at }] : []),
+    ...(item.noteQuote ? [{ text: item.noteQuote, ...at }] : []),
+    ...(item.fixes ?? []).map(fix => ({
+      text: fix.quote,
+      cite: `في المطبوع «${fix.printed}»، والصواب «${fix.reads}» كما هنا: ${cite(fix.citation)}`,
+      url: fix.citation.url,
+    })),
     ...item.grades.map(grade => ({
       text: grade.quote,
       cite: `${grade.scholar}${grade.reportedBy ? `، نقله ${grade.reportedBy}` : ''}، ${cite(grade.citation)}`,
@@ -49,10 +58,14 @@ function quotes(item: Dhikr): Quote[] {
   ];
 }
 
-/** The Madina page the Quran selection starts on, whole (al-Ikhlas and al-Mu'awwidhatayn fill page 604). */
+/**
+ * The Quran selection in the mushaf's own lines: one passage (آية الكرسي, the end of al-Baqara) as the reader draws its
+ * ayat; several surahs (al-Ikhlas and al-Mu'awwidhatayn, which fill page 604) as their whole Madina page.
+ */
 function QuranPage({ item, palette }: { item: Dhikr; palette: Palette }) {
   if (item.content.kind !== 'quran') return null;
-  const first = item.content.ranges[0];
+  const [first, ...rest] = item.content.ranges;
+  if (!rest.length) return <AyatRange from={`${first.surah}:${first.from}`} to={`${first.surah}:${first.to}`} palette={palette} />;
   const page = pageOfAyah(`${first.surah}:${first.from}`);
   return page ? <PageTop page={page} palette={palette} lines={PAGE_LINES} /> : null;
 }

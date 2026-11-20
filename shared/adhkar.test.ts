@@ -1,10 +1,19 @@
 import { describe, expect, it } from 'vitest';
-import { ADHKAR, ADHKAR_OCCASIONS, adhkarFor, dhikrById } from './adhkar';
+import { ADHKAR, ADHKAR_OCCASIONS, adhkarFor, dhikrById, type Dhikr } from './adhkar';
 import witness from './adhkar/author-excerpts.json';
 import { SOURCES } from './sources';
 
 const reports = new Map(Object.entries(witness.reports));
 const grading = new Map(Object.entries(witness.grading));
+
+/** The words as printed: the parts, or the shown text with each fix undone. */
+function printed(item: Dhikr): string[] {
+  if (item.content.kind !== 'text') return [];
+  if (item.content.parts) return [...item.content.parts];
+  let text = item.content.text;
+  for (const fix of item.fixes ?? []) text = text.replace(fix.reads, fix.printed);
+  return [text];
+}
 
 function authorReport(report: number | undefined) {
   const text = reports.get(String(report));
@@ -34,8 +43,9 @@ describe('the al-Adhkar selection', () => {
   it('keeps every displayed word and supporting claim in its own author-only witness', () => {
     for (const item of ADHKAR) {
       const report = authorReport(item.citation.report);
-      if (item.content.kind === 'text') expect(report).toContain(item.content.text);
+      for (const part of printed(item)) expect(report).toContain(part);
       expect(report).toContain(item.occasionQuote);
+      if (item.noteQuote) expect(report).toContain(item.noteQuote);
       if (item.virtueQuote) expect(report).toContain(item.virtueQuote);
       if (item.instructionQuote) expect(report).toContain(item.instructionQuote);
       for (const collection of item.collections) expect(report).toContain(collection);
@@ -45,10 +55,34 @@ describe('the al-Adhkar selection', () => {
     }
   });
 
+  it('shows the printed words, joined from their parts and corrected only where a cited source reads otherwise', () => {
+    for (const item of ADHKAR) {
+      if (item.content.kind !== 'text') continue;
+      let shown = item.content.parts ? item.content.parts.join(' ') : printed(item)[0];
+      for (const fix of item.fixes ?? []) {
+        expect(shown.split(fix.printed), `${item.id}: «${fix.printed}» once`).toHaveLength(2);
+        expect(shown.split(fix.reads), `${item.id}: «${fix.reads}» not already in the words`).toHaveLength(1);
+        shown = shown.replace(fix.printed, fix.reads);
+        const plain = (text: string) => text.replace(/[\u064B-\u0652\u0670]/g, '');
+        expect(plain(fix.quote), `${item.id}: the source reads «${fix.reads}»`).toContain(plain(fix.reads));
+        if (fix.citation.report) expect(authorReport(fix.citation.report)).toContain(fix.quote);
+      }
+      expect(item.content.text).toBe(shown);
+    }
+    expect(ADHKAR.flatMap(item => (item.fixes ?? []).map(fix => fix.citation.report))).toEqual([29, 214, 174, 225]);
+  });
+
   it('has only attributed sahih/hasan judgments, quoted within their source context', () => {
-    const words = { 'sahih': /صحيح/, 'hasan': /حسن/, 'hasan-sahih': /حسن صحيح/, 'isnad-sahih': /بإسناد صحيح|صحيح الإ.?سناد/ };
+    const words = { 'in-sahih': /^(صحيح (البخاري|مسلم)|الصحيحين|أخرجه البخاري .*)$/, 'sahih': /صحيح/, 'hasan': /حسن/, 'hasan-sahih': /حسن صحيح/, 'isnad-sahih': /بإسناد صحيح|صحيح الإ.?سناد/ };
     const pages = new Map(Object.entries(witness.gradingPages));
     for (const item of ADHKAR) {
+      for (const grade of item.grades.filter(grade => grade.rank === 'in-sahih')) {
+        // The Sahih as al-Nawawi names it, or, where Ibn Hajar answers that, his own word on who put it out.
+        if (grade.citation.source === 'adhkar-nawawi') {
+          expect(item.collections, `${item.id}: the Sahih al-Nawawi names`).toContain(grade.quote);
+          expect(grade.reportedBy).toBe('النووي');
+        } else expect(grade.reportedBy).toBe('ابن حجر العسقلاني');
+      }
       expect(item.grades.some(grade => grade.rank !== 'isnad-sahih'), `${item.id} needs a grade of the hadith, not only its chain`).toBe(true);
       for (const grade of item.grades) {
         expect(grade.quote).toMatch(words[grade.rank]);
@@ -80,11 +114,13 @@ describe('the al-Adhkar selection', () => {
 
   it('gives a counter only the sourced target and the whole selection as its unit', () => {
     const counted = ADHKAR.filter(item => item.repeat);
-    expect(counted.map(item => item.citation.report)).toEqual([207, 213]);
+    expect(counted.map(item => [item.citation.report, item.repeat!.count])).toEqual([[207, 3], [213, 3], [206, 100], [215, 4], [255, 3], [259, 3]]);
     for (const item of counted) {
-      expect(item.repeat).toEqual({ count: 3, quote: 'ثَلاثَ مَرَّاتٍ', scope: 'whole-selection' });
+      expect(item.repeat!.scope).toBe('whole-selection');
       expect(authorReport(item.citation.report)).toContain(item.repeat!.quote);
     }
+    // Abu Bakrah's three times is his own practice, quoted in the reference: no counter.
+    expect(dhikrById('morning-evening-wellness')?.repeat).toBeUndefined();
     expect(dhikrById('prayer-peace')?.repeat).toBeUndefined();
     expect(dhikrById('sleep-side')?.repeat).toBeUndefined();
     expect(dhikrById('waking-life')?.repeat).toBeUndefined();

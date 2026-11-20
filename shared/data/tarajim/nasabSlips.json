@@ -5,13 +5,17 @@
       "at": "عَبْدِ شَمْسٍ",
       "note": "Not a slip but a disputed link: the entry (Siyar 2/571) gives Hisham ibn al-Kalbi, Ibn Ma'in, al-Bukhari and Abu Ubayd's «ابن سمرة بن حبيب بن عبد شمس», and al-Zubayr ibn Bakkar and Mus'ab add «بن ربيعة» after Habib. The line stops at Habib so no meeting point is asked through the disputed link."
     },
+    "abdullah-ibn-as-saib": {
+      "at": "عُمَرَ",
+      "note": "Siyar v6 p388 prints «صيفي بن عابد بن عمر بن مخزوم», leaving out «عبد الله» between Abid and Umar: Abid is the son of Abdullah ibn Umar ibn Makhzum (al-Isti'ab; Tahdhib al-Kamal), the brother of Hilal (Abu Salamah's line, p406) and of Uthman (Amr ibn Hurayth's line, p417). His line stops at «عابد» so it does not meet them at «عمر»."
+    },
     "al-miswar-ibn-makhramah": {
       "at": "قُصَيِّ",
       "note": "Siyar v6 p390 prints «بن زهرة بن قصي بن كلاب». Zuhrah is the son of Kilab, not of Qusayy: the two are brothers, sons of Kilab, as the Prophet's ﷺ nasab and every Zuhri nasab in the Siyar give it. So «بن قصي» here is a printing slip."
     },
-    "abdullah-ibn-as-saib": {
-      "at": "عُمَرَ",
-      "note": "Siyar v6 p388 prints «صيفي بن عابد بن عمر بن مخزوم», leaving out «عبد الله» between Abid and Umar: Abid is the son of Abdullah ibn Umar ibn Makhzum (al-Isti'ab; Tahdhib al-Kamal), the brother of Hilal (Abu Salamah's line, p406) and of Uthman (Amr ibn Hurayth's line, p417). His line stops at «عابد» so it does not meet them at «عمر»."
+    "amr-ibn-said-al-ashdaq": {
+      "at": "العَاصِ",
+      "note": "Not a slip of print but a shorthand: Siyar v6 p449 heads him «عمرو الأشدق بن العاص», naming him by his grandfather. On the same pages his father is Sa'id: «والد عمرو بن سعيد الأشدق» (p445), «عمرو بن سعيد بن العاص الأشدق سار بعد موت أبيه» (p448), and «فأما ابنه» just before his heading (p449). His line goes on through Sa'id's entry."
     }
   }
 }
