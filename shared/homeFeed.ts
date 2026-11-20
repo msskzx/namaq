@@ -10,6 +10,13 @@ import type { FeedCardKind, Interest } from './interests';
 export const hasJuzCard = (slot: number) => slot === 0;
 export const hasBooksCard = (slot: number) => slot % 4 === 1;
 
+/**
+ * On a Friday (by the reader's own clock) Surat al-Kahf comes as the feed's second card (owner, 2026-11-20), a card to open
+ * the mushaf at its first page.
+ */
+export const isKahfDay = (now: Date) => now.getDay() === 5;
+export const KAHF_SLOT = 1;
+
 /** A few books for the books card: those with a فاصلة first, then the others turning by the day. */
 export function feedBooks<T extends { id: string }>(books: readonly T[], hasFasila: (id: string) => boolean, day: number, count = 4): T[] {
   const marked = books.filter(book => hasFasila(book.id));

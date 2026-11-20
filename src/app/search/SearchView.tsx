@@ -1,6 +1,7 @@
 'use client';
 
-import AyahFlow, { AyahWords, QuranWord } from '@/components/quran/text/AyahFlow';
+import { QuranWord } from '@/components/quran/text/AyahFlow';
+import LitAyat from '@/components/quran/text/LitAyat';
 import React, { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { ArrowLeftRight, BookOpen, ChevronDown, ChevronLeft, HandHeart, List, NotebookPen, ScrollText, TextSearch, Users, type LucideProps } from 'lucide-react';
@@ -21,7 +22,6 @@ import Empty from '@/components/common/Empty';
 /** Results a group shows until its arrow opens the rest; at most this many when open (shared/quran/searchSources.ts). */
 export const GROUP_SHOWN = 3;
 const GROUP_MAX = 100;
-const AROUND = 6;
 
 const GROUPS: Record<SearchKind, { title: string; Icon: (props: LucideProps) => React.ReactNode }> = {
   surah: { title: 'السور', Icon: List },
@@ -56,18 +56,12 @@ function HitBody({ hit }: { hit: SearchHit }) {
   switch (hit.kind) {
     case 'surah':
       return <><span className={styles.muted}>{num(hit.number)}</span><span className={styles.grow}>{hit.name}</span></>;
-    case 'ayah': {
-      const start = Math.max(0, hit.from - AROUND);
-      const end = Math.min(hit.words.length, hit.to + 1 + AROUND);
+    case 'ayah':
+      // The whole ayah as the page sets it, its number after it, the words found on the band (the app's search).
       return <span className={styles.grow}>
-        <AyahFlow>
-          {start > 0 ? '… ' : ''}
-          {hit.words.slice(start, end).map((word, at) => <AyahWords key={at} className={start + at >= hit.from && start + at <= hit.to ? styles.hit : undefined}>{`${word} `}</AyahWords>)}
-          {end < hit.words.length ? '…' : ''}
-        </AyahFlow>
+        <LitAyat ayat={[{ words: hit.words, lit: [[hit.from, hit.to]], number: Number(hit.key.split(':')[1]) }]} />
         <span className={`${styles.muted} block`}>{ayahLabel(hit.key)}</span>
       </span>;
-    }
     case 'word':
       return <><QuranWord className={styles.grow}>{hit.name}</QuranWord><span className={styles.count}>{num(hit.count)}</span></>;
     case 'tree':
