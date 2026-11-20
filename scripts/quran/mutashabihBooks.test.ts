@@ -12,6 +12,8 @@ describe("the author's words", () => {
     expect(authorsWords('٥٨٧- قَوْله تَعَالَى (تبت يدا)')).toBe('قَوْله تَعَالَى (تبت يدا)');
     expect(authorsWords('أخرجوهم) وفي النمل ٥٦: (فما كان')).toBe('أخرجوهم) وفي النمل: (فما كان');
     expect(authorsWords('(ومن قوم موسى..) ليكون آخر٥/ب الكلام')).toBe('(ومن قوم موسى..) ليكون آخر الكلام');
+    expect(authorsWords('(أنا خير منه..) الآية سورة ص: ٧٦')).toBe('(أنا خير منه..) الآية');
+    expect(authorsWords('أيديكم.. . وقال')).toBe('أيديكم... وقال');
   });
 
   it("takes out his footnotes, his insertions in square brackets and his «ينظر» notes", () => {
@@ -22,6 +24,7 @@ describe("the author's words", () => {
   });
 
   it('keeps a verse the author quotes in square brackets, without the brackets', () => {
+    expect(authorsWords('إذا ما الثريا فى السماء تعرضت [تعرض أثناء الوشاح المفصل]')).toBe('إذا ما الثريا فى السماء تعرضت');
     expect(authorsWords('من قول الأخطل:\n[نفسي فداء أمير المؤمنين إذا أبدى التواجد يوم باسل ذكر]\nومهلهل:'))
       .toBe('من قول الأخطل:\nنفسي فداء أمير المؤمنين إذا أبدى التواجد يوم باسل ذكر\nومهلهل:');
   });

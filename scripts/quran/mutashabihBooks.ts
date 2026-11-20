@@ -15,7 +15,7 @@ const WORD = '[\\u0621-\\u064A\\u0640]+';
 const NAME = `${WORD}(?:\\s${WORD})?`;
 const loose = (name: string) => name.replace(/[أإآا]/g, '[أإآا]').replace(/[ةه]$/, '[ةه]').replace(/[ىي]$/, '[ىي]');
 /** A surah's name as the editors write it in a reference outside brackets, where any looser match would take the author's own words. */
-const SURAH = `(?:سورة\\s+)?(?:${[...surahs.map(row => row.name), 'براءة', 'بني إسرائيل', 'المؤمن', 'المؤمنين', 'حم السجدة', 'القتال', 'المنافقين', 'التساؤل']
+const SURAH = `(?:سورة\\s+)?(?:${[...surahs.map(row => row.name), 'براءة', 'بني إسرائيل', 'المؤمن', 'المؤمنين', 'حم السجدة', 'القتال', 'المنافقين', 'التساؤل', 'ونس']
   .sort((a, b) => b.length - a.length).map(loose).join('|')})(?![ء-ي])`;
 const EDITOR: RegExp[] = [
   // A manuscript leaf, «٥/ب», first: it can stand right after a quote.
@@ -24,8 +24,8 @@ const EDITOR: RegExp[] = [
   /\s*[([]\s*ينظر[^)\]]*[)\]]/g,
   // A reference in brackets, closed or not: «[الأعراف: ١٩]», «(هود: ٩٦ - ٩٧)», «(العنكبوت: ٦١، …», «(٣)», «"آل عمران: ١٨٧"».
   new RegExp(`\\s*[[("“]\\s*(?:ى\\s*)?(?:${NAME}\\s*\\)?\\s*[:"]*\\s*/?\\s*)?${DIGITS}\\s*["”]?\\s*[\\])"”»]?`, 'g'),
-  // After a quote: «…) البقرة ٥٨،», «…) . الأعراف ٦٥-٦٦،», «…) الأعراف:: ٨٥», «…) الآية الأعراف: ١٢٤», «…) من التوبة: ٢٤».
-  new RegExp(`(?<=[)\\]])\\s*\\.?\\s*(?:(?:الآية|من)\\s+)?${SURAH}\\s*[:،]*\\s*${DIGITS}`, 'g'),
+  // After a quote: «…) البقرة ٥٨،», «…) . الأعراف ٦٥-٦٦،», «…) الأعراف:: ٨٥», «…) من التوبة: ٢٤» (a «الآية» before it is the author's).
+  new RegExp(`(?<=[)\\]](?:\\s+الآية)?)\\s*\\.?\\s*(?:من\\s+)?${SURAH}\\s*[:،]*\\s*${DIGITS}`, 'g'),
   // Inside the author's sentence: «في سورة لقمان الآية: ٢١:», «في سورة الرعد ٣٧:», «، المائدة: ٢١،».
   new RegExp(`\\s*(?:الآية|الآيات)\\s*:\\s*${DIGITS}`, 'g'),
   new RegExp(`(?<=،)\\s*${SURAH}\\s*،?\\s*:\\s*${DIGITS}\\s*،?`, 'g'),
@@ -37,18 +37,17 @@ const EDITOR: RegExp[] = [
 export function authorsWords(text: string): string {
   let out = text.split(/\n?_{5,}/)[0]
     .replace(/<[^>]*>/g, '')
-    // His short insertions in square brackets (a poet's name, a modern surah name, «[بياض]»), his «(بياض بالأصل)» and «صفحة فارغة».
-    // A longer bracket holds the author's words, a verse he quotes: only its brackets go.
-    .replace(/\s*\[[^\]\n]{0,60}\](?=\s*:)/g, '')
-    .replace(/\s*\[\s*(?:بياض[^\]]*|[^\]\s]+(?:\s[^\]\s]+){0,2})\s*\]/g, '')
-    .replace(/\[([^\]]{0,300})\]/g, '$1')
+    // His insertions in square brackets (a poet's name, a modern surah name, a verse completed, «[بياض]»), his «(بياض بالأصل)»
+    // and «صفحة فارغة». A bracket that fills its own lines holds a verse the author quotes: only its brackets go.
+    .replace(/^\[([^\]]{0,300})\]$/gm, '$1')
+    .replace(/\s*\[[^\]]{0,300}\]/g, '')
     .replace(/\s*\(\s*بياض[^)]*\)/g, '')
     .replace(/^\s*صفحة فارغة\s*$/gm, '');
   for (const pattern of EDITOR) out = out.replace(pattern, '');
   return out
     .replace(new RegExp(`\\s*(?:و(?=[٠-٩]))?${DIGITS}`, 'g'), '')
     .replace(/:\s*[،,-]+(?:\s*[،,-])*/g, ':')
-    .replace(/\.[ \t]+\.(?!\.)/g, '.')
+    .replace(/(?<!\.)\.[ \t]+\.(?!\.)/g, '.')
     .replace(/[ \t]+([،.:؛])/g, '$1')
     .replace(/[ \t]{2,}/g, ' ')
     .replace(/ *\n */g, '\n')
@@ -102,7 +101,7 @@ export function chaptersOf(pages: TurathPage[], levels: number[]): { chapters: C
   const breaks: PageBreak[] = [];
   let surah = 0;
   // A reference cut by the page's end goes whole onto the next page, where the rest of it is: «(الإسراء:» | «٧٥)».
-  const cut = new RegExp(`\\s*[[(]\\s*${NAME}\\s*:\\s*$`);
+  const cut = new RegExp(`(?:\\s*[[(]\\s*${NAME}\\s*:|(?<=[)\\]])\\s*\\.?\\s*(?:من\\s+)?(?:${SURAH}|آل)\\s*:?)\\s*$`);
   let carried = '';
   for (const page of pages) {
     if (page.page === null) continue;
