@@ -1,7 +1,8 @@
 import treeData from '@shared/quran/quranText/corpus';
 import { groups } from '@shared/quran/mutashabih/data';
 import { ayahOf, ayahPairs, keyOrder, pairChains, pairsBySurah, pairsFor, surahPairs, surahOf, type AyahPair } from '@/lib/quran/mutashabih/pairs';
-import { pairColumns, type SimilarAyahPair } from '@/lib/quran/mutashabih/similar';
+import { pairColumns, type CompactColumn, type SimilarAyahPair } from '@/lib/quran/mutashabih/similar';
+import type { PhraseOccurrence } from '@shared/quran/phraseTrees';
 import type { BranchAyah } from '@shared/quran/branches';
 import { TANASUB_LINKS, tanasubLinksFor, type TanasubLink } from '@shared/quran/tanasubCards';
 import { compareVerdicts, keptPair, verdictFor } from '@/lib/quran/curation/comparePairs';
@@ -51,7 +52,8 @@ function joinCurated(chains: AyahPair[][]) {
   }, chains);
 }
 
-const found = ayahPairs(withCuratedLinks([...data.pairs, ...passage.pairs, ...within.pairs] as SimilarAyahPair[]), groups);
+// The surah-order books' groups are compare's own book cards on branches; they name no family for the engine's pairs.
+const found = ayahPairs(withCuratedLinks([...data.pairs, ...passage.pairs, ...within.pairs] as SimilarAyahPair[]), groups.filter(group => !group.tanasub));
 /** Curation runs after the engine: pairs a reader judged to share only vocabulary are left out. */
 const bySurah = pairsBySurah(found.filter(keptPair));
 const foundBySurah = pairsBySurah(found);
@@ -161,6 +163,29 @@ function bookCard(link: TanasubLink): PairCard {
     ...(pairs.length > 1 ? { pairs: pairs.map(pair => ({ id: `${pair.a}|${pair.b}` })) } : {}),
     sides,
   };
+}
+
+/**
+ * The tree of a surah-order book's card (owner 2026-11-20: only meaningful trees): one pair of ayat that share a run of two
+ * words or more in the same order, at least one of them a content word (with a root), so «ألا إن» alone grows none. The run is
+ * the trunk on each side. A card of several pairs, or of ayat the book joins by meaning only, stays its two ayat.
+ */
+export function tanasubTrees(): Record<number, [PhraseOccurrence, PhraseOccurrence]> {
+  return Object.fromEntries(TANASUB_LINKS.flatMap(link => {
+    if (link.pairs.length !== 1) return [];
+    const [a, b] = link.pairs[0].map(key => corpusAyat.get(key)!);
+    const columns = pairColumns(a, b).sort((x, y) => x[0] - y[0]);
+    let best: CompactColumn[] = [];
+    let run: CompactColumn[] = [];
+    for (const column of columns) {
+      const last = run[run.length - 1];
+      run = last && column[0] === last[0] + 1 && column[1] === last[1] + 1 ? [...run, column] : [column];
+      if (run.length > best.length) best = run;
+    }
+    if (best.length < 2 || !best.some(([i]) => a.roots?.[i])) return [];
+    const span = (ayah: BranchAyah, side: 0 | 1): PhraseOccurrence => ({ key: ayah.key, start: best[0][side], end: best[best.length - 1][side] + 1 });
+    return [[link.link, [span(a, 0), span(b, 1)]]];
+  }));
 }
 
 /** The ayah pairs a card holds. */

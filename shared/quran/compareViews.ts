@@ -1,5 +1,6 @@
 import data from '../data/quran/compareViews.json';
 import type { PairCard } from './compareCards';
+import { tanasubTree } from './tanasubCards';
 
 /**
  * The owner's view verdict on one compare card, keyed by the card's id (`PairCard.id`). `view: 'matrix'` keeps the card as its
@@ -10,12 +11,9 @@ export type CompareView = { view: 'matrix'; why: string };
 
 export const compareViews = (data as { cards: Record<string, CompareView> }).cards;
 
-/** Whether some ayah of the card has two marked words in a row: a run of shared words a tree can draw. */
-const sharesRun = (card: Pick<PairCard, 'sides'>) => card.sides.some(side => side.ayat.some(ayah => Object.keys(ayah.marks ?? {}).map(Number).some((word, _, all) => all.includes(word + 1))));
-
 /**
- * A compare card the owner keeps as its matrix only. A surah-order book's card (`book`) follows the owner's first case by
- * itself: with no run of two shared words it has nothing to draw as a tree, and the book, not the words, makes it a pair.
+ * A compare card the owner keeps as its matrix only. A surah-order book's card (`book`) grows a tree only when it is meaningful
+ * (owner 2026-11-20, shared/quran/tanasubCards.ts tanasubTree): the same rule on compare and on branches.
  */
-export const compareMatrixOnly = (card: { id: string } & Partial<Pick<PairCard, 'book' | 'sides'>>, views: Record<string, CompareView> = compareViews) =>
-  views[card.id]?.view === 'matrix' || (!!card.book && !!card.sides && !sharesRun({ sides: card.sides }));
+export const compareMatrixOnly = (card: { id: string } & Partial<Pick<PairCard, 'book'>>, views: Record<string, CompareView> = compareViews) =>
+  views[card.id]?.view === 'matrix' || (!!card.book && !tanasubTree(card.book));

@@ -26,7 +26,7 @@ const UNITS: { value: FilterUnit; label: string }[] = [
   { value: 'surahs', label: 'سور محددة' },
   { value: 'juzs', label: 'أجزاء محددة' },
 ];
-const CATEGORIES: Record<string, string> = { mutashabeh: 'في كتب المتشابهات', pondering: 'تدبّر', words: 'أشجار الكلمات' };
+const CATEGORIES: Record<string, string> = { mutashabeh: 'في كتب المتشابهات', pondering: 'تدبّر', tanasub: 'في كتب تناسب السور', words: 'أشجار الكلمات' };
 const SORT_LABELS = ['ترتيب المصحف', 'الأقرب', 'الأكثر مواضع', 'الأقل اختلافًا'];
 
 export function Group({ title, children, palette }: { title: string; children: React.ReactNode; palette: Palette }) {

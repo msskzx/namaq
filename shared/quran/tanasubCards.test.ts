@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 import generated from '../data/quran/compareCards';
 import type { StoredCards } from './compareCards';
 import { ORDER_LINKS } from './surahOrder';
-import { pairNote, TANASUB_LINKS } from './tanasubCards';
+import { pairNote, TANASUB_LINKS, tanasubTree } from './tanasubCards';
+import { branchInventory, reviewPool } from './branchInventory';
+import { matrixOnly } from './branchVerdicts';
 
 const stored = generated as unknown as StoredCards;
 const ayahOf = (key: string) => Number(key.split(':')[1]);
@@ -36,5 +38,22 @@ describe('surah-order book cards on the compare pages', () => {
     // A link that names ayat is a card, not a note; surahs that are not neighbours have none.
     expect(pairNote(87, 88)).toBeUndefined();
     expect(pairNote(85, 87)).toBeUndefined();
+  });
+
+  it('shows every book card on the branches tab of its own, a tree only where the ayat share a run of words', () => {
+    const pieces = branchInventory({ categories: 'tanasub' }, null);
+    expect(pieces.map(piece => piece.group?.tanasub).sort((x, y) => x! - y!)).toEqual(TANASUB_LINKS.map(link => link.link).sort((x, y) => x - y));
+    for (const piece of pieces) {
+      const link = TANASUB_LINKS.find(item => item.link === piece.group!.tanasub)!;
+      expect(piece.keys.sort()).toEqual([...new Set(link.pairs.flat())].sort());
+      expect(matrixOnly(piece), piece.id).toBe(!tanasubTree(link.link));
+    }
+    // «خلق الإنسان» (al-Tin 4, al-Alaq 2) grows a tree; al-A'la and al-Ghashiya, joined by meaning, stay their ayat.
+    expect(tanasubTree(96)?.map(trunk => trunk.end - trunk.start)).toEqual([2, 2]);
+    expect(tanasubTree(88)).toBeUndefined();
+  });
+
+  it('keeps the book cards out of the pool the owner judges, since no verdict drops a book entry', () => {
+    expect(reviewPool().some(piece => piece.group?.tanasub)).toBe(false);
   });
 });

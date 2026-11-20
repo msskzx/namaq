@@ -10,12 +10,26 @@ import { connectionColor, useGroupConnections } from './GroupConnections';
 import DifferenceWords from '@/components/quran/text/DifferenceWords';
 import OpenInBook from '@/components/quran/OpenInBook';
 import { citationInBook } from '@shared/readerBooks';
+import SourceLine, { sourcesOf } from '@/components/common/SourceLine';
+import { tanasubLink, tanasubSource } from '@shared/quran/tanasubCards';
+
+/** Under a surah-order book's card, as on compare: the quote as written and its book on the source line (owner, 2026-11-20). */
+function TanasubQuote({ link: key }: { link: number }) {
+  const link = tanasubLink(key);
+  if (!link) return null;
+  const sources = sourcesOf([tanasubSource(link)]);
+  return <div data-book-quote lang="ar" dir="rtl" className="flex flex-col gap-1">
+    <p className="m-0 text-lg leading-loose text-justify">«{link.text}»</p>
+    <div className="-mx-3"><SourceLine named={sources} sources={sources} /></div>
+  </div>;
+}
 
 export function GroupDetails({ group, shownKeys }: { group: Group; shownKeys?: string[] }) {
   group = evidenceGroup(group, shownKeys);
   const ar = useLanguage().language === 'ar';
   const connections = useGroupConnections();
   return <div className="flex flex-col gap-2 text-sm">
+    {group.tanasub && <TanasubQuote link={group.tanasub} />}
     {(group.tags.length > 0 || group.detail) && <div data-connection-legend={group.id} className="flex flex-wrap items-center gap-1.5">
       {group.tags.map(tag => {
         const label = TAGS[tag];

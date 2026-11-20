@@ -1,4 +1,4 @@
-// A look-alike pair's, a tree's or a prophet's story's sources, for its home card's source line (owner, 2026-11-20: every card has one).
+// A look-alike pair's, a tree's (a surah-order book's card names its book too), or a prophet's story's sources, for its home card's source line (owner, 2026-11-20: every card has one).
 import corpus from './quranText/corpus';
 import type { BranchAyah } from './branches';
 import { evidenceGroup } from './mutashabih/evidence';
@@ -6,13 +6,16 @@ import type { Group } from './mutashabih/types';
 import { citationSource, mushafSource, MUSHAF_BOOK, type QuizSource } from '../quiz/sources';
 import { SURAH_NAMES } from './surahNames';
 import { num } from './arabicNumber';
+import { tanasubLink, tanasubSource } from './tanasubCards';
 
 let pages: Map<string, number> | undefined;
 const pageOf = (key: string) => (pages ??= new Map((corpus.ayat as BranchAyah[]).map(ayah => [ayah.key, ayah.page]))).get(key);
 
 /** The mushaf at each of its ayat, then the mutashabih books that set them side by side. */
-export const pieceSources = (keys: string[], group?: Group): QuizSource[] =>
-  [...keys.map(key => mushafSource(key, pageOf(key))), ...(group ? evidenceGroup(group, keys).citations.map(citationSource) : [])];
+export const pieceSources = (keys: string[], group?: Group): QuizSource[] => {
+  const link = group?.tanasub ? tanasubLink(group.tanasub) : undefined;
+  return [...keys.map(key => mushafSource(key, pageOf(key))), ...(group ? evidenceGroup(group, keys).citations.map(citationSource) : []), ...(link ? [tanasubSource(link)] : [])];
+};
 
 /** A prophet's story card's source: the mushaf at the ayat of the group it shows («المصحف · البقرة ٣٠–٣٩، …»). */
 export const storySource = (events: { phase: number; segments: { surah: number; range: readonly [number, number] }[] }[], phase: number): QuizSource => ({
