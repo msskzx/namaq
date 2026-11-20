@@ -83,6 +83,10 @@ test.describe('pages with the database', () => {
     await pickTree(page);
     await page.goto('/');
     const card = page.locator('article').filter({ hasText: 'من متشابهات القرآن' }).first();
+    await expect(card.getByRole('link', { name: 'افتح الشجرة في متشابهات القرآن' })).toBeVisible();
+    // One tree in ten opens as the matrix by design (TreeViewCard `mixed`); its button turns it to the tree.
+    const toTree = card.getByRole('button', { name: 'عرض الشجرة' });
+    if (await toTree.count()) await toTree.click();
     await expect(card.getByRole('region', { name: 'شجرة العبارات المشتركة' }).filter({ visible: true }).first()).toBeVisible();
     await card.getByRole('link', { name: 'افتح الشجرة في متشابهات القرآن' }).click();
     await expect(page).toHaveURL(/\/quran\/branches/);

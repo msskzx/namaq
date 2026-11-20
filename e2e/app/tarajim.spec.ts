@@ -1,22 +1,21 @@
 import { expect, open, tab, test } from './fixtures';
 
-// The tarajim tab (owner, 2026-11-18): only the people whose Siyar entry is converted (shared/data/tarajim/people.json),
-// each with a page built from the entry, and the nasab tree where lines meet.
-test('the tarajim tab lists the converted people, filters by title, and opens a person', async ({ page }) => {
+// The tarajim tab (owner, 2026-11-18; a hub since 2026-11-19, the full list on its own page): only the people whose Siyar
+// entry is converted (shared/data/tarajim/people.json), each with a page built from the entry, and the nasab tree where lines meet.
+test('the tarajim tab opens the list of converted people, filters by title, and opens a person', async ({ page }) => {
   await open(page, '/');
   await tab(page, 'التراجم').click();
-  await expect(page.getByRole('link', { name: 'الزبير بن العوام' })).toBeVisible();
-  // Someone whose entry is not converted is not listed.
-  await expect(page.getByRole('link', { name: 'خالد بن الوليد' })).toHaveCount(0);
+  await page.getByRole('link', { name: /كل التراجم بترتيب الكتاب/ }).click();
+  await expect(page.getByRole('link', { name: 'الزبير بن العوام', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'العشرة المبشرون بالجنة' }).click();
-  await expect(page.getByRole('link', { name: 'طلحة بن عبيد الله' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'حمزة بن عبد المطلب' })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'طلحة بن عبيد الله', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'حمزة بن عبد المطلب', exact: true })).toHaveCount(0);
   await page.getByRole('button', { name: 'الكل' }).click();
-  await page.getByLabel('ابحث في التراجم').fill('صفية');
-  await expect(page.getByRole('link', { name: 'صفية بنت عبد المطلب' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'الزبير بن العوام' })).toHaveCount(0);
+  await page.getByPlaceholder('ابحث في التراجم', { exact: true }).fill('صفية');
+  await expect(page.getByRole('link', { name: 'صفية بنت عبد المطلب', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'الزبير بن العوام', exact: true })).toHaveCount(0);
 
-  await page.getByRole('link', { name: 'صفية بنت عبد المطلب' }).click();
+  await page.getByRole('link', { name: 'صفية بنت عبد المطلب', exact: true }).click();
   await expect(page).toHaveURL(/\/person\?slug=safiyyah-bint-abd-al-muttalib/);
   await expect(page.getByRole('heading', { name: /نسبها/ })).toBeVisible();
   await expect(page.getByRole('heading', { name: /صلاتها/ })).toBeVisible();
