@@ -3,6 +3,7 @@
 import { describe, expect, it } from 'vitest';
 import { cardBookmarkId } from '@shared/bookmarkKind';
 import { savedFeedCard } from './feedCard';
+import { WEB_CARD_KINDS } from './feedCardKinds';
 import { hadithCards } from './forty';
 import { siraCards, storyCards } from './homeFeed';
 import { sahihCards } from './sahih';
@@ -22,7 +23,7 @@ describe('a saved feed card', () => {
       { ...(await termCard(DAY, 1)), kind: 'term' },
     ];
     // Every kind the website's feed draws from the server.
-    expect([...new Set(drawn.map(card => card.kind))].sort()).toEqual(['bukhari', 'hadith', 'isnad', 'kunya', 'laqab', 'life', 'moment', 'muslim', 'prophets', 'rajab', 'recorded', 'sira', 'term', 'tarajim', 'tie'].sort());
+    expect([...new Set(drawn.map(card => card.kind)), 'note-qiraat'].sort()).toEqual([...WEB_CARD_KINDS].sort());
     for (const card of drawn) {
       const again = await savedFeedCard(cardBookmarkId(card.kind, card.item), DAY);
       expect(again, `${card.kind}:${card.item}`).not.toBeNull();

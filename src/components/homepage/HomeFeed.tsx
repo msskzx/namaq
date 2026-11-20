@@ -28,7 +28,8 @@ import StoryAyatLines from '@/components/stories/StoryAyatLines';
 import { Moment } from '@/components/battles/BattleMoments';
 import { battleLine } from '@shared/battles/battle';
 import { rangeName } from '@shared/stories/story';
-import { bookmarkKind, cardMenuSaveId } from '@shared/bookmarkKind';
+import { bookmarkKind, cardMenuSaveId, isCardBookmark } from '@shared/bookmarkKind';
+import { drawsCard } from '@/lib/feedCardKinds';
 import type { SavedFeedCard } from '@/lib/feedCard';
 import type { Bookmark as SavedItem } from '@shared/bookmarks';
 import { useRouter } from 'next/navigation';
@@ -631,8 +632,8 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
   // The saved items as they were when the visit began (once read in the browser), so saving or unsaving a card does not move the cards on screen.
   const savedAtVisit = useRef<{ visit: number; list: typeof bookmarks } | null>(null);
   if (!savedAtVisit.current || savedAtVisit.current.visit !== visit || (!savedAtVisit.current.list.length && bookmarks.length)) savedAtVisit.current = { visit, list: bookmarks };
-  // Feed cards saved in the app are drawn by the app's cards only; the website's feed shows trees, pairs and ayat.
-  const saved = savedAtVisit.current.list;
+  // Saved cards join only when the website draws their kind; the others stay on the library's list.
+  const saved = savedAtVisit.current.list.filter(item => !isCardBookmark(item.id) || drawsCard(item.id));
   // The interests picked on this device (shared/interests.ts), as they were when the visit began (a change starts a new
   // visit, so the cards on screen never move): the feed brings only theirs, questions in turn by them.
   const interests = useSyncExternalStore(pickedInterests.subscribe, pickedInterests.read, pickedInterests.server);
