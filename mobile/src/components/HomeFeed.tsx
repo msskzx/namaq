@@ -1,7 +1,7 @@
-import { createContext, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
+import { createContext, isValidElement, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, BookOpenText, Bookmark, BookOpen, Check, Clock, Compass, Eye, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, MoreHorizontal, Network, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, History, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpenText, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, Eye, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, History, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
@@ -114,10 +114,7 @@ import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
 import Card, { CardWithRow } from '@/ui/Card';
 import { openExternal } from '@/ui/ExternalLink';
-import FloatingMenu, { type MenuAt } from '@/ui/FloatingMenu';
-import ActButton from '@/ui/ActButton';
 import Button from '@/ui/Button';
-import { buzz } from '@/lib/haptics';
 
 type IconType = (props: LucideProps) => React.ReactNode;
 
@@ -135,59 +132,51 @@ function Post({ head, actions, bar, palette, press, children }: { head: React.Re
   press?: { onPress: () => void; label: string };
   /** A bar of the feature's own under the card, leading the buttons' row (recite mode's small bar, on the recall card; owner 2026-11-17). */
   bar?: React.ReactNode; palette: Palette; children: React.ReactNode }) {
+  // The card's save is named on the saved shelf by its head's title and line.
+  const named = isValidElement<{ title?: string; sub?: string }>(head) ? [head.props.title, head.props.sub].filter(Boolean).join(' · ') : '';
   return (
     <View style={{ gap: 4 }}>
       {head}
-      {/* What the card's content hands up with UnderCard joins the row under the card, before the post's own buttons. */}
-      <CardWithRow palette={palette} pad={0} clip onPress={press?.onPress} accessibilityLabel={press?.label} bar={bar} row={actions}>{children}</CardWithRow>
+      {/* What the card's content hands up with UnderCard joins the row under the card, before the post's own buttons; share stays last. */}
+      <CardWithRow palette={palette} pad={0} clip onPress={press?.onPress} accessibilityLabel={press?.label} bar={bar} row={<><CardMenuActions text={named} />{actions}</>}>{children}</CardWithRow>
     </View>
   );
 }
 
 /**
- * What a feed card's «…» menu acts on (owner, 2026-11-19): the card's kind and item (to save it), the interest it came from
- * («ليس من اهتماماتي»), and whether it came from outside the reader's interests («أضفه»). Only cards an interest brings carry it.
+ * What a feed card's own buttons act on (owner, 2026-11-19): the card's kind and item (to save it) and the interest it came
+ * from («ليس من اهتماماتي»). A card from outside the reader's interests is added from its line above (SurpriseLine).
  */
 type CardMenu = { kind: FeedCardKind | FeedQuizKind; item?: string; interest: string; surprise?: boolean;
   /** Left out where taking the interest out makes no sense (the only one picked, one interest's own view). */
-  notMine?: () => void; add: () => void;
+  notMine?: () => void;
   /** A saved card shown again (the saved shelf, «مدونتي»): only to unsave it. */
   savedOnly?: boolean };
 const CardMenuContext = createContext<CardMenu | null>(null);
 
-/** A feed card's «…»: the reader's long-press menu (icons with their names), to save the card or say it is not for them. */
-function CardMenuButton({ menu, title, sub, palette }: { menu: CardMenu; title: string; sub?: string; palette: Palette }) {
-  const box = useRef<ComponentRef<typeof View>>(null);
-  const [at, setAt] = useState<MenuAt | null>(null);
+/**
+ * A feed card's save and «ليس من اهتماماتي», in the row under the card like every other button (owner, 2026-11-20: every
+ * home card has one layout, no «…» menu). `text` names a saved card on the saved shelf; left out where the card's own
+ * row already saves it (pair, tree: shared/bookmarkKind.ts SAVES_ITSELF).
+ */
+function CardMenuActions({ text }: { text?: string }) {
+  const menu = useContext(CardMenuContext);
   const saved = useSyncExternalStore(subscribeBookmarks, readBookmarks);
-  const id = cardMenuSaveId(menu.kind, menu.item);
+  if (!menu) return null;
+  const id = text === undefined ? null : cardMenuSaveId(menu.kind, menu.item);
   const on = !!id && saved.some(item => item.id === id);
   const name = interestById(menu.interest)?.name ?? '';
-  const picked = useSyncExternalStore(pickedInterests.subscribe, pickedInterests.read, pickedInterests.server);
-  const adds = !menu.savedOnly && !!menu.surprise && !picked.includes(menu.interest);
-  const notMine = !menu.savedOnly && !menu.surprise && menu.notMine;
-  const open = () => box.current?.measureInWindow((x: number, y: number, width: number, height: number) => { setAt({ x: x + width / 2, y: y + height / 2 }); buzz(); });
-  const close = () => setAt(null);
-  if (!id && !adds && !notMine) return null;
-  return (
-    <>
-      <View ref={box} collapsable={false}><IconButton Icon={MoreHorizontal} label={`خيارات: ${title}`} onPress={open} /></View>
-      <FloatingMenu overlay at={at} label={title} onClose={close} palette={palette}>
-        {id && <ActButton Icon={Bookmark} name="احفظ" label={on ? 'أزلها من المحفوظات' : 'احفظ البطاقة'} on={on} tint={palette.root} filled palette={palette}
-          onPress={() => { close(); toggleBookmark({ id, text: [title, sub].filter(Boolean).join(' · '), href: '' }); }} />}
-        {adds
-          ? <ActButton wide Icon={Plus} name="أضفه إلى اهتماماتي" label={`أضف «${name}» إلى اهتماماتي`} palette={palette} onPress={() => { close(); menu.add(); }} />
-          : notMine && <ActButton wide Icon={EyeOff} name="ليس من اهتماماتي" label={`«${name}» ليس من اهتماماتي`} palette={palette} onPress={() => { close(); menu.notMine?.(); }} />}
-      </FloatingMenu>
-    </>
-  );
+  const notMine = !menu.savedOnly && !menu.surprise ? menu.notMine : undefined;
+  return <>
+    {id && <IconButton Icon={Bookmark} label={on ? 'أزلها من المحفوظات' : 'احفظ البطاقة'} on={on} fill onPress={() => toggleBookmark({ id, text: text ?? '', href: '' })} />}
+    {notMine && <IconButton Icon={CircleMinus} label={`«${name}» ليس من اهتماماتي`} onPress={notMine} />}
+  </>;
 }
 
-/** A feed card's head: a round icon, a title and a line under it, like a post's author; the «…» menu on cards an interest brings. */
+/** A feed card's head: a round icon, a title and a line under it, like a post's author. */
 function PostHead({ Icon, title, sub, palette, open }: { Icon: IconType; title: string; sub?: string; palette: Palette;
   /** A tap on the head opens the post's own page; `label` names it for a screen reader. */
   open?: { onPress: () => void; label: string } }) {
-  const menu = useContext(CardMenuContext);
   const head = (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, paddingTop: 10, paddingBottom: 6 }}>
       <View style={{ width: 36, height: 36, borderRadius: 18, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, alignItems: 'center', justifyContent: 'center' }}>
@@ -199,14 +188,7 @@ function PostHead({ Icon, title, sub, palette, open }: { Icon: IconType; title: 
       </View>
     </View>
   );
-  const tappable = open ? <Tap onPress={open.onPress} accessibilityRole="button" accessibilityLabel={open.label} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>{head}</Tap> : head;
-  if (!menu) return tappable;
-  return (
-    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-      <View style={{ flex: 1 }}>{tappable}</View>
-      <CardMenuButton menu={menu} title={title} sub={sub} palette={palette} />
-    </View>
-  );
+  return open ? <Tap onPress={open.onPress} accessibilityRole="button" accessibilityLabel={open.label} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>{head}</Tap> : head;
 }
 
 /** Where a post's ayat are, for its head: «البقرة ٦١ · آل عمران ٢١، ١١٢» (shared/quran/ayahPlaces.ts). */
@@ -257,7 +239,7 @@ const PairPost = memo(function PairPost({ pair, palette }: { pair: PairCard; pal
   return (
     <View>
       <PostHead Icon={ArrowLeftRight} title="آيتان متشابهتان" sub={`${sideLabel(a)} · ${sideLabel(b)}`} palette={palette} />
-      <CompareCard card={pair} palette={palette} onOpen={compare} />
+      <CompareCard card={pair} palette={palette} onOpen={compare} extra={<CardMenuActions />} />
     </View>
   );
 });
@@ -534,7 +516,7 @@ const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece
   const { height: screen } = useWindowDimensions();
   // The matrix's card follows its rows, up to most of the screen (owner, 2026-11-18); the tree keeps its own height.
   const [height, onFit] = useFitHeight(Math.max(TREE_HEIGHT, Math.round(screen * TREE_SHARE)));
-  const embedded = useMemo(() => ({ open: (at: BranchPiece) => toTab({ pathname: '/branches', params: { tree: at.id } }), ayatRoom: { height: room, set: setRoom }, onFit }), [room, onFit]);
+  const embedded = useMemo(() => ({ open: (at: BranchPiece) => toTab({ pathname: '/branches', params: { tree: at.id } }), ayatRoom: { height: room, set: setRoom }, onFit, extra: <CardMenuActions /> }), [room, onFit]);
   // The pager draws the tree in its own card and its buttons under it, so the post is the head and the pager.
   return (
     <View style={{ gap: 4 }}>
@@ -1093,7 +1075,7 @@ export function SavedFeedCard({ id, palette }: { id: string; palette: Palette })
   const { day } = useToday();
   if (!card || !(LIST_KINDS as string[]).includes(card.kind) || !itemsOf(card.kind as ListKind).includes(card.item)) return null;
   const kind = card.kind as ListKind;
-  const menu: CardMenu = { kind, item: card.item, interest: interestOf(kind)?.id ?? '', savedOnly: true, add: () => {} };
+  const menu: CardMenu = { kind, item: card.item, interest: interestOf(kind)?.id ?? '', savedOnly: true };
   return <CardMenuContext.Provider value={menu}><ContentPost kind={kind} item={card.item} day={day} palette={palette} /></CardMenuContext.Provider>;
 }
 
@@ -1265,7 +1247,6 @@ export function Feed({ palette, nearEnd, screenBottom, only = null }: { palette:
           setRemoved({ visit, keys: new Set([...removedKeys, key]) });
           pickedInterests.write(activeInterests(pickedInterests.read()).map(each => each.id).filter(id => id !== slot.interest));
         },
-        add: () => pickedInterests.write([...pickedInterests.read(), slot.interest]),
       };
       posts.push(
         <CardMenuContext.Provider key={key} value={menu}>

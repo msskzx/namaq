@@ -77,7 +77,7 @@ in [records](records/README.md), `AGENTS` a rule already in AGENTS.md.
 - [ ] The card draws the feature's own shared view component, never a text-only stand-in or a redraw. Its taps open the real page at that item. (owner 11-13, 11-19, R0031)
 - [ ] The card has a UI test that uses it (swipe, zoom, typing, the tap that opens its page), not just a screenshot. (R0031)
 - [ ] One item per card. The card grows with its content up to screen height, with no inner scroll below that. Ayah cards stay small and open a sheet on tap. (owner 11-14, 11-18)
-- [ ] Card buttons sit under the card, never inside it. (owner 11-15)
+- [ ] Every home card follows the one agreed layout: the head over the card, the card, and every button in the row under it, save first and share last. No buttons inside the card and no «…» menu. (owner 11-14, 11-15, 11-20)
 - [ ] The feed learns nothing from taps yet. Only open rules move a card, and any hidden logic becomes a setting. (owner 11-19)
 - [ ] No stats, counts, streaks, likes or forgot-counts anywhere. Counters are live only (adhkar).
 - [ ] Questions use the memorized range. Pondering cards may use everything but prefer the memorized range. Trees are always drawn whole. (owner 11-13)
@@ -97,7 +97,6 @@ in [records](records/README.md), `AGENTS` a rule already in AGENTS.md.
 - [ ] Chips, pills and buttons in one row share one size. No card inside a card. Keep the 12 pt margin, padding and card borders.
 - [ ] A new card is built from the shared `Card` (one 14 px radius, the card colour) and the compare page's mark styles. No new card style and no background highlight for matches. (owner 11-13, 11-14)
 - [ ] Colours mark kinds of sameness by the mutashabih books' categories, with al-Zarkashi's terms in the legend. Colouring goes word by word. Matrix: words every row shares in full colour, words some rows share faded, a tapped word lit in every row. (owner 11-11, 11-13, 11-14)
-- [ ] Whether ayat make a group at all is a separate rule: it weighs how many words they share and what kind of words they are (the books' mutashabih, or for «تدبّر» a few rare words). The colouring rule never decides it. (owner 11-18, 11-20)
 - [ ] Toggles run left to right everywhere: on means the knob is on the right. (owner 11-09)
 - [ ] Numbers on the phone are picked with `NumberPicker` or chips, never typed, and there are no +/- steppers. The party join code is the one exception. (owner 11-10)
 - [ ] The keyboard never covers a filter, sheet or submit button. Search does not auto-focus, and tapping empty space dismisses the keyboard. (owner 11-10, 11-11)

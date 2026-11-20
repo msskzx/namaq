@@ -61,9 +61,11 @@ function useSaved(piece: BranchPiece) {
   return isSaved(piece, useSyncExternalStore(subscribeBookmarks, readBookmarks));
 }
 
-function Actions({ piece, palette, pop, current, embedded, onVideo, onShare, onEvidence, onCompare, onRotate, onView, onAround, choice }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void; onShare: () => void; onEvidence: (group: Group) => void; onCompare: (targets: CompareTarget[]) => void; onRotate?: () => void;
+function Actions({ piece, palette, pop, current, embedded, extra, onVideo, onShare, onEvidence, onCompare, onRotate, onView, onAround, choice }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void; onShare: () => void; onEvidence: (group: Group) => void; onCompare: (targets: CompareTarget[]) => void; onRotate?: () => void;
   /** A pager embedded elsewhere (the home feed): no studio. */
   embedded?: boolean;
+  /** The feed's own buttons for this card, before share. */
+  extra?: React.ReactNode;
   /** Each card's own switches (owner, 2026-11-14): tree or matrix, and the surrounding ayat; the settings only give their defaults. */
   onView?: { mode: BranchView; toggle: () => void }; onAround: { on: boolean; toggle: () => void };
   /** A book matrix's studio plays its connections or the read-along: the switch between them. */
@@ -94,6 +96,7 @@ function Actions({ piece, palette, pop, current, embedded, onVideo, onShare, onE
       {onRotate && <IconButton Icon={RotateCwSquare} label="تدوير الشجرة" onPress={onRotate} tone={tone} />}
       {evidence && <IconButton Icon={BookOpen} label="المصادر" onPress={() => onEvidence(evidence)} tone={tone} />}
       {targets.length > 0 && <IconButton Icon={ArrowLeftRight} label="في المقارنة" onPress={() => onCompare(targets)} tone={tone} />}
+      {extra}
       {/* Share is always the last button (the left end). */}
       <IconButton Icon={Send} label="مشاركة" onPress={onShare} tone={tone} />
     </View>
@@ -169,6 +172,8 @@ type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: B
     ayatRoom?: { height: number; set: (height: number) => void };
     /** In a feed card that follows its content: the matrix's overflow, or null when the card shows the tree (lib/useFit.ts). */
     onFit?: (overflow: number | null) => boolean;
+    /** The feed's own buttons for this card (HomeFeed CardMenuActions), before share. */
+    extra?: React.ReactNode;
   }; };
 
 /** The branches trees as a row of cards: the neighbour follows the finger, the place and zoom are kept for next time. */
@@ -371,7 +376,7 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
                 <View style={{ height: FOOT }}>
                   {current && !embedded && <StudioProgress palette={palette} />}
                   <Actions piece={pieces[at]} palette={palette} pop={pop} current={current}
-                    embedded={!!embedded} onVideo={atMode === 'tree' && current ? () => void openVideo() : undefined} onShare={() => share(pieces[at])} onEvidence={setEvidence} onCompare={compare}
+                    embedded={!!embedded} extra={embedded?.extra} onVideo={atMode === 'tree' && current ? () => void openVideo() : undefined} onShare={() => share(pieces[at])} onEvidence={setEvidence} onCompare={compare}
                     onRotate={atMode === 'tree' ? () => setRotatedId(rotatedId === pieces[at].id ? null : pieces[at].id) : undefined}
                     onView={matrixOnly(pieces[at]) ? undefined : { mode: atMode, toggle: () => switchCard(pieces[at], { mode: atMode === 'tree' ? 'matrix' : 'tree' }) }}
                     onAround={{ on: atAround, toggle: () => switchCard(pieces[at], { around: !atAround }) }}
