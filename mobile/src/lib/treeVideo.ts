@@ -5,7 +5,7 @@ import { logoUrl } from './logo';
 import type { Palette } from './theme';
 import { UI_FONT } from './fonts';
 import { QURAN_FAMILY } from '@/components/quran/text/quranFont';
-import { ayahOf, matrixOf, NOTHING_SHARED, readId, surahNames, type MatrixAyah, type Presentation } from './branches';
+import { ayahOf, matrixOf, rowOf, NOTHING_SHARED, readId, surahNames, type MatrixAyah, type Presentation } from './branches';
 import { sharedTone } from './marks';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
@@ -21,11 +21,11 @@ const mix = (a: string, b: string, t: number) => {
  */
 export function videoAyat(beats: Beat[], presentation: Presentation | undefined, palette: Palette): VideoAyah[] {
   const matrix = presentation && matrixOf(presentation, false);
-  const starts = presentation?.ayat.map(ayah => ayah.key) ?? [];
   return [...new Set(beats.map(beat => beat.key).filter(Boolean))].map(key => {
     const [surah, number] = key.split(':').map(Number);
-    const r = starts.indexOf(key);
-    const row: MatrixAyah[] = matrix?.rows[r]?.ayah?.ayat ?? [{ key, page: 0, words: ayahOf(key)?.words ?? [], ...NOTHING_SHARED }];
+    const found = matrix ? rowOf(matrix, key) : null;
+    const r = found?.r ?? -1;
+    const row: MatrixAyah[] = found?.row.ayah?.ayat ?? [{ key, page: 0, words: ayahOf(key)?.words ?? [], ...NOTHING_SHARED }];
     const words = row.flatMap(ayah => [
       ...ayah.words.map((word, i) => {
         const color = sharedTone(palette, ayah, i) ?? palette.ink;
