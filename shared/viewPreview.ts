@@ -30,3 +30,10 @@ export const TREE_LINES = TREE_LAYOUT.ending.tops.map(top => {
   const mid = (fromX + toX) / 2;
   return `M${fromX} ${fromY} C${mid} ${fromY} ${mid} ${toY} ${toX} ${toY}`;
 });
+
+/**
+ * How big the Quran words in a settings tile's picture are, as a share of a word on its own (the module's MiniQuran, app
+ * and website): a picture filling a tile, half a tile (the device look shows light and dark side by side), the default
+ * view's pictures, the same pictures full width in the first-launch tour, and the word-colour tiles' words alone.
+ */
+export const TILE_SHARE = { tile: 0.45, half: 0.35, view: 0.42, tour: 0.9, words: 0.55 } as const;

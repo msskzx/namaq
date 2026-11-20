@@ -7,18 +7,20 @@ import { SAMPLE_AYAH, SAMPLE_TREE, TREE_LAYOUT, TREE_LINES } from '@shared/viewP
 import { closeStudio } from '@/lib/growPlayer';
 import { branchView, cardTints, markMode, themeChoice, type BranchView } from '@/lib/settings';
 import { MARK_LEGEND, MARK_MODE_NAMES, MARK_MODES, MARK_SETTING_LABEL, markTones, type Likeness } from '@shared/quran/wordMatch';
-import { QURAN_FONT, type Palette } from '@/lib/theme';
+import type { Palette } from '@/lib/theme';
+import { MiniQuran } from './quran/text/AyahFlow';
+import { TILE_SHARE } from '@shared/viewPreview';
 
 /** A small page with a card on it: the tile's page colour, card tint and the sample ayah, its ending in the accent. */
 function Mini({ mode, tint, small }: { mode: CardMode; tint: string; small?: boolean }) {
   const colours = MODE_PREVIEW[mode];
   const card = cardColour(mode, tint);
-  const text = { color: colours.ink, fontFamily: QURAN_FONT, fontSize: small ? 8 : 10, lineHeight: small ? 14 : 17, textAlign: 'center' as const };
+  const share = small ? TILE_SHARE.half : TILE_SHARE.tile;
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: tintSurfaces(mode, tint)?.paper ?? colours.page }}>
       <View style={{ width: small ? '86%' : '76%', height: '66%', justifyContent: 'center', borderWidth: 1, borderColor: colours.rule, borderRadius: 5, backgroundColor: card, overflow: 'hidden' }}>
-        <Text numberOfLines={1} style={text}>{SAMPLE_AYAH.start}</Text>
-        <Text numberOfLines={1} style={text}>{SAMPLE_AYAH.end} <Text style={{ color: colours.accent, fontWeight: '700' }}>{SAMPLE_AYAH.ending}</Text></Text>
+        <MiniQuran share={share} lines={1} look={{ color: colours.ink }}>{SAMPLE_AYAH.start}</MiniQuran>
+        <MiniQuran share={share} lines={1} look={{ color: colours.ink }}>{SAMPLE_AYAH.end} <Text style={{ color: colours.accent, fontWeight: '700' }}>{SAMPLE_AYAH.ending}</Text></MiniQuran>
       </View>
     </View>
   );
@@ -93,13 +95,13 @@ export function ViewTiles({ palette, onPick, big }: { palette: Palette; onPick?:
 
 /** The view drawn small in the current colours, with the إن المتقين في tree as its sample. */
 function ViewPreview({ view, palette, big }: { view: BranchView; palette: Palette; big?: boolean }) {
-  const text = { color: palette.ink, fontFamily: QURAN_FONT, fontSize: big ? 19 : 9, lineHeight: big ? 28 : 13, textAlign: 'center' as const };
+  const share = big ? TILE_SHARE.tour : TILE_SHARE.view;
   const box = { position: 'absolute' as const, alignItems: 'center' as const, justifyContent: 'center' as const, borderWidth: 1, borderColor: palette.rule, borderRadius: 4, backgroundColor: palette.card, overflow: 'hidden' as const };
   if (view === 'matrix') return (
     <View style={{ flex: 1, justifyContent: 'center', gap: big ? 8 : 4, paddingHorizontal: '6%', backgroundColor: palette.paper }}>
       {SAMPLE_TREE.endings.map(ending => (
         <View key={ending.words} style={{ borderWidth: 1, borderColor: palette.rule, borderRadius: 4, backgroundColor: palette.card, paddingHorizontal: 3 }}>
-          <Text numberOfLines={1} style={text}><Text style={{ color: palette.marks.exact ?? palette.ink, fontWeight: '700' }}>{SAMPLE_TREE.trunk.join(' ')}</Text> {ending.words}</Text>
+          <MiniQuran share={share} lines={1} look={{ color: palette.ink }}><Text style={{ color: palette.marks.exact ?? palette.ink, fontWeight: '700' }}>{SAMPLE_TREE.trunk.join(' ')}</Text> {ending.words}</MiniQuran>
         </View>
       ))}
     </View>
@@ -111,11 +113,11 @@ function ViewPreview({ view, palette, big }: { view: BranchView; palette: Palett
         {TREE_LINES.map(d => <Path key={d} d={d} fill="none" stroke={palette.rule} strokeWidth={1} vectorEffect="non-scaling-stroke" />)}
       </Svg>
       <View style={[box, { right: `${trunk.right}%`, top: `${trunk.top}%`, width: `${trunk.width}%`, height: `${trunk.height}%` }]}>
-        {SAMPLE_TREE.trunk.map(line => <Text key={line} numberOfLines={1} style={[text, { color: palette.marks.exact ?? palette.ink, fontWeight: '700' }]}>{line}</Text>)}
+        {SAMPLE_TREE.trunk.map(line => <MiniQuran key={line} share={share} lines={1} look={{ color: palette.marks.exact ?? palette.ink, fontWeight: '700' }}>{line}</MiniQuran>)}
       </View>
       {SAMPLE_TREE.endings.map((leaf, index) => (
         <View key={leaf.words} style={[box, { left: `${ending.left}%`, top: `${ending.tops[index]}%`, width: `${ending.width}%`, height: `${ending.height}%` }]}>
-          <Text numberOfLines={1} style={text}>{leaf.words}</Text>
+          <MiniQuran share={share} lines={1} look={{ color: palette.ink }}>{leaf.words}</MiniQuran>
         </View>
       ))}
     </View>
@@ -136,7 +138,7 @@ export function MarkTiles({ palette }: { palette: Palette }) {
           return (
             <Tile key={option} name={MARK_MODE_NAMES[option].ar} on={mode === option} onPress={() => setMode(option)} palette={palette}>
               <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: palette.card }}>
-                {words.map(item => <Text key={item.kind} style={{ fontFamily: QURAN_FONT, fontSize: 12, lineHeight: 20, color: shown[item.kind] ?? palette.ink }}>{item.word}</Text>)}
+                {words.map(item => <MiniQuran key={item.kind} share={TILE_SHARE.words} look={{ color: shown[item.kind] ?? palette.ink }}>{item.word}</MiniQuran>)}
               </View>
             </Tile>
           );

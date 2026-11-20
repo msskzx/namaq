@@ -81,3 +81,12 @@ export function TreeText({ ref, children, look, center = false }: { ref?: Ref<Co
   const size = useWordSize();
   return <Text ref={ref} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, writingDirection: 'rtl', textAlign: center ? 'center' : undefined, ...look }}>{children}</Text>;
 }
+
+/**
+ * Quran words in a settings tile's small picture (the look, the default view, the word colours): the module's font at a
+ * share of a word on its own, so a picture keeps its words in proportion to the real ones. The place sets colour only.
+ */
+export function MiniQuran({ share, children, look, lines, center = true }: { share: number; children: ReactNode; look?: WordLook; lines?: number; center?: boolean }) {
+  const size = useWordSize() * share;
+  return <Text numberOfLines={lines} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, textAlign: center ? 'center' : undefined, ...look }}>{children}</Text>;
+}
