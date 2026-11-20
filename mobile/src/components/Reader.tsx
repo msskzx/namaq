@@ -377,12 +377,15 @@ export default function Reader() {
     jump({ page: to, key, mark: true });
   }, [jump]);
   const focus = flowing ? (position ? view?.upcoming ?? null : mark?.page === page ? mark.key : null) : null;
+  // What the page lights: the selected ayah while reading; while reciting, the ayah (and words) a long press opened the
+  // menu on, as the website does (owner, 2026-11-20: a selection drew nothing in recite mode).
+  const selected = position ? (actions ? { key: actions.key, page, words: actions.words } : null) : mark;
   const render = (at: number) => {
     const atModel = modelOf(at);
     return (
       <MushafPageView page={at} data={pageData(at)} model={atModel} palette={palette} width={size?.width ?? 0} height={height}
         zoom={zoom} onHeight={onHeight} focus={at === page ? focus : null} onFocus={onFocus}
-        top={surahBefore(at)} names={SURAH_TITLES} mark={!position && mark?.page === at ? mark.key : null} markWords={!position && mark?.page === at ? mark.words ?? null : null}
+        top={surahBefore(at)} names={SURAH_TITLES} mark={selected?.page === at ? selected.key : null} markWords={selected?.page === at ? selected.words ?? null : null}
         recite={position ? reciteView(atModel, position) : null} playing={listening?.key ?? null} forgot={forgot} saved={saved} onTouch={onTouch} onSelect={onSelect}
         write={at === page ? write : null} checked={position && at === page ? checked : null} />
     );

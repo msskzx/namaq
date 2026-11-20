@@ -55,10 +55,10 @@
 }
 
 :root:has([data-feature-theme]) {
-  /* The reader's ayah bands (the app's palette.bands): selected, forgotten (amber), recited aloud and the long-pressed word (rose). */
+  /* The reader's ayah bands (the app's palette.bands): selected, forgotten (amber), recited aloud (yellow) and the long-pressed word (rose). */
   --home-band-mark: color-mix(in srgb, var(--home-ink) 10%, var(--home-card));
   --home-band-forgot: #f6dc9a;
-  --home-band-playing: #f3cbcb;
+  --home-band-playing: #dcc5a0; /* the theme's yellow (--home-highlight), never the forgotten band's (owner, 2026-11-20) */
   --home-band-word: #eebcc2;
   --home-paper: #f8f6f0;
   --home-paper-deep: #eee8da;
@@ -95,7 +95,7 @@
 :root.dark:has([data-feature-theme]) {
   /* Deep wine bands keep the light ink readable; a light wash over a dark card greys it (owner, 2026-11-17). */
   --home-band-forgot: color-mix(in srgb, #783d49 45%, var(--home-card));
-  --home-band-playing: color-mix(in srgb, #783d49 70%, var(--home-card));
+  --home-band-playing: color-mix(in srgb, #dcc5a0 35%, var(--home-card));
   --home-band-word: color-mix(in srgb, #783d49 85%, var(--home-band-mark));
   --home-card: var(--home-paper-deep);
   --home-paper: #15191b;

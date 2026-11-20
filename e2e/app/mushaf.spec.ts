@@ -426,8 +426,9 @@ test('the recite bar floats over a full-size page, goes wherever it is dragged, 
   await page.mouse.move(grab.x, grab.y);
   await page.mouse.down();
   for (let step = 1; step <= 10; step++) { await page.mouse.move(grab.x - step * 3, grab.y - step * 35); await page.waitForTimeout(16); }
-  await page.mouse.up();
+  // It is under the finger while the finger is still down, not only once it lifts (owner, 2026-11-20).
   await expect.poll(async () => (await box()).y).toBeLessThan(from.y - 300);
+  await page.mouse.up();
   const dropped = await box();
   // Its place is kept where it shows, for next time.
   const screen = page.viewportSize()!.height;
