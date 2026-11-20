@@ -15,6 +15,8 @@ import { loadReaderAyat } from '@/lib/quran/readerAyat';
 import { isAyahKey } from '@shared/quran/ayahContext';
 import { LIST_KINDS, type ListKind } from '@shared/homeFeed';
 import { itemsOf } from '@/lib/feedLists';
+import { DRAWING_CARD_KINDS, type DrawingCardKind } from '@shared/interests';
+import { drawingCardOf, type DrawingCard } from '@/lib/drawingCards';
 
 export type SavedFeedCard =
   | { kind: 'hadith' | 'rajab' | 'recorded' | 'isnad'; card: HadithCard }
@@ -26,7 +28,8 @@ export type SavedFeedCard =
   | { kind: 'term'; card: TermCard }
   | { kind: 'note-qiraat'; ayah: string }
   | { kind: 'note-tafsir' | 'note-irab' | 'note-balagha'; note: NoteBody }
-  | { kind: 'scene'; view: ExampleView; reference: LataifReference };
+  | { kind: 'scene'; view: ExampleView; reference: LataifReference }
+  | { kind: DrawingCardKind; card: DrawingCard };
 
 const NOTES = { 'note-tafsir': 'tafsir', 'note-irab': 'irab', 'note-balagha': 'balagha' } as const;
 
@@ -58,6 +61,7 @@ export async function savedFeedCard(id: string, day: number): Promise<SavedFeedC
       return { kind, view, reference: exampleReference(view, itqan) };
     }
     default: {
+      if ((DRAWING_CARD_KINDS as readonly string[]).includes(kind)) { const card = await drawingCardOf(kind, item); return card ? { kind: card.kind, card } : null; }
       if (!isSahihSlug(kind)) return null;
       const card = await sahihCardOf(kind, item);
       return card ? { kind, card } : null;

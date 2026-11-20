@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { ChevronDown, ChevronUp, PenLine, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { CONDITION_NOTES, CONDITION_SOURCES, CONDITION_SPANS, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, conditionLines, inKind, soleCard, openingCards, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
@@ -51,7 +51,8 @@ function Conditions({ surah, palette }: { surah: number; palette: Palette }) {
   );
 }
 
-function Rows({ card, palette, open, still }: { card: OpeningCard; palette: Palette; open?: boolean; still?: boolean }) {
+/** A card's surahs, each its name (opening the mushaf there) over its opening ayah: the page's card and its feed card. */
+export function OpeningRows({ card, palette, open, still }: { card: OpeningCard; palette: Palette; open?: boolean; still?: boolean }) {
   return <>
     {card.rows.map((row, r) => (
       <View key={row.surah} style={{ paddingVertical: 6, borderTopWidth: r ? 1 : 0, borderColor: `${palette.rule}55` }}>
@@ -65,20 +66,20 @@ function Rows({ card, palette, open, still }: { card: OpeningCard; palette: Pale
   </>;
 }
 
-function Opening({ card, palette }: { card: OpeningCard; palette: Palette }) {
+function Opening({ card, palette, onLayout }: { card: OpeningCard; palette: Palette; onLayout?: (y: number) => void }) {
   const [open, setOpen] = useState(false);
   const share = () => shareCard({ link: `https://namaq.vercel.app/quran/openings?kind=${card.kind}#${card.id}`, content: width => (
     <Card palette={palette} style={{ width }}>
       <Text style={{ color: palette.accent, fontSize: 19, textAlign: 'right' }}>{card.title}</Text>
-      <Rows card={card} palette={palette} still />
+      <OpeningRows card={card} palette={palette} still />
     </Card>
   ) });
   return (
-    <View style={{ marginBottom: 12, gap: 2 }}>
+    <View style={{ marginBottom: 12, gap: 2 }} onLayout={onLayout && (e => onLayout(e.nativeEvent.layout.y))}>
       <Card palette={palette} pad={[9, 16]}>
         {!soleCard(card) && <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 19, textAlign: 'right' }}>{card.title}</Text>}
         {card.refs && !soleCard(card) && <Reference title={card.refs[0].cite!} quotes={card.refs} palette={palette} />}
-        <Rows card={card} palette={palette} open={open} />
+        <OpeningRows card={card} palette={palette} open={open} />
         {open && <View style={{ gap: 4, borderTopWidth: 1, borderColor: `${palette.rule}55`, paddingTop: 8 }}>
           {CONDITION_NOTES.map(text => <Text key={text} style={{ color: palette.muted, fontSize: 13, lineHeight: 21, textAlign: 'right' }}>{text}</Text>)}
           {CONDITION_SOURCES.map(source => <ExternalLink key={source.url} url={source.url} color={palette.muted} size={13} style={{ textAlign: 'right' }}>{source.title}</ExternalLink>)}
@@ -107,6 +108,17 @@ export default function OpeningsScreen() {
   const [kind, setKind] = useState<OpeningKindId | null>(null);
   useTabRetap('openings', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   const cards = useMemo(() => openingCards(ayahOf), []);
+  // Opened at a card (`at`, its id: the home feed's card): scrolled to it once its kind's block and the card are placed.
+  const { at } = useLocalSearchParams<{ at?: string }>();
+  const atKind = cards.find(card => card.id === at)?.kind;
+  const place = useRef<{ kind?: number; card?: number; done?: boolean }>({});
+  const placed = (part: 'kind' | 'card', y: number) => {
+    place.current[part] = y;
+    const { kind: top, card, done } = place.current;
+    if (done || top === undefined || card === undefined) return;
+    place.current.done = true;
+    requestAnimationFrame(() => scroll.current?.scrollTo({ y: top + card, animated: false }));
+  };
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar hub hideOnScroll>
@@ -132,13 +144,13 @@ export default function OpeningsScreen() {
           const quote = ITQAN_QUOTES.find(q => q.kind === k.id)!;
           const sole = cards.find(card => card.kind === k.id && soleCard(card));
           return (
-            <View key={k.id}>
+            <View key={k.id} onLayout={k.id === atKind ? e => placed('kind', e.nativeEvent.layout.y) : undefined}>
               <View style={{ gap: 4, paddingTop: 8, marginBottom: 10 }}>
                 <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 22, fontWeight: '700', textAlign: 'right' }}>{k.label}</Text>
                 <Reference title={quote.cite} quotes={[quote, ...(ITQAN_KIND_NOTES[k.id] ?? [])]} palette={palette} />
                 {sole?.refs && <Reference title={sole.refs[0].cite!} quotes={sole.refs} palette={palette} />}
               </View>
-              {cards.filter(card => (kind ? inKind(card, k.id) : card.kind === k.id)).map(card => <Opening key={card.id} card={card} palette={palette} />)}
+              {cards.filter(card => (kind ? inKind(card, k.id) : card.kind === k.id)).map(card => <Opening key={card.id} card={card} palette={palette} onLayout={card.id === at && !kind ? y => placed('card', y) : undefined} />)}
             </View>
           );
         })}
