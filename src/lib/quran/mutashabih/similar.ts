@@ -92,6 +92,15 @@ export function similarAyahPair(rawA: BranchAyah, rawB: BranchAyah, weights: Map
   return { a: a.key, b: b.key, columns: [...aligned, ...crossingColumns(a, b, aligned)] };
 }
 
+/** The words two ayat share, in order then crossing, with no threshold: for a pair a book names, where the book decides it is a pair. */
+export function pairColumns(rawA: BranchAyah, rawB: BranchAyah): CompactColumn[] {
+  const [a, b] = [withAliases(rawA), withAliases(rawB)];
+  const aligned: CompactColumn[] = compareAyat(a, b).columns
+    .filter(column => column.level && column.a?.key === a.key && column.b?.key === b.key)
+    .map(column => [column.a!.index, column.b!.index, column.level!]);
+  return [...aligned, ...crossingColumns(a, b, aligned)];
+}
+
 /** Every cross-surah ayah pair that meets the compare criteria, lower surah first. Candidates share two or more roots. */
 export function similarAyat(source: BranchAyah[], criteria = COMPARE_CRITERIA): SimilarAyahPair[] {
   const ayat = source.map(withAliases);

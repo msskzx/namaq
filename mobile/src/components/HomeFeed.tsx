@@ -128,6 +128,7 @@ import { compiledSource, recordSource } from '@shared/quiz/hadith';
 import { termSource } from '@shared/quran/balaghaTerms';
 import { exampleReference } from '@shared/quran/lataif';
 import { pieceSources, storySource } from '@shared/quran/pieceSources';
+import { tanasubLink, tanasubSource } from '@shared/quran/tanasubCards';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
 import { METHODS } from '@shared/prayer';
 import Button from '@/ui/Button';
@@ -280,7 +281,10 @@ export function ContinueReading({ palette }: { palette: Palette }) {
 const PairPost = memo(function PairPost({ pair, palette }: { pair: PairCard; palette: Palette }) {
   const [a, b] = pair.sides;
   const compare = useCallback(() => openIntent({ tab: 'compare', lead: a.surah, other: b.surah, ayat: [...sideKeys(a), ...sideKeys(b)] }), [a, b]);
-  const sources = useMemo(() => sourcesOf(pieceSources([...sideKeys(a), ...sideKeys(b)], pair.group ? treeList().find(piece => piece.id === pair.group || aliasesOf(piece).includes(pair.group!))?.group : undefined)), [a, b, pair.group]);
+  const sources = useMemo(() => {
+    const link = pair.book ? tanasubLink(pair.book) : undefined;
+    return sourcesOf([...pieceSources([...sideKeys(a), ...sideKeys(b)], pair.group ? treeList().find(piece => piece.id === pair.group || aliasesOf(piece).includes(pair.group!))?.group : undefined), ...(link ? [tanasubSource(link)] : [])]);
+  }, [a, b, pair.group, pair.book]);
   return (
     <View>
       <PostHead Icon={ArrowLeftRight} title="آيتان متشابهتان" sub={`${sideLabel(a)} · ${sideLabel(b)}`} palette={palette} />

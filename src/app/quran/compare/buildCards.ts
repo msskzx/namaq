@@ -1,15 +1,18 @@
 import treeData from '@shared/quran/quranText/corpus';
 import { groups } from '@shared/quran/mutashabih/data';
 import { ayahOf, ayahPairs, keyOrder, pairChains, pairsBySurah, pairsFor, surahPairs, surahOf, type AyahPair } from '@/lib/quran/mutashabih/pairs';
-import type { SimilarAyahPair } from '@/lib/quran/mutashabih/similar';
+import { pairColumns, type SimilarAyahPair } from '@/lib/quran/mutashabih/similar';
+import type { BranchAyah } from '@shared/quran/branches';
+import { TANASUB_LINKS, tanasubLinksFor, type TanasubLink } from '@shared/quran/tanasubCards';
 import { compareVerdicts, keptPair, verdictFor } from '@/lib/quran/curation/comparePairs';
-import { encodeAyat, type CardSide, type MarkKind, type PairCard } from '@shared/quran/compareCards';
+import { encodeAyat, type CardSide, type MarkKind, type PairCard, type SurahPair } from '@shared/quran/compareCards';
 import links from '@/lib/quran/curation/compareLinks.json';
 import data from './pairs.json';
 import passage from './passagePairs.json';
 import within from './withinPairs.json';
 
 const words = new Map((treeData.ayat as { key: string; words: string[] }[]).map(ayah => [ayah.key, ayah.words]));
+const corpusAyat = new Map((treeData.ayat as BranchAyah[]).map(ayah => [ayah.key, ayah]));
 /** `remove` lists engine links `[a word, b word]` that a reader judged wrong for this pair. */
 type CuratedLinks = { pair: string; links: SimilarAyahPair['columns']; remove?: [number, number][]; why: string; source: string };
 
@@ -53,10 +56,21 @@ const found = ayahPairs(withCuratedLinks([...data.pairs, ...passage.pairs, ...wi
 const bySurah = pairsBySurah(found.filter(keptPair));
 const foundBySurah = pairsBySurah(found);
 
+/** A page for every pair of surahs a surah-order book names ayat in, the engine's or not: the book's cards count on it. */
+function withBookPages(pairs: SurahPair[]): SurahPair[] {
+  const counts = new Map(pairs.map(pair => [`${pair.a}:${pair.b}`, pair]));
+  for (const link of TANASUB_LINKS) {
+    const key = `${link.a}:${link.b}`;
+    const pair = counts.get(key) ?? { a: link.a, b: link.b, count: 0 };
+    counts.set(key, { ...pair, count: pair.count + link.pairs.length });
+  }
+  return [...counts.values()].sort((p, q) => p.a - q.a || p.b - q.b);
+}
+
 /** Every surah pair with enough kept ayah pairs to get its own page. */
-const listedPairs = surahPairs(bySurah);
+const listedPairs = withBookPages(surahPairs(bySurah));
 /** Review still lists every page the engine finds, so a page whose cards were all left out can be looked at again. */
-const reviewPairs = surahPairs(foundBySurah);
+const reviewPairs = withBookPages(surahPairs(foundBySurah));
 
 const LEVELS = ['exact', 'letters', 'lemma', 'root'];
 const kindOf = (level: string): MarkKind => (level === 'root' ? 'related' : level === 'lemma' ? 'root' : 'exact');
@@ -75,12 +89,13 @@ function wordMarks(pairs: AyahPair[]) {
   return marks;
 }
 
-function side(pairs: AyahPair[], which: 'a' | 'b', marks: ReturnType<typeof wordMarks>, span?: [number, number]): CardSide {
+/** A card side: every ayah from the first to the last its pairs hold (or `span`), or exactly the ayat a book names (`exact`). */
+function side(pairs: AyahPair[], which: 'a' | 'b', marks: ReturnType<typeof wordMarks>, span?: [number, number], exact = false): CardSide {
   const surah = surahOf(pairs[0][which]);
   const numbers = pairs.map(pair => ayahOf(pair[which]));
   const [from, to] = span ?? [Math.min(...numbers), Math.max(...numbers)];
-  const ayat = Array.from({ length: to - from + 1 }, (_, i) => {
-    const number = from + i;
+  const shown = exact ? [...new Set(numbers)].sort((p, q) => p - q) : Array.from({ length: to - from + 1 }, (_, i) => from + i);
+  const ayat = shown.map(number => {
     const key = `${surah}:${number}`;
     const list = words.get(key) ?? [];
     return { number, words: list, marks: Object.fromEntries(list.flatMap((_, index) => {
@@ -88,7 +103,7 @@ function side(pairs: AyahPair[], which: 'a' | 'b', marks: ReturnType<typeof word
       return mark ? [[index, mark]] : [];
     })) };
   });
-  return { surah, ayah: from, ayat };
+  return { surah, ayah: shown[0], ayat };
 }
 
 const rangeId = (cardSide: CardSide) => `${cardSide.surah}:${cardSide.ayah}${cardSide.ayat.length > 1 ? `-${cardSide.ayat[cardSide.ayat.length - 1].number}` : ''}`;
@@ -127,6 +142,29 @@ function manyCard(pairs: AyahPair[], shared: 'a' | 'b', review: boolean): PairCa
     }) },
   };
 }
+
+/** A surah-order book's card: exactly the ayat its quote names, every word the two sides share marked, the link's key as `book`. */
+function bookCard(link: TanasubLink): PairCard {
+  const ayah = (key: string) => {
+    const found = corpusAyat.get(key);
+    if (!found) throw new Error(`compare cards: ${key} of the surah-order link into ${link.link} is not in the corpus`);
+    return found;
+  };
+  const pairs: AyahPair[] = link.pairs.map(([a, b]) => ({ a, b, columns: pairColumns(ayah(a), ayah(b))
+    .map(([i, j, level]) => ({ a: { key: a, index: i }, b: { key: b, index: j }, level })) }));
+  const marks = wordMarks(pairs);
+  const sides: PairCard['sides'] = [side(pairs, 'a', marks, undefined, true), side(pairs, 'b', marks, undefined, true)];
+  return {
+    // As the reader decodes it (compareCards.ts rangeCard): the first and last ayat of each side.
+    id: pairs.length === 1 ? `${pairs[0].a}|${pairs[0].b}` : `${rangeId(sides[0])}|${rangeId(sides[1])}`,
+    book: link.link,
+    ...(pairs.length > 1 ? { pairs: pairs.map(pair => ({ id: `${pair.a}|${pair.b}` })) } : {}),
+    sides,
+  };
+}
+
+/** The ayah pairs a card holds. */
+const pairIds = (card: PairCard) => card.pairs?.map(pair => pair.id) ?? [card.id];
 
 /** Single pairs that share an ayah, largest groups first; a pair joins one group only. */
 function manyGroups(singles: AyahPair[]) {
@@ -168,19 +206,25 @@ function pairCards(x: number, y: number, review = false): PairCard[] {
   const groups = [...manyGroups(singles.filter(refrain)), ...manyGroups(singles.filter(pair => !refrain(pair)))];
   const grouped = new Set(groups.flatMap(group => group.pairs));
   const order = (pair: AyahPair) => [keyOrder(pair.a), keyOrder(pair.b)];
-  return [
+  const books = tanasubLinksFor(x, y).map(bookCard);
+  // Card rules (owner 2026-11-20): our card that a book card already holds gives way to the book's.
+  const named = new Set(books.flatMap(pairIds));
+  const ours = [
     ...chains.filter(chain => !grouped.has(chain[0])).map(chain => ({ at: chain[0], build: () => card(chain, review) })),
     ...kept.filter(alone).map(pair => ({ at: pair, build: () => card([pair], review) })),
     ...pairs.filter(pair => !keptPair(pair)).map(pair => ({ at: pair, build: () => card([pair], review) })),
     ...groups.map(group => ({ at: group.pairs[0], build: () => manyCard(group.pairs, group.shared, review) })),
-  ].sort((p, q) => order(p.at)[0] - order(q.at)[0] || order(p.at)[1] - order(q.at)[1]).map(entry => entry.build());
+  ].sort((p, q) => order(p.at)[0] - order(q.at)[0] || order(p.at)[1] - order(q.at)[1]).map(entry => entry.build())
+    .filter(card => !pairIds(card).every(id => named.has(id)));
+  const first = (card: PairCard) => card.sides.map(cardSide => cardSide.surah * 1000 + cardSide.ayat[0].number);
+  return [...ours, ...books].sort((p, q) => first(p)[0] - first(q)[0] || first(p)[1] - first(q)[1]);
 }
 
 function storedCard(card: PairCard) {
   const links = new Map<string, number>();
   // A single pair a reader left out shows only in review (`x`); range and one-to-many cards hold kept pairs only.
-  const hidden = !card.pairs && !compareVerdicts[card.id]?.keep;
-  const base = { p: card.pairs?.map(pair => pair.id) ?? [card.id], ...(card.group ? { g: card.group } : {}), ...(card.span ? { s: card.span } : {}), ...(hidden ? { x: 1 } : {}) };
+  const hidden = !card.book && !card.pairs && !compareVerdicts[card.id]?.keep;
+  const base = { p: card.pairs?.map(pair => pair.id) ?? [card.id], ...(card.group ? { g: card.group } : {}), ...(card.book ? { k: card.book, a: card.sides.map(cardSide => cardSide.ayat.map(item => item.number)) } : {}), ...(card.span ? { s: card.span } : {}), ...(hidden ? { x: 1 } : {}) };
   if (card.many) return { ...base, n: card.many.side, o: card.many.options.map(option => [encodeAyat([option.shared], links), encodeAyat([option.ayah], links)]) };
   return { ...base, m: card.sides.map(side => encodeAyat(side.ayat, links)) };
 }
