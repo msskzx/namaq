@@ -15,7 +15,7 @@
     { "number": 3, "name": "سيرة الخلفاء الراشدين", "firstPrintedPage": 7, "lastPrintedPage": 290 },
     { "number": 4, "name": "سير أعلام النبلاء ج١", "firstPrintedPage": 5, "lastPrintedPage": 558 },
     { "number": 5, "name": "سير أعلام النبلاء ج٢", "firstPrintedPage": 5, "lastPrintedPage": 633 },
-    { "number": 6, "name": "سير أعلام النبلاء ج٣", "firstPrintedPage": 5, "lastPrintedPage": 549 },
+    { "number": 6, "name": "سير أعلام النبلاء ج٣", "firstPrintedPage": 5, "lastPrintedPage": 549, "skippedPrintedPages": [240] },
     { "number": 7, "name": "سير أعلام النبلاء ج٤", "firstPrintedPage": 5, "lastPrintedPage": 623 },
     { "number": 8, "name": "سير أعلام النبلاء ج٥", "firstPrintedPage": 5, "lastPrintedPage": 482 },
     { "number": 9, "name": "سير أعلام النبلاء ج٦", "firstPrintedPage": 5, "lastPrintedPage": 418 },
