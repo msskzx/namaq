@@ -1,0 +1,571 @@
+{
+  "unit": {
+    "id": "siyar-v6-119-yusuf-ibn-abdullah-ibn-salam",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١١٩"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ys_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "509",
+      "layer": "MAIN",
+      "exact": "١١٩ - يُوْسُفُ بنُ عَبْدِ اللهِ بنِ سَلاَمِ بنِ الحَارِثِ الإِبْرَاهِيْمِيُّ"
+    },
+    {
+      "id": "sp_ys_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "509",
+      "layer": "MAIN",
+      "exact": "يُوْسُفُ بنُ عَبْدِ اللهِ بنِ سَلاَمِ بنِ الحَارِثِ الإِبْرَاهِيْمِيُّ",
+      "prefix": "١١٩ - "
+    },
+    {
+      "id": "sp_ys_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "509",
+      "layer": "MAIN",
+      "exact": "يُوْسُفُ بنُ",
+      "prefix": "١١٩ - "
+    },
+    {
+      "id": "sp_ys_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "509",
+      "layer": "MAIN",
+      "exact": "عَبْدِ اللهِ بنِ سَلاَمِ",
+      "prefix": "١١٩ - يُوْسُفُ بنُ "
+    },
+    {
+      "id": "sp_ys_kunya_st",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "509",
+      "layer": "MAIN",
+      "exact": "أَبُو يَعْقُوْبَ الإِبْرَاهِيْمِيُّ، الإِسْرَائِيْلِيُّ، المَدَنِيُّ، حَلِيفُ الأَنْصَارِ"
+    },
+    {
+      "id": "sp_ys_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "509",
+      "layer": "MAIN",
+      "exact": "أَبُو يَعْقُوْبَ",
+      "suffix": " الإِبْرَاهِيْمِيُّ، الإِسْرَائِيْلِيُّ"
+    },
+    {
+      "id": "sp_ys_named",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "509",
+      "layer": "MAIN",
+      "exact": "وُلِدَ: فِي حَيَاةِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - فَسَمَّاهُ: يُوْسُفَ، وَأَجْلَسَهُ فِي حَجْرِهِ"
+    },
+    {
+      "id": "sp_ys_prophet_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "509",
+      "layer": "MAIN",
+      "exact": "النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - فَسَمَّاهُ",
+      "prefix": "وُلِدَ: فِي حَيَاةِ "
+    },
+    {
+      "id": "sp_ys_ruya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "509",
+      "layer": "MAIN",
+      "exact": "وَلَهُ رُؤْيَةٌ مَا",
+      "prefix": "فِي حَجْرِهِ (٢) ، "
+    },
+    {
+      "id": "sp_ys_ibnabihatim_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "510",
+      "layer": "MAIN",
+      "exact": "وَقَالَ ابْنُ أَبِي حَاتِمٍ:",
+      "suffix": " لَهُ رُؤْيَةٌ"
+    },
+    {
+      "id": "sp_ys_ibnabihatim",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "510",
+      "layer": "MAIN",
+      "exact": "لَهُ رُؤْيَةٌ",
+      "prefix": "وَقَالَ ابْنُ أَبِي حَاتِمٍ: "
+    },
+    {
+      "id": "sp_ys_bukhari_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "510",
+      "layer": "MAIN",
+      "exact": "وَقَالَ البُخَارِيُّ:",
+      "suffix": " لَهُ صُحْبَةٌ"
+    },
+    {
+      "id": "sp_ys_bukhari",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "510",
+      "layer": "MAIN",
+      "exact": "لَهُ صُحْبَةٌ",
+      "prefix": "وَقَالَ البُخَارِيُّ: "
+    },
+    {
+      "id": "sp_ys_abuhatim_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "510",
+      "layer": "MAIN",
+      "exact": "وَقَالَ أَبُو حَاتِمٍ:",
+      "suffix": " لَيْسَتْ"
+    },
+    {
+      "id": "sp_ys_abuhatim",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "510",
+      "layer": "MAIN",
+      "exact": "لَيْسَتْ لَهُ صُحْبَةٌ",
+      "prefix": "وَقَالَ أَبُو حَاتِمٍ: "
+    },
+    {
+      "id": "sp_ys_ijli_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "510",
+      "layer": "MAIN",
+      "exact": "وَقَالَ العِجْلِيُّ:",
+      "suffix": " تَابِعِيٌّ"
+    },
+    {
+      "id": "sp_ys_ijli",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "510",
+      "layer": "MAIN",
+      "exact": "تَابِعِيٌّ، ثِقَةٌ",
+      "prefix": "وَقَالَ العِجْلِيُّ: "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ys0",
+      "unit": "siyar-v6-119-yusuf-ibn-abdullah-ibn-salam",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ys_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ys_ibnabihatim",
+      "unit": "siyar-v6-119-yusuf-ibn-abdullah-ibn-salam",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ys_ibnabihatim_frame"
+      ],
+      "origin": {
+        "mention": "m_ys_ibnabihatim_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ys_bukhari",
+      "unit": "siyar-v6-119-yusuf-ibn-abdullah-ibn-salam",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ys_bukhari_frame"
+      ],
+      "origin": {
+        "mention": "m_ys_bukhari_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ys_abuhatim",
+      "unit": "siyar-v6-119-yusuf-ibn-abdullah-ibn-salam",
+      "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ys_abuhatim_frame"
+      ],
+      "origin": {
+        "mention": "m_ys_abuhatim_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ys_ijli",
+      "unit": "siyar-v6-119-yusuf-ibn-abdullah-ibn-salam",
+      "ordinal": 5,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ys_ijli_frame"
+      ],
+      "origin": {
+        "mention": "m_ys_ijli_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ys_name",
+      "report": "r_ys0",
+      "spans": [
+        "sp_ys_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ys_kunya_st",
+      "report": "r_ys0",
+      "spans": [
+        "sp_ys_kunya_st"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ys_named",
+      "report": "r_ys0",
+      "spans": [
+        "sp_ys_named"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ys_ruya",
+      "report": "r_ys0",
+      "spans": [
+        "sp_ys_ruya"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ys_ibnabihatim",
+      "report": "r_ys_ibnabihatim",
+      "spans": [
+        "sp_ys_ibnabihatim"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ys_bukhari",
+      "report": "r_ys_bukhari",
+      "spans": [
+        "sp_ys_bukhari"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ys_abuhatim",
+      "report": "r_ys_abuhatim",
+      "spans": [
+        "sp_ys_abuhatim"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ys_ijli",
+      "report": "r_ys_ijli",
+      "spans": [
+        "sp_ys_ijli"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ys",
+      "parent": "sp_ys_name",
+      "exact": "يُوْسُفُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ys_father",
+      "parent": "sp_ys_name",
+      "exact": "عَبْدِ اللهِ بنِ سَلاَمِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ys_named",
+      "parent": "sp_ys_named",
+      "exact": "فَسَمَّاهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ys_prophet",
+      "parent": "sp_ys_named",
+      "exact": "النَّبِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ys_ibnabihatim_by",
+      "parent": "sp_ys_ibnabihatim_frame",
+      "exact": "ابْنُ أَبِي حَاتِمٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ys_bukhari_by",
+      "parent": "sp_ys_bukhari_frame",
+      "exact": "البُخَارِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ys_abuhatim_by",
+      "parent": "sp_ys_abuhatim_frame",
+      "exact": "أَبُو حَاتِمٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ys_ijli_by",
+      "parent": "sp_ys_ijli_frame",
+      "exact": "العِجْلِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ys_c_ruya",
+      "parent": "sp_ys_ruya",
+      "exact": "لَهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ys_c_ibnabihatim",
+      "parent": "sp_ys_ibnabihatim",
+      "exact": "لَهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ys_c_bukhari",
+      "parent": "sp_ys_bukhari",
+      "exact": "لَهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ys",
+      "mention": "m_ys",
+      "agent": "yusuf-ibn-abdullah-ibn-salam",
+      "basis": [
+        {
+          "span": "sp_ys_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ys_father",
+      "mention": "m_ys_father",
+      "agent": "abdullah-ibn-salam",
+      "basis": [
+        {
+          "span": "sp_ys_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ys_named",
+      "mention": "m_ys_named",
+      "agent": "yusuf-ibn-abdullah-ibn-salam",
+      "basis": [
+        {
+          "span": "sp_ys_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ys_prophet",
+      "mention": "m_ys_prophet",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "sp_ys_prophet_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ys_c_ruya",
+      "mention": "m_ys_c_ruya",
+      "agent": "yusuf-ibn-abdullah-ibn-salam",
+      "basis": [
+        {
+          "span": "sp_ys_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ys_c_ibnabihatim",
+      "mention": "m_ys_c_ibnabihatim",
+      "agent": "yusuf-ibn-abdullah-ibn-salam",
+      "basis": [
+        {
+          "span": "sp_ys_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ys_c_bukhari",
+      "mention": "m_ys_c_bukhari",
+      "agent": "yusuf-ibn-abdullah-ibn-salam",
+      "basis": [
+        {
+          "span": "sp_ys_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ys_name",
+      "subject": "m_ys",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ys_name"
+        ]
+      },
+      "restsOn": [
+        "st_ys_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ys_sex",
+      "subject": "m_ys",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ys_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ys_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ys_father",
+      "subject": "m_ys",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ys_father"
+      },
+      "restsOn": [
+        "st_ys_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ys_kunya",
+      "subject": "m_ys",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_ys_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_ys_kunya_st"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ys_v_named",
+      "subject": "m_ys_named",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ys_named"
+        ]
+      },
+      "restsOn": [
+        "st_ys_named"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ys_comp_ruya",
+      "subject": "m_ys_c_ruya",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_ys_prophet"
+      },
+      "restsOn": [
+        "st_ys_ruya",
+        "st_ys_abuhatim",
+        "st_ys_ijli"
+      ],
+      "status": "DISPUTED"
+    },
+    {
+      "id": "a_ys_comp_ibnabihatim",
+      "subject": "m_ys_c_ibnabihatim",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_ys_prophet"
+      },
+      "restsOn": [
+        "st_ys_ibnabihatim",
+        "st_ys_abuhatim",
+        "st_ys_ijli"
+      ],
+      "status": "DISPUTED"
+    },
+    {
+      "id": "a_ys_comp_bukhari",
+      "subject": "m_ys_c_bukhari",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_ys_prophet"
+      },
+      "restsOn": [
+        "st_ys_bukhari",
+        "st_ys_abuhatim",
+        "st_ys_ijli"
+      ],
+      "status": "DISPUTED"
+    }
+  ]
+}

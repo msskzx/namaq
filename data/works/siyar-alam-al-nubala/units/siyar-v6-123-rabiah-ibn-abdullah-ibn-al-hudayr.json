@@ -1,0 +1,248 @@
+{
+  "unit": {
+    "id": "siyar-v6-123-rabiah-ibn-abdullah-ibn-al-hudayr",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٢٣"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_rh_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "516",
+      "layer": "MAIN",
+      "exact": "١٢٣ - رَبِيْعَةُ بنُ عَبْدِ اللهِ بنِ الهُدَيْرِ القُرَشِيُّ"
+    },
+    {
+      "id": "sp_rh_n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "516",
+      "layer": "MAIN",
+      "exact": "رَبِيْعَةُ بنُ عَبْدِ اللهِ بنِ الهُدَيْرِ القُرَشِيُّ",
+      "prefix": "١٢٣ - "
+    },
+    {
+      "id": "sp_rh_n2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "516",
+      "layer": "MAIN",
+      "exact": "التَّمِيْمِيُّ، المَدَنِيُّ"
+    },
+    {
+      "id": "sp_rh_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "516",
+      "layer": "MAIN",
+      "exact": "رَبِيْعَةُ بنُ",
+      "prefix": "١٢٣ - "
+    },
+    {
+      "id": "sp_rh_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "516",
+      "layer": "MAIN",
+      "exact": "عَبْدِ اللهِ بنِ الهُدَيْرِ",
+      "prefix": "١٢٣ - رَبِيْعَةُ بنُ "
+    },
+    {
+      "id": "sp_rh_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "516",
+      "layer": "MAIN",
+      "exact": "مَاتَ: سَنَةَ ثَلاَثٍ وَتِسْعِيْنَ، وَلَهُ سَبْعٌ وَثَمَانُوْنَ سَنَةً"
+    },
+    {
+      "id": "sp_rh_y93",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "516",
+      "layer": "MAIN",
+      "exact": "سَنَةَ ثَلاَثٍ وَتِسْعِيْنَ",
+      "prefix": "مَاتَ: "
+    },
+    {
+      "id": "sp_rh_age",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "516",
+      "layer": "MAIN",
+      "exact": "سَبْعٌ وَثَمَانُوْنَ سَنَةً",
+      "prefix": "وَلَهُ "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_rh0",
+      "unit": "siyar-v6-123-rabiah-ibn-abdullah-ibn-al-hudayr",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_rh_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_rh_name",
+      "report": "r_rh0",
+      "spans": [
+        "sp_rh_n1",
+        "sp_rh_n2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_rh_death",
+      "report": "r_rh0",
+      "spans": [
+        "sp_rh_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_rh",
+      "parent": "sp_rh_n1",
+      "exact": "رَبِيْعَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_rh_father",
+      "parent": "sp_rh_n1",
+      "exact": "عَبْدِ اللهِ بنِ الهُدَيْرِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_rh_d",
+      "parent": "sp_rh_death",
+      "exact": "مَاتَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_rh",
+      "mention": "m_rh",
+      "agent": "rabiah-ibn-abdullah-ibn-al-hudayr",
+      "basis": [
+        {
+          "span": "sp_rh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rh_father",
+      "mention": "m_rh_father",
+      "agent": "abdullah-ibn-al-hudayr",
+      "basis": [
+        {
+          "span": "sp_rh_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_rh_d",
+      "mention": "m_rh_d",
+      "agent": "rabiah-ibn-abdullah-ibn-al-hudayr",
+      "basis": [
+        {
+          "span": "sp_rh_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_rh_name",
+      "subject": "m_rh",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_rh_n1",
+          "sp_rh_n2"
+        ]
+      },
+      "restsOn": [
+        "st_rh_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rh_sex",
+      "subject": "m_rh",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_rh_sex"
+        ]
+      },
+      "restsOn": [
+        "st_rh_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rh_father",
+      "subject": "m_rh",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_rh_father"
+      },
+      "restsOn": [
+        "st_rh_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rh_d93",
+      "subject": "m_rh_d",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 93,
+        "spans": [
+          "sp_rh_y93"
+        ]
+      },
+      "restsOn": [
+        "st_rh_death"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_rh_age",
+      "subject": "m_rh_d",
+      "predicate": "died.age",
+      "value": {
+        "parsed": 87,
+        "spans": [
+          "sp_rh_age"
+        ]
+      },
+      "restsOn": [
+        "st_rh_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

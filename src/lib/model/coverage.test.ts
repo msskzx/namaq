@@ -131,6 +131,12 @@ describe('coverageOf', () => {
     expect(cov.notModeled.map((s) => s.text)).toEqual(['نَصٌّ هُنَا.']);
   });
 
+  it('ends an entry at a next heading whose number is printed on a line of its own', () => {
+    const pages = { '41': '٣ - الزُّبَيْرُ بنُ العَوَّامِ\n\nنَصٌّ هُنَا.\n\n٤\n\n- غَيْرُهُ\n\nآخَرُ.' };
+    const cov = coverageFor((f) => (f.spans = [heading]), pages);
+    expect(cov.notModeled.map((s) => s.text)).toEqual(['نَصٌّ هُنَا.']);
+  });
+
   it('throws when a page the manifest declares is missing before the entry ends', () => {
     const pages = { '41': '٣ - الزُّبَيْرُ بنُ العَوَّامِ\n\nنَصٌّ هُنَا.' };
     expect(() =>

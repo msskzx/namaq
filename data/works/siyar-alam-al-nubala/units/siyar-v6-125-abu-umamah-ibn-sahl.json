@@ -1,0 +1,607 @@
+{
+  "unit": {
+    "id": "siyar-v6-125-abu-umamah-ibn-sahl",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٢٥"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_au_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "517",
+      "layer": "MAIN",
+      "exact": "١٢٥ - أَبُو أُمَامَةَ بنُ سَهْلِ بنِ حُنَيْفٍ الأَنْصَارِيُّ"
+    },
+    {
+      "id": "sp_au_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "517",
+      "layer": "MAIN",
+      "exact": "أَبُو أُمَامَةَ بنُ سَهْلِ بنِ حُنَيْفٍ الأَنْصَارِيُّ",
+      "prefix": "١٢٥ - "
+    },
+    {
+      "id": "sp_au_kunya",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "517",
+      "layer": "MAIN",
+      "exact": "أَبُو أُمَامَةَ",
+      "prefix": "١٢٥ - "
+    },
+    {
+      "id": "sp_au_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "517",
+      "layer": "MAIN",
+      "exact": "سَهْلِ بنِ حُنَيْفٍ",
+      "prefix": "١٢٥ - أَبُو أُمَامَةَ بنُ "
+    },
+    {
+      "id": "sp_au_ism",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "517",
+      "layer": "MAIN",
+      "exact": "اسْمُهُ: أَسْعَدُ بِاسْمِ جَدِّهِ لأُمِّهِ، النَّقِيبُ، السَّيِّدُ، أَسَعْدُ بنُ زُرَارَةَ"
+    },
+    {
+      "id": "sp_au_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "517",
+      "layer": "MAIN",
+      "exact": "اسْمُهُ: أَسْعَدُ",
+      "suffix": " بِاسْمِ جَدِّهِ"
+    },
+    {
+      "id": "sp_au_born",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "518",
+      "layer": "MAIN",
+      "exact": "وُلِدَ: فِي حَيَاةِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ -",
+      "suffix": " وَرَآهُ"
+    },
+    {
+      "id": "sp_au_qila",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "518",
+      "layer": "MAIN",
+      "exact": "وَرَآهُ - فِيمَا قِيْلَ -",
+      "prefix": "وَسَلَّمَ - "
+    },
+    {
+      "id": "sp_au_abumashar_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "518",
+      "layer": "MAIN",
+      "exact": "قَالَ أَبُو مَعْشَرٍ السِّنْدِيُّ:"
+    },
+    {
+      "id": "sp_au_abumashar",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "518",
+      "layer": "MAIN",
+      "exact": "رَأَيْتُ أَبَا أُمَامَةَ وَقَدْ رَأَى النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ -"
+    },
+    {
+      "id": "sp_au_zuhri_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "518",
+      "layer": "MAIN",
+      "exact": "وَقَالَ الزُّهْرِيُّ: أَخْبَرَنِي أَبُو أُمَامَةَ،"
+    },
+    {
+      "id": "sp_au_zuhri",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "518",
+      "layer": "MAIN",
+      "exact": "وَكَانَ مِنْ عِلِّيَّةِ الأَنْصَارِ وَعُلَمَائِهِم، وَمِنْ أَبْنَاءِ البَدْرِيِّيْنَ"
+    },
+    {
+      "id": "sp_au_sons",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "518",
+      "layer": "MAIN",
+      "exact": "وَابْنَاهُ؛ مُحَمَّدٌ وَسَهْلٌ ابْنَا أَبِي أُمَامَةَ"
+    },
+    {
+      "id": "sp_au_sons_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "518",
+      "layer": "MAIN",
+      "exact": "مُحَمَّدٌ وَسَهْلٌ ابْنَا أَبِي أُمَامَةَ",
+      "prefix": "وَابْنَاهُ؛ "
+    },
+    {
+      "id": "sp_au_death",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "519",
+      "layer": "MAIN",
+      "exact": "اتَّفَقُوا عَلَى وَفَاتِهِ فِي سَنَةِ مائَةٍ"
+    },
+    {
+      "id": "sp_au_y100",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "519",
+      "layer": "MAIN",
+      "exact": "سَنَةِ مائَةٍ",
+      "prefix": "وَفَاتِهِ فِي "
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_au0",
+      "unit": "siyar-v6-125-abu-umamah-ibn-sahl",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_au_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_au_qila",
+      "unit": "siyar-v6-125-abu-umamah-ibn-sahl",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_au_qila_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_au_abumashar",
+      "unit": "siyar-v6-125-abu-umamah-ibn-sahl",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_au_abumashar_frame"
+      ],
+      "origin": {
+        "mention": "m_au_abumashar_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_au_zuhri",
+      "unit": "siyar-v6-125-abu-umamah-ibn-sahl",
+      "ordinal": 4,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_au_zuhri_frame"
+      ],
+      "origin": {
+        "mention": "m_au_zuhri_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_au_name",
+      "report": "r_au0",
+      "spans": [
+        "sp_au_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_au_ism",
+      "report": "r_au0",
+      "spans": [
+        "sp_au_ism"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_au_born",
+      "report": "r_au0",
+      "spans": [
+        "sp_au_born"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_au_qila",
+      "report": "r_au_qila",
+      "spans": [
+        "sp_au_qila"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_au_abumashar",
+      "report": "r_au_abumashar",
+      "spans": [
+        "sp_au_abumashar"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_au_zuhri",
+      "report": "r_au_zuhri",
+      "spans": [
+        "sp_au_zuhri"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_au_sons",
+      "report": "r_au0",
+      "spans": [
+        "sp_au_sons"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_au_death",
+      "report": "r_au0",
+      "spans": [
+        "sp_au_death"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_au",
+      "parent": "sp_au_name",
+      "exact": "أَبُو أُمَامَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_au_father",
+      "parent": "sp_au_name",
+      "exact": "سَهْلِ بنِ حُنَيْفٍ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_au_qila_by",
+      "parent": "sp_au_qila",
+      "exact": "قِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_au_prophet",
+      "parent": "sp_au_born",
+      "exact": "النَّبِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_au_q",
+      "parent": "sp_au_qila",
+      "exact": "وَرَآهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_au_abumashar_by",
+      "parent": "sp_au_abumashar_frame",
+      "exact": "أَبُو مَعْشَرٍ السِّنْدِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_au_am",
+      "parent": "sp_au_abumashar",
+      "exact": "أَبَا أُمَامَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_au_prophet2",
+      "parent": "sp_au_abumashar",
+      "exact": "النَّبِيَّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_au_zuhri_by",
+      "parent": "sp_au_zuhri_frame",
+      "exact": "الزُّهْرِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_au_z",
+      "parent": "sp_au_zuhri",
+      "exact": "وَكَانَ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_au_s",
+      "parent": "sp_au_sons",
+      "exact": "وَابْنَاهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_au_c_muhammad",
+      "parent": "sp_au_sons",
+      "exact": "مُحَمَّدٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_au_c_sahl",
+      "parent": "sp_au_sons",
+      "exact": "سَهْلٌ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_au_d",
+      "parent": "sp_au_death",
+      "exact": "وَفَاتِهِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_au",
+      "mention": "m_au",
+      "agent": "abu-umamah-ibn-sahl",
+      "basis": [
+        {
+          "span": "sp_au_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_au_father",
+      "mention": "m_au_father",
+      "agent": "sahl-ibn-hunayf",
+      "basis": [
+        {
+          "span": "sp_au_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_au_q",
+      "mention": "m_au_q",
+      "agent": "abu-umamah-ibn-sahl",
+      "basis": [
+        {
+          "span": "sp_au_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_au_am",
+      "mention": "m_au_am",
+      "agent": "abu-umamah-ibn-sahl",
+      "basis": [
+        {
+          "span": "sp_au_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_au_z",
+      "mention": "m_au_z",
+      "agent": "abu-umamah-ibn-sahl",
+      "basis": [
+        {
+          "span": "sp_au_zuhri_frame",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_au_s",
+      "mention": "m_au_s",
+      "agent": "abu-umamah-ibn-sahl",
+      "basis": [
+        {
+          "span": "sp_au_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_au_c_muhammad",
+      "mention": "m_au_c_muhammad",
+      "agent": "muhammad-ibn-abi-umamah-ibn-sahl",
+      "basis": [
+        {
+          "span": "sp_au_sons_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_au_c_sahl",
+      "mention": "m_au_c_sahl",
+      "agent": "sahl-ibn-abi-umamah-ibn-sahl",
+      "basis": [
+        {
+          "span": "sp_au_sons_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_au_d",
+      "mention": "m_au_d",
+      "agent": "abu-umamah-ibn-sahl",
+      "basis": [
+        {
+          "span": "sp_au_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_au_name",
+      "subject": "m_au",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_au_name"
+        ]
+      },
+      "restsOn": [
+        "st_au_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_au_kunya",
+      "subject": "m_au",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sp_au_kunya"
+        ]
+      },
+      "restsOn": [
+        "st_au_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_au_father",
+      "subject": "m_au",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_au_father"
+      },
+      "restsOn": [
+        "st_au_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_au_sex",
+      "subject": "m_au",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_au_sex"
+        ]
+      },
+      "restsOn": [
+        "st_au_ism"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_au_comp_qila",
+      "subject": "m_au_q",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_au_prophet"
+      },
+      "restsOn": [
+        "st_au_qila"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_au_comp_am",
+      "subject": "m_au_am",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_au_prophet2"
+      },
+      "restsOn": [
+        "st_au_abumashar"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_au_v_zuhri",
+      "subject": "m_au_z",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_au_zuhri"
+        ]
+      },
+      "restsOn": [
+        "st_au_zuhri"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_au_c_muhammad_0",
+      "subject": "m_au_c_muhammad",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_au_s"
+      },
+      "restsOn": [
+        "st_au_sons"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_au_c_sahl_0",
+      "subject": "m_au_c_sahl",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_au_s"
+      },
+      "restsOn": [
+        "st_au_sons"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_au_d100",
+      "subject": "m_au_d",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 100,
+        "spans": [
+          "sp_au_y100"
+        ]
+      },
+      "restsOn": [
+        "st_au_death"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
