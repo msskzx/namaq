@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { ArrowLeftRight } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
-import { aroundOf, ayahOf, matrixOf, mixedBefore, NOTHING_SHARED, readId, surahNames, type Presentation } from '@/lib/branches';
+import { aroundOf, ayahOf, matrixOf, rowOf, mixedBefore, NOTHING_SHARED, readId, surahNames, type Presentation } from '@/lib/branches';
 import { compareTargetsOfAyah, type CompareTarget } from '@/lib/compare';
 import { openCompare } from '@/lib/ways';
 import type { Palette } from '@/lib/theme';
@@ -30,25 +30,26 @@ export default function PathAyat({ ayahKeys, presentation, palette, width, onLay
   // While an ayah grows (`shown`), its card counts from the ayah's own start, so the surrounding ayat join only once it has grown.
   const withAround = around && shown === undefined;
   const matrix = useMemo(() => ayahKeys.length ? matrixOf(presentation, withAround) : null, [presentation, ayahKeys.length > 0, withAround]); // eslint-disable-line react-hooks/exhaustive-deps
-  const starts = presentation.ayat.map(ayah => ayah.key);
+  const rowFor = (key: string) => (matrix ? rowOf(matrix, key) : null);
   const mixed = mixedBefore(presentation);
   const context = useMemo(() => withAround && mixed ? aroundOf(presentation) : null, [presentation, withAround, mixed]);
   // A growing ayah too long for the fixed frame scrolls along as its words appear, so the newest stay in sight.
   const scroller = useRef<React.ComponentRef<typeof ScrollView>>(null);
   const [heights, setHeights] = useState({ content: 0, view: 0 });
-  const total = matrix && ayahKeys.length === 1 ? (matrix.rows[starts.indexOf(ayahKeys[0])]?.ayah?.ayat ?? []).reduce((sum, ayah) => sum + ayah.words.length, 0) : 0;
+  const total = matrix && ayahKeys.length === 1 ? (rowFor(ayahKeys[0])?.row.ayah?.ayat ?? []).reduce((sum, ayah) => sum + ayah.words.length, 0) : 0;
   // The tour's reading moves the same way, to the word it reads.
   const readAt = useMemo(() => {
     if (!reading?.size || !matrix || ayahKeys.length !== 1) return undefined;
-    const r = starts.indexOf(ayahKeys[0]);
+    const found = rowFor(ayahKeys[0]);
+    const r = found?.r ?? -1;
     let at = 0;
-    for (const ayah of matrix.rows[r]?.ayah?.ayat ?? []) for (let i = 0; i < ayah.words.length; i++, at++) if (reading.has(readId(r, ayah.key, i))) return at;
+    for (const ayah of found?.row.ayah?.ayat ?? []) for (let i = 0; i < ayah.words.length; i++, at++) if (reading.has(readId(r, ayah.key, i))) return at;
     return undefined;
   }, [reading, matrix, ayahKeys]); // eslint-disable-line react-hooks/exhaustive-deps
   // With the surrounding ayat on, the card holds them too: the own ayah's words sit after those before it and ahead of those after.
   const [wordsBefore, wordsAfter] = useMemo(() => {
     if (!withAround || !matrix || ayahKeys.length !== 1) return [0, 0];
-    const row = matrix.rows[starts.indexOf(ayahKeys[0])];
+    const row = rowFor(ayahKeys[0])?.row;
     const count = (ayat: { words: unknown[] }[]) => ayat.reduce((sum, ayah) => sum + ayah.words.length, 0);
     const earlier = mixed ? context?.earlier[ayahKeys[0]] : null;
     return [count([...(earlier ? [earlier] : []), ...row?.before?.ayat ?? []]), count(row?.after?.ayat ?? [])];
@@ -68,7 +69,8 @@ export default function PathAyat({ ayahKeys, presentation, palette, width, onLay
         onContentSizeChange={(_w, content) => { onContent?.(content); setHeights(old => old.content === content ? old : { ...old, content }); }} contentContainerStyle={{ gap: 8 }} showsVerticalScrollIndicator={false}>
         {ayahKeys.map(key => {
           const ayah = ayahOf(key);
-          const row = matrix.rows[starts.indexOf(key)];
+          const found = rowFor(key);
+          const row = found?.row;
           const cell = row?.ayah ?? (ayah ? { ayat: [{ key, page: ayah.page, words: ayah.words, ...NOTHING_SHARED }] } : null);
           // As the tree draws the run: in a mixed tree one more ayah before, then the ayah before, this one, and the ayah after.
           const earlier = withAround && mixed ? context?.earlier[key] : null;
@@ -77,7 +79,7 @@ export default function PathAyat({ ayahKeys, presentation, palette, width, onLay
           const [surah, number] = key.split(':').map(Number);
           const place = `${surahNames[surah] ?? num(surah)} ${num(number)}`;
           const targets = compareTargetsOfAyah(key);
-          return <Cell key={key} cell={cell} at="ayah" palette={palette} width={width - 24} current shown={shown} around={around} read={reading ? { row: starts.indexOf(key), now: reading } : undefined}
+          return <Cell key={key} cell={cell} at="ayah" palette={palette} width={width - 24} current shown={shown} around={around} read={reading ? { row: found?.r ?? -1, now: reading } : undefined}
             tools={targets.length > 0 && <IconButton Icon={ArrowLeftRight} label={`قارن ${place}`} onPress={() => (targets.length === 1 ? openCompare(targets[0]) : setChoosing(targets))} size="small" />} />;
         })}
       </ScrollView>

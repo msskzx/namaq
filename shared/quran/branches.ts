@@ -452,3 +452,12 @@ export function withStarts(prefixes: Variant[], ayahKeys: string[]): Variant[] {
   const missing = ayahKeys.filter(key => !covered.has(key));
   return missing.length ? [...prefixes, { word: '', words: [], conj: '', keys: missing, id: prefixes[0].id }] : prefixes;
 }
+
+/**
+ * The rows a matrix draws, by index: a row whose ayat all show inside another row's passage is left out, so an ayah is not drawn
+ * twice (al-Zumar 36 reads on into 37, which is a row of its own: one row, «الزمر ٣٦–٣٧»; owner, 2026-11-20).
+ */
+export function uncoveredRows(passages: readonly (readonly string[])[]): number[] {
+  const covers = (j: number, i: number) => j !== i && (passages[j].length > passages[i].length || passages[j].length === passages[i].length && j < i) && passages[i].every(key => passages[j].includes(key));
+  return passages.flatMap((_, i) => passages.some((__, j) => covers(j, i)) ? [] : [i]);
+}

@@ -20,6 +20,7 @@ import styles from './AyahCards.module.css';
 import { ConnectionLines, useGroupConnections } from './GroupConnections';
 import { useGrowth, useMatrixReadTarget, type MatrixReadStep } from './Grow';
 import { stepTime } from '@shared/quran/readPlan';
+import { uncoveredRows } from '@shared/quran/branches';
 
 type Column = 'before' | 'ayah' | 'after';
 const ENTER = 'matrix-enter';
@@ -59,8 +60,10 @@ function Matrix({ ayahKeys, passageKeys, names, steps, context, note }: Props & 
   const { language } = useLanguage();
   const ar = language === 'ar';
   const connections = useGroupConnections();
-  const shown = ayahKeys.slice(0, MAX_KEYS);
-  const passages = shown.map((key, i) => passageKeys?.[i] ?? [key]);
+  const all = ayahKeys.slice(0, MAX_KEYS).map((key, i) => ({ key, passage: passageKeys?.[i] ?? [key] }));
+  const kept = uncoveredRows(all.map(row => row.passage)).map(i => all[i]);
+  const shown = kept.map(row => row.key);
+  const passages = kept.map(row => row.passage);
   const treeKey = passages.map(passage => passage.join(',')).join(' ');
   const ends = passages.map(passage => passage[passage.length - 1]);
   const COLUMNS: Column[] = context ? ['before', 'ayah', 'after'] : ['ayah'];

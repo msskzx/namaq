@@ -36,7 +36,7 @@ import { CardActions, DoubleTapSave, FilterButton, NoTrees, SurahChip } from './
 import { compareLinksFor, compareLinksOfAyah } from '../compare/pairCards';
 import { PathScope } from './Paths';
 import TreeReview from './TreeReview';
-import { branchReviewState, branchVerdictFor, droppedBranch, matrixOnly, ownAyatOnly, twoAyat } from '@shared/quran/branchVerdicts';
+import { branchReviewState, branchVerdictFor, droppedBranch, matrixOnly, ownAyatOnly, twoAyat, withoutLeftOut } from '@shared/quran/branchVerdicts';
 import PreloadQuranText from '@/components/quran/PreloadQuranText';
 import styles from '@/components/common/PaperPage.module.css';
 
@@ -115,9 +115,11 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   const effectiveFilters = { ...filters, categories: kind };
   const matchingGroups = browseGroups(groups, effectiveFilters, allAyat, range);
   const requestedGroup = matchingGroups.find(group => groupHasId(group, requestedId)) ?? groupsById.get(requestedId);
-  const canonicalPhrase = requestedId.startsWith('tree:') ? searchableFor(built).find(piece => piece.id === requestedId)?.phrase : undefined;
+  const canonical = requestedId.startsWith('tree:') ? searchableFor(built).find(piece => piece.id === requestedId)?.phrase : undefined;
+  const canonicalPhrase = canonical && { ...canonical, occurrences: withoutLeftOut(requestedId, canonical.occurrences) };
   const resolved: TreeGroup | undefined = canonicalPhrase ?? requestedGroup?.tree ?? (subtreeHolds ? subtree : undefined) ?? resolveTree<TreeGroup>(requestedId, built.trees, () => built.phrases ??= buildPhraseGroups(built.ayat));
-  const id = requestedGroup?.id ?? (resolved ? treeId(resolved) : requestedId);
+  // A tree with ayat taken out (withoutLeftOut) keeps the id of the whole tree its verdict is filed under.
+  const id = requestedGroup?.id ?? (canonicalPhrase ? requestedId : resolved ? treeId(resolved) : requestedId);
   const picked = Number(first(params.s));
   const surah = Number.isInteger(picked) && picked >= 1 && picked <= 114 ? picked : undefined;
   // The reader's ayah menu opens the trees holding one ayah (?k=2:255).
@@ -134,7 +136,7 @@ export default async function QuranBranchesPage({ searchParams }: { searchParams
   // The list view is gone: search results and surahs are swiped through as trees.
   if (id !== requestedId && !(requestedGroup && groupHasId(requestedGroup, requestedId)) && resolved?.id !== requestedId || params.m === 'list' || params.p || params.c || params.scope || params.kind || params.v || params.g || params.w || params.r || params.apply === 'juz') redirect(branchesHref(id, juz, state));
   const scopePieces = (pieces: SharedPiece[]) => pieces.flatMap(piece => {
-    const occurrences = piece.phrase.occurrences.filter(occurrence => withinScope(occurrence.key));
+    const occurrences = withoutLeftOut(piece.id, piece.phrase.occurrences.filter(occurrence => withinScope(occurrence.key)));
     const keys = [...new Set(occurrences.map(occurrence => occurrence.key))];
     return keys.length < 2 ? [] : [{ ...piece, keys, count: keys.length, opening: { ...piece.opening, count: keys.length }, phrase: { ...piece.phrase, occurrences } }];
   });

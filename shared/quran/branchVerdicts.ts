@@ -7,8 +7,9 @@ import twinData from '../data/quran/twinVerdicts.json';
  * `ayat: 'own'`: each of its rows reads its own ayah only, not grown on into the next (the owner's call for one card, not the rule).
  * `ayat: 'two'`: each matrix row reads two ayat, its own and the next, so the rows match in depth (the tree is drawn as it is).
  * `same`: hidden on branches only because the card it names already shows these ayat; a twin's compare verdict does not undo it.
+ * `without`: ayat the owner took out of the card (al-Baqara 107 from «ملك السماوات والأرض وما», where «وما» starts a new sentence).
  */
-export type BranchVerdict = { keep: boolean; why: string; checked?: boolean; ask?: string; view?: 'matrix'; ayat?: 'own' | 'two'; same?: string };
+export type BranchVerdict = { keep: boolean; why: string; checked?: boolean; ask?: string; view?: 'matrix'; ayat?: 'own' | 'two'; same?: string; without?: string[] };
 export type BranchVerdicts = Record<string, BranchVerdict>;
 
 /**
@@ -21,6 +22,11 @@ export type TwinVerdicts = Record<string, TwinVerdict>;
 export const OWNER_ASK = 'owner: discuss';
 
 export const branchVerdicts = (data as { trees: BranchVerdicts }).trees;
+/** A tree's ayat less those the owner took out of its card (`without`): every place that draws the tree reads it from here. */
+export const withoutLeftOut = <T extends { key: string }>(id: string, occurrences: T[]): T[] => {
+  const without = branchVerdicts[id]?.without;
+  return without ? occurrences.filter(occurrence => !without.includes(occurrence.key)) : occurrences;
+};
 export const twinVerdicts = (twinData as { twins: TwinVerdicts }).twins;
 
 type Identified = { id: string; legacyId?: string; legacyIds?: string[]; group?: { id?: string; aliases?: string[] }; phrase?: { occurrences: { start: number; end: number }[] } };
