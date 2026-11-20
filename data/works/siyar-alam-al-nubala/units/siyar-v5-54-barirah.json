@@ -1,0 +1,206 @@
+{
+  "unit": {
+    "id": "siyar-v5-54-barirah",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٥٤"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_br_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "297",
+      "layer": "MAIN",
+      "exact": "٥٤ - بَرِيْرَةُ مَوْلاَةُ أُمِّ المُؤْمِنِيْنَ عَائِشَةَ"
+    },
+    {
+      "id": "sp_br_name",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "297",
+      "layer": "MAIN",
+      "exact": "بَرِيْرَةُ",
+      "prefix": "٥٤ -"
+    },
+    {
+      "id": "sp_br_mughith_isnad",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "302",
+      "layer": "MAIN",
+      "exact": "هَمَّامٌ: حَدَّثَنَا قَتَادَةُ، عَنْ عِكْرِمَةَ، عَنِ ابْنِ عَبَّاسٍ"
+    },
+    {
+      "id": "sp_br_mughith",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "302",
+      "layer": "MAIN",
+      "exact": "أَنَّ زَوْجَ بَرِيْرَةَ كَانَ عَبْداً أَسْوَدَ يُسَمَّى مُغِيثاً"
+    },
+    {
+      "id": "sp_br_mughith_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "300",
+      "layer": "MAIN",
+      "exact": "وَهِيَ عِنْدَ مُغِيْثِ بنِ جَحْشٍ"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_br0",
+      "unit": "siyar-v5-54-barirah",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_br_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_br_mughith",
+      "unit": "siyar-v5-54-barirah",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "isnadSpan": "sp_br_mughith_isnad",
+      "origin": {
+        "mention": "m_br_mughith_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_br_name",
+      "report": "r_br0",
+      "spans": [
+        "sp_br_name"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_br_mughith",
+      "report": "r_br_mughith",
+      "spans": [
+        "sp_br_mughith"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_br",
+      "parent": "sp_br_name",
+      "exact": "بَرِيْرَةُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_br_mughith_by",
+      "parent": "sp_br_mughith_isnad",
+      "exact": "ابْنِ عَبَّاسٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_br_m",
+      "parent": "sp_br_mughith",
+      "exact": "بَرِيْرَةَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_br_mughith",
+      "parent": "sp_br_mughith",
+      "exact": "مُغِيثاً",
+      "occurrence": 1,
+      "role": "REFERENT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_br",
+      "mention": "m_br",
+      "agent": "barirah",
+      "basis": [
+        {
+          "span": "sp_br_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_m",
+      "mention": "m_br_m",
+      "agent": "barirah",
+      "basis": [
+        {
+          "span": "sp_br_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_br_mughith",
+      "mention": "m_br_mughith",
+      "agent": "mughith",
+      "basis": [
+        {
+          "span": "sp_br_mughith_n",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_br_name",
+      "subject": "m_br",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_br_name"
+        ]
+      },
+      "restsOn": [
+        "st_br_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_sex",
+      "subject": "m_br",
+      "predicate": "sex",
+      "value": {
+        "classified": "FEMALE",
+        "spans": [
+          "sp_br_heading"
+        ]
+      },
+      "restsOn": [
+        "st_br_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_br_mughith",
+      "subject": "m_br_m",
+      "predicate": "MARRIED",
+      "value": {
+        "object": "m_br_mughith"
+      },
+      "restsOn": [
+        "st_br_mughith"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

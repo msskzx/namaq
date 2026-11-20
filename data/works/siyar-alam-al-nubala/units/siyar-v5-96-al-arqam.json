@@ -1,0 +1,537 @@
+{
+  "unit": {
+    "id": "siyar-v5-96-al-arqam",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٩٦"
+    }
+  },
+  "spans": [
+    {
+      "id": "hd",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "479",
+      "layer": "MAIN",
+      "exact": "٩٦ - الأَرْقَمُ بنُ أَبِي الأَرْقَمِ بنِ أَسِدِ بنِ عَبْدِ اللهِ المَخْزُوْمِيُّ"
+    },
+    {
+      "id": "n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "479",
+      "layer": "MAIN",
+      "exact": "الأَرْقَمُ بنُ أَبِي الأَرْقَمِ بنِ أَسِدِ بنِ عَبْدِ اللهِ"
+    },
+    {
+      "id": "n2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "479",
+      "layer": "MAIN",
+      "exact": "ابْنِ عُمَرَ بنِ مَخْزُوْمِ بنِ يَقَظَةَ المَخْزُوْمِيُّ"
+    },
+    {
+      "id": "sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "479",
+      "layer": "MAIN",
+      "exact": "الأَرْقَمُ بنُ",
+      "prefix": "-"
+    },
+    {
+      "id": "fa",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "479",
+      "layer": "MAIN",
+      "exact": "أَبِي الأَرْقَمِ بنِ أَسِدِ"
+    },
+    {
+      "id": "fn",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "479",
+      "layer": "MAIN",
+      "exact": "اسْمُ أَبِيْهِ: عَبْدُ مَنَافٍ."
+    },
+    {
+      "id": "cp",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "479",
+      "layer": "MAIN",
+      "exact": "صَاحِبُ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-. مِنَ السَّابِقِيْنَ الأَوَّلِيْنَ."
+    },
+    {
+      "id": "cp_p",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "479",
+      "layer": "MAIN",
+      "exact": "النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-"
+    },
+    {
+      "id": "sb",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "479",
+      "layer": "MAIN",
+      "exact": "مِنَ السَّابِقِيْنَ الأَوَّلِيْنَ."
+    },
+    {
+      "id": "bd",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "479",
+      "layer": "MAIN",
+      "exact": "كَانَ الأَرْقَمُ أَحَدَ مَنْ شَهِدَ بَدْراً، وَقَدِ اسْتَخْفَى النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فِي دَارِهِ، وَهِيَ عِنْدَ الصَّفَا."
+    },
+    {
+      "id": "bd_b",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "479",
+      "layer": "MAIN",
+      "exact": "بَدْراً",
+      "prefix": "شَهِدَ"
+    },
+    {
+      "id": "bd_v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "479",
+      "layer": "MAIN",
+      "exact": "وَقَدِ اسْتَخْفَى النَّبِيُّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ- فِي دَارِهِ، وَهِيَ عِنْدَ الصَّفَا."
+    },
+    {
+      "id": "dp",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "480",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ: بِالمَدِيْنَةِ، وَصَلَّى عَلَيْهِ: سَعْدُ بنُ أَبِي وَقَّاصٍ بِوَصِيَّتِهِ إِلَيْهِ"
+    },
+    {
+      "id": "dp_p",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "480",
+      "layer": "MAIN",
+      "exact": "بِالمَدِيْنَةِ",
+      "prefix": "تُوُفِّيَ:"
+    },
+    {
+      "id": "d1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "480",
+      "layer": "MAIN",
+      "exact": "وَقَالَ عُثْمَانُ بنُ الأَرْقَمِ: تُوُفِّيَ أَبِي سَنَةَ ثَلاَثٍ وَخَمْسِيْنَ، وَلَهُ ثَلاَثٌ وَثَمَانُوْنَ سَنَةً"
+    },
+    {
+      "id": "d1y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "480",
+      "layer": "MAIN",
+      "exact": "سَنَةَ ثَلاَثٍ وَخَمْسِيْنَ"
+    },
+    {
+      "id": "d1a",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "480",
+      "layer": "MAIN",
+      "exact": "ثَلاَثٌ وَثَمَانُوْنَ سَنَةً"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r0",
+      "unit": "siyar-v5-96-al-arqam",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "hd",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_22",
+      "unit": "siyar-v5-96-al-arqam",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "d1"
+      ],
+      "origin": {
+        "mention": "m_sp21"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_1",
+      "report": "r0",
+      "spans": [
+        "n1",
+        "n2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_5",
+      "report": "r0",
+      "spans": [
+        "n1",
+        "fn"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_8",
+      "report": "r0",
+      "spans": [
+        "cp"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_13",
+      "report": "r0",
+      "spans": [
+        "bd"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_18",
+      "report": "r0",
+      "spans": [
+        "dp"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_23",
+      "report": "r_22",
+      "spans": [
+        "d1"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_s2",
+      "parent": "n1",
+      "exact": "الأَرْقَمُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o6",
+      "parent": "n1",
+      "exact": "أَبِي الأَرْقَمِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_s9",
+      "parent": "cp",
+      "exact": "صَاحِبُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o10",
+      "parent": "cp",
+      "exact": "النَّبِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_s14",
+      "parent": "bd",
+      "exact": "الأَرْقَمُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_e15",
+      "parent": "bd",
+      "exact": "بَدْراً",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_s19",
+      "parent": "dp",
+      "exact": "تُوُفِّيَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sp21",
+      "parent": "d1",
+      "exact": "عُثْمَانُ بنُ الأَرْقَمِ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_s24",
+      "parent": "d1",
+      "exact": "أَبِي",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_s2",
+      "mention": "m_s2",
+      "agent": "al-arqam-ibn-abi-al-arqam",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o6",
+      "mention": "m_o6",
+      "agent": "abd-manaf-ibn-asad-al-makhzumi",
+      "basis": [
+        {
+          "span": "fa",
+          "role": "NASAB"
+        },
+        {
+          "span": "fn",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s9",
+      "mention": "m_s9",
+      "agent": "al-arqam-ibn-abi-al-arqam",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o10",
+      "mention": "m_o10",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "cp_p",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s14",
+      "mention": "m_s14",
+      "agent": "al-arqam-ibn-abi-al-arqam",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_e15",
+      "mention": "m_e15",
+      "event": "badr",
+      "basis": [
+        {
+          "span": "bd_b",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s19",
+      "mention": "m_s19",
+      "agent": "al-arqam-ibn-abi-al-arqam",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s24",
+      "mention": "m_s24",
+      "agent": "al-arqam-ibn-abi-al-arqam",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_3",
+      "subject": "m_s2",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "n1",
+          "n2"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_4",
+      "subject": "m_s2",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sex"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_7",
+      "subject": "m_s2",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_o6"
+      },
+      "restsOn": [
+        "st_5"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_11",
+      "subject": "m_s9",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_o10"
+      },
+      "restsOn": [
+        "st_8"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_12",
+      "subject": "m_s9",
+      "predicate": "title",
+      "value": {
+        "classified": "al-sabiqoon",
+        "spans": [
+          "sb"
+        ]
+      },
+      "restsOn": [
+        "st_8"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_16",
+      "subject": "m_s14",
+      "predicate": "PARTICIPATED_IN",
+      "value": {
+        "object": "m_e15"
+      },
+      "restsOn": [
+        "st_13"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_17",
+      "subject": "m_s14",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "bd_v"
+        ]
+      },
+      "restsOn": [
+        "st_13"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_20",
+      "subject": "m_s19",
+      "predicate": "died.place",
+      "value": {
+        "spans": [
+          "dp_p"
+        ]
+      },
+      "restsOn": [
+        "st_18"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_25",
+      "subject": "m_s24",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 53,
+        "spans": [
+          "d1y"
+        ]
+      },
+      "restsOn": [
+        "st_23"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_26",
+      "subject": "m_s24",
+      "predicate": "died.age",
+      "value": {
+        "parsed": 83,
+        "spans": [
+          "d1a"
+        ]
+      },
+      "restsOn": [
+        "st_23"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

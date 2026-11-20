@@ -1,0 +1,426 @@
+{
+  "unit": {
+    "id": "siyar-v5-97-abu-humayd-al-saidi",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "٩٧"
+    }
+  },
+  "spans": [
+    {
+      "id": "hd",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "481",
+      "layer": "MAIN",
+      "exact": "٩٧ - أَبُو حُمَيْدٍ السَّاعِدِيُّ الأَنْصَارِيُّ المَدَنِيُّ"
+    },
+    {
+      "id": "n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "481",
+      "layer": "MAIN",
+      "exact": "أَبُو حُمَيْدٍ السَّاعِدِيُّ الأَنْصَارِيُّ المَدَنِيُّ"
+    },
+    {
+      "id": "sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "481",
+      "layer": "MAIN",
+      "exact": "أَبُو حُمَيْدٍ",
+      "prefix": "-"
+    },
+    {
+      "id": "q1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "481",
+      "layer": "MAIN",
+      "exact": "قِيْلَ: اسْمُهُ عَبْدُ الرَّحْمَنِ."
+    },
+    {
+      "id": "q1v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "481",
+      "layer": "MAIN",
+      "exact": "عَبْدُ الرَّحْمَنِ",
+      "prefix": "اسْمُهُ"
+    },
+    {
+      "id": "q2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "481",
+      "layer": "MAIN",
+      "exact": "وَقِيْلَ: المُنْذِرُ بنُ سَعْدٍ."
+    },
+    {
+      "id": "q2v",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "481",
+      "layer": "MAIN",
+      "exact": "المُنْذِرُ بنُ سَعْدٍ",
+      "prefix": "وَقِيْلَ:"
+    },
+    {
+      "id": "v1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "481",
+      "layer": "MAIN",
+      "exact": "مِنْ فُقَهَاءِ أَصْحَابِ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-."
+    },
+    {
+      "id": "v1_p",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "481",
+      "layer": "MAIN",
+      "exact": "النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ-"
+    },
+    {
+      "id": "d1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "481",
+      "layer": "MAIN",
+      "exact": "تُوُفِّيَ: سَنَةَ سِتِّيْنَ.",
+      "prefix": "وَغَيْرُهُمْ."
+    },
+    {
+      "id": "d1y",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 5,
+      "page": "481",
+      "layer": "MAIN",
+      "exact": "سَنَةَ سِتِّيْنَ",
+      "prefix": "تُوُفِّيَ:"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r0",
+      "unit": "siyar-v5-97-abu-humayd-al-saidi",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "hd",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_7",
+      "unit": "siyar-v5-97-abu-humayd-al-saidi",
+      "ordinal": 2,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_sp6"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_12",
+      "unit": "siyar-v5-97-abu-humayd-al-saidi",
+      "ordinal": 3,
+      "voice": "REPORTED_ANONYMOUS",
+      "origin": {
+        "mention": "m_sp11"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_1",
+      "report": "r0",
+      "spans": [
+        "n1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_8",
+      "report": "r_7",
+      "spans": [
+        "q1"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_13",
+      "report": "r_12",
+      "spans": [
+        "q2"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_16",
+      "report": "r0",
+      "spans": [
+        "v1"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_21",
+      "report": "r0",
+      "spans": [
+        "d1"
+      ],
+      "role": "AUTHOR_REPORT"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_s2",
+      "parent": "n1",
+      "exact": "أَبُو حُمَيْدٍ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sp6",
+      "parent": "q1",
+      "exact": "قِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_s9",
+      "parent": "q1",
+      "exact": "اسْمُهُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_sp11",
+      "parent": "q2",
+      "exact": "وَقِيْلَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_s14",
+      "parent": "q2",
+      "exact": "المُنْذِرُ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_s17",
+      "parent": "v1",
+      "exact": "فُقَهَاءِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_o18",
+      "parent": "v1",
+      "exact": "النَّبِيِّ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_s22",
+      "parent": "d1",
+      "exact": "تُوُفِّيَ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_s2",
+      "mention": "m_s2",
+      "agent": "abu-humayd-al-saidi",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s9",
+      "mention": "m_s9",
+      "agent": "abu-humayd-al-saidi",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s14",
+      "mention": "m_s14",
+      "agent": "abu-humayd-al-saidi",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s17",
+      "mention": "m_s17",
+      "agent": "abu-humayd-al-saidi",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_o18",
+      "mention": "m_o18",
+      "agent": "prophet-muhammad",
+      "basis": [
+        {
+          "span": "v1_p",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_s22",
+      "mention": "m_s22",
+      "agent": "abu-humayd-al-saidi",
+      "basis": [
+        {
+          "span": "hd",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_3",
+      "subject": "m_s2",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "n1"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_4",
+      "subject": "m_s2",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sex"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_5",
+      "subject": "m_s2",
+      "predicate": "name.kunya",
+      "value": {
+        "spans": [
+          "sex"
+        ]
+      },
+      "restsOn": [
+        "st_1"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_10",
+      "subject": "m_s9",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "q1v"
+        ]
+      },
+      "restsOn": [
+        "st_8"
+      ],
+      "status": "DISPUTED"
+    },
+    {
+      "id": "a_15",
+      "subject": "m_s14",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "q2v"
+        ]
+      },
+      "restsOn": [
+        "st_13"
+      ],
+      "status": "DISPUTED"
+    },
+    {
+      "id": "a_19",
+      "subject": "m_s17",
+      "predicate": "COMPANION_OF",
+      "value": {
+        "object": "m_o18"
+      },
+      "restsOn": [
+        "st_16"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_20",
+      "subject": "m_s17",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "v1"
+        ]
+      },
+      "restsOn": [
+        "st_16"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_23",
+      "subject": "m_s22",
+      "predicate": "died.year",
+      "value": {
+        "parsed": 60,
+        "spans": [
+          "d1y"
+        ]
+      },
+      "restsOn": [
+        "st_21"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}
