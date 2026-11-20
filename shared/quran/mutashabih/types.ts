@@ -26,7 +26,7 @@ export const KINDS = {
 
 export type Tag = keyof typeof TAGS;
 export type Kind = keyof typeof KINDS;
-export type Category = 'mutashabeh' | 'pondering' | 'words';
+export type Category = 'mutashabeh' | 'pondering' | 'words' | 'tanasub';
 export type Level = 'exact' | 'letters' | 'lemma' | 'root';
 export type Position = { key: string; index: number };
 export type Word = Position & { features?: WordFeatures; text: string; letters: string; lemma?: string; root?: string; conj?: string; base: string };
@@ -57,4 +57,6 @@ export type Group = {
   /** The page words that differ per tag, for tags without a book's example (shared/quran/mutashabih/examples.ts). */
   words?: Partial<Record<Tag, DifferenceWords>>;
   columns: { a: string; b: string; columns: Column[] }[];
+  /** A surah-order book's card (shared/quran/tanasubCards.ts): the key of its link in ORDER_LINKS. */
+  tanasub?: number;
 };

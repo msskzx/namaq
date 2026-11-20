@@ -4,6 +4,8 @@ import { TAGS, type Citation } from '@shared/quran/mutashabih/types';
 import type { Palette } from '@/lib/theme';
 import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
+import SourceLine, { sourcesOf } from '@/ui/SourceLine';
+import { tanasubLink, tanasubSource } from '@shared/quran/tanasubCards';
 
 const arabicDigits = (text: string) => text.replace(/\d/g, digit => '٠١٢٣٤٥٦٧٨٩'[Number(digit)]);
 /** «§ الفاتحة، ج 1 ص 11» as the card's foot reads it: «الفاتحة، ج ١ ص ١١». */
@@ -30,6 +32,19 @@ export default function BookQuote({ citations, onMore, palette }: { citations: C
         <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{placeLabel(first.locator)}{citations.length > 1 ? ` · ${otherBooks(citations.length - 1)}` : ''}</Text>
         <Button variant="plain" label="اقرأ الباقي" onPress={onMore} accessibilityLabel={`اقرأ كلام ${first.book} كاملًا`} />
       </View>
+    </View>
+  );
+}
+
+/** Under a surah-order book's card on branches, as on compare: the quote as written and its book on the source line (owner, 2026-11-20). */
+export function TanasubQuote({ link: key, palette }: { link: number; palette: Palette }) {
+  const link = tanasubLink(key);
+  if (!link) return null;
+  const sources = sourcesOf([tanasubSource(link)]);
+  return (
+    <View style={{ gap: 2, paddingTop: 10 }}>
+      <Text style={{ color: palette.ink, fontSize: 16, lineHeight: 28, textAlign: 'justify', writingDirection: 'rtl' }}>«{link.text}»</Text>
+      <SourceLine named={sources} sources={sources} palette={palette} />
     </View>
   );
 }
