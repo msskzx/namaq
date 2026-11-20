@@ -4,6 +4,8 @@ The branch page opens on reviewed mutashabeh and pondering comparisons in mushaf
 
 ## Matching and evidence
 
+Owner rule (2026-11-18, 2026-11-20): whether ayat make a group at all weighs how many words they share and what kind of words they are (the books' mutashabih, or for «تدبّر» a few rare words). This is decided once, when the groups are built, and is separate from colouring, which goes word by word.
+
 The engine compares ayat and selected spans, retaining the original word indices. An explicitly cited passage can continue into the next ayah. Automatic groups require every pair to satisfy the same matching policy. Exact repeats remain accessible. Broad phrase groups are restricted to search.
 
 The thirty cases supplied in the owner's book-rules report are recorded in `shared/quran/mutashabih/evidence.json`. Their quotations, edition locators and selected passages retain the report's attribution and verification limits. A section link stands in for pagination only where the report provides no printed page. The four messenger passages are held together as the requested regression example. Only the cited places inherit the citation.
