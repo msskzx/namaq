@@ -34,13 +34,15 @@ export interface BranchQuestion {
 const nextClass = (ayah: BranchAyah, at: number) => at >= ayah.words.length ? '۝' : `${ayah.roots?.[at] ?? ''}:${ayah.words[at].replace(/[\u064B-\u065F\u0670\u06D6-\u06EDـ]/g, '')}`;
 
 /** The trees a quiz may ask, and how to turn one into a question; building a question costs time, so callers build only what they ask. */
-export function branchQuestionPool(all: BranchAyah[], range: JuzRange | null = null, supplied?: (TreeGroup & { sources?: QuizSource[] })[]) {
+export function branchQuestionPool(all: BranchAyah[], range: JuzRange | null = null, supplied?: (TreeGroup & { sources?: QuizSource[]; cited?: boolean })[]) {
   const ayat = range ? all.filter(entry => inJuzRange(entry.key, range)) : all;
   const byKey = new Map(ayat.map(entry => [entry.key, entry]));
   // Supplied trees keep only their places inside the range.
   const trees = supplied ? supplied.map(group => ({ ...group, occurrences: group.occurrences.filter(occurrence => byKey.has(occurrence.key)) })) : buildTreeGroups(ayat);
   // Built as the branches tab builds the same tree (createTreePresenter, the owner's curated ends), so a quiz tree is the tree.
   const present = createTreePresenter(ayat, true, !range);
+  // A book's tree keeps to the ayat the book names, never reading on into the next (owner, 2026-11-20; groupPresentation).
+  const presentBook = createTreePresenter(ayat, true, false);
   const candidates = trees.filter(group => !group.family && new Set(group.occurrences.map(occurrence => occurrence.key)).size >= 2 && new Set(group.occurrences.map(occurrence => occurrence.key)).size <= MAX_BRANCHES && new Set(group.occurrences.map(occurrence => nextClass(byKey.get(occurrence.key)!, occurrence.end))).size >= 2);
   const levels = new Map<TreeGroup, Difficulty>();
   /** A tree's difficulty, from its whole ayat. */
@@ -49,8 +51,8 @@ export function branchQuestionPool(all: BranchAyah[], range: JuzRange | null = n
     if (!found) levels.set(group, (found = levelOf(treeScore([...new Set(group.occurrences.map(occurrence => occurrence.key))].map(key => byKey.get(key)!.words)))));
     return found;
   };
-  const build = (group: TreeGroup & { sources?: QuizSource[] }): BranchQuestion | null => {
-    const presentation = present(group);
+  const build = (group: TreeGroup & { sources?: QuizSource[]; cited?: boolean }): BranchQuestion | null => {
+    const presentation = (group.cited ? presentBook : present)(group);
     const tree = ownAyatOnly(group) ? ownAyat(presentation.tree) : presentation.tree;
     const memberKeys = [...new Set(group.occurrences.map(occurrence => occurrence.key))];
     if (!tree.words.length || tree.children.length < 2 || tree.children.length > MAX_BRANCHES || tree.ayat.length > 0 || memberKeys.length > MAX_BRANCHES) return null;
