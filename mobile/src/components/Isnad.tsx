@@ -59,7 +59,7 @@ export default function Isnad({ isnad, palette }: { isnad: AppIsnad; palette: Pa
           </View>
         ))}
         {placed.map(node => (
-          <Card key={node.id} palette={palette} pad={[0, 4]} style={{ position: 'absolute', left: node.x * k, top: node.y * k, width: NODE_W * k, height: NODE_H * k,
+          <Card key={node.id} palette={palette} pad={[0, 4]} node style={{ position: 'absolute', left: node.x * k, top: node.y * k, width: NODE_W * k, height: NODE_H * k,
             alignItems: 'center', justifyContent: 'center' }}>
             <Text numberOfLines={2} style={{ color: palette.ink, fontSize: 14 * k, lineHeight: 19 * k, textAlign: 'center' }}>{node.label}</Text>
             {node.row && rowName(node.row) ? <Text style={{ color: palette.muted, fontSize: 10 * k, lineHeight: 14 * k }}>{rowName(node.row)}</Text> : null}

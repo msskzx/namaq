@@ -66,7 +66,7 @@ export function CardWithRow({ row, bar, children, ...card }: Omit<React.Componen
  * and dims while pressed; without it, it is a plain box, so a screen reader reaches the buttons inside it.
  * `style` is for the card's place only (width, height, flex, alignment), never for its look.
  */
-export default function Card({ palette, pad = 14, gap, spine = false, picked = false, dashed = false, outline, faded = false, clip = false, style, children, testID,
+export default function Card({ palette, pad = 14, gap, spine = false, picked = false, dashed = false, outline, faded = false, clip = false, node = false, style, children, testID,
   onPress, onLongPress, onLayout, ref, accessibilityRole, accessibilityLabel, accessibilityState }: {
   palette: Palette;
   /** Room inside the card: 14, 0 for content that runs to its edges (a mushaf slice, a list of rows), or [top and bottom, sides] for rows of text. */
@@ -84,6 +84,11 @@ export default function Card({ palette, pad = 14, gap, spine = false, picked = f
   faded?: boolean;
   /** Clip what runs past the round corners. */
   clip?: boolean;
+  /**
+   * A box of a drawing (a narrator in an isnad, a book in «من أخرجه»): part of the drawing, not a card, so it keeps its frame
+   * inside a card (owner, 2026-11-20: the isnad is boxes joined by lines).
+   */
+  node?: boolean;
   style?: StyleProp<ViewStyle>;
   children?: React.ReactNode;
   /** Finds the card in a UI test (a feed post's card is `feed-card`). */
@@ -98,7 +103,7 @@ export default function Card({ palette, pad = 14, gap, spine = false, picked = f
 }) {
   // A card in a card draws flat (owner: no card in a card): no fill, no round frame, a rule above to part it from what is before.
   const inside = useContext(InsideCard);
-  const look: ViewStyle = inside ? {
+  const look: ViewStyle = inside && !node ? {
     borderTopWidth: 1, borderColor: palette.rule, gap,
     ...(typeof pad === 'number' ? { padding: pad } : { paddingVertical: pad[0], paddingHorizontal: pad[1] }),
     ...(clip ? { overflow: 'hidden' } : null),
