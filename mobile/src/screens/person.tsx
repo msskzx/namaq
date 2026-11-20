@@ -1,19 +1,19 @@
 import { useMemo, useState } from 'react';
 import { ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Network } from 'lucide-react-native';
-import { kunyaName, pageLabel, saidBy, sayerAt, sourcesOf, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
+import { ArrowLeftRight, Link2, Network, Waypoints } from 'lucide-react-native';
+import { factSources, kunyaName, sayerAt, saidBy, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
 import { surahName } from '@shared/quran/surahNames';
 import { counted, num } from '@shared/quran/arabicNumber';
 import { sourceById } from '@shared/sources';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
-import Card from '@/ui/Card';
+import { CardWithRow } from '@/ui/Card';
 import Chip from '@/ui/Chip';
-import Button, { Row } from '@/ui/Button';
+import Button from '@/ui/Button';
 import IconButton from '@/ui/IconButton';
-import Folded from '@/ui/Folded';
-import ExternalLink from '@/ui/ExternalLink';
+import Reference from '@/ui/Reference';
+import SourceLine, { sourcesOf } from '@/ui/SourceLine';
 import { usePalette, type Palette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
@@ -24,50 +24,45 @@ import LifeTimeline from '@/components/LifeTimeline';
 import Tabs from '@/ui/Tabs';
 import Saying from '@/ui/Saying';
 import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
+import { lifeSources } from '@shared/events/lifeTimeline';
+import type { QuizSource } from '@shared/quiz/sources';
 import { NasabTree } from './nasab';
 import TiesRing, { TieSheet } from '@/components/TiesRing';
 import type { Tie } from '@shared/tarajimGraph';
 
 const siyar = sourceById('siyar')!;
-const SIYAR = { title: siyar.title.ar, edition: siyar.edition ?? '', url: siyar.link.url };
+/** The page's side room and the card's padding and frame, taken from the screen's width for the ties ring inside its card. */
+const RING_ROOM = 32 + 30;
 const body = (palette: Palette) => ({ color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' as const });
 const muted = (palette: Palette) => ({ color: palette.muted, fontSize: 14, textAlign: 'right' as const });
 const openPerson = (slug: string) => router.push({ pathname: '/person', params: { slug } });
 
-/** A section: its name in the accent, numbered as on the sketch («١ · نسبه»), then its card. */
-function Part({ n, title, palette, children, drawing }: { n: number; title: string; palette: Palette; children?: React.ReactNode;
-  /** A drawing above the card, on the page itself (no card in a card): the «حياته» timeline, the ties ring. */
-  drawing?: React.ReactNode }) {
+/**
+ * A section (owner 2026-11-20: the home card's shape): its name in the accent, numbered as on the sketch («١ · نسبه»), a
+ * switch above the card where it has one, the card, its own buttons in the row under it and its books on the line under them.
+ */
+function Part({ n, title, palette, children, above, row, source }: { n: number; title: string; palette: Palette; children: React.ReactNode;
+  /** Above the card: the «الرسم | النص» switch. */
+  above?: React.ReactNode;
+  /** The section's own buttons, under the card. */
+  row?: React.ReactNode;
+  /** Books the section names besides the `Credit`s inside it. */
+  source?: QuizSource[] }) {
   return (
     <View style={{ gap: 8 }}>
       <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 15, textAlign: 'right' }}>{num(n)} · {title}</Text>
-      {drawing}
-      {children ? <Card palette={palette} gap={10}>{children}</Card> : null}
+      {above}
+      <CardWithRow palette={palette} gap={10} row={row} source={source && sourcesOf(source)}>{children}</CardWithRow>
     </View>
   );
 }
 
-/** The books a card rests on, folded at its foot; open, the pages, each tie's own words, then the edition on al-Shamela. */
+/**
+ * The books a section rests on (each value's words with who says them at its pages when `quotes`, then the edition and its
+ * link): in a card with a row they join its book line (ui/sourceSlot.ts), elsewhere each is a collapsed reference.
+ */
 export function Credit({ facts, palette, quotes = false }: { facts: PersonFact[]; palette: Palette; quotes?: boolean }) {
-  const refs = facts.flatMap(fact => fact.refs);
-  if (refs.length === 0) return null;
-  const books = sourcesOf(refs).map(id => sourceById(id)).filter(book => book !== undefined);
-  // Folded, only the books and their authors (owner 2026-11-19); a tap opens the pages, the quotes and the edition.
-  return (
-    <Folded credit={books.map(book => `${book.title.ar}، ${book.author?.ar ?? ''}`).join(' · ')} palette={palette}>
-      <Text style={muted(palette)}>{pageLabel(refs)}</Text>
-      {quotes && facts.filter(fact => fact.text).map((fact, i) => (
-        <Text key={i} style={{ color: palette.ink, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>«{fact.text}» <Text style={muted(palette)}>{pageLabel(fact.refs)}</Text></Text>
-      ))}
-      {/* Each book the pages come from: the Siyar, and another book where one is cited too (Zad al-Ma'ad). */}
-      {books.map(book => (
-        <View key={book.id} style={{ gap: 2 }}>
-          <Text style={muted(palette)}>{book.title.ar}، {book.edition ?? ''}</Text>
-          <ExternalLink url={book.link.url} color={palette.accent} size={14} style={{ textAlign: 'right' }}>الكتاب على المكتبة الشاملة</ExternalLink>
-        </View>
-      ))}
-    </Folded>
-  );
+  return <>{sourcesOf(factSources(facts, quotes)).map(book => <Reference key={book.line} title={book.line} quotes={book.quotes} links={book.links} palette={palette} />)}</>;
 }
 
 /**
@@ -179,6 +174,7 @@ export default function PersonScreen() {
   const life = [...person.islamAge, ...battles, ...person.absentFrom, ...person.died.year, ...person.died.month, ...person.died.age, ...person.died.place];
   const tieList = ties(person);
   const { book, part } = volumeLabel(person.entry.volume);
+  const titleSources = sourcesOf(factSources(person.titles, true));
   let n = 0;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
@@ -197,24 +193,21 @@ export default function PersonScreen() {
               ))}
             </View>
           )}
-          <Credit facts={person.titles} palette={palette} quotes />
+          {titleSources.length > 0 && <SourceLine named={titleSources} sources={titleSources} palette={palette} />}
         </View>
 
         {person.fullName && (
           <Part n={++n} title={person.sex === 'FEMALE' ? 'نسبها' : 'نسبه'} palette={palette}
-            drawing={<>
-              <Tabs palette={palette} label="كيف يُعرض النسب" value={nasabView} onChange={setNasabView} options={DRAWING_OR_TEXT} />
-              {nasabView === 'drawing' && <NasabTree slugs={[person.slug]} palette={palette} meetings={false} text={false} />}
-            </>}>
-            {nasabView === 'text' && <>
+            above={<Tabs palette={palette} label="كيف يُعرض النسب" value={nasabView} onChange={setNasabView} options={DRAWING_OR_TEXT} />}
+            row={<IconButton Icon={ArrowLeftRight} label={person.sex === 'FEMALE' ? 'قارن نسبها بغيرها' : 'قارن نسبه بغيره'} onPress={tree} />}>
+            {nasabView === 'drawing' ? <NasabTree slugs={[person.slug]} palette={palette} meetings={false} text={false} /> : <>
             <Quote fact={person.fullName} palette={palette} many={!!person.otherNames?.length} />
             {person.otherNames?.map((fact, i) => (
               <Quote key={i} fact={fact} palette={palette} many><Text style={body(palette)}>وقيل: {fact.text}</Text></Quote>
             ))}
             {person.nameVariants.map((fact, i) => <Quote key={`v${i}`} fact={fact} palette={palette} many />)}
-            <Row><Button label={person.sex === 'FEMALE' ? 'قارن نسبها بغيرها' : 'قارن نسبه بغيره'} onPress={tree} /></Row>
-            <Credit facts={[person.fullName, ...(person.otherNames ?? []), ...person.nameVariants]} palette={palette} />
             </>}
+            <Credit facts={[person.fullName, ...(person.otherNames ?? []), ...person.nameVariants]} palette={palette} />
           </Part>
         )}
 
@@ -245,8 +238,9 @@ export default function PersonScreen() {
         )}
 
         {(life.length > 0 || lifeItems.length > 0) && (
-          <Part n={++n} title={person.sex === 'FEMALE' ? 'حياتها' : 'حياته'} palette={palette}
-            drawing={lifeItems.length > 0 ? <LifeTimeline items={lifeItems} palette={palette} onCompare={() => router.push({ pathname: '/life', params: { slugs: person.slug } })} /> : undefined}>
+          <Part n={++n} title={person.sex === 'FEMALE' ? 'حياتها' : 'حياته'} palette={palette} source={lifeSources(lifeItems)}
+            row={lifeItems.length > 0 && <IconButton Icon={ArrowLeftRight} label={f ? 'قارن حياتها بغيرها' : 'قارن حياته بغيره'} onPress={() => router.push({ pathname: '/life', params: { slugs: person.slug } })} />}>
+            {lifeItems.length > 0 && <LifeTimeline items={lifeItems} palette={palette} inCard />}
             {life.length > 0 ? <>
             {person.islamAge.map((fact, i) => (
               <Line key={`i${i}`} label={f ? 'أسلمت وعمرها' : 'أسلم وعمره'} palette={palette}>
@@ -273,15 +267,14 @@ export default function PersonScreen() {
 
         {tieList.length > 0 && (
           <Part n={++n} title={person.sex === 'FEMALE' ? 'صلاتها' : 'صلاته'} palette={palette}
-            drawing={<>
-              <Tabs palette={palette} label="كيف تُعرض الصلات" value={tiesView} onChange={setTiesView} options={DRAWING_OR_TEXT} />
-              {tiesView === 'drawing' && <TiesRing slug={person.slug} width={Math.min(width - 32, 480)} palette={palette} onPick={openPerson} onShow={setTie} />}
+            above={<Tabs palette={palette} label="كيف تُعرض الصلات" value={tiesView} onChange={setTiesView} options={DRAWING_OR_TEXT} />}
+            row={<>
+              <IconButton Icon={Waypoints} label={person.sex === 'FEMALE' ? 'تنقّل في صلاتها' : 'تنقّل في صلاته'} onPress={() => router.push({ pathname: '/ties', params: { slug: person.slug } })} />
+              <IconButton Icon={Link2} label={person.sex === 'FEMALE' ? 'بينها وبين…' : 'بينه وبين…'} onPress={() => router.push({ pathname: '/between', params: { slugs: person.slug } })} />
             </>}>
-            {tiesView === 'text' && tieList.map(tie => <Line key={tie.label} label={tie.label} palette={palette}><Names links={tie.links} palette={palette} /></Line>)}
-            <Row>
-              <Button label={person.sex === 'FEMALE' ? 'تنقّل في صلاتها' : 'تنقّل في صلاته'} onPress={() => router.push({ pathname: '/ties', params: { slug: person.slug } })} />
-              <Button label={person.sex === 'FEMALE' ? 'بينها وبين…' : 'بينه وبين…'} onPress={() => router.push({ pathname: '/between', params: { slugs: person.slug } })} />
-            </Row>
+            {tiesView === 'drawing'
+              ? <TiesRing slug={person.slug} width={Math.min(width - RING_ROOM, 480)} palette={palette} onPick={openPerson} onShow={setTie} />
+              : tieList.map(tie => <Line key={tie.label} label={tie.label} palette={palette}><Names links={tie.links} palette={palette} /></Line>)}
             <Credit facts={tieList.flatMap(tie => tie.links)} palette={palette} quotes />
           </Part>
         )}
@@ -300,13 +293,12 @@ export default function PersonScreen() {
           </Part>
         )}
 
-        <Part n={++n} title={person.sex === 'FEMALE' ? 'ترجمتها في الكتاب' : 'ترجمته في الكتاب'} palette={palette}>
+        <Part n={++n} title={person.sex === 'FEMALE' ? 'ترجمتها في الكتاب' : 'ترجمته في الكتاب'} palette={palette}
+          source={[{ book: book, author: 'الذهبي', url: siyar.link.url, ...(siyar.edition && { edition: siyar.edition }) }]}>
           {/* An entry that runs into the next volume (the Sira) names both: «السيرة النبوية ١/٢٩ – ٢/٤٩٥». */}
           <Text style={body(palette)}>{person.entry.toVolume !== undefined && part !== undefined
             ? `${book} ${num(part)}/${num(Number(person.entry.from))} – ${num(volumeLabel(person.entry.toVolume).part ?? person.entry.toVolume)}/${num(Number(person.entry.to))}`
             : `${book}${part !== undefined ? ` ${num(part)}` : ''}${person.entry.from ? `، ص ${num(Number(person.entry.from))}${person.entry.to && person.entry.to !== person.entry.from ? `–${num(Number(person.entry.to))}` : ''}` : ''}`}</Text>
-          <Text style={muted(palette)}>{SIYAR.edition}</Text>
-          <ExternalLink url={SIYAR.url} color={palette.accent} size={15} style={{ textAlign: 'right' }}>اقرأها على المكتبة الشاملة</ExternalLink>
         </Part>
       </ScrollView>
       <TieSheet tie={tie} onClose={() => setTie(undefined)} palette={palette} />

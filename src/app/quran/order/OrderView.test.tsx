@@ -17,7 +17,9 @@ describe('OrderView', () => {
     const list = screen.getByRole('list', { name: 'السور' });
     expect(within(list).getAllByRole('heading')).toHaveLength(114);
     expect(within(list).getAllByLabelText('الصلة بما قبلها')).toHaveLength(113);
-    expect(screen.getAllByRole('link', { name: 'السيوطي، تناسق الدرر ص١٦٠' })[0].getAttribute('href')).toBe('https://shamela.ws/book/9992/166');
+    // Each quote's book on the line under it; its sheet links the page.
+    fireEvent.click(within(list).getAllByRole('button', { name: 'المصدر: السيوطي، تناسق الدرر' })[0]);
+    expect(within(screen.getByRole('dialog', { name: 'المصدر' })).getAllByRole('link').map(link => link.getAttribute('href'))[0]).toMatch(/^https:\/\/shamela\.ws\/book\/9992\//);
   });
 
   it('shows the early surahs and their source links under juz one', () => {
@@ -26,7 +28,8 @@ describe('OrderView', () => {
     const list = screen.getByRole('list', { name: 'السور' });
     expect(within(list).getAllByRole('heading').map(h => h.textContent)).toEqual(['الفَاتِحَةْ١', 'البَقَرَةْ٢']);
     expect(within(list).getAllByLabelText('الصلة بما قبلها')).toHaveLength(1);
-    expect(within(list).getByRole('link', { name: 'السيوطي، تناسق الدرر ص٥٣' }).getAttribute('href')).toBe('https://shamela.ws/book/9992/51');
+    fireEvent.click(within(within(list).getByLabelText('الصلة بما قبلها')).getByRole('button', { name: 'المصدر: السيوطي، تناسق الدرر' }));
+    expect(within(screen.getByRole('dialog', { name: 'المصدر' })).getByRole('link', { name: 'السيوطي، تناسق الدرر ص٥٣' }).getAttribute('href')).toBe('https://shamela.ws/book/9992/51');
   });
 
   it('narrows to a juz and drops the link into its first surah', () => {

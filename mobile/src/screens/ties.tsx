@@ -5,7 +5,10 @@ import type { Tie } from '@shared/tarajimGraph';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Chip from '@/ui/Chip';
-import Button, { Row } from '@/ui/Button';
+import Button from '@/ui/Button';
+import IconButton from '@/ui/IconButton';
+import { CardWithRow } from '@/ui/Card';
+import { Link2, Network, Users } from 'lucide-react-native';
 import { usePalette } from '@/lib/theme';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { toTab } from '@/lib/ways';
@@ -34,7 +37,8 @@ export default function TiesScreen() {
   const go = (to: string) => setTrail([...trail, to]);
   if (!person) return <View style={{ flex: 1, backgroundColor: palette.paper }}><TopBar back={back} title="الصلات" /></View>;
 
-  const drawW = Math.min(width - 32, 480);
+  // The page's side room and the card's padding and frame.
+  const drawW = Math.min(width - 32 - 30, 480);
   const battles = [...new Map(person.battles.map(b => [b.slug, b])).values()];
 
   return (
@@ -48,6 +52,12 @@ export default function TiesScreen() {
               : <Text key={`${s}${i}`} style={{ color: palette.ink, fontSize: 15 }}>{personName(findPerson(s)!)}</Text>))}
           </View>
         )}
+        {/* One section in the home card's shape (owner 2026-11-20): the ring and its badges, the ways on under it, the books on the line. */}
+        <CardWithRow palette={palette} gap={12} row={<>
+          <IconButton Icon={Users} label={person.sex === 'FEMALE' ? 'ترجمتها' : 'ترجمته'} onPress={() => router.push({ pathname: '/person', params: { slug: person.slug } })} />
+          <IconButton Icon={Network} label="النسب" onPress={() => router.push({ pathname: '/nasab', params: { slug: person.slug } })} />
+          <IconButton Icon={Link2} label={person.sex === 'FEMALE' ? 'بينها وبين…' : 'بينه وبين…'} onPress={() => router.push({ pathname: '/between', params: { slugs: person.slug } })} />
+        </>}>
         <TiesRing slug={person.slug} width={drawW} palette={palette} onPick={go} onShow={setShown} />
         {battles.length > 0 && <>
           <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{person.sex === 'FEMALE' ? 'شهدت' : 'شهد'}</Text>
@@ -67,13 +77,9 @@ export default function TiesScreen() {
             ))}
           </View>
         </>}
-        <Credit facts={groups.flatMap(g => g.ties.map(tie => tie.link))} palette={palette} />
-        <Row>
-          <Button label={person.sex === 'FEMALE' ? 'بينها وبين…' : 'بينه وبين…'} onPress={() => router.push({ pathname: '/between', params: { slugs: person.slug } })} />
-          <Button label="النسب" onPress={() => router.push({ pathname: '/nasab', params: { slug: person.slug } })} />
-          <Button label={person.sex === 'FEMALE' ? 'ترجمتها' : 'ترجمته'} onPress={() => router.push({ pathname: '/person', params: { slug: person.slug } })} />
-        </Row>
         {groups.length === 0 && <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>لا صلات مذكورة في الترجمة.</Text>}
+        <Credit facts={groups.flatMap(g => g.ties.map(tie => tie.link))} palette={palette} />
+        </CardWithRow>
       </ScrollView>
       <TieSheet tie={shown} onClose={() => setShown(undefined)} palette={palette} />
     </View>

@@ -7,22 +7,25 @@ import Sheet from '@/ui/Sheet';
 import { Tap } from '@/ui/Tap';
 import type { Palette } from '@/lib/theme';
 import type { Source } from '@/ui/sourceSlot';
-import { referenceGroups, type QuizSource } from '@shared/quiz/sources';
+import { mergeSources, sourceEntries, type QuizSource } from '@shared/quiz/sources';
 
 /** A card's books as source-line entries, one for each book (shared/quiz/sources.ts referenceGroups). */
-export const sourcesOf = (sources: QuizSource[]): Source[] => referenceGroups(sources).map(group => ({ line: group.title, quotes: group.lines }));
+export const sourcesOf = (sources: QuizSource[]): Source[] => sourceEntries(sources);
 
 /**
  * A home card's source line (owner 2026-11-20, like an Instagram post's line under its buttons): a book icon and the
  * books (`named`), muted, no arrow; a tap anywhere on it opens a sheet with each book's places, words and links (`sources`).
  */
-export default function SourceLine({ named, sources, palette }: { named: Source[]; sources: Source[]; palette: Palette }) {
+export default function SourceLine({ named, sources, palette }: {
+  /** The books named on the line; all of `sources` when left out (a page heading's line). */
+  named?: Source[]; sources: Source[]; palette: Palette }) {
   const [open, setOpen] = useState(false);
   if (!sources.length) return null;
-  const line = [...new Set(named.map(source => source.line))].join('، ');
+  const line = [...new Set((named ?? sources).map(source => source.line))].join('، ');
   // A book named on the line with nothing more to say is left out of the sheet when what the card holds says where in it.
-  const told = sources.filter(source => source.quotes.length || source.links?.length);
-  const shown = told.length ? told : sources;
+  const books = mergeSources(sources);
+  const told = books.filter(source => source.quotes.length || source.links?.length);
+  const shown = told.length ? told : books;
   return (
     <>
       <Tap onPress={() => setOpen(true)} accessibilityRole="button" accessibilityLabel={`المصدر: ${line}`}

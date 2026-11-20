@@ -233,11 +233,11 @@ describe('QuizzesPage', () => {
       nav.reset('/quizzes?topic=PEOPLE&length=5');
       render(<QuizzesPage />);
 
-      // The source waits for the answer, then shows as its book's name.
-      expect(screen.queryByText('سير أعلام النبلاء')).toBeNull();
+      // The source waits for the answer, then shows as its book's name on the line.
+      expect(screen.queryByRole('button', { name: 'المصدر: سير أعلام النبلاء' })).toBeNull();
       fireEvent.click(screen.getByRole('button', { name: 'الصحيح' }));
       expect(screen.getByText('Correct')).toBeTruthy();
-      expect(screen.getByText('سير أعلام النبلاء')).toBeTruthy();
+      expect(screen.getByRole('button', { name: 'المصدر: سير أعلام النبلاء' })).toBeTruthy();
 
       fireEvent.click(screen.getByRole('button', { name: 'الأول' }));
       expect(screen.queryByText('Incorrect')).toBeNull();
@@ -411,7 +411,7 @@ describe('QuizzesPage', () => {
       render(<QuizzesPage />);
 
       fireEvent.click(screen.getByRole('button', { name: 'الصحيح' }));
-      fireEvent.click(screen.getByText('سير أعلام النبلاء'));
+      fireEvent.click(screen.getByRole('button', { name: 'المصدر: سير أعلام النبلاء' }));
       expect(screen.getByText(/نص الشاهد/)).toBeTruthy();
       expect(screen.getByRole('link', { name: /ص 5/ }).getAttribute('href')).toBe(reference.readerUrl);
     } finally {

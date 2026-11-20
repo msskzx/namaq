@@ -2,14 +2,15 @@
 
 import AyahFlow from '@/components/quran/text/AyahFlow';
 import { useState } from 'react';
-import Link from 'next/link';
 import { BookOpen } from 'lucide-react';
 import { SettingsHelp } from '@/components/common/SettingsHelp';
 import ExternalLink from '@/components/common/ExternalLink';
 import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
-import { BOOKS, citeLabel, citeUrl, ORDER_HELP, linkShows, ORDER_JUZ, orderInJuz, toggledJuz, type Cite, type OrderAyah, type OrderLinkView, type OrderSurah } from '@shared/quran/surahOrder';
-import Card from '@/components/common/Card';
+import { BOOKS, orderSource, ORDER_HELP, linkShows, ORDER_JUZ, orderInJuz, toggledJuz, type Cite, type OrderAyah, type OrderLinkView, type OrderSurah } from '@shared/quran/surahOrder';
+import Button from '@/components/common/Button';
+import CardWithRow from '@/components/common/CardWithRow';
+import SourceLine from '@/components/common/SourceLine';
 import Chip from '@/components/common/Chip';
 
 const HELP = [
@@ -18,15 +19,9 @@ const HELP = [
     {Object.values(BOOKS).map(book => <li key={book.shamela}><ExternalLink href={`https://shamela.ws/book/${book.shamela}`} className="underline underline-offset-4">{book.title}</ExternalLink></li>)}
   </ul>,
 ];
-const ICON_BUTTON = 'inline-flex size-9 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]';
 
-function Source({ cite }: { cite: Cite }) {
-  return (
-    <ExternalLink href={citeUrl(cite)} className="text-sm text-[var(--home-muted)] underline decoration-[var(--home-rule)] underline-offset-4 hover:text-[var(--home-accent)]">
-      {citeLabel(cite, num)}
-    </ExternalLink>
-  );
-}
+/** A quote's book as the line under it (owner 2026-11-20): its page and full title in the line's sheet (the app's). */
+const Source = ({ cite }: { cite: Cite }) => <SourceLine sources={[orderSource(cite, num)]} />;
 
 function PairAyah({ ayah }: { ayah: OrderAyah }) {
   return <>
@@ -54,17 +49,16 @@ function LinkBlock({ link }: { link: OrderLinkView }) {
 
 function SurahCard({ s }: { s: OrderSurah }) {
   return (
-    <Card as="li" className="px-4 pt-2.5 pb-1">
+    <li>
+    <CardWithRow className="px-4 pt-2.5 pb-2" source={[orderSource(s.aim.src, num)]}
+      lead={<Button size="lg" variant="muted" href={ayahHref(`${s.surah}:1`)} aria-label={`افتح سورة ${s.name} في المصحف`} title="في المصحف"><BookOpen aria-hidden /></Button>}>
       <h2 className="flex items-baseline gap-2"><span className="text-2xl text-[var(--home-accent)]">{s.name}</span><span className="text-sm text-[var(--home-muted)]">{num(s.surah)}</span></h2>
       <AyahFlow>
         {s.opening.map(a => <span key={a.ayah}>{`${a.text} `}<span className="text-[var(--home-amber)]">{`${num(a.ayah)} `}</span></span>)}
       </AyahFlow>
       <p className="mt-1 text-lg leading-loose">«{s.aim.text}»</p>
-      <Source cite={s.aim.src} />
-      <div className="flex gap-1">
-        <Link href={ayahHref(`${s.surah}:1`)} className={ICON_BUTTON} aria-label={`افتح سورة ${s.name} في المصحف`} title="في المصحف"><BookOpen size={18} aria-hidden /></Link>
-      </div>
-    </Card>
+    </CardWithRow>
+    </li>
   );
 }
 

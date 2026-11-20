@@ -1,7 +1,9 @@
 import { memo, useMemo } from 'react';
 import { View } from 'react-native';
 import { Text } from '@/ui/Text';
-import Card from '@/ui/Card';
+import { CardWithRow } from '@/ui/Card';
+import { sourcesOf } from '@/ui/SourceLine';
+import { qiraatSources } from '@shared/quiz/bookSources';
 import { num } from '@shared/quran/arabicNumber';
 import { qiraatOf } from '@shared/quran/qiraatData';
 import { surahName } from '@shared/quran/surahNames';
@@ -53,7 +55,8 @@ function QiraatPlace({ ayah, words, mark, max, bare = false, lines = false, pale
       {listed.length < shown.length && <Text style={{ color: palette.accent, fontSize: 14, textAlign: 'right' }}>المزيد</Text>}
     </View>
   );
-  return bare ? <View style={{ paddingHorizontal: 14 }}>{body}</View> : <Card palette={palette} pad={[10, 14]}>{body}</Card>;
+  // On its own, a place is a card in the home card's shape with the readings' book on the line under it (owner 2026-11-20).
+  return bare ? <View style={{ paddingHorizontal: 14 }}>{body}</View> : <CardWithRow palette={palette} pad={[10, 14]} source={sourcesOf(qiraatSources(ayah))}>{body}</CardWithRow>;
 }
 
 export default memo(QiraatPlace);

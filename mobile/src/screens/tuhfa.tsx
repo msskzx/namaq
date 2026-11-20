@@ -7,6 +7,7 @@ import { numberVerses, type NumberedVerse, type Poem } from '@shared/tajwid/poem
 import poemData from '@shared/tajwid/tuhfat-al-atfal.json';
 import { Text } from '@/ui/Text';
 import Sheet from '@/ui/Sheet';
+import SourceLine from '@/ui/SourceLine';
 import BarPicker from '@/ui/BarPicker';
 import TopBar from '@/ui/TopBar';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
@@ -90,7 +91,8 @@ export default function TuhfaScreen() {
       <ScrollView ref={scroll} onScroll={onScroll} onContentSizeChange={toVerse} scrollEventThrottle={16} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: bottom }}>
         <Text style={{ color: palette.ink, fontSize: 22, fontWeight: '700', textAlign: 'center' }}>{poem.title}</Text>
         <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'center', marginTop: 4 }}>{`${poem.author}، ${num(poem.composed)}هـ، ${num(count)} بيتًا`}</Text>
-        <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'center', marginTop: 2 }}>{poem.edition.name}</Text>
+        {/* The edition and the transcription it was checked against, on the book line (owner 2026-11-20). */}
+        <SourceLine palette={palette} sources={[{ line: poem.title, quotes: [{ text: '', cite: `الضبط: ${poem.edition.name}`, url: poem.edition.url }, { text: '', cite: 'قوبل به كل بيت من نسخة رقمية', url: poem.transcription }] }]} />
         {chapters.map((part, i) => (
           <View key={part.title} onLayout={event => { tops.current[i] = event.nativeEvent.layout.y; toVerse(); }} style={{ marginTop: 18 }}>
             <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 18, fontWeight: '700', textAlign: 'center', marginBottom: 6 }}>{part.title}</Text>

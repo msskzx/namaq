@@ -1,25 +1,13 @@
 'use client';
 
-import Link from 'next/link';
-import ExternalLink from '@/components/common/ExternalLink';
-import { SettingsHelp } from '@/components/common/SettingsHelp';
+import SourceLine from '@/components/common/SourceLine';
 import { WORDS_COUNTING, WORDS_SOURCE } from '@shared/quran/words';
 import { sourceById } from '@shared/sources';
 
-const LINK = 'text-[var(--home-accent)]';
 const source = sourceById(WORDS_SOURCE)!;
 
-const CONTENT = <>
-  <div>
-    <p className="font-bold">{source.title.ar}</p>
-    {source.author && <p className="text-sm text-[var(--home-muted)]">{source.author.ar}</p>}
-    <ExternalLink href={source.link.url} className={LINK}>{source.link.label}</ExternalLink>
-  </div>
-  {WORDS_COUNTING.map(text => <p key={text}>{text}</p>)}
-  <Link href={`/attributions#${WORDS_SOURCE}`} className={LINK}>المصادر والتراخيص</Link>
-</>;
-
-/** The words page's source and how it counts, behind the books icon in the top bar, as in the app. */
+/** The words page's book as the line under its heading, as the home cards carry theirs (owner 2026-11-20; the app's words page). */
 export default function WordsSource() {
-  return <SettingsHelp label="المصدر" refs>{CONTENT}</SettingsHelp>;
+  return <SourceLine sources={[{ line: source.title.ar, quotes: WORDS_COUNTING.map(text => ({ text })),
+    links: [{ label: source.link.label, url: source.link.url }, { label: 'المصادر والتراخيص', url: `/attributions#${WORDS_SOURCE}` }] }]} />;
 }

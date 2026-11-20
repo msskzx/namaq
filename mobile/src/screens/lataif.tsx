@@ -1,10 +1,12 @@
 import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import itqan from '@shared/data/quran/itqanBalagha';
-import { TOPICS, topicOf, exampleReference } from '@shared/quran/lataif';
+import { TOPICS, topicOf, exampleReference, type Topic } from '@shared/quran/lataif';
 import { examples, type Voice } from '@shared/quran/iltifat';
 import { Text } from '@/ui/Text';
-import { IltifatCard, VOICE_NAME, voiceColor } from '@/components/Iltifat';
+import { IltifatActions, IltifatScene, VOICE_NAME, voiceColor } from '@/components/Iltifat';
+import { CardWithRow } from '@/ui/Card';
+import SourceLine from '@/ui/SourceLine';
 import Reference from '@/ui/Reference';
 import TopBar from '@/ui/TopBar';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
@@ -13,6 +15,9 @@ import { useTabRetap } from '@/lib/tabRetap';
 import { usePalette } from '@/lib/theme';
 import { ayahMushafWords } from '@/lib/mushaf';
 import Chip from '@/ui/Chip';
+
+/** A topic's reference as its line under the heading. */
+const topicSource = (topic: Topic) => ({ line: topic.reference.title, quotes: topic.reference.quotes });
 
 /**
  * The website's /quran/lataif (owner, 2026-11-16): a curated list of examples, each card with its own picture, grouped
@@ -44,13 +49,15 @@ export default function LataifScreen() {
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', columnGap: 16 }} accessibilityLabel="ألوان الضمائر">
                 {(['he', 'we', 'you'] as Voice[]).map(voice => <Text key={voice} style={{ color: voiceColor(palette, voice), fontSize: 14 }}>{{ he: 'هو', we: 'نحن، أنا', you: 'أنت' }[voice]}: {VOICE_NAME[voice]}</Text>)}
               </View>
-              <Reference title={item.reference.title} quotes={item.reference.quotes} palette={palette} />
+              <SourceLine named={[topicSource(item)]} sources={[topicSource(item)]} palette={palette} />
             </View>
+            {/* Each example in the home card's shape (owner 2026-11-20): its mushaf button and share under it, its reference on the line. */}
             {views.filter(view => topicOf(view).name === item.name).map(view => (
-              <View key={view.key} style={{ gap: 6 }}>
-                <IltifatCard view={view} palette={palette} />
-                <View style={{ paddingHorizontal: 4 }}><Reference title={references[view.key].title} quotes={references[view.key].quotes} palette={palette} /></View>
-              </View>
+              <CardWithRow key={view.key} palette={palette} pad={[10, 16]} gap={10}
+                lead={<IltifatActions view={view} only="open" palette={palette} />} row={<IltifatActions view={view} only="share" palette={palette} />}>
+                <IltifatScene view={view} palette={palette} />
+                <Reference title={references[view.key].title} quotes={references[view.key].quotes} palette={palette} />
+              </CardWithRow>
             ))}
           </View>
         ))}

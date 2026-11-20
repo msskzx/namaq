@@ -5,9 +5,8 @@ import { ADHKAR_OCCASIONS, adhkarFor, type AdhkarOccasion, type Dhikr } from '@s
 import { ADHKAR_LABELS, ADHKAR_TABS, adhkarQuotes, adhkarTitle } from '@shared/adhkarCite';
 import { num } from '@shared/quran/arabicNumber';
 import type { AdhkarTime } from '@shared/adhanAlerts';
-import Card from '@/ui/Card';
+import { CardWithRow } from '@/ui/Card';
 import Tabs from '@/ui/Tabs';
-import Reference from '@/ui/Reference';
 import Button from '@/ui/Button';
 import IconButton from '@/ui/IconButton';
 import { Text } from '@/ui/Text';
@@ -109,25 +108,25 @@ export default function Adhkar({ palette, on, onPlace, scrollTo }: { palette: Pa
       {bell.blocked && <Button variant="plain" Icon={BellOff} label="التنبيهات موقوفة، فاسمح بها من إعدادات الجوال" onPress={openPhoneSettings} />}
       {items.map(item => {
         const counted = countOf(count, item.id);
+        // The counter is the card's own tool, first in the row under it; the book on the line (owner 2026-11-20).
         return (
-          <Card key={item.id} palette={palette} pad={18} gap={14} onLayout={event => laid(item.id, event.nativeEvent.layout)}>
-            {item.content.kind === 'text'
-              ? <Text style={{ color: palette.ink, fontSize: 21, lineHeight: 40, textAlign: 'justify' }}>{item.content.text}</Text>
-              : <QuranPage item={item} palette={palette} />}
-            {item.virtueQuote && <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>«{item.virtueQuote}»</Text>}
-            {item.repeat && (
-              <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
+          <View key={item.id} onLayout={event => laid(item.id, event.nativeEvent.layout)}>
+            <CardWithRow palette={palette} pad={18} gap={14} source={[{ line: adhkarTitle(item), quotes: adhkarQuotes(item) }]}
+              lead={item.repeat && <>
                 <IconButton round Icon={Check} render={({ size, color }) => <Check size={size} color={color} strokeWidth={2.5} />} label={`عُدَّ مرة، ${num(counted)} من ${num(item.repeat.count)}`}
                   disabled={counted >= item.repeat.count}
                   onPress={() => { buzz(); dispatch({ type: 'tap', id: item.id, target: item.repeat!.count }); }} />
-                <Text accessibilityElementsHidden importantForAccessibility="no" style={{ color: palette.ink, fontSize: 20, writingDirection: 'ltr' }}>
+                <Text accessibilityElementsHidden importantForAccessibility="no" style={{ color: palette.ink, fontSize: 20, writingDirection: 'ltr', paddingHorizontal: 12 }}>
                   {num(counted)} / {num(item.repeat.count)}
                 </Text>
                 {counted > 0 && <Button Icon={RotateCcw} variant="plain" accessibilityLabel="من جديد" onPress={() => dispatch({ type: 'reset' })} />}
-              </View>
-            )}
-            <Reference title={adhkarTitle(item)} palette={palette} quotes={adhkarQuotes(item)} />
-          </Card>
+              </>}>
+              {item.content.kind === 'text'
+                ? <Text style={{ color: palette.ink, fontSize: 21, lineHeight: 40, textAlign: 'justify' }}>{item.content.text}</Text>
+                : <QuranPage item={item} palette={palette} />}
+              {item.virtueQuote && <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>«{item.virtueQuote}»</Text>}
+            </CardWithRow>
+          </View>
         );
       })}
     </View>

@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight, MessagesSquare } from 'lucide-react';
 import { bookOf, findHadith, placeOf } from '@shared/sahih';
 import { num } from '@shared/quran/arabicNumber';
 import Button from '@/components/common/Button';
-import Card from '@/components/common/Card';
+import CardWithRow from '@/components/common/CardWithRow';
 import { SahihHadithView } from '@/components/hadith/SahihParts';
 import HadithBooks from '@/components/hadith/HadithBooks';
 import { recordedIn } from '@shared/hadith';
@@ -47,7 +47,7 @@ export default async function SahihHadithPage({ params }: { params: Params }) {
         {book.headingsBy === 'nawawi' && place.bab?.title && <span className="text-[0.8125rem] text-[var(--home-muted)]">تبويب النووي</span>}
         <h1 className="text-2xl">{`${book.title} ${[hadith.n, ...(hadith.also ?? [])].map(each => num(each)).join(' - ')}`}</h1>
       </div>
-      <Card className="p-4"><SahihHadithView book={bookOf(book)} hadith={hadith} /></Card>
+      <CardWithRow className="p-4"><SahihHadithView book={bookOf(book)} hadith={hadith} /></CardWithRow>
       {forty.length > 0 && (
         <div className="flex flex-col gap-2">
           <h2 className="text-[1.0625rem] font-bold">من أخرجه</h2>

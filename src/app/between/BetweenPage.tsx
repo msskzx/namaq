@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import type { BetweenView, PickPerson } from '@/lib/tarajim';
 import Segmented from '@/components/common/Segmented';
-import Card from '@/components/common/Card';
+import CardWithRow from '@/components/common/CardWithRow';
 import PeoplePicker from '@/components/tarajim/PeoplePicker';
-import { betweenHref, CreditFold, TiesChain } from '@/components/tarajim/TarajimParts';
+import { betweenHref, BookCredit, TiesChain } from '@/components/tarajim/TarajimParts';
 
 export default function BetweenPage({ view, people }: { view: BetweenView; people: PickPerson[] }) {
   const [first] = view.people;
@@ -23,8 +23,11 @@ export default function BetweenPage({ view, people }: { view: BetweenView; peopl
         )}
         {view.sentence && <Segmented tabs label="كيف تُعرض الصلة" className="self-start"
           options={DRAWING_OR_TEXT.map(item => ({ ...item, current: shown === item.key, onClick: () => setShown(item.key) }))} />}
-        {shown === 'text' && view.sentence ? <Card className="px-4 py-3 text-lg leading-8">{view.sentence}</Card> : <TiesChain chain={view.chain} />}
-        <CreditFold credit={view.credit} />
+        {/* The chain in the home card's shape, its pages on the book line under it (owner 2026-11-20). */}
+        <CardWithRow className="px-4 py-3">
+          {shown === 'text' && view.sentence ? <p className="text-lg leading-8">{view.sentence}</p> : <TiesChain chain={view.chain} inCard />}
+          <BookCredit credit={view.credit} />
+        </CardWithRow>
       </>}
     </div>
   );

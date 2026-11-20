@@ -58,9 +58,10 @@ describe('LataifView', () => {
     render(<LataifView views={views} references={references} />);
     const iltifat = screen.getByRole('region', { name: 'الالتفات' });
     expect(within(iltifat).getByRole('list', { name: 'ألوان الضمائر' }).children).toHaveLength(3);
-    expect(within(iltifat).getByText('الالتفات في الإتقان للسيوطي ٣/٢٨٩')).toBeTruthy();
-    expect(within(iltifat).getAllByText('الإتقان للسيوطي ٣/٢٩٠–٢٩١')[0].tagName).toBe('SUMMARY');
-    expect(within(iltifat).getByText('تفسير القرطبي')).toBeTruthy();
+    // The topic's reference on the line under its heading, each card's on the line under its buttons.
+    expect(within(iltifat).getByRole('button', { name: 'المصدر: الالتفات في الإتقان للسيوطي ٣/٢٨٩' })).toBeTruthy();
+    expect(within(iltifat).getAllByRole('button', { name: 'المصدر: الإتقان للسيوطي ٣/٢٩٠–٢٩١' }).length).toBeGreaterThan(0);
+    expect(within(iltifat).getByRole('button', { name: 'المصدر: تفسير القرطبي' })).toBeTruthy();
     expect(screen.getByRole('tab', { name: 'الكل' }).getAttribute('aria-selected')).toBe('true');
   });
 });

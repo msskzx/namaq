@@ -148,23 +148,30 @@ export function volumeLabel(volume: number) {
   return { book: 'سير أعلام النبلاء', part: volume - 3 };
 }
 
+/** The sources of a section's values, each value's words (with who says them) at its pages when `quotes`, else the pages alone. */
+export function factSources(facts: PersonFact[], quotes = false): QuizSource[] {
+  if (!quotes) return pageSources(facts.flatMap(fact => fact.refs));
+  return facts.flatMap(fact => pageSources(fact.refs, fact.text ? { text: fact.text, by: saidBy(fact) } : undefined));
+}
+
 /**
  * A value's pages as quiz sources (shared/quiz/sources.ts): one for each book, its pages, and the book's words with who
  * says them, when given. The three books of the Risalah printing (the Sira, the Caliphs, the Siyar) are al-Dhahabi's.
  */
 export function pageSources(refs: PageRef[], quote?: { text: string; by?: string }): QuizSource[] {
-  const books = new Map<string, { author: string; pages: string[]; url?: string }>();
+  const books = new Map<string, { author: string; pages: string[]; url?: string; edition?: string }>();
   for (const ref of refs) {
     const other = ref.work ? OTHER_WORKS[ref.work] : undefined;
     const { book, part } = other ? { book: other.book, part: ref.volume as number | undefined } : volumeLabel(ref.volume);
     const at = part === undefined ? arabic(ref.page) : `${arabic(part)}/${arabic(ref.page)}`;
     // The book online (shared/sources.ts), so a card's sheet links to it as the person page's reference did.
-    const entry = books.get(book) ?? { author: other?.author ?? 'الذهبي', pages: [], url: sourceById(other?.source ?? 'siyar')?.link.url };
+    const online = sourceById(other?.source ?? 'siyar');
+    const entry = books.get(book) ?? { author: other?.author ?? 'الذهبي', pages: [], url: online?.link.url, edition: online?.edition };
     if (!entry.pages.includes(at)) entry.pages.push(at);
     books.set(book, entry);
   }
-  return [...books].map(([book, { author, pages, url }]) => ({
-    book, author, at: pages.join('، '), ...(url && { url }),
+  return [...books].map(([book, { author, pages, url, edition }]) => ({
+    book, author, at: pages.join('، '), ...(url && { url }), ...(edition && { edition }),
     ...(quote?.text && { quote: quote.text }), ...(quote?.by && { by: quote.by }),
   }));
 }

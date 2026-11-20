@@ -3,7 +3,7 @@ import { Pressable, ScrollView, View } from 'react-native';
 import { Check, ChevronDown, ChevronLeft, CircleCheck, CirclePause, Download, Mic, Play, RotateCw, Trash2 } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import Sheet from '@/ui/Sheet';
-import Reference from '@/ui/Reference';
+import SourceLine from '@/ui/SourceLine';
 import { Group } from './FilterFields';
 import { num } from '@shared/quran/arabicNumber';
 import { ayatOf, EACH_AYAH, LISTEN_REFERENCE, PAUSES, RANGE_TIMES, RECITERS, RIWAYA, SPEEDS, pauseLabel, reciterName, sizeLabel, speedLabel, surahEnd, timesLabel, type Range, type RepeatPlan } from '@shared/quran/recitation';
@@ -171,7 +171,7 @@ export default function ListenSheet({ open, start, onClose, palette }: { open: b
             <Text style={{ color: palette.muted, fontSize: 13, lineHeight: 21, textAlign: 'right' }}>
               دون تنزيل تُسمع التلاوة من الشبكة. ويبقى المنزَّل على الهاتف، ويُحدَّث من مؤسسة القرآن مرة في اليوم إذا اتصل الهاتف بالشبكة، كما تشترط.
             </Text>
-            <Reference title={LISTEN_REFERENCE.title} quotes={LISTEN_REFERENCE.quotes} palette={palette} />
+            <SourceLine sources={[{ line: LISTEN_REFERENCE.title, quotes: LISTEN_REFERENCE.quotes }]} palette={palette} />
           </>
         )}
       </ScrollView>

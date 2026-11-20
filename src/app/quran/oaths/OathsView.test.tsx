@@ -32,7 +32,7 @@ describe('OathsView', () => {
     renderView();
     expect(within(screen.getByRole('region', { name: 'على الجزاء والوعد والوعيد' })).getAllByText(/ابن القيم، التبيان ص ٨/).length).toBeGreaterThan(0);
     const ours = screen.getByRole('region', { name: OATH_SECTIONS.at(-1)!.title });
-    expect(within(ours).getByText('من جمعنا')).toBeTruthy();
+    expect(within(ours).getByRole('button', { name: 'المصدر: من جمعنا' })).toBeTruthy();
   });
 
   it('switches to the oaths of others, one list, each with its speaker', () => {

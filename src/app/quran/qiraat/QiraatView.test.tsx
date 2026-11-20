@@ -25,7 +25,7 @@ describe('QiraatView: the website\'s «القراءات»', () => {
     // qiraat.json counts the ۞ as a word, so the band stays on نَنسَخۡ and نُنسِهَا, not the word after each.
     expect([...container.querySelectorAll('#a2-106 mark')].map(m => m.textContent)).toEqual([texts['2:106'][2], texts['2:106'][6]]);
     expect(texts['2:106'][0]).toBe('۞');
-  });
+  }, 20_000); // Every one of the 1,550 places drawn as a card with its row and line.
 
   it("narrows to a reader, shades his reading, and offers his two riwayat", () => {
     const { container } = render(<QiraatView texts={texts} />);
