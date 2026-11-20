@@ -346,6 +346,9 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'car
   const [a, b] = card.sides;
   const bookmark = { id, text: `${a.ayat[0]?.words.slice(0, 6).join(' ') ?? ''} …`, href: `${surahPairHref(a.surah, b.surah)}#${anchor}` };
   const saveLabel = saved ? (ar ? 'إزالة من المحفوظة' : 'Remove from saved') : (ar ? 'حفظ' : 'Save');
+  const saveButton = <Button size="icon" variant="muted" aria-pressed={saved} onClick={() => toggleBookmark(bookmark, savedIds)} aria-label={saveLabel} title={saveLabel} className={saved ? 'text-[var(--home-accent)]' : undefined}>
+    {saved ? <BookmarkCheck size={18} aria-hidden /> : <Bookmark size={18} aria-hidden />}
+  </Button>;
   const pick = (target: EventTarget) => {
     const id = (target as HTMLElement).closest?.('mark[data-link]')?.getAttribute('data-link');
     if (id) setLit(current => (current === id ? null : id));
@@ -440,6 +443,8 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'car
       </div>
       {read.studio ? <ReadStudio read={read} ar={ar} card={card} names={names} /> : <div className="flex justify-start">
         {review && <CardReview a={review.a} b={review.b} card={card} />}
+        {/* Shown outside the compare page (the home feed), the button that opens it there leads the row (owner, 2026-11-20). */}
+        {page && <Button size="icon" variant="muted" href={`${page}#${anchor}`} aria-label={ar ? 'افتحها في المقارنة' : 'Open in compare'} title={ar ? 'افتحها في المقارنة' : 'Open in compare'}><ArrowLeftRight size={18} aria-hidden /></Button>}
         {tree && card.group && <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={18} aria-hidden /></Link>}
         {!matrixOnly && <Button size="icon" variant="muted" onClick={() => setView(view === 'tree' ? 'cards' : 'tree')} aria-label={viewLabel} title={viewLabel}>
           {view === 'tree' ? <GalleryHorizontal size={18} aria-hidden /> : <TreeIcon size={18} aria-hidden />}
@@ -447,10 +452,8 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'car
         <Button size="icon" variant="muted" aria-pressed={aroundOn} onClick={() => setAround(!aroundOn)} aria-label={aroundLabel} title={aroundLabel}
           className="aria-pressed:text-[var(--home-accent)]"><UnfoldHorizontal size={18} aria-hidden /></Button>
         <Button size="icon" variant="muted" onClick={read.open} aria-label={studioLabel} title={studioLabel}><Clapperboard size={18} aria-hidden /></Button>
-        <Button size="icon" variant="muted" aria-pressed={saved} onClick={() => toggleBookmark(bookmark, savedIds)} aria-label={saveLabel} title={saveLabel} className={saved ? 'text-[var(--home-accent)]' : undefined}>
-          {saved ? <BookmarkCheck size={18} aria-hidden /> : <Bookmark size={18} aria-hidden />}
-        </Button>
-        {page && <Button size="icon" variant="muted" href={`${page}#${anchor}`} aria-label={ar ? 'افتحها في المقارنة' : 'Open in compare'} title={ar ? 'افتحها في المقارنة' : 'Open in compare'}><ArrowLeftRight size={18} aria-hidden /></Button>}
+        {/* Save comes after the card's tools, just before share (owner, 2026-11-20). */}
+        {saveButton}
         <ShareImageButton size="icon" iconSize={18} href={`${page ?? ''}#${anchor}`} onVideo={canRecord() ? read.open : undefined} onPageVideo={onPageVideo} />
       </div>}
       {verdicts.map(({ id: pair, verdict }) => <div key={pair} dir="ltr" className="mt-1 text-sm">

@@ -83,12 +83,13 @@ test.describe('pages with the database', () => {
     await pickTree(page);
     await page.goto('/');
     const card = page.locator('article').filter({ hasText: 'من متشابهات القرآن' }).first();
-    await expect(card.getByRole('link', { name: 'افتح الشجرة في متشابهات القرآن' })).toBeVisible();
+    // The head and the first button of the row under the tree both open it (owner, 2026-11-20: open first in the row).
+    await expect(card.getByRole('link', { name: 'افتح الشجرة في متشابهات القرآن' })).toHaveCount(2);
     // One tree in ten opens as the matrix by design (TreeViewCard `mixed`); its button turns it to the tree.
     const toTree = card.getByRole('button', { name: 'عرض الشجرة' });
     if (await toTree.count()) await toTree.click();
     await expect(card.getByRole('region', { name: 'شجرة العبارات المشتركة' }).filter({ visible: true }).first()).toBeVisible();
-    await card.getByRole('link', { name: 'افتح الشجرة في متشابهات القرآن' }).click();
+    await card.getByRole('link', { name: 'افتح الشجرة في متشابهات القرآن' }).last().click();
     await expect(page).toHaveURL(/\/quran\/branches/);
     await noErrorPage(page);
   });
@@ -252,7 +253,7 @@ test.describe('pages with the database', () => {
       await expect(saved).toBeAttached({ timeout: 1000 });
     }).toPass({ timeout: 40_000 });
     const card = page.locator('article').filter({ has: saved }).first();
-    await expect(card.getByText(`${S(2)} ٢٥٥`, { exact: true })).toBeVisible();
+    await expect(card.getByText(`${S(2)} ٢٥٥`, { exact: true }).first()).toBeVisible();
     await expect(card.locator('[data-line]').first()).toBeAttached();
     await noErrorPage(page);
   });

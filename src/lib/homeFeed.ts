@@ -9,6 +9,8 @@ import { pairCards, pairOfDay, type PairCard } from '@/app/quran/compare/pairCar
 import { bookmarkKind } from '@shared/bookmarkKind';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { treeInventory, treePreviewOf, type TreePreview } from '@/app/quran/read/ayahPreview';
+import { pieceSources } from '@shared/quran/pieceSources';
+import type { QuizSource } from '@shared/quiz/sources';
 import { findProphet, storyTitle } from '@shared/quran/prophets';
 import { quranStoryText } from '@shared/quran/prophets/storyText';
 import { buildStory, storyMap, type EventView, type StoryMap } from '@shared/quran/prophets/story';
@@ -46,10 +48,17 @@ export function feedIds(day: number, count = FEED_AHEAD) {
 }
 
 /** The picked pairs and trees, by offset from the day. */
-export function feedContent(day: number, pairOffsets: number[], treeOffsets: number[]): { pairs: PairCard[]; trees: (TreePreview & { text: string })[] } {
+/** A pair or a tree with the sources its card's line names (owner, 2026-11-20: every card has one). */
+export type FeedPair = PairCard & { sources: QuizSource[] };
+export type FeedTree = TreePreview & { text: string; sources: QuizSource[] };
+const pairGroup = (pair: PairCard) => (pair.group ? treeInventory().find(piece => piece.id === pair.group || [piece.legacyId, ...(piece.legacyIds ?? []), ...(piece.group?.aliases ?? [])].includes(pair.group!))?.group : undefined);
+const feedPair = (pair: PairCard): FeedPair => ({ ...pair, sources: pieceSources(pair.sides.flatMap(side => side.ayat.map(ayah => `${side.surah}:${ayah.number}`)), pairGroup(pair)) });
+const feedTree = (piece: BranchPiece): FeedTree => ({ ...treePreviewOf(piece), text: piece.text, sources: pieceSources(piece.keys, piece.group) });
+
+export function feedContent(day: number, pairOffsets: number[], treeOffsets: number[]): { pairs: FeedPair[]; trees: FeedTree[] } {
   return {
-    pairs: pairOffsets.flatMap(offset => pairOfDay(day + offset) ?? []),
-    trees: treeOffsets.flatMap(offset => { const piece = treeOfDay(day, offset); return piece ? [{ ...treePreviewOf(piece), text: piece.text }] : []; }),
+    pairs: pairOffsets.flatMap(offset => { const pair = pairOfDay(day + offset); return pair ? [feedPair(pair)] : []; }),
+    trees: treeOffsets.flatMap(offset => { const piece = treeOfDay(day, offset); return piece ? [feedTree(piece)] : []; }),
   };
 }
 
@@ -135,19 +144,19 @@ const momentCard = (slot: number, { battle, moment, n }: (typeof MOMENT_FEED)[nu
   ({ slot, kind: 'moment', item: momentItem(battle.slug, n), battle: { slug: battle.slug, name: battle.name, kind: battle.kind, year: battle.year }, moment, n });
 
 /** A saved item drawn as its own card in the feed: the tree card's tree or the pair card's pair; a saved ayah needs nothing here. */
-export type SavedContent = { pair?: PairCard; tree?: TreePreview & { text: string } };
+export type SavedContent = { pair?: FeedPair; tree?: FeedTree };
 
 export function savedContent(id: string): SavedContent | null {
   const kind = bookmarkKind({ id });
   if (kind === 'tree') {
     // A tree saved before its id changed is found under its old ids too, as the branches page finds it.
     const piece = treeInventory().find(at => at.id === id) ?? treeInventory().find(at => [at.legacyId, ...(at.legacyIds ?? []), ...(at.group?.aliases ?? [])].includes(id));
-    return piece ? { tree: { ...treePreviewOf(piece), text: piece.text } } : null;
+    return piece ? { tree: feedTree(piece) } : null;
   }
   if (kind !== 'compare') return null;
   const surahs = [...new Set(compareBookmarkAyat({ id }).map(key => Number(key.split(':')[0])))].sort((a, b) => a - b);
   const pair = surahs.length ? pairCards(surahs[0], surahs[1] ?? surahs[0]).find(card => savedAs(card.id, [{ id }]).length) : undefined;
-  return pair ? { pair } : null;
+  return pair ? { pair: feedPair(pair) } : null;
 }
 
 /**

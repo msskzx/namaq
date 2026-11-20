@@ -32,15 +32,14 @@ const sayingOf = (record: FortyRecord) => {
 
 const shamela = (book: keyof AppForty['books'], id: number) => `https://shamela.ws/book/${FORTY.books[book].shamela}/${id}`;
 /** The entry in the book that gathers it: al-Nawawi's Forty, or Ibn Rajab's additions in Jami' al-'Ulum. */
-const compiled = (entry: FortyEntry): QuizSource => {
+export const compiledSource = (entry: FortyEntry): QuizSource => {
   const { book, name } = compilerOf(entry);
   return { book: FORTY.books[book].title, author: name, at: `${entry.heading}، ص ${num(entry.pages[entry.pages.length - 1])}`, url: shamela(book, entry.shamela) };
 };
+/** One record of the saying in its book («رقم ١، ج ١، ص ٦»). */
+export const recordSource = (record: FortyRecord): QuizSource => ({ book: FORTY.books[record.book].title, at: `رقم ${num(record.number)}${record.route ? ` (${record.route})` : ''}، ج ${num(record.volume)}، ص ${num(record.pages[0])}`, url: shamela(record.book, record.shamela) });
 /** The record the saying is quoted from, then the entry that holds it. */
-const sources = (entry: FortyEntry, record: FortyRecord): QuizSource[] => [
-  { book: FORTY.books[record.book].title, at: `رقم ${num(record.number)}${record.route ? ` (${record.route})` : ''}، ج ${num(record.volume)}، ص ${num(record.pages[0])}`, url: shamela(record.book, record.shamela) },
-  compiled(entry),
-];
+const sources = (entry: FortyEntry, record: FortyRecord): QuizSource[] => [recordSource(record), compiledSource(entry)];
 
 function choose(key: string, family: string, promptArabic: string, right: string, wrong: string[], cited: { sources: QuizSource[]; note?: string }, entry: FortyEntry, random: Random): ChoiceQuestion | null {
   const others = [...new Map(wrong.filter(label => bare(label) !== bare(right)).map(label => [bare(label), label])).values()];
@@ -148,7 +147,7 @@ export function bookQuestions(random: Random): ChoiceQuestion[] {
   return shuffle(all.flatMap(({ entry, quotation, books }) => {
     const wrong = all.filter(other => apart(other.entry.named, entry.named)).map(other => other.books);
     const question = choose(`${entry.n}`, HADITH_BOOK, `${quotation}\nإلى أي كتب عزاه النووي؟`, books, wrong,
-      { sources: [compiled(entry)] }, entry, random);
+      { sources: [compiledSource(entry)] }, entry, random);
     return question ? [question] : [];
   }), random);
 }

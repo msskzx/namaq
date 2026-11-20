@@ -3,20 +3,20 @@
 import { Fragment, isValidElement, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText, SquareArrowOutUpLeft, Swords, BookOpenText, ListTree, MessagesSquare, Link2, History, Network, GitCommitVertical } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, Feather, Layers, Users, EyeOff, LightbulbOff, NotebookPen, ScrollText, Swords, BookOpenText, ListTree, MessagesSquare, Link2, History, Network, GitCommitVertical } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Cookies from 'js-cookie';
 import StoryMap from '@/app/quran/prophets/[slug]/StoryMap';
-import type { SavedContent, SiraCard, StoryCard } from '@/lib/homeFeed';
+import type { FeedPair, FeedTree, SavedContent, SiraCard, StoryCard } from '@/lib/homeFeed';
 import type { TermCard } from '@/lib/balaghaTerms';
 import type { HadithCard } from '@/lib/forty';
 import type { SahihCard } from '@/lib/sahih';
-import { SahihHadithView, sahihPage } from '@/components/hadith/SahihParts';
+import { SahihHadithView } from '@/components/hadith/SahihParts';
 import type { NameCard, TarajimCard } from '@/lib/tarajim';
-import { betweenHref, CreditFold, TiesChain, tiesHref } from '@/components/tarajim/TarajimParts';
+import { betweenHref, TiesChain, tiesHref } from '@/components/tarajim/TarajimParts';
 import LifeTimeline from '@/components/tarajim/LifeTimeline';
-import { IbnRajab, shamelaPage } from '@/components/hadith/FortyParts';
+import { IbnRajab } from '@/components/hadith/FortyParts';
 import HadithBooks from '@/components/hadith/HadithBooks';
 import FortyIsnad from '@/components/hadith/FortyIsnad';
 import { compilerOf, fromCompanion } from '@shared/hadith';
@@ -43,7 +43,6 @@ import { pageModel } from '@shared/quran/recitePage';
 import { usePageGestures } from '@/app/quran/read/usePageGestures';
 import { readGestures, type GestureAction } from '@shared/readerGestures';
 import { surahPairHref } from '@shared/quran/curatedComparisons';
-import type { TreePreview } from '@/app/quran/read/ayahPreview';
 import { LAST_PAGE_KEY } from '@/app/quran/read/ReaderView';
 import { lastPage } from '@/app/quran/read/OpenLastPage';
 import { useNow } from '@/components/utilities/Utilities';
@@ -76,7 +75,12 @@ import { QiraatPlace } from '@/app/quran/qiraat/QiraatView';
 import { surahName } from '@shared/quran/surahNames';
 import Card from '@/components/common/Card';
 import { CardRowProvider, useRowSlot } from '@/components/common/UnderCard';
-import ExternalLink from '@/components/common/ExternalLink';
+import SourceLine, { sourcesOf } from '@/components/common/SourceLine';
+import { SourceSlotContext, type Source } from '@/components/common/sourceSlot';
+import { citeSource, mushafSource, MUSHAF_BOOK, type QuizSource } from '@shared/quiz/sources';
+import { qiraatSources } from '@shared/quiz/bookSources';
+import { storySource } from '@shared/quran/pieceSources';
+import { termSource } from '@shared/quran/balaghaTerms';
 
 /**
  * The website's home feed, as the app's (mobile/src/components/HomeFeed.tsx): story circles, the page the mushaf was left on,
@@ -153,8 +157,9 @@ export function ContinueReading() {
   const href = `/quran/read/${page ?? 1}`;
   const where = [data && names[data.surah], today?.date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ');
   return <Post labelledBy="reading-title" head={<PostHead Icon={BookOpen} id="reading-title" title={fasila || (page && page > 1) ? 'تابع القراءة' : 'ابدأ القراءة'} sub={where || undefined} />}
+    open={<Action Icon={BookOpen} label="اقرأ" href={href} />}
+    source={data ? [{ book: MUSHAF_BOOK, at: `${names[data.surah]}، ص ${num(data.page)}` }] : undefined}
     actions={<>
-      <Action Icon={BookOpen} label="اقرأ" href={href} />
       {today?.juz && <Link href={juzHref(today.juz[0])} onClick={() => markStoryOpened('juz')} className={`${styles.action} ${styles.accent} text-sm`} aria-label={`اقرأ ${juzLabel(today.juz)}، جزء اليوم`}>{juzLabel(today.juz)}</Link>}
     </>}>
     <Link href={href} className={styles.pageSlice} aria-label={fasila ? 'افتح المصحف عند فاصلتك' : 'افتح المصحف حيث توقفت'} lang="ar">
@@ -174,10 +179,18 @@ function PostHead({ Icon, title, sub, href, label, id }: { Icon: typeof BookOpen
 }
 
 /**
- * Every feed post's one shape (owner, 2026-11-14), the compare card's and the app's (mobile HomeFeed's Post): the head,
- * the body in one card, and a row of icon buttons under the card, starting on the right.
+ * Every feed post's one shape (owner, 2026-11-14 and 2026-11-20, like an Instagram post), the app's (mobile HomeFeed's
+ * Post): the head, the body in one card, the row of icon buttons under it grouped on the right (the open button, the
+ * card's tools, save, share), then the source line.
  */
-function Post({ head, actions, bar, labelledBy, save, children }: { head: React.ReactNode; actions?: React.ReactNode;
+function Post({ head, open, actions, share, source, bar, labelledBy, save, children }: { head: React.ReactNode;
+  /** Opens the item in its own reader (the mushaf at the ayah, the hadith in its book): first in the row. */
+  open?: React.ReactNode;
+  actions?: React.ReactNode;
+  /** The card's share button, last of the group, after save. */
+  share?: React.ReactNode;
+  /** The books the card stands on, named on its source line; a `Reference` inside the card joins its sheet. */
+  source?: QuizSource[];
   /** A bar of the card's own between it and its buttons (recall's recite bar). */
   bar?: React.ReactNode; labelledBy?: string;
   /** The card's kind and item, saved as `card:<kind>:<item>` by the first button of its row (owner 2026-11-20, as the app's CardMenuActions). */
@@ -185,11 +198,21 @@ function Post({ head, actions, bar, labelledBy, save, children }: { head: React.
   // What the card's content hands up with UnderCard lands at the start of the row under the card (owner: buttons under the
   // card, never in it); the row hides while it holds no button.
   const [slot, setSlot] = useRowSlot();
+  const [handed, setHanded] = useState<[string, Source][]>([]);
+  const sourceSlot = useMemo(() => ({ set: (id: string, given: Source | null) => setHanded(now => {
+    const rest = now.filter(([at]) => at !== id);
+    if (!given) return rest.length === now.length ? now : rest;
+    const at = now.findIndex(([key]) => key === id);
+    return at < 0 ? [...now, [id, given]] : now.map(entry => (entry[0] === id ? [id, given] : entry));
+  }) }), []);
+  const own = source ? sourcesOf(source) : [];
+  const inner = handed.map(([, given]) => given);
   const body = <>
     {head}
-    <Card className="overflow-hidden"><CardRowProvider slot={slot}>{children}</CardRowProvider></Card>
+    <Card className="overflow-hidden"><SourceSlotContext.Provider value={sourceSlot}><CardRowProvider slot={slot}>{children}</CardRowProvider></SourceSlotContext.Provider></Card>
     {bar && <div className="mt-2 flex justify-center" data-share-skip>{bar}</div>}
-    <div className={styles.postActions} data-share-skip><span ref={setSlot} className="contents" />{save && <SaveCard {...save} head={head} />}{actions}</div>
+    <div className={styles.postActions} data-share-skip>{open}<span ref={setSlot} className="contents" />{actions}{save && <SaveCard {...save} head={head} />}{share}</div>
+    {own.length + inner.length > 0 && <SourceLine named={own.length ? own : inner} sources={[...own, ...inner]} />}
   </>;
   // The reading card is a section of the page named by its head (`labelledBy`); the feed's posts are articles.
   return labelledBy
@@ -197,7 +220,7 @@ function Post({ head, actions, bar, labelledBy, save, children }: { head: React.
     : <article className={styles.postWrap} dir="rtl">{body}</article>;
 }
 
-/** A feed card's save, first in the row under it; the saved shelf names it by the card's head (its title and line). */
+/** A feed card's save, after its tools and before share; the saved shelf names it by the card's head (its title and line). */
 function SaveCard({ kind, item, head }: { kind: string; item: string; head: React.ReactNode }) {
   const saved = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
   const id = cardMenuSaveId(kind, item);
@@ -208,12 +231,9 @@ function SaveCard({ kind, item, head }: { kind: string; item: string; head: Reac
 }
 
 /** One icon button of a post's row: a link with `href`, else a button; `on` lights it, `tone` colours it. */
-function Action({ Icon, label, href, onClick, on, tone, disabled, external }: { Icon: typeof BookOpen; label: string; href?: string; onClick?: () => void; on?: boolean; tone?: 'green'; disabled?: boolean;
-  /** `href` leaves Namaq (a source's page): it opens in a new tab. */
-  external?: boolean }) {
+function Action({ Icon, label, href, onClick, on, tone, disabled }: { Icon: typeof BookOpen | typeof TreeIcon; label: string; href?: string; onClick?: () => void; on?: boolean; tone?: 'green'; disabled?: boolean }) {
   const className = [styles.action, on && styles.actionOn, tone === 'green' && styles.green].filter(Boolean).join(' ');
   const icon = <Icon size={22} aria-hidden />;
-  if (href && external) return <ExternalLink href={href} mark={false} aria-label={label} title={label} className={className}>{icon}</ExternalLink>;
   return href
     ? <Link href={href} onClick={onClick} aria-label={label} title={label} className={className}>{icon}</Link>
     : <button type="button" onClick={onClick} disabled={disabled} aria-label={label} title={label} aria-pressed={on} className={className}>{icon}</button>;
@@ -222,7 +242,7 @@ function Action({ Icon, label, href, onClick, on, tone, disabled, external }: { 
 const compareNames = Object.fromEntries(surahRows.map(row => [row.number, { ar: surahName(row.number), en: row.nameTransliterated }]));
 
 /** A look-alike pair as a post: the compare page's own card (read-along, views, saving, sharing), and a link to open it there. */
-function PairPost({ pair }: { pair: PairCard }) {
+function PairPost({ pair }: { pair: FeedPair }) {
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks, serverBookmarks);
   const [a, b] = pair.sides;
   const label = (side: PairCard['sides'][number]) => `${names[side.surah]} ${num(side.ayat[0].number)}`;
@@ -231,6 +251,7 @@ function PairPost({ pair }: { pair: PairCard }) {
     <ul className="list-none p-0">
       <CompareCard card={pair} names={compareNames} ar savedIds={savedAs(pair.id, bookmarks)} page={surahPairHref(a.surah, b.surah)} view={defaultBranchView(Cookies.get(BRANCH_VIEW_COOKIE))} />
     </ul>
+    <SourceLine named={sourcesOf(pair.sources)} sources={sourcesOf(pair.sources)} />
   </article>;
 }
 
@@ -254,11 +275,11 @@ function ForgottenPost({ ayah: mark, review, title = 'هل تذكرها؟' }: { 
   const toggleWriting = () => setWriting(on => { try { localStorage.setItem(RECALL_WRITE, String(!on)); } catch {} return !on; });
   const [surah, number] = ayah.split(':').map(Number);
   if (!review && recalled.has(ayah)) return null;
-  return <Recall key={`${mark}-${writing}`} ayah={ayah} targetWord={markWord(mark)} title={title} sub={`${names[surah]} ${num(number)}`} writing={writing} onWriting={toggleWriting}>
+  return <Recall key={`${mark}-${writing}`} ayah={ayah} targetWord={markWord(mark)} title={title} sub={`${names[surah]} ${num(number)}`} writing={writing} onWriting={toggleWriting}
+    open={<Action Icon={BookOpen} label="في المصحف" href={ayahHref(ayah)} />}>
     <Action Icon={Check} label="تذكّرتها" tone="green" onClick={() => { if (review) rememberAyah(mark); else { recalled.add(ayah); setGone(n => n + 1); } }} />
     {!review && <Action Icon={LightbulbOff} label="نسيتها" onClick={() => { recalled.add(ayah); markForgotten(ayah); setGone(n => n + 1); }} />}
     {review && <Action Icon={EyeOff} label="راجع ما نسيت" href={review} />}
-    <Action Icon={BookOpen} label="في المصحف" href={ayahHref(ayah)} />
   </Recall>;
 }
 
@@ -268,7 +289,7 @@ function ForgottenPost({ ayah: mark, review, title = 'هل تذكرها؟' }: { 
  * (the reader's gesture settings, read/usePageGestures); the pen writes what the pen setting asks. Drawn afresh for each way
  * of asking (`writing`).
  */
-function Recall({ ayah, targetWord, title, sub, writing, onWriting, children }: { ayah: string; targetWord?: number; title: string; sub: string; writing: boolean; onWriting: () => void; children: React.ReactNode }) {
+function Recall({ ayah, targetWord, title, sub, writing, onWriting, open, children }: { ayah: string; targetWord?: number; title: string; sub: string; writing: boolean; onWriting: () => void; open: React.ReactNode; children: React.ReactNode }) {
   const { pages, words } = useAyahPage(ayah);
   const model = useMemo(() => (pages ? pageModel(pages.data, pages.top) : null), [pages]);
   const [position, setPosition] = useState<RecitePosition>({ start: ayah, ...(targetWord !== undefined ? { word: targetWord } : {}), shown: null, words: 0 });
@@ -293,7 +314,7 @@ function Recall({ ayah, targetWord, title, sub, writing, onWriting, children }: 
   });
   return <Post head={<PostHead Icon={LightbulbOff} title={title} sub={sub} />}
     bar={<RecitePill recite={recite} writing={writing} onWriting={onWriting} />}
-    actions={children}>
+    open={open} actions={children} source={[mushafSource(ayah, pages?.page)]}>
     <div ref={lines} className={styles.recall}>
       {!pages && <LoadingDots label="جارٍ التحميل" />}
       {pages && <AyahLines ayah={ayah} targetWord={targetWord} pages={pages} shown={recite.done} words={position.words} checked={recite.checked} write={recite.write ?? undefined} />}
@@ -327,11 +348,10 @@ function QuizPost({ kind, seed, scope }: { kind: string; seed: number; scope: Re
   const [revealed, setRevealed] = useState(false);
   const question = data?.questions?.[0];
   if (!question) return null;
-  return <Post head={<PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind as FeedQuizKind]} />} actions={<>
-    {/* After the answer, the ayah's mushaf button sits in the card's row, as in the app (owner, 2026-11-15). */}
-    {given !== undefined && question.ayahKey && <Action Icon={BookOpen} label="في المصحف" href={ayahHref(question.ayahKey)} />}
-    <QuizActions />
-  </>}>
+  return <Post head={<PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind as FeedQuizKind]} />}
+    // After the answer, the ayah's mushaf button leads the card's row, as in the app (owner, 2026-11-15 and 2026-11-20).
+    open={given !== undefined && question.ayahKey ? <Action Icon={BookOpen} label="في المصحف" href={ayahHref(question.ayahKey)} /> : undefined}
+    actions={<QuizActions />}>
     <div className={styles.question} lang="ar">
       {question.promptArabic !== FEED_QUIZ_NAMES[kind as FeedQuizKind] && <p className="mb-3 pt-2 text-base leading-loose">{question.promptArabic}</p>}
       <QuizAnswer question={question} given={given} typed={typed} hints={hints} revealed={revealed} names={data?.surahNames ?? {}} ar mushaf={false}
@@ -357,7 +377,8 @@ function StoryPost({ card }: { card: StoryCard }) {
   const href = `/quran/prophets/${card.slug}`;
   const read = () => router.push(href);
   return <Post save={{ kind: 'prophets', item: card.item }} head={<PostHead Icon={ScrollText} title={card.title} sub={card.phases[card.phase]} href={href} label="افتح القصة" />}
-    actions={<Action Icon={BookOpen} label="افتح القصة" href={href} />}>
+    open={<Action Icon={BookOpen} label="افتح القصة" href={href} />}
+    source={[storySource(card.events, card.phase)]}>
     <div className={styles.storyMap} data-story-scroll>
       <StoryMap map={card.map} events={card.events} phases={card.phases} at={card.phase} onRead={read} />
     </div>
@@ -371,10 +392,8 @@ function StoryPost({ card }: { card: StoryCard }) {
 function SiraPost({ card }: { card: Extract<SiraCard, { kind: 'sira' }> }) {
   const href = `/stories/${card.slug}`;
   return <Post save={card} head={<PostHead Icon={ScrollText} title="من قصص السيرة" sub={card.name} href={href} label={`افتح ${card.name}`} />}
-    actions={<>
-      <Action Icon={ScrollText} label={`افتح ${card.name}`} href={href} />
-      <Action Icon={SquareArrowOutUpLeft} label={`المصدر: ${card.report.cite}`} href={card.report.url} external />
-    </>}>
+    open={<Action Icon={ScrollText} label={`افتح ${card.name}`} href={href} />}
+    source={[citeSource({ text: '', cite: card.report.cite, url: card.report.url })]}>
     <div className="flex flex-col gap-3 p-4" lang="ar">
       <Report report={card.report} plain />
       {card.ayat.map((item, i) => <StoryAyatLines key={item.from} credit={`${item.label}: ${rangeName(item.from, item.to)}`} pages={card.pages[i] ?? []} folded />)}
@@ -386,10 +405,8 @@ function SiraPost({ card }: { card: Extract<SiraCard, { kind: 'sira' }> }) {
 function MomentPost({ card }: { card: Extract<SiraCard, { kind: 'moment' }> }) {
   const href = `/battles/${card.battle.slug}`;
   return <Post save={card} head={<PostHead Icon={Swords} title={`من ${card.battle.name}`} sub={battleLine(card.battle)} href={href} label={`افتح ${card.battle.name}`} />}
-    actions={<>
-      <Action Icon={Swords} label={`افتح ${card.battle.name}`} href={href} />
-      <Action Icon={SquareArrowOutUpLeft} label={`المصدر: ${card.moment.cite}`} href={card.moment.url} external />
-    </>}>
+    open={<Action Icon={Swords} label={`افتح ${card.battle.name}`} href={href} />}
+    source={[citeSource({ text: '', cite: card.moment.cite, url: card.moment.url })]}>
     <div className="p-4" lang="ar"><Moment moment={card.moment} n={card.n} plain /></div>
   </Post>;
 }
@@ -403,10 +420,9 @@ function TermPost({ card }: { card: TermCard }) {
   const href = termHref(card.term.name);
   const quote = card.term.quotes[0];
   return <Post save={{ kind: 'term', item: card.item }} head={<PostHead Icon={BookOpenText} title="من مصطلحات البلاغة" sub={quote.book === 'itqan' ? 'الإتقان للسيوطي' : 'تلخيص المفتاح للقزويني'} href={href} label={`افتح ${name}`} />}
-    actions={<>
-      <Action Icon={BookOpenText} label={`${name}: تعريفه وأمثلته`} href={href} />
-      <Action Icon={ListTree} label="مصطلحات البلاغة" href="/quran/terms" />
-    </>}>
+    open={<Action Icon={BookOpenText} label={`${name}: تعريفه وأمثلته`} href={href} />}
+    actions={<Action Icon={ListTree} label="مصطلحات البلاغة" href="/quran/terms" />}
+    source={[termSource(quote)]}>
     <div className="flex flex-col gap-1.5 px-3.5 py-3" lang="ar">
       <p className="text-2xl">{name}</p>
       {!card.term.defines && <p className="text-sm text-[var(--home-muted)]">{quotesTitle(card.term)}</p>}
@@ -430,29 +446,22 @@ function HadithPost({ card }: { card: HadithCard }) {
   const href = `/hadith/forty/${entry.n}`;
   const open = <Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} href={href} />;
   const sub = `${entry.heading}، ${fromCompanion(entry.companion)}`;
-  if (card.kind === 'recorded') return <Post save={card} head={<PostHead Icon={Network} title="من أخرجه" sub={sub} href={href} label={`افتح ${entry.heading}`} />} actions={open}>
+  if (card.kind === 'recorded') return <Post save={card} head={<PostHead Icon={Network} title="من أخرجه" sub={sub} href={href} label={`افتح ${entry.heading}`} />} open={open} source={card.sources}>
     <div className="flex flex-col gap-3 px-4 py-3" lang="ar">
       <p className="line-clamp-3 text-[1.125rem] leading-[1.9]">{entry.text}</p>
       <HadithBooks top={entry.heading} boxes={card.boxes} namer={compilerOf(entry).name} />
     </div>
   </Post>;
   if (card.kind === 'isnad') return <Post save={card} head={<PostHead Icon={GitCommitVertical} title="من الإسناد" sub={sub} href={href} label={`افتح ${entry.heading}`} />}
-    actions={<>
-      {open}
-      <Action Icon={SquareArrowOutUpLeft} label={`المصدر: ${card.bukhari.title} ${num(card.record.number)}`} href={shamelaPage({ bukhari: card.bukhari }, 'bukhari', card.record.shamela)} external />
-    </>}>
+    open={open} source={card.sources}>
     <div className="flex flex-col gap-3 px-4 py-3" lang="ar">
       <FortyIsnad isnad={card.record.isnad} size={card.size} />
       <p className="line-clamp-3 text-[1.125rem] leading-[1.9]">{card.record.saying}</p>
     </div>
   </Post>;
   const rajab = card.kind === 'rajab';
-  const source = rajab ? { title: books.ibnrajab.title, url: shamelaPage(books, 'ibnrajab', card.passage[0].shamela) } : { title: books[compilerOf(entry).book].title, url: shamelaPage(books, compilerOf(entry).book, entry.shamela) };
   return <Post save={card} head={<PostHead Icon={rajab ? BookOpenText : MessagesSquare} title={rajab ? 'من شرح ابن رجب' : 'من الحديث'} sub={sub} href={href} label={`افتح ${entry.heading}`} />}
-    actions={<>
-      {open}
-      <Action Icon={SquareArrowOutUpLeft} label={`المصدر: ${source.title}`} href={source.url} external />
-    </>}>
+    open={open} source={card.sources}>
     <div className="px-4 py-3" lang="ar">
       {card.kind === 'rajab' ? <IbnRajab only={card.passage} books={books} /> : <p className="text-[1.1875rem] leading-[1.9]">{entry.text}</p>}
     </div>
@@ -465,10 +474,8 @@ function SahihPost({ card }: { card: SahihCard }) {
   const href = `/hadith/sahih/${book.slug}/${hadith.n}`;
   const name = `${book.title} ${num(hadith.n)}`;
   return <Post save={card} head={<PostHead Icon={MessagesSquare} title={`من ${book.title}`} sub={card.where} href={href} label={`افتح ${name}`} />}
-    actions={<>
-      <Action Icon={MessagesSquare} label={`افتح ${name}`} href={href} />
-      <Action Icon={SquareArrowOutUpLeft} label={`المصدر: ${book.title}`} href={sahihPage(book, hadith.routes[0].shamela)} external />
-    </>}>
+    open={<Action Icon={MessagesSquare} label={`افتح ${name}`} href={href} />}
+    source={[{ book: book.title, author: book.slug === 'bukhari' ? 'البخاري' : 'مسلم' }]}>
     <div className="px-4 py-3"><SahihHadithView book={book} hadith={hadith} /></div>
   </Post>;
 }
@@ -480,13 +487,12 @@ function SahihPost({ card }: { card: SahihCard }) {
 function TarajimPost({ card }: { card: Extract<TarajimCard, { kind: 'tarajim' }> }) {
   const href = `/people/${card.person.slug}`;
   return <Post save={card} head={<PostHead Icon={Users} title="من التراجم" sub={card.person.name} href={href} label={`افتح ترجمة ${card.person.name}`} />}
-    actions={<>
-      <Action Icon={Users} label={`افتح ترجمة ${card.person.name}`} href={href} />
-      <Action Icon={Link2} label={card.person.sex === 'FEMALE' ? 'صلاتها' : 'صلاته'} href={tiesHref(card.person.slug)} />
-    </>}>
+    open={<Action Icon={Users} label={`افتح ترجمة ${card.person.name}`} href={href} />}
+    actions={<Action Icon={Link2} label={card.person.sex === 'FEMALE' ? 'صلاتها' : 'صلاته'} href={tiesHref(card.person.slug)} />}
+    source={card.sources}>
     <div className="flex flex-col gap-1.5 px-4 py-3" lang="ar">
       <p className="text-[1.125rem] leading-[1.85]">{card.virtue.text}</p>
-      <p className="text-sm text-[var(--home-muted)]">{card.virtue.by ? `${card.virtue.by} · ` : ''}{card.pages}</p>
+      {card.virtue.by && <p className="text-sm text-[var(--home-muted)]">{card.virtue.by}</p>}
     </div>
   </Post>;
 }
@@ -498,12 +504,11 @@ function TarajimPost({ card }: { card: Extract<TarajimCard, { kind: 'tarajim' }>
 function NamePost({ card }: { card: NameCard }) {
   const href = `/people/${card.person.slug}`;
   return <Post save={card} head={<PostHead Icon={Users} title={card.kind === 'laqab' ? 'لقب وصاحبه' : 'كنية وصاحبها'} sub={card.person.name} href={href} label={`افتح ترجمة ${card.person.name}`} />}
-    actions={<Action Icon={Users} label={`افتح ترجمة ${card.person.name}`} href={href} />}>
+    open={<Action Icon={Users} label={`افتح ترجمة ${card.person.name}`} href={href} />} source={card.sources}>
     <div className="flex flex-col gap-1 px-4 py-3" lang="ar">
       <p className="text-[1.875rem] font-bold leading-[1.6] text-[var(--home-accent)]">{card.name}</p>
       <p className="text-[1.1875rem] leading-[1.6]">{card.person.name}</p>
       {card.quote && <p className="text-base leading-[1.75] text-[var(--home-muted)]">«{card.quote}»{card.by ? ` ${card.by}` : ''}</p>}
-      <CreditFold credit={card.credit} />
     </div>
   </Post>;
 }
@@ -514,6 +519,8 @@ function NamePost({ card }: { card: NameCard }) {
  */
 function TiePost({ card }: { card: Extract<TarajimCard, { kind: 'tie' }> }) {
   return <Post save={card} head={<PostHead Icon={Link2} title="صلة" sub={`${card.a.name} و${card.b.name}`} href={betweenHref([card.a.slug, card.b.slug])} label={`ارسم الصلة بين ${card.a.name} و${card.b.name}`} />}
+    open={<Action Icon={Link2} label={`ارسم الصلة بين ${card.a.name} و${card.b.name}`} href={betweenHref([card.a.slug, card.b.slug])} />}
+    source={card.sources}
     actions={<>
       <Action Icon={Link2} label={`صلات ${card.a.name}`} href={tiesHref(card.a.slug)} />
       <Action Icon={Link2} label={`صلات ${card.b.name}`} href={tiesHref(card.b.slug)} />
@@ -521,7 +528,6 @@ function TiePost({ card }: { card: Extract<TarajimCard, { kind: 'tie' }> }) {
     <div className="flex flex-col gap-1.5 px-4 py-3" lang="ar">
       <TiesChain chain={card.chain} inCard />
       <p className="text-[1.125rem] leading-[1.85]">{card.sentence}</p>
-      <p className="text-sm text-[var(--home-muted)]">{card.pages}</p>
     </div>
   </Post>;
 }
@@ -530,21 +536,21 @@ function TiePost({ card }: { card: Extract<TarajimCard, { kind: 'tie' }> }) {
 function LifePost({ card }: { card: Extract<TarajimCard, { kind: 'life' }> }) {
   const href = `/people/${card.person.slug}`;
   return <Post save={card} head={<PostHead Icon={History} title={card.person.sex === 'FEMALE' ? 'من حياتها' : 'من حياته'} sub={card.person.name} href={href} label={`افتح ترجمة ${card.person.name}`} />}
-    actions={<Action Icon={Users} label={`افتح ترجمة ${card.person.name}`} href={href} />}>
+    open={<Action Icon={Users} label={`افتح ترجمة ${card.person.name}`} href={href} />} source={card.sources}>
     <div className="px-2.5 py-3.5">
       <LifeTimeline items={card.items} inCard compact linked={false} />
     </div>
   </Post>;
 }
 
-type Tree = TreePreview & { text: string };
+type Tree = FeedTree;
 
 /** A saved ayah as a post: the ayah in the mushaf's own lines, as the recall card shows it once revealed. */
 function SavedAyahPost({ ayah }: { ayah: string }) {
   const { pages } = useAyahPage(ayah);
   const [surah, number] = ayah.split(':').map(Number);
   return <Post head={<PostHead Icon={Bookmark} title="من المحفوظات" sub={`${names[surah]} ${num(number)}`} />}
-    actions={<Action Icon={BookOpen} label="في المصحف" href={ayahHref(ayah)} />}>
+    open={<Action Icon={BookOpen} label="في المصحف" href={ayahHref(ayah)} />} source={[mushafSource(ayah, pages?.page)]}>
     <div className={styles.recall}>
       {pages ? <AyahLines ayah={ayah} pages={pages} shown whole checked={null} /> : <LoadingDots label="جارٍ التحميل" />}
     </div>
@@ -593,7 +599,9 @@ const TREE_HEIGHT = 'max(24rem, calc(68svh - 5rem))';
 function TreePost({ tree }: { tree: Tree }) {
   return <article className={styles.postWrap} dir="rtl">
     <PostHead Icon={TreeIcon} title="من متشابهات القرآن" sub={ayahPlaces(tree.ayat?.map(ayah => ayah.key) ?? [], names)} href={tree.href} label="افتح الشجرة في متشابهات القرآن" />
-    <TreeViewCard tree={tree} height={TREE_HEIGHT} names={names} mixed frameClassName={styles.post} actionsClassName={styles.postActions} />
+    <TreeViewCard tree={tree} height={TREE_HEIGHT} names={names} mixed frameClassName={styles.post} actionsClassName={styles.postActions}
+      lead={<Action Icon={TreeIcon} label="افتح الشجرة في متشابهات القرآن" href={tree.href} />} />
+    <SourceLine named={sourcesOf(tree.sources)} sources={sourcesOf(tree.sources)} />
   </article>;
 }
 
@@ -606,7 +614,7 @@ function QiraatPost({ ayah }: { ayah: string }) {
   const { pages } = useAyahPage(ayah);
   const [surah, number] = ayah.split(':').map(Number);
   const href = `/quran/qiraat#a${ayah.replace(':', '-')}`;
-  return <Post save={{ kind: 'note-qiraat', item: ayah }} head={<PostHead Icon={Layers} title="من القراءات" sub={`${names[surah]} ${num(number)}`} />} actions={<Action Icon={Layers} label="القراءات كاملة" href={href} />}>
+  return <Post save={{ kind: 'note-qiraat', item: ayah }} head={<PostHead Icon={Layers} title="من القراءات" sub={`${names[surah]} ${num(number)}`} />} open={<Action Icon={Layers} label="القراءات كاملة" href={href} />} source={qiraatSources(ayah)}>
     <QiraatPlace ayah={ayah} max={2} more={href} lines={pages ? <AyahLines ayah={ayah} pages={pages} shown whole checked={null} /> : <LoadingDots label="جارٍ التحميل" />} />
   </Post>;
 }
@@ -614,7 +622,7 @@ function QiraatPost({ ayah }: { ayah: string }) {
 /** Batches added each time the page nears the feed's end. */
 const MORE = 3;
 type Ids = { pairs: (string | null)[]; trees: (string | null)[]; pairKeys?: string[][]; treeKeys?: string[][] };
-type Content = { pairs: PairCard[]; trees: (TreePreview & { text: string })[] };
+type Content = { pairs: FeedPair[]; trees: FeedTree[] };
 
 /** The home feed: pairs and trees not seen before, a forgotten ayah that is due, and more each time the page nears its end. */
 /** `only`: one interest's id, its cards alone (the chip row over the feed). */

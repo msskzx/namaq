@@ -71,4 +71,24 @@ test.describe('interests on the website', () => {
     // Its save is lit there, and takes it off the list.
     await expect(page.getByRole('button', { name: 'أزلها من المحفوظات' }).first()).toBeVisible();
   });
+
+  test('a card opens its item first in its row, and its source line under the buttons opens a sheet', async ({ page }) => {
+    // Owner, 2026-11-20 (sketch reference-place/every-card-2-dark.png): like an Instagram post, as in the app.
+    await page.addInitScript(() => { localStorage.setItem('interests', '["hadith"]'); localStorage.setItem('interests-asked', '1'); });
+    await page.goto('/');
+    const save = page.getByRole('button', { name: 'احفظ البطاقة' }).first();
+    await expect(save).toBeVisible({ timeout: 30_000 });
+    const post = page.locator('article').filter({ has: save }).first();
+    const saved = (await save.boundingBox())!;
+    // The row's buttons and links, right to left: the one that opens the hadith leads it.
+    const row = (await Promise.all((await post.locator('[data-share-skip] :is(a, button)').all()).map(async item => ({ name: await item.getAttribute('aria-label'), box: await item.boundingBox() }))))
+      .filter(item => item.box && Math.abs(item.box.y - saved.y) < 4).sort((a, b) => b.box!.x - a.box!.x);
+    expect(row[0].name).toMatch(/^افتح /);
+    const line = post.getByRole('button', { name: /^المصدر: / });
+    expect((await line.boundingBox())!.y).toBeGreaterThan(saved.y);
+    await line.click();
+    const sheet = page.getByRole('dialog', { name: 'المصدر' });
+    await expect(sheet).toBeVisible();
+    await expect(sheet.getByRole('link').first()).toBeVisible();
+  });
 });

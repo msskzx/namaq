@@ -43,7 +43,7 @@ const fetchMock = vi.fn(async (url: string) => {
     // No prophets cards and no question cards here: they have tests of their own in the browser (e2e/web/pages.spec.ts).
     : query.has('s') ? []
     : url.startsWith('/api/quiz') ? { questions: [] }
-    : query.has('p') || query.has('t') ? { pairs: (query.get('p') ?? '').split(',').filter(Boolean).map(Number).map(at => pairs[at]).filter(Boolean), trees: [] }
+    : query.has('p') || query.has('t') ? { pairs: (query.get('p') ?? '').split(',').filter(Boolean).map(Number).map(at => pairs[at]).filter(Boolean).map(pair => ({ ...pair, sources: [] })), trees: [] }
     : { pairs: pairs.map(pair => pair.id), trees: [null, null], pairKeys: pairs.map(pair => pair.sides.map(side => `${side.surah}:${side.ayah}`)), treeKeys: [[], []] };
   return { ok: true, json: async () => body } as Response;
 });

@@ -6,7 +6,7 @@ import { CHOICE_KINDS } from './kinds';
 import { seededRandom } from './feedQuiz';
 import { branchQuestions } from './branchQuestions';
 import { quizTrees } from './treeScope';
-import { ayahPlace, citeSource, MUSHAF_BOOK, type QuizSource } from './sources';
+import { ayahPlace, citeSource, mushafSource, MUSHAF_BOOK, referenceGroups, type QuizSource } from './sources';
 import corpus from '../quran/quranText/corpus';
 import type { BranchAyah } from '../quran/branches';
 
@@ -37,6 +37,13 @@ describe('every quiz question cites where its answer comes from', () => {
 });
 
 describe('how a reference is written', () => {
+  it('names the mushaf by its ayat on a card\'s line, and a book by its name and author (owner, 2026-11-20)', () => {
+    const groups = referenceGroups([{ book: 'تيسير الكريم الرحمن', author: 'السعدي', at: 'ص ٩٣٧' }, mushafSource('112:3', 604)]);
+    expect(groups.map(group => group.title)).toEqual([`المصحف · ${ayahPlace('112:3')}`, 'تيسير الكريم الرحمن · السعدي']);
+    // Opened, the mushaf names its printing and the page.
+    expect(groups[0].lines.map(line => line.text)).toEqual([MUSHAF_BOOK, `${ayahPlace('112:3')}، ص ٦٠٤`]);
+  });
+
   it('reads the book apart from the place in a sira reference, so the collapsed line shows the book alone', () => {
     expect(citeSource({ text: 'خرج رسول الله', cite: 'سير أعلام النبلاء، السيرة ١، ص ٢٩٧', url: 'https://shamela.ws/book/10906/1' }))
       .toEqual({ book: 'سير أعلام النبلاء', at: 'السيرة ١، ص ٢٩٧', quote: 'خرج رسول الله', url: 'https://shamela.ws/book/10906/1' });

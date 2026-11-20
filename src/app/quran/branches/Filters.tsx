@@ -129,11 +129,16 @@ function ComparePicker({ links, label, ar }: { links: CompareLink[]; label: stri
 }
 
 /** Under the tree or matrix, as on a post: save, the card's own switches (`toggles`), share, then compare. */
-export function CardActions({ id, text, href, aliases = [], details, compareLinks = [], toggles }: { id: string; text: string; href?: string; aliases?: string[]; details?: React.ReactNode; compareLinks?: CompareLink[]; toggles?: React.ReactNode }) {
+export function CardActions({ id, text, href, aliases = [], details, compareLinks = [], toggles, lead }: { id: string; text: string; href?: string; aliases?: string[]; details?: React.ReactNode; compareLinks?: CompareLink[]; toggles?: React.ReactNode;
+  /** In the home feed: the button that opens the tree on the branches page, first, and save after the tools, before share (owner, 2026-11-20). */
+  lead?: React.ReactNode }) {
   const ar = useLanguage().language === 'ar';
   const saved = useBookmarks().some(item => item.id === id || aliases.includes(item.id));
   const label = saved ? (ar ? 'إزالة من المحفوظة' : 'Remove from saved') : (ar ? 'حفظ' : 'Save');
   const save = () => toggleBookmark(bookmarkOf(id, text, href), aliases);
+  const saveButton = <Button size="lg" variant="muted" aria-pressed={saved} onClick={save} aria-label={label} title={label} className={saved ? 'text-[var(--home-accent)]' : undefined}>
+    {saved ? <BookmarkCheck aria-hidden /> : <Bookmark aria-hidden />}
+  </Button>;
   // In the growth studio its controls take the row; save and share come back when it closes.
   const studio = useGrowth().studio;
   const videoLabel = ar ? 'مشاركة كفيديو' : 'Share as video';
@@ -141,15 +146,13 @@ export function CardActions({ id, text, href, aliases = [], details, compareLink
   return <div className="flex flex-col gap-1">
     <GrowProgress />
     <div className="flex flex-wrap items-center gap-1">
-    {!studio && <>
-      <Button size="lg" variant="muted" aria-pressed={saved} onClick={save} aria-label={label} title={label} className={saved ? 'text-[var(--home-accent)]' : undefined}>
-        {saved ? <BookmarkCheck aria-hidden /> : <Bookmark aria-hidden />}
-      </Button>
-    </>}
+    {!studio && lead}
+    {!studio && !lead && saveButton}
     {/* The studio's button sits after save, as in the app; open, its controls take the row. */}
     <GrowControls share={studio && canRecord() && <Button data-share-tree size="lg" variant="muted" onClick={openVideo} aria-label={videoLabel} title={videoLabel}><Send aria-hidden /></Button>} />
     {!studio && <>
       {toggles}
+      {lead && saveButton}
       <ShareButton video href={href} />
     </>}
     {!studio && compareLinks.length === 1 && <Button size="lg" variant="muted" href={compareLinks[0].href} aria-label={compareLabel} title={compareLabel}><ArrowLeftRight aria-hidden /></Button>}

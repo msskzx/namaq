@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLiftSource, type Source } from '@/ui/sourceSlot';
 import { View } from 'react-native';
 import { ChevronDown } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
@@ -7,7 +8,8 @@ import type { Palette } from '@/lib/theme';
 import { Tap } from '@/ui/Tap';
 
 /** A quote from a book: its words, with the page it cites as a link (the page alone when it has no words). A quote with no page is our own note on the ones above. */
-export type Quote = { text: string; cite?: string; url?: string };
+export type { Quote, Source } from '@/ui/sourceSlot';
+import type { Quote } from '@/ui/sourceSlot';
 
 /**
  * A section's reference, collapsed to the book and page it cites (a muted line with a chevron); a tap opens the quotes,
@@ -17,6 +19,9 @@ export default function Reference({ title, quotes, links = [], palette }: { titl
   /** Links under the quotes when open (the source's own page, our sources and licences page). */
   links?: { label: string; url: string }[]; palette: Palette }) {
   const [open, setOpen] = useState(false);
+  // On a home card the reference joins the card's source line under its buttons (owner 2026-11-20), and draws nothing here.
+  const lifted = useLiftSource({ line: title, quotes, links });
+  if (lifted) return null;
   return (
     <View style={{ gap: 4 }}>
       <Tap onPress={() => setOpen(!open)} accessibilityRole="button" accessibilityState={{ expanded: open }} hitSlop={6} style={{ flexDirection: 'row', alignItems: 'center', gap: 4, alignSelf: 'flex-start' }}>
