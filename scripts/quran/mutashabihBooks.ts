@@ -28,7 +28,8 @@ const EDITOR: RegExp[] = [
   new RegExp(`(?<=[)\\]](?:\\s+الآية)?)\\s*\\.?\\s*(?:من\\s+)?${SURAH}\\s*[:،]*\\s*${DIGITS}`, 'g'),
   // Inside the author's sentence: «في سورة لقمان الآية: ٢١:», «في سورة الرعد ٣٧:», «، المائدة: ٢١،».
   new RegExp(`\\s*(?:الآية|الآيات)\\s*:\\s*${DIGITS}`, 'g'),
-  new RegExp(`(?<=،)\\s*${SURAH}\\s*،?\\s*:\\s*${DIGITS}\\s*،?`, 'g'),
+  // The comma before it is his too: «المكذبين، الأنعام: ١١.», «صافات، الملك، ١٨/١٩.».
+  new RegExp(`\\s*،\\s*${SURAH}\\s*[،:]*\\s*${DIGITS}`, 'g'),
   // An entry's number at the start of a line, «٥٨٧- قوله».
   /^[٠-٩]+\s*-\s*/gm,
 ];
@@ -47,6 +48,8 @@ export function authorsWords(text: string): string {
   return out
     .replace(new RegExp(`\\s*(?:و(?=[٠-٩]))?${DIGITS}`, 'g'), '')
     .replace(/:\s*[،,-]+(?:\s*[،,-])*/g, ':')
+    .replace(/:(?:[ \t]*:)+/g, ':')
+    .replace(/،[ \t]*\.(?!\.)/g, '.')
     .replace(/(?<!\.)\.[ \t]+\.(?!\.)/g, '.')
     .replace(/[ \t]+([،.:؛])/g, '$1')
     .replace(/[ \t]{2,}/g, ' ')

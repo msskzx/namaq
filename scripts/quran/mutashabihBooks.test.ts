@@ -14,6 +14,8 @@ describe("the author's words", () => {
     expect(authorsWords('(ومن قوم موسى..) ليكون آخر٥/ب الكلام')).toBe('(ومن قوم موسى..) ليكون آخر الكلام');
     expect(authorsWords('(أنا خير منه..) الآية سورة ص: ٧٦')).toBe('(أنا خير منه..) الآية');
     expect(authorsWords('أيديكم.. . وقال')).toBe('أيديكم... وقال');
+    expect(authorsWords('عاقبة المكذبين، الأنعام: ١١.\nوفي سورة النمل: ٢٩: قل سيروا')).toBe('عاقبة المكذبين.\nوفي سورة النمل: قل سيروا');
+    expect(authorsWords('فوقهم صافات، الملك، ١٨/١٩. كأنه قال')).toBe('فوقهم صافات. كأنه قال');
   });
 
   it("takes out his footnotes, his insertions in square brackets and his «ينظر» notes", () => {
