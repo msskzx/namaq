@@ -10,16 +10,18 @@ const CLAMP = { 2: 'line-clamp-2', 3: 'line-clamp-3', 4: 'line-clamp-4', 5: 'lin
  * the room the words flow in, sized from its own width as the reader's flowing text is (shared/quran/quranText/flow.ts).
  * Words and write boxes inside take that size (em); the place sets only colour, never a size.
  */
-export default function AyahFlow({ children, row = false, lines, className = '' }: { children: ReactNode;
+export default function AyahFlow({ children, row = false, center = false, lines, className = '' }: { children: ReactNode;
   /** Pieces side by side, wrapping (words and boxes in a matrix row); otherwise one justified paragraph. */
   row?: boolean;
+  /** Lines centred instead of justified (a narration between a dialogue's turns), as the app's. */
+  center?: boolean;
   /** At most this many lines, the rest cut (a note's ayah over its text); not with `row`. */
   lines?: 2 | 3 | 4 | 5 | 6; className?: string }) {
   const size: CSSProperties = { fontSize: `${FLOW_SIZE * 100}cqi`, lineHeight: FLOW_LINE };
   return (
     // Spans shown as blocks, so it may sit in a paragraph, a button or a choice's label.
     <span className={`block w-full min-w-0 ${className}`} style={{ containerType: 'inline-size' }}>
-      <span lang="ar" dir="rtl" data-ayah-flow className={`font-quran ${row ? 'flex flex-wrap items-center gap-x-[0.35em]' : `${lines ? CLAMP[lines] : 'block'} text-justify [text-align-last:right]`}`} style={size}>{children}</span>
+      <span lang="ar" dir="rtl" data-ayah-flow className={`font-quran ${row ? 'flex flex-wrap items-center gap-x-[0.35em]' : `${lines ? CLAMP[lines] : 'block'} ${center ? 'text-center' : 'text-justify [text-align-last:right]'}`}`} style={size}>{children}</span>
     </span>
   );
 }
@@ -38,4 +40,12 @@ const WORD_SIZE: CSSProperties = { fontSize: `calc(${FLOW_SIZE} * (min(100vw, ${
  */
 export function QuranWord({ children, className = '' }: { children: string; className?: string }) {
   return <span lang="ar" dir="rtl" className={`font-quran ${className}`} style={WORD_SIZE}>{mushafText(children)}</span>;
+}
+
+/**
+ * A tree box's words, as the app's TreeText (owner, 2026-11-20: trees take the reader's size too, as they zoom): the word
+ * size, the flowing line height, as a block in the box. `className` sets colour only.
+ */
+export function TreeText({ children, className = '' }: { children: ReactNode; className?: string }) {
+  return <span lang="ar" data-tree-text className={`block font-quran ${className}`} style={WORD_SIZE}>{children}</span>;
 }

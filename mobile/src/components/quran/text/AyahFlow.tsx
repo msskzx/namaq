@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useContext, useState, type ComponentRef, type ReactNode, type Ref } from 'react';
 import { useWindowDimensions, View, type TextStyle, type ViewStyle } from 'react-native';
 import { Text } from '@/ui/Text';
 import { QURAN_FONT } from '@/lib/theme';
@@ -50,6 +50,9 @@ export function AyahWords({ children, look }: { children: string; look?: WordLoo
   return <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, color, writingDirection: 'rtl', ...look }}>{mushafText(children)}</Text>;
 }
 
+/** The size of a Quran word on its own, and of a tree's words, on this screen. */
+export const useWordSize = () => wordFontSize(useWindowDimensions().width);
+
 /** Where a place may put a word on its own: its room in a row, never its size or font. */
 export type WordPlace = Pick<TextStyle, 'flex' | 'flexShrink' | 'minWidth' | 'maxWidth' | 'textAlign' | 'alignSelf'>;
 
@@ -63,9 +66,18 @@ export function QuranWord({ children, look, place, lines, header = false }: { ch
   lines?: number;
   /** It names what the sheet is about (a word sheet's word). */
   header?: boolean }) {
-  const size = wordFontSize(useWindowDimensions().width);
+  const size = useWordSize();
   return (
     <Text numberOfLines={lines} accessibilityRole={header ? 'header' : undefined}
       style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, writingDirection: 'rtl', ...place, ...look }}>{mushafText(children)}</Text>
   );
+}
+
+/**
+ * A tree box's words (owner, 2026-11-20: trees take the reader's size too, as they zoom): the word size, the flowing line
+ * height. The tree hands its ref on so the video finds the words where the app put them; the place sets colour only.
+ */
+export function TreeText({ ref, children, look, center = false }: { ref?: Ref<ComponentRef<typeof Text>>; children: ReactNode; look?: WordLook; center?: boolean }) {
+  const size = useWordSize();
+  return <Text ref={ref} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, writingDirection: 'rtl', textAlign: center ? 'center' : undefined, ...look }}>{children}</Text>;
 }

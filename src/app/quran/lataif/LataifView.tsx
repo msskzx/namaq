@@ -11,13 +11,13 @@ import { TOPICS, topicOf, type LataifReference } from '@shared/quran/lataif';
 import { letterDiff, rangeLabel, type ExampleView, type Line, type Step, type TurnView, type Voice } from '@shared/quran/iltifat';
 import Card from '@/components/common/Card';
 import Chip from '@/components/common/Chip';
+import AyahFlow, { AyahWords, TreeText } from '@/components/quran/text/AyahFlow';
 
 /** The app's colours for the three voices (mobile/src/components/Iltifat.tsx). */
 export const VOICE_COLOR: Record<Voice, string> = { he: 'var(--home-slot-1)', we: 'var(--home-green)', you: 'var(--home-root)' };
 const VOICE_NAME: Record<Voice, string> = { he: 'غيبة', we: 'تكلم', you: 'خطاب' };
 const ICON = 'flex size-9 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]';
 const DASH = 'h-0 flex-1 border-t-[1.5px] border-dashed border-[var(--home-rule)]';
-const QURAN = 'font-quran text-[1.45rem] leading-[2.1] text-[var(--home-ink)]';
 
 function Words({ lines }: { lines: Line[] }) {
   return lines.map((line, i) => (
@@ -26,7 +26,7 @@ function Words({ lines }: { lines: Line[] }) {
       {line.words.map((word, k) => (
         <React.Fragment key={k}>
           {k > 0 && ' '}
-          {word.voice ? <span style={{ color: VOICE_COLOR[word.voice] }}>{mushafText(word.text)}</span> : mushafText(word.text)}
+          {word.voice ? <span style={{ color: VOICE_COLOR[word.voice] }}><AyahWords>{word.text}</AyahWords></span> : <AyahWords>{word.text}</AyahWords>}
         </React.Fragment>
       ))}
       {line.end && <span className="text-[var(--home-amber)]">{' '}{num(line.ayah)}</span>}
@@ -56,14 +56,14 @@ function Tree({ trunk, leaves }: { trunk: string; leaves: { ayah: number; who: s
   const parts = letterDiff(mushafText(leaves[0].word), mushafText(leaves[1].word));
   return (
     <div className="flex flex-col items-stretch">
-      <p className={`${QURAN} rounded-[var(--card-radius)] border-[1.5px] border-[var(--home-rule)] px-3 py-1 text-center`}>{mushafText(trunk)}</p>
+      <p className="rounded-[var(--card-radius)] border-[1.5px] border-[var(--home-rule)] px-3 py-1 text-center"><TreeText className="text-[var(--home-ink)]">{mushafText(trunk)}</TreeText></p>
       <svg aria-hidden viewBox="0 0 320 22" preserveAspectRatio="none" className="h-6 w-full fill-none stroke-[var(--home-rule)] [stroke-width:1.5]">
         <path d="M160 0 V8 Q160 12 150 12 H90 Q80 12 80 22 M160 8 Q160 12 170 12 H230 Q240 12 240 22" vectorEffect="non-scaling-stroke" />
       </svg>
       <ul className="grid grid-cols-2 gap-3">
         {leaves.map((leaf, i) => (
           <li key={leaf.ayah} className="flex flex-col items-center rounded-[var(--card-radius)] border-[1.5px] border-[var(--home-rule)] px-2 py-1">
-            <span className="font-quran text-2xl leading-[2] text-[var(--home-ink)]">{parts[i][0]}<span className="text-[var(--home-accent)]">{parts[i][1]}</span>{parts[i][2]}</span>
+            <TreeText className="text-[var(--home-ink)]">{parts[i][0]}<span className="text-[var(--home-accent)]">{parts[i][1]}</span>{parts[i][2]}</TreeText>
             <span className="text-sm text-[var(--home-muted)]">{leaf.who} · {num(leaf.ayah)}</span>
           </li>
         ))}
@@ -81,12 +81,12 @@ function Dialog({ turns }: { turns: TurnView[] }) {
             <span aria-hidden className={DASH} />{turn.cut}<span aria-hidden className={DASH} />
           </p>
         );
-        if ('narration' in turn) return <p key={i} className={`${QURAN} text-center text-[var(--home-muted)]`}><Words lines={turn.narration} /></p>;
+        if ('narration' in turn) return <AyahFlow key={i} center className="text-[var(--home-muted)]"><Words lines={turn.narration} /></AyahFlow>;
         return (
           <figure key={i} className={`max-w-[88%] rounded-[var(--card-radius)] bg-[var(--home-paper)] px-3 pt-1.5 pb-1 ${turn.side === 'start' ? 'self-start rounded-ss-[4px]' : 'self-end rounded-se-[4px]'}`}
             style={turn.said ? { boxShadow: `inset 0 0 0 1.5px ${VOICE_COLOR[turn.voice]}` } : undefined}>
             <figcaption className="text-sm" style={{ color: VOICE_COLOR[turn.voice] }}>{turn.who}</figcaption>
-            <p className={QURAN}><Words lines={turn.lines} /></p>
+            <AyahFlow className="text-[var(--home-ink)]"><Words lines={turn.lines} /></AyahFlow>
           </figure>
         );
       })}
@@ -101,7 +101,7 @@ function ExampleCard({ view }: { view: ExampleView }) {
       <h3 className="text-base text-[var(--home-muted)]">{title}</h3>
       {view.kind === 'strip' && <>
         <Strip steps={view.steps} />
-        <p className={`${QURAN} text-justify [text-align-last:right]`}><Words lines={view.lines} /></p>
+        <AyahFlow className="text-[var(--home-ink)]"><Words lines={view.lines} /></AyahFlow>
       </>}
       {view.kind === 'tree' && <Tree trunk={view.trunk} leaves={view.leaves} />}
       {view.kind === 'dialog' && <Dialog turns={view.turns} />}
