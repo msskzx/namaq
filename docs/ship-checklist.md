@@ -77,7 +77,7 @@ in [records](records/README.md), `AGENTS` a rule already in AGENTS.md.
 - [ ] The card draws the feature's own shared view component, never a text-only stand-in or a redraw. Its taps open the real page at that item. (owner 11-13, 11-19, R0031)
 - [ ] The card has a UI test that uses it (swipe, zoom, typing, the tap that opens its page), not just a screenshot. (R0031)
 - [ ] One item per card. The card grows with its content up to screen height, with no inner scroll below that. Ayah cards stay small and open a sheet on tap. (owner 11-14, 11-18)
-- [ ] Card buttons sit under the card, never inside it. (owner 11-15)
+- [ ] Every home card follows the one agreed layout: the head over the card, the card, and every button in the row under it, save first and share last. No buttons inside the card and no «…» menu. (owner 11-14, 11-15, 11-20)
 - [ ] The feed learns nothing from taps yet. Only open rules move a card, and any hidden logic becomes a setting. (owner 11-19)
 - [ ] No stats, counts, streaks, likes or forgot-counts anywhere. Counters are live only (adhkar).
 - [ ] Questions use the memorized range. Pondering cards may use everything but prefer the memorized range. Trees are always drawn whole. (owner 11-13)

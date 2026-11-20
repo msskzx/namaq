@@ -28,7 +28,7 @@ Rules a test already enforces are listed at the end.
 | 16 | `shared/topBarSearch.test.ts` |
 | 17 | `shared/colourLiterals.test.ts`, with a shrink-only list of the colours still outside the themes |
 | 21 | `shared/firstFrame.test.ts`. Follows value imports only: `import type` lines are erased at build, and the type graph reaches the data through harmless card shapes. It found six tab pages that ignored a tap on their open button (battle, battles, story, stories, life, term); fixed |
-| 14 | `shared/bookmarkKind.test.ts` over `cardMenuSaveId`, which the app's «…» menu now uses. The website has no «…» menu on its feed cards yet (a parity gap, not built here) |
+| 14 | `shared/bookmarkKind.test.ts` over `cardMenuSaveId`, which the app's card row now uses (the «…» menu was dropped 2026-11-20). The website's feed cards have no save yet (a parity gap, not built here) |
 | 18 | `e2e/app` `reciteBarsHidden`, run after recite starts from the top bar, the long-press menu and the home review |
 | 19 | Not a test: the blank tree was seen on a phone only, so it is on the real-phone checklist |
 | 20 | `e2e/app/fixtures.ts` `noNestedButtons`: the page each app UI test ends on has no button inside a button |

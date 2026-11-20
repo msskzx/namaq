@@ -154,9 +154,11 @@ function Studio({ read, palette, record }: { read: ReturnType<typeof useReadAlon
 }
 
 /** One compare card: both sides stacked, tap a coloured word to light its partner, double tap to save, the studio reads along. */
-function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; palette: Palette; /** Opens the whole pair page's video, offered in the share sheet. */ onPageVideo?: () => void;
+function CompareCard({ card, palette, onPageVideo, onOpen, extra }: { card: PairCard; palette: Palette; /** Opens the whole pair page's video, offered in the share sheet. */ onPageVideo?: () => void;
   /** Set where the card shows outside the compare tab (the home feed): a button that opens it there. */
-  onOpen?: () => void }) {
+  onOpen?: () => void;
+  /** The feed's own buttons for this card (HomeFeed CardMenuActions), before share. */
+  extra?: React.ReactNode }) {
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const saved = savedIdsOf(card, bookmarks).length > 0;
   const read = useReadAlong(card);
@@ -361,6 +363,7 @@ function CompareCard({ card, palette, onPageVideo, onOpen }: { card: PairCard; p
           {/* In matrix view this button sits on the first ayah's line instead, as on the website. */}
           {tree && card.group && <IconButton Icon={TreeIcon} label="افتح في متشابهات القرآن" onPress={() => toTab({ pathname: '/branches', params: { tree: card.group } })} />}
           {onOpen && <IconButton Icon={ArrowLeftRight} label="افتحها في المقارنة" onPress={onOpen} />}
+          {extra}
           {/* Share is always the last button (the left end), as on the branches tab. */}
           <IconButton Icon={Send} label="مشاركة" onPress={() => share()} />
         </View>

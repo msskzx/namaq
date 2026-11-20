@@ -74,9 +74,10 @@ A new card or quiz kind goes into an interest's `cards` or `quizzes` in the same
 - Only three open rules move a card up: what is picked, a question answered wrong comes back after the ayah rests
   (`shared/quiz/missedQuestions.ts`), and a story opened goes on from where it stopped. Nothing is learned from taps.
 - Every card walks its own list with what was seen (`shared/feedSeen.ts`), so a card is new until the list is done.
-- The «…» on each card (FloatingMenu with ActButtons, like the reader's) holds «احفظ» (a `card:` bookmark, shown in the
-  library and among the saved cards) and «ليس من اهتماماتي» or «أضفه إلى اهتماماتي». Nothing on screen moves: interests
-  are kept for the visit, and a card taken out leaves a line with «تراجع».
+- Each card's row under it holds «احفظ» (a `card:` bookmark, shown in the library and among the saved cards) and
+  «ليس من اهتماماتي» (HomeFeed `CardMenuActions`), before share; there is no «…» menu (owner 2026-11-20: one layout for
+  every card). A card from outside the reader's interests is added from its line above («أضفه»). Nothing on screen moves:
+  interests are kept for the visit, and a card taken out leaves a line with «تراجع».
 - Today's juz, the forgotten ayat, books, the prayer card and saved items stay outside the rounds.
 - The chips over the feed: «لك» and each interest picked; a tap shows that interest's cards alone.
 - The website has the same picker (first open, settings, the chip row and its pencil, `src/components/homepage/Interests.tsx`);

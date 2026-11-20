@@ -15,8 +15,9 @@ test.describe('a new user', () => {
     // The reading card's head: where the page is and today's Hijri date.
     await expect(page.getByText(/ · .*[٠-٩]{4}$/).first()).toBeVisible();
     await expect(page.getByRole('button', { name: /^افتح المصحف حيث توقفت/ })).toBeVisible();
-    // Every content card has its «…» menu (save, not my interest).
-    await expect(page.getByRole('button', { name: /^خيارات: / }).first()).toBeAttached();
+    // Every card has one layout (owner, 2026-11-20): its save sits in the row under it, and there is no «…» menu.
+    await expect(page.getByRole('button', { name: 'احفظ البطاقة' }).first()).toBeAttached();
+    await expect(page.getByRole('button', { name: /^خيارات: / })).toHaveCount(0);
   });
 
   test('the reading card opens the mushaf where it was left', async ({ page }) => {

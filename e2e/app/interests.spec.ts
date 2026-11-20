@@ -33,25 +33,22 @@ test.describe('with balagha and the sira picked', () => {
     await page.getByRole('radio', { name: 'البلاغة', exact: true }).click();
     await expect(page.getByRole('radio', { name: 'البلاغة', exact: true })).toBeChecked();
     await expect(page.getByRole('heading', { name: 'جزء اليوم', exact: true })).toHaveCount(0);
-    await expect(page.getByRole('button', { name: /^خيارات: / }).first()).toBeAttached();
+    await expect(page.getByRole('button', { name: 'احفظ البطاقة' }).first()).toBeAttached();
     await page.getByRole('radio', { name: 'لك', exact: true }).click();
     await expect(page.getByRole('heading', { name: 'جزء اليوم', exact: true })).toBeAttached();
   });
 
-  test('the card menu saves a card and takes an interest out, with undo', async ({ page }) => {
+  test('the buttons under a card save it and take an interest out, with undo', async ({ page }) => {
     await open(page, '/');
     await page.getByRole('radio', { name: 'البلاغة', exact: true }).click();
-    const more = page.getByRole('button', { name: /^خيارات: / }).first();
-    await more.scrollIntoViewIfNeeded();
-    await more.click();
-    await page.getByRole('button', { name: 'احفظ البطاقة' }).click();
+    const save = page.getByRole('button', { name: 'احفظ البطاقة' }).first();
+    await save.scrollIntoViewIfNeeded();
+    await save.click();
     const bookmarks = await stored(page, 'bookmarks');
     expect(bookmarks).toContain('card:');
     await page.getByRole('radio', { name: 'لك', exact: true }).click();
-    const menus = page.getByRole('button', { name: /^خيارات: / });
-    await menus.first().scrollIntoViewIfNeeded();
-    await menus.first().click();
-    const notMine = page.getByRole('button', { name: /ليس من اهتماماتي$/ });
+    const notMine = page.getByRole('button', { name: /ليس من اهتماماتي$/ }).first();
+    await notMine.scrollIntoViewIfNeeded();
     const name = (await notMine.getAttribute('aria-label'))!.match(/«(.+)»/)![1];
     await notMine.click();
     await expect(page.getByText(`أُزيل «${name}» من اهتماماتك`).first()).toBeVisible();
