@@ -10,7 +10,7 @@ import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
 import { words } from '@/lib/words';
 import { usePalette } from '@/lib/theme';
-import Reference from '@/ui/Reference';
+import SourceLine from '@/ui/SourceLine';
 import { sourceById } from '@shared/sources';
 import { SearchField } from '@/ui/Field';
 import { QuranWord } from '@/components/quran/text/AyahFlow';
@@ -41,10 +41,10 @@ export default function WordsScreen() {
       <TopBar hub hideOnScroll />
       <View style={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 8 }}>
         <SearchField value={query} onChangeText={setQuery} placeholder="ابحث عن كلمة" label="ابحث عن كلمة في القرآن" palette={palette} />
-        {/* The page's source in the page, collapsed, as openings and oaths carry theirs (owner, 2026-11-17: no sources icon). */}
+        {/* The page's book as the line under its search, as the home cards carry theirs (owner, 2026-11-20). */}
         {source && <View style={{ paddingTop: 8 }}>
-          <Reference title={`المصدر: ${source.title.ar}`} quotes={WORDS_COUNTING.map(text => ({ text }))} palette={palette}
-            links={[{ label: source.link.label, url: source.link.url }, { label: 'المصادر والتراخيص', url: `${WEBSITE}/attributions#${WORDS_SOURCE}` }]} />
+          <SourceLine palette={palette} sources={[{ line: source.title.ar, quotes: WORDS_COUNTING.map(text => ({ text })),
+            links: [{ label: source.link.label, url: source.link.url }, { label: 'المصادر والتراخيص', url: `${WEBSITE}/attributions#${WORDS_SOURCE}` }] }]} />
         </View>}
       </View>
       <ScrollView ref={scroll} onScroll={event => { top.current = event.nativeEvent.contentOffset.y; shrink(event); }} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: bottom }}>

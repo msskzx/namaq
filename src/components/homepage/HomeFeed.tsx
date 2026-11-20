@@ -78,10 +78,9 @@ import { ayahNoteAt } from '@shared/quran/ayahNotes';
 import { QiraatPlace } from '@/app/quran/qiraat/QiraatView';
 import { surahName } from '@shared/quran/surahNames';
 import Card from '@/components/common/Card';
-import CappedCard from '@/components/common/CappedCard';
+import CardWithRow from '@/components/common/CardWithRow';
 import MoreMenu from '@/components/common/MoreMenu';
 import Button from '@/components/common/Button';
-import { CardRowProvider, useRowSlot } from '@/components/common/UnderCard';
 import SourceLine, { sourcesOf } from '@/components/common/SourceLine';
 import { SourceSlotContext, type Source } from '@/components/common/sourceSlot';
 import { citeSource, mushafSource, MUSHAF_BOOK, type QuizSource } from '@shared/quiz/sources';
@@ -218,44 +217,19 @@ function Post({ head, open, actions, share, source, bar, labelledBy, save, whole
   save?: { kind: string; item: string };
   /** Never capped (owner, 2026-11-20): a question shows all its choices, a recall card its whole ayah. */
   whole?: boolean; children: React.ReactNode }) {
-  // What the card's content hands up with UnderCard lands at the start of the row under the card (owner: buttons under the
-  // card, never in it); the row hides while it holds no button.
-  const [slot, setSlot] = useRowSlot();
-  // The row under the copy of a capped card in its sheet, where that copy's UnderCard buttons go.
-  const [sheetSlot, setSheetSlot] = useRowSlot();
-  const [handed, setHanded] = useState<[string, Source][]>([]);
-  const sourceSlot = useMemo(() => ({ set: (id: string, given: Source | null) => setHanded(now => {
-    const rest = now.filter(([at]) => at !== id);
-    if (!given) return rest.length === now.length ? now : rest;
-    const at = now.findIndex(([key]) => key === id);
-    return at < 0 ? [...now, [id, given]] : now.map(entry => (entry[0] === id ? [id, given] : entry));
-  }) }), []);
-  const own = source ? sourcesOf(source) : [];
-  const inner = handed.map(([, given]) => given);
-  const row = (ref: (element: HTMLElement | null) => void, more?: React.ReactNode) => <>
-    {bar && <div className="mt-2 flex justify-center" data-share-skip>{bar}</div>}
-    <div className={styles.postActions} data-share-skip>{open}<span ref={ref} className="contents" />{actions}{save && <SaveCard {...save} head={head} />}{share}{more}</div>
-  </>;
-  const sources = own.length + inner.length > 0 && <SourceLine named={own.length ? own : inner} sources={[...own, ...inner]} />;
-  const content = <SourceSlotContext.Provider value={sourceSlot}><CardRowProvider slot={slot}>{children}</CardRowProvider></SourceSlotContext.Provider>;
+  // What the card's content hands up with UnderCard lands at the start of the row under the card, before the post's own
+  // buttons (common/CardWithRow); share stays last.
+  const menu = notMineItems(useContext(NotMineContext));
   const body = <>
     {head}
-    {whole ? <Card className="overflow-hidden">{content}</Card> : <CappedCard className="overflow-hidden" whole={<>
-      <Card className="overflow-hidden"><SourceSlotContext.Provider value={NO_SOURCES}><CardRowProvider slot={sheetSlot}>{children}</CardRowProvider></SourceSlotContext.Provider></Card>
-      {row(setSheetSlot)}
-      {sources}
-    </>}>{content}</CappedCard>}
-    {row(setSlot, <NotMine />)}
-    {sources}
+    <CardWithRow cap={!whole} bar={bar} lead={open} row={<>{actions}{save && <SaveCard {...save} head={head} />}{share}</>} menu={menu}
+      source={source ? sourcesOf(source) : undefined}>{children}</CardWithRow>
   </>;
   // The reading card is a section of the page named by its head (`labelledBy`); the feed's posts are articles.
   return labelledBy
     ? <section className={styles.postWrap} dir="rtl" aria-labelledby={labelledBy}>{body}</section>
     : <article className={styles.postWrap} dir="rtl">{body}</article>;
 }
-
-/** In the sheet that shows a capped card whole, the card's references stay on the source line at the sheet's foot. */
-const NO_SOURCES = { set: () => {} };
 
 /** A feed card's save, after its tools and before share; the saved shelf names it by the card's head (its title and line). */
 function SaveCard({ kind, item, head }: { kind: string; item: string; head: React.ReactNode }) {
@@ -275,9 +249,11 @@ const NotMineContext = createContext<{ interest: string; notMine?: () => void } 
 
 /** The card's «⋯» alone at the row's far left, holding «ليس من اهتماماتي» (owner, 2026-11-20, the app's NotMineMenu); none elsewhere. */
 function NotMine() {
-  const menu = useContext(NotMineContext);
-  return <MoreMenu items={menu?.notMine ? [{ Icon: CircleMinus, name: 'ليس من اهتماماتي', label: `«${interestById(menu.interest)?.name ?? ''}» ليس من اهتماماتي`, onClick: menu.notMine }] : []} />;
+  return <MoreMenu items={notMineItems(useContext(NotMineContext))} />;
 }
+
+const notMineItems = (menu: { interest: string; notMine?: () => void } | null) =>
+  menu?.notMine ? [{ Icon: CircleMinus, name: 'ليس من اهتماماتي', label: `«${interestById(menu.interest)?.name ?? ''}» ليس من اهتماماتي`, onClick: menu.notMine }] : [];
 
 /** In a card's place after «ليس من اهتماماتي»: what was taken out, and a button to put it back (the app's RemovedLine). */
 function RemovedLine({ interest, onUndo }: { interest: string; onUndo: () => void }) {

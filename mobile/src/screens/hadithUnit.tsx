@@ -10,6 +10,9 @@ import Tabs from '@/ui/Tabs';
 import Bubble from '@/ui/Bubble';
 import { Section } from '@/components/QuizForm';
 import Button from '@/ui/Button';
+import IconButton from '@/ui/IconButton';
+import { sourcesOf } from '@/ui/SourceLine';
+import { unitSource } from '@shared/quiz/hadith';
 import { usePalette, type Palette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
@@ -80,6 +83,9 @@ export default function HadithUnitScreen() {
   const isSharh = view.explains.length > 0;
   const remarks = view.reports.filter(report => report.voice === 'AUTHOR');
   const open = (unit: string) => router.push({ pathname: '/hadith-unit', params: { unit } });
+  // The book the page's text is printed in, on the line under each of its sections (owner 2026-11-20); the isnad stays drawn.
+  const source = sourcesOf([unitSource(view)]);
+  const read = (unit: string, label: string) => <IconButton Icon={BookOpen} label={label} onPress={() => open(unit)} />;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar back={back} title={view.book} hideOnScroll />
@@ -90,7 +96,7 @@ export default function HadithUnitScreen() {
           <Tabs label="طريقة العرض" options={MODES} value={mode} onChange={setMode} palette={palette} />
         )}
         {!isSharh && hadith.map(report => (
-          <Section key={report.id} title="الحديث" palette={palette}>
+          <Section key={report.id} title="الحديث" palette={palette} source={source}>
             {mode === 'text' ? <>
               {report.frame ? <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{report.frame}</Text> : null}
               {(report.fullText ? [report.fullText] : report.statements).map((text, i) => <Text key={i} style={body(palette)}>{text}</Text>)}
@@ -107,14 +113,14 @@ export default function HadithUnitScreen() {
           </Section>
         ))}
         {!isSharh && remarks.map(report => (
-          <Section key={report.id} title="تعليق المصنف" palette={palette}>
+          <Section key={report.id} title="تعليق المصنف" palette={palette} source={source}>
             {report.frame ? <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{report.frame}</Text> : null}
             {report.statements.map((text, i) => <Text key={i} style={body(palette)}>{text}</Text>)}
           </Section>
         ))}
-        {view.reader && view.reader.length > 0 && <Section title="نص الكتاب كما طُبع" palette={palette}><Pages pages={view.reader} palette={palette} /></Section>}
+        {view.reader && view.reader.length > 0 && <Section title="نص الكتاب كما طُبع" palette={palette} source={source}><Pages pages={view.reader} palette={palette} /></Section>}
         {view.notes.length > 0 && (
-          <Section title="ما يقوله الشارح عن هذا الحديث" palette={palette}>
+          <Section title="ما يقوله الشارح عن هذا الحديث" palette={palette} source={source}>
             {view.notes.map((note, i) => (
               <View key={i}>
                 <Text style={body(palette)}>{note.text}</Text>
@@ -124,23 +130,20 @@ export default function HadithUnitScreen() {
           </Section>
         )}
         {view.explains.map(item => (
-          <Section key={item.unit} title="الحديث الذي يشرحه" palette={palette}>
+          <Section key={item.unit} title="الحديث الذي يشرحه" palette={palette} source={source} row={read(item.unit, 'اقرأ الحديث')}>
             <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>هذا النص شرحٌ لحديث في {item.book}، ويحدده بما طُبع في أوله:</Text>
             <Text style={body(palette)}>{item.basis}</Text>
-            <View style={{ flexDirection: 'row' }}><Button Icon={BookOpen} label="اقرأ الحديث" onPress={() => open(item.unit)} /></View>
           </Section>
         ))}
         {view.sameEvent.map(item => (
-          <Section key={item.unit} title={`الواقعة نفسها في ${item.book}`} palette={palette}>
+          <Section key={item.unit} title={`الواقعة نفسها في ${item.book}`} palette={palette} row={read(item.unit, `اقرأ الحديث في ${item.book}`)}>
             <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>حسب {item.source}:</Text>
             <Text style={body(palette)}>{item.basis}</Text>
-            <View style={{ flexDirection: 'row' }}><Button Icon={BookOpen} label={`اقرأ الحديث في ${item.book}`} onPress={() => open(item.unit)} /></View>
           </Section>
         ))}
         {view.explainedBy.map(item => (
-          <Section key={item.unit} title="ما قاله ابن حجر عن هذا الحديث" palette={palette}>
+          <Section key={item.unit} title="ما قاله ابن حجر عن هذا الحديث" palette={palette} row={read(item.unit, 'اقرأ صفحات الشرح')}>
             {item.texts.map((text, i) => <Text key={i} style={body(palette)}>{text}</Text>)}
-            <View style={{ flexDirection: 'row' }}><Button Icon={BookOpen} label="اقرأ صفحات الشرح" onPress={() => open(item.unit)} /></View>
           </Section>
         ))}
       </ScrollView>

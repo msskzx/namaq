@@ -3,9 +3,9 @@ import { useLocalSearchParams } from 'expo-router';
 import { FlatList, View } from 'react-native';
 import { BookOpen } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
-import { citeLabel, citeUrl, ORDER_JUZ, orderInJuz, orderSurahs, type Cite, type OrderAyah, type OrderLinkView, type OrderSurah } from '@shared/quran/surahOrder';
+import { orderSource, ORDER_JUZ, orderInJuz, orderSurahs, type Cite, type OrderAyah, type OrderLinkView, type OrderSurah } from '@shared/quran/surahOrder';
 import { Text } from '@/ui/Text';
-import ExternalLink from '@/ui/ExternalLink';
+import SourceLine from '@/ui/SourceLine';
 import HelpSheet from '@/components/HelpSheet';
 import TopBar from '@/ui/TopBar';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
@@ -16,19 +16,16 @@ import { usePalette, type Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
 import { ayahMushafWords } from '@/lib/mushaf';
 import IconButton from '@/ui/IconButton';
-import Card from '@/ui/Card';
+import { CardWithRow } from '@/ui/Card';
 import Chip from '@/ui/Chip';
 
 const SURAHS = orderSurahs(ayahMushafWords, num);
 type Row = { kind: 'link'; surah: number; link: OrderLinkView } | { kind: 'surah'; s: OrderSurah };
 
+/** A quote's book as the line under it (owner 2026-11-20): its page and full title in the line's sheet. */
 function Source({ cite, palette }: { cite: Cite; palette: Palette }) {
-  return (
-    <ExternalLink url={citeUrl(cite)} color={palette.muted} size={13}
-      style={{ textDecorationLine: 'underline', textDecorationColor: palette.rule, textAlign: 'right' }}>
-      {citeLabel(cite, num)}
-    </ExternalLink>
-  );
+  const source = [orderSource(cite, num)];
+  return <SourceLine named={source} sources={source} palette={palette} />;
 }
 
 const quote = (palette: Palette) => ({ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'justify' as const, writingDirection: 'rtl' as const });
@@ -61,7 +58,8 @@ function LinkBlock({ link, palette }: { link: OrderLinkView; palette: Palette })
 
 function SurahCard({ s, palette }: { s: OrderSurah; palette: Palette }) {
   return (
-    <Card palette={palette} pad={[6, 14]}>
+    <CardWithRow palette={palette} pad={[6, 14]} source={[orderSource(s.aim.src, num)]}
+      lead={<IconButton Icon={BookOpen} label={`افتح سورة ${s.name} في المصحف`} onPress={() => readAyah(`${s.surah}:1`)} />}>
       <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 8 }}>
         <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 22, fontWeight: '700' }}>{s.name}</Text>
         <Text style={{ color: palette.muted, fontSize: 14 }}>{num(s.surah)}</Text>
@@ -72,13 +70,8 @@ function SurahCard({ s, palette }: { s: OrderSurah; palette: Palette }) {
           <AyahWords key={`${a.ayah}-n`} look={{ color: palette.amber }}>{`${num(a.ayah)} `}</AyahWords>,
         ])}
       </AyahFlow>
-      <Text style={[quote(palette), { marginTop: 4 }]}>«{s.aim.text}»</Text>
-      <Source cite={s.aim.src} palette={palette} />
-      {/* Card actions on the right (owner): the mushaf. */}
-      <View style={{ flexDirection: 'row', gap: 4 }}>
-        <IconButton Icon={BookOpen} label={`افتح سورة ${s.name} في المصحف`} onPress={() => readAyah(`${s.surah}:1`)} size="small" />
-      </View>
-    </Card>
+      <Text style={[quote(palette), { marginTop: 4, marginBottom: 6 }]}>«{s.aim.text}»</Text>
+    </CardWithRow>
   );
 }
 

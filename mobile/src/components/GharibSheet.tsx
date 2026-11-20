@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { BookOpenText } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
-import ExternalLink from '@/ui/ExternalLink';
 import gharib from '@shared/data/quran/gharib';
 import mufradat from '@shared/data/quran/mufradat';
 import { num } from '@shared/quran/arabicNumber';
@@ -13,9 +12,8 @@ import { ayahMushafWords } from '@/lib/mushaf';
 import type { Palette } from '@/lib/theme';
 import { BookList } from './Books';
 import Sheet from '@/ui/Sheet';
-import Card from '@/ui/Card';
+import Card, { CardWithRow } from '@/ui/Card';
 import Tabs from '@/ui/Tabs';
-import Folded from '@/ui/Folded';
 import Pickable from '@/ui/Pickable';
 import LitAyat from './quran/text/LitAyat';
 import BookRuns from './quran/text/BookRuns';
@@ -86,32 +84,22 @@ export function GharibBody({ target, palette }: { target: GharibTarget; palette:
 
 function Gharib({ entries, picked, onPick, palette }: { entries: GharibAt[]; picked: number | null; onPick: (at: number) => void; palette: Palette }) {
   return entries.map((entry, i) => (
-    <Card key={entry.at} palette={palette} pad={[10, 14]} picked={picked === i}>
+    <CardWithRow key={entry.at} palette={palette} pad={[10, 14]} picked={picked === i} source={[{ line: GHARIB_BOOK, quotes: [{ text: '', cite: gharibCredit(entry), url: gharibPage(entry) },
+      { text: `${GHARIB_BOOK}، ${GHARIB_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث، كلام ابن قتيبة وحده بلا حواشي المحقق.` }] }]}>
       {/* The entry lights the words it quotes; its reference below is a control of its own. */}
       <Pickable picked={picked === i} onPick={() => onPick(i)}>
         <BookRuns text={entry.text} quran={palette.accent} style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' }} />
       </Pickable>
-      <Folded credit={gharibCredit(entry)} palette={palette}>
-        <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 24, textAlign: 'right' }}>
-          {`${GHARIB_BOOK}، ${GHARIB_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث، كلام ابن قتيبة وحده بلا حواشي المحقق.`}
-        </Text>
-        <ExternalLink url={gharibPage(entry)} color={palette.muted} size={14} style={{ textAlign: 'right' }}>اقرأ الصفحة</ExternalLink>
-      </Folded>
-    </Card>
+    </CardWithRow>
   ));
 }
 
 function Mufradat({ article, palette }: { article: MufradatEntry; palette: Palette }) {
   return (
-    <Card palette={palette} pad={[10, 14]}>
+    <CardWithRow palette={palette} pad={[10, 14]} source={[{ line: MUFRADAT_BOOK, quotes: [{ text: '', cite: mufradatCredit(article), url: mufradatPage(article) },
+      { text: `${MUFRADAT_BOOK}، ${MUFRADAT_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث، كلام الراغب وحده بلا حواشي المحقق. المادة كاملة تحت عنوانه، ووُصلت بالكلمة من جذرها في المدونة القرآنية.` }] }]}>
       <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`[${article[0]}]`}</Text>
       <BookRuns text={article[4]} quran={palette.accent} style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' }} />
-      <Folded credit={mufradatCredit(article)} palette={palette}>
-        <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 24, textAlign: 'right' }}>
-          {`${MUFRADAT_BOOK}، ${MUFRADAT_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث، كلام الراغب وحده بلا حواشي المحقق. المادة كاملة تحت عنوانه، ووُصلت بالكلمة من جذرها في المدونة القرآنية.`}
-        </Text>
-        <ExternalLink url={mufradatPage(article)} color={palette.muted} size={14} style={{ textAlign: 'right' }}>اقرأ الصفحة</ExternalLink>
-      </Folded>
-    </Card>
+    </CardWithRow>
   );
 }

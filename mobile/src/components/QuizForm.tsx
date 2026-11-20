@@ -5,14 +5,16 @@ import { QUIZ_LEAVES, type QuizTopic } from '@shared/quiz/settings';
 import { DIFFICULTIES, DIFFICULTY_NAMES, DIFFICULTY_NOTES, type Difficulty } from '@shared/quiz/difficulty';
 import Button, { Row } from '@/ui/Button';
 import { type Palette } from '@/lib/theme';
-import Card from '@/ui/Card';
+import { CardWithRow } from '@/ui/Card';
+import type { Source } from '@/ui/sourceSlot';
 
-export function Section({ title, palette, children }: { title: string; palette: Palette; children: React.ReactNode }) {
+/** A titled section in the home card's shape (owner 2026-11-20): its own buttons in the `row` under the card, its books (`source`) on the line under them. */
+export function Section({ title, palette, row, source, children }: { title: string; palette: Palette; row?: React.ReactNode; source?: Source[]; children: React.ReactNode }) {
   return (
-    <Card palette={palette} gap={10}>
+    <CardWithRow palette={palette} gap={10} row={row} source={source}>
       <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 16, fontWeight: '700', textAlign: 'right' }}>{title}</Text>
       {children}
-    </Card>
+    </CardWithRow>
   );
 }
 

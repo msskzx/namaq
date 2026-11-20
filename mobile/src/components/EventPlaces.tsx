@@ -17,7 +17,9 @@ import { groupColor } from './StoryMap';
 import { BACK_EDGE_SLOP } from '@/lib/stackOptions';
 import { toTab } from '@/lib/ways';
 import IconButton from '@/ui/IconButton';
-import Card from '@/ui/Card';
+import Card, { CardWithRow } from '@/ui/Card';
+import { sourcesOf } from '@/ui/SourceLine';
+import { storySource } from '@shared/quran/pieceSources';
 
 // How far (px) a finger must move sideways to change the event, or how fast a flick.
 const SWIPE = 60;
@@ -90,20 +92,26 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
           <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 22, fontWeight: '700', lineHeight: 32 }}>{event.title}</Text>
         </View>
       </View>
+      {/* Each place in the home card's shape (owner 2026-11-20): the mushaf, compare and share under it, the mushaf's places on the line (the feed card's source). */}
       {places.map((place, k) => (
-        <Card key={place.surah} palette={palette} gap={4} picked={focus === place.surah} onLayout={e => onLayoutPlace(place.surah, e.nativeEvent.layout.y)}>
-          {/* The tapped dot scrolls straight to its card, past the event's title, so the card names the event itself. */}
-          {focus === place.surah && <Text style={{ color: groupColor(palette, event.phase), fontSize: 13, fontWeight: '600' }}>{event.title}</Text>}
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-            <Text style={{ color: palette.ink, fontSize: 15, fontWeight: '600' }}>{place.name}</Text>
-            <Text style={{ flex: 1, color: palette.muted, fontSize: 13 }}>{place.segments.map(g => rangeText(g.range)).join('، ')}</Text>
-            {readable && <><IconButton Icon={BookOpen} label={`افتح ${place.name} في المصحف`} onPress={() => readAyah(`${place.surah}:${place.segments[0].range[0]}`)} size="small" />
-            <CompareButton place={place} targets={targets.filter(t => t.lead !== t.other && (t.lead === place.surah || t.other === place.surah))} onChoose={setChoosing} palette={palette} />
-            {/* Share is always the last button: this place as an image, under the event's title. */}
-            <IconButton Icon={Send} label={`شارك ${place.name}`} onPress={() => share(place, k)} size="small" /></>}
-          </View>
-          <PlaceText place={place} shared={shared[k]} palette={palette} />
-        </Card>
+        <View key={place.surah} style={{ gap: 4 }} onLayout={e => onLayoutPlace(place.surah, e.nativeEvent.layout.y)}>
+          <CardWithRow palette={palette} gap={4} picked={focus === place.surah}
+            source={sourcesOf([storySource([{ phase: 0, segments: place.segments.map(g => ({ surah: place.surah, range: g.range })) }], 0)])}
+            lead={readable && <IconButton Icon={BookOpen} label={`افتح ${place.name} في المصحف`} onPress={() => readAyah(`${place.surah}:${place.segments[0].range[0]}`)} />}
+            row={readable && <>
+              <CompareButton place={place} targets={targets.filter(t => t.lead !== t.other && (t.lead === place.surah || t.other === place.surah))} onChoose={setChoosing} palette={palette} />
+              {/* Share is always the last button: this place as an image, under the event's title. */}
+              <IconButton Icon={Send} label={`شارك ${place.name}`} onPress={() => share(place, k)} />
+            </>}>
+            {/* The tapped dot scrolls straight to its card, past the event's title, so the card names the event itself. */}
+            {focus === place.surah && <Text style={{ color: groupColor(palette, event.phase), fontSize: 13, fontWeight: '600' }}>{event.title}</Text>}
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Text style={{ color: palette.ink, fontSize: 15, fontWeight: '600' }}>{place.name}</Text>
+              <Text style={{ flex: 1, color: palette.muted, fontSize: 13 }}>{place.segments.map(g => rangeText(g.range)).join('، ')}</Text>
+            </View>
+            <PlaceText place={place} shared={shared[k]} palette={palette} />
+          </CardWithRow>
+        </View>
       ))}
       <CompareTargetsSheet targets={choosing} onPick={target => { setChoosing(null); openCompare(target); }} onClose={() => setChoosing(null)} palette={palette} />
     </Animated.View>
@@ -117,6 +125,6 @@ function CompareButton({ place, targets, onChoose, palette }: { place: Place; ta
   // Seen from this place's surah.
   const own = targets.map(t => (t.lead === place.surah ? t : { lead: t.other, other: t.lead, ayat: [t.ayat[1], t.ayat[0]] as [number, number] }));
   return (
-    <IconButton Icon={ArrowLeftRight} label={`قارن ${place.name}`} onPress={() => (own.length === 1 ? openCompare(own[0]) : onChoose(own))} size="small" />
+    <IconButton Icon={ArrowLeftRight} label={`قارن ${place.name}`} onPress={() => (own.length === 1 ? openCompare(own[0]) : onChoose(own))} />
   );
 }

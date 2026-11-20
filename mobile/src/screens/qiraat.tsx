@@ -7,14 +7,13 @@ import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
 import { ChevronUp } from 'lucide-react-native';
 import Empty from '@/ui/Empty';
-import ExternalLink from '@/ui/ExternalLink';
 import { SearchField } from '@/ui/Field';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
 import { usePalette } from '@/lib/theme';
 import { back } from '@/lib/ways';
-import { QIRAAT_SOURCE, READERS, RIWAYAT, type ReaderId } from '@shared/quran/qiraat';
+import { READERS, RIWAYAT, type ReaderId } from '@shared/quran/qiraat';
 import { filterName, filterRawis, qiraatPlaces, riwayatOf, type QiraatFilter } from '@shared/quran/qiraatPlaces';
 import { surahName } from '@shared/quran/surahNames';
 import QiraatPlace from '@/components/QiraatPlace';
@@ -82,9 +81,6 @@ export default function QiraatScreen() {
         contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 10 }}
         ListHeaderComponent={head}
         ListEmptyComponent={<Empty text="لا موضع بهذه الكلمة. جرّب كلمة أقصر." palette={palette} />}
-        ListFooterComponent={rows.length ? (
-          <ExternalLink url={QIRAAT_SOURCE.url} color={palette.muted} size={14} style={{ textAlign: 'right' }}>{`المصدر: ${QIRAAT_SOURCE.name}`}</ExternalLink>
-        ) : undefined}
         renderItem={({ item }) => (item.kind === 'surah'
           ? <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 15, textAlign: 'right', marginTop: 6 }}>{surahName(item.surah)}</Text>
           : <QiraatPlace ayah={item.key} words={item.words} mark={mark} palette={palette} />)} />

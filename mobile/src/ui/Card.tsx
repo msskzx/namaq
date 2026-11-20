@@ -8,6 +8,8 @@ import { Text } from '@/ui/Text';
 import Sheet from '@/ui/Sheet';
 import MoreMenu, { type MoreItem } from '@/ui/MoreMenu';
 import { SourceSlotContext, type Source } from '@/ui/sourceSlot';
+import SourceLine from '@/ui/SourceLine';
+import Reference from '@/ui/Reference';
 import { InsideCard, RowSlot, type Slot } from '@/ui/cardContext';
 
 export { OutsideCard, useCardRow, useInsideCard } from '@/ui/cardContext';
@@ -42,7 +44,8 @@ const FADE = 72;
  * A card with the row of buttons under it (the feed post's shape): `row` is the post's own buttons, after what its content
  * hands up with `UnderCard`. The row starts on the right, as across the app, and the «⋯» of `menu` sits alone at its far left.
  * With `cap`, content taller than CARD_CAP_SHARE of the screen stops there with a fade, and «اقرأ كاملًا» under the card
- * opens it whole in a sheet with the same buttons and source line at its foot (owner, 2026-11-20).
+ * opens it whole in a sheet with the same buttons and source line at its foot (owner, 2026-11-20). Every feed card and every
+ * section of a page (owner, 2026-11-20: one look).
  */
 export function CardWithRow({ lead, row, menu, cap = false, source, sourceLine, bar, children, ...card }: Omit<React.ComponentProps<typeof Card>, 'children'> & {
   /** The button that opens the item in its own reader, first in the row before the card's own tools (owner 2026-11-20). */
@@ -55,8 +58,8 @@ export function CardWithRow({ lead, row, menu, cap = false, source, sourceLine, 
   /** The card's sources, named on the line under its buttons (owner 2026-11-20); a `Reference` inside the card joins the sheet. */
   source?: Source[];
   /**
-   * Draws the source line (ui/SourceLine.tsx, kept out of this file so Card does not reach the sheet): `named` are the
-   * card's own sources, or what its content handed up when it gives none; `all` are both, for the sheet.
+   * Draws the source line (ui/SourceLine.tsx unless given): `named` are the card's own sources, or what its content handed
+   * up when it gives none; `all` are both, for the sheet.
    */
   sourceLine?: (named: Source[], all: Source[]) => React.ReactNode;
   /** A bar of the feature's own leading the row (recite mode's small bar, on the recall card). */
@@ -73,13 +76,18 @@ export function CardWithRow({ lead, row, menu, cap = false, source, sourceLine, 
   const capped = cap && tall > most;
   const [whole, setWhole] = useState(false);
   const { palette } = card;
+  const inside = useContext(InsideCard);
   const buttonRow = (handedUp: [string, React.ReactNode][], more?: MoreItem[]) => (bar || lead || row || handedUp.length > 0 || !!more?.length) && (
     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', gap: bar ? 4 : 0, marginTop: bar ? 4 : 0 }}>
       {bar}{lead}{handedUp.map(([id, node]) => <View key={id} style={{ flexDirection: 'row', alignItems: 'center' }}>{node}</View>)}{row}
       {more?.length ? <><View style={{ flex: 1 }} /><MoreMenu items={more} /></> : null}
     </View>
   );
-  const sources = own.length + inner.length > 0 && sourceLine?.(own.length ? own : inner, [...own, ...inner]);
+  const named = own.length ? own : inner;
+  // Drawn inside another card (a page's section in a quiz's look-up, a feed post): no second card and no second row; its
+  // buttons join that card's row and its books that card's line, or show as collapsed references where it has none.
+  if (inside) return <>{children}<UnderCard>{lead}{row}</UnderCard>{own.map(given => <Reference key={given.line} title={given.line} quotes={given.quotes} links={given.links} palette={palette} />)}</>;
+  const sources = own.length + inner.length > 0 && (sourceLine ? sourceLine(named, [...own, ...inner]) : <SourceLine named={named} sources={[...own, ...inner]} palette={palette} />);
   return (
     <>
       <SourceSlotContext.Provider value={sourceSlot}>

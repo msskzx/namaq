@@ -1,5 +1,5 @@
 import { num } from './arabicNumber';
-import { ITQAN_BOOK, itqanCredit, itqanPage, type ItqanData } from './itqanBalagha';
+import { ITQAN_BOOK, ITQAN_EDITION, itqanCredit, itqanPage, type ItqanData } from './itqanBalagha';
 import type { QuizSource } from '../quiz/sources';
 
 /**
@@ -47,6 +47,12 @@ export type BalaghaTermsData = { terms: BalaghaTerm[] };
 export const plainName = (name: string) => name.replace(/[ً-ٰٟ]/g, '');
 
 const TALKHIS_SHORT = 'تلخيص المفتاح للقزويني';
+const TALKHIS_EDITION = 'تلخيص المفتاح لجلال الدين القزويني (ت ٧٣٩هـ)، متنًا فوق شرح بهاء الدين السبكي «عروس الأفراح في شرح تلخيص المفتاح»، تحقيق عبد الحميد هنداوي، المكتبة العصرية، ١٤٢٣هـ/٢٠٠٣م';
+/** Each book's printing, and how its words were taken, as the credit under a quote says it. */
+const TERM_EDITION: Record<TermQuote['book'], string> = {
+  itqan: `${ITQAN_BOOK}، ${ITQAN_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث، الفقرة كاملة كما في الكتاب.`,
+  talkhis: `${TALKHIS_EDITION}. كلام القزويني في أعلى الصفحة، من نسخة المكتبة الشاملة التي نشرها موقع تراث. لم يعرّفه السيوطي في الإتقان، فنقلنا تعريف القزويني.`,
+};
 /** The line under a quote: book, volume and page. 'Arus al-Afrah prints the Talkhis above al-Subki's commentary. */
 export const termCredit = (quote: TermQuote) => quote.book === 'itqan'
   ? itqanCredit(quote)
@@ -55,10 +61,16 @@ export const termCredit = (quote: TermQuote) => quote.book === 'itqan'
 export const termSource = (quote: TermQuote): QuizSource => {
   const at = `${num(quote.part)}/${num(quote.pages[0])}${quote.pages[1] !== quote.pages[0] ? `–${num(quote.pages[1])}` : ''}`;
   return quote.book === 'itqan'
-    ? { book: ITQAN_BOOK, author: 'السيوطي', at, url: termPage(quote) }
-    : { book: 'تلخيص المفتاح', author: 'القزويني', at: `في عروس الأفراح ${at}`, url: termPage(quote) };
+    ? { book: ITQAN_BOOK, author: 'السيوطي', at, url: termPage(quote), edition: TERM_EDITION.itqan }
+    : { book: 'تلخيص المفتاح', author: 'القزويني', at: `في عروس الأفراح ${at}`, url: termPage(quote), edition: TERM_EDITION.talkhis };
 };
 export const termPage = (quote: TermQuote) => quote.book === 'itqan' ? itqanPage(quote) : `https://shamela.ws/book/11151/${quote.id}`;
+
+/** An example's paragraph of al-Suyuti's as its card's source: volume and pages, the page online and the printing. */
+export const exampleSource = (example: Pick<TermExample, 'part' | 'pages' | 'id'>): QuizSource => ({
+  ...termSource({ book: 'itqan', part: example.part, pages: example.pages, id: example.id, text: '' }),
+  edition: `${ITQAN_BOOK}، ${ITQAN_EDITION}. الفقرة كاملة كما في الكتاب، تحت عنوانه.`,
+});
 
 /** His chapter's title without its marks («النوع الثامن والخمسون: في بدائع القرآن»). */
 export const chapterTitle = (itqan: ItqanData, kind: number) => plainName(itqan.kinds[kind] ?? '');

@@ -128,23 +128,23 @@ export function IltifatScene({ view, palette }: { view: ExampleView; palette: Pa
 
 const iltifatTitle = (view: ExampleView) => `${view.name} ${rangeLabel(view)}`;
 
-/** An example's mushaf and share buttons: inside its card on «مشاهد», under the card in the home feed. */
+/** An example's mushaf and share buttons, in the row under its card (on «مشاهد» and in the home feed). */
 export function IltifatActions({ view, palette, only }: { view: ExampleView; palette: Palette;
   /** One of the two, where a feed card puts them apart: open first in its row, share after save (owner, 2026-11-20). */
   only?: 'open' | 'share' }) {
   const title = iltifatTitle(view);
   return <>
     {only !== 'share' && <IconButton Icon={BookOpen} label={`افتح ${title} في المصحف`} onPress={() => readAyah(`${view.surah}:${view.from}`)} />}
-    {only !== 'open' && <IconButton Icon={Send} label={`شارك ${title}`} onPress={() => shareCard({ content: width => <View style={{ width }}><IltifatCard view={view} palette={palette} image /></View> })} />}
+    {only !== 'open' && <IconButton Icon={Send} label={`شارك ${title}`} onPress={() => shareCard({ content: width => <View style={{ width }}><IltifatCard view={view} palette={palette} /></View> })} />}
   </>;
 }
 
-/** One example's card: its scene, then the mushaf and share buttons on the right (left out of the shared image). */
-export function IltifatCard({ view, palette, image }: { view: ExampleView; palette: Palette; image?: boolean }) {
+/** One example's card as its shared image draws it: its scene alone, without the buttons. */
+function IltifatCard({ view, palette }: { view: ExampleView; palette: Palette }) {
   return (
     <Card palette={palette} pad={[10, 16]} gap={10} accessibilityLabel={iltifatTitle(view)}>
       <IltifatScene view={view} palette={palette} />
-      {image ? <View style={{ height: 10 }} /> : <View style={{ flexDirection: 'row' }}><IltifatActions view={view} palette={palette} /></View>}
+      <View style={{ height: 10 }} />
     </Card>
   );
 }

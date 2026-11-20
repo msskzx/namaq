@@ -6,7 +6,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { CONDITION_NOTES, CONDITION_SOURCES, CONDITION_SPANS, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, conditionLines, inKind, soleCard, openingCards, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
 import { someTone } from '@/lib/marks';
 import { Text } from '@/ui/Text';
-import ExternalLink from '@/ui/ExternalLink';
+import SourceLine from '@/ui/SourceLine';
 import Reference from '@/ui/Reference';
 import TopBar from '@/ui/TopBar';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
@@ -19,7 +19,7 @@ import { useTabRetap } from '@/lib/tabRetap';
 import { usePalette, type Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
 import IconButton from '@/ui/IconButton';
-import Card from '@/ui/Card';
+import Card, { CardWithRow } from '@/ui/Card';
 
 const words = (key: string) => ayahOf(key)?.words ?? [];
 
@@ -75,19 +75,18 @@ function Opening({ card, palette }: { card: OpeningCard; palette: Palette }) {
   ) });
   return (
     <View style={{ marginBottom: 12, gap: 2 }}>
-      <Card palette={palette} pad={[9, 16]}>
+      <CardWithRow palette={palette} pad={[9, 16]} row={<>
+        {card.rows.some(row => CONDITION_SPANS[row.surah]) && <IconButton Icon={open ? ChevronUp : ChevronDown} label="الشرط وجوابه" onPress={() => setOpen(!open)} expanded={open} />}
+        <IconButton Icon={Send} label={`شارك ${card.title}`} onPress={share} />
+      </>}>
         {!soleCard(card) && <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 19, textAlign: 'right' }}>{card.title}</Text>}
         {card.refs && !soleCard(card) && <Reference title={card.refs[0].cite!} quotes={card.refs} palette={palette} />}
         <Rows card={card} palette={palette} open={open} />
         {open && <View style={{ gap: 4, borderTopWidth: 1, borderColor: `${palette.rule}55`, paddingTop: 8 }}>
           {CONDITION_NOTES.map(text => <Text key={text} style={{ color: palette.muted, fontSize: 13, lineHeight: 21, textAlign: 'right' }}>{text}</Text>)}
-          {CONDITION_SOURCES.map(source => <ExternalLink key={source.url} url={source.url} color={palette.muted} size={13} style={{ textAlign: 'right' }}>{source.title}</ExternalLink>)}
+          {CONDITION_SOURCES.map(source => <Reference key={source.url} title={source.title} quotes={[]} links={[{ label: source.title, url: source.url }]} palette={palette} />)}
         </View>}
-      </Card>
-      <View style={{ flexDirection: 'row', gap: 14, paddingHorizontal: 4 }}>
-        {card.rows.some(row => CONDITION_SPANS[row.surah]) && <IconButton Icon={open ? ChevronUp : ChevronDown} label="الشرط وجوابه" onPress={() => setOpen(!open)} size="small" expanded={open} />}
-        <IconButton Icon={Send} label={`شارك ${card.title}`} onPress={share} size="small" />
-      </View>
+      </CardWithRow>
     </View>
   );
 }
@@ -125,7 +124,7 @@ export default function OpeningsScreen() {
       </ScrollView>
       <ScrollView ref={scroll} onScroll={shrink} scrollEventThrottle={16} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: bottom }}>
         <View style={{ gap: 6, marginBottom: 8 }}>
-          <Reference title={ITQAN_OPENING.cite} quotes={[ITQAN_OPENING]} palette={palette} />
+          <SourceLine sources={[{ line: ITQAN_OPENING.cite, quotes: [ITQAN_OPENING] }]} palette={palette} />
           <Text style={{ color: palette.muted, fontSize: 13, lineHeight: 21, textAlign: 'right' }}>{OPENINGS_LEGEND}</Text>
         </View>
         {OPENING_KINDS.filter(k => !kind || k.id === kind).map(k => {
@@ -135,8 +134,7 @@ export default function OpeningsScreen() {
             <View key={k.id}>
               <View style={{ gap: 4, paddingTop: 8, marginBottom: 10 }}>
                 <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 22, fontWeight: '700', textAlign: 'right' }}>{k.label}</Text>
-                <Reference title={quote.cite} quotes={[quote, ...(ITQAN_KIND_NOTES[k.id] ?? [])]} palette={palette} />
-                {sole?.refs && <Reference title={sole.refs[0].cite!} quotes={sole.refs} palette={palette} />}
+                <SourceLine palette={palette} sources={[{ line: quote.cite, quotes: [quote, ...(ITQAN_KIND_NOTES[k.id] ?? [])] }, ...(sole?.refs ? [{ line: sole.refs[0].cite!, quotes: sole.refs }] : [])]} />
               </View>
               {cards.filter(card => (kind ? inKind(card, k.id) : card.kind === k.id)).map(card => <Opening key={card.id} card={card} palette={palette} />)}
             </View>

@@ -5,7 +5,7 @@ import { Plus } from 'lucide-react-native';
 import { chainSentence, joining } from '@shared/tarajimGraph';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
-import Card from '@/ui/Card';
+import { CardWithRow } from '@/ui/Card';
 import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
 import Sheet from '@/ui/Sheet';
@@ -35,7 +35,8 @@ export default function BetweenScreen() {
   // The chain drawn or said in one sentence: one at a time, the drawing first (owner, 2026-11-20).
   const [shown, setShown] = useState<DrawingOrText>('drawing');
   const { nodes, steps, apart } = useMemo(() => joining(GRAPH, picked), [picked]);
-  const drawW = Math.min(width - 32, 480);
+  // The page's side room and the card's padding and frame.
+  const drawW = Math.min(width - 32 - 30, 480);
   const back = () => (router.canGoBack() ? router.back() : toTab('/tarajim'));
   const name = (slug: string) => personName(GRAPH.nodes.get(slug)!);
   const sentence = steps.length ? chainSentence(GRAPH, steps, node => personName(node)) : '';
@@ -57,10 +58,13 @@ export default function BetweenScreen() {
             </Text>
           )}
           {sentence ? <Tabs palette={palette} label="كيف تُعرض الصلة" value={shown} onChange={setShown} options={DRAWING_OR_TEXT} /> : null}
-          {shown === 'text' && sentence
-            ? <Card palette={palette}><Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{sentence}.</Text></Card>
-            : <TiesChain nodes={nodes} steps={steps} first={picked[0]} picked={picked} width={drawW} palette={palette} />}
-          <Credit facts={steps.map(step => step.link)} palette={palette} quotes />
+          {/* The chain in the home card's shape, its pages on the book line under it (owner 2026-11-20). */}
+          <CardWithRow palette={palette}>
+            {shown === 'text' && sentence
+              ? <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{sentence}.</Text>
+              : <TiesChain nodes={nodes} steps={steps} first={picked[0]} picked={picked} width={drawW} palette={palette} inCard />}
+            <Credit facts={steps.map(step => step.link)} palette={palette} quotes />
+          </CardWithRow>
         </>}
       </ScrollView>
       <Sheet open={adding} onClose={() => setAdding(false)} palette={palette} tall>

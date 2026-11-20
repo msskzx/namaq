@@ -2,7 +2,8 @@
 // questions from al-Nawawi's Forty as al-Bukhari prints them (shared/data/hadith/forty.json), the most authentic first.
 // Every choice is a real name or a real phrase of another hadith, and the reference is under the choices.
 import fortyData from '../data/hadith/forty.json';
-import { COLLECTOR, authentic, compilerOf, recordName, type AppForty, type FortyEntry, type FortyRecord } from '../hadith';
+import { COLLECTOR, authentic, compilerOf, recordName, type AppForty, type FortyEntry, type FortyRecord, type HadithUnitView } from '../hadith';
+import { SOURCES } from '../sources';
 import { num } from '../quran/arabicNumber';
 import { shuffle, type Random } from './random';
 import type { ChoiceKind, ChoiceQuestion } from './choiceKinds';
@@ -221,3 +222,13 @@ export const hadithChainQuiz: ChoiceKind = {
   questions: (_scope, _difficulty, random, limit = Infinity) => chainQuestions(random).slice(0, limit),
   count: () => chainQuestions(Math.random).length,
 };
+
+/** A hadith page's book (shared/hadith.ts HadithUnitView): its kitab and bab, with the edition and link where shared/sources.ts lists the book. */
+export function unitSource(unit: Pick<HadithUnitView, 'book' | 'compiler' | 'kitab' | 'bab'>): QuizSource {
+  const listed = SOURCES.find(source => source.title.ar === unit.book);
+  const at = [unit.kitab, unit.bab].filter(Boolean).join('، ');
+  return {
+    book: unit.book, ...(unit.compiler && { author: unit.compiler }), ...(at && { at }),
+    ...(listed && { url: listed.link.url, ...(listed.edition && { edition: listed.edition }) }),
+  };
+}

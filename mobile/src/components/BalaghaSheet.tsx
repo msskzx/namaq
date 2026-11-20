@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { Sparkles } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
-import ExternalLink from '@/ui/ExternalLink';
 import itqan from '@shared/data/quran/itqanBalagha';
 import { num } from '@shared/quran/arabicNumber';
 import { ITQAN_BOOK, ITQAN_EDITION, itqanAt, itqanCredit, itqanPage, type ItqanParagraph } from '@shared/quran/itqanBalagha';
@@ -18,7 +17,7 @@ import LoadingDots from '@/ui/LoadingDots';
 import Sheet from '@/ui/Sheet';
 import OpenInBook from './OpenInBook';
 import LitAyat, { deepBand } from './quran/text/LitAyat';
-import Card from '@/ui/Card';
+import Card, { CardWithRow } from '@/ui/Card';
 import Tabs from '@/ui/Tabs';
 import Folded from '@/ui/Folded';
 import Pickable from '@/ui/Pickable';
@@ -84,7 +83,9 @@ function Itqan({ paragraphs, palette, onSpan, onClose }: { paragraphs: ItqanPara
   if (bookState('itqan') !== 'on') return <BookList kind="balagha" palette={palette} />;
   if (!paragraphs.length) return <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center', paddingVertical: 16 }}>لم يستشهد السيوطي بهذه الآية في أنواع البلاغة.</Text>;
   return paragraphs.map((paragraph, i) => (
-    <Card key={`${paragraph.id}/${i}`} palette={palette} pad={[10, 14]} picked={picked === i && paragraphs.length > 1}>
+    <CardWithRow key={`${paragraph.id}/${i}`} palette={palette} pad={[10, 14]} picked={picked === i && paragraphs.length > 1} row={<TermLink paragraph={paragraph} palette={palette} onClose={onClose} />}
+      source={[{ line: ITQAN_BOOK, quotes: [{ text: '', cite: itqanCredit(paragraph), url: itqanPage(paragraph) },
+        { text: `${ITQAN_BOOK}، ${ITQAN_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث. الفقرة كاملة كما في الكتاب، والعنوان عنوانه.` }] }]}>
       {/* The paragraph lights the words it quotes; its reference below is a control of its own. */}
       <Pickable picked={picked === i} onPick={() => setPicked(i)}>
       <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 22, textAlign: 'right' }}>{paragraph.heading ? `«${paragraph.heading}» · ${paragraph.kind}` : paragraph.kind}</Text>
@@ -92,8 +93,6 @@ function Itqan({ paragraphs, palette, onSpan, onClose }: { paragraphs: ItqanPara
         {tafsirRuns(paragraph.text).map((run, j) => run.quran ? <QuranWords key={j} style={{ color: palette.accent }}>{run.text}</QuranWords> : <Text key={j}>{run.text}</Text>)}
       </Text>
       </Pickable>
-      {/* Under the paragraph, not in it: a button inside the pressable paragraph is lost on the web and to screen readers (R0055). */}
-      <TermLink paragraph={paragraph} palette={palette} onClose={onClose} />
       {/* A quote that names no ayah: every ayah it fits, listed, none chosen for him (owner, 2026-11-18). */}
       {paragraph.matches.length > 0 && (
         <Folded credit={`مواضع الشاهد في القرآن: ${num(paragraph.matches.length)}، ولم يعيّن السيوطي أحدها`} palette={palette}>
@@ -107,13 +106,7 @@ function Itqan({ paragraphs, palette, onSpan, onClose }: { paragraphs: ItqanPara
           </View>
         </Folded>
       )}
-      <Folded credit={itqanCredit(paragraph)} palette={palette}>
-        <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 24, textAlign: 'right' }}>
-          {`${ITQAN_BOOK}، ${ITQAN_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث. الفقرة كاملة كما في الكتاب، والعنوان عنوانه.`}
-        </Text>
-        <ExternalLink url={itqanPage(paragraph)} color={palette.muted} size={14} style={{ textAlign: 'right' }}>اقرأ الصفحة</ExternalLink>
-      </Folded>
-    </Card>
+    </CardWithRow>
   ));
 }
 
@@ -122,11 +115,10 @@ function TermLink({ paragraph, palette, onClose }: { paragraph: ItqanParagraph; 
   const term = termOfParagraph(itqan, paragraph);
   if (!term || !onClose) return null;
   const label = `تعريف ${plainName(term)}`;
+  // Under the paragraph's card, not in it (owner 2026-11-20; and a button inside the pressable paragraph is lost on the web and to screen readers, R0055).
   return (
-    <View style={{ flexDirection: 'row', paddingVertical: 4 }}>
-      <Chip small label={label} on={false} palette={palette} accessibilityLabel={`${label} في مصطلحات البلاغة`}
-        onPress={() => { onClose(); toTab({ pathname: '/term', params: { name: term } }); }} />
-    </View>
+    <Chip small label={label} on={false} palette={palette} accessibilityLabel={`${label} في مصطلحات البلاغة`}
+      onPress={() => { onClose(); toTab({ pathname: '/term', params: { name: term } }); }} />
   );
 }
 
@@ -149,7 +141,9 @@ function Kashshaf({ ayah, palette, onSpan, onClose }: { ayah: string; palette: P
   return (
     <>
       {passage && (
-        <Card palette={palette} pad={[10, 14]}>
+        <CardWithRow palette={palette} pad={[10, 14]} lead={<OpenInBook book="kashshaf" ayah={ayah} onClose={onClose} palette={palette} />}
+          source={[{ line: KASHSHAF_BOOK, quotes: [{ text: '', cite: kashshafCredit(passage), url: kashshafPage(passage) },
+            { text: `${KASHSHAF_BOOK}، ${KASHSHAF_EDITION}. نص الموسوعة القرآنية، إصدار ${book ? book.source.version : ''}، بلا حواشي الكتب المطبوعة معه. تضاء الجملة التي يسمّي فيها الزمخشري فنًّا من فنون البلاغة.` }] }]}>
           <Text selectable style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' }}>
             {kashshafRuns(passage).map((run, i) => (
               <Text key={i} onPress={run.lit !== null ? () => setPicked(run.lit) : undefined}
@@ -160,13 +154,7 @@ function Kashshaf({ ayah, palette, onSpan, onClose }: { ayah: string; palette: P
               </Text>
             ))}
           </Text>
-          <Folded credit={kashshafCredit(passage)} palette={palette} extra={<OpenInBook book="kashshaf" ayah={ayah} onClose={onClose} palette={palette} />}>
-            <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 24, textAlign: 'right' }}>
-              {`${KASHSHAF_BOOK}، ${KASHSHAF_EDITION}. نص الموسوعة القرآنية، إصدار ${book ? book.source.version : ''}، بلا حواشي الكتب المطبوعة معه. تضاء الجملة التي يسمّي فيها الزمخشري فنًّا من فنون البلاغة.`}
-            </Text>
-            <ExternalLink url={kashshafPage(passage)} color={palette.muted} size={14} style={{ textAlign: 'right' }}>اقرأ الصفحة</ExternalLink>
-          </Folded>
-        </Card>
+        </CardWithRow>
       )}
       {on && book === null && <LoadingDots fill />}
       {book && !passage && <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center', paddingVertical: 16 }}>لا كلام للكشاف على هذه الآية.</Text>}

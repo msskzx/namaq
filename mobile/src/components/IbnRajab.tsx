@@ -5,6 +5,7 @@ import { lastPage, rajabOpening, type RajabChapter, type RajabParagraph } from '
 import { Text } from '@/ui/Text';
 import Button from '@/ui/Button';
 import Reference from '@/ui/Reference';
+import { UnderCard } from '@/ui/Card';
 import type { Palette } from '@/lib/theme';
 import { FORTY, shamelaPage } from '@/lib/hadith';
 
@@ -63,13 +64,13 @@ export default function IbnRajab({ chapter, only, palette }: { chapter: RajabCha
     <View style={{ gap: 8 }}>
       <Paragraphs paragraphs={shown} palette={palette} />
       {!only && (
-        <View style={{ flexDirection: 'row' }}>
+        <UnderCard>
           <Button variant="plain" label={whole ? 'أقل' : 'الشرح كاملًا'} onPress={() => setWhole(was => !was)}
             accessibilityLabel={whole ? 'اطو الشرح' : 'اقرأ شرح ابن رجب للحديث كاملًا'} />
-        </View>
+        </UnderCard>
       )}
-      <Reference title={rajabRange(first, last)}
-        quotes={[{ text: `${book.title}، ${book.edition}` }]} links={[{ label: 'الصفحة في المكتبة الشاملة', url: shamelaPage('ibnrajab', first.shamela) }]} palette={palette} />
+      <Reference title={book.title}
+        quotes={[{ text: '', cite: rajabRange(first, last), url: shamelaPage('ibnrajab', first.shamela) }, { text: `${book.title}، ${book.edition}` }]} palette={palette} />
     </View>
   );
 }
