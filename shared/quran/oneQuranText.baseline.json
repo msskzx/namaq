@@ -1,16 +1,7 @@
 {
   "font": [
-    "mobile/src/components/AyahShare.tsx",
-    "mobile/src/components/BalaghaSheet.tsx",
     "mobile/src/components/ThemeTiles.tsx",
-    "mobile/src/lib/compareVideo.ts",
-    "mobile/src/lib/shareVideo.ts",
-    "mobile/src/lib/shareVideo.web.ts",
-    "mobile/src/lib/treeVideo.ts",
-    "src/app/quran/compare/CompareVideo.tsx",
-    "src/components/quran/AyahCard.tsx",
     "src/components/quran/PageSpread.module.css",
-    "src/components/share/AyahShare.tsx",
     "src/components/theme/ThemeTiles.module.css"
   ],
   "convert": [
@@ -27,9 +18,7 @@
     "src/app/quran/lataif/LataifView.tsx",
     "src/app/quran/read/ayahPreview.ts",
     "src/components/common/MushafText.tsx",
-    "src/components/quran/AyahCard.tsx",
-    "src/components/quran/PageSpread.tsx",
-    "src/components/share/AyahShare.tsx"
+    "src/components/quran/PageSpread.tsx"
   ],
   "sized": [
     "mobile/src/ui/ActButton.tsx",

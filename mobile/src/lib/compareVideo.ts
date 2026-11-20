@@ -5,13 +5,14 @@ import type { ReadStep } from '@shared/quran/readPlan';
 import { compareRecorderPage, compareVideoInput, markColours, pageVideoInputs, videoCard, type CompareLook, type VideoNames } from '@shared/video/compareVideo';
 import { pairTitle, silentNote, surahName } from './compare';
 import { logoUrl } from './logo';
-import { QURAN_FONT, UI_FONT, type Palette } from './theme';
+import { UI_FONT, type Palette } from './theme';
+import { QURAN_FAMILY } from '@/components/quran/text/quranFont';
 
 /** The compare tab's colours and fonts, for the recorder page. */
 export const compareLook = (palette: Palette): CompareLook => ({
   paper: palette.paper, card: palette.card, deep: palette.paperDeep, ink: palette.ink, muted: palette.muted, rule: palette.rule, accent: palette.accent, green: palette.green,
   highlight: palette.highlight, onHighlight: palette.onHighlight, marks: markColours(palette),
-  font: `"${QURAN_FONT}"`, ui: `"${UI_FONT}"`, logo: logoUrl(palette.ink, palette.accent),
+  font: `"${QURAN_FAMILY}"`, ui: `"${UI_FONT}"`, logo: logoUrl(palette.ink, palette.accent),
 });
 
 /** The card's names as the app writes them. */
