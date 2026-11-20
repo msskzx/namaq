@@ -23,7 +23,7 @@ import type { BalaghaAyah } from './balagha';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
 import Button from '@/components/common/Button';
 import Sheet from '@/components/common/Sheet';
-import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
+import AyahFlow, { AyahWords, QuranWord } from '@/components/quran/text/AyahFlow';
 import Card from '@/components/common/Card';
 
 /** Trees, compare and tafsir load their preview; readings come with the page (ayahLinks.ts). Readings and tafsir have no page of their own. */
@@ -43,7 +43,7 @@ function Readings({ qiraat }: { qiraat: WordDifference[] }) {
     <Card key={word.at.join('-')} className="block shrink-0 px-3.5">
       {word.readings.map((reading, i) => (
         <div key={i} className={`flex items-center gap-3 py-2 ${i ? 'border-t border-[var(--home-rule)]' : ''}`}>
-          <span className={`min-w-[6.5rem] font-quran text-2xl leading-[1.9] ${i ? 'text-[var(--home-accent)]' : ''}`}>{reading.text}</span>
+          <QuranWord className={`min-w-[6.5rem] ${i ? 'text-[var(--home-accent)]' : ''}`}>{reading.text}</QuranWord>
           <span className="flex-1 text-sm leading-6 text-[var(--home-muted)]">{whoReads(reading, word.readings)}</span>
         </div>
       ))}

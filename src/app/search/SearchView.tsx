@@ -1,6 +1,6 @@
 'use client';
 
-import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
+import AyahFlow, { AyahWords, QuranWord } from '@/components/quran/text/AyahFlow';
 import React, { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { ArrowLeftRight, BookOpen, ChevronDown, ChevronLeft, HandHeart, List, NotebookPen, ScrollText, TextSearch, Users, type LucideProps } from 'lucide-react';
@@ -9,7 +9,6 @@ import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
 import { branchesHref } from '@shared/quran/branches';
 import { surahPairHref } from '@shared/quran/curatedComparisons';
-import { mushafText } from '@shared/quran/mushafText';
 import { holdsTerms, SEARCH_ORDER, type SearchGroup, type SearchHit, type SearchKind } from '@shared/quran/searchAll';
 import { NavActions } from '@/components/common/NavBar';
 import { NavSearchShown } from '@/components/common/NavSearch';
@@ -70,9 +69,9 @@ function HitBody({ hit }: { hit: SearchHit }) {
       </span>;
     }
     case 'word':
-      return <><span className={`${styles.grow} ${styles.quran}`}>{mushafText(hit.name)}</span><span className={styles.count}>{num(hit.count)}</span></>;
+      return <><QuranWord className={styles.grow}>{hit.name}</QuranWord><span className={styles.count}>{num(hit.count)}</span></>;
     case 'tree':
-      return <span className={`${styles.grow} ${styles.quran}`}>{mushafText(hit.text)}</span>;
+      return <QuranWord className={styles.grow}>{hit.text}</QuranWord>;
     case 'compare':
       return <span className={styles.grow}>{hit.title}</span>;
     case 'event':

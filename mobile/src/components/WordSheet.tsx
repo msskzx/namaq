@@ -3,13 +3,12 @@ import { Pressable, ScrollView, View } from 'react-native';
 import { BookOpen } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import { num } from '@shared/quran/arabicNumber';
-import { mushafText } from '@shared/quran/mushafText';
 import { countsBySurah, placesOf } from '@shared/quran/words';
 import { ayahOf, surahNames } from '@/lib/branches';
 import { readAyah } from '@/lib/openReader';
 import { corpusText, words } from '@/lib/words';
-import { QURAN_FONT, type Palette } from '@/lib/theme';
-import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
+import type { Palette } from '@/lib/theme';
+import AyahFlow, { AyahWords, QuranWord } from './quran/text/AyahFlow';
 import Sheet from '@/ui/Sheet';
 import SurahStrip from './SurahStrip';
 import Card from '@/ui/Card';
@@ -60,11 +59,11 @@ function WordPlaces({ lemmas, onClose, palette }: { lemmas: number[]; onClose: (
         {lemmas.length > 1
           ? <View accessibilityRole="tablist" style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
             {lemmas.map((lemma, i) => (
-              <Chip key={lemma} role="tab" lit quran label={mushafText(words.lemmas[lemma][0])} on={i === picked} palette={palette}
+              <Chip key={lemma} role="tab" lit quran label={words.lemmas[lemma][0]} on={i === picked} palette={palette}
                 onPress={() => { setPicked(i); setShown(PLACES_STEP); setSurah(null); tops.current.clear(); pending.current = null; }} />
             ))}
           </View>
-          : <Text accessibilityRole="header" style={{ fontFamily: QURAN_FONT, fontSize: 26, lineHeight: 46, color: palette.accent, textAlign: 'right' }}>{mushafText(name)}</Text>}
+          : <QuranWord header look={{ color: palette.accent }} place={{ textAlign: 'right' }}>{name}</QuranWord>}
         <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>
           {`ترد في القرآن ${num(count)} مرة في ${num(places.length)} آية${root ? `، وجذرها «${root}»` : ''}`}
           {surah !== null && <Text style={{ color: palette.accent, fontSize: 15 }}>{`، منها ${num(counts[surah])} في ${surahNames[surah + 1]}`}</Text>}

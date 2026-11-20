@@ -7,7 +7,8 @@
 .action { position: absolute; top: 50%; inset-inline-start: 0.25rem; transform: translateY(-50%); }
 .page h3 { font-family: var(--font-amiri), serif; font-size: 1.5rem; }
 .page header p { color: var(--home-muted); font-size: 0.9375rem; }
-.lines { display: contents; font-family: var(--font-quran); font-size: 1.5rem; line-height: 2.5; text-align: center; }
+/* The ayat's font and size come from the Quran module (CARD_AYAT, set on the element). */
+.lines { display: contents; text-align: center; }
 .lines > p { align-self: start; }
 .ruled .lines > p:not(:first-child) { border-top: 1px dotted var(--home-rule); padding-top: 0.75rem; }
 /* a compact card in parts: the first part opens on a rule too, under the title */
@@ -43,7 +44,6 @@
 .compact .page header.withAction { padding-inline: 2.75rem; margin-bottom: 0.5rem; }
 .compact .page header.withAction:has(.action :is(a, button) + :is(a, button, span)) { padding-inline: 4.75rem; }
 .compact .page h3 { font-family: inherit; font-size: 0.875rem; color: var(--home-muted); }
-.compact .lines { line-height: 2.2; }
 /* a row a reader can select: one ayah among several partners of the same ayah */
 .pick { display: block; width: 100%; font: inherit; color: inherit; text-align: inherit; cursor: pointer; border-radius: 0.25rem; }
 .pick[aria-pressed="false"] { opacity: 0.5; }
@@ -70,7 +70,7 @@
 .legend ul { display: flex; flex-direction: column; gap: 0.25rem; }
 .legend li { display: flex; align-items: center; gap: 0.75rem; }
 .legend p { color: var(--home-muted); font-size: 0.875rem; }
-.legendWord { min-width: 4rem; text-align: center; font-family: var(--font-quran); font-size: 1.25rem; }
+.legendWord { min-width: 4rem; text-align: center; }
 
 @media (max-width: 600px) {
   .spread { column-gap: 0.5rem; }
@@ -79,7 +79,7 @@
   .compact > .page { padding: 0.5rem 0.75rem 0.75rem; }
   .page { padding: 0.5rem; }
   .page h3 { font-size: 1.125rem; }
-  .lines { font-size: 1.125rem; line-height: 2.2; }
+
 }
 
 /* An ayah shown for context only: the ayah before or after in a compare matrix, running on with the ayat it frames. */

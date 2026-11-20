@@ -4,7 +4,6 @@ import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { router } from 'expo-router';
 import { ArrowLeftRight, BookOpen, ChevronDown, ChevronLeft, HandHeart, List, NotebookPen, ScrollText, TextSearch, Users, type LucideProps } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
-import { mushafText } from '@shared/quran/mushafText';
 import type { SearchGroup, SearchHit, SearchKind } from '@shared/quran/searchAll';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
@@ -17,8 +16,8 @@ import { GROUP_MAX, searchApp, warmSearch } from '@/lib/searchAll';
 import { useTabRetap } from '@/lib/tabRetap';
 import { openAdhkar } from '@/lib/adhkar';
 import { back, openIntent as go, toTab } from '@/lib/ways';
-import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
-import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
+import { usePalette, type Palette } from '@/lib/theme';
+import AyahFlow, { AyahWords, QuranWord } from '@/components/quran/text/AyahFlow';
 import Card from '@/ui/Card';
 import Empty from '@/ui/Empty';
 
@@ -74,14 +73,14 @@ function HitRow({ hit, palette, onWord }: { hit: SearchHit; palette: Palette; on
     case 'word':
       return (
         <Pressable onPress={() => onWord(hit.id)} accessibilityRole="button" accessibilityLabel={`${hit.name}، ${num(hit.count)} مرة`} style={({ pressed: on }) => [row, pressed(on)]}>
-          <Text style={{ flex: 1, fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 40, color: palette.ink, textAlign: 'right' }}>{mushafText(hit.name)}</Text>
+          <QuranWord look={{ color: palette.ink }} place={{ flex: 1, textAlign: 'right' }}>{hit.name}</QuranWord>
           <Text style={{ color: palette.accent, fontSize: 16 }}>{num(hit.count)}</Text>
         </Pressable>
       );
     case 'tree':
       return (
         <Pressable onPress={() => go({ tab: 'branches', query: hit.text, open: hit.id })} accessibilityRole="link" style={({ pressed: on }) => [row, pressed(on)]}>
-          <Text style={{ flex: 1, fontFamily: QURAN_FONT, fontSize: 19, lineHeight: 38, color: palette.ink, textAlign: 'right' }}>{mushafText(hit.text)}</Text>
+          <QuranWord look={{ color: palette.ink }} place={{ flex: 1, textAlign: 'right' }}>{hit.text}</QuranWord>
         </Pressable>
       );
     case 'compare':

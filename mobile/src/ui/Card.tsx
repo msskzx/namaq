@@ -2,6 +2,7 @@ import { createContext, useContext, useId, useLayoutEffect, useMemo, useState } 
 import { View, type AccessibilityRole, type GestureResponderEvent, type LayoutChangeEvent, type StyleProp, type ViewStyle } from 'react-native';
 import { CARD, type Palette } from '@/lib/theme';
 import { Tap } from '@/ui/Tap';
+import { SourceSlotContext, type Source } from '@/ui/sourceSlot';
 
 /** True inside a card: a box drawn there would be a card in a card, so the shared pieces draw flat instead. */
 const InsideCard = createContext(false);
@@ -36,28 +37,48 @@ export function UnderCard({ children }: { children: React.ReactNode }) {
  * A card with the row of buttons under it (the feed post's shape): `row` is the post's own buttons, after what its content
  * hands up with `UnderCard`. The row starts on the right, as across the app.
  */
-export function CardWithRow({ row, bar, children, ...card }: Omit<React.ComponentProps<typeof Card>, 'children'> & {
+export function CardWithRow({ lead, row, aside, source, sourceLine, bar, children, ...card }: Omit<React.ComponentProps<typeof Card>, 'children'> & {
+  /** The button that opens the item in its own reader, first in the row before the card's own tools (owner 2026-11-20). */
+  lead?: React.ReactNode;
   row?: React.ReactNode;
+  /** A button alone at the row's far end (the left), away from the others: «ليس من اهتماماتي» (owner 2026-11-20). */
+  aside?: React.ReactNode;
+  /** The card's sources, named on the line under its buttons (owner 2026-11-20); a `Reference` inside the card joins the sheet. */
+  source?: Source[];
+  /**
+   * Draws the source line (ui/SourceLine.tsx, kept out of this file so Card does not reach the sheet): `named` are the
+   * card's own sources, or what its content handed up when it gives none; `all` are both, for the sheet.
+   */
+  sourceLine?: (named: Source[], all: Source[]) => React.ReactNode;
   /** A bar of the feature's own leading the row (recite mode's small bar, on the recall card). */
   bar?: React.ReactNode; children: React.ReactNode }) {
   const [lifted, setLifted] = useState<[string, React.ReactNode][]>([]);
-  const slot = useMemo<Slot>(() => ({
-    set: (id, node) => setLifted(now => {
-      const rest = now.filter(([at]) => at !== id);
-      if (node === null) return rest.length === now.length ? now : rest;
-      const at = now.findIndex(([key]) => key === id);
-      return at < 0 ? [...now, [id, node]] : now.map(entry => (entry[0] === id ? [id, node] : entry));
-    }),
-  }), []);
-  const buttons = lifted.length > 0 || !!row;
+  const slot = useMemo<Slot>(() => ({ set: (id, node) => setLifted(now => keyed(now, id, node)) }), []);
+  const [handed, setHanded] = useState<[string, Source | null][]>([]);
+  const sourceSlot = useMemo(() => ({ set: (id: string, given: Source | null) => setHanded(now => keyed(now, id, given)) }), []);
+  const inner = handed.map(([, given]) => given).filter((given): given is Source => !!given);
+  const own = source ?? [];
+  const buttons = lifted.length > 0 || !!row || !!aside || !!lead;
   return (
     <>
-      <RowSlot.Provider value={slot}><Card testID="feed-card" {...card}>{children}</Card></RowSlot.Provider>
+      <SourceSlotContext.Provider value={sourceSlot}>
+        <RowSlot.Provider value={slot}><Card testID="feed-card" {...card}>{children}</Card></RowSlot.Provider>
+      </SourceSlotContext.Provider>
       {(bar || buttons) && <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', gap: bar ? 4 : 0, marginTop: bar ? 4 : 0 }}>
-        {bar}{lifted.map(([id, node]) => <View key={id} style={{ flexDirection: 'row', alignItems: 'center' }}>{node}</View>)}{row}
+        {bar}{lead}{lifted.map(([id, node]) => <View key={id} style={{ flexDirection: 'row', alignItems: 'center' }}>{node}</View>)}{row}
+        {aside ? <><View style={{ flex: 1 }} />{aside}</> : null}
       </View>}
+      {own.length + inner.length > 0 && sourceLine?.(own.length ? own : inner, [...own, ...inner])}
     </>
   );
+}
+
+/** A list of entries by id, with one set (a new one last), changed in place or (null) taken out; the same list when nothing changes. */
+function keyed<T>(now: [string, T][], id: string, value: T | null): [string, T][] {
+  const rest = now.filter(([at]) => at !== id);
+  if (value === null) return rest.length === now.length ? now : rest;
+  const at = now.findIndex(([key]) => key === id);
+  return at < 0 ? [...now, [id, value]] : now.map(entry => (entry[0] === id ? [id, value] : entry));
 }
 
 /**

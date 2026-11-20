@@ -55,15 +55,22 @@ export type SahihSearch = Awaited<ReturnType<typeof searchBoth>>;
 export async function sahihCards(day: number, slots: number[]) {
   return (await Promise.all(slots.map(async slot => {
     const slug = SAHIH_SLUGS[slot % SAHIH_SLUGS.length];
-    const book = bookOf(SAHIH[slug]);
-    const text = await sahihText(slug);
-    const all = text.kitabs.flatMap(file => file.hadith);
+    const all = (await sahihText(slug)).kitabs.flatMap(file => file.hadith);
     if (!all.length) return [];
     const turn = Math.floor(slot / SAHIH_SLUGS.length);
-    const hadith = all[(((day * 37 + turn) % all.length) + all.length) % all.length];
-    const place = placeOf(SAHIH[slug], hadith.n);
-    const where = place ? `${place.kitab.title}${place.bab?.title ? ` › ${place.bab.title}` : ''}${book.headingsBy === 'nawawi' && place.bab?.title ? ' (تبويب النووي)' : ''}` : '';
-    return [{ slot, kind: slug, book, hadith, where }];
+    return [sahihCard(slot, slug, all[(((day * 37 + turn) % all.length) + all.length) % all.length])];
   }))).flat();
+}
+function sahihCard(slot: number, slug: SahihSlug, hadith: SahihHadith) {
+  const book = bookOf(SAHIH[slug]);
+  const place = placeOf(SAHIH[slug], hadith.n);
+  const where = place ? `${place.kitab.title}${place.bab?.title ? ` › ${place.bab.title}` : ''}${book.headingsBy === 'nawawi' && place.bab?.title ? ' (تبويب النووي)' : ''}` : '';
+  // The card's lasting id is the hadith's number, as the app's feed saves it.
+  return { slot, kind: slug, item: String(hadith.n), book, hadith, where };
+}
+/** A saved Sahih card by its book and hadith number; null when the book has no such hadith. */
+export async function sahihCardOf(slug: SahihSlug, item: string) {
+  const hadith = (await sahihText(slug)).kitabs.flatMap(file => file.hadith).find(each => String(each.n) === item);
+  return hadith ? sahihCard(0, slug, hadith) : null;
 }
 export type SahihCard = Awaited<ReturnType<typeof sahihCards>>[number];

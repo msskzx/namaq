@@ -7,7 +7,6 @@
 .grow { flex: 1; min-width: 0; }
 .muted { color: var(--home-muted); font-size: 0.85rem; }
 .count { color: var(--home-accent); }
-.quran { font-family: var(--font-quran, inherit); font-size: 1.25rem; line-height: 2.2; }
 .ayah { display: block; border: 1px solid var(--home-rule); border-radius: 14px; background: var(--home-card); padding: 0.4rem 0.75rem; margin-bottom: 0.5rem; text-align: justify; text-align-last: right; }
 .hit { color: var(--home-accent); }
 .verse { display: flex; flex-direction: column; }

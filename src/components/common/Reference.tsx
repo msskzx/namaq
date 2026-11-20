@@ -1,5 +1,8 @@
+'use client';
+
 import { ChevronDown } from 'lucide-react';
 import ExternalLink from './ExternalLink';
+import { useLiftSource } from './sourceSlot';
 
 /** A quote from a book: its words, with the page it cites as a link (the page alone when it has no words). A quote with no page is our own note on the ones above. */
 export type Quote = { text: string; cite?: string; url?: string };
@@ -11,6 +14,8 @@ export type Quote = { text: string; cite?: string; url?: string };
 export default function Reference({ title, quotes, links = [] }: { title: string; quotes: Quote[];
   /** Links under the quotes when open (the source's own page), as the app's. */
   links?: { label: string; url: string }[] }) {
+  // On a home card the reference joins the card's source line under its buttons (owner 2026-11-20), and draws nothing here.
+  if (useLiftSource({ line: title, quotes, links })) return null;
   return (
     <details className="group text-[var(--home-muted)]">
       <summary className="flex w-fit cursor-pointer list-none items-center gap-1 text-sm [&::-webkit-details-marker]:hidden">

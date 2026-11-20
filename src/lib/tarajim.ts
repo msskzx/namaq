@@ -2,8 +2,10 @@
 // read on the server only (the file is big), and the views the app draws from them worked out here: a person's ties round
 // him (mobile/src/components/TiesRing.tsx), the nasab tree (mobile/src/screens/nasab.tsx), the virtues (person.tsx), and
 // the «من التراجم» and «صلة» feed cards. The client parts in src/components/tarajim draw what these return.
+import { nameItem, tieItem, virtueItem } from '@shared/feedItems';
 import peopleJson from '@shared/data/tarajim/people.json';
-import { pageLabel, sayerLine, sourcesOf, type AppPerson, type PersonFact } from '@shared/tarajim';
+import { pageLabel, pageSources, sayerLine, sourcesOf, type AppPerson, type PersonFact } from '@shared/tarajim';
+import { citeSource, uniqueSources, type QuizSource } from '@shared/quiz/sources';
 import { byVolume, heldGroups, kunyaLine, personLine } from '@shared/tarajimGroups';
 import { chainOf, matchesQuery, namesHay, foldTop, lineOf, meetingOf, nasabTree, type NasabNode } from '@shared/tarajimLine';
 import { chainSentence, groupWord, joining, linkedPairs, peopleGraph, stepClause, tieGroups, tieWord, type GraphNode, type Step, type TieKind } from '@shared/tarajimGraph';
@@ -170,45 +172,59 @@ export function betweenView(slugs: string[]): BetweenView {
  * The «من التراجم» card (a virtue), the «صلة» card (two people and the chain that joins them) and the «من حياته» card (a
  * person's timeline), one a batch in turn.
  */
-export type TarajimCard =
-  | { slot: number; kind: 'tarajim'; person: PersonHead; virtue: VirtueLine; pages: string }
-  | { slot: number; kind: 'tie'; a: PersonHead; b: PersonHead; chain: ChainView; sentence: string; pages: string }
-  | { slot: number; kind: 'life'; person: PersonHead; items: LifeItem[] };
+export type TarajimCard = { slot: number; /** The card's lasting id, as the app's feed saves it (shared/feedItems.ts). */ item: string } & (
+  | { kind: 'tarajim'; person: PersonHead; virtue: VirtueLine; sources: QuizSource[] }
+  | { kind: 'tie'; a: PersonHead; b: PersonHead; chain: ChainView; sentence: string; sources: QuizSource[] }
+  | { kind: 'life'; person: PersonHead; items: LifeItem[]; sources: QuizSource[] });
 
 let virtues: ReturnType<typeof allVirtues<AppPerson>> | undefined;
 let pairs: ReturnType<typeof linkedPairs> | undefined;
 let lives: AppPerson[] | undefined;
 const turnOf = (day: number, at: number, count: number) => ((((day * 41 + at) % count) + count) % count);
 
-export function tarajimCards(day: number, slots: number[]): TarajimCard[] {
+const lists = () => {
   virtues ??= allVirtues(PEOPLE);
   pairs ??= linkedPairs(GRAPH);
   lives ??= PEOPLE.filter(person => drawsLine(personLife(person)));
+  return { virtues, pairs, lives };
+};
+function lifeCard(slot: number, person: AppPerson): TarajimCard {
+  const items = personLife(person);
+  return { slot, kind: 'life', item: person.slug, person: head(person), items, sources: uniqueSources(items.flatMap(item => [...item.refs, ...item.yearRefs]).map(citeSource)) };
+}
+function virtueCard(slot: number, { person, index }: NonNullable<typeof virtues>[number]): TarajimCard {
+  const fact = person.virtues[index];
+  return { slot, kind: 'tarajim', item: virtueItem(person.slug, index), person: head(person), virtue: { text: fact.text ?? '', ...(sayerOf(fact) ? { by: sayerOf(fact) } : {}) }, sources: pageSources(fact.refs) };
+}
+function tieCard(slot: number, pair: NonNullable<typeof pairs>[number]): TarajimCard {
+  const nodes = [...new Set(pair.steps.flatMap(step => [step.from, step.to]))];
+  const node = (slug: string) => GRAPH.nodes.get(slug)!;
+  return {
+    slot, kind: 'tie', item: tieItem(pair.a, pair.b),
+    a: { slug: pair.a, name: personName(node(pair.a)), sex: node(pair.a).sex }, b: { slug: pair.b, name: personName(node(pair.b)), sex: node(pair.b).sex },
+    chain: chainView(nodes, pair.steps, [pair.a, pair.b]),
+    sentence: `${chainSentence(GRAPH, pair.steps, personName)}.`,
+    sources: pageSources(pair.steps.flatMap(step => step.link.refs)),
+  };
+}
+
+export function tarajimCards(day: number, slots: number[]): TarajimCard[] {
+  const { virtues: all, pairs: ties, lives: lived } = lists();
   return slots.flatMap((slot): TarajimCard[] => {
     const turn = Math.floor(slot / 3);
-    if (slot % 3 === 2) {
-      if (!lives!.length) return [];
-      const person = lives![turnOf(day, turn, lives!.length)];
-      return [{ slot, kind: 'life', person: head(person), items: personLife(person) }];
-    }
-    if (slot % 3 === 0) {
-      if (!virtues!.length) return [];
-      const { person, index } = virtues![turnOf(day, turn, virtues!.length)];
-      const fact = person.virtues[index];
-      return [{ slot, kind: 'tarajim', person: head(person), virtue: { text: fact.text ?? '', ...(sayerOf(fact) ? { by: sayerOf(fact) } : {}) }, pages: pageLabel(fact.refs) }];
-    }
-    if (!pairs!.length) return [];
-    const pair = pairs![turnOf(day, turn, pairs!.length)];
-    const nodes = [...new Set(pair.steps.flatMap(step => [step.from, step.to]))];
-    const node = (slug: string) => GRAPH.nodes.get(slug)!;
-    return [{
-      slot, kind: 'tie',
-      a: { slug: pair.a, name: personName(node(pair.a)), sex: node(pair.a).sex }, b: { slug: pair.b, name: personName(node(pair.b)), sex: node(pair.b).sex },
-      chain: chainView(nodes, pair.steps, [pair.a, pair.b]),
-      sentence: `${chainSentence(GRAPH, pair.steps, personName)}.`,
-      pages: [...new Set(pair.steps.map(step => pageLabel(step.link.refs)))].join(' · '),
-    }];
+    if (slot % 3 === 2) return lived.length ? [lifeCard(slot, lived[turnOf(day, turn, lived.length)])] : [];
+    if (slot % 3 === 0) return all.length ? [virtueCard(slot, all[turnOf(day, turn, all.length)])] : [];
+    return ties.length ? [tieCard(slot, ties[turnOf(day, turn, ties.length)])] : [];
   });
+}
+
+/** A saved «من التراجم», «صلة» or «من حياته» card by its item (shared/feedItems.ts); null when the data no longer holds it. */
+export function tarajimCardOf(kind: string, item: string): TarajimCard | null {
+  const { virtues: all, pairs: ties, lives: lived } = lists();
+  if (kind === 'life') { const person = lived.find(each => each.slug === item); return person ? lifeCard(0, person) : null; }
+  if (kind === 'tarajim') { const found = all.find(each => virtueItem(each.person.slug, each.index) === item); return found ? virtueCard(0, found) : null; }
+  if (kind === 'tie') { const pair = ties.find(each => tieItem(each.a, each.b) === item); return pair ? tieCard(0, pair) : null; }
+  return null;
 }
 
 /** A person's «حياته» rows (shared/events/lifeTimeline.ts), as the app's lib/life.ts reads them. */
@@ -258,16 +274,22 @@ export const hubGroups = () => heldGroups(PEOPLE);
  * The «الألقاب» and «الكنى» cards (the app's NamePost), one of each a batch: a person's laqab or kunya, the person, the
  * book's words when they say more than the name, and the person page's folded reference.
  */
-export type NameCard = { slot: number; kind: 'laqab' | 'kunya'; person: PersonHead; name: string; quote?: string; by?: string; credit?: Credit };
+export type NameCard = { slot: number; kind: 'laqab' | 'kunya'; /** The card's lasting id (shared/feedItems.ts nameItem). */ item: string; person: PersonHead; name: string; quote?: string; by?: string; sources: QuizSource[] };
 let nameLists: { laqab: NameFact[]; kunya: NameFact[] } | undefined;
 const bare = (text: string) => text.replace(/[\u064B-\u0652\u0670\u0640]/g, '').trim();
+function nameCard(slot: number, kind: 'laqab' | 'kunya', { person, name, fact }: NameFact): NameCard {
+  const quote = bare(fact.text) !== name ? { quote: fact.text, ...(fact.by.length ? { by: sayerLine(fact) } : {}) } : {};
+  return { slot, kind, item: nameItem(person.slug, name), person: head(person), name, ...quote, sources: pageSources(fact.refs) };
+}
+const names = () => (nameLists ??= { laqab: laqabFacts(PEOPLE), kunya: kunyaFacts(PEOPLE) });
 export function nameCards(day: number, slots: number[]): NameCard[] {
-  nameLists ??= { laqab: laqabFacts(PEOPLE), kunya: kunyaFacts(PEOPLE) };
   return slots.flatMap(slot => (['laqab', 'kunya'] as const).flatMap((kind): NameCard[] => {
-    const list = nameLists![kind];
-    if (!list.length) return [];
-    const { person, name, fact } = list[turnOf(day * 2 + (kind === 'kunya' ? 1 : 0), slot, list.length)];
-    const quote = bare(fact.text) !== name ? { quote: fact.text, ...(fact.by.length ? { by: sayerLine(fact) } : {}) } : {};
-    return [{ slot, kind, person: head(person), name, ...quote, credit: creditOf([fact]) }];
+    const list = names()[kind];
+    return list.length ? [nameCard(slot, kind, list[turnOf(day * 2 + (kind === 'kunya' ? 1 : 0), slot, list.length)])] : [];
   }));
+}
+/** A saved laqab or kunya card by its item; null when the data no longer holds it. */
+export function nameCardOf(kind: 'laqab' | 'kunya', item: string): NameCard | null {
+  const found = names()[kind].find(each => nameItem(each.person.slug, each.name) === item);
+  return found ? nameCard(0, kind, found) : null;
 }

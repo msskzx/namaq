@@ -6,18 +6,19 @@ import { useRouter } from 'next/navigation';
 import { Check } from 'lucide-react';
 import { useLanguage } from '@/components/language/LanguageContext';
 import { BRANCH_VIEW_COOKIE, defaultBranchView, type BranchView } from '@shared/quran/branchView';
-import { SAMPLE_TREE, TREE_LAYOUT, TREE_LINES } from '@shared/viewPreview';
+import { SAMPLE_TREE, TREE_LAYOUT, TREE_LINES, TILE_SHARE } from '@shared/viewPreview';
 import styles from '@/components/theme/ThemeTiles.module.css';
+import { MiniQuran } from '@/components/quran/text/AyahFlow';
 
 /** The view drawn small in the page's own colours, with the إن المتقين في tree as its sample; both colour the words every ayah shares, as the real views do. */
 function Preview({ view }: { view: 'tree' | 'matrix' }) {
-  if (view === 'matrix') return <span className={styles.matrix}>
+  if (view === 'matrix') return <span className={styles.matrix}><MiniQuran share={TILE_SHARE.view}>
     {SAMPLE_TREE.endings.map(ending => <span key={ending.words} className={styles.row}>
       <b>{SAMPLE_TREE.trunk.join(' ')}</b> {ending.words}
     </span>)}
-  </span>;
+  </MiniQuran></span>;
   const { trunk, ending } = TREE_LAYOUT;
-  return <span className={styles.tree}>
+  return <span className={styles.tree}><MiniQuran share={TILE_SHARE.view}>
     <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 size-full">
       {TREE_LINES.map(d => <path key={d} d={d} fill="none" stroke="var(--home-rule)" strokeWidth={1} vectorEffect="non-scaling-stroke" />)}
     </svg>
@@ -26,7 +27,7 @@ function Preview({ view }: { view: 'tree' | 'matrix' }) {
     </span>
     {SAMPLE_TREE.endings.map((leaf, index) => <span key={leaf.words} className={styles.node}
       style={{ left: `${ending.left}%`, top: `${ending.tops[index]}%`, width: `${ending.width}%`, height: `${ending.height}%` }}>{leaf.words}</span>)}
-  </span>;
+  </MiniQuran></span>;
 }
 
 /** `onPick` hears every choice, even of the view already set (the first-visit tour waits for one). */

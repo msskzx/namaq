@@ -15,6 +15,7 @@ import { MARK_CLASS } from '@/lib/markMode';
 import { closingSign } from '@shared/quran/branches';
 import { quranSurrounding } from '@/lib/quran/quranText';
 import LoadingDots from '@/components/common/LoadingDots';
+import { TreeText } from '@/components/quran/text/AyahFlow';
 
 export type Around = { data: Surrounding; ends: Record<string, string>; inTree: Set<string>; names: Record<number, string>; tree: string;
   /** The first ayah drawn before each ayah with no words before the phrase (see BranchTree), where its path's one tab starts. */
@@ -148,15 +149,15 @@ export function NeighbourBox({ neighbour, of, side, around, nodeId }: { nodeId?:
   const match = sharedByAll(others.map(ayah => ({ ayah, before: null, after: null }))).find(context => context.ayah.key === neighbour.key)?.match;
   const basmala = neighbour.basmala && <span className="block border-[var(--home-rule)] text-center first:border-b last:border-t first:pb-1 last:pt-1 border-dotted"><MushafText>{neighbour.basmala.join(' ')}</MushafText></span>;
   return (
-    <PathBox id={id} ctx={of} keys={[of]} lit="border-[var(--home-accent)] text-[var(--home-ink)]" tone="border-[var(--home-rule)] text-[var(--home-ink)]" className={`w-52 max-w-[70vw] text-lg [[data-down]_&]:w-44`}>
-      <span className="block font-quran leading-loose">
+    <PathBox id={id} ctx={of} keys={[of]} lit="border-[var(--home-accent)] text-[var(--home-ink)]" tone="border-[var(--home-rule)] text-[var(--home-ink)]" className="w-52 max-w-[70vw] [[data-down]_&]:w-44">
+      <TreeText>
         {side === 'after' && basmala}
         <span className="block"><span>{neighbour.words.map((word, i) => {
           const kind = likenessOf(match, i);
           return <React.Fragment key={i}>{i > 0 && ' '}{kind ? <mark className={`bg-transparent ${MARK_CLASS[kind]}`} title={ar ? LIKENESS_TITLE[kind].ar : LIKENESS_TITLE[kind].en}><MushafText>{word}</MushafText></mark> : <MushafText>{word}</MushafText>}</React.Fragment>;
         })}</span>{closingSign(neighbour.words, [neighbour.key]).map(sign => <React.Fragment key="end">{' '}<span data-end><MushafText>{sign}</MushafText></span></React.Fragment>)}</span>
         {side === 'before' && basmala}
-      </span>
+      </TreeText>
       <span className="mt-1 block text-xs">{ref}</span>
       <span data-node-buttons className="mt-1 flex flex-wrap items-center gap-2">
         <PathButton id={id} keys={[of]} subject={ref} />

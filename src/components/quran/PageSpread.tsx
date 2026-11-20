@@ -4,6 +4,7 @@ import Rope from '@/components/common/Rope';
 import { num } from '@shared/quran/arabicNumber';
 import styles from './PageSpread.module.css';
 import { LEGEND_SOURCE, MARK_LEGEND } from '@shared/quran/wordMatch';
+import { CARD_AYAT, QuranWord } from '@/components/quran/text/AyahFlow';
 
 /** `link` names the matched pair a word belongs to; `lit` shows it while its pair is selected. */
 /** `some`: a word only some of the rows share, drawn faded. */
@@ -55,7 +56,7 @@ export function MatchLegend({ ar, extra }: { ar: boolean; extra?: React.ReactNod
       <ul>
         {MARK_LEGEND.map(item => (
           <li key={item.kind}>
-            {item.kind === 'plain' ? <span className={styles.legendWord}>{item.word}</span> : <mark className={`${styles[item.kind] ?? ''} ${styles.legendWord}`}>{item.word}</mark>}
+            {item.kind === 'plain' ? <QuranWord className={styles.legendWord}>{item.word}</QuranWord> : <mark className={`${styles[item.kind] ?? ''} ${styles.legendWord}`}><QuranWord>{item.word}</QuranWord></mark>}
             <span>{ar ? item.ar : item.en}</span>
           </li>
         ))}
@@ -77,7 +78,7 @@ export default function PageSpread({ pages, ruled = false, stackOnMobile = false
       {pages.map((page, k) => !page ? <div key={k} /> : (
         <article key={k} className={styles.page} style={{ gridRow: `span ${rows + (page.footer ? 2 : 1)}` }} aria-label={page.label ?? page.title}>
           <header className={page.action ? styles.withAction : undefined}><h3>{page.title}</h3>{page.subtitle && <p dir="auto">{page.subtitle}</p>}{page.action && <span className={styles.action}>{page.action}</span>}</header>
-          <div className={styles.lines} lang="ar">
+          <div className={`${styles.lines} ${CARD_AYAT.className}`} style={CARD_AYAT.style} lang="ar">
             {Array.from({ length: stacked && !page.pick ? 1 : rows }, (_, row) => {
               const onRule = ruled && (row > 0 || compact);
               const silent = page.empty && page.rows[row]?.length === 0 && !page.bare?.[row];

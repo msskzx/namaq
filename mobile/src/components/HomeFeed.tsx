@@ -1,7 +1,7 @@
 import { createContext, isValidElement, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, ScrollView, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, BookOpenText, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, Eye, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, History, ExternalLink as ExternalLinkIcon, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpenText, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, Eye, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, History, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
@@ -16,10 +16,9 @@ import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
 import { allVirtues, dayStart, feedBooks, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, prayerSoon, type FeedSlot } from '@shared/homeFeed';
-import { pageLabel, sayerLine } from '@shared/tarajim';
+import { pageSources, sayerLine } from '@shared/tarajim';
 import { findPerson, GRAPH, PEOPLE, personName, tiePairs, unvowelled } from '@/lib/tarajim';
 import { kunyaFacts, laqabFacts, type NameFact } from '@shared/tarajimNames';
-import { Credit } from '@/screens/person';
 import { chainSentence } from '@shared/tarajimGraph';
 import TiesChain from './TiesChain';
 import LifeTimeline from './LifeTimeline';
@@ -46,7 +45,7 @@ import momentBattles from '@shared/data/battles/moments.json';
 import type { AppMomentBattle } from '@shared/battles/battle';
 import { battleLine, Moment } from './battles/BattleParts';
 import { STORIES } from '@/lib/stories';
-import { FORTY, fortyEntry, shamelaPage } from '@/lib/hadith';
+import { FORTY, fortyEntry } from '@/lib/hadith';
 import { compilerOf, drawnBukhari, fromCompanion, fromSahihayn, rajabFeedPassages, recordedIn, type RajabChapter } from '@shared/hadith';
 import Isnad from '@/components/Isnad';
 import HadithBooks from '@/components/HadithBooks';
@@ -79,7 +78,7 @@ import { showsOtherView } from '@shared/quran/branchView';
 import { timesFor, useMinute } from '@/lib/prayer';
 import { bookState, useBooks } from '@/lib/books';
 import { SAHIH, isSahihSlug, useSahihText } from '@/lib/sahih';
-import { SahihHadithView, sahihPage } from '@/components/Sahih';
+import { SahihHadithView } from '@/components/Sahih';
 import { findHadith, placeOf, type SahihSlug } from '@shared/sahih';
 import type { BookId } from '@shared/books';
 import { BookCard, Shelf, TUHFA } from '@/screens/books';
@@ -101,6 +100,7 @@ import type { WordDifference } from '@shared/quran/qiraat';
 import BalaghaSheet from './BalaghaSheet';
 import IrabSheet from './IrabSheet';
 import QuranWords from './quran/text/QuranWords';
+import { momentItem, nameItem, rajabItem, storyItem, tieItem, virtueItem } from '@shared/feedItems';
 import { FIT_SHARE, useFitHeight } from '@/lib/useFit';
 import { storyMap } from '@shared/quran/prophets/story';
 import { STORY_GROUPS } from '@shared/quran/prophets/storyGroup';
@@ -113,8 +113,18 @@ import { type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
 import Card, { CardWithRow } from '@/ui/Card';
-import { openExternal } from '@/ui/ExternalLink';
+import SourceLine, { sourcesOf } from '@/ui/SourceLine';
+import type { Source } from '@/ui/sourceSlot';
+import { citeSource, mushafSource, MUSHAF_BOOK, uniqueSources, type QuizSource } from '@shared/quiz/sources';
+import { irabSources, itqanSource, qiraatSources, sadiSource } from '@shared/quiz/bookSources';
+import { compiledSource, recordSource } from '@shared/quiz/hadith';
+import { termSource } from '@shared/quran/balaghaTerms';
+import { exampleReference } from '@shared/quran/lataif';
+import { pieceSources, storySource } from '@shared/quran/pieceSources';
+import { SURAH_NAMES } from '@shared/quran/surahNames';
+import { METHODS } from '@shared/prayer';
 import Button from '@/ui/Button';
+import { QuranWord } from '@/components/quran/text/AyahFlow';
 
 type IconType = (props: LucideProps) => React.ReactNode;
 
@@ -124,10 +134,18 @@ function Action({ Icon, label, on, onPress, tone, disabled }: { Icon: IconType; 
 }
 
 /**
- * Every feed post's one shape (owner, 2026-11-14), the compare card's: the head, the body in one card, and a row of icon
- * buttons under the card, starting on the right.
+ * Every feed post's one shape (owner, 2026-11-14 and 2026-11-20, like an Instagram post): the head, the body in one card,
+ * the row of icon buttons under it grouped on the right (the open button, the card's tools, save, share) with «ليس من
+ * اهتماماتي» alone on the left, then the source line.
  */
-function Post({ head, actions, bar, palette, press, children }: { head: React.ReactNode; actions?: React.ReactNode;
+function Post({ head, open, actions, share, source, bar, palette, press, children }: { head: React.ReactNode;
+  /** Opens the item in its own reader (the mushaf at the ayah, the hadith in its book): first in the row. */
+  open?: React.ReactNode;
+  actions?: React.ReactNode;
+  /** The card's share button, last of the group, after save. */
+  share?: React.ReactNode;
+  /** The books the card stands on, named on its source line; a `Reference` inside the card joins its sheet. */
+  source?: Source[];
   /** The whole card as one button (an ayah card opening its sheet); `label` names it for a screen reader. */
   press?: { onPress: () => void; label: string };
   /** A bar of the feature's own under the card, leading the buttons' row (recite mode's small bar, on the recall card; owner 2026-11-17). */
@@ -138,7 +156,8 @@ function Post({ head, actions, bar, palette, press, children }: { head: React.Re
     <View style={{ gap: 4 }}>
       {head}
       {/* What the card's content hands up with UnderCard joins the row under the card, before the post's own buttons; share stays last. */}
-      <CardWithRow palette={palette} pad={0} clip onPress={press?.onPress} accessibilityLabel={press?.label} bar={bar} row={<><CardMenuActions text={named} />{actions}</>}>{children}</CardWithRow>
+      <CardWithRow palette={palette} pad={0} clip onPress={press?.onPress} accessibilityLabel={press?.label} bar={bar}
+        lead={open} row={<>{actions}<SaveAction text={named} />{share}</>} aside={<NotMineAction />} source={source} sourceLine={sourceLine(palette)}>{children}</CardWithRow>
     </View>
   );
 }
@@ -155,23 +174,29 @@ type CardMenu = { kind: FeedCardKind | FeedQuizKind; item?: string; interest: st
 const CardMenuContext = createContext<CardMenu | null>(null);
 
 /**
- * A feed card's save and «ليس من اهتماماتي», in the row under the card like every other button (owner, 2026-11-20: every
- * home card has one layout, no «…» menu). `text` names a saved card on the saved shelf; left out where the card's own
- * row already saves it (pair, tree: shared/bookmarkKind.ts SAVES_ITSELF).
+ * A feed card's save, in the row under the card like every other button (owner, 2026-11-20: every home card has one
+ * layout, no «…» menu). `text` names a saved card on the saved shelf. The pair and tree cards save from their own row
+ * (shared/bookmarkKind.ts SAVES_ITSELF).
  */
-function CardMenuActions({ text }: { text?: string }) {
+function SaveAction({ text }: { text: string }) {
   const menu = useContext(CardMenuContext);
   const saved = useSyncExternalStore(subscribeBookmarks, readBookmarks);
-  if (!menu) return null;
-  const id = text === undefined ? null : cardMenuSaveId(menu.kind, menu.item);
-  const on = !!id && saved.some(item => item.id === id);
-  const name = interestById(menu.interest)?.name ?? '';
-  const notMine = !menu.savedOnly && !menu.surprise ? menu.notMine : undefined;
-  return <>
-    {id && <IconButton Icon={Bookmark} label={on ? 'أزلها من المحفوظات' : 'احفظ البطاقة'} on={on} fill onPress={() => toggleBookmark({ id, text: text ?? '', href: '' })} />}
-    {notMine && <IconButton Icon={CircleMinus} label={`«${name}» ليس من اهتماماتي`} onPress={notMine} />}
-  </>;
+  const id = menu ? cardMenuSaveId(menu.kind, menu.item) : null;
+  if (!id) return null;
+  const on = saved.some(item => item.id === id);
+  return <IconButton Icon={Bookmark} label={on ? 'أزلها من المحفوظات' : 'احفظ البطاقة'} on={on} fill onPress={() => toggleBookmark({ id, text, href: '' })} />;
 }
+
+/** «ليس من اهتماماتي», alone at the row's left end (owner, 2026-11-20). */
+function NotMineAction() {
+  const menu = useContext(CardMenuContext);
+  const notMine = menu && !menu.savedOnly && !menu.surprise ? menu.notMine : undefined;
+  if (!notMine) return null;
+  return <IconButton Icon={CircleMinus} label={`«${interestById(menu!.interest)?.name ?? ''}» ليس من اهتماماتي`} onPress={notMine} />;
+}
+
+/** The source line under a card's buttons (owner, 2026-11-20). */
+const sourceLine = (palette: Palette) => (named: Source[], all: Source[]) => <SourceLine named={named} sources={all} palette={palette} />;
 
 /** A feed card's head: a round icon, a title and a line under it, like a post's author. */
 function PostHead({ Icon, title, sub, palette, open }: { Icon: IconType; title: string; sub?: string; palette: Palette;
@@ -193,6 +218,11 @@ function PostHead({ Icon, title, sub, palette, open }: { Icon: IconType; title: 
 
 /** Where a post's ayat are, for its head: «البقرة ٦١ · آل عمران ٢١، ١١٢» (shared/quran/ayahPlaces.ts). */
 const placesOf = (keys: string[]) => ayahPlaces(keys, shortNames);
+
+/** A mushaf page as a card's source: «المصحف · البقرة», the page in its sheet. */
+const mushafPage = (surah: number, page: number): QuizSource => ({ book: MUSHAF_BOOK, at: `${SURAH_NAMES[surah]}، ص ${num(page)}` });
+/** The ayat a card shows as its source: «المصحف · الإخلاص ٣», each with its page in the sheet. */
+const mushafOf = (...keys: string[]) => sourcesOf(keys.map(key => mushafSource(key, pageOfAyah(key))));
 
 /** The day's things, the same all day: date, juz. */
 function useToday() {
@@ -220,10 +250,9 @@ export function ContinueReading({ palette }: { palette: Palette }) {
   const where = [shortNames[surah], date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ');
   return (
     <Post palette={palette} head={<PostHead Icon={BookOpen} title={fasila || page > 1 ? 'تابع القراءة' : 'ابدأ القراءة'} sub={where} palette={palette} />}
-      actions={<>
-        <Action Icon={BookOpen} label="اقرأ" onPress={read} palette={palette} />
-        <Text style={{ color: palette.muted, fontSize: 14, padding: 8 }}>{juzLabel([juz])}</Text>
-      </>}>
+      open={<Action Icon={BookOpen} label="اقرأ" onPress={read} palette={palette} />}
+      actions={<Text style={{ color: palette.muted, fontSize: 14, padding: 8 }}>{juzLabel([juz])}</Text>}
+      source={sourcesOf([mushafPage(surah, page)])}>
       <Tap onPress={read} accessibilityRole="button" accessibilityLabel={`افتح المصحف ${fasila ? 'عند فاصلتك' : 'حيث توقفت'}، سورة ${shortNames[surah] ?? ''}`} style={{ paddingHorizontal: 12, paddingVertical: 6 }}>
         {/* The page's first half as the reader draws it (owner, 2026-11-14). */}
         <PageTop page={page} palette={palette} />
@@ -236,10 +265,12 @@ export function ContinueReading({ palette }: { palette: Palette }) {
 const PairPost = memo(function PairPost({ pair, palette }: { pair: PairCard; palette: Palette }) {
   const [a, b] = pair.sides;
   const compare = useCallback(() => openIntent({ tab: 'compare', lead: a.surah, other: b.surah, ayat: [...sideKeys(a), ...sideKeys(b)] }), [a, b]);
+  const sources = useMemo(() => sourcesOf(pieceSources([...sideKeys(a), ...sideKeys(b)], pair.group ? treeList().find(piece => piece.id === pair.group || aliasesOf(piece).includes(pair.group!))?.group : undefined)), [a, b, pair.group]);
   return (
     <View>
       <PostHead Icon={ArrowLeftRight} title="آيتان متشابهتان" sub={`${sideLabel(a)} · ${sideLabel(b)}`} palette={palette} />
-      <CompareCard card={pair} palette={palette} onOpen={compare} extra={<CardMenuActions />} />
+      <CompareCard card={pair} palette={palette} onOpen={compare} aside={<NotMineAction />} />
+      <SourceLine named={sources} sources={sources} palette={palette} />
     </View>
   );
 });
@@ -265,9 +296,9 @@ function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', palette }:
     <Action Icon={Check} label="تذكّرتها" tone="green" palette={palette} onPress={() => { if (review) rememberAyah(ayah); else { recalled.add(ayah); setGone(n => n + 1); } }} />
     {!review && <Action Icon={LightbulbOff} label="نسيتها" palette={palette} onPress={() => { recalled.add(ayah); markForgotten(ayah); setGone(n => n + 1); }} />}
     {review && <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} />}
-    <Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: markAyah(ayah), word: markWord(ayah) })} palette={palette} />
   </>;
-  return <Recall key={`${ayah}-${writing}`} ayah={markAyah(ayah)} targetWord={markWord(ayah)} title={title} writing={writing} onWriting={toggleWriting} marks={marks} palette={palette} />;
+  const open = <Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: markAyah(ayah), word: markWord(ayah) })} palette={palette} />;
+  return <Recall key={`${ayah}-${writing}`} ayah={markAyah(ayah)} targetWord={markWord(ayah)} title={title} writing={writing} onWriting={toggleWriting} open={open} marks={marks} palette={palette} />;
 }
 
 /**
@@ -275,7 +306,7 @@ function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', palette }:
  * tap, double tap or long press on the ayah does what it does in recite mode (the reader's gesture settings); the pen writes
  * what the pen setting asks, and it stops at the ayah's end. Drawn afresh for each way of asking (`writing`).
  */
-function Recall({ ayah, targetWord, title, writing, onWriting, marks, palette }: { ayah: string; targetWord?: number; title: string; writing: boolean; onWriting: () => void; marks: React.ReactNode; palette: Palette }) {
+function Recall({ ayah, targetWord, title, writing, onWriting, open, marks, palette }: { ayah: string; targetWord?: number; title: string; writing: boolean; onWriting: () => void; open: React.ReactNode; marks: React.ReactNode; palette: Palette }) {
   const model = useMemo(() => { const page = pageOfAyah(ayah); return page ? pageModel(pageData(page), surahBefore(page)) : null; }, [ayah]);
   const [position, setPosition] = useState<RecitePosition>({ start: ayah, word: targetWord, shown: null, words: 0 });
   const [pen] = penRule.use();
@@ -296,7 +327,7 @@ function Recall({ ayah, targetWord, title, writing, onWriting, marks, palette }:
   return (
     <Post palette={palette} head={<PostHead Icon={LightbulbOff} title={title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />}
       bar={<RecitePill recite={recite} writing={writing} onWriting={onWriting} palette={palette} small />}
-      actions={marks}>
+      open={open} actions={marks} source={mushafOf(ayah)}>
       <View style={{ padding: 12 }}>
         <AyahLines ayah={ayah} targetWord={targetWord} palette={palette} shown={shown} words={position.words} checked={recite.checked} onTouch={onTouch} write={recite.write} />
         {recite.write && recite.boxes.field}
@@ -351,14 +382,13 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
   const prompt = question.promptArabic && question.promptArabic !== FEED_QUIZ_NAMES[kind] ? <QuizPrompt text={question.promptArabic} palette={palette} /> : undefined;
   return (
     <Post palette={palette} head={<PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind]} palette={palette} />}
+      open={!isTree(question) && !isCompare(question) && question.ayahKey && run.typed[0][0] !== undefined
+        ? <Action Icon={BookOpen} label="في المصحف" onPress={() => readAyah(question.ayahKey!)} palette={palette} /> : undefined}
       actions={<>
         {(isTree(question) || isCompare(question)) && !checked && <>
           <Action Icon={Check} label="تحقق" disabled={!hasTyped(run)} onPress={() => setRun(check(run))} palette={palette} />
           <Action Icon={Eye} label="إظهار الإجابة" onPress={() => setRun(showAnswer(run))} palette={palette} />
         </>}
-        {/* After the answer, the ayah's mushaf button joins the card's row, not the card (owner, 2026-11-15). */}
-        {!isTree(question) && !isCompare(question) && question.ayahKey && run.typed[0][0] !== undefined &&
-          <Action Icon={BookOpen} label="في المصحف" onPress={() => readAyah(question.ayahKey!)} palette={palette} />}
         <QuizActions palette={palette} />
       </>}>
       {isCompare(question)
@@ -404,10 +434,12 @@ function TarajimPost({ id, palette }: { id: string; palette: Palette }) {
   const virtue = pick.person.virtues[pick.index];
   const open = () => router.push({ pathname: '/person', params: { slug: pick.person.slug } });
   return (
-    <Post palette={palette} head={<PostHead Icon={Users} title="من التراجم" sub={personName(pick.person)} palette={palette} open={{ onPress: open, label: `افتح ترجمة ${personName(pick.person)}` }} />}>
+    <Post palette={palette} head={<PostHead Icon={Users} title="من التراجم" sub={personName(pick.person)} palette={palette} open={{ onPress: open, label: `افتح ترجمة ${personName(pick.person)}` }} />}
+      open={<Action Icon={Users} label={`افتح ترجمة ${personName(pick.person)}`} onPress={open} palette={palette} />}
+      source={sourcesOf(pageSources(virtue.refs))}>
       <View style={{ padding: 14, gap: 6 }}>
         <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{virtue.text}</Text>
-        <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{virtue.by.length ? `${sayerLine(virtue)} · ` : ''}{pageLabel(virtue.refs)}</Text>
+        {virtue.by.length ? <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{sayerLine(virtue)}</Text> : null}
       </View>
     </Post>
   );
@@ -425,12 +457,13 @@ function TiePost({ id, palette }: { id: string; palette: Palette }) {
   const name = (slug: string) => personName(GRAPH.nodes.get(slug)!);
   const open = () => router.push({ pathname: '/between', params: { slugs: `${pair.a},${pair.b}` } });
   return (
-    <Post palette={palette} head={<PostHead Icon={Link2} title="صلة" sub={`${name(pair.a)} و${name(pair.b)}`} palette={palette} open={{ onPress: open, label: `ارسم الصلة بين ${name(pair.a)} و${name(pair.b)}` }} />}>
+    <Post palette={palette} head={<PostHead Icon={Link2} title="صلة" sub={`${name(pair.a)} و${name(pair.b)}`} palette={palette} open={{ onPress: open, label: `ارسم الصلة بين ${name(pair.a)} و${name(pair.b)}` }} />}
+      open={<Action Icon={Link2} label={`ارسم الصلة بين ${name(pair.a)} و${name(pair.b)}`} onPress={open} palette={palette} />}
+      source={sourcesOf(pageSources(pair.steps.flatMap(step => step.link.refs)))}>
       <View style={{ padding: 14, gap: 6 }}>
         {/* The same drawing as «بينه وبين…» (owner, 2026-11-19: the feature exists, so the card shows it). */}
         <TiesChain nodes={nodes} steps={pair.steps} first={pair.a} picked={[pair.a, pair.b]} width={Math.min(width - 60, 480)} palette={palette} inCard />
         <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{chainSentence(GRAPH, pair.steps, personName)}.</Text>
-        <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{[...new Set(pair.steps.map(step => pageLabel(step.link.refs)))].join(' · ')}</Text>
       </View>
     </Post>
   );
@@ -449,12 +482,13 @@ function NamePost({ kind, id, palette }: { kind: 'laqab' | 'kunya'; id: string; 
   const open = () => router.push({ pathname: '/person', params: { slug: person.slug } });
   const quote = unvowelled(fact.text).trim() !== name ? fact.text : '';
   return (
-    <Post palette={palette} head={<PostHead Icon={Users} title={kind === 'laqab' ? 'لقب وصاحبه' : 'كنية وصاحبها'} sub={who} palette={palette} open={{ onPress: open, label: `افتح ترجمة ${who}` }} />}>
+    <Post palette={palette} head={<PostHead Icon={Users} title={kind === 'laqab' ? 'لقب وصاحبه' : 'كنية وصاحبها'} sub={who} palette={palette} open={{ onPress: open, label: `افتح ترجمة ${who}` }} />}
+      open={<Action Icon={Users} label={`افتح ترجمة ${who}`} onPress={open} palette={palette} />}
+      source={sourcesOf(pageSources(fact.refs))}>
       <View style={{ padding: 14, gap: 4 }}>
         <Text style={{ color: palette.accent, fontSize: 30, lineHeight: 48, fontWeight: '700', textAlign: 'right' }}>{name}</Text>
         <Text style={{ color: palette.ink, fontSize: 19, lineHeight: 30, textAlign: 'right' }}>{who}</Text>
         {quote ? <Text style={{ color: palette.muted, fontSize: 16, lineHeight: 28, textAlign: 'right' }}>«{quote}»{fact.by.length ? ` ${sayerLine(fact)}` : ''}</Text> : null}
-        <Credit facts={[fact]} palette={palette} />
       </View>
     </Post>
   );
@@ -471,7 +505,9 @@ function LifePost({ slug, palette }: { slug: string; palette: Palette }) {
   const she = person.sex === 'FEMALE';
   const open = () => router.push({ pathname: '/person', params: { slug } });
   return (
-    <Post palette={palette} head={<PostHead Icon={History} title={she ? 'من حياتها' : 'من حياته'} sub={personName(person)} palette={palette} open={{ onPress: open, label: `افتح ترجمة ${personName(person)}` }} />}>
+    <Post palette={palette} head={<PostHead Icon={History} title={she ? 'من حياتها' : 'من حياته'} sub={personName(person)} palette={palette} open={{ onPress: open, label: `افتح ترجمة ${personName(person)}` }} />}
+      open={<Action Icon={Users} label={`افتح ترجمة ${personName(person)}`} onPress={open} palette={palette} />}
+      source={sourcesOf(uniqueSources(items.flatMap(item => [...item.refs, ...item.yearRefs]).map(citeSource)))}>
       <View style={{ paddingVertical: 14, paddingHorizontal: 10 }}>
         <LifeTimeline items={items} palette={palette} inCard compact linked={false} />
       </View>
@@ -516,7 +552,12 @@ const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece
   const { height: screen } = useWindowDimensions();
   // The matrix's card follows its rows, up to most of the screen (owner, 2026-11-18); the tree keeps its own height.
   const [height, onFit] = useFitHeight(Math.max(TREE_HEIGHT, Math.round(screen * TREE_SHARE)));
-  const embedded = useMemo(() => ({ open: (at: BranchPiece) => toTab({ pathname: '/branches', params: { tree: at.id } }), ayatRoom: { height: room, set: setRoom }, onFit, extra: <CardMenuActions /> }), [room, onFit]);
+  const embedded = useMemo(() => {
+    const open = (at: BranchPiece) => toTab({ pathname: '/branches', params: { tree: at.id } });
+    const lead = <Action Icon={TreeIcon} label="افتح الشجرة في متشابهات القرآن" onPress={() => open(piece)} palette={palette} />;
+    return { open, ayatRoom: { height: room, set: setRoom }, onFit, extra: { lead, aside: <NotMineAction /> } };
+  }, [room, onFit, piece, palette]);
+  const sources = useMemo(() => sourcesOf(pieceSources(piece.keys, piece.group)), [piece]);
   // The pager draws the tree in its own card and its buttons under it, so the post is the head and the pager.
   return (
     <View style={{ gap: 4 }}>
@@ -524,6 +565,7 @@ const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece
       <View style={{ height: height + room }}>
         <TreePager pieces={pieces} list={EMPTY_LIST} palette={palette} mode={mode} around={around} start={0} embedded={embedded} />
       </View>
+      <SourceLine named={sources} sources={sources} palette={palette} />
     </View>
   );
 });
@@ -533,7 +575,7 @@ function SavedAyahPost({ ayah, palette }: { ayah: string; palette: Palette }) {
   const [surah, number] = ayah.split(':').map(Number);
   return (
     <Post palette={palette} head={<PostHead Icon={Bookmark} title="من المحفوظات" sub={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />}
-      actions={<Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: ayah })} palette={palette} />}>
+      open={<Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: ayah })} palette={palette} />} source={mushafOf(ayah)}>
       <View style={{ padding: 12 }}>
         <AyahLines ayah={ayah} palette={palette} shown whole write={null} checked={null} />
       </View>
@@ -573,7 +615,8 @@ const StoryPost = memo(function StoryPost({ slug, phase, palette }: { slug: stri
   const open = () => { continueAfter('prophets', `${slug}-${phase}`); router.push({ pathname: '/prophets/[slug]', params: { slug } }); };
   return (
     <Post palette={palette} head={<PostHead Icon={ScrollText} title={prophet.title} sub={prophet.story.phases[phase]} palette={palette} open={{ onPress: () => open(), label: 'افتح القصة' }} />}
-      actions={<Action Icon={BookOpen} label="افتح القصة" onPress={() => open()} palette={palette} />}>
+      open={<Action Icon={BookOpen} label="افتح القصة" onPress={() => open()} palette={palette} />}
+      source={sourcesOf([storySource(prophet.events, phase)])}>
       <ScrollView nestedScrollEnabled style={{ maxHeight: Math.round(screen * FIT_SHARE) }} contentContainerStyle={{ paddingVertical: 8 }}>
         <StoryMap map={map} events={prophet.events} phases={prophet.story.phases} at={phase} palette={palette} onPick={open} onTitle={open} />
       </ScrollView>
@@ -593,7 +636,7 @@ function JuzPost({ palette }: { palette: Palette }) {
   const read = () => openJuz(juz[0]);
   return (
     <Post palette={palette} head={<PostHead Icon={BookOpen} title="جزء اليوم" sub={[juzLabel(juz), date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ')} palette={palette} />}
-      actions={<Action Icon={BookOpen} label={`اقرأ ${juzLabel(juz)}`} onPress={read} palette={palette} />}>
+      open={<Action Icon={BookOpen} label={`اقرأ ${juzLabel(juz)}`} onPress={read} palette={palette} />} source={mushafOf(`${start.surah}:${start.ayah}`)}>
       <Tap onPress={read} accessibilityRole="button" accessibilityLabel={`اقرأ ${juzLabel(juz)}، جزء اليوم`} style={{ paddingHorizontal: 12, paddingVertical: 6 }}>
         <PageTop page={page} palette={palette} />
       </Tap>
@@ -608,6 +651,8 @@ function JuzPost({ palette }: { palette: Palette }) {
 function PrayerPost({ prayer, times, palette }: { prayer: Exclude<PrayerKey, 'sunrise'>; times: PrayerDay; palette: Palette }) {
   const now = useMinute();
   const [place] = prayerPlace.use();
+  const [settings] = prayerSettings.use();
+  const method = METHODS.find(each => each.id === settings.method)?.label ?? '';
   const { date } = useToday();
   const left = Math.ceil((times[prayer].getTime() - now.getTime()) / 60_000);
   const title = left > 0 ? `${PRAYER_NAMES[prayer]} ${inMinutes(left)}` : `حان وقت ${PRAYER_NAMES[prayer]}`;
@@ -616,7 +661,8 @@ function PrayerPost({ prayer, times, palette }: { prayer: Exclude<PrayerKey, 'su
       actions={<>
         <Action Icon={Clock} label="مواقيت الصلاة" onPress={() => openUtility('times')} palette={palette} />
         <Action Icon={Compass} label="القبلة" onPress={() => openUtility('qibla')} palette={palette} />
-      </>}>
+      </>}
+      source={[{ line: `طريقة الحساب · ${method}`, quotes: [{ text: `حُسبت المواقيت بطريقة ${method}${settings.hanafi ? '، والعصر على مذهب الحنفية' : ''}، وتُغيَّر من مواقيت الصلاة.` }] }]}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 14, paddingVertical: 12 }}>
         {FIVE.map(key => {
           const color = key === prayer ? palette.accent : palette.ink;
@@ -701,7 +747,8 @@ const ScenePost = memo(function ScenePost({ id, palette }: { id: string; palette
   if (!view) return null;
   return (
     <Post palette={palette} head={<PostHead Icon={Presentation} title="من المشاهد" sub={topicOf(view).name} palette={palette} open={{ onPress: () => toTab('/lataif'), label: 'افتح المشاهد' }} />}
-      actions={<IltifatActions view={view} palette={palette} />}>
+      open={<IltifatActions view={view} only="open" palette={palette} />} share={<IltifatActions view={view} only="share" palette={palette} />}
+      source={[exampleReference(view, itqan)].map(found => ({ line: found.title, quotes: found.quotes }))}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 10 }}><IltifatScene view={view} palette={palette} /></View>
     </Post>
   );
@@ -718,10 +765,8 @@ function SiraPost({ id, palette }: { id: string; palette: Palette }) {
   const open = () => { continueAfter('sira', id); toTab({ pathname: '/story', params: { slug: story.slug } }); };
   return (
     <Post palette={palette} head={<PostHead Icon={ScrollText} title="من قصص السيرة" sub={story.name} palette={palette} open={{ onPress: open, label: `افتح ${story.name}` }} />}
-      actions={<>
-        <Action Icon={ScrollText} label={`افتح ${story.name}`} onPress={open} palette={palette} />
-        <Action Icon={ExternalLinkIcon} label={`المصدر: ${report.cite}`} onPress={() => openExternal(report.url)} palette={palette} />
-      </>}>
+      open={<Action Icon={ScrollText} label={`افتح ${story.name}`} onPress={open} palette={palette} />}
+      source={sourcesOf([citeSource({ text: '', cite: report.cite, url: report.url })])}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
         <Report report={report} palette={palette} plain />
         {story.ayat.map(ayat => <StoryAyat key={ayat.from} ayat={ayat} palette={palette} folded />)}
@@ -736,7 +781,7 @@ const FEED_FORTY = FORTY.entries.filter(fromSahihayn);
 /** Ibn Rajab's explanations of a phrase of those hadith, for his card. */
 const RAJAB_PASSAGES = rajabFeedPassages(rajab as RajabChapter[], FORTY.entries);
 /** A passage's lasting id: its hadith's number and its first paragraph's place in the chapter. */
-const rajabId = ({ chapter, passage }: (typeof RAJAB_PASSAGES)[number]) => `${chapter.n}-${chapter.paragraphs.indexOf(passage[0])}`;
+const rajabId = ({ chapter, passage }: (typeof RAJAB_PASSAGES)[number]) => rajabItem(chapter.n, chapter.paragraphs.indexOf(passage[0]));
 
 /**
  * A passage of Ibn Rajab's Jami' al-'Ulum wal-Hikam (owner, 2026-11-18: every feature gets a card), where he explains a phrase
@@ -750,10 +795,8 @@ function RajabPost({ id, palette }: { id: string; palette: Palette }) {
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
     <Post palette={palette} head={<PostHead Icon={BookOpenText} title="من شرح ابن رجب" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} palette={palette} open={{ onPress: open, label: `افتح ${entry.heading}` }} />}
-      actions={<>
-        <Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />
-        <Action Icon={ExternalLinkIcon} label={`المصدر: ${FORTY.books.ibnrajab.title}`} onPress={() => openExternal(shamelaPage('ibnrajab', picked.passage[0].shamela))} palette={palette} />
-      </>}>
+      open={<Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}
+      source={sourcesOf([{ book: FORTY.books.ibnrajab.title, author: 'ابن رجب' }])}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
         <IbnRajab chapter={picked.chapter} only={picked.passage} palette={palette} />
       </View>
@@ -769,10 +812,8 @@ function HadithPost({ id, palette }: { id: string; palette: Palette }) {
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
     <Post palette={palette} head={<PostHead Icon={MessagesSquare} title="من الحديث" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} palette={palette} open={{ onPress: open, label: `افتح ${entry.heading}` }} />}
-      actions={<>
-        <Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />
-        <Action Icon={ExternalLinkIcon} label={`المصدر: ${FORTY.books[book].title}`} onPress={() => openExternal(shamelaPage(book, entry.shamela))} palette={palette} />
-      </>}>
+      open={<Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}
+      source={sourcesOf([compiledSource(entry)])}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
         <Text style={{ color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right' }}>{entry.text}</Text>
       </View>
@@ -798,10 +839,8 @@ function SahihPost({ slug, id, palette }: { slug: SahihSlug; id: string; palette
   const where = `${place.kitab.title}${place.bab?.title ? ` › ${place.bab.title}` : ''}${book.headingsBy === 'nawawi' && place.bab?.title ? ' (تبويب النووي)' : ''}`;
   return (
     <Post palette={palette} head={<PostHead Icon={MessagesSquare} title={`من ${book.title}`} sub={where} palette={palette} open={{ onPress: open, label: `افتح ${book.title} ${num(Number(id))}` }} />}
-      actions={<>
-        <Action Icon={MessagesSquare} label={`افتح ${book.title} ${num(Number(id))}`} onPress={open} palette={palette} />
-        <Action Icon={ExternalLinkIcon} label={`المصدر: ${book.title}`} onPress={() => openExternal(sahihPage(book, found.hadith.routes[0].shamela))} palette={palette} />
-      </>}>
+      open={<Action Icon={MessagesSquare} label={`افتح ${book.title} ${num(Number(id))}`} onPress={open} palette={palette} />}
+      source={sourcesOf([{ book: book.title, author: slug === 'bukhari' ? 'البخاري' : 'مسلم' }])}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
         <SahihHadithView book={book} hadith={found.hadith} palette={palette} />
       </View>
@@ -819,7 +858,8 @@ function RecordedPost({ id, palette }: { id: string; palette: Palette }) {
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
     <Post palette={palette} head={<PostHead Icon={Network} title="من أخرجه" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} palette={palette} open={{ onPress: open, label: `افتح ${entry.heading}` }} />}
-      actions={<Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}>
+      open={<Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}
+      source={sourcesOf(uniqueSources([...entry.records.map(recordSource), compiledSource(entry)]))}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
         <Text numberOfLines={3} style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>{entry.text}</Text>
         <HadithBooks top={entry.heading} boxes={recordedIn(entry)} namer={compilerOf(entry).name} palette={palette} />
@@ -840,13 +880,10 @@ function IsnadPost({ id, palette }: { id: string; palette: Palette }) {
   const record = entry && drawnBukhari(entry);
   if (!entry || !record) return null;
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
-  const where = `${FORTY.books.bukhari.title} ${num(record.number)}`;
   return (
     <Post palette={palette} head={<PostHead Icon={GitCommitVertical} title="من الإسناد" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} palette={palette} open={{ onPress: open, label: `افتح ${entry.heading}` }} />}
-      actions={<>
-        <Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />
-        <Action Icon={ExternalLinkIcon} label={`المصدر: ${where}`} onPress={() => openExternal(shamelaPage('bukhari', record.shamela))} palette={palette} />
-      </>}>
+      open={<Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}
+      source={sourcesOf([recordSource(record)])}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
         <Isnad isnad={record.isnad!} palette={palette} />
         <Text numberOfLines={3} style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>{record.text.slice(record.isnadEnd)}</Text>
@@ -872,10 +909,9 @@ function TermPost({ id, day, palette }: { id: string; day: number; palette: Pale
   const open = () => toTab({ pathname: '/term', params: { name: term.name } });
   return (
     <Post palette={palette} head={<PostHead Icon={BookOpenText} title="من مصطلحات البلاغة" sub={quote.book === 'itqan' ? 'الإتقان للسيوطي' : 'تلخيص المفتاح للقزويني'} palette={palette} open={{ onPress: open, label: `افتح ${name}` }} />}
-      actions={<>
-        <Action Icon={BookOpenText} label={`${name}: تعريفه وأمثلته`} onPress={open} palette={palette} />
-        <Action Icon={ListTree} label="مصطلحات البلاغة" onPress={() => toTab('/terms')} palette={palette} />
-      </>}
+      open={<Action Icon={BookOpenText} label={`${name}: تعريفه وأمثلته`} onPress={open} palette={palette} />}
+      actions={<Action Icon={ListTree} label="مصطلحات البلاغة" onPress={() => toTab('/terms')} palette={palette} />}
+      source={sourcesOf([termSource(quote)])}
       press={{ onPress: open, label: `${name}: تعريفه وأمثلته` }}>
       <View style={{ paddingHorizontal: 14, paddingVertical: 12, gap: 6 }}>
         <Text style={{ color: palette.ink, fontSize: 24, textAlign: 'right' }}>{name}</Text>
@@ -894,7 +930,7 @@ function TermPost({ id, day, palette }: { id: string; day: number; palette: Pale
 
 /** Every battle's moments, in the battles' order, for the moment card. */
 const MOMENTS = (momentBattles as AppMomentBattle[]).flatMap(battle => battle.moments.map((moment, i) => ({ battle, moment, n: i + 1 })));
-const momentId = (item: (typeof MOMENTS)[number]) => `${item.battle.slug}-${item.n}`;
+const momentId = (item: (typeof MOMENTS)[number]) => momentItem(item.battle.slug, item.n);
 
 /** A moment of a battle in the source's words (owner, 2026-11-18); the head opens the battle's page. */
 function MomentPost({ id, palette }: { id: string; palette: Palette }) {
@@ -905,10 +941,8 @@ function MomentPost({ id, palette }: { id: string; palette: Palette }) {
   return (
     <Post palette={palette} head={<PostHead Icon={Swords} title={`من ${battle.name}`} sub={battleLine(battle)} palette={palette}
       open={{ onPress: open, label: `افتح ${battle.name}` }} />}
-      actions={<>
-        <Action Icon={Swords} label={`افتح ${battle.name}`} onPress={open} palette={palette} />
-        <Action Icon={ExternalLinkIcon} label={`المصدر: ${moment.cite}`} onPress={() => openExternal(moment.url)} palette={palette} />
-      </>}>
+      open={<Action Icon={Swords} label={`افتح ${battle.name}`} onPress={open} palette={palette} />}
+      source={sourcesOf([citeSource({ text: '', cite: moment.cite, url: moment.url })])}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}><Moment moment={moment} n={n} palette={palette} plain /></View>
     </Post>
   );
@@ -924,7 +958,7 @@ const NOTE_HEADS: Record<AyahNote, { Icon: IconType; title: string; open: string
   irab: { Icon: ListTree, title: 'من الإعراب', open: 'إعراب الآية' },
   qiraat: { Icon: Layers, title: 'من القراءات', open: 'القراءات كاملة' },
 };
-type NoteBody = { key: string } & ({ text: string; source: string; heading?: string } | { word: number; shown: string; role: string; morph: string } | { readings: WordDifference[] });
+type NoteBody = { key: string; sources: QuizSource[] } & ({ text: string; heading?: string } | { word: number; shown: string; role: string; morph: string } | { readings: WordDifference[] });
 /** The lines of a book's words a card shows before «المزيد». */
 const NOTE_LINES = 4;
 
@@ -941,10 +975,12 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
   const on = noteBookOn(kind);
   const note = useMemo((): NoteBody | null => {
     const key = id;
-    if (kind === 'tafsir') { const passage = tafsirSadiOf(key); return passage ? { key, text: withoutOpeningQuote(passage.text), source: 'تفسير السعدي' } : null; }
+    if (kind === 'tafsir') { const passage = tafsirSadiOf(key); return passage ? { key, text: withoutOpeningQuote(passage.text), sources: [sadiSource(passage)] } : null; }
     if (kind === 'balagha') {
-      const found = balaghaNote(itqanAt(itqan, key));
-      return found ? { key, ...found, source: 'الإتقان للسيوطي' } : null;
+      const paragraphs = itqanAt(itqan, key);
+      const found = balaghaNote(paragraphs);
+      const paragraph = paragraphs.find(each => each.places === 1);
+      return found && paragraph ? { key, ...found, sources: [itqanSource(paragraph)] } : null;
     }
     if (kind === 'irab') {
       const words = ayahMushafWords(key);
@@ -955,9 +991,9 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
       const particle = (i: number) => corpusWords(key, i).every(c => lines[c]?.morph.startsWith('حرف'));
       const word = order.find(i => hasRole(i) && !particle(i)) ?? order.find(hasRole);
       if (word === undefined) return null;
-      return { key, word, shown: words[word], role: corpusWords(key, word).map(c => lines[c]?.role).filter(Boolean).join('، '), morph: corpusWords(key, word).map(c => lines[c]?.morph).filter(Boolean).join(' · ') };
+      return { key, sources: irabSources(key), word, shown: words[word], role: corpusWords(key, word).map(c => lines[c]?.role).filter(Boolean).join('، '), morph: corpusWords(key, word).map(c => lines[c]?.morph).filter(Boolean).join(' · ') };
     }
-    return { key, readings: qiraatOf(key) };
+    return { key, sources: qiraatSources(key), readings: qiraatOf(key) };
   }, [kind, id, day]);
   const [open, setOpen] = useState(false);
   // The sheet stays while it is open, even when its book is taken off the phone from inside it.
@@ -969,8 +1005,9 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
   const more = <Text style={{ color: palette.accent, fontSize: 14, textAlign: 'right', paddingHorizontal: 14 }}>المزيد</Text>;
   return (
     <>
-      {on && <Post palette={palette} head={<PostHead Icon={head.Icon} title={head.title} sub={[`${shortNames[surah] ?? ''} ${num(number)}`, 'source' in note ? note.source : ''].filter(Boolean).join(' · ')} palette={palette} />}
-        actions={<Action Icon={head.Icon} label={head.open} onPress={kind === 'qiraat' ? () => toTab({ pathname: '/qiraat', params: { ayah: note.key, at: String(Date.now()) } }) : show} palette={palette} />}
+      {on && <Post palette={palette} head={<PostHead Icon={head.Icon} title={head.title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />}
+        open={<Action Icon={head.Icon} label={head.open} onPress={kind === 'qiraat' ? () => toTab({ pathname: '/qiraat', params: { ayah: note.key, at: String(Date.now()) } }) : show} palette={palette} />}
+        source={sourcesOf(note.sources)}
         press={{ onPress: show, label: `${head.open}، ${shortNames[surah] ?? ''} ${num(number)}` }}>
         {'readings' in note ? <View style={{ paddingVertical: 10 }}><QiraatPlace ayah={note.key} max={2} lines bare palette={palette} /></View> : <View style={{ paddingVertical: 10, gap: 6 }}>
           <View pointerEvents="none" style={{ paddingHorizontal: 12 }}>
@@ -978,14 +1015,14 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
           </View>
           <View style={{ height: 1, backgroundColor: palette.rule, marginHorizontal: 14, opacity: 0.6 }} />
           {'heading' in note && note.heading ? <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right', paddingHorizontal: 14 }}>{note.heading}</Text> : null}
-          {'source' in note && <>
+          {'text' in note && <>
             <Text numberOfLines={NOTE_LINES} style={{ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'right', writingDirection: 'rtl', paddingHorizontal: 14 }}>
               {tafsirRuns(note.text).map((run, i) => (run.quran ? <QuranWords key={i} style={{ color: palette.accent }}>{run.text}</QuranWords> : run.text))}
             </Text>
             {more}
           </>}
           {'word' in note && <View style={{ paddingHorizontal: 14, gap: 2 }}>
-            <Text style={{ textAlign: 'right', writingDirection: 'rtl' }}><QuranWords style={{ fontSize: 26, lineHeight: 48, color: palette.accent }}>{note.shown}</QuranWords></Text>
+            <QuranWord look={{ color: palette.accent }} place={{ textAlign: 'right' }}>{note.shown}</QuranWord>
             <Text style={{ color: palette.ink, fontSize: 19, lineHeight: 31, textAlign: 'right' }}>{note.role}</Text>
             <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>{note.morph}</Text>
           </View>}
@@ -1001,10 +1038,10 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
 /** Every virtue of the converted people, read once: the «من التراجم» card's list. */
 let virtues: { person: (typeof PEOPLE)[number]; index: number }[] | undefined;
 const virtueList = () => (virtues ??= allVirtues(PEOPLE));
-const virtueOf = (id: string) => virtueList().find(each => `${each.person.slug}-${each.index}` === id);
+const virtueOf = (id: string) => virtueList().find(each => virtueItem(each.person.slug, each.index) === id);
 const nameLists: Partial<Record<'laqab' | 'kunya', NameFact[]>> = {};
 const nameList = (kind: 'laqab' | 'kunya') => (nameLists[kind] ??= kind === 'laqab' ? laqabFacts(PEOPLE) : kunyaFacts(PEOPLE));
-const nameId = (each: NameFact) => `${each.person.slug}|${each.name}`;
+const nameId = (each: NameFact) => nameItem(each.person.slug, each.name);
 
 /** The content cards drawn from a list (pairs and trees have their own picks): each kind's items, by a lasting id. */
 type ListKind = Exclude<FeedCardKind, 'pair' | 'tree'>;
@@ -1020,11 +1057,11 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   rajab: () => RAJAB_PASSAGES.map(rajabId),
   recorded: () => FEED_FORTY.map(entry => String(entry.n)),
   isnad: () => FEED_CHAINS.map(entry => String(entry.n)),
-  prophets: () => STORY_GROUPS.map(group => `${group.slug}-${group.phase}`),
+  prophets: () => STORY_GROUPS.map(group => storyItem(group.slug, group.phase)),
   sira: () => STORIES.filter(story => story.reports[0]).map(story => story.slug),
   moment: () => MOMENTS.map(momentId),
-  tarajim: () => virtueList().map(each => `${each.person.slug}-${each.index}`),
-  tie: () => tiePairs().map(pair => `${pair.a},${pair.b}`),
+  tarajim: () => virtueList().map(each => virtueItem(each.person.slug, each.index)),
+  tie: () => tiePairs().map(pair => tieItem(pair.a, pair.b)),
   laqab: () => nameList('laqab').map(nameId),
   kunya: () => nameList('kunya').map(nameId),
   life: lifePeople,

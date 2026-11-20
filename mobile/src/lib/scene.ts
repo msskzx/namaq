@@ -1,5 +1,6 @@
 import type { Beat } from './growth';
 import { OUTRO, PAUSE, READY } from '@shared/video/recorder';
+import { FLOW_LINE } from '@shared/quran/quranText/flow';
 
 export { VIDEO_TYPES } from '@shared/video/recorder';
 
@@ -145,7 +146,7 @@ function wrap(words, width, size) {
   return lines;
 }
 
-// Words centred line by line in their place, as Words sets them (a line every 1.9 of the size).
+// Words centred line by line in their place, as Words sets them (a line every FLOW_LINE of the size).
 function drawWords(words, size, lineHeight, rect) {
   // The place is exactly as wide as its longest line: a pixel of slack keeps rounding from breaking that line in two.
   // A line more than the app broke into keeps inside the place, so it never runs onto the box's references.
@@ -213,7 +214,7 @@ function drawText(box) {
     return;
   }
   // A box drawn by its own content (a quiz's): its words centred, its references above or under them.
-  var size = box.size, lineHeight = size * 1.9, label = 13, pad = box.bare ? 2 : 12;
+  var size = box.size, lineHeight = size * ${FLOW_LINE}, label = 13, pad = box.bare ? 2 : 12;
   var lines = wrap(box.words, Math.max(10, box.w - 2 * pad) + 2, size);
   var block = lines.length * lineHeight + (box.header ? label * 1.8 + 5 : 0) + (box.footer ? label * 1.8 + 4 : 0);
   var y = box.y + (box.h - block) / 2;

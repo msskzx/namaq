@@ -20,7 +20,7 @@ export function Refs({ refs }: { refs: AppCite[] }) {
 export function Report({ report, plain = false, titled = false }: { report: AppReport;
   /** Each moment with our few words naming it above it, small (the quiz's look-up: «ما الذي جاء بعد …؟» asks by them). */
   titled?: boolean;
-  /** In a feed card the source is plain text, and its link is a button under the card (the app's `plain`). */
+  /** In a feed card the source is in the card's source line under its buttons (owner, 2026-11-20); the grading stays. */
   plain?: boolean }) {
   return (
     <div className="flex flex-col gap-3">
@@ -29,10 +29,11 @@ export function Report({ report, plain = false, titled = false }: { report: AppR
         {titled && <p className="text-sm font-bold text-[var(--home-accent)]">{moment.title}</p>}
         <p className="text-lg leading-9">{moment.text}</p>
       </div>)}
-      <p className="text-sm text-[var(--home-muted)]">
-        {report.grading ? `${report.grading} · ` : ''}
-        {plain ? report.cite : <ExternalLink href={report.url} className="text-[var(--home-muted)]">{report.cite}</ExternalLink>}
-      </p>
+      {plain ? report.grading && <p className="text-sm text-[var(--home-muted)]">{report.grading}</p>
+        : <p className="text-sm text-[var(--home-muted)]">
+          {report.grading ? `${report.grading} · ` : ''}
+          <ExternalLink href={report.url} className="text-[var(--home-muted)]">{report.cite}</ExternalLink>
+        </p>}
     </div>
   );
 }

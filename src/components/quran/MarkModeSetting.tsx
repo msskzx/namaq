@@ -6,6 +6,8 @@ import { useLanguage } from '@/components/language/LanguageContext';
 import { MARK_LEGEND, MARK_MODE_NAMES, MARK_MODES, MARK_SETTING_LABEL, type MarkMode } from '@shared/quran/wordMatch';
 import { readMarkMode, setMarkMode } from '@/lib/markMode';
 import styles from '@/components/theme/ThemeTiles.module.css';
+import { TILE_SHARE } from '@shared/viewPreview';
+import { MiniQuran } from '@/components/quran/text/AyahFlow';
 
 const COLOUR: Record<MarkMode, Record<string, string>> = {
   kinds: { exact: 'var(--home-accent)', written: 'var(--home-amber)', root: 'var(--home-root)' },
@@ -28,9 +30,9 @@ export default function MarkModeSetting() {
         const name = ar ? MARK_MODE_NAMES[option].ar : MARK_MODE_NAMES[option].en;
         return <button key={option} type="button" aria-pressed={on} title={name} onClick={() => { setMarkMode(option); setMode(option); }} className={styles.tile}>
           <span className={styles.thumb} aria-hidden>
-            <span className={styles.words}>
+            <span className={styles.words}><MiniQuran share={TILE_SHARE.words}>
               {words.map(item => <span key={item.kind} style={{ color: COLOUR[option][item.kind] }}>{item.word}</span>)}
-            </span>
+            </MiniQuran></span>
             {on && <span className={styles.check}><Check size={10} strokeWidth={3} aria-hidden /></span>}
           </span>
           <span>{name}</span>

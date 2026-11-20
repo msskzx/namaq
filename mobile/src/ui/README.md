@@ -27,6 +27,7 @@ below. Never copy one into a screen.
 | `Text` | Amiri text with the interface scale | every non-Quran text |
 | `ExternalLink` (+ `openExternal`) | Opens a page outside the app | every link out of Namaq |
 | `Reference` | A book's quote with its page as a link | the sources of a section |
+| `SourceLine` | A home card's source line under its buttons: a book icon and the books, a tap opening a sheet with where in them; `sourcesOf` turns a question's `QuizSource[]` into its entries. A `Reference` inside a `CardWithRow` hands itself up to the line (`sourceSlot.ts`) | every home card (owner 2026-11-20) |
 | `Folded` | A passage's credit under a rule at its card's foot, folded; opens to the edition and the page's link | each passage in the reader's book sheets (balagha, meaning); the ayat a balagha quote fits when al-Suyuti names none |
 | `SettingRow` | A settings row that folds: icon, name, what is chosen; a tap opens the picker under it | settings' «ما أحفظه» and «اهتماماتي» |
 | `TapRow` | A frameless row of a drawing: a tap opens what it names, a long press shows its source; 44 tall | the rows of the «حياته» timeline |

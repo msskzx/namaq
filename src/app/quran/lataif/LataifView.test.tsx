@@ -35,7 +35,8 @@ describe('LataifView', () => {
   it('colours a word with the colour of its chip', () => {
     render(<LataifView views={views} references={references} />);
     const word = within(card('فَاطِرْ ٩')).getByText('فَسُقۡنَٰهُ');
-    expect(word.getAttribute('style')).toContain(VOICE_COLOR.we);
+    // The colour sits on the span around the word (the module's AyahWords sets no colour of its own).
+    expect(word.parentElement!.getAttribute('style')).toContain(VOICE_COLOR.we);
   });
 
   it('shows al-Zukhruf as a trunk and two leaves, the differing letter in the accent', () => {

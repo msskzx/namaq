@@ -12,12 +12,13 @@ import { corpusWords } from '@shared/quran/words';
 import { bookState, readBook, useBooks } from '@/lib/books';
 import { surahNames } from '@/lib/branches';
 import { ayahMushafWords } from '@/lib/mushaf';
-import { QURAN_FONT, type Palette } from '@/lib/theme';
+import type { Palette } from '@/lib/theme';
 import QuranWords from './quran/text/QuranWords';
 import { BookList } from './Books';
 import Sheet from '@/ui/Sheet';
 import Card from '@/ui/Card';
 import Chip from '@/ui/Chip';
+import { QuranWord } from '@/components/quran/text/AyahFlow';
 
 export type IrabTarget = { key: string; word: number };
 
@@ -80,7 +81,7 @@ export function IrabBody({ target, palette, onClose }: { target: IrabTarget; pal
         )}
         {shortOn && (
           <Card palette={palette} pad={[10, 14]} gap={4}>
-            <Text style={{ fontFamily: QURAN_FONT, fontSize: 30, lineHeight: 56, color: palette.accent, textAlign: 'right', writingDirection: 'rtl' }}>{words[picked]}</Text>
+            <QuranWord look={{ color: palette.accent }} place={{ textAlign: 'right' }}>{words[picked]}</QuranWord>
             {corpus.map(i => lines[i] && (
               <View key={i} style={{ gap: 2 }}>
                 {lines[i].role && <Text style={{ color: palette.ink, fontSize: 21, lineHeight: 34, textAlign: 'right' }}>{lines[i].role}</Text>}

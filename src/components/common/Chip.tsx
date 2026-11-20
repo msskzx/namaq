@@ -4,8 +4,8 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { Check, X } from 'lucide-react';
 import { num } from '@shared/quran/arabicNumber';
-import QuranWords from '@/components/quran/text/QuranWords';
 import { TAP_FLOOR } from './Button';
+import { QuranWord } from '@/components/quran/text/AyahFlow';
 
 /**
  * The one chip, as the app's `ui/Chip`: a round, framed word to pick among others in a row (filters, a topic, a surah).
@@ -30,7 +30,7 @@ export default function Chip({ label, on = false, onClick, href, role = 'button'
   tapThrough?: boolean;
   className?: string;
 }) {
-  const size = small ? 'h-7 px-2.5 text-sm' : quran ? 'px-3.5 text-[1.375rem] leading-[1.8]' : 'min-h-9 px-3 text-[0.9375rem]';
+  const size = small ? 'h-7 px-2.5 text-sm' : quran ? 'px-3.5' : 'min-h-9 px-3 text-[0.9375rem]';
   const base = `inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border ${size}`;
   if (onClear || clearHref) {
     const x = `${TAP_FLOOR} relative grid size-6 place-items-center rounded-full text-[var(--home-muted)] hover:bg-[var(--home-paper-deep)] hover:text-[var(--home-ink)]`;
@@ -47,7 +47,7 @@ export default function Chip({ label, on = false, onClick, href, role = 'button'
     : 'border-[var(--home-rule)] text-[var(--home-ink)]';
   const body = <>
     {check && on && <Check size={13} aria-hidden />}
-    {quran ? <QuranWords>{label}</QuranWords> : label}
+    {quran && typeof label === 'string' ? <QuranWord>{label}</QuranWord> : label}
     {count !== undefined && <span className="text-xs opacity-70">{num(count)}</span>}
   </>;
   if (href) return <Link href={href} aria-label={name} title={name} className={`${base} ${look} hover:border-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--home-accent)] ${className}`}>{body}</Link>;

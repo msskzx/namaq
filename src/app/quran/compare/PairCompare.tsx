@@ -46,6 +46,7 @@ import Frame from '@/components/common/Card';
 import Chip from '@/components/common/Chip';
 import { SearchField } from '@/components/common/Field';
 import Empty from '@/components/common/Empty';
+import { QuranWord } from '@/components/quran/text/AyahFlow';
 
 export type SurahName = { ar: string; en?: string };
 type Names = Record<number, SurahName>;
@@ -121,7 +122,7 @@ function CompareFilter({ a, b, review, todo, scope, names, savedOnly, onSavedOnl
 /** The compare page's help, the app's (mobile/src/components/HelpSheet.tsx), with its colour legend. */
 const COMPARE_HELP = <>
   <p>كل صفحة تجمع سورتين، وكل بطاقة تضع آية من كل سورة جنبًا إلى جنب. اختيرت البطاقات لأن الآيتين في المشهد نفسه أو تشتركان في عبارة نادرة، لا لعدد الكلمات المشتركة. اضغط كلمة ملوّنة لتضيء نظيرتها في الآية الأخرى. النص برواية حفص.</p>
-  <MatchLegend ar extra={<li className="flex items-center gap-3 [:root[data-marks=none]_&]:hidden"><span className="min-w-16 text-center font-quran text-xl text-[color-mix(in_srgb,var(--mark-root)_45%,var(--home-muted))]">بَيَانٌ</span><span>من جذر مشترك بلفظ مختلف، وقد يختلف المعنى</span></li>} />
+  <MatchLegend ar extra={<li className="flex items-center gap-3 [:root[data-marks=none]_&]:hidden"><QuranWord className="min-w-16 text-center text-[color-mix(in_srgb,var(--mark-root)_45%,var(--home-muted))]">بَيَانٌ</QuranWord><span>من جذر مشترك بلفظ مختلف، وقد يختلف المعنى</span></li>} />
 </>;
 
 /** A chevron beside the pair title: previous on the reading side's start, next on its end. Greyed out at either end of the list. */
@@ -345,6 +346,9 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'car
   const [a, b] = card.sides;
   const bookmark = { id, text: `${a.ayat[0]?.words.slice(0, 6).join(' ') ?? ''} …`, href: `${surahPairHref(a.surah, b.surah)}#${anchor}` };
   const saveLabel = saved ? (ar ? 'إزالة من المحفوظة' : 'Remove from saved') : (ar ? 'حفظ' : 'Save');
+  const saveButton = <Button size="icon" variant="muted" aria-pressed={saved} onClick={() => toggleBookmark(bookmark, savedIds)} aria-label={saveLabel} title={saveLabel} className={saved ? 'text-[var(--home-accent)]' : undefined}>
+    {saved ? <BookmarkCheck size={18} aria-hidden /> : <Bookmark size={18} aria-hidden />}
+  </Button>;
   const pick = (target: EventTarget) => {
     const id = (target as HTMLElement).closest?.('mark[data-link]')?.getAttribute('data-link');
     if (id) setLit(current => (current === id ? null : id));
@@ -439,6 +443,8 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'car
       </div>
       {read.studio ? <ReadStudio read={read} ar={ar} card={card} names={names} /> : <div className="flex justify-start">
         {review && <CardReview a={review.a} b={review.b} card={card} />}
+        {/* Shown outside the compare page (the home feed), the button that opens it there leads the row (owner, 2026-11-20). */}
+        {page && <Button size="icon" variant="muted" href={`${page}#${anchor}`} aria-label={ar ? 'افتحها في المقارنة' : 'Open in compare'} title={ar ? 'افتحها في المقارنة' : 'Open in compare'}><ArrowLeftRight size={18} aria-hidden /></Button>}
         {tree && card.group && <Link href={branchesHref(card.group)} aria-label={family} title={family} className={ICON}><TreeIcon size={18} aria-hidden /></Link>}
         {!matrixOnly && <Button size="icon" variant="muted" onClick={() => setView(view === 'tree' ? 'cards' : 'tree')} aria-label={viewLabel} title={viewLabel}>
           {view === 'tree' ? <GalleryHorizontal size={18} aria-hidden /> : <TreeIcon size={18} aria-hidden />}
@@ -446,10 +452,8 @@ export function Card({ card, names, ar, savedIds, review, view: preferred = 'car
         <Button size="icon" variant="muted" aria-pressed={aroundOn} onClick={() => setAround(!aroundOn)} aria-label={aroundLabel} title={aroundLabel}
           className="aria-pressed:text-[var(--home-accent)]"><UnfoldHorizontal size={18} aria-hidden /></Button>
         <Button size="icon" variant="muted" onClick={read.open} aria-label={studioLabel} title={studioLabel}><Clapperboard size={18} aria-hidden /></Button>
-        <Button size="icon" variant="muted" aria-pressed={saved} onClick={() => toggleBookmark(bookmark, savedIds)} aria-label={saveLabel} title={saveLabel} className={saved ? 'text-[var(--home-accent)]' : undefined}>
-          {saved ? <BookmarkCheck size={18} aria-hidden /> : <Bookmark size={18} aria-hidden />}
-        </Button>
-        {page && <Button size="icon" variant="muted" href={`${page}#${anchor}`} aria-label={ar ? 'افتحها في المقارنة' : 'Open in compare'} title={ar ? 'افتحها في المقارنة' : 'Open in compare'}><ArrowLeftRight size={18} aria-hidden /></Button>}
+        {/* Save comes after the card's tools, just before share (owner, 2026-11-20). */}
+        {saveButton}
         <ShareImageButton size="icon" iconSize={18} href={`${page ?? ''}#${anchor}`} onVideo={canRecord() ? read.open : undefined} onPageVideo={onPageVideo} />
       </div>}
       {verdicts.map(({ id: pair, verdict }) => <div key={pair} dir="ltr" className="mt-1 text-sm">

@@ -3,12 +3,12 @@ import { Keyboard, KeyboardAvoidingView, Pressable, ScrollView, View } from 'rea
 import { Text } from '@/ui/Text';
 import { num } from '@shared/quran/arabicNumber';
 import type { Bookmark } from '@shared/bookmarks';
-import { quranText } from '@/lib/quranText';
 import { ALL_KINDS_LIST, applyDraft, draftOf, EMPTY_LIST, suggestions, type FilterDraft, type ListState } from '@/lib/branchList';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useKeyboardShown } from '@/lib/keyboard';
 import { draftValid, FilterActions, FilterFields } from './FilterFields';
-import { QURAN_FONT, type Palette } from '@/lib/theme';
+import type { Palette } from '@/lib/theme';
+import { QuranWord } from './quran/text/AyahFlow';
 import TopBar from '@/ui/TopBar';
 import { surahName } from '@shared/quran/surahNames';
 
@@ -67,14 +67,14 @@ export default function BranchSearch({ state, bookmarks, palette, onClose, onApp
         {found.surahs.length > 0 && found.phrases.length > 0 && <Text style={{ color: palette.muted, fontSize: 12, paddingHorizontal: 16, paddingTop: 10 }}>العبارات</Text>}
         {found.phrases.map(piece => (
           <Pressable key={piece.id} onPress={() => apply({ query: piece.text }, { id: piece.id, query: piece.text })} accessibilityRole="button" style={row}>
-            <Text style={{ flex: 1, color: palette.ink, fontSize: 20, fontFamily: QURAN_FONT, lineHeight: 38, textAlign: 'right' }}>{quranText(piece.text)}</Text>
+            <QuranWord look={{ color: palette.ink }} place={{ flex: 1, textAlign: 'right' }}>{piece.text}</QuranWord>
             <Text style={{ color: palette.accent }}>{num(piece.count)}</Text>
           </Pressable>
         ))}
         {found.outside.length > 0 && <Text style={{ color: palette.muted, fontSize: 12, paddingHorizontal: 16, paddingTop: 10 }}>خارج التصفية الحالية، فتحها يمسح التصفية</Text>}
         {found.outside.map(piece => (
           <Pressable key={`o${piece.id}`} onPress={() => onApply({ ...ALL_KINDS_LIST, query: piece.text }, { id: piece.id, query: piece.text })} accessibilityRole="button" style={row}>
-            <Text style={{ flex: 1, color: palette.muted, fontSize: 20, fontFamily: QURAN_FONT, lineHeight: 38, textAlign: 'right' }}>{quranText(piece.text)}</Text>
+            <QuranWord look={{ color: palette.muted }} place={{ flex: 1, textAlign: 'right' }}>{piece.text}</QuranWord>
             <Text style={{ color: palette.muted }}>{num(piece.count)}</Text>
           </Pressable>
         ))}

@@ -2,6 +2,7 @@
 
 import { useEffect, useImperativeHandle, useRef, type ReactNode, type Ref, type SyntheticEvent } from 'react';
 import { useSwipeClose } from './useSwipeClose';
+import { SourceSlotContext } from './sourceSlot';
 
 const KINDS = {
   /** Rises from the bottom, swipe down or tap outside to close (the app's `Sheet`). */
@@ -47,7 +48,8 @@ export default function Sheet({ open, onClose, label, kind = 'bottom', dir = 'rt
   return (
     <dialog ref={dialog} aria-label={label} onClose={onClose} onClick={event => { if (event.target === dialog.current) shut(); }} dir={dir} lang={lang}
       className={`${KINDS[kind]} border-0 bg-[var(--home-paper)] p-0 text-[var(--home-ink)] backdrop:bg-[var(--home-backdrop)] ${className}`}>
-      {children}
+      {/* A sheet opened from a home card is not the card: its references draw in it (sourceSlot.ts). */}
+      <SourceSlotContext.Provider value={null}>{children}</SourceSlotContext.Provider>
     </dialog>
   );
 }

@@ -64,8 +64,8 @@ function useSaved(piece: BranchPiece) {
 function Actions({ piece, palette, pop, current, embedded, extra, onVideo, onShare, onEvidence, onCompare, onRotate, onView, onAround, choice }: { piece: BranchPiece; palette: Palette; pop: number; current: boolean; onVideo?: () => void; onShare: () => void; onEvidence: (group: Group) => void; onCompare: (targets: CompareTarget[]) => void; onRotate?: () => void;
   /** A pager embedded elsewhere (the home feed): no studio. */
   embedded?: boolean;
-  /** The feed's own buttons for this card, before share. */
-  extra?: React.ReactNode;
+  /** The feed's: its open button, first in the row, and «ليس من اهتماماتي», alone at the row's left end (owner, 2026-11-20). */
+  extra?: { lead?: React.ReactNode; aside?: React.ReactNode };
   /** Each card's own switches (owner, 2026-11-14): tree or matrix, and the surrounding ayat; the settings only give their defaults. */
   onView?: { mode: BranchView; toggle: () => void }; onAround: { on: boolean; toggle: () => void };
   /** A book matrix's studio plays its connections or the read-along: the switch between them. */
@@ -86,19 +86,23 @@ function Actions({ piece, palette, pop, current, embedded, extra, onVideo, onSha
   const save = () => toggleSaved(piece);
   // Embedded in a feed, the buttons look like the compare card's row beside it.
   const tone = embedded ? 'muted' : 'ink';
+  const saveButton = <IconButton Icon={Bookmark} label={saved ? 'إزالة من المحفوظات' : 'حفظ الشجرة'} onPress={save} on={saved} fill tone={tone}
+    render={shown => <Animated.View style={popped}><Bookmark {...shown} /></Animated.View>} />;
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: embedded ? 0 : 4, paddingHorizontal: embedded ? 0 : 8 }}>
-      <IconButton Icon={Bookmark} label={saved ? 'إزالة من المحفوظات' : 'حفظ الشجرة'} onPress={save} on={saved} fill tone={tone}
-        render={shown => <Animated.View style={popped}><Bookmark {...shown} /></Animated.View>} />
+      {extra?.lead}
+      {!embedded && saveButton}
       {!embedded && <StudioButton palette={palette} />}
       {onView && <IconButton Icon={onView.mode === 'tree' ? GalleryHorizontal : TreeIcon} label={onView.mode === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} onPress={onView.toggle} tone={tone} />}
       <IconButton Icon={UnfoldHorizontal} label="الآيات المحيطة" onPress={onAround.toggle} on={onAround.on} tone={tone} />
       {onRotate && <IconButton Icon={RotateCwSquare} label="تدوير الشجرة" onPress={onRotate} tone={tone} />}
       {evidence && <IconButton Icon={BookOpen} label="المصادر" onPress={() => onEvidence(evidence)} tone={tone} />}
       {targets.length > 0 && <IconButton Icon={ArrowLeftRight} label="في المقارنة" onPress={() => onCompare(targets)} tone={tone} />}
-      {extra}
-      {/* Share is always the last button (the left end). */}
+      {/* In the feed, save comes after the card's tools, just before share (owner, 2026-11-20). */}
+      {embedded && saveButton}
+      {/* Share is always the last of the group. */}
       <IconButton Icon={Send} label="مشاركة" onPress={onShare} tone={tone} />
+      {extra?.aside ? <><View style={{ flex: 1 }} />{extra.aside}</> : null}
     </View>
   );
 }
@@ -172,8 +176,8 @@ type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: B
     ayatRoom?: { height: number; set: (height: number) => void };
     /** In a feed card that follows its content: the matrix's overflow, or null when the card shows the tree (lib/useFit.ts). */
     onFit?: (overflow: number | null) => boolean;
-    /** The feed's own buttons for this card (HomeFeed CardMenuActions), before share. */
-    extra?: React.ReactNode;
+    /** The feed's own buttons for this card: its open button first, «ليس من اهتماماتي» at the left end. */
+    extra?: { lead?: React.ReactNode; aside?: React.ReactNode };
   }; };
 
 /** The branches trees as a row of cards: the neighbour follows the finger, the place and zoom are kept for next time. */

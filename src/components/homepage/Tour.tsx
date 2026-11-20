@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, ArrowRight, House, Play, SkipForward } from 'lucide-react';
 import Button from '@/components/common/Button';
 import Emblem from '@/components/common/Emblem';
-import MushafText from '@/components/common/MushafText';
 import BranchViewSetting from '@/components/quran/BranchViewSetting';
 import { useLanguage } from '@/components/language/LanguageContext';
 import BranchTree from '@/app/quran/branches/BranchTree';
@@ -20,6 +19,7 @@ import { storyMap } from '@shared/quran/prophets/story';
 import { pageModel, reciteView } from '@shared/quran/recitePage';
 import type { RecitePosition } from '@shared/quran/recite';
 import type { HomepageData } from '@/lib/homepageData';
+import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
 
 export const TOUR_SEEN = 'tour-seen';
 /** Sent on the window when the tour ends, so what waits for it (the interests asked at first open) can come. */
@@ -129,7 +129,7 @@ function TourBody({ tour, story, recite, names, onDone }: Props & { onDone: () =
           </div>
           {/* Room kept for the ayah from the start, so the tree does not jump when it shows. */}
           <div className="min-h-32 pt-3">{first && <div className="rounded-2xl border border-[var(--home-rule)] bg-[var(--home-card)] p-3 text-center" dir="rtl">
-            <p className="font-quran text-2xl leading-loose" lang="ar"><MushafText>{first.words.join(' ')}</MushafText></p>
+            <AyahFlow center><AyahWords>{first.words.join(' ')}</AyahWords></AyahFlow>
             <p className="text-sm text-[var(--home-muted)]">{tapped.map(where).join(' · ')}</p>
           </div>}</div>
         </>}

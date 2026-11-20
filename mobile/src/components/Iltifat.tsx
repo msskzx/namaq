@@ -9,7 +9,8 @@ import { Text } from '@/ui/Text';
 import Bubble from '@/ui/Bubble';
 import { readAyah } from '@/lib/openReader';
 import { shareCard } from '@/lib/shareImage';
-import { CARD, QURAN_FONT, type Palette } from '@/lib/theme';
+import { CARD, type Palette } from '@/lib/theme';
+import AyahFlow, { AyahWords, TreeText } from './quran/text/AyahFlow';
 import IconButton from '@/ui/IconButton';
 import Card from '@/ui/Card';
 
@@ -19,8 +20,6 @@ import Card from '@/ui/Card';
 export const voiceColor = (palette: Palette, voice: Voice) => ({ he: palette.path, we: palette.green, you: palette.root })[voice];
 export const VOICE_NAME: Record<Voice, string> = { he: 'غيبة', we: 'تكلم', you: 'خطاب' };
 
-const quran = (palette: Palette) => ({ fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 44, color: palette.ink, writingDirection: 'rtl' as const });
-
 function Words({ lines, palette }: { lines: Line[]; palette: Palette }) {
   return lines.map((line, i) => (
     <Fragment key={i}>
@@ -28,7 +27,7 @@ function Words({ lines, palette }: { lines: Line[]; palette: Palette }) {
       {line.words.map((word, k) => (
         <Fragment key={k}>
           {k > 0 && ' '}
-          {word.voice ? <Text style={{ color: voiceColor(palette, word.voice) }}>{mushafText(word.text)}</Text> : mushafText(word.text)}
+          <AyahWords look={word.voice ? { color: voiceColor(palette, word.voice) } : undefined}>{word.text}</AyahWords>
         </Fragment>
       ))}
       {line.end && <Text style={{ color: palette.amber }}>{' '}{num(line.ayah)}</Text>}
@@ -64,7 +63,7 @@ function Tree({ trunk, leaves, palette }: { trunk: string; leaves: { ayah: numbe
   return (
     <View>
       <View style={[box, { paddingHorizontal: 12, paddingVertical: 2 }]}>
-        <Text style={[quran(palette), { fontSize: 20, lineHeight: 40, textAlign: 'center' }]}>{mushafText(trunk)}</Text>
+        <TreeText center look={{ color: palette.ink }}>{mushafText(trunk)}</TreeText>
       </View>
       <Svg width="100%" height={22} viewBox="0 0 320 22" preserveAspectRatio="none">
         <Path d="M160 0 V8 Q160 12 150 12 H90 Q80 12 80 22 M160 8 Q160 12 170 12 H230 Q240 12 240 22" stroke={palette.rule} strokeWidth={1.5} fill="none" vectorEffect="non-scaling-stroke" />
@@ -72,7 +71,7 @@ function Tree({ trunk, leaves, palette }: { trunk: string; leaves: { ayah: numbe
       <View style={{ flexDirection: 'row', gap: 12 }}>
         {leaves.map((leaf, i) => (
           <View key={leaf.ayah} style={[box, { flex: 1, alignItems: 'center', paddingVertical: 4 }]} accessibilityLabel={`${leaf.who}، ${num(leaf.ayah)}`}>
-            <Text style={[quran(palette), { fontSize: 24, lineHeight: 46 }]}>{parts[i][0]}<Text style={{ color: palette.accent }}>{parts[i][1]}</Text>{parts[i][2]}</Text>
+            <TreeText look={{ color: palette.ink }}>{parts[i][0]}<Text style={{ color: palette.accent }}>{parts[i][1]}</Text>{parts[i][2]}</TreeText>
             <Text style={{ color: palette.muted, fontSize: 13 }}>{leaf.who} · {num(leaf.ayah)}</Text>
           </View>
         ))}
@@ -101,12 +100,12 @@ function Dialog({ turns, palette }: { turns: TurnView[]; palette: Palette }) {
             <Dash palette={palette} />
           </View>
         );
-        if ('narration' in turn) return <Text key={i} style={[quran(palette), { fontSize: 20, lineHeight: 40, color: palette.muted, textAlign: 'center' }]}><Words lines={turn.narration} palette={palette} /></Text>;
+        if ('narration' in turn) return <AyahFlow key={i} center color={palette.muted}><Words lines={turn.narration} palette={palette} /></AyahFlow>;
         const color = voiceColor(palette, turn.voice);
         const start = turn.side === 'start';
         return (
           <Bubble key={i} who={turn.who} colour={color} start={start} framed={!!turn.said} palette={palette}>
-            <Text style={[quran(palette), { fontSize: 20, lineHeight: 40, textAlign: 'right' }]}><Words lines={turn.lines} palette={palette} /></Text>
+            <AyahFlow screen color={palette.ink}><Words lines={turn.lines} palette={palette} /></AyahFlow>
           </Bubble>
         );
       })}
@@ -120,7 +119,7 @@ export function IltifatScene({ view, palette }: { view: ExampleView; palette: Pa
     <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{iltifatTitle(view)}</Text>
     {view.kind === 'strip' && <>
       <Strip steps={view.steps} palette={palette} />
-      <Text style={[quran(palette), { textAlign: 'justify' }]}><Words lines={view.lines} palette={palette} /></Text>
+      <AyahFlow color={palette.ink}><Words lines={view.lines} palette={palette} /></AyahFlow>
     </>}
     {view.kind === 'tree' && <Tree trunk={view.trunk} leaves={view.leaves} palette={palette} />}
     {view.kind === 'dialog' && <Dialog turns={view.turns} palette={palette} />}
@@ -130,11 +129,13 @@ export function IltifatScene({ view, palette }: { view: ExampleView; palette: Pa
 const iltifatTitle = (view: ExampleView) => `${view.name} ${rangeLabel(view)}`;
 
 /** An example's mushaf and share buttons: inside its card on «مشاهد», under the card in the home feed. */
-export function IltifatActions({ view, palette }: { view: ExampleView; palette: Palette }) {
+export function IltifatActions({ view, palette, only }: { view: ExampleView; palette: Palette;
+  /** One of the two, where a feed card puts them apart: open first in its row, share after save (owner, 2026-11-20). */
+  only?: 'open' | 'share' }) {
   const title = iltifatTitle(view);
   return <>
-    <IconButton Icon={BookOpen} label={`افتح ${title} في المصحف`} onPress={() => readAyah(`${view.surah}:${view.from}`)} />
-    <IconButton Icon={Send} label={`شارك ${title}`} onPress={() => shareCard({ content: width => <View style={{ width }}><IltifatCard view={view} palette={palette} image /></View> })} />
+    {only !== 'share' && <IconButton Icon={BookOpen} label={`افتح ${title} في المصحف`} onPress={() => readAyah(`${view.surah}:${view.from}`)} />}
+    {only !== 'open' && <IconButton Icon={Send} label={`شارك ${title}`} onPress={() => shareCard({ content: width => <View style={{ width }}><IltifatCard view={view} palette={palette} image /></View> })} />}
   </>;
 }
 
