@@ -23,6 +23,8 @@ const DRAWINGS = [
   'mobile/src/components/BranchTree.tsx',
   'mobile/src/components/TreeCard.tsx',
   'mobile/src/components/MushafPageView.tsx',
+  // The page's hidden-word and write boxes, moved out of MushafPageView into the Quran module: each is a word's own shape.
+  'mobile/src/components/quran/text/WriteBoxes.tsx',
   'mobile/src/components/ThemeTiles.tsx',
   'mobile/src/lib/treeVideo.ts',
   'mobile/src/lib/compareVideo.ts',

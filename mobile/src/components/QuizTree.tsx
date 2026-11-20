@@ -23,7 +23,7 @@ import { type Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
 import { toTab } from '@/lib/ways';
 import Card, { UnderCard } from '@/ui/Card';
-import { BlankBoxes } from './MushafPageView';
+import { BlankBoxes } from './quran/text/WriteBoxes';
 import { useWriteBlanks, type WriteBlanks } from './recite/useRecite';
 import { writeBlank, type WriteBlank } from '@shared/quiz/writeBlanks';
 import QuizSources from './QuizSources';

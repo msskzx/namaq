@@ -16,7 +16,7 @@ import { type Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
 import IconButton from '@/ui/IconButton';
 import Card, { UnderCard } from '@/ui/Card';
-import { BlankBoxes } from './MushafPageView';
+import { BlankBoxes } from './quran/text/WriteBoxes';
 import { useWriteBlanks } from './recite/useRecite';
 import { writeBlank } from '@shared/quiz/writeBlanks';
 import QuizSources from './QuizSources';
