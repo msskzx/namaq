@@ -3,6 +3,7 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { tourRecitePage, tourStory, tourTree, TOUR_RECITE } from '@/lib/tourTree';
 import { TOUR_AYAH } from '@shared/quran/tour';
 import Tour, { TOUR_SEEN } from './Tour';
+import { mushafText } from '@shared/quran/mushafText';
 
 const { nav } = vi.hoisted(() => ({ nav: { search: '', replace: vi.fn(), refresh: vi.fn() } }));
 vi.mock('next/navigation', () => ({
@@ -31,7 +32,7 @@ describe('first-visit tour', () => {
     fireEvent.click(screen.getByRole('button', { name: /التالي/ }));
     expect(screen.queryByRole('button', { name: /التالي/ })).toBeNull();
     fireEvent.click(container.querySelector<HTMLElement>(`[data-node][data-keys="${TOUR_AYAH}"]`)!);
-    expect(screen.getByText(tour.ayat.find(ayah => ayah.key === TOUR_AYAH)!.words.join(' '))).toBeTruthy();
+    expect(screen.getByText(mushafText(tour.ayat.find(ayah => ayah.key === TOUR_AYAH)!.words.join(' ')))).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: /التالي/ }));
     expect(screen.queryByRole('button', { name: /إلى الرئيسية/ })).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'مصفوفة' }));

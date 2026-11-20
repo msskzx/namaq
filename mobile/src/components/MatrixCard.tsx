@@ -8,12 +8,12 @@ import { useFitReport, type OnFit } from '@/lib/useFit';
 import Animated, { cancelAnimation, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { num } from '@shared/quran/arabicNumber';
-import { mushafText } from '@shared/quran/mushafText';
 import type { Lane } from './TreeCard';
 import { matrixOf, readId, surahNames, type MatrixAyah, type MatrixCell, type Presentation } from '@/lib/branches';
 import { sharedTone } from '@/lib/marks';
 import type { Size } from '@/lib/camera';
-import { QURAN_FONT, toneColor, type Palette, CARD } from '@/lib/theme';
+import { toneColor, type Palette, CARD } from '@/lib/theme';
+import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
 import Hourglass from '@/ui/Hourglass';
 import Svg, { Circle, Path } from 'react-native-svg';
 import { connectionTone, wordConnections, type ConnectionEnd } from '@shared/quran/mutashabih/connections';
@@ -95,15 +95,15 @@ function Ayah({ ayah, palette, muted, light, read, shown = Infinity }: { ayah: M
     {ayah.words.map((word, i) => {
       const tone = readTone(ayah, i, palette, read) ?? toneOf(ayah, i, palette, light);
       return <View key={i} ref={view => { if (view) registry.words.set(`${ayah.key}:${i}`, view); else registry.words.delete(`${ayah.key}:${i}`); }} onLayout={registry.measure} collapsable={false}>
-        <Text onPress={press(i)} style={[{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: palette.ink }, tone, i >= shown && UNSEEN]}>{mushafText(word)}</Text>
+        <Text onPress={press(i)}><AyahWords look={{ ...tone, ...(i >= shown ? UNSEEN : null) }}>{word}</AyahWords></Text>
       </View>;
     })}
-    <Text style={[{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: palette.accent }, ayah.words.length > shown && UNSEEN]}>{num(number)}</Text>
+    <AyahWords look={{ color: palette.accent, ...(ayah.words.length > shown ? UNSEEN : null) }}>{num(number)}</AyahWords>
   </>;
   return <>
     {ayah.words.map((word, i) => {
       const tone = readTone(ayah, i, palette, read) ?? toneOf(ayah, i, palette, light);
-      return <Text key={i}>{i > 0 ? ' ' : ''}<Text onPress={press(i)} style={[tone, i >= shown && UNSEEN]}>{mushafText(word)}</Text></Text>;
+      return <Text key={i}>{i > 0 ? ' ' : ''}<Text onPress={press(i)}><AyahWords look={{ ...tone, ...(i >= shown ? UNSEEN : null) }}>{word}</AyahWords></Text></Text>;
     })}
     <Text style={[{ color: muted ? palette.muted : palette.accent }, ayah.words.length > shown && UNSEEN]}> {num(number)} </Text>
   </>;
@@ -139,11 +139,11 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
   // and the next surah's first ayah.
   const mutedText = { color: palette.muted };
   const aroundOf = (ayat: MatrixAyah[], side: 'before' | 'after') => ayat.map(ayah => <Text key={ayah.key}>
-    {side === 'after' && ayah.basmala && <Text style={mutedText}>{`${mushafText(ayah.basmala.join(' '))} `}</Text>}
+    {side === 'after' && ayah.basmala && <AyahWords look={mutedText}>{`${ayah.basmala.join(' ')} `}</AyahWords>}
     <Ayah ayah={ayah} palette={palette} muted={false} />
-    {side === 'before' && ayah.basmala && <Text style={mutedText}>{` ${mushafText(ayah.basmala.join(' '))} `}</Text>}
+    {side === 'before' && ayah.basmala && <AyahWords look={mutedText}>{` ${ayah.basmala.join(' ')} `}</AyahWords>}
   </Text>);
-  const basmala = first.basmala && <Text style={{ fontFamily: QURAN_FONT, fontSize: 18, lineHeight: 36, color: palette.muted, textAlign: 'center' }}>{mushafText(first.basmala.join(' '))}</Text>;
+  const basmala = first.basmala && <AyahFlow center color={palette.muted}><AyahWords>{first.basmala.join(' ')}</AyahWords></AyahFlow>;
   return (
     // The card's own buttons sit beside its tap area, not in it: a button inside a pressable is lost on the web and to screen readers (R0055).
     <View style={stacked ? { width, paddingVertical: 8 } : { width, opacity: current ? 1 : 0.45, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, paddingHorizontal: 12, paddingVertical: 8 }}>
@@ -156,17 +156,17 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
         </Text>
       </View>
       {at === 'after' && basmala}
-      {around ? <Text style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: palette.ink, writingDirection: 'rtl', textAlign: 'center' }}>
+      {around ? <AyahFlow center color={palette.ink}>
           {aroundOf(around.before, 'before')}
           {cell.ayat.map((ayah, index) => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={false} light={tapped} read={read} shown={shownOf(index)} />)}
           {aroundOf(around.after, 'after')}
-        </Text>
+        </AyahFlow>
       : wordViews && !muted
         // Each word its own box, so the connection lines can find it: a wrapping row from the right, as the text runs.
-        ? <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', justifyContent: 'center', columnGap: 6 }}>{cell.ayat.map((ayah, index) => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} read={muted ? undefined : read} shown={shownOf(index)} />)}</View>
-        : <Text style={{ fontFamily: QURAN_FONT, fontSize: 21, lineHeight: 44, color: muted ? palette.muted : palette.ink, writingDirection: 'rtl', textAlign: 'center' }}>
+        ? <AyahFlow row center color={palette.ink}>{cell.ayat.map((ayah, index) => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} read={muted ? undefined : read} shown={shownOf(index)} />)}</AyahFlow>
+        : <AyahFlow center color={muted ? palette.muted : palette.ink}>
           {cell.ayat.map((ayah, index) => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} read={muted ? undefined : read} shown={shownOf(index)} />)}
-        </Text>}
+        </AyahFlow>}
       {at === 'before' && basmala}
       {at === 'ayah' && note?.(own.key)}
     </Tap>

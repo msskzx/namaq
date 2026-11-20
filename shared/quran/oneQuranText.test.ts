@@ -21,7 +21,19 @@ const SOURCE = ['shared/data/quran/mushaf/'];
 /** Where the Quran module lives, once built: the only code that may set the Quran font or shape Quran text. */
 const MODULE = ['shared/quran/quranText/', 'src/components/quran/text/', 'mobile/src/components/quran/text/'];
 /** Where the font is declared, loaded or credited (not used): its @font-face, its name, the app's font loading, the sources list. */
-const FONT_HOME = ['src/app/globals.css', 'mobile/src/lib/fonts.ts', 'mobile/src/app/_layout.tsx', 'shared/sources.ts'];
+const FONT_HOME = ['src/app/globals.css', 'mobile/src/lib/fonts.ts', 'mobile/src/app/_layout.tsx', 'shared/sources.ts',
+  // The app's theme hands the font's name on from fonts.ts.
+  'mobile/src/lib/theme.ts'];
+/** The mushaf page itself (level 1, the pipeline's first level): the reader's page styles set the page's own font and size. */
+const PAGE = ['src/app/quran/read/Mushaf.module.css',
+  // The app's mushaf page draws its own lines, titles and basmala at the page's size (its zoom too); its write boxes live in the module (WriteBoxes).
+  'mobile/src/components/MushafPageView.tsx'];
+/**
+ * Videos drawn on a canvas, which name the font themselves, not through a Text: they take its name and file from the module
+ * (quranFont.ts), and only these may.
+ */
+const DRAWN = ['mobile/src/lib/treeVideo.ts', 'mobile/src/lib/compareVideo.ts', 'mobile/src/lib/shareVideo.ts', 'mobile/src/lib/shareVideo.web.ts',
+  'src/app/quran/compare/CompareVideo.tsx'];
 /** Books quote the Quran in their own words and spelling (the exception): tafsir, i'rab, balagha, printed pages. */
 const BOOKS = ['tafsirSadi', 'kashshaf', 'irab', 'irabUkbari', 'itqanBalagha', 'bookPages'].map(name => `shared/data/quran/${name}.`);
 /**
@@ -65,7 +77,8 @@ const WRAP_SIZED = new RegExp(String.raw`${SIZE}[^<>]*>\s*<QuranWords\b`);
 
 const breaks = {
   /** Sets the Quran font itself (app QURAN_FONT, website font-quran / --font-quran or the face's name) instead of going through the module. */
-  font: code.filter(file => !inside(file.path, [...MODULE, ...FONT_HOME]) && /\bQURAN_FONT\b|--font-quran|\bfont-quran\b|KFGQPC[\s_]*Hafs|UthmanicHafs/i.test(file.text)).map(file => file.path).sort(),
+  font: code.filter(file => !inside(file.path, [...MODULE, ...FONT_HOME, ...PAGE]) && (/\bQURAN_FONT\b|--font-quran|\bfont-quran\b|KFGQPC[\s_]*Hafs|UthmanicHafs/i.test(file.text)
+    || (!inside(file.path, DRAWN) && /\bQURAN_(FAMILY|FONT_FILE)\b|\bquranFontFace\b/.test(file.text)))).map(file => file.path).sort(),
   /** Turns the old text into page-looking text word by word (mushafText and its aliases), dropping every waqf, sajda and hizb sign. */
   convert: code.filter(file => !inside(file.path, MODULE) && file.path !== 'shared/quran/mushafText.ts' && /\b(mushafText|MushafText)\b|lib\/quranText'/.test(file.text)).map(file => file.path).sort(),
   /**

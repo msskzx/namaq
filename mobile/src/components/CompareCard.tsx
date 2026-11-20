@@ -13,7 +13,8 @@ import { aloneNote, aroundOf, besideRows, partLabel, rowSides, runsLabel, savedI
 import { around as aroundSetting, besideLayout, branchView, type BranchView } from '@/lib/settings';
 import CompareTree from './CompareTree';
 import { Gap, PartRule, Silent, StartRule } from './StoryParts';
-import { QURAN_FONT, type Palette } from '@/lib/theme';
+import { blend, type Palette } from '@/lib/theme';
+import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
 import { COMPARE_CARD, markColour, sideTitle, sideView, writtenLinks } from '@shared/quran/compareCardLook';
 import { likenessAt } from '@/lib/branches';
 import { nextSpeed, useReadAlong } from './useReadAlong';
@@ -44,56 +45,53 @@ function cardLink(card: PairCard) {
 
 /** One ayah: same words in the accent, same root in purple, a lit word and its partner on a highlight, the word read underlined. */
 function AyahText({ ayah, palette, light, plain = false, inline = false }: { ayah: CardAyah; palette: Palette; light?: Light; plain?: boolean; inline?: boolean }) {
-  return (
-    <Text style={inline ? { color: plain ? palette.muted : palette.ink } : { ...ayahStyle(palette), color: plain ? palette.muted : palette.ink }}>
-      {ayah.words.map((word, i) => {
-        const mark = plain ? undefined : ayah.marks?.[i];
-        const lit = !!mark?.link && mark.link === light?.lit;
-        const reading = light?.reading === i;
-        const color = lit ? palette.onHighlight : markColour(mark?.kind, palette, !!mark?.link && !!light?.written?.has(mark.link));
-        const link = mark?.link;
-        return (
-          <Text key={i}>
-            {i > 0 ? ' ' : ''}
-            <Text onPress={link && light?.onWord ? () => light.onWord!(link) : undefined}
-              style={[color ? { color } : null, lit ? { backgroundColor: palette.highlight } : null, reading ? { textDecorationLine: 'underline', textDecorationColor: palette.accent, backgroundColor: lit ? palette.highlight : palette.paperDeep } : null]}>
-              {mushafText(word)}
-            </Text>
-          </Text>
-        );
-      })}
-      <Text style={{ color: palette.accent }}>{"\u00A0"}{num(ayah.number)}</Text>
-    </Text>
-  );
+  const words = <>
+    {ayah.words.map((word, i) => {
+      const mark = plain ? undefined : ayah.marks?.[i];
+      const lit = !!mark?.link && mark.link === light?.lit;
+      const reading = light?.reading === i;
+      const color = lit ? palette.onHighlight : markColour(mark?.kind, palette, !!mark?.link && !!light?.written?.has(mark.link));
+      const link = mark?.link;
+      return (
+        <Text key={i}>
+          {i > 0 ? ' ' : ''}
+          <Text onPress={link && light?.onWord ? () => light.onWord!(link) : undefined}><AyahWords
+            look={{ ...(color ? { color } : null), ...(lit ? { backgroundColor: palette.highlight } : null), ...(reading ? { textDecorationLine: 'underline', textDecorationColor: palette.accent, backgroundColor: lit ? palette.highlight : palette.paperDeep } : null) }}>
+            {word}
+          </AyahWords></Text>
+        </Text>
+      );
+    })}
+    <AyahWords look={{ color: palette.accent }}>{`\u00A0${num(ayah.number)}`}</AyahWords>
+  </>;
+  // Inside a running text it takes the flow around it; on its own it is its own flow (the reader's line size, centred).
+  return inline ? <Text style={{ color: plain ? palette.muted : palette.ink }}>{words}</Text> : <AyahFlow center color={plain ? palette.muted : palette.ink}>{words}</AyahFlow>;
 }
 
 /** The ayah before or after a side in the matrix: muted, its words coloured where the other side's neighbour shares them. */
 function Neighbour({ ayah, palette }: { ayah: AroundAyah; palette: Palette }) {
   return (
-    <Text style={{ fontSize: 18, color: palette.muted }}>
+    <Text>
       {ayah.words.map((word, i) => {
         const kind = likenessAt(ayah, i);
         const color = kind && palette.marks[kind];
-        return <Text key={i} style={color ? { color, opacity: 0.8 } : undefined}>{i > 0 ? ' ' : ''}{mushafText(word)}</Text>;
+        return <Text key={i}>{i > 0 ? ' ' : ''}<AyahWords look={{ color: color ? blend(color, palette.card, 0.8) : palette.muted }}>{word}</AyahWords></Text>;
       })}
-      <Text>{"\u00A0"}{num(ayah.number)}</Text>
+      <AyahWords look={{ color: palette.muted }}>{`\u00A0${num(ayah.number)}`}</AyahWords>
     </Text>
   );
 }
 
 /** A side's ayat as one running text, with the ayah before and after (muted) when the surrounding switch is on. */
-function RunningAyat({ ayat, before, after, palette, light, lane = false }: { ayat: CardAyah[]; before?: AroundAyah | null; after?: AroundAyah | null; palette: Palette; light: (ayah: CardAyah) => Light; /** Half the card wide, side by side. */ lane?: boolean }) {
+function RunningAyat({ ayat, before, after, palette, light, lane = false }: { ayat: CardAyah[]; before?: AroundAyah | null; after?: AroundAyah | null; palette: Palette; light: (ayah: CardAyah) => Light; /** Half the card wide, side by side: the reader's size from the screen, wrapping within the lane. */ lane?: boolean }) {
   return (
-    <Text style={lane ? { ...ayahStyle(palette), fontSize: COMPARE_CARD.laneSize, lineHeight: COMPARE_CARD.laneLine } : ayahStyle(palette)}>
+    <AyahFlow center screen={lane} color={palette.ink}>
       {before && <><Neighbour ayah={before} palette={palette} />{' '}</>}
       {ayat.map((ayah, i) => <Text key={ayah.number}>{i > 0 ? ' ' : ''}<AyahText ayah={ayah} palette={palette} light={light(ayah)} inline /></Text>)}
       {after && <>{' '}<Neighbour ayah={after} palette={palette} /></>}
-    </Text>
+    </AyahFlow>
   );
 }
-
-/** The ayat's type, as the video draws it too (shared/quran/compareCardLook.ts). */
-const ayahStyle = (palette: Palette) => ({ fontFamily: QURAN_FONT, fontSize: COMPARE_CARD.ayahSize, lineHeight: COMPARE_CARD.ayahLine, color: palette.ink, writingDirection: 'rtl', textAlign: 'center' }) as const;
 
 function SideHead({ label, keys, palette, group }: { label: string; keys: string[]; palette: Palette; group?: string }) {
   const read = `اقرأ ${label} في المصحف`;

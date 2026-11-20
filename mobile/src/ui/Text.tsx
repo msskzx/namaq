@@ -1,6 +1,6 @@
 import { createContext, useContext, type ComponentProps } from 'react';
 import { Platform, StyleSheet, Text as NativeText, TextInput as NativeTextInput, type StyleProp, type TextStyle } from 'react-native';
-import { QURAN_FONT, UI_FONT, UI_FONT_BOLD } from '@/lib/theme';
+import { UI_FONT, UI_FONT_BOLD } from '@/lib/theme';
 import { textDirection } from '@/lib/rtl';
 import { UI_SCALE } from '@shared/quran/compareCardLook';
 

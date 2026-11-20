@@ -246,6 +246,236 @@ export const ADHKAR: readonly Dhikr[] = [
     "occasionQuote": "فِي دُبُرِ كُلّ صَلاةٍ"
   },
   {
+    "id": "prayer-ibn-zubayr",
+    "occasions": [
+      "after-prayer"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "لا إلهَ إِلاَّ اللَّهُ وَحدَهُ لا شَريكَ لَهُ، لَهُ المُلْكُ وَلَهُ الحَمْدُ وَهُوَ على كُلّ شئ قَدِيرٌ، لا حَوْلَ وَلاَ قُوَّةَ إِلاَّ باللَّهِ، لا إِلهَ إِلاَّ الله وَلاَ نَعْبُدُ إِلاَّ إيَّاهُ لَهُ النِّعْمَةُ ولَهُ الفَضْلُ، وَلَهُ الثَّناءُ الحَسَنُ، لا إلهَ إِلاَّ الله مُخْلِصِينَ لَهُ الدِّينَ وَلَوْ كَرِهَ الكافِرُونَ"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 71,
+      "url": "https://shamela.ws/book/1956/69",
+      "report": 185
+    },
+    "collections": [
+      "صحيح مسلم"
+    ],
+    "grades": [
+      {
+        "rank": "sahih",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث صحيح، أخرجه مسلم عن يعقوب بن إبراهيم",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 2,
+          "page": 264,
+          "url": "https://shamela.ws/book/30108/841"
+        }
+      }
+    ],
+    "occasionQuote": "دُبُرَ كُلّ صَلاةٍ حين يسلم",
+    "noteQuote": "قال ابن الزبير: وكان رسول الله ﷺ يهلّل بهنّ دُبُرَ كُلِّ صَلاةٍ"
+  },
+  {
+    "id": "prayer-cowardice",
+    "occasions": [
+      "after-prayer"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الجُبْنِ، وَأعُوذُ بِكَ أنْ أُرَدَّ إلى أَرْذَلِ العمُرِ، وأعُوذُ بِكَ مِنْ فتْنَةِ الدُّنْيا وأعُوذُ بِكَ منْ عَذَابِ القَبْرِ"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 72,
+      "url": "https://shamela.ws/book/1956/70",
+      "report": 189
+    },
+    "collections": [
+      "صحيح البخاري"
+    ],
+    "grades": [
+      {
+        "rank": "sahih",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث صحيح، أخرجه البخاري في باب التعوذ من الجبن من كتاب الجهاد",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 2,
+          "page": 280,
+          "url": "https://shamela.ws/book/30108/860"
+        }
+      }
+    ],
+    "occasionQuote": "كان يتعوّذ دُبُرَ الصلاة بهؤلاء الكلماتِ"
+  },
+  {
+    "id": "prayer-three-refuges",
+    "occasions": [
+      "after-prayer"
+    ],
+    "content": {
+      "kind": "quran",
+      "ranges": [
+        {
+          "surah": 112,
+          "from": 1,
+          "to": 4
+        },
+        {
+          "surah": 113,
+          "from": 1,
+          "to": 5
+        },
+        {
+          "surah": 114,
+          "from": 1,
+          "to": 6
+        }
+      ]
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 73,
+      "url": "https://shamela.ws/book/1956/71",
+      "report": 191
+    },
+    "collections": [
+      "سنن أبي داود",
+      "الترمذي",
+      "النسائي"
+    ],
+    "grades": [
+      {
+        "rank": "sahih",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث صحيح، أخرجه أحمد عن المقرئ",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 2,
+          "page": 290,
+          "url": "https://shamela.ws/book/30108/871"
+        }
+      }
+    ],
+    "occasionQuote": "أمرني رسول الله ﷺ أن أقرأ بالمعوّذتين دُبُرَ كُلّ صَلاةٍ"
+  },
+  {
+    "id": "prayer-disbelief-poverty",
+    "occasions": [
+      "after-prayer"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "اللَّهُمَّ إني أعُوذُ بِكَ مِنَ الكُفْرِ وَالفَقْرِ وَعَذَابِ القَبْرِ"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 74,
+      "url": "https://shamela.ws/book/1956/72",
+      "report": 197
+    },
+    "collections": [],
+    "grades": [
+      {
+        "rank": "hasan",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث حسن، أخرجه أحمد أيضًا وابن أبي شيبة جميعًا عن وكيع عن عثمان الشحام",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 2,
+          "page": 309,
+          "url": "https://shamela.ws/book/30108/892"
+        }
+      }
+    ],
+    "occasionQuote": "كان يقول في دُبر الصلاة"
+  },
+  {
+    "id": "maghrib-fajr-refuge-fire",
+    "occasions": [
+      "after-prayer"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "اللَّهُمَّ أجِرْنِي مِنَ النَّارِ"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 75,
+      "url": "https://shamela.ws/book/1956/73",
+      "report": 201
+    },
+    "collections": [
+      "سنن أبي داود"
+    ],
+    "grades": [
+      {
+        "rank": "hasan",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث حسن، أخرجه أبو داود عن أبي النضر إسحاق بن إبراهيم",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 2,
+          "page": 326,
+          "url": "https://shamela.ws/book/30108/911"
+        }
+      }
+    ],
+    "occasionQuote": "إذَا انْصَرَفْتَ مِنْ صَلاةِ المَغْرِبِ فَقُلِ",
+    "repeat": {
+      "count": 7,
+      "quote": "سَبْعَ مَرَّاتٍ",
+      "scope": "whole-selection"
+    },
+    "instructionQuote": "وإذَا صَلَّيْتَ الصُّبْحَ فَقُلْ كذَلِكَ",
+    "virtueQuote": "فإنَّكَ إذَا قُلْتَ ذلكَ ثُمَّ مُتَّ مِنْ لَيْلَتِكَ كُتِبَ لَكَ جِوَارٌ مِنْها"
+  },
+  {
+    "id": "fajr-knowledge",
+    "occasions": [
+      "after-prayer"
+    ],
+    "content": {
+      "kind": "text",
+      "text": "اللَّهُمَّ إني أسألُكَ عِلْمًا نافِعًا، وعَمَلًا مُتَقَبَّلًا، وَرِزْقًا طَيِّبًا"
+    },
+    "citation": {
+      "source": "adhkar-nawawi",
+      "volume": 1,
+      "page": 75,
+      "url": "https://shamela.ws/book/1956/73",
+      "report": 202
+    },
+    "collections": [
+      "مسند الإِمام أحمد",
+      "سنن ابن ماجه",
+      "كتاب ابن السني"
+    ],
+    "grades": [
+      {
+        "rank": "hasan",
+        "scholar": "ابن حجر العسقلاني",
+        "quote": "هذا حديث حسن، أخرجه أحمد عن روح بن عبادة ومحمد بن جعفر كلاهما عن شعبة",
+        "citation": {
+          "source": "nataij-afkar",
+          "volume": 2,
+          "page": 330,
+          "url": "https://shamela.ws/book/30108/916"
+        }
+      }
+    ],
+    "occasionQuote": "كان رسول الله ﷺ إذا صلى الصبح قال"
+  },
+  {
     "id": "morning-evening-protection",
     "occasions": [
       "morning",

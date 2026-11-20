@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { NotebookPen, Send, Trash2, X } from 'lucide-react';
 import { AyahShareDialog } from '@/components/share/AyahShare';
 import Button from '@/components/common/Button';
-import MushafText from '@/components/common/MushafText';
+import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
 import { readAyahNotes, writeAyahNote } from '@shared/ayahNotes';
 import { num } from '@shared/quran/arabicNumber';
 import { quranContexts } from '@/lib/quran/quranText';
@@ -49,7 +49,7 @@ export default function NoteDialog({ ayah, name, ar, onClose }: { ayah: string; 
         {!!text.trim() && <Button size="lg" variant="muted" aria-label={labels.share} title={labels.share} aria-haspopup="dialog" onClick={() => { flush(); setSharing(true); }}><Send aria-hidden /></Button>}
         <Button size="lg" variant="muted" aria-label={labels.close} title={labels.close} onClick={close}><X aria-hidden /></Button>
       </div>
-      {words && <p lang="ar" dir="rtl" className="line-clamp-2 font-[family-name:var(--font-quran)] text-lg leading-loose text-[var(--home-muted)]"><MushafText>{words}</MushafText></p>}
+      {words && <AyahFlow lines={2} className="text-[var(--home-muted)]"><AyahWords>{words}</AyahWords></AyahFlow>}
       <Field multiline ref={field} value={text} onChange={event => edit(event.target.value)} placeholder={labels.title} label={labels.title} dir="auto" rows={7} />
     </div>
     {sharing && <AyahShareDialog ayah={ayah} name={name} note={text.trim()} onClose={() => setSharing(false)} />}

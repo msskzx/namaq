@@ -5,7 +5,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import { Tap } from '@/ui/Tap';
 import type { Palette } from '@/lib/theme';
-import QuranWords from '@/components/quran/text/QuranWords';
+import { QuranWord } from '@/components/quran/text/AyahFlow';
 
 /**
  * The one chip: a round, framed word to pick among others in a row that wraps (filters, a gesture's action, a topic).
@@ -52,7 +52,7 @@ export default function Chip({ label, on, onPress, palette, role = 'button', che
         backgroundColor: filled ? accent : on ? palette.paperDeep : 'transparent', opacity: pressed ? 0.6 : 1 })}>
       {check && on && <Check size={13} color={color} />}
       {Icon && <Icon size={15} color={color} />}
-      {quran ? <QuranWords style={{ fontSize: 22, lineHeight: 40, color }}>{label}</QuranWords> : <Text style={{ fontSize: small ? 14 : 15, color }}>{label}</Text>}
+      {quran ? <QuranWord look={{ color }}>{label}</QuranWord> : <Text style={{ fontSize: small ? 14 : 15, color }}>{label}</Text>}
       {count !== undefined && <Text style={{ color: on ? accent : palette.muted, fontSize: 11 }}>{num(count)}</Text>}
     </Tap>
   );

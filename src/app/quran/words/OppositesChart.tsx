@@ -10,16 +10,16 @@ import type { CountedSide, LemmaCount } from '@/lib/quran/lemmas';
 import { normalizeWord } from '@shared/quran/normalize';
 import { NOTE, PANEL } from '../panel';
 import { SUGGESTIONS } from './WordCounts';
-import { mushafText } from '@shared/quran/mushafText';
 import { SearchField } from '@/components/common/Field';
 import Empty from '@/components/common/Empty';
+import { QuranWord } from '@/components/quran/text/AyahFlow';
 
 type Pair = [CountedSide, CountedSide];
 
 function SideLabel({ side, className }: { side: CountedSide; className: string }) {
   return (
     <span className={`min-w-0 ${className}`}>
-      <span className="block font-quran text-lg">{mushafText(side.label)}</span>
+      <QuranWord className="block">{side.label}</QuranWord>
       <span className={`${NOTE} block text-xs`}>{side.form ? `صيغة «${side.label}» وحدها من «${side.lemma}»` : `مدخل «${side.lemma}»`}</span>
     </span>
   );
@@ -73,7 +73,7 @@ export default function OppositesChart({ opposites, lemmas }: { opposites: Pair[
           {suggestions.length === 0 ? <li className={`${NOTE} px-2 py-1`}>لا كلمة تطابق البحث.</li> : suggestions.map(r => (
             <li key={r.rank}>
               <button type="button" onClick={() => pick(r)} className="w-full flex items-baseline gap-2 px-2 py-1 text-start hover:bg-[var(--home-paper-deep)]">
-                <span className="flex-1 font-quran text-lg">{mushafText(r.lemma)}</span>
+                <QuranWord className="flex-1">{r.lemma}</QuranWord>
                 <span className="text-[var(--home-muted)]">{num(r.count)}</span>
               </button>
             </li>

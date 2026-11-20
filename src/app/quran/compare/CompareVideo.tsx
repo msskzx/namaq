@@ -12,6 +12,7 @@ import { VIDEO_TYPES } from '@shared/video/recorder';
 import type { CardSide, PairCard } from './pairCards';
 import { setReadSpeed, useReadSpeed } from './readAlong';
 import Sheet from '@/components/common/Sheet';
+import { QURAN_FAMILY, quranFontFace } from '@/components/quran/text/quranFont';
 
 export const canRecord = () => typeof HTMLCanvasElement !== 'undefined' && 'captureStream' in HTMLCanvasElement.prototype
   && typeof MediaRecorder !== 'undefined' && VIDEO_TYPES.some(type => MediaRecorder.isTypeSupported(type));
@@ -36,7 +37,7 @@ function webLook(): CompareLook {
   return {
     paper, card: token('--home-card'), deep: token('--home-paper-deep'), ink: token('--home-ink'), muted: colours.muted, rule: token('--home-rule'), accent: token('--home-accent'),
     green: token('--home-green'), highlight: token('--home-highlight'), onHighlight: token('--home-on-highlight'), marks: markColours(colours),
-    font: '"KFGQPC Hafs"', ui: '"Amiri"', logo: `${location.origin}/brand/namaq-icon-${dark ? 'dark' : 'light'}.svg`,
+    font: `"${QURAN_FAMILY}"`, ui: '"Amiri"', logo: `${location.origin}/brand/namaq-icon-${dark ? 'dark' : 'light'}.svg`,
   };
 }
 
@@ -53,7 +54,7 @@ function amiriFaces() {
   }
   return faces.join('');
 }
-const fontFace = () => `@font-face{font-family:"KFGQPC Hafs";src:url("${location.origin}/fonts/UthmanicHafs1Ver18.ttf") format("truetype");}${amiriFaces()}`;
+const fontFace = () => `${quranFontFace(location.origin)}${amiriFaces()}`;
 const pageOf = (input: CompareVideoInput) => compareRecorderPage(input, fontFace());
 
 const fromBase64 = (data: string, mime: string, name: string) => {

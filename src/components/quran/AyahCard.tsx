@@ -6,8 +6,8 @@ import Pagination from '@/components/common/Pagination';
 import { useLanguage } from '../language/LanguageContext';
 import translations from '../language/translations';
 import { SLOT_COLORS } from './slotColors';
-import { mushafText } from '@shared/quran/mushafText';
 import { surahName } from '@shared/quran/surahNames';
+import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
 
 export type WordNote = { className?: string; title?: string };
 
@@ -21,7 +21,7 @@ function SharedText({ text, slots, notes = {} }: { text: string; slots: Record<n
   return text.split(' ').map((word, index) => (
     <React.Fragment key={index}>
       {index > 0 && ' '}
-      {index in slots ? <mark className={[`bg-transparent ${SLOT_COLORS[slots[index] % SLOT_COLORS.length]}`, notes[index]?.className].filter(Boolean).join(' ')} title={notes[index]?.title}>{mushafText(word)}</mark> : mushafText(word)}
+      {index in slots ? <mark className={[`bg-transparent ${SLOT_COLORS[slots[index] % SLOT_COLORS.length]}`, notes[index]?.className].filter(Boolean).join(' ')} title={notes[index]?.title}><AyahWords>{word}</AyahWords></mark> : <AyahWords>{word}</AyahWords>}
     </React.Fragment>
   ));
 }
@@ -39,9 +39,9 @@ export function AyahCard({ ayah, slots, notes }: AyahCardProps) {
           </div>
         </div>
         <div className="flex-1">
-          <div className="text-right text-2xl leading-[2.2] mb-2 font-quran" dir="rtl">
-            {slots ? <SharedText text={ayah.text} slots={slots} notes={notes} /> : mushafText(ayah.text)}
-          </div>
+          <AyahFlow className="mb-2">
+            {slots ? <SharedText text={ayah.text} slots={slots} notes={notes} /> : <AyahWords>{ayah.text}</AyahWords>}
+          </AyahFlow>
           <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">
             {language === 'ar' ? surahName(ayah.surah.number) : ayah.surah.nameTransliterated || surahName(ayah.surah.number)} - {t.ayahs} {ayah.number}
           </div>

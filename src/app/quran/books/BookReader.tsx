@@ -1,5 +1,6 @@
 'use client';
 
+import QuranWords from '@/components/quran/text/QuranWords';
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -96,7 +97,7 @@ export default function BookReader({ id, title, page, total, name, printed, sour
                   onClick={() => { if (!justSwiped()) setPicked(on ? null : { entry: p.entry, at: p.at }); }}
                   onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setPicked(on ? null : { entry: p.entry, at: p.at }); } }}>
                   {savedKeys.has(key) && <span className={styles.saved} aria-label="فقرة محفوظة" role="img" />}
-                  {p.runs.map((run, i) => (run.quran ? <span key={i} className="font-quran text-[var(--home-accent)]">{run.text}</span> : run.text))}
+                  {p.runs.map((run, i) => (run.quran ? <QuranWords key={i} className="text-[var(--home-accent)]">{run.text}</QuranWords> : run.text))}
                 </p>
               );
             })}

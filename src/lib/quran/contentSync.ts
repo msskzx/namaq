@@ -26,8 +26,8 @@ let scopeAt = 0;
 
 async function accessToken(fresh = false): Promise<string> {
   if (!fresh && cached && cached.until > Date.now()) return cached.token;
-  const id = process.env.QF_CLIENT_ID;
-  const secret = process.env.QF_CLIENT_SECRET;
+  const id = process.env.QF_CLIENT_ID?.trim();
+  const secret = process.env.QF_CLIENT_SECRET?.trim();
   if (!id || !secret) throw new SyncError('Quran Foundation key is not set', 503);
   let failure = '';
   for (let tried = 0; tried < SCOPES.length; tried++) {
@@ -56,7 +56,7 @@ async function accessToken(fresh = false): Promise<string> {
 async function get<T>(path: string): Promise<T> {
   for (let attempt = 0; attempt < 2; attempt++) {
     const response = await fetch(`${hosts().api}${path}`, {
-      headers: { 'x-auth-token': await accessToken(attempt > 0), 'x-client-id': process.env.QF_CLIENT_ID ?? '' },
+      headers: { 'x-auth-token': await accessToken(attempt > 0), 'x-client-id': process.env.QF_CLIENT_ID?.trim() ?? '' },
       cache: 'no-store',
     });
     if (response.status === 401 && attempt === 0) continue;

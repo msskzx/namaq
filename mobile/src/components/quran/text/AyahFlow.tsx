@@ -1,8 +1,8 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useContext, useState, type ComponentRef, type ReactNode, type Ref } from 'react';
 import { useWindowDimensions, View, type TextStyle, type ViewStyle } from 'react-native';
 import { Text } from '@/ui/Text';
 import { QURAN_FONT } from '@/lib/theme';
-import { FLOW_LINE, flowFontSize } from '@shared/quran/quranText/flow';
+import { CARD_MARGINS, FLOW_LINE, flowFontSize, wordFontSize } from '@shared/quran/quranText/flow';
 import { mushafText } from '@shared/quran/mushafText';
 
 /** The font size the AyahFlow around takes from its width (0 outside one). */
@@ -16,20 +16,26 @@ export const useAyahSize = () => useContext(FlowSize).size;
  * flow in, sized from its own width as the reader's flowing text is (shared/quran/quranText/flow.ts). Its AyahWords (and
  * write boxes, by useAyahSize) take that size; the place sets only colour, never a size.
  */
-export default function AyahFlow({ children, color, row = false, style }: { children: ReactNode; color: string;
+export default function AyahFlow({ children, color, row = false, center = false, screen: fromScreen = false, lines, style }: { children: ReactNode; color: string;
   /** Pieces side by side, wrapping (words and boxes in a matrix row); otherwise one justified paragraph. */
-  row?: boolean; style?: ViewStyle }) {
+  row?: boolean;
+  /** Lines centred instead of justified: the matrix and compare cards, which centre each ayah under its heading. */
+  center?: boolean;
+  /** Sized from the screen as the reader is, not from its own width: a narrow lane (two sides of a compare card side by side) keeps the reader's size and wraps sooner. */
+  screen?: boolean;
+  /** At most this many lines, the rest cut (a note's ayah over its text, a shelf card); not with `row`. */
+  lines?: number; style?: ViewStyle }) {
   // Until it has measured its own width, it guesses from the screen's (less a card's margins), so it is drawn at about its
   // height from the first pass: a list that scrolls to an item by its laid-out place finds it there.
   const screen = useWindowDimensions().width;
   const [measured, setMeasured] = useState(0);
-  const size = measured || flowFontSize(screen - 64);
+  const size = fromScreen ? flowFontSize(screen - CARD_MARGINS) : measured || flowFontSize(screen - CARD_MARGINS);
   return (
     <View style={style} onLayout={event => setMeasured(flowFontSize(event.nativeEvent.layout.width))}>
       <FlowSize.Provider value={{ size, color }}>
         {row
-          ? <View style={{ direction: 'rtl', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: size * 0.35 }}>{children}</View>
-          : <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, color, textAlign: 'justify', writingDirection: 'rtl' }}>{children}</Text>}
+          ? <View style={{ direction: 'rtl', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: center ? 'center' : 'flex-start', columnGap: size * 0.35 }}>{children}</View>
+          : <Text numberOfLines={lines} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, color, textAlign: center ? 'center' : 'justify', writingDirection: 'rtl' }}>{children}</Text>}
       </FlowSize.Provider>
     </View>
   );
@@ -42,4 +48,36 @@ export type WordLook = Pick<TextStyle, 'color' | 'fontWeight' | 'textDecorationL
 export function AyahWords({ children, look }: { children: string; look?: WordLook }) {
   const { size, color } = useContext(FlowSize);
   return <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, color, writingDirection: 'rtl', ...look }}>{mushafText(children)}</Text>;
+}
+
+/** The size of a Quran word on its own, and of a tree's words, on this screen. */
+export const useWordSize = () => wordFontSize(useWindowDimensions().width);
+
+/** Where a place may put a word on its own: its room in a row, never its size or font. */
+export type WordPlace = Pick<TextStyle, 'flex' | 'flexShrink' | 'minWidth' | 'maxWidth' | 'textAlign' | 'alignSelf'>;
+
+/**
+ * A Quran word (or a few) on its own, outside an ayah (owner, 2026-11-20: one word size): a word list's row, the picked
+ * word of an i'rab or a word sheet, a reading, a chip. It takes the size an ayah has in a card on a phone
+ * (shared/quran/quranText/flow.ts wordFontSize); the place sets colour and its room, never a size.
+ */
+export function QuranWord({ children, look, place, lines, header = false }: { children: string; look?: WordLook; place?: WordPlace;
+  /** At most this many lines, the rest cut. */
+  lines?: number;
+  /** It names what the sheet is about (a word sheet's word). */
+  header?: boolean }) {
+  const size = useWordSize();
+  return (
+    <Text numberOfLines={lines} accessibilityRole={header ? 'header' : undefined}
+      style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, writingDirection: 'rtl', ...place, ...look }}>{mushafText(children)}</Text>
+  );
+}
+
+/**
+ * A tree box's words (owner, 2026-11-20: trees take the reader's size too, as they zoom): the word size, the flowing line
+ * height. The tree hands its ref on so the video finds the words where the app put them; the place sets colour only.
+ */
+export function TreeText({ ref, children, look, center = false }: { ref?: Ref<ComponentRef<typeof Text>>; children: ReactNode; look?: WordLook; center?: boolean }) {
+  const size = useWordSize();
+  return <Text ref={ref} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, writingDirection: 'rtl', textAlign: center ? 'center' : undefined, ...look }}>{children}</Text>;
 }

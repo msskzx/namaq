@@ -15,11 +15,11 @@ function Tree() {
   return <div ref={root}>
     <label><input type="checkbox" role="switch" aria-label="الآيات المحيطة" checked={on} onChange={event => setOn(event.currentTarget.checked)} /></label>
     <div data-tree-content>
-      <div data-node="n-1" data-keys="1:1 1:2"><span className="font-quran">إن</span></div>
+      <div data-node="n-1" data-keys="1:1 1:2"><span data-tree-text className="font-quran">إن</span></div>
       <span data-line />
       <ul>
-        <li><div data-node="n0" data-keys="1:1"><PathToggle /><span className="font-quran">جنات</span></div></li>
-        <li><div data-node="n1" data-keys="1:2"><PathToggle /><span className="font-quran">عيون</span></div></li>
+        <li><div data-node="n0" data-keys="1:1"><PathToggle /><span data-tree-text className="font-quran">جنات</span></div></li>
+        <li><div data-node="n1" data-keys="1:2"><PathToggle /><span data-tree-text className="font-quran">عيون</span></div></li>
         {on && <li data-testid="around"><div data-node="after1:1" data-ctx="1:1" data-keys="1:1"><span>بعدها</span></div></li>}
       </ul>
     </div>
@@ -27,8 +27,8 @@ function Tree() {
   </div>;
 }
 
-const words = (node: string) => document.querySelector<HTMLElement>(`[data-node="${node}"] .font-quran`)!;
-const typed = (node: string) => document.querySelector(`[data-node="${node}"]`)!.querySelectorAll('.font-quran')[1]?.textContent;
+const words = (node: string) => document.querySelector<HTMLElement>(`[data-node="${node}"] [data-tree-text]`)!;
+const typed = (node: string) => document.querySelector(`[data-node="${node}"]`)!.querySelectorAll('[data-tree-text]')[1]?.textContent;
 const branch = (node: string) => document.querySelector<HTMLElement>(`[data-node="${node}"]`)!.closest('li')!.style.opacity;
 const skip = () => screen.queryByRole('button', { name: 'تخطّ' });
 const advance = (ms: number) => act(async () => { await vi.advanceTimersByTimeAsync(ms); });
@@ -70,7 +70,7 @@ it('grows the tree level by level with every node typed, then fades in the surro
   expect(words('n-1').style.visibility).toBe('');
   expect([branch('n0'), branch('n1')]).toEqual(['', '']);
   expect([words('n0').style.visibility, words('n1').style.visibility]).toEqual(['hidden', 'hidden']);
-  expect(document.querySelector('[data-node="n0"] .font-quran')!.className).toBe('font-quran');
+  expect(document.querySelector('[data-node="n0"] [data-tree-text]')!.className).toBe('font-quran');
   await advance(500);
   expect([typed('n0'), typed('n1')]).toEqual([undefined, undefined]);
   expect([words('n0').style.visibility, words('n1').style.visibility]).toEqual(['', '']);

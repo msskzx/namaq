@@ -11,7 +11,8 @@ import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { readAyah } from '@/lib/openReader';
 import { useTabRetap } from '@/lib/tabRetap';
-import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import { usePalette, type Palette } from '@/lib/theme';
+import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
 import { ayahMushafWords } from '@/lib/mushaf';
 import IconButton from '@/ui/IconButton';
 import Card from '@/ui/Card';
@@ -35,9 +36,9 @@ function PairAyah({ ayah, palette }: { ayah: OrderAyah; palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 8 }}>
       <Text style={{ color: palette.muted, fontSize: 13, minWidth: 64 }}>{ayah.place}</Text>
-      <Text style={{ flex: 1, fontFamily: QURAN_FONT, fontSize: 19, lineHeight: 36, color: palette.ink, writingDirection: 'rtl' }}>
-        {ayah.words.map((w, i) => <Text key={i} style={{ fontFamily: QURAN_FONT, color: w.shared ? palette.accent : palette.ink }}>{`${w.text} `}</Text>)}
-      </Text>
+      <AyahFlow color={palette.ink} style={{ flex: 1 }}>
+        {ayah.words.map((w, i) => <AyahWords key={i} look={w.shared ? { color: palette.accent } : undefined}>{`${w.text} `}</AyahWords>)}
+      </AyahFlow>
     </View>
   );
 }
@@ -64,12 +65,12 @@ function SurahCard({ s, palette }: { s: OrderSurah; palette: Palette }) {
         <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 22, fontWeight: '700' }}>{s.name}</Text>
         <Text style={{ color: palette.muted, fontSize: 14 }}>{num(s.surah)}</Text>
       </View>
-      <Text style={{ fontFamily: QURAN_FONT, fontSize: 22, lineHeight: 42, color: palette.ink, textAlign: 'justify', writingDirection: 'rtl' }}>
+      <AyahFlow color={palette.ink}>
         {s.opening.map(a => [
-          <Text key={a.ayah} style={{ fontFamily: QURAN_FONT }}>{`${a.text} `}</Text>,
-          <Text key={`${a.ayah}-n`} style={{ fontFamily: QURAN_FONT, color: palette.amber }}>{`${num(a.ayah)} `}</Text>,
+          <AyahWords key={a.ayah}>{`${a.text} `}</AyahWords>,
+          <AyahWords key={`${a.ayah}-n`} look={{ color: palette.amber }}>{`${num(a.ayah)} `}</AyahWords>,
         ])}
-      </Text>
+      </AyahFlow>
       <Text style={[quote(palette), { marginTop: 4 }]}>«{s.aim.text}»</Text>
       <Source cite={s.aim.src} palette={palette} />
       {/* Card actions on the right (owner): the mushaf. */}

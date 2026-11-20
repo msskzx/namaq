@@ -1,7 +1,8 @@
 import { Asset } from 'expo-asset';
 import { File, Paths } from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
-import { QURAN_FONT, UI_FONT } from './theme';
+import { UI_FONT } from './theme';
+import { QURAN_FAMILY, QURAN_FONT_FILE } from '@/components/quran/text/quranFont';
 
 /** The Hafs font for the recorder page, inlined so the web view draws the same letters as the app. Read once; a failed read is tried again next time. */
 let faces: Promise<string> | null = null;
@@ -15,7 +16,7 @@ async function readFaces() {
     const data = await new File(asset.localUri ?? asset.uri).base64();
     return `@font-face{font-family:"${family}";font-weight:${weight};src:url(data:font/ttf;base64,${data}) format("truetype");}`;
   };
-  return (await face(QURAN_FONT, require('../../assets/fonts/UthmanicHafs1Ver18.ttf'))) + (await face(UI_FONT, require('../../assets/fonts/Amiri-Regular.ttf')))
+  return (await face(QURAN_FAMILY, QURAN_FONT_FILE)) + (await face(UI_FONT, require('../../assets/fonts/Amiri-Regular.ttf')))
     + (await face(UI_FONT, require('../../assets/fonts/Amiri-Bold.ttf'), 'bold'));
 }
 

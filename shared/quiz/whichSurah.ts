@@ -11,6 +11,7 @@ import { quizTrees } from './treeScope';
 import type { ChoiceKind, ChoiceQuestion, ChoiceScope } from './choiceKinds';
 import { mushafSource } from './sources';
 import { SURAH_NAMES } from '../quran/surahNames';
+import { SURAHS } from '../quran/words';
 
 export const WHICH_SURAH = 'SURAH';
 const CHOICES = 4;
@@ -70,7 +71,7 @@ const levelOf = (alike: Alike[] | undefined): Difficulty => !alike?.length ? 'ea
  */
 function wrongSurahs(surah: number, alike: Alike[], difficulty: Difficulty, random: Random, allowed: Set<number>): number[] {
   const picked: number[] = [];
-  // Only surahs inside the chosen part of the Quran (owner, 2026-11-19: a quiz on juz 30 offers no surah of juz 29).
+  // Surahs inside the chosen part of the Quran first (owner, 2026-11-20).
   const free = (n: number) => n !== surah && !picked.includes(n) && allowed.has(n);
   const take = (candidates: number[]) => { for (const n of candidates) if (picked.length < CHOICES - 1 && free(n)) picked.push(n); };
   const every = [...allowed].sort((a, b) => a - b);
@@ -93,6 +94,12 @@ function wrongSurahs(surah: number, alike: Alike[], difficulty: Difficulty, rand
     take(shuffle(every.filter(n => Math.abs(n - surah) <= NEAR), random));
   }
   take(shuffle(every, random));
+  // Too few inside: the surahs just outside the range fill the rest, so a small range still asks and teaches where it ends.
+  if (picked.length < CHOICES - 1) {
+    const outside = Array.from({ length: SURAHS }, (_, i) => i + 1).filter(n => !allowed.has(n))
+      .map(n => ({ n, gap: Math.min(...every.map(a => Math.abs(a - n))) }));
+    for (const { n } of shuffle(outside, random).sort((a, b) => a.gap - b.gap)) if (picked.length < CHOICES - 1) picked.push(n);
+  }
   return picked;
 }
 
@@ -134,13 +141,13 @@ export function namesItsSurah(ayah: BranchAyah) {
   return own.length > 0 && own.every(word => words.has(word));
 }
 
-/** The ayat in the scope that can be asked, and the scope's surahs the wrong choices come from. */
+/** The ayat in the scope that can be asked, and the scope's surahs the wrong choices come from first. */
 function inScope(scope: ChoiceScope) {
   const { ayat, answerable } = index();
   const scoped = [...filteredAyat(ayat, scope.filters, scope.range).values()];
   const allowed = new Set(scoped.map(ayah => surahOf(ayah.key)));
-  // Fewer surahs than choices leave too little to choose between (juz 1 is al-Fatihah and al-Baqarah).
-  return { allowed, asked: allowed.size < CHOICES ? [] : scoped.filter(ayah => answerable(ayah) && !namesItsSurah(ayah)) };
+  // One surah: every answer is that surah.
+  return { allowed, asked: allowed.size < 2 ? [] : scoped.filter(ayah => answerable(ayah) && !namesItsSurah(ayah)) };
 }
 
 /** The ayat in the scope that can be asked, in random order, the chosen difficulty's first. */
