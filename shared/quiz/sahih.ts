@@ -80,7 +80,8 @@ export function sahihKitabQuestions(random: Random, limit = Infinity): ChoiceQue
       promptArabic: `${bab.title}\n${ask}`,
       choices: choices.map((each, at) => ({ value: String(at), labelArabic: label(each) })),
       correctAnswer: String(choices.indexOf(kitab)),
-      note: { label: 'المصدر', text: `${book.title}، ${kitab.title}، الحديث ${num(bab.from)}${book.headingsBy === 'nawawi' ? '، وتراجم الأبواب للنووي' : ''}` },
+      // The bab under its kitab; Muslim's headings are al-Nawawi's.
+      sources: [{ book: book.title, at: `${kitab.title}، الحديث ${num(bab.from)}`, quote: bab.title, ...(book.headingsBy === 'nawawi' && { by: 'تبويب النووي' }) }],
       look: { view: 'sahih', book: book.slug, mark: kitab.n },
       evidence: { claimKeys: [] },
     } satisfies ChoiceQuestion;

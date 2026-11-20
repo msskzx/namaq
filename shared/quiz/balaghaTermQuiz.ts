@@ -3,7 +3,8 @@
 // A wrong choice never shares a word with the right term or with the definition, so it cannot also be right or named in it.
 // Once answered, each choice links to its term's page.
 import terms from '../data/quran/balaghaTerms';
-import { BROAD_ITNAB, BROAD_TERMS, plainName, termCredit, type BalaghaTerm } from '../quran/balaghaTerms';
+import { BROAD_ITNAB, BROAD_TERMS, plainName, termSource, type BalaghaTerm } from '../quran/balaghaTerms';
+import { uniqueSources } from './sources';
 import { normalizeWord } from '../quran/normalize';
 import { stem } from './ayahQuizText';
 import { shuffle, type Random } from './random';
@@ -135,7 +136,6 @@ function question(right: BalaghaTerm, random: Random): ChoiceQuestion | null {
     && !(chapter && term.kind <= 55)), random).slice(0, WRONG);
   if (wrong.length < WRONG) return null;
   const choices = [right, ...wrong];
-  const pages = quotes.map(termCredit);
   // In the order shown, so the look's list never puts the right one first.
   const offered = shuffle(choices, random);
   return {
@@ -146,7 +146,7 @@ function question(right: BalaghaTerm, random: Random): ChoiceQuestion | null {
     choices: offered.map(term => ({ value: term.name, labelArabic: plainName(term.name) })),
     correctAnswer: right.name,
     terms: Object.fromEntries(offered.map(term => [term.name, term.name])),
-    note: { label: 'المصدر', text: [...new Set(pages)].join('؛ ') },
+    sources: uniqueSources(quotes.map(termSource)),
     look: { view: 'terms', names: offered.map(term => term.name), mark: right.name },
     evidence: { claimKeys: [] },
   };

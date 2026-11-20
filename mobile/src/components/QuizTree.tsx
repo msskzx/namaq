@@ -26,8 +26,10 @@ import Card, { UnderCard } from '@/ui/Card';
 import { BlankBoxes } from './MushafPageView';
 import { useWriteBlanks, type WriteBlanks } from './recite/useRecite';
 import { writeBlank, type WriteBlank } from '@shared/quiz/writeBlanks';
+import QuizSources from './QuizSources';
+import type { QuizSource } from '@shared/quiz/sources';
 
-export type TreeQuestion = ScoredQuestion & { tree: Branch; prefixes?: Variant[] };
+export type TreeQuestion = ScoredQuestion & { tree: Branch; prefixes?: Variant[]; sources?: QuizSource[] };
 
 
 /** The ayah signs an asked node opens with (﴿١٧﴾ where its ayah reads on into the next): given before its boxes, never typed. */
@@ -237,6 +239,8 @@ export function QuizFeedback({ question, typed, palette, names: _names, header, 
           {size && <MatrixCard presentation={presentation} palette={palette} view={size} around={around} onTap={NO_SHEET} onMove={() => {}} onFit={onFit}
             note={key => { const row = correctionOf(graded.rows, key); return row ? <MatrixMark row={row} palette={palette} hinted={!!hints?.[row.index]} /> : null; }} />}
         </View>
+        {/* Where the leaves come from: the mushaf, and the book that sets the ayat side by side (owner, 2026-11-19). */}
+        {!!question.sources?.length && <View style={{ paddingHorizontal: 12, paddingTop: 8 }}><QuizSources sources={question.sources} palette={palette} /></View>}
       </View>
       <UnderCard><View style={{ direction: 'rtl', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 8, gap: 2 }}>
         {question.phrase && <TreeActions phrase={question.phrase} text={question.tree.words.join(' ')} palette={palette} onShare={share} />}

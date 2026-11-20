@@ -1,4 +1,5 @@
 import { citationReaderUrl } from '@/lib/provenance/citationReaderUrl';
+import type { QuizSource } from '@shared/quiz/sources';
 
 /** The single citation a quiz surface presents for an answer. */
 export interface QuizReference {
@@ -56,3 +57,11 @@ export function selectQuizReference(
   }
   return null;
 }
+
+/** A bank question's cited passage as a quiz source, drawn under the answer like every kind's (shared/quiz/sources.ts). */
+export const referenceSource = (reference: QuizReference): QuizSource => ({
+  book: reference.sourceTitle,
+  ...(reference.pageReference && { at: `ص ${reference.pageReference}` }),
+  quote: reference.excerptArabic,
+  url: reference.readerUrl,
+});

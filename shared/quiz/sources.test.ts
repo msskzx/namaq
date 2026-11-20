@@ -1,0 +1,44 @@
+// The guard on owner's rule (2026-11-19, "every quiz shows its references"): every question of every kind, and every
+// tree, says where its answer comes from. Every kind in CHOICE_KINDS is run whole, so a new kind is checked the day it is
+// registered.
+import { describe, expect, it } from 'vitest';
+import { CHOICE_KINDS } from './kinds';
+import { seededRandom } from './feedQuiz';
+import { branchQuestions } from './branchQuestions';
+import { quizTrees } from './treeScope';
+import { ayahPlace, citeSource, MUSHAF_BOOK, type QuizSource } from './sources';
+import corpus from '../quran/quranText/corpus';
+import type { BranchAyah } from '../quran/branches';
+
+const ALL = { range: null, filters: {} };
+/** A source a reader can find: a book, and where in it. */
+const findable = (source: QuizSource) => !!source.book.trim() && !!source.at?.trim();
+
+describe('every quiz question cites where its answer comes from', () => {
+  for (const kind of CHOICE_KINDS) {
+    it(kind.name, () => {
+      const unsourced = kind.questions(ALL, 'medium', seededRandom(5)).filter(question => !question.sources.length || !question.sources.every(findable));
+      expect(unsourced.map(question => question.key)).toEqual([]);
+    });
+  }
+
+  it('cites, for every tree, the mushaf at each of its ayat and the mutashabih book that sets them side by side', () => {
+    const trees = branchQuestions(corpus.ayat as BranchAyah[], null, quizTrees());
+    expect(trees.length).toBeGreaterThan(0);
+    for (const tree of trees) {
+      const [mushaf, ...books] = tree.sources;
+      expect(mushaf.book).toBe(MUSHAF_BOOK);
+      for (const branch of tree.branches) for (const ayah of branch.ayat) expect(mushaf.at).toContain(ayahPlace(ayah.key));
+      // Quiz trees are the books' pairs only (owner, 2026-11-19), so each has a book's entry.
+      expect(books.length, tree.key).toBeGreaterThan(0);
+      expect(books.every(findable), tree.key).toBe(true);
+    }
+  });
+});
+
+describe('how a reference is written', () => {
+  it('reads the book apart from the place in a sira reference, so the collapsed line shows the book alone', () => {
+    expect(citeSource({ text: 'خرج رسول الله', cite: 'سير أعلام النبلاء، السيرة ١، ص ٢٩٧', url: 'https://shamela.ws/book/10906/1' }))
+      .toEqual({ book: 'سير أعلام النبلاء', at: 'السيرة ١، ص ٢٩٧', quote: 'خرج رسول الله', url: 'https://shamela.ws/book/10906/1' });
+  });
+});

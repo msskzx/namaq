@@ -182,6 +182,11 @@ the sources disagree on as settled.
   virtue, ties… so a reader who does not want kunyas turns them off alone (`shared/interests.ts`).
 - **Mutashabih quizzes ask only what the mutashabih books set side by side** («في كتب المتشابهات»,
   category `mutashabeh`), never our own «تدبّر» pairs (owner, 2026-11-19): `quizFilters` fixes the kind.
+- **Every question says where its answer comes from** (owner, 2026-11-19): each kind fills `sources`
+  (`shared/quiz/sources.ts`), every book a fact stands on, each with where in it; the screens draw them
+  after the answer with `QuizSources` (app `mobile/src/components/QuizSources.tsx`, website
+  `src/components/quiz/QuizSources.tsx`), one collapsed line per book. A kind adds no «المصدر» note of
+  its own. `shared/quiz/sources.test.ts` runs every registered kind and the trees.
 
 - Quiz candidates and review decisions are authored under `data/quiz/` and
   projected into PostgreSQL. Whenever an agent generates or changes the bank,

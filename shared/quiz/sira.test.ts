@@ -12,7 +12,8 @@ describe('the sira and battles quiz', () => {
     for (const question of questions) {
       expect(question.choices).toHaveLength(4);
       expect(new Set(question.choices.map(choice => choice.labelArabic)).size).toBe(4);
-      expect(question.note?.text).toMatch(/ص/);
+      expect(question.sources.length).toBeGreaterThan(0);
+      for (const source of question.sources) expect(source.at).toMatch(/ص|رقم/);
     }
   });
 

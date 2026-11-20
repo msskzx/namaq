@@ -2,13 +2,11 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookOpen, faCircle, faCircleCheck, faCircleXmark, faCopy, faCrown, faHourglassHalf, faPaperPlane, faPlay, faRightFromBracket, faRotateLeft, faUserCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCircle, faCircleCheck, faCircleXmark, faCopy, faCrown, faHourglassHalf, faPaperPlane, faPlay, faRightFromBracket, faRotateLeft, faUserCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { renderSVG } from "uqr";
 import styles from "@/components/common/PaperPage.module.css";
 import Button from "@/components/common/Button";
 import LoadingDots from "@/components/common/LoadingDots";
-import QuizReferenceDialog from "@/components/common/QuizReferenceDialog";
-import type { QuizReference } from "@/lib/quiz/quizReference";
 import { useHideFooter } from "@/components/common/AppChrome";
 import { useLanguage } from "@/components/language/LanguageContext";
 import { num } from "@shared/quran/arabicNumber";
@@ -34,7 +32,6 @@ type Question = PartyQuestion & ChoiceParts & {
   choices: QuestionChoice[];
   choiceDetails?: Record<string, { text: string; reference: string }>;
   ayah?: { text: string; reference: string } | null;
-  evidence?: { reference: QuizReference | null };
   look?: QuizLook;
 };
 
@@ -232,7 +229,6 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
   const question = view.question as Question;
   const revealed = view.phase === "reveal";
   const [typed, setTyped] = useState<string[]>(() => question.compare ? emptyCompareAnswers(question) : emptyBranchAnswers(question));
-  const [source, setSource] = useState(false);
   const sent = view.answer !== null;
   const waiting = view.players.filter((player) => !player.submitted);
   const isHost = view.you === view.hostId;
@@ -321,13 +317,9 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
         )}
         {revealed && view.answer !== null && view.answer !== "" && !question.tree && !question.compare && !question.write && <ChoiceAfter question={question} given={view.answer as string} ar={ar}
           surahName={(value) => question.choices.find((choice) => choice.value === value)?.labelArabic} />}
-        {revealed && (view.answer === null || view.answer === "" || question.write) && question.ayahKey && <ChoiceAfter question={question} ar={ar} />}
+        {revealed && (view.answer === null || view.answer === "" || question.write) && !question.tree && !question.compare && <ChoiceAfter question={question} ar={ar} />}
         {/* After the reveal, everyone sees the view it is looked up in, the answer lit (owner, 2026-11-19). */}
         {revealed && lookable && <div className="mt-4"><LookView look={question.look!} shown /></div>}
-        {revealed && question.evidence?.reference && (
-          <Button className="mt-3" size="sm" variant="outline" onClick={() => setSource(true)}><FontAwesomeIcon icon={faBookOpen} />{ar ? "المصدر" : "Source"}</Button>
-        )}
-        <QuizReferenceDialog reference={source ? question.evidence?.reference ?? null : null} onClose={() => setSource(false)} />
       </Card>
       {revealed && (
         <>

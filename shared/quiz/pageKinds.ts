@@ -10,6 +10,7 @@ import { filteredAyat } from '../quran/mutashabih/browse';
 import { shuffle } from './random';
 import { FORGOT, RECITED, type ChoiceKind, type ChoiceQuestion, type ChoiceScope } from './choiceKinds';
 import { SURAH_NAMES } from '../quran/surahNames';
+import { mushafSource } from './sources';
 
 export const OPENING = 'OPENINGS';
 export const ENDS = 'ENDS';
@@ -29,6 +30,7 @@ const ask = (family: string, key: string, promptArabic: string): ChoiceQuestion 
   ayahKey: key,
   // The surah is named in the question, so its title shows on the page.
   page: { shows: 0, recite: true, title: 'shown' },
+  sources: [mushafSource(key, ayat?.get(key)?.page)],
   evidence: { claimKeys: [] },
 });
 

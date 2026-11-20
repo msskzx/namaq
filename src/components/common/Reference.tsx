@@ -1,7 +1,7 @@
 import { ChevronDown } from 'lucide-react';
 import ExternalLink from './ExternalLink';
 
-/** A quote from a book: its words, with the page it cites as a link. A quote with no page is our own note on the ones above. */
+/** A quote from a book: its words, with the page it cites as a link (the page alone when it has no words). A quote with no page is our own note on the ones above. */
 export type Quote = { text: string; cite?: string; url?: string };
 
 /**
@@ -19,8 +19,8 @@ export default function Reference({ title, quotes, links = [] }: { title: string
       </summary>
       <div className="flex flex-col gap-1 pt-1 leading-relaxed">
         {quotes.map((quote, i) => (
-          <p key={quote.text} className={i ? 'text-sm' : 'text-[var(--home-ink)]'}>
-            {quote.url ? <>«{quote.text}» <ExternalLink className="whitespace-nowrap text-sm text-[var(--home-muted)]" href={quote.url}>{quote.cite}</ExternalLink></> : quote.text}
+          <p key={`${i}:${quote.text}`} className={i ? 'text-sm' : 'text-[var(--home-ink)]'}>
+            {quote.url ? <>{quote.text && `«${quote.text}» `}<ExternalLink className="whitespace-nowrap text-sm text-[var(--home-muted)]" href={quote.url}>{quote.cite}</ExternalLink></> : quote.text}
           </p>
         ))}
         {links.map(link => <ExternalLink key={link.url} href={link.url} className="text-[var(--home-accent)]">{link.label}</ExternalLink>)}

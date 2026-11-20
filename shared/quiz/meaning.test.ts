@@ -28,7 +28,8 @@ describe('«ما معنى؟»', () => {
       }
       expect(question.marked!.length).toBeGreaterThan(0);
       expect(question.marked!.every(at => question.quran![at])).toBe(true);
-      expect(question.note?.text).toMatch(/^كل الخيارات من غريب القرآن لابن قتيبة، ص /);
+      // His own words for the right choice, at his page.
+      expect(question.sources).toEqual([expect.objectContaining({ book: 'تفسير غريب القرآن', quote: question.choices.find(choice => choice.value === question.correctAnswer)!.labelArabic })]);
     }
   });
 

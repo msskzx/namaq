@@ -19,11 +19,13 @@ import Card, { UnderCard } from '@/ui/Card';
 import { BlankBoxes } from './MushafPageView';
 import { useWriteBlanks } from './recite/useRecite';
 import { writeBlank } from '@shared/quiz/writeBlanks';
+import QuizSources from './QuizSources';
+import type { QuizSource } from '@shared/quiz/sources';
 
 const toneColour = (tone: Tone, palette: Palette) => markColour(tone === 'written' ? 'exact' : tone, palette, tone === 'written');
 const ayahOf = (key: string) => Number(key.split(':')[1]);
 
-type Asked = { compare: CompareAsk };
+type Asked = { compare: CompareAsk; sources?: QuizSource[] };
 
 /** Given words in the app-wide word-match colours: same words terracotta, written differently amber, same root purple. */
 const Words = ({ line, at, palette }: { line: CompareLine; at: number[]; palette: Palette }) =>
@@ -153,6 +155,7 @@ export function CompareFeedback({ question, typed, palette, header, hints, onFit
               ))];
             })}
           </Line>
+          <QuizSources sources={question.sources} palette={palette} />
         </View>
       </ScrollView>
       <Buttons>

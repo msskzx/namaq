@@ -2,6 +2,7 @@
 // Every answer comes from the poem itself: its verses, and the letters it names for each rule.
 import { num } from '../quran/arabicNumber';
 import type { ChoiceQuestion } from '../quiz/choiceKinds';
+import type { QuizSource } from '../quiz/sources';
 import { shuffle, type Random } from '../quiz/random';
 import { numberVerses, type NumberedVerse, type Poem } from './poem';
 import poemData from './tuhfat-al-atfal.json';
@@ -14,6 +15,8 @@ export const verses: NumberedVerse[] = numberVerses(poemData as Poem).flatMap(ch
 const verse = (number: number) => verses[number - 1];
 const whole = (number: number) => `${verse(number).first} ۞ ${verse(number).second}`;
 const noteOf = (number: number) => ({ label: `البيت ${num(number)}`, text: whole(number) });
+/** The poem, at the verse that answers (shown whole in the note). */
+const sourcesOf = (number: number): QuizSource[] => [{ book: 'تحفة الأطفال', author: 'سليمان الجمزوري', at: `البيت ${num(number)}` }];
 
 /** The letters the poem names for each rule, and the verse that names them (checked against the text in questions.test.ts). */
 export const NOON_RULES = [
@@ -62,6 +65,7 @@ export function completeQuestions(random: Random): ChoiceQuestion[] {
     choices: halfChoices(second, number, 'second', number, random),
     correctAnswer: second,
     note: noteOf(number),
+    sources: sourcesOf(number),
     look: { view: 'tuhfa', mark: number },
     evidence: { claimKeys: [] },
   }));
@@ -76,6 +80,7 @@ export function nextQuestions(random: Random): ChoiceQuestion[] {
     choices: halfChoices(verse(number + 1).first, number + 1, 'first', number, random),
     correctAnswer: verse(number + 1).first,
     note: noteOf(number + 1),
+    sources: sourcesOf(number + 1),
     look: { view: 'tuhfa', mark: number + 1 },
     evidence: { claimKeys: [] },
   }));
@@ -92,6 +97,7 @@ function letterQuestions(name: string, rules: Rules, prompt: (letter: string) =>
       choices: shuffle([rule, ...others], random).map(text => ({ value: text, labelArabic: text })),
       correctAnswer: rule,
       note: noteOf(number),
+      sources: sourcesOf(number),
       look: { view: 'tuhfa', mark: number },
       evidence: { claimKeys: [] },
     };

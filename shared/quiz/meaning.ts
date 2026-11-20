@@ -6,7 +6,7 @@ import gharib from '../data/quran/gharib';
 import corpus from '../quran/quranText/corpus';
 import type { BranchAyah } from '../quran/branches';
 import { filteredAyat } from '../quran/mutashabih/browse';
-import { gharibCredit, type GharibEntry, GHARIB_SHORT } from '../quran/gharib';
+import { GHARIB_BOOK, gharibPage, type GharibEntry } from '../quran/gharib';
 import { num } from '../quran/arabicNumber';
 import { SURAH_NAMES } from '../quran/surahNames';
 import { shuffle, type Random } from './random';
@@ -35,8 +35,6 @@ function question(asked: number, others: number[], random: Random): ChoiceQuesti
     const other = placeOf(gharib.entries[at]);
     return [String(at), { quote: other.quote, where: `${SURAH_NAMES[gharib.entries[at][0]]} ${num(other.ayah)}` }];
   }));
-  const pages = all.map(at => gharib.entries[at][1]);
-  const [first, last] = [Math.min(...pages), Math.max(...pages)];
   return {
     key: `${MEANING}:${asked}`,
     family: MEANING,
@@ -50,7 +48,8 @@ function question(asked: number, others: number[], random: Random): ChoiceQuesti
     ayahKey: place.key,
     look: { view: 'word', key: place.key, word: place.from },
     explains,
-    note: { label: 'المصدر', text: `كل الخيارات من ${first === last ? gharibCredit({ page: first }) : `${GHARIB_SHORT}، ص ${num(first)}–${num(last)}`}` },
+    // His meaning of the asked word; each wrong choice names its own word above (explains).
+    sources: [{ book: GHARIB_BOOK, author: 'ابن قتيبة', at: `ص ${num(entry[1])}`, quote: gharib.meanings[asked], url: gharibPage({ id: entry[2] }) }],
     evidence: { claimKeys: [] },
   };
 }

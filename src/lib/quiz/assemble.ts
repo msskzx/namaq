@@ -43,6 +43,8 @@ export interface AssembledQuestion {
   terms?: ChoiceQuestion['terms'];
   note?: ChoiceQuestion['note'];
   look?: ChoiceQuestion['look'];
+  /** Where the answer comes from (shared/quiz/sources.ts). A bank question's comes from its claims' citations (api/quiz). */
+  sources?: ChoiceQuestion['sources'];
   evidence: { claimKeys: string[] };
 }
 

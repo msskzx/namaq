@@ -5,12 +5,13 @@
 // choices clearly wrong). The look-up is the person's own timeline.
 import peopleJson from '../data/tarajim/people.json';
 import lifeData from '../data/events/life.json';
-import { pageLabel, type AppPerson, type PersonFact } from '../tarajim';
+import { pageSources, type AppPerson, type PersonFact } from '../tarajim';
 import type { AppLife, AppLifeEntry } from '../events/life';
 import { num } from '../quran/arabicNumber';
 import { genitive } from '../tarajimGraph';
 import { shuffle, type Random } from './random';
 import type { ChoiceKind, ChoiceQuestion } from './choiceKinds';
+import { citeSource, uniqueSources, type QuizSource } from './sources';
 
 export const TARAJIM_LIFE = 'TARAJIM_LIFE';
 export const TARAJIM_LIFE_NAME = 'في أي سنة كان؟';
@@ -21,7 +22,7 @@ const LIFE = lifeData as AppLife;
 const nameOf = (person: AppPerson) => (person.slug === 'prophet-muhammad' && !person.name.includes('ﷺ') ? `${person.name} ﷺ` : person.name);
 
 /** A thing to ask the year of: its name, every year the sources give, where they say it, and whose timeline shows it. */
-export type Dated = { key: string; name: string; years: number[]; cites: string[]; slug: string; mark: string };
+export type Dated = { key: string; name: string; years: number[]; sources: QuizSource[]; slug: string; mark: string };
 
 /** «السنة ٥ للهجرة», «السنة ٥ أو ٦ للهجرة», «٣ قبل الهجرة». */
 export function yearsName(years: number[]): string {
@@ -45,13 +46,13 @@ export function datedThings(people: AppPerson[] = PEOPLE, life: AppLife = LIFE):
       const key = `${entry.kind}:${entry.slug}`;
       if (entry.kind === 'battle' || !entry.year || entry.year.others?.length || things.has(key)) continue;
       const { name } = entry;
-      things.set(key, { key, name, years: [entry.year.value], cites: entry.year.refs.map(ref => ref.cite), slug: person.slug, mark: key });
+      things.set(key, { key, name, years: [entry.year.value], sources: entry.year.refs.map(citeSource), slug: person.slug, mark: key });
     }
     const deaths = person.died.year.filter((fact): fact is PersonFact & { value: number } => typeof fact.value === 'number');
     if (deaths.length) {
       things.set(`death:${person.slug}`, {
         key: `death:${person.slug}`, name: `وفاة ${genitive(nameOf(person))}`, years: deaths.map(fact => fact.value),
-        cites: deaths.map(fact => pageLabel(fact.refs)), slug: person.slug, mark: 'own:death',
+        sources: deaths.flatMap(fact => pageSources(fact.refs, { text: fact.text })), slug: person.slug, mark: 'own:death',
       });
     }
   }
@@ -82,7 +83,7 @@ export function yearQuestion(thing: Dated, pool: number[], random: Random): Choi
     promptArabic: `في أي سنة ${was(thing.name)} ${thing.name}؟`,
     choices: choices.map((label, i) => ({ value: String(i), labelArabic: label })),
     correctAnswer: String(choices.indexOf(right)),
-    note: { label: 'المصدر', text: [...new Set(thing.cites)].join('؛ ') },
+    sources: uniqueSources(thing.sources),
     look: { view: 'life', slug: thing.slug, mark: thing.mark },
     evidence: { claimKeys: [] },
   };
