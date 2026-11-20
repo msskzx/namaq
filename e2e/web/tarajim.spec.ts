@@ -7,7 +7,7 @@ test('the hub opens «بين عدة أشخاص», which picks people and draws t
   await page.getByRole('link', { name: /بين عدة أشخاص/ }).click();
   await expect(page).toHaveURL(/\/between$/);
   await page.getByRole('searchbox', { name: 'ابحث في التراجم' }).fill('الزبير بن العوام');
-  await page.getByRole('link', { name: 'الزبير بن العوام' }).click();
+  await page.getByRole('link', { name: 'الزبير بن العوام', exact: true }).click();
   await page.getByRole('button', { name: 'أضف' }).click();
   // Found by his kunya, as the app's search finds him.
   await page.getByRole('searchbox', { name: 'ابحث في التراجم' }).fill('ابو عمارة');
@@ -22,7 +22,7 @@ test('the hub opens «حياتهم جنبًا إلى جنب», where what two li
   await page.getByRole('link', { name: /حياتهم جنبًا إلى جنب/ }).click();
   await expect(page).toHaveURL(/\/life$/);
   await page.getByRole('searchbox', { name: 'ابحث في التراجم' }).fill('الزبير بن العوام');
-  await page.getByRole('link', { name: 'الزبير بن العوام' }).click();
+  await page.getByRole('link', { name: 'الزبير بن العوام', exact: true }).click();
   await page.getByRole('button', { name: 'أضف' }).click();
   await page.getByRole('searchbox', { name: 'ابحث في التراجم' }).fill('الصديق');
   await page.getByRole('link', { name: /^أبو بكر/ }).click();
