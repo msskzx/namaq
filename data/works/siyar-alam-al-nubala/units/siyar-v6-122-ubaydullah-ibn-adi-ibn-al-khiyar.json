@@ -1,0 +1,345 @@
+{
+  "unit": {
+    "id": "siyar-v6-122-ubaydullah-ibn-adi-ibn-al-khiyar",
+    "work": "siyar-alam-al-nubala",
+    "type": "tarjama",
+    "numbers": {
+      "printed": "١٢٢"
+    }
+  },
+  "spans": [
+    {
+      "id": "sp_ud_heading",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "514",
+      "layer": "MAIN",
+      "exact": "١٢٢ - عُبَيْدُ اللهِ بنُ عَدِيِّ بنِ الخِيَارِ النَّوْفَلِيُّ"
+    },
+    {
+      "id": "sp_ud_n1",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "514",
+      "layer": "MAIN",
+      "exact": "عُبَيْدُ اللهِ بنُ عَدِيِّ بنِ الخِيَارِ النَّوْفَلِيُّ",
+      "prefix": "١٢٢ - "
+    },
+    {
+      "id": "sp_ud_n2",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "514",
+      "layer": "MAIN",
+      "exact": "ابْنِ عَدِيِّ بنِ نَوْفَلِ بنِ عَبْدِ مَنَافٍ بنِ قُصَيِّ بنِ كِلاَبٍ القُرَشِيُّ، النَّوْفَلِيُّ"
+    },
+    {
+      "id": "sp_ud_sex",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "514",
+      "layer": "MAIN",
+      "exact": "عُبَيْدُ اللهِ بنُ",
+      "prefix": "١٢٢ - "
+    },
+    {
+      "id": "sp_ud_father_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "514",
+      "layer": "MAIN",
+      "exact": "عَدِيِّ بنِ الخِيَارِ",
+      "prefix": "١٢٢ - عُبَيْدُ اللهِ بنُ "
+    },
+    {
+      "id": "sp_ud_mother_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "515",
+      "layer": "MAIN",
+      "exact": "وَقَالَ ابْنُ سَعْدٍ فِي الطَّبَقَةِ الأُوْلَى مِنْ أَهْلِ المَدِيْنَةِ:"
+    },
+    {
+      "id": "sp_ud_mother",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "515",
+      "layer": "MAIN",
+      "exact": "عُبَيْدُ اللهِ بنُ عَدِيٍّ الأَكْبَرِ بنِ الخِيَارِ، وَأُمُّهُ: أُمُّ قِتَالٍ بِنْتِ أُسَيْدِ بنِ أَبِي العَيْصِ الأُمَوِيَّةُ"
+    },
+    {
+      "id": "sp_ud_mother_n",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "515",
+      "layer": "MAIN",
+      "exact": "أُمُّ قِتَالٍ بِنْتِ أُسَيْدِ بنِ أَبِي العَيْصِ",
+      "prefix": "وَأُمُّهُ: "
+    },
+    {
+      "id": "sp_ud_ata_frame",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "515",
+      "layer": "MAIN",
+      "exact": "قَالَ عَطَاءُ بنُ يَزِيْدَ (٢) :"
+    },
+    {
+      "id": "sp_ud_ata",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "515",
+      "layer": "MAIN",
+      "exact": "كَانَ عُبَيْدُ اللهِ بنُ عَدِيٍّ مِنْ فُقَهَاءِ قُرَيْشٍ، وَعُلَمَائِهِم"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r_ud0",
+      "unit": "siyar-v6-122-ubaydullah-ibn-adi-ibn-al-khiyar",
+      "ordinal": 1,
+      "voice": "AUTHOR",
+      "voiceBasis": "sp_ud_heading",
+      "origin": {
+        "workAuthor": true
+      },
+      "chainState": "COMPLETE"
+    },
+    {
+      "id": "r_ud_mother",
+      "unit": "siyar-v6-122-ubaydullah-ibn-adi-ibn-al-khiyar",
+      "ordinal": 2,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ud_mother_frame"
+      ],
+      "origin": {
+        "mention": "m_ud_mother_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ud_ata",
+      "unit": "siyar-v6-122-ubaydullah-ibn-adi-ibn-al-khiyar",
+      "ordinal": 3,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ud_ata_frame"
+      ],
+      "origin": {
+        "mention": "m_ud_ata_by"
+      },
+      "chainState": "DEFERRED"
+    }
+  ],
+  "statements": [
+    {
+      "id": "st_ud_name",
+      "report": "r_ud0",
+      "spans": [
+        "sp_ud_n1",
+        "sp_ud_n2"
+      ],
+      "role": "AUTHOR_REPORT"
+    },
+    {
+      "id": "st_ud_mother",
+      "report": "r_ud_mother",
+      "spans": [
+        "sp_ud_mother"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ud_ata",
+      "report": "r_ud_ata",
+      "spans": [
+        "sp_ud_ata"
+      ],
+      "role": "TRANSMITTED"
+    }
+  ],
+  "mentions": [
+    {
+      "id": "m_ud",
+      "parent": "sp_ud_n1",
+      "exact": "عُبَيْدُ اللهِ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    },
+    {
+      "id": "m_ud_father",
+      "parent": "sp_ud_n1",
+      "exact": "عَدِيِّ بنِ الخِيَارِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ud_mother_by",
+      "parent": "sp_ud_mother_frame",
+      "exact": "ابْنُ سَعْدٍ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ud_m",
+      "parent": "sp_ud_mother",
+      "exact": "وَأُمُّهُ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ud_mother",
+      "parent": "sp_ud_mother",
+      "exact": "أُمُّ قِتَالٍ بِنْتِ أُسَيْدِ بنِ أَبِي العَيْصِ",
+      "occurrence": 1,
+      "role": "REFERENT"
+    },
+    {
+      "id": "m_ud_ata_by",
+      "parent": "sp_ud_ata_frame",
+      "exact": "عَطَاءُ بنُ يَزِيْدَ",
+      "occurrence": 1,
+      "role": "SPEAKER"
+    },
+    {
+      "id": "m_ud_ata",
+      "parent": "sp_ud_ata",
+      "exact": "عُبَيْدُ اللهِ بنُ عَدِيٍّ",
+      "occurrence": 1,
+      "role": "SUBJECT"
+    }
+  ],
+  "identifications": [
+    {
+      "id": "i_ud",
+      "mention": "m_ud",
+      "agent": "ubaydullah-ibn-adi-ibn-al-khiyar",
+      "basis": [
+        {
+          "span": "sp_ud_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ud_father",
+      "mention": "m_ud_father",
+      "agent": "adi-ibn-al-khiyar",
+      "basis": [
+        {
+          "span": "sp_ud_father_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ud_m",
+      "mention": "m_ud_m",
+      "agent": "ubaydullah-ibn-adi-ibn-al-khiyar",
+      "basis": [
+        {
+          "span": "sp_ud_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ud_mother",
+      "mention": "m_ud_mother",
+      "agent": "umm-qital-bint-usayd",
+      "basis": [
+        {
+          "span": "sp_ud_mother_n",
+          "role": "NASAB"
+        }
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "i_ud_ata",
+      "mention": "m_ud_ata",
+      "agent": "ubaydullah-ibn-adi-ibn-al-khiyar",
+      "basis": [
+        {
+          "span": "sp_ud_heading",
+          "role": "SAME_WORK_EXPLICIT"
+        }
+      ],
+      "status": "PROPOSED"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "a_ud_name",
+      "subject": "m_ud",
+      "predicate": "name.full",
+      "value": {
+        "spans": [
+          "sp_ud_n1",
+          "sp_ud_n2"
+        ]
+      },
+      "restsOn": [
+        "st_ud_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ud_sex",
+      "subject": "m_ud",
+      "predicate": "sex",
+      "value": {
+        "classified": "MALE",
+        "spans": [
+          "sp_ud_sex"
+        ]
+      },
+      "restsOn": [
+        "st_ud_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ud_father",
+      "subject": "m_ud",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ud_father"
+      },
+      "restsOn": [
+        "st_ud_name"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ud_mother",
+      "subject": "m_ud_m",
+      "predicate": "CHILD_OF",
+      "value": {
+        "object": "m_ud_mother"
+      },
+      "restsOn": [
+        "st_ud_mother"
+      ],
+      "status": "PROPOSED"
+    },
+    {
+      "id": "a_ud_v_faqih",
+      "subject": "m_ud_ata",
+      "predicate": "virtue",
+      "value": {
+        "spans": [
+          "sp_ud_ata"
+        ]
+      },
+      "restsOn": [
+        "st_ud_ata"
+      ],
+      "status": "PROPOSED"
+    }
+  ]
+}

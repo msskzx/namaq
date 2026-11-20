@@ -1,7 +1,8 @@
 # Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
 # dependencies
-node_modules/
+# no trailing slash: a node_modules symlink must be ignored too
+node_modules
 
 # Expo
 .expo/
