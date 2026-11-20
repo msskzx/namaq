@@ -240,6 +240,19 @@
         "mention": "m_ua_d87_by"
       },
       "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_ua_d87z",
+      "unit": "siyar-v6-121-ubaydullah-ibn-al-abbas",
+      "ordinal": 6,
+      "voice": "TRANSMITTED",
+      "frame": [
+        "sp_ua_d87_frame"
+      ],
+      "origin": {
+        "mention": "m_ua_d87z_by"
+      },
+      "chainState": "DEFERRED"
     }
   ],
   "statements": [
@@ -331,6 +344,14 @@
         "sp_ua_d87"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_ua_d87z",
+      "report": "r_ua_d87z",
+      "spans": [
+        "sp_ua_d87"
+      ],
+      "role": "TRANSMITTED"
     }
   ],
   "mentions": [
@@ -379,35 +400,35 @@
     {
       "id": "m_ua_b_kathir",
       "parent": "sp_ua_bro2",
-      "exact": "وَكَثِيْرٍ",
+      "exact": "كَثِيْرٍ",
       "occurrence": 1,
       "role": "REFERENT"
     },
     {
       "id": "m_ua_b_fadl",
       "parent": "sp_ua_bro2",
-      "exact": "وَالفَضْلِ",
+      "exact": "الفَضْلِ",
       "occurrence": 1,
       "role": "REFERENT"
     },
     {
       "id": "m_ua_b_qutham",
       "parent": "sp_ua_bro2",
-      "exact": "وَقُثَمَ",
+      "exact": "قُثَمَ",
       "occurrence": 1,
       "role": "REFERENT"
     },
     {
       "id": "m_ua_b_mabad",
       "parent": "sp_ua_bro2",
-      "exact": "وَمَعْبَدٍ",
+      "exact": "مَعْبَدٍ",
       "occurrence": 1,
       "role": "REFERENT"
     },
     {
       "id": "m_ua_b_tammam",
       "parent": "sp_ua_bro2",
-      "exact": "وَتَمَّامٍ",
+      "exact": "تَمَّامٍ",
       "occurrence": 1,
       "role": "REFERENT"
     },
@@ -494,6 +515,13 @@
       "exact": "مَاتَ",
       "occurrence": 1,
       "role": "REFERENT"
+    },
+    {
+      "id": "m_ua_d87z_by",
+      "parent": "sp_ua_d87_frame",
+      "exact": "أَبُو حَسَّانٍ الزِّيَادِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
     }
   ],
   "identifications": [
@@ -548,7 +576,7 @@
     {
       "id": "i_ua_b_abdullah",
       "mention": "m_ua_b_abdullah",
-      "agent": "abdullah-ibn-al-abbas",
+      "agent": "abdullah-ibn-abbas",
       "basis": [
         {
           "span": "sp_ua_father_n",
@@ -896,7 +924,8 @@
         ]
       },
       "restsOn": [
-        "st_ua_d87"
+        "st_ua_d87",
+        "st_ua_d87z"
       ],
       "status": "PROPOSED"
     }

@@ -296,9 +296,10 @@
         "object": "m_uk_comp_prophet"
       },
       "restsOn": [
-        "st_uk_qila"
+        "st_uk_qila",
+        "st_uk_aslama"
       ],
-      "status": "PROPOSED"
+      "status": "DISPUTED"
     },
     {
       "id": "a_uk_d88",

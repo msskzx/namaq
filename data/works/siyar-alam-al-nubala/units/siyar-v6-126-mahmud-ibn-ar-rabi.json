@@ -102,7 +102,8 @@
       "volume": 6,
       "page": "519",
       "layer": "MAIN",
-      "exact": "أَدْرَكَ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - وَعَقَلَ مِنْهُ مَجَّةً مَجَّهَا فِي وَجْهِهِ مِنْ بِئْرٍ فِي دَارِهِم، وَهُوَ يَوْمَئِذٍ ابْنُ أَرْبَعِ سِنِيْنَ"
+      "exact": "أَدْرَكَ النَّبِيَّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - وَعَقَلَ مِنْهُ مَجَّةً مَجَّهَا فِي وَجْهِهِ مِنْ بِئْرٍ فِي دَارِهِم",
+      "suffix": "، وَهُوَ يَوْمَئِذٍ"
     },
     {
       "id": "sp_mr_ibnmain_frame",
@@ -172,6 +173,14 @@
       "layer": "MAIN",
       "exact": "ثَلاَثٌ وَتِسْعُوْنَ سَنَةً",
       "prefix": "وَلَهُ "
+    },
+    {
+      "id": "sp_mr_d99t",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "520",
+      "layer": "MAIN",
+      "exact": "وَكَذَا أَرَّخَهُ: عَلِيُّ بنُ عَبْدِ اللهِ التَّمِيْمِيُّ"
     },
     {
       "id": "sp_mr_d96_frame",
@@ -262,9 +271,19 @@
       "chainState": "DEFERRED"
     },
     {
-      "id": "r_mr_d96",
+      "id": "r_mr_d99t",
       "unit": "siyar-v6-126-mahmud-ibn-ar-rabi",
       "ordinal": 6,
+      "voice": "TRANSMITTED",
+      "origin": {
+        "mention": "m_mr_d99t_by"
+      },
+      "chainState": "DEFERRED"
+    },
+    {
+      "id": "r_mr_d96",
+      "unit": "siyar-v6-126-mahmud-ibn-ar-rabi",
+      "ordinal": 7,
       "voice": "TRANSMITTED",
       "frame": [
         "sp_mr_d96_frame"
@@ -337,6 +356,14 @@
       "report": "r_mr_d99",
       "spans": [
         "sp_mr_d99"
+      ],
+      "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_mr_d99t",
+      "report": "r_mr_d99t",
+      "spans": [
+        "sp_mr_d99t"
       ],
       "role": "TRANSMITTED"
     },
@@ -440,6 +467,13 @@
       "exact": "مَاتَ",
       "occurrence": 1,
       "role": "REFERENT"
+    },
+    {
+      "id": "m_mr_d99t_by",
+      "parent": "sp_mr_d99t",
+      "exact": "عَلِيُّ بنُ عَبْدِ اللهِ التَّمِيْمِيُّ",
+      "occurrence": 1,
+      "role": "SPEAKER"
     },
     {
       "id": "m_mr_d96_by",
@@ -699,7 +733,8 @@
         ]
       },
       "restsOn": [
-        "st_mr_d99"
+        "st_mr_d99",
+        "st_mr_d99t"
       ],
       "status": "PROPOSED"
     },

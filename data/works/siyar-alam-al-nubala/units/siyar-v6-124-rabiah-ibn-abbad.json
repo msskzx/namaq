@@ -70,6 +70,14 @@
       "prefix": "وَقَالَ البُخَارِيُّ، وَغَيْرُهُ: "
     },
     {
+      "id": "sp_rb_presama",
+      "edition": "siyar-risalah-1405-arnaut",
+      "volume": 6,
+      "page": "517",
+      "layer": "MAIN",
+      "exact": "وَلاَ رَيْبَ فِي سَمَاعِ رَبِيْعَةَ مِنَ النَّبِيِّ -صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ - وَلَكِنْ كَانَ قَبْلَ أَنْ يُسْلِمَ"
+    },
+    {
       "id": "sp_rb_khalifah_frame",
       "edition": "siyar-risalah-1405-arnaut",
       "volume": 6,
@@ -159,6 +167,14 @@
         "sp_rb_bukhari"
       ],
       "role": "TRANSMITTED"
+    },
+    {
+      "id": "st_rb_presama",
+      "report": "r_rb0",
+      "spans": [
+        "sp_rb_presama"
+      ],
+      "role": "AUTHOR_REPORT"
     },
     {
       "id": "st_rb_khalifah",
@@ -339,9 +355,11 @@
         "object": "m_rb_comp_prophet"
       },
       "restsOn": [
-        "st_rb_bukhari"
+        "st_rb_bukhari",
+        "st_rb_saw",
+        "st_rb_presama"
       ],
-      "status": "PROPOSED"
+      "status": "DISPUTED"
     },
     {
       "id": "a_rb_yarmuk",
