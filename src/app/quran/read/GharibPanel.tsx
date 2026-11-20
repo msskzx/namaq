@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 import { GHARIB_BOOK, GHARIB_EDITION, MUFRADAT_BOOK, MUFRADAT_EDITION, gharibCredit, gharibOfWord, gharibPage, mufradatCredit, mufradatPage } from '@shared/quran/gharib';
-import ExternalLink from '@/components/common/ExternalLink';
 import Card from '@/components/common/Card';
+import CardWithRow from '@/components/common/CardWithRow';
 import Segmented from '@/components/common/Segmented';
-import Folded from '@/components/common/Folded';
 import Pickable from '@/components/common/Pickable';
 import LitAyat from '@/components/quran/text/LitAyat';
 import BookRuns from '@/components/quran/text/BookRuns';
@@ -38,26 +37,20 @@ export default function GharibPanel({ data }: { data: GharibAyah }) {
       )}
       {!books.length && <p className="py-6 text-center text-sm text-[var(--home-muted)]">لا كلام في الكتابين على هذه الكلمة.</p>}
       {showing === 'gharib' && gharib.map((entry, i) => (
-        <Card key={entry.at} picked={picked === i} className="block shrink-0 px-3.5 py-2.5">
-          {/* The entry lights the words it quotes; its reference below is a control of its own. */}
+        <CardWithRow key={entry.at} card={{ picked: picked === i }} className="block px-3.5 py-2.5" source={[{ line: GHARIB_BOOK, quotes: [{ text: '', cite: gharibCredit(entry), url: gharibPage(entry) },
+          { text: `${GHARIB_BOOK}، ${GHARIB_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث، كلام ابن قتيبة وحده بلا حواشي المحقق.` }] }]}>
+          {/* The entry lights the words it quotes; its book is on the line under it (owner 2026-11-20). */}
           <Pickable picked={picked === i} onPick={() => setPicked(i)}>
             <p className="whitespace-pre-line text-[1.125rem] leading-[1.9]"><BookRuns text={entry.text} /></p>
           </Pickable>
-          <Folded credit={gharibCredit(entry)}>
-            <p>{`${GHARIB_BOOK}، ${GHARIB_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث، كلام ابن قتيبة وحده بلا حواشي المحقق.`}</p>
-            <ExternalLink href={gharibPage(entry)}>اقرأ الصفحة</ExternalLink>
-          </Folded>
-        </Card>
+        </CardWithRow>
       ))}
       {showing === 'mufradat' && mufradat && (
-        <Card className="block shrink-0 px-3.5 py-2.5">
+        <CardWithRow className="block px-3.5 py-2.5" source={[{ line: MUFRADAT_BOOK, quotes: [{ text: '', cite: mufradatCredit(mufradat), url: mufradatPage(mufradat) },
+          { text: `${MUFRADAT_BOOK}، ${MUFRADAT_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث، كلام الراغب وحده بلا حواشي المحقق. المادة كاملة تحت عنوانه، ووُصلت بالكلمة من جذرها في المدونة القرآنية.` }] }]}>
           <p className="text-[0.9375rem] text-[var(--home-muted)]">{`[${mufradat[0]}]`}</p>
           <p className="whitespace-pre-line text-[1.125rem] leading-[1.9]"><BookRuns text={mufradat[4]} /></p>
-          <Folded credit={mufradatCredit(mufradat)}>
-            <p>{`${MUFRADAT_BOOK}، ${MUFRADAT_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث، كلام الراغب وحده بلا حواشي المحقق. المادة كاملة تحت عنوانه، ووُصلت بالكلمة من جذرها في المدونة القرآنية.`}</p>
-            <ExternalLink href={mufradatPage(mufradat)}>اقرأ الصفحة</ExternalLink>
-          </Folded>
-        </Card>
+        </CardWithRow>
       )}
     </>
   );

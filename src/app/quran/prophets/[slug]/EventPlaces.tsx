@@ -13,7 +13,9 @@ import { PlaceReview } from './PlaceReview';
 import PlaceText from './PlaceText';
 import { groupColor, type StoryReview } from './StoryMap';
 import Button from '@/components/common/Button';
-import Card from '@/components/common/Card';
+import CardWithRow from '@/components/common/CardWithRow';
+import { sourcesOf } from '@/components/common/SourceLine';
+import { storySource } from '@shared/quran/pieceSources';
 
 /**
  * One event read across the surahs that tell it: a card for each surah, one under another, words another surah also has in colour.
@@ -48,7 +50,7 @@ export default function EventPlaces({ slug, compare, event, places, phase, focus
     step: forward => { setX(0); onStep(forward ? 1 : -1); },
     cancel: back,
   });
-  const icon = 'rounded p-1 text-[var(--home-muted)] hover:text-[var(--home-ink)]';
+  const icon = 'flex size-11 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-ink)] [&_svg]:size-5';
   return (
     <section ref={box} aria-labelledby={readable ? 'event-heading' : undefined} aria-label={readable ? undefined : event.title} className={`flex flex-col gap-4 ${settling ? 'transition-transform duration-[250ms]' : ''}`} style={x ? { transform: `translateX(${x}px)` } : undefined}>
       <div className="flex items-center gap-3">
@@ -63,15 +65,18 @@ export default function EventPlaces({ slug, compare, event, places, phase, focus
       </div>
       <div className="flex max-w-4xl flex-col gap-3">
         {places.map((place, k) => (
-          <Card
-            as="article"
-            key={place.surah}
-            data-share-card
-            data-surah={place.surah}
-            faded={review?.verdicts[placeKeyOf(review.slug, place)]?.keep === false}
-            picked={focus === place.surah}
-            className="flex flex-col gap-1 p-4"
-          >
+          // Each place in the home card's shape (owner 2026-11-20): the mushaf, compare and share under it, the mushaf's places on the line (the feed card's source).
+          <article key={place.surah} data-share-card data-surah={place.surah}>
+          <CardWithRow className="flex flex-col gap-1 p-4"
+            card={{ faded: review?.verdicts[placeKeyOf(review.slug, place)]?.keep === false, picked: focus === place.surah }}
+            source={sourcesOf([storySource([{ phase: 0, segments: place.segments.map(g => ({ surah: place.surah, range: g.range })) }], 0)])}
+            lead={readable && <Link href={`/quran/read/ayah/${place.surah}/${place.segments[0].range[0]}`} aria-label={`افتح ${place.name} في المصحف`} title="افتح في المصحف" className={icon}>
+              <BookOpen aria-hidden />
+            </Link>}
+            row={readable && <>
+              <CompareLinks links={compare[placeKeyOf(slug, place)] ?? []} label={`قارن ${place.name}`} className={icon} />
+              <ShareImageButton href={`/quran/read/ayah/${place.surah}/${place.segments[0].range[0]}`} />
+            </>}>
             {/* In the image the place carries its event, as in the phone app. */}
             <div data-share-only hidden>
               <p className="text-sm font-semibold" style={{ color: groupColor(event.phase) }}>{phase}</p>
@@ -80,17 +85,11 @@ export default function EventPlaces({ slug, compare, event, places, phase, focus
             <header className="flex items-center gap-2">
               <h3 className="font-semibold">{place.name}</h3>
               <span className="text-xs text-[var(--home-muted)]">{place.segments.map(g => rangeText(g.range)).join('، ')}</span>
-              {readable && <span data-share-skip className="ms-auto flex items-center gap-2">
-                <Link href={`/quran/read/ayah/${place.surah}/${place.segments[0].range[0]}`} aria-label={`افتح ${place.name} في المصحف`} title="افتح في المصحف" className={icon}>
-                  <BookOpen size={16} aria-hidden />
-                </Link>
-                <CompareLinks links={compare[placeKeyOf(slug, place)] ?? []} label={`قارن ${place.name}`} className={icon} />
-                <ShareImageButton size="icon" iconSize={16} href={`/quran/read/ayah/${place.surah}/${place.segments[0].range[0]}`} />
-              </span>}
             </header>
             <PlaceText place={place} shared={shared[k]} />
             {review && <PlaceReview key={placeKeyOf(review.slug, place)} id={placeKeyOf(review.slug, place)} verdict={review.verdicts[placeKeyOf(review.slug, place)]} />}
-          </Card>
+          </CardWithRow>
+          </article>
         ))}
       </div>
     </section>

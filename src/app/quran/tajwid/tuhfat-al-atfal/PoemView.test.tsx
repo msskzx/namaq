@@ -37,14 +37,10 @@ it.each(['ar', 'en'])('links every chapter to its reading section in %s', langua
   expect(screen.getByRole('article').getAttribute('dir')).toBe('rtl');
 });
 
-it.each(['ar', 'en'])('keeps edition and transcription links in a source disclosure in %s', language => {
-  state.language = language;
+it('keeps the edition and transcription links in the sheet of its book line', () => {
   render(<PoemView poem={poem as Poem} />);
-  const summary = screen.getByText(language === 'ar' ? 'الضبط والمصدر' : 'Edition and source');
-  const details = summary.closest('details')!;
-  expect(details.open).toBe(false);
-  fireEvent.click(summary);
-  expect(details.open).toBe(true);
-  expect(within(details).getByRole('link', { name: poem.edition.name }).getAttribute('href')).toBe(poem.edition.url);
-  expect(within(details).getByRole('link', { name: language === 'ar' ? 'نسخة رقمية' : 'digital transcription' }).getAttribute('href')).toBe(poem.transcription);
+  fireEvent.click(screen.getByRole('button', { name: `المصدر: ${poem.title}` }));
+  const sheet = screen.getByRole('dialog', { name: 'المصدر' });
+  expect(within(sheet).getByRole('link', { name: `الضبط: ${poem.edition.name}` }).getAttribute('href')).toBe(poem.edition.url);
+  expect(within(sheet).getByRole('link', { name: 'قوبل به كل بيت من نسخة رقمية' }).getAttribute('href')).toBe(poem.transcription);
 });

@@ -32,8 +32,8 @@ export default function CardWithRow({ lead, row, menu = [], cap = false, source 
   bar?: ReactNode;
   /** The card's inner layout (padding, flex), as on `Card`. */
   className?: string;
-  /** The card's own attributes (an `id` to link to, `data-share-image` for the picture it shares); not on a capped card. */
-  card?: HTMLAttributes<HTMLElement> & { as?: 'article' | 'section' } & Record<`data-${string}`, string | boolean | undefined>;
+  /** The card's own attributes and looks (an `id` to link to, `data-share-image` for the picture it shares, `picked`); not on a capped card. */
+  card?: HTMLAttributes<HTMLElement> & { as?: 'article' | 'section'; picked?: boolean; faded?: boolean } & Record<`data-${string}`, string | number | boolean | undefined>;
   children: ReactNode;
 }) {
   const [slot, setSlot] = useRowSlot();
@@ -60,7 +60,7 @@ export default function CardWithRow({ lead, row, menu = [], cap = false, source 
   const content = <SourceSlotContext.Provider value={sourceSlot}><CardRowProvider slot={slot}>{children}</CardRowProvider></SourceSlotContext.Provider>;
   const look = `overflow-hidden ${className}`;
   // One block, so a page's gaps part its sections, not a card from its own row and line.
-  return <div className="flex flex-col gap-1">
+  return <div className="flex shrink-0 flex-col gap-1">
     {cap ? <CappedCard className={look} whole={<>
       <Card className={look}><SourceSlotContext.Provider value={NO_SOURCES}><CardRowProvider slot={sheetSlot}>{children}</CardRowProvider></SourceSlotContext.Provider></Card>
       {buttons(setSheetSlot)}

@@ -8,10 +8,10 @@ import { num } from '@shared/quran/arabicNumber';
 import { ITQAN_BOOK, ITQAN_EDITION, itqanCredit, itqanPage } from '@shared/quran/itqanBalagha';
 import { KASHSHAF_BOOK, KASHSHAF_EDITION, kashshafCredit, kashshafPage, kashshafRuns, litWords } from '@shared/quran/kashshaf';
 import { tafsirRuns } from '@shared/quran/tafsirSadi';
-import ExternalLink from '@/components/common/ExternalLink';
 import OpenInBook from '@/components/quran/OpenInBook';
 import type { BalaghaAyah } from './balagha';
 import Card from '@/components/common/Card';
+import CardWithRow from '@/components/common/CardWithRow';
 import Segmented from '@/components/common/Segmented';
 import Folded from '@/components/common/Folded';
 import Pickable from '@/components/common/Pickable';
@@ -30,7 +30,7 @@ type Book = keyof typeof BOOKS;
  * The reader's balagha sheet on the website, the app's BalaghaSheet (mobile/src/components/BalaghaSheet.tsx): pills pick
  * the book. Al-Itqan: al-Suyuti's paragraphs that quote the ayah, whole, under his heading. Al-Kashshaf: al-Zamakhshari's
  * whole passage, the sentences where he names a device lit with his word in front. A click on a paragraph or a lit
- * sentence lights the ayah words it quotes; each book's page folds open below.
+ * sentence lights the ayah words it quotes; each book's page is on the line under its card.
  */
 export default function BalaghaPanel({ ayah, data }: { ayah: string; data: BalaghaAyah }) {
   const { passage, words, itqan } = data;
@@ -50,8 +50,10 @@ export default function BalaghaPanel({ ayah, data }: { ayah: string; data: Balag
       <Segmented tabs label="الكتاب" className="shrink-0 self-start"
         options={(Object.keys(BOOKS) as Book[]).map(book => ({ key: book, label: BOOKS[book], current: shown === book, onClick: () => setShown(book) }))} />
       {shown === 'itqan' && (itqan.length ? itqan.map((item, i) => (
-        <Card key={`${item.id}/${i}`} picked={paragraph === i && itqan.length > 1} className="block shrink-0 px-3.5 py-2.5">
-          {/* The paragraph lights the words it quotes; its reference below is a control of its own. */}
+        <CardWithRow key={`${item.id}/${i}`} card={{ picked: paragraph === i && itqan.length > 1 }} className="block px-3.5 py-2.5"
+          source={[{ line: ITQAN_BOOK, quotes: [{ text: '', cite: itqanCredit(item), url: itqanPage(item) },
+            { text: `${ITQAN_BOOK}، ${ITQAN_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث. الفقرة كاملة كما في الكتاب، والعنوان عنوانه.` }] }]}>
+          {/* The paragraph lights the words it quotes; its book is on the line under it (owner 2026-11-20). */}
           <Pickable picked={paragraph === i} onPick={() => setParagraph(i)}>
           <p className="text-sm leading-6 text-[var(--home-muted)]">{item.heading ? `«${item.heading}» · ${item.kind}` : item.kind}</p>
           <p className="text-[1.125rem] leading-[1.9]">
@@ -70,14 +72,12 @@ export default function BalaghaPanel({ ayah, data }: { ayah: string; data: Balag
               </span>
             </Folded>
           )}
-          <Folded credit={itqanCredit(item)}>
-            <p>{`${ITQAN_BOOK}، ${ITQAN_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث. الفقرة كاملة كما في الكتاب، والعنوان عنوانه.`}</p>
-            <ExternalLink href={itqanPage(item)}>اقرأ الصفحة</ExternalLink>
-          </Folded>
-        </Card>
+        </CardWithRow>
       )) : <p className="py-6 text-center text-sm text-[var(--home-muted)]">لم يستشهد السيوطي بهذه الآية في أنواع البلاغة.</p>)}
       {shown === 'kashshaf' && (passage ? (
-        <Card className="block shrink-0 px-3.5 py-2.5">
+        <CardWithRow className="block px-3.5 py-2.5" lead={<OpenInBook book="kashshaf" ayah={ayah} className="min-h-11 px-2" />}
+          source={[{ line: KASHSHAF_BOOK, quotes: [{ text: '', cite: kashshafCredit(passage), url: kashshafPage(passage) },
+            { text: `${KASHSHAF_BOOK}، ${KASHSHAF_EDITION}. نص الموسوعة القرآنية، إصدار ${data.version}، بلا حواشي الكتب المطبوعة معه. تضاء الجملة التي يسمّي فيها الزمخشري فنًّا من فنون البلاغة.` }] }]}>
           <p className="whitespace-pre-line text-[1.125rem] leading-[1.9]">
             {kashshafRuns(passage).map((run, i) => {
               const text = run.quran ? <QuranWords className="text-[var(--home-accent)]">{run.text}</QuranWords> : run.text;
@@ -91,12 +91,7 @@ export default function BalaghaPanel({ ayah, data }: { ayah: string; data: Balag
               );
             })}
           </p>
-          <Folded credit={kashshafCredit(passage)}>
-            <p>{`${KASHSHAF_BOOK}، ${KASHSHAF_EDITION}. نص الموسوعة القرآنية، إصدار ${data.version}، بلا حواشي الكتب المطبوعة معه. تضاء الجملة التي يسمّي فيها الزمخشري فنًّا من فنون البلاغة.`}</p>
-            <ExternalLink href={kashshafPage(passage)}>اقرأ الصفحة</ExternalLink>
-            <OpenInBook book="kashshaf" ayah={ayah} />
-          </Folded>
-        </Card>
+        </CardWithRow>
       ) : <p className="py-6 text-center text-sm text-[var(--home-muted)]">لا كلام للكشاف على هذه الآية.</p>)}
     </>
   );

@@ -3,7 +3,7 @@
 import { useLanguage } from '@/components/language/LanguageContext';
 import { num } from '@shared/quran/arabicNumber';
 import paper from '@/components/common/PaperPage.module.css';
-import ExternalLink from '@/components/common/ExternalLink';
+import SourceLine from '@/components/common/SourceLine';
 import { numberVerses, type Poem } from '@shared/tajwid/poem';
 import styles from './Poem.module.css';
 
@@ -40,10 +40,8 @@ export default function PoemView({ poem }: { poem: Poem }) {
         <p>{ar
           ? <>{author}، نظمها سنة {num(composed)}هـ، وأبياتها {num(count)}</>
           : <>By <span lang="ar" dir="rtl">{author}</span>. Composed in {composed} AH · {count} verses</>}</p>
-        <details className={styles.sources}>
-          <summary>{ar ? 'الضبط والمصدر' : 'Edition and source'}</summary>
-          <p>{ar ? 'الضبط: ' : 'Vocalization: '}<ExternalLink href={edition.url} lang="ar" dir="rtl">{edition.name}</ExternalLink>{ar ? '، قوبل به كل بيت من ' : '. Compared verse by verse with a '}<ExternalLink href={transcription}>{ar ? 'نسخة رقمية' : 'digital transcription'}</ExternalLink>.</p>
-        </details>
+        {/* The edition and the transcription it was checked against, on the book line (owner 2026-11-20; the app's). */}
+        <div className="flex justify-center"><SourceLine sources={[{ line: title, quotes: [{ text: '', cite: `الضبط: ${edition.name}`, url: edition.url }, { text: '', cite: 'قوبل به كل بيت من نسخة رقمية', url: transcription }] }]} /></div>
       </header>
       <div className={styles.layout}>
         <nav aria-label={ar ? 'أبواب المنظومة' : 'Poem chapters'} className={styles.contents}>

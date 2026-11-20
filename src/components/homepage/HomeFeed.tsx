@@ -102,7 +102,7 @@ import CardWithRow from '@/components/common/CardWithRow';
 import MoreMenu from '@/components/common/MoreMenu';
 import Button from '@/components/common/Button';
 import SourceLine, { sourcesOf } from '@/components/common/SourceLine';
-import { SourceSlotContext, type Source } from '@/components/common/sourceSlot';
+import type { Source } from '@/components/common/sourceSlot';
 import { citeSource, mushafSource, MUSHAF_BOOK, type QuizSource } from '@shared/quiz/sources';
 import { qiraatSources } from '@shared/quiz/bookSources';
 import { storySource } from '@shared/quran/pieceSources';

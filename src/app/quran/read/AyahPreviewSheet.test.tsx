@@ -1,5 +1,5 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { ayahPreview } from './ayahPreview';
 import { qiraatOf } from '@shared/quran/qiraatData';
 import { LanguageProvider } from '@/components/language/LanguageContext';
@@ -21,7 +21,10 @@ describe('the readings sheet', () => {
     expect(screen.getByText('تَعۡمَلُونَ')).toBeTruthy();
     expect(screen.getByText('يَعۡمَلُونَ')).toBeTruthy();
     expect(screen.getAllByText('الباقون').length).toBeGreaterThan(0);
-    expect(screen.getByText('المصدر: الموسوعة القرآنية').getAttribute('href')).toBe('https://quranpedia.net');
+    // The book on the line under the readings; its sheet links the source.
+    fireEvent.click(screen.getByRole('button', { name: /^المصدر: الموسوعة القرآنية/ }));
+    const sheet = screen.getByRole('dialog', { name: 'المصدر' });
+    expect(within(sheet).getAllByRole('link').map(link => link.getAttribute('href'))).toContain('https://quranpedia.net');
   });
 });
 
@@ -72,15 +75,14 @@ describe('the balagha sheet', () => {
     expect(screen.getByText(/«الِاسْتِعَارَةُ» · النَّوْعُ الثَّامِنُ/)).toBeTruthy();
     expect(screen.getByText('شَيۡبࣰا').closest('mark')).toBeTruthy();
     expect(screen.getByText('قَالَ').closest('mark')).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: 'الإتقان للسيوطي ٣/١٥٠–١٥١' }));
-    expect(screen.getByText('اقرأ الصفحة').getAttribute('href')).toBe('https://shamela.ws/book/11728/1000');
+    // Each card's book on the line under it, the page linked in its sheet.
+    fireEvent.click(screen.getByRole('button', { name: /^المصدر: الإتقان/ }));
+    expect(within(screen.getByRole('dialog', { name: 'المصدر' })).getByRole('link', { name: 'الإتقان للسيوطي ٣/١٥٠–١٥١' }).getAttribute('href')).toBe('https://shamela.ws/book/11728/1000');
     fireEvent.click(screen.getByRole('tab', { name: 'الكشاف للزمخشري' }));
     const lit = await screen.findByRole('button', { name: /«الاستعارة» «التشبيه»/ });
     expect(lit.textContent).toContain('ثم أخرجه مخرج الاستعارة');
-    const credit = screen.getByRole('button', { name: /الكشاف للزمخشري/ });
-    expect(credit.getAttribute('aria-expanded')).toBe('false');
-    fireEvent.click(credit);
-    expect(screen.getByText('اقرأ الصفحة').getAttribute('href')).toMatch(/^https:\/\/quranpedia\.net\/book\/346\//);
+    fireEvent.click(screen.getByRole('button', { name: /^المصدر: الكشاف/ }));
+    expect(within(screen.getAllByRole('dialog', { name: 'المصدر' }).at(-1)!).getAllByRole('link').map(link => link.getAttribute('href')).some(href => /^https:\/\/quranpedia\.net\/book\/346\//.test(href!))).toBe(true);
     vi.unstubAllGlobals();
   });
 });

@@ -1,4 +1,3 @@
-import { View } from 'react-native';
 import { Text } from '@/ui/Text';
 import { num } from '@shared/quran/arabicNumber';
 import { QUIZ_LEAVES, type QuizTopic } from '@shared/quiz/settings';

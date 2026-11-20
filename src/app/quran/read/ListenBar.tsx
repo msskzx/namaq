@@ -6,7 +6,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { EACH_AYAH, LISTEN_REFERENCE, ONCE, PAUSES, RANGE_TIMES, RECITERS, RIWAYA, SPEEDS, pauseLabel, reciterName, reciterOf, speedLabel, surahEnd, timesLabel, type Range, type RepeatPlan } from '@shared/quran/recitation';
 import { readListenPlan, readReciter, serverListenPlan, serverReciter, subscribeListenPlan, subscribeReciter, writeListenPlan, writeReciter } from '@shared/listenSettings';
 import Button from '@/components/common/Button';
-import Reference from '@/components/common/Reference';
+import SourceLine from '@/components/common/SourceLine';
 import { applyReciter, applySpeed, ayahCounts, listen, stopListening, togglePlaying, useListening } from '@/lib/listen';
 import styles from './Mushaf.module.css';
 import { surahName } from '@shared/quran/surahNames';
@@ -106,7 +106,7 @@ export function ListenSheet({ start, onClose }: { start: string | null; onClose:
               </button>
             ))}
           </div>
-          <Reference title={LISTEN_REFERENCE.title} quotes={LISTEN_REFERENCE.quotes} />
+          <SourceLine sources={[{ line: LISTEN_REFERENCE.title, quotes: LISTEN_REFERENCE.quotes }]} />
         </>}
       </div>}
     </Sheet>
