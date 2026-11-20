@@ -17,6 +17,12 @@ export const hasBooksCard = (slot: number) => slot % 4 === 1;
 export const isKahfDay = (now: Date) => now.getDay() === 5;
 export const KAHF_SLOT = 1;
 
+/**
+ * No feed card is taller than this share of the screen (owner, 2026-11-20): longer content stops with a fade and «اقرأ كاملًا»
+ * opens it whole in a sheet (app ui/Card `CardWithRow` `cap`, website common/CappedCard).
+ */
+export const CARD_CAP_SHARE = 2 / 3;
+
 /** A few books for the books card: those with a فاصلة first, then the others turning by the day. */
 export function feedBooks<T extends { id: string }>(books: readonly T[], hasFasila: (id: string) => boolean, day: number, count = 4): T[] {
   const marked = books.filter(book => hasFasila(book.id));

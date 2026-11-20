@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { SahihLook } from '@/components/Sahih';
 import { SAHIH } from '@/lib/sahih';
-import IconButton from '@/ui/IconButton';
 import { UnderCard, useCardRow } from '@/ui/Card';
 import { ScrollView, View, useWindowDimensions } from 'react-native';
 import { Check, Search } from 'lucide-react-native';
@@ -219,12 +218,13 @@ export function LookView({ look, shown, palette }: { look: QuizLook; shown: bool
 /** `top`: kept in sight above the looked-up view, such as a party's clock (owner, 2026-11-19: the time left shows while looking). */
 export function LookButton({ look, onLook, costs = false, palette, top }: { look: QuizLook; onLook?: () => void; costs?: boolean; palette: Palette; top?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
-  // In a feed card the button joins the row of icons under the card (owner: no buttons in a card).
+  // In a feed card the button joins the row of icons under the card (owner: no buttons in a card), framed with its words so it
+  // does not read as a search (owner, 2026-11-20).
   const inRow = useCardRow();
   const press = () => { setOpen(true); onLook?.(); };
   return (
     <View style={{ gap: 4, alignItems: 'flex-start' }}>
-      {inRow ? <UnderCard><IconButton Icon={Search} label="ابحث عن الجواب" onPress={press} tone="ink" /></UnderCard> : <Button Icon={Search} label="ابحث عن الجواب" onPress={press} />}
+      {inRow ? <UnderCard><Button Icon={Search} label="ابحث عن الجواب" onPress={press} pill /></UnderCard> : <Button Icon={Search} label="ابحث عن الجواب" onPress={press} />}
       {costs && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right', alignSelf: 'stretch' }}>
         {`بعد البحث للإجابة الصحيحة ${num(LOOKED_POINTS)} نقاط بدل ${num(POINTS)}.`}
       </Text>}

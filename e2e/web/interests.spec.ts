@@ -91,8 +91,8 @@ test.describe('interests on the website', () => {
     await expect(sheet).toBeVisible();
     await expect(sheet.getByRole('link').first()).toBeVisible();
   });
-  test('«ليس من اهتماماتي» sits alone at the far left, takes the interest out with a line in the card\'s place, and undo puts it back', async ({ page }) => {
-    // Owner, 2026-11-20: as in the app; the website had no such button.
+  test('«ليس من اهتماماتي» sits in the «⋯» alone at the far left, takes the interest out with a line in the card\'s place, and undo puts it back', async ({ page }) => {
+    // Owner, 2026-11-20: as in the app; the website had no such button, and it moved into the «⋯» menu.
     await page.addInitScript(() => { localStorage.setItem('interests', '["mutashabih","hadith"]'); localStorage.setItem('interests-asked', '1'); });
     await page.goto('/');
     // Last in its row, at the far left, on a plain card and on the tree card (whose row is the branches page's own).
@@ -105,22 +105,27 @@ test.describe('interests on the website', () => {
       expect(others.length).toBeGreaterThan(0);
       for (const box of others) expect(box!.x).toBeGreaterThanOrEqual(own.x + own.width);
     };
-    const notMine = page.getByRole('button', { name: '«الحديث» ليس من اهتماماتي' }).first();
-    await expect(notMine).toBeVisible({ timeout: 30_000 });
-    await aloneAtLeft(page.locator('article').filter({ has: notMine }).first(), notMine);
-    const tree = page.locator('article').filter({ has: page.getByRole('link', { name: 'افتح الشجرة في متشابهات القرآن' }) }).first();
+    const more = 'خيارات البطاقة';
+    const treeLink = page.getByRole('link', { name: 'افتح الشجرة في متشابهات القرآن' });
+    const post = page.locator('article').filter({ has: page.getByRole('link', { name: /^افتح / }), hasNot: treeLink }).filter({ has: page.getByRole('button', { name: more }) }).first();
+    await expect(post).toBeVisible({ timeout: 30_000 });
+    await aloneAtLeft(post, post.getByRole('button', { name: more }));
+    const tree = page.locator('article').filter({ has: treeLink }).first();
     await expect(tree).toBeVisible({ timeout: 30_000 });
-    await aloneAtLeft(tree, tree.getByRole('button', { name: '«المتشابه اللفظي» ليس من اهتماماتي' }));
+    await aloneAtLeft(tree, tree.getByRole('button', { name: more }));
+    await tree.getByRole('button', { name: more }).click();
+    await expect(tree.getByRole('menuitem', { name: '«المتشابه اللفظي» ليس من اهتماماتي' })).toBeVisible();
+    await page.keyboard.press('Escape');
     // The card's place in the feed, to find it again after undo.
-    const post = page.locator('article').filter({ has: notMine }).first();
     const at = await post.evaluate(card => [...card.parentElement!.children].indexOf(card));
     const text = (await post.innerText()).slice(0, 80);
-    await notMine.click();
+    await post.getByRole('button', { name: more }).click();
+    await post.getByRole('menuitem', { name: '«الحديث» ليس من اهتماماتي' }).click();
     const line = page.getByText('أُزيل «الحديث» من اهتماماتك');
     await expect(line).toHaveCount(1);
     expect(JSON.parse((await stored(page, 'interests'))!)).toEqual(['mutashabih']);
-    // The cards on screen stay; with one interest left, none offers to take it out.
-    await expect(page.getByRole('button', { name: /ليس من اهتماماتي$/ })).toHaveCount(0);
+    // The cards on screen stay; with one interest left, none offers to take it out, so no card has a «⋯».
+    await expect(page.getByRole('button', { name: more })).toHaveCount(0);
     await page.getByRole('button', { name: 'تراجع' }).click();
     await expect(line).toHaveCount(0);
     expect(JSON.parse((await stored(page, 'interests'))!)).toEqual(['mutashabih', 'hadith']);
@@ -136,6 +141,6 @@ test.describe('interests on the website', () => {
     await save.click();
     await page.goto('/library?tab=saved');
     await expect(page.getByRole('button', { name: 'أزلها من المحفوظات' }).first()).toBeVisible({ timeout: 30_000 });
-    await expect(page.getByRole('button', { name: /ليس من اهتماماتي$/ })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'خيارات البطاقة' })).toHaveCount(0);
   });
 });

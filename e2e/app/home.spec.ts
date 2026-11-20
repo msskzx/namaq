@@ -81,12 +81,14 @@ test.describe('a new user', () => {
 
       test('the tree card is the branches tree with one tree, and opens it on the branches tab', async ({ page }) => {
         await open(page, '/');
-        const button = page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).first();
-        await button.scrollIntoViewIfNeeded();
-        // The card's head names where the tree's ayat are, surah first; the branches tab opens on that same tree.
-        const places = (await button.getByText(/[٠-٩]/).textContent())!.trim();
+        const head = page.getByRole('heading', { name: 'من متشابهات القرآن', exact: true }).first();
+        await head.scrollIntoViewIfNeeded();
+        // The card's head names where the tree's ayat are, surah first; the row's open button (the card's one way there)
+        // opens the branches tab on that same tree.
+        const places = (await head.locator('xpath=following-sibling::*[1]').textContent())!.trim();
         const surah = places.match(/^[^٠-٩]+/)![0].trim();
-        await button.click();
+        const post = head.locator('xpath=ancestor::div[.//*[@aria-label="افتح الشجرة في متشابهات القرآن"]][1]');
+        await post.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).first().click();
         await expect(page).toHaveURL(/\/branches/);
         await expect(page.getByLabel(/^الشجرة \S+ من /)).toBeAttached();
         await expect(page.getByRole('button', { name: `سورة ${surah}` }).first()).toBeAttached();
@@ -179,7 +181,8 @@ test.describe('a new user', () => {
           await page.mouse.wheel(0, 3000);
           await expect(head).toBeAttached({ timeout: 1000 });
         }).toPass({ timeout: 30_000 });
-        await page.getByRole('button', { name: new RegExp(`^${button}، `) }).first().click();
+        // The row's open button is the card's one control for it (owner, 2026-11-20).
+        await page.getByRole('button', { name: button, exact: true }).first().click();
         await expect(inSheet.last()).toBeVisible();
         // A tap above the sheet closes it, as on a phone.
         await expect(async () => {
@@ -193,7 +196,7 @@ test.describe('a new user', () => {
   test.describe('with the tafsir picked', () => {
     test.use({ seed: { interests: '["tafsir","hifz"]', 'interests-surprise': '0' } });
 
-    test('a card\'s buttons sit on the right, open first, «ليس من اهتماماتي» alone on the left, and its source line opens a sheet', async ({ page }) => {
+    test('a card\'s buttons sit on the right, open first, the «⋯» of «ليس من اهتماماتي» alone on the left, and its source line opens a sheet', async ({ page }) => {
       // Owner, 2026-11-20 (sketch reference-place/every-card-2-dark.png): like an Instagram post.
       await open(page, '/');
       const head = page.getByRole('heading', { name: 'من التفسير', exact: true }).first();
@@ -204,20 +207,32 @@ test.describe('a new user', () => {
       }).toPass({ timeout: 30_000 });
       const card = head.locator('xpath=ancestor::div[.//*[starts-with(@aria-label, "المصدر: ")]][1]');
       await card.scrollIntoViewIfNeeded();
-      const box = async (name: string | RegExp) => (await card.getByRole('button', { name, exact: typeof name === 'string' }).boundingBox())!;
-      const opens = await box('التفسير كاملًا');
-      const save = await box('احفظ البطاقة');
-      const notMine = await box(/ليس من اهتماماتي$/);
-      // The row's buttons, right to left: the open button first, «ليس من اهتماماتي» alone at the far left.
-      const row = (await Promise.all((await card.getByRole('button').all()).map(button => button.boundingBox())))
-        .filter((found): found is NonNullable<typeof found> => !!found && Math.abs(found.y - save.y) < 4).sort((a, b) => b.x - a.x);
-      expect(row[0].x).toBe(opens.x);
-      expect(row.at(-1)!.x).toBe(notMine.x);
-      expect(save.x).toBeGreaterThan(notMine.x);
-      // Apart from the group: more room before it than a button's width.
-      expect(row.at(-2)!.x - notMine.x).toBeGreaterThan(2 * notMine.width);
+      // Cards above may still settle their height (a long one stops at two thirds of the screen), so every button is
+      // measured at one moment.
+      await expect(async () => {
+        const buttons = await card.evaluate(node => [...node.querySelectorAll('[role="button"]')].map(button => {
+          const { x, y, width } = button.getBoundingClientRect();
+          return { name: button.getAttribute('aria-label'), x, y, width };
+        }));
+        const named = (name: string) => buttons.find(button => button.name === name)!;
+        const opens = named('التفسير كاملًا');
+        const save = named('احفظ البطاقة');
+        const more = named('خيارات البطاقة');
+        // The row's buttons, right to left: the open button first, the «⋯» alone at the far left.
+        const row = buttons.filter(button => Math.abs(button.y - save.y) < 4).sort((a, b) => b.x - a.x);
+        expect(row[0].x).toBe(opens.x);
+        expect(row.at(-1)!.x).toBe(more.x);
+        expect(save.x).toBeGreaterThan(more.x);
+        // Apart from the group: more room before it than a button's width.
+        expect(row.at(-2)!.x - more.x).toBeGreaterThan(2 * more.width);
+        expect(named('المصدر: تيسير الكريم الرحمن · السعدي').y).toBeGreaterThan(save.y);
+      }).toPass({ timeout: 10_000 });
+      // The «⋯» opens the menu that holds «ليس من اهتماماتي».
+      await card.getByRole('button', { name: 'خيارات البطاقة' }).click();
+      await expect(page.getByRole('button', { name: /ليس من اهتماماتي$/ })).toBeVisible();
+      await page.mouse.click(195, 60);
+      await expect(page.getByRole('button', { name: /ليس من اهتماماتي$/ })).toHaveCount(0);
       const line = card.getByRole('button', { name: 'المصدر: تيسير الكريم الرحمن · السعدي' });
-      expect((await line.boundingBox())!.y).toBeGreaterThan(save.y);
       await line.click();
       await expect(page.getByRole('heading', { name: 'المصدر', exact: true })).toBeVisible();
       await expect(page.getByRole('link', { name: /^ص [٠-٩]+/ }).last()).toBeVisible();

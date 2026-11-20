@@ -27,7 +27,7 @@ export default function TreeViewCard({ tree, height, names, mixed = false, actio
   tree: TreePreview; height: string; names: Record<number, string>; mixed?: boolean; actionsClassName?: string; frameClassName?: string;
   /** The home feed's open button, first in the row (CardActions `lead`). */
   lead?: React.ReactNode;
-  /** The home feed's «ليس من اهتماماتي» (CardActions `aside`). */
+  /** The home feed's «⋯» (common/MoreMenu) (CardActions `aside`). */
   aside?: React.ReactNode;
 }) {
   const [chosen, setView] = useState<BranchView>(() => {
