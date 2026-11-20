@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { whichSurah } from './whichSurah';
 import { shuffle } from './random';
+import { SURAHS } from '../quran/words';
 
 const seeded = (seed: number) => () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
 const whole = { range: null, filters: {} };
@@ -32,7 +33,7 @@ describe('which surah', () => {
     expect(adam.alike?.['17'].key).toBe('17:61');
   });
 
-  it('asks only the range, and offers only its surahs (owner, 2026-11-19)', () => {
+  it('asks only the range, and offers only its surahs when it has enough (owner, 2026-11-19)', () => {
     const picked = ['36', '37', '38', '39'];
     const scope = { range: null, filters: { surahs: picked.join(',') } };
     const questions = whichSurah.questions(scope, 'medium', seeded(5));
@@ -42,8 +43,27 @@ describe('which surah', () => {
       for (const choice of question.choices) expect(picked).toContain(choice.value);
     }
     expect(whichSurah.count(scope)).toBe(questions.length);
-    // Fewer surahs than choices: nothing to choose between.
+    // One surah: every answer would be that surah.
     expect(whichSurah.count({ range: null, filters: { surahs: '36' } })).toBe(0);
+  });
+
+  it('still asks a range of too few surahs, filling the choices with the surahs nearest it (owner, 2026-11-20)', () => {
+    // Middle, either end, three surahs, and two far apart.
+    for (const range of [[36, 37], [1, 2], [113, 114], [36, 37, 38], [2, 100]]) {
+      const gap = (n: number) => Math.min(...range.map(r => Math.abs(r - n)));
+      for (const difficulty of ['easy', 'medium', 'hard'] as const) {
+        const questions = whichSurah.questions({ range: null, filters: { surahs: range.join(',') } }, difficulty, seeded(10));
+        expect(questions.length).toBeGreaterThan(0);
+        for (const question of questions) {
+          const values = question.choices.map(choice => Number(choice.value));
+          expect(new Set(values).size).toBe(values.length);
+          const inside = values.filter(n => range.includes(n));
+          expect(inside).toHaveLength(Math.min(range.length, values.length));
+          const leftOut = Array.from({ length: SURAHS }, (_, i) => i + 1).filter(n => !values.includes(n));
+          for (const n of values.filter(n => !range.includes(n))) expect(leftOut.every(other => range.includes(other) || gap(other) >= gap(n))).toBe(true);
+        }
+      }
+    }
   });
 
   it('never asks an ayah that says its own surah\'s name («هودًا» in Hud, «فتحًا» in al-Fath)', () => {
