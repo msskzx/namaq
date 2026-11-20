@@ -2,7 +2,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import { FLOW_LINE, FLOW_SIZE } from '@shared/quran/quranText/flow';
 import { mushafText } from '@shared/quran/mushafText';
 
-/** Tailwind needs each clamp written out whole. */
+/** Tailwind needs each clamp written out whole; a clamp is its own box, so it stands in for `block`. */
 const CLAMP = { 2: 'line-clamp-2', 3: 'line-clamp-3', 4: 'line-clamp-4', 5: 'line-clamp-5', 6: 'line-clamp-6' } as const;
 
 /**
@@ -19,7 +19,7 @@ export default function AyahFlow({ children, row = false, lines, className = '' 
   return (
     // Spans shown as blocks, so it may sit in a paragraph, a button or a choice's label.
     <span className={`block w-full min-w-0 ${className}`} style={{ containerType: 'inline-size' }}>
-      <span lang="ar" dir="rtl" data-ayah-flow className={`font-quran ${row ? 'flex flex-wrap items-center gap-x-[0.35em]' : `block text-justify [text-align-last:right] ${lines ? CLAMP[lines] : ''}`}`} style={size}>{children}</span>
+      <span lang="ar" dir="rtl" data-ayah-flow className={`font-quran ${row ? 'flex flex-wrap items-center gap-x-[0.35em]' : `${lines ? CLAMP[lines] : 'block'} text-justify [text-align-last:right]`}`} style={size}>{children}</span>
     </span>
   );
 }
