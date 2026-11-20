@@ -39,7 +39,7 @@ const rajabPassages = () => (passages ??= rajabFeedPassages(RAJAB, FORTY.entries
  * al-Nawawi's words (Ibn Rajab's for his eight), a passage of Ibn Rajab's explanation of one, the books that record one («من أخرجه»),
  * or al-Bukhari's chain for one drawn («من الإسناد», the app's IsnadPost).
  */
-export type HadithCard = { slot: number;
+export type HadithCard = {
   /** The card's lasting id, as the app's feed saves it (shared/feedItems.ts). */
   item: string; entry: Pick<FortyEntry, 'n' | 'heading' | 'companion' | 'text' | 'shamela' | 'source'>; books: Pick<FortyBooks, 'nawawi' | 'ibnrajab'>;
   /** The books the card stands on, for its source line (owner, 2026-11-20). */
@@ -61,17 +61,17 @@ export function hadithItems(kind: HadithKind): string[] {
 
 const books = () => ({ nawawi: FORTY.books.nawawi, ibnrajab: FORTY.books.ibnrajab });
 const short = ({ n, heading, companion, text, shamela, source }: FortyEntry) => ({ n, heading, companion, text, shamela, ...(source ? { source } : {}) });
-const recordedCard = (slot: number, entry: FortyEntry): HadithCard => ({ slot, kind: 'recorded', item: String(entry.n), entry: short(entry), books: books(), boxes: recordedIn(entry),
+const recordedCard = (entry: FortyEntry): HadithCard => ({ kind: 'recorded', item: String(entry.n), entry: short(entry), books: books(), boxes: recordedIn(entry),
   sources: uniqueSources([...entry.records.map(recordSource), compiledSource(entry)]) });
-const plainCard = (slot: number, entry: FortyEntry): HadithCard => ({ slot, kind: 'hadith', item: String(entry.n), entry: short(entry), books: books(), sources: [compiledSource(entry)] });
-function isnadCard(slot: number, entry: FortyEntry): HadithCard {
+const plainCard = (entry: FortyEntry): HadithCard => ({ kind: 'hadith', item: String(entry.n), entry: short(entry), books: books(), sources: [compiledSource(entry)] });
+function isnadCard(entry: FortyEntry): HadithCard {
   const record = drawnBukhari(entry)!;
-  return { slot, kind: 'isnad', item: String(entry.n), entry: short(entry), books: books(), sources: [recordSource(record)], size: (units as AppHadith).size, bukhari: FORTY.books.bukhari,
+  return { kind: 'isnad', item: String(entry.n), entry: short(entry), books: books(), sources: [recordSource(record)], size: (units as AppHadith).size, bukhari: FORTY.books.bukhari,
     record: { number: record.number, shamela: record.shamela, isnad: record.isnad!, saying: record.text.slice(record.isnadEnd) } };
 }
-function rajabCard(slot: number, { chapter, passage }: ReturnType<typeof rajabPassages>[number]): HadithCard | null {
+function rajabCard({ chapter, passage }: ReturnType<typeof rajabPassages>[number]): HadithCard | null {
   const entry = fortyEntry(chapter.n);
-  return entry ? { slot, kind: 'rajab', item: rajabItem(chapter.n, chapter.paragraphs.indexOf(passage[0])), entry: short(entry), books: books(), passage,
+  return entry ? { kind: 'rajab', item: rajabItem(chapter.n, chapter.paragraphs.indexOf(passage[0])), entry: short(entry), books: books(), passage,
     sources: [{ book: FORTY.books.ibnrajab.title, author: 'ابن رجب' }] } : null;
 }
 
@@ -81,12 +81,12 @@ export function hadithCardOf(kind: string, item: string): HadithCard | null {
   const n = Number(item);
   if (kind === 'hadith' || kind === 'recorded') {
     const entry = FEED_FORTY.find(each => String(each.n) === item);
-    return entry ? (kind === 'hadith' ? plainCard(0, entry) : recordedCard(0, entry)) : null;
+    return entry ? (kind === 'hadith' ? plainCard(entry) : recordedCard(entry)) : null;
   }
-  if (kind === 'isnad') { const entry = FEED_CHAINS.find(each => each.n === n && String(n) === item); return entry ? isnadCard(0, entry) : null; }
+  if (kind === 'isnad') { const entry = FEED_CHAINS.find(each => each.n === n && String(n) === item); return entry ? isnadCard(entry) : null; }
   if (kind === 'rajab') {
     const found = rajabPassages().find(({ chapter, passage }) => rajabItem(chapter.n, chapter.paragraphs.indexOf(passage[0])) === item);
-    return found ? rajabCard(0, found) : null;
+    return found ? rajabCard(found) : null;
   }
   return null;
 }

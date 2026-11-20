@@ -27,5 +27,7 @@ describe('a feed card', () => {
     expect(await savedFeedCard(cardBookmarkId('hadith', '9999'), DAY)).toBeNull();
     expect(await savedFeedCard(cardBookmarkId('unknown', 'x'), DAY)).toBeNull();
     expect(await savedFeedCard('tree-id', DAY)).toBeNull();
+    // An ayah past its surah's end is in no list, so nothing is read for it.
+    expect(await savedFeedCard(cardBookmarkId('note-irab', '2:999'), DAY)).toBeNull();
   });
 });

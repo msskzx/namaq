@@ -48,17 +48,17 @@ export async function searchBoth(query: string, count: number) {
 }
 export type SahihSearch = Awaited<ReturnType<typeof searchBoth>>;
 
-function sahihCard(slot: number, slug: SahihSlug, hadith: SahihHadith) {
+function sahihCard(slug: SahihSlug, hadith: SahihHadith) {
   const book = bookOf(SAHIH[slug]);
   const place = placeOf(SAHIH[slug], hadith.n);
   const where = place ? `${place.kitab.title}${place.bab?.title ? ` › ${place.bab.title}` : ''}${book.headingsBy === 'nawawi' && place.bab?.title ? ' (تبويب النووي)' : ''}` : '';
   // The card's lasting id is the hadith's number, as the app's feed saves it.
-  return { slot, kind: slug, item: String(hadith.n), book, hadith, where };
+  return { kind: slug, item: String(hadith.n), book, hadith, where };
 }
 /** A saved Sahih card by its book and hadith number; null when the book has no such hadith. */
 export async function sahihCardOf(slug: SahihSlug, item: string) {
   const hadith = (await sahihText(slug)).kitabs.flatMap(file => file.hadith).find(each => String(each.n) === item);
-  return hadith ? sahihCard(0, slug, hadith) : null;
+  return hadith ? sahihCard(slug, hadith) : null;
 }
 /** Every hadith number of a Sahih from its kitabs, as the app's feed lists them; a number its text lacks draws no card. */
 export const sahihItems = (slug: SahihSlug) => SAHIH[slug].kitabs.flatMap(kitab => (kitab.from ? Array.from({ length: kitab.to - kitab.from + 1 }, (_, i) => String(kitab.from + i)) : []));

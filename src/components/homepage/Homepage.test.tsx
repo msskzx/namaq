@@ -1,3 +1,4 @@
+import { existsSync, readFileSync } from 'node:fs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { backToVisit, leftVisit, visitStart } from '@shared/feedSeen';
@@ -71,9 +72,11 @@ describe('home', () => {
     const reading = screen.getByRole('region', { name: 'ابدأ القراءة' });
     const feed = screen.getByRole('region', { name: 'للتأمل اليوم' });
     for (const [a, b] of [[buttons, reading], [reading, feed]]) expect(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    // The app's buttons in the story circles' place (owner, 2026-11-18), each opening its page.
-    expect(within(buttons).getAllByRole('link').map(link => [link.textContent, link.getAttribute('href')])).toEqual([
-      ['القبلة', '/utilities?view=qibla'], ['الأذكار', '/utilities?view=adhkar'], ['المكتبة', '/quran/books'], ['مشاهد', '/quran/lataif'], ['مدونتي', '/library?tab=saved']]);
+    // The app's buttons, in its order (owner, 2026-11-18, website parity 2026-11-19), each opening a page the website has.
+    const links = within(buttons).getAllByRole('link');
+    const appLabels = [...readFileSync('mobile/src/components/HomeButtons.tsx', 'utf8').matchAll(/\{ label: '([^']+)'/g)].map(match => match[1]);
+    expect(links.map(link => link.textContent)).toEqual(appLabels);
+    for (const link of links) expect(existsSync(`src/app${new URL(link.getAttribute('href')!, 'https://x').pathname}/page.tsx`), link.textContent!).toBe(true);
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('نمق');
     for (const name of ['المحفوظات', 'اختبارات القرآن', 'ما نسيته']) expect(screen.queryByRole('region', { name })).toBeNull();
     expect(screen.queryByRole('link', { name: 'مواقيت الصلاة' })).toBeNull();

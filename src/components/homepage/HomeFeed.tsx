@@ -49,6 +49,7 @@ import { placeStore, prayerTimes, settingsStore, useNow } from '@/components/uti
 import { clock, DEFAULT_PRAYER_SETTINGS, FIVE, METHODS, PRAYER_NAMES, type PrayerDay, type PrayerKey } from '@shared/prayer';
 import { feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, feedBooks, LIST_KINDS, prayerSoon, type FeedSlot, type ListKind } from '@shared/homeFeed';
 import { answeredQuestion, dueSeeds, readMissed } from '@shared/quiz/missedQuestions';
+import { questionPoints } from '@shared/quiz/score';
 import type { NoteBody } from '@shared/quran/ayahNoteBody';
 import AyahPreviewSheet, { type Preview } from '@/app/quran/read/AyahPreviewSheet';
 import SadiText from '@/components/quran/SadiText';
@@ -95,8 +96,8 @@ import { storySource } from '@shared/quran/pieceSources';
 import { termSource } from '@shared/quran/balaghaTerms';
 
 /**
- * The website's home feed, as the app's (mobile/src/components/HomeFeed.tsx): story circles, the page the mushaf was left on,
- * a feed of pairs and trees that skips what this browser has seen (shared/feedSeen.ts) and loads more on request, and the prayer row.
+ * The website's home feed, as the app's (mobile/src/components/HomeFeed.tsx): the page the mushaf was left on, then the
+ * app's feed in its order (shared/homeFeed.ts feedRound), skipping what this browser has seen (shared/feedSeen.ts) and loading more near the end.
  */
 
 const names: Record<number, string> = SURAH_NAMES;
@@ -366,7 +367,11 @@ function QuizPost({ kind, seed, scope }: { kind: string; seed: number; scope: Re
   const question = data?.questions?.[0];
   // Answered wrong (or looked up first), the question comes back after a rest; right, it goes (shared/quiz/missedQuestions.ts).
   const answer = (value: string) => {
-    if (given === undefined && question) answeredQuestion(kind, seed, !revealed && value === question.correctAnswer);
+    if (given === undefined && question) {
+      // Several right choices or an order are right only when every part is (the quiz page's and the app's grading).
+      const { earned, total } = questionPoints(question, value);
+      answeredQuestion(kind, seed, !revealed && (value === question.correctAnswer || earned === total));
+    }
     setGiven(value);
   };
   if (!question) return null;
@@ -829,9 +834,10 @@ function useListItems(counts: Record<string, number>, day: number | undefined, s
       const list = fetched[kind];
       const need = counts[kind] ?? 0;
       if (!list || !need) continue;
-      out[kind] = growingPicks(holders[kind] ??= { list: [] }, [view, day, turn], offset => list[offset], item => `${kind}:${item}`, seen, need, { since: visit, tries: list.length });
+      out[kind] = growingPicks(holders[kind] ??= { list: [] }, [view, day], offset => list[offset], item => `${kind}:${item}`, seen, need, { since: visit, tries: list.length });
     }
     return out;
+    // `turn` (a story opened) recomputes without a reset, as the app's: cards on screen stay, later ones continue after it.
   }, [key, counts, day, seen, view, visit, turn]); // eslint-disable-line react-hooks/exhaustive-deps -- `key` stands for the fetched lists
 }
 

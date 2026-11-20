@@ -11,9 +11,9 @@ import { MemorizedPrompt } from './Memorized';
 import { InterestChips, InterestsWelcome, onlyOf, usePicked } from './Interests';
 
 /**
- * Home, as the app's (owner, 2026-11-13): reading and learning first, like a social app's home. A few buttons (owner, 2026-11-18, in the story circles' place), the page the
+ * Home, as the app's (owner, 2026-11-13): reading and learning first, like a social app's home. The app's few buttons (owner, 2026-11-18), the page the
  * mushaf was left on, then a feed that loads more as it nears its end (owner, 2026-11-14: no tools below; prayer times live on the
- * utilities page, saved cards behind their story circle). A reload (a phone browser's pull to refresh) starts a new visit, as every page load does (shared/feedSeen.ts).
+ * utilities page, saved cards in «مدونتي»). A reload (a phone browser's pull to refresh) starts a new visit, as every page load does (shared/feedSeen.ts).
  */
 export default function Homepage({ data }: { data: HomepageData }) {
   const { ar, names } = useHomeCards(data, 0);

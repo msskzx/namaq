@@ -13,6 +13,8 @@ import { exampleReference, type LataifReference } from '@shared/quran/lataif';
 import { ayahMushafWords } from '@/app/quran/read/irab';
 import { loadReaderAyat } from '@/lib/quran/readerAyat';
 import { isAyahKey } from '@shared/quran/ayahContext';
+import { LIST_KINDS, type ListKind } from '@shared/homeFeed';
+import { itemsOf } from '@/lib/feedLists';
 
 export type SavedFeedCard =
   | { kind: 'hadith' | 'rajab' | 'recorded' | 'isnad'; card: HadithCard }
@@ -33,6 +35,8 @@ export async function savedFeedCard(id: string, day: number): Promise<SavedFeedC
   const saved = cardOfBookmark(id);
   if (!saved) return null;
   const { kind, item } = saved;
+  // Only an item its kind's list holds, as the app's SavedFeedCard: no ayah past a surah's end, no story group too wide for a card.
+  if ((LIST_KINDS as readonly string[]).includes(kind) && !itemsOf(kind as ListKind).includes(item)) return null;
   switch (kind) {
     case 'hadith': case 'rajab': case 'recorded': case 'isnad': { const card = hadithCardOf(kind, item); return card ? { kind, card } : null; }
     case 'tarajim': case 'tie': case 'life': { const card = tarajimCardOf(kind, item); return card ? { kind, card } : null; }

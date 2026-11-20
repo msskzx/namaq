@@ -87,9 +87,9 @@ export async function ayahPages(key: string) {
 }
 
 /** The prophets card's story, as the prophets page shows it to readers (kept places only), cut to what its map needs. */
-export type StoryCard = { slot: number; /** The card's lasting id (shared/feedItems.ts storyItem). */ item: string; slug: string; title: string; phase: number; phases: readonly string[]; map: StoryMap; events: EventView[]; story: number[] };
+export type StoryCard = { /** The card's lasting id (shared/feedItems.ts storyItem). */ item: string; slug: string; title: string; phase: number; phases: readonly string[]; map: StoryMap; events: EventView[]; story: number[] };
 
-function storyCard(slot: number, slug: string, phase: number): StoryCard | null {
+function storyCard(slug: string, phase: number): StoryCard | null {
   const prophet = findProphet(slug);
   if (!prophet) return null;
   const all = withUnappliedStoryReviews(verdictData.places as PlaceVerdicts);
@@ -100,7 +100,7 @@ function storyCard(slot: number, slug: string, phase: number): StoryCard | null 
   // The words stay behind: the map needs only each place's count.
   const map = { ...whole, places: whole.places.map(places => places.map(place => ({ ...place, segments: [] }))) };
   return {
-    slot, item: storyItem(slug, phase), slug, title: storyTitle(prophet), phase, phases: story.phases, map,
+    item: storyItem(slug, phase), slug, title: storyTitle(prophet), phase, phases: story.phases, map,
     events: events.map(event => ({ ...event, segments: [] })),
     // Each event's place in the whole story (the kept story can drop events), for the page's ?event=.
     story: events.map(event => story.events.findIndex(at => at.title === event.title)),
@@ -111,15 +111,15 @@ function storyCard(slot: number, slug: string, phase: number): StoryCard | null 
  * The «السيرة والمغازي» cards (the app's SiraPost and MomentPost, mobile/src/components/HomeFeed.tsx): a sira story's first
  * report whole with its ayat in the mushaf's lines, or one moment of a battle, taking turns batch by batch.
  */
-export type SiraCard = { slot: number; /** The card's lasting id: the story's slug, or shared/feedItems.ts momentItem. */ item: string } & (
+export type SiraCard = { /** The card's lasting id: the story's slug, or shared/feedItems.ts momentItem. */ item: string } & (
   | { kind: 'sira'; slug: string; name: string; report: AppReport; ayat: AppStory['ayat']; pages: AyatPage[][] }
   | { kind: 'moment'; battle: Pick<AppMomentBattle, 'slug' | 'name' | 'kind' | 'year'>; moment: AppMoment; n: number });
 
 const SIRA_FEED = SIRA_STORIES.filter(story => story.reports[0]);
 const MOMENT_FEED = (momentsData as AppMomentBattle[]).flatMap(battle => battle.moments.map((moment, i) => ({ battle, moment, n: i + 1 })));
 
-const momentCard = (slot: number, { battle, moment, n }: (typeof MOMENT_FEED)[number]): SiraCard =>
-  ({ slot, kind: 'moment', item: momentItem(battle.slug, n), battle: { slug: battle.slug, name: battle.name, kind: battle.kind, year: battle.year }, moment, n });
+const momentCard = ({ battle, moment, n }: (typeof MOMENT_FEED)[number]): SiraCard =>
+  ({ kind: 'moment', item: momentItem(battle.slug, n), battle: { slug: battle.slug, name: battle.name, kind: battle.kind, year: battle.year }, moment, n });
 
 /** Every item of the prophets, sira and battle-moment cards, in the list's order (the app's LIST_OF). */
 export function storyItems(kind: 'prophets' | 'sira' | 'moment'): string[] {
@@ -150,12 +150,12 @@ export function savedContent(id: string): SavedContent | null {
 export async function siraCardOf(kind: string, item: string): Promise<SiraCard | null> {
   if (kind === 'sira') {
     const story = SIRA_FEED.find(each => each.slug === item);
-    return story ? { slot: 0, kind: 'sira', item: story.slug, slug: story.slug, name: story.name, report: story.reports[0], ayat: story.ayat, pages: await storyAyat(story) } : null;
+    return story ? { kind: 'sira', item: story.slug, slug: story.slug, name: story.name, report: story.reports[0], ayat: story.ayat, pages: await storyAyat(story) } : null;
   }
   const found = kind === 'moment' ? MOMENT_FEED.find(each => momentItem(each.battle.slug, each.n) === item) : undefined;
-  return found ? momentCard(0, found) : null;
+  return found ? momentCard(found) : null;
 }
 export function storyCardOf(item: string): StoryCard | null {
   const split = lastNumber(item);
-  return split && STORIES[split.head] && split.n >= 0 && split.n < STORIES[split.head].phases.length ? storyCard(0, split.head, split.n) : null;
+  return split && STORIES[split.head] && split.n >= 0 && split.n < STORIES[split.head].phases.length ? storyCard(split.head, split.n) : null;
 }
