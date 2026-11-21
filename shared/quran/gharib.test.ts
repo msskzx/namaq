@@ -81,12 +81,21 @@ describe("a word's meanings on the words page", () => {
     expect(found.every(entry => entry.text.includes('الطُّور'))).toBe(true);
   });
 
-  it('puts an entry quoting a phrase on the page of the word he explains, not of the other words', () => {
-    // «﴿وَالنَّخْلَ بَاسِقَاتٍ﴾ أي طوالا» explains باسقات, and «﴿أَعْجَازُ نَخْلٍ﴾ أي أصولُ نخل» the phrase as a whole: neither is a
-    // meaning of نخل.
-    expect(gharibOfPlaces(gharib, marks, placesOfWord('نَخۡل'))).toEqual([]);
-    expect(gharibOfPlaces(gharib, marks, placesOfWord('بَاسِقَٰت')).map(entry => entry.text)).toEqual([expect.stringContaining('أي طوالا')]);
-    expect(gharibOfPlaces(gharib, marks, placesOfWord('أَعۡجَاز')).some(entry => entry.text.includes('أصولُ نخل'))).toBe(false);
+  it('puts an entry quoting a phrase on the page of the word he explains, and one explaining the phrase whole «في عبارة»', () => {
+    // «﴿وَالنَّخْلَ بَاسِقَاتٍ﴾ أي طوالا» explains باسقات alone: on its page, never on نخل's. «﴿أَعْجَازُ نَخْلٍ﴾ أي أصولُ نخل» explains
+    // the phrase whole: on نخل's page and أعجاز's under «في عبارة», never as either word's own meaning.
+    const nakhl = gharibOfPlaces(gharib, marks, placesOfWord('نَخۡل'));
+    expect(nakhl.some(entry => entry.text.includes('أي طوالا'))).toBe(false);
+    expect(nakhl.filter(entry => !entry.phrase)).toEqual([]);
+    expect(nakhl.some(entry => entry.phrase && entry.text.includes('أصولُ نخل'))).toBe(true);
+    expect(gharibOfPlaces(gharib, marks, placesOfWord('أَعۡجَاز')).some(entry => entry.phrase && entry.text.includes('أصولُ نخل'))).toBe(true);
+    expect(gharibOfPlaces(gharib, marks, placesOfWord('بَاسِقَٰت')).map(entry => [entry.text, entry.phrase])).toEqual([[expect.stringContaining('أي طوالا'), undefined]]);
+  });
+
+  it("lists a word's own meanings before the phrases it is in", () => {
+    const found = gharibOfPlaces(gharib, marks, placesOfWord('دِين'));
+    expect(found.some(entry => !entry.phrase)).toBe(true);
+    expect(found.findIndex(entry => entry.phrase) === -1 || found.slice(found.findIndex(entry => entry.phrase)).every(entry => entry.phrase)).toBe(true);
   });
 
   it('keeps an entry whose quoted words are all this word, whatever its marks say', () => {
@@ -95,6 +104,7 @@ describe("a word's meanings on the words page", () => {
 
   it('marks only words an entry quotes, and only entries quoting more than one word', () => {
     expect(marks.source).toEqual(gharib.source);
+    for (const at of marks.phrases) expect(marks.words[at]).toBeUndefined();
     for (const [at, explained] of Object.entries(marks.words)) {
       const places = gharib.entries[Number(at)][4];
       expect(places.reduce((count, [, from, to]) => count + to - from + 1, 0)).toBeGreaterThan(1);

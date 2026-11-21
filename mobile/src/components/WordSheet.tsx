@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type ComponentRef, type MutableRefObject } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ComponentRef, type MutableRefObject } from 'react';
 import { Pressable, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { BookOpen } from 'lucide-react-native';
@@ -179,7 +179,12 @@ export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bott
             </Card>
           );
         })}
-        {showing === 'gharib' && entries.slice(0, shown).map(entry => <GharibCard key={entry.at} entry={entry} onOpen={open} palette={palette} />)}
+        {showing === 'gharib' && entries.slice(0, shown).map((entry, i) => (
+          <Fragment key={entry.at}>
+            {entry.phrase && !entries[i - 1]?.phrase && <Text style={{ color: palette.muted, fontSize: 16, textAlign: 'right', marginTop: 8 }}>في عبارة</Text>}
+            <GharibCard entry={entry} onOpen={open} palette={palette} />
+          </Fragment>
+        ))}
         {showing === 'mufradat' && articles.map(article => <Mufradat key={article.at} article={article} palette={palette} />)}
         {showing !== 'mufradat' && shown < total && (
           <Pressable onPress={() => setShown(shown + PLACES_STEP)} accessibilityRole="button"

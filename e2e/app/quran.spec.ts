@@ -319,7 +319,7 @@ test('an opened word shows where it gathers: a bar picks a surah, names it with 
   await expect(page.getByRole('button', { name: new RegExp(`^افتح ${S(7)} .* في المصحف$`) }).first()).toBeInViewport();
 });
 
-test("a word's page holds Ibn Qutaybah's note on a phrase that explains it, and the phrase's other words' pages do not", async ({ page }) => {
+test("a word's page holds Ibn Qutaybah's note on a phrase that explains it, and a phrase explained whole under «في عبارة»", async ({ page }) => {
   await open(page, '/words');
   await page.getByLabel('ابحث عن كلمة في القرآن').fill('ريب');
   await page.getByRole('button', { name: /^رَيۡب، / }).click();
@@ -328,8 +328,9 @@ test("a word's page holds Ibn Qutaybah's note on a phrase that explains it, and 
   await open(page, '/words');
   await page.getByLabel('ابحث عن كلمة في القرآن').fill('نخل');
   await page.getByRole('button', { name: /^نَخۡل، / }).click();
-  await expect(page.getByRole('tab', { name: 'المواضع' })).toBeVisible();
-  await expect(page.getByRole('tab', { name: 'غريب القرآن لابن قتيبة' })).toHaveCount(0);
+  await page.getByRole('tab', { name: 'غريب القرآن لابن قتيبة' }).click();
+  await expect(page.getByText('في عبارة', { exact: true })).toBeVisible();
+  await expect(page.getByText('أي طوالا', { exact: false })).toHaveCount(0);
 });
 
 test('the words page shows its source and how it counts in the page, collapsed', async ({ page }) => {
