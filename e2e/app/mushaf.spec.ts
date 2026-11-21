@@ -1,5 +1,8 @@
-import { expect, longPress, open, readerPage, reciteBarsHidden, stored, test } from './fixtures';
+import { closeSource, expect, longPress, open, openSource, readerPage, reciteBarsHidden, stored, test } from './fixtures';
 import { surahName as S } from '../../shared/quran/surahNames';
+import { bookUrl } from '../../shared/books';
+import itqan from '../../shared/data/quran/itqanBalagha';
+import { itqanAt, itqanCredit } from '../../shared/quran/itqanBalagha';
 
 // Words are matched as the mushaf data writes them (shared/data/quran/mushaf/1.json).
 const HAMD = 'ٱلۡحَمۡدُ';
@@ -92,11 +95,13 @@ test('the tafsir sheet shows al-Sa\'di\'s passage for the ayah\'s run, with its 
   await page.getByRole('button', { name: 'تفسير السعدي' }).click();
   await expect(page.getByRole('heading', { name: `${S(1)} ١–٧` })).toBeVisible();
   await expect(page.getByText('هو المألوه المعبود', { exact: false })).toBeVisible();
-  await expect(page.getByRole('link', { name: /تيسير الكريم الرحمن للسعدي، ص ٣٩/ })).toBeVisible();
+  await openSource(page);
+  await expect(page.getByText('تيسير الكريم الرحمن للسعدي، ص ٣٩', { exact: false })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'ص ٣٩', exact: true })).toBeVisible();
 });
 
 test('a word\'s i\'rab shows its short line, and al-\'Ukbari once his book is downloaded', async ({ page }) => {
-  await page.route('https://namaq.vercel.app/api/books/ukbari', route => route.fulfill({
+  await page.route(bookUrl('ukbari'), route => route.fulfill({
     json: { source: { version: '2026-08-10', book: 309 }, entries: [[1, 2, 0, 0, 4, 'قَوْلُهُ تَعَالَى: ﴿الْحَمْدُ﴾ : مُبْتَدَأٌ.']] },
   }));
   await open(page, '/read');
@@ -121,15 +126,18 @@ test('a word\'s meaning shows al-Raghib\'s article on its root, and Ibn Qutaybah
   // Ibn Qutaybah explains «ٱلۡعَٰلَمِينَ» in this ayah, not the pressed word, so the sheet opens on al-Raghib's root article.
   await expect(page.getByRole('tab', { name: 'المفردات للراغب' })).toHaveAttribute('aria-selected', 'true');
   await expect(page.getByText(/الثناء عليه بالفضيلة/).first()).toBeVisible();
+  await openSource(page);
   await expect(page.getByText('المفردات للراغب، ص ٢٥٦')).toBeVisible();
+  await closeSource(page);
   await page.getByRole('tab', { name: 'غريب القرآن لابن قتيبة' }).click();
   await expect(page.getByText(/أصناف الخلق/).first()).toBeVisible();
+  await openSource(page);
   await expect(page.getByText('غريب القرآن لابن قتيبة، ص ٣٨')).toBeVisible();
 });
 
 test('an ayah\'s balagha shows al-Suyuti\'s paragraphs, then al-Zamakhshari\'s passage once al-Kashshaf is downloaded', async ({ page }) => {
   const text = 'قوله ﴿الْحَمْدُ لِلَّهِ﴾ كلام. وفيه استعارة في ﴿الْحَمْدُ﴾. آخر.';
-  await page.route('https://namaq.vercel.app/api/books/kashshaf', route => route.fulfill({
+  await page.route(bookUrl('kashshaf'), route => route.fulfill({
     json: { source: { version: '2026-08-10', book: 346, from: '' }, entries: [[1, 1, 7, 1, 8, 9, text, [[text.indexOf('وفيه'), text.indexOf('آخر') - 1, 0, 2, 0, 0]]]] },
   }));
   await open(page, '/read');
@@ -138,7 +146,10 @@ test('an ayah\'s balagha shows al-Suyuti\'s paragraphs, then al-Zamakhshari\'s p
   await expect(page.getByRole('heading', { name: `${S(1)} ٢` })).toBeVisible();
   await expect(page.getByRole('tab', { name: 'الإتقان للسيوطي' })).toHaveAttribute('aria-selected', 'true');
   await expect(page.getByText('«الصِّفَةُ»', { exact: false }).first()).toBeVisible();
-  await expect(page.getByText('الإتقان للسيوطي ٣/٢٣٣')).toBeVisible();
+  await openSource(page);
+  // The first source line is the first paragraph's: its part and page.
+  await expect(page.getByText(itqanCredit(itqanAt(itqan, '1:2')[0]), { exact: true })).toBeVisible();
+  await closeSource(page);
   // His «الحمد لله» names no ayah: the paragraph says so and lists every ayah the quote fits.
   await page.getByRole('button', { name: 'مواضع الشاهد في القرآن: ٦، ولم يعيّن السيوطي أحدها' }).click();
   await expect(page.getByRole('button', { name: `افتح ${S(6)} ٤٥ في المصحف` })).toBeVisible();
@@ -146,6 +157,7 @@ test('an ayah\'s balagha shows al-Suyuti\'s paragraphs, then al-Zamakhshari\'s p
   await page.getByRole('tab', { name: 'الكشاف للزمخشري' }).click();
   await page.getByRole('button', { name: 'نزّل الكشاف عن حقائق التنزيل' }).click();
   await expect(page.getByText('«الاستعارة»', { exact: false })).toBeVisible();
+  await openSource(page);
   await expect(page.getByText('الكشاف للزمخشري ١/٨–٩')).toBeVisible();
   await expect.poll(() => stored<string[]>(page, 'books-saved')).toEqual(['kashshaf']);
 });
@@ -290,22 +302,27 @@ test('dragging after a long press selects several words, and «نسيت» marks 
 });
 
 test.describe('word review', () => {
-  test.use({ seed: { 'ayah-forgot': { '1:2:1': { forgot: 1, at: 1 } }, 'reader-place': { page: 1, reviewing: true, position: { start: '1:2', word: 1, shown: null, words: 0 } }, 'reader-write': true } });
+  test.use({ seed: { 'ayah-forgot': { '1:2:1': { forgot: 1, at: 1 } }, 'reader-place': { page: 1, reviewing: true, position: { start: '1:2', gaps: [1], shown: null, words: 0 } }, 'reader-write': true } });
 
-  test('tests only the marked word and rests it after a correct answer', async ({ page }) => {
+  // Owner, 2026-11-21: the ayah is hidden; a step shows it up to the forgotten word, which is then the one box.
+  test('shows the ayah up to the marked word, tests only that word and rests it after a correct answer', async ({ page }) => {
     await open(page, '/read');
+    await expect(page.getByRole('button', { name: 'أظهر الآية التالية' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'اكتب هذه الكلمة', exact: true })).toHaveCount(0);
+    await page.getByRole('button', { name: 'أظهر الآية التالية' }).click();
     await expect(page.getByRole('button', { name: 'اكتب هذه الكلمة', exact: true })).toHaveCount(1);
-    await expect(page.getByText(HAMD, { exact: true }).first()).toBeVisible();
     await page.getByLabel('اكتب الكلمة').fill('لله');
     await expect.poll(async () => (await stored<Record<string, { step?: number }>>(page, 'ayah-forgot'))?.['1:2:1']?.step).toBe(1);
     await expect.poll(async () => Object.keys((await stored<object>(page, 'ayah-forgot')) ?? {})).toEqual(['1:2:1']);
   });
 
-  test('a wrong answer resets only the word mark', async ({ page }) => {
+  test('a wrong answer resets only the word mark, and shows what was typed over the word', async ({ page }) => {
     await open(page, '/read');
+    await page.getByRole('button', { name: 'أظهر الآية التالية' }).click();
     await expect(page.getByRole('button', { name: 'اكتب هذه الكلمة', exact: true })).toHaveCount(1);
     await page.getByLabel('اكتب الكلمة').fill('رب');
     await page.getByLabel('اكتب الكلمة').press('Enter');
+    await expect(page.getByLabel('كتبت: رب')).toBeVisible();
     await expect.poll(() => stored(page, 'ayah-forgot')).toEqual({ '1:2:1': { forgot: 2, at: expect.any(Number) } });
   });
 });
@@ -327,7 +344,12 @@ for (const theme of ['light', 'dark'] as const) {
       await expect(page.getByRole('toolbar', { name: 'أدوات التسميع' }).first()).toBeVisible();
       await expect(page.getByText(HAMD, { exact: true }).first()).toBeVisible();
       await capture('review');
-      const next = page.getByRole('toolbar', { name: 'أدوات التسميع' }).first().getByRole('button', { name: 'أظهر الكلمة التالية' });
+      // Step by step (owner, 2026-11-21): the ayah up to the forgotten word (the second), then that word, then to its end.
+      const next = page.getByRole('toolbar', { name: 'أدوات التسميع' }).first().getByRole('button', { name: 'أظهر الآية التالية' });
+      await next.click();
+      await expect(next).toBeEnabled();
+      await next.click();
+      await expect(next).toBeEnabled();
       await next.click();
       await expect(next).toBeDisabled();
     });
@@ -335,18 +357,21 @@ for (const theme of ['light', 'dark'] as const) {
 }
 
 test.describe('two word reviews in one ayah', () => {
-  test.use({ seed: { 'ayah-forgot': { '1:2:0': { forgot: 1, at: 1 }, '1:2:1': { forgot: 1, at: 1 } }, 'reader-place': { page: 1, reviewing: true, position: { start: '1:2', word: 0, shown: null, words: 0 } }, 'reader-write': true } });
+  test.use({ seed: { 'ayah-forgot': { '1:2:0': { forgot: 1, at: 1 }, '1:2:1': { forgot: 1, at: 1 } }, 'reader-place': { page: 1, reviewing: true, position: { start: '1:2', gaps: [0, 1], shown: null, words: 0 } }, 'reader-write': true } });
 
-  test('the next word has its own blank and no feedback from the previous answer', async ({ page }) => {
+  // Both words are one stop (owner, 2026-11-21): the answer to the first shows over it, and the second is the next box, empty.
+  test('the next word has its own blank while the previous answer stays over its word', async ({ page }) => {
     await open(page, '/read');
     await page.getByLabel('اكتب الكلمة').fill('خطأ');
     await page.getByLabel('اكتب الكلمة').press('Enter');
     await expect(page.getByLabel('كتبت: خطأ')).toBeVisible();
-    await page.getByRole('button', { name: 'الآية المنسية التالية' }).click();
-    await expect(page.getByLabel('كتبت: خطأ')).toHaveCount(0);
     await expect(page.getByRole('button', { name: 'اكتب هذه الكلمة', exact: true })).toHaveCount(1);
+    await expect(page.getByLabel('اكتب الكلمة')).toHaveValue('');
+    await expect.poll(async () => (await stored<Record<string, { forgot?: number }>>(page, 'ayah-forgot'))?.['1:2:0']?.forgot).toBe(2);
     await page.getByLabel('اكتب الكلمة').fill('لله');
     await expect.poll(async () => (await stored<Record<string, { step?: number }>>(page, 'ayah-forgot'))?.['1:2:1']?.step).toBe(1);
+    // The second answer keeps the first one's feedback over its word.
+    await expect(page.getByLabel('كتبت: خطأ')).toBeVisible();
   });
 });
 

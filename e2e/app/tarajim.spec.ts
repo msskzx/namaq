@@ -41,7 +41,7 @@ test('the tarajim hub opens the nasab search, and a pick draws his tree', async 
   await open(page, '/');
   await tab(page, 'التراجم').click();
   await page.getByRole('link', { name: /^النسب/ }).click();
-  await page.getByLabel('ابحث في التراجم').fill('أبو بكر');
+  await page.getByRole('textbox', { name: 'ابحث في التراجم' }).filter({ visible: true }).fill('أبو بكر');
   await page.getByRole('button', { name: 'أبو بكر الصديق' }).click();
   // A box stands alone, so it names his father in the nominative: «أبو قحافة», never «أبي قحافة».
   await expect(page.getByText(/^أبو قحافة/)).toBeVisible();
@@ -61,14 +61,14 @@ test('the ties view draws a person with his ties and walks to a relative', async
 
 test('between two people shows the chain that joins them, with its pages', async ({ page }) => {
   await open(page, '/between?slugs=az-zubayr-ibn-al-awwam,hamzah-ibn-abd-al-muttalib');
-  // The drawing first; the sentence that says it on «النص» (owner, 2026-11-20).
-  await expect(page.getByRole('link', { name: 'حمزة بن عبد المطلب' })).toBeVisible();
+  // The drawing first, in the page's card (owner, 2026-11-20); the sentence that says it on «النص».
+  await expect(page.getByRole('button', { name: 'حمزة بن عبد المطلب', exact: true })).toBeVisible();
   await page.getByRole('tab', { name: 'النص' }).click();
   await expect(page.getByText(/أمُّ الزبير بن العوام/)).toBeVisible();
   await page.getByRole('tab', { name: 'الرسم' }).click();
   await page.getByRole('button', { name: 'أضف' }).click();
   await page.getByRole('button', { name: /^العباس/ }).click();
-  await expect(page.getByRole('link', { name: /^العباس/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: /^العباس/ })).toBeVisible();
 });
 
 // The person page draws what we have of him (owner, 2026-11-19): «نسبه» as the tree or as text (the drawing first, 2026-11-20), «حياته» on the timeline

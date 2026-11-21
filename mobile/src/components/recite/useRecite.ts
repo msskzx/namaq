@@ -38,11 +38,16 @@ export function useRecite({ model, position, setPosition, writing, pen, until = 
   // Words already shown (by the next-word button) are not asked.
   const asked = writeKey && view ? (gap ? [gap.at] : penTargets(words, pen)).filter(at => view.hidden(writeKey, at + offset)) : [];
   const [checked, setChecked] = useState<Checked | null>(null);
-  useEffect(() => setChecked(null), [position?.start, gap?.place]);
+  // An ayah's forgotten words are answered one by one in one stop: each answer adds its colours to the ayah's, so what was
+  // typed wrong stays shown over its word while the next box is written. A new stop (a new ayah, or a new review of the same
+  // one, which gets its own gaps) starts clean; the steps within a stop keep the same gaps.
+  useEffect(() => setChecked(null), [position?.start, position?.gaps]);
   const boxes = useWriteBoxes({ ayah: writeKey && gap ? wordMarkKey(writeKey, gap.place) : writeKey, words, asked, autoFocus, onDone: (graded, typed) => {
     if (!writeKey || !position) return;
     if (onSubmit) { onSubmit(writeKey, typed); return; }
-    setChecked({ key: writeKey, ...graded });
+    setChecked(was => (gap && was?.key === writeKey
+      ? { key: writeKey, right: [...was.right.filter(at => !asked.includes(at)), ...graded.right], wrong: [...was.wrong.filter(at => !asked.includes(at)), ...graded.wrong], typed: { ...was.typed, ...graded.typed } }
+      : { key: writeKey, ...graded }));
     const key = gap ? wordMarkKey(writeKey, gap.place) : writeKey;
     if (graded.wrong.length) markForgotten(key);
     // A right answer rests a mark only when it is due, so a resting one is not pushed further by recitations between reviews.

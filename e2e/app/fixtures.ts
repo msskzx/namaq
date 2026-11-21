@@ -118,3 +118,19 @@ export async function writeBlank(page: Page, name: string, text: string, nth = 0
   const field = page.getByLabel('اكتب الكلمة', { exact: true });
   for (const word of text.split(' ').slice(0, boxes)) await field.fill(`${word.replace(/[ً-ٰٟۖ-ۭ]/g, '').replace(/ٱ/g, 'ا')} `);
 }
+
+/**
+ * A reference is a source line under its card or sheet; a tap opens the books with their pages (owner, 2026-11-20).
+ * `book` picks the line by the books it names; the first line otherwise.
+ */
+export async function openSource(page: Page, book?: string) {
+  await page.getByRole('button', { name: book ? `المصدر: ${book}` : /^المصدر: / }).first().click();
+  await expect(page.getByRole('heading', { name: 'المصدر', exact: true })).toBeVisible();
+}
+
+/** A tap above the source sheet closes it, back to what was under it. */
+export async function closeSource(page: Page) {
+  // Above every sheet: the screen's top bar.
+  await page.mouse.click(page.viewportSize()!.width / 2, 40);
+  await expect(page.getByRole('heading', { name: 'المصدر', exact: true })).toHaveCount(0);
+}
