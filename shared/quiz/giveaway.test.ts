@@ -20,6 +20,7 @@ const READ: Record<string, string> = {
   'QIRAAT:5:110:2': '«طيرا» later in the ayah is another word; how «الطير» is read is not told by it',
   'HADITH_BOOK:35': '«المسلم» in the hadith is the believer, not the book of Muslim',
   'HADITH_BOOK:36': '«المسلم» in the hadith is the believer, not the book of Muslim',
+  'SURAH_AIM:47': 'al-Biqa\'i\'s «حتى يلزموهم الصغار، أو يبطلوا ضلالهم» is one aim\'s two outcomes of the jihad, not a second reading of it',
 };
 
 const ALL = { range: null, filters: {} };

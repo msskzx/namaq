@@ -1,7 +1,7 @@
 import { createContext, isValidElement, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, BookOpenText, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, Eye, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListStart, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, History, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpenText, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, Eye, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListStart, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, History, Target, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
@@ -129,6 +129,8 @@ import { check, DEFAULT_LIST, DEFAULT_SOLO, isCompare, isTree, pick, questionSta
 import { readAyah } from '@/lib/openReader';
 import QuizChoice, { QuizPrompt } from './QuizChoice';
 import { orderJuz } from '@shared/quiz/orderAnswer';
+import { aimItems, aimSources, linkItems, linkSources, type OrderSurah } from '@shared/quran/surahOrder';
+import { LinkWords, orderSurahList, SurahBody } from '@/components/OrderSurah';
 import { CompareFeedback, CompareInputs } from './QuizCompare';
 import { QuizFeedback, QuizInputs } from './QuizTree';
 import { type Palette } from '@/lib/theme';
@@ -672,6 +674,46 @@ function OathPost({ id, palette }: { id: string; palette: Palette }) {
       actions={<Action Icon={BookOpen} label={`افتح ${place} في المصحف`} onPress={() => readAyah(oath.id)} palette={palette} />}
       source={sourcesOf(oathSources(id))}>
       <View style={{ paddingHorizontal: 14, paddingVertical: 6 }}><OathWords oath={oath} palette={palette} /></View>
+    </Post>
+  );
+}
+
+/** The surah-order page's surah, by its number as the feed keeps it. */
+const orderSurahOf = (item: string) => orderSurahList().find(each => each.surah === Number(item));
+const openOrder = (s: OrderSurah) => router.push({ pathname: '/order', params: { juz: String(s.juz[0]) } });
+
+/**
+ * «مقصود السورة» (owner, 2026-11-21; sketch surah-order-feed/sketch-dark.png, screen 2): a surah's card as the surah-order
+ * page draws it, its opening ayat and al-Biqa'i's aim; the open button opens the page at the surah's juz.
+ */
+function SurahAimPost({ id, palette }: { id: string; palette: Palette }) {
+  const s = orderSurahOf(id);
+  if (!s) return null;
+  return (
+    <Post palette={palette} head={<PostHead Icon={Target} title="مقصود السورة" palette={palette} />}
+      open={<Action Icon={BookOpen} label={`افتح سورة ${s.name} في ترتيب السور`} onPress={() => openOrder(s)} palette={palette} />}
+      source={sourcesOf(aimSources(id))}>
+      <View style={{ paddingHorizontal: 14, paddingVertical: 8 }}><SurahBody s={s} palette={palette} /></View>
+    </Post>
+  );
+}
+
+/**
+ * «بين سورتين» (sketch screen 1): a surah and the one before it, al-Suyuti's words on what joins them (Ibn al-Zubayr's where
+ * he is silent) and the ayat his words name, as the surah-order page shows them.
+ */
+function SurahLinkPost({ id, palette }: { id: string; palette: Palette }) {
+  const s = orderSurahOf(id);
+  const before = orderSurahOf(String(Number(id) - 1));
+  if (!s?.link || !before) return null;
+  return (
+    <Post palette={palette} head={<PostHead Icon={Link2} title="بين سورتين" palette={palette} />}
+      open={<Action Icon={BookOpen} label={`افتح ${before.name} و${s.name} في ترتيب السور`} onPress={() => openOrder(s)} palette={palette} />}
+      source={sourcesOf(linkSources(id))}>
+      <View style={{ paddingHorizontal: 14, paddingVertical: 8, gap: 6 }}>
+        <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 22, fontWeight: '700', textAlign: 'right' }}>{`${before.name} ← ${s.name}`}</Text>
+        <LinkWords link={s.link} palette={palette} barred />
+      </View>
     </Post>
   );
 }
@@ -1235,6 +1277,8 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   opening: () => openingItems(openingList()),
   oath: () => oathItems(oathList()),
   event: () => eventItems(STORY_EVENTS),
+  'surah-aim': aimItems,
+  'surah-link': linkItems,
 };
 const itemsOf = (kind: ListKind) => (itemLists[kind] ??= LIST_OF[kind]());
 
@@ -1278,6 +1322,8 @@ function ContentPost({ kind, item, day, palette }: { kind: ListKind; item: strin
     case 'opening': return <OpeningCardPost id={item} palette={palette} />;
     case 'oath': return <OathPost id={item} palette={palette} />;
     case 'event': return <EventPost id={item} palette={palette} />;
+    case 'surah-aim': return <SurahAimPost id={item} palette={palette} />;
+    case 'surah-link': return <SurahLinkPost id={item} palette={palette} />;
     default: return null;
   }
 }

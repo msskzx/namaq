@@ -16,7 +16,7 @@ export const SECTIONS = [
 export type SectionId = (typeof SECTIONS)[number]['id'];
 
 /** The cards of the drawings built for their pages (owner, 2026-11-20; their items in shared/drawingCards.ts). */
-export const DRAWING_CARD_KINDS = ['nasab', 'ties', 'battle', 'hadith-scene', 'opening', 'oath', 'event'] as const;
+export const DRAWING_CARD_KINDS = ['nasab', 'ties', 'battle', 'hadith-scene', 'opening', 'oath', 'event', 'surah-link', 'surah-aim'] as const;
 export type DrawingCardKind = (typeof DRAWING_CARD_KINDS)[number];
 
 /** The feed's content cards, by kind; each app card (mobile/src/components/HomeFeed.tsx) draws one. */
@@ -33,6 +33,8 @@ export type Interest = {
 
 export const INTERESTS: readonly Interest[] = [
   { id: 'hifz', name: 'الحفظ والمراجعة', section: 'quran', ours: true, cards: ['opening'], quizzes: ['RECITE', 'OPENINGS', 'SURAH', 'ORDER', 'ORDER_JUZ'] },
+  // «علم المناسبات»: al-Biqa'i's aims and al-Suyuti's links of the surah-order page (owner, 2026-11-21).
+  { id: 'tanasub', name: 'تناسب السور', section: 'quran', cards: ['surah-link', 'surah-aim'], quizzes: ['SURAH_AIM'] },
   { id: 'mutashabih', name: 'المتشابه اللفظي', section: 'quran', ours: true, cards: ['pair', 'tree'], quizzes: ['BRANCHES', 'COMPARE'] },
   { id: 'tafsir', name: 'التفسير', section: 'quran', cards: ['note-tafsir', 'oath'], quizzes: ['TAFSIR'] },
   { id: 'gharib', name: 'غريب القرآن', section: 'quran', ours: true, cards: [], quizzes: ['MEANING'] },
