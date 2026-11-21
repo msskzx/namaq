@@ -40,7 +40,7 @@ const ayahLength = new Map<string, number>();
       for (const token of item.line ?? []) {
         if (typeof token === 'number') { ayahLength.set(`${surah}:${token}`, at); [next, at] = [token + 1, 0]; continue; }
         if (token === '۞') continue;
-        mushaf.push({ surah, ayah: next, at: at++, skeleton: skeleton(token) });
+        mushaf.push({ surah, ayah: next, at: at++, skeleton: skeleton(token), text: token });
       }
     }
   }

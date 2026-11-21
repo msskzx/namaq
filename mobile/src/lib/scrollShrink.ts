@@ -7,7 +7,7 @@ export type ScrollPoint = { y: number; maxY: number };
 /** Scrolls smaller than this (in points) are finger jitter and change nothing. */
 const STEP = 6;
 /** Near the top the bar stays full size. */
-const TOP = 24;
+export const TOP = 24;
 
 export function nextCompact(compact: boolean, last: ScrollPoint, now: ScrollPoint): boolean {
   if (now.y <= TOP) return false;
