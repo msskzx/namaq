@@ -16,7 +16,9 @@ const named = (speaker: string, agent?: string) => (agent === PROPHET_AGENT && !
  * at reading size; each saying in a bubble on its speaker's side, a new speaker on the other side, the narrator's lead-in
  * («فَقَالَ») above it outside the bubble. Who narrates is named once, when he changes, on its own line in ink.
  */
-export default function HadithScene({ lines, slots, palette }: { lines: SceneLine[]; slots: Map<string, number>; palette: Palette }) {
+export default function HadithScene({ lines, slots, palette, keyed = true }: { lines: SceneLine[]; slots: Map<string, number>; palette: Palette;
+  /** Draw the speakers' chips; a page whose people row above is already the key (a sira story) passes false. */
+  keyed?: boolean }) {
   const sides = bubbleSides(lines);
   const agents = new Map(lines.filter(line => line.kind === 'turn' && line.speaker).map(line => [line.speaker!, line.agent]));
   const colourOf = (speaker?: string) => palette.slots[slots.get(speaker ?? '') ?? 0];
@@ -24,7 +26,7 @@ export default function HadithScene({ lines, slots, palette }: { lines: SceneLin
   let narrator: string | undefined;
   return (
     <View style={{ gap: 10 }}>
-      {people.length > 0 && (
+      {keyed && people.length > 0 && (
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
           {people.map(({ speaker }) => (
             <Chip key={speaker} label={named(speaker, agents.get(speaker))} on lit tint={colourOf(speaker)} role="text" small palette={palette} />
@@ -34,7 +36,7 @@ export default function HadithScene({ lines, slots, palette }: { lines: SceneLin
       {lines.map((line, i) => {
         if (line.kind === 'narration') {
           const next = lines[i + 1];
-          const split = next?.kind === 'turn' ? splitLead(line.text) : { before: line.text };
+          const split = next?.kind === 'turn' && next.lead === undefined ? splitLead(line.text) : { before: line.text };
           const changed = line.speaker && line.speaker !== narrator;
           if (line.speaker) narrator = line.speaker;
           if (!changed && !split.before) return null;
@@ -46,7 +48,7 @@ export default function HadithScene({ lines, slots, palette }: { lines: SceneLin
           );
         }
         const previous = lines[i - 1];
-        const lead = previous?.kind === 'narration' ? splitLead(previous.text).lead : undefined;
+        const lead = line.lead ?? (previous?.kind === 'narration' ? splitLead(previous.text).lead : undefined);
         return (
           <Bubble key={i} who={line.speaker && named(line.speaker, line.agent)} colour={colourOf(line.speaker)} start={!sides[i]} lead={lead} palette={palette}>
             <Text style={body(palette)}>{line.text}</Text>

@@ -112,7 +112,18 @@ export const SOURCES: Source[] = [
   {
     id: 'sahih-muslim', group: 'books', files: ['shared/data/hadith/muslim.json'],
     title: { ar: 'صحيح مسلم', en: 'Sahih Muslim' }, author: { ar: 'مسلم بن الحجاج النيسابوري', en: 'Muslim' },
-    edition: 'تحقيق محمد فؤاد عبد الباقي، مطبعة عيسى البابي الحلبي، القاهرة ١٣٧٤هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1727), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih],
+    edition: 'تحقيق محمد فؤاد عبد الباقي، مطبعة عيسى البابي الحلبي، القاهرة ١٣٧٤هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1727), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih, USE.stories],
+  },
+  {
+    id: 'kawkab-wahhaj', group: 'books', files: ['data/history/sources/kawkab-wahhaj/'],
+    title: { ar: 'الكوكب الوهاج والروض البهاج في شرح صحيح مسلم بن الحجاج', en: 'al-Kawkab al-Wahhaj, a commentary on Sahih Muslim' },
+    author: { ar: 'محمد الأمين بن عبد الله الهرري', en: 'Muhammad al-Amin al-Harari' },
+    edition: 'دار المنهاج ودار طوق النجاة، الطبعة الأولى ١٤٣٠هـ؛ من نسخة turath.io، ٢٠٢٦-١١-٢١', link: shamela(18268),
+    licence: {
+      ar: 'توفي المؤلف سنة ١٤٤١هـ/٢٠١٩م. ننقل منه سطرًا قصيرًا منسوبًا إليه يسمّي المتكلم في قصة، مع الجزء والصفحة والرابط، ولا ننشر الكتاب.',
+      en: 'The author died in 2019. We quote a short, attributed line that names who speaks in a story, with volume, page and link, and publish nothing more of the book.',
+    },
+    uses: [USE.stories],
   },
   {
     id: 'sunan-tirmidhi', group: 'books',

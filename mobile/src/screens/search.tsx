@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type Compon
 import { Pressable, ScrollView, View } from 'react-native';
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { router } from 'expo-router';
-import { ArrowLeftRight, BookOpen, ChevronDown, ChevronLeft, HandHeart, List, NotebookPen, ScrollText, TextSearch, Users, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpen, ChevronDown, ChevronLeft, HandHeart, History, List, NotebookPen, ScrollText, TextSearch, type LucideProps } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import type { SearchGroup, SearchHit, SearchKind } from '@shared/quran/searchAll';
 import { Text } from '@/ui/Text';
@@ -31,7 +31,7 @@ const GROUPS: Record<SearchKind, { title: string; Icon: (props: LucideProps) => 
   word: { title: 'الألفاظ', Icon: TextSearch },
   tree: { title: 'المتشابهات', Icon: TreeIcon },
   compare: { title: 'المقارنة', Icon: ArrowLeftRight },
-  event: { title: 'قصص الأنبياء', Icon: Users },
+  event: { title: 'قصص الأنبياء', Icon: History },
   tuhfa: { title: 'تحفة الأطفال', Icon: ScrollText },
   adhkar: { title: 'الأذكار', Icon: HandHeart },
   note: { title: 'تأملاتي', Icon: NotebookPen },
