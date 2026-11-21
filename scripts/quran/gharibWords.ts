@@ -45,6 +45,9 @@ const differ = new Set([...phrases].filter(at => !alike(a.get(at)!, b.get(at)!))
 const c = existsSync(join(DIR, 'passC.jsonl')) ? read('passC.jsonl', differ) : new Map<number, Mark>();
 
 const words: Record<string, GharibWord[]> = {};
+// Off a word's own meanings, an entry two markers called "phrase" shows under «في عبارة» on its words' pages (owner,
+// 2026-11-21): he explains the phrase as a whole, which still helps the reader of each of its words.
+const phraseOnly: number[] = [];
 let agreed = 0;
 let third = 0;
 let answered = 0;
@@ -57,12 +60,15 @@ for (const at of phrases) {
   else if (alike(first, second)) { agreed++; chosen = first.words ?? []; }
   else if (tie && (alike(tie, first) || alike(tie, second))) { third++; chosen = tie.words ?? []; }
   else open++;
-  if (!chosen?.length) continue;
+  if (!chosen?.length) {
+    if (!owner[at] && [first, second, tie].filter(mark => mark?.mark === 'phrase').length >= 2) phraseOnly.push(at);
+    continue;
+  }
   const quoted = quotedOf(at);
   for (const id of chosen) if (!quoted.has(id)) throw new Error(`entry ${at}: ${id} is not a word it quotes`);
   words[at] = chosen.map(id => id.split(':').map(Number) as GharibWord);
 }
 for (const at of Object.keys(owner)) if (!phrases.has(Number(at))) throw new Error(`owner.json: entry ${at} quotes no phrase`);
-const out: GharibWordsData = { source, words };
+const out: GharibWordsData = { source, words, phrases: phraseOnly };
 writeFileSync(join(__dirname, '../../shared/data/quran/gharibWords.json'), `${JSON.stringify(out)}\n`);
-console.log(`gharib words: ${phrases.size} phrase entries, ${agreed} marked alike, ${third} settled by a third marker, ${answered} answered by the owner, ${open} open; ${Object.keys(words).length} explain a word`);
+console.log(`gharib words: ${phrases.size} phrase entries, ${agreed} marked alike, ${third} settled by a third marker, ${answered} answered by the owner, ${open} open; ${Object.keys(words).length} explain a word, ${phraseOnly.length} a phrase`);

@@ -70,7 +70,7 @@ export function mufradatOf(data: MufradatData, key: string, word: number): (Mufr
 }
 
 /** One of Ibn Qutaybah's entries found through a word's place: the ayah it was found in, and the words it quotes there. */
-export type GharibPlaced = GharibAt & { key: string };
+export type GharibPlaced = GharibAt & { key: string; phrase?: boolean };
 
 /** [ayah, mushaf word]: a word of the entry's surah. */
 export type GharibWord = [ayah: number, word: number];
@@ -80,7 +80,7 @@ export type GharibWord = [ayah: number, word: number];
  * marked alike, and the owner's answers where they differed, are here. An entry explaining the phrase as a whole («﴿أَعْجَازُ
  * نَخْلٍ﴾ أي أصولُ نخل») or that neither could pin to a word has none. Built by scripts/quran/gharibWords.ts.
  */
-export type GharibWordsData = { source: { book: number; sha: string }; words: Record<string, GharibWord[]> };
+export type GharibWordsData = { source: { book: number; sha: string }; words: Record<string, GharibWord[]>; phrases: number[] };
 
 /** The words an entry explains: the one word it quotes, or the ones marked for it. */
 export function explainedBy(data: GharibData, marks: GharibWordsData, at: number): GharibWord[] {
@@ -91,23 +91,29 @@ export function explainedBy(data: GharibData, marks: GharibWordsData, at: number
 
 /**
  * His entries on a word wherever the Quran uses it (the words page, owner 2026-11-21): `places` are the word's ayat in
- * mushaf order, each with its mushaf words. An entry counts only when it explains this word: quoting it alone (one word,
- * or a phrase all of this word: «﴿وَأَنْفُسَنَا وَأَنْفُسَكُمْ﴾»), or quoting a phrase with this word marked as the one he
- * explains (`marks`). An entry found twice shows once, at its first ayah.
+ * mushaf order, each with its mushaf words. First the entries that explain this word: quoting it alone (one word, or a
+ * phrase all of this word: «﴿وَأَنْفُسَنَا وَأَنْفُسَكُمْ﴾»), or quoting a phrase with this word marked as the one he explains
+ * (`marks`). Then, marked `phrase`, the entries explaining as a whole a phrase this word is in («﴿أَعْجَازُ نَخْلٍ﴾ أي
+ * أصولُ نخل» on نخل), shown under «في عبارة» so his meaning is never read as this word's own. An entry found twice shows
+ * once, at its first ayah.
  */
 export function gharibOfPlaces(data: GharibData, marks: GharibWordsData, places: { key: string; words: number[] }[]): GharibPlaced[] {
+  const phrases = new Set(marks.phrases);
   const seen = new Set<number>();
-  const found: GharibPlaced[] = [];
+  const own: GharibPlaced[] = [];
+  const inPhrase: GharibPlaced[] = [];
   for (const { key, words } of places) {
     const ayah = Number(key.split(':')[1]);
     for (const entry of gharibAt(data, key)) {
-      const alone = entry.words.every(([from, to]) => Array.from({ length: to - from + 1 }, (_, i) => from + i).every(word => words.includes(word)));
-      if (seen.has(entry.at) || !(alone || explainedBy(data, marks, entry.at).some(([at, word]) => at === ayah && words.includes(word)))) continue;
+      if (seen.has(entry.at)) continue;
+      const quoted = entry.words.flatMap(([from, to]) => Array.from({ length: to - from + 1 }, (_, i) => from + i));
+      if ((!phrases.has(entry.at) && quoted.every(word => words.includes(word))) || explainedBy(data, marks, entry.at).some(([at, word]) => at === ayah && words.includes(word))) own.push({ ...entry, key });
+      else if (phrases.has(entry.at) && quoted.some(word => words.includes(word))) inPhrase.push({ ...entry, key, phrase: true });
+      else continue;
       seen.add(entry.at);
-      found.push({ ...entry, key });
     }
   }
-  return found;
+  return [...own, ...inPhrase];
 }
 
 /**
