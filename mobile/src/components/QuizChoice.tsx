@@ -65,6 +65,9 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
   const write = (question as ChoiceQuestion & { write?: WriteAsk }).write;
   const revealed = shown || answered || !recited(question) || pageShown === question.key;
   const several = ticks(question);
+  // One right choice (owner, 2026-11-21): a tap selects, «تحقق» submits, and «تحقق» with nothing selected shows the answer,
+  // so every question moves on by the same button. A recited ayah's حفظتها/نسيتها is its grade, still answered by the tap.
+  const single = !several && !recited(question) && !orders(question);
   // The ticks belong to their question: a screen that keeps this component for the next one starts it empty.
   const [tickState, setTickState] = useState<{ key: string; values: string[] }>({ key: question.key, values: [] });
   const ticked = tickState.key === question.key ? tickState.values : [];
@@ -73,6 +76,10 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
     const values = ticked.includes(value) ? ticked.filter(each => each !== value) : [...ticked, value];
     setTickState({ key: question.key, values });
     onTicks?.(joined(values));
+  };
+  const select = (value: string) => {
+    setTickState({ key: question.key, values: [value] });
+    onTicks?.(value);
   };
   const picks = several && answered ? picksOf(picked) : [];
   const alike = answered && !several && picked !== question.correctAnswer ? question.alike?.[picked] : undefined;
@@ -135,6 +142,8 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
         <View style={{ paddingHorizontal: 16, gap: 10 }}>
           {question.choices.map(choice => {
             const chosen = several ? (answered ? picks : ticked).includes(choice.value) : choice.value === picked;
+            // Selected, not yet submitted: framed in the accent until «تحقق».
+            const selected = single && !answered && ticked.includes(choice.value);
             const isRight = answered && isRightChoice(question, choice.value);
             const right = isRight && (!several || chosen);
             const wrong = answered && chosen && !isRight;
@@ -144,10 +153,10 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
             const Box = chosen ? SquareCheck : Square;
             return (
               <Pressable key={choice.value} disabled={answered || !onPick}
-                onPress={() => (several ? toggle(choice.value) : onPick?.(choice.value))} accessibilityRole="button" accessibilityLabel={answered && question.explains?.[choice.value] ? `${choice.labelArabic} معنى ${question.explains[choice.value].quote}، ${question.explains[choice.value].where}`
+                onPress={() => (several ? toggle(choice.value) : single ? select(choice.value) : onPick?.(choice.value))} accessibilityRole="button" accessibilityLabel={answered && question.explains?.[choice.value] ? `${choice.labelArabic} معنى ${question.explains[choice.value].quote}، ${question.explains[choice.value].where}`
                 : answered && question.whereOf?.[choice.value] ? `${choice.labelArabic}، ${question.whereOf[choice.value]}` : choice.labelArabic}
-                accessibilityState={several ? { checked: chosen, disabled: answered } : { selected: chosen, disabled: answered }}
-                style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderWidth: right || wrong || missed ? 1.5 : 1, borderColor: right || wrong || missed ? color : palette.rule, borderStyle: missed ? 'dashed' : 'solid', ...CARD, paddingVertical: 12, paddingHorizontal: 16, backgroundColor: pressed ? palette.paperDeep : 'transparent' })}>
+                accessibilityState={several ? { checked: chosen, disabled: answered } : { selected: chosen || selected, disabled: answered }}
+                style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderWidth: right || wrong || missed || selected ? 1.5 : 1, borderColor: right || wrong || missed ? color : selected ? palette.accent : palette.rule, borderStyle: missed ? 'dashed' : 'solid', ...CARD, paddingVertical: 12, paddingHorizontal: 16, backgroundColor: pressed ? palette.paperDeep : 'transparent' })}>
                 <View style={{ flexShrink: 1, flexGrow: question.quranChoices ? 1 : 0, gap: 2 }}>
                   {question.quranChoices
                     ? <AyahFlow color={color}><AyahWords>{choice.labelArabic}</AyahWords></AyahFlow>
@@ -168,10 +177,10 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
           })}
         </View>
       )}
-      {several && !answered && onPick && (
+      {(several || single) && !answered && onPick && (
         <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}>
           <Button variant="primary" Icon={Check} label="تحقق"
-            onPress={() => onPick(joined(ticked))} />
+            onPress={() => onPick(several ? joined(ticked) : ticked[0] ?? '')} />
         </View>
       )}
       {!answered && revealed && question.look && onPick && <View style={{ paddingHorizontal: 16 }}><LookButton look={question.look} onLook={onLook} costs={costs} palette={palette} top={lookTop} /></View>}
