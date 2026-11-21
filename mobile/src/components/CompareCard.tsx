@@ -2,7 +2,6 @@ import { memo, useEffect, useMemo, useRef, useState, useSyncExternalStore, type 
 import { View } from 'react-native';
 import { Text } from '@/ui/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
-import { router } from 'expo-router';
 import { ArrowLeftRight, Bookmark, BookOpen, Clapperboard, Columns2, GalleryHorizontal, Rows2, Pause, UnfoldHorizontal, Play, RotateCcw, Send, X } from 'lucide-react-native';
 import type { CardAyah, CardSide, PairCard } from '@shared/quran/compareCards';
 import { ayahStarts, isRefrain, type ReadStep } from '@shared/quran/readPlan';
@@ -15,7 +14,7 @@ import CompareTree from './CompareTree';
 import { Gap, PartRule, Silent, StartRule } from './StoryParts';
 import { blend, type Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
-import { COMPARE_CARD, markColour, sideTitle, sideView, writtenLinks } from '@shared/quran/compareCardLook';
+import { COMPARE_CARD, markColour, sideTitle, sideView, writtenLinks, type SideName } from '@shared/quran/compareCardLook';
 import { likenessAt } from '@/lib/branches';
 import { nextSpeed, useReadAlong } from './useReadAlong';
 import VideoSheet from './VideoSheet';
@@ -26,6 +25,7 @@ import { WEBSITE } from '@/lib/website';
 import { surahPairHref } from '@shared/quran/curatedComparisons';
 import { compareAnchor } from '@shared/compareBookmarks';
 import { toTab } from '@/lib/ways';
+import { readAyah } from '@/lib/openReader';
 import { compareMatrixOnly } from '@shared/quran/compareViews';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
@@ -95,14 +95,18 @@ function RunningAyat({ ayat, before, after, palette, light, lane = false }: { ay
   );
 }
 
+/** Where a side opens the reader: its first ayah, or, for the listed partners of a one-to-many card, the partner picked. */
+const readAt = (name: SideName, side: CardSide, selected: number) =>
+  (name.listed ? `${side.surah}:${name.numbers[selected] ?? name.numbers[0]}` : sideKeys(side)[0]);
+
 /** `bare`: the head is the name alone, its buttons in the row under the card (the home feed, owner 2026-11-20). */
-function SideHead({ label, keys, palette, group, bare = false }: { label: string; keys: string[]; palette: Palette; group?: string; bare?: boolean }) {
+function SideHead({ label, at, palette, group, bare = false }: { label: string; at: string; palette: Palette; group?: string; bare?: boolean }) {
   const read = `اقرأ ${label} في المصحف`;
   return (
     // The buttons at the right edge, in the thumb's reach, and the surah's name and number in the middle (owner, 2026-11-15).
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
       {!bare && <View style={{ position: 'absolute', right: 0, flexDirection: 'row-reverse', alignItems: 'center', zIndex: 1 }}>
-        <IconButton Icon={BookOpen} label={read} onPress={() => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } })} size="small" />
+        <IconButton Icon={BookOpen} label={read} onPress={() => readAyah(at)} size="small" />
         {group && <IconButton Icon={TreeIcon} label="افتح في متشابهات القرآن" onPress={() => toTab({ pathname: '/branches', params: { tree: group } })} size="small" />}
       </View>}
       <Text style={{ flex: 1, color: palette.muted, fontSize: COMPARE_CARD.labelSize, textAlign: 'center', paddingHorizontal: bare ? 0 : group ? 64 : 32, minHeight: 30, lineHeight: 30 }}>{label}</Text>
@@ -111,11 +115,11 @@ function SideHead({ label, keys, palette, group, bare = false }: { label: string
 }
 
 /** A lane's head side by side: the surah and its ayat, then its buttons, all on one line to fit half the card. */
-function LaneHead({ label, keys, palette, group, bare = false }: { label: string; keys: string[]; palette: Palette; group?: string; bare?: boolean }) {
+function LaneHead({ label, at, palette, group, bare = false }: { label: string; at: string; palette: Palette; group?: string; bare?: boolean }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', minHeight: 30 }}>
       <Text style={{ color: palette.muted, fontSize: COMPARE_CARD.labelSize, textAlign: 'center', flexShrink: 1 }}>{label}</Text>
-      {!bare && <IconButton Icon={BookOpen} label={`اقرأ ${label} في المصحف`} onPress={() => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } })} size="small" />}
+      {!bare && <IconButton Icon={BookOpen} label={`اقرأ ${label} في المصحف`} onPress={() => readAyah(at)} size="small" />}
       {!bare && group && <IconButton Icon={TreeIcon} label="افتح في متشابهات القرآن" onPress={() => toTab({ pathname: '/branches', params: { tree: group } })} size="small" />}
     </View>
   );
@@ -210,12 +214,11 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
   // A side as the shared pieces (shared/quran/compareCardLook.ts), which the video draws too.
   const side = (cardSide: CardSide, i: 0 | 1) => {
     const view = sideView(card, i, selected, folded);
-    const keys = view.name.listed ? view.name.numbers.map(n => `${cardSide.surah}:${n}`) : sideKeys(cardSide);
     const light = (ayah: CardAyah) => lightFor(lit, step, i, ayah.number, onWord, written);
     const many = card.many && card.many.side === i && !view.refrain;
     return (
       <View key={i} style={{ gap: many ? COMPARE_CARD.optionsGap : COMPARE_CARD.sideGap }}>
-        <SideHead label={sideTitle(view.name, surahName)} keys={keys} palette={palette} group={i === 0 ? card.group : undefined} bare={!!onOpen} />
+        <SideHead label={sideTitle(view.name, surahName)} at={readAt(view.name, cardSide, selected)} palette={palette} group={i === 0 ? card.group : undefined} bare={!!onOpen} />
         {/* Story cards run in the first surah's order, so this surah tells this part before the last card's. */}
         {view.back && <Text style={{ color: palette.muted, fontSize: COMPARE_CARD.noteSize, textAlign: 'right' }}>قبلُ في السورة</Text>}
         {view.pieces.map((piece, k) => {
@@ -280,10 +283,9 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
         {([0, 1] as const).map(i => {
           const view = sideView(card, i, selected, []);
           const cardSide = sides[i];
-          const keys = view.name.listed ? view.name.numbers.map(n => `${cardSide.surah}:${n}`) : sideKeys(cardSide);
           return (
             <View key={i} style={{ flex: 1 }}>
-              <LaneHead label={sideTitle(view.name, surahName)} keys={keys} palette={palette} group={i === 0 ? card.group : undefined} bare={!!onOpen} />
+              <LaneHead label={sideTitle(view.name, surahName)} at={readAt(view.name, cardSide, selected)} palette={palette} group={i === 0 ? card.group : undefined} bare={!!onOpen} />
               {view.back && <Text style={{ color: palette.muted, fontSize: COMPARE_CARD.noteSize, textAlign: 'center' }}>قبلُ في السورة</Text>}
             </View>
           );
@@ -368,9 +370,8 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
           {onOpen && <IconButton Icon={ArrowLeftRight} label="افتحها في المقارنة" onPress={onOpen} />}
           {onOpen && ([0, 1] as const).map(i => {
             const view = sideView(card, i, selected, []);
-            const keys = view.name.listed ? view.name.numbers.map(n => `${sides[i].surah}:${n}`) : sideKeys(sides[i]);
             const label = sideTitle(view.name, surahName);
-            return <IconButton key={i} Icon={BookOpen} label={`اقرأ ${label} في المصحف`} onPress={() => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } })} />;
+            return <IconButton key={i} Icon={BookOpen} label={`اقرأ ${label} في المصحف`} onPress={() => readAyah(readAt(view.name, sides[i], selected))} />;
           })}
           {!onOpen && saveButton}
           <IconButton Icon={Clapperboard} label="استوديو القراءة" onPress={read.open} />

@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Text } from '@/ui/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
-import { ArrowLeftRight, Bookmark, BookOpen, GalleryHorizontal, RotateCwSquare, Send, Tags, UnfoldHorizontal } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, BookMarked, GalleryHorizontal, RotateCwSquare, Send, Tags, UnfoldHorizontal } from 'lucide-react-native';
 import TreeIcon from './TreeIcon';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
@@ -96,7 +96,7 @@ function Actions({ piece, palette, pop, current, embedded, extra, onVideo, onSha
       {onView && <IconButton Icon={onView.mode === 'tree' ? GalleryHorizontal : TreeIcon} label={onView.mode === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} onPress={onView.toggle} tone={tone} />}
       <IconButton Icon={UnfoldHorizontal} label="الآيات المحيطة" onPress={onAround.toggle} on={onAround.on} tone={tone} />
       {onRotate && <IconButton Icon={RotateCwSquare} label="تدوير الشجرة" onPress={onRotate} tone={tone} />}
-      {evidence && <IconButton Icon={BookOpen} label="المصادر" onPress={() => onEvidence(evidence)} tone={tone} />}
+      {evidence && <IconButton Icon={BookMarked} label="المصادر" onPress={() => onEvidence(evidence)} tone={tone} />}
       {targets.length > 0 && <IconButton Icon={ArrowLeftRight} label="في المقارنة" onPress={() => onCompare(targets)} tone={tone} />}
       {/* In the feed, save comes after the card's tools, just before share (owner, 2026-11-20). */}
       {embedded && saveButton}
