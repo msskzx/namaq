@@ -130,7 +130,7 @@ test.describe('«أصهاره»', () => {
     await page.getByRole('tab', { name: 'النص' }).click();
     await expect(page.getByText(/حفصة/).first()).toBeVisible();
     await page.getByRole('button', { name: 'ارسم الصلة بينهم' }).click();
-    await expect(page).toHaveURL(/\/between\?slugs=prophet-muhammad,/);
+    await expect(page).toHaveURL(/\/between\?slugs=prophet-muhammad(,|%2C)/);
   });
 });
 
