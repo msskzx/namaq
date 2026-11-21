@@ -46,7 +46,7 @@ export default async function CardsReview({ searchParams }: { searchParams: Prom
       <Segmented label="عدد البطاقات في الصفحة" options={PAGE_SIZES.map(size => ({ key: String(size), label: String(size), current: query.size === size, href: href({ size }) }))} />
     </div>
     <p className="text-sm text-[var(--home-muted)]">{list.length} بطاقة</p>
-    <ReviewKeys key={items.map(entry => entry.id).join()} previous={page > 1 ? href({ page: page - 1 }) : pairHref(-1)} next={page < pages ? href({ page: page + 1 }) : pairHref(1)} />
+    <ReviewKeys key={items.map(entry => entry.id).join()} previous={page > 1 ? href({ page: page - 1 }) : pairHref(-1)} next={page < pages ? href({ page: page + 1 }) : pairHref(1)} unreviewed={query.todo} />
     {pager}
     <ol className="flex flex-col gap-4">
       {items.map((entry, i) => {

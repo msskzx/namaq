@@ -12,7 +12,7 @@ const ACTIONS: Record<string, string> = { KeyA: 'keep', KeyR: 'drop', KeyD: 'dis
  * page or leaves no card current, so a second press never undoes the first. A click on a card makes it the current one. It
  * listens before the matrices, which slide on left and right too (`AyahCards`).
  */
-export default function ReviewKeys({ previous, next }: { previous?: string; next?: string }) {
+export default function ReviewKeys({ previous, next, unreviewed }: { previous?: string; next?: string; unreviewed?: boolean }) {
   const router = useNavigatingRouter();
   useEffect(() => {
     const cards = () => Array.from(document.querySelectorAll<HTMLElement>('[data-review-card]'));
@@ -25,17 +25,26 @@ export default function ReviewKeys({ previous, next }: { previous?: string; next
       if (scroll) list[at].scrollIntoView({ block: 'start', behavior: 'smooth' });
     };
     select(0, false);
+    let pressed = false;
+    // With «غير المراجَعة فقط» the cards pressed here leave the list, so the next page is this one again, reloaded.
+    const forward = () => {
+      if (unreviewed && pressed) router.refresh();
+      else if (next) router.push(next);
+    };
+    const onClick = (event: MouseEvent) => {
+      if ((event.target as Element).closest?.('[data-card-action]')) pressed = true;
+    };
     const onPointer = (event: PointerEvent) => {
       const card = (event.target as Element).closest?.('[data-review-card]');
       if (card) select(cards().indexOf(card as HTMLElement), false);
     };
     const onKey = (event: KeyboardEvent) => {
-      if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) return;
+      if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey || document.querySelector('dialog[open]')) return;
       if ((event.target as Element).closest?.('input, textarea, select, [contenteditable="true"]')) return;
       const action = ACTIONS[event.code];
       if (event.key === 'ArrowDown') select(at + 1, true);
       else if (event.key === 'ArrowUp') select(at - 1, true);
-      else if (event.key === 'ArrowLeft') { if (next) router.push(next); }
+      else if (event.key === 'ArrowLeft') forward();
       else if (event.key === 'ArrowRight') { if (previous) router.push(previous); }
       else if (action) {
         if (event.repeat) return event.preventDefault();
@@ -44,17 +53,22 @@ export default function ReviewKeys({ previous, next }: { previous?: string; next
         if (!button) return;
         button.click();
         if (at < list.length - 1) select(at + 1, true);
-        else if (next) router.push(next);
         else {
           at = list.length;
           list.forEach(card => card.removeAttribute('data-current'));
+          forward();
         }
       } else return;
       event.preventDefault();
     };
     document.addEventListener('pointerdown', onPointer);
+    document.addEventListener('click', onClick, true);
     window.addEventListener('keydown', onKey, true);
-    return () => { document.removeEventListener('pointerdown', onPointer); window.removeEventListener('keydown', onKey, true); };
-  }, [previous, next, router]);
+    return () => {
+      document.removeEventListener('pointerdown', onPointer);
+      document.removeEventListener('click', onClick, true);
+      window.removeEventListener('keydown', onKey, true);
+    };
+  }, [previous, next, unreviewed, router]);
   return <p className="text-sm text-[var(--home-muted)]">↑ ↓ بين البطاقات، ← → بين الصفحات · a إبقاء · r حذف · d للنقاش</p>;
 }

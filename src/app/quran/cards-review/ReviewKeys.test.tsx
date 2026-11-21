@@ -3,16 +3,17 @@ import { cleanup, fireEvent, render } from '@testing-library/react';
 import ReviewKeys from './ReviewKeys';
 
 const push = vi.fn();
-vi.mock('@/components/common/NavigationLoader', () => ({ useNavigatingRouter: () => ({ push }) }));
+const refresh = vi.fn();
+vi.mock('@/components/common/NavigationLoader', () => ({ useNavigatingRouter: () => ({ push, refresh }) }));
 
-afterEach(() => { cleanup(); push.mockReset(); });
+afterEach(() => { cleanup(); push.mockReset(); refresh.mockReset(); });
 
 const pressed: string[] = [];
-function page(previous?: string, next?: string) {
+function page(previous?: string, next?: string, unreviewed?: boolean) {
   pressed.length = 0;
   Element.prototype.scrollIntoView = () => {};
   return render(<main dir="rtl">
-    <ReviewKeys previous={previous} next={next} />
+    <ReviewKeys previous={previous} next={next} unreviewed={unreviewed} />
     <select aria-label="pages"><option>1</option></select>
     {['one', 'two'].map(id => <article key={id} data-review-card={id}>
       {['keep', 'drop', 'discuss'].map(action => <button key={action} data-card-action={action} onClick={() => pressed.push(`${id}:${action}`)}>{action}</button>)}
@@ -41,12 +42,26 @@ describe('ReviewKeys', () => {
     expect(push.mock.calls).toEqual([['/next'], ['/prev']]);
   });
 
-  it('a click makes a card current, and keys typed into a field or with a modifier press nothing', () => {
+  it('with only unreviewed cards shown, turning the page after a press reloads this page, so no unreviewed card is skipped', () => {
+    page(undefined, '/next', true);
+    fireEvent.keyDown(window, { key: 'ArrowLeft' });
+    expect(push.mock.calls).toEqual([['/next']]);
+    fireEvent.click(document.querySelector('[data-card-action="drop"]')!);
+    fireEvent.keyDown(window, { key: 'ArrowLeft' });
+    expect(push.mock.calls).toEqual([['/next']]);
+    expect(refresh).toHaveBeenCalledOnce();
+  });
+
+  it('a click makes a card current, and keys typed into a field, with a modifier or under an open dialog press nothing', () => {
     const { container, getByLabelText } = page();
     fireEvent.pointerDown(container.querySelector('[data-review-card="two"]')!);
     expect(current(container)).toBe('two');
     fireEvent.keyDown(getByLabelText('pages'), { key: 'ArrowDown' });
     fireEvent.keyDown(window, { key: 'a', code: 'KeyA', metaKey: true });
+    const dialog = document.body.appendChild(document.createElement('dialog'));
+    dialog.setAttribute('open', '');
+    fireEvent.keyDown(window, { key: 'a', code: 'KeyA' });
+    dialog.remove();
     expect(pressed).toEqual([]);
     expect(current(container)).toBe('two');
   });
@@ -57,6 +72,8 @@ describe('ReviewKeys', () => {
     fireEvent.keyDown(window, { key: 'a', code: 'KeyA', repeat: true });
     expect(pressed).toEqual(['one:keep']);
     fireEvent.keyDown(window, { key: 'a', code: 'KeyA' });
+    fireEvent.keyDown(window, { key: 'a', code: 'KeyA' });
+    expect(pressed).toEqual(['one:keep', 'two:keep']);
     expect(push.mock.calls).toEqual([['/next']]);
     cleanup();
     const last = page();
