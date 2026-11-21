@@ -319,6 +319,19 @@ test('an opened word shows where it gathers: a bar picks a surah, names it with 
   await expect(page.getByRole('button', { name: new RegExp(`^افتح ${S(7)} .* في المصحف$`) }).first()).toBeInViewport();
 });
 
+test("a word's page holds Ibn Qutaybah's note on a phrase that explains it, and the phrase's other words' pages do not", async ({ page }) => {
+  await open(page, '/words');
+  await page.getByLabel('ابحث عن كلمة في القرآن').fill('ريب');
+  await page.getByRole('button', { name: /^رَيۡب، / }).click();
+  await page.getByRole('tab', { name: 'غريب القرآن لابن قتيبة' }).click();
+  await expect(page.getByText('لا شكَّ فيه', { exact: false })).toBeVisible();
+  await open(page, '/words');
+  await page.getByLabel('ابحث عن كلمة في القرآن').fill('نخل');
+  await page.getByRole('button', { name: /^نَخۡل، / }).click();
+  await expect(page.getByRole('tab', { name: 'المواضع' })).toBeVisible();
+  await expect(page.getByRole('tab', { name: 'غريب القرآن لابن قتيبة' })).toHaveCount(0);
+});
+
 test('the words page shows its source and how it counts in the page, collapsed', async ({ page }) => {
   await open(page, '/words');
   await expect(page.getByRole('button', { name: 'المصادر' })).toHaveCount(0);

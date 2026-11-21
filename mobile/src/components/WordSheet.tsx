@@ -4,10 +4,11 @@ import Animated from 'react-native-reanimated';
 import { BookOpen } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import gharib from '@shared/data/quran/gharib';
+import gharibWords from '@shared/data/quran/gharibWords.json';
 import mufradat from '@shared/data/quran/mufradat';
 import { num } from '@shared/quran/arabicNumber';
 import { countsBySurah, lemmasAtMushafWord, mushafPlacesOf, placesOf } from '@shared/quran/words';
-import { gharibOfPlaces, mufradatOfPlaces, type GharibPlaced } from '@shared/quran/gharib';
+import { gharibOfPlaces, mufradatOfPlaces, type GharibPlaced, type GharibWordsData } from '@shared/quran/gharib';
 import { ayahOf, surahNames } from '@/lib/branches';
 import { readAyah } from '@/lib/openReader';
 import { bookState, useBooks } from '@/lib/books';
@@ -93,7 +94,7 @@ export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bott
   const gharibOn = bookState('gharib') === 'on';
   const mufradatOn = bookState('mufradat') === 'on';
   const mushafPlaces = useMemo(() => mushafPlacesOf(words, id), [id]);
-  const entries = useMemo(() => (gharibOn ? gharibOfPlaces(gharib, mushafPlaces) : []), [mushafPlaces, gharibOn]);
+  const entries = useMemo(() => (gharibOn ? gharibOfPlaces(gharib, gharibWords as unknown as GharibWordsData, mushafPlaces) : []), [mushafPlaces, gharibOn]);
   // Al-Raghib by the word's root: a word without one (a particle) has no article, and a mushaf word holding a second lemma
   // («بِئۡسَمَا») speaks for the other one.
   const articles = useMemo(() => (mufradatOn && words.lemmas[id][2]
