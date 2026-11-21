@@ -128,14 +128,24 @@ export function pressOf(entry: Pick<CardReviewEntry, 'id' | 'twin' | 'pairs'>, p
   return !own || other && other.t > own.t ? other : own;
 }
 
+/**
+ * Whether the owner already reviewed a card: a press on this page, or a verdict they checked in an earlier review, either the
+ * card's own or, live, every compare pair it holds (`checkedPairs`, with the compare review log's unapplied presses).
+ */
+export function reviewed(entry: CardReviewEntry, pressed: Map<string, CardPress>, checkedPairs: Set<string> = new Set()): boolean {
+  if (pressOf(entry, pressed) || entry.verdict?.checked) return true;
+  const pairs = entry.pairs ?? (entry.twin ? [entry.twin] : []);
+  return pairs.length > 0 && pairs.every(pair => checkedPairs.has(pair));
+}
+
 export type CardQuery = { kind: CardKind; changed?: boolean; todo?: boolean; pair?: string };
 
 /** The cards of one kind the owner asked to see, in the index's order; compare can be narrowed to one surah pair. */
-export function selectCards(cards: CardReviewEntry[], proposals: CardProposals, pressed: Map<string, CardPress>, query: CardQuery): CardReviewEntry[] {
+export function selectCards(cards: CardReviewEntry[], proposals: CardProposals, pressed: Map<string, CardPress>, query: CardQuery, checkedPairs?: Set<string>): CardReviewEntry[] {
   return cards.filter(entry => entry.kind === query.kind
     && (!query.pair || entry.page === query.pair)
     && (!query.changed || agentsChanged(entry, proposals[entry.id]))
-    && (!query.todo || !pressOf(entry, pressed)));
+    && (!query.todo || !reviewed(entry, pressed, checkedPairs)));
 }
 
 /** One page of a list: the page number is kept inside the list, and `pages` is at least 1. */

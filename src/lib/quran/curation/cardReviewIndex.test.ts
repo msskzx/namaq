@@ -79,5 +79,19 @@ describe('card review', () => {
     expect(pressOf(compare, pressed)?.action).toBe('keep');
     expect(pressOf(word1, pressed)?.action).toBe('drop');
   });
+
+  it('«غير المراجَعة فقط» leaves out what the owner reviewed in an earlier review, not only presses on this page', () => {
+    const cards: CardReviewEntry[] = [
+      { id: 'checked', kind: 'compare', rows: [], pairs: ['1:1|2:2'], verdict: { keep: true, why: '', checked: true } },
+      { id: 'in-old-log', kind: 'compare', rows: [], pairs: ['1:3|2:4', '1:5|2:6'] },
+      { id: 'half-in-old-log', kind: 'compare', rows: [], pairs: ['1:3|2:4', '1:7|2:8'] },
+      { id: 'twin-in-old-log', kind: 'book', rows: [], twin: '1:5|2:6' },
+      { id: 'draft', kind: 'compare', rows: [], pairs: ['1:9|2:10'], verdict: { keep: true, why: '' } },
+    ];
+    const checkedPairs = new Set(['1:3|2:4', '1:5|2:6']);
+    const todo = (kind: CardReviewEntry['kind']) => selectCards(cards, {}, new Map(), { kind, todo: true }, checkedPairs).map(entry => entry.id);
+    expect(todo('compare')).toEqual(['half-in-old-log', 'draft']);
+    expect(todo('book')).toEqual([]);
+  });
 });
 

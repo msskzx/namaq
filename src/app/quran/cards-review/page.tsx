@@ -7,6 +7,8 @@ import { surahName } from '@shared/quran/surahNames';
 import { CARD_KINDS, comparePages, pageOf, pressesByCard, pressOf, selectCards, sharedKey, type CardKind } from '@/lib/quran/curation/cardReviewIndex';
 import { cardProposals, cardReviewIndex } from '@/lib/quran/curation/cardReviewData';
 import { readCardPresses } from '@/lib/quran/curation/cardReviewLog';
+import { compareVerdicts } from '@/lib/quran/curation/comparePairs';
+import { withUnappliedReviews } from '@/lib/quran/curation/reviewLog';
 import ReviewCard from './ReviewCard';
 import Pager from './Pager';
 import ReviewKeys from './ReviewKeys';
@@ -28,7 +30,8 @@ export default async function CardsReview({ searchParams }: { searchParams: Prom
   const pressed = pressesByCard(readCardPresses());
   const pairs = comparePages(index.cards);
   const query = parseCardsReview(await searchParams, pairs[0]?.page);
-  const list = selectCards(index.cards, proposals, pressed, query);
+  const checkedPairs = new Set(Object.entries(withUnappliedReviews(compareVerdicts)).filter(([, verdict]) => verdict.checked).map(([pair]) => pair));
+  const list = selectCards(index.cards, proposals, pressed, query, checkedPairs);
   const { items, page, pages } = pageOf(list, query.size, query.page);
   const counts = Object.fromEntries(CARD_KINDS.map(kind => [kind.id, index.cards.filter(entry => entry.kind === kind.id).length])) as Record<CardKind, number>;
   const href = (change: Partial<typeof query>) => cardsReviewHref({ ...query, page: 1, ...change });
