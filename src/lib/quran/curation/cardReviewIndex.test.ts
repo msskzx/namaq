@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { agentsChanged, comparePages, oneTwinPerPair, pageOf, pressesByCard, pressOf, rowsChanged, selectCards, sharedKey, type CardPress, type CardReviewEntry } from './cardReviewIndex';
+import { agentsChanged, comparePages, filteredPairs, oneTwinPerPair, pageOf, pressesByCard, pressOf, rowsChanged, selectCards, sharedKey, type CardPress, type CardReviewEntry } from './cardReviewIndex';
 
 const tree = (id: string, rows: string[][], extra: Partial<CardReviewEntry> = {}): CardReviewEntry => ({ id, kind: 'word', rows, verdict: { keep: true, why: 'old' }, ...extra });
 const press = (id: string, action: CardPress['action'], t = 0): CardPress => ({ t, id, action, version: 'original' });
@@ -92,6 +92,14 @@ describe('card review', () => {
     const todo = (kind: CardReviewEntry['kind']) => selectCards(cards, {}, new Map(), { kind, todo: true }, checkedPairs).map(entry => entry.id);
     expect(todo('compare')).toEqual(['half-in-old-log', 'draft']);
     expect(todo('book')).toEqual([]);
+  });
+
+  it('the surah pair list counts only what the filters show, and drops a pair with nothing left except the open one', () => {
+    const at = (id: string, page: string, checked = false): CardReviewEntry => ({ id, kind: 'compare', rows: [], page, ...(checked ? { verdict: { keep: true, why: '', checked } } : {}) });
+    const cards = [at('a', '2/2'), at('b', '2/2', true), at('c', '2/3', true), at('d', '2/4', true), at('e', '3/3')];
+    expect(filteredPairs(cards, {}, new Map(), { todo: true })).toEqual([{ page: '2/2', count: 1 }, { page: '3/3', count: 1 }]);
+    expect(filteredPairs(cards, {}, new Map(), { todo: true }, undefined, '2/3')).toEqual([{ page: '2/2', count: 1 }, { page: '2/3', count: 0 }, { page: '3/3', count: 1 }]);
+    expect(filteredPairs(cards, {}, new Map(), {})).toEqual(comparePages(cards));
   });
 });
 

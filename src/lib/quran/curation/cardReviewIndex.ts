@@ -155,6 +155,16 @@ export function pageOf<T>(list: T[], size: number, page: number): { items: T[]; 
   return { items: list.slice((at - 1) * size, at * size), page: at, pages };
 }
 
+/**
+ * Compare's surah pairs for the pair list, counted under the page's filters (owner 2026-11-21): a pair with nothing left to show
+ * drops out, except the open one (`open`), which stays with its count of 0 so the list and the arrows still find it.
+ */
+export function filteredPairs(cards: CardReviewEntry[], proposals: CardProposals, pressed: Map<string, CardPress>, filters: Omit<CardQuery, 'kind' | 'pair'>, checkedPairs?: Set<string>, open?: string): { page: string; count: number }[] {
+  const shown = selectCards(cards, proposals, pressed, { ...filters, kind: 'compare' }, checkedPairs);
+  const kept = open && !shown.some(entry => entry.page === open) ? [...shown, { id: '', kind: 'compare' as const, rows: [], page: open }] : shown;
+  return comparePages(kept).map(pair => (pair.page === open && !shown.some(entry => entry.page === open) ? { ...pair, count: 0 } : pair));
+}
+
 /** Compare's surah pairs, in mushaf order, each with how many cards it holds (owner reviews compare one pair at a time). */
 export function comparePages(cards: CardReviewEntry[]): { page: string; count: number }[] {
   const counts = new Map<string, number>();
