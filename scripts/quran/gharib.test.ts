@@ -1,8 +1,23 @@
 import { describe, expect, it } from 'vitest';
 import { spellSigns } from './signs';
-import { authorText, headingsFor, letters, meaningOf, meaningPicks, quotesOf, readGharib, readMufradat } from './gharib';
+import { skeleton } from './irabUkbari';
+import { authorText, firstWords, headingsFor, letters, meaningOf, meaningPicks, placeEntry, quotesOf, readGharib, readMufradat, type MushafWord } from './gharib';
 
 const page = (id: number, text: string, at = id) => ({ id, text, vol: '1', page: at });
+
+describe("placing Ibn Qutaybah's entries", () => {
+  // Al-Baqara 265 «كَمَثَلِ جَنَّةِۭ بِرَبۡوَةٍ أَصَابَهَا وَابِلٞ فَـَٔاتَتۡ أُكُلَهَا» and 275 «فَمَن جَآءَهُۥ مَوۡعِظَةٞ مِّن رَّبِّهِۦ»: in consonants alone
+  // «رَبۡوَةٍ» and «رَّبِّهِۦ» are one word (ربه), and his entry on الربوة stood on «ربه» before.
+  const ayat: [number, string][] = [[265, 'كَمَثَلِ جَنَّةِۭ بِرَبۡوَةٍ أَصَابَهَا وَابِلٞ فَـَٔاتَتۡ أُكُلَهَا'], [275, 'فَمَن جَآءَهُۥ مَوۡعِظَةٞ مِّن رَّبِّهِۦ']];
+  const mushaf: MushafWord[] = ayat.flatMap(([ayah, text]) => text.split(' ').map((token, at) => ({ surah: 2, ayah, at, skeleton: skeleton(token), text: token })));
+  const first = firstWords(mushaf);
+  const entry = (text: string) => ({ surah: 2, from: 0, to: 0, numbered: false, page: 97, id: 1, text });
+
+  it('puts his word on the mushaf word whose waw and ya agree with it, not on one with the same consonants', () => {
+    expect(placeEntry(entry('(الرَّبْوة): الارتفاع.'), mushaf, first, 265)).toEqual([[265, 2, 2]]);
+    expect(placeEntry(entry('﴿أُكُلَهَا﴾: ثَمَرُها.'), mushaf, first, 265)).toEqual([[265, 6, 6]]);
+  });
+});
 
 describe("Ibn Qutaybah's text", () => {
   it("keeps the author's words: no notes below the rule, no note calls, no tags", () => {

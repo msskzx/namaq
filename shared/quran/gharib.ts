@@ -69,6 +69,38 @@ export function mufradatOf(data: MufradatData, key: string, word: number): (Mufr
   return at < 0 ? null : Object.assign([...data.entries[at]] as MufradatEntry, { at });
 }
 
+/** One of Ibn Qutaybah's entries found through a word's place: the ayah it was found in, and the words it quotes there. */
+export type GharibPlaced = GharibAt & { key: string };
+
+/**
+ * His entries on a word wherever the Quran uses it (the words page, owner 2026-11-21): `places` are the word's ayat in
+ * mushaf order, each with its mushaf words. An entry counts only when it quotes the word alone: one quoting a phrase
+ * («﴿أَعْجَازُ نَخْلٍ﴾ أي أصولُ نخل») may explain another word of it, which is not this word's meaning. An entry found
+ * twice shows once, at its first ayah.
+ */
+export function gharibOfPlaces(data: GharibData, places: { key: string; words: number[] }[]): GharibPlaced[] {
+  const seen = new Set<number>();
+  const found: GharibPlaced[] = [];
+  for (const { key, words } of places) {
+    for (const entry of gharibAt(data, key)) {
+      if (seen.has(entry.at) || !entry.words.every(([from, to]) => Array.from({ length: to - from + 1 }, (_, i) => from + i).every(word => words.includes(word)))) continue;
+      seen.add(entry.at);
+      found.push({ ...entry, key });
+    }
+  }
+  return found;
+}
+
+/** Al-Raghib's articles on a word's places, each once, in the order they are first met (one, for nearly every word). */
+export function mufradatOfPlaces(data: MufradatData, places: { key: string; words: number[] }[]): (MufradatEntry & { at: number })[] {
+  const found = new Map<number, MufradatEntry & { at: number }>();
+  for (const { key, words } of places) for (const word of words) {
+    const article = mufradatOf(data, key, word);
+    if (article && !found.has(article.at)) found.set(article.at, article);
+  }
+  return [...found.values()];
+}
+
 export const GHARIB_BOOK = 'تفسير غريب القرآن';
 export const GHARIB_EDITION = 'ابن قتيبة الدينوري (ت ٢٧٦هـ)، تحقيق السيد أحمد صقر، دار الكتب العلمية، ١٣٩٨هـ/١٩٧٨م';
 export const GHARIB_SHORT = 'غريب القرآن لابن قتيبة';

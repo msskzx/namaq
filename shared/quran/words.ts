@@ -112,6 +112,18 @@ export function corpusWords(key: string, mushafWord: number): number[] {
   return mushafWord === spacing.at ? [spacing.at, spacing.at + 1] : [mushafWord + 1];
 }
 
+/** The mushaf words (from 0, without ۞) that hold one corpus word of an ayah: corpusWords turned around. */
+export function mushafWords(key: string, corpusWord: number): number[] {
+  const spacing = SPACING[key];
+  if (!spacing || corpusWord < spacing.at) return [corpusWord];
+  if (spacing.mushaf === 'two') return corpusWord === spacing.at ? [spacing.at, spacing.at + 1] : [corpusWord + 1];
+  return [corpusWord <= spacing.at + 1 ? spacing.at : corpusWord - 1];
+}
+
+/** A lemma's ayat as `placesOf` gives them, each with its mushaf words instead of its corpus words. */
+export const mushafPlacesOf = (data: WordsData, id: number): WordPlace[] =>
+  placesOf(data, id).map(({ key, words }) => ({ key, words: [...new Set(words.flatMap(word => mushafWords(key, word)))] }));
+
 /** Lemma ids under one mushaf word, in the word's order. */
 export const lemmasAtMushafWord = (data: WordsData, key: string, mushafWord: number) =>
   [...new Set(corpusWords(key, mushafWord).flatMap(word => lemmasOfWord(data, key, word)))];

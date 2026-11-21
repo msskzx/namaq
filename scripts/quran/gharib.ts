@@ -68,6 +68,17 @@ export function quotesOf(text: string): string[] {
   return paren ? [paren[1]] : [];
 }
 
+/** A word's letters with its waw and ya, which the skeleton drops; no alif or hamza, whose spelling the book and the mushaf write differently. */
+const firm = (word: string) => letters(word).replace(/ـ/g, '').replace(/^(?:وال|فال|بال|ال|و|ف)(?=...)/, '').replace(/[ءا]/g, '').replace(/ة/g, 'ه').replace(/[^ء-ي]/g, '');
+const quoteTokens = (quote: string) => quote.replace(/[^ء-ۭ\s]/g, ' ').split(/\s+/).filter(Boolean);
+/** His word and a mushaf word agree on every letter but alif and hamza, one perhaps with a prefix the other lacks. */
+function firmlyOne(his: string, mushaf: string | undefined) {
+  if (!mushaf) return false;
+  const [a, b] = [firm(his), firm(mushaf)];
+  const prefixed = (long: string, short: string) => long.endsWith(short) && /^[وفبكل]{1,2}$/.test(long.slice(0, long.length - short.length));
+  return a.length > 0 && b.length > 0 && (a === b || prefixed(a, b) || prefixed(b, a));
+}
+
 /** A word with no leading و، ف or article: he often names a word as «الصَّيِّبُ» where the ayah has «كَصَيِّبٖ». */
 const loose = (word: string) => word.replace(/^[وف](?=..)/, '').replace(/^[بكل]?ال(?=..)/, '').replace(/^[بكل](?=...)/, '');
 
@@ -109,9 +120,22 @@ export function placeEntry(entry: RawEntry, mushaf: MushafWord[], first: Map<str
   for (const quote of quotesOf(entry.text)) {
     const tokens = quote.replace(/[^ء-ۭ\s]/g, ' ').split(/\s+/).map(skeleton).filter(Boolean);
     const starts = placesOf(quote, mushaf, first).filter(start => mushaf[start].surah === entry.surah);
-    const inRange = starts.filter(start => mushaf[start].ayah >= entry.from && mushaf[start].ayah <= entry.to);
-    const later = starts.filter(start => mushaf[start].ayah >= floor).sort((a, b) => a - b);
-    const start = entry.numbered ? inRange[0] : later[0] ?? (starts.length === 1 ? starts[0] : undefined);
+    const pick = (pool: number[]) => {
+      const inRange = pool.filter(start => mushaf[start].ayah >= entry.from && mushaf[start].ayah <= entry.to);
+      const later = pool.filter(start => mushaf[start].ayah >= floor).sort((a, b) => a - b);
+      return entry.numbered ? inRange[0] : later[0] ?? (pool.length === 1 ? pool[0] : undefined);
+    };
+    // The consonants alone make «الرَّبْوة» meet «رَبِّهِ»: a place whose waw and ya agree with his word goes first, then
+    // one found loosely near his place that agrees so, and only then the consonants' match.
+    const firmly = (start: number) => quoteTokens(quote).every((token, j) => firmlyOne(token, mushaf[start + j]?.text));
+    const firmStart = pick(starts.filter(firmly));
+    if (firmStart === undefined && !starts.some(firmly)) {
+      const near = entry.numbered ? Array.from({ length: entry.to - entry.from + 1 }, (_, i) => entry.from + i) : floor ? [floor, floor + 1, floor + 2] : [];
+      const found = near.map(ayah => ({ ayah, words: ayahWords(ayah), run: looseRun(tokens, ayahWords(ayah)) }))
+        .find(({ words, run }) => run && firmly(mushaf.indexOf(words.find(word => word.at === run[0])!)));
+      if (found?.run) { add(found.ayah, found.run[0], found.run[1]); floor = found.ayah; continue; }
+    }
+    const start = firmStart ?? pick(starts);
     if (start !== undefined) {
       for (let j = 0; j < tokens.length; j++) {
         const word = mushaf[start + j];
