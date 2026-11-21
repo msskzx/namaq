@@ -99,7 +99,7 @@ export default function OrderTray({ question, given, ar, onAnswer, onDraft, sent
         );
       })}
     </ol>
-    {!locked && <div className={`mt-3 flex flex-col gap-2 border-t border-[var(--home-rule)] pt-3 ${pinned ? "sticky bottom-0 z-10 bg-[var(--home-paper)] pb-3" : ""}`}>
+    {!locked && <div className={`mt-3 flex flex-col gap-2 border-t border-[var(--home-rule)] pt-3 ${pinned ? "sticky bottom-[var(--app-tabbar)] z-10 bg-[var(--home-paper)] pb-3" : ""}`}>
       <ul className={`flex flex-wrap gap-2 ${pinned ? "max-h-40 overflow-y-auto" : ""}`} aria-label={ar ? "أسماء السور" : "Surah names"}>
         {left.map(value => <li key={value}><Chip label={label(value)} onClick={() => change(put(tray, value))} /></li>)}
       </ul>
