@@ -21,7 +21,7 @@ import { hadithUnit } from '@/lib/hadith';
 import Isnad from '@/components/Isnad';
 
 type Mode = 'scenes' | 'text';
-const MODES = [{ key: 'scenes', label: 'الرسم' }, { key: 'text', label: 'النص كاملًا' }] as const;
+const MODES = [{ key: 'scenes', label: 'الرسم' }, { key: 'text', label: 'النص' }] as const;
 
 const body = (palette: Palette) => ({ color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right' as const });
 
