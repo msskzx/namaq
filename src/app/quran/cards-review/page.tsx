@@ -9,6 +9,7 @@ import { cardProposals, cardReviewIndex } from '@/lib/quran/curation/cardReviewD
 import { readCardPresses } from '@/lib/quran/curation/cardReviewLog';
 import ReviewCard from './ReviewCard';
 import Pager from './Pager';
+import ReviewKeys from './ReviewKeys';
 import { cardsReviewHref, PAGE_SIZES, parseCardsReview } from './query';
 
 export const dynamic = 'force-dynamic';
@@ -32,17 +33,20 @@ export default async function CardsReview({ searchParams }: { searchParams: Prom
   const counts = Object.fromEntries(CARD_KINDS.map(kind => [kind.id, index.cards.filter(entry => entry.kind === kind.id).length])) as Record<CardKind, number>;
   const href = (change: Partial<typeof query>) => cardsReviewHref({ ...query, page: 1, ...change });
   const first = (page - 1) * query.size;
+  const pairAt = pairs.findIndex(pair => pair.page === query.pair);
+  const pairHref = (step: number) => (query.kind === 'compare' && pairs[pairAt + step] ? href({ pair: pairs[pairAt + step].page }) : undefined);
   const pager = <Pager page={page} hrefs={Array.from({ length: pages }, (_, i) => href({ page: i + 1 }))} />;
   return <main className={`${styles.page} mx-auto flex max-w-3xl flex-col gap-4 px-4 py-6`} dir="rtl">
     <h1 className="text-xl">مراجعة البطاقات</h1>
     <Segmented label="نوع البطاقات" options={CARD_KINDS.map(kind => ({ key: kind.id, label: `${kind.ar} (${counts[kind.id]})`, current: query.kind === kind.id, href: href({ kind: kind.id }) }))} />
-    {query.kind === 'compare' && <Pager label="السورتان" page={pairs.findIndex(pair => pair.page === query.pair) + 1} hrefs={pairs.map(pair => href({ pair: pair.page }))} labels={pairs.map(pair => `${pair.page.split('/').map(n => names[Number(n)]).join(' و')} (${pair.count})`)} />}
+    {query.kind === 'compare' && <Pager label="السورتان" page={pairAt + 1} hrefs={pairs.map(pair => href({ pair: pair.page }))} labels={pairs.map(pair => `${pair.page.split('/').map(n => names[Number(n)]).join(' و')} (${pair.count})`)} />}
     <div className="flex flex-wrap items-center gap-2">
       <Chip label="ما غيّره الوكلاء فقط" on={query.changed} href={href({ changed: !query.changed })} />
       <Chip label="غير المراجَعة فقط" on={query.todo} href={href({ todo: !query.todo })} />
       <Segmented label="عدد البطاقات في الصفحة" options={PAGE_SIZES.map(size => ({ key: String(size), label: String(size), current: query.size === size, href: href({ size }) }))} />
     </div>
     <p className="text-sm text-[var(--home-muted)]">{list.length} بطاقة</p>
+    <ReviewKeys key={items.map(entry => entry.id).join()} previous={page > 1 ? href({ page: page - 1 }) : pairHref(-1)} next={page < pages ? href({ page: page + 1 }) : pairHref(1)} unreviewed={query.todo} />
     {pager}
     <ol className="flex flex-col gap-4">
       {items.map((entry, i) => {
