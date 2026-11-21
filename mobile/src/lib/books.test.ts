@@ -5,7 +5,6 @@ const store = new Map<string, string>();
 let serve: () => string;
 
 vi.mock('react-native', () => ({ Platform: { OS: 'ios' } }));
-vi.mock('./branches', () => ({ WEBSITE: 'https://site' }));
 vi.mock('./deviceStorage', () => ({ deviceStorage: { getItem: (key: string) => store.get(key) ?? null, setItem: (key: string, value: string) => { store.set(key, value); } } }));
 vi.mock('expo-file-system', () => {
   class Directory {
