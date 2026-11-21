@@ -18,6 +18,7 @@
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
+    "books:files": "tsx scripts/books/writeBookFiles.ts",
     "adhkar:check": "tsx scripts/adhkar/checkWitness.ts",
     "quran:topics": "tsx scripts/quran/buildSurahTopics.ts",
     "quran:qiraat": "tsx scripts/quran/buildQiraat.ts",

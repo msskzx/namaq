@@ -7,7 +7,8 @@ import { num } from '@shared/quran/arabicNumber';
 import { BY_QUOTES, OATH_BY, OATH_QUOTES, citesOf, kindQuotes, oathSections, sectionQuotes, type OathBy } from '@shared/quran/oathSources';
 import { buildOaths, oathPlace, oathShareText, type OathKind, type OathView } from '@shared/quran/oaths';
 import { Text } from '@/ui/Text';
-import Reference from '@/ui/Reference';
+import SourceLine, { sourcesOf } from '@/ui/SourceLine';
+import { mushafSource } from '@shared/quiz/sources';
 import TopBar from '@/ui/TopBar';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { ayahMushafWords } from '@/lib/mushaf';
@@ -18,7 +19,7 @@ import { useTabRetap } from '@/lib/tabRetap';
 import { usePalette, type Palette } from '@/lib/theme';
 import OathWords from '@/components/OathWords';
 import IconButton from '@/ui/IconButton';
-import Card from '@/ui/Card';
+import { CardWithRow } from '@/ui/Card';
 import Tabs from '@/ui/Tabs';
 import Chip from '@/ui/Chip';
 
@@ -44,16 +45,13 @@ function OathCard({ oath, palette }: { oath: OathView; palette: Palette }) {
       <View style={{ paddingHorizontal: 4 }}>
         <Text accessibilityRole="header" style={{ fontSize: 16, fontWeight: '700', color: palette.ink }}>{place}</Text>
         {oath.who && <Text style={{ color: palette.muted, fontSize: 14 }}>{oath.who}</Text>}
-        {quotes && <Reference title={citesOf(quotes)} quotes={quotes} palette={palette} />}
       </View>
-      <Card palette={palette} pad={[6, 14]}>
+      {/* The home card's shape (owner 2026-11-20): the mushaf first in the row, share last, the books on the line. */}
+      <CardWithRow palette={palette} pad={[6, 14]} source={[...(quotes ? [{ line: citesOf(quotes), quotes }] : []), ...sourcesOf([mushafSource(oath.id)])]}
+        lead={<IconButton Icon={BookOpen} label={`افتح ${place} في المصحف`} onPress={() => readAyah(oath.id)} />}
+        row={<IconButton Icon={Send} label={`شارك ${place}`} onPress={() => shareOath(oath)} />}>
         <OathWords oath={oath} palette={palette} />
-      </Card>
-      {/* Card actions under the card, on the right (owner): the mushaf, then share last. */}
-      <View style={{ flexDirection: 'row', gap: 4 }}>
-        <IconButton Icon={BookOpen} label={`افتح ${place} في المصحف`} onPress={() => readAyah(oath.id)} size="small" />
-        <IconButton Icon={Send} label={`شارك ${place}`} onPress={() => shareOath(oath)} size="small" />
-      </View>
+      </CardWithRow>
     </View>
   );
 }
@@ -97,7 +95,7 @@ export default function OathsScreen() {
         }}
         ListHeaderComponent={
           <View style={{ gap: 4 }}>
-            <Reference key={kind} title={citesOf(kindQuotes(kind))} quotes={kindQuotes(kind)} palette={palette} />
+            <SourceLine key={kind} sources={[{ line: citesOf(kindQuotes(kind)), quotes: kindQuotes(kind) }]} palette={palette} />
             {kind === 'allah' && (
               <>
                 {/* Inverted in a left-to-right box, as the home shelves, so «الكل» sits on the right on every platform. */}
@@ -106,7 +104,7 @@ export default function OathsScreen() {
                     style={{ flexGrow: 0, flexShrink: 0 }} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 4, gap: 6 }}
                     renderItem={({ item }) => chip(item ? OATH_BY.find(b => b.by === item)!.label : 'الكل', item)} />
                 </View>
-                <Reference title={citesOf(BY_QUOTES)} quotes={BY_QUOTES} palette={palette} />
+                <SourceLine sources={[{ line: citesOf(BY_QUOTES), quotes: BY_QUOTES }]} palette={palette} />
               </>
             )}
           </View>
@@ -114,7 +112,7 @@ export default function OathsScreen() {
         renderItem={({ item }) => ('head' in item ? (
           <View style={{ paddingTop: 8, gap: 2 }}>
             <Text accessibilityRole="header" style={{ fontSize: 20, fontWeight: '700', color: palette.accent }}>{item.head.title}</Text>
-            <Reference title={citesOf(sectionQuotes(item.head))} quotes={sectionQuotes(item.head)} palette={palette} />
+            <SourceLine sources={[{ line: citesOf(sectionQuotes(item.head)), quotes: sectionQuotes(item.head) }]} palette={palette} />
           </View>
         ) : <OathCard oath={item.oath} palette={palette} />)} />
     </View>

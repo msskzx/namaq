@@ -13,8 +13,10 @@ export const metadata: Metadata = {
 export default function QuranWordsPage() {
   return (
     <div dir="rtl" className="w-full p-4 flex flex-col gap-6 text-[var(--home-ink)]">
-      <WordsSource />
-      <h1 className="text-3xl">ألفاظ القرآن</h1>
+      <div className="flex flex-col gap-1">
+        <h1 className="text-3xl">ألفاظ القرآن</h1>
+        <WordsSource />
+      </div>
       <WordCounts lemmas={counts.lemmas as LemmaCount[]} />
       <RepetitionProvider>
         <RepetitionStats />

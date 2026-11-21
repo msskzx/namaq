@@ -7,7 +7,7 @@ import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
-import Card from '@/ui/Card';
+import Card, { CardWithRow, useInsideCard } from '@/ui/Card';
 import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
 import Sheet from '@/ui/Sheet';
@@ -122,6 +122,7 @@ export function NasabTree({ slugs, palette, meetings: showMeetings = true, linke
   const [open, setOpen] = useState<string[]>([]);
   const [runs, setRuns] = useState<string[]>([]);
   const [shown, setShown] = useState<DrawingOrText>(start);
+  const inside = useInsideCard();
   const lines = useMemo(() => slugs.filter(s => findPerson(s)).map(s => ({ slug: s, line: lineOf(findPerson(s)!, PEOPLE) })), [slugs]);
   const roots = useMemo(() => nasabTree(lines), [lines]);
   if (lines.length === 0) return null;
@@ -135,8 +136,7 @@ export function NasabTree({ slugs, palette, meetings: showMeetings = true, linke
   const sources = [...new Set(lines.flatMap(({ line }) => line.map(n => n.from)))].map(s => findPerson(s)?.fullName).filter(f => !!f);
   const tree = (scale: number): Tree => ({ palette, linked, scale, open: runs, onOpen: key => setRuns([...runs, key]) });
   const bodyText = { color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' as const };
-  return <>
-    {withText && <Tabs palette={palette} label="كيف يُعرض النسب" value={shown} onChange={setShown} options={DRAWING_OR_TEXT} />}
+  const body = <>
     {shown === 'drawing' || !withText ? roots.map((root, r) => {
       // One person: his whole line. Several: from where they part, the shared fathers above folded into a line.
       const { above, start: top } = lines.length > 1 ? foldTop(root) : { above: [], start: root };
@@ -173,6 +173,11 @@ export function NasabTree({ slugs, palette, meetings: showMeetings = true, linke
       الأسماء كما في نسب كل علَم في سير أعلام النبلاء؛ وإذا وقف نسبه عند جدٍّ أكمله نسبُ علَمٍ آخر يذكر الآباء أنفسهم.
     </Text>
     {!inCard && <Credit facts={sources} palette={palette} />}
+  </>;
+  // On its own page the tree is a section in the home card's shape, its books on the line under it (owner 2026-11-20).
+  return <>
+    {withText && <Tabs palette={palette} label="كيف يُعرض النسب" value={shown} onChange={setShown} options={DRAWING_OR_TEXT} />}
+    {inside ? body : <CardWithRow palette={palette} gap={10}>{body}</CardWithRow>}
   </>;
 }
 

@@ -8,10 +8,9 @@ import { countOf, counting } from '@shared/adhkarCount';
 import { num } from '@shared/quran/arabicNumber';
 import { AyatLines } from '@/components/stories/StoryAyatLines';
 import type { AyatPage } from '@/lib/storyAyat';
-import Card from '@/components/common/Card';
+import CardWithRow from '@/components/common/CardWithRow';
 import Button from '@/components/common/Button';
 import Segmented from '@/components/common/Segmented';
-import Reference from '@/components/common/Reference';
 
 const TABS = ADHKAR_TABS.filter(key => ADHKAR_OCCASIONS.includes(key));
 
@@ -54,21 +53,20 @@ export default function Adhkar({ quran, on, start }: { quran: Record<string, Aya
         const counted = countOf(count, item.id);
         const target = item.repeat?.count;
         return (
-          <Card key={item.id} id={dhikrAnchor(item.id)} className="grid scroll-mt-20 gap-3.5 p-[18px]">
+          // The counter is the card's own tool, first in the row under it; the book on the line (owner 2026-11-20).
+          <div key={item.id} id={dhikrAnchor(item.id)} className="scroll-mt-20">
+          <CardWithRow className="grid gap-3.5 p-[18px]" source={[{ line: adhkarTitle(item), quotes: adhkarQuotes(item) }]} lead={target && <>
+            <Button size="lg" variant="outline" disabled={counted >= target} aria-label={`عُدَّ مرة، ${num(counted)} من ${num(target)}`}
+              onClick={() => dispatch({ type: 'tap', id: item.id, target })}><Check strokeWidth={2.5} aria-hidden /></Button>
+            <span aria-hidden dir="ltr" className="px-3 text-xl">{num(counted)} / {num(target)}</span>
+            {counted > 0 && <Button variant="ghost" size="lg" aria-label="من جديد" onClick={() => dispatch({ type: 'reset' })}><RotateCcw aria-hidden /></Button>}
+          </>}>
             {item.content.kind === 'text'
               ? <p className="text-justify text-[1.3125rem] leading-[2.5rem]">{item.content.text}</p>
               : (quran[item.id] ?? []).map((pages, i) => <AyatLines key={i} pages={pages} />)}
             {item.virtueQuote && <p className="text-[0.9375rem] leading-relaxed text-[var(--home-muted)]">«{item.virtueQuote}»</p>}
-            {target && (
-              <div className="flex items-center gap-3">
-                <Button size="round" variant="outline" disabled={counted >= target} aria-label={`عُدَّ مرة، ${num(counted)} من ${num(target)}`}
-                  onClick={() => dispatch({ type: 'tap', id: item.id, target })}><Check strokeWidth={2.5} aria-hidden /></Button>
-                <span aria-hidden dir="ltr" className="text-xl">{num(counted)} / {num(target)}</span>
-                {counted > 0 && <Button variant="ghost" size="icon" aria-label="من جديد" onClick={() => dispatch({ type: 'reset' })}><RotateCcw aria-hidden /></Button>}
-              </div>
-            )}
-            <Reference title={adhkarTitle(item)} quotes={adhkarQuotes(item)} />
-          </Card>
+          </CardWithRow>
+          </div>
         );
       })}
     </div>

@@ -7,7 +7,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Tabs from '@/ui/Tabs';
-import Card from '@/ui/Card';
+import { CardWithRow } from '@/ui/Card';
 import Button from '@/ui/Button';
 import Folded from '@/ui/Folded';
 import Reference from '@/ui/Reference';
@@ -30,14 +30,14 @@ const MODES = [{ key: 'drawing', label: 'الرسم' }, { key: 'text', label: '�
 const body = (palette: Palette) => ({ color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right' as const });
 const pagesName = (pages: number[]) => (pages.length > 1 ? `ص ${num(pages[0])}–${num(pages[pages.length - 1])}` : `ص ${num(pages[0])}`);
 
-/** A source's page as the section's reference: the book, volume and page, opening to the edition and Shamela's page. */
-function Cite({ title, edition, url, palette }: { title: string; edition: string; url: string; palette: Palette }) {
-  return <Reference title={title} quotes={[{ text: edition }]} links={[{ label: 'الصفحة في المكتبة الشاملة', url }]} palette={palette} />;
+/** A source's page: the book on its card's line, the place (linked to Shamela's page) and the edition in its sheet. */
+function Cite({ book, place, url, palette }: { book: keyof typeof FORTY.books; place: string; url: string; palette: Palette }) {
+  const { title, edition } = FORTY.books[book];
+  return <Reference title={title} quotes={[{ text: '', cite: place, url }, { text: `${title}، ${edition}` }]} palette={palette} />;
 }
 
 /** One record: the drawn chain with the saying under it, or the whole text, the chain in muted ink before the saying. */
 function Record({ record, mode, palette }: { record: FortyRecord; mode: Mode; palette: Palette }) {
-  const book = FORTY.books[record.book];
   const chain = record.isnadEnd ? record.text.slice(0, record.isnadEnd) : '';
   const saying = record.text.slice(chain.length);
   return (
@@ -49,7 +49,7 @@ function Record({ record, mode, palette }: { record: FortyRecord; mode: Mode; pa
         </>
         : <Text style={body(palette)}><Text style={{ color: palette.muted }}>{chain}</Text>{saying}</Text>}
       {record.from && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{record.mursal ? `مرسلًا، عن ${record.from}` : `من حديث ${record.from}`}</Text>}
-      <Cite title={`${recordName(record, num, FORTY.books)}، ج ${num(record.volume)}، ${pagesName(record.pages)}`} edition={`${book.title}، ${book.edition}`}
+      <Cite book={record.book} place={`${recordName(record, num, FORTY.books)}، ج ${num(record.volume)}، ${pagesName(record.pages)}`}
         url={shamelaPage(record.book, record.shamela)} palette={palette} />
     </View>
   );
@@ -60,7 +60,7 @@ function BookRecords({ title, records, mode, palette }: { title: string; records
   const firstWhole = records.find(record => !record.partial) ?? records[0];
   const rest = records.filter(record => record !== firstWhole);
   return (
-    <Card palette={palette} gap={10}>
+    <CardWithRow palette={palette} gap={10}>
       <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 17, fontWeight: '700', textAlign: 'right' }}>{title}</Text>
       {firstWhole.partial && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>فيه بعض لفظ الحديث</Text>}
       <Record record={firstWhole} mode={mode} palette={palette} />
@@ -74,7 +74,7 @@ function BookRecords({ title, records, mode, palette }: { title: string; records
           ))}
         </Folded>
       )}
-    </Card>
+    </CardWithRow>
   );
 }
 
@@ -94,13 +94,12 @@ const LONG_GRADE = 300;
 function Grade({ grade, palette }: { grade: FortyGrade; palette: Palette }) {
   const [open, setOpen] = useState(false);
   const long = grade.quote.length > LONG_GRADE;
-  const book = FORTY.books[grade.book];
   return (
     <View style={{ gap: 4, borderStartWidth: 2, borderColor: palette.rule, paddingStart: 10 }}>
       <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{grade.by}</Text>
       <Text numberOfLines={long && !open ? GRADE_LINES : undefined} style={body(palette)}>{grade.quote}</Text>
       {long && <View style={{ flexDirection: 'row' }}><Button variant="plain" label={open ? 'أقل' : 'المزيد'} onPress={() => setOpen(was => !was)} accessibilityLabel={open ? 'اطو الكلام' : `اقرأ كلام ${grade.by} كاملًا`} /></View>}
-      <Cite title={gradePlace(grade)} edition={`${book.title}، ${book.edition}`} url={shamelaPage(grade.book, grade.shamela)} palette={palette} />
+      <Cite book={grade.book} place={gradePlace(grade)} url={shamelaPage(grade.book, grade.shamela)} palette={palette} />
     </View>
   );
 }
@@ -108,23 +107,22 @@ function Grade({ grade, palette }: { grade: FortyGrade; palette: Palette }) {
 /** What the scholars said of the hadith's grade (the owner's sketch, frame 4): each in his own words, under his name; no grade of ours. */
 function Grades({ grades, palette }: { grades: FortyGrade[]; palette: Palette }) {
   return (
-    <Card palette={palette} gap={14}>
+    <CardWithRow palette={palette} gap={14}>
       <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 17, fontWeight: '700', textAlign: 'right' }}>ما قاله العلماء في درجته</Text>
       {grades.map((grade, i) => <Grade key={`${grade.by}-${i}`} grade={grade} palette={palette} />)}
-    </Card>
+    </CardWithRow>
   );
 }
 
 /** The compiler's text as he printed it (al-Nawawi's, or Ibn Rajab's for his eight), with his page; the books he names are in «من أخرجه» under it. */
 function Compiled({ entry, palette }: { entry: FortyEntry; palette: Palette }) {
   const { book: key } = compilerOf(entry);
-  const book = FORTY.books[key];
   const where = entry.volume ? `${num(entry.volume)}/ ${num(entry.pages[0])}` : pagesName(entry.pages);
   return (
-    <Card palette={palette} gap={8}>
+    <CardWithRow palette={palette} gap={8}>
       <Text style={body(palette)}>{entry.text}</Text>
-      <Cite title={`${book.title}، ${where}`} edition={`${book.title}، ${book.edition}`} url={shamelaPage(key, entry.shamela)} palette={palette} />
-    </Card>
+      <Cite book={key} place={`${FORTY.books[key].title}، ${where}`} url={shamelaPage(key, entry.shamela)} palette={palette} />
+    </CardWithRow>
   );
 }
 
@@ -150,11 +148,8 @@ export function FortyHadith({ entry, palette, jibril }: { entry: FortyEntry; pal
     {books.map(({ book, records }) => <BookRecords key={book} title={`في ${FORTY.books[book].title}`} records={records} mode={mode} palette={palette} />)}
     {chapter && (
       <>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' }}>
-          <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, textAlign: 'right' }}>من شرح ابن رجب</Text>
-          <Text style={{ color: palette.muted, fontSize: 13 }}>{FORTY.books.ibnrajab.title}</Text>
-        </View>
-        <Card palette={palette} gap={8}><IbnRajab chapter={chapter} palette={palette} /></Card>
+        <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, textAlign: 'right' }}>من شرح ابن رجب</Text>
+        <CardWithRow palette={palette} gap={8}><IbnRajab chapter={chapter} palette={palette} /></CardWithRow>
       </>
     )}
   </>;

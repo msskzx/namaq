@@ -7,7 +7,11 @@ import type { DrawingsView, RingTie } from '@/lib/tarajim';
 import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import Segmented from '@/components/common/Segmented';
 import Button from '@/components/common/Button';
-import { betweenHref, NasabTree, nasabHref, TieSays, TiesRing, tiesHref } from './TarajimParts';
+import { ArrowLeftRight, Link2, Waypoints } from 'lucide-react';
+import CardWithRow from '@/components/common/CardWithRow';
+import { lifeSources } from '@shared/events/lifeTimeline';
+import { sourceEntries } from '@shared/quiz/sources';
+import { betweenHref, BookCredit, NasabTree, nasabHref, TieSays, TiesRing, tiesHref } from './TarajimParts';
 import LifeTimeline, { lifeHref } from './LifeTimeline';
 
 // What the person page draws for someone whose Siyar entry is converted (owner 2026-11-19: "the profile page does not
@@ -32,25 +36,35 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-/** «نسبه»: the tree of his fathers, or the name as the book writes it (owner 2026-11-20: «الرسم | النص», the drawing first). */
+/** A button of a section's row under its card: an icon, named for screen readers, going to `href`. */
+function RowLink({ href, label, Icon }: { href: string; label: string; Icon: typeof Link2 }) {
+  return <Button size="lg" variant="muted" href={href} aria-label={label} title={label}><Icon aria-hidden /></Button>;
+}
+
+/** «نسبه»: the tree of his fathers, or the name as the book writes it (owner 2026-11-20: «الرسم | النص», the drawing first), in the home card's shape. */
 export function NasabToggle({ view, text }: { view: DrawingsView; text: ReactNode }) {
   const [shown, setShown] = useState<DrawingOrText>('drawing');
   return (
     <div className="flex flex-col gap-3" lang="ar" dir="rtl">
       <Segmented label="كيف يُعرض النسب" tabs className="self-start"
         options={DRAWING_OR_TEXT.map(item => ({ ...item, current: shown === item.key, onClick: () => setShown(item.key) }))} />
-      {shown === 'text' ? text : <NasabTree view={view.nasab} text={false} />}
-      <div><Button size="sm" href={nasabHref([view.slug])}>{view.sex === 'FEMALE' ? 'قارن نسبها بغيرها' : 'قارن نسبه بغيره'}</Button></div>
+      <CardWithRow className="flex flex-col gap-3 p-4" row={<RowLink href={nasabHref([view.slug])} Icon={ArrowLeftRight} label={view.sex === 'FEMALE' ? 'قارن نسبها بغيرها' : 'قارن نسبه بغيره'} />}>
+        {shown === 'text' ? <>{text}<BookCredit credit={view.nasab.credit} /></> : <NasabTree view={view.nasab} text={false} />}
+      </CardWithRow>
     </div>
   );
 }
 
-/** «حياته» on the timeline. */
+/** «حياته» on the timeline, its sentences on the book line under it. */
 export function LifeSection({ view }: { view: DrawingsView }) {
   if (view.life.length === 0) return null;
+  const she = view.sex === 'FEMALE';
   return (
-    <Section title={view.sex === 'FEMALE' ? 'حياتها' : 'حياته'}>
-      <LifeTimeline items={view.life} compare={lifeHref([view.slug])} />
+    <Section title={she ? 'حياتها' : 'حياته'}>
+      <CardWithRow className="px-2.5 py-3.5" source={sourceEntries(lifeSources(view.life))}
+        row={<RowLink href={lifeHref([view.slug])} Icon={ArrowLeftRight} label={she ? 'قارن حياتها بغيرها' : 'قارن حياته بغيره'} />}>
+        <LifeTimeline items={view.life} inCard />
+      </CardWithRow>
     </Section>
   );
 }
@@ -63,12 +77,14 @@ export function TiesSection({ view }: { view: DrawingsView }) {
   const she = view.sex === 'FEMALE';
   return (
     <Section title={she ? 'صلاتها' : 'صلاته'}>
-      <TiesRing view={view.ties} onPick={slug => router.push(`/people/${slug}`)} onShow={setShown} />
-      {shown && <TieSays tie={shown} />}
-      <div className="flex flex-wrap gap-2">
-        <Button size="sm" href={tiesHref(view.slug)}>{she ? 'تنقّل في صلاتها' : 'تنقّل في صلاته'}</Button>
-        <Button size="sm" href={betweenHref([view.slug])}>{she ? 'بينها وبين…' : 'بينه وبين…'}</Button>
-      </div>
+      <CardWithRow className="flex flex-col gap-3 p-4" row={<>
+        <RowLink href={tiesHref(view.slug)} Icon={Waypoints} label={she ? 'تنقّل في صلاتها' : 'تنقّل في صلاته'} />
+        <RowLink href={betweenHref([view.slug])} Icon={Link2} label={she ? 'بينها وبين…' : 'بينه وبين…'} />
+      </>}>
+        <TiesRing view={view.ties} onPick={slug => router.push(`/people/${slug}`)} onShow={setShown} />
+        {shown && <TieSays tie={shown} />}
+        <BookCredit credit={view.ties.credit} />
+      </CardWithRow>
     </Section>
   );
 }

@@ -2,7 +2,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { battleLine, type AppBattle, type AppCited } from '@shared/battles/battle';
 import Chip from '@/components/common/Chip';
 import { Refs } from '@/components/stories/StoryView';
-import Card from '@/components/common/Card';
+import CardWithRow from '@/components/common/CardWithRow';
 import BattleMoments from './BattleMoments';
 import BattleMap from './BattleMap';
 
@@ -27,14 +27,14 @@ export function Counts({ battle, Heading }: { battle: AppBattle; Heading: 'h2' |
   ].filter(row => row.ours || row.theirs);
   if (!rows.length) return null;
   const them = battle.kind?.value === 'معركة' ? 'العدو' : 'المشركون';
-  return <section className="flex flex-col gap-2">
+  return <CardWithRow className="flex flex-col gap-2 p-4">
     <Heading className="text-2xl">العدد</Heading>
     {rows.map(({ label, ours, theirs }) => (
       <p key={label} className="text-lg">{label}: المسلمون {count(ours)}، {them} {count(theirs)}</p>
     ))}
     <Refs refs={[muslims, others, muslimsKilled, othersKilled].flatMap(value => value?.refs ?? [])} />
     <Readings values={[muslims, others, muslimsKilled, othersKilled]} />
-  </section>;
+  </CardWithRow>;
 }
 
 function People({ title, people, Heading }: { title: string; people: AppBattle['present']; Heading: 'h2' | 'h3' }) {
@@ -54,18 +54,18 @@ export default function BattleView({ battle, inset = false }: { battle: AppBattl
   const Name = inset ? 'h2' : 'h1';
   const Heading = inset ? 'h3' : 'h2';
   return <div dir="rtl" lang="ar" className="flex flex-col gap-4 text-[var(--home-ink)]">
-    <div className="flex flex-col gap-1">
-      <Name className="text-3xl">{battle.name}</Name>
-      <p className="text-[var(--home-muted)]">{battleLine(battle)}</p>
-      <Refs refs={[battle.kind, battle.year, battle.location].flatMap(value => value?.refs ?? [])} />
-      <Readings values={[battle.kind, battle.year, battle.location]} />
-    </div>
-    {battle.place ? (
-      <Card className="overflow-hidden">
-        <BattleMap place={battle.place} />
-        <p className="p-2.5 text-sm text-[var(--home-muted)]">موضع تقريبي على خريطة اليوم، من عندنا.</p>
-      </Card>
-    ) : battle.location && <p className="text-lg">{battle.location.value}</p>}
+    <Name className="text-3xl">{battle.name}</Name>
+    {/* Each section in the home card's shape, its books on the line under it (owner 2026-11-20). */}
+    <CardWithRow>
+      {battle.place && <BattleMap place={battle.place} />}
+      <div className="flex flex-col gap-1.5 p-4">
+        <p className="text-lg">{battleLine(battle)}</p>
+        {battle.place ? <p className="text-sm text-[var(--home-muted)]">موضع تقريبي على خريطة اليوم، من عندنا.</p>
+          : battle.location && <p className="text-lg">{battle.location.value}</p>}
+        <Refs refs={[battle.kind, battle.year, battle.location].flatMap(value => value?.refs ?? [])} />
+        <Readings values={[battle.kind, battle.year, battle.location]} />
+      </div>
+    </CardWithRow>
     <Counts battle={battle} Heading={Heading} />
     {battle.moments.length > 0 && <BattleMoments moments={battle.moments} kind={battle.kind?.value} inset={inset} />}
     <People title="من استشهد يومئذ" people={battle.martyrs} Heading={Heading} />

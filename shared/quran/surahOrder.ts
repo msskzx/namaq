@@ -1,3 +1,4 @@
+import type { SourceEntry } from '../quiz/sources';
 import { juzOf } from './juz';
 import { normalizeWord } from './normalize';
 import surahRows from '../data/quran/surahs.json';
@@ -334,3 +335,7 @@ export const citeLabel = (c: Cite, num: (n: number) => string) => {
   return `${BOOKS[c.book].short} ${c.vol ? `${num(c.vol)}/${pages}` : `ص${pages}`}`;
 };
 export const citeUrl = (c: Cite) => `https://shamela.ws/book/${BOOKS[c.book].shamela}/${c.sh}`;
+
+/** A quote's book on its card's source line, its page (linked to al-Shamela) and the book's full title in the line's sheet. */
+export const orderSource = (c: Cite, num: (n: number) => string): SourceEntry =>
+  ({ line: BOOKS[c.book].short, quotes: [{ text: '', cite: citeLabel(c, num), url: citeUrl(c) }, { text: BOOKS[c.book].title }] });

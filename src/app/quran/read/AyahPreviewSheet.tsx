@@ -5,9 +5,10 @@ import Link from 'next/link';
 import useSWR from 'swr';
 import { ArrowLeftRight, BookOpenText, BookOpen, ChevronLeft, Layers, ListTree, Sparkles, X } from 'lucide-react';
 import { num } from '@shared/quran/arabicNumber';
-import { QIRAAT_SOURCE, whoReads, type WordDifference } from '@shared/quran/qiraat';
-import { tafsirSadiCredit, tafsirSadiPage, type TafsirPassage } from '@shared/quran/tafsirSadi';
-import ExternalLink from '@/components/common/ExternalLink';
+import { whoReads, type WordDifference } from '@shared/quran/qiraat';
+import { tafsirSadiCredit, type TafsirPassage } from '@shared/quran/tafsirSadi';
+import { qiraatSources, sadiSource } from '@shared/quiz/bookSources';
+import SourceLine, { sourcesOf } from '@/components/common/SourceLine';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import TreeViewCard from '@/app/quran/branches/TreeViewCard';
@@ -118,8 +119,13 @@ export default function AyahPreviewSheet({ preview, onClose }: { preview: Previe
             </Card>
           ))}
         </div>
-        {shown.kind === 'irab' || shown.kind === 'gharib' || shown.kind === 'balagha' ? null : shown.kind === 'tafsir' ? tafsir && <div className="mx-4 mt-2.5 flex shrink-0 items-center gap-3 text-sm"><ExternalLink href={tafsirSadiPage(tafsir)} className="flex-1 text-[var(--home-muted)]">{tafsirSadiCredit(tafsir)}</ExternalLink><OpenInBook book="sadi" ayah={shown.key} /></div>
-          : shown.kind === 'readings' ? <ExternalLink href={QIRAAT_SOURCE.url} className="mx-4 mt-2.5 shrink-0 text-sm text-[var(--home-muted)]">{`المصدر: ${QIRAAT_SOURCE.name}`}</ExternalLink> : <Link href={shown.all} className="mx-4 mt-2.5 flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-[10px] border border-[var(--home-rule)] text-[1.0625rem]">
+        {shown.kind === 'irab' || shown.kind === 'gharib' || shown.kind === 'balagha' ? null : shown.kind === 'tafsir' ? tafsir && (
+          // The book's own reader first, then the book line (owner 2026-11-20), as under a home card.
+          <div className="mx-1 mt-1.5 flex shrink-0 flex-col gap-0.5">
+            <div className="flex px-3"><OpenInBook book="sadi" ayah={shown.key} className="min-h-11" /></div>
+            <SourceLine sources={sourcesOf([{ ...sadiSource(tafsir), edition: tafsirSadiCredit(tafsir) }])} />
+          </div>)
+          : shown.kind === 'readings' ? <div className="mx-1 mt-1.5 shrink-0"><SourceLine sources={sourcesOf(qiraatSources(shown.key))} /></div> : <Link href={shown.all} className="mx-4 mt-2.5 flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-[10px] border border-[var(--home-rule)] text-[1.0625rem]">
           <Icon size={20} aria-hidden />
           {trees ? 'افتح في المتشابهات' : `كل مقارنات ${names[surah] ?? ''}`}
           <ChevronLeft size={18} aria-hidden className="text-[var(--home-muted)]" />

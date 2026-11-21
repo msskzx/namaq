@@ -14,12 +14,12 @@ vi.mock('next-themes', () => ({ useTheme: () => ({ theme: 'system', setTheme: st
 afterEach(() => { cleanup(); state.path = '/'; state.language = 'en'; state.loaded = true; vi.clearAllMocks(); });
 
 describe('TabBar', () => {
-  it('shows the words page\'s source as books, with the corpus, how it counts and the licences page', () => {
+  it('shows the words page\'s source on its line, with the corpus, how it counts and the licences page', () => {
     state.language = 'ar';
     state.path = '/quran/words';
     render(<><WordsSource /><TabBar /></>);
     expect(screen.queryByRole('button', { name: 'مساعدة' })).toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: 'المصادر' }));
+    fireEvent.click(screen.getByRole('button', { name: 'المصدر: المدوّنة القرآنية العربية' }));
     const sheet = screen.getByRole('dialog', { name: 'المصدر' });
     expect(within(sheet).getByText('المدوّنة القرآنية العربية')).toBeTruthy();
     expect(within(sheet).getByText(/تُعدّ الكلمة بمدخلها المعجمي/)).toBeTruthy();

@@ -44,7 +44,7 @@ export default function LibraryScreen() {
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ tab?: string }>();
   const [tab, setTab] = useState<Tab>(params.tab === 'forgotten' || params.tab === 'notes' ? params.tab : 'saved');
-  const { cards, forgottenCards, noteCards, savedMenu, forgottenMenu, noteMenu, menus } = useHomeCards(palette);
+  const { cards, forgottenCards, noteCards, savedItems, forgottenItems, noteItems, menus } = useHomeCards(palette);
   const shown = tab === 'saved' ? cards : tab === 'notes' ? noteCards : forgottenCards;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
@@ -53,13 +53,13 @@ export default function LibraryScreen() {
         <View style={{ flex: 1, alignItems: 'center' }}><Picker tab={tab} onTab={setTab} palette={palette} /></View>
         <View style={{ width: 34 }} />
       </TopBar>
-      <FlatList key={tab} data={shown} keyExtractor={card => card.id} contentContainerStyle={{ padding: 16, paddingBottom: insets.bottom + 24, gap: 12 }}
+      <FlatList key={tab} data={shown} keyExtractor={card => card.id} contentContainerStyle={{ padding: 16, paddingBottom: insets.bottom + 24, gap: 16 }}
         renderItem={({ item }) => tab === 'saved' && item.kind === 'card'
           ? <SavedFeedCard id={item.id} palette={palette} />
           : tab === 'saved'
-          ? <ShelfCard wide card={item} palette={palette} onPress={at => savedMenu(item, at)} />
-          : tab === 'notes' ? <ShelfCard wide note card={item} palette={palette} Icon={NotebookPen} label={NOTE_LABEL} onPress={at => noteMenu(item, at)} />
-          : <ShelfCard wide card={item} palette={palette} Icon={LightbulbOff} label={FORGOTTEN_LABEL} onPress={at => forgottenMenu(item, at)} />}
+          ? <ShelfCard card={item} palette={palette} items={savedItems(item)} />
+          : tab === 'notes' ? <ShelfCard note card={item} palette={palette} Icon={NotebookPen} label={NOTE_LABEL} items={noteItems(item)} />
+          : <ShelfCard card={item} palette={palette} Icon={LightbulbOff} label={FORGOTTEN_LABEL} items={forgottenItems(item)} />}
         ListEmptyComponent={<Empty palette={palette} text={tab === 'saved' ? 'لا شيء محفوظ بعد. احفظ شجرة أو بطاقة مقارنة أو آية، أو أي بطاقة في الرئيسية من زر «…» فوقها، لتجدها هنا.' : tab === 'notes' ? 'لا تأملات بعد. اضغط مطولًا على آية في المصحف لتكتب تأملك.' : 'لا آيات منسية.'} />} />
       {menus}
     </View>

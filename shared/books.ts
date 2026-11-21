@@ -1,7 +1,9 @@
+import { BOOK_SOURCE, GITHUB_FILES, WEBSITE, type BookSource } from './downloadSources';
+
 /**
  * The books the reader's sheets draw on (owner, 2026-11-15). On the phone each one is the person's to keep or remove:
  * a built-in book ships with the app and can be hidden and brought back without a connection; any other is downloaded
- * from the website and kept on the phone. The website fetches what a sheet shows, so it has nothing to manage.
+ * (bookUrl) and kept on the phone. The website fetches what a sheet shows, so it has nothing to manage.
  * The default tafsir can change later to a better book.
  */
 export type BookKind = 'tafsir' | 'irab' | 'balagha' | 'gharib' | 'mutashabih' | 'hadith';
@@ -37,5 +39,15 @@ export const BOOK_KINDS: { kind: BookKind; title: string }[] = [
 export const bookOf = (id: BookId) => BOOKS.find(book => book.id === id)!;
 export const isBookId = (value: unknown): value is BookId => BOOKS.some(book => book.id === value);
 
-/** Where the phone downloads a book that does not ship with it (src/app/api/books/[id]/route.ts). */
-export const bookPath = (id: BookId) => `/api/books/${id}`;
+/**
+ * Where a book that does not ship with the app lives in the repository as plain JSON: a Quran book's copy under
+ * data/books/ (scripts/books/writeBookFiles.ts), a Sahih's own file under data/hadith/sahih/.
+ */
+export const bookFile = (id: BookId) => (bookOf(id).kind === 'hadith' ? `data/hadith/sahih/${id}.json` : `data/books/${id}.json`);
+/** Each place a book can be downloaded from (shared/downloadSources.ts): the website's /api/books, or its file on GitHub. */
+export const BOOK_SOURCES: Record<BookSource, (id: BookId) => string> = {
+  website: id => `${WEBSITE}/api/books/${id}`,
+  github: id => `${GITHUB_FILES}${bookFile(id)}`,
+};
+/** Where the phone downloads that book, from the source in use. */
+export const bookUrl = (id: BookId) => BOOK_SOURCES[BOOK_SOURCE](id);

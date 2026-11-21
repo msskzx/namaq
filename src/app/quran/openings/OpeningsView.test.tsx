@@ -42,10 +42,9 @@ describe('the surah openings page', () => {
     expect(document.querySelectorAll('#letters-alone [data-mark]')).toHaveLength(0);
     expect([...document.querySelectorAll('#ha-mim [data-part]')].map(part => part.textContent)).toEqual(['الخبر', 'الحواميم']);
     const oath = screen.getByRole('region', { name: 'القسم' });
-    const reference = oath.querySelector('details')!;
-    expect(reference.open).toBe(false);
-    expect(reference.querySelector('summary')!.textContent).toBe('السيوطي، الإتقان ٣/٣٦٢');
-    expect(reference.textContent).toMatch(/القسم في خمس عشرة سورة/);
+    // The kind's reference on the line under its heading; a click opens its words in the sheet.
+    fireEvent.click(within(oath).getAllByRole('button', { name: 'المصدر: السيوطي، الإتقان ٣/٣٦٢' })[0]);
+    expect(screen.getByRole('dialog', { name: 'المصدر' }).textContent).toMatch(/القسم في خمس عشرة سورة/);
   });
 
   it('names a card only where its kind holds more than one, keeping the name for the shared picture', () => {
@@ -62,7 +61,8 @@ describe('the surah openings page', () => {
     render(<OpeningsView cards={cards} names={names} conditions={conditions} />);
     const card = document.getElementById('hamd')!;
     expect(card.hasAttribute('data-share-image')).toBe(true);
-    expect(card.parentElement!.hasAttribute('data-share-card')).toBe(true);
+    expect(card.closest('[data-share-card]')).toBeTruthy();
+    expect(within(card).queryByRole('button', { name: 'مشاركة' })).toBeNull();
   });
 
   it('opens the إذا السماء card on its conditions and their answer', () => {

@@ -4,7 +4,6 @@ import type { FortyEntry } from '@shared/hadith';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
-import Reference from '@/ui/Reference';
 import { usePalette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
@@ -37,8 +36,8 @@ export default function HadithBookScreen() {
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right', marginTop: -6 }}>{`${sahih.author} (ت ${num(sahih.died)}هـ)`}</Text>
           {sahih.headingsBy === 'nawawi' && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>تراجم الأبواب من وضع النووي، كما في طبعة عبد الباقي.</Text>}
           {state !== 'on' && <SahihDownload slug={sahih.slug} state={state} palette={palette} />}
-          <SahihKitabList book={sahih} onOpen={kitab => openKitab(sahih.slug, kitab)} palette={palette} />
-          <Reference title={sahih.title} quotes={[{ text: `${sahih.title}، ${sahih.edition}` }]} links={[{ label: 'الكتاب في المكتبة الشاملة', url: `https://shamela.ws/book/${sahih.shamela}` }]} palette={palette} />
+          <SahihKitabList book={sahih} onOpen={kitab => openKitab(sahih.slug, kitab)} palette={palette}
+            source={[{ line: sahih.title, quotes: [{ text: `${sahih.title}، ${sahih.edition}` }], links: [{ label: 'الكتاب في المكتبة الشاملة', url: `https://shamela.ws/book/${sahih.shamela}` }] }]} />
         </> : <>
           {FORTY.entries.filter(entry => !entry.source).map(card)}
           <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 22, textAlign: 'right', marginTop: 8 }}>ما زاده ابن رجب</Text>

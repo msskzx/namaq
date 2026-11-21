@@ -5,7 +5,8 @@ import { bookOf } from '@shared/books';
 import { lastLink, sahihName, searchSahih, splitRoute, type SahihHadith, type SahihIndex, type SahihRoute } from '@shared/sahih';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
-import Card from '@/ui/Card';
+import Card, { CardWithRow } from '@/ui/Card';
+import type { Source } from '@/ui/sourceSlot';
 import Tabs from '@/ui/Tabs';
 import Folded from '@/ui/Folded';
 import Reference from '@/ui/Reference';
@@ -61,8 +62,9 @@ export function SahihRouteView({ book, n, route, mode, palette, big }: { book: S
       {mode === 'drawing' && route.chain
         ? <><SahihChain book={book} route={route} palette={palette} /><Text style={body(palette, big)}>{words}</Text></>
         : <Text style={body(palette, big)}><Text style={{ color: palette.muted }}>{chain}</Text>{words}</Text>}
-      <Reference title={`${sahihName(book, n, num, route.route)}، ج ${num(route.volume)}، ${pagesName(route.pages)}`}
-        quotes={[{ text: `${book.title}، ${book.edition}` }]} links={[{ label: 'الصفحة في المكتبة الشاملة', url: sahihPage(book, route.shamela) }]} palette={palette} />
+      {/* In a card with a row, the book joins its line and the page (linked to al-Shamela) its sheet (owner 2026-11-20). */}
+      <Reference title={book.title} palette={palette}
+        quotes={[{ text: '', cite: `${sahihName(book, n, num, route.route)}، ج ${num(route.volume)}، ${pagesName(route.pages)}`, url: sahihPage(book, route.shamela) }, { text: `${book.title}، ${book.edition}` }]} />
     </View>
   );
 }
@@ -124,9 +126,11 @@ export function SahihDownload({ slug, state, palette }: { slug: SahihIndex['slug
  * A Sahih's kitabs as rows in one card, each its number, name and hadith numbers; `mark` checks one (a quiz's answer).
  * The book's page opens a kitab on a tap; a quiz's look-up opens its bab headings under it.
  */
-export function SahihKitabList({ book, onOpen, mark, open, palette }: { book: SahihIndex; onOpen: (kitab: number) => void; mark?: number; open?: number; palette: Palette }) {
+export function SahihKitabList({ book, onOpen, mark, open, palette, source }: { book: SahihIndex; onOpen: (kitab: number) => void; mark?: number; open?: number; palette: Palette;
+  /** The book itself, on the line under the list (the book's page). */
+  source?: Source[] }) {
   return (
-    <Card palette={palette} pad={[4, 14]}>
+    <CardWithRow palette={palette} pad={[4, 14]} source={source}>
       {book.kitabs.map((kitab, i) => (
         <View key={kitab.n} style={{ borderTopWidth: i ? 1 : 0, borderColor: palette.rule }}>
           <TapRow role="link" label={kitab.n === mark ? `${kitab.title}، الجواب` : kitab.title} onPress={() => onOpen(kitab.n)}
@@ -140,7 +144,7 @@ export function SahihKitabList({ book, onOpen, mark, open, palette }: { book: Sa
           ))}
         </View>
       ))}
-    </Card>
+    </CardWithRow>
   );
 }
 

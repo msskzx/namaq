@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { num } from '@shared/quran/arabicNumber';
 import { SahihKitabList } from '@/components/hadith/SahihParts';
-import Reference from '@/components/common/Reference';
 import { SAHIH, SAHIH_SLUGS, isSahihSlug } from '@/lib/sahih';
 
 export const generateStaticParams = () => SAHIH_SLUGS.map(book => ({ book }));
@@ -25,8 +24,8 @@ export default async function SahihBookPage({ params }: { params: Promise<{ book
         {book.headingsBy === 'nawawi' && <p className="text-sm text-[var(--home-muted)]">تراجم الأبواب من وضع النووي، كما في طبعة عبد الباقي.</p>}
       </div>
       {/* The list links each kitab, so its bab headings stay on the server. */}
-      <SahihKitabList book={{ ...book, kitabs: book.kitabs.map(kitab => ({ ...kitab, babs: [] })) }} kitabHref={`/hadith/sahih/${slug}/kitab/`} />
-      <Reference title={book.title} quotes={[{ text: `${book.title}، ${book.edition}` }]} links={[{ label: 'الكتاب في المكتبة الشاملة', url: `https://shamela.ws/book/${book.shamela}` }]} />
+      <SahihKitabList book={{ ...book, kitabs: book.kitabs.map(kitab => ({ ...kitab, babs: [] })) }} kitabHref={`/hadith/sahih/${slug}/kitab/`}
+        source={[{ line: book.title, quotes: [{ text: `${book.title}، ${book.edition}` }], links: [{ label: 'الكتاب في المكتبة الشاملة', url: `https://shamela.ws/book/${book.shamela}` }] }]} />
     </div>
   );
 }

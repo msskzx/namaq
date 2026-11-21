@@ -4,6 +4,7 @@
 import type { AppCite, AppReading } from '../battles/battle';
 import type { AppLifeEntry } from './life';
 import { pageLabel, type AppPerson, type PersonFact } from '../tarajim';
+import { citeSource, uniqueSources, type QuizSource } from '../quiz/sources';
 
 /** What a row is: a raid the Prophet ﷺ went out on himself, one he sent, a later battle, an event, a story, or the person's own fact. */
 export type LifeKind = 'ghazwah' | 'sariyyah' | 'battle' | 'event' | 'story' | 'own';
@@ -25,6 +26,9 @@ export type LifeItem = {
   /** The sentences that place the person there, with their pages. */
   refs: AppCite[];
 };
+
+/** The books a drawn life stands on: each row's sentences and those that give its year, a sentence cited twice given once. */
+export const lifeSources = (items: LifeItem[]): QuizSource[] => uniqueSources(items.flatMap(item => [...item.refs, ...item.yearRefs]).map(citeSource));
 
 /** The chips over the rail, in the sketch's order; a chip shows only when the person has something of its kind. */
 export const LIFE_FILTERS: { kinds: LifeKind[]; label: string }[] = [

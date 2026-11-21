@@ -5,6 +5,8 @@ import { Check } from 'lucide-react';
 import { lastLink, sahihName, searchSahih, splitRoute, type SahihBook, type SahihHadith, type SahihIndex, type SahihRoute } from '@shared/sahih';
 import { num } from '@shared/quran/arabicNumber';
 import Card from '@/components/common/Card';
+import CardWithRow from '@/components/common/CardWithRow';
+import type { Source } from '@/components/common/sourceSlot';
 import Folded from '@/components/common/Folded';
 import Reference from '@/components/common/Reference';
 import Segmented from '@/components/common/Segmented';
@@ -54,8 +56,9 @@ export function SahihRouteView({ book, n, route, mode, big = false }: { book: Sa
       {mode === 'drawing' && route.chain
         ? <><SahihChain book={book} route={route} /><p className={body}>{words}</p></>
         : <p className={body}><span className="text-[var(--home-muted)]">{chain}</span>{words}</p>}
-      <Reference title={`${sahihName(book, n, num, route.route)}، ج ${num(route.volume)}، ${pagesName(route.pages)}`}
-        quotes={[{ text: `${book.title}، ${book.edition}` }]} links={[{ label: 'الصفحة في المكتبة الشاملة', url: sahihPage(book, route.shamela) }]} />
+      {/* In a card with a row, the book joins its line and the page (linked to al-Shamela) its sheet (owner 2026-11-20). */}
+      <Reference title={book.title}
+        quotes={[{ text: '', cite: `${sahihName(book, n, num, route.route)}، ج ${num(route.volume)}، ${pagesName(route.pages)}`, url: sahihPage(book, route.shamela) }, { text: `${book.title}، ${book.edition}` }]} />
     </div>
   );
 }
@@ -99,10 +102,12 @@ export function SahihHadithCard({ n, also, from, start, routes, href }: { n: num
  * one (a quiz's answer). The book's page links each kitab (`kitabHref`, the kitab's number after it); a quiz's look-up opens
  * its bab headings under it.
  */
-export function SahihKitabList({ book, kitabHref, mark }: { book: SahihIndex; kitabHref?: string; mark?: number }) {
+export function SahihKitabList({ book, kitabHref, mark, source }: { book: SahihIndex; kitabHref?: string; mark?: number;
+  /** The book itself, on the line under the list (the book's page). */
+  source?: Source[] }) {
   const [open, setOpen] = useState<number>();
   return (
-    <Card className="flex flex-col px-3.5 py-1">
+    <CardWithRow source={source} className="flex flex-col px-3.5 py-1">
       {book.kitabs.map((kitab, i) => {
         const inside = <>
           <span className="w-7 shrink-0 text-[0.9375rem] text-[var(--home-accent)]">{num(kitab.n)}</span>
@@ -118,7 +123,7 @@ export function SahihKitabList({ book, kitabHref, mark }: { book: SahihIndex; ki
           </div>
         );
       })}
-    </Card>
+    </CardWithRow>
   );
 }
 

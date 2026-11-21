@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
+import { useMemo, useState, useSyncExternalStore } from 'react';
 import { View } from 'react-native';
 import { Text } from '@/ui/Text';
 import { ArrowLeftRight, Bookmark, BookOpen, Check, EyeOff, GalleryHorizontal, NotebookPen, Send, Trash2, type LucideProps } from 'lucide-react-native';
@@ -9,13 +9,11 @@ import { BOOKMARK_KIND_LABEL, type BookmarkKind } from '@shared/bookmarkKind';
 import { forgottenOrder } from '@shared/quran/recite';
 import { num } from '@shared/quran/arabicNumber';
 import TreeIcon from './TreeIcon';
-import FloatingMenu, { type MenuAt } from '@/ui/FloatingMenu';
-import ActButton from '@/ui/ActButton';
-import { buzz } from '@/lib/haptics';
+import IconButton from '@/ui/IconButton';
 import { surahName } from '@shared/quran/surahNames';
 
-/** A card menu's button: its icon, its short name under it, and what a screen reader says. */
-type MenuItem = { id: string; Icon: (props: LucideProps) => React.ReactNode; name: string; label: string; on?: boolean; tint?: string; filled?: boolean; color?: string; onPress: () => void };
+/** A card's button: its icon, its short name, and what a screen reader says; `color` marks the green «تذكّرتها». */
+type MenuItem = { id: string; Icon: (props: LucideProps) => React.ReactNode; name: string; label: string; on?: boolean; color?: string; onPress: () => void };
 import { shareAyah } from './AyahShare';
 import CompareTargetsSheet from './CompareTargetsSheet';
 import NoteSheet from './NoteSheet';
@@ -25,7 +23,7 @@ import { cardWays, forgottenCard, forgottenWays, noteCard, savedCard, shownBookm
 import { followWay, openIntent } from '@/lib/ways';
 import type { Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
-import Card from '@/ui/Card';
+import { CardWithRow } from '@/ui/Card';
 
 const KIND_ICONS: Record<BookmarkKind, (props: LucideProps) => React.ReactNode> = { tree: TreeIcon, compare: ArrowLeftRight, ayah: BookOpen, card: Bookmark };
 const WAYS: Record<CardWay['to'], { label: string; name: string; Icon: (props: LucideProps) => React.ReactNode }> = {
@@ -39,19 +37,19 @@ const WAYS: Record<CardWay['to'], { label: string; name: string; Icon: (props: L
 export const FORGOTTEN_LABEL = 'ما نسيته';
 export const NOTE_LABEL = 'تأمل';
 
-/** A saved or forgotten card, or a note: on a shelf it is a fixed-width book with five lines; wide, it fills the row and shows the whole text. A note's text is the reader's own words, so it is not in the mushaf font. */
-export function ShelfCard({ card, palette, onPress, wide = false, note = false, Icon = KIND_ICONS[card.kind], label = BOOKMARK_KIND_LABEL[card.kind].ar }: {
-  card: SavedCard; palette: Palette; onPress: (at: MenuAt) => void; wide?: boolean; note?: boolean; Icon?: (props: LucideProps) => React.ReactNode; label?: string;
+/**
+ * A saved or forgotten card, or a note, on the full list (owner 2026-11-20: the home card's shape): its ayat in the card,
+ * its ways and tools as buttons in the row under it, as a feed card's. A note's text is the reader's own words, so it is
+ * not in the mushaf font.
+ */
+export function ShelfCard({ card, palette, items, note = false, Icon = KIND_ICONS[card.kind], label = BOOKMARK_KIND_LABEL[card.kind].ar }: {
+  card: SavedCard; palette: Palette; items: MenuItem[]; note?: boolean; Icon?: (props: LucideProps) => React.ReactNode; label?: string;
 }) {
-  const box = useRef<ComponentRef<typeof View>>(null);
-  // A screen reader's tap often carries no point: the menu then opens over the card's top.
-  const open = ({ pageX, pageY }: { pageX: number; pageY: number }) => {
-    if (pageX || pageY) onPress({ x: pageX, y: pageY });
-    else box.current?.measureInWindow((x: number, y: number, width: number) => onPress({ x: x + width / 2, y: y + 24 }));
-  };
   return (
-    <Card ref={box} palette={palette} spine gap={10} faded={!card.open} onPress={event => open(event.nativeEvent)} accessibilityLabel={`${label}: ${card.text}`}
-      style={{ width: wide ? '100%' : 250, minHeight: wide ? 0 : 200 }}>
+    <CardWithRow palette={palette} spine gap={10} faded={!card.open} accessibilityLabel={`${label}: ${card.text}`}
+      row={items.map(({ id, Icon: ItemIcon, label: name, on, color, onPress }) => (
+        <IconButton key={id} Icon={ItemIcon} label={name} on={on} tone={color ? 'green' : undefined} onPress={onPress} />
+      ))}>
       <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 8, paddingBottom: card.references.length ? 8 : 0, borderBottomWidth: card.references.length ? 1 : 0, borderColor: palette.rule }}>
         <View style={{ height: 20, justifyContent: 'center' }}><Icon size={16} color={palette.accent} /></View>
         {card.references.length > 0 && (
@@ -65,21 +63,20 @@ export function ShelfCard({ card, palette, onPress, wide = false, note = false, 
         )}
       </View>
       {note
-        ? <Text numberOfLines={wide ? undefined : 6} style={{ color: palette.ink, fontSize: 17, lineHeight: 28, textAlign: 'right' }}>{card.text}</Text>
-        : <AyahFlow lines={wide ? undefined : 5} color={palette.ink} style={{ marginVertical: 'auto' }}><AyahWords>{shelfText(card)}</AyahWords></AyahFlow>}
-    </Card>
+        ? <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 28, textAlign: 'right' }}>{card.text}</Text>
+        : <AyahFlow color={palette.ink}><AyahWords>{shelfText(card)}</AyahWords></AyahFlow>}
+    </CardWithRow>
   );
 }
 
 /**
- * The saved and forgotten cards with their tap menus, for the homepage shelves and the full list page.
- * `menus` renders the icon row and the compare chooser; place it once at the end of the screen.
+ * The saved and forgotten cards and the buttons under each, for the full list page. `menus` renders the compare chooser
+ * and the note sheet; place it once at the end of the screen.
  */
 export function useHomeCards(palette: Palette) {
   const allBookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const bookmarks = useMemo(() => shownBookmarks(allBookmarks), [allBookmarks]);
   const cards = useMemo(() => bookmarks.map(savedCard), [bookmarks]);
-  const [menu, setMenu] = useState<{ at: MenuAt; label: string; items: MenuItem[] } | null>(null);
   const [choosing, setChoosing] = useState<{ way: CardWay; targets: CompareTarget[] } | null>(null);
   const marks = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const forgotten = useMemo(() => forgottenOrder(Object.keys(marks)), [marks]);
@@ -87,41 +84,36 @@ export function useHomeCards(palette: Palette) {
   const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes);
   const noteCards = useMemo(() => notesByDate(notes).map(key => noteCard(key, notes[key].text)), [notes]);
   const [noting, setNoting] = useState<string | null>(null);
-  // A light buzz as a card's menu opens, as the mushaf's long press.
-  useEffect(() => { if (menu) buzz(); }, [menu?.at]); // eslint-disable-line react-hooks/exhaustive-deps
   /** Every other view of a card's ayat; compare across several surahs is picked next. */
   const wayItems = (ways: CardWay[]): MenuItem[] => ways.map(way => ({
     id: way.to, ...WAYS[way.to],
     onPress: () => (way.to === 'compare' && way.targets.length > 1 ? setChoosing({ way, targets: way.targets }) : followWay(way)),
   }));
-  const savedMenu = (card: SavedCard, at: MenuAt) => {
+  const savedItems = (card: SavedCard): MenuItem[] => {
     const item: Saved | undefined = bookmarks.find(saved => saved.id === card.id);
-    if (!item) return;
-    setMenu({ at, label: BOOKMARK_KIND_LABEL[card.kind].ar, items: [
+    if (!item) return [];
+    return [
       ...wayItems(cardWays(item)),
-      { id: 'saved', Icon: Bookmark, name: 'احفظ', label: 'أزلها من المحفوظات', on: true, tint: palette.root, filled: true, onPress: () => toggleBookmark(item) },
-    ] });
+      { id: 'saved', Icon: Bookmark, name: 'احفظ', label: 'أزلها من المحفوظات', on: true, onPress: () => toggleBookmark(item) },
+    ];
   };
-  const forgottenMenu = (card: SavedCard, at: MenuAt) => setMenu({ at, label: FORGOTTEN_LABEL, items: [
+  const forgottenItems = (card: SavedCard): MenuItem[] => [
     { id: 'recite', Icon: EyeOff, name: 'سمّع', label: 'سمّع من هذه الآية', onPress: () => card.open && openIntent(card.open) },
     ...wayItems(forgottenWays(card.id)),
     { id: 'clear', Icon: Check, name: 'تذكّرتها', label: 'تذكّرتها', color: palette.green, onPress: () => rememberAyah(card.id) },
-  ] });
-  const noteMenu = (card: SavedCard, at: MenuAt) => setMenu({ at, label: NOTE_LABEL, items: [
+  ];
+  const noteItems = (card: SavedCard): MenuItem[] => [
     { id: 'edit', Icon: NotebookPen, name: 'عدّل', label: 'عدّل التأمل', onPress: () => setNoting(card.id) },
     ...wayItems(forgottenWays(card.id)),
     { id: 'delete', Icon: Trash2, name: 'احذف', label: 'احذف التأمل', onPress: () => writeAyahNote(card.id, '') },
     { id: 'share', Icon: Send, name: 'مشاركة', label: 'مشاركة', onPress: () => shareAyah(card.id, palette, card.text, true) },
-  ] });
+  ];
   const menus = (<>
-    <FloatingMenu overlay at={menu?.at ?? null} label={menu?.label ?? ''} onClose={() => setMenu(null)} palette={palette}>
-      {menu?.items.map(({ id, onPress, ...item }) => <ActButton key={id} {...item} palette={palette} onPress={() => { setMenu(null); onPress(); }} />)}
-    </FloatingMenu>
     <CompareTargetsSheet targets={choosing?.targets ?? null} palette={palette}
       onPick={target => { const way = choosing!.way; setChoosing(null); followWay(way, target); }} onClose={() => setChoosing(null)} />
     <NoteSheet ayah={noting} onClose={() => setNoting(null)} palette={palette} />
   </>);
-  return { cards, forgotten, forgottenCards, noteCards, savedMenu, forgottenMenu, noteMenu, menus };
+  return { cards, forgotten, forgottenCards, noteCards, savedItems, forgottenItems, noteItems, menus };
 }
 
 /** The review button: the reader in recite mode on the first forgotten ayah in mushaf order, stepping through the rest. */

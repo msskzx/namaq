@@ -1,6 +1,8 @@
 import type { AppCite } from '@shared/battles/battle';
 import { rangeName, type AppReport, type AppStory } from '@shared/stories/story';
-import Card from '@/components/common/Card';
+import CardWithRow from '@/components/common/CardWithRow';
+import SourceLine from '@/components/common/SourceLine';
+import { citeSource, sourceEntries, uniqueSources } from '@shared/quiz/sources';
 import Chip from '@/components/common/Chip';
 import Folded from '@/components/common/Folded';
 import ExternalLink from '@/components/common/ExternalLink';
@@ -12,6 +14,9 @@ import StoryAyatLines from './StoryAyatLines';
 export function Refs({ refs }: { refs: AppCite[] }) {
   return refs.length ? <Reference title={refs[0].cite} quotes={refs} /> : null;
 }
+
+/** A report's book and page, for the line under its card. */
+const reportSource = (report: AppReport) => sourceEntries([citeSource({ text: '', cite: report.cite, url: report.url })]);
 
 /**
  * One report whole, as the book prints it (owner, 2026-11-18/19; the app's StoryParts Report): its chain, a paragraph per
@@ -47,20 +52,22 @@ export default function StoryView({ story, ayat, titled = false, inset = false }
   inset?: boolean }) {
   const Name = inset ? 'h2' : 'h1';
   const [main, ...rest] = story.reports;
+  const place = story.place ? sourceEntries(uniqueSources(story.place.refs.map(citeSource))) : [];
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
         <Name className="text-3xl">{story.name}</Name>
         {story.place && <p className="text-[var(--home-muted)]">{story.place.value}</p>}
-        {story.place && <Refs refs={story.place.refs} />}
+        {place.length > 0 && <SourceLine sources={place} />}
         {story.tags.length > 0 && <p className="text-sm text-[var(--home-muted)]">{story.tags.join(' · ')}</p>}
         <div className="flex flex-wrap gap-1.5">
           {story.people.map(person => <Chip key={person.slug} label={person.name} small />)}
         </div>
       </div>
-      {main && <Card className="p-4"><Report report={main} titled={titled} /></Card>}
+      {/* Each part in the home card's shape, its books on the line under it (owner 2026-11-20). */}
+      {main && <CardWithRow className="p-4" source={reportSource(main)}><Report report={main} titled={titled} plain /></CardWithRow>}
       {story.ayat.map((item, i) => (
-        <div key={item.from} className="flex flex-col gap-1.5">
+        <CardWithRow key={item.from} className="flex flex-col gap-1.5 p-4">
           <StoryAyatLines credit={`${item.label}: ${rangeName(item.from, item.to)}`} pages={ayat[i] ?? []} />
           <Refs refs={item.refs} />
           {item.others?.map(other => (
@@ -69,11 +76,11 @@ export default function StoryView({ story, ayat, titled = false, inset = false }
               <Refs refs={other.refs} />
             </div>
           ))}
-        </div>
+        </CardWithRow>
       ))}
       {rest.length > 0 && (
         <Folded credit={rest.length === 1 ? 'رواية أخرى في الكتاب' : 'روايات أخرى في الكتاب'} bare>
-          {rest.map(report => <Card key={report.url + (report.isnad ?? '')} className="p-4"><Report report={report} titled={titled} /></Card>)}
+          {rest.map(report => <CardWithRow key={report.url + (report.isnad ?? '')} className="p-4" source={reportSource(report)}><Report report={report} titled={titled} plain /></CardWithRow>)}
         </Folded>
       )}
     </div>

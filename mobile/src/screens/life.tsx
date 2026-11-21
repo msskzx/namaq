@@ -2,10 +2,11 @@ import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Plus } from 'lucide-react-native';
-import { lifeColumns, type LifeItem } from '@shared/events/lifeTimeline';
+import { lifeColumns, lifeSources, type LifeItem } from '@shared/events/lifeTimeline';
 import { Text } from '@/ui/Text';
 import Svg, { Circle } from 'react-native-svg';
-import Card from '@/ui/Card';
+import Card, { CardWithRow } from '@/ui/Card';
+import { sourcesOf } from '@/ui/SourceLine';
 import { MIN_TAP } from '@/ui/tapSize';
 import TopBar from '@/ui/TopBar';
 import Chip from '@/ui/Chip';
@@ -25,7 +26,7 @@ function Cell({ item, palette, show }: { item?: LifeItem; palette: Palette; show
   if (!item) return <View style={{ flex: 1 }} />;
   return (
     <View style={{ flex: 1 }}>
-      <Card palette={palette} pad={[6, 8]} onPress={() => openItem(item, show)} onLongPress={() => show(item)} accessibilityRole={item.open ? 'link' : 'button'}
+      <Card node palette={palette} pad={[6, 8]} onPress={() => openItem(item, show)} onLongPress={() => show(item)} accessibilityRole={item.open ? 'link' : 'button'}
         style={{ flexGrow: 1, minHeight: MIN_TAP, flexDirection: 'row', alignItems: 'center', gap: 6 }}>
         <Svg width={7} height={7}><Circle cx={3.5} cy={3.5} r={3.5} fill={lifeColor(palette, item.kind)} /></Svg>
         <Text style={{ flex: 1, color: item.kind === 'own' ? palette.muted : palette.ink, fontSize: 15, lineHeight: 22, textAlign: 'center' }}>{item.name}</Text>
@@ -60,8 +61,9 @@ export default function LifeScreen() {
           {picked.map(s => <Chip key={s} label={name(s)} on palette={palette} onClear={picked.length > 1 ? () => setPicked(picked.filter(p => p !== s)) : undefined} />)}
           <Chip Icon={Plus} label="أضف" on={false} small palette={palette} onPress={() => setAdding(true)} />
         </View>
+        {/* The lives in the home card's shape, every sentence they rest on named on the book line (owner 2026-11-20). */}
         {picked.length > 1 && (
-          <View style={{ gap: 6 }}>
+          <CardWithRow palette={palette} pad={[14, 8]} gap={6} source={sourcesOf(lifeSources(picked.flatMap(s => personLife(findPerson(s)!))))}>
             <View style={{ flexDirection: 'row', gap: 8 }}>
               <View style={{ width: 48 }} />
               {picked.map(s => <Text key={s} numberOfLines={2} style={{ flex: 1, color: palette.muted, fontSize: 14, textAlign: 'center' }}>{name(s)}</Text>)}
@@ -80,7 +82,7 @@ export default function LifeScreen() {
             {picked.filter(s => lifeOf(s).length === 0).map(s => (
               <Text key={s} style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>لا أحداث مؤرخة بعد لـ{name(s)} في التراجم المضافة.</Text>
             ))}
-          </View>
+          </CardWithRow>
         )}
         {picked.length < 2 && <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>اختر علمًا آخر لتضع حياتيهما جنبًا إلى جنب.</Text>}
       </ScrollView>

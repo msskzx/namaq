@@ -1,22 +1,22 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { BookOpen } from 'lucide-react';
 import Reference from '@/components/common/Reference';
+import Button from '@/components/common/Button';
+import CardWithRow from '@/components/common/CardWithRow';
+import SourceLine from '@/components/common/SourceLine';
 import { ShareImageButton } from '@/components/share/ShareImage';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
-import { TOPICS, topicOf, type LataifReference } from '@shared/quran/lataif';
+import { TOPICS, topicOf, type LataifReference, type Topic } from '@shared/quran/lataif';
 import { letterDiff, rangeLabel, type ExampleView, type Line, type Step, type TurnView, type Voice } from '@shared/quran/iltifat';
-import Card from '@/components/common/Card';
 import Chip from '@/components/common/Chip';
 import AyahFlow, { AyahWords, TreeText } from '@/components/quran/text/AyahFlow';
 
 /** The app's colours for the three voices (mobile/src/components/Iltifat.tsx). */
 export const VOICE_COLOR: Record<Voice, string> = { he: 'var(--home-slot-1)', we: 'var(--home-green)', you: 'var(--home-root)' };
 const VOICE_NAME: Record<Voice, string> = { he: 'غيبة', we: 'تكلم', you: 'خطاب' };
-const ICON = 'flex size-9 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-accent)] focus-visible:outline-2 focus-visible:outline-[var(--home-accent)]';
 const DASH = 'h-0 flex-1 border-t-[1.5px] border-dashed border-[var(--home-rule)]';
 
 function Words({ lines }: { lines: Line[] }) {
@@ -106,19 +106,24 @@ export function ExampleScene({ view }: { view: ExampleView }) {
   </>;
 }
 
-function ExampleCard({ view }: { view: ExampleView }) {
+/** One example in the home card's shape (owner 2026-11-20): its scene, the mushaf and share buttons under it, its reference on the line. */
+function ExampleCard({ view, reference }: { view: ExampleView; reference: LataifReference }) {
   const title = `${view.name} ${rangeLabel(view)}`;
   return (
-    <Card as="article" id={view.key} data-share-card aria-label={title} className="flex scroll-mt-20 flex-col gap-2.5 px-4 pt-3.5 pb-1.5">
-      <h3 className="text-base text-[var(--home-muted)]">{title}</h3>
-      <ExampleScene view={view} />
-      <div data-share-skip className="flex gap-1">
-        <Link href={`/quran/read/ayah/${view.surah}/${view.from}`} aria-label={`افتح ${title} في المصحف`} title="افتح في المصحف" className={ICON}><BookOpen size={20} strokeWidth={1.6} aria-hidden /></Link>
-        <ShareImageButton size="icon" iconSize={20} href={`/quran/lataif#${view.key}`} />
-      </div>
-    </Card>
+    <article id={view.key} data-share-card aria-label={title} className="scroll-mt-20">
+      <CardWithRow className="flex flex-col gap-2.5 px-4 py-3.5"
+        lead={<Button size="lg" variant="muted" href={`/quran/read/ayah/${view.surah}/${view.from}`} aria-label={`افتح ${title} في المصحف`} title="افتح في المصحف"><BookOpen aria-hidden /></Button>}
+        row={<ShareImageButton href={`/quran/lataif#${view.key}`} />}>
+        <h3 className="text-base text-[var(--home-muted)]">{title}</h3>
+        <ExampleScene view={view} />
+        <Reference title={reference.title} quotes={reference.quotes} />
+      </CardWithRow>
+    </article>
   );
 }
+
+/** A topic's reference as its line under the heading. */
+const topicSource = (topic: Topic) => [{ line: topic.reference.title, quotes: topic.reference.quotes }];
 
 /** The voices' colours, under the topic's name: what each colour on the cards means. */
 function Voices() {
@@ -148,13 +153,10 @@ export default function LataifView({ views, references }: { views: ExampleView[]
           <div className="flex flex-col gap-1">
             <h2 className="text-xl">{item.name}</h2>
             <Voices />
-            <Reference title={item.reference.title} quotes={item.reference.quotes} />
+            <SourceLine sources={topicSource(item)} />
           </div>
           {views.filter(view => topicOf(view).name === item.name).map(view => (
-            <div key={view.key} className="flex flex-col gap-1.5">
-              <ExampleCard view={view} />
-              <div className="px-1"><Reference title={references[view.key].title} quotes={references[view.key].quotes} /></div>
-            </div>
+            <ExampleCard key={view.key} view={view} reference={references[view.key]} />
           ))}
         </section>
       ))}

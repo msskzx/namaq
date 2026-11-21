@@ -2,12 +2,13 @@ import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { ArrowLeftRight, BookOpen, ChevronLeft, Layers } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
-import ExternalLink from '@/ui/ExternalLink';
+import SourceLine, { sourcesOf } from '@/ui/SourceLine';
+import { qiraatSources, sadiSource } from '@shared/quiz/bookSources';
 import { num } from '@shared/quran/arabicNumber';
-import { QIRAAT_SOURCE, whoReads } from '@shared/quran/qiraat';
+import { whoReads } from '@shared/quran/qiraat';
 import { qiraatOf } from '@shared/quran/qiraatData';
 import type { WordDifference } from '@shared/quran/qiraat';
-import { tafsirRuns, tafsirSadiCredit, tafsirSadiPage } from '@shared/quran/tafsirSadi';
+import { tafsirRuns, tafsirSadiCredit } from '@shared/quran/tafsirSadi';
 import { tafsirSadiOf } from '@shared/quran/tafsirSadiData';
 import { bookState, useBooks } from '@/lib/books';
 import { BookList } from './Books';
@@ -98,18 +99,15 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
             );
           })}
         </ScrollView>}
+        {/* The book's own reader first, then the book line (owner 2026-11-20), as under a home card. */}
         {tafsir ? (
-          <View style={{ marginHorizontal: 16, marginTop: 10, marginBottom: 8, minHeight: 32, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-            <View style={{ flex: 1 }}>
-              <ExternalLink url={tafsirSadiPage(tafsir)} color={palette.muted} style={{ textAlign: 'right', paddingVertical: 6 }}>
-                {tafsirSadiCredit(tafsir)}
-              </ExternalLink>
-            </View>
-            <OpenInBook book="sadi" ayah={preview.key} onClose={onClose} palette={palette} />
+          <View style={{ marginHorizontal: 4, marginTop: 6, marginBottom: 8, gap: 2 }}>
+            <View style={{ flexDirection: 'row', paddingHorizontal: 12 }}><OpenInBook book="sadi" ayah={preview.key} onClose={onClose} palette={palette} /></View>
+            <SourceLine sources={sourcesOf([{ ...sadiSource(tafsir), edition: tafsirSadiCredit(tafsir) }])} palette={palette} />
           </View>
         ) : preview.kind === 'tafsir' ? null : preview.kind === 'readings' ? (
-          <View style={{ marginHorizontal: 16, marginTop: 10, marginBottom: 8, minHeight: 32, justifyContent: 'center' }}>
-            <ExternalLink url={QIRAAT_SOURCE.url} color={palette.muted} style={{ textAlign: 'right', paddingVertical: 6 }}>{`المصدر: ${QIRAAT_SOURCE.name}`}</ExternalLink>
+          <View style={{ marginHorizontal: 4, marginTop: 6, marginBottom: 8 }}>
+            <SourceLine sources={sourcesOf(qiraatSources(preview.key))} palette={palette} />
           </View>
         ) : <Pressable onPress={() => go(() => (preview.kind === 'trees' ? openTreesOf(preview.key) : openIntent({ tab: 'compare', lead: surah })))} accessibilityRole="button"
           style={{ marginHorizontal: 16, marginTop: 10, marginBottom: 8, minHeight: 48, borderRadius: 10, borderWidth: 1, borderColor: palette.rule, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
