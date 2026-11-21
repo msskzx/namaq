@@ -428,7 +428,7 @@ export const SOURCES: Source[] = [
     uses: [USE.qiraat, USE.reader, USE.tafsir, USE.topics, USE.irab, USE.qiraatQuiz, USE.qiraatWhoQuiz],
   },
   {
-    id: 'gharib-ibn-qutaybah', group: 'books', files: ['shared/data/quran/gharib.js', 'shared/data/quran/gharib.d.ts'],
+    id: 'gharib-ibn-qutaybah', group: 'books', files: ['shared/data/quran/gharib.js', 'shared/data/quran/gharib.d.ts', 'shared/data/quran/gharibWords.json'],
     title: { ar: 'تفسير غريب القرآن', en: 'Tafsir Gharib al-Quran' }, author: { ar: 'ابن قتيبة الدينوري', en: 'Ibn Qutaybah' },
     edition: 'تحقيق السيد أحمد صقر، دار الكتب العلمية، ١٣٩٨هـ/١٩٧٨م', link: shamela(3259),
     licence: {
