@@ -3,7 +3,6 @@
   "convert": [
     "mobile/src/components/BranchTree.tsx",
     "mobile/src/components/CompareCard.tsx",
-    "mobile/src/components/Iltifat.tsx",
     "mobile/src/components/ReaderSheets.tsx",
     "mobile/src/lib/ayahPreview.ts",
     "mobile/src/lib/quranText.ts",

@@ -38,6 +38,8 @@ below. Never copy one into a screen.
 | `Pickable` | A block of a card that picks it on a tap, `aria-pressed` | a book's paragraph that lights the ayah words it quotes |
 | `Saying` | Someone's words with who says them on a muted line before them («قال فلان:»); `by` left out draws the words alone | every quote from a book with its sayer (a person's virtues, a laqab's words, a tie's sentence) |
 | `Bubble` | A speech bubble: the speaker's name in his colour, his side, his corner sharp; `framed` | a conversation drawn as a chat (the dialog scenes of «مشاهد», a hadith's scenes) |
+| `StepDots` | A row of dots for the steps of something walked in order: the reached one bigger in the theme's yellow, passed ones muted; a tap goes to a step | the layers of a «مشاهد» scene |
+| `Hold` | A finger held down on what it wraps, `onHold(true)` then `onHold(false)` as it lifts; a moving finger is never a hold | a «مشاهد» scene's moment the reader acts out (bringing the hand out) |
 | `Step` | A numbered step: the number in an accent ring, its content beside it | a sequence told in order (a battle's moments) |
 | `SplitBar` | Two amounts on one bar, each its share, accent then rule colour | comparing two sides (a battle's numbers) |
 | `Empty` | The one "nothing here" line: muted, centred, says what is missing and how to fill it | every empty list or search |

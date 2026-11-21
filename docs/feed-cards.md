@@ -8,7 +8,8 @@ repository; update it in the PR that adds a feature, a card, a quiz kind or an e
 
 ## Cards in the feed now
 
-Continue reading, today's juz, prayer time, books, scenes (مشاهد), saved and forgotten
+Continue reading, today's juz, prayer time, books, scenes (من المشاهد: a «مشاهد» scene's whole picture, still, with its ayah,
+under التفسير; `ScenePost` drawn by `components/DarkSea`, the page's own view), saved and forgotten
 ayat, surah openings, a balagha term (من مصطلحات البلاغة: its name, its definition in the scholar's words and one of
 al-Suyuti's examples, opening the term's page in «مصطلحات البلاغة»; `TermPost`), a battle's moment (من غزوة …, opening the battle's page), a sira story whole (من قصص السيرة, its first report with
 the ayat folded under it, opening the story's page), one of al-Nawawi's Forty (من الحديث, his text for an entry he takes whole
@@ -130,4 +131,6 @@ timeline), رتّب, من شهدها؟ / من أمير السرية؟, فيمَ 
 - Search, share and videos, settings, «ما أحفظه», «اهتماماتي»: tools, not content.
 - الأذكار: an interest once its card or question is built (owner agreed it is one, 2026-11-19).
 - Party quizzes: played with others, not from the feed.
+- «مشاهد» has no quiz kind yet: what the darknesses stand for differs between the scholars (each shown by name), so a question
+  would ask a disputed point. An order question on the layers is a candidate once more scenes exist.
 - Tarajim: the battles have the moment card and the sira stories the story card; the people have «من التراجم», «صلة», «من حياته», «لقب وصاحبه», «كنية وصاحبها», «نسبه» and «صلاته».
