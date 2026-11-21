@@ -1,0 +1,7 @@
+{"steps": [
+  ["open","/"],
+  ["open","/order?juz=5"],
+  ["tap","٦"],
+  ["swipe","up"],
+  ["open","/order?juz=20"]
+]}

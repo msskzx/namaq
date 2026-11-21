@@ -1,9 +1,10 @@
 import { useRef, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
-import { ArrowLeftRight, BookOpenText, BookMarked, BookOpen, Layers, ListStart, Presentation, ScrollText, SunMoon, TextSearch, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookMarked, BookOpen, DoorOpen, Gem, Layers, Presentation, ScrollText, SunMoon, TextSearch, type LucideProps } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import TreeIcon from '@/components/TreeIcon';
+import OrderIcon from '@/components/OrderIcon';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
@@ -21,10 +22,10 @@ export const QURAN_TILES: { route: string; label: string; Icon: (props: LucidePr
   { route: '/words', label: 'ألفاظ القرآن', Icon: TextSearch },
   { route: '/oaths', label: 'الأقسام', Icon: SunMoon },
   { route: '/lataif', label: 'مشاهد', Icon: Presentation },
-  { route: '/terms', label: 'مصطلحات البلاغة', Icon: BookOpenText },
+  { route: '/terms', label: 'مصطلحات البلاغة', Icon: Gem },
   { route: '/qiraat', label: 'القراءات', Icon: Layers },
-  { route: '/openings', label: 'افتتاح السور', Icon: ListStart },
-  { route: '/order', label: 'ترتيب السور', Icon: ListStart },
+  { route: '/openings', label: 'افتتاح السور', Icon: DoorOpen },
+  { route: '/order', label: 'ترتيب السور', Icon: OrderIcon },
 ];
 
 /** The Quran tab (owner, 2026-11-13): a grid of the Quran tools, two to a row, the mushaf first (owner, 2026-11-18: it lost its own button). */
