@@ -1,6 +1,27 @@
 # UI tests
 
-Playwright clicks through the main flows of the phone app (its web export at 390×844) and the website. Run it before merging a change to the app or to the pages below:
+## Using the app
+
+Before merging a change to the phone app, use the feature you changed the way a person would. `npm run phone` runs the app's own React Native code, built for the web, in a dark browser the size of the owner's iPhone 17 Pro Max, with the tour and the interests question already done.
+
+```bash
+npm run phone -- start             # builds the app (about a minute) and opens the home screen
+npm run phone -- tap الاختبارات      # one step; prints the screenshot's path and everything on screen that can be tapped
+npm run phone -- press ٱلۡحَمۡدُ          # a long press, as on a word in the reader
+npm run phone -- open /read        # go to a route
+npm run phone -- save reader-menu  # keep the steps since start as e2e/journeys/reader-menu.json
+npm run phone -- stop
+```
+
+The other steps are `type`, `swipe up|down|left|right`, `back`, `wait <name>` and `look`; `npm run phone` alone lists them. After each step, open the screenshot (`e2e/look/NN-step.png`) and decide the next tap from what you see, as a person would. A step that cannot be done prints `STUCK`, and an error the page raised prints under `ERRORS`. `start --reuse` skips the build when `mobile/dist-phone` already holds this branch's code.
+
+Save a walk when it covers a flow worth keeping. `npm run phone -- run <name>...` walks saved journeys again from the start, and `npm run test:ui` walks every one of them (`app/journeys.spec.ts`), failing when a step can no longer be done or the page errs. A journey checks that the walk still works; to check a result (a stored value, a number shown), write a spec below.
+
+The web build does not show native gestures, haptics, the native fonts' exact shaping, audio, notifications or the share sheet. The owner checks those in Expo Go, so name them in the PR when your change touches them.
+
+## The test suite
+
+Playwright clicks through the main flows of the phone app (its web export at iPhone 17 Pro Max size, 440×956) and the website. Run it before merging a change to the app or to the pages below:
 
 ```bash
 npm run test:ui                # both halves, about 2.5 minutes in a cloud container
@@ -31,6 +52,7 @@ export DATABASE_URL=... DATABASE_URL_UNPOOLED=...
 - `app/quizzes.spec.ts`: the quizzes tab, a solo quiz (right, wrong and shown answers, reload, result) with seeded random questions, and recite mode.
 - `app/party.spec.ts`: a host and a guest play a whole party quiz against `app/partyServer.ts`, which runs the worker's rules from `shared/party/rules.ts` in the test.
 - `app/utilities.spec.ts`: prayer times for a picked city, the qibla and the Hijri month.
+- `app/journeys.spec.ts`: every walk saved in `journeys/` with `npm run phone -- save`.
 - `web/pages.spec.ts`: the same areas on the website, a smoke test per page.
 
 Every test fails on an uncaught page error or a console error (`errors` in each `fixtures.ts`).

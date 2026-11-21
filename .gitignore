@@ -54,4 +54,5 @@ next-env.d.ts
 
 # end-to-end tests (e2e/)
 /e2e/test-results/
+/e2e/look/
 /.card-review-log.*
