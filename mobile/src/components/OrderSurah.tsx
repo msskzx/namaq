@@ -1,7 +1,8 @@
-import { View } from 'react-native';
+import { Fragment } from 'react';
+import { View, type TextStyle } from 'react-native';
 import { BookOpen } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
-import { orderSource, orderSurahs, type Cite, type OrderAyah, type OrderLinkView, type OrderSurah } from '@shared/quran/surahOrder';
+import { orderSource, orderSurahs, type Cite, type OrderAyah, type OrderLinkView, type OrderSurah, type QuoteRun } from '@shared/quran/surahOrder';
 import { Text } from '@/ui/Text';
 import SourceLine from '@/ui/SourceLine';
 import Sheet from '@/ui/Sheet';
@@ -9,6 +10,7 @@ import Button from '@/ui/Button';
 import { readAyah } from '@/lib/openReader';
 import type { Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
+import QuranWords from '@/components/quran/text/QuranWords';
 import { ayahMushafWords } from '@/lib/mushaf';
 import IconButton from '@/ui/IconButton';
 import { CardWithRow } from '@/ui/Card';
@@ -29,6 +31,18 @@ function Source({ cite, palette }: { cite: Cite; palette: Palette }) {
 
 const quote = (palette: Palette) => ({ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'justify' as const, writingDirection: 'rtl' as const });
 
+/** A book's words with the Quran it quotes set from the mushaf's page words, an ayah's number where a quote runs past its end. */
+function BookWords({ runs, palette, style }: { runs: QuoteRun[]; palette: Palette; style?: TextStyle }) {
+  return (
+    <Text style={[quote(palette), style]}>
+      «{runs.map((run, i) => ('quran' in run
+        ? <QuranWords key={i}>{'﴿'}{run.quran.map(a => (
+          <Fragment key={a.key}>{a.words.join(' ')}{a.end && <Text style={{ color: palette.amber }}>{` ${num(Number(a.key.split(':')[1]))} `}</Text>}</Fragment>))}{'﴾'}</QuranWords>
+        : run.text))}»
+    </Text>
+  );
+}
+
 function PairAyah({ ayah, palette }: { ayah: OrderAyah; palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 8 }}>
@@ -46,7 +60,7 @@ export function LinkWords({ link, palette, barred = false }: { link: OrderLinkVi
   barred?: boolean }) {
   return (
     <View style={{ gap: 2 }}>
-      <Text style={quote(palette)}>«{link.text}»</Text>
+      <BookWords runs={link.runs} palette={palette} />
       {link.pairs.map(([a, b]) => (
         <View key={a.key + b.key} style={barred ? { borderStartWidth: 2, borderColor: palette.rule, paddingStart: 10, marginTop: 6 } : undefined}>
           <PairAyah ayah={a} palette={palette} />
@@ -80,7 +94,7 @@ export function SurahBody({ s, palette }: { s: OrderSurah; palette: Palette }) {
           <AyahWords key={`${a.ayah}-n`} look={{ color: palette.amber }}>{`${num(a.ayah)} `}</AyahWords>,
         ])}
       </AyahFlow>
-      <Text style={[quote(palette), { marginTop: 4, marginBottom: 6 }]}>«{s.aim.text}»</Text>
+      <BookWords runs={s.aim.runs} palette={palette} style={{ marginTop: 4, marginBottom: 6 }} />
     </>
   );
 }

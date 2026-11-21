@@ -408,7 +408,9 @@ inside a book, the other readers' readings (qiraat.json), and the Quranic
 Arabic Corpus's dictionary forms of a word (words, lemmas, similar ayat): none
 of them is the Hafs page text. The readings and dictionary forms are stored
 in the Madina page's spelling (`scripts/quran/madinaSpelling.ts` at build
-time), so no screen converts a word; book quotes keep the book's own spelling.
+time), so no screen converts a word; book quotes keep the book's own spelling,
+except where a feature puts a quote back on the page words it quotes (the surah
+order page, owner 2026-11-21: `quoteRuns` in `shared/quran/surahOrder.ts`).
 An ayah drawn off the page (a quiz's ayah, a choice that is an ayah) goes in
 the module's `AyahFlow` with `AyahWords`, which size it from its width as the
 reader's flowing text is (`shared/quran/quranText/flow.ts`); the place sets
