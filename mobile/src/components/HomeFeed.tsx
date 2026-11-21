@@ -1,7 +1,7 @@
 import { createContext, isValidElement, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, BookOpenText, DoorOpen, Gem, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Landmark, ScrollText, Swords, History, Target, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpenText, DoorOpen, Gem, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Milestone, ScrollText, Swords, History, Target, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, toggleForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
@@ -475,8 +475,8 @@ function TarajimPost({ id, palette }: { id: string; palette: Palette }) {
   const virtue = pick.person.virtues[pick.index];
   const open = () => router.push({ pathname: '/person', params: { slug: pick.person.slug } });
   return (
-    <Post palette={palette} head={<PostHead Icon={Landmark} title="من التراجم" sub={personName(pick.person)} palette={palette} />}
-      open={<Action Icon={Landmark} label={`افتح ترجمة ${personName(pick.person)}`} onPress={open} palette={palette} />}
+    <Post palette={palette} head={<PostHead Icon={Milestone} title="من التراجم" sub={personName(pick.person)} palette={palette} />}
+      open={<Action Icon={Milestone} label={`افتح ترجمة ${personName(pick.person)}`} onPress={open} palette={palette} />}
       source={sourcesOf(pageSources(virtue.refs))}>
       <View style={{ padding: 14, gap: 6 }}>
         <Saying by={saidBy(virtue)} palette={palette}>
@@ -527,8 +527,8 @@ function NamePost({ kind, id, palette }: { kind: 'laqab' | 'kunya'; id: string; 
   const open = () => router.push({ pathname: '/person', params: { slug: person.slug } });
   const quote = unvowelled(fact.text).trim() !== name ? fact.text : '';
   return (
-    <Post palette={palette} head={<PostHead Icon={Landmark} title={kind === 'laqab' ? 'لقب وصاحبه' : 'كنية وصاحبها'} sub={who} palette={palette} />}
-      open={<Action Icon={Landmark} label={`افتح ترجمة ${who}`} onPress={open} palette={palette} />}
+    <Post palette={palette} head={<PostHead Icon={Milestone} title={kind === 'laqab' ? 'لقب وصاحبه' : 'كنية وصاحبها'} sub={who} palette={palette} />}
+      open={<Action Icon={Milestone} label={`افتح ترجمة ${who}`} onPress={open} palette={palette} />}
       source={sourcesOf(pageSources(fact.refs))}>
       <View style={{ padding: 14, gap: 4 }}>
         <Text style={{ color: palette.accent, fontSize: 30, lineHeight: 48, fontWeight: '700', textAlign: 'right' }}>{name}</Text>
@@ -551,7 +551,7 @@ function LifePost({ slug, palette }: { slug: string; palette: Palette }) {
   const open = () => router.push({ pathname: '/person', params: { slug } });
   return (
     <Post palette={palette} head={<PostHead Icon={History} title={she ? 'من حياتها' : 'من حياته'} sub={personName(person)} palette={palette} />}
-      open={<Action Icon={Landmark} label={`افتح ترجمة ${personName(person)}`} onPress={open} palette={palette} />}
+      open={<Action Icon={Milestone} label={`افتح ترجمة ${personName(person)}`} onPress={open} palette={palette} />}
       source={sourcesOf(uniqueSources(items.flatMap(item => [...item.refs, ...item.yearRefs]).map(citeSource)))}>
       <View style={{ paddingVertical: 14, paddingHorizontal: 10 }}>
         <LifeTimeline items={items} palette={palette} inCard compact linked={false} />
