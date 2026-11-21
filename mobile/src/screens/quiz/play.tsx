@@ -3,7 +3,7 @@ import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { Text } from '@/ui/Text';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ArrowLeft, ArrowRight, Check, Eraser, Eye, LogOut, RotateCcw, Send } from 'lucide-react-native';
+import { ArrowLeft, ArrowRight, Check, Eraser, LogOut, RotateCcw, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { emptyBranchAnswers } from '@shared/quiz/score';
 import TopBar from '@/ui/TopBar';
@@ -13,7 +13,7 @@ import QuestionDots from '@/components/QuestionDots';
 import { QuizFeedback, QuizInputs } from '@/components/QuizTree';
 import { CompareFeedback, CompareInputs } from '@/components/QuizCompare';
 import { surahNames } from '@/lib/branches';
-import { check, cleanSolo, clearAnswers, goTo, hasTyped, isCompare, isTree, pick, questionState, reveal, setHints, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from '@/lib/quiz';
+import { check, cleanSolo, clearAnswers, goTo, hasTyped, isCompare, isTree, pick, questionState, reveal, setHints, soloScore, startSolo, submit, typeAnswer, type SoloRun } from '@/lib/quiz';
 import QuizChoice, { QuizPrompt } from '@/components/QuizChoice';
 import { readAyah } from '@/lib/openReader';
 import { markForgotten } from '@shared/ayahMarks';
@@ -123,7 +123,6 @@ export default function QuizPlay() {
               <Row>
                 <Button variant="primary" Icon={Check} label="تحقق" onPress={() => update(check(run))} />
                 <Button Icon={Eraser} accessibilityLabel="مسح الإجابات" disabled={!hasTyped(run)} onPress={() => update(clearAnswers(run))} />
-                <Button Icon={Eye} label="إظهار الإجابة" onPress={() => update(showAnswer(run))} />
               </Row>
             )}
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
