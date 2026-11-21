@@ -1,16 +1,18 @@
 import { useSyncExternalStore } from 'react';
 import { Platform } from 'react-native';
 import { Directory, File, Paths } from 'expo-file-system';
+import { AUDIO_SOURCE, WEBSITE, type AudioSource } from '@shared/downloadSources';
 import { ayahAudioUrl, ayahFile, reciterOf } from '@shared/quran/recitation';
 import { applySync, syncDue, type AudioRow, type SyncResult } from '@shared/quran/recitationSync';
 import { arrayOf, isNumberIn, isRecord, isString, readJson, writeJson } from './storage';
-import { WEBSITE } from './website';
+import surahRows from '@shared/data/quran/surahs.json';
 
 /**
  * Recitations kept on the phone to listen offline, one folder of ayah files per reciter.
  * Quran Foundation allows an offline copy only through its Content Sync (terms §3.1), synced at least every seven days
  * while online. The website's /api/quran/listen-sync runs it with the project's key; the phone keeps each reciter's
  * ayah file rows and sync token, syncs once a day when it can, and fetches again or removes the files that changed.
+ * Where the rows come from is chosen in shared/downloadSources.ts (AUDIO_SOURCES below).
  */
 /** A surah download is kept per surah, so several surahs can sit on the phone together. */
 export type PackKind = 'memorized' | 'all' | `surah:${number}`;
@@ -91,7 +93,8 @@ export function bytesOf(reciter: number): number {
   try { const dir = folder(reciter); return dir.exists ? dir.size ?? 0 : 0; } catch { return 0; }
 }
 
-async function fetchSync(reciter: number, token?: string): Promise<SyncResult | { resync: true }> {
+/** Content Sync through the website: what changed since the token, or every row without one. */
+async function websiteSync(reciter: number, token?: string): Promise<SyncResult | { resync: true }> {
   // A sync that hangs would hold the reciter's downloads behind it (inLine).
   const abort = new AbortController();
   const timer = setTimeout(() => abort.abort(), 20_000);
@@ -103,6 +106,16 @@ async function fetchSync(reciter: number, token?: string): Promise<SyncResult | 
     clearTimeout(timer);
   }
 }
+
+/** Every ayah at the address it streams from, worked out on the phone; the same each time, so nothing is fetched again. */
+async function directSync(reciter: number): Promise<SyncResult> {
+  const keys = surahRows.flatMap(surah => Array.from({ length: surah.numberOfAyat }, (_, i) => `${surah.number}:${i + 1}`));
+  return { token: 'direct', full: keys.map((key, i) => ({ id: i + 1, key, url: ayahAudioUrl(reciterOf(reciter), key) })), upsert: [], remove: [] };
+}
+
+/** Each place a reciter's rows can come from (shared/downloadSources.ts). */
+const AUDIO_SOURCES: Record<AudioSource, (reciter: number, token?: string) => Promise<SyncResult | { resync: true }>> = { website: websiteSync, direct: directSync };
+const fetchSync = (reciter: number, token?: string) => AUDIO_SOURCES[AUDIO_SOURCE](reciter, token);
 
 const deleteFile = (reciter: number, key: string) => { try { const file = fileOf(reciter, key); if (file.exists) file.delete(); } catch {} };
 const heldKeys = (reciter: number, list = packs) => new Set(list.filter(pack => pack.reciter === reciter).flatMap(pack => pack.keys));

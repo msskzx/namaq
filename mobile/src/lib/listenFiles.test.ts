@@ -7,10 +7,11 @@ let net: (url: string, path: string) => Promise<void>;
 let downloads = 0;
 const store = new Map<string, string>();
 let syncReply: () => unknown;
+let audioSource = 'website';
 
 vi.mock('react-native', () => ({ Platform: { OS: 'ios' } }));
 vi.mock('react', () => ({ useSyncExternalStore: () => 0 }));
-vi.mock('./branches', () => ({ WEBSITE: 'https://site' }));
+vi.mock('@shared/downloadSources', async original => ({ ...(await original<object>()), get AUDIO_SOURCE() { return audioSource; } }));
 vi.mock('./deviceStorage', () => ({
   deviceStorage: { getItem: (key: string) => store.get(key) ?? null, setItem: (key: string, value: string) => { store.set(key, value); } },
 }));
@@ -49,7 +50,7 @@ async function load() {
 }
 
 beforeEach(() => {
-  disk.clear(); dirs.clear(); store.clear(); downloads = 0;
+  disk.clear(); dirs.clear(); store.clear(); downloads = 0; audioSource = 'website';
   syncReply = () => ({ token: 't1', full: KEYS.map(key => row(key)), upsert: [], remove: [] });
   net = async (url, at) => { disk.set(at, `bytes of ${url}`); };
   vi.stubGlobal('fetch', async () => ({ ok: true, json: async () => syncReply() }));
@@ -185,5 +186,17 @@ describe('audio downloads', () => {
     downloads = 0;
     await (await load()).syncPacks(Date.now());
     expect(downloads).toBe(0);
+  });
+
+  it('downloads from the address each ayah streams from, without the website, when the direct source is in use', async () => {
+    audioSource = 'direct';
+    const asked: string[] = [];
+    vi.stubGlobal('fetch', async (url: string) => { asked.push(url); return { ok: false, status: 402 }; });
+    const files = await load();
+    const { ayahAudioUrl, reciterOf } = await import('@shared/quran/recitation');
+    await files.downloadPack(7, 'all', 'all', KEYS);
+    expect(asked).toEqual([]);
+    expect(files.packsOf(7).map(pack => pack.kind)).toEqual(['all']);
+    expect(disk.get(path('1:2'))).toBe(`bytes of ${ayahAudioUrl(reciterOf(7), '1:2')}`);
   });
 });
