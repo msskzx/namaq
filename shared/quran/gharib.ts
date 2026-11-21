@@ -91,14 +91,18 @@ export function gharibOfPlaces(data: GharibData, places: { key: string; words: n
   return found;
 }
 
-/** Al-Raghib's articles on a word's places, each once, in the order they are first met (one, for nearly every word). */
+/**
+ * Al-Raghib's article on a word, from its places: the one most of its words link to (a word has one root). A stray link
+ * (a mushaf word that also holds another word) is outvoted. Empty when no place links to one.
+ */
 export function mufradatOfPlaces(data: MufradatData, places: { key: string; words: number[] }[]): (MufradatEntry & { at: number })[] {
-  const found = new Map<number, MufradatEntry & { at: number }>();
+  const votes = new Map<number, { article: MufradatEntry & { at: number }; count: number }>();
   for (const { key, words } of places) for (const word of words) {
     const article = mufradatOf(data, key, word);
-    if (article && !found.has(article.at)) found.set(article.at, article);
+    if (article) votes.set(article.at, { article, count: (votes.get(article.at)?.count ?? 0) + 1 });
   }
-  return [...found.values()];
+  const best = [...votes.values()].sort((a, b) => b.count - a.count)[0];
+  return best ? [best.article] : [];
 }
 
 export const GHARIB_BOOK = 'تفسير غريب القرآن';

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState, type ComponentRef, type MutableRefObject } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ComponentRef, type MutableRefObject } from 'react';
 import { Pressable, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { BookOpen } from 'lucide-react-native';
@@ -6,13 +6,13 @@ import { Text } from '@/ui/Text';
 import gharib from '@shared/data/quran/gharib';
 import mufradat from '@shared/data/quran/mufradat';
 import { num } from '@shared/quran/arabicNumber';
-import { countsBySurah, mushafPlacesOf, placesOf } from '@shared/quran/words';
+import { countsBySurah, lemmasAtMushafWord, mushafPlacesOf, placesOf } from '@shared/quran/words';
 import { gharibOfPlaces, mufradatOfPlaces, type GharibPlaced } from '@shared/quran/gharib';
 import { ayahOf, surahNames } from '@/lib/branches';
 import { readAyah } from '@/lib/openReader';
 import { bookState, useBooks } from '@/lib/books';
 import { ayahMushafWords } from '@/lib/mushaf';
-import { nextCompact, type ScrollPoint } from '@/lib/scrollShrink';
+import { TOP, nextCompact, type ScrollPoint } from '@/lib/scrollShrink';
 import { corpusText, words } from '@/lib/words';
 import type { Palette } from '@/lib/theme';
 import { hiddenProps, useSlideAway } from '@/ui/motion';
@@ -43,12 +43,17 @@ export default function WordSheet({ lemmas, onClose, palette }: { lemmas: number
   // The last word stays in the sheet while it slides away; a new word starts on its first lemma and first ayat.
   const [kept, setKept] = useState({ lemmas, opened: 0 });
   if (lemmas?.length && lemmas !== kept.lemmas) setKept({ lemmas, opened: kept.opened + 1 });
-  const [hidden, onScroll, reveal] = useHideOnScroll();
   return (
     <Sheet open={!!lemmas?.length} onClose={onClose} palette={palette}>
-      {kept.lemmas?.length ? <WordView key={kept.opened} lemmas={kept.lemmas} onOpen={onClose} hidden={hidden} onScroll={onScroll} reveal={reveal} palette={palette} /> : null}
+      {kept.lemmas?.length ? <SheetWord key={kept.opened} lemmas={kept.lemmas} onOpen={onClose} palette={palette} /> : null}
     </Sheet>
   );
+}
+
+/** Each word opened in the sheet starts with its top shown, whatever the last one was scrolled to. */
+function SheetWord({ lemmas, onOpen, palette }: { lemmas: number[]; onOpen: () => void; palette: Palette }) {
+  const [hidden, onScroll, reveal] = useHideOnScroll();
+  return <WordView lemmas={lemmas} onOpen={onOpen} hidden={hidden} onScroll={onScroll} reveal={reveal} palette={palette} />;
 }
 
 /** A scroll view's own hide-on-scroll (the sheet's), by the same rule as the app's bars (lib/scrollShrink.ts). */
@@ -89,7 +94,11 @@ export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bott
   const mufradatOn = bookState('mufradat') === 'on';
   const mushafPlaces = useMemo(() => mushafPlacesOf(words, id), [id]);
   const entries = useMemo(() => (gharibOn ? gharibOfPlaces(gharib, mushafPlaces) : []), [mushafPlaces, gharibOn]);
-  const articles = useMemo(() => (mufradatOn ? mufradatOfPlaces(mufradat, mushafPlaces) : []), [mushafPlaces, mufradatOn]);
+  // Al-Raghib by the word's root: a word without one (a particle) has no article, and a mushaf word holding a second lemma
+  // («بِئۡسَمَا») speaks for the other one.
+  const articles = useMemo(() => (mufradatOn && words.lemmas[id][2]
+    ? mufradatOfPlaces(mufradat, mushafPlaces.map(({ key, words: at }) => ({ key, words: at.filter(word => lemmasAtMushafWord(words, key, word).length === 1) })))
+    : []), [id, mushafPlaces, mufradatOn]);
   const sections = (['places', 'gharib', 'mufradat'] as const).filter(at => at === 'places' || (at === 'gharib' ? entries.length : articles.length));
   const showing = sections.includes(section) ? section : 'places';
   const [surah, setSurah] = useState<number | null>(null);
@@ -103,7 +112,14 @@ export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bott
   const away = hidden && !sliding;
   const slide = useSlideAway(away, 'top', top);
   // The scroll events of a jump come in after it, so the top is brought back once they have.
-  const settled = () => setTimeout(reveal, SETTLE_MS);
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => () => clearTimeout(timer.current), []);
+  const settled = () => { clearTimeout(timer.current); timer.current = setTimeout(reveal, SETTLE_MS); };
+  // A list that overflows by less than the top's height would fit once the top left, snap back and bring it again: it keeps its top.
+  const scrolled = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const { contentSize, layoutMeasurement } = event.nativeEvent;
+    if (contentSize.height - layoutMeasurement.height + (away ? top : 0) > top + TOP) onScroll(event);
+  };
   const jump = (y: number) => { scroll.current?.scrollTo({ y, animated: false }); settled(); };
   const onSlide = (now: boolean) => { setSliding(now); if (!now) settled(); };
   const [name, count, root] = words.lemmas[id];
@@ -140,7 +156,7 @@ export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bott
           {showing === 'places' && places.length > 0 && <SurahStrip counts={counts} picked={surah} onPick={pickSurah} onSliding={onSlide} names={surahNames} palette={palette} />}
         </Animated.View>
       </Animated.View>
-      <ScrollView key={id} ref={scroll} onScroll={onScroll} scrollEventThrottle={16} style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 10, paddingBottom: bottom }}>
+      <ScrollView key={id} ref={scroll} onScroll={scrolled} scrollEventThrottle={16} style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 10, paddingBottom: bottom }}>
         {showing === 'places' && places.slice(0, shown).map(({ key, words: marked }) => {
           const [s, number] = key.split(':').map(Number);
           const place = `${surahNames[s] ?? num(s)} ${num(number)}`;

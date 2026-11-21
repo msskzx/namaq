@@ -83,7 +83,9 @@ describe("a word's meanings on the words page", () => {
     expect(gharibOfPlaces(gharib, twice).filter(found => found.at === entry)).toHaveLength(1);
   });
 
-  it("gives al-Raghib's one article on the root of «نَخۡل» and of «نَّخِيل»", () => {
+  it("gives al-Raghib's one article on the root of «نَخۡل» and of «نَّخِيل», a stray link outvoted", () => {
+    // In 2:181 the link for «سَمِيعٌ» lands on أله, one of 47 places of «سَمِيع».
+    expect(mufradatOfPlaces(mufradat, placesOfWord('سَمِيع')).map(article => article[0].replace(/[\u064B-\u0652]/g, ''))).toEqual(['سمع']);
     expect(mufradatOfPlaces(mufradat, placesOfWord('نَخۡل')).map(article => article[0].replace(/[\u064B-\u0652]/g, ''))).toEqual(['نخل']);
     expect(mufradatOfPlaces(mufradat, placesOfWord('نَّخِيل')).map(article => article[0].replace(/[\u064B-\u0652]/g, ''))).toEqual(['نخل']);
   });
