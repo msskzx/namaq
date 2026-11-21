@@ -1,7 +1,7 @@
 import { createContext, isValidElement, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, BookOpenText, DoorOpen, Gem, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, History, Target, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpenText, CalendarRange, ChartNoAxesColumn, DoorOpen, Gem, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, History, Target, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, toggleForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
@@ -43,8 +43,11 @@ import { pageStart } from '@shared/quran/readerPage';
 import { continuePage, readFasilas, serverFasilas, subscribeFasilas } from '@shared/readingMarks';
 import { Text } from '@/ui/Text';
 import momentBattles from '@shared/data/battles/moments.json';
-import type { AppMomentBattle } from '@shared/battles/battle';
-import { battleLine, Counts, Moment } from './battles/BattleParts';
+import type { AppBattle, AppMomentBattle } from '@shared/battles/battle';
+import { battleLine, CountRow, Counts, Moment, Readings, SidesHead } from './battles/BattleParts';
+import { BattleYears } from './battles/BattleTimeline';
+import { yearTitle } from '@shared/battles/timeline';
+import TapRow from '@/ui/TapRow';
 import { STORIES } from '@/lib/stories';
 import { FORTY, fortyEntry } from '@/lib/hadith';
 import { compilerOf, drawnBukhari, fromCompanion, fromSahihayn, rajabFeedPassages, recordedIn, type RajabChapter } from '@shared/hadith';
@@ -53,7 +56,7 @@ import HadithBooks from '@/components/HadithBooks';
 import rajab from '@shared/data/hadith/ibnRajab.json';
 import IbnRajab from '@/components/IbnRajab';
 import { Report, StoryAyat } from './stories/StoryParts';
-import { battleHeadSources, battleItems, battleOnCard, eventItems, eventOf, eventSources, nasabPeople, nasabSources, oathItems, oathSources, openingItems, openingSources, sceneItems, sceneOf, sceneSources, tiesPeople, tiesSources } from '@shared/drawingCards';
+import { armiesBattles, armiesItems, armiesSources, battleHeadSources, battleItems, battleOnCard, battleYearItems, battleYearSlice, battleYearSources, type ArmiesTab, eventItems, eventOf, eventSources, nasabPeople, nasabSources, oathItems, oathSources, openingItems, openingSources, sceneItems, sceneOf, sceneSources, tiesPeople, tiesSources } from '@shared/drawingCards';
 import { NasabTree } from '@/screens/nasab';
 import { OpeningRows } from '@/screens/openings';
 import TiesRing, { TieSheet } from './TiesRing';
@@ -617,6 +620,69 @@ function BattlePost({ slug, palette }: { slug: string; palette: Palette }) {
         <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right', paddingHorizontal: 12, paddingTop: 6 }}>موضع تقريبي على خريطة اليوم، من عندنا.</Text>
       </> : null}
       <View style={{ padding: 14 }}><Counts battle={battle} palette={palette} /></View>
+    </Post>
+  );
+}
+
+/**
+ * A year of the battles timeline with the year before and after it (owner, 2026-11-21; feed-visuals sketch, panel 4), the
+ * year lit and its battles listed under the drawing, each opening its page; a year's column, or the open button, opens the
+ * battles screen at that year.
+ */
+function BattleYearPost({ id, palette }: { id: string; palette: Palette }) {
+  const { width } = useWindowDimensions();
+  const year = Number(id);
+  const slice = battleYearSlice(BATTLES, year);
+  if (!slice) return null;
+  const toYear = (at: number) => toTab({ pathname: '/battles', params: { year: String(at) } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={CalendarRange} title="من الغزوات والمعارك" sub={yearTitle(year)} palette={palette} />}
+      open={<Action Icon={CalendarRange} label={`افتح ${yearTitle(year)} في الغزوات والمعارك`} onPress={() => toYear(year)} palette={palette} />}
+      source={sourcesOf(battleYearSources(BATTLES, year))}>
+      <View style={{ padding: 14, gap: 6 }}>
+        <BattleYears columns={slice.columns} lit={year} width={Math.min(width - 60, 480)} palette={palette} onYear={toYear} />
+        {slice.battles.map(battle => (
+          <TapRow key={battle.slug} role="link" label={`افتح ${battle.name}`} style={{ flexDirection: 'column', justifyContent: 'center' }}
+            onPress={() => toTab({ pathname: '/battle', params: { slug: battle.slug } })}>
+            <Text style={{ color: palette.ink, fontSize: 18, textAlign: 'right' }}>{battle.name}</Text>
+            <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{battleLine(battle)}</Text>
+            <Readings values={[battle.year]} palette={palette} />
+          </TapRow>
+        ))}
+      </View>
+    </Post>
+  );
+}
+
+const ARMIES_TAB_NAMES: { key: ArmiesTab; label: string }[] = [{ key: 'field', label: 'في الميدان' }, { key: 'killed', label: 'القتلى' }];
+
+/**
+ * The two armies across the battles whose data cites both sides (owner, 2026-11-21; feed-visuals sketch, panel 5), a row of
+ * the battle page's numbers each, «في الميدان» or «القتلى»; a dash where the source gives no number, and each number's other readings under it, attributed. A row opens its battle.
+ */
+function ArmiesPost({ id, palette }: { id: string; palette: Palette }) {
+  const [tab, setTab] = useState<ArmiesTab>(id === 'killed' ? 'killed' : 'field');
+  const battles = armiesBattles(BATTLES);
+  if (!battles.length) return null;
+  const sides = (battle: AppBattle) => (tab === 'field' ? [battle.counts.muslims, battle.counts.others] : [battle.counts.muslimsKilled, battle.counts.othersKilled]);
+  return (
+    <Post palette={palette} head={<PostHead Icon={ChartNoAxesColumn} title="الجيشان في الغزوات" sub={battles.map(battle => battle.name.replace(/^غزوة /, '')).join(' · ')} palette={palette} />}
+      open={<Action Icon={Swords} label="افتح الغزوات والمعارك" onPress={() => toTab('/battles')} palette={palette} />}
+      source={sourcesOf(armiesSources(BATTLES))}>
+      <View style={{ padding: 14, gap: 10 }}>
+        <Tabs palette={palette} label="ما يُعدّ" value={tab} onChange={setTab} options={ARMIES_TAB_NAMES} fill />
+        <SidesHead battle={battles[0]} palette={palette} />
+        {battles.map(battle => {
+          const [ours, theirs] = sides(battle);
+          return (
+            <TapRow key={battle.slug} role="link" label={`افتح ${battle.name}`} style={{ flexDirection: 'column', justifyContent: 'center' }}
+              onPress={() => toTab({ pathname: '/battle', params: { slug: battle.slug } })}>
+              <CountRow label={[battle.name, battle.year && yearTitle(battle.year.value)].filter(Boolean).join(' · ')} ours={ours?.value} theirs={theirs?.value} palette={palette} />
+              <Readings values={[ours, theirs]} palette={palette} />
+            </TapRow>
+          );
+        })}
+      </View>
     </Post>
   );
 }
@@ -1266,6 +1332,8 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   nasab: () => nasabPeople(PEOPLE),
   ties: () => tiesPeople(PEOPLE, GRAPH),
   battle: () => battleItems(BATTLES),
+  'battle-year': () => battleYearItems(BATTLES),
+  'battle-armies': () => armiesItems(BATTLES),
   'hadith-scene': () => sceneItems(HADITH.units),
   opening: () => openingItems(openingList()),
   oath: () => oathItems(oathList()),
@@ -1311,6 +1379,8 @@ function ContentPost({ kind, item, day, palette }: { kind: ListKind; item: strin
     case 'nasab': return <NasabPost slug={item} palette={palette} />;
     case 'ties': return <TiesPost slug={item} palette={palette} />;
     case 'battle': return <BattlePost slug={item} palette={palette} />;
+    case 'battle-year': return <BattleYearPost id={item} palette={palette} />;
+    case 'battle-armies': return <ArmiesPost id={item} palette={palette} />;
     case 'hadith-scene': return <HadithScenePost id={item} palette={palette} />;
     case 'opening': return <OpeningCardPost id={item} palette={palette} />;
     case 'oath': return <OathPost id={item} palette={palette} />;

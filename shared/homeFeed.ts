@@ -149,7 +149,7 @@ export const dayStart = (count: number, day: number, salt: number) => (count ? s
 
 /** The content cards drawn from a list of items (pairs and trees have their own picks), in the order that salts each one's start. */
 export const LIST_KINDS = ['note-tafsir', 'note-qiraat', 'note-irab', 'note-balagha', 'term', 'scene', 'mashahid', 'hadith', 'bukhari', 'muslim', 'rajab',
-  'recorded', 'isnad', 'prophets', 'sira', 'moment', 'tarajim', 'tie', 'laqab', 'kunya', 'life', ...DRAWING_CARD_KINDS] as const satisfies readonly FeedCardKind[];
+  'recorded', 'isnad', 'prophets', 'sira', 'moment', 'tarajim', 'tie', 'laqab', 'kunya', 'life', ...DRAWING_CARD_KINDS, 'battle-year', 'battle-armies'] as const satisfies readonly FeedCardKind[];
 export type ListKind = (typeof LIST_KINDS)[number];
 
 /**
