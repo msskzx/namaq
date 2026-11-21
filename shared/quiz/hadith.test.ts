@@ -220,3 +220,11 @@ describe('«من حدّث به؟»', () => {
     }
   });
 });
+
+describe('the words on an isnad line', () => {
+  // Owner, 2026-11-21: the exact words as printed, «قال» with them where the print has it.
+  it('keeps «قَالَ:» before the word of transmission where al-Bukhari prints it', () => {
+    const record = FORTY.entries[0].records.find(each => each.book === 'bukhari' && each.number === 54)!;
+    expect(record.isnad!.edges.map(edge => edge.label)).toEqual(['حَدَّثَنَا', 'قَالَ: أَخْبَرَنَا', 'عَنْ', 'عَنْ', 'عَنْ', 'عَنْ']);
+  });
+});
