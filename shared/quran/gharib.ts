@@ -107,7 +107,7 @@ export function gharibOfPlaces(data: GharibData, marks: GharibWordsData, places:
     for (const entry of gharibAt(data, key)) {
       if (seen.has(entry.at)) continue;
       const quoted = entry.words.flatMap(([from, to]) => Array.from({ length: to - from + 1 }, (_, i) => from + i));
-      if (quoted.every(word => words.includes(word)) || explainedBy(data, marks, entry.at).some(([at, word]) => at === ayah && words.includes(word))) own.push({ ...entry, key });
+      if ((!phrases.has(entry.at) && quoted.every(word => words.includes(word))) || explainedBy(data, marks, entry.at).some(([at, word]) => at === ayah && words.includes(word))) own.push({ ...entry, key });
       else if (phrases.has(entry.at) && quoted.some(word => words.includes(word))) inPhrase.push({ ...entry, key, phrase: true });
       else continue;
       seen.add(entry.at);

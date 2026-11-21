@@ -73,7 +73,7 @@ export function useHideOnScroll(): [boolean, (event: NativeSyntheticEvent<Native
 /**
  * A word: its count, then three sections (owner, 2026-11-21: Ibn Qutaybah's and al-Raghib's books live with the word
  * counts): «المواضع», its ayat as cards with the word in colour and the chart of where it gathers; Ibn Qutaybah's entries on
- * it wherever the Quran uses it, in mushaf order; al-Raghib's article on its root. A book with nothing on the word, or
+ * it wherever the Quran uses it, in mushaf order, then those on a phrase it is in under «في عبارة»; al-Raghib's article on its root. A book with nothing on the word, or
  * hidden from the books page, has no section. Nothing at the top stays pinned (owner, 2026-11-21): the word, its count,
  * the sections and the chart slide away while the list scrolls down and come back on any scroll up (`hidden`).
  * A mushaf word holding two lemmas («مِمَّا») picks one at the top. docs/plans/word-counts-app.md

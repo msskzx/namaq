@@ -92,10 +92,14 @@ describe("a word's meanings on the words page", () => {
     expect(gharibOfPlaces(gharib, marks, placesOfWord('بَاسِقَٰت')).map(entry => [entry.text, entry.phrase])).toEqual([[expect.stringContaining('أي طوالا'), undefined]]);
   });
 
-  it("lists a word's own meanings before the phrases it is in", () => {
-    const found = gharibOfPlaces(gharib, marks, placesOfWord('دِين'));
-    expect(found.some(entry => !entry.phrase)).toBe(true);
-    expect(found.findIndex(entry => entry.phrase) === -1 || found.slice(found.findIndex(entry => entry.phrase)).every(entry => entry.phrase)).toBe(true);
+  it("lists a word's own meanings before the phrases it is in, a phrase across two ayat too", () => {
+    // «﴿فَهَبْ لِي مِنْ لَدُنْكَ وَلِيًّا * يَرِثُنِي﴾ يعني الولد» explains the phrase whole, though at 19:6 it quotes يرثني alone.
+    const found = gharibOfPlaces(gharib, marks, placesOfWord('أَجۡر'));
+    const first = found.findIndex(entry => entry.phrase);
+    expect(first).toBeGreaterThan(0);
+    expect(found.slice(first).every(entry => entry.phrase)).toBe(true);
+    const inherit = gharibOfPlaces(gharib, marks, placesOfWord('وَرِثَ')).find(entry => entry.text.includes('يعني الولد'));
+    expect(inherit?.phrase).toBe(true);
   });
 
   it('keeps an entry whose quoted words are all this word, whatever its marks say', () => {
