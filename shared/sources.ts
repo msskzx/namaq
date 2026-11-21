@@ -44,6 +44,7 @@ const USE = {
   openings: { ar: 'فواتح السور', en: 'surah openings', href: '/quran/openings' },
   oaths: { ar: 'الأقسام في القرآن', en: 'oaths in the Quran', href: '/quran/oaths' },
   iltifat: { ar: 'مشاهد: أمثلة مختارة', en: 'scenes: chosen examples', href: '/quran/lataif' },
+  darkSea: { ar: 'مشاهد: ظلمات البحر في تطبيق الهاتف', en: 'scenes: the dark sea, in the phone app' },
   branches: { ar: 'شواهد المتشابه في الفروع', en: 'the cited cases in branches', href: '/quran/branches' },
   prophets: { ar: 'ترتيب الأنبياء في قصصهم', en: 'the order of the prophets’ stories', href: '/quran/prophets' },
   qiraat: { ar: 'القراءات', en: 'the readings', href: '/quran/qiraat' },
@@ -219,7 +220,7 @@ export const SOURCES: Source[] = [
   {
     id: 'tafsir-ibn-kathir', group: 'books',
     title: { ar: 'تفسير القرآن العظيم', en: 'Tafsir al-Quran al-‘Azim' }, author: { ar: 'ابن كثير', en: 'Ibn Kathir' },
-    edition: 'تحقيق سامي بن محمد سلامة، دار طيبة، الطبعة الثانية ١٤٢٠هـ/١٩٩٩م، ٨ أجزاء', link: shamela(8473), licence: PUBLIC_DOMAIN, uses: [USE.oaths],
+    edition: 'تحقيق سامي بن محمد سلامة، دار طيبة، الطبعة الثانية ١٤٢٠هـ/١٩٩٩م، ٨ أجزاء', link: shamela(8473), licence: PUBLIC_DOMAIN, uses: [USE.oaths, USE.darkSea],
   },
   {
     id: 'irab-nahhas', group: 'books',
@@ -274,6 +275,16 @@ export const SOURCES: Source[] = [
     uses: [USE.iltifat],
   },
   {
+    id: 'tafsir-tabari', group: 'books',
+    title: { ar: 'جامع البيان عن تأويل آي القرآن', en: 'Jami‘ al-Bayan' }, author: { ar: 'ابن جرير الطبري', en: 'al-Tabari' },
+    edition: 'تحقيق عبد الله بن عبد المحسن التركي، دار هجر، الطبعة الأولى ١٤٢٢هـ/٢٠٠١م، ٢٦ جزءًا', link: shamela(7798), licence: PUBLIC_DOMAIN, uses: [USE.darkSea],
+  },
+  {
+    id: 'amthal-ibn-qayyim', group: 'books',
+    title: { ar: 'الأمثال في القرآن (من إعلام الموقعين)', en: 'al-Amthal fi al-Quran (from I‘lam al-Muwaqqi‘in)' }, author: { ar: 'ابن قيم الجوزية', en: 'Ibn al-Qayyim' },
+    edition: 'تحقيق أبي حذيفة إبراهيم بن محمد، مكتبة الصحابة، طنطا، الطبعة الأولى ١٤٠٦هـ/١٩٨٦م', link: shamela(928), licence: PUBLIC_DOMAIN, uses: [USE.darkSea],
+  },
+  {
     id: 'tafsir-ksu', group: 'books',
     title: { ar: 'تفاسير الطبري والبغوي والقرطبي', en: 'The tafsirs of al-Tabari, al-Baghawi and al-Qurtubi' },
     link: { url: 'https://quran.ksu.edu.sa', label: 'مصحف جامعة الملك سعود' }, licence: PUBLIC_DOMAIN, uses: [USE.openings, USE.iltifat],
@@ -286,7 +297,7 @@ export const SOURCES: Source[] = [
       ar: 'توفي المؤلف سنة ١٣٧٦هـ/١٩٥٦م، فنصه في الملك العام. نعرض نصه وحده دون حواشي المحقق، من ملف الموسوعة القرآنية، مع رقم الصفحة ورابطها. وما انقطع في الملف (سبعة مواضع، منها آل عمران ٩٦-٩٧ ويوسف ١١٠-١١١) أكملناه من نسخة المكتبة الشاملة للطبعة نفسها.',
       en: 'The author died in 1956, so his text is in the public domain. We show his text alone, without the editor’s footnotes, from Quranpedia’s dump, with the page number and a link. Where the dump breaks off (seven passages, among them Al ‘Imran 96–97 and Yusuf 110–111), the rest comes from Shamela’s copy of the same edition.',
     },
-    uses: [USE.tafsir, USE.books, USE.oaths, USE.tafsirQuiz],
+    uses: [USE.tafsir, USE.books, USE.oaths, USE.tafsirQuiz, USE.darkSea],
   },
   {
     id: 'tibyan-ukbari', group: 'books', files: ['shared/data/quran/irabUkbari.js', 'shared/data/quran/irabUkbari.d.ts'],
@@ -306,7 +317,7 @@ export const SOURCES: Source[] = [
       ar: 'توفي المؤلف سنة ٥٣٨هـ، فنصه في الملك العام. نعرض كلامه كاملًا على كل آية دون حواشي الكتب المطبوعة معه، من ملف الموسوعة القرآنية، مع رقم الصفحة ورابطها. تضاء الجملة التي يسمّي فيها فنًّا من فنون البلاغة بقاعدة ثابتة. وفي الكتاب تأويلات معتزلية لبعض الصفات. لا يأتي مع التطبيق، بل ينزّله من يختاره إلى هاتفه.',
       en: 'The author died in 1144, so his text is in the public domain. We show his whole passage on each ayah, without the works printed in its margins, from Quranpedia’s dump, with the page number and a link. A fixed rule lights the sentences where he names a rhetorical device. The book carries Mu‘tazili readings of some divine attributes. It does not ship with the app; whoever wants it downloads it to their phone.',
     },
-    uses: [USE.balagha, USE.books],
+    uses: [USE.balagha, USE.books, USE.darkSea],
   },
   {
     id: 'tafsir-mawdui', group: 'books', files: ['shared/data/quran/surahTopics.json'],
@@ -445,7 +456,7 @@ export const SOURCES: Source[] = [
       ar: 'توفي المؤلف سنة ٥٠٢هـ، فنصه في الملك العام. نعرض مادته كاملة تحت عنوانه، كلامه وحده بلا حواشي المحقق، من نسخة المكتبة الشاملة التي نشرها موقع تراث، مع رقم الصفحة ورابطها. وتوصل الكلمة بمادتها من جذرها في المدونة القرآنية العربية.',
       en: 'The author died in 1108, so his text is in the public domain. We show his whole article under his own heading, his words alone without the editor’s notes, from the Shamela copy published by Turath, with the page number and a link. A word is linked to its article by its root in the Quranic Arabic Corpus.',
     },
-    uses: [USE.meaning],
+    uses: [USE.meaning, USE.darkSea],
   },
   {
     id: 'natural-earth', group: 'data', files: ['shared/data/battles/land.json'],

@@ -36,13 +36,16 @@ test('the surah order narrows to a juz and cites its books', async ({ page }) =>
   await expect(page.getByRole('button', { name: /^المصدر: البقاعي، نظم الدرر/ }).first()).toBeVisible();
 });
 
-test('the lata\'if page groups its examples by topic, each with al-Suyuti\'s words folded under it', async ({ page }) => {
+test('«مشاهد» walks an-Nur 40 a layer at a time, each line with who says it, and never «قيل»', async ({ page }) => {
   await open(page, '/lataif');
-  await expect(page.getByRole('tab', { name: 'الكل' })).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByRole('heading', { name: 'الالتفات' })).toBeVisible();
-  const reference = page.getByRole('button', { name: 'الإتقان للسيوطي ٣/٢٩٢–٢٩٣' });
-  await reference.click();
-  await expect(page.getByRole('link', { name: /الإتقان للسيوطي ٣\/٢٩٢–٢٩٣/ }).first()).toBeVisible();
+  await expect(page.getByText('قال الطبري:').first()).toBeVisible();
+  await page.getByRole('tab', { name: 'اليد' }).click();
+  await expect(page.getByRole('tab', { name: 'اليد' })).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByText('قال الزمخشري:')).toBeVisible();
+  await page.getByRole('tab', { name: 'المعنى' }).click();
+  await page.getByRole('tab', { name: 'ابن القيم' }).click();
+  await expect(page.getByText('قال ابن القيم:').first()).toBeVisible();
+  await expect(page.getByText(/(^|\s)قيل/)).toHaveCount(0);
 });
 
 test('a new user\'s branches open as the matrix, with a switch to the tree', async ({ page }) => {
