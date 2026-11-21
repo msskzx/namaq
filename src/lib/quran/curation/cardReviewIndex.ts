@@ -72,6 +72,27 @@ export const cardReviewKind = (piece: { group?: { citations: unknown[] } }): Exc
  */
 export const sharedKey = (entry: Pick<CardReviewEntry, 'twin' | 'pairs'>): string | undefined => entry.twin ?? (entry.pairs?.length === 1 ? entry.pairs[0] : undefined);
 
+const TWIN_RANK: Record<CardKind, number> = { book: 0, ours: 1, word: 2, compare: 3 };
+
+/**
+ * Several tree cards can hold one compare pair (a book's card and word trees of the same two ayat). Only one of them shares the
+ * pair's verdict: the book's card, else ours, else the first word tree. The others keep their own press, so dropping a duplicate
+ * never drops the book's card or the compare card.
+ */
+export function oneTwinPerPair(entries: CardReviewEntry[]): CardReviewEntry[] {
+  const primary = new Map<string, CardReviewEntry>();
+  for (const entry of entries) {
+    const held = entry.twin ? primary.get(entry.twin) : undefined;
+    if (entry.twin && (!held || TWIN_RANK[entry.kind] < TWIN_RANK[held.kind])) primary.set(entry.twin, entry);
+  }
+  return entries.map(entry => {
+    if (!entry.twin || primary.get(entry.twin) === entry) return entry;
+    const own = { ...entry };
+    delete own.twin;
+    return own;
+  });
+}
+
 const rowsKey = (rows: string[][]) => rows.map(row => row.join('+')).join(',');
 
 /** Whether the agents changed the card's ayat: added, removed or merged rows, or split it. */

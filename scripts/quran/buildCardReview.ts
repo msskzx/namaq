@@ -14,7 +14,7 @@ import { phrasePresentation } from '../../shared/quran/phraseTrees';
 import { groupPresentation } from '../../shared/quran/mutashabih/presentation';
 import { branchVerdictFor, matrixOnly, ownAyatOnly, twinOf, twoAyat } from '../../shared/quran/branchVerdicts';
 import { tanasubLink, tanasubSource } from '../../shared/quran/tanasubCards';
-import { cardReviewKind, compareCardId, type CardReviewEntry, type CardReviewIndex } from '../../src/lib/quran/curation/cardReviewIndex';
+import { cardReviewKind, compareCardId, oneTwinPerPair, type CardReviewEntry, type CardReviewIndex } from '../../src/lib/quran/curation/cardReviewIndex';
 
 const OUT = 'src/lib/quran/curation/cardReview.json';
 const ayat = corpus.ayat;
@@ -97,15 +97,15 @@ for (const { page, card } of compareCards()) {
   });
 }
 
-const index: CardReviewIndex = { built: 'npm run quran:card-review', cards: entries };
+const index: CardReviewIndex = { built: 'npm run quran:card-review', cards: oneTwinPerPair(entries) };
 writeFileSync(OUT, `${JSON.stringify(index)}\n`);
-console.log(`${entries.length} cards → ${OUT}`);
+console.log(`${index.cards.length} cards → ${OUT}`);
 
 const at = process.argv.indexOf('--agents');
 if (at > 0) {
   const dir = process.argv[at + 1];
   mkdirSync(dir, { recursive: true });
-  const lines = entries.map(entry => JSON.stringify({ ...entry, text: Object.fromEntries(entry.rows.flat().map(key => [key, textOf(key)])) }));
+  const lines = index.cards.map(entry => JSON.stringify({ ...entry, text: Object.fromEntries(entry.rows.flat().map(key => [key, textOf(key)])) }));
   writeFileSync(join(dir, 'cards.jsonl'), `${lines.join('\n')}\n`);
   writeFileSync(join(dir, 'ayat.json'), JSON.stringify(Object.fromEntries(ayat.map(ayah => [ayah.key, textOf(ayah.key)]))));
   console.log(`agents' input → ${dir}`);

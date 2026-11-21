@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { agentsChanged, comparePages, pageOf, pressesByCard, pressOf, rowsChanged, selectCards, type CardPress, type CardReviewEntry } from './cardReviewIndex';
+import { agentsChanged, comparePages, oneTwinPerPair, pageOf, pressesByCard, pressOf, rowsChanged, selectCards, sharedKey, type CardPress, type CardReviewEntry } from './cardReviewIndex';
 
 const tree = (id: string, rows: string[][], extra: Partial<CardReviewEntry> = {}): CardReviewEntry => ({ id, kind: 'word', rows, verdict: { keep: true, why: 'old' }, ...extra });
 const press = (id: string, action: CardPress['action'], t = 0): CardPress => ({ t, id, action, version: 'original' });
@@ -62,4 +62,22 @@ describe('card review', () => {
     const at = (page: string): CardReviewEntry => ({ id: page, kind: 'compare', rows: [], page });
     expect(comparePages([at('10/12'), at('2/3'), at('2/10'), at('2/3')])).toEqual([{ page: '2/3', count: 2 }, { page: '2/10', count: 1 }, { page: '10/12', count: 1 }]);
   });
+
+  it('a press on a duplicate tree card of a pair leaves the book card and the compare card as they were', () => {
+    const pair = '2:234|2:240';
+    const rows = [['2:234'], ['2:240']];
+    const cards = oneTwinPerPair([
+      { id: 'word-1', kind: 'word', rows, twin: pair },
+      { id: 'book', kind: 'book', rows, twin: pair },
+      { id: 'word-2', kind: 'word', rows, twin: pair },
+      { id: 'compare', kind: 'compare', rows, pairs: [pair] },
+    ]);
+    const press = (entry: CardReviewEntry, action: CardPress['action'], t: number): CardPress => ({ t, id: entry.id, ...(sharedKey(entry) ? { shared: sharedKey(entry) } : {}), action, version: 'original' });
+    const [word1, book, word2, compare] = cards;
+    const pressed = pressesByCard([press(book, 'keep', 1), press(word1, 'drop', 2), press(word2, 'drop', 3)]);
+    expect(pressOf(book, pressed)?.action).toBe('keep');
+    expect(pressOf(compare, pressed)?.action).toBe('keep');
+    expect(pressOf(word1, pressed)?.action).toBe('drop');
+  });
 });
+
