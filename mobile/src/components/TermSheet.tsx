@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { BookOpenText } from 'lucide-react-native';
+import { Gem } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import Sheet from '@/ui/Sheet';
 import Button from '@/ui/Button';
@@ -35,7 +35,7 @@ export default function TermChips({ names, palette }: { names: string[]; palette
             <TermQuotes term={term} palette={palette} />
             {!isOverTabs() && (
               <View style={{ alignItems: 'flex-start' }}>
-                <Button Icon={BookOpenText} label="أمثلته في مصطلحات البلاغة" onPress={() => { setOpen(null); toTab({ pathname: '/term', params: { name: term.name } }); }} />
+                <Button Icon={Gem} label="أمثلته في مصطلحات البلاغة" onPress={() => { setOpen(null); toTab({ pathname: '/term', params: { name: term.name } }); }} />
               </View>
             )}
           </ScrollView>
