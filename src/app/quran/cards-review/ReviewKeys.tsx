@@ -4,11 +4,11 @@ import { useEffect } from 'react';
 import { useNavigatingRouter } from '@/components/common/NavigationLoader';
 
 /** Keys by position, so an Arabic keyboard presses the same choice as an English one. */
-const ACTIONS: Record<string, string> = { KeyA: 'keep', KeyR: 'drop', KeyD: 'discuss' };
+const ACTIONS: Record<string, string> = { KeyA: 'keep', KeyD: 'drop', KeyQ: 'discuss' };
 
 /**
  * The review by keyboard (owner 2026-11-21): up and down move between the cards, left and right turn the page as an Arabic book
- * does, and a, r, d press keep, drop and discuss on the current card, then move to the next. After the last card it turns the
+ * does, and a, d, q press keep, drop and discuss on the current card, then move to the next. After the last card it turns the
  * page or leaves no card current, so a second press never undoes the first. A click on a card makes it the current one. It
  * listens before the matrices, which slide on left and right too (`AyahCards`).
  */
@@ -70,5 +70,5 @@ export default function ReviewKeys({ previous, next, unreviewed }: { previous?: 
       window.removeEventListener('keydown', onKey, true);
     };
   }, [previous, next, unreviewed, router]);
-  return <p className="text-sm text-[var(--home-muted)]">↑ ↓ بين البطاقات، ← → بين الصفحات · a إبقاء · r حذف · d للنقاش</p>;
+  return <p className="text-sm text-[var(--home-muted)]">↑ ↓ بين البطاقات، ← → بين الصفحات · a إبقاء · d حذف · q للنقاش</p>;
 }

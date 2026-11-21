@@ -23,15 +23,16 @@ function page(previous?: string, next?: string, unreviewed?: boolean) {
 const current = (container: HTMLElement) => container.querySelector('[data-current]')?.getAttribute('data-review-card');
 
 describe('ReviewKeys', () => {
-  it('a, r and d press keep, drop and discuss on the current card and move to the next, on any keyboard layout', () => {
+  it('a, d and q press keep, drop and discuss on the current card and move to the next, on any keyboard layout; r presses nothing', () => {
     const { container } = page();
     expect(current(container)).toBe('one');
     fireEvent.keyDown(window, { key: 'ش', code: 'KeyA' });
     expect(pressed).toEqual(['one:keep']);
     expect(current(container)).toBe('two');
     fireEvent.keyDown(window, { key: 'ArrowUp' });
-    fireEvent.keyDown(window, { key: 'r', code: 'KeyR' });
     fireEvent.keyDown(window, { key: 'd', code: 'KeyD' });
+    fireEvent.keyDown(window, { key: 'r', code: 'KeyR' });
+    fireEvent.keyDown(window, { key: 'q', code: 'KeyQ' });
     expect(pressed).toEqual(['one:keep', 'one:drop', 'two:discuss']);
   });
 
