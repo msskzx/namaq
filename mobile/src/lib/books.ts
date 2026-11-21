@@ -1,9 +1,8 @@
 import { useSyncExternalStore } from 'react';
 import { Platform } from 'react-native';
 import { Directory, File, Paths } from 'expo-file-system';
-import { bookOf, bookPath, isBookId, type BookId } from '@shared/books';
+import { bookOf, bookUrl, isBookId, type BookId } from '@shared/books';
 import { readJson, writeJson } from './storage';
-import { WEBSITE } from './website';
 
 /**
  * The person's books (shared/books.ts): which are on the phone, and downloading or removing one. A built-in book is
@@ -71,7 +70,7 @@ export async function addBook(id: BookId) {
   busy.set(id, 'downloading');
   changed();
   try {
-    const url = `${WEBSITE}${bookPath(id)}`;
+    const url = bookUrl(id);
     if (web) {
       const response = await fetch(url);
       if (!response.ok) throw new Error(`book ${id}: ${response.status}`);
@@ -127,7 +126,7 @@ export async function readBook<T>(id: BookId): Promise<T | null> {
 
 async function readFromFile(id: BookId): Promise<unknown> {
   try {
-    const data = readable(id, web ? await (await fetch(`${WEBSITE}${bookPath(id)}`)).json() : JSON.parse(await fileOf(id).text()));
+    const data = readable(id, web ? await (await fetch(bookUrl(id))).json() : JSON.parse(await fileOf(id).text()));
     loaded.set(id, data);
     return data;
   } catch {
