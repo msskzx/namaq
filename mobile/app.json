@@ -39,9 +39,10 @@
       [
         "expo-media-library",
         {
-          "photosPermission": "يحفظ نمق صور المشاركة في مكتبة الصور عند طلبك.",
+          "photosPermission": false,
           "savePhotosPermission": "يحفظ نمق صور المشاركة في مكتبة الصور عند طلبك.",
-          "isAccessMediaLocationEnabled": false
+          "isAccessMediaLocationEnabled": false,
+          "granularPermissions": []
         }
       ],
       [

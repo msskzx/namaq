@@ -26,6 +26,8 @@ function fill(blocks: number[], heights: number[], rooms: (page: number) => numb
   const pages: number[][] = [[]];
   let used = 0;
   for (const i of blocks) {
+    // A first block too tall to go under the head starts the next page, leaving the head on its own.
+    if (pages.length === 1 && !pages[0].length && heights[i] > rooms(0) - slack && heights[i] <= rooms(1) - slack) pages.push([]);
     const page = pages[pages.length - 1];
     const next = page.length ? used + gap + heights[i] : heights[i];
     if (page.length && next > rooms(pages.length - 1) - slack) { pages.push([i]); used = heights[i]; }

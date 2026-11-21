@@ -33,6 +33,13 @@ describe('sharePages', () => {
     }
   });
 
+  it('never puts a block under the head that is taller than the room there', () => {
+    const heights = [450, 100, 100];
+    const pages = sharePages({ heights, room: 478, firstRoom: 400, gap: 10 });
+    expect(pages[0]).toEqual([]);
+    expect(pages.flat()).toEqual([0, 1, 2]);
+  });
+
   it('lets a last scene taller than a page flow with the rest', () => {
     const heights = [50, 200, 200];
     const pages = sharePages({ heights, room: 300, firstRoom: 300, gap: 0, tailFrom: 1 });

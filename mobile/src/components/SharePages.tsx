@@ -18,6 +18,16 @@ const BOTTOM = 12;
 const FOOT = 30;
 const GAP = 10;
 
+/** The logo and «نمق» at a shared image's foot (one picture or each of a story's); `small` on a story's pictures. */
+export function ShareBrand({ small, palette }: { small?: boolean; palette: Palette }) {
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+      <Logo size={small ? 22 : 26} />
+      <Text style={{ color: palette.ink, fontSize: small ? 17 : 19, fontFamily: UI_FONT_BOLD, lineHeight: small ? 28 : 30 }}>نمق</Text>
+    </View>
+  );
+}
+
 /** The source under the last picture's blocks, a hairline above it (owner, 2026-11-21: the only line in the pictures). */
 function Foot({ children, palette }: { children: React.ReactNode; palette: Palette }) {
   return <View style={{ borderTopWidth: 1, borderTopColor: palette.rule, paddingTop: 6 }}>{children}</View>;
@@ -79,13 +89,10 @@ export default function SharePages({ paged, width, palette, onShots, onFail }: {
           <View style={{ flex: 1, gap: GAP }}>
             {p === 0 ? paged.head : null}
             {page.map(i => <View key={i}>{paged.blocks[i]}</View>)}
-            {p === total - 1 && paged.foot ? <><View style={{ flex: 1 }} /><Foot palette={palette}>{paged.foot}</Foot></> : null}
+            {p === total - 1 && paged.foot ? <View style={{ marginTop: 'auto' }}><Foot palette={palette}>{paged.foot}</Foot></View> : null}
           </View>
           <View style={{ height: FOOT, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-              <Logo size={22} />
-              <Text style={{ color: palette.ink, fontSize: 17, fontFamily: UI_FONT_BOLD, lineHeight: 28 }}>نمق</Text>
-            </View>
+            <ShareBrand small palette={palette} />
             <Text style={{ color: palette.muted, fontSize: 14 }}>{`${num(p + 1)} من ${num(total)}`}</Text>
           </View>
         </View>
