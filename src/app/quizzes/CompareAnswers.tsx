@@ -48,11 +48,9 @@ function Line({ line, ar, children, after }: { line: CompareLine; ar: boolean; c
 
 const Whole = ({ line, ar }: { line: CompareLine; ar: boolean }) => <Line line={line} ar={ar}><Words line={line} at={line.words.map((_, i) => i)} /></Line>;
 
-export function CompareInputs({ question, typed, onChange, onCheck, ar, sendEmpty = false, hints: kept, onHints }: { question: Question; typed: string[]; onChange: (typed: string[]) => void; onCheck: () => void; ar: boolean;
+export function CompareInputs({ question, typed, onChange, onCheck, ar, hints: kept, onHints }: { question: Question; typed: string[]; onChange: (typed: string[]) => void; onCheck: () => void; ar: boolean;
   /** The hints shown so far, when the quiz keeps them (solo, so the review can mark them); otherwise they live here. */
-  hints?: Hints; onHints?: (hints: Hints) => void;
-  /** A party may send it empty (owner, 2026-11-19): a player who does not know need not wait out the clock. */
-  sendEmpty?: boolean }) {
+  hints?: Hints; onHints?: (hints: Hints) => void; }) {
   const inRow = useCardRow();
   const formId = React.useId();
   const [own, setOwn] = React.useState<Hints>({});
@@ -69,7 +67,7 @@ export function CompareInputs({ question, typed, onChange, onCheck, ar, sendEmpt
   const started = values.some(value => value.trim());
   const hintLabel = ar ? "تلميح: حرف آخر من كل فراغ" : "Hint: one more letter in each empty blank";
   return (
-    <form id={formId} className="flex flex-col gap-3" onSubmit={(event) => { event.preventDefault(); if (started || sendEmpty) onCheck(); }}>
+    <form id={formId} className="flex flex-col gap-3" onSubmit={(event) => { event.preventDefault(); onCheck(); }}>
       {write.field({ "aria-label": ar ? "اكتب الكلمة" : "Write the word" })}
       <div dir="rtl" className="flex flex-col gap-2.5" data-quiz-compare>
         {inRow
@@ -86,7 +84,7 @@ export function CompareInputs({ question, typed, onChange, onCheck, ar, sendEmpt
       </div>
       {/* In a feed card they join the row of icons under the card (owner: no buttons in a card); `form` keeps «تحقق» submitting. */}
       <UnderCard><div className={inRow ? "contents" : "flex flex-wrap gap-2"}>
-        <Button variant={inRow ? "muted" : "primary"} size={inRow ? "lg" : undefined} type="submit" form={formId} disabled={!started && !sendEmpty} aria-label={inRow ? (ar ? "تحقق" : "Check") : undefined} title={inRow ? (ar ? "تحقق" : "Check") : undefined}><FontAwesomeIcon icon={faCheckDouble} />{!inRow && (ar ? "تحقق" : "Check")}</Button>
+        <Button variant={inRow ? "muted" : "primary"} size={inRow ? "lg" : undefined} type="submit" form={formId} aria-label={inRow ? (ar ? "تحقق" : "Check") : undefined} title={inRow ? (ar ? "تحقق" : "Check") : undefined}><FontAwesomeIcon icon={faCheckDouble} />{!inRow && (ar ? "تحقق" : "Check")}</Button>
         <Button variant={inRow ? "muted" : undefined} size={inRow ? "lg" : undefined} disabled={!started} onClick={() => onChange(emptyCompareAnswers(question))} aria-label={inRow ? (ar ? "مسح الإجابات" : "Clear answers") : undefined} title={inRow ? (ar ? "مسح الإجابات" : "Clear answers") : undefined}><Eraser size={16} aria-hidden />{!inRow && (ar ? "مسح الإجابات" : "Clear answers")}</Button>
       </div></UnderCard>
     </form>

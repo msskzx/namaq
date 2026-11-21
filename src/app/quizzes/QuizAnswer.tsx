@@ -163,7 +163,7 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
         );
       })}
     </div>}
-    {several && !locked && <Button className="mt-3 w-fit" variant="primary" disabled={ticked.length === 0}
+    {several && !locked && <Button className="mt-3 w-fit" variant="primary"
       onClick={() => onAnswer(question.choices.map(choice => choice.value).filter(value => ticked.includes(value)).join(PICKS))}>
       <Check size={16} aria-hidden />{ar ? "تحقق" : "Check"}</Button>}
     {!locked && canLook(question.look) && <LookButton look={question.look} />}

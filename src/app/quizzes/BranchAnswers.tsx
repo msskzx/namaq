@@ -139,11 +139,9 @@ export function BranchFeedback({ question: givenQuestion, typed: givenTyped, nam
   );
 }
 
-export function BranchInputs({ question, typed, onChange, onCheck, ar, sendEmpty = false, names, hints: kept, onHints }: { question: Question; typed: string[]; onChange: (typed: string[]) => void; onCheck: () => void; ar: boolean; names?: Names;
+export function BranchInputs({ question, typed, onChange, onCheck, ar, names, hints: kept, onHints }: { question: Question; typed: string[]; onChange: (typed: string[]) => void; onCheck: () => void; ar: boolean; names?: Names;
   /** The hints shown so far, when the quiz keeps them (solo, so the review can mark them); otherwise they live here. */
-  hints?: Hints; onHints?: (hints: Hints) => void;
-  /** A party may send it empty (owner, 2026-11-19): a player who does not know need not wait out the clock. */
-  sendEmpty?: boolean }) {
+  hints?: Hints; onHints?: (hints: Hints) => void; }) {
   const inRow = useCardRow();
   const formId = React.useId();
   const [own, setOwn] = React.useState<Hints>({});
@@ -161,7 +159,7 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar, sendEmpty
   return (
     <form id={formId} className="flex flex-col gap-3" onSubmit={(event) => {
       event.preventDefault();
-      if (started || sendEmpty) onCheck();
+      onCheck();
     }}>
       {!question.asked && <p className="text-sm text-[var(--home-muted)]">{ar ? "أكمل كل عقدة. وفي نهاية كل فرع تكفي كلمتاه الأوليان، على أن تصح كل كلمة تكتبها. يمكن تبديل الفروع المتشابهة في الشكل." : "Complete every node. For a leaf, its first two words are enough, and every word you type must be right. Branches with the same shape can be entered in either order."}</p>}
       <div dir="rtl">
@@ -175,7 +173,7 @@ export function BranchInputs({ question, typed, onChange, onCheck, ar, sendEmpty
       </div>
       {/* In a feed card they join the row of icons under the card (owner: no buttons in a card); `form` keeps «تحقق» submitting. */}
       <UnderCard><div className={inRow ? "contents" : "flex flex-wrap gap-2"}>
-      <Button variant={inRow ? "muted" : "primary"} size={inRow ? "lg" : undefined} type="submit" form={formId} disabled={!started && !sendEmpty} aria-label={inRow ? (ar ? "تحقق" : "Check") : undefined} title={inRow ? (ar ? "تحقق" : "Check") : undefined}>
+      <Button variant={inRow ? "muted" : "primary"} size={inRow ? "lg" : undefined} type="submit" form={formId} aria-label={inRow ? (ar ? "تحقق" : "Check") : undefined} title={inRow ? (ar ? "تحقق" : "Check") : undefined}>
         <FontAwesomeIcon icon={faCheckDouble} />
         {!inRow && (ar ? "تحقق" : "Check")}
       </Button>

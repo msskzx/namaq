@@ -155,7 +155,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
       )}
       {several && !answered && onPick && (
         <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}>
-          <Button variant="primary" Icon={Check} label="تحقق" disabled={ticked.length === 0}
+          <Button variant="primary" Icon={Check} label="تحقق"
             onPress={() => onPick(joined(ticked))} />
         </View>
       )}
