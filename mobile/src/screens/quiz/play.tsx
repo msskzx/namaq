@@ -17,7 +17,7 @@ import { check, cleanSolo, clearAnswers, goTo, hasTyped, isCompare, isTree, pick
 import QuizChoice, { QuizPrompt } from '@/components/QuizChoice';
 import { readAyah } from '@/lib/openReader';
 import { markForgotten } from '@shared/ayahMarks';
-import { FORGOT, recited, showsAnswerButton } from '@shared/quiz/choiceKinds';
+import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import { useKeyboardShown } from '@/lib/keyboard';
 import { setRun, useRun } from '@/lib/soloStore';
 import { usePalette, type Palette } from '@/lib/theme';
@@ -125,10 +125,6 @@ export default function QuizPlay() {
                 <Button Icon={Eraser} accessibilityLabel="مسح الإجابات" disabled={!hasTyped(run)} onPress={() => update(clearAnswers(run))} />
                 <Button Icon={Eye} label="إظهار الإجابة" onPress={() => update(showAnswer(run))} />
               </Row>
-            )}
-            {/* A choice question's way on for one who does not know (owner, 2026-11-21). */}
-            {!checked && !isTree(question) && !isCompare(question) && showsAnswerButton(question) && (
-              <Row><Button Icon={Eye} label="إظهار الإجابة" onPress={() => update(pick(run, ''))} /></Row>
             )}
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <Button Icon={ArrowRight} accessibilityLabel="السابق" disabled={current === 0} onPress={() => update(goTo(run, current - 1))} />
