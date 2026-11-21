@@ -1,6 +1,10 @@
 import { View } from 'react-native';
 import { narratorOf, rangeName, reportLines, reportSlots, type AppReport, type AppStory, type AppStoryAyat } from '@shared/stories/story';
-import HadithScene from '@/components/HadithScene';
+import HadithScene, { sceneBlocks } from '@/components/HadithScene';
+import { BookMarked, Send } from 'lucide-react-native';
+import IconButton from '@/ui/IconButton';
+import { shareCard, type SharePaged } from '@/lib/shareImage';
+import { UI_FONT_BOLD } from '@/lib/theme';
 import { Text } from '@/ui/Text';
 import ExternalLink from '@/ui/ExternalLink';
 import Folded from '@/ui/Folded';
@@ -87,4 +91,37 @@ export function ReportScene({ report, slots, palette }: { report: AppReport; slo
       {report.grading ? <Text style={{ color: palette.muted, fontSize: 13, lineHeight: 22, textAlign: 'right' }}>{report.grading}</Text> : null}
     </View>
   );
+}
+
+/**
+ * A drawn story as pictures to share (owner's agreed layout, 2026-11-21): its name and «عَنْ ابْنِ عَبَّاسٍ» on the first
+ * only; the scene's blocks with no rings and no chips, the lead-ins saying who speaks; the last moment together on the last
+ * picture with the book and its number under it (a picture cannot be tapped open, so its place is written out).
+ */
+function storyPictures(story: AppStory, report: AppReport, palette: Palette): SharePaged {
+  const lines = reportLines(report);
+  const blocks = sceneBlocks(lines, reportSlots(lines, palette.slots.length), palette, false);
+  const lastFrom = lines.length - (report.moments.at(-1)?.turns?.length ?? 0);
+  const tailFrom = blocks.findIndex(block => block.line >= lastFrom);
+  return {
+    head: (
+      <View style={{ gap: 4 }}>
+        <Text style={{ color: palette.ink, fontSize: 22, fontFamily: UI_FONT_BOLD, lineHeight: 36, textAlign: 'right' }}>{story.name}</Text>
+        {report.isnad ? <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>{narratorOf(report.isnad)}</Text> : null}
+      </View>
+    ),
+    blocks: blocks.map(block => block.node),
+    ...(tailFrom > 0 ? { tailFrom } : {}),
+    foot: (
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+        <BookMarked size={15} color={palette.muted} />
+        <Text style={{ color: palette.muted, fontSize: 14 }}>{report.cite}</Text>
+      </View>
+    ),
+  };
+}
+
+/** The share button of a drawn story, on its page and its feed card. */
+export function StoryShare({ story, report, palette }: { story: AppStory; report: AppReport; palette: Palette }) {
+  return <IconButton Icon={Send} label={`شارك ${story.name}`} onPress={() => shareCard({ content: () => null, paged: () => storyPictures(story, report, palette) })} />;
 }

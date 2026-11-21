@@ -101,6 +101,8 @@ export type DrawMode = (typeof DRAW_MODES)[number]['key'];
 
 /** The Prophet's agent id in the scenes: his colour is the first in every scene, his chip first in every key. */
 export const PROPHET_AGENT = 'prophet-muhammad';
+/** The Prophet's name on his chip and ring: «رسول الله ﷺ», whatever the text calls him (owner, 2026-11-21). */
+export const PROPHET_LABEL = 'رسول الله ﷺ';
 
 /**
  * Each scene's speakers and the colour each takes, by its place in a list of `count` colours. The Prophet ﷺ always takes

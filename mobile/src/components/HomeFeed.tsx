@@ -55,7 +55,7 @@ import Isnad from '@/components/Isnad';
 import HadithBooks from '@/components/HadithBooks';
 import rajab from '@shared/data/hadith/ibnRajab.json';
 import IbnRajab from '@/components/IbnRajab';
-import { Report, ReportScene, reportSource, StoryAyat } from './stories/StoryParts';
+import { Report, ReportScene, reportSource, StoryAyat, StoryShare } from './stories/StoryParts';
 import { drawnReport } from '@shared/stories/story';
 import { armiesBattles, armiesItems, armiesSources, battleHeadSources, battleItems, battleOnCard, battleYearItems, battleYearSlice, battleYearSources, type ArmiesTab, eventItems, eventOf, eventSources, nasabPeople, nasabSources, oathItems, oathSources, openingItems, openingSources, sceneItems, sceneOf, sceneSources, tiesPeople, tiesSources } from '@shared/drawingCards';
 import { NasabTree } from '@/screens/nasab';
@@ -1058,6 +1058,7 @@ function SiraPost({ id, palette }: { id: string; palette: Palette }) {
   return (
     <Post palette={palette} head={<PostHead Icon={ScrollText} title="من قصص السيرة" sub={story.name} palette={palette} />}
       open={<Action Icon={ScrollText} label={`افتح ${story.name}`} onPress={open} palette={palette} />}
+      share={drawn ? <StoryShare story={story} report={report} palette={palette} /> : undefined}
       source={reportSource(report, drawn)}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
         {drawn ? <ReportScene report={report} palette={palette} /> : <Report report={report} palette={palette} plain />}
