@@ -56,4 +56,18 @@ describe('OrderView', () => {
     fireEvent.click(screen.getByRole('button', { name: 'الكل' }));
     expect(within(screen.getByRole('list', { name: 'السور' })).getAllByRole('heading')).toHaveLength(114);
   });
+
+  it('puts the picked juz in boxes to fill from a tray, and lets a surah\'s card open once checked', () => {
+    render(<OrderView surahs={surahs} />);
+    fireEvent.click(screen.getByRole('button', { name: '٢٩' }));
+    fireEvent.click(screen.getByRole('button', { name: 'رتّبها بنفسك' }));
+    const tray = within(screen.getByRole('list', { name: 'أسماء السور' }));
+    expect(tray.getAllByRole('button')).toHaveLength(11);
+    fireEvent.click(tray.getByRole('button', { name: 'المُلْكْ' }));
+    fireEvent.click(screen.getByRole('button', { name: 'تحقق' }));
+    expect(screen.getByText('١ من ١١ في مكانها.')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'أعد الخطأ فقط' }));
+    expect(within(screen.getByRole('list', { name: 'أسماء السور' })).getAllByRole('button')).toHaveLength(10);
+  });
 });
+

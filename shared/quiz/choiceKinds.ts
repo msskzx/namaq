@@ -70,6 +70,11 @@ export type ChoiceQuestion = {
   correctAnswers?: string[];
   /** The choices' right order, for a question that puts them in order (`orders`); in a party before the reveal the list is empty. */
   order?: string[];
+  /**
+   * An order filled in boxes from a tray of names instead of dragged (owner, 2026-11-21; sketch surah-order-tray/sketch-dark.png):
+   * the long lists, a whole juz or the home card's run, where dragging would go back and forth (OrderTray).
+   */
+  tray?: boolean;
   /** The ayah (`surah:ayah`) the question is about, opened in the mushaf after answering. */
   ayahKey?: string;
   /** Asked on the ayah's own mushaf page instead of the words above (QuizPage): how much shows, what is written, the surah title. */

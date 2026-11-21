@@ -13,6 +13,8 @@ import type { Branch, Variant } from "@shared/quran/branches";
 import type { Hints } from "@shared/quiz/hints";
 import { FORGOT, isRightChoice, orders, PICKS, picksOf, recited, ticks } from "@shared/quiz/choiceKinds";
 import OrderRows from "@/components/common/OrderRows";
+import OrderTray from "@/components/common/OrderTray";
+import OrderSurahSheet from "@/components/quran/OrderSurahSheet";
 import { markForgotten } from "@shared/ayahMarks";
 import AyahFlow, { AyahWords } from "@/components/quran/text/AyahFlow";
 import { branchesCorrect, emptyBranchAnswers } from "@shared/quiz/score";
@@ -60,6 +62,7 @@ export interface QuizQuestionView {
   correctAnswers?: string[];
   /** Choices to put in order: the right order (shared/quiz/choiceKinds.ts `orders`). */
   order?: string[];
+  tray?: boolean;
   /** Where the answer comes from, shown once answered (shared/quiz/sources.ts); a bank question's cited passage among them. */
   sources?: ChoiceQuestion["sources"];
   evidence: { reference: QuizReference | null };
@@ -102,6 +105,7 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
   const ticked = tickState.key === question.key ? tickState.values : [];
   const picks = several && locked ? picksOf(given) : ticked;
   const answers = typed ?? (question.compare ? emptyCompareAnswers(question) : emptyBranchAnswers(question));
+  const [card, setCard] = useState<number | null>(null);
   return <>
     {question.ayah && <AskedAyah ayah={question.ayah} />}
     <ChoiceQuran question={question} given={given} revealed={revealed || locked} onReveal={onReveal} ar={ar} onAnswer={value => {
@@ -122,6 +126,9 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
         <BranchInputs key={question.key} question={question} typed={answers} onChange={onType} hints={hints ?? {}} onHints={onHints}
           onCheck={() => onAnswer(branchesCorrect(question, answers) ? question.correctAnswer : "")} ar={ar} />
       )
+    ) : question.tray ? (
+      // «رتّب سور الجزء» (owner, 2026-11-21): boxes filled from a tray; a box's look-up and, once checked, any box open its surah card.
+      <OrderTray question={question} given={given} ar={ar} onAnswer={onAnswer} onLook={setCard} onBox={setCard} pinned={!inRow} />
     ) : orders(question) ? (
       <OrderRows question={question} given={given} ar={ar} onAnswer={onAnswer} />
     ) : recited(question) && !revealed && !locked ? null : <div className="flex flex-col gap-2">
@@ -171,6 +178,7 @@ export default function QuizAnswer({ question, given, typed, hints, revealed, na
       surahName={(value) => question.choices.find((choice) => choice.value === value)?.labelArabic} />}
     {/* After the answer, the view it was looked up in, so everyone learns from it (owner, 2026-11-19; the app's QuizChoice). */}
     {locked && canLook(question.look) && <div className="mt-4"><LookView look={question.look} shown /></div>}
+    {question.tray && <OrderSurahSheet surah={card} onClose={() => setCard(null)} />}
     {/* In a feed card it joins the row of icons under the card (owner, 2026-11-19: no buttons in a card). */}
     {!locked && !recited(question) && <UnderCard><Button className={inRow ? undefined : "mt-3"} size={inRow ? "lg" : "sm"} variant={inRow ? "muted" : undefined}
       aria-label={inRow ? (ar ? "إظهار الإجابة" : "Show answer") : undefined} title={inRow ? (ar ? "إظهار الإجابة" : "Show answer") : undefined} onClick={() => {

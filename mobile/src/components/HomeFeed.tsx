@@ -401,7 +401,9 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
   const [run, setRun] = useState<SoloRun | null>(null);
   useEffect(() => {
-    const list = memorized && questions ? { ...DEFAULT_LIST, filters: withMemorizedScope(DEFAULT_LIST.filters, memorized) } : DEFAULT_LIST;
+    const base = memorized && questions ? { ...DEFAULT_LIST, filters: withMemorizedScope(DEFAULT_LIST.filters, memorized) } : DEFAULT_LIST;
+    // «رتّب الجزء كله» asks a run of surahs that fits the card, not a whole juz (owner, 2026-11-21).
+    const list = kind === 'ORDER_JUZ' ? { ...base, filters: { ...base.filters, run: '1' } } : base;
     const started = startSolo({ ...DEFAULT_SOLO, kinds: [kind], length: 1, list }, seededRandom(seed));
     setRun(started.questions.length ? started : null);
   }, [kind, seed, memorized, questions]);

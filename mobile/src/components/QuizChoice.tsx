@@ -6,6 +6,8 @@ import { Text } from '@/ui/Text';
 import Button from '@/ui/Button';
 import { alikeDiff, BOX_ASKED, FORGOT, isRightChoice, orders, PICKS, picksOf, recited, RECITED, ticks, type ChoiceQuestion } from '@shared/quiz/choiceKinds';
 import OrderRows from '@/ui/OrderRows';
+import OrderTray from '@/ui/OrderTray';
+import { SurahSheet } from './OrderSurah';
 import Chip from '@/ui/Chip';
 import QuizPage from './QuizPage';
 import QuranWords from './quran/text/QuranWords';
@@ -76,6 +78,19 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
   const alike = answered && !several && picked !== question.correctAnswer ? question.alike?.[picked] : undefined;
   const diff = alike && question.quran ? alikeDiff(question.quran, alike.words) : undefined;
   const name = (value: string) => question.choices.find(choice => choice.value === value)?.labelArabic ?? '';
+  const [card, setCard] = useState<number | null>(null);
+  // «رتّب سور الجزء» (owner, 2026-11-21): the boxes and the tray; on the quiz page the tray stays at the foot of the screen.
+  // «ابحث عن الجواب» opens the lit box's surah card (a party counts it as a look), and once checked any box opens its card.
+  if (question.tray) return (
+    <View style={{ flex: scroll ? 1 : undefined, paddingBottom: scroll ? 0 : 12 }}>
+      <OrderTray key={question.key} question={question} picked={picked} palette={palette} pinned={scroll}
+        onPick={answered ? undefined : onPick} onDraft={onTicks}
+        onLook={answered ? undefined : surah => { setCard(surah); onLook?.(); }} onBox={answered ? setCard : undefined}
+        header={<>{header}</>}
+        footer={answered && !!question.sources?.length ? <QuizSources sources={question.sources} palette={palette} /> : undefined} />
+      <SurahSheet surah={card} onClose={() => setCard(null)} palette={palette} top={lookTop} />
+    </View>
+  );
   return (
     <Box {...(scroll ? { contentContainerStyle: { paddingBottom: 24, gap: 12 } } : { style: { gap: 12 } })}>
       {header}
