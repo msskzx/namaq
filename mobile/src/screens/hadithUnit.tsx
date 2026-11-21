@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { BookOpen } from 'lucide-react-native';
-import { sceneSlots, type ReaderPage } from '@shared/hadith';
+import { DRAW_MODES, sceneSlots, type DrawMode, type ReaderPage } from '@shared/hadith';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
@@ -20,8 +20,6 @@ import { toTab } from '@/lib/ways';
 import { hadithUnit } from '@/lib/hadith';
 import Isnad from '@/components/Isnad';
 
-type Mode = 'scenes' | 'text';
-const MODES = [{ key: 'scenes', label: 'الرسم' }, { key: 'text', label: 'النص' }] as const;
 
 const body = (palette: Palette) => ({ color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right' as const });
 
@@ -50,7 +48,7 @@ export default function HadithUnitScreen() {
   const bottom = useTabBarSpace();
   const { unit: id = '' } = useLocalSearchParams<{ unit?: string }>();
   const view = hadithUnit(id);
-  const [mode, setMode] = useState<Mode>('scenes');
+  const [mode, setMode] = useState<DrawMode>('drawing');
   const hadith = useMemo(() => view?.reports.filter(report => report.voice !== 'AUTHOR') ?? [], [view]);
   const slots = useMemo(() => new Map(hadith.map(report => [report.id, sceneSlots(report.scenes, palette.slots.length)])), [hadith, palette.slots.length]);
   const back = () => (router.canGoBack() ? router.back() : toTab('/hadith'));
@@ -68,7 +66,7 @@ export default function HadithUnitScreen() {
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 26, textAlign: 'right' }}>{view.book}</Text>
         {view.kitab ? <Text style={{ color: palette.muted, fontSize: 17, lineHeight: 30, textAlign: 'right' }}>{view.kitab}، {view.bab}</Text> : null}
         {!isSharh && hadith.length > 0 && (
-          <Tabs label="طريقة العرض" options={MODES} value={mode} onChange={setMode} palette={palette} />
+          <Tabs label="طريقة العرض" options={DRAW_MODES} value={mode} onChange={setMode} palette={palette} />
         )}
         {!isSharh && hadith.map(report => (
           <Section key={report.id} title="الحديث" palette={palette} source={source}>

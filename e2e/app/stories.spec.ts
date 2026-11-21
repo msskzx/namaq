@@ -26,3 +26,18 @@ test('the tarajim tab lists the sira stories, and Utbah\'s opens whole with Fuss
   await page.getByRole('button', { name: 'روايات أخرى في الكتاب' }).click();
   await expect(page.getByText('لما أسلم حمزة', { exact: false })).toBeVisible();
 });
+
+// Owner, 2026-11-21: a story whose speakers a book names is drawn as a conversation («الرسم»), each saying in its
+// speaker's bubble, whose ring shows his name; «النص» is the source's text as printed, chain first.
+test('Dimad\'s story is drawn by speaker, and «النص» shows it as Muslim prints it', async ({ page }) => {
+  await open(page, '/story?slug=islam-of-dimad');
+  await expect(page.getByRole('tab', { name: 'الرسم' })).toHaveAttribute('aria-selected', 'true');
+  // The chain is folded under «السند»; the lead-in sits outside the bubble, the saying inside.
+  await expect(page.getByText('حَدَّثَنَا إِسْحَاقُ', { exact: false })).toHaveCount(0);
+  await expect(page.getByText('هَاتِ يَدَكَ أُبَايِعْكَ عَلَى الْإِسْلَامِ.', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'صاحب السرية' }).first().click();
+  await expect(page.getByText('صاحب السرية', { exact: true }).last()).toBeVisible();
+  await page.getByRole('tab', { name: 'النص' }).click();
+  await expect(page.getByText('حَدَّثَنَا إِسْحَاقُ', { exact: false })).toBeVisible();
+  await expect(page.getByText('هَاتِ يَدَكَ أُبَايِعْكَ عَلَى الْإِسْلَامِ.', { exact: true })).toHaveCount(0);
+});

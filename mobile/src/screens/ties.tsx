@@ -8,7 +8,7 @@ import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
 import IconButton from '@/ui/IconButton';
 import { CardWithRow } from '@/ui/Card';
-import { Link2, Network, Users } from 'lucide-react-native';
+import { Landmark, Link2, Network } from 'lucide-react-native';
 import { usePalette } from '@/lib/theme';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { toTab } from '@/lib/ways';
@@ -54,7 +54,7 @@ export default function TiesScreen() {
         )}
         {/* One section in the home card's shape (owner 2026-11-20): the ring and its badges, the ways on under it, the books on the line. */}
         <CardWithRow palette={palette} gap={12} row={<>
-          <IconButton Icon={Users} label={person.sex === 'FEMALE' ? 'ترجمتها' : 'ترجمته'} onPress={() => router.push({ pathname: '/person', params: { slug: person.slug } })} />
+          <IconButton Icon={Landmark} label={person.sex === 'FEMALE' ? 'ترجمتها' : 'ترجمته'} onPress={() => router.push({ pathname: '/person', params: { slug: person.slug } })} />
           <IconButton Icon={Network} label="النسب" onPress={() => router.push({ pathname: '/nasab', params: { slug: person.slug } })} />
           <IconButton Icon={Link2} label={person.sex === 'FEMALE' ? 'بينها وبين…' : 'بينه وبين…'} onPress={() => router.push({ pathname: '/between', params: { slugs: person.slug } })} />
         </>}>

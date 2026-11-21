@@ -66,10 +66,18 @@ export function Counts({ battle, palette }: { battle: AppBattle; palette: Palett
   );
 }
 
-export function People({ people, palette }: { people: AppPersonLink[]; palette: Palette }) {
+export function People({ people, palette, tints, more = [] }: { people: AppPersonLink[]; palette: Palette;
+  /** A colour by person slug: in a story's drawing each speaker's chip is in his bubbles' colour, the key to them. */
+  tints?: Map<string, string>;
+  /** Speakers the story names but has no person page for («صاحب السرية»), each in his colour. */
+  more?: { name: string; tint: string }[] }) {
   return (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
-      {people.map(person => <Chip key={person.slug} label={person.name} on={false} role="text" small palette={palette} />)}
+      {people.map(person => {
+        const tint = tints?.get(person.slug);
+        return <Chip key={person.slug} label={person.name} on={!!tint} lit={!!tint} tint={tint} role="text" small palette={palette} />;
+      })}
+      {more.map(one => <Chip key={one.name} label={one.name} on lit tint={one.tint} role="text" small palette={palette} />)}
     </View>
   );
 }
