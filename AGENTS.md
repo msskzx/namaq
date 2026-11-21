@@ -53,6 +53,14 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   `page.tsx` may only export `default`, `metadata`, and the other names
   Next recognizes; anything else, like a helper function, fails only here)
   — run it before every PR, not just when something feels risky.
+- A change to the phone app is used before it merges (owner, 2026-11-21): run
+  `npm run phone -- start` and tap through the feature you changed step by step,
+  looking at each dark, iPhone-size screenshot as a person would, then save the
+  walk with `npm run phone -- save <name>` when the flow is worth keeping. Post
+  the screenshots with the result. The web build does not show native gestures,
+  haptics, the native fonts' shaping, audio, notifications or the share sheet;
+  name those in the PR for the owner's Expo Go check. See
+  [e2e/README.md](e2e/README.md), "Using the app".
 - A change to the phone app, or to a website page the UI tests visit, also runs
   `npm run test:ui` (Playwright, about 2.5 minutes; see [e2e/README.md](e2e/README.md)).
   It is a local check, not a CI job. In a cloud container run `./e2e/cloud-db.sh`
@@ -210,10 +218,10 @@ the sources disagree on as settled.
   user asks for them. Still go through the sync scripts where one exists (see
   Data model), and do not print or read credentials out of `.env` to do it:
   run the project's own scripts, which load it themselves.
-- Don't reach for browser computer-use (screenshots, clicking, typing)
-  by default. Only use it when the user asks for it, or when it's
-  necessary to verify something lint/tsc/tests can't catch — e.g. actual
-  rendered layout, force-graph physics, or other visual behavior.
+- For the phone app, use `npm run phone` (see Testing), not a browser tool.
+  On the website, use browser computer-use (screenshots, clicking, typing) only
+  when the user asks for it or to check what lint, tsc and the tests can't,
+  such as rendered layout or force-graph physics.
 
 ## Git
 

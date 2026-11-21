@@ -13,6 +13,7 @@
     "test:watch": "vitest",
     "test:live": "vitest run --config vitest.live.config.mts",
     "test:ui": "playwright test -c e2e",
+    "phone": "node e2e/phone.mjs",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",

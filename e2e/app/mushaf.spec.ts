@@ -422,8 +422,9 @@ test('the recite bar floats over a full-size page, goes wherever it is dragged, 
   const bar = page.getByRole('toolbar', { name: 'أدوات التسميع' });
   const box = async () => (await bar.boundingBox())!;
   expect((await box()).y).toBeGreaterThan(600);
-  // The page keeps its place and size: the bar takes no room from it (owner, 2026-11-19).
-  await expect.poll(pageTop).toBe(before);
+  // The page keeps its place and size: the bar takes no room from it (owner, 2026-11-19). Within half a point, as a
+  // wider screen lays the lines out at fractions of a point.
+  await expect.poll(pageTop).toBeCloseTo(before, 0);
   // Every bar button is a full 44-point box (ui/tapSize.ts).
   const undo = (await page.getByRole('button', { name: 'ارجع خطوة' }).boundingBox())!;
   expect(Math.min(undo.width, undo.height)).toBeGreaterThanOrEqual(44);

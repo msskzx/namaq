@@ -156,6 +156,7 @@ owner 2026-11-19). These lines check it.
 - [ ] You can say in one sentence what each test in your feature's files protects: an owner rule or a past bug. If you cannot, rewrite it or delete it.
 - [ ] Hard-coded counts are replaced by a rule that holds for every item, plus "there is at least one" so an empty list cannot pass. Or the test is removed.
 - [ ] Removed: render-only, copy, class-name, config-mirror, duplicate and dead-helper tests. Each removal is listed in the PR with what it covered. (owner 11-09, AGENTS)
+- [ ] App changes: you used the feature with `npm run phone`, step by step, looked at each screenshot, and saved the walk if the flow is worth keeping. Gestures, haptics, fonts, audio, notifications and sharing that the web build cannot show are named in the PR for the owner's Expo Go check. (owner 11-21)
 - [ ] App changes, and website pages the UI tests visit, ran `npm run test:ui`. Each flow added or changed has a test there, and a UI test broken by a UI change is fixed in the same PR. (AGENTS)
 - [ ] Tests read Quran text and surah names from shared data (`surahName`), never hand-typed.
 - [ ] Where a rule must hold for all the data, the test walks every item, not a sample.
@@ -182,7 +183,7 @@ What counts as a meaningful test (proposal for the owner):
 - [ ] One review cycle by a subagent that did not write the code. A second only if the first needed a code or test change. Never a third. (AGENTS)
 - [ ] For a bug that came back: say why it happened and what stops it recurring. If the fix would repeat in another feature, bring a one-entry proposal, not a new record. Tell the coordinator about similar places. (R0054, AGENTS)
 - [ ] Before resolving: every piece of the approved sketch you handed to another thread was built, and every data piece you built reaches its screen. (owner 11-19)
-- [ ] Merge your own PR once the checks and review pass, unless a real open question remains or the owner said he wants to review it. Post dark, phone-size screenshots with the result. (owner 11-10, 11-16, 11-17)
+- [ ] Merge your own PR once the checks and review pass, unless a real open question remains or the owner said he wants to review it. Post dark, phone-size screenshots with the result (`npm run phone` takes them). (owner 11-10, 11-16, 11-17)
 - [ ] After a squash merge, confirm origin/main has the change. Check `git status` before `git add -A`.
 - [ ] Open questions go to `/mnt/project-files/compare-refine/open-questions.md`, data doubts to `/mnt/project-files/data-review/review-list.md`, and only the doubtful cases go to the owner. Clear bugs are fixed without asking, and a thread with no open question goes on to its next agreed step. (owner 11-17, 11-18)
 - [ ] Owner-facing messages: plain English. Arabic goes in its own line or inline code, never mid-sentence. Surah names inside an English sentence may be transliterated; Quran words in verdicts and reasons are always in Arabic script. Refs are numbers (56:74). If the owner says "still broken" on the phone, ask him to fully reopen Expo Go first. (owner 11-07, 11-08, 11-18)
