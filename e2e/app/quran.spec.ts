@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test';
-import { expect, open, readerPage, tab, test } from './fixtures';
+import { closeSource, expect, open, openSource, readerPage, tab, test } from './fixtures';
 import { surahName as S } from '../../shared/quran/surahNames';
 
 test('the Quran hub links to every tool', async ({ page }) => {
@@ -20,8 +20,11 @@ test('the surah order narrows to a juz and cites its books', async ({ page }) =>
   await page.getByRole('button', { name: '١', exact: true }).click();
   await expect(page.getByRole('heading', { name: `${S(2)}` })).toBeVisible();
   await page.evaluate(() => { window.open = url => { (window as unknown as { externalUrl: string }).externalUrl = String(url); return null; }; });
-  await page.getByRole('link', { name: 'السيوطي، تناسق الدرر ص٥٣' }).click();
+  // Its books are on the source line under it; a tap opens each with its page (owner, 2026-11-20).
+  await openSource(page, 'السيوطي، تناسق الدرر');
+  await page.getByRole('link', { name: /ص٥٣/ }).click();
   await expect.poll(() => page.evaluate(() => (window as unknown as { externalUrl: string }).externalUrl)).toBe('https://shamela.ws/book/9992/51');
+  await closeSource(page);
   // The strip is an inverted list (mirrored), so its far end is the largest scrollLeft; scrollTo() does not move it.
   await page.getByRole('button', { name: '١', exact: true }).evaluate(element => {
     let strip = element.parentElement;
@@ -30,7 +33,7 @@ test('the surah order narrows to a juz and cites its books', async ({ page }) =>
   });
   await page.getByRole('button', { name: '٣٠', exact: true }).click();
   await expect(page.getByRole('heading', { name: `${S(78)}` })).toBeVisible();
-  await expect(page.getByRole('link', { name: /^البقاعي، نظم الدرر/ }).first()).toBeVisible();
+  await expect(page.getByRole('button', { name: /^المصدر: البقاعي، نظم الدرر/ }).first()).toBeVisible();
 });
 
 test('the lata\'if page groups its examples by topic, each with al-Suyuti\'s words folded under it', async ({ page }) => {
@@ -114,7 +117,7 @@ test.describe('branches', () => {
     await page.getByRole('button', { name: 'حفظ الشجرة' }).first().click();
     await tab(page, 'الرئيسية').click();
     await page.getByRole('button', { name: 'مدونتي', exact: true }).click();
-    await expect(page.getByRole('button', { name: /^شجرة: / }).first()).toBeVisible();
+    await expect(page.getByLabel(/^شجرة: /).first()).toBeVisible();
   });
 
   test('the search narrows the trees to a phrase', async ({ page }) => {
