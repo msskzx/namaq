@@ -72,18 +72,35 @@ export function mufradatOf(data: MufradatData, key: string, word: number): (Mufr
 /** One of Ibn Qutaybah's entries found through a word's place: the ayah it was found in, and the words it quotes there. */
 export type GharibPlaced = GharibAt & { key: string };
 
+/** [ayah, mushaf word]: a word of the entry's surah. */
+export type GharibWord = [ayah: number, word: number];
+/**
+ * The words each of his entries quoting more than one word explains (owner, 2026-11-21), by entry index: «﴿وَالنَّخْلَ
+ * بَاسِقَاتٍ﴾ أي طوالا» explains باسقات alone. Two agents marked every such entry blind of each other; only the ones both
+ * marked alike, and the owner's answers where they differed, are here. An entry explaining the phrase as a whole («﴿أَعْجَازُ
+ * نَخْلٍ﴾ أي أصولُ نخل») or that neither could pin to a word has none. Built by scripts/quran/gharibWords.ts.
+ */
+export type GharibWordsData = { source: { book: number; sha: string }; words: Record<string, GharibWord[]> };
+
+/** The words an entry explains: the one word it quotes, or the ones marked for it. */
+export function explainedBy(data: GharibData, marks: GharibWordsData, at: number): GharibWord[] {
+  const places = data.entries[at][4];
+  if (places.length === 1 && places[0][1] === places[0][2]) return [[places[0][0], places[0][1]]];
+  return marks.words[at] ?? [];
+}
+
 /**
  * His entries on a word wherever the Quran uses it (the words page, owner 2026-11-21): `places` are the word's ayat in
- * mushaf order, each with its mushaf words. An entry counts only when it quotes the word alone: one quoting a phrase
- * («﴿أَعْجَازُ نَخْلٍ﴾ أي أصولُ نخل») may explain another word of it, which is not this word's meaning. An entry found
- * twice shows once, at its first ayah.
+ * mushaf order, each with its mushaf words. An entry counts only when it explains this word: quoting it alone, or quoting
+ * a phrase with this word marked as the one he explains (`marks`). An entry found twice shows once, at its first ayah.
  */
-export function gharibOfPlaces(data: GharibData, places: { key: string; words: number[] }[]): GharibPlaced[] {
+export function gharibOfPlaces(data: GharibData, marks: GharibWordsData, places: { key: string; words: number[] }[]): GharibPlaced[] {
   const seen = new Set<number>();
   const found: GharibPlaced[] = [];
   for (const { key, words } of places) {
+    const ayah = Number(key.split(':')[1]);
     for (const entry of gharibAt(data, key)) {
-      if (seen.has(entry.at) || !entry.words.every(([from, to]) => Array.from({ length: to - from + 1 }, (_, i) => from + i).every(word => words.includes(word)))) continue;
+      if (seen.has(entry.at) || !explainedBy(data, marks, entry.at).some(([at, word]) => at === ayah && words.includes(word))) continue;
       seen.add(entry.at);
       found.push({ ...entry, key });
     }

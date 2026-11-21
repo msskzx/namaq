@@ -3,8 +3,11 @@ import gharib from '../data/quran/gharib';
 import mufradat from '../data/quran/mufradat';
 import corpus from './quranText/corpus';
 import words from '../data/quran/words.json';
+import gharibWordsJson from '../data/quran/gharibWords.json';
 import { mushafPlacesOf, type WordsData } from './words';
-import { gharibAt, gharibCredit, gharibOfPlaces, mufradatOfPlaces, gharibOfWord, gharibPage, mufradatCredit, mufradatOf, mufradatPage, wordsOf, type GharibEntry } from './gharib';
+import { gharibAt, gharibCredit, gharibOfPlaces, mufradatOfPlaces, gharibOfWord, gharibPage, mufradatCredit, mufradatOf, mufradatPage, wordsOf, type GharibEntry, type GharibWordsData } from './gharib';
+
+const marks = gharibWordsJson as unknown as GharibWordsData;
 
 const ayahWords = new Map(corpus.ayat.map(ayah => [ayah.key, ayah.words]));
 
@@ -73,21 +76,33 @@ describe("a word's meanings on the words page", () => {
   const placesOfWord = (name: string) => mushafPlacesOf(corpus, corpus.lemmas.findIndex(([lemma]) => lemma === name));
 
   it('gathers his entries on «طُور» wherever it occurs, «وَالطُّورِ» with its waw too, in mushaf order', () => {
-    const found = gharibOfPlaces(gharib, placesOfWord('طُور'));
+    const found = gharibOfPlaces(gharib, marks, placesOfWord('طُور'));
     expect(found.map(entry => entry.key)).toEqual(['2:63', '20:80', '52:1']);
     expect(found.every(entry => entry.text.includes('الطُّور'))).toBe(true);
   });
 
-  it('leaves out an entry quoting a phrase, which may explain another word of it', () => {
-    // «﴿أَعْجَازُ نَخْلٍ﴾ أي أصولُ نخل» explains أعجاز, and «﴿وَالنَّخْلَ بَاسِقَاتٍ﴾ أي طوالا» باسقات: neither is a meaning of نخل.
-    expect(gharibOfPlaces(gharib, placesOfWord('نَخۡل'))).toEqual([]);
+  it('puts an entry quoting a phrase on the page of the word he explains, not of the other words', () => {
+    // «﴿وَالنَّخْلَ بَاسِقَاتٍ﴾ أي طوالا» explains باسقات, and «﴿أَعْجَازُ نَخْلٍ﴾ أي أصولُ نخل» the phrase as a whole: neither is a
+    // meaning of نخل.
+    expect(gharibOfPlaces(gharib, marks, placesOfWord('نَخۡل'))).toEqual([]);
+    expect(gharibOfPlaces(gharib, marks, placesOfWord('بَاسِقَٰت')).map(entry => entry.text)).toEqual([expect.stringContaining('أي طوالا')]);
+    expect(gharibOfPlaces(gharib, marks, placesOfWord('أَعۡجَاز')).some(entry => entry.text.includes('أصولُ نخل'))).toBe(false);
+  });
+
+  it('marks only words an entry quotes, and only entries quoting more than one word', () => {
+    expect(marks.source).toEqual(gharib.source);
+    for (const [at, explained] of Object.entries(marks.words)) {
+      const places = gharib.entries[Number(at)][4];
+      expect(places.reduce((count, [, from, to]) => count + to - from + 1, 0)).toBeGreaterThan(1);
+      for (const [ayah, word] of explained) expect(places.some(([at, from, to]) => at === ayah && word >= from && word <= to)).toBe(true);
+    }
   });
 
   it('shows an entry found in two of its ayat once', () => {
     const entry = gharib.entries.findIndex(([, , , , places]) => new Set(places.map(([ayah]) => ayah)).size > 1 && places.every(([, from]) => from >= 0));
     const [surah, , , , places] = gharib.entries[entry];
     const twice = [...new Set(places.map(([ayah]) => ayah))].map(ayah => ({ key: `${surah}:${ayah}`, words: places.filter(place => place[0] === ayah).flatMap(([, from, to]) => Array.from({ length: to - from + 1 }, (_, i) => from + i)) }));
-    expect(gharibOfPlaces(gharib, twice).filter(found => found.at === entry)).toHaveLength(1);
+    expect(gharibOfPlaces(gharib, marks, twice).filter(found => found.at === entry)).toHaveLength(1);
   });
 
   it("gives al-Raghib's one article on the root of «نَخۡل» and of «نَّخِيل», a stray link outvoted", () => {
