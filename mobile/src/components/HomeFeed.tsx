@@ -1,7 +1,7 @@
 import { createContext, isValidElement, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, BookOpenText, CalendarRange, ChartNoAxesColumn, DoorOpen, Gem, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, History, Target, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpenText, CalendarRange, ChartNoAxesColumn, DoorOpen, Gem, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Landmark, ScrollText, Swords, History, Target, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, toggleForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
@@ -55,7 +55,8 @@ import Isnad from '@/components/Isnad';
 import HadithBooks from '@/components/HadithBooks';
 import rajab from '@shared/data/hadith/ibnRajab.json';
 import IbnRajab from '@/components/IbnRajab';
-import { Report, StoryAyat } from './stories/StoryParts';
+import { Report, ReportScene, reportSource, StoryAyat } from './stories/StoryParts';
+import { drawnReport } from '@shared/stories/story';
 import { armiesBattles, armiesItems, armiesSources, battleHeadSources, battleItems, battleOnCard, battleYearItems, battleYearSlice, battleYearSources, type ArmiesTab, eventItems, eventOf, eventSources, nasabPeople, nasabSources, oathItems, oathSources, openingItems, openingSources, sceneItems, sceneOf, sceneSources, tiesPeople, tiesSources } from '@shared/drawingCards';
 import { NasabTree } from '@/screens/nasab';
 import { OpeningRows } from '@/screens/openings';
@@ -384,7 +385,7 @@ export function QuizActions({ palette }: { palette: Palette }) {
   return (
     <>
       <Action Icon={Feather} label="اختبار فردي" onPress={() => router.push('/quiz/solo')} palette={palette} />
-      <Action Icon={Users} label="اختبار جماعي" onPress={() => router.push('/quiz/party')} palette={palette} />
+      <Action Icon={MessagesSquare} label="اختبار جماعي" onPress={() => router.push('/quiz/party')} palette={palette} />
       <Action Icon={EyeOff} label="تسميع" onPress={() => openIntent({ tab: 'read', recite: true })} palette={palette} />
     </>
   );
@@ -477,8 +478,8 @@ function TarajimPost({ id, palette }: { id: string; palette: Palette }) {
   const virtue = pick.person.virtues[pick.index];
   const open = () => router.push({ pathname: '/person', params: { slug: pick.person.slug } });
   return (
-    <Post palette={palette} head={<PostHead Icon={Users} title="من التراجم" sub={personName(pick.person)} palette={palette} />}
-      open={<Action Icon={Users} label={`افتح ترجمة ${personName(pick.person)}`} onPress={open} palette={palette} />}
+    <Post palette={palette} head={<PostHead Icon={Landmark} title="من التراجم" sub={personName(pick.person)} palette={palette} />}
+      open={<Action Icon={Landmark} label={`افتح ترجمة ${personName(pick.person)}`} onPress={open} palette={palette} />}
       source={sourcesOf(pageSources(virtue.refs))}>
       <View style={{ padding: 14, gap: 6 }}>
         <Saying by={saidBy(virtue)} palette={palette}>
@@ -529,8 +530,8 @@ function NamePost({ kind, id, palette }: { kind: 'laqab' | 'kunya'; id: string; 
   const open = () => router.push({ pathname: '/person', params: { slug: person.slug } });
   const quote = unvowelled(fact.text).trim() !== name ? fact.text : '';
   return (
-    <Post palette={palette} head={<PostHead Icon={Users} title={kind === 'laqab' ? 'لقب وصاحبه' : 'كنية وصاحبها'} sub={who} palette={palette} />}
-      open={<Action Icon={Users} label={`افتح ترجمة ${who}`} onPress={open} palette={palette} />}
+    <Post palette={palette} head={<PostHead Icon={Landmark} title={kind === 'laqab' ? 'لقب وصاحبه' : 'كنية وصاحبها'} sub={who} palette={palette} />}
+      open={<Action Icon={Landmark} label={`افتح ترجمة ${who}`} onPress={open} palette={palette} />}
       source={sourcesOf(pageSources(fact.refs))}>
       <View style={{ padding: 14, gap: 4 }}>
         <Text style={{ color: palette.accent, fontSize: 30, lineHeight: 48, fontWeight: '700', textAlign: 'right' }}>{name}</Text>
@@ -553,7 +554,7 @@ function LifePost({ slug, palette }: { slug: string; palette: Palette }) {
   const open = () => router.push({ pathname: '/person', params: { slug } });
   return (
     <Post palette={palette} head={<PostHead Icon={History} title={she ? 'من حياتها' : 'من حياته'} sub={personName(person)} palette={palette} />}
-      open={<Action Icon={Users} label={`افتح ترجمة ${personName(person)}`} onPress={open} palette={palette} />}
+      open={<Action Icon={Landmark} label={`افتح ترجمة ${personName(person)}`} onPress={open} palette={palette} />}
       source={sourcesOf(uniqueSources(items.flatMap(item => [...item.refs, ...item.yearRefs]).map(citeSource)))}>
       <View style={{ paddingVertical: 14, paddingHorizontal: 10 }}>
         <LifeTimeline items={items} palette={palette} inCard compact linked={false} />
@@ -1051,13 +1052,15 @@ function SiraPost({ id, palette }: { id: string; palette: Palette }) {
   const story = STORIES.find(each => each.slug === id);
   if (!story?.reports[0]) return null;
   const report = story.reports[0];
+  // Drawn by speaker where a book names them (owner, 2026-11-21), as on the story's page.
+  const drawn = drawnReport(report);
   const open = () => { continueAfter('sira', id); toTab({ pathname: '/story', params: { slug: story.slug } }); };
   return (
     <Post palette={palette} head={<PostHead Icon={ScrollText} title="من قصص السيرة" sub={story.name} palette={palette} />}
       open={<Action Icon={ScrollText} label={`افتح ${story.name}`} onPress={open} palette={palette} />}
-      source={sourcesOf([citeSource({ text: '', cite: report.cite, url: report.url })])}>
+      source={reportSource(report, drawn)}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
-        <Report report={report} palette={palette} plain />
+        {drawn ? <ReportScene report={report} palette={palette} /> : <Report report={report} palette={palette} plain />}
         {story.ayat.map(ayat => <StoryAyat key={ayat.from} ayat={ayat} palette={palette} folded />)}
       </View>
     </Post>

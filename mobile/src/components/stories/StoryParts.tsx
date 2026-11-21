@@ -1,10 +1,13 @@
 import { View } from 'react-native';
-import { rangeName, type AppReport, type AppStory, type AppStoryAyat } from '@shared/stories/story';
+import { narratorOf, rangeName, reportLines, reportSlots, type AppReport, type AppStory, type AppStoryAyat } from '@shared/stories/story';
+import HadithScene from '@/components/HadithScene';
 import { Text } from '@/ui/Text';
 import ExternalLink from '@/ui/ExternalLink';
 import Folded from '@/ui/Folded';
 import { AyatRange } from '@/components/AyahLines';
 import { Readings, Refs } from '@/components/battles/BattleParts';
+import { sourcesOf } from '@/ui/SourceLine';
+import { citeSource, uniqueSources } from '@shared/quiz/sources';
 import type { Palette } from '@/lib/theme';
 
 /** A story's tags, as muted words under its name (owner, 2026-11-19: chips there are its people), as the stories list shows them. */
@@ -52,6 +55,36 @@ export function StoryAyat({ ayat, palette, folded = false }: { ayat: AppStoryAya
       </Folded>
       <Refs refs={ayat.refs} palette={palette} />
       {ayat.others ? <Readings values={[{ value: null, refs: [], others: ayat.others }]} palette={palette} /> : null}
+    </View>
+  );
+}
+
+/** A report's book and page, for the line under its card, and in its drawing the books that say who speaks. */
+export const reportSource = (report: AppReport, drawing = false) =>
+  sourcesOf(uniqueSources([
+    citeSource({ text: '', cite: report.cite, url: report.url }),
+    ...(drawing ? report.moments.flatMap(moment => moment.turns ?? []).flatMap(turn => (turn.witness ? [citeSource(turn.witness)] : [])) : []),
+  ]));
+
+/**
+ * A report drawn as a conversation («الرسم», owner 2026-11-21): whose telling it is in ink with its chain folded under
+ * «السند», then the hadith scene (`HadithScene`) of its turns. On the story's page the people's chips above, in the
+ * speakers' colours, are the key (`slots` given, no key of its own); in the feed card the scene draws its own key.
+ */
+export function ReportScene({ report, slots, palette }: { report: AppReport; slots?: Map<string, number>; palette: Palette }) {
+  const lines = reportLines(report);
+  return (
+    <View style={{ gap: 10 }}>
+      {report.isnad ? (
+        <View style={{ gap: 2 }}>
+          <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>{narratorOf(report.isnad)}</Text>
+          <Folded credit="السند" palette={palette}>
+            <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 24, textAlign: 'right' }}>{report.isnad}</Text>
+          </Folded>
+        </View>
+      ) : null}
+      <HadithScene lines={lines} slots={slots ?? reportSlots(lines, palette.slots.length)} keyed={!slots} palette={palette} />
+      {report.grading ? <Text style={{ color: palette.muted, fontSize: 13, lineHeight: 22, textAlign: 'right' }}>{report.grading}</Text> : null}
     </View>
   );
 }

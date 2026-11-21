@@ -47,7 +47,7 @@ in [records](records/README.md), `AGENTS` a rule already in AGENTS.md.
 - [ ] Doctrinally loaded tafsir (al-Kashshaf's Mu'tazili readings) is not shown by default without asking the owner. Al-Sa'di stays the default.
 - [ ] Qira'at: Shatibiyya and Durra routes only. Route doubts are settled from the route books. Pronunciation-only details stay off the cards. (R0033)
 - [ ] Wording is plain for a lay reader («ما صلة محمد من علي»), and a relation's direction is stated in words. (owner 11-19)
-- [ ] The owner's terms: «مواضع», never «روايات», for a story's places in the Quran. Tree groups are never «العائلات». The hadith tabs are «الرسم» and «النص كاملًا», never «الإسناد». Feature names: «مشاهد», «مدونتي», «المتشابهات», «دوّن».
+- [ ] The owner's terms: «مواضع», never «روايات», for a story's places in the Quran. Tree groups are never «العائلات». The drawing tabs (hadith, sira stories) are «الرسم» and «النص», never «النص كاملًا» (it says the drawing is not whole, owner 11-21) and never «الإسناد». Feature names: «مشاهد», «مدونتي», «المتشابهات», «دوّن».
 - [ ] A set of events with no known order is called a grouping, not a timeline. (owner 11-11)
 
 ## 2. Quran text
