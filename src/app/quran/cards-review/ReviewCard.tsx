@@ -73,7 +73,7 @@ export default function ReviewCard({ number, entry, shared, proposal, pressed, n
     { action: 'discuss' as const, label: 'للنقاش', Icon: CircleHelp },
   ];
   // Not a card: the matrix inside is framed already, and a card never holds a card (owner 2026-11-19).
-  return <article className="flex flex-col gap-3 border-t border-[var(--home-rule)] pt-4" data-review-card={entry.id}>
+  return <article className="flex scroll-mt-4 flex-col gap-3 border-t border-[var(--home-rule)] pt-4 data-[current]:border-t-2 data-[current]:border-[var(--home-accent)]" data-review-card={entry.id}>
     <header className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[var(--home-muted)]">
       <span>{number}</span>
       <span>{link ? TANASUB_KIND : kind.ar}</span>
@@ -108,7 +108,7 @@ export default function ReviewCard({ number, entry, shared, proposal, pressed, n
     <div className="flex items-center gap-1" data-card-review>
       {choices.map(({ action, label, Icon }) => {
         const on = current?.action === action && current.version === version;
-        return <Button key={action} size="lg" variant="muted" active={on} aria-pressed={on} aria-label={label} title={label} onClick={() => send(action)}><Icon aria-hidden /></Button>;
+        return <Button key={action} size="lg" variant="muted" active={on} aria-pressed={on} aria-label={label} title={label} data-card-action={action} onClick={() => send(action)}><Icon aria-hidden /></Button>;
       })}
       {current && current.version !== version && <span className="text-sm text-[var(--home-muted)]">{current.version === 'agents' ? 'قرارك على نسخة الوكلاء' : 'قرارك على الأصل'}</span>}
       {failed && <p role="alert" className="text-sm text-[var(--home-accent)]">تعذّر الحفظ.</p>}
