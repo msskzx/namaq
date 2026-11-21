@@ -1,7 +1,9 @@
+import { BOOK_SOURCE, GITHUB_FILES, WEBSITE, type BookSource } from './downloadSources';
+
 /**
  * The books the reader's sheets draw on (owner, 2026-11-15). On the phone each one is the person's to keep or remove:
  * a built-in book ships with the app and can be hidden and brought back without a connection; any other is downloaded
- * from GitHub (bookUrl) and kept on the phone. The website fetches what a sheet shows, so it has nothing to manage.
+ * (bookUrl) and kept on the phone. The website fetches what a sheet shows, so it has nothing to manage.
  * The default tafsir can change later to a better book.
  */
 export type BookKind = 'tafsir' | 'irab' | 'balagha' | 'gharib' | 'mutashabih' | 'hadith';
@@ -42,8 +44,10 @@ export const isBookId = (value: unknown): value is BookId => BOOKS.some(book => 
  * data/books/ (scripts/books/writeBookFiles.ts), a Sahih's own file under data/hadith/sahih/.
  */
 export const bookFile = (id: BookId) => (bookOf(id).kind === 'hadith' ? `data/hadith/sahih/${id}.json` : `data/books/${id}.json`);
-/**
- * Where the phone downloads that book: straight from GitHub, so downloads work without the website being up (Vercel
- * paused it 2026-11-21). GitHub serves it gzipped and open to any origin, so the app on the web reads it too.
- */
-export const bookUrl = (id: BookId) => `https://raw.githubusercontent.com/msskzx/namaq/main/${bookFile(id)}`;
+/** Each place a book can be downloaded from (shared/downloadSources.ts): the website's /api/books, or its file on GitHub. */
+export const BOOK_SOURCES: Record<BookSource, (id: BookId) => string> = {
+  website: id => `${WEBSITE}/api/books/${id}`,
+  github: id => `${GITHUB_FILES}${bookFile(id)}`,
+};
+/** Where the phone downloads that book, from the source in use. */
+export const bookUrl = (id: BookId) => BOOK_SOURCES[BOOK_SOURCE](id);
