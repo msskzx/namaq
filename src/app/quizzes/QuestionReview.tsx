@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight, Check, X } from "lucide-react";
 import Button from "@/components/common/Button";
 import QuizSources from "@/components/quiz/QuizSources";
 import OrderRows from "@/components/common/OrderRows";
+import OrderTray from "@/components/common/OrderTray";
 import type { QuestionChoice } from "@/lib/quiz/types";
 import { emptyBranchAnswers, type QuestionAnswer, type ScoredQuestion } from "@shared/quiz/score";
 import { num } from "@shared/quran/arabicNumber";
@@ -19,6 +20,7 @@ import { PICKS, picksOf, ticks } from "@shared/quiz/choiceKinds";
 
 type ReviewQuestion = ScoredQuestion & ChoiceParts & {
   key: string;
+  tray?: boolean;
   promptArabic: string;
   choices: QuestionChoice[];
   choiceDetails?: Record<string, { text: string; reference: string }>;
@@ -67,7 +69,8 @@ export default function QuestionReview({ entries, names, ar }: { entries: Review
     {question.ayah && <blockquote dir="rtl" lang="ar"><AyahFlow><AyahWords>{question.ayah.text}</AyahWords></AyahFlow><p className="text-sm text-[var(--home-muted)]">{question.ayah.reference}</p></blockquote>}
     <ChoiceQuran question={question} given={typeof answer === "string" ? answer : undefined} revealed ar={ar} written={Array.isArray(answer) ? answer : null} />
     {question.compare ? <CompareFeedback key={question.key} question={question} typed={Array.isArray(answer) ? answer : []} ar={ar} hints={entries[index].hints} /> : question.tree ? <BranchFeedback key={question.key} question={question} typed={Array.isArray(answer) ? answer : emptyBranchAnswers(question)} names={names} ar={ar} hints={entries[index].hints} /> : question.write ? <QuizSources sources={question.sources} /> : question.order ? <>
-      <OrderRows question={question} given={typeof answer === "string" ? answer : ""} ar={ar} />
+      {question.tray ? <OrderTray question={question} given={typeof answer === "string" ? answer : ""} ar={ar} />
+        : <OrderRows question={question} given={typeof answer === "string" ? answer : ""} ar={ar} />}
       <ChoiceAfter question={question} given={typeof answer === "string" && answer ? answer : undefined} ar={ar} />
     </> : <>
       <div>{typeof answer === "string" && answer ? choiceText(answer) : ar ? "بدون إجابة" : "No answer"}</div>

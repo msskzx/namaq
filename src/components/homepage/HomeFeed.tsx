@@ -365,7 +365,8 @@ export function QuizActions() {
  * turn, the same question all day (`seed`). With «الأسئلة مما أحفظ فقط» on, it asks from what is memorized, as the quiz page does.
  */
 function QuizPost({ kind, seed, scope }: { kind: string; seed: number; scope: Record<string, string> }) {
-  const query = new URLSearchParams({ topic: kind, length: '1', seed: String(seed), ...scope });
+  // «رتّب الجزء كله» asks a run of surahs that fits the card, not a whole juz (owner, 2026-11-21).
+  const query = new URLSearchParams({ topic: kind, length: '1', seed: String(seed), ...scope, ...(kind === 'ORDER_JUZ' && { run: '1' }) });
   const { data } = useSWR(`/api/quiz?${query}`, fetchJson<QuizData>, { revalidateOnFocus: false, shouldRetryOnError: false });
   const [given, setGiven] = useState<string>();
   const [typed, setTyped] = useState<string[]>();

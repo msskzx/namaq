@@ -24,6 +24,7 @@ export interface AssembledQuestion {
   correctAnswer: string;
   correctAnswers?: ChoiceQuestion['correctAnswers'];
   order?: ChoiceQuestion['order'];
+  tray?: ChoiceQuestion['tray'];
   phrase?: string;
   branches?: BranchAnswer[];
   tree?: Branch;

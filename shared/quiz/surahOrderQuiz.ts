@@ -10,6 +10,8 @@ import { SURAHS } from '../quran/words';
 import { shuffle, type Random } from './random';
 import { PICKS, type ChoiceKind, type ChoiceQuestion, type ChoiceScope } from './choiceKinds';
 import { MUSHAF_BOOK } from './sources';
+import { juzOf } from '../quran/juz';
+import surahRows from '../data/quran/surahs.json';
 
 export const SURAH_ORDER = 'ORDER';
 const CHOICES = 4;
@@ -52,13 +54,14 @@ function mixed(order: number[], random: Random) {
   }
 }
 
-export function orderQuestion(surahs: number[], random: Random): ChoiceQuestion {
+export function orderQuestion(surahs: number[], random: Random, kind: string = SURAH_ORDER, prompt = 'رتّب هذه السور كما في المصحف'): ChoiceQuestion {
   const order = [...surahs].sort((a, b) => a - b);
   const right = order.map(String);
   return {
-    key: `${SURAH_ORDER}:${order.join(',')}`,
-    family: SURAH_ORDER,
-    promptArabic: 'رتّب هذه السور كما في المصحف',
+    key: `${kind}:${order.join(',')}`,
+    family: kind,
+    promptArabic: prompt,
+    ...(kind === SURAH_ORDER_JUZ && { tray: true }),
     choices: mixed(order, random).map(n => ({ value: String(n), labelArabic: SURAH_NAMES[n] })),
     correctAnswer: right.join(PICKS),
     order: right,
@@ -76,4 +79,34 @@ export const surahOrderQuiz: ChoiceKind = {
   questions: (scope, _difficulty, random, limit = Infinity) =>
     shuffle(sets(inScope(scope), !!scope.filters.apart, random), random).slice(0, limit).map(surahs => orderQuestion(surahs, random)),
   count: scope => sets(inScope(scope), !!scope.filters.apart, Math.random).length,
+};
+
+/**
+ * «رتّب الجزء كله» (owner, 2026-11-21; sketch surah-order-tray/sketch-dark.png): every surah of a juz at once, filled into
+ * numbered boxes from a tray of their names (OrderTray). A surah running over two juz is asked under both, as the surah-order
+ * page lists it. The home card (`run`) asks six surahs following each other in a juz instead, so the card stays within the
+ * screen (sketch surah-order-tray/sketch-home-dark.png); a juz of fewer is asked whole.
+ */
+export const SURAH_ORDER_JUZ = 'ORDER_JUZ';
+const RUN = 6;
+const lastAyah = (surah: number) => surahRows.find(row => row.number === surah)!.numberOfAyat;
+
+function juzSets(inside: number[], run: boolean): { surahs: number[]; juz: number }[] {
+  if (inside.length < 2) return [];
+  const spans = inside.map(surah => ({ surah, from: juzOf(`${surah}:1`), to: juzOf(`${surah}:${lastAyah(surah)}`) }));
+  const juzs = [...new Set(spans.flatMap(span => Array.from({ length: span.to - span.from + 1 }, (_, i) => span.from + i)))];
+  const whole = juzs.map(juz => ({ juz, surahs: spans.filter(span => span.from <= juz && juz <= span.to).map(span => span.surah) })).filter(set => set.surahs.length > 1);
+  if (!run) return whole;
+  return whole.flatMap(set => set.surahs.length <= RUN ? [set]
+    : Array.from({ length: set.surahs.length - RUN + 1 }, (_, i) => ({ juz: set.juz, surahs: set.surahs.slice(i, i + RUN) })));
+}
+
+export const surahOrderJuzQuiz: ChoiceKind = {
+  id: SURAH_ORDER_JUZ,
+  name: 'رتّب سور الجزء',
+  party: true,
+  questions: (scope, _difficulty, random, limit = Infinity) =>
+    shuffle(juzSets(inScope(scope), !!scope.filters.run), random).slice(0, limit)
+      .map(set => orderQuestion(set.surahs, random, SURAH_ORDER_JUZ, `رتّب سور الجزء ${num(set.juz)}`)),
+  count: scope => juzSets(inScope(scope), !!scope.filters.run).length,
 };

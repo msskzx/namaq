@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { surahOrderQuiz } from './surahOrderQuiz';
+import { surahOrderJuzQuiz, surahOrderQuiz } from './surahOrderQuiz';
 import { seededRandom } from './feedQuiz';
 import { PICKS } from './choiceKinds';
 import { questionPoints } from './score';
@@ -49,5 +49,37 @@ describe('«رتّب السور»', () => {
     expect(questionPoints(question, ['82', '85', '86', '88'].join(PICKS))).toEqual({ earned: 4, total: 4 });
     expect(questionPoints(question, ['82', '86', '85', '88'].join(PICKS))).toEqual({ earned: 2, total: 4 });
     expect(questionPoints(question, undefined)).toEqual({ earned: 0, total: 4 });
+  });
+});
+
+describe('«رتّب سور الجزء»', () => {
+  it('asks every surah of a juz in a tray, a surah over two juz under both, and only juz of two surahs or more', () => {
+    const questions = surahOrderJuzQuiz.questions(ALL, 'medium', seededRandom(5));
+    const juz30 = questions.find(question => question.promptArabic === 'رتّب سور الجزء ٣٠')!;
+    expect(juz30.order).toEqual(Array.from({ length: 37 }, (_, i) => String(78 + i)));
+    expect(juz30.tray).toBe(true);
+    // al-Dhariyat starts in juz 26 and ends in juz 27.
+    expect(questions.find(question => question.promptArabic === 'رتّب سور الجزء ٢٦')!.order).toContain('51');
+    expect(questions.find(question => question.promptArabic === 'رتّب سور الجزء ٢٧')!.order).toContain('51');
+    // Juz 2 is al-Baqara alone: nothing to order.
+    expect(questions.some(question => question.promptArabic === 'رتّب سور الجزء ٢')).toBe(false);
+    expect(questions.every(question => question.order!.length > 1)).toBe(true);
+  });
+
+  it('asks the home card six surahs that follow each other in one juz (owner, 2026-11-21)', () => {
+    for (const question of surahOrderJuzQuiz.questions({ range: null, filters: { run: '1' } }, 'medium', seededRandom(6), 20)) {
+      const order = question.order!.map(Number);
+      expect(order.length).toBeGreaterThan(1);
+      expect(order.length).toBeLessThanOrEqual(6);
+      expect(order.every((n, i) => i === 0 || n === order[i - 1] + 1)).toBe(true);
+      expect(question.promptArabic).toMatch(/^رتّب سور الجزء /);
+    }
+  });
+
+  it('gives each surah in its box its share and nothing for a box left empty', () => {
+    const question = surahOrderJuzQuiz.questions(ALL, 'medium', seededRandom(7)).find(each => each.order!.length === 37)!;
+    const [a, b, ...rest] = question.order!;
+    expect(questionPoints(question, [b, a, ...rest].join(PICKS))).toEqual({ earned: 35, total: 37 });
+    expect(questionPoints(question, ['', '', ...rest].join(PICKS))).toEqual({ earned: 35, total: 37 });
   });
 });

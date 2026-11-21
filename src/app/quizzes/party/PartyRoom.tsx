@@ -22,6 +22,7 @@ import { Eye, Search, Square, SquareCheck } from "lucide-react";
 import { canLook, LookButton, LookedNote, LookView } from "@/components/quiz/QuizLook";
 import { isRightChoice, orders, PICKS, picksOf, ticks, type QuizLook } from "@shared/quiz/choiceKinds";
 import OrderRows from "@/components/common/OrderRows";
+import OrderTray from "@/components/common/OrderTray";
 import QuestionReview from "../QuestionReview";
 import { ChoiceAfter, ChoiceLabel, ChoiceQuran, type ChoiceParts } from "../ChoiceParts";
 import AyahFlow, { AyahWords } from "@/components/quran/text/AyahFlow";
@@ -279,7 +280,10 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
         ) : question.tree ? (
           revealed ? <BranchFeedback question={question} typed={Array.isArray(view.answer) ? view.answer : emptyBranchAnswers(question)} names={view.surahNames} ar={ar} />
             : <BranchInputs question={question} typed={typed} onChange={draftTyped} onCheck={() => send({ type: "submit", answer: typed })} ar={ar} />
-        ) : question.write ? null : orders(question) ? (
+        ) : question.write ? null : question.tray ? (
+          <OrderTray key={question.key} question={question} given={revealed ? (typeof view.answer === "string" ? view.answer : "") : undefined} sent={sent} ar={ar} pinned
+            onAnswer={(answer) => send({ type: "submit", answer })} onDraft={(answer) => send({ type: "draft", answer })} />
+        ) : orders(question) ? (
           <OrderRows key={question.key} question={question} given={revealed ? (typeof view.answer === "string" ? view.answer : "") : undefined} sent={sent} ar={ar}
             onAnswer={(answer) => send({ type: "submit", answer })} onDraft={(answer) => send({ type: "draft", answer })} />
         ) : ticks(question) ? (

@@ -26,6 +26,7 @@ below. Never copy one into a screen.
 | `Sheet` | Rises from the bottom, tap outside or swipe down closes; `tall` one height above the keyboard, `full` whole screen with title and close | every sheet, full-screen ones included (share, video) |
 | `Toggle` | On means knob on the right | every on/off setting |
 | `OrderRows` | Rows to drag into order, the row following the finger (at once from its grip, after a short hold elsewhere) and the others making room; then «تحقق»; once answered, the right order with where each was put | a question that puts its choices in order («رتّب السور») |
+| `OrderTray` | Numbered boxes in mushaf order filled from a tray of names: a name tapped fills the lit box, a filled box tapped sends its name back, an empty one becomes the next; «تحقق» at any time; once checked, green, accent with the struck name, or «لم تضعها» | a long order («رتّب سور الجزء», the surah-order page's practice) |
 | `NumberPicker` (+ `NumberList`) | Drop-down number list | picking a number (no steppers) |
 | `Text` | Amiri text with the interface scale | every non-Quran text |
 | `ExternalLink` (+ `openExternal`) | Opens a page outside the app | every link out of Namaq |
