@@ -11,11 +11,12 @@ import { toTab } from '@/lib/ways';
 import { FORTY } from '@/lib/hadith';
 import { SAHIH, isSahihSlug, useSahihText } from '@/lib/sahih';
 import { SahihDownload, SahihKitabList } from '@/components/Sahih';
-import { FortyCard, openKitab } from './hadith';
+import { ADDED_TITLE, FortyCard, openKitab } from './hadith';
 
 /**
  * A book's kitabs (owner's sketch, 2026-11-19): for a Sahih each kitab a row in one card, its number, its name and its
- * hadith numbers, opening its babs and hadith; for al-Nawawi's Forty, his hadith in his order.
+ * hadith numbers, opening its babs and hadith; for al-Nawawi's Forty, his hadith in his order; for the eight Ibn Rajab adds
+ * (his «الأحاديث المزيدة على ما ذكره الشيخ», 43–50), his in his order.
  */
 export default function HadithBookScreen() {
   const palette = usePalette();
@@ -25,7 +26,8 @@ export default function HadithBookScreen() {
   const sahih = isSahihSlug(slug) ? SAHIH[slug] : undefined;
   const { state } = useSahihText(sahih?.slug);
   const back = () => (router.canGoBack() ? router.back() : toTab('/hadith'));
-  const title = sahih?.title ?? FORTY.books.nawawi.title;
+  const added = slug === 'added';
+  const title = sahih?.title ?? (added ? ADDED_TITLE : FORTY.books.nawawi.title);
   const card = (entry: FortyEntry) => <FortyCard key={entry.n} entry={entry} palette={palette} onPress={() => router.push({ pathname: '/hadith-forty', params: { n: String(entry.n) } })} />;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
@@ -39,10 +41,10 @@ export default function HadithBookScreen() {
           <SahihKitabList book={sahih} onOpen={kitab => openKitab(sahih.slug, kitab)} palette={palette}
             source={[{ line: sahih.title, quotes: [{ text: `${sahih.title}، ${sahih.edition}` }], links: [{ label: 'الكتاب في المكتبة الشاملة', url: `https://shamela.ws/book/${sahih.shamela}` }] }]} />
         </> : <>
-          {FORTY.entries.filter(entry => !entry.source).map(card)}
-          <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 22, textAlign: 'right', marginTop: 8 }}>ما زاده ابن رجب</Text>
-          <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right', marginTop: -8 }}>{FORTY.books.ibnrajab.title}</Text>
-          {FORTY.entries.filter(entry => entry.source === 'ibnrajab').map(card)}
+          <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right', marginTop: -6 }}>
+            {added ? `ابن رجب الحنبلي (ت ${num(795)}هـ)، في ${FORTY.books.ibnrajab.title}` : `يحيى بن شرف النووي (ت ${num(676)}هـ)`}
+          </Text>
+          {FORTY.entries.filter(entry => (added ? entry.source === 'ibnrajab' : !entry.source)).map(card)}
         </>}
       </ScrollView>
     </View>

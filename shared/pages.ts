@@ -40,7 +40,7 @@ export const PAGES: readonly PageEntry[] = [
   { id: 'terms', app: ['(tabs)/(quran)/terms.tsx'], web: ['quran/terms'] },
   { id: 'term', app: ['(tabs)/(quran)/term.tsx'], web: ['quran/terms/[name]'] },
   { id: 'tuhfa', app: ['(tabs)/(quran)/tuhfa.tsx'], web: ['quran/tajwid/tuhfat-al-atfal'] },
-  { id: 'words', app: ['(tabs)/(quran)/words.tsx'], web: ['quran/words'] },
+  { id: 'words', app: ['(tabs)/(quran)/words.tsx', '(tabs)/(quran)/word.tsx'], web: ['quran/words'] },
   { id: 'tarajim', app: ['(tabs)/(tarajim)/tarajim.tsx'], web: ['biographies'] },
   { id: 'people', app: ['(tabs)/(tarajim)/people.tsx'], web: ['people'] },
   { id: 'person', app: ['(tabs)/(tarajim)/person.tsx'], web: ['people/[slug]'] },
