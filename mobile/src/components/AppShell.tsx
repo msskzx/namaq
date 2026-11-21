@@ -40,7 +40,6 @@ export default function AppShell({ onReady }: { onReady: () => void }) {
         <View style={{ flex: 1, direction: 'rtl', backgroundColor: palette.paper }}>
           <Stack screenOptions={stack} screenListeners={({ route }) => ({ focus: () => noteRootPage(route.name) })}>
             <Stack.Screen name="(tabs)" />
-            <Stack.Screen name="ayah" />
             <Stack.Screen name="library" />
             <Stack.Screen name="about" />
             <Stack.Screen name="privacy" />
