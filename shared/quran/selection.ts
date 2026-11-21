@@ -11,6 +11,10 @@ export type Selection = { key: string; from: number; to: number };
 /** The selection from the pressed word to the one the finger is on now, whichever way it went. */
 export const selectionOf = (key: string, anchor: number, now = anchor): Selection => ({ key, from: Math.min(anchor, now), to: Math.max(anchor, now) });
 
+/** Whether a touch on `key`'s word `word` lands on the selected words (a double tap there acts on them, owner 2026-11-21). */
+export const inSelection = (selection: Selection | undefined | null, key: string | null, word: number | undefined) =>
+  !!selection && key === selection.key && word !== undefined && word >= selection.from && word <= selection.to;
+
 /** Several words, not one. */
 export const isPhrase = (selection: Selection) => selection.to > selection.from;
 

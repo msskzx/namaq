@@ -36,21 +36,35 @@ export function reciteView(model: PageModel, position: RecitePosition) {
   titled.forEach((steps, surah) => { counts[`${surah}:1`] = (counts[`${surah}:1`] ?? 0) + steps; });
   const upcoming = nextAyah(position, model.order);
   const titleSteps = upcoming?.endsWith(':1') ? titled.get(Number(upcoming.split(':')[0])) ?? 0 : 0;
-  const target = position.word;
-  const tokens = model.lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === position.start).map(group => group.word) ?? []);
-  const targetAt = target === undefined ? -1 : tokens.map((word, at) => word === '۞' ? -1 : at).filter(at => at >= 0)[target];
+  // The forgotten words under review, as places among the ayah's words on the page (the ۞ mark counted there, not in a gap).
+  const tokens = position.gaps ? model.lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === position.start).map(group => group.word) ?? []) : [];
+  const places = tokens.map((word, at) => (word === '۞' ? -1 : at)).filter(at => at >= 0);
+  const marked = (position.gaps ?? []).filter(gap => places[gap] !== undefined).map(place => ({ place, at: places[place] }));
+  const gaps = marked.map(gap => gap.at);
+  const reviewing = !!position.gaps && position.shown !== position.start && upcoming === position.start;
+  /** The forgotten word the next step shows, once the ayah is shown up to it: its place on the page (`at`) and in the ayah. */
+  const gap = (reviewing && marked.find(gap => gap.at === position.words)) || null;
   return {
     titled,
     upcoming,
+    gap,
     /** `word` counts the ayah's words on the page from 0, after its title steps. */
-    hidden: (key: string, word: number) => target === undefined ? isHidden(position, key, word, upcoming) : key === position.start && position.shown !== key && word === targetAt,
-    /** The next ayah step: a title or basmala, else the whole ayah; null when the page is done. */
+    hidden: (key: string, word: number) => isHidden(position, key, word, upcoming),
+    /**
+     * The next ayah step: a title or basmala, else the whole ayah; null when the page is done. With forgotten words under
+     * review, the ayah up to the next forgotten word, then that word, and so on to its end (owner, 2026-11-21).
+     */
     nextAyah: (): RecitePosition | null => {
-      if (target !== undefined) return position.shown === position.start ? null : revealAyah(position, position.start);
       if (!upcoming) return null;
+      if (reviewing && gaps.length) {
+        const length = counts[upcoming] ?? 0;
+        if (gap) return revealWord(position, upcoming, length);
+        const next = gaps.find(at => at > position.words);
+        return next !== undefined && next < length ? { ...position, words: next } : revealAyah(position, upcoming);
+      }
       return position.words < titleSteps ? { ...position, words: position.words + 1 } : revealAyah(position, upcoming);
     },
-    nextWord: (): RecitePosition | null => (target !== undefined ? position.shown === position.start ? null : revealAyah(position, position.start) : upcoming ? revealWord(position, upcoming, counts[upcoming] ?? 0) : null),
+    nextWord: (): RecitePosition | null => (upcoming ? revealWord(position, upcoming, counts[upcoming] ?? 0) : null),
   };
 }
 

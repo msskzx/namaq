@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import type { MushafPage } from './readerPage';
-import { stepBack, type RecitePosition } from './recite';
+import type { RecitePosition } from './recite';
 import { joinModels, pageModel, reciteView } from './recitePage';
 
 const page = (n: number): MushafPage => JSON.parse(readFileSync(join(__dirname, '../data/quran/mushaf', `${n}.json`), 'utf8'));
@@ -68,42 +68,40 @@ describe('a two-page spread', () => {
 });
 
 
-describe('single-word recitation', () => {
-  const model = pageModel(page(1));
+describe('reviewing forgotten words (owner, 2026-11-21)', () => {
+  // 2:2 on page 2: ذَٰلِكَ ٱلۡكِتَٰبُ لَا رَيۡبَۛ فِيهِۛ هُدٗى لِّلۡمُتَّقِينَ
+  const model = pageModel(page(2));
 
-  it('hides only the marked word and keeps the rest of the ayah, its end and neighbouring ayat visible', () => {
-    const view = reciteView(model, { start: '1:2', word: 1, shown: null, words: 0 });
-    expect(view.hidden('1:2', 0)).toBe(false);
-    expect(view.hidden('1:2', 1)).toBe(true);
-    expect(view.hidden('1:2', 2)).toBe(false);
-    expect(view.hidden('1:2', Number.MAX_SAFE_INTEGER)).toBe(false);
-    expect(view.hidden('1:1', 0)).toBe(false);
-    expect(view.hidden('1:3', 0)).toBe(false);
+  it('hides the ayah and the page after it, then shows it up to each forgotten word, then the word, to its end', () => {
+    const start: RecitePosition = { start: '2:2', gaps: [3, 6], shown: null, words: 0 };
+    const view = reciteView(model, start);
+    expect(view.hidden('2:1', 0)).toBe(false);
+    expect(view.hidden('2:2', 0)).toBe(true);
+    expect(view.hidden('2:3', 0)).toBe(true);
+    expect(view.hidden('2:5', 0)).toBe(true);
+    // A review stops once its ayah shows (useRecite's `until`).
+    const seen = steps(model, start).slice(0, 5);
+    // Up to رَيۡبَۛ, then رَيۡبَۛ, then up to لِّلۡمُتَّقِينَ, then لِّلۡمُتَّقِينَ, which completes the ayah.
+    expect(seen.map(at => at.shown ?? at.words)).toEqual([0, 3, 4, 6, '2:2']);
+    const upToFirst = reciteView(model, seen[1]);
+    expect(upToFirst.hidden('2:2', 2)).toBe(false);
+    expect(upToFirst.hidden('2:2', 3)).toBe(true);
+    expect(upToFirst.gap).toEqual({ place: 3, at: 3 });
+    expect(reciteView(model, seen[2]).gap).toBeNull();
+    // Once the ayah shows, the rest of the page stays hidden.
+    expect(reciteView(model, seen[4]).hidden('2:3', 0)).toBe(true);
   });
 
-  it('reveals the target with either reveal action, then restores its blank on a step back', () => {
-    const position = { start: '1:2', word: 0, shown: null, words: 0 };
-    const view = reciteView(model, position);
-    const revealed = view.nextWord()!;
-    expect(revealed).toEqual({ ...position, shown: '1:2' });
-    expect(view.nextAyah()).toEqual(revealed);
-    expect(reciteView(model, revealed).hidden('1:2', 0)).toBe(false);
-    expect(reciteView(model, revealed).nextWord()).toBeNull();
-    expect(reciteView(model, revealed).nextAyah()).toBeNull();
-    const back = stepBack(revealed, new Map([[1, 7]]));
-    expect(back).toEqual(position);
-    expect(reciteView(model, back).hidden('1:2', 0)).toBe(true);
+  it('takes two steps when only the last word was forgotten', () => {
+    expect(steps(model, { start: '2:2', gaps: [6], shown: null, words: 0 }).slice(0, 3).map(at => at.shown ?? at.words)).toEqual([0, 6, '2:2']);
   });
 
-  it('counts Madina words without counting a hizb sign as word zero', () => {
+  it('counts Madina words without counting a hizb sign, so the gap lands on the right word', () => {
     const withHizb = pageModel({ juz: 1, items: [{ surah: 2 }, { line: ['۞', 'أول', 'ثان', 1, 'بعد', 2] }] });
-    const first = reciteView(withHizb, { start: '2:1', word: 0, shown: null, words: 0 });
-    expect(first.hidden('2:1', 0)).toBe(false);
-    expect(first.hidden('2:1', 1)).toBe(true);
-    expect(first.hidden('2:1', 2)).toBe(false);
-    const second = reciteView(withHizb, { start: '2:1', word: 1, shown: null, words: 0 });
-    expect(second.hidden('2:1', 1)).toBe(false);
-    expect(second.hidden('2:1', 2)).toBe(true);
-    expect(second.hidden('2:2', 0)).toBe(false);
+    const view = reciteView(withHizb, { start: '2:1', gaps: [1], shown: null, words: 0 });
+    const upTo = reciteView(withHizb, view.nextAyah()!);
+    expect(upTo.hidden('2:1', 1)).toBe(false);
+    expect(upTo.hidden('2:1', 2)).toBe(true);
+    expect(upTo.gap).toEqual({ place: 1, at: 2 });
   });
 });

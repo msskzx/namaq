@@ -75,7 +75,7 @@ import { BookCard, TuhfaCard } from '@/app/quran/books/BooksShelf';
 import { readBookmarks, serverBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { savedAs } from '@shared/compareBookmarks';
 import { continuePage, readFasilas, serverFasilas, subscribeFasilas } from '@shared/readingMarks';
-import { ayahBookmarkId, ayahHref, markAyah, markWord, wordMarkKey, markForgotten, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
+import { ayahBookmarkId, ayahHref, markAyah, markWord, wordMarkKey, markForgotten, toggleForgotten, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { isMemorized, memorizedFilters, memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized, type Memorized } from '@shared/memorized';
 import { FEED_QUIZ_NAMES, feedQuizSeed, OPENINGS, openingSurah, type FeedQuizKind } from '@shared/quiz/feedQuiz';
 import { activeInterests, INTERESTS, interestById, pickedInterests, restoredInterest, surpriseMe, toggledInterest } from '@shared/interests';
@@ -317,7 +317,7 @@ function ForgottenPost({ ayah: mark, review, title = 'هل تذكرها؟' }: { 
 function Recall({ ayah, targetWord, title, sub, writing, onWriting, open, children }: { ayah: string; targetWord?: number; title: string; sub: string; writing: boolean; onWriting: () => void; open: React.ReactNode; children: React.ReactNode }) {
   const { pages, words } = useAyahPage(ayah);
   const model = useMemo(() => (pages ? pageModel(pages.data, pages.top) : null), [pages]);
-  const [position, setPosition] = useState<RecitePosition>({ start: ayah, ...(targetWord !== undefined ? { word: targetWord } : {}), shown: null, words: 0 });
+  const [position, setPosition] = useState<RecitePosition>({ start: ayah, ...(targetWord !== undefined ? { gaps: [targetWord] } : {}), shown: null, words: 0 });
   const pen = usePenRule();
   const recite = useRecite({ model, position, setPosition, writing, pen, until: ayah });
   const run = (action: GestureAction, key: string | undefined) => {
@@ -325,7 +325,7 @@ function Recall({ ayah, targetWord, title, sub, writing, onWriting, open, childr
     else if (action === 'next-word') recite.nextWord();
     else if (action === 'back') recite.back();
     else if (key !== ayah) return;
-    else if (action === 'forgot') markForgotten(targetWord === undefined ? ayah : wordMarkKey(ayah, targetWord));
+    else if (action === 'forgot') toggleForgotten(targetWord === undefined ? ayah : wordMarkKey(ayah, targetWord));
     else if (action === 'save' && words) toggleBookmark({ id: ayahBookmarkId(ayah), text: words.join(' '), href: ayahHref(ayah) });
   };
   const lines = useRef<HTMLDivElement>(null);
@@ -1001,7 +1001,7 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
   const next = (kind: string) => { const at = used[kind] ?? 0; used[kind] = at + 1; return at; };
   for (let round = 0; round < rounds.length; round++) {
     if (round === 0 && !only) {
-      if (forgotten) posts.push(<ForgottenPost key={`ask${forgotten}`} ayah={forgotten} review={reviewHref(forgottenOrder(Object.keys(due))[0])} />);
+      if (forgotten) posts.push(<ForgottenPost key={`ask${forgotten}`} ayah={forgotten} review={reviewHref(forgottenOrder(Object.keys(due))[0], due)} />);
       else if (recall) posts.push(<ForgottenPost key={`ask${recall}`} ayah={recall} />);
       if (hasJuzCard(round) && today?.juz) posts.push(<JuzPost key={`j${day}`} juz={today.juz} date={today.date} />);
     }

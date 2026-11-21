@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it } from 'vitest';
-import { ayahHref, clearForgotten, markAyah, markWord, wordMarkKey, dueMarks, markForgotten, readAyahMarks, readDueMarks, mostForgotten, rememberAyah } from './ayahMarks';
+import { ayahHref, clearForgotten, markAyah, markWord, wordMarkKey, dueMarks, markForgotten, readAyahMarks, readDueMarks, mostForgotten, rememberAyah, toggleForgotten } from './ayahMarks';
 
 describe('ayahMarks', () => {
   beforeEach(() => localStorage.clear());
@@ -15,6 +15,16 @@ describe('ayahMarks', () => {
     markForgotten('57:3');
     markForgotten('2:255');
     expect(readAyahMarks()['57:3'].forgot).toBe(2);
+  });
+
+  it('toggles forgot and remembered on the same ayah, as a second double tap does', () => {
+    const now = Date.now();
+    toggleForgotten('2:2', now);
+    expect(readDueMarks(now)['2:2']).toBeTruthy();
+    toggleForgotten('2:2', now);
+    expect(readDueMarks(now)['2:2']).toBeUndefined();
+    toggleForgotten('2:2', now);
+    expect(readAyahMarks()['2:2'].forgot).toBe(2);
   });
 
   it('rests a remembered ayah 1, 3, 7, then 30 days, and forgetting it starts over', () => {

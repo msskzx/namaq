@@ -21,7 +21,7 @@ export default function ReciteShortcuts() {
   if (!last && !forgotten.length) return null;
   return <div className="mb-5 flex flex-wrap gap-2">
     {last?.startsWith('/quran/read/') && <Button href={last}><Play size={18} aria-hidden />{ar ? 'تابع من حيث توقفت' : 'Continue where you stopped'}</Button>}
-    {forgotten.length > 0 && <Button href={reviewHref(forgotten[0])}>
+    {forgotten.length > 0 && <Button href={reviewHref(forgotten[0], marks)}>
       <LightbulbOff size={18} aria-hidden />{ar ? 'راجع ما نسيت' : 'Review what you forgot'}
     </Button>}
   </div>;

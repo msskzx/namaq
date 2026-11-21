@@ -45,7 +45,7 @@ function AyahLines({ ayah, palette, write, checked, shown, words = 0, whole = fa
     const previous = slice.before && page > 1 ? { page: page - 1, data: pageData(page - 1), model: pageModel(pageData(page - 1), surahBefore(page - 1)), slice: pageEnd(pageData(page - 1).items) } : null;
     return { data, model, slice, previous };
   }, [ayah, page]);
-  const recite = useMemo(() => (parts ? reciteView(parts.model, { start: ayah, word: targetWord, shown: shown ? ayah : null, words: shown ? 0 : words }) : null), [parts, ayah, shown, words, targetWord]);
+  const recite = useMemo(() => (parts ? reciteView(parts.model, { start: ayah, ...(targetWord !== undefined ? { gaps: [targetWord] } : {}), shown: shown ? ayah : null, words: shown ? 0 : words }) : null), [parts, ayah, shown, words, targetWord]);
   if (!page || !parts) return null;
   const height = width * PAGE_TEXT_RATIO;
   return (

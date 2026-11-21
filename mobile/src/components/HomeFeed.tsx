@@ -4,7 +4,7 @@ import { router, useFocusEffect } from 'expo-router';
 import { ArrowLeftRight, BookOpenText, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, Eye, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListStart, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, History, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
-import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
+import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, toggleForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
 import { toggleBookmark } from '@shared/bookmarks';
 import { readGestures, type GestureAction } from '@shared/readerGestures';
 import { isMemorized, memorizedPrefer, memorizedQuestions, readMemorized, recallOfDay, subscribeMemorized, touchesMemorized, withMemorizedScope } from '@shared/memorized';
@@ -344,7 +344,7 @@ function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', palette }:
  */
 function Recall({ ayah, targetWord, title, writing, onWriting, open, marks, palette }: { ayah: string; targetWord?: number; title: string; writing: boolean; onWriting: () => void; open: React.ReactNode; marks: React.ReactNode; palette: Palette }) {
   const model = useMemo(() => { const page = pageOfAyah(ayah); return page ? pageModel(pageData(page), surahBefore(page)) : null; }, [ayah]);
-  const [position, setPosition] = useState<RecitePosition>({ start: ayah, word: targetWord, shown: null, words: 0 });
+  const [position, setPosition] = useState<RecitePosition>({ start: ayah, ...(targetWord !== undefined ? { gaps: [targetWord] } : {}), shown: null, words: 0 });
   const [pen] = penRule.use();
   const recite = useRecite({ model, position, setPosition, writing, pen, until: ayah });
   const shown = recite.done;
@@ -353,7 +353,7 @@ function Recall({ ayah, targetWord, title, writing, onWriting, open, marks, pale
     else if (action === 'next-word') recite.nextWord();
     else if (action === 'back') recite.back();
     else if (key !== ayah) return;
-    else if (action === 'forgot') markForgotten(targetWord === undefined ? ayah : `${ayah}:${targetWord}`);
+    else if (action === 'forgot') toggleForgotten(targetWord === undefined ? ayah : `${ayah}:${targetWord}`);
     else if (action === 'save') toggleBookmark({ id: ayahBookmarkId(ayah), text: pageWords(ayah).join(' '), href: ayahHref(ayah) });
   };
   const touches = usePageTouch((gesture, key) => run(readGestures().recite[gesture], key), () => readGestures().recite.double !== 'none');

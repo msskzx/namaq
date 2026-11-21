@@ -9,18 +9,19 @@ import { useIsFocused } from 'expo-router';
 import { ArrowLeft, ArrowLeftRight, BookOpenText, BookOpen, Bookmark, Copy, EyeOff, Headphones, Layers, Lightbulb, LightbulbOff, ListTree, NotebookPen, History, Play, Pointer, Search, Send, Sparkles, TableOfContents, TextSearch } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
-import { ayahBookmarkId, ayahHref, markAyah, wordMarkKey, markForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
+import { ayahBookmarkId, ayahHref, markAyah, wordMarkKey, markForgotten, toggleForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { readFasilas, serverFasilas, setQuranFasila, subscribeFasilas } from '@shared/readingMarks';
 import { readGestures, type Gesture as Touching, type GestureAction } from '@shared/readerGestures';
-import { forgotToggle, isForgotten, isPhrase, NOTE_NAME, selectedText, selectionOf, wordKeys, type Selection } from '@shared/quran/selection';
-import { compareKeys, forgottenOrder, isKey, nextForgotten, reviewPosition, type RecitePosition } from '@shared/quran/recite';
+import { forgotToggle, inSelection, isForgotten, isPhrase, NOTE_NAME, selectedText, selectionOf, wordKeys, type Selection } from '@shared/quran/selection';
+import { compareKeys, forgottenAyat, isKey, nextInReview, reviewedBefore, reviewPosition, type RecitePosition } from '@shared/quran/recite';
 import TabHint from './TabHint';
 import TopBar, { TOP_BAR } from '@/ui/TopBar';
 import { TAB_BAR, tabBarBottom, tabBarTop } from '@/ui/tabBarSpace';
 import ReaderPager from './ReaderPager';
 import MushafPageView, { type Touch, type Write } from './MushafPageView';
 import { IndexSheet, type Jump } from './ReaderSheets';
+import BulbPop, { type Pop } from '@/ui/BulbPop';
 import AyahPreviewSheet, { type Preview } from './AyahPreviewSheet';
 import TopicSheet, { type TopicOpen } from './TopicSheet';
 import NoteSheet from './NoteSheet';
@@ -65,11 +66,11 @@ const PLACE = 'reader-place';
 /** Where the last recitation (not a review) stopped, to continue it later. */
 const LAST_RECITE = 'reader-recite-last';
 /** `y`: how far down the page the reader had scrolled, when the text is bigger than the printed page. */
-type Place = { page: number; position?: RecitePosition | null; reviewing?: boolean; y?: number };
+type Place = { page: number; position?: RecitePosition | null; reviewing?: boolean; reviewFrom?: string; y?: number };
 const isPosition = (value: unknown): value is RecitePosition =>
-  isRecord(value) && isKey(value.start as string) && (value.shown === null || isKey(value.shown as string)) && isNumberIn(0, Infinity)(value.words) && (value.word === undefined || isNumberIn(0, Infinity)(value.word));
+  isRecord(value) && isKey(value.start as string) && (value.shown === null || isKey(value.shown as string)) && isNumberIn(0, Infinity)(value.words) && (value.gaps === undefined || (Array.isArray(value.gaps) && value.gaps.every(isNumberIn(0, Infinity))));
 const isPlace = (value: unknown): value is Place =>
-  isRecord(value) && isNumberIn(1, PAGES)(value.page) && (value.position == null || isPosition(value.position)) && (value.reviewing === undefined || isBoolean(value.reviewing)) && (value.y === undefined || isNumberIn(-Infinity, Infinity)(value.y));
+  isRecord(value) && isNumberIn(1, PAGES)(value.page) && (value.position == null || isPosition(value.position)) && (value.reviewing === undefined || isBoolean(value.reviewing)) && (value.reviewFrom === undefined || isKey(value.reviewFrom as string)) && (value.y === undefined || isNumberIn(-Infinity, Infinity)(value.y));
 /** The text size (1 is the printed page), kept on this phone from one visit to the next. */
 const ZOOM = 'reader-zoom';
 /** Whether recite mode asks to write each ayah's first and last words (on) or only reveals them (off). */
@@ -94,6 +95,9 @@ export default function Reader() {
   const [page, setPage] = useState(() => Math.min(PAGES, Math.max(1, place?.page ?? 1)));
   const [position, setPosition] = useState<RecitePosition | null>(place?.position ?? null);
   const [reviewing, setReviewing] = useState(!!place?.reviewing && !!place?.position);
+  /** Where «ما نسيت» began, at the page open (owner, 2026-11-21): the review wraps round to it. Unset, it began at the first. */
+  const [reviewFrom, setReviewFrom] = useState(place?.reviewFrom ?? null);
+  useEffect(() => { if (!reviewing) setReviewFrom(null); }, [reviewing]);
   const [reciteMenu, setReciteMenu] = useState<{ x: number; y: number } | null>(null);
   /** The selected ayah, and after a long press the words it selected (their places in the ayah). */
   const [mark, setMark] = useState<{ key: string; page: number; words?: { from: number; to: number } } | null>(null);
@@ -142,7 +146,7 @@ export default function Reader() {
   useEffect(() => { if (listening) setFollowing(true); }, [listening?.range]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (!listening) setFollowing(true); }, [listening]);
   const saved = useMemo(() => new Set(bookmarks.filter(item => item.id.startsWith('ayah:')).map(item => item.id.slice(5))), [bookmarks]);
-  const forgotten = useMemo(() => forgottenOrder(Object.keys(forgot)), [forgot]);
+  const forgotten = useMemo(() => forgottenAyat(Object.keys(forgot)), [forgot]);
   const last = useMemo(() => (focused ? readJson(LAST_RECITE, isPlace) : undefined), [focused, position]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const reciting = !!position;
@@ -179,11 +183,11 @@ export default function Reader() {
   }, [reciting]);
 
   const scrollY = useRef(place?.y ?? 0);
-  const keep = () => writeJson(PLACE, { page, position, reviewing, y: flowing ? Math.round(scrollY.current) : 0 } satisfies Place);
+  const keep = () => writeJson(PLACE, { page, position, reviewing, ...(reviewFrom ? { reviewFrom } : {}), y: flowing ? Math.round(scrollY.current) : 0 } satisfies Place);
   useEffect(() => {
     keep();
     if (position && !reviewing) writeJson(LAST_RECITE, { page, position } satisfies Place);
-  }, [page, position, reviewing]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [page, position, reviewing, reviewFrom]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const turnTo = useCallback((next: number) => {
     setPage(next);
@@ -198,7 +202,7 @@ export default function Reader() {
     setMark(to.mark && !position ? { key: to.key, page: to.page } : null);
     if (recite === 'review') {
       setReviewing(true);
-      setPosition(reviewPosition(to.key));
+      setPosition(reviewPosition(to.key, readDueMarks()));
     } else if (position) {
       // While reciting, a link starts the recitation again from where it leads.
       setReviewing(false);
@@ -215,7 +219,9 @@ export default function Reader() {
     setTools(false);
     setReviewing(!!intent.recite && !!intent.review);
     setMark(intent.at && !intent.recite ? { key: intent.at, page: to } : null);
-    setPosition(intent.recite ? { start: intent.at ?? modelOf(to).order[0], ...(intent.word !== undefined ? { word: intent.word } : {}), shown: null, words: 0 } : null);
+    setPosition(!intent.recite ? null : intent.at
+      ? reviewPosition(intent.word !== undefined ? wordMarkKey(intent.at, intent.word) : intent.at, intent.review ? readDueMarks() : {})
+      : { start: modelOf(to).order[0], shown: null, words: 0 });
   });
 
   // The page's start by default; the eye's menu and an ayah's long-press menu pass the ayah (owner, 2026-11-17).
@@ -229,9 +235,11 @@ export default function Reader() {
   // The bar's reset (owner, 2026-11-20): the whole page hidden again, recited from its first ayah, without leaving recite mode.
   const restartPage = () => { setActions(null); setReviewing(false); setChecked(null); setPosition({ start: model.order[0], shown: null, words: 0 }); };
   const stopRecite = () => { setActions(null); setReviewing(false); setPosition(null); setChecked(null); boxes.blur(); };
-  const reviewKey = position ? position.word === undefined ? position.start : wordMarkKey(position.start, position.word) : '';
-  const reviewNext = reviewing && position ? nextForgotten(forgotten, reviewKey) : null;
-  const reviewAt = position ? forgotten.filter(key => compareKeys(key, reviewKey) < 0).length + 1 : 1;
+  // A review stops at each forgotten ayah once, with all its forgotten words (owner, 2026-11-21).
+  const reviewKey = position?.start ?? '';
+  const from = reviewFrom ?? forgotten[0] ?? reviewKey;
+  const reviewNext = reviewing && position ? nextInReview(forgotten, reviewKey, from) : null;
+  const reviewAt = position ? reviewedBefore(forgotten, reviewKey, from) + 1 : 1;
   const reviewTotal = forgotten.length + (position && !forgotten.includes(reviewKey) ? 1 : 0);
 
   const revealNextAyah = recite.nextAyah;
@@ -243,6 +251,12 @@ export default function Reader() {
   const ayahWords = (key: string) => model.lines.flatMap(line => line?.filter(group => group.word && group.word !== '۞' && `${group.surah}:${group.ayah}` === key).map(group => group.word) ?? []);
   const toggleSaved = (key: string) => toggleBookmark({ id: ayahBookmarkId(key), text: ayahText(key), href: ayahHref(key) });
 
+  // The gesture's mark pops where the finger was (owner, 2026-11-21), like the heart on a double tap.
+  const [pop, setPop] = useState<Pop | null>(null);
+  /** The reader's top on the screen: a touch's page y less it is where the pop goes. */
+  const root = useRef<ComponentRef<typeof View>>(null);
+  const origin = useRef(0);
+  const popAt = (x: number, y: number, kind: Pop['kind'], on: boolean) => setPop(was => ({ id: (was?.id ?? 0) + 1, x, y: y - origin.current, kind, on }));
   const run = (action: GestureAction, key: string | null, x: number, y: number, word?: number, gesture?: Touching) => {
     if (action === 'tools') setTools(on => !on);
     else if (action === 'next-ayah') revealNextAyah();
@@ -252,8 +266,8 @@ export default function Reader() {
       buzz();
       setActions({ key, x, y, holding: gesture === 'long' && word !== undefined, ...(word === undefined ? { lemmas: [] } : { words: selectionOf(key, word), lemmas: lemmasAtMushafWord(words, key, word) }) });
     }
-    else if (key && action === 'forgot') markForgotten(position?.start === key && position.word !== undefined ? wordMarkKey(key, position.word) : key);
-    else if (key && action === 'save') toggleSaved(key);
+    else if (key && action === 'forgot') popAt(x, y, 'forgot', toggleForgotten(position?.start === key && position.gaps ? position.gaps.map(word => wordMarkKey(key, word)) : key));
+    else if (key && action === 'save') popAt(x, y, 'save', toggleSaved(key));
   };
 
   const moved = useRef(0);
@@ -290,6 +304,17 @@ export default function Reader() {
   // While reading, a tap, double tap or long press selects the ayah, and a tap on the page clears it. A second single
   // tap on the marked ayah lets it go (owner, 2026-11-14); it is read once the tap is known not to be a double tap.
   const touches = usePageTouch((gesture, key, x, y, word) => {
+    // Selected words with their menu open (owner, 2026-11-21): a tap on them closes the menu, and a double tap does the
+    // double tap's action on just those words (forgot marks or rests them), then closes it.
+    const open = actionsNow.current;
+    if (open?.words && inSelection(open.words, key, word)) {
+      setActions(null);
+      const action = readGestures()[mode].double;
+      if (gesture !== 'double') return;
+      if (action === 'forgot') { buzz(); popAt(x, y, 'forgot', toggleForgotten(wordKeys(open.words))); }
+      else latest.current(action, key, x, y, word, gesture);
+      return;
+    }
     if (mode === 'read') setMark(current => (key && !(gesture === 'tap' && current?.key === key) ? { key, page: shown.current, ...(gesture === 'long' && word !== undefined ? { words: { from: word, to: word } } : {}) } : null));
     latest.current(readGestures()[mode][gesture], key, x, y, word, gesture);
   }, () => readGestures()[mode].double !== 'none');
@@ -297,8 +322,9 @@ export default function Reader() {
     if (Date.now() - moved.current < 350) return;
     // While writing, a touch on the page only brings the keyboard back; the boxes pick a word themselves.
     if (writingNow.current) { boxes.focus(); return; }
-    // A touch that closes the ayah buttons only closes them, as on the website.
-    if (actionsOpen.current) { setActions(null); return; }
+    // A touch that closes the ayah buttons only closes them, as on the website, except a tap on the selected words: it may be
+    // the first of a double tap on them.
+    if (actionsOpen.current && !(touch !== 'long' && inSelection(actionsNow.current?.words, key, word) && readGestures()[mode].double !== 'none')) { setActions(null); return; }
     touches.touch(touch, key, x, y, word);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -420,7 +446,7 @@ export default function Reader() {
   // The long press's menu opens where the finger pressed.
   const actionsAt = actions && !actions.dragging ? { x: actions.x, y: actions.y } : null;
   return (
-    <View style={{ flex: 1, backgroundColor: palette.card }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
+    <View ref={root} style={{ flex: 1, backgroundColor: palette.card }} onLayout={event => { setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height }); root.current?.measureInWindow((_x: number, y: number) => { origin.current = y; }); }}>
       <GestureDetector gesture={scrollGesture}>
       <ScrollView ref={scroller} scrollEnabled={!pinching && !actions?.holding && (!!keyboard || flowing)} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="always" scrollEventThrottle={32}
         onScroll={event => { scrolled.current = event.nativeEvent.contentOffset.y; scrollY.current = scrolled.current; }}
@@ -456,7 +482,13 @@ export default function Reader() {
           {last?.position && <ActButton Icon={History} label="تابع التسميع من حيث توقفت" name="تابع" palette={palette}
             onPress={() => { setReciteMenu(null); setReviewing(false); setPosition(last.position!); setPage(last.page); }} />}
           {forgotten.length > 0 && <ActButton Icon={LightbulbOff} label="راجع ما نسيت" name="ما نسيت" palette={palette}
-            onPress={() => { setReciteMenu(null); jump({ page: pageOfAyah(markAyah(forgotten[0])) ?? page, key: forgotten[0], mark: false }, 'review'); }} />}
+            onPress={() => {
+              setReciteMenu(null);
+              // From the page open (owner, 2026-11-21): its first forgotten ayah, or the next one after it, wrapping to the first.
+              const first = forgotten.find(key => (pageOfAyah(key) ?? 0) >= page) ?? forgotten[0];
+              jump({ page: pageOfAyah(first) ?? page, key: first, mark: false }, 'review');
+              setReviewFrom(first);
+            }} />}
         </FloatingMenu>
       )}
       {actions && (
@@ -512,6 +544,7 @@ export default function Reader() {
       )}
       {/* The tree and compare buttons preview in place; each item, and the sheet's last button, opens its page (owner, 2026-11-13). */}
       <AyahPreviewSheet preview={preview} onClose={() => setPreview(null)} palette={palette} />
+      <BulbPop pop={pop} palette={palette} />
       <TopicSheet open={topic} onClose={() => setTopic(null)} onJump={jumpToAyah} palette={palette} />
       <NoteSheet ayah={noting} onClose={() => setNoting(null)} palette={palette} />
       {/* The word long-pressed: its count and the ayat it is in (owner, 2026-11-13). */}

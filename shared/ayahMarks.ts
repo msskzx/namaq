@@ -63,6 +63,20 @@ export function rememberAyah(key: string, now = Date.now()) {
 
 const isDue = (mark: AyahMark, now: number) => !mark.due || mark.due <= now;
 
+/**
+ * «نسيت» as one toggle (owner, 2026-11-19), and the reader's double tap set to it (owner, 2026-11-21): marks all due for
+ * review are rested as remembered; otherwise the ones not due are marked forgotten. `keys`: an ayah, or its words under review.
+ */
+export function toggleForgotten(keys: string | string[], now = Date.now()) {
+  const list = typeof keys === 'string' ? [keys] : keys;
+  const due = readDueMarks(now);
+  const remembered = list.every(key => due[key]);
+  if (remembered) list.forEach(key => rememberAyah(key, now));
+  else list.filter(key => !due[key]).forEach(key => markForgotten(key, now));
+  /** Whether they are forgotten now. */
+  return !remembered;
+}
+
 /** The ayat to review now: every forgotten ayah that is not resting. */
 export function dueMarks(marks: AyahMarks, now = Date.now()): AyahMarks {
   const due = Object.entries(marks).filter(([, mark]) => isDue(mark, now));
