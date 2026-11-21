@@ -58,6 +58,8 @@ export class Party extends DurableObject<Env> {
     if (result.error && from) from.send(JSON.stringify({ type: 'error', error: result.error }));
     if (result.state === state) return;
     await this.save(result.state, result.state.questions !== state.questions);
+    // A draft (what a player has typed or picked so far, graded if the time runs out) shows to no one: nothing to send.
+    if (action.type === 'draft') return;
     for (const socket of this.ctx.getWebSockets()) {
       const [id] = this.ctx.getTags(socket);
       if (result.state.players.some(player => player.id === id)) socket.send(JSON.stringify({ type: 'state', view: viewFor(result.state, id, now) }));

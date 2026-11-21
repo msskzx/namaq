@@ -139,11 +139,17 @@ describe('complete branch tree answers', () => {
     expect(screen.getAllByText('يَطُوفُ عَلَيْهِمْ').length).toBeGreaterThan(0);
     expect(screen.queryByText('غِلْمَانٌ لَهُمْ')).toBeNull();
     expect(screen.queryAllByRole('link')).toHaveLength(0);
-    expect(screen.getByRole('button', { name: 'Check' }).hasAttribute('disabled')).toBe(true);
     write('Node 4', 'إذا رأيتهم');
     expect(onChange).toHaveBeenLastCalledWith(['', '', '', 'إذا رأيتهم']);
-    fireEvent.submit(screen.getByRole('button', { name: 'Check' }).closest('form')!);
-    expect(onCheck).not.toHaveBeenCalled();
+  });
+
+  it('checks with nothing written, so one who does not know can move on (owner, 2026-11-21)', () => {
+    const onCheck = vi.fn();
+    render(<BranchInputs question={question} typed={emptyBranchAnswers(question)} onChange={vi.fn()} onCheck={onCheck} ar={false} />);
+    const check = screen.getByRole('button', { name: 'Check' });
+    expect(check.hasAttribute('disabled')).toBe(false);
+    fireEvent.submit(check.closest('form')!);
+    expect(onCheck).toHaveBeenCalledTimes(1);
   });
 
 });

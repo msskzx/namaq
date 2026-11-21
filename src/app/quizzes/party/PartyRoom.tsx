@@ -230,6 +230,8 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
   const question = view.question as Question;
   const revealed = view.phase === "reveal";
   const [typed, setTyped] = useState<string[]>(() => question.compare ? emptyCompareAnswers(question) : emptyBranchAnswers(question));
+  // What is typed goes to the party as it is typed, so the time running out grades it as sent (owner, 2026-11-21).
+  const draftTyped = (next: string[]) => { setTyped(next); send({ type: "draft", answer: next }); };
   const sent = view.answer !== null;
   const waiting = view.players.filter((player) => !player.submitted);
   const isHost = view.you === view.hostId;
@@ -273,10 +275,10 @@ function QuestionStage({ view, send, offset, ar }: { view: PartyView; send: Retu
           pen={view.settings.pen} onWrite={write} written={revealed ? (Array.isArray(view.answer) ? view.answer : null) : undefined} />
         {question.compare ? (
           revealed ? <CompareFeedback question={question} typed={Array.isArray(view.answer) ? view.answer : []} ar={ar} />
-            : <CompareInputs question={question} typed={typed} onChange={setTyped} onCheck={() => send({ type: "submit", answer: typed })} ar={ar} sendEmpty />
+            : <CompareInputs question={question} typed={typed} onChange={draftTyped} onCheck={() => send({ type: "submit", answer: typed })} ar={ar} />
         ) : question.tree ? (
           revealed ? <BranchFeedback question={question} typed={Array.isArray(view.answer) ? view.answer : emptyBranchAnswers(question)} names={view.surahNames} ar={ar} />
-            : <BranchInputs question={question} typed={typed} onChange={setTyped} onCheck={() => send({ type: "submit", answer: typed })} ar={ar} sendEmpty />
+            : <BranchInputs question={question} typed={typed} onChange={draftTyped} onCheck={() => send({ type: "submit", answer: typed })} ar={ar} />
         ) : question.write ? null : orders(question) ? (
           <OrderRows key={question.key} question={question} given={revealed ? (typeof view.answer === "string" ? view.answer : "") : undefined} sent={sent} ar={ar}
             onAnswer={(answer) => send({ type: "submit", answer })} onDraft={(answer) => send({ type: "draft", answer })} />
@@ -434,7 +436,7 @@ function Ticks({ question, answer, revealed, sent, ar, onSend, onDraft }: {
         );
       })}
       {!sent && !revealed && <div className="flex flex-wrap gap-2">
-        <Button variant="primary" disabled={!ticked.length} onClick={() => onSend(joined(ticked))}>
+        <Button variant="primary" onClick={() => onSend(joined(ticked))}>
           <FontAwesomeIcon icon={faPaperPlane} />{ar ? "أرسل" : "Send"}</Button>
         <Button onClick={() => onSend("")}><FontAwesomeIcon icon={faPaperPlane} />{ar ? "أرسل بلا إجابة" : "Send with no answer"}</Button>
       </div>}

@@ -325,6 +325,13 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
   const prompt = question.promptArabic ? <QuizPrompt text={question.promptArabic} palette={palette} /> : null;
   const revealed = view.phase === 'reveal';
   const [typed, setTyped] = useState<string[]>(() => question.compare ? emptyCompareAnswers(question) : emptyBranchAnswers(question));
+  // What is typed goes to the party as it is typed, so the time running out grades it as sent (owner, 2026-11-21: right
+  // answers were lost for not pressing «أرسل»).
+  const draftTyped = (at: number, text: string) => {
+    const next = typed.map((value, i) => i === at ? text : value);
+    setTyped(next);
+    send({ type: 'draft', answer: next });
+  };
   const sent = view.answer !== null;
   const isHost = view.you === view.hostId;
   const last = view.index + 1 >= view.total;
@@ -390,8 +397,8 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
         <>
           <View style={{ flex: 1 }}>
             {isCompare(question)
-              ? <CompareInputs question={question} typed={typed} onType={(blank, text) => setTyped(values => values.map((value, i) => i === blank ? text : value))} palette={palette} header={prompt} />
-              : <QuizInputs question={question} typed={typed} onType={(node, text) => setTyped(values => values.map((value, i) => i === node ? text : value))} palette={palette} names={view.surahNames} header={prompt} />}
+              ? <CompareInputs question={question} typed={typed} onType={(blank, text) => draftTyped(blank, text)} palette={palette} header={prompt} />
+              : <QuizInputs question={question} typed={typed} onType={(node, text) => draftTyped(node, text)} palette={palette} names={view.surahNames} header={prompt} />}
           </View>
           {!typing && <View style={{ padding: 12, paddingBottom: insets.bottom + 12, borderTopWidth: 1, borderColor: palette.rule, alignItems: 'flex-start' }}>
             <Button big variant="primary" Icon={Check} label="أرسل" onPress={() => send({ type: 'submit', answer: typed })} />
