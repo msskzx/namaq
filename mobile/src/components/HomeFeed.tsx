@@ -1,7 +1,7 @@
 import { createContext, isValidElement, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowDownUp, ArrowLeftRight, BookOpenText, DoorOpen, Gem, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, History, Target, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpenText, DoorOpen, Gem, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, History, Target, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, toggleForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
@@ -78,6 +78,7 @@ import { aliasesOf, EMPTY_LIST } from '@/lib/branchList';
 import { treeList } from '@/lib/branches';
 import { shownBookmarks } from '@/lib/home';
 import TreeIcon from './TreeIcon';
+import OrderIcon from './OrderIcon';
 import { REVIEW_LABEL, reviewForgotten } from './HomeCards';
 import { forgottenOrder, type RecitePosition } from '@shared/quran/recite';
 import { pageModel } from '@shared/quran/recitePage';
@@ -426,7 +427,7 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
         ? <Action Icon={BookOpen} label="في المصحف" onPress={() => readAyah(question.ayahKey!)} palette={palette} />
         // «رتّب السور» opens the surah order page at the asked surahs' juz.
         : !isTree(question) && question.order?.length && run.typed[0][0] !== undefined
-        ? <Action Icon={ArrowDownUp} label="ترتيب السور" onPress={() => router.push({ pathname: '/order', params: { juz: String(orderJuz(question.order!)) } })} palette={palette} /> : undefined}
+        ? <Action Icon={OrderIcon} label="ترتيب السور" onPress={() => router.push({ pathname: '/order', params: { juz: String(orderJuz(question.order!)) } })} palette={palette} /> : undefined}
       actions={<>
         {(isTree(question) || isCompare(question)) && !checked &&
           <Action Icon={Check} label="تحقق" onPress={() => setRun(check(run))} palette={palette} />}
@@ -687,7 +688,7 @@ function SurahAimPost({ id, palette }: { id: string; palette: Palette }) {
   if (!s) return null;
   return (
     <Post palette={palette} head={<PostHead Icon={Target} title="مقصود السورة" palette={palette} />}
-      open={<Action Icon={ArrowDownUp} label={`افتح سورة ${s.name} في ترتيب السور`} onPress={() => openOrder(s)} palette={palette} />}
+      open={<Action Icon={OrderIcon} label={`افتح سورة ${s.name} في ترتيب السور`} onPress={() => openOrder(s)} palette={palette} />}
       source={sourcesOf(aimSources(id))}>
       <View style={{ paddingHorizontal: 14, paddingVertical: 8 }}><SurahBody s={s} palette={palette} /></View>
     </Post>
@@ -704,7 +705,7 @@ function SurahLinkPost({ id, palette }: { id: string; palette: Palette }) {
   if (!s?.link || !before) return null;
   return (
     <Post palette={palette} head={<PostHead Icon={Link2} title="بين سورتين" palette={palette} />}
-      open={<Action Icon={ArrowDownUp} label={`افتح ${before.name} و${s.name} في ترتيب السور`} onPress={() => openOrder(s)} palette={palette} />}
+      open={<Action Icon={OrderIcon} label={`افتح ${before.name} و${s.name} في ترتيب السور`} onPress={() => openOrder(s)} palette={palette} />}
       source={sourcesOf(linkSources(id))}>
       <View style={{ paddingHorizontal: 14, paddingVertical: 8, gap: 6 }}>
         <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 22, fontWeight: '700', textAlign: 'right' }}>{`${before.name} ← ${s.name}`}</Text>
