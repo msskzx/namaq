@@ -1,5 +1,5 @@
 // The website's cards of the drawings built for their pages (the app's NasabPost, TiesPost, BattlePost, HadithScenePost,
-// OpeningCardPost, OathPost and EventPost in mobile/src/components/HomeFeed.tsx), worked out on the server: the items
+// OpeningCardPost, OathPost, EventPost, SurahAimPost and SurahLinkPost in mobile/src/components/HomeFeed.tsx), worked out on the server: the items
 // (walked by the feed through src/lib/feedLists.ts) and their sources come from shared/drawingCards.ts, the views from each
 // page's own builder.
 import battlesJson from '@shared/data/battles/battles.json';
@@ -23,6 +23,8 @@ import {
 } from '@shared/drawingCards';
 import { withUnappliedStoryReviews } from '@/lib/quran/curation/storyReviewLog';
 import { loadReaderAyat } from '@/lib/quran/readerAyat';
+import { num } from '@shared/quran/arabicNumber';
+import { aimItems, aimSources, linkItems, linkSources, orderSurahs, type OrderSurah } from '@shared/quran/surahOrder';
 import { findPerson, GRAPH, nasabView, PEOPLE, personName, tiesView, type NasabView, type PersonHead, type TiesView } from '@/lib/tarajim';
 
 const BATTLES = battlesJson as AppBattle[];
@@ -35,7 +37,9 @@ export type DrawingCard = { /** The card's lasting id, as the app's feed saves i
   | { kind: 'hadith-scene'; unit: { id: string; book: string; kitab?: string }; scenes: SceneView[]; at: number }
   | { kind: 'opening'; card: OpeningCard }
   | { kind: 'oath'; oath: OathView }
-  | { kind: 'event'; slug: string; title: string; phase: string; event: EventView; places: Place[]; at: number });
+  | { kind: 'event'; slug: string; title: string; phase: string; event: EventView; places: Place[]; at: number }
+  | { kind: 'surah-aim'; order: OrderSurah }
+  | { kind: 'surah-link'; order: OrderSurah; before: OrderSurah });
 
 const head = (slug: string): PersonHead => { const person = findPerson(slug)!; return { slug, name: personName(person), sex: person.sex }; };
 const byKey = new Map(treeData.ayat.map(ayah => [ayah.key, ayah]));
@@ -51,9 +55,17 @@ const oathOf = (id: string) => (oaths ??= loadReaderAyat().then(ayat => {
   return [...buildOaths('allah', key => words.get(key)), ...buildOaths('others', key => words.get(key))];
 }).catch(error => { oaths = undefined; throw error; })).then(all => all.find(each => each.id === id));
 
+/** The surah-order page's surahs, their openings and linked ayat in the mushaf's words (the page's own builder). */
+let orderList: Promise<OrderSurah[]> | undefined;
+const orderSurahOf = (surah: number) => (orderList ??= loadReaderAyat().then(ayat => {
+  const words = new Map(ayat.map(ayah => [ayah.key, ayah.words]));
+  return orderSurahs(key => words.get(key), num);
+}).catch(error => { orderList = undefined; throw error; })).then(all => all.find(each => each.surah === surah));
+
 const ITEMS: Record<DrawingCardKind, () => string[]> = {
   nasab: () => nasabPeople(PEOPLE), ties: () => tiesPeople(PEOPLE, GRAPH), battle: () => battleItems(BATTLES), 'hadith-scene': () => sceneItems(UNITS),
   opening: () => openingItems(openingList()), oath: () => oathItems(oathIdList()), event: () => eventItems(STORIES),
+  'surah-aim': aimItems, 'surah-link': linkItems,
 };
 const items: Partial<Record<DrawingCardKind, string[]>> = {};
 /** A drawing kind's items by their lasting ids, in the order the feed walks them. */
@@ -86,5 +98,10 @@ export async function drawingCardOf(kind: string, item: string): Promise<Drawing
     case 'opening': { const card = openingList().find(each => each.id === item)!; return { item, kind: 'opening', card, sources: openingSources(card) }; }
     case 'oath': { const oath = await oathOf(item); return oath ? { item, kind: 'oath', oath, sources: oathSources(item) } : null; }
     case 'event': return eventCard(item);
+    case 'surah-aim': { const surah = await orderSurahOf(Number(item)); return surah ? { item, kind: 'surah-aim', order: surah, sources: aimSources(item) } : null; }
+    case 'surah-link': {
+      const [surah, before] = await Promise.all([orderSurahOf(Number(item)), orderSurahOf(Number(item) - 1)]);
+      return surah?.link && before ? { item, kind: 'surah-link', order: surah, before, sources: linkSources(item) } : null;
+    }
   }
 }

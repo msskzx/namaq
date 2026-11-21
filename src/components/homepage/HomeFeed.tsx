@@ -3,7 +3,7 @@
 import { createContext, Fragment, isValidElement, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, Feather, Layers, LibraryBig, Users, EyeOff, LightbulbOff, Plus, Presentation, ScrollText, Sparkles, Undo2, Swords, BookOpenText, ListTree, ListStart, MessagesSquare, Link2, History, Network, GitCommitVertical } from 'lucide-react';
+import { ArrowLeftRight, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, Feather, Layers, LibraryBig, Users, EyeOff, LightbulbOff, Plus, Presentation, ScrollText, Sparkles, Undo2, Swords, BookOpenText, ListTree, ListStart, MessagesSquare, Link2, History, Network, GitCommitVertical, Target } from 'lucide-react';
 import TreeIcon from '@/components/common/TreeIcon';
 import LoadingDots from '@/components/common/LoadingDots';
 import Segmented from '@/components/common/Segmented';
@@ -25,6 +25,7 @@ import { Counts } from '@/components/battles/BattleView';
 import { Bubbles, sceneColours } from '@/components/hadith/HadithBody';
 import { OpeningRows } from '@/app/quran/openings/OpeningsView';
 import { OathWords, oathAnchor } from '@/app/quran/oaths/OathsView';
+import { OrderLinkWords, OrderSurahBody } from '@/components/quran/OrderSurahCard';
 import EventPlaces from '@/app/quran/prophets/[slug]/EventPlaces';
 import { oathPlace } from '@shared/quran/oaths';
 import LifeTimeline from '@/components/tarajim/LifeTimeline';
@@ -642,6 +643,20 @@ function DrawingPost({ card }: { card: DrawingCard }) {
         <div className="px-4 py-3" lang="ar">
           <EventPlaces slug={card.slug} compare={{}} event={card.event} places={card.places} phase={card.phase} readable={false}
             onStep={() => {}} hasPrev={false} hasNext={false} />
+        </div>
+      </Post>;
+    // The surah-order page's cards (owner, 2026-11-21; sketch surah-order-feed/sketch-dark.png), opened there at the surah's juz.
+    case 'surah-aim':
+      return <Post save={save} head={<PostHead Icon={Target} title="مقصود السورة" />}
+        open={<Action Icon={BookOpen} label={`افتح سورة ${card.order.name} في ترتيب السور`} href={`/quran/order?juz=${card.order.juz[0]}`} />} source={card.sources}>
+        <div className="px-4 py-2" lang="ar"><OrderSurahBody s={card.order} /></div>
+      </Post>;
+    case 'surah-link':
+      return <Post save={save} head={<PostHead Icon={Link2} title="بين سورتين" />}
+        open={<Action Icon={BookOpen} label={`افتح ${card.before.name} و${card.order.name} في ترتيب السور`} href={`/quran/order?juz=${card.order.juz[0]}`} />} source={card.sources}>
+        <div className="px-4 py-2" lang="ar">
+          <h2 className="text-2xl text-[var(--home-accent)]">{`${card.before.name} ← ${card.order.name}`}</h2>
+          <OrderLinkWords link={card.order.link!} barred />
         </div>
       </Post>;
   }

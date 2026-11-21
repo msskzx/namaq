@@ -40,25 +40,36 @@ function PairAyah({ ayah, palette }: { ayah: OrderAyah; palette: Palette }) {
   );
 }
 
-export function LinkBlock({ link, palette }: { link: OrderLinkView; palette: Palette }) {
+/** al-Suyuti's words on what joins a surah to the one before it, and under them the two ayat each pair of his names. */
+export function LinkWords({ link, palette, barred = false }: { link: OrderLinkView; palette: Palette;
+  /** Each pair behind a line of its own (the feed card), where no line already runs beside the whole link (the page). */
+  barred?: boolean }) {
   return (
-    <View accessibilityLabel="الصلة بما قبلها" style={{ marginStart: 22, borderStartWidth: 2, borderColor: palette.rule, paddingStart: 14, paddingVertical: 4, gap: 2 }}>
+    <View style={{ gap: 2 }}>
       <Text style={quote(palette)}>«{link.text}»</Text>
       {link.pairs.map(([a, b]) => (
-        <View key={a.key + b.key}>
+        <View key={a.key + b.key} style={barred ? { borderStartWidth: 2, borderColor: palette.rule, paddingStart: 10, marginTop: 6 } : undefined}>
           <PairAyah ayah={a} palette={palette} />
           <PairAyah ayah={b} palette={palette} />
         </View>
       ))}
+    </View>
+  );
+}
+
+export function LinkBlock({ link, palette }: { link: OrderLinkView; palette: Palette }) {
+  return (
+    <View accessibilityLabel="الصلة بما قبلها" style={{ marginStart: 22, borderStartWidth: 2, borderColor: palette.rule, paddingStart: 14, paddingVertical: 4, gap: 2 }}>
+      <LinkWords link={link} palette={palette} />
       <Source cite={link.src} palette={palette} />
     </View>
   );
 }
 
-export function SurahCard({ s, palette }: { s: OrderSurah; palette: Palette }) {
+/** A surah's name and number, its opening ayat and al-Biqa'i's aim: the card's inside, as the page, a sheet and the feed show it. */
+export function SurahBody({ s, palette }: { s: OrderSurah; palette: Palette }) {
   return (
-    <CardWithRow palette={palette} pad={[6, 14]} source={[orderSource(s.aim.src, num)]}
-      lead={<IconButton Icon={BookOpen} label={`افتح سورة ${s.name} في المصحف`} onPress={() => readAyah(`${s.surah}:1`)} />}>
+    <>
       <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 8 }}>
         <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 22, fontWeight: '700' }}>{s.name}</Text>
         <Text style={{ color: palette.muted, fontSize: 14 }}>{num(s.surah)}</Text>
@@ -70,10 +81,18 @@ export function SurahCard({ s, palette }: { s: OrderSurah; palette: Palette }) {
         ])}
       </AyahFlow>
       <Text style={[quote(palette), { marginTop: 4, marginBottom: 6 }]}>«{s.aim.text}»</Text>
-    </CardWithRow>
+    </>
   );
 }
 
+export function SurahCard({ s, palette }: { s: OrderSurah; palette: Palette }) {
+  return (
+    <CardWithRow palette={palette} pad={[6, 14]} source={[orderSource(s.aim.src, num)]}
+      lead={<IconButton Icon={BookOpen} label={`افتح سورة ${s.name} في المصحف`} onPress={() => readAyah(`${s.surah}:1`)} />}>
+      <SurahBody s={s} palette={palette} />
+    </CardWithRow>
+  );
+}
 
 /**
  * A surah's card in a sheet (owner, 2026-11-21; sketch surah-order-tray/sketch-home-dark.png): what «ابحث عن الجواب» opens

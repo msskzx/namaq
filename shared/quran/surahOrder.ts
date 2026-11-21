@@ -1,4 +1,5 @@
-import type { SourceEntry } from '../quiz/sources';
+import type { QuizSource, SourceEntry } from '../quiz/sources';
+import { num as arabic } from './arabicNumber';
 import { juzOf } from './juz';
 import { normalizeWord } from './normalize';
 import surahRows from '../data/quran/surahs.json';
@@ -339,3 +340,19 @@ export const citeUrl = (c: Cite) => `https://shamela.ws/book/${BOOKS[c.book].sha
 /** A quote's book on its card's source line, its page (linked to al-Shamela) and the book's full title in the line's sheet. */
 export const orderSource = (c: Cite, num: (n: number) => string): SourceEntry =>
   ({ line: BOOKS[c.book].short, quotes: [{ text: '', cite: citeLabel(c, num), url: citeUrl(c) }, { text: BOOKS[c.book].title }] });
+
+/**
+ * The surah-order page's feed cards (owner, 2026-11-21; sketch surah-order-feed/sketch-dark.png), each under «تناسب السور»:
+ * «مقصود السورة», a surah's card by its number, and «بين سورتين», the link into a surah from the one before it, by the
+ * later surah's number.
+ */
+export const aimItems = () => Object.keys(ORDER_AIMS).map(Number).sort((a, b) => a - b).map(String);
+export const linkItems = () => Object.keys(ORDER_LINKS).map(Number).sort((a, b) => a - b).map(String);
+export const aimSources = (item: string) => (ORDER_AIMS[Number(item)] ? [orderCiteSource(ORDER_AIMS[Number(item)].src)] : []);
+export const linkSources = (item: string) => (ORDER_LINKS[Number(item)] ? [orderCiteSource(ORDER_LINKS[Number(item)].src)] : []);
+
+/** A quote's page as a card's or a question's source: the book (al-Shamela's page linked) and the volume and page. */
+export function orderCiteSource(c: Cite): QuizSource {
+  const pages = `${arabic(c.page)}${c.to ? `–${arabic(c.to)}` : ''}`;
+  return { book: BOOKS[c.book].short, at: c.vol ? `${arabic(c.vol)}/${pages}` : `ص${pages}`, url: citeUrl(c) };
+}

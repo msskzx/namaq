@@ -26,6 +26,7 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   tarajim: () => tarajimItems('tarajim'), tie: () => tarajimItems('tie'), life: () => tarajimItems('life'), laqab: () => tarajimItems('laqab'), kunya: () => tarajimItems('kunya'),
   nasab: () => drawingItems('nasab'), ties: () => drawingItems('ties'), battle: () => drawingItems('battle'), 'hadith-scene': () => drawingItems('hadith-scene'),
   opening: () => drawingItems('opening'), oath: () => drawingItems('oath'), event: () => drawingItems('event'),
+  'surah-aim': () => drawingItems('surah-aim'), 'surah-link': () => drawingItems('surah-link'),
 };
 export const itemsOf = (kind: ListKind) => (lists[kind] ??= LIST_OF[kind]());
 
