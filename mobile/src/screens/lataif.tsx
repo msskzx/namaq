@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { View } from 'react-native';
 import { Text } from '@/ui/Text';
 import SourceLine from '@/ui/SourceLine';
 import TopBar from '@/ui/TopBar';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { usePalette } from '@/lib/theme';
+import { useTabRetap } from '@/lib/tabRetap';
 import DarkSea, { DarkSeaActions, darkSeaName, darkSeaSourceList } from '@/components/DarkSea';
 
 /**
@@ -15,6 +17,9 @@ export default function LataifScreen() {
   const palette = usePalette();
   const bottom = useTabBarSpace();
   const sources = darkSeaSourceList();
+  // A retap on the tab takes the scene back to the surface.
+  const [visit, setVisit] = useState(0);
+  useTabRetap('lataif', () => setVisit(now => now + 1));
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar hub />
@@ -23,7 +28,7 @@ export default function LataifScreen() {
           <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>مشاهد</Text>
           <Text style={{ color: palette.muted, fontSize: 16 }}>{darkSeaName()}</Text>
         </View>
-        <DarkSea palette={palette} />
+        <DarkSea key={visit} palette={palette} />
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <DarkSeaActions palette={palette} only="open" />
           <DarkSeaActions palette={palette} only="share" />

@@ -20,7 +20,7 @@ export const DRAWING_CARD_KINDS = ['nasab', 'ties', 'battle', 'hadith-scene', 'o
 export type DrawingCardKind = (typeof DRAWING_CARD_KINDS)[number];
 
 /** The feed's content cards, by kind; each app card (mobile/src/components/HomeFeed.tsx) draws one. */
-export const FEED_CARD_KINDS = ['pair', 'tree', 'note-tafsir', 'note-qiraat', 'note-irab', 'note-balagha', 'term', 'scene',
+export const FEED_CARD_KINDS = ['pair', 'tree', 'note-tafsir', 'note-qiraat', 'note-irab', 'note-balagha', 'term', 'scene', 'mashahid',
   'hadith', 'rajab', 'recorded', 'isnad', 'bukhari', 'muslim', 'prophets', 'sira', 'moment', 'tarajim', 'tie', 'life', 'laqab', 'kunya', ...DRAWING_CARD_KINDS] as const;
 export type FeedCardKind = (typeof FEED_CARD_KINDS)[number];
 
@@ -36,12 +36,12 @@ export const INTERESTS: readonly Interest[] = [
   // «علم المناسبات»: al-Biqa'i's aims and al-Suyuti's links of the surah-order page (owner, 2026-11-21).
   { id: 'tanasub', name: 'تناسب السور', section: 'quran', cards: ['surah-link', 'surah-aim'], quizzes: ['SURAH_AIM'] },
   { id: 'mutashabih', name: 'المتشابه اللفظي', section: 'quran', ours: true, cards: ['pair', 'tree'], quizzes: ['BRANCHES', 'COMPARE'] },
-  { id: 'tafsir', name: 'التفسير', section: 'quran', cards: ['note-tafsir', 'oath', 'scene'], quizzes: ['TAFSIR'] },
+  { id: 'tafsir', name: 'التفسير', section: 'quran', cards: ['note-tafsir', 'oath', 'mashahid'], quizzes: ['TAFSIR'] },
   { id: 'gharib', name: 'غريب القرآن', section: 'quran', ours: true, cards: [], quizzes: ['MEANING'] },
   { id: 'qiraat', name: 'القراءات', section: 'quran', cards: ['note-qiraat'], quizzes: ['QIRAAT', 'QIRAAT_WHO'] },
   { id: 'tajwid', name: 'التجويد', section: 'quran', ours: true, cards: [], quizzes: ['TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE'] },
   { id: 'irab', name: 'الإعراب', section: 'lisan', cards: ['note-irab'], quizzes: ['IRAB'] },
-  { id: 'balagha', name: 'البلاغة', section: 'lisan', cards: ['note-balagha', 'term'], quizzes: ['BALAGHA', 'TERM'] },
+  { id: 'balagha', name: 'البلاغة', section: 'lisan', cards: ['note-balagha', 'term', 'scene'], quizzes: ['BALAGHA', 'TERM'] },
   { id: 'hadith', name: 'الحديث', section: 'hadith', cards: ['hadith', 'rajab', 'recorded', 'isnad', 'bukhari', 'muslim', 'hadith-scene'], quizzes: ['HADITH_NARRATOR', 'HADITH_COMPLETE', 'HADITH_BOOK', 'HADITH_CHAIN', 'SAHIH_KITAB'] },
   { id: 'prophets', name: 'قصص الأنبياء', section: 'history', ours: true, cards: ['prophets', 'event'], quizzes: [] },
   { id: 'sira', name: 'السيرة والمغازي', section: 'history', cards: ['sira', 'moment', 'battle'], quizzes: ['SIRA', 'PROPHET_NAMES'] },

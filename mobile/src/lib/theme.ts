@@ -66,6 +66,15 @@ export const dark: Palette = {
   marks: { exact: '#d9a6b0', written: '#dcc5a0', root: '#c3afd5' },
 };
 
+/**
+ * The «مشاهد» sea's picture (owner, 2026-11-21): the same in both themes, as a picture is; the darkness over it is black.
+ * Drawn shapes until the owner's own art comes.
+ */
+export const SEA_ART = {
+  surface: ['#1f3340', '#2c4a57', '#1a3a4a', '#0e2230'], deep: ['#14303e', '#0b1d28', '#03090d'],
+  wave: '#1b3a49', waveEdge: '#7fa6b5', wave2: '#22455a', wave2Edge: '#8fb5c4', cloud: '#2c323c', night: '#000000', hand: '#f2eadc',
+} as const;
+
 /** Every card's corners, tree nodes included: one round radius (owner, 2026-11-13). */
 export const CARD = { borderRadius: 14 } as const;
 

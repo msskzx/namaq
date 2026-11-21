@@ -45,7 +45,10 @@ test('«مشاهد» walks an-Nur 40 a layer at a time, each line with who says 
   await page.getByRole('tab', { name: 'المعنى' }).click();
   await page.getByRole('tab', { name: 'ابن القيم' }).click();
   await expect(page.getByText('قال ابن القيم:').first()).toBeVisible();
-  await expect(page.getByText(/(^|\s)قيل/)).toHaveCount(0);
+  for (const layer of ['مثل', 'بحر لجي', 'موج', 'موج فوقه', 'سحاب', 'ظلمات بعضها فوق بعض', 'اليد', 'المعنى']) {
+    await page.getByRole('tab', { name: layer, exact: true }).click();
+    await expect(page.getByText(/(^|[\s«(])[وف]?قيل/)).toHaveCount(0);
+  }
 });
 
 test('a new user\'s branches open as the matrix, with a switch to the tree', async ({ page }) => {

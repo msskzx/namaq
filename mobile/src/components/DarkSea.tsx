@@ -1,8 +1,8 @@
-import { Fragment, useMemo, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { Fragment, useEffect, useMemo, useState } from 'react';
+import { ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
 import Svg, { Defs, LinearGradient, Path, Rect, Stop } from 'react-native-svg';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { interpolate, useAnimatedReaction, useAnimatedStyle, useReducedMotion, useSharedValue, withTiming, type SharedValue } from 'react-native-reanimated';
+import Animated, { cancelAnimation, interpolate, useAnimatedReaction, useAnimatedStyle, useReducedMotion, useSharedValue, withTiming, type SharedValue } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { BookOpen, ChevronsDown, Hand, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
@@ -19,7 +19,7 @@ import { sourcesOf } from '@/ui/SourceLine';
 import { ayahMushafWords } from '@/lib/mushaf';
 import { readAyah } from '@/lib/openReader';
 import { shareCard } from '@/lib/shareImage';
-import type { Palette } from '@/lib/theme';
+import { SEA_ART, type Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
 
 const LAST = DARK_SEA_STEPS.length - 1;
@@ -64,7 +64,7 @@ function SceneArt({ depth, hand }: { depth: SharedValue<number>; hand: SharedVal
       <Svg style={fill} viewBox="0 0 440 600" preserveAspectRatio="none">
         <Defs>
           <LinearGradient id="surface" x1="0" y1="0" x2="0" y2="1">
-            <Stop offset="0" stopColor="#1f3340" /><Stop offset="0.45" stopColor="#2c4a57" /><Stop offset="0.46" stopColor="#1a3a4a" /><Stop offset="1" stopColor="#0e2230" />
+            <Stop offset="0" stopColor={SEA_ART.surface[0]} /><Stop offset="0.45" stopColor={SEA_ART.surface[1]} /><Stop offset="0.46" stopColor={SEA_ART.surface[2]} /><Stop offset="1" stopColor={SEA_ART.surface[3]} />
           </LinearGradient>
         </Defs>
         <Rect width="440" height="600" fill="url(#surface)" />
@@ -73,7 +73,7 @@ function SceneArt({ depth, hand }: { depth: SharedValue<number>; hand: SharedVal
         <Svg style={fill} viewBox="0 0 440 600" preserveAspectRatio="none">
           <Defs>
             <LinearGradient id="deep" x1="0" y1="0" x2="0" y2="1">
-              <Stop offset="0" stopColor="#14303e" /><Stop offset="0.5" stopColor="#0b1d28" /><Stop offset="1" stopColor="#03090d" />
+              <Stop offset="0" stopColor={SEA_ART.deep[0]} /><Stop offset="0.5" stopColor={SEA_ART.deep[1]} /><Stop offset="1" stopColor={SEA_ART.deep[2]} />
             </LinearGradient>
           </Defs>
           <Rect width="440" height="600" fill="url(#deep)" />
@@ -81,25 +81,25 @@ function SceneArt({ depth, hand }: { depth: SharedValue<number>; hand: SharedVal
       </Animated.View>
       <Animated.View style={[fill, wave]}>
         <Svg style={fill} viewBox="0 0 440 600" preserveAspectRatio="none">
-          <Path d="M0 300 Q50 260 100 300 T200 298 T300 296 T440 298 V200 H0Z" fill="#1b3a49" />
-          <Path d="M0 300 Q50 260 100 300 T200 298 T300 296 T440 298" fill="none" stroke="#7fa6b5" strokeWidth={2} />
+          <Path d="M0 300 Q50 260 100 300 T200 298 T300 296 T440 298 V200 H0Z" fill={SEA_ART.wave} />
+          <Path d="M0 300 Q50 260 100 300 T200 298 T300 296 T440 298" fill="none" stroke={SEA_ART.waveEdge} strokeWidth={2} />
         </Svg>
       </Animated.View>
       <Animated.View style={[fill, wave2]}>
         <Svg style={fill} viewBox="0 0 440 600" preserveAspectRatio="none">
-          <Path d="M0 200 Q40 160 90 198 T190 196 T290 194 T440 196 V130 H0Z" fill="#22455a" />
-          <Path d="M0 200 Q40 160 90 198 T190 196 T290 194 T440 196" fill="none" stroke="#8fb5c4" strokeWidth={2} />
+          <Path d="M0 200 Q40 160 90 198 T190 196 T290 194 T440 196 V130 H0Z" fill={SEA_ART.wave2} />
+          <Path d="M0 200 Q40 160 90 198 T190 196 T290 194 T440 196" fill="none" stroke={SEA_ART.wave2Edge} strokeWidth={2} />
         </Svg>
       </Animated.View>
       <Animated.View style={[fill, cloud]}>
         <Svg style={fill} viewBox="0 0 440 600" preserveAspectRatio="none">
-          <Path d="M0 130 C60 100 120 100 180 130 S300 160 440 120 V0 H0Z" fill="#2c323c" />
+          <Path d="M0 130 C60 100 120 100 180 130 S300 160 440 120 V0 H0Z" fill={SEA_ART.cloud} />
         </Svg>
       </Animated.View>
-      <Animated.View style={[fill, { backgroundColor: '#000' }, dark]} />
+      <Animated.View style={[fill, { backgroundColor: SEA_ART.night }, dark]} />
       <Animated.View style={[fill, handStyle]} pointerEvents="none">
         <Svg style={fill} viewBox="0 0 440 600">
-          <Path d="M220 250 v-84 M194 252 v-72 M246 252 v-70 M270 258 v-50 M172 266 l-28 -38 M168 266 q52 76 104 0" stroke="#f2eadc" strokeWidth={4} strokeLinecap="round" fill="none" />
+          <Path d="M220 250 v-84 M194 252 v-72 M246 252 v-70 M270 258 v-50 M172 266 l-28 -38 M168 266 q52 76 104 0" stroke={SEA_ART.hand} strokeWidth={4} strokeLinecap="round" fill="none" />
         </Svg>
       </Animated.View>
     </>
@@ -132,37 +132,36 @@ function Meaning({ palette }: { palette: Palette }) {
 /**
  * «ظلمات بعضها فوق بعض» (an-Nur 40) as a scene (owner, 2026-11-21; docs/feed-cards.md): the ayah above, its sea below.
  * A finger moving up goes down a layer at a time, each layer lighting its words and saying what it is in the scholars'
- * words; the dots beside it jump to a layer; at the hand the reader holds a finger down to bring a hand out, and barely
+ * words; the dots under it jump to a layer; at the hand the reader holds a finger down to bring a hand out, and barely
  * sees it. `still` draws the whole picture without gestures (the feed card, the shared image).
  */
 export default function DarkSea({ palette, still = false }: { palette: Palette; still?: boolean }) {
   const reduced = useReducedMotion();
+  const { height: screen } = useWindowDimensions();
   const first = still ? STILL_STEP : 0;
   const depth = useSharedValue(first);
   const hand = useSharedValue(0);
   const start = useSharedValue(0);
   const [step, setStep] = useState(first);
   useAnimatedReaction(() => Math.round(depth.value), (now, before) => { if (now !== before) scheduleOnRN(setStep, now); });
+  useEffect(() => { if (step !== HAND) hand.value = 0; }, [step, hand]);
   const go = (to: number) => { depth.value = reduced ? to : withTiming(to, { duration: 320 }); };
   const pan = Gesture.Pan()
     .activeOffsetY([-12, 12])
-    .onBegin(() => { start.value = depth.value; })
+    .onBegin(() => { cancelAnimation(depth); start.value = depth.value; })
     .onUpdate(event => { depth.value = Math.min(LAST, Math.max(0, start.value - event.translationY / STEP_PX)); })
     .onEnd(event => {
       const target = Math.min(LAST, Math.max(0, Math.round(depth.value - event.velocityY / 2400)));
       depth.value = withTiming(target, { duration: 220 });
     });
-  const onHold = (down: boolean) => { hand.value = withTiming(down && Math.round(depth.value) === HAND ? 1 : 0, { duration: down ? 900 : 300 }); };
+  const showHand = (down: boolean) => { hand.value = withTiming(down ? 1 : 0, { duration: down ? 900 : 300 }); };
   const current = DARK_SEA_STEPS[step];
-  const scene = (
-    <View style={{ flex: still ? undefined : 1, height: still ? 300 : undefined, overflow: 'hidden' }}
-      accessible={still} accessibilityLabel={still ? `${darkSeaName()}: البحر والموج والسحاب والليل، ظلمات بعضها فوق بعض` : undefined}>
+  const art = (
+    <View style={{ flex: still ? undefined : 1, minHeight: 160, height: still ? 220 : undefined, overflow: 'hidden' }}
+      accessibilityLabel={still ? `${darkSeaName()}: البحر والموج والسحاب والليل، ظلمات بعضها فوق بعض` : undefined}
+      accessibilityActions={step === HAND && !still ? [{ name: 'activate', label: 'أخرج يدك' }] : undefined}
+      onAccessibilityAction={() => { showHand(true); setTimeout(() => showHand(false), 3000); }}>
       <SceneArt depth={depth} hand={hand} />
-      {!still && (
-        <View style={{ position: 'absolute', start: 4, top: 12 }}>
-          <StepDots names={DARK_SEA_STEPS.map(each => each.name)} at={step} onPick={go} palette={palette} />
-        </View>
-      )}
       {!still && step === 0 && (
         <View style={{ position: 'absolute', top: 24, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: 6 }}>
           <ChevronsDown size={16} color={palette.ink} />
@@ -175,17 +174,18 @@ export default function DarkSea({ palette, still = false }: { palette: Palette; 
           <Text style={{ color: palette.muted, fontSize: 15 }}>اضغط مطوّلًا لتُخرج يدك</Text>
         </View>
       )}
-      <View style={{ position: 'absolute', start: still ? 12 : 32, end: 12, bottom: 12 }}>
-        <Card palette={palette} pad={[10, 14]} gap={8}>
-          {current.layer === 'meaning' ? <Meaning palette={palette} /> : <Sayings sayings={current.sayings} palette={palette} />}
-        </Card>
-      </View>
     </View>
   );
+  const sayings = current.layer === 'meaning' ? <Meaning palette={palette} /> : <Sayings sayings={current.sayings} palette={palette} />;
   return (
     <View style={{ flex: still ? undefined : 1, gap: 10 }}>
       <SceneAyah step={still ? LAST + 1 : step} palette={palette} />
-      {still ? scene : <GestureDetector gesture={pan}><View style={{ flex: 1 }}><Hold onHold={onHold}>{scene}</Hold></View></GestureDetector>}
+      {still ? art : <GestureDetector gesture={pan}><View style={{ flex: 1 }}><Hold enabled={step === HAND} onHold={showHand}>{art}</Hold></View></GestureDetector>}
+      {!still && <StepDots names={DARK_SEA_STEPS.map(each => each.name)} at={step} onPick={go} palette={palette} />}
+      {/* The page does not scroll (the finger moves the scene), so the scholars' words scroll on their own when they run long. */}
+      {still
+        ? <View style={{ gap: 8 }}>{sayings}</View>
+        : <ScrollView style={{ maxHeight: Math.round(screen * 0.3) }} contentContainerStyle={{ gap: 8 }}>{sayings}</ScrollView>}
     </View>
   );
 }

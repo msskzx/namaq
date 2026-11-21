@@ -1246,7 +1246,9 @@ const itemLists: Partial<Record<ListKind, readonly string[]>> = {};
 const LIST_OF: Record<ListKind, () => readonly string[]> = {
   'note-tafsir': () => noteList('tafsir'), 'note-qiraat': () => noteList('qiraat'), 'note-irab': () => noteList('irab'), 'note-balagha': () => noteList('balagha'),
   term: () => balaghaTerms.terms.map(term => term.name),
-  scene: () => [DARK_SEA_KEY],
+  // The chosen iltifat examples left «مشاهد» on the phone (owner, 2026-11-21); the website keeps them for now.
+  scene: () => [],
+  mashahid: () => [DARK_SEA_KEY],
   hadith: () => FEED_FORTY.map(entry => String(entry.n)),
   bukhari: () => sahihNumbers('bukhari'),
   muslim: () => sahihNumbers('muslim'),
@@ -1293,7 +1295,7 @@ function ContentPost({ kind, item, day, palette }: { kind: ListKind; item: strin
   if (kind in NOTE_OF) return <AyahNotePost kind={NOTE_OF[kind]} id={item} day={day} palette={palette} />;
   switch (kind) {
     case 'term': return <TermPost id={item} day={day} palette={palette} />;
-    case 'scene': return <ScenePost id={item} palette={palette} />;
+    case 'mashahid': return <ScenePost id={item} palette={palette} />;
     case 'hadith': return <HadithPost id={item} palette={palette} />;
     case 'rajab': return <RajabPost id={item} palette={palette} />;
     case 'bukhari': case 'muslim': return <SahihPost slug={kind} id={item} palette={palette} />;
