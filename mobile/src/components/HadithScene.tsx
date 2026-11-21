@@ -1,28 +1,54 @@
 import { View } from 'react-native';
-import { bubbleSides, type SceneLine } from '@shared/hadith';
+import { bubbleSides, sceneSpeakers, splitLead, PROPHET_AGENT, type SceneLine } from '@shared/hadith';
 import { Text } from '@/ui/Text';
 import Bubble from '@/ui/Bubble';
+import Chip from '@/ui/Chip';
 import type { Palette } from '@/lib/theme';
 
 const body = (palette: Palette) => ({ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' as const });
 
-/** A hadith's scene as a conversation, its page's and its feed card's (the website's bubbles): each speaker his colour, a new speaker on the other side. */
+/** The Prophet's name as the scene gives it, with ﷺ after it. */
+const named = (speaker: string, agent?: string) => (agent === PROPHET_AGENT && !speaker.includes('ﷺ') ? `${speaker} ﷺ` : speaker);
+
+/**
+ * A hadith's scene as a conversation, its page's and its feed card's (owner's agreed story layout, 2026-11-21): the people
+ * who speak as chips in their colours at the top, the Prophet ﷺ first, the key to the bubbles; the narration in full ink
+ * at reading size; each saying in a bubble on its speaker's side, a new speaker on the other side, the narrator's lead-in
+ * («فَقَالَ») above it outside the bubble. Who narrates is named once, when he changes, on its own line in ink.
+ */
 export default function HadithScene({ lines, slots, palette }: { lines: SceneLine[]; slots: Map<string, number>; palette: Palette }) {
   const sides = bubbleSides(lines);
+  const agents = new Map(lines.filter(line => line.kind === 'turn' && line.speaker).map(line => [line.speaker!, line.agent]));
+  const colourOf = (speaker?: string) => palette.slots[slots.get(speaker ?? '') ?? 0];
+  const people = sceneSpeakers(lines);
+  let narrator: string | undefined;
   return (
     <View style={{ gap: 10 }}>
+      {people.length > 0 && (
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
+          {people.map(({ speaker }) => (
+            <Chip key={speaker} label={named(speaker, agents.get(speaker))} on lit tint={colourOf(speaker)} role="text" small palette={palette} />
+          ))}
+        </View>
+      )}
       {lines.map((line, i) => {
-        const colour = palette.slots[slots.get(line.speaker ?? '') ?? 0];
         if (line.kind === 'narration') {
+          const next = lines[i + 1];
+          const split = next?.kind === 'turn' ? splitLead(line.text) : { before: line.text };
+          const changed = line.speaker && line.speaker !== narrator;
+          if (line.speaker) narrator = line.speaker;
+          if (!changed && !split.before) return null;
           return (
             <View key={i} style={{ paddingHorizontal: 4 }}>
-              {line.speaker ? <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{line.speaker}</Text> : null}
-              <Text style={[body(palette), { color: palette.muted, fontSize: 17, lineHeight: 32 }]}>{line.text}</Text>
+              {changed ? <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>{line.speaker}</Text> : null}
+              {split.before ? <Text style={body(palette)}>{split.before}</Text> : null}
             </View>
           );
         }
+        const previous = lines[i - 1];
+        const lead = previous?.kind === 'narration' ? splitLead(previous.text).lead : undefined;
         return (
-          <Bubble key={i} who={line.speaker} colour={colour} start={!sides[i]} palette={palette}>
+          <Bubble key={i} who={line.speaker && named(line.speaker, line.agent)} colour={colourOf(line.speaker)} start={!sides[i]} lead={lead} palette={palette}>
             <Text style={body(palette)}>{line.text}</Text>
           </Bubble>
         );

@@ -19,8 +19,8 @@ import type { Palette } from '@/lib/theme';
 import { addBook, type BookState } from '@/lib/books';
 
 type Mode = 'drawing' | 'text';
+const MODES = [{ key: 'drawing', label: 'الرسم' }, { key: 'text', label: 'النص' }] as const;
 // The owner's names (2026-11-18): the drawing, and the whole text with its isnad.
-const MODES = [{ key: 'drawing', label: 'الرسم' }, { key: 'text', label: 'النص كاملًا' }] as const;
 
 const body = (palette: Palette, big = false) => ({ color: palette.ink, fontSize: big ? 21 : 19, lineHeight: big ? 40 : 36, textAlign: 'right' as const });
 const pagesName = (pages: number[]) => (pages.length > 1 ? `ص ${num(pages[0])}–${num(pages[pages.length - 1])}` : `ص ${num(pages[0])}`);
@@ -70,7 +70,7 @@ export function SahihRouteView({ book, n, route, mode, palette, big }: { book: S
 }
 
 /**
- * A hadith of a Sahih whole (owner's sketch, 2026-11-19): the narrator it comes from, its words large, «الرسم» or «النص كاملًا»
+ * A hadith of a Sahih whole (owner's sketch, 2026-11-19): the narrator it comes from, its words large, «الرسم» or «النص»
  * when its chain is drawn, and in Muslim its other routes folded under the first. The page, the feed card and a quiz's
  * look-up all draw it.
  */
@@ -81,7 +81,7 @@ export function SahihHadithView({ book, hadith, palette }: { book: SahihIndex; h
   const drawn = hadith.routes.some(route => route.chain);
   return (
     <View style={{ gap: 12 }}>
-      {from && <Text style={{ color: palette.muted, fontSize: 16, textAlign: 'right' }}>{from}</Text>}
+      {from && <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>{from}</Text>}
       {drawn && <Tabs label="طريقة العرض" options={MODES} value={mode} onChange={setMode} palette={palette} />}
       <SahihRouteView book={book} n={hadith.n} route={first} mode={mode} palette={palette} big />
       {rest.length > 0 && (

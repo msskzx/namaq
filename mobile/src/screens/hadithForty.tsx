@@ -24,8 +24,8 @@ import rajab from '@shared/data/hadith/ibnRajab.json';
 const RAJAB = rajab as RajabChapter[];
 
 type Mode = 'drawing' | 'text';
+const MODES = [{ key: 'drawing', label: 'الرسم' }, { key: 'text', label: 'النص' }] as const;
 // The owner's names (2026-11-18): the drawing, and the whole text with its isnad.
-const MODES = [{ key: 'drawing', label: 'الرسم' }, { key: 'text', label: 'النص كاملًا' }] as const;
 
 const body = (palette: Palette) => ({ color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right' as const });
 const pagesName = (pages: number[]) => (pages.length > 1 ? `ص ${num(pages[0])}–${num(pages[pages.length - 1])}` : `ص ${num(pages[0])}`);
@@ -48,7 +48,7 @@ function Record({ record, mode, palette }: { record: FortyRecord; mode: Mode; pa
           <Text style={body(palette)}>{saying}</Text>
         </>
         : <Text style={body(palette)}><Text style={{ color: palette.muted }}>{chain}</Text>{saying}</Text>}
-      {record.from && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{record.mursal ? `مرسلًا، عن ${record.from}` : `من حديث ${record.from}`}</Text>}
+      {record.from && <Text style={{ color: palette.ink, fontSize: 14, textAlign: 'right' }}>{record.mursal ? `مرسلًا، عن ${record.from}` : `من حديث ${record.from}`}</Text>}
       <Cite book={record.book} place={`${recordName(record, num, FORTY.books)}، ج ${num(record.volume)}، ${pagesName(record.pages)}`}
         url={shamelaPage(record.book, record.shamela)} palette={palette} />
     </View>
@@ -137,7 +137,7 @@ export function FortyHadith({ entry, palette, jibril }: { entry: FortyEntry; pal
   const drawn = entry.records.some(record => record.isnad);
   return <>
     <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 26, textAlign: 'right' }}>{entry.heading}</Text>
-    <Text style={{ color: palette.muted, fontSize: 16, textAlign: 'right', marginTop: -8 }}>{fromCompanion(entry.companion)}</Text>
+    <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right', marginTop: -8 }}>{fromCompanion(entry.companion)}</Text>
     <Compiled entry={entry} palette={palette} />
     <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, textAlign: 'right' }}>من أخرجه</Text>
     <HadithBooks top={entry.heading} boxes={recordedIn(entry)} namer={compilerOf(entry).name} palette={palette} />
@@ -157,7 +157,7 @@ export function FortyHadith({ entry, palette, jibril }: { entry: FortyEntry; pal
 
 /**
  * One of al-Nawawi's Forty (owner, 2026-11-18): his text, then each book he names with the records found there, every chain
- * the edition links drawn («الرسم») or the whole text read («النص كاملًا»). No. 2 opens the Jibril pages with their scenes.
+ * the edition links drawn («الرسم») or the text read as printed («النص»). No. 2 opens the Jibril pages with their scenes.
  */
 export default function HadithFortyScreen() {
   const palette = usePalette();

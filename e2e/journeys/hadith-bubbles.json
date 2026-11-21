@@ -1,0 +1,8 @@
+{"steps": [
+  ["open","/"],
+  ["open","/hadith-unit?unit=muslim-jibril"],
+  ["tap","عَبْدُ اللَّهِ بْنُ عُمَرَ بْنِ الْخَطَّابِ"],
+  ["tap","النص"],
+  ["open","/hadith-forty?n=1"],
+  ["swipe","up"]
+]}
