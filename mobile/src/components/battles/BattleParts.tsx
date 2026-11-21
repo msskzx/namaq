@@ -1,3 +1,4 @@
+import { PROPHET_AGENT, PROPHET_LABEL } from '@shared/hadith';
 import { View } from 'react-native';
 import type { AppBattle, AppCite, AppCited, AppMoment, AppPersonLink } from '@shared/battles/battle';
 import { num } from '@shared/quran/arabicNumber';
@@ -88,7 +89,7 @@ export function People({ people, palette, tints, more = [] }: { people: AppPerso
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
       {people.map(person => {
         const tint = tints?.get(person.slug);
-        return <Chip key={person.slug} label={person.name} on={!!tint} lit={!!tint} tint={tint} role="text" small palette={palette} />;
+        return <Chip key={person.slug} label={person.slug === PROPHET_AGENT ? PROPHET_LABEL : person.name} on={!!tint} lit={!!tint} tint={tint} role="text" small palette={palette} />;
       })}
       {more.map(one => <Chip key={one.name} label={one.name} on lit tint={one.tint} role="text" small palette={palette} />)}
     </View>

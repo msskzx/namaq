@@ -2,7 +2,15 @@ import { useSyncExternalStore } from 'react';
 import type { ReactNode } from 'react';
 
 /** What a card's share button hands the share sheet: the card drawn for the image at the width given, its link, its video where it has one, and its whole page's video (compare). */
-export type ShareRequest = { content: (width: number) => ReactNode; link?: string; onVideo?: () => void; onPageVideo?: () => void };
+export type ShareRequest = { content: (width: number) => ReactNode; link?: string; onVideo?: () => void; onPageVideo?: () => void;
+  /** Shared as equal 4:5 pictures instead of one (a story, owner 2026-11-21); `content` is then unused. */
+  paged?: (width: number) => SharePaged };
+
+/**
+ * A long drawing laid out on equal pictures (shared/sharePages.ts): `head` on the first only, the `blocks` flowing between
+ * them, those from `tailFrom` on together on the last, and `foot` (the source) at the last one's foot.
+ */
+export type SharePaged = { head: ReactNode; blocks: ReactNode[]; tailFrom?: number; foot?: ReactNode };
 
 /** iOS shows one modal at a time: what opens after another sheet closes waits this long for it to go. */
 export const MODAL_GAP = 350;
