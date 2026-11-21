@@ -94,3 +94,52 @@ test.describe('a prophet\'s event', () => {
     await expect(page).toHaveURL(/\/prophets\/musa\?event=0/);
   });
 });
+
+// Owner, 2026-11-21 (sketch feed-visuals panels 1-3, 7-9): the people drawings.
+test.describe('the Prophet\'s ﷺ children as a ring', () => {
+  test.use({ seed: saved('ring', 'kin:prophet-muhammad:child') });
+  // A tie the book holds in doubt is off the drawing and said under it, its text in a sheet.
+  test('names al-Tayyib apart «على خلاف» with the text, a daughter opens her page, and the card opens his ties', async ({ page }) => {
+    await open(page, '/library');
+    await page.getByRole('button', { name: 'الطيب: على خلاف' }).click();
+    await expect(page.getByText(/وماتوا صغارا رضعا/)).toBeVisible();
+    await page.keyboard.press('Escape');
+    await page.getByRole('link', { name: 'فاطمة بنت محمد' }).click();
+    await expect(page).toHaveURL(/\/person\?slug=fatimah-bint-muhammad/);
+    await page.goBack();
+    await page.getByRole('button', { name: /^افتح صلات محمد/ }).click();
+    await expect(page).toHaveURL(/\/ties\?slug=prophet-muhammad/);
+  });
+});
+
+test.describe('a hadith ring', () => {
+  test.use({ seed: saved('ring', 'hadith:muslim-2417') });
+  test('quotes the Prophet ﷺ over the people the hadith names, and opens the hadith', async ({ page }) => {
+    await open(page, '/library');
+    await expect(page.getByText(/اسْكُنْ\. حِرَاءُ/)).toBeVisible();
+    await expect(page.getByRole('link', { name: 'سعد بن أبي وقاص' })).toBeVisible();
+    await page.getByRole('button', { name: 'افتح الحديث' }).click();
+    await expect(page).toHaveURL(/hadith-sahih/);
+  });
+});
+
+test.describe('«أصهاره»', () => {
+  test.use({ seed: saved('group', 'inlaws:prophet-muhammad') });
+  test('draws his wives and their fathers, says it in words, and opens «بينه وبين…» with them', async ({ page }) => {
+    await open(page, '/library');
+    await page.getByRole('tab', { name: 'النص' }).click();
+    await expect(page.getByText(/حفصة/).first()).toBeVisible();
+    await page.getByRole('button', { name: 'ارسم الصلة بينهم' }).click();
+    await expect(page).toHaveURL(/\/between\?slugs=prophet-muhammad,/);
+  });
+});
+
+test.describe('«أين يلتقي نسبه ﷺ بنسب الخلفاء الأربعة؟»', () => {
+  test.use({ seed: saved('meet', 'prophet-muhammad,abu-bakr-as-siddiq,umar-ibn-al-khattab,uthman-ibn-affan,ali-ibn-abi-talib') });
+  test('draws the five lines and opens the nasab page with all five', async ({ page }) => {
+    await open(page, '/library');
+    await expect(page.getByText(/^أين يلتقي نسبه ﷺ/)).toBeVisible();
+    await page.getByRole('button', { name: 'افتح النسب' }).click();
+    await expect(page).toHaveURL(/\/nasab\?slug=prophet-muhammad(,|%2C)abu-bakr-as-siddiq/);
+  });
+});
