@@ -3,7 +3,7 @@ import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { Text } from '@/ui/Text';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ArrowLeft, ArrowRight, Check, Eraser, Eye, LogOut, RotateCcw, Send } from 'lucide-react-native';
+import { ArrowLeft, ArrowRight, Check, Eraser, LogOut, RotateCcw, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { emptyBranchAnswers } from '@shared/quiz/score';
 import TopBar from '@/ui/TopBar';
@@ -13,11 +13,11 @@ import QuestionDots from '@/components/QuestionDots';
 import { QuizFeedback, QuizInputs } from '@/components/QuizTree';
 import { CompareFeedback, CompareInputs } from '@/components/QuizCompare';
 import { surahNames } from '@/lib/branches';
-import { check, cleanSolo, clearAnswers, goTo, hasTyped, isCompare, isTree, pick, questionState, reveal, setHints, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from '@/lib/quiz';
+import { check, cleanSolo, clearAnswers, goTo, hasTyped, isCompare, isTree, pick, questionState, reveal, setHints, soloScore, startSolo, submit, typeAnswer, type SoloRun } from '@/lib/quiz';
 import QuizChoice, { QuizPrompt } from '@/components/QuizChoice';
 import { readAyah } from '@/lib/openReader';
 import { markForgotten } from '@shared/ayahMarks';
-import { FORGOT, recited, showsAnswerButton } from '@shared/quiz/choiceKinds';
+import { FORGOT, recited } from '@shared/quiz/choiceKinds';
 import { useKeyboardShown } from '@/lib/keyboard';
 import { setRun, useRun } from '@/lib/soloStore';
 import { usePalette, type Palette } from '@/lib/theme';
@@ -123,12 +123,7 @@ export default function QuizPlay() {
               <Row>
                 <Button variant="primary" Icon={Check} label="تحقق" onPress={() => update(check(run))} />
                 <Button Icon={Eraser} accessibilityLabel="مسح الإجابات" disabled={!hasTyped(run)} onPress={() => update(clearAnswers(run))} />
-                <Button Icon={Eye} label="إظهار الإجابة" onPress={() => update(showAnswer(run))} />
               </Row>
-            )}
-            {/* A choice question's way on for one who does not know (owner, 2026-11-21). */}
-            {!checked && !isTree(question) && !isCompare(question) && showsAnswerButton(question) && (
-              <Row><Button Icon={Eye} label="إظهار الإجابة" onPress={() => update(pick(run, ''))} /></Row>
             )}
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <Button Icon={ArrowRight} accessibilityLabel="السابق" disabled={current === 0} onPress={() => update(goTo(run, current - 1))} />

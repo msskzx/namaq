@@ -7,7 +7,7 @@ import { quizTrees } from '@shared/quiz/treeScope';
 import type { BranchAyah } from '@shared/quran/branches';
 import corpus from '@shared/quran/quranText/corpus';
 import { isAsked } from '@shared/quiz/score';
-import { availability, check, cleanSolo, DEFAULT_LIST, goTo, hasTyped, isTree, pick, questionState, reveal, setHints, showAnswer, soloScore, startSolo, submit, typeAnswer, type SoloRun } from './quiz';
+import { availability, check, cleanSolo, DEFAULT_LIST, goTo, hasTyped, isTree, pick, questionState, reveal, setHints, soloScore, startSolo, submit, typeAnswer, type SoloRun } from './quiz';
 import type { AskedBranchQuestion } from '@shared/quiz/branchQuestions';
 
 const seeded = (seed: number) => () => (seed = (seed * 16807) % 2147483647) / 2147483647;
@@ -70,9 +70,8 @@ describe('solo quiz on the phone', () => {
     expect(soloScore(run).points[index]).toEqual({ earned: 1, total: 2 });
   });
 
-  it('drops what was typed when the answer is shown, and locks a checked question', () => {
-    let run = typeRight(startSolo(cleanSolo({ juzFrom: 30, juzTo: 30 }), seeded(9)));
-    run = showAnswer(run);
+  it('checks a question with nothing typed, showing its answer for nothing (owner, 2026-11-21: «تحقق» is the only way on), and locks it', () => {
+    let run = check(startSolo(cleanSolo({ juzFrom: 30, juzTo: 30 }), seeded(9)));
     expect(questionState(run, 0)).toBe('incorrect');
     expect(soloScore(run).points[0].earned).toBe(0);
     expect(typeRight(run)).toBe(run);

@@ -39,11 +39,6 @@ export const isRightChoice = (question: { correctAnswer: string; correctAnswers?
 
 export const recited = (question: { reveal?: unknown; page?: { recite?: unknown } }) => !!(question.reveal || question.page?.recite);
 
-/**
- * Whether a choice question offers «إظهار الإجابة», the way on for one who does not know (owner, 2026-11-21: no quiz forces
- * an answer to move on). A recited ayah has «نسيتها» and an order its own «تحقق», so they need none.
- */
-export const showsAnswerButton = (question: { reveal?: unknown; page?: { recite?: unknown }; order?: string[] }) => !recited(question) && !orders(question);
 
 /** In a question's `boxes`, the box asked about and another blank one. */
 export const BOX_ASKED = '؟';
