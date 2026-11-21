@@ -5,7 +5,6 @@ import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { skeleton } from './irabUkbari';
 import { firstWords, gharibEntry, headingsFor, letters, meaningOf, meaningPicks, placeEntry, quotesOf, readGharib, readMufradat, type MushafWord, type TurathPage } from './gharib';
-import { corpusWordsAt } from '../../shared/quran/quranText/ayahWords';
 import type { GharibData, GharibPlace, MufradatData } from '../../shared/quran/gharib';
 
 // docs/plans/alfaz-al-quran.md: Ibn Qutaybah's gharib (Shamela 3259, Saqr's edition) and al-Raghib's al-Mufradat
@@ -88,7 +87,7 @@ const treeAyat = new Map(trees.ayat.map(ayah => [ayah.key, ayah]));
 /** The corpus roots of the words an entry's first place quotes. */
 const rootsOf = (surah: number, [ayah, from, to]: GharibPlace) => {
   const tree = treeAyat.get(`${surah}:${ayah}`);
-  return from < 0 || !tree ? [] : [...new Set(Array.from({ length: to - from + 1 }, (_, i) => corpusWordsAt(tree.key, from + i).map(old => tree.roots?.[old])).flat().filter((root): root is string => !!root))];
+  return from < 0 || !tree ? [] : [...new Set(Array.from({ length: to - from + 1 }, (_, i) => tree.roots?.[from + i]).filter((root): root is string => !!root))];
 };
 const candidates = gharib.entries.map(([surah, , , text, places], at) => ({ surah, roots: places.length ? rootsOf(surah, places[0]) : [], text: notMeaning.has(keyOf(at)) || !places.length || !firstPlaced(surah, text, places[0]) ? '' : text, places, quote: quotesOf(text)[0] ?? '' }));
 const asked = new Set<string>();
@@ -129,7 +128,9 @@ for (const ayah of trees.ayat) {
   const length = ayahLength.get(ayah.key);
   if (length === undefined) continue;
   const links = Array.from({ length }, (_, at) => {
-    const roots = [...new Set(corpusWordsAt(ayah.key, at).map(old => ayah.roots?.[old]).filter((root): root is string => !!root))];
+    // trees.json holds the page's words already (scripts/quran/buildBranches.ts maps the corpus onto them), so a root sits at
+    // its page word: mapping again shifted the seven ayat the page spaces otherwise by one (2:181 «سَمِيعٌ» got «أله»).
+    const roots = ayah.roots?.[at] ? [ayah.roots[at]!] : [];
     if (roots.length !== 1) return -1;
     rooted++;
     const root = [...roots[0]].map(c => BUCKWALTER[c] ?? c).join('');
