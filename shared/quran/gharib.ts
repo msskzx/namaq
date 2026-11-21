@@ -91,8 +91,9 @@ export function explainedBy(data: GharibData, marks: GharibWordsData, at: number
 
 /**
  * His entries on a word wherever the Quran uses it (the words page, owner 2026-11-21): `places` are the word's ayat in
- * mushaf order, each with its mushaf words. An entry counts only when it explains this word: quoting it alone, or quoting
- * a phrase with this word marked as the one he explains (`marks`). An entry found twice shows once, at its first ayah.
+ * mushaf order, each with its mushaf words. An entry counts only when it explains this word: quoting it alone (one word,
+ * or a phrase all of this word: «﴿وَأَنْفُسَنَا وَأَنْفُسَكُمْ﴾»), or quoting a phrase with this word marked as the one he
+ * explains (`marks`). An entry found twice shows once, at its first ayah.
  */
 export function gharibOfPlaces(data: GharibData, marks: GharibWordsData, places: { key: string; words: number[] }[]): GharibPlaced[] {
   const seen = new Set<number>();
@@ -100,7 +101,8 @@ export function gharibOfPlaces(data: GharibData, marks: GharibWordsData, places:
   for (const { key, words } of places) {
     const ayah = Number(key.split(':')[1]);
     for (const entry of gharibAt(data, key)) {
-      if (seen.has(entry.at) || !explainedBy(data, marks, entry.at).some(([at, word]) => at === ayah && words.includes(word))) continue;
+      const alone = entry.words.every(([from, to]) => Array.from({ length: to - from + 1 }, (_, i) => from + i).every(word => words.includes(word)));
+      if (seen.has(entry.at) || !(alone || explainedBy(data, marks, entry.at).some(([at, word]) => at === ayah && words.includes(word)))) continue;
       seen.add(entry.at);
       found.push({ ...entry, key });
     }

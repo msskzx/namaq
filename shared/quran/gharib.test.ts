@@ -89,6 +89,10 @@ describe("a word's meanings on the words page", () => {
     expect(gharibOfPlaces(gharib, marks, placesOfWord('أَعۡجَاز')).some(entry => entry.text.includes('أصولُ نخل'))).toBe(false);
   });
 
+  it('keeps an entry whose quoted words are all this word, whatever its marks say', () => {
+    expect(gharibOfPlaces(gharib, marks, placesOfWord('نَفۡس')).some(entry => entry.text.includes('إخواننا وإخوانكم'))).toBe(true);
+  });
+
   it('marks only words an entry quotes, and only entries quoting more than one word', () => {
     expect(marks.source).toEqual(gharib.source);
     for (const [at, explained] of Object.entries(marks.words)) {
