@@ -46,7 +46,7 @@ export default function AyahLines({ ayah, pages, write, checked, shown, words = 
     return slice && { model, slice };
   }, [pages, ayah]);
   const previous = useMemo(() => (pages.previous ? pageEnd(pages.previous.data.items) : null), [pages]);
-  const view = useMemo(() => (parts ? reciteView(parts.model, { start: ayah, ...(targetWord !== undefined ? { word: targetWord } : {}), shown: shown ? ayah : null, words: shown ? 0 : words }) : null), [parts, ayah, shown, words, targetWord]);
+  const view = useMemo(() => (parts ? reciteView(parts.model, { start: ayah, ...(targetWord !== undefined ? { gaps: [targetWord] } : {}), shown: shown ? ayah : null, words: shown ? 0 : words }) : null), [parts, ayah, shown, words, targetWord]);
   if (!parts || !view) return null;
   return <div lang="ar">
     {parts.slice.before && pages.previous && previous && <MushafPage page={pages.previous.page} data={pages.previous.data} top={pages.previous.top} names={NAMES} slice={previous} />}

@@ -83,7 +83,7 @@ function QuizPage({ ayah, ask, shown, onWritten, onShown, party, palette }: { ay
     const at = order.indexOf(ayah);
     const base = recite.view;
     return {
-      ...(base ?? { upcoming: ayah, nextAyah: () => null, nextWord: () => null }),
+      ...(base ?? { upcoming: ayah, gap: null, nextAyah: () => null, nextWord: () => null }),
       // The quiz stops at its ayah: nothing after it is the next one.
       upcoming: open ? null : base?.upcoming ?? ayah,
       // Every surah title on the page is a step of its first ayah, so a title stays hidden like the words.

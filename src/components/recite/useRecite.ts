@@ -33,24 +33,27 @@ export function useRecite({ model, position, setPosition, writing, pen, until = 
 }) {
   const view = useMemo(() => (model && position ? reciteView(model, position) : null), [model, position]);
   const done = !!until && position?.shown === until;
-  const writeKey = writing && view?.upcoming && !done ? view.upcoming : null;
+  // With forgotten words under review the pen asks each one when its turn comes, the ayah shown up to it (owner, 2026-11-21).
+  const gap = view?.gap ?? null;
+  const writeKey = writing && view?.upcoming && !done && (!position?.gaps || gap) ? view.upcoming : null;
   const words = useMemo(() => (writeKey && model ? model.lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === writeKey).map(group => group.word!) ?? []) : []), [writeKey, model]);
   const offset = writeKey?.endsWith(':1') ? view?.titled.get(Number(writeKey.split(':')[0])) ?? 0 : 0;
   // Words already shown (by the next-word button) are not asked.
   // A forgotten word under review is the one word asked, whatever the pen asks of a whole ayah.
-  const asked = writeKey && view ? (position?.word === undefined ? penTargets(words, pen) : words.map((_, at) => at)).filter(at => view.hidden(writeKey, at + offset)) : [];
+  const asked = writeKey && view ? (gap ? [gap.at] : penTargets(words, pen)).filter(at => view.hidden(writeKey, at + offset)) : [];
   const [checked, setChecked] = useState<Omit<Checked, 'before'> | null>(null);
-  useEffect(() => setChecked(null), [position?.start, position?.word]);
-  const boxes = useWriteBoxes({ ayah: writeKey && position?.word !== undefined ? wordMarkKey(writeKey, position.word) : writeKey, words, asked, autoFocus, onDone: (graded, typed) => {
+  useEffect(() => setChecked(null), [position?.start, gap?.place]);
+  const boxes = useWriteBoxes({ ayah: writeKey && gap ? wordMarkKey(writeKey, gap.place) : writeKey, words, asked, autoFocus, onDone: (graded, typed) => {
     if (!writeKey || !position) return;
     if (onSubmit) { onSubmit(writeKey, typed); return; }
     setChecked({ key: writeKey, ...graded });
     // A word under review is marked, or rested, as the word; a whole ayah as the ayah.
-    const key = position.word === undefined ? writeKey : wordMarkKey(writeKey, position.word);
+    const key = gap ? wordMarkKey(writeKey, gap.place) : writeKey;
     if (graded.wrong.length) markForgotten(key);
     // A right answer rests a mark only when it is due, so a resting one is not pushed further by recitations between reviews.
     else if (readDueMarks()[key]) rememberAyah(key);
-    setPosition(revealAyah(position, writeKey));
+    // A forgotten word shows itself and the ayah goes on to the next one; a whole ayah shows whole.
+    setPosition((gap && view?.nextAyah()) || revealAyah(position, writeKey));
     onWritten?.(writeKey, graded);
   } });
   const nextAyah = () => {

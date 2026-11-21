@@ -1,0 +1,27 @@
+/* The double tap's pop (the app's ui/BulbPop.tsx): shows where the finger was and fades in about 0.6 s. */
+.pop { position: fixed; z-index: 60; width: 110px; height: 110px; margin: -55px 0 0 -55px; pointer-events: none; animation: pop 600ms ease-out forwards; }
+.pop svg { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.lit { stroke: var(--home-highlight); filter: drop-shadow(0 0 14px var(--home-highlight)); }
+.lit .glass { fill: color-mix(in srgb, var(--home-highlight) 20%, transparent); }
+.struck { stroke: var(--home-accent); }
+.strike { stroke-width: 2; stroke-dasharray: 28.3; }
+.saved { stroke: var(--home-root); }
+.saved .fill { fill: var(--home-root); }
+
+/* Forgetting: lit, struck through, then wine. Remembering: the reverse. */
+.forget .strike { animation: draw 300ms ease-out forwards; }
+.remember .strike { animation: undraw 300ms ease-out forwards; }
+.forget .lit, .remember .struck { animation: out 300ms linear forwards; }
+.forget .struck, .remember .lit { opacity: 0; animation: in 300ms linear forwards; }
+/* Saving: the bookmark fills; unsaving: it empties. */
+.save .fill { opacity: 0; animation: in 300ms linear forwards; }
+.unsave .fill { animation: out 300ms linear forwards; }
+
+@keyframes pop { 0% { transform: scale(0.7); opacity: 1; } 25% { transform: scale(1); } 50% { opacity: 1; } 100% { transform: scale(1.05); opacity: 0; } }
+@keyframes draw { from { stroke-dashoffset: 28.3; } to { stroke-dashoffset: 0; } }
+@keyframes undraw { from { stroke-dashoffset: 0; } to { stroke-dashoffset: 28.3; } }
+@keyframes in { 0%, 60% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes out { 0%, 60% { opacity: 1; } 100% { opacity: 0; } }
+
+/* Reduce Motion: no pop; the ayah's band or colour alone changes. */
+@media (prefers-reduced-motion: reduce) { .pop { display: none; } }

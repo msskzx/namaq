@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { compareKeys, forgottenOrder, isHidden, nextAyah, nextForgotten, positionQuery, previousKey, readPosition, revealAyah, reviewHref, reviewPosition, revealWord, stepBack, type RecitePosition } from './recite';
+import { compareKeys, forgottenOrder, isHidden, nextAyah, nextForgotten, positionQuery, previousKey, readPosition, revealAyah, reviewHref, reviewPosition, forgottenAyat, nextInReview, reviewedBefore, revealWord, stepBack, type RecitePosition } from './recite';
 
 const counts = new Map([[56, 96], [57, 29]]);
 const order = ['56:95', '56:96', '57:1', '57:2', '57:3'];
@@ -41,18 +41,34 @@ describe('recite', () => {
     expect(readPosition(new URLSearchParams('recite=57:5&upto=57:4'))).toEqual({ start: '57:5', shown: null, words: 0 });
   });
 
-  it('carries a forgotten word under review through the URL', () => {
-    const position = { start: '1:2', word: 0, shown: null, words: 0 };
+  it('carries the forgotten words under review through the URL', () => {
+    const position = { start: '1:2', gaps: [0, 3], shown: null, words: 0 };
     expect(readPosition(new URLSearchParams(positionQuery(position)))).toEqual(position);
     expect(readPosition(new URLSearchParams('recite=1:2&word=x'))).toEqual({ start: '1:2', shown: null, words: 0 });
     expect(readPosition(new URLSearchParams('recite=1:2&word=-1'))).toEqual({ start: '1:2', shown: null, words: 0 });
   });
 
-  it('reviews a forgotten ayah whole and a forgotten word alone', () => {
+  it('reviews a forgotten ayah whole, and all forgotten words of an ayah in one stop', () => {
     expect(reviewPosition('2:255')).toEqual({ start: '2:255', shown: null, words: 0 });
-    expect(reviewPosition('2:255:3')).toEqual({ start: '2:255', word: 3, shown: null, words: 0 });
+    expect(reviewPosition('2:255:3')).toEqual({ start: '2:255', gaps: [3], shown: null, words: 0 });
+    const due = { '2:255:9': {}, '2:255:3': {}, '2:256:1': {} };
+    expect(reviewPosition('2:255:9', due)).toEqual({ start: '2:255', gaps: [3, 9], shown: null, words: 0 });
+    expect(reviewPosition('2:255', due)).toEqual({ start: '2:255', gaps: [3, 9], shown: null, words: 0 });
+    // The whole ayah forgotten is recited whole.
+    expect(reviewPosition('2:255:3', { ...due, '2:255': {} })).toEqual({ start: '2:255', shown: null, words: 0 });
     expect(reviewHref('2:255')).toBe('/quran/read/ayah/2/255?recite=2:255&review=1');
-    expect(reviewHref('2:255:3')).toBe('/quran/read/ayah/2/255?recite=2:255&word=3&review=1');
+    expect(reviewHref('2:255:3', due)).toBe('/quran/read/ayah/2/255?recite=2:255&word=3,9&review=1');
+  });
+
+  it('stops at each forgotten ayah once, and a review from a page wraps round to where it began', () => {
+    const ayat = forgottenAyat(['2:255:3', '1:2', '2:255:9', '57:3', '2:255']);
+    expect(ayat).toEqual(['1:2', '2:255', '57:3']);
+    expect(nextInReview(ayat, '2:255', '2:255')).toBe('57:3');
+    expect(nextInReview(ayat, '57:3', '2:255')).toBe('1:2');
+    expect(nextInReview(ayat, '1:2', '2:255')).toBeNull();
+    expect(reviewedBefore(ayat, '1:2', '2:255')).toBe(2);
+    // Begun at the first, it ends at the last.
+    expect(nextInReview(ayat, '57:3', '1:2')).toBeNull();
   });
 
   it('walks forgotten words between ayat in mushaf order', () => {

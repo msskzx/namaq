@@ -425,6 +425,31 @@ describe('Recite mode', () => {
     expect(JSON.parse(localStorage.getItem('ayah-forgot')!)['2:1'].forgot).toBe(1);
   });
 
+  it('a second double tap set to «نسيت» rests the ayah again (owner, 2026-11-21)', () => {
+    vi.useFakeTimers();
+    localStorage.setItem('reader-gestures', JSON.stringify({ read: { tap: 'none', double: 'forgot' } }));
+    const { container } = render(<ReaderView page={3} pages={one(3, opening)} names={names} surahs={surahs} />);
+    const word = container.querySelector('[data-ayah="2:1"]')!;
+    const doubled = () => { fireEvent.pointerDown(word); fireEvent.pointerUp(word); fireEvent.pointerDown(word); fireEvent.pointerUp(word); act(() => { vi.advanceTimersByTime(300); }); };
+    doubled();
+    expect(container.querySelector('[data-ayah="2:1"]')?.className).toMatch(/forgot/);
+    doubled();
+    expect(container.querySelector('[data-ayah="2:1"]')?.className ?? '').not.toMatch(/forgot/);
+    expect(JSON.parse(localStorage.getItem('ayah-forgot')!)['2:1'].step).toBe(1);
+  });
+
+  it('reviews forgotten words by showing the ayah up to each one, then the word, with the rest of the page hidden', () => {
+    const { container } = render(<ReaderView page={3} pages={one(3, opening)} names={names} surahs={surahs} recite={{ start: '2:2', gaps: [1], shown: null, words: 0 }} review />);
+    expect(veiled(container)).toEqual(['ذَٰلِكَ', 'ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ۝']);
+    const next = () => fireEvent.click(screen.getByRole('button', { name: 'أظهر الآية التالية' }));
+    next();
+    expect(veiled(container)).toEqual(['ٱلۡكِتَٰبُ', 'لَا', 'رَيۡبَۛ ۝']);
+    next();
+    expect(veiled(container)).toEqual(['لَا', 'رَيۡبَۛ ۝']);
+    next();
+    expect(veiled(container)).toEqual([]);
+  });
+
   // The top bar recites from the page's start even with an ayah marked (owner, 2026-11-17).
   it('starts reciting from the page start with the recite button, even with an ayah marked', () => {
     media(true);

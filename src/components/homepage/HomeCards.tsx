@@ -85,7 +85,7 @@ export function useHomeCards(data: CardData, forgottenShown = Infinity) {
     ] });
   };
   const forgottenMenu = (key: string, event: MouseEvent<HTMLElement>) => setMenu({ ...menuAt(event), label: forgottenLabel, items: [
-    { id: 'recite', Icon: EyeOff, label: ar ? 'سمّع من هذه الآية' : 'Recite from this ayah', href: reviewHref(key) },
+    { id: 'recite', Icon: EyeOff, label: ar ? 'سمّع من هذه الآية' : 'Recite from this ayah', href: reviewHref(key, marks) },
     { id: 'mushaf', Icon: BookOpen, label: ar ? 'في المصحف' : 'In the mushaf', href: ayahHref(key) },
     { id: 'clear', Icon: Check, label: ar ? 'تذكّرتها' : 'I remember it now', onClick: () => rememberAyah(key) },
   ] });

@@ -177,7 +177,10 @@ describe('home', () => {
     localStorage.setItem('recall-write', 'true');
     render(<Homepage data={data} />);
     const post = (await screen.findByText('هل تذكرها؟')).closest('article')!;
-    // Only the marked word is a box, whatever the pen asks of a whole ayah.
+    // The ayah is hidden first; the next step shows it up to the forgotten word, and only that word is a box.
+    await waitFor(() => expect(within(post).getByRole('button', { name: 'أظهر الآية التالية' })).toBeTruthy());
+    expect(within(post).queryAllByRole('button', { name: 'اكتب هذه الكلمة' })).toHaveLength(0);
+    fireEvent.click(within(post).getByRole('button', { name: 'أظهر الآية التالية' }));
     await waitFor(() => expect(within(post).getAllByRole('button', { name: 'اكتب هذه الكلمة' })).toHaveLength(1));
     expect(within(post).getByRole('link', { name: 'راجع ما نسيت' }).getAttribute('href')).toBe('/quran/read/ayah/2/255?recite=2:255&word=1&review=1');
     fireEvent.change(within(post).getByLabelText('اكتب الكلمة'), { target: { value: 'لا ' } });

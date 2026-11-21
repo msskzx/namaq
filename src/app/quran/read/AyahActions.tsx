@@ -77,8 +77,8 @@ export default function AyahActions({ ayah, x, y, below, forgot, lit, saved, not
   /** Share as image, always the last button. */
   onShare?: () => void;
   onClose: () => void;
-  /** A press outside closes the buttons; the page then ignores that press. */
-  onDismiss?: () => void;
+  /** A press outside closes the buttons (`target`: what was pressed); the page then ignores that press. */
+  onDismiss?: (target: EventTarget | null) => void;
 }) {
   const box = useRef<HTMLDivElement>(null);
   /** The open bubble, and its button's place in the buttons' box (and its top on the screen). */
@@ -88,7 +88,7 @@ export default function AyahActions({ ayah, x, y, below, forgot, lit, saved, not
   const bubbleBox = useRef<HTMLDivElement>(null);
   useEffect(() => {
     box.current?.querySelector<HTMLElement>('button')?.focus({ preventScroll: true });
-    const outside = (event: PointerEvent) => { if (!box.current?.contains(event.target as Node)) onDismiss(); };
+    const outside = (event: PointerEvent) => { if (!box.current?.contains(event.target as Node)) onDismiss(event.target); };
     // Escape lets go of an open bubble first, back to its button, then of the buttons.
     const key = (event: KeyboardEvent) => { if (event.key === 'Escape') { event.preventDefault(); if (bubbleNow.current) { bubbleNow.current.button.focus({ preventScroll: true }); setBubble(null); } else onClose(); } };
     document.addEventListener('pointerdown', outside, true);
