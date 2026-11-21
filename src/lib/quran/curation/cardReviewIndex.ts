@@ -129,11 +129,12 @@ export function pressOf(entry: Pick<CardReviewEntry, 'id' | 'twin' | 'pairs'>, p
 }
 
 /**
- * Whether the owner already reviewed a card: a press on this page, or a verdict they checked in an earlier review, either the
- * card's own or, live, every compare pair it holds (`checkedPairs`, with the compare review log's unapplied presses).
+ * Whether a card needs no review: a book names it (every book entry stays a card), or the owner already reviewed it, by a press on
+ * this page or a verdict they checked in an earlier review, either the card's own or, live, every compare pair it holds
+ * (`checkedPairs`, with the compare review log's unapplied presses).
  */
 export function reviewed(entry: CardReviewEntry, pressed: Map<string, CardPress>, checkedPairs: Set<string> = new Set()): boolean {
-  if (pressOf(entry, pressed) || entry.verdict?.checked) return true;
+  if (entry.kind === 'book' || entry.books?.length || pressOf(entry, pressed) || entry.verdict?.checked) return true;
   const pairs = entry.pairs ?? (entry.twin ? [entry.twin] : []);
   return pairs.length > 0 && pairs.every(pair => checkedPairs.has(pair));
 }

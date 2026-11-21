@@ -97,6 +97,15 @@ for (const { page, card } of compareCards()) {
   });
 }
 
+// A compare card whose every pair a mutashabih book names is the book's card too: it carries the books, and like the book's card it
+// is kept by rule (owner 2026-11-21: "since this is in books why do i get it to review it?").
+const bookPairs = new Map<string, string[]>();
+for (const entry of entries) if (entry.kind === 'book' && entry.twin) bookPairs.set(entry.twin, [...new Set([...bookPairs.get(entry.twin) ?? [], ...entry.books ?? []])]);
+for (const entry of entries) {
+  if (entry.kind !== 'compare' || entry.link || !entry.pairs?.every(pair => bookPairs.has(pair))) continue;
+  entry.books = [...new Set(entry.pairs.flatMap(pair => bookPairs.get(pair)!))];
+}
+
 const index: CardReviewIndex = { built: 'npm run quran:card-review', cards: oneTwinPerPair(entries) };
 writeFileSync(OUT, `${JSON.stringify(index)}\n`);
 console.log(`${index.cards.length} cards → ${OUT}`);

@@ -85,13 +85,25 @@ describe('card review', () => {
       { id: 'checked', kind: 'compare', rows: [], pairs: ['1:1|2:2'], verdict: { keep: true, why: '', checked: true } },
       { id: 'in-old-log', kind: 'compare', rows: [], pairs: ['1:3|2:4', '1:5|2:6'] },
       { id: 'half-in-old-log', kind: 'compare', rows: [], pairs: ['1:3|2:4', '1:7|2:8'] },
-      { id: 'twin-in-old-log', kind: 'book', rows: [], twin: '1:5|2:6' },
+      { id: 'twin-in-old-log', kind: 'word', rows: [], twin: '1:5|2:6' },
+      { id: 'word-draft', kind: 'word', rows: [], twin: '1:9|2:10' },
       { id: 'draft', kind: 'compare', rows: [], pairs: ['1:9|2:10'], verdict: { keep: true, why: '' } },
     ];
     const checkedPairs = new Set(['1:3|2:4', '1:5|2:6']);
     const todo = (kind: CardReviewEntry['kind']) => selectCards(cards, {}, new Map(), { kind, todo: true }, checkedPairs).map(entry => entry.id);
     expect(todo('compare')).toEqual(['half-in-old-log', 'draft']);
+    expect(todo('word')).toEqual(['word-draft']);
+  });
+
+  it('«غير المراجَعة فقط» leaves out what a book names: every book entry stays a card (owner 2026-11-21)', () => {
+    const cards: CardReviewEntry[] = [
+      { id: 'book', kind: 'book', rows: [], twin: '2:48|2:123', books: ['al-Kirmani'], verdict: { keep: true, why: '' } },
+      { id: 'its-compare', kind: 'compare', rows: [], pairs: ['2:48|2:123'], books: ['al-Kirmani'], verdict: { keep: true, why: '' } },
+      { id: 'ours', kind: 'compare', rows: [], pairs: ['2:49|2:124'], verdict: { keep: true, why: '' } },
+    ];
+    const todo = (kind: CardReviewEntry['kind']) => selectCards(cards, {}, new Map(), { kind, todo: true }).map(entry => entry.id);
     expect(todo('book')).toEqual([]);
+    expect(todo('compare')).toEqual(['ours']);
   });
 
   it('the surah pair list counts only what the filters show, and drops a pair with nothing left except the open one', () => {
