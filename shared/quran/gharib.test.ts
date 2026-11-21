@@ -56,6 +56,13 @@ describe("al-Raghib's al-Mufradat", () => {
     }
   });
 
+  it('links the right word in an ayah the page spaces otherwise («بَعۡدَ مَا» in 2:181)', () => {
+    const heading = (word: number) => mufradatOf(mufradat, '2:181', word)?.[0].replace(/[\u064B-\u0652]/g, '');
+    expect(heading(4)).toBe('سمع'); // «سَمِعَهُۥ»
+    expect(heading(12)).toBe('سمع'); // «سَمِيعٌ»
+    expect(heading(13)).toBe('علم'); // «عَلِيمٌ»
+  });
+
   it('has nothing for a word with no root («مِنَ»)', () => {
     expect(mufradatOf(mufradat, '78:14', 1)).toBeNull();
   });
