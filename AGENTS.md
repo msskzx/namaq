@@ -25,7 +25,7 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   imports, so the app's bundler can read it.
 - Move code into `shared/` when the app needs it, and keep the website's tests passing.
 - No page lives on the website alone (owner, 2026-11-18), except the owner's review tools
-  (`/quizzes/questions`). About, privacy and attributions are app pages too
+  (`/quizzes/questions`, `/quran/cards-review`). About, privacy and attributions are app pages too
   (`mobile/src/screens/info.tsx`), reading their text from `shared/infoPages.ts`.
 
 ## Testing
