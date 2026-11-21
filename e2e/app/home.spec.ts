@@ -141,8 +141,8 @@ test.describe('a new user', () => {
 
   // Scenes are one of balagha's cards; with every interest on, the feed holds so many kinds that one may come only after
   // many screens, so the user here picks balagha alone. The books card stays outside the interests' rounds.
-  test.describe('with balagha picked', () => {
-    test.use({ seed: { interests: '["balagha"]', 'interests-surprise': '0' } });
+  test.describe('with tafsir picked', () => {
+    test.use({ seed: { interests: '["tafsir"]', 'interests-surprise': '0' } });
 
     test('a scene from «مشاهد» and a few books with their authors come up in the feed', async ({ page }) => {
       await open(page, '/');

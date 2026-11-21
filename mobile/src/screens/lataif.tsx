@@ -1,67 +1,40 @@
-import { useMemo, useRef, useState, type ComponentRef } from 'react';
-import { ScrollView, View } from 'react-native';
-import itqan from '@shared/data/quran/itqanBalagha';
-import { TOPICS, topicOf, exampleReference, type Topic } from '@shared/quran/lataif';
-import { examples, type Voice } from '@shared/quran/iltifat';
+import { useState } from 'react';
+import { View } from 'react-native';
 import { Text } from '@/ui/Text';
-import { IltifatActions, IltifatScene, VOICE_NAME, voiceColor } from '@/components/Iltifat';
-import { CardWithRow } from '@/ui/Card';
 import SourceLine from '@/ui/SourceLine';
-import Reference from '@/ui/Reference';
 import TopBar from '@/ui/TopBar';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
-import { useShrinkOnScroll } from '@/lib/chrome';
-import { useTabRetap } from '@/lib/tabRetap';
 import { usePalette } from '@/lib/theme';
-import { ayahMushafWords } from '@/lib/mushaf';
-import Chip from '@/ui/Chip';
-
-/** A topic's reference as its line under the heading. */
-const topicSource = (topic: Topic) => ({ line: topic.reference.title, quotes: topic.reference.quotes });
+import { useTabRetap } from '@/lib/tabRetap';
+import DarkSea, { DarkSeaActions, darkSeaName, darkSeaSourceList } from '@/components/DarkSea';
 
 /**
- * The website's /quran/lataif (owner, 2026-11-16): a curated list of examples, each card with its own picture, grouped
- * by topic with pills to pick one. Each topic and each card carries its reference (shared/quran/lataif.ts).
+ * «مشاهد» (owner, 2026-11-21: the chosen examples dropped, the page starts over with scenes): an ayah drawn as a scene the
+ * reader walks through. The first is an-Nur 40's sea (components/DarkSea). The page does not scroll: a finger moving up
+ * goes down through the scene's layers.
  */
 export default function LataifScreen() {
   const palette = usePalette();
-  const shrink = useShrinkOnScroll();
   const bottom = useTabBarSpace();
-  const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
-  const [topic, setTopic] = useState<string | null>(null);
-  const views = useMemo(() => examples(ayahMushafWords), []);
-  const references = useMemo(() => Object.fromEntries(views.map(view => [view.key, exampleReference(view, itqan)])), [views]);
-  useTabRetap('lataif', () => scroll.current?.scrollTo({ y: 0, animated: true }));
-  const pill = (name: string | null, label: string) => <Chip key={label} role="tab" label={label} on={topic === name} onPress={() => setTopic(name)} palette={palette} />;
+  const sources = darkSeaSourceList();
+  // A retap on the tab takes the scene back to the surface.
+  const [visit, setVisit] = useState(0);
+  useTabRetap('lataif', () => setVisit(now => now + 1));
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar hub hideOnScroll />
-      <ScrollView ref={scroll} onScroll={shrink} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 12 }}>
-        <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>مشاهد</Text>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }} accessibilityRole="tablist">
-          {pill(null, 'الكل')}
-          {TOPICS.map(item => pill(item.name, item.name))}
+      <TopBar hub />
+      <View style={{ flex: 1, paddingHorizontal: 16, paddingBottom: bottom, gap: 6 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 10 }}>
+          <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>مشاهد</Text>
+          <Text style={{ color: palette.muted, fontSize: 16 }}>{darkSeaName()}</Text>
         </View>
-        {TOPICS.filter(item => topic === null || topic === item.name).map(item => (
-          <View key={item.name} style={{ gap: 12 }}>
-            <View style={{ gap: 4 }}>
-              <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 20, textAlign: 'right' }}>{item.name}</Text>
-              <View style={{ flexDirection: 'row', flexWrap: 'wrap', columnGap: 16 }} accessibilityLabel="ألوان الضمائر">
-                {(['he', 'we', 'you'] as Voice[]).map(voice => <Text key={voice} style={{ color: voiceColor(palette, voice), fontSize: 14 }}>{{ he: 'هو', we: 'نحن، أنا', you: 'أنت' }[voice]}: {VOICE_NAME[voice]}</Text>)}
-              </View>
-              <SourceLine named={[topicSource(item)]} sources={[topicSource(item)]} palette={palette} />
-            </View>
-            {/* Each example in the home card's shape (owner 2026-11-20): its mushaf button and share under it, its reference on the line. */}
-            {views.filter(view => topicOf(view).name === item.name).map(view => (
-              <CardWithRow key={view.key} palette={palette} pad={[10, 16]} gap={10}
-                lead={<IltifatActions view={view} only="open" palette={palette} />} row={<IltifatActions view={view} only="share" palette={palette} />}>
-                <IltifatScene view={view} palette={palette} />
-                <Reference title={references[view.key].title} quotes={references[view.key].quotes} palette={palette} />
-              </CardWithRow>
-            ))}
-          </View>
-        ))}
-      </ScrollView>
+        <DarkSea key={visit} palette={palette} />
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <DarkSeaActions palette={palette} only="open" />
+          <DarkSeaActions palette={palette} only="share" />
+        </View>
+        <SourceLine sources={sources} palette={palette} />
+      </View>
     </View>
   );
 }

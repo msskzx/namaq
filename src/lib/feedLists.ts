@@ -19,6 +19,8 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   'note-tafsir': singleAyahPassages, 'note-qiraat': qiraatAyat, 'note-balagha': () => itqanSureAyat(itqan),
   'note-irab': () => allAyat(surahRows.map(surah => surah.numberOfAyat)),
   term: () => TERMS.terms.map(term => term.name),
+  // The phone's «مشاهد» scenes (an-Nur 40's sea); not on the website yet.
+  mashahid: () => [],
   scene: () => [...EXAMPLES].sort((a, b) => a.surah - b.surah || a.from - b.from).map(exampleKey),
   hadith: () => hadithItems('hadith'), recorded: () => hadithItems('recorded'), rajab: () => hadithItems('rajab'), isnad: () => hadithItems('isnad'),
   bukhari: () => sahihItems('bukhari'), muslim: () => sahihItems('muslim'),

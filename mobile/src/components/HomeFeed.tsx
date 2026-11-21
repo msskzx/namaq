@@ -33,8 +33,6 @@ import { BookWords, ExampleAyat, ayatName, quotesTitle } from './BalaghaTerm';
 import { clock, FIVE, PRAYER_NAMES, type PrayerDay, type PrayerKey } from '@shared/prayer';
 import { BOOKS } from '@shared/books';
 import { isReaderBook, pageName } from '@shared/readerBooks';
-import { examples } from '@shared/quran/iltifat';
-import { topicOf } from '@shared/quran/lataif';
 import { hijriDate, todaysJuz } from '@shared/hijri';
 import { JUZ_INDEX } from '@shared/quran/juzIndex';
 import { num } from '@shared/quran/arabicNumber';
@@ -103,7 +101,8 @@ import { SahihHadithView } from '@/components/Sahih';
 import { findHadith, placeOf, type SahihSlug } from '@shared/sahih';
 import type { BookId } from '@shared/books';
 import { BookCard, Shelf, TUHFA } from '@/screens/books';
-import { IltifatActions, IltifatScene } from './Iltifat';
+import DarkSea, { DarkSeaActions, darkSeaName, darkSeaSourceList } from './DarkSea';
+import { DARK_SEA_KEY } from '@shared/quran/scenes/darkSea';
 import { prophetStory } from '@/lib/prophets';
 import StoryMap from './StoryMap';
 import { ayahPlaces } from '@shared/quran/ayahPlaces';
@@ -146,7 +145,6 @@ import { citeSource, mushafSource, MUSHAF_BOOK, uniqueSources, type QuizSource }
 import { irabSources, itqanSource, qiraatSources, sadiSource } from '@shared/quiz/bookSources';
 import { compiledSource, recordSource } from '@shared/quiz/hadith';
 import { termSource } from '@shared/quran/balaghaTerms';
-import { exampleReference } from '@shared/quran/lataif';
 import { pieceSources, storySource } from '@shared/quran/pieceSources';
 import { tanasubLink, tanasubSource } from '@shared/quran/tanasubCards';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
@@ -964,21 +962,17 @@ function BooksPost({ day, palette }: { day: number; palette: Palette }) {
   );
 }
 
-let scenes: ReturnType<typeof examples> | undefined;
-const sceneList = () => (scenes ??= examples(ayahMushafWords));
-
 /**
- * A scene from «مشاهد» as a post (owner, 2026-11-18): the page's own card, whole, so the picture reads as it does there.
- * The head opens the page.
+ * A scene from «مشاهد» as a post (owner, 2026-11-21): the scene's whole picture, still, with its ayah; the head opens the page
+ * where the reader walks through it.
  */
 const ScenePost = memo(function ScenePost({ id, palette }: { id: string; palette: Palette }) {
-  const view = sceneList().find(scene => scene.key === id);
-  if (!view) return null;
+  if (id !== DARK_SEA_KEY) return null;
   return (
-    <Post palette={palette} head={<PostHead Icon={Presentation} title="من المشاهد" sub={topicOf(view).name} palette={palette} open={{ onPress: () => toTab('/lataif'), label: 'افتح المشاهد' }} />}
-      open={<IltifatActions view={view} only="open" palette={palette} />} share={<IltifatActions view={view} only="share" palette={palette} />}
-      source={[exampleReference(view, itqan)].map(found => ({ line: found.title, quotes: found.quotes }))}>
-      <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 10 }}><IltifatScene view={view} palette={palette} /></View>
+    <Post palette={palette} head={<PostHead Icon={Presentation} title="من المشاهد" sub={darkSeaName()} palette={palette} open={{ onPress: () => toTab('/lataif'), label: 'افتح المشاهد' }} />}
+      open={<DarkSeaActions palette={palette} only="open" />} share={<DarkSeaActions palette={palette} only="share" />}
+      source={darkSeaSourceList()}>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}><DarkSea palette={palette} still /></View>
     </Post>
   );
 });
@@ -1252,7 +1246,9 @@ const itemLists: Partial<Record<ListKind, readonly string[]>> = {};
 const LIST_OF: Record<ListKind, () => readonly string[]> = {
   'note-tafsir': () => noteList('tafsir'), 'note-qiraat': () => noteList('qiraat'), 'note-irab': () => noteList('irab'), 'note-balagha': () => noteList('balagha'),
   term: () => balaghaTerms.terms.map(term => term.name),
-  scene: () => sceneList().map(scene => scene.key),
+  // The chosen iltifat examples left «مشاهد» on the phone (owner, 2026-11-21); the website keeps them for now.
+  scene: () => [],
+  mashahid: () => [DARK_SEA_KEY],
   hadith: () => FEED_FORTY.map(entry => String(entry.n)),
   bukhari: () => sahihNumbers('bukhari'),
   muslim: () => sahihNumbers('muslim'),
@@ -1299,7 +1295,7 @@ function ContentPost({ kind, item, day, palette }: { kind: ListKind; item: strin
   if (kind in NOTE_OF) return <AyahNotePost kind={NOTE_OF[kind]} id={item} day={day} palette={palette} />;
   switch (kind) {
     case 'term': return <TermPost id={item} day={day} palette={palette} />;
-    case 'scene': return <ScenePost id={item} palette={palette} />;
+    case 'mashahid': return <ScenePost id={item} palette={palette} />;
     case 'hadith': return <HadithPost id={item} palette={palette} />;
     case 'rajab': return <RajabPost id={item} palette={palette} />;
     case 'bukhari': case 'muslim': return <SahihPost slug={kind} id={item} palette={palette} />;

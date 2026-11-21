@@ -13,7 +13,8 @@ const itemOf = (card: NonNullable<Awaited<ReturnType<typeof savedFeedCard>>>) =>
 
 describe('a feed card', () => {
   it('of every content kind is drawn from the ids its list gives, the same item again', async () => {
-    for (const kind of LIST_KINDS) {
+    // «مشاهد»'s scenes are on the phone only for now (owner, 2026-11-21: phone first), so the website lists none.
+    for (const kind of LIST_KINDS.filter(kind => kind !== 'mashahid')) {
       const ids = feedItemIds(kind, DAY, 5);
       const cards = await Promise.all(ids.map(id => savedFeedCard(cardBookmarkId(kind, id), DAY)));
       // A Sahih number its text lacks, or an ayah whose word has no i'rab, draws nothing; a kind always draws some.
