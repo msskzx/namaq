@@ -6,7 +6,7 @@ import { hiddenProps, useHidden, useSlideAway } from '@/ui/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, useSegments } from 'expo-router';
 import type { BottomTabBarProps } from 'expo-router/js-tabs';
-import { BookOpenText, Feather, House, Landmark, ScrollText, type LucideProps } from 'lucide-react-native';
+import { BookOpenText, Feather, House, Milestone, ScrollText, type LucideProps } from 'lucide-react-native';
 import { TAB_BAR, tabBarBottom } from '@/ui/tabBarSpace';
 import { usePalette } from '@/lib/theme';
 import { retapTab } from '@/lib/tabRetap';
@@ -23,7 +23,7 @@ const BUTTONS: { key: string; label: string; Icon: (props: LucideProps) => React
   { key: '(quran)', label: 'القرآن', Icon: BookOpenText },
   { key: '(hadith)', label: 'الحديث', Icon: ScrollText },
   { key: '(home)', label: 'الرئيسية', Icon: House },
-  { key: '(tarajim)', label: 'التراجم', Icon: Landmark },
+  { key: '(tarajim)', label: 'التراجم', Icon: Milestone },
   { key: 'quizzes', label: 'الاختبارات', Icon: Feather },
 ];
 
