@@ -70,6 +70,12 @@ An item whose own data names no source is left out:
 - غزوة … (`BattlePost`, under السيرة والمغازي): the battle's map and the two sides' numbers. Jamal, Siffin and Nahrawan show only
   their name, year, place and people, whatever their data holds (`FITNA_BATTLES`); Siffin and Nahrawan have no cited
   year or place yet, so they stay out.
+- من الغزوات والمعارك (`BattleYearPost`, under السيرة والمغازي, phone only): one year of the battles timeline with the year before
+  and after it on its axis, the year lit and its battles listed under it, each opening its page; a year or the open button opens
+  the battles screen at that year. Items are the years with a cited battle; the line names the pages for the years drawn.
+- الجيشان في الغزوات (`ArmiesPost`, under السيرة والمغازي, phone only): the battles whose data cites both sides in the field (now
+  Badr, Uhud, al-Khandaq), a row of the battle page's numbers each, tabs «في الميدان | القتلى», a dash where no number is
+  cited, and a note where the battle page has another reading of a number.
 - من صحيح … (`HadithScenePost`, under الحديث): one scene of a hadith drawn as a chat, only scenes where someone speaks.
 - من فواتح السور (`OpeningCardPost`, under الحفظ والمراجعة): one card of «فواتح السور», only those a scholar groups (al-Suyuti);
   our own groupings stay out.

@@ -33,6 +33,34 @@ export function Readings({ values, palette }: { values: readonly (AppCited<unkno
   );
 }
 
+/** The two sides' names over the bars: the Muslims on the right, the other side by the battle's kind. */
+export function SidesHead({ battle, palette }: { battle: Pick<AppBattle, 'kind'>; palette: Palette }) {
+  return (
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      <Text style={{ color: palette.muted, fontSize: 14 }}>المسلمون</Text>
+      <Text style={{ color: palette.muted, fontSize: 14 }}>{battle.kind?.value === 'معركة' ? 'العدو' : 'المشركون'}</Text>
+    </View>
+  );
+}
+
+/**
+ * One row of numbers: the Muslims' number, the bar of both, the other side's; a dash where the source gives none. The bar
+ * is drawn only when both are given, so one side's number never reads as against nothing.
+ */
+export function CountRow({ label, ours, theirs, palette }: { label: string; ours?: number; theirs?: number; palette: Palette }) {
+  const side = (value: number | undefined) => <Text numberOfLines={1} style={{ color: palette.ink, fontSize: 18, minWidth: 44, textAlign: 'center' }}>{value === undefined ? '—' : num(value)}</Text>;
+  return (
+    <View style={{ gap: 2 }} accessibilityLabel={`${label}: المسلمون ${ours ? num(ours) : 'غير مذكور'}، ${theirs ? num(theirs) : 'غير مذكور'}`}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+        {side(ours)}
+        {ours !== undefined && theirs !== undefined ? <SplitBar first={ours} second={theirs} palette={palette} /> : <View style={{ flex: 1 }} />}
+        {side(theirs)}
+      </View>
+      <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'center' }}>{label}</Text>
+    </View>
+  );
+}
+
 /** How many on each side: the Muslims' bar in the accent, the other side's in the rule colour, both to one scale. */
 export function Counts({ battle, palette }: { battle: AppBattle; palette: Palette }) {
   const { muslims, others, muslimsKilled, othersKilled } = battle.counts;
@@ -41,25 +69,10 @@ export function Counts({ battle, palette }: { battle: AppBattle; palette: Palett
     { label: 'القتلى', ours: muslimsKilled, theirs: othersKilled },
   ].filter(row => row.ours || row.theirs);
   if (!rows.length) return null;
-  const side = (value: number | undefined) => <Text numberOfLines={1} style={{ color: palette.ink, fontSize: 18, minWidth: 44, textAlign: 'center' }}>{value === undefined ? '—' : num(value)}</Text>;
   return (
     <View style={{ gap: 10 }}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Text style={{ color: palette.muted, fontSize: 14 }}>المسلمون</Text>
-        <Text style={{ color: palette.muted, fontSize: 14 }}>{battle.kind?.value === 'معركة' ? 'العدو' : 'المشركون'}</Text>
-      </View>
-      {rows.map(({ label, ours, theirs }) => {
-        return (
-          <View key={label} style={{ gap: 2 }} accessibilityLabel={`${label}: المسلمون ${ours ? num(ours.value) : 'غير مذكور'}، ${theirs ? num(theirs.value) : 'غير مذكور'}`}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-              {side(ours?.value)}
-              <SplitBar first={ours?.value} second={theirs?.value} palette={palette} />
-              {side(theirs?.value)}
-            </View>
-            <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'center' }}>{label}</Text>
-          </View>
-        );
-      })}
+      <SidesHead battle={battle} palette={palette} />
+      {rows.map(({ label, ours, theirs }) => <CountRow key={label} label={label} ours={ours?.value} theirs={theirs?.value} palette={palette} />)}
       <Refs refs={[muslims, others, muslimsKilled, othersKilled].flatMap(value => value?.refs ?? [])} palette={palette} />
       <Readings values={[muslims, others, muslimsKilled, othersKilled]} palette={palette} />
     </View>
