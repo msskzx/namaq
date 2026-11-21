@@ -143,13 +143,6 @@ export const hasTyped = (run: SoloRun, index = run.current) =>
 
 export const check = (run: SoloRun): SoloRun => ({ ...run, checked: at(run.checked, run.current, true) });
 
-/** Showing the answer gives up the question: what was typed is dropped and it scores nothing. */
-export const showAnswer = (run: SoloRun): SoloRun => ({
-  ...run,
-  typed: at(run.typed, run.current, emptyOf(run.questions[run.current])),
-  checked: at(run.checked, run.current, true),
-});
-
 export const goTo = (run: SoloRun, index: number): SoloRun => ({ ...run, current: Math.max(0, Math.min(run.questions.length - 1, index)) });
 
 /** Submitting grades what was typed in every question, checked or not. */

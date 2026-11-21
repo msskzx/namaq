@@ -1,7 +1,7 @@
 import { createContext, isValidElement, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, BookOpenText, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, Eye, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListStart, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, History, Target, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpenText, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListStart, ListTree, Presentation, Sparkles, Users, ScrollText, Swords, History, Target, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, toggleForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
@@ -125,7 +125,7 @@ import { momentItem, nameItem, rajabItem, storyItem, tieItem, virtueItem } from 
 import { useFitHeight } from '@/lib/useFit';
 import { storyMap } from '@shared/quran/prophets/story';
 import { STORY_GROUPS } from '@shared/quran/prophets/storyGroup';
-import { check, DEFAULT_LIST, DEFAULT_SOLO, isCompare, isTree, pick, questionState, reveal, showAnswer, startSolo, typeAnswer, type SoloRun } from '@/lib/quiz';
+import { check, DEFAULT_LIST, DEFAULT_SOLO, isCompare, isTree, pick, questionState, reveal, startSolo, typeAnswer, type SoloRun } from '@/lib/quiz';
 import { readAyah } from '@/lib/openReader';
 import QuizChoice, { QuizPrompt } from './QuizChoice';
 import { orderJuz } from '@shared/quiz/orderAnswer';
@@ -428,10 +428,8 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
         : !isTree(question) && question.order?.length && run.typed[0][0] !== undefined
         ? <Action Icon={ListStart} label="ترتيب السور" onPress={() => router.push({ pathname: '/order', params: { juz: String(orderJuz(question.order!)) } })} palette={palette} /> : undefined}
       actions={<>
-        {(isTree(question) || isCompare(question)) && !checked && <>
-          <Action Icon={Check} label="تحقق" onPress={() => setRun(check(run))} palette={palette} />
-          <Action Icon={Eye} label="إظهار الإجابة" onPress={() => setRun(showAnswer(run))} palette={palette} />
-        </>}
+        {(isTree(question) || isCompare(question)) && !checked &&
+          <Action Icon={Check} label="تحقق" onPress={() => setRun(check(run))} palette={palette} />}
         <QuizActions palette={palette} />
       </>}>
       {isCompare(question)
