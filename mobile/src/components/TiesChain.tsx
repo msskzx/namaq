@@ -25,6 +25,10 @@ const GAP = 8;
 const NODE_H = 44;
 const ROW = 92;
 const LABEL_W = 170;
+/** Two lines of a tie's words apart, and the row gap that leaves a line above them. */
+const CROWDED = 110;
+const LABEL_H = 38;
+const ROW_FAN = 132;
 /** The name before «بن» or «بنت», for the short clause on a line: «الزبير ابنُ صفية». */
 const firstName = (node: GraphNode) => personName(node).split(/\s+بنت?\s+/u)[0];
 
@@ -50,12 +54,25 @@ function layout(nodes: readonly string[], steps: readonly Step[], first: string,
   const rows = new Map<number, string[]>();
   for (const node of nodes) rows.set(depth.get(node)!, [...(rows.get(depth.get(node)!) ?? []), node]);
   // A row of few people gives each a wide box, so a name stays on one line and the tie's words between rows stay clear.
-  const place = new Map<string, Place>();
-  for (const [row, members] of rows) {
+  const xs = new Map<string, { x: number; w: number }>();
+  for (const members of rows.values()) {
     const w = Math.min(NODE_W, (width - GAP * (members.length - 1)) / members.length);
-    members.forEach((node, i) => place.set(node, { x: width / 2 + (i - (members.length - 1) / 2) * (w + GAP), y: NODE_H / 2 + 8 + row * ROW, w }));
+    members.forEach((node, i) => xs.set(node, { x: width / 2 + (i - (members.length - 1) / 2) * (w + GAP), w }));
   }
-  return { place, height: (Math.max(0, ...rows.keys()) + 1) * ROW };
+  // Lines fanning out from one person to a full row put their words too close at the middle: those words go just above
+  // the person each line reaches, as wide as his box, and the rows move apart to leave the lines room (the in-laws card).
+  const crowded = new Set<number>();
+  const lastRow = Math.max(0, ...rows.keys());
+  for (let row = 0; row < lastRow; row++) {
+    const mids = steps.filter(step => Math.min(depth.get(step.from)!, depth.get(step.to)!) === row && depth.get(step.from) !== depth.get(step.to))
+      .map(step => (xs.get(step.from)!.x + xs.get(step.to)!.x) / 2).sort((a, b) => a - b);
+    if (mids.some((x, i) => i > 0 && x - mids[i - 1] < CROWDED)) crowded.add(row);
+  }
+  const top = new Map<number, number>([[0, NODE_H / 2 + 8]]);
+  for (let row = 1; row <= lastRow; row++) top.set(row, top.get(row - 1)! + (crowded.has(row - 1) ? ROW_FAN : ROW));
+  const place = new Map<string, Place>();
+  for (const node of nodes) place.set(node, { ...xs.get(node)!, y: top.get(depth.get(node)!)! });
+  return { place, height: top.get(lastRow)! + ROW - NODE_H / 2 - 8, fanned: (step: Step) => depth.get(step.from) !== depth.get(step.to) && crowded.has(Math.min(depth.get(step.from)!, depth.get(step.to)!)) };
 }
 
 /**
@@ -69,7 +86,7 @@ export default function TiesChain({ nodes, steps, first, picked, width, palette,
   /** Drawn inside a card (the feed): people as chips on the card's colour. */
   inCard?: boolean;
 }) {
-  const { place, height } = layout(nodes, steps, first, width);
+  const { place, height, fanned } = layout(nodes, steps, first, width);
   const ground = inCard ? palette.card : palette.paper;
   return (
     <View style={{ width, height, alignSelf: 'center' }}>
@@ -83,6 +100,14 @@ export default function TiesChain({ nodes, steps, first, picked, width, palette,
       {steps.map((step, i) => {
         const a = place.get(step.from)!;
         const b = place.get(step.to)!;
+        if (fanned(step)) {
+          const lower = a.y > b.y ? a : b;
+          return (
+            <Text key={`l${step.from}>${step.to}`} numberOfLines={2} style={{ position: 'absolute', left: lower.x - lower.w / 2, top: lower.y - NODE_H / 2 - LABEL_H - 4, width: lower.w, textAlign: 'center', color: kindColor(palette, step.kind), fontSize: 13, backgroundColor: ground }}>
+              {stepClause(GRAPH, step, firstName)}
+            </Text>
+          );
+        }
         // Lines between the same two rows have their words side by side: each takes the room to its neighbour.
         const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
         const room = Math.min(LABEL_W, ...steps.filter((_, j) => j !== i).map(other => {

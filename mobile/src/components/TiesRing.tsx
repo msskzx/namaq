@@ -54,6 +54,97 @@ function layout(count: number, width: number) {
   return { places: [...row(top, first), ...side, ...row(below, mid + ROW)], middle: mid, middleW, height: mid + NODE_H / 2 + GROW + (below > 0 ? ROW : 0), w };
 }
 
+/** The kinds a ring of `room` nodes folds into one node each, the biggest first, until the rest fit. */
+export function foldedKinds(groups: readonly TieGroup[], room: number): TieKind[] {
+  const folded = new Set<TieKind>();
+  const size = () => groups.reduce((sum, g) => sum + (folded.has(g.kind) ? 1 : g.ties.length), 0);
+  for (const g of [...groups].sort((a, b) => b.ties.length - a.ties.length)) {
+    if (size() <= room) break;
+    if (g.ties.length > 1) folded.add(g.kind);
+  }
+  return [...folded];
+}
+
+/** How many nodes a ring holds in a drawing `width` wide. */
+export const ringRoom = (width: number) => capacity(width);
+
+/** The nodes of a round ring: one name each, as wide as the name (read off its letters) up to a third of the drawing. */
+const ROUND_H = 40;
+const MIDDLE_H = 80;
+const roundW = (label: string, width: number) => Math.min(width / 3, label.length * 7 + 22);
+
+/**
+ * A round ring's places (owner, 2026-11-21; feed-visuals sketch panels 7 and 9): its nodes down both sides of the middle
+ * in turn, each lower than the last by more than a node's height so none touch, near the middle at the top and foot and
+ * out to the edges beside it, like an oval. It holds no more than fit while it is under half as tall again as it is wide
+ * (null then).
+ */
+export function roundLayout(labels: readonly string[], width: number) {
+  const ws = labels.map(label => roundW(label, width));
+  const middleW = width * 0.27;
+  for (let step = ROUND_H + 6; (labels.length - 1) * step + ROUND_H + 8 <= width * 1.5; step += 4) {
+    const height = Math.max((labels.length - 1) * step, MIDDLE_H) + ROUND_H + 8;
+    const middle = { x: width / 2, y: height / 2 };
+    const half = Math.max(height / 2 - ROUND_H / 2 - 4, 1);
+    const places = labels.map((_, i) => {
+      const y = ROUND_H / 2 + 4 + i * step + (labels.length === 1 ? half : 0);
+      const near = ws[i] / 2 + 8;
+      const out = width / 2 - ws[i] / 2 - near;
+      const side = i % 2 ? -1 : 1;
+      return { x: width / 2 + side * (near + out * Math.sqrt(Math.max(0, 1 - ((y - middle.y) / half) ** 2))), y };
+    });
+    if (places.every((place, i) => Math.abs(place.x - middle.x) >= (ws[i] + middleW) / 2 + 6 || Math.abs(place.y - middle.y) >= (ROUND_H + MIDDLE_H) / 2 + 6)) {
+      return { places, ws, h: ROUND_H, middle, middleW, height };
+    }
+  }
+  return null;
+}
+
+export type RoundNode = { key: string; label: string; colour: string; inApp: boolean; onPress: () => void; onLongPress?: () => void };
+
+/**
+ * A ring drawn round (owner, 2026-11-21): a middle (a person, a title) with its people on an oval round it, each a line to
+ * the middle. The one-kind ring of a person, a title's holders and a hadith's people draw it.
+ */
+export function RoundRing({ middle, nodes, width, palette }: { middle: string; nodes: readonly RoundNode[]; width: number; palette: Palette }) {
+  const layout = roundLayout(nodes.map(node => node.label), width);
+  if (!layout) return null;
+  const { places, ws, h, middle: centre, middleW, height } = layout;
+  return (
+    <View style={{ width, height, alignSelf: 'center' }}>
+      <Svg width={width} height={height} style={{ position: 'absolute' }}>
+        {nodes.map((node, i) => {
+          const from = edge(centre, places[i], middleW / 2, 26);
+          const to = edge(places[i], centre, ws[i] / 2, h / 2);
+          return <Line key={node.key} x1={from.x} y1={from.y} x2={to.x} y2={to.y} stroke={node.colour} strokeWidth={2} strokeOpacity={0.8} />;
+        })}
+      </Svg>
+      <View style={{ position: 'absolute', left: centre.x - middleW / 2, top: centre.y - MIDDLE_H / 2, width: middleW, height: MIDDLE_H, justifyContent: 'center' }}>
+        <Card palette={palette} node pad={[8, 10]} picked accessibilityRole="header" accessibilityLabel={middle}>
+          <Text numberOfLines={3} style={{ color: palette.ink, fontSize: 15, lineHeight: 20, textAlign: 'center' }}>{middle}</Text>
+        </Card>
+      </View>
+      {nodes.map((node, i) => (
+        <View key={node.key} style={{ position: 'absolute', left: places[i].x - ws[i] / 2, top: places[i].y - h / 2, width: ws[i], height: h, justifyContent: 'center' }}>
+          <Card palette={palette} node pad={[4, 6]} picked={node.inApp} faded={!node.inApp} accessibilityRole={node.inApp ? 'link' : 'button'} accessibilityLabel={node.label}
+            onPress={node.onPress} onLongPress={node.onLongPress} style={{ minHeight: h, justifyContent: 'center' }}>
+            <Text numberOfLines={1} style={{ color: node.inApp ? palette.accent : palette.muted, fontSize: 14, textAlign: 'center' }}>{node.label}</Text>
+          </Card>
+        </View>
+      ))}
+    </View>
+  );
+}
+
+/** A node's name in a ring: «X بن Y» shortened as the grid ring shortens it. */
+export const ringName = (slug: string) => nodeName(GRAPH.nodes.get(slug)!);
+
+/** A person in a round ring: his page when he has one, else the sentence that names him. */
+export function personNode(slug: string, colour: string, go: (slug: string) => void, show?: () => void): RoundNode {
+  const node = GRAPH.nodes.get(slug)!;
+  return { key: slug, label: nodeName(node), colour, inApp: node.inApp, onPress: node.inApp ? () => go(slug) : () => show?.(), onLongPress: show };
+}
+
 /** A person's ties by kind, each person once, under the nearest kind (al-Zubayr's kin the Prophet ﷺ is not drawn again as his companion). */
 export function tiesOf(slug: string): TieGroup[] {
   const seen = new Set<string>();
@@ -94,12 +185,7 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
       const group = groups.find(g => g.kind === open);
       return group && group.ties.length <= room ? group.ties.map(tie => ({ tie, kind: tie.kind })) : [];
     }
-    const folded = new Set<TieKind>();
-    const size = () => groups.reduce((sum, g) => sum + (folded.has(g.kind) ? 1 : g.ties.length), 0);
-    for (const g of [...groups].sort((a, b) => b.ties.length - a.ties.length)) {
-      if (size() <= room) break;
-      if (g.ties.length > 1) folded.add(g.kind);
-    }
+    const folded = new Set(foldedKinds(groups, room));
     return groups.flatMap((g): Item[] => (folded.has(g.kind) ? [{ group: g.kind, count: g.ties.length, kind: g.kind }] : g.ties.map(tie => ({ tie, kind: tie.kind }))));
   })();
   const { places, middle, middleW, height: drawH, w: NODE_W } = layout(spots.length, drawW);

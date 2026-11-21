@@ -189,8 +189,9 @@ export default function NasabScreen() {
   const palette = usePalette();
   const bottom = useTabBarSpace();
   const { slug = '', pick } = useLocalSearchParams<{ slug?: string; pick?: string }>();
-  const [picked, setPicked] = useState(() => (findPerson(slug) ? [slug] : []));
-  const [adding, setAdding] = useState(!!pick || !findPerson(slug));
+  // One person, or several from a feed card («أين يلتقي نسبهما؟»).
+  const [picked, setPicked] = useState(() => slug.split(',').filter(s => findPerson(s)));
+  const [adding, setAdding] = useState(!!pick || !picked.length);
   const [query, setQuery] = useState('');
   const back = () => (router.canGoBack() ? router.back() : toTab('/tarajim'));
   return (
