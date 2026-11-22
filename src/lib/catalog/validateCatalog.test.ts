@@ -293,6 +293,21 @@ describe('validateCatalog', () => {
       expect(validateCatalog(catalog({ events: [event] }), known)).toEqual([]);
     });
 
+    it('rejects a year zero, which the hijri era does not have', () => {
+      const event = {
+        kind: 'EVENT' as const,
+        slug: 'some-event',
+        name: 'حدث',
+        type: 'OTHER' as const,
+        fields: { hijriYear: { value: 0, claims: ['pilot/one'] as const } },
+        people: [{ person: 'prophet-muhammad', claims: ['pilot/one'] as const }],
+      } as const;
+
+      expect(validateCatalog(catalog({ events: [event] }), known)).toEqual([
+        { path: 'events/some-event.hijriYear', message: 'there is no hijri year zero' },
+      ]);
+    });
+
     it('rejects a hijri month of 13', () => {
       const battle = {
         kind: 'BATTLE' as const,

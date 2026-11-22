@@ -74,7 +74,7 @@ describe('sira stories', () => {
     }
   });
 
-  const turned = reports.flatMap(([name, report]) => report.moments.filter(moment => moment.turns).map(moment => [`${name}, «${moment.title}»`, moment] as const));
+  const turned = reports.flatMap(([name, report]) => report.moments.filter(moment => moment.turns).map(moment => [`${name}, «${moment.title}»`, moment, report] as const));
 
   it.each(turned)('%s is its turns put back together', (_, moment) => {
     expect(moment.turns!.map(turn => turn.text).join(' ')).toBe(moment.text);
@@ -83,15 +83,26 @@ describe('sira stories', () => {
     for (const turn of moment.turns!) if (turn.lead) expect(turn.speaker).toBeDefined();
   });
 
+  // A kunya changes with its case: «أن أبا سفيان أخبره», «في جواب أبي بكر».
+  const kunyaForms = (name: string) => [name, name.replace(/^أبو /, 'أبا '), name.replace(/^أبو /, 'أبي ')].map(bare);
+
   // Owner, 2026-11-21: who speaks comes from the source, never our reading of a bare «فقال».
-  it.each(turned)('%s names each speaker as the text or a book does', (_, moment) => {
+  it.each(turned)('%s names each speaker as the text or a book does', (_, moment, report) => {
     for (const turn of moment.turns!.filter(turn => turn.speaker)) {
       const { name } = turn.speaker!;
       if (turn.witness) {
         const { source, volume, page, quote } = turn.witness;
         // A quote that skips words marks the gap with « … »: each part is on the page as printed.
         for (const part of quote.split(' … ')) expect(paragraphs(source, volume, page).join('\n')).toContain(part);
-        expect(bare(quote)).toContain(bare(name));
+        // «ﷺ» is said of the Prophet alone, so a note that gives the answer as his names him.
+        if (turn.speaker!.person === 'prophet-muhammad' && quote.includes('ﷺ')) continue;
+        expect(kunyaForms(name).some(form => bare(quote).includes(form))).toBe(true);
+      } else if (turn.teller) {
+        // Owner, 2026-11-22: the teller's own «قلت» is his: the lead says «I said», and the chain names him as the one telling.
+        expect(bare(turn.lead ?? '')).toMatch(/^(?:قالت?:? )?(?:ثم )?[فو]?قل(?:ت|نا)(?::? [^:]+)?:?$/);
+        // «قلت في نفسي» was thought, not said.
+        expect(bare(turn.lead ?? '')).not.toMatch(/نفسي/);
+        expect(kunyaForms(name).some(form => bare(report.isnad ?? '').includes(form))).toBe(true);
       } else expect(bare(turn.lead ?? '')).toContain(bare(name));
     }
   });

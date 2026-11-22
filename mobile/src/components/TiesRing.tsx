@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Check } from 'lucide-react-native';
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 import Svg, { Line } from 'react-native-svg';
 import { groupWord, tieGroups, tieWord, type GraphNode, type Tie, type TieGroup, type TieKind } from '@shared/tarajimGraph';
 import { num } from '@shared/quran/arabicNumber';
@@ -8,9 +8,6 @@ import { Text } from '@/ui/Text';
 import Card from '@/ui/Card';
 import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
-import Sheet from '@/ui/Sheet';
-import { pageLabel, saidBy } from '@shared/tarajim';
-import Saying from '@/ui/Saying';
 import type { Palette } from '@/lib/theme';
 import { findPerson, GRAPH, personName } from '@/lib/tarajim';
 import { edge, kindColor } from './TiesChain';
@@ -266,9 +263,8 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
           <Card palette={palette} pad={[4, 14]}>
             {listed.map(tie => {
               const node = GRAPH.nodes.get(tie.to)!;
-              return node.inApp
-                ? <Button key={tie.to} variant="plain" label={personName(node)} Icon={tie.to === marked ? Check : undefined} onPress={() => go(node.slug)} />
-                : <Text key={tie.to} style={{ color: tie.to === marked ? palette.green : palette.muted, fontSize: 16, lineHeight: 34, textAlign: 'right' }}>{personName(node)}</Text>;
+              // Everyone looks the same (owner, 2026-11-22): his page when he has one, else the sentence that names him.
+              return <Button key={tie.to} variant="plain" label={personName(node)} Icon={tie.to === marked ? Check : undefined} onPress={node.inApp ? () => go(node.slug) : () => setShown(tie)} />;
             })}
           </Card>
         )}
@@ -276,40 +272,4 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
   );
 }
 
-/** The sentence that states a tie, with its pages: a long press on the ring, on the «صلاته» screen and the person page. */
-/** A tie in the book's own words, with its pages (the ring's sheets). */
-function TieWords({ tie, palette }: { tie: Tie; palette: Palette }) {
-  return (
-    <View style={{ gap: 8 }}>
-      <Saying by={tie.link.text ? saidBy(tie.link) : undefined} palette={palette}>
-        <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{tie.link.text || personName(GRAPH.nodes.get(tie.to)!)}</Text>
-      </Saying>
-      <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>
-        {tie.link.refs.length ? pageLabel(tie.link.refs) : ''}{tie.reversed ? ' · من ترجمة الآخر' : ''}
-      </Text>
-    </View>
-  );
-}
-
-export function TieSheet({ tie, onClose, palette }: { tie?: Tie; onClose: () => void; palette: Palette }) {
-  return (
-    <Sheet open={!!tie} onClose={onClose} palette={palette}>
-      {tie && <View style={{ padding: 16 }}><TieWords tie={tie} palette={palette} /></View>}
-    </Sheet>
-  );
-}
-
-/**
- * A ring's ties the book gives «على خلاف», all in one sheet (owner, 2026-11-22): only the book's words and their pages,
- * no words of ours; two ties the book says in the same words show them once.
- */
-export function DoubtedSheet({ ties, open, onClose, palette }: { ties: readonly Tie[]; open: boolean; onClose: () => void; palette: Palette }) {
-  const once = ties.filter((tie, i) => !tie.link.text || ties.findIndex(other => other.link.text === tie.link.text) === i);
-  return (
-    <Sheet open={open} onClose={onClose} palette={palette}>
-      <ScrollView contentContainerStyle={{ padding: 16, gap: 18 }}>
-        {once.map(tie => <TieWords key={tie.to} tie={tie} palette={palette} />)}
-      </ScrollView>
-    </Sheet>
-  );
-}
+export { default as TieSheet, DoubtedSheet } from './TieSheet';

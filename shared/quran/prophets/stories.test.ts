@@ -1,466 +1,79 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { pageAyat } from '../branches';
+import { normalizeWord } from '../normalize';
+import type { MushafPage } from '../readerPage';
 import { PROPHETS, prophetName } from '.';
-import { ALYASA } from './alyasa';
-import { AYYUB } from './ayyub';
-import { DAWUD } from './dawud';
-import { DHUL_KIFL } from './dhul-kifl';
-import { HARUN } from './harun';
-import { HUD } from './hud';
-import { IDRIS } from './idris';
-import { IBRAHIM } from './ibrahim';
-import { ILYAS } from './ilyas';
-import { ISA } from './isa';
-import { ADAM } from './adam';
-import { LUT } from './lut';
-import { MUHAMMAD } from './muhammad';
-import { MUSA } from './musa';
-import { NUH } from './nuh';
-import { SALIH } from './salih';
-import { SHUAYB } from './shuayb';
-import { SULAYMAN } from './sulayman';
 import { STORIES } from './stories';
 import { storyKeys } from './story';
-import { YUNUS } from './yunus';
-import { YAHYA } from './yahya';
-import { YAQUB } from './yaqub';
-import { YUSUF } from './yusuf';
-import { ZAKARIYYA } from './zakariyya';
 
-const MUSA_EVENTS = MUSA.events;
+const mushaf: MushafPage[] = Array.from({ length: 604 }, (_, i) =>
+  JSON.parse(readFileSync(join(__dirname, '../../data/quran/mushaf', `${i + 1}.json`), 'utf8')),
+);
+const ayahWords = pageAyat(mushaf).map(ayah => ({ key: ayah.key, words: ayah.words.flatMap(word => word.split(/\s+/)).map(normalizeWord) }));
 
-const NAMED: Record<number, number[]> = {
-  2: [51, 53, 54, 55, 60, 61, 67, 87, 92, 108, 136, 246, 248],
-  3: [84],
-  4: [153, 164],
-  5: [20, 22, 24],
-  6: [84, 91, 154],
-  7: [103, 104, 115, 117, 122, 127, 128, 131, 134, 138, 142, 143, 144, 148, 150, 154, 155, 159, 160],
-  10: [75, 77, 80, 81, 83, 84, 87, 88],
-  11: [17, 96, 110],
-  14: [5, 6, 8],
-  17: [2, 101],
-  18: [60, 66],
-  19: [51],
-  20: [9, 11, 17, 19, 36, 40, 49, 57, 61, 65, 67, 70, 77, 83, 86, 88, 91],
-  21: [48],
-  22: [44],
-  23: [45, 49],
-  25: [35],
-  26: [10, 43, 45, 48, 52, 61, 63, 65],
-  27: [7, 9, 10],
-  28: [3, 7, 10, 15, 18, 19, 20, 29, 30, 31, 36, 37, 38, 43, 44, 48, 76],
-  29: [39],
-  32: [23],
-  33: [7, 69],
-  37: [114, 120],
-  40: [23, 26, 27, 37, 53],
-  41: [45],
-  42: [13],
-  43: [46],
-  46: [12, 30],
-  51: [38],
-  53: [36],
-  61: [5],
-  79: [15],
-  87: [19],
-};
+/** Ayat holding one of these words (as normalizeWord spells them), alone or after و/ف and then ب/ل/ك or the vocative يا. */
+const ayatNaming = (forms: readonly string[]) =>
+  ayahWords
+    .filter(({ words }) => words.some(word => forms.includes(word) || forms.includes(word.replace(/^[وف]/, '')) || forms.includes(word.replace(/^[وف]?[بلكي]/, ''))))
+    .map(({ key }) => key);
 
-const PHARAOH: Record<number, number[]> = {
-  2: [49, 50],
-  3: [11],
-  7: [103, 104, 109, 113, 123, 127, 130, 137, 141],
-  8: [52, 54],
-  10: [75, 79, 83, 88, 90],
-  11: [97],
-  14: [6],
-  17: [101, 102],
-  20: [24, 43, 60, 78, 79],
-  23: [46],
-  26: [11, 16, 23, 41, 44, 53],
-  27: [12],
-  28: [3, 4, 6, 8, 9, 32, 38],
-  29: [39],
-  38: [12],
-  40: [24, 26, 28, 29, 36, 37, 45, 46],
-  43: [46, 51],
-  44: [17, 31],
-  50: [13],
-  51: [38],
-  54: [41],
-  66: [11],
-  69: [9],
-  73: [15, 16],
-  79: [17],
-  85: [18],
-  89: [10],
-};
-
-describe('MUSA_EVENTS', () => {
-  const keys = storyKeys(MUSA_EVENTS);
-
-  it('puts no ayah in two events', () => {
-    expect(new Set(keys).size).toBe(keys.length);
-  });
-
-  it('holds every ayah that names Musa', () => {
-    const named = Object.entries(NAMED).flatMap(([s, ns]) => ns.map(n => `${s}:${n}`));
-    expect(named).toHaveLength(131);
-    expect(named.filter(k => !keys.includes(k))).toEqual([]);
-  });
-
-  it('holds every ayah that names Pharaoh or Haman', () => {
-    const named = Object.entries(PHARAOH).flatMap(([s, ns]) => ns.map(n => `${s}:${n}`));
-    expect(named).toHaveLength(67);
-    expect(named.filter(k => !keys.includes(k))).toEqual([]);
-  });
-
-  it('keeps every range ordered', () => {
-    for (const e of MUSA_EVENTS) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
-  });
-});
-
-describe('SHUAYB', () => {
-  const keys = storyKeys(SHUAYB.events);
-  const flat = (byS: Record<number, number[]>) => Object.entries(byS).flatMap(([s, ns]) => ns.map(n => `${s}:${n}`));
-
-  it('puts no ayah in two events', () => {
-    expect(new Set(keys).size).toBe(keys.length);
-  });
-
-  it('holds every ayah that names Shuayb', () => {
-    const named = flat({ 7: [85, 88, 90, 92], 11: [84, 87, 91, 94], 26: [177], 29: [36] });
-    expect(named).toHaveLength(10);
-    expect(named.filter(k => !keys.includes(k))).toEqual([]);
-  });
-
-  it('holds every ayah that names his people, Madyan or the people of the thicket', () => {
-    const named = flat({ 7: [85], 9: [70], 11: [84, 95], 15: [78], 22: [44], 26: [176], 29: [36], 38: [13], 50: [14] });
-    expect(named).toHaveLength(10);
-    expect(named.filter(k => !keys.includes(k))).toEqual([]);
-  });
-});
-
-// Every ayah that names the prophet (Hafs). 19:28 «يا أخت هارون» is about Maryam, so not in Harun's story; 37:130 «إل ياسين» is Ilyas.
-const BRIEF = [
-  { slug: 'idris', story: IDRIS, named: ['19:56', '21:85'] },
-  { slug: 'nuh', story: NUH, named: ['3:33', '4:163', '6:84', '7:59', '7:69', '9:70', '10:71', '11:25', '11:32', '11:36', '11:42', '11:45', '11:46', '11:48', '11:89', '14:9', '17:3', '17:17', '19:58', '21:76', '22:42', '23:23', '25:37', '26:105', '26:106', '26:116', '29:14', '33:7', '37:75', '37:79', '38:12', '40:5', '40:31', '42:13', '50:12', '51:46', '53:52', '54:9', '57:26', '66:10', '71:1', '71:21', '71:26'] },
-  { slug: 'ayyub', story: AYYUB, named: ['4:163', '6:84', '21:83', '38:41'] },
-  { slug: 'harun', story: HARUN, named: ['2:248', '4:163', '6:84', '7:122', '7:142', '10:75', '19:53', '20:30', '20:70', '20:90', '20:92', '21:48', '23:45', '25:35', '26:13', '26:48', '28:34', '37:114', '37:120'] },
-  { slug: 'dhul-kifl', story: DHUL_KIFL, named: ['21:85', '38:48'] },
-  { slug: 'dawud', story: DAWUD, named: ['2:251', '4:163', '5:78', '6:84', '17:55', '21:78', '21:79', '27:15', '27:16', '34:10', '34:13', '38:17', '38:22', '38:24', '38:26', '38:30'] },
-  { slug: 'sulayman', story: SULAYMAN, named: ['2:102', '4:163', '6:84', '21:78', '21:79', '21:81', '27:15', '27:16', '27:17', '27:18', '27:30', '27:36', '27:44', '34:12', '38:30', '38:34'] },
-  { slug: 'ilyas', story: ILYAS, named: ['6:85', '37:123', '37:130'] },
-  { slug: 'alyasa', story: ALYASA, named: ['6:86', '38:48'] },
-  {
-    slug: 'yusuf',
-    story: YUSUF,
-    named: ['6:84', ...[4, 7, 8, 9, 10, 11, 17, 21, 29, 46, 51, 56, 58, 69, 76, 77, 80, 84, 85, 87, 89, 90, 94, 99].map(n => `12:${n}`), '40:34'],
+/**
+ * What every ayah naming a prophet (Hafs) has to sit in his story: the words
+ * that name him, or the people or person whose story is told inside his, found
+ * in the Quran text; `also`, ayat that tell of him by another name, or whose
+ * name is also an ordinary word (هود «Jews», صالح «righteous», يحيى «gives
+ * life», عاد «transgressing») and so are listed by hand; `elsewhere`, ayat the
+ * words find that belong to another story, each with its reason.
+ */
+const NAMED: Record<string, { words: string[]; also?: string[]; elsewhere?: Record<string, string> }> = {
+  adam: { words: ['ءادم', 'ادم', 'ابليس'], elsewhere: { '26:95': 'the hosts of Iblis on the Last Day' } },
+  idris: { words: ['ادريس'] },
+  nuh: { words: ['نوح', 'نوحا'] },
+  hud: {
+    words: [],
+    also: [
+      // Hud
+      '7:65', '11:50', '11:53', '11:58', '11:60', '11:89', '26:124',
+      // Aad
+      '9:70', '11:59', '14:9', '22:42', '25:38', '26:123', '29:38', '38:12', '40:31', '41:13', '41:15', '46:21', '50:13',
+      '51:41', '53:50', '54:18', '69:4', '69:6', '89:6',
+    ],
   },
-  // Yaqub, and Israel where the ayah means him, not his children (3:93, 19:58).
-  { slug: 'yaqub', story: YAQUB, named: ['2:132', '2:133', '2:136', '2:140', '3:84', '3:93', '4:163', '6:84', '11:71', '12:6', '12:38', '12:68', '19:6', '19:49', '19:58', '21:72', '29:27', '38:45'] },
-];
-
-describe.each(BRIEF)('$slug', ({ story, named }) => {
-  const keys = storyKeys(story.events);
-
-  it('puts no ayah in two events', () => {
-    expect(new Set(keys).size).toBe(keys.length);
-  });
-
-  it('holds every ayah that names him', () => {
-    expect(named.filter(k => !keys.includes(k))).toEqual([]);
-  });
-
-  it('keeps every range ordered', () => {
-    for (const e of story.events) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
-  });
-});
-
-describe.each([
-  { name: 'Zakariyya', story: ZAKARIYYA, named: ['3:37', '3:38', '6:85', '19:2', '19:7', '21:89'] },
-  { name: 'Yahya', story: YAHYA, named: ['3:39', '6:85', '19:7', '19:12', '21:90'] },
-])('$name', ({ story, named }) => {
-  const keys = storyKeys(story.events);
-
-  it('puts no ayah in two events', () => {
-    expect(new Set(keys).size).toBe(keys.length);
-  });
-
-  it('holds every ayah that names him', () => {
-    expect(named.filter(k => !keys.includes(k))).toEqual([]);
-  });
-});
-
-const ADAM_NAMED: Record<number, number[]> = {
-  2: [31, 33, 34, 35, 37],
-  3: [33, 59],
-  5: [27],
-  7: [11, 19, 26, 27, 31, 35, 172],
-  17: [61, 70],
-  18: [50],
-  19: [58],
-  20: [115, 116, 117, 120, 121],
-  36: [60],
+  salih: {
+    words: ['ثمود', 'ثمودا'],
+    // Salih by name, and the people of al-Hijr (15:80).
+    also: ['7:73', '7:75', '7:77', '11:61', '11:62', '11:66', '11:89', '26:142', '27:45', '15:80'],
+  },
+  // His sons Ismail and Ishaq, whose stories are told inside his.
+  ibrahim: { words: ['ابرهيم', 'ابرهم', 'اسمعيل', 'اسحق'] },
+  // And the overturned towns of his people.
+  lut: { words: ['لوط', 'لوطا'], also: ['9:70', '53:53', '69:9'] },
+  shuayb: {
+    words: ['شعيب', 'شعيبا', 'مدين', 'الايكه', 'ليكه'],
+    elsewhere: { '20:40': 'Musa in Madyan', '28:22': 'Musa in Madyan', '28:23': 'Musa in Madyan', '28:45': 'Musa in Madyan' },
+  },
+  // Israel, where the ayah means him and not his children.
+  yaqub: { words: ['يعقوب'], also: ['3:93', '19:58'] },
+  yusuf: { words: ['يوسف'] },
+  ayyub: { words: ['ايوب'] },
+  'dhul-kifl': { words: ['الكفل'] },
+  // Dhu al-Nun (21:87), the companion of the whale (68:48), and the whole telling in al-Saffat.
+  yunus: { words: ['يونس'], also: ['21:87', '21:88', '68:48', '68:49', '68:50', ...Array.from({ length: 10 }, (_, i) => `37:${139 + i}`)] },
+  musa: { words: ['موسي', 'فرعون', 'همن'] },
+  harun: { words: ['هرون'], elsewhere: { '19:28': '«يا أخت هارون» is said to Maryam' } },
+  // «إل ياسين» (37:130).
+  ilyas: { words: ['الياس'], also: ['37:130'] },
+  alyasa: { words: ['اليسع'] },
+  dawud: { words: ['داود'] },
+  sulayman: { words: ['سليمن'] },
+  zakariyya: { words: ['زكريا'] },
+  yahya: { words: [], also: ['3:39', '6:85', '19:7', '19:12', '21:90'] },
+  // Named عيسى, المسيح or ابن مريم; Maryam's story is told inside his.
+  isa: { words: ['عيسي', 'المسيح', 'مريم'] },
+  muhammad: { words: ['محمد'] },
 };
-
-const IBLIS: Record<number, number[]> = {
-  2: [34],
-  7: [11],
-  15: [31, 32],
-  17: [61],
-  18: [50],
-  20: [116],
-  34: [20],
-  38: [74, 75],
-};
-
-describe('ADAM', () => {
-  const keys = storyKeys(ADAM.events);
-
-  it('puts no ayah in two events', () => {
-    expect(new Set(keys).size).toBe(keys.length);
-  });
-
-  it('holds every ayah that names Adam', () => {
-    const named = Object.entries(ADAM_NAMED).flatMap(([s, ns]) => ns.map(n => `${s}:${n}`));
-    expect(named).toHaveLength(25);
-    expect(named.filter(k => !keys.includes(k))).toEqual([]);
-  });
-
-  it('holds every ayah that names Iblis, but for its scene on the Last Day (26:95)', () => {
-    const named = Object.entries(IBLIS).flatMap(([s, ns]) => ns.map(n => `${s}:${n}`));
-    expect(named).toHaveLength(10);
-    expect(named.filter(k => !keys.includes(k))).toEqual([]);
-  });
-
-  it('keeps every range ordered', () => {
-    for (const e of ADAM.events) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
-  });
-});
-
-// Ayat that name Ibrahim, and his sons Ismail and Ishaq, whose story is told inside his.
-const IBRAHIM_NAMED: Record<string, string> = {
-  Ibrahim:
-    '2:124 2:125 2:126 2:127 2:130 2:132 2:133 2:135 2:136 2:140 2:258 2:260 3:33 3:65 3:67 3:68 3:84 3:95 3:97 4:54 4:125 4:163 6:74 6:75 6:83 6:161 9:70 9:114 11:69 11:74 11:75 11:76 12:6 12:38 14:35 15:51 16:120 16:123 19:41 19:46 19:58 21:51 21:60 21:62 21:69 22:26 22:43 22:78 26:69 29:16 29:31 33:7 37:83 37:104 37:109 38:45 42:13 43:26 51:24 53:37 57:26 60:4 87:19',
-  Ismail: '2:125 2:127 2:133 2:136 2:140 3:84 4:163 6:86 14:39 19:54 21:85 38:48',
-  Ishaq: '2:133 2:136 2:140 3:84 4:163 6:84 11:71 12:6 12:38 14:39 19:49 21:72 29:27 37:112 37:113 38:45',
-};
-const IBRAHIM_COUNTS: Record<string, number> = { Ibrahim: 63, Ismail: 12, Ishaq: 16 };
-
-describe('IBRAHIM', () => {
-  const keys = storyKeys(IBRAHIM.events);
-
-  it('puts no ayah in two events', () => {
-    expect(new Set(keys).size).toBe(keys.length);
-  });
-
-  it.each(Object.keys(IBRAHIM_NAMED))('holds every ayah that names %s', name => {
-    const named = IBRAHIM_NAMED[name].split(' ');
-    expect(named).toHaveLength(IBRAHIM_COUNTS[name]);
-    expect(named.filter(k => !keys.includes(k))).toEqual([]);
-  });
-
-  it('keeps every range ordered', () => {
-    for (const e of IBRAHIM.events) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
-  });
-});
-
-describe('YUNUS', () => {
-  const keys = storyKeys(YUNUS.events);
-
-  it('puts no ayah in two events', () => {
-    expect(new Set(keys).size).toBe(keys.length);
-  });
-
-  // Named Yunus, Dhu al-Nun (21:87) or the companion of the whale (68:48), and the whole telling in al-Saffat.
-  it('holds every ayah that names him and every ayah of his telling', () => {
-    const named = ['4:163', '6:86', '10:98', '21:87', '37:139', '68:48'];
-    const told = [...Array.from({ length: 10 }, (_, i) => `37:${139 + i}`), '21:88', '68:49', '68:50'];
-    expect([...named, ...told].filter(k => !keys.includes(k))).toEqual([]);
-    expect(keys).toHaveLength(18);
-  });
-});
-
-// Ayat that name Salih, and those that name Thamud or the people of al-Hijr.
-const SALIH_NAMED: Record<number, number[]> = { 7: [73, 75, 77], 11: [61, 62, 66, 89], 26: [142], 27: [45] };
-const THAMUD: Record<number, number[]> = {
-  7: [73],
-  9: [70],
-  11: [61, 68, 95],
-  14: [9],
-  15: [80],
-  17: [59],
-  22: [42],
-  25: [38],
-  26: [141],
-  27: [45],
-  29: [38],
-  38: [13],
-  40: [31],
-  41: [13, 17],
-  50: [12],
-  51: [43],
-  53: [51],
-  54: [23],
-  69: [4, 5],
-  85: [18],
-  89: [9],
-  91: [11],
-};
-
-describe('SALIH', () => {
-  const keys = storyKeys(SALIH.events);
-  const flat = (m: Record<number, number[]>) => Object.entries(m).flatMap(([s, ns]) => ns.map(n => `${s}:${n}`));
-
-  it('puts no ayah in two events', () => {
-    expect(new Set(keys).size).toBe(keys.length);
-  });
-
-  it('holds every ayah that names Salih', () => {
-    expect(flat(SALIH_NAMED)).toHaveLength(9);
-    expect(flat(SALIH_NAMED).filter(k => !keys.includes(k))).toEqual([]);
-  });
-
-  it('holds every ayah that names Thamud or the people of al-Hijr', () => {
-    expect(flat(THAMUD)).toHaveLength(26);
-    expect(flat(THAMUD).filter(k => !keys.includes(k))).toEqual([]);
-  });
-
-  it('keeps every range ordered', () => {
-    for (const e of SALIH.events) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
-  });
-});
-
-// Ayat that name him: عيسى, المسيح or ابن مريم.
-const ISA_NAMED: Record<number, number[]> = {
-  2: [87, 136, 253],
-  3: [45, 52, 55, 59, 84],
-  4: [157, 163, 171, 172],
-  5: [17, 46, 72, 75, 78, 110, 112, 114, 116],
-  6: [85],
-  9: [30, 31],
-  19: [34],
-  23: [50],
-  33: [7],
-  42: [13],
-  43: [57, 63],
-  57: [27],
-  61: [6, 14],
-};
-
-const MARYAM: Record<number, number[]> = {
-  2: [87, 253],
-  3: [36, 37, 42, 43, 44, 45],
-  4: [156, 157, 171],
-  5: [17, 46, 72, 75, 78, 110, 112, 114, 116],
-  9: [31],
-  19: [16, 27, 34],
-  23: [50],
-  33: [7],
-  43: [57],
-  57: [27],
-  61: [6, 14],
-  66: [12],
-};
-
-describe('ISA', () => {
-  const keys = storyKeys(ISA.events);
-  const flat = (named: Record<number, number[]>) => Object.entries(named).flatMap(([s, ns]) => ns.map(n => `${s}:${n}`));
-
-  it('puts no ayah in two events', () => {
-    expect(new Set(keys).size).toBe(keys.length);
-  });
-
-  it('holds every ayah that names Isa', () => {
-    expect(flat(ISA_NAMED)).toHaveLength(33);
-    expect(flat(ISA_NAMED).filter(k => !keys.includes(k))).toEqual([]);
-  });
-
-  it('holds every ayah that names Maryam', () => {
-    expect(flat(MARYAM)).toHaveLength(31);
-    expect(flat(MARYAM).filter(k => !keys.includes(k))).toEqual([]);
-  });
-});
-
-const LUT_NAMED: Record<number, number[]> = {
-  6: [86],
-  7: [80],
-  11: [70, 74, 77, 81, 89],
-  15: [59, 61],
-  21: [71, 74],
-  22: [43],
-  26: [160, 161, 167],
-  27: [54, 56],
-  29: [26, 28, 32, 33],
-  37: [133],
-  38: [13],
-  50: [13],
-  54: [33, 34],
-  66: [10],
-};
-
-// The overturned towns of Lut's people.
-const MUTAFIKAT = ['9:70', '53:53', '69:9'];
-
-describe('LUT', () => {
-  const keys = storyKeys(LUT.events);
-
-  it('puts no ayah in two events', () => {
-    expect(new Set(keys).size).toBe(keys.length);
-  });
-
-  it('holds every ayah that names Lut, and the overturned towns', () => {
-    const named = Object.entries(LUT_NAMED).flatMap(([s, ns]) => ns.map(n => `${s}:${n}`));
-    expect(named).toHaveLength(27);
-    expect([...named, ...MUTAFIKAT].filter(k => !keys.includes(k))).toEqual([]);
-  });
-
-  it('keeps every range ordered', () => {
-    for (const e of LUT.events) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
-  });
-});
-
-describe('HUD', () => {
-  const keys = storyKeys(HUD.events);
-  const flat = (byS: Record<number, number[]>) => Object.entries(byS).flatMap(([s, ns]) => ns.map(n => `${s}:${n}`));
-
-  it('puts no ayah in two events', () => {
-    expect(new Set(keys).size).toBe(keys.length);
-  });
-
-  it('holds every ayah that names Hud', () => {
-    const named = flat({ 7: [65], 11: [50, 53, 58, 60, 89], 26: [124] });
-    expect(named).toHaveLength(7);
-    expect(named.filter(k => !keys.includes(k))).toEqual([]);
-  });
-
-  it('holds every ayah that names Aad', () => {
-    const named = flat({
-      7: [65], 9: [70], 11: [50, 59, 60], 14: [9], 22: [42], 25: [38], 26: [123], 29: [38], 38: [12], 40: [31],
-      41: [13, 15], 46: [21], 50: [13], 51: [41], 53: [50], 54: [18], 69: [4, 6], 89: [6],
-    });
-    expect(named).toHaveLength(22);
-    expect(named.filter(k => !keys.includes(k))).toEqual([]);
-  });
-
-  it('keeps every range ordered', () => {
-    for (const e of HUD.events) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
-  });
-});
-
-
-describe('Muhammad', () => {
-  const keys = storyKeys(MUHAMMAD.events);
-
-  it('holds every ayah that names him Muhammad', () => {
-    expect(['3:144', '33:40', '47:2', '48:29'].filter(k => !keys.includes(k))).toEqual([]);
-  });
-
-  it('leaves the name Ahmad to Isa, who gives the good news of him', () => {
-    expect(keys).not.toContain('61:6');
-    expect(storyKeys(ISA.events)).toContain('61:6');
-  });
-});
 
 describe('PROPHETS', () => {
   it('names each prophet with «عليه السلام», and the Prophet Muhammad with ﷺ', () => {
@@ -485,5 +98,19 @@ describe('STORIES', () => {
     for (const e of events) for (const g of e.segments) expect(g.range[0]).toBeLessThanOrEqual(g.range[1]);
     const keys = storyKeys(events);
     expect(new Set(keys).size).toBe(keys.length);
+  });
+
+  it.each(PROPHETS)('$slug holds every ayah that names him', ({ slug }) => {
+    const { words, also = [], elsewhere = {} } = NAMED[slug];
+    const keys = new Set(storyKeys(STORIES[slug].events));
+    const named = [...ayatNaming(words).filter(key => !(key in elsewhere)), ...also];
+
+    expect(named.length).toBeGreaterThan(0);
+    expect(named.filter(key => !keys.has(key))).toEqual([]);
+  });
+
+  it('leaves the name Ahmad to Isa, who gives the good news of him', () => {
+    expect(storyKeys(STORIES.muhammad.events)).not.toContain('61:6');
+    expect(storyKeys(STORIES.isa.events)).toContain('61:6');
   });
 });

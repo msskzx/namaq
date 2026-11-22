@@ -28,6 +28,8 @@ import { StoryView } from '@/screens/story';
 import { BattleView } from '@/screens/battle';
 import { storyOf } from '@/lib/stories';
 import { battleOf } from '@/lib/battles';
+import { TieSaying } from '@/components/TieSheet';
+import type { Tie } from '@shared/tarajimGraph';
 import { GharibBody } from './GharibSheet';
 import { BalaghaBody } from './BalaghaSheet';
 import { IrabBody } from './IrabSheet';
@@ -55,8 +57,10 @@ const FOUND = 20;
 function TiesLook({ slug, mark, width, palette }: { slug: string; mark?: string; width: number; palette: Palette }) {
   const [trail, setTrail] = useState([slug]);
   const [query, setQuery] = useState('');
+  // Already in a sheet: a name with no page shows the sentence that names him under the ring.
+  const [shown, setShown] = useState<Tie | undefined>();
   const at = trail[trail.length - 1];
-  const go = (to: string) => { setTrail([...trail, to]); setQuery(''); };
+  const go = (to: string) => { setTrail([...trail, to]); setQuery(''); setShown(undefined); };
   const found = query.trim() ? searchPeople(query).slice(0, FOUND) : [];
   return (
     <View style={{ gap: 12 }}>
@@ -73,7 +77,8 @@ function TiesLook({ slug, mark, width, palette }: { slug: string; mark?: string;
                 : <Text key={`${s}${i}`} style={{ color: palette.ink, fontSize: 15 }}>{personName(findPerson(s)!)}</Text>))}
             </View>
           )}
-          <TiesRing slug={at} width={width} palette={palette} onPick={go} marked={mark} />
+          <TiesRing slug={at} width={width} palette={palette} onPick={go} onShow={setShown} marked={mark} />
+          {shown && <TieSaying tie={shown} palette={palette} />}
         </>}
     </View>
   );

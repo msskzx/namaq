@@ -37,6 +37,14 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   becomes a rule that holds for every item plus "there is at least one". A
   guard's shrink-only baseline is not a magic number.
   [docs/ship-checklist.md](docs/ship-checklist.md) section 9 has examples.
+- Catalog data (people, battles, events, sira stories) has no per-person,
+  per-chapter or per-story test files (owner, 2026-11-22): they froze what one
+  batch decided, so a correct fix from a source broke them. A new rule is
+  written once over the whole catalog in `data/catalog/catalogRules.test.ts`
+  (which runs the catalog validator), beside `claimProvenance.test.ts` and
+  `events/stories.test.ts`. After a catalog change, run `npm run battles:app`
+  and `npm run model:app-people`: the phone reads those files, and a test
+  fails when they lag the catalog.
 - New functionality must be covered by automated tests. **Search and graph
   features are the highest priority**
 - Colocate tests next to the code they cover, named `<file>.test.ts(x)`

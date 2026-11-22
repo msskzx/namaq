@@ -6,6 +6,8 @@ import type { CatalogEvent } from '@/lib/catalog/types';
  * «ليلة استمعوا القرآن» does not say which occasion; putting it here, after Alqamah's as Muslim has them, is our reading.
  * Reports that Ibn Mas'ud was with him that night (al-Nasa'i's, «وقد جاء ما يخالف هذا», pp160-161) and saw them (the Zutt,
  * p161, «صحيح» but not placed in a Sahih) wait (owner: sahih first).
+ *
+ * Masruq's report follows as al-Bukhari prints it (3859), whole.
  */
 const theNightOfTheJinn = {
   kind: 'EVENT',
@@ -34,6 +36,13 @@ const theNightOfTheJinn = {
       grading: 'متفق عليه.',
       moments: [
         { title: 'آذنته بهم شجرة', text: 'قال: سألت مسروقا: من آذن النبي صلى الله عليه وسلم ليلة استمعوا القرآن؟ فقال: حدثني أبوك، يعني ابن مسعود: أنه آذنته بهم شجرة.', people: ['prophet-muhammad', 'abdullah-ibn-masud'] },
+      ],
+    },
+    {
+      isnad: "حَدَّثَنِي عُبَيْدُ اللهِ بْنُ سَعِيدٍ: حَدَّثَنَا أَبُو أُسَامَةَ: حَدَّثَنَا مِسْعَرٌ، عَنْ مَعْنِ بْنِ عَبْدِ الرَّحْمَنِ",
+      source: { slug: 'sahih-al-bukhari', hadith: 3859, url: 'https://sunnah.com/bukhari:3859' },
+      moments: [
+        { title: "آذنته بهم شجرة", text: "قَالَ: سَمِعْتُ أَبِي قَالَ: «سَأَلْتُ مَسْرُوقًا: مَنْ آذَنَ النَّبِيَّ ﷺ بِالْجِنِّ لَيْلَةَ اسْتَمَعُوا الْقُرْآنَ؟ فَقَالَ: حَدَّثَنِي أَبُوكَ، يَعْنِي عَبْدَ اللهِ: أَنَّهُ آذَنَتْ بِهِمْ شَجَرَةٌ.»", people: ['prophet-muhammad', 'abdullah-ibn-masud'] },
       ],
     },
   ],
