@@ -1,11 +1,13 @@
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
- * The Prophet ﷺ sent Ali, Abu Marthad and al-Zubayr to Rawdat Khakh after a woman carrying a letter from Hatib ibn Abi
- * Balta'ah to the mushrikun; they brought it back, Umar asked to strike his neck, Hatib gave his reason, and the Prophet ﷺ
- * said «صدق، ولا تقولوا له إلا خيرا… أليس من أهل بدر؟». Told from Sahih al-Bukhari 3983 (al-Maghazi, the virtue of those
- * who were at Badr), whole. Abu Marthad has no catalog subject and is not linked. Other tellings in the book (3007, 4274)
- * fall in later batches and should be weighed here when they come.
+ * The Prophet ﷺ sent Ali with al-Zubayr and al-Miqdad (in 3983, Abu Marthad and al-Zubayr) to Rawdat Khakh after a woman
+ * carrying a letter from Hatib ibn Abi Balta'ah to the mushrikun of Makkah; they brought it back, Hatib gave his reason, Umar
+ * asked to strike his neck, and the Prophet ﷺ said «إنه قد شهد بدرا… اعملوا ما شئتم فقد غفرت لكم», and the opening of
+ * al-Mumtahanah was sent down. Told first from Sahih al-Bukhari 4274 (al-Maghazi, the chapter on the conquest of Makkah),
+ * whole: it is a little the fuller and the only one that gives the ayah sent down; then 3983 (the virtue of those who were
+ * at Badr), whole. Abu Marthad has no catalog subject and is not linked. Another telling in the book (3007) falls outside
+ * the sira batches.
  */
 const theLetterOfHatib = {
   kind: 'EVENT',
@@ -14,9 +16,29 @@ const theLetterOfHatib = {
   nameTransliterated: "Hatib ibn Abi Balta'ah's letter",
   type: 'OTHER',
   fields: {},
-  people: [{ person: 'ali-ibn-abi-talib' }, { person: 'az-zubayr-ibn-al-awwam' }, { person: 'prophet-muhammad' }, { person: 'hatib-ibn-abi-baltaah' }, { person: 'umar-ibn-al-khattab' }],
-  tags: ['HIS_WORDS'],
+  people: [{ person: 'ali-ibn-abi-talib' }, { person: 'az-zubayr-ibn-al-awwam' }, { person: 'prophet-muhammad' }, { person: 'hatib-ibn-abi-baltaah' }, { person: 'umar-ibn-al-khattab' }, { person: 'al-miqdad-ibn-amr' }],
+  tags: ['HIS_WORDS', 'REVEALED_ABOUT'],
+  ayat: [
+    {
+      kind: 'REVEALED_ABOUT',
+      from: '60:1',
+      to: '60:1',
+      evidence: [{ source: 'sahih-al-bukhari', hadith: 4274, url: 'https://sunnah.com/bukhari:4274', quote: "فَأَنْزَلَ اللهُ السُّورَةَ: ﴿يَا أَيُّهَا الَّذِينَ آمَنُوا لا تَتَّخِذُوا عَدُوِّي وَعَدُوَّكُمْ أَوْلِيَاءَ تُلْقُونَ إِلَيْهِمْ بِالْمَوَدَّةِ﴾ إِلَى قَوْلِهِ: ﴿فَقَدْ ضَلَّ سَوَاءَ السَّبِيلِ﴾" }],
+    },
+  ],
   reports: [
+    {
+      isnad: "حَدَّثَنَا قُتَيْبَةُ، حَدَّثَنَا سُفْيَانُ، عَنْ عَمْرِو بْنِ دِينَارٍ قَالَ: أَخْبَرَنِي الْحَسَنُ بْنُ مُحَمَّدٍ أَنَّهُ سَمِعَ عُبَيْدَ اللهِ بْنَ أَبِي رَافِعٍ يَقُولُ: سَمِعْتُ عَلِيًّا  رضي الله عنه يَقُولُ:",
+      source: { slug: 'sahih-al-bukhari', hadith: 4274, url: 'https://sunnah.com/bukhari:4274' },
+      moments: [
+        { title: "«انطلقوا حتى تأتوا روضة خاخ»", text: "«بَعَثَنِي رَسُولُ اللهِ ﷺ أَنَا وَالزُّبَيْرَ وَالْمِقْدَادَ، فَقَالَ: انْطَلِقُوا حَتَّى تَأْتُوا رَوْضَةَ خَاخٍ، فَإِنَّ بِهَا ظَعِينَةً مَعَهَا كِتَابٌ، فَخُذُوا مِنْهَا.", people: ['prophet-muhammad', 'ali-ibn-abi-talib', 'az-zubayr-ibn-al-awwam', 'al-miqdad-ibn-amr'] },
+        { title: "«لتخرجن الكتاب»", text: "قَالَ: فَانْطَلَقْنَا تَعَادَى بِنَا خَيْلُنَا حَتَّى أَتَيْنَا الرَّوْضَةَ، فَإِذَا نَحْنُ بِالظَّعِينَةِ، قُلْنَا لَهَا: أَخْرِجِي الْكِتَابَ، قَالَتْ: مَا مَعِي كِتَابٌ، فَقُلْنَا: لَتُخْرِجِنَّ الْكِتَابَ، أَوْ لَنُلْقِيَنَّ الثِّيَابَ، قَالَ: فَأَخْرَجَتْهُ مِنْ عِقَاصِهَا،", people: ['ali-ibn-abi-talib', 'az-zubayr-ibn-al-awwam', 'al-miqdad-ibn-amr'] },
+        { title: "من حاطب بن أبي بلتعة", text: "فَأَتَيْنَا بِهِ رَسُولَ اللهِ ﷺ فَإِذَا فِيهِ: مِنْ حَاطِبِ بْنِ أَبِي بَلْتَعَةَ، إِلَى نَاسٍ بِمَكَّةَ مِنَ الْمُشْرِكِينَ، يُخْبِرُهُمْ بِبَعْضِ أَمْرِ رَسُولِ اللهِ ﷺ.", people: ['prophet-muhammad', 'hatib-ibn-abi-baltaah'] },
+        { title: "«يا حاطب، ما هذا؟»", text: "فَقَالَ رَسُولُ اللهِ ﷺ: يَا حَاطِبُ، مَا هَذَا؟ قَالَ: يَا رَسُولَ اللهِ، لَا تَعْجَلْ عَلَيَّ، إِنِّي كُنْتُ امْرَأً مُلْصَقًا فِي قُرَيْشٍ، يَقُولُ: كُنْتُ حَلِيفًا، وَلَمْ أَكُنْ مِنْ أَنْفُسِهَا، وَكَانَ مَنْ مَعَكَ مِنَ الْمُهَاجِرِينَ، مَنْ لَهُمْ قَرَابَاتٌ يَحْمُونَ أَهْلِيهِمْ وَأَمْوَالَهُمْ، فَأَحْبَبْتُ إِذْ فَاتَنِي ذَلِكَ مِنَ النَّسَبِ فِيهِمْ، أَنْ أَتَّخِذَ عِنْدَهُمْ يَدًا يَحْمُونَ قَرَابَتِي، وَلَمْ أَفْعَلْهُ ارْتِدَادًا عَنْ دِينِي، وَلَا رِضًا بِالْكُفْرِ بَعْدَ الْإِسْلَامِ.", people: ['prophet-muhammad', 'hatib-ibn-abi-baltaah'] },
+        { title: "«اعملوا ما شئتم فقد غفرت لكم»", text: "فَقَالَ رَسُولُ اللهِ ﷺ: أَمَا إِنَّهُ قَدْ صَدَقَكُمْ. فَقَالَ عُمَرُ: يَا رَسُولَ اللهِ، دَعْنِي أَضْرِبْ عُنُقَ هَذَا الْمُنَافِقِ. فَقَالَ: إِنَّهُ قَدْ شَهِدَ بَدْرًا، وَمَا يُدْرِيكَ لَعَلَّ اللهَ اطَّلَعَ عَلَى مَنْ شَهِدَ بَدْرًا قَالَ: اعْمَلُوا مَا شِئْتُمْ فَقَدْ غَفَرْتُ لَكُمْ.", people: ['prophet-muhammad', 'umar-ibn-al-khattab'] },
+        { title: "فأنزل الله السورة", text: "فَأَنْزَلَ اللهُ السُّورَةَ: ﴿يَا أَيُّهَا الَّذِينَ آمَنُوا لا تَتَّخِذُوا عَدُوِّي وَعَدُوَّكُمْ أَوْلِيَاءَ تُلْقُونَ إِلَيْهِمْ بِالْمَوَدَّةِ﴾ إِلَى قَوْلِهِ: ﴿فَقَدْ ضَلَّ سَوَاءَ السَّبِيلِ﴾.»", people: [] },
+      ],
+    },
     {
       isnad: "حَدَّثَنِي إِسْحَاقُ بْنُ إِبْرَاهِيمَ: أَخْبَرَنَا عَبْدُ اللهِ بْنُ إِدْرِيسَ قَالَ: سَمِعْتُ حُصَيْنَ بْنَ عَبْدِ الرَّحْمَنِ، عَنْ سَعْدِ بْنِ عُبَيْدَةَ، عَنْ أَبِي عَبْدِ الرَّحْمَنِ السُّلَمِيِّ، عَنْ عَلِيٍّ  رضي الله عنه قَالَ:",
       source: { slug: 'sahih-al-bukhari', hadith: 3983, url: 'https://sunnah.com/bukhari:3983' },
