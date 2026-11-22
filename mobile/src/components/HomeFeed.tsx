@@ -295,8 +295,9 @@ const fortyTopic = (n: number) => n > 42 ? topic({ pathname: '/hadith-book', par
 /** Where a post's ayat are, for its head: «البقرة ٦١ · آل عمران ٢١، ١١٢» (shared/quran/ayahPlaces.ts). */
 const placesOf = (keys: string[]) => ayahPlaces(keys, shortNames);
 
-/** A mushaf page as a card's source: «المصحف · البقرة», the page in its sheet. */
-const mushafPage = (surah: number, page: number): QuizSource => ({ book: MUSHAF_BOOK, at: `${SURAH_NAMES[surah]}، ص ${num(page)}` });
+/** A mushaf page as a card's source, its juz and page on the line: «المصحف · البقرة، الجزء ٣، الصفحة ٤٥» (owner, 2026-11-22). */
+const mushafPage = (surah: number, page: number): QuizSource =>
+  ({ book: MUSHAF_BOOK, at: `${SURAH_NAMES[surah]}، ${juzLabel([pageData(page).juz])}، الصفحة ${num(page)}` });
 /** The ayat a card shows as its source: «المصحف · الإخلاص ٣», each with its page in the sheet. */
 const mushafOf = (...keys: string[]) => sourcesOf(keys.map(key => mushafSource(key, pageOfAyah(key))));
 
@@ -323,11 +324,11 @@ export function ContinueReading({ palette }: { palette: Palette }) {
   // The juz of the page it opens on, not today's juz (owner, 2026-11-18: today's juz is its own card in the feed).
   const juz = pageData(page).juz;
   const read = () => openIntent({ tab: 'read', page });
-  const where = [shortNames[surah], date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ');
+  // The juz beside the surah and date in the head, as on today's juz card; the row holds only buttons (owner, 2026-11-22).
+  const where = [shortNames[surah], juzLabel([juz]), date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ');
   return (
     <Post palette={palette} head={<PostHead Icon={BookOpen} title={fasila || page > 1 ? 'تابع القراءة' : 'ابدأ القراءة'} sub={where} open={topic('/quran', 'افتح القرآن')} palette={palette} />}
       open={<OpenButton label={`افتح المصحف ${fasila ? 'عند فاصلتك' : 'حيث توقفت'}، سورة ${shortNames[surah] ?? ''}`} onPress={read} palette={palette} />}
-      actions={<Text style={{ color: palette.muted, fontSize: 14, padding: 8 }}>{juzLabel([juz])}</Text>}
       source={sourcesOf([mushafPage(surah, page)])}
       // Shared, the page alone: not where you stopped (owner's plan, 2026-11-22).
       picture={{ head: <PostHead Icon={BookOpen} title={shortNames[surah] ?? ''} sub={juzLabel([juz])} palette={palette} />,
@@ -1132,6 +1133,9 @@ const StoryPost = memo(function StoryPost({ slug, phase, palette }: { slug: stri
 const JUZ_READ = 'juz-read';
 const juzRead = (day: number) => readJson(JUZ_READ, isNumberIn(0, Infinity)) === day;
 
+/** Today's juz shows half the lines the reading card does. */
+const JUZ_LINES = 4;
+
 /**
  * Today's juz as a post (owner, 2026-11-18: no longer a circle at the top): the Hijri day's juz, the top of its first page,
  * and a button to read it. «الجزءان» on the last day of a 29-day month. «قرأته» marks it read for the day (owner, 2026-11-22):
@@ -1149,8 +1153,9 @@ function JuzPost({ palette }: { palette: Palette }) {
     <Post palette={palette} head={<PostHead Icon={BookOpen} title="جزء اليوم" sub={[juzLabel(juz), date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ')} open={topic('/quran', 'افتح القرآن')} palette={palette} />}
       open={<OpenButton label={`اقرأ ${juzLabel(juz)}، جزء اليوم`} onPress={open} palette={palette} />}
       actions={<Action Icon={read ? CircleCheck : Check} label="قرأته" tone="green" on={read} onPress={toggle} palette={palette} />}
-      source={mushafOf(`${start.surah}:${start.ayah}`)}>
-      <View style={{ paddingHorizontal: 12, paddingVertical: 6 }}><PageTop page={page} palette={palette} /></View>
+      source={sourcesOf([mushafPage(start.surah, page)])}>
+      {/* Smaller than the reading card: the juz's first lines only (owner, 2026-11-22). */}
+      <View style={{ paddingHorizontal: 12, paddingVertical: 6 }}><PageTop page={page} lines={JUZ_LINES} palette={palette} /></View>
     </Post>
   );
 }
@@ -1161,7 +1166,7 @@ function KahfPost({ palette }: { palette: Palette }) {
   const read = () => openIntent({ tab: 'read', at: '18:1' });
   return (
     <Post palette={palette} head={<PostHead Icon={BookOpen} title="سورة الكهف" sub="يوم الجمعة" open={topic('/quran', 'افتح القرآن')} palette={palette} />}
-      open={<OpenButton label="اقرأ سورة الكهف" onPress={read} palette={palette} />} source={mushafOf('18:1')}>
+      open={<OpenButton label="اقرأ سورة الكهف" onPress={read} palette={palette} />} source={sourcesOf([mushafPage(18, page)])}>
       <View style={{ paddingHorizontal: 12, paddingVertical: 6 }}><PageTop page={page} palette={palette} /></View>
     </Post>
   );

@@ -133,7 +133,9 @@ test.describe('a new user', () => {
   test('the reading card names the juz of its own page, and today\'s juz is a card that opens the mushaf', async ({ page }) => {
     await page.addInitScript(() => localStorage.setItem('reader-place', JSON.stringify({ page: 300, position: null })));
     await open(page, '/');
-    await expect(page.getByText('الجزء ١٥', { exact: true }).first()).toBeVisible();
+    // The juz on the head's second line beside the surah, and on the reference line with the page (owner, 2026-11-22).
+    await expect(page.getByText(/ · الجزء ١٥ · /).first()).toBeVisible();
+    await expect(page.getByText(/^المصحف · .+، الجزء ١٥، الصفحة ٣٠٠$/).first()).toBeVisible();
     const juz = page.getByRole('button', { name: /^اقرأ الجزءا?ن? .*، جزء اليوم$/ });
     await juz.scrollIntoViewIfNeeded();
     await juz.click();
