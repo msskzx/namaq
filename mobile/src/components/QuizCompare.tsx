@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useFitReport, type OnFit } from '@/lib/useFit';
-import { Lightbulb, SquareArrowOutUpLeft, type LucideProps } from 'lucide-react-native';
+import { BookSearch, SquareArrowOutUpLeft, type LucideProps } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import { num } from '@shared/quran/arabicNumber';
 import { markColour } from '@shared/quran/compareCardLook';
@@ -87,7 +87,7 @@ export function CompareInputs({ question, typed, onType, palette, header, hints:
         </View>
       </ScrollView>
       {!typing && <Buttons>
-        <Bar label="تلميح: حرف آخر من كل فراغ" onPress={() => (onHints ?? setOwn)(addCompareHint(ask, typed, hints))} Icon={Lightbulb} palette={palette} />
+        <Bar label="تلميح: حرف آخر من كل فراغ" onPress={() => (onHints ?? setOwn)(addCompareHint(ask, typed, hints))} Icon={BookSearch} palette={palette} />
       </Buttons>}
     </View>
   );
@@ -109,7 +109,7 @@ function Mark({ row, palette, hinted }: { row: Correction; palette: Palette; hin
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
         <Badge row={row} palette={palette} />
         <Text style={{ fontSize: 14, fontWeight: '600', color: palette.ink }}>{verdict(row, true)}</Text>
-        {hinted && <Lightbulb size={15} color={palette.muted} accessibilityLabel="بتلميح" />}
+        {hinted && <BookSearch size={15} color={palette.muted} accessibilityLabel="بتلميح" />}
       </View>
       {!row.correct && <Text style={{ fontSize: 15, color: palette.muted, textAlign: 'right' }}>
         {'كتبتَ: '}

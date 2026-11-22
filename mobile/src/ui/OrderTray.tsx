@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
-import { Check, Search } from 'lucide-react-native';
+import { BookSearch, Check } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import { Tap } from '@/ui/Tap';
 import Button from '@/ui/Button';
@@ -103,7 +103,7 @@ export default function OrderTray({ question, picked, palette, onPick, onDraft, 
       </ScrollView>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
         <Button variant="primary" Icon={Check} label="تحقق" onPress={() => onPick(sentTray(tray))} />
-        {onLook && tray.at !== null && <Button Icon={Search} label="تلميح" accessibilityLabel="تلميح: ابحث عن الجواب" onPress={() => onLook(numbers[tray.at!])} />}
+        {onLook && tray.at !== null && <Button Icon={BookSearch} label="تلميح" accessibilityLabel="تلميح: ابحث عن الجواب" onPress={() => onLook(numbers[tray.at!])} />}
       </View>
     </View>
   );

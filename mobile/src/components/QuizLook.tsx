@@ -3,7 +3,7 @@ import { SahihLook } from '@/components/Sahih';
 import { SAHIH } from '@/lib/sahih';
 import { UnderCard, useCardRow } from '@/ui/Card';
 import { ScrollView, View, useWindowDimensions } from 'react-native';
-import { Check, Search } from 'lucide-react-native';
+import { BookSearch, Check } from 'lucide-react-native';
 import type { QuizLook } from '@shared/quiz/choiceKinds';
 import { LOOKED_POINTS, POINTS } from '@shared/quiz/score';
 import { num } from '@shared/quran/arabicNumber';
@@ -224,7 +224,7 @@ export function LookButton({ look, onLook, costs = false, palette, top }: { look
   const press = () => { setOpen(true); onLook?.(); };
   return (
     <View style={{ gap: 4, alignItems: 'flex-start' }}>
-      {inRow ? <UnderCard><Button Icon={Search} label="تلميح" accessibilityLabel="تلميح: ابحث عن الجواب" onPress={press} pill /></UnderCard> : <Button Icon={Search} label="تلميح" accessibilityLabel="تلميح: ابحث عن الجواب" onPress={press} />}
+      {inRow ? <UnderCard><Button Icon={BookSearch} label="تلميح" accessibilityLabel="تلميح: ابحث عن الجواب" onPress={press} pill /></UnderCard> : <Button Icon={BookSearch} label="تلميح" accessibilityLabel="تلميح: ابحث عن الجواب" onPress={press} />}
       {costs && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right', alignSelf: 'stretch' }}>
         {`بعد البحث للإجابة الصحيحة ${num(LOOKED_POINTS)} نقاط بدل ${num(POINTS)}.`}
       </Text>}
@@ -243,7 +243,7 @@ export function LookButton({ look, onLook, costs = false, palette, top }: { look
 export function LookedNote({ palette }: { palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start' }}>
-      <Search size={15} color={palette.amber} />
+      <BookSearch size={15} color={palette.amber} />
       <Text style={{ color: palette.amber, fontSize: 15 }}>{`بحثتَ عنه · للإجابة الصحيحة ${num(LOOKED_POINTS)} نقاط`}</Text>
     </View>
   );
