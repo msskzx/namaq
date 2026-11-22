@@ -3,7 +3,6 @@ import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { BookOpen } from 'lucide-react-native';
 import { DRAW_MODES, sceneSlots, type DrawMode, type ReaderPage } from '@shared/hadith';
-import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Tabs from '@/ui/Tabs';
@@ -76,12 +75,12 @@ export default function HadithUnitScreen() {
             </> : <>
               {view.isnad[report.id] && <Isnad isnad={view.isnad[report.id]} palette={palette} />}
               {report.scenes.length === 0 && report.statements.map((text, i) => <Text key={i} style={body(palette)}>{text}</Text>)}
-              {report.scenes.map((scene, i) => (
-                <View key={scene.ordinal} style={{ gap: 8 }}>
-                  <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, textAlign: 'right' }}>المشهد {num(scene.ordinal)}</Text>
-                  <HadithScene lines={scene.lines} slots={slots.get(report.id)![i]} palette={palette} />
+              {/* No «المشهد ١» heading of ours (owner, 2026-11-22): the scenes follow one another with space between. */}
+              {report.scenes.length > 0 && (
+                <View style={{ gap: 28 }}>
+                  {report.scenes.map((scene, i) => <HadithScene key={scene.ordinal} lines={scene.lines} slots={slots.get(report.id)![i]} palette={palette} />)}
                 </View>
-              ))}
+              )}
             </>}
           </Section>
         ))}

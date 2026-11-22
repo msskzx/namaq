@@ -1,7 +1,7 @@
 import { createContext, isValidElement, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { AppState, useWindowDimensions, View } from 'react-native';
+import { AppState, Dimensions, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, BookOpenText, CalendarRange, ChartNoAxesColumn, DoorOpen, Gem, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Milestone, ScrollText, Swords, History, Target, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpenText, CalendarRange, ChartNoAxesColumn, DoorOpen, Gem, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Milestone, ScrollText, Swords, History, Target, Users, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, toggleForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
@@ -22,7 +22,7 @@ import Saying from '@/ui/Saying';
 import Tabs from '@/ui/Tabs';
 import { findPerson, GRAPH, PEOPLE, personName, tiePairs, unvowelled } from '@/lib/tarajim';
 import { kunyaFacts, laqabFacts, type NameFact } from '@shared/tarajimNames';
-import { chainSentence } from '@shared/tarajimGraph';
+import { chainSentence, groupWord } from '@shared/tarajimGraph';
 import TiesChain from './TiesChain';
 import LifeTimeline from './LifeTimeline';
 import { personLife } from '@/lib/life';
@@ -60,7 +60,13 @@ import { drawnReport } from '@shared/stories/story';
 import { armiesBattles, armiesItems, armiesSources, battleHeadSources, battleItems, battleOnCard, battleYearItems, battleYearSlice, battleYearSources, type ArmiesTab, eventItems, eventOf, eventSources, nasabPeople, nasabSources, oathItems, oathSources, openingItems, openingSources, sceneItems, sceneOf, sceneSources, tiesPeople, tiesSources } from '@shared/drawingCards';
 import { NasabTree } from '@/screens/nasab';
 import { OpeningRows } from '@/screens/openings';
-import TiesRing, { TieSheet } from './TiesRing';
+import TiesRing, { foldedKinds, personNode, RoundRing, ringName, ringRoom, roundLayout, TieSheet, tiesOf } from './TiesRing';
+import { kindColor } from './TiesChain';
+import LifeColumns from './LifeColumns';
+import { LifeSheet } from './LifeTimeline';
+import { CALIPHS_MEET, groupItems, groupOf, groupSources, kinOf, livesPairs, meetItems, meetSources, ringList, stepSources, type GroupSource, type Ring } from '@shared/peopleCards';
+import { lifeSources, type LifeItem } from '@shared/events/lifeTimeline';
+import { nasabQuestions } from '@shared/quiz/tarajim';
 import type { Tie } from '@shared/tarajimGraph';
 import BattleMap from './battles/BattleMap';
 import { BATTLES, battleOf } from '@/lib/battles';
@@ -603,6 +609,133 @@ function TiesPost({ slug, palette }: { slug: string; palette: Palette }) {
   );
 }
 
+/** The groups the data holds (shared/peopleCards.ts), read once. */
+let groups: GroupSource[] | undefined;
+const groupList = () => (groups ??= groupSources(STORIES, BATTLES));
+
+/**
+ * «صلة بينهم» (owner, 2026-11-21; feed-visuals sketch panel 1): three to five people of one story or battle, or a man's
+ * in-laws, joined by family as «بينه وبين…» draws them; its open button opens that page with them picked.
+ */
+function GroupPost({ id, palette }: { id: string; palette: Palette }) {
+  const { width } = useWindowDimensions();
+  const [shown, setShown] = useState<DrawingOrText>('drawing');
+  const group = useMemo(() => groupOf(GRAPH, groupList(), id), [id]);
+  if (!group) return null;
+  const picked = group.id.startsWith('inlaws:') ? group.nodes : group.slugs.filter(slug => GRAPH.nodes.has(slug));
+  const inLaws = group.id.startsWith('inlaws:');
+  const title = inLaws ? herOrHis(group.slugs[0], 'أصهاره', 'أصهارها') : 'صلة بينهم';
+  const sub = inLaws ? personName(GRAPH.nodes.get(group.slugs[0])!) : group.name;
+  const open = () => router.push({ pathname: '/between', params: { slugs: picked.join(',') } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={Link2} title={title} sub={sub} palette={palette} />}
+      open={<Action Icon={Link2} label="ارسم الصلة بينهم" onPress={open} palette={palette} />}
+      source={sourcesOf(stepSources(group.steps))}>
+      <View style={{ padding: 14, gap: 6 }}>
+        <Tabs palette={palette} label="كيف تُعرض الصلة" value={shown} onChange={setShown} options={DRAWING_OR_TEXT} />
+        {shown === 'drawing'
+          ? <TiesChain nodes={group.nodes} steps={group.steps} first={group.nodes[0]} picked={group.id.startsWith('inlaws:') ? [group.nodes[0]] : picked} width={Math.min(width - 60, 480)} palette={palette} inCard />
+          : <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{chainSentence(GRAPH, group.steps, personName)}.</Text>}
+      </View>
+    </Post>
+  );
+}
+
+/** «حياتهما» (feed-visuals sketch panel 2): two lives side by side, what they shared joined; it opens «حياتهما» with the two. */
+function LivesPost({ id, palette }: { id: string; palette: Palette }) {
+  const [shown, setShown] = useState<LifeItem | undefined>();
+  const slugs = id.split(',');
+  if (slugs.length !== 2 || !slugs.every(slug => findPerson(slug))) return null;
+  const names = slugs.map(slug => personName(findPerson(slug)!));
+  const open = () => router.push({ pathname: '/life', params: { slugs: id } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={ArrowLeftRight} title="حياتهما" sub={`${names[0]} و${names[1]}`} palette={palette} />}
+      open={<Action Icon={ArrowLeftRight} label={`قارن حياة ${names[0]} و${names[1]}`} onPress={open} palette={palette} />}
+      source={sourcesOf(lifeSources(slugs.flatMap(slug => personLife(findPerson(slug)!))))}>
+      <View style={{ paddingVertical: 14, paddingHorizontal: 8, gap: 6 }}>
+        <LifeColumns slugs={slugs} palette={palette} show={setShown} />
+      </View>
+      <LifeSheet item={shown} onClose={() => setShown(undefined)} palette={palette} />
+    </Post>
+  );
+}
+
+/**
+ * «أين يلتقي نسبهما؟» (feed-visuals sketch panels 3 and 8): the nasab tree of two people, or of the Prophet ﷺ and the four
+ * caliphs, each line leaving the shared one where it parts; it opens the nasab page with them.
+ */
+function MeetPost({ id, palette }: { id: string; palette: Palette }) {
+  const slugs = id.split(',');
+  if (!slugs.every(slug => findPerson(slug))) return null;
+  const caliphs = id === CALIPHS_MEET.join(',');
+  const names = slugs.map(slug => personName(findPerson(slug)!));
+  const open = () => router.push({ pathname: '/nasab', params: { slug: slugs.join(',') } });
+  return (
+    <Post palette={palette} head={<PostHead Icon={Network} title={caliphs ? 'أين يلتقي نسبه ﷺ بنسب الخلفاء الأربعة؟' : 'أين يلتقي نسبهما؟'}
+      sub={caliphs ? names.slice(1).join('، ') : `${names[0]} و${names[1]}`} palette={palette} />}
+      open={<Action Icon={Network} label="افتح النسب" onPress={open} palette={palette} />}
+      source={sourcesOf(uniqueSources(meetSources(PEOPLE, slugs)))}>
+      <View style={{ padding: 14, gap: 10 }}><NasabTree slugs={slugs} palette={palette} meetings={false} text={false} inCard /></View>
+    </Post>
+  );
+}
+
+/** Rings by id, read once: the one-kind rings fold as the card's ring would (its width on this phone). */
+let rings: Ring[] | undefined;
+const ringList_ = () => (rings ??= (() => {
+  const width = Math.min(Dimensions.get('window').width - 60, 480);
+  return ringList(GRAPH, PEOPLE, slug => foldedKinds(tiesOf(slug), ringRoom(width)), slugs => roundLayout(slugs.map(ringName), width) !== null);
+})());
+const SAHIH_NAMES = { bukhari: { book: 'صحيح البخاري', author: 'البخاري' }, muslim: { book: 'صحيح مسلم', author: 'مسلم' } } as const;
+
+/**
+ * A ring (feed-visuals sketch panels 7 and 9): one kind of a person's ties (his ﷺ wives, his children…), a title and those
+ * who hold it, or a hadith and the people it names, drawn round; a tie held in doubt is said under it with both views.
+ */
+function RingPost({ id, palette }: { id: string; palette: Palette }) {
+  const { width } = useWindowDimensions();
+  const [tie, setTie] = useState<Tie | undefined>();
+  const ring = ringList_().find(each => each.id === id);
+  if (!ring) return null;
+  const go = (slug: string) => router.push({ pathname: '/person', params: { slug } });
+  const drawW = Math.min(width - 60, 480);
+  const kin = ring.by === 'kin' ? kinOf(GRAPH, ring.slug, ring.kind) : undefined;
+  const nodes = ring.people.map(slug => {
+    const own = kin?.sure.find(each => each.to === slug);
+    return personNode(slug, ring.by === 'kin' ? kindColor(palette, ring.kind) : palette.rule, go, own ? () => setTie(own) : undefined);
+  });
+  const owner = ring.by === 'title' ? undefined : GRAPH.nodes.get(ring.by === 'kin' ? ring.slug : ring.middle)!;
+  const middle = ring.by === 'title' ? ring.name : personName(owner!);
+  const title = ring.by === 'kin' ? groupWord(ring.kind, owner!.sex, ring.people.length) : ring.by === 'title' ? ring.name : `من ${SAHIH_NAMES[ring.book].book}`;
+  const head = ring.by === 'kin'
+    ? <PostHead Icon={Users} title={`${title} ${ring.slug === 'prophet-muhammad' ? 'ﷺ' : ''}`.trim()} sub={middle} palette={palette} />
+    : <PostHead Icon={Users} title={title} sub={ring.by === 'hadith' ? `الحديث ${num(ring.n)}` : 'كما جمعهم العلماء'} palette={palette} />;
+  const open = ring.by === 'kin' ? () => router.push({ pathname: '/ties', params: { slug: ring.slug } })
+    : ring.by === 'title' ? () => router.push({ pathname: '/people', params: { title: ring.title } })
+    : () => toTab({ pathname: '/hadith-sahih', params: { book: ring.book, n: String(ring.n) } });
+  const source = ring.by === 'hadith'
+    ? [ring, ...(ring.also ? [ring.also] : [])].map(each => ({ ...SAHIH_NAMES[each.book], at: num(each.n) }))
+    : ring.sources;
+  return (
+    <Post palette={palette} head={head}
+      open={<Action Icon={Users} label={ring.by === 'kin' ? `افتح صلات ${middle}` : ring.by === 'title' ? `افتح «${ring.name}»` : 'افتح الحديث'} onPress={open} palette={palette} />}
+      source={sourcesOf(source)}>
+      <View style={{ padding: 14, gap: 10 }}>
+        {ring.by === 'hadith' && <Saying by="قال رسول الله ﷺ" palette={palette}><Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>«{ring.quote}»</Text></Saying>}
+        <RoundRing middle={middle} nodes={nodes} width={drawW} palette={palette} />
+        {!ring.note && ring.doubted.length > 0 && (
+          <View style={{ gap: 4 }}>
+            {ring.doubted.map(each => (
+              <Button key={each.to} variant="plain" label={`${personName(GRAPH.nodes.get(each.to)!)}: على خلاف`} onPress={() => setTie(each)} />
+            ))}
+          </View>
+        )}
+      </View>
+      <TieSheet tie={tie} onClose={() => setTie(undefined)} palette={palette} />
+    </Post>
+  );
+}
+
 /**
  * A battle (sketch panel 6): its place on the still map and the two sides' numbers, as its page draws them; a fitna battle
  * shows no numbers (shared/drawingCards.ts battleOnCard). Its open button opens the battle's page.
@@ -702,7 +835,7 @@ function HadithScenePost({ id, palette }: { id: string; palette: Palette }) {
   const slots = sceneSlots(report.scenes, palette.slots.length)[at];
   const open = () => toTab({ pathname: '/hadith-unit', params: { unit: unit.id } });
   return (
-    <Post palette={palette} head={<PostHead Icon={MessagesSquare} title={`من ${unit.book}`} sub={[unit.kitab, `المشهد ${num(scene.ordinal)}`].filter(Boolean).join(' · ')} palette={palette} />}
+    <Post palette={palette} head={<PostHead Icon={MessagesSquare} title={`من ${unit.book}`} sub={unit.kitab} palette={palette} />}
       open={<Action Icon={MessagesSquare} label={`افتح الحديث في ${unit.book}`} onPress={open} palette={palette} />}
       source={sourcesOf(sceneSources(unit))}>
       <View style={{ paddingHorizontal: 14, paddingVertical: 12 }}><HadithScene lines={scene.lines} slots={slots} palette={palette} /></View>
@@ -1350,6 +1483,10 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   event: () => eventItems(STORY_EVENTS),
   'surah-aim': aimItems,
   'surah-link': linkItems,
+  group: () => groupItems(GRAPH, groupList(), PEOPLE),
+  lives: () => livesPairs(new Map(PEOPLE.map(person => [person.slug, personLife(person)]))),
+  meet: () => meetItems(PEOPLE, nasabQuestions(PEOPLE).flatMap(question => (question.look?.view === 'nasab' ? [question.look.slugs as [string, string]] : []))),
+  ring: () => ringList_().map(ring => ring.id),
 };
 const itemsOf = (kind: ListKind) => (itemLists[kind] ??= LIST_OF[kind]());
 
@@ -1397,6 +1534,10 @@ function ContentPost({ kind, item, day, palette }: { kind: ListKind; item: strin
     case 'event': return <EventPost id={item} palette={palette} />;
     case 'surah-aim': return <SurahAimPost id={item} palette={palette} />;
     case 'surah-link': return <SurahLinkPost id={item} palette={palette} />;
+    case 'group': return <GroupPost id={item} palette={palette} />;
+    case 'lives': return <LivesPost id={item} palette={palette} />;
+    case 'meet': return <MeetPost id={item} palette={palette} />;
+    case 'ring': return <RingPost id={item} palette={palette} />;
     default: return null;
   }
 }

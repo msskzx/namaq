@@ -54,6 +54,27 @@ its page; the head opens the person's page.
 من حياته (`LifePost`): a converted person's «حياته» timeline as his page draws it (the strip of years, the kinds as
 chips), the rail a year a line; the head opens his page. Only people whose strip has two years or more (`drawsLine`).
 
+The people drawings (owner, 2026-11-21; sketch `/mnt/project-files/feed-visuals/sketch-dark.png`, panels 1-3 and 7-9),
+phone only (`PHONE_ONLY_KINDS`), lists and rules in `shared/peopleCards.ts`:
+
+- صلة بينهم (`GroupPost`): three to five people of one sira story, one battle's martyrs or those present at it, drawn with
+  `TiesChain` when family ties alone join them through at most one person outside the group. «أصهاره» is the same card
+  for a man, his wives and their fathers, when there are two fathers or more.
+- حياتهما (`LivesPost`): two lives side by side (`LifeColumns`, the «حياتهما» page's view), for pairs that share a battle
+  or an event, spread so one person does not fill card after card.
+- أين يلتقي نسبهما؟ (`MeetPost`): `NasabTree` for the Prophet ﷺ and the four caliphs, then the pairs the «أين
+  يلتقي النسبان؟» quiz asks.
+- Rings (`RingPost`, `RoundRing` in `TiesRing.tsx`): one kind of a person's ties that his full ring folds into a count
+  (the Prophet's ﷺ wives, children, cousins), a title whose holders the data holds whole («العشرة المبشرون بالجنة»), and
+  two hadith of the Sahihayn that name a group with the Prophet ﷺ in the middle (al-Bukhari 3693 / Muslim 2403, Muslim
+  2417). A tie the book holds in doubt is left off the drawing and named under it with «على خلاف», opening both
+  views. Where a scholar's words settle it (Ibn al-Qayyim: al-Tayyib and al-Tahir are two titles of Abdullah, Zad
+  al-Ma'ad 1/101), those words go on that book's line in the references instead, so the card keeps the home layout
+  (owner, 2026-11-22; `RING_NOTES`). A ring whose names do not fit the phone's width is not shown.
+
+Inside an interest, a drawn card and a text card take turns (`DRAWN_KINDS` in `shared/interests.ts`, `slotOf` in
+`shared/homeFeed.ts`). These cards add no quiz kind: their questions already exist («أين يلتقي النسبان؟», «ما صلته به؟»).
+
 لقب وصاحبه / كنية وصاحبها (`NamePost`, interests «الألقاب» and «الكنى»): one person's laqab or kunya large, the person
 under it, the book's words when they say more, and the person page's folded reference (lists from `shared/tarajimNames.ts`).
 
@@ -139,4 +160,4 @@ timeline), رتّب, من شهدها؟ / من أمير السرية؟, فيمَ 
 - Party quizzes: played with others, not from the feed.
 - «مشاهد» has no quiz kind yet: what the darknesses stand for differs between the scholars (each shown by name), so a question
   would ask a disputed point. An order question on the layers is a candidate once more scenes exist.
-- Tarajim: the battles have the moment card and the sira stories the story card; the people have «من التراجم», «صلة», «من حياته», «لقب وصاحبه», «كنية وصاحبها», «نسبه» and «صلاته».
+- Tarajim: the battles have the moment card and the sira stories the story card; the people have «من التراجم», «صلة», «من حياته», «لقب وصاحبه», «كنية وصاحبها», «نسبه», «صلاته», «صلة بينهم», «حياتهما», «أين يلتقي نسبهما؟» and the rings.

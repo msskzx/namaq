@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { dayStart, feedBooks, LIST_KINDS, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, prayerSoon } from './homeFeed';
-import { FEED_CARD_KINDS, INTERESTS } from './interests';
+import { DRAWN_KINDS, FEED_CARD_KINDS, INTERESTS, onWebsite, PHONE_ONLY_KINDS, type FeedCardKind } from './interests';
 import type { PrayerDay } from './prayer';
 
 const at = (hours: number, minutes = 0) => new Date(2026, 10, 18, hours, minutes);
@@ -90,6 +90,23 @@ describe('the feed by interests', () => {
     const asked = new Set<string>();
     for (let round = 0; round < 12; round++) for (const slot of feedRound(all, round, 4)) if (slot.quiz) asked.add(slot.interest);
     expect([...asked].sort()).toEqual(all.filter(interest => interest.quizzes.length).map(interest => interest.id).sort());
+  });
+
+  it('gives an interest\'s drawings and text cards in turn, and over the rounds every card kind', () => {
+    for (const day of [0, 1, 7]) {
+      for (const interest of all.filter(each => each.cards.some(kind => DRAWN_KINDS.includes(kind)) && each.cards.some(kind => !DRAWN_KINDS.includes(kind)))) {
+        const cards = Array.from({ length: 40 }, (_, round) => feedRound([interest], round, day)[0]).filter(slot => !slot.quiz);
+        for (let i = 1; i < cards.length; i++) expect(DRAWN_KINDS.includes(cards[i].kind as FeedCardKind), interest.id).not.toBe(DRAWN_KINDS.includes(cards[i - 1].kind as FeedCardKind));
+        expect(new Set(cards.map(slot => slot.kind)), interest.id).toEqual(new Set(interest.cards));
+      }
+    }
+  });
+
+  // The website draws nothing for the phone's own cards: a turn dealt to one was a blank slot in its feed.
+  it('deals the website none of the cards only the phone draws', () => {
+    const slots = Array.from({ length: 40 }, (_, round) => feedRound(INTERESTS.map(onWebsite), round, 3)).flat().filter(slot => !slot.quiz);
+    expect(slots.length).toBeGreaterThan(0);
+    expect(slots.filter(slot => (PHONE_ONLY_KINDS as readonly string[]).includes(slot.kind))).toEqual([]);
   });
 
   it('adds one surprise from an interest not picked, and none without one', () => {
