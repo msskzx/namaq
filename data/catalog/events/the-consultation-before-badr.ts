@@ -1,0 +1,33 @@
+import type { CatalogEvent } from '@/lib/catalog/types';
+
+/**
+ * Anas: when word came of Abu Sufyan's approach the Prophet ﷺ consulted his companions, and Sa'd ibn Ubadah said they would
+ * ride into the sea if he ordered it; at Badr they caught a black slave of Quraysh's water carriers and beat him when he
+ * told the truth, and the Prophet ﷺ, finishing his prayer, rebuked them, then showed where each of Quraysh would fall.
+ * Told from Sahih Muslim 1779 (al-Jihad, the chapter on the battle of Badr), whole. Shaybah is named among Quraysh but has
+ * no catalog subject and is not linked.
+ */
+const theConsultationBeforeBadr = {
+  kind: 'EVENT',
+  slug: 'the-consultation-before-badr',
+  name: "المشورة قبل بدر",
+  nameTransliterated: "The consultation before Badr",
+  type: 'OTHER',
+  fields: {},
+  people: [{ person: 'prophet-muhammad' }, { person: 'abu-bakr-as-siddiq' }, { person: 'umar-ibn-al-khattab' }, { person: 'saad-ibn-ubadah' }, { person: 'abu-sufyan-ibn-harb' }, { person: 'abu-jahl-ibn-hisham' }, { person: 'utbah-ibn-rabiah' }, { person: 'umayyah-ibn-khalaf' }],
+  tags: ['HIS_WORDS'],
+  reports: [
+    {
+      isnad: "حَدَّثَنَا أَبُو بَكْرِ بْنُ أبي شيبة. حدثنا عَفَّانُ. حَدَّثَنَا حَمَّادُ بْنُ سَلَمَةَ عَنْ ثَابِتٍ، عَنْ أَنَسٍ؛",
+      source: { slug: 'sahih-muslim', hadith: 1779, url: 'https://sunnah.com/muslim:1779' },
+      moments: [
+        { title: "«إيانا تريد؟ يا رسول الله»", text: "أَنّ رَسُولَ اللَّهِ ﷺ شَاوَرَ، حِينَ بَلَغَهُ إِقْبَالُ أَبِي سُفْيَانَ. قَالَ: فَتَكَلَّمَ أَبُو بَكْرٍ فَأَعْرَضَ عَنْهُ. ثُمَّ تَكَلَّمَ عُمَرُ فَأَعْرَضَ عنه. فقام سعد ابن عُبَادَةَ فَقَالَ: إِيَّانَا تُرِيدُ؟ يَا رَسُولَ اللَّهِ! وَالَّذِي نَفْسِي بِيَدِهِ! لَوْ أَمَرْتَنَا أَنْ نُخِيضَهَا الْبَحْرَ لَأَخَضْنَاهَا. وَلَوْ أَمَرْتَنَا أَنْ نَضْرِبَ أَكْبَادَهَا إِلَى بَرْكِ الْغِمَادِ لَفَعَلْنَا.", people: ['prophet-muhammad', 'abu-bakr-as-siddiq', 'umar-ibn-al-khattab', 'saad-ibn-ubadah'] },
+        { title: "غلام أسود لبني الحجاج", text: "قَالَ: فَنَدَبَ رَسُولُ اللَّهِ ﷺ النَّاسَ. فَانْطَلَقُوا حَتَّى نَزَلُوا بَدْرًا. وَوَرَدَتْ عَلَيْهِمْ رَوَايَا قُرَيْشٍ. وَفِيهِمْ غُلَامٌ أَسْوَدُ لِبَنِي الْحَجَّاجِ. فَأَخَذُوهُ. فَكَانَ أصحاب رسول الله ﷺ يَسْأَلُونَهُ عَنْ أَبِي سُفْيَانَ وَأَصْحَابِهِ؟ فَيَقُولُ: مَا لي علمك بِأَبِي سُفْيَانَ. وَلَكِنْ هَذَا أَبُو جَهْلٍ وَعُتْبَةُ وَشَيْبَةُ وَأُمَيَّةُ بْنُ خَلَفٍ. فَإِذَا قَالَ ذَلِكَ، ضَرَبُوهُ. فَقَالَ: نَعَمْ. أَنَا أُخْبِرُكُمْ. هَذَا أَبُو سُفْيَانَ. فَإِذَا تَرَكُوهُ فَسَأَلُوهُ فَقَالَ: مَا لِي بِأَبِي سُفْيَانَ عِلْمٌ. وَلَكِنْ هَذَا أَبُو جَهْلٍ وَعُتْبَةُ وَشَيْبَةُ وَأُمَيَّةُ بْنُ خَلَفٍ فِي النَّاسِ. فَإِذَا قَالَ هَذَا أَيْضًا ضَرَبُوهُ.", people: ['prophet-muhammad', 'abu-sufyan-ibn-harb', 'abu-jahl-ibn-hisham', 'utbah-ibn-rabiah', 'umayyah-ibn-khalaf'] },
+        { title: "«لتضربوه إذا صدقكم»", text: "وَرَسُولُ اللَّهِ ﷺ قَائِمٌ يُصَلِّي. فَلَمَّا رأى ذلك انصرف. وقال: (وَالَّذِي نَفْسِي بِيَدِهِ! لَتَضْرِبُوهُ إِذَا صَدَقَكُمْ. وَتَتْرُكُوهُ إِذَا كَذَبَكُمْ).", people: ['prophet-muhammad'] },
+        { title: "«هذا مصرع فلان»", text: "قَالَ: فَقَالَ رَسُولُ اللَّهِ ﷺ (هَذَا مَصْرَعُ فُلَانٍ) قَالَ: ويضع يده على الأرض، ها هنا وها هنا. قال: فما أماط أَحَدُهُمْ عَنْ مَوْضِعِ يَدِ رَسُولِ اللَّهِ ﷺ.", people: ['prophet-muhammad'] },
+      ],
+    },
+  ],
+} satisfies CatalogEvent;
+
+export default theConsultationBeforeBadr;
