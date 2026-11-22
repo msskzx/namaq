@@ -4,6 +4,8 @@ import type { CatalogEvent } from '@/lib/catalog/types';
  * Abu Musa: six of us went out with the Prophet ﷺ sharing one camel, and our feet were holed and my nails fell off, so we
  * wrapped our feet in rags, and it was called the raid of the rags; then he disliked having told it. Told from Sahih
  * al-Bukhari 4128 (al-Maghazi, the chapter on Dhat al-Riqa'), whole.
+ *
+ * Then Abu Musa's same hadith in Sahih Muslim 1816 (al-Jihad, the raid of Dhat al-Riqa'), whole.
  */
 const theNamingOfDhatAlRiqa = {
   kind: 'EVENT',
@@ -20,6 +22,14 @@ const theNamingOfDhatAlRiqa = {
       moments: [
         { title: "نقبت أقدامنا", text: "«خَرَجْنَا مَعَ النَّبِيِّ ﷺ فِي غَزَاةٍ وَنَحْنُ سِتَّةُ نَفَرٍ، بَيْنَنَا بَعِيرٌ نَعْتَقِبُهُ، فَنَقِبَتْ أَقْدَامُنَا، وَنَقِبَتْ قَدَمَايَ وَسَقَطَتْ أَظْفَارِي، وَكُنَّا نَلُفُّ عَلَى أَرْجُلِنَا الْخِرَقَ، فَسُمِّيَتْ غَزْوَةَ ذَاتِ الرِّقَاعِ، لِمَا كُنَّا نَعْصِبُ مِنَ الْخِرَقِ عَلَى أَرْجُلِنَا.", people: ['abu-musa-al-ashari', 'prophet-muhammad'] },
         { title: "كره أن يذكره", text: "وَحَدَّثَ أَبُو مُوسَى بِهَذَا، ثُمَّ كَرِهَ ذَاكَ، قَالَ: مَا كُنْتُ أَصْنَعُ بِأَنْ أَذْكُرَهُ، كَأَنَّهُ كَرِهَ أَنْ يَكُونَ شَيْءٌ مِنْ عَمَلِهِ أَفْشَاهُ».", people: ['abu-musa-al-ashari'] },
+      ],
+    },
+    {
+      isnad: "حَدَّثَنَا أَبُو عَامِرٍ عَبْدُ اللَّهِ بْنُ بَرَّادٍ الْأَشْعَرِيُّ وَمُحَمَّدُ بْنُ العلاء الهمذاني (وَاللَّفْظُ لِأَبِي عَامِرٍ). قَالَا: حَدَّثَنَا أَبُو أُسَامَةَ عَنْ بُرَيْدِ بْنِ أَبِي بُرْدَةَ، عَنْ أَبِي بُرْدَةَ، عَنْ أَبِي مُوسَى. قَالَ:",
+      source: { slug: 'sahih-muslim', hadith: 1816, url: 'https://sunnah.com/muslim:1816' },
+      moments: [
+        { title: "نقبت أقدامنا", text: "خَرَجْنَا مَعَ رَسُولِ اللَّهِ ﷺ في غَزَاةٍ. وَنَحْنُ سِتَّةُ نَفَرٍ. بَيْنَنَا بَعِيرٌ نَعْتَقِبُهُ. قَالَ: فَنَقِبَتْ أَقْدَامُنَا. فَنَقِبَتْ قَدَمَايَ وَسَقَطَتْ أَظْفَارِي. فكنا نلف على أرجلنا الخرق. فسمت غَزْوَةَ ذَاتِ الرِّقَاعِ، لِمَا كُنَّا نُعَصِّبُ عَلَى أَرْجُلِنَا مِنَ الْخِرَقِ.", people: ['abu-musa-al-ashari', 'prophet-muhammad'] },
+        { title: "كره أن يذكره", text: "قَالَ أَبُو بُرْدَةَ: فَحَدَّثَ أَبُو مُوسَى بِهَذَا الْحَدِيثِ. ثُمَّ كَرِهَ ذَلِكَ. قَالَ: كَأَنَّهُ كَرِهَ أَنْ يَكُونَ شَيْئًا مِنْ عَمَلِهِ أَفْشَاهُ. قَالَ أَبُو أُسَامَةَ: وَزَادَنِي غَيْرُ بريد: والله يجزي به.", people: ['abu-musa-al-ashari'] },
       ],
     },
   ],
