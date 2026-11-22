@@ -98,7 +98,7 @@ import { cardsFor, sideKeys, sideLabel } from '@/lib/compare';
 import { surahNames as shortNames } from '@/lib/branches';
 import { ayahMushafWords, pageData, pageOfAyah, PAGES, surahBefore } from '@/lib/mushaf';
 import { isBoolean, isNumberIn, isRecord, readJson, writeJson } from '@/lib/storage';
-import { openIntent, openTreesOf, openUtility, toTab } from '@/lib/ways';
+import { openIntent, openTreesOf, openUtility, toTab, openAyahPage } from '@/lib/ways';
 import OpenButton from '@/ui/OpenButton';
 import { FEATURE_ICON, QUIZ_ICON } from './featureIcons';
 import { juzLabel, openJuz } from '@/lib/juz';
@@ -126,10 +126,7 @@ import { qiraatAyat, qiraatOf } from '@shared/quran/qiraatData';
 import { singleAyahPassages, tafsirSadiOf } from '@shared/quran/tafsirSadiData';
 import { tafsirRuns } from '@shared/quran/tafsirSadi';
 import { corpusWords } from '@shared/quran/words';
-import AyahPreviewSheet from './AyahPreviewSheet';
 import type { WordDifference } from '@shared/quran/qiraat';
-import BalaghaSheet from './BalaghaSheet';
-import IrabSheet from './IrabSheet';
 import QuranWords from './quran/text/QuranWords';
 import { momentItem, nameItem, rajabItem, storyItem, tieItem, virtueItem } from '@shared/feedItems';
 import { useFitHeight } from '@/lib/useFit';
@@ -145,7 +142,7 @@ import { CompareFeedback, CompareInputs } from './QuizCompare';
 import { QuizFeedback, QuizInputs } from './QuizTree';
 import { type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
-import { Tap } from '@/ui/Tap';
+import PostHead from '@/ui/PostHead';
 import Card, { CardWithRow } from '@/ui/Card';
 import MoreMenu, { type MoreItem } from '@/ui/MoreMenu';
 import RowScroll from '@/ui/RowScroll';
@@ -265,25 +262,6 @@ function NotMineMenu() {
 /** The source line under a card's buttons (owner, 2026-11-20). */
 const sourceLine = (palette: Palette) => (named: Source[], all: Source[]) => <SourceLine named={named} sources={all} palette={palette} />;
 
-/** A feed card's head: a round icon, a title and a line under it, like a post's author. */
-function PostHead({ Icon, title, sub, palette, open }: { Icon: IconType; title: string; sub?: string; palette: Palette;
-  /** A tap on the head opens the card's general topic, as a post's name opens its account (owner, 2026-11-22); the row's open
-   *  button opens this card's own place. `label` names it for a screen reader. */
-  open?: { onPress: () => void; label: string } }) {
-  const head = (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, paddingTop: 10, paddingBottom: 6 }}>
-      <View style={{ width: 36, height: 36, borderRadius: 18, borderWidth: 1, borderColor: palette.rule, backgroundColor: palette.paper, alignItems: 'center', justifyContent: 'center' }}>
-        <Icon size={18} color={palette.accent} />
-      </View>
-      <View style={{ flex: 1 }}>
-        <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 16, fontWeight: '700', textAlign: 'right' }}>{title}</Text>
-        {sub ? <Text numberOfLines={1} style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{sub}</Text> : null}
-      </View>
-    </View>
-  );
-  return open ? <Tap onPress={open.onPress} accessibilityRole="button" accessibilityLabel={open.label} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}>{head}</Tap> : head;
-}
-
 /** A head's topic: a page of the tabs (owner, 2026-11-22: every card's head opens the general topic it names). */
 const topic = (href: Href, label: string) => ({ onPress: () => toTab(href), label });
 /** A head that names a person opens the person. */
@@ -394,7 +372,7 @@ function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', Icon = Lig
     {!review && <Action Icon={LightbulbOff} label="نسيتها" on={done?.did === 'forgot'} palette={palette} onPress={() => mark('forgot')} />}
     {review && <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} />}
   </>;
-  const open = <OpenButton label="في المصحف" onPress={() => openIntent({ tab: 'read', at: markAyah(ayah), word: markWord(ayah) })} palette={palette} />;
+  const open = <OpenButton label="افتح صفحة الآية" onPress={() => openAyahPage(markAyah(ayah))} palette={palette} />;
   // A due forgotten ayah's head opens the forgotten list; any other recall question's, the quizzes, as every question's does.
   const head = review ? { onPress: () => router.push({ pathname: '/library', params: { tab: 'forgotten' } }), label: 'افتح ما نسيته' } : topic('/quizzes', 'افتح الاختبارات');
   return <Recall key={`${ayah}-${writing}`} ayah={markAyah(ayah)} targetWord={markWord(ayah)} title={title} Icon={Icon} head={head} writing={writing} onWriting={toggleWriting} open={open} marks={marks} revealed={!!done} palette={palette} />;
@@ -431,9 +409,9 @@ function Recall({ ayah, targetWord, title, Icon, head, writing, onWriting, open,
       open={open} actions={marks} source={mushafOf(ayah)}
       // Shared, the ayah's lines as the mushaf sets them: never what is hidden, nor whether it was remembered (owner, 2026-11-22).
       picture={{ head: <PostHead Icon={FEATURE_ICON.mushaf} title={shortNames[surah] ?? ''} sub={num(number)} palette={palette} />,
-        body: <View style={{ padding: 12 }}><AyahLines ayah={ayah} palette={palette} write={null} checked={null} shown whole /></View> }}>
+        body: <View style={{ padding: 12 }}><AyahLines ayah={ayah} menu={false} palette={palette} write={null} checked={null} shown whole /></View> }}>
       <View style={{ padding: 12 }}>
-        <AyahLines ayah={ayah} targetWord={targetWord} palette={palette} shown={shown} words={position.words} checked={recite.checked} onTouch={onTouch} write={recite.write} />
+        <AyahLines ayah={ayah} menu={false} targetWord={targetWord} palette={palette} shown={shown} words={position.words} checked={recite.checked} onTouch={onTouch} write={recite.write} />
         {recite.write && recite.boxes.field}
       </View>
     </Post>
@@ -1083,9 +1061,9 @@ function SavedAyahPost({ ayah, palette }: { ayah: string; palette: Palette }) {
   const [surah, number] = ayah.split(':').map(Number);
   return (
     <Post palette={palette} head={<PostHead Icon={Bookmark} title="من المحفوظات" sub={`${shortNames[surah] ?? ''} ${num(number)}`} open={{ onPress: () => router.push('/library'), label: 'افتح المحفوظات' }} palette={palette} />}
-      open={<OpenButton label="في المصحف" onPress={() => openIntent({ tab: 'read', at: ayah })} palette={palette} />} source={mushafOf(ayah)}>
+      open={<OpenButton label="افتح صفحة الآية" onPress={() => openAyahPage(ayah)} palette={palette} />} source={mushafOf(ayah)}>
       <View style={{ padding: 12 }}>
-        <AyahLines ayah={ayah} palette={palette} shown whole write={null} checked={null} />
+        <AyahLines ayah={ayah} menu={ayah} palette={palette} shown whole write={null} checked={null} />
       </View>
     </Post>
   );
@@ -1447,7 +1425,7 @@ function TermPost({ id, day, palette }: { id: string; day: number; palette: Pale
         {example && <>
           <View style={{ height: 1, backgroundColor: palette.rule, opacity: 0.6, marginVertical: 4 }} />
           <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>من أمثلته</Text>
-          <View pointerEvents="none"><ExampleAyat example={example} palette={palette} /></View>
+          <ExampleAyat example={example} palette={palette} />
           <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{ayatName(example.ayat)}</Text>
         </>}
       </View>
@@ -1507,21 +1485,18 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
   useBooks();
   const on = noteBookOn(kind);
   const note = useMemo(() => noteBody(kind, id, day, kind === 'irab' ? ayahMushafWords(id) : []), [kind, id, day]);
-  const [open, setOpen] = useState(false);
-  // The sheet stays while it is open, even when its book is taken off the phone from inside it.
-  if (!note || (!on && !open)) return null;
+  if (!note || !on) return null;
   const [surah, number] = note.key.split(':').map(Number);
   const head = NOTE_HEADS[kind];
-  const show = () => setOpen(true);
-  const close = () => setOpen(false);
+  // «افتح» opens the ayah's page at this card's section (owner, 2026-11-22: the ayah is the subject).
+  const show = () => openAyahPage(note.key, kind, 'word' in note ? note.word : undefined);
   return (
-    <>
-      {on && <Post palette={palette} head={<PostHead Icon={head.Icon} title={head.title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} open={NOTE_TOPICS[kind]} palette={palette} />}
-        open={<OpenButton label={head.open} onPress={show} palette={palette} />}
+    <Post palette={palette} head={<PostHead Icon={head.Icon} title={head.title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} open={NOTE_TOPICS[kind]} palette={palette} />}
+        open={<OpenButton label={`افتح صفحة الآية، ${head.open}`} onPress={show} palette={palette} />}
         source={sourcesOf(note.sources)}>
         {'readings' in note ? <View style={{ paddingVertical: 10 }}><QiraatPlace ayah={note.key} max={2} lines bare palette={palette} /></View> : <View style={{ paddingVertical: 10, gap: 6 }}>
-          <View pointerEvents="none" style={{ paddingHorizontal: 12 }}>
-            <AyahLines ayah={note.key} palette={palette} shown whole write={null} checked={null} />
+          <View style={{ paddingHorizontal: 12 }}>
+            <AyahLines ayah={note.key} menu={note.key} palette={palette} shown whole write={null} checked={null} />
           </View>
           <View style={{ height: 1, backgroundColor: palette.rule, marginHorizontal: 14, opacity: 0.6 }} />
           {'heading' in note && note.heading ? <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right', paddingHorizontal: 14 }}>{note.heading}</Text> : null}
@@ -1536,11 +1511,7 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
             <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>{note.morph}</Text>
           </View>}
         </View>}
-      </Post>}
-      {(kind === 'tafsir' || kind === 'qiraat') && <AyahPreviewSheet preview={open ? { kind: kind === 'tafsir' ? 'tafsir' : 'readings', key: note.key } : null} onClose={close} palette={palette} />}
-      {kind === 'balagha' && <BalaghaSheet ayah={open ? note.key : null} onClose={close} palette={palette} />}
-      {kind === 'irab' && 'word' in note && <IrabSheet target={open ? { key: note.key, word: note.word } : null} onClose={close} palette={palette} />}
-    </>
+    </Post>
   );
 });
 

@@ -143,7 +143,7 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
     <Ayah ayah={ayah} palette={palette} muted={false} />
     {side === 'before' && ayah.basmala && <AyahWords look={mutedText}>{` ${ayah.basmala.join(' ')} `}</AyahWords>}
   </Text>);
-  const basmala = first.basmala && <AyahFlow center color={palette.muted}><AyahWords>{first.basmala.join(' ')}</AyahWords></AyahFlow>;
+  const basmala = first.basmala && <AyahFlow center color={palette.muted} menu={false}><AyahWords>{first.basmala.join(' ')}</AyahWords></AyahFlow>;
   return (
     // The card's own buttons sit beside its tap area, not in it: a button inside a pressable is lost on the web and to screen readers (R0055).
     <View style={stacked ? { width, paddingVertical: 8 } : { width, opacity: current ? 1 : 0.45, backgroundColor: palette.card, borderWidth: 1, borderColor: palette.rule, ...CARD, paddingHorizontal: 12, paddingVertical: 8 }}>
@@ -156,15 +156,15 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
         </Text>
       </View>
       {at === 'after' && basmala}
-      {around ? <AyahFlow center color={palette.ink}>
+      {around ? <AyahFlow center color={palette.ink} menu={false}>
           {aroundOf(around.before, 'before')}
           {cell.ayat.map((ayah, index) => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={false} light={tapped} read={read} shown={shownOf(index)} />)}
           {aroundOf(around.after, 'after')}
         </AyahFlow>
       : wordViews && !muted
         // Each word its own box, so the connection lines can find it: a wrapping row from the right, as the text runs.
-        ? <AyahFlow row center color={palette.ink}>{cell.ayat.map((ayah, index) => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} read={muted ? undefined : read} shown={shownOf(index)} />)}</AyahFlow>
-        : <AyahFlow center color={muted ? palette.muted : palette.ink}>
+        ? <AyahFlow row center color={palette.ink} menu={false}>{cell.ayat.map((ayah, index) => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} read={muted ? undefined : read} shown={shownOf(index)} />)}</AyahFlow>
+        : <AyahFlow center color={muted ? palette.muted : palette.ink} menu={false}>
           {cell.ayat.map((ayah, index) => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} read={muted ? undefined : read} shown={shownOf(index)} />)}
         </AyahFlow>}
       {at === 'before' && basmala}

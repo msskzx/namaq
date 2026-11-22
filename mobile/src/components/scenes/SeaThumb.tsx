@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Svg, { Defs, Ellipse, G, LinearGradient, Path, RadialGradient, Rect, Stop } from 'react-native-svg';
-import { DARK_SEA_STEPS, darkSeaWords } from '@shared/quran/scenes/darkSea';
+import { DARK_SEA_KEY, DARK_SEA_STEPS, darkSeaWords } from '@shared/quran/scenes/darkSea';
 import { Text } from '@/ui/Text';
 import { ayahMushafWords } from '@/lib/mushaf';
 import { SEA_ART } from '@/lib/theme';
@@ -47,7 +47,7 @@ export default function SeaThumb({ place }: { place: string }) {
         <Path d="M0 178 C50 166 80 150 130 156 C180 162 210 178 260 172 C310 166 340 150 390 156 C415 159 430 166 440 168" fill="none" stroke={edge[1]} strokeOpacity={0.5} strokeWidth={1.6} />
         <Rect width="440" height="248" fill="url(#tvig)" />
       </Svg>
-      <AyahFlow color={SEA_ART.gold} style={{ position: 'absolute', right: 14, left: 96, bottom: 6 }}>
+      <AyahFlow menu={DARK_SEA_KEY} color={SEA_ART.gold} style={{ position: 'absolute', right: 14, left: 96, bottom: 6 }}>
         {words.map((word, i) => <AyahWords key={i}>{`${i ? ' ' : ''}${word}`}</AyahWords>)}
       </AyahFlow>
       <View style={{ position: 'absolute', left: 10, bottom: 10, backgroundColor: badge, paddingHorizontal: 8, paddingVertical: 2 }}>

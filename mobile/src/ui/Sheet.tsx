@@ -10,6 +10,7 @@ import { X } from 'lucide-react-native';
 import type { Palette } from '@/lib/theme';
 import { Text } from '@/ui/Text';
 import { SourceSlotContext } from '@/ui/sourceSlot';
+import { AyahMenuContext } from './ayahMenuContext';
 import IconButton from '@/ui/IconButton';
 
 const OPEN_MS = 260;
@@ -71,6 +72,8 @@ export default function Sheet({ open, onClose, palette, tall, full, title, onDis
     <Modal visible={shown} transparent animationType="none" onRequestClose={onClose} onDismiss={onDismiss} statusBarTranslucent>
       {/* A sheet opened from a home card is not the card: its references draw in it (ui/sourceSlot.ts). */}
       <SourceSlotContext.Provider value={null}>
+      {/* The ayah menu opens under a modal, so an ayah in a sheet opens none (ui/ayahMenuContext.ts). */}
+      <AyahMenuContext.Provider value={null}>
       <GestureHandlerRootView style={{ flex: 1, paddingBottom: keyboard }}>
         {!full && <Animated.View style={[{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.45)' }, dim]}>
           <Pressable accessibilityLabel="إغلاق" onPress={onClose} style={{ flex: 1 }} />
@@ -81,6 +84,7 @@ export default function Sheet({ open, onClose, palette, tall, full, title, onDis
           <OutsideCard>{children}</OutsideCard>
         </Animated.View>
       </GestureHandlerRootView>
+      </AyahMenuContext.Provider>
       </SourceSlotContext.Provider>
     </Modal>
   );

@@ -169,7 +169,7 @@ export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bott
                 tops.current.set(key, y);
                 if (pending.current === key) { pending.current = null; jump(y); }
               }} accessibilityRole="button" accessibilityLabel={`افتح ${place} في المصحف`}>
-              <AyahFlow color={palette.ink}>
+              <AyahFlow color={palette.ink} menu={false}>
                 {text.map((word, i) => <AyahWords key={i} look={marked.includes(i) ? { color: palette.accent } : undefined}>{`${i ? ' ' : ''}${word}`}</AyahWords>)}
               </AyahFlow>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 2 }}>
@@ -206,7 +206,7 @@ function GharibCard({ entry, onOpen, palette }: { entry: GharibPlaced; onOpen: (
     <CardWithRow palette={palette} pad={[10, 14]} source={gharibSource(entry)}
       lead={<IconButton Icon={FEATURE_ICON.mushaf} label={`افتح ${place} في المصحف`} onPress={() => onOpen(entry.key)} />}
       row={<Text style={{ color: palette.muted, fontSize: 14 }}>{place}</Text>}>
-      <LitAyat ayat={[{ words: ayah, lit: entry.words }]} palette={palette} />
+      <LitAyat ayat={[{ words: ayah, lit: entry.words }]} menu={false} palette={palette} />
       <View style={{ height: 1, backgroundColor: `${palette.rule}60`, marginVertical: 6 }} />
       <BookRuns text={entry.text} quran={palette.accent} style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' }} />
     </CardWithRow>

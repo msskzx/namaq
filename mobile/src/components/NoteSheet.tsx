@@ -53,7 +53,7 @@ export default function NoteSheet({ ayah, onClose, palette }: { ayah: string | n
             <IconButton Icon={Send} label="مشاركة" onPress={() => { flush(); onClose(); shareAyah(shown, palette, text.trim(), true); }} />
           )}
         </View>
-        {shown && <AyahFlow lines={2} color={palette.muted}><AyahWords>{ayahText(shown)}</AyahWords></AyahFlow>}
+        {shown && <AyahFlow lines={2} color={palette.muted} menu={false}><AyahWords>{ayahText(shown)}</AyahWords></AyahFlow>}
         <Field value={text} onChangeText={edit} multiline autoFocus={!!shown && !readAyahNotes()[shown]} placeholder="تأملك في هذه الآية" label="تأملك في هذه الآية" palette={palette} style={{ flex: 1 }} />
       </View>
     </Sheet>

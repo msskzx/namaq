@@ -48,7 +48,7 @@ function cardLink(card: PairCard) {
 }
 
 /** One ayah: same words in the accent, same root in purple, a lit word and its partner on a highlight, the word read underlined. */
-function AyahText({ ayah, palette, light, plain = false, inline = false }: { ayah: CardAyah; palette: Palette; light?: Light; plain?: boolean; inline?: boolean }) {
+function AyahText({ ayah, surah, palette, light, plain = false, inline = false }: { ayah: CardAyah; surah: number; palette: Palette; light?: Light; plain?: boolean; inline?: boolean }) {
   const words = <>
     {ayah.words.map((word, i) => {
       const mark = plain ? undefined : ayah.marks?.[i];
@@ -69,7 +69,7 @@ function AyahText({ ayah, palette, light, plain = false, inline = false }: { aya
     <AyahWords look={{ color: palette.accent }}>{`\u00A0${num(ayah.number)}`}</AyahWords>
   </>;
   // Inside a running text it takes the flow around it; on its own it is its own flow (the reader's line size, centred).
-  return inline ? <Text style={{ color: plain ? palette.muted : palette.ink }}>{words}</Text> : <AyahFlow center color={plain ? palette.muted : palette.ink}>{words}</AyahFlow>;
+  return inline ? <Text style={{ color: plain ? palette.muted : palette.ink }}>{words}</Text> : <AyahFlow center menu={`${surah}:${ayah.number}`} color={plain ? palette.muted : palette.ink}>{words}</AyahFlow>;
 }
 
 /** The ayah before or after a side in the matrix: muted, its words coloured where the other side's neighbour shares them. */
@@ -87,11 +87,11 @@ function Neighbour({ ayah, palette }: { ayah: AroundAyah; palette: Palette }) {
 }
 
 /** A side's ayat as one running text, with the ayah before and after (muted) when the surrounding switch is on. */
-function RunningAyat({ ayat, before, after, palette, light, lane = false }: { ayat: CardAyah[]; before?: AroundAyah | null; after?: AroundAyah | null; palette: Palette; light: (ayah: CardAyah) => Light; /** Half the card wide, side by side: the reader's size from the screen, wrapping within the lane. */ lane?: boolean }) {
+function RunningAyat({ ayat, surah, before, after, palette, light, lane = false }: { ayat: CardAyah[]; surah: number; before?: AroundAyah | null; after?: AroundAyah | null; palette: Palette; light: (ayah: CardAyah) => Light; /** Half the card wide, side by side: the reader's size from the screen, wrapping within the lane. */ lane?: boolean }) {
   return (
-    <AyahFlow center screen={lane} color={palette.ink}>
+    <AyahFlow center screen={lane} menu={[...(before ? [before.key] : []), ...ayat.map(ayah => `${surah}:${ayah.number}`), ...(after ? [after.key] : [])]} color={palette.ink}>
       {before && <><Neighbour ayah={before} palette={palette} />{' '}</>}
-      {ayat.map((ayah, i) => <Text key={ayah.number}>{i > 0 ? ' ' : ''}<AyahText ayah={ayah} palette={palette} light={light(ayah)} inline /></Text>)}
+      {ayat.map((ayah, i) => <Text key={ayah.number}>{i > 0 ? ' ' : ''}<AyahText ayah={ayah} surah={surah} palette={palette} light={light(ayah)} inline /></Text>)}
       {after && <>{' '}<Neighbour ayah={after} palette={palette} /></>}
     </AyahFlow>
   );
@@ -232,17 +232,17 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
             case 'silent': return <Silent key={k} note={silentNote(piece.surah)} palette={palette} />;
             case 'around': {
               const ayah = (piece.which === 'before' ? around?.before : around?.after)?.[i];
-              return ayah ? <RunningAyat key={k} ayat={[]} {...{ [piece.which]: ayah }} palette={palette} light={() => ({ lit: null })} /> : null;
+              return ayah ? <RunningAyat key={k} ayat={[]} surah={cardSide.surah} {...{ [piece.which]: ayah }} palette={palette} light={() => ({ lit: null })} /> : null;
             }
             case 'ayat': {
-              if (piece.option === undefined) return <RunningAyat key={k} ayat={piece.ayat} before={piece.before ? around?.before[i] : undefined} after={piece.after ? around?.after[i] : undefined} palette={palette} light={light} />;
+              if (piece.option === undefined) return <RunningAyat key={k} ayat={piece.ayat} surah={cardSide.surah} before={piece.before ? around?.before[i] : undefined} after={piece.after ? around?.after[i] : undefined} palette={palette} light={light} />;
               const row = piece.option;
               const ayah = piece.ayat[0];
               return (
                 <Tap key={k} onPress={() => { if (!step && row !== selected) { setPicked(row); setTapped(null); } }} accessibilityRole="button" accessibilityState={{ selected: piece.picked }}
                   accessibilityLabel={`${surahName(cardSide.surah)} ${num(ayah.number)}`}
                   style={{ borderRightWidth: COMPARE_CARD.pickBar, borderRightColor: piece.picked ? palette.accent : 'transparent', paddingRight: COMPARE_CARD.pickPad }}>
-                  <AyahText ayah={ayah} palette={palette} plain={piece.plain} light={piece.picked ? light(ayah) : undefined} />
+                  <AyahText ayah={ayah} surah={cardSide.surah} palette={palette} plain={piece.plain} light={piece.picked ? light(ayah) : undefined} />
                 </Tap>
               );
             }
@@ -264,7 +264,7 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
       return stretches.map((stretch, k) => (
         <View key={k}>
           {k > 0 && <Gap label={runsLabel(stretch.map(ayah => ayah.number))} palette={palette} />}
-          <RunningAyat lane={!wide} ayat={stretch} before={parts || k > 0 ? undefined : around?.before[i]} after={parts || k < stretches.length - 1 ? undefined : around?.after[i]} palette={palette}
+          <RunningAyat lane={!wide} ayat={stretch} surah={cardSide.surah} before={parts || k > 0 ? undefined : around?.before[i]} after={parts || k < stretches.length - 1 ? undefined : around?.after[i]} palette={palette}
             light={ayah => lightFor(lit, step, i, ayah.number, onWord, written)} />
         </View>
       ));

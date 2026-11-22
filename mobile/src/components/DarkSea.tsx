@@ -162,7 +162,7 @@ export default function DarkSea() {
           {page === 0
             ? <View style={{ flex: 1, justifyContent: 'center' }}>
                 <Shade style={{ gap: 0, paddingVertical: 18 }}>
-                  <AyahFlow color={SEA_ART.gold} center>
+                  <AyahFlow menu={DARK_SEA_KEY} color={SEA_ART.gold} center>
                     {topWords.map((word, i) => <AyahWords key={i}>{`${i ? ' ' : ''}${word.text}`}</AyahWords>)}
                     <AyahWords look={{ color: SEA_ART.muted }}>{` ${num(Number(DARK_SEA_KEY.split(':')[1]))}`}</AyahWords>
                   </AyahFlow>
@@ -171,7 +171,7 @@ export default function DarkSea() {
               </View>
             : <>
                 <Animated.View style={[{ alignItems: 'center', gap: 4 }, top]}>
-                  <AyahFlow color={SEA_ART.gold} center style={{ alignSelf: 'stretch' }}>
+                  <AyahFlow menu={DARK_SEA_KEY} color={SEA_ART.gold} center style={{ alignSelf: 'stretch' }}>
                     {topWords.map((word, i) => <AyahWords key={i}>{`${i ? ' ' : ''}${word.text}`}</AyahWords>)}
                   </AyahFlow>
                   <Text style={{ color: SEA_ART.muted, fontSize: 13 }}>{name}</Text>
@@ -189,7 +189,7 @@ export default function DarkSea() {
         </View>
         {/* The last words alone, in the middle of the black. */}
         <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 32, right: 32, top: 0, bottom: 0, justifyContent: 'center' }, last]}>
-          <AyahFlow color={SEA_ART.gold} center>
+          <AyahFlow menu={DARK_SEA_KEY} color={SEA_ART.gold} center>
             {endWords.map((word, i) => <AyahWords key={i}>{`${i ? ' ' : ''}${word.text}`}</AyahWords>)}
           </AyahFlow>
         </Animated.View>
@@ -214,7 +214,7 @@ export function DarkSeaCard({ palette, onPress }: { palette: Palette; onPress?: 
       <View style={{ flexDirection: 'row', gap: 12, alignItems: 'flex-start' }}>
         <Icon size={22} color={palette.accent} style={{ marginTop: 6 }} />
         <View style={{ flex: 1, gap: 2 }}>
-          <AyahFlow color={palette.ink}>{title.map((word, i) => <AyahWords key={i}>{`${i ? ' ' : ''}${word}`}</AyahWords>)}</AyahFlow>
+          <AyahFlow menu={DARK_SEA_KEY} color={palette.ink}>{title.map((word, i) => <AyahWords key={i}>{`${i ? ' ' : ''}${word}`}</AyahWords>)}</AyahFlow>
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`سورة ${surahName(surah)} · الآية ${num(ayah)}`}</Text>
           <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{authors}</Text>
         </View>

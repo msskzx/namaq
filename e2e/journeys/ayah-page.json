@@ -1,0 +1,7 @@
+{"steps": [
+  ["open","/"],
+  ["open","/ayah?key=93:3"],
+  ["swipe","up"],
+  ["open","/ayah?key=93:3"],
+  ["tap","التفسير كاملًا"]
+]}

@@ -4,6 +4,7 @@ import { Text } from '@/ui/Text';
 import { QURAN_FONT } from '@/lib/theme';
 import { CARD_MARGINS, FLOW_LINE, flowFontSize, wordFontSize } from '@shared/quran/quranText/flow';
 import { mushafText } from '@shared/quran/mushafText';
+import { AyahMenuPress, type AyahMenuKeys } from '@/ui/AyahMenuPress';
 
 /** The font size the AyahFlow around takes from its width (0 outside one). */
 const FlowSize = createContext({ size: 0, color: '' });
@@ -15,8 +16,14 @@ export const useAyahSize = () => useContext(FlowSize).size;
  * Ayah text off the page (owner, 2026-11-19: every ayah view keeps the mushaf's line size and height): the room the words
  * flow in, sized from its own width as the reader's flowing text is (shared/quran/quranText/flow.ts). Its AyahWords (and
  * write boxes, by useAyahSize) take that size; the place sets only colour, never a size.
+ *
+ * A long press opens the reader's menu on the ayah (owner, 2026-11-22): `menu` is the ayah's key. Every place names it, or
+ * passes false where a long press must not open it (an unanswered question, recite and write boxes, a tree, a sheet, a
+ * picture); shared/quran/oneQuranText.test.ts holds the places allowed to.
  */
-export default function AyahFlow({ children, color, row = false, center = false, screen: fromScreen = false, lines, style }: { children: ReactNode; color: string;
+export default function AyahFlow({ children, color, menu, row = false, center = false, screen: fromScreen = false, lines, style }: { children: ReactNode; color: string;
+  /** The ayah a long press opens the menu on («2:255»), the ayat in order when it shows several, or false where it opens nothing. */
+  menu: AyahMenuKeys;
   /** Pieces side by side, wrapping (words and boxes in a matrix row); otherwise one justified paragraph. */
   row?: boolean;
   /** Lines centred instead of justified: the matrix and compare cards, which centre each ayah under its heading. */
@@ -31,6 +38,7 @@ export default function AyahFlow({ children, color, row = false, center = false,
   const [measured, setMeasured] = useState(0);
   const size = fromScreen ? flowFontSize(screen - CARD_MARGINS) : measured || flowFontSize(screen - CARD_MARGINS);
   return (
+    <AyahMenuPress menu={menu}>
     <View style={style} onLayout={event => setMeasured(flowFontSize(event.nativeEvent.layout.width))}>
       <FlowSize.Provider value={{ size, color }}>
         {row
@@ -38,6 +46,7 @@ export default function AyahFlow({ children, color, row = false, center = false,
           : <Text numberOfLines={lines} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, color, textAlign: center ? 'center' : 'justify', writingDirection: 'rtl' }}>{children}</Text>}
       </FlowSize.Provider>
     </View>
+    </AyahMenuPress>
   );
 }
 
