@@ -166,33 +166,28 @@ test.describe('a new user', () => {
   test.describe('with the ayah books picked', () => {
     test.use({ seed: { interests: '["tafsir","qiraat","irab","balagha"]', 'interests-surprise': '0' } });
 
-    test('the feed has small ayah cards from the tafsir, balagha, i\'rab and readings, each opening the reader\'s own sheet', async ({ page }) => {
+    // Where the ayah is the subject, «افتح» opens the ayah's page at the card's section (owner, 2026-11-22).
+    test('the feed has small ayah cards from the tafsir, balagha, i\'rab and readings, each opening the ayah\'s page at its section', async ({ page }) => {
       await open(page, '/');
       await page.mouse.move(380, 500);
-      // Each sheet is headed by its ayah («قٓ ٣»).
-      const ayahHead = page.getByRole('heading', { name: / [٠-٩]+(–[٠-٩]+)?$/ });
       const cards = [
-        ['من التفسير', 'التفسير كاملًا', page.getByRole('link', { name: 'اقرأ في الكتاب' })],
-        ['من البلاغة', 'البلاغة كاملة', ayahHead],
-        ['من الإعراب', 'إعراب الآية', page.getByRole('tablist', { name: 'كلمات الآية' })],
-        ['من القراءات', 'القراءات كاملة', ayahHead],
+        ['من التفسير', 'التفسير كاملًا', 'التفسير'],
+        ['من البلاغة', 'البلاغة كاملة', 'البلاغة'],
+        ['من الإعراب', 'إعراب الآية', 'الإعراب'],
+        ['من القراءات', 'القراءات كاملة', 'القراءات'],
       ] as const;
-      for (const [title, button, inSheet] of cards) {
+      for (const [title, button, section] of cards) {
         const head = page.getByRole('heading', { name: title, exact: true }).first();
         await expect(async () => {
-          // Back over the feed: the tap that closed the last sheet left the pointer on the top bar.
           await page.mouse.move(380, 500);
           await page.mouse.wheel(0, 3000);
           await expect(head).toBeAttached({ timeout: 1000 });
         }).toPass({ timeout: 30_000 });
         // The row's open button is the card's one control for it (owner, 2026-11-20).
-        await page.getByRole('button', { name: button, exact: true }).first().click();
-        await expect(inSheet.last()).toBeVisible();
-        // A tap above the sheet closes it, as on a phone.
-        await expect(async () => {
-          await page.mouse.click(195, 40);
-          await expect(inSheet).toHaveCount(0, { timeout: 1500 });
-        }).toPass({ timeout: 10_000 });
+        await page.getByRole('button', { name: `افتح صفحة الآية، ${button}`, exact: true }).first().click();
+        await expect(page.getByRole('heading', { name: section, exact: true }).filter({ visible: true })).toBeInViewport();
+        await page.getByRole('button', { name: 'رجوع' }).filter({ visible: true }).click();
+        await expect(head).toBeAttached();
       }
     });
   });
@@ -219,7 +214,7 @@ test.describe('a new user', () => {
           return { name: button.getAttribute('aria-label'), x, y, width };
         }));
         const named = (name: string) => buttons.find(button => button.name === name)!;
-        const opens = named('التفسير كاملًا');
+        const opens = named('افتح صفحة الآية، التفسير كاملًا');
         const save = named('احفظ البطاقة');
         const more = named('خيارات البطاقة');
         // The row's buttons, right to left: the open button first, the «⋯» alone at the far left.
@@ -394,6 +389,16 @@ test.describe('a returning user', () => {
     await expect.poll(() => readerPage(page)).toBe(42);
   });
 
+  // Where the ayah is the subject, «افتح» opens its page with everything on it (owner, 2026-11-22).
+  test('a saved ayah opens its own page from «افتح», with its tafsir and the mushaf one tap away', async ({ page }) => {
+    await open(page, '/');
+    await page.getByRole('button', { name: 'مدونتي', exact: true }).click();
+    await page.getByRole('button', { name: 'افتح صفحة الآية' }).first().click();
+    await expect(page.getByRole('heading', { name: 'التفسير', exact: true })).toBeVisible();
+    await page.getByRole('button', { name: 'في المصحف' }).filter({ visible: true }).click();
+    await expect.poll(() => readerPage(page)).toBe(42);
+  });
+
   test('a saved ayah comes up in the feed as its mushaf lines', async ({ page }) => {
     await open(page, '/');
     await page.mouse.move(380, 500);
@@ -430,7 +435,7 @@ test.describe('a returning user', () => {
     expect(middle).toBeGreaterThan(barBox!.y);
     expect(middle).toBeLessThan(barBox!.y + barBox!.height);
     expect(buttonBox!.x + buttonBox!.width).toBeLessThanOrEqual(barBox!.x);
-    const last = await page.getByRole('button', { name: 'في المصحف' }).first().boundingBox();
+    const last = await page.getByRole('button', { name: 'افتح صفحة الآية' }).first().boundingBox();
     expect(last!.x).toBeGreaterThanOrEqual(0);
   });
 
