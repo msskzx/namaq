@@ -1,0 +1,40 @@
+import type { CatalogEvent } from '@/lib/catalog/types';
+
+/**
+ * Khabbab: they emigrated with the Prophet ﷺ seeking the face of Allah, and some died having taken none of their reward,
+ * among them Mus'ab ibn Umayr, killed at Uhud, who left only a namirah too short to cover him; the Prophet ﷺ had them
+ * cover his head and put idhkhir on his feet. Told from Sahih al-Bukhari, each hadith whole, as its chapter on the hijra
+ * (Manaqib al-Ansar) gives them: 3914 first, the fuller, then 3897. 3913 is only the opening of 3914's double chain
+ * («هاجرنا مع رسول الله ﷺ») and is not repeated.
+ */
+const theShroudOfMusabIbnUmayr = {
+  kind: 'EVENT',
+  slug: 'the-shroud-of-musab-ibn-umayr',
+  name: "كفن مصعب بن عمير",
+  nameTransliterated: "The shroud of Mus'ab ibn Umayr",
+  type: 'OTHER',
+  fields: {},
+  people: [{ person: 'khabbab-ibn-al-aratt' }, { person: 'prophet-muhammad' }, { person: 'musab-ibn-umayr' }],
+  reports: [
+    {
+      isnad: "وَحَدَّثَنَا مُسَدَّدٌ: حَدَّثَنَا يَحْيَى، عَنِ الْأَعْمَشِ قَالَ: سَمِعْتُ شَقِيقَ بْنَ سَلَمَةَ قَالَ: حَدَّثَنَا خَبَّابٌ قَالَ:",
+      source: { slug: 'sahih-al-bukhari', hadith: 3914, url: 'https://sunnah.com/bukhari:3914' },
+      moments: [
+        { title: "«لم يأكل من أجره شيئا»", text: "«هَاجَرْنَا مَعَ رَسُولِ اللهِ ﷺ نَبْتَغِي وَجْهَ اللهِ، وَوَجَبَ أَجْرُنَا عَلَى اللهِ، فَمِنَّا مَنْ مَضَى لَمْ يَأْكُلْ مِنْ أَجْرِهِ شَيْئًا،", people: ['khabbab-ibn-al-aratt', 'prophet-muhammad'] },
+        { title: "لم نجد إلا نمرة", text: "مِنْهُمْ مُصْعَبُ بْنُ عُمَيْرٍ، قُتِلَ يَوْمَ أُحُدٍ، فَلَمْ نَجِدْ شَيْئًا نُكَفِّنُهُ فِيهِ إِلَّا نَمِرَةً، كُنَّا إِذَا غَطَّيْنَا بِهَا رَأْسَهُ خَرَجَتْ رِجْلَاهُ، فَإِذَا غَطَّيْنَا رِجْلَيْهِ خَرَجَ رَأْسُهُ، فَأَمَرَنَا رَسُولُ اللهِ ﷺ أَنْ نُغَطِّيَ رَأْسَهُ بِهَا، وَنَجْعَلَ عَلَى رِجْلَيْهِ مِنْ إِذْخِرٍ،", people: ['musab-ibn-umayr', 'prophet-muhammad'] },
+        { title: "«ومنا من أينعت له ثمرته»", text: "وَمِنَّا مَنْ أَيْنَعَتْ لَهُ ثَمَرَتُهُ فَهْوَ يَهْدِبُهَا».", people: ['khabbab-ibn-al-aratt'] },
+      ],
+    },
+    {
+      isnad: "حَدَّثَنَا الْحُمَيْدِيُّ: حَدَّثَنَا سُفْيَانُ: حَدَّثَنَا الْأَعْمَشُ قَالَ: سَمِعْتُ أَبَا وَائِلٍ يَقُولُ:",
+      source: { slug: 'sahih-al-bukhari', hadith: 3897, url: 'https://sunnah.com/bukhari:3897' },
+      moments: [
+        { title: "«نريد وجه الله»", text: "«عُدْنَا خَبَّابًا، فَقَالَ: هَاجَرْنَا مَعَ النَّبِيِّ ﷺ نُرِيدُ وَجْهَ اللهِ، فَوَقَعَ أَجْرُنَا عَلَى اللهِ، فَمِنَّا مَنْ مَضَى لَمْ يَأْخُذْ مِنْ أَجْرِهِ شَيْئًا،", people: ['khabbab-ibn-al-aratt', 'prophet-muhammad'] },
+        { title: "إذا غطينا بها رأسه بدت رجلاه", text: "مِنْهُمْ مُصْعَبُ بْنُ عُمَيْرٍ، قُتِلَ يَوْمَ أُحُدٍ، وَتَرَكَ نَمِرَةً، فَكُنَّا إِذَا غَطَّيْنَا بِهَا رَأْسَهُ بَدَتْ رِجْلَاهُ، وَإِذَا غَطَّيْنَا رِجْلَيْهِ بَدَا رَأْسُهُ، فَأَمَرَنَا رَسُولُ اللهِ ﷺ أَنْ نُغَطِّيَ رَأْسَهُ، وَنَجْعَلَ عَلَى رِجْلَيْهِ شَيْئًا مِنْ إِذْخِرٍ،", people: ['musab-ibn-umayr', 'prophet-muhammad'] },
+        { title: "«ومنا من أينعت له ثمرته»", text: "وَمِنَّا مَنْ أَيْنَعَتْ لَهُ ثَمَرَتُهُ فَهْوَ يَهْدِبُهَا».", people: ['khabbab-ibn-al-aratt'] },
+      ],
+    },
+  ],
+} satisfies CatalogEvent;
+
+export default theShroudOfMusabIbnUmayr;
