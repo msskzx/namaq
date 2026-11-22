@@ -220,11 +220,14 @@ export function lapsedReviews(
   root: string,
   inferences: Inference[] = [],
 ) {
+  // Only the reviewed records need a revision; hashing every assertion grows with the whole model.
+  const reviewed = new Set(reviews.map((r) => r.record));
   const current = new Map<string, string>();
   const lookup = unitLookup(folders);
   for (const folder of folders) {
     for (const file of folder.units) {
       for (const assertion of file.assertions) {
+        if (!reviewed.has(assertion.id)) continue;
         current.set(assertion.id, revisionOf(folder, file, assertion, root, inferences, lookup));
       }
     }

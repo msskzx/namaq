@@ -8,9 +8,6 @@ import { Text } from '@/ui/Text';
 import Card from '@/ui/Card';
 import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
-import Sheet from '@/ui/Sheet';
-import { pageLabel, saidBy } from '@shared/tarajim';
-import Saying from '@/ui/Saying';
 import type { Palette } from '@/lib/theme';
 import { findPerson, GRAPH, personName } from '@/lib/tarajim';
 import { edge, kindColor } from './TiesChain';
@@ -264,9 +261,8 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
           <Card palette={palette} pad={[4, 14]}>
             {listed.map(tie => {
               const node = GRAPH.nodes.get(tie.to)!;
-              return node.inApp
-                ? <Button key={tie.to} variant="plain" label={personName(node)} Icon={tie.to === marked ? Check : undefined} onPress={() => go(node.slug)} />
-                : <Text key={tie.to} style={{ color: tie.to === marked ? palette.green : palette.muted, fontSize: 16, lineHeight: 34, textAlign: 'right' }}>{personName(node)}</Text>;
+              // Everyone looks the same (owner, 2026-11-22): his page when he has one, else the sentence that names him.
+              return <Button key={tie.to} variant="plain" label={personName(node)} Icon={tie.to === marked ? Check : undefined} onPress={node.inApp ? () => go(node.slug) : () => setShown(tie)} />;
             })}
           </Card>
         )}
@@ -274,20 +270,4 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
   );
 }
 
-/** The sentence that states a tie, with its pages: a long press on the ring, on the «صلاته» screen and the person page. */
-export function TieSheet({ tie, onClose, palette }: { tie?: Tie; onClose: () => void; palette: Palette }) {
-  return (
-    <Sheet open={!!tie} onClose={onClose} palette={palette}>
-      {tie && (
-        <View style={{ padding: 16, gap: 8 }}>
-          <Saying by={tie.link.text ? saidBy(tie.link) : undefined} palette={palette}>
-            <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{tie.link.text || personName(GRAPH.nodes.get(tie.to)!)}</Text>
-          </Saying>
-          <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>
-            {tie.link.refs.length ? pageLabel(tie.link.refs) : ''}{tie.reversed ? ' · من ترجمة الآخر' : ''}
-          </Text>
-        </View>
-      )}
-    </Sheet>
-  );
-}
+export { default as TieSheet } from './TieSheet';
