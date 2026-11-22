@@ -127,7 +127,8 @@ test.describe('«أصهاره»', () => {
   test.use({ seed: saved('group', 'inlaws:prophet-muhammad') });
   test('draws his wives and their fathers, says it in words, and opens «بينه وبين…» with them', async ({ page }) => {
     await open(page, '/library');
-    await page.getByRole('tab', { name: 'النص' }).click();
+    // The drawing and the words swap from the row under the card (owner, 2026-11-22: no switch inside a card).
+    await page.getByRole('button', { name: 'النص', exact: true }).click();
     await expect(page.getByText(/حفصة/).first()).toBeVisible();
     await page.getByRole('button', { name: 'ارسم الصلة بينهم' }).click();
     await expect(page).toHaveURL(/\/between\?slugs=prophet-muhammad(,|%2C)/);

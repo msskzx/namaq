@@ -1,7 +1,7 @@
 import { createContext, isValidElement, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, Dimensions, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, BookOpenText, CalendarRange, ChartNoAxesColumn, DoorOpen, Gem, Bookmark, BookOpen, Check, CircleCheck, CircleMinus, Clock, Compass, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Milestone, ScrollText, Swords, History, Target, Users, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpenText, CalendarRange, ChartNoAxesColumn, DoorOpen, Gem, Bookmark, BookOpen, Check, CircleCheck, CircleMinus, Clock, Compass, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListTree, Presentation, Scale, Sparkles, TextAlignEnd, Milestone, ScrollText, Swords, History, Target, Users, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, toggleForgotten, mostForgotten, readAyahMarks, readDueMarks, rememberAyah, restoreMark, subscribeDueMarks, type AyahMark } from '@shared/ayahMarks';
@@ -20,7 +20,6 @@ import { allVirtues, feedBooks, LIST_KINDS, listStart, type ListKind, feedRound,
 import { pageSources, saidBy } from '@shared/tarajim';
 import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import Saying from '@/ui/Saying';
-import Tabs from '@/ui/Tabs';
 import { findPerson, GRAPH, PEOPLE, personName, tiePairs, unvowelled } from '@/lib/tarajim';
 import { kunyaFacts, laqabFacts, type NameFact } from '@shared/tarajimNames';
 import { chainSentence, groupWord } from '@shared/tarajimGraph';
@@ -61,7 +60,7 @@ import { drawnReport } from '@shared/stories/story';
 import { armiesBattles, armiesItems, armiesSources, battleHeadSources, battleItems, battleOnCard, battleYearItems, battleYearSlice, battleYearSources, type ArmiesTab, eventItems, eventOf, eventSources, nasabPeople, nasabSources, oathItems, oathSources, openingItems, openingSources, sceneItems, sceneOf, sceneSources, tiesPeople, tiesSources } from '@shared/drawingCards';
 import { NasabTree } from '@/screens/nasab';
 import { OpeningRows } from '@/screens/openings';
-import TiesRing, { foldedKinds, personNode, RoundRing, ringName, ringRoom, roundLayout, TieSheet, tiesOf } from './TiesRing';
+import TiesRing, { foldedKinds, personNode, RoundRing, ringName, ringRoom, roundLayout, TieSheet, tiesOf, DoubtedSheet } from './TiesRing';
 import { kindColor } from './TiesChain';
 import LifeColumns from './LifeColumns';
 import { LifeSheet } from './LifeTimeline';
@@ -170,6 +169,19 @@ type IconType = (props: LucideProps) => React.ReactNode;
 function Action({ Icon, label, on, onPress, tone, disabled }: { Icon: IconType; label: string; on?: boolean; onPress: () => void; palette: Palette; tone?: 'green'; disabled?: boolean }) {
   return <IconButton Icon={Icon} label={label} onPress={onPress} on={on} disabled={disabled} tone={tone} />;
 }
+
+/**
+ * One of a card's two views at a time, swapped from the row under the card (owner, 2026-11-22: no switch inside a card): the
+ * button names the other view, with its icon, and a tap shows it.
+ */
+function SwapButton<K extends string>({ options, value, onChange, Icons }: { options: readonly { key: K; label: string }[]; value: K;
+  onChange: (key: K) => void; Icons: Record<K, IconType> }) {
+  const other = options.find(option => option.key !== value) ?? options[0];
+  return <Button pill label={other.label} Icon={Icons[other.key]} onPress={() => onChange(other.key)} />;
+}
+
+const DRAWING_ICONS: Record<DrawingOrText, IconType> = { drawing: Network, text: TextAlignEnd };
+const ARMIES_ICONS: Record<ArmiesTab, IconType> = { field: Users, killed: Swords };
 
 /**
  * Every feed post's one shape (owner, 2026-11-14 and 2026-11-20, like an Instagram post): the head, the body in one card,
@@ -566,10 +578,10 @@ function TiePost({ id, palette }: { id: string; palette: Palette }) {
   return (
     <Post palette={palette} head={<PostHead Icon={Link2} title="صلة" sub={`${name(pair.a)} و${name(pair.b)}`} palette={palette} />}
       open={<OpenButton label={`ارسم الصلة بين ${name(pair.a)} و${name(pair.b)}`} onPress={open} palette={palette} />}
+      actions={<SwapButton options={DRAWING_OR_TEXT} value={shown} onChange={setShown} Icons={DRAWING_ICONS} />}
       source={sourcesOf(pageSources(pair.steps.flatMap(step => step.link.refs)))}>
       <View style={{ padding: 14, gap: 6 }}>
         {/* The same drawing as «بينه وبين…» (owner, 2026-11-19), or the sentence that says it: one at a time, the drawing first (owner, 2026-11-20). */}
-        <Tabs palette={palette} label="كيف تُعرض الصلة" value={shown} onChange={setShown} options={DRAWING_OR_TEXT} />
         {shown === 'drawing'
           ? <TiesChain nodes={nodes} steps={pair.steps} first={pair.a} picked={[pair.a, pair.b]} width={Math.min(width - 60, 480)} palette={palette} inCard />
           : <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{chainSentence(GRAPH, pair.steps, personName)}.</Text>}
@@ -685,9 +697,9 @@ function GroupPost({ id, palette }: { id: string; palette: Palette }) {
   return (
     <Post palette={palette} head={<PostHead Icon={Link2} title={title} sub={sub} palette={palette} />}
       open={<OpenButton label="ارسم الصلة بينهم" onPress={open} palette={palette} />}
+      actions={<SwapButton options={DRAWING_OR_TEXT} value={shown} onChange={setShown} Icons={DRAWING_ICONS} />}
       source={sourcesOf(stepSources(group.steps))}>
       <View style={{ padding: 14, gap: 6 }}>
-        <Tabs palette={palette} label="كيف تُعرض الصلة" value={shown} onChange={setShown} options={DRAWING_OR_TEXT} />
         {shown === 'drawing'
           ? <TiesChain nodes={group.nodes} steps={group.steps} first={group.nodes[0]} picked={group.id.startsWith('inlaws:') ? [group.nodes[0]] : picked} width={Math.min(width - 60, 480)} palette={palette} inCard />
           : <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{chainSentence(GRAPH, group.steps, personName)}.</Text>}
@@ -750,6 +762,7 @@ const SAHIH_NAMES = { bukhari: { book: 'صحيح البخاري', author: 'ال�
 function RingPost({ id, palette }: { id: string; palette: Palette }) {
   const { width } = useWindowDimensions();
   const [tie, setTie] = useState<Tie | undefined>();
+  const [doubtedOpen, setDoubtedOpen] = useState(false);
   const ring = ringList_().find(each => each.id === id);
   if (!ring) return null;
   const go = (slug: string) => router.push({ pathname: '/person', params: { slug } });
@@ -759,6 +772,11 @@ function RingPost({ id, palette }: { id: string; palette: Palette }) {
     const own = kin?.sure.find(each => each.to === slug);
     return personNode(slug, ring.by === 'kin' ? kindColor(palette, ring.kind) : palette.rule, go, own ? () => setTie(own) : undefined);
   });
+  // A tie the book gives «على خلاف» is drawn too, its line dashed (owner, 2026-11-22), when the ring still fits; a scholar's
+  // note that settles them (`ring.note`) leaves them out.
+  const doubted = ring.note ? [] : ring.doubted;
+  const withDoubted = [...nodes, ...doubted.map(each => ({ ...personNode(each.to, ring.by === 'kin' ? kindColor(palette, ring.kind) : palette.rule, go, () => setTie(each)), dashed: true }))];
+  const drawn = doubted.length && roundLayout(withDoubted.map(node => node.label), drawW) ? withDoubted : nodes;
   const owner = ring.by === 'title' ? undefined : GRAPH.nodes.get(ring.by === 'kin' ? ring.slug : ring.middle)!;
   const middle = ring.by === 'title' ? ring.name : personName(owner!);
   const title = ring.by === 'kin' ? groupWord(ring.kind, owner!.sex, ring.people.length) : ring.by === 'title' ? ring.name : `من ${SAHIH_NAMES[ring.book].book}`;
@@ -774,19 +792,15 @@ function RingPost({ id, palette }: { id: string; palette: Palette }) {
   return (
     <Post palette={palette} head={head}
       open={<OpenButton label={ring.by === 'kin' ? `افتح صلات ${middle}` : ring.by === 'title' ? `افتح «${ring.name}»` : 'افتح الحديث'} onPress={open} palette={palette} />}
+      // The ties the book gives «على خلاف»: one button in the row, their words in one sheet (owner, 2026-11-22).
+      actions={doubted.length > 0 && <Button pill label="على خلاف" Icon={Scale} onPress={() => setDoubtedOpen(true)} />}
       source={sourcesOf(source)}>
       <View style={{ padding: 14, gap: 10 }}>
         {ring.by === 'hadith' && <Saying by="قال رسول الله ﷺ" palette={palette}><Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>«{ring.quote}»</Text></Saying>}
-        <RoundRing middle={middle} nodes={nodes} width={drawW} palette={palette} />
-        {!ring.note && ring.doubted.length > 0 && (
-          <View style={{ gap: 4 }}>
-            {ring.doubted.map(each => (
-              <Button key={each.to} variant="plain" label={`${personName(GRAPH.nodes.get(each.to)!)}: على خلاف`} onPress={() => setTie(each)} />
-            ))}
-          </View>
-        )}
+        <RoundRing middle={middle} nodes={drawn} width={drawW} palette={palette} />
       </View>
       <TieSheet tie={tie} onClose={() => setTie(undefined)} palette={palette} />
+      <DoubtedSheet ties={doubted} open={doubtedOpen} onClose={() => setDoubtedOpen(false)} palette={palette} />
     </Post>
   );
 }
@@ -863,9 +877,9 @@ function ArmiesPost({ id, palette }: { id: string; palette: Palette }) {
   return (
     <Post palette={palette} head={<PostHead Icon={ChartNoAxesColumn} title="الجيشان في الغزوات" sub={battles.map(battle => battle.name.replace(/^غزوة /, '')).join(' · ')} palette={palette} />}
       open={<OpenButton label="افتح الغزوات والمعارك" onPress={() => toTab('/battles')} palette={palette} />}
+      actions={<SwapButton options={ARMIES_TAB_NAMES} value={tab} onChange={setTab} Icons={ARMIES_ICONS} />}
       source={sourcesOf(armiesSources(BATTLES))}>
       <View style={{ padding: 14, gap: 10 }}>
-        <Tabs palette={palette} label="ما يُعدّ" value={tab} onChange={setTab} options={ARMIES_TAB_NAMES} fill />
         <SidesHead battle={battles[0]} palette={palette} />
         {battles.map(battle => {
           const [ours, theirs] = sides(battle);

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Check } from 'lucide-react-native';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import Svg, { Line } from 'react-native-svg';
 import { groupWord, tieGroups, tieWord, type GraphNode, type Tie, type TieGroup, type TieKind } from '@shared/tarajimGraph';
 import { num } from '@shared/quran/arabicNumber';
@@ -100,7 +100,9 @@ export function roundLayout(labels: readonly string[], width: number) {
   return null;
 }
 
-export type RoundNode = { key: string; label: string; colour: string; inApp: boolean; onPress: () => void; onLongPress?: () => void };
+export type RoundNode = { key: string; label: string; colour: string; inApp: boolean; onPress: () => void; onLongPress?: () => void;
+  /** A tie the book gives «على خلاف»: its line dashed; the person drawn as every other (owner, 2026-11-22). */
+  dashed?: boolean };
 
 /**
  * A ring drawn round (owner, 2026-11-21): a middle (a person, a title) with its people on an oval round it, each a line to
@@ -116,7 +118,7 @@ export function RoundRing({ middle, nodes, width, palette }: { middle: string; n
         {nodes.map((node, i) => {
           const from = edge(centre, places[i], middleW / 2, 26);
           const to = edge(places[i], centre, ws[i] / 2, h / 2);
-          return <Line key={node.key} x1={from.x} y1={from.y} x2={to.x} y2={to.y} stroke={node.colour} strokeWidth={2} strokeOpacity={0.8} />;
+          return <Line key={node.key} x1={from.x} y1={from.y} x2={to.x} y2={to.y} stroke={node.colour} strokeWidth={2} strokeOpacity={0.8} strokeDasharray={node.dashed ? '6 5' : undefined} />;
         })}
       </Svg>
       <View style={{ position: 'absolute', left: centre.x - middleW / 2, top: centre.y - MIDDLE_H / 2, width: middleW, height: MIDDLE_H, justifyContent: 'center' }}>
@@ -275,19 +277,39 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
 }
 
 /** The sentence that states a tie, with its pages: a long press on the ring, on the «صلاته» screen and the person page. */
+/** A tie in the book's own words, with its pages (the ring's sheets). */
+function TieWords({ tie, palette }: { tie: Tie; palette: Palette }) {
+  return (
+    <View style={{ gap: 8 }}>
+      <Saying by={tie.link.text ? saidBy(tie.link) : undefined} palette={palette}>
+        <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{tie.link.text || personName(GRAPH.nodes.get(tie.to)!)}</Text>
+      </Saying>
+      <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>
+        {tie.link.refs.length ? pageLabel(tie.link.refs) : ''}{tie.reversed ? ' · من ترجمة الآخر' : ''}
+      </Text>
+    </View>
+  );
+}
+
 export function TieSheet({ tie, onClose, palette }: { tie?: Tie; onClose: () => void; palette: Palette }) {
   return (
     <Sheet open={!!tie} onClose={onClose} palette={palette}>
-      {tie && (
-        <View style={{ padding: 16, gap: 8 }}>
-          <Saying by={tie.link.text ? saidBy(tie.link) : undefined} palette={palette}>
-            <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{tie.link.text || personName(GRAPH.nodes.get(tie.to)!)}</Text>
-          </Saying>
-          <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>
-            {tie.link.refs.length ? pageLabel(tie.link.refs) : ''}{tie.reversed ? ' · من ترجمة الآخر' : ''}
-          </Text>
-        </View>
-      )}
+      {tie && <View style={{ padding: 16 }}><TieWords tie={tie} palette={palette} /></View>}
+    </Sheet>
+  );
+}
+
+/**
+ * A ring's ties the book gives «على خلاف», all in one sheet (owner, 2026-11-22): only the book's words and their pages,
+ * no words of ours; two ties the book says in the same words show them once.
+ */
+export function DoubtedSheet({ ties, open, onClose, palette }: { ties: readonly Tie[]; open: boolean; onClose: () => void; palette: Palette }) {
+  const once = ties.filter((tie, i) => !tie.link.text || ties.findIndex(other => other.link.text === tie.link.text) === i);
+  return (
+    <Sheet open={open} onClose={onClose} palette={palette}>
+      <ScrollView contentContainerStyle={{ padding: 16, gap: 18 }}>
+        {once.map(tie => <TieWords key={tie.to} tie={tie} palette={palette} />)}
+      </ScrollView>
     </Sheet>
   );
 }

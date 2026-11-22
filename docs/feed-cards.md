@@ -145,6 +145,10 @@ A new card or quiz kind goes into an interest's `cards` or `quizzes` in the same
   presents what it asked (a person, a hadith, a term, the ayah in the reader), never the quizzes page. Each choice then
   says what it is where the data has it: whose name or laqab, which hadith a narrator or an ending belongs to
   (`ChoiceQuestion.whereOf`). Every button has its word first, then its icon.
+- No switch inside a card (owner, 2026-11-22): a card with two views (the «صلة» and group cards' drawing and words, the
+  armies' field and killed) swaps them with one pill in its row naming the other view. A ring draws a tie the book gives
+  «على خلاف» with a dashed line, and one «على خلاف» pill in the row opens those ties in the book's words only, with no
+  words of ours.
 - Every card shares (owner, 2026-11-22): the paper airplane last in its row shares the card as one picture, its head,
   the card as it stands (a question unanswered, or answered with its marks and whose lines) and its books, with no
   buttons (app `ui/CardShare`). A card with its own share keeps it (pair, tree, مشاهد, story). Cards of your own state
