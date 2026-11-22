@@ -52,7 +52,7 @@ export default function Chip({ label, on, onPress, palette, role = 'button', che
         backgroundColor: filled ? accent : on ? palette.paperDeep : 'transparent', opacity: pressed ? 0.6 : 1 })}>
       {check && on && <Check size={13} color={color} />}
       {Icon && <Icon size={15} color={color} />}
-      {quran ? <QuranWord look={{ color }}>{label}</QuranWord> : <Text style={{ fontSize: small ? 14 : 15, color }}>{label}</Text>}
+      {quran ? <QuranWord look={{ color }}>{label}</QuranWord> : <Text style={{ flexShrink: 1, fontSize: small ? 14 : 15, color, textAlign: 'center' }}>{label}</Text>}
       {count !== undefined && <Text style={{ color: on ? accent : palette.muted, fontSize: 11 }}>{num(count)}</Text>}
     </Tap>
   );
