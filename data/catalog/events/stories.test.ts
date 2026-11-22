@@ -91,11 +91,17 @@ describe('sira stories', () => {
         const { source, volume, page, quote } = turn.witness;
         // A quote that skips words marks the gap with « … »: each part is on the page as printed.
         for (const part of quote.split(' … ')) expect(paragraphs(source, volume, page).join('\n')).toContain(part);
+        // «ﷺ» is said of the Prophet alone, so a note that gives the answer as his names him.
+        if (turn.speaker!.person === 'prophet-muhammad' && quote.includes('ﷺ')) continue;
         expect(bare(quote)).toContain(bare(name));
       } else if (turn.teller) {
         // Owner, 2026-11-22: the teller's own «قلت» is his: the lead says «I said», and the chain names him as the one telling.
-        expect(bare(turn.lead ?? '')).toMatch(/^(?:قال: )?ف?قل(?:ت|نا)(?: له| لها| لهم)?:?$/);
-        expect(bare(report.isnad ?? '')).toContain(bare(name));
+        expect(bare(turn.lead ?? '')).toMatch(/^(?:قال:? )?ف?قل(?:ت|نا)(?: [^:]+)?:?$/);
+        // «قلت في نفسي» was thought, not said.
+        expect(bare(turn.lead ?? '')).not.toMatch(/نفسي/);
+        // A kunya changes with its case in the chain: «أن أبا سفيان أخبره».
+        const forms = [name, name.replace(/^أبو /, 'أبا '), name.replace(/^أبو /, 'أبي ')].map(bare);
+        expect(forms.some(form => bare(report.isnad ?? '').includes(form))).toBe(true);
       } else expect(bare(turn.lead ?? '')).toContain(bare(name));
     }
   });
