@@ -97,7 +97,9 @@ export function roundLayout(labels: readonly string[], width: number) {
   return null;
 }
 
-export type RoundNode = { key: string; label: string; colour: string; inApp: boolean; onPress: () => void; onLongPress?: () => void };
+export type RoundNode = { key: string; label: string; colour: string; inApp: boolean; onPress: () => void; onLongPress?: () => void;
+  /** A tie the book gives «على خلاف»: its line dashed; the person drawn as every other (owner, 2026-11-22). */
+  dashed?: boolean };
 
 /**
  * A ring drawn round (owner, 2026-11-21): a middle (a person, a title) with its people on an oval round it, each a line to
@@ -113,7 +115,7 @@ export function RoundRing({ middle, nodes, width, palette }: { middle: string; n
         {nodes.map((node, i) => {
           const from = edge(centre, places[i], middleW / 2, 26);
           const to = edge(places[i], centre, ws[i] / 2, h / 2);
-          return <Line key={node.key} x1={from.x} y1={from.y} x2={to.x} y2={to.y} stroke={node.colour} strokeWidth={2} strokeOpacity={0.8} />;
+          return <Line key={node.key} x1={from.x} y1={from.y} x2={to.x} y2={to.y} stroke={node.colour} strokeWidth={2} strokeOpacity={0.8} strokeDasharray={node.dashed ? '6 5' : undefined} />;
         })}
       </Svg>
       <View style={{ position: 'absolute', left: centre.x - middleW / 2, top: centre.y - MIDDLE_H / 2, width: middleW, height: MIDDLE_H, justifyContent: 'center' }}>
@@ -270,4 +272,4 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
   );
 }
 
-export { default as TieSheet } from './TieSheet';
+export { default as TieSheet, DoubtedSheet } from './TieSheet';

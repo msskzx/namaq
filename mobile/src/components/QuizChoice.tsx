@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import Card from '@/ui/Card';
+import Card, { UnderCard, useCardRow } from '@/ui/Card';
 import { Pressable, ScrollView, View } from 'react-native';
-import { BookOpen, Check, Eye, Square, SquareCheck, X } from 'lucide-react-native';
+import { Check, Eye, Square, SquareCheck, X } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import Button from '@/ui/Button';
 import { alikeDiff, BOX_ASKED, FORGOT, isRightChoice, orders, PICKS, picksOf, recited, RECITED, ticks, type ChoiceQuestion } from '@shared/quiz/choiceKinds';
@@ -20,6 +20,7 @@ import type { PenRule } from '@shared/quran/writeAyah';
 import { num } from '@shared/quran/arabicNumber';
 import { CARD, type Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
+import { FEATURE_ICON } from '@/components/featureIcons';
 
 const AYAH_NUMBER = /^[٠-٩]+$/;
 
@@ -58,6 +59,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
 }) {
   const Box = scroll ? ScrollView : View;
   const answered = picked !== undefined;
+  const inRow = useCardRow();
   // What is recited or written stays hidden until it is shown or answered; on the page, recite mode's bar shows it.
   const [pageShown, setPageShown] = useState<string | null>(null);
   const onPage = !!question.ayahKey && !!question.page;
@@ -177,8 +179,10 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
           })}
         </View>
       )}
-      {(several || single) && !answered && onPick && (
-        <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}>
+      {/* In a feed card «تحقق» joins the row under the card, before «تلميح» (owner, 2026-11-22: no button in a card). */}
+      {(several || single) && !answered && onPick && (inRow
+        ? <UnderCard><Button variant="primary" pill Icon={Check} label="تحقق" onPress={() => onPick(several ? joined(ticked) : ticked[0] ?? '')} /></UnderCard>
+        : <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}>
           <Button variant="primary" Icon={Check} label="تحقق"
             onPress={() => onPick(several ? joined(ticked) : ticked[0] ?? '')} />
         </View>
@@ -203,7 +207,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
       {answered && !!question.sources?.length && <View style={{ paddingHorizontal: 16 }}><QuizSources sources={question.sources} palette={palette} /></View>}
       {/* After the answer, the view it was looked up in, the answer lit there, so everyone learns from it (owner, 2026-11-19). */}
       {answered && question.look && <View style={{ paddingHorizontal: 16 }}><LookView look={question.look} shown palette={palette} /></View>}
-      {answered && question.ayahKey && onOpen && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}><Button Icon={BookOpen} accessibilityLabel="في المصحف" onPress={() => onOpen(question.ayahKey!)} /></View>}
+      {answered && question.ayahKey && onOpen && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}><Button Icon={FEATURE_ICON.mushaf} accessibilityLabel="في المصحف" onPress={() => onOpen(question.ayahKey!)} /></View>}
     </Box>
   );
 }

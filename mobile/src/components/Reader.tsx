@@ -6,7 +6,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Text } from '@/ui/Text';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsFocused } from 'expo-router';
-import { ArrowLeft, ArrowLeftRight, BookOpenText, BookOpen, Bookmark, Copy, EyeOff, Headphones, Layers, Lightbulb, LightbulbOff, ListTree, NotebookPen, History, Play, Pointer, Search, Send, Sparkles, TableOfContents, TextSearch } from 'lucide-react-native';
+import { ArrowLeft, ArrowLeftRight, BookOpenText, Bookmark, Copy, EyeOff, Headphones, Layers, Lightbulb, LightbulbOff, ListTree, NotebookPen, History, Play, Pointer, Search, Send, Sparkles, TableOfContents, TextSearch } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, wordMarkKey, markForgotten, toggleForgotten, rememberAyah, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
@@ -60,6 +60,7 @@ import { usePalette } from '@/lib/theme';
 import { penRule } from '@/lib/settings';
 import { surahName } from '@shared/quran/surahNames';
 import { SURAH_TITLES } from '@shared/quran/surahNames';
+import { FEATURE_ICON } from '@/components/featureIcons';
 
 /** Where the reader was: the page, and the recitation if one was running. Kept so the app opens where it was left. */
 const PLACE = 'reader-place';
@@ -509,7 +510,7 @@ export default function Reader() {
               <ActButton Icon={NotebookPen} label={notes[actions.key] ? 'ما دوّنته عن الآية' : 'دوّن عن الآية'} name={NOTE_NAME} palette={palette} on={!!notes[actions.key]} onPress={() => { setNoting(actions.key); setActions(null); }} />
             </>,
             <>
-              <ActButton Icon={BookOpen} label="تفسير السعدي" name="التفسير" palette={palette} onPress={() => { const key = actions.key; setActions(null); setPreview({ kind: 'tafsir', key }); }} />
+              <ActButton Icon={FEATURE_ICON.tafsir} label="تفسير السعدي" name="التفسير" palette={palette} onPress={() => { const key = actions.key; setActions(null); setPreview({ kind: 'tafsir', key }); }} />
               {/* The pressed word's i'rab and meaning; their sheets hold every word of the ayah to pick another (owner, 2026-11-19). */}
               {lit && <ActButton Icon={ListTree} label="إعراب الكلمة" name="الإعراب" palette={palette} onPress={() => { const key = actions.key; setActions(null); setIrab({ key, word: lit.from }); }} />}
               {lit && <ActButton Icon={BookOpenText} label="معنى الكلمة" name="المعنى" palette={palette} onPress={() => { const key = actions.key; setActions(null); setGharib({ key, word: lit.from }); }} />}

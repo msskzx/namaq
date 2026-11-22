@@ -4,7 +4,7 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { Text } from '@/ui/Text';
-import { ArrowLeftRight, BookOpen, Send } from 'lucide-react-native';
+import { ArrowLeftRight, Send } from 'lucide-react-native';
 import { rangeText, sharedWords, type EventView, type Place } from '@shared/quran/prophets/story';
 import { compareTargetsFor, type CompareTarget } from '@/lib/compare';
 import { setIntent } from '@/lib/intent';
@@ -20,6 +20,7 @@ import IconButton from '@/ui/IconButton';
 import Card, { CardWithRow } from '@/ui/Card';
 import { sourcesOf } from '@/ui/SourceLine';
 import { storySource } from '@shared/quran/pieceSources';
+import { FEATURE_ICON } from '@/components/featureIcons';
 
 // How far (px) a finger must move sideways to change the event, or how fast a flick.
 const SWIPE = 60;
@@ -97,7 +98,7 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
         <View key={place.surah} style={{ gap: 4 }} onLayout={e => onLayoutPlace(place.surah, e.nativeEvent.layout.y)}>
           <CardWithRow palette={palette} gap={4} picked={focus === place.surah}
             source={sourcesOf([storySource([{ phase: 0, segments: place.segments.map(g => ({ surah: place.surah, range: g.range })) }], 0)])}
-            lead={readable && <IconButton Icon={BookOpen} label={`افتح ${place.name} في المصحف`} onPress={() => readAyah(`${place.surah}:${place.segments[0].range[0]}`)} />}
+            lead={readable && <IconButton Icon={FEATURE_ICON.mushaf} label={`افتح ${place.name} في المصحف`} onPress={() => readAyah(`${place.surah}:${place.segments[0].range[0]}`)} />}
             row={readable && <>
               <CompareButton place={place} targets={targets.filter(t => t.lead !== t.other && (t.lead === place.surah || t.other === place.surah))} onChoose={setChoosing} palette={palette} />
               {/* Share is always the last button: this place as an image, under the event's title. */}

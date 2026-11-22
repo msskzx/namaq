@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import { FlatList, Share, View } from 'react-native';
-import { BookOpen, Send } from 'lucide-react-native';
+import { Send } from 'lucide-react-native';
 import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
 import { BY_QUOTES, OATH_BY, OATH_QUOTES, citesOf, kindQuotes, oathSections, sectionQuotes, type OathBy } from '@shared/quran/oathSources';
@@ -22,6 +22,7 @@ import IconButton from '@/ui/IconButton';
 import { CardWithRow } from '@/ui/Card';
 import Tabs from '@/ui/Tabs';
 import Chip from '@/ui/Chip';
+import { FEATURE_ICON } from '@/components/featureIcons';
 
 const KINDS: { kind: OathKind; label: string }[] = [{ kind: 'allah', label: 'أقسم الله' }, { kind: 'others', label: 'أقسم غيره' }];
 const BUILT = { allah: buildOaths('allah', ayahMushafWords), others: buildOaths('others', ayahMushafWords) };
@@ -48,7 +49,7 @@ function OathCard({ oath, palette }: { oath: OathView; palette: Palette }) {
       </View>
       {/* The home card's shape (owner 2026-11-20): the mushaf first in the row, share last, the books on the line. */}
       <CardWithRow palette={palette} pad={[6, 14]} source={[...(quotes ? [{ line: citesOf(quotes), quotes }] : []), ...sourcesOf([mushafSource(oath.id)])]}
-        lead={<IconButton Icon={BookOpen} label={`افتح ${place} في المصحف`} onPress={() => readAyah(oath.id)} />}
+        lead={<IconButton Icon={FEATURE_ICON.mushaf} label={`افتح ${place} في المصحف`} onPress={() => readAyah(oath.id)} />}
         row={<IconButton Icon={Send} label={`شارك ${place}`} onPress={() => shareOath(oath)} />}>
         <OathWords oath={oath} palette={palette} />
       </CardWithRow>

@@ -232,6 +232,19 @@ export function tieQuestions(people: AppPerson[] = PEOPLE): ChoiceQuestion[] {
 }
 
 /**
+ * Who bears a name offered as a choice (owner, 2026-11-22: once answered, every choice says whose it is, «ذو النورين» under it
+ * «عثمان بن عفان»): the people of `facts` whose kunya or laqab it is, and the pages that say so, for the question's sources.
+ */
+function bearers(facts: readonly NameFact[]) {
+  const by = new Map<string, NameFact[]>();
+  for (const fact of facts) by.set(bareName(fact.name), [...(by.get(bareName(fact.name)) ?? []), fact]);
+  return (name: string) => {
+    const all = (by.get(bareName(name)) ?? []).filter((fact, i, list) => list.findIndex(other => other.person.slug === fact.person.slug) === i);
+    return { names: all.map(fact => nameOf(fact.person)).join('، '), sources: all.flatMap(({ fact }) => pageSources(fact.refs, { text: fact.text, by: saidBy(fact) })) };
+  };
+}
+
+/**
  * «ما كنيته؟» and «بمَ لُقّب؟» (owner, 2026-11-19; sketch titles-quiz/sketch-dark.png, screens 1 and 2): one person's
  * kunya or laqab, and three other people's of the same sex (owner: a question about a woman offers women's), each as one
  * says it. Never a name the person also bears, nor two that read the same; a kunya after a name in the question
@@ -241,6 +254,7 @@ export function tieQuestions(people: AppPerson[] = PEOPLE): ChoiceQuestion[] {
  */
 export function nameQuestions(family: typeof TARAJIM_KUNYA | typeof TARAJIM_LAQAB, people: AppPerson[] = PEOPLE, random: Random = Math.random): ChoiceQuestion[] {
   const facts: NameFact[] = family === TARAJIM_KUNYA ? kunyaFacts(people) : laqabFacts(people);
+  const bearer = bearers(facts);
   const ownNames = new Map<string, Set<string>>();
   for (const { person, name } of facts) ownNames.set(person.slug, (ownNames.get(person.slug) ?? new Set()).add(bareName(name)));
   // Another man's kunya can be the Prophet's ﷺ own («أبو القاسم», Muhammad ibn Abi Hudhayfah): never a wrong choice.
@@ -256,13 +270,15 @@ export function nameQuestions(family: typeof TARAJIM_KUNYA | typeof TARAJIM_LAQA
     if (others.length < 3) return [];
     const female = person.sex === 'FEMALE';
     const promptArabic = family === TARAJIM_KUNYA ? `ما كنية ${genitive(nameOf(person))}؟` : `بمَ ${female ? 'لُقّبت' : 'لُقّب'} ${nameOf(person)}؟`;
+    const wrong = others.map(other => ({ name: other.name, ...bearer(other.name) }));
     return [{
       key: `${family}:${person.slug}:${k}`,
       family,
       promptArabic,
       choices: shuffle([name, ...others.map(other => other.name)], random).map(each => ({ value: each, labelArabic: each })),
       correctAnswer: name,
-      sources: pageSources(fact.refs, { text: fact.text, by: saidBy(fact) }),
+      whereOf: Object.fromEntries([[name, nameOf(person)], ...wrong.map(each => [each.name, each.names])]),
+      sources: uniqueSources([...pageSources(fact.refs, { text: fact.text, by: saidBy(fact) }), ...wrong.flatMap(each => each.sources)]),
       evidence: { claimKeys: [] },
     }];
   });
@@ -289,8 +305,11 @@ const RIGHT_COUNTS = [1, 2, 2, 3, 3, 1, 2, 3, 4];
  */
 export function prophetNameQuestions(people: AppPerson[] = PEOPLE, random: Random = Math.random, count = 30): ChoiceQuestion[] {
   const names = prophetNames(people);
+  const his = nameOf(people.find(p => p.slug === 'prophet-muhammad')!);
   const nameWordsOf = new Set(names.flatMap(title => nameWords(title.name)).filter(word => word !== 'نبي'));
-  const others = laqabFacts(people).filter(fact => fact.person.sex === 'MALE' && !nameWords(fact.name).some(word => nameWordsOf.has(word)))
+  const laqabs = laqabFacts(people);
+  const bearer = bearers(laqabs);
+  const others = laqabs.filter(fact => fact.person.sex === 'MALE' && !nameWords(fact.name).some(word => nameWordsOf.has(word)))
     .map(fact => fact.name).filter((name, i, all) => all.indexOf(name) === i);
   if (names.length < 4 || others.length < 3) return [];
   const questions = new Map<string, ChoiceQuestion>();
@@ -308,7 +327,8 @@ export function prophetNameQuestions(people: AppPerson[] = PEOPLE, random: Rando
       choices: choices.map(name => ({ value: name, labelArabic: name })),
       correctAnswer: correctAnswers.join(PICKS),
       correctAnswers,
-      sources: right.flatMap(title => pageSources(title.refs, { text: title.text })),
+      whereOf: Object.fromEntries([...right.map(title => [title.name, his]), ...wrong.map(name => [name, bearer(name).names])]),
+      sources: uniqueSources([...right.flatMap(title => pageSources(title.refs, { text: title.text })), ...wrong.flatMap(name => bearer(name).sources)]),
       evidence: { claimKeys: [] },
     });
   }

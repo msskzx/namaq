@@ -1,7 +1,6 @@
 import { Fragment, createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { Text } from '@/ui/Text';
-import { BookOpen } from 'lucide-react-native';
 import { readAyah } from '@/lib/openReader';
 import { Gesture, GestureDetector, ScrollView, type GestureType } from 'react-native-gesture-handler';
 import { useFitReport, type OnFit } from '@/lib/useFit';
@@ -22,6 +21,7 @@ import { BACK_EDGE_SLOP } from '@/lib/stackOptions';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
 import { useInsideCard } from '@/ui/Card';
+import { FEATURE_ICON } from '@/components/featureIcons';
 
 type Props = {
   /** In a feed card that follows its content: how much taller the rows are than the card (lib/useFit.ts). */
@@ -172,7 +172,7 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
     </Tap>
     {/* Centred on the heading row, as when they sat in it. */}
     {current && !still && <View style={{ position: 'absolute', top: 8, right: stacked ? 0 : 12, height: head, flexDirection: 'row-reverse', alignItems: 'center', gap: 4, zIndex: 1 }}>
-      <IconButton Icon={BookOpen} label={`قراءة ${surahNames[own.key.split(':').map(Number)[0]]} ${num(Number(own.key.split(':')[1]))}`} onPress={() => readAyah(own.key)} size="small" />
+      <IconButton Icon={FEATURE_ICON.mushaf} label={`قراءة ${surahNames[own.key.split(':').map(Number)[0]]} ${num(Number(own.key.split(':')[1]))}`} onPress={() => readAyah(own.key)} size="small" />
       {tools}
     </View>}
     </View>

@@ -7,7 +7,9 @@ export const OPENINGS = 'OPENINGS';
 export type FeedQuizKind = QuizTopic | typeof OPENINGS;
 
 /** The kinds in the order they take turns: the Quran's, then the tarajim's three built on the converted entries, then the sira stories and battles, then the hadith (owner, 2026-11-18). */
-export const FEED_QUIZ_KINDS: readonly FeedQuizKind[] = ['SURAH', 'ORDER', 'ORDER_JUZ', 'SURAH_AIM', 'BRANCHES', 'RECITE', 'COMPARE', OPENINGS, 'MEANING', 'TAFSIR', 'BALAGHA', 'TERM', 'IRAB', 'QIRAAT', 'QIRAAT_WHO', 'TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE', 'TARAJIM_NASAB', 'TARAJIM_NASAB_FILL', 'TARAJIM_VIRTUE', 'TARAJIM_TIE', 'TARAJIM_LIFE', 'TARAJIM_LAQAB', 'TARAJIM_KUNYA', 'PROPHET_NAMES', 'SIRA', 'HADITH_NARRATOR', 'HADITH_COMPLETE', 'HADITH_BOOK', 'HADITH_CHAIN', 'SAHIH_KITAB'];
+export const FEED_QUIZ_KINDS = ['SURAH', 'ORDER', 'ORDER_JUZ', 'SURAH_AIM', 'BRANCHES', 'RECITE', 'COMPARE', OPENINGS, 'MEANING', 'TAFSIR', 'BALAGHA', 'TERM', 'IRAB', 'QIRAAT', 'QIRAAT_WHO', 'TUHFA_COMPLETE', 'TUHFA_NEXT', 'TUHFA_RULE', 'TARAJIM_NASAB', 'TARAJIM_NASAB_FILL', 'TARAJIM_VIRTUE', 'TARAJIM_TIE', 'TARAJIM_LIFE', 'TARAJIM_LAQAB', 'TARAJIM_KUNYA', 'PROPHET_NAMES', 'SIRA', 'HADITH_NARRATOR', 'HADITH_COMPLETE', 'HADITH_BOOK', 'HADITH_CHAIN', 'SAHIH_KITAB'] as const satisfies readonly FeedQuizKind[];
+/** A kind the feed asks. */
+export type FeedKind = (typeof FEED_QUIZ_KINDS)[number];
 
 /** Each kind's card title, the quiz's own names for them (shared/quiz/kinds.ts), without loading the kinds' data. */
 export const FEED_QUIZ_NAMES: Record<FeedQuizKind & string, string> = {

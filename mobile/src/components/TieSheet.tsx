@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import type { Tie } from '@shared/tarajimGraph';
 import { pageLabel, saidBy } from '@shared/tarajim';
 import { Text } from '@/ui/Text';
@@ -28,6 +28,21 @@ export default function TieSheet({ tie, onClose, palette }: { tie?: ShownTie; on
   return (
     <Sheet open={!!tie} onClose={onClose} palette={palette}>
       {tie && <View style={{ padding: 16 }}><TieSaying tie={tie} palette={palette} /></View>}
+    </Sheet>
+  );
+}
+
+/**
+ * A ring's ties the book gives «على خلاف», all in one sheet (owner, 2026-11-22): only the book's words and their pages,
+ * no words of ours; two ties the book says in the same words show them once.
+ */
+export function DoubtedSheet({ ties, open, onClose, palette }: { ties: readonly ShownTie[]; open: boolean; onClose: () => void; palette: Palette }) {
+  const once = ties.filter((tie, i) => !tie.link.text || ties.findIndex(other => other.link.text === tie.link.text) === i);
+  return (
+    <Sheet open={open} onClose={onClose} palette={palette}>
+      <ScrollView contentContainerStyle={{ padding: 16, gap: 18 }}>
+        {once.map(tie => <TieSaying key={tie.to} tie={tie} palette={palette} />)}
+      </ScrollView>
     </Sheet>
   );
 }

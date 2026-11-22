@@ -77,7 +77,7 @@ in [records](records/README.md), `AGENTS` a rule already in AGENTS.md.
 - [ ] Kinds mix as chips inside solo and party, never as separate quizzes. Quizzes show trees in the matrix view only. (owner 11-13, 11-17)
 - [ ] Every typed Quran answer (recite, write, tree leaves, compare blanks) uses the recite-mode write boxes, in the same colour. No quiz builds its own writing field. (owner 11-17, 11-19)
 - [ ] A tree question's prompt is not bigger than the tree. Corrections sit inside each asked node.
-- [ ] Look-up: tapping «ابحث عن الجواب» counts as the attempt. Party scores 10 a question and 5 after a look; solo has no penalty; nothing extra for speed. After the reveal, everyone sees the feature's full view under the answer. Memory kinds (which-surah, compare, recite) have no look-up. (owner 11-19)
+- [ ] Look-up: tapping «تلميح» (once «ابحث عن الجواب») counts as the attempt. Party scores 10 a question and 5 after a look; solo has no penalty; nothing extra for speed. After the reveal, everyone sees the feature's full view under the answer. Memory kinds (which-surah, compare, recite) have no look-up. (owner 11-19)
 - [ ] Answer buttons sit on the right. Players move between questions by swiping. The result never says "passed" or "failed". (owner 11-17)
 
 ## 4. Feed cards
@@ -85,7 +85,7 @@ in [records](records/README.md), `AGENTS` a rule already in AGENTS.md.
 - [ ] The feature ships with its home-feed card and, if it has something to ask, a quiz kind, both shown in the sketch. A feature with no card is named in the PR with the reason, and [feed-cards.md](feed-cards.md) is updated. (AGENTS)
 - [ ] The card draws the feature's own shared view component, never a text-only stand-in or a redraw. Its taps open the real page at that item. (owner 11-13, 11-19, R0031)
 - [ ] The card has a UI test that uses it (swipe, zoom, typing, the tap that opens its page), not just a screenshot. (R0031)
-- [ ] One item per card. The card grows with its content up to two thirds of the screen, then stops with a fade and «اقرأ كاملًا» opens it whole in a sheet; no inner scroll. Ayah cards stay small and open a sheet from their row's button. (owner 11-14, 11-18, 11-20)
+- [ ] One item per card. The card grows with its content up to two thirds of the screen, then stops with a fade; the card's one open button («افتح ←», owner 11-22) opens its page, or the whole card in a sheet when it has none; no inner scroll. Ayah cards stay small and open a sheet from their row's button. (owner 11-14, 11-18, 11-20)
 - [ ] Every home card follows the one agreed layout, like an Instagram post: the head over the card, the card, the row of buttons right under it, then the source line. No buttons inside the card. One control per destination: the row's open button, never the head or the whole card too. (owner 11-14, 11-15, 11-20)
 - [ ] The row's buttons are grouped on the right: the one that opens the item in its own reader first (the mushaf at the ayah, the hadith in its book), then the card's own tools, then save, then share. A «⋯» alone at the far left opens «ليس من اهتماماتي»; no «⋯» on a card without it. (owner 11-20)
 - [ ] Every card has a source line under its buttons, the Quran too («المصحف · الإخلاص ٣»): a book icon, then the book and its author, no arrow. A tap anywhere on the line opens a sheet with the details (volume, page, edition, link). A question's line comes after it is answered, so it never gives the answer away. (owner 11-20)
