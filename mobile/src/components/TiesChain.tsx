@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { View } from 'react-native';
 import Svg, { Line, Polygon } from 'react-native-svg';
 import { router } from 'expo-router';
-import { stepClause, tieName, type GraphNode, type Step, type TieKind } from '@shared/tarajimGraph';
+import { stepClause, tieName, type GraphNode, type Step, type Tie, type TieKind } from '@shared/tarajimGraph';
 import { Text } from '@/ui/Text';
 import Card from '@/ui/Card';
 import Chip from '@/ui/Chip';
+import TieSheet from './TieSheet';
 import type { Palette } from '@/lib/theme';
 import { GRAPH, personName } from '@/lib/tarajim';
 
@@ -96,6 +97,12 @@ export default function TiesChain({ nodes, steps, first, picked, width, palette,
 }) {
   // Each box's height as drawn, so lines end at its edge however many lines its name takes.
   const [tall, setTall] = useState<Record<string, number>>({});
+  const [shown, setShown] = useState<Tie | undefined>();
+  // One with no page opens the sentence that ties him into the chain (owner, 2026-11-22): every name looks the same.
+  const sentenceOf = (slug: string): Tie | undefined => {
+    const step = steps.find(s => s.from === slug || s.to === slug);
+    return step && { to: slug, kind: step.kind, link: step.link };
+  };
   const { place, height, fanned } = layout(nodes, steps, first, width, slug => tall[slug] ?? NODE_H);
   const ground = inCard ? palette.card : palette.paper;
   // Each line from the edge of the one its name describes to the edge of the other, where the arrow ends.
@@ -149,20 +156,21 @@ export default function TiesChain({ nodes, steps, first, picked, width, palette,
       {nodes.map(slug => {
         const node = GRAPH.nodes.get(slug)!;
         const at = place.get(slug)!;
-        const open = node.inApp ? () => router.push({ pathname: '/ties', params: { slug } }) : undefined;
+        const open = node.inApp ? () => router.push({ pathname: '/ties', params: { slug } }) : () => setShown(sentenceOf(slug));
         return (
           <View key={slug} onLayout={e => { const h = Math.round(e.nativeEvent.layout.height); if (h !== at.h && (h > NODE_H || tall[slug])) setTall(t => ({ ...t, [slug]: h })); }}
             style={{ position: 'absolute', left: at.x - at.w / 2, top: at.y - at.h / 2, width: at.w, minHeight: NODE_H, justifyContent: 'center', alignItems: inCard ? 'center' : 'stretch' }}>
             {inCard
-              ? <Chip label={personName(node)} on={picked.includes(slug)} lit tint={node.inApp ? palette.accent : palette.muted} role={node.inApp ? 'button' : 'text'} onPress={open} palette={palette} />
+              ? <Chip label={personName(node)} on={picked.includes(slug)} lit tint={palette.accent} role="button" onPress={open} palette={palette} />
               : (
-                <Card palette={palette} pad={[6, 8]} picked={picked.includes(slug)} accessibilityRole={node.inApp ? 'link' : undefined} accessibilityLabel={personName(node)} onPress={open}>
+                <Card palette={palette} pad={[6, 8]} picked={picked.includes(slug)} accessibilityRole={node.inApp ? 'link' : 'button'} accessibilityLabel={personName(node)} onPress={open}>
                   <Text numberOfLines={2} style={{ color: picked.includes(slug) ? palette.accent : palette.ink, fontSize: 14, textAlign: 'center' }}>{personName(node)}</Text>
                 </Card>
               )}
           </View>
         );
       })}
+      <TieSheet tie={shown} onClose={() => setShown(undefined)} palette={palette} />
     </View>
   );
 }

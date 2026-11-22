@@ -48,6 +48,20 @@ test('the tarajim hub opens the nasab search, and a pick draws his tree', async 
   await expect(page.getByText(/^أبو قحافة/)).toBeVisible();
 });
 
+// A relative the entry names who has no page looks like everyone else (owner, 2026-11-22): a tap opens the sentence
+// that names him, with its page, on the ring and in the text view alike.
+test('a relative with no page opens the sentence that names him', async ({ page }) => {
+  await open(page, '/person?slug=jabr-ibn-atik');
+  await page.getByRole('button', { name: 'ابنه: عتيك', exact: true }).click();
+  await expect(page.getByRole('dialog').getByText(/وَلَهُ أَوْلاَدٌ/)).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+
+  await page.getByRole('tab', { name: 'النص' }).last().click();
+  await page.getByRole('button', { name: 'عتيك', exact: true }).click();
+  await expect(page.getByRole('dialog').getByText(/وَلَهُ أَوْلاَدٌ/)).toBeVisible();
+});
+
 // The people graph (owner, 2026-11-18; sketch tarajim-app/graph/sketch2-dark.png): one person in the middle with his ties,
 // and «بينه وبين…» drawing the nearest chain between the people picked.
 test('the ties view draws a person with his ties and walks to a relative', async ({ page }) => {
