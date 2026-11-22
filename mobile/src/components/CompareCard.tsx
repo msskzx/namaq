@@ -1,8 +1,9 @@
 import { memo, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
+import OpenButton from '@/ui/OpenButton';
 import { View } from 'react-native';
 import { Text } from '@/ui/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
-import { ArrowLeftRight, Bookmark, BookOpen, Clapperboard, Columns2, GalleryHorizontal, Rows2, Pause, UnfoldHorizontal, Play, RotateCcw, Send, X } from 'lucide-react-native';
+import { Bookmark, BookOpen, Clapperboard, Columns2, GalleryHorizontal, Rows2, Pause, UnfoldHorizontal, Play, RotateCcw, Send, X } from 'lucide-react-native';
 import type { CardAyah, CardSide, PairCard } from '@shared/quran/compareCards';
 import { ayahStarts, isRefrain, type ReadStep } from '@shared/quran/readPlan';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
@@ -367,7 +368,7 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
       </Tap>
       {read.studio ? <Studio read={read} palette={palette} record={record} /> : (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
-          {onOpen && <IconButton Icon={ArrowLeftRight} label="افتحها في المقارنة" onPress={onOpen} />}
+          {onOpen && <OpenButton label="افتحها في المقارنة" onPress={onOpen} />}
           {onOpen && ([0, 1] as const).map(i => {
             const view = sideView(card, i, selected, []);
             const label = sideTitle(view.name, surahName);

@@ -101,6 +101,7 @@ import { surahNames as shortNames } from '@/lib/branches';
 import { ayahMushafWords, pageData, pageOfAyah, PAGES, surahBefore } from '@/lib/mushaf';
 import { isBoolean, isNumberIn, isRecord, readJson, writeJson } from '@/lib/storage';
 import { openIntent, openUtility, toTab } from '@/lib/ways';
+import OpenButton from '@/ui/OpenButton';
 import { juzLabel, openJuz } from '@/lib/juz';
 import { around as aroundSetting, branchView, penRule, prayerPlace, prayerSettings } from '@/lib/settings';
 import { showsOtherView } from '@shared/quran/branchView';
@@ -296,7 +297,7 @@ export function ContinueReading({ palette }: { palette: Palette }) {
   const where = [shortNames[surah], date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ');
   return (
     <Post palette={palette} head={<PostHead Icon={BookOpen} title={fasila || page > 1 ? 'تابع القراءة' : 'ابدأ القراءة'} sub={where} palette={palette} />}
-      open={<Action Icon={BookOpen} label={`افتح المصحف ${fasila ? 'عند فاصلتك' : 'حيث توقفت'}، سورة ${shortNames[surah] ?? ''}`} onPress={read} palette={palette} />}
+      open={<OpenButton label={`افتح المصحف ${fasila ? 'عند فاصلتك' : 'حيث توقفت'}، سورة ${shortNames[surah] ?? ''}`} onPress={read} palette={palette} />}
       actions={<Text style={{ color: palette.muted, fontSize: 14, padding: 8 }}>{juzLabel([juz])}</Text>}
       source={sourcesOf([mushafPage(surah, page)])}>
       {/* The page's first half as the reader draws it (owner, 2026-11-14). */}
@@ -360,7 +361,7 @@ function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', palette }:
     {!review && <Action Icon={LightbulbOff} label="نسيتها" on={done?.did === 'forgot'} palette={palette} onPress={() => mark('forgot')} />}
     {review && <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} />}
   </>;
-  const open = <Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: markAyah(ayah), word: markWord(ayah) })} palette={palette} />;
+  const open = <OpenButton label="في المصحف" onPress={() => openIntent({ tab: 'read', at: markAyah(ayah), word: markWord(ayah) })} palette={palette} />;
   return <Recall key={`${ayah}-${writing}`} ayah={markAyah(ayah)} targetWord={markWord(ayah)} title={title} writing={writing} onWriting={toggleWriting} open={open} marks={marks} revealed={!!done} palette={palette} />;
 }
 
@@ -402,17 +403,11 @@ function Recall({ ayah, targetWord, title, writing, onWriting, open, marks, reve
 }
 
 /**
- * The quiz buttons a question card carries (owner, 2026-11-14, in place of home's quiz box; 2026-11-22: one quiz button):
- * one that opens the quizzes page, where the reader picks a solo quiz or one with others, and «تسميع» on a Quran
- * question only (`quran`), where reciting is what the question trains.
+ * «تسميع» on a Quran question card (owner, 2026-11-22: only where reciting is what the question trains); the card's open
+ * button opens the quizzes page, where the reader picks a solo quiz or one with others.
  */
-export function QuizActions({ quran, palette }: { quran: boolean; palette: Palette }) {
-  return (
-    <>
-      <Action Icon={Feather} label="الاختبارات" onPress={() => toTab('/quizzes')} palette={palette} />
-      {quran && <Action Icon={EyeOff} label="تسميع" onPress={() => openIntent({ tab: 'read', recite: true })} palette={palette} />}
-    </>
-  );
+function ReciteAction({ palette }: { palette: Palette }) {
+  return <Action Icon={EyeOff} label="تسميع" onPress={() => openIntent({ tab: 'read', recite: true })} palette={palette} />;
 }
 
 /** A question about the Quran: its interest is one of the Quran's sciences or the language's, which ask about its ayat. */
@@ -452,15 +447,16 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
   const prompt = question.promptArabic && question.promptArabic !== FEED_QUIZ_NAMES[kind] ? <QuizPrompt text={question.promptArabic} palette={palette} /> : undefined;
   return (
     <Post palette={palette} head={<PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind]} palette={palette} />} whole
-      open={!isTree(question) && !isCompare(question) && question.ayahKey && run.typed[0][0] !== undefined
-        ? <Action Icon={BookOpen} label="في المصحف" onPress={() => readAyah(question.ayahKey!)} palette={palette} />
-        // «رتّب السور» opens the surah order page at the asked surahs' juz.
-        : !isTree(question) && question.order?.length && run.typed[0][0] !== undefined
-        ? <Action Icon={OrderIcon} label="ترتيب السور" onPress={() => router.push({ pathname: '/order', params: { juz: String(orderJuz(question.order!)) } })} palette={palette} /> : undefined}
+      open={<OpenButton label="افتح الاختبارات" onPress={() => toTab('/quizzes')} palette={palette} />}
       actions={<>
         {(isTree(question) || isCompare(question)) && !checked &&
           <Action Icon={Check} label="تحقق" onPress={() => setRun(check(run))} palette={palette} />}
-        <QuizActions quran={isQuranKind(kind)} palette={palette} />
+        {/* Once answered, the ayah in the mushaf, or «رتّب السور»'s surahs on the surah order page at their juz. */}
+        {!isTree(question) && !isCompare(question) && question.ayahKey && run.typed[0][0] !== undefined
+          ? <Action Icon={BookOpen} label="في المصحف" onPress={() => readAyah(question.ayahKey!)} palette={palette} />
+          : !isTree(question) && question.order?.length && run.typed[0][0] !== undefined
+          ? <Action Icon={OrderIcon} label="ترتيب السور" onPress={() => router.push({ pathname: '/order', params: { juz: String(orderJuz(question.order!)) } })} palette={palette} /> : null}
+        {isQuranKind(kind) && <ReciteAction palette={palette} />}
       </>}>
       {isCompare(question)
         ? <View style={{ height: roomHeight }}>
@@ -506,7 +502,7 @@ function TarajimPost({ id, palette }: { id: string; palette: Palette }) {
   const open = () => router.push({ pathname: '/person', params: { slug: pick.person.slug } });
   return (
     <Post palette={palette} head={<PostHead Icon={Milestone} title="من التراجم" sub={personName(pick.person)} palette={palette} />}
-      open={<Action Icon={Milestone} label={`افتح ترجمة ${personName(pick.person)}`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`افتح ترجمة ${personName(pick.person)}`} onPress={open} palette={palette} />}
       source={sourcesOf(pageSources(virtue.refs))}>
       <View style={{ padding: 14, gap: 6 }}>
         <Saying by={saidBy(virtue)} palette={palette}>
@@ -531,7 +527,7 @@ function TiePost({ id, palette }: { id: string; palette: Palette }) {
   const open = () => router.push({ pathname: '/between', params: { slugs: `${pair.a},${pair.b}` } });
   return (
     <Post palette={palette} head={<PostHead Icon={Link2} title="صلة" sub={`${name(pair.a)} و${name(pair.b)}`} palette={palette} />}
-      open={<Action Icon={Link2} label={`ارسم الصلة بين ${name(pair.a)} و${name(pair.b)}`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`ارسم الصلة بين ${name(pair.a)} و${name(pair.b)}`} onPress={open} palette={palette} />}
       source={sourcesOf(pageSources(pair.steps.flatMap(step => step.link.refs)))}>
       <View style={{ padding: 14, gap: 6 }}>
         {/* The same drawing as «بينه وبين…» (owner, 2026-11-19), or the sentence that says it: one at a time, the drawing first (owner, 2026-11-20). */}
@@ -558,7 +554,7 @@ function NamePost({ kind, id, palette }: { kind: 'laqab' | 'kunya'; id: string; 
   const quote = unvowelled(fact.text).trim() !== name ? fact.text : '';
   return (
     <Post palette={palette} head={<PostHead Icon={Milestone} title={kind === 'laqab' ? 'لقب وصاحبه' : 'كنية وصاحبها'} sub={who} palette={palette} />}
-      open={<Action Icon={Milestone} label={`افتح ترجمة ${who}`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`افتح ترجمة ${who}`} onPress={open} palette={palette} />}
       source={sourcesOf(pageSources(fact.refs))}>
       <View style={{ padding: 14, gap: 4 }}>
         <Text style={{ color: palette.accent, fontSize: 30, lineHeight: 48, fontWeight: '700', textAlign: 'right' }}>{name}</Text>
@@ -581,7 +577,7 @@ function LifePost({ slug, palette }: { slug: string; palette: Palette }) {
   const open = () => router.push({ pathname: '/person', params: { slug } });
   return (
     <Post palette={palette} head={<PostHead Icon={History} title={she ? 'من حياتها' : 'من حياته'} sub={personName(person)} palette={palette} />}
-      open={<Action Icon={Milestone} label={`افتح ترجمة ${personName(person)}`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`افتح ترجمة ${personName(person)}`} onPress={open} palette={palette} />}
       source={sourcesOf(uniqueSources(items.flatMap(item => [...item.refs, ...item.yearRefs]).map(citeSource)))}>
       <View style={{ paddingVertical: 14, paddingHorizontal: 10 }}>
         <LifeTimeline items={items} palette={palette} inCard compact linked={false} />
@@ -603,7 +599,7 @@ function NasabPost({ slug, palette }: { slug: string; palette: Palette }) {
   const open = () => router.push({ pathname: '/nasab', params: { slug } });
   return (
     <Post palette={palette} head={<PostHead Icon={Network} title={herOrHis(slug, 'نسبه', 'نسبها')} sub={personName(person)} palette={palette} />}
-      open={<Action Icon={Network} label={`افتح نسب ${personName(person)}`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`افتح نسب ${personName(person)}`} onPress={open} palette={palette} />}
       source={sourcesOf(nasabSources(person, PEOPLE))}>
       <View style={{ padding: 14, gap: 10 }}><NasabTree slugs={[slug]} palette={palette} meetings={false} text={false} inCard /></View>
     </Post>
@@ -620,7 +616,7 @@ function TiesPost({ slug, palette }: { slug: string; palette: Palette }) {
   const open = () => router.push({ pathname: '/ties', params: { slug } });
   return (
     <Post palette={palette} head={<PostHead Icon={Link2} title={title} sub={personName(person)} palette={palette} />}
-      open={<Action Icon={Link2} label={`افتح ${title}: ${personName(person)}`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`افتح ${title}: ${personName(person)}`} onPress={open} palette={palette} />}
       source={sourcesOf(tiesSources(GRAPH, slug))}>
       <View style={{ padding: 14 }}>
         <TiesRing slug={slug} width={Math.min(width - 60, 480)} palette={palette} onPick={to => router.push({ pathname: '/person', params: { slug: to } })} onShow={setTie} />
@@ -650,7 +646,7 @@ function GroupPost({ id, palette }: { id: string; palette: Palette }) {
   const open = () => router.push({ pathname: '/between', params: { slugs: picked.join(',') } });
   return (
     <Post palette={palette} head={<PostHead Icon={Link2} title={title} sub={sub} palette={palette} />}
-      open={<Action Icon={Link2} label="ارسم الصلة بينهم" onPress={open} palette={palette} />}
+      open={<OpenButton label="ارسم الصلة بينهم" onPress={open} palette={palette} />}
       source={sourcesOf(stepSources(group.steps))}>
       <View style={{ padding: 14, gap: 6 }}>
         <Tabs palette={palette} label="كيف تُعرض الصلة" value={shown} onChange={setShown} options={DRAWING_OR_TEXT} />
@@ -671,7 +667,7 @@ function LivesPost({ id, palette }: { id: string; palette: Palette }) {
   const open = () => router.push({ pathname: '/life', params: { slugs: id } });
   return (
     <Post palette={palette} head={<PostHead Icon={ArrowLeftRight} title="حياتهما" sub={`${names[0]} و${names[1]}`} palette={palette} />}
-      open={<Action Icon={ArrowLeftRight} label={`قارن حياة ${names[0]} و${names[1]}`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`قارن حياة ${names[0]} و${names[1]}`} onPress={open} palette={palette} />}
       source={sourcesOf(lifeSources(slugs.flatMap(slug => personLife(findPerson(slug)!))))}>
       <View style={{ paddingVertical: 14, paddingHorizontal: 8, gap: 6 }}>
         <LifeColumns slugs={slugs} palette={palette} show={setShown} />
@@ -694,7 +690,7 @@ function MeetPost({ id, palette }: { id: string; palette: Palette }) {
   return (
     <Post palette={palette} head={<PostHead Icon={Network} title={caliphs ? 'أين يلتقي نسبه ﷺ بنسب الخلفاء الأربعة؟' : 'أين يلتقي نسبهما؟'}
       sub={caliphs ? names.slice(1).join('، ') : `${names[0]} و${names[1]}`} palette={palette} />}
-      open={<Action Icon={Network} label="افتح النسب" onPress={open} palette={palette} />}
+      open={<OpenButton label="افتح النسب" onPress={open} palette={palette} />}
       source={sourcesOf(uniqueSources(meetSources(PEOPLE, slugs)))}>
       <View style={{ padding: 14, gap: 10 }}><NasabTree slugs={slugs} palette={palette} meetings={false} text={false} inCard /></View>
     </Post>
@@ -739,7 +735,7 @@ function RingPost({ id, palette }: { id: string; palette: Palette }) {
     : ring.sources;
   return (
     <Post palette={palette} head={head}
-      open={<Action Icon={Users} label={ring.by === 'kin' ? `افتح صلات ${middle}` : ring.by === 'title' ? `افتح «${ring.name}»` : 'افتح الحديث'} onPress={open} palette={palette} />}
+      open={<OpenButton label={ring.by === 'kin' ? `افتح صلات ${middle}` : ring.by === 'title' ? `افتح «${ring.name}»` : 'افتح الحديث'} onPress={open} palette={palette} />}
       source={sourcesOf(source)}>
       <View style={{ padding: 14, gap: 10 }}>
         {ring.by === 'hadith' && <Saying by="قال رسول الله ﷺ" palette={palette}><Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>«{ring.quote}»</Text></Saying>}
@@ -768,7 +764,7 @@ function BattlePost({ slug, palette }: { slug: string; palette: Palette }) {
   const open = () => toTab({ pathname: '/battle', params: { slug } });
   return (
     <Post palette={palette} head={<PostHead Icon={Swords} title={battle.name} sub={battleLine(battle)} palette={palette} />}
-      open={<Action Icon={Swords} label={`افتح ${battle.name}`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`افتح ${battle.name}`} onPress={open} palette={palette} />}
       source={sourcesOf(battleHeadSources(battle))}>
       {battle.place ? <>
         <BattleMap places={[battle.place]} palette={palette} />
@@ -794,7 +790,7 @@ function BattleYearPost({ id, palette }: { id: string; palette: Palette }) {
   const places = [...new Map(slice.battles.flatMap(battle => (battle.place ? [[battle.place.name, battle.place] as const] : []))).values()];
   return (
     <Post palette={palette} head={<PostHead Icon={CalendarRange} title="من الغزوات والمعارك" sub={yearTitle(year)} palette={palette} />}
-      open={<Action Icon={CalendarRange} label={`افتح ${yearTitle(year)} في الغزوات والمعارك`} onPress={() => toYear(year)} palette={palette} />}
+      open={<OpenButton label={`افتح ${yearTitle(year)} في الغزوات والمعارك`} onPress={() => toYear(year)} palette={palette} />}
       source={sourcesOf(battleYearSources(BATTLES, year))}>
       <View style={{ padding: 14, gap: 6 }}>
         <BattleYears columns={slice.columns} lit={year} width={Math.min(width - 60, 480)} palette={palette} onYear={toYear} />
@@ -828,7 +824,7 @@ function ArmiesPost({ id, palette }: { id: string; palette: Palette }) {
   const sides = (battle: AppBattle) => (tab === 'field' ? [battle.counts.muslims, battle.counts.others] : [battle.counts.muslimsKilled, battle.counts.othersKilled]);
   return (
     <Post palette={palette} head={<PostHead Icon={ChartNoAxesColumn} title="الجيشان في الغزوات" sub={battles.map(battle => battle.name.replace(/^غزوة /, '')).join(' · ')} palette={palette} />}
-      open={<Action Icon={Swords} label="افتح الغزوات والمعارك" onPress={() => toTab('/battles')} palette={palette} />}
+      open={<OpenButton label="افتح الغزوات والمعارك" onPress={() => toTab('/battles')} palette={palette} />}
       source={sourcesOf(armiesSources(BATTLES))}>
       <View style={{ padding: 14, gap: 10 }}>
         <Tabs palette={palette} label="ما يُعدّ" value={tab} onChange={setTab} options={ARMIES_TAB_NAMES} fill />
@@ -857,7 +853,7 @@ function HadithScenePost({ id, palette }: { id: string; palette: Palette }) {
   const open = () => toTab({ pathname: '/hadith-unit', params: { unit: unit.id } });
   return (
     <Post palette={palette} head={<PostHead Icon={MessagesSquare} title={`من ${unit.book}`} sub={unit.kitab} palette={palette} />}
-      open={<Action Icon={MessagesSquare} label={`افتح الحديث في ${unit.book}`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`افتح الحديث في ${unit.book}`} onPress={open} palette={palette} />}
       source={sourcesOf(sceneSources(unit))}>
       <View style={{ paddingHorizontal: 14, paddingVertical: 12 }}><HadithScene lines={scene.lines} slots={slots} palette={palette} /></View>
     </Post>
@@ -874,7 +870,7 @@ function OpeningCardPost({ id, palette }: { id: string; palette: Palette }) {
   const open = () => toTab({ pathname: '/openings', params: { at: id } });
   return (
     <Post palette={palette} head={<PostHead Icon={DoorOpen} title="من فواتح السور" sub={card.title} palette={palette} />}
-      open={<Action Icon={DoorOpen} label={`افتح «${card.title}» في فواتح السور`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`افتح «${card.title}» في فواتح السور`} onPress={open} palette={palette} />}
       source={sourcesOf(openingSources(card))}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 9 }}><OpeningRows card={card} palette={palette} /></View>
     </Post>
@@ -892,7 +888,7 @@ function OathPost({ id, palette }: { id: string; palette: Palette }) {
   const open = () => toTab({ pathname: '/oaths', params: { at: id } });
   return (
     <Post palette={palette} head={<PostHead Icon={Feather} title="من الأقسام" sub={[place, oath.who].filter(Boolean).join(' · ')} palette={palette} />}
-      open={<Action Icon={Feather} label={`افتح ${place} في الأقسام`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`افتح ${place} في الأقسام`} onPress={open} palette={palette} />}
       actions={<Action Icon={BookOpen} label={`افتح ${place} في المصحف`} onPress={() => readAyah(oath.id)} palette={palette} />}
       source={sourcesOf(oathSources(id))}>
       <View style={{ paddingHorizontal: 14, paddingVertical: 6 }}><OathWords oath={oath} palette={palette} /></View>
@@ -913,7 +909,7 @@ function SurahAimPost({ id, palette }: { id: string; palette: Palette }) {
   if (!s) return null;
   return (
     <Post palette={palette} head={<PostHead Icon={Target} title="مقصود السورة" palette={palette} />}
-      open={<Action Icon={OrderIcon} label={`افتح سورة ${s.name} في ترتيب السور`} onPress={() => openOrder(s)} palette={palette} />}
+      open={<OpenButton label={`افتح سورة ${s.name} في ترتيب السور`} onPress={() => openOrder(s)} palette={palette} />}
       source={sourcesOf(aimSources(id))}>
       <View style={{ paddingHorizontal: 14, paddingVertical: 8 }}><SurahBody s={s} palette={palette} /></View>
     </Post>
@@ -930,7 +926,7 @@ function SurahLinkPost({ id, palette }: { id: string; palette: Palette }) {
   if (!s?.link || !before) return null;
   return (
     <Post palette={palette} head={<PostHead Icon={Link2} title="بين سورتين" palette={palette} />}
-      open={<Action Icon={OrderIcon} label={`افتح ${before.name} و${s.name} في ترتيب السور`} onPress={() => openOrder(s)} palette={palette} />}
+      open={<OpenButton label={`افتح ${before.name} و${s.name} في ترتيب السور`} onPress={() => openOrder(s)} palette={palette} />}
       source={sourcesOf(linkSources(id))}>
       <View style={{ paddingHorizontal: 14, paddingVertical: 8, gap: 6 }}>
         <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 22, fontWeight: '700', textAlign: 'right' }}>{`${before.name} ← ${s.name}`}</Text>
@@ -953,7 +949,7 @@ function EventPost({ id, palette }: { id: string; palette: Palette }) {
   const open = () => router.push({ pathname: '/prophets/[slug]', params: { slug: found.slug, event: String(found.at) } });
   return (
     <Post palette={palette} head={<PostHead Icon={ScrollText} title={prophet.title} sub={phase} palette={palette} />}
-      open={<Action Icon={BookOpen} label={`افتح ${event.title} في القصة`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`افتح ${event.title} في القصة`} onPress={open} palette={palette} />}
       source={sourcesOf(eventSources(found.event))}>
       <View style={{ paddingVertical: 12 }}>
         <EventPlaces event={event} places={eventPlaces(event)} phase={phase} readable={false} palette={palette}
@@ -1002,7 +998,7 @@ const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece
   const [height, onFit] = useFitHeight(Math.max(TREE_HEIGHT, Math.round(screen * TREE_SHARE)));
   const embedded = useMemo(() => {
     const open = (at: BranchPiece) => toTab({ pathname: '/branches', params: { tree: at.id } });
-    const lead = <Action Icon={TreeIcon} label="افتح الشجرة في متشابهات القرآن" onPress={() => open(piece)} palette={palette} />;
+    const lead = <OpenButton label="افتح الشجرة في متشابهات القرآن" onPress={() => open(piece)} palette={palette} />;
     return { open, ayatRoom: { height: room, set: setRoom }, onFit, extra: { lead, aside: <NotMineMenu /> } };
   }, [room, onFit, piece, palette]);
   const sources = useMemo(() => sourcesOf(pieceSources(piece.keys, piece.group)), [piece]);
@@ -1023,7 +1019,7 @@ function SavedAyahPost({ ayah, palette }: { ayah: string; palette: Palette }) {
   const [surah, number] = ayah.split(':').map(Number);
   return (
     <Post palette={palette} head={<PostHead Icon={Bookmark} title="من المحفوظات" sub={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />}
-      open={<Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: ayah })} palette={palette} />} source={mushafOf(ayah)}>
+      open={<OpenButton label="في المصحف" onPress={() => openIntent({ tab: 'read', at: ayah })} palette={palette} />} source={mushafOf(ayah)}>
       <View style={{ padding: 12 }}>
         <AyahLines ayah={ayah} palette={palette} shown whole write={null} checked={null} />
       </View>
@@ -1062,7 +1058,7 @@ const StoryPost = memo(function StoryPost({ slug, phase, palette }: { slug: stri
   const open = () => { continueAfter('prophets', `${slug}-${phase}`); router.push({ pathname: '/prophets/[slug]', params: { slug } }); };
   return (
     <Post palette={palette} head={<PostHead Icon={ScrollText} title={prophet.title} sub={prophet.story.phases[phase]} palette={palette} />}
-      open={<Action Icon={BookOpen} label="افتح القصة" onPress={() => open()} palette={palette} />}
+      open={<OpenButton label="افتح القصة" onPress={() => open()} palette={palette} />}
       source={sourcesOf([storySource(prophet.events, phase)])}>
       <View style={{ paddingVertical: 8 }}>
         <StoryMap map={map} events={prophet.events} phases={prophet.story.phases} at={phase} palette={palette} onPick={open} onTitle={open} />
@@ -1090,7 +1086,7 @@ function JuzPost({ palette }: { palette: Palette }) {
   const toggle = () => setRead(on => { writeJson(JUZ_READ, on ? 0 : day); return !on; });
   return (
     <Post palette={palette} head={<PostHead Icon={BookOpen} title="جزء اليوم" sub={[juzLabel(juz), date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ')} palette={palette} />}
-      open={<Action Icon={BookOpen} label={`اقرأ ${juzLabel(juz)}، جزء اليوم`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`اقرأ ${juzLabel(juz)}، جزء اليوم`} onPress={open} palette={palette} />}
       actions={<Action Icon={read ? CircleCheck : Check} label="قرأته" tone="green" on={read} onPress={toggle} palette={palette} />}
       source={mushafOf(`${start.surah}:${start.ayah}`)}>
       <View style={{ paddingHorizontal: 12, paddingVertical: 6 }}><PageTop page={page} palette={palette} /></View>
@@ -1104,7 +1100,7 @@ function KahfPost({ palette }: { palette: Palette }) {
   const read = () => openIntent({ tab: 'read', at: '18:1' });
   return (
     <Post palette={palette} head={<PostHead Icon={BookOpen} title="سورة الكهف" sub="يوم الجمعة" palette={palette} />}
-      open={<Action Icon={BookOpen} label="اقرأ سورة الكهف" onPress={read} palette={palette} />} source={mushafOf('18:1')}>
+      open={<OpenButton label="اقرأ سورة الكهف" onPress={read} palette={palette} />} source={mushafOf('18:1')}>
       <View style={{ paddingHorizontal: 12, paddingVertical: 6 }}><PageTop page={page} palette={palette} /></View>
     </Post>
   );
@@ -1206,7 +1202,7 @@ const ScenePost = memo(function ScenePost({ id, palette }: { id: string; palette
   if (id !== DARK_SEA_KEY) return null;
   return (
     <Post palette={palette} head={<PostHead Icon={Presentation} title="من المشاهد" sub={darkSeaName()} palette={palette} open={{ onPress: () => toTab('/lataif'), label: 'افتح المشاهد' }} />}
-      open={<DarkSeaActions palette={palette} only="open" />} share={<DarkSeaActions palette={palette} only="share" />}
+      open={<DarkSeaActions palette={palette} only="open" feed />} share={<DarkSeaActions palette={palette} only="share" />}
       source={darkSeaSourceList()}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}><DarkSea palette={palette} still /></View>
     </Post>
@@ -1226,7 +1222,7 @@ function SiraPost({ id, palette }: { id: string; palette: Palette }) {
   const open = () => { continueAfter('sira', id); toTab({ pathname: '/story', params: { slug: story.slug } }); };
   return (
     <Post palette={palette} head={<PostHead Icon={ScrollText} title="من قصص السيرة" sub={story.name} palette={palette} />}
-      open={<Action Icon={ScrollText} label={`افتح ${story.name}`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`افتح ${story.name}`} onPress={open} palette={palette} />}
       share={drawn ? <StoryShare story={story} report={report} palette={palette} /> : undefined}
       source={reportSource(report, drawn)}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
@@ -1257,7 +1253,7 @@ function RajabPost({ id, palette }: { id: string; palette: Palette }) {
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
     <Post palette={palette} head={<PostHead Icon={BookOpenText} title="من شرح ابن رجب" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} palette={palette} />}
-      open={<Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}
       source={sourcesOf([{ book: FORTY.books.ibnrajab.title, author: 'ابن رجب' }])}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
         <IbnRajab chapter={picked.chapter} only={picked.passage} palette={palette} />
@@ -1274,7 +1270,7 @@ function HadithPost({ id, palette }: { id: string; palette: Palette }) {
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
     <Post palette={palette} head={<PostHead Icon={MessagesSquare} title="من الحديث" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} palette={palette} />}
-      open={<Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}
       source={sourcesOf([compiledSource(entry)])}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
         <Text style={{ color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right' }}>{entry.text}</Text>
@@ -1301,7 +1297,7 @@ function SahihPost({ slug, id, palette }: { slug: SahihSlug; id: string; palette
   const where = `${place.kitab.title}${place.bab?.title ? ` › ${place.bab.title}` : ''}${book.headingsBy === 'nawawi' && place.bab?.title ? ' (تبويب النووي)' : ''}`;
   return (
     <Post palette={palette} head={<PostHead Icon={MessagesSquare} title={`من ${book.title}`} sub={where} palette={palette} />}
-      open={<Action Icon={MessagesSquare} label={`افتح ${book.title} ${num(Number(id))}`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`افتح ${book.title} ${num(Number(id))}`} onPress={open} palette={palette} />}
       source={sourcesOf([{ book: book.title, author: slug === 'bukhari' ? 'البخاري' : 'مسلم' }])}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
         <SahihHadithView book={book} hadith={found.hadith} palette={palette} />
@@ -1320,7 +1316,7 @@ function RecordedPost({ id, palette }: { id: string; palette: Palette }) {
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
     <Post palette={palette} head={<PostHead Icon={Network} title="من أخرجه" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} palette={palette} />}
-      open={<Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}
       source={sourcesOf(uniqueSources([...entry.records.map(recordSource), compiledSource(entry)]))}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
         <Text numberOfLines={3} style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>{entry.text}</Text>
@@ -1344,7 +1340,7 @@ function IsnadPost({ id, palette }: { id: string; palette: Palette }) {
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
     <Post palette={palette} head={<PostHead Icon={GitCommitVertical} title="من الإسناد" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} palette={palette} />}
-      open={<Action Icon={MessagesSquare} label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}
       source={sourcesOf([recordSource(record)])}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
         <Isnad isnad={record.isnad!} palette={palette} />
@@ -1371,7 +1367,7 @@ function TermPost({ id, day, palette }: { id: string; day: number; palette: Pale
   const open = () => toTab({ pathname: '/term', params: { name: term.name } });
   return (
     <Post palette={palette} head={<PostHead Icon={Gem} title="من مصطلحات البلاغة" sub={quote.book === 'itqan' ? 'الإتقان للسيوطي' : 'تلخيص المفتاح للقزويني'} palette={palette} />}
-      open={<Action Icon={Gem} label={`${name}: تعريفه وأمثلته`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`${name}: تعريفه وأمثلته`} onPress={open} palette={palette} />}
       actions={<Action Icon={ListTree} label="مصطلحات البلاغة" onPress={() => toTab('/terms')} palette={palette} />}
       source={sourcesOf([termSource(quote)])}>
       <View style={{ paddingHorizontal: 14, paddingVertical: 12, gap: 6 }}>
@@ -1401,7 +1397,7 @@ function MomentPost({ id, palette }: { id: string; palette: Palette }) {
   const open = () => { continueAfter('moment', id); toTab({ pathname: '/battle', params: { slug: battle.slug } }); };
   return (
     <Post palette={palette} head={<PostHead Icon={Swords} title={`من ${battle.name}`} sub={battleLine(battle)} palette={palette} />}
-      open={<Action Icon={Swords} label={`افتح ${battle.name}`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`افتح ${battle.name}`} onPress={open} palette={palette} />}
       source={sourcesOf([citeSource({ text: '', cite: moment.cite, url: moment.url })])}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}><Moment moment={moment} n={n} palette={palette} plain /></View>
     </Post>
@@ -1444,7 +1440,7 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
   return (
     <>
       {on && <Post palette={palette} head={<PostHead Icon={head.Icon} title={head.title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />}
-        open={<Action Icon={head.Icon} label={head.open} onPress={show} palette={palette} />}
+        open={<OpenButton label={head.open} onPress={show} palette={palette} />}
         source={sourcesOf(note.sources)}>
         {'readings' in note ? <View style={{ paddingVertical: 10 }}><QiraatPlace ayah={note.key} max={2} lines bare palette={palette} /></View> : <View style={{ paddingVertical: 10, gap: 6 }}>
           <View pointerEvents="none" style={{ paddingHorizontal: 12 }}>

@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
+import OpenButton from '@/ui/OpenButton';
 import { ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
 import Svg, { Defs, LinearGradient, Path, Rect, Stop } from 'react-native-svg';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -191,10 +192,13 @@ export default function DarkSea({ palette, still = false }: { palette: Palette; 
 }
 
 /** The scene's mushaf and share buttons, in the row under it (the page and the feed card). */
-export function DarkSeaActions({ palette, only }: { palette: Palette; only?: 'open' | 'share' }) {
+export function DarkSeaActions({ palette, only, feed = false }: { palette: Palette; only?: 'open' | 'share';
+  /** On its home card: the feed's one open button (ui/OpenButton), not the book. */
+  feed?: boolean }) {
   const name = darkSeaName();
   return <>
-    {only !== 'share' && <IconButton Icon={BookOpen} label={`افتح ${name} في المصحف`} onPress={() => readAyah(DARK_SEA_KEY)} />}
+    {only !== 'share' && (feed ? <OpenButton label={`افتح ${name} في المصحف`} onPress={() => readAyah(DARK_SEA_KEY)} />
+      : <IconButton Icon={BookOpen} label={`افتح ${name} في المصحف`} onPress={() => readAyah(DARK_SEA_KEY)} />)}
     {only !== 'open' && <IconButton Icon={Send} label={`شارك ${name}`} onPress={() => shareCard({ content: width => (
       <View style={{ width }}><Card palette={palette} pad={[10, 16]} gap={10}><DarkSea palette={palette} still /></Card></View>
     ) })} />}

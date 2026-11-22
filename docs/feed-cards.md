@@ -130,14 +130,17 @@ A new card or quiz kind goes into an interest's `cards` or `quizzes` in the same
   the one card with no line: its books are the card. A card from outside the reader's interests is added from its line above («أضفه»). Nothing on screen moves:
   interests are kept for the visit, and a card taken out leaves a line with «تراجع».
 - No card is taller than two thirds of the screen (`CARD_CAP_SHARE` in `shared/homeFeed.ts`, owner 2026-11-20): longer
-  content stops with a fade and «اقرأ كاملًا» opens it whole in a sheet with the row and the source line at its foot
+  content stops with a fade and the card's open button opens its page, or, with no page, the whole card in a sheet with the row and the source line at its foot
   (app `CardWithRow` `cap`, website `common/CappedCard`). Nothing scrolls inside a card. Question cards and recall cards
   are never capped: a question shows all its choices, a recall card its whole ayah.
 - Today's juz, the forgotten ayat, books, the prayer card and saved items stay outside the rounds.
 - A card never vanishes when the reader acts on it (owner, 2026-11-22). «تذكّرتها» and «نسيتها» on the recall card, and
   «قرأته» on today's juz, light up green or in the mark colour, a second tap takes them back, and the card stays where it is
   until the next visit. A juz marked read is left out for the rest of its day.
-- A question card's row has one quiz button that opens the quizzes page (solo or with others), and «تسميع» only on a
+- Every card has one open button, the same on all of them: «افتح» with the forward arrow (app `ui/OpenButton`), first
+  in its row (owner, 2026-11-22). It opens the card's item on its page; a long card with no page opens whole in a sheet
+  with it, and there is no «اقرأ كاملًا» link. The head's round icon still tells the card kinds apart.
+- A question card's open button opens the quizzes page (solo or with others), and «تسميع» shows only on a
   Quran question (an interest in the Quran's or the language's sciences). Once answered, each choice says what it is where
   the data has it: whose name or laqab, which hadith a narrator or an ending belongs to (`ChoiceQuestion.whereOf`).
 - The chips over the feed: «لك» and each interest picked; a tap shows that interest's cards alone.
