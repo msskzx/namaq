@@ -6,9 +6,9 @@
 [checked in repo] There are 20 Bukhari chain records, 104 narrator occurrences and 88 exact name forms across the fifty entries.
 [inferred] Build term citations first; keep uncertain narrator identities unresolved and require edition collation before publishing new source text.
 
-[checked in repo] Research snapshot: 21 November 2026, main `133f3deb`. Read AGENTS.md, the records, [the previous hadith audit](2026-11-18-hadith-sources.md), [the source registry](../../shared/sources.ts), [forty.json](../../data/hadith/forty.json) and [forty-map.json](../../data/hadith/forty-map.json). This file adds no app code or shipped data. It does not reopen the previous audit's collection editions, Ibn Rajab edition, Taqrib edition problem or provider licences. The full Sahihayn and the choice of another collection are outside scope.
+[checked in repo] Research begun 21 November 2026, continued 22 November on main `2ad09a47`, then integrated main `94edfe96` before the PR. Read AGENTS.md, the records, [the previous hadith audit](2026-11-18-hadith-sources.md), [the source registry](../../shared/sources.ts), [forty.json](../../data/hadith/forty.json) and [forty-map.json](../../data/hadith/forty-map.json). This file adds no app code or shipped data. It does not reopen the previous audit's collection editions, Ibn Rajab edition, Taqrib edition problem or provider licences. The full Sahihayn and the choice of another collection are outside scope.
 
-[inferred] Labels apply to whole paragraphs and table rows unless a cell has its own label. “Checked against source” identifies an inspected scholarly digital witness, not an assertion that a scan was visually collated. Printed locators below are the edition's reported pagination; Shamela digital IDs are recorded separately. **The new quotations have not been visually collated against edition images.** Export downloads from `files.turath.io` remain blocked by this environment. This is an evidence ledger and a build-readiness assessment, not certification of a new publishable transcription. Definitions, rank words and judgments below are quotations; recommendations and identity decisions are ours and labelled accordingly. No translation is supplied.
+[inferred] Labels apply to whole paragraphs and table rows unless a cell has its own label. “Checked against source” identifies an inspected scholarly digital witness, not an assertion that a scan was visually collated. Printed locators below are the edition's reported pagination; Shamela digital IDs are recorded separately. The 22 November continuation acquired edition images from Archive.org. The collation notes below identify exactly which passages were inspected and where print differs from the digital quotation. Turath and live Shamela still return HTTP 403; Archive.org and OpenITI downloads work. This is an evidence ledger and a build-readiness assessment, not certification of a new publishable transcription. Definitions, rank words and judgments below are quotations; recommendations and identity decisions are ours and labelled accordingly. No translation is supplied.
 
 ## 1. Mustalah terms
 
@@ -17,12 +17,51 @@
 | Status | Work and author | Edition / digital witness | Count and size of definitions | Author's examples / decision |
 | --- | --- | --- | --- | --- |
 | Checked against source | al-Bayquniyya, attributed by the catalogue to Umar, also called Uta, b. Muhammad b. Futuh al-Bayquni, d. approximately 1080 AH | Dar al-Mughni, first 1420/1999, one volume, printed pp. 7–12; [Shamela 8567](https://shamela.ws/book/8567). The catalogue itself qualifies the name and death date. | 34 numbered verses. The table below contains 32 term units, our count with the two name-comparison pairs kept together; this is not a claim that the author numbered 32 definitions. Whole definitions take one or two verses. | Examples occur for المسلسل and المعنعن. Most rows have no separate example. [inferred] Recommended bounded first base because the whole defining passage fits a card and its complete inventory is below. Do not present its wording as every scholar's terminology. |
-| Checked against source | Ibn Hajar al-Asqalani, d. 852 AH, Nukhbat al-Fikar | Dar al-Hadith, Cairo, fifth 1418/1997, edited by Isam al-Sababti and Imad al-Sayyid, appended to Subul al-Salam; [Shamela 5940](https://shamela.ws/book/5940). | A continuous classification, not a numbered glossary with an author-declared total. It has well over thirty named categories, with embedded relations and a final list of further sciences. A count of numbered headings in a modern index would not count its definitions. Many definitions fit a sentence, but references such as الأول and الثاني need their preceding division. | Few developed examples in the matn. The card explicitly says square-bracket additions are selected commentary, not matn. [inferred] Strong next expansion, using the author's Nuzha to preserve context rather than inventing independent definitions from dependent clauses. A complete atomic-term count is not established here. |
-| Checked against source | The same Ibn Hajar, Nuzhat al-Nazar, his own explanation | Nur al-Din Itr, Maktabat/matbaat al-Sabah, Damascus, third 1421/2000, 175 pages; [Shamela 1565](https://shamela.ws/book/1565). The card describes a copy read to the author. Al-Ruhayli's Safir first 1422 witness is another candidate, but historical IDs 12115 and 1184 now identify different works on the live Shamela site. | Expands the Nukhba divisions; there is no author-declared closed glossary count. Some complete definitions fit a sentence; discussions of حسن and حسن صحيح span pages. | Supplies actual examples, including الفرد المطلق. [inferred] Prefer Itr as the currently identifiable commentary witness for comparisons, subject to print collation. This is a practical witness choice, not a ranking of all editions. Keep Itr's comments, headings and footnotes separate. |
+| Checked against source | Ibn Hajar al-Asqalani, d. 852 AH, Nukhbat al-Fikar | Dar al-Hadith, Cairo, fifth 1418/1997, edited by Isam al-Sababti and Imad al-Sayyid, appended to Subul al-Salam; [Shamela 5940](https://shamela.ws/book/5940). | A continuous classification, not a numbered glossary with an author-declared total. It has well over thirty named categories, with embedded relations and a final list of further sciences. A count of numbered headings in a modern index would not count its definitions. Many definitions fit a sentence, but references such as الأول and الثاني need their preceding division. | Few developed examples in the matn. The card explicitly says square-bracket additions are selected commentary, not matn. [inferred] Strong next expansion, using the author's Nuzha to preserve context rather than inventing independent definitions from dependent clauses. The counted classification selection below has 62 units, with dependent and supporting definitions reported separately. |
+| Checked against source | The same Ibn Hajar, Nuzhat al-Nazar, his own explanation | Nur al-Din Itr, Maktabat/matbaat al-Sabah, Damascus, third 1421/2000, 175 pages; [Shamela 1565](https://shamela.ws/book/1565). The card describes a copy read to the author. Al-Ruhayli's Safir first 1422 witness is another candidate, but historical IDs 12115 and 1184 now identify different works on the live Shamela site. | Expands the Nukhba divisions. The counted classification selection below has 70 units under the same rule as Nukhba, with supporting definitions excluded explicitly. Some complete definitions fit a sentence; discussions of حسن and حسن صحيح span pages. | Supplies actual examples, including الفرد المطلق. [inferred] Prefer Itr as the currently identifiable commentary witness for comparisons, subject to print collation. This is a practical witness choice, not a ranking of all editions. Keep Itr's comments, headings and footnotes separate. |
 | Checked against source | Uthman b. Abd al-Rahman Ibn al-Salah, d. 643 AH, Ma'rifat anwa' ulum al-hadith | Nur al-Din Itr, Dar al-Fikr, Syria / Dar al-Fikr al-Muasir, Beirut, 1406/1986; [Shamela 22870](https://shamela.ws/book/22870). | 65 author-numbered kinds, as its contents show. These include biographical and practical sciences, so “65 kinds” is not “65 short definitions.” Subdefinitions increase the term count; an exhaustive atomic count is not established here. | Many examples and named alternative usages. [inferred] Use as attributed depth and a comparison source; a complete discussion often cannot fit a short card. |
 | Checked against source | Yahya b. Sharaf al-Nawawi, d. 676 AH, al-Taqrib wa-l-Taysir | Muhammad Uthman al-Khisht, Dar al-Kitab al-Arabi, Beirut, first 1405/1985, 123 pages; [Shamela 5586](https://shamela.ws/book/5586). | 65 numbered kinds, shortening Ibn al-Salah through his Irshad. Again, this is an authorial topic count, not a count of atomic definitions. Many whole openings fit a paragraph. | Examples appear, e.g. المنقطع and المسند, with named alternative usages. [inferred] A useful prose companion. Do not strip “قال الخطيب” or “قال الحاكم” and relabel the resulting definition as Nawawi's own formulation. |
 
 [inferred] The comparison distinguishes counted term units from numbered kinds and verses. A later data PR must enumerate every adopted definition, its complete dependent context and any author's example before advertising a larger glossary count. None of these books licenses Namaq to fill a missing example or modernize a definition.
+
+### Counted classification selection in Nukhba and Nuzha
+
+[inferred] This audit counts a bounded selection of classification definitions. One named report, narrator or chain category, or the named comparison operation الاعتبار, counts once when the author's text gives a membership criterion. Dependent antecedents must be restored. Synonyms and alternative senses of the same lemma stay in one unit. Joint pair-names count as one. Names supplied only in commentary brackets, headings or modern margins do not count as matn. This gives **62 Nukhba units and 70 Nuzha units**, enumerated below. These are our selection counts, not an author-declared total or an exhaustive count of every explanatory definition in either work.
+
+[checked against source] The Nukhba selection was checked through the complete historical Shamela 5940 text, printed 4/721–726. Its square-bracket comments were excluded. Nuzha's authorial text was checked in the historical 1565 Itr witness and against al-Ruhayli's 12115 witness. Al-Ruhayli's repeated second copy of the text was excluded from counting. The Itr third 1421/2000 scan is [Archive item 01454](https://archive.org/details/01454), PDF leaves equal printed pages. Neither modern headings nor marginal ordinals supply the count.
+
+| Unit numbers | Complete Nukhba selection |
+| --- | --- |
+| 1–5 | 1. المتواتر؛ 2. المشهور والمستفيض على رأي؛ 3. العزيز؛ 4. الغريب؛ 5. آحاد |
+| 6–9 | 6. الفرد المطلق؛ 7. الفرد النسبي؛ 8. الصحيح لذاته؛ 9. الحسن لذاته |
+| 10–16 | 10. المحفوظ؛ 11. الشاذ؛ 12. المعروف؛ 13. المنكر؛ 14. المتابع؛ 15. الشاهد؛ 16. الاعتبار |
+| 17–20 | 17. المحكم؛ 18. مختلف الحديث؛ 19. الناسخ؛ 20. المنسوخ |
+| 21–26 | 21. المعلق؛ 22. المرسل؛ 23. المعضل؛ 24. المنقطع؛ 25. المدلس؛ 26. المرسل الخفي |
+| 27–35 | 27. الموضوع؛ 28. المتروك؛ 29. المعلل؛ 30. مدرج الإسناد؛ 31. مدرج المتن؛ 32. المقلوب؛ 33. المزيد في متصل الأسانيد؛ 34. المضطرب؛ 35. المصحف والمحرف |
+| 36–39 | 36. المبهم؛ 37. مجهول العين؛ 38. مجهول الحال والمستور؛ 39. المختلط |
+| 40–46 | 40. الصحابي؛ 41. التابعي؛ 42. المرفوع؛ 43. الموقوف؛ 44. المقطوع؛ 45. الأثر؛ 46. المسند |
+| 47–53 | 47. العلو المطلق؛ 48. العلو النسبي؛ 49. الموافقة؛ 50. البدل؛ 51. المساواة؛ 52. المصافحة؛ 53. النزول |
+| 54–59 | 54. رواية الأقران؛ 55. المدبج؛ 56. رواية الأكابر عن الأصاغر؛ 57. السابق واللاحق؛ 58. المهمل؛ 59. المسلسل |
+| 60–62 | 60. المتفق والمفترق؛ 61. المؤتلف والمختلف؛ 62. المتشابه |
+
+[checked against source] Nuzha retains that classification selection and adds the following eight units under the same convention. Dividing the shared مصحف ومحرف criterion adds one unit. The seven other rows add seven units.
+
+| Added unit | Authorial criterion or distinction | Itr printed locator |
+| --- | --- | --- |
+| Split المصحف والمحرف | Nukhba gives a shared criterion of changed writing with the context retained; Nuzha distinguishes changes to points from changes to vocalization. | 1/95–96 |
+| المقبول | «ما يجب العمل به عند الجمهور» | 1/50 |
+| المردود | «الذي لم يرجح صدق المخبر به» | 1/50–51 |
+| المتصل | «ما سلم إسناده من سقوط فيه، بحيث يكون كل من رجاله سمع ذلك المروي من شيخه» | 1/58 |
+| المتابعة التامة | «إن حصلت للراوي نفسه فهي التامة» | 1/73 |
+| المتابعة القاصرة | «وإن حصلت لشيخه فمن فوقه فهي القاصرة» | 1/73 |
+| الوحدان | «من لم يرو عنه إلا واحد، ولو سمي» | 1/99–100 |
+| المخضرمون | «الذين أدركوا الجاهلية والإسلام ولم يروا النبي» | 1/112–113 |
+
+[checked against source] The shared units' Nuzha locators are: 1–5, pp. 41–50; 6–7, pp. 55–57; 8–9, pp. 57–58 and 65; 10–13, pp. 70–72; 14–16, pp. 72–75; 17–20, pp. 75–79; 21–26, pp. 80–86; 27–29, pp. 87–92; 30–35, pp. 92–96; 36–38, pp. 100–101; 39, pp. 103–104; 40–46, pp. 110–115; 47–53, pp. 115–118; 54–59, pp. 118–122; 60–62, pp. 128–131. This range table locates definitions and their dependent context; it does not imply each discussion fills every page in the range.
+
+[inferred] Three dependent evaluative definitions in each book are reported separately: strengthening the hasan by its routes, combining the sahih and hasan descriptions, and strengthening the otherwise weak report through corroboration. Labels such as الصحيح لغيره and الحسن لغيره must not be counted as extra explicit matn names in 5940 merely because its bracketed commentary supplies them. The clear-discontinuity criterion and singular/plural hearing and reading formula contexts are also outside the named classification selection.
+
+[inferred] Supporting definitions remain a separate inventory: الخبر and الحديث alternatives; السند, الطريق and المتن; اليقين, العلم الضروري, النظر and العلم النظري; علم الإسناد; العدل, التقوى and the two kinds of ضبط; شرط الصحيحين; النسخ; causes of narrator criticism; الاختصار, الرواية بالمعنى, غريب الحديث and المشكل; and the modes of transmission. Nuzha also defines terms within its closing sciences, including طبقة, عرض الحديث and the four composition forms. Nukhba often only names these sciences or gives a ruling. The subclass الآباء عن الأبناء is named under الأكابر عن الأصاغر, and the six explicit/implicit قول/فعل/تقرير cases are examples of المرفوع. None warrants invented independent definition wording. A count advertised as every atomic definition in the books still needs this supporting and closing inventory; 62/70 must not be relabelled as that total.
 
 ### Complete al-Bayquniyya term inventory
 
@@ -144,7 +183,57 @@
 
 > والقِسْمُ الثاني من أقسام المردود: وهو ما يكون بسبب تُهمَةِ الراوي بالكَذِبِ هو المتروكُ (٤).
 
-[inferred] The comparison above is a bounded selection of differing definitions, not a complete textual concordance of all four prose works. In particular, a full atomic-term count for Nukhba/Nuzha and a term-by-term comparison of every remaining Bayquniyya row are still owed before claiming that larger deliverable complete.
+[inferred] The comparison above is a bounded selection of differing definitions, not a complete textual concordance of all four prose works. The added table below covers the remaining sixteen Bayquniyya units. The 62/70 classification counts have explicit exclusions; they are not exhaustive totals of every lexical and supporting definition.
+
+### Comparison coverage for the remaining base terms
+
+[checked against source] The sixteen terms below complete prose comparison coverage of the 32 Bayquniyya units. The earlier selections cover the other sixteen. This is one or more attributed prose witnesses per base term, not a four-book concordance. Al-Nawawi quotations below were checked against the al-Khisht first 1405/1985 scan, [Archive item 185](https://archive.org/details/alfirdwsiy2018_gmail_185_20181022). Its PDF leaf numbers equal printed page numbers here. Editorial headings, notes and note-call numbers are excluded. Punctuation and vocalization are not a diplomatic transcription.
+
+| Status | Base term | Attributed comparison or stated limit | Printed locator |
+| --- | --- | --- | --- |
+| Checked against source | الضعيف | Al-Nawawi: «وهو ما لم يجمع صفة الصحيح أو الحسن، ويتفاوت ضعفه كصحة الصحيح، ومنه ما له لقب خاص: كالموضوع، والشاذ، وغيرهما.» | 1/31, type 3 |
+| Checked against source | المرفوع | Al-Nawawi: «وهو ما أضيف إلى النبي ﷺ خاصة، لا يقع مطلقه على غيره متصلا كان أو منقطعا. وقيل: هو ما أخبر به الصحابي عن فعل النبي ﷺ أو قوله.» | 1/32, type 6 |
+| Checked against source | الموقوف | Al-Nawawi: «وهو المروي عن الصحابة قولا لهم أو فعلا أو نحوه، متصلا كان أو منقطعا. ويستعمل في غيرهم مقيدا، فيقال: وقفه فلان على الزهري ونحوه. وعند فقهاء خراسان تسمية الموقوف بالأثر، والمرفوع بالخبر. وعند المحدثين كله يسمى أثرا.» | 1/33, type 7 |
+| Checked against source | المعنعن | Al-Nawawi: «أحدها: الإسناد المعنعن: وهو فلان عن فلان، قيل: إنه مرسل. والصحيح الذي عليه العمل وقاله الجماهير من أصحاب الحديث والفقه والأصول، أنه متصل بشرط أن لا يكون المعنعن مدلسا، وبشرط إمكان لقاء بعضهم بعضا. وفي اشتراط ثبوت اللقاء وطول الصحبة ومعرفته بالرواية عنه خلاف.» | 1/37, type 11, first branch |
+| Checked against source | الفرد | Al-Nawawi: «تقدم مقصوده. فالفرد قسمان: أحدهما: فرد عن جميع الرواة، وتقدم حكمه. والثاني: بالنسبة إلى جهة، كقولهم: تفرد به أهل مكة والشام، أو فلان عن فلان، أو أهل البصرة عن أهل الكوفة وشبهه. ولا يقتضي هذا ضعفه إلا أن يراد بتفرد المدنيين انفراد واحد منهم، فيكون كالقسم الأول، والله أعلم.» | 1/43, type 17. The first division refers back to the preceding discussion of solitary reports; this row does not turn that reference into an invented definition. |
+| Checked against source | المعلل | Al-Nawawi: «والعلة عبارة عن سبب غامض قادح مع أن الظاهر السلامة منه. ويتطرق إلى الإسناد الجامع شروط الصحة ظاهرا وتدرك بتفرد الراوي وبمخالفة غيره له مع قرائن تنبه العارف على وهم بإرسال أو وقف، أو دخول حديث في حديث أو غير ذلك، بحيث يغلب على ظنه فيحكم بعدم صحة الحديث أو يتردد فيتوقف.» | 1/44, type 18 |
+| Checked against source | المدرج | Al-Nawawi: «هو أقسام: أحدها: مدرج في حديث النبي ﷺ بأن يذكر الراوي عقيبه كلاما لنفسه أو لغيره، فيرويه من بعده متصلا، فيتوهم أنه من الحديث. الثاني: أن يكون عنده متنان بإسنادين فيرويهما بأحدهما. الثالث: أن يسمع حديثا من جماعة مختلفين في إسناده أو متنه فيرويه عنهم باتفاق. وكله حرام، وصنف فيه الخطيب كتابا شفى وكفى، والله أعلم.» | 1/46, type 20 |
+| Checked against source | الموضوع | Al-Nawawi: «هو المختلق المصنوع، وشر الضعيف، وتحرم روايته مع العلم به في أي معنى كان إلا مبينا.» | 1/46, opening of type 21 |
+| Checked against source | المقلوب | Al-Nawawi: «هو نحو حديث مشهور عن سالم جعل عن نافع ليرغب فيه. وقلب أهل بغداد على البخاري مائة حديث امتحانا، فردها على وجوهها، فأذعنوا بفضله. والله أعلم.» | 1/47, type 22. This is the author's definition through examples. |
+| Checked against source | العالي | Al-Nawawi: «وهو أقسام: أجلها القرب من رسول الله ﷺ بإسناد صحيح نظيف. الثاني: القرب من إمام من أئمة الحديث، وإن كثر بعده العدد إلى رسول الله ﷺ.» | 1/84, opening of type 29. These are the first two of five divisions, not a quotation of the entire five-part treatment. |
+| Checked against source | النازل | Al-Nawawi: «وأما النزول فضد العلو فهو خمسة أقسام تعرف من ضدها، وهو مفضول مرغوب عنه على الصواب وقول الجمهور، وفضله بعضهم على العلو، فإن تميز بفائدة فهو مختار، والله أعلم.» | 1/85. Its five antecedents, in type 29, are proximity to the Prophet, proximity to an imam, relation to a compiler, earlier narrator death and earlier hearing. Those are source locators for restoring context, not new definitions by Namaq. |
+| Checked against source | المسلسل | Al-Nawawi: «هو ما تتابع رجال إسناده على صفة أو حالة للرواة تارة وللرواية تارة أخرى. وصفات الرواة إما أقوال أو أفعال وأنواع كثيرة غيرهما كمسلسل التشبيك باليد والعد فيها، وكاتفاق أسماء الرواة أو صفاتهم أو نسبتهم كأحاديث رويناها كل رجالها دمشقيون، وكمسلسل الفقهاء. وصفات الرواية كالمسلسل بسمعت أو بأخبرنا أو أخبرنا فلان والله.» | 1/87, type 33; the later warning that a sequence can break continues on 1/88. |
+| Checked against source | المدبج | Al-Nawawi: «القرينان هما المتقاربان في السن والإسناد، وربما اكتفى الحاكم بالإسناد. فإن روى كل واحد منهما عن صاحبه كعائشة وأبي هريرة، ومالك والأوزاعي، فهو المدبج.» | 1/96, type 42 |
+| Checked against source | المؤتلف والمختلف | Al-Nawawi: «هو فن جليل يقبح جهله بأهل العلم، لا سيما أهل الحديث، ومن لم يعرفه يكثر خطؤه، وهو ما يتفق في الخط دون اللفظ، وفيه مصنفات أحسنها وأكملها «الإكمال» لابن ماكولا وفيه إعواز، وأتمه ابن نقطة. وهو منتشر لا ضابط في أكثره.» | 1/106, opening of type 53 |
+| Checked against source | المتفق والمفترق | Al-Nawawi: «هو متفق خطا ولفظا، وللخطيب فيه كتاب نفيس. وهو أقسام: الأول: من اتفقت أسماؤهم وأسماء آبائهم: كالخليل بن أحمد ستة.» | 1/110, opening of type 54. The six people illustrate shared naming, not a claim that identical names establish identical people. |
+| Checked against source | المبهم | Al-Nawawi provides identification and examples rather than a separate abstract definition: «ويعرف [...] بوروده مسمى في بعض الروايات.» The following division begins «وهو أقسام: أهمها رجل أو امرأة». The print's supplied bracketed words are excluded here. | 1/115–116, type 59 |
+
+[inferred] These passages support attributed comparison, including differences in scope and example-based definitions. They do not make every author use every term in the same way. A page adopting a short dependent clause must also retain the division it points back to.
+
+### Print differences in the earlier term quotations
+
+[checked against source] The Dar al-Mughni scan acquired here is the **second 1427/2007** printing, not the catalogue's first 1420/1999 printing. [Archive item](https://archive.org/details/20200911_20200911_2011), file `_المنظومة_البيقونية_ويليها_متن_نخبة_الفكر.pdf`, SHA-256 `da6547b0bb64b70f9a91ccff6314a3b731bc5320f7a64bfed10faf4147c36d39`. Its colophon is PDF leaf 4; printed pp. 7–12 are PDF leaves 7–12. All 34 verses were visually inspected. The same 32 term units are present. The following conspicuous digital readings differ from this printing; its edition number prevents calling them certified corrections to the first printing.
+
+| Verse / page | Digital quotation in the inventory | Second-print reading |
+| --- | --- | --- |
+| 21 / 10 | «وما يخلف» | «وما يخالف» |
+| 29 / 11 | «مُتَّقِقُ» | «متفق» |
+
+[checked against source] The al-Khisht first 1405/1985 Nawawi scan was also checked for the earlier comparison passages, not only the sixteen new rows. The following digital readings require an explicit print distinction. The original quotations above retain their witness's text rather than receiving silent lexical repairs. Source pin: [Archive item 185](https://archive.org/details/alfirdwsiy2018_gmail_185_20181022), PDF extracted from its ZIP, SHA-256 `5d1a1217fce1e83e259bb8e771c81df9bf9c8c8fb26bfc7fa45a5cc784c6cfed`.
+
+| Term / page | Digital reading | Al-Khisht print |
+| --- | --- | --- |
+| الحسن / 29 | «يكونراويه» | «يكون راويه» |
+| المسند / 32 | «فيها جاء» | «فيما جاء» |
+| المقطوع / 34 | «وجمعه والمقاطيع» | «وجمعه المقاطع والمقاطيع» |
+| المنقطع / 35 | «والخطيب أبن عبد البر» | «والخطيب وابن عبد البر» |
+| المنقطع / 35 | «وما اختل فيه لرجل» | «هو ما اختل منه رجل» |
+| المعضل / 36 | «للملوك طعامه وكسوته» | «للمملوك طعامه وكسوته» |
+| التدليس / 39 | «كقنادة» | «كقتادة» |
+| الشاذ / 40 | «ليس في رواية من الثقة» | «ليس في راويه من الثقة» |
+| المنكر / 41 | «البرديحي» | «البرديجي» |
+
+[checked against source] Itr's Nuzha third 1421/2000 print was inspected at pp. 65–67 and 91 for the earlier quotations. Its pp. 65–66 make clear that the hasan discussion continues across the page turn. The note-call numbers in the digital quotes belong to the edition apparatus. On p. 91 the authorial المتروك sentence agrees after excluding note-call 4. The scan pin is [Archive item 01454](https://archive.org/details/01454), SHA-256 `0b5b16b151f5aa1365032a59c894b13472b0924aea6732418bfb348bb49afd36`. Nukhba 5940 and the Ibn al-Salah passages remain checked digital witnesses; this continuation does not claim an unperformed image collation of their cited printings.
 
 ## 2. Terms already used on Namaq's hadith
 
@@ -180,9 +269,34 @@
 
 > وقد رُوي هذا الحديثُ من حديث ابنِ عمر (٢) عن النبيِّ - صلى الله عليه وسلم -، ولكن في إسناده من لا يُعرف حاله. قاله أبو حاتم الرازي (٣).
 
-[checked against source] The notes below the rule on Jami' 2/467, 496 and 510 mention further authentication by Ibn Hibban, al-Hakim and al-Dhahabi. Those sentences are the modern editors' words, not Ibn Rajab's. They are acquisition leads, not permission to manufacture those scholars' wording. Direct classical passages for each of those additional attributions have not been acquired in this run; an exhaustive “every named scholar's grade” claim for these three hadith would therefore be premature. For no. 47, Jami' reports حسن while the present Tirmidhi witness prints حسن صحيح. Both are retained, with their witnesses. No. 50's collection text has the qualifier من هذا الوجه.
+[checked against source] The notes below the rule on Jami' 2/467, 496 and 510 mention further authentication by Ibn Hibban, al-Hakim and al-Dhahabi. Those sentences are the modern editors' words, not Ibn Rajab's. They are acquisition leads, not permission to manufacture those scholars' wording. The continuation below acquires the direct Mustadrak and Ihsan passages. It distinguishes al-Hakim's explicit verdicts, Dhahabi's transmitted words, an editorial report of silence and Ibn Hibban's collection inclusion. For no. 47, Jami' reports حسن while the present Tirmidhi witness prints حسن صحيح. Both are retained, with their witnesses. No. 50's collection text has the qualifier من هذا الوجه.
 
 [checked in repo] Nos. 43, 44, 45, 46 and 48 have no `grades` array in the current data. Their absence is a repository fact, not an unsourced authentication or criticism of those reports. The source map already points to their collection records. No scholarly term is inferred from the shape of a chain.
+
+### Additional direct grading witnesses for nos. 47, 49 and 50
+
+[checked against source] Al-Hakim, al-Mustadrak, Mustafa Abd al-Qadir Ata, Dar al-Kutub al-Ilmiyya. The research catalogue identifies the first 1411/1990 edition; the acquired volume PDFs identify the editor and publisher but do not expose a numbered-edition colophon. The [Archive scan](https://archive.org/details/muasahih) carries volume files `masahih1.pdf` and `masahih4.pdf`. PDF leaf numbers equal printed page numbers at the passages below. The report number and quoted matn identify each route independently of the anthology number. These are additional research witnesses, not additions to the 45 saved `grades` passages or to app data.
+
+| Status | Anthology / Mustadrak report | Direct classical grading words | Printed locator and inspected image |
+| --- | --- | --- | --- |
+| Checked against source | 47 / 7945, al-Miqdam, through Yahya b. Jabir | Al-Hakim: «هذا حديث صحيح الإسناد ولم يخرجاه.» | 4/367–368; the matn starts on 367 and the grade is on 368. [Scan p. 368](https://archive.org/details/muasahih/masahih4/page/n367/mode/1up) |
+| Checked against source | 47 / 7945 | Al-Dhahabi: «صحيح» | Ata's note on 4/367 attributes this word to the Talkhis. The note's introductory «قال في التلخيص» is Ata's, not part of Dhahabi's quoted judgment. [Scan p. 367](https://archive.org/details/muasahih/masahih4/page/n366/mode/1up) |
+| Checked against source | 49 / 7894, Umar, through Abu Tamim al-Jayshani | Al-Hakim: «هذا حديث صحيح الإسناد ولم يخرجاه.» | 4/354. [Scan](https://archive.org/details/muasahih/masahih4/page/n353/mode/1up) |
+| Checked against source | 50 / 1822, Abd Allah b. Busr, through Amr b. Qays al-Sakuni | Al-Hakim: «هذا حديث صحيح الإسناد ولم يخرجاه.» | 1/672–673; the matn starts on 672 and the grade is on 673. [Scan p. 673](https://archive.org/details/muasahih/masahih1/page/n672/mode/1up) |
+| Checked against source | 50 / 1822 | Al-Dhahabi: «صحيح» | Ata's note on 1/672 attributes this word to the Talkhis. [Scan](https://archive.org/details/muasahih/masahih1/page/n671/mode/1up) |
+
+[checked against source] Ata's note at 4/354 says «سكت عنه الذهبي في التلخيص». That is an editorial report of silence. It supplies no Dhahabi grade for no. 49. The OpenITI `Shamela0002266` witness reproduces the grade strings but replaces print pagination with `PageV00P000`; it cannot establish the printed locators. The scan, not that marker, supplies the page boundaries above. These are classical judgments as transmitted in Ata's edition; the Talkhis manuscript or a separately printed Talkhis has not been collated here.
+
+[checked against source] Ibn Hibban's direct report passages were also acquired in al-Ihsan, Ibn Balban's arrangement, edited by Shuayb al-Arnaut, al-Risala. The [Archive volume files](https://archive.org/details/SahihIbnHibanTartibIbnBilban) identify the editor and publisher; these files do not expose a numbered-edition colophon, so they are not silently called the digital catalogue's second 1414 edition. The following locators were visually checked. At these locations PDF leaf is printed page minus two.
+
+| Anthology | Ihsan report / printed page | Direct report wording identifying the passage | Grading boundary |
+| --- | --- | --- | --- |
+| 47 | 674 / 2/449 | «ما من وعاء ملأ ابن آدم وعاء شرا من بطن» | The report body contains no separate Ibn Hibban grade sentence. |
+| 47 | 5236 / 12/41 | «ما ملأ آدمي وعاء شرا من بطن، حسبك يا ابن آدم لقيمات يقمن صلبك» | The body ends with the report; «حديث صحيح» is in Arnaut's numbered footnote. |
+| 49 | 730 / 2/509 | «لو توكلون على الله حق توكله، لرزقكم الله كما يرزق الطير» | «إسناده جيد» begins Arnaut's footnote, not an Ibn Hibban statement. |
+| 50 | 814 / 3/96–97 | «لا يزال لسانك رطبا من ذكر الله» | The report starts on 96 and ends on 97; «إسناده قوي» is Arnaut's footnote. |
+
+[inferred] The editorial references to Ibn Hibban can therefore be recorded precisely as inclusion in his Sahih, with these report locators. They do not yield an additional verbatim grade sentence by him. The audit has acquired the direct classical passages and keeps their modern grading notes separate. No missing authorial sentence is reconstructed from the collection title. The volume-file SHA-256 values are `88c748154ca8995b732b09ce55cf24d72a96ab542b853203d918db712f3268e5` for `SahehBnHibban_02.pdf`, `82d3ccfd12b1cf87bd9bfed732eb1112de49d1974f2f124bcd6bdc448fc4116e` for `_03.pdf`, and `36a4af8065383407a4fc031c7ea2937e5945decfb5f549156b59d07d054d3474` for `_12.pdf`.
 
 ### Complete current grading-passage inventory for nos. 1–42
 
@@ -400,19 +514,46 @@
 
 [inferred] A term-to-hadith link selects the scholar's actual word and its exact record or route. The ledger above supports examples for حسن صحيح، غريب، مرسل، منقطع، مرفوع، موقوف and narrator criticism. It does not license attaching all of a prose work's categories to a record just because a parser can draw it. Preserve the full context, speaker and source page when selecting a short example. This follows R0026 and R0063.
 
+### Collation of the saved grading passages
+
+[checked against source] A visual pass covered all 45 saved grading passages. Fifteen passages were checked against the exact named editions: fourteen in al-Nawawi's Forty, Dar al-Minhaj first 1430/2009, and one in al-Bayhaqi, Dar al-Kutub al-Ilmiyya third 1424/2003, 7/584, report 15094. The other thirty were checked against identified alternative printings, not certified against their cited editions. Twelve are in the al-Halabi Tirmidhi scan whose volume 4 colophon reads first 1382/1962, rather than second 1395. Eighteen are in Jami', al-Risala eighth 1419/1999, rather than seventh 1417. Equal pagination and matching wording do not establish equal editions.
+
+| Witness | No. / printed page | Saved quotation | Printed reading or locator |
+| --- | --- | --- | --- |
+| Exact Nawawi edition | 12 / 64 | «حديث حسن، رواه الترمذي وغيره وهكذا.» | «حديث حسن، رواه الترمذي وغيره.» |
+| Exact Nawawi edition | 41 / 113 | «حديث حسن صحيح، رويناه في كتاب الحجة بإسناد صحيح.» | «حديث صحيح، رويناه في كتاب الحجة بإسناد صحيح.» |
+| Exact Nawawi edition | 42 / 115 | «رواه الترمذي وقال: حديث حسن صحيح.» | «رواه الترمذي رحمه الله وقال: حديث حسن.» |
+| Exact Nawawi edition | 27 / 88 | Omits an honorific after الدارمي | Print has «رحمهما الله تعالى» |
+| Alternative Tirmidhi print | 11 / 4/668, report 2518 | «وهذا حديث صحيح» | «وهذا حديث حسن صحيح» |
+| Alternative Tirmidhi print | 50 / report 3375 | Grade locator 5/457 | The grade is on 5/458 in this printing: «هذا حديث حسن غريب من هذا الوجه» |
+
+[checked against source] The other eleven Tirmidhi selections agree in grading words, including Mahmoud's attributed statement and the route qualifications. All eighteen Jami' selections agree at the word level with the alternative printing, apart from typography and honorific conventions. Al-Bayhaqi's complete saved passage agrees with the exact edition. The remaining al-Nawawi grade words agree. These findings do not authorize an unrecorded change to the app's saved text. In particular, no. 42's saved حسن صحيح cannot be presented as the reading of the inspected MinHaj print. Both the repository evidence above and the print evidence here remain visible.
+
+[checked against source] Reproducible scan pins and coverage:
+
+| Witness | Archive file | SHA-256 / inspected printed pages |
+| --- | --- | --- |
+| Al-Nawawi, exact edition | [Item 00113, ZIP member `96465.pdf`](https://archive.org/details/00113_201810) | `56307209b7fcf75ad9e94c969e569337d398ff46e95e8681542ba578c16a70b6`; 63, 64, 70, 72, 88, 90, 93, 95, 96, 98, 99, 110, 113, 115 |
+| Al-Bayhaqi, exact edition | [`skb07.pdf`](https://archive.org/download/SunanKubraBeyhaghiAta/skb07.pdf) | `f4ac672ecc8ce2ad314191ca7e8f950766ae203e44e9ee08f3819722e9aef6d3`; 7/584 |
+| Tirmidhi, alternative print | [`halabi.pdf`](https://archive.org/download/SunanTirmithiHalabi/halabi.pdf) | `b48daca2dc4dd4aa4557bfe936fd59fb34ed35e658bcee086a93f7b997edb9d4`; reports 1987, 2317, 2318, 2344, 2380, 2516, 2518, 2616, 2676, 3375, 3540. Report 1987 contains two saved selections. |
+| Jami', alternative print, volume 1 | [Item 01020904, ZIP member `01_47287.pdf`](https://archive.org/details/01020904) | `96c4e23b6965f2c6d4bfdc99e84aaaa70e5db05b46a023bf751a32a795fc1d94`; 278, 287–288, 395–396, 459–462 |
+| Jami', alternative print, volume 2 | Same item, ZIP member `02_47288.pdf` | `7b16d518c8c0cdc2b834d137a550eb75512173f632c281bd8a54069f18c7ed3b`; 93–94, 109–111, 135, 150, 174–176, 207–210, 226, 361–362, 393–395, 400, 467, 496, 510 |
+
+[checked against source] Nawawi, Bayhaqi and Jami' PDF leaf numbers equal printed pages. In the combined Tirmidhi scan, volume 4 page p is PDF leaf p + 1803, and volume 5 page p is PDF leaf p + 2559. A separate Tirmidhi PDF export was excluded from print verification because it is digitally typeset, not a scan. Exact seventh-edition Jami' and second-edition Tirmidhi print collation remains unverified.
+
 ## 3. Ibn Hajar's ranks and generations
 
 [checked against source] The baseline for this introduction is Muhammad Awwama, Dar al-Rashid, first 1406/1986, volume 1, printed pp. 73–75. Its complete introduction is present in the [JK000121 research witness](https://github.com/OpenITI/0875AH/blob/5835c183b8bbf4ea454d5c1be2b168b669403771/data/0852IbnHajarCasqalani/0852IbnHajarCasqalani.TaqribTahdhib/0852IbnHajarCasqalani.TaqribTahdhib.JK000121-ara1.completed), SHA-256 `178d493bd150032bc64a81ed4397d7e4a828209ee690deed283c1e63cada4637`. The live Shamela 8609 witness begins at printed p. 75, digital 1. **No live Shamela digital page for printed pp. 73–74 was available in that witness.** That is a gap, not permission to cite digital 1 as printed p. 73. The research corpus is used here to locate and quote the classical text, not adopted as a shipping source.
 
-[checked against source] The following reproduces that introduction witness's words with its line-wrap and corpus markup removed. Its digital reading “التهجم” in rank five is retained, not silently corrected. Because images of pp. 73–75 have not been inspected, these are provisional transcription quotations, not certified verbatim print quotations. This prevents declaring the introduction ready for the app. The alternative Mustafa Abd al-Qadir Ata witness was also inspected: its modern introduction's summary omits a rank, whereas the author's later introduction has twelve. It is not used to repair or replace the pinned Awwama wording here.
+[checked against source] On 22 November, the introduction was visually collated against Awwama's Dar al-Rashid third revised 1411/1991 scan, [Archive item 1957](https://archive.org/details/alfirdwsiy2018_gmail_1957). PDF leaves 80, 81 and 82 show printed pp. 73, 74 and 75. This alternative printing confirms all eleven first ranks on p. 74 and rank twelve and all twelve generations on p. 75. It corrects the research witness's rank-five typo from «التهجم» to «التجهم». The tables retain unvocalized transcription and modern punctuation, rather than claiming to reproduce every printed vowel mark. The words and page assignments were checked against those images. The first-print introduction itself remains uncollated. Awwama's footnotes are excluded. The alternative Mustafa Abd al-Qadir Ata introduction remains a separate witness and does not replace Awwama here.
 
-| Status | Rank | Ibn Hajar's wording in the pinned witness | Printed locator / Shamela digital locator |
+| Status | Rank | Ibn Hajar's wording collated against the third printing | Printed locator / Shamela digital locator |
 | --- | --- | --- | --- |
 | Checked against source | 1 | «فأولها : الصحابة : فأصرح بذلك لشرفهم .» | 1/74; live Shamela page unavailable in 8609; pinned introduction witness above |
 | Checked against source | 2 | «الثانية : من أكد مدحه : إما : بأفعل : كأوثق الناس ، أو بتكرير الصفة لفظا : كثقة ثقة ، أو معنى : كثقة حافظ .» | 1/74; live Shamela page unavailable in 8609; pinned introduction witness above |
 | Checked against source | 3 | «الثالثة : من أفرد بصفة ، كثقة ، أو متقن ، أو ثبت ، أو عدل .» | 1/74; live Shamela page unavailable in 8609; pinned introduction witness above |
 | Checked against source | 4 | «الرابعة : من قصر عن درجة الثالثة قليلا ، وإليه الإشارة : بصدوق ، أو لا بأس به ، أو ليس به بأس .» | 1/74; live Shamela page unavailable in 8609; pinned introduction witness above |
-| Checked against source | 5 | «الخامسة : من قصر عن الرابعة قليلا ، وإليه الإشارة بصدوق سيء الحفظ ، أو صدوق يهم ، أو له أوهام ، أو يخطىء ، أو تغير بأخرة . ويلتحق بذلك من رمي بنوع من البدعة ، كالتشيع والقدر ، والنصب ، والإرجاء ، والتهجم ، مع بيان الداعية من غيره .» | 1/74; live Shamela page unavailable in 8609; pinned introduction witness above |
+| Checked against source | 5 | «الخامسة : من قصر عن الرابعة قليلا ، وإليه الإشارة بصدوق سيء الحفظ ، أو صدوق يهم ، أو له أوهام ، أو يخطىء ، أو تغير بأخرة . ويلتحق بذلك من رمي بنوع من البدعة ، كالتشيع والقدر ، والنصب ، والإرجاء ، والتجهم ، مع بيان الداعية من غيره .» | 1/74; live Shamela page unavailable in 8609; pinned introduction witness above |
 | Checked against source | 6 | «السادسة : من ليس له من الحديث إلا القليل ، ولم يثبت فيه ما يترك حديثه من أجله ، وإليه الإشارة بلفظ : مقبول ، حيث يتابع ، وإلا فلين الحديث .» | 1/74; live Shamela page unavailable in 8609; pinned introduction witness above |
 | Checked against source | 7 | «السابعة : من روى عنه أكثر من واحد ولم يوثق ، وإليه الإشارة بلفظ : مستور ، أو مجهول الحال .» | 1/74; live Shamela page unavailable in 8609; pinned introduction witness above |
 | Checked against source | 8 | «الثامنة : من لم يوجد فيه توثيق لمعتبر ، ووجد فيه إطلاق الضعف ، ولو لم يفسر ، وإليه الإشارة بلفظ : ضعيف .» | 1/74; live Shamela page unavailable in 8609; pinned introduction witness above |
@@ -421,7 +562,7 @@
 | Checked against source | 11 | «الحادية عشرة : من اتهم بالكذب .» | 1/74; live Shamela page unavailable in 8609; pinned introduction witness above |
 | Checked against source | 12 | «الثانية عشرة : من أطلق عليه اسم الكذب ، والوضع .» | 1/75; live Shamela page unavailable in 8609; pinned introduction witness above |
 
-| Status | Generation | Ibn Hajar's wording in the same witness | Printed locator / Shamela digital locator |
+| Status | Generation | Ibn Hajar's wording collated against the same third printing | Printed locator / Shamela digital locator |
 | --- | --- | --- | --- |
 | Checked against source | 1 | «فالأولى : الصحابة ، على اختلاف مراتبهم ، وتمييز من ليس له منهم إلا مجرد الرؤية من غيره .» | 1/75; live Shamela page unavailable in 8609; pinned introduction witness above |
 | Checked against source | 2 | «الثانية : طبقة كبار التابعين ، كابن المسيب ، فإن كان مخضرما صرحت بذلك .» | 1/75; live Shamela page unavailable in 8609; pinned introduction witness above |
@@ -591,6 +732,40 @@
 | Checked in repo | F86: قَبِيصَةُ بْنُ عُقْبَةَ | 48/B34: البخاري → **قَبِيصَةُ بْنُ عُقْبَةَ** → سُفْيَانُ | [T5513](#t5513) | [inferred] B34: 5513. Qualified name or explicit alias in the quoted entry; neighbouring chain retained for the identification. |
 | Checked in repo | F87: الْأَعْمَشِ | 48/B34: سُفْيَانُ → **الْأَعْمَشِ** → عَبْدِ اللهِ بْنِ مُرَّةَ | [T2615](#t2615) | [inferred] B34: 2615. Qualified name or explicit alias in the quoted entry; neighbouring chain retained for the identification. |
 | Checked in repo | F88: عَبْدِ اللهِ بْنِ عَمْرٍو | 48/B34: مَسْرُوقٍ → **عَبْدِ اللهِ بْنِ عَمْرٍو** → المتن | [T3499](#t3499) | [inferred] B34: unresolved. Candidate from the quoted name/kunya and this chain context only. A direct commentator or teacher/student biography confirmation is still required; unresolved. |
+
+### Edition-image collation, 22 November 2026
+
+[checked against source] The complete 92-entry Taqrib dictionary was visually compared with Awwama's Dar al-Rashid scan, [Archive item 1957](https://archive.org/details/alfirdwsiy2018_gmail_1957). The pass inspected all 83 cited printed pages and p. 681, where T8426 continues. At these locations the PDF leaf is printed page plus seven. The title identifies Awwama and Dar al-Rashid; PDF leaf 2 identifies the third revised 1411/1991 printing. It is an alternative to the catalogue's first 1406/1986 printing, not certification of that printing. The PDF SHA-256 is `c1bf84338c71c93f9219cdee436c29b0fa96c196ea95ceea5d1f724eafc627e1`. The digital quotations below remain quotations of their digital witness. They must not be copied as if they were identical transcriptions of Awwama's print. The following collation records the differences, allowing for the digital witness's systematic ابن versus print بن, punctuation and vowel marks.
+
+| Entry | Printed page | Digital reading below | Awwama print |
+| --- | --- | --- | --- |
+| T177 | 89 | «مات سنة خمس وثمانين» | «مات سنة خمس وثمانين ومائة» |
+| T1430 | 173 | «تغير حفظه قليل في الآخر» | «تغير حفظه قليلا في الآخر» |
+| T2227 | 230 | «مات سنه» | «مات سنة» |
+| T3613 | 323 | «مناقبة جمة» | «مناقبه جمة» |
+| T4669 | 396 | Ends «الذي قبله» | Ends «الذي قبله. تمييز.» |
+| T3298 | 302 | Prior audit locator 301 | Entry begins on 302 |
+| T8426 | 680–681 | Prior audit locator 680 | The quotation continues onto 681 |
+
+[checked against source] The thirteen bracket-bearing entries have the following additional differences. These bracket strings are absent from Awwama's entry body. Their absence from this print does not by itself identify who inserted them into the composite digital witness. T6809 is stronger evidence: Awwama supplies the additional narrator in his footnote, separately from Ibn Hajar's entry.
+
+| Entry | Page | Digital bracket material absent from Awwama's body | Awwama body where relevant |
+| --- | --- | --- | --- |
+| T1582 | 183 | «الأسود» | No bracket addition |
+| T2568 | 252 | «فيروز» | No bracket addition |
+| T2615 | 254 | «بالقراءة» | «بالقراءات» |
+| T3297 | 301 | «يعني بل روى عنه بواسطة» | No bracket addition |
+| T3490 | 315 | «سنة» | No bracket addition |
+| T3620 | 323 | «أول» | No bracket addition |
+| T4345 | 375 | «بن أبي المختار» | No bracket addition |
+| T4888 | 412 | «يقال له: الفاروق» | No bracket addition |
+| T5171 | 430 | «من الثانية» | No bracket addition |
+| T6809 | 541 | «وعاصم بن أبي النجود» | Supplied in Awwama's footnote, not the entry body |
+| T7317 | 574 | «عقبة» | «أبو عتبة» |
+| T8426 | 680 | «وذمة، وقيل» | No bracket addition |
+| T8633 | 750 | «الحميراء» and «ففيها» | «ففيهما» |
+
+[inferred] The other inspected entries showed no additional lexical discrepancy in this pass. That is a collation result with stated differences, not certification of typographic identity. A future author-only extraction must select the scan's body and preserve its references separately from the apparatus. The identity decisions remain 78 resolved occurrences across 61 people and 26 unresolved occurrences. This continuation retains all 26 unresolved decisions explicitly, including their candidates and missing contextual evidence in the form ledger. No candidate is promoted because a dictionary entry exists.
 
 ### Full Taqrib entries for all selected identities and candidates
 
@@ -778,7 +953,7 @@
 
 <a id="t3298"></a>
 
-[checked against source] T3298; printed 1/301; [Shamela 8609, digital 227](https://shamela.ws/book/8609/227):
+[checked against source] T3298; digital witness reports printed 1/301; collated third printing 1/302; [Shamela 8609, digital 227](https://shamela.ws/book/8609/227):
 
 > عبد الله ابن داود الواسطي أبو محمد التمار ضعيف من التاسعة ت
 
@@ -1138,7 +1313,7 @@
 
 <a id="t8426"></a>
 
-[checked against source] T8426; printed 1/680; [Shamela 8609, digital 605](https://shamela.ws/book/8609/605):
+[checked against source] T8426; digital witness reports printed 1/680; collated third printing 1/680–681; [Shamela 8609, digital 605](https://shamela.ws/book/8609/605):
 
 > أبو هريرة الدوسي الصحابي الجليل حافظ الصحابة اختلف في اسمه واسم أبيه قيل عبد الرحمن ابن صخر وقيل ابن غنم وقيل عبد الله ابن عائذ وقيل ابن عامر وقيل ابن عمرو وقيل سكين ابن ودمة [وذمة، وقيل] ابن هانئ وقيل ابن مل وقيل ابن صخر وقيل عامر ابن عبد شمس وقيل ابن عمير وقيل يزيد ابن عشرقة وقيل عبد نهم وقيل عبد شمس وقيل غنم وقيل عبيد ابن غنم وقيل عمرو ابن غنم وقيل ابن عامر وقيل سعيد ابن الحارث هذا الذي وقفنا عليه من الاختلاف في ذلك ونقطع بأن عبد شمس وعبدنهم غير بعد أن أسلم واختلف في أيها أرجح فذهب كثيرون إلى الأول وذهب جمع من النسابين إلى عمرو ابن عامر مات سنة سبع وقيل سنة ثمان وقيل تسع وخمسين وهو ابن ثمان وسبعين سنة ع
 
@@ -1160,36 +1335,41 @@
 
 | Status | Part | Ready now | Missing / smallest first PR |
 | --- | --- | --- | --- |
-| Inferred | Terms | A complete bounded Bayquniyya selection and an attributed comparison set are inspectable here. | Pin its print images, collate the suspicious digital readings, then add author-only definitions with whole-verse spans and edition/page metadata through the existing terms pattern. Register an adopted source once. Do not promise a complete Nukhba/Nuzha term count or full four-book concordance until it is enumerated. |
-| Inferred | Existing hadith examples | The 39 current grading passages and the six addition-grade passages can be selected by existing source locators. | The first data-only PR should record exact term spans, scholar, witness and route scope, keeping qualifications and contrary named statements together. Obtain the direct classical passages behind additional modern-note attributions for 47, 49 and 50 before calling their grade inventory exhaustive. |
-| Inferred | Twelve ranks / twelve generations | Both authorial lists are transcribed above with an edition pin and the digital coverage gap exposed. | Acquire and collate Awwama pp. 73–75, replace the provisional research transcription with verified author-only spans and separately identify every retained editorial addition. No generated shorthand definitions of the classes. |
-| Inferred | Narrators | All 104 stored occurrences are covered by the form ledger, with full entries for the identity and candidate dictionary. | First publish a reviewed small occurrence-to-existing-person map for the resolved qualified identities. Fill the unresolved teacher/student and commentator evidence before assigning those occurrences a biography or rank. No automatic surname/kunya merge and no unsourced person stub. |
+| Inferred | Terms | A complete bounded Bayquniyya selection and an attributed comparison set are inspectable here. | The second Dar al-Mughni printing was collated and its differences recorded. The first-print scan remains unverified. A product PR must select one inspected edition, quote its author-only wording and register it once. The 62/70 classification selections are bounded; a full four-book concordance is not claimed. |
+| Inferred | Existing hadith examples | The 39 current grading passages and the six addition-grade passages can be selected by existing source locators. | The first data-only PR should record exact term spans, scholar, witness and route scope, keeping qualifications and contrary named statements together. The direct additional passages are now recorded. Fix the demonstrated Nawawi print discrepancies in a separately reviewed data change. Exact second-edition Tirmidhi and seventh-edition Jami' print verification remains unconfirmed; alternative printings do not certify them. |
+| Inferred | Twelve ranks / twelve generations | Both authorial lists are transcribed above with an edition pin and the digital coverage gap exposed. | Awwama's third revised printing, pp. 73–75, is now collated, and the rank-five typo is corrected here with that witness named. A product extraction must retain author-only spans and exclude Awwama's notes. No generated shorthand definitions of the classes. |
+| Inferred | Narrators | All 104 stored occurrences are covered by the form ledger. All 92 dictionary entries were collated, with print differences and editorial additions recorded. | First publish a reviewed small occurrence-to-existing-person map for the resolved qualified identities. Fill the unresolved teacher/student and commentator evidence before assigning those occurrences a biography or rank. No automatic surname/kunya merge and no unsourced person stub. |
 | Inferred | Muslim splitting | Existing exact text is available for manual annotation. | Annotate a small selected set with branches and speaker boundaries, prove round-trip text coverage, then extend after review. No whole-library importer or next collection is proposed. |
 
 [inferred] The smallest product slice after the source-only PR is the bounded terms page with the scholar's name, complete quote, his own example where present, and a source link opening the edition/page. It can link a term to an already sourced grading passage. Reuse the balagha terms page's source-first pattern; keep this audit out of app code. A subsequent feature must supply its shared view, feed card and sourced quiz under the repository's existing rules. Quiz options must be real source spans; different valid scholarly definitions cannot be treated as invented false definitions.
 
 [checked in repo] The records affecting this plan are R0015, competing source statements remain attributed; R0026, a citation supports only the actual claim; R0059, main-text placement does not establish authorship; R0061, distinguish a matn from the commentary that carries it; R0063, a grade quote retains its complete scope; and R0067, identify editorial insertions from evidence rather than assuming everything above the footnote rule is classical. The numerical instruction in R0067 arose from particular Quran-book exports; it is not applied to delete Ibn Hajar's authorial numbered classes.
 
-## Continuation state, 21 November 2026
+### Digital witness provenance
 
-[checked in repo] This is a saved research draft, not a completed audit. The owner authorized adding the source domains and published a new environment configuration, but the current chat still reports enforced revision 1 and fresh downloads to Turath and Archive fail with proxy 403. Continue in a new chat using the published environment. Keep the requested final deliverable to this one file and open the titled PR only after completing or explicitly resolving the remaining requirements below.
+[checked against source] Digital research provenance retained from the first draft: the public OpenITI repositories contain `0875AH/data/0852IbnHajarCasqalani/0852IbnHajarCasqalani.TaqribTahdhib/0852IbnHajarCasqalani.TaqribTahdhib.JK000121-ara1.completed`, the same work's `Shamela0008609-ara1`, `NukhbatFikar/0852IbnHajarCasqalani.NukhbatFikar.Shamela0005940-ara1`, `NuzhatNazar/0852IbnHajarCasqalani.NuzhatNazar.Shamela0012115-ara1`, and `FathBari/0852IbnHajarCasqalani.FathBari.Shamela0001673-ara1`. Their historical IDs and edition metadata must not be assumed to match today's live Shamela. The first draft inspected 0875AH revision `5835c183b8bbf4ea454d5c1be2b168b669403771`. The other paths are `0700AH/data/0676Nawawi/0676Nawawi.Taqrib/0676Nawawi.Taqrib.Shamela0005586-ara1`, `0650AH/data/0643IbnSalahShahrazuri/0643IbnSalahShahrazuri.MuqaddimatCulumHadith/0643IbnSalahShahrazuri.MuqaddimatCulumHadith.Shamela0022870-ara1`, and `0425AH/data/0405HakimNaysaburi/0405HakimNaysaburi.Mustadrak/0405HakimNaysaburi.Mustadrak.JK000467-ara1` and `Shamela0002266-ara1`. These are research aids; use edition images for the requested print check rather than substituting their normalized spellings.
 
-- [inferred] Collate the new Arabic quotations against the named edition images. In particular, verify the introduction's individual page assignments; the provisional JK footer interpretation places ranks 1–11 on p. 74 and rank 12 and the generations on p. 75, while live Shamela begins with generation 12 on p. 75. Do not certify the earlier paragraphs' page boundaries from that partial live witness.
-- [inferred] Enumerate Nukhba and Nuzha's actual definition units and finish the differing-definition comparison for the remaining base terms. The 32-row Bayquniyya inventory is complete; the prose comparison and the requested other-book definition counts are not.
-- [inferred] Complete the direct classical grade inventory for 47, 49 and 50. Further research located al-Hakim's Mustadrak, Mustafa Abd al-Qadir Ata, Dar al-Kutub al-Ilmiyya, first 1411/1990: no. 1822 at 1/672, no. 7894 at 4/354 and no. 7945 at 4/367. The JK research witness has these page markers; the Shamela-derived witness includes a Dhahabi comment at 7945 and an editorial notice of silence at 7894. These are leads pending edition-image and digital-locator verification, not additional published grades in this file. Do not turn silence into approval or collection inclusion into a fabricated grade sentence.
-- [inferred] Confirm the unresolved narrator candidates through actual teacher/student or commentator passages. The ledger's resolved/unresolved counts describe its stated decisions and are not approval for publishing new biographies.
+## Continuation state, 22 November 2026
 
-[checked against source] Research acquisition paths for continuation: the public OpenITI repositories contain `0875AH/data/0852IbnHajarCasqalani/0852IbnHajarCasqalani.TaqribTahdhib/0852IbnHajarCasqalani.TaqribTahdhib.JK000121-ara1.completed`, the same work's `Shamela0008609-ara1`, `NukhbatFikar/0852IbnHajarCasqalani.NukhbatFikar.Shamela0005940-ara1`, `NuzhatNazar/0852IbnHajarCasqalani.NuzhatNazar.Shamela0012115-ara1`, and `FathBari/0852IbnHajarCasqalani.FathBari.Shamela0001673-ara1`. Their historical IDs and edition metadata must not be assumed to match today's live Shamela. The 0875AH revision inspected was `5835c183b8bbf4ea454d5c1be2b168b669403771`. The other paths are `0700AH/data/0676Nawawi/0676Nawawi.Taqrib/0676Nawawi.Taqrib.Shamela0005586-ara1`, `0650AH/data/0643IbnSalahShahrazuri/0643IbnSalahShahrazuri.MuqaddimatCulumHadith/0643IbnSalahShahrazuri.MuqaddimatCulumHadith.Shamela0022870-ara1`, and `0425AH/data/0405HakimNaysaburi/0405HakimNaysaburi.Mustadrak/0405HakimNaysaburi.Mustadrak.JK000467-ara1` and `Shamela0002266-ara1`. These are research aids; use edition images for the requested print check rather than substituting their normalized spellings.
+[checked in repo] Only this audit file changes relative to main `94edfe96`. No app code, shipped data, manifest or lockfile changes. This is a source audit with negative findings and retained uncertainties, not approval to publish all quoted digital text.
 
-[checked in repo] One independent review cycle reproduced all 104 occurrence placements, 88 forms, 78 resolved occurrences, 26 unresolved occurrences, 61 resolved people, 92 dictionary quotes and all 45 saved grade quotes. Its two empty comparison quotes were filled and its introduction-page finding was addressed provisionally with the remaining image check explicit. It also flagged the incomplete grade inventory, term counts/comparison and print verification. A second review cycle is not required for these documentation corrections under AGENTS.md.
+[checked against source] The new environment reaches Archive.org metadata and PDFs and GitHub/OpenITI. Fresh requests to live Shamela and `files.turath.io/books-v3/8609.json` still return HTTP 403. The old blanket source-download blocker no longer applies. Downloaded scans are pinned here by item, member filename and hash; they are research artifacts outside the repository.
 
-[checked in repo] Validation on main `133f3deb5c17abf72d28ef5a7a23b2e1d2d6ff0b`: lint passed; TypeScript initially exhausted the default heap, then passed with `NODE_OPTIONS=--max-old-space-size=4096`. The full test run passed 536 suites and 5,306 tests, with one skipped test; one suite could not load missing Expo dependencies. After installing the existing mobile lockfile dependencies using a writable temporary npm cache, the affected `shared/tapSize.test.ts` suite passed. The production build was still compiling when this continuation snapshot was saved. No app code, package manifest or lockfile was changed.
+- [checked against source] Awwama's introduction and all 92 dictionary entries were visually collated against the third revised printing, explicitly distinguished from the first-print catalogue metadata. The introduction's page assignments are confirmed and its rank-five typo corrected. Five lexical dictionary discrepancies, two locator corrections and thirteen bracket-bearing entries are recorded separately from the digital quotes.
+- [checked against source] All 45 saved grading passages were compared with images. Fifteen have exact-edition checks; thirty have explicitly identified alternative-print checks. Three substantive Nawawi differences and the alternative Tirmidhi findings remain visible. Exact second-edition Tirmidhi and seventh-edition Jami' scans remain unverified.
+- [checked against source] Additional direct Mustadrak and Ihsan passages for 47, 49 and 50 are acquired. Al-Hakim supplies three explicit judgments. Two Dhahabi words are transmitted in Ata's apparatus. Silence at 7894 and modern Ihsan footnotes are not additional classical verdicts.
+- [checked against source] Prose comparison coverage now reaches all 32 Bayquniyya units. The counted classification selections contain 62 Nukhba and 70 Nuzha units under the stated rule. Every-atomic-definition totals and a four-book concordance are not claimed. The Dar al-Mughni scan is second 1427, not first 1420; the Ibn al-Salah and Nukhba 5940 quotations remain digital checks.
+- [inferred] All 26 unresolved narrator occurrences remain unresolved, with candidates and missing contextual evidence in the form ledger. The decisions still total 78 resolved occurrences across 61 people. No new biography or link is approved by this audit.
+
+[checked in repo] Independent source review reproduced the dictionary and saved-grade coverage and checked the sixteen new comparative selections against Nawawi's print. Its unsupported concluding phrase in the new المدبج quotation was removed. The count review supplied the explicit classification convention and exclusions. These are documentation findings; the audit makes no application or test-code changes.
+
+[checked in repo] Validation before the final main integration: lint passed. TypeScript passed after stale generated Next page types were removed. The full test run completed with 527 passing suites, 11 failing suites and one skipped test; all fourteen failures were five-second timeouts. The production build exhausted Node's default heap. The owner then instructed this chat to skip tests because this is a documentation file. The retry was stopped and no further code checks were run after integrating main `94edfe96`. These results are recorded without claiming a passing build or test run.
 
 ## Open questions for the owner
 
-- [inferred] Approve the bounded Bayquniyya page as the first base, or require Nukhba with Nuzha as the first complete inventory? The latter still needs its atomic term count and full table, not an index-heading count.
-- [inferred] Can the chosen edition scans and pinned exports be made accessible so the new Arabic quotations can be collated against print? The current file explicitly distinguishes digital witness checking from that missing verification.
+- [inferred] Approve the bounded Bayquniyya page as the first base, or require Nukhba with Nuzha as the first complete inventory? The 62/70 classification selection is enumerated here; a broader glossary would also need its supporting and closing definition units.
+- [inferred] Should a later product extraction adopt the inspected alternative printings, or wait for exact first-print Bayquniyya, second-print Tirmidhi and seventh-print Jami' scans? The source-only audit does not substitute editions silently.
 - [inferred] Who will review the source wording and approve the identity decisions, especially Yaqub in 2697, Ishaq in 4343 and the other unresolved bare names? The exact unique-person total remains open while those occurrences do.
-- [inferred] Should the first source PR include the additional direct classical grading witnesses named in the editors' notes for 47, 49 and 50, or should those references remain acquisition leads until their actual passages are read?
+- [inferred] Should the next data PR correct the demonstrated saved Nawawi grading differences against the named edition? This audit records them without changing shipped data.
 - [inferred] Approve keeping alternative classical definitions together, each under its scholar's name, and excluding them as false answers to a universal-definition quiz?
 - [inferred] Should the first narrator links use only existing Companion people pages, or also create independently sourced profiles for resolved non-Companion narrators through the canonical people pipeline? A narrator occurrence alone does not authorize a graph node.
