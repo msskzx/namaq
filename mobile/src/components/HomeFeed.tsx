@@ -702,7 +702,7 @@ function HadithScenePost({ id, palette }: { id: string; palette: Palette }) {
   const slots = sceneSlots(report.scenes, palette.slots.length)[at];
   const open = () => toTab({ pathname: '/hadith-unit', params: { unit: unit.id } });
   return (
-    <Post palette={palette} head={<PostHead Icon={MessagesSquare} title={`من ${unit.book}`} sub={[unit.kitab, `المشهد ${num(scene.ordinal)}`].filter(Boolean).join(' · ')} palette={palette} />}
+    <Post palette={palette} head={<PostHead Icon={MessagesSquare} title={`من ${unit.book}`} sub={unit.kitab} palette={palette} />}
       open={<Action Icon={MessagesSquare} label={`افتح الحديث في ${unit.book}`} onPress={open} palette={palette} />}
       source={sourcesOf(sceneSources(unit))}>
       <View style={{ paddingHorizontal: 14, paddingVertical: 12 }}><HadithScene lines={scene.lines} slots={slots} palette={palette} /></View>
