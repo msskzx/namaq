@@ -96,12 +96,15 @@ Every story shows where stories already show: its own page, «قصص السير�
 it, the feed card, and the sira quiz kinds. Nothing new to build on screen for this plan, on the app or
 the website.
 
-## Open questions for the owner
+## Owner's answers (2026-11-22)
 
-1. Is «حسن» enough? For example al-Dhahabi writing «إسناده حسن», or al-Tirmidhi «حسن صحيح».
-   Proposed: yes when the source itself says it, shown with its words.
-2. May a later scholar's verdict make a report teachable when the old book is silent? For example
-   Salman's long story, which is only in Ibn Ishaq. Proposed: not for now; Sahihs and al-Dhahabi first.
-3. Very long stories (the Ifk, Ka'b ibn Malik, Salamah at Dhu Qarad, each about 1,500 words): told whole
-   like the others, with the feed card showing one moment. Proposed: yes.
-4. A new tag for signs of prophethood (Jabir's food, the split moon)? Proposed: yes, «من دلائل نبوته».
+1. «حسن» is enough when the source itself grades it so, for example al-Dhahabi's «إسناده حسن» or
+   al-Tirmidhi's «حسن صحيح». The card shows the grader's own words.
+2. A later scholar's verdict does not make a report teachable, not for now. The Sahihs and al-Dhahabi come first.
+   Salman's long story waits.
+3. Long stories (the Ifk, Ka'b ibn Malik, Salamah at Dhu Qarad) are told whole. Their feed card shows one
+   moment or a preview, and a tap opens the whole story.
+4. Signs of prophethood (Jabir's food, the split moon) get a tag, but in a scholar's words, not ours.
+   The tag is al-Bukhari's own chapter heading «علامات النبوة في الإسلام» (Sahih al-Bukhari, Kitab al-Manaqib,
+   the chapter before hadith 3571), and its reference names him. A story takes the tag only when its source
+   files it under such a chapter.
