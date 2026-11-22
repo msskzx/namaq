@@ -25,11 +25,11 @@ const NODE_W = 220;
 const GAP = 8;
 const NODE_H = 44;
 /** Rows far enough apart that a line between them holds its tie's name and its arrow with room round both. */
-const ROW = 104;
+const ROW = 116;
 const LABEL_W = 90;
 /** Two lines whose names would touch at their middles, and the row gap when their names go above the people instead. */
 const CROWDED = 48;
-const LABEL_H = 20;
+const LABEL_H = 28;
 const ROW_FAN = 124;
 /** The arrow's length and half width at the end of a line. */
 const ARROW = 9;
