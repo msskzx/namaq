@@ -5,7 +5,7 @@ import Svg, { Defs, LinearGradient, Path, Rect, Stop } from 'react-native-svg';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { cancelAnimation, interpolate, useAnimatedReaction, useAnimatedStyle, useReducedMotion, useSharedValue, withTiming, type SharedValue } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
-import { BookOpen, ChevronsDown, Hand, Send } from 'lucide-react-native';
+import { ChevronsDown, Hand, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { surahName } from '@shared/quran/surahNames';
 import { DARK_SEA_KEY, DARK_SEA_READINGS, DARK_SEA_STEPS, darkSeaSources, darkSeaTitle, darkSeaWords, type SceneSaying } from '@shared/quran/scenes/darkSea';
@@ -23,6 +23,7 @@ import { toTab } from '@/lib/ways';
 import { shareCard } from '@/lib/shareImage';
 import { SEA_ART, type Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
+import { FEATURE_ICON } from '@/components/featureIcons';
 
 const LAST = DARK_SEA_STEPS.length - 1;
 const at = (layer: string) => DARK_SEA_STEPS.findIndex(step => step.layer === layer);
@@ -199,7 +200,7 @@ export function DarkSeaActions({ palette, only, feed = false }: { palette: Palet
   const name = darkSeaName();
   return <>
     {only !== 'share' && (feed ? <OpenButton label={`افتح مشهد ${name}`} onPress={() => toTab('/lataif')} />
-      : <IconButton Icon={BookOpen} label={`افتح ${name} في المصحف`} onPress={() => readAyah(DARK_SEA_KEY)} />)}
+      : <IconButton Icon={FEATURE_ICON.mushaf} label={`افتح ${name} في المصحف`} onPress={() => readAyah(DARK_SEA_KEY)} />)}
     {only !== 'open' && <IconButton Icon={Send} label={`شارك ${name}`} onPress={() => shareCard({ content: width => (
       <View style={{ width }}><Card palette={palette} pad={[10, 16]} gap={10}><DarkSea palette={palette} still /></Card></View>
     ) })} />}

@@ -1,7 +1,7 @@
 import { useMemo, useState, useSyncExternalStore } from 'react';
 import { View } from 'react-native';
 import { Text } from '@/ui/Text';
-import { ArrowLeftRight, Bookmark, BookOpen, Check, EyeOff, GalleryHorizontal, NotebookPen, Send, Trash2, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, Check, EyeOff, GalleryHorizontal, NotebookPen, Send, Trash2, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, toggleBookmark, type Bookmark as Saved } from '@shared/bookmarks';
 import { notesByDate, readAyahNotes, subscribeAyahNotes, writeAyahNote } from '@shared/ayahNotes';
 import { markAyah, markWord, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
@@ -24,10 +24,11 @@ import { followWay, openIntent } from '@/lib/ways';
 import type { Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
 import { CardWithRow } from '@/ui/Card';
+import { FEATURE_ICON } from '@/components/featureIcons';
 
-const KIND_ICONS: Record<BookmarkKind, (props: LucideProps) => React.ReactNode> = { tree: TreeIcon, compare: ArrowLeftRight, ayah: BookOpen, card: Bookmark };
+const KIND_ICONS: Record<BookmarkKind, (props: LucideProps) => React.ReactNode> = { tree: TreeIcon, compare: ArrowLeftRight, ayah: FEATURE_ICON.mushaf, card: Bookmark };
 const WAYS: Record<CardWay['to'], { label: string; name: string; Icon: (props: LucideProps) => React.ReactNode }> = {
-  mushaf: { label: 'في المصحف', name: 'المصحف', Icon: BookOpen },
+  mushaf: { label: 'في المصحف', name: 'المصحف', Icon: FEATURE_ICON.mushaf },
   tree: { label: 'الشجرة', name: 'الشجرة', Icon: TreeIcon },
   matrix: { label: 'المصفوفة', name: 'المصفوفة', Icon: GalleryHorizontal },
   trees: { label: 'الأشجار التي فيها الآية', name: 'المتشابهات', Icon: TreeIcon },

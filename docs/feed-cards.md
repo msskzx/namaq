@@ -126,7 +126,11 @@ A new card or quiz kind goes into an interest's `cards` or `quizzes` in the same
   اهتماماتي» (`ui/MoreMenu`, `common/MoreMenu`), and a card with no such choice has no «⋯». The open button is the one way to
   the item: the card is not a button for it too. The head (round icon and title) is a button to the card's GENERAL TOPIC
   (owner, 2026-11-22, like a post's name opening its account): the tarajim, a person, the mutashabihat, a hadith book, the
-  battles, the Quran tab; no chevron, it dims when pressed (HomeFeed `PostHead` `open`, helpers `topic`/`personTopic`). Under the row, the source line:
+  battles, the Quran tab; no chevron, it dims when pressed (HomeFeed `PostHead` `open`, helpers `topic`/`personTopic`).
+  The head's icon is its feature's one icon (owner, 2026-11-22), the same on the feature's page tile, its feed card and its
+  question card: `FEATURE_ICON` and `QUIZ_ICON` in `mobile/src/components/featureIcons.ts`. The mushaf has the open book
+  with lines of the tab bar, a commentary (tafsir, Ibn Rajab's sharh) the notebook, and who recorded a hadith and who
+  narrated it share the chain. Under the row, the source line:
   a book icon and the books the card stands on («المصحف · الإخلاص ٣» for the Quran), a tap opening a sheet with where in
   them (HomeFeed `Post` `source`; a `Reference` inside a card joins it on its own, ui/sourceSlot.ts). The books card is
   the one card with no line: its books are the card. A card from outside the reader's interests is added from its line above («أضفه»). Nothing on screen moves:
