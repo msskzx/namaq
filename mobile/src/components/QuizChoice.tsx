@@ -130,7 +130,8 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
         </View>
       ) : question.quran && (
         <Card palette={palette} pad={16} style={{ marginHorizontal: 16 }}>
-          <AyahFlow color={palette.ink}>
+          {/* Its menu only once answered: before, it would name the answer (owner, 2026-11-22). */}
+          <AyahFlow color={palette.ink} menu={answered && question.ayahKey ? question.ayahKey : false}>
             <Words words={question.quran} marked={diff?.a ?? question.marked} palette={palette} />
             {question.number !== undefined && <AyahWords look={{ color: palette.accent }}>{` ${num(question.number)}`}</AyahWords>}
             {question.reveal && (revealed ? <Text>{' '}<Words words={question.reveal} marked={question.reveal.map((_, at) => at)} palette={palette} /></Text> : ' …')}
@@ -161,7 +162,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
                 style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderWidth: right || wrong || missed || selected ? 1.5 : 1, borderColor: right || wrong || missed ? color : selected ? palette.accent : palette.rule, borderStyle: missed ? 'dashed' : 'solid', ...CARD, paddingVertical: 12, paddingHorizontal: 16, backgroundColor: pressed ? palette.paperDeep : 'transparent' })}>
                 <View style={{ flexShrink: 1, flexGrow: question.quranChoices ? 1 : 0, gap: 2 }}>
                   {question.quranChoices
-                    ? <AyahFlow color={color}><AyahWords>{choice.labelArabic}</AyahWords></AyahFlow>
+                    ? <AyahFlow color={color} menu={false}><AyahWords>{choice.labelArabic}</AyahWords></AyahFlow>
                     : <Text style={{ color, fontSize: 19, fontWeight: right ? '700' : '400' }}>{choice.labelArabic}{missed ? ' · فاتك' : ''}</Text>}
                   {/* What a choice is, once answered: an ayah's place, a reading's readers. */}
                   {answered && question.whereOf?.[choice.value] && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{question.whereOf[choice.value]}</Text>}
@@ -192,7 +193,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
       {alike && diff && (
         <View style={{ marginHorizontal: 16, borderTopWidth: 1, borderStyle: 'dashed', borderColor: palette.rule, paddingTop: 10, gap: 4 }}>
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`آية ${name(picked!)} التي تشبهها، ${num(Number(alike.key.split(':')[1]))}`}</Text>
-          <AyahFlow color={palette.ink}>
+          <AyahFlow color={palette.ink} menu={alike.key}>
             <Words words={alike.words} marked={diff.b} palette={palette} />
           </AyahFlow>
         </View>

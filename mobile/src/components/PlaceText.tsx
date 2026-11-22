@@ -8,7 +8,7 @@ export default function PlaceText({ place, shared, palette }: { place: Place; sh
   return (
     <>
       {place.segments.map((g, gi) => (
-        <AyahFlow key={g.range[0]} color={palette.ink}>
+        <AyahFlow key={g.range[0]} color={palette.ink} menu={`${g.surah}:${g.range[0]}`}>
           {g.lines.map((line, li) => [
             ...line.words.map((word, w) => <AyahWords key={`${line.ayah}/${w}`} look={shared[gi][li][w] ? { color: palette.accent } : undefined}>{`${word} `}</AyahWords>),
             <AyahWords key={`${line.ayah}#`} look={{ color: palette.muted }}>{`${num(line.ayah)} `}</AyahWords>,

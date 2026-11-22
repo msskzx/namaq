@@ -67,7 +67,7 @@ export function GharibBody({ target, palette }: { target: GharibTarget; palette:
       </View>
       <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 10, paddingBottom: 8 }}>
         <Card palette={palette} pad={[10, 14]}>
-          <LitAyat ayat={[{ words, lit }]} palette={palette} />
+          <LitAyat ayat={[{ words, lit }]} menu={false} palette={palette} />
         </Card>
         {books.length > 1 && <Tabs options={books.map(book => ({ key: book, label: BOOK_NAMES[book] }))} value={shown} onChange={book => { setShown(book); setPicked(null); }} palette={palette} />}
         {!books.length && !(gharibOn && mufradatOn) ? null

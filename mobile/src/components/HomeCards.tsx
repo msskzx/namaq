@@ -66,7 +66,7 @@ export function ShelfCard({ card, palette, items, open, note = false, Icon = KIN
         ))}>
         {note
           ? <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 28, textAlign: 'right' }}>{card.text}</Text>
-          : <AyahFlow color={palette.ink}><AyahWords>{shelfText(card)}</AyahWords></AyahFlow>}
+          : <AyahFlow color={palette.ink} menu={ayah ?? (card.references[0] ? `${card.references[0].surah}:${card.references[0].ayat[0]}` : false)}><AyahWords>{shelfText(card)}</AyahWords></AyahFlow>}
         {holds.length > 0 && <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 22, textAlign: 'right' }}>{holds.join(' · ')}</Text>}
       </CardWithRow>
     </View>

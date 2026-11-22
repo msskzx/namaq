@@ -105,3 +105,50 @@ describe('one Quran text', () => {
     });
   }
 });
+
+/**
+ * The reader's long-press menu on every ayah view (owner, 2026-11-22; /mnt/project-files/ayah-page/agreed.md part 4): the
+ * app's ayah views (the module's AyahFlow, and AyahLines, the mushaf's lines around one ayah) each take the ayah's key as
+ * `menu` and open the menu through AyahMenuPress. A place may pass false only for an agreed exception, named here with its
+ * reason: anything else that turns the menu off fails.
+ */
+const MENU_VIEWS = ['mobile/src/components/quran/text/AyahFlow.tsx', 'mobile/src/components/AyahLines.tsx'];
+const MENU_OFF: Record<string, string> = {
+  // A question before it is answered: the menu would name the answer.
+  'mobile/src/components/QuizChoice.tsx': 'a question and its choices before the answer',
+  'mobile/src/components/QuizCompare.tsx': 'a compare question',
+  // Trees and the matrix have their own taps on each word.
+  'mobile/src/components/QuizTree.tsx': 'a tree',
+  'mobile/src/components/MatrixCard.tsx': 'the matrix, a tree view',
+  // Recite and write boxes: their long press is recite mode's own. A share image is a picture, not a view.
+  'mobile/src/components/HomeFeed.tsx': 'the recall card in recite mode, and its share picture',
+  'mobile/src/components/AyahShare.tsx': 'a share picture',
+  // Sheets sit over every page, and the menu opens under them.
+  'mobile/src/components/AyahPreviewSheet.tsx': 'a sheet',
+  'mobile/src/components/BalaghaSheet.tsx': 'a sheet',
+  'mobile/src/components/GharibSheet.tsx': 'a sheet',
+  'mobile/src/components/NoteSheet.tsx': 'a sheet',
+  'mobile/src/components/ReaderSheets.tsx': 'a sheet',
+  'mobile/src/components/WordSheet.tsx': 'a sheet',
+  // The feed's readings card draws the ayah's lines as a picture under the readings (pointerEvents none).
+  'mobile/src/components/QiraatPlace.tsx': 'the readings card\'s lines picture',
+  // A compare card's side, or a balagha example, with no ayah of its own.
+  'mobile/src/components/CompareCard.tsx': 'a side with no ayah',
+  'mobile/src/components/BalaghaTerm.tsx': 'an example that names no ayah',
+};
+
+describe("the reader's menu on every ayah view (owner, 2026-11-22)", () => {
+  it('every ayah view asks for the ayah its long press opens the menu on, and opens it', () => {
+    for (const path of MENU_VIEWS) {
+      const text = readFileSync(join(ROOT, path), 'utf8');
+      expect(text, path).toMatch(/\bmenu: string \| false;/);
+      expect(text, path).toMatch(/<AyahMenuPress menu=\{menu\}>/);
+    }
+  });
+
+  it('turns the menu off only in the agreed exceptions', () => {
+    const off = code.filter(file => file.path.startsWith('mobile/src/') && !inside(file.path, MODULE) && /\bmenu=\{[^}]*\bfalse\b/.test(file.text)).map(file => file.path);
+    expect(off.length).toBeGreaterThan(0);
+    expect(off.filter(path => !(path in MENU_OFF))).toEqual([]);
+  });
+});

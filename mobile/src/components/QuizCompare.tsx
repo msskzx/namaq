@@ -36,7 +36,7 @@ function Line({ line, palette, children, after }: { line: CompareLine; palette: 
   return (
     <Card palette={palette} pad={10} gap={2}>
       <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{compareLabel(line.key)}</Text>
-      <AyahFlow row color={palette.ink}>
+      <AyahFlow row color={palette.ink} menu={false}>
         {children}
         <AyahWords look={{ color: palette.muted }}>{num(ayahOf(line.key))}</AyahWords>
       </AyahFlow>

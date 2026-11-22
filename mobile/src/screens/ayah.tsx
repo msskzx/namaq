@@ -113,7 +113,7 @@ export default function AyahScreen() {
             <IconButton Icon={NotebookPen} label={note ? 'ما دوّنته عن الآية' : 'دوّن عن الآية'} on={!!note} onPress={() => setNoting(key)} />
             <IconButton Icon={Send} label="مشاركة" onPress={() => shareAyah(key, palette, note)} />
           </>}>
-          <LitAyat ayat={[{ words: ayahMushafWords(key), lit: [], number }]} palette={palette} />
+          <LitAyat ayat={[{ words: ayahMushafWords(key), lit: [], number }]} menu={key} palette={palette} />
         </CardWithRow>
         {note ? (
           <Part Icon={NotebookPen} title="ما دوّنته" palette={palette} open={() => setNoting(key)} label="عدّل ما دوّنته">

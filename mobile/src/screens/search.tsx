@@ -59,7 +59,7 @@ function HitRow({ hit, palette, onWord }: { hit: SearchHit; palette: Palette; on
       // an ayah is never cut to a few words around the find).
       return (
         <Card palette={palette} pad={[8, 12]} onPress={() => go({ tab: 'read', at: hit.key })} accessibilityRole="link" accessibilityLabel={ayahLabel(hit.key)} style={{ marginBottom: 8 }}>
-          <LitAyat ayat={[{ words: hit.words, lit: [[hit.from, hit.to]], number: Number(hit.key.split(':')[1]) }]} palette={palette} />
+          <LitAyat ayat={[{ words: hit.words, lit: [[hit.from, hit.to]], number: Number(hit.key.split(':')[1]) }]} menu={hit.key} palette={palette} />
           <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{ayahLabel(hit.key)}</Text>
         </Card>
       );

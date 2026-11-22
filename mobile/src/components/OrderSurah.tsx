@@ -47,7 +47,7 @@ function PairAyah({ ayah, palette }: { ayah: OrderAyah; palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 8 }}>
       <Text style={{ color: palette.muted, fontSize: 13, minWidth: 64 }}>{ayah.place}</Text>
-      <AyahFlow color={palette.ink} screen style={{ flex: 1 }}>
+      <AyahFlow color={palette.ink} screen menu={ayah.key} style={{ flex: 1 }}>
         {ayah.words.map((w, i) => <AyahWords key={i} look={w.shared ? { color: palette.accent } : undefined}>{`${w.text} `}</AyahWords>)}
       </AyahFlow>
     </View>
@@ -88,7 +88,7 @@ export function SurahBody({ s, palette }: { s: OrderSurah; palette: Palette }) {
         <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 22, fontWeight: '700' }}>{s.name}</Text>
         <Text style={{ color: palette.muted, fontSize: 14 }}>{num(s.surah)}</Text>
       </View>
-      <AyahFlow color={palette.ink} screen>
+      <AyahFlow color={palette.ink} screen menu={s.opening[0] ? `${s.surah}:${s.opening[0].ayah}` : false}>
         {s.opening.map(a => [
           <AyahWords key={a.ayah}>{`${a.text} `}</AyahWords>,
           <AyahWords key={`${a.ayah}-n`} look={{ color: palette.amber }}>{`${num(a.ayah)} `}</AyahWords>,

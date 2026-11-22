@@ -29,9 +29,9 @@ function tone(palette: Palette, kind: keyof Palette['marks'], some: boolean) {
   return colour && (some ? someTone(palette, colour) : colour);
 }
 
-function Ayah({ words: list, cut, palette }: { words: OpeningWord[]; cut?: boolean; palette: Palette }) {
+function Ayah({ words: list, menu, cut, palette }: { words: OpeningWord[]; menu: string; cut?: boolean; palette: Palette }) {
   return (
-    <AyahFlow color={palette.ink}>
+    <AyahFlow color={palette.ink} menu={menu}>
       {list.map((word, i) => <AyahWords key={i} look={'text' in word && word.mark ? { color: tone(palette, word.mark.kind, word.mark.some) } : undefined}>{`${i > 0 ? ' ' : ''}${'end' in word ? num(word.end) : word.text}`}</AyahWords>)}
       {cut ? <AyahWords look={{ color: palette.muted }}> …</AyahWords> : null}
     </AyahFlow>
@@ -44,7 +44,7 @@ function Conditions({ surah, palette }: { surah: number; palette: Palette }) {
       {conditionLines(surah).map(line => (
         <View key={line.key} style={{ borderRightWidth: 2, borderStyle: line.role === 'disputed' ? 'dashed' : 'solid', borderColor: line.role === 'answer' ? palette.green : line.role === 'disputed' ? palette.muted : palette.rule, paddingRight: 8 }}>
           {line.role !== 'condition' && <Text style={{ color: palette.muted, fontSize: 12, textAlign: 'right' }}>{line.role === 'answer' ? (line.ours ? 'الجواب، قراءتنا' : 'الجواب') : 'موضع الخلاف في الجواب'}</Text>}
-          <Ayah palette={palette} words={[...words(line.key).map(text => ({ text })), { end: Number(line.key.split(':')[1]) }]} />
+          <Ayah palette={palette} menu={line.key} words={[...words(line.key).map(text => ({ text })), { end: Number(line.key.split(':')[1]) }]} />
         </View>
       ))}
     </View>
@@ -60,7 +60,7 @@ export function OpeningRows({ card, palette, open, still }: { card: OpeningCard;
         <Pressable disabled={still} onPress={() => readAyah(`${row.surah}:1`)} accessibilityRole="link" accessibilityLabel={`افتح ${surahNames[row.surah]} في المصحف`} style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
           <Text style={{ color: palette.muted, fontSize: 14 }}>{surahNames[row.surah]}</Text>
         </Pressable>
-        {open && CONDITION_SPANS[row.surah] ? <Conditions surah={row.surah} palette={palette} /> : <Ayah words={row.words} cut={row.cut} palette={palette} />}
+        {open && CONDITION_SPANS[row.surah] ? <Conditions surah={row.surah} palette={palette} /> : <Ayah words={row.words} menu={row.surah === 1 ? '1:2' : `${row.surah}:1`} cut={row.cut} palette={palette} />}
       </View>
     ))}
   </>;
