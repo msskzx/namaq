@@ -92,7 +92,7 @@ An item whose own data names no source is left out:
   their name, year, place and people, whatever their data holds (`FITNA_BATTLES`); Siffin and Nahrawan have no cited
   year or place yet, so they stay out.
 - من الغزوات والمعارك (`BattleYearPost`, under السيرة والمغازي, phone only): one year of the battles timeline with the year before
-  and after it on its axis, the year lit and its battles listed under it, each opening its page; a year or the open button opens
+  and after it on its axis, the year lit, its battles' places on one map (places too close to tell apart share a pin) and its battles listed under it, each opening its page; a year or the open button opens
   the battles screen at that year. Items are the years with a cited battle; the line names the pages for the years drawn.
 - الجيشان في الغزوات (`ArmiesPost`, under السيرة والمغازي, phone only): the battles whose data cites both sides in the field (now
   Badr, Uhud, al-Khandaq), a row of the battle page's numbers each, tabs «في الميدان | القتلى», a dash where no number is

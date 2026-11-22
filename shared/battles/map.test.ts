@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import land from '../data/battles/land.json';
-import { clipRing, frameOf, landPath, projector, type LonLat } from './map';
+import { clipRing, frameOf, landPath, pinsOf, projector, type LonLat } from './map';
 import { BATTLE_PLACE, PLACES } from './places';
 
 const square: LonLat[] = [[0, 0], [10, 0], [10, 10], [0, 10]];
@@ -43,5 +43,13 @@ describe('the battle map', () => {
       const [lon, lat] = PLACES[key].at;
       expect(lon > 24 && lon < 52 && lat > 12 && lat < 40).toBe(true);
     });
+  });
+
+  // Owner, 2026-11-22: a year's battles on one map; places drawn on top of each other share a pin and its name.
+  it('joins places too close to tell apart into one pin, each name once, and keeps the others apart', () => {
+    const pins = pinsOf([
+      { name: 'أحد', x: 100, y: 100 }, { name: 'المدينة', x: 104, y: 101 }, { name: 'المدينة', x: 104, y: 101 }, { name: 'حمراء الأسد', x: 160, y: 140 },
+    ], 20);
+    expect(pins.map(pin => pin.name)).toEqual(['أحد، المدينة', 'حمراء الأسد']);
   });
 });

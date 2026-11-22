@@ -33,7 +33,7 @@ export function BattleView({ battle, palette }: { battle: AppBattle; palette: Pa
   return <>
     <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>{battle.name}</Text>
     <CardWithRow palette={palette} pad={0} clip gap={0}>
-      {battle.place ? <BattleMap place={battle.place} palette={palette} /> : null}
+      {battle.place ? <BattleMap places={[battle.place]} palette={palette} /> : null}
       <View style={{ padding: 14, gap: 6 }}>
         <Text style={{ color: palette.ink, fontSize: 17, textAlign: 'right' }}>{battleLine(battle)}</Text>
         {battle.place ? <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>موضع تقريبي على خريطة اليوم، من عندنا.</Text>

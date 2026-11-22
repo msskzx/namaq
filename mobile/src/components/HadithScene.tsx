@@ -11,10 +11,9 @@ const named = (speaker: string, agent?: string) => (agent === PROPHET_AGENT ? PR
 
 /**
  * The scene's lines drawn one block each (a line of narration, a bubble with its lead-in), for the scene and for a shared
- * picture, which lays the blocks out on pages. `line` is the block's place in `lines`. `ring` off leaves the bubbles'
- * name rings out (a shared picture).
+ * picture, which lays the blocks out on pages. `line` is the block's place in `lines`.
  */
-export function sceneBlocks(lines: SceneLine[], slots: Map<string, number>, palette: Palette, ring = true): { line: number; node: React.ReactNode }[] {
+export function sceneBlocks(lines: SceneLine[], slots: Map<string, number>, palette: Palette): { line: number; node: React.ReactNode }[] {
   const sides = bubbleSides(lines);
   const colourOf = (speaker?: string) => palette.slots[slots.get(speaker ?? '') ?? 0];
   let narrator: string | undefined;
@@ -35,7 +34,7 @@ export function sceneBlocks(lines: SceneLine[], slots: Map<string, number>, pale
     const previous = lines[i - 1];
     const lead = line.lead ?? (previous?.kind === 'narration' ? splitLead(previous.text).lead : undefined);
     return [{ line: i, node: (
-      <Bubble key={i} who={line.speaker && named(line.speaker, line.agent)} colour={colourOf(line.speaker)} start={!sides[i]} lead={lead} ring={ring} palette={palette}>
+      <Bubble key={i} colour={colourOf(line.speaker)} start={!sides[i]} lead={lead} palette={palette}>
         <Text style={body(palette)}>{line.text}</Text>
       </Bubble>
     ) }];
