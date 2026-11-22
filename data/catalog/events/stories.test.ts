@@ -15,13 +15,11 @@ const paragraphs = (slug: string, volume: number, page: number) => {
 };
 const pagesText = (slug: string, volume: number, from: number, to: number) =>
   Array.from({ length: to - from + 1 }, (_, i) => paragraphs(slug, volume, from + i)).flat().join(' ');
-// A hadith book is stored one hadith to a file (data/history/sources/<slug>/hadith/<number>.md).
-// Sahih Muslim is the app's own copy (scripts/hadith/buildSahihayn.ts), Abd al-Baqi's numbers: the hadith's first printed text.
-const muslim = JSON.parse(readFileSync('data/hadith/sahih/muslim.json', 'utf8')) as { kitabs: { hadith: { n: number; routes: { text: string }[] }[] }[] };
-const hadithText = (slug: string, hadith: number) =>
-  slug === 'sahih-muslim'
-    ? muslim.kitabs.flatMap(kitab => kitab.hadith).find(item => item.n === hadith)!.routes[0].text
-    : readFileSync(`${SOURCES}/${slug}/hadith/${hadith}.md`, 'utf8').trim();
+// The two Sahihs are the app's own copies (scripts/hadith/buildSahihayn.ts): a hadith's text is its first printed route, chain and all.
+type SahihText = { kitabs: { hadith: { n: number; routes: { text: string }[] }[] }[] };
+const sahih = (book: string) => (JSON.parse(readFileSync(`data/hadith/sahih/${book}.json`, 'utf8')) as SahihText).kitabs.flatMap(kitab => kitab.hadith);
+const SAHIH: Record<string, ReturnType<typeof sahih>> = { 'sahih-al-bukhari': sahih('bukhari'), 'sahih-muslim': sahih('muslim') };
+const hadithText = (slug: string, hadith: number) => SAHIH[slug].find(item => item.n === hadith)!.routes[0].text;
 const bare = (text: string) => text.replace(/[\u064B-\u0652\u0670\u0640]/g, '');
 const sadi = (JSON.parse(readFileSync('shared/data/quran/tafsirSadi.json', 'utf8')) as { passages: [number, number, number, number, number, string][] }).passages;
 const reports = stories.flatMap(story => story.reports!.map((report, i) => [`${story.slug} report ${i + 1}`, report] as const));
