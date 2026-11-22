@@ -375,7 +375,7 @@ const RECALL_WRITE = 'recall-write';
  * written words green or amber, and a mistake puts it on the forgotten shelf, as in the reader. A forgotten ayah that is due
  * comes with the review button and «تذكّرتها» rests it; an ayah of the day from what is memorized (`review` absent) has «نسيتها» too.
  */
-function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', palette }: { ayah: string; review?: () => void; title?: string; palette: Palette }) {
+function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', Icon = LightbulbOff, palette }: { ayah: string; review?: () => void; title?: string; Icon?: IconType; palette: Palette }) {
   const [done, setDone] = useState(() => recalledNow(ayah));
   const [writing, setWriting] = useState(() => readJson(RECALL_WRITE, isBoolean) === true);
   const toggleWriting = () => setWriting(on => { writeJson(RECALL_WRITE, !on); return !on; });
@@ -395,7 +395,9 @@ function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', palette }:
     {review && <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} />}
   </>;
   const open = <OpenButton label="في المصحف" onPress={() => openIntent({ tab: 'read', at: markAyah(ayah), word: markWord(ayah) })} palette={palette} />;
-  return <Recall key={`${ayah}-${writing}`} ayah={markAyah(ayah)} targetWord={markWord(ayah)} title={title} writing={writing} onWriting={toggleWriting} open={open} marks={marks} revealed={!!done} palette={palette} />;
+  // A due forgotten ayah's head opens the forgotten list; any other recall question's, the quizzes, as every question's does.
+  const head = review ? { onPress: () => router.push({ pathname: '/library', params: { tab: 'forgotten' } }), label: 'افتح ما نسيته' } : topic('/quizzes', 'افتح الاختبارات');
+  return <Recall key={`${ayah}-${writing}`} ayah={markAyah(ayah)} targetWord={markWord(ayah)} title={title} Icon={Icon} head={head} writing={writing} onWriting={toggleWriting} open={open} marks={marks} revealed={!!done} palette={palette} />;
 }
 
 /**
@@ -403,7 +405,7 @@ function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', palette }:
  * tap, double tap or long press on the ayah does what it does in recite mode (the reader's gesture settings); the pen writes
  * what the pen setting asks, and it stops at the ayah's end. Drawn afresh for each way of asking (`writing`).
  */
-function Recall({ ayah, targetWord, title, writing, onWriting, open, marks, revealed, palette }: { ayah: string; targetWord?: number; title: string; writing: boolean; onWriting: () => void; open: React.ReactNode; marks: React.ReactNode;
+function Recall({ ayah, targetWord, title, Icon, head, writing, onWriting, open, marks, revealed, palette }: { ayah: string; targetWord?: number; title: string; Icon: IconType; head: { onPress: () => void; label: string }; writing: boolean; onWriting: () => void; open: React.ReactNode; marks: React.ReactNode;
   /** Marked from the card («تذكّرتها», «نسيتها»): the ayah shows whole, as recite mode shows it once done. */
   revealed?: boolean; palette: Palette }) {
   const model = useMemo(() => { const page = pageOfAyah(ayah); return page ? pageModel(pageData(page), surahBefore(page)) : null; }, [ayah]);
@@ -424,7 +426,7 @@ function Recall({ ayah, targetWord, title, writing, onWriting, open, marks, reve
   const onTouch: typeof touches.touch = (...touch) => (recite.write ? recite.boxes.focus() : touches.touch(...touch));
   const [surah, number] = ayah.split(':').map(Number);
   return (
-    <Post palette={palette} head={<PostHead Icon={LightbulbOff} title={title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} open={{ onPress: () => router.push({ pathname: '/library', params: { tab: 'forgotten' } }), label: 'افتح ما نسيته' }} palette={palette} />} whole
+    <Post palette={palette} head={<PostHead Icon={Icon} title={title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} open={head} palette={palette} />} whole
       bar={<RecitePill recite={recite} writing={writing} onWriting={onWriting} palette={palette} small />}
       open={open} actions={marks} source={mushafOf(ayah)}
       // Shared, the ayah's lines as the mushaf sets them: never what is hidden, nor whether it was remembered (owner, 2026-11-22).
@@ -461,7 +463,7 @@ function openAnswer(question: SoloQuestion) {
     case 'virtues': return person(look.mark?.slug ?? look.slugs[0]);
     case 'nasab': return router.push({ pathname: '/nasab', params: { slug: look.slugs.join(',') } });
     case 'terms': return toTab({ pathname: '/term', params: { name: look.mark ?? look.names[0] } });
-    case 'hadith': return toTab(look.mark ? { pathname: '/hadith-forty', params: { n: String(look.mark) } } : '/hadith-forty');
+    case 'hadith': return toTab(look.mark ? { pathname: '/hadith-forty', params: { n: String(look.mark) } } : { pathname: '/hadith-book', params: { book: 'forty' } });
     case 'sahih': return look.mark ? toTab({ pathname: '/hadith-kitab', params: { book: look.book, kitab: String(look.mark) } }) : toTab('/hadith');
     case 'story': return toTab({ pathname: '/story', params: { slug: look.slug } });
     case 'battle': return toTab({ pathname: '/battle', params: { slug: look.slug } });
@@ -471,6 +473,8 @@ function openAnswer(question: SoloQuestion) {
   }
   if (question.ayahKey) return readAyah(question.ayahKey);
   if (question.order?.length) return router.push({ pathname: '/order', params: { juz: String(orderJuz(question.order)) } });
+  const aimed = question.family === 'SURAH_AIM' && orderSurahOf(question.correctAnswer);
+  if (aimed) return openOrder(aimed);
   const slug = question.key.split(':')[1];
   if (question.family === PROPHET_NAMES) return person('prophet-muhammad');
   if (slug && findPerson(slug)) return person(slug);
@@ -512,12 +516,10 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
   const prompt = question.promptArabic && question.promptArabic !== FEED_QUIZ_NAMES[kind] ? <QuizPrompt text={question.promptArabic} palette={palette} /> : undefined;
   return (
     <Post palette={palette} head={<PostHead Icon={QUIZ_ICON[kind as FeedKind]} title={FEED_QUIZ_NAMES[kind]} open={topic('/quizzes', 'افتح الاختبارات')} palette={palette} />} whole
-      open={answered ? <OpenButton label="افتح ما يشرح الجواب" onPress={() => openAnswer(question)} palette={palette} /> : undefined}
-      actions={<>
-        {(isTree(question) || isCompare(question)) && !checked &&
-          <Action Icon={Check} label="تحقق" onPress={() => setRun(check(run))} palette={palette} />}
-        {kind === RECITE_SNIPPET && !answered && <ReciteAction palette={palette} />}
-      </>}>
+      // Unanswered, a tree or compare question's «تحقق» leads the row, before «تلميح», as the choice questions' does.
+      open={answered ? <OpenButton label="افتح ما يشرح الجواب" onPress={() => openAnswer(question)} palette={palette} />
+        : (isTree(question) || isCompare(question)) && !checked ? <Action Icon={Check} label="تحقق" onPress={() => setRun(check(run))} palette={palette} /> : undefined}
+      actions={kind === RECITE_SNIPPET && !answered && <ReciteAction palette={palette} />}>
       {isCompare(question)
         ? <View style={{ height: roomHeight }}>
           {checked
@@ -548,7 +550,7 @@ function OpeningPost({ seed, palette }: { seed: number; palette: Palette }) {
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
   const surah = useMemo(() => openingSurah(seed, memorized && questions && !('all' in memorized)
     ? Array.from({ length: 114 }, (_, i) => i + 1).filter(n => isMemorized(`${n}:1`, memorized)) : undefined), [seed, memorized, questions]);
-  return surah ? <ForgottenPost ayah={`${surah}:1`} title={FEED_QUIZ_NAMES[OPENINGS]} palette={palette} /> : null;
+  return surah ? <ForgottenPost ayah={`${surah}:1`} title={FEED_QUIZ_NAMES[OPENINGS]} Icon={QUIZ_ICON[OPENINGS]} palette={palette} /> : null;
 }
 
 /**
