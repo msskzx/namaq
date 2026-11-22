@@ -19,6 +19,7 @@ import IconButton from '@/ui/IconButton';
 import { sourcesOf } from '@/ui/SourceLine';
 import { ayahMushafWords } from '@/lib/mushaf';
 import { readAyah } from '@/lib/openReader';
+import { toTab } from '@/lib/ways';
 import { shareCard } from '@/lib/shareImage';
 import { SEA_ART, type Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
@@ -193,11 +194,11 @@ export default function DarkSea({ palette, still = false }: { palette: Palette; 
 
 /** The scene's mushaf and share buttons, in the row under it (the page and the feed card). */
 export function DarkSeaActions({ palette, only, feed = false }: { palette: Palette; only?: 'open' | 'share';
-  /** On its home card: the feed's one open button (ui/OpenButton), not the book. */
+  /** On its home card: the feed's one open button (ui/OpenButton), to the scene on its page (owner, 2026-11-22). */
   feed?: boolean }) {
   const name = darkSeaName();
   return <>
-    {only !== 'share' && (feed ? <OpenButton label={`افتح ${name} في المصحف`} onPress={() => readAyah(DARK_SEA_KEY)} />
+    {only !== 'share' && (feed ? <OpenButton label={`افتح مشهد ${name}`} onPress={() => toTab('/lataif')} />
       : <IconButton Icon={BookOpen} label={`افتح ${name} في المصحف`} onPress={() => readAyah(DARK_SEA_KEY)} />)}
     {only !== 'open' && <IconButton Icon={Send} label={`شارك ${name}`} onPress={() => shareCard({ content: width => (
       <View style={{ width }}><Card palette={palette} pad={[10, 16]} gap={10}><DarkSea palette={palette} still /></Card></View>

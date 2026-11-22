@@ -121,6 +121,11 @@ test.describe('a hadith ring', () => {
     await page.getByRole('button', { name: 'افتح الحديث' }).click();
     await expect(page).toHaveURL(/hadith-sahih/);
   });
+  test('its head opens the book it is from, the general topic (owner, 2026-11-22)', async ({ page }) => {
+    await open(page, '/library');
+    await page.getByRole('button', { name: 'افتح صحيح مسلم' }).click();
+    await expect(page).toHaveURL(/hadith-book\?book=muslim/);
+  });
 });
 
 test.describe('«أصهاره»', () => {

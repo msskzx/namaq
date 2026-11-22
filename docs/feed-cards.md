@@ -124,7 +124,9 @@ A new card or quiz kind goes into an interest's `cards` or `quizzes` in the same
   holds, from the right, the button that opens the item in its own reader, the card's tools, «احفظ» (a `card:` bookmark,
   shown in the library and among the saved cards) and share; a «⋯» alone at the left opens a small menu with «ليس من
   اهتماماتي» (`ui/MoreMenu`, `common/MoreMenu`), and a card with no such choice has no «⋯». The open button is the one way to
-  the item: the head and the card are not buttons for it too. Under the row, the source line:
+  the item: the card is not a button for it too. The head (round icon and title) is a button to the card's GENERAL TOPIC
+  (owner, 2026-11-22, like a post's name opening its account): the tarajim, a person, the mutashabihat, a hadith book, the
+  battles, the Quran tab; no chevron, it dims when pressed (HomeFeed `PostHead` `open`, helpers `topic`/`personTopic`). Under the row, the source line:
   a book icon and the books the card stands on («المصحف · الإخلاص ٣» for the Quran), a tap opening a sheet with where in
   them (HomeFeed `Post` `source`; a `Reference` inside a card joins it on its own, ui/sourceSlot.ts). The books card is
   the one card with no line: its books are the card. A card from outside the reader's interests is added from its line above («أضفه»). Nothing on screen moves:

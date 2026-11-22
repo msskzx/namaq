@@ -111,7 +111,7 @@ test.describe('a new user', () => {
       await open(page, '/');
       const trees = page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' });
       await expect(trees.first()).toBeAttached();
-      for (const name of ['مواقيت الصلاة', 'المزيد للتأمل', 'افتح المحفوظات']) await expect(page.getByRole('button', { name })).toHaveCount(0);
+      for (const name of ['مواقيت الصلاة', 'المزيد للتأمل', 'افتح المحفوظات']) await expect(page.getByRole('button', { name, exact: true })).toHaveCount(0);
       await page.mouse.move(195, 500);
       const first = await trees.count();
       await expect(async () => {
@@ -300,7 +300,7 @@ test.describe('a new user', () => {
       await expect(card.getByText(/[٠-٩]+$/).first()).toBeAttached();
       const openAnswer = card.getByRole('button', { name: 'افتح ما يشرح الجواب' });
       // Unanswered, no «افتح»: «تحقق» answers (owner, 2026-11-22).
-      const choice = card.getByRole('button').filter({ hasText: /\S/ }).first();
+      const choice = card.getByRole('button').filter({ hasText: /\S/, hasNot: page.getByRole('heading') }).first();
       await expect(openAnswer).toHaveCount(0);
       // A tap selects, and only «تحقق» answers (owner, 2026-11-21).
       await choice.click();
@@ -324,7 +324,7 @@ test.describe('a new user', () => {
       const head = page.getByRole('heading', { name: 'بمَ لُقّب؟', exact: true }).first();
       await expect(head).toBeAttached({ timeout: 20_000 });
       const card = head.locator('xpath=ancestor::div[.//*[@aria-label="تحقق"]][1]');
-      await card.getByRole('button').filter({ hasText: /\S/ }).first().click();
+      await card.getByRole('button').filter({ hasText: /\S/, hasNot: page.getByRole('heading') }).first().click();
       await card.getByRole('button', { name: 'تحقق', exact: true }).click();
       const post = head.locator('xpath=ancestor::div[.//*[@aria-label="شارك البطاقة"]][1]');
       await post.getByRole('button', { name: 'شارك البطاقة' }).first().click();
@@ -500,7 +500,7 @@ test.describe('balagha terms in the feed', () => {
     const card = page.getByRole('heading', { name: 'ما الأسلوب؟', exact: true }).first().locator('xpath=ancestor::div[.//*[@aria-label="تحقق"]][1]');
     await card.scrollIntoViewIfNeeded();
     await expect(page.getByRole('button', { name: /^تعريف / })).toHaveCount(0);
-    await card.getByRole('button').filter({ hasText: /\S/ }).first().click();
+    await card.getByRole('button').filter({ hasText: /\S/, hasNot: page.getByRole('heading') }).first().click();
     await card.getByRole('button', { name: 'تحقق', exact: true }).click();
     const chips = page.getByRole('button', { name: /^تعريف / });
     await expect(chips.first()).toBeVisible();
