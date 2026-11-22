@@ -96,7 +96,7 @@ describe('sira stories', () => {
         expect(bare(quote)).toContain(bare(name));
       } else if (turn.teller) {
         // Owner, 2026-11-22: the teller's own «قلت» is his: the lead says «I said», and the chain names him as the one telling.
-        expect(bare(turn.lead ?? '')).toMatch(/^(?:قال:? )?(?:ثم )?ف?قل(?:ت|نا)(?: [^:]+)?:?$/);
+        expect(bare(turn.lead ?? '')).toMatch(/^(?:قالت?:? )?(?:ثم )?[فو]?قل(?:ت|نا)(?::? [^:]+)?:?$/);
         // «قلت في نفسي» was thought, not said.
         expect(bare(turn.lead ?? '')).not.toMatch(/نفسي/);
         // A kunya changes with its case in the chain: «أن أبا سفيان أخبره».
