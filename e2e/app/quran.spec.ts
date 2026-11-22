@@ -36,19 +36,31 @@ test('the surah order narrows to a juz and cites its books', async ({ page }) =>
   await expect(page.getByRole('button', { name: /^المصدر: البقاعي، نظم الدرر/ }).first()).toBeVisible();
 });
 
-test('«مشاهد» walks an-Nur 40 a layer at a time, each line with who says it, and never «قيل»', async ({ page }) => {
+test('«مشاهد» lists the sea scene with its surah and ayah; it opens full screen and walks an-Nur 40, each saying with who says it, never «قيل»', async ({ page }) => {
   await open(page, '/lataif');
-  await expect(page.getByText('قال الطبري:').first()).toBeVisible();
-  await page.getByRole('tab', { name: 'اليد' }).click();
-  await expect(page.getByRole('tab', { name: 'اليد' })).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByText('قال الزمخشري:')).toBeVisible();
-  await page.getByRole('tab', { name: 'المعنى' }).click();
-  await page.getByRole('tab', { name: 'ابن القيم' }).click();
-  await expect(page.getByText('قال ابن القيم:').first()).toBeVisible();
-  for (const layer of ['مثل', 'بحر لجي', 'موج', 'موج فوقه', 'سحاب', 'ظلمات بعضها فوق بعض', 'اليد', 'المعنى']) {
-    await page.getByRole('tab', { name: layer, exact: true }).click();
+  await expect(page.getByText(/^سورة .+ · الآية ٤٠$/)).toBeVisible();
+  await page.getByRole('link', { name: /^افتح مشهد/ }).click();
+  await expect(page).toHaveURL(/\/scene/);
+  for (const shot of ['بحر لجي', 'موج', 'موج فوقه', 'سحاب', 'ظلمات بعضها فوق بعض']) {
+    await page.getByRole('tab', { name: shot, exact: true }).click();
+    await expect(page.getByRole('tab', { name: shot, exact: true })).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByText(/^قال /).first()).toBeVisible();
     await expect(page.getByText(/(^|[\s«(])[وف]?قيل/)).toHaveCount(0);
   }
+  // The finger drives the scene: up past the last words opens the readings, down comes back.
+  await page.getByRole('tab', { name: 'فما له من نور', exact: true }).click();
+  await expect(page.getByRole('tab', { name: 'فما له من نور', exact: true })).toHaveAttribute('aria-selected', 'true');
+  await page.waitForTimeout(800); // the glide there ends; a finger mid-glide catches the scene where it is
+  const drag = async (from: number, to: number) => {
+    await page.mouse.move(220, from);
+    await page.mouse.down();
+    for (let y = from; Math.abs(y - to) > 1; y += Math.sign(to - from) * 20) await page.mouse.move(220, y);
+    await page.mouse.up();
+  };
+  await drag(700, 200);
+  await expect(page.getByText('ما هذه الظلمات؟')).toBeVisible();
+  await drag(200, 700);
+  await expect(page.getByText('ما هذه الظلمات؟')).toBeHidden();
 });
 
 test('a new user\'s branches open as the matrix, with a switch to the tree', async ({ page }) => {

@@ -1,208 +1,243 @@
-import { Fragment, useEffect, useMemo, useState } from 'react';
-import OpenButton from '@/ui/OpenButton';
-import { ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
-import Svg, { Defs, LinearGradient, Path, Rect, Stop } from 'react-native-svg';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useWindowDimensions, View } from 'react-native';
+import { router } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { cancelAnimation, interpolate, useAnimatedReaction, useAnimatedStyle, useReducedMotion, useSharedValue, withTiming, type SharedValue } from 'react-native-reanimated';
+import Animated, { cancelAnimation, useAnimatedReaction, useAnimatedStyle, useDerivedValue, useReducedMotion, useSharedValue, withDelay, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
-import { ChevronsDown, Hand, Send } from 'lucide-react-native';
+import { ChevronRight, Pause, Play, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { surahName } from '@shared/quran/surahNames';
-import { DARK_SEA_KEY, DARK_SEA_READINGS, DARK_SEA_STEPS, darkSeaSources, darkSeaTitle, darkSeaWords, type SceneSaying } from '@shared/quran/scenes/darkSea';
+import { DARK_SEA_KEY, DARK_SEA_STEPS, darkSeaShots, darkSeaSources, darkSeaTitle, darkSeaWords, shotOf, wordsPage, type Layer, type SceneSaying } from '@shared/quran/scenes/darkSea';
 import { Text } from '@/ui/Text';
-import Card from '@/ui/Card';
-import Chip from '@/ui/Chip';
+import TapRow from '@/ui/TapRow';
+import Shade from '@/ui/Shade';
 import Saying from '@/ui/Saying';
+import Card from '@/ui/Card';
+import Button from '@/ui/Button';
 import StepDots from '@/ui/StepDots';
-import Hold from '@/ui/Hold';
 import IconButton from '@/ui/IconButton';
-import { sourcesOf } from '@/ui/SourceLine';
+import OpenButton from '@/ui/OpenButton';
+import SourceLine, { sourcesOf } from '@/ui/SourceLine';
 import { ayahMushafWords } from '@/lib/mushaf';
 import { readAyah } from '@/lib/openReader';
 import { toTab } from '@/lib/ways';
 import { shareCard } from '@/lib/shareImage';
-import { SEA_ART, type Palette } from '@/lib/theme';
+import { dark, ForcePalette, SEA_ART, type Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
+import SeaArt from './scenes/SeaArt';
+import SeaThumb, { useSceneWords } from './scenes/SeaThumb';
 import { FEATURE_ICON } from '@/components/featureIcons';
 
-const LAST = DARK_SEA_STEPS.length - 1;
-const at = (layer: string) => DARK_SEA_STEPS.findIndex(step => step.layer === layer);
-const SEA = at('sea'), WAVE = at('wave'), WAVE2 = at('wave2'), CLOUD = at('cloud'), NIGHT = at('night'), HAND = at('hand');
-/** How far a finger moves for one layer. */
-const STEP_PX = 90;
-/** The picture the feed card and the shared image show: every layer, the night over them. */
-export const STILL_STEP = NIGHT;
+const PAGES = DARK_SEA_STEPS;
+const LAST = PAGES.length - 1;
+/** The page whose saying comes in pieces as the darknesses go out. */
+const DARK = PAGES.findIndex(page => page.parts);
+const END = PAGES.findIndex(page => page.layer === 'end');
+/** The picture each page shows (components/scenes/SeaArt). */
+const LOOK: Record<Layer, number> = { surface: 0, sea: 1, wave: 2, wave2: 3, cloud: 4, night: 5, hand: 6, end: 7 };
+const LOOKS = PAGES.map(page => LOOK[page.layer]);
+const SHOTS = darkSeaShots();
 
 export const darkSeaName = () => darkSeaTitle(surahName(Number(DARK_SEA_KEY.split(':')[0])));
 export const darkSeaSourceList = () => sourcesOf(darkSeaSources());
+/** The scene on its own page, over the tabs (owner, 2026-11-22: a card's «افتح» opens the scene itself). */
+export const openDarkSea = () => router.push({ pathname: '/scene', params: { id: DARK_SEA_KEY } });
 
-/** The ayah, its words lit as the scene reaches them: the step's words in the theme's yellow, those passed in ink. */
-function SceneAyah({ step, palette }: { step: number; palette: Palette }) {
-  const words = useMemo(() => darkSeaWords(ayahMushafWords), []);
+const clamp = (v: number) => { 'worklet'; return Math.max(0, Math.min(1, v)); };
+
+/** How long a page rests in the scene played by itself: long enough to be read, about two and a half words a second. */
+function restOf(page: number) {
+  const step = PAGES[page];
+  const words = step.sayings.reduce((n, saying) => n + saying.text.split(' ').length, 0) + (page === 0 ? 30 : 6);
+  return Math.max(3200, (words / 2.5) * 1000 + 1200);
+}
+
+/** A saying in the middle of the scene: who said it, his words, and his book's name. */
+function Quote({ saying, parts }: { saying: SceneSaying; parts?: React.ReactNode }) {
   return (
-    <AyahFlow color={palette.ink} center>
-      {words.map((word, i) => (
-        <Fragment key={i}>
-          <AyahWords look={{ color: word.step === step ? palette.highlight : word.step < step ? palette.ink : `${palette.muted}73` }}>{`${i ? ' ' : ''}${word.text}`}</AyahWords>
-        </Fragment>
-      ))}
-      <AyahWords look={{ color: palette.muted }}>{` ${num(Number(DARK_SEA_KEY.split(':')[1]))}`}</AyahWords>
-    </AyahFlow>
-  );
-}
-
-/** A layer's picture comes in as the depth passes it. */
-function useLayer(depth: SharedValue<number>, step: number) {
-  return useAnimatedStyle(() => ({ opacity: interpolate(depth.value, [step - 1, step], [0, 1], 'clamp') }));
-}
-
-/** The art of the scene, layer on layer (drawn shapes until the owner's art comes). */
-function SceneArt({ depth, hand }: { depth: SharedValue<number>; hand: SharedValue<number> }) {
-  const sea = useLayer(depth, SEA), wave = useLayer(depth, WAVE), wave2 = useLayer(depth, WAVE2), cloud = useLayer(depth, CLOUD);
-  const dark = useAnimatedStyle(() => ({ opacity: interpolate(depth.value, [0, CLOUD, NIGHT, LAST], [0, 0.3, 0.85, 0.92], 'clamp') }));
-  const handStyle = useAnimatedStyle(() => ({ opacity: hand.value * 0.25 }));
-  const fill = StyleSheet.absoluteFill;
-  return (
-    <>
-      <Svg style={fill} viewBox="0 0 440 600" preserveAspectRatio="none">
-        <Defs>
-          <LinearGradient id="surface" x1="0" y1="0" x2="0" y2="1">
-            <Stop offset="0" stopColor={SEA_ART.surface[0]} /><Stop offset="0.45" stopColor={SEA_ART.surface[1]} /><Stop offset="0.46" stopColor={SEA_ART.surface[2]} /><Stop offset="1" stopColor={SEA_ART.surface[3]} />
-          </LinearGradient>
-        </Defs>
-        <Rect width="440" height="600" fill="url(#surface)" />
-      </Svg>
-      <Animated.View style={[fill, sea]}>
-        <Svg style={fill} viewBox="0 0 440 600" preserveAspectRatio="none">
-          <Defs>
-            <LinearGradient id="deep" x1="0" y1="0" x2="0" y2="1">
-              <Stop offset="0" stopColor={SEA_ART.deep[0]} /><Stop offset="0.5" stopColor={SEA_ART.deep[1]} /><Stop offset="1" stopColor={SEA_ART.deep[2]} />
-            </LinearGradient>
-          </Defs>
-          <Rect width="440" height="600" fill="url(#deep)" />
-        </Svg>
-      </Animated.View>
-      <Animated.View style={[fill, wave]}>
-        <Svg style={fill} viewBox="0 0 440 600" preserveAspectRatio="none">
-          <Path d="M0 300 Q50 260 100 300 T200 298 T300 296 T440 298 V200 H0Z" fill={SEA_ART.wave} />
-          <Path d="M0 300 Q50 260 100 300 T200 298 T300 296 T440 298" fill="none" stroke={SEA_ART.waveEdge} strokeWidth={2} />
-        </Svg>
-      </Animated.View>
-      <Animated.View style={[fill, wave2]}>
-        <Svg style={fill} viewBox="0 0 440 600" preserveAspectRatio="none">
-          <Path d="M0 200 Q40 160 90 198 T190 196 T290 194 T440 196 V130 H0Z" fill={SEA_ART.wave2} />
-          <Path d="M0 200 Q40 160 90 198 T190 196 T290 194 T440 196" fill="none" stroke={SEA_ART.wave2Edge} strokeWidth={2} />
-        </Svg>
-      </Animated.View>
-      <Animated.View style={[fill, cloud]}>
-        <Svg style={fill} viewBox="0 0 440 600" preserveAspectRatio="none">
-          <Path d="M0 130 C60 100 120 100 180 130 S300 160 440 120 V0 H0Z" fill={SEA_ART.cloud} />
-        </Svg>
-      </Animated.View>
-      <Animated.View style={[fill, { backgroundColor: SEA_ART.night }, dark]} />
-      <Animated.View style={[fill, handStyle]} pointerEvents="none">
-        <Svg style={fill} viewBox="0 0 440 600">
-          <Path d="M220 250 v-84 M194 252 v-72 M246 252 v-70 M270 258 v-50 M172 266 l-28 -38 M168 266 q52 76 104 0" stroke={SEA_ART.hand} strokeWidth={4} strokeLinecap="round" fill="none" />
-        </Svg>
-      </Animated.View>
-    </>
-  );
-}
-
-/** What the scholars say on the step: each saying with its sayer first (owner, 2026-11-21: named, never «قيل»). */
-function Sayings({ sayings, palette }: { sayings: SceneSaying[]; palette: Palette }) {
-  return sayings.map((saying, i) => (
-    <Saying key={i} by={`قال ${saying.by}:`} palette={palette}>
-      <Text style={{ color: palette.ink, fontSize: 16, lineHeight: 28, textAlign: 'right' }}>«{saying.text}»</Text>
+    <Saying by={`قال ${saying.by}:`} palette={dark} size={15} center>
+      {parts ?? <Text style={{ color: SEA_ART.ink, fontSize: 20, lineHeight: 34, textAlign: 'center' }}>«{saying.text}»</Text>}
+      <Text style={{ color: SEA_ART.source, fontSize: 13, textAlign: 'center' }}>{saying.source.book}</Text>
     </Saying>
-  ));
+  );
 }
 
-/** The last step: what the parable means, al-Tabari's words, then each scholar's naming of the darknesses, one at a time. */
-function Meaning({ palette }: { palette: Palette }) {
-  const sayers = [...new Set(DARK_SEA_READINGS.map(saying => saying.by))];
-  const [sayer, setSayer] = useState(sayers[0]);
-  return <>
-    <Sayings sayings={DARK_SEA_STEPS[LAST].sayings} palette={palette} />
-    <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>ما هذه الظلمات؟</Text>
-    <View accessibilityRole="tablist" style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-      {sayers.map(name => <Chip key={name} role="tab" label={name} on={name === sayer} onPress={() => setSayer(name)} palette={palette} />)}
-    </View>
-    <Sayings sayings={DARK_SEA_READINGS.filter(saying => saying.by === sayer)} palette={palette} />
-  </>;
+/** One piece of al-Sa'di's darknesses: it comes as its layer goes out. */
+function Part({ text, index, count, look }: { text: string; index: number; count: number; look: { value: number } }) {
+  const style = useAnimatedStyle(() => ({ opacity: withTiming(clamp(look.value - 4) * 4 >= index + 0.55 ? 1 : 0, { duration: 900 }) }));
+  return (
+    <Animated.View style={style}>
+      <Text style={{ color: SEA_ART.ink, fontSize: 20, lineHeight: 34, textAlign: 'center' }}>{`${index ? '' : '«'}${text}${index === count - 1 ? '»' : ''}`}</Text>
+    </Animated.View>
+  );
 }
 
 /**
- * «ظلمات بعضها فوق بعض» (an-Nur 40) as a scene (owner, 2026-11-21; docs/feed-cards.md): the ayah above, its sea below.
- * A finger moving up goes down a layer at a time, each layer lighting its words and saying what it is in the scholars'
- * words; the dots under it jump to a layer; at the hand the reader holds a finger down to bring a hand out, and barely
- * sees it. `still` draws the whole picture without gestures (the feed card, the shared image).
+ * «ظلمات بعضها فوق بعض» (an-Nur 40) as a full-screen scene (owner, 2026-11-22; prototype and its prompt in
+ * /mnt/project-files/mashahid/): a finger moved anywhere goes a page down or up. The ayah alone opens it; then each layer
+ * comes with its words at the top and one saying in the middle (others on the next page of the shot); the darknesses go out
+ * one over another as al-Sa'di's words come piece by piece; the hand's words darker still; the ayah's last words alone in
+ * the black; then what the parable and its darknesses are. «شغّل» plays it by itself, each page long enough to read.
  */
-export default function DarkSea({ palette, still = false }: { palette: Palette; still?: boolean }) {
+export default function DarkSea() {
+  const palette = dark;
   const reduced = useReducedMotion();
-  const { height: screen } = useWindowDimensions();
-  const first = still ? STILL_STEP : 0;
-  const depth = useSharedValue(first);
-  const hand = useSharedValue(0);
+  const insets = useSafeAreaInsets();
+  const { width, height } = useWindowDimensions();
+  const pos = useSharedValue(0);
   const start = useSharedValue(0);
-  const [step, setStep] = useState(first);
-  useAnimatedReaction(() => Math.round(depth.value), (now, before) => { if (now !== before) scheduleOnRN(setStep, now); });
-  useEffect(() => { if (step !== HAND) hand.value = 0; }, [step, hand]);
-  const go = (to: number) => { depth.value = reduced ? to : withTiming(to, { duration: 320 }); };
+  const [page, setPage] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const words = useMemo(() => darkSeaWords(ayahMushafWords), []);
+  const look = useDerivedValue(() => {
+    const i = Math.min(LAST - 1, Math.floor(pos.value)), f = clamp(pos.value - i);
+    return LOOKS[i] + (LOOKS[i + 1] - LOOKS[i]) * f;
+  });
+  // The darknesses' page comes as soon as the first layer starts to go out, so al-Sa'di's first piece comes with it.
+  useAnimatedReaction(() => (pos.value > DARK - 0.98 && pos.value < DARK ? DARK : Math.round(pos.value)), (now, before) => { if (now !== before) scheduleOnRN(setPage, now); });
+
+  /** To a page: into the darknesses each layer goes out with a rest after it; elsewhere a slow glide. */
+  const goTo = (target: number, from = pos.value) => {
+    'worklet';
+    const to = Math.max(0, Math.min(LAST, target));
+    if (reduced) { pos.value = to; return; }
+    if (to === DARK && from < DARK - 0.5) {
+      const base = DARK - 1, step = (k: number) => withTiming(base + k / 4, { duration: 700 });
+      pos.value = withSequence(withTiming(base, { duration: Math.max(1, (base - from) * 600) }), step(1), withDelay(450, step(2)), withDelay(450, step(3)), withDelay(450, step(4)));
+    } else pos.value = withTiming(to, { duration: 700 });
+  };
+  const stop = () => { clearTimeout(timer.current); setPlaying(false); };
   const pan = Gesture.Pan()
     .activeOffsetY([-12, 12])
-    .onBegin(() => { cancelAnimation(depth); start.value = depth.value; })
-    .onUpdate(event => { depth.value = Math.min(LAST, Math.max(0, start.value - event.translationY / STEP_PX)); })
+    // On start, not on touch: a tap on a button never stops the play or holds the scene mid-glide.
+    .onStart(() => { cancelAnimation(pos); start.value = pos.value; scheduleOnRN(stop); })
+    .onUpdate(event => { pos.value = Math.min(LAST, Math.max(0, start.value - event.translationY / (height * 0.45))); })
     .onEnd(event => {
-      const target = Math.min(LAST, Math.max(0, Math.round(depth.value - event.velocityY / 2400)));
-      depth.value = withTiming(target, { duration: 220 });
+      let target = Math.round(pos.value);
+      if (Math.abs(event.velocityY) > 350) target = event.velocityY < 0 ? Math.floor(start.value) + 1 : Math.ceil(start.value) - 1;
+      goTo(target);
     });
-  const showHand = (down: boolean) => { hand.value = withTiming(down ? 1 : 0, { duration: down ? 900 : 300 }); };
-  const current = DARK_SEA_STEPS[step];
-  const art = (
-    <View style={{ flex: still ? undefined : 1, minHeight: 160, height: still ? 220 : undefined, overflow: 'hidden' }}
-      accessibilityLabel={still ? `${darkSeaName()}: البحر والموج والسحاب والليل، ظلمات بعضها فوق بعض` : undefined}
-      accessibilityActions={step === HAND && !still ? [{ name: 'activate', label: 'أخرج يدك' }] : undefined}
-      onAccessibilityAction={() => { showHand(true); setTimeout(() => showHand(false), 3000); }}>
-      <SceneArt depth={depth} hand={hand} />
-      {!still && step === 0 && (
-        <View style={{ position: 'absolute', top: 24, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          <ChevronsDown size={16} color={palette.ink} />
-          <Text style={{ color: palette.ink, fontSize: 15 }}>اسحب إلى الأعلى لتنزل في البحر</Text>
-        </View>
-      )}
-      {!still && step === HAND && (
-        <View style={{ position: 'absolute', top: 24, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          <Hand size={16} color={palette.muted} />
-          <Text style={{ color: palette.muted, fontSize: 15 }}>اضغط مطوّلًا لتُخرج يدك</Text>
-        </View>
-      )}
-    </View>
-  );
-  const sayings = current.layer === 'meaning' ? <Meaning palette={palette} /> : <Sayings sayings={current.sayings} palette={palette} />;
+
+  // Played by itself: each page rests, then the next comes (the darknesses take their own time).
+  useEffect(() => {
+    if (!playing) return;
+    if (page >= LAST) { setPlaying(false); return; }
+    timer.current = setTimeout(() => goTo(page + 1, page), restOf(page) + (page === DARK ? 4600 : 0));
+    return () => clearTimeout(timer.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playing, page]);
+  const play = () => { if (playing) return stop(); if (page >= LAST) { pos.value = 0; setPage(0); } setPlaying(true); };
+
+  // The words at the top wait while the darknesses go out, and leave for the last words alone in the black.
+  const top = useAnimatedStyle(() => {
+    const dimming = pos.value > DARK - 1 + 0.02 && pos.value < DARK - 0.03;
+    return { opacity: withTiming(dimming || look.value > 6.3 ? 0 : 1, { duration: 600 }) };
+  });
+  const last = useAnimatedStyle(() => ({ opacity: withTiming(look.value > 6.85 && pos.value < END + 0.4 ? 1 : 0, { duration: 1200 }) }));
+
+  const step = PAGES[page];
+  const shown = wordsPage(page);
+  const topWords = page === 0 ? words : words.filter(word => word.step === shown);
+  const endWords = words.filter(word => word.step === END);
+  const shot = shotOf(page);
+  const name = darkSeaName();
   return (
-    <View style={{ flex: still ? undefined : 1, gap: 10 }}>
-      <SceneAyah step={still ? LAST + 1 : step} palette={palette} />
-      {still ? art : <GestureDetector gesture={pan}><View style={{ flex: 1 }}><Hold enabled={step === HAND} onHold={showHand}>{art}</Hold></View></GestureDetector>}
-      {!still && <StepDots names={DARK_SEA_STEPS.map(each => each.name)} at={step} onPick={go} palette={palette} />}
-      {/* The page does not scroll (the finger moves the scene), so the scholars' words scroll on their own when they run long. */}
-      {still
-        ? <View style={{ gap: 8 }}>{sayings}</View>
-        : <ScrollView style={{ maxHeight: Math.round(screen * 0.3) }} contentContainerStyle={{ gap: 8 }}>{sayings}</ScrollView>}
-    </View>
+    <ForcePalette value={dark}>
+    <GestureDetector gesture={pan}>
+      <View style={{ flex: 1, backgroundColor: SEA_ART.black }} accessibilityLabel={`${name}: ${step.name}`}
+        // A screen reader cannot drag: it turns the pages up and down, every page included.
+        accessibilityRole="adjustable" accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
+        onAccessibilityAction={({ nativeEvent }) => { stop(); goTo(page + (nativeEvent.actionName === 'increment' ? 1 : -1), page); }}>
+        <SeaArt look={look} width={width} height={height} />
+        {/* The bar: back on the right; play and share on the left. */}
+        <View style={{ position: 'absolute', top: insets.top + 6, right: 12, left: 12, flexDirection: 'row', alignItems: 'center', gap: 8, zIndex: 2 }}>
+          <IconButton Icon={ChevronRight} label="رجوع" tone="ink" onPress={() => (router.canGoBack() ? router.back() : toTab('/lataif'))} />
+          <View style={{ flex: 1 }} />
+          <IconButton Icon={Send} label={`شارك ${name}`} onPress={() => shareDarkSea(palette)} />
+          <Button pill label={playing ? 'أوقف' : 'شغّل'} Icon={playing ? Pause : Play} onPress={play} />
+        </View>
+        <View pointerEvents="box-none" style={{ flex: 1, paddingTop: insets.top + 64, paddingBottom: insets.bottom + 24, paddingHorizontal: 40 }}>
+          {page === 0
+            ? <View style={{ flex: 1, justifyContent: 'center' }}>
+                <Shade style={{ gap: 0, paddingVertical: 18 }}>
+                  <AyahFlow color={SEA_ART.gold} center>
+                    {topWords.map((word, i) => <AyahWords key={i}>{`${i ? ' ' : ''}${word.text}`}</AyahWords>)}
+                    <AyahWords look={{ color: SEA_ART.muted }}>{` ${num(Number(DARK_SEA_KEY.split(':')[1]))}`}</AyahWords>
+                  </AyahFlow>
+                  <Text style={{ color: SEA_ART.muted, fontSize: 14, textAlign: 'center', marginTop: 6 }}>{name}</Text>
+                </Shade>
+              </View>
+            : <>
+                <Animated.View style={[{ alignItems: 'center', gap: 4 }, top]}>
+                  <AyahFlow color={SEA_ART.gold} center style={{ alignSelf: 'stretch' }}>
+                    {topWords.map((word, i) => <AyahWords key={i}>{`${i ? ' ' : ''}${word.text}`}</AyahWords>)}
+                  </AyahFlow>
+                  <Text style={{ color: SEA_ART.muted, fontSize: 13 }}>{name}</Text>
+                </Animated.View>
+                <View style={{ flex: 1 }} />
+                <Shade key={page} style={[!step.sayings.length && !step.head && { backgroundColor: 'transparent' }]}>
+                  {step.head ? <Text style={{ color: SEA_ART.gold, fontSize: 15, textAlign: 'center' }}>{step.head}</Text> : null}
+                  {step.parts
+                    ? <Quote saying={step.sayings[0]} parts={<View>{step.parts.map((part, i, all) => <Part key={i} text={part} index={i} count={all.length} look={look} />)}</View>} />
+                    : step.sayings.map((saying, i) => <Quote key={i} saying={saying} />)}
+                  {page === LAST ? <SourceLine sources={darkSeaSourceList()} palette={palette} /> : null}
+                </Shade>
+                <View style={{ flex: 1.15 }} />
+              </>}
+        </View>
+        {/* The last words alone, in the middle of the black. */}
+        <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 32, right: 32, top: 0, bottom: 0, justifyContent: 'center' }, last]}>
+          <AyahFlow color={SEA_ART.gold} center>
+            {endWords.map((word, i) => <AyahWords key={i}>{`${i ? ' ' : ''}${word.text}`}</AyahWords>)}
+          </AyahFlow>
+        </Animated.View>
+        <View style={{ position: 'absolute', left: 0, top: 0, bottom: 0, justifyContent: 'center' }}>
+          <StepDots column names={SHOTS.map(each => each.name)} at={shot} onPick={k => { stop(); goTo(SHOTS[k].page); }} palette={{ ...palette, highlight: SEA_ART.gold, muted: SEA_ART.muted, rule: SEA_ART.dotRule }} />
+        </View>
+      </View>
+    </GestureDetector>
+    </ForcePalette>
   );
 }
 
-/** The scene's mushaf and share buttons, in the row under it (the page and the feed card). */
+/** The scene's card: its picture, then its title (the ayah's opening words), the surah and ayah, and the books. */
+export function DarkSeaCard({ palette, onPress }: { palette: Palette; onPress?: () => void }) {
+  const title = useSceneWords('sea');
+  const [surah, ayah] = DARK_SEA_KEY.split(':').map(Number);
+  const authors = [...new Set(darkSeaSources().map(source => source.author))].join(' · ');
+  const Icon = FEATURE_ICON.scenes;
+  const body = (
+    <View style={{ gap: 10 }}>
+      <Card palette={palette} pad={0} clip><SeaThumb place={darkSeaName()} /></Card>
+      <View style={{ flexDirection: 'row', gap: 12, alignItems: 'flex-start' }}>
+        <Icon size={22} color={palette.accent} style={{ marginTop: 6 }} />
+        <View style={{ flex: 1, gap: 2 }}>
+          <AyahFlow color={palette.ink}>{title.map((word, i) => <AyahWords key={i}>{`${i ? ' ' : ''}${word}`}</AyahWords>)}</AyahFlow>
+          <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`سورة ${surahName(surah)} · الآية ${num(ayah)}`}</Text>
+          <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{authors}</Text>
+        </View>
+      </View>
+    </View>
+  );
+  return onPress
+    ? <TapRow onPress={onPress} role="link" label={`افتح مشهد ${darkSeaName()}`} style={{ flexDirection: 'column' }}>{body}</TapRow>
+    : body;
+}
+
+const shareDarkSea = (palette: Palette) => shareCard({ content: width => (
+  <View style={{ width, padding: 16, backgroundColor: palette.paper }}><DarkSeaCard palette={palette} /></View>
+) });
+
+/** The scene's buttons in a card's row: on a home card the one open button to the scene; elsewhere its mushaf; and share. */
 export function DarkSeaActions({ palette, only, feed = false }: { palette: Palette; only?: 'open' | 'share';
-  /** On its home card: the feed's one open button (ui/OpenButton), to the scene on its page (owner, 2026-11-22). */
+  /** On its home card: the feed's one open button (ui/OpenButton), to the scene itself (owner, 2026-11-22). */
   feed?: boolean }) {
   const name = darkSeaName();
   return <>
-    {only !== 'share' && (feed ? <OpenButton label={`افتح مشهد ${name}`} onPress={() => toTab('/lataif')} />
+    {only !== 'share' && (feed ? <OpenButton label={`افتح مشهد ${name}`} onPress={openDarkSea} />
       : <IconButton Icon={FEATURE_ICON.mushaf} label={`افتح ${name} في المصحف`} onPress={() => readAyah(DARK_SEA_KEY)} />)}
-    {only !== 'open' && <IconButton Icon={Send} label={`شارك ${name}`} onPress={() => shareCard({ content: width => (
-      <View style={{ width }}><Card palette={palette} pad={[10, 16]} gap={10}><DarkSea palette={palette} still /></Card></View>
-    ) })} />}
+    {only !== 'open' && <IconButton Icon={Send} label={`شارك ${name}`} onPress={() => shareDarkSea(palette)} />}
   </>;
 }
