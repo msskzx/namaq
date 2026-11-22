@@ -1,5 +1,5 @@
 {
-  "about": "Abd al-Baqi numbers the pinned turath export (book 1727) prints wrongly. The build finds each: a route head ahead of the numbering, or a number no route carries. Each fix was checked against the fawazahmed0 hadith-api ara-muslim edition, whose text under the right number is the same (scripts/hadith/checkSahihayn.ts). `absent` are numbers neither the export nor that witness prints.",
+  "about": "Abd al-Baqi numbers the pinned turath export (book 1727) prints wrongly. The build finds each: a route head ahead of the numbering, or a number no route carries. Each fix was checked against the fawazahmed0 hadith-api ara-muslim edition, whose text under the right number is the same (scripts/hadith/checkSahihayn.ts). `absent` are numbers neither the export nor that witness prints. `heads` are route heads the export misprints inside a hadith's text, taken out of it: each was read against the routes around it.",
   "fixes": [
     {
       "page": 636,
@@ -180,10 +180,29 @@
       "page": 6616,
       "printed": 2602,
       "n": 2620
+    },
+    {
+      "page": 5849,
+      "printed": 2263,
+      "n": 2265
     }
   ],
   "absent": [
     1824,
     2483
-  ]
+  ],
+  "heads": {
+    "412": [
+      "٨٣ - ٠٤١٢)"
+    ],
+    "588": [
+      "(٥٨٨٩"
+    ],
+    "788": [
+      "٢٢٥ - (٧٨٨٩"
+    ],
+    "1869": [
+      "٩٤ -"
+    ]
+  }
 }
