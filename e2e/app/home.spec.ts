@@ -56,7 +56,8 @@ test.describe('a new user', () => {
       await head.scrollIntoViewIfNeeded();
       const post = head.locator('xpath=ancestor::div[.//*[@data-testid="feed-card"]][1]');
       const card = post.getByTestId('feed-card');
-      const row = post.locator('xpath=.//*[@aria-label="اختبار فردي"]/..');
+      // The row under the card: where the share button (on every card) sits.
+      const row = post.locator('xpath=.//*[@aria-label="شارك البطاقة"]/..');
       const boxes = () => card.evaluate(root => [...root.querySelectorAll('*')].filter(el => {
         if (el.closest('[role="button"], button, input, textarea')) return false;
         const style = getComputedStyle(el);
@@ -266,7 +267,7 @@ test.describe('a new user', () => {
     });
   });
 
-  test('the feed asks a question of every quiz kind in turn, each card with the quiz buttons', async ({ page }) => {
+  test('the feed asks a question of every quiz kind in turn', async ({ page }) => {
     test.setTimeout(180_000);
     // Each round asks about half the interests, each in its own kind in turn by the round and the day.
     const kinds = ['في أي سورة؟', 'أكمل المتشابهات', 'سمّع بقية الآية', 'قارن الموضعين', 'أوائل السور', 'ما معنى؟', 'لأي آية هذا التفسير؟', 'ما الأسلوب؟', 'ما المصطلح؟', 'ما إعرابها؟', 'كيف يقرؤها؟',
@@ -278,7 +279,8 @@ test.describe('a new user', () => {
       await page.mouse.move(195, 500);
       await expect(async () => {
         await page.mouse.wheel(0, 3000);
-        expect(await page.getByRole('button', { name: 'اختبار فردي' }).count()).toBeGreaterThan(24);
+        // Enough questions drawn: each unanswered one has «تحقق» under it (owner, 2026-11-22).
+        expect(await page.getByRole('button', { name: 'تحقق', exact: true }).count()).toBeGreaterThan(24);
       }).toPass({ timeout: 40_000 });
       for (const name of kinds) if (await page.getByRole('heading', { name, exact: true }).count()) seen.add(name);
       if (seen.size === kinds.length) break;
@@ -310,6 +312,24 @@ test.describe('a new user', () => {
       await expect(openAnswer).toHaveCount(1);
       await openAnswer.click();
       await expect(page).toHaveURL(/\/read/);
+    });
+  });
+
+  test.describe('with the laqab picked', () => {
+    test.use({ seed: { interests: '["laqab"]', 'interests-surprise': '0' } });
+
+    // Every card shares (owner, 2026-11-22): the question as it stands, answered here, as one picture.
+    test('an answered question card shares as a picture', async ({ page }) => {
+      await open(page, '/');
+      const head = page.getByRole('heading', { name: 'بمَ لُقّب؟', exact: true }).first();
+      await expect(head).toBeAttached({ timeout: 20_000 });
+      const card = head.locator('xpath=ancestor::div[.//*[@aria-label="تحقق"]][1]');
+      await card.getByRole('button').filter({ hasText: /\S/ }).first().click();
+      await card.getByRole('button', { name: 'تحقق', exact: true }).click();
+      const post = head.locator('xpath=ancestor::div[.//*[@aria-label="شارك البطاقة"]][1]');
+      await post.getByRole('button', { name: 'شارك البطاقة' }).first().click();
+      await expect(page.getByLabel('الصورة', { exact: true })).toBeVisible({ timeout: 20_000 });
+      await expect(page.getByRole('button', { name: 'مشاركة كصورة' })).toBeEnabled();
     });
   });
 
@@ -477,7 +497,7 @@ test.describe('balagha terms in the feed', () => {
   test('a «ما الأسلوب؟» card, once answered, opens each choice\'s definition in a sheet with a way to its page', async ({ page }) => {
     await open(page, '/');
     await expect(page.getByRole('heading', { name: 'ما الأسلوب؟', exact: true }).first()).toBeAttached({ timeout: 20_000 });
-    const card = page.getByRole('heading', { name: 'ما الأسلوب؟', exact: true }).first().locator('xpath=ancestor::div[.//*[@aria-label="اختبار فردي"]][1]');
+    const card = page.getByRole('heading', { name: 'ما الأسلوب؟', exact: true }).first().locator('xpath=ancestor::div[.//*[@aria-label="تحقق"]][1]');
     await card.scrollIntoViewIfNeeded();
     await expect(page.getByRole('button', { name: /^تعريف / })).toHaveCount(0);
     await card.getByRole('button').filter({ hasText: /\S/ }).first().click();

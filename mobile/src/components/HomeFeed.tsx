@@ -151,6 +151,7 @@ import Card, { CardWithRow } from '@/ui/Card';
 import MoreMenu, { type MoreItem } from '@/ui/MoreMenu';
 import RowScroll from '@/ui/RowScroll';
 import SourceLine, { sourcesOf } from '@/ui/SourceLine';
+import CardShare from '@/ui/CardShare';
 import type { Source } from '@/ui/sourceSlot';
 import { citeSource, mushafSource, MUSHAF_BOOK, uniqueSources, type QuizSource } from '@shared/quiz/sources';
 import { irabSources, itqanSource, qiraatSources, sadiSource } from '@shared/quiz/bookSources';
@@ -177,12 +178,17 @@ function Action({ Icon, label, on, onPress, tone, disabled }: { Icon: IconType; 
  * head and the card are not buttons for it too (owner, 2026-11-20: one control per destination). A long card stops at two
  * thirds of the screen, the rest in a sheet (ui/Card `cap`).
  */
-function Post({ head, open, actions, share, source, bar, palette, whole = false, children }: { head: React.ReactNode;
+function Post({ head, open, actions, share, picture, source, bar, palette, whole = false, children }: { head: React.ReactNode;
   /** Opens the item in its own reader (the mushaf at the ayah, the hadith in its book): first in the row. */
   open?: React.ReactNode;
   actions?: React.ReactNode;
-  /** The card's share button, last of the group, after save. */
-  share?: React.ReactNode;
+  /**
+   * The card's share button, last of the group, after save. Left out, the card shares as it is (ui/CardShare, owner
+   * 2026-11-22: every card shares); a card with its own share (a video, pictures) gives it, and `false` shares nothing.
+   */
+  share?: React.ReactNode | false;
+  /** What the picture shows instead of the card as it is: the recall card shares its ayah whole, never the hiding. */
+  picture?: { head: React.ReactNode; body: React.ReactNode };
   /** The books the card stands on, named on its source line; a `Reference` inside the card joins its sheet. */
   source?: Source[];
   /**
@@ -200,7 +206,9 @@ function Post({ head, open, actions, share, source, bar, palette, whole = false,
       {head}
       {/* What the card's content hands up with UnderCard joins the row under the card, before the post's own buttons; share stays last. */}
       <CardWithRow palette={palette} pad={0} clip cap={!whole} bar={bar}
-        lead={open} row={<>{actions}<SaveAction text={named} />{share}</>} menu={menu} source={source} sourceLine={sourceLine(palette)}>{children}</CardWithRow>
+        lead={open} row={<>{actions}<SaveAction text={named} />{share === undefined
+          ? <CardShare head={picture?.head ?? head} sources={source} palette={palette}>{picture?.body ?? children}</CardShare>
+          : share || null}</>} menu={menu} source={source} sourceLine={sourceLine(palette)}>{children}</CardWithRow>
     </View>
   );
 }
@@ -299,7 +307,10 @@ export function ContinueReading({ palette }: { palette: Palette }) {
     <Post palette={palette} head={<PostHead Icon={BookOpen} title={fasila || page > 1 ? 'تابع القراءة' : 'ابدأ القراءة'} sub={where} palette={palette} />}
       open={<OpenButton label={`افتح المصحف ${fasila ? 'عند فاصلتك' : 'حيث توقفت'}، سورة ${shortNames[surah] ?? ''}`} onPress={read} palette={palette} />}
       actions={<Text style={{ color: palette.muted, fontSize: 14, padding: 8 }}>{juzLabel([juz])}</Text>}
-      source={sourcesOf([mushafPage(surah, page)])}>
+      source={sourcesOf([mushafPage(surah, page)])}
+      // Shared, the page alone: not where you stopped (owner's plan, 2026-11-22).
+      picture={{ head: <PostHead Icon={BookOpen} title={shortNames[surah] ?? ''} sub={juzLabel([juz])} palette={palette} />,
+        body: <View style={{ paddingHorizontal: 12, paddingVertical: 6 }}><PageTop page={page} palette={palette} /></View> }}>
       {/* The page's first half as the reader draws it (owner, 2026-11-14). */}
       <View style={{ paddingHorizontal: 12, paddingVertical: 6 }}><PageTop page={page} palette={palette} /></View>
     </Post>
@@ -393,7 +404,10 @@ function Recall({ ayah, targetWord, title, writing, onWriting, open, marks, reve
   return (
     <Post palette={palette} head={<PostHead Icon={LightbulbOff} title={title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />} whole
       bar={<RecitePill recite={recite} writing={writing} onWriting={onWriting} palette={palette} small />}
-      open={open} actions={marks} source={mushafOf(ayah)}>
+      open={open} actions={marks} source={mushafOf(ayah)}
+      // Shared, the ayah's lines as the mushaf sets them: never what is hidden, nor whether it was remembered (owner, 2026-11-22).
+      picture={{ head: <PostHead Icon={BookOpen} title={shortNames[surah] ?? ''} sub={num(number)} palette={palette} />,
+        body: <View style={{ padding: 12 }}><AyahLines ayah={ayah} palette={palette} write={null} checked={null} shown whole /></View> }}>
       <View style={{ padding: 12 }}>
         <AyahLines ayah={ayah} targetWord={targetWord} palette={palette} shown={shown} words={position.words} checked={recite.checked} onTouch={onTouch} write={recite.write} />
         {recite.write && recite.boxes.field}
@@ -1144,6 +1158,8 @@ function PrayerPost({ prayer, times, palette }: { prayer: Exclude<PrayerKey, 'su
   const title = left > 0 ? `${PRAYER_NAMES[prayer]} ${inMinutes(left)}` : `حان وقت ${PRAYER_NAMES[prayer]}`;
   return (
     <Post palette={palette} head={<PostHead Icon={Clock} title={title} sub={[date, place?.name].filter(Boolean).join(' · ')} palette={palette} />}
+      // Nothing to share: the times are your own day and place (owner's plan, 2026-11-22: own-state cards never share your state).
+      share={false}
       actions={<>
         <Action Icon={Clock} label="مواقيت الصلاة" onPress={() => openUtility('times')} palette={palette} />
         <Action Icon={Compass} label="القبلة" onPress={() => openUtility('qibla')} palette={palette} />

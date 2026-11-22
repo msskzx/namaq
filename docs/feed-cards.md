@@ -145,6 +145,12 @@ A new card or quiz kind goes into an interest's `cards` or `quizzes` in the same
   presents what it asked (a person, a hadith, a term, the ayah in the reader), never the quizzes page. Each choice then
   says what it is where the data has it: whose name or laqab, which hadith a narrator or an ending belongs to
   (`ChoiceQuestion.whereOf`). Every button has its word first, then its icon.
+- Every card shares (owner, 2026-11-22): the paper airplane last in its row shares the card as one picture, its head,
+  the card as it stands (a question unanswered, or answered with its marks and whose lines) and its books, with no
+  buttons (app `ui/CardShare`). A card with its own share keeps it (pair, tree, مشاهد, story). Cards of your own state
+  share the Quran only: the recall card its ayah's lines (never what is hidden or whether you remembered), «تابع القراءة»
+  its page under the surah's name (not where you stopped). The prayer card shares nothing. A long card shares whole as
+  one tall picture.
 - The chips over the feed: «لك» and each interest picked; a tap shows that interest's cards alone.
 - The website has the same picker (first open, settings, the chip row and its pencil, `src/components/homepage/Interests.tsx`);
   «فاجئني» is the app's alone, since the website's feed has no surprise card.
