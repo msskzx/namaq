@@ -5,7 +5,7 @@ import { chromium } from '@playwright/test';
 /** What each step does; `arg` is the step's one argument. */
 export const HELP = {
   open: 'open <route>        go to a route, e.g. / or /read or /quiz/solo',
-  tap: 'tap <name>          tap the button, link or tab with this name, or else the text',
+  tap: 'tap <name>          tap the button, link, tab or field with this name, or else the text',
   press: 'press <name>        long-press it (the reader\'s menu, for one)',
   type: 'type <text>         type into the focused field (tap the field first)',
   swipe: 'swipe <up|down|left|right>  up and down scroll the screen; left and right drag a finger across it',
@@ -40,12 +40,13 @@ export async function launch(baseURL) {
 /** Outside the screens the app keeps behind the one on top (hidden from screen readers, as from the finger). */
 const SHOWN = ':not([aria-hidden="true"], [aria-hidden="true"] *)';
 
-/** What a person would call `name`, in this order: a button, link or tab by its label, or else text on the screen. */
+/** What a person would call `name`, in this order: a button, link, tab or field by its label, or else text on the screen. */
 async function find(page, name) {
   const kinds = [
     page.getByRole('button', { name, exact: true }),
     page.getByRole('link', { name, exact: true }),
     page.getByRole('tab', { name, exact: true }),
+    page.getByRole('textbox', { name, exact: true }),
     page.getByText(name, { exact: true }).and(page.locator(SHOWN)),
   ].map(found => found.filter({ visible: true }).first());
   for (let tries = 0; tries < 25; tries++) {

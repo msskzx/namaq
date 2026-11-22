@@ -6,7 +6,6 @@ import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Card from '@/ui/Card';
 import Empty from '@/ui/Empty';
-import { SearchField } from '@/ui/Field';
 import { BATTLES } from '@/lib/battles';
 import { usePalette, type Palette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
@@ -22,7 +21,7 @@ export function HubHeading({ text, palette }: { text: string; palette: Palette }
 }
 
 /**
- * The tarajim tab (owner, 2026-11-19; sketch tarajim-hub/sketch-dark.png): a hub, not a list. Search first; typing shows the
+ * The tarajim tab (owner, 2026-11-19; sketch tarajim-hub/sketch-dark.png): a hub, not a list. Search in the top bar and no page title, as on every tab (owner, 2026-11-22); typing shows the
  * people found as rows in one card in place of the sections. Then the groups the scholars name, the sira and its battles,
  * the ties between people and the nasab search, and the whole list on its own page in the book's order (nothing capped, nothing dumped here).
  */
@@ -37,11 +36,9 @@ export default function TarajimScreen() {
   const found = useMemo(() => (query.trim() ? searchPeople(query) : []), [query]);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar hideOnScroll />
-      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled"
+      <TopBar hideOnScroll search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث باسم أو كنية أو لقب', label: 'ابحث في التراجم' }} />
+      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag"
         contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 10 }}>
-        <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>التراجم</Text>
-        <SearchField palette={palette} label="ابحث في التراجم" placeholder="ابحث باسم أو كنية أو لقب" value={query} onChangeText={setQuery} />
         {query.trim() ? (
           found.length === 0
             ? <Empty text="لا أحد بهذا الاسم في التراجم المضافة بعد" palette={palette} />

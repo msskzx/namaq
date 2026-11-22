@@ -41,7 +41,8 @@ test('the tarajim hub opens the nasab search, and a pick draws his tree', async 
   await open(page, '/');
   await tab(page, 'التراجم').click();
   await page.getByRole('link', { name: /^النسب/ }).click();
-  await page.getByRole('textbox', { name: 'ابحث في التراجم' }).filter({ visible: true }).fill('أبو بكر');
+  // The hub under it keeps its own top-bar search of the same name; the picker's is in the sheet.
+  await page.getByRole('dialog').getByRole('textbox', { name: 'ابحث في التراجم' }).fill('أبو بكر');
   await page.getByRole('button', { name: 'أبو بكر الصديق' }).click();
   // A box stands alone, so it names his father in the nominative: «أبو قحافة», never «أبي قحافة».
   await expect(page.getByText(/^أبو قحافة/)).toBeVisible();
