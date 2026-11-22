@@ -14,6 +14,8 @@ export default function Bubble({ colour, start, framed = true, lead, palette, ch
   /** On the start side (the right in Arabic) or the end side. */
   start: boolean;
   framed?: boolean;
+  /** The ring that names the speaker; a shared picture leaves it out (owner, 2026-11-21), its lead-ins say who speaks. */
+  ring?: boolean;
   /** The narrator's words just before the saying, drawn above it. */
   lead?: string;
   palette: Palette; children: React.ReactNode;
