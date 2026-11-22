@@ -65,7 +65,7 @@ export function BalaghaBody({ ayah, palette, onClose }: { ayah: string; palette:
       </View>
       <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 10, paddingBottom: 8 }}>
         <Card palette={palette} pad={[10, 14]}>
-          <LitAyat ayat={[{ words, lit: span }]} palette={palette} />
+          <LitAyat ayat={[{ words, lit: span }]} menu={false} palette={palette} />
         </Card>
         <Tabs options={(['itqan', 'kashshaf'] as const).map(book => ({ key: book, label: BOOK_NAMES[book] }))} value={shown} onChange={book => { setShown(book); setSpan([]); }} palette={palette} />
         {shown === 'itqan'

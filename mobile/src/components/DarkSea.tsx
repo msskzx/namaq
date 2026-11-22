@@ -40,7 +40,7 @@ export const darkSeaSourceList = () => sourcesOf(darkSeaSources());
 function SceneAyah({ step, palette }: { step: number; palette: Palette }) {
   const words = useMemo(() => darkSeaWords(ayahMushafWords), []);
   return (
-    <AyahFlow color={palette.ink} center>
+    <AyahFlow color={palette.ink} center menu={DARK_SEA_KEY}>
       {words.map((word, i) => (
         <Fragment key={i}>
           <AyahWords look={{ color: word.step === step ? palette.highlight : word.step < step ? palette.ink : `${palette.muted}73` }}>{`${i ? ' ' : ''}${word.text}`}</AyahWords>

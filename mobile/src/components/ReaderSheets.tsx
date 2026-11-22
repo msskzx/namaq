@@ -131,7 +131,7 @@ export function IndexSheet({ open, onClose, onJump, palette, page, recite, query
               style={{ paddingHorizontal: 16, paddingVertical: 8, borderBottomWidth: 1, borderColor: palette.rule, gap: 2 }}>
               <Text style={{ color: palette.accent, fontSize: 13 }}>{name(surahs[surah - 1])} {num(ayah)}</Text>
               {/* The whole ayah, its found words coloured (owner, 2026-11-17). */}
-              <AyahFlow color={palette.ink}>
+              <AyahFlow color={palette.ink} menu={false}>
                 <AyahWords>{join(row.words.slice(0, row.from))}</AyahWords>
                 <AyahWords look={{ color: palette.accent }}>{join(row.words.slice(row.from, row.to + 1))}</AyahWords>
                 <AyahWords>{join(row.words.slice(row.to + 1))}</AyahWords>

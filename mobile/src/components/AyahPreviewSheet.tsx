@@ -93,7 +93,7 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
                   <Text style={{ color: palette.muted, fontSize: 14 }}>{`${surahName(other)} ${num(at)}`}</Text>
                   <ChevronLeft size={16} color={palette.muted} />
                 </View>
-                <AyahFlow color={palette.ink}>
+                <AyahFlow color={palette.ink} menu={false}>
                   {words.map((word, i) => <AyahWords key={i} look={word.shared ? { color: palette.accent } : undefined}>{`${i ? ' ' : ''}${word.text}`}</AyahWords>)}
                 </AyahFlow>
               </Card>

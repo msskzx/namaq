@@ -66,12 +66,16 @@ export function ShelfCard({ card, palette, items, open, note = false, Icon = KIN
         ))}>
         {note
           ? <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 28, textAlign: 'right' }}>{card.text}</Text>
-          : <AyahFlow color={palette.ink}><AyahWords>{shelfText(card)}</AyahWords></AyahFlow>}
+          : <AyahFlow color={palette.ink} menu={ayah ?? card.references.flatMap(reference => referenceKeys(reference))}><AyahWords>{shelfText(card)}</AyahWords></AyahFlow>}
         {holds.length > 0 && <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 22, textAlign: 'right' }}>{holds.join(' · ')}</Text>}
       </CardWithRow>
     </View>
   );
 }
+
+/** The ayat a saved tree's or compare card's reference names, in order (a range runs from its first to its last). */
+const referenceKeys = ({ surah, ayat, range }: { surah: number; ayat: number[]; range?: boolean }) =>
+  (range ? Array.from({ length: ayat[ayat.length - 1] - ayat[0] + 1 }, (_, i) => ayat[0] + i) : ayat).map(ayah => `${surah}:${ayah}`);
 
 /** The ayah a shelf card is on: a saved ayah's key, or a forgotten word's or note's ayah. */
 const ayahOfCard = (card: SavedCard) => markAyah(card.id.startsWith('ayah:') ? card.id.slice('ayah:'.length) : card.id);

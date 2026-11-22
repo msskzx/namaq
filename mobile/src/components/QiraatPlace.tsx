@@ -42,9 +42,9 @@ function QiraatPlace({ ayah, words, mark, max, bare = false, lines = false, pale
   const listed = max ? shown.slice(0, max) : shown;
   const body = (
     <View style={{ gap: 4 }}>
-      {lines ? <View pointerEvents="none"><AyahLines ayah={ayah} palette={palette} shown whole write={null} checked={null} /></View> : <>
+      {lines ? <View pointerEvents="none"><AyahLines ayah={ayah} menu={false} palette={palette} shown whole write={null} checked={null} /></View> : <>
         <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{`${surahName(surah)} ${num(number)}`}</Text>
-        <LitAyat ayat={[{ words: tokens.filter(word => word !== '۞'), lit, number }]} palette={palette} />
+        <LitAyat ayat={[{ words: tokens.filter(word => word !== '۞'), lit, number }]} menu={ayah} palette={palette} />
       </>}
       <View style={{ height: 1, backgroundColor: palette.rule, opacity: 0.6, marginVertical: 2 }} />
       {listed.map((word, i) => (
