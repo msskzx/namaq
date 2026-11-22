@@ -5,8 +5,15 @@
   "editor": "مراجعة لجنة من العلماء برئاسة هاشم محمد علي مهدي",
   "digitalHost": "turath.io (المكتبة الشاملة 18268)",
   "url": "https://shamela.ws/book/18268",
-  "notes": "Used to say who speaks where a story's text has only «قال» or «فقال» (owner, 2026-11-21): al-Harari names the speaker in brackets inside Muslim's text. Each page is the whole printed page (Muslim's text above the rule «ــ», the commentary under it), from api.turath.io/page?book_id=18268&pg=<page id>&ver=3, fetched 2026-11-21, with the HTML tags taken out, entities decoded and one blank line between paragraphs. Only the pages a story cites are stored.",
+  "notes": "Used to say who speaks where a story's text has only «قال» or «فقال» (owner, 2026-11-21): al-Harari names the speaker in brackets inside Muslim's text. Each page is the whole printed page (Muslim's text above the rule «ــ», the commentary under it), from api.turath.io/page?book_id=18268&pg=<page id>&ver=3, fetched 2026-11-21 (vol 24: 2026-11-22), with the HTML tags taken out, entities decoded and one blank line between paragraphs. Only the pages a story cites are stored.",
   "volumes": [
-    { "number": 10, "name": "الجزء العاشر" }
+    {
+      "number": 10,
+      "name": "الجزء العاشر"
+    },
+    {
+      "number": 24,
+      "name": "الجزء الرابع والعشرون"
+    }
   ]
 }
