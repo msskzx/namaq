@@ -41,6 +41,7 @@ export default function AppShell({ onReady }: { onReady: () => void }) {
           <Stack screenOptions={stack} screenListeners={({ route }) => ({ focus: () => noteRootPage(route.name) })}>
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="library" />
+            <Stack.Screen name="ayah" />
             <Stack.Screen name="about" />
             <Stack.Screen name="privacy" />
             <Stack.Screen name="attributions" />

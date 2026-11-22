@@ -118,12 +118,17 @@ test.describe('branches', () => {
     await expect(page.getByRole('button', { name: 'حفظ الشجرة' }).first()).toBeVisible();
   });
 
-  test('a tree is saved and shows in «مدونتي» on home', async ({ page }) => {
+  test('a tree is saved, shows in «مدونتي» on home, and its «افتح» opens the tree', async ({ page }) => {
     await open(page, '/branches');
     await page.getByRole('button', { name: 'حفظ الشجرة' }).first().click();
     await tab(page, 'الرئيسية').click();
     await page.getByRole('button', { name: 'مدونتي', exact: true }).click();
     await expect(page.getByLabel(/^شجرة: /).first()).toBeVisible();
+    // The mushaf stays one button away, and «افتح» is the tree itself, not the mushaf.
+    await expect(page.getByRole('button', { name: 'في المصحف' }).first()).toBeVisible();
+    await page.getByRole('button', { name: 'افتح الشجرة' }).first().click();
+    // The saved tree opens, its save button lit.
+    await expect(page.getByRole('button', { name: 'إزالة من المحفوظات' }).filter({ visible: true }).first()).toBeVisible();
   });
 
   test('the search narrows the trees to a phrase', async ({ page }) => {

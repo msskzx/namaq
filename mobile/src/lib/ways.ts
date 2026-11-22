@@ -72,3 +72,11 @@ export const openBookPage = (id: string, printed: string) => toTab({ pathname: '
 
 /** Opens the utilities on one of them: the qibla, the prayer times, the adhkar. */
 export const openUtility = (view: UtilityView) => { utilityView.set(view); toTab('/utilities'); };
+
+/**
+ * Opens an ayah's page, everything on it (owner, 2026-11-22): wherever the ayah is the subject (a saved ayah, a home card
+ * on it, a bookmark). Reading (continue reading, today's juz) still opens the mushaf. `at` scrolls to one of its sections.
+ */
+/** The ayah's page, scrolled to a section when `at` names one; `word` is the word a feed i'rab card showed. */
+export const openAyahPage = (key: string, at?: string, word?: number) =>
+  router.push({ pathname: '/ayah', params: { key, ...(at ? { at } : {}), ...(word !== undefined ? { word: String(word) } : {}) } });

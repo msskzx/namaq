@@ -80,8 +80,9 @@ under it, the book's words when they say more, and the person page's folded refe
 
 The ayah cards (`AyahNotePost` in `HomeFeed.tsx`, lists in `shared/quran/ayahNotes.ts`), each kind under its own interest:
 من التفسير (an ayah al-Sa'di explains alone), من البلاغة (an ayah al-Suyuti surely names), من الإعراب (one word's line),
-من القراءات. Each is small: the ayah, a little of the book, and a tap opens the reader's own sheet with the whole text
-(owner, 2026-11-18).
+من القراءات. Each is small: the ayah and a little of the book (owner, 2026-11-18). Its «افتح» opens the ayah's page
+(`mobile/src/screens/ayah.tsx`) at that book's section, as the saved-ayah and recall cards' «افتح» open the ayah's page
+(owner, 2026-11-22: where the ayah is the subject; reading cards still open the mushaf).
 
 The drawings built for their pages (owner, 2026-11-20; items and sources in `shared/drawingCards.ts`, the website's
 cards in `src/lib/drawingCards.ts`). Each draws the page's own component and its open button opens that page at the item.
