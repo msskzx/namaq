@@ -107,7 +107,7 @@ export const SOURCES: Source[] = [
   {
     id: 'sahih-bukhari', group: 'books', files: ['shared/data/hadith/bukhari.json'],
     title: { ar: 'صحيح البخاري', en: 'Sahih al-Bukhari' }, author: { ar: 'محمد بن إسماعيل البخاري', en: 'al-Bukhari' },
-    edition: 'الطبعة السلطانية، بولاق ١٣١١هـ، مصوّرة دار طوق النجاة ١٤٢٢هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1681), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih],
+    edition: 'الطبعة السلطانية، بولاق ١٣١١هـ، مصوّرة دار طوق النجاة ١٤٢٢هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1681), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih, USE.stories],
   },
   {
     id: 'sahih-muslim', group: 'books', files: ['shared/data/hadith/muslim.json'],
@@ -408,26 +408,16 @@ export const SOURCES: Source[] = [
     },
     uses: [USE.qiraat],
   },
-  {
-    id: 'sahih-al-bukhari', group: 'books',
-    title: { ar: 'صحيح البخاري', en: 'Sahih al-Bukhari' }, author: { ar: 'محمد بن إسماعيل البخاري', en: 'al-Bukhari' },
-    edition: 'نص hadith-api (ara-bukhari) بالترقيم المشهور، ويُربط كل حديث برقمه في sunnah.com', link: { url: 'https://sunnah.com/bukhari', label: 'sunnah.com' },
-    licence: {
-      ar: 'توفي المؤلف سنة ٢٥٦هـ، فنصه في الملك العام. نروي الحديث كاملًا من إسناده إلى آخره، مع رقمه ورابطه.',
-      en: 'The author died in 870, so his text is in the public domain. We give each hadith whole, chain to last word, with its number and a link.',
-    },
-    uses: [USE.stories],
-  },
   // Data
   {
     id: 'hadith-api', group: 'data',
-    title: { ar: 'hadith-api: نص صحيح البخاري', en: 'hadith-api: the text of Sahih al-Bukhari' },
-    edition: 'الإصدار ١ (ara-bukhari)، نُزّل ٢٠٢٦-١١-١٨، ولم يُغيَّر فيه إلا حذف علامات الاتجاه (U+200F) وجعل المسافات المتتالية مسافة واحدة', link: { url: 'https://github.com/fawazahmed0/hadith-api', label: 'fawazahmed0/hadith-api' },
+    title: { ar: 'hadith-api: نصا صحيح البخاري وصحيح مسلم', en: 'hadith-api: the texts of Sahih al-Bukhari and Sahih Muslim' },
+    edition: 'الإصدار ١ (ara-bukhari وara-muslim)', link: { url: 'https://github.com/fawazahmed0/hadith-api', label: 'fawazahmed0/hadith-api' },
     licence: {
-      ar: 'منشورة في الملك العام (Unlicense).',
-      en: 'Released into the public domain (Unlicense).',
+      ar: 'منشورة في الملك العام (Unlicense). تُستعمل لمقابلة ترقيم عبد الباقي في نسختنا من الصحيحين فقط، ولا يُعرض من نصها شيء.',
+      en: 'Released into the public domain (Unlicense). Used only to check Abd al-Baqi’s numbering in our copy of the two Sahihs; none of its text is shown.',
     },
-    uses: [USE.stories],
+    uses: [USE.sahih],
   },
   {
     id: 'shamela-sadi', group: 'data',

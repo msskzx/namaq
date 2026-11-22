@@ -4,8 +4,8 @@ import type { CatalogEvent } from '@/lib/catalog/types';
  * The Prophet ﷺ came to Khaybar by night and waited for morning; when the people came out with their spades and baskets and
  * saw him they cried «محمد والخميس», and he said «الله أكبر، خربت خيبر، إنا إذا نزلنا بساحة قوم فساء صباح المنذرين».
  * Told from Sahih al-Bukhari (al-Maghazi, the chapter on Khaybar), each hadith whole: Anas's 4200 first, the fullest, with
- * Safiyyah among the captives; then 4198, with the call against the donkeys' meat; then 4197, whose printed route in our copy
- * begins with the last words of 4196 («نشأ بها») before its own chain, kept with the chain as printed.
+ * Safiyyah among the captives; then 4198, with the call against the donkeys' meat; then 4197, from its own chain (the
+ * route printed before it, Qutaybah's «نشأ بها», is the end of 4196).
  */
 const theMorningAtKhaybar = {
   kind: 'EVENT',
@@ -35,7 +35,7 @@ const theMorningAtKhaybar = {
       ],
     },
     {
-      isnad: "حَدَّثَنَا قُتَيْبَةُ: حَدَّثَنَا حَاتِمٌ، قَالَ: «نَشَأَ بِهَا». ٤١٩٧ (م) - حَدَّثَنَا عَبْدُ اللهِ بْنُ يُوسُفَ: أَخْبَرَنَا مَالِكٌ، عَنْ حُمَيْدٍ الطَّوِيلِ، عَنْ أَنَسٍ  رضي الله عنه:",
+      isnad: "حَدَّثَنَا عَبْدُ اللهِ بْنُ يُوسُفَ: أَخْبَرَنَا مَالِكٌ، عَنْ حُمَيْدٍ الطَّوِيلِ، عَنْ أَنَسٍ  رضي الله عنه:",
       source: { slug: 'sahih-al-bukhari', hadith: 4197, url: 'https://sunnah.com/bukhari:4197' },
       moments: [
         { title: "لم يغر بهم حتى يصبح", text: "«أَنَّ رَسُولَ اللهِ ﷺ أَتَى خَيْبَرَ لَيْلًا: وَكَانَ إِذَا أَتَى قَوْمًا بِلَيْلٍ لَمْ يُغِرْ بِهِمْ حَتَّى يُصْبِحَ، فَلَمَّا أَصْبَحَ خَرَجَتِ الْيَهُودُ بِمَسَاحِيهِمْ وَمَكَاتِلِهِمْ، فَلَمَّا رَأَوْهُ قَالُوا: مُحَمَّدٌ وَاللهِ، مُحَمَّدٌ وَالْخَمِيسُ.", people: ['prophet-muhammad'] },
