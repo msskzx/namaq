@@ -617,7 +617,7 @@ function BattlePost({ slug, palette }: { slug: string; palette: Palette }) {
       open={<Action Icon={Swords} label={`افتح ${battle.name}`} onPress={open} palette={palette} />}
       source={sourcesOf(battleHeadSources(battle))}>
       {battle.place ? <>
-        <BattleMap place={battle.place} palette={palette} />
+        <BattleMap places={[battle.place]} palette={palette} />
         <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right', paddingHorizontal: 12, paddingTop: 6 }}>موضع تقريبي على خريطة اليوم، من عندنا.</Text>
       </> : null}
       <View style={{ padding: 14 }}><Counts battle={battle} palette={palette} /></View>
@@ -627,7 +627,7 @@ function BattlePost({ slug, palette }: { slug: string; palette: Palette }) {
 
 /**
  * A year of the battles timeline with the year before and after it (owner, 2026-11-21; feed-visuals sketch, panel 4), the
- * year lit and its battles listed under the drawing, each opening its page; a year's column, or the open button, opens the
+ * year lit, its battles' places on one map and its battles listed under them, each opening its page; a year's column, or the open button, opens the
  * battles screen at that year.
  */
 function BattleYearPost({ id, palette }: { id: string; palette: Palette }) {
@@ -636,12 +636,18 @@ function BattleYearPost({ id, palette }: { id: string; palette: Palette }) {
   const slice = battleYearSlice(BATTLES, year);
   if (!slice) return null;
   const toYear = (at: number) => toTab({ pathname: '/battles', params: { year: String(at) } });
+  // The year's battles on one map (owner, 2026-11-22), each place once.
+  const places = [...new Map(slice.battles.flatMap(battle => (battle.place ? [[battle.place.name, battle.place] as const] : []))).values()];
   return (
     <Post palette={palette} head={<PostHead Icon={CalendarRange} title="من الغزوات والمعارك" sub={yearTitle(year)} palette={palette} />}
       open={<Action Icon={CalendarRange} label={`افتح ${yearTitle(year)} في الغزوات والمعارك`} onPress={() => toYear(year)} palette={palette} />}
       source={sourcesOf(battleYearSources(BATTLES, year))}>
       <View style={{ padding: 14, gap: 6 }}>
         <BattleYears columns={slice.columns} lit={year} width={Math.min(width - 60, 480)} palette={palette} onYear={toYear} />
+        {places.length ? <>
+          <BattleMap places={places} palette={palette} />
+          <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>مواضع تقريبية على خريطة اليوم، من عندنا.</Text>
+        </> : null}
         {slice.battles.map(battle => (
           <TapRow key={battle.slug} role="link" label={`افتح ${battle.name}`} style={{ flexDirection: 'column', justifyContent: 'center' }}
             onPress={() => toTab({ pathname: '/battle', params: { slug: battle.slug } })}>

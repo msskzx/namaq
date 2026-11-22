@@ -69,3 +69,17 @@ export function landPath(land: readonly (readonly LonLat[])[], box: Box, width: 
     .map(ring => `M${ring.map(point => at(point).map(n => n.toFixed(1)).join(',')).join('L')}Z`)
     .join('');
 }
+
+/**
+ * The pins of a map holding several places (owner, 2026-11-22: a year's battles on one map), in drawn points: places
+ * closer than `near` points share one pin, named by all of them («أحد، المدينة»), so no two pins or names sit on each other.
+ */
+export function pinsOf<P extends { name: string }>(places: readonly (P & { x: number; y: number })[], near: number) {
+  const pins: { x: number; y: number; names: string[] }[] = [];
+  for (const place of places) {
+    const pin = pins.find(each => Math.hypot(each.x - place.x, each.y - place.y) < near);
+    if (!pin) pins.push({ x: place.x, y: place.y, names: [place.name] });
+    else if (!pin.names.includes(place.name)) pin.names.push(place.name);
+  }
+  return pins.map(pin => ({ x: pin.x, y: pin.y, name: pin.names.join('، ') }));
+}
