@@ -4,6 +4,7 @@ import type { CatalogEvent } from '@/lib/catalog/types';
  * Sahl ibn Sa'd, asked about the Prophet's wound, said Fatimah washed it and Ali poured water from his shield, and when the
  * blood would not stop she burned a piece of mat and pressed it on; that day his tooth was broken, his face wounded and the
  * helmet broken on his head. Told from Sahih al-Bukhari 4075 (al-Maghazi, in the chapters on Uhud), whole.
+ * Then Sahl's telling in Sahih Muslim 1790 (al-Jihad, the chapter on Uhud), whole, folded.
  */
 const theWoundOfTheProphetAtUhud = {
   kind: 'EVENT',
@@ -20,6 +21,14 @@ const theWoundOfTheProphetAtUhud = {
       moments: [
         { title: "من كان يغسل جرح رسول الله ﷺ", text: "«سَمِعَ سَهْلَ بْنَ سَعْدٍ، وَهُوَ يُسْأَلُ عَنْ جُرْحِ رَسُولِ اللهِ ﷺ، فَقَالَ: أَمَا وَاللهِ إِنِّي لَأَعْرِفُ مَنْ كَانَ يَغْسِلُ جُرْحَ رَسُولِ اللهِ ﷺ، وَمَنْ كَانَ يَسْكُبُ الْمَاءَ، وَبِمَا دُووِيَ،", people: ['prophet-muhammad'] },
         { title: "أخذت قطعة من حصير فأحرقتها", text: "قَالَ: كَانَتْ فَاطِمَةُ عليها السلام بِنْتُ رَسُولِ اللهِ ﷺ تَغْسِلُهُ، وَعَلِيٌّ يَسْكُبُ الْمَاءَ بِالْمِجَنِّ، فَلَمَّا رَأَتْ فَاطِمَةُ أَنَّ الْمَاءَ لَا يَزِيدُ الدَّمَ إِلَّا كَثْرَةً، أَخَذَتْ قِطْعَةً مِنْ حَصِيرٍ، فَأَحْرَقَتْهَا وَأَلْصَقَتْهَا، فَاسْتَمْسَكَ الدَّمُ، وَكُسِرَتْ رَبَاعِيَتُهُ يَوْمَئِذٍ، وَجُرِحَ وَجْهُهُ، وَكُسِرَتِ الْبَيْضَةُ عَلَى رَأْسِهِ.»", people: ['fatimah-bint-muhammad', 'prophet-muhammad', 'ali-ibn-abi-talib'] },
+      ],
+    },
+    {
+      isnad: "حَدَّثَنَا يَحْيَي بْنُ يَحْيَي التَّمِيمِيُّ. حَدَّثَنَا عَبْدُ الْعَزِيزِ بْنُ أَبِي حَازِمٍ عَنْ أَبِيهِ؛",
+      source: { slug: 'sahih-muslim', hadith: 1790, url: 'https://sunnah.com/muslim:1790' },
+      moments: [
+        { title: "جرح وجه رسول الله ﷺ", text: "أَنَّهُ سَمِعَ سَهْلَ بْنَ سَعْدٍ يُسْأَلُ عَنْ جُرْحِ رسول الله ﷺ، يوم أُحُدٍ؟ فَقَالَ: جُرِحَ وَجْهُ رَسُولِ اللَّهِ ﷺ، وَكُسِرَتْ رَبَاعِيَتُهُ، وَهُشِمَتِ الْبَيْضَةُ عَلَى رَأْسِهِ.", people: ['prophet-muhammad'] },
+        { title: "أخذت قطعة من حصير فأحرقته", text: "فَكَانَتْ فَاطِمَةُ بِنْتُ رَسُولِ اللَّهِ ﷺ تَغْسِلُ الدَّمَ. وَكَانَ عَلِيُّ بْنُ أَبِي طَالِبٍ يَسْكُبُ عَلَيْهَا بِالْمِجَنِّ. فَلَمَّا رَأَتْ فَاطِمَةُ أَنَّ الْمَاءَ لَا يَزِيدُ الدم إلا كثرة، أخذت قطعة من حَصِيرٍ فَأَحْرَقَتْهُ حَتَّى صَارَ رَمَادًا. ثُمَّ أَلْصَقَتْهُ بالجرح. فاستمسك الدم.", people: ['fatimah-bint-muhammad', 'ali-ibn-abi-talib', 'prophet-muhammad'] },
       ],
     },
   ],
