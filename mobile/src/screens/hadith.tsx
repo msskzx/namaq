@@ -11,7 +11,6 @@ import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
 import Empty from '@/ui/Empty';
 import LoadingDots from '@/ui/LoadingDots';
-import { SearchField } from '@/ui/Field';
 import { usePalette, type Palette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
@@ -83,7 +82,7 @@ function Hit({ hit, line, palette }: { hit: SahihHit; line: string; palette: Pal
 }
 
 /**
- * The hadith tab (owner's sketch, 2026-11-19): one search over both Sahihs' babs and hadith, then a card for each book,
+ * The hadith tab (owner's sketch, 2026-11-19): one search over both Sahihs' babs and hadith, in the top bar with no page title, as on every tab (owner, 2026-11-22), then a card for each book,
  * Sahih al-Bukhari, Sahih Muslim and al-Nawawi's Forty, each opening its kitabs, with «تابع» to the last hadith read.
  */
 export default function HadithScreen() {
@@ -112,10 +111,8 @@ export default function HadithScreen() {
   const hadithHits = found ? found.hadith.slice(0, Math.max(0, count - found.babs.length)) : [];
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar hideOnScroll />
-      <ScrollView ref={scroll} onScroll={scrolled} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 12 }}>
-        <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>الحديث</Text>
-        <SearchField palette={palette} label="ابحث في الصحيحين" placeholder="ابحث في الأبواب والأحاديث" value={query} onChangeText={setQuery} />
+      <TopBar hideOnScroll search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث في الأبواب والأحاديث', label: 'ابحث في الصحيحين' }} />
+      <ScrollView ref={scroll} onScroll={scrolled} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 12 }}>
         {found ? <>
           <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>في الأبواب</Text>
           {found.babs.length ? babs.map(hit => {
