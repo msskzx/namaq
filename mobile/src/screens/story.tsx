@@ -15,7 +15,7 @@ import { storyOf } from '@/lib/stories';
 import type { AppStory } from '@shared/stories/story';
 import { People } from '@/components/battles/BattleParts';
 import Folded from '@/ui/Folded';
-import { Report, ReportScene, reportSource, StoryAyat, Tags } from '@/components/stories/StoryParts';
+import { Report, ReportScene, reportSource, StoryAyat, StoryShare, Tags } from '@/components/stories/StoryParts';
 import Tabs from '@/ui/Tabs';
 import { drawnReport, reportLines, reportSlots } from '@shared/stories/story';
 import { DRAW_MODES, type DrawMode } from '@shared/hadith';
@@ -52,7 +52,7 @@ export function StoryView({ story, palette, titled }: { story: AppStory; palette
       {drawn ? <Tabs label="طريقة العرض" options={DRAW_MODES} value={mode} onChange={setMode} palette={palette} /> : null}
     </View>
     {main ? (
-      <CardWithRow palette={palette} pad={16} gap={0} source={reportSource(main, drawing)}>
+      <CardWithRow palette={palette} pad={16} gap={0} source={reportSource(main, drawing)} row={drawn ? <StoryShare story={story} report={main} palette={palette} /> : undefined}>
         {drawing ? <ReportScene report={main} slots={slots} palette={palette} /> : <Report report={main} palette={palette} titled={titled} plain />}
       </CardWithRow>
     ) : null}

@@ -45,5 +45,18 @@ test('Dimad\'s story is drawn by speaker, and «النص» shows it as Muslim pr
   await page.getByRole('tab', { name: 'النص', exact: true }).click();
   await expect(page.getByText(chain, { exact: false })).toBeVisible();
   await expect(page.getByText(saying, { exact: true })).toHaveCount(0);
-  await expect(page.getByRole('button', { name: 'ضماد' })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'ضماد', exact: true })).toHaveCount(0);
+});
+
+// Owner, 2026-11-21: a drawn story is shared as several pictures of one size (an Instagram post of several), not one tall
+// image; the preview steps through them and the button saves them all.
+test('a drawn story is shared as several pictures', async ({ page }) => {
+  await open(page, '/story?slug=islam-of-dimad');
+  await page.getByRole('button', { name: 'شارك إسلام ضماد الأزدي' }).click();
+  const pictures = page.getByRole('tab', { name: /^الصورة / });
+  await expect(pictures.first()).toBeVisible({ timeout: 20_000 });
+  expect(await pictures.count()).toBeGreaterThan(1);
+  await pictures.nth(1).click();
+  await expect(pictures.nth(1)).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('button', { name: 'احفظ الصور في الجهاز' })).toBeEnabled();
 });
