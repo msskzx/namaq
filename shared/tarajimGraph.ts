@@ -189,6 +189,23 @@ export function tieOf(kind: TieKind, toSex: GraphNode['sex']) {
   }
 }
 
+/**
+ * A tie's bare name for a line in a drawing (owner, 2026-11-22: the line says only the tie, and an arrow says whose):
+ * `word` is what `who` is to `of`, «أم» on the line from صفية to الزبير.
+ */
+export function tieName(graph: PeopleGraph, step: Step) {
+  const from = graph.nodes.get(step.from)!;
+  const to = graph.nodes.get(step.to)!;
+  // «صَحِبَ» says `from` was `to`'s companion.
+  const [who, of] = step.kind === 'accompanied' ? [from, to] : [to, from];
+  const f = who.sex === 'FEMALE';
+  const kind = step.kind === 'accompanied' ? 'companion' : step.kind;
+  const word = ({ parent: f ? 'أم' : 'أب', child: f ? 'بنت' : 'ابن', spouse: f ? 'زوجة' : 'زوج', sibling: f ? 'أخت' : 'أخ',
+    cousin: f ? 'قريبة' : 'قريب', companion: f ? 'صاحبة' : 'صاحب' } as const)[kind];
+  const doubt = step.link.disputed ? ' على خلاف' : step.link.anonymous ? ' فيما قيل' : '';
+  return { word: word + doubt, who: who.slug, of: of.slug };
+}
+
 /** A name after a word that governs it («أمُّ أبي العاص», «من أبي سفيان»): a leading kunya or «ذو» in the genitive. */
 export const genitive = (name: string) => name.replace(/^أب[وا](?= )/u, 'أبي').replace(/^ذو(?= )/u, 'ذي');
 

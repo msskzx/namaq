@@ -31,7 +31,7 @@ function Box({ node, palette, linked, scale }: { node: NasabNode; palette: Palet
   return (
     <Card palette={palette} node pad={[6 * scale, 12 * scale]} picked={!!slug} accessibilityRole={slug && linked ? 'link' : undefined} accessibilityLabel={slug ? name : undefined}
       onPress={slug && linked ? () => router.push({ pathname: '/person', params: { slug } }) : undefined}>
-      <Text style={{ color: slug ? palette.accent : palette.ink, fontSize: 16 * scale, textAlign: 'center' }}>{name}</Text>
+      <Text numberOfLines={1} style={{ color: slug ? palette.accent : palette.ink, fontSize: 16 * scale, textAlign: 'center' }}>{name}</Text>
     </Card>
   );
 }
@@ -41,7 +41,8 @@ type Tree = { palette: Palette; linked: boolean; scale: number };
 /**
  * A node and his sons under him, joined by lines: a stem down from the father, a bar across the sons, a stem down to
  * each (each son draws his half of the bar, so the bar spans from the first son's middle to the last's). Every father
- * is drawn: the tree never folds (owner 2026-11-22).
+ * is drawn: the tree never folds (owner 2026-11-22). An only son hangs as far below as sons under a bar do, so each
+ * generation stands on one row across the tree (owner 2026-11-22).
  */
 function Branch({ node, path, tree }: { node: NasabNode; path: string; tree: Tree }) {
   const { palette, scale } = tree;
@@ -59,7 +60,7 @@ function Branch({ node, path, tree }: { node: NasabNode; path: string; tree: Tre
                 <View style={{ flex: 1, backgroundColor: i === node.children.length - 1 ? 'transparent' : palette.muted }} />
               </View>
             )}
-            {node.children.length > 1 && <View style={stem} />}
+            <View style={node.children.length > 1 ? stem : { ...stem, height: stem.height + LINE }} />
             <Branch node={child} path={`${path}/${child.key}`} tree={tree} />
           </View>
         ))}

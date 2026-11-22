@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import { View } from 'react-native';
-import Svg, { Line } from 'react-native-svg';
+import Svg, { Line, Polygon } from 'react-native-svg';
 import { router } from 'expo-router';
-import { stepClause, type GraphNode, type Step, type TieKind } from '@shared/tarajimGraph';
+import { stepClause, tieName, type GraphNode, type Step, type TieKind } from '@shared/tarajimGraph';
 import { Text } from '@/ui/Text';
 import Card from '@/ui/Card';
 import Chip from '@/ui/Chip';
@@ -23,22 +24,26 @@ export function edge(a: { x: number; y: number }, b: { x: number; y: number }, h
 const NODE_W = 220;
 const GAP = 8;
 const NODE_H = 44;
-const ROW = 92;
-const LABEL_W = 170;
-/** Two lines of a tie's words apart, and the row gap that leaves a line above them. */
-const CROWDED = 110;
-const LABEL_H = 38;
-const ROW_FAN = 132;
-/** The name before «بن» or «بنت», for the short clause on a line: «الزبير ابنُ صفية». */
+/** Rows far enough apart that a line between them holds its tie's name and its arrow with room round both. */
+const ROW = 104;
+const LABEL_W = 90;
+/** Two lines whose names would touch at their middles, and the row gap when their names go above the people instead. */
+const CROWDED = 48;
+const LABEL_H = 20;
+const ROW_FAN = 124;
+/** The arrow's length and half width at the end of a line. */
+const ARROW = 9;
+const ARROW_HALF = 5;
+/** The name before «بن» or «بنت», for the clause a screen reader says for a line: «الزبير ابنُ صفية». */
 const firstName = (node: GraphNode) => personName(node).split(/\s+بنت?\s+/u)[0];
 
-type Place = { x: number; y: number; w: number };
+type Place = { x: number; y: number; w: number; h: number };
 
 /**
  * Rows for the joining graph: each person on the row of his distance from the first one, so the chains read top down
  * like the nasab tree, and the people of a row spread across.
  */
-function layout(nodes: readonly string[], steps: readonly Step[], first: string, width: number) {
+function layout(nodes: readonly string[], steps: readonly Step[], first: string, width: number, tall: (slug: string) => number) {
   const depth = new Map<string, number>([[first, 0]]);
   for (let changed = true; changed;) {
     changed = false;
@@ -68,56 +73,76 @@ function layout(nodes: readonly string[], steps: readonly Step[], first: string,
       .map(step => (xs.get(step.from)!.x + xs.get(step.to)!.x) / 2).sort((a, b) => a - b);
     if (mids.some((x, i) => i > 0 && x - mids[i - 1] < CROWDED)) crowded.add(row);
   }
-  const top = new Map<number, number>([[0, NODE_H / 2 + 8]]);
-  for (let row = 1; row <= lastRow; row++) top.set(row, top.get(row - 1)! + (crowded.has(row - 1) ? ROW_FAN : ROW));
+  // A name that takes two lines makes its box taller: the rows keep the same length of line between the boxes.
+  const half = (row: number) => Math.max(NODE_H, ...(rows.get(row) ?? []).map(tall)) / 2;
+  const top = new Map<number, number>([[0, half(0) + 8]]);
+  for (let row = 1; row <= lastRow; row++) top.set(row, top.get(row - 1)! + half(row - 1) + half(row) + (crowded.has(row - 1) ? ROW_FAN : ROW) - NODE_H);
   const place = new Map<string, Place>();
-  for (const node of nodes) place.set(node, { ...xs.get(node)!, y: top.get(depth.get(node)!)! });
-  return { place, height: top.get(lastRow)! + ROW - NODE_H / 2 - 8, fanned: (step: Step) => depth.get(step.from) !== depth.get(step.to) && crowded.has(Math.min(depth.get(step.from)!, depth.get(step.to)!)) };
+  for (const node of nodes) place.set(node, { ...xs.get(node)!, y: top.get(depth.get(node)!)!, h: Math.max(NODE_H, tall(node)) });
+  return { place, height: top.get(lastRow)! + half(lastRow) + 8, fanned: (step: Step) => depth.get(step.from) !== depth.get(step.to) && crowded.has(Math.min(depth.get(step.from)!, depth.get(step.to)!)) };
 }
 
 /**
  * The one drawing of a chain of ties (owner, 2026-11-18/19): «بينه وبين…» and the «صلة» feed card draw the same thing.
- * Each line carries the whole tie with both names («الزبير ابنُ صفية»), so a word such as «ابنُ» never leaves the
- * reader guessing who is whose son. Anyone with a page opens his ties. Inside a feed card the people are chips, since a
- * card holds no card.
+ * Each line says only the tie's name, and its arrow runs from the one the name describes to the one he is it to: «أم»
+ * on the line from صفية to الزبير (owner, 2026-11-22). A screen reader hears the whole clause with both names, and the
+ * «النص» view writes it out. Anyone with a page opens his ties. Inside a feed card the people are chips, since a card
+ * holds no card.
  */
 export default function TiesChain({ nodes, steps, first, picked, width, palette, inCard = false }: {
   nodes: readonly string[]; steps: readonly Step[]; first: string; picked: readonly string[]; width: number; palette: Palette;
   /** Drawn inside a card (the feed): people as chips on the card's colour. */
   inCard?: boolean;
 }) {
-  const { place, height, fanned } = layout(nodes, steps, first, width);
+  // Each box's height as drawn, so lines end at its edge however many lines its name takes.
+  const [tall, setTall] = useState<Record<string, number>>({});
+  const { place, height, fanned } = layout(nodes, steps, first, width, slug => tall[slug] ?? NODE_H);
   const ground = inCard ? palette.card : palette.paper;
+  // Each line from the edge of the one its name describes to the edge of the other, where the arrow ends.
+  const lines = steps.map(step => {
+    const { word, who, of } = tieName(GRAPH, step);
+    const p = place.get(who)!;
+    const q = place.get(of)!;
+    const a = edge(p, q, p.w / 2, p.h / 2);
+    const tip = edge(q, p, q.w / 2, q.h / 2);
+    const long = Math.hypot(tip.x - a.x, tip.y - a.y) || 1;
+    const u = { x: (tip.x - a.x) / long, y: (tip.y - a.y) / long };
+    return { step, word, p, q, a, tip, u, color: kindColor(palette, step.kind) };
+  });
   return (
     <View style={{ width, height, alignSelf: 'center' }}>
       <Svg width={width} height={height} style={{ position: 'absolute' }}>
-        {steps.map(step => {
-          const a = edge(place.get(step.from)!, place.get(step.to)!, place.get(step.from)!.w / 2, NODE_H / 2);
-          const b = edge(place.get(step.to)!, place.get(step.from)!, place.get(step.to)!.w / 2, NODE_H / 2);
-          return <Line key={`${step.from}>${step.to}`} x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke={kindColor(palette, step.kind)} strokeWidth={2} />;
+        {lines.map(({ step, a, tip, u, color }) => {
+          const back = { x: tip.x - u.x * ARROW, y: tip.y - u.y * ARROW };
+          const head = [tip, { x: back.x - u.y * ARROW_HALF, y: back.y + u.x * ARROW_HALF }, { x: back.x + u.y * ARROW_HALF, y: back.y - u.x * ARROW_HALF }];
+          return [
+            <Line key={`${step.from}>${step.to}`} x1={a.x} y1={a.y} x2={back.x} y2={back.y} stroke={color} strokeWidth={2} />,
+            <Polygon key={`${step.from}>${step.to}^`} points={head.map(pt => `${pt.x},${pt.y}`).join(' ')} fill={color} />,
+          ];
         })}
       </Svg>
-      {steps.map((step, i) => {
-        const a = place.get(step.from)!;
-        const b = place.get(step.to)!;
+      {lines.map(({ step, word, p, q, a, tip, color }, i) => {
+        const said = stepClause(GRAPH, step, firstName);
+        const style = { position: 'absolute' as const, height: LABEL_H, textAlign: 'center' as const, color, fontSize: 13, lineHeight: LABEL_H, backgroundColor: ground };
         if (fanned(step)) {
-          const lower = a.y > b.y ? a : b;
+          // Above the lower one, clear of the arrow when it ends on him.
+          const lower = p.y > q.y ? p : q;
+          const clear = lower === q ? ARROW + 2 : 2;
           return (
-            <Text key={`l${step.from}>${step.to}`} numberOfLines={2} style={{ position: 'absolute', left: lower.x - lower.w / 2, top: lower.y - NODE_H / 2 - LABEL_H - 4, width: lower.w, textAlign: 'center', color: kindColor(palette, step.kind), fontSize: 13, backgroundColor: ground }}>
-              {stepClause(GRAPH, step, firstName)}
+            <Text key={`l${step.from}>${step.to}`} numberOfLines={1} accessibilityLabel={said} style={{ ...style, left: lower.x - lower.w / 2, top: lower.y - lower.h / 2 - clear - LABEL_H, width: lower.w }}>
+              {word}
             </Text>
           );
         }
-        // Lines between the same two rows have their words side by side: each takes the room to its neighbour.
-        const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
-        const room = Math.min(LABEL_W, ...steps.filter((_, j) => j !== i).map(other => {
-          const p = place.get(other.from)!;
-          const q = place.get(other.to)!;
-          return Math.abs((p.y + q.y) / 2 - mid.y) < 24 ? Math.abs((p.x + q.x) / 2 - mid.x) - 6 : Infinity;
+        // Between the line's ends, short of the arrow; lines between the same two rows each take the room to their neighbour.
+        const mid = { x: (a.x + tip.x) / 2, y: (a.y + tip.y) / 2 };
+        const room = Math.min(LABEL_W, ...lines.filter((_, j) => j !== i).map(other => {
+          const m = { x: (other.a.x + other.tip.x) / 2, y: (other.a.y + other.tip.y) / 2 };
+          return Math.abs(m.y - mid.y) < LABEL_H ? Math.abs(m.x - mid.x) - 6 : Infinity;
         }));
         return (
-          <Text key={`l${step.from}>${step.to}`} numberOfLines={2} style={{ position: 'absolute', left: Math.max(0, Math.min(width - room, mid.x - room / 2)), top: mid.y - (room < LABEL_W ? 18 : 10), width: room, textAlign: 'center', color: kindColor(palette, step.kind), fontSize: 13, backgroundColor: ground }}>
-            {stepClause(GRAPH, step, firstName)}
+          <Text key={`l${step.from}>${step.to}`} numberOfLines={1} accessibilityLabel={said} style={{ ...style, left: Math.max(0, Math.min(width - room, mid.x - room / 2)), top: mid.y - LABEL_H / 2, width: room }}>
+            {word}
           </Text>
         );
       })}
@@ -126,7 +151,8 @@ export default function TiesChain({ nodes, steps, first, picked, width, palette,
         const at = place.get(slug)!;
         const open = node.inApp ? () => router.push({ pathname: '/ties', params: { slug } }) : undefined;
         return (
-          <View key={slug} style={{ position: 'absolute', left: at.x - at.w / 2, top: at.y - NODE_H / 2, width: at.w, height: NODE_H, justifyContent: 'center', alignItems: inCard ? 'center' : 'stretch' }}>
+          <View key={slug} onLayout={e => { const h = Math.round(e.nativeEvent.layout.height); if (h !== at.h && (h > NODE_H || tall[slug])) setTall(t => ({ ...t, [slug]: h })); }}
+            style={{ position: 'absolute', left: at.x - at.w / 2, top: at.y - at.h / 2, width: at.w, minHeight: NODE_H, justifyContent: 'center', alignItems: inCard ? 'center' : 'stretch' }}>
             {inCard
               ? <Chip label={personName(node)} on={picked.includes(slug)} lit tint={node.inApp ? palette.accent : palette.muted} role={node.inApp ? 'button' : 'text'} onPress={open} palette={palette} />
               : (
