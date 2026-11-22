@@ -140,9 +140,11 @@ A new card or quiz kind goes into an interest's `cards` or `quizzes` in the same
 - Every card has one open button, the same on all of them: «افتح» with the forward arrow (app `ui/OpenButton`), first
   in its row (owner, 2026-11-22). It opens the card's item on its page; a long card with no page opens whole in a sheet
   with it, and there is no «اقرأ كاملًا» link. The head's round icon still tells the card kinds apart.
-- A question card's open button opens the quizzes page (solo or with others), and «تسميع» shows only on a
-  Quran question (an interest in the Quran's or the language's sciences). Once answered, each choice says what it is where
-  the data has it: whose name or laqab, which hadith a narrator or an ending belongs to (`ChoiceQuestion.whereOf`).
+- A question card (owner, 2026-11-22): before answering, «تحقق» (filled, in the row) and «تلميح» (the look-up, once
+  «ابحث عن الجواب»), and «تسميع» only on the recite question. Once answered, only «افتح», which opens the page that
+  presents what it asked (a person, a hadith, a term, the ayah in the reader), never the quizzes page. Each choice then
+  says what it is where the data has it: whose name or laqab, which hadith a narrator or an ending belongs to
+  (`ChoiceQuestion.whereOf`). Every button has its icon before its word.
 - The chips over the feed: «لك» and each interest picked; a tap shows that interest's cards alone.
 - The website has the same picker (first open, settings, the chip row and its pencil, `src/components/homepage/Interests.tsx`);
   «فاجئني» is the app's alone, since the website's feed has no surprise card.

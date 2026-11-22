@@ -293,23 +293,22 @@ test.describe('a new user', () => {
       // The hifz questions take turns, so «في أي سورة؟» is among the first three.
       await open(page, '/');
       await expect(page.getByRole('heading', { name: 'في أي سورة؟', exact: true }).first()).toBeAttached({ timeout: 20_000 });
-      const card = page.getByRole('heading', { name: 'في أي سورة؟', exact: true }).first().locator('xpath=ancestor::div[.//*[@aria-label="اختبار فردي"]][1]');
+      const card = page.getByRole('heading', { name: 'في أي سورة؟', exact: true }).first().locator('xpath=ancestor::div[.//*[@aria-label="تحقق" or @aria-label="افتح ما يشرح الجواب"]][1]');
       await card.scrollIntoViewIfNeeded();
       await expect(card.getByText(/[٠-٩]+$/).first()).toBeAttached();
-      // The choices are the card's buttons with words; the quiz buttons are icons.
+      const openAnswer = card.getByRole('button', { name: 'افتح ما يشرح الجواب' });
+      // Unanswered, no «افتح»: «تحقق» answers (owner, 2026-11-22).
       const choice = card.getByRole('button').filter({ hasText: /\S/ }).first();
-      await expect(card.getByRole('button', { name: 'في المصحف' })).toHaveCount(0);
+      await expect(openAnswer).toHaveCount(0);
       // A tap selects, and only «تحقق» answers (owner, 2026-11-21).
       await choice.click();
       await expect(choice).toBeEnabled();
-      await expect(card.getByRole('button', { name: 'في المصحف' })).toHaveCount(0);
+      await expect(openAnswer).toHaveCount(0);
       await card.getByRole('button', { name: 'تحقق', exact: true }).click();
       await expect(choice).toBeDisabled();
-      // Answered, the mushaf button joins the row under the card, first (owner, 2026-11-20), and opens the reader.
-      const row = card.locator('xpath=.//*[@aria-label="اختبار فردي"]/..');
-      await expect(row.getByRole('button', { name: 'في المصحف' })).toHaveCount(1);
-      await expect(card.getByRole('button', { name: 'في المصحف' })).toHaveCount(1);
-      await row.getByRole('button', { name: 'في المصحف' }).click();
+      // Answered, «افتح» opens the ayah in the reader, never the quizzes page (owner, 2026-11-22).
+      await expect(openAnswer).toHaveCount(1);
+      await openAnswer.click();
       await expect(page).toHaveURL(/\/read/);
     });
   });
@@ -384,13 +383,14 @@ test.describe('a returning user', () => {
     await expect(page.getByText(`${S(2)} ٢٥٥`, { exact: true }).first()).toBeAttached();
   });
 
-  test('a remembered ayah leaves the feed until its review is due', async ({ page }) => {
+  test('a remembered ayah stays on screen lit, and rests until its review is due', async ({ page }) => {
     await open(page, '/');
     // The recall card, by its title: an openings card further down has the same buttons.
     const recall = page.getByRole('heading', { name: 'هل تذكرها؟', exact: true });
     await expect(recall).toHaveCount(1);
     await page.getByRole('button', { name: 'تذكّرتها' }).first().click();
-    await expect(recall).toHaveCount(0);
+    // A card never vanishes on a tap (owner, 2026-11-22): it stays until the next visit.
+    await expect(recall).toHaveCount(1);
     await expect.poll(async () => (await stored<Record<string, { due?: number }>>(page, 'ayah-forgot'))?.['18:10']?.due).toBeGreaterThan(Date.now());
   });
 

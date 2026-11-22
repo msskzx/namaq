@@ -16,14 +16,12 @@ type Props = {
   big?: boolean;
   /** Grows to share the row's width with its neighbours, with a little less side padding so three fit on a phone. */
   grow?: boolean;
-  /** Round ends: the one labelled button in a feed card's row of icons («ابحث عن الجواب», owner 2026-11-20). */
+  /** Round ends: the one labelled button in a feed card's row of icons («تلميح», owner 2026-11-20). */
   pill?: boolean;
-  /** The icon after the label, as an arrow follows a word («افتح ←», the feed card's open button). */
-  iconAfter?: boolean;
 };
 
 /** The app's button: a filled terracotta primary, an outlined one, or a plain icon button. */
-export default function Button({ label, Icon, onPress, variant = 'outline', active, disabled, accessibilityLabel, big, grow, pill = false, iconAfter = false }: Props) {
+export default function Button({ label, Icon, onPress, variant = 'outline', active, disabled, accessibilityLabel, big, grow, pill = false }: Props) {
   const palette = usePalette();
   // A disabled button is never filled: faded text on the accent was hard to read.
   const filled = !disabled && (variant === 'primary' || active);
@@ -38,9 +36,8 @@ export default function Button({ label, Icon, onPress, variant = 'outline', acti
         borderWidth: variant === 'plain' ? 0 : 1, borderColor: filled ? palette.accent : palette.rule,
         opacity: disabled ? 0.6 : pressed ? 0.7 : 1,
       })}>
-      {Icon && !iconAfter && <Icon size={big ? 22 : 20} color={color} />}
+      {Icon && <Icon size={big ? 22 : 20} color={color} />}
       {label ? <Text style={{ color, fontSize: big ? 18 : 16, fontWeight: variant === 'primary' ? '600' : '400' }}>{label}</Text> : null}
-      {Icon && iconAfter && <Icon size={big ? 22 : 20} color={color} />}
     </Tap>
   );
 }

@@ -103,7 +103,7 @@ export default function OrderTray({ question, picked, palette, onPick, onDraft, 
       </ScrollView>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
         <Button variant="primary" Icon={Check} label="تحقق" onPress={() => onPick(sentTray(tray))} />
-        {onLook && tray.at !== null && <Button Icon={Search} label="ابحث عن الجواب" onPress={() => onLook(numbers[tray.at!])} />}
+        {onLook && tray.at !== null && <Button Icon={Search} label="تلميح" accessibilityLabel="تلميح: ابحث عن الجواب" onPress={() => onLook(numbers[tray.at!])} />}
       </View>
     </View>
   );

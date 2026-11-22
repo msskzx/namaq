@@ -12,7 +12,8 @@ import { FEED_QUIZ_NAMES, feedQuizSeed, OPENINGS, openingSurah, seededRandom, ty
 import { answeredQuestion, dueSeeds, readMissed } from '@shared/quiz/missedQuestions';
 import { activeInterests, INTERESTS, interestById, interestOf, pickedInterests, restoredInterest, surpriseMe, toggledInterest, type FeedCardKind } from '@shared/interests';
 import { bookmarkKind, cardMenuSaveId, cardOfBookmark, isCardBookmark } from '@shared/bookmarkKind';
-import { FORGOT, recited } from '@shared/quiz/choiceKinds';
+import { FORGOT, questionAyat, recited, RECITE_SNIPPET } from '@shared/quiz/choiceKinds';
+import { PROPHET_NAMES } from '@shared/quiz/tarajim';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
 import { allVirtues, feedBooks, LIST_KINDS, listStart, type ListKind, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, isKahfDay, KAHF_SLOT, prayerSoon, type FeedSlot } from '@shared/homeFeed';
@@ -86,7 +87,6 @@ import { aliasesOf, EMPTY_LIST } from '@/lib/branchList';
 import { treeList } from '@/lib/branches';
 import { shownBookmarks } from '@/lib/home';
 import TreeIcon from './TreeIcon';
-import OrderIcon from './OrderIcon';
 import { REVIEW_LABEL, reviewForgotten } from './HomeCards';
 import { forgottenOrder, type RecitePosition } from '@shared/quran/recite';
 import { pageModel } from '@shared/quran/recitePage';
@@ -100,7 +100,7 @@ import { cardsFor, sideKeys, sideLabel } from '@/lib/compare';
 import { surahNames as shortNames } from '@/lib/branches';
 import { ayahMushafWords, pageData, pageOfAyah, PAGES, surahBefore } from '@/lib/mushaf';
 import { isBoolean, isNumberIn, isRecord, readJson, writeJson } from '@/lib/storage';
-import { openIntent, openUtility, toTab } from '@/lib/ways';
+import { openIntent, openTreesOf, openUtility, toTab } from '@/lib/ways';
 import OpenButton from '@/ui/OpenButton';
 import { juzLabel, openJuz } from '@/lib/juz';
 import { around as aroundSetting, branchView, penRule, prayerPlace, prayerSettings } from '@/lib/settings';
@@ -136,7 +136,7 @@ import { momentItem, nameItem, rajabItem, storyItem, tieItem, virtueItem } from 
 import { useFitHeight } from '@/lib/useFit';
 import { storyMap } from '@shared/quran/prophets/story';
 import { STORY_GROUPS } from '@shared/quran/prophets/storyGroup';
-import { check, DEFAULT_LIST, DEFAULT_SOLO, isCompare, isTree, pick, questionState, reveal, startSolo, typeAnswer, type SoloRun } from '@/lib/quiz';
+import { check, DEFAULT_LIST, DEFAULT_SOLO, isCompare, isTree, pick, questionState, reveal, startSolo, typeAnswer, type SoloQuestion, type SoloRun } from '@/lib/quiz';
 import { readAyah } from '@/lib/openReader';
 import QuizChoice, { QuizPrompt } from './QuizChoice';
 import { orderJuz } from '@shared/quiz/orderAnswer';
@@ -402,16 +402,43 @@ function Recall({ ayah, targetWord, title, writing, onWriting, open, marks, reve
   );
 }
 
-/**
- * «تسميع» on a Quran question card (owner, 2026-11-22: only where reciting is what the question trains); the card's open
- * button opens the quizzes page, where the reader picks a solo quiz or one with others.
- */
+/** «تسميع» on a recite question card (owner, 2026-11-22: only where the question asks to recite the ayah). */
 function ReciteAction({ palette }: { palette: Palette }) {
   return <Action Icon={EyeOff} label="تسميع" onPress={() => openIntent({ tab: 'read', recite: true })} palette={palette} />;
 }
 
-/** A question about the Quran: its interest is one of the Quran's sciences or the language's, which ask about its ayat. */
-const isQuranKind = (kind: QuizTopic) => { const section = interestOf(kind as FeedQuizKind)?.section; return section === 'quran' || section === 'lisan'; };
+/**
+ * Where an answered question's «افتح» goes (owner, 2026-11-22): the page that presents what it asked, to read more there, never
+ * the quizzes page. Its look names the feature; else its ayah opens in the reader, its surahs on the order page, a name
+ * question on the person's page.
+ */
+function openAnswer(question: SoloQuestion) {
+  const person = (slug: string) => router.push({ pathname: '/person', params: { slug } });
+  if (isTree(question)) return openTreesOf(questionAyat(question)[0]);
+  if (isCompare(question)) {
+    const [a, b] = [question.compare.shown.key, question.compare.asked.key];
+    return openIntent({ tab: 'compare', lead: Number(a.split(':')[0]), other: Number(b.split(':')[0]), ayat: [a, b] });
+  }
+  const look = question.look;
+  switch (look?.view) {
+    case 'ties': case 'life': return person(look.slug);
+    case 'virtues': return person(look.mark?.slug ?? look.slugs[0]);
+    case 'nasab': return router.push({ pathname: '/nasab', params: { slug: look.slugs.join(',') } });
+    case 'terms': return toTab({ pathname: '/term', params: { name: look.mark ?? look.names[0] } });
+    case 'hadith': return toTab(look.mark ? { pathname: '/hadith-forty', params: { n: String(look.mark) } } : '/hadith-forty');
+    case 'sahih': return look.mark ? toTab({ pathname: '/hadith-kitab', params: { book: look.book, kitab: String(look.mark) } }) : toTab('/hadith');
+    case 'story': return toTab({ pathname: '/story', params: { slug: look.slug } });
+    case 'battle': return toTab({ pathname: '/battle', params: { slug: look.slug } });
+    case 'tafsir': return readAyah(look.mark ?? look.keys[0]);
+    case 'word': case 'balagha': case 'irab': case 'qiraat': return readAyah(look.key);
+    case 'tuhfa': return toTab(look.mark ? { pathname: '/tuhfa', params: { verse: String(look.mark) } } : '/tuhfa');
+  }
+  if (question.ayahKey) return readAyah(question.ayahKey);
+  if (question.order?.length) return router.push({ pathname: '/order', params: { juz: String(orderJuz(question.order)) } });
+  const slug = question.key.split(':')[1];
+  if (question.family === PROPHET_NAMES) return person('prophet-muhammad');
+  if (slug && findPerson(slug)) return person(slug);
+}
 
 /** The tree or compare question's room in a card before it has measured what it holds: the quiz's own tree and its buttons. */
 const QUIZ_TREE_HEIGHT = 380;
@@ -444,19 +471,16 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
   if (!run) return null;
   const question = run.questions[0];
   const checked = run.checked[0];
+  // Answered: a picked choice, or a tree or compare question checked (owner, 2026-11-22: «افتح» only then).
+  const answered = isTree(question) || isCompare(question) ? !!checked : run.typed[0][0] !== undefined;
   const prompt = question.promptArabic && question.promptArabic !== FEED_QUIZ_NAMES[kind] ? <QuizPrompt text={question.promptArabic} palette={palette} /> : undefined;
   return (
     <Post palette={palette} head={<PostHead Icon={kind === 'BRANCHES' ? TreeIcon : Feather} title={FEED_QUIZ_NAMES[kind]} palette={palette} />} whole
-      open={<OpenButton label="افتح الاختبارات" onPress={() => toTab('/quizzes')} palette={palette} />}
+      open={answered ? <OpenButton label="افتح ما يشرح الجواب" onPress={() => openAnswer(question)} palette={palette} /> : undefined}
       actions={<>
         {(isTree(question) || isCompare(question)) && !checked &&
           <Action Icon={Check} label="تحقق" onPress={() => setRun(check(run))} palette={palette} />}
-        {/* Once answered, the ayah in the mushaf, or «رتّب السور»'s surahs on the surah order page at their juz. */}
-        {!isTree(question) && !isCompare(question) && question.ayahKey && run.typed[0][0] !== undefined
-          ? <Action Icon={BookOpen} label="في المصحف" onPress={() => readAyah(question.ayahKey!)} palette={palette} />
-          : !isTree(question) && question.order?.length && run.typed[0][0] !== undefined
-          ? <Action Icon={OrderIcon} label="ترتيب السور" onPress={() => router.push({ pathname: '/order', params: { juz: String(orderJuz(question.order!)) } })} palette={palette} /> : null}
-        {isQuranKind(kind) && <ReciteAction palette={palette} />}
+        {kind === RECITE_SNIPPET && !answered && <ReciteAction palette={palette} />}
       </>}>
       {isCompare(question)
         ? <View style={{ height: roomHeight }}>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Card from '@/ui/Card';
+import Card, { UnderCard, useCardRow } from '@/ui/Card';
 import { Pressable, ScrollView, View } from 'react-native';
 import { BookOpen, Check, Eye, Square, SquareCheck, X } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
@@ -58,6 +58,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
 }) {
   const Box = scroll ? ScrollView : View;
   const answered = picked !== undefined;
+  const inRow = useCardRow();
   // What is recited or written stays hidden until it is shown or answered; on the page, recite mode's bar shows it.
   const [pageShown, setPageShown] = useState<string | null>(null);
   const onPage = !!question.ayahKey && !!question.page;
@@ -177,8 +178,10 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
           })}
         </View>
       )}
-      {(several || single) && !answered && onPick && (
-        <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}>
+      {/* In a feed card «تحقق» joins the row under the card, before «تلميح» (owner, 2026-11-22: no button in a card). */}
+      {(several || single) && !answered && onPick && (inRow
+        ? <UnderCard><Button variant="primary" pill Icon={Check} label="تحقق" onPress={() => onPick(several ? joined(ticked) : ticked[0] ?? '')} /></UnderCard>
+        : <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}>
           <Button variant="primary" Icon={Check} label="تحقق"
             onPress={() => onPick(several ? joined(ticked) : ticked[0] ?? '')} />
         </View>

@@ -7,5 +7,5 @@ import Button from '@/ui/Button';
  * screen reader. A long card with no page opens whole in a sheet with it (ui/Card `cap`).
  */
 export default function OpenButton({ label, onPress }: { label: string; onPress: () => void; palette?: unknown }) {
-  return <Button pill label="افتح" Icon={ArrowLeft} iconAfter accessibilityLabel={label} onPress={onPress} />;
+  return <Button pill label="افتح" Icon={ArrowLeft} accessibilityLabel={label} onPress={onPress} />;
 }
