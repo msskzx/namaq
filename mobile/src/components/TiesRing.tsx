@@ -126,9 +126,9 @@ export function RoundRing({ middle, nodes, width, palette }: { middle: string; n
       </View>
       {nodes.map((node, i) => (
         <View key={node.key} style={{ position: 'absolute', left: places[i].x - ws[i] / 2, top: places[i].y - h / 2, width: ws[i], height: h, justifyContent: 'center' }}>
-          <Card palette={palette} node pad={[4, 6]} picked={node.inApp} faded={!node.inApp} accessibilityRole={node.inApp ? 'link' : 'button'} accessibilityLabel={node.label}
+          <Card palette={palette} node pad={[4, 6]} accessibilityRole={node.inApp ? 'link' : 'button'} accessibilityLabel={node.label}
             onPress={node.onPress} onLongPress={node.onLongPress} style={{ minHeight: h, justifyContent: 'center' }}>
-            <Text numberOfLines={1} style={{ color: node.inApp ? palette.ink : palette.muted, fontSize: 14, textAlign: 'center' }}>{node.label}</Text>
+            <Text numberOfLines={1} style={{ color: palette.ink, fontSize: 14, textAlign: 'center' }}>{node.label}</Text>
           </Card>
         </View>
       ))}
@@ -240,11 +240,11 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
             const label = `${tieWord(spot.kind, node.sex, person.sex)}: ${personName(node)}`;
             return (
               <View key={spot.key} style={style}>
-                <Card palette={palette} node pad={[6, 8]} picked={node.inApp && node.slug !== marked} faded={!node.inApp} outline={node.slug === marked ? palette.green : undefined} accessibilityRole={node.inApp ? 'link' : 'button'} accessibilityLabel={label}
+                <Card palette={palette} node pad={[6, 8]} outline={node.slug === marked ? palette.green : undefined} accessibilityRole={node.inApp ? 'link' : 'button'} accessibilityLabel={label}
                   onPress={node.inApp ? () => go(node.slug) : () => setShown(spot.tie)} onLongPress={() => setShown(spot.tie)}>
                   {/* What this person is to the one in the middle, on the node itself, so a line's colour is never the only clue. */}
                   <Text style={{ color: kindColor(palette, spot.kind), fontSize: 12, textAlign: 'center' }}>{tieWord(spot.kind, node.sex, person.sex)}</Text>
-                  <Text numberOfLines={2} style={{ color: node.inApp ? palette.ink : palette.muted, fontSize: 14, textAlign: 'center' }}>{nodeName(node)}</Text>
+                  <Text numberOfLines={2} style={{ color: palette.ink, fontSize: 14, textAlign: 'center' }}>{nodeName(node)}</Text>
                 </Card>
               </View>
             );

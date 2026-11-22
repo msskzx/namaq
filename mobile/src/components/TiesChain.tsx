@@ -13,7 +13,7 @@ import { GRAPH, personName } from '@/lib/tarajim';
 export const kindColor = (palette: Palette, kind: TieKind) =>
   ({ parent: palette.amber, spouse: palette.accent, child: palette.root, sibling: palette.ink, cousin: palette.path, companion: palette.green, accompanied: palette.green })[kind];
 
-/** Where the line from `a` to `b` leaves a box of half sizes `hw`×`hh` round `a`, so a faded box shows no line through it. */
+/** Where the line from `a` to `b` leaves a box of half sizes `hw`×`hh` round `a`, so no line runs into a box. */
 export function edge(a: { x: number; y: number }, b: { x: number; y: number }, hw: number, hh: number) {
   const dx = b.x - a.x;
   const dy = b.y - a.y;
@@ -156,8 +156,8 @@ export default function TiesChain({ nodes, steps, first, picked, width, palette,
             {inCard
               ? <Chip label={personName(node)} on={picked.includes(slug)} lit tint={node.inApp ? palette.accent : palette.muted} role={node.inApp ? 'button' : 'text'} onPress={open} palette={palette} />
               : (
-                <Card palette={palette} pad={[6, 8]} picked={picked.includes(slug)} faded={!node.inApp} accessibilityRole={node.inApp ? 'link' : undefined} accessibilityLabel={personName(node)} onPress={open}>
-                  <Text numberOfLines={2} style={{ color: picked.includes(slug) ? palette.accent : node.inApp ? palette.ink : palette.muted, fontSize: 14, textAlign: 'center' }}>{personName(node)}</Text>
+                <Card palette={palette} pad={[6, 8]} picked={picked.includes(slug)} accessibilityRole={node.inApp ? 'link' : undefined} accessibilityLabel={personName(node)} onPress={open}>
+                  <Text numberOfLines={2} style={{ color: picked.includes(slug) ? palette.accent : palette.ink, fontSize: 14, textAlign: 'center' }}>{personName(node)}</Text>
                 </Card>
               )}
           </View>
