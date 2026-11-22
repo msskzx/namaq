@@ -35,16 +35,18 @@ describe('the whole catalog', () => {
 
     const issues = validateCatalog(catalog, { people, claims: new Set(claimByKey.keys()), spans, claimSources });
 
-    // Open, waiting on the owner: relatives these two entries name who have no
-    // profile yet. Remove each line once its person exists or the link goes.
-    const open = [
+    // Relatives an entry names who have no profile. The phone shows them as a
+    // plain name (on the ring, a tap opens the sentence that names them), which
+    // the owner kept (2026-11-22). The website's graph needs a row for each, so
+    // a new one is a choice to make, not a slip: add it here on purpose.
+    const withoutProfile = [
       'people/jabr-ibn-atik.relations.FATHER: unknown person atik-ibn-jabr',
       'people/jabr-ibn-atik.relations.FATHER: unknown person abdullah-ibn-jabr',
       'people/jabr-ibn-atik.relations.FATHER: unknown person umm-thabit-bint-jabr',
       'people/jabr-ibn-atik.relations.PATERNAL_UNCLE: unknown person al-harith-ibn-qais-ibn-hayshah-al-awsi',
       'people/umayr-ibn-saad-al-ansari.relations.FATHER: unknown person abd-al-rahman-ibn-umayr-ibn-saad',
     ];
-    expect(issues.map((issue) => `${issue.path}: ${issue.message}`)).toEqual(open);
+    expect(issues.map((issue) => `${issue.path}: ${issue.message}`)).toEqual(withoutProfile);
   });
 
   // A competing figure is evidence, not noise: it stays in its batch, marked
