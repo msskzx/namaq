@@ -139,9 +139,11 @@ test.describe('«أين يلتقي نسبه ﷺ بنسب الخلفاء الأر
   test('draws the five lines and opens the nasab page with all five', async ({ page }) => {
     await open(page, '/library');
     await expect(page.getByText(/^أين يلتقي نسبه ﷺ/)).toBeVisible();
-    // The fathers they share are written out above the tree, none hidden (owner, 2026-11-22).
-    await expect(page.getByText(/^لؤي بن غالب بن فهر/)).toBeVisible();
-    await expect(page.getByRole('button', { name: /^أظهر / })).toHaveCount(0);
+    // The fathers they share above the meeting are one «…» node of the tree, which opens them as nodes (owner, 2026-11-22).
+    await expect(page.getByText('لؤي', { exact: true })).toHaveCount(0);
+    await page.getByRole('button', { name: /^أظهر الآباء فوق كعب/ }).click();
+    await expect(page.getByText('لؤي', { exact: true })).toBeVisible();
+    await expect(page.getByText('عدنان', { exact: true })).toBeAttached();
     await page.getByRole('button', { name: 'افتح النسب' }).click();
     await expect(page).toHaveURL(/\/nasab\?slug=prophet-muhammad(,|%2C)abu-bakr-as-siddiq/);
   });

@@ -90,7 +90,7 @@ function Fitted({ children }: { children: (scale: number) => React.ReactNode }) 
 
 /**
  * The nasab tree (owner, 2026-11-18; sketch tarajim-app/sketch-dark.png, screen 3): the tree of `slugs`' fathers (one person's line, or several that part where their nasabs part), the fathers they
- * share written out above it, every name shown (owner 2026-11-22: the tree never folds). «الرسم | النص» shows the tree or the text (owner 2026-11-20, the drawing
+ * share above the meeting in one «…» node that opens them (owner 2026-11-22), every name below it drawn. «الرسم | النص» shows the tree or the text (owner 2026-11-20, the drawing
  * first): each one's chain of fathers written out, or with `meetings`, where each pair meets and the chain to it. The
  * «النسب» screen draws it, and so does a quiz that asks where two nasabs meet (the meetings only after the answer).
  */
@@ -104,6 +104,8 @@ export function NasabTree({ slugs, palette, meetings: showMeetings = true, linke
   /** Which of the two shows first: a quiz on the nasab's words opens on the text. */
   start?: DrawingOrText }) {
   const [shown, setShown] = useState<DrawingOrText>(start);
+  // The trees whose shared fathers above the meeting are opened.
+  const [opened, setOpened] = useState<string[]>([]);
   const inside = useInsideCard();
   const lines = useMemo(() => slugs.filter(s => findPerson(s)).map(s => ({ slug: s, line: lineOf(findPerson(s)!, PEOPLE) })), [slugs]);
   const roots = useMemo(() => nasabTree(lines), [lines]);
@@ -120,14 +122,23 @@ export function NasabTree({ slugs, palette, meetings: showMeetings = true, linke
   const bodyText = { color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' as const };
   const body = <>
     {shown === 'drawing' || !withText ? roots.map((root, r) => {
-      // Several people: the tree from where they part, the fathers they share above it written out in full, never folded.
-      const { above, start: top } = lines.length > 1 ? foldTop(root) : { above: [], start: root };
+      // Several people: the tree from where they part, the fathers they share above it in one «…» node of the tree's own
+      // style, which opens them as nodes in place (owner 2026-11-22).
+      const { above, start: top } = lines.length > 1 && !opened.includes(root.key) ? foldTop(root) : { above: [], start: root };
       const id = `${r}:${root.key}`;
       return (
-        <View key={id} style={{ gap: 10 }}>
-          {above.length > 0 && <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>{above.join(' بن ')}</Text>}
-          <Fitted>{scale => <Branch node={top} path={id} tree={tree(scale)} />}</Fitted>
-        </View>
+        <Fitted key={id}>{scale => (
+          <View style={{ alignItems: 'center' }}>
+            {above.length > 0 && <>
+              <Card palette={palette} node pad={[6 * scale, 12 * scale]} accessibilityRole="button" accessibilityLabel={`أظهر الآباء فوق ${top.name}: ${above.length}`}
+                onPress={() => setOpened([...opened, root.key])}>
+                <Text style={{ color: palette.muted, fontSize: 16 * scale, textAlign: 'center' }}>…</Text>
+              </Card>
+              <View style={{ width: LINE, height: 16 * scale, backgroundColor: palette.muted }} />
+            </>}
+            <Branch node={top} path={id} tree={tree(scale)} />
+          </View>
+        )}</Fitted>
       );
     }) : meetings.length > 0 ? meetings.map(({ a, b, at }) => (
       <Card key={b.slug} palette={palette} gap={6}>
