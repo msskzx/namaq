@@ -111,7 +111,7 @@ import { SahihHadithView } from '@/components/Sahih';
 import { findHadith, placeOf, type SahihSlug } from '@shared/sahih';
 import type { BookId } from '@shared/books';
 import { BookCard, Shelf, TUHFA } from '@/screens/books';
-import DarkSea, { DarkSeaActions, darkSeaName, darkSeaSourceList } from './DarkSea';
+import { DarkSeaActions, DarkSeaCard, darkSeaName, darkSeaSourceList, openDarkSea } from './DarkSea';
 import { DARK_SEA_KEY } from '@shared/quran/scenes/darkSea';
 import { prophetStory } from '@/lib/prophets';
 import StoryMap from './StoryMap';
@@ -1243,8 +1243,8 @@ function BooksPost({ day, palette }: { day: number; palette: Palette }) {
 }
 
 /**
- * A scene from «مشاهد» as a post (owner, 2026-11-21): the scene's whole picture, still, with its ayah; the head opens the page
- * where the reader walks through it.
+ * A scene from «مشاهد» as a post (owner, 2026-11-22): its card as on the scenes page (picture, title, surah and ayah); the
+ * head opens the scenes page, the picture and «افتح» the scene itself.
  */
 const ScenePost = memo(function ScenePost({ id, palette }: { id: string; palette: Palette }) {
   if (id !== DARK_SEA_KEY) return null;
@@ -1252,7 +1252,7 @@ const ScenePost = memo(function ScenePost({ id, palette }: { id: string; palette
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.scenes} title="من المشاهد" sub={darkSeaName()} palette={palette} open={{ onPress: () => toTab('/lataif'), label: 'افتح المشاهد' }} />}
       open={<DarkSeaActions palette={palette} only="open" feed />} share={<DarkSeaActions palette={palette} only="share" />}
       source={darkSeaSourceList()}>
-      <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}><DarkSea palette={palette} still /></View>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}><DarkSeaCard palette={palette} onPress={openDarkSea} /></View>
     </Post>
   );
 });

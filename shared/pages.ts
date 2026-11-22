@@ -31,7 +31,7 @@ export const PAGES: readonly PageEntry[] = [
   { id: 'recite-start', web: ['quran/read/recite'] },
   { id: 'branches', app: ['(tabs)/(quran)/branches.tsx'], web: ['quran/branches'] },
   { id: 'compare', app: ['(tabs)/(quran)/compare.tsx'], web: ['quran/compare'] },
-  { id: 'lataif', app: ['(tabs)/(quran)/lataif.tsx'], web: ['quran/lataif'] },
+  { id: 'lataif', app: ['(tabs)/(quran)/lataif.tsx', 'scene.tsx'], web: ['quran/lataif'] },
   { id: 'oaths', app: ['(tabs)/(quran)/oaths.tsx'], web: ['quran/oaths'] },
   { id: 'openings', app: ['(tabs)/(quran)/openings.tsx'], web: ['quran/openings'] },
   { id: 'order', app: ['(tabs)/(quran)/order.tsx'], web: ['quran/order'] },

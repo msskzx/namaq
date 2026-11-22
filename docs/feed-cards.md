@@ -8,8 +8,9 @@ repository; update it in the PR that adds a feature, a card, a quiz kind or an e
 
 ## Cards in the feed now
 
-Continue reading, today's juz, prayer time, books, scenes (من المشاهد: a «مشاهد» scene's whole picture, still, with its ayah,
-under التفسير; `ScenePost` drawn by `components/DarkSea`, the page's own view), saved and forgotten
+Continue reading, today's juz, prayer time, books, scenes (من المشاهد: a «مشاهد» scene's card as on the list, its still
+picture, its title from the ayah, the surah and ayah, under التفسير; «افتح» opens the scene full screen; `ScenePost` drawing
+`DarkSeaCard` from `components/DarkSea`, the list's own card), saved and forgotten
 ayat, surah openings, a balagha term (من مصطلحات البلاغة: its name, its definition in the scholar's words and one of
 al-Suyuti's examples, opening the term's page in «مصطلحات البلاغة»; `TermPost`), a battle's moment (من غزوة …, opening the battle's page), a sira story whole (من قصص السيرة, its first report with
 the ayat folded under it, opening the story's page), one of al-Nawawi's Forty (من الحديث, his text for an entry he takes whole
