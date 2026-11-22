@@ -108,3 +108,16 @@ the website.
    The tag is al-Bukhari's own chapter heading «علامات النبوة في الإسلام» (Sahih al-Bukhari, Kitab al-Manaqib,
    the chapter before hadith 3571), and its reference names him. A story takes the tag only when its source
    files it under such a chapter.
+
+## Tests for new stories
+
+These notes come from the test audit (2026-11-22) and apply to every batch:
+
+- Don't add a test file for one story or one person. Don't pin hand-typed values, such as counts or
+  "exactly 3 citations".
+- Rely on the general checks that already run over every story: `data/catalog/claimProvenance.test.ts`,
+  `data/catalog/events/stories.test.ts` (reports word for word, ayah evidence as printed, only catalog people)
+  and `src/lib/catalog/validateCatalog.test.ts`. When a story needs a new rule, write it as a general rule over all
+  stories.
+- After catalog changes, rebuild with `scripts/battles/buildAppBattles.ts` so `shared/data/events/stories.json`
+  and `life.json` match the catalog. No test checks this yet, so check it by hand.
