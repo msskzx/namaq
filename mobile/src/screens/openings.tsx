@@ -29,7 +29,7 @@ function tone(palette: Palette, kind: keyof Palette['marks'], some: boolean) {
   return colour && (some ? someTone(palette, colour) : colour);
 }
 
-function Ayah({ words: list, menu, cut, palette }: { words: OpeningWord[]; menu: string; cut?: boolean; palette: Palette }) {
+function Ayah({ words: list, menu, cut, palette }: { words: OpeningWord[]; menu: string | string[]; cut?: boolean; palette: Palette }) {
   return (
     <AyahFlow color={palette.ink} menu={menu}>
       {list.map((word, i) => <AyahWords key={i} look={'text' in word && word.mark ? { color: tone(palette, word.mark.kind, word.mark.some) } : undefined}>{`${i > 0 ? ' ' : ''}${'end' in word ? num(word.end) : word.text}`}</AyahWords>)}
@@ -60,7 +60,7 @@ export function OpeningRows({ card, palette, open, still }: { card: OpeningCard;
         <Pressable disabled={still} onPress={() => readAyah(`${row.surah}:1`)} accessibilityRole="link" accessibilityLabel={`افتح ${surahNames[row.surah]} في المصحف`} style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
           <Text style={{ color: palette.muted, fontSize: 14 }}>{surahNames[row.surah]}</Text>
         </Pressable>
-        {open && CONDITION_SPANS[row.surah] ? <Conditions surah={row.surah} palette={palette} /> : <Ayah words={row.words} menu={row.surah === 1 ? '1:2' : `${row.surah}:1`} cut={row.cut} palette={palette} />}
+        {open && CONDITION_SPANS[row.surah] ? <Conditions surah={row.surah} palette={palette} /> : <Ayah words={row.words} menu={row.words.flatMap(word => ('end' in word ? [`${row.surah}:${word.end}`] : []))} cut={row.cut} palette={palette} />}
       </View>
     ))}
   </>;

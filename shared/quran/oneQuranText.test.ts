@@ -108,11 +108,17 @@ describe('one Quran text', () => {
 
 /**
  * The reader's long-press menu on every ayah view (owner, 2026-11-22; /mnt/project-files/ayah-page/agreed.md part 4): the
- * app's ayah views (the module's AyahFlow, and AyahLines, the mushaf's lines around one ayah) each take the ayah's key as
- * `menu` and open the menu through AyahMenuPress. A place may pass false only for an agreed exception, named here with its
- * reason: anything else that turns the menu off fails.
+ * app's ayah views (the module's AyahFlow and LitAyat, and AyahLines and AyatRange, the mushaf's lines) each open the menu
+ * through AyahMenuPress, on the ayah or ayat they name. A place may turn it off only for an agreed exception, named here
+ * with its reason; a sheet turns it off for all it holds (its modal would cover the menu).
  */
-const MENU_VIEWS = ['mobile/src/components/quran/text/AyahFlow.tsx', 'mobile/src/components/AyahLines.tsx'];
+const MENU_PRESS = 'mobile/src/ui/AyahMenuPress.tsx';
+const MENU_VIEWS: Record<string, RegExp[]> = {
+  'mobile/src/components/quran/text/AyahFlow.tsx': [/\bmenu: AyahMenuKeys;/, /<AyahMenuPress menu=\{menu\}>/],
+  'mobile/src/components/quran/text/LitAyat.tsx': [/\bmenu: AyahMenuKeys;/, /<AyahFlow\b[^>]*\bmenu=\{menu\}/],
+  'mobile/src/components/AyahLines.tsx': [/\bmenu: AyahMenuKeys;/, /<AyahMenuPress menu=\{menu\}>/, /<AyahMenuPress menu=\{keys\}>/],
+  'mobile/src/ui/Sheet.tsx': [/<AyahMenuContext\.Provider value=\{null\}>/],
+};
 const MENU_OFF: Record<string, string> = {
   // A question before it is answered: the menu would name the answer.
   'mobile/src/components/QuizChoice.tsx': 'a question and its choices before the answer',
@@ -123,7 +129,7 @@ const MENU_OFF: Record<string, string> = {
   // Recite and write boxes: their long press is recite mode's own. A share image is a picture, not a view.
   'mobile/src/components/HomeFeed.tsx': 'the recall card in recite mode, and its share picture',
   'mobile/src/components/AyahShare.tsx': 'a share picture',
-  // Sheets sit over every page, and the menu opens under them.
+  // Sheets turn it off themselves; these say so where the ayah is drawn.
   'mobile/src/components/AyahPreviewSheet.tsx': 'a sheet',
   'mobile/src/components/BalaghaSheet.tsx': 'a sheet',
   'mobile/src/components/GharibSheet.tsx': 'a sheet',
@@ -132,23 +138,39 @@ const MENU_OFF: Record<string, string> = {
   'mobile/src/components/WordSheet.tsx': 'a sheet',
   // The feed's readings card draws the ayah's lines as a picture under the readings (pointerEvents none).
   'mobile/src/components/QiraatPlace.tsx': 'the readings card\'s lines picture',
-  // A compare card's side, or a balagha example, with no ayah of its own.
-  'mobile/src/components/CompareCard.tsx': 'a side with no ayah',
-  'mobile/src/components/BalaghaTerm.tsx': 'an example that names no ayah',
 };
 
+/** Each `menu={…}` a file passes, its braces balanced (a key may be a template, `${surah}:${ayah}`). */
+function menuValues(text: string): string[] {
+  const values: string[] = [];
+  for (const match of text.matchAll(/\bmenu=\{/g)) {
+    let depth = 1;
+    let at = match.index + match[0].length;
+    const start = at;
+    while (depth > 0 && at < text.length) { if (text[at] === '{') depth++; else if (text[at] === '}') depth--; at++; }
+    values.push(text.slice(start, at - 1));
+  }
+  return values;
+}
+
 describe("the reader's menu on every ayah view (owner, 2026-11-22)", () => {
-  it('every ayah view asks for the ayah its long press opens the menu on, and opens it', () => {
-    for (const path of MENU_VIEWS) {
-      const text = readFileSync(join(ROOT, path), 'utf8');
-      expect(text, path).toMatch(/\bmenu: string \| false;/);
-      expect(text, path).toMatch(/<AyahMenuPress menu=\{menu\}>/);
+  it('every ayah view takes the ayah its long press opens the menu on, and opens it; a sheet turns it off', () => {
+    const press = withoutComments(readFileSync(join(ROOT, MENU_PRESS), 'utf8'));
+    expect(press).toMatch(/Gesture\.LongPress\(\)/);
+    expect(press).toMatch(/<GestureDetector gesture=\{press\}>/);
+    for (const [path, rules] of Object.entries(MENU_VIEWS)) {
+      const text = withoutComments(readFileSync(join(ROOT, path), 'utf8'));
+      for (const rule of rules) expect(text, path).toMatch(rule);
     }
   });
 
-  it('turns the menu off only in the agreed exceptions', () => {
-    const off = code.filter(file => file.path.startsWith('mobile/src/') && !inside(file.path, MODULE) && /\bmenu=\{[^}]*\bfalse\b/.test(file.text)).map(file => file.path);
-    expect(off.length).toBeGreaterThan(0);
+  it('turns the menu off only in the agreed exceptions, and only with false itself', () => {
+    const passes = code.filter(file => file.path.startsWith('mobile/src/')).map(file => ({ path: file.path, values: menuValues(file.text) })).filter(file => file.values.length);
+    expect(passes.length).toBeGreaterThan(0);
+    // The menu is off only with false written out (alone, or as one side of a condition), never `cond && key` or an empty key.
+    expect(passes.flatMap(file => file.values.filter(value => /^[^?]*&&[^?]*$|(['"`])\1/.test(value)).map(value => `${file.path}: ${value}`))).toEqual([]);
+    const off = passes.filter(file => file.values.some(value => /\bfalse\b/.test(value))).map(file => file.path);
     expect(off.filter(path => !(path in MENU_OFF))).toEqual([]);
+    expect(Object.keys(MENU_OFF).filter(path => !off.includes(path)), 'an exception no longer used comes off the list').toEqual([]);
   });
 });

@@ -88,7 +88,7 @@ export function SurahBody({ s, palette }: { s: OrderSurah; palette: Palette }) {
         <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 22, fontWeight: '700' }}>{s.name}</Text>
         <Text style={{ color: palette.muted, fontSize: 14 }}>{num(s.surah)}</Text>
       </View>
-      <AyahFlow color={palette.ink} screen menu={s.opening[0] ? `${s.surah}:${s.opening[0].ayah}` : false}>
+      <AyahFlow color={palette.ink} screen menu={s.opening.map(a => `${s.surah}:${a.ayah}`)}>
         {s.opening.map(a => [
           <AyahWords key={a.ayah}>{`${a.text} `}</AyahWords>,
           <AyahWords key={`${a.ayah}-n`} look={{ color: palette.amber }}>{`${num(a.ayah)} `}</AyahWords>,

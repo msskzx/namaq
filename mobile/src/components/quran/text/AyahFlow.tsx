@@ -4,7 +4,7 @@ import { Text } from '@/ui/Text';
 import { QURAN_FONT } from '@/lib/theme';
 import { CARD_MARGINS, FLOW_LINE, flowFontSize, wordFontSize } from '@shared/quran/quranText/flow';
 import { mushafText } from '@shared/quran/mushafText';
-import { AyahMenuPress } from './ayahMenu';
+import { AyahMenuPress, type AyahMenuKeys } from '@/ui/AyahMenuPress';
 
 /** The font size the AyahFlow around takes from its width (0 outside one). */
 const FlowSize = createContext({ size: 0, color: '' });
@@ -22,8 +22,8 @@ export const useAyahSize = () => useContext(FlowSize).size;
  * picture); shared/quran/oneQuranText.test.ts holds the places allowed to.
  */
 export default function AyahFlow({ children, color, menu, row = false, center = false, screen: fromScreen = false, lines, style }: { children: ReactNode; color: string;
-  /** The ayah a long press opens the menu on («2:255»), or false where it opens nothing. */
-  menu: string | false;
+  /** The ayah a long press opens the menu on («2:255»), the ayat in order when it shows several, or false where it opens nothing. */
+  menu: AyahMenuKeys;
   /** Pieces side by side, wrapping (words and boxes in a matrix row); otherwise one justified paragraph. */
   row?: boolean;
   /** Lines centred instead of justified: the matrix and compare cards, which centre each ayah under its heading. */

@@ -54,7 +54,7 @@ export const ayatName = (ayat: string[]) => placesLabel(ayat, surahNames);
 
 /** The ayat of an example in the mushaf's font, with the words he quotes lit and each ayah's number after it. */
 export function ExampleAyat({ example, palette }: { example: Pick<TermExample, 'entry' | 'ayat'>; palette: Palette }) {
-  return <LitAyat ayat={example.ayat.map(key => ({ words: ayahMushafWords(key), lit: exampleWords(itqan, example, key), number: Number(key.split(':')[1]) }))} menu={example.ayat[0] ?? false} palette={palette} />;
+  return <LitAyat ayat={example.ayat.map(key => ({ words: ayahMushafWords(key), lit: exampleWords(itqan, example, key), number: Number(key.split(':')[1]) }))} menu={example.ayat} palette={palette} />;
 }
 
 /**

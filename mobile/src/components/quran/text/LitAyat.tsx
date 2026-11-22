@@ -1,6 +1,7 @@
 import { num } from '@shared/quran/arabicNumber';
 import type { Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from './AyahFlow';
+import type { AyahMenuKeys } from '@/ui/AyahMenuPress';
 
 /** The band under the ayah words a book's paragraph quotes: the reader's sheets and the balagha terms' examples. */
 export const deepBand = (palette: Palette) => `${palette.ink}33`;
@@ -12,7 +13,7 @@ export const deepBand = (palette: Palette) => `${palette.ink}33`;
  */
 export default function LitAyat({ ayat, menu, palette }: { ayat: { words: string[]; lit: [number, number][]; number?: number }[];
   /** The ayah a long press opens the reader's menu on (AyahFlow's `menu`), or false. */
-  menu: string | false; palette: Palette }) {
+  menu: AyahMenuKeys; palette: Palette }) {
   return (
     <AyahFlow color={palette.ink} menu={menu}>
       {ayat.map((ayah, k) => ayah.words.map((word, i) => (

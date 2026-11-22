@@ -1,4 +1,5 @@
 import { expect, longPress, open, readerPage, stored, test } from './fixtures';
+import { surahName as S } from '../../shared/quran/surahNames';
 
 // The reader's long-press menu on every ayah view (owner, 2026-11-22; /mnt/project-files/ayah-page/agreed.md part 4):
 // the same buttons as the mushaf's, with the mushaf (and the ayah's page, away from it) first.
@@ -23,5 +24,19 @@ test.describe('a long press on an ayah off the mushaf', () => {
     await longPress(page, page.getByText('مَا', { exact: true }).first());
     await page.getByRole('button', { name: 'في المصحف', exact: true }).last().click();
     await expect.poll(() => readerPage(page)).toBe(596);
+  });
+
+  test('on a view of several ayat (an oath), asks which ayah, and acts on the one picked', async ({ page }) => {
+    await open(page, '/oaths');
+    // The first oath's ayat (al-Saffat 1-3), in the card under its place.
+    const card = page.getByText(`${S(37)} ١–٣`, { exact: true }).first();
+    const box = (await card.boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height + 45);
+    await page.mouse.down();
+    await page.waitForTimeout(900);
+    await page.mouse.up();
+    await page.getByRole('radio', { name: 'الآية ٣' }).click();
+    await page.getByRole('button', { name: 'احفظ الآية' }).click();
+    await expect.poll(async () => (await stored<{ id: string }[]>(page, 'bookmarks'))?.map(item => item.id)).toContain('ayah:37:3');
   });
 });

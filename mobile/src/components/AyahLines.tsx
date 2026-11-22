@@ -6,7 +6,7 @@ import MushafPageView, { type Checked, type Touch, type Write } from './MushafPa
 import { pageData, pageOfAyah, surahBefore } from '@/lib/mushaf';
 import type { Palette } from '@/lib/theme';
 import { SURAH_TITLES } from '@shared/quran/surahNames';
-import { AyahMenuPress } from './quran/text/ayahMenu';
+import { AyahMenuPress, type AyahMenuKeys } from '@/ui/AyahMenuPress';
 
 /** A page's text height for its width: the lines of a slice keep the size they have on the whole page. */
 const PAGE_TEXT_RATIO = 1.5;
@@ -30,7 +30,7 @@ export function pageWords(ayah: string): string[] {
  */
 function AyahLines({ ayah, menu, palette, write, checked, shown, words = 0, whole = false, targetWord, onTouch = noTouch }: { ayah: string; palette: Palette; write: Write | null; checked: Checked | null; shown: boolean;
   /** A long press opens the reader's menu on this ayah (AyahFlow's `menu`); false in recite mode, whose long press is its own. */
-  menu: string | false;
+  menu: AyahMenuKeys;
   /** A tap or long press on the lines (MushafPageView's), as the reader's page takes it. */
   onTouch?: (touch: Touch, key: string | null, x: number, y: number, word?: number) => void;
   /** The ayah's first words shown so far, as recite mode's next-word button shows them. */
@@ -101,12 +101,20 @@ export const AyatRange = memo(function AyatRange({ from, to, palette }: { from: 
       return slice ? [{ page, data, model, slice }] : [];
     });
   }, [from, to]);
+  // A long press opens the reader's menu, asking which of the ayat (owner, 2026-11-22).
+  const keys = useMemo(() => {
+    const [surah, first] = from.split(':').map(Number);
+    const last = Number(to.split(':')[1]);
+    return Array.from({ length: last - first + 1 }, (_, i) => `${surah}:${first + i}`);
+  }, [from, to]);
   return (
-    <View onLayout={event => setWidth(event.nativeEvent.layout.width)} pointerEvents="none">
+    <AyahMenuPress menu={keys}>
+    <View onLayout={event => setWidth(event.nativeEvent.layout.width)}>
       {width > 0 && parts.map(part => (
         <MushafPageView key={part.page} page={part.page} data={part.data} model={part.model} palette={palette} width={width} height={width * PAGE_TEXT_RATIO}
           top={surahBefore(part.page)} names={SURAH_TITLES} forgot={NONE} saved={NO_SAVES} onTouch={noTouch} slice={part.slice} />
       ))}
     </View>
+    </AyahMenuPress>
   );
 });

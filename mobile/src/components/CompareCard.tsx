@@ -89,7 +89,7 @@ function Neighbour({ ayah, palette }: { ayah: AroundAyah; palette: Palette }) {
 /** A side's ayat as one running text, with the ayah before and after (muted) when the surrounding switch is on. */
 function RunningAyat({ ayat, surah, before, after, palette, light, lane = false }: { ayat: CardAyah[]; surah: number; before?: AroundAyah | null; after?: AroundAyah | null; palette: Palette; light: (ayah: CardAyah) => Light; /** Half the card wide, side by side: the reader's size from the screen, wrapping within the lane. */ lane?: boolean }) {
   return (
-    <AyahFlow center screen={lane} menu={ayat[0] ? `${surah}:${ayat[0].number}` : (before ?? after)?.key ?? false} color={palette.ink}>
+    <AyahFlow center screen={lane} menu={[...(before ? [before.key] : []), ...ayat.map(ayah => `${surah}:${ayah.number}`), ...(after ? [after.key] : [])]} color={palette.ink}>
       {before && <><Neighbour ayah={before} palette={palette} />{' '}</>}
       {ayat.map((ayah, i) => <Text key={ayah.number}>{i > 0 ? ' ' : ''}<AyahText ayah={ayah} surah={surah} palette={palette} light={light(ayah)} inline /></Text>)}
       {after && <>{' '}<Neighbour ayah={after} palette={palette} /></>}

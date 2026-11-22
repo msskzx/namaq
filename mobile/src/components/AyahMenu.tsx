@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { View } from 'react-native';
 import { ArrowLeftRight, BookOpenText, Bookmark, Copy, EyeOff, FileText, Layers, Lightbulb, LightbulbOff, ListTree, NotebookPen, Play, Send, Sparkles, TableOfContents, TextSearch } from 'lucide-react-native';
 import { hasQiraat } from '@shared/quran/qiraatData';
 import { NOTE_NAME } from '@shared/quran/selection';
@@ -6,6 +7,9 @@ import { hasTrees } from '@/lib/branchList';
 import { compareTargetsOfAyah } from '@/lib/compare';
 import type { Palette } from '@/lib/theme';
 import ActButton, { type ButtonBox } from '@/ui/ActButton';
+import Chip from '@/ui/Chip';
+import { num } from '@shared/quran/arabicNumber';
+import { surahName } from '@shared/quran/surahNames';
 import { FEATURE_ICON } from './featureIcons';
 import TreeIcon from './TreeIcon';
 
@@ -20,6 +24,8 @@ type Act = () => void;
 
 /** What each button of the menu does where it is opened; a button with no action here is left out. */
 export type AyahMenuActions = {
+  /** A view of several ayat: the one the menu acts on, picked from a row of them. */
+  ayat?: { keys: readonly string[]; picked: string; onPick: (key: string) => void };
   /** Outside the reader (owner, 2026-11-22): the ayah's page and the mushaf at the ayah, first. */
   page?: Act; mushaf?: Act;
   listen?: Act; recite?: Act;
@@ -39,7 +45,13 @@ export type AyahMenuActions = {
  */
 export function ayahMenuGroups(facts: ReturnType<typeof useAyahMenuFacts>, act: AyahMenuActions, palette: Palette): React.ReactNode[] {
   const { forgot } = act;
+  const surahs = new Set(act.ayat?.keys.map(key => key.split(':')[0]));
+  const ayahName = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return surahs.size > 1 ? `${surahName(surah)} ${num(ayah)}` : num(ayah); };
   return [
+    ...(act.ayat ? [<View key="ayat" style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, maxWidth: 4 * 56 }}>
+      {act.ayat.keys.map(key => <Chip key={key} small role="radio" label={ayahName(key)} on={key === act.ayat!.picked} onPress={() => act.ayat!.onPick(key)} palette={palette}
+        accessibilityLabel={`الآية ${ayahName(key)}`} />)}
+    </View>] : []),
     ...(act.page || act.mushaf ? [<>
       {act.page && <ActButton Icon={FileText} label="صفحة الآية" name="صفحة الآية" palette={palette} onPress={act.page} />}
       {act.mushaf && <ActButton Icon={FEATURE_ICON.mushaf} label="في المصحف" name="المصحف" palette={palette} onPress={act.mushaf} />}

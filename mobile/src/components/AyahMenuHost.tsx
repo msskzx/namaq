@@ -12,22 +12,22 @@ import { openAyahPage, openIntent } from '@/lib/ways';
 import { usePalette } from '@/lib/theme';
 import FloatingMenu, { type MenuAt } from '@/ui/FloatingMenu';
 import { ayahMenuGroups, useAyahMenuFacts } from './AyahMenu';
-import { AyahMenuContext, type OpenAyahMenu } from './quran/text/ayahMenu';
+import { AyahMenuContext, type OpenAyahMenu } from '@/ui/ayahMenuContext';
 import AyahPreviewSheet, { type Preview } from './AyahPreviewSheet';
 import BalaghaSheet from './BalaghaSheet';
 import NoteSheet from './NoteSheet';
 import TopicSheet, { type TopicOpen } from './TopicSheet';
 import { shareAyah } from './AyahShare';
 
-
 /**
  * The reader's long-press menu for every ayah drawn off the mushaf (owner, 2026-11-22; ayah-page/agreed.md part 4): an
- * ayah view (AyahFlow) opens it here, once for the app, with the ayah's page and the mushaf first. Its sheets open over
- * the page the ayah is on.
+ * ayah view (AyahFlow, AyahLines) opens it here, once for the app, with the ayah's page and the mushaf first. A view of
+ * several ayat (an oath, a story's place) opens it on the first, with a row of the ayat to pick the one meant. Its sheets
+ * open over the page the ayah is on.
  */
 export default function AyahMenuHost({ children }: { children: ReactNode }) {
   const palette = usePalette();
-  const [menu, setMenu] = useState<{ key: string; at: MenuAt } | null>(null);
+  const [menu, setMenu] = useState<{ keys: readonly string[]; key: string; at: MenuAt } | null>(null);
   const [preview, setPreview] = useState<Preview | null>(null);
   const [balagha, setBalagha] = useState<string | null>(null);
   const [noting, setNoting] = useState<string | null>(null);
@@ -36,7 +36,7 @@ export default function AyahMenuHost({ children }: { children: ReactNode }) {
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes);
   const facts = useAyahMenuFacts(menu?.key);
-  const open = useMemo<OpenAyahMenu>(() => (key, at) => setMenu({ key, at }), []);
+  const open = useMemo<OpenAyahMenu>(() => (keys, at) => setMenu({ keys, key: keys[0], at }), []);
   const key = menu?.key ?? '';
   const [surah, ayah] = key.split(':').map(Number);
   const close = () => setMenu(null);
@@ -52,6 +52,7 @@ export default function AyahMenuHost({ children }: { children: ReactNode }) {
       {menu && (
         <FloatingMenu overlay at={menu.at} label={`الآية ${num(ayah)} من السورة ${num(surah)}`} onClose={close} palette={palette}
           groups={ayahMenuGroups(facts, {
+            ayat: menu.keys.length > 1 ? { keys: menu.keys, picked: key, onPick: picked => setMenu({ ...menu, key: picked }) } : undefined,
             page: onItsPage ? undefined : then(openAyahPage),
             mushaf: then(at => openIntent({ tab: 'read', at })),
             recite: then(at => openIntent({ tab: 'read', at, recite: true })),
