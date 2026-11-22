@@ -723,7 +723,7 @@ function RingPost({ id, palette }: { id: string; palette: Palette }) {
       <View style={{ padding: 14, gap: 10 }}>
         {ring.by === 'hadith' && <Saying by="قال رسول الله ﷺ" palette={palette}><Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>«{ring.quote}»</Text></Saying>}
         <RoundRing middle={middle} nodes={nodes} width={drawW} palette={palette} />
-        {ring.doubted.length > 0 && (
+        {!ring.note && ring.doubted.length > 0 && (
           <View style={{ gap: 4 }}>
             {ring.doubted.map(each => (
               <Button key={each.to} variant="plain" label={`${personName(GRAPH.nodes.get(each.to)!)}: على خلاف`} onPress={() => setTie(each)} />

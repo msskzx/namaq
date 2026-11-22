@@ -1,10 +1,9 @@
 import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { ChevronDown, ChevronUp, Plus } from 'lucide-react-native';
-import { chainOf, foldTop, FOLD_RUN, lineOf, meetingOf, nasabTree, straightRun, type NasabNode } from '@shared/tarajimLine';
+import { Plus } from 'lucide-react-native';
+import { chainOf, foldTop, lineOf, meetingOf, nasabTree, type NasabNode } from '@shared/tarajimLine';
 import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
-import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Card, { CardWithRow, useInsideCard } from '@/ui/Card';
@@ -24,7 +23,6 @@ const LINE = 1.5;
 /** The smallest a wide tree is drawn to fit the screen's width; past it, it scrolls sideways. */
 const MIN_SCALE = 0.5;
 
-const picked = (node: NasabNode) => node.people.length > 0;
 
 /** A father's name in the tree, in the one card; a picked person's is picked and opens his page. */
 function Box({ node, palette, linked, scale }: { node: NasabNode; palette: Palette; linked: boolean; scale: number }) {
@@ -38,31 +36,16 @@ function Box({ node, palette, linked, scale }: { node: NasabNode; palette: Palet
   );
 }
 
-type Tree = { palette: Palette; linked: boolean; scale: number; open: string[]; onOpen: (key: string) => void };
+type Tree = { palette: Palette; linked: boolean; scale: number };
 
 /**
  * A node and his sons under him, joined by lines: a stem down from the father, a bar across the sons, a stem down to
- * each (each son draws his half of the bar, so the bar spans from the first son's middle to the last's). A long straight
- * run of fathers under him is one «…» box that opens in place (owner 2026-11-20).
+ * each (each son draws his half of the bar, so the bar spans from the first son's middle to the last's). Every father
+ * is drawn: the tree never folds (owner 2026-11-22).
  */
 function Branch({ node, path, tree }: { node: NasabNode; path: string; tree: Tree }) {
-  const { palette, scale, open, onOpen } = tree;
+  const { palette, scale } = tree;
   const stem = { width: LINE, height: 16 * scale, backgroundColor: palette.muted, alignSelf: 'center' as const };
-  const below = (child: NasabNode) => {
-    const key = `${path}/${child.key}`;
-    const run = straightRun(child, picked);
-    if (run.length < FOLD_RUN || open.includes(key)) return <Branch node={child} path={key} tree={tree} />;
-    const names = run.map(n => n.name).join('، ');
-    return (
-      <View style={{ alignItems: 'center' }}>
-        <Card palette={palette} node pad={[6 * scale, 12 * scale]} dashed accessibilityRole="button" accessibilityLabel={`أظهر ${num(run.length)} آباء: ${names}`} onPress={() => onOpen(key)}>
-          <Text style={{ color: palette.muted, fontSize: 16 * scale, textAlign: 'center' }}>… {num(run.length)}</Text>
-        </Card>
-        <View style={stem} />
-        <Branch node={run[run.length - 1].children[0]} path={`${key}…`} tree={tree} />
-      </View>
-    );
-  };
   return (
     <View style={{ alignItems: 'center' }}>
       <Box node={node} palette={palette} linked={tree.linked} scale={scale} />
@@ -77,7 +60,7 @@ function Branch({ node, path, tree }: { node: NasabNode; path: string; tree: Tre
               </View>
             )}
             {node.children.length > 1 && <View style={stem} />}
-            {below(child)}
+            <Branch node={child} path={`${path}/${child.key}`} tree={tree} />
           </View>
         ))}
       </View>
@@ -105,8 +88,8 @@ function Fitted({ children }: { children: (scale: number) => React.ReactNode }) 
 }
 
 /**
- * The nasab tree (owner, 2026-11-18; sketch tarajim-app/sketch-dark.png, screen 3): the tree of `slugs`' fathers (one person's line, or several that part where their nasabs part), the shared line above
- * folded into one line of names that opens. «الرسم | النص» shows the tree or the text (owner 2026-11-20, the drawing
+ * The nasab tree (owner, 2026-11-18; sketch tarajim-app/sketch-dark.png, screen 3): the tree of `slugs`' fathers (one person's line, or several that part where their nasabs part), the fathers they
+ * share written out above it, every name shown (owner 2026-11-22: the tree never folds). «الرسم | النص» shows the tree or the text (owner 2026-11-20, the drawing
  * first): each one's chain of fathers written out, or with `meetings`, where each pair meets and the chain to it. The
  * «النسب» screen draws it, and so does a quiz that asks where two nasabs meet (the meetings only after the answer).
  */
@@ -119,8 +102,6 @@ export function NasabTree({ slugs, palette, meetings: showMeetings = true, linke
   text?: boolean;
   /** Which of the two shows first: a quiz on the nasab's words opens on the text. */
   start?: DrawingOrText }) {
-  const [open, setOpen] = useState<string[]>([]);
-  const [runs, setRuns] = useState<string[]>([]);
   const [shown, setShown] = useState<DrawingOrText>(start);
   const inside = useInsideCard();
   const lines = useMemo(() => slugs.filter(s => findPerson(s)).map(s => ({ slug: s, line: lineOf(findPerson(s)!, PEOPLE) })), [slugs]);
@@ -134,21 +115,16 @@ export function NasabTree({ slugs, palette, meetings: showMeetings = true, linke
   const chain = (slug: string, line: Parameters<typeof chainOf>[1], to: number) => chainOf(findPerson(slug)!, line, to);
   // Every entry a name on the page comes from: a line carried on through another entry rests on that entry's nasab too.
   const sources = [...new Set(lines.flatMap(({ line }) => line.map(n => n.from)))].map(s => findPerson(s)?.fullName).filter(f => !!f);
-  const tree = (scale: number): Tree => ({ palette, linked, scale, open: runs, onOpen: key => setRuns([...runs, key]) });
+  const tree = (scale: number): Tree => ({ palette, linked, scale });
   const bodyText = { color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' as const };
   const body = <>
     {shown === 'drawing' || !withText ? roots.map((root, r) => {
-      // One person: his whole line. Several: from where they part, the shared fathers above folded into a line.
+      // Several people: the tree from where they part, the fathers they share above it written out in full, never folded.
       const { above, start: top } = lines.length > 1 ? foldTop(root) : { above: [], start: root };
       const id = `${r}:${root.key}`;
-      const aboveShown = open.includes(id);
       return (
         <View key={id} style={{ gap: 10 }}>
-          {above.length > 0 && (
-            <Button variant="plain" Icon={aboveShown ? ChevronUp : ChevronDown}
-              onPress={() => setOpen(aboveShown ? open.filter(k => k !== id) : [...open, id])}
-              label={`${(aboveShown ? above : above.slice(0, 3)).join(' · ')}${!aboveShown && above.length > 3 ? ' …' : ''}`} />
-          )}
+          {above.length > 0 && <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>{above.join(' بن ')}</Text>}
           <Fitted>{scale => <Branch node={top} path={id} tree={tree(scale)} />}</Fitted>
         </View>
       );

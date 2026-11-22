@@ -67,8 +67,10 @@ phone only (`PHONE_ONLY_KINDS`), lists and rules in `shared/peopleCards.ts`:
 - Rings (`RingPost`, `RoundRing` in `TiesRing.tsx`): one kind of a person's ties that his full ring folds into a count
   (the Prophet's ﷺ wives, children, cousins), a title whose holders the data holds whole («العشرة المبشرون بالجنة»), and
   two hadith of the Sahihayn that name a group with the Prophet ﷺ in the middle (al-Bukhari 3693 / Muslim 2403, Muslim
-  2417). A tie the book holds in doubt (al-Tayyib and al-Tahir) is left off the drawing and named under it with
-  «على خلاف», opening both views. A ring whose names do not fit the phone's width is not shown.
+  2417). A tie the book holds in doubt is left off the drawing and named under it with «على خلاف», opening both
+  views. Where a scholar's words settle it (Ibn al-Qayyim: al-Tayyib and al-Tahir are two titles of Abdullah, Zad
+  al-Ma'ad 1/101), those words go on that book's line in the references instead, so the card keeps the home layout
+  (owner, 2026-11-22; `RING_NOTES`). A ring whose names do not fit the phone's width is not shown.
 
 Inside an interest, a drawn card and a text card take turns (`DRAWN_KINDS` in `shared/interests.ts`, `slotOf` in
 `shared/homeFeed.ts`). These cards add no quiz kind: their questions already exist («أين يلتقي النسبان؟», «ما صلته به؟»).

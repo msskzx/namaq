@@ -124,10 +124,24 @@ export const meetSources = (people: readonly AppPerson[], slugs: readonly string
  * A ring card: one person and one kind of his ties (his wives, his children…), a title and those who hold it, or a hadith
  * and those it names. A tie the book holds in doubt is left off the drawing and said under it with both views.
  */
-export type Ring = { id: string; people: string[]; doubted: Tie[]; sources: QuizSource[] } & (
+export type Ring = { id: string; people: string[]; doubted: Tie[]; sources: QuizSource[]; note?: RingNote } & (
   | { by: 'kin'; slug: string; kind: TieKind }
   | { by: 'title'; title: string; name: string }
   | { by: 'hadith'; quote: string; book: 'bukhari' | 'muslim'; n: number; also?: { book: 'bukhari' | 'muslim'; n: number }; middle: string });
+
+/** A scholar's words on one of a ring's people, in the ring's references, in place of the doubted ties they settle. */
+export type RingNote = { by: string; of: string; work: string; quote: string };
+
+/**
+ * Notes on a kin ring (owner, 2026-11-22): Ibn al-Qayyim on the Prophet's ﷺ son Abdullah, that al-Tayyib and al-Tahir are
+ * his two titles (Zad al-Ma'ad 1/101). The words go in that book's line of the references, so the card keeps the home
+ * layout, and the doubted ties they settle are not listed under the drawing. A note holds only when its words are in the
+ * text of the tie that states Abdullah.
+ */
+export const RING_NOTES: Record<string, RingNote> = {
+  'kin:prophet-muhammad:child': { by: 'ابن القيم', of: 'abdullah-ibn-muhammad', work: 'zad-al-maad',
+    quote: 'ثُمَّ وُلِدَ لَهُ عبد الله، وَهَلْ وُلِدَ بَعْدَ النُّبُوَّةِ أَوْ قَبْلَهَا؟ فِيهِ اخْتِلَافٌ، وَصَحَّحَ بَعْضُهُمْ أَنَّهُ وُلِدَ بَعْدَ النُّبُوَّةِ، وَهَلْ هُوَ الطيب والطاهر، أَوْ هُمَا غَيْرُهُ؟ عَلَى قَوْلَيْنِ. وَالصَّحِيحُ أَنَّهُمَا لَقَبَانِ لَهُ' },
+};
 
 /** The titles that name how many hold them: shown only when the data holds every one (owner, 2026-11-21). */
 export const TITLE_COUNTS: Record<string, number> = { 'the-ten-promised-paradise': 10, 'the-six-of-the-shura': 6, naqib: 12 };
@@ -143,6 +157,15 @@ export const HADITH_RINGS: readonly Extract<Ring, { by: 'hadith' }>[] = [
     middle: 'prophet-muhammad', people: ['abu-bakr-as-siddiq', 'umar-ibn-al-khattab', 'uthman-ibn-affan', 'ali-ibn-abi-talib', 'talhah-ibn-ubaydullah', 'az-zubayr-ibn-al-awwam', 'saad-ibn-abi-waqqas'],
     doubted: [], sources: [] },
 ];
+
+/** A kin ring's note, if it holds, and its references with the note's words on its book's line. */
+function noted(id: string, sure: readonly Tie[], sources: QuizSource[]): { note?: RingNote; sources: QuizSource[] } {
+  const note = RING_NOTES[id];
+  const tie = note && sure.find(each => each.to === note.of);
+  if (!note || !tie?.link.text?.includes(note.quote)) return { sources };
+  const [line] = pageSources(tie.link.refs.filter(ref => ref.work === note.work));
+  return { note, sources: sources.map(each => (line && each.book === line.book && each.at === line.at ? { ...each, quote: note.quote, by: note.by } : each)) };
+}
 
 /** A person's ties of one kind, each person once under his nearest kind as the ring draws them; the doubted ones apart. */
 export function kinOf(graph: PeopleGraph, slug: string, kind: TieKind) {
@@ -162,7 +185,7 @@ export function ringList(graph: PeopleGraph, people: readonly AppPerson[], folde
     const { sure, doubted } = kinOf(graph, person.slug, kind);
     return sure.length > 1 && fits(sure.map(tie => tie.to))
       ? [{ id: `kin:${person.slug}:${kind}`, by: 'kin' as const, slug: person.slug, kind, people: sure.map(tie => tie.to), doubted,
-        sources: pageSources([...sure, ...doubted].flatMap(tie => tie.link.refs)) }]
+        ...noted(`kin:${person.slug}:${kind}`, sure, pageSources([...sure, ...doubted].flatMap(tie => tie.link.refs))) }]
       : [];
   }));
   const same = (a: readonly string[], b: readonly string[]) => a.length === b.length && a.every(slug => b.includes(slug));

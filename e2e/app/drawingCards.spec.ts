@@ -1,4 +1,4 @@
-import { expect, open, test, type Seed } from './fixtures';
+import { closeSource, expect, open, openSource, test, type Seed } from './fixtures';
 import { SURAH_NAMES } from '../../shared/quran/surahNames';
 
 // Owner, 2026-11-20 (sketch layout-cleanup panel 6): home draws the drawings built for their pages, each card the page's own
@@ -7,13 +7,11 @@ const saved = (kind: string, item: string): Seed => ({ bookmarks: [{ id: `card:$
 
 test.describe('«نسبه»', () => {
   test.use({ seed: saved('nasab', 'az-zubayr-ibn-al-awwam') });
-  test('draws the nasab tree with its long runs folded, and opens the nasab page', async ({ page }) => {
+  // Owner, 2026-11-22: the nasab tree never folds; every father is drawn.
+  test('draws every father of the nasab, none folded, and opens the nasab page', async ({ page }) => {
     await open(page, '/library');
-    const fold = page.getByRole('button', { name: /^أظهر [٠-٩]+ آباء: / }).first();
-    await expect(fold).toBeVisible();
-    const name = (await fold.getAttribute('aria-label'))!;
-    await fold.click();
-    await expect(page.getByRole('button', { name, exact: true })).toHaveCount(0);
+    await expect(page.getByText('قصي', { exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: /^أظهر / })).toHaveCount(0);
     await page.getByRole('button', { name: 'افتح نسب الزبير بن العوام' }).click();
     await expect(page).toHaveURL(/\/nasab\?slug=az-zubayr-ibn-al-awwam/);
   });
@@ -98,12 +96,14 @@ test.describe('a prophet\'s event', () => {
 // Owner, 2026-11-21 (sketch feed-visuals panels 1-3, 7-9): the people drawings.
 test.describe('the Prophet\'s ﷺ children as a ring', () => {
   test.use({ seed: saved('ring', 'kin:prophet-muhammad:child') });
-  // A tie the book holds in doubt is off the drawing and said under it, its text in a sheet.
-  test('names al-Tayyib apart «على خلاف» with the text, a daughter opens her page, and the card opens his ties', async ({ page }) => {
+  // Owner, 2026-11-22: al-Tayyib and al-Tahir are off the drawing, and Ibn al-Qayyim's words on them are in the references,
+  // so the card keeps the home layout.
+  test('keeps al-Tayyib and al-Tahir off the card with Ibn al-Qayyim\'s words in its references, a daughter opens her page, and the card opens his ties', async ({ page }) => {
     await open(page, '/library');
-    await page.getByRole('button', { name: 'الطيب: على خلاف' }).click();
-    await expect(page.getByText(/وماتوا صغارا رضعا/)).toBeVisible();
-    await page.keyboard.press('Escape');
+    await expect(page.getByRole('button', { name: /على خلاف/ })).toHaveCount(0);
+    await openSource(page);
+    await expect(page.getByText(/الطيب والطاهر/)).toBeVisible();
+    await closeSource(page);
     await page.getByRole('link', { name: 'فاطمة بنت محمد' }).click();
     await expect(page).toHaveURL(/\/person\?slug=fatimah-bint-muhammad/);
     await page.goBack();
@@ -139,6 +139,9 @@ test.describe('«أين يلتقي نسبه ﷺ بنسب الخلفاء الأر
   test('draws the five lines and opens the nasab page with all five', async ({ page }) => {
     await open(page, '/library');
     await expect(page.getByText(/^أين يلتقي نسبه ﷺ/)).toBeVisible();
+    // The fathers they share are written out above the tree, none hidden (owner, 2026-11-22).
+    await expect(page.getByText(/^لؤي بن غالب بن فهر/)).toBeVisible();
+    await expect(page.getByRole('button', { name: /^أظهر / })).toHaveCount(0);
     await page.getByRole('button', { name: 'افتح النسب' }).click();
     await expect(page).toHaveURL(/\/nasab\?slug=prophet-muhammad(,|%2C)abu-bakr-as-siddiq/);
   });

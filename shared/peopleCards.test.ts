@@ -64,6 +64,18 @@ describe('the ring cards', () => {
     expect(children.doubted.length).toBeGreaterThan(0);
   });
 
+  // Owner, 2026-11-22: Ibn al-Qayyim's words on Abdullah go in the references, not under the drawing, so the card keeps the
+  // home layout; they stand in for the doubted ties only because they name each of them.
+  it('carry a scholar\'s note on its book\'s line in the references, naming every doubted tie it settles', () => {
+    const noted = rings.filter(ring => ring.note);
+    expect(noted.length).toBeGreaterThan(0);
+    for (const ring of noted) {
+      const note = ring.note!;
+      expect(ring.sources.filter(source => source.quote === note.quote), ring.id).toHaveLength(1);
+      for (const tie of ring.doubted) expect(note.quote, `${ring.id} ${tie.to}`).toContain(graph.nodes.get(tie.to)!.name);
+    }
+  });
+
   it('draw a title that names how many hold it only when the data holds every one', () => {
     const counted = rings.filter(ring => ring.by === 'title' && TITLE_COUNTS[ring.title] !== undefined);
     expect(counted.length).toBeGreaterThan(0);
