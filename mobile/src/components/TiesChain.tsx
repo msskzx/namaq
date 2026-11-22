@@ -86,7 +86,7 @@ function layout(nodes: readonly string[], steps: readonly Step[], first: string,
  * The one drawing of a chain of ties (owner, 2026-11-18/19): «بينه وبين…» and the «صلة» feed card draw the same thing.
  * Each line says only the tie's name, and its arrow runs from the one the name describes to the one he is it to: «أم»
  * on the line from صفية to الزبير (owner, 2026-11-22). A screen reader hears the whole clause with both names, and the
- * «النص» view writes it out. Anyone with a page opens his ties. Inside a feed card the people are chips, since a card
+ * «النص» view writes it out. Only the people picked are in the accent (owner, 2026-11-22). Anyone with a page opens his ties. Inside a feed card the people are chips, since a card
  * holds no card.
  */
 export default function TiesChain({ nodes, steps, first, picked, width, palette, inCard = false }: {
@@ -157,7 +157,7 @@ export default function TiesChain({ nodes, steps, first, picked, width, palette,
               ? <Chip label={personName(node)} on={picked.includes(slug)} lit tint={node.inApp ? palette.accent : palette.muted} role={node.inApp ? 'button' : 'text'} onPress={open} palette={palette} />
               : (
                 <Card palette={palette} pad={[6, 8]} picked={picked.includes(slug)} faded={!node.inApp} accessibilityRole={node.inApp ? 'link' : undefined} accessibilityLabel={personName(node)} onPress={open}>
-                  <Text numberOfLines={2} style={{ color: node.inApp ? palette.accent : palette.muted, fontSize: 14, textAlign: 'center' }}>{personName(node)}</Text>
+                  <Text numberOfLines={2} style={{ color: picked.includes(slug) ? palette.accent : node.inApp ? palette.ink : palette.muted, fontSize: 14, textAlign: 'center' }}>{personName(node)}</Text>
                 </Card>
               )}
           </View>

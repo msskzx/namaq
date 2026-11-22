@@ -634,7 +634,7 @@ function GroupPost({ id, palette }: { id: string; palette: Palette }) {
       <View style={{ padding: 14, gap: 6 }}>
         <Tabs palette={palette} label="كيف تُعرض الصلة" value={shown} onChange={setShown} options={DRAWING_OR_TEXT} />
         {shown === 'drawing'
-          ? <TiesChain nodes={group.nodes} steps={group.steps} first={group.nodes[0]} picked={picked} width={Math.min(width - 60, 480)} palette={palette} inCard />
+          ? <TiesChain nodes={group.nodes} steps={group.steps} first={group.nodes[0]} picked={group.id.startsWith('inlaws:') ? [group.nodes[0]] : picked} width={Math.min(width - 60, 480)} palette={palette} inCard />
           : <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{chainSentence(GRAPH, group.steps, personName)}.</Text>}
       </View>
     </Post>

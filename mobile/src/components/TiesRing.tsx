@@ -121,14 +121,14 @@ export function RoundRing({ middle, nodes, width, palette }: { middle: string; n
       </Svg>
       <View style={{ position: 'absolute', left: centre.x - middleW / 2, top: centre.y - MIDDLE_H / 2, width: middleW, height: MIDDLE_H, justifyContent: 'center' }}>
         <Card palette={palette} node pad={[8, 10]} picked accessibilityRole="header" accessibilityLabel={middle}>
-          <Text numberOfLines={3} style={{ color: palette.ink, fontSize: 15, lineHeight: 20, textAlign: 'center' }}>{middle}</Text>
+          <Text numberOfLines={3} style={{ color: palette.accent, fontSize: 15, lineHeight: 20, textAlign: 'center' }}>{middle}</Text>
         </Card>
       </View>
       {nodes.map((node, i) => (
         <View key={node.key} style={{ position: 'absolute', left: places[i].x - ws[i] / 2, top: places[i].y - h / 2, width: ws[i], height: h, justifyContent: 'center' }}>
           <Card palette={palette} node pad={[4, 6]} picked={node.inApp} faded={!node.inApp} accessibilityRole={node.inApp ? 'link' : 'button'} accessibilityLabel={node.label}
             onPress={node.onPress} onLongPress={node.onLongPress} style={{ minHeight: h, justifyContent: 'center' }}>
-            <Text numberOfLines={1} style={{ color: node.inApp ? palette.accent : palette.muted, fontSize: 14, textAlign: 'center' }}>{node.label}</Text>
+            <Text numberOfLines={1} style={{ color: node.inApp ? palette.ink : palette.muted, fontSize: 14, textAlign: 'center' }}>{node.label}</Text>
           </Card>
         </View>
       ))}
@@ -214,7 +214,7 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
           </Svg>
           <View style={{ position: 'absolute', left: drawW / 2 - middleW / 2, top: middle - (NODE_H + GROW) / 2, height: NODE_H + GROW, width: middleW, justifyContent: 'center' }}>
             <Card palette={palette} node pad={[8, 10]} picked accessibilityRole="header" accessibilityLabel={personName(person)}>
-              <Text numberOfLines={2} style={{ color: palette.ink, fontSize: 17, textAlign: 'center' }}>{personName(person)}</Text>
+              <Text numberOfLines={2} style={{ color: palette.accent, fontSize: 17, textAlign: 'center' }}>{personName(person)}</Text>
             </Card>
           </View>
           {placed.map(spot => {
@@ -244,7 +244,7 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
                   onPress={node.inApp ? () => go(node.slug) : () => setShown(spot.tie)} onLongPress={() => setShown(spot.tie)}>
                   {/* What this person is to the one in the middle, on the node itself, so a line's colour is never the only clue. */}
                   <Text style={{ color: kindColor(palette, spot.kind), fontSize: 12, textAlign: 'center' }}>{tieWord(spot.kind, node.sex, person.sex)}</Text>
-                  <Text numberOfLines={2} style={{ color: node.inApp ? palette.accent : palette.muted, fontSize: 14, textAlign: 'center' }}>{nodeName(node)}</Text>
+                  <Text numberOfLines={2} style={{ color: node.inApp ? palette.ink : palette.muted, fontSize: 14, textAlign: 'center' }}>{nodeName(node)}</Text>
                 </Card>
               </View>
             );
