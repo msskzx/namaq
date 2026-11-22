@@ -6,7 +6,9 @@ import type { CatalogEvent } from '@/lib/catalog/types';
  * Mas'ud saw them killed at Badr. Told from Sahih al-Bukhari 3854 (Manaqib al-Ansar), whole. Of those named in the du'a,
  * Shaybah ibn Rabi'ah and Ubayy ibn Khalaf have no catalog subject and are not linked; Umayyah is linked though Shu'bah
  * doubts whether it was Umayyah or Ubayy, as the text says, because al-Bukhari settles it himself after Shu'bah's doubt
- * in 2934: «وَقَالَ شُعْبَةُ: أُمَيَّةُ أَوْ أُبَيٌّ وَالصَّحِيحُ أُمَيَّةُ».
+ * in 2934: «وَقَالَ شُعْبَةُ: أُمَيَّةُ أَوْ أُبَيٌّ وَالصَّحِيحُ أُمَيَّةُ». Then 3960 (al-Maghazi, the chapter on the du'a against
+ * Shaybah, Utbah, al-Walid and Abu Jahl), the same hadith by another route, whole, folded; al-Walid ibn Utbah has no
+ * catalog subject and is not linked.
  */
 const theCamelsOffal = {
   kind: 'EVENT',
@@ -53,6 +55,14 @@ const theCamelsOffal = {
             { text: "فَرَأَيْتُهُمْ قُتِلُوا يَوْمَ بَدْرٍ، فَأُلْقُوا فِي بِئْرٍ غَيْرَ أُمَيَّةَ أَوْ أُبَيٍّ، تَقَطَّعَتْ أَوْصَالُهُ، فَلَمْ يُلْقَ فِي الْبِئْرِ.»" },
           ],
         },
+      ],
+    },
+    {
+      isnad: "حَدَّثَنِي عَمْرُو بْنُ خَالِدٍ: حَدَّثَنَا زُهَيْرٌ: حَدَّثَنَا أَبُو إِسْحَاقَ، عَنْ عَمْرِو بْنِ مَيْمُونٍ، عَنْ عَبْدِ اللهِ بْنِ مَسْعُودٍ  رضي الله عنه قَالَ:",
+      source: { slug: 'sahih-al-bukhari', hadith: 3960, url: 'https://sunnah.com/bukhari:3960' },
+      moments: [
+        { title: "دعا على نفر من قريش", text: "«اسْتَقْبَلَ النَّبِيُّ ﷺ الْكَعْبَةَ، فَدَعَا عَلَى نَفَرٍ مِنْ قُرَيْشٍ: عَلَى شَيْبَةَ بْنِ رَبِيعَةَ، وَعُتْبَةَ بْنِ رَبِيعَةَ، وَالْوَلِيدِ بْنِ عُتْبَةَ، وَأَبِي جَهْلِ بْنِ هِشَامٍ", people: ['prophet-muhammad', 'utbah-ibn-rabiah', 'abu-jahl-ibn-hisham'] },
+        { title: "«لقد رأيتهم صرعى»", text: "فَأَشْهَدُ بِاللهِ، لَقَدْ رَأَيْتُهُمْ صَرْعَى، قَدْ غَيَّرَتْهُمُ الشَّمْسُ، وَكَانَ يَوْمًا حَارًّا».", people: ['abdullah-ibn-masud'] },
       ],
     },
   ],
