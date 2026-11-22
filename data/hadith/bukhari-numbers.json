@@ -1,5 +1,5 @@
 {
-  "about": "Abd al-Baqi numbers the pinned turath export (book 1681) prints in another way. Each was found by the build and checked against Abd al-Baqi's numbering as the fawazahmed0 hadith-api ara-bukhari edition carries it (the same text under the number). See scripts/hadith/buildSahihayn.ts.",
+  "about": "Abd al-Baqi numbers the pinned turath export (book 1681) prints in another way. Each was found by the build and checked against Abd al-Baqi's numbering as the fawazahmed0 hadith-api ara-bukhari edition carries it (the same text under the number). See scripts/hadith/buildSahihayn.ts. `starts` are numbers whose record begins at a phrase other than the printed head: 4197 at its «(م)» head, the route before it («نَشَأَ بِهَا») being the end of 4196, and 6592 at «وَزَادَ», whose head the print gives 6591.",
   "shared": {
     "3028": 3027,
     "4034": 4033,
@@ -7,7 +7,9 @@
     "4514": 4515
   },
   "starts": {
+    "4197": "حَدَّثَنَا عَبْدُ اللهِ بْنُ يُوسُفَ: أَخْبَرَنَا مَالِكٌ",
     "6591": "حَدَّثَنَا عَلِيُّ بْنُ عَبْدِ اللهِ: حَدَّثَنَا حَرَمِيُّ بْنُ عُمَارَةَ",
+    "6592": "وَزَادَ ابْنُ أَبِي عَدِيٍّ عَنْ شُعْبَةَ",
     "6896": "وَقَالَ لِي ابْنُ بَشَّارٍ حَدَّثَنَا يَحْيَى"
   },
   "absent": [

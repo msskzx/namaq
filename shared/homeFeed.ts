@@ -1,7 +1,7 @@
 import { nextPrayer, type PrayerDay, type PrayerKey } from './prayer';
 import { counted } from './quran/arabicNumber';
 import type { FeedQuizKind } from './quiz/feedQuiz';
-import { DRAWING_CARD_KINDS, type FeedCardKind, type Interest } from './interests';
+import { DRAWING_CARD_KINDS, DRAWN_KINDS, type FeedCardKind, type Interest } from './interests';
 
 /**
  * The reader's own cards, not any interest's (owner, 2026-11-18/19): today's juz in the feed's first round, the books on
@@ -83,8 +83,13 @@ function slotOf(interest: Interest, at: number, round: number, day: number, card
   // Interests take turns starting on a card or a question, so a round holds both (owner, 2026-11-19: learn, then test).
   const quiz = cardOnly && cards.length ? false : both ? (round + at) % 2 === 1 : quizzes.length > 0;
   const turn = both ? Math.floor((round + (at % 2)) / 2) : round;
-  const list = quiz ? quizzes : cards;
-  return { interest: interest.id, kind: list[spin(turn + day, list.length)], quiz };
+  if (quiz) return { interest: interest.id, kind: quizzes[spin(turn + day, quizzes.length)], quiz };
+  // Its drawings and its text cards take turns too (owner, 2026-11-21), each list walked in its own turn.
+  const drawn = cards.filter(kind => DRAWN_KINDS.includes(kind));
+  const text = cards.filter(kind => !DRAWN_KINDS.includes(kind));
+  const list = !drawn.length || !text.length ? cards : spin(turn + day, 2) === 0 ? drawn : text;
+  const own = list === cards ? turn : Math.floor((turn + spin(day, 2)) / 2);
+  return { interest: interest.id, kind: list[spin(own + day, list.length)], quiz };
 }
 
 /** A round's cards before the spacing: each interest once, the order shuffled by the day. */
@@ -149,7 +154,7 @@ export const dayStart = (count: number, day: number, salt: number) => (count ? s
 
 /** The content cards drawn from a list of items (pairs and trees have their own picks), in the order that salts each one's start. */
 export const LIST_KINDS = ['note-tafsir', 'note-qiraat', 'note-irab', 'note-balagha', 'term', 'scene', 'mashahid', 'hadith', 'bukhari', 'muslim', 'rajab',
-  'recorded', 'isnad', 'prophets', 'sira', 'moment', 'tarajim', 'tie', 'laqab', 'kunya', 'life', ...DRAWING_CARD_KINDS, 'battle-year', 'battle-armies'] as const satisfies readonly FeedCardKind[];
+  'recorded', 'isnad', 'prophets', 'sira', 'moment', 'tarajim', 'tie', 'laqab', 'kunya', 'life', ...DRAWING_CARD_KINDS, 'battle-year', 'battle-armies', 'group', 'lives', 'meet', 'ring'] as const satisfies readonly FeedCardKind[];
 export type ListKind = (typeof LIST_KINDS)[number];
 
 /**

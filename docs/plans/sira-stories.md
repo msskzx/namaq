@@ -1,7 +1,6 @@
 # Sira stories: plan for more, sound ones only
 
-Status: plan for owner review (2026-11-20). No data is extracted until the owner says go
-(owner, 2026-11-19: no more data parsing until told).
+Status: owner said go on 2026-11-22. Batches run in order below.
 
 ## What we have today
 
@@ -81,7 +80,7 @@ data). Each batch is one PR with the triage list in it.
 
 | Batch | Range | Examples (numbers checked against our copy) |
 |---|---|---|
-| 0 | Code only | Muslim as a report source; the test reads the built Sahihayn instead of separate hadith files |
+| 0 | Code only, done 2026-11-22 | Muslim as a report source; the test reads the built Sahihayn instead of separate hadith files, and the eight Bukhari reports already told were re-split on that text |
 | 1 | Makkah: Bukhari 3851–3896, Muslim 832, 121 | Uqbah and Abu Bakr «أتقتلون رجلا» (3856), Abu Bakr's islam (3857), Sa'd's (3858), Sa'id ibn Zayd (3862), death of Abu Talib (3884), Aqaba (3893), Amr ibn Abasah (Muslim 832), Amr ibn al-As (Muslim 121) |
 | 2 | Hijra and Madinah: Bukhari 3897–3948 | the hijra (3905), Suraqa (3906), arrival in Madinah, Salman «من رب إلى رب» (3946–3947) |
 | 3 | Badr to Uhud: Bukhari 3949–4085, Muslim 1763, 1779, 1800 | the two youths and Abu Jahl (3988), Umar's account of Badr (Muslim 1763), Wahshi and Hamzah (4072) |
@@ -96,12 +95,28 @@ Every story shows where stories already show: its own page, «قصص السير�
 it, the feed card, and the sira quiz kinds. Nothing new to build on screen for this plan, on the app or
 the website.
 
-## Open questions for the owner
+## Owner's answers (2026-11-22)
 
-1. Is «حسن» enough? For example al-Dhahabi writing «إسناده حسن», or al-Tirmidhi «حسن صحيح».
-   Proposed: yes when the source itself says it, shown with its words.
-2. May a later scholar's verdict make a report teachable when the old book is silent? For example
-   Salman's long story, which is only in Ibn Ishaq. Proposed: not for now; Sahihs and al-Dhahabi first.
-3. Very long stories (the Ifk, Ka'b ibn Malik, Salamah at Dhu Qarad, each about 1,500 words): told whole
-   like the others, with the feed card showing one moment. Proposed: yes.
-4. A new tag for signs of prophethood (Jabir's food, the split moon)? Proposed: yes, «من دلائل نبوته».
+1. «حسن» is enough when the source itself grades it so, for example al-Dhahabi's «إسناده حسن» or
+   al-Tirmidhi's «حسن صحيح». The card shows the grader's own words.
+2. A later scholar's verdict does not make a report teachable, not for now. The Sahihs and al-Dhahabi come first.
+   Salman's long story waits.
+3. Long stories (the Ifk, Ka'b ibn Malik, Salamah at Dhu Qarad) are told whole. Their feed card shows one
+   moment or a preview, and a tap opens the whole story.
+4. Signs of prophethood (Jabir's food, the split moon) get a tag, but in a scholar's words, not ours.
+   The tag is al-Bukhari's own chapter heading «علامات النبوة في الإسلام» (Sahih al-Bukhari, Kitab al-Manaqib,
+   the chapter before hadith 3571), and its reference names him. A story takes the tag only when its source
+   files it under such a chapter.
+
+## Tests for new stories
+
+These notes come from the test audit (2026-11-22) and apply to every batch:
+
+- Don't add a test file for one story or one person. Don't pin hand-typed values, such as counts or
+  "exactly 3 citations".
+- Rely on the general checks that already run over every story: `data/catalog/claimProvenance.test.ts`,
+  `data/catalog/events/stories.test.ts` (reports word for word, ayah evidence as printed, only catalog people)
+  and `src/lib/catalog/validateCatalog.test.ts`. When a story needs a new rule, write it as a general rule over all
+  stories.
+- After catalog changes, rebuild with `scripts/battles/buildAppBattles.ts` so `shared/data/events/stories.json`
+  and `life.json` match the catalog. No test checks this yet, so check it by hand.

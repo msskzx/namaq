@@ -5,7 +5,7 @@ import { expect, open, tab, test } from './fixtures';
 test('the hadith tab lists the Forty, and one opens with its chain drawn or its whole text', async ({ page }) => {
   await open(page, '/');
   await tab(page, 'الحديث').click();
-  await expect(page.getByRole('heading', { name: 'الحديث', exact: true })).toBeVisible();
+  await expect(page.getByRole('textbox', { name: 'ابحث في الصحيحين' }).filter({ visible: true })).toBeVisible();
   // The tab lists the books (the hadith tab redesign); the Forty is one of them.
   await page.getByRole('link', { name: 'الأربعون النووية', exact: true }).click();
   await expect(page.getByRole('link', { name: 'الحديث الأول، عن عمر بن الخطاب' })).toBeVisible();
@@ -43,9 +43,11 @@ test('the hadith of Jibril opens its scenes in al-Bukhari and in Muslim', async 
   await page.getByRole('button', { name: 'رواية أبي هريرة في البخاري' }).click();
   await expect(page).toHaveURL(/\/hadith-unit\?unit=bukhari-jibril/);
   await expect(page.getByLabel(/^الإسناد: البخاري، مُسَدَّدٌ/)).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'المشهد ١' })).toBeVisible();
+  // The scenes are drawn with the speakers' chips, and no «المشهد ١» heading of ours (owner, 2026-11-22).
+  await expect(page.getByText('رسول الله ﷺ', { exact: true }).first()).toBeVisible();
+  await expect(page.getByText(/^المشهد /)).toHaveCount(0);
   await page.getByRole('tab', { name: 'النص', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'المشهد ١' })).toHaveCount(0);
+  await expect(page.getByText('رسول الله ﷺ', { exact: true })).toHaveCount(0);
   await expect(page.getByRole('heading', { name: 'تعليق المصنف' })).toBeVisible();
   // Where else the same event is: Muslim's hadith opens over it, and back comes back.
   await page.getByRole('button', { name: 'اقرأ الحديث في صحيح مسلم' }).click();
@@ -69,7 +71,7 @@ test('the bar is Quran, hadith, home, tarajim and quizzes, and the mushaf opens 
   await expect.poll(() => page.getByRole('tab').evaluateAll(tabs => tabs.map(item => item.getAttribute('aria-label'))))
     .toEqual(['القرآن', 'الحديث', 'الرئيسية', 'التراجم', 'الاختبارات']);
   await tab(page, 'التراجم').click();
-  await expect(page.getByRole('heading', { name: 'التراجم', exact: true })).toBeVisible();
+  await expect(page.getByRole('textbox', { name: 'ابحث في التراجم' }).filter({ visible: true })).toBeVisible();
   await tab(page, 'القرآن').click();
   await page.getByRole('link', { name: 'المصحف', exact: true }).click();
   await expect(page).toHaveURL(/\/read/);

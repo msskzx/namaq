@@ -41,10 +41,25 @@ test('the tarajim hub opens the nasab search, and a pick draws his tree', async 
   await open(page, '/');
   await tab(page, 'التراجم').click();
   await page.getByRole('link', { name: /^النسب/ }).click();
-  await page.getByRole('textbox', { name: 'ابحث في التراجم' }).filter({ visible: true }).fill('أبو بكر');
+  // The hub under it keeps its own top-bar search of the same name; the picker's is in the sheet.
+  await page.getByRole('dialog').getByRole('textbox', { name: 'ابحث في التراجم' }).fill('أبو بكر');
   await page.getByRole('button', { name: 'أبو بكر الصديق' }).click();
   // A box stands alone, so it names his father in the nominative: «أبو قحافة», never «أبي قحافة».
   await expect(page.getByText(/^أبو قحافة/)).toBeVisible();
+});
+
+// A relative the entry names who has no page looks like everyone else (owner, 2026-11-22): a tap opens the sentence
+// that names him, with its page, on the ring and in the text view alike.
+test('a relative with no page opens the sentence that names him', async ({ page }) => {
+  await open(page, '/person?slug=jabr-ibn-atik');
+  await page.getByRole('button', { name: 'ابنه: عتيك', exact: true }).click();
+  await expect(page.getByRole('dialog').getByText(/وَلَهُ أَوْلاَدٌ/)).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+
+  await page.getByRole('tab', { name: 'النص' }).last().click();
+  await page.getByRole('button', { name: 'عتيك', exact: true }).click();
+  await expect(page.getByRole('dialog').getByText(/وَلَهُ أَوْلاَدٌ/)).toBeVisible();
 });
 
 // The people graph (owner, 2026-11-18; sketch tarajim-app/graph/sketch2-dark.png): one person in the middle with his ties,

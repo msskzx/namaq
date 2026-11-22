@@ -20,6 +20,7 @@ import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { toTab } from '@/lib/ways';
 import { findPerson, personName, unvowelled } from '@/lib/tarajim';
 import { personLife } from '@/lib/life';
+import { battleOf } from '@/lib/battles';
 import LifeTimeline from '@/components/LifeTimeline';
 import Tabs from '@/ui/Tabs';
 import Saying from '@/ui/Saying';
@@ -101,15 +102,13 @@ function Line({ label, palette, children }: { label: string; palette: Palette; c
   );
 }
 
-/** Names in a line: each one with a page in the app is a button that opens it, the others plain text. */
-function Names({ links, palette }: { links: PersonLink[]; palette: Palette }) {
+/** Names in a line, all alike (owner, 2026-11-22): one with a page in the app opens it, the others the sentence that names them. */
+function Names({ links, palette, onShow }: { links: PersonLink[]; palette: Palette; onShow: (link: PersonLink) => void }) {
   return (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 6 }}>
       {links.map(link => (
         <View key={link.slug} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-          {link.inApp
-            ? <Button variant="plain" label={personName(link)} onPress={() => openPerson(link.slug)} />
-            : <Text style={body(palette)}>{personName(link)}</Text>}
+          <Button variant="plain" label={personName(link)} onPress={link.inApp ? () => openPerson(link.slug) : () => onShow(link)} />
           {/* A tie the book gives with a word against it: both texts and sayers are in the sources under the section. */}
           {link.disputed && <Text style={muted(palette)}>(على خلاف)</Text>}
         </View>
@@ -156,7 +155,10 @@ export default function PersonScreen() {
   const bottom = useTabBarSpace();
   const { slug = '' } = useLocalSearchParams<{ slug?: string }>();
   const { width } = useWindowDimensions();
-  const [tie, setTie] = useState<Tie | undefined>();
+  const [tie, setTie] = useState<Pick<Tie, 'to' | 'link' | 'reversed'> | undefined>();
+  const showLink = (link: PersonLink) => setTie({ to: link.slug, link });
+  // A battle opens its page when the app has one, as the timeline's battles do.
+  const showBattle = (link: PersonLink) => (battleOf(link.slug) ? toTab({ pathname: '/battle', params: { slug: link.slug } }) : showLink(link));
   // «نسبه» drawn as the tree of fathers or as the book writes it (owner 2026-11-20: «الرسم | النص», the drawing first).
   const [nasabView, setNasabView] = useState<DrawingOrText>('drawing');
   // «صلاته» as the ring or as the lines of names, which name the same people (the drawing first).
@@ -247,8 +249,8 @@ export default function PersonScreen() {
                 <Quote fact={fact} palette={palette} many={person.islamAge.length > 1}><Text style={body(palette)}>{ageOf(fact)}</Text></Quote>
               </Line>
             ))}
-            {battles.length > 0 && <Line label={f ? 'شهدت' : 'شهد'} palette={palette}><Names links={battles} palette={palette} /></Line>}
-            {person.absentFrom.length > 0 && <Line label={f ? 'غابت عن' : 'غاب عن'} palette={palette}><Names links={uniq(person.absentFrom)} palette={palette} /></Line>}
+            {battles.length > 0 && <Line label={f ? 'شهدت' : 'شهد'} palette={palette}><Names links={battles} palette={palette} onShow={showBattle} /></Line>}
+            {person.absentFrom.length > 0 && <Line label={f ? 'غابت عن' : 'غاب عن'} palette={palette}><Names links={uniq(person.absentFrom)} palette={palette} onShow={showBattle} /></Line>}
             {person.died.year.map((fact, i) => (
               <Line key={`y${i}`} label={f ? 'وفاتها' : 'وفاته'} palette={palette}>
                 <Quote fact={fact} palette={palette} many={person.died.year.length > 1}><Text style={body(palette)}>{yearOf(fact)}</Text></Quote>
@@ -274,7 +276,7 @@ export default function PersonScreen() {
             </>}>
             {tiesView === 'drawing'
               ? <TiesRing slug={person.slug} width={Math.min(width - RING_ROOM, 480)} palette={palette} onPick={openPerson} onShow={setTie} />
-              : tieList.map(tie => <Line key={tie.label} label={tie.label} palette={palette}><Names links={tie.links} palette={palette} /></Line>)}
+              : tieList.map(tie => <Line key={tie.label} label={tie.label} palette={palette}><Names links={tie.links} palette={palette} onShow={showLink} /></Line>)}
             <Credit facts={tieList.flatMap(tie => tie.links)} palette={palette} quotes />
           </Part>
         )}

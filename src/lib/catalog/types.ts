@@ -251,8 +251,8 @@ export interface CatalogReport {
 
 /**
  * One speaker's words in a story, or the narrator's between them. The bubble holds the words after `lead`; the speaker
- * is taken only from the source: the lead-in names him («فقال رسول الله ﷺ:»), or `witness` quotes a book that does
- * (owner, 2026-11-21: a bare «فقال» is never our reading).
+ * is taken only from the source: the lead-in names him («فقال رسول الله ﷺ:»), `witness` quotes a book that does
+ * (owner, 2026-11-21: a bare «فقال» is never our reading), or `teller` says the words are the teller's own «قلت».
  */
 export interface CatalogTurn {
   readonly text: string;
@@ -267,6 +267,12 @@ export interface CatalogTurn {
   readonly lead?: string;
   /** A book that says who speaks, when the lead-in does not name him: its words, as printed on the page. */
   readonly witness?: { readonly source: string; readonly volume: number; readonly volumeLabel: string; readonly page: number; readonly quote: string; readonly url: string };
+  /**
+   * The words are the teller's own, brought in by his «قلت» (owner, 2026-11-22): the speaker is the one the chain has the
+   * story from («قال أبو ذر»). Only where he is the one telling at that point: a listener's «قلت» inside his telling (Ibn
+   * al-Samit asking Abu Dharr «لمن؟») needs a witness, and «قلت في نفسي» was not said and stays narration.
+   */
+  readonly teller?: true;
 }
 
 /** Our tags for gathering stories (owner, 2026-11-18). */

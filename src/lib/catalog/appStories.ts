@@ -19,7 +19,7 @@ export const HADITH_URL: Record<string, (hadith: number) => string> = {
 };
 
 /** The books a turn's witness may cite, by slug, as a cite names them. */
-const WITNESS_BOOKS: Record<string, string> = { 'kawkab-wahhaj': 'الكوكب الوهاج للهرري' };
+const WITNESS_BOOKS: Record<string, string> = { 'kawkab-wahhaj': 'الكوكب الوهاج للهرري', 'fath-al-bari': 'فتح الباري لابن حجر' };
 
 const appTurn = (turn: CatalogTurn): AppTurn => ({
   ...(turn.lead ? { lead: turn.lead } : {}),

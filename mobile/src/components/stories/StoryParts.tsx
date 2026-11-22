@@ -95,12 +95,12 @@ export function ReportScene({ report, slots, palette }: { report: AppReport; slo
 
 /**
  * A drawn story as pictures to share (owner's agreed layout, 2026-11-21): its name and «عَنْ ابْنِ عَبَّاسٍ» on the first
- * only; the scene's blocks with no rings and no chips, the lead-ins saying who speaks; the last moment together on the last
+ * only; the scene's blocks with no chips, the lead-ins saying who speaks; the last moment together on the last
  * picture with the book and its number under it (a picture cannot be tapped open, so its place is written out).
  */
 function storyPictures(story: AppStory, report: AppReport, palette: Palette): SharePaged {
   const lines = reportLines(report);
-  const blocks = sceneBlocks(lines, reportSlots(lines, palette.slots.length), palette, false);
+  const blocks = sceneBlocks(lines, reportSlots(lines, palette.slots.length), palette);
   const lastFrom = lines.length - (report.moments.at(-1)?.turns?.length ?? 0);
   const tailFrom = blocks.findIndex(block => block.line >= lastFrom);
   return {

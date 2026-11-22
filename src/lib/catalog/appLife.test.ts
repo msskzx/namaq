@@ -1,9 +1,18 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { appLife } from './appLife';
+import { appStories } from './appStories';
 import { loadCatalog } from './loadCatalog';
 
 describe("a person's «حياته»", async () => {
-  const life = appLife(await loadCatalog());
+  const catalog = await loadCatalog();
+  const life = appLife(catalog);
+
+  // The phone reads these two files, not the catalog. A catalog fix reaches it only once they are written again.
+  it('and the sira stories are what the catalog builds now (npm run battles:app)', () => {
+    expect(JSON.parse(readFileSync('shared/data/events/life.json', 'utf8'))).toEqual(JSON.parse(JSON.stringify(life)));
+    expect(JSON.parse(readFileSync('shared/data/events/stories.json', 'utf8'))).toEqual(JSON.parse(JSON.stringify(appStories(catalog))));
+  });
 
   it('holds only what places the person with its quotes, dated ones by year and undated stories last', () => {
     for (const entries of Object.values(life)) {

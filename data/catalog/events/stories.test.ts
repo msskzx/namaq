@@ -15,13 +15,11 @@ const paragraphs = (slug: string, volume: number, page: number) => {
 };
 const pagesText = (slug: string, volume: number, from: number, to: number) =>
   Array.from({ length: to - from + 1 }, (_, i) => paragraphs(slug, volume, from + i)).flat().join(' ');
-// A hadith book is stored one hadith to a file (data/history/sources/<slug>/hadith/<number>.md).
-// Sahih Muslim is the app's own copy (scripts/hadith/buildSahihayn.ts), Abd al-Baqi's numbers: the hadith's first printed text.
-const muslim = JSON.parse(readFileSync('data/hadith/sahih/muslim.json', 'utf8')) as { kitabs: { hadith: { n: number; routes: { text: string }[] }[] }[] };
-const hadithText = (slug: string, hadith: number) =>
-  slug === 'sahih-muslim'
-    ? muslim.kitabs.flatMap(kitab => kitab.hadith).find(item => item.n === hadith)!.routes[0].text
-    : readFileSync(`${SOURCES}/${slug}/hadith/${hadith}.md`, 'utf8').trim();
+// The two Sahihs are the app's own copies (scripts/hadith/buildSahihayn.ts): a hadith's text is its first printed route, chain and all.
+type SahihText = { kitabs: { hadith: { n: number; routes: { text: string }[] }[] }[] };
+const sahih = (book: string) => (JSON.parse(readFileSync(`data/hadith/sahih/${book}.json`, 'utf8')) as SahihText).kitabs.flatMap(kitab => kitab.hadith);
+const SAHIH: Record<string, ReturnType<typeof sahih>> = { 'sahih-al-bukhari': sahih('bukhari'), 'sahih-muslim': sahih('muslim') };
+const hadithText = (slug: string, hadith: number) => SAHIH[slug].find(item => item.n === hadith)!.routes[0].text;
 const bare = (text: string) => text.replace(/[\u064B-\u0652\u0670\u0640]/g, '');
 const sadi = (JSON.parse(readFileSync('shared/data/quran/tafsirSadi.json', 'utf8')) as { passages: [number, number, number, number, number, string][] }).passages;
 const reports = stories.flatMap(story => story.reports!.map((report, i) => [`${story.slug} report ${i + 1}`, report] as const));
@@ -76,7 +74,7 @@ describe('sira stories', () => {
     }
   });
 
-  const turned = reports.flatMap(([name, report]) => report.moments.filter(moment => moment.turns).map(moment => [`${name}, «${moment.title}»`, moment] as const));
+  const turned = reports.flatMap(([name, report]) => report.moments.filter(moment => moment.turns).map(moment => [`${name}, «${moment.title}»`, moment, report] as const));
 
   it.each(turned)('%s is its turns put back together', (_, moment) => {
     expect(moment.turns!.map(turn => turn.text).join(' ')).toBe(moment.text);
@@ -85,15 +83,26 @@ describe('sira stories', () => {
     for (const turn of moment.turns!) if (turn.lead) expect(turn.speaker).toBeDefined();
   });
 
+  // A kunya changes with its case: «أن أبا سفيان أخبره», «في جواب أبي بكر».
+  const kunyaForms = (name: string) => [name, name.replace(/^أبو /, 'أبا '), name.replace(/^أبو /, 'أبي ')].map(bare);
+
   // Owner, 2026-11-21: who speaks comes from the source, never our reading of a bare «فقال».
-  it.each(turned)('%s names each speaker as the text or a book does', (_, moment) => {
+  it.each(turned)('%s names each speaker as the text or a book does', (_, moment, report) => {
     for (const turn of moment.turns!.filter(turn => turn.speaker)) {
       const { name } = turn.speaker!;
       if (turn.witness) {
         const { source, volume, page, quote } = turn.witness;
         // A quote that skips words marks the gap with « … »: each part is on the page as printed.
         for (const part of quote.split(' … ')) expect(paragraphs(source, volume, page).join('\n')).toContain(part);
-        expect(bare(quote)).toContain(bare(name));
+        // «ﷺ» is said of the Prophet alone, so a note that gives the answer as his names him.
+        if (turn.speaker!.person === 'prophet-muhammad' && quote.includes('ﷺ')) continue;
+        expect(kunyaForms(name).some(form => bare(quote).includes(form))).toBe(true);
+      } else if (turn.teller) {
+        // Owner, 2026-11-22: the teller's own «قلت» is his: the lead says «I said», and the chain names him as the one telling.
+        expect(bare(turn.lead ?? '')).toMatch(/^(?:قالت?:? )?(?:ثم )?[فو]?قل(?:ت|نا)(?::? [^:]+)?:?$/);
+        // «قلت في نفسي» was thought, not said.
+        expect(bare(turn.lead ?? '')).not.toMatch(/نفسي/);
+        expect(kunyaForms(name).some(form => bare(report.isnad ?? '').includes(form))).toBe(true);
       } else expect(bare(turn.lead ?? '')).toContain(bare(name));
     }
   });
