@@ -126,6 +126,13 @@ export const SOURCES: Source[] = [
     uses: [USE.stories],
   },
   {
+    id: 'fath-al-bari', group: 'books', files: ['data/history/sources/fath-al-bari/'],
+    title: { ar: 'فتح الباري بشرح صحيح البخاري', en: 'Fath al-Bari, a commentary on Sahih al-Bukhari' },
+    author: { ar: 'أحمد بن علي بن حجر العسقلاني', en: 'Ibn Hajar al-Asqalani' },
+    edition: 'ترقيم محمد فؤاد عبد الباقي، إخراج محب الدين الخطيب، المكتبة السلفية، مصر ١٣٨٠–١٣٩٠هـ، وصوّرتها دور منها دار المعرفة ببيروت، بصفحاتها؛ من نسخة turath.io، ٢٠٢٦-١١-٢٢', link: shamela(1673),
+    licence: PUBLIC_DOMAIN, uses: [USE.stories],
+  },
+  {
     id: 'sunan-tirmidhi', group: 'books',
     title: { ar: 'سنن الترمذي', en: 'Sunan al-Tirmidhi' }, author: { ar: 'محمد بن عيسى الترمذي', en: 'al-Tirmidhi' },
     edition: 'تحقيق أحمد محمد شاكر ومحمد فؤاد عبد الباقي وإبراهيم عطوة عوض، مصطفى البابي الحلبي، مصر، الطبعة الثانية ١٣٩٥هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٩', link: shamela(1435), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.people],
