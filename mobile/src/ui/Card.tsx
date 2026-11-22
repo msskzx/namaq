@@ -4,6 +4,7 @@ import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import { CARD_CAP_SHARE } from '@shared/homeFeed';
 import { CARD, type Palette } from '@/lib/theme';
 import { Tap } from '@/ui/Tap';
+import OpenButton from '@/ui/OpenButton';
 import { Text } from '@/ui/Text';
 import Sheet from '@/ui/Sheet';
 import MoreMenu, { type MoreItem } from '@/ui/MoreMenu';
@@ -43,8 +44,10 @@ const FADE = 72;
 /**
  * A card with the row of buttons under it (the feed post's shape): `row` is the post's own buttons, after what its content
  * hands up with `UnderCard`. The row starts on the right, as across the app, and the «⋯» of `menu` sits alone at its far left.
- * With `cap`, content taller than CARD_CAP_SHARE of the screen stops there with a fade, and «اقرأ كاملًا» under the card
- * opens it whole in a sheet with the same buttons and source line at its foot (owner, 2026-11-20). Every feed card and every
+ * With `cap`, content taller than CARD_CAP_SHARE of the screen stops there with a fade (owner, 2026-11-20). The open button
+ * (`lead`) opens the item's page, where it shows whole; a card with no page gets the one open button (ui/OpenButton), which
+ * opens it whole in a sheet with the same buttons and source line at its foot (owner, 2026-11-22: one open button, no
+ * «اقرأ كاملًا» link). Every feed card and every
  * section of a page (owner, 2026-11-20: one look).
  */
 export function CardWithRow({ lead, row, menu, cap = false, source, sourceLine, bar, children, ...card }: Omit<React.ComponentProps<typeof Card>, 'children'> & {
@@ -77,9 +80,9 @@ export function CardWithRow({ lead, row, menu, cap = false, source, sourceLine, 
   const [whole, setWhole] = useState(false);
   const { palette } = card;
   const inside = useContext(InsideCard);
-  const buttonRow = (handedUp: [string, React.ReactNode][], more?: MoreItem[]) => (bar || lead || row || handedUp.length > 0 || !!more?.length) && (
+  const buttonRow = (handedUp: [string, React.ReactNode][], more?: MoreItem[], first: React.ReactNode = lead) => (bar || first || row || handedUp.length > 0 || !!more?.length) && (
     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', gap: bar ? 4 : 0, marginTop: bar ? 4 : 0 }}>
-      {bar}{lead}{handedUp.map(([id, node]) => <View key={id} style={{ flexDirection: 'row', alignItems: 'center' }}>{node}</View>)}{row}
+      {bar}{first}{handedUp.map(([id, node]) => <View key={id} style={{ flexDirection: 'row', alignItems: 'center' }}>{node}</View>)}{row}
       {more?.length ? <><View style={{ flex: 1 }} /><MoreMenu items={more} /></> : null}
     </View>
   );
@@ -106,10 +109,7 @@ export function CardWithRow({ lead, row, menu, cap = false, source, sourceLine, 
           </Card>
         </RowSlot.Provider>
       </SourceSlotContext.Provider>
-      {capped && <Tap onPress={() => setWhole(true)} accessibilityRole="button" style={{ alignSelf: 'flex-start', paddingHorizontal: 12, minHeight: 32, justifyContent: 'center' }}>
-        <Text style={{ color: palette.accent, fontSize: 15 }}>اقرأ كاملًا</Text>
-      </Tap>}
-      {buttonRow(lifted, menu)}
+      {buttonRow(lifted, menu, capped && !lead ? <OpenButton label="اقرأ البطاقة كاملة" onPress={() => setWhole(true)} /> : lead)}
       {sources}
       {(capped || whole) && <Sheet open={whole} onClose={() => setWhole(false)} palette={palette}>
         <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 12, paddingBottom: 12, gap: 4 }}>

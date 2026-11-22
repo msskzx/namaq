@@ -2,7 +2,7 @@ import { Fragment, useEffect, useMemo, useState, useSyncExternalStore } from 're
 import { Pressable, ScrollView, View } from 'react-native';
 import { useFitReport, type OnFit } from '@/lib/useFit';
 import { Text } from '@/ui/Text';
-import { Bookmark, Lightbulb, Send, SquareArrowOutUpLeft, UnfoldHorizontal, type LucideProps } from 'lucide-react-native';
+import { Bookmark, BookSearch, Send, SquareArrowOutUpLeft, UnfoldHorizontal, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, toggleBookmark } from '@shared/bookmarks';
 import { ayatLabel, branchesHref, keys, shownAyat, type Branch, type Variant } from '@shared/quran/branches';
 import { num } from '@shared/quran/arabicNumber';
@@ -135,7 +135,7 @@ export function QuizInputs({ question, typed, onType, palette, names, header, hi
       <ScrollView {...fit} style={{ flex: 1 }} keyboardShouldPersistTaps="handled">{header}<MatrixInputs question={question} values={values} hints={shown} write={write} palette={palette} names={names} /></ScrollView>
       {/* The buttons sit on the right, as action buttons do across the app (owner, 2026-11-17). */}
       {!typing && <UnderCard><View style={{ direction: 'rtl', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 8 }}>
-        <Bar label="تلميح: حرف آخر من كل طرف فارغ" onPress={hint} Icon={Lightbulb} palette={palette} />
+        <Bar label="تلميح: حرف آخر من كل طرف فارغ" onPress={hint} Icon={BookSearch} palette={palette} />
       </View></UnderCard>}
     </View>
   );
@@ -169,7 +169,7 @@ function MatrixMark({ row, palette, hinted }: { row: Correction; palette: Palett
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
         <Badge row={row} palette={palette} />
         <Text style={{ fontSize: 14, fontWeight: '600', color: palette.ink }}>{verdict(row, true)}</Text>
-        {hinted && <Lightbulb size={15} color={palette.muted} accessibilityLabel="بتلميح" />}
+        {hinted && <BookSearch size={15} color={palette.muted} accessibilityLabel="بتلميح" />}
       </View>
       {!row.correct && <Typed row={row} palette={palette} />}
     </View>

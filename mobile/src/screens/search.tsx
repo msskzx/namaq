@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type Compon
 import { Pressable, ScrollView, View } from 'react-native';
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { router } from 'expo-router';
-import { ArrowLeftRight, BookOpen, ChevronDown, ChevronLeft, HandHeart, History, List, NotebookPen, ScrollText, TextSearch, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, ChevronDown, ChevronLeft, HandHeart, History, List, NotebookPen, ScrollText, TextSearch, type LucideProps } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import type { SearchGroup, SearchHit, SearchKind } from '@shared/quran/searchAll';
 import { Text } from '@/ui/Text';
@@ -21,13 +21,14 @@ import { QuranWord } from '@/components/quran/text/AyahFlow';
 import LitAyat from '@/components/quran/text/LitAyat';
 import Card from '@/ui/Card';
 import Empty from '@/ui/Empty';
+import { FEATURE_ICON } from '@/components/featureIcons';
 
 /** Results a group shows until its arrow opens the rest. */
 export const GROUP_SHOWN = 3;
 
 const GROUPS: Record<SearchKind, { title: string; Icon: (props: LucideProps) => React.ReactNode }> = {
   surah: { title: 'السور', Icon: List },
-  ayah: { title: 'الآيات', Icon: BookOpen },
+  ayah: { title: 'الآيات', Icon: FEATURE_ICON.mushaf },
   word: { title: 'الألفاظ', Icon: TextSearch },
   tree: { title: 'المتشابهات', Icon: TreeIcon },
   compare: { title: 'المقارنة', Icon: ArrowLeftRight },

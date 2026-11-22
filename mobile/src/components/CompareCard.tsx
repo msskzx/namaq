@@ -1,8 +1,9 @@
 import { memo, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
+import OpenButton from '@/ui/OpenButton';
 import { View } from 'react-native';
 import { Text } from '@/ui/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
-import { ArrowLeftRight, Bookmark, BookOpen, Clapperboard, Columns2, GalleryHorizontal, Rows2, Pause, UnfoldHorizontal, Play, RotateCcw, Send, X } from 'lucide-react-native';
+import { Bookmark, Clapperboard, Columns2, GalleryHorizontal, Rows2, Pause, UnfoldHorizontal, Play, RotateCcw, Send, X } from 'lucide-react-native';
 import type { CardAyah, CardSide, PairCard } from '@shared/quran/compareCards';
 import { ayahStarts, isRefrain, type ReadStep } from '@shared/quran/readPlan';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
@@ -31,6 +32,7 @@ import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
 import SourceLine, { sourcesOf } from '@/ui/SourceLine';
 import { TANASUB_KIND, tanasubLink, tanasubSource } from '@shared/quran/tanasubCards';
+import { FEATURE_ICON } from '@/components/featureIcons';
 
 const DOUBLE_TAP = 280;
 
@@ -106,7 +108,7 @@ function SideHead({ label, at, palette, group, bare = false }: { label: string; 
     // The buttons at the right edge, in the thumb's reach, and the surah's name and number in the middle (owner, 2026-11-15).
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
       {!bare && <View style={{ position: 'absolute', right: 0, flexDirection: 'row-reverse', alignItems: 'center', zIndex: 1 }}>
-        <IconButton Icon={BookOpen} label={read} onPress={() => readAyah(at)} size="small" />
+        <IconButton Icon={FEATURE_ICON.mushaf} label={read} onPress={() => readAyah(at)} size="small" />
         {group && <IconButton Icon={TreeIcon} label="افتح في متشابهات القرآن" onPress={() => toTab({ pathname: '/branches', params: { tree: group } })} size="small" />}
       </View>}
       <Text style={{ flex: 1, color: palette.muted, fontSize: COMPARE_CARD.labelSize, textAlign: 'center', paddingHorizontal: bare ? 0 : group ? 64 : 32, minHeight: 30, lineHeight: 30 }}>{label}</Text>
@@ -119,7 +121,7 @@ function LaneHead({ label, at, palette, group, bare = false }: { label: string; 
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', minHeight: 30 }}>
       <Text style={{ color: palette.muted, fontSize: COMPARE_CARD.labelSize, textAlign: 'center', flexShrink: 1 }}>{label}</Text>
-      {!bare && <IconButton Icon={BookOpen} label={`اقرأ ${label} في المصحف`} onPress={() => readAyah(at)} size="small" />}
+      {!bare && <IconButton Icon={FEATURE_ICON.mushaf} label={`اقرأ ${label} في المصحف`} onPress={() => readAyah(at)} size="small" />}
       {!bare && group && <IconButton Icon={TreeIcon} label="افتح في متشابهات القرآن" onPress={() => toTab({ pathname: '/branches', params: { tree: group } })} size="small" />}
     </View>
   );
@@ -367,11 +369,11 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
       </Tap>
       {read.studio ? <Studio read={read} palette={palette} record={record} /> : (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
-          {onOpen && <IconButton Icon={ArrowLeftRight} label="افتحها في المقارنة" onPress={onOpen} />}
+          {onOpen && <OpenButton label="افتحها في المقارنة" onPress={onOpen} />}
           {onOpen && ([0, 1] as const).map(i => {
             const view = sideView(card, i, selected, []);
             const label = sideTitle(view.name, surahName);
-            return <IconButton key={i} Icon={BookOpen} label={`اقرأ ${label} في المصحف`} onPress={() => readAyah(readAt(view.name, sides[i], selected))} />;
+            return <IconButton key={i} Icon={FEATURE_ICON.mushaf} label={`اقرأ ${label} في المصحف`} onPress={() => readAyah(readAt(view.name, sides[i], selected))} />;
           })}
           {!onOpen && saveButton}
           <IconButton Icon={Clapperboard} label="استوديو القراءة" onPress={read.open} />

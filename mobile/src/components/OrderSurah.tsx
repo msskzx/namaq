@@ -1,6 +1,5 @@
 import { Fragment } from 'react';
 import { View, type TextStyle } from 'react-native';
-import { BookOpen } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { orderSource, orderSurahs, type Cite, type OrderAyah, type OrderLinkView, type OrderSurah, type QuoteRun } from '@shared/quran/surahOrder';
 import { Text } from '@/ui/Text';
@@ -14,6 +13,7 @@ import QuranWords from '@/components/quran/text/QuranWords';
 import { ayahMushafWords } from '@/lib/mushaf';
 import IconButton from '@/ui/IconButton';
 import { CardWithRow } from '@/ui/Card';
+import { FEATURE_ICON } from '@/components/featureIcons';
 
 /**
  * The surah-order page's pieces (owner, 2026-11-13), shared with the quizzes that order surahs: a surah's card (its opening
@@ -102,7 +102,7 @@ export function SurahBody({ s, palette }: { s: OrderSurah; palette: Palette }) {
 export function SurahCard({ s, palette }: { s: OrderSurah; palette: Palette }) {
   return (
     <CardWithRow palette={palette} pad={[6, 14]} source={[orderSource(s.aim.src, num)]}
-      lead={<IconButton Icon={BookOpen} label={`افتح سورة ${s.name} في المصحف`} onPress={() => readAyah(`${s.surah}:1`)} />}>
+      lead={<IconButton Icon={FEATURE_ICON.mushaf} label={`افتح سورة ${s.name} في المصحف`} onPress={() => readAyah(`${s.surah}:1`)} />}>
       <SurahBody s={s} palette={palette} />
     </CardWithRow>
   );

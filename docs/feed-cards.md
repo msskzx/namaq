@@ -124,16 +124,43 @@ A new card or quiz kind goes into an interest's `cards` or `quizzes` in the same
   holds, from the right, the button that opens the item in its own reader, the card's tools, «احفظ» (a `card:` bookmark,
   shown in the library and among the saved cards) and share; a «⋯» alone at the left opens a small menu with «ليس من
   اهتماماتي» (`ui/MoreMenu`, `common/MoreMenu`), and a card with no such choice has no «⋯». The open button is the one way to
-  the item: the head and the card are not buttons for it too. Under the row, the source line:
+  the item: the card is not a button for it too. The head (round icon and title) is a button to the card's GENERAL TOPIC
+  (owner, 2026-11-22, like a post's name opening its account): the tarajim, a person, the mutashabihat, a hadith book, the
+  battles, the Quran tab; no chevron, it dims when pressed (HomeFeed `PostHead` `open`, helpers `topic`/`personTopic`).
+  The head's icon is its feature's one icon (owner, 2026-11-22), the same on the feature's page tile, its feed card and its
+  question card: `FEATURE_ICON` and `QUIZ_ICON` in `mobile/src/components/featureIcons.ts`. The mushaf has the open book
+  with lines of the tab bar, a commentary (tafsir, Ibn Rajab's sharh) the notebook, and who recorded a hadith and who
+  narrated it share the chain. Under the row, the source line:
   a book icon and the books the card stands on («المصحف · الإخلاص ٣» for the Quran), a tap opening a sheet with where in
   them (HomeFeed `Post` `source`; a `Reference` inside a card joins it on its own, ui/sourceSlot.ts). The books card is
   the one card with no line: its books are the card. A card from outside the reader's interests is added from its line above («أضفه»). Nothing on screen moves:
   interests are kept for the visit, and a card taken out leaves a line with «تراجع».
 - No card is taller than two thirds of the screen (`CARD_CAP_SHARE` in `shared/homeFeed.ts`, owner 2026-11-20): longer
-  content stops with a fade and «اقرأ كاملًا» opens it whole in a sheet with the row and the source line at its foot
+  content stops with a fade and the card's open button opens its page, or, with no page, the whole card in a sheet with the row and the source line at its foot
   (app `CardWithRow` `cap`, website `common/CappedCard`). Nothing scrolls inside a card. Question cards and recall cards
   are never capped: a question shows all its choices, a recall card its whole ayah.
 - Today's juz, the forgotten ayat, books, the prayer card and saved items stay outside the rounds.
+- A card never vanishes when the reader acts on it (owner, 2026-11-22). «تذكّرتها» and «نسيتها» on the recall card, and
+  «قرأته» on today's juz, light up green or in the mark colour, a second tap takes them back, and the card stays where it is
+  until the next visit. A juz marked read is left out for the rest of its day.
+- Every card has one open button, the same on all of them: «افتح» with the forward arrow (app `ui/OpenButton`), first
+  in its row (owner, 2026-11-22). It opens the card's item on its page; a long card with no page opens whole in a sheet
+  with it, and there is no «اقرأ كاملًا» link. The head's round icon still tells the card kinds apart.
+- A question card (owner, 2026-11-22): before answering, «تحقق» (filled, in the row) and «تلميح» (the look-up, once
+  «ابحث عن الجواب»), and «تسميع» only on the recite question. Once answered, only «افتح», which opens the page that
+  presents what it asked (a person, a hadith, a term, the ayah in the reader), never the quizzes page. Each choice then
+  says what it is where the data has it: whose name or laqab, which hadith a narrator or an ending belongs to
+  (`ChoiceQuestion.whereOf`). Every button has its word first, then its icon.
+- No switch inside a card (owner, 2026-11-22): a card with two views (the «صلة» and group cards' drawing and words, the
+  armies' field and killed) swaps them with one pill in its row naming the other view. A ring draws a tie the book gives
+  «على خلاف» with a dashed line, and one «على خلاف» pill in the row opens those ties in the book's words only, with no
+  words of ours.
+- Every card shares (owner, 2026-11-22): the paper airplane last in its row shares the card as one picture, its head,
+  the card as it stands (a question unanswered, or answered with its marks and whose lines) and its books, with no
+  buttons (app `ui/CardShare`). A card with its own share keeps it (pair, tree, مشاهد, story). Cards of your own state
+  share the Quran only: the recall card its ayah's lines (never what is hidden or whether you remembered), «تابع القراءة»
+  its page under the surah's name (not where you stopped). The prayer card shares nothing. A long card shares whole as
+  one tall picture.
 - The chips over the feed: «لك» and each interest picked; a tap shows that interest's cards alone.
 - The website has the same picker (first open, settings, the chip row and its pencil, `src/components/homepage/Interests.tsx`);
   «فاجئني» is the app's alone, since the website's feed has no surprise card.

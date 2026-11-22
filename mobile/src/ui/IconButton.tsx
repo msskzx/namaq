@@ -24,7 +24,7 @@ type Props = {
   size?: 'bar' | 'small';
   /** The icon's colour when off: muted (most buttons), ink (bar buttons that lead the eye), accent (a button that is the page's next step), green (remembered). */
   tone?: 'muted' | 'ink' | 'accent' | 'green';
-  /** On (saved, shown, playing): the icon turns the accent, with nothing behind it (owner, 2026-11-17: no coloured square). */
+  /** On (saved, shown, playing): the icon turns the accent, with nothing behind it (owner, 2026-11-17: no coloured square); a green one stays green. */
   on?: boolean;
   /** Fill the icon's body when on (the bookmark). */
   fill?: boolean;
@@ -47,7 +47,7 @@ export default function IconButton({ Icon, label, onPress, size = 'bar', tone = 
   const palette = usePalette();
   const dims = round ? ICON_BUTTON[big ? 'roundBig' : 'round'] : ICON_BUTTON[size];
   const off = tone === 'ink' ? palette.ink : tone === 'accent' ? palette.accent : tone === 'green' ? palette.green : palette.muted;
-  const color = round ? palette.onAccent : on ? palette.accent : off;
+  const color = round ? palette.onAccent : on ? (tone === 'green' ? palette.green : palette.accent) : off;
   const filled = !round && on && fill ? palette.accent : 'none';
   return (
     <Tap onPress={onPress} disabled={disabled} hitSlop={HIT} accessibilityRole={role} accessibilityLabel={label}

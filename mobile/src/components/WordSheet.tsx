@@ -1,7 +1,6 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ComponentRef, type MutableRefObject } from 'react';
 import { Pressable, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { BookOpen } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import gharib from '@shared/data/quran/gharib';
 import gharibWords from '@shared/data/quran/gharibWords.json';
@@ -27,6 +26,7 @@ import Card, { CardWithRow } from '@/ui/Card';
 import Chip from '@/ui/Chip';
 import Tabs from '@/ui/Tabs';
 import IconButton from '@/ui/IconButton';
+import { FEATURE_ICON } from '@/components/featureIcons';
 
 /** Ayat (or Ibn Qutaybah's entries) shown at first, and added by each «المزيد». */
 export const PLACES_STEP = 20;
@@ -173,7 +173,7 @@ export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bott
                 {text.map((word, i) => <AyahWords key={i} look={marked.includes(i) ? { color: palette.accent } : undefined}>{`${i ? ' ' : ''}${word}`}</AyahWords>)}
               </AyahFlow>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 2 }}>
-                <BookOpen size={16} color={palette.muted} />
+                <FEATURE_ICON.mushaf size={16} color={palette.muted} />
                 <Text style={{ color: palette.muted, fontSize: 13 }}>{place}</Text>
               </View>
             </Card>
@@ -204,7 +204,7 @@ function GharibCard({ entry, onOpen, palette }: { entry: GharibPlaced; onOpen: (
   const ayah = useMemo(() => ayahMushafWords(entry.key), [entry.key]);
   return (
     <CardWithRow palette={palette} pad={[10, 14]} source={gharibSource(entry)}
-      lead={<IconButton Icon={BookOpen} label={`افتح ${place} في المصحف`} onPress={() => onOpen(entry.key)} />}
+      lead={<IconButton Icon={FEATURE_ICON.mushaf} label={`افتح ${place} في المصحف`} onPress={() => onOpen(entry.key)} />}
       row={<Text style={{ color: palette.muted, fontSize: 14 }}>{place}</Text>}>
       <LitAyat ayat={[{ words: ayah, lit: entry.words }]} palette={palette} />
       <View style={{ height: 1, backgroundColor: `${palette.rule}60`, marginVertical: 6 }} />

@@ -137,6 +137,41 @@ describe('بمَ لُقّب؟ and ما كنيته؟', () => {
   });
 });
 
+describe('once answered, each choice says whose name it is (owner, 2026-11-22)', () => {
+  const people = peopleJson as AppPerson[];
+  const nameOf = (person: AppPerson) => (person.slug === 'prophet-muhammad' && !person.name.includes('ﷺ') ? `${person.name} ﷺ` : person.name);
+  /** The people a name belongs to, read straight from the entries the choices come from. */
+  const bearersOf = (facts: ReturnType<typeof laqabFacts>, name: string) => facts.filter(fact => bareName(fact.name) === bareName(name));
+  const check = (questions: ReturnType<typeof nameQuestions>, facts: ReturnType<typeof laqabFacts>, rightBy: (q: (typeof questions)[number]) => string) => {
+    expect(questions.length).toBeGreaterThan(0);
+    for (const q of questions) {
+      for (const choice of q.choices) {
+        const line = q.whereOf?.[choice.value];
+        if (q.correctAnswers?.includes(choice.value) ?? q.correctAnswer === choice.value) { expect(line).toBe(rightBy(q)); continue; }
+        const bearers = bearersOf(facts, choice.value);
+        expect(bearers.length).toBeGreaterThan(0);
+        // Every bearer is named, and the words that give each the name are among the question's sources.
+        for (const { person, fact } of bearers) {
+          expect(line?.split('، ')).toContain(nameOf(person));
+          expect(q.sources.some(source => source.quote === fact.text)).toBe(true);
+        }
+      }
+    }
+  };
+
+  it('names the Companion whose laqab a wrong choice is, and the Prophet ﷺ under his own names', () => {
+    const his = nameOf(people.find(p => p.slug === 'prophet-muhammad')!);
+    check(prophetNameQuestions(people, seededRandom(3), 30), laqabFacts(people), () => his);
+  });
+
+  it('names whose laqab or kunya each choice is, the asked person under the right one', () => {
+    const bySlug = new Map(people.map(person => [person.slug, person]));
+    for (const [kind, facts] of [[TARAJIM_LAQAB, laqabFacts(people)], [TARAJIM_KUNYA, kunyaFacts(people)]] as const) {
+      check(nameQuestions(kind, people, seededRandom(2)).slice(0, 60), facts, q => nameOf(bySlug.get(q.key.split(':')[1])!));
+    }
+  });
+});
+
 describe('أسماء النبي ﷺ (several right choices)', () => {
   const people = peopleJson as AppPerson[];
   it('offers four choices, one to four of them his names as the hadith gives them, the rest Companions’ laqabs', () => {

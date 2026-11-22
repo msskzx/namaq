@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
-import { ArrowLeftRight, BookOpen, ChevronLeft, Layers } from 'lucide-react-native';
+import { ArrowLeftRight, ChevronLeft, Layers } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import SourceLine, { sourcesOf } from '@/ui/SourceLine';
 import { qiraatSources, sadiSource } from '@shared/quiz/bookSources';
@@ -27,6 +27,7 @@ import TreeIcon from './TreeIcon';
 import TreePager from './TreePager';
 import OpenInBook from './OpenInBook';
 import Card from '@/ui/Card';
+import { FEATURE_ICON } from '@/components/featureIcons';
 
 export type Preview = { kind: 'trees' | 'compare' | 'readings' | 'tafsir'; key: string };
 
@@ -63,7 +64,7 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
       {preview && <View style={preview.kind === 'trees' ? { flex: 1 } : { flexShrink: 1 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 18, paddingBottom: 8 }}>
           {preview.kind === 'trees' ? <TreeIcon size={20} color={palette.muted} /> : preview.kind === 'readings' ? <Layers size={20} color={palette.muted} />
-            : preview.kind === 'tafsir' ? <BookOpen size={20} color={palette.muted} /> : <ArrowLeftRight size={20} color={palette.muted} />}
+            : preview.kind === 'tafsir' ? <FEATURE_ICON.tafsir size={20} color={palette.muted} /> : <ArrowLeftRight size={20} color={palette.muted} />}
           {/* Al-Sa'di explains a run of ayat at once, so the tafsir names the whole run. */}
           <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 16 }}>
             {`${surahNames[surah] ?? num(surah)} ${tafsir && tafsir.from !== tafsir.to ? `${num(tafsir.from)}–${num(tafsir.to)}` : num(number)}`}
