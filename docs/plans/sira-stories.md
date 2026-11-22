@@ -1,7 +1,6 @@
 # Sira stories: plan for more, sound ones only
 
-Status: plan for owner review (2026-11-20). No data is extracted until the owner says go
-(owner, 2026-11-19: no more data parsing until told).
+Status: owner said go on 2026-11-22. Batches run in order below.
 
 ## What we have today
 
@@ -81,7 +80,7 @@ data). Each batch is one PR with the triage list in it.
 
 | Batch | Range | Examples (numbers checked against our copy) |
 |---|---|---|
-| 0 | Code only | Muslim as a report source; the test reads the built Sahihayn instead of separate hadith files |
+| 0 | Code only, done 2026-11-22 | Muslim as a report source; the test reads the built Sahihayn instead of separate hadith files, and the eight Bukhari reports already told were re-split on that text |
 | 1 | Makkah: Bukhari 3851–3896, Muslim 832, 121 | Uqbah and Abu Bakr «أتقتلون رجلا» (3856), Abu Bakr's islam (3857), Sa'd's (3858), Sa'id ibn Zayd (3862), death of Abu Talib (3884), Aqaba (3893), Amr ibn Abasah (Muslim 832), Amr ibn al-As (Muslim 121) |
 | 2 | Hijra and Madinah: Bukhari 3897–3948 | the hijra (3905), Suraqa (3906), arrival in Madinah, Salman «من رب إلى رب» (3946–3947) |
 | 3 | Badr to Uhud: Bukhari 3949–4085, Muslim 1763, 1779, 1800 | the two youths and Abu Jahl (3988), Umar's account of Badr (Muslim 1763), Wahshi and Hamzah (4072) |
