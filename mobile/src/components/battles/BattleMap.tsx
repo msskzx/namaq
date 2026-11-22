@@ -33,9 +33,7 @@ export default function BattleMap({ places: given, palette }: { places: readonly
     const box = frameOf([...places.map(place => place.at), ...cities.map(city => city.at)], ASPECT);
     const { height, at } = projector(box, width);
     const pins = pinsOf(places.map(place => { const [x, y] = at(place.at); return { name: place.name, x, y }; }), JOIN);
-    // A city under a pin gives way to it.
-    const shown = cities.map(city => ({ name: city.name, xy: at(city.at) }))
-      .filter(city => pins.every(pin => Math.hypot(pin.x - city.xy[0], pin.y - city.xy[1]) >= JOIN));
+    const shown = cities.map(city => ({ name: city.name, xy: at(city.at) }));
     return { height, d: landPath(land as unknown as LonLat[][], box, width), pins, cities: shown };
   }, [width, places, cities]);
   const label = (x: number, y: number, text: string, size: number) => {

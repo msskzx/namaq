@@ -72,7 +72,7 @@ export function landPath(land: readonly (readonly LonLat[])[], box: Box, width: 
 
 /**
  * The pins of a map holding several places (owner, 2026-11-22: a year's battles on one map), in drawn points: places
- * closer than `near` points share one pin, named by all of them («أحد، المدينة»), so no two pins or names sit on each other.
+ * closer than `near` points share one pin, named by all of them («أحد، المدينة»), so no two pins sit on each other.
  */
 export function pinsOf<P extends { name: string }>(places: readonly (P & { x: number; y: number })[], near: number) {
   const pins: { x: number; y: number; names: string[] }[] = [];
