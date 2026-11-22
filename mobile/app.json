@@ -37,6 +37,15 @@
       ],
       "expo-notifications",
       [
+        "expo-media-library",
+        {
+          "photosPermission": false,
+          "savePhotosPermission": "يحفظ نمق صور المشاركة في مكتبة الصور عند طلبك.",
+          "isAccessMediaLocationEnabled": false,
+          "granularPermissions": []
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "image": "./assets/splash-icon.png",

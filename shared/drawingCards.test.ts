@@ -11,8 +11,9 @@ import { openingCards } from './quran/openingKinds';
 import { buildOaths } from './quran/oaths';
 import { STORIES } from './quran/prophets/stories';
 import { lastNumber } from './feedItems';
+import { MADINAH_YEARS } from './battles/timeline';
 import {
-  authorCiteSource, battleItems, battleOnCard, battleSources, eventItems, eventOf, eventSources, FITNA_BATTLES, nasabPeople, nasabSources, oathItems, oathSources,
+  armiesBattles, armiesItems, armiesSources, authorCiteSource, battleItems, battleYearItems, battleYearSlice, battleYearSources, battleOnCard, battleSources, eventItems, eventOf, eventSources, FITNA_BATTLES, nasabPeople, nasabSources, oathItems, oathSources,
   openingItems, openingSources, sceneItems, sceneOf, sceneSources, tiesPeople, tiesSources,
 } from './drawingCards';
 
@@ -34,6 +35,8 @@ describe('the drawing cards\' items', () => {
     ['opening', openingItems(cards), id => openingSources(cards.find(card => card.id === id)!)],
     ['oath', oathItems(oaths), oathSources],
     ['event', eventItems(STORIES), item => eventSources(eventOf(STORIES, item)!.event)],
+    ['battle-year', battleYearItems(battles), year => battleYearSources(battles, Number(year))],
+    ['battle-armies', armiesItems(battles), () => armiesSources(battles)],
   ];
   it.each(kinds)('every %s item names a source, and there is one', (_, items, sources) => {
     expect(items.length).toBeGreaterThan(0);
@@ -76,5 +79,39 @@ describe('the drawing cards\' items', () => {
     expect(authorCiteSource({ text: '', cite: 'السيوطي، الإتقان ٣/٣٦١' })).toMatchObject({ book: 'الإتقان', author: 'السيوطي', at: '٣/٣٦١' });
     for (const card of cards) for (const source of openingSources(card)) expect(source.at, card.id).toBeTruthy();
     for (const id of oathItems(oaths)) for (const source of oathSources(id)) expect(source.at, id).toBeTruthy();
+  });
+});
+
+// Owner, 2026-11-21 (feed-visuals sketch, panels 4 and 5): a year of the battles timeline with its neighbours, and the two
+// armies side by side only where the data cites both.
+describe('the battle cards', () => {
+  it('draw a year with the year before and after it on its own axis, and list only that year\'s battles', () => {
+    for (const item of battleYearItems(battles)) {
+      const year = Number(item);
+      const slice = battleYearSlice(battles, year)!;
+      const years = slice.columns.map(column => column.year);
+      expect(years, item).toContain(year);
+      // The year's own neighbours on its axis: on the Madinah axis the years either side, empty or not.
+      const at = years.indexOf(year);
+      expect(years.length, item).toBeLessThanOrEqual(3);
+      expect([...years].sort((a, b) => a - b), item).toEqual(years);
+      if (year <= MADINAH_YEARS) years.forEach((each, i) => expect(each, item).toBe(year + i - at));
+      expect(slice.battles.length, item).toBeGreaterThan(0);
+      expect(slice.battles.every(battle => battle.year?.value === year), item).toBe(true);
+    }
+    // The Madinah axis keeps its empty years, so a year has both neighbours there.
+    expect(battleYearSlice(battles, 2)!.columns.map(column => column.year)).toEqual([1, 2, 3]);
+  });
+
+  it('set side by side only the battles whose data cites both sides in the field, never a fitna battle, by year', () => {
+    const shown = armiesBattles(battles);
+    expect(shown.length).toBeGreaterThan(1);
+    for (const battle of shown) expect([battle.counts.muslims, battle.counts.others].every(Boolean), battle.slug).toBe(true);
+    expect(shown.some(battle => FITNA_BATTLES.includes(battle.slug))).toBe(false);
+    const years = shown.map(battle => battle.year!.value);
+    expect([...years].sort((a, b) => a - b)).toEqual(years);
+    const badr = battles.find(battle => battle.slug === 'badr')!;
+    const oneSide = { ...badr, slug: 'one-side', counts: { muslims: badr.counts.muslims } };
+    expect(armiesBattles([...battles, oneSide]).map(battle => battle.slug)).not.toContain('one-side');
   });
 });

@@ -19,9 +19,15 @@ export type SectionId = (typeof SECTIONS)[number]['id'];
 export const DRAWING_CARD_KINDS = ['nasab', 'ties', 'battle', 'hadith-scene', 'opening', 'oath', 'event', 'surah-link', 'surah-aim'] as const;
 export type DrawingCardKind = (typeof DRAWING_CARD_KINDS)[number];
 
+/**
+ * The cards on the phone only for now (owner, 2026-11-21: phone first while the site is down); the website lists no items
+ * for them (src/lib/feedLists.ts).
+ */
+export const PHONE_ONLY_KINDS = ['mashahid', 'battle-year', 'battle-armies'] as const;
+
 /** The feed's content cards, by kind; each app card (mobile/src/components/HomeFeed.tsx) draws one. */
-export const FEED_CARD_KINDS = ['pair', 'tree', 'note-tafsir', 'note-qiraat', 'note-irab', 'note-balagha', 'term', 'scene', 'mashahid',
-  'hadith', 'rajab', 'recorded', 'isnad', 'bukhari', 'muslim', 'prophets', 'sira', 'moment', 'tarajim', 'tie', 'life', 'laqab', 'kunya', ...DRAWING_CARD_KINDS] as const;
+export const FEED_CARD_KINDS = ['pair', 'tree', 'note-tafsir', 'note-qiraat', 'note-irab', 'note-balagha', 'term', 'scene',
+  'hadith', 'rajab', 'recorded', 'isnad', 'bukhari', 'muslim', 'prophets', 'sira', 'moment', 'tarajim', 'tie', 'life', 'laqab', 'kunya', ...DRAWING_CARD_KINDS, ...PHONE_ONLY_KINDS] as const;
 export type FeedCardKind = (typeof FEED_CARD_KINDS)[number];
 
 export type Interest = {
@@ -44,7 +50,7 @@ export const INTERESTS: readonly Interest[] = [
   { id: 'balagha', name: 'البلاغة', section: 'lisan', cards: ['note-balagha', 'term', 'scene'], quizzes: ['BALAGHA', 'TERM'] },
   { id: 'hadith', name: 'الحديث', section: 'hadith', cards: ['hadith', 'rajab', 'recorded', 'isnad', 'bukhari', 'muslim', 'hadith-scene'], quizzes: ['HADITH_NARRATOR', 'HADITH_COMPLETE', 'HADITH_BOOK', 'HADITH_CHAIN', 'SAHIH_KITAB'] },
   { id: 'prophets', name: 'قصص الأنبياء', section: 'history', ours: true, cards: ['prophets', 'event'], quizzes: [] },
-  { id: 'sira', name: 'السيرة والمغازي', section: 'history', cards: ['sira', 'moment', 'battle'], quizzes: ['SIRA', 'PROPHET_NAMES'] },
+  { id: 'sira', name: 'السيرة والمغازي', section: 'history', cards: ['sira', 'moment', 'battle', 'battle-year', 'battle-armies'], quizzes: ['SIRA', 'PROPHET_NAMES'] },
   { id: 'tarajim', name: 'التراجم', section: 'history', cards: ['tarajim', 'tie', 'life', 'nasab', 'ties'], quizzes: ['TARAJIM_NASAB', 'TARAJIM_NASAB_FILL', 'TARAJIM_VIRTUE', 'TARAJIM_TIE', 'TARAJIM_LIFE'] },
   // Each thing about a person its own interest (owner, 2026-11-19), so a reader who does not want kunyas turns them off alone.
   { id: 'laqab', name: 'الألقاب', section: 'history', cards: ['laqab'], quizzes: ['TARAJIM_LAQAB'] },

@@ -17,11 +17,13 @@ const PRESS = MIN_TAP;
  * people's chips above the scene are the key to the colours. The narrator's words that lead into the saying («فَقَالَ»)
  * sit above the bubble on its side, outside it, in full ink. `framed` rings the bubble in his colour.
  */
-export default function Bubble({ who, colour, start, framed = true, lead, palette, children }: {
+export default function Bubble({ who, colour, start, framed = true, ring: withRing = true, lead, palette, children }: {
   who?: string; colour: string;
   /** On the start side (the right in Arabic) or the end side. */
   start: boolean;
   framed?: boolean;
+  /** The ring that names the speaker; a shared picture leaves it out (owner, 2026-11-21), its lead-ins say who speaks. */
+  ring?: boolean;
   /** The narrator's words just before the saying, drawn above it. */
   lead?: string;
   palette: Palette; children: React.ReactNode;
@@ -48,16 +50,16 @@ export default function Bubble({ who, colour, start, framed = true, lead, palett
   return (
     <View style={{ maxWidth: '92%', alignSelf: start ? 'flex-start' : 'flex-end', gap: 2 }}>
       {lead ? (
-        <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, paddingHorizontal: PRESS, textAlign: start ? 'right' : 'left' }}>{lead}</Text>
+        <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, paddingHorizontal: withRing ? PRESS : 4, textAlign: start ? 'right' : 'left' }}>{lead}</Text>
       ) : null}
       <View style={{ flexDirection: 'row', alignItems: 'flex-end', alignSelf: start ? 'flex-start' : 'flex-end' }}>
-        {start && ring}
+        {start && withRing && ring}
         <View style={{ flexShrink: 1, backgroundColor: palette.paper, ...CARD,
           borderBottomStartRadius: start ? corner : CARD.borderRadius, borderBottomEndRadius: start ? CARD.borderRadius : corner,
           borderWidth: framed ? 1.5 : 0, borderColor: colour, paddingHorizontal: 12, paddingTop: 6, paddingBottom: 2 }}>
           {children}
         </View>
-        {!start && ring}
+        {!start && withRing && ring}
       </View>
     </View>
   );

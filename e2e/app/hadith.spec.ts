@@ -15,7 +15,7 @@ test('the hadith tab lists the Forty, and one opens with its chain drawn or its 
   // «من أخرجه» (owner, 2026-11-19): each book with its number, al-Nawawi's own marked.
   await expect(page.getByLabel('البخاري ٦٠١٨، سمّاه النووي؛ مسلم ٤٧، سمّاه النووي')).toBeVisible();
   await expect(page.getByLabel(/^الإسناد: البخاري، قُتَيْبَةُ/)).toBeVisible();
-  await page.getByRole('tab', { name: 'النص كاملًا' }).click();
+  await page.getByRole('tab', { name: 'النص', exact: true }).click();
   await expect(page.getByLabel(/^الإسناد: البخاري/)).toHaveCount(0);
   await expect(page.getByText(/^٦٠١٨ - /)).toBeVisible();
   // The hadith button tapped on a hadith goes back to the list it was opened from.
@@ -44,7 +44,7 @@ test('the hadith of Jibril opens its scenes in al-Bukhari and in Muslim', async 
   await expect(page).toHaveURL(/\/hadith-unit\?unit=bukhari-jibril/);
   await expect(page.getByLabel(/^الإسناد: البخاري، مُسَدَّدٌ/)).toBeVisible();
   await expect(page.getByRole('heading', { name: 'المشهد ١' })).toBeVisible();
-  await page.getByRole('tab', { name: 'النص كاملًا' }).click();
+  await page.getByRole('tab', { name: 'النص', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'المشهد ١' })).toHaveCount(0);
   await expect(page.getByRole('heading', { name: 'تعليق المصنف' })).toBeVisible();
   // Where else the same event is: Muslim's hadith opens over it, and back comes back.

@@ -31,6 +31,8 @@ export interface SceneLine {
   speaker?: string;
   agent?: string;
   text: string;
+  /** A turn's lead-in as its source cut it («قَالَ فَقَالَ:»), drawn above its bubble; without it the narration before is cut by `splitLead`. */
+  lead?: string;
 }
 
 export interface SceneView {
@@ -93,8 +95,14 @@ export function bubbleSides(lines: Pick<SceneLine, 'kind' | 'speaker'>[]): boole
   });
 }
 
+/** A drawn hadith or story's two ways to read it, the owner's names (2026-11-18; 2026-11-21: never «النص كاملًا»). */
+export const DRAW_MODES = [{ key: 'drawing', label: 'الرسم' }, { key: 'text', label: 'النص' }] as const;
+export type DrawMode = (typeof DRAW_MODES)[number]['key'];
+
 /** The Prophet's agent id in the scenes: his colour is the first in every scene, his chip first in every key. */
 export const PROPHET_AGENT = 'prophet-muhammad';
+/** The Prophet's name on his chip and ring: «رسول الله ﷺ», whatever the text calls him (owner, 2026-11-21). */
+export const PROPHET_LABEL = 'رسول الله ﷺ';
 
 /**
  * Each scene's speakers and the colour each takes, by its place in a list of `count` colours. The Prophet ﷺ always takes

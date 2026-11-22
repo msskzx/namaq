@@ -2,6 +2,7 @@
 // kind's items and the sources its card's line names. An item whose own data names no source is left out.
 import { eventItem, lastNumber, sceneItem } from './feedItems';
 import type { AppBattle, AppCite } from './battles/battle';
+import { battleTimeline } from './battles/timeline';
 import type { HadithUnitView, SceneView } from './hadith';
 import type { OathView } from './quran/oaths';
 import { OATH_QUOTES } from './quran/oathSources';
@@ -105,3 +106,38 @@ export function eventOf(stories: Record<string, { events: StoryEvent[] }>, item:
   const event = split ? stories[split.head]?.events[split.n] : undefined;
   return split && event && toldInPlaces(event) ? { slug: split.head, at: split.n, event } : null;
 }
+
+/**
+ * «الغزوات في سنة» (owner, 2026-11-21; feed-visuals sketch, panel 4): one year of the battles timeline with the year
+ * before and after it on the same axis, the middle year lit. An item is a year with a battle whose year is cited.
+ */
+export function battleYearSlice(battles: readonly AppBattle[], year: number) {
+  const { madinah, after } = battleTimeline([...battles]);
+  const axis = madinah.some(column => column.year === year && column.dots.length) ? madinah : after;
+  const at = axis.findIndex(column => column.year === year && column.dots.length);
+  if (at < 0) return null;
+  return { columns: axis.slice(Math.max(0, at - 1), at + 2), battles: battles.filter(battle => battle.year?.value === year) };
+}
+/** The pages that give the kinds and years of the battles drawn, those of the slice's years. */
+export function battleYearSources(battles: readonly AppBattle[], year: number): QuizSource[] {
+  const slice = battleYearSlice(battles, year);
+  const years = new Set(slice?.columns.map(column => column.year));
+  return citedOf(battles.filter(battle => years.has(battle.year?.value as number)).flatMap(battle => [battle.kind, battle.year]));
+}
+export const battleYearItems = (battles: readonly AppBattle[]) =>
+  [...new Set(battles.flatMap(battle => (typeof battle.year?.value === 'number' && battle.year.refs.length ? [battle.year.value] : [])))]
+    .sort((a, b) => a - b).filter(year => battleYearSources(battles, year).length > 0).map(String);
+
+/**
+ * «الجيشان» (owner, 2026-11-21; feed-visuals sketch, panel 5): the battles whose data cites both sides' numbers in the
+ * field, side by side by year, each with its dead where cited. The item is the tab the card opens on.
+ */
+export const ARMIES_TABS = ['field', 'killed'] as const;
+export type ArmiesTab = (typeof ARMIES_TABS)[number];
+export const armiesBattles = (battles: readonly AppBattle[]) =>
+  battles.filter(battle => !FITNA_BATTLES.includes(battle.slug) && battle.counts.muslims && battle.counts.others)
+    .sort((a, b) => (a.year?.value ?? Infinity) - (b.year?.value ?? Infinity));
+/** Each battle's head and numbers, as its own card names them. */
+export const armiesSources = (battles: readonly AppBattle[]) => uniqueSources(armiesBattles(battles).flatMap(battleSources));
+export const armiesItems = (battles: readonly AppBattle[]): string[] =>
+  armiesBattles(battles).length > 1 && armiesSources(battles).length ? [...ARMIES_TABS] : [];
