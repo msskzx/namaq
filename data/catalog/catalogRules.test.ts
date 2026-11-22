@@ -49,6 +49,20 @@ describe('the whole catalog', () => {
     expect(issues.map((issue) => `${issue.path}: ${issue.message}`)).toEqual(withoutProfile);
   });
 
+  // A claim may back a whole sentence (no field) or one value; a count never rests on a claim stating another value.
+  it('never cites a battle count with a claim about a different value', () => {
+    const counted = catalog.battles.flatMap((battle) =>
+      COUNTS.flatMap((column) =>
+        keysOf((battle.fields as Record<string, Cited<number> | undefined> | undefined)?.[column]?.claims).map((key) => ({
+          at: `battles/${battle.slug}.${column}`, column, key,
+        })),
+      ),
+    );
+
+    expect(counted.length).toBeGreaterThan(0);
+    expect(counted.filter(({ column, key }) => { const field = claimByKey.get(key)?.field; return field && field !== column; })).toEqual([]);
+  });
+
   // A competing figure is evidence, not noise: it stays in its batch, marked
   // DISPUTED, and no count takes it.
   it('keeps every count figure no battle takes as a DISPUTED claim', () => {
@@ -59,6 +73,7 @@ describe('the whole catalog', () => {
     );
     const untaken = claims.filter((claim) => claim.field && COUNTS.includes(claim.field) && !taken.has(claim.key));
 
+    expect(untaken.length).toBeGreaterThan(0);
     expect(untaken.filter((claim) => claim.confidence !== 'DISPUTED').map((claim) => claim.key)).toEqual([]);
   });
 });
