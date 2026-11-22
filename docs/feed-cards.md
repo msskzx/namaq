@@ -144,7 +144,7 @@ A new card or quiz kind goes into an interest's `cards` or `quizzes` in the same
   «ابحث عن الجواب»), and «تسميع» only on the recite question. Once answered, only «افتح», which opens the page that
   presents what it asked (a person, a hadith, a term, the ayah in the reader), never the quizzes page. Each choice then
   says what it is where the data has it: whose name or laqab, which hadith a narrator or an ending belongs to
-  (`ChoiceQuestion.whereOf`). Every button has its icon before its word.
+  (`ChoiceQuestion.whereOf`). Every button has its word first, then its icon.
 - The chips over the feed: «لك» and each interest picked; a tap shows that interest's cards alone.
 - The website has the same picker (first open, settings, the chip row and its pencil, `src/components/homepage/Interests.tsx`);
   «فاجئني» is the app's alone, since the website's feed has no surprise card.
