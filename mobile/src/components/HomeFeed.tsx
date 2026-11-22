@@ -1,10 +1,10 @@
 import { createContext, isValidElement, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, Dimensions, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { ArrowLeftRight, BookOpenText, CalendarRange, ChartNoAxesColumn, DoorOpen, Gem, Bookmark, BookOpen, Check, CircleMinus, Clock, Compass, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Milestone, ScrollText, Swords, History, Target, Users, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, BookOpenText, CalendarRange, ChartNoAxesColumn, DoorOpen, Gem, Bookmark, BookOpen, Check, CircleCheck, CircleMinus, Clock, Compass, EyeOff, Feather, GitCommitVertical, Layers, LibraryBig, Link2, MessagesSquare, Network, Plus, LightbulbOff, ListTree, Presentation, Sparkles, Milestone, ScrollText, Swords, History, Target, Users, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
-import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, toggleForgotten, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
+import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, toggleForgotten, mostForgotten, readAyahMarks, readDueMarks, rememberAyah, restoreMark, subscribeDueMarks, type AyahMark } from '@shared/ayahMarks';
 import { toggleBookmark } from '@shared/bookmarks';
 import { readGestures, type GestureAction } from '@shared/readerGestures';
 import { isMemorized, memorizedPrefer, memorizedQuestions, readMemorized, recallOfDay, subscribeMemorized, touchesMemorized, withMemorizedScope } from '@shared/memorized';
@@ -322,8 +322,15 @@ const PairPost = memo(function PairPost({ pair, palette }: { pair: PairCard; pal
   );
 });
 
-/** Today's ayah from the memorized range that the reader said they remembered: it leaves the feed until tomorrow. */
-const recalled = new Set<string>();
+/**
+ * What the reader marked on a recall card while the app runs (owner, 2026-11-22: a card does not vanish on a tick): the
+ * card stays where it is, its tick lit and the ayah shown, and a second tap takes the tick back (`before`: the ayah's mark
+ * as it was). On the next visit a marked card gives way to the next one.
+ */
+type Recalled = { did: 'remembered' | 'forgot'; before: AyahMark | undefined; visit: number };
+const recalled = new Map<string, Recalled>();
+/** The tick on this ayah's card in this visit; one from an earlier visit is over (its mark has moved on since). */
+const recalledNow = (ayah: string) => { const entry = recalled.get(ayah); return entry?.visit === visitStart() ? entry : undefined; };
 /** Whether the recall card asks to write the whole ayah (on) or reveals it word by word (off). */
 const RECALL_WRITE = 'recall-write';
 
@@ -335,17 +342,26 @@ const RECALL_WRITE = 'recall-write';
  * comes with the review button and «تذكّرتها» rests it; an ayah of the day from what is memorized (`review` absent) has «نسيتها» too.
  */
 function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', palette }: { ayah: string; review?: () => void; title?: string; palette: Palette }) {
-  const [, setGone] = useState(0);
+  const [done, setDone] = useState(() => recalledNow(ayah));
   const [writing, setWriting] = useState(() => readJson(RECALL_WRITE, isBoolean) === true);
   const toggleWriting = () => setWriting(on => { writeJson(RECALL_WRITE, !on); return !on; });
-  if (!review && recalled.has(ayah)) return null;
+  // One tick at a time: tapping the lit one takes it back, tapping the other moves it.
+  const mark = (did: Recalled['did']) => {
+    if (done) restoreMark(ayah, done.before);
+    if (done?.did === did) { recalled.delete(ayah); setDone(undefined); return; }
+    const now: Recalled = { did, before: readAyahMarks()[ayah], visit: visitStart() };
+    if (did === 'forgot') markForgotten(ayah);
+    else if (review) rememberAyah(ayah);
+    recalled.set(ayah, now);
+    setDone(now);
+  };
   const marks = <>
-    <Action Icon={Check} label="تذكّرتها" tone="green" palette={palette} onPress={() => { if (review) rememberAyah(ayah); else { recalled.add(ayah); setGone(n => n + 1); } }} />
-    {!review && <Action Icon={LightbulbOff} label="نسيتها" palette={palette} onPress={() => { recalled.add(ayah); markForgotten(ayah); setGone(n => n + 1); }} />}
+    <Action Icon={done?.did === 'remembered' ? CircleCheck : Check} label="تذكّرتها" tone="green" on={done?.did === 'remembered'} palette={palette} onPress={() => mark('remembered')} />
+    {!review && <Action Icon={LightbulbOff} label="نسيتها" on={done?.did === 'forgot'} palette={palette} onPress={() => mark('forgot')} />}
     {review && <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} />}
   </>;
   const open = <Action Icon={BookOpen} label="في المصحف" onPress={() => openIntent({ tab: 'read', at: markAyah(ayah), word: markWord(ayah) })} palette={palette} />;
-  return <Recall key={`${ayah}-${writing}`} ayah={markAyah(ayah)} targetWord={markWord(ayah)} title={title} writing={writing} onWriting={toggleWriting} open={open} marks={marks} palette={palette} />;
+  return <Recall key={`${ayah}-${writing}`} ayah={markAyah(ayah)} targetWord={markWord(ayah)} title={title} writing={writing} onWriting={toggleWriting} open={open} marks={marks} revealed={!!done} palette={palette} />;
 }
 
 /**
@@ -353,12 +369,14 @@ function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', palette }:
  * tap, double tap or long press on the ayah does what it does in recite mode (the reader's gesture settings); the pen writes
  * what the pen setting asks, and it stops at the ayah's end. Drawn afresh for each way of asking (`writing`).
  */
-function Recall({ ayah, targetWord, title, writing, onWriting, open, marks, palette }: { ayah: string; targetWord?: number; title: string; writing: boolean; onWriting: () => void; open: React.ReactNode; marks: React.ReactNode; palette: Palette }) {
+function Recall({ ayah, targetWord, title, writing, onWriting, open, marks, revealed, palette }: { ayah: string; targetWord?: number; title: string; writing: boolean; onWriting: () => void; open: React.ReactNode; marks: React.ReactNode;
+  /** Marked from the card («تذكّرتها», «نسيتها»): the ayah shows whole, as recite mode shows it once done. */
+  revealed?: boolean; palette: Palette }) {
   const model = useMemo(() => { const page = pageOfAyah(ayah); return page ? pageModel(pageData(page), surahBefore(page)) : null; }, [ayah]);
   const [position, setPosition] = useState<RecitePosition>({ start: ayah, ...(targetWord !== undefined ? { gaps: [targetWord] } : {}), shown: null, words: 0 });
   const [pen] = penRule.use();
   const recite = useRecite({ model, position, setPosition, writing, pen, until: ayah });
-  const shown = recite.done;
+  const shown = recite.done || !!revealed;
   const run = (action: GestureAction, key: string | null) => {
     if (action === 'next-ayah') recite.nextAyah();
     else if (action === 'next-word') recite.nextWord();
@@ -384,18 +402,21 @@ function Recall({ ayah, targetWord, title, writing, onWriting, open, marks, pale
 }
 
 /**
- * The quiz buttons a question card carries (owner, 2026-11-14, in place of home's quiz box): a solo quiz, a quiz with others,
- * and recite.
+ * The quiz buttons a question card carries (owner, 2026-11-14, in place of home's quiz box; 2026-11-22: one quiz button):
+ * one that opens the quizzes page, where the reader picks a solo quiz or one with others, and «تسميع» on a Quran
+ * question only (`quran`), where reciting is what the question trains.
  */
-export function QuizActions({ palette }: { palette: Palette }) {
+export function QuizActions({ quran, palette }: { quran: boolean; palette: Palette }) {
   return (
     <>
-      <Action Icon={Feather} label="اختبار فردي" onPress={() => router.push('/quiz/solo')} palette={palette} />
-      <Action Icon={MessagesSquare} label="اختبار جماعي" onPress={() => router.push('/quiz/party')} palette={palette} />
-      <Action Icon={EyeOff} label="تسميع" onPress={() => openIntent({ tab: 'read', recite: true })} palette={palette} />
+      <Action Icon={Feather} label="الاختبارات" onPress={() => toTab('/quizzes')} palette={palette} />
+      {quran && <Action Icon={EyeOff} label="تسميع" onPress={() => openIntent({ tab: 'read', recite: true })} palette={palette} />}
     </>
   );
 }
+
+/** A question about the Quran: its interest is one of the Quran's sciences or the language's, which ask about its ayat. */
+const isQuranKind = (kind: QuizTopic) => { const section = interestOf(kind as FeedQuizKind)?.section; return section === 'quran' || section === 'lisan'; };
 
 /** The tree or compare question's room in a card before it has measured what it holds: the quiz's own tree and its buttons. */
 const QUIZ_TREE_HEIGHT = 380;
@@ -439,7 +460,7 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
       actions={<>
         {(isTree(question) || isCompare(question)) && !checked &&
           <Action Icon={Check} label="تحقق" onPress={() => setRun(check(run))} palette={palette} />}
-        <QuizActions palette={palette} />
+        <QuizActions quran={isQuranKind(kind)} palette={palette} />
       </>}>
       {isCompare(question)
         ? <View style={{ height: roomHeight }}>
@@ -1050,19 +1071,28 @@ const StoryPost = memo(function StoryPost({ slug, phase, palette }: { slug: stri
   );
 });
 
+/** The day today's juz was marked read («قرأته»), kept on this device: one day, no history (no counts, owner's rule). */
+const JUZ_READ = 'juz-read';
+const juzRead = (day: number) => readJson(JUZ_READ, isNumberIn(0, Infinity)) === day;
+
 /**
  * Today's juz as a post (owner, 2026-11-18: no longer a circle at the top): the Hijri day's juz, the top of its first page,
- * and a button to read it. «الجزءان» on the last day of a 29-day month.
+ * and a button to read it. «الجزءان» on the last day of a 29-day month. «قرأته» marks it read for the day (owner, 2026-11-22):
+ * the card stays with its tick lit, and the feed leaves it out from the next visit until the next day's juz.
  */
 function JuzPost({ palette }: { palette: Palette }) {
-  const { date, juz } = useToday();
+  const { day, date, juz } = useToday();
+  const [read, setRead] = useState(() => juzRead(day));
   if (!juz) return null;
   const start = JUZ_INDEX[juz[0] - 1];
   const page = pageOfAyah(`${start.surah}:${start.ayah}`) ?? 1;
-  const read = () => openJuz(juz[0]);
+  const open = () => openJuz(juz[0]);
+  const toggle = () => setRead(on => { writeJson(JUZ_READ, on ? 0 : day); return !on; });
   return (
     <Post palette={palette} head={<PostHead Icon={BookOpen} title="جزء اليوم" sub={[juzLabel(juz), date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ')} palette={palette} />}
-      open={<Action Icon={BookOpen} label={`اقرأ ${juzLabel(juz)}، جزء اليوم`} onPress={read} palette={palette} />} source={mushafOf(`${start.surah}:${start.ayah}`)}>
+      open={<Action Icon={BookOpen} label={`اقرأ ${juzLabel(juz)}، جزء اليوم`} onPress={open} palette={palette} />}
+      actions={<Action Icon={read ? CircleCheck : Check} label="قرأته" tone="green" on={read} onPress={toggle} palette={palette} />}
+      source={mushafOf(`${start.surah}:${start.ayah}`)}>
       <View style={{ paddingHorizontal: 12, paddingVertical: 6 }}><PageTop page={page} palette={palette} /></View>
     </Post>
   );
@@ -1614,6 +1644,15 @@ export function Feed({ palette, nearEnd, screenBottom, only = null }: { palette:
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
   const prefer = useSyncExternalStore(memorizedPrefer.subscribe, memorizedPrefer.read);
   const recall = useMemo(() => (memorized ? recallOfDay(questions ? memorized : { all: true }, day) : undefined), [memorized, questions, day]);
+  // The recall card asked this visit stays once the reader ticks it (owner, 2026-11-22), though a rested ayah is no longer
+  // due; the next visit asks the next one, and the ayah of the day ticked as remembered is not asked again.
+  const fresh = forgotten ? { ayah: forgotten, review: true } : recall && recalled.get(recall)?.did !== 'remembered' ? { ayah: recall, review: false } : undefined;
+  const [held, setHeld] = useState({ visit, asked: fresh });
+  const keep = held.visit === visit && held.asked && !!recalledNow(held.asked.ayah);
+  const asked = keep ? held.asked : fresh;
+  if (!keep && (held.visit !== visit || held.asked?.ayah !== fresh?.ayah || held.asked?.review !== fresh?.review)) setHeld({ visit, asked: fresh });
+  // Today's juz, once marked read, stays for the visit it was marked in and is left out after (owner, 2026-11-22).
+  const showJuz = useMemo(() => !juzRead(day), [visit, day]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
   // The interests as they were when the visit began (a change in settings starts a new visit); one taken out from a card's
   // menu leaves the cards on screen in place, its own replaced by a line to put it back.
   const picked = useSyncExternalStore(pickedInterests.subscribe, pickedInterests.read, pickedInterests.server);
@@ -1676,9 +1715,9 @@ export function Feed({ palette, nearEnd, screenBottom, only = null }: { palette:
   const next = (kind: string) => { const at = used[kind] ?? 0; used[kind] = at + 1; return at; };
   for (let round = 0; round < batches; round++) {
     if (round === 0 && !only) {
-      if (forgotten) posts.push(<ForgottenPost key={`ask${forgotten}`} ayah={forgotten} review={() => reviewForgotten(forgottenOrder(Object.keys(due)))} palette={palette} />);
-      else if (recall) posts.push(<ForgottenPost key={`ask${recall}`} ayah={recall} palette={palette} />);
-      if (hasJuzCard(round) && juz) posts.push(<JuzPost key={`j${day}`} palette={palette} />);
+      if (asked?.review) posts.push(<ForgottenPost key={`ask${asked.ayah}`} ayah={asked.ayah} review={() => reviewForgotten(forgottenOrder(Object.keys(due)))} palette={palette} />);
+      else if (asked) posts.push(<ForgottenPost key={`ask${asked.ayah}`} ayah={asked.ayah} palette={palette} />);
+      if (hasJuzCard(round) && juz && showJuz) posts.push(<JuzPost key={`j${day}`} palette={palette} />);
     }
     rounds[round].forEach((slot: FeedSlot) => {
       const at = next(slot.kind);

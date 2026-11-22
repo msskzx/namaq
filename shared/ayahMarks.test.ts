@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it } from 'vitest';
-import { ayahHref, clearForgotten, markAyah, markWord, wordMarkKey, dueMarks, markForgotten, readAyahMarks, readDueMarks, mostForgotten, rememberAyah, toggleForgotten } from './ayahMarks';
+import { ayahHref, clearForgotten, markAyah, markWord, wordMarkKey, dueMarks, markForgotten, readAyahMarks, readDueMarks, mostForgotten, rememberAyah, restoreMark, toggleForgotten } from './ayahMarks';
 
 describe('ayahMarks', () => {
   beforeEach(() => localStorage.clear());
@@ -140,5 +140,18 @@ describe('forgotten word positions', () => {
       '1:2': { forgot: 2, at: 10 },
       '1:2:0': { forgot: 1, at: 20 },
     });
+  });
+
+  it('takes a card\'s tick back: the mark is as it was before, rest and count alike', () => {
+    markForgotten('57:3', 0);
+    const before = readAyahMarks()['57:3'];
+    rememberAyah('57:3', 0);
+    restoreMark('57:3', before);
+    expect(readAyahMarks()['57:3']).toEqual(before);
+    expect(Object.keys(readDueMarks(1))).toEqual(['57:3']);
+    // An ayah with no mark before «نسيتها» has none after the tick is taken back.
+    markForgotten('2:255', 0);
+    restoreMark('2:255', undefined);
+    expect(readAyahMarks()['2:255']).toBeUndefined();
   });
 });

@@ -134,6 +134,12 @@ A new card or quiz kind goes into an interest's `cards` or `quizzes` in the same
   (app `CardWithRow` `cap`, website `common/CappedCard`). Nothing scrolls inside a card. Question cards and recall cards
   are never capped: a question shows all its choices, a recall card its whole ayah.
 - Today's juz, the forgotten ayat, books, the prayer card and saved items stay outside the rounds.
+- A card never vanishes when the reader acts on it (owner, 2026-11-22). «تذكّرتها» and «نسيتها» on the recall card, and
+  «قرأته» on today's juz, light up green or in the mark colour, a second tap takes them back, and the card stays where it is
+  until the next visit. A juz marked read is left out for the rest of its day.
+- A question card's row has one quiz button that opens the quizzes page (solo or with others), and «تسميع» only on a
+  Quran question (an interest in the Quran's or the language's sciences). Once answered, each choice says what it is where
+  the data has it: whose name or laqab, which hadith a narrator or an ending belongs to (`ChoiceQuestion.whereOf`).
 - The chips over the feed: «لك» and each interest picked; a tap shows that interest's cards alone.
 - The website has the same picker (first open, settings, the chip row and its pencil, `src/components/homepage/Interests.tsx`);
   «فاجئني» is the app's alone, since the website's feed has no surprise card.

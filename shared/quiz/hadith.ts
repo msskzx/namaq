@@ -7,7 +7,7 @@ import { SOURCES } from '../sources';
 import { num } from '../quran/arabicNumber';
 import { shuffle, type Random } from './random';
 import type { ChoiceKind, ChoiceQuestion } from './choiceKinds';
-import type { QuizSource } from './sources';
+import { uniqueSources, type QuizSource } from './sources';
 
 export const HADITH_NARRATOR = 'HADITH_NARRATOR';
 export const HADITH_NARRATOR_NAME = 'من راوي الحديث؟';
@@ -42,18 +42,23 @@ export const recordSource = (record: FortyRecord): QuizSource => ({ book: FORTY.
 /** The record the saying is quoted from, then the entry that holds it. */
 const sources = (entry: FortyEntry, record: FortyRecord): QuizSource[] => [recordSource(record), compiledSource(entry)];
 
-function choose(key: string, family: string, promptArabic: string, right: string, wrong: string[], cited: { sources: QuizSource[]; note?: string }, entry: FortyEntry, random: Random): ChoiceQuestion | null {
+/**
+ * `cited.whose`: once answered, what each choice is, by its words (owner, 2026-11-22: every choice says whose it is), such as
+ * the hadith a wrong ending closes, with the pages that say so among the sources.
+ */
+function choose(key: string, family: string, promptArabic: string, right: string, wrong: string[], cited: { sources: QuizSource[]; whose?: (label: string) => { line: string; sources: QuizSource[] } | undefined }, entry: FortyEntry, random: Random): ChoiceQuestion | null {
   const others = [...new Map(wrong.filter(label => bare(label) !== bare(right)).map(label => [bare(label), label])).values()];
   if (others.length < CHOICES - 1) return null;
   const choices = shuffle([right, ...shuffle(others, random).slice(0, CHOICES - 1)], random);
+  const whose = choices.flatMap((label, i) => { const each = cited.whose?.(label); return each ? [[i, each] as const] : []; });
   return {
     key: `${family}:${key}`,
     family,
     promptArabic,
     choices: choices.map((label, i) => ({ value: String(i), labelArabic: label })),
     correctAnswer: String(choices.indexOf(right)),
-    sources: cited.sources,
-    ...(cited.note && { note: { label: 'الخيارات الأخرى', text: cited.note } }),
+    sources: uniqueSources([...cited.sources, ...whose.flatMap(([, each]) => each.sources)]),
+    ...(whose.length && { whereOf: Object.fromEntries(whose.map(([i, each]) => [String(i), each.line])) }),
     // Looked up in the Forty, searched by its words; after the answer, this hadith's page.
     look: { view: 'hadith', mark: entry.n },
     evidence: { claimKeys: [] },
@@ -69,12 +74,18 @@ const namesOf = (companion: string) => [companion, companion.replace(/^عبد ا
  */
 export function narratorQuestions(random: Random): ChoiceQuestion[] {
   const all = bukhari();
+  // Each Companion offered, with the hadith of the Forty al-Bukhari has from him: «راوي الحديث ١٦ من الأربعين».
+  const narrates = (companion: string) => {
+    const his = all.filter(other => bare(other.entry.companion) === bare(companion));
+    const numbers = [...new Set(his.map(other => other.entry.n))].sort((a, b) => a - b);
+    return numbers.length ? { line: `راوي ${numbers.length > 1 ? 'الأحاديث' : 'الحديث'} ${numbers.map(n => num(n)).join('، ')} من الأربعين`, sources: his.map(other => recordSource(other.record)) } : undefined;
+  };
   return shuffle(all.flatMap(({ entry, record }) => {
     const saying = sayingOf(record);
     if (namesOf(entry.companion).some(name => bare(saying).includes(name))) return [];
     const also = new Set([entry.companion, ...(entry.alsoFrom ?? [])].map(bare));
     const wrong = all.map(other => other.entry.companion).filter(name => !also.has(bare(name)));
-    const question = choose(`${record.number}`, HADITH_NARRATOR, `${saying}\nعن أي صحابي روى البخاري هذا الحديث؟`, entry.companion, wrong, { sources: sources(entry, record) }, entry, random);
+    const question = choose(`${record.number}`, HADITH_NARRATOR, `${saying}\nعن أي صحابي روى البخاري هذا الحديث؟`, entry.companion, wrong, { sources: sources(entry, record), whose: narrates }, entry, random);
     return question ? [question] : [];
   }), random);
 }
@@ -97,8 +108,9 @@ export function completeQuestions(random: Random): ChoiceQuestion[] {
     const seen = new Set([bare(end)]);
     const wrong = shuffle(all.filter(other => other.record !== record), random)
       .filter(other => !seen.has(bare(other.end)) && seen.add(bare(other.end))).slice(0, CHOICES - 1);
-    const from = wrong.map(other => `«${other.end}» من ${recordName(other.record, num)}`).join('، ');
-    const question = choose(`${record.number}`, HADITH_COMPLETE, `${start} …»`, end, wrong.map(other => other.end), { sources: sources(entry, record), note: `أواخر أحاديث أخرى: ${from}` }, entry, random);
+    // Under each wrong ending, the hadith it closes (it was one note under the choices before, owner 2026-11-22).
+    const whose = (label: string) => { const other = wrong.find(each => each.end === label); return other && { line: `آخر ${recordName(other.record, num)}`, sources: [recordSource(other.record)] }; };
+    const question = choose(`${record.number}`, HADITH_COMPLETE, `${start} …»`, end, wrong.map(other => other.end), { sources: sources(entry, record), whose }, entry, random);
     return question ? [question] : [];
   }), random);
 }

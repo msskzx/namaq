@@ -61,6 +61,14 @@ export function rememberAyah(key: string, now = Date.now()) {
   write({ ...marks, [key]: { ...mark, step, due: now + REST_DAYS[Math.min(step, REST_DAYS.length) - 1] * DAY } });
 }
 
+/** Puts an ayah's mark back as it was (`undefined`: no mark): a tick on a card taken back (owner, 2026-11-22). */
+export function restoreMark(key: string, mark: AyahMark | undefined) {
+  const marks = { ...readAyahMarks() };
+  if (mark) marks[key] = mark;
+  else delete marks[key];
+  write(marks);
+}
+
 const isDue = (mark: AyahMark, now: number) => !mark.due || mark.due <= now;
 
 /**
