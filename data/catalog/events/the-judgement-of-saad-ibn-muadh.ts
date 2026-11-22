@@ -1,0 +1,58 @@
+import type { CatalogEvent } from '@/lib/catalog/types';
+
+/**
+ * Sa'd ibn Mu'adh was shot in the arm vein at the trench, and the Prophet ﷺ pitched a tent for him in the mosque; when he had
+ * laid down his arms Jibril came and pointed him to Banu Qurayzah, who came down to his judgement, and he left it to Sa'd;
+ * Sa'd judged, asked Allah to keep him for any war left with Quraysh or else let the wound open, and it opened and he died.
+ * Told from Sahih al-Bukhari, each hadith whole: Aisha's 4122 first (al-Maghazi, the chapter on the return from the
+ * Confederates and the march on Banu Qurayzah), the fullest; then her 4117; Abu Sa'id's 4121, «قوموا إلى سيدكم»; and Anas's
+ * 4118, the dust of Jibril's procession. Hibban ibn al-Ariqah has no catalog subject and is not linked.
+ */
+const theJudgementOfSaadIbnMuadh = {
+  kind: 'EVENT',
+  slug: 'the-judgement-of-saad-ibn-muadh',
+  name: "حكم سعد بن معاذ في بني قريظة",
+  nameTransliterated: "Sa'd ibn Mu'adh's judgement on Banu Qurayzah",
+  type: 'OTHER',
+  fields: {},
+  people: [{ person: 'saad-ibn-muadh' }, { person: 'prophet-muhammad' }],
+  tags: ['HIS_WORDS'],
+  reports: [
+    {
+      isnad: "حَدَّثَنَا زَكَرِيَّاءُ بْنُ يَحْيَى: حَدَّثَنَا عَبْدُ اللهِ بْنُ نُمَيْرٍ: حَدَّثَنَا هِشَامٌ، عَنْ أَبِيهِ، عَنْ عَائِشَةَ  رضي الله عنها قَالَتْ:",
+      source: { slug: 'sahih-al-bukhari', hadith: 4122, url: 'https://sunnah.com/bukhari:4122' },
+      moments: [
+        { title: "رمي سعد في الأكحل", text: "«أُصِيبَ سَعْدٌ يَوْمَ الْخَنْدَقِ، رَمَاهُ رَجُلٌ مِنْ قُرَيْشٍ، يُقَالُ لَهُ حِبَّانُ بْنُ الْعَرِقَةِ، رَمَاهُ فِي الْأَكْحَلِ، فَضَرَبَ النَّبِيُّ ﷺ خَيْمَةً فِي الْمَسْجِدِ لِيَعُودَهُ مِنْ قَرِيبٍ،", people: ['saad-ibn-muadh', 'prophet-muhammad'] },
+        { title: "«قد وضعت السلاح»", text: "فَلَمَّا رَجَعَ رَسُولُ اللهِ ﷺ مِنَ الْخَنْدَقِ وَضَعَ السِّلَاحَ وَاغْتَسَلَ، فَأَتَاهُ جِبْرِيلُ عليه السلام وَهْوَ يَنْفُضُ رَأْسَهُ مِنَ الْغُبَارِ، فَقَالَ: قَدْ وَضَعْتَ السِّلَاحَ، وَاللهِ مَا وَضَعْتُهُ، اخْرُجْ إِلَيْهِمْ. قَالَ النَّبِيُّ ﷺ: فَأَيْنَ. فَأَشَارَ إِلَى بَنِي قُرَيْظَةَ،", people: ['prophet-muhammad'] },
+        { title: "«فإني أحكم فيهم»", text: "فَأَتَاهُمْ رَسُولُ اللهِ ﷺ فَنَزَلُوا عَلَى حُكْمِهِ، فَرَدَّ الْحُكْمَ إِلَى سَعْدٍ، قَالَ: فَإِنِّي أَحْكُمُ فِيهِمْ: أَنْ تُقْتَلَ الْمُقَاتِلَةُ، وَأَنْ تُسْبَى النِّسَاءُ وَالذُّرِّيَّةُ، وَأَنْ تُقْسَمَ أَمْوَالُهُمْ.", people: ['prophet-muhammad', 'saad-ibn-muadh'] },
+        { title: "«فأبقني له»", text: "قَالَ هِشَامٌ: فَأَخْبَرَنِي أَبِي، عَنْ عَائِشَةَ أَنَّ سَعْدًا قَالَ: اللَّهُمَّ إِنَّكَ تَعْلَمُ أَنَّهُ لَيْسَ أَحَدٌ أَحَبَّ إِلَيَّ أَنْ أُجَاهِدَهُمْ فِيكَ، مِنْ قَوْمٍ كَذَّبُوا رَسُولَكَ ﷺ وَأَخْرَجُوهُ، اللَّهُمَّ فَإِنِّي أَظُنُّ أَنَّكَ قَدْ وَضَعْتَ الْحَرْبَ بَيْنَنَا وَبَيْنَهُمْ، فَإِنْ كَانَ بَقِيَ مِنْ حَرْبِ قُرَيْشٍ شَيْءٌ فَأَبْقِنِي لَهُ، حَتَّى أُجَاهِدَهُمْ فِيكَ، وَإِنْ كُنْتَ وَضَعْتَ الْحَرْبَ فَافْجُرْهَا وَاجْعَلْ مَوْتَتِي فِيهَا،", people: ['saad-ibn-muadh', 'prophet-muhammad'] },
+        { title: "فانفجرت من لبته", text: "فَانْفَجَرَتْ مِنْ لَبَّتِهِ، فَلَمْ يَرُعْهُمْ، وَفِي الْمَسْجِدِ خَيْمَةٌ مِنْ بَنِي غِفَارٍ، إِلَّا الدَّمُ يَسِيلُ إِلَيْهِمْ، فَقَالُوا: يَا أَهْلَ الْخَيْمَةِ، مَا هَذَا الَّذِي يَأْتِينَا مِنْ قِبَلِكُمْ. فَإِذَا سَعْدٌ يَغْذُو جُرْحُهُ دَمًا، فَمَاتَ مِنْهَا رضي الله عنه».", people: ['saad-ibn-muadh'] },
+      ],
+    },
+    {
+      isnad: "حَدَّثَنِي عَبْدُ اللهِ بْنُ أَبِي شَيْبَةَ: حَدَّثَنَا ابْنُ نُمَيْرٍ، عَنْ هِشَامٍ، عَنْ أَبِيهِ، عَنْ عَائِشَةَ  رضي الله عنها قَالَتْ:",
+      source: { slug: 'sahih-al-bukhari', hadith: 4117, url: 'https://sunnah.com/bukhari:4117' },
+      moments: [
+        { title: "«قد وضعت السلاح؟»", text: "«لَمَّا رَجَعَ النَّبِيُّ ﷺ مِنَ الْخَنْدَقِ، وَوَضَعَ السِّلَاحَ وَاغْتَسَلَ، أَتَاهُ جِبْرِيلُ عليه السلام، فَقَالَ قَدْ وَضَعْتَ السِّلَاحَ؟ وَاللهِ مَا وَضَعْنَاهُ، فَاخْرُجْ إِلَيْهِمْ.", people: ['prophet-muhammad'] },
+        { title: "«فإلى أين؟»", text: "قَالَ: فَإِلَى أَيْنَ؟ قَالَ: هَا هُنَا، وَأَشَارَ إِلَى بَنِي قُرَيْظَةَ، فَخَرَجَ النَّبِيُّ ﷺ إِلَيْهِمْ.»", people: ['prophet-muhammad'] },
+      ],
+    },
+    {
+      isnad: "حَدَّثَنِي مُحَمَّدُ بْنُ بَشَّارٍ: حَدَّثَنَا غُنْدَرٌ: حَدَّثَنَا شُعْبَةُ، عَنْ سَعْدٍ قَالَ: سَمِعْتُ أَبَا أُمَامَةَ قَالَ: سَمِعْتُ أَبَا سَعِيدٍ الْخُدْرِيَّ  رضي الله عنه يَقُولُ:",
+      source: { slug: 'sahih-al-bukhari', hadith: 4121, url: 'https://sunnah.com/bukhari:4121' },
+      moments: [
+        { title: "«قوموا إلى سيدكم»", text: "«نَزَلَ أَهْلُ قُرَيْظَةَ عَلَى حُكْمِ سَعْدِ بْنِ مُعَاذٍ، فَأَرْسَلَ النَّبِيُّ ﷺ إِلَى سَعْدٍ فَأَتَى عَلَى حِمَارٍ، فَلَمَّا دَنَا مِنَ الْمَسْجِدِ قَالَ لِلْأَنْصَارِ: قُومُوا إِلَى سَيِّدِكُمْ، أَوْ خَيْرِكُمْ.", people: ['prophet-muhammad', 'saad-ibn-muadh'] },
+        { title: "«قضيت بحكم الله»", text: "فَقَالَ: هَؤُلَاءِ نَزَلُوا عَلَى حُكْمِكَ. فَقَالَ: تَقْتُلُ مُقَاتِلَتَهُمْ، وَتَسْبِي ذَرَارِيَّهُمْ، قَالَ: قَضَيْتَ بِحُكْمِ اللهِ. وَرُبَّمَا قَالَ: بِحُكْمِ الْمَلِكِ».", people: ['prophet-muhammad', 'saad-ibn-muadh'] },
+      ],
+    },
+    {
+      isnad: "حَدَّثَنَا مُوسَى: حَدَّثَنَا جَرِيرُ بْنُ حَازِمٍ، عَنْ حُمَيْدِ بْنِ هِلَالٍ، عَنْ أَنَسٍ رَضِيَ اللهُ عَنْهُ قَالَ:",
+      source: { slug: 'sahih-al-bukhari', hadith: 4118, url: 'https://sunnah.com/bukhari:4118' },
+      moments: [
+        { title: "موكب جبريل", text: "«كَأَنِّي أَنْظُرُ إِلَى الْغُبَارِ سَاطِعًا فِي زُقَاقِ بَنِي غَنْمٍ، مَوْكِبَ جِبْرِيلَ حِينَ سَارَ رَسُولُ اللهِ ﷺ إِلَى بَنِي قُرَيْظَةَ.»", people: ['prophet-muhammad'] },
+      ],
+    },
+  ],
+} satisfies CatalogEvent;
+
+export default theJudgementOfSaadIbnMuadh;
