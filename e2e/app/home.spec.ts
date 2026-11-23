@@ -2,6 +2,7 @@ import { expect, open, readerPage, reciteBarsHidden, returningUser, stored, test
 import { surahName as S } from '../../shared/quran/surahNames';
 import * as adhan from 'adhan';
 import { DEFAULT_PRAYER_SETTINGS, prayerDay, type Adhan } from '../../shared/prayer';
+import { ABOUT_INTRO, ATTRIBUTIONS_INTRO } from '../../shared/infoPages';
 
 test.describe('a new user', () => {
   test('home shows the few buttons, the reading card with the date, and the feed', async ({ page }) => {
@@ -370,7 +371,7 @@ test.describe('a new user', () => {
   });
 
   // About, privacy and the sources are pages of the app, offline (owner, 2026-11-18), not links to the website.
-  for (const [label, text] of [['عن نمق', 'نَمَق تطبيق تعليمي'], ['المصادر والتراخيص', 'الأعمال والبيانات التي اعتمد عليها نمق'], ['سياسة الخصوصية', 'ما يحفظه التطبيق']]) {
+  for (const [label, text] of [['عن نمق', ABOUT_INTRO.ar], ['المصادر والتراخيص', ATTRIBUTIONS_INTRO.ar], ['سياسة الخصوصية', 'ما يحفظه التطبيق']]) {
     test(`the settings sheet opens «${label}» in the app`, async ({ page }) => {
       await open(page, '/');
       await page.getByRole('button', { name: 'الإعدادات' }).click();
