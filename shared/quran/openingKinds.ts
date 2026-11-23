@@ -3,6 +3,7 @@
 import { sharedByAll } from './ayahContext';
 import type { BranchAyah } from './branches';
 import type { Likeness } from './wordMatch';
+import { normalizeWord } from './normalize';
 
 export type OpeningKindId = 'praise' | 'letters' | 'call' | 'statement' | 'oath' | 'condition' | 'command' | 'question' | 'prayer' | 'reason';
 
@@ -232,3 +233,40 @@ export const CONDITION_SOURCES = [
 ];
 
 export const OPENINGS_LEGEND = 'الكلمة الملوّنة تشترك فيها كل سور البطاقة، والباهتة يشترك فيها بعضها، كما في المصفوفة. والبطاقات على ما جمعه السيوطي، ونصه تحت عنوان النوع أو البطاقة. والنص برواية حفص.';
+
+/** Letters only, without the alifs the mushaf writes as a mark or a letter («ٱلۡكِتَٰبِ» and a typed «الكتاب» meet). */
+/** Typed or mushaf text as one plain form: no marks, one alif and one yeh, ة as ه. */
+const plain = (text: string) => normalizeWord(text).replace(/\s+/g, ' ').trim();
+/**
+ * The letters a word keeps whatever its spelling: the mushaf writes some alifs small or not at all, the hamza on its own
+ * (القرءان), and ىٰ or ۦ where typed text has ا or ي (أتىٰك, إۦلٰفهم). Leaving out ا, ء and ي matches the two.
+ */
+const skeleton = (word: string) => word.replace(/[اءي]/g, '');
+/** A word with and without a joined و or ف and ال, so «قرآن» finds وَٱلۡقُرۡءَانِ and «القرآن» finds وَقُرۡءَانٖ. */
+const forms = (word: string) => {
+  const bare = word.length > 3 ? word.replace(/^[وف]/, '') : word;
+  const noAl = bare.replace(/^ال/, '');
+  return noAl.length >= 3 ? [word, bare, noAl] : [word, bare];
+};
+/** A typed word found in a row's word: a short one (يس, ص, الم) only as the whole word, a longer one as its start or with the same letters. */
+const wordFound = (typed: string, word: string) => {
+  const own = typed.replace(/^ال/, '');
+  return [typed, ...(own.length >= 3 ? [own] : [])].some(t => forms(word).some(form =>
+    typed.length <= 3 ? form === t : form.startsWith(t) || (t.length >= 4 && skeleton(form) === skeleton(t))));
+};
+
+/**
+ * The page's search: a card with a row whose surah name is the typed text (or starts with it, from four letters), or
+ * whose opening has every typed word.
+ */
+export function openingFound(card: OpeningCard, query: string, nameOf: (surah: number) => string): boolean {
+  const typed = plain(query);
+  if (!typed) return true;
+  const wanted = typed.split(' ');
+  return card.rows.some(row => {
+    const name = plain(nameOf(row.surah));
+    if ([name, name.replace(/^ال/, '')].some(form => form === typed || (typed.length >= 4 && form.startsWith(typed)))) return true;
+    const words = row.words.flatMap(word => ('text' in word ? [plain(word.text)] : []));
+    return wanted.every(part => words.some(word => wordFound(part, word)));
+  });
+}
