@@ -72,6 +72,27 @@ export const cardReviewKind = (piece: { group?: { citations: unknown[] } }): Exc
  */
 export const sharedKey = (entry: Pick<CardReviewEntry, 'twin' | 'pairs'>): string | undefined => entry.twin ?? (entry.pairs?.length === 1 ? entry.pairs[0] : undefined);
 
+const TWIN_RANK: Record<CardKind, number> = { book: 0, ours: 1, word: 2, compare: 3 };
+
+/**
+ * Several tree cards can hold one compare pair (a book's card and word trees of the same two ayat). Only one of them shares the
+ * pair's verdict: the book's card, else ours, else the first word tree. The others keep their own press, so dropping a duplicate
+ * never drops the book's card or the compare card.
+ */
+export function oneTwinPerPair(entries: CardReviewEntry[]): CardReviewEntry[] {
+  const primary = new Map<string, CardReviewEntry>();
+  for (const entry of entries) {
+    const held = entry.twin ? primary.get(entry.twin) : undefined;
+    if (entry.twin && (!held || TWIN_RANK[entry.kind] < TWIN_RANK[held.kind])) primary.set(entry.twin, entry);
+  }
+  return entries.map(entry => {
+    if (!entry.twin || primary.get(entry.twin) === entry) return entry;
+    const own = { ...entry };
+    delete own.twin;
+    return own;
+  });
+}
+
 const rowsKey = (rows: string[][]) => rows.map(row => row.join('+')).join(',');
 
 /** Whether the agents changed the card's ayat: added, removed or merged rows, or split it. */
@@ -107,14 +128,43 @@ export function pressOf(entry: Pick<CardReviewEntry, 'id' | 'twin' | 'pairs'>, p
   return !own || other && other.t > own.t ? other : own;
 }
 
-export type CardQuery = { kind: CardKind; changed?: boolean; todo?: boolean; pair?: string };
+/**
+ * Whether the owner already reviewed a card: a press on this page, or a verdict they checked in an earlier review, either the
+ * card's own or, live, every compare pair it holds (`checkedPairs`, with the compare review log's unapplied presses).
+ */
+export function reviewed(entry: CardReviewEntry, pressed: Map<string, CardPress>, checkedPairs: Set<string> = new Set()): boolean {
+  if (pressOf(entry, pressed) || entry.verdict?.checked) return true;
+  const pairs = entry.pairs ?? (entry.twin ? [entry.twin] : []);
+  return pairs.length > 0 && pairs.every(pair => checkedPairs.has(pair));
+}
+
+/** A card a book names: a book's card, or a compare card that carries books (it holds a book card's ayat, or is a surah-order book's). */
+export const bookNamed = (entry: Pick<CardReviewEntry, 'kind' | 'books'>) => entry.kind === 'book' || !!entry.books?.length;
+
+/**
+ * A compare card that holds every ayah of a book's card is the book's too, even beside another ayah (2:48 and 2:123 with 82:19):
+ * it carries the book's names (owner 2026-11-23).
+ */
+export function markBookCards(entries: CardReviewEntry[]): CardReviewEntry[] {
+  const books = entries.filter(entry => entry.kind === 'book').map(entry => ({ places: [...new Set(entry.rows.map(row => row[0]))], names: entry.books ?? [] }));
+  return entries.map(entry => {
+    if (entry.kind !== 'compare' || entry.link) return entry;
+    const held = new Set(entry.rows.flat());
+    const names = books.filter(book => book.places.length > 1 && book.places.every(key => held.has(key))).flatMap(book => book.names);
+    return names.length ? { ...entry, books: [...new Set([...entry.books ?? [], ...names])] } : entry;
+  });
+}
+
+/** `books`: show the cards a book names, which need no review and stay out of it unless asked for (owner 2026-11-23). */
+export type CardQuery = { kind: CardKind; changed?: boolean; todo?: boolean; books?: boolean; pair?: string };
 
 /** The cards of one kind the owner asked to see, in the index's order; compare can be narrowed to one surah pair. */
-export function selectCards(cards: CardReviewEntry[], proposals: CardProposals, pressed: Map<string, CardPress>, query: CardQuery): CardReviewEntry[] {
+export function selectCards(cards: CardReviewEntry[], proposals: CardProposals, pressed: Map<string, CardPress>, query: CardQuery, checkedPairs?: Set<string>): CardReviewEntry[] {
   return cards.filter(entry => entry.kind === query.kind
     && (!query.pair || entry.page === query.pair)
+    && (query.books || !bookNamed(entry))
     && (!query.changed || agentsChanged(entry, proposals[entry.id]))
-    && (!query.todo || !pressOf(entry, pressed)));
+    && (!query.todo || !reviewed(entry, pressed, checkedPairs)));
 }
 
 /** One page of a list: the page number is kept inside the list, and `pages` is at least 1. */
@@ -122,6 +172,16 @@ export function pageOf<T>(list: T[], size: number, page: number): { items: T[]; 
   const pages = Math.max(1, Math.ceil(list.length / size));
   const at = Math.min(Math.max(1, page), pages);
   return { items: list.slice((at - 1) * size, at * size), page: at, pages };
+}
+
+/**
+ * Compare's surah pairs for the pair list, counted under the page's filters (owner 2026-11-21): a pair with nothing left to show
+ * drops out, except the open one (`open`), which stays with its count of 0 so the list and the arrows still find it.
+ */
+export function filteredPairs(cards: CardReviewEntry[], proposals: CardProposals, pressed: Map<string, CardPress>, filters: Omit<CardQuery, 'kind' | 'pair'>, checkedPairs?: Set<string>, open?: string): { page: string; count: number }[] {
+  const shown = selectCards(cards, proposals, pressed, { ...filters, kind: 'compare' }, checkedPairs);
+  const kept = open && !shown.some(entry => entry.page === open) ? [...shown, { id: '', kind: 'compare' as const, rows: [], page: open }] : shown;
+  return comparePages(kept).map(pair => (pair.page === open && !shown.some(entry => entry.page === open) ? { ...pair, count: 0 } : pair));
 }
 
 /** Compare's surah pairs, in mushaf order, each with how many cards it holds (owner reviews compare one pair at a time). */

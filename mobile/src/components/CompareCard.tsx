@@ -10,7 +10,7 @@ import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { num } from '@shared/quran/arabicNumber';
 import { mushafText } from '@shared/quran/mushafText';
 import { aloneNote, aroundOf, besideRows, partLabel, rowSides, runsLabel, savedIdsOf, shownAyat, sideKeys, silentNote, surahName, toggleCardSaved, type AroundAyah } from '@/lib/compare';
-import { around as aroundSetting, besideLayout, branchView, type BranchView } from '@/lib/settings';
+import { around as aroundSetting, besideLayout, type BranchView } from '@/lib/settings';
 import CompareTree from './CompareTree';
 import { Gap, PartRule, Silent, StartRule } from './StoryParts';
 import { blend, type Palette } from '@/lib/theme';
@@ -181,7 +181,7 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
   const lit = step ? step.link ?? null : tapped;
   const selected = step?.option ?? picked;
   const onWord = (link: string) => { if (!step) setTapped(current => (current === link ? null : link)); };
-  const [view, setView] = useState<BranchView>(branchView.get);
+  const [view, setView] = useState<BranchView>('matrix');
   const [beside, setBeside] = useState(besideLayout.get);
   // The read-along studio lights words in the matrix, so it shows the matrix while open; a matrix-only card never shows a tree.
   const matrixOnly = compareMatrixOnly(card);

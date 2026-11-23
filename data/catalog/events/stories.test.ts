@@ -2,7 +2,10 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { siyarSiraUrl } from '@/lib/catalog/siyarPages';
 import { describe, expect, it } from 'vitest';
 import { loadCatalog } from '@/lib/catalog/loadCatalog';
-import { HADITH_URL } from '@/lib/catalog/appStories';
+import { plainName } from '@shared/quran/normalize';
+import { appStories, HADITH_URL } from '@/lib/catalog/appStories';
+import { STORY_WHEN } from '@/lib/catalog/storyWhen';
+import { CHAPTER_OF_STORY, chapterOfBab, OTHER_CHAPTER, siraBab } from '@/lib/catalog/storyChapters';
 import { isHadithSource } from '@/lib/catalog/types';
 
 // A story is told whole (owner, 2026-11-18: nothing is cut): each report's moments, joined, are the pages' text.
@@ -111,5 +114,48 @@ describe('sira stories', () => {
     const people = new Set(readdirSync('data/catalog/people').map(file => file.replace(/\.ts$/, '')));
     const named = stories.flatMap(story => [...story.people.map(p => p.person), ...(story.ayat ?? []).flatMap(a => (a.about ? [a.about] : [])), ...story.reports!.flatMap(r => r.moments.flatMap(m => [...m.people, ...(m.turns ?? []).flatMap(t => (t.speaker?.person ? [t.speaker.person] : []))]))]);
     expect(named.filter(slug => !people.has(slug))).toEqual([]);
+  });
+});
+
+// «قصص السيرة» (owner, 2026-11-23): a story is on a year only where a source gives it that year, and al-Bukhari's chapters keep his order.
+const built = appStories(await loadCatalog());
+describe('sira stories by year and chapter', () => {
+  const slugs = new Set(built.map(story => story.slug));
+
+  it('dates and places only stories that exist', () => {
+    expect(Object.keys(STORY_WHEN).filter(slug => !slugs.has(slug))).toEqual([]);
+    expect(Object.keys(CHAPTER_OF_STORY).filter(slug => !slugs.has(slug))).toEqual([]);
+  });
+
+  it('shows the quote that gives every year a story is on', () => {
+    expect(built.filter(story => story.when?.pages.some(page => page !== 'before') && !story.when.refs.length).map(story => story.slug)).toEqual([]);
+  });
+
+  it('quotes a year heading of al-Dhahabi only where his page prints it', () => {
+    for (const when of Object.values(STORY_WHEN)) {
+      if (when.kind !== 'siyar') continue;
+      expect(readFileSync(`${SOURCES}/siyar-alam-al-nubala-risalah/v${when.volume}/${when.page}.md`, 'utf8')).toContain(when.quote);
+    }
+  });
+
+  it("takes a year from al-Bukhari's heading only where the heading names a year", () => {
+    for (const when of Object.values(STORY_WHEN)) if (when.kind === 'bab') expect(siraBab(when.hadith)?.title).toContain('سنة');
+  });
+
+  it('has a chapter for every heading of the sira in al-Bukhari, from «باب مبعث النبي ﷺ» on', () => {
+    type Kitab = { n: number; from: number; to: number; babs: { title: string; from: number }[] };
+    const kitabs = (JSON.parse(readFileSync('shared/data/hadith/bukhari.json', 'utf8')) as { kitabs: Kitab[] }).kitabs;
+    const start = kitabs.find(kitab => kitab.n === 63)!.babs.find(bab => plainName(bab.title).includes('مبعث'))!.from;
+    const end = kitabs.find(kitab => kitab.n === 64)!.to;
+    for (let hadith = start; hadith <= end; hadith++) {
+      const bab = siraBab(hadith);
+      if (bab) expect(() => chapterOfBab(bab.title), bab.title).not.toThrow();
+    }
+  });
+
+  it('keeps each chapter whole, with the stories of no chapter last', () => {
+    const runs = built.map(story => story.chapter).filter((chapter, i, all) => chapter !== all[i - 1]);
+    expect(runs).toEqual([...new Set(runs)]);
+    expect(runs.at(-1)).toBe(OTHER_CHAPTER);
   });
 });

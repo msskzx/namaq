@@ -1,7 +1,9 @@
 import { View } from 'react-native';
-import { narratorOf, rangeName, reportLines, reportSlots, type AppReport, type AppStory, type AppStoryAyat } from '@shared/stories/story';
+import { isnadParts, narratorOf, rangeName, reportLines, reportSlots, type AppReport, type AppStory, type AppStoryAyat } from '@shared/stories/story';
 import HadithScene, { sceneBlocks } from '@/components/HadithScene';
-import { BookMarked, Send } from 'lucide-react-native';
+import { BookMarked, ChevronDown, ChevronUp, Send } from 'lucide-react-native';
+import { useState } from 'react';
+import TapRow from '@/ui/TapRow';
 import IconButton from '@/ui/IconButton';
 import { shareCard, type SharePaged } from '@/lib/shareImage';
 import { UI_FONT_BOLD } from '@/lib/theme';
@@ -32,7 +34,7 @@ export function Report({ report, palette, plain, titled }: { report: AppReport; 
   titled?: boolean }) {
   return (
     <View style={{ gap: 12 }}>
-      {report.isnad ? <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 24, textAlign: 'right' }}>{report.isnad}</Text> : null}
+      {report.isnad ? <IsnadLine isnad={report.isnad} palette={palette} /> : null}
       {report.moments.map(moment => (
         <View key={moment.title} style={{ gap: 2 }}>
           {titled ? <Text style={{ color: palette.accent, fontSize: 14, fontWeight: '700', textAlign: 'right' }}>{moment.title}</Text> : null}
@@ -63,6 +65,25 @@ export function StoryAyat({ ayat, palette, folded = false }: { ayat: AppStoryAya
   );
 }
 
+/**
+ * A report's chain in one line (owner, 2026-11-23): its last link as printed, «عَنْ أَنَسٍ رضي الله عنه قَالَ:», with an
+ * arrow; a tap opens the whole chain in its place, the earlier links muted and the last in ink, and a second tap folds it.
+ */
+export function IsnadLine({ isnad, palette }: { isnad: string; palette: Palette }) {
+  const [open, setOpen] = useState(false);
+  const { head, tail } = isnadParts(isnad);
+  const Arrow = open ? ChevronUp : ChevronDown;
+  return (
+    <TapRow onPress={() => setOpen(was => !was)} disabled={!head} expanded={open} label={!head ? tail : open ? `${head} ${tail}، اطو السند` : `${narratorOf(isnad)}، السند كاملا`} style={{ alignItems: 'center', gap: 6 }}>
+      <Text style={{ flex: 1, textAlign: 'right', lineHeight: 26 }}>
+        {open && head ? <Text style={{ color: palette.muted, fontSize: 14 }}>{`${head} `}</Text> : null}
+        <Text style={{ color: palette.ink, fontSize: 16 }}>{tail}</Text>
+      </Text>
+      {head ? <Arrow size={18} color={palette.muted} /> : null}
+    </TapRow>
+  );
+}
+
 /** A report's book and page, for the line under its card, and in its drawing the books that say who speaks. */
 export const reportSource = (report: AppReport, drawing = false) =>
   sourcesOf(uniqueSources([
@@ -79,14 +100,7 @@ export function ReportScene({ report, slots, palette }: { report: AppReport; slo
   const lines = reportLines(report);
   return (
     <View style={{ gap: 10 }}>
-      {report.isnad ? (
-        <View style={{ gap: 2 }}>
-          <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>{narratorOf(report.isnad)}</Text>
-          <Folded credit="السند" palette={palette}>
-            <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 24, textAlign: 'right' }}>{report.isnad}</Text>
-          </Folded>
-        </View>
-      ) : null}
+      {report.isnad ? <IsnadLine isnad={report.isnad} palette={palette} /> : null}
       <HadithScene lines={lines} slots={slots ?? reportSlots(lines, palette.slots.length)} keyed={!slots} palette={palette} />
       {report.grading ? <Text style={{ color: palette.muted, fontSize: 13, lineHeight: 22, textAlign: 'right' }}>{report.grading}</Text> : null}
     </View>

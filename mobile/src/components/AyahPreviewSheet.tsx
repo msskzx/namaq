@@ -14,7 +14,7 @@ import { bookState, useBooks } from '@/lib/books';
 import { BookList } from './Books';
 import { compareOfAyah, treePiecesOfAyah } from '@/lib/ayahPreview';
 import { EMPTY_LIST } from '@/lib/branchList';
-import { around as aroundSetting, branchView } from '@/lib/settings';
+import { around as aroundSetting } from '@/lib/settings';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { surahNames } from '@/lib/branches';
 import { surahName } from '@/lib/compare';
@@ -38,8 +38,7 @@ export type Preview = { kind: 'trees' | 'compare' | 'readings' | 'tafsir'; key: 
 export default function AyahPreviewSheet({ preview, onClose, palette }: { preview: Preview | null; onClose: () => void; palette: Palette }) {
   const trees = useMemo(() => (preview?.kind === 'trees' ? treePiecesOfAyah(preview.key) : []), [preview]);
   // The trees are the branches tab's own cards (owner, 2026-11-14): zoom, pan, a path lit on a tap, each card's tree/matrix
-  // and surrounding switches, opening on the settings' defaults. The reader's ayah opens lit on each tree.
-  const [mode] = branchView.use();
+  // and surrounding switches, opening as the matrix with the settings' surrounding. The reader's ayah opens lit on each tree.
   const [around] = aroundSetting.use();
   const [treeAt, setTreeAt] = useState(0);
   // Another ayah's trees start counting from the first.
@@ -73,7 +72,7 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
         </View>
         {preview.kind === 'trees' && trees.length > 0 && (
           <View style={{ flex: 1 }}>
-            <TreePager key={preview.key} pieces={trees} list={EMPTY_LIST} palette={palette} mode={mode} around={around} start={0} onIndex={setTreeAt} embedded={embedded} />
+            <TreePager key={preview.key} pieces={trees} list={EMPTY_LIST} palette={palette} around={around} start={0} onIndex={setTreeAt} embedded={embedded} />
           </View>
         )}
         {preview.kind !== 'trees' && <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 10, paddingBottom: 4 }}>

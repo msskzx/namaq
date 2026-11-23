@@ -6,7 +6,7 @@ import { CHOICE_KINDS } from './kinds';
 import { seededRandom } from './feedQuiz';
 import { branchQuestions } from './branchQuestions';
 import { quizTrees } from './treeScope';
-import { ayahPlace, citeSource, mushafSource, MUSHAF_BOOK, referenceGroups, type QuizSource } from './sources';
+import { ayahPlace, citeSource, mushafSource, MUSHAF_BOOK, referenceGroups, sourceEntries, type QuizSource } from './sources';
 import corpus from '../quran/quranText/corpus';
 import type { BranchAyah } from '../quran/branches';
 
@@ -47,6 +47,17 @@ describe('how a reference is written', () => {
   it('names who says the words before them (owner, 2026-11-20)', () => {
     const [group] = referenceGroups([{ book: 'سير أعلام النبلاء', at: '١/٤١', quote: 'إن لكل نبي حواريًا', by: 'قال النبي ﷺ:' }]);
     expect(group.lines.map(line => line.text)).toEqual(['قال النبي ﷺ:', '«إن لكل نبي حواريًا»، ١/٤١']);
+  });
+
+  it('writes out where in each book and its printing, each once, for a share picture that cannot be opened', () => {
+    const [group] = sourceEntries([
+      { book: 'صحيح البخاري', author: 'البخاري', at: 'كتاب الإيمان، رقم ٥٠', edition: 'الطبعة السلطانية' },
+      { book: 'صحيح البخاري', author: 'البخاري', at: 'كتاب الإيمان، رقم ٥٠', quote: 'ما الإيمان', edition: 'الطبعة السلطانية' },
+    ]);
+    expect(group.places).toEqual(['كتاب الإيمان، رقم ٥٠']);
+    expect(group.editions).toEqual(['الطبعة السلطانية']);
+    const [mushaf] = sourceEntries([mushafSource('112:3', 604)]);
+    expect(mushaf.places).toEqual([MUSHAF_BOOK, 'ص ٦٠٤']);
   });
 
   it('reads the book apart from the place in a sira reference, so the collapsed line shows the book alone', () => {

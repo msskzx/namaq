@@ -5,16 +5,21 @@ import { DIFFICULTIES, DIFFICULTY_NAMES, DIFFICULTY_NOTES, type Difficulty } fro
 import Button, { Row } from '@/ui/Button';
 import { type Palette } from '@/lib/theme';
 import { CardWithRow } from '@/ui/Card';
+import { SharedCard } from '@/ui/CardShare';
 import type { Source } from '@/ui/sourceSlot';
 
 /** A titled section in the home card's shape (owner 2026-11-20): its own buttons in the `row` under the card, its books (`source`) on the line under them. */
-export function Section({ title, palette, row, source, children }: { title: string; palette: Palette; row?: React.ReactNode; source?: Source[]; children: React.ReactNode }) {
-  return (
-    <CardWithRow palette={palette} gap={10} row={row} source={source}>
-      <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 16, fontWeight: '700', textAlign: 'right' }}>{title}</Text>
-      {children}
-    </CardWithRow>
-  );
+export function Section({ title, palette, row, source, share, children }: { title: string; palette: Palette; row?: React.ReactNode; source?: Source[];
+  /** Shares the section as a picture (ui/CardShare SharedCard), under this head naming its page. */
+  share?: { head: React.ReactNode };
+  children: React.ReactNode }) {
+  const content = <>
+    <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 16, fontWeight: '700', textAlign: 'right' }}>{title}</Text>
+    {children}
+  </>;
+  return share
+    ? <SharedCard palette={palette} gap={10} row={row} source={source} shareHead={share.head} shareLabel={`شارك ${title}`}>{content}</SharedCard>
+    : <CardWithRow palette={palette} gap={10} row={row} source={source}>{content}</CardWithRow>;
 }
 
 /** How many leaves to type in each tree, 1 to 10. */

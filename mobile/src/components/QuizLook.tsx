@@ -1,3 +1,4 @@
+import { NoShare } from '@/ui/CardShare';
 import { useState } from 'react';
 import { SahihLook } from '@/components/Sahih';
 import { SAHIH } from '@/lib/sahih';
@@ -209,7 +210,12 @@ const bleed = { marginHorizontal: -16 } as const;
  * The feature's own view a question looks its answer up in (owner, 2026-11-19; sketch /mnt/project-files/quiz-lookup): the
  * same drawing as the feature's page and feed card. `shown` once the answer is: then what the look marks is lit.
  */
-export function LookView({ look, shown, palette }: { look: QuizLook; shown: boolean; palette: Palette }) {
+/** A page's view in a quiz's look-up: its sections share nothing here (ui/CardShare NoShare). */
+export function LookView(props: { look: QuizLook; shown: boolean; palette: Palette }) {
+  return <NoShare.Provider value><LookViewOf {...props} /></NoShare.Provider>;
+}
+
+function LookViewOf({ look, shown, palette }: { look: QuizLook; shown: boolean; palette: Palette }) {
   const width = usePageWidth();
   const drawW = Math.min(width - 32, 480);
   switch (look.view) {

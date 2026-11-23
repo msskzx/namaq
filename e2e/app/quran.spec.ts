@@ -111,19 +111,33 @@ test('every matrix has one studio: the read-along, and on a book matrix a switch
 });
 
 test.describe('branches', () => {
-  // These tests are about the tree, so they run for a reader who picked it.
-  test.use({ seed: { 'branches-view': '"tree"' } });
+  // These tests are about the tree. Every card opens as its matrix (no setting picks the tree since 2026-11-23), so each
+  // test switches the open card to its tree with the card's own button.
+  const showTree = async (page: Page) => {
+    // The cards either side are drawn off screen: only the open card's button is visible.
+    await page.getByRole('button', { name: 'عرض الشجرة' }).filter({ visible: true }).first().click();
+    await expect(page.getByRole('button', { name: 'عرض المصفوفة' }).filter({ visible: true }).first()).toBeVisible();
+  };
   // The trees searched for below are our own (no book compares them), so they sit under «تدبّر».
   const openPondering = async (page: Page) => {
     await open(page, '/branches');
     await page.getByRole('tab', { name: 'تدبّر' }).click();
     await expect(page.getByRole('tab', { name: 'تدبّر' })).toHaveAttribute('aria-selected', 'true');
   };
+  const search = async (page: Page, phrase: string) => {
+    await openPondering(page);
+    await page.getByRole('button', { name: 'ابحث' }).click();
+    const box = page.getByLabel('ابحث عن عبارة مشتركة بين آيتين أو أكثر');
+    await box.fill(phrase);
+    await box.press('Enter');
+    await showTree(page);
+  };
 
   test('the tree switches to the matrix and back', async ({ page }) => {
     await open(page, '/branches');
     await expect(page.getByLabel(/^الشجرة ١ من /)).toBeAttached();
     // Each card has its own switch, under it.
+    await showTree(page);
     await page.getByRole('button', { name: 'عرض المصفوفة' }).first().click();
     await expect(page.getByRole('button', { name: /^قراءة / }).first()).toBeVisible();
     await page.getByRole('button', { name: 'عرض الشجرة' }).first().click();
@@ -150,15 +164,12 @@ test.describe('branches', () => {
     await box.fill('إن المتقين');
     await box.press('Enter');
     await expect(page.getByText('«إن المتقين»')).toBeVisible();
+    await showTree(page);
     await expect(page.getByRole('button', { name: `سورة ${S(44)}` })).toBeVisible();
   });
 
   test('the studio grows a tree to its end', async ({ page }) => {
-    await openPondering(page);
-    await page.getByRole('button', { name: 'ابحث' }).click();
-    const box = page.getByLabel('ابحث عن عبارة مشتركة بين آيتين أو أكثر');
-    await box.fill('إن المتقين في');
-    await box.press('Enter');
+    await search(page, 'إن المتقين في');
     await page.getByRole('button', { name: 'استوديو النمو' }).first().click();
     await page.getByRole('button', { name: 'السرعة 1×' }).click();
     await page.getByRole('button', { name: 'شاهد الشجرة تنمو' }).click();
@@ -169,11 +180,7 @@ test.describe('branches', () => {
   });
 
   test('the tree video draws each box from where the app laid out its labels and words', async ({ page }) => {
-    await openPondering(page);
-    await page.getByRole('button', { name: 'ابحث' }).click();
-    const box = page.getByLabel('ابحث عن عبارة مشتركة بين آيتين أو أكثر');
-    await box.fill('إن المتقين في');
-    await box.press('Enter');
+    await search(page, 'إن المتقين في');
     await page.getByRole('button', { name: 'استوديو النمو' }).first().click();
     await page.getByRole('button', { name: 'مشاركة كفيديو' }).click();
     await expect.poll(() => page.frames().length).toBeGreaterThan(1);
@@ -198,11 +205,7 @@ test.describe('branches', () => {
   });
 
   test('the tree video draws a braid as the app does: each strand outlined with its words, and its curves; the tree whole in the frame', async ({ page }) => {
-    await openPondering(page);
-    await page.getByRole('button', { name: 'ابحث' }).click();
-    const box = page.getByLabel('ابحث عن عبارة مشتركة بين آيتين أو أكثر');
-    await box.fill('عليكم الميتة والدم ولحم الخنزير وما أهل');
-    await box.press('Enter');
+    await search(page, 'عليكم الميتة والدم ولحم الخنزير وما أهل');
     await page.getByRole('button', { name: 'استوديو النمو' }).first().click();
     await page.getByRole('button', { name: 'مشاركة كفيديو' }).click();
     await expect.poll(() => page.frames().length).toBeGreaterThan(1);
@@ -227,11 +230,7 @@ test.describe('branches', () => {
   });
 
   test('any box only one path runs through toggles that path, however quickly the boxes are tapped', async ({ page }) => {
-    await openPondering(page);
-    await page.getByRole('button', { name: 'ابحث' }).click();
-    const box = page.getByLabel('ابحث عن عبارة مشتركة بين آيتين أو أكثر');
-    await box.fill('بدت لهما سوآتهما وطفقا يخصفان');
-    await box.press('Enter');
+    await search(page, 'بدت لهما سوآتهما وطفقا يخصفان');
     // Two roots (al-A'raf 22, Taha 121) meet in one box, then part again into two leaves.
     const node = (name: RegExp) => page.getByRole('button', { name }).first();
     const rootA = node(/^فَدَلَّىٰهُمَا /), leafA = node(new RegExp(`^${S(7)} ٢٢ وَنَادَىٰهُمَا `)), rootB = node(/فَأَكَلَا /), leafB = node(new RegExp(`^${S(20)} ١٢١`));
@@ -252,11 +251,7 @@ test.describe('branches', () => {
   });
 
   test('the tree card keeps its buttons in place when a path is lit', async ({ page }) => {
-    await openPondering(page);
-    await page.getByRole('button', { name: 'ابحث' }).click();
-    const box = page.getByLabel('ابحث عن عبارة مشتركة بين آيتين أو أكثر');
-    await box.fill('إن المتقين في');
-    await box.press('Enter');
+    await search(page, 'إن المتقين في');
     const save = page.getByRole('button', { name: 'حفظ الشجرة' }).first();
     await expect(save).toBeVisible();
     // The tab's first-visit hint lies over the chips under a full-height tree.
@@ -288,8 +283,25 @@ test('a compare card kept as its matrix has no tree and no tree button', async (
   await expect(page.getByRole('button', { name: 'عرض الشجرة' })).toHaveCount(0);
 });
 
+test.describe('a saved compare card', () => {
+  // Adam's story in al-A'raf and Taha, a compare card that belongs to a tree.
+  test.use({ seed: { bookmarks: [{ id: 'compare:7:11-19|20:115-119', text: 'وَلَقَدۡ خَلَقۡنَٰكُمۡ …', href: '/quran/compare?a=7&b=20', savedAt: Date.now() }] } });
+
+  test('its «الشجرة» opens that card as its tree, while the branches tab otherwise opens as the matrix', async ({ page }) => {
+    // No setting picks the tree since 2026-11-23 (owner): the way out names the view, and only that card takes it.
+    await open(page, '/');
+    await page.getByRole('button', { name: 'مدونتي', exact: true }).click();
+    await page.getByRole('button', { name: 'الشجرة', exact: true }).first().click();
+    await expect(page).toHaveURL(/\/branches/);
+    await expect(page.getByRole('button', { name: 'عرض المصفوفة' }).filter({ visible: true }).first()).toBeVisible();
+    await page.reload();
+    await expect(page.getByRole('button', { name: /^قراءة / }).first()).toBeVisible();
+    await expect(page.getByRole('button', { name: 'عرض المصفوفة' })).toHaveCount(0);
+  });
+});
+
 test.describe('a long story compare', () => {
-  test.use({ seed: { 'compare-place': { lead: 2, other: 7 }, 'branches-view': '"matrix"' } });
+  test.use({ seed: { 'compare-place': { lead: 2, other: 7 } } });
 
   test('a card switches to side by side: lanes for shared parts, one surah across the card with the other named', async ({ page }) => {
     await open(page, '/compare');

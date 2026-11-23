@@ -3,7 +3,12 @@
 import type { AppStory, AppTurn } from '@shared/stories/story';
 import { quranpediaPage } from '@shared/readerBooks';
 import { PROPHET_AGENT } from '@shared/hadith';
-import { batchClaims, citeOf } from './appBattles';
+import { batchClaims, citeOf, citing } from './appBattles';
+import { siraBab, storyChapter } from './storyChapters';
+import { STORY_WHEN, type StoryWhen } from './storyWhen';
+import { siyarSiraUrl } from './siyarPages';
+import type { AppCite } from '@shared/battles/battle';
+import type { StoryWhenApp } from '@shared/stories/story';
 import type { Catalog, CatalogReportSource, CatalogStoryAyat, CatalogStoryEvidence, CatalogTurn } from './types';
 import { isHadithSource, legacyUnreviewed, STORY_TAGS } from './types';
 
@@ -48,10 +53,52 @@ const placeOf = (source: CatalogReportSource) => (isHadithSource(source) ? [1000
 
 const AYAT_KIND: Record<CatalogStoryAyat['kind'], string> = { RECITED: 'ما قرأه', REVEALED_ABOUT: 'نزل فيه' };
 
+/**
+ * A story's year pages and the quotes that give them (storyWhen.ts). It fails the build when a story's battle or event
+ * has no cited year, or when its battle or event has another reading the book does not reject. A rejected reading
+ * («وهذا لا يصح») stays in the quotes but gets no page.
+ */
+/** The battle a story is set in, from storyWhen.ts. */
+const battleOf = (slug: string) => { const when = STORY_WHEN[slug]; return when?.kind === 'battle' ? when.slug : undefined; };
+
+/** How al-Dhahabi rejects a reading: «وهذا لا يصح», «وهم بين». */
+const REJECTED = /لا يصح|وهم بين/;
+
+export function storyYears(catalog: Catalog, claims = batchClaims()) {
+  const { cited } = citing(claims);
+  const fail = (slug: string, why: string): never => { throw new Error(`Story ${slug}: ${why}`); };
+  return (slug: string, when: StoryWhen | undefined): StoryWhenApp | undefined => {
+    if (!when) return undefined;
+    switch (when.kind) {
+      case 'before':
+        return { pages: ['before'], refs: [] };
+      case 'battle': {
+        const year = cited(catalog.battles.find(battle => battle.slug === when.slug)?.fields?.hijriYear) ?? fail(slug, `battle ${when.slug} has no cited year`);
+        // A story goes on one year only where the book itself rejects every other reading; the rejected quotes still show.
+        const open = (year.others ?? []).filter(other => !other.refs.some(ref => REJECTED.test(ref.text)));
+        if (open.length) fail(slug, `${when.slug}'s year has a reading the book does not reject: ${open[0].text}`);
+        return { pages: [year.value], refs: [...year.refs, ...(year.others ?? []).flatMap(other => other.refs)] };
+      }
+      case 'event': {
+        const year = cited(catalog.events.find(event => event.slug === when.slug)?.fields.hijriYear) ?? fail(slug, `event ${when.slug} has no cited year`);
+        if (year.others?.length) fail(slug, `${when.slug}'s year has other readings`);
+        return { pages: [year.value], refs: year.refs };
+      }
+      case 'siyar':
+        return { pages: [when.year], refs: [{ text: when.quote, cite: citeOf({ sourceSlug: SIRA, volume: `السيرة ${when.volume}`, pageReference: String(when.page) }), url: siyarSiraUrl(when.volume, when.page) }] };
+      case 'bab': {
+        const bab = siraBab(when.hadith) ?? fail(slug, `no heading over al-Bukhari ${when.hadith}`);
+        return { pages: [when.year], refs: [{ text: bab.title, cite: reportCite({ slug: 'sahih-al-bukhari', hadith: when.hadith, url: HADITH_URL['sahih-al-bukhari'](when.hadith) }), url: HADITH_URL['sahih-al-bukhari'](when.hadith) }] satisfies AppCite[] };
+      }
+    }
+  };
+}
+
 export function appStories(catalog: Catalog, claims = batchClaims()): AppStory[] {
   const names = new Map(catalog.people.map(person => [person.slug, person.name]));
   const link = (slug: string) => ({ slug, name: names.get(slug) ?? slug });
-  return catalog.events
+  const yearsOf = storyYears(catalog, claims);
+  const stories = catalog.events
     .filter(event => event.reports?.length)
     // In the order the source tells them.
     .sort((a, b) => {
@@ -64,9 +111,13 @@ export function appStories(catalog: Catalog, claims = batchClaims()): AppStory[]
         location && location.claims !== legacyUnreviewed
           ? location.claims.flatMap(key => (claims.get(key)?.citations ?? []).filter(c => c.excerptArabic).map(c => ({ text: c.excerptArabic!, cite: citeOf(c), url: c.extractionUrl })))
           : [];
+      const { chapter } = storyChapter(event.slug, event.reports!.map(report => report.source), battleOf(event.slug));
+      const when = yearsOf(event.slug, STORY_WHEN[event.slug]);
       return {
         slug: event.slug,
         name: event.name,
+        chapter,
+        ...(when ? { when } : {}),
         ...(location && placeRefs.length ? { place: { value: location.value, refs: placeRefs } } : {}),
         tags: (event.tags ?? []).map(tag => STORY_TAGS[tag]),
         // The Prophet ﷺ first among a story's people (owner, 2026-11-21), the rest as the story names them.
@@ -93,4 +144,13 @@ export function appStories(catalog: Catalog, claims = batchClaims()): AppStory[]
         })),
       };
     });
+  // In al-Bukhari's order: each chapter where its first story stands in his book, then each story in it by its number.
+  const at = new Map(catalog.events.filter(event => event.reports?.length).map(event => [event.slug, storyChapter(event.slug, event.reports!.map(report => report.source), battleOf(event.slug)).at]));
+  const first = new Map<string, number>();
+  for (const story of stories) first.set(story.chapter, Math.min(first.get(story.chapter) ?? Infinity, at.get(story.slug)!));
+  const rank = (story: AppStory) => first.get(story.chapter)!;
+  return stories
+    .map((story, i) => ({ story, i }))
+    .sort((a, b) => rank(a.story) - rank(b.story) || at.get(a.story.slug)! - at.get(b.story.slug)! || a.i - b.i)
+    .map(({ story }) => story);
 }

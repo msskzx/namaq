@@ -53,7 +53,7 @@ function unapplied() {
 }
 
 function pagesOfPairs(): Map<string, string[]> {
-  const pairs: { a: string; b: string }[] = [...readJson('src/app/quran/compare/pairs.json').pairs, ...readJson('src/app/quran/compare/passagePairs.json').pairs];
+  const pairs: { a: string; b: string }[] = ['pairs', 'passagePairs', 'withinPairs'].flatMap(file => readJson(`src/app/quran/compare/${file}.json`).pairs);
   const curated = (readJson('src/lib/quran/curation/compareLinks.json').links as { pair: string }[]).map(link => link.pair);
   const pages = new Map<string, string[]>();
   for (const key of new Set([...pairs.map(pair => `${pair.a}|${pair.b}`), ...curated])) {
@@ -65,9 +65,11 @@ function pagesOfPairs(): Map<string, string[]> {
 
 function replayed(verdicts: Verdicts, presses: ReviewPress[]): Verdicts {
   const pages = pagesOfPairs();
+  const known = new Set([...pages.values()].flat());
   const next = { ...verdicts };
   for (const { page, card, action } of presses) {
-    const keys = card ?? (pages.get(page) ?? []).filter(key => !next[key]?.card);
+    // A press on a pair the compare page does not hold as a card (a story part's ayat) has nothing to judge.
+    const keys = card ? card.filter(key => known.has(key)) : (pages.get(page) ?? []).filter(key => !next[key]?.card);
     if (action === 'undo') {
       const restored = restoredVerdicts(next, keys);
       for (const key of keys) {

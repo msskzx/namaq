@@ -123,8 +123,11 @@ export function sharedByAll(contexts: AyahContext[]): AyahContext[] {
     const lists = all.map(ayah => ayah.byKey.get(key) ?? []);
     const count = Math.min(...lists.map(list => list.length));
     // The occurrences every ayah shares first, in reading order; the rest after, best lined up first.
+    // A form written alike in the other ayat goes before one only of the same root: «العليم» pairs with «العليم», not with «علم»
+    // that happens to line up (owner 2026-11-23, 2:32 and 51:30). Occurrences written alike keep the lining up.
+    const alike = (n: number, i: number) => -lists.filter((other, m) => m !== n && other.some(j => likeness([all[n].forms[i], all[m].forms[j]]) === 'exact')).length;
     const ordered = lists.map((list, n) => {
-      const ranked = [...list].sort((x, y) => all[n].rank(x) - all[n].rank(y) || x - y);
+      const ranked = [...list].sort((x, y) => alike(n, x) - alike(n, y) || all[n].rank(x) - all[n].rank(y) || x - y);
       return [...ranked.slice(0, count).sort((x, y) => x - y), ...ranked.slice(count)];
     });
     // A word with a root («ألقوا», «ملقون») may sit anywhere in the other ayah; a particle with none («من», «لا»)

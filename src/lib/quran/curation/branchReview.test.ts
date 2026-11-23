@@ -41,6 +41,7 @@ describe('branch review', () => {
     mkdirSync(join(root, 'src/lib/quran/curation'), { recursive: true });
     writeFileSync(join(root, 'src/app/quran/compare/pairs.json'), JSON.stringify({ pairs: [{ a: '2:8', b: '3:114' }] }));
     writeFileSync(join(root, 'src/app/quran/compare/passagePairs.json'), JSON.stringify({ pairs: [] }));
+    writeFileSync(join(root, 'src/app/quran/compare/withinPairs.json'), JSON.stringify({ pairs: [] }));
     writeFileSync(join(root, 'src/lib/quran/curation/compareLinks.json'), JSON.stringify({ links: [] }));
     recordBranchReview('cmp:twin', 'keep');
     expect(onDisk()).toEqual({});

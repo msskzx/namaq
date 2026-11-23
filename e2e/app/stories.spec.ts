@@ -1,6 +1,6 @@
 import { expect, open, tab, test } from './fixtures';
 import stories from '../../shared/data/events/stories.json';
-import type { AppStory } from '../../shared/stories/story';
+import { narratorOf, type AppStory } from '../../shared/stories/story';
 
 // The sira stories (owner, 2026-11-18): from the tarajim tab, «قصص السيرة» by tag, and a story whole as the source tells
 // it, in moments, with the ayat recited in full in the mushaf's lines and the source's other reports folded
@@ -10,11 +10,12 @@ test('the tarajim tab lists the sira stories, and Utbah\'s opens whole with Fuss
   await tab(page, 'التراجم').click();
   await page.getByRole('link', { name: 'قصص السيرة' }).click();
   await expect(page.getByRole('heading', { name: 'قصص السيرة' })).toBeVisible();
-  // A tag narrows the list.
+  // The first year page is «قبل الهجرة», on al-Bukhari's chapters (owner, 2026-11-23); a tag narrows every year.
   await page.getByRole('button', { name: 'إسلامهم' }).click();
-  await expect(page.getByRole('link', { name: 'عتبة بن ربيعة يعرض على النبي ﷺ' })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'أذى المشركين بمكة' })).toHaveCount(0);
   await page.getByRole('button', { name: 'إسلامهم' }).click();
-  await page.getByRole('link', { name: 'عتبة بن ربيعة يعرض على النبي ﷺ' }).click();
+  await page.getByRole('button', { name: 'أذى المشركين بمكة' }).first().click();
+  await page.getByRole('link', { name: 'عتبة بن ربيعة يعرض على النبي ﷺ' }).first().click();
   await expect(page).toHaveURL(/\/story\?slug=utbah-offers-and-hears-fussilat$/);
   await expect(page.getByRole('heading', { name: 'عتبة بن ربيعة يعرض على النبي ﷺ' })).toBeVisible();
   await expect(page.getByText('عن جابر بن عبد الله', { exact: false })).toBeVisible();
@@ -37,12 +38,15 @@ test('Dimad\'s story is drawn by speaker, and «النص» shows it as Muslim pr
   const saying = report.moments.flatMap(moment => moment.turns ?? []).find(turn => turn.speaker?.name === 'ضماد')!.text;
   await open(page, '/story?slug=islam-of-dimad');
   await expect(page.getByRole('tab', { name: 'الرسم' })).toHaveAttribute('aria-selected', 'true');
-  // The chain is folded under «السند»; the saying stands alone in its bubble, its lead-in outside it.
+  // The chain is one line, its last link; the saying stands alone in its bubble, its lead-in outside it.
   await expect(page.getByText(chain, { exact: false })).toHaveCount(0);
   await expect(page.getByText(saying, { exact: true })).toBeVisible();
   // No name ring to tap beside a bubble: the chips are the key, and they are not buttons.
   await expect(page.getByRole('button', { name: 'ضماد', exact: true })).toHaveCount(0);
   await page.getByRole('tab', { name: 'النص', exact: true }).click();
+  // The whole chain opens from its last link (owner, 2026-11-23).
+  await expect(page.getByText(chain, { exact: false })).toHaveCount(0);
+  await page.getByRole('button', { name: `${narratorOf(report.isnad!)}، السند كاملا` }).click();
   await expect(page.getByText(chain, { exact: false })).toBeVisible();
   await expect(page.getByText(saying, { exact: true })).toHaveCount(0);
 });

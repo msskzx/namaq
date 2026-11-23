@@ -2,10 +2,10 @@ import { useEffect, useReducer, useRef, useState } from 'react';
 import { AppState, View } from 'react-native';
 import { Bed, Bell, BellOff, Check, Moon, Mosque, RotateCcw, Sun, Sunrise } from 'lucide-react-native';
 import { ADHKAR_OCCASIONS, adhkarFor, type AdhkarOccasion, type Dhikr } from '@shared/adhkar';
-import { ADHKAR_NAMES, ADHKAR_TABS, adhkarQuotes, adhkarTitle, gradeLine } from '@shared/adhkarCite';
+import { ADHKAR_NAMES, ADHKAR_TABS, ADHKAR_TITLES, adhkarSource, gradeLine } from '@shared/adhkarCite';
 import { counted as counted_, num } from '@shared/quran/arabicNumber';
 import type { AdhkarTime } from '@shared/adhanAlerts';
-import { CardWithRow } from '@/ui/Card';
+import { SharedCard, ShareHead } from '@/ui/CardShare';
 import Tabs from '@/ui/Tabs';
 import Chip from '@/ui/Chip';
 import SplitBar from '@/ui/SplitBar';
@@ -173,7 +173,8 @@ export default function Adhkar({ palette, on, onPlace, scrollTo }: { palette: Pa
         // The counter is the card's own tool, first in the row under it; the book on the line (owner 2026-11-20).
         return (
           <View key={item.id} onLayout={event => laid(item.id, event.nativeEvent.layout)}>
-            <CardWithRow palette={palette} pad={18} gap={12} outline={done ? palette.green : undefined} source={[{ line: adhkarTitle(item), quotes: adhkarQuotes(item) }]}
+            <SharedCard palette={palette} pad={18} gap={12} outline={done ? palette.green : undefined} source={[adhkarSource(item)]} shareLabel="شارك الذكر"
+              shareHead={<ShareHead title={`من أذكار ${ADHKAR_TITLES[occasion]}`} palette={palette} />}
               lead={<>
                 <Button big pill variant={done ? 'outline' : 'primary'} disabled={done} Icon={Check}
                   label={item.repeat ? `${num(counted)} / ${num(target)}` : 'قلته'}
@@ -191,7 +192,7 @@ export default function Adhkar({ palette, on, onPlace, scrollTo }: { palette: Pa
               {item.repeat && !done && (
                 <View style={{ flexDirection: 'row' }}><SplitBar first={counted} second={target - counted} palette={palette} /></View>
               )}
-            </CardWithRow>
+            </SharedCard>
           </View>
         );
       })}

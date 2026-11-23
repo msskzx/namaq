@@ -2,6 +2,7 @@ import { expect, open, readerPage, reciteBarsHidden, returningUser, stored, test
 import { surahName as S } from '../../shared/quran/surahNames';
 import * as adhan from 'adhan';
 import { DEFAULT_PRAYER_SETTINGS, prayerDay, type Adhan } from '../../shared/prayer';
+import { ABOUT_INTRO, ATTRIBUTIONS_INTRO } from '../../shared/infoPages';
 
 test.describe('a new user', () => {
   test('home shows the few buttons, the reading card with the date, and the feed', async ({ page }) => {
@@ -76,8 +77,8 @@ test.describe('a new user', () => {
       expect(await boxes()).toBe(0);
     });
 
-    test.describe('with the tree picked in settings', () => {
-      test.use({ seed: { 'branches-view': '"tree"', interests: '["mutashabih"]', 'interests-surprise': '0' } });
+    test.describe('the mutashabih cards', () => {
+      test.use({ seed: { interests: '["mutashabih"]', 'interests-surprise': '0' } });
 
       test('the tree card is the branches tree with one tree, and opens it on the branches tab', async ({ page }) => {
         await open(page, '/');
@@ -91,6 +92,8 @@ test.describe('a new user', () => {
         await post.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).first().click();
         await expect(page).toHaveURL(/\/branches/);
         await expect(page.getByLabel(/^الشجرة \S+ من /)).toBeAttached();
+        // It opens as its matrix there too; its own button shows the tree, whose boxes name the surahs.
+        await page.getByRole('button', { name: 'عرض الشجرة' }).filter({ visible: true }).first().click();
         await expect(page.getByRole('button', { name: `سورة ${surah}` }).first()).toBeAttached();
       });
 
@@ -100,9 +103,11 @@ test.describe('a new user', () => {
         await open(page, '/');
         const tree = page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).first();
         await expect(tree).toBeAttached();
-        // A tree card draws its tree once it comes near the screen.
+        // A tree card opens as its matrix; its own button shows the tree, drawn once it comes near the screen.
         await tree.scrollIntoViewIfNeeded();
-        await expect(page.locator('[aria-label$="شجرةً"]').first()).toBeAttached();
+        const post = tree.locator('xpath=ancestor::div[.//*[@aria-label="عرض الشجرة"]][1]');
+        await post.getByRole('button', { name: 'عرض الشجرة' }).first().click();
+        await expect(post.getByRole('button', { name: 'عرض المصفوفة' }).first()).toBeVisible();
         await expect(page.getByTestId('node-tab')).toHaveCount(0);
       });
     });
@@ -366,7 +371,7 @@ test.describe('a new user', () => {
   });
 
   // About, privacy and the sources are pages of the app, offline (owner, 2026-11-18), not links to the website.
-  for (const [label, text] of [['عن نمق', 'نَمَق تطبيق تعليمي'], ['المصادر والتراخيص', 'الأعمال والبيانات التي اعتمد عليها نمق'], ['سياسة الخصوصية', 'ما يحفظه التطبيق']]) {
+  for (const [label, text] of [['عن نمق', ABOUT_INTRO.ar], ['المصادر والتراخيص', ATTRIBUTIONS_INTRO.ar], ['سياسة الخصوصية', 'ما يحفظه التطبيق']]) {
     test(`the settings sheet opens «${label}» in the app`, async ({ page }) => {
       await open(page, '/');
       await page.getByRole('button', { name: 'الإعدادات' }).click();

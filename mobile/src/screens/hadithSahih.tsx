@@ -6,7 +6,7 @@ import { findHadith, placeOf, type SahihHadith, type SahihIndex } from '@shared/
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
-import { CardWithRow } from '@/ui/Card';
+import { SharedCard, ShareHead } from '@/ui/CardShare';
 import Button, { Row } from '@/ui/Button';
 import LoadingDots from '@/ui/LoadingDots';
 import { usePalette, type Palette } from '@/lib/theme';
@@ -37,7 +37,10 @@ function SahihPage({ book, hadith, width, palette }: { book: SahihIndex; hadith:
       {place && <Button variant="plain" label={`${place.kitab.title}${place.bab?.title ? ` › ${place.bab.title}` : ''}`} onPress={() => openKitab(book.slug, place.kitab.n)} />}
       {book.headingsBy === 'nawawi' && place?.bab?.title && <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right', marginTop: -10 }}>تبويب النووي</Text>}
       <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 24, textAlign: 'right' }}>{`${book.title} ${numbers}`}</Text>
-      <CardWithRow palette={palette}><SahihHadithView book={book} hadith={hadith} palette={palette} /></CardWithRow>
+      <SharedCard palette={palette} shareLabel={`شارك ${book.title} ${num(hadith.n)}`}
+        shareHead={<ShareHead title={`${book.title} ${numbers}`} sub={place ? `${place.kitab.title}${place.bab?.title ? ` › ${place.bab.title}` : ''}` : undefined} palette={palette} />}>
+        <SahihHadithView book={book} hadith={hadith} palette={palette} />
+      </SharedCard>
       {forty.length > 0 && (
         <View style={{ gap: 8 }}>
           <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 17, fontWeight: '700', textAlign: 'right' }}>من أخرجه</Text>

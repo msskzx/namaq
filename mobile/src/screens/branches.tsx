@@ -18,7 +18,7 @@ import { PAGE_KINDS } from '@shared/quran/branchSearch';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useIntent } from '@/lib/intent';
 import { loadPrefs, closeStudio, type Prefs } from '@/lib/growPlayer';
-import { around as aroundSetting, branchView, listState } from '@/lib/settings';
+import { around as aroundSetting, listState } from '@/lib/settings';
 import { isRecord, readJson, writeJson } from '@/lib/storage';
 import { usePalette, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
@@ -29,17 +29,18 @@ function BarButton({ label, onPress, Icon, palette, on, dot }: { label: string; 
   return <IconButton Icon={Icon} label={label} onPress={onPress} on={on} dot={dot} />;
 }
 
+type Opening = { id?: string; query?: string; view?: 'tree' };
+
 export default function BranchesScreen() {
   const palette = usePalette();
   const bottom = useTabBarSpace();
   const [help, setHelp] = useState(false);
   const [list, setList] = listState.use();
-  // The settings' defaults: each card switches its own view and surrounding ayat.
-  const [mode] = branchView.use();
+  // Every card opens as its matrix with the settings' surrounding; each card switches both for itself.
   const [around] = aroundSetting.use();
   const [searching, setSearching] = useState(false);
-  /** Where a new list opens: a picked phrase, else the search's best tree; undefined keeps the saved place. */
-  const [start, setStart] = useState<{ id?: string; query?: string } | undefined>(undefined);
+  /** Where a new list opens: a picked phrase, else the search's best tree; undefined keeps the saved place. `view`: that tree opens as its tree. */
+  const [start, setStart] = useState<Opening | undefined>(undefined);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const [pieces, setPieces] = useState<BranchPiece[] | null>(null);
   useEffect(() => loadPrefs(readJson('branches-grow', isRecord) as Partial<Prefs> | undefined, prefs => writeJson('branches-grow', prefs)), []);
@@ -52,7 +53,7 @@ export default function BranchesScreen() {
     // `start` too: change() blanks the list and may set the same list again (the empty list, the list shown), which alone reruns nothing.
   }, [list, savedKey, start]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const change = useCallback((next: ListState, opening?: { id?: string; query?: string }) => {
+  const change = useCallback((next: ListState, opening?: Opening) => {
     closeStudio();
     setPieces(null);
     setStart(opening ?? {});
@@ -63,6 +64,8 @@ export default function BranchesScreen() {
     if (start.id) { const at = pieces.findIndex(piece => piece.id === start.id || aliasesOf(piece).includes(start.id!)); if (at >= 0) return at; }
     return openingIndex(pieces, start.query ?? '');
   }, [pieces, start]);
+  // Only the asked tree opens as its tree: a fallback card (the asked one not found) opens as its matrix.
+  const startMode = start?.view && start.id && pieces?.[startIndex ?? -1] && [pieces[startIndex!].id, ...aliasesOf(pieces[startIndex!])].includes(start.id) ? start.view : undefined;
   // The homepage opens a saved tree (among the saved ones), or a surah's or juz's trees.
   const [jumps, setJumps] = useState(0);
   // A node's «show only this part» opens that tree as the search for its phrase does.
@@ -71,9 +74,10 @@ export default function BranchesScreen() {
     setJumps(value => value + 1);
     // A tree opens among the saved ones when it is saved (the homepage's shelf), else in the first list that holds it.
     const found = intent.open && !intent.saved && !intent.query ? listShowing({ ...EMPTY_LIST, saved: true }, intent.open, bookmarks) : null;
-    if (intent.query) change({ ...EMPTY_LIST, query: intent.query }, { id: intent.open, query: intent.query });
-    else if (found) change(found.list, { id: found.piece.id });
-    else if (intent.open || intent.saved) change({ ...EMPTY_LIST, saved: true }, { id: intent.open });
+    const view = intent.view;
+    if (intent.query) change({ ...EMPTY_LIST, query: intent.query }, { id: intent.open, query: intent.query, view });
+    else if (found) change(found.list, { id: found.piece.id, view });
+    else if (intent.open || intent.saved) change({ ...EMPTY_LIST, saved: true }, { id: intent.open, view });
     // An ayah's, a surah's or a juz's cards open with both tabs' cards, the books' and ours.
     else if (intent.ayah) change({ ...BOTH_KINDS_LIST, ayah: intent.ayah });
     else if (intent.surah) change({ ...BOTH_KINDS_LIST, surah: intent.surah });
@@ -89,12 +93,12 @@ export default function BranchesScreen() {
   });
   const openSearch = useCallback(() => setSearching(true), []);
   // A compare card's tree icon opens here with ?tree=<id>: that tree, in the list shown when it holds it.
-  const { tree } = useLocalSearchParams<{ tree?: string }>();
+  const { tree, view } = useLocalSearchParams<{ tree?: string; view?: string }>();
   useEffect(() => {
     if (!tree) return;
     const found = listShowing(list, tree, bookmarks);
-    if (found) change(found.list, { id: found.piece.id });
-    router.setParams({ tree: undefined });
+    if (found) change(found.list, { id: found.piece.id, view: view === 'tree' ? 'tree' : undefined });
+    router.setParams({ tree: undefined, view: undefined });
   }, [tree]); // eslint-disable-line react-hooks/exhaustive-deps
   const listKey = JSON.stringify([list, start, jumps]);
 
@@ -115,7 +119,7 @@ export default function BranchesScreen() {
         {PAGE_KINDS.map(kind => <Chip key={kind.id} role="tab" label={kind.ar} on={tabOf(list) === kind.id} palette={palette}
           onPress={() => { if (tabOf(list) !== kind.id) change({ ...list, filters: { ...list.filters, categories: kind.id } }); }} />)}
       </View>
-      {pieces?.length ? <TreePager key={listKey} pieces={pieces} list={list} palette={palette} mode={mode} around={around} start={startIndex} onIndex={onIndex} onPull={openSearch} onOpen={openPart} />
+      {pieces?.length ? <TreePager key={listKey} pieces={pieces} list={list} palette={palette} around={around} start={startIndex} startMode={startMode} onIndex={onIndex} onPull={openSearch} onOpen={openPart} />
         : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}>
           {pieces ? <Empty palette={palette} text={list.query ? `لا شجرة تطابق «${list.query}».` : list.saved && !isFiltered({ ...list, saved: false }) ? 'لا شجرة محفوظة بعد. احفظ شجرة بزر الحفظ تحتها أولًا.' : isFiltered(list) ? 'لا مواضع متشابهة تطابق التصفية.' : 'لا شجرة في هذا النطاق.'} /> : <LoadingDots />}
         </View>}

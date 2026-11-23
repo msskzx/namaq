@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { agentsChanged, comparePages, pageOf, pressesByCard, pressOf, rowsChanged, selectCards, type CardPress, type CardReviewEntry } from './cardReviewIndex';
+import { agentsChanged, comparePages, filteredPairs, markBookCards, oneTwinPerPair, pageOf, pressesByCard, pressOf, rowsChanged, selectCards, sharedKey, type CardPress, type CardReviewEntry } from './cardReviewIndex';
 
 const tree = (id: string, rows: string[][], extra: Partial<CardReviewEntry> = {}): CardReviewEntry => ({ id, kind: 'word', rows, verdict: { keep: true, why: 'old' }, ...extra });
 const press = (id: string, action: CardPress['action'], t = 0): CardPress => ({ t, id, action, version: 'original' });
@@ -62,4 +62,71 @@ describe('card review', () => {
     const at = (page: string): CardReviewEntry => ({ id: page, kind: 'compare', rows: [], page });
     expect(comparePages([at('10/12'), at('2/3'), at('2/10'), at('2/3')])).toEqual([{ page: '2/3', count: 2 }, { page: '2/10', count: 1 }, { page: '10/12', count: 1 }]);
   });
+
+  it('a press on a duplicate tree card of a pair leaves the book card and the compare card as they were', () => {
+    const pair = '2:234|2:240';
+    const rows = [['2:234'], ['2:240']];
+    const cards = oneTwinPerPair([
+      { id: 'word-1', kind: 'word', rows, twin: pair },
+      { id: 'book', kind: 'book', rows, twin: pair },
+      { id: 'word-2', kind: 'word', rows, twin: pair },
+      { id: 'compare', kind: 'compare', rows, pairs: [pair] },
+    ]);
+    const press = (entry: CardReviewEntry, action: CardPress['action'], t: number): CardPress => ({ t, id: entry.id, ...(sharedKey(entry) ? { shared: sharedKey(entry) } : {}), action, version: 'original' });
+    const [word1, book, word2, compare] = cards;
+    const pressed = pressesByCard([press(book, 'keep', 1), press(word1, 'drop', 2), press(word2, 'drop', 3)]);
+    expect(pressOf(book, pressed)?.action).toBe('keep');
+    expect(pressOf(compare, pressed)?.action).toBe('keep');
+    expect(pressOf(word1, pressed)?.action).toBe('drop');
+  });
+
+  it('«غير المراجَعة فقط» leaves out what the owner reviewed in an earlier review, not only presses on this page', () => {
+    const cards: CardReviewEntry[] = [
+      { id: 'checked', kind: 'compare', rows: [], pairs: ['1:1|2:2'], verdict: { keep: true, why: '', checked: true } },
+      { id: 'in-old-log', kind: 'compare', rows: [], pairs: ['1:3|2:4', '1:5|2:6'] },
+      { id: 'half-in-old-log', kind: 'compare', rows: [], pairs: ['1:3|2:4', '1:7|2:8'] },
+      { id: 'twin-in-old-log', kind: 'word', rows: [], twin: '1:5|2:6' },
+      { id: 'word-draft', kind: 'word', rows: [], twin: '1:9|2:10' },
+      { id: 'draft', kind: 'compare', rows: [], pairs: ['1:9|2:10'], verdict: { keep: true, why: '' } },
+    ];
+    const checkedPairs = new Set(['1:3|2:4', '1:5|2:6']);
+    const todo = (kind: CardReviewEntry['kind']) => selectCards(cards, {}, new Map(), { kind, todo: true }, checkedPairs).map(entry => entry.id);
+    expect(todo('compare')).toEqual(['half-in-old-log', 'draft']);
+    expect(todo('word')).toEqual(['word-draft']);
+  });
+
+  it('«غير المراجَعة فقط» leaves out what a book names: every book entry stays a card (owner 2026-11-21)', () => {
+    const cards: CardReviewEntry[] = [
+      { id: 'book', kind: 'book', rows: [], twin: '2:48|2:123', books: ['al-Kirmani'], verdict: { keep: true, why: '' } },
+      { id: 'its-compare', kind: 'compare', rows: [], pairs: ['2:48|2:123'], books: ['al-Kirmani'], verdict: { keep: true, why: '' } },
+      { id: 'ours', kind: 'compare', rows: [], pairs: ['2:49|2:124'], verdict: { keep: true, why: '' } },
+    ];
+    const todo = (kind: CardReviewEntry['kind']) => selectCards(cards, {}, new Map(), { kind, todo: true }).map(entry => entry.id);
+    expect(todo('book')).toEqual([]);
+    expect(todo('compare')).toEqual(['ours']);
+  });
+
+  it('the surah pair list counts only what the filters show, and drops a pair with nothing left except the open one', () => {
+    const at = (id: string, page: string, checked = false): CardReviewEntry => ({ id, kind: 'compare', rows: [], page, ...(checked ? { verdict: { keep: true, why: '', checked } } : {}) });
+    const cards = [at('a', '2/2'), at('b', '2/2', true), at('c', '2/3', true), at('d', '2/4', true), at('e', '3/3')];
+    expect(filteredPairs(cards, {}, new Map(), { todo: true })).toEqual([{ page: '2/2', count: 1 }, { page: '3/3', count: 1 }]);
+    expect(filteredPairs(cards, {}, new Map(), { todo: true }, undefined, '2/3')).toEqual([{ page: '2/2', count: 1 }, { page: '2/3', count: 0 }, { page: '3/3', count: 1 }]);
+    expect(filteredPairs(cards, {}, new Map(), {})).toEqual(comparePages(cards));
+  });
+
+  it("leaves the cards a book names out of the review, even a compare card holding a book card's ayat beside another, unless asked for", () => {
+    const cards = markBookCards([
+      { id: 'book', kind: 'book', rows: [['2:48'], ['2:123']], books: ['al-Kirmani'] },
+      { id: 'with-82', kind: 'compare', rows: [['2:48'], ['2:123'], ['82:19']], pairs: ['2:48|82:19', '2:123|82:19'] },
+      { id: 'one-of-them', kind: 'compare', rows: [['2:48'], ['82:19']], pairs: ['2:48|82:19'] },
+      { id: 'surah-order', kind: 'compare', rows: [['1:1'], ['2:1']], pairs: ['1:1|2:1'], link: 1, books: ['al-Biqa\'i'] },
+    ]);
+    const shown = (kind: CardReviewEntry['kind'], books: boolean) => selectCards(cards, {}, new Map(), { kind, todo: true, books }, new Set()).map(entry => entry.id);
+    expect(cards[1].books).toEqual(['al-Kirmani']);
+    expect(shown('compare', false)).toEqual(['one-of-them']);
+    expect(shown('book', false)).toEqual([]);
+    expect(shown('compare', true)).toEqual(['with-82', 'one-of-them', 'surah-order']);
+    expect(shown('book', true)).toEqual(['book']);
+  });
 });
+

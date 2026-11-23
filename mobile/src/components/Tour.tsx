@@ -11,7 +11,6 @@ import { GrowingLogo } from './Logo';
 import TreeCard from './TreeCard';
 import MatrixCard from './MatrixCard';
 import MushafPageView from './MushafPageView';
-import { ViewTiles } from './ThemeTiles';
 import StoryMap from './StoryMap';
 import EventPlaces from './EventPlaces';
 import { storyMap } from '@shared/quran/prophets/story';
@@ -22,7 +21,6 @@ import { EMPTY_LIST } from '@/lib/branchList';
 import { pageData, surahBefore } from '@/lib/mushaf';
 import { pageModel, reciteView } from '@shared/quran/recitePage';
 import { RECITE_AYAH, RECITE_PAGE, TOUR_STEPS, tourPiece, type TourStep } from '@/lib/tour';
-import { branchView } from '@/lib/settings';
 import type { Palette } from '@/lib/theme';
 import type { RecitePosition } from '@shared/quran/recite';
 import { APP_NAME, OPENING, SLOGAN } from '@shared/brand';
@@ -94,7 +92,7 @@ const READING = { s: 1, x: -100000, y: 0 };
 
 /**
  * The first-launch tour: the opening, then the matrix of «إن المتقين في», the same ayat as a tree (tap a branch), the
- * default view (matrix chosen unless changed), Adam's story map, and recite on the last mushaf page. Swiping sideways or «التالي» turns the
+ * Adam's story map, and recite on the last mushaf page. Swiping sideways or «التالي» turns the
  * step (in Arabic the next one comes from the left, so a swipe to the right moves on); «تخطَّ» ends the tour, and the
  * settings sheet plays it again.
  */
@@ -108,15 +106,11 @@ export default function Tour({ palette, onDone }: { palette: Palette; onDone: ()
   const model = useMemo(() => pageModel(pageData(page), surahBefore(page)), [page]);
   const [position, setPosition] = useState<RecitePosition>({ start: RECITE_AYAH, shown: null, words: 0 });
   const recite = useMemo(() => reciteView(model, position), [model, position]);
-  const [, setView] = branchView.use();
 
   const steps: TourStep[] = piece ? ['opening', ...TOUR_STEPS] : ['opening', 'recite'];
   const at = steps.indexOf(step);
   const last = at === steps.length - 1;
   const did = (which: TourStep) => setDone(current => (current[which] ? current : { ...current, [which]: true }));
-  // The question opens with the matrix chosen, once per tour, so coming back to the step keeps what was tapped.
-  const preselected = useRef(false);
-  useEffect(() => { if (step === 'view' && !preselected.current) { preselected.current = true; setView('matrix'); } }, [step]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // The steps sit side by side, each at its own place (step i at i widths to the left, as the next step comes from the
   // left in Arabic), and the strip slides under the finger: dragging right pulls the next step in. Letting go past a
@@ -151,7 +145,7 @@ export default function Tour({ palette, onDone }: { palette: Palette; onDone: ()
     });
   const strip = useAnimatedStyle(() => ({ transform: [{ translateX: offset.value }] }));
 
-  const title: Record<TourStep, string> = { opening: '', matrix: '', tree: '', view: 'أيهما تفضّل؟', timeline: 'قصص الأنبياء', recite: 'سمّع من المصحف' };
+  const title: Record<TourStep, string> = { opening: '', matrix: '', tree: '', timeline: 'قصص الأنبياء', recite: 'سمّع من المصحف' };
   const hint: Partial<Record<TourStep, string>> = { tree: 'اسحب الشجرة واضغط غصنًا', timeline: 'اضغط نقطة لترى آياتها', recite: 'اضغط لتظهر الآية التالية' };
 
   /** One step's page: its title and its card. Neighbours are drawn too, so they can peek in while dragging. */
@@ -178,12 +172,6 @@ export default function Tour({ palette, onDone }: { palette: Palette; onDone: ()
           <View style={{ flex: 1, backgroundColor: palette.card, overflow: 'hidden' }}>
             <Fit>{size => <TreeCard piece={card.piece} list={EMPTY_LIST} palette={palette} view={size} around={false} onMove={noop}
               initialCamera={READING} onTap={(keys, lightPath) => { if (!keys) return; lightPath?.(); did('tree'); }} />}</Fit>
-          </View>
-        )}
-        {which === 'view' && (
-          <View style={{ flex: 1, paddingBottom: 8 }}>
-            <ViewTiles palette={palette} big />
-            <Text style={{ marginTop: 14, color: palette.muted, fontSize: 13, textAlign: 'center' }}>تغيّره متى شئت من الإعدادات</Text>
           </View>
         )}
         {which === 'timeline' && <Timeline palette={palette} onPick={() => did('timeline')} />}

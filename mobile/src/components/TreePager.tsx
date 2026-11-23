@@ -152,10 +152,12 @@ function ScrollingTree({ view, studio, children }: { view: Size; studio: boolean
   );
 }
 
-/** `mode` and `around`: the defaults from the settings, which each card can switch for itself. */
-type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: BranchView; around: boolean;
+/** Every card opens as its matrix, and `around` is the settings' default; each card can switch both for itself. */
+type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; around: boolean;
   /** The tree a search opens on; otherwise the one left open last time. */
   start?: number; onIndex?: (index: number) => void;
+  /** How the `start` card opens when not as its matrix (a saved tree's «الشجرة»). */
+  startMode?: BranchView;
   /** A downward swipe on the open tree. */
   onPull?: () => void;
   /** A node's «show only this part»: the tree of its own that holds the node's ayat. */
@@ -181,13 +183,18 @@ type Props = { pieces: BranchPiece[]; list: ListState; palette: Palette; mode: B
   }; };
 
 /** The branches trees as a row of cards: the neighbour follows the finger, the place and zoom are kept for next time. */
-export default function TreePager({ pieces, list, palette, mode: defaultMode, around: defaultAround, start, onIndex, onPull, onOpen, embedded }: Props) {
+const DEFAULT_MODE: BranchView = 'matrix';
+
+export default function TreePager({ pieces, list, palette, around: defaultAround, start, startMode, onIndex, onPull, onOpen, embedded }: Props) {
   /** The one tree drawn the other way, by its id: rotating belongs to that tree, not to the page. */
   const [rotatedId, setRotatedId] = useState<string | null>(null);
-  /** What each card switched for itself, by its id; a card it does not name opens on the settings' defaults. */
-  const [own, setOwn] = useState<Record<string, { mode?: BranchView; around?: boolean }>>({});
+  /** What each card switched for itself, by its id; a card it does not name opens as its matrix with the settings' surrounding. */
+  const [own, setOwn] = useState<Record<string, { mode?: BranchView; around?: boolean }>>(() => {
+    const opened = start === undefined ? undefined : pieces[start];
+    return opened && startMode ? { [opened.id]: { mode: startMode } } : {};
+  });
   // A card the owner keeps as its matrix only has no tree to switch to.
-  const modeOf = (at: BranchPiece): BranchView => matrixOnly(at) ? 'matrix' : own[at.id]?.mode ?? defaultMode;
+  const modeOf = (at: BranchPiece): BranchView => matrixOnly(at) ? 'matrix' : own[at.id]?.mode ?? DEFAULT_MODE;
   const surroundOf = (at: BranchPiece) => own[at.id]?.around ?? defaultAround;
   const switchCard = (at: BranchPiece, change: { mode?: BranchView; around?: boolean }) => {
     if (!embedded) closeStudio();
@@ -199,7 +206,7 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
   const first = start ?? Math.max(0, pieces.findIndex(piece => piece.id === place?.id));
   const [index, setIndex] = useState(first);
   // A feed card that follows the matrix's rows goes back to its own height when the tree is shown.
-  const currentMode = pieces[index] ? modeOf(pieces[index]) : defaultMode;
+  const currentMode = pieces[index] ? modeOf(pieces[index]) : DEFAULT_MODE;
   useEffect(() => { if (currentMode === 'tree') embedded?.onFit?.(null); }, [currentMode]); // eslint-disable-line react-hooks/exhaustive-deps
   const [view, setView] = useState<Size | null>(null);
   const [pop, setPop] = useState(0);
@@ -249,7 +256,7 @@ export default function TreePager({ pieces, list, palette, mode: defaultMode, ar
 
   // The open tree is the one the studio grows.
   const piece = pieces[Math.min(index, pieces.length - 1)];
-  const mode = piece ? modeOf(piece) : defaultMode;
+  const mode = piece ? modeOf(piece) : DEFAULT_MODE;
   // A matrix's rows scroll, and the top bar slides away while they scroll down (owner, 2026-11-15). A tree sits in a fixed
   // frame that does not scroll, so another card, or the tree view, brings the bar back.
   const shrink = useShrinkOnScroll();

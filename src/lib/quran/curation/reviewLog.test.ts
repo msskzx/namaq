@@ -23,6 +23,7 @@ beforeEach(() => {
   put(VERDICTS, { pairs: drafted });
   put('src/app/quran/compare/pairs.json', { pairs: [{ a: '2:1', b: '3:1' }, { a: '2:2', b: '3:2' }, { a: '4:1', b: '5:1' }] });
   put('src/app/quran/compare/passagePairs.json', { pairs: [] });
+  put('src/app/quran/compare/withinPairs.json', { pairs: [] });
   put('src/lib/quran/curation/compareLinks.json', { links: [] });
 });
 afterEach(() => {
@@ -110,6 +111,12 @@ describe('the review log', () => {
       press('2/3', 'discuss', ['2:9|3:9']);
       apply();
       expect(onDisk()['2:9|3:9']).toMatchObject({ keep: false, ask: 'owner: discuss' });
+    });
+
+    it('gives no verdict to a pair the compare page does not hold as a card (a story part pressed on its page)', () => {
+      press('2/7', 'keep', ['2:37|7:23']);
+      apply();
+      expect(onDisk()['2:37|7:23']).toBeUndefined();
     });
 
     it('gives a pair with no verdict one, and undo removes it', () => {

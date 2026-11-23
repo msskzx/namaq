@@ -1,5 +1,7 @@
 import type { AdhkarCitation, AdhkarOccasion, Dhikr, DhikrGrade } from './adhkar';
 import { num } from './quran/arabicNumber';
+import { sourceById } from './sources';
+import type { SourceEntry } from './quiz/sources';
 
 /** The adhkar page's tabs, in their order, with their short names (app and website). */
 export const ADHKAR_LABELS: Record<AdhkarOccasion, string> = { morning: 'صباح', evening: 'مساء', waking: 'يقظة', sleep: 'نوم', 'after-prayer': 'صلاة' };
@@ -10,6 +12,9 @@ const BOOK: Record<AdhkarCitation['source'], string> = { 'adhkar-nawawi': 'ال�
 /** «الأذكار ٧٨ ح٢١٣», with the volume before the page when the book has several («نتائج الأفكار ٢/٢٩٧»). */
 export const adhkarCite = (citation: AdhkarCitation) =>
   `${BOOK[citation.source]} ${citation.volume > 1 ? `${num(citation.volume)}/` : ''}${num(citation.page)}${citation.report ? ` ح${num(citation.report)}` : ''}`;
+
+/** The share picture's head: «من أذكار الصباح». */
+export const ADHKAR_TITLES: Record<AdhkarOccasion, string> = { morning: 'الصباح', evening: 'المساء', waking: 'الاستيقاظ', sleep: 'النوم', 'after-prayer': 'ما بعد الصلاة' };
 
 /** A card's reference line: the book and page, and the collections that hold it. */
 export const adhkarTitle = (item: Dhikr) => `${adhkarCite(item.citation)} · ${item.collections.join('، ')}`;
@@ -48,5 +53,19 @@ export function gradeLine(item: Dhikr): { grades: { rank: string; by: string }[]
   return {
     grades: item.grades.map(grade => ({ rank: RANK[grade.rank], by: `${grade.scholar}${grade.reportedBy ? `، نقله ${grade.reportedBy}` : ''}` })),
     recorded: item.collections.join('، '),
+  };
+}
+
+/**
+ * A card's reference whole: its line and quotes, and, for a share picture that cannot be opened, every grade with its
+ * scholar and page written out, and each book's printing (release 1: full references).
+ */
+export function adhkarSource(item: Dhikr): SourceEntry {
+  const books = [...new Set([item.citation.source, ...item.grades.map(grade => grade.citation.source)])];
+  return {
+    line: adhkarTitle(item), quotes: adhkarQuotes(item),
+    // A grade quoted with its «قال الترمذي» already names him.
+    places: item.grades.map(grade => `${grade.quote.startsWith('قال ') ? '' : `${grade.scholar}: `}«${grade.quote}»${grade.reportedBy ? `، نقله ${grade.reportedBy}` : ''}، ${adhkarCite(grade.citation)}`),
+    editions: books.flatMap(book => { const edition = sourceById(book)?.edition; return edition ? [`${BOOK[book]}: ${edition}`] : []; }),
   };
 }
