@@ -92,6 +92,11 @@ export type ChoiceQuestion = {
   terms?: Record<string, string>;
   /** Shown under the choices after answering, such as the line of a poem that states the rule. */
   note?: { label: string; text: string };
+  /**
+   * Asked on the atlas's map («أين كانت؟», shared/quiz/atlas.ts): each choice is a place of the layer, drawn as a pin
+   * with no name until answered, and its value is the place's name.
+   */
+  map?: { layer: 'life' | 'after' };
   /** A compare question (compareQuiz.ts): typed into its blanks, not picked from choices. */
   compare?: CompareAsk;
   /** What «ابحث عن الجواب» opens, and after the answer what shows under it: the feature's own view (QuizLook). */

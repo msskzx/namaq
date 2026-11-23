@@ -21,6 +21,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { CARD, type Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
 import { FEATURE_ICON } from '@/components/featureIcons';
+import AtlasQuizMap from './battles/AtlasQuizMap';
 
 const AYAH_NUMBER = /^[٠-٩]+$/;
 
@@ -141,7 +142,12 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
       {!revealed && !onPage && onReveal && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}><Button variant="primary" Icon={Eye} label="أظهر الآية" onPress={onReveal} /></View>}
       {/* Choices to put in order («رتّب السور»): dragged into place, then checked; a party's moves go as drafts. */}
       {orders(question) && <OrderRows key={question.key} question={question} picked={picked} palette={palette} onPick={answered ? undefined : onPick} onDraft={onTicks} />}
-      {revealed && !write && !orders(question) && (
+      {/* «أين كانت؟»: the choices are the atlas's pins, a tap selects one and «تحقق» checks it as any choice is. */}
+      {question.map && (
+        <AtlasQuizMap layer={question.map.layer} choices={question.choices.map(choice => choice.value)} right={answered ? question.correctAnswer : undefined}
+          picked={answered ? picked : ticked[0]} onPick={answered || !onPick ? undefined : select} palette={palette} />
+      )}
+      {revealed && !write && !orders(question) && !question.map && (
         <View style={{ paddingHorizontal: 16, gap: 10 }}>
           {question.choices.map(choice => {
             const chosen = several ? (answered ? picks : ticked).includes(choice.value) : choice.value === picked;
