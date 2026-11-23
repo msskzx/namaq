@@ -18,6 +18,8 @@ describe('a person\'s looks in the book\'s words', () => {
     // The Prophet ﷺ: «ليس بجعد قطط» says he was neither, so neither is a chip of his.
     const prophet = labels('كان ربعة من القوم، ليس بالطويل البائن، ولا بالقصير، أزهر اللون، ليس بأبيض أمهق، ولا آدم، ليس بجعد قطط، ولا بالسبط');
     expect(prophet).toEqual(['ربعة', 'ليس بالطويل', 'ولا بالقصير', 'أزهر اللون']);
+    // Talhah (Musa ibn Talhah's words): «ولا يغير شعره» is the trait «لا يغير شعره».
+    expect(labels('حسن الوجه، إذا مشى أسرع، ولا يغير شعره')).toEqual(['حسن الوجه', 'لا يغير شعره']);
   });
 
   it('names under a chip only the sayers the book names; an unnamed «وقيل» lights its words but is no second voice', () => {

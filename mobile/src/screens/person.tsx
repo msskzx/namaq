@@ -3,7 +3,7 @@ import { ScrollView, View } from 'react-native';
 import { usePageWidth } from '@/ui/column';
 import { router, useLocalSearchParams } from 'expo-router';
 import { CalendarDays, Link2, MapPin, Network, Waypoints } from 'lucide-react-native';
-import { factSources, kunyaName, namePieces, pageLabel, pageSources, sayer, sayerAt, saidBy, virtueGroups, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
+import { factSources, kunyaName, namePieces, pageLabel, pageSources, sayerAt, saidBy, virtueGroups, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
 import { surahName } from '@shared/quran/surahNames';
 import { counted, num } from '@shared/quran/arabicNumber';
 import { sourceById } from '@shared/sources';
@@ -154,7 +154,8 @@ export function Virtues({ person, palette, marked }: { person: AppPerson; palett
 function Looks({ person, palette }: { person: AppPerson; palette: Palette }) {
   const names = namesOf(person);
   const author = (fact: PersonFact) => pageSources(fact.refs)[0]?.author ?? 'الذهبي';
-  const named = (fact: PersonFact) => (fact.anonymous ? undefined : fact.by.length ? sayer(fact) : author(fact));
+  // The name as the line over his sentence gives it («قال أبو الزناد:» → «أبو الزناد»), and «النبي ﷺ» for the Prophet ﷺ.
+  const named = (fact: PersonFact) => (fact.anonymous ? undefined : fact.by.length ? saidBy(fact)?.replace(/^قالت? /u, '').replace(/:$/u, '') : author(fact));
   const traits = traitChips(person.appearance, named);
   return <>
     {traits.length > 0 && <View style={{ padding: 16 }}><TraitChips traits={traits} palette={palette} /></View>}

@@ -33,7 +33,7 @@ export default function SourceLine({ named, sources, palette, label, small = fal
   return (
     <>
       <Tap onPress={() => setOpen(true)} accessibilityRole="button" accessibilityLabel={`المصدر: ${line}`}
-        style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: small ? 0 : 12, minHeight: 32 }}>
+        style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: small ? 0 : 12, minHeight: small ? 44 : 32 }}>
         <BookMarked size={15} color={palette.muted} />
         <Text numberOfLines={1} style={{ flex: 1, color: palette.muted, fontSize: 13, textAlign: 'right' }}>{line}</Text>
       </Tap>

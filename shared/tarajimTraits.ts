@@ -59,7 +59,8 @@ export function traitSpans(text: string): TraitSpan[] {
   for (let i = 1; i < clause.length; i++) if (clause[i] < 0) clause[i] = clause[i - 1];
   const out: TraitSpan[] = [];
   for (let i = 0; i < words.length;) {
-    const hit = PHRASES.find(phrase => phrase.words.every((w, k) => words[i + k]?.word === w));
+    // A phrase that opens with «لا» also reads after a joined «و» («ولا يغير شعره»).
+    const hit = PHRASES.find(phrase => phrase.words.every((w, k) => words[i + k]?.word === w || (k === 0 && w === 'لا' && words[i]?.word === 'ولا')));
     if (!hit) { i++; continue; }
     // «ولا آدم», «ليس بجعد قطط»: the denial right before it, or before a «ب» word it follows.
     const before = words.slice(clause[i], i).map(w => w.word).reverse();
