@@ -26,7 +26,7 @@ below. Never copy one into a screen.
 | `RowScroll` | A sideways row of chips or cards that starts on the right with its first item, whatever the platform; `gap`, `bleed` (reaches to the screen's edges) | the home interest chips, the books post, any sideways row |
 | `Tap` | The one press: a finger that moved more than 10px (a scroll or swipe) never presses | inside every button piece and tappable card; a screen drawing one counts as a control |
 | `motion` (`useSlideAway`, `useHidden`, `hiddenProps`) | The one hide motion: slide off the edge and fade, hide 200ms ease-in, show 260ms ease-out | every bar that hides or comes back |
-| `GlassBar` | A floating frosted bar of buttons, as tall as one icon button; `small` is a shorter pill sized to small buttons, sharing its row | recite mode's bar (`components/recite/RecitePill`, `small` on the home recall card) |
+| `GlassBar` | A floating frosted bar of buttons, as tall as one icon button; `small` is a shorter pill sized to small buttons, sharing its row | recite mode's bar (`components/recite/RecitePill`; `small` in a quiz row) |
 | `TabBar`, `tabBarSpace` | The floating bottom tab bar and its height | room under content |
 | `column` | The tablet column (680pt), home's two columns lying down, `usePageWidth` for anything sized from the page, `isTablet`/`isWide` | sizing from the window width |
 | `FloatingMenu` (+ `MenuAt`) | A row of ActButtons over what was pressed, wrapping, above or below the finger; `groups` lays them in groups with a thin line between; `bubble` (+ `span`, the button's height) is the round reaction pop-up over one button of an open menu; `overlay` dims behind and closes on a tap outside | the mushaf and book long press, the home cards menu |

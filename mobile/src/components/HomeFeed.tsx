@@ -220,7 +220,7 @@ function Post({ head, open, actions, share, picture, source, bar, palette, whole
    * its whole ayah with one write box.
    */
   whole?: boolean;
-  /** A bar of the feature's own under the card, leading the buttons' row (recite mode's small bar, on the recall card; owner 2026-11-17). */
+  /** A bar of the feature's own under the card, on its own line above the buttons (recite mode's bar, on the recall card; owner 2026-11-23). */
   bar?: React.ReactNode; palette: Palette; children: React.ReactNode }) {
   // The card's save is named on the saved shelf by its head's title and line.
   const named = isValidElement<{ title?: string; sub?: string }>(head) ? [head.props.title, head.props.sub].filter(Boolean).join(' · ') : '';
@@ -435,7 +435,7 @@ function Recall({ ayah, gaps, title, Icon, head, writing, onWriting, open, marks
   const [surah, number] = ayah.split(':').map(Number);
   return (
     <Post palette={palette} head={<PostHead Icon={Icon} title={title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} open={head} palette={palette} />} whole
-      bar={<RecitePill recite={recite} writing={writing} onWriting={onWriting} palette={palette} small />}
+      bar={<RecitePill recite={recite} writing={writing} onWriting={onWriting} palette={palette} />}
       open={open} actions={marks} source={mushafOf(ayah)}
       // Shared, the ayah's lines as the mushaf sets them: never what is hidden, nor whether it was remembered (owner, 2026-11-22).
       picture={{ head: <PostHead Icon={FEATURE_ICON.mushaf} title={shortNames[surah] ?? ''} sub={num(number)} palette={palette} />,
