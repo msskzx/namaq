@@ -22,7 +22,8 @@ import BookRuns from './quran/text/BookRuns';
 import { BOOK_NAMES, Mufradat, gharibSource } from './GharibSheet';
 import Sheet from '@/ui/Sheet';
 import SurahStrip from './SurahStrip';
-import Card, { CardWithRow } from '@/ui/Card';
+import Card from '@/ui/Card';
+import { NoShare, SharedCard, ShareHead } from '@/ui/CardShare';
 import Chip from '@/ui/Chip';
 import Tabs from '@/ui/Tabs';
 import IconButton from '@/ui/IconButton';
@@ -46,7 +47,8 @@ export default function WordSheet({ lemmas, onClose, palette }: { lemmas: number
   if (lemmas?.length && lemmas !== kept.lemmas) setKept({ lemmas, opened: kept.opened + 1 });
   return (
     <Sheet open={!!lemmas?.length} onClose={onClose} palette={palette}>
-      {kept.lemmas?.length ? <SheetWord key={kept.opened} lemmas={kept.lemmas} onOpen={onClose} palette={palette} /> : null}
+      {/* Shared from the word's own page; a sheet's card would open the share sheet over this one. */}
+      <NoShare.Provider value>{kept.lemmas?.length ? <SheetWord key={kept.opened} lemmas={kept.lemmas} onOpen={onClose} palette={palette} /> : null}</NoShare.Provider>
     </Sheet>
   );
 }
@@ -136,6 +138,8 @@ export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bott
     else { pending.current = key; if (first >= shown) setShown(first + PLACES_STEP); }
   };
   const total = showing === 'gharib' ? entries.length : places.length;
+  // Each book's card shares as a picture under the word (release 1: every page shares).
+  const head = <ShareHead title={`«${name}»`} sub={root ? `جذرها «${root}»` : undefined} palette={palette} />;
   return (
     <View style={{ flexShrink: 1, flexGrow: 1 }}>
       {/* The top's frame gives its room back as it slides away; the top itself is laid out at full height to be measured. */}
@@ -182,10 +186,10 @@ export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bott
         {showing === 'gharib' && entries.slice(0, shown).map((entry, i) => (
           <Fragment key={entry.at}>
             {entry.phrase && !entries[i - 1]?.phrase && <Text style={{ color: palette.muted, fontSize: 16, textAlign: 'right', marginTop: 8 }}>في عبارة</Text>}
-            <GharibCard entry={entry} onOpen={open} palette={palette} />
+            <GharibCard entry={entry} onOpen={open} head={head} palette={palette} />
           </Fragment>
         ))}
-        {showing === 'mufradat' && articles.map(article => <Mufradat key={article.at} article={article} palette={palette} />)}
+        {showing === 'mufradat' && articles.map(article => <Mufradat key={article.at} article={article} head={head} palette={palette} />)}
         {showing !== 'mufradat' && shown < total && (
           <Pressable onPress={() => setShown(shown + PLACES_STEP)} accessibilityRole="button"
             style={{ alignSelf: 'center', minHeight: 44, paddingHorizontal: 20, borderRadius: 10, borderWidth: 1, borderColor: palette.rule, justifyContent: 'center' }}>
@@ -198,17 +202,17 @@ export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bott
 }
 
 /** One of Ibn Qutaybah's entries on the word: its ayah with the words he quotes on the band, his entry whole, then the mushaf button and his page. */
-function GharibCard({ entry, onOpen, palette }: { entry: GharibPlaced; onOpen: (key: string) => void; palette: Palette }) {
+function GharibCard({ entry, onOpen, head, palette }: { entry: GharibPlaced; onOpen: (key: string) => void; head: React.ReactNode; palette: Palette }) {
   const [surah, number] = entry.key.split(':').map(Number);
   const place = `${surahNames[surah] ?? num(surah)} ${num(number)}`;
   const ayah = useMemo(() => ayahMushafWords(entry.key), [entry.key]);
   return (
-    <CardWithRow palette={palette} pad={[10, 14]} source={gharibSource(entry)}
+    <SharedCard palette={palette} pad={[10, 14]} source={gharibSource(entry)} shareHead={head} shareLabel={`شارك كلام ابن قتيبة في ${place}`}
       lead={<IconButton Icon={FEATURE_ICON.mushaf} label={`افتح ${place} في المصحف`} onPress={() => onOpen(entry.key)} />}
       row={<Text style={{ color: palette.muted, fontSize: 14 }}>{place}</Text>}>
       <LitAyat ayat={[{ words: ayah, lit: entry.words }]} menu={false} palette={palette} />
       <View style={{ height: 1, backgroundColor: `${palette.rule}60`, marginVertical: 6 }} />
       <BookRuns text={entry.text} quran={palette.accent} style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' }} />
-    </CardWithRow>
+    </SharedCard>
   );
 }

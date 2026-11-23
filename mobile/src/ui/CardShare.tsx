@@ -59,6 +59,8 @@ export function PictureRefs({ sources, palette }: { sources: Source[]; palette: 
     : /^ [٠-٩]/.test(place.slice(book.length)) && place.startsWith(book) ? `رقم${place.slice(book.length)}`
     // and a bare page («٧») as a page.
     : /^[٠-٩، ]+$/.test(place) ? `ص ${place}` : place);
+  // A printing written as a source sheet has it («الإتقان، … ١٩٧٤م. النص من نسخة الشاملة…») is the printing alone.
+  const printing = (edition: string, book: string) => unnamed(edition, book).split(/\. (?=النص|الفقرة|المادة)/)[0];
   const placed = new Set(merged.filter(book => book.places?.length).map(book => bookOf(book.line)));
   const dropped = merged.filter(book => !book.places?.length && placed.has(bookOf(book.line)));
   // Its printing still goes under the same book where the card says where in it.
@@ -76,7 +78,7 @@ export function PictureRefs({ sources, palette }: { sources: Source[]; palette: 
             <Text style={{ color: palette.muted, fontSize: 13, lineHeight: 21, textAlign: 'right' }}>
               {[book.line, ...(book.places ?? []).map(place => unnamed(place, bookOf(book.line)))].join('، ')}
             </Text>
-            {(book.editions ?? []).map(edition => (
+            {[...new Set((book.editions ?? []).map(edition => printing(edition, bookOf(book.line))))].map(edition => (
               <Text key={edition} style={{ color: palette.muted, fontSize: 11, lineHeight: 18, textAlign: 'right' }}>{edition}</Text>
             ))}
           </View>

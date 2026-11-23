@@ -13,6 +13,7 @@ import type { Palette } from '@/lib/theme';
 import { BookList } from './Books';
 import Sheet from '@/ui/Sheet';
 import Card, { CardWithRow } from '@/ui/Card';
+import { NoShare, SharedCard } from '@/ui/CardShare';
 import Tabs from '@/ui/Tabs';
 import Pickable from '@/ui/Pickable';
 import LitAyat from './quran/text/LitAyat';
@@ -33,7 +34,9 @@ export default function GharibSheet({ target, onClose, palette }: { target: Ghar
   if (target && target !== kept) setKept(target);
   return (
     <Sheet open={!!target} onClose={onClose} palette={palette}>
+      <NoShare.Provider value>
       {kept && <GharibBody key={`${kept.key}/${kept.word}`} target={kept} palette={palette} />}
+      </NoShare.Provider>
     </Sheet>
   );
 }
@@ -84,7 +87,8 @@ export function GharibBody({ target, palette }: { target: GharibTarget; palette:
 
 /** An Ibn Qutaybah card's book line: his page, then the edition and where our text comes from. */
 export const gharibSource = (entry: { page: number; id: number }) => [{ line: GHARIB_BOOK, quotes: [{ text: '', cite: gharibCredit(entry), url: gharibPage(entry) },
-  { text: `${GHARIB_BOOK}، ${GHARIB_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث، كلام ابن قتيبة وحده بلا حواشي المحقق.` }] }];
+  { text: `${GHARIB_BOOK}، ${GHARIB_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث، كلام ابن قتيبة وحده بلا حواشي المحقق.` }],
+  places: [`ص ${num(entry.page)}`], editions: [GHARIB_EDITION] }];
 
 function Gharib({ entries, picked, onPick, palette }: { entries: GharibAt[]; picked: number | null; onPick: (at: number) => void; palette: Palette }) {
   return entries.map((entry, i) => (
@@ -98,12 +102,15 @@ function Gharib({ entries, picked, onPick, palette }: { entries: GharibAt[]; pic
 }
 
 /** Al-Raghib's whole article on a root, with its book line. */
-export function Mufradat({ article, palette }: { article: MufradatEntry; palette: Palette }) {
+export function Mufradat({ article, head, palette }: { article: MufradatEntry;
+  /** The word over its share picture, on the word's page (a sheet shares nothing: ui/CardShare NoShare). */
+  head?: React.ReactNode; palette: Palette }) {
   return (
-    <CardWithRow palette={palette} pad={[10, 14]} source={[{ line: MUFRADAT_BOOK, quotes: [{ text: '', cite: mufradatCredit(article), url: mufradatPage(article) },
-      { text: `${MUFRADAT_BOOK}، ${MUFRADAT_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث، كلام الراغب وحده بلا حواشي المحقق. المادة كاملة تحت عنوانه، ووُصلت بالكلمة من جذرها في المدونة القرآنية.` }] }]}>
+    <SharedCard palette={palette} pad={[10, 14]} shareHead={head} shareLabel="شارك كلام الراغب" source={[{ line: MUFRADAT_BOOK, quotes: [{ text: '', cite: mufradatCredit(article), url: mufradatPage(article) },
+      { text: `${MUFRADAT_BOOK}، ${MUFRADAT_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث، كلام الراغب وحده بلا حواشي المحقق. المادة كاملة تحت عنوانه، ووُصلت بالكلمة من جذرها في المدونة القرآنية.` }],
+      places: [`ص ${num(article[1])}${article[2] !== article[1] ? `–${num(article[2])}` : ''}`], editions: [MUFRADAT_EDITION] }]}>
       <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`[${article[0]}]`}</Text>
       <BookRuns text={article[4]} quran={palette.accent} style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' }} />
-    </CardWithRow>
+    </SharedCard>
   );
 }

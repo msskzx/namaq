@@ -10,6 +10,7 @@ import { plainName, termNamed } from '@shared/quran/balaghaTerms';
 import { isOverTabs, toTab } from '@/lib/ways';
 import type { Palette } from '@/lib/theme';
 import { TermQuotes } from './BalaghaTerm';
+import { NoShare } from '@/ui/CardShare';
 
 /**
  * Once a quiz question on balagha is answered, a chip for each term among its choices; a tap opens the term's definition in
@@ -32,7 +33,7 @@ export default function TermChips({ names, palette }: { names: string[]; palette
         {term && (
           <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 10, paddingBottom: 8 }}>
             <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 24, textAlign: 'right' }}>{plainName(term.name)}</Text>
-            <TermQuotes term={term} palette={palette} />
+            <NoShare.Provider value><TermQuotes term={term} palette={palette} /></NoShare.Provider>
             {!isOverTabs() && (
               <View style={{ alignItems: 'flex-start' }}>
                 <Button Icon={Gem} label="أمثلته في مصطلحات البلاغة" onPress={() => { setOpen(null); toTab({ pathname: '/term', params: { name: term.name } }); }} />

@@ -10,6 +10,8 @@ import Sheet from '@/ui/Sheet';
 import SourceLine from '@/ui/SourceLine';
 import BarPicker from '@/ui/BarPicker';
 import TopBar from '@/ui/TopBar';
+import CardShare, { ShareHead } from '@/ui/CardShare';
+import { ICON_BUTTON } from '@/ui/IconButton';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
@@ -95,7 +97,17 @@ export default function TuhfaScreen() {
         <SourceLine palette={palette} sources={[{ line: poem.title, quotes: [{ text: '', cite: `الضبط: ${poem.edition.name}`, url: poem.edition.url }, { text: '', cite: 'قوبل به كل بيت من نسخة رقمية', url: poem.transcription }] }]} />
         {chapters.map((part, i) => (
           <View key={part.title} onLayout={event => { tops.current[i] = event.nativeEvent.layout.y; toVerse(); }} style={{ marginTop: 18 }}>
-            <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 18, fontWeight: '700', textAlign: 'center', marginBottom: 6 }}>{part.title}</Text>
+            {/* Each chapter shares as one picture, its verses' numbers and the poem's edition written out (release 1: every page shares). */}
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}>
+              <View style={{ width: ICON_BUTTON.bar.box }} />
+              <Text accessibilityRole="header" style={{ flex: 1, color: palette.accent, fontSize: 18, fontWeight: '700', textAlign: 'center' }}>{part.title}</Text>
+              <CardShare label={`شارك ${part.title}`} palette={palette} pad={[8, 14]}
+                head={<ShareHead title={poem.title} sub={part.title} palette={palette} />}
+                sources={[{ line: `${poem.title} · ${poem.author}`, quotes: [],
+                  places: [part.verses.length === 1 ? `البيت ${num(part.verses[0].number)}` : `الأبيات ${num(part.verses[0].number)}–${num(part.verses[part.verses.length - 1].number)}`], editions: [`الضبط: ${poem.edition.name}`] }]}>
+                {part.verses.map(verse => <TuhfaVerse key={verse.number} verse={verse} marked={false} palette={palette} />)}
+              </CardShare>
+            </View>
             {part.verses.map(verse => <TuhfaVerse key={verse.number} verse={verse} marked={marked === verse.number} palette={palette}
               onLayout={event => { verseY.current[verse.number] = event.nativeEvent.layout.y; }} />)}
           </View>
