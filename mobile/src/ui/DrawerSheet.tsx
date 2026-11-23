@@ -9,8 +9,10 @@ import { CARD, type Palette } from '@/lib/theme';
  * its handle, dragged or tapped, brings it up to `high` to read the whole list, and back. Its content scrolls inside it.
  * Unlike ui/Sheet it never closes and nothing behind it dims.
  */
-export default function DrawerSheet({ low, high, bottom = 0, lower = 0, palette, children }: {
+export default function DrawerSheet({ low, high, bottom = 0, lower = 0, raised = false, palette, children }: {
   low: number; high: number;
+  /** While true, the sheet stays up (search results, read over the keyboard); back to rest when it turns false. */
+  raised?: boolean;
   /** Changed (a count), it brings the sheet down to rest: a second tap on the page's tab. */
   lower?: number;
   /** Room under the content for what floats over the page's foot (the tab bar). */
@@ -27,6 +29,7 @@ export default function DrawerSheet({ low, high, bottom = 0, lower = 0, palette,
     Animated.timing(y, { toValue: at.current, duration: 260, useNativeDriver: false }).start();
   };
   useEffect(() => { if (lower) settle(false); }, [lower]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (raised) settle(true); else if (up) settle(false); }, [raised]); // eslint-disable-line react-hooks/exhaustive-deps
   const pan = useMemo(() => PanResponder.create({
     onMoveShouldSetPanResponder: (_, move) => Math.abs(move.dy) > 6,
     onPanResponderMove: (_, move) => y.setValue(Math.min(travel, Math.max(0, at.current + move.dy))),

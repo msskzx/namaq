@@ -16,6 +16,9 @@ test('the tarajim tab lists the battles, and Badr opens with its map, numbers, m
   await expect(page.getByRole('heading', { name: 'مجرى الغزوة' })).toBeVisible();
   await expect(page.getByText('هذا جبريل آخذ برأس فرسه، عليه أداة الحرب', { exact: false })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'من استشهد يومئذ' })).toBeVisible();
+  // Every page shares (release 1): the head as one picture, and each scene of the course.
+  await expect(page.getByRole('button', { name: 'شارك غزوة بدر' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'شارك عدة أهل بدر' })).toBeVisible();
   // A section's reference opens to the quote it stands on.
   await page.getByRole('button', { name: 'سير أعلام النبلاء، السيرة ١، ص ٣٢٥' }).click();
   await expect(page.getByText(/ثلاثمائة وثلاثة عشر رجلا/)).toBeVisible();
@@ -30,4 +33,11 @@ test('the battles search keeps the matching battles', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'غزوة بدر', exact: true })).toHaveCount(0);
   await search.fill('لا شيء بهذا الاسم');
   await expect(page.getByText('لا غزوة ولا معركة بهذا الاسم')).toBeVisible();
+});
+
+// The feed's year card opens the line at its year (owner, 2026-11-23): the year's label comes into view.
+test('the battles line opened at a year scrolls to it', async ({ page }) => {
+  await open(page, '/battles?year=5');
+  await expect(page.getByText(/^السنة ٥/).first()).toBeInViewport();
+  await expect(page.getByRole('link', { name: 'غزوة الخندق', exact: true })).toBeInViewport();
 });

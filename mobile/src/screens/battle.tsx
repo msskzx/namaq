@@ -9,7 +9,9 @@ import StripTabs from '@/ui/StripTabs';
 import QuoteBar from '@/ui/QuoteBar';
 import PullQuote from '@/ui/PullQuote';
 import Step from '@/ui/Step';
-import { SharedCard, ShareHead } from '@/ui/CardShare';
+import { PassageShare, ShareHead } from '@/ui/CardShare';
+import { sourcesOf } from '@/ui/SourceLine';
+import { citeSource, uniqueSources } from '@shared/quiz/sources';
 import { LeadLink } from '@/ui/ExternalLink';
 import { Section } from '@/components/QuizForm';
 import { usePalette, type Palette } from '@/lib/theme';
@@ -25,10 +27,14 @@ import BattleMap, { MAP_ASPECT } from '@/components/battles/BattleMap';
 import { Counts, People, Readings, Refs } from '@/components/battles/BattleParts';
 
 /** Where the reader is in a battle's course, and the ways to move through it (the battle screen only). */
-type CourseNav = { current: number; past: boolean; go: (i: number) => void; laidOut: (i: number, y: number, height: number) => void };
+type CourseNav = { current: number; past: boolean; go: (i: number) => void;
+  /** Each scene's view, measured against the page when the reader moves (on the web a scene keeps its first place otherwise). */
+  held: (i: number, view: ComponentRef<typeof View> | null) => void; laidOut: () => void;
+  /** The contents' own height, so a scene brought up clears them. */
+  sized: (height: number) => void };
 
 /** The battle's head as an article opens: its kind and year, its name large, and its place in its book's words. */
-function Head({ battle, palette }: { battle: AppBattle; palette: Palette }) {
+function HeadBody({ battle, palette }: { battle: AppBattle; palette: Palette }) {
   const said = battle.place?.refs.find(ref => ref.text && placeSayer(ref.cite));
   return (
     <View style={{ gap: 8 }}>
@@ -44,15 +50,29 @@ function Head({ battle, palette }: { battle: AppBattle; palette: Palette }) {
   );
 }
 
+/** The head with its share (release 1: every page shares): the map, when it has one, and the head as one picture. */
+function Head({ battle, palette }: { battle: AppBattle; palette: Palette }) {
+  return (
+    <View style={{ gap: 4 }}>
+      <HeadBody battle={battle} palette={palette} />
+      <View style={{ alignItems: 'flex-start' }}>
+        <PassageShare label={`شارك ${battle.name}`} palette={palette} gap={10} sources={sourcesOf(uniqueSources([battle.kind, battle.year, battle.location, battle.place]
+          .flatMap(value => value?.refs ?? []).map(citeSource)))}>
+          {battle.place ? <View style={{ aspectRatio: 1 / MAP_ASPECT }}><BattleMap places={[battle.place]} palette={palette} /></View> : null}
+          <HeadBody battle={battle} palette={palette} />
+        </PassageShare>
+      </View>
+    </View>
+  );
+}
+
 /** The course's contents: one tab a scene, the one being read underlined and kept in view, and a bar of how far through them the reader is. */
 function Contents({ moments, nav, palette }: { moments: AppMoment[]; nav: CourseNav; palette: Palette }) {
   return (
     // Past the course the contents step aside (they stay in the page's flow, so nothing under them moves).
-    <View style={{ backgroundColor: palette.paper, paddingVertical: 8, gap: 8, opacity: nav.past ? 0 : 1 }} pointerEvents={nav.past ? 'none' : 'auto'}>
-      <StripTabs labels={moments.map((moment, i) => `${num(i + 1)} ${moment.title}`)} at={nav.current} onPick={nav.go} palette={palette} />
-      <View style={{ height: 3, backgroundColor: palette.rule, opacity: 0.5 }}>
-        <View style={{ height: 3, width: `${((nav.current + 1) / moments.length) * 100}%`, backgroundColor: palette.accent, alignSelf: 'flex-start' }} />
-      </View>
+    <View style={{ backgroundColor: palette.paper, paddingVertical: 8, opacity: nav.past ? 0 : 1 }} pointerEvents={nav.past ? 'none' : 'auto'}
+      onLayout={event => nav.sized(event.nativeEvent.layout.height)}>
+      <StripTabs labels={moments.map((moment, i) => `${num(i + 1)} ${moment.title}`)} at={nav.current} onPick={nav.go} progress palette={palette} />
     </View>
   );
 }
@@ -62,11 +82,28 @@ function Contents({ moments, nav, palette }: { moments: AppMoment[]; nav: Course
  * the report itself with the Prophet's ﷺ words set apart large in amber where the report gives him as their speaker, its
  * grading and page, the people in it, and the way on to the next scene.
  */
-function Scene({ moment, n, palette, next }: { moment: AppMoment; n: number; palette: Palette; next?: () => void }) {
+function Scene({ moment, n, palette, next, head }: { moment: AppMoment; n: number; palette: Palette; next?: () => void; head: React.ReactNode }) {
+  const share = <PassageShare label={`شارك ${moment.title}`} head={head} palette={palette} gap={8}
+    sources={sourcesOf(uniqueSources([citeSource({ text: '', cite: moment.cite, url: moment.url })]))}>
+    <SceneBody moment={moment} n={n} palette={palette} />
+  </PassageShare>;
+  return (
+    <View style={{ gap: 8, paddingTop: 10 }}>
+      <SceneBody moment={moment} n={n} palette={palette} />
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        {next ? <Button label="المشهد التالي" Icon={ArrowLeft} variant="plain" onPress={next} /> : <View />}
+        {share}
+      </View>
+    </View>
+  );
+}
+
+/** A scene's words, drawn on the page and in its share picture. */
+function SceneBody({ moment, n, palette }: { moment: AppMoment; n: number; palette: Palette }) {
   const split = prophetSaying(moment.quote);
   const body = { color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right' as const };
   return (
-    <View style={{ gap: 8, paddingTop: 10 }}>
+    <View style={{ gap: 8 }}>
       <Step n={n} palette={palette}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 22, textAlign: 'right' }}>{moment.title}</Text>
       </Step>
@@ -78,7 +115,6 @@ function Scene({ moment, n, palette, next }: { moment: AppMoment; n: number; pal
       </> : <Text style={body}>{moment.quote}</Text>}
       <LeadLink lead={`${moment.grading} ·`} url={moment.url} color={palette.muted}>{moment.cite}</LeadLink>
       {moment.people.length ? <People people={moment.people} palette={palette} /> : null}
-      {next ? <View style={{ alignItems: 'flex-start' }}><Button label="المشهد التالي" Icon={ArrowLeft} variant="plain" onPress={next} /></View> : null}
     </View>
   );
 }
@@ -101,8 +137,8 @@ export function battleParts(battle: AppBattle, palette: Palette, nav?: CourseNav
     parts.push(<Text key="course" accessibilityRole="header" style={{ color: palette.accent, fontSize: 18, textAlign: 'right', marginTop: 10 }}>{course}</Text>);
     if (nav) { stuck = parts.length; parts.push(<Contents key="contents" moments={battle.moments} nav={nav} palette={palette} />); }
     battle.moments.forEach((moment, i) => parts.push(
-      <View key={`scene-${moment.title}`} onLayout={nav ? event => nav.laidOut(i, event.nativeEvent.layout.y, event.nativeEvent.layout.height) : undefined}>
-        <Scene moment={moment} n={i + 1} palette={palette} next={nav && i < battle.moments.length - 1 ? () => nav.go(i + 1) : undefined} />
+      <View key={`scene-${moment.title}`} ref={nav ? view => nav.held(i, view) : undefined} onLayout={nav?.laidOut}>
+        <Scene moment={moment} n={i + 1} palette={palette} head={head} next={nav && i < battle.moments.length - 1 ? () => nav.go(i + 1) : undefined} />
       </View>,
     ));
   }
@@ -117,8 +153,8 @@ export function BattleView({ battle, palette }: { battle: AppBattle; palette: Pa
   return <>{battleParts(battle, palette).parts}</>;
 }
 
-/** Room above a scene when the contents bring it up, so its head clears the contents stuck at the top. */
-const UNDER_CONTENTS = 110;
+/** Room between the contents stuck at the top and the head of the scene they bring up. */
+const UNDER_GAP = 14;
 
 /** A battle (owner, 2026-11-18; as an article 2026-11-23): its course's contents stay at the top once reached and follow the reading. */
 export default function BattleScreen() {
@@ -126,25 +162,43 @@ export default function BattleScreen() {
   const shrink = useShrinkOnScroll();
   const bottom = useTabBarSpace();
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
+  const scenes = useRef(new Map<number, ComponentRef<typeof View>>());
   const sceneAt = useRef(new Map<number, number>());
   const courseEnd = useRef(Infinity);
+  const contentsHeight = useRef(0);
   const [current, setCurrent] = useState(0);
   const [past, setPast] = useState(false);
   useTabRetap('battle', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   const { slug = '' } = useLocalSearchParams<{ slug?: string }>();
   const battle = battleOf(slug);
   if (!battle) return <View style={{ flex: 1, backgroundColor: palette.paper }}><TopBar back={back} /></View>;
+  // Where each scene is on the page now: what is above it (the head's fonts, a reference opened) may have moved it.
+  const measure = (then?: () => void) => {
+    const page = scroll.current?.getInnerViewRef();
+    let left = scenes.current.size;
+    if (!page || !left) return;
+    const done = () => { left -= 1; if (!left) then?.(); };
+    for (const [i, view] of scenes.current) {
+      view.measureLayout(page, (_x, y, _width, height) => {
+        sceneAt.current.set(i, y);
+        if (i === battle.moments.length - 1) courseEnd.current = y + height;
+        done();
+      }, done);
+    }
+  };
   const nav: CourseNav = {
     current, past,
-    go: i => { const y = sceneAt.current.get(i); if (y !== undefined) scroll.current?.scrollTo({ y: Math.max(0, y - UNDER_CONTENTS), animated: true }); },
-    laidOut: (i, y, height) => {
-      sceneAt.current.set(i, y);
-      if (i === battle.moments.length - 1) courseEnd.current = y + height;
-    },
+    go: i => measure(() => {
+      const y = sceneAt.current.get(i);
+      if (y !== undefined) scroll.current?.scrollTo({ y: Math.max(0, y - contentsHeight.current - UNDER_GAP), animated: true });
+    }),
+    sized: height => { contentsHeight.current = height; },
+    held: (i, view) => { if (view) scenes.current.set(i, view); else scenes.current.delete(i); },
+    laidOut: () => measure(),
   };
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     shrink(event);
-    const y = event.nativeEvent.contentOffset.y + UNDER_CONTENTS + 1;
+    const y = event.nativeEvent.contentOffset.y + contentsHeight.current + UNDER_GAP + 1;
     let reading = 0;
     for (const [i, top] of sceneAt.current) if (top <= y && i > reading) reading = i;
     if (reading !== current) setCurrent(reading);
@@ -155,7 +209,7 @@ export default function BattleScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar back={back} hideOnScroll />
-      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} stickyHeaderIndices={stuck === undefined ? undefined : [stuck]}
+      <ScrollView ref={scroll} onScroll={onScroll} onScrollBeginDrag={() => measure()} onContentSizeChange={() => measure()} scrollEventThrottle={16} stickyHeaderIndices={stuck === undefined ? undefined : [stuck]}
         contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 14 }}>
         {parts}
       </ScrollView>

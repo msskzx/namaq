@@ -8,13 +8,14 @@ import type { Palette } from '@/lib/theme';
 /**
  * A strip of many short tabs over pages swiped sideways (the years of «قصص السيرة», owner 2026-11-23): right to left, the
  * open one underlined in the accent and kept in view; a tap goes to its page. Each is at least MIN_TAP wide, so a long
- * strip scrolls. A few views of one thing are ui/Tabs.
+ * strip scrolls. `progress` draws under it how far through the tabs the open one is (a battle's scenes). A few views of
+ * one thing are ui/Tabs.
  */
-export default function StripTabs({ labels, names, at, onPick, palette }: {
+export default function StripTabs({ labels, names, at, onPick, progress = false, palette }: {
   labels: string[];
   /** Each tab's full name, read out («السنة ٨» for «٨»). */
   names?: string[];
-  at: number; onPick: (index: number) => void; palette: Palette;
+  at: number; onPick: (index: number) => void; progress?: boolean; palette: Palette;
 }) {
   const row = useRef<ComponentRef<typeof ScrollView>>(null);
   const centres = useRef<number[]>([]);
@@ -40,6 +41,9 @@ export default function StripTabs({ labels, names, at, onPick, palette }: {
           </Tap>
         ))}
       </ScrollView>
+      {progress && <View style={{ height: 3, backgroundColor: `${palette.rule}80` }}>
+        <View style={{ height: 3, width: `${((at + 1) / labels.length) * 100}%`, backgroundColor: palette.accent, alignSelf: 'flex-end' }} />
+      </View>}
     </View>
   );
 }

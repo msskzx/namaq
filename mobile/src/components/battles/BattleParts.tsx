@@ -52,7 +52,7 @@ export function SidesHead({ battle, palette }: { battle: Pick<AppBattle, 'kind'>
 export function CountRow({ label, ours, theirs, palette }: { label: string; ours?: number; theirs?: number; palette: Palette }) {
   const side = (value: number | undefined) => <Text numberOfLines={1} style={{ color: palette.ink, fontSize: 18, minWidth: 44, textAlign: 'center' }}>{value === undefined ? '—' : num(value)}</Text>;
   return (
-    <View style={{ gap: 2 }} accessibilityLabel={`${label}: المسلمون ${ours ? num(ours) : 'غير مذكور'}، ${theirs ? num(theirs) : 'غير مذكور'}`}>
+    <View style={{ gap: 2 }} accessibilityLabel={`${label}: المسلمون ${ours !== undefined ? num(ours) : 'غير مذكور'}، ${theirs !== undefined ? num(theirs) : 'غير مذكور'}`}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
         {side(ours)}
         {ours !== undefined && theirs !== undefined ? <SplitBar first={ours} second={theirs} palette={palette} /> : <View style={{ flex: 1 }} />}
@@ -73,7 +73,7 @@ function Side({ name, value, unit, color, palette }: { name: string; value?: num
       </View>
       {value === undefined
         ? <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>لم يذكره المصدر</Text>
-        : <UnitDots count={Math.max(1, Math.round(value / unit))} color={color} />}
+        : value > 0 ? <UnitDots count={Math.max(1, Math.round(value / unit))} color={color} /> : null}
     </View>
   );
 }
@@ -89,14 +89,14 @@ export function Counts({ battle, palette }: { battle: AppBattle; palette: Palett
   const rows = [
     { label: 'في الميدان', ours: muslims?.value, theirs: others?.value, names: ['المسلمون', them] },
     { label: 'القتلى', ours: muslimsKilled?.value, theirs: othersKilled?.value, names: ['استشهد', 'قُتل'] },
-  ].filter(row => row.ours || row.theirs);
+  ].filter(row => row.ours !== undefined || row.theirs !== undefined);
   if (!rows.length) return null;
   return (
     <View style={{ gap: 14 }}>
       {rows.map(({ label, ours, theirs, names }) => {
         const unit = unitFor(Math.max(ours ?? 0, theirs ?? 0));
         return (
-          <View key={label} style={{ gap: 6 }} accessibilityLabel={`${label}: المسلمون ${ours ? num(ours) : 'غير مذكور'}، ${theirs ? num(theirs) : 'غير مذكور'}`}>
+          <View key={label} style={{ gap: 6 }} accessibilityLabel={`${label}: المسلمون ${ours !== undefined ? num(ours) : 'غير مذكور'}، ${theirs !== undefined ? num(theirs) : 'غير مذكور'}`}>
             <View style={{ flexDirection: 'row', gap: 14 }}>
               <Side name={names[0]} value={ours} unit={unit} color={palette.accent} palette={palette} />
               <View style={{ width: 1, backgroundColor: palette.rule, opacity: 0.4 }} />
