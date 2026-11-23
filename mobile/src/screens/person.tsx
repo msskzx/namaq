@@ -116,20 +116,19 @@ export function Virtues({ person, palette, marked }: { person: AppPerson; palett
  */
 export function PersonBrief({ person, palette }: { person: AppPerson; palette: Palette }) {
   const f = person.sex === 'FEMALE';
+  const heading = (text: string) => <Text style={{ color: palette.accent, fontSize: 13, textAlign: 'right' }}>{text}</Text>;
+  // A reading on one line with who gives it after it, small: «سنة ٥٢هـ  عند خليفة بن خياط».
+  const reading = (fact: PersonFact, shown: string, many: boolean) => {
+    const by = sayerOf(fact, many)?.replace(/:$/u, '');
+    return <Text key={fact.id ?? shown} style={body(palette)}>{shown}{by ? <Text style={{ color: palette.muted, fontSize: 13 }}>{`  ${by}`}</Text> : null}</Text>;
+  };
+  const deaths = [...person.died.year.map(fact => reading(fact, yearOf(fact), person.died.year.length > 1)),
+    ...person.died.place.map(fact => reading(fact, unvowelled(fact.text), person.died.place.length > 1))];
   return (
-    <View style={{ gap: 12 }}>
-      {person.fullName && <Line label={f ? 'اسمها' : 'اسمه'} palette={palette}><Quote fact={person.fullName} palette={palette} /></Line>}
-      <VirtueList person={person} palette={palette} />
-      {person.died.year.map((fact, i) => (
-        <Line key={`y${i}`} label={f ? 'وفاتها' : 'وفاته'} palette={palette}>
-          <Quote fact={fact} palette={palette} many={person.died.year.length > 1}><Text style={body(palette)}>{yearOf(fact)}</Text></Quote>
-        </Line>
-      ))}
-      {person.died.place.map((fact, i) => (
-        <Line key={`p${i}`} label={f ? 'ماتت' : 'مات'} palette={palette}>
-          <Quote fact={fact} palette={palette} many={person.died.place.length > 1}><Text style={body(palette)}>{unvowelled(fact.text)}</Text></Quote>
-        </Line>
-      ))}
+    <View style={{ gap: 16 }}>
+      {person.fullName && <Text style={{ ...body(palette), fontSize: 19 }}>{person.fullName.text}</Text>}
+      {person.virtues.length > 0 && <View style={{ gap: 6 }}>{heading(f ? 'من مناقبها' : 'من مناقبه')}<VirtueList person={person} palette={palette} /></View>}
+      {deaths.length > 0 && <View style={{ gap: 2 }}>{heading(f ? 'وفاتها' : 'وفاته')}{deaths}</View>}
     </View>
   );
 }
