@@ -48,6 +48,8 @@ const hasCounts = (battle: AppBattle) => Object.values(battle.counts).some(Boole
 const citedOf = (values: readonly ({ refs: AppCite[] } | undefined)[]) =>
   uniqueSources(values.flatMap(value => value?.refs ?? []).map(citeSource));
 /** The pages of the card's head: the battle's kind, year and place. */
+/** The books that place each battle's pin on the map. */
+export const placeSources = (battles: readonly AppBattle[]) => citedOf(battles.map(battle => battle.place));
 export const battleHeadSources = (battle: AppBattle) => citedOf([battle.kind, battle.year, battle.location]);
 /** The head's pages and the books that put the battle's pin where its map shows it (owner, 2026-11-23). */
 export const battleCardSources = (battle: AppBattle) => uniqueSources([...battleHeadSources(battle), ...citedOf([battle.place])]);
