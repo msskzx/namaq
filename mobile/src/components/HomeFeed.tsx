@@ -371,16 +371,18 @@ const RECALL_WRITE = 'recall-write';
  * tick rests every one of them. The forgotten list draws one of these for each forgotten ayah (owner, 2026-11-23), with
  * its own `head`.
  */
-export function ForgottenPost({ ayah: asked, review, title = 'هل تذكرها؟', Icon = LightbulbOff, head: ownHead, palette }: { ayah: string; review?: () => void; title?: string; Icon?: IconType;
-  head?: { onPress: () => void; label: string }; palette: Palette }) {
+export function ForgottenPost({ ayah: asked, review, due: dueOne, title = 'هل تذكرها؟', Icon = LightbulbOff, head: ownHead, palette }: { ayah: string; review?: () => void;
+  /** A forgotten ayah due for review, with no review button: the forgotten list, whose cards are the review (owner, 2026-11-23). */
+  due?: boolean; title?: string; Icon?: IconType; head?: { onPress: () => void; label: string }; palette: Palette }) {
   const ayah = markAyah(asked);
+  const forgotten = dueOne ?? !!review;
   // Fixed when the card is drawn, so a tick taken back puts back the same marks it rested.
   const [keys, gaps] = useMemo(() => {
-    if (!review) return [[asked], markWord(asked) === undefined ? undefined : [markWord(asked)!]] as const;
+    if (!forgotten) return [[asked], markWord(asked) === undefined ? undefined : [markWord(asked)!]] as const;
     const due = readDueMarks();
     const own = Object.keys(due).filter(key => markAyah(key) === ayah);
     return [own.length ? own : [asked], reviewPosition(asked, due).gaps] as const;
-  }, [asked, ayah, review]);
+  }, [asked, ayah, forgotten]);
   const [done, setDone] = useState(() => recalledNow(ayah));
   const [writing, setWriting] = useState(() => readJson(RECALL_WRITE, isBoolean) === true);
   const toggleWriting = () => setWriting(on => { writeJson(RECALL_WRITE, !on); return !on; });
@@ -391,18 +393,18 @@ export function ForgottenPost({ ayah: asked, review, title = 'هل تذكرها�
     const stored = readAyahMarks();
     const now: Recalled = { did, before: Object.fromEntries(keys.map(key => [key, stored[key]])), visit: visitStart() };
     if (did === 'forgot') keys.forEach(key => markForgotten(key));
-    else if (review) keys.forEach(key => rememberAyah(key));
+    else if (forgotten) keys.forEach(key => rememberAyah(key));
     recalled.set(ayah, now);
     setDone(now);
   };
   const marks = <>
     <Action Icon={done?.did === 'remembered' ? CircleCheck : Check} label="تذكّرتها" tone="green" on={done?.did === 'remembered'} palette={palette} onPress={() => mark('remembered')} />
-    {!review && <Action Icon={LightbulbOff} label="نسيتها" on={done?.did === 'forgot'} palette={palette} onPress={() => mark('forgot')} />}
+    {!forgotten && <Action Icon={LightbulbOff} label="نسيتها" on={done?.did === 'forgot'} palette={palette} onPress={() => mark('forgot')} />}
     {review && <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} />}
   </>;
   const open = <OpenButton label="افتح صفحة الآية" onPress={() => openAyahPage(ayah)} palette={palette} />;
   // A due forgotten ayah's head opens the forgotten list; any other recall question's, the quizzes, as every question's does.
-  const head = ownHead ?? (review ? { onPress: () => router.push({ pathname: '/library', params: { tab: 'forgotten' } }), label: 'افتح ما نسيته' } : topic('/quizzes', 'افتح الاختبارات'));
+  const head = ownHead ?? (forgotten ? { onPress: () => router.push({ pathname: '/library', params: { tab: 'forgotten' } }), label: 'افتح ما نسيته' } : topic('/quizzes', 'افتح الاختبارات'));
   return <Recall key={`${ayah}-${writing}`} ayah={ayah} gaps={gaps} title={title} Icon={Icon} head={head} writing={writing} onWriting={toggleWriting} open={open} marks={marks} revealed={!!done} palette={palette} />;
 }
 

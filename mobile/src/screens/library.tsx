@@ -73,8 +73,7 @@ export default function LibraryScreen() {
       </TopBar>
       {tab === 'forgotten'
         ? <FlatList key={tab} data={forgotten} keyExtractor={markAyah} contentContainerStyle={listStyle}
-          renderItem={({ item }) => <ForgottenPost ayah={item} palette={palette}
-            review={() => openIntent({ tab: 'read', at: markAyah(item), recite: true, review: true })}
+          renderItem={({ item }) => <ForgottenPost ayah={item} due palette={palette}
             head={{ onPress: () => openIntent({ tab: 'read', at: markAyah(item) }), label: 'افتح الآية في المصحف' }} />}
           ListEmptyComponent={<Empty palette={palette} text="لا آيات منسية." />} />
         : <FlatList key={tab} data={shown} keyExtractor={card => card.id} contentContainerStyle={listStyle}
