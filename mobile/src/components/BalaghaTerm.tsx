@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import { Text } from '@/ui/Text';
-import { CardWithRow } from '@/ui/Card';
+import { SharedCard } from '@/ui/CardShare';
 import { sourcesOf } from '@/ui/SourceLine';
 import Chip from '@/ui/Chip';
 import itqan from '@shared/data/quran/itqanBalagha';
@@ -33,10 +33,12 @@ const BY: Record<TermQuote['book'], string> = { itqan: 'قال السيوطي ف
 export const quotesTitle = (term: Pick<BalaghaTerm, 'defines'>) => (term.defines ? 'تعريفه' : 'من كلام السيوطي عليه');
 
 /** A term's quotes in one card, each whole, their books on the line under it (owner 2026-11-20). */
-export function TermQuotes({ term, palette }: { term: BalaghaTerm; palette: Palette }) {
+export function TermQuotes({ term, head, palette }: { term: BalaghaTerm;
+  /** The term's name over the card's share picture, on its page (ui/CardShare SharedCard). */
+  head?: React.ReactNode; palette: Palette }) {
   const mixed = new Set(term.quotes.map(quote => quote.book)).size > 1;
   return (
-    <CardWithRow palette={palette} pad={[10, 14]} gap={4} source={sourcesOf(term.quotes.map(termSource))}>
+    <SharedCard palette={palette} pad={[10, 14]} gap={4} source={sourcesOf(term.quotes.map(termSource))} shareHead={head} shareLabel={`شارك ${quotesTitle(term)}`}>
       <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{quotesTitle(term)}</Text>
       {term.quotes.map((quote, i) => (
         <View key={`${quote.book}${quote.id}/${i}`}>
@@ -45,7 +47,7 @@ export function TermQuotes({ term, palette }: { term: BalaghaTerm; palette: Pale
           <BookWords text={quote.text} palette={palette} />
         </View>
       ))}
-    </CardWithRow>
+    </SharedCard>
   );
 }
 
@@ -61,9 +63,9 @@ export function ExampleAyat({ example, palette }: { example: Pick<TermExample, '
  * One example: the ayat with his quoted words lit and his paragraph whole (unless the definition above already quotes it);
  * under the card each ayah as a chip to the mushaf, then his book on the line (owner 2026-11-20).
  */
-export function TermExampleCard({ example, palette }: { example: TermExample & { inDefinition?: boolean }; palette: Palette }) {
+export function TermExampleCard({ example, head, palette }: { example: TermExample & { inDefinition?: boolean }; head?: React.ReactNode; palette: Palette }) {
   return (
-    <CardWithRow palette={palette} pad={[10, 14]} gap={6} source={sourcesOf([exampleSource(example)])} row={
+    <SharedCard palette={palette} pad={[10, 14]} gap={6} source={sourcesOf([exampleSource(example)])} shareHead={head} shareLabel={`شارك المثال ${ayatName(example.ayat)}`} row={
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, paddingHorizontal: 4 }}>
         {example.ayat.map(key => {
           const [surah, number] = key.split(':').map(Number);
@@ -76,6 +78,6 @@ export function TermExampleCard({ example, palette }: { example: TermExample & {
       {example.inDefinition
         ? <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>ذكرها في كلامه المنقول في التعريف أعلاه.</Text>
         : <BookWords text={example.text} palette={palette} />}
-    </CardWithRow>
+    </SharedCard>
   );
 }

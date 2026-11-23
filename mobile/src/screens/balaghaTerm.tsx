@@ -9,6 +9,7 @@ import { useShrinkOnScroll } from '@/lib/chrome';
 import { usePalette } from '@/lib/theme';
 import { back } from '@/lib/ways';
 import { TermExampleCard, TermQuotes } from '@/components/BalaghaTerm';
+import { ShareHead } from '@/ui/CardShare';
 import terms from '@shared/data/quran/balaghaTerms';
 import itqan from '@shared/data/quran/itqanBalagha';
 import { num } from '@shared/quran/arabicNumber';
@@ -28,6 +29,7 @@ export default function BalaghaTermScreen() {
   const term = termNamed(terms, name);
   const examples = useMemo(() => (term ? examplesOf(itqan, term) : []), [term]);
   if (!term) return <View style={{ flex: 1, backgroundColor: palette.paper }}><TopBar back={back} /></View>;
+  const head = <ShareHead title={plainName(term.name)} sub={`${chapterTitle(itqan, term.kind)} · الإتقان للسيوطي`} palette={palette} />;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar back={back} hideOnScroll />
@@ -36,9 +38,9 @@ export default function BalaghaTermScreen() {
           <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>{plainName(term.name)}</Text>
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`${chapterTitle(itqan, term.kind)} · الإتقان للسيوطي`}</Text>
         </View>
-        <TermQuotes term={term} palette={palette} />
+        <TermQuotes term={term} head={head} palette={palette} />
         <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 15, textAlign: 'right', marginTop: 4 }}>{`أمثلته في الإتقان (${num(examples.length)})`}</Text>
-        {examples.map(example => <TermExampleCard key={example.entry} example={example} palette={palette} />)}
+        {examples.map(example => <TermExampleCard key={example.entry} example={example} head={head} palette={palette} />)}
       </ScrollView>
     </View>
   );
