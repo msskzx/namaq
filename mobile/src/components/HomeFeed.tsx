@@ -8,7 +8,7 @@ import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, toggleForgotten, mostForgotten, readAyahMarks, readDueMarks, rememberAyah, restoreMark, subscribeDueMarks, type AyahMark } from '@shared/ayahMarks';
 import { toggleBookmark } from '@shared/bookmarks';
 import { readGestures, type GestureAction } from '@shared/readerGestures';
-import { isMemorized, type Memorized, memorizedPrefer, memorizedQuestions, readMemorized, recallOfDay, subscribeMemorized, touchesMemorized, withMemorizedScope } from '@shared/memorized';
+import { isMemorized, type Memorized, memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized, withMemorizedScope } from '@shared/memorized';
 import { FEED_QUIZ_KINDS, FEED_QUIZ_NAMES, feedQuizSeed, OPENINGS, openingSurah, seededRandom, type FeedKind, type FeedQuizKind } from '@shared/quiz/feedQuiz';
 import { answeredQuestion, dueSeeds, readMissed } from '@shared/quiz/missedQuestions';
 import { activeInterests, INTERESTS, interestById, interestOf, pickedInterests, restoredInterest, surpriseMe, toggledInterest, type FeedCardKind } from '@shared/interests';
@@ -23,6 +23,7 @@ import { briefFacts, PersonBrief } from '@/screens/person';
 import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import Saying from '@/ui/Saying';
 import { findPerson, GRAPH, PEOPLE, personName, tiePairs, unvowelled } from '@/lib/tarajim';
+import { useSettledMemorized } from './Memorized';
 import { kunyaFacts, laqabFacts, type NameFact } from '@shared/tarajimNames';
 import { chainSentence, groupWord } from '@shared/tarajimGraph';
 import TiesChain from './TiesChain';
@@ -532,10 +533,21 @@ function feedRun(kind: QuizTopic, seed: number, memorized: Memorized | null): So
  * or a tree's QuizInputs and QuizFeedback), one kind a card in turn, the same question all day (`seed`). With «الأسئلة مما أحفظ
  * فقط» on, it asks from what is memorized, as the solo quiz does.
  */
+/**
+ * What is memorized, as a feed's cards read it: the feed's own (Feed below), which waits for the picker to close and, in a feed
+ * kept hidden behind another chip, for the feed to be shown. Outside a feed, the settled pick.
+ */
+const FeedMemorized = createContext<Memorized | null | undefined>(undefined);
+function useFeedMemorized() {
+  const fromFeed = useContext(FeedMemorized);
+  const settled = useSettledMemorized();
+  return fromFeed === undefined ? settled : fromFeed;
+}
+
 const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTopic; seed: number; palette: Palette }) {
   // A tree or compare question's room follows what it holds, up to most of the screen (owner, 2026-11-18).
   const [roomHeight, onFit] = useFitHeight(QUIZ_TREE_HEIGHT);
-  const memorized = useSyncExternalStore(subscribeMemorized, readMemorized);
+  const memorized = useFeedMemorized();
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
   // The question is drawn as the card mounts, from the one worked out before (feedRun), so a chip shows its cards at once.
   const asked = feedRun(kind, seed, memorized && questions ? memorized : null);
@@ -587,7 +599,7 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
 
 /** The surah openings quiz as a post: a surah's first ayah to write under its name, as the openings quiz asks it in the mushaf. */
 function OpeningPost({ seed, palette }: { seed: number; palette: Palette }) {
-  const memorized = useSyncExternalStore(subscribeMemorized, readMemorized);
+  const memorized = useFeedMemorized();
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
   const surah = useMemo(() => openingSurah(seed, memorized && questions && !('all' in memorized)
     ? Array.from({ length: 114 }, (_, i) => i + 1).filter(n => isMemorized(`${n}:1`, memorized)) : undefined), [seed, memorized, questions]);
@@ -1885,8 +1897,12 @@ export const Feed = memo(function Feed({ palette, nearEnd, screenBottom, only = 
   const savedCards = useMemo(() => shownBookmarks(bookmarks).filter(item => isCardBookmark(item.id)), [visit]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const forgotten = mostForgotten(due)[0];
-  // The settings under «ما أحفظه»: questions come from the memorized range, pondering puts it first.
-  const memorized = useSyncExternalStore(subscribeMemorized, readMemorized);
+  // The settings under «ما أحفظه»: questions come from the memorized range, pondering puts it first. A feed kept hidden takes
+  // a new pick when it is shown again, so closing the picker draws only the feed on screen.
+  const settledMemorized = useSettledMemorized();
+  const [heldMemorized, setHeldMemorized] = useState(settledMemorized);
+  if (shown && heldMemorized !== settledMemorized) setHeldMemorized(settledMemorized);
+  const memorized = shown ? settledMemorized : heldMemorized;
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
   const prefer = useSyncExternalStore(memorizedPrefer.subscribe, memorizedPrefer.read);
   const recall = useMemo(() => (memorized ? recallOfDay(questions ? memorized : { all: true }, day) : undefined), [memorized, questions, day]);
@@ -2058,6 +2074,7 @@ export const Feed = memo(function Feed({ palette, nearEnd, screenBottom, only = 
     const prayers = new Set(cards.map(card => `pr${card.key}`));
     const sides = keys.map(key => (prayers.has(key) ? Math.max(turn, 0) % 2 : ++turn % 2));
     return (
+      <FeedMemorized.Provider value={memorized}>
       <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: COLUMN_GAP }} onLayout={event => { top.current = event.nativeEvent.layout.y; }}>
         {[0, 1].map(side => (
           <PageWidthProvider key={side} value={column + 32}>
@@ -2068,12 +2085,15 @@ export const Feed = memo(function Feed({ palette, nearEnd, screenBottom, only = 
           </PageWidthProvider>
         ))}
       </View>
+      </FeedMemorized.Provider>
     );
   }
   return (
-    <View style={{ gap: 14 }} onLayout={event => { top.current = event.nativeEvent.layout.y; }}>
-      {lead}
-      {posts.map((_post, i) => placed(i))}
-    </View>
+    <FeedMemorized.Provider value={memorized}>
+      <View style={{ gap: 14 }} onLayout={event => { top.current = event.nativeEvent.layout.y; }}>
+        {lead}
+        {posts.map((_post, i) => placed(i))}
+      </View>
+    </FeedMemorized.Provider>
   );
 });
