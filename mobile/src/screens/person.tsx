@@ -90,8 +90,8 @@ function Quote({ fact, palette, marked = false, many = false, children }: { fact
   );
 }
 
-/** A person's virtues as the entry gives them, with the pages: the person page's «مناقبه» and a quiz's look-up draw it. */
-export function Virtues({ person, palette, marked }: { person: AppPerson; palette: Palette; marked?: number }) {
+/** A person's virtues by who says them, each its own point; `marked` (a quiz's answer, once shown) in green. */
+function VirtueList({ person, palette, marked }: { person: AppPerson; palette: Palette; marked?: number }) {
   return <>
     {virtueGroups(person.virtues).map(group => (
       <Saying key={group.items[0].at} by={group.by} palette={palette}>
@@ -99,9 +99,41 @@ export function Virtues({ person, palette, marked }: { person: AppPerson; palett
           key: at, node: <Text style={at === marked ? { ...body(palette), color: palette.green } : body(palette)}>{fact.text}</Text> }))} />
       </Saying>
     ))}
+  </>;
+}
+
+/** A person's virtues as the entry gives them, with the pages: the person page's «مناقبه» and a quiz's look-up draw it. */
+export function Virtues({ person, palette, marked }: { person: AppPerson; palette: Palette; marked?: number }) {
+  return <>
+    <VirtueList person={person} palette={palette} marked={marked} />
     <Credit facts={person.virtues} palette={palette} />
   </>;
 }
+
+/**
+ * A person in brief, as his page gives it (owner, 2026-11-23: the feed's «من التراجم» held one short line): his name as
+ * the book prints it, his virtues, and when and where he died. The facts it draws, for the card's book line: `briefFacts`.
+ */
+export function PersonBrief({ person, palette }: { person: AppPerson; palette: Palette }) {
+  const f = person.sex === 'FEMALE';
+  return (
+    <View style={{ gap: 12 }}>
+      {person.fullName && <Line label={f ? 'اسمها' : 'اسمه'} palette={palette}><Quote fact={person.fullName} palette={palette} /></Line>}
+      <VirtueList person={person} palette={palette} />
+      {person.died.year.map((fact, i) => (
+        <Line key={`y${i}`} label={f ? 'وفاتها' : 'وفاته'} palette={palette}>
+          <Quote fact={fact} palette={palette} many={person.died.year.length > 1}><Text style={body(palette)}>{yearOf(fact)}</Text></Quote>
+        </Line>
+      ))}
+      {person.died.place.map((fact, i) => (
+        <Line key={`p${i}`} label={f ? 'ماتت' : 'مات'} palette={palette}>
+          <Quote fact={fact} palette={palette} many={person.died.place.length > 1}><Text style={body(palette)}>{unvowelled(fact.text)}</Text></Quote>
+        </Line>
+      ))}
+    </View>
+  );
+}
+export const briefFacts = (person: AppPerson) => [...(person.fullName ? [person.fullName] : []), ...person.virtues, ...person.died.year, ...person.died.place];
 
 /** A labelled line: the label small on the left, the value on the right («أبوه  العوام بن خويلد»). */
 function Line({ label, palette, children }: { label: string; palette: Palette; children: React.ReactNode }) {

@@ -19,6 +19,7 @@ import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
 import { allVirtues, feedBooks, LIST_KINDS, listStart, type ListKind, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, isKahfDay, KAHF_SLOT, prayerSoon, type FeedSlot } from '@shared/homeFeed';
 import { pageSources, saidBy } from '@shared/tarajim';
+import { briefFacts, PersonBrief } from '@/screens/person';
 import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import Saying from '@/ui/Saying';
 import { findPerson, GRAPH, PEOPLE, personName, tiePairs, unvowelled } from '@/lib/tarajim';
@@ -580,22 +581,20 @@ function OpeningPost({ seed, palette }: { seed: number; palette: Palette }) {
 }
 
 /**
- * «من التراجم» (owner, 2026-11-18; sketch tarajim-app/sketch-dark.png, screen 4): a virtue from a converted entry, in the
- * book's words with who says it and its page; the head opens the person's page.
+ * «من التراجم» (owner, 2026-11-18; sketch tarajim-app/sketch-dark.png, screen 4): a person from a converted entry in brief,
+ * as his page gives it (owner, 2026-11-23: one virtue alone was too small a card), in the book's words with who says
+ * each; the head opens the tarajim, «افتح» his page.
  */
 function TarajimPost({ id, palette }: { id: string; palette: Palette }) {
   const pick = virtueOf(id);
   if (!pick) return null;
-  const virtue = pick.person.virtues[pick.index];
   const open = () => router.push({ pathname: '/person', params: { slug: pick.person.slug } });
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.person} title="من التراجم" sub={personName(pick.person)} open={topic('/tarajim', 'افتح التراجم')} palette={palette} />}
       open={<OpenButton label={`افتح ترجمة ${personName(pick.person)}`} onPress={open} palette={palette} />}
-      source={sourcesOf(pageSources(virtue.refs))}>
-      <View style={{ padding: 14, gap: 6 }}>
-        <Saying by={saidBy(virtue)} palette={palette}>
-          <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{virtue.text}</Text>
-        </Saying>
+      source={sourcesOf(pageSources(briefFacts(pick.person).flatMap(fact => fact.refs)))}>
+      <View style={{ padding: 14 }}>
+        <PersonBrief person={pick.person} palette={palette} />
       </View>
     </Post>
   );
@@ -1666,7 +1665,8 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   prophets: () => STORY_GROUPS.map(group => storyItem(group.slug, group.phase)),
   sira: () => STORIES.filter(story => story.reports[0]).map(story => story.slug),
   moment: () => MOMENTS.map(momentId),
-  tarajim: () => virtueList().map(each => virtueItem(each.person.slug, each.index)),
+  // One card a person, his whole brief (owner, 2026-11-23), not one a virtue; a card saved before still opens.
+  tarajim: () => virtueList().filter(each => each.index === 0).map(each => virtueItem(each.person.slug, each.index)),
   tie: () => tiePairs().map(pair => tieItem(pair.a, pair.b)),
   laqab: () => nameList('laqab').map(nameId),
   kunya: () => nameList('kunya').map(nameId),
