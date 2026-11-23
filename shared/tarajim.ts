@@ -129,6 +129,26 @@ export function saidBy(fact: PersonFact) {
 }
 const PROPHET_NAME = 'محمد ﷺ';
 
+/**
+ * A person's virtues by who says them (owner, 2026-11-23): the book's own words first (they carry no sayer's line), then
+ * the Prophet's ﷺ, then each other sayer in the book's order, so one sayer's line heads all his sayings. One man is one
+ * name: a short name that a longer one of the same list begins with («علي», «علي بن أبي طالب») takes the longer.
+ * `at` is each fact's place in `facts`, for a quiz's marked answer.
+ */
+export function virtueGroups(facts: readonly PersonFact[]) {
+  const names = facts.flatMap(fact => fact.by);
+  const whole = (name: string) => names.filter(other => other.startsWith(`${name} بن `)).sort((a, b) => b.length - a.length)[0] ?? name;
+  const groups: { by?: string; items: { fact: PersonFact; at: number }[] }[] = [];
+  facts.forEach((fact, at) => {
+    const named = { ...fact, by: fact.by.map(whole) };
+    const by = saidBy(named);
+    const group = groups.find(g => g.by === by) ?? groups[groups.push({ by, items: [] }) - 1];
+    group.items.push({ fact: named, at });
+  });
+  const rank = (by?: string) => (by === undefined ? 0 : by === 'قال النبي ﷺ:' ? 1 : by === 'قيل:' ? 3 : 2);
+  return groups.map((g, i) => ({ g, i })).sort((a, b) => rank(a.g.by) - rank(b.g.by) || a.i - b.i).map(({ g }) => g);
+}
+
 /** «عند فلان» under one reading among several: after «عند» a kunya is genitive («عند أبي نعيم», not «عند أبو نعيم»). */
 export function sayerAt(fact: PersonFact) {
   return `عند ${sayer(fact).split('، ').map(name => name.replace(/^(?:أبو|أبا)(?= )/u, 'أبي')).join('، ')}`;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { saidBy, sayerAt, type PersonFact } from './tarajim';
+import { saidBy, sayerAt, virtueGroups, type PersonFact } from './tarajim';
 
 const fact = (by: string[], more: Partial<PersonFact> = {}) => ({ id: 'x', text: 'x', refs: [], by, ...more }) as PersonFact;
 
@@ -20,5 +20,24 @@ describe('sayer lines', () => {
     expect(saidBy(fact(['أنس']))).toBe('قال أنس:');
     expect(saidBy(fact([], { anonymous: true }))).toBe('قيل:');
     expect(saidBy(fact([]))).toBeUndefined();
+  });
+});
+
+describe('virtues by who says them', () => {
+  it('puts the book\'s own words first, then the Prophet\'s ﷺ, then each sayer once, under one name', () => {
+    // Abu Bakr's virtues (Siyar 3/7-15) as the book orders them, short.
+    const facts = [
+      fact([], { text: 'أول من آمن من الرجال' }),
+      fact(['عمر بن الخطاب'], { text: 'سيدنا' }),
+      fact(['محمد ﷺ'], { text: 'خليلا' }),
+      fact(['علي بن أبي طالب'], { text: 'خير هذه الأمة' }),
+      fact(['محمد ﷺ'], { text: 'صاحبي' }),
+      fact(['علي'], { text: 'المصاحف' }),
+    ];
+    const groups = virtueGroups(facts);
+    expect(groups.map(g => g.by)).toEqual([undefined, 'قال النبي ﷺ:', 'قال عمر بن الخطاب:', 'قال علي بن أبي طالب:']);
+    expect(groups[1].items.map(item => item.fact.text)).toEqual(['خليلا', 'صاحبي']);
+    // Each keeps its place in the book's list, which a quiz marks its answer by.
+    expect(groups[3].items.map(item => item.at)).toEqual([3, 5]);
   });
 });
