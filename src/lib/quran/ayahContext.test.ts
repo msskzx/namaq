@@ -60,6 +60,14 @@ describe('loadReaderAyat', () => {
 const pick = (context: AyahContext) => ({ exact: context.match?.exact, ...(context.match?.written?.length ? { written: context.match.written } : {}), rooted: context.match?.rooted });
 
 describe('sharedByAll', () => {
+  it('pairs a word with the same word in the other ayah before one only of its root (owner 2026-11-23, 2:32 and 51:30)', () => {
+    const [first, second] = sharedByAll(ayahContexts(treeData.ayat as BranchAyah[], ['2:32', '51:30']));
+    const link = (context: AyahContext, word: string) => context.match?.links?.[context.ayah.words.findIndex(form => normalizeWord(form) === normalizeWord(word))];
+    // «العليم» is in both, in another order; «علم» in 2:32 is only of its root.
+    expect(link(first, 'ٱلۡعَلِيمُ')).toMatchObject({ link: link(second, 'ٱلۡعَلِيمُ')!.link, kind: 'exact' });
+    expect(link(first, 'عِلۡمَ')).toBeUndefined();
+  });
+
   it('links words only some ayat share, and the words every ayah shares to each other', async () => {
     const all = await loadReaderAyat();
     // يونس ٤٢، النمل ٨٠، الروم ٥٢، الزخرف ٤٠: «تسمع الصم» in all four; النمل and الروم are near twins.
