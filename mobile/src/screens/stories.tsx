@@ -58,7 +58,7 @@ function ChapterCard({ chapter, palette, startOpen = false, onLeave }: { chapter
         </>
       ) : (
         <Text numberOfLines={1} style={{ color: palette.muted, fontSize: 14, textAlign: 'right', paddingBottom: 8 }}>
-          {chapter.stories.slice(0, 2).map(story => story.name).join('، ')}{chapter.stories.length > 2 ? ' …' : ''}
+          {chapter.stories.map(story => story.name).join('، ')}
         </Text>
       )}
     </Card>
