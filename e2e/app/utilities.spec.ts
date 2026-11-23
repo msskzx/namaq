@@ -51,7 +51,7 @@ test('the adhkar: each time\'s cards, a counter that stops at its number and sta
   // Only a card whose hadith states a number has a counter; it stops at three.
   const tap = page.getByRole('button', { name: /^عُدَّ مرة/ }).filter({ visible: true }).nth(1);
   await expect(tap).toHaveAccessibleName('عُدَّ مرة، ٠ من ٣');
-  for (let i = 0; i < 3; i++) await tap.click();
+  for (const n of ['١', '٢', '٣']) { await tap.click(); await expect(tap).toHaveAccessibleName(`عُدَّ مرة، ${n} من ٣`); }
   await expect(tap).toHaveAccessibleName('عُدَّ مرة، ٣ من ٣');
   await expect(tap).toBeDisabled();
   await page.getByRole('button', { name: 'من جديد' }).filter({ visible: true }).first().click();

@@ -111,8 +111,14 @@ export default function Adhkar({ palette, on, onPlace, scrollTo }: { palette: Pa
   const { occasion, id: wanted } = useAdhkarPlace();
   const items = adhkarFor(occasion);
   const [count, dispatch] = useReducer(counting, null);
-  // Leaving the card's tab, the page or the app ends the count.
-  useEffect(() => { dispatch({ type: 'leave' }); clearTimeout(next.current); }, [occasion, on]);
+  // The count ends when the reader leaves: another tab, or the page going out of view. The page coming into view is not
+  // a leaving, so a tap made just as it opens is kept.
+  const wasOn = useRef(on);
+  useEffect(() => { dispatch({ type: 'leave' }); clearTimeout(next.current); }, [occasion]);
+  useEffect(() => {
+    if (wasOn.current && !on) { dispatch({ type: 'leave' }); clearTimeout(next.current); }
+    wasOn.current = on;
+  }, [on]);
   useEffect(() => {
     const listener = AppState.addEventListener('change', state => { if (state === 'background') dispatch({ type: 'leave' }); });
     return () => listener.remove();
@@ -181,7 +187,8 @@ export default function Adhkar({ palette, on, onPlace, scrollTo }: { palette: Pa
               </View>
               <DhikrBody item={item} palette={palette} />
               <GradeLine item={item} palette={palette} />
-              {item.repeat && !done && counted > 0 && (
+              {/* The bar is there before the first count, so the button under it never moves under a finger that taps again. */}
+              {item.repeat && !done && (
                 <View style={{ flexDirection: 'row' }}><SplitBar first={counted} second={target - counted} palette={palette} /></View>
               )}
             </CardWithRow>
