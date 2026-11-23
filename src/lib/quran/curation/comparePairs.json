@@ -26333,8 +26333,9 @@
   },
   "2:154|2:190": {
    "keep": false,
-   "why": "Martyrs alive vs the command to fight; different subjects",
-   "ask": "owner: discuss"
+   "why": "Only the phrase in the way of Allah is shared; the martyrs being alive versus the command to fight without transgressing. The phrase is stock.",
+   "checked": true,
+   "card": true
   },
   "2:154|2:244": {
    "keep": true,
