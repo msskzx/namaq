@@ -4,7 +4,9 @@ import { createContext, useContext, useId, useLayoutEffect } from 'react';
 export type Quote = { text: string; cite?: string; url?: string };
 
 /** Where a card's sources come from (owner 2026-11-20): the line under its buttons, and what its sheet opens to. */
-export type Source = { line: string; quotes: Quote[]; links?: { label: string; url: string }[] };
+export type Source = { line: string; quotes: Quote[]; links?: { label: string; url: string }[];
+  /** Where in the book and its printings (shared/quiz/sources.ts SourceEntry), written out under it in a share picture. */
+  places?: string[]; editions?: string[] };
 
 type SourceSlot = { set: (id: string, source: Source | null) => void };
 /** Set by a home card (`CardWithRow`): a `Reference` drawn inside it hands its book up to the card's source line. */

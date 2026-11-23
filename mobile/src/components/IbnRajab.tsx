@@ -69,7 +69,7 @@ export default function IbnRajab({ chapter, only, palette }: { chapter: RajabCha
             accessibilityLabel={whole ? 'اطو الشرح' : 'اقرأ شرح ابن رجب للحديث كاملًا'} />
         </UnderCard>
       )}
-      <Reference title={book.title}
+      <Reference title={book.title} places={[rajabRange(first, last)]} editions={[book.edition]}
         quotes={[{ text: '', cite: rajabRange(first, last), url: shamelaPage('ibnrajab', first.shamela) }, { text: `${book.title}، ${book.edition}` }]} palette={palette} />
     </View>
   );

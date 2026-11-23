@@ -1,12 +1,14 @@
 import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { BookOpen } from 'lucide-react-native';
+import { BookOpen, Send } from 'lucide-react-native';
 import { DRAW_MODES, sceneSlots, type DrawMode, type ReaderPage } from '@shared/hadith';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Tabs from '@/ui/Tabs';
-import HadithScene from '@/components/HadithScene';
+import HadithScene, { sceneBlocks } from '@/components/HadithScene';
+import { PictureRefs, ShareHead } from '@/ui/CardShare';
+import { shareCard } from '@/lib/shareImage';
 import { Section } from '@/components/QuizForm';
 import Button from '@/ui/Button';
 import IconButton from '@/ui/IconButton';
@@ -58,6 +60,16 @@ export default function HadithUnitScreen() {
   // The book the page's text is printed in, on the line under each of its sections (owner 2026-11-20); the isnad stays drawn.
   const source = sourcesOf([unitSource(view)]);
   const read = (unit: string, label: string) => <IconButton Icon={BookOpen} label={label} onPress={() => open(unit)} />;
+  // Every section shares as a picture under the book's name and place, its reference written out in full (release 1).
+  const head = <ShareHead title={view.book} sub={[view.kitab, view.bab].filter(Boolean).join('، ') || undefined} palette={palette} />;
+  const share = { head };
+  // A drawn hadith shares as the story does (#1110): equal 4:5 pictures, its scenes flowing between them, the book at the foot.
+  // Its head is the book's name alone: the kitab and bab are in the reference at the foot, and the first picture keeps room.
+  const sharePaged = (report: (typeof hadith)[number]) => <IconButton Icon={Send} label="شارك الحديث" onPress={() => shareCard({ content: () => null, paged: () => ({
+    head: <ShareHead title={view.book} palette={palette} />,
+    blocks: report.scenes.flatMap((scene, i) => sceneBlocks(scene.lines, slots.get(report.id)![i], palette).map(block => block.node)),
+    foot: <PictureRefs sources={source} palette={palette} />,
+  }) })} />;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar back={back} title={view.book} hideOnScroll />
@@ -68,7 +80,8 @@ export default function HadithUnitScreen() {
           <Tabs label="طريقة العرض" options={DRAW_MODES} value={mode} onChange={setMode} palette={palette} />
         )}
         {!isSharh && hadith.map(report => (
-          <Section key={report.id} title="الحديث" palette={palette} source={source}>
+          <Section key={report.id} title="الحديث" palette={palette} source={source}
+            {...(mode === 'drawing' && report.scenes.length > 0 ? { row: sharePaged(report) } : { share })}>
             {mode === 'text' ? <>
               {report.frame ? <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{report.frame}</Text> : null}
               {(report.fullText ? [report.fullText] : report.statements).map((text, i) => <Text key={i} style={body(palette)}>{text}</Text>)}
@@ -85,14 +98,14 @@ export default function HadithUnitScreen() {
           </Section>
         ))}
         {!isSharh && remarks.map(report => (
-          <Section key={report.id} title="تعليق المصنف" palette={palette} source={source}>
+          <Section key={report.id} title="تعليق المصنف" palette={palette} source={source} share={share}>
             {report.frame ? <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{report.frame}</Text> : null}
             {report.statements.map((text, i) => <Text key={i} style={body(palette)}>{text}</Text>)}
           </Section>
         ))}
         {view.reader && view.reader.length > 0 && <Section title="نص الكتاب كما طُبع" palette={palette} source={source}><Pages pages={view.reader} palette={palette} /></Section>}
         {view.notes.length > 0 && (
-          <Section title="ما يقوله الشارح عن هذا الحديث" palette={palette} source={source}>
+          <Section title="ما يقوله الشارح عن هذا الحديث" palette={palette} source={source} share={share}>
             {view.notes.map((note, i) => (
               <View key={i}>
                 <Text style={body(palette)}>{note.text}</Text>
@@ -102,7 +115,7 @@ export default function HadithUnitScreen() {
           </Section>
         )}
         {view.explains.map(item => (
-          <Section key={item.unit} title="الحديث الذي يشرحه" palette={palette} source={source} row={read(item.unit, 'اقرأ الحديث')}>
+          <Section key={item.unit} title="الحديث الذي يشرحه" palette={palette} source={source} row={read(item.unit, 'اقرأ الحديث')} share={share}>
             <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>هذا النص شرحٌ لحديث في {item.book}، ويحدده بما طُبع في أوله:</Text>
             <Text style={body(palette)}>{item.basis}</Text>
           </Section>

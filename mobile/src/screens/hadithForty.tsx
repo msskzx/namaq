@@ -7,7 +7,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Tabs from '@/ui/Tabs';
-import { CardWithRow } from '@/ui/Card';
+import { SharedCard, ShareHead } from '@/ui/CardShare';
 import Button from '@/ui/Button';
 import Folded from '@/ui/Folded';
 import Reference from '@/ui/Reference';
@@ -33,7 +33,7 @@ const pagesName = (pages: number[]) => (pages.length > 1 ? `ص ${num(pages[0])}�
 /** A source's page: the book on its card's line, the place (linked to Shamela's page) and the edition in its sheet. */
 function Cite({ book, place, url, palette }: { book: keyof typeof FORTY.books; place: string; url: string; palette: Palette }) {
   const { title, edition } = FORTY.books[book];
-  return <Reference title={title} quotes={[{ text: '', cite: place, url }, { text: `${title}، ${edition}` }]} palette={palette} />;
+  return <Reference title={title} quotes={[{ text: '', cite: place, url }, { text: `${title}، ${edition}` }]} places={[place]} editions={[edition]} palette={palette} />;
 }
 
 /** One record: the drawn chain with the saying under it, or the whole text, the chain in muted ink before the saying. */
@@ -56,11 +56,11 @@ function Record({ record, mode, palette }: { record: FortyRecord; mode: Mode; pa
 }
 
 /** A book's records for the hadith: the first in full, the others (Muslim's other routes, another place) folded under it. */
-function BookRecords({ title, records, mode, palette }: { title: string; records: FortyRecord[]; mode: Mode; palette: Palette }) {
+function BookRecords({ title, records, mode, head, palette }: { title: string; records: FortyRecord[]; mode: Mode; head: React.ReactNode; palette: Palette }) {
   const firstWhole = records.find(record => !record.partial) ?? records[0];
   const rest = records.filter(record => record !== firstWhole);
   return (
-    <CardWithRow palette={palette} gap={10}>
+    <SharedCard palette={palette} gap={10} shareHead={head} shareLabel={`شارك ما ${title}`}>
       <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 17, fontWeight: '700', textAlign: 'right' }}>{title}</Text>
       {firstWhole.partial && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>فيه بعض لفظ الحديث</Text>}
       <Record record={firstWhole} mode={mode} palette={palette} />
@@ -74,7 +74,7 @@ function BookRecords({ title, records, mode, palette }: { title: string; records
           ))}
         </Folded>
       )}
-    </CardWithRow>
+    </SharedCard>
   );
 }
 
@@ -105,24 +105,24 @@ function Grade({ grade, palette }: { grade: FortyGrade; palette: Palette }) {
 }
 
 /** What the scholars said of the hadith's grade (the owner's sketch, frame 4): each in his own words, under his name; no grade of ours. */
-function Grades({ grades, palette }: { grades: FortyGrade[]; palette: Palette }) {
+function Grades({ grades, head, palette }: { grades: FortyGrade[]; head: React.ReactNode; palette: Palette }) {
   return (
-    <CardWithRow palette={palette} gap={14}>
+    <SharedCard palette={palette} gap={14} shareHead={head} shareLabel="شارك ما قاله العلماء في درجته">
       <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 17, fontWeight: '700', textAlign: 'right' }}>ما قاله العلماء في درجته</Text>
       {grades.map((grade, i) => <Grade key={`${grade.by}-${i}`} grade={grade} palette={palette} />)}
-    </CardWithRow>
+    </SharedCard>
   );
 }
 
 /** The compiler's text as he printed it (al-Nawawi's, or Ibn Rajab's for his eight), with his page; the books he names are in «من أخرجه» under it. */
-function Compiled({ entry, palette }: { entry: FortyEntry; palette: Palette }) {
+function Compiled({ entry, head, palette }: { entry: FortyEntry; head: React.ReactNode; palette: Palette }) {
   const { book: key } = compilerOf(entry);
   const where = entry.volume ? `${num(entry.volume)}/ ${num(entry.pages[0])}` : pagesName(entry.pages);
   return (
-    <CardWithRow palette={palette} gap={8}>
+    <SharedCard palette={palette} gap={8} shareHead={head} shareLabel={`شارك ${entry.heading}`}>
       <Text style={body(palette)}>{entry.text}</Text>
       <Cite book={key} place={`${FORTY.books[key].title}، ${where}`} url={shamelaPage(key, entry.shamela)} palette={palette} />
-    </CardWithRow>
+    </SharedCard>
   );
 }
 
@@ -135,21 +135,23 @@ export function FortyHadith({ entry, palette, jibril }: { entry: FortyEntry; pal
   const books = RECORD_BOOKS.map(book => ({ book, records: entry.records.filter(record => record.book === book) })).filter(({ records }) => records.length > 0);
   const chapter = RAJAB.find(item => item.n === entry.n);
   const drawn = entry.records.some(record => record.isnad);
+  // Each card shares as a picture under the hadith's heading and Companion (release 1: every page shares).
+  const head = <ShareHead title={entry.heading} sub={fromCompanion(entry.companion)} palette={palette} />;
   return <>
     <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 26, textAlign: 'right' }}>{entry.heading}</Text>
     <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right', marginTop: -8 }}>{fromCompanion(entry.companion)}</Text>
-    <Compiled entry={entry} palette={palette} />
+    <Compiled entry={entry} head={head} palette={palette} />
     <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, textAlign: 'right' }}>من أخرجه</Text>
     <HadithBooks top={entry.heading} boxes={recordedIn(entry)} namer={compilerOf(entry).name} palette={palette} />
     {jibril}
     {drawn && <Tabs label="طريقة العرض" options={MODES} value={mode} onChange={setMode} palette={palette} />}
     {entry.partial && entry.records.length > 0 && <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>في الصحيحين بعض لفظ الحديث</Text>}
-    {entry.grades && <Grades grades={entry.grades} palette={palette} />}
-    {books.map(({ book, records }) => <BookRecords key={book} title={`في ${FORTY.books[book].title}`} records={records} mode={mode} palette={palette} />)}
+    {entry.grades && <Grades grades={entry.grades} head={head} palette={palette} />}
+    {books.map(({ book, records }) => <BookRecords key={book} title={`في ${FORTY.books[book].title}`} records={records} mode={mode} head={head} palette={palette} />)}
     {chapter && (
       <>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, textAlign: 'right' }}>من شرح ابن رجب</Text>
-        <CardWithRow palette={palette} gap={8}><IbnRajab chapter={chapter} palette={palette} /></CardWithRow>
+        <SharedCard palette={palette} gap={8} shareHead={head} shareLabel="شارك شرح ابن رجب"><IbnRajab chapter={chapter} palette={palette} /></SharedCard>
       </>
     )}
   </>;
