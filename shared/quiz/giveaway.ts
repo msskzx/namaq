@@ -25,12 +25,12 @@ function standsIn(label: string, shown: string[]) {
  */
 export function givesAway(question: ChoiceQuestion): string | null {
   if (question.choices.length < 2) return null;
-  // A question on the atlas's map («أين كانت؟») shows its choices as pins with no names: the place's name in the battle's
-  // name («غزوة تبوك») says nothing of where on the map it is.
-  if (question.map) return null;
   // A question of several right choices is checked for each of them against the wrong ones.
   const rights = question.choices.filter(choice => isRightChoice(question, choice.value));
   if (!rights.length) return 'no right choice';
+  // A question on the atlas's map («أين كانت؟») shows its choices as pins with no names: the place's name in the battle's
+  // name («غزوة تبوك») says nothing of where on the map it is.
+  if (question.map) return null;
   const wrong = question.choices.filter(choice => !rights.includes(choice));
   if (!wrong.length) return null;
   for (const right of rights) {

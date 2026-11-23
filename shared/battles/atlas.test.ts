@@ -57,6 +57,8 @@ describe('the atlas', () => {
     const here = battlesAt(BATTLES, 'life', [placeOf('khandaq').name], 5);
     expect(here.length).toBeGreaterThan(1);
     expect(here[0].year?.value).toBe(5);
+    // The map hides the years after the chosen one, and so does the pin's sheet.
+    expect(battlesAt(BATTLES, 'life', [placeOf('khandaq').name], 3).every(battle => battle.year!.value <= 3)).toBe(true);
   });
 
   it('finds a battle by its name or its place, whatever the article or hamza', () => {

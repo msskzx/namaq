@@ -38,7 +38,7 @@ export default function BattleMap({ places: given, palette, box: fixed, onPin }:
   const places = useMemo(() => given, [key]);
   const cities = useMemo(() => {
     const near = (city: { at: LonLat }) => places.some(place => Math.hypot(place.at[0] - city.at[0], place.at[1] - city.at[1]) < NEAR);
-    // A city a lit pin names is that pin; one a quiet pin names is drawn as the city, its name kept.
+    // A city a lit pin names is that pin; one a quiet pin names stays a city with its name, the quiet dot on it.
     const pinned = (city: { name: string }) => places.some(place => place.name === city.name && place.look !== 'quiet');
     return LANDMARKS.map(key => PLACES[key]).filter(city => !pinned(city) && near(city));
   }, [places]);
@@ -49,8 +49,7 @@ export default function BattleMap({ places: given, palette, box: fixed, onPin }:
     const { height, at } = projector(box, width);
     // Pins of one look join; a lit pin never takes a quiet one's name. The lit and answered come first, so their names get the room.
     const order: PinLook[] = ['right', 'wrong', 'lit', 'selected', 'choice', 'quiet'];
-    const cityNames = new Set(cities.map(city => city.name));
-    const pins = order.flatMap(look => pinsOf(places.filter(place => (place.look ?? 'lit') === look && !(look === 'quiet' && cityNames.has(place.name)))
+    const pins = order.flatMap(look => pinsOf(places.filter(place => (place.look ?? 'lit') === look)
       .map(place => { const [x, y] = at(place.at); return { name: place.name, x, y }; }), PIN_JOIN).map(pin => ({ ...pin, look })))
       // A quiet pin under a lit one would cover it: the lit pin stands for the place.
       .filter((pin, _, all) => pin.look !== 'quiet' || all.every(other => other.look === 'quiet' || Math.hypot(other.x - pin.x, other.y - pin.y) >= PIN_JOIN));

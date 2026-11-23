@@ -75,6 +75,12 @@ describe('the names on a map', () => {
     expect(label!.box[0]).toBeGreaterThanOrEqual(0);
   });
 
+  it('lets a pin with no name (a quiz\'s choice) take only its own room, so a name beside it still shows', () => {
+    // The small pin sits just under where the name goes; a name of its own there would push the name to the other side.
+    const [, named] = placeLabels([{ x: 215, y: 112, text: '', size: 16, r: 2 }, { x: 200, y: 100, text: 'دمشق', size: 16 }], 400, 300);
+    expect(named?.anchor).toBe('start');
+  });
+
   it('names a lone pin beside it', () => {
     expect(placeLabels([{ x: 100, y: 100, text: 'تبوك', size: 16 }], 400, 300)[0]?.anchor).toBe('start');
   });

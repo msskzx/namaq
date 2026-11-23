@@ -6,7 +6,7 @@ test('the tarajim tab opens the atlas; a year lights its places and a search ope
   await open(page, '/');
   await tab(page, 'التراجم').click();
   await page.getByRole('link', { name: 'الأطلس' }).click();
-  await expect(page.getByRole('button', { name: 'في حياته ﷺ' })).toBeVisible();
+  await expect(page.getByRole('tab', { name: 'في حياته ﷺ', selected: true })).toBeVisible();
   await page.getByRole('button', { name: /^السنة ٩: / }).click();
   await expect(page.getByRole('img', { name: /^خريطة: .*تبوك/ })).toBeVisible();
   await expect(page.getByRole('link', { name: 'افتح غزوة تبوك' })).toBeVisible();
@@ -16,7 +16,7 @@ test('the tarajim tab opens the atlas; a year lights its places and a search ope
   // The pin's sheet names the book that places it and the GeoNames record of its coordinates.
   await expect(page.getByRole('button', { name: /^معجم البلدان، / })).toBeVisible();
   await expect(page.getByRole('button', { name: /^GeoNames، رقم / })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'بعده ﷺ' })).toBeVisible();
+  await expect(page.getByRole('tab', { name: 'بعده ﷺ', selected: true })).toBeVisible();
 });
 
 test.describe('the year card', () => {
@@ -34,6 +34,7 @@ test.describe('the year card', () => {
 test('«أين كانت؟» asks a battle\'s place on the map and names the places once answered', async ({ page }) => {
   await open(page, '/quiz/solo');
   await page.getByRole('button', { name: 'أين كانت؟' }).click();
+  await page.getByRole('button', { name: 'متشابهات القرآن', exact: true }).click();
   await page.getByRole('button', { name: 'ابدأ الاختبار' }).click();
   const pins = page.getByRole('button', { name: /^موضع [٠-٩]+$/ });
   await expect(pins.first()).toBeVisible();

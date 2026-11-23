@@ -10,7 +10,7 @@ import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Card from '@/ui/Card';
 import Empty from '@/ui/Empty';
-import Chip from '@/ui/Chip';
+import Tabs from '@/ui/Tabs';
 import Sheet from '@/ui/Sheet';
 import TapRow from '@/ui/TapRow';
 import OpenButton from '@/ui/OpenButton';
@@ -27,10 +27,10 @@ import { battleLine, Refs } from '@/components/battles/BattleParts';
 
 const openBattle = (slug: string) => router.push({ pathname: '/battle', params: { slug } });
 
-/** A battle in the atlas's lists: its name and «غزوة · السنة ٥ للهجرة», opening its page; «لا موضع» where no book pins it. */
-function BattleRow({ battle, palette }: { battle: AppBattle; palette: Palette }) {
+/** A battle in the atlas's lists: its name and «غزوة · السنة ٥ للهجرة», opening its page (or `onPress`: a search result shows it on the map); «لا موضع» where no book pins it. */
+function BattleRow({ battle, onPress, palette }: { battle: AppBattle; onPress?: () => void; palette: Palette }) {
   return (
-    <TapRow role="link" label={`افتح ${battle.name}`} onPress={() => openBattle(battle.slug)}
+    <TapRow role={onPress ? 'button' : 'link'} label={onPress ? battle.name : `افتح ${battle.name}`} onPress={onPress ?? (() => openBattle(battle.slug))}
       style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
       <View style={{ flexShrink: 1 }}>
         <Text style={{ color: palette.ink, fontSize: 18, textAlign: 'right' }}>{battle.name}</Text>
@@ -46,13 +46,18 @@ function BattleRow({ battle, palette }: { battle: AppBattle; palette: Palette })
  * battle there with its open button (owner, 2026-11-23: every pin carries its reference).
  */
 function PlaceSheet({ battles, onClose, palette }: { battles: AppBattle[]; onClose: () => void; palette: Palette }) {
-  const place = battles[0]?.place;
+  // A pin may hold several places (Makkah and al-Hudaybiyah): each with its own books.
+  const places = [...new Map(battles.map(battle => [battle.place!.name, battle] as const)).values()];
   return (
-    <Sheet open={!!place} onClose={onClose} palette={palette}>
-      {place ? (
+    <Sheet open={battles.length > 0} onClose={onClose} palette={palette}>
+      {battles.length ? (
         <View style={{ gap: 12, paddingHorizontal: 16, paddingBottom: 24 }}>
-          <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 22, textAlign: 'right' }}>{place.name}</Text>
-          {placeRefs(battles[0]).map(refs => <Refs key={refs[0]?.cite} refs={refs} palette={palette} />)}
+          {places.map(first => (
+            <View key={first.place!.name} style={{ gap: 6 }}>
+              <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 22, textAlign: 'right' }}>{first.place!.name}</Text>
+              {placeRefs(first).map(refs => <Refs key={refs[0]?.cite} refs={refs} palette={palette} />)}
+            </View>
+          ))}
           {battles.map(battle => (
             <View key={battle.slug} style={{ gap: 6 }}>
               <Text style={{ color: palette.ink, fontSize: 18, textAlign: 'right' }}>{battle.name}</Text>
@@ -82,21 +87,23 @@ export default function AtlasScreen() {
   const bottom = useTabBarSpace();
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   useTabRetap('atlas', () => scroll.current?.scrollTo({ y: 0, animated: true }));
-  const params = useLocalSearchParams<{ layer?: string; year?: string; place?: string }>();
+  const params = useLocalSearchParams<{ layer?: string; year?: string; place?: string; at?: string }>();
   const years = useMemo(() => lifeYears(BATTLES), []);
   const [layer, setLayer] = useState<AtlasLayer>('life');
   const [year, setYear] = useState(years[0]);
   const [query, setQuery] = useState('');
   const [sheet, setSheet] = useState<AppBattle[]>([]);
-  // The feed's year card or a quiz's answer opens the atlas on its year or place; a later one comes as new params.
+  // The feed's year card or a quiz's answer opens the atlas on its year or place; each opening carries its own `at`, so the
+  // same year opened again still comes back to it after the reader moved on.
   useEffect(() => {
+    setQuery('');
     const at = params.place ? BATTLES.find(battle => battle.place?.name === params.place) : undefined;
     const toLayer = at ? layerOf(at) : params.layer === 'after' ? 'after' : params.year ? 'life' : undefined;
     if (toLayer) setLayer(toLayer);
     const toYear = at && toLayer === 'life' ? at.year!.value : params.year ? Number(params.year) : undefined;
     if (toYear && years.includes(toYear)) setYear(toYear);
     if (at) setSheet(battlesAt(BATTLES, layerOf(at), [at.place!.name], toYear));
-  }, [params.layer, params.year, params.place]);
+  }, [params.layer, params.year, params.place, params.at]);
   const box = useMemo(() => layerBox(BATTLES, layer), [layer]);
   const pins = useMemo(() => atlasPins(BATTLES, layer, year), [layer, year]);
   const madinah = useMemo(() => battleTimeline(layerBattles(BATTLES, 'life')).madinah, []);
@@ -123,18 +130,11 @@ export default function AtlasScreen() {
         contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 12 }}>
         {query.trim() ? (
           found.length
-            ? found.map(battle => (
-              <Card key={battle.slug} palette={palette} pad={[10, 14]} gap={2} accessibilityRole="button" accessibilityLabel={battle.name} onPress={() => pickFound(battle)}>
-                <Text style={{ color: palette.ink, fontSize: 19, textAlign: 'right' }}>{battle.name}</Text>
-                <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>
-                  {[battleLine(battle), battle.place ? battle.place.name : 'لا موضع'].filter(Boolean).join(' · ')}
-                </Text>
-              </Card>
-            ))
+            ? <View>{found.map(battle => <BattleRow key={battle.slug} battle={battle} onPress={() => pickFound(battle)} palette={palette} />)}</View>
             : <Empty text="لا غزوة ولا موضع بهذا الاسم" palette={palette} />
         ) : <>
           <View style={{ flexDirection: 'row', gap: 8 }}>
-            {LAYERS.map(each => <Chip key={each.key} label={each.name} on={layer === each.key} onPress={() => setLayer(each.key)} palette={palette} />)}
+            <Tabs label="الطبقة" options={LAYERS.map(each => ({ key: each.key, label: each.name }))} value={layer} onChange={setLayer} palette={palette} fill />
           </View>
           <Card palette={palette} pad={0} clip gap={0}>
             <BattleMap places={pins} box={box} palette={palette} onPin={showPlace} />

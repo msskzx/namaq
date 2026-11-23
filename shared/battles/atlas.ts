@@ -40,9 +40,13 @@ export function atlasPins(battles: readonly AppBattle[], layer: AtlasLayer, year
   return [...pins.values()];
 }
 
-/** The battles of a layer at the named places (a pin may hold several): those of `year` first, then the rest by year. */
+/**
+ * The battles of a layer at the named places (a pin may hold several): those of `year` first, then the earlier ones by
+ * year; on «في حياته ﷺ» none after `year`, as the map hides them.
+ */
 export function battlesAt<B extends Pick<AppBattle, 'year' | 'place'>>(battles: readonly B[], layer: AtlasLayer, names: readonly string[], year?: number): B[] {
-  const here = layerBattles(battles, layer).filter(battle => battle.place && names.includes(battle.place.name));
+  const here = layerBattles(battles, layer).filter(battle => battle.place && names.includes(battle.place.name)
+    && (layer === 'after' || year === undefined || battle.year!.value <= year));
   const rank = (battle: B) => (battle.year?.value === year ? -1 : battle.year?.value ?? Infinity);
   return here.sort((a, b) => rank(a) - rank(b));
 }
@@ -51,8 +55,8 @@ export function battlesAt<B extends Pick<AppBattle, 'year' | 'place'>>(battles: 
 export const lifeYears = (battles: readonly Pick<AppBattle, 'year'>[]) =>
   [...new Set(layerBattles(battles, 'life').map(battle => battle.year!.value))].sort((a, b) => a - b);
 
-/** The narrowest map a quiz card draws (a small phone's width less the card's margins), in points. */
-export const NARROWEST_MAP = 320;
+/** The narrowest map a quiz draws (a 320-point phone less the card's and the screen's margins), in points. */
+export const NARROWEST_MAP = 280;
 
 /**
  * The places «أين كانت؟» can ask about on a layer: those whose pin stands alone on the layer's map at its narrowest

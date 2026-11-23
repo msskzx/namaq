@@ -97,13 +97,14 @@ const overlaps = (a: readonly number[], b: readonly number[]) => a[0] < b[2] && 
 
 /**
  * Where each pin's name goes so no two names cover each other or another pin (owner, 2026-11-23: places close together
- * must not have their names on top of one another). Each name tries beside its pin on the right, on the left, above,
+ * must not have their names on top of one another). A pin with no name takes only its own room. Each name tries beside its pin on the right, on the left, above,
  * then below, and takes the first spot inside the map that is free; the pins are taken in the given order, so the ones
  * that matter most come first. A name with no free spot is left off (null): the pin still opens its sheet by name.
  */
 export function placeLabels(pins: readonly { x: number; y: number; text: string; size: number; r?: number }[], width: number, height: number): (PlacedLabel | null)[] {
   const taken: number[][] = pins.map(({ x, y, r = 8 }) => [x - r, y - r, x + r, y + r]);
   return pins.map(({ x, y, text, size, r = 8 }, own) => {
+    if (!text) return null;
     const wide = text.length * size * LETTER;
     const gap = r + 4;
     const spots: PlacedLabel[] = [

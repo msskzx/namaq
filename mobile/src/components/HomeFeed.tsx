@@ -470,7 +470,7 @@ function openAnswer(question: SoloQuestion) {
     return openIntent({ tab: 'compare', lead: Number(a.split(':')[0]), other: Number(b.split(':')[0]), ayat: [a, b] });
   }
   // «أين كانت؟»: the atlas at the place asked, its sheet open.
-  if (question.map) return toTab({ pathname: '/atlas', params: { place: question.correctAnswer } });
+  if (question.map) return toTab({ pathname: '/atlas', params: { place: question.correctAnswer, at: String(Date.now()) } });
   // The prophet's story, not the ayah its look shows.
   if (question.family === PROPHET_STORY) return router.push({ pathname: '/prophets/[slug]', params: { slug: question.correctAnswer } });
   const look = question.look;
@@ -870,7 +870,7 @@ function BattleYearPost({ id, palette }: { id: string; palette: Palette }) {
   const slice = battleYearSlice(BATTLES, year);
   if (!slice) return null;
   const layer = slice.battles[0] ? layerOf(slice.battles[0]) : 'life';
-  const toYear = (at: number) => toTab({ pathname: '/atlas', params: layerOf({ year: { value: at, refs: [] } }) === 'life' ? { year: String(at) } : { layer: 'after' } });
+  const toYear = (at: number) => toTab({ pathname: '/atlas', params: { ...(layerOf({ year: { value: at, refs: [] } }) === 'life' ? { year: String(at) } : { layer: 'after' }), at: String(Date.now()) } });
   // The year on the atlas: on «بعده ﷺ» only the year's own places, lit.
   const places = layer === 'life' ? atlasPins(BATTLES, 'life', year)
     : [...new Map(slice.battles.flatMap(battle => (battle.place ? [[battle.place.name, battle.place] as const] : []))).values()];
