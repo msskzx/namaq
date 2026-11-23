@@ -104,7 +104,8 @@ test.describe('the Prophet\'s ﷺ children as a ring', () => {
     await openSource(page);
     await expect(page.getByText(/الطيب والطاهر/)).toBeVisible();
     await closeSource(page);
-    await page.getByRole('link', { name: 'فاطمة بنت محمد' }).click();
+    // Round her father she is «فاطمة»: his name is in the middle of the same drawing (owner, 2026-11-23).
+    await page.getByRole('link', { name: 'فاطمة', exact: true }).click();
     await expect(page).toHaveURL(/\/person\?slug=fatimah-bint-muhammad/);
     await page.goBack();
     await page.getByRole('button', { name: /^افتح صلات محمد/ }).click();

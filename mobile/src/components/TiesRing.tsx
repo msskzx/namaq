@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Check } from 'lucide-react-native';
 import { View } from 'react-native';
 import Svg, { Line } from 'react-native-svg';
+import { settledTies } from '@shared/peopleCards';
 import { groupWord, tieGroups, tieWord, type GraphNode, type Tie, type TieGroup, type TieKind } from '@shared/tarajimGraph';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
@@ -20,7 +21,16 @@ const ROW = NODE_H + 46;
 /** A tie's word on its line: its height, and the most room it takes across. */
 const LABEL_H = 18;
 const LABEL_W = 70;
-const nodeName = (node: GraphNode) => personName(node).replace(/\s+بن\s+.*$/u, (rest) => (rest.length > 18 ? '' : rest));
+/**
+ * A node's name: «X بن Y» shortened, and with no father's name when the father is the one in the middle (owner,
+ * 2026-11-23: «فاطمة», not «فاطمة بنت محمد», round the Prophet ﷺ; he is there in the same drawing).
+ */
+const nodeName = (node: GraphNode, middle?: string) => {
+  const father = middle && GRAPH.nodes.get(middle)?.name.replace(/\s*ﷺ/u, '').split(/\s+(?:بن|بنت)\s+/u)[0].trim();
+  const name = personName(node);
+  const own = father && name.replace(new RegExp(`\\s+(?:بن|بنت)\\s+${father}$`, 'u'), '');
+  return own && own !== name ? own : name.replace(/\s+بن\s+.*$/u, (rest) => (rest.length > 18 ? '' : rest));
+};
 
 /** A node round the middle: a person (opens his ties if he has a page), or a whole kind folded into one node with its count. */
 type Spot = { key: string; x: number; y: number; kind: TieKind } & ({ tie: Tie } | { group: TieKind; count: number });
@@ -139,19 +149,19 @@ export function RoundRing({ middle, nodes, width, palette }: { middle: string; n
 }
 
 /** A node's name in a ring: «X بن Y» shortened as the grid ring shortens it. */
-export const ringName = (slug: string) => nodeName(GRAPH.nodes.get(slug)!);
+export const ringName = (slug: string, middle?: string) => nodeName(GRAPH.nodes.get(slug)!, middle);
 
 /** A person in a round ring: his page when he has one, else the sentence that names him. */
-export function personNode(slug: string, colour: string, go: (slug: string) => void, show?: () => void): RoundNode {
+export function personNode(slug: string, colour: string, go: (slug: string) => void, show?: () => void, middle?: string): RoundNode {
   const node = GRAPH.nodes.get(slug)!;
-  return { key: slug, label: nodeName(node), colour, inApp: node.inApp, onPress: node.inApp ? () => go(slug) : () => show?.(), onLongPress: show };
+  return { key: slug, label: nodeName(node, middle), colour, inApp: node.inApp, onPress: node.inApp ? () => go(slug) : () => show?.(), onLongPress: show };
 }
 
 /** A person's ties by kind, each person once, under the nearest kind (al-Zubayr's kin the Prophet ﷺ is not drawn again as his companion). */
 export function tiesOf(slug: string): TieGroup[] {
   const seen = new Set<string>();
   return tieGroups(GRAPH, slug)
-    .map(g => ({ ...g, ties: g.ties.filter(tie => !seen.has(tie.to) && seen.add(tie.to)) }))
+    .map(g => ({ ...g, ties: settledTies(slug, g.kind, g.ties).filter(tie => !seen.has(tie.to) && seen.add(tie.to)) }))
     .filter(g => g.ties.length > 0);
 }
 
@@ -198,8 +208,8 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
   // A kind opened that is more than the grid holds goes round the middle on an oval, which holds more (owner, 2026-11-23:
   // the Prophet's ﷺ nine children came as a list); a list only past what even the oval holds.
   const big = openGroup && openGroup.ties.length > room ? openGroup : undefined;
-  const oval = big && roundLayout(big.ties.map(tie => ringName(tie.to)), drawW)
-    ? big.ties.map(tie => ({ ...personNode(tie.to, kindColor(palette, tie.kind), go, () => setShown(tie)), dashed: tie.link.disputed })) : undefined;
+  const oval = big && roundLayout(big.ties.map(tie => ringName(tie.to, slug)), drawW)
+    ? big.ties.map(tie => ({ ...personNode(tie.to, kindColor(palette, tie.kind), go, () => setShown(tie), slug), dashed: tie.link.disputed })) : undefined;
   const listed = big && !oval ? big.ties : [];
 
   return (
@@ -229,8 +239,9 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
               const a = edge(centre, at, middleW / 2, 26), b = edge(at, centre, NODE_W / 2, NODE_H / 2);
               return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
             };
-            const m = mid(spot);
-            const room = Math.min(LABEL_W, ...placed.filter((_, j) => j !== i).map(other => {
+            // A node beside the middle has too short a line for a word: its word goes just over the node instead.
+            const m = spot.y === middle ? { x: spot.x, y: spot.y - (NODE_H + GROW) / 2 - LABEL_H / 2 + 6 } : mid(spot);
+            const room = Math.min(LABEL_W, ...placed.filter((_, j) => j !== i && placed[j].y !== middle).map(other => {
               const o = mid(other);
               return Math.abs(o.y - m.y) < LABEL_H ? Math.abs(o.x - m.x) - 4 : Infinity;
             }));
@@ -271,7 +282,7 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
               <View key={spot.key} style={style}>
                 <Card palette={palette} node pad={[6, 8]} outline={node.slug === marked ? palette.green : undefined} accessibilityRole={node.inApp ? 'link' : 'button'} accessibilityLabel={label}
                   onPress={node.inApp ? () => go(node.slug) : () => setShown(spot.tie)} onLongPress={() => setShown(spot.tie)}>
-                  <Text numberOfLines={2} style={{ color: palette.ink, fontSize: 14, textAlign: 'center' }}>{nodeName(node)}</Text>
+                  <Text numberOfLines={2} style={{ color: palette.ink, fontSize: 14, textAlign: 'center' }}>{nodeName(node, slug)}</Text>
                 </Card>
               </View>
             );
