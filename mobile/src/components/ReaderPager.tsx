@@ -57,8 +57,9 @@ export default function ReaderPager({ page, count, width, height, onPage, onMove
   const focal = useSharedValue({ x: 0, y: 0 });
 
   // A page chosen from outside (index, recite, restore) slides there; one reached by a swipe is already there.
+  // Before the paint, so a turned screen never shows a frame at the old width's offset.
   const laidOut = useRef(width);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!width) return;
     const target = (page - 1) * width;
     if (laidOut.current !== width) {
