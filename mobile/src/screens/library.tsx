@@ -1,7 +1,7 @@
 import { useRef, useState, useSyncExternalStore } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { Check, NotebookPen } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import BarPicker from '@/ui/BarPicker';
@@ -57,16 +57,16 @@ function useForgottenAyat() {
 /** Every saved card and every forgotten ayah, one list at a time; the homepage shelves show the latest few and open this page. */
 export default function LibraryScreen() {
   const palette = usePalette();
-  const insets = useSafeAreaInsets();
+  const bottom = useTabBarSpace();
   const params = useLocalSearchParams<{ tab?: string }>();
   const [tab, setTab] = useState<Tab>(params.tab === 'forgotten' || params.tab === 'notes' ? params.tab : 'saved');
   const { cards, noteCards, savedItems, noteItems, openOf, openAyah, menus } = useHomeCards(palette);
   const forgotten = useForgottenAyat();
   const shown = tab === 'saved' ? cards : noteCards;
-  const listStyle = { padding: 16, paddingBottom: insets.bottom + 24, gap: 16 };
+  const listStyle = { padding: 16, paddingBottom: bottom + 16, gap: 16 };
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      {/* A back button, as on the quiz pages: this page is opened from the homepage and has no tab bar. */}
+      {/* Pushed over home in the home tab, so the tab bar stays (owner, 2026-11-23); the back button returns to home. */}
       <TopBar back={() => (router.canGoBack() ? router.back() : toTab('/'))}>
         <View style={{ flex: 1, alignItems: 'center' }}><Picker tab={tab} onTab={setTab} palette={palette} /></View>
         <View style={{ width: 34 }} />
