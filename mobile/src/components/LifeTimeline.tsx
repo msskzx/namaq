@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { Plus } from 'lucide-react-native';
+import { ChevronDown, ChevronUp, Plus } from 'lucide-react-native';
+import { Tap } from '@/ui/Tap';
 import { num } from '@shared/quran/arabicNumber';
 import { lifeFilters, lifeRail, lifeStrip, openLabel, stripLabels, type LifeItem, type LifeKind } from '@shared/events/lifeTimeline';
 import { Text } from '@/ui/Text';
@@ -31,6 +32,22 @@ export function openItem(item: LifeItem, show: (item: LifeItem) => void) {
 }
 
 const DOT = 9;
+/**
+ * A folded rail shows this many of its rows (owner, 2026-11-23: the Prophet's ﷺ life is long on his page): enough to
+ * read as a line, short enough that the sections under it stay near. The strip above still shows every year.
+ */
+const FOLDED_ROWS = 6;
+
+/** The rail's first `rows` rows, its years cut where they run out. */
+function railStart(rail: ReturnType<typeof lifeRail>, rows: number) {
+  const start: ReturnType<typeof lifeRail> = [];
+  for (const place of rail) {
+    const left = rows - start.reduce((sum, had) => sum + had.items.length, 0);
+    if (left <= 0) break;
+    start.push({ ...place, items: place.items.slice(0, left) });
+  }
+  return start;
+}
 /** Room a year's label takes under the strip: two digits at its size with a little air, so labels never touch. */
 const LABEL_W = 22;
 
@@ -144,7 +161,7 @@ export function LifeSheet({ item, onClose, palette }: { item?: LifeItem; onClose
  * chips for the kinds he has and «+ قارن», then the rail by year. The person page draws it; `onCompare` opens the
  * «حياتهما» screen (screens/life.tsx) with him first.
  */
-export default function LifeTimeline({ items, palette, onCompare, inCard = false, compact = false, linked = true, marked }: {
+export default function LifeTimeline({ items, palette, onCompare, inCard = false, compact = false, linked = true, marked, foldable = false }: {
   items: LifeItem[]; palette: Palette; onCompare?: () => void;
   /** Inside a card (a feed post, a quiz's look-up): the strip draws no card of its own. */
   inCard?: boolean;
@@ -154,13 +171,20 @@ export default function LifeTimeline({ items, palette, onCompare, inCard = false
   linked?: boolean;
   /** A row lit in green: a quiz's answer, once shown. */
   marked?: string;
+  /** The rail opens folded to its first years when it has more, with a row that opens and folds it (the person page). */
+  foldable?: boolean;
 }) {
   const [filter, setFilter] = useState<number | undefined>();
   const [shown, setShown] = useState<LifeItem | undefined>();
   const filters = useMemo(() => lifeFilters(items), [items]);
   const picked = filter === undefined ? undefined : filters[filter];
   const on = (item: LifeItem) => !picked || picked.kinds.includes(item.kind) || item.kind === 'own';
-  const rail = lifeRail(items.filter(on));
+  const [open, setOpen] = useState(false);
+  const whole = lifeRail(items.filter(on));
+  const total = whole.reduce((sum, place) => sum + place.items.length, 0);
+  // Folded only when what it hides is more than a couple of rows.
+  const folds = foldable && total > FOLDED_ROWS + 2;
+  const rail = folds && !open ? railStart(whole, FOLDED_ROWS) : whole;
   if (items.length === 0) return null;
   return (
     <View style={{ gap: 12 }}>
@@ -184,6 +208,15 @@ export default function LifeTimeline({ items, palette, onCompare, inCard = false
             </View>
           </View>
         ))}
+        {folds && (
+          <Tap onPress={() => setOpen(was => !was)} accessibilityRole="button" aria-expanded={open}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 4, paddingTop: 8, borderTopWidth: 1, borderColor: palette.rule, minHeight: MIN_TAP }}>
+            {open ? <ChevronUp size={16} color={palette.muted} /> : <ChevronDown size={16} color={palette.muted} />}
+            <Text style={{ flex: 1, color: palette.muted, fontSize: 14 }}>
+              {open ? 'اطوِ' : `أظهر البقية (${num(total - FOLDED_ROWS)})`}
+            </Text>
+          </Tap>
+        )}
       </View>
       <LifeSheet item={shown} onClose={() => setShown(undefined)} palette={palette} />
     </View>

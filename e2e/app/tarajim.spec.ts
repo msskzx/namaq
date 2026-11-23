@@ -99,7 +99,8 @@ test('the person page draws his nasab tree, his life and his ties', async ({ pag
   await expect(page.getByRole('link', { name: 'الزبير', exact: true })).toBeVisible();
   // His ties round him: his mother opens her own page.
   await expect(page.getByRole('link', { name: /^أمه: صفية/ })).toBeVisible();
-  // His life: a raid filter keeps Badr and drops the battle of the Camel; Badr opens its page.
+  // His life, opened past its fold: a raid filter keeps Badr and drops the battle of the Camel; Badr opens its page.
+  await page.getByRole('button', { name: /^أظهر البقية/ }).click();
   await expect(page.getByRole('link', { name: /معركة الجمل/ })).toBeVisible();
   await page.getByRole('button', { name: 'الغزوات' }).click();
   await expect(page.getByRole('link', { name: /معركة الجمل/ })).toHaveCount(0);
@@ -112,4 +113,14 @@ test('his life beside another\'s puts what they shared on one row', async ({ pag
   // Both were at Badr: one box each, side by side; only al-Zubayr at the Camel.
   await expect(page.getByRole('link', { name: 'غزوة بدر' })).toHaveCount(2);
   await expect(page.getByRole('link', { name: 'معركة الجمل' })).toHaveCount(1);
+});
+
+// A long life folds on the person page (owner, 2026-11-23: the Prophet's ﷺ is long): its first rows, then a row that opens the rest.
+test('a long life on the person page opens folded, and its fold opens the rest', async ({ page }) => {
+  await open(page, '/person?slug=prophet-muhammad');
+  await expect(page.getByRole('link', { name: 'غزوة تبوك', exact: true })).toHaveCount(0);
+  await page.getByRole('button', { name: /^أظهر البقية/ }).click();
+  await expect(page.getByRole('link', { name: 'غزوة تبوك', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'اطوِ', exact: true }).click();
+  await expect(page.getByRole('link', { name: 'غزوة تبوك', exact: true })).toHaveCount(0);
 });
