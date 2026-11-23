@@ -17,7 +17,7 @@ test('the tarajim tab opens the list of converted people, filters by title, and 
 
   await page.getByRole('link', { name: 'صفية بنت عبد المطلب', exact: true }).click();
   await expect(page).toHaveURL(/\/person\?slug=safiyyah-bint-abd-al-muttalib/);
-  await expect(page.getByRole('heading', { name: /نسبها/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'صفية بنت عبد المطلب', exact: true }).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: /صلاتها/ })).toBeVisible();
   // Her son has a page too: his node on her ties ring opens it.
   await page.getByRole('link', { name: /^ابنها: الزبير/ }).click();
@@ -139,4 +139,39 @@ test('a long life on the person page opens folded, and its fold opens the rest',
   await expect(page.getByRole('link', { name: 'غزوة تبوك', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'اطوِ', exact: true }).click();
   await expect(page.getByRole('link', { name: 'غزوة تبوك', exact: true })).toHaveCount(0);
+});
+
+// «مناقبه» and «صفته» (owner, 2026-11-23, sketch tarajim-feed-card/sketch/traits-dark.png): the Prophet's ﷺ words first, each
+// with its own page that opens the book there; his looks as the book's words, the sayer the book names under each, and no
+// name under a word only an unnamed «وقيل» gives.
+test('his virtues put the Prophet\'s ﷺ words first with their pages, his looks as the book\'s words', async ({ page }) => {
+  await open(page, '/person?slug=abu-bakr-as-siddiq');
+  const saying = page.getByText(/ولو كنت متخذا خليلا/).first();
+  await saying.scrollIntoViewIfNeeded();
+  await expect(page.getByText('قال النبي ﷺ:').first()).toBeVisible();
+  await page.getByRole('button', { name: 'المصدر: سيرة الخلفاء الراشدين ١٢' }).first().click();
+  await expect(page.getByText(/^«ويأب. الله والمؤمنون إلا أبا بكر»$/)).toBeVisible();
+  await page.keyboard.press('Escape');
+  // Al-Zuhri names «مسترق الوركين»; «نحيف» is the unnamed sentence's only.
+  await expect(page.getByLabel('مسترق الوركين، عند الزهري', { exact: true })).toBeVisible();
+  await expect(page.getByLabel('نحيف', { exact: true })).toBeVisible();
+});
+
+// The page's new head and sections (owner, 2026-11-23; sketch tarajim-feed-card/sketch/person-dark.png): his age at Islam with
+// each reading's sayer in the head card, the battles of his life on the atlas's map, each opening its page, and the ayah
+// revealed about him in the mushaf's text, its name opening the ayah's page.
+test('the person page heads with his facts, maps his battles and gives the ayah revealed about him', async ({ page }) => {
+  await open(page, '/person?slug=az-zubayr-ibn-al-awwam');
+  await expect(page.getByText('أسلم وعمره', { exact: true })).toBeVisible();
+  await expect(page.getByText('عند عروة', { exact: true })).toBeVisible();
+  await expect(page.getByText(/ترجمته في الكتاب/)).toHaveCount(0);
+  const yarmuk = page.getByRole('button', { name: 'معركة اليرموك', exact: true }).last();
+  await yarmuk.scrollIntoViewIfNeeded();
+  await yarmuk.click();
+  await expect(page).toHaveURL(/\/battle\?slug=/);
+  await page.goBack();
+  const ayah = page.getByRole('button', { name: /^آلِ عِمْرَانْ ١٧٢/ });
+  await ayah.scrollIntoViewIfNeeded();
+  await ayah.click();
+  await expect(page).toHaveURL(/\/ayah\?key=3%3A172|\/ayah\?key=3:172/);
 });

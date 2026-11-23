@@ -49,6 +49,14 @@ const hasName = (text: string, name: string) => ` ${bareName(text)} `.includes(`
  * than three such fathers is not asked, nor one whose names in the question already say where they meet.
  */
 export function nasabQuestions(people: AppPerson[] = PEOPLE): ChoiceQuestion[] {
+  // Every pair of people is weighed: worked out once for each list (the quiz and the feed's «أين يلتقي نسبهما؟» both ask).
+  let made = nasabMade.get(people);
+  if (!made) nasabMade.set(people, made = nasabPairs(people));
+  return [...made];
+}
+const nasabMade = new WeakMap<readonly AppPerson[], ChoiceQuestion[]>();
+
+function nasabPairs(people: AppPerson[]): ChoiceQuestion[] {
   const lines = linesOf(people);
   const questions: ChoiceQuestion[] = [];
   for (let i = 0; i < people.length; i += 1) for (let j = i + 1; j < people.length; j += 1) {
@@ -88,9 +96,15 @@ export function nasabQuestions(people: AppPerson[] = PEOPLE): ChoiceQuestion[] {
  * («جعفراً»), so «علي» is not found in «عليه» nor «عمر» in «عمرو».
  */
 function mentions(quote: string, name: string) {
-  const escaped = bareName(name).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return new RegExp(`(?:^|[\\s«(])[وفبلك]?${escaped}ا?(?=$|[\\s،.:؛»)!؟])`, 'u').test(bareName(quote));
+  let named = namedBy.get(name);
+  if (!named) {
+    const escaped = bareName(name).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    namedBy.set(name, named = new RegExp(`(?:^|[\\s«(])[وفبلك]?${escaped}ا?(?=$|[\\s،.:؛»)!؟])`, 'u'));
+  }
+  return named.test(bareName(quote));
 }
+/** Each name's pattern, made once: the virtue questions look for the same names in every quote. */
+const namedBy = new Map<string, RegExp>();
 
 /** The words that name a person in a quote: the first name, «ابن» or «بنت» and the father, each kunya and laqab in any case. */
 function namesOf(person: AppPerson, line: LineName[]) {

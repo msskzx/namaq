@@ -2,8 +2,8 @@ import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { usePageWidth } from '@/ui/column';
 import { router, useLocalSearchParams } from 'expo-router';
-import { CalendarDays, Link2, MapPin, Network, Waypoints } from 'lucide-react-native';
-import { factSources, kunyaName, namePieces, pageSources, sayerAt, saidBy, virtueGroups, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
+import { CalendarDays, ChevronLeft, Link2, MapPin, Network, Waypoints } from 'lucide-react-native';
+import { factSources, kunyaName, namePieces, pageLabel, pageSources, sayerAt, saidBy, virtueGroups, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
 import { surahName } from '@shared/quran/surahNames';
 import { counted, num } from '@shared/quran/arabicNumber';
 import { sourceById } from '@shared/sources';
@@ -12,6 +12,12 @@ import TopBar from '@/ui/TopBar';
 import { SharedCard, ShareHead } from '@/ui/CardShare';
 import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
+import BattleMap from '@/components/battles/BattleMap';
+import LitAyat from '@/components/quran/text/LitAyat';
+import { ayahMushafWords } from '@/lib/mushaf';
+import { openAyahPage } from '@/lib/ways';
+import { placeSources } from '@shared/drawingCards';
+import type { AppBattle } from '@shared/battles/battle';
 import IconButton from '@/ui/IconButton';
 import Reference from '@/ui/Reference';
 import SourceLine, { sourcesOf } from '@/ui/SourceLine';
@@ -26,9 +32,11 @@ import LifeTimeline from '@/components/LifeTimeline';
 import { FEATURE_ICON } from '@/components/featureIcons';
 import Tabs from '@/ui/Tabs';
 import Saying from '@/ui/Saying';
-import Points from '@/ui/Points';
 import FactCells, { type FactCell, type Reading } from '@/ui/FactCells';
-import QuoteBar from '@/ui/QuoteBar';
+import QuoteBar, { type QuotePiece } from '@/ui/QuoteBar';
+import SayingBand from '@/ui/SayingBand';
+import TraitChips from '@/ui/TraitChips';
+import { traitChips, traitSpans } from '@shared/tarajimTraits';
 import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import { lifeSources } from '@shared/events/lifeTimeline';
 import type { QuizSource } from '@shared/quiz/sources';
@@ -47,7 +55,9 @@ const openPerson = (slug: string) => router.push({ pathname: '/person', params: 
  * A section (owner 2026-11-20: the home card's shape): its name in the accent, numbered as on the sketch («١ · نسبه»), a
  * switch above the card where it has one, the card, its own buttons in the row under it and its books on the line under them.
  */
-function Part({ n, title, palette, children, above, row, source, head }: { n: number; title: string; palette: Palette; children: React.ReactNode;
+function Part({ n, title, palette, children, above, row, source, head, pad, gap = 10 }: { n: number; title: string; palette: Palette; children: React.ReactNode;
+  /** A card whose blocks reach its edges (a band at its head) sets its own room: `pad` 0. */
+  pad?: number; gap?: number;
   /** The person's name over the section's share picture (release 1: every page shares). */
   head: React.ReactNode;
   /** Above the card: the «الرسم | النص» switch. */
@@ -60,7 +70,7 @@ function Part({ n, title, palette, children, above, row, source, head }: { n: nu
     <View style={{ gap: 8 }}>
       <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 15, textAlign: 'right' }}>{num(n)} · {title}</Text>
       {above}
-      <SharedCard palette={palette} gap={10} row={row} source={source && sourcesOf(source)} shareLabel={`شارك ${title}`}
+      <SharedCard palette={palette} gap={gap} pad={pad} clip={pad === 0} row={row} source={source && sourcesOf(source)} shareLabel={`شارك ${title}`}
         shareHead={<>{head}<Text style={{ color: palette.accent, fontSize: 15, textAlign: 'right', paddingHorizontal: 8 }}>{title}</Text></>}>{children}</SharedCard>
     </View>
   );
@@ -92,17 +102,47 @@ function Quote({ fact, palette, marked = false, many = false, children }: { fact
   );
 }
 
-/** A person's virtues by who says them, each its own point; `marked` (a quiz's answer, once shown) in green. */
+/** The words to light in a person's sayings: his name as the page heads it, his kunyas and his laqabs. */
+const namesOf = (person: AppPerson) => [personName(person), ...person.kunya.map(fact => fact.text), ...person.laqab.map(fact => fact.text)];
+
+/** A saying's own page, under it, opening the book there (owner 2026-11-23: each saying opens its reference). */
+function PageOf({ fact, palette }: { fact: PersonFact; palette: Palette }) {
+  if (!fact.refs.length) return null;
+  const books = sourcesOf(pageSources(fact.refs, { text: fact.text, by: saidBy(fact) }));
+  return <SourceLine named={books} sources={books} label={pageLabel(fact.refs)} palette={palette} small />;
+}
+
+/**
+ * A person's virtues (owner, 2026-11-23, sketch tarajim-feed-card/sketch/traits-dark.png): the Prophet's ﷺ words first,
+ * set apart on an amber band between «», then each other sayer's with a bar and his name over it, the author's own words
+ * under his name too, so every saying says whose it is; his own names lit, each saying's page under it. `marked` (a
+ * quiz's answer, once shown) in green.
+ */
 function VirtueList({ person, palette, marked }: { person: AppPerson; palette: Palette; marked?: number }) {
+  const names = namesOf(person);
+  const groups = virtueGroups(person.virtues);
+  const prophet = groups.find(group => group.by === PROPHET_SAYS);
+  const author = (fact: PersonFact) => `قال ${pageSources(fact.refs)[0]?.author ?? 'الذهبي'}:`;
   return <>
-    {virtueGroups(person.virtues).map(group => (
-      <Saying key={group.items[0].at} by={group.by} palette={palette}>
-        <Points palette={palette} items={group.items.map(({ fact, at }) => ({
-          key: at, node: <Text style={at === marked ? { ...body(palette), color: palette.green } : body(palette)}>{fact.text}</Text> }))} />
-      </Saying>
-    ))}
+    {prophet && (
+      <SayingBand by={PROPHET_SAYS} tone={palette.amber} palette={palette}>
+        {prophet.items.map(({ fact, at }) => (
+          <QuoteBar key={at} quoted tone={palette.amber} pieces={namePieces(fact.text, names)} palette={palette} marked={at === marked}
+            foot={<PageOf fact={fact} palette={palette} />} />
+        ))}
+      </SayingBand>
+    )}
+    {groups.some(group => group !== prophet) && (
+      <View style={{ padding: 16, gap: 14 }}>
+        {groups.filter(group => group !== prophet).flatMap(group => group.items.map(({ fact, at }) => (
+          <QuoteBar key={at} by={group.by ?? (fact.anonymous ? 'قيل:' : author(fact))} pieces={namePieces(fact.text, names)} palette={palette}
+            marked={at === marked} foot={<PageOf fact={fact} palette={palette} />} />
+        )))}
+      </View>
+    )}
   </>;
 }
+const PROPHET_SAYS = 'قال النبي ﷺ:';
 
 /** A person's virtues as the entry gives them, with the pages: the person page's «مناقبه» and a quiz's look-up draw it. */
 export function Virtues({ person, palette, marked }: { person: AppPerson; palette: Palette; marked?: number }) {
@@ -113,23 +153,70 @@ export function Virtues({ person, palette, marked }: { person: AppPerson; palett
 }
 
 /**
+ * A person's looks (owner, 2026-11-23, sketch tarajim-feed-card/sketch/traits-dark.png): the book's words for them as
+ * chips, each with the sayer the book names under it (none for an unnamed «وقيل», which is no second voice), then every
+ * sentence in full with those words marked.
+ */
+function Looks({ person, palette }: { person: AppPerson; palette: Palette }) {
+  const names = namesOf(person);
+  const author = (fact: PersonFact) => pageSources(fact.refs)[0]?.author ?? 'الذهبي';
+  // The name as the line over his sentence gives it («قال أبو الزناد:» → «أبو الزناد»), and «النبي ﷺ» for the Prophet ﷺ.
+  const named = (fact: PersonFact) => (fact.anonymous ? undefined : fact.by.length ? saidBy(fact)?.replace(/^قالت? /u, '').replace(/:$/u, '') : author(fact));
+  const traits = traitChips(person.appearance, named);
+  return <>
+    {traits.length > 0 && <View style={{ padding: 16 }}><TraitChips traits={traits} palette={palette} /></View>}
+    <View style={{ padding: 16, paddingTop: traits.length ? 0 : 16, gap: 14 }}>
+      {person.appearance.map((fact, i) => (
+        <QuoteBar key={i} by={saidBy(fact) ?? `قال ${author(fact)}:`} pieces={lookPieces(fact.text, names)} palette={palette} size={17} />
+      ))}
+    </View>
+    <Credit facts={person.appearance} palette={palette} />
+  </>;
+}
+
+/** A sentence of looks in runs: the trait words marked, his names lit in what is left. */
+function lookPieces(text: string, names: string[]): QuotePiece[] {
+  const out: QuotePiece[] = [];
+  let at = 0;
+  for (const span of traitSpans(text)) {
+    if (span.start > at) out.push(...namePieces(text.slice(at, span.start), names));
+    out.push({ text: text.slice(span.start, span.end), mark: true });
+    at = span.end;
+  }
+  if (at < text.length) out.push(...namePieces(text.slice(at), names));
+  return out;
+}
+
+/** Who gives a reading, in words a reader new to the books follows: «عند خليفة بن خياط», «قيل»; the author's own, his name. */
+const readingOf = (fact: PersonFact, value: string): Reading => ({ value,
+  by: fact.anonymous ? 'قيل' : fact.by.length ? sayerAt(fact) : `عند ${pageSources(fact.refs)[0]?.author ?? 'الذهبي'}` });
+
+/**
+ * A person's short facts side by side (FactCells): his age at Islam when `islam` (the page's head), the year he died with
+ * its month, where, and his age, every reading with who gives it.
+ */
+function personCells(person: AppPerson, islam = false): FactCell[] {
+  const f = person.sex === 'FEMALE';
+  const { year, month, place, age } = person.died;
+  return [
+    ...(islam && person.islamAge.length ? [{ key: 'islam', label: f ? 'أسلمت وعمرها' : 'أسلم وعمره', readings: person.islamAge.map(fact => readingOf(fact, ageOf(fact))) }] : []),
+    ...(year.length ? [{ key: 'year', Icon: CalendarDays, label: f ? 'وفاتها' : 'وفاته', readings: [
+      ...year.map(fact => readingOf(fact, yearOf(fact))), ...(islam ? month.map(fact => readingOf(fact, unvowelled(fact.text))) : [])] }] : []),
+    ...(islam && !year.length && month.length ? [{ key: 'month', label: f ? 'شهر وفاتها' : 'شهر وفاته', readings: month.map(fact => readingOf(fact, unvowelled(fact.text))) }] : []),
+    ...(place.length ? [{ key: 'place', Icon: MapPin, label: f ? 'ماتت في' : 'مات في', readings: place.map(fact => readingOf(fact, unvowelled(fact.text).replace(/^ب(?=ال)/u, ''))) }] : []),
+    ...(age.length ? [{ key: 'age', label: f ? 'عمرها' : 'عمره', readings: age.map(fact => readingOf(fact, ageOf(fact))) }] : []),
+  ];
+}
+
+/**
  * A person in brief, as his page gives it (owner, 2026-11-23: the feed's «من التراجم» held one short line; sketch
  * tarajim-feed-card/sketch design أ): his name large with the name the book prints under it, his death in cells, then
  * his virtues each with a bar, his own names in them lit, the Prophet's ﷺ words barred in amber. The facts it draws, for
  * the card's book line: `briefFacts`.
  */
 export function PersonBrief({ person, palette }: { person: AppPerson; palette: Palette }) {
-  const f = person.sex === 'FEMALE';
-  // Who gives a reading, in words a reader new to the books follows: «عند خليفة بن خياط», «قيل»; the author's own, his name.
-  const reading = (fact: PersonFact, value: string): Reading => ({ value,
-    by: fact.anonymous ? 'قيل' : fact.by.length ? sayerAt(fact) : `عند ${pageSources(fact.refs)[0]?.author ?? 'الذهبي'}` });
-  const { year, place, age } = person.died;
-  const cells: FactCell[] = [
-    ...(year.length ? [{ key: 'year', Icon: CalendarDays, label: f ? 'وفاتها' : 'وفاته', readings: year.map(fact => reading(fact, yearOf(fact))) }] : []),
-    ...(place.length ? [{ key: 'place', Icon: MapPin, label: f ? 'ماتت في' : 'مات في', readings: place.map(fact => reading(fact, unvowelled(fact.text).replace(/^ب(?=ال)/u, ''))) }] : []),
-    ...(age.length ? [{ key: 'age', label: f ? 'عمرها' : 'عمره', readings: age.map(fact => reading(fact, ageOf(fact))) }] : []),
-  ];
-  const names = [personName(person), ...person.kunya.map(fact => fact.text), ...person.laqab.map(fact => fact.text)];
+  const cells = personCells(person);
+  const names = namesOf(person);
   // The author's own words carry his name too, so every saying says whose it is.
   const sayer = (fact: PersonFact, by?: string) => by ?? (fact.anonymous ? 'قيل:' : `قال ${pageSources(fact.refs)[0]?.author ?? 'الذهبي'}:`);
   return (
@@ -234,10 +321,11 @@ export default function PersonScreen() {
   // A battle the timeline draws is not named again under it; one the entry names that the timeline lacks stays in the line.
   const drawn = new Set(lifeItems.map(item => item.open?.slug));
   const battles = uniq(person.battles).filter(b => !drawn.has(b.slug));
-  const life = [...person.islamAge, ...battles, ...person.absentFrom, ...person.died.year, ...person.died.month, ...person.died.age, ...person.died.place];
+  const life = [...battles, ...person.absentFrom];
+  const places = mapBattles(person, lifeItems);
+  const ayat = person.ayat.filter(fact => typeof fact.value === 'string');
+  const allRevealed = ayat.every(fact => fact.kind === 'REVEALED_ABOUT');
   const tieList = ties(person);
-  const { book, part } = volumeLabel(person.entry.volume);
-  const titleSources = sourcesOf(factSources(person.titles, true));
   const head = <ShareHead title={personName(person)} palette={palette} />;
   let n = 0;
   return (
@@ -246,94 +334,75 @@ export default function PersonScreen() {
         <IconButton Icon={Network} label="شجرة النسب" onPress={tree} />
       </TopBar>
       <ScrollView onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 18 }}>
-        <View style={{ gap: 6 }}>
-          <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>{personName(person)}</Text>
-          {person.kunya[0] && <Text style={{ color: palette.muted, fontSize: 16, textAlign: 'right' }}>{kunyaName(person.kunya[0].text)}</Text>}
-          {person.titles.length > 0 && (
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-              {person.titles.map(title => (
-                <Chip key={title.title} label={title.name} on={false} small palette={palette}
-                  onPress={title.shared ? () => router.navigate({ pathname: '/people', params: { title: title.title, at: String(Date.now()) } }) : undefined} />
+        <SharedCard palette={palette} pad={0} gap={0} clip source={heroSources(person)} shareLabel={`شارك ${personName(person)}`} shareHead={head}
+          row={person.fullName && <IconButton Icon={FEATURE_ICON.nasab} label={f ? 'قارن نسبها بغيرها' : 'قارن نسبه بغيره'} onPress={tree} />}>
+          <View style={{ padding: 16, paddingBottom: 14, gap: 10 }}>
+            <View style={{ gap: 2 }}>
+              <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, lineHeight: 40, textAlign: 'right' }}>{personName(person)}</Text>
+              {/* The name as the book gives it, no drawing of it (owner, 2026-11-23); the drawing is for comparing, on the button. */}
+              {person.fullName && <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>{`${saidBy(person.fullName) ? `${saidBy(person.fullName)} ` : ''}${person.fullName.text}`}</Text>}
+              {[...(person.otherNames ?? []), ...person.nameVariants].map((fact, i) => (
+                <Text key={i} style={{ color: palette.muted, fontSize: 14, lineHeight: 24, textAlign: 'right' }}>{`${saidBy(fact) ?? 'وقيل:'} ${fact.text}`}</Text>
               ))}
             </View>
-          )}
-          {titleSources.length > 0 && <SourceLine named={titleSources} sources={titleSources} palette={palette} />}
-        </View>
-
-        {person.fullName && (
-          <Part head={head} n={++n} title={person.sex === 'FEMALE' ? 'نسبها' : 'نسبه'} palette={palette}
-            row={<IconButton Icon={FEATURE_ICON.nasab} label={person.sex === 'FEMALE' ? 'قارن نسبها بغيرها' : 'قارن نسبه بغيره'} onPress={tree} />}>
-            {/* The name as the book gives it, no drawing of it (owner, 2026-11-23: one line alone adds nothing); the drawing is
-                for comparing, on the button. */}
-            <Quote fact={person.fullName} palette={palette} many={!!person.otherNames?.length} />
-            {person.otherNames?.map((fact, i) => (
-              <Quote key={i} fact={fact} palette={palette} many><Text style={body(palette)}>وقيل: {fact.text}</Text></Quote>
-            ))}
-            {person.nameVariants.map((fact, i) => <Quote key={`v${i}`} fact={fact} palette={palette} many />)}
-            <Credit facts={[person.fullName, ...(person.otherNames ?? []), ...person.nameVariants]} palette={palette} />
-          </Part>
-        )}
-
-        {names.length > 0 && (
-          <Part head={head} n={++n} title={[person.kunya.length ? 'كنيت' : '', person.laqab.length ? 'لقب' : ''].filter(Boolean).map(w => w + suffixOf(person)).join(' و')} palette={palette}>
-            {names.map(({ label, fact, kunya }, i) => (
-              <Line key={i} label={label} palette={palette}>
-                {/* A kunya reads as a name (nominative); the book's own words are in the sources below. */}
-                {kunya ? <Quote fact={fact} palette={palette}><Text style={body(palette)}>{kunyaName(fact.text)}</Text></Quote>
-                  : <Quote fact={fact} palette={palette} />}
-              </Line>
-            ))}
-            <Credit facts={names.map(name => name.fact)} palette={palette} quotes />
-          </Part>
-        )}
-
-        {person.appearance.length > 0 && (
-          <Part head={head} n={++n} title={person.sex === 'FEMALE' ? 'صفتها' : 'صفته'} palette={palette}>
-            {person.appearance.map((fact, i) => <Quote key={i} fact={fact} palette={palette} />)}
-            <Credit facts={person.appearance} palette={palette} />
-          </Part>
-        )}
+            {names.map(({ label, fact, kunya }, i) => {
+              // A kunya reads as a name (nominative); the book's own words are in the sources. A name someone gave him keeps
+              // who said it over it.
+              const value = kunya ? kunyaName(fact.text) : fact.text;
+              return saidBy(fact)
+                ? <Line key={i} label={label} palette={palette}><Quote fact={fact} palette={palette}><Text style={body(palette)}>{value}</Text></Quote></Line>
+                : <Text key={i} style={{ ...body(palette), lineHeight: 28 }}><Text style={{ color: palette.muted, fontSize: 14 }}>{`${label} `}</Text>{value}</Text>;
+            })}
+            {person.titles.length > 0 && (
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+                {person.titles.map(title => (
+                  <Chip key={title.title} label={title.name} on={false} small palette={palette}
+                    onPress={title.shared ? () => router.navigate({ pathname: '/people', params: { title: title.title, at: String(Date.now()) } }) : undefined} />
+                ))}
+              </View>
+            )}
+          </View>
+          <FactCells cells={personCells(person, true)} palette={palette} />
+        </SharedCard>
 
         {person.virtues.length > 0 && (
-          <Part head={head} n={++n} title={person.sex === 'FEMALE' ? 'مناقبها' : 'مناقبه'} palette={palette}>
+          <Part head={head} n={++n} title={f ? 'مناقبها' : 'مناقبه'} palette={palette} pad={0} gap={0}>
             <Virtues person={person} palette={palette} />
           </Part>
         )}
 
+        {person.appearance.length > 0 && (
+          <Part head={head} n={++n} title={f ? 'صفتها' : 'صفته'} palette={palette} pad={0} gap={0}>
+            <Looks person={person} palette={palette} />
+          </Part>
+        )}
+
         {(life.length > 0 || lifeItems.length > 0) && (
-          <Part head={head} n={++n} title={person.sex === 'FEMALE' ? 'حياتها' : 'حياته'} palette={palette} source={lifeSources(lifeItems)}
+          <Part head={head} n={++n} title={f ? 'حياتها' : 'حياته'} palette={palette} source={lifeSources(lifeItems)}
             row={lifeItems.length > 0 && <IconButton Icon={FEATURE_ICON.life} label={f ? 'قارن حياتها بغيرها' : 'قارن حياته بغيره'} onPress={() => router.push({ pathname: '/life', params: { slugs: person.slug } })} />}>
             {lifeItems.length > 0 && <LifeTimeline items={lifeItems} palette={palette} inCard foldable />}
-            {life.length > 0 ? <>
-            {person.islamAge.map((fact, i) => (
-              <Line key={`i${i}`} label={f ? 'أسلمت وعمرها' : 'أسلم وعمره'} palette={palette}>
-                <Quote fact={fact} palette={palette} many={person.islamAge.length > 1}><Text style={body(palette)}>{ageOf(fact)}</Text></Quote>
-              </Line>
-            ))}
             {battles.length > 0 && <Line label={f ? 'شهدت' : 'شهد'} palette={palette}><Names links={battles} palette={palette} onShow={showBattle} /></Line>}
             {person.absentFrom.length > 0 && <Line label={f ? 'غابت عن' : 'غاب عن'} palette={palette}><Names links={uniq(person.absentFrom)} palette={palette} onShow={showBattle} /></Line>}
-            {person.died.year.map((fact, i) => (
-              <Line key={`y${i}`} label={f ? 'وفاتها' : 'وفاته'} palette={palette}>
-                <Quote fact={fact} palette={palette} many={person.died.year.length > 1}><Text style={body(palette)}>{yearOf(fact)}</Text></Quote>
-              </Line>
-            ))}
-            {person.died.month.map((fact, i) => (
-              <Line key={`m${i}`} label={f ? 'شهر وفاتها' : 'شهر وفاته'} palette={palette}><Quote fact={fact} palette={palette} many={person.died.month.length > 1}><Text style={body(palette)}>{unvowelled(fact.text)}</Text></Quote></Line>
-            ))}
-            {person.died.age.map((fact, i) => (
-              <Line key={`a${i}`} label={f ? 'عمرها' : 'عمره'} palette={palette}><Quote fact={fact} palette={palette} many={person.died.age.length > 1}><Text style={body(palette)}>{ageOf(fact)}</Text></Quote></Line>
-            ))}
-            <Credit facts={life} palette={palette} quotes />
-            </> : null}
+            {life.length > 0 && <Credit facts={life} palette={palette} quotes />}
+          </Part>
+        )}
+
+        {places.length > 0 && (
+          <Part head={head} n={++n} title={f ? 'أماكنها' : 'أماكنه'} palette={palette} pad={0} gap={0} source={placesSources(places, person, lifeItems)}>
+            <BattleMap places={places.map(battle => ({ name: battle.place!.name, at: battle.place!.at }))} palette={palette}
+              onPin={names => { const at = places.find(battle => names.includes(battle.place!.name)); if (at) openBattle(at.slug); }} />
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, padding: 12 }}>
+              {places.map(battle => <Chip key={battle.slug} label={battle.name} on={false} small palette={palette} onPress={() => openBattle(battle.slug)} />)}
+            </View>
           </Part>
         )}
 
         {tieList.length > 0 && (
-          <Part head={head} n={++n} title={person.sex === 'FEMALE' ? 'صلاتها' : 'صلاته'} palette={palette}
+          <Part head={head} n={++n} title={f ? 'صلاتها' : 'صلاته'} palette={palette}
             above={<Tabs palette={palette} label="كيف تُعرض الصلات" value={tiesView} onChange={setTiesView} options={DRAWING_OR_TEXT} />}
             row={<>
-              <IconButton Icon={Waypoints} label={person.sex === 'FEMALE' ? 'تنقّل في صلاتها' : 'تنقّل في صلاته'} onPress={() => router.push({ pathname: '/ties', params: { slug: person.slug } })} />
-              <IconButton Icon={Link2} label={person.sex === 'FEMALE' ? 'بينها وبين…' : 'بينه وبين…'} onPress={() => router.push({ pathname: '/between', params: { slugs: person.slug } })} />
+              <IconButton Icon={Waypoints} label={f ? 'تنقّل في صلاتها' : 'تنقّل في صلاته'} onPress={() => router.push({ pathname: '/ties', params: { slug: person.slug } })} />
+              <IconButton Icon={Link2} label={f ? 'بينها وبين…' : 'بينه وبين…'} onPress={() => router.push({ pathname: '/between', params: { slugs: person.slug } })} />
             </>}>
             {tiesView === 'drawing'
               ? <TiesRing slug={person.slug} width={Math.min(width - RING_ROOM, 480)} palette={palette} onPick={openPerson} onShow={setTie} />
@@ -342,32 +411,60 @@ export default function PersonScreen() {
           </Part>
         )}
 
-        {person.ayat.length > 0 && (
-          <Part head={head} n={++n} title={person.sex === 'FEMALE' ? 'آيات فيها' : 'آيات فيه'} palette={palette}>
-            {person.ayat.map((fact, i) => (
-              <View key={i} style={{ gap: 2 }}>
-                <Text style={{ color: palette.accent, fontSize: 15, textAlign: 'right' }}>
-                  {typeof fact.value === 'string' ? ayahOf(fact.value) : ''}{fact.kind === 'REVEALED_ABOUT' ? (person.sex === 'FEMALE' ? ' · نزلت فيها' : ' · نزلت فيه') : ''}
-                </Text>
-                <Quote fact={fact} palette={palette} />
+        {ayat.length > 0 && (
+          <Part head={head} n={++n} palette={palette}
+            title={allRevealed ? (f ? 'آيات نزلت فيها' : 'آيات نزلت فيه') : (f ? 'آيات فيها' : 'آيات فيه')}>
+            {ayat.map(fact => (
+              <View key={fact.value} style={{ gap: 8 }}>
+                <AyahOf ayahKey={fact.value as string} palette={palette} />
+                {/* The ayah is the subject: its name opens its page (owner, 2026-11-22). */}
+                <Button variant="plain" label={`${ayahOf(fact.value as string)}${fact.kind === 'REVEALED_ABOUT' && !allRevealed ? (f ? ' · نزلت فيها' : ' · نزلت فيه') : ''}`} Icon={ChevronLeft} onPress={() => openAyahPage(fact.value as string)} />
+                <QuoteBar by={saidBy(fact) ?? `قال ${pageSources(fact.refs)[0]?.author ?? 'الذهبي'}:`} pieces={namePieces(fact.text, namesOf(person))} palette={palette} size={17} />
               </View>
             ))}
-            <Credit facts={person.ayat} palette={palette} />
+            <Credit facts={ayat} palette={palette} quotes />
           </Part>
         )}
-
-        <Part head={head} n={++n} title={person.sex === 'FEMALE' ? 'ترجمتها في الكتاب' : 'ترجمته في الكتاب'} palette={palette}
-          source={[{ book: book, author: 'الذهبي', url: siyar.link.url, ...(siyar.edition && { edition: siyar.edition }) }]}>
-          {/* An entry that runs into the next volume (the Sira) names both: «السيرة النبوية ١/٢٩ – ٢/٤٩٥». */}
-          <Text style={body(palette)}>{person.entry.toVolume !== undefined && part !== undefined
-            ? `${book} ${num(part)}/${num(Number(person.entry.from))} – ${num(volumeLabel(person.entry.toVolume).part ?? person.entry.toVolume)}/${num(Number(person.entry.to))}`
-            : `${book}${part !== undefined ? ` ${num(part)}` : ''}${person.entry.from ? `، ص ${num(Number(person.entry.from))}${person.entry.to && person.entry.to !== person.entry.from ? `–${num(Number(person.entry.to))}` : ''}` : ''}`}</Text>
-        </Part>
       </ScrollView>
       <TieSheet tie={tie} onClose={() => setTie(undefined)} palette={palette} />
     </View>
   );
 }
+
+const openBattle = (slug: string) => toTab({ pathname: '/battle', params: { slug } });
+
+/** An ayah as the page sets it, with its number (the Quran module's AyahFlow through LitAyat). */
+function AyahOf({ ayahKey, palette }: { ayahKey: string; palette: Palette }) {
+  return <LitAyat ayat={[{ words: ayahMushafWords(ayahKey), lit: [], number: Number(ayahKey.split(':')[1]) }]} menu={ayahKey} palette={palette} />;
+}
+
+/** The page's head card's books: the entry itself first (its pages), then every name, title and fact the card shows. */
+function heroSources(person: AppPerson) {
+  const { book, part } = volumeLabel(person.entry.volume);
+  const at = person.entry.toVolume !== undefined && part !== undefined
+    ? `${num(part)}/${num(Number(person.entry.from))} – ${num(volumeLabel(person.entry.toVolume).part ?? person.entry.toVolume)}/${num(Number(person.entry.to))}`
+    : `${part !== undefined ? `${num(part)}/` : ''}${num(Number(person.entry.from))}${person.entry.to && person.entry.to !== person.entry.from ? `–${num(Number(person.entry.to))}` : ''}`;
+  const entry: QuizSource = { book, author: 'الذهبي', at, url: siyar.link.url, ...(siyar.edition && { edition: siyar.edition }) };
+  const facts = [...(person.fullName ? [person.fullName] : []), ...(person.otherNames ?? []), ...person.nameVariants, ...person.kunya, ...person.laqab,
+    ...person.titles, ...person.islamAge, ...person.died.year, ...person.died.month, ...person.died.place, ...person.died.age];
+  return sourcesOf([entry, ...factSources(facts, true)]);
+}
+
+/**
+ * «أماكنه» (owner, 2026-11-23; sketch tarajim-feed-card/sketch/person-dark.png): the battles his entry or his life names
+ * that the atlas pins, each once, by year. A death place waits until the atlas has it with its book.
+ */
+function mapBattles(person: AppPerson, life: ReturnType<typeof personLife>) {
+  const slugs = [...person.battles.map(link => link.slug), ...life.flatMap(item => (item.open?.to === 'battle' ? [item.open.slug] : []))];
+  return [...new Set(slugs)].flatMap(slug => battleOf(slug) ?? []).filter(battle => battle.place)
+    .sort((a, b) => (a.year?.value ?? Infinity) - (b.year?.value ?? Infinity));
+}
+/** The map's books: the pages naming him at each battle, and the books placing each pin. */
+const placesSources = (places: AppBattle[], person: AppPerson, life: ReturnType<typeof personLife>): QuizSource[] => [
+  ...factSources(person.battles.filter(link => places.some(battle => battle.slug === link.slug)), true),
+  ...lifeSources(life.filter(item => places.some(battle => battle.slug === item.open?.slug))),
+  ...placeSources(places),
+];
 
 /** A battle named in two places is one name in the line. */
 function uniq(links: PersonLink[]) {

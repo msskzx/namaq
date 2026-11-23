@@ -143,6 +143,18 @@ export function namesItsSurah(ayah: BranchAyah) {
 
 /** The ayat in the scope that can be asked, and the scope's surahs the wrong choices come from first. */
 function inScope(scope: ChoiceScope) {
+  // The same scope comes again for every question the feed and quizzes ask: its ayat are found once.
+  const id = JSON.stringify(scope);
+  let found = scopes.get(id);
+  if (!found) {
+    if (scopes.size > 4) scopes.delete(scopes.keys().next().value!);
+    scopes.set(id, found = scopedAyat(scope));
+  }
+  return found;
+}
+const scopes = new Map<string, ReturnType<typeof scopedAyat>>();
+
+function scopedAyat(scope: ChoiceScope) {
   const { ayat, answerable } = index();
   const scoped = [...filteredAyat(ayat, scope.filters, scope.range).values()];
   const allowed = new Set(scoped.map(ayah => surahOf(ayah.key)));

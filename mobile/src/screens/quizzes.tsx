@@ -16,7 +16,7 @@ import { useTabRetap } from '@/lib/tabRetap';
 import { useBooks } from '@/lib/books';
 import { DEFAULT_LIST, DEFAULT_SOLO, startSolo } from '@/lib/quiz';
 import { setRun } from '@/lib/soloStore';
-import { FeedQuiz, quizBookOn } from '@/components/HomeFeed';
+import { FeedQuiz, feedRun, quizBookOn } from '@/components/HomeFeed';
 import QuizKindTree, { type TreeBranch } from '@/components/QuizKindTree';
 import { QUIZ_ICON } from '@/components/featureIcons';
 import { INTERESTS, SECTIONS, interestOf, type SectionId } from '@shared/interests';
@@ -153,17 +153,17 @@ function Heading({ title, line, palette }: { title: string; line?: string; palet
  */
 function CameBack({ onOpen, palette }: { onOpen: (asked: Asked) => void; palette: Palette }) {
   const missed = useSyncExternalStore(subscribeMissed, readMissed);
-  const list = useList();
+  const memorized = useSyncExternalStore(subscribeMemorized, readMemorized);
+  const only = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
   const [now] = useState(Date.now);
   const due = useMemo(() => Object.values(missed).filter(item => item.due <= now && FEED_QUIZ_NAMES[item.kind as FeedQuizKind])
     .sort((a, b) => a.due - b.due).flatMap(item => {
       const kind = item.kind as FeedQuizKind;
       if (!quizBookOn(kind)) return [];
-      // Drawn as the card draws it: «رتّب سور الجزء» asks a run of surahs (HomeFeed QuizPost).
-      const asked = kind === 'ORDER_JUZ' ? { ...list, filters: { ...list.filters, run: '1' } } : list;
-      const question = startSolo({ ...DEFAULT_SOLO, kinds: [kind as QuizTopic], length: 1, list: asked }, seededRandom(item.seed)).questions[0];
+      // The card's own run (HomeFeed feedRun): the same question the tap asks, worked out once.
+      const question = feedRun(kind as QuizTopic, item.seed, memorized && only ? memorized : null)?.questions[0];
       return question ? [{ kind, seed: item.seed, prompt: question.promptArabic ?? '' }] : [];
-    }), [missed, now, list]);
+    }), [missed, now, memorized, only]);
   if (!due.length) return null;
   return (
     <View style={{ gap: 8 }}>
