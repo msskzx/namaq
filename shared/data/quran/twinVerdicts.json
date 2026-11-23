@@ -1045,7 +1045,8 @@
   "cmp:0nfi4us1804pro": {
    "pair": "2:6|36:10",
    "keep": true,
-   "why": "Same sentence: it is the same to them whether you warn them or not; they will not believe."
+   "why": "Same sentence: it is the same to them whether you warn them or not; they will not believe. (owner kept)",
+   "checked": true
   },
   "cmp:0ngj0ig1k79tua": {
    "pair": "4:105|39:2",
@@ -1995,7 +1996,8 @@
   "cmp:14vn3bw0l28v6u": {
    "pair": "2:119|35:24",
    "keep": true,
-   "why": "Same sentence: We sent you with the truth as a bringer of good news and a warner."
+   "why": "Same sentence: We sent you with the truth as a bringer of good news and a warner. (owner kept)",
+   "checked": true
   },
   "cmp:14xtj190zbc2sp": {
    "pair": "42:37|53:32",
@@ -5424,7 +5426,8 @@
   "tree:196eucv07a9dcd": {
    "pair": "2:34|38:74",
    "keep": true,
-   "why": "Same scene: Iblis refused, was arrogant and was of the disbelievers."
+   "why": "Same scene: Iblis refused, was arrogant and was of the disbelievers. (owner kept)",
+   "checked": true
   },
   "tree:198x6s80wcrabo": {
    "pair": "8:8|10:82",

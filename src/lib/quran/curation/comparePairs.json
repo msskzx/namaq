@@ -6432,15 +6432,33 @@
   },
   "2:51|23:41": {
    "keep": false,
-   "why": "Only 'wrongdoers' as a word; the calf vs the blast on Thamud."
+   "why": "Only 'wrongdoers' as a word; the calf vs the blast on Thamud. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'wrongdoers' as a word; the calf vs the blast on Thamud."
+   }
   },
   "2:53|23:49": {
    "keep": true,
-   "why": "Same sentence: We gave Musa the Book so that they may be guided."
+   "why": "Same sentence: We gave Musa the Book so that they may be guided. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Same sentence: We gave Musa the Book so that they may be guided."
+   }
   },
   "2:92|23:41": {
    "keep": false,
-   "why": "Only 'wrongdoers' as a word; the calf vs the blast on Thamud."
+   "why": "Only 'wrongdoers' as a word; the calf vs the blast on Thamud. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'wrongdoers' as a word; the calf vs the blast on Thamud."
+   }
   },
   "2:34|25:26": {
    "keep": false,
@@ -6799,35 +6817,83 @@
   },
   "2:119|35:24": {
    "keep": true,
-   "why": "Same sentence: We sent you with the truth as a bringer of good news and a warner."
+   "why": "Same sentence: We sent you with the truth as a bringer of good news and a warner. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Same sentence: We sent you with the truth as a bringer of good news and a warner."
+   }
   },
   "2:204|35:5": {
-   "keep": true,
-   "why": "Same theme: the life of this world deceives; people and Allah."
+   "keep": false,
+   "why": "Same theme: the life of this world deceives; people and Allah. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Same theme: the life of this world deceives; people and Allah."
+   }
   },
   "2:284|35:1": {
    "keep": false,
-   "why": "Shares only heavens and earth and the closing 'able over all things'."
+   "why": "Shares only heavens and earth and the closing 'able over all things'. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Shares only heavens and earth and the closing 'able over all things'."
+   }
   },
   "2:6|36:10": {
    "keep": true,
-   "why": "Same sentence: it is the same to them whether you warn them or not; they will not believe."
+   "why": "Same sentence: it is the same to them whether you warn them or not; they will not believe. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Same sentence: it is the same to them whether you warn them or not; they will not believe."
+   }
   },
   "2:66|36:9": {
    "keep": false,
-   "why": "Only 'before them and behind them'; different points."
+   "why": "Only 'before them and behind them'; different points. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'before them and behind them'; different points."
+   }
   },
   "2:66|36:45": {
-   "keep": false,
-   "why": "Only 'before you and behind you'; different points."
+   "keep": true,
+   "why": "Only 'before you and behind you'; different points. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'before you and behind you'; different points."
+   }
   },
   "2:77|36:76": {
    "keep": true,
-   "why": "Same sentence: Allah knows what they conceal and what they declare."
+   "why": "Same sentence: Allah knows what they conceal and what they declare. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Same sentence: Allah knows what they conceal and what they declare."
+   }
   },
   "2:131|36:58": {
-   "keep": false,
-   "why": "Only 'Lord' and the root of peace/submission; different scenes."
+   "keep": true,
+   "why": "Only 'Lord' and the root of peace/submission; different scenes. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'Lord' and the root of peace/submission; different scenes."
+   }
   },
   "2:34|39:59": {
    "keep": true,
@@ -26105,7 +26171,7 @@
   },
   "2:40|2:47": {
    "keep": true,
-   "why": "The same call to the Children of Israel to remember the favour, continuing two ways. A classic place for a memorizer to slip.",
+   "why": "Same call to the Children of Israel to remember the favour",
    "checked": true,
    "card": true
   },
@@ -30530,7 +30596,7 @@
   },
   "1:2|6:45": {
    "keep": true,
-   "why": "Owner kept it",
+   "why": "Only the formula 'praise be to Allah, Lord of the worlds'. (owner kept)",
    "checked": true,
    "card": true
   },
@@ -30554,13 +30620,13 @@
   },
   "1:2|37:182": {
    "keep": true,
-   "why": "Owner kept it",
+   "why": "Only the formula 'praise be to Allah, Lord of the worlds'. (owner kept)",
    "checked": true,
    "card": true
   },
   "1:2|40:65": {
    "keep": true,
-   "why": "Owner kept it",
+   "why": "Only the formula 'praise be to Allah, Lord of the worlds'. (owner kept)",
    "checked": true,
    "card": true
   },
@@ -30584,7 +30650,7 @@
   },
   "1:6|10:25": {
    "keep": true,
-   "why": "Owner kept it",
+   "why": "Only 'guides whom He wills to a straight path'; a prayer vs a general statement. (owner kept)",
    "checked": true,
    "card": true
   },
@@ -30596,7 +30662,7 @@
   },
   "1:6|24:46": {
    "keep": true,
-   "why": "Owner kept it",
+   "why": "Only 'guides whom He wills to a straight path'; a prayer vs a general statement. (owner kept)",
    "checked": true,
    "card": true
   },
@@ -30608,13 +30674,19 @@
   },
   "1:6|67:22": {
    "keep": true,
-   "why": "Owner kept it",
+   "why": "Only 'straight path'; a prayer vs the parable of the one walking prone. (owner kept)",
    "checked": true,
    "card": true
   },
   "2:11|26:152": {
    "keep": true,
-   "why": "Corrupters in the land: they claim to reform, they do not reform."
+   "why": "Corrupters in the land: they claim to reform, they do not reform. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Corrupters in the land: they claim to reform, they do not reform."
+   }
   },
   "2:32|51:30": {
    "keep": true,
@@ -30624,7 +30696,13 @@
   },
   "2:34|38:74": {
    "keep": true,
-   "why": "Same scene: Iblis refused, was arrogant and was of the disbelievers."
+   "why": "Same scene: Iblis refused, was arrogant and was of the disbelievers. (owner kept)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": true,
+    "why": "Same scene: Iblis refused, was arrogant and was of the disbelievers."
+   }
   },
   "2:39|90:19": {
    "keep": true,
@@ -30684,7 +30762,13 @@
   },
   "2:117|26:24": {
    "keep": false,
-   "why": "Only 'the heavens and the earth'."
+   "why": "Only 'the heavens and the earth'. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'the heavens and the earth'."
+   }
   },
   "2:123|82:19": {
    "keep": true,
@@ -30694,7 +30778,13 @@
   },
   "2:154|37:36": {
    "keep": false,
-   "why": "Only 'they say'; different subjects."
+   "why": "Only 'they say'; different subjects. (owner removed)",
+   "checked": true,
+   "card": true,
+   "draft": {
+    "keep": false,
+    "why": "Only 'they say'; different subjects."
+   }
   },
   "2:190|60:8": {
    "keep": true,
