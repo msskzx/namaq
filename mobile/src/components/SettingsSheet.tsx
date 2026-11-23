@@ -4,7 +4,7 @@ import { BookOpen, ChevronLeft, Play, ShieldCheck } from 'lucide-react-native';
 import { router } from 'expo-router';
 import Sheet from '@/ui/Sheet';
 import Logo from './Logo';
-import ThemeTiles, { MarkTiles, ViewTiles } from './ThemeTiles';
+import ThemeTiles, { MarkTiles } from './ThemeTiles';
 import { GestureSettings } from './ReaderSheets';
 import { around, besideLayout, connectors, haptics, hintsSeen, tourSeen } from '@/lib/settings';
 import Toggle from '@/ui/Toggle';
@@ -31,7 +31,6 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
         <InterestsSetting palette={palette} />
         <MemorizedSetting palette={palette} />
         <ThemeTiles palette={palette} />
-        <ViewTiles palette={palette} />
         <MarkTiles palette={palette} />
         <AroundSetting palette={palette} />
         <BesideSetting palette={palette} />

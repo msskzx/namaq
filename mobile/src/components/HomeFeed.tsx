@@ -102,8 +102,7 @@ import { openIntent, openTreesOf, openUtility, toTab, openAyahPage } from '@/lib
 import OpenButton from '@/ui/OpenButton';
 import { FEATURE_ICON, QUIZ_ICON } from './featureIcons';
 import { juzLabel, openJuz } from '@/lib/juz';
-import { around as aroundSetting, branchView, penRule, prayerPlace, prayerSettings } from '@/lib/settings';
-import { showsOtherView } from '@shared/quran/branchView';
+import { around as aroundSetting, penRule, prayerPlace, prayerSettings } from '@/lib/settings';
 import { timesFor, useMinute } from '@/lib/prayer';
 import { bookState, useBooks } from '@/lib/books';
 import { SAHIH, isSahihSlug, useSahihText } from '@/lib/sahih';
@@ -1028,10 +1027,7 @@ const TREE_SHARE = 0.68;
  * a tap and saves on a double tap, as there. The open button takes it to the branches tab.
  */
 const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece; palette: Palette }) {
-  // Opens on the settings' default view; a reader who picked the tree sees one tree in ten as the matrix, but the tree is
-  // never shown to anyone who did not pick it (owner, 2026-11-17). The card's own switches change only this card.
-  const [preferred] = branchView.use();
-  const mode = preferred === 'tree' && showsOtherView(piece.id) ? 'matrix' : preferred;
+  // Opens as the matrix (owner, 2026-11-17); the card's own switches change only this card.
   const [around] = aroundSetting.use();
   const pieces = useMemo(() => [piece], [piece]);
   const [room, setRoom] = useState(0);
@@ -1049,7 +1045,7 @@ const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece
     <View style={{ gap: 4 }}>
       <PostHead Icon={FEATURE_ICON.trees} title="من متشابهات القرآن" sub={placesOf(piece.keys)} open={topic('/branches', 'افتح متشابهات القرآن')} palette={palette} />
       <View style={{ height: height + room }}>
-        <TreePager pieces={pieces} list={EMPTY_LIST} palette={palette} mode={mode} around={around} start={0} embedded={embedded} />
+        <TreePager pieces={pieces} list={EMPTY_LIST} palette={palette} around={around} start={0} embedded={embedded} />
       </View>
       <SourceLine named={sources} sources={sources} palette={palette} />
     </View>
