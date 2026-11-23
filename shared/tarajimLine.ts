@@ -21,9 +21,19 @@ export interface LineName {
 
 /** A name with no vowels, tatweel or hamza seat, for matching («عَمْرٍو» = «عَمْرِو», «أبي» = «ابي», «مرة» = «مره», «لؤي» = «لأي»). */
 export function bareName(name: string) {
-  return name.replace(/[ً-ْٰـ]/g, '').replace(/[أإآؤ]/g, 'ا').replace(/ئ/g, 'ي').replace(/ة/g, 'ه')
-    .replace(/ى$/u, 'ي').replace(/\s+/g, ' ').trim();
+  let bare = bareNames.get(name);
+  if (bare === undefined) {
+    // Names repeat all through the quizzes and cards (thousands of calls for a few hundred names): worked out once each.
+    if (bareNames.size > 50_000) bareNames.clear();
+    bare = bareOf(name);
+    bareNames.set(name, bare);
+  }
+  return bare;
 }
+const bareNames = new Map<string, string>();
+const bareOf = (name: string) =>
+  name.replace(/[ً-ْٰـ]/g, '').replace(/[أإآؤ]/g, 'ا').replace(/ئ/g, 'ي').replace(/ة/g, 'ه')
+    .replace(/ى$/u, 'ي').replace(/\s+/g, ' ').trim();
 
 /** Each word of a text bare, so a final «ى» inside a phrase («أبو يحيى بن») matches as it does at the end. */
 const bareWords = (text: string) => text.split(/\s+/u).filter(Boolean).map(bareName);
@@ -44,6 +54,8 @@ const COMPOUND = /^(?:عبد|ابي|ابو|ام|ذي|ذو|امري|امرئ)$/u;
 export function sameName(a: string, b: string) {
   if (a === b) return true;
   const [short, long] = a.length < b.length ? [a, b] : [b, a];
+  // Both ways below need the longer name to hold the shorter: a quick no for most pairs, asked thousands of times.
+  if (!long.includes(short)) return false;
   const words = long.split(' ');
   // A kunya before the name is the same man: Sa'id ibn al-As's grandfather «أبي أحيحة سعيد» is Khalid's father «سعيد».
   if (words.length > 2 && /^اب[ويا]$/u.test(words[0]) && words.slice(2).join(' ') === short) return true;
@@ -114,6 +126,16 @@ function ownLinesOf(people: readonly AppPerson[]) {
  * stops at «العاص»). Then three names in a row matching another entry's line carry it on.
  */
 export function lineOf(person: AppPerson, people: readonly AppPerson[]): LineName[] {
+  // Each line is looked for among all the others: worked out once for each person of a list (the cards and quizzes ask often).
+  let lines = fullLines.get(people);
+  if (!lines) fullLines.set(people, lines = new Map());
+  let line = lines.get(person.slug);
+  if (!line) lines.set(person.slug, line = fullLineOf(person, people));
+  return [...line];
+}
+const fullLines = new WeakMap<readonly AppPerson[], Map<string, LineName[]>>();
+
+function fullLineOf(person: AppPerson, people: readonly AppPerson[]): LineName[] {
   const own = ownLinesOf(people);
   const line = [...own.get(person.slug)!];
   const father = fatherOf(person);
@@ -179,9 +201,18 @@ export function meetingOf(a: LineName[], b: LineName[]): { a: number; b: number 
  * «بن», in the genitive («أبي طالب», «أبي قحافة عثمان», «ذي يزن»); the box reads «أبو طالب», «أبو قحافة عثمان», «ذو يزن».
  */
 export function boxName(name: string) {
-  return name.replace(/[ً-ْٰـ]/g, '').trim()
-    .replace(/(^|\s)(?:أبي|أبا)(?=\s)/gu, '$1أبو').replace(/(^|\s)(?:ذي|ذا)(?=\s)/gu, '$1ذو').replace(/(^|\s)امرئ(?=\s)/gu, '$1امرؤ');
+  let box = boxNames.get(name);
+  if (box === undefined) {
+    if (boxNames.size > 50_000) boxNames.clear();
+    boxNames.set(name, box = boxOf(name));
+  }
+  return box;
 }
+/** Each name as a box shows it, worked out once: the nasab quizzes ask the same fathers many times over. */
+const boxNames = new Map<string, string>();
+const boxOf = (name: string) =>
+  name.replace(/[ً-ْٰـ]/g, '').trim()
+    .replace(/(^|\s)(?:أبي|أبا)(?=\s)/gu, '$1أبو').replace(/(^|\s)(?:ذي|ذا)(?=\s)/gu, '$1ذو').replace(/(^|\s)امرئ(?=\s)/gu, '$1امرؤ');
 
 /** One father in the nasab tree: his name, the people picked whose line ends at him (they are he), and his sons on the lines. */
 export interface NasabNode {
