@@ -18,8 +18,8 @@ import BattleTimeline from '@/components/battles/BattleTimeline';
 
 /**
  * Every battle in the app: the timeline over the years, then the list by year (undated last); each row opens its page.
- * Opened with `year` (the feed's year card), it scrolls to that year's group once it is laid out. The title is small in the
- * top bar, beside a search that keeps the battles whose name or place holds every typed word (owner, 2026-11-23).
+ * Opened with `year` (the feed's year card), it scrolls to that year's group once it is laid out. The top bar holds a search,
+ * named for the page, with no title beside it (owner, 2026-11-23, as on the Hadith and Tarajim tabs), that keeps the battles whose name or place holds every typed word (owner, 2026-11-23).
  */
 export default function BattlesScreen() {
   const palette = usePalette();
@@ -54,8 +54,8 @@ export default function BattlesScreen() {
   }, [opened]);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar back={back} title="الغزوات والمعارك" hideOnScroll
-        search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث', label: 'ابحث في الغزوات والمعارك' }} />
+      <TopBar back={back} hideOnScroll
+        search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث في الغزوات والمعارك', label: 'ابحث في الغزوات والمعارك' }} />
       <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 10 }}>
         {!words.length && <BattleTimeline madinah={timeline.madinah} after={timeline.after} palette={palette} onYear={toYear} />}
         {!groups.length && <Empty text="لا غزوة ولا معركة بهذا الاسم" palette={palette} />}

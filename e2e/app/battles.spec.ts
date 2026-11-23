@@ -6,7 +6,7 @@ test('the tarajim tab lists the battles, and Badr opens with its map, numbers, m
   await open(page, '/');
   await tab(page, 'التراجم').click();
   await page.getByRole('link', { name: 'الغزوات والمعارك' }).click();
-  await expect(page.getByRole('heading', { name: 'الغزوات والمعارك' })).toBeVisible();
+  await expect(page.getByLabel('ابحث في الغزوات والمعارك')).toBeVisible();
   await page.getByRole('link', { name: 'غزوة بدر', exact: true }).click();
   await expect(page).toHaveURL(/\/battle\?slug=badr$/);
   await expect(page.getByRole('heading', { name: 'غزوة بدر', exact: true })).toBeVisible();
