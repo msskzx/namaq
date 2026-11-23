@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import corpus from './quranText/corpus';
 import type { BranchAyah } from './branches';
-import { ITQAN_KIND_NOTES, ITQAN_QUOTES, OPENING_CARDS, OPENING_KINDS, conditionLines, inKind, kindOf, openingCards, openingKeys, openingLike, type OpeningRow } from './openingKinds';
+import { ITQAN_KIND_NOTES, ITQAN_QUOTES, OPENING_CARDS, OPENING_KINDS, conditionLines, inKind, kindOf, soleCard, openingCards, openingKeys, openingLike, type OpeningRow } from './openingKinds';
 
 const byKey = new Map((corpus as unknown as { ayat: BranchAyah[] }).ayat.map(ayah => [ayah.key, ayah]));
 const words = (key: string) => byKey.get(key)?.words ?? [];
@@ -49,6 +49,10 @@ describe('opening kinds', () => {
     expect(surahs('aflak')).toEqual([85, 86]);
     expect(surahs('hawa')).toEqual([51, 77]);
     for (const card of OPENING_CARDS) for (const ref of card.refs ?? []) expect(ref.cite).toMatch(/^السيوطي، (الإتقان ٣\/٣٦[١-٣]|تناسق الدرر ص[٠-٩]+)$/);
+  });
+
+  it('gives every card a source: its own quote, or its kind\'s when it is the kind\'s only card (owner 2026-11-23)', () => {
+    for (const card of OPENING_CARDS) expect(card.refs?.length || soleCard(card) ? card.id : `${card.id} has no source`).toBe(card.id);
   });
 
   it('opens with the first ayah, the next one too after a short one, and the Fatiha after the basmala', () => {

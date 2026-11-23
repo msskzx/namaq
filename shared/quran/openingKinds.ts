@@ -105,7 +105,7 @@ export const OPENING_CARDS: CardDef[] = [
   { id: 'maryam-taha', kind: 'letters', title: 'مريم وطه', surahs: [19, 20], refs: [
     { text: 'وسائر السور المفتتحة بالحروف المقطعة كلها مقترنة؛ كيونس وتواليها، ومريم وطه، والطواسين، و«الم» العنكبوت وتواليها، والحواميم', ...tanasuq('٧٤', 72) },
   ] },
-  { id: 'letters-alone', kind: 'letters', title: 'وحدها', surahs: [7, 36, 38, 50, 68], alone: true },
+  { id: 'letters-alone', kind: 'letters', title: 'سائر ذوات الحروف', surahs: [7, 36, 38, 50, 68], alone: true, refs: [{ text: 'حروف التهجي في تسع وعشرين سورة', ...itqan('٣٦١', 1125) }] },
   { id: 'nabi', kind: 'call', title: 'نداء الرسول ﷺ', surahs: [33, 65, 66, 73, 74], refs: [
     { text: 'خمس بنداء الرسول ﷺ: الأحزاب والطلاق والتحريم والمزمل والمدثر', ...itqan('٣٦١', 1125) },
     { text: 'هذه السورة [التحريم] متآخية مع التي قبلها في الافتتاح بخطاب النبي ﷺ', ...tanasuq('١٤٤', 149) },
@@ -125,7 +125,7 @@ export const OPENING_CARDS: CardDef[] = [
   { id: 'hawa', kind: 'oath', title: 'بالهواء', surahs: [51, 77], refs: [
     { text: 'وسورتان بالهواء الذي هو أحد العناصر: والذاريات والمرسلات', ...itqan('٣٦٢', 1126) },
   ] },
-  { id: 'oath-alone', kind: 'oath', title: 'وحدها', surahs: [37, 52, 95, 79, 100], alone: true, parts: [
+  { id: 'oath-alone', kind: 'oath', title: 'سائر القسم', surahs: [37, 52, 95, 79, 100], alone: true, parts: [
     { label: 'بالملائكة', surahs: [37] }, { label: 'بالتربة', surahs: [52] }, { label: 'بالنبات', surahs: [95] }, { label: 'بالحيوان الناطق', surahs: [79] }, { label: 'بالبهيم', surahs: [100] },
   ], refs: [
     { text: 'سورة أقسم فيها بالملائكة وهي «والصافات»… وسورة بالتربة التي هي منها أيضا وهي الطور، وسورة بالنبات وهي والتين، وسورة بالحيوان الناطق وهي والنازعات، وسورة بالبهيم وهي والعاديات', ...itqan('٣٦٢', 1126) },
