@@ -36,7 +36,8 @@ describe('interests', () => {
     expect(activeInterests([]).length).toBe(INTERESTS.length);
     expect(activeInterests(['irab']).map(interest => interest.id)).toEqual(['irab']);
     // Picks with nothing of the kind asked fall back to all that have it.
-    expect(activeInterests(['prophets'], interest => interest.quizzes.length > 0).length).toBe(INTERESTS.filter(interest => interest.quizzes.length).length);
+    const others = (interest: (typeof INTERESTS)[number]) => interest.id !== 'prophets';
+    expect(activeInterests(['prophets'], others).length).toBe(INTERESTS.filter(others).length);
   });
 
   it('has «فاجئني» on until it is turned off', () => {
