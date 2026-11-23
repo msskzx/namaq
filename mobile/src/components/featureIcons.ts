@@ -15,7 +15,7 @@ export const FEATURE_ICON = {
   mushaf: BookOpenText, tafsir: NotebookText, trees: TreeIcon, compare: ArrowLeftRight, openings: DoorOpen, order: OrderIcon,
   oaths: SunMoon, words: TextSearch, balagha: Gem, qiraat: Layers, irab: ListTree, tuhfa: BookMarked, prophets: ScrollText,
   scenes: Presentation, person: Milestone, life: History, nasab: Network, ties: Link2, battles: Swords, hadith: MessagesSquare,
-  chain: GitCommitVertical,
+  chain: GitCommitVertical, stories: ScrollText,
 } satisfies Record<string, Icon>;
 
 /** Each question kind wears the icon of the feature it asks about. */
