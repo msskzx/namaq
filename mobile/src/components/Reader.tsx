@@ -42,6 +42,7 @@ import { useRecite } from './recite/useRecite';
 import ListenSheet from './ListenSheet';
 import { listen, useListening } from '@/lib/listen';
 import { firstAyahOfPage, PAGES, pageData, pageOfAyah, surahBefore } from '@/lib/mushaf';
+import { spreadOf } from '@shared/quran/readerPage';
 import { pageModel, reciteView } from '@shared/quran/recitePage';
 import { lemmasAtMushafWord } from '@shared/quran/words';
 import { sectionAt, surahTopicsOf } from '@shared/quran/surahTopics';
@@ -54,7 +55,8 @@ import { usePageTouch } from '@/lib/usePageTouch';
 import { settleZoom } from '@/lib/pageZoom';
 import { useIntent } from '@/lib/intent';
 import { usePalette } from '@/lib/theme';
-import { penRule } from '@/lib/settings';
+import { mushafSpread, penRule } from '@/lib/settings';
+import { isWide } from '@/ui/column';
 import { surahName } from '@shared/quran/surahNames';
 import { SURAH_TITLES } from '@shared/quran/surahNames';
 
@@ -312,7 +314,7 @@ export default function Reader() {
       else latest.current(action, key, x, y, word, gesture);
       return;
     }
-    if (mode === 'read') setMark(current => (key && !(gesture === 'tap' && current?.key === key) ? { key, page: shown.current, ...(gesture === 'long' && word !== undefined ? { words: { from: word, to: word } } : {}) } : null));
+    if (mode === 'read') setMark(current => (key && !(gesture === 'tap' && current?.key === key) ? { key, page: pageOfAyah(key) ?? shown.current, ...(gesture === 'long' && word !== undefined ? { words: { from: word, to: word } } : {}) } : null));
     latest.current(readGestures()[mode][gesture], key, x, y, word, gesture);
   }, () => readGestures()[mode].double !== 'none');
   const onTouch = useCallback((touch: Touch, key: string | null, x: number, y: number, word?: number) => {
@@ -404,15 +406,29 @@ export default function Reader() {
   const focus = flowing ? (position ? view?.upcoming ?? null : mark?.page === page ? mark.key : null) : null;
   // What the page lights: the selected ayah while reading; while reciting, the ayah (and words) a long press opened the
   // menu on, as the website does (owner, 2026-11-20: a selection drew nothing in recite mode).
-  const selected = position ? (actions ? { key: actions.key, page, words: actions.words } : null) : mark;
-  const render = (at: number) => {
+  const selected = position ? (actions ? { key: actions.key, page: pageOfAyah(actions.key) ?? page, words: actions.words } : null) : mark;
+  // Lying down on a tablet, two facing pages, the odd one on the right (owner, 2026-11-23); a page turn turns both. Bigger
+  // text and writing an ayah keep one page, which they reflow and scroll.
+  const [spreadOn] = mushafSpread.use();
+  const spread = spreadOn && !!size && isWide(size.width, size.height) && !flowing && !writeKey;
+  const pageView = (at: number, width: number) => {
     const atModel = modelOf(at);
     return (
-      <MushafPageView page={at} data={pageData(at)} model={atModel} palette={palette} width={size?.width ?? 0} height={height}
+      <MushafPageView page={at} data={pageData(at)} model={atModel} palette={palette} width={width} height={height}
         zoom={zoom} onHeight={onHeight} focus={at === page ? focus : null} onFocus={onFocus}
         top={surahBefore(at)} names={SURAH_TITLES} mark={selected?.page === at ? selected.key : null} markWords={selected?.page === at ? selected.words ?? null : null}
         recite={position ? reciteView(atModel, position) : null} playing={listening?.key ?? null} forgot={forgot} saved={saved} onTouch={onTouch} onSelect={onSelect}
         write={at === page ? write : null} checked={position && at === page ? checked : null} />
+    );
+  };
+  const render = (at: number) => {
+    const width = size?.width ?? 0;
+    if (!spread) return pageView(at, width);
+    // The pager's pages are spreads here; its direction is right to left, so the first of the row (the odd page) sits on the right.
+    return (
+      <View style={{ flexDirection: 'row', width, height }}>
+        {spreadOf(at * 2 - 1).map(one => <View key={one} style={{ width: width / 2 }}>{pageView(one, width / 2)}</View>)}
+      </View>
     );
   };
 
@@ -449,7 +465,7 @@ export default function Reader() {
         onScrollEndDrag={() => { setScrollTop(scrolled.current); keep(); }} onMomentumScrollEnd={() => { setScrollTop(scrolled.current); keep(); }}
         style={{ flex: 1 }} contentContainerStyle={{ paddingTop: pageInsets.top, paddingBottom: keyboard ? keyboard + RECITE_BAR + 24 : pageInsets.bottom }}>
         {size && height > 0 && (
-          <ReaderPager page={page} count={PAGES} width={size.width} height={pagerHeight} onPage={turnByHand} onMove={onMove} render={render} onPull={keyboard ? undefined : openIndex} zoom={zoom} onZoom={zoomTo} scrollTop={scrollTop}
+          <ReaderPager page={spread ? Math.ceil(page / 2) : page} count={spread ? Math.ceil(PAGES / 2) : PAGES} width={size.width} height={pagerHeight} onPage={spread ? at => turnByHand(at * 2 - 1) : turnByHand} onMove={onMove} render={render} onPull={keyboard ? undefined : openIndex} zoom={zoom} onZoom={zoomTo} scrollTop={scrollTop}
             scroll={scrollGesture} onPinch={onPinch} hold={!!actions?.holding} />
         )}
       </ScrollView>

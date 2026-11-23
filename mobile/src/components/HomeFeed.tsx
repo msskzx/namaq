@@ -1,5 +1,6 @@
 import { createContext, isValidElement, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, Dimensions, useWindowDimensions, View } from 'react-native';
+import { COLUMN_GAP, PageWidthProvider, usePageWidth } from '@/ui/column';
 import { router, useFocusEffect, type Href } from 'expo-router';
 import { CalendarRange, ChartNoAxesColumn, Bookmark, Check, CircleCheck, CircleMinus, Clock, Compass, EyeOff, LibraryBig, Network, Plus, LightbulbOff, ListTree, Scale, TextAlignEnd, Swords, Users, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
@@ -558,7 +559,7 @@ function TarajimPost({ id, palette }: { id: string; palette: Palette }) {
  * that joins them, in one sentence with the pages that state each tie; the head opens «بينه وبين…» with the two picked.
  */
 function TiePost({ id, palette }: { id: string; palette: Palette }) {
-  const { width } = useWindowDimensions();
+  const width = usePageWidth();
   const [shown, setShown] = useState<DrawingOrText>('drawing');
   const pair = tiePairs().find(each => `${each.a},${each.b}` === id);
   if (!pair) return null;
@@ -648,7 +649,7 @@ function NasabPost({ slug, palette }: { slug: string; palette: Palette }) {
 
 /** «صلاته»: a person's ties ring as his ties page draws it; a person on it opens his page, and its open button the ties page. */
 function TiesPost({ slug, palette }: { slug: string; palette: Palette }) {
-  const { width } = useWindowDimensions();
+  const width = usePageWidth();
   const [tie, setTie] = useState<Tie | undefined>();
   const person = findPerson(slug);
   if (!person) return null;
@@ -675,7 +676,7 @@ const groupList = () => (groups ??= groupSources(STORIES, BATTLES));
  * in-laws, joined by family as «بينه وبين…» draws them; its open button opens that page with them picked.
  */
 function GroupPost({ id, palette }: { id: string; palette: Palette }) {
-  const { width } = useWindowDimensions();
+  const width = usePageWidth();
   const [shown, setShown] = useState<DrawingOrText>('drawing');
   const group = useMemo(() => groupOf(GRAPH, groupList(), id), [id]);
   if (!group) return null;
@@ -750,7 +751,7 @@ const SAHIH_NAMES = { bukhari: { book: 'صحيح البخاري', author: 'ال�
  * who hold it, or a hadith and the people it names, drawn round; a tie held in doubt is said under it with both views.
  */
 function RingPost({ id, palette }: { id: string; palette: Palette }) {
-  const { width } = useWindowDimensions();
+  const width = usePageWidth();
   const [tie, setTie] = useState<Tie | undefined>();
   const [doubtedOpen, setDoubtedOpen] = useState(false);
   const ring = ringList_().find(each => each.id === id);
@@ -823,7 +824,7 @@ function BattlePost({ slug, palette }: { slug: string; palette: Palette }) {
  * battles screen at that year.
  */
 function BattleYearPost({ id, palette }: { id: string; palette: Palette }) {
-  const { width } = useWindowDimensions();
+  const width = usePageWidth();
   const year = Number(id);
   const slice = battleYearSlice(BATTLES, year);
   if (!slice) return null;
@@ -1662,11 +1663,15 @@ const STEP_CARDS = INTERESTS.length;
  * `only` shows one interest's cards alone (the chip row over the feed). What was shown before is skipped (shared/feedSeen.ts);
  * once all was seen it starts again from the seen ones. A question answered wrong comes back after a rest.
  */
-export function Feed({ palette, nearEnd, screenBottom, only = null }: { palette: Palette; nearEnd: number;
+export function Feed({ palette, nearEnd, screenBottom, only = null, column = null, lead }: { palette: Palette; nearEnd: number;
   /** Where the bottom of the screen is in the page, for a card that comes while the feed is open (the prayer card). */
   screenBottom: () => number;
   /** One interest's id: its cards alone. */
-  only?: string | null }) {
+  only?: string | null;
+  /** A tablet lying down (owner, 2026-11-23): the width of each of two columns of cards, which take turns; otherwise one column. */
+  column?: number | null;
+  /** What heads the first column in two columns (the mushaf's page), so the second starts with a card beside it. */
+  lead?: React.ReactNode }) {
   const { day, juz } = useToday();
   const now = useMinute();
   const visit = useSyncExternalStore(subscribeVisit, visitStart, serverVisit);
@@ -1844,11 +1849,27 @@ export function Feed({ palette, nearEnd, screenBottom, only = null }: { palette:
     posts.splice(at, 0, <PrayerPost key={`pr${card.key}`} prayer={card.prayer} times={card.times} palette={palette} />);
     keys.splice(at, 0, `pr${card.key}`);
   }
+  const placed = (i: number) => <View key={keys[i]} onLayout={event => { tops.current.set(keys[i], event.nativeEvent.layout.y); }}>{posts[i]}</View>;
+  if (column) {
+    // Each column is a phone's page to the cards in it, so their drawings and ayat size from its width (ui/column.ts).
+    // A card's place is told within its column, which starts where the feed does, so the prayer card still comes below the screen.
+    return (
+      <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: COLUMN_GAP }} onLayout={event => { top.current = event.nativeEvent.layout.y; }}>
+        {[0, 1].map(side => (
+          <PageWidthProvider key={side} value={column + 32}>
+            <View style={{ width: column, gap: 14 }}>
+              {side === 0 && lead}
+              {posts.map((_post, i) => (i % 2 === side ? placed(i) : null))}
+            </View>
+          </PageWidthProvider>
+        ))}
+      </View>
+    );
+  }
   return (
     <View style={{ gap: 14 }} onLayout={event => { top.current = event.nativeEvent.layout.y; }}>
-      {posts.map((post, i) => (
-        <View key={keys[i]} onLayout={event => { tops.current.set(keys[i], event.nativeEvent.layout.y); }}>{post}</View>
-      ))}
+      {lead}
+      {posts.map((_post, i) => placed(i))}
     </View>
   );
 }

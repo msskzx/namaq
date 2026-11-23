@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { SahihLook } from '@/components/Sahih';
 import { SAHIH } from '@/lib/sahih';
 import { UnderCard, useCardRow } from '@/ui/Card';
-import { ScrollView, View, useWindowDimensions } from 'react-native';
+import { ScrollView, View } from 'react-native';
+import { usePageWidth } from '@/ui/column';
 import { BookSearch, Check } from 'lucide-react-native';
 import type { QuizLook } from '@shared/quiz/choiceKinds';
 import { LOOKED_POINTS, POINTS } from '@shared/quiz/score';
@@ -190,7 +191,7 @@ const bleed = { marginHorizontal: -16 } as const;
  * same drawing as the feature's page and feed card. `shown` once the answer is: then what the look marks is lit.
  */
 export function LookView({ look, shown, palette }: { look: QuizLook; shown: boolean; palette: Palette }) {
-  const { width } = useWindowDimensions();
+  const width = usePageWidth();
   const drawW = Math.min(width - 32, 480);
   switch (look.view) {
     case 'ties': return <TiesLook key={look.slug} slug={look.slug} mark={shown ? look.mark : undefined} width={drawW} palette={palette} />;
