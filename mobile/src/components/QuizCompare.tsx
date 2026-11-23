@@ -6,8 +6,7 @@ import { useFitReport, type OnFit } from '@/lib/useFit';
 import { BookSearch, SquareArrowOutUpLeft, type LucideProps } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import { num } from '@shared/quran/arabicNumber';
-import { markColour } from '@shared/quran/compareCardLook';
-import { addCompareHint, blankWords, compareCorrections, compareHintsOf, compareLabel, comparePieces, type CompareAsk, type CompareLine, type Tone } from '@shared/quiz/compareAnswers';
+import { addCompareHint, blankWords, compareCorrections, compareHintsOf, compareLabel, comparePieces, type CompareAsk, type CompareLine } from '@shared/quiz/compareAnswers';
 import { neededCut, verdict, type Correction } from '@shared/quiz/feedback';
 import type { Hints } from '@shared/quiz/hints';
 import { useKeyboardShown } from '@/lib/keyboard';
@@ -22,14 +21,13 @@ import { writeBlank } from '@shared/quiz/writeBlanks';
 import QuizSources from './QuizSources';
 import type { QuizSource } from '@shared/quiz/sources';
 
-const toneColour = (tone: Tone, palette: Palette) => markColour(tone === 'written' ? 'exact' : tone, palette, tone === 'written');
 const ayahOf = (key: string) => Number(key.split(':')[1]);
 
 type Asked = { compare: CompareAsk; sources?: QuizSource[] };
 
 /** Given words in the app-wide word-match colours: same words terracotta, written differently amber, same root purple. */
 const Words = ({ line, at, palette }: { line: CompareLine; at: number[]; palette: Palette }) =>
-  <>{at.map(i => <AyahWords key={i} look={{ color: toneColour(line.tones[i], palette) ?? palette.ink }}>{line.words[i]}</AyahWords>)}</>;
+  <>{at.map(i => <AyahWords key={i} mark={line.tones[i] && { kind: line.tones[i]! }} look={line.tones[i] ? undefined : { color: palette.ink }}>{line.words[i]}</AyahWords>)}</>;
 
 /** One ayah of the matrix in its card: its reference above, its words flowing right to left, then its number. */
 function Line({ line, palette, children, after }: { line: CompareLine; palette: Palette; children: React.ReactNode; after?: React.ReactNode }) {

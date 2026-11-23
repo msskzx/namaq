@@ -28,7 +28,7 @@ export function pageWords(ayah: string): string[] {
  * title), the ayah and what follows are hidden, and `write` puts the boxes where the asked words are. `shown` reveals the
  * ayah, with `checked` colouring what was written.
  */
-function AyahLines({ ayah, menu, palette, write, checked, shown, words = 0, whole = false, targetWord, onTouch = noTouch }: { ayah: string; palette: Palette; write: Write | null; checked: Checked | null; shown: boolean;
+function AyahLines({ ayah, menu, palette, write, checked, shown, words = 0, whole = false, gaps, onTouch = noTouch }: { ayah: string; palette: Palette; write: Write | null; checked: Checked | null; shown: boolean;
   /** A long press opens the reader's menu on this ayah (AyahFlow's `menu`); false in recite mode, whose long press is its own. */
   menu: AyahMenuKeys;
   /** A tap or long press on the lines (MushafPageView's), as the reader's page takes it. */
@@ -36,7 +36,9 @@ function AyahLines({ ayah, menu, palette, write, checked, shown, words = 0, whol
   /** The ayah's first words shown so far, as recite mode's next-word button shows them. */
   words?: number;
   /** The lines as the page sets them, nothing hidden (a saved ayah). */
-  whole?: boolean; targetWord?: number }) {
+  whole?: boolean;
+  /** The forgotten words hidden in their places (recite mode's gaps); absent, the whole ayah is hidden. */
+  gaps?: number[] }) {
   const [width, setWidth] = useState(0);
   const page = pageOfAyah(ayah);
   const parts = useMemo(() => {
@@ -48,7 +50,7 @@ function AyahLines({ ayah, menu, palette, write, checked, shown, words = 0, whol
     const previous = slice.before && page > 1 ? { page: page - 1, data: pageData(page - 1), model: pageModel(pageData(page - 1), surahBefore(page - 1)), slice: pageEnd(pageData(page - 1).items) } : null;
     return { data, model, slice, previous };
   }, [ayah, page]);
-  const recite = useMemo(() => (parts ? reciteView(parts.model, { start: ayah, ...(targetWord !== undefined ? { gaps: [targetWord] } : {}), shown: shown ? ayah : null, words: shown ? 0 : words }) : null), [parts, ayah, shown, words, targetWord]);
+  const recite = useMemo(() => (parts ? reciteView(parts.model, { start: ayah, ...(gaps?.length ? { gaps } : {}), shown: shown ? ayah : null, words: shown ? 0 : words }) : null), [parts, ayah, shown, words, gaps]);
   if (!page || !parts) return null;
   const height = width * PAGE_TEXT_RATIO;
   return (

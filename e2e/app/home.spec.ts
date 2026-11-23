@@ -426,22 +426,18 @@ test.describe('a returning user', () => {
     await expect.poll(async () => (await stored<Record<string, { due?: number }>>(page, 'ayah-forgot'))?.['18:10']?.due).toBeGreaterThan(Date.now());
   });
 
-  test('the recall card small recite bar shares one row with the card buttons', async ({ page }) => {
-    // The narrowest phone we draw for: the whole row still fits.
+  test('the recall card has recite mode\'s bar on a line of its own, its buttons on the line under it', async ({ page }) => {
+    // Owner, 2026-11-23: the bar at its size in the mushaf, alone, so the rows look even on the narrowest phone we draw for.
     await page.setViewportSize({ width: 360, height: 800 });
     await open(page, '/');
     const bar = page.getByRole('toolbar', { name: 'أدوات التسميع' }).first();
     const remembered = page.getByRole('button', { name: 'تذكّرتها' }).first();
     await expect(bar).toBeVisible();
     const [barBox, buttonBox] = [await bar.boundingBox(), await remembered.boundingBox()];
-    expect(barBox!.height).toBeLessThanOrEqual(40);
-    // Same row: the button's middle lies within the bar's height, and the bar on the right of it.
-    const middle = buttonBox!.y + buttonBox!.height / 2;
-    expect(middle).toBeGreaterThan(barBox!.y);
-    expect(middle).toBeLessThan(barBox!.y + barBox!.height);
-    expect(buttonBox!.x + buttonBox!.width).toBeLessThanOrEqual(barBox!.x);
-    const last = await page.getByRole('button', { name: 'افتح صفحة الآية' }).first().boundingBox();
-    expect(last!.x).toBeGreaterThanOrEqual(0);
+    expect(buttonBox!.y).toBeGreaterThanOrEqual(barBox!.y + barBox!.height);
+    const open_ = await page.getByRole('button', { name: 'افتح صفحة الآية' }).first().boundingBox();
+    expect(Math.abs((open_!.y + open_!.height / 2) - (buttonBox!.y + buttonBox!.height / 2))).toBeLessThan(buttonBox!.height / 2);
+    expect(open_!.x).toBeGreaterThanOrEqual(0);
   });
 
   test('the recall card reveals a word at a time, and with the pen takes what the pen setting asks in write boxes and grades it', async ({ page }) => {
@@ -500,6 +496,24 @@ test.describe('a returning user', () => {
     await page.getByRole('button', { name: 'احذف التأمل' }).click();
     await expect(page.getByLabel(/^تأمل:/)).toHaveCount(0);
     await expect.poll(() => stored(page, 'ayah-notes')).toEqual({});
+  });
+});
+
+test.describe('the forgotten list', () => {
+  test.use({ seed: { 'ayah-forgot': { '2:255:3': { forgot: 2, at: 10 }, '2:255:9': { forgot: 1, at: 11 }, '112:2': { forgot: 1, at: 20 } } } });
+
+  // Owner, 2026-11-23: each forgotten ayah is asked as recite mode asks it, one card per ayah however many of its words were forgotten.
+  test('asks each forgotten ayah once, and its tick rests every forgotten word of it until taken back', async ({ page }) => {
+    await open(page, '/library?tab=forgotten');
+    await expect(page.getByRole('button', { name: 'افتح الآية في المصحف' })).toHaveCount(2);
+    await expect(page.getByRole('button', { name: 'أظهر الكلمة التالية' })).toHaveCount(2);
+    const tick = page.getByRole('button', { name: 'تذكّرتها', exact: true }).first();
+    await tick.click();
+    await expect.poll(async () => Object.entries((await stored<Record<string, { due?: number }>>(page, 'ayah-forgot')) ?? {}).filter(([, mark]) => mark.due).map(([key]) => key).sort()).toEqual(['2:255:3', '2:255:9']);
+    // The card keeps its place, and a second tap puts both marks back as they were.
+    await expect(page.getByRole('button', { name: 'تذكّرتها', exact: true })).toHaveCount(2);
+    await tick.click();
+    await expect.poll(async () => Object.values((await stored<Record<string, { due?: number }>>(page, 'ayah-forgot')) ?? {}).filter(mark => mark.due)).toEqual([]);
   });
 });
 

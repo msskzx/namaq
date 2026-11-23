@@ -1,12 +1,11 @@
 import { useMemo, useState, useSyncExternalStore } from 'react';
 import { View } from 'react-native';
 import { Text } from '@/ui/Text';
-import { ArrowLeftRight, Bookmark, Check, EyeOff, GalleryHorizontal, NotebookPen, Send, Trash2, type LucideProps } from 'lucide-react-native';
+import { ArrowLeftRight, Bookmark, GalleryHorizontal, NotebookPen, Send, Trash2, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, toggleBookmark, type Bookmark as Saved } from '@shared/bookmarks';
 import { notesByDate, readAyahNotes, subscribeAyahNotes, writeAyahNote } from '@shared/ayahNotes';
-import { markAyah, markWord, mostForgotten, readDueMarks, rememberAyah, subscribeDueMarks } from '@shared/ayahMarks';
+import { markAyah, markWord } from '@shared/ayahMarks';
 import { BOOKMARK_KIND_LABEL, type BookmarkKind } from '@shared/bookmarkKind';
-import { forgottenOrder } from '@shared/quran/recite';
 import { num } from '@shared/quran/arabicNumber';
 import TreeIcon from './TreeIcon';
 import IconButton from '@/ui/IconButton';
@@ -17,9 +16,8 @@ type MenuItem = { id: string; Icon: (props: LucideProps) => React.ReactNode; nam
 import { shareAyah } from './AyahShare';
 import CompareTargetsSheet from './CompareTargetsSheet';
 import NoteSheet from './NoteSheet';
-import { ayahMushafWords, ayahText } from '@/lib/mushaf';
 import type { CompareTarget } from '@/lib/compare';
-import { cardWays, forgottenCard, forgottenWays, noteCard, savedCard, shownBookmarks, shelfText, type CardWay, type SavedCard } from '@/lib/home';
+import { cardWays, noteCard, savedCard, shownBookmarks, shelfText, type CardWay, type SavedCard } from '@/lib/home';
 import type { Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
 import { CardWithRow } from '@/ui/Card';
@@ -39,11 +37,10 @@ const WAYS: Record<CardWay['to'], { label: string; name: string; Icon: (props: L
   compare: { label: 'في المقارنة', name: 'المقارنة', Icon: ArrowLeftRight },
 };
 
-export const FORGOTTEN_LABEL = 'ما نسيته';
 export const NOTE_LABEL = 'تأمل';
 
 /**
- * A saved or forgotten card, or a note, on the full list, in the home card's shape (owner, 2026-11-22): its place above the
+ * A saved card, or a note, on the full list, in the home card's shape (owner, 2026-11-22): its place above the
  * card, only its ayat (or the note) inside, and «افتح» first in the row under it with its few tools after. An ayah's «افتح»
  * and a tap on the card open the ayah's page; a tree or compare card opens its own page. A saved ayah names what its page
  * holds on a quiet line. A note's text is the reader's own words, so it is not in the mushaf font.
@@ -52,9 +49,9 @@ export function ShelfCard({ card, palette, items, open, note = false, Icon = KIN
   card: SavedCard; palette: Palette; items: MenuItem[]; open?: { onPress: () => void; label: string }; note?: boolean; Icon?: (props: LucideProps) => React.ReactNode; label?: string;
 }) {
   const places = card.references.map(reference => `${surahName(reference.surah)} ${reference.ayat.map(num).join(reference.range ? '–' : '، ')}`).join(' · ');
-  const ayah = card.kind === 'ayah' || note || label === FORGOTTEN_LABEL ? ayahOfCard(card) : null;
+  const ayah = card.kind === 'ayah' || note ? ayahOfCard(card) : null;
   const books = useBooks();
-  const saved = card.kind === 'ayah' && !note && label !== FORGOTTEN_LABEL;
+  const saved = card.kind === 'ayah' && !note;
   const holds = useMemo(() => (ayah && saved ? sectionNames(ayahSections(ayah).filter(sectionOn)) : []), [ayah, saved, books]);
   return (
     <View style={{ gap: 4 }}>
@@ -77,11 +74,11 @@ export function ShelfCard({ card, palette, items, open, note = false, Icon = KIN
 const referenceKeys = ({ surah, ayat, range }: { surah: number; ayat: number[]; range?: boolean }) =>
   (range ? Array.from({ length: ayat[ayat.length - 1] - ayat[0] + 1 }, (_, i) => ayat[0] + i) : ayat).map(ayah => `${surah}:${ayah}`);
 
-/** The ayah a shelf card is on: a saved ayah's key, or a forgotten word's or note's ayah. */
+/** The ayah a shelf card is on: a saved ayah's key, or a note's ayah. */
 const ayahOfCard = (card: SavedCard) => markAyah(card.id.startsWith('ayah:') ? card.id.slice('ayah:'.length) : card.id);
 
 /**
- * The saved and forgotten cards and the buttons under each, for the full list page. `menus` renders the compare chooser
+ * The saved cards and notes and the buttons under each, for the full list page. `menus` renders the compare chooser
  * and the note sheet; place it once at the end of the screen.
  */
 export function useHomeCards(palette: Palette) {
@@ -89,9 +86,6 @@ export function useHomeCards(palette: Palette) {
   const bookmarks = useMemo(() => shownBookmarks(allBookmarks), [allBookmarks]);
   const cards = useMemo(() => bookmarks.map(savedCard), [bookmarks]);
   const [choosing, setChoosing] = useState<{ way: CardWay; targets: CompareTarget[] } | null>(null);
-  const marks = useSyncExternalStore(subscribeDueMarks, readDueMarks);
-  const forgotten = useMemo(() => forgottenOrder(Object.keys(marks)), [marks]);
-  const forgottenCards = useMemo(() => mostForgotten(marks).map(key => forgottenCard(key, markWord(key) === undefined ? ayahText(key) : ayahMushafWords(markAyah(key))[markWord(key)!] ?? '')), [marks]);
   const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes);
   const noteCards = useMemo(() => notesByDate(notes).map(key => noteCard(key, notes[key].text)), [notes]);
   const [noting, setNoting] = useState<string | null>(null);
@@ -113,17 +107,12 @@ export function useHomeCards(palette: Palette) {
       ...(card.kind === 'ayah' ? [{ id: 'share', Icon: Send, name: 'مشاركة', label: 'مشاركة', onPress: () => shareAyah(ayahOfCard(card), palette) }] : []),
     ];
   };
-  const forgottenItems = (card: SavedCard): MenuItem[] => [
-    { id: 'recite', Icon: EyeOff, name: 'سمّع', label: 'سمّع من هذه الآية', onPress: () => card.open && openIntent(card.open) },
-    ...wayItems(forgottenWays(card.id).filter(way => way.to === 'mushaf')),
-    { id: 'clear', Icon: Check, name: 'تذكّرتها', label: 'تذكّرتها', color: palette.green, onPress: () => rememberAyah(card.id) },
-  ];
   const noteItems = (card: SavedCard): MenuItem[] => [
     { id: 'edit', Icon: NotebookPen, name: 'عدّل', label: 'عدّل التأمل', onPress: () => setNoting(card.id) },
     { id: 'delete', Icon: Trash2, name: 'احذف', label: 'احذف التأمل', onPress: () => writeAyahNote(card.id, '') },
     { id: 'share', Icon: Send, name: 'مشاركة', label: 'مشاركة', onPress: () => shareAyah(card.id, palette, card.text, true) },
   ];
-  /** «افتح» of a shelf card: an ayah, a forgotten word or a note opens the ayah's page; a tree or compare card its own page. */
+  /** «افتح» of a shelf card: an ayah or a note opens the ayah's page; a tree or compare card its own page. */
   const openOf = (card: SavedCard): { onPress: () => void; label: string } | undefined => {
     if (card.kind === 'ayah') return { onPress: () => openAyahPage(ayahOfCard(card)), label: 'افتح صفحة الآية' };
     if ((card.kind === 'tree' || card.kind === 'compare') && card.open) {
@@ -138,7 +127,7 @@ export function useHomeCards(palette: Palette) {
       onPick={target => { const way = choosing!.way; setChoosing(null); followWay(way, target); }} onClose={() => setChoosing(null)} />
     <NoteSheet ayah={noting} onClose={() => setNoting(null)} palette={palette} />
   </>);
-  return { cards, forgotten, forgottenCards, noteCards, savedItems, forgottenItems, noteItems, openOf, openAyah, menus };
+  return { cards, noteCards, savedItems, noteItems, openOf, openAyah, menus };
 }
 
 /** The review button: the reader in recite mode on the first forgotten ayah in mushaf order, stepping through the rest. */
