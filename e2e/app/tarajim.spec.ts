@@ -170,7 +170,7 @@ test('the person page heads with his facts, maps his battles and gives the ayah 
   await yarmuk.click();
   await expect(page).toHaveURL(/\/battle\?slug=/);
   await page.goBack();
-  const ayah = page.getByRole('button', { name: /^آلِ عِمْرَانْ ١٧٢$/ });
+  const ayah = page.getByRole('button', { name: /^آلِ عِمْرَانْ ١٧٢/ });
   await ayah.scrollIntoViewIfNeeded();
   await ayah.click();
   await expect(page).toHaveURL(/\/ayah\?key=3%3A172|\/ayah\?key=3:172/);

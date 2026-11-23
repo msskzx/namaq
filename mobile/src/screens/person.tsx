@@ -202,6 +202,7 @@ function personCells(person: AppPerson, islam = false): FactCell[] {
     ...(islam && person.islamAge.length ? [{ key: 'islam', label: f ? 'أسلمت وعمرها' : 'أسلم وعمره', readings: person.islamAge.map(fact => readingOf(fact, ageOf(fact))) }] : []),
     ...(year.length ? [{ key: 'year', Icon: CalendarDays, label: f ? 'وفاتها' : 'وفاته', readings: [
       ...year.map(fact => readingOf(fact, yearOf(fact))), ...(islam ? month.map(fact => readingOf(fact, unvowelled(fact.text))) : [])] }] : []),
+    ...(islam && !year.length && month.length ? [{ key: 'month', label: f ? 'شهر وفاتها' : 'شهر وفاته', readings: month.map(fact => readingOf(fact, unvowelled(fact.text))) }] : []),
     ...(place.length ? [{ key: 'place', Icon: MapPin, label: f ? 'ماتت في' : 'مات في', readings: place.map(fact => readingOf(fact, unvowelled(fact.text).replace(/^ب(?=ال)/u, ''))) }] : []),
     ...(age.length ? [{ key: 'age', label: f ? 'عمرها' : 'عمره', readings: age.map(fact => readingOf(fact, ageOf(fact))) }] : []),
   ];
@@ -323,6 +324,7 @@ export default function PersonScreen() {
   const life = [...battles, ...person.absentFrom];
   const places = mapBattles(person, lifeItems);
   const ayat = person.ayat.filter(fact => typeof fact.value === 'string');
+  const allRevealed = ayat.every(fact => fact.kind === 'REVEALED_ABOUT');
   const tieList = ties(person);
   const head = <ShareHead title={personName(person)} palette={palette} />;
   let n = 0;
@@ -338,7 +340,7 @@ export default function PersonScreen() {
             <View style={{ gap: 2 }}>
               <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, lineHeight: 40, textAlign: 'right' }}>{personName(person)}</Text>
               {/* The name as the book gives it, no drawing of it (owner, 2026-11-23); the drawing is for comparing, on the button. */}
-              {person.fullName && <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>{person.fullName.text}</Text>}
+              {person.fullName && <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>{`${saidBy(person.fullName) ? `${saidBy(person.fullName)} ` : ''}${person.fullName.text}`}</Text>}
               {[...(person.otherNames ?? []), ...person.nameVariants].map((fact, i) => (
                 <Text key={i} style={{ color: palette.muted, fontSize: 14, lineHeight: 24, textAlign: 'right' }}>{`${saidBy(fact) ?? 'وقيل:'} ${fact.text}`}</Text>
               ))}
@@ -411,12 +413,12 @@ export default function PersonScreen() {
 
         {ayat.length > 0 && (
           <Part head={head} n={++n} palette={palette}
-            title={ayat.every(fact => fact.kind === 'REVEALED_ABOUT') ? (f ? 'آيات نزلت فيها' : 'آيات نزلت فيه') : (f ? 'آيات فيها' : 'آيات فيه')}>
+            title={allRevealed ? (f ? 'آيات نزلت فيها' : 'آيات نزلت فيه') : (f ? 'آيات فيها' : 'آيات فيه')}>
             {ayat.map(fact => (
               <View key={fact.value} style={{ gap: 8 }}>
                 <AyahOf ayahKey={fact.value as string} palette={palette} />
                 {/* The ayah is the subject: its name opens its page (owner, 2026-11-22). */}
-                <Button variant="plain" label={ayahOf(fact.value as string)} Icon={ChevronLeft} onPress={() => openAyahPage(fact.value as string)} />
+                <Button variant="plain" label={`${ayahOf(fact.value as string)}${fact.kind === 'REVEALED_ABOUT' && !allRevealed ? (f ? ' · نزلت فيها' : ' · نزلت فيه') : ''}`} Icon={ChevronLeft} onPress={() => openAyahPage(fact.value as string)} />
                 <QuoteBar by={saidBy(fact) ?? `قال ${pageSources(fact.refs)[0]?.author ?? 'الذهبي'}:`} pieces={namePieces(fact.text, namesOf(person))} palette={palette} size={17} />
               </View>
             ))}
