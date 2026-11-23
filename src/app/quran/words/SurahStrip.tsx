@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { SURAHS, nearestSurah, stepSurah } from '@shared/quran/words';
+import { SURAHS } from '@shared/quran/words';
+import { nearestBar, stepBar } from '@shared/bars';
 
 const LABEL = 120;
 
@@ -17,14 +18,14 @@ export default function SurahStrip({ counts, picked, onPick, name }: {
   const first = counts.findIndex(Boolean);
   const pick = (event: React.PointerEvent<HTMLDivElement>) => {
     const box = event.currentTarget.getBoundingClientRect();
-    const surah = nearestSurah(counts, Math.floor(((box.right - event.clientX) / box.width) * SURAHS));
+    const surah = nearestBar(counts, Math.floor(((box.right - event.clientX) / box.width) * SURAHS));
     if (surah !== picked) onPick(surah);
   };
   const last = counts.findLastIndex(Boolean);
   const keys = (event: React.KeyboardEvent) => {
     if (first < 0) return;
     const by = event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? 1 : event.key === 'ArrowRight' || event.key === 'ArrowDown' ? -1 : 0;
-    const to = event.key === 'Home' ? first : event.key === 'End' ? last : by ? (picked === null ? first : stepSurah(counts, picked, by)) : null;
+    const to = event.key === 'Home' ? first : event.key === 'End' ? last : by ? (picked === null ? first : stepBar(counts, picked, by)) : null;
     if (to === null) return;
     event.preventDefault();
     onPick(to);

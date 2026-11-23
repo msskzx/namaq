@@ -38,6 +38,32 @@ test('the eight hadith Ibn Rajab added added hadith are a book of their own, eac
   await expect(page.getByRole('heading', { name: 'ما قاله العلماء في درجته' })).toBeVisible();
 });
 
+// Each Sahih's shape on the tab (owner, 2026-11-23: sketch hadith-design): one bar per kitab; a finger slid along it names
+// the kitab under it, and lifting it opens that kitab, the first on the right.
+test('sliding along al-Bukhari\'s bars names a kitab, and lifting the finger opens it', async ({ page }) => {
+  await open(page, '/hadith');
+  const strip = page.getByLabel('كتب صحيح البخاري، المس واسحب').filter({ visible: true });
+  const box = (await strip.boundingBox())!;
+  const y = box.y + box.height - 8;
+  await page.mouse.move(box.x + box.width - 2, y);
+  await page.mouse.down();
+  await expect(page.getByText('بدء الوحي، ١–٧')).toBeVisible();
+  for (let x = box.x + box.width - 2; x > box.x + box.width * 0.6; x -= 10) await page.mouse.move(x, y);
+  await page.mouse.up();
+  await expect(page).toHaveURL(/\/hadith-kitab\?book=bukhari&kitab=\d+/);
+  expect(Number(new URL(page.url()).searchParams.get('kitab'))).toBeGreaterThan(1);
+});
+
+// A Sahih's page searches its kitabs and bab headings (owner, 2026-11-23): a kitab whose name holds the word alone, and
+// under another kitab the headings that hold it.
+test('a Sahih\'s page finds kitabs and bab headings by a word', async ({ page }) => {
+  await open(page, '/hadith-book?book=bukhari');
+  await page.getByRole('textbox', { name: 'ابحث في صحيح البخاري' }).filter({ visible: true }).fill('الحيض');
+  await expect(page.getByRole('link', { name: 'كِتَابُ الْحَيْضِ', exact: true })).toBeVisible();
+  await expect(page.getByText(/^بَابُ اعْتِزَالِ/)).toBeVisible();
+  await expect(page.getByRole('link', { name: 'بدء الوحي', exact: true })).toHaveCount(0);
+});
+
 test('the hadith of Jibril opens its scenes in al-Bukhari and in Muslim', async ({ page }) => {
   await open(page, '/hadith-forty?n=2');
   await page.getByRole('button', { name: 'رواية أبي هريرة في البخاري' }).click();

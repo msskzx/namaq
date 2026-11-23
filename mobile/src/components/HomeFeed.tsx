@@ -8,7 +8,7 @@ import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, toggleForgotten, mostForgotten, readAyahMarks, readDueMarks, rememberAyah, restoreMark, subscribeDueMarks, type AyahMark } from '@shared/ayahMarks';
 import { toggleBookmark } from '@shared/bookmarks';
 import { readGestures, type GestureAction } from '@shared/readerGestures';
-import { isMemorized, type Memorized, memorizedPrefer, memorizedQuestions, readMemorized, recallOfDay, subscribeMemorized, touchesMemorized, withMemorizedScope } from '@shared/memorized';
+import { isMemorized, type Memorized, memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized, withMemorizedScope } from '@shared/memorized';
 import { FEED_QUIZ_KINDS, FEED_QUIZ_NAMES, feedQuizSeed, OPENINGS, openingSurah, seededRandom, type FeedKind, type FeedQuizKind } from '@shared/quiz/feedQuiz';
 import { answeredQuestion, dueSeeds, readMissed } from '@shared/quiz/missedQuestions';
 import { activeInterests, INTERESTS, interestById, interestOf, pickedInterests, restoredInterest, surpriseMe, toggledInterest, type FeedCardKind } from '@shared/interests';
@@ -23,6 +23,7 @@ import { briefFacts, PersonBrief } from '@/screens/person';
 import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import Saying from '@/ui/Saying';
 import { findPerson, GRAPH, PEOPLE, personName, tiePairs, unvowelled } from '@/lib/tarajim';
+import { useSettledMemorized } from './Memorized';
 import { kunyaFacts, laqabFacts, type NameFact } from '@shared/tarajimNames';
 import { chainSentence, groupWord } from '@shared/tarajimGraph';
 import TiesChain from './TiesChain';
@@ -515,7 +516,7 @@ const QUIZ_TREE_HEIGHT = 380;
  * shown again (another chip, back to «لك») mounts at once instead of building its kind's questions afresh.
  */
 const feedRuns = new Map<string, SoloRun | null>();
-function feedRun(kind: QuizTopic, seed: number, memorized: Memorized | null): SoloRun | null {
+export function feedRun(kind: QuizTopic, seed: number, memorized: Memorized | null): SoloRun | null {
   const id = `${kind}|${seed}|${memorized ? JSON.stringify(memorized) : ''}`;
   if (feedRuns.has(id)) return feedRuns.get(id)!;
   const base = memorized ? { ...DEFAULT_LIST, filters: withMemorizedScope(DEFAULT_LIST.filters, memorized) } : DEFAULT_LIST;
@@ -532,10 +533,23 @@ function feedRun(kind: QuizTopic, seed: number, memorized: Memorized | null): So
  * or a tree's QuizInputs and QuizFeedback), one kind a card in turn, the same question all day (`seed`). With «الأسئلة مما أحفظ
  * فقط» on, it asks from what is memorized, as the solo quiz does.
  */
-const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTopic; seed: number; palette: Palette }) {
+/**
+ * What is memorized, as a feed's cards read it: the feed's own (Feed below), which waits for the picker to close and, in a feed
+ * kept hidden behind another chip, for the feed to be shown. Outside a feed, the settled pick.
+ */
+const FeedMemorized = createContext<Memorized | null | undefined>(undefined);
+function useFeedMemorized() {
+  const fromFeed = useContext(FeedMemorized);
+  const settled = useSettledMemorized();
+  return fromFeed === undefined ? settled : fromFeed;
+}
+
+const QuizPost = memo(function QuizPost({ kind, seed, palette, sub, home = true }: { kind: QuizTopic; seed: number; palette: Palette;
+  /** The head's line under the title (the quizzes page names the kind's interest). */ sub?: string;
+  /** Off on the quizzes page itself, where a head opening the quizzes would go nowhere. */ home?: boolean }) {
   // A tree or compare question's room follows what it holds, up to most of the screen (owner, 2026-11-18).
   const [roomHeight, onFit] = useFitHeight(QUIZ_TREE_HEIGHT);
-  const memorized = useSyncExternalStore(subscribeMemorized, readMemorized);
+  const memorized = useFeedMemorized();
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
   // The question is drawn as the card mounts, from the one worked out before (feedRun), so a chip shows its cards at once.
   const asked = feedRun(kind, seed, memorized && questions ? memorized : null);
@@ -556,7 +570,7 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
   const answered = isTree(question) || isCompare(question) ? !!checked : run.typed[0][0] !== undefined;
   const prompt = question.promptArabic && question.promptArabic !== FEED_QUIZ_NAMES[kind] ? <QuizPrompt text={question.promptArabic} palette={palette} /> : undefined;
   return (
-    <Post palette={palette} head={<PostHead Icon={QUIZ_ICON[kind as FeedKind]} title={FEED_QUIZ_NAMES[kind]} open={topic('/quizzes', 'افتح الاختبارات')} palette={palette} />} whole
+    <Post palette={palette} head={<PostHead Icon={QUIZ_ICON[kind as FeedKind]} title={FEED_QUIZ_NAMES[kind]} sub={sub} open={home ? topic('/quizzes', 'افتح الاختبارات') : undefined} palette={palette} />} whole
       // Unanswered, a tree or compare question's «تحقق» leads the row, before «تلميح», as the choice questions' does.
       open={answered ? <OpenButton label="افتح ما يشرح الجواب" onPress={() => openAnswer(question)} palette={palette} />
         : (isTree(question) || isCompare(question)) && !checked ? <Action Icon={Check} label="تحقق" onPress={() => setRun(check(run))} palette={palette} /> : undefined}
@@ -587,7 +601,7 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
 
 /** The surah openings quiz as a post: a surah's first ayah to write under its name, as the openings quiz asks it in the mushaf. */
 function OpeningPost({ seed, palette }: { seed: number; palette: Palette }) {
-  const memorized = useSyncExternalStore(subscribeMemorized, readMemorized);
+  const memorized = useFeedMemorized();
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
   const surah = useMemo(() => openingSurah(seed, memorized && questions && !('all' in memorized)
     ? Array.from({ length: 114 }, (_, i) => i + 1).filter(n => isMemorized(`${n}:1`, memorized)) : undefined), [seed, memorized, questions]);
@@ -1070,12 +1084,14 @@ const lifePeople = () => PEOPLE.filter(person => drawsLine(personLife(person))).
 const QUIZ_BOOKS: Partial<Record<FeedQuizKind, BookId>> = { TAFSIR: 'sadi', BALAGHA: 'itqan', TERM: 'itqan', IRAB: 'irab-words' };
 
 /** A question card of kind `kind`: the openings quiz, or one of the solo quiz's. */
-function FeedQuiz({ kind, seed, palette }: { kind: FeedQuizKind; seed: number; palette: Palette }) {
+export function FeedQuiz({ kind, seed, palette, sub, home = true }: { kind: FeedQuizKind; seed: number; palette: Palette; sub?: string; home?: boolean }) {
   useBooks();
-  const book = QUIZ_BOOKS[kind];
-  if (book && bookState(book) !== 'on') return null;
-  return kind === OPENINGS ? <OpeningPost seed={seed} palette={palette} /> : <QuizPost kind={kind} seed={seed} palette={palette} />;
+  if (!quizBookOn(kind)) return null;
+  return kind === OPENINGS ? <OpeningPost seed={seed} palette={palette} /> : <QuizPost kind={kind} seed={seed} palette={palette} sub={sub} home={home} />;
 }
+
+/** Whether a kind's book is on (settings, «الكتب»): a kind asked from a book that is off is not asked. */
+export const quizBookOn = (kind: FeedQuizKind) => { const book = QUIZ_BOOKS[kind]; return !book || bookState(book) === 'on'; };
 
 /**
  * The tree card's height: its frame, the buttons and the chips. A lit path's ayat add their room below (TreeCard `ayatRoom`),
@@ -1885,8 +1901,12 @@ export const Feed = memo(function Feed({ palette, nearEnd, screenBottom, only = 
   const savedCards = useMemo(() => shownBookmarks(bookmarks).filter(item => isCardBookmark(item.id)), [visit]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const forgotten = mostForgotten(due)[0];
-  // The settings under «ما أحفظه»: questions come from the memorized range, pondering puts it first.
-  const memorized = useSyncExternalStore(subscribeMemorized, readMemorized);
+  // The settings under «ما أحفظه»: questions come from the memorized range, pondering puts it first. A feed kept hidden takes
+  // a new pick when it is shown again, so closing the picker draws only the feed on screen.
+  const settledMemorized = useSettledMemorized();
+  const [heldMemorized, setHeldMemorized] = useState(settledMemorized);
+  if (shown && heldMemorized !== settledMemorized) setHeldMemorized(settledMemorized);
+  const memorized = shown ? settledMemorized : heldMemorized;
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
   const prefer = useSyncExternalStore(memorizedPrefer.subscribe, memorizedPrefer.read);
   const recall = useMemo(() => (memorized ? recallOfDay(questions ? memorized : { all: true }, day) : undefined), [memorized, questions, day]);
@@ -2058,6 +2078,7 @@ export const Feed = memo(function Feed({ palette, nearEnd, screenBottom, only = 
     const prayers = new Set(cards.map(card => `pr${card.key}`));
     const sides = keys.map(key => (prayers.has(key) ? Math.max(turn, 0) % 2 : ++turn % 2));
     return (
+      <FeedMemorized.Provider value={memorized}>
       <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: COLUMN_GAP }} onLayout={event => { top.current = event.nativeEvent.layout.y; }}>
         {[0, 1].map(side => (
           <PageWidthProvider key={side} value={column + 32}>
@@ -2068,12 +2089,15 @@ export const Feed = memo(function Feed({ palette, nearEnd, screenBottom, only = 
           </PageWidthProvider>
         ))}
       </View>
+      </FeedMemorized.Provider>
     );
   }
   return (
-    <View style={{ gap: 14 }} onLayout={event => { top.current = event.nativeEvent.layout.y; }}>
-      {lead}
-      {posts.map((_post, i) => placed(i))}
-    </View>
+    <FeedMemorized.Provider value={memorized}>
+      <View style={{ gap: 14 }} onLayout={event => { top.current = event.nativeEvent.layout.y; }}>
+        {lead}
+        {posts.map((_post, i) => placed(i))}
+      </View>
+    </FeedMemorized.Provider>
   );
 });

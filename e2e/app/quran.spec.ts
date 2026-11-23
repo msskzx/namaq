@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test';
-import { closeSource, expect, open, openSource, readerPage, tab, test } from './fixtures';
+import { closeSource, expect, onScreen, open, openSource, readerPage, tab, test } from './fixtures';
 import { surahName as S } from '../../shared/quran/surahNames';
 
 test('the Quran hub links to every tool', async ({ page }) => {
@@ -259,7 +259,11 @@ test.describe('branches', () => {
     const before = await save.boundingBox();
     await page.getByRole('button', { name: `سورة ${S(15)}` }).click();
     await expect(page.getByRole('button', { name: `قارن ${S(15)} ٤٥` })).toBeVisible();
-    expect(await save.boundingBox()).toEqual(before);
+    // In place to the pixel: the lit path's text can settle a fraction of a pixel as its font lays out, never a row's height.
+    const after = (await save.boundingBox())!;
+    expect(Math.abs(after.x - before!.x)).toBeLessThan(1);
+    expect(Math.abs(after.y - before!.y)).toBeLessThan(1);
+    expect(Math.abs(after.width - before!.width)).toBeLessThan(1);
     // The surah's name comes first, then the ayat, in one label on the right (the matrix's head).
     await expect(page.getByText(`${S(15)} ٤٥–٤٦`, { exact: true }).first()).toBeVisible();
   });
@@ -279,8 +283,10 @@ test('a compare card kept as its matrix has no tree and no tree button', async (
   await open(page, '/compare');
   await expect(page.getByRole('button', { name: 'استوديو القراءة' }).first()).toBeVisible();
   await expect(page.getByRole('button', { name: new RegExp(`^اختر سورتين:.*${S(1)}`) })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'عرض المصفوفة' })).toHaveCount(0);
-  await expect(page.getByRole('button', { name: 'عرض الشجرة' })).toHaveCount(0);
+  // The pager keeps the next pair's card drawn beside the screen, with its own buttons: only the card on screen counts,
+  // once its row is there.
+  await expect.poll(async () => (await onScreen(page, page.getByRole('button', { name: 'استوديو القراءة' }))).length).toBeGreaterThan(0);
+  for (const name of ['عرض المصفوفة', 'عرض الشجرة']) expect(await onScreen(page, page.getByRole('button', { name }))).toEqual([]);
 });
 
 test.describe('a saved compare card', () => {
