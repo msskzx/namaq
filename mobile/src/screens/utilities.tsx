@@ -15,17 +15,25 @@ type Scroller = ComponentRef<typeof ScrollView>;
 /** One utility, scrolled up and down on its own. */
 function Page({ view, width, height, palette, on, current, bottom, onPlace, scrollers }: { view: UtilityView; width: number; height: number; palette: Palette; on: boolean; current: boolean; bottom: number; onPlace: () => void; scrollers: Map<UtilityView, Scroller> }) {
   const shrink = useShrinkOnScroll();
+  // How far down the page has been seen, in steps of 50 so a scroll redraws it seldom: the qibla waits for it.
+  const [reach, setReach] = useState(height);
+  useEffect(() => { setReach(seen => Math.max(seen, height)); }, [height]);
+  const scrolled = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    shrink(event);
+    const bottom = Math.ceil((event.nativeEvent.contentOffset.y + height) / 50) * 50;
+    setReach(seen => (bottom > seen ? bottom : seen));
+  };
   return (
-    <ScrollView ref={node => { if (node) scrollers.set(view, node); else scrollers.delete(view); }} onScroll={shrink} scrollEventThrottle={16}
+    <ScrollView ref={node => { if (node) scrollers.set(view, node); else scrollers.delete(view); }} onScroll={scrolled} scrollEventThrottle={16}
       importantForAccessibility={current ? 'auto' : 'no-hide-descendants'} accessibilityElementsHidden={!current}
       style={{ width, height, direction: 'rtl' }} contentContainerStyle={{ padding: 16, paddingBottom: bottom }}>
-      <UtilityPage view={view} palette={palette} on={on} onPlace={onPlace} scrollTo={y => scrollers.get(view)?.scrollTo({ y, animated: false })} />
+      <UtilityPage view={view} palette={palette} on={on} onPlace={onPlace} reach={reach} scrollTo={y => scrollers.get(view)?.scrollTo({ y, animated: view === 'tools' })} />
     </ScrollView>
   );
 }
 
 /**
- * The utilities tab: prayer times, the qibla, the Hijri calendar (owner, 2026-11-13) and the adhkar (owner, 2026-11-17), side by side.
+ * The utilities tab: the tools (prayer times, the qibla and the Hijri calendar, owner 2026-11-13, on one page since 2026-11-23) and the adhkar (owner, 2026-11-17), side by side.
  * A sideways swipe follows the finger and shows the next one coming in (owner, 2026-11-15); the icons in the top bar jump to one.
  * As in the reading order, the first is on the right and swiping right brings the next from the left.
  */

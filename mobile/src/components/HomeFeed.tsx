@@ -1176,8 +1176,8 @@ function PrayerPost({ prayer, times, palette }: { prayer: Exclude<PrayerKey, 'su
       // Nothing to share: the times are your own day and place (owner's plan, 2026-11-22: own-state cards never share your state).
       share={false}
       actions={<>
-        <Action Icon={Clock} label="مواقيت الصلاة" onPress={() => openUtility('times')} palette={palette} />
-        <Action Icon={Compass} label="القبلة" onPress={() => openUtility('qibla')} palette={palette} />
+        <Action Icon={Clock} label="مواقيت الصلاة" onPress={() => openUtility('tools')} palette={palette} />
+        <Action Icon={Compass} label="القبلة" onPress={() => openUtility('tools', 'qibla')} palette={palette} />
       </>}
       source={[{ line: `طريقة الحساب · ${method}`, quotes: [{ text: `حُسبت المواقيت بطريقة ${method}${settings.hanafi ? '، والعصر على مذهب الحنفية' : ''}، وتُغيَّر من مواقيت الصلاة.` }] }]}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 14, paddingVertical: 12 }}>

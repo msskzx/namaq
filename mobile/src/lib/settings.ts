@@ -92,6 +92,7 @@ export const prayerSettings = setting<PrayerSettings>('prayer-settings', DEFAULT
 export const adhanAlerts = setting<AdhanAlerts>('adhan-alerts', NO_ALERTS, isAdhanAlerts);
 /** The morning adhkar reminder after fajr and the evening one after asr; both off until the person turns one on. */
 export const adhkarAlerts = setting<AdhkarAlerts>('adhkar-alerts', NO_ADHKAR_ALERTS, isAdhkarAlerts);
-export type UtilityView = 'times' | 'qibla' | 'calendar' | 'adhkar';
-export const utilityView = setting<UtilityView>('utilities-view', 'times', (value): value is UtilityView => value === 'times' || value === 'qibla' || value === 'calendar' || value === 'adhkar');
+/** The utilities' two pages (owner, 2026-11-23): the tools (Hijri date, prayer times, qibla) and the adhkar. */
+export type UtilityView = 'tools' | 'adhkar';
+export const utilityView = setting<UtilityView>('utilities-view', 'tools', (value): value is UtilityView => value === 'tools' || value === 'adhkar');
 

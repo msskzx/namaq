@@ -127,7 +127,7 @@ test.describe('a new user', () => {
       await page.getByRole('button', { name, exact: true }).click();
       await expect(page).toHaveURL(url);
     }
-    await expect(page.getByRole('radio', { name: 'القبلة' })).toBeChecked();
+    await expect(page.getByRole('radio', { name: 'الأدوات' })).toBeChecked();
   });
 
   test('the reading card names the juz of its own page, and today\'s juz is a card that opens the mushaf', async ({ page }) => {
@@ -252,7 +252,7 @@ test.describe('a new user', () => {
       await expect(page.getByRole('heading', { name: 'العصر بعد ١٠ دقائق', exact: true })).toBeAttached();
       for (const prayer of ['الفجر', 'الظهر', 'المغرب', 'العشاء']) await expect(page.getByLabel(new RegExp(`^${prayer} `)).first()).toBeAttached();
       await page.getByRole('button', { name: 'القبلة' }).last().click();
-      await expect(page.getByRole('radio', { name: 'القبلة' })).toBeChecked();
+      await expect(page.getByRole('radio', { name: 'الأدوات' })).toBeChecked();
     });
 
     test('far from a prayer there is no prayer card', async ({ page }) => {

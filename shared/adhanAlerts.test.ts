@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import * as adhan from 'adhan';
-import { ADHKAR_AFTER, adhkarAt, adhkarOf, alertText, isAdhkarAlerts, MAX_ALERTS, MAX_DAYS, NO_ADHKAR_ALERTS, NO_ALERTS, isAdhanAlerts, planAll, planAlerts, plannedHere, planKey } from './adhanAlerts';
+import { ADHKAR_AFTER, adhkarAt, adhkarOf, alertText, isAdhkarAlerts, MAX_ALERTS, MAX_DAYS, NO_ADHKAR_ALERTS, NO_ALERTS, isAdhanAlerts, type AdhanAlerts, planAll, planAlerts, plannedHere, planKey } from './adhanAlerts';
 import { DEFAULT_PRAYER_SETTINGS, MY_LOCATION, prayerDay, type Adhan, type Place } from './prayer';
 
 const lib = adhan as unknown as Adhan;
@@ -41,6 +41,21 @@ describe('adhan alerts plan', () => {
   it('names the city, but not the phone\'s own place', () => {
     expect(alertText('fajr', cairo)).toEqual({ title: 'الفجر', body: 'حان وقت أذان الفجر في القاهرة' });
     expect(alertText('maghrib', { ...cairo, name: MY_LOCATION }).body).toBe('حان وقت أذان المغرب');
+  });
+
+  it('rings at sunrise without calling it an adhan (owner, 2026-11-23)', () => {
+    expect(alertText('sunrise', cairo).body).toBe('حان وقت الشروق في القاهرة');
+    const now = new Date(2026, 10, 13, 1);
+    const plan = planAlerts({ ...NO_ALERTS, sunrise: true }, cairo, now, times(cairo));
+    expect(plan.length).toBeGreaterThan(0);
+    expect(plan.every(alert => alert.prayer === 'sunrise' && alert.at.getTime() === times(cairo)(new Date(alert.at.getFullYear(), alert.at.getMonth(), alert.at.getDate(), 12)).sunrise.getTime())).toBe(true);
+  });
+
+  it('keeps a list saved before the sunrise bell, with the sunrise off', () => {
+    const saved: AdhanAlerts = { ...NO_ALERTS, fajr: true };
+    delete saved.sunrise;
+    expect(isAdhanAlerts(saved)).toBe(true);
+    expect(planAlerts(saved, cairo, new Date(2026, 10, 13, 1), times(cairo)).every(alert => alert.prayer === 'fajr')).toBe(true);
   });
 
   it('checks stored values and changes key with the day', () => {

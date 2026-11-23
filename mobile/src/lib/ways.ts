@@ -70,8 +70,23 @@ export const openBookAt = (id: string, ayah: string) => toTab({ pathname: '/book
 /** Opens a book at a printed page, «part:page» (a branch card's citation of it). */
 export const openBookPage = (id: string, printed: string) => toTab({ pathname: '/book', params: { id, printed } });
 
-/** Opens the utilities on one of them: the qibla, the prayer times, the adhkar. */
-export const openUtility = (view: UtilityView) => { utilityView.set(view); toTab('/utilities'); };
+/**
+ * The qibla asked for from outside the tools page (home's «القبلة»): waiting until the page takes it, once. `qiblaAsks`
+ * grows with each ask so the page hears it; the page drops an ask it cannot serve (no place yet), so it never jumps later.
+ */
+let qiblaAsks = 0;
+let qiblaWaiting = false;
+export const takeQiblaAsk = () => { const waiting = qiblaWaiting; qiblaWaiting = false; return waiting; };
+const qiblaListeners = new Set<() => void>();
+export const subscribeQiblaAsks = (listener: () => void) => { qiblaListeners.add(listener); return () => { qiblaListeners.delete(listener); }; };
+export const readQiblaAsks = () => qiblaAsks;
+
+/** Opens the utilities on a page; `qibla` scrolls the tools page down to the compass. */
+export const openUtility = (view: UtilityView, spot?: 'qibla') => {
+  utilityView.set(view);
+  if (spot) { qiblaAsks++; qiblaWaiting = true; qiblaListeners.forEach(listener => listener()); }
+  toTab('/utilities');
+};
 
 /**
  * Opens an ayah's page, everything on it (owner, 2026-11-22): wherever the ayah is the subject (a saved ayah, a home card

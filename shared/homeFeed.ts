@@ -42,8 +42,14 @@ export function prayerSoon(day: PrayerDay, now: Date, within = PRAYER_SOON_MINUT
   return minutes >= 0 && minutes <= within ? { key, minutes } : null;
 }
 
-/** «بعد ١٨ دقيقة», «بعد دقيقة», «بعد دقيقتين», «الآن». */
-export const inMinutes = (minutes: number) => (minutes <= 0 ? 'الآن' : `بعد ${counted(minutes, ['دقيقة', 'دقيقتين', 'دقائق'])}`);
+/** «بعد ١٨ دقيقة», «بعد دقيقة», «بعد دقيقتين», «الآن»; past the hour «بعد ساعتين و١٠ دقائق» (the tools page's next prayer). */
+export function inMinutes(minutes: number) {
+  if (minutes <= 0) return 'الآن';
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  const parts = [hours ? counted(hours, ['ساعة', 'ساعتين', 'ساعات']) : '', rest ? counted(rest, ['دقيقة', 'دقيقتين', 'دقائق']) : ''].filter(Boolean);
+  return `بعد ${parts.join(' و')}`;
+}
 
 /**
  * Where a card that comes while the feed is open goes (the prayer card, owner 2026-11-18): before the first post that starts

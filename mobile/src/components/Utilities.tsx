@@ -1,10 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Animated, Pressable, ScrollView, View } from 'react-native';
 import Svg, { Circle, G, Line, Polygon, Rect, Text as SvgText } from 'react-native-svg';
-import { Bell, BellOff, CalendarDays, Check, HandHeart, ChevronDown, ChevronLeft, ChevronRight, Clock, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin, type LucideProps } from 'lucide-react-native';
+import { Bell, BellOff, CalendarDays, Check, HandHeart, ChevronDown, ChevronLeft, ChevronRight, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin, type LucideProps } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import Sheet from '@/ui/Sheet';
-import { hijriDate, todaysJuz } from '@shared/hijri';
+import { hijriDate, hijriDay, todaysJuz } from '@shared/hijri';
+import { inMinutes } from '@shared/homeFeed';
+import { readQiblaAsks, subscribeQiblaAsks, takeQiblaAsk } from '@/lib/ways';
 import { juzLabel, openJuz } from '@/lib/juz';
 import Button from '@/ui/Button';
 import { ALL, clock, dayDigits, FACING, hijriMonth, METHODS, MY_LOCATION, nextPrayer, PRAYER_NAMES, qiblaLabel, searchPlaces, turnTo, type Place, type PrayerKey } from '@shared/prayer';
@@ -20,12 +22,11 @@ import { SearchField } from '@/ui/Field';
 import Empty from '@/ui/Empty';
 import Adhkar from './Adhkar';
 import { Tap } from '@/ui/Tap';
+import TapRow from '@/ui/TapRow';
 import { FEATURE_ICON } from '@/components/featureIcons';
 
 const VIEWS: { id: UtilityView; Icon: (props: LucideProps) => React.ReactNode; label: string }[] = [
-  { id: 'times', Icon: Clock, label: 'مواقيت الصلاة' },
-  { id: 'qibla', Icon: Compass, label: 'القبلة' },
-  { id: 'calendar', Icon: CalendarDays, label: 'التقويم الهجري' },
+  { id: 'tools', Icon: Compass, label: 'الأدوات' },
   { id: 'adhkar', Icon: HandHeart, label: 'الأذكار' },
 ];
 
@@ -72,16 +73,43 @@ export function UtilityPicker({ palette, progress }: { palette: Palette; progres
 export const UTILITY_VIEWS = VIEWS.map(view => view.id);
 
 /**
- * One utility's page: prayer times, the qibla, the Hijri calendar or the adhkar. `on` runs the compass only while its page is
- * on screen, and ends an adhkar count when the page is left; `scrollTo` brings a searched adhkar card into view.
+ * One utility's page: the tools or the adhkar. `on` runs the compass only while its page is on screen, and ends an adhkar
+ * count when the page is left; `scrollTo` brings a searched adhkar card or the qibla into view; `reach` is how far down the
+ * page has been seen, so the compass asks for the location only once it is reached.
  */
-export function UtilityPage({ view, palette, on = true, onPlace, scrollTo }: { view: UtilityView; palette: Palette; on?: boolean; onPlace: () => void; scrollTo?: (y: number) => void }) {
+export function UtilityPage({ view, palette, on = true, onPlace, scrollTo, reach = Infinity }: { view: UtilityView; palette: Palette; on?: boolean; onPlace: () => void; scrollTo?: (y: number) => void; reach?: number }) {
+  return view === 'adhkar' ? <Adhkar palette={palette} on={on} onPlace={onPlace} scrollTo={scrollTo} />
+    : <Tools palette={palette} on={on} onPlace={onPlace} scrollTo={scrollTo} reach={reach} />;
+}
+
+/**
+ * The tools page (owner, 2026-11-23: prayer times, the qibla and the Hijri date on one page; sketch
+ * /mnt/project-files/adhkar-page-redesign/utilities-sketch-dark.png): today's date and week, the next prayer and the six
+ * times with their bells, the place and the way they are worked out, then the qibla.
+ */
+function Tools({ palette, on, onPlace, scrollTo, reach }: { palette: Palette; on: boolean; onPlace: () => void; scrollTo?: (y: number) => void; reach: number }) {
   const [place] = prayerPlace.use();
-  return view === 'calendar' ? <Calendar palette={palette} />
-    : view === 'adhkar' ? <Adhkar palette={palette} on={on} onPlace={onPlace} scrollTo={scrollTo} />
-    : !place ? <FirstUse palette={palette} onPick={onPlace} />
-    : view === 'times' ? <Times place={place} palette={palette} onPlace={onPlace} />
-    : <Qibla place={place} palette={palette} on={on} onPlace={onPlace} />;
+  const [qiblaY, setQiblaY] = useState(0);
+  const asks = useSyncExternalStore(subscribeQiblaAsks, readQiblaAsks);
+  useEffect(() => {
+    if (!place) takeQiblaAsk();
+    else if (qiblaY && takeQiblaAsk()) scrollTo?.(qiblaY - 8);
+  }, [asks, place, qiblaY, scrollTo]);
+  const reached = qiblaY > 0 && qiblaY + 80 <= reach;
+  return (
+    <View style={{ gap: 16 }}>
+      <Today palette={palette} />
+      {!place ? <FirstUse palette={palette} onPick={onPlace} /> : (
+        <>
+          <Times place={place} palette={palette} onPlace={onPlace} />
+          <View onLayout={event => setQiblaY(event.nativeEvent.layout.y)} style={{ gap: 8 }}>
+            <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 16 }}>القبلة</Text>
+            <Card palette={palette} pad={18}><Qibla place={place} palette={palette} on={on && reached} /></Card>
+          </View>
+        </>
+      )}
+    </View>
+  );
 }
 
 /** Before any place is known: the two ways to give one. Location is asked for only on a tap. */
@@ -94,7 +122,7 @@ function FirstUse({ palette, onPick }: { palette: Palette; onPick: () => void })
     if (place) prayerPlace.set(place); else onPick();
   };
   return (
-    <View style={{ alignItems: 'center', gap: 14, paddingVertical: 40 }}>
+    <View style={{ alignItems: 'center', gap: 14, paddingVertical: 24 }}>
       <MapPin size={40} color={palette.accent} strokeWidth={1.5} />
       <View style={{ flexDirection: 'row', gap: 8 }}>
         <Wide Icon={LocateFixed} label="موقعي الحالي" onPress={here} palette={palette} primary disabled={busy} />
@@ -127,14 +155,19 @@ function PlaceChip({ place, palette, onPress }: { place: Place; palette: Palette
   );
 }
 
+/** The next prayer large with the time left, then the six times, each with its bell (owner, 2026-11-23: the sunrise too), then the place line. */
 function Times({ place, palette, onPlace }: { place: Place; palette: Palette; onPlace: () => void }) {
   const now = useMinute();
   const [settings, setSettings] = prayerSettings.use();
+  const [open, setOpen] = useState(false);
   const [methods, setMethods] = useState(false);
   const dayKey = now.toDateString();
   const times = useMemo(() => timesFor(place, now, settings), [place, settings, dayKey]); // eslint-disable-line react-hooks/exhaustive-deps
-  const date = useMemo(() => hijriDate(now), [dayKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  // After isha, the next is tomorrow's fajr.
+  const tomorrow = useMemo(() => timesFor(place, new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 12), settings), [place, settings, dayKey]); // eslint-disable-line react-hooks/exhaustive-deps
   const next = nextPrayer(times, now);
+  const nextAt = next ? times[next] : tomorrow.fajr;
+  const left = Math.ceil((nextAt.getTime() - now.getTime()) / 60_000);
   const method = METHODS.find(item => item.id === settings.method)!;
   const [alerts, setAlerts] = adhanAlerts.use();
   // Switched on but the phone blocks notifications: say so under the card.
@@ -146,36 +179,35 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
     alertsAllowed().then(ok => { if (!gone) setBlocked(!ok); });
     return () => { gone = true; };
   }, [alerts, dayKey, back]);
-  const toggle = async (key: Exclude<PrayerKey, 'sunrise'>) => {
+  const toggle = async (key: PrayerKey) => {
     buzz();
     if (alerts[key]) { setAlerts({ ...adhanAlerts.get(), [key]: false }); return; }
-    // The permission is asked for only here, the first time a prayer is switched on.
+    // The permission is asked for only here, the first time a time is switched on.
     const ok = await allowAlerts();
     setBlocked(!ok);
     if (ok) setAlerts({ ...adhanAlerts.get(), [key]: true });
   };
   return (
     <>
-      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
-        <PlaceChip place={place} palette={palette} onPress={onPlace} />
-        {date && <Text style={{ color: palette.ink, fontSize: 15 }}>{date}</Text>}
-      </View>
-      <Card palette={palette} pad={6}>
-        {ALL.map((key, i) => {
+      <Card palette={palette} pad={[14, 18]}>
+        <View accessible accessibilityLabel={`الصلاة التالية ${PRAYER_NAMES[next ?? 'fajr']} ${clock(nextAt, true)}، ${inMinutes(left)}`}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' }}>
+            <Text style={{ color: palette.accent, fontSize: 26 }}>{PRAYER_NAMES[next ?? 'fajr']}</Text>
+            <Text style={{ color: palette.ink, fontSize: 30 }}>{clock(nextAt, true)}</Text>
+          </View>
+          <Text style={{ color: palette.muted, fontSize: 16, marginBottom: 6 }}>{inMinutes(left)}</Text>
+        </View>
+        {ALL.map(key => {
           const on = key === next;
-          const faint = key === 'sunrise';
-          const color = on ? palette.onAccent : faint ? palette.muted : palette.ink;
+          const color = on ? palette.accent : palette.ink;
           return (
-            <View key={key}
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 14, paddingVertical: faint ? 8 : 11, borderRadius: 10, backgroundColor: on ? palette.accent : 'transparent', borderTopWidth: i && !on && ALL[i - 1] !== next ? 1 : 0, borderColor: `${palette.rule}55` }}>
-              {ALERTS_SUPPORTED && (key === 'sunrise'
-                ? <View style={{ width: BELL }} />
-                : <BellButton on={alerts[key]} color={on ? palette.onAccent : alerts[key] ? palette.accent : palette.muted} name={PRAYER_NAMES[key]} onPress={() => toggle(key)} />)}
+            <View key={key} style={{ flexDirection: 'row', alignItems: 'center', gap: 10, minHeight: 50, borderTopWidth: 1, borderColor: `${palette.rule}55` }}>
               <View accessible accessibilityState={{ selected: on }} accessibilityLabel={`${PRAYER_NAMES[key]} ${clock(times[key], true)}${on ? '، التالية' : ''}`}
                 style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color, fontSize: faint ? 16 : 20 }}>{PRAYER_NAMES[key]}</Text>
-                <Text style={{ color, fontSize: faint ? 16 : 20 }}>{clock(times[key], true)}</Text>
+                <Text style={{ color, fontSize: 19 }}>{PRAYER_NAMES[key]}</Text>
+                <Text style={{ color, fontSize: 19 }}>{clock(times[key], true)}</Text>
               </View>
+              {ALERTS_SUPPORTED && <BellButton on={!!alerts[key]} color={alerts[key] ? palette.accent : palette.muted} name={PRAYER_NAMES[key]} sunrise={key === 'sunrise'} onPress={() => toggle(key)} />}
             </View>
           );
         })}
@@ -187,26 +219,36 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
           <Text style={{ color: palette.muted, fontSize: 15 }}>التنبيهات موقوفة، فاسمح بها من إعدادات الجوال</Text>
         </Tap>
       )}
-      <View style={{ gap: 6 }}>
-        <Text style={{ color: palette.muted, fontSize: 14 }}>طريقة الحساب</Text>
-        <Pressable onPress={() => setMethods(true)} accessibilityRole="button" accessibilityLabel={`طريقة الحساب: ${method.label}`}
-          style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 12, minHeight: 44, backgroundColor: palette.paper, opacity: pressed ? 0.7 : 1 })}>
-          <Text style={{ flex: 1, color: palette.ink, fontSize: 16 }}>{method.label}</Text>
-          <ChevronDown size={18} color={palette.muted} />
-        </Pressable>
-        <Text style={{ color: palette.muted, fontSize: 14, marginTop: 6 }}>العصر</Text>
-        <View accessibilityRole="radiogroup" accessibilityLabel="العصر" style={{ flexDirection: 'row', borderWidth: 1, borderColor: palette.rule, borderRadius: 10, padding: 2, gap: 2 }}>
-          {([[false, 'الجمهور'], [true, 'الحنفي']] as const).map(([hanafi, label]) => {
-            const on = settings.hanafi === hanafi;
-            return (
-              <Pressable key={label} onPress={() => setSettings({ ...settings, hanafi })} accessibilityRole="radio" accessibilityState={{ checked: on }} accessibilityLabel={label}
-                style={{ flex: 1, alignItems: 'center', paddingVertical: 7, borderRadius: 8, backgroundColor: on ? palette.accent : 'transparent' }}>
-                <Text style={{ color: on ? palette.onAccent : palette.ink, fontSize: 16 }}>{label}</Text>
-              </Pressable>
-            );
-          })}
+      {/* The place and the way the times are worked out, one line; a tap opens them to change. */}
+      <TapRow onPress={() => setOpen(true)} label={`المكان وطريقة الحساب: ${place.name}، ${method.label}`} style={{ alignItems: 'center', gap: 6 }}>
+        {place.name === MY_LOCATION ? <LocateFixed size={16} color={palette.muted} /> : <MapPin size={16} color={palette.muted} />}
+        <Text numberOfLines={1} style={{ flex: 1, color: palette.muted, fontSize: 15 }}>{place.name} · {method.label} · العصر: {settings.hanafi ? 'الحنفي' : 'الجمهور'}</Text>
+        <ChevronLeft size={16} color={palette.muted} />
+      </TapRow>
+      <Sheet open={open} onClose={() => setOpen(false)} palette={palette}>
+        <View style={{ paddingHorizontal: 16, paddingBottom: 20, gap: 8 }}>
+          <Text style={{ color: palette.muted, fontSize: 14 }}>المكان</Text>
+          <PlaceChip place={place} palette={palette} onPress={() => { setOpen(false); onPlace(); }} />
+          <Text style={{ color: palette.muted, fontSize: 14, marginTop: 6 }}>طريقة الحساب</Text>
+          <Pressable onPress={() => { setOpen(false); setMethods(true); }} accessibilityRole="button" accessibilityLabel={`طريقة الحساب: ${method.label}`}
+            style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, borderWidth: 1, borderColor: palette.rule, borderRadius: 10, paddingHorizontal: 12, minHeight: 44, backgroundColor: palette.paper, opacity: pressed ? 0.7 : 1 })}>
+            <Text style={{ flex: 1, color: palette.ink, fontSize: 16 }}>{method.label}</Text>
+            <ChevronDown size={18} color={palette.muted} />
+          </Pressable>
+          <Text style={{ color: palette.muted, fontSize: 14, marginTop: 6 }}>العصر</Text>
+          <View accessibilityRole="radiogroup" accessibilityLabel="العصر" style={{ flexDirection: 'row', borderWidth: 1, borderColor: palette.rule, borderRadius: 10, padding: 2, gap: 2 }}>
+            {([[false, 'الجمهور'], [true, 'الحنفي']] as const).map(([hanafi, label]) => {
+              const on = settings.hanafi === hanafi;
+              return (
+                <Pressable key={label} onPress={() => setSettings({ ...settings, hanafi })} accessibilityRole="radio" accessibilityState={{ checked: on }} accessibilityLabel={label}
+                  style={{ flex: 1, alignItems: 'center', paddingVertical: 7, borderRadius: 8, backgroundColor: on ? palette.accent : 'transparent' }}>
+                  <Text style={{ color: on ? palette.onAccent : palette.ink, fontSize: 16 }}>{label}</Text>
+                </Pressable>
+              );
+            })}
+          </View>
         </View>
-      </View>
+      </Sheet>
       <Sheet open={methods} onClose={() => setMethods(false)} palette={palette}>
         <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16 }}>
           {METHODS.map(item => (
@@ -222,10 +264,10 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
 const BELL = 20;
 
 /** The adhan switch on a prayer's row: a bell when it rings, a struck bell when it doesn't. */
-function BellButton({ on, color, name, onPress }: { on: boolean; color: string; name: string; onPress: () => void }) {
+function BellButton({ on, color, name, sunrise = false, onPress }: { on: boolean; color: string; name: string; sunrise?: boolean; onPress: () => void }) {
   const Icon = on ? Bell : BellOff;
   return (
-    <Pressable onPress={onPress} accessibilityRole="switch" accessibilityState={{ checked: on }} accessibilityLabel={`تنبيه أذان ${name}`} hitSlop={12}
+    <Pressable onPress={onPress} accessibilityRole="switch" accessibilityState={{ checked: on }} accessibilityLabel={sunrise ? `تنبيه ${name}` : `تنبيه أذان ${name}`} hitSlop={12}
       style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}>
       <Icon size={BELL} color={color} strokeWidth={on ? 2 : 1.6} />
     </Pressable>
@@ -279,7 +321,7 @@ const KAABA = '#1d1b19';
 const R = DIAL / 2 - 10;
 
 /** The qibla: a dial that turns with the phone, north marked «ش», and the Kaaba on the qibla's bearing. */
-function Qibla({ place, palette, on, onPlace }: { place: Place; palette: Palette; on: boolean; onPlace: () => void }) {
+function Qibla({ place, palette, on }: { place: Place; palette: Palette; on: boolean }) {
   const bearing = useMemo(() => qiblaFor(place), [place]);
   const heading = useHeading(on);
   const live = typeof heading === 'number';
@@ -293,7 +335,6 @@ function Qibla({ place, palette, on, onPlace }: { place: Place; palette: Palette
   const ticks = Array.from({ length: 72 }, (_, i) => i * 5);
   return (
     <View style={{ alignItems: 'center', gap: 14 }}>
-      <View style={{ alignSelf: 'stretch' }}><PlaceChip place={place} palette={palette} onPress={onPlace} /></View>
       <Svg width={DIAL} height={DIAL} viewBox={`${-DIAL / 2} ${-DIAL / 2} ${DIAL} ${DIAL}`} accessible accessibilityRole="image" accessibilityLabel={qiblaLabel(bearing, turn)}>
         <G rotation={spin}>
           <Circle r={R} fill={palette.card} stroke={palette.rule} strokeWidth={1.5} />
@@ -333,6 +374,54 @@ function Qibla({ place, palette, on, onPlace }: { place: Place; palette: Palette
 }
 
 const WEEK = ['س', 'ح', 'ن', 'ث', 'ر', 'خ', 'ج'];
+const WEEK_NAMES = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
+
+/**
+ * Today at the top of the tools page (owner, 2026-11-23): the Hijri date over the Gregorian one, and this week's days from
+ * Saturday with today marked; the calendar button opens the whole month in a sheet.
+ */
+function Today({ palette }: { palette: Palette }) {
+  const now = useMinute();
+  const [month, setMonth] = useState(false);
+  const dayKey = now.toDateString();
+  const date = useMemo(() => hijriDate(now), [dayKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  const week = useMemo(() => {
+    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - ((now.getDay() + 1) % 7), 12);
+    return Array.from({ length: 7 }, (_, i) => new Date(start.getFullYear(), start.getMonth(), start.getDate() + i, 12));
+  }, [dayKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  const gregorian = new Intl.DateTimeFormat('ar-EG-u-ca-gregory-nu-arab', { day: 'numeric', month: 'long', year: 'numeric' }).format(now);
+  return (
+    <View style={{ gap: 10 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+        <View style={{ flex: 1 }}>
+          {date && <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 22 }}>{date}</Text>}
+          <Text style={{ color: palette.muted, fontSize: 15 }}>{gregorian}</Text>
+        </View>
+        <IconButton Icon={CalendarDays} label="التقويم الهجري" onPress={() => setMonth(true)} tone="ink" />
+      </View>
+      {date && (
+        <Card palette={palette} pad={6}>
+          <View style={{ flexDirection: 'row' }}>
+            {week.map((day, i) => {
+              const today = day.toDateString() === dayKey;
+              const n = hijriDay(day);
+              return (
+                <View key={i} accessible accessibilityState={{ selected: today }} accessibilityLabel={`${WEEK_NAMES[i]} ${n ? dayDigits(n) : ''}`}
+                  style={{ flex: 1, alignItems: 'center', paddingVertical: 4, borderRadius: 10, backgroundColor: today ? palette.accent : 'transparent' }}>
+                  <Text style={{ color: today ? palette.onAccent : palette.ink, fontSize: 18, lineHeight: 26 }}>{n ? dayDigits(n) : ''}</Text>
+                  <Text style={{ color: today ? palette.onAccent : palette.muted, fontSize: 12, lineHeight: 16 }}>{WEEK[i]}</Text>
+                </View>
+              );
+            })}
+          </View>
+        </Card>
+      )}
+      <Sheet open={month} onClose={() => setMonth(false)} palette={palette}>
+        <View style={{ paddingHorizontal: 16, paddingBottom: 20 }}><Calendar palette={palette} /></View>
+      </Sheet>
+    </View>
+  );
+}
 
 /** The Hijri month, Saturday first, with the Gregorian day under each day. */
 function Calendar({ palette }: { palette: Palette }) {

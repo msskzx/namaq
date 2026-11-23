@@ -44,6 +44,8 @@ describe('the prayer card', () => {
     expect(inMinutes(5)).toBe('بعد ٥ دقائق');
     expect(inMinutes(2)).toBe('بعد دقيقتين');
     expect(inMinutes(1)).toBe('بعد دقيقة');
+    expect(inMinutes(130)).toBe('بعد ساعتين و١٠ دقائق');
+    expect(inMinutes(60)).toBe('بعد ساعة');
     expect(inMinutes(0)).toBe('الآن');
   });
 
