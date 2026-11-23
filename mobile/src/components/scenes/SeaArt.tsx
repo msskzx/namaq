@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import Svg, { Defs, G, LinearGradient, Path, RadialGradient, Rect, Stop } from 'react-native-svg';
 import Animated, { useAnimatedProps, useFrameCallback, useReducedMotion, useSharedValue, type SharedValue } from 'react-native-reanimated';
-import { colourOf, SEA_ART } from '@/lib/theme';
+import { SEA_ART } from '@/lib/theme';
 
 const APath = Animated.createAnimatedComponent(Path);
 const ARect = Animated.createAnimatedComponent(Rect);
@@ -46,15 +46,18 @@ function line(W: number, y: (x: number) => number, step = 8) {
   for (let x = 0; x <= W + step; x += step) d += `${x ? 'L' : 'M'}${x.toFixed(1)} ${y(x).toFixed(1)}`;
   return d;
 }
-/** The edge of the newest layer is gold; once passed, it goes quiet. */
-function rim(t: number, at: number, base: [number, number, number], alpha: number) {
+/**
+ * The edge of the newest layer is gold; once passed, it goes quiet. Drawn as two strokes, its own colour and gold, whose
+ * opacities share `alpha`: a colour changed on the UI thread crashes the native SVG (Expo Go, 2026-11-23), an opacity does not.
+ */
+function rim(t: number, at: number, alpha: number) {
   'worklet';
-  const f = clamp(1 - Math.abs(t - at) * 1.4), old = t > at + 0.5 ? 0.55 : 1;
-  return colourOf(lerp(base[0], 240, f), lerp(base[1], 214, f), lerp(base[2], 160, f), alpha * old);
+  const f = clamp(1 - Math.abs(t - at) * 1.4), a = alpha * (t > at + 0.5 ? 0.55 : 1);
+  return { own: a * (1 - f), gold: a * f };
 }
 
-const WAVES = [{ at: 2, lift: 0, amp: 0.1, ph: 0, k: 1.15, rise: 0.55, rim: [225, 240, 244] as [number, number, number], alpha: 0.75 },
-  { at: 3, lift: 0.05, amp: 0.13, ph: 2.2, k: 0.85, rise: 0.6, rim: [235, 245, 247] as [number, number, number], alpha: 0.8 }];
+const WAVES = [{ at: 2, lift: 0, amp: 0.1, ph: 0, k: 1.15, rise: 0.55, alpha: 0.75 },
+  { at: 3, lift: 0.05, amp: 0.13, ph: 2.2, k: 0.85, rise: 0.6, alpha: 0.8 }];
 const BANKS = [[0.2, 0.05, 0.6, 0.7, 0.85], [0.26, 0.045, 2.1, 1.0, 1], [0.32, 0.04, 4.0, 1.35, 1.15]] as const;
 const RAYS = Array.from({ length: 6 }, (_, i) => i);
 const SPECKS = Array.from({ length: 36 }, (_, i) => ({ x: ((i * 0.618) % 1), y: ((i * 0.377) % 1), r: 0.5 + ((i * 7) % 10) / 10, s: 0.2 + ((i * 3) % 7) / 10 }));
@@ -120,7 +123,13 @@ export default function SeaArt({ look, width: W, height: H, still = false }: { l
     const edge = useAnimatedProps(() => {
       const s = state(look.value, H), grow = n ? s.w2 : s.w1, time = clock.value * (n ? 1.1 : 1);
       const base = s.sy - H * w.lift + (1 - grow) * H * w.rise, amp = H * w.amp * grow;
-      return { d: line(W, x => waveY(x, W, base, amp, w.ph, time, w.k)), stroke: rim(look.value, w.at, w.rim, w.alpha * s.light * (1 - s.dWave * 0.85)), opacity: grow > 0 ? 1 : 0 };
+      return { d: line(W, x => waveY(x, W, base, amp, w.ph, time, w.k)), opacity: grow > 0 ? rim(look.value, w.at, w.alpha * s.light * (1 - s.dWave * 0.85)).own : 0 };
+    });
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const gold = useAnimatedProps(() => {
+      const s = state(look.value, H), grow = n ? s.w2 : s.w1, time = clock.value * (n ? 1.1 : 1);
+      const base = s.sy - H * w.lift + (1 - grow) * H * w.rise, amp = H * w.amp * grow;
+      return { d: line(W, x => waveY(x, W, base, amp, w.ph, time, w.k)), opacity: grow > 0 ? rim(look.value, w.at, w.alpha * s.light * (1 - s.dWave * 0.85)).gold : 0 };
     });
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const foam = useAnimatedProps(() => {
@@ -130,7 +139,7 @@ export default function SeaArt({ look, width: W, height: H, still = false }: { l
       for (let j = 1; j <= 3; j++) d += line(W, x => waveY(x, W, base, amp, w.ph, time, w.k) + j * 5, 10);
       return { d, strokeDashoffset: -time * 12, opacity: grow > 0 ? 0.22 * s.light * (1 - s.dWave) : 0 };
     });
-    return { body, edge, foam };
+    return { body, edge, gold, foam };
   };
   const one = wave(0), two = wave(1);
 
@@ -149,7 +158,12 @@ export default function SeaArt({ look, width: W, height: H, still = false }: { l
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const edge = useAnimatedProps(() => {
       const s = state(look.value, H), bottom = lerp(-H * 0.25, H * by, s.cl), amp = H * ba, time = clock.value;
-      return { d: line(W, x => edgeY(x, bottom, amp, time), 6), stroke: rim(look.value, 4, [215, 230, 234], 0.6 * sh * s.light * (1 - s.dCloud * 0.8)), opacity: s.cl > 0 ? 1 : 0 };
+      return { d: line(W, x => edgeY(x, bottom, amp, time), 6), opacity: s.cl > 0 ? rim(look.value, 4, 0.6 * sh * s.light * (1 - s.dCloud * 0.8)).own : 0 };
+    });
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const gold = useAnimatedProps(() => {
+      const s = state(look.value, H), bottom = lerp(-H * 0.25, H * by, s.cl), amp = H * ba, time = clock.value;
+      return { d: line(W, x => edgeY(x, bottom, amp, time), 6), opacity: s.cl > 0 ? rim(look.value, 4, 0.6 * sh * s.light * (1 - s.dCloud * 0.8)).gold : 0 };
     });
     // The underside lit by the last light: a wide soft stroke along the edge.
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -157,7 +171,7 @@ export default function SeaArt({ look, width: W, height: H, still = false }: { l
       const s = state(look.value, H), bottom = lerp(-H * 0.25, H * by, s.cl), amp = H * ba, time = clock.value;
       return { d: line(W, x => edgeY(x, bottom, amp, time) + 6, 6), opacity: s.cl > 0 ? 0.16 * sh * s.light * (1 - s.dCloud) : 0 };
     });
-    return { body, edge, under };
+    return { body, edge, gold, under };
   };
   const banks = [bank(0), bank(1), bank(2)];
 
@@ -203,7 +217,8 @@ export default function SeaArt({ look, width: W, height: H, still = false }: { l
       {[one, two].map((w, i) => (
         <G key={`wave${i}`}>
           <APath animatedProps={w.body} fill="url(#wave)" />
-          <APath animatedProps={w.edge} fill="none" strokeWidth={i ? 2.2 : 1.8} />
+          <APath animatedProps={w.edge} fill="none" stroke={SEA_ART.rim[i]} strokeWidth={i ? 2.2 : 1.8} />
+          <APath animatedProps={w.gold} fill="none" stroke={SEA_ART.gold} strokeWidth={i ? 2.2 : 1.8} />
           <APath animatedProps={w.foam} fill="none" stroke={SEA_ART.foam} strokeWidth={1} strokeDasharray="14 22" />
         </G>
       ))}
@@ -211,7 +226,8 @@ export default function SeaArt({ look, width: W, height: H, still = false }: { l
         <G key={`bank${i}`}>
           <APath animatedProps={b.body} fill="url(#cloud)" />
           <APath animatedProps={b.under} fill="none" stroke={SEA_ART.underlight} strokeWidth={16} />
-          <APath animatedProps={b.edge} fill="none" strokeWidth={1.5} />
+          <APath animatedProps={b.edge} fill="none" stroke={SEA_ART.rim[2]} strokeWidth={1.5} />
+          <APath animatedProps={b.gold} fill="none" stroke={SEA_ART.gold} strokeWidth={1.5} />
         </G>
       ))}
       <ARect animatedProps={dim} width={W} height={H} fill={SEA_ART.black} />
