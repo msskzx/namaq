@@ -1,14 +1,13 @@
 import { useRef, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import type { LucideProps } from 'lucide-react-native';
-import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
 import { toTab } from '@/lib/ways';
 import { usePalette } from '@/lib/theme';
-import Card from '@/ui/Card';
+import IconTile from '@/ui/IconTile';
 import { FEATURE_ICON } from '@/components/featureIcons';
 
 /** The Quran button's tools; each opens inside the tab, with a back arrow to this grid. */
@@ -40,11 +39,7 @@ export default function QuranHub() {
       <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom }}>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
           {QURAN_TILES.map(({ route, label, Icon }) => (
-            <Card key={route} palette={palette} gap={10} onPress={() => toTab(route as Parameters<typeof toTab>[0])} accessibilityRole="link" accessibilityLabel={label}
-              style={{ flexBasis: '47%', flexGrow: 1, height: 112, alignItems: 'center', justifyContent: 'center' }}>
-              <Icon size={30} color={palette.accent} strokeWidth={1.75} />
-              <Text style={{ color: palette.ink, fontSize: 17 }}>{label}</Text>
-            </Card>
+            <IconTile key={route} label={label} Icon={Icon} palette={palette} onPress={() => toTab(route as Parameters<typeof toTab>[0])} />
           ))}
         </View>
       </ScrollView>
