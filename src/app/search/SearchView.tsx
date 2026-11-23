@@ -31,6 +31,7 @@ const GROUPS: Record<SearchKind, { title: string; Icon: (props: LucideProps) => 
   tree: { title: 'المتشابهات', Icon: TreeIcon },
   compare: { title: 'المقارنة', Icon: ArrowLeftRight },
   event: { title: 'قصص الأنبياء', Icon: Users },
+  sira: { title: 'قصص السيرة', Icon: ScrollText },
   tuhfa: { title: 'تحفة الأطفال', Icon: ScrollText },
   adhkar: { title: 'الأذكار', Icon: HandHeart },
   note: { title: 'تأملاتي', Icon: NotebookPen },
@@ -47,6 +48,7 @@ export function hitHref(hit: SearchHit): string {
     case 'tree': return branchesHref(hit.id, undefined, { query: hit.text });
     case 'compare': return surahPairHref(hit.a, hit.b);
     case 'event': return `/quran/prophets/${hit.slug}?event=${hit.event}`;
+    case 'sira': return hit.slug ? `/stories/${hit.slug}` : '/stories';
     case 'tuhfa': return `/quran/tajwid/tuhfat-al-atfal#bayt-${hit.verse}`;
     case 'adhkar': return adhkarHref(hit.occasion, hit.id);
   }
@@ -70,6 +72,8 @@ function HitBody({ hit }: { hit: SearchHit }) {
       return <span className={styles.grow}>{hit.title}</span>;
     case 'event':
       return <><span className={styles.grow}>{hit.title}</span><span className={styles.muted}>{hit.prophet}</span></>;
+    case 'sira':
+      return <><span className={styles.grow}>{hit.title}</span>{hit.slug ? null : <span className={styles.muted}>باب</span>}</>;
     case 'tuhfa':
       return <><span className={styles.muted}>{num(hit.verse)}</span><span className={`${styles.grow} ${styles.verse}`}><span>{hit.first}</span><span>{hit.second}</span></span></>;
     case 'adhkar':
@@ -80,7 +84,7 @@ function HitBody({ hit }: { hit: SearchHit }) {
 }
 
 const hitKey = (hit: SearchHit) => hit.kind === 'surah' ? `s${hit.number}` : hit.kind === 'ayah' || hit.kind === 'note' ? `${hit.kind}${hit.key}` : hit.kind === 'word' ? `w${hit.id}`
-  : hit.kind === 'tree' ? `t${hit.id}` : hit.kind === 'compare' ? `c${hit.a}:${hit.b}` : hit.kind === 'event' ? `e${hit.slug}${hit.event}` : hit.kind === 'adhkar' ? `d${hit.id}` : `v${hit.verse}`;
+  : hit.kind === 'tree' ? `t${hit.id}` : hit.kind === 'compare' ? `c${hit.a}:${hit.b}` : hit.kind === 'event' ? `e${hit.slug}${hit.event}` : hit.kind === 'adhkar' ? `d${hit.id}` : hit.kind === 'sira' ? `q${hit.slug ?? hit.chapter}` : `v${hit.verse}`;
 
 /** The reader's notes join the groups the server found, in their place in the order. */
 export function withNotes(groups: SearchGroup[], notes: { key: string; text: string }[], query: string): SearchGroup[] {

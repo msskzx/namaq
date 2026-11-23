@@ -40,4 +40,10 @@ describe('trees in the app search', () => {
     expect(trees.length).toBeGreaterThan(0);
     expect(trees.every(tree => tree.text.includes('فِرۡعَوۡن'))).toBe(true);
   });
+
+  it('finds a sira chapter by its name before the stories in it (owner, 2026-11-23: «الوفود», «حجة الوداع»)', () => {
+    expect(group('الوفود', 'sira')[0]).toMatchObject({ chapter: 'الوفود' });
+    expect(group('حجة الوداع', 'sira')[0]).toMatchObject({ chapter: 'حجة الوداع' });
+    expect(group('حجة الوداع', 'sira')).toContainEqual(expect.objectContaining({ slug: 'the-sermon-of-the-farewell-hajj' }));
+  });
 });

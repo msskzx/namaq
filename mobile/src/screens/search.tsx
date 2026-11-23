@@ -33,6 +33,7 @@ const GROUPS: Record<SearchKind, { title: string; Icon: (props: LucideProps) => 
   tree: { title: 'المتشابهات', Icon: TreeIcon },
   compare: { title: 'المقارنة', Icon: ArrowLeftRight },
   event: { title: 'قصص الأنبياء', Icon: History },
+  sira: { title: 'قصص السيرة', Icon: ScrollText },
   tuhfa: { title: 'تحفة الأطفال', Icon: ScrollText },
   adhkar: { title: 'الأذكار', Icon: HandHeart },
   note: { title: 'تأملاتي', Icon: NotebookPen },
@@ -83,13 +84,19 @@ function HitRow({ hit, palette, onWord }: { hit: SearchHit; palette: Palette; on
         </Pressable>
       );
     case 'event':
+    case 'sira': {
+      // A prophet's event opens his page at it; a sira chapter opens «الفهرس» at it, with all its stories; a sira story its page.
+      const open = hit.kind === 'event'
+        ? () => router.push({ pathname: '/prophets/[slug]', params: { slug: hit.slug, event: String(hit.event) } })
+        : () => toTab(hit.slug ? { pathname: '/story', params: { slug: hit.slug } } : { pathname: '/stories', params: { chapter: hit.chapter } });
+      const sub = hit.kind === 'event' ? hit.prophet : hit.chapter ? 'باب' : '';
       return (
-        <Pressable onPress={() => router.push({ pathname: '/prophets/[slug]', params: { slug: hit.slug, event: String(hit.event) } })} accessibilityRole="link"
-          style={({ pressed: on }) => [row, pressed(on)]}>
+        <Pressable onPress={open} accessibilityRole="link" style={({ pressed: on }) => [row, pressed(on)]}>
           <Text style={{ flex: 1, color: palette.ink, fontSize: 16, textAlign: 'right' }}>{hit.title}</Text>
-          <Text style={{ color: palette.muted, fontSize: 13 }}>{hit.prophet}</Text>
+          {sub ? <Text style={{ color: palette.muted, fontSize: 13 }}>{sub}</Text> : null}
         </Pressable>
       );
+    }
     case 'tuhfa':
       return (
         <Pressable onPress={() => toTab({ pathname: '/tuhfa', params: { verse: String(hit.verse) } })} accessibilityRole="link" style={({ pressed: on }) => [row, pressed(on)]}>
@@ -126,6 +133,7 @@ const hitKey = (hit: SearchHit) => {
     case 'tree': return `t${hit.id}`;
     case 'compare': return `c${hit.a}:${hit.b}`;
     case 'event': return `e${hit.slug}${hit.event}`;
+    case 'sira': return `s${hit.slug ?? hit.chapter}`;
     case 'tuhfa': return `v${hit.verse}`;
     case 'adhkar': return `d${hit.id}`;
   }
