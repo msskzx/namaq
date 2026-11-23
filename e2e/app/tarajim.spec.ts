@@ -74,6 +74,15 @@ test('the ties view draws a person with his ties and walks to a relative', async
   await expect(page.getByRole('link', { name: /^ابنها: الزبير/ })).toBeVisible();
 });
 
+// Round her father a daughter is named alone (owner, 2026-11-23), even where her nasab gives his kunya in the genitive and
+// without his laqab: «عائشة بنت أبي بكر» round «أبو بكر الصديق» is «عائشة».
+test('the ring names a child without the father in the middle', async ({ page }) => {
+  await open(page, '/person?slug=abu-bakr-as-siddiq');
+  // The link still reads her whole name aloud; the drawing shows her name alone.
+  await expect(page.getByRole('link', { name: 'بنته: عائشة بنت أبي بكر', exact: true })).toHaveText('عائشة');
+  await expect(page.getByRole('link', { name: 'ابنه: محمد بن أبي بكر الصديق', exact: true })).toHaveText('محمد');
+});
+
 test('between two people shows the chain that joins them, with its pages', async ({ page }) => {
   await open(page, '/between?slugs=az-zubayr-ibn-al-awwam,hamzah-ibn-abd-al-muttalib');
   // The drawing first, in the page's card (owner, 2026-11-20); the sentence that says it on «النص».

@@ -26,10 +26,15 @@ const LABEL_W = 70;
  * 2026-11-23: «فاطمة», not «فاطمة بنت محمد», round the Prophet ﷺ; he is there in the same drawing).
  */
 const nodeName = (node: GraphNode, middle?: string) => {
-  const father = middle && GRAPH.nodes.get(middle)?.name.replace(/\s*ﷺ/u, '').split(/\s+(?:بن|بنت)\s+/u)[0].trim();
   const name = personName(node);
-  const own = father && name.replace(new RegExp(`\\s+(?:بن|بنت)\\s+${father}$`, 'u'), '');
-  return own && own !== name ? own : name.replace(/\s+بن\s+.*$/u, (rest) => (rest.length > 18 ? '' : rest));
+  const father = middle && GRAPH.nodes.get(middle)?.name.replace(/\s*ﷺ/u, '').split(/\s+(?:بن|بنت)\s+/u)[0].trim().split(/\s+/u);
+  // The child's name gives the father as the nasab does: a kunya in the genitive («بنت أبي بكر»), and maybe without his laqab.
+  const word = (w: string) => (/^أب[وياى]$/u.test(w) ? 'أب(?:و|ي|ا)' : w);
+  for (let n = father ? father.length : 0; father && n >= (/^أب[وي]$/u.test(father[0]) ? 2 : 1); n--) {
+    const own = name.replace(new RegExp(`\\s+(?:بن|بنت)\\s+${father.slice(0, n).map(word).join('\\s+')}$`, 'u'), '');
+    if (own !== name) return own;
+  }
+  return name.replace(/\s+بن\s+.*$/u, (rest) => (rest.length > 18 ? '' : rest));
 };
 
 /** A node round the middle: a person (opens his ties if he has a page), or a whole kind folded into one node with its count. */
