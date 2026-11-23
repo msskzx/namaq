@@ -43,28 +43,42 @@ type Tree = { palette: Palette; linked: boolean; scale: number };
  * each (each son draws his half of the bar, so the bar spans from the first son's middle to the last's). Every father
  * is drawn: the tree never folds (owner 2026-11-22). An only son hangs as far below as sons under a bar do, so each
  * generation stands on one row across the tree (owner 2026-11-22).
+ *
+ * A run of fathers each with one son is drawn as one flat column, and views nest only where the tree parts: nesting a
+ * view per generation made the phone's layout time double with each one, and a 22-generation line (Abu Bakr's, to
+ * Adnan) froze the app for minutes (owner, 2026-11-23).
  */
 function Branch({ node, path, tree }: { node: NasabNode; path: string; tree: Tree }) {
   const { palette, scale } = tree;
   const stem = { width: LINE, height: 16 * scale, backgroundColor: palette.muted, alignSelf: 'center' as const };
+  const run = [node];
+  while (run[run.length - 1].children.length === 1) run.push(run[run.length - 1].children[0]);
+  const last = run[run.length - 1];
+  const at = (i: number) => [path, ...run.slice(1, i + 1).map(n => n.key)].join('/');
   return (
     <View style={{ alignItems: 'center' }}>
-      <Box node={node} palette={palette} linked={tree.linked} scale={scale} />
-      {node.children.length > 0 && <View style={stem} />}
-      <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-        {node.children.map((child, i) => (
-          <View key={child.key} style={{ alignItems: 'center', paddingHorizontal: 4 * scale }}>
-            {node.children.length > 1 && (
+      {run.map((father, i) => (
+        <View key={`${i}:${father.key}`} style={{ alignItems: 'center' }}>
+          <Box node={father} palette={palette} linked={tree.linked} scale={scale} />
+          {father.children.length > 0 && <View style={stem} />}
+          {/* An only son: the stem down to him, as long as a son's under a bar. */}
+          {father.children.length === 1 && <View style={{ ...stem, height: stem.height + LINE }} />}
+        </View>
+      ))}
+      {last.children.length > 1 && (
+        <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+          {last.children.map((child, i) => (
+            <View key={child.key} style={{ alignItems: 'center', paddingHorizontal: 4 * scale }}>
               <View style={{ flexDirection: 'row', alignSelf: 'stretch', height: LINE, marginHorizontal: -4 * scale }}>
                 <View style={{ flex: 1, backgroundColor: i === 0 ? 'transparent' : palette.muted }} />
-                <View style={{ flex: 1, backgroundColor: i === node.children.length - 1 ? 'transparent' : palette.muted }} />
+                <View style={{ flex: 1, backgroundColor: i === last.children.length - 1 ? 'transparent' : palette.muted }} />
               </View>
-            )}
-            <View style={node.children.length > 1 ? stem : { ...stem, height: stem.height + LINE }} />
-            <Branch node={child} path={`${path}/${child.key}`} tree={tree} />
-          </View>
-        ))}
-      </View>
+              <View style={stem} />
+              <Branch node={child} path={`${at(run.length - 1)}/${child.key}`} tree={tree} />
+            </View>
+          ))}
+        </View>
+      )}
     </View>
   );
 }
