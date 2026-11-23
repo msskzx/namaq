@@ -33,19 +33,33 @@ const NAMES: Record<string, string[]> = {
 };
 const ASKED = PROPHETS.filter(prophet => NAMES[prophet.slug] && STORIES[prophet.slug]);
 
-/** A word bare of its marks and a joined «و ف ب ل ك» before it. */
+/** A word bare of its marks and a joined «و ف ب ل ك» before the article. */
 const bare = (word: string) => normalizeWord(word).replace(/[^ء-ي]/g, '').replace(/^[وفبلك](?=ال)/, '');
+/**
+ * The name anywhere in the word, so «يا موسى» (one word on the page), «بموسى», «لموسى» and «ولوطا» all count. A word that
+ * only looks like a name («يهود») drops a question, never lets one through.
+ */
 const names = (word: string, slug: string) => {
-  const plain = bare(word);
-  return NAMES[slug].some(name => plain === name || plain === `${name}ا` || (/^[وف]/.test(plain) && plain.slice(1) === name));
+  const plain = normalizeWord(word).replace(/[^ء-ي]/g, '');
+  return NAMES[slug].some(name => plain.includes(name));
 };
+/** Prophets the stories here do not tell but who point at one (Isma'il and Ishaq at Ibrahim): an ayah naming them is not asked. */
+const POINTING = ['اسمعيل', 'اسحق', 'اسماعيل', 'اسحاق'];
+/** Musa and Harun are told together: neither is offered as the other's wrong choice. */
+const TOLD_TOGETHER: Record<string, string> = { musa: 'harun', harun: 'musa' };
+/** Ayat spoken to the Prophet ﷺ inside a story, where nothing in the ayah points at whose story it is. */
+const SPOKEN_TO_HIM = new Set(['2:252', '3:60', '5:74']);
+/** How far the naming ayah may be from the asked one. */
+const NEAR = 3;
+/** Ayat on either side of the asked one: a prophet whose story holds any of them is never a wrong choice. */
+const AROUND = 2;
 
 let ayat: Map<string, BranchAyah> | undefined;
 const ayatByKey = () => (ayat ??= new Map((corpus.ayat as BranchAyah[]).map(ayah => [ayah.key, ayah])));
 const wordsOf = (key: string) => ayatByKey().get(key)?.words ?? [];
-const namesAny = (key: string) => wordsOf(key).some(word => ASKED.some(prophet => names(word, prophet.slug)));
+const namesAny = (key: string) => wordsOf(key).some(word => ASKED.some(prophet => names(word, prophet.slug)) || POINTING.some(name => normalizeWord(word).includes(name)));
 
-export type ProphetAyah = { key: string; slug: string; event: number; named: string; passage: string[] };
+export type ProphetAyah = { key: string; slug: string; event: number; named: string; passage: string[]; nearby: string[] };
 
 /** Each story's ayat in the order told, with the event they are in and the passage (one run of ayat) around them. */
 function storyAyat() {
@@ -72,7 +86,7 @@ export function prophetAyat(): ProphetAyah[] {
   for (const item of all) for (const run of runsOf(item.key)) runsBySlug.set(run, (runsBySlug.get(run) ?? new Set()).add(item.slug));
   const seen = new Set<string>();
   built = all.flatMap(item => {
-    if (seen.has(item.key) || stories.get(item.key)!.size > 1) return [];
+    if (seen.has(item.key) || stories.get(item.key)!.size > 1 || SPOKEN_TO_HIM.has(item.key)) return [];
     seen.add(item.key);
     const words = wordsOf(item.key);
     if (!words.length || words.length > MOST_WORDS || namesAny(item.key)) return [];
@@ -80,13 +94,17 @@ export function prophetAyat(): ProphetAyah[] {
     // The nearest ayah of the passage that names him.
     const named = [...item.passage].sort((a, b) => Math.abs(item.passage.indexOf(a) - item.passage.indexOf(item.key)) - Math.abs(item.passage.indexOf(b) - item.passage.indexOf(item.key)))
       .find(key => wordsOf(key).some(word => names(word, item.slug)));
-    return named ? [{ key: item.key, slug: item.slug, event: item.event, named, passage: item.passage }] : [];
+    if (!named || Math.abs(item.passage.indexOf(named) - item.passage.indexOf(item.key)) > NEAR) return [];
+    const [surah, ayah] = item.key.split(':').map(Number);
+    const nearby = new Set<string>();
+    for (let k = ayah - AROUND; k <= ayah + AROUND; k++) for (const slug of stories.get(`${surah}:${k}`) ?? []) nearby.add(slug);
+    return [{ key: item.key, slug: item.slug, event: item.event, named, passage: item.passage, nearby: [...nearby] }];
   });
   return built;
 }
 
 function question(item: ProphetAyah, random: Random): ChoiceQuestion {
-  const others = shuffle(ASKED.filter(prophet => prophet.slug !== item.slug), random).slice(0, CHOICES - 1);
+  const others = shuffle(ASKED.filter(prophet => prophet.slug !== item.slug && prophet.slug !== TOLD_TOGETHER[item.slug] && !item.nearby.includes(prophet.slug)), random).slice(0, CHOICES - 1);
   const choices = shuffle([ASKED.find(prophet => prophet.slug === item.slug)!, ...others], random);
   const ayah = Number(item.key.split(':')[1]);
   const namedWords = wordsOf(item.named);

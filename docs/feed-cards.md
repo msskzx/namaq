@@ -21,10 +21,13 @@ start of one al-Nawawi takes whole from the Sahihayn and the «من أخرجه»
 by `components/HadithBooks`, the page's own view), al-Bukhari's chain for one (من الإسناد, the drawing «الرسم» of his record
 for one of those hadith with the start of the saying, opening the hadith's page; `IsnadPost` drawn by `components/Isnad`), a hadith of Sahih al-Bukhari or Sahih Muslim whole
 (من صحيح البخاري / من صحيح مسلم, its kitab › bab in the head, Muslim's bab marked «تبويب النووي», drawn by `SahihHadithView`, the
-hadith page's own view, opening the hadith's page; `SahihPost`, only once the book is downloaded on the phone), and the quiz cards in `FEED_QUIZ_NAMES`
+hadith page's own view, opening the hadith's page; `SahihPost`, only once the book is downloaded on the phone), a word of the Quran (من غريب القرآن, the ayah with the words
+Ibn Qutaybah quotes lit and his entry whole, opening the word's page, or the ayah's page for a phrase; `GharibPost`, phone only),
+a rule of Tuhfat al-Atfal (من تحفة الأطفال, the rule's verses as on the poem's page and «حروفه» where the poem names the letters,
+opening the poem at the first verse; `TuhfaPost` from `shared/tajwid/passages.ts`, phone only), and the quiz cards in `FEED_QUIZ_NAMES`
 (`shared/quiz/feedQuiz.ts`): في أي سورة؟, أكمل المتشابهات, سمّع بقية الآية, قارن الموضعين,
 أوائل السور, سمّع الآية, ما معنى؟, the four ayah quizzes below, ما المصطلح؟ (`shared/quiz/balaghaTermQuiz.ts`: a term's
-definition with its name hidden, four terms to pick from, each choice linking to its definition once answered), the three Tuhfat al-Atfal questions, السيرة والغزوات (shared/quiz/sira.ts), the five tarajim questions
+definition with its name hidden, four terms to pick from, each choice linking to its definition once answered), the three Tuhfat al-Atfal questions, في قصة مَن هذه الآية؟ (`shared/quiz/prophetStory.ts`: an ayah of a prophet's story that names no prophet, from a passage where a near ayah names him, that ayah its source; the look-up the passage in the mushaf; «افتح» opens the story), السيرة والغزوات (shared/quiz/sira.ts), the five tarajim questions
 (أين يلتقي النسبان؟, صاحب المنقبة and ما صلته به؟, `shared/quiz/tarajim.ts`; في أي سنة كان؟, `shared/quiz/life.ts`:
 the year of an event or story of someone's «حياته», or of a person's death (battles are the sira quiz's); two years where
 the sources give two, the wrong choices of the same shape and none near; the look-up his timeline; أكمل النسب,

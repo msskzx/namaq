@@ -25,4 +25,13 @@ describe('«في قصة مَن هذه الآية؟»', () => {
     }
     expect(items.filter(item => told.get(item.key)!.size > 1)).toEqual([]);
   });
+
+  it('never offers as wrong a prophet whose story holds the ayat around it, nor Harun for Musa', () => {
+    for (const question of prophetStoryQuiz.questions({ range: null, filters: {} }, 'easy', Math.random)) {
+      const item = items.find(each => question.key.endsWith(each.key))!;
+      const wrong = question.choices.map(choice => choice.value).filter(slug => slug !== question.correctAnswer);
+      expect(wrong.filter(slug => item.nearby.includes(slug))).toEqual([]);
+      if (question.correctAnswer === 'musa') expect(wrong).not.toContain('harun');
+    }
+  });
 });

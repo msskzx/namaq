@@ -445,6 +445,8 @@ function openAnswer(question: SoloQuestion) {
     const [a, b] = [question.compare.shown.key, question.compare.asked.key];
     return openIntent({ tab: 'compare', lead: Number(a.split(':')[0]), other: Number(b.split(':')[0]), ayat: [a, b] });
   }
+  // The prophet's story, not the ayah its look shows.
+  if (question.family === PROPHET_STORY) return router.push({ pathname: '/prophets/[slug]', params: { slug: question.correctAnswer } });
   const look = question.look;
   switch (look?.view) {
     case 'ties': case 'life': return person(look.slug);
@@ -460,7 +462,6 @@ function openAnswer(question: SoloQuestion) {
     case 'tuhfa': return toTab(look.mark ? { pathname: '/tuhfa', params: { verse: String(look.mark) } } : '/tuhfa');
     case 'ayat': return readAyah(look.mark ?? look.keys[0]);
   }
-  if (question.family === PROPHET_STORY) return router.push({ pathname: '/prophets/[slug]', params: { slug: question.correctAnswer } });
   if (question.ayahKey) return readAyah(question.ayahKey);
   if (question.order?.length) return router.push({ pathname: '/order', params: { juz: String(orderJuz(question.order)) } });
   const aimed = question.family === 'SURAH_AIM' && orderSurahOf(question.correctAnswer);
@@ -1462,15 +1463,16 @@ const gharibItems = () => gharib.entries.flatMap((entry, at) => {
 function GharibPost({ id, palette }: { id: string; palette: Palette }) {
   const entry = gharib.entries[Number(id)];
   if (!entry) return null;
-  const [surah, , page, text, [[ayah, from]]] = entry;
+  const [surah, page, shamelaId, text, [[ayah, from, to]]] = entry;
   const key = `${surah}:${ayah}`;
   const words = ayahMushafWords(key);
-  const lemmas = lemmasAtMushafWord(wordCounts, key, from);
+  // A word's page is one word's: an entry on a phrase opens the ayah's page.
+  const lemmas = from === to ? lemmasAtMushafWord(wordCounts, key, from) : [];
   const open = () => (lemmas.length ? toTab({ pathname: '/word', params: { ids: lemmas.join(',') } }) : openAyahPage(key));
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.words} title="من غريب القرآن" sub={`${shortNames[surah] ?? ''} ${num(ayah)}`} open={topic('/words', 'افتح ألفاظ القرآن')} palette={palette} />}
       open={<OpenButton label={lemmas.length ? 'افتح صفحة الكلمة' : 'افتح صفحة الآية'} onPress={open} palette={palette} />}
-      source={gharibSource({ page: entry[1], id: page })}>
+      source={gharibSource({ page, id: shamelaId })}>
       <View style={{ paddingHorizontal: 14, paddingVertical: 12, gap: 8 }}>
         <LitAyat ayat={[{ words, lit: gharibWordsOf(entry, ayah), number: ayah }]} menu={key} palette={palette} />
         <View style={{ height: 1, backgroundColor: palette.rule, opacity: 0.6 }} />
