@@ -39,9 +39,9 @@ function Ayah({ words: list, menu, palette, light }: { words: OpeningWord[]; men
       {list.map((word, i) => {
         const mark = 'text' in word ? word.mark : undefined;
         const lit = !!mark && mark.link === light?.lit;
-        const look = lit ? { color: palette.onHighlight, backgroundColor: palette.highlight } : mark ? { color: tone(palette, mark.kind, mark.some) } : undefined;
-        const text = `${i > 0 ? ' ' : ''}${'end' in word ? num(word.end) : word.text}`;
-        return mark && light ? <Text key={i} onPress={() => light.onWord(mark.link)}><AyahWords look={look}>{text}</AyahWords></Text> : <AyahWords key={i} look={look}>{text}</AyahWords>;
+        return <AyahWords key={i} lit={lit} look={mark && !lit ? { color: tone(palette, mark.kind, mark.some) } : undefined} onPress={mark && light ? () => light.onWord(mark.link) : undefined}>
+          {`${i > 0 ? ' ' : ''}${'end' in word ? num(word.end) : word.text}`}
+        </AyahWords>;
       })}
     </AyahFlow>
   );

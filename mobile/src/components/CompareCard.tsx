@@ -54,15 +54,15 @@ function AyahText({ ayah, surah, palette, light, plain = false, inline = false }
       const mark = plain ? undefined : ayah.marks?.[i];
       const lit = !!mark?.link && mark.link === light?.lit;
       const reading = light?.reading === i;
-      const color = lit ? palette.onHighlight : markColour(mark?.kind, palette, !!mark?.link && !!light?.written?.has(mark.link));
+      const color = lit ? undefined : markColour(mark?.kind, palette, !!mark?.link && !!light?.written?.has(mark.link));
       const link = mark?.link;
       return (
         <Text key={i}>
           {i > 0 ? ' ' : ''}
-          <Text onPress={link && light?.onWord ? () => light.onWord!(link) : undefined}><AyahWords
-            look={{ ...(color ? { color } : null), ...(lit ? { backgroundColor: palette.highlight } : null), ...(reading ? { textDecorationLine: 'underline', textDecorationColor: palette.accent, backgroundColor: lit ? palette.highlight : palette.paperDeep } : null) }}>
+          <AyahWords lit={lit} onPress={link && light?.onWord ? () => light.onWord!(link) : undefined}
+            look={{ ...(color ? { color } : null), ...(reading ? { textDecorationLine: 'underline', textDecorationColor: palette.accent, ...(lit ? null : { backgroundColor: palette.paperDeep }) } : null) }}>
             {word}
-          </AyahWords></Text>
+          </AyahWords>
         </Text>
       );
     })}
