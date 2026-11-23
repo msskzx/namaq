@@ -21,7 +21,7 @@ export default function AboutPage() {
 
       <section className="space-y-4" aria-labelledby="about-references">
         <h2 id="about-references" className="text-2xl">
-          {language === 'ar' ? 'المراجع' : 'References'}
+          {language === 'ar' ? 'منهجه ومراجعه' : 'Method and references'}
         </h2>
         <div className="space-y-3 leading-loose">
           {ABOUT_REFERENCES.map(text => <p key={text.en}>{text[language]}</p>)}
