@@ -19,6 +19,7 @@ import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
 import { allVirtues, feedBooks, LIST_KINDS, listStart, type ListKind, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, isKahfDay, KAHF_SLOT, prayerSoon, type FeedSlot } from '@shared/homeFeed';
 import { pageSources, saidBy } from '@shared/tarajim';
+import { briefFacts, PersonBrief } from '@/screens/person';
 import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import Saying from '@/ui/Saying';
 import { findPerson, GRAPH, PEOPLE, personName, tiePairs, unvowelled } from '@/lib/tarajim';
@@ -58,7 +59,7 @@ import rajab from '@shared/data/hadith/ibnRajab.json';
 import IbnRajab from '@/components/IbnRajab';
 import { Report, ReportScene, reportSource, StoryAyat, StoryShare } from './stories/StoryParts';
 import { drawnReport } from '@shared/stories/story';
-import { armiesBattles, armiesItems, armiesSources, battleCardSources, battleItems, battleOnCard, battleYearItems, battleYearSlice, battleYearSources, atlasSources, type ArmiesTab, eventItems, eventOf, eventSources, nasabPeople, nasabSources, oathItems, oathSources, openingItems, openingSources, sceneItems, sceneOf, sceneSources, tiesPeople, tiesSources } from '@shared/drawingCards';
+import { armiesBattles, armiesItems, armiesSources, battleCardSources, battleItems, battleOnCard, battleYearItems, battleYearSlice, battleYearSources, atlasSources, type ArmiesTab, eventItems, eventOf, eventSources, nasabSources, oathItems, oathSources, openingItems, openingSources, sceneItems, sceneOf, sceneSources, tiesPeople, tiesSources } from '@shared/drawingCards';
 import { NasabTree } from '@/screens/nasab';
 import { OpeningRows } from '@/screens/openings';
 import TiesRing, { foldedKinds, personNode, RoundRing, ringName, ringRoom, roundLayout, TieSheet, tiesOf, DoubtedSheet } from './TiesRing';
@@ -199,13 +200,19 @@ const ARMIES_ICONS: Record<ArmiesTab, IconType> = { field: Users, killed: Swords
 /**
  * Every feed post's one shape (owner, 2026-11-14 and 2026-11-20, like an Instagram post): the head, the body in one card,
  * the row of icon buttons under it grouped on the right (the open button, the card's tools, save, share) with the «⋯» of
- * «ليس من اهتماماتي» alone on the left, then the source line. The row's open button is the one way to the item's page: the
- * head and the card are not buttons for it too (owner, 2026-11-20: one control per destination). A long card stops at two
- * thirds of the screen, the rest in a sheet (ui/Card `cap`).
+ * «ليس من اهتماماتي» alone on the left, then the source line. The head opens the general topic; the row's open button this
+ * card's own place. A reading card's body opens it too (`press`), nothing else's: a tap on a question or recall card must
+ * not cut its answer (owner, 2026-11-23). A long card stops at two thirds of the screen, the rest in a sheet (ui/Card `cap`).
  */
-function Post({ head, open, actions, share, picture, source, bar, palette, whole = false, children }: { head: React.ReactNode;
+function Post({ head, open, press, actions, share, picture, source, bar, palette, whole = false, children }: { head: React.ReactNode;
   /** Opens the item in its own reader (the mushaf at the ayah, the hadith in its book): first in the row. */
   open?: React.ReactNode;
+  /**
+   * The card itself as a button to the same place as `open` (owner, 2026-11-23: the reading cards, «تابع القراءة» and
+   * «جزء اليوم», open the mushaf from a tap anywhere on the page slice), dimming while pressed as the head does. `label`
+   * names the page for a screen reader, apart from the open button's own name.
+   */
+  press?: { onPress: () => void; label: string };
   actions?: React.ReactNode;
   /**
    * The card's share button, last of the group, after save. Left out, the card shares as it is (ui/CardShare, owner
@@ -230,7 +237,7 @@ function Post({ head, open, actions, share, picture, source, bar, palette, whole
     <View style={{ gap: 4 }}>
       {head}
       {/* What the card's content hands up with UnderCard joins the row under the card, before the post's own buttons; share stays last. */}
-      <CardWithRow palette={palette} pad={0} clip cap={!whole} bar={bar}
+      <CardWithRow palette={palette} pad={0} clip cap={!whole} bar={bar} onPress={press?.onPress} accessibilityLabel={press?.label}
         lead={open} row={<>{actions}<SaveAction text={named} />{share === undefined
           ? <CardShare head={picture?.head ?? head} sources={source} palette={palette}>{picture?.body ?? children}</CardShare>
           : share || null}</>} menu={menu} source={source} sourceLine={sourceLine(palette)}>{children}</CardWithRow>
@@ -322,7 +329,7 @@ export function ContinueReading({ palette }: { palette: Palette }) {
   const where = [shortNames[surah], juzLabel([juz]), date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ');
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.mushaf} title={fasila || page > 1 ? 'تابع القراءة' : 'ابدأ القراءة'} sub={where} open={topic('/quran', 'افتح القرآن')} palette={palette} />}
-      open={<OpenButton label={`افتح المصحف ${fasila ? 'عند فاصلتك' : 'حيث توقفت'}، سورة ${shortNames[surah] ?? ''}`} onPress={read} palette={palette} />}
+      open={<OpenButton label={`افتح المصحف ${fasila ? 'عند فاصلتك' : 'حيث توقفت'}، سورة ${shortNames[surah] ?? ''}`} onPress={read} palette={palette} />} press={{ onPress: read, label: `الصفحة ${num(page)} من المصحف` }}
       source={sourcesOf([mushafPage(surah, page)])}
       // Shared, the page alone: not where you stopped (owner's plan, 2026-11-22).
       picture={{ head: <PostHead Icon={FEATURE_ICON.mushaf} title={shortNames[surah] ?? ''} sub={juzLabel([juz])} palette={palette} />,
@@ -588,22 +595,20 @@ function OpeningPost({ seed, palette }: { seed: number; palette: Palette }) {
 }
 
 /**
- * «من التراجم» (owner, 2026-11-18; sketch tarajim-app/sketch-dark.png, screen 4): a virtue from a converted entry, in the
- * book's words with who says it and its page; the head opens the person's page.
+ * «من التراجم» (owner, 2026-11-18; sketch tarajim-app/sketch-dark.png, screen 4): a person from a converted entry in brief,
+ * as his page gives it (owner, 2026-11-23: one virtue alone was too small a card), in the book's words with who says
+ * each; the head opens the tarajim, «افتح» his page.
  */
 function TarajimPost({ id, palette }: { id: string; palette: Palette }) {
   const pick = virtueOf(id);
   if (!pick) return null;
-  const virtue = pick.person.virtues[pick.index];
   const open = () => router.push({ pathname: '/person', params: { slug: pick.person.slug } });
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.person} title="من التراجم" sub={personName(pick.person)} open={topic('/tarajim', 'افتح التراجم')} palette={palette} />}
       open={<OpenButton label={`افتح ترجمة ${personName(pick.person)}`} onPress={open} palette={palette} />}
-      source={sourcesOf(pageSources(virtue.refs))}>
-      <View style={{ padding: 14, gap: 6 }}>
-        <Saying by={saidBy(virtue)} palette={palette}>
-          <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{virtue.text}</Text>
-        </Saying>
+      source={sourcesOf(pageSources(briefFacts(pick.person).flatMap(fact => fact.refs)))}>
+      <View style={{ padding: 14 }}>
+        <PersonBrief person={pick.person} palette={palette} />
       </View>
     </Post>
   );
@@ -1185,7 +1190,7 @@ function JuzPost({ palette }: { palette: Palette }) {
   const toggle = () => setRead(on => { writeJson(JUZ_READ, on ? 0 : day); return !on; });
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.mushaf} title="جزء اليوم" sub={[juzLabel(juz), date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ')} open={topic('/quran', 'افتح القرآن')} palette={palette} />}
-      open={<OpenButton label={`اقرأ ${juzLabel(juz)}، جزء اليوم`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`اقرأ ${juzLabel(juz)}، جزء اليوم`} onPress={open} palette={palette} />} press={{ onPress: open, label: `أول ${juzLabel(juz)}، الصفحة ${num(page)} من المصحف` }}
       actions={<Action Icon={read ? CircleCheck : Check} label="قرأته" tone="green" on={read} onPress={toggle} palette={palette} />}
       source={sourcesOf([mushafPage(start.surah, page)])}>
       {/* Smaller than the reading card: the juz's first lines only (owner, 2026-11-22). */}
@@ -1674,12 +1679,14 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   prophets: () => STORY_GROUPS.map(group => storyItem(group.slug, group.phase)),
   sira: () => STORIES.filter(story => story.reports[0]).map(story => story.slug),
   moment: () => MOMENTS.map(momentId),
-  tarajim: () => virtueList().map(each => virtueItem(each.person.slug, each.index)),
+  // One card a person, his whole brief (owner, 2026-11-23), not one a virtue; a card saved before still opens.
+  tarajim: () => virtueList().filter(each => each.index === 0).map(each => virtueItem(each.person.slug, each.index)),
   tie: () => tiePairs().map(pair => tieItem(pair.a, pair.b)),
   laqab: () => nameList('laqab').map(nameId),
   kunya: () => nameList('kunya').map(nameId),
   life: lifePeople,
-  nasab: () => nasabPeople(PEOPLE),
+  // One person's nasab is never drawn (owner, 2026-11-23: a long chain as a tree adds nothing); two meeting are «meet».
+  nasab: () => [],
   ties: () => tiesPeople(PEOPLE, GRAPH),
   battle: () => battleItems(BATTLES),
   'battle-year': () => battleYearItems(BATTLES),

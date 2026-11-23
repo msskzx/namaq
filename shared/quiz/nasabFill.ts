@@ -22,6 +22,8 @@ const CHOICES = 4;
 const PEOPLE = peopleJson as AppPerson[];
 const PROPHET = 'prophet-muhammad';
 const nameOf = (person: AppPerson) => (person.slug === PROPHET && !person.name.includes('ﷺ') ? `${person.name} ﷺ` : person.name);
+/** A person's own name, without the fathers his name goes on to («حفصة بنت عمر» is «حفصة»). */
+export const ownName = (name: string) => name.split(/\s+(?:بن|بنت|ابن|ابنة)\s+/u)[0].trim();
 /** The Prophet's ﷺ own names are never a wrong choice (AGENTS.md "Quiz questions"). */
 const HIS = new Set(['محمد', 'احمد'].map(bareName));
 /** A name's shape, so the right one never stands out by its look: a kunya, «عبد …», «ذو …», or one name, by its words. */
@@ -78,7 +80,8 @@ export function nasabFillQuestions(people: AppPerson[] = PEOPLE, random: Random 
     const line = lines.get(person.slug)!.slice(0, BOXES);
     if (line.length < FEWEST) return [];
     const shown = nameOf(person);
-    const names = line.map((father, i) => (i === 0 ? shown : boxName(father.name)));
+    // His box is his own name only (owner, 2026-11-23): his father is the next box, «حفصة» then «عمر», not «حفصة بنت عمر».
+    const names = line.map((father, i) => (i === 0 ? ownName(shown) : boxName(father.name)));
     const blank = names.map((name, i) => i % 2 === 1 && !told(shown, name));
     const asked = names.flatMap((name, k) => (blank[k] && !names.some((other, i) => !blank[i] && i !== k && same(bareName(other), bareName(name))) ? [k] : []));
     // The entries every box's name is printed in, each with its nasab and page.

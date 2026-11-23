@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { saidBy, sayerAt, virtueGroups, type PersonFact } from './tarajim';
+import { namePieces, saidBy, sayerAt, virtueGroups, type PersonFact } from './tarajim';
 
 const fact = (by: string[], more: Partial<PersonFact> = {}) => ({ id: 'x', text: 'x', refs: [], by, ...more }) as PersonFact;
 
@@ -39,5 +39,21 @@ describe('virtues by who says them', () => {
     expect(groups[1].items.map(item => item.fact.text)).toEqual(['خليلا', 'صاحبي']);
     // Each keeps its place in the book's list, which a quiz marks its answer by.
     expect(groups[3].items.map(item => item.at)).toEqual([3, 5]);
+  });
+});
+
+describe('his names in a text', () => {
+  const marked = (text: string, names: string[]) => namePieces(text, names).filter(piece => piece.name).map(piece => piece.text);
+  it('finds a kunya in any case, with or without short vowels, and not inside another word', () => {
+    // Siyar 3/10, 3/12 (Abu Bakr's virtues).
+    expect(marked('لا تبقين في المسجد خوخة إلا خوخة أبي بكر', ['أبو بكر'])).toEqual(['أبي بكر']);
+    expect(marked('ويأبي الله والمؤمنون إلا أبا بكر', ['أبو بكر'])).toEqual(['أبا بكر']);
+    expect(marked('وَكَانَ أَبُو بَكْرَةَ مِنْ فُقَهَاءِ الصَّحَابَةِ', ['أبو بكرة'])).toEqual(['أَبُو بَكْرَةَ']);
+    expect(marked('خير هذه الأمة بعد نبيها أبو بكر، وعمر', ['أبو بكر', 'عمر'])).toEqual(['أبو بكر', 'عمر']);
+    expect(marked('عمرو بن العاص', ['عمر'])).toEqual([]);
+  });
+  it('gives the whole text back in order', () => {
+    const text = 'إن لم تجديني فأتي أبا بكر';
+    expect(namePieces(text, ['أبو بكر']).map(piece => piece.text).join('')).toBe(text);
   });
 });

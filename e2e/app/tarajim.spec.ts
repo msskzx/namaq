@@ -27,7 +27,9 @@ test('the tarajim tab opens the list of converted people, filters by title, and 
 
 test('the nasab tree shows where two lines meet', async ({ page }) => {
   await open(page, '/nasab?slug=al-abbas-ibn-abd-al-muttalib');
-  await expect(page.getByRole('link', { name: 'العباس' })).toBeVisible();
+  // One person's line is his nasab as text, never drawn (owner, 2026-11-23); the tree comes with a second.
+  await expect(page.getByRole('tab', { name: 'الرسم' })).toHaveCount(0);
+  await expect(page.getByText(/^العباس بن عبد المطلب بن هاشم/)).toBeVisible();
   await page.getByRole('button', { name: 'أضف' }).click();
   await page.getByRole('button', { name: 'محمد ﷺ' }).click();
   // The drawing first (owner, 2026-11-20); where they meet is the text.
@@ -37,13 +39,16 @@ test('the nasab tree shows where two lines meet', async ({ page }) => {
 });
 
 // The hub's «النسب» opens the nasab page on its search of people (owner, 2026-11-20).
-test('the tarajim hub opens the nasab search, and a pick draws his tree', async ({ page }) => {
+test('the tarajim hub opens the nasab search, and two picks draw their tree', async ({ page }) => {
   await open(page, '/');
   await tab(page, 'التراجم').click();
   await page.getByRole('link', { name: /^النسب/ }).click();
   // The hub under it keeps its own top-bar search of the same name; the picker's is in the sheet.
   await page.getByRole('dialog').getByRole('textbox', { name: 'ابحث في التراجم' }).fill('أبو بكر');
   await page.getByRole('button', { name: 'أبو بكر الصديق' }).click();
+  await page.getByRole('button', { name: 'أضف' }).click();
+  await page.getByRole('dialog').getByRole('textbox', { name: 'ابحث في التراجم' }).fill('عمر');
+  await page.getByRole('button', { name: 'عمر بن الخطاب', exact: true }).click();
   // A box stands alone, so it names his father in the nominative: «أبو قحافة», never «أبي قحافة».
   await expect(page.getByText(/^أبو قحافة/)).toBeVisible();
 });
@@ -134,4 +139,20 @@ test('a long life on the person page opens folded, and its fold opens the rest',
   await expect(page.getByRole('link', { name: 'غزوة تبوك', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'اطوِ', exact: true }).click();
   await expect(page.getByRole('link', { name: 'غزوة تبوك', exact: true })).toHaveCount(0);
+});
+
+// «مناقبه» and «صفته» (owner, 2026-11-23, sketch tarajim-feed-card/sketch/traits-dark.png): the Prophet's ﷺ words first, each
+// with its own page that opens the book there; his looks as the book's words, the sayer the book names under each, and no
+// name under a word only an unnamed «وقيل» gives.
+test('his virtues put the Prophet\'s ﷺ words first with their pages, his looks as the book\'s words', async ({ page }) => {
+  await open(page, '/person?slug=abu-bakr-as-siddiq');
+  const saying = page.getByText(/ولو كنت متخذا خليلا/).first();
+  await saying.scrollIntoViewIfNeeded();
+  await expect(page.getByText('قال النبي ﷺ:').first()).toBeVisible();
+  await page.getByRole('button', { name: 'المصدر: سيرة الخلفاء الراشدين ١٢' }).first().click();
+  await expect(page.getByText(/^«ويأب. الله والمؤمنون إلا أبا بكر»$/)).toBeVisible();
+  await page.keyboard.press('Escape');
+  // Al-Zuhri names «مسترق الوركين»; «نحيف» is the unnamed sentence's only.
+  await expect(page.getByLabel('مسترق الوركين، عند الزهري', { exact: true })).toBeVisible();
+  await expect(page.getByLabel('نحيف', { exact: true })).toBeVisible();
 });

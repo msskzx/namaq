@@ -46,6 +46,10 @@ below. Never copy one into a screen.
 | `Pickable` | A block of a card that picks it on a tap, `aria-pressed` | a book's paragraph that lights the ayah words it quotes |
 | `Saying` | Someone's words with who says them on a muted line before them («قال فلان:»); `by` left out draws the words alone; `center` centres both | every quote from a book with its sayer (a person's virtues, a laqab's words, a tie's sentence) |
 | `Points` | Separate sayings or facts one under another, each with an accent point at its first line | a sayer's several sayings under one «قال فلان:» (a person's virtues) |
+| `FactCells` | Short facts side by side, ruled apart, each a small label with its icon and every reading with who gives it | a person's death, place and age on the person card |
+| `QuoteBar` | A saying with a bar down its right, its sayer first in words, chosen words lit in the accent (`name`) or on a soft band (`mark`); `quoted` draws it between «» with no bar; `foot` under the words | a person's virtues and looks (the Prophet's ﷺ in amber) |
+| `SayingBand` | One speaker's sayings on a tinted band at the head of their card, his name once above them | the Prophet's ﷺ words first in a person's «مناقبه» |
+| `TraitChips` | Framed words in a wrapping row, who gives each under it; one two named sayers give framed in the accent | a person's «صفته» |
 | `Bubble` | A speech bubble in the speaker's colour, on his side, his corner sharp, the lead-in above it; no name ring (owner, 2026-11-22); `framed` | a conversation drawn as a chat (the dialog scenes of «مشاهد», a hadith's scenes, a sira story drawn by speaker through `HadithScene`) |
 | `StepDots` | A row of dots (`column` stands them up) for the steps of something walked in order: the reached one bigger in the theme's yellow, passed ones muted; a tap goes to a step | the layers of a «مشاهد» scene; a story's shared pictures in the share sheet |
 | `Shade` | A soft dark shade behind words over a picture, round at the corners; takes an animated style | the ayah and the sayings over a «مشاهد» scene's sky |

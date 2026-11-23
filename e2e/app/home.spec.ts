@@ -27,6 +27,16 @@ test.describe('a new user', () => {
     expect(await readerPage(page)).toBe(300);
   });
 
+  // Owner, 2026-11-23: a tap on the reading card's page opens the mushaf there too, and «افتح» stays.
+  test('a tap on the reading card\'s page opens the mushaf where it was left', async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('reader-place', JSON.stringify({ page: 300, position: null })));
+    await open(page, '/');
+    await expect(page.getByRole('button', { name: new RegExp(`^افتح المصحف حيث توقفت، سورة ${S(18)}`) })).toBeVisible();
+    await page.getByRole('button', { name: 'الصفحة ٣٠٠ من المصحف', exact: true }).click();
+    await expect(page).toHaveURL(/\/read/);
+    expect(await readerPage(page)).toBe(300);
+  });
+
   // The فاصلة wins over the page last open (owner, 2026-11-17).
   test('the reading card opens the mushaf at the فاصلة when one is set', async ({ page }) => {
     await page.addInitScript(() => {
@@ -145,6 +155,16 @@ test.describe('a new user', () => {
     await juz.scrollIntoViewIfNeeded();
     await juz.click();
     await expect(page).toHaveURL(/\/read/);
+    // The stored place starts at page 300, no juz's first page: wait for the juz's page.
+    await expect.poll(() => readerPage(page)).not.toBe(300);
+    const opened = await readerPage(page);
+    // A tap on the card's page opens the same place as «اقرأ» (owner, 2026-11-23).
+    await open(page, '/');
+    const card = page.getByRole('button', { name: /^أول الجزءا?ن? .*، الصفحة .* من المصحف$/ });
+    await card.scrollIntoViewIfNeeded();
+    await card.click();
+    await expect(page).toHaveURL(/\/read/);
+    await expect.poll(() => readerPage(page)).toBe(opened);
   });
 
   // Scenes are one of balagha's cards; with every interest on, the feed holds so many kinds that one may come only after

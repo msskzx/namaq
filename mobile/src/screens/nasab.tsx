@@ -119,7 +119,11 @@ export function NasabTree({ slugs, palette, meetings: showMeetings = true, linke
   text?: boolean;
   /** Which of the two shows first: a quiz on the nasab's words opens on the text. */
   start?: DrawingOrText }) {
-  const [shown, setShown] = useState<DrawingOrText>(start);
+  const [picked, setShown] = useState<DrawingOrText>(start);
+  // One person's line is never drawn (owner, 2026-11-23: a long chain as a tree adds nothing): his nasab is the text; the
+  // tree is for two or more, where it shows where they part.
+  const single = slugs.length < 2;
+  const shown: DrawingOrText = single ? 'text' : picked;
   // The trees whose shared fathers above the meeting are opened.
   const [opened, setOpened] = useState<string[]>([]);
   const inside = useInsideCard();
@@ -137,7 +141,7 @@ export function NasabTree({ slugs, palette, meetings: showMeetings = true, linke
   const tree = (scale: number): Tree => ({ palette, linked, scale });
   const bodyText = { color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' as const };
   const body = <>
-    {shown === 'drawing' || !withText ? roots.map((root, r) => {
+    {shown === 'drawing' || (!withText && !single) ? roots.map((root, r) => {
       // Several people: the tree from where they part, the fathers they share above it in one «…» node of the tree's own
       // style, which opens them as nodes in place (owner 2026-11-22).
       const { above, start: top } = lines.length > 1 && !opened.includes(root.key) ? foldTop(root) : { above: [], start: root };
@@ -169,9 +173,10 @@ export function NasabTree({ slugs, palette, meetings: showMeetings = true, linke
         )}
       </Card>
     )) : (
+      inside ? lines.map(({ slug, line }) => <Text key={slug} style={bodyText}>{chain(slug, line, line.length - 1)}</Text>) : (
       <Card palette={palette} gap={10}>
         {lines.map(({ slug, line }) => <Text key={slug} style={bodyText}>{chain(slug, line, line.length - 1)}</Text>)}
-      </Card>
+      </Card>)
     )}
     <Text style={{ color: palette.muted, fontSize: 13, lineHeight: 22, textAlign: 'right' }}>
       الأسماء كما في نسب كل علَم في سير أعلام النبلاء؛ وإذا وقف نسبه عند جدٍّ أكمله نسبُ علَمٍ آخر يذكر الآباء أنفسهم.
@@ -180,7 +185,7 @@ export function NasabTree({ slugs, palette, meetings: showMeetings = true, linke
   </>;
   // On its own page the tree is a section in the home card's shape, its books on the line under it (owner 2026-11-20).
   return <>
-    {withText && <Tabs palette={palette} label="كيف يُعرض النسب" value={shown} onChange={setShown} options={DRAWING_OR_TEXT} />}
+    {withText && !single && <Tabs palette={palette} label="كيف يُعرض النسب" value={shown} onChange={setShown} options={DRAWING_OR_TEXT} />}
     {inside ? body : <CardWithRow palette={palette} gap={10}>{body}</CardWithRow>}
   </>;
 }
