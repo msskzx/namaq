@@ -23,9 +23,9 @@ export type DrawingCardKind = (typeof DRAWING_CARD_KINDS)[number];
  * Cards on the phone alone for now (owner, 2026-11-21: phone first while the site is down; the website lists no items for
  * them, src/lib/feedLists.ts): «مشاهد», the battle year and the two armies, and the people drawings of the feed-visuals
  * sketch (/mnt/project-files/feed-visuals/sketch-dark.png): ties among a group, two lives side by side, where nasabs meet,
- * and a ring of one kind of tie or of one title.
+ * and a ring of one kind of tie or of one title. The adhkar too: the website has no adhkar page.
  */
-export const PHONE_ONLY_KINDS = ['mashahid', 'battle-year', 'battle-armies', 'group', 'lives', 'meet', 'ring'] as const;
+export const PHONE_ONLY_KINDS = ['adhkar', 'mashahid', 'battle-year', 'battle-armies', 'group', 'lives', 'meet', 'ring'] as const;
 
 /** The feed's content cards, by kind; each app card (mobile/src/components/HomeFeed.tsx) draws one. */
 export const FEED_CARD_KINDS = ['pair', 'tree', 'note-tafsir', 'note-qiraat', 'note-irab', 'note-balagha', 'term', 'scene',
@@ -61,6 +61,8 @@ export const INTERESTS: readonly Interest[] = [
   { id: 'irab', name: 'الإعراب', section: 'lisan', cards: ['note-irab'], quizzes: ['IRAB'] },
   { id: 'balagha', name: 'البلاغة', section: 'lisan', cards: ['note-balagha', 'term', 'scene'], quizzes: ['BALAGHA', 'TERM'] },
   { id: 'hadith', name: 'الحديث', section: 'hadith', cards: ['hadith', 'rajab', 'recorded', 'isnad', 'bukhari', 'muslim', 'hadith-scene'], quizzes: ['HADITH_NARRATOR', 'HADITH_COMPLETE', 'HADITH_BOOK', 'HADITH_CHAIN', 'SAHIH_KITAB'] },
+  // al-Nawawi's al-Adhkar, from the utilities' adhkar page (owner, 2026-11-23: every feature a feed card and a quiz kind).
+  { id: 'adhkar', name: 'الأذكار', section: 'hadith', cards: ['adhkar'], quizzes: ['ADHKAR_COMPLETE'] },
   { id: 'prophets', name: 'قصص الأنبياء', section: 'history', ours: true, cards: ['prophets', 'event'], quizzes: [] },
   { id: 'sira', name: 'السيرة والمغازي', section: 'history', cards: ['sira', 'moment', 'battle', 'battle-year', 'battle-armies'], quizzes: ['SIRA', 'PROPHET_NAMES'] },
   { id: 'tarajim', name: 'التراجم', section: 'history', cards: ['tarajim', 'tie', 'life', 'nasab', 'ties', 'group', 'lives', 'meet', 'ring'], quizzes: ['TARAJIM_NASAB', 'TARAJIM_NASAB_FILL', 'TARAJIM_VIRTUE', 'TARAJIM_TIE', 'TARAJIM_LIFE'] },

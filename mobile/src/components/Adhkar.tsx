@@ -41,6 +41,16 @@ function QuranPage({ item, palette }: { item: Dhikr; palette: Palette }) {
   );
 }
 
+/** A dhikr's words (the Quran passages in the mushaf's lines) and its virtue under them: the page's card and the feed's. */
+export function DhikrBody({ item, palette }: { item: Dhikr; palette: Palette }) {
+  return <>
+    {item.content.kind === 'text'
+      ? <Text style={{ color: palette.ink, fontSize: 21, lineHeight: 40, textAlign: 'justify' }}>{item.content.text}</Text>
+      : <QuranPage item={item} palette={palette} />}
+    {item.virtueQuote && <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>«{item.virtueQuote}»</Text>}
+  </>;
+}
+
 /** The fajr or asr reminder for the open tab, if it has one; switching it on asks for notifications the first time. */
 function useReminder(time: AdhkarTime | undefined, onPlace: () => void) {
   const [alerts, setAlerts] = adhkarAlerts.use();
@@ -121,10 +131,7 @@ export default function Adhkar({ palette, on, onPlace, scrollTo }: { palette: Pa
                 </Text>
                 {counted > 0 && <Button Icon={RotateCcw} variant="plain" accessibilityLabel="من جديد" onPress={() => dispatch({ type: 'reset' })} />}
               </>}>
-              {item.content.kind === 'text'
-                ? <Text style={{ color: palette.ink, fontSize: 21, lineHeight: 40, textAlign: 'justify' }}>{item.content.text}</Text>
-                : <QuranPage item={item} palette={palette} />}
-              {item.virtueQuote && <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>«{item.virtueQuote}»</Text>}
+              <DhikrBody item={item} palette={palette} />
             </CardWithRow>
           </View>
         );
