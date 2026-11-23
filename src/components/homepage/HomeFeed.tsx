@@ -612,7 +612,7 @@ function DrawingPost({ card }: { card: DrawingCard }) {
       return <Post save={save} head={<PostHead Icon={Swords} title={battle.name} sub={battleLine(battle)} />}
         open={<Action Icon={Swords} label={`افتح ${battle.name}`} href={`/battles/${battle.slug}`} />} source={card.sources}>
         <div lang="ar">
-          {battle.place && <><BattleMap place={battle.place} /><p className="px-3 pt-1.5 text-sm text-[var(--home-muted)]">موضع تقريبي على خريطة اليوم، من عندنا.</p></>}
+          {battle.place && <BattleMap place={battle.place} />}
           <div className="px-4 py-3"><Counts battle={battle} Heading="h3" /></div>
         </div>
       </Post>;

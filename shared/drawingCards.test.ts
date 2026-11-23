@@ -50,7 +50,7 @@ describe('the drawing cards\' items', () => {
     const unsourced = oaths.find(oath => !oathSources(oath.id).length);
     expect(unsourced && oathItems(oaths)).not.toContain(unsourced?.id);
     expect(sceneItems(units.map(unit => ({ ...unit, compiler: undefined })))).toEqual([]);
-    const bare = (battle: AppBattle): AppBattle => ({ ...battle, kind: undefined, year: undefined, location: undefined, counts: {} });
+    const bare = (battle: AppBattle): AppBattle => ({ ...battle, kind: undefined, year: undefined, location: undefined, place: undefined, counts: {} });
     expect(battleItems(battles.map(bare))).toEqual([]);
   });
 
