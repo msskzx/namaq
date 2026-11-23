@@ -81,6 +81,8 @@ test('the ring names a child without the father in the middle', async ({ page })
   // The link still reads her whole name aloud; the drawing shows her name alone.
   await expect(page.getByRole('link', { name: 'بنته: عائشة بنت أبي بكر', exact: true })).toHaveText('عائشة');
   await expect(page.getByRole('link', { name: 'ابنه: محمد بن أبي بكر الصديق', exact: true })).toHaveText('محمد');
+  // His line to the Prophet ﷺ says what he was, «صحابي», with its arrow from him (owner, 2026-11-23).
+  await expect(page.getByText('صحابي', { exact: true })).toBeVisible();
 });
 
 test('between two people shows the chain that joins them, with its pages', async ({ page }) => {
