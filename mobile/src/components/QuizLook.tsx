@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { SahihLook } from '@/components/Sahih';
 import { SAHIH } from '@/lib/sahih';
 import { UnderCard, useCardRow } from '@/ui/Card';
-import { ScrollView, View, useWindowDimensions } from 'react-native';
+import { ScrollView, View } from 'react-native';
+import { usePageWidth } from '@/ui/column';
 import { BookSearch, Check } from 'lucide-react-native';
 import type { QuizLook } from '@shared/quiz/choiceKinds';
 import { LOOKED_POINTS, POINTS } from '@shared/quiz/score';
@@ -50,6 +51,8 @@ import TiesRing from './TiesRing';
 import LifeTimeline from './LifeTimeline';
 import { personLife } from '@/lib/life';
 import { TermQuotes } from './BalaghaTerm';
+import LitAyat from './quran/text/LitAyat';
+import { ayahMushafWords } from '@/lib/mushaf';
 
 /** Names a search lists before asking for more letters. */
 const FOUND = 20;
@@ -166,6 +169,23 @@ function TafsirLook({ keys, mark, palette }: { keys: string[]; mark?: string; pa
   );
 }
 
+/** A run of ayat as the mushaf sets them, under the surah's name and their numbers; once marked, the ayah that answers lit. */
+function AyatLook({ keys, mark, palette }: { keys: string[]; mark?: string; palette: Palette }) {
+  const [surah, first] = keys[0].split(':').map(Number);
+  const last = Number(keys[keys.length - 1].split(':')[1]);
+  return (
+    <View style={{ gap: 8 }}>
+      <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 16, textAlign: 'right' }}>{`${surahNames[surah] ?? num(surah)} ${num(first)}${last > first ? `–${num(last)}` : ''}`}</Text>
+      <Card palette={palette} pad={[10, 14]}>
+        <LitAyat ayat={keys.map(key => {
+          const words = ayahMushafWords(key);
+          return { words, lit: key === mark ? [[0, words.length - 1] as [number, number]] : [], number: Number(key.split(':')[1]) };
+        })} menu={keys} palette={palette} />
+      </Card>
+    </View>
+  );
+}
+
 const TUHFA = numberVerses(poemData as Poem);
 
 /** Tuhfat al-Atfal whole, as on its page; once marked, the chapter of the verse that answers, the verse lit. */
@@ -196,7 +216,7 @@ export function LookView(props: { look: QuizLook; shown: boolean; palette: Palet
 }
 
 function LookViewOf({ look, shown, palette }: { look: QuizLook; shown: boolean; palette: Palette }) {
-  const { width } = useWindowDimensions();
+  const width = usePageWidth();
   const drawW = Math.min(width - 32, 480);
   switch (look.view) {
     case 'ties': return <TiesLook key={look.slug} slug={look.slug} mark={shown ? look.mark : undefined} width={drawW} palette={palette} />;
@@ -219,6 +239,7 @@ function LookViewOf({ look, shown, palette }: { look: QuizLook; shown: boolean; 
     );
     case 'tafsir': return <TafsirLook key={`${look.keys.join()}/${look.mark ?? ''}`} keys={look.keys} mark={shown ? look.mark : undefined} palette={palette} />;
     case 'tuhfa': return <TuhfaLook mark={shown ? look.mark : undefined} palette={palette} />;
+    case 'ayat': return <AyatLook keys={look.keys} mark={shown ? look.mark : undefined} palette={palette} />;
   }
 }
 

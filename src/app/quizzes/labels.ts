@@ -35,6 +35,7 @@ export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   TARAJIM_LAQAB: { en: "What was he called?", ar: "بمَ لُقّب؟" },
   TARAJIM_KUNYA: { en: "What is his kunya?", ar: "ما كنيته؟" },
   PROPHET_NAMES: { en: "The Prophet's names", ar: "أسماء النبي ﷺ" },
+  PROPHET_STORY: { en: "Whose story is this ayah?", ar: "في قصة مَن هذه الآية؟" },
   SIRA: { en: "Sira and battles", ar: "السيرة والغزوات" },
   HADITH_NARRATOR: { en: "Who narrated it?", ar: "من راوي الحديث؟" },
   HADITH_COMPLETE: { en: "Complete the hadith", ar: "أكمل الحديث" },
@@ -44,7 +45,7 @@ export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
 };
 
 export const TOPIC_GROUPS: { en: string; ar: string; topics: QuizTopic[] }[] = [
-  { en: "Quran", ar: "القرآن", topics: ["BRANCHES", "COMPARE", "SURAH", "ORDER", "ORDER_JUZ", "SURAH_AIM", "RECITE", "OPENINGS", "ENDS", "MEANING", "TAFSIR", "BALAGHA", "TERM", "IRAB", "QIRAAT", "QIRAAT_WHO"] },
+  { en: "Quran", ar: "القرآن", topics: ["BRANCHES", "COMPARE", "SURAH", "ORDER", "ORDER_JUZ", "SURAH_AIM", "RECITE", "OPENINGS", "ENDS", "MEANING", "TAFSIR", "BALAGHA", "TERM", "IRAB", "QIRAAT", "QIRAAT_WHO", "PROPHET_STORY"] },
   { en: "Tuhfat al-Atfal", ar: "تحفة الأطفال", topics: ["TUHFA_COMPLETE", "TUHFA_NEXT", "TUHFA_RULE"] },
   { en: "Tarajim", ar: "التراجم", topics: ["TARAJIM_NASAB", "TARAJIM_NASAB_FILL", "TARAJIM_VIRTUE", "TARAJIM_TIE", "TARAJIM_LIFE", "TARAJIM_LAQAB", "TARAJIM_KUNYA"] },
   { en: "Sira", ar: "السيرة", topics: ["SIRA", "PROPHET_NAMES"] },
