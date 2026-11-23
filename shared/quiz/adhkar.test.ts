@@ -2,8 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { ADHKAR } from '../adhkar';
 import { askedDhikr, completeDhikrQuestions, dhikrEnding } from './adhkar';
 import { seededRandom } from './feedQuiz';
+import { plainText } from '../sahih';
 
-const bare = (text: string) => text.replace(/[ً-ْٰ]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/[.،,]/g, ' ').replace(/\s+/g, ' ').trim();
+const bare = plainText;
 const questions = completeDhikrQuestions(seededRandom(7));
 
 describe('«أكمل الذكر»', () => {

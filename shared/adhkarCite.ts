@@ -1,4 +1,4 @@
-import type { AdhkarCitation, AdhkarOccasion, Dhikr } from './adhkar';
+import type { AdhkarCitation, AdhkarOccasion, Dhikr, DhikrGrade } from './adhkar';
 import { num } from './quran/arabicNumber';
 
 /** The adhkar page's tabs, in their order, with their short names (app and website). */
@@ -36,4 +36,17 @@ export function adhkarQuotes(item: Dhikr): { text: string; cite: string; url: st
       url: grade.citation.url,
     })),
   ];
+}
+
+/** The tabs' full names on the phone's adhkar page (owner, 2026-11-23). */
+export const ADHKAR_NAMES: Record<AdhkarOccasion, string> = { morning: 'الصباح', evening: 'المساء', sleep: 'النوم', waking: 'الاستيقاظ', 'after-prayer': 'الصلاة' };
+
+const RANK: Record<DhikrGrade['rank'], string> = { sahih: 'صحيح', hasan: 'حسن', 'hasan-sahih': 'حسن صحيح', 'isnad-sahih': 'إسناده صحيح', 'in-sahih': 'في الصحيح' };
+
+/** Under a dhikr (owner, 2026-11-23: its reference right under it): each grade and who gave it, then who recorded it. */
+export function gradeLine(item: Dhikr): { grades: { rank: string; by: string }[]; recorded: string } {
+  return {
+    grades: item.grades.map(grade => ({ rank: RANK[grade.rank], by: `${grade.scholar}${grade.reportedBy ? `، نقله ${grade.reportedBy}` : ''}` })),
+    recorded: item.collections.join('، '),
+  };
 }

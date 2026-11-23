@@ -4,6 +4,7 @@
 // some of them (رضيت بالله ربا at morning too), so a wrong time could be a right one.
 import { ADHKAR, type AdhkarCitation, type AdhkarOccasion, type Dhikr } from '../adhkar';
 import { num } from '../quran/arabicNumber';
+import { plainText } from '../sahih';
 import { shuffle, type Random } from './random';
 import type { ChoiceKind, ChoiceQuestion } from './choiceKinds';
 import { uniqueSources, type QuizSource } from './sources';
@@ -12,8 +13,9 @@ export const ADHKAR_COMPLETE = 'ADHKAR_COMPLETE';
 export const ADHKAR_COMPLETE_NAME = 'أكمل الذكر';
 const CHOICES = 4;
 
-/** No harakat, one alif, one space: so «وَإِلَيْكَ النُّشُورُ» and «وإليك النشور» are one ending. */
-const bare = (text: string) => text.replace(/[ً-ْٰ]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/[.،,]/g, ' ').replace(/\s+/g, ' ').trim();
+/** One shared rule (shared/sahih.ts plainText): no marks, hamzas folded, punctuation set aside, so «وَإِلَيْكَ النُّشُورُ» and
+ * «وإليك النشور» are one ending. */
+const bare = plainText;
 
 /** «أذكار الصباح والمساء»: the times a dhikr's report names, as the adhkar page's tabs call them. */
 const TIME: Record<AdhkarOccasion, string> = { morning: 'الصباح', evening: 'المساء', waking: 'الاستيقاظ', sleep: 'النوم', 'after-prayer': 'دبر الصلاة' };

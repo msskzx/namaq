@@ -59,7 +59,7 @@ export default function Adhkar({ quran, on, start }: { quran: Record<string, Aya
             <Button size="lg" variant="outline" disabled={counted >= target} aria-label={`عُدَّ مرة، ${num(counted)} من ${num(target)}`}
               onClick={() => dispatch({ type: 'tap', id: item.id, target })}><Check strokeWidth={2.5} aria-hidden /></Button>
             <span aria-hidden dir="ltr" className="px-3 text-xl">{num(counted)} / {num(target)}</span>
-            {counted > 0 && <Button variant="ghost" size="lg" aria-label="من جديد" onClick={() => dispatch({ type: 'reset' })}><RotateCcw aria-hidden /></Button>}
+            {counted > 0 && <Button variant="ghost" size="lg" aria-label="من جديد" onClick={() => dispatch({ type: 'reset', id: item.id })}><RotateCcw aria-hidden /></Button>}
           </>}>
             {item.content.kind === 'text'
               ? <p className="text-justify text-[1.3125rem] leading-[2.5rem]">{item.content.text}</p>
