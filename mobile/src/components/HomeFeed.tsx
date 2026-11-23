@@ -198,13 +198,19 @@ const ARMIES_ICONS: Record<ArmiesTab, IconType> = { field: Users, killed: Swords
 /**
  * Every feed post's one shape (owner, 2026-11-14 and 2026-11-20, like an Instagram post): the head, the body in one card,
  * the row of icon buttons under it grouped on the right (the open button, the card's tools, save, share) with the «⋯» of
- * «ليس من اهتماماتي» alone on the left, then the source line. The row's open button is the one way to the item's page: the
- * head and the card are not buttons for it too (owner, 2026-11-20: one control per destination). A long card stops at two
- * thirds of the screen, the rest in a sheet (ui/Card `cap`).
+ * «ليس من اهتماماتي» alone on the left, then the source line. The head opens the general topic; the row's open button this
+ * card's own place. A reading card's body opens it too (`press`), nothing else's: a tap on a question or recall card must
+ * not cut its answer (owner, 2026-11-23). A long card stops at two thirds of the screen, the rest in a sheet (ui/Card `cap`).
  */
-function Post({ head, open, actions, share, picture, source, bar, palette, whole = false, children }: { head: React.ReactNode;
+function Post({ head, open, press, actions, share, picture, source, bar, palette, whole = false, children }: { head: React.ReactNode;
   /** Opens the item in its own reader (the mushaf at the ayah, the hadith in its book): first in the row. */
   open?: React.ReactNode;
+  /**
+   * The card itself as a button to the same place as `open` (owner, 2026-11-23: the reading cards, «تابع القراءة» and
+   * «جزء اليوم», open the mushaf from a tap anywhere on the page slice), dimming while pressed as the head does. `label`
+   * names the page for a screen reader, apart from the open button's own name.
+   */
+  press?: { onPress: () => void; label: string };
   actions?: React.ReactNode;
   /**
    * The card's share button, last of the group, after save. Left out, the card shares as it is (ui/CardShare, owner
@@ -229,7 +235,7 @@ function Post({ head, open, actions, share, picture, source, bar, palette, whole
     <View style={{ gap: 4 }}>
       {head}
       {/* What the card's content hands up with UnderCard joins the row under the card, before the post's own buttons; share stays last. */}
-      <CardWithRow palette={palette} pad={0} clip cap={!whole} bar={bar}
+      <CardWithRow palette={palette} pad={0} clip cap={!whole} bar={bar} onPress={press?.onPress} accessibilityLabel={press?.label}
         lead={open} row={<>{actions}<SaveAction text={named} />{share === undefined
           ? <CardShare head={picture?.head ?? head} sources={source} palette={palette}>{picture?.body ?? children}</CardShare>
           : share || null}</>} menu={menu} source={source} sourceLine={sourceLine(palette)}>{children}</CardWithRow>
@@ -321,7 +327,7 @@ export function ContinueReading({ palette }: { palette: Palette }) {
   const where = [shortNames[surah], juzLabel([juz]), date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ');
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.mushaf} title={fasila || page > 1 ? 'تابع القراءة' : 'ابدأ القراءة'} sub={where} open={topic('/quran', 'افتح القرآن')} palette={palette} />}
-      open={<OpenButton label={`افتح المصحف ${fasila ? 'عند فاصلتك' : 'حيث توقفت'}، سورة ${shortNames[surah] ?? ''}`} onPress={read} palette={palette} />}
+      open={<OpenButton label={`افتح المصحف ${fasila ? 'عند فاصلتك' : 'حيث توقفت'}، سورة ${shortNames[surah] ?? ''}`} onPress={read} palette={palette} />} press={{ onPress: read, label: `الصفحة ${num(page)} من المصحف` }}
       source={sourcesOf([mushafPage(surah, page)])}
       // Shared, the page alone: not where you stopped (owner's plan, 2026-11-22).
       picture={{ head: <PostHead Icon={FEATURE_ICON.mushaf} title={shortNames[surah] ?? ''} sub={juzLabel([juz])} palette={palette} />,
@@ -1165,7 +1171,7 @@ function JuzPost({ palette }: { palette: Palette }) {
   const toggle = () => setRead(on => { writeJson(JUZ_READ, on ? 0 : day); return !on; });
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.mushaf} title="جزء اليوم" sub={[juzLabel(juz), date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ')} open={topic('/quran', 'افتح القرآن')} palette={palette} />}
-      open={<OpenButton label={`اقرأ ${juzLabel(juz)}، جزء اليوم`} onPress={open} palette={palette} />}
+      open={<OpenButton label={`اقرأ ${juzLabel(juz)}، جزء اليوم`} onPress={open} palette={palette} />} press={{ onPress: open, label: `أول ${juzLabel(juz)}، الصفحة ${num(page)} من المصحف` }}
       actions={<Action Icon={read ? CircleCheck : Check} label="قرأته" tone="green" on={read} onPress={toggle} palette={palette} />}
       source={sourcesOf([mushafPage(start.surah, page)])}>
       {/* Smaller than the reading card: the juz's first lines only (owner, 2026-11-22). */}
