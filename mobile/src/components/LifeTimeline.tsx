@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { ChevronDown, ChevronUp, Plus } from 'lucide-react-native';
-import { Tap } from '@/ui/Tap';
+import { Plus } from 'lucide-react-native';
+import Folded from '@/ui/Folded';
 import { num } from '@shared/quran/arabicNumber';
 import { lifeFilters, lifeRail, lifeStrip, openLabel, stripLabels, type LifeItem, type LifeKind } from '@shared/events/lifeTimeline';
 import { Text } from '@/ui/Text';
@@ -37,6 +37,18 @@ const DOT = 9;
  * read as a line, short enough that the sections under it stay near. The strip above still shows every year.
  */
 const FOLDED_ROWS = 6;
+
+/** The rail past its first `rows` rows: a year cut by the fold goes on with its own label. */
+function railRest(rail: ReturnType<typeof lifeRail>, rows: number) {
+  const rest: ReturnType<typeof lifeRail> = [];
+  let seen = 0;
+  for (const place of rail) {
+    const skip = Math.max(0, Math.min(place.items.length, rows - seen));
+    seen += place.items.length;
+    if (skip < place.items.length) rest.push({ ...place, items: place.items.slice(skip) });
+  }
+  return rest;
+}
 
 /** The rail's first `rows` rows, its years cut where they run out. */
 function railStart(rail: ReturnType<typeof lifeRail>, rows: number) {
@@ -179,13 +191,27 @@ export default function LifeTimeline({ items, palette, onCompare, inCard = false
   const filters = useMemo(() => lifeFilters(items), [items]);
   const picked = filter === undefined ? undefined : filters[filter];
   const on = (item: LifeItem) => !picked || picked.kinds.includes(item.kind) || item.kind === 'own';
-  const [open, setOpen] = useState(false);
   const whole = lifeRail(items.filter(on));
   const total = whole.reduce((sum, place) => sum + place.items.length, 0);
   // Folded only when what it hides is more than a couple of rows.
   const folds = foldable && total > FOLDED_ROWS + 2;
-  const rail = folds && !open ? railStart(whole, FOLDED_ROWS) : whole;
   if (items.length === 0) return null;
+  /** Years of the rail; `ends` when the rail's line stops at its last row. */
+  const railRows = (rail: ReturnType<typeof lifeRail>, ends: boolean) => (
+    <View>
+      {rail.map((place, p) => (
+        <View key={place.key} style={{ flexDirection: 'row' }}>
+          <Text style={{ width: 52, color: place.year === undefined ? palette.muted : palette.accent, fontSize: 15, lineHeight: 20, paddingTop: 12, textAlign: 'center' }}>{placeLabel(place)}</Text>
+          <View style={{ flex: 1 }}>
+            {compact
+              ? <Line items={place.items} palette={palette} last={ends && p === rail.length - 1} />
+              : place.items.map((item, i) => <Item key={item.key} item={item} palette={palette} show={setShown} linked={linked} marked={item.key === marked}
+                last={ends && p === rail.length - 1 && i === place.items.length - 1} />)}
+          </View>
+        </View>
+      ))}
+    </View>
+  );
   return (
     <View style={{ gap: 12 }}>
       <Strip items={items} on={on} palette={palette} inCard={inCard} />
@@ -196,28 +222,13 @@ export default function LifeTimeline({ items, palette, onCompare, inCard = false
           {onCompare && <Chip Icon={Plus} label="قارن" on={false} palette={palette} onPress={onCompare} />}
         </View>
       )}
-      <View>
-        {rail.map((place, p) => (
-          <View key={place.key} style={{ flexDirection: 'row' }}>
-            <Text style={{ width: 52, color: place.year === undefined ? palette.muted : palette.accent, fontSize: 15, lineHeight: 20, paddingTop: 12, textAlign: 'center' }}>{placeLabel(place)}</Text>
-            <View style={{ flex: 1 }}>
-              {compact
-                ? <Line items={place.items} palette={palette} last={p === rail.length - 1} />
-                : place.items.map((item, i) => <Item key={item.key} item={item} palette={palette} show={setShown} linked={linked} marked={item.key === marked}
-                  last={p === rail.length - 1 && i === place.items.length - 1} />)}
-            </View>
-          </View>
-        ))}
-        {folds && (
-          <Tap onPress={() => setOpen(was => !was)} accessibilityRole="button" aria-expanded={open}
-            style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 4, paddingTop: 8, borderTopWidth: 1, borderColor: palette.rule, minHeight: MIN_TAP }}>
-            {open ? <ChevronUp size={16} color={palette.muted} /> : <ChevronDown size={16} color={palette.muted} />}
-            <Text style={{ flex: 1, color: palette.muted, fontSize: 14 }}>
-              {open ? 'اطوِ' : `أظهر البقية (${num(total - FOLDED_ROWS)})`}
-            </Text>
-          </Tap>
-        )}
-      </View>
+      {/* A long life (the person page) shows its first rows and folds the rest under the shared fold row. */}
+      {railRows(folds ? railStart(whole, FOLDED_ROWS) : whole, !folds)}
+      {folds && (
+        <Folded credit={`أظهر البقية (${num(total - FOLDED_ROWS)})`} openCredit="اطوِ" palette={palette}>
+          {railRows(railRest(whole, FOLDED_ROWS), true)}
+        </Folded>
+      )}
       <LifeSheet item={shown} onClose={() => setShown(undefined)} palette={palette} />
     </View>
   );

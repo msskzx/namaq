@@ -31,6 +31,7 @@ import type { QuizSource } from '@shared/quiz/sources';
 import { NasabTree } from './nasab';
 import TiesRing, { TieSheet } from '@/components/TiesRing';
 import type { Tie } from '@shared/tarajimGraph';
+import { settledTies } from '@shared/peopleCards';
 
 const siyar = sourceById('siyar')!;
 /** The page's side room and the card's padding and frame, taken from the screen's width for the ties ring inside its card. */
@@ -133,7 +134,7 @@ function ties(person: AppPerson) {
     { label: `أبو${s}`, links: fathers },
     { label: `أم${s}`, links: mothers },
     { label: spouses.length > 1 ? `أزواج${s}` : `زوج${s}`, links: spouses },
-    { label: `أولاد${s}`, links: person.children },
+    { label: `أولاد${s}`, links: settledTies(person.slug, 'child', person.children) },
     { label: `إخوت${s}`, links: person.siblings },
     { label: `قرابت${s}`, links: person.cousins },
     { label: person.sex === 'FEMALE' ? 'صحبت' : 'صحب', links: person.companionOf },

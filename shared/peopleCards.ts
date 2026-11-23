@@ -143,6 +143,20 @@ export const RING_NOTES: Record<string, RingNote> = {
     quote: 'ثُمَّ وُلِدَ لَهُ عبد الله، وَهَلْ وُلِدَ بَعْدَ النُّبُوَّةِ أَوْ قَبْلَهَا؟ فِيهِ اخْتِلَافٌ، وَصَحَّحَ بَعْضُهُمْ أَنَّهُ وُلِدَ بَعْدَ النُّبُوَّةِ، وَهَلْ هُوَ الطيب والطاهر، أَوْ هُمَا غَيْرُهُ؟ عَلَى قَوْلَيْنِ. وَالصَّحِيحُ أَنَّهُمَا لَقَبَانِ لَهُ' },
 };
 
+/**
+ * The ties of one kind with those a scholar's note settles left out (owner, 2026-11-23: the Prophet's ﷺ children are
+ * seven; al-Tayyib and al-Tahir are Abdullah's titles, Zad al-Ma'ad 1/101): the doubted ties go when the note holds, that
+ * is when its words are in the text of the tie it is on. The person page, its ring and the feed's ring all draw these.
+ */
+export function settledTies<T extends { to?: string; slug?: string; disputed?: true; link?: { disputed?: true; text?: string }; text?: string }>(
+  slug: string, kind: string, ties: readonly T[]): T[] {
+  const note = RING_NOTES[`kin:${slug}:${kind}`];
+  if (!note) return [...ties];
+  const of = ties.find(tie => (tie.to ?? tie.slug) === note.of);
+  if (!(of?.link?.text ?? of?.text)?.includes(note.quote)) return [...ties];
+  return ties.filter(tie => !(tie.link?.disputed ?? tie.disputed));
+}
+
 /** The titles that name how many hold them: shown only when the data holds every one (owner, 2026-11-21). */
 export const TITLE_COUNTS: Record<string, number> = { 'the-ten-promised-paradise': 10, 'the-six-of-the-shura': 6, naqib: 12 };
 
