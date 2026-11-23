@@ -43,13 +43,14 @@ export const TOPIC_LABELS: Record<QuizTopic, { en: string; ar: string }> = {
   HADITH_CHAIN: { en: "Who is missing from the chain?", ar: "من حدّث به؟" },
   SAHIH_KITAB: { en: "Which kitab?", ar: "في أيّ كتاب؟" },
   ADHKAR_COMPLETE: { en: "Complete the dhikr", ar: "أكمل الذكر" },
+  ATLAS_WHERE: { en: "Where was it?", ar: "أين كانت؟" },
 };
 
 export const TOPIC_GROUPS: { en: string; ar: string; topics: QuizTopic[] }[] = [
   { en: "Quran", ar: "القرآن", topics: ["BRANCHES", "COMPARE", "SURAH", "ORDER", "ORDER_JUZ", "SURAH_AIM", "RECITE", "OPENINGS", "ENDS", "MEANING", "TAFSIR", "BALAGHA", "TERM", "IRAB", "QIRAAT", "QIRAAT_WHO", "PROPHET_STORY"] },
   { en: "Tuhfat al-Atfal", ar: "تحفة الأطفال", topics: ["TUHFA_COMPLETE", "TUHFA_NEXT", "TUHFA_RULE"] },
   { en: "Tarajim", ar: "التراجم", topics: ["TARAJIM_NASAB", "TARAJIM_NASAB_FILL", "TARAJIM_VIRTUE", "TARAJIM_TIE", "TARAJIM_LIFE", "TARAJIM_LAQAB", "TARAJIM_KUNYA"] },
-  { en: "Sira", ar: "السيرة", topics: ["SIRA", "PROPHET_NAMES"] },
+  { en: "Sira", ar: "السيرة", topics: ["SIRA", "PROPHET_NAMES", "ATLAS_WHERE"] },
   { en: "Hadith", ar: "الحديث", topics: ["HADITH_NARRATOR", "HADITH_COMPLETE", "HADITH_BOOK", "HADITH_CHAIN", "SAHIH_KITAB"] },
   { en: "Adhkar", ar: "الأذكار", topics: ["ADHKAR_COMPLETE"] },
 ];

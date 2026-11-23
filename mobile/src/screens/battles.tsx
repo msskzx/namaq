@@ -2,7 +2,7 @@ import { useDeferredValue, useEffect, useMemo, useRef, useState, type ComponentR
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { battleTimeline } from '@shared/battles/timeline';
-import { normalizeWord } from '@shared/quran/normalize';
+import { searchBattles } from '@shared/battles/battle';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Card from '@/ui/Card';
@@ -31,14 +31,9 @@ export default function BattlesScreen() {
   const { year: opened } = useLocalSearchParams<{ year?: string }>();
   const pending = useRef<number | undefined>(undefined);
   const [query, setQuery] = useState('');
-  const words = useDeferredValue(query).trim().split(/\s+/).filter(Boolean).map(normalizeWord);
-  const groups = words.length
-    ? timeline.groups
-      .map(group => ({ ...group, battles: group.battles.filter(battle => {
-        const said = normalizeWord(`${battle.name} ${battle.location?.value ?? ''} ${battle.place?.name ?? ''}`);
-        return words.every(word => said.includes(word));
-      }) }))
-      .filter(group => group.battles.length)
+  const searched = useDeferredValue(query);
+  const groups = searched.trim()
+    ? timeline.groups.map(group => ({ ...group, battles: searchBattles(group.battles, searched) })).filter(group => group.battles.length)
     : timeline.groups;
   useTabRetap('battles', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   const toYear = (year: number) => {
@@ -57,7 +52,7 @@ export default function BattlesScreen() {
       <TopBar back={back} hideOnScroll
         search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث في الغزوات والمعارك', label: 'ابحث في الغزوات والمعارك' }} />
       <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 10 }}>
-        {!words.length && <BattleTimeline madinah={timeline.madinah} after={timeline.after} palette={palette} onYear={toYear} />}
+        {!searched.trim() && <BattleTimeline madinah={timeline.madinah} after={timeline.after} palette={palette} onYear={toYear} />}
         {!groups.length && <Empty text="لا غزوة ولا معركة بهذا الاسم" palette={palette} />}
         {groups.map(group => (
           <View key={group.title} style={{ gap: 10, paddingTop: 6 }}

@@ -26,10 +26,10 @@ import LifeTimeline from '@/components/LifeTimeline';
 import { FEATURE_ICON } from '@/components/featureIcons';
 import Tabs from '@/ui/Tabs';
 import Saying from '@/ui/Saying';
+import Points from '@/ui/Points';
 import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import { lifeSources } from '@shared/events/lifeTimeline';
 import type { QuizSource } from '@shared/quiz/sources';
-import { NasabTree } from './nasab';
 import TiesRing, { TieSheet } from '@/components/TiesRing';
 import type { Tie } from '@shared/tarajimGraph';
 import { settledTies } from '@shared/peopleCards';
@@ -95,9 +95,8 @@ export function Virtues({ person, palette, marked }: { person: AppPerson; palett
   return <>
     {virtueGroups(person.virtues).map(group => (
       <Saying key={group.items[0].at} by={group.by} palette={palette}>
-        <View style={{ gap: 10 }}>
-          {group.items.map(({ fact, at }) => <Text key={at} style={at === marked ? { ...body(palette), color: palette.green } : body(palette)}>{fact.text}</Text>)}
-        </View>
+        <Points palette={palette} items={group.items.map(({ fact, at }) => ({
+          key: at, node: <Text style={at === marked ? { ...body(palette), color: palette.green } : body(palette)}>{fact.text}</Text> }))} />
       </Saying>
     ))}
     <Credit facts={person.virtues} palette={palette} />
@@ -173,7 +172,6 @@ export default function PersonScreen() {
   const showBattle = (link: PersonLink) => (battleOf(link.slug) ? toTab({ pathname: '/battle', params: { slug: link.slug } }) : showLink(link));
   // «نسبه» drawn as the tree of fathers or as the book writes it: his full name as the book gives it first (owner
   // 2026-11-23), the tree on «الرسم».
-  const [nasabView, setNasabView] = useState<DrawingOrText>('text');
   // «صلاته» as the ring or as the lines of names, which name the same people (the drawing first).
   const [tiesView, setTiesView] = useState<DrawingOrText>('drawing');
   const person = findPerson(slug);
@@ -215,15 +213,14 @@ export default function PersonScreen() {
 
         {person.fullName && (
           <Part head={head} n={++n} title={person.sex === 'FEMALE' ? 'نسبها' : 'نسبه'} palette={palette}
-            above={<Tabs palette={palette} label="كيف يُعرض النسب" value={nasabView} onChange={setNasabView} options={DRAWING_OR_TEXT} />}
             row={<IconButton Icon={FEATURE_ICON.nasab} label={person.sex === 'FEMALE' ? 'قارن نسبها بغيرها' : 'قارن نسبه بغيره'} onPress={tree} />}>
-            {nasabView === 'drawing' ? <NasabTree slugs={[person.slug]} palette={palette} meetings={false} text={false} /> : <>
+            {/* The name as the book gives it, no drawing of it (owner, 2026-11-23: one line alone adds nothing); the drawing is
+                for comparing, on the button. */}
             <Quote fact={person.fullName} palette={palette} many={!!person.otherNames?.length} />
             {person.otherNames?.map((fact, i) => (
               <Quote key={i} fact={fact} palette={palette} many><Text style={body(palette)}>وقيل: {fact.text}</Text></Quote>
             ))}
             {person.nameVariants.map((fact, i) => <Quote key={`v${i}`} fact={fact} palette={palette} many />)}
-            </>}
             <Credit facts={[person.fullName, ...(person.otherNames ?? []), ...person.nameVariants]} palette={palette} />
           </Part>
         )}

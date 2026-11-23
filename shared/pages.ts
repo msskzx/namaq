@@ -51,6 +51,8 @@ export const PAGES: readonly PageEntry[] = [
   { id: 'between', app: ['(tabs)/(tarajim)/between.tsx'], web: ['between', 'graphs'] },
   { id: 'battles', app: ['(tabs)/(tarajim)/battles.tsx'], web: ['battles'] },
   { id: 'battle', app: ['(tabs)/(tarajim)/battle.tsx'], web: ['battles/[slug]'] },
+  // Phone only while the website is paused (owner, 2026-11-23); ported with the other phone pages later.
+  { id: 'atlas', app: ['(tabs)/(tarajim)/atlas.tsx'] },
   { id: 'stories', app: ['(tabs)/(tarajim)/stories.tsx'], web: ['stories'] },
   { id: 'story', app: ['(tabs)/(tarajim)/story.tsx'], web: ['stories/[slug]'] },
   { id: 'events', web: ['events', 'events/[slug]'] },
