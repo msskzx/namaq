@@ -45,6 +45,7 @@ below. Never copy one into a screen.
 | `TapRow` | A frameless row of a drawing: a tap opens what it names, a long press shows its source; 44 tall | the rows of the «حياته» timeline; a year's column on the battles timeline (`style` turns it into a column) |
 | `Pickable` | A block of a card that picks it on a tap, `aria-pressed` | a book's paragraph that lights the ayah words it quotes |
 | `Saying` | Someone's words with who says them on a muted line before them («قال فلان:»); `by` left out draws the words alone; `center` centres both | every quote from a book with its sayer (a person's virtues, a laqab's words, a tie's sentence) |
+| `Points` | Separate sayings or facts one under another, each with an accent point at its first line | a sayer's several sayings under one «قال فلان:» (a person's virtues) |
 | `Bubble` | A speech bubble in the speaker's colour, on his side, his corner sharp, the lead-in above it; no name ring (owner, 2026-11-22); `framed` | a conversation drawn as a chat (the dialog scenes of «مشاهد», a hadith's scenes, a sira story drawn by speaker through `HadithScene`) |
 | `StepDots` | A row of dots (`column` stands them up) for the steps of something walked in order: the reached one bigger in the theme's yellow, passed ones muted; a tap goes to a step | the layers of a «مشاهد» scene; a story's shared pictures in the share sheet |
 | `Shade` | A soft dark shade behind words over a picture, round at the corners; takes an animated style | the ayah and the sayings over a «مشاهد» scene's sky |

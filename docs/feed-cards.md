@@ -38,7 +38,10 @@ with one narrator left out, the wrong choices narrators of other chains named no
 `shared/quiz/hadith.ts`), في أيّ كتاب؟ (`shared/quiz/sahih.ts`: a bab heading of either Sahih and the kitab it stands in), and أكمل الذكر
 (`shared/quiz/adhkar.ts`: a text dhikr of the adhkar page with its last clause or last three words hidden, the wrong choices the
 endings of other adhkar said nowhere in it; no Quran passage; «متى يُقال؟» is left out because other sound reports name more
-times for some adhkar, so a wrong time could be right).
+times for some adhkar, so a wrong time could be right), and أين كانت؟ (`shared/quiz/atlas.ts`, under السيرة والمغازي: a battle's
+name, and the reader taps its place on the atlas's map of its layer, every pin nameless until answered; only places whose pin
+stands alone on the narrowest map are asked; the sources the book that places it and GeoNames; «افتح» opens the atlas at the
+place; solo only, since a party draws choices as rows).
 
 The ayah quizzes (`shared/quiz/ayahQuizzes.ts`), whose questions are built once by `scripts/quran/buildAyahQuizzes.ts`
 (the app and the website only read the bank; hand review in `scripts/quran/ayahQuizReview.json`):
@@ -100,9 +103,12 @@ An item whose own data names no source is left out:
 - غزوة … (`BattlePost`, under السيرة والمغازي): the battle's map and the two sides' numbers. Jamal, Siffin and Nahrawan show only
   their name, year, place and people, whatever their data holds (`FITNA_BATTLES`); Siffin and Nahrawan have no cited
   year or place yet, so they stay out.
-- من الغزوات والمعارك (`BattleYearPost`, under السيرة والمغازي, phone only): one year of the battles timeline with the year before
-  and after it on its axis, the year lit, its battles' places on one map (places too close to tell apart share a pin) and its battles listed under it, each opening its page; a year or the open button opens
-  the battles screen at that year. Items are the years with a cited battle; the line names the pages for the years drawn.
+- من الأطلس (`BattleYearPost`, under السيرة والمغازي, phone only; owner 2026-11-23): one year of the battles timeline with the year
+  before and after it on its axis, the year lit, and the year on the atlas's map: in the Prophet's ﷺ years its places lit and the
+  earlier years' quiet on the atlas's still frame, a later year its own places only (places too close to tell apart share a pin,
+  and no name covers another). Its battles are listed under it, each opening its page; the head, a year or the open button opens
+  the atlas («الأطلس», `mobile/src/screens/atlas.tsx`) at that year. Items are the years with a cited battle; the line names the
+  pages for the years drawn and the books that place every pin.
 - الجيشان في الغزوات (`ArmiesPost`, under السيرة والمغازي, phone only): the battles whose data cites both sides in the field (now
   Badr, Uhud, al-Khandaq), a row of the battle page's numbers each, tabs «في الميدان | القتلى», a dash where no number is
   cited, and a note where the battle page has another reading of a number.

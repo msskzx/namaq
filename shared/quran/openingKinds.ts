@@ -202,35 +202,28 @@ export function openingLike(surah: number): { card: string; kind: OpeningKindId;
 export const openingHref = (card: string, kind: OpeningKindId) => `/quran/openings?kind=${kind}#${card}`;
 
 // إذا السماء: the conditions from the first ayah to their answer, as the page showed them before the rework.
-export type ConditionRole = 'condition' | 'answer' | 'disputed';
+export type ConditionRole = 'condition' | 'answer';
 
+/** The span of conditions and the ayah that answers them; al-Inshiqaq's answer is disputed, so its span is the five conditions alone. */
 export const CONDITION_SPANS: Record<number, { to: number; answer?: number }> = {
   81: { to: 14, answer: 14 },
   82: { to: 5, answer: 5 },
-  84: { to: 6 },
+  84: { to: 5 },
 };
 
-/** Each ayah of the span with its role; 84's answer is disputed. */
+/** Each ayah of the span with its role. */
 export function conditionLines(surah: number): { key: string; role: ConditionRole }[] {
   const span = CONDITION_SPANS[surah];
   if (!span) return [];
-  return Array.from({ length: span.to }, (_, i) => {
-    const ayah = i + 1;
-    const role: ConditionRole = span.answer === undefined ? (ayah === span.to ? 'disputed' : 'condition') : ayah === span.answer ? 'answer' : 'condition';
-    return { key: `${surah}:${ayah}`, role };
-  });
+  return Array.from({ length: span.to }, (_, i) => ({ key: `${surah}:${i + 1}`, role: i + 1 === span.answer ? 'answer' : 'condition' }));
 }
 
-export const CONDITION_NOTES = [
-  'في التكوير قال الطبري والقرطبي إن «علمت نفس ما أحضرت» جواب «إذا» وما قبلها. وفي الانفطار قال القرطبي في «علمت نفس ما قدمت وأخرت»: وهذا جواب «إذا السماء انفطرت».',
-  'وفي الانشقاق اختلف المفسرون في الجواب: محذوف يُفهم من السياق (الطبري والبغوي والقرطبي)، أو «يا أيها الإنسان إنك كادح» (بعض نحويي البصرة)، أو «وأذنت» والواو زائدة (الفراء)، أو «فأما من أوتي كتابه بيمينه» (الكسائي، وقال النحاس: أصح ما قيل فيه).',
-];
-
-export const CONDITION_SOURCES = [
-  { title: 'الطبري والقرطبي في تفسير التكوير ١٤', url: 'https://quran.ksu.edu.sa/tafseer/ibn-tabary-qortobi-saadi/sura81-aya14.html' },
-  { title: 'القرطبي في تفسير الانفطار ٤', url: 'https://quran.ksu.edu.sa/tafseer/qortobi/sura82-aya4.html' },
-  { title: 'الطبري والبغوي والقرطبي في تفسير الانشقاق ٥', url: 'https://quran.ksu.edu.sa/tafseer/ibn-baghawy-tabary-qortobi/sura84-aya5.html' },
-];
+/** What the mufassirun say of each surah's answer, with where they say it. */
+export const CONDITION_NOTES: Record<number, { text: string; source: { title: string; url: string } }> = {
+  81: { text: 'قال الطبري والقرطبي إن «علمت نفس ما أحضرت» جواب «إذا» وما قبلها.', source: { title: 'الطبري والقرطبي في تفسير التكوير ١٤', url: 'https://quran.ksu.edu.sa/tafseer/ibn-tabary-qortobi-saadi/sura81-aya14.html' } },
+  82: { text: 'قال القرطبي في «علمت نفس ما قدمت وأخرت»: وهذا جواب «إذا السماء انفطرت».', source: { title: 'القرطبي في تفسير الانفطار ٤', url: 'https://quran.ksu.edu.sa/tafseer/qortobi/sura82-aya4.html' } },
+  84: { text: 'اختلف المفسرون في الجواب: محذوف يُفهم من السياق (الطبري والبغوي والقرطبي)، أو «يا أيها الإنسان إنك كادح» (بعض نحويي البصرة)، أو «وأذنت» والواو زائدة (الفراء)، أو «فأما من أوتي كتابه بيمينه» (الكسائي، وقال النحاس: أصح ما قيل فيه).', source: { title: 'الطبري والبغوي والقرطبي في تفسير الانشقاق ٥', url: 'https://quran.ksu.edu.sa/tafseer/ibn-baghawy-tabary-qortobi/sura84-aya5.html' } },
+};
 
 export const OPENINGS_LEGEND = 'الكلمة الملوّنة تشترك فيها كل سور البطاقة، والباهتة يشترك فيها بعضها، كما في المصفوفة. والبطاقات على ما جمعه السيوطي، ونصه تحت عنوان النوع أو البطاقة. والنص برواية حفص.';
 

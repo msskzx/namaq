@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import corpus from './quranText/corpus';
 import { SURAH_NAMES } from './surahNames';
 import type { BranchAyah } from './branches';
-import { ITQAN_KIND_NOTES, ITQAN_QUOTES, OPENING_CARDS, OPENING_KINDS, conditionLines, inKind, kindOf, openingFound, soleCard, openingCards, openingKeys, openingLike, type OpeningRow } from './openingKinds';
+import { CONDITION_NOTES, CONDITION_SPANS, ITQAN_KIND_NOTES, ITQAN_QUOTES, OPENING_CARDS, OPENING_KINDS, conditionLines, inKind, kindOf, openingFound, soleCard, openingCards, openingKeys, openingLike, type OpeningRow } from './openingKinds';
 
 const byKey = new Map((corpus as unknown as { ayat: BranchAyah[] }).ayat.map(ayah => [ayah.key, ayah]));
 const words = (key: string) => byKey.get(key)?.words ?? [];
@@ -107,7 +107,9 @@ describe('opening kinds', () => {
   it('keeps the condition and answer spans of al-Takwir, al-Infitar and al-Inshiqaq', () => {
     expect(conditionLines(81).map(l => l.role)).toEqual([...Array(13).fill('condition'), 'answer']);
     expect(conditionLines(82).map(l => l.role)).toEqual([...Array(4).fill('condition'), 'answer']);
-    expect(conditionLines(84).at(-1)!.role).toBe('disputed');
+    // al-Inshiqaq's answer is disputed: its five conditions, no ayah marked as the answer, and every opinion in its note.
+    expect(conditionLines(84).map(l => l.role)).toEqual(Array(5).fill('condition'));
+    expect(Object.keys(CONDITION_NOTES)).toEqual(Object.keys(CONDITION_SPANS));
     expect(conditionLines(1)).toEqual([]);
   });
 });
