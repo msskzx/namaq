@@ -3,7 +3,7 @@ import { useWindowDimensions, View } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { cancelAnimation, useAnimatedReaction, useAnimatedStyle, useDerivedValue, useReducedMotion, useSharedValue, withDelay, withSequence, withTiming } from 'react-native-reanimated';
+import Animated, { cancelAnimation, FadeIn, useAnimatedReaction, useAnimatedStyle, useDerivedValue, useReducedMotion, useSharedValue, withDelay, withSequence, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { ChevronRight, Pause, Play, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
@@ -171,10 +171,12 @@ export default function DarkSea() {
               </View>
             : <>
                 <Animated.View style={[{ alignItems: 'center', gap: 4 }, top]}>
+                  <Animated.View key={shown} entering={FadeIn.duration(450)} style={{ alignSelf: 'stretch', alignItems: 'center', gap: 4 }}>
                   <AyahFlow menu={DARK_SEA_KEY} color={SEA_ART.gold} center style={{ alignSelf: 'stretch' }}>
                     {topWords.map((word, i) => <AyahWords key={i}>{`${i ? ' ' : ''}${word.text}`}</AyahWords>)}
                   </AyahFlow>
                   <Text style={{ color: SEA_ART.muted, fontSize: 13 }}>{name}</Text>
+                  </Animated.View>
                 </Animated.View>
                 <View style={{ flex: 1 }} />
                 <Shade key={page} style={[!step.sayings.length && !step.head && { backgroundColor: 'transparent' }]}>
