@@ -13,7 +13,7 @@ import { useTabRetap } from '@/lib/tabRetap';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { back } from '@/lib/ways';
 import { battleOf } from '@/lib/battles';
-import { courseTitle, type AppBattle } from '@shared/battles/battle';
+import { courseTitle, placeRefs, type AppBattle } from '@shared/battles/battle';
 import BattleMap from '@/components/battles/BattleMap';
 import { battleLine, Counts, Moment, People, Readings, Refs } from '@/components/battles/BattleParts';
 
@@ -39,9 +39,10 @@ export function BattleView({ battle, palette }: { battle: AppBattle; palette: Pa
       {battle.place ? <BattleMap places={[battle.place]} palette={palette} /> : null}
       <View style={{ padding: 14, gap: 6 }}>
         <Text style={{ color: palette.ink, fontSize: 17, textAlign: 'right' }}>{battleLine(battle)}</Text>
-        {battle.place ? <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>موضع تقريبي على خريطة اليوم، من عندنا.</Text>
-          : battle.location ? <Text style={{ color: palette.ink, fontSize: 17, textAlign: 'right' }}>{battle.location.value}</Text> : null}
+        {battle.location ? <Text style={{ color: palette.ink, fontSize: 17, textAlign: 'right' }}>{battle.location.value}</Text> : null}
         <Refs refs={heading} palette={palette} />
+        {/* Where the map pins it, in its book's words (owner, 2026-11-23: every place on the map carries its reference). */}
+        {placeRefs(battle).map(refs => <Refs key={refs[0]?.cite} refs={refs} palette={palette} />)}
         <Readings values={[battle.kind, battle.year, battle.location]} palette={palette} />
       </View>
     </SharedCard>

@@ -48,11 +48,14 @@ const citedOf = (values: readonly ({ refs: AppCite[] } | undefined)[]) =>
   uniqueSources(values.flatMap(value => value?.refs ?? []).map(citeSource));
 /** The pages of the card's head: the battle's kind, year and place. */
 export const battleHeadSources = (battle: AppBattle) => citedOf([battle.kind, battle.year, battle.location]);
-/** The pages of everything the card shows: its head and the numbers. */
-export function battleSources(battle: AppBattle): QuizSource[] {
+/** The head's pages and the books that put the battle's pin where its map shows it (owner, 2026-11-23). */
+export const battleCardSources = (battle: AppBattle) => uniqueSources([...battleHeadSources(battle), ...citedOf([battle.place])]);
+const countsSources = (battle: AppBattle) => {
   const { muslims, others, muslimsKilled, othersKilled } = battleOnCard(battle).counts;
-  return uniqueSources([...battleHeadSources(battle), ...citedOf([muslims, others, muslimsKilled, othersKilled])]);
-}
+  return citedOf([muslims, others, muslimsKilled, othersKilled]);
+};
+/** The pages of everything the card shows: its head, its map and the numbers. */
+export const battleSources = (battle: AppBattle): QuizSource[] => uniqueSources([...battleCardSources(battle), ...countsSources(battle)]);
 /** The battles with a map or numbers to draw, and a page behind them. */
 export const battleItems = (battles: readonly AppBattle[]) =>
   battles.filter(battle => (battle.place || hasCounts(battleOnCard(battle))) && battleSources(battle).length > 0).map(battle => battle.slug);
@@ -118,11 +121,14 @@ export function battleYearSlice(battles: readonly AppBattle[], year: number) {
   if (at < 0) return null;
   return { columns: axis.slice(Math.max(0, at - 1), at + 2), battles: battles.filter(battle => battle.year?.value === year) };
 }
-/** The pages that give the kinds and years of the battles drawn, those of the slice's years. */
+/** The pages that give the kinds and years of the battles drawn, those of the slice's years, and the books that place the year's pins. */
 export function battleYearSources(battles: readonly AppBattle[], year: number): QuizSource[] {
   const slice = battleYearSlice(battles, year);
   const years = new Set(slice?.columns.map(column => column.year));
-  return citedOf(battles.filter(battle => years.has(battle.year?.value as number)).flatMap(battle => [battle.kind, battle.year]));
+  return uniqueSources([
+    ...citedOf(battles.filter(battle => years.has(battle.year?.value as number)).flatMap(battle => [battle.kind, battle.year])),
+    ...citedOf(slice?.battles.map(battle => battle.place) ?? []),
+  ]);
 }
 export const battleYearItems = (battles: readonly AppBattle[]) =>
   [...new Set(battles.flatMap(battle => (typeof battle.year?.value === 'number' && battle.year.refs.length ? [battle.year.value] : [])))]
@@ -138,6 +144,7 @@ export const armiesBattles = (battles: readonly AppBattle[]) =>
   battles.filter(battle => !FITNA_BATTLES.includes(battle.slug) && battle.counts.muslims && battle.counts.others)
     .sort((a, b) => (a.year?.value ?? Infinity) - (b.year?.value ?? Infinity));
 /** Each battle's head and numbers, as its own card names them. */
-export const armiesSources = (battles: readonly AppBattle[]) => uniqueSources(armiesBattles(battles).flatMap(battleSources));
+export const armiesSources = (battles: readonly AppBattle[]) =>
+  uniqueSources(armiesBattles(battles).flatMap(battle => [...battleHeadSources(battle), ...countsSources(battle)]));
 export const armiesItems = (battles: readonly AppBattle[]): string[] =>
   armiesBattles(battles).length > 1 && armiesSources(battles).length ? [...ARMIES_TABS] : [];

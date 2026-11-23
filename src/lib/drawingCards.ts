@@ -18,7 +18,7 @@ import { keptViews, type PlaceVerdicts } from '@shared/quran/prophets/review';
 import verdictData from '@shared/quran/prophets/verdicts.json';
 import type { QuizSource } from '@shared/quiz/sources';
 import {
-  battleHeadSources, battleItems, battleOnCard, eventItems, eventOf, eventSources, nasabPeople, nasabSources, oathItems, oathSources,
+  battleCardSources, battleItems, battleOnCard, eventItems, eventOf, eventSources, nasabPeople, nasabSources, oathItems, oathSources,
   openingItems, openingSources, sceneItems, sceneOf, sceneSources, tiesPeople, tiesSources,
 } from '@shared/drawingCards';
 import { withUnappliedStoryReviews } from '@/lib/quran/curation/storyReviewLog';
@@ -90,7 +90,7 @@ export async function drawingCardOf(kind: string, item: string): Promise<Drawing
   switch (kind as DrawingCardKind) {
     case 'nasab': return { item, kind: 'nasab', person: head(item), nasab: nasabView([item], false), sources: nasabSources(findPerson(item)!, PEOPLE) };
     case 'ties': { const ties = tiesView(item); return ties ? { item, kind: 'ties', person: head(item), ties, sources: tiesSources(GRAPH, item) } : null; }
-    case 'battle': { const battle = BATTLES.find(each => each.slug === item)!; return { item, kind: 'battle', battle: battleOnCard(battle), sources: battleHeadSources(battle) }; }
+    case 'battle': { const battle = BATTLES.find(each => each.slug === item)!; return { item, kind: 'battle', battle: battleOnCard(battle), sources: battleCardSources(battle) }; }
     case 'hadith-scene': {
       const { unit, report, at } = sceneOf(UNITS, item)!;
       return { item, kind: 'hadith-scene', unit: { id: unit.id, book: unit.book, ...(unit.kitab && { kitab: unit.kitab }) }, scenes: report.scenes, at, sources: sceneSources(unit) };

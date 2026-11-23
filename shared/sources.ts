@@ -196,6 +196,42 @@ export const SOURCES: Source[] = [
     uses: [USE.people, USE.stories, USE.battles, { ar: 'الأحاديث', en: 'hadith', href: '/hadith' }], shelf: 'siyar-alam-al-nubala-risalah',
   },
   {
+    id: 'biladi-maalim', group: 'books',
+    title: { ar: 'معجم المعالم الجغرافية في السيرة النبوية', en: 'Mu‘jam al-Ma‘alim al-Jughrafiyya fi al-Sira al-Nabawiyya' },
+    author: { ar: 'عاتق بن غيث البلادي', en: '‘Atiq ibn Ghayth al-Biladi' },
+    edition: 'دار مكة للنشر والتوزيع، مكة المكرمة، الطبعة الأولى ١٤٠٢هـ/١٩٨٢م؛ من نسخة turath.io، ٢٠٢٦-١١-٢٣', link: shamela(9777),
+    licence: {
+      ar: 'توفي المؤلف سنة ١٤٣١هـ/٢٠١٠م. ننقل منه جملة قصيرة منسوبة إليه تعيّن موضع الغزوة اليوم، مع الصفحة والرابط، ولا ننشر الكتاب.',
+      en: 'The author died in 2010. We quote a short, attributed sentence that says where a battle’s place is today, with page and link, and publish nothing more of the book.',
+    },
+    uses: [USE.battles],
+  },
+  {
+    id: 'yaqut-buldan', group: 'books',
+    title: { ar: 'معجم البلدان', en: 'Mu‘jam al-Buldan' }, author: { ar: 'ياقوت الحموي', en: 'Yaqut al-Hamawi' },
+    edition: 'دار صادر، بيروت، الطبعة الثانية ١٩٩٥م، ٧ أجزاء؛ من نسخة turath.io، ٢٠٢٦-١١-٢٣', link: shamela(23735), licence: PUBLIC_DOMAIN, uses: [USE.battles],
+  },
+  {
+    id: 'shurrab-maalim', group: 'books',
+    title: { ar: 'المعالم الأثيرة في السنة والسيرة', en: 'al-Ma‘alim al-Athira fi al-Sunna wa-l-Sira' }, author: { ar: 'محمد محمد حسن شرّاب', en: 'Muhammad Hasan Shurrab' },
+    edition: 'دار القلم والدار الشامية، دمشق وبيروت، الطبعة الأولى ١٤١١هـ؛ من نسخة turath.io، ٢٠٢٦-١١-٢٣', link: shamela(23677),
+    licence: {
+      ar: 'كتاب حديث. ننقل منه جملة قصيرة منسوبة إليه تعيّن موضعًا، مع الصفحة والرابط، ولا ننشر الكتاب.',
+      en: 'A modern book. We quote a short, attributed sentence that places a site, with page and link, and publish nothing more of it.',
+    },
+    uses: [USE.battles],
+  },
+  {
+    id: 'lughat-al-arab', group: 'books',
+    title: { ar: 'مجلة لغة العرب', en: 'Lughat al-‘Arab (journal)' }, author: { ar: 'أنستاس ماري الكرملي', en: 'Anastase-Marie al-Karmali' },
+    edition: 'بغداد، مطبعة الآداب، ٩ أجزاء؛ من نسخة turath.io، ٢٠٢٦-١١-٢٣', link: shamela(36540),
+    licence: {
+      ar: 'توفي صاحبها سنة ١٣٦٦هـ/١٩٤٧م. ننقل منها جملة قصيرة منسوبة إليها مع الجزء والصفحة والرابط.',
+      en: 'Its editor died in 1947. We quote a short, attributed sentence with volume, page and link.',
+    },
+    uses: [USE.battles],
+  },
+  {
     id: 'zad-al-maad', group: 'books',
     title: { ar: 'زاد المعاد في هدي خير العباد', en: 'Zad al-Ma‘ad fi Hady Khayr al-‘Ibad' }, author: { ar: 'ابن قيم الجوزية', en: 'Ibn Qayyim al-Jawziyya' },
     edition: 'تحقيق شعيب الأرنؤوط وعبد القادر الأرنؤوط، مؤسسة الرسالة، الإصدار الثاني، الطبعة الأولى ١٤١٧هـ/١٩٩٦م', link: shamela(21713), licence: PUBLIC_DOMAIN,
@@ -472,7 +508,17 @@ export const SOURCES: Source[] = [
     id: 'natural-earth', group: 'data', files: ['shared/data/battles/land.json'],
     title: { ar: 'Natural Earth: اليابسة بمقياس ١:٥٠ مليون', en: 'Natural Earth: 1:50m land' },
     edition: 'ne_50m_land، مقصوصة على ما بين مصر وفارس', link: { url: 'https://www.naturalearthdata.com', label: 'naturalearthdata.com' },
-    licence: { ar: 'ملك عام. مواضع الغزوات على الخريطة من عندنا، تقريبية.', en: 'Public domain. Where each battle is pinned is our own, approximate.' }, uses: [USE.battles],
+    licence: { ar: 'ملك عام.', en: 'Public domain.' }, uses: [USE.battles],
+  },
+  {
+    id: 'geonames', group: 'data', files: ['shared/battles/places.ts'],
+    title: { ar: 'GeoNames: معجم الأماكن الجغرافية', en: 'GeoNames geographical database' },
+    edition: 'ملفات البلدان من download.geonames.org، ٢٠٢٦-١١-٢٣؛ لكل موضع رقم سجله', link: { url: 'https://www.geonames.org', label: 'geonames.org' },
+    licence: {
+      ar: 'رخصة المشاع الإبداعي، النسبة ٤٫٠ (CC BY 4.0). منها إحداثيات المواضع التي تسمّيها الكتب على خرائط الغزوات.',
+      en: 'Creative Commons Attribution 4.0 (CC BY 4.0). The coordinates of the places the books name, on the battle maps.',
+    },
+    uses: [USE.battles],
   },
   {
     id: 'quranic-arabic-corpus', group: 'data', files: ['shared/data/quran/irab.js', 'shared/data/quran/irab.d.ts'],
