@@ -21,6 +21,8 @@ export type Source = {
   shelf?: string;
   /** The data files and fonts built from it, as paths from the repo root; a path ending in / is a whole folder (guard proposal 24). */
   files?: string[];
+  /** Used by the website alone, so the app's own sources page leaves it out. */
+  websiteOnly?: true;
 };
 
 export const GROUPS: { group: SourceGroup; title: Bi }[] = [
@@ -107,12 +109,12 @@ export const SOURCES: Source[] = [
   {
     id: 'sahih-bukhari', group: 'books', files: ['shared/data/hadith/bukhari.json'],
     title: { ar: 'صحيح البخاري', en: 'Sahih al-Bukhari' }, author: { ar: 'محمد بن إسماعيل البخاري', en: 'al-Bukhari' },
-    edition: 'الطبعة السلطانية، بولاق ١٣١١هـ، مصوّرة دار طوق النجاة ١٤٢٢هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1681), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih, USE.stories],
+    edition: 'الطبعة السلطانية، بولاق ١٣١١هـ، مصوّرة دار طوق النجاة ١٤٢٢هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1681), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih, USE.stories, USE.people],
   },
   {
     id: 'sahih-muslim', group: 'books', files: ['shared/data/hadith/muslim.json'],
     title: { ar: 'صحيح مسلم', en: 'Sahih Muslim' }, author: { ar: 'مسلم بن الحجاج النيسابوري', en: 'Muslim' },
-    edition: 'تحقيق محمد فؤاد عبد الباقي، مطبعة عيسى البابي الحلبي، القاهرة ١٣٧٤هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1727), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih, USE.stories],
+    edition: 'تحقيق محمد فؤاد عبد الباقي، مطبعة عيسى البابي الحلبي، القاهرة ١٣٧٤هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1727), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih, USE.stories, USE.people],
   },
   {
     id: 'kawkab-wahhaj', group: 'books', files: ['data/history/sources/kawkab-wahhaj/'],
@@ -191,7 +193,7 @@ export const SOURCES: Source[] = [
     id: 'siyar', group: 'books',
     title: { ar: 'سير أعلام النبلاء', en: 'Siyar A‘lam al-Nubala’' }, author: { ar: 'شمس الدين الذهبي', en: 'al-Dhahabi' },
     edition: 'مؤسسة الرسالة، الطبعة الثالثة، ١٤٠٥هـ/١٩٨٥م', link: shamela(10906), licence: PUBLIC_DOMAIN,
-    uses: [USE.people, { ar: 'الأحاديث', en: 'hadith', href: '/hadith' }], shelf: 'siyar-alam-al-nubala-risalah',
+    uses: [USE.people, USE.stories, USE.battles, { ar: 'الأحاديث', en: 'hadith', href: '/hadith' }], shelf: 'siyar-alam-al-nubala-risalah',
   },
   {
     id: 'zad-al-maad', group: 'books',
@@ -518,18 +520,30 @@ export const SOURCES: Source[] = [
     licence: { ar: 'SIL Open Font License 1.1', en: 'SIL Open Font License 1.1' }, uses: [USE.everywhere],
   },
   {
-    id: 'kitab', group: 'fonts',
+    id: 'kitab', group: 'fonts', websiteOnly: true,
     title: { ar: 'خط كتاب (للصيغ مثل ﷺ)', en: 'Kitab (honorific signs such as ﷺ)' }, author: { ar: 'مشروع كاتب', en: 'The Katib Project' },
     link: { url: 'https://github.com/quranacademy/kitab-font', label: 'quranacademy/kitab-font' },
     licence: { ar: 'SIL Open Font License 1.1', en: 'SIL Open Font License 1.1' }, uses: [USE.people],
   },
   {
-    id: 'geist-mono', group: 'fonts',
+    id: 'geist-mono', group: 'fonts', websiteOnly: true,
     title: { ar: 'Geist Mono', en: 'Geist Mono' }, author: { ar: 'Vercel', en: 'Vercel' },
     link: { url: 'https://github.com/vercel/geist-font', label: 'vercel/geist-font' },
     licence: { ar: 'SIL Open Font License 1.1', en: 'SIL Open Font License 1.1' }, uses: [{ ar: 'الأرقام في الموقع', en: 'numbers on the website' }],
   },
   // Code
+  {
+    id: 'expo', group: 'code',
+    title: { ar: 'Expo', en: 'Expo' }, author: { ar: 'Expo', en: 'Expo' },
+    link: { url: 'https://github.com/expo/expo', label: 'expo/expo' },
+    licence: { ar: 'MIT', en: 'MIT' }, uses: [{ ar: 'تطبيق الهاتف كله، وتحديثاته', en: 'the whole phone app, and its updates' }],
+  },
+  {
+    id: 'react-native', group: 'code',
+    title: { ar: 'React Native', en: 'React Native' }, author: { ar: 'Meta', en: 'Meta' },
+    link: { url: 'https://github.com/facebook/react-native', label: 'facebook/react-native' },
+    licence: { ar: 'MIT', en: 'MIT' }, uses: [{ ar: 'تطبيق الهاتف كله', en: 'the whole phone app' }],
+  },
   {
     id: 'adhan', group: 'code',
     title: { ar: 'adhan-js', en: 'adhan-js' }, author: { ar: 'Batoul Apps', en: 'Batoul Apps' },
@@ -550,7 +564,7 @@ export const SOURCES: Source[] = [
     licence: { ar: 'MIT', en: 'MIT' }, uses: [USE.darkSea],
   },
   {
-    id: 'font-awesome', group: 'code',
+    id: 'font-awesome', group: 'code', websiteOnly: true,
     title: { ar: 'أيقونات Font Awesome المجانية', en: 'Font Awesome Free icons' },
     link: { url: 'https://fontawesome.com/license/free', label: 'fontawesome.com' },
     licence: { ar: 'الأيقونات CC BY 4.0، والشيفرة MIT.', en: 'Icons CC BY 4.0, code MIT.' }, uses: [{ ar: 'صفحات الموقع', en: 'website pages' }],

@@ -7,19 +7,69 @@ import type { Bi } from './sources';
  */
 
 export const ABOUT_INTRO: Bi = {
-  ar: 'نَمَق تطبيق تعليمي موجّه للمسلمين وطلاب العلم، والعربية لغته الأساسية. يعين على دراسة القرآن الكريم والحديث النبوي وتاريخ صدر الإسلام من خلال نصوص المصادر والمقارنة بينها، واستكشاف الشخصيات والعلاقات بينها بصريًا.',
-  en: 'Namaq is an Arabic-first learning application for Muslims and students of Islamic knowledge. It helps readers study the Quran, Hadith, and early Islamic history through source texts, comparisons, and visual exploration of people and their relationships.',
+  ar: 'نَمَق إطار يجمع الكتب الكبرى في علوم الشريعة لطلاب العلم ولكل مسلم يريد أن يتعلم دينه من مصادره، والعربية لغته. يعرض نصوصها بصريًا، ومعها أدوات تعين على الفهم والحفظ، وكل ما فيه منسوب إلى كتابه وصفحته.',
+  en: 'Namaq is a framework built on the great books of the Islamic sciences, for students of knowledge and every Muslim who wants to learn the religion from its sources, Arabic first. It shows their texts visually, with tools that help understanding and memorisation, and everything in it points to its book and page.',
 };
 
-/** The references section. No review labels anywhere (owner, 2026-11-17), so it says how values are checked, not that each carries a status. */
-export const ABOUT_REFERENCES: Bi[] = [
+/** What the phone app holds, one science to a line (the about page in the app, mobile/src/screens/info.tsx). */
+export const ABOUT_CONTENTS: { title: Bi; body: Bi }[] = [
   {
-    ar: 'المصادر التي اعتمدنا عليها في بناء نمق ومحتواه التاريخي. نستمد الشخصيات والأحداث من كتاب «سير أعلام النبلاء» للذهبي، ونحفظ نص كل ترجمة صفحةً صفحةً من نسخ رقمية منشورة، فيُحال كل ما يُعرض في الصفحة الشخصية إلى الصفحة التي أُخذ منها.',
-    en: 'The sources used to build Namaq and its historical content. People and events are drawn from Siyar A‘lam al-Nubala’ by al-Dhahabi. The text of each entry is kept page by page from published digital editions, and every fact on a profile points to the page it was taken from.',
+    title: { ar: 'القرآن', en: 'Quran' },
+    body: {
+      ar: 'المصحف برواية حفص، ومعه التفسير، ومعاني الكلمات، والإعراب، والبلاغة، والقراءات، والمتشابه اللفظي، وتناسب الآيات والسور، والاستماع إلى التلاوة، وما يعين على الحفظ.',
+      en: 'The mushaf in the riwaya of Hafs, with tafsir, word meanings, i‘rab, balagha, the qira’at, verbal mutashabih, the coherence of ayat and surahs, recitations to listen to, and help with memorising.',
+    },
   },
   {
-    ar: 'تُضاف المعلومات على دفعات، ولا تُنشر الدفعة إلا بعد اعتمادها. وبعض القيم جاءت من ملاحظات سابقة بلا إحالات، وتُطابَق مع نص الكتاب كلما بلغتها دفعة جديدة.',
-    en: 'Information is added in batches, and a batch is published only after it is approved. Some values came from earlier notes with no citations; they are checked against the book as new batches reach them.',
+    title: { ar: 'الحديث', en: 'Hadith' },
+    body: {
+      ar: 'الصحيحان كاملين بكتبهما وأبوابهما، والأربعون النووية ورواياتها في كتب الحديث، وشرح ابن رجب عليها.',
+      en: 'The two Sahihs whole, with their kitabs and babs, and al-Nawawi’s Forty with their records in the hadith books and Ibn Rajab’s commentary.',
+    },
+  },
+  {
+    title: { ar: 'التراجم', en: 'Biographies' },
+    body: {
+      ar: 'الصحابة من «سير أعلام النبلاء» للذهبي، بأنسابهم وصلاتهم وما شهدوه.',
+      en: 'The Companions from al-Dhahabi’s Siyar A‘lam al-Nubala’, with their lineages, ties and what they witnessed.',
+    },
+  },
+  {
+    title: { ar: 'السيرة', en: 'Sira' },
+    body: {
+      ar: 'قصص من الصحيحين يحكيها أصحابها، والغزوات على الخريطة، ومشاهد تصوّر آيات بأقوال المفسرين.',
+      en: 'Stories from the two Sahihs told by the people in them, the battles on a map, and scenes that picture ayat through what the mufassirun said.',
+    },
+  },
+  {
+    title: { ar: 'الأذكار والصلاة', en: 'Adhkar and prayer' },
+    body: {
+      ar: 'الأذكار من كتاب النووي مع تخريج ابن حجر، ومواقيت الصلاة والقبلة والتاريخ الهجري.',
+      en: 'The adhkar from al-Nawawi’s book with Ibn Hajar’s takhrij, prayer times, the qibla and the Hijri date.',
+    },
+  },
+  {
+    title: { ar: 'الاختبارات', en: 'Quizzes' },
+    body: {
+      ar: 'اختبارات في كل علم منها، وحدك أو مع غيرك، ومع كل جواب مرجعه.',
+      en: 'Quizzes in each of these sciences, alone or with others, and every answer carries its reference.',
+    },
+  },
+];
+
+/** How content is chosen and cited (content rules in team memory). No review labels anywhere (owner, 2026-11-17). */
+export const ABOUT_REFERENCES: Bi[] = [
+  {
+    ar: 'نعرض الثابت المشهور عند أهل العلم، والأصح أولًا. وما اختلفوا فيه يُنسب كل قول فيه إلى قائله مع مرجعه.',
+    en: 'We show what is well established among the scholars, the most authentic first. Where they differ, each view is attributed to whoever held it, with its reference.',
+  },
+  {
+    ar: 'لا نحكم على حديث من عندنا: الأحكام منسوبة إلى أصحابها. ولا نصحّح نصًا إلا من مصدر مسمّى.',
+    en: 'We grade no hadith ourselves: every grading is attributed to the scholar who gave it. We correct a text only from a named source.',
+  },
+  {
+    ar: 'كل بطاقة وصفحة تحمل مرجعها. اضغط اسم الكتاب لترى الجزء والصفحة ورابط الطبعة التي نقلنا منها.',
+    en: 'Every card and page carries its reference. Tap the book’s name to see the volume, page and a link to the edition it was taken from.',
   },
 ];
 
@@ -48,8 +98,8 @@ export const NAMAQ_NAME: { ar: { verb: NameEntry; noun: NameEntry }; en: { verb:
 export const NAMAQ_FORMS = ['نَمَق', 'يَنمُق', 'نَمْقًا', 'نامِق', 'مَنْموق', 'نَمَّقَ', 'ينمِّق', 'تنميقًا', 'مُنمِّق', 'نَمْق', 'نَمَق'];
 
 export const ATTRIBUTIONS_INTRO: Bi = {
-  ar: 'الأعمال والبيانات التي اعتمد عليها نمق، ولمن يعود كل منها، وبأي ترخيص.',
-  en: 'The works and data Namaq relies on, whom each one belongs to, and under what licence.',
+  ar: 'الكتب والبيانات والخطوط والمكتبات التي يعتمد عليها نمق، ولمن يعود كل منها، والطبعة التي ننقل منها، وبأي ترخيص، وأين تُستعمل.',
+  en: 'The books, data, fonts and libraries Namaq relies on, whom each one belongs to, the edition we quote, under what licence, and where each is used.',
 };
 
 /** What a source adds beyond its card: Siyar's scans and OCR text, the corpus's counting notes. */
@@ -88,11 +138,12 @@ export const CONTACT_EMAIL = 'msskzx@gmail.com';
  * website, which has a cookie and analytics; the app has neither.
  */
 export const APP_PRIVACY: { title: string; body: string }[] = [
-  { title: 'ما يحفظه التطبيق', body: 'الإعدادات، والمحفوظات، وتأملاتك، وما نسيته، وما تحفظه من القرآن: كلها على هاتفك وحده، ولا تُرسل إلى أحد. تُمحى إذا حذفت التطبيق.' },
-  { title: 'الموقع', body: 'يُطلب موقعك لمواقيت الصلاة واتجاه القبلة فقط، ويُحسب كل ذلك على الهاتف، ولا يُرسل الموقع إلى أحد. يعمل التطبيق كله إن رفضت.' },
-  { title: 'التنبيهات', body: 'تذكير الأذكار والأذان يُجدول على هاتفك، ويُوقف من صفحته متى شئت.' },
-  { title: 'الإنترنت', body: 'يعمل التطبيق بلا إنترنت، ويتصل في هذه الحالات وحدها: عند فتحه يسأل خوادم Expo عن تحديث له؛ والاختبار الجماعي يرسل الاسم الذي تكتبه ورقمًا عشوائيًا للاعب إلى خادم نمق لتلك الجولة؛ وتنزيل الكتب يجلبها من مستودع نمق على GitHub؛ والاستماع إلى التلاوات يجلبها من Quran Foundation (verses.quran.com) ومن quranicaudio.com، ويسأل موقع نمق عن ملفات التلاوة حين تنزّلها لتبقى محدّثة؛ والروابط الخارجية تفتح في المتصفح. ولا يُرسل مع شيء من ذلك ما حفظته على هاتفك.' },
-  { title: 'التحليلات والحسابات', body: 'لا تحليلات ولا تتبّع في التطبيق، ولا حسابات ولا تسجيل دخول، ولا يجمع أي معلومات شخصية.' },
+  { title: 'ما يحفظه التطبيق', body: 'إعداداتك، والمحفوظات، وتأملاتك، وما تحفظه من القرآن، وموضع قراءتك، واختياراتك في الرئيسية، والكتب والتلاوات التي تنزّلها: كلها على هاتفك وحده، ولا تُرسل إلى أحد. تُمحى إذا حذفت التطبيق.' },
+  { title: 'الحسابات والتحليلات', body: 'لا حسابات ولا تسجيل دخول، ولا تحليلات ولا تتبّع ولا إعلانات، ولا يجمع التطبيق أي معلومات شخصية.' },
+  { title: 'الموقع والبوصلة', body: 'يُطلب موقعك وأنت تستعمل التطبيق لمواقيت الصلاة واتجاه القبلة فقط، وتُقرأ البوصلة لاتجاه القبلة. يُحسب ذلك كله على الهاتف، ويُحفظ الموقع عليه وحده مقرّبًا إلى نحو كيلومتر، ولا يُرسل إلى أحد. ويعمل التطبيق كله إن رفضت.' },
+  { title: 'التنبيهات', body: 'تذكير الأذكار والأذان يُجدول على هاتفك نفسه، لا من خادم، ويُوقف من صفحته متى شئت.' },
+  { title: 'المشاركة والصور', body: 'المشاركة تصنع الصورة أو المقطع أو النص على هاتفك، ثم تفتح قائمة المشاركة في جهازك، فلا يذهب شيء إلا إلى من تختاره. وإن اخترت حفظ الصورة، طلب التطبيق إذن الإضافة إلى مكتبة الصور وحده، ولا يقرأ صورك.' },
+  { title: 'الإنترنت', body: 'يعمل التطبيق بلا إنترنت، ويتصل في هذه الحالات وحدها: عند فتحه يسأل خوادم Expo عن تحديث له؛ وتنزيل الكتب يجلبها من مستودع نمق على GitHub؛ والاستماع إلى التلاوات يجلبها من Quran Foundation (verses.quran.com) ومن quranicaudio.com، ويسأل موقع نمق عن ملفات التلاوة حين تنزّلها لتبقى محدّثة؛ والاختبار الجماعي يرسل الاسم الذي تكتبه ورقمًا عشوائيًا للاعب إلى خادم نمق لتلك الجولة؛ والروابط الخارجية تفتح في المتصفح. ولا يُرسل مع شيء من ذلك ما حفظته على هاتفك.' },
   { title: 'اتصل بنا', body: `لأي أسئلة حول هذه السياسة، راسلنا على ${CONTACT_EMAIL}` },
   { title: 'تحديثات هذه السياسة', body: 'إذا أضفنا ميزة تغيّر ما نحفظه أو ما يُرسل، تُحدَّث هذه الصفحة في التغيير نفسه.' },
 ];

@@ -1,7 +1,7 @@
 import { createContext, isValidElement, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, Dimensions, useWindowDimensions, View } from 'react-native';
 import { router, useFocusEffect, type Href } from 'expo-router';
-import { CalendarRange, ChartNoAxesColumn, Bookmark, Check, CircleCheck, CircleMinus, Clock, Compass, EyeOff, LibraryBig, Network, Plus, LightbulbOff, ListTree, Scale, TextAlignEnd, ScrollText, Swords, Users, type LucideProps } from 'lucide-react-native';
+import { CalendarRange, ChartNoAxesColumn, Bookmark, Check, CircleCheck, CircleMinus, Clock, Compass, EyeOff, LibraryBig, Network, Plus, LightbulbOff, ListTree, Scale, TextAlignEnd, Swords, Users, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, toggleForgotten, mostForgotten, readAyahMarks, readDueMarks, rememberAyah, restoreMark, subscribeDueMarks, type AyahMark } from '@shared/ayahMarks';
@@ -1269,7 +1269,7 @@ function SiraPost({ id, palette }: { id: string; palette: Palette }) {
   const drawn = drawnReport(report);
   const open = () => { continueAfter('sira', id); toTab({ pathname: '/story', params: { slug: story.slug } }); };
   return (
-    <Post palette={palette} head={<PostHead Icon={ScrollText} title="من قصص السيرة" sub={story.name} open={topic('/stories', 'افتح قصص السيرة')} palette={palette} />}
+    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.stories} title="من قصص السيرة" sub={story.name} open={topic('/stories', 'افتح قصص السيرة')} palette={palette} />}
       open={<OpenButton label={`افتح ${story.name}`} onPress={open} palette={palette} />}
       share={drawn ? <StoryShare story={story} report={report} palette={palette} /> : undefined}
       source={reportSource(report, drawn)}>
