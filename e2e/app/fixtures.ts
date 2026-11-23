@@ -83,6 +83,20 @@ export async function longPress(page: Page, target: Locator, ms = 900) {
   await page.mouse.up();
 }
 
+/**
+ * The indices of a locator's matches that sit wholly inside the screen's width. The tree and compare pagers keep their
+ * neighbouring cards drawn beside the screen, so a page holds their buttons too.
+ */
+export async function onScreen(page: Page, target: Locator): Promise<number[]> {
+  const width = page.viewportSize()!.width;
+  const shown: number[] = [];
+  for (let i = 0; i < await target.count(); i++) {
+    const box = await target.nth(i).boundingBox();
+    if (box && box.x >= 0 && box.x + box.width <= width) shown.push(i);
+  }
+  return shown;
+}
+
 /** The tab bar at the bottom (mobile/src/ui/TabBar.tsx). */
 export const tab = (page: Page, name: 'القرآن' | 'الحديث' | 'الرئيسية' | 'التراجم' | 'الاختبارات') => page.getByRole('tab', { name, exact: true });
 
