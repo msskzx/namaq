@@ -8,7 +8,6 @@ import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Card from '@/ui/Card';
 import Chip from '@/ui/Chip';
-import Button from '@/ui/Button';
 import Empty from '@/ui/Empty';
 import LoadingDots from '@/ui/LoadingDots';
 import { usePalette, type Palette } from '@/lib/theme';
@@ -16,10 +15,15 @@ import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useTabRetap } from '@/lib/tabRetap';
 import { FORTY } from '@/lib/hadith';
-import { SAHIH, SAHIH_SLUGS, lastOpened, useSahihTexts } from '@/lib/sahih';
+import { SAHIH, SAHIH_SLUGS, lastRead, useSahihTexts, type LastRead } from '@/lib/sahih';
 import { bookState, useBooks } from '@/lib/books';
 import { findHadith } from '@shared/sahih';
-import { opening } from '@/components/Sahih';
+import { SahihShape, opening } from '@/components/Sahih';
+import { CardWithRow } from '@/ui/Card';
+import OpenButton from '@/ui/OpenButton';
+import QuoteBar from '@/ui/QuoteBar';
+import TapRow from '@/ui/TapRow';
+import NumberGrid from '@/ui/NumberGrid';
 
 /** One of the Forty in a list: his number, the Companion, the opening of his text and the books he names. */
 export function FortyCard({ entry, palette, onPress }: { entry: FortyEntry; palette: Palette; onPress: () => void }) {
@@ -41,19 +45,33 @@ export const openBook = (book: SahihSlug | 'forty' | 'added') => router.push({ p
 export const openKitab = (book: SahihSlug, kitab: number) => router.push({ pathname: '/hadith-kitab', params: { book, kitab: String(kitab) } });
 export const openSahih = (book: SahihSlug, n: number) => router.push({ pathname: '/hadith-sahih', params: { book, n: String(n) } });
 
-/** A book on the tab: its title, author and size; the card opens its kitabs, «تابع» the last hadith read in it. */
-function BookCard({ title, by, size, last, onOpen, onContinue, palette }: {
-  title: string; by: string; size: string; last?: string; onOpen: () => void; onContinue?: () => void; palette: Palette;
-}) {
+/** The hadith read last, its narrator and the opening of its words, with «افتح» back to it (owner, 2026-11-23: sketch hadith-design). */
+function ContinueCard({ read, palette }: { read: LastRead; palette: Palette }) {
+  const book = SAHIH[read.slug];
+  const kitab = placeOf(book, read.n)?.kitab;
+  const name = `${book.title} ${num(read.n)}`;
   return (
-    <View style={{ gap: 8 }}>
-      <Card palette={palette} gap={4} accessibilityRole="link" accessibilityLabel={title} onPress={onOpen}>
-        <Text style={{ color: palette.ink, fontSize: 20, textAlign: 'right' }}>{title}</Text>
-        <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{by}</Text>
-        <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{size}</Text>
-      </Card>
-      {onContinue && last && <View style={{ flexDirection: 'row' }}><Button label={`تابع: ${last}`} onPress={onContinue} /></View>}
-    </View>
+    <CardWithRow palette={palette} gap={6} lead={<OpenButton label={`افتح ${name}`} onPress={() => openSahih(read.slug, read.n)} />}
+      source={[{ line: `${name}${kitab ? `، ${kitab.title}` : ''}`, quotes: [{ text: `${book.title}، ${book.edition}` }], links: [{ label: 'الكتاب في المكتبة الشاملة', url: `https://shamela.ws/book/${book.shamela}` }] }]}>
+      <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>تابع من حيث وقفت</Text>
+      <QuoteBar by={read.from ? `${read.from}:` : undefined} pieces={[{ text: read.words.trim() }]} lines={3} palette={palette} />
+    </CardWithRow>
+  );
+}
+
+/** A Forty on the tab: its name and author, then its numbers in rings, each opening its hadith. */
+function FortyShape({ title, by, numbers, onOpenBook, tone, palette }: { title: string; by: string; numbers: number[]; onOpenBook: () => void; tone?: string; palette: Palette }) {
+  return (
+    <Card palette={palette} gap={12}>
+      <TapRow role="link" label={title} onPress={onOpenBook}>
+        <View style={{ flex: 1, gap: 2 }}>
+          <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 24, textAlign: 'right' }}>{title}</Text>
+          <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{by}</Text>
+        </View>
+      </TapRow>
+      <NumberGrid numbers={numbers} tone={tone} label={n => FORTY.entries.find(entry => entry.n === n)?.heading ?? num(n)} palette={palette}
+        onOpen={n => router.push({ pathname: '/hadith-forty', params: { n: String(n) } })} />
+    </Card>
   );
 }
 
@@ -82,8 +100,9 @@ function Hit({ hit, line, palette }: { hit: SahihHit; line: string; palette: Pal
 }
 
 /**
- * The hadith tab (owner's sketch, 2026-11-19): one search over both Sahihs' babs and hadith, in the top bar with no page title, as on every tab (owner, 2026-11-22), then a card for each book,
- * Sahih al-Bukhari, Sahih Muslim and al-Nawawi's Forty, each opening its kitabs, with «تابع» to the last hadith read.
+ * The hadith tab: one search over both Sahihs' babs and hadith, in the top bar with no page title, as on every tab (owner,
+ * 2026-11-22); then «تابع» on the hadith read last, each Sahih's shape (its kitabs as bars, a touch opening one), and the
+ * Forty and Ibn Rajab's eight as numbers (owner, 2026-11-23: sketch hadith-design).
  */
 export default function HadithScreen() {
   const palette = usePalette();
@@ -99,8 +118,9 @@ export default function HadithScreen() {
   const [drawn, setDrawn] = useState({ typed: '', count: SEARCH_STEP });
   const count = drawn.typed === typed ? drawn.count : SEARCH_STEP;
   const missing = SAHIH_SLUGS.filter(slug => bookState(slug) !== 'on');
-  // «تابع» reads the last hadith again each time the tab comes back into view.
+  // «تابع» and the mark on each book read the last hadith again each time the tab comes back into view.
   const [, setSeen] = useState(0);
+  const read = lastRead();
   useFocusEffect(useCallback(() => { setSeen(was => was + 1); }, []));
   const scrolled = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     onScroll(event);
@@ -128,16 +148,16 @@ export default function HadithScreen() {
             : !found.hadith.length && <Empty text={missing.length === SAHIH_SLUGS.length ? 'نزّل الصحيحين من المكتبة ليبحث في نص الأحاديث' : 'لا حديث فيه هذه الكلمات'} palette={palette} />}
           {missing.length > 0 && missing.length < SAHIH_SLUGS.length && <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{`نزّل ${SAHIH[missing[0]].title} من المكتبة ليبحث فيه أيضًا`}</Text>}
         </> : <>
-          {SAHIH_SLUGS.map(slug => {
-            const book = SAHIH[slug];
-            const last = lastOpened(slug);
-            const kitab = last ? placeOf(book, last)?.kitab : undefined;
-            const count = book.kitabs[book.kitabs.length - 1].to;
-            return <BookCard key={slug} title={book.title} by={`${book.author} (ت ${num(book.died)}هـ)`} size={`${num(book.kitabs.length)} كتابًا، ${num(count)} حديثًا`}
-              last={last && kitab ? `${num(last)}، ${kitab.title}` : undefined} onOpen={() => openBook(slug)} onContinue={last ? () => openSahih(slug, last) : undefined} palette={palette} />;
-          })}
-          <BookCard title={FORTY.books.nawawi.title} by={`يحيى بن شرف النووي (ت ${num(676)}هـ)`} size={`${num(FORTY_COUNT)} حديثًا`} onOpen={() => openBook('forty')} palette={palette} />
-          <BookCard title={ADDED_TITLE} by={`ابن رجب الحنبلي (ت ${num(795)}هـ)، في ${FORTY.books.ibnrajab.title}`} size={`${num(ADDED_COUNT)} أحاديث`} onOpen={() => openBook('added')} palette={palette} />
+          {read && <ContinueCard read={read} palette={palette} />}
+          {SAHIH_SLUGS.map(slug => (
+            <Card key={slug} palette={palette}>
+              <SahihShape book={SAHIH[slug]} onOpenBook={() => openBook(slug)} onOpenKitab={kitab => openKitab(slug, kitab)} palette={palette} />
+            </Card>
+          ))}
+          <FortyShape title={FORTY.books.nawawi.title} by={`يحيى بن شرف النووي (ت ${num(676)}هـ)، ${num(FORTY_COUNT)} حديثًا`}
+            numbers={FORTY.entries.filter(entry => !entry.source).map(entry => entry.n)} onOpenBook={() => openBook('forty')} palette={palette} />
+          <FortyShape title={ADDED_TITLE} by={`ابن رجب الحنبلي (ت ${num(795)}هـ)، في ${FORTY.books.ibnrajab.title}، ${num(ADDED_COUNT)} أحاديث`}
+            numbers={FORTY.entries.filter(entry => entry.source === 'ibnrajab').map(entry => entry.n)} onOpenBook={() => openBook('added')} tone={palette.green} palette={palette} />
         </>}
       </ScrollView>
     </View>

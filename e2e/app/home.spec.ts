@@ -1,4 +1,5 @@
 import { expect, open, readerPage, reciteBarsHidden, returningUser, stored, test } from './fixtures';
+import type { Locator } from '@playwright/test';
 import { surahName as S } from '../../shared/quran/surahNames';
 import * as adhan from 'adhan';
 import { DEFAULT_PRAYER_SETTINGS, prayerDay, type Adhan } from '../../shared/prayer';
@@ -92,18 +93,38 @@ test.describe('a new user', () => {
 
       test('the tree card is the branches tree with one tree, and opens it on the branches tab', async ({ page }) => {
         await open(page, '/');
-        const head = page.getByRole('heading', { name: 'من متشابهات القرآن', exact: true }).first();
+        // A card the owner keeps as its matrix only (a book's entry whose ayat share no word) has no tree button, so the
+        // card asked about is the first that can show its tree.
+        const heads = page.getByRole('heading', { name: 'من متشابهات القرآن', exact: true });
+        await expect(heads.first()).toBeAttached();
+        const postOf = (head: Locator) => head.locator('xpath=ancestor::div[.//*[@aria-label="افتح الشجرة في متشابهات القرآن"]][1]');
+        let head: Locator | undefined;
+        for (let i = 0; i < await heads.count() && !head; i++) {
+          if (await postOf(heads.nth(i)).getByRole('button', { name: 'عرض الشجرة' }).count()) head = heads.nth(i);
+        }
+        if (!head) throw new Error('no tree card in the feed can show its tree');
+        const post = postOf(head);
         await head.scrollIntoViewIfNeeded();
         // The card's head names where the tree's ayat are, surah first; the row's open button (the card's one way there)
         // opens the branches tab on that same tree.
         const places = (await head.locator('xpath=following-sibling::*[1]').textContent())!.trim();
         const surah = places.match(/^[^٠-٩]+/)![0].trim();
-        const post = head.locator('xpath=ancestor::div[.//*[@aria-label="افتح الشجرة في متشابهات القرآن"]][1]');
         await post.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' }).first().click();
         await expect(page).toHaveURL(/\/branches/);
         await expect(page.getByLabel(/^الشجرة \S+ من /)).toBeAttached();
-        // It opens as its matrix there too; its own button shows the tree, whose boxes name the surahs.
-        await page.getByRole('button', { name: 'عرض الشجرة' }).filter({ visible: true }).first().click();
+        // It opens as its matrix there too; its own button shows the tree, whose boxes name the surahs. The pager keeps its
+        // neighbours drawn beside the screen, so the button pressed is the one on screen.
+        const buttons = page.getByRole('button', { name: 'عرض الشجرة' });
+        const width = page.viewportSize()!.width;
+        const onScreen = async () => {
+          for (let i = 0; i < await buttons.count(); i++) {
+            const box = await buttons.nth(i).boundingBox();
+            if (box && box.x >= 0 && box.x + box.width <= width) return i;
+          }
+          return -1;
+        };
+        await expect.poll(onScreen).toBeGreaterThanOrEqual(0);
+        await buttons.nth(await onScreen()).click();
         await expect(page.getByRole('button', { name: `سورة ${surah}` }).first()).toBeAttached();
       });
 

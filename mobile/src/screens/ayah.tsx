@@ -10,6 +10,9 @@ import IconButton from '@/ui/IconButton';
 import OpenButton from '@/ui/OpenButton';
 import PostHead from '@/ui/PostHead';
 import { CardWithRow } from '@/ui/Card';
+import FactCells from '@/ui/FactCells';
+import QuoteBar from '@/ui/QuoteBar';
+import TraitChips from '@/ui/TraitChips';
 import { sourcesOf } from '@/ui/SourceLine';
 import type { Source } from '@/ui/sourceSlot';
 import { num } from '@shared/quran/arabicNumber';
@@ -22,7 +25,9 @@ import { noteBody } from '@shared/quran/ayahNoteBody';
 import { tafsirRuns } from '@shared/quran/tafsirSadi';
 import { ayahPlaces } from '@shared/quran/ayahPlaces';
 import { surahTopicsCredit, surahTopicsOf } from '@shared/quran/surahTopics';
-import { gharibCredit, gharibPage, GHARIB_BOOK } from '@shared/quran/gharib';
+import { gharibCredit, gharibPage, GHARIB_BOOK, type GharibAt } from '@shared/quran/gharib';
+import gharibData from '@shared/data/quran/gharib';
+import { juzOf } from '@shared/quran/juz';
 import { itqanCredit, itqanPage, ITQAN_BOOK } from '@shared/quran/itqanBalagha';
 import { kashshafCredit, kashshafPage, KASHSHAF_BOOK, type KashshafData } from '@shared/quran/kashshaf';
 import { sadiSource } from '@shared/quiz/bookSources';
@@ -32,7 +37,7 @@ import { ayahSections, sectionOn, type AyahSection } from '@/lib/ayahPage';
 import { treePiecesOfAyah } from '@/lib/ayahPreview';
 import { prophetStory } from '@/lib/prophets';
 import { bookState, readBook, useBooks } from '@/lib/books';
-import { ayahMushafWords, ayahText, pageOfAyah } from '@/lib/mushaf';
+import { ayahCounts, ayahMushafWords, ayahText, pageOfAyah } from '@/lib/mushaf';
 import { openIntent, toTab } from '@/lib/ways';
 import { usePalette, type Palette } from '@/lib/theme';
 import { QuranWord } from '@/components/quran/text/AyahFlow';
@@ -44,6 +49,7 @@ import IrabSheet, { type IrabTarget } from '@/components/IrabSheet';
 import NoteSheet from '@/components/NoteSheet';
 import TopicSheet, { type TopicOpen } from '@/components/TopicSheet';
 import QiraatPlace from '@/components/QiraatPlace';
+import SurahRoute from '@/components/SurahRoute';
 import { FEATURE_ICON } from '@/components/featureIcons';
 import QuranWords from '@/components/quran/text/QuranWords';
 import { shareAyah } from '@/components/AyahShare';
@@ -104,7 +110,7 @@ export default function AyahScreen() {
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar back={() => (router.canGoBack() ? router.back() : toTab('/'))} title={title} />
       <ScrollView ref={scroller} contentContainerStyle={{ padding: 16, paddingBottom: insets.bottom + 32, gap: 18 }}>
-        <CardWithRow palette={palette} pad={12} source={sourcesOf([mushafSource(key, pageOfAyah(key))])}
+        <CardWithRow palette={palette} pad={0} gap={0} clip source={sourcesOf([mushafSource(key, pageOfAyah(key))])}
           lead={<Button pill label="في المصحف" Icon={FEATURE_ICON.mushaf} accessibilityLabel={`افتح ${title} في المصحف`} onPress={() => openIntent({ tab: 'read', at: key })} />}
           row={<>
             <IconButton Icon={EyeOff} label="سمّع من هذه الآية" onPress={() => openIntent({ tab: 'read', at: key, recite: true })} />
@@ -113,7 +119,14 @@ export default function AyahScreen() {
             <IconButton Icon={NotebookPen} label={note ? 'ما دوّنته عن الآية' : 'دوّن عن الآية'} on={!!note} onPress={() => setNoting(key)} />
             <IconButton Icon={Send} label="مشاركة" onPress={() => shareAyah(key, palette, note)} />
           </>}>
-          <LitAyat ayat={[{ words: ayahMushafWords(key), lit: [], number }]} menu={key} palette={palette} />
+          <View style={{ padding: 12 }}><LitAyat ayat={[{ words: ayahMushafWords(key), lit: [], number }]} menu={key} palette={palette} /></View>
+          {/* Its place at a glance, as the person page's head gives his (owner, 2026-11-23, sketch quran-design/ayah-page design أ). */}
+          <FactCells palette={palette} cells={[
+            { key: 'surah', label: 'السورة', readings: [{ value: surahName(surah) }] },
+            { key: 'ayah', label: 'الآية', readings: [{ value: num(number), by: `من ${num(ayahCounts.get(surah) ?? number)}` }] },
+            { key: 'juz', label: 'الجزء', readings: [{ value: num(juzOf(key)) }] },
+            { key: 'page', label: 'الصفحة', readings: [{ value: num(pageOfAyah(key) ?? 0) }] },
+          ]} />
         </CardWithRow>
         {note ? (
           <Part Icon={NotebookPen} title="ما دوّنته" palette={palette} open={() => setNoting(key)} label="عدّل ما دوّنته">
@@ -172,22 +185,12 @@ const SectionPart = memo(function SectionPart({ section, ayah, word, palette, op
       return (
         <Part {...common} Icon={FEATURE_ICON.tafsir} title="التفسير" sub={`تفسير السعدي · ${surahName(surah)} ${run}`} label="التفسير كاملًا"
           open={() => open.preview({ kind: 'tafsir', key: ayah })} source={sourcesOf([sadiSource(passage)])}>
-          <BookText text={withoutOpeningQuote(passage.text)} palette={palette} />
+          <QuoteBar by="قال السعدي:" palette={palette}><BookText text={withoutOpeningQuote(passage.text)} palette={palette} /></QuoteBar>
         </Part>
       );
     }
-    case 'gharib': {
-      const shown = section.entries.slice(0, 3);
-      return (
-        <Part {...common} Icon={FEATURE_ICON.words} title="معاني الكلمات" sub="غريب القرآن لابن قتيبة" label="معاني كلمات الآية"
-          open={() => open.gharib({ key: ayah, word: section.entries[0].words[0]?.[0] ?? 0 })}
-          source={[bookLine(GHARIB_BOOK, gharibCredit(section.entries[0]), gharibPage(section.entries[0]))]}>
-          {shown.map(entry => (
-            <BookText key={entry.at} text={entry.text.replace(/^[٠-٩]+-\s*/, '')} lines={2} palette={palette} />
-          ))}
-        </Part>
-      );
-    }
+    case 'gharib':
+      return <WordsPart {...common} entries={section.entries} ayah={ayah} open={open} />;
     case 'irab': {
       // The word the feed's i'rab card showed, when it opened this page.
       const body = noteBody('irab', ayah, word, ayahMushafWords(ayah));
@@ -209,7 +212,7 @@ const SectionPart = memo(function SectionPart({ section, ayah, word, palette, op
         : kashshaf ? [bookLine(KASHSHAF_BOOK, kashshafCredit(kashshaf), kashshafPage(kashshaf))] : [];
       return (
         <Part {...common} Icon={FEATURE_ICON.balagha} title="البلاغة" sub={heading} label="البلاغة في الآية" open={() => open.balagha(ayah)} source={source}>
-          <BookText text={paragraph?.text ?? kashshaf?.text ?? ''} palette={palette} />
+          <QuoteBar by={paragraph ? 'قال السيوطي:' : 'قال الزمخشري:'} palette={palette}><BookText text={paragraph?.text ?? kashshaf?.text ?? ''} palette={palette} /></QuoteBar>
         </Part>
       );
     }
@@ -279,15 +282,38 @@ const SectionPart = memo(function SectionPart({ section, ayah, word, palette, op
       const topics = surahTopicsOf(surah);
       const run = section.from === undefined ? '' : section.from === section.to ? num(section.from) : `${num(section.from)}–${num(section.to!)}`;
       return (
-        <Part {...common} Icon={TableOfContents} title="موضعها في السورة" sub={`${surahName(surah)} ${run}`.trim()} label={`موضوعات سورة ${surahName(surah)}`}
+        <Part {...common} Icon={TableOfContents} title="مسار السورة" sub={`${surahName(surah)} ${run}`.trim()} label={`موضوعات سورة ${surahName(surah)}`}
           open={() => open.topic({ surah, section: section.section })}
           source={topics ? [{ line: 'التفسير الموضوعي لسور القرآن الكريم', quotes: [{ text: '', cite: surahTopicsCredit(topics) }] }] : undefined}>
-          <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 30, textAlign: 'right' }}>{section.title}</Text>
+          <SurahRoute surah={surah} ayah={Number(ayah.split(':')[1])} count={ayahCounts.get(surah) ?? 0} palette={palette} />
         </Part>
       );
     }
   }
 });
+
+/**
+ * «كلماتها» (owner, 2026-11-23, sketch quran-design/ayah-page design أ): each word Ibn Qutaybah explains on the ayah as a
+ * framed word in the mushaf's letters with his short meaning under it, in his words; the picked one's whole entry under
+ * them, his name first.
+ */
+function WordsPart({ entries, ayah, palette, open, onAt }: { entries: GharibAt[]; ayah: string; palette: Palette; open: Openers; onAt?: (y: number) => void }) {
+  const [picked, setPicked] = useState(0);
+  const words = useMemo(() => ayahMushafWords(ayah), [ayah]);
+  // Every entry gharibAt lists quotes words of the ayah; its chip shows the first run it quotes.
+  const chips = entries.map(each => {
+    const [from, to] = each.words[0];
+    return { label: words.slice(from, to + 1).join(' '), names: ['ابن قتيبة'], agreed: false, meaning: gharibData.meanings[each.at]?.replace(/\.$/, '') };
+  });
+  const entry = entries[picked];
+  return (
+    <Part palette={palette} onAt={onAt} Icon={FEATURE_ICON.words} title="كلماتها" sub="غريب القرآن لابن قتيبة" label="معاني كلمات الآية"
+      open={() => open.gharib({ key: ayah, word: entry.words[0]?.[0] ?? 0 })} source={[bookLine(GHARIB_BOOK, gharibCredit(entry), gharibPage(entry))]}>
+      {chips.length > 0 && <TraitChips traits={chips} quran palette={palette} picked={picked} onPick={setPicked} />}
+      <QuoteBar by="قال ابن قتيبة:" palette={palette}><BookText text={entry.text.replace(/^[٠-٩]+-\s*/, '')} palette={palette} /></QuoteBar>
+    </Part>
+  );
+}
 
 /** Surah names for a list of places, as the feed heads write them. */
 const PLACE_NAMES: Record<number, string> = Object.fromEntries(Array.from({ length: 114 }, (_, i) => [i + 1, surahName(i + 1)]));

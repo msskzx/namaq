@@ -8,8 +8,8 @@ import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, toggleForgotten, mostForgotten, readAyahMarks, readDueMarks, rememberAyah, restoreMark, subscribeDueMarks, type AyahMark } from '@shared/ayahMarks';
 import { toggleBookmark } from '@shared/bookmarks';
 import { readGestures, type GestureAction } from '@shared/readerGestures';
-import { isMemorized, memorizedPrefer, memorizedQuestions, readMemorized, recallOfDay, subscribeMemorized, touchesMemorized, withMemorizedScope } from '@shared/memorized';
-import { FEED_QUIZ_NAMES, feedQuizSeed, OPENINGS, openingSurah, seededRandom, type FeedKind, type FeedQuizKind } from '@shared/quiz/feedQuiz';
+import { isMemorized, type Memorized, memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized, withMemorizedScope } from '@shared/memorized';
+import { FEED_QUIZ_KINDS, FEED_QUIZ_NAMES, feedQuizSeed, OPENINGS, openingSurah, seededRandom, type FeedKind, type FeedQuizKind } from '@shared/quiz/feedQuiz';
 import { answeredQuestion, dueSeeds, readMissed } from '@shared/quiz/missedQuestions';
 import { activeInterests, INTERESTS, interestById, interestOf, pickedInterests, restoredInterest, surpriseMe, toggledInterest, type FeedCardKind } from '@shared/interests';
 import { bookmarkKind, cardMenuSaveId, cardOfBookmark, isCardBookmark } from '@shared/bookmarkKind';
@@ -23,6 +23,7 @@ import { briefFacts, PersonBrief } from '@/screens/person';
 import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import Saying from '@/ui/Saying';
 import { findPerson, GRAPH, PEOPLE, personName, tiePairs, unvowelled } from '@/lib/tarajim';
+import { useSettledMemorized } from './Memorized';
 import { kunyaFacts, laqabFacts, type NameFact } from '@shared/tarajimNames';
 import { chainSentence, groupWord } from '@shared/tarajimGraph';
 import TiesChain from './TiesChain';
@@ -511,23 +512,50 @@ function openAnswer(question: SoloQuestion) {
 const QUIZ_TREE_HEIGHT = 380;
 
 /**
+ * A feed question as it is first asked: the same for a kind and seed all day, so each is worked out once and kept, and a card
+ * shown again (another chip, back to «لك») mounts at once instead of building its kind's questions afresh.
+ */
+const feedRuns = new Map<string, SoloRun | null>();
+export function feedRun(kind: QuizTopic, seed: number, memorized: Memorized | null): SoloRun | null {
+  const id = `${kind}|${seed}|${memorized ? JSON.stringify(memorized) : ''}`;
+  if (feedRuns.has(id)) return feedRuns.get(id)!;
+  const base = memorized ? { ...DEFAULT_LIST, filters: withMemorizedScope(DEFAULT_LIST.filters, memorized) } : DEFAULT_LIST;
+  // «رتّب الجزء كله» asks a run of surahs that fits the card, not a whole juz (owner, 2026-11-21).
+  const list = kind === 'ORDER_JUZ' ? { ...base, filters: { ...base.filters, run: '1' } } : base;
+  const started = startSolo({ ...DEFAULT_SOLO, kinds: [kind], length: 1, list }, seededRandom(seed));
+  if (feedRuns.size > 300) feedRuns.delete(feedRuns.keys().next().value!);
+  feedRuns.set(id, started.questions.length ? started : null);
+  return feedRuns.get(id)!;
+}
+
+/**
  * One question of the solo quiz as a post (owner, 2026-11-14): the quiz's own question, drawn by its own parts (QuizChoice,
  * or a tree's QuizInputs and QuizFeedback), one kind a card in turn, the same question all day (`seed`). With «الأسئلة مما أحفظ
  * فقط» on, it asks from what is memorized, as the solo quiz does.
  */
-const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTopic; seed: number; palette: Palette }) {
+/**
+ * What is memorized, as a feed's cards read it: the feed's own (Feed below), which waits for the picker to close and, in a feed
+ * kept hidden behind another chip, for the feed to be shown. Outside a feed, the settled pick.
+ */
+const FeedMemorized = createContext<Memorized | null | undefined>(undefined);
+function useFeedMemorized() {
+  const fromFeed = useContext(FeedMemorized);
+  const settled = useSettledMemorized();
+  return fromFeed === undefined ? settled : fromFeed;
+}
+
+const QuizPost = memo(function QuizPost({ kind, seed, palette, sub, home = true }: { kind: QuizTopic; seed: number; palette: Palette;
+  /** The head's line under the title (the quizzes page names the kind's interest). */ sub?: string;
+  /** Off on the quizzes page itself, where a head opening the quizzes would go nowhere. */ home?: boolean }) {
   // A tree or compare question's room follows what it holds, up to most of the screen (owner, 2026-11-18).
   const [roomHeight, onFit] = useFitHeight(QUIZ_TREE_HEIGHT);
-  const memorized = useSyncExternalStore(subscribeMemorized, readMemorized);
+  const memorized = useFeedMemorized();
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
-  const [run, setRun] = useState<SoloRun | null>(null);
-  useEffect(() => {
-    const base = memorized && questions ? { ...DEFAULT_LIST, filters: withMemorizedScope(DEFAULT_LIST.filters, memorized) } : DEFAULT_LIST;
-    // «رتّب الجزء كله» asks a run of surahs that fits the card, not a whole juz (owner, 2026-11-21).
-    const list = kind === 'ORDER_JUZ' ? { ...base, filters: { ...base.filters, run: '1' } } : base;
-    const started = startSolo({ ...DEFAULT_SOLO, kinds: [kind], length: 1, list }, seededRandom(seed));
-    setRun(started.questions.length ? started : null);
-  }, [kind, seed, memorized, questions]);
+  // The question is drawn as the card mounts, from the one worked out before (feedRun), so a chip shows its cards at once.
+  const asked = feedRun(kind, seed, memorized && questions ? memorized : null);
+  const [run, setRun] = useState<SoloRun | null>(asked);
+  const [runOf, setRunOf] = useState(asked);
+  if (runOf !== asked) { setRunOf(asked); setRun(asked); }
   // Answered wrong (or looked up), the question comes back after a rest; right, it goes (shared/quiz/missedQuestions.ts).
   const reported = useRef<string | null>(null);
   useEffect(() => {
@@ -542,7 +570,7 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
   const answered = isTree(question) || isCompare(question) ? !!checked : run.typed[0][0] !== undefined;
   const prompt = question.promptArabic && question.promptArabic !== FEED_QUIZ_NAMES[kind] ? <QuizPrompt text={question.promptArabic} palette={palette} /> : undefined;
   return (
-    <Post palette={palette} head={<PostHead Icon={QUIZ_ICON[kind as FeedKind]} title={FEED_QUIZ_NAMES[kind]} open={topic('/quizzes', 'افتح الاختبارات')} palette={palette} />} whole
+    <Post palette={palette} head={<PostHead Icon={QUIZ_ICON[kind as FeedKind]} title={FEED_QUIZ_NAMES[kind]} sub={sub} open={home ? topic('/quizzes', 'افتح الاختبارات') : undefined} palette={palette} />} whole
       // Unanswered, a tree or compare question's «تحقق» leads the row, before «تلميح», as the choice questions' does.
       open={answered ? <OpenButton label="افتح ما يشرح الجواب" onPress={() => openAnswer(question)} palette={palette} />
         : (isTree(question) || isCompare(question)) && !checked ? <Action Icon={Check} label="تحقق" onPress={() => setRun(check(run))} palette={palette} /> : undefined}
@@ -573,7 +601,7 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
 
 /** The surah openings quiz as a post: a surah's first ayah to write under its name, as the openings quiz asks it in the mushaf. */
 function OpeningPost({ seed, palette }: { seed: number; palette: Palette }) {
-  const memorized = useSyncExternalStore(subscribeMemorized, readMemorized);
+  const memorized = useFeedMemorized();
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
   const surah = useMemo(() => openingSurah(seed, memorized && questions && !('all' in memorized)
     ? Array.from({ length: 114 }, (_, i) => i + 1).filter(n => isMemorized(`${n}:1`, memorized)) : undefined), [seed, memorized, questions]);
@@ -1056,12 +1084,14 @@ const lifePeople = () => PEOPLE.filter(person => drawsLine(personLife(person))).
 const QUIZ_BOOKS: Partial<Record<FeedQuizKind, BookId>> = { TAFSIR: 'sadi', BALAGHA: 'itqan', TERM: 'itqan', IRAB: 'irab-words' };
 
 /** A question card of kind `kind`: the openings quiz, or one of the solo quiz's. */
-function FeedQuiz({ kind, seed, palette }: { kind: FeedQuizKind; seed: number; palette: Palette }) {
+export function FeedQuiz({ kind, seed, palette, sub, home = true }: { kind: FeedQuizKind; seed: number; palette: Palette; sub?: string; home?: boolean }) {
   useBooks();
-  const book = QUIZ_BOOKS[kind];
-  if (book && bookState(book) !== 'on') return null;
-  return kind === OPENINGS ? <OpeningPost seed={seed} palette={palette} /> : <QuizPost kind={kind} seed={seed} palette={palette} />;
+  if (!quizBookOn(kind)) return null;
+  return kind === OPENINGS ? <OpeningPost seed={seed} palette={palette} /> : <QuizPost kind={kind} seed={seed} palette={palette} sub={sub} home={home} />;
 }
+
+/** Whether a kind's book is on (settings, «الكتب»): a kind asked from a book that is off is not asked. */
+export const quizBookOn = (kind: FeedQuizKind) => { const book = QUIZ_BOOKS[kind]; return !book || bookState(book) === 'on'; };
 
 /**
  * The tree card's height: its frame, the buttons and the chips. A lit path's ayat add their room below (TreeCard `ayatRoom`),
@@ -1694,6 +1724,43 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
 const itemsOf = (kind: ListKind) => (itemLists[kind] ??= LIST_OF[kind]());
 
 /**
+ * What every chip's cards are drawn from, worked out while the home is idle, one piece at a time (owner, 2026-11-23: a chip
+ * should show its cards at once, not work them out on the tap): each kind's list, and a question of each kind, which builds
+ * the kind's questions once (the quizzes keep them). Started once a run of the app, after the first cards are drawn.
+ */
+let warmed = false;
+function warmFeed(day: number, memorized: Memorized | null) {
+  if (warmed) return;
+  warmed = true;
+  const steps: (() => unknown)[] = [
+    ...LIST_KINDS.map(kind => () => itemsOf(kind)),
+    ...FEED_QUIZ_KINDS.filter(kind => kind !== OPENINGS).map(kind => () => {
+      const book = QUIZ_BOOKS[kind];
+      if (!book || bookState(book) === 'on') feedRun(kind, feedQuizSeed(day, 0), memorized);
+    }),
+    // The surahs' order and links, which the «تناسب السور» cards read.
+    () => orderSurahList(),
+    // Each chip's first cards' own questions, as its feed asks them (Feed below: a round a card, the first few drawn on the tap).
+    ...activeInterests(pickedInterests.read()).flatMap(interest => Array.from({ length: FIRST_CARDS }, (_, round) => () => {
+      for (const slot of feedRound([interest], round, day)) {
+        const book = QUIZ_BOOKS[slot.kind as FeedQuizKind];
+        if (slot.quiz && slot.kind !== OPENINGS && (!book || bookState(book) === 'on')) feedRun(slot.kind as QuizTopic, feedQuizSeed(day, round), memorized);
+      }
+    })),
+  ];
+  const idle = (next: () => void) => (typeof requestIdleCallback === 'function' ? requestIdleCallback(next, { timeout: 500 }) : setTimeout(next, 16));
+  const step = () => {
+    const work = steps.shift();
+    if (!work) return;
+    try { work(); } catch { /* a kind that cannot be worked out now is worked out when its card asks, as before */ }
+    idle(step);
+  };
+  setTimeout(() => idle(step), WARM_AFTER);
+}
+/** How long after the home's first cards the idle work starts (ms), so opening the app stays as quick as before. */
+const WARM_AFTER = 1500;
+
+/**
  * A story opened from the feed continues (owner, 2026-11-19): that kind's next card is the one after it in the list (the
  * next phase of a prophet's story, the next moment of the battle, the next sira story), before the day's turn goes on.
  */
@@ -1786,6 +1853,8 @@ function RemovedLine({ interest, onUndo, palette }: { interest: string; onUndo: 
 
 /** About how many cards come at a time, as the page opens and each time it nears the end: a round of every interest. */
 const STEP_CARDS = INTERESTS.length;
+/** How many cards a chip draws on its tap, about a screen's worth; the rest come a frame after. */
+const FIRST_CARDS = 3;
 
 /**
  * The home feed (owner, 2026-11-19): the reader's own cards at the top (a forgotten ayah that is due, today's juz, the prayer
@@ -1794,7 +1863,7 @@ const STEP_CARDS = INTERESTS.length;
  * `only` shows one interest's cards alone (the chip row over the feed). What was shown before is skipped (shared/feedSeen.ts);
  * once all was seen it starts again from the seen ones. A question answered wrong comes back after a rest.
  */
-export function Feed({ palette, nearEnd, screenBottom, only = null, column = null, lead }: { palette: Palette; nearEnd: number;
+export const Feed = memo(function Feed({ palette, nearEnd, screenBottom, only = null, column = null, lead, shown = true }: { palette: Palette; nearEnd: number;
   /** Where the bottom of the screen is in the page, for a card that comes while the feed is open (the prayer card). */
   screenBottom: () => number;
   /** One interest's id: its cards alone. */
@@ -1802,15 +1871,28 @@ export function Feed({ palette, nearEnd, screenBottom, only = null, column = nul
   /** A tablet lying down (owner, 2026-11-23): the width of each of two columns of cards, which take turns; otherwise one column. */
   column?: number | null;
   /** What heads the first column in two columns (the mushaf's page), so the second starts with a card beside it. */
-  lead?: React.ReactNode }) {
+  lead?: React.ReactNode;
+  /** False while the feed is kept hidden behind another chip's: it marks nothing seen and places no prayer card until shown. */
+  shown?: boolean }) {
   const { day, juz } = useToday();
   const now = useMinute();
   const visit = useSyncExternalStore(subscribeVisit, visitStart, serverVisit);
   // A new visit (pulled to refresh, or back after long away), or another chip, starts again from one round.
   const view = `${visit}|${only ?? ''}`;
+  // Another chip, or a new visit, draws the cards that fill the screen first and the rest a frame after, so the tap shows its
+  // cards at once (owner, 2026-11-23). The feed the home opens with is drawn whole, as before.
+  const [whole, setWhole] = useState<string | null>(() => (only ? null : view));
+  const drawn = whole === view;
+  useEffect(() => {
+    if (drawn) return;
+    let later: ReturnType<typeof setTimeout> | undefined;
+    const frame = requestAnimationFrame(() => { later = setTimeout(() => setWhole(view), 0); });
+    return () => { cancelAnimationFrame(frame); clearTimeout(later); };
+  }, [drawn, view]);
   const [more, setMore] = useState({ view, batches: 0 });
   useEffect(() => {
-    if (nearEnd) setMore(now => ({ view, batches: (now.view === view && now.batches ? now.batches : step) + step }));
+    // The short page of a feed being drawn is not its end.
+    if (nearEnd && drawn) setMore(now => ({ view, batches: (now.view === view && now.batches ? now.batches : step) + step }));
   }, [nearEnd]); // eslint-disable-line react-hooks/exhaustive-deps -- only a new signal asks for more
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen);
   const bookmarks = readBookmarks();
@@ -1819,8 +1901,12 @@ export function Feed({ palette, nearEnd, screenBottom, only = null, column = nul
   const savedCards = useMemo(() => shownBookmarks(bookmarks).filter(item => isCardBookmark(item.id)), [visit]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const forgotten = mostForgotten(due)[0];
-  // The settings under «ما أحفظه»: questions come from the memorized range, pondering puts it first.
-  const memorized = useSyncExternalStore(subscribeMemorized, readMemorized);
+  // The settings under «ما أحفظه»: questions come from the memorized range, pondering puts it first. A feed kept hidden takes
+  // a new pick when it is shown again, so closing the picker draws only the feed on screen.
+  const settledMemorized = useSettledMemorized();
+  const [heldMemorized, setHeldMemorized] = useState(settledMemorized);
+  if (shown && heldMemorized !== settledMemorized) setHeldMemorized(settledMemorized);
+  const memorized = shown ? settledMemorized : heldMemorized;
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
   const prefer = useSyncExternalStore(memorizedPrefer.subscribe, memorizedPrefer.read);
   const recall = useMemo(() => (memorized ? recallOfDay(questions ? memorized : { all: true }, day) : undefined), [memorized, questions, day]);
@@ -1839,6 +1925,7 @@ export function Feed({ palette, nearEnd, screenBottom, only = null, column = nul
   const surprise = useSyncExternalStore(surpriseMe.subscribe, surpriseMe.read, surpriseMe.server);
   // A note card whose book is off (or still loading) is passed over, and not counted as seen.
   useBooks();
+  useEffect(() => warmFeed(day, memorized && questions ? memorized : null), []); // eslint-disable-line react-hooks/exhaustive-deps -- once a run of the app
   const frozen = useMemo(() => ({ picked, surprise }), [visit]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
   const { active, others } = useMemo(() => {
     if (only) return { active: INTERESTS.filter(interest => interest.id === only), others: [] };
@@ -1956,7 +2043,7 @@ export function Feed({ palette, nearEnd, screenBottom, only = null, column = nul
   if (!only && isKahfDay(now)) posts.splice(Math.min(KAHF_SLOT, posts.length), 0, <KahfPost key={`kahf${day}`} palette={palette} />);
   // Pair ids hold «|», so the list is kept on lines.
   const renderedKey = rendered.join('\n');
-  useEffect(() => { if (renderedKey) markFeedSeen(renderedKey.split('\n')); }, [renderedKey]);
+  useEffect(() => { if (renderedKey && shown) markFeedSeen(renderedKey.split('\n')); }, [renderedKey, shown]);
   // A prayer that is near comes in once, before the first post below the screen, so what the reader looks at stays put (owner,
   // 2026-11-18). One near when home opens leads the feed. A card the reader has passed or is looking at stays; one still
   // below the screen gives way to the next prayer's.
@@ -1966,12 +2053,12 @@ export function Feed({ palette, nearEnd, screenBottom, only = null, column = nul
   const tops = useRef(new Map<string, number>());
   const keys = posts.map(post => String((post as React.ReactElement).key));
   useEffect(() => {
-    if (!soon || cards.some(card => card.key === soon.key)) return;
+    if (!shown || !soon || cards.some(card => card.key === soon.key)) return;
     const bottom = screenBottom();
     const below = (key: string) => (tops.current.get(key) ?? Infinity) + top.current >= bottom;
     const at = insertAt(keys.map(key => (tops.current.get(key) ?? Infinity) + top.current), bottom);
     setCards(now => [...now.filter(card => !below(`pr${card.key}`)), { ...soon, after: at ? keys[at - 1] : null }]);
-  }, [soon?.key]); // eslint-disable-line react-hooks/exhaustive-deps -- once for each prayer
+  }, [soon?.key, shown]); // eslint-disable-line react-hooks/exhaustive-deps -- once for each prayer, on the feed on screen
   // A new visit starts the feed again from the top, with the prayer that is near now leading it.
   const [cardsVisit, setCardsVisit] = useState(visit);
   if (cardsVisit !== visit) { setCardsVisit(visit); setCards(soon ? [{ ...soon, after: null }] : []); }
@@ -1980,7 +2067,8 @@ export function Feed({ palette, nearEnd, screenBottom, only = null, column = nul
     posts.splice(at, 0, <PrayerPost key={`pr${card.key}`} prayer={card.prayer} times={card.times} palette={palette} />);
     keys.splice(at, 0, `pr${card.key}`);
   }
-  const placed = (i: number) => <View key={keys[i]} onLayout={event => { tops.current.set(keys[i], event.nativeEvent.layout.y); }}>{posts[i]}</View>;
+  const placed = (i: number) => (drawn || i < FIRST_CARDS
+    ? <View key={keys[i]} onLayout={event => { tops.current.set(keys[i], event.nativeEvent.layout.y); }}>{posts[i]}</View> : null);
   if (column) {
     // Each column is a phone's page to the cards in it, so their drawings and ayat size from its width (ui/column.ts).
     // A card's place is told within its column, which starts where the feed does, so the prayer card still comes below the screen.
@@ -1990,6 +2078,7 @@ export function Feed({ palette, nearEnd, screenBottom, only = null, column = nul
     const prayers = new Set(cards.map(card => `pr${card.key}`));
     const sides = keys.map(key => (prayers.has(key) ? Math.max(turn, 0) % 2 : ++turn % 2));
     return (
+      <FeedMemorized.Provider value={memorized}>
       <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: COLUMN_GAP }} onLayout={event => { top.current = event.nativeEvent.layout.y; }}>
         {[0, 1].map(side => (
           <PageWidthProvider key={side} value={column + 32}>
@@ -2000,12 +2089,15 @@ export function Feed({ palette, nearEnd, screenBottom, only = null, column = nul
           </PageWidthProvider>
         ))}
       </View>
+      </FeedMemorized.Provider>
     );
   }
   return (
-    <View style={{ gap: 14 }} onLayout={event => { top.current = event.nativeEvent.layout.y; }}>
-      {lead}
-      {posts.map((_post, i) => placed(i))}
-    </View>
+    <FeedMemorized.Provider value={memorized}>
+      <View style={{ gap: 14 }} onLayout={event => { top.current = event.nativeEvent.layout.y; }}>
+        {lead}
+        {posts.map((_post, i) => placed(i))}
+      </View>
+    </FeedMemorized.Provider>
   );
-}
+});

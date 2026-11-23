@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FlatList, Platform, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { MessagesSquare } from 'lucide-react-native';
-import { findHadith, placeOf, type SahihHadith, type SahihIndex } from '@shared/sahih';
+import { findHadith, lastLink, placeOf, type SahihHadith, type SahihIndex } from '@shared/sahih';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
@@ -14,7 +14,7 @@ import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { toTab } from '@/lib/ways';
 import { SAHIH, fortyOf, isSahihSlug, rememberOpened, useSahihText } from '@/lib/sahih';
-import { SahihDownload, SahihHadithView } from '@/components/Sahih';
+import { SahihDownload, SahihHadithView, opening } from '@/components/Sahih';
 import HadithBooks from '@/components/HadithBooks';
 import { recordedIn, type BookBox } from '@shared/hadith';
 import { openKitab, openSahih } from './hadith';
@@ -71,7 +71,7 @@ export default function HadithSahihScreen() {
   const [index, setIndex] = useState(-1);
   const shown = index >= 0 ? index : start;
   const hadith = all[shown];
-  useEffect(() => { if (book && hadith) rememberOpened(book.slug, hadith.n); }, [book, hadith]);
+  useEffect(() => { if (book && hadith) rememberOpened(book.slug, hadith.n, lastLink(hadith.routes[0]), opening(hadith)); }, [book, hadith]);
   const [width, setWidth] = useState(0);
   const list = useRef<FlatList<SahihHadith>>(null);
   const settle = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {

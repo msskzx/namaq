@@ -15,6 +15,25 @@ import SettingRow from '@/ui/SettingRow';
 
 const useMemorized = () => useSyncExternalStore(subscribeMemorized, readMemorized);
 
+/** How many pickers are open now: while one is, the home feed keeps what was picked before (useSettledMemorized). */
+let picking = 0;
+const pickingListeners = new Set<() => void>();
+const subscribePicking = (listener: () => void) => { pickingListeners.add(listener); return () => { pickingListeners.delete(listener); }; };
+const isPicking = () => picking > 0;
+const setPicking = (change: number) => { picking += change; pickingListeners.forEach(listener => listener()); };
+
+/**
+ * What is memorized, as the home feed uses it: each tap in the picker is kept at once, but the feed takes the new pick only
+ * when the picker closes, so a tap on a juz answers at once instead of drawing the feed again for each one (owner, 2026-11-23).
+ */
+export function useSettledMemorized() {
+  const memorized = useMemorized();
+  const open = useSyncExternalStore(subscribePicking, isPicking);
+  const [settled, setSettled] = useState(memorized);
+  if (!open && settled !== memorized) setSettled(memorized);
+  return open ? settled : memorized;
+}
+
 /** A short line for what is picked: «القرآن كله», «الأجزاء ٢٧، ٢٨…», or a nudge while nothing is picked. */
 export function memorizedLabel(memorized: Memorized | null) {
   if (!memorized) return 'لم تختر بعد';
@@ -29,6 +48,7 @@ export function memorizedLabel(memorized: Memorized | null) {
  */
 export function MemorizedPicker({ palette }: { palette: Palette }) {
   const memorized = useMemorized();
+  useEffect(() => { setPicking(1); return () => setPicking(-1); }, []);
   const [unit, setUnit] = useState<'juz' | 'surah'>(() => (memorized && 'unit' in memorized ? memorized.unit : 'juz'));
   // The grid follows what is kept (another picker may have changed it); the last juz or surahs come back when «القرآن كله» is switched off.
   const last = useRef(memorized && 'unit' in memorized ? memorized : null);

@@ -14,6 +14,13 @@ const meet = (a: string, b: string) => {
 };
 
 describe('lineOf', () => {
+  it('keeps the line it worked out whole when a caller changes the list it was handed (lines are kept for speed)', () => {
+    const first = lineOf(person('az-zubayr-ibn-al-awwam'), people);
+    const whole = first.length;
+    first.splice(1);
+    expect(lineOf(person('az-zubayr-ibn-al-awwam'), people)).toHaveLength(whole);
+  });
+
   it('carries al-Zubayr on past «غالب» through the Prophet’s nasab', () => {
     const line = names('az-zubayr-ibn-al-awwam');
     expect(line.slice(0, 3)).toEqual(['الزبير', 'العوام', 'خويلد']);
