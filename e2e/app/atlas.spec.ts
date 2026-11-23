@@ -9,7 +9,7 @@ test('the tarajim tab opens the atlas; a year lights its places and a search ope
   await expect(page.getByRole('tab', { name: 'في حياته ﷺ', selected: true })).toBeVisible();
   await page.getByRole('button', { name: /^السنة ٩: / }).click();
   await expect(page.getByRole('img', { name: /^خريطة: .*تبوك/ })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'افتح غزوة تبوك' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'افتح غزوة تبوك' })).toBeVisible();
 
   await page.getByLabel('ابحث في الأطلس').fill('اليرموك');
   await page.getByRole('button', { name: 'معركة اليرموك' }).click();
@@ -26,7 +26,7 @@ test.describe('the year card', () => {
     await expect(page.getByRole('img', { name: /^خريطة: .*المدينة/ })).toBeVisible();
     await page.getByRole('button', { name: 'افتح السنة ٥ في الأطلس' }).click();
     await expect(page).toHaveURL(/\/atlas\?year=5/);
-    await expect(page.getByRole('link', { name: 'افتح غزوة الخندق' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'افتح غزوة الخندق' })).toBeVisible();
   });
 });
 

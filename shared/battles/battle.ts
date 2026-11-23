@@ -81,3 +81,35 @@ export function searchBattles<B extends Pick<AppBattle, 'name' | 'place' | 'loca
     return words.every(word => said.some(each => each.includes(word)));
   });
 }
+
+/** «مجرى الغزوة في ٧ مشاهد»: a battle's moments counted as Arabic counts them (one, two, three to ten, eleven on). */
+export function courseLine(battle: Pick<AppBattle, 'kind' | 'moments'>): string {
+  const n = battle.moments.length;
+  const scenes = n === 1 ? 'مشهد واحد' : n === 2 ? 'مشهدين' : n <= 10 ? `${num(n)} مشاهد` : `${num(n)} مشهدًا`;
+  return `${courseTitle(battle.kind?.value)} في ${scenes}`;
+}
+
+/**
+ * A report whose first quoted words are the Prophet's ﷺ, split around them («… قال يوم بدر: "هذا جبريل…"»): the words
+ * before them name him as the speaker, so the battle page can set his words apart (owner, 2026-11-23: his words as a
+ * large quote). A report whose first quote is someone else's, or that has none, stays whole (undefined).
+ */
+export function prophetSaying(quote: string): { lead: string; saying: string; rest: string } | undefined {
+  const open = quote.indexOf('"');
+  const close = open < 0 ? -1 : quote.indexOf('"', open + 1);
+  if (close < 0) return undefined;
+  const lead = quote.slice(0, open).trim();
+  // The speaker is named just before the quote: «قال النبي ﷺ …:» or «أن رسول الله ﷺ قال …:», not a later «قال» of another.
+  const lastSpeaker = lead.split(/[.؟!]/).pop() ?? '';
+  if (!/(النبي|رسول الله)/.test(lastSpeaker) || !lead.endsWith(':')) return undefined;
+  // A question or exclamation mark printed after the closing quote is the saying's own («"ما ترون في هؤلاء"؟»).
+  const mark = quote.slice(close + 1).match(/^[؟?!]/)?.[0] ?? '';
+  return { lead, saying: quote.slice(open + 1, close).trim() + mark, rest: quote.slice(close + 1 + mark.length).replace(/^[\s.،]+/, '').trim() };
+}
+
+/** How many men a dot stands for, so the larger side of a battle stays under a hundred dots. */
+export const UNITS = [1, 10, 50, 100, 500, 1000] as const;
+export const unitFor = (most: number) => UNITS.find(unit => most / unit <= 100) ?? UNITS[UNITS.length - 1];
+export const UNIT_WORDS: Record<(typeof UNITS)[number], string> = {
+  1: 'رجل', 10: 'عشرة رجال', 50: 'خمسون رجلًا', 100: 'مئة رجل', 500: 'خمسمئة رجل', 1000: 'ألف رجل',
+};

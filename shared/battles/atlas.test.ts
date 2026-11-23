@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import data from '../data/battles/battles.json';
 import type { AppBattle } from './battle';
-import { atlasPins, NARROWEST_MAP, battlesAt, layerBox, layerOf, lifeYears, lonePlaces } from './atlas';
+import { atlasPins, NARROWEST_MAP, battlesAt, layerBox, layerOf, lifeYears, lonePlaces, screenBox } from './atlas';
 import { searchBattles } from './battle';
 import { MADINAH_YEARS } from './timeline';
 import { PIN_JOIN, projector } from './map';
@@ -79,5 +79,25 @@ describe('the atlas', () => {
       }));
     }
     expect(lonePlaces(BATTLES, 'life')).not.toContain(placeOf('hudaybiyyah').name);
+  });
+});
+
+// The atlas's map fills the screen, and no pin hides under the bars above or the sheet below (owner, 2026-11-23).
+describe('screenBox', () => {
+  it('puts every pinned place of each layer inside the open band of the screen', () => {
+    const screen = { width: 440, height: 956, top: 150, bottom: 500 };
+    for (const layer of ['life', 'after'] as const) {
+      const placed = BATTLES.filter(battle => layerOf(battle) === layer && battle.place);
+      expect(placed.length).toBeGreaterThan(0);
+      const { at, height } = projector(screenBox(BATTLES, layer, screen), screen.width);
+      expect(height).toBeGreaterThanOrEqual(screen.bottom);
+      for (const battle of placed) {
+        const [x, y] = at(battle.place!.at);
+        expect(x, battle.slug).toBeGreaterThanOrEqual(0);
+        expect(x, battle.slug).toBeLessThanOrEqual(screen.width);
+        expect(y, battle.slug).toBeGreaterThanOrEqual(screen.top);
+        expect(y, battle.slug).toBeLessThanOrEqual(screen.bottom);
+      }
+    }
   });
 });

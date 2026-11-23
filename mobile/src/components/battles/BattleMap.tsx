@@ -9,7 +9,9 @@ import TapRow from '@/ui/TapRow';
 import { MIN_TAP } from '@/ui/tapSize';
 import { num } from '@shared/quran/arabicNumber';
 
-const ASPECT = 0.85;
+/** A battle map's height over its width, so a page can keep its room before it is drawn. */
+export const MAP_ASPECT = 0.85;
+const ASPECT = MAP_ASPECT;
 /** How far from a battle (in degrees) a well-known city still shows beside it. */
 const NEAR = 7;
 

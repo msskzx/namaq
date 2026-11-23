@@ -32,6 +32,7 @@ below. Never copy one into a screen.
 | `FloatingMenu` (+ `MenuAt`) | A row of ActButtons over what was pressed, wrapping, above or below the finger; `groups` lays them in groups with a thin line between; `bubble` (+ `span`, the button's height) is the round reaction pop-up over one button of an open menu; `overlay` dims behind and closes on a tap outside | the mushaf and book long press, the home cards menu |
 | `MoreMenu` | A card's «⋯»: an icon button that opens a `FloatingMenu` of its choices (ActButtons); nothing when there is none | the feed cards' «ليس من اهتماماتي» |
 | `Sheet` | Rises from the bottom, tap outside or swipe down closes; `tall` one height above the keyboard, `full` whole screen with title and close | every sheet, full-screen ones included (share, video) |
+| `DrawerSheet` | A sheet that stays on the page over a full-screen picture: rests low with the picture open above, its handle (dragged or tapped) raises it to read the whole list; never closes, nothing dims | the atlas's year and battles over its map |
 | `Toggle` | On means knob on the right | every on/off setting |
 | `OrderRows` | Rows to drag into order, the row following the finger (at once from its grip, after a short hold elsewhere) and the others making room; then «تحقق»; once answered, the right order with where each was put | a question that puts its choices in order («رتّب السور») |
 | `OrderTray` | Numbered boxes in mushaf order filled from a tray of names: a name tapped fills the lit box, a filled box tapped sends its name back, an empty one becomes the next; «تحقق» at any time; once checked, green, accent with the struck name, or «لم تضعها» | a long order («رتّب سور الجزء», the surah-order page's practice) |
@@ -54,6 +55,8 @@ below. Never copy one into a screen.
 | `StepDots` | A row of dots (`column` stands them up) for the steps of something walked in order: the reached one bigger in the theme's yellow, passed ones muted; a tap goes to a step | the layers of a «مشاهد» scene; a story's shared pictures in the share sheet |
 | `Shade` | A soft dark shade behind words over a picture, round at the corners; takes an animated style | the ayah and the sayings over a «مشاهد» scene's sky |
 | `Step` | A numbered step: the number in an accent ring, its content beside it | a sequence told in order (a battle's moments) |
+| `UnitDots` | A count as dots in rows from the right, wrapping to its width; the caller says what a dot stands for | a battle's numbers on its page («كل نقطة عشرة رجال») |
+| `PullQuote` | Words set apart in a long read: large, centred, between «», ruled above and below in a tone (amber for the Prophet's ﷺ words) | the Prophet's ﷺ words in a battle's course |
 | `SplitBar` | Two amounts on one bar, each its share, accent then rule colour | comparing two sides (a battle's numbers) |
 | `Empty` | The one "nothing here" line: muted, centred, says what is missing and how to fill it | every empty list or search |
 | `LoadingDots`, `LoadingScreen`, `Hourglass` | The one loader (`fill` centres it for a page or sheet, `label` for screen readers), app start screen, quiz timer | waiting |
