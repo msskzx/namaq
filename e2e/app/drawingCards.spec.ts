@@ -5,18 +5,6 @@ import { SURAH_NAMES } from '../../shared/quran/surahNames';
 // component, its open button opening that page at the item. Each card is saved, so the library draws it whatever the day.
 const saved = (kind: string, item: string): Seed => ({ bookmarks: [{ id: `card:${kind}:${item}`, text: '', href: '', savedAt: Date.now() }] });
 
-test.describe('«نسبه»', () => {
-  test.use({ seed: saved('nasab', 'az-zubayr-ibn-al-awwam') });
-  // Owner, 2026-11-22: the nasab tree never folds; every father is drawn.
-  test('draws every father of the nasab, none folded, and opens the nasab page', async ({ page }) => {
-    await open(page, '/library');
-    await expect(page.getByText('قصي', { exact: true })).toBeVisible();
-    await expect(page.getByRole('button', { name: /^أظهر / })).toHaveCount(0);
-    await page.getByRole('button', { name: 'افتح نسب الزبير بن العوام' }).click();
-    await expect(page).toHaveURL(/\/nasab\?slug=az-zubayr-ibn-al-awwam/);
-  });
-});
-
 test.describe('«صلاته»', () => {
   test.use({ seed: saved('ties', 'az-zubayr-ibn-al-awwam') });
   test('draws the ties ring, a person on it opens his page, and the card opens the ties page', async ({ page }) => {

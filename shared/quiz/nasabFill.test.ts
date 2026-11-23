@@ -28,6 +28,15 @@ describe('«أكمل النسب»', () => {
     expect(father?.correctAnswer).toMatch(/^أبو قحافة/u);
   });
 
+  it('names the person in his own box without his fathers: they are the boxes after it', () => {
+    // Owner, 2026-11-23: «حفصة بنت عمر» then «عمر» said her father twice; her box is «حفصة».
+    for (const question of questions) {
+      expect(question.boxes![0], question.key).not.toMatch(/\s(?:بن|بنت)\s/u);
+    }
+    const hafsah = questions.find(q => q.key.startsWith('TARAJIM_NASAB_FILL:hafsah-bint-umar:'));
+    if (hafsah) expect(hafsah.boxes![0]).toBe('حفصة');
+  });
+
   it('shows the boxes in between: every other box is a name the reader sees', () => {
     for (const question of questions) {
       const boxes = question.boxes!;
