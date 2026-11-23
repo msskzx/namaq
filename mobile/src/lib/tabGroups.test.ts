@@ -21,6 +21,7 @@ describe('tab groups', () => {
   it('takes home from the search or the utilities, and the library from a book, as a way back, not a re-tap', () => {
     expect(tapOnOpen('search')).toBe('back');
     expect(tapOnOpen('utilities')).toBe('back');
+    expect(tapOnOpen('library')).toBe('back');
     expect(tapOnOpen('book')).toBe('back');
     expect(tapOnOpen('hadith-unit')).toBe('back');
     expect(tapOnOpen('hadith-forty')).toBe('back');
