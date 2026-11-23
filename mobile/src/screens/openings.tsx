@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState, type ComponentRef } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { ChevronDown, ChevronUp, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
@@ -19,6 +19,8 @@ import { usePalette, type Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
 import IconButton from '@/ui/IconButton';
 import Card, { CardWithRow } from '@/ui/Card';
+import { Tap } from '@/ui/Tap';
+import Chip from '@/ui/Chip';
 
 const words = (key: string) => ayahOf(key)?.words ?? [];
 
@@ -28,10 +30,19 @@ function tone(palette: Palette, kind: keyof Palette['marks'], some: boolean) {
   return colour && (some ? someTone(palette, colour) : colour);
 }
 
-function Ayah({ words: list, menu, palette }: { words: OpeningWord[]; menu: string | string[]; palette: Palette }) {
+type Light = { lit: string | null; onWord: (link: string) => void };
+
+/** A row's words: shared ones coloured as the matrix colours them; a tap on one lights it and its partners on the highlight, as in the matrix and compare. */
+function Ayah({ words: list, menu, palette, light }: { words: OpeningWord[]; menu: string | string[]; palette: Palette; light?: Light }) {
   return (
     <AyahFlow color={palette.ink} menu={menu}>
-      {list.map((word, i) => <AyahWords key={i} look={'text' in word && word.mark ? { color: tone(palette, word.mark.kind, word.mark.some) } : undefined}>{`${i > 0 ? ' ' : ''}${'end' in word ? num(word.end) : word.text}`}</AyahWords>)}
+      {list.map((word, i) => {
+        const mark = 'text' in word ? word.mark : undefined;
+        const lit = !!mark && mark.link === light?.lit;
+        const look = lit ? { color: palette.onHighlight, backgroundColor: palette.highlight } : mark ? { color: tone(palette, mark.kind, mark.some) } : undefined;
+        const text = `${i > 0 ? ' ' : ''}${'end' in word ? num(word.end) : word.text}`;
+        return mark && light ? <Text key={i} onPress={() => light.onWord(mark.link)}><AyahWords look={look}>{text}</AyahWords></Text> : <AyahWords key={i} look={look}>{text}</AyahWords>;
+      })}
     </AyahFlow>
   );
 }
@@ -51,14 +62,16 @@ function Conditions({ surah, palette }: { surah: number; palette: Palette }) {
 
 /** A card's surahs, each its name (opening the mushaf there) over its opening ayah: the page's card and its feed card. */
 export function OpeningRows({ card, palette, open, still }: { card: OpeningCard; palette: Palette; open?: boolean; still?: boolean }) {
+  const [lit, setLit] = useState<string | null>(null);
+  const light = still ? undefined : { lit, onWord: (link: string) => setLit(now => (now === link ? null : link)) };
   return <>
     {card.rows.map((row, r) => (
       <View key={row.surah} style={{ paddingVertical: 6, borderTopWidth: r ? 1 : 0, borderColor: `${palette.rule}55` }}>
         {card.parts?.find(part => part.surahs[0] === row.surah) && <Text style={{ color: palette.ink, fontSize: 14, fontWeight: '700', textAlign: 'right', paddingBottom: 2 }}>{card.parts.find(part => part.surahs[0] === row.surah)!.label}</Text>}
-        <Pressable disabled={still} onPress={() => readAyah(`${row.surah}:1`)} accessibilityRole="link" accessibilityLabel={`افتح ${surahNames[row.surah]} في المصحف`} style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+        <Tap disabled={still} onPress={() => readAyah(`${row.surah}:1`)} accessibilityRole="link" accessibilityLabel={`افتح ${surahNames[row.surah]} في المصحف`} style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
           <Text style={{ color: palette.muted, fontSize: 14 }}>{surahNames[row.surah]}</Text>
-        </Pressable>
-        {open && CONDITION_SPANS[row.surah] ? <Conditions surah={row.surah} palette={palette} /> : <Ayah words={row.words} menu={row.words.flatMap(word => ('end' in word ? [`${row.surah}:${word.end}`] : []))} palette={palette} />}
+        </Tap>
+        {open && CONDITION_SPANS[row.surah] ? <Conditions surah={row.surah} palette={palette} /> : <Ayah words={row.words} menu={row.words.flatMap(word => ('end' in word ? [`${row.surah}:${word.end}`] : []))} palette={palette} light={light} />}
       </View>
     ))}
   </>;
@@ -117,10 +130,7 @@ export default function OpeningsScreen() {
         {OPENING_KINDS.map(k => {
           const on = kind === k.id;
           return (
-            <Pressable key={k.id} onPress={() => { setKind(on ? null : k.id); scroll.current?.scrollTo({ y: 0, animated: false }); }} accessibilityRole="button" accessibilityState={{ selected: on }} accessibilityLabel={k.label}
-              style={{ borderWidth: 1, borderColor: on ? palette.accent : palette.rule, backgroundColor: on ? palette.accent : 'transparent', borderRadius: 16, height: 32, paddingHorizontal: 14, alignItems: 'center', justifyContent: 'center' }}>
-              <Text style={{ color: on ? palette.onAccent : palette.muted, fontSize: 15 }}>{k.label}</Text>
-            </Pressable>
+            <Chip key={k.id} label={k.label} on={on} onPress={() => { setKind(on ? null : k.id); scroll.current?.scrollTo({ y: 0, animated: false }); }} palette={palette} />
           );
         })}
       </ScrollView>

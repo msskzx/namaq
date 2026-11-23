@@ -156,7 +156,7 @@ export function openingKeys(surah: number, words: (key: string) => string[]): st
 }
 
 /** A word's colour, by the rule every view uses (shared/quran/wordMatch.ts): how alike, and whether only `some` rows share it. */
-export type OpeningMark = { kind: Likeness; some: boolean };
+export type OpeningMark = { kind: Likeness; some: boolean; link: string };
 export type OpeningWord = { text: string; mark?: OpeningMark } | { end: number };
 export type OpeningRow = { surah: number; words: OpeningWord[] };
 export type OpeningCard = { id: string; kind: OpeningKindId; title: string; alone: boolean; rows: OpeningRow[]; parts?: { label: string; surahs: number[] }[]; refs?: Quote[] };
@@ -181,7 +181,7 @@ export function openingCards(ayahOf: (key: string) => BranchAyah | undefined): O
         ...ayah.words.map(text => {
           const link = marks?.[r].match?.links?.[at];
           at++;
-          return link ? { text, mark: { kind: link.kind, some: link.rows < card.surahs.length } } : { text };
+          return link ? { text, mark: { kind: link.kind, some: link.rows < card.surahs.length, link: link.link } } : { text };
         }),
         { end: Number(ayah.key.split(':')[1]) },
       ]);
