@@ -398,8 +398,11 @@ export function ForgottenPost({ ayah: asked, review, due: dueOne, title = 'هل 
     setDone(now);
   };
   const marks = <>
-    <Action Icon={done?.did === 'remembered' ? CircleCheck : Check} label="تذكّرتها" tone="green" on={done?.did === 'remembered'} palette={palette} onPress={() => mark('remembered')} />
-    {!forgotten && <Action Icon={LightbulbOff} label="نسيتها" on={done?.did === 'forgot'} palette={palette} onPress={() => mark('forgot')} />}
+    {/* Worded, now that the recite bar has its own line (owner, 2026-11-23). */}
+    <View style={{ flexDirection: 'row', gap: 8, marginHorizontal: 8 }}>
+      <Button pill label="تذكّرتها" Icon={done?.did === 'remembered' ? CircleCheck : Check} tone="green" active={done?.did === 'remembered'} onPress={() => mark('remembered')} />
+      {!forgotten && <Button pill label="نسيتها" Icon={LightbulbOff} active={done?.did === 'forgot'} onPress={() => mark('forgot')} />}
+    </View>
     {review && <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} />}
   </>;
   const open = <OpenButton label="افتح صفحة الآية" onPress={() => openAyahPage(ayah)} palette={palette} />;
