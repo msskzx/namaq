@@ -10,7 +10,7 @@ import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
 import { toTab } from '@/lib/ways';
 import { usePalette, type Palette } from '@/lib/theme';
-import Card from '@/ui/Card';
+import IconTile from '@/ui/IconTile';
 import Empty from '@/ui/Empty';
 import { SearchResults, useAppSearch } from '@/components/SearchResults';
 import { FEATURE_ICON } from '@/components/featureIcons';
@@ -31,18 +31,10 @@ export const QURAN_TILES: { route: string; label: string; Icon: (props: LucidePr
   { route: '/order', label: 'ترتيب السور', Icon: FEATURE_ICON.order },
 ];
 
-type Tile = (typeof QURAN_TILES)[number];
-
-/** A tool's tile: its icon over its name, two to a row; it opens the tool inside the tab. */
-function ToolTile({ tile: { route, label, Icon }, palette }: { tile: Tile; palette: Palette }) {
-  return (
-    <Card palette={palette} gap={10} onPress={() => toTab(route as Parameters<typeof toTab>[0])} accessibilityRole="link" accessibilityLabel={label}
-      style={{ flexBasis: '47%', flexGrow: 1, height: 112, alignItems: 'center', justifyContent: 'center' }}>
-      <Icon size={30} color={palette.accent} strokeWidth={1.75} />
-      <Text style={{ color: palette.ink, fontSize: 17 }}>{label}</Text>
-    </Card>
-  );
-}
+/** A tool's tile; it opens the tool inside the tab. */
+const ToolTile = ({ tile: { route, label, Icon }, palette }: { tile: (typeof QURAN_TILES)[number]; palette: Palette }) => (
+  <IconTile label={label} Icon={Icon} palette={palette} onPress={() => toTab(route as Parameters<typeof toTab>[0])} />
+);
 
 const loose = (text: string) => normalizeWord(text).replace(/\s+/g, ' ').trim();
 
