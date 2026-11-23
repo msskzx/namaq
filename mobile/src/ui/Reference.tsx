@@ -34,7 +34,10 @@ export default function Reference({ title, quotes, links = [], places, editions,
         const style = { color: i ? palette.muted : palette.ink, fontSize: i ? 13 : 15, lineHeight: i ? 21 : 25, textAlign: 'right' as const };
         const key = `${i}:${quote.text}`;
         return quote.url
-          ? <Text key={key} style={style}>{quote.text ? `«${quote.text}» ` : ''}<ExternalLink url={quote.url} color={palette.muted} size={13}>{quote.cite}</ExternalLink></Text>
+          ? <View key={key} style={{ gap: 2 }}>
+              {quote.text ? <Text style={style}>{`«${quote.text}»`}</Text> : null}
+              <ExternalLink url={quote.url} color={palette.muted} size={13}>{quote.cite}</ExternalLink>
+            </View>
           : <Text key={key} style={style}>{quote.text}</Text>;
       })}
       {open && links.map(link => <ExternalLink key={link.url} url={link.url} color={palette.accent} size={14} style={{ textAlign: 'right' }}>{link.label}</ExternalLink>)}

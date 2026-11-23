@@ -8,7 +8,7 @@ import IconButton from '@/ui/IconButton';
 import { shareCard, type SharePaged } from '@/lib/shareImage';
 import { UI_FONT_BOLD } from '@/lib/theme';
 import { Text } from '@/ui/Text';
-import ExternalLink from '@/ui/ExternalLink';
+import { LeadLink } from '@/ui/ExternalLink';
 import Folded from '@/ui/Folded';
 import { AyatRange } from '@/components/AyahLines';
 import { Readings, Refs } from '@/components/battles/BattleParts';
@@ -42,10 +42,7 @@ export function Report({ report, palette, plain, titled }: { report: AppReport; 
         </View>
       ))}
       {plain ? (report.grading ? <Text style={{ color: palette.muted, fontSize: 13, lineHeight: 22, textAlign: 'right' }}>{report.grading}</Text> : null)
-        : <Text style={{ color: palette.muted, fontSize: 13, lineHeight: 22, textAlign: 'right' }}>
-          {report.grading ? `${report.grading} · ` : ''}
-          <ExternalLink url={report.url} color={palette.muted} size={13}>{report.cite}</ExternalLink>
-        </Text>}
+        : <LeadLink lead={report.grading ? `${report.grading} ·` : undefined} url={report.url} color={palette.muted} lineHeight={22}>{report.cite}</LeadLink>}
     </View>
   );
 }

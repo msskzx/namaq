@@ -42,7 +42,10 @@ export default function SourceLine({ named, sources, palette }: {
               {source.quotes.map((quote, i) => {
                 const style = { color: palette.muted, fontSize: 14, lineHeight: 24, textAlign: 'right' as const };
                 return quote.url
-                  ? <Text key={i} style={style}>{quote.text ? `«${quote.text}» ` : ''}<ExternalLink url={quote.url} color={palette.muted} size={13}>{quote.cite}</ExternalLink></Text>
+                  ? <View key={i} style={{ gap: 2 }}>
+                      {quote.text ? <Text style={style}>{`«${quote.text}»`}</Text> : null}
+                      <ExternalLink url={quote.url} color={palette.muted} size={13}>{quote.cite}</ExternalLink>
+                    </View>
                   : <Text key={i} style={style}>{quote.text}{quote.cite ? ` ${quote.cite}` : ''}</Text>;
               })}
               {(source.links ?? []).map(link => <ExternalLink key={link.url} url={link.url} color={palette.accent} size={14} style={{ textAlign: 'right' }}>{link.label}</ExternalLink>)}
