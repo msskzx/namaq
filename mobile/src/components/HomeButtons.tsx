@@ -12,7 +12,7 @@ import type { Palette } from '@/lib/theme';
  * date come as a card in the feed); «مدونتي» holds what the reader kept: saved, forgotten and notes.
  */
 const BUTTONS: { label: string; Icon: (props: LucideProps) => React.ReactNode; open: () => void }[] = [
-  { label: 'القبلة', Icon: Compass, open: () => openUtility('qibla') },
+  { label: 'القبلة', Icon: Compass, open: () => openUtility('tools', 'qibla') },
   { label: 'الأذكار', Icon: SunMoon, open: () => openUtility('adhkar') },
   { label: 'المكتبة', Icon: LibraryBig, open: () => toTab('/books') },
   { label: 'مشاهد', Icon: Presentation, open: () => toTab('/lataif') },

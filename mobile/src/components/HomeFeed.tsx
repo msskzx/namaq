@@ -36,7 +36,7 @@ import { BOOKS } from '@shared/books';
 import { isReaderBook, pageName } from '@shared/readerBooks';
 import { hijriDate, todaysJuz } from '@shared/hijri';
 import { JUZ_INDEX } from '@shared/quran/juzIndex';
-import { num } from '@shared/quran/arabicNumber';
+import { counted, num } from '@shared/quran/arabicNumber';
 import { dayNumber } from '@shared/dailyPick';
 import type { PairCard } from '@shared/quran/compareCards';
 import type { BranchPiece } from '@shared/quran/branchInventory';
@@ -168,6 +168,11 @@ import { tanasubLink, tanasubSource } from '@shared/quran/tanasubCards';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
 import { METHODS } from '@shared/prayer';
 import Button from '@/ui/Button';
+import { ADHKAR, type Dhikr } from '@shared/adhkar';
+import { ADHKAR_TABS, adhkarSource } from '@shared/adhkarCite';
+import { adhkarTimes, askedDhikr } from '@shared/quiz/adhkar';
+import { openAdhkar } from '@/lib/adhkar';
+import { DhikrBody } from './Adhkar';
 import { QuranWord } from '@/components/quran/text/AyahFlow';
 
 type IconType = (props: LucideProps) => React.ReactNode;
@@ -462,6 +467,8 @@ function openAnswer(question: SoloQuestion) {
     case 'tuhfa': return toTab(look.mark ? { pathname: '/tuhfa', params: { verse: String(look.mark) } } : '/tuhfa');
     case 'ayat': return readAyah(look.mark ?? look.keys[0]);
   }
+  const dhikr = askedDhikr(question.key);
+  if (dhikr) return openDhikr(dhikr);
   if (question.ayahKey) return readAyah(question.ayahKey);
   if (question.order?.length) return router.push({ pathname: '/order', params: { juz: String(orderJuz(question.order)) } });
   const aimed = question.family === 'SURAH_AIM' && orderSurahOf(question.correctAnswer);
@@ -1180,8 +1187,8 @@ function PrayerPost({ prayer, times, palette }: { prayer: Exclude<PrayerKey, 'su
       // Nothing to share: the times are your own day and place (owner's plan, 2026-11-22: own-state cards never share your state).
       share={false}
       actions={<>
-        <Action Icon={Clock} label="مواقيت الصلاة" onPress={() => openUtility('times')} palette={palette} />
-        <Action Icon={Compass} label="القبلة" onPress={() => openUtility('qibla')} palette={palette} />
+        <Action Icon={Clock} label="مواقيت الصلاة" onPress={() => openUtility('tools')} palette={palette} />
+        <Action Icon={Compass} label="القبلة" onPress={() => openUtility('tools', 'qibla')} palette={palette} />
       </>}
       source={[{ line: `طريقة الحساب · ${method}`, quotes: [{ text: `حُسبت المواقيت بطريقة ${method}${settings.hanafi ? '، والعصر على مذهب الحنفية' : ''}، وتُغيَّر من مواقيت الصلاة.` }] }]}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 14, paddingVertical: 12 }}>
@@ -1591,6 +1598,28 @@ const nameLists: Partial<Record<'laqab' | 'kunya', NameFact[]>> = {};
 const nameList = (kind: 'laqab' | 'kunya') => (nameLists[kind] ??= kind === 'laqab' ? laqabFacts(PEOPLE) : kunyaFacts(PEOPLE));
 const nameId = (each: NameFact) => nameItem(each.person.slug, each.name);
 
+/** A dhikr's card on the adhkar page: its first tab (a morning and evening dhikr opens on the morning), scrolled to it. */
+const openDhikr = (item: Dhikr) => openAdhkar(ADHKAR_TABS.find(tab => item.occasions.includes(tab))!, item.id);
+
+/**
+ * A dhikr of the adhkar page (owner, 2026-11-23: every feature a feed card): the page's own card body, its times and how
+ * often on the head, the same reference as on the page; «افتح» opens the page at its card, the head the adhkar page.
+ */
+function DhikrPost({ id, palette }: { id: string; palette: Palette }) {
+  const item = ADHKAR.find(each => each.id === id);
+  if (!item) return null;
+  const often = item.repeat ? ` · ${counted(item.repeat.count, ['مرة', 'مرتين', 'مرات'])}` : '';
+  return (
+    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.adhkar} title="من الأذكار" sub={`${adhkarTimes(item)}${often}`} open={{ onPress: () => openUtility('adhkar'), label: 'افتح الأذكار' }} palette={palette} />}
+      open={<OpenButton label="افتح الذكر في الأذكار" onPress={() => openDhikr(item)} palette={palette} />}
+      source={[adhkarSource(item)]}>
+      <View style={{ paddingHorizontal: 18, paddingVertical: 14, gap: 14 }}>
+        <DhikrBody item={item} palette={palette} />
+      </View>
+    </Post>
+  );
+}
+
 /** The content cards drawn from a list (pairs and trees have their own picks): each kind's items, by a lasting id. */
 const NOTE_OF: Record<string, AyahNote> = { 'note-tafsir': 'tafsir', 'note-qiraat': 'qiraat', 'note-irab': 'irab', 'note-balagha': 'balagha' };
 const itemLists: Partial<Record<ListKind, readonly string[]>> = {};
@@ -1631,6 +1660,7 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   ring: () => ringList_().map(ring => ring.id),
   gharib: gharibItems,
   tuhfa: () => TUHFA_PASSAGES.map(passage => passage.id),
+  adhkar: () => ADHKAR.map(item => item.id),
 };
 const itemsOf = (kind: ListKind) => (itemLists[kind] ??= LIST_OF[kind]());
 
@@ -1684,6 +1714,7 @@ function ContentPost({ kind, item, day, palette }: { kind: ListKind; item: strin
     case 'ring': return <RingPost id={item} palette={palette} />;
     case 'gharib': return <GharibPost id={item} palette={palette} />;
     case 'tuhfa': return <TuhfaPost id={item} palette={palette} />;
+    case 'adhkar': return <DhikrPost id={item} palette={palette} />;
     default: return null;
   }
 }

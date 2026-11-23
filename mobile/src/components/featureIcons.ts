@@ -16,7 +16,7 @@ export const FEATURE_ICON = {
   mushaf: BookOpenText, tafsir: NotebookText, trees: TreeIcon, compare: ArrowLeftRight, openings: DoorOpen, order: OrderIcon,
   oaths: SunMoon, words: TextSearch, balagha: Gem, qiraat: Layers, irab: ListTree, tuhfa: BookMarked, prophets: ScrollText,
   scenes: Presentation, person: Milestone, life: LifeIcon, nasab: Network, ties: Link2, battles: Swords, hadith: MessagesSquare,
-  chain: GitCommitVertical, stories: ScrollText,
+  chain: GitCommitVertical, stories: ScrollText, adhkar: SunMoon,
 } satisfies Record<string, Icon>;
 
 /** Each question kind wears the icon of the feature it asks about. */
@@ -29,4 +29,5 @@ export const QUIZ_ICON = {
   TARAJIM_TIE: FEATURE_ICON.ties, TARAJIM_LIFE: FEATURE_ICON.life, TARAJIM_LAQAB: FEATURE_ICON.person, TARAJIM_KUNYA: FEATURE_ICON.person,
   PROPHET_NAMES: FEATURE_ICON.person, PROPHET_STORY: FEATURE_ICON.prophets, SIRA: FEATURE_ICON.battles, HADITH_NARRATOR: FEATURE_ICON.hadith, HADITH_COMPLETE: FEATURE_ICON.hadith,
   HADITH_BOOK: FEATURE_ICON.chain, HADITH_CHAIN: FEATURE_ICON.chain, SAHIH_KITAB: FEATURE_ICON.hadith,
+  ADHKAR_COMPLETE: FEATURE_ICON.adhkar,
 } satisfies Record<FeedKind, Icon>;

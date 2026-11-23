@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { countOf, counting, type Counting } from './adhkarCount';
+import { countOf, counting, isDone, type Counting } from './adhkarCount';
 
 const run = (events: Parameters<typeof counting>[1][]) => events.reduce<Counting>(counting, null);
 const tap = (id: string, target = 3) => ({ type: 'tap' as const, id, target });
@@ -11,14 +11,25 @@ describe('the adhkar counter', () => {
     expect(countOf(run([tap('a'), tap('a'), tap('a'), tap('a')]), 'a')).toBe(3);
   });
 
-  it('starts again from one on another card, and the first card is back at zero', () => {
+  it('starts again from one on another card, and an unfinished first card is back at zero', () => {
     const state = run([tap('a'), tap('a'), tap('b')]);
     expect(countOf(state, 'b')).toBe(1);
     expect(countOf(state, 'a')).toBe(0);
   });
 
-  it('is gone on reset and when the page or the app is left', () => {
-    expect(run([tap('a'), { type: 'reset' }])).toBeNull();
+  it('keeps a finished card done while the next one counts, and counts a card without a number once (owner, 2026-11-23)', () => {
+    const state = run([tap('a'), tap('a'), tap('a'), tap('b', 1), tap('c')]);
+    expect(isDone(state, 'a') && isDone(state, 'b')).toBe(true);
+    expect(countOf(state, 'a')).toBe(3);
+    expect(isDone(state, 'c')).toBe(false);
+    expect(countOf(run([tap('a'), tap('a'), tap('a'), tap('a')]), 'a')).toBe(3);
+  });
+
+  it('starts one card again on its reset, and forgets everything when the page or the app is left', () => {
+    const state = run([tap('a', 1), tap('b'), { type: 'reset', id: 'a' }]);
+    expect(isDone(state, 'a')).toBe(false);
+    expect(countOf(state, 'b')).toBe(1);
+    expect(countOf(run([tap('a'), { type: 'reset' }]), 'a')).toBe(0);
     expect(run([tap('a'), tap('a'), { type: 'leave' }])).toBeNull();
   });
 

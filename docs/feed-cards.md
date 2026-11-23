@@ -24,7 +24,8 @@ for one of those hadith with the start of the saying, opening the hadith's page;
 hadith page's own view, opening the hadith's page; `SahihPost`, only once the book is downloaded on the phone), a word of the Quran (من غريب القرآن, the ayah with the words
 Ibn Qutaybah quotes lit and his entry whole, opening the word's page, or the ayah's page for a phrase; `GharibPost`, phone only),
 a rule of Tuhfat al-Atfal (من تحفة الأطفال, the rule's verses as on the poem's page and «حروفه» where the poem names the letters,
-opening the poem at the first verse; `TuhfaPost` from `shared/tajwid/passages.ts`, phone only), and the quiz cards in `FEED_QUIZ_NAMES`
+opening the poem at the first verse; `TuhfaPost` from `shared/tajwid/passages.ts`, phone only), a dhikr of the adhkar page (من الأذكار, its times and how often in the
+head, drawn by `DhikrBody`, the page's own card body, opening the page at its card; `DhikrPost`, phone only, under الأذكار), and the quiz cards in `FEED_QUIZ_NAMES`
 (`shared/quiz/feedQuiz.ts`): في أي سورة؟, أكمل المتشابهات, سمّع بقية الآية, قارن الموضعين,
 أوائل السور, سمّع الآية, ما معنى؟, the four ayah quizzes below, ما المصطلح؟ (`shared/quiz/balaghaTermQuiz.ts`: a term's
 definition with its name hidden, four terms to pick from, each choice linking to its definition once answered), the three Tuhfat al-Atfal questions, في قصة مَن هذه الآية؟ (`shared/quiz/prophetStory.ts`: an ayah of a prophet's story that names no prophet, from a passage where a near ayah names him, that ayah its source; the look-up the passage in the mushaf; «افتح» opens the story), السيرة والغزوات (shared/quiz/sira.ts), the five tarajim questions
@@ -34,7 +35,10 @@ the sources give two, the wrong choices of the same shape and none near; the loo
 `shared/quiz/nasabFill.ts`: a person's nasab as boxes, every other one blank, one blank asked at a time from other fathers
 the entries name, of the answer's shape; the look-up the nasab written out), بمَ لُقّب؟ and ما كنيته؟ (each its own interest), أسماء النبي ﷺ (several right choices, under السيرة), and the four hadith questions (من راوي الحديث؟, أكمل الحديث, من أخرجه؟ and من حدّث به؟: al-Bukhari's chain
 with one narrator left out, the wrong choices narrators of other chains named nowhere in this hadith's records;
-`shared/quiz/hadith.ts`), and في أيّ كتاب؟ (`shared/quiz/sahih.ts`: a bab heading of either Sahih and the kitab it stands in).
+`shared/quiz/hadith.ts`), في أيّ كتاب؟ (`shared/quiz/sahih.ts`: a bab heading of either Sahih and the kitab it stands in), and أكمل الذكر
+(`shared/quiz/adhkar.ts`: a text dhikr of the adhkar page with its last clause or last three words hidden, the wrong choices the
+endings of other adhkar said nowhere in it; no Quran passage; «متى يُقال؟» is left out because other sound reports name more
+times for some adhkar, so a wrong time could be right).
 
 The ayah quizzes (`shared/quiz/ayahQuizzes.ts`), whose questions are built once by `scripts/quran/buildAyahQuizzes.ts`
 (the app and the website only read the bank; hand review in `scripts/quran/ayahQuizReview.json`):
@@ -188,7 +192,6 @@ timeline), رتّب, من شهدها؟ / من أمير السرية؟, فيمَ 
 - Audio: a play button on the ayah cards instead of a card of its own.
 - Qibla: already on the prayer card.
 - Search, share and videos, settings, «ما أحفظه», «اهتماماتي»: tools, not content.
-- الأذكار: an interest once its card or question is built (owner agreed it is one, 2026-11-19).
 - Party quizzes: played with others, not from the feed.
 - «مشاهد» has no quiz kind yet: what the darknesses stand for differs between the scholars (each shown by name), so a question
   would ask a disputed point. An order question on the layers is a candidate once more scenes exist.

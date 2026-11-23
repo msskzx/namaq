@@ -2,14 +2,17 @@
  * Adhan alerts: which prayer times to set a phone notification for. Worked out here, scheduled by the app.
  * Notifications are local (no server): the phone keeps a list of upcoming ones and rings them itself.
  */
-import { FIVE, MY_LOCATION, PRAYER_NAMES, type Place, type PrayerDay, type PrayerKey } from './prayer';
+import { ALL, FIVE, MY_LOCATION, PRAYER_NAMES, type Place, type PrayerDay, type PrayerKey } from './prayer';
 
-export type Prayer = Exclude<PrayerKey, 'sunrise'>;
-export type AdhanAlerts = Record<Prayer, boolean>;
-export const NO_ALERTS: AdhanAlerts = { fajr: false, dhuhr: false, asr: false, maghrib: false, isha: false };
+/** A time with a bell: the five prayers, and the sunrise (owner, 2026-11-23: a bell on every row, the end of fajr's time). */
+export type Prayer = PrayerKey;
+/** `sunrise` came later, so a list saved before it has none: off. */
+export type AdhanAlerts = Record<Exclude<PrayerKey, 'sunrise'>, boolean> & { sunrise?: boolean };
+export const NO_ALERTS: AdhanAlerts = { fajr: false, sunrise: false, dhuhr: false, asr: false, maghrib: false, isha: false };
 export const isAdhanAlerts = (value: unknown): value is AdhanAlerts =>
-  !!value && typeof value === 'object' && FIVE.every(key => typeof (value as AdhanAlerts)[key] === 'boolean');
-export const anyAlert = (alerts: AdhanAlerts) => FIVE.some(key => alerts[key]);
+  !!value && typeof value === 'object' && FIVE.every(key => typeof (value as AdhanAlerts)[key] === 'boolean')
+  && ['boolean', 'undefined'].includes(typeof (value as AdhanAlerts).sunrise);
+export const anyAlert = (alerts: AdhanAlerts) => ALL.some(key => alerts[key]);
 
 /** iOS keeps at most 64 waiting notifications per app; stay under it. The app tops the list up each time it opens. */
 export const MAX_ALERTS = 60;
@@ -48,7 +51,7 @@ export function adhkarAt(day: PrayerDay, time: AdhkarTime): Date {
 export function planAll(alerts: AdhanAlerts, adhkar: AdhkarAlerts, place: Place, now: Date, timesOn: (day: Date) => PrayerDay): { prayers: Alert[]; adhkar: AdhkarAlert[] } {
   const prayers: Alert[] = [];
   const reminders: AdhkarAlert[] = [];
-  const on = FIVE.filter(key => alerts[key]);
+  const on = ALL.filter(key => alerts[key]);
   const times = (['morning', 'evening'] as const).filter(time => adhkar[time]);
   if (!on.length && !times.length) return { prayers, adhkar: reminders };
   const upcoming = (at: Date) => !Number.isNaN(at.getTime()) && at.getTime() > now.getTime();
@@ -85,11 +88,11 @@ export const adhkarOf = (data: Record<string, unknown> | undefined): AdhkarTime 
 export const planAlerts = (alerts: AdhanAlerts, place: Place, now: Date, timesOn: (day: Date) => PrayerDay): Alert[] =>
   planAll(alerts, NO_ADHKAR_ALERTS, place, now, timesOn).prayers;
 
-/** «الفجر» over «حان وقت أذان الفجر في القاهرة»; the phone's own place reads «حان وقت أذان الفجر». */
+/** «الفجر» over «حان وقت أذان الفجر في القاهرة»; the phone's own place reads «حان وقت أذان الفجر». The sunrise has no adhan: «حان وقت الشروق». */
 export function alertText(prayer: Prayer, place: Place) {
   const name = PRAYER_NAMES[prayer];
   const where = place.name && place.name !== MY_LOCATION ? ` في ${place.name}` : '';
-  return { title: name, body: `حان وقت أذان ${name}${where}` };
+  return { title: name, body: `حان وقت ${prayer === 'sunrise' ? '' : 'أذان '}${name}${where}` };
 }
 
 /** One string for what the plan depends on, so the app reschedules only when one of these, or the day, changes. */
