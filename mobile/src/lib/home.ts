@@ -1,6 +1,5 @@
 import type { Bookmark } from '@shared/bookmarks';
 import { bookmarkKind, type BookmarkKind } from '@shared/bookmarkKind';
-import { ayahBookmarkId, markAyah, markWord } from '@shared/ayahMarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { aliasesOf, hasTrees } from './branchList';
 import { cardsFor, compareTargetsFor, compareTargetsOfAyah, type CompareTarget } from './compare';
@@ -113,17 +112,9 @@ export function cardWays(item: Bookmark): CardWay[] {
   ];
 }
 
-/** A forgotten ayah as a homepage card; it opens the reader reviewing from that ayah. */
-export function forgottenCard(key: string, text: string): SavedCard {
-  const [surah, ayah] = split(key);
-  return { id: key, text, kind: 'ayah', references: [{ surah, ayat: [ayah] }], open: { tab: 'read', at: markAyah(key), recite: true, review: true, ...(markWord(key) !== undefined ? { word: markWord(key) } : {}) } };
-}
-
 /** A note on an ayah as a homepage card: the reader's words under the ayah's name; it opens the ayah in the mushaf. */
 export function noteCard(key: string, text: string): SavedCard {
   const [surah, ayah] = split(key);
   return { id: key, text, kind: 'ayah', references: [{ surah, ayat: [ayah] }], open: { tab: 'read', at: key } };
 }
 
-/** The other views of a forgotten ayah: the same as a saved ayah's. */
-export const forgottenWays = (key: string) => cardWays({ id: ayahBookmarkId(markAyah(key)), text: '', href: '', savedAt: 0 });

@@ -503,6 +503,24 @@ test.describe('a returning user', () => {
   });
 });
 
+test.describe('the forgotten list', () => {
+  test.use({ seed: { 'ayah-forgot': { '2:255:3': { forgot: 2, at: 10 }, '2:255:9': { forgot: 1, at: 11 }, '112:2': { forgot: 1, at: 20 } } } });
+
+  // Owner, 2026-11-23: each forgotten ayah is asked as recite mode asks it, one card per ayah however many of its words were forgotten.
+  test('asks each forgotten ayah once, and its tick rests every forgotten word of it until taken back', async ({ page }) => {
+    await open(page, '/library?tab=forgotten');
+    await expect(page.getByRole('button', { name: 'افتح الآية في المصحف' })).toHaveCount(2);
+    await expect(page.getByRole('button', { name: 'أظهر الكلمة التالية' })).toHaveCount(2);
+    const tick = page.getByRole('button', { name: 'تذكّرتها', exact: true }).first();
+    await tick.click();
+    await expect.poll(async () => Object.entries((await stored<Record<string, { due?: number }>>(page, 'ayah-forgot')) ?? {}).filter(([, mark]) => mark.due).map(([key]) => key).sort()).toEqual(['2:255:3', '2:255:9']);
+    // The card keeps its place, and a second tap puts both marks back as they were.
+    await expect(page.getByRole('button', { name: 'تذكّرتها', exact: true })).toHaveCount(2);
+    await tick.click();
+    await expect.poll(async () => Object.values((await stored<Record<string, { due?: number }>>(page, 'ayah-forgot')) ?? {}).filter(mark => mark.due)).toEqual([]);
+  });
+});
+
 test.describe('balagha terms in the feed', () => {
   test.use({ seed: { interests: '["balagha"]', 'interests-surprise': '0' } });
 
