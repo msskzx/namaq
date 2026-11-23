@@ -515,7 +515,9 @@ const QUIZ_TREE_HEIGHT = 380;
  * or a tree's QuizInputs and QuizFeedback), one kind a card in turn, the same question all day (`seed`). With «الأسئلة مما أحفظ
  * فقط» on, it asks from what is memorized, as the solo quiz does.
  */
-const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTopic; seed: number; palette: Palette }) {
+const QuizPost = memo(function QuizPost({ kind, seed, palette, sub, home = true }: { kind: QuizTopic; seed: number; palette: Palette;
+  /** The head's line under the title (the quizzes page names the kind's interest). */ sub?: string;
+  /** Off on the quizzes page itself, where a head opening the quizzes would go nowhere. */ home?: boolean }) {
   // A tree or compare question's room follows what it holds, up to most of the screen (owner, 2026-11-18).
   const [roomHeight, onFit] = useFitHeight(QUIZ_TREE_HEIGHT);
   const memorized = useSyncExternalStore(subscribeMemorized, readMemorized);
@@ -542,7 +544,7 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette }: { kind: QuizTop
   const answered = isTree(question) || isCompare(question) ? !!checked : run.typed[0][0] !== undefined;
   const prompt = question.promptArabic && question.promptArabic !== FEED_QUIZ_NAMES[kind] ? <QuizPrompt text={question.promptArabic} palette={palette} /> : undefined;
   return (
-    <Post palette={palette} head={<PostHead Icon={QUIZ_ICON[kind as FeedKind]} title={FEED_QUIZ_NAMES[kind]} open={topic('/quizzes', 'افتح الاختبارات')} palette={palette} />} whole
+    <Post palette={palette} head={<PostHead Icon={QUIZ_ICON[kind as FeedKind]} title={FEED_QUIZ_NAMES[kind]} sub={sub} open={home ? topic('/quizzes', 'افتح الاختبارات') : undefined} palette={palette} />} whole
       // Unanswered, a tree or compare question's «تحقق» leads the row, before «تلميح», as the choice questions' does.
       open={answered ? <OpenButton label="افتح ما يشرح الجواب" onPress={() => openAnswer(question)} palette={palette} />
         : (isTree(question) || isCompare(question)) && !checked ? <Action Icon={Check} label="تحقق" onPress={() => setRun(check(run))} palette={palette} /> : undefined}
@@ -1056,12 +1058,14 @@ const lifePeople = () => PEOPLE.filter(person => drawsLine(personLife(person))).
 const QUIZ_BOOKS: Partial<Record<FeedQuizKind, BookId>> = { TAFSIR: 'sadi', BALAGHA: 'itqan', TERM: 'itqan', IRAB: 'irab-words' };
 
 /** A question card of kind `kind`: the openings quiz, or one of the solo quiz's. */
-function FeedQuiz({ kind, seed, palette }: { kind: FeedQuizKind; seed: number; palette: Palette }) {
+export function FeedQuiz({ kind, seed, palette, sub, home = true }: { kind: FeedQuizKind; seed: number; palette: Palette; sub?: string; home?: boolean }) {
   useBooks();
-  const book = QUIZ_BOOKS[kind];
-  if (book && bookState(book) !== 'on') return null;
-  return kind === OPENINGS ? <OpeningPost seed={seed} palette={palette} /> : <QuizPost kind={kind} seed={seed} palette={palette} />;
+  if (!quizBookOn(kind)) return null;
+  return kind === OPENINGS ? <OpeningPost seed={seed} palette={palette} /> : <QuizPost kind={kind} seed={seed} palette={palette} sub={sub} home={home} />;
 }
+
+/** Whether a kind's book is on (settings, «الكتب»): a kind asked from a book that is off is not asked. */
+export const quizBookOn = (kind: FeedQuizKind) => { const book = QUIZ_BOOKS[kind]; return !book || bookState(book) === 'on'; };
 
 /**
  * The tree card's height: its frame, the buttons and the chips. A lit path's ayat add their room below (TreeCard `ayatRoom`),
