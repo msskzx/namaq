@@ -3,6 +3,7 @@ import { View, type TextStyle, type ViewStyle } from 'react-native';
 import { usePageWidth } from '@/ui/column';
 import { Text } from '@/ui/Text';
 import { QURAN_FONT, usePalette } from '@/lib/theme';
+import { markTone, type WordMark } from '@/lib/marks';
 import { CARD_MARGINS, FLOW_LINE, flowFontSize, wordFontSize } from '@shared/quran/quranText/flow';
 import { mushafText } from '@shared/quran/mushafText';
 import { AyahMenuPress, type AyahMenuKeys } from '@/ui/AyahMenuPress';
@@ -55,21 +56,24 @@ export default function AyahFlow({ children, color, menu, row = false, center = 
 export type WordLook = Pick<TextStyle, 'color' | 'fontWeight' | 'textDecorationLine' | 'textDecorationColor' | 'backgroundColor'>;
 
 /** Page words in an AyahFlow, at its size (as a paragraph's run, or a piece of a row). */
-export function AyahWords({ children, look, lit = false, onPress }: { children: string; look?: WordLook;
+export function AyahWords({ children, look, mark, lit = false, onPress }: { children: string; look?: WordLook;
+  /** How the word matches the other ayat: the module gives it the match colour (lib/marks.ts markTone). */
+  mark?: WordMark;
   /** Lit on the highlight: a tapped word and its partners in the other ayat (compare, the matrix, the surah openings), or the word read along. */
   lit?: boolean;
   /** A tap on the word: lights it and its partners where the place keeps which word is lit. */
   onPress?: () => void }) {
   const { size, color } = useContext(FlowSize);
   const style = { fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, color, writingDirection: 'rtl' as const };
-  const word = lit ? <LitWord style={style} look={look}>{children}</LitWord> : <Text style={{ ...style, ...look }}>{mushafText(children)}</Text>;
+  const word = lit || mark ? <ToneWord style={style} look={look} mark={mark} lit={lit}>{children}</ToneWord> : <Text style={{ ...style, ...look }}>{mushafText(children)}</Text>;
   return onPress ? <Text onPress={onPress}>{word}</Text> : word;
 }
 
-/** The lit look, read from the palette only for the word that is lit (a card holds many words). */
-function LitWord({ children, style, look }: { children: string; style: TextStyle; look?: WordLook }) {
+/** A marked or lit word, reading the palette only for those (a card holds many plain words). */
+function ToneWord({ children, style, look, mark, lit }: { children: string; style: TextStyle; look?: WordLook; mark?: WordMark; lit: boolean }) {
   const palette = usePalette();
-  return <Text style={{ ...style, color: palette.onHighlight, backgroundColor: palette.highlight, ...look }}>{mushafText(children)}</Text>;
+  const tone = lit ? { color: palette.onHighlight, backgroundColor: palette.highlight } : { color: (mark && markTone(palette, mark)) || style.color };
+  return <Text style={{ ...style, ...tone, ...look }}>{mushafText(children)}</Text>;
 }
 
 /** The size of a Quran word on its own, and of a tree's words, on this screen. */

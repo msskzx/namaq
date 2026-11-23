@@ -4,7 +4,6 @@ import { useLocalSearchParams } from 'expo-router';
 import { ChevronDown, ChevronUp, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { CONDITION_NOTES, CONDITION_SOURCES, CONDITION_SPANS, ITQAN_KIND_NOTES, ITQAN_QUOTES, OPENING_KINDS, conditionLines, inKind, soleCard, openingCards, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
-import { someTone } from '@/lib/marks';
 import { Text } from '@/ui/Text';
 import SourceLine from '@/ui/SourceLine';
 import Reference from '@/ui/Reference';
@@ -24,12 +23,6 @@ import Chip from '@/ui/Chip';
 
 const words = (key: string) => ayahOf(key)?.words ?? [];
 
-/** A shared word's colour, as the matrix gives it (mobile/src/lib/marks.ts): mixed with the muted colour when only some rows share it. */
-function tone(palette: Palette, kind: keyof Palette['marks'], some: boolean) {
-  const colour = palette.marks[kind];
-  return colour && (some ? someTone(palette, colour) : colour);
-}
-
 type Light = { lit: string | null; onWord: (link: string) => void };
 
 /** A row's words: shared ones coloured as the matrix colours them; a tap on one lights it and its partners on the highlight, as in the matrix and compare. */
@@ -39,7 +32,7 @@ function Ayah({ words: list, menu, palette, light }: { words: OpeningWord[]; men
       {list.map((word, i) => {
         const mark = 'text' in word ? word.mark : undefined;
         const lit = !!mark && mark.link === light?.lit;
-        return <AyahWords key={i} lit={lit} look={mark && !lit ? { color: tone(palette, mark.kind, mark.some) } : undefined} onPress={mark && light ? () => light.onWord(mark.link) : undefined}>
+        return <AyahWords key={i} lit={lit} mark={mark && { kind: mark.kind, some: mark.some }} onPress={mark && light ? () => light.onWord(mark.link) : undefined}>
           {`${i > 0 ? ' ' : ''}${'end' in word ? num(word.end) : word.text}`}
         </AyahWords>;
       })}

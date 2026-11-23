@@ -9,7 +9,7 @@ import { scheduleOnRN } from 'react-native-worklets';
 import { num } from '@shared/quran/arabicNumber';
 import type { Lane } from './TreeCard';
 import { matrixOf, readId, surahNames, type MatrixAyah, type MatrixCell, type Presentation } from '@/lib/branches';
-import { sharedTone } from '@/lib/marks';
+import { sharedMark } from '@/lib/marks';
 import type { Size } from '@/lib/camera';
 import { toneColor, type Palette, CARD } from '@/lib/theme';
 import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
@@ -66,12 +66,6 @@ type Light = { lit: string | null; onWord: (link: string) => void };
 /** The read-along in one row: the word being read (`row:key:index`) and its link (`link:<link>`), lit together. */
 type Read = { row: number; now: Set<string> };
 
-/** A word's colour: shared by every row in full, by only some rows faded into the card. */
-function toneOf(ayah: MatrixAyah, i: number, palette: Palette) {
-  const color = sharedTone(palette, ayah, i);
-  return color ? { color } : undefined;
-}
-
 /** A tapped word and its partners, or the word the read-along is on and the words matched with it in the other rows. */
 function isLit(ayah: MatrixAyah, i: number, light?: Light, read?: Read) {
   const link = ayah.links?.get(i)?.link;
@@ -93,7 +87,7 @@ function Ayah({ ayah, palette, muted, light, read, shown = Infinity }: { ayah: M
     {ayah.words.map((word, i) => {
       const lit = isLit(ayah, i, light, read);
       return <View key={i} ref={view => { if (view) registry.words.set(`${ayah.key}:${i}`, view); else registry.words.delete(`${ayah.key}:${i}`); }} onLayout={registry.measure} collapsable={false}>
-        <Text><AyahWords lit={lit} onPress={press(i)} look={{ ...(lit ? null : toneOf(ayah, i, palette)), ...(i >= shown ? UNSEEN : null) }}>{word}</AyahWords></Text>
+        <Text><AyahWords lit={lit} mark={sharedMark(ayah, i)} onPress={press(i)} look={i >= shown ? UNSEEN : undefined}>{word}</AyahWords></Text>
       </View>;
     })}
     <AyahWords look={{ color: palette.accent, ...(ayah.words.length > shown ? UNSEEN : null) }}>{num(number)}</AyahWords>
@@ -101,7 +95,7 @@ function Ayah({ ayah, palette, muted, light, read, shown = Infinity }: { ayah: M
   return <>
     {ayah.words.map((word, i) => {
       const lit = isLit(ayah, i, light, read);
-      return <Text key={i}>{i > 0 ? ' ' : ''}<AyahWords lit={lit} onPress={press(i)} look={{ ...(lit ? null : toneOf(ayah, i, palette)), ...(i >= shown ? UNSEEN : null) }}>{word}</AyahWords></Text>;
+      return <Text key={i}>{i > 0 ? ' ' : ''}<AyahWords lit={lit} mark={sharedMark(ayah, i)} onPress={press(i)} look={i >= shown ? UNSEEN : undefined}>{word}</AyahWords></Text>;
     })}
     <Text style={[{ color: muted ? palette.muted : palette.accent }, ayah.words.length > shown && UNSEEN]}> {num(number)} </Text>
   </>;

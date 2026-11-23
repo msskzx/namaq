@@ -15,7 +15,7 @@ import CompareTree from './CompareTree';
 import { Gap, PartRule, Silent, StartRule } from './StoryParts';
 import { blend, type Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
-import { COMPARE_CARD, markColour, sideTitle, sideView, writtenLinks, type SideName } from '@shared/quran/compareCardLook';
+import { COMPARE_CARD, sideTitle, sideView, writtenLinks, type SideName } from '@shared/quran/compareCardLook';
 import { likenessAt } from '@/lib/branches';
 import { nextSpeed, useReadAlong } from './useReadAlong';
 import VideoSheet from './VideoSheet';
@@ -54,13 +54,13 @@ function AyahText({ ayah, surah, palette, light, plain = false, inline = false }
       const mark = plain ? undefined : ayah.marks?.[i];
       const lit = !!mark?.link && mark.link === light?.lit;
       const reading = light?.reading === i;
-      const color = lit ? undefined : markColour(mark?.kind, palette, !!mark?.link && !!light?.written?.has(mark.link));
+      const written = !!mark?.link && !!light?.written?.has(mark.link);
       const link = mark?.link;
       return (
         <Text key={i}>
           {i > 0 ? ' ' : ''}
-          <AyahWords lit={lit} onPress={link && light?.onWord ? () => light.onWord!(link) : undefined}
-            look={{ ...(color ? { color } : null), ...(reading ? { textDecorationLine: 'underline', textDecorationColor: palette.accent, ...(lit ? null : { backgroundColor: palette.paperDeep }) } : null) }}>
+          <AyahWords lit={lit} mark={mark?.kind && { kind: written && mark.kind === 'exact' ? 'written' : mark.kind }} onPress={link && light?.onWord ? () => light.onWord!(link) : undefined}
+            look={{ ...(reading ? { textDecorationLine: 'underline', textDecorationColor: palette.accent, ...(lit ? null : { backgroundColor: palette.paperDeep }) } : null) }}>
             {word}
           </AyahWords>
         </Text>
