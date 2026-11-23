@@ -42,3 +42,20 @@ Checks, pinned in `shared/quran/words.test.ts`:
 
 Every number is about the Quran's text and is the same for everyone. Nothing counts what a reader read, saved or
 memorized, and nothing is stored.
+
+## A word's page (owner, 2026-11-21)
+
+Tapping a word on the words page opens its own page (`screens/word.tsx`), not a sheet. The mushaf's long press and the
+search still open the same view as a sheet (`components/WordSheet.tsx`, `WordView`). Three sections, a book with nothing
+on the word having none:
+
+- «المواضع»: the count, the chart of where it gathers and its ayat, as before.
+- «غريب القرآن لابن قتيبة»: his entries on the word wherever the Quran uses it, in mushaf order (`gharibOfPlaces`). Only
+  an entry that quotes the word alone counts: one quoting a phrase («﴿أَعْجَازُ نَخْلٍ﴾ أي أصولُ نخل») often explains
+  another word of it. A reading pass that marks the word each phrase entry explains is the agreed next step.
+- «المفردات للراغب»: his article on the word's root (`mufradatOfPlaces`).
+
+Nothing at the top stays pinned: the word, count, sections and chart slide away while the list scrolls down and come back
+on any scroll up, as the top bar does, except while a finger slides on the chart and after the list jumps to a picked
+surah. The chart is twice as tall as before (96 points), and the picked surah's name rides above the finger while it
+slides.

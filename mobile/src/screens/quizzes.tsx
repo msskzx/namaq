@@ -2,7 +2,7 @@ import { useRef, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { Text } from '@/ui/Text';
 import { router, type Href } from 'expo-router';
-import { User, Users, type LucideProps } from 'lucide-react-native';
+import { MessageSquare, MessagesSquare, type LucideProps } from 'lucide-react-native';
 import TopBar from '@/ui/TopBar';
 import { usePalette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
@@ -13,8 +13,8 @@ import Card from '@/ui/Card';
 // The website's /quizzes mode cards (src/app/quizzes/page.tsx QuizModes): solo and party only, every kind of question is
 // chosen inside them (owner, 2026-11-17).
 const MODES: { href: Href; Icon: (props: LucideProps) => React.ReactNode; title: string; text: string}[] = [
-  { href: '/quiz/solo', Icon: User, title: 'اختبار فردي', text: 'أجب عن أسئلة في آيات القرآن، ثم راجع الإجابة والآيات المرتبطة بها.' },
-  { href: '/quiz/party', Icon: Users, title: 'اختبار جماعي', text: 'ابدأ اختبارًا جماعيًا وشارك رقمه، أو انضم إلى غيرك من هاتفك.' },
+  { href: '/quiz/solo', Icon: MessageSquare, title: 'اختبار فردي', text: 'أجب عن أسئلة في آيات القرآن، ثم راجع الإجابة والآيات المرتبطة بها.' },
+  { href: '/quiz/party', Icon: MessagesSquare, title: 'اختبار جماعي', text: 'ابدأ اختبارًا جماعيًا وشارك رقمه، أو انضم إلى غيرك من هاتفك.' },
 ];
 
 export default function QuizzesScreen() {

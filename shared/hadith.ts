@@ -31,6 +31,8 @@ export interface SceneLine {
   speaker?: string;
   agent?: string;
   text: string;
+  /** A turn's lead-in as its source cut it («قَالَ فَقَالَ:»), drawn above its bubble; without it the narration before is cut by `splitLead`. */
+  lead?: string;
 }
 
 export interface SceneView {
@@ -93,26 +95,76 @@ export function bubbleSides(lines: Pick<SceneLine, 'kind' | 'speaker'>[]): boole
   });
 }
 
+/** A drawn hadith or story's two ways to read it, the owner's names (2026-11-18; 2026-11-21: never «النص كاملًا»). */
+export const DRAW_MODES = [{ key: 'drawing', label: 'الرسم' }, { key: 'text', label: 'النص' }] as const;
+export type DrawMode = (typeof DRAW_MODES)[number]['key'];
+
+/** The Prophet's agent id in the scenes: his colour is the first in every scene, his chip first in every key. */
+export const PROPHET_AGENT = 'prophet-muhammad';
+/** The Prophet's name on his chip and ring: «رسول الله ﷺ», whatever the text calls him (owner, 2026-11-21). */
+export const PROPHET_LABEL = 'رسول الله ﷺ';
+
 /**
- * Each scene's speakers and the colour each takes, by its place in a list of `count` colours: a speaker keeps the colour
- * an earlier scene gave him, unless someone in this scene already has it.
+ * Each scene's speakers and the colour each takes, by its place in a list of `count` colours. The Prophet ﷺ always takes
+ * the first; anyone else keeps the colour an earlier scene gave him unless someone in this scene already has it, and
+ * otherwise takes the next free one after the Prophet's. More speakers than colours share the others in turn.
  */
 export function sceneSlots(scenes: SceneView[], count: number): Map<string, number>[] {
   const earlier = new Map<string, number>();
   return scenes.map((scene) => {
     const taken = new Set<number>();
     const slots = new Map<string, number>();
-    for (const { kind, speaker } of scene.lines) {
-      if (kind !== 'turn' || !speaker || slots.has(speaker)) continue;
+    const speakers = sceneSpeakers(scene.lines);
+    for (const { speaker, prophet } of speakers) {
+      if (prophet) { slots.set(speaker, 0); taken.add(0); }
+    }
+    const others = Math.max(1, count - 1);
+    let shared = 0;
+    for (const { speaker, prophet } of speakers) {
+      if (prophet) continue;
       const kept = earlier.get(speaker);
-      let at = kept !== undefined && !taken.has(kept) ? kept : 0;
-      while (taken.has(at)) at = (at + 1) % count;
+      let at = kept !== undefined && !taken.has(kept) ? kept : undefined;
+      for (let i = 1; at === undefined && i < count; i++) if (!taken.has(i)) at = i;
+      // Every colour is taken: the rest share them, in turn.
+      at ??= 1 + (shared++ % others);
       taken.add(at);
       earlier.set(speaker, at);
-      slots.set(speaker, at);
+      slots.set(speaker, at % count);
     }
     return slots;
   });
+}
+
+/** Who speaks in a scene, each once, in the order they first speak, the Prophet ﷺ first: the key of the scene's colours. */
+export function sceneSpeakers(lines: Pick<SceneLine, 'kind' | 'speaker' | 'agent'>[]): { speaker: string; prophet: boolean }[] {
+  const seen = new Map<string, boolean>();
+  for (const { kind, speaker, agent } of lines) {
+    if (kind !== 'turn' || !speaker) continue;
+    seen.set(speaker, (seen.get(speaker) ?? false) || agent === PROPHET_AGENT);
+  }
+  const all = [...seen].map(([speaker, prophet]) => ({ speaker, prophet }));
+  return [...all.filter(one => one.prophet), ...all.filter(one => !one.prophet)];
+}
+
+/** A word that says someone spoke: «قال», «فقال», «وقالت», «قلت», «فقلنا», «قالوا»… */
+const SAYING = /^[فو]?(قال|قالت|قالوا|قلت|قلنا)$/;
+/** Words that join the saying to what went before and go with it: «ثُمَّ قَالَ». */
+const JOINERS = new Set(['ثم']);
+
+/**
+ * A narration that leads into a saying, cut where the last saying verb starts: the words before stay the story's lines,
+ * the saying verb and what follows it («فَقَالَ رَسُولُ اللَّهِ ﷺ», «ثُمَّ قَالَ لِي») are the lead-in drawn above the bubble.
+ * The text is never changed, only cut: the two parts joined are the narration as printed. A narration with no saying verb
+ * is all lead-in.
+ */
+export function splitLead(narration: string): { before?: string; lead: string } {
+  const words = narration.trim().split(/\s+/);
+  const bare = words.map(word => normalizeWord(word).replace(/[^\u0621-\u064a]/g, ''));
+  let at = bare.findLastIndex(word => SAYING.test(word));
+  if (at <= 0) return { lead: narration.trim() };
+  while (at > 0 && JOINERS.has(bare[at - 1])) at--;
+  if (at === 0) return { lead: narration.trim() };
+  return { before: words.slice(0, at).join(' '), lead: words.slice(at).join(' ') };
 }
 
 /** The books the Forty's records come from: the Sahihayn first, then the books al-Nawawi names for the rest. */

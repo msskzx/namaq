@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { ScrollView, useWindowDimensions, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
+import { usePageWidth } from '@/ui/column';
 import { router, useLocalSearchParams } from 'expo-router';
 import type { Tie } from '@shared/tarajimGraph';
 import { Text } from '@/ui/Text';
@@ -8,7 +9,7 @@ import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
 import IconButton from '@/ui/IconButton';
 import { CardWithRow } from '@/ui/Card';
-import { Link2, Network, Users } from 'lucide-react-native';
+import { Milestone, Link2, Network } from 'lucide-react-native';
 import { usePalette } from '@/lib/theme';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { toTab } from '@/lib/ways';
@@ -26,7 +27,7 @@ import TiesRing, { TieSheet, tiesOf } from '@/components/TiesRing';
 export default function TiesScreen() {
   const palette = usePalette();
   const bottom = useTabBarSpace();
-  const { width } = useWindowDimensions();
+  const width = usePageWidth();
   const { slug = '' } = useLocalSearchParams<{ slug?: string }>();
   const [trail, setTrail] = useState<string[]>(() => (findPerson(slug) ? [slug] : []));
   const [shown, setShown] = useState<Tie | undefined>();
@@ -54,7 +55,7 @@ export default function TiesScreen() {
         )}
         {/* One section in the home card's shape (owner 2026-11-20): the ring and its badges, the ways on under it, the books on the line. */}
         <CardWithRow palette={palette} gap={12} row={<>
-          <IconButton Icon={Users} label={person.sex === 'FEMALE' ? 'ترجمتها' : 'ترجمته'} onPress={() => router.push({ pathname: '/person', params: { slug: person.slug } })} />
+          <IconButton Icon={Milestone} label={person.sex === 'FEMALE' ? 'ترجمتها' : 'ترجمته'} onPress={() => router.push({ pathname: '/person', params: { slug: person.slug } })} />
           <IconButton Icon={Network} label="النسب" onPress={() => router.push({ pathname: '/nasab', params: { slug: person.slug } })} />
           <IconButton Icon={Link2} label={person.sex === 'FEMALE' ? 'بينها وبين…' : 'بينه وبين…'} onPress={() => router.push({ pathname: '/between', params: { slugs: person.slug } })} />
         </>}>

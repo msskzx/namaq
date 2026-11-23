@@ -69,6 +69,67 @@ export function mufradatOf(data: MufradatData, key: string, word: number): (Mufr
   return at < 0 ? null : Object.assign([...data.entries[at]] as MufradatEntry, { at });
 }
 
+/** One of Ibn Qutaybah's entries found through a word's place: the ayah it was found in, and the words it quotes there. */
+export type GharibPlaced = GharibAt & { key: string; phrase?: boolean };
+
+/** [ayah, mushaf word]: a word of the entry's surah. */
+export type GharibWord = [ayah: number, word: number];
+/**
+ * The words each of his entries quoting more than one word explains (owner, 2026-11-21), by entry index: «﴿وَالنَّخْلَ
+ * بَاسِقَاتٍ﴾ أي طوالا» explains باسقات alone. Two agents marked every such entry blind of each other; only the ones both
+ * marked alike, and the owner's answers where they differed, are here. An entry explaining the phrase as a whole («﴿أَعْجَازُ
+ * نَخْلٍ﴾ أي أصولُ نخل») or that neither could pin to a word has none. Built by scripts/quran/gharibWords.ts.
+ */
+export type GharibWordsData = { source: { book: number; sha: string }; words: Record<string, GharibWord[]>; phrases: number[] };
+
+/** The words an entry explains: the one word it quotes, or the ones marked for it. */
+export function explainedBy(data: GharibData, marks: GharibWordsData, at: number): GharibWord[] {
+  const places = data.entries[at][4];
+  if (places.length === 1 && places[0][1] === places[0][2]) return [[places[0][0], places[0][1]]];
+  return marks.words[at] ?? [];
+}
+
+/**
+ * His entries on a word wherever the Quran uses it (the words page, owner 2026-11-21): `places` are the word's ayat in
+ * mushaf order, each with its mushaf words. First the entries that explain this word: quoting it alone (one word, or a
+ * phrase all of this word: «﴿وَأَنْفُسَنَا وَأَنْفُسَكُمْ﴾»), or quoting a phrase with this word marked as the one he explains
+ * (`marks`). Then, marked `phrase`, the entries explaining as a whole a phrase this word is in («﴿أَعْجَازُ نَخْلٍ﴾ أي
+ * أصولُ نخل» on نخل), shown under «في عبارة» so his meaning is never read as this word's own. An entry found twice shows
+ * once, at its first ayah.
+ */
+export function gharibOfPlaces(data: GharibData, marks: GharibWordsData, places: { key: string; words: number[] }[]): GharibPlaced[] {
+  const phrases = new Set(marks.phrases);
+  const seen = new Set<number>();
+  const own: GharibPlaced[] = [];
+  const inPhrase: GharibPlaced[] = [];
+  for (const { key, words } of places) {
+    const ayah = Number(key.split(':')[1]);
+    for (const entry of gharibAt(data, key)) {
+      if (seen.has(entry.at)) continue;
+      const quoted = entry.words.flatMap(([from, to]) => Array.from({ length: to - from + 1 }, (_, i) => from + i));
+      if ((!phrases.has(entry.at) && quoted.every(word => words.includes(word))) || explainedBy(data, marks, entry.at).some(([at, word]) => at === ayah && words.includes(word))) own.push({ ...entry, key });
+      else if (phrases.has(entry.at) && quoted.some(word => words.includes(word))) inPhrase.push({ ...entry, key, phrase: true });
+      else continue;
+      seen.add(entry.at);
+    }
+  }
+  return [...own, ...inPhrase];
+}
+
+/**
+ * Al-Raghib's article on a word, from its places: the one most of its words link to (a word has one root). A stray link
+ * (a mushaf word that also holds another word) is outvoted. Empty when no place links to one.
+ */
+export function mufradatOfPlaces(data: MufradatData, places: { key: string; words: number[] }[]): (MufradatEntry & { at: number })[] {
+  const votes = new Map<number, { article: MufradatEntry & { at: number }; count: number }>();
+  for (const { key, words } of places) for (const word of words) {
+    const article = mufradatOf(data, key, word);
+    if (article) votes.set(article.at, { article, count: (votes.get(article.at)?.count ?? 0) + 1 });
+  }
+  const best = [...votes.values()].sort((a, b) => b.count - a.count)[0];
+  return best ? [best.article] : [];
+}
+
 export const GHARIB_BOOK = 'تفسير غريب القرآن';
 export const GHARIB_EDITION = 'ابن قتيبة الدينوري (ت ٢٧٦هـ)، تحقيق السيد أحمد صقر، دار الكتب العلمية، ١٣٩٨هـ/١٩٧٨م';
 export const GHARIB_SHORT = 'غريب القرآن لابن قتيبة';

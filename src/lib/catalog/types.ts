@@ -241,7 +241,38 @@ export interface CatalogReport {
     readonly title: string;
     readonly text: string;
     readonly people: readonly string[];
+    /**
+     * The moment split where its speaker changes (owner, 2026-11-21), for the story drawn as a conversation («الرسم»).
+     * Joined with one space they are `text`. A story draws its bubbles only when every moment of its first report has them.
+     */
+    readonly turns?: readonly CatalogTurn[];
   }[];
+}
+
+/**
+ * One speaker's words in a story, or the narrator's between them. The bubble holds the words after `lead`; the speaker
+ * is taken only from the source: the lead-in names him («فقال رسول الله ﷺ:»), `witness` quotes a book that does
+ * (owner, 2026-11-21: a bare «فقال» is never our reading), or `teller` says the words are the teller's own «قلت».
+ */
+export interface CatalogTurn {
+  readonly text: string;
+  /** Who speaks; none for the narrator's own words, which are drawn outside any bubble. */
+  readonly speaker?: {
+    /** By catalog slug, when the catalog has him; then he keeps one colour in the story. */
+    readonly person?: string;
+    /** As the lead-in or the witness calls him; what a tap on his icon shows. */
+    readonly name: string;
+  };
+  /** The source's words that bring the speech in, the start of `text` («قَالَ فَقَالَ:»). */
+  readonly lead?: string;
+  /** A book that says who speaks, when the lead-in does not name him: its words, as printed on the page. */
+  readonly witness?: { readonly source: string; readonly volume: number; readonly volumeLabel: string; readonly page: number; readonly quote: string; readonly url: string };
+  /**
+   * The words are the teller's own, brought in by his «قلت» (owner, 2026-11-22): the speaker is the one the chain has the
+   * story from («قال أبو ذر»). Only where he is the one telling at that point: a listener's «قلت» inside his telling (Ibn
+   * al-Samit asking Abu Dharr «لمن؟») needs a witness, and «قلت في نفسي» was not said and stays narration.
+   */
+  readonly teller?: true;
 }
 
 /** Our tags for gathering stories (owner, 2026-11-18). */

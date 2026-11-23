@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import fortyData from '../data/hadith/forty.json';
 import rajabData from '../data/hadith/ibnRajab.json';
-import { rajabFeedPassages, rajabOpening, sayingStart, type AppForty, type RajabChapter } from '../hadith';
-import { bookQuestions, chainQuestions, completeQuestions, namedBooks, narratorQuestions } from './hadith';
+import { rajabFeedPassages, rajabOpening, recordName, sayingStart, type AppForty, type RajabChapter } from '../hadith';
+import { num } from '../quran/arabicNumber';
+import { bookQuestions, chainQuestions, completeQuestions, namedBooks, narratorQuestions, recordSource } from './hadith';
 
 const FORTY = fortyData as AppForty;
 const RAJAB = rajabData as RajabChapter[];
@@ -57,6 +58,19 @@ describe('the hadith quizzes', () => {
       expect(right(question)).toBe(entry.companion);
       expect(bare(question.promptArabic)).not.toContain(bare(entry.companion));
       for (const other of entry.alsoFrom ?? []) expect(question.choices.map(choice => choice.labelArabic)).not.toContain(other);
+      // Once answered, each Companion offered says which hadith of the Forty al-Bukhari has from him (owner, 2026-11-22),
+      // and al-Bukhari's records of them are among the sources.
+      for (const choice of question.choices) {
+        const his = FORTY.entries.flatMap(item => (bare(item.companion) === bare(choice.labelArabic) ? item.records.filter(record => record.book === 'bukhari').map(record => ({ item, record })) : []));
+        const line = question.whereOf?.[choice.value] ?? '';
+        const numbers = line.replace(/^راوي (?:الحديث|الأحاديث) /, '').replace(/ من الأربعين$/, '').split('، ');
+        expect(numbers.length, line).toBeGreaterThan(0);
+        for (const n of numbers) {
+          const held = his.filter(({ item }) => num(item.n) === n);
+          expect(held.length, `${choice.labelArabic}: ${n}`).toBeGreaterThan(0);
+          expect(held.some(({ record }) => question.sources.some(source => JSON.stringify(source) === JSON.stringify(recordSource(record))))).toBe(true);
+        }
+      }
     }
   });
 
@@ -64,7 +78,13 @@ describe('the hadith quizzes', () => {
     for (const question of complete) {
       expect(question.promptArabic.endsWith('…»')).toBe(true);
       expect(bare(question.promptArabic)).not.toContain(bare(right(question)));
-      for (const choice of question.choices.filter(item => item.value !== question.correctAnswer)) expect(question.note!.text).toContain(`«${choice.labelArabic}»`);
+      // Under each wrong ending, the record it closes (owner, 2026-11-22), and that record among the sources.
+      for (const choice of question.choices.filter(item => item.value !== question.correctAnswer)) {
+        const line = question.whereOf?.[choice.value];
+        const record = FORTY.entries.flatMap(entry => entry.records).find(each => line === `آخر ${recordName(each, num)}`);
+        expect(record, choice.labelArabic).toBeDefined();
+        expect(question.sources).toContainEqual(recordSource(record!));
+      }
     }
   });
 });
@@ -218,5 +238,13 @@ describe('«من حدّث به؟»', () => {
       // No case ending in the chain or the choices tells the place.
       expect(question.promptArabic.split('\n')[1] + question.choices.map(choice => choice.labelArabic).join(' ')).not.toMatch(/[ً-ْ]/);
     }
+  });
+});
+
+describe('the words on an isnad line', () => {
+  // Owner, 2026-11-21: the exact words as printed, «قال» with them where the print has it.
+  it('keeps «قَالَ:» before the word of transmission where al-Bukhari prints it', () => {
+    const record = FORTY.entries[0].records.find(each => each.book === 'bukhari' && each.number === 54)!;
+    expect(record.isnad!.edges.map(edge => bare(edge.label))).toEqual(['حدثنا', 'قال: أخبرنا', 'عن', 'عن', 'عن', 'عن']);
   });
 });

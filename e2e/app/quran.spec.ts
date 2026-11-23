@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test';
-import { expect, open, readerPage, tab, test } from './fixtures';
+import { closeSource, expect, open, openSource, readerPage, tab, test } from './fixtures';
 import { surahName as S } from '../../shared/quran/surahNames';
 
 test('the Quran hub links to every tool', async ({ page }) => {
@@ -20,8 +20,11 @@ test('the surah order narrows to a juz and cites its books', async ({ page }) =>
   await page.getByRole('button', { name: '١', exact: true }).click();
   await expect(page.getByRole('heading', { name: `${S(2)}` })).toBeVisible();
   await page.evaluate(() => { window.open = url => { (window as unknown as { externalUrl: string }).externalUrl = String(url); return null; }; });
-  await page.getByRole('link', { name: 'السيوطي، تناسق الدرر ص٥٣' }).click();
+  // Its books are on the source line under it; a tap opens each with its page (owner, 2026-11-20).
+  await openSource(page, 'السيوطي، تناسق الدرر');
+  await page.getByRole('link', { name: /ص٥٣/ }).click();
   await expect.poll(() => page.evaluate(() => (window as unknown as { externalUrl: string }).externalUrl)).toBe('https://shamela.ws/book/9992/51');
+  await closeSource(page);
   // The strip is an inverted list (mirrored), so its far end is the largest scrollLeft; scrollTo() does not move it.
   await page.getByRole('button', { name: '١', exact: true }).evaluate(element => {
     let strip = element.parentElement;
@@ -30,16 +33,34 @@ test('the surah order narrows to a juz and cites its books', async ({ page }) =>
   });
   await page.getByRole('button', { name: '٣٠', exact: true }).click();
   await expect(page.getByRole('heading', { name: `${S(78)}` })).toBeVisible();
-  await expect(page.getByRole('link', { name: /^البقاعي، نظم الدرر/ }).first()).toBeVisible();
+  await expect(page.getByRole('button', { name: /^المصدر: البقاعي، نظم الدرر/ }).first()).toBeVisible();
 });
 
-test('the lata\'if page groups its examples by topic, each with al-Suyuti\'s words folded under it', async ({ page }) => {
+test('«مشاهد» lists the sea scene with its surah and ayah; it opens full screen and walks an-Nur 40, each saying with who says it, never «قيل»', async ({ page }) => {
   await open(page, '/lataif');
-  await expect(page.getByRole('tab', { name: 'الكل' })).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByRole('heading', { name: 'الالتفات' })).toBeVisible();
-  const reference = page.getByRole('button', { name: 'الإتقان للسيوطي ٣/٢٩٢–٢٩٣' });
-  await reference.click();
-  await expect(page.getByRole('link', { name: /الإتقان للسيوطي ٣\/٢٩٢–٢٩٣/ }).first()).toBeVisible();
+  await expect(page.getByText(/^سورة .+ · الآية ٤٠$/)).toBeVisible();
+  await page.getByRole('link', { name: /^افتح مشهد/ }).click();
+  await expect(page).toHaveURL(/\/scene/);
+  for (const shot of ['بحر لجي', 'موج', 'موج فوقه', 'سحاب', 'ظلمات بعضها فوق بعض']) {
+    await page.getByRole('tab', { name: shot, exact: true }).click();
+    await expect(page.getByRole('tab', { name: shot, exact: true })).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByText(/^قال /).first()).toBeVisible();
+    await expect(page.getByText(/(^|[\s«(])[وف]?قيل/)).toHaveCount(0);
+  }
+  // The finger drives the scene: up past the last words opens the readings, down comes back.
+  await page.getByRole('tab', { name: 'فما له من نور', exact: true }).click();
+  await expect(page.getByRole('tab', { name: 'فما له من نور', exact: true })).toHaveAttribute('aria-selected', 'true');
+  await page.waitForTimeout(800); // the glide there ends; a finger mid-glide catches the scene where it is
+  const drag = async (from: number, to: number) => {
+    await page.mouse.move(220, from);
+    await page.mouse.down();
+    for (let y = from; Math.abs(y - to) > 1; y += Math.sign(to - from) * 20) await page.mouse.move(220, y);
+    await page.mouse.up();
+  };
+  await drag(700, 200);
+  await expect(page.getByText('ما هذه الظلمات؟')).toBeVisible();
+  await drag(200, 700);
+  await expect(page.getByText('ما هذه الظلمات؟')).toBeHidden();
 });
 
 test('a new user\'s branches open as the matrix, with a switch to the tree', async ({ page }) => {
@@ -109,12 +130,17 @@ test.describe('branches', () => {
     await expect(page.getByRole('button', { name: 'حفظ الشجرة' }).first()).toBeVisible();
   });
 
-  test('a tree is saved and shows in «مدونتي» on home', async ({ page }) => {
+  test('a tree is saved, shows in «مدونتي» on home, and its «افتح» opens the tree', async ({ page }) => {
     await open(page, '/branches');
     await page.getByRole('button', { name: 'حفظ الشجرة' }).first().click();
     await tab(page, 'الرئيسية').click();
     await page.getByRole('button', { name: 'مدونتي', exact: true }).click();
-    await expect(page.getByRole('button', { name: /^شجرة: / }).first()).toBeVisible();
+    await expect(page.getByLabel(/^شجرة: /).first()).toBeVisible();
+    // The mushaf stays one button away, and «افتح» is the tree itself, not the mushaf.
+    await expect(page.getByRole('button', { name: 'في المصحف' }).first()).toBeVisible();
+    await page.getByRole('button', { name: 'افتح الشجرة' }).first().click();
+    // The saved tree opens, its save button lit.
+    await expect(page.getByRole('button', { name: 'إزالة من المحفوظات' }).filter({ visible: true }).first()).toBeVisible();
   });
 
   test('the search narrows the trees to a phrase', async ({ page }) => {
@@ -308,6 +334,20 @@ test('an opened word shows where it gathers: a bar picks a surah, names it with 
   await page.mouse.click(box.x + box.width * (1 - 6.5 / 114), box.y + 10);
   await expect(page.getByText(`، منها ٢١ في ${S(7)}`)).toBeVisible();
   await expect(page.getByRole('button', { name: new RegExp(`^افتح ${S(7)} .* في المصحف$`) }).first()).toBeInViewport();
+});
+
+test("a word's page holds Ibn Qutaybah's note on a phrase that explains it, and a phrase explained whole under «في عبارة»", async ({ page }) => {
+  await open(page, '/words');
+  await page.getByLabel('ابحث عن كلمة في القرآن').fill('ريب');
+  await page.getByRole('button', { name: /^رَيۡب، / }).click();
+  await page.getByRole('tab', { name: 'غريب القرآن لابن قتيبة' }).click();
+  await expect(page.getByText('لا شكَّ فيه', { exact: false })).toBeVisible();
+  await open(page, '/words');
+  await page.getByLabel('ابحث عن كلمة في القرآن').fill('نخل');
+  await page.getByRole('button', { name: /^نَخۡل، / }).click();
+  await page.getByRole('tab', { name: 'غريب القرآن لابن قتيبة' }).click();
+  await expect(page.getByText('في عبارة', { exact: true })).toBeVisible();
+  await expect(page.getByText('أي طوالا', { exact: false })).toHaveCount(0);
 });
 
 test('the words page shows its source and how it counts in the page, collapsed', async ({ page }) => {

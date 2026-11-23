@@ -6,7 +6,7 @@ import { numberVerses, type Poem } from '../../shared/tajwid/poem';
 import poemData from '../../shared/tajwid/tuhfat-al-atfal.json';
 
 const chapters = numberVerses(poemData as Poem);
-import { expect, firstBoxes, open, stored, tab, test, writeBlank } from './fixtures';
+import { closeSource, expect, firstBoxes, open, stored, tab, test, writeBlank } from './fixtures';
 
 type Run = { questions: { tree: Branch; asked: number[] }[]; current: number };
 
@@ -24,6 +24,12 @@ const answersOf = async (page: Page, index: number) => {
 /** Each asked leaf's first box (recite mode's boxes, owner 2026-11-19), named in the boxes' order. */
 const leaves = (page: Page) => firstBoxes(page, 'الطرف \\S+');
 const leaf = (i: number) => `الطرف ${num(i + 1)}`;
+
+/** A one-answer question: a tap selects the choice, «تحقق» answers (owner, 2026-11-21). */
+const choose = async (page: Page, label: string) => {
+  await page.getByRole('button', { name: label, exact: true }).click();
+  await page.getByRole('button', { name: 'تحقق', exact: true }).click();
+};
 
 test.beforeEach(async ({ page }) => {
   // The same questions every run: Math.random seeded before the app starts.
@@ -51,7 +57,7 @@ test('the quizzes tab holds solo and party only, and the written kinds are asked
   await expect.poll(async () => Object.keys(await stored<Record<string, unknown>>(page, 'ayah-forgot') ?? {}).length).toBe(1);
 });
 
-test('a solo quiz: right, wrong and shown answers, resume after reload, then the result', async ({ page }) => {
+test('a solo quiz: right, wrong and empty answers, resume after reload, then the result', async ({ page }) => {
   await open(page, '/quiz/solo');
   await page.getByRole('button', { name: 'ابدأ الاختبار' }).click();
   await expect(page).toHaveURL(/\/quiz\/play/);
@@ -72,8 +78,9 @@ test('a solo quiz: right, wrong and shown answers, resume after reload, then the
   await page.getByRole('button', { name: 'تحقق', exact: true }).click();
   await expect(page.getByLabel('السؤال ٢ - خطأ')).toBeVisible();
 
+  // «تحقق» with nothing typed is the way on for one who does not know (owner, 2026-11-21).
   await page.getByRole('button', { name: 'التالي' }).click();
-  await page.getByRole('button', { name: 'إظهار الإجابة' }).click();
+  await page.getByRole('button', { name: 'تحقق', exact: true }).click();
   await expect(page.getByLabel(/^السؤال ٣ - /)).toBeVisible();
 
   await page.getByRole('button', { name: 'التالي' }).click();
@@ -112,7 +119,7 @@ test('a solo quiz of which surah and recite questions: pick, reveal, then the re
     if (question.family === 'RECITE') {
       await page.getByRole('button', { name: 'أظهر الآية التالية' }).click();
       await page.getByRole('button', { name: 'حفظتها' }).click();
-    } else await page.getByRole('button', { name: question.choices.find(choice => choice.value === question.correctAnswer)!.labelArabic, exact: true }).click();
+    } else await choose(page, question.choices.find(choice => choice.value === question.correctAnswer)!.labelArabic);
     await expect(page.getByRole('button', { name: 'في المصحف' })).toBeVisible();
     await page.getByRole('button', { name: index === run!.questions.length - 1 ? 'إرسال' : 'التالي' }).click();
   }
@@ -166,15 +173,16 @@ test('a solo quiz of the sira and battles: pick the right answers, each shows it
   const run = await stored<{ questions: { family: string; correctAnswer: string; choices: { value: string; labelArabic: string }[] }[] }>(page, 'quiz-solo-run');
   expect(run!.questions.every(question => question.family === 'SIRA')).toBe(true);
   for (const [index, question] of run!.questions.entries()) {
-    await page.getByRole('button', { name: question.choices.find(choice => choice.value === question.correctAnswer)!.labelArabic, exact: true }).click();
-    await expect(page.getByText(/سير أعلام النبلاء|صحيح البخاري/).first()).toBeVisible();
+    await choose(page, question.choices.find(choice => choice.value === question.correctAnswer)!.labelArabic);
+    await expect(page.getByText(/سير أعلام النبلاء|صحيح البخاري|صحيح مسلم/).first()).toBeVisible();
     if (index === 0) {
       // Collapsed to the book's name (owner, 2026-11-19); a tap opens where in it the answer is.
-      const book = page.getByRole('button', { name: /سير أعلام النبلاء|صحيح البخاري/ }).first();
+      const book = page.getByRole('button', { name: /سير أعلام النبلاء|صحيح البخاري|صحيح مسلم/ }).first();
       const places = page.getByText(/ص [٠-٩]|رقم [٠-٩]/);
       const before = await places.count();
       await book.click();
       await expect.poll(() => places.count()).toBeGreaterThan(before);
+      await closeSource(page);
     }
     await page.getByRole('button', { name: index === run!.questions.length - 1 ? 'إرسال' : 'التالي' }).click();
   }
@@ -195,7 +203,7 @@ test('a solo quiz looks an answer up in the poem, and after the answer shows the
   await expect(page.getByRole('heading', { name: chapters[0].title })).toBeVisible();
   await expect(page.getByRole('heading', { name: chapters.at(-1)!.title })).toBeAttached();
   await page.getByRole('button', { name: 'رجوع إلى السؤال' }).click();
-  await page.getByRole('button', { name: question.correctAnswer, exact: true }).click();
+  await choose(page, question.correctAnswer);
   await expect(page.getByRole('button', { name: 'ابحث عن الجواب' })).toHaveCount(0);
   // Only the chapter of the verse that answers, the verse lit.
   await expect(page.getByLabel(`${num(question.look.mark)}: `, { exact: false }).first()).toBeVisible();
@@ -217,7 +225,7 @@ test('a solo quiz of the year of a thing looks it up on the timeline, then names
   await page.getByRole('button', { name: 'ابحث عن الجواب' }).click();
   await expect(page.getByLabel(/^على سنوات الهجرة/).last()).toBeVisible();
   await page.getByRole('button', { name: 'رجوع إلى السؤال' }).click();
-  await page.getByRole('button', { name: question.choices[Number(question.correctAnswer)].labelArabic, exact: true }).click();
+  await choose(page, question.choices[Number(question.correctAnswer)].labelArabic);
   await expect(page.getByText('سير أعلام النبلاء').first()).toBeVisible();
 });
 

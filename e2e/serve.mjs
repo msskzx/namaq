@@ -16,7 +16,9 @@ const decode = text => { try { return decodeURIComponent(text); } catch { return
 
 http.createServer((req, res) => {
   let file = path.join(root, decode(req.url.split('?')[0]));
-  if (!file.startsWith(root + path.sep) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) file = path.join(root, 'index.html');
+  // Skia's engine for the web, straight from the installed package (the scenes draw with it).
+  if (req.url === '/canvaskit.wasm' && !fs.existsSync(file)) file = path.resolve('mobile/node_modules/canvaskit-wasm/bin/full/canvaskit.wasm');
+  else if (!file.startsWith(root + path.sep) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) file = path.join(root, 'index.html');
   res.writeHead(200, {
     'content-type': types[path.extname(file)] ?? 'application/octet-stream',
     'Cross-Origin-Opener-Policy': 'same-origin',

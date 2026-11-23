@@ -1,7 +1,7 @@
 import type { QuizSource, SourceEntry } from '../quiz/sources';
 import { num as arabic } from './arabicNumber';
 import { juzOf } from './juz';
-import { normalizeWord } from './normalize';
+import { normalizeWord, plainName } from './normalize';
 import surahRows from '../data/quran/surahs.json';
 import type { AyahWordsOf } from './quranText/ayahWords';
 import { SURAH_NAMES } from './surahNames';
@@ -269,8 +269,10 @@ export const ORDER_HELP = [
 
 export type OrderWord = { text: string; shared: boolean };
 export type OrderAyah = { key: string; place: string; words: OrderWord[] };
-export type OrderLinkView = Omit<Link, 'pairs'> & { pairs: [OrderAyah, OrderAyah][] };
-export type OrderSurah = { surah: number; name: string; juz: [number, number]; opening: { ayah: number; text: string }[]; aim: Aim; link?: OrderLinkView };
+/** A book's words, or a Quran quote in them (﴿…﴾) set as the page prints it: each ayah's page words, `end` where the quote runs past the ayah's end. */
+export type QuoteRun = { text: string } | { quran: { key: string; words: string[]; end: boolean }[] };
+export type OrderLinkView = Omit<Link, 'pairs'> & { pairs: [OrderAyah, OrderAyah][]; runs: QuoteRun[] };
+export type OrderSurah = { surah: number; name: string; juz: [number, number]; opening: { ayah: number; text: string }[]; aim: Aim & { runs: QuoteRun[] }; link?: OrderLinkView };
 
 /** A word's letters with و / ف and the article or a joined lam taken off, to find a word both ayat of a pair carry. */
 const core = (word: string) => normalizeWord(word).replace(/^[وف]/, '').replace(/^(ال|لل|ل)/, '');
@@ -287,6 +289,65 @@ function openingKeys(surah: number, text: (key: string) => string) {
     count += words(text(`${surah}:${ayah}`)).length;
   }
   return keys;
+}
+
+// A word's consonants, so the book's spelling meets the page's rasm (docs/records/R0043): one leading و ف ل ب ك may differ.
+// A word of long vowels only (أو، يا) keeps its letters.
+const consonants = (word: string) => { const n = normalizeWord(word); return n.replace(/[اويءئؤ\u0654\u0655]/g, '') || n; };
+const PREFIX = /^[وفلبك]/;
+const sameWord = (a: string, b: string) => a === b || (a.length > 1 && b.length > 1 && ((PREFIX.test(a) && a.slice(1) === b) || (PREFIX.test(b) && b.slice(1) === a)));
+type Stream = { key: string; word: string; skeleton: string }[];
+const streamOf = (keys: string[], ayahWords: AyahWordsOf): Stream => keys
+  .flatMap(key => (ayahWords(key) ?? []).filter(w => normalizeWord(w) !== '').map(word => ({ key, word, skeleton: consonants(word) })));
+const keysOf = (surah: number) => Array.from({ length: counts[surah] ?? 0 }, (_, i) => `${surah}:${i + 1}`);
+const DIGITS = '٠١٢٣٤٥٦٧٨٩';
+const latin = (digits: string) => Number([...digits].map(d => DIGITS.indexOf(d)).join(''));
+
+/**
+ * The ayat a book names right after a quote: «"الحجر: ٩٨"», «"الشعراء: ١٨، ١٩"», «"إبراهيم: ٤٨-٥٠"», or the numbers alone
+ * («"١"») for ayat of the surah in hand.
+ */
+function namedAyat(after: string, surah: number) {
+  const m = after.match(/^\s*["[(](?:([^:"\])٠-٩]+):\s*)?([٠-٩]+(?:\s*[-–،,]\s*[٠-٩]+)*)["\])]/);
+  if (!m) return null;
+  const named = m[1] ? Number(Object.entries(names).find(([, name]) => plainName(name) === plainName(m[1].trim()))?.[0]) : surah;
+  if (!named) return null;
+  const ayat = m[2].split(/\s*[،,]\s*/).flatMap(part => {
+    const [from, to = from] = part.split(/\s*[-–]\s*/).map(latin);
+    return Array.from({ length: to - from + 1 }, (_, k) => from + k);
+  });
+  return ayat.map(ayah => `${named}:${ayah}`);
+}
+
+/** The first run of page words that holds a quote's words in order, or none. */
+function firstRun(stream: Stream, want: string[]) {
+  for (let i = 0; i + want.length <= stream.length; i++) if (want.every((w, j) => sameWord(w, stream[i + j].skeleton))) return stream.slice(i, i + want.length);
+  return null;
+}
+
+/**
+ * A book's text with each Quran quote put back on the page words it quotes (owner, 2026-11-21: Quran text on the order page
+ * goes through the pipeline). A quote is looked for in the ayat the book names after it, else in its own surah and then the
+ * one before it; a quote not found there stays in the book's words.
+ */
+export function quoteRuns(text: string, surah: number, ayahWords: AyahWordsOf): QuoteRun[] {
+  const parts = text.split(/(﴿[^﴾]*﴾)/).filter(Boolean);
+  return parts.map((run, i): QuoteRun => {
+    if (!run.startsWith('﴿')) return { text: run };
+    // The page writes the vocative «يَٰٓأَيُّهَا» as one word, books as two.
+    const want = run.slice(1, -1).replace(/(^|\s)(يَ?ا)\s+(?=أ)/g, '$1$2').split(/[\s،.:؛]+/).filter(w => normalizeWord(w) !== '').map(consonants);
+    const named = namedAyat(parts[i + 1] ?? '', surah);
+    const found = want.length ? (named ? firstRun(streamOf(named, ayahWords), want)
+      : [surah, surah - 1].filter(s => s > 0).reduce<Stream | null>((hit, s) => hit ?? firstRun(streamOf(keysOf(s), ayahWords), want), null)) : null;
+    if (!found) return { text: run };
+    const quran: { key: string; words: string[]; end: boolean }[] = [];
+    for (const { key, word } of found) {
+      const last = quran[quran.length - 1];
+      if (last?.key === key) last.words.push(word);
+      else { if (last) last.end = true; quran.push({ key, words: [word], end: false }); }
+    }
+    return { quran };
+  });
 }
 
 /** The surahs of /quran/order, their openings and the ayat of each link as the Madina pages print them (AGENTS.md, "Quran text"). */
@@ -311,8 +372,8 @@ export function orderSurahs(ayahWords: AyahWordsOf, num: (n: number) => string):
       name: names[surah],
       juz: [juzOf(`${surah}:1`), juzOf(`${surah}:${counts[surah]}`)] as [number, number],
       opening: openingKeys(surah, text).map(key => ({ ayah: Number(key.split(':')[1]), text: text(key) })),
-      aim: ORDER_AIMS[surah],
-      link: link && { ...link, pairs: link.pairs.map(pair) },
+      aim: { ...ORDER_AIMS[surah], runs: quoteRuns(ORDER_AIMS[surah].text, surah, ayahWords) },
+      link: link && { ...link, pairs: link.pairs.map(pair), runs: quoteRuns(link.text, surah, ayahWords) },
     };
   });
 }

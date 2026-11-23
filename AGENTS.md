@@ -37,6 +37,14 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   becomes a rule that holds for every item plus "there is at least one". A
   guard's shrink-only baseline is not a magic number.
   [docs/ship-checklist.md](docs/ship-checklist.md) section 9 has examples.
+- Catalog data (people, battles, events, sira stories) has no per-person,
+  per-chapter or per-story test files (owner, 2026-11-22): they froze what one
+  batch decided, so a correct fix from a source broke them. A new rule is
+  written once over the whole catalog in `data/catalog/catalogRules.test.ts`
+  (which runs the catalog validator), beside `claimProvenance.test.ts` and
+  `events/stories.test.ts`. After a catalog change, run `npm run battles:app`
+  and `npm run model:app-people`: the phone reads those files, and a test
+  fails when they lag the catalog.
 - New functionality must be covered by automated tests. **Search and graph
   features are the highest priority**
 - Colocate tests next to the code they cover, named `<file>.test.ts(x)`
@@ -53,6 +61,14 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   `page.tsx` may only export `default`, `metadata`, and the other names
   Next recognizes; anything else, like a helper function, fails only here)
   — run it before every PR, not just when something feels risky.
+- A change to the phone app is used before it merges (owner, 2026-11-21): run
+  `npm run phone -- start` and tap through the feature you changed step by step,
+  looking at each dark, iPhone-size screenshot as a person would, then save the
+  walk with `npm run phone -- save <name>` when the flow is worth keeping. Post
+  the screenshots with the result. The web build does not show native gestures,
+  haptics, the native fonts' shaping, audio, notifications or the share sheet;
+  name those in the PR for the owner's Expo Go check. See
+  [e2e/README.md](e2e/README.md), "Using the app".
 - A change to the phone app, or to a website page the UI tests visit, also runs
   `npm run test:ui` (Playwright, about 2.5 minutes; see [e2e/README.md](e2e/README.md)).
   It is a local check, not a CI job. In a cloud container run `./e2e/cloud-db.sh`
@@ -210,10 +226,10 @@ the sources disagree on as settled.
   user asks for them. Still go through the sync scripts where one exists (see
   Data model), and do not print or read credentials out of `.env` to do it:
   run the project's own scripts, which load it themselves.
-- Don't reach for browser computer-use (screenshots, clicking, typing)
-  by default. Only use it when the user asks for it, or when it's
-  necessary to verify something lint/tsc/tests can't catch — e.g. actual
-  rendered layout, force-graph physics, or other visual behavior.
+- For the phone app, use `npm run phone` (see Testing), not a browser tool.
+  On the website, use browser computer-use (screenshots, clicking, typing) only
+  when the user asks for it or to check what lint, tsc and the tests can't,
+  such as rendered layout or force-graph physics.
 
 ## Git
 
@@ -400,7 +416,9 @@ inside a book, the other readers' readings (qiraat.json), and the Quranic
 Arabic Corpus's dictionary forms of a word (words, lemmas, similar ayat): none
 of them is the Hafs page text. The readings and dictionary forms are stored
 in the Madina page's spelling (`scripts/quran/madinaSpelling.ts` at build
-time), so no screen converts a word; book quotes keep the book's own spelling.
+time), so no screen converts a word; book quotes keep the book's own spelling,
+except where a feature puts a quote back on the page words it quotes (the surah
+order page, owner 2026-11-21: `quoteRuns` in `shared/quran/surahOrder.ts`).
 An ayah drawn off the page (a quiz's ayah, a choice that is an ayah) goes in
 the module's `AyahFlow` with `AyahWords`, which size it from its width as the
 reader's flowing text is (`shared/quran/quranText/flow.ts`); the place sets

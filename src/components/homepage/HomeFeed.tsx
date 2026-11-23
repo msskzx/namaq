@@ -79,7 +79,7 @@ import { continuePage, readFasilas, serverFasilas, subscribeFasilas } from '@sha
 import { ayahBookmarkId, ayahHref, markAyah, markWord, wordMarkKey, markForgotten, toggleForgotten, mostForgotten, readDueMarks, rememberAyah, serverAyahMarks, subscribeDueMarks } from '@shared/ayahMarks';
 import { isMemorized, memorizedFilters, memorizedPrefer, memorizedQuestions, recallOfDay, touchesMemorized, type Memorized } from '@shared/memorized';
 import { FEED_QUIZ_NAMES, feedQuizSeed, OPENINGS, openingSurah, type FeedQuizKind } from '@shared/quiz/feedQuiz';
-import { activeInterests, INTERESTS, interestById, pickedInterests, restoredInterest, surpriseMe, toggledInterest } from '@shared/interests';
+import { activeInterests, INTERESTS, interestById, onWebsite, pickedInterests, restoredInterest, surpriseMe, toggledInterest } from '@shared/interests';
 import QuizAnswer, { type QuizData } from '@/app/quizzes/QuizAnswer';
 import type { Hints } from '@shared/quiz/hints';
 import { backToVisit, FEED_AHEAD, FEED_FAR, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, serverFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit, type Seen } from '@shared/feedSeen';
@@ -972,7 +972,7 @@ export function Feed({ only = null }: { only?: string | null } = {}) {
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read, memorizedQuestions.server);
   const prefer = useSyncExternalStore(memorizedPrefer.subscribe, memorizedPrefer.read, memorizedPrefer.server);
   const recall = useMemo(() => (memorized && day ? recallOfDay(questions ? memorized : { all: true }, day) : undefined), [memorized, questions, day]);
-  const rounds = useMemo(() => (day ? Array.from({ length: batches }, (_, round) => feedRound(active, round, day, others)) : []), [active, others, batches, day]);
+  const rounds = useMemo(() => (day ? Array.from({ length: batches }, (_, round) => feedRound(active.map(onWebsite), round, day, others.map(onWebsite))) : []), [active, others, batches, day]);
   // The questions answered wrong that are due again, as they were when the visit began.
   const missed = useMemo(() => ({ list: readMissed(), at: Date.now() }), [visit]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
   // A tab hidden for long and shown again starts a new visit (shared/feedSeen.ts).

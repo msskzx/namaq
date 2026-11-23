@@ -16,7 +16,7 @@ export default function AyahShare({ ayahKey, note, palette, width }: { ayahKey: 
   return (
     <Card palette={palette} gap={6} style={{ width }}>
       <Text style={{ color: palette.muted, fontSize: 14 }}>{surahName(surah)} {num(number)}</Text>
-      <AyahFlow color={palette.ink}><AyahWords>{ayahText(ayahKey)}</AyahWords></AyahFlow>
+      <AyahFlow color={palette.ink} menu={false}><AyahWords>{ayahText(ayahKey)}</AyahWords></AyahFlow>
       {note ? <View style={{ paddingTop: 8, borderTopWidth: 1, borderColor: palette.rule }}>
         <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 28, textAlign: 'right' }}>{note}</Text>
       </View> : null}

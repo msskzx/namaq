@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import Card from '@/ui/Card';
+import Card, { UnderCard, useCardRow } from '@/ui/Card';
 import { Pressable, ScrollView, View } from 'react-native';
-import { BookOpen, Check, Eye, Square, SquareCheck, X } from 'lucide-react-native';
+import { Check, Eye, Square, SquareCheck, X } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import Button from '@/ui/Button';
 import { alikeDiff, BOX_ASKED, FORGOT, isRightChoice, orders, PICKS, picksOf, recited, RECITED, ticks, type ChoiceQuestion } from '@shared/quiz/choiceKinds';
@@ -20,6 +20,7 @@ import type { PenRule } from '@shared/quran/writeAyah';
 import { num } from '@shared/quran/arabicNumber';
 import { CARD, type Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
+import { FEATURE_ICON } from '@/components/featureIcons';
 
 const AYAH_NUMBER = /^[٠-٩]+$/;
 
@@ -58,6 +59,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
 }) {
   const Box = scroll ? ScrollView : View;
   const answered = picked !== undefined;
+  const inRow = useCardRow();
   // What is recited or written stays hidden until it is shown or answered; on the page, recite mode's bar shows it.
   const [pageShown, setPageShown] = useState<string | null>(null);
   const onPage = !!question.ayahKey && !!question.page;
@@ -128,7 +130,8 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
         </View>
       ) : question.quran && (
         <Card palette={palette} pad={16} style={{ marginHorizontal: 16 }}>
-          <AyahFlow color={palette.ink}>
+          {/* Its menu only once answered: before, it would name the answer (owner, 2026-11-22). */}
+          <AyahFlow color={palette.ink} menu={answered && question.ayahKey ? question.ayahKey : false}>
             <Words words={question.quran} marked={diff?.a ?? question.marked} palette={palette} />
             {question.number !== undefined && <AyahWords look={{ color: palette.accent }}>{` ${num(question.number)}`}</AyahWords>}
             {question.reveal && (revealed ? <Text>{' '}<Words words={question.reveal} marked={question.reveal.map((_, at) => at)} palette={palette} /></Text> : ' …')}
@@ -159,7 +162,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
                 style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderWidth: right || wrong || missed || selected ? 1.5 : 1, borderColor: right || wrong || missed ? color : selected ? palette.accent : palette.rule, borderStyle: missed ? 'dashed' : 'solid', ...CARD, paddingVertical: 12, paddingHorizontal: 16, backgroundColor: pressed ? palette.paperDeep : 'transparent' })}>
                 <View style={{ flexShrink: 1, flexGrow: question.quranChoices ? 1 : 0, gap: 2 }}>
                   {question.quranChoices
-                    ? <AyahFlow color={color}><AyahWords>{choice.labelArabic}</AyahWords></AyahFlow>
+                    ? <AyahFlow color={color} menu={false}><AyahWords>{choice.labelArabic}</AyahWords></AyahFlow>
                     : <Text style={{ color, fontSize: 19, fontWeight: right ? '700' : '400' }}>{choice.labelArabic}{missed ? ' · فاتك' : ''}</Text>}
                   {/* What a choice is, once answered: an ayah's place, a reading's readers. */}
                   {answered && question.whereOf?.[choice.value] && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{question.whereOf[choice.value]}</Text>}
@@ -177,8 +180,10 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
           })}
         </View>
       )}
-      {(several || single) && !answered && onPick && (
-        <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}>
+      {/* In a feed card «تحقق» joins the row under the card, before «تلميح» (owner, 2026-11-22: no button in a card). */}
+      {(several || single) && !answered && onPick && (inRow
+        ? <UnderCard><Button variant="primary" pill Icon={Check} label="تحقق" onPress={() => onPick(several ? joined(ticked) : ticked[0] ?? '')} /></UnderCard>
+        : <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}>
           <Button variant="primary" Icon={Check} label="تحقق"
             onPress={() => onPick(several ? joined(ticked) : ticked[0] ?? '')} />
         </View>
@@ -188,7 +193,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
       {alike && diff && (
         <View style={{ marginHorizontal: 16, borderTopWidth: 1, borderStyle: 'dashed', borderColor: palette.rule, paddingTop: 10, gap: 4 }}>
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`آية ${name(picked!)} التي تشبهها، ${num(Number(alike.key.split(':')[1]))}`}</Text>
-          <AyahFlow color={palette.ink}>
+          <AyahFlow color={palette.ink} menu={alike.key}>
             <Words words={alike.words} marked={diff.b} palette={palette} />
           </AyahFlow>
         </View>
@@ -203,7 +208,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
       {answered && !!question.sources?.length && <View style={{ paddingHorizontal: 16 }}><QuizSources sources={question.sources} palette={palette} /></View>}
       {/* After the answer, the view it was looked up in, the answer lit there, so everyone learns from it (owner, 2026-11-19). */}
       {answered && question.look && <View style={{ paddingHorizontal: 16 }}><LookView look={question.look} shown palette={palette} /></View>}
-      {answered && question.ayahKey && onOpen && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}><Button Icon={BookOpen} accessibilityLabel="في المصحف" onPress={() => onOpen(question.ayahKey!)} /></View>}
+      {answered && question.ayahKey && onOpen && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}><Button Icon={FEATURE_ICON.mushaf} accessibilityLabel="في المصحف" onPress={() => onOpen(question.ayahKey!)} /></View>}
     </Box>
   );
 }

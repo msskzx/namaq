@@ -36,6 +36,9 @@ export const tourSeen = setting('tour-seen', false, isBoolean);
 export type { HintId };
 export const hintsSeen = setting<HintId[]>(HINTS_SEEN, [], (value): value is HintId[] => Array.isArray(value) && value.every(item => HINT_IDS.includes(item)));
 
+/** A tablet lying down shows the mushaf's two facing pages, the odd one on the right, as the printed mushaf does (owner, 2026-11-23); off, one page. */
+export const mushafSpread = setting('mushaf-spread', true, isBoolean);
+
 /** A light tap from the phone when a card's or an ayah's icon menu opens. */
 export const haptics = setting('haptics', true, isBoolean);
 

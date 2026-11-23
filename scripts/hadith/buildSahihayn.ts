@@ -83,6 +83,9 @@ interface Numbers { shared: Record<string, number>; starts: Record<string, strin
 
 function bukhariMarks(book: string, start: number, last: number, { shared, starts, absent }: Numbers) {
   const heads = new Map<number, { at: number; also: number[] }[]>();
+  // A kitab the table of contents does not find stands half a character before its first bab (headings): the marks are
+  // whole offsets, or each would take the digit before it into the record before.
+  start = Math.ceil(start);
   for (const m of book.slice(start).matchAll(/(?<=^|\n|⟧)\s*([٠-٩]+(?: \(م\))?(?:(?: ?- ?| )[٠-٩]+)* ?-(?: ?[٠-٩]+ ?-?)*)(?=\s)/g)) {
     const [n, ...also] = m[1].match(/[٠-٩]+/g)!.map(en);
     if (n >= 1 && n <= last) heads.set(n, [...(heads.get(n) ?? []), { at: start + m.index! + m[0].search(/[٠-٩]/), also }]);
@@ -175,7 +178,7 @@ interface Cut { start: number; end: number; n: number; route?: string; also?: nu
 interface Built { index: SahihIndex; files: SahihKitabFile[] }
 
 /** Each hadith with its kitab and bab: the last heading of each level before it. */
-function assemble(book: string, heads: Heading[], cuts: Cut[], meta: SahihBook, muslim: boolean): Built {
+function assemble(book: string, heads: Heading[], cuts: Cut[], meta: SahihBook, muslim: boolean, unmark: (text: string, n: number) => string): Built {
   const kitabs: SahihKitab[] = [];
   const files: SahihKitabFile[] = [];
   const byNumber = new Map<number, SahihHadith>();
@@ -203,12 +206,15 @@ function assemble(book: string, heads: Heading[], cuts: Cut[], meta: SahihBook, 
     if (!kitab) throw new Error(`hadith ${c.n} before the first kitab`);
     if (!kitab.babs.length) { kitab.babs.push({ title: '', from: 0, to: 0 }); file.said.push(''); }
     const bab = kitab.babs[kitab.babs.length - 1];
-    const end = Math.min(c.end, sorted[h]?.at ?? book.length);
+    // A title the export marks is a heading, never a hadith's words: one the table of contents does not place (Muslim's
+    // kitabs, printed «٣٣ - كتاب الإمارة») ends the hadith before it all the same.
+    const titled = book.indexOf('⟪باب⟫', c.start);
+    const end = Math.min(c.end, sorted[h]?.at ?? book.length, titled < 0 ? book.length : titled);
     const piece = cut(book, c.start, Math.ceil(end));
     // The number heading the text («٨ - », «١٩ - (١٦) ») is shown apart from it.
     // The next number's digits can stay at the end, after the closing mark («… إِلَيْهِ». ٢»): they are its head, not this text.
     // A bab heading the table of contents places after its first word leaves «بَابُ» at the end of the hadith before it.
-    const text = piece.text.replace(/\s+بَ?ا?بٌ?ُ?:?$/, '').replace(/([».،:؟])\s*[٠-٩]+(?:\s*-\s*[٠-٩]+)*\s*-?$/, '$1').replace(/^[٠-٩]+(?: \(م\))?(?:(?: ?- ?| )[٠-٩]+)* ?-?(?: ?[٠-٩]+ ?-?)*\s*/, '').replace(/^(?:[٠-٩]+ ?)?(?:- )?(?:٠ )?(?:م(?: [٠-٩]+)? ?)?(?:- )?\([٠-٩]+(?:\/ ?[٠-٩]+)?\)(?: -)?\s*/, '');
+    const text = unmark(piece.text.replace(/\s+بَ?ا?بٌ?ُ?:?$/, '').replace(/([».،:؟])\s*[٠-٩]+(?:\s*-\s*[٠-٩]+)*\s*-?$/, '$1').replace(/^[٠-٩]+(?: \(م\))?(?:(?: ?- ?| )[٠-٩]+)* ?-?(?: ?[٠-٩]+ ?-?)*\s*/, '').replace(/^(?:[٠-٩]+ ?)?(?:- )?(?:٠ )?(?:م(?: [٠-٩]+)? ?)?(?:- )?\([٠-٩]+(?:\/ ?[٠-٩]+)?\)(?: -)?\s*/, ''), c.n);
     const route: SahihRoute = { ...(c.route ? { route: c.route } : {}), ...(piece.chain ? { chain: piece.chain } : {}), text, volume: piece.volume, pages: piece.pages, shamela: piece.shamela };
     const earlier = muslim ? byNumber.get(c.n) : undefined;
     if (earlier) { earlier.routes.push(route); continue; }
@@ -227,6 +233,42 @@ function assemble(book: string, heads: Heading[], cuts: Cut[], meta: SahihBook, 
   return { index: { ...meta, kitabs }, files };
 }
 
+/**
+ * The edition's own numbers taken out of a hadith's words, where they stand inside a record (the record's head is shown
+ * apart already). al-Bukhari's print gives a report within a record Abd al-Baqi's number again, «٣٩٣ (م) -», «١٧٧٤ (م)», «١٣٩٠ م (١) -»,
+ * «١٧٦٧ م ١», «٣٧٥٦ - (م ١)», or a number of its own mid-line («٦٥٩٢ - وَزَادَ»), and a kitab its number («﷽ ٤٠ -»);
+ * bukhariMarks keeps the numbers, the text keeps only al-Bukhari's words.
+ */
+const bukhariUnmarked = (text: string) => text
+  .replace(/(?:^|\s+)(?:[٠-٩]{1,4}(?: \(م\)(?: -)?| م \([٠-٩]+\) -| م [٠-٩]+| - \(م [٠-٩]+\))|[٠-٩]{3,4}(?: - [٠-٩]{3,4})* -)(?=\s|$)/g, '')
+  .replace(/(?<=﷽)\s+[٠-٩]+ -$/, '')
+  .trim();
+
+/**
+ * Muslim's route heads the export prints inside a route's line, so that the route before runs on over them: «(١٤٢) -»,
+ * «٦١ - (٣٧)», «١٥١ - م-٢ - (٢٢٤٢)», «م (١١٧٧)», «(٢٩٢٠ - م)», «(١٤٨٨/ ١٤٨٧)», a head's «م-١» left at a route's start,
+ * and the misprinted heads data/hadith/muslim-numbers.json lists under `heads` («٨٣ - ٠٤١٢)»). Abd al-Baqi's route
+ * numbers are his, not Muslim's words: they go, and the route keeps the words.
+ */
+function muslimUnmarked(misprinted: Record<string, string[]>) {
+  const used = new Set<string>();
+  const unmark = (text: string, n: number) => {
+    for (const head of misprinted[n] ?? []) {
+      if (!text.includes(head)) continue;
+      used.add(`${n} ${head}`);
+      text = text.replace(new RegExp(`\\s*${head.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`), '');
+    }
+    return text
+      .replace(/(?:^|\s+|(?<=[.»"]))(?:[٠-٩]+(?:\/ ?[٠-٩]+)?(?: [٠-٩])? - (?:م-[٠-٩]+ - )?\([٠-٩]+\)|\([٠-٩]+\) -(?: م-[٠-٩]+)?|\([٠-٩]+\/ ?[٠-٩]+\)|م \([٠-٩]+\)|\([٠-٩]+ - م\))(?=\s)|^م-[٠-٩]+(?=\s)/g, '')
+      .trim();
+  };
+  const check = () => {
+    const unused = Object.entries(misprinted).flatMap(([n, heads]) => heads.filter(head => !used.has(`${n} ${head}`)).map(head => `${n} «${head}»`));
+    if (unused.length) throw new Error(`Muslim: misprinted heads not found in their hadith: ${unused.join(', ')}`);
+  };
+  return { unmark, check };
+}
+
 function write(built: Built) {
   const slug = built.index.slug;
   writeFileSync(`shared/data/hadith/${slug}.json`, `${JSON.stringify(built.index)}\n`);
@@ -243,7 +285,7 @@ export function buildBukhari() {
   const heads = headings(book, entries.slice(startAt), isKitab);
   const marks = bukhariMarks(book, heads[0].at, 7563, JSON.parse(readFileSync('data/hadith/bukhari-numbers.json', 'utf8')));
   const cuts = marks.map((m, i) => ({ start: m.at, end: marks[i + 1]?.at ?? book.length, n: m.n, also: m.also }));
-  return assemble(book, heads, cuts, { slug: 'bukhari', title: BOOKS.bukhari.title, author: 'محمد بن إسماعيل البخاري', died: 256, edition: BOOKS.bukhari.edition, shamela: BOOKS.bukhari.id, headingsBy: 'author' }, false);
+  return assemble(book, heads, cuts, { slug: 'bukhari', title: BOOKS.bukhari.title, author: 'محمد بن إسماعيل البخاري', died: 256, edition: BOOKS.bukhari.edition, shamela: BOOKS.bukhari.id, headingsBy: 'author' }, false, bukhariUnmarked);
 }
 
 export function buildMuslim() {
@@ -253,9 +295,13 @@ export function buildMuslim() {
   const startAt = entries.findIndex(e => /مقدمة المصنف/.test(e.title));
   const isKitab = (e: TocEntry) => e.level === 1;
   const heads = headings(book, entries.slice(startAt), isKitab).map(head => ({ ...head, title: head.level === 1 ? head.title.replace(/^[٠-٩]+ ?- ?/, '').replace(/^مقدمة المصنف$/, 'المقدمة') : head.title.replace(/^\([٠-٩]+\) ?/, '').replace(/^[٠-٩]+ ?- ?/, '') }));
-  const routes = muslimMarks(book, heads[0].at, 3033, JSON.parse(readFileSync('data/hadith/muslim-numbers.json', 'utf8')));
+  const numbers = JSON.parse(readFileSync('data/hadith/muslim-numbers.json', 'utf8'));
+  const routes = muslimMarks(book, heads[0].at, 3033, numbers);
   const cuts = routes.map((r, i) => ({ start: r.at, end: routes[i + 1]?.at ?? book.length, n: r.n, route: r.label, also: r.also }));
-  return assemble(book, heads, cuts, { slug: 'muslim', title: BOOKS.muslim.title, author: 'مسلم بن الحجاج النيسابوري', died: 261, edition: BOOKS.muslim.edition, shamela: BOOKS.muslim.id, headingsBy: 'nawawi' }, true);
+  const { unmark, check } = muslimUnmarked(numbers.heads);
+  const built = assemble(book, heads, cuts, { slug: 'muslim', title: BOOKS.muslim.title, author: 'مسلم بن الحجاج النيسابوري', died: 261, edition: BOOKS.muslim.edition, shamela: BOOKS.muslim.id, headingsBy: 'nawawi' }, true, unmark);
+  check();
+  return built;
 }
 
 if (process.argv[1]?.endsWith('buildSahihayn.ts')) {

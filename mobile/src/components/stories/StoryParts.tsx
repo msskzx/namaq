@@ -1,10 +1,17 @@
 import { View } from 'react-native';
-import { rangeName, type AppReport, type AppStory, type AppStoryAyat } from '@shared/stories/story';
+import { narratorOf, rangeName, reportLines, reportSlots, type AppReport, type AppStory, type AppStoryAyat } from '@shared/stories/story';
+import HadithScene, { sceneBlocks } from '@/components/HadithScene';
+import { BookMarked, Send } from 'lucide-react-native';
+import IconButton from '@/ui/IconButton';
+import { shareCard, type SharePaged } from '@/lib/shareImage';
+import { UI_FONT_BOLD } from '@/lib/theme';
 import { Text } from '@/ui/Text';
 import ExternalLink from '@/ui/ExternalLink';
 import Folded from '@/ui/Folded';
 import { AyatRange } from '@/components/AyahLines';
 import { Readings, Refs } from '@/components/battles/BattleParts';
+import { sourcesOf } from '@/ui/SourceLine';
+import { citeSource, uniqueSources } from '@shared/quiz/sources';
 import type { Palette } from '@/lib/theme';
 
 /** A story's tags, as muted words under its name (owner, 2026-11-19: chips there are its people), as the stories list shows them. */
@@ -54,4 +61,67 @@ export function StoryAyat({ ayat, palette, folded = false }: { ayat: AppStoryAya
       {ayat.others ? <Readings values={[{ value: null, refs: [], others: ayat.others }]} palette={palette} /> : null}
     </View>
   );
+}
+
+/** A report's book and page, for the line under its card, and in its drawing the books that say who speaks. */
+export const reportSource = (report: AppReport, drawing = false) =>
+  sourcesOf(uniqueSources([
+    citeSource({ text: '', cite: report.cite, url: report.url }),
+    ...(drawing ? report.moments.flatMap(moment => moment.turns ?? []).flatMap(turn => (turn.witness ? [citeSource(turn.witness)] : [])) : []),
+  ]));
+
+/**
+ * A report drawn as a conversation («الرسم», owner 2026-11-21): whose telling it is in ink with its chain folded under
+ * «السند», then the hadith scene (`HadithScene`) of its turns. On the story's page the people's chips above, in the
+ * speakers' colours, are the key (`slots` given, no key of its own); in the feed card the scene draws its own key.
+ */
+export function ReportScene({ report, slots, palette }: { report: AppReport; slots?: Map<string, number>; palette: Palette }) {
+  const lines = reportLines(report);
+  return (
+    <View style={{ gap: 10 }}>
+      {report.isnad ? (
+        <View style={{ gap: 2 }}>
+          <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>{narratorOf(report.isnad)}</Text>
+          <Folded credit="السند" palette={palette}>
+            <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 24, textAlign: 'right' }}>{report.isnad}</Text>
+          </Folded>
+        </View>
+      ) : null}
+      <HadithScene lines={lines} slots={slots ?? reportSlots(lines, palette.slots.length)} keyed={!slots} palette={palette} />
+      {report.grading ? <Text style={{ color: palette.muted, fontSize: 13, lineHeight: 22, textAlign: 'right' }}>{report.grading}</Text> : null}
+    </View>
+  );
+}
+
+/**
+ * A drawn story as pictures to share (owner's agreed layout, 2026-11-21): its name and «عَنْ ابْنِ عَبَّاسٍ» on the first
+ * only; the scene's blocks with no chips, the lead-ins saying who speaks; the last moment together on the last
+ * picture with the book and its number under it (a picture cannot be tapped open, so its place is written out).
+ */
+function storyPictures(story: AppStory, report: AppReport, palette: Palette): SharePaged {
+  const lines = reportLines(report);
+  const blocks = sceneBlocks(lines, reportSlots(lines, palette.slots.length), palette);
+  const lastFrom = lines.length - (report.moments.at(-1)?.turns?.length ?? 0);
+  const tailFrom = blocks.findIndex(block => block.line >= lastFrom);
+  return {
+    head: (
+      <View style={{ gap: 4 }}>
+        <Text style={{ color: palette.ink, fontSize: 22, fontFamily: UI_FONT_BOLD, lineHeight: 36, textAlign: 'right' }}>{story.name}</Text>
+        {report.isnad ? <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>{narratorOf(report.isnad)}</Text> : null}
+      </View>
+    ),
+    blocks: blocks.map(block => block.node),
+    ...(tailFrom > 0 ? { tailFrom } : {}),
+    foot: (
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+        <BookMarked size={15} color={palette.muted} />
+        <Text style={{ color: palette.muted, fontSize: 14 }}>{report.cite}</Text>
+      </View>
+    ),
+  };
+}
+
+/** The share button of a drawn story, on its page and its feed card. */
+export function StoryShare({ story, report, palette }: { story: AppStory; report: AppReport; palette: Palette }) {
+  return <IconButton Icon={Send} label={`شارك ${story.name}`} onPress={() => shareCard({ content: () => null, paged: () => storyPictures(story, report, palette) })} />;
 }

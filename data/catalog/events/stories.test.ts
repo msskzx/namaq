@@ -15,8 +15,12 @@ const paragraphs = (slug: string, volume: number, page: number) => {
 };
 const pagesText = (slug: string, volume: number, from: number, to: number) =>
   Array.from({ length: to - from + 1 }, (_, i) => paragraphs(slug, volume, from + i)).flat().join(' ');
-// A hadith book is stored one hadith to a file (data/history/sources/<slug>/hadith/<number>.md).
-const hadithText = (slug: string, hadith: number) => readFileSync(`${SOURCES}/${slug}/hadith/${hadith}.md`, 'utf8').trim();
+// The two Sahihs are the app's own copies (scripts/hadith/buildSahihayn.ts): a hadith's text is its first printed route, chain and all.
+type SahihText = { kitabs: { hadith: { n: number; routes: { text: string }[] }[] }[] };
+const sahih = (book: string) => (JSON.parse(readFileSync(`data/hadith/sahih/${book}.json`, 'utf8')) as SahihText).kitabs.flatMap(kitab => kitab.hadith);
+const SAHIH: Record<string, ReturnType<typeof sahih>> = { 'sahih-al-bukhari': sahih('bukhari'), 'sahih-muslim': sahih('muslim') };
+const hadithText = (slug: string, hadith: number) => SAHIH[slug].find(item => item.n === hadith)!.routes[0].text;
+const bare = (text: string) => text.replace(/[\u064B-\u0652\u0670\u0640]/g, '');
 const sadi = (JSON.parse(readFileSync('shared/data/quran/tafsirSadi.json', 'utf8')) as { passages: [number, number, number, number, number, string][] }).passages;
 const reports = stories.flatMap(story => story.reports!.map((report, i) => [`${story.slug} report ${i + 1}`, report] as const));
 
@@ -70,9 +74,42 @@ describe('sira stories', () => {
     }
   });
 
+  const turned = reports.flatMap(([name, report]) => report.moments.filter(moment => moment.turns).map(moment => [`${name}, «${moment.title}»`, moment, report] as const));
+
+  it.each(turned)('%s is its turns put back together', (_, moment) => {
+    expect(moment.turns!.map(turn => turn.text).join(' ')).toBe(moment.text);
+    for (const turn of moment.turns!) if (turn.lead) expect(turn.text.startsWith(turn.lead)).toBe(true);
+    // A lead-in is drawn above a bubble: on narration it would have nowhere to go and drop out of the text.
+    for (const turn of moment.turns!) if (turn.lead) expect(turn.speaker).toBeDefined();
+  });
+
+  // A kunya changes with its case: «أن أبا سفيان أخبره», «في جواب أبي بكر».
+  const kunyaForms = (name: string) => [name, name.replace(/^أبو /, 'أبا '), name.replace(/^أبو /, 'أبي ')].map(bare);
+
+  // Owner, 2026-11-21: who speaks comes from the source, never our reading of a bare «فقال».
+  it.each(turned)('%s names each speaker as the text or a book does', (_, moment, report) => {
+    for (const turn of moment.turns!.filter(turn => turn.speaker)) {
+      const { name } = turn.speaker!;
+      if (turn.witness) {
+        const { source, volume, page, quote } = turn.witness;
+        // A quote that skips words marks the gap with « … »: each part is on the page as printed.
+        for (const part of quote.split(' … ')) expect(paragraphs(source, volume, page).join('\n')).toContain(part);
+        // «ﷺ» is said of the Prophet alone, so a note that gives the answer as his names him.
+        if (turn.speaker!.person === 'prophet-muhammad' && quote.includes('ﷺ')) continue;
+        expect(kunyaForms(name).some(form => bare(quote).includes(form))).toBe(true);
+      } else if (turn.teller) {
+        // Owner, 2026-11-22: the teller's own «قلت» is his: the lead says «I said», and the chain names him as the one telling.
+        expect(bare(turn.lead ?? '')).toMatch(/^(?:قالت?:? )?(?:ثم )?[فو]?قل(?:ت|نا)(?::? [^:]+)?:?$/);
+        // «قلت في نفسي» was thought, not said.
+        expect(bare(turn.lead ?? '')).not.toMatch(/نفسي/);
+        expect(kunyaForms(name).some(form => bare(report.isnad ?? '').includes(form))).toBe(true);
+      } else expect(bare(turn.lead ?? '')).toContain(bare(name));
+    }
+  });
+
   it('names only people the catalog has', () => {
     const people = new Set(readdirSync('data/catalog/people').map(file => file.replace(/\.ts$/, '')));
-    const named = stories.flatMap(story => [...story.people.map(p => p.person), ...(story.ayat ?? []).flatMap(a => (a.about ? [a.about] : [])), ...story.reports!.flatMap(r => r.moments.flatMap(m => m.people))]);
+    const named = stories.flatMap(story => [...story.people.map(p => p.person), ...(story.ayat ?? []).flatMap(a => (a.about ? [a.about] : [])), ...story.reports!.flatMap(r => r.moments.flatMap(m => [...m.people, ...(m.turns ?? []).flatMap(t => (t.speaker?.person ? [t.speaker.person] : []))]))]);
     expect(named.filter(slug => !people.has(slug))).toEqual([]);
   });
 });

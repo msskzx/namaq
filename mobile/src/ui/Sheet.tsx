@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { OutsideCard } from '@/ui/cardContext';
 import { Modal, Pressable, View, useWindowDimensions } from 'react-native';
+import { COLUMN, PageWidthProvider } from './column';
 import { useKeyboardHeight } from '@/lib/keyboard';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, { Easing, interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -10,6 +11,7 @@ import { X } from 'lucide-react-native';
 import type { Palette } from '@/lib/theme';
 import { Text } from '@/ui/Text';
 import { SourceSlotContext } from '@/ui/sourceSlot';
+import { AyahMenuContext } from './ayahMenuContext';
 import IconButton from '@/ui/IconButton';
 
 const OPEN_MS = 260;
@@ -66,11 +68,14 @@ export default function Sheet({ open, onClose, palette, tall, full, title, onDis
   );
   const size = full ? { flex: 1, paddingTop: insets.top }
     : tall ? { height: Math.round((screen - keyboard) * 0.85) } : { maxHeight: '85%' as const };
-  const edge = full ? {} : { borderTopWidth: 1, borderColor: palette.rule, borderTopLeftRadius: 16, borderTopRightRadius: 16 };
+  // On a tablet a sheet rises in the page's column (ui/column.ts), not across the whole screen.
+  const edge = full ? {} : { borderTopWidth: 1, borderColor: palette.rule, borderTopLeftRadius: 16, borderTopRightRadius: 16, width: '100%' as const, maxWidth: COLUMN, alignSelf: 'center' as const };
   return (
     <Modal visible={shown} transparent animationType="none" onRequestClose={onClose} onDismiss={onDismiss} statusBarTranslucent>
       {/* A sheet opened from a home card is not the card: its references draw in it (ui/sourceSlot.ts). */}
       <SourceSlotContext.Provider value={null}>
+      {/* The ayah menu opens under a modal, so an ayah in a sheet opens none (ui/ayahMenuContext.ts). */}
+      <AyahMenuContext.Provider value={null}>
       <GestureHandlerRootView style={{ flex: 1, paddingBottom: keyboard }}>
         {!full && <Animated.View style={[{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.45)' }, dim]}>
           <Pressable accessibilityLabel="إغلاق" onPress={onClose} style={{ flex: 1 }} />
@@ -78,9 +83,11 @@ export default function Sheet({ open, onClose, palette, tall, full, title, onDis
         {!full && <View pointerEvents="none" style={{ flex: 1 }} />}
         <Animated.View style={[{ direction: 'rtl', ...size, backgroundColor: palette.paper, ...edge, paddingBottom: (keyboard ? 0 : insets.bottom) + 8 }, moved]}>
           {handle}
-          <OutsideCard>{children}</OutsideCard>
+          {/* A sheet opened from one of home's two columns is as wide as the column of a page, not the card's (ui/column.ts). */}
+          <PageWidthProvider value={null}><OutsideCard>{children}</OutsideCard></PageWidthProvider>
         </Animated.View>
       </GestureHandlerRootView>
+      </AyahMenuContext.Provider>
       </SourceSlotContext.Provider>
     </Modal>
   );

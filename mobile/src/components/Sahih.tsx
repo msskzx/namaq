@@ -4,6 +4,7 @@ import { Check, Download } from 'lucide-react-native';
 import { bookOf } from '@shared/books';
 import { lastLink, sahihName, searchSahih, splitRoute, type SahihHadith, type SahihIndex, type SahihRoute } from '@shared/sahih';
 import { num } from '@shared/quran/arabicNumber';
+import { DRAW_MODES, type DrawMode } from '@shared/hadith';
 import { Text } from '@/ui/Text';
 import Card, { CardWithRow } from '@/ui/Card';
 import type { Source } from '@/ui/sourceSlot';
@@ -18,9 +19,6 @@ import LoadingDots from '@/ui/LoadingDots';
 import type { Palette } from '@/lib/theme';
 import { addBook, type BookState } from '@/lib/books';
 
-type Mode = 'drawing' | 'text';
-// The owner's names (2026-11-18): the drawing, and the whole text with its isnad.
-const MODES = [{ key: 'drawing', label: 'الرسم' }, { key: 'text', label: 'النص كاملًا' }] as const;
 
 const body = (palette: Palette, big = false) => ({ color: palette.ink, fontSize: big ? 21 : 19, lineHeight: big ? 40 : 36, textAlign: 'right' as const });
 const pagesName = (pages: number[]) => (pages.length > 1 ? `ص ${num(pages[0])}–${num(pages[pages.length - 1])}` : `ص ${num(pages[0])}`);
@@ -55,7 +53,7 @@ export function SahihChain({ book, route, palette }: { book: SahihIndex; route: 
 }
 
 /** One printed text: its chain drawn and its words under it, or the whole text with the chain in muted ink; its page folded. */
-export function SahihRouteView({ book, n, route, mode, palette, big }: { book: SahihIndex; n: number; route: SahihRoute; mode: Mode; palette: Palette; big?: boolean }) {
+export function SahihRouteView({ book, n, route, mode, palette, big }: { book: SahihIndex; n: number; route: SahihRoute; mode: DrawMode; palette: Palette; big?: boolean }) {
   const { chain, words } = splitRoute(route);
   return (
     <View style={{ gap: 10 }}>
@@ -70,19 +68,19 @@ export function SahihRouteView({ book, n, route, mode, palette, big }: { book: S
 }
 
 /**
- * A hadith of a Sahih whole (owner's sketch, 2026-11-19): the narrator it comes from, its words large, «الرسم» or «النص كاملًا»
+ * A hadith of a Sahih whole (owner's sketch, 2026-11-19): the narrator it comes from, its words large, «الرسم» or «النص»
  * when its chain is drawn, and in Muslim its other routes folded under the first. The page, the feed card and a quiz's
  * look-up all draw it.
  */
 export function SahihHadithView({ book, hadith, palette }: { book: SahihIndex; hadith: SahihHadith; palette: Palette }) {
-  const [mode, setMode] = useState<Mode>('drawing');
+  const [mode, setMode] = useState<DrawMode>('drawing');
   const [first, ...rest] = hadith.routes;
   const from = lastLink(first);
   const drawn = hadith.routes.some(route => route.chain);
   return (
     <View style={{ gap: 12 }}>
-      {from && <Text style={{ color: palette.muted, fontSize: 16, textAlign: 'right' }}>{from}</Text>}
-      {drawn && <Tabs label="طريقة العرض" options={MODES} value={mode} onChange={setMode} palette={palette} />}
+      {from && <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>{from}</Text>}
+      {drawn && <Tabs label="طريقة العرض" options={DRAW_MODES} value={mode} onChange={setMode} palette={palette} />}
       <SahihRouteView book={book} n={hadith.n} route={first} mode={mode} palette={palette} big />
       {rest.length > 0 && (
         <Folded credit={`طرق أخرى عند ${book.slug === 'muslim' ? 'مسلم' : 'البخاري'} (${num(rest.length)})`} palette={palette}>

@@ -23,7 +23,7 @@ Both files are pinned by sha256 in `scripts/quran/buildGharib.ts`. Both are publ
 `scripts/quran/gharib.ts`:
 
 - **Ibn Qutaybah.** His surahs start at Shamela page 36. Before that are his chapters on the divine names, which name no ayah. An entry opens on a numbered line («١٤- ﴿…﴾») or a line that opens with a quote, and runs on over the lines after it.
-- **Placing his entries.** Each quote is found in its surah: first exactly, in the ayah he numbers or the next place after the last entry, then loosely (و/ف/ال dropped, two quote words joined into one mushaf word) in the ayat nearby. A numbered entry that is still not found shows on its ayah with no word lit. 3,456 of 3,482 entries are placed, on 2,370 ayat. The 26 left are cross-references to other surahs and spellings the matcher misses.
+- **Placing his entries.** Each quote is found in its surah: first exactly, in the ayah he numbers or the next place after the last entry, then loosely (و/ف/ال dropped, two quote words joined into one mushaf word) in the ayat nearby. Matching by consonants alone joins words like «الرَّبْوة» and «رَبِّهِ» (both ربه), so a place whose waw and ya also agree with his word goes first, then one found loosely nearby that agrees so (2026-11-21: «الربوة» and «أكلها» moved from 2:275 and 2:282 to 2:265, «حتى يؤمنوا» and «والخبيثون» to their own words). A numbered entry that is still not found shows on its ayah with no word lit. 3,456 of 3,482 entries are placed, on 2,370 ayat. The 26 left are cross-references to other surahs and spellings the matcher misses.
 - **Al-Raghib.** The articles start at the first «كتاب …» division and stop at «مقدّمة للفهارس». In Turath's export, some title marks fall inside words. So a heading is a line that is a title alone, or two to six letters alone.
 - **Linking a word to an article.** A word is linked through its Quranic Arabic Corpus root, when exactly one of his headings fits it. Spellings are tried in order and the first that names a heading decides: the root (with a doubled last letter written once), then a weak letter written as alif (a و-root also as و, a ي-root as ي), then a weak last letter dropped. The rule never crosses و and ي, since نسو (women) is not نسى (forgetting). `ALIASES` lists the roots he files under a heading of his own, each checked against his article. 49,273 of 49,964 rooted words are linked. 111 roots have no heading and show nothing.
 
@@ -44,6 +44,10 @@ Both files are pinned by sha256 in `scripts/quran/buildGharib.ts`. Both are publ
 - **Signs spelled out.** His text writes honorifics as single signs (﷿ for «عز وجل», ﵇ for «عليه السلام», ﵁ for «رضي الله عنه»). Readers did not recognise them, so both books spell them out in words; only ﷺ stays as a sign. One list in `scripts/quran/signs.ts`, shared with the Sa'di build.
 - **On screen.** The question is the whole quote he explains, in its ayah, with the quote marked. After answering, each wrong choice shows the word it explains and where («معنى «فراتا»، المرسلات ٢٧»), and the note gives his pages.
 - **Where it appears.** The kind is `MEANING` (`shared/quiz/meaning.ts`), asked solo, in a party, and in the home feed's turn of question cards. Hiding the book in the library hides the reader sheet's pill, not the quiz: the quiz is chosen by its own kind.
+
+## Words page
+
+Each word's page on «ألفاظ القرآن» shows his entries that quote the word alone and al-Raghib's article on its root (docs/plans/word-counts-app.md, "A word's page").
 
 ## Reader sheet
 

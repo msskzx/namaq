@@ -1,9 +1,9 @@
 import { memo, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
+import OpenButton from '@/ui/OpenButton';
 import { View } from 'react-native';
 import { Text } from '@/ui/Text';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
-import { router } from 'expo-router';
-import { ArrowLeftRight, Bookmark, BookOpen, Clapperboard, Columns2, GalleryHorizontal, Rows2, Pause, UnfoldHorizontal, Play, RotateCcw, Send, X } from 'lucide-react-native';
+import { Bookmark, Clapperboard, Columns2, GalleryHorizontal, Rows2, Pause, UnfoldHorizontal, Play, RotateCcw, Send, X } from 'lucide-react-native';
 import type { CardAyah, CardSide, PairCard } from '@shared/quran/compareCards';
 import { ayahStarts, isRefrain, type ReadStep } from '@shared/quran/readPlan';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
@@ -15,7 +15,7 @@ import CompareTree from './CompareTree';
 import { Gap, PartRule, Silent, StartRule } from './StoryParts';
 import { blend, type Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
-import { COMPARE_CARD, markColour, sideTitle, sideView, writtenLinks } from '@shared/quran/compareCardLook';
+import { COMPARE_CARD, markColour, sideTitle, sideView, writtenLinks, type SideName } from '@shared/quran/compareCardLook';
 import { likenessAt } from '@/lib/branches';
 import { nextSpeed, useReadAlong } from './useReadAlong';
 import VideoSheet from './VideoSheet';
@@ -26,11 +26,13 @@ import { WEBSITE } from '@/lib/website';
 import { surahPairHref } from '@shared/quran/curatedComparisons';
 import { compareAnchor } from '@shared/compareBookmarks';
 import { toTab } from '@/lib/ways';
+import { readAyah } from '@/lib/openReader';
 import { compareMatrixOnly } from '@shared/quran/compareViews';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
 import SourceLine, { sourcesOf } from '@/ui/SourceLine';
 import { TANASUB_KIND, tanasubLink, tanasubSource } from '@shared/quran/tanasubCards';
+import { FEATURE_ICON } from '@/components/featureIcons';
 
 const DOUBLE_TAP = 280;
 
@@ -46,7 +48,7 @@ function cardLink(card: PairCard) {
 }
 
 /** One ayah: same words in the accent, same root in purple, a lit word and its partner on a highlight, the word read underlined. */
-function AyahText({ ayah, palette, light, plain = false, inline = false }: { ayah: CardAyah; palette: Palette; light?: Light; plain?: boolean; inline?: boolean }) {
+function AyahText({ ayah, surah, palette, light, plain = false, inline = false }: { ayah: CardAyah; surah: number; palette: Palette; light?: Light; plain?: boolean; inline?: boolean }) {
   const words = <>
     {ayah.words.map((word, i) => {
       const mark = plain ? undefined : ayah.marks?.[i];
@@ -67,7 +69,7 @@ function AyahText({ ayah, palette, light, plain = false, inline = false }: { aya
     <AyahWords look={{ color: palette.accent }}>{`\u00A0${num(ayah.number)}`}</AyahWords>
   </>;
   // Inside a running text it takes the flow around it; on its own it is its own flow (the reader's line size, centred).
-  return inline ? <Text style={{ color: plain ? palette.muted : palette.ink }}>{words}</Text> : <AyahFlow center color={plain ? palette.muted : palette.ink}>{words}</AyahFlow>;
+  return inline ? <Text style={{ color: plain ? palette.muted : palette.ink }}>{words}</Text> : <AyahFlow center menu={`${surah}:${ayah.number}`} color={plain ? palette.muted : palette.ink}>{words}</AyahFlow>;
 }
 
 /** The ayah before or after a side in the matrix: muted, its words coloured where the other side's neighbour shares them. */
@@ -85,24 +87,28 @@ function Neighbour({ ayah, palette }: { ayah: AroundAyah; palette: Palette }) {
 }
 
 /** A side's ayat as one running text, with the ayah before and after (muted) when the surrounding switch is on. */
-function RunningAyat({ ayat, before, after, palette, light, lane = false }: { ayat: CardAyah[]; before?: AroundAyah | null; after?: AroundAyah | null; palette: Palette; light: (ayah: CardAyah) => Light; /** Half the card wide, side by side: the reader's size from the screen, wrapping within the lane. */ lane?: boolean }) {
+function RunningAyat({ ayat, surah, before, after, palette, light, lane = false }: { ayat: CardAyah[]; surah: number; before?: AroundAyah | null; after?: AroundAyah | null; palette: Palette; light: (ayah: CardAyah) => Light; /** Half the card wide, side by side: the reader's size from the screen, wrapping within the lane. */ lane?: boolean }) {
   return (
-    <AyahFlow center screen={lane} color={palette.ink}>
+    <AyahFlow center screen={lane} menu={[...(before ? [before.key] : []), ...ayat.map(ayah => `${surah}:${ayah.number}`), ...(after ? [after.key] : [])]} color={palette.ink}>
       {before && <><Neighbour ayah={before} palette={palette} />{' '}</>}
-      {ayat.map((ayah, i) => <Text key={ayah.number}>{i > 0 ? ' ' : ''}<AyahText ayah={ayah} palette={palette} light={light(ayah)} inline /></Text>)}
+      {ayat.map((ayah, i) => <Text key={ayah.number}>{i > 0 ? ' ' : ''}<AyahText ayah={ayah} surah={surah} palette={palette} light={light(ayah)} inline /></Text>)}
       {after && <>{' '}<Neighbour ayah={after} palette={palette} /></>}
     </AyahFlow>
   );
 }
 
+/** Where a side opens the reader: its first ayah, or, for the listed partners of a one-to-many card, the partner picked. */
+const readAt = (name: SideName, side: CardSide, selected: number) =>
+  (name.listed ? `${side.surah}:${name.numbers[selected] ?? name.numbers[0]}` : sideKeys(side)[0]);
+
 /** `bare`: the head is the name alone, its buttons in the row under the card (the home feed, owner 2026-11-20). */
-function SideHead({ label, keys, palette, group, bare = false }: { label: string; keys: string[]; palette: Palette; group?: string; bare?: boolean }) {
+function SideHead({ label, at, palette, group, bare = false }: { label: string; at: string; palette: Palette; group?: string; bare?: boolean }) {
   const read = `اقرأ ${label} في المصحف`;
   return (
     // The buttons at the right edge, in the thumb's reach, and the surah's name and number in the middle (owner, 2026-11-15).
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
       {!bare && <View style={{ position: 'absolute', right: 0, flexDirection: 'row-reverse', alignItems: 'center', zIndex: 1 }}>
-        <IconButton Icon={BookOpen} label={read} onPress={() => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } })} size="small" />
+        <IconButton Icon={FEATURE_ICON.mushaf} label={read} onPress={() => readAyah(at)} size="small" />
         {group && <IconButton Icon={TreeIcon} label="افتح في متشابهات القرآن" onPress={() => toTab({ pathname: '/branches', params: { tree: group } })} size="small" />}
       </View>}
       <Text style={{ flex: 1, color: palette.muted, fontSize: COMPARE_CARD.labelSize, textAlign: 'center', paddingHorizontal: bare ? 0 : group ? 64 : 32, minHeight: 30, lineHeight: 30 }}>{label}</Text>
@@ -111,11 +117,11 @@ function SideHead({ label, keys, palette, group, bare = false }: { label: string
 }
 
 /** A lane's head side by side: the surah and its ayat, then its buttons, all on one line to fit half the card. */
-function LaneHead({ label, keys, palette, group, bare = false }: { label: string; keys: string[]; palette: Palette; group?: string; bare?: boolean }) {
+function LaneHead({ label, at, palette, group, bare = false }: { label: string; at: string; palette: Palette; group?: string; bare?: boolean }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', minHeight: 30 }}>
       <Text style={{ color: palette.muted, fontSize: COMPARE_CARD.labelSize, textAlign: 'center', flexShrink: 1 }}>{label}</Text>
-      {!bare && <IconButton Icon={BookOpen} label={`اقرأ ${label} في المصحف`} onPress={() => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } })} size="small" />}
+      {!bare && <IconButton Icon={FEATURE_ICON.mushaf} label={`اقرأ ${label} في المصحف`} onPress={() => readAyah(at)} size="small" />}
       {!bare && group && <IconButton Icon={TreeIcon} label="افتح في متشابهات القرآن" onPress={() => toTab({ pathname: '/branches', params: { tree: group } })} size="small" />}
     </View>
   );
@@ -210,12 +216,11 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
   // A side as the shared pieces (shared/quran/compareCardLook.ts), which the video draws too.
   const side = (cardSide: CardSide, i: 0 | 1) => {
     const view = sideView(card, i, selected, folded);
-    const keys = view.name.listed ? view.name.numbers.map(n => `${cardSide.surah}:${n}`) : sideKeys(cardSide);
     const light = (ayah: CardAyah) => lightFor(lit, step, i, ayah.number, onWord, written);
     const many = card.many && card.many.side === i && !view.refrain;
     return (
       <View key={i} style={{ gap: many ? COMPARE_CARD.optionsGap : COMPARE_CARD.sideGap }}>
-        <SideHead label={sideTitle(view.name, surahName)} keys={keys} palette={palette} group={i === 0 ? card.group : undefined} bare={!!onOpen} />
+        <SideHead label={sideTitle(view.name, surahName)} at={readAt(view.name, cardSide, selected)} palette={palette} group={i === 0 ? card.group : undefined} bare={!!onOpen} />
         {/* Story cards run in the first surah's order, so this surah tells this part before the last card's. */}
         {view.back && <Text style={{ color: palette.muted, fontSize: COMPARE_CARD.noteSize, textAlign: 'right' }}>قبلُ في السورة</Text>}
         {view.pieces.map((piece, k) => {
@@ -227,17 +232,17 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
             case 'silent': return <Silent key={k} note={silentNote(piece.surah)} palette={palette} />;
             case 'around': {
               const ayah = (piece.which === 'before' ? around?.before : around?.after)?.[i];
-              return ayah ? <RunningAyat key={k} ayat={[]} {...{ [piece.which]: ayah }} palette={palette} light={() => ({ lit: null })} /> : null;
+              return ayah ? <RunningAyat key={k} ayat={[]} surah={cardSide.surah} {...{ [piece.which]: ayah }} palette={palette} light={() => ({ lit: null })} /> : null;
             }
             case 'ayat': {
-              if (piece.option === undefined) return <RunningAyat key={k} ayat={piece.ayat} before={piece.before ? around?.before[i] : undefined} after={piece.after ? around?.after[i] : undefined} palette={palette} light={light} />;
+              if (piece.option === undefined) return <RunningAyat key={k} ayat={piece.ayat} surah={cardSide.surah} before={piece.before ? around?.before[i] : undefined} after={piece.after ? around?.after[i] : undefined} palette={palette} light={light} />;
               const row = piece.option;
               const ayah = piece.ayat[0];
               return (
                 <Tap key={k} onPress={() => { if (!step && row !== selected) { setPicked(row); setTapped(null); } }} accessibilityRole="button" accessibilityState={{ selected: piece.picked }}
                   accessibilityLabel={`${surahName(cardSide.surah)} ${num(ayah.number)}`}
                   style={{ borderRightWidth: COMPARE_CARD.pickBar, borderRightColor: piece.picked ? palette.accent : 'transparent', paddingRight: COMPARE_CARD.pickPad }}>
-                  <AyahText ayah={ayah} palette={palette} plain={piece.plain} light={piece.picked ? light(ayah) : undefined} />
+                  <AyahText ayah={ayah} surah={cardSide.surah} palette={palette} plain={piece.plain} light={piece.picked ? light(ayah) : undefined} />
                 </Tap>
               );
             }
@@ -259,7 +264,7 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
       return stretches.map((stretch, k) => (
         <View key={k}>
           {k > 0 && <Gap label={runsLabel(stretch.map(ayah => ayah.number))} palette={palette} />}
-          <RunningAyat lane={!wide} ayat={stretch} before={parts || k > 0 ? undefined : around?.before[i]} after={parts || k < stretches.length - 1 ? undefined : around?.after[i]} palette={palette}
+          <RunningAyat lane={!wide} ayat={stretch} surah={cardSide.surah} before={parts || k > 0 ? undefined : around?.before[i]} after={parts || k < stretches.length - 1 ? undefined : around?.after[i]} palette={palette}
             light={ayah => lightFor(lit, step, i, ayah.number, onWord, written)} />
         </View>
       ));
@@ -280,10 +285,9 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
         {([0, 1] as const).map(i => {
           const view = sideView(card, i, selected, []);
           const cardSide = sides[i];
-          const keys = view.name.listed ? view.name.numbers.map(n => `${cardSide.surah}:${n}`) : sideKeys(cardSide);
           return (
             <View key={i} style={{ flex: 1 }}>
-              <LaneHead label={sideTitle(view.name, surahName)} keys={keys} palette={palette} group={i === 0 ? card.group : undefined} bare={!!onOpen} />
+              <LaneHead label={sideTitle(view.name, surahName)} at={readAt(view.name, cardSide, selected)} palette={palette} group={i === 0 ? card.group : undefined} bare={!!onOpen} />
               {view.back && <Text style={{ color: palette.muted, fontSize: COMPARE_CARD.noteSize, textAlign: 'center' }}>قبلُ في السورة</Text>}
             </View>
           );
@@ -365,12 +369,11 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
       </Tap>
       {read.studio ? <Studio read={read} palette={palette} record={record} /> : (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
-          {onOpen && <IconButton Icon={ArrowLeftRight} label="افتحها في المقارنة" onPress={onOpen} />}
+          {onOpen && <OpenButton label="افتحها في المقارنة" onPress={onOpen} />}
           {onOpen && ([0, 1] as const).map(i => {
             const view = sideView(card, i, selected, []);
-            const keys = view.name.listed ? view.name.numbers.map(n => `${sides[i].surah}:${n}`) : sideKeys(sides[i]);
             const label = sideTitle(view.name, surahName);
-            return <IconButton key={i} Icon={BookOpen} label={`اقرأ ${label} في المصحف`} onPress={() => router.push({ pathname: '/ayah', params: { keys: keys.join(',') } })} />;
+            return <IconButton key={i} Icon={FEATURE_ICON.mushaf} label={`اقرأ ${label} في المصحف`} onPress={() => readAyah(readAt(view.name, sides[i], selected))} />;
           })}
           {!onOpen && saveButton}
           <IconButton Icon={Clapperboard} label="استوديو القراءة" onPress={read.open} />

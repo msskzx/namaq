@@ -3,8 +3,6 @@ import { surahName as S } from '../../shared/quran/surahNames';
 import * as adhan from 'adhan';
 import { DEFAULT_PRAYER_SETTINGS, prayerDay, type Adhan } from '../../shared/prayer';
 
-const menu = (page: import('@playwright/test').Page) => page.getByRole('toolbar');
-
 test.describe('a new user', () => {
   test('home shows the few buttons, the reading card with the date, and the feed', async ({ page }) => {
     await open(page, '/');
@@ -58,7 +56,8 @@ test.describe('a new user', () => {
       await head.scrollIntoViewIfNeeded();
       const post = head.locator('xpath=ancestor::div[.//*[@data-testid="feed-card"]][1]');
       const card = post.getByTestId('feed-card');
-      const row = post.locator('xpath=.//*[@aria-label="اختبار فردي"]/..');
+      // The row under the card: where the share button (on every card) sits.
+      const row = post.locator('xpath=.//*[@aria-label="شارك البطاقة"]/..');
       const boxes = () => card.evaluate(root => [...root.querySelectorAll('*')].filter(el => {
         if (el.closest('[role="button"], button, input, textarea')) return false;
         const style = getComputedStyle(el);
@@ -69,7 +68,8 @@ test.describe('a new user', () => {
       // The hint is the card's own button: it waits in the row with the quiz buttons.
       await expect(row.getByRole('button', { name: /^تلميح/ })).toHaveCount(1);
       await expect(card.getByRole('button', { name: /^تلميح/ })).toHaveCount(0);
-      await row.getByRole('button', { name: 'إظهار الإجابة' }).click();
+      // «تحقق» with nothing typed shows the answer (owner, 2026-11-21).
+      await row.getByRole('button', { name: 'تحقق', exact: true }).click();
       // Answered, the matrix draws no frame of its own, and its buttons join the same row.
       await expect(row.getByRole('button', { name: 'الآيات المحيطة' })).toHaveCount(1);
       await expect(card.getByRole('button', { name: 'الآيات المحيطة' })).toHaveCount(0);
@@ -111,7 +111,7 @@ test.describe('a new user', () => {
       await open(page, '/');
       const trees = page.getByRole('button', { name: 'افتح الشجرة في متشابهات القرآن' });
       await expect(trees.first()).toBeAttached();
-      for (const name of ['مواقيت الصلاة', 'المزيد للتأمل', 'افتح المحفوظات']) await expect(page.getByRole('button', { name })).toHaveCount(0);
+      for (const name of ['مواقيت الصلاة', 'المزيد للتأمل', 'افتح المحفوظات']) await expect(page.getByRole('button', { name, exact: true })).toHaveCount(0);
       await page.mouse.move(195, 500);
       const first = await trees.count();
       await expect(async () => {
@@ -133,7 +133,9 @@ test.describe('a new user', () => {
   test('the reading card names the juz of its own page, and today\'s juz is a card that opens the mushaf', async ({ page }) => {
     await page.addInitScript(() => localStorage.setItem('reader-place', JSON.stringify({ page: 300, position: null })));
     await open(page, '/');
-    await expect(page.getByText('الجزء ١٥', { exact: true }).first()).toBeVisible();
+    // The juz on the head's second line beside the surah, and on the reference line with the page (owner, 2026-11-22).
+    await expect(page.getByText(/ · الجزء ١٥ · /).first()).toBeVisible();
+    await expect(page.getByText(/^المصحف · .+، الجزء ١٥، الصفحة ٣٠٠$/).first()).toBeVisible();
     const juz = page.getByRole('button', { name: /^اقرأ الجزءا?ن? .*، جزء اليوم$/ });
     await juz.scrollIntoViewIfNeeded();
     await juz.click();
@@ -142,8 +144,8 @@ test.describe('a new user', () => {
 
   // Scenes are one of balagha's cards; with every interest on, the feed holds so many kinds that one may come only after
   // many screens, so the user here picks balagha alone. The books card stays outside the interests' rounds.
-  test.describe('with balagha picked', () => {
-    test.use({ seed: { interests: '["balagha"]', 'interests-surprise': '0' } });
+  test.describe('with tafsir picked', () => {
+    test.use({ seed: { interests: '["tafsir"]', 'interests-surprise': '0' } });
 
     test('a scene from «مشاهد» and a few books with their authors come up in the feed', async ({ page }) => {
       await open(page, '/');
@@ -164,31 +166,28 @@ test.describe('a new user', () => {
   test.describe('with the ayah books picked', () => {
     test.use({ seed: { interests: '["tafsir","qiraat","irab","balagha"]', 'interests-surprise': '0' } });
 
-    test('the feed has small ayah cards from the tafsir, balagha, i\'rab and readings, each opening the reader\'s own sheet', async ({ page }) => {
+    // Where the ayah is the subject, «افتح» opens the ayah's page at the card's section (owner, 2026-11-22).
+    test('the feed has small ayah cards from the tafsir, balagha, i\'rab and readings, each opening the ayah\'s page at its section', async ({ page }) => {
       await open(page, '/');
       await page.mouse.move(380, 500);
       const cards = [
-        ['من التفسير', 'التفسير كاملًا', page.getByText(/^تيسير الكريم الرحمن للسعدي، ص/)],
-        ['من البلاغة', 'البلاغة كاملة', page.getByRole('heading', { name: /^[^ ]+ [٠-٩]+$/ })],
-        ['من الإعراب', 'إعراب الآية', page.getByRole('tablist', { name: 'كلمات الآية' })],
-        ['من القراءات', 'القراءات كاملة', page.getByText(/^المصدر: /)],
+        ['من التفسير', 'التفسير كاملًا', 'التفسير'],
+        ['من البلاغة', 'البلاغة كاملة', 'البلاغة'],
+        ['من الإعراب', 'إعراب الآية', 'الإعراب'],
+        ['من القراءات', 'القراءات كاملة', 'القراءات'],
       ] as const;
-      for (const [title, button, inSheet] of cards) {
+      for (const [title, button, section] of cards) {
         const head = page.getByRole('heading', { name: title, exact: true }).first();
         await expect(async () => {
-          // Back over the feed: the tap that closed the last sheet left the pointer on the top bar.
           await page.mouse.move(380, 500);
           await page.mouse.wheel(0, 3000);
           await expect(head).toBeAttached({ timeout: 1000 });
         }).toPass({ timeout: 30_000 });
         // The row's open button is the card's one control for it (owner, 2026-11-20).
-        await page.getByRole('button', { name: button, exact: true }).first().click();
-        await expect(inSheet.last()).toBeVisible();
-        // A tap above the sheet closes it, as on a phone.
-        await expect(async () => {
-          await page.mouse.click(195, 40);
-          await expect(inSheet).toHaveCount(0, { timeout: 1500 });
-        }).toPass({ timeout: 10_000 });
+        await page.getByRole('button', { name: `افتح صفحة الآية، ${button}`, exact: true }).first().click();
+        await expect(page.getByRole('heading', { name: section, exact: true }).filter({ visible: true })).toBeInViewport();
+        await page.getByRole('button', { name: 'رجوع' }).filter({ visible: true }).click();
+        await expect(head).toBeAttached();
       }
     });
   });
@@ -215,7 +214,7 @@ test.describe('a new user', () => {
           return { name: button.getAttribute('aria-label'), x, y, width };
         }));
         const named = (name: string) => buttons.find(button => button.name === name)!;
-        const opens = named('التفسير كاملًا');
+        const opens = named('افتح صفحة الآية، التفسير كاملًا');
         const save = named('احفظ البطاقة');
         const more = named('خيارات البطاقة');
         // The row's buttons, right to left: the open button first, the «⋯» alone at the far left.
@@ -265,7 +264,7 @@ test.describe('a new user', () => {
     });
   });
 
-  test('the feed asks a question of every quiz kind in turn, each card with the quiz buttons', async ({ page }) => {
+  test('the feed asks a question of every quiz kind in turn', async ({ page }) => {
     test.setTimeout(180_000);
     // Each round asks about half the interests, each in its own kind in turn by the round and the day.
     const kinds = ['في أي سورة؟', 'أكمل المتشابهات', 'سمّع بقية الآية', 'قارن الموضعين', 'أوائل السور', 'ما معنى؟', 'لأي آية هذا التفسير؟', 'ما الأسلوب؟', 'ما المصطلح؟', 'ما إعرابها؟', 'كيف يقرؤها؟',
@@ -277,7 +276,8 @@ test.describe('a new user', () => {
       await page.mouse.move(195, 500);
       await expect(async () => {
         await page.mouse.wheel(0, 3000);
-        expect(await page.getByRole('button', { name: 'اختبار فردي' }).count()).toBeGreaterThan(24);
+        // Enough questions drawn: each unanswered one has «تحقق» under it (owner, 2026-11-22).
+        expect(await page.getByRole('button', { name: 'تحقق', exact: true }).count()).toBeGreaterThan(24);
       }).toPass({ timeout: 40_000 });
       for (const name of kinds) if (await page.getByRole('heading', { name, exact: true }).count()) seen.add(name);
       if (seen.size === kinds.length) break;
@@ -292,20 +292,41 @@ test.describe('a new user', () => {
       // The hifz questions take turns, so «في أي سورة؟» is among the first three.
       await open(page, '/');
       await expect(page.getByRole('heading', { name: 'في أي سورة؟', exact: true }).first()).toBeAttached({ timeout: 20_000 });
-      const card = page.getByRole('heading', { name: 'في أي سورة؟', exact: true }).first().locator('xpath=ancestor::div[.//*[@aria-label="اختبار فردي"]][1]');
+      const card = page.getByRole('heading', { name: 'في أي سورة؟', exact: true }).first().locator('xpath=ancestor::div[.//*[@aria-label="تحقق" or @aria-label="افتح ما يشرح الجواب"]][1]');
       await card.scrollIntoViewIfNeeded();
       await expect(card.getByText(/[٠-٩]+$/).first()).toBeAttached();
-      // The choices are the card's buttons with words; the quiz buttons are icons.
-      const choice = card.getByRole('button').filter({ hasText: /\S/ }).first();
-      await expect(card.getByRole('button', { name: 'في المصحف' })).toHaveCount(0);
+      const openAnswer = card.getByRole('button', { name: 'افتح ما يشرح الجواب' });
+      // Unanswered, no «افتح»: «تحقق» answers (owner, 2026-11-22).
+      const choice = card.getByRole('button').filter({ hasText: /\S/, hasNot: page.getByRole('heading') }).first();
+      await expect(openAnswer).toHaveCount(0);
+      // A tap selects, and only «تحقق» answers (owner, 2026-11-21).
       await choice.click();
+      await expect(choice).toBeEnabled();
+      await expect(openAnswer).toHaveCount(0);
+      await card.getByRole('button', { name: 'تحقق', exact: true }).click();
       await expect(choice).toBeDisabled();
-      // Answered, the mushaf button joins the row under the card, first (owner, 2026-11-20), and opens the reader.
-      const row = card.locator('xpath=.//*[@aria-label="اختبار فردي"]/..');
-      await expect(row.getByRole('button', { name: 'في المصحف' })).toHaveCount(1);
-      await expect(card.getByRole('button', { name: 'في المصحف' })).toHaveCount(1);
-      await row.getByRole('button', { name: 'في المصحف' }).click();
+      // Answered, «افتح» opens the ayah in the reader, never the quizzes page (owner, 2026-11-22).
+      await expect(openAnswer).toHaveCount(1);
+      await openAnswer.click();
       await expect(page).toHaveURL(/\/read/);
+    });
+  });
+
+  test.describe('with the laqab picked', () => {
+    test.use({ seed: { interests: '["laqab"]', 'interests-surprise': '0' } });
+
+    // Every card shares (owner, 2026-11-22): the question as it stands, answered here, as one picture.
+    test('an answered question card shares as a picture', async ({ page }) => {
+      await open(page, '/');
+      const head = page.getByRole('heading', { name: 'بمَ لُقّب؟', exact: true }).first();
+      await expect(head).toBeAttached({ timeout: 20_000 });
+      const card = head.locator('xpath=ancestor::div[.//*[@aria-label="تحقق"]][1]');
+      await card.getByRole('button').filter({ hasText: /\S/, hasNot: page.getByRole('heading') }).first().click();
+      await card.getByRole('button', { name: 'تحقق', exact: true }).click();
+      const post = head.locator('xpath=ancestor::div[.//*[@aria-label="شارك البطاقة"]][1]');
+      await post.getByRole('button', { name: 'شارك البطاقة' }).first().click();
+      await expect(page.getByLabel('الصورة', { exact: true })).toBeVisible({ timeout: 20_000 });
+      await expect(page.getByRole('button', { name: 'مشاركة كصورة' })).toBeEnabled();
     });
   });
 
@@ -359,11 +380,22 @@ test.describe('a new user', () => {
 test.describe('a returning user', () => {
   test.use({ seed: returningUser() });
 
-  test('a saved ayah opens on its mushaf page from the card menu', async ({ page }) => {
+  // A saved ayah is a card with its buttons in the row under it, like every card (owner, 2026-11-20).
+  test('a saved ayah opens on its mushaf page from the button under its card', async ({ page }) => {
     await open(page, '/');
     await page.getByRole('button', { name: 'مدونتي', exact: true }).click();
-    await page.getByRole('button', { name: /^آية: ٱللَّهُ لَآ إِلَٰهَ/ }).click();
-    await menu(page).getByRole('button', { name: 'في المصحف' }).click();
+    await expect(page.getByLabel(/^آية: ٱللَّهُ لَآ إِلَٰهَ/)).toBeVisible();
+    await page.getByRole('button', { name: 'في المصحف' }).click();
+    await expect.poll(() => readerPage(page)).toBe(42);
+  });
+
+  // Where the ayah is the subject, «افتح» opens its page with everything on it (owner, 2026-11-22).
+  test('a saved ayah opens its own page from «افتح», with its tafsir and the mushaf one tap away', async ({ page }) => {
+    await open(page, '/');
+    await page.getByRole('button', { name: 'مدونتي', exact: true }).click();
+    await page.getByRole('button', { name: 'افتح صفحة الآية' }).first().click();
+    await expect(page.getByRole('heading', { name: 'التفسير', exact: true })).toBeVisible();
+    await page.getByRole('button', { name: 'في المصحف' }).filter({ visible: true }).click();
     await expect.poll(() => readerPage(page)).toBe(42);
   });
 
@@ -378,13 +410,14 @@ test.describe('a returning user', () => {
     await expect(page.getByText(`${S(2)} ٢٥٥`, { exact: true }).first()).toBeAttached();
   });
 
-  test('a remembered ayah leaves the feed until its review is due', async ({ page }) => {
+  test('a remembered ayah stays on screen lit, and rests until its review is due', async ({ page }) => {
     await open(page, '/');
     // The recall card, by its title: an openings card further down has the same buttons.
     const recall = page.getByRole('heading', { name: 'هل تذكرها؟', exact: true });
     await expect(recall).toHaveCount(1);
     await page.getByRole('button', { name: 'تذكّرتها' }).first().click();
-    await expect(recall).toHaveCount(0);
+    // A card never vanishes on a tap (owner, 2026-11-22): it stays until the next visit.
+    await expect(recall).toHaveCount(1);
     await expect.poll(async () => (await stored<Record<string, { due?: number }>>(page, 'ayah-forgot'))?.['18:10']?.due).toBeGreaterThan(Date.now());
   });
 
@@ -402,7 +435,7 @@ test.describe('a returning user', () => {
     expect(middle).toBeGreaterThan(barBox!.y);
     expect(middle).toBeLessThan(barBox!.y + barBox!.height);
     expect(buttonBox!.x + buttonBox!.width).toBeLessThanOrEqual(barBox!.x);
-    const last = await page.getByRole('button', { name: 'في المصحف' }).first().boundingBox();
+    const last = await page.getByRole('button', { name: 'افتح صفحة الآية' }).first().boundingBox();
     expect(last!.x).toBeGreaterThanOrEqual(0);
   });
 
@@ -458,9 +491,9 @@ test.describe('a returning user', () => {
     await page.getByRole('button', { name: 'مدونتي', exact: true }).click();
     await page.getByRole('button', { name: /^اختر القائمة:/ }).click();
     await page.getByRole('button', { name: 'تأملاتي', exact: true }).click();
-    await page.getByRole('button', { name: 'تأمل: تأمل في الحي القيوم' }).click();
-    await menu(page).getByRole('button', { name: 'احذف التأمل' }).click();
-    await expect(page.getByRole('button', { name: /^تأمل:/ })).toHaveCount(0);
+    await expect(page.getByLabel('تأمل: تأمل في الحي القيوم')).toBeVisible();
+    await page.getByRole('button', { name: 'احذف التأمل' }).click();
+    await expect(page.getByLabel(/^تأمل:/)).toHaveCount(0);
     await expect.poll(() => stored(page, 'ayah-notes')).toEqual({});
   });
 });
@@ -471,10 +504,11 @@ test.describe('balagha terms in the feed', () => {
   test('a «ما الأسلوب؟» card, once answered, opens each choice\'s definition in a sheet with a way to its page', async ({ page }) => {
     await open(page, '/');
     await expect(page.getByRole('heading', { name: 'ما الأسلوب؟', exact: true }).first()).toBeAttached({ timeout: 20_000 });
-    const card = page.getByRole('heading', { name: 'ما الأسلوب؟', exact: true }).first().locator('xpath=ancestor::div[.//*[@aria-label="اختبار فردي"]][1]');
+    const card = page.getByRole('heading', { name: 'ما الأسلوب؟', exact: true }).first().locator('xpath=ancestor::div[.//*[@aria-label="تحقق"]][1]');
     await card.scrollIntoViewIfNeeded();
     await expect(page.getByRole('button', { name: /^تعريف / })).toHaveCount(0);
-    await card.getByRole('button').filter({ hasText: /\S/ }).first().click();
+    await card.getByRole('button').filter({ hasText: /\S/, hasNot: page.getByRole('heading') }).first().click();
+    await card.getByRole('button', { name: 'تحقق', exact: true }).click();
     const chips = page.getByRole('button', { name: /^تعريف / });
     await expect(chips.first()).toBeVisible();
     const name = (await chips.first().textContent())!.replace(/^تعريف /, '');

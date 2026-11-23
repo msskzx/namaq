@@ -99,8 +99,16 @@ export function cut(book: string, start: number, end: number) {
 
 const MODES = /(?:^|\s)(?:حدثنا|حدثني|أخبرنا|أخبرني|عن|سمعت|سمع|أنبأنا)[\s:،]*$/;
 export const bare = (text: string) => text.replace(/[\u064B-\u0652\u0670]/g, '');
-/** The word a narrator narrated with, as printed, when the words before his name end with one. */
-const modeOf = (before: string) => (MODES.test(bare(before)) ? before.trim().replace(/[:،]$/, '').split(/\s+/).pop() : undefined);
+/**
+ * The words a narrator narrated with, as printed, when the words before his name end with one: the word, with the «قال»
+ * before it when the print has one («قَالَ: حَدَّثَنَا», owner 2026-11-21: the exact words).
+ */
+const modeOf = (before: string) => {
+  if (!MODES.test(bare(before))) return undefined;
+  const words = before.trim().replace(/[:،]$/, '').split(/\s+/);
+  const said = words.length > 1 && /^قالت?:?$/.test(bare(words[words.length - 2])) ? `${words[words.length - 2].replace(/:?$/, ':')} ` : '';
+  return said + words[words.length - 1];
+};
 
 /**
  * A record's text with Shamela's narrator links taken out, and its chain when the links make it plain: one line of

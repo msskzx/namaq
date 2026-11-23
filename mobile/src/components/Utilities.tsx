@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Pressable, ScrollView, View } from 'react-native';
 import Svg, { Circle, G, Line, Polygon, Rect, Text as SvgText } from 'react-native-svg';
-import { Bell, BellOff, BookOpen, CalendarDays, Check, HandHeart, ChevronDown, ChevronLeft, ChevronRight, Clock, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin, type LucideProps } from 'lucide-react-native';
+import { Bell, BellOff, CalendarDays, Check, HandHeart, ChevronDown, ChevronLeft, ChevronRight, Clock, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin, type LucideProps } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import Sheet from '@/ui/Sheet';
 import { hijriDate, todaysJuz } from '@shared/hijri';
@@ -20,6 +20,7 @@ import { SearchField } from '@/ui/Field';
 import Empty from '@/ui/Empty';
 import Adhkar from './Adhkar';
 import { Tap } from '@/ui/Tap';
+import { FEATURE_ICON } from '@/components/featureIcons';
 
 const VIEWS: { id: UtilityView; Icon: (props: LucideProps) => React.ReactNode; label: string }[] = [
   { id: 'times', Icon: Clock, label: 'مواقيت الصلاة' },
@@ -356,7 +357,7 @@ function Calendar({ palette }: { palette: Palette }) {
         {arrow(ChevronLeft, 1, 'الشهر التالي')}
       </View>
       {/* Today's juz, which follows the Hijri day (owner, 2026-11-18: its shortcut lives here and as a card on home). */}
-      {juz && <View style={{ alignItems: 'center' }}><Button Icon={BookOpen} label={`اقرأ جزء اليوم: ${juzLabel(juz)}`} onPress={() => openJuz(juz[0])} /></View>}
+      {juz && <View style={{ alignItems: 'center' }}><Button Icon={FEATURE_ICON.mushaf} label={`اقرأ جزء اليوم: ${juzLabel(juz)}`} onPress={() => openJuz(juz[0])} /></View>}
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', rowGap: 6 }}>
         {WEEK.map(day => <Text key={day} style={{ width: `${100 / 7}%`, color: palette.muted, fontSize: 14, textAlign: 'center' }}>{day}</Text>)}
         {cells.map((cell, i) => (

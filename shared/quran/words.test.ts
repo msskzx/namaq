@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import data from '../data/quran/words.json';
 import trees from './quranText/corpus';
 import { pageGroups, type MushafPage } from './readerPage';
-import { corpusWords, countsBySurah, lemmasAtMushafWord, lemmasOfWord, nearestSurah, placesOf, stepSurah, searchWords, type WordsData } from './words';
+import { corpusWords, countsBySurah, lemmasAtMushafWord, lemmasOfWord, mushafWords, nearestSurah, placesOf, stepSurah, searchWords, type WordsData } from './words';
 import { corpusWordsAt } from './quranText/ayahWords';
 
 const words = data as unknown as WordsData;
@@ -64,6 +64,17 @@ describe('reader words', () => {
       const corpus = words.ayat[surah - 1][number - 1].split(' ').length;
       const mapped = ayat[key].flatMap((_, i) => corpusWords(key, i));
       expect([key, [...new Set(mapped)]]).toEqual([key, Array.from({ length: corpus }, (_, i) => i)]);
+    }
+  });
+
+  it('finds the mushaf words of every corpus word, the way back of corpusWords', () => {
+    for (const key of Object.keys(ayat)) {
+      const [surah, number] = key.split(':').map(Number);
+      const corpus = words.ayat[surah - 1][number - 1].split(' ').length;
+      for (let word = 0; word < corpus; word++) {
+        const back = ayat[key].map((_, i) => i).filter(i => corpusWords(key, i).includes(word));
+        expect([key, word, mushafWords(key, word)]).toEqual([key, word, back]);
+      }
     }
   });
 

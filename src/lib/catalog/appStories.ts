@@ -1,17 +1,34 @@
 // The phone app's sira stories (owner, 2026-11-18): events the catalog tells whole in reports. The app is offline, so
 // scripts/battles/buildAppBattles.ts writes them to shared/data/events/stories.json.
-import type { AppStory } from '@shared/stories/story';
+import type { AppStory, AppTurn } from '@shared/stories/story';
 import { quranpediaPage } from '@shared/readerBooks';
+import { PROPHET_AGENT } from '@shared/hadith';
 import { batchClaims, citeOf } from './appBattles';
-import type { Catalog, CatalogReportSource, CatalogStoryAyat, CatalogStoryEvidence } from './types';
+import type { Catalog, CatalogReportSource, CatalogStoryAyat, CatalogStoryEvidence, CatalogTurn } from './types';
 import { isHadithSource, legacyUnreviewed, STORY_TAGS } from './types';
 
 const digits = (text: string) => text.replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[Number(d)]);
 const SIRA = 'siyar-alam-al-nubala-risalah';
 
-const HADITH_BOOKS: Record<string, string> = { 'sahih-al-bukhari': 'صحيح البخاري' };
+const HADITH_BOOKS: Record<string, string> = { 'sahih-al-bukhari': 'صحيح البخاري', 'sahih-muslim': 'صحيح مسلم' };
 /** Each hadith book's page for one hadith, by the number the store files it under (sunnah.com's numbering). */
-export const HADITH_URL: Record<string, (hadith: number) => string> = { 'sahih-al-bukhari': hadith => `https://sunnah.com/bukhari:${hadith}` };
+export const HADITH_URL: Record<string, (hadith: number) => string> = {
+  'sahih-al-bukhari': hadith => `https://sunnah.com/bukhari:${hadith}`,
+  // Abd al-Baqi's numbers, the ones the app's Sahih Muslim (data/hadith/sahih/muslim.json) and sunnah.com both use.
+  'sahih-muslim': hadith => `https://sunnah.com/muslim:${hadith}`,
+};
+
+/** The books a turn's witness may cite, by slug, as a cite names them. */
+const WITNESS_BOOKS: Record<string, string> = { 'kawkab-wahhaj': 'الكوكب الوهاج للهرري', 'fath-al-bari': 'فتح الباري لابن حجر' };
+
+const appTurn = (turn: CatalogTurn): AppTurn => ({
+  ...(turn.lead ? { lead: turn.lead } : {}),
+  text: turn.lead ? turn.text.slice(turn.lead.length).trimStart() : turn.text,
+  ...(turn.speaker ? { speaker: { name: turn.speaker.name, ...(turn.speaker.person ? { person: turn.speaker.person } : {}) } } : {}),
+  ...(turn.witness
+    ? { witness: { text: turn.witness.quote, cite: digits(`${WITNESS_BOOKS[turn.witness.source] ?? turn.witness.source}، ج ${turn.witness.volume}، ص ${turn.witness.page}`), url: turn.witness.url } }
+    : {}),
+});
 
 /** «سير أعلام النبلاء، السيرة ١، ص ١٢٤–١٢٥» or «صحيح البخاري، رقم ٤٨٥٤». */
 export const reportCite = (source: CatalogReportSource) =>
@@ -52,14 +69,20 @@ export function appStories(catalog: Catalog, claims = batchClaims()): AppStory[]
         name: event.name,
         ...(location && placeRefs.length ? { place: { value: location.value, refs: placeRefs } } : {}),
         tags: (event.tags ?? []).map(tag => STORY_TAGS[tag]),
-        people: event.people.map(person => link(person.person)),
-        reports: event.reports!.map(report => ({
+        // The Prophet ﷺ first among a story's people (owner, 2026-11-21), the rest as the story names them.
+        people: [...event.people].sort((a, b) => Number(b.person === PROPHET_AGENT) - Number(a.person === PROPHET_AGENT)).map(person => link(person.person)),
+        reports: event.reports!.map(report => {
+          // Drawn as a conversation only when every moment is split (owner, 2026-11-21: never half a drawing).
+          const drawn = report.moments.every(moment => moment.turns?.length);
+          return {
           ...(report.isnad ? { isnad: report.isnad } : {}),
-          moments: report.moments.map(moment => ({ title: moment.title, text: moment.text, people: moment.people.map(link) })),
+          moments: report.moments.map(moment => ({ title: moment.title, text: moment.text, people: moment.people.map(link),
+            ...(drawn ? { turns: moment.turns!.map(appTurn) } : {}) })),
           ...(report.grading ? { grading: report.grading } : {}),
           cite: reportCite(report.source),
           url: report.source.url,
-        })),
+          };
+        }),
         ayat: (event.ayat ?? []).map(ayat => ({
           label: ayat.report ? `${AYAT_KIND[ayat.kind]} ${ayat.report}` : AYAT_KIND[ayat.kind],
           ...(ayat.about ? { about: link(ayat.about) } : {}),

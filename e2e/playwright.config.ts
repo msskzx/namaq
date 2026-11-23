@@ -43,7 +43,7 @@ export default defineConfig({
   use: {
     trace: 'off',
     screenshot: 'only-on-failure',
-    viewport: { width: 390, height: 844 },
+    viewport: { width: 440, height: 956 }, // iPhone 17 Pro Max, the owner's phone
     isMobile: true,
     hasTouch: true,
     locale: 'ar',

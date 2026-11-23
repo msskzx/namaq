@@ -5,7 +5,7 @@ import { expect, open, tab, test } from './fixtures';
 test('the hadith tab lists the Forty, and one opens with its chain drawn or its whole text', async ({ page }) => {
   await open(page, '/');
   await tab(page, 'الحديث').click();
-  await expect(page.getByRole('heading', { name: 'الحديث', exact: true })).toBeVisible();
+  await expect(page.getByRole('textbox', { name: 'ابحث في الصحيحين' }).filter({ visible: true })).toBeVisible();
   // The tab lists the books (the hadith tab redesign); the Forty is one of them.
   await page.getByRole('link', { name: 'الأربعون النووية', exact: true }).click();
   await expect(page.getByRole('link', { name: 'الحديث الأول، عن عمر بن الخطاب' })).toBeVisible();
@@ -15,7 +15,7 @@ test('the hadith tab lists the Forty, and one opens with its chain drawn or its 
   // «من أخرجه» (owner, 2026-11-19): each book with its number, al-Nawawi's own marked.
   await expect(page.getByLabel('البخاري ٦٠١٨، سمّاه النووي؛ مسلم ٤٧، سمّاه النووي')).toBeVisible();
   await expect(page.getByLabel(/^الإسناد: البخاري، قُتَيْبَةُ/)).toBeVisible();
-  await page.getByRole('tab', { name: 'النص كاملًا' }).click();
+  await page.getByRole('tab', { name: 'النص', exact: true }).click();
   await expect(page.getByLabel(/^الإسناد: البخاري/)).toHaveCount(0);
   await expect(page.getByText(/^٦٠١٨ - /)).toBeVisible();
   // The hadith button tapped on a hadith goes back to the list it was opened from.
@@ -24,11 +24,13 @@ test('the hadith tab lists the Forty, and one opens with its chain drawn or its 
 });
 
 // Ibn Rajab's eight (Jami' al-'Ulum wal-Hikam, chapters 43–50) under the Forty: his text, and the books he names marked as his.
-test('the hadith tab lists the eight Ibn Rajab adds, each opening on his text and the books he names', async ({ page }) => {
+test('the eight hadith Ibn Rajab added added hadith are a book of their own, each opening on his text and the books he names', async ({ page }) => {
   await open(page, '/');
   await tab(page, 'الحديث').click();
-  await page.getByRole('link', { name: 'الأربعون النووية', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'ما زاده ابن رجب' })).toBeVisible();
+  // His own name for them (Jami' 1/57), a book of its own beside al-Nawawi's (owner, 2026-11-21).
+  await page.getByRole('link', { name: 'الأحاديث المزيدة على ما ذكره الشيخ', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'الأحاديث المزيدة على ما ذكره الشيخ', exact: true }).first()).toBeVisible();
+  await expect(page.getByRole('link', { name: /^الحديث الأول،/ })).toHaveCount(0);
   await page.getByRole('link', { name: /^الحديث السابع والأربعون، عن المقدام/ }).click();
   await expect(page).toHaveURL(/\/hadith-forty\?n=47/);
   await expect(page.getByLabel(/^الترمذي ٢٣٨٠، سمّاه ابن رجب؛/)).toBeVisible();
@@ -41,9 +43,11 @@ test('the hadith of Jibril opens its scenes in al-Bukhari and in Muslim', async 
   await page.getByRole('button', { name: 'رواية أبي هريرة في البخاري' }).click();
   await expect(page).toHaveURL(/\/hadith-unit\?unit=bukhari-jibril/);
   await expect(page.getByLabel(/^الإسناد: البخاري، مُسَدَّدٌ/)).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'المشهد ١' })).toBeVisible();
-  await page.getByRole('tab', { name: 'النص كاملًا' }).click();
-  await expect(page.getByRole('heading', { name: 'المشهد ١' })).toHaveCount(0);
+  // The scenes are drawn with the speakers' chips, and no «المشهد ١» heading of ours (owner, 2026-11-22).
+  await expect(page.getByText('رسول الله ﷺ', { exact: true }).first()).toBeVisible();
+  await expect(page.getByText(/^المشهد /)).toHaveCount(0);
+  await page.getByRole('tab', { name: 'النص', exact: true }).click();
+  await expect(page.getByText('رسول الله ﷺ', { exact: true })).toHaveCount(0);
   await expect(page.getByRole('heading', { name: 'تعليق المصنف' })).toBeVisible();
   // Where else the same event is: Muslim's hadith opens over it, and back comes back.
   await page.getByRole('button', { name: 'اقرأ الحديث في صحيح مسلم' }).click();
@@ -67,7 +71,7 @@ test('the bar is Quran, hadith, home, tarajim and quizzes, and the mushaf opens 
   await expect.poll(() => page.getByRole('tab').evaluateAll(tabs => tabs.map(item => item.getAttribute('aria-label'))))
     .toEqual(['القرآن', 'الحديث', 'الرئيسية', 'التراجم', 'الاختبارات']);
   await tab(page, 'التراجم').click();
-  await expect(page.getByRole('heading', { name: 'التراجم', exact: true })).toBeVisible();
+  await expect(page.getByRole('textbox', { name: 'ابحث في التراجم' }).filter({ visible: true })).toBeVisible();
   await tab(page, 'القرآن').click();
   await page.getByRole('link', { name: 'المصحف', exact: true }).click();
   await expect(page).toHaveURL(/\/read/);

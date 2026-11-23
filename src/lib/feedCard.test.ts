@@ -3,6 +3,7 @@
 import { describe, expect, it } from 'vitest';
 import { cardBookmarkId } from '@shared/bookmarkKind';
 import { LIST_KINDS } from '@shared/homeFeed';
+import { PHONE_ONLY_KINDS } from '@shared/interests';
 import { savedFeedCard } from './feedCard';
 import { feedItemIds } from './feedLists';
 
@@ -13,7 +14,8 @@ const itemOf = (card: NonNullable<Awaited<ReturnType<typeof savedFeedCard>>>) =>
 
 describe('a feed card', () => {
   it('of every content kind is drawn from the ids its list gives, the same item again', async () => {
-    for (const kind of LIST_KINDS) {
+    // The phone-only cards (owner, 2026-11-21: phone first) have no items on the website.
+    for (const kind of LIST_KINDS.filter(kind => !(PHONE_ONLY_KINDS as readonly string[]).includes(kind))) {
       const ids = feedItemIds(kind, DAY, 5);
       const cards = await Promise.all(ids.map(id => savedFeedCard(cardBookmarkId(kind, id), DAY)));
       // A Sahih number its text lacks, or an ayah whose word has no i'rab, draws nothing; a kind always draws some.

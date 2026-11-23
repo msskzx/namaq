@@ -79,7 +79,7 @@ export function readParagraphs(pages: (TurathPage & { id: number })[]): { paragr
 }
 
 /** The mushaf's words in order, each with its ayah and place in it. */
-export type MushafWord = { surah: number; ayah: number; at: number; skeleton: string };
+export type MushafWord = { surah: number; ayah: number; at: number; skeleton: string; text?: string };
 
 const quoteWords = (quote: string) => quote.replace(/[^ء-ۭ࣓-ࣿ\s]/g, ' ').split(/\s+/).map(skeleton).filter(Boolean);
 

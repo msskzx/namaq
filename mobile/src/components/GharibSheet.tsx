@@ -21,7 +21,7 @@ import BookRuns from './quran/text/BookRuns';
 export type GharibTarget = { key: string; word: number };
 
 type Book = 'gharib' | 'mufradat';
-const BOOK_NAMES: Record<Book, string> = { gharib: 'غريب القرآن لابن قتيبة', mufradat: 'المفردات للراغب' };
+export const BOOK_NAMES: Record<Book, string> = { gharib: 'غريب القرآن لابن قتيبة', mufradat: 'المفردات للراغب' };
 
 /**
  * A word's meaning (owner, 2026-11-18; docs/plans/alfaz-al-quran.md), from two books picked with pills, like the balagha
@@ -67,7 +67,7 @@ export function GharibBody({ target, palette }: { target: GharibTarget; palette:
       </View>
       <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 10, paddingBottom: 8 }}>
         <Card palette={palette} pad={[10, 14]}>
-          <LitAyat ayat={[{ words, lit }]} palette={palette} />
+          <LitAyat ayat={[{ words, lit }]} menu={false} palette={palette} />
         </Card>
         {books.length > 1 && <Tabs options={books.map(book => ({ key: book, label: BOOK_NAMES[book] }))} value={shown} onChange={book => { setShown(book); setPicked(null); }} palette={palette} />}
         {!books.length && !(gharibOn && mufradatOn) ? null
@@ -82,10 +82,13 @@ export function GharibBody({ target, palette }: { target: GharibTarget; palette:
   );
 }
 
+/** An Ibn Qutaybah card's book line: his page, then the edition and where our text comes from. */
+export const gharibSource = (entry: { page: number; id: number }) => [{ line: GHARIB_BOOK, quotes: [{ text: '', cite: gharibCredit(entry), url: gharibPage(entry) },
+  { text: `${GHARIB_BOOK}، ${GHARIB_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث، كلام ابن قتيبة وحده بلا حواشي المحقق.` }] }];
+
 function Gharib({ entries, picked, onPick, palette }: { entries: GharibAt[]; picked: number | null; onPick: (at: number) => void; palette: Palette }) {
   return entries.map((entry, i) => (
-    <CardWithRow key={entry.at} palette={palette} pad={[10, 14]} picked={picked === i} source={[{ line: GHARIB_BOOK, quotes: [{ text: '', cite: gharibCredit(entry), url: gharibPage(entry) },
-      { text: `${GHARIB_BOOK}، ${GHARIB_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث، كلام ابن قتيبة وحده بلا حواشي المحقق.` }] }]}>
+    <CardWithRow key={entry.at} palette={palette} pad={[10, 14]} picked={picked === i} source={gharibSource(entry)}>
       {/* The entry lights the words it quotes; its reference below is a control of its own. */}
       <Pickable picked={picked === i} onPick={() => onPick(i)}>
         <BookRuns text={entry.text} quran={palette.accent} style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' }} />
@@ -94,7 +97,8 @@ function Gharib({ entries, picked, onPick, palette }: { entries: GharibAt[]; pic
   ));
 }
 
-function Mufradat({ article, palette }: { article: MufradatEntry; palette: Palette }) {
+/** Al-Raghib's whole article on a root, with its book line. */
+export function Mufradat({ article, palette }: { article: MufradatEntry; palette: Palette }) {
   return (
     <CardWithRow palette={palette} pad={[10, 14]} source={[{ line: MUFRADAT_BOOK, quotes: [{ text: '', cite: mufradatCredit(article), url: mufradatPage(article) },
       { text: `${MUFRADAT_BOOK}، ${MUFRADAT_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث، كلام الراغب وحده بلا حواشي المحقق. المادة كاملة تحت عنوانه، ووُصلت بالكلمة من جذرها في المدونة القرآنية.` }] }]}>

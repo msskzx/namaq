@@ -47,7 +47,7 @@ in [records](records/README.md), `AGENTS` a rule already in AGENTS.md.
 - [ ] Doctrinally loaded tafsir (al-Kashshaf's Mu'tazili readings) is not shown by default without asking the owner. Al-Sa'di stays the default.
 - [ ] Qira'at: Shatibiyya and Durra routes only. Route doubts are settled from the route books. Pronunciation-only details stay off the cards. (R0033)
 - [ ] Wording is plain for a lay reader («ما صلة محمد من علي»), and a relation's direction is stated in words. (owner 11-19)
-- [ ] The owner's terms: «مواضع», never «روايات», for a story's places in the Quran. Tree groups are never «العائلات». The hadith tabs are «الرسم» and «النص كاملًا», never «الإسناد». Feature names: «مشاهد», «مدونتي», «المتشابهات», «دوّن».
+- [ ] The owner's terms: «مواضع», never «روايات», for a story's places in the Quran. Tree groups are never «العائلات». The drawing tabs (hadith, sira stories) are «الرسم» and «النص», never «النص كاملًا» (it says the drawing is not whole, owner 11-21) and never «الإسناد». Feature names: «مشاهد», «مدونتي», «المتشابهات», «دوّن».
 - [ ] A set of events with no known order is called a grouping, not a timeline. (owner 11-11)
 
 ## 2. Quran text
@@ -77,7 +77,7 @@ in [records](records/README.md), `AGENTS` a rule already in AGENTS.md.
 - [ ] Kinds mix as chips inside solo and party, never as separate quizzes. Quizzes show trees in the matrix view only. (owner 11-13, 11-17)
 - [ ] Every typed Quran answer (recite, write, tree leaves, compare blanks) uses the recite-mode write boxes, in the same colour. No quiz builds its own writing field. (owner 11-17, 11-19)
 - [ ] A tree question's prompt is not bigger than the tree. Corrections sit inside each asked node.
-- [ ] Look-up: tapping «ابحث عن الجواب» counts as the attempt. Party scores 10 a question and 5 after a look; solo has no penalty; nothing extra for speed. After the reveal, everyone sees the feature's full view under the answer. Memory kinds (which-surah, compare, recite) have no look-up. (owner 11-19)
+- [ ] Look-up: tapping «تلميح» (once «ابحث عن الجواب») counts as the attempt. Party scores 10 a question and 5 after a look; solo has no penalty; nothing extra for speed. After the reveal, everyone sees the feature's full view under the answer. Memory kinds (which-surah, compare, recite) have no look-up. (owner 11-19)
 - [ ] Answer buttons sit on the right. Players move between questions by swiping. The result never says "passed" or "failed". (owner 11-17)
 
 ## 4. Feed cards
@@ -85,7 +85,7 @@ in [records](records/README.md), `AGENTS` a rule already in AGENTS.md.
 - [ ] The feature ships with its home-feed card and, if it has something to ask, a quiz kind, both shown in the sketch. A feature with no card is named in the PR with the reason, and [feed-cards.md](feed-cards.md) is updated. (AGENTS)
 - [ ] The card draws the feature's own shared view component, never a text-only stand-in or a redraw. Its taps open the real page at that item. (owner 11-13, 11-19, R0031)
 - [ ] The card has a UI test that uses it (swipe, zoom, typing, the tap that opens its page), not just a screenshot. (R0031)
-- [ ] One item per card. The card grows with its content up to two thirds of the screen, then stops with a fade and «اقرأ كاملًا» opens it whole in a sheet; no inner scroll. Ayah cards stay small and open a sheet from their row's button. (owner 11-14, 11-18, 11-20)
+- [ ] One item per card. The card grows with its content up to two thirds of the screen, then stops with a fade; the card's one open button («افتح ←», owner 11-22) opens its page, or the whole card in a sheet when it has none; no inner scroll. Ayah cards stay small and open a sheet from their row's button. (owner 11-14, 11-18, 11-20)
 - [ ] Every home card follows the one agreed layout, like an Instagram post: the head over the card, the card, the row of buttons right under it, then the source line. No buttons inside the card. One control per destination: the row's open button, never the head or the whole card too. (owner 11-14, 11-15, 11-20)
 - [ ] The row's buttons are grouped on the right: the one that opens the item in its own reader first (the mushaf at the ayah, the hadith in its book), then the card's own tools, then save, then share. A «⋯» alone at the far left opens «ليس من اهتماماتي»; no «⋯» on a card without it. (owner 11-20)
 - [ ] Every card has a source line under its buttons, the Quran too («المصحف · الإخلاص ٣»): a book icon, then the book and its author, no arrow. A tap anywhere on the line opens a sheet with the details (volume, page, edition, link). A question's line comes after it is answered, so it never gives the answer away. (owner 11-20)
@@ -156,6 +156,7 @@ owner 2026-11-19). These lines check it.
 - [ ] You can say in one sentence what each test in your feature's files protects: an owner rule or a past bug. If you cannot, rewrite it or delete it.
 - [ ] Hard-coded counts are replaced by a rule that holds for every item, plus "there is at least one" so an empty list cannot pass. Or the test is removed.
 - [ ] Removed: render-only, copy, class-name, config-mirror, duplicate and dead-helper tests. Each removal is listed in the PR with what it covered. (owner 11-09, AGENTS)
+- [ ] App changes: you used the feature with `npm run phone`, step by step, looked at each screenshot, and saved the walk if the flow is worth keeping. Gestures, haptics, fonts, audio, notifications and sharing that the web build cannot show are named in the PR for the owner's Expo Go check. (owner 11-21)
 - [ ] App changes, and website pages the UI tests visit, ran `npm run test:ui`. Each flow added or changed has a test there, and a UI test broken by a UI change is fixed in the same PR. (AGENTS)
 - [ ] Tests read Quran text and surah names from shared data (`surahName`), never hand-typed.
 - [ ] Where a rule must hold for all the data, the test walks every item, not a sample.
@@ -182,7 +183,7 @@ What counts as a meaningful test (proposal for the owner):
 - [ ] One review cycle by a subagent that did not write the code. A second only if the first needed a code or test change. Never a third. (AGENTS)
 - [ ] For a bug that came back: say why it happened and what stops it recurring. If the fix would repeat in another feature, bring a one-entry proposal, not a new record. Tell the coordinator about similar places. (R0054, AGENTS)
 - [ ] Before resolving: every piece of the approved sketch you handed to another thread was built, and every data piece you built reaches its screen. (owner 11-19)
-- [ ] Merge your own PR once the checks and review pass, unless a real open question remains or the owner said he wants to review it. Post dark, phone-size screenshots with the result. (owner 11-10, 11-16, 11-17)
+- [ ] Merge your own PR once the checks and review pass, unless a real open question remains or the owner said he wants to review it. Post dark, phone-size screenshots with the result (`npm run phone` takes them). (owner 11-10, 11-16, 11-17)
 - [ ] After a squash merge, confirm origin/main has the change. Check `git status` before `git add -A`.
 - [ ] Open questions go to `/mnt/project-files/compare-refine/open-questions.md`, data doubts to `/mnt/project-files/data-review/review-list.md`, and only the doubtful cases go to the owner. Clear bugs are fixed without asking, and a thread with no open question goes on to its next agreed step. (owner 11-17, 11-18)
 - [ ] Owner-facing messages: plain English. Arabic goes in its own line or inline code, never mid-sentence. Surah names inside an English sentence may be transliterated; Quran words in verdicts and reasons are always in Arabic script. Refs are numbers (56:74). If the owner says "still broken" on the phone, ask him to fully reopen Expo Go first. (owner 11-07, 11-08, 11-18)

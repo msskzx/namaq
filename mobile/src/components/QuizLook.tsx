@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { SahihLook } from '@/components/Sahih';
 import { SAHIH } from '@/lib/sahih';
 import { UnderCard, useCardRow } from '@/ui/Card';
-import { ScrollView, View, useWindowDimensions } from 'react-native';
-import { Check, Search } from 'lucide-react-native';
+import { ScrollView, View } from 'react-native';
+import { usePageWidth } from '@/ui/column';
+import { BookSearch, Check } from 'lucide-react-native';
 import type { QuizLook } from '@shared/quiz/choiceKinds';
 import { LOOKED_POINTS, POINTS } from '@shared/quiz/score';
 import { num } from '@shared/quran/arabicNumber';
@@ -28,6 +29,8 @@ import { StoryView } from '@/screens/story';
 import { BattleView } from '@/screens/battle';
 import { storyOf } from '@/lib/stories';
 import { battleOf } from '@/lib/battles';
+import { TieSaying } from '@/components/TieSheet';
+import type { Tie } from '@shared/tarajimGraph';
 import { GharibBody } from './GharibSheet';
 import { BalaghaBody } from './BalaghaSheet';
 import { IrabBody } from './IrabSheet';
@@ -47,6 +50,8 @@ import TiesRing from './TiesRing';
 import LifeTimeline from './LifeTimeline';
 import { personLife } from '@/lib/life';
 import { TermQuotes } from './BalaghaTerm';
+import LitAyat from './quran/text/LitAyat';
+import { ayahMushafWords } from '@/lib/mushaf';
 
 /** Names a search lists before asking for more letters. */
 const FOUND = 20;
@@ -55,8 +60,10 @@ const FOUND = 20;
 function TiesLook({ slug, mark, width, palette }: { slug: string; mark?: string; width: number; palette: Palette }) {
   const [trail, setTrail] = useState([slug]);
   const [query, setQuery] = useState('');
+  // Already in a sheet: a name with no page shows the sentence that names him under the ring.
+  const [shown, setShown] = useState<Tie | undefined>();
   const at = trail[trail.length - 1];
-  const go = (to: string) => { setTrail([...trail, to]); setQuery(''); };
+  const go = (to: string) => { setTrail([...trail, to]); setQuery(''); setShown(undefined); };
   const found = query.trim() ? searchPeople(query).slice(0, FOUND) : [];
   return (
     <View style={{ gap: 12 }}>
@@ -73,7 +80,8 @@ function TiesLook({ slug, mark, width, palette }: { slug: string; mark?: string;
                 : <Text key={`${s}${i}`} style={{ color: palette.ink, fontSize: 15 }}>{personName(findPerson(s)!)}</Text>))}
             </View>
           )}
-          <TiesRing slug={at} width={width} palette={palette} onPick={go} marked={mark} />
+          <TiesRing slug={at} width={width} palette={palette} onPick={go} onShow={setShown} marked={mark} />
+          {shown && <TieSaying tie={shown} palette={palette} />}
         </>}
     </View>
   );
@@ -160,6 +168,23 @@ function TafsirLook({ keys, mark, palette }: { keys: string[]; mark?: string; pa
   );
 }
 
+/** A run of ayat as the mushaf sets them, under the surah's name and their numbers; once marked, the ayah that answers lit. */
+function AyatLook({ keys, mark, palette }: { keys: string[]; mark?: string; palette: Palette }) {
+  const [surah, first] = keys[0].split(':').map(Number);
+  const last = Number(keys[keys.length - 1].split(':')[1]);
+  return (
+    <View style={{ gap: 8 }}>
+      <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 16, textAlign: 'right' }}>{`${surahNames[surah] ?? num(surah)} ${num(first)}${last > first ? `–${num(last)}` : ''}`}</Text>
+      <Card palette={palette} pad={[10, 14]}>
+        <LitAyat ayat={keys.map(key => {
+          const words = ayahMushafWords(key);
+          return { words, lit: key === mark ? [[0, words.length - 1] as [number, number]] : [], number: Number(key.split(':')[1]) };
+        })} menu={keys} palette={palette} />
+      </Card>
+    </View>
+  );
+}
+
 const TUHFA = numberVerses(poemData as Poem);
 
 /** Tuhfat al-Atfal whole, as on its page; once marked, the chapter of the verse that answers, the verse lit. */
@@ -185,7 +210,7 @@ const bleed = { marginHorizontal: -16 } as const;
  * same drawing as the feature's page and feed card. `shown` once the answer is: then what the look marks is lit.
  */
 export function LookView({ look, shown, palette }: { look: QuizLook; shown: boolean; palette: Palette }) {
-  const { width } = useWindowDimensions();
+  const width = usePageWidth();
   const drawW = Math.min(width - 32, 480);
   switch (look.view) {
     case 'ties': return <TiesLook key={look.slug} slug={look.slug} mark={shown ? look.mark : undefined} width={drawW} palette={palette} />;
@@ -208,6 +233,7 @@ export function LookView({ look, shown, palette }: { look: QuizLook; shown: bool
     );
     case 'tafsir': return <TafsirLook key={`${look.keys.join()}/${look.mark ?? ''}`} keys={look.keys} mark={shown ? look.mark : undefined} palette={palette} />;
     case 'tuhfa': return <TuhfaLook mark={shown ? look.mark : undefined} palette={palette} />;
+    case 'ayat': return <AyatLook keys={look.keys} mark={shown ? look.mark : undefined} palette={palette} />;
   }
 }
 
@@ -224,7 +250,7 @@ export function LookButton({ look, onLook, costs = false, palette, top }: { look
   const press = () => { setOpen(true); onLook?.(); };
   return (
     <View style={{ gap: 4, alignItems: 'flex-start' }}>
-      {inRow ? <UnderCard><Button Icon={Search} label="ابحث عن الجواب" onPress={press} pill /></UnderCard> : <Button Icon={Search} label="ابحث عن الجواب" onPress={press} />}
+      {inRow ? <UnderCard><Button Icon={BookSearch} label="تلميح" accessibilityLabel="تلميح: ابحث عن الجواب" onPress={press} pill /></UnderCard> : <Button Icon={BookSearch} label="تلميح" accessibilityLabel="تلميح: ابحث عن الجواب" onPress={press} />}
       {costs && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right', alignSelf: 'stretch' }}>
         {`بعد البحث للإجابة الصحيحة ${num(LOOKED_POINTS)} نقاط بدل ${num(POINTS)}.`}
       </Text>}
@@ -243,7 +269,7 @@ export function LookButton({ look, onLook, costs = false, palette, top }: { look
 export function LookedNote({ palette }: { palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start' }}>
-      <Search size={15} color={palette.amber} />
+      <BookSearch size={15} color={palette.amber} />
       <Text style={{ color: palette.amber, fontSize: 15 }}>{`بحثتَ عنه · للإجابة الصحيحة ${num(LOOKED_POINTS)} نقاط`}</Text>
     </View>
   );

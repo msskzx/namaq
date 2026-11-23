@@ -3,7 +3,7 @@ import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Share, View } fr
 import { Text } from '@/ui/Text';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Check, Circle, CircleCheck, Crown, Hourglass, LogOut, Play, RotateCcw, Search, Send, UserCheck, X } from 'lucide-react-native';
+import { Check, Circle, CircleCheck, Crown, Hourglass, LogOut, Play, RotateCcw, Search, Send, X } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { PEN_NAMES } from '@/components/recite/PenSetting';
 import { WRITTEN_TOPICS } from '@shared/quiz/settings';
@@ -290,7 +290,7 @@ function Lobby({ view, send, error, palette }: { view: PartyView; send: Send; er
         </Row>
       )) : (
         <Row gap={12}>
-          <Button big variant={me?.ready ? 'outline' : 'primary'} Icon={UserCheck} label={me?.ready ? 'لست مستعدًا' : 'أنا مستعد'} onPress={() => send({ type: 'ready', ready: !me?.ready })} />
+          <Button big variant={me?.ready ? 'outline' : 'primary'} Icon={CircleCheck} label={me?.ready ? 'لست مستعدًا' : 'أنا مستعد'} onPress={() => send({ type: 'ready', ready: !me?.ready })} />
           <Label palette={palette} muted>{me?.ready ? 'ينتظر المضيف ليبدأ.' : 'اضغط حين تستعد.'}</Label>
         </Row>
       )}

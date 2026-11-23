@@ -1,0 +1,9 @@
+{"steps": [
+  ["open","/story?slug=islam-of-dimad"],
+  ["tap","النص"],
+  ["tap","الرسم"],
+  ["tap","السند"],
+  ["swipe","up"],
+  ["swipe","up"],
+  ["swipe","up"]
+]}

@@ -1,7 +1,7 @@
-import { View } from 'react-native';
-import { BookOpen } from 'lucide-react-native';
+import { Fragment } from 'react';
+import { View, type TextStyle } from 'react-native';
 import { num } from '@shared/quran/arabicNumber';
-import { orderSource, orderSurahs, type Cite, type OrderAyah, type OrderLinkView, type OrderSurah } from '@shared/quran/surahOrder';
+import { orderSource, orderSurahs, type Cite, type OrderAyah, type OrderLinkView, type OrderSurah, type QuoteRun } from '@shared/quran/surahOrder';
 import { Text } from '@/ui/Text';
 import SourceLine from '@/ui/SourceLine';
 import Sheet from '@/ui/Sheet';
@@ -9,9 +9,11 @@ import Button from '@/ui/Button';
 import { readAyah } from '@/lib/openReader';
 import type { Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
+import QuranWords from '@/components/quran/text/QuranWords';
 import { ayahMushafWords } from '@/lib/mushaf';
 import IconButton from '@/ui/IconButton';
 import { CardWithRow } from '@/ui/Card';
+import { FEATURE_ICON } from '@/components/featureIcons';
 
 /**
  * The surah-order page's pieces (owner, 2026-11-13), shared with the quizzes that order surahs: a surah's card (its opening
@@ -29,11 +31,23 @@ function Source({ cite, palette }: { cite: Cite; palette: Palette }) {
 
 const quote = (palette: Palette) => ({ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'justify' as const, writingDirection: 'rtl' as const });
 
+/** A book's words with the Quran it quotes set from the mushaf's page words, an ayah's number where a quote runs past its end. */
+function BookWords({ runs, palette, style }: { runs: QuoteRun[]; palette: Palette; style?: TextStyle }) {
+  return (
+    <Text style={[quote(palette), style]}>
+      «{runs.map((run, i) => ('quran' in run
+        ? <QuranWords key={i}>{'﴿'}{run.quran.map(a => (
+          <Fragment key={a.key}>{a.words.join(' ')}{a.end && <Text style={{ color: palette.amber }}>{` ${num(Number(a.key.split(':')[1]))} `}</Text>}</Fragment>))}{'﴾'}</QuranWords>
+        : run.text))}»
+    </Text>
+  );
+}
+
 function PairAyah({ ayah, palette }: { ayah: OrderAyah; palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 8 }}>
       <Text style={{ color: palette.muted, fontSize: 13, minWidth: 64 }}>{ayah.place}</Text>
-      <AyahFlow color={palette.ink} screen style={{ flex: 1 }}>
+      <AyahFlow color={palette.ink} screen menu={ayah.key} style={{ flex: 1 }}>
         {ayah.words.map((w, i) => <AyahWords key={i} look={w.shared ? { color: palette.accent } : undefined}>{`${w.text} `}</AyahWords>)}
       </AyahFlow>
     </View>
@@ -46,7 +60,7 @@ export function LinkWords({ link, palette, barred = false }: { link: OrderLinkVi
   barred?: boolean }) {
   return (
     <View style={{ gap: 2 }}>
-      <Text style={quote(palette)}>«{link.text}»</Text>
+      <BookWords runs={link.runs} palette={palette} />
       {link.pairs.map(([a, b]) => (
         <View key={a.key + b.key} style={barred ? { borderStartWidth: 2, borderColor: palette.rule, paddingStart: 10, marginTop: 6 } : undefined}>
           <PairAyah ayah={a} palette={palette} />
@@ -74,13 +88,13 @@ export function SurahBody({ s, palette }: { s: OrderSurah; palette: Palette }) {
         <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 22, fontWeight: '700' }}>{s.name}</Text>
         <Text style={{ color: palette.muted, fontSize: 14 }}>{num(s.surah)}</Text>
       </View>
-      <AyahFlow color={palette.ink} screen>
+      <AyahFlow color={palette.ink} screen menu={s.opening.map(a => `${s.surah}:${a.ayah}`)}>
         {s.opening.map(a => [
           <AyahWords key={a.ayah}>{`${a.text} `}</AyahWords>,
           <AyahWords key={`${a.ayah}-n`} look={{ color: palette.amber }}>{`${num(a.ayah)} `}</AyahWords>,
         ])}
       </AyahFlow>
-      <Text style={[quote(palette), { marginTop: 4, marginBottom: 6 }]}>«{s.aim.text}»</Text>
+      <BookWords runs={s.aim.runs} palette={palette} style={{ marginTop: 4, marginBottom: 6 }} />
     </>
   );
 }
@@ -88,7 +102,7 @@ export function SurahBody({ s, palette }: { s: OrderSurah; palette: Palette }) {
 export function SurahCard({ s, palette }: { s: OrderSurah; palette: Palette }) {
   return (
     <CardWithRow palette={palette} pad={[6, 14]} source={[orderSource(s.aim.src, num)]}
-      lead={<IconButton Icon={BookOpen} label={`افتح سورة ${s.name} في المصحف`} onPress={() => readAyah(`${s.surah}:1`)} />}>
+      lead={<IconButton Icon={FEATURE_ICON.mushaf} label={`افتح سورة ${s.name} في المصحف`} onPress={() => readAyah(`${s.surah}:1`)} />}>
       <SurahBody s={s} palette={palette} />
     </CardWithRow>
   );

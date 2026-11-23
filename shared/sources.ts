@@ -21,6 +21,8 @@ export type Source = {
   shelf?: string;
   /** The data files and fonts built from it, as paths from the repo root; a path ending in / is a whole folder (guard proposal 24). */
   files?: string[];
+  /** Used by the website alone, so the app's own sources page leaves it out. */
+  websiteOnly?: true;
 };
 
 export const GROUPS: { group: SourceGroup; title: Bi }[] = [
@@ -44,6 +46,7 @@ const USE = {
   openings: { ar: 'فواتح السور', en: 'surah openings', href: '/quran/openings' },
   oaths: { ar: 'الأقسام في القرآن', en: 'oaths in the Quran', href: '/quran/oaths' },
   iltifat: { ar: 'مشاهد: أمثلة مختارة', en: 'scenes: chosen examples', href: '/quran/lataif' },
+  darkSea: { ar: 'مشاهد: ظلمات البحر في تطبيق الهاتف', en: 'scenes: the dark sea, in the phone app' },
   branches: { ar: 'شواهد المتشابه في الفروع', en: 'the cited cases in branches', href: '/quran/branches' },
   prophets: { ar: 'ترتيب الأنبياء في قصصهم', en: 'the order of the prophets’ stories', href: '/quran/prophets' },
   qiraat: { ar: 'القراءات', en: 'the readings', href: '/quran/qiraat' },
@@ -106,12 +109,30 @@ export const SOURCES: Source[] = [
   {
     id: 'sahih-bukhari', group: 'books', files: ['shared/data/hadith/bukhari.json'],
     title: { ar: 'صحيح البخاري', en: 'Sahih al-Bukhari' }, author: { ar: 'محمد بن إسماعيل البخاري', en: 'al-Bukhari' },
-    edition: 'الطبعة السلطانية، بولاق ١٣١١هـ، مصوّرة دار طوق النجاة ١٤٢٢هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1681), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih],
+    edition: 'الطبعة السلطانية، بولاق ١٣١١هـ، مصوّرة دار طوق النجاة ١٤٢٢هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1681), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih, USE.stories, USE.people],
   },
   {
     id: 'sahih-muslim', group: 'books', files: ['shared/data/hadith/muslim.json'],
     title: { ar: 'صحيح مسلم', en: 'Sahih Muslim' }, author: { ar: 'مسلم بن الحجاج النيسابوري', en: 'Muslim' },
-    edition: 'تحقيق محمد فؤاد عبد الباقي، مطبعة عيسى البابي الحلبي، القاهرة ١٣٧٤هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1727), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih],
+    edition: 'تحقيق محمد فؤاد عبد الباقي، مطبعة عيسى البابي الحلبي، القاهرة ١٣٧٤هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1727), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih, USE.stories, USE.people],
+  },
+  {
+    id: 'kawkab-wahhaj', group: 'books', files: ['data/history/sources/kawkab-wahhaj/'],
+    title: { ar: 'الكوكب الوهاج والروض البهاج في شرح صحيح مسلم بن الحجاج', en: 'al-Kawkab al-Wahhaj, a commentary on Sahih Muslim' },
+    author: { ar: 'محمد الأمين بن عبد الله الهرري', en: 'Muhammad al-Amin al-Harari' },
+    edition: 'دار المنهاج ودار طوق النجاة، الطبعة الأولى ١٤٣٠هـ؛ من نسخة turath.io، ٢٠٢٦-١١-٢١', link: shamela(18268),
+    licence: {
+      ar: 'توفي المؤلف سنة ١٤٤١هـ/٢٠١٩م. ننقل منه سطرًا قصيرًا منسوبًا إليه يسمّي المتكلم في قصة، مع الجزء والصفحة والرابط، ولا ننشر الكتاب.',
+      en: 'The author died in 2019. We quote a short, attributed line that names who speaks in a story, with volume, page and link, and publish nothing more of the book.',
+    },
+    uses: [USE.stories],
+  },
+  {
+    id: 'fath-al-bari', group: 'books', files: ['data/history/sources/fath-al-bari/'],
+    title: { ar: 'فتح الباري بشرح صحيح البخاري', en: 'Fath al-Bari, a commentary on Sahih al-Bukhari' },
+    author: { ar: 'أحمد بن علي بن حجر العسقلاني', en: 'Ibn Hajar al-Asqalani' },
+    edition: 'ترقيم محمد فؤاد عبد الباقي، إخراج محب الدين الخطيب، المكتبة السلفية، مصر ١٣٨٠–١٣٩٠هـ، وصوّرتها دور منها دار المعرفة ببيروت، بصفحاتها؛ من نسخة turath.io، ٢٠٢٦-١١-٢٢', link: shamela(1673),
+    licence: PUBLIC_DOMAIN, uses: [USE.stories],
   },
   {
     id: 'sunan-tirmidhi', group: 'books',
@@ -172,7 +193,7 @@ export const SOURCES: Source[] = [
     id: 'siyar', group: 'books',
     title: { ar: 'سير أعلام النبلاء', en: 'Siyar A‘lam al-Nubala’' }, author: { ar: 'شمس الدين الذهبي', en: 'al-Dhahabi' },
     edition: 'مؤسسة الرسالة، الطبعة الثالثة، ١٤٠٥هـ/١٩٨٥م', link: shamela(10906), licence: PUBLIC_DOMAIN,
-    uses: [USE.people, { ar: 'الأحاديث', en: 'hadith', href: '/hadith' }], shelf: 'siyar-alam-al-nubala-risalah',
+    uses: [USE.people, USE.stories, USE.battles, { ar: 'الأحاديث', en: 'hadith', href: '/hadith' }], shelf: 'siyar-alam-al-nubala-risalah',
   },
   {
     id: 'zad-al-maad', group: 'books',
@@ -219,7 +240,7 @@ export const SOURCES: Source[] = [
   {
     id: 'tafsir-ibn-kathir', group: 'books',
     title: { ar: 'تفسير القرآن العظيم', en: 'Tafsir al-Quran al-‘Azim' }, author: { ar: 'ابن كثير', en: 'Ibn Kathir' },
-    edition: 'تحقيق سامي بن محمد سلامة، دار طيبة، الطبعة الثانية ١٤٢٠هـ/١٩٩٩م، ٨ أجزاء', link: shamela(8473), licence: PUBLIC_DOMAIN, uses: [USE.oaths],
+    edition: 'تحقيق سامي بن محمد سلامة، دار طيبة، الطبعة الثانية ١٤٢٠هـ/١٩٩٩م، ٨ أجزاء', link: shamela(8473), licence: PUBLIC_DOMAIN, uses: [USE.oaths, USE.darkSea],
   },
   {
     id: 'irab-nahhas', group: 'books',
@@ -274,6 +295,16 @@ export const SOURCES: Source[] = [
     uses: [USE.iltifat],
   },
   {
+    id: 'tafsir-tabari', group: 'books',
+    title: { ar: 'جامع البيان عن تأويل آي القرآن', en: 'Jami‘ al-Bayan' }, author: { ar: 'ابن جرير الطبري', en: 'al-Tabari' },
+    edition: 'تحقيق عبد الله بن عبد المحسن التركي، دار هجر، الطبعة الأولى ١٤٢٢هـ/٢٠٠١م، ٢٦ جزءًا', link: shamela(7798), licence: PUBLIC_DOMAIN, uses: [USE.darkSea],
+  },
+  {
+    id: 'amthal-ibn-qayyim', group: 'books',
+    title: { ar: 'الأمثال في القرآن (من إعلام الموقعين)', en: 'al-Amthal fi al-Quran (from I‘lam al-Muwaqqi‘in)' }, author: { ar: 'ابن قيم الجوزية', en: 'Ibn al-Qayyim' },
+    edition: 'تحقيق أبي حذيفة إبراهيم بن محمد، مكتبة الصحابة، طنطا، الطبعة الأولى ١٤٠٦هـ/١٩٨٦م', link: shamela(928), licence: PUBLIC_DOMAIN, uses: [USE.darkSea],
+  },
+  {
     id: 'tafsir-ksu', group: 'books',
     title: { ar: 'تفاسير الطبري والبغوي والقرطبي', en: 'The tafsirs of al-Tabari, al-Baghawi and al-Qurtubi' },
     link: { url: 'https://quran.ksu.edu.sa', label: 'مصحف جامعة الملك سعود' }, licence: PUBLIC_DOMAIN, uses: [USE.openings, USE.iltifat],
@@ -286,7 +317,7 @@ export const SOURCES: Source[] = [
       ar: 'توفي المؤلف سنة ١٣٧٦هـ/١٩٥٦م، فنصه في الملك العام. نعرض نصه وحده دون حواشي المحقق، من ملف الموسوعة القرآنية، مع رقم الصفحة ورابطها. وما انقطع في الملف (سبعة مواضع، منها آل عمران ٩٦-٩٧ ويوسف ١١٠-١١١) أكملناه من نسخة المكتبة الشاملة للطبعة نفسها.',
       en: 'The author died in 1956, so his text is in the public domain. We show his text alone, without the editor’s footnotes, from Quranpedia’s dump, with the page number and a link. Where the dump breaks off (seven passages, among them Al ‘Imran 96–97 and Yusuf 110–111), the rest comes from Shamela’s copy of the same edition.',
     },
-    uses: [USE.tafsir, USE.books, USE.oaths, USE.tafsirQuiz],
+    uses: [USE.tafsir, USE.books, USE.oaths, USE.tafsirQuiz, USE.darkSea],
   },
   {
     id: 'tibyan-ukbari', group: 'books', files: ['shared/data/quran/irabUkbari.js', 'shared/data/quran/irabUkbari.d.ts'],
@@ -306,7 +337,7 @@ export const SOURCES: Source[] = [
       ar: 'توفي المؤلف سنة ٥٣٨هـ، فنصه في الملك العام. نعرض كلامه كاملًا على كل آية دون حواشي الكتب المطبوعة معه، من ملف الموسوعة القرآنية، مع رقم الصفحة ورابطها. تضاء الجملة التي يسمّي فيها فنًّا من فنون البلاغة بقاعدة ثابتة. وفي الكتاب تأويلات معتزلية لبعض الصفات. لا يأتي مع التطبيق، بل ينزّله من يختاره إلى هاتفه.',
       en: 'The author died in 1144, so his text is in the public domain. We show his whole passage on each ayah, without the works printed in its margins, from Quranpedia’s dump, with the page number and a link. A fixed rule lights the sentences where he names a rhetorical device. The book carries Mu‘tazili readings of some divine attributes. It does not ship with the app; whoever wants it downloads it to their phone.',
     },
-    uses: [USE.balagha, USE.books],
+    uses: [USE.balagha, USE.books, USE.darkSea],
   },
   {
     id: 'tafsir-mawdui', group: 'books', files: ['shared/data/quran/surahTopics.json'],
@@ -386,26 +417,16 @@ export const SOURCES: Source[] = [
     },
     uses: [USE.qiraat],
   },
-  {
-    id: 'sahih-al-bukhari', group: 'books',
-    title: { ar: 'صحيح البخاري', en: 'Sahih al-Bukhari' }, author: { ar: 'محمد بن إسماعيل البخاري', en: 'al-Bukhari' },
-    edition: 'نص hadith-api (ara-bukhari) بالترقيم المشهور، ويُربط كل حديث برقمه في sunnah.com', link: { url: 'https://sunnah.com/bukhari', label: 'sunnah.com' },
-    licence: {
-      ar: 'توفي المؤلف سنة ٢٥٦هـ، فنصه في الملك العام. نروي الحديث كاملًا من إسناده إلى آخره، مع رقمه ورابطه.',
-      en: 'The author died in 870, so his text is in the public domain. We give each hadith whole, chain to last word, with its number and a link.',
-    },
-    uses: [USE.stories],
-  },
   // Data
   {
     id: 'hadith-api', group: 'data',
-    title: { ar: 'hadith-api: نص صحيح البخاري', en: 'hadith-api: the text of Sahih al-Bukhari' },
-    edition: 'الإصدار ١ (ara-bukhari)، نُزّل ٢٠٢٦-١١-١٨، ولم يُغيَّر فيه إلا حذف علامات الاتجاه (U+200F) وجعل المسافات المتتالية مسافة واحدة', link: { url: 'https://github.com/fawazahmed0/hadith-api', label: 'fawazahmed0/hadith-api' },
+    title: { ar: 'hadith-api: نصا صحيح البخاري وصحيح مسلم', en: 'hadith-api: the texts of Sahih al-Bukhari and Sahih Muslim' },
+    edition: 'الإصدار ١ (ara-bukhari وara-muslim)', link: { url: 'https://github.com/fawazahmed0/hadith-api', label: 'fawazahmed0/hadith-api' },
     licence: {
-      ar: 'منشورة في الملك العام (Unlicense).',
-      en: 'Released into the public domain (Unlicense).',
+      ar: 'منشورة في الملك العام (Unlicense). تُستعمل لمقابلة ترقيم عبد الباقي في نسختنا من الصحيحين فقط، ولا يُعرض من نصها شيء.',
+      en: 'Released into the public domain (Unlicense). Used only to check Abd al-Baqi’s numbering in our copy of the two Sahihs; none of its text is shown.',
     },
-    uses: [USE.stories],
+    uses: [USE.sahih],
   },
   {
     id: 'shamela-sadi', group: 'data',
@@ -428,7 +449,7 @@ export const SOURCES: Source[] = [
     uses: [USE.qiraat, USE.reader, USE.tafsir, USE.topics, USE.irab, USE.qiraatQuiz, USE.qiraatWhoQuiz],
   },
   {
-    id: 'gharib-ibn-qutaybah', group: 'books', files: ['shared/data/quran/gharib.js', 'shared/data/quran/gharib.d.ts'],
+    id: 'gharib-ibn-qutaybah', group: 'books', files: ['shared/data/quran/gharib.js', 'shared/data/quran/gharib.d.ts', 'shared/data/quran/gharibWords.json'],
     title: { ar: 'تفسير غريب القرآن', en: 'Tafsir Gharib al-Quran' }, author: { ar: 'ابن قتيبة الدينوري', en: 'Ibn Qutaybah' },
     edition: 'تحقيق السيد أحمد صقر، دار الكتب العلمية، ١٣٩٨هـ/١٩٧٨م', link: shamela(3259),
     licence: {
@@ -445,7 +466,7 @@ export const SOURCES: Source[] = [
       ar: 'توفي المؤلف سنة ٥٠٢هـ، فنصه في الملك العام. نعرض مادته كاملة تحت عنوانه، كلامه وحده بلا حواشي المحقق، من نسخة المكتبة الشاملة التي نشرها موقع تراث، مع رقم الصفحة ورابطها. وتوصل الكلمة بمادتها من جذرها في المدونة القرآنية العربية.',
       en: 'The author died in 1108, so his text is in the public domain. We show his whole article under his own heading, his words alone without the editor’s notes, from the Shamela copy published by Turath, with the page number and a link. A word is linked to its article by its root in the Quranic Arabic Corpus.',
     },
-    uses: [USE.meaning],
+    uses: [USE.meaning, USE.darkSea],
   },
   {
     id: 'natural-earth', group: 'data', files: ['shared/data/battles/land.json'],
@@ -499,18 +520,30 @@ export const SOURCES: Source[] = [
     licence: { ar: 'SIL Open Font License 1.1', en: 'SIL Open Font License 1.1' }, uses: [USE.everywhere],
   },
   {
-    id: 'kitab', group: 'fonts',
+    id: 'kitab', group: 'fonts', websiteOnly: true,
     title: { ar: 'خط كتاب (للصيغ مثل ﷺ)', en: 'Kitab (honorific signs such as ﷺ)' }, author: { ar: 'مشروع كاتب', en: 'The Katib Project' },
     link: { url: 'https://github.com/quranacademy/kitab-font', label: 'quranacademy/kitab-font' },
     licence: { ar: 'SIL Open Font License 1.1', en: 'SIL Open Font License 1.1' }, uses: [USE.people],
   },
   {
-    id: 'geist-mono', group: 'fonts',
+    id: 'geist-mono', group: 'fonts', websiteOnly: true,
     title: { ar: 'Geist Mono', en: 'Geist Mono' }, author: { ar: 'Vercel', en: 'Vercel' },
     link: { url: 'https://github.com/vercel/geist-font', label: 'vercel/geist-font' },
     licence: { ar: 'SIL Open Font License 1.1', en: 'SIL Open Font License 1.1' }, uses: [{ ar: 'الأرقام في الموقع', en: 'numbers on the website' }],
   },
   // Code
+  {
+    id: 'expo', group: 'code',
+    title: { ar: 'Expo', en: 'Expo' }, author: { ar: 'Expo', en: 'Expo' },
+    link: { url: 'https://github.com/expo/expo', label: 'expo/expo' },
+    licence: { ar: 'MIT', en: 'MIT' }, uses: [{ ar: 'تطبيق الهاتف كله، وتحديثاته', en: 'the whole phone app, and its updates' }],
+  },
+  {
+    id: 'react-native', group: 'code',
+    title: { ar: 'React Native', en: 'React Native' }, author: { ar: 'Meta', en: 'Meta' },
+    link: { url: 'https://github.com/facebook/react-native', label: 'facebook/react-native' },
+    licence: { ar: 'MIT', en: 'MIT' }, uses: [{ ar: 'تطبيق الهاتف كله', en: 'the whole phone app' }],
+  },
   {
     id: 'adhan', group: 'code',
     title: { ar: 'adhan-js', en: 'adhan-js' }, author: { ar: 'Batoul Apps', en: 'Batoul Apps' },
@@ -525,7 +558,13 @@ export const SOURCES: Source[] = [
     licence: { ar: 'ISC', en: 'ISC' }, uses: [USE.everywhere],
   },
   {
-    id: 'font-awesome', group: 'code',
+    id: 'react-native-skia', group: 'code',
+    title: { ar: 'React Native Skia', en: 'React Native Skia' }, author: { ar: 'Shopify', en: 'Shopify' },
+    link: { url: 'https://github.com/Shopify/react-native-skia', label: 'Shopify/react-native-skia' },
+    licence: { ar: 'MIT', en: 'MIT' }, uses: [USE.darkSea],
+  },
+  {
+    id: 'font-awesome', group: 'code', websiteOnly: true,
     title: { ar: 'أيقونات Font Awesome المجانية', en: 'Font Awesome Free icons' },
     link: { url: 'https://fontawesome.com/license/free', label: 'fontawesome.com' },
     licence: { ar: 'الأيقونات CC BY 4.0، والشيفرة MIT.', en: 'Icons CC BY 4.0, code MIT.' }, uses: [{ ar: 'صفحات الموقع', en: 'website pages' }],

@@ -6,7 +6,7 @@ import { hiddenProps, useHidden, useSlideAway } from '@/ui/motion';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, useSegments } from 'expo-router';
 import type { BottomTabBarProps } from 'expo-router/js-tabs';
-import { BookOpenText, Feather, House, ScrollText, Users, type LucideProps } from 'lucide-react-native';
+import { BookOpenText, Feather, House, Milestone, ScrollText, type LucideProps } from 'lucide-react-native';
 import { TAB_BAR, tabBarBottom } from '@/ui/tabBarSpace';
 import { usePalette } from '@/lib/theme';
 import { retapTab } from '@/lib/tabRetap';
@@ -14,6 +14,7 @@ import { setCompact, useCompact, useImmersive } from '@/lib/chrome';
 import { openPage, tapOnOpen } from '@/lib/tabGroups';
 import { toTab } from '@/lib/ways';
 import { Tap } from '@/ui/Tap';
+import { useColumnSide } from '@/ui/column';
 
 // Five buttons at most (owner, 2026-11-13). Arabic runs right to left, so the first sits on the right:
 // Quran, hadith, home, tarajim, quizzes (owner, 2026-11-18). Keys are the tab routes; each but the quizzes holds a page stack (lib/tabGroups.ts).
@@ -23,7 +24,7 @@ const BUTTONS: { key: string; label: string; Icon: (props: LucideProps) => React
   { key: '(quran)', label: 'القرآن', Icon: BookOpenText },
   { key: '(hadith)', label: 'الحديث', Icon: ScrollText },
   { key: '(home)', label: 'الرئيسية', Icon: House },
-  { key: '(tarajim)', label: 'التراجم', Icon: Users },
+  { key: '(tarajim)', label: 'التراجم', Icon: Milestone },
   { key: 'quizzes', label: 'الاختبارات', Icon: Feather },
 ];
 
@@ -38,6 +39,8 @@ const ICON_SMALL = 0.8;
 export default function TabBar({ state, navigateToTab }: BottomTabBarProps) {
   const palette = usePalette();
   const insets = useSafeAreaInsets();
+  // On a tablet the pill floats in the page's column (ui/column.ts).
+  const side = useColumnSide();
   const immersive = useImmersive();
   const compact = useCompact();
   const shrink = useHidden(compact);
@@ -53,7 +56,7 @@ export default function TabBar({ state, navigateToTab }: BottomTabBarProps) {
   const away = page === 'read' && immersive;
   const slide = useSlideAway(away, 'bottom', FULL + tabBarBottom(insets.bottom) + 24);
   return (
-    <Animated.View {...hiddenProps(away, 'box-none')} style={[{ position: 'absolute', left: TAB_BAR.side, right: TAB_BAR.side, bottom: tabBarBottom(insets.bottom),
+    <Animated.View {...hiddenProps(away, 'box-none')} style={[{ position: 'absolute', left: TAB_BAR.side + side, right: TAB_BAR.side + side, bottom: tabBarBottom(insets.bottom),
       borderRadius: 999, boxShadow: '0 6px 24px rgba(0, 0, 0, 0.3)' }, slide.content]}>
       <Animated.View style={[{ flexDirection: 'row', paddingHorizontal: 6, borderRadius: 999, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }, row]}>
         <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />

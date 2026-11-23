@@ -4,7 +4,7 @@
     "slug": "namaq",
     "scheme": "namaq",
     "version": "0.1.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "ios": {
@@ -36,6 +36,15 @@
         }
       ],
       "expo-notifications",
+      [
+        "expo-media-library",
+        {
+          "photosPermission": false,
+          "savePhotosPermission": "يحفظ نمق صور المشاركة في مكتبة الصور عند طلبك.",
+          "isAccessMediaLocationEnabled": false,
+          "granularPermissions": []
+        }
+      ],
       [
         "expo-splash-screen",
         {
