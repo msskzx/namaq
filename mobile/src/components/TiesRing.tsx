@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Check } from 'lucide-react-native';
 import { View } from 'react-native';
-import Svg, { Line } from 'react-native-svg';
+import Svg, { Line, Polygon } from 'react-native-svg';
 import { settledTies } from '@shared/peopleCards';
-import { groupWord, tieGroups, tieWord, type GraphNode, type Tie, type TieGroup, type TieKind } from '@shared/tarajimGraph';
+import { groupWord, lineWord, tieGroups, tieWord, type GraphNode, type Tie, type TieGroup, type TieKind } from '@shared/tarajimGraph';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import Card, { useInsideCard } from '@/ui/Card';
@@ -11,7 +11,7 @@ import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
 import type { Palette } from '@/lib/theme';
 import { findPerson, GRAPH, personName } from '@/lib/tarajim';
-import { edge, kindColor } from './TiesChain';
+import { arrowHead, edge, kindColor } from './TiesChain';
 
 const NODE_H = 62;
 /** Room a node has to grow away from the middle when its name takes another line, so its line still meets its edge. */
@@ -231,9 +231,18 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
         <View style={{ width: drawW, height: drawH, alignSelf: 'center' }}>
           <Svg width={drawW} height={drawH} style={{ position: 'absolute' }}>
             {placed.map(spot => {
-              const from = edge(centre, spot, middleW / 2, 26);
-              const to = edge(spot, centre, NODE_W / 2, NODE_H / 2);
-              return <Line key={spot.key} x1={from.x} y1={from.y} x2={to.x} y2={to.y} stroke={kindColor(palette, spot.kind)} strokeWidth={2} strokeOpacity={0.8} />;
+              const inner = edge(centre, spot, middleW / 2, 26);
+              const outer = edge(spot, centre, NODE_W / 2, NODE_H / 2);
+              // As «بينه وبين…» draws it: the arrow runs from the one the word describes, so «صحابي» on the companion's own
+              // page points away from him, to the one he accompanied.
+              const [a, tip] = spot.kind === 'accompanied' ? [inner, outer] : [outer, inner];
+              const long = Math.hypot(tip.x - a.x, tip.y - a.y) || 1;
+              const { back, head } = arrowHead(tip, { x: (tip.x - a.x) / long, y: (tip.y - a.y) / long });
+              const colour = kindColor(palette, spot.kind);
+              return [
+                <Line key={spot.key} x1={a.x} y1={a.y} x2={back.x} y2={back.y} stroke={colour} strokeWidth={2} strokeOpacity={0.8} />,
+                <Polygon key={`${spot.key}^`} points={head} fill={colour} />,
+              ];
             })}
           </Svg>
           {/* What each one is to him, on his line (owner, 2026-11-23: on the edges, as «بينه وبين…» writes it), so a line's
@@ -253,7 +262,7 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
             const node = GRAPH.nodes.get(spot.tie.to)!;
             return (
               <View key={`w${spot.key}`} pointerEvents="none" style={{ position: 'absolute', left: Math.max(0, Math.min(drawW - room, m.x - room / 2)), top: m.y - LABEL_H / 2, width: room, height: LABEL_H, alignItems: 'center' }}>
-                <Text numberOfLines={1} style={{ color: kindColor(palette, spot.kind), fontSize: 12, lineHeight: LABEL_H, paddingHorizontal: 3, backgroundColor: ground }}>{tieWord(spot.kind, node.sex, person.sex)}</Text>
+                <Text numberOfLines={1} style={{ color: kindColor(palette, spot.kind), fontSize: 12, lineHeight: LABEL_H, paddingHorizontal: 3, backgroundColor: ground }}>{lineWord(spot.kind, node.sex, person.sex)}</Text>
               </View>
             );
           })}

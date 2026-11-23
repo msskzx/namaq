@@ -35,6 +35,12 @@ const ROW_FAN = 124;
 /** The arrow's length and half width at the end of a line. */
 const ARROW = 9;
 const ARROW_HALF = 5;
+/** A line's arrow ending at `tip`, running along the unit vector `u`: where the line stops, and the head's points for a Polygon. */
+export function arrowHead(tip: { x: number; y: number }, u: { x: number; y: number }) {
+  const back = { x: tip.x - u.x * ARROW, y: tip.y - u.y * ARROW };
+  const head = [tip, { x: back.x - u.y * ARROW_HALF, y: back.y + u.x * ARROW_HALF }, { x: back.x + u.y * ARROW_HALF, y: back.y - u.x * ARROW_HALF }];
+  return { back, head: head.map(pt => `${pt.x},${pt.y}`).join(' ') };
+}
 /** The name before «بن» or «بنت», for the clause a screen reader says for a line: «الزبير ابنُ صفية». */
 const firstName = (node: GraphNode) => personName(node).split(/\s+بنت?\s+/u)[0];
 
@@ -120,11 +126,10 @@ export default function TiesChain({ nodes, steps, first, picked, width, palette,
     <View style={{ width, height, alignSelf: 'center' }}>
       <Svg width={width} height={height} style={{ position: 'absolute' }}>
         {lines.map(({ step, a, tip, u, color }) => {
-          const back = { x: tip.x - u.x * ARROW, y: tip.y - u.y * ARROW };
-          const head = [tip, { x: back.x - u.y * ARROW_HALF, y: back.y + u.x * ARROW_HALF }, { x: back.x + u.y * ARROW_HALF, y: back.y - u.x * ARROW_HALF }];
+          const { back, head } = arrowHead(tip, u);
           return [
             <Line key={`${step.from}>${step.to}`} x1={a.x} y1={a.y} x2={back.x} y2={back.y} stroke={color} strokeWidth={2} />,
-            <Polygon key={`${step.from}>${step.to}^`} points={head.map(pt => `${pt.x},${pt.y}`).join(' ')} fill={color} />,
+            <Polygon key={`${step.from}>${step.to}^`} points={head} fill={color} />,
           ];
         })}
       </Svg>
