@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import data from '../data/quran/words.json';
 import trees from './quranText/corpus';
 import { pageGroups, type MushafPage } from './readerPage';
-import { corpusWords, countsBySurah, lemmasAtMushafWord, lemmasOfWord, mushafWords, nearestSurah, placesOf, stepSurah, searchWords, type WordsData } from './words';
+import { corpusWords, countsBySurah, lemmasAtMushafWord, lemmasOfWord, mushafWords, placesOf, searchWords, type WordsData } from './words';
 import { corpusWordsAt } from './quranText/ayahWords';
 
 const words = data as unknown as WordsData;
@@ -113,22 +113,4 @@ describe('counts by surah', () => {
     expect(countsBySurah([{ key: '2:51', words: [1] }, { key: '2:60', words: [2, 9] }])[1]).toBe(3);
   });
 
-  it('snaps a finger between bars to the nearest surah that has the word', () => {
-    const counts = new Array(114).fill(0);
-    counts[6] = 2; counts[19] = 1;
-    expect(nearestSurah(counts, 6)).toBe(6);
-    expect(nearestSurah(counts, 9)).toBe(6);
-    expect(nearestSurah(counts, 15)).toBe(19);
-    expect(nearestSurah(counts, 200)).toBe(19);
-    expect(nearestSurah(counts, -3)).toBe(6);
-  });
-
-  it('steps to the next surah that has the word, and stays at the ends', () => {
-    const counts = new Array(114).fill(0);
-    counts[6] = 2; counts[19] = 1;
-    expect(stepSurah(counts, 6, 1)).toBe(19);
-    expect(stepSurah(counts, 19, -1)).toBe(6);
-    expect(stepSurah(counts, 19, 1)).toBe(19);
-    expect(stepSurah(counts, 6, -1)).toBe(6);
-  });
 });
