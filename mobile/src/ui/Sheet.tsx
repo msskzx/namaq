@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { OutsideCard } from '@/ui/cardContext';
 import { Modal, Pressable, View, useWindowDimensions } from 'react-native';
-import { COLUMN } from './column';
+import { COLUMN, PageWidthProvider } from './column';
 import { useKeyboardHeight } from '@/lib/keyboard';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, { Easing, interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -83,7 +83,8 @@ export default function Sheet({ open, onClose, palette, tall, full, title, onDis
         {!full && <View pointerEvents="none" style={{ flex: 1 }} />}
         <Animated.View style={[{ direction: 'rtl', ...size, backgroundColor: palette.paper, ...edge, paddingBottom: (keyboard ? 0 : insets.bottom) + 8 }, moved]}>
           {handle}
-          <OutsideCard>{children}</OutsideCard>
+          {/* A sheet opened from one of home's two columns is as wide as the column of a page, not the card's (ui/column.ts). */}
+          <PageWidthProvider value={null}><OutsideCard>{children}</OutsideCard></PageWidthProvider>
         </Animated.View>
       </GestureHandlerRootView>
       </AyahMenuContext.Provider>

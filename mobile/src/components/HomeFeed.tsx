@@ -1853,13 +1853,18 @@ export function Feed({ palette, nearEnd, screenBottom, only = null, column = nul
   if (column) {
     // Each column is a phone's page to the cards in it, so their drawings and ayat size from its width (ui/column.ts).
     // A card's place is told within its column, which starts where the feed does, so the prayer card still comes below the screen.
+    // The cards take turns by their order without the prayer cards, which join the column of the card before them: a prayer
+    // card coming or going never moves a card to the other column.
+    let turn = -1;
+    const prayers = new Set(cards.map(card => `pr${card.key}`));
+    const sides = keys.map(key => (prayers.has(key) ? Math.max(turn, 0) % 2 : ++turn % 2));
     return (
       <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: COLUMN_GAP }} onLayout={event => { top.current = event.nativeEvent.layout.y; }}>
         {[0, 1].map(side => (
           <PageWidthProvider key={side} value={column + 32}>
             <View style={{ width: column, gap: 14 }}>
               {side === 0 && lead}
-              {posts.map((_post, i) => (i % 2 === side ? placed(i) : null))}
+              {posts.map((_post, i) => (sides[i] === side ? placed(i) : null))}
             </View>
           </PageWidthProvider>
         ))}
