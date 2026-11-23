@@ -115,6 +115,16 @@ import { BookCard, Shelf, TUHFA } from '@/screens/books';
 import { DarkSeaActions, DarkSeaCard, darkSeaName, darkSeaSourceList, openDarkSea } from './DarkSea';
 import { DARK_SEA_KEY } from '@shared/quran/scenes/darkSea';
 import { prophetStory } from '@/lib/prophets';
+import gharib from '@shared/data/quran/gharib';
+import { wordsOf as gharibWordsOf } from '@shared/quran/gharib';
+import { lemmasAtMushafWord } from '@shared/quran/words';
+import { words as wordCounts } from '@/lib/words';
+import { gharibSource } from './GharibSheet';
+import LitAyat from './quran/text/LitAyat';
+import BookRuns from './quran/text/BookRuns';
+import { TUHFA_PASSAGES, tuhfaPassage } from '@shared/tajwid/passages';
+import { TuhfaVerse } from '@/screens/tuhfa';
+import { PROPHET_STORY } from '@shared/quiz/prophetStory';
 import StoryMap from './StoryMap';
 import { ayahPlaces } from '@shared/quran/ayahPlaces';
 import itqan from '@shared/data/quran/itqanBalagha';
@@ -436,6 +446,8 @@ function openAnswer(question: SoloQuestion) {
     const [a, b] = [question.compare.shown.key, question.compare.asked.key];
     return openIntent({ tab: 'compare', lead: Number(a.split(':')[0]), other: Number(b.split(':')[0]), ayat: [a, b] });
   }
+  // The prophet's story, not the ayah its look shows.
+  if (question.family === PROPHET_STORY) return router.push({ pathname: '/prophets/[slug]', params: { slug: question.correctAnswer } });
   const look = question.look;
   switch (look?.view) {
     case 'ties': case 'life': return person(look.slug);
@@ -449,6 +461,7 @@ function openAnswer(question: SoloQuestion) {
     case 'tafsir': return readAyah(look.mark ?? look.keys[0]);
     case 'word': case 'balagha': case 'irab': case 'qiraat': return readAyah(look.key);
     case 'tuhfa': return toTab(look.mark ? { pathname: '/tuhfa', params: { verse: String(look.mark) } } : '/tuhfa');
+    case 'ayat': return readAyah(look.mark ?? look.keys[0]);
   }
   if (question.ayahKey) return readAyah(question.ayahKey);
   if (question.order?.length) return router.push({ pathname: '/order', params: { juz: String(orderJuz(question.order)) } });
@@ -456,6 +469,7 @@ function openAnswer(question: SoloQuestion) {
   if (aimed) return openOrder(aimed);
   const slug = question.key.split(':')[1];
   if (question.family === PROPHET_NAMES) return person('prophet-muhammad');
+
   if (slug && findPerson(slug)) return person(slug);
 }
 
@@ -1434,6 +1448,63 @@ function TermPost({ id, day, palette }: { id: string; day: number; palette: Pale
   );
 }
 
+/** Ibn Qutaybah's entries a card can hold: one place, a word or a few, said in a few lines, on an ayah that fits a card. */
+const GHARIB_WORDS = 3;
+const GHARIB_CHARS = 240;
+const GHARIB_AYAH = 30;
+const gharibItems = () => gharib.entries.flatMap((entry, at) => {
+  const [[ayah, from, to], ...more] = entry[4];
+  return !more.length && to - from < GHARIB_WORDS && entry[3].length <= GHARIB_CHARS && ayahMushafWords(`${entry[0]}:${ayah}`).length <= GHARIB_AYAH ? [String(at)] : [];
+});
+
+/**
+ * A word of the Quran and Ibn Qutaybah's meaning of it (release-1 plan 2026-11-23: «غريب القرآن» had questions and no
+ * card): the ayah with the words he quotes lit, then his entry whole. «افتح» opens the word's page, the head the words page.
+ */
+function GharibPost({ id, palette }: { id: string; palette: Palette }) {
+  const entry = gharib.entries[Number(id)];
+  if (!entry) return null;
+  const [surah, page, shamelaId, text, [[ayah, from, to]]] = entry;
+  const key = `${surah}:${ayah}`;
+  const words = ayahMushafWords(key);
+  // A word's page is one word's: an entry on a phrase opens the ayah's page.
+  const lemmas = from === to ? lemmasAtMushafWord(wordCounts, key, from) : [];
+  const open = () => (lemmas.length ? toTab({ pathname: '/word', params: { ids: lemmas.join(',') } }) : openAyahPage(key));
+  return (
+    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.words} title="من غريب القرآن" sub={`${shortNames[surah] ?? ''} ${num(ayah)}`} open={topic('/words', 'افتح ألفاظ القرآن')} palette={palette} />}
+      open={<OpenButton label={lemmas.length ? 'افتح صفحة الكلمة' : 'افتح صفحة الآية'} onPress={open} palette={palette} />}
+      source={gharibSource({ page, id: shamelaId })}>
+      <View style={{ paddingHorizontal: 14, paddingVertical: 12, gap: 8 }}>
+        <LitAyat ayat={[{ words, lit: gharibWordsOf(entry, ayah), number: ayah }]} menu={key} palette={palette} />
+        <View style={{ height: 1, backgroundColor: palette.rule, opacity: 0.6 }} />
+        <BookRuns text={text} quran={palette.accent} style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' }} />
+      </View>
+    </Post>
+  );
+}
+
+/**
+ * One rule of Tuhfat al-Atfal (release-1 plan 2026-11-23: «التجويد» had questions and no card): its verses as on the poem's
+ * page, and the letters the poem names for it. «افتح» opens the poem at its first verse, the head the poem's top.
+ */
+function TuhfaPost({ id, palette }: { id: string; palette: Palette }) {
+  const passage = tuhfaPassage(id);
+  if (!passage) return null;
+  const first = passage.verses[0].number;
+  return (
+    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.tuhfa} title="من تحفة الأطفال" sub={passage.chapter} open={topic('/tuhfa', 'افتح تحفة الأطفال')} palette={palette} />}
+      open={<OpenButton label="افتح المنظومة" onPress={() => toTab({ pathname: '/tuhfa', params: { verse: String(first) } })} palette={palette} />}
+      source={sourcesOf([{ book: TUHFA.title, author: TUHFA.by, at: passage.verses.length > 1 ? `الأبيات ${num(first)}–${num(passage.verses.at(-1)!.number)}` : `البيت ${num(first)}` }])}>
+      <View style={{ paddingHorizontal: 14, paddingVertical: 8 }}>
+        {passage.verses.map(verse => <TuhfaVerse key={verse.number} verse={verse} marked={false} palette={palette} />)}
+        {passage.letters && <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right', paddingTop: 10 }}>
+          {'حروفه: '}<Text style={{ color: palette.accent, fontSize: 20, letterSpacing: 6 }}>{[...passage.letters].join(' ')}</Text>
+        </Text>}
+      </View>
+    </Post>
+  );
+}
+
 /** Every battle's moments, in the battles' order, for the moment card. */
 const MOMENTS = (momentBattles as AppMomentBattle[]).flatMap(battle => battle.moments.map((moment, i) => ({ battle, moment, n: i + 1 })));
 const momentId = (item: (typeof MOMENTS)[number]) => momentItem(item.battle.slug, item.n);
@@ -1562,6 +1633,8 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   lives: () => livesPairs(new Map(PEOPLE.map(person => [person.slug, personLife(person)]))),
   meet: () => meetItems(PEOPLE, nasabQuestions(PEOPLE).flatMap(question => (question.look?.view === 'nasab' ? [question.look.slugs as [string, string]] : []))),
   ring: () => ringList_().map(ring => ring.id),
+  gharib: gharibItems,
+  tuhfa: () => TUHFA_PASSAGES.map(passage => passage.id),
 };
 const itemsOf = (kind: ListKind) => (itemLists[kind] ??= LIST_OF[kind]());
 
@@ -1613,6 +1686,8 @@ function ContentPost({ kind, item, day, palette }: { kind: ListKind; item: strin
     case 'lives': return <LivesPost id={item} palette={palette} />;
     case 'meet': return <MeetPost id={item} palette={palette} />;
     case 'ring': return <RingPost id={item} palette={palette} />;
+    case 'gharib': return <GharibPost id={item} palette={palette} />;
+    case 'tuhfa': return <TuhfaPost id={item} palette={palette} />;
     default: return null;
   }
 }

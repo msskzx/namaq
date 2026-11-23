@@ -50,6 +50,8 @@ import TiesRing from './TiesRing';
 import LifeTimeline from './LifeTimeline';
 import { personLife } from '@/lib/life';
 import { TermQuotes } from './BalaghaTerm';
+import LitAyat from './quran/text/LitAyat';
+import { ayahMushafWords } from '@/lib/mushaf';
 
 /** Names a search lists before asking for more letters. */
 const FOUND = 20;
@@ -166,6 +168,23 @@ function TafsirLook({ keys, mark, palette }: { keys: string[]; mark?: string; pa
   );
 }
 
+/** A run of ayat as the mushaf sets them, under the surah's name and their numbers; once marked, the ayah that answers lit. */
+function AyatLook({ keys, mark, palette }: { keys: string[]; mark?: string; palette: Palette }) {
+  const [surah, first] = keys[0].split(':').map(Number);
+  const last = Number(keys[keys.length - 1].split(':')[1]);
+  return (
+    <View style={{ gap: 8 }}>
+      <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 16, textAlign: 'right' }}>{`${surahNames[surah] ?? num(surah)} ${num(first)}${last > first ? `–${num(last)}` : ''}`}</Text>
+      <Card palette={palette} pad={[10, 14]}>
+        <LitAyat ayat={keys.map(key => {
+          const words = ayahMushafWords(key);
+          return { words, lit: key === mark ? [[0, words.length - 1] as [number, number]] : [], number: Number(key.split(':')[1]) };
+        })} menu={keys} palette={palette} />
+      </Card>
+    </View>
+  );
+}
+
 const TUHFA = numberVerses(poemData as Poem);
 
 /** Tuhfat al-Atfal whole, as on its page; once marked, the chapter of the verse that answers, the verse lit. */
@@ -214,6 +233,7 @@ export function LookView({ look, shown, palette }: { look: QuizLook; shown: bool
     );
     case 'tafsir': return <TafsirLook key={`${look.keys.join()}/${look.mark ?? ''}`} keys={look.keys} mark={shown ? look.mark : undefined} palette={palette} />;
     case 'tuhfa': return <TuhfaLook mark={shown ? look.mark : undefined} palette={palette} />;
+    case 'ayat': return <AyatLook keys={look.keys} mark={shown ? look.mark : undefined} palette={palette} />;
   }
 }
 
