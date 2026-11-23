@@ -79,7 +79,7 @@ function Fitted({ children }: { children: (scale: number) => React.ReactNode }) 
   // fixed parts (lines, a node's least width) do not shrink with the scale, and correcting for them each layout froze the
   // phone in a loop of layouts (owner, 2026-11-23: a person's page would not open).
   const [natural, setNatural] = useState(0);
-  const scale = room && natural > room ? Math.max(MIN_SCALE, room / natural) : 1;
+  const scale = room && natural > room ? Math.max(MIN_SCALE, room / (natural * 1.02)) : 1;
   return (
     <ScrollView horizontal onLayout={e => setRoom(e.nativeEvent.layout.width)} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
       <View onLayout={e => {
@@ -129,7 +129,7 @@ export function NasabTree({ slugs, palette, meetings: showMeetings = true, linke
       const { above, start: top } = lines.length > 1 && !opened.includes(root.key) ? foldTop(root) : { above: [], start: root };
       const id = `${r}:${root.key}`;
       return (
-        <Fitted key={id}>{scale => (
+        <Fitted key={`${slugs.join(',')}|${id}`}>{scale => (
           <View style={{ alignItems: 'center' }}>
             {above.length > 0 && <>
               <Card palette={palette} node pad={[6 * scale, 12 * scale]} accessibilityRole="button" accessibilityLabel={`أظهر الآباء فوق ${top.name}: ${above.length}`}
