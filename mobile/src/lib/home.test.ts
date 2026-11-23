@@ -1,16 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { cardWays, forgottenCard, forgottenWays, noteCard, referencesOf, savedCard, shelfText, shownBookmarks } from './home';
+import { noteCard, referencesOf, savedCard, shelfText, shownBookmarks } from './home';
 import { treeList } from './branches';
 import { aliasesOf } from './branchList';
 
 const saved = (id: string) => ({ id, text: 'نص', href: '/', savedAt: 0 });
 
 describe('the homepage shelf', () => {
-  it('reviews a forgotten ayah from where it is, and offers the views a saved ayah has', () => {
-    expect(forgottenCard('2:255', 'نص')).toEqual({ id: '2:255', text: 'نص', kind: 'ayah', references: [{ surah: 2, ayat: [255] }], open: { tab: 'read', at: '2:255', recite: true, review: true } });
+  it('opens a note on its ayah in the mushaf', () => {
     expect(noteCard('2:255', 'تأمل')).toEqual({ id: '2:255', text: 'تأمل', kind: 'ayah', references: [{ surah: 2, ayat: [255] }], open: { tab: 'read', at: '2:255' } });
-    expect(forgottenWays('2:255')).toEqual(cardWays(saved('ayah:2:255')));
-    expect(forgottenWays('2:255')[0]).toEqual({ to: 'mushaf', at: '2:255' });
   });
 
   it('quietly leaves out a saved tree the data review removed, keeping ayat, compare cards and live trees', () => {
@@ -60,18 +57,3 @@ describe('the homepage shelf', () => {
   });
 });
 
-
-describe('forgotten word shelf cards', () => {
-  it('opens a word review at the ayah with the exact zero-based word position', () => {
-    expect(forgottenCard('2:255:0', 'نص')).toEqual({
-      id: '2:255:0', text: 'نص', kind: 'ayah', references: [{ surah: 2, ayat: [255] }],
-      open: { tab: 'read', at: '2:255', word: 0, recite: true, review: true },
-    });
-    expect(forgottenCard('2:255:4', 'نص').open).toEqual({ tab: 'read', at: '2:255', word: 4, recite: true, review: true });
-  });
-
-  it("uses the marked word's ayah for the other views", () => {
-    expect(forgottenWays('2:255:0')).toEqual(forgottenWays('2:255'));
-    expect(forgottenWays('2:255:0')[0]).toEqual({ to: 'mushaf', at: '2:255' });
-  });
-});

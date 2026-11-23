@@ -65,7 +65,7 @@ export function CardWithRow({ lead, row, menu, cap = false, source, sourceLine, 
    * up when it gives none; `all` are both, for the sheet.
    */
   sourceLine?: (named: Source[], all: Source[]) => React.ReactNode;
-  /** A bar of the feature's own leading the row (recite mode's small bar, on the recall card). */
+  /** A bar of the feature's own on a line above the row (recite mode's bar, on the recall card). */
   bar?: React.ReactNode; children: React.ReactNode }) {
   const [lifted, slot] = useLifted();
   const [liftedWhole, slotWhole] = useLifted();
@@ -80,12 +80,14 @@ export function CardWithRow({ lead, row, menu, cap = false, source, sourceLine, 
   const [whole, setWhole] = useState(false);
   const { palette } = card;
   const inside = useContext(InsideCard);
-  const buttonRow = (handedUp: [string, React.ReactNode][], more?: MoreItem[], first: React.ReactNode = lead) => (bar || first || row || handedUp.length > 0 || !!more?.length) && (
-    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', gap: 8, marginTop: bar ? 4 : 0 }}>
-      {bar}{first}{handedUp.map(([id, node]) => <View key={id} style={{ flexDirection: 'row', alignItems: 'center' }}>{node}</View>)}{row}
+  // The feature's bar has a line of its own, at its full size, with the card's buttons on the line under it (owner, 2026-11-23).
+  const buttonRow = (handedUp: [string, React.ReactNode][], more?: MoreItem[], first: React.ReactNode = lead) => (bar || first || row || handedUp.length > 0 || !!more?.length) && (<>
+    {bar && <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4 }}>{bar}</View>}
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', gap: 8 }}>
+      {first}{handedUp.map(([id, node]) => <View key={id} style={{ flexDirection: 'row', alignItems: 'center' }}>{node}</View>)}{row}
       {more?.length ? <><View style={{ flex: 1 }} /><MoreMenu items={more} /></> : null}
     </View>
-  );
+  </>);
   const named = own.length ? own : inner;
   // Drawn inside another card (a page's section in a quiz's look-up, a feed post): no second card and no second row; its
   // buttons join that card's row and its books that card's line, or show as collapsed references where it has none.

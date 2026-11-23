@@ -87,7 +87,7 @@ import { aliasesOf, EMPTY_LIST } from '@/lib/branchList';
 import { treeList } from '@/lib/branches';
 import { shownBookmarks } from '@/lib/home';
 import { REVIEW_LABEL, reviewForgotten } from './HomeCards';
-import { forgottenOrder, type RecitePosition } from '@shared/quran/recite';
+import { forgottenOrder, reviewPosition, type RecitePosition } from '@shared/quran/recite';
 import { pageModel } from '@shared/quran/recitePage';
 import RecitePill from './recite/RecitePill';
 import { useRecite } from './recite/useRecite';
@@ -220,7 +220,7 @@ function Post({ head, open, actions, share, picture, source, bar, palette, whole
    * its whole ayah with one write box.
    */
   whole?: boolean;
-  /** A bar of the feature's own under the card, leading the buttons' row (recite mode's small bar, on the recall card; owner 2026-11-17). */
+  /** A bar of the feature's own under the card, on its own line above the buttons (recite mode's bar, on the recall card; owner 2026-11-23). */
   bar?: React.ReactNode; palette: Palette; children: React.ReactNode }) {
   // The card's save is named on the saved shelf by its head's title and line.
   const named = isValidElement<{ title?: string; sub?: string }>(head) ? [head.props.title, head.props.sub].filter(Boolean).join(' · ') : '';
@@ -351,13 +351,13 @@ const PairPost = memo(function PairPost({ pair, palette }: { pair: PairCard; pal
 
 /**
  * What the reader marked on a recall card while the app runs (owner, 2026-11-22: a card does not vanish on a tick): the
- * card stays where it is, its tick lit and the ayah shown, and a second tap takes the tick back (`before`: the ayah's mark
- * as it was). On the next visit a marked card gives way to the next one.
+ * card stays where it is, its tick lit and the ayah shown, and a second tap takes the tick back (`before`: each mark it
+ * touched as it was). On the next visit a marked card gives way to the next one.
  */
-type Recalled = { did: 'remembered' | 'forgot'; before: AyahMark | undefined; visit: number };
+type Recalled = { did: 'remembered' | 'forgot'; before: Record<string, AyahMark | undefined>; visit: number };
 const recalled = new Map<string, Recalled>();
 /** The tick on this ayah's card in this visit; one from an earlier visit is over (its mark has moved on since). */
-const recalledNow = (ayah: string) => { const entry = recalled.get(ayah); return entry?.visit === visitStart() ? entry : undefined; };
+const recalledNow = (ayah: string) => { const entry = recalled.get(markAyah(ayah)); return entry?.visit === visitStart() ? entry : undefined; };
 /** Whether the recall card asks to write the whole ayah (on) or reveals it word by word (off). */
 const RECALL_WRITE = 'recall-write';
 
@@ -367,30 +367,48 @@ const RECALL_WRITE = 'recall-write';
  * The pen switches to writing the whole ayah in write boxes (lib/useWriteBoxes); the last box shows the ayah with the
  * written words green or amber, and a mistake puts it on the forgotten shelf, as in the reader. A forgotten ayah that is due
  * comes with the review button and «تذكّرتها» rests it; an ayah of the day from what is memorized (`review` absent) has «نسيتها» too.
+ * A due ayah hides all its forgotten words in their places at once, as the reader's review does (reviewPosition), and its
+ * tick rests every one of them. The forgotten list draws one of these for each forgotten ayah (owner, 2026-11-23), with
+ * its own `head`.
  */
-function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', Icon = LightbulbOff, palette }: { ayah: string; review?: () => void; title?: string; Icon?: IconType; palette: Palette }) {
+export function ForgottenPost({ ayah: asked, review, due: dueOne, title = 'هل تذكرها؟', Icon = LightbulbOff, head: ownHead, palette }: { ayah: string; review?: () => void;
+  /** A forgotten ayah due for review, with no review button: the forgotten list, whose cards are the review (owner, 2026-11-23). */
+  due?: boolean; title?: string; Icon?: IconType; head?: { onPress: () => void; label: string }; palette: Palette }) {
+  const ayah = markAyah(asked);
+  const forgotten = dueOne ?? !!review;
+  // Fixed when the card is drawn, so a tick taken back puts back the same marks it rested.
+  const [keys, gaps] = useMemo(() => {
+    if (!forgotten) return [[asked], markWord(asked) === undefined ? undefined : [markWord(asked)!]] as const;
+    const due = readDueMarks();
+    const own = Object.keys(due).filter(key => markAyah(key) === ayah);
+    return [own.length ? own : [asked], reviewPosition(asked, due).gaps] as const;
+  }, [asked, ayah, forgotten]);
   const [done, setDone] = useState(() => recalledNow(ayah));
   const [writing, setWriting] = useState(() => readJson(RECALL_WRITE, isBoolean) === true);
   const toggleWriting = () => setWriting(on => { writeJson(RECALL_WRITE, !on); return !on; });
   // One tick at a time: tapping the lit one takes it back, tapping the other moves it.
   const mark = (did: Recalled['did']) => {
-    if (done) restoreMark(ayah, done.before);
+    if (done) Object.entries(done.before).forEach(([key, before]) => restoreMark(key, before));
     if (done?.did === did) { recalled.delete(ayah); setDone(undefined); return; }
-    const now: Recalled = { did, before: readAyahMarks()[ayah], visit: visitStart() };
-    if (did === 'forgot') markForgotten(ayah);
-    else if (review) rememberAyah(ayah);
+    const stored = readAyahMarks();
+    const now: Recalled = { did, before: Object.fromEntries(keys.map(key => [key, stored[key]])), visit: visitStart() };
+    if (did === 'forgot') keys.forEach(key => markForgotten(key));
+    else if (forgotten) keys.forEach(key => rememberAyah(key));
     recalled.set(ayah, now);
     setDone(now);
   };
   const marks = <>
-    <Action Icon={done?.did === 'remembered' ? CircleCheck : Check} label="تذكّرتها" tone="green" on={done?.did === 'remembered'} palette={palette} onPress={() => mark('remembered')} />
-    {!review && <Action Icon={LightbulbOff} label="نسيتها" on={done?.did === 'forgot'} palette={palette} onPress={() => mark('forgot')} />}
+    {/* Worded, now that the recite bar has its own line (owner, 2026-11-23). */}
+    <View style={{ flexDirection: 'row', gap: 8 }}>
+      <Button pill label="تذكّرتها" Icon={done?.did === 'remembered' ? CircleCheck : Check} tone="green" active={done?.did === 'remembered'} onPress={() => mark('remembered')} />
+      {!forgotten && <Button pill label="نسيتها" Icon={LightbulbOff} active={done?.did === 'forgot'} onPress={() => mark('forgot')} />}
+    </View>
     {review && <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} />}
   </>;
-  const open = <OpenButton label="افتح صفحة الآية" onPress={() => openAyahPage(markAyah(ayah))} palette={palette} />;
+  const open = <OpenButton label="افتح صفحة الآية" onPress={() => openAyahPage(ayah)} palette={palette} />;
   // A due forgotten ayah's head opens the forgotten list; any other recall question's, the quizzes, as every question's does.
-  const head = review ? { onPress: () => router.push({ pathname: '/library', params: { tab: 'forgotten' } }), label: 'افتح ما نسيته' } : topic('/quizzes', 'افتح الاختبارات');
-  return <Recall key={`${ayah}-${writing}`} ayah={markAyah(ayah)} targetWord={markWord(ayah)} title={title} Icon={Icon} head={head} writing={writing} onWriting={toggleWriting} open={open} marks={marks} revealed={!!done} palette={palette} />;
+  const head = ownHead ?? (forgotten ? { onPress: () => router.push({ pathname: '/library', params: { tab: 'forgotten' } }), label: 'افتح ما نسيته' } : topic('/quizzes', 'افتح الاختبارات'));
+  return <Recall key={`${ayah}-${writing}`} ayah={ayah} gaps={gaps} title={title} Icon={Icon} head={head} writing={writing} onWriting={toggleWriting} open={open} marks={marks} revealed={!!done} palette={palette} />;
 }
 
 /**
@@ -398,11 +416,11 @@ function ForgottenPost({ ayah, review, title = 'هل تذكرها؟', Icon = Lig
  * tap, double tap or long press on the ayah does what it does in recite mode (the reader's gesture settings); the pen writes
  * what the pen setting asks, and it stops at the ayah's end. Drawn afresh for each way of asking (`writing`).
  */
-function Recall({ ayah, targetWord, title, Icon, head, writing, onWriting, open, marks, revealed, palette }: { ayah: string; targetWord?: number; title: string; Icon: IconType; head: { onPress: () => void; label: string }; writing: boolean; onWriting: () => void; open: React.ReactNode; marks: React.ReactNode;
+function Recall({ ayah, gaps, title, Icon, head, writing, onWriting, open, marks, revealed, palette }: { ayah: string; gaps?: readonly number[]; title: string; Icon: IconType; head: { onPress: () => void; label: string }; writing: boolean; onWriting: () => void; open: React.ReactNode; marks: React.ReactNode;
   /** Marked from the card («تذكّرتها», «نسيتها»): the ayah shows whole, as recite mode shows it once done. */
   revealed?: boolean; palette: Palette }) {
   const model = useMemo(() => { const page = pageOfAyah(ayah); return page ? pageModel(pageData(page), surahBefore(page)) : null; }, [ayah]);
-  const [position, setPosition] = useState<RecitePosition>({ start: ayah, ...(targetWord !== undefined ? { gaps: [targetWord] } : {}), shown: null, words: 0 });
+  const [position, setPosition] = useState<RecitePosition>({ start: ayah, ...(gaps?.length ? { gaps: [...gaps] } : {}), shown: null, words: 0 });
   const [pen] = penRule.use();
   const recite = useRecite({ model, position, setPosition, writing, pen, until: ayah });
   const shown = recite.done || !!revealed;
@@ -411,7 +429,7 @@ function Recall({ ayah, targetWord, title, Icon, head, writing, onWriting, open,
     else if (action === 'next-word') recite.nextWord();
     else if (action === 'back') recite.back();
     else if (key !== ayah) return;
-    else if (action === 'forgot') toggleForgotten(targetWord === undefined ? ayah : `${ayah}:${targetWord}`);
+    else if (action === 'forgot') toggleForgotten(gaps?.length ? gaps.map(word => `${ayah}:${word}`) : ayah);
     else if (action === 'save') toggleBookmark({ id: ayahBookmarkId(ayah), text: pageWords(ayah).join(' '), href: ayahHref(ayah) });
   };
   const touches = usePageTouch((gesture, key) => run(readGestures().recite[gesture], key), () => readGestures().recite.double !== 'none');
@@ -420,13 +438,13 @@ function Recall({ ayah, targetWord, title, Icon, head, writing, onWriting, open,
   const [surah, number] = ayah.split(':').map(Number);
   return (
     <Post palette={palette} head={<PostHead Icon={Icon} title={title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} open={head} palette={palette} />} whole
-      bar={<RecitePill recite={recite} writing={writing} onWriting={onWriting} palette={palette} small />}
+      bar={<RecitePill recite={recite} writing={writing} onWriting={onWriting} palette={palette} />}
       open={open} actions={marks} source={mushafOf(ayah)}
       // Shared, the ayah's lines as the mushaf sets them: never what is hidden, nor whether it was remembered (owner, 2026-11-22).
       picture={{ head: <PostHead Icon={FEATURE_ICON.mushaf} title={shortNames[surah] ?? ''} sub={num(number)} palette={palette} />,
         body: <View style={{ padding: 12 }}><AyahLines ayah={ayah} menu={false} palette={palette} write={null} checked={null} shown whole /></View> }}>
       <View style={{ padding: 12 }}>
-        <AyahLines ayah={ayah} menu={false} targetWord={targetWord} palette={palette} shown={shown} words={position.words} checked={recite.checked} onTouch={onTouch} write={recite.write} />
+        <AyahLines ayah={ayah} menu={false} gaps={gaps ? [...gaps] : undefined} palette={palette} shown={shown} words={position.words} checked={recite.checked} onTouch={onTouch} write={recite.write} />
         {recite.write && recite.boxes.field}
       </View>
     </Post>
@@ -1795,7 +1813,7 @@ export function Feed({ palette, nearEnd, screenBottom, only = null, column = nul
   const recall = useMemo(() => (memorized ? recallOfDay(questions ? memorized : { all: true }, day) : undefined), [memorized, questions, day]);
   // The recall card asked this visit stays once the reader ticks it (owner, 2026-11-22), though a rested ayah is no longer
   // due; the next visit asks the next one, and the ayah of the day ticked as remembered is not asked again.
-  const fresh = forgotten ? { ayah: forgotten, review: true } : recall && recalled.get(recall)?.did !== 'remembered' ? { ayah: recall, review: false } : undefined;
+  const fresh = forgotten ? { ayah: forgotten, review: true } : recall && recalled.get(markAyah(recall))?.did !== 'remembered' ? { ayah: recall, review: false } : undefined;
   const [held, setHeld] = useState({ visit, asked: fresh });
   const keep = held.visit === visit && held.asked && !!recalledNow(held.asked.ayah);
   const asked = keep ? held.asked : fresh;
