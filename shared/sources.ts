@@ -544,6 +544,12 @@ export const SOURCES: Source[] = [
     licence: { ar: 'ISC', en: 'ISC' }, uses: [USE.everywhere],
   },
   {
+    id: 'react-native-skia', group: 'code',
+    title: { ar: 'React Native Skia', en: 'React Native Skia' }, author: { ar: 'Shopify', en: 'Shopify' },
+    link: { url: 'https://github.com/Shopify/react-native-skia', label: 'Shopify/react-native-skia' },
+    licence: { ar: 'MIT', en: 'MIT' }, uses: [USE.darkSea],
+  },
+  {
     id: 'font-awesome', group: 'code',
     title: { ar: 'أيقونات Font Awesome المجانية', en: 'Font Awesome Free icons' },
     link: { url: 'https://fontawesome.com/license/free', label: 'fontawesome.com' },

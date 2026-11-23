@@ -81,6 +81,8 @@ export const SEA_ART = {
   gold: '#f0d29e', ink: '#ece4d4', muted: '#9a948a', source: '#7d776e', dotRule: 'rgba(236,228,212,0.3)',
   /** The night it ends in, and the shade behind words over a bright sky. */
   black: '#000', backing: 'rgba(0,0,0,0.45)',
+  /** See-through black and the vignette's edge, for the drawing's gradients. */
+  clear: '#00000000', vignette: '#0000008c',
   /** The card's still (components/scenes/SeaThumb): the stormy night. */
   thumb: { sky: ['#05080b', '#14222c', '#1f3644', '#03070a'], haze: '#7fa3b5', cloud: ['#0a0e11', '#2b3a43'], mist: '#33454f',
     wave: ['#0e1b23', '#081218'], edge: ['#9fbccb', '#6d8a99'], badge: 'rgba(0,0,0,0.75)', badgeInk: '#fff' },
