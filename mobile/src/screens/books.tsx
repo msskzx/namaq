@@ -1,5 +1,6 @@
 import { useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
-import { ScrollView, useWindowDimensions, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
+import { usePageWidth } from '@/ui/column';
 import { router } from 'expo-router';
 import { Check, Download, Eye, EyeOff, Pencil, RotateCw, Trash2 } from 'lucide-react-native';
 import { BOOK_KINDS, BOOKS, type Book } from '@shared/books';
@@ -115,7 +116,7 @@ export function Shelf({ palette, label, onPress, kind, title, by, foot = null, a
   kind: string; title: string; by: string; foot?: Foot; action?: React.ReactNode; faded?: boolean; width?: number }) {
   // Two to a row, a little taller than wide like a book (owner, 2026-11-18), and taller still when a long title or author
   // needs the room (the row's other card grows with it).
-  const shelf = (useWindowDimensions().width - 32 - 12) / 2;
+  const shelf = (usePageWidth() - 32 - 12) / 2;
   const side = width ?? shelf;
   // A card that opens is one link. One that does not (editing, or a book to download) is a plain view, so a screen reader
   // reaches its button: a pressable card would read as one element with the button folded inside it.

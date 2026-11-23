@@ -1,5 +1,6 @@
 import { Platform } from 'react-native';
 import { usePalette } from './theme';
+import { useColumnSide } from '@/ui/column';
 
 /**
  * Every page stack (the root one and the home and Quran stacks inside the tabs) slides the same way.
@@ -8,9 +9,11 @@ import { usePalette } from './theme';
  * Only the edge starts it, never the middle of a page, so the trees, compare cards, story maps and mushaf pages keep their own sideways swipes.
  * Android keeps its system back.
  */
-export function useStackOptions() {
+export function useStackOptions(column?: number) {
   const palette = usePalette();
-  return { headerShown: false, contentStyle: { backgroundColor: palette.paper }, gestureEnabled: true, fullScreenGestureEnabled: false } as const;
+  // On a tablet each page sits in the centred column (ui/column.ts); a phone's screen is narrower, so it has no sides.
+  const side = useColumnSide(column);
+  return { headerShown: false, contentStyle: { backgroundColor: palette.paper, paddingHorizontal: side }, gestureEnabled: true, fullScreenGestureEnabled: false } as const;
 }
 
 /**

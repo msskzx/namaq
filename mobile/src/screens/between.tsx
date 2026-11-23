@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { ScrollView, useWindowDimensions, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
+import { usePageWidth } from '@/ui/column';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Plus } from 'lucide-react-native';
 import { chainSentence, joining } from '@shared/tarajimGraph';
@@ -27,7 +28,7 @@ import TiesChain from '@/components/TiesChain';
 export default function BetweenScreen() {
   const palette = usePalette();
   const bottom = useTabBarSpace();
-  const { width } = useWindowDimensions();
+  const width = usePageWidth();
   const { slugs = '' } = useLocalSearchParams<{ slugs?: string }>();
   const [picked, setPicked] = useState(() => slugs.split(',').filter(s => findPerson(s)));
   const [adding, setAdding] = useState(picked.length < 2);

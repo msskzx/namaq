@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { ScrollView, useWindowDimensions, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
+import { usePageWidth } from '@/ui/column';
 import { router, useLocalSearchParams } from 'expo-router';
 import type { Tie } from '@shared/tarajimGraph';
 import { Text } from '@/ui/Text';
@@ -26,7 +27,7 @@ import TiesRing, { TieSheet, tiesOf } from '@/components/TiesRing';
 export default function TiesScreen() {
   const palette = usePalette();
   const bottom = useTabBarSpace();
-  const { width } = useWindowDimensions();
+  const width = usePageWidth();
   const { slug = '' } = useLocalSearchParams<{ slug?: string }>();
   const [trail, setTrail] = useState<string[]>(() => (findPerson(slug) ? [slug] : []));
   const [shown, setShown] = useState<Tie | undefined>();
