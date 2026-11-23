@@ -4,7 +4,7 @@ import type { AppBattle, AppCite, AppCited, AppMoment, AppPersonLink } from '@sh
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import Chip from '@/ui/Chip';
-import ExternalLink from '@/ui/ExternalLink';
+import { LeadLink } from '@/ui/ExternalLink';
 import Reference from '@/ui/Reference';
 import SplitBar from '@/ui/SplitBar';
 import Step from '@/ui/Step';
@@ -105,9 +105,8 @@ export function Moment({ moment, n, palette, plain }: { moment: AppMoment; n: nu
       <Text style={{ color: palette.ink, fontSize: 18, fontWeight: '700', textAlign: 'right' }}>{moment.title}</Text>
       {moment.isnad ? <Text style={{ color: palette.muted, fontSize: 14, lineHeight: 24, textAlign: 'right' }}>{moment.isnad}</Text> : null}
       <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>{moment.quote}</Text>
-      <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>
-        {moment.grading}{plain ? null : <> · <ExternalLink url={moment.url} color={palette.muted} size={13}>{moment.cite}</ExternalLink></>}
-      </Text>
+      {plain ? <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{moment.grading}</Text>
+        : <LeadLink lead={`${moment.grading} ·`} url={moment.url} color={palette.muted}>{moment.cite}</LeadLink>}
       {moment.people.length ? <People people={moment.people} palette={palette} /> : null}
     </Step>
   );

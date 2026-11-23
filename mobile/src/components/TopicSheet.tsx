@@ -43,7 +43,7 @@ export default function TopicSheet({ open, onClose, onJump, palette }: { open: T
           {aim && (
             <View style={{ paddingBottom: 10, marginBottom: 6, borderBottomWidth: 1, borderBottomColor: palette.rule, gap: 2 }}>
               <Text selectable style={{ fontSize: 17, lineHeight: 30, textAlign: 'right', color: palette.ink }}>{aim.text}</Text>
-              <ExternalLink url={citeUrl(aim.src)} color={palette.muted} style={{ textAlign: 'right', fontSize: 13 }}>{citeLabel(aim.src, num)}</ExternalLink>
+              <ExternalLink url={citeUrl(aim.src)} color={palette.muted} size={13} style={{ textAlign: 'right', fontSize: 13 }}>{citeLabel(aim.src, num)}</ExternalLink>
             </View>
           )}
           {rows(topics.sections, 0, '')}
