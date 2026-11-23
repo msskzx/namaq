@@ -1,9 +1,9 @@
-import { useMemo, useRef, useState, type ComponentRef } from 'react';
+import { useDeferredValue, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { ChevronDown, ChevronUp, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
-import { CONDITION_NOTES, CONDITION_SOURCES, CONDITION_SPANS, ITQAN_KIND_NOTES, ITQAN_QUOTES, OPENING_KINDS, conditionLines, inKind, soleCard, openingCards, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
+import { CONDITION_NOTES, CONDITION_SOURCES, CONDITION_SPANS, ITQAN_KIND_NOTES, ITQAN_QUOTES, OPENING_KINDS, conditionLines, inKind, openingFound, soleCard, openingCards, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
 import { Text } from '@/ui/Text';
 import SourceLine from '@/ui/SourceLine';
 import Reference from '@/ui/Reference';
@@ -20,6 +20,7 @@ import IconButton from '@/ui/IconButton';
 import Card, { CardWithRow } from '@/ui/Card';
 import { Tap } from '@/ui/Tap';
 import Chip from '@/ui/Chip';
+import Empty from '@/ui/Empty';
 
 const words = (key: string) => ayahOf(key)?.words ?? [];
 
@@ -105,6 +106,10 @@ export default function OpeningsScreen() {
   const [kind, setKind] = useState<OpeningKindId | null>(null);
   useTabRetap('openings', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   const cards = useMemo(() => openingCards(ayahOf), []);
+  const [query, setQuery] = useState('');
+  const typed = useDeferredValue(query.trim());
+  const shown = (k: OpeningKindId) => cards.filter(card => (kind ? inKind(card, k) : card.kind === k) && openingFound(card, typed, surah => surahNames[surah]));
+  const kinds = OPENING_KINDS.filter(k => (!kind || k.id === kind) && shown(k.id).length > 0);
   // Opened at a card (`at`, its id: the home feed's card): scrolled to it once its kind's block and the card are placed.
   const { at } = useLocalSearchParams<{ at?: string }>();
   const atKind = cards.find(card => card.id === at)?.kind;
@@ -118,7 +123,7 @@ export default function OpeningsScreen() {
   };
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar hub hideOnScroll />
+      <TopBar hub hideOnScroll search={{ value: query, onChangeText: setQuery, placeholder: 'اسم سورة أو كلمة من فاتحتها', label: 'ابحث في فواتح السور' }} />
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0, flexShrink: 0 }} contentContainerStyle={{ gap: 8, paddingHorizontal: 16, paddingVertical: 8, alignItems: 'center', flexDirection: 'row' }}>
         {OPENING_KINDS.map(k => {
           const on = kind === k.id;
@@ -128,7 +133,8 @@ export default function OpeningsScreen() {
         })}
       </ScrollView>
       <ScrollView ref={scroll} onScroll={shrink} scrollEventThrottle={16} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: bottom }}>
-        {OPENING_KINDS.filter(k => !kind || k.id === kind).map(k => {
+        {!kinds.length && <Empty text="لا سورة بهذا الاسم ولا فاتحة فيها هذه الكلمة" palette={palette} />}
+        {kinds.map(k => {
           const quote = ITQAN_QUOTES.find(q => q.kind === k.id)!;
           const sole = cards.find(card => card.kind === k.id && soleCard(card));
           return (
@@ -137,7 +143,7 @@ export default function OpeningsScreen() {
                 <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 22, fontWeight: '700', textAlign: 'right' }}>{k.label}</Text>
                 <SourceLine palette={palette} sources={[{ line: quote.cite, quotes: [quote, ...(ITQAN_KIND_NOTES[k.id] ?? [])] }, ...(sole?.refs ? [{ line: sole.refs[0].cite!, quotes: sole.refs }] : [])]} />
               </View>
-              {cards.filter(card => (kind ? inKind(card, k.id) : card.kind === k.id)).map(card => <Opening key={card.id} card={card} palette={palette} onLayout={card.id === at && !kind ? y => placed('card', y) : undefined} />)}
+              {shown(k.id).map(card => <Opening key={card.id} card={card} palette={palette} onLayout={card.id === at && !kind ? y => placed('card', y) : undefined} />)}
             </View>
           );
         })}

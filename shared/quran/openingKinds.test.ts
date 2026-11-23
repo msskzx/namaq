@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import corpus from './quranText/corpus';
+import { SURAH_NAMES } from './surahNames';
 import type { BranchAyah } from './branches';
-import { ITQAN_KIND_NOTES, ITQAN_QUOTES, OPENING_CARDS, OPENING_KINDS, conditionLines, inKind, kindOf, soleCard, openingCards, openingKeys, openingLike, type OpeningRow } from './openingKinds';
+import { ITQAN_KIND_NOTES, ITQAN_QUOTES, OPENING_CARDS, OPENING_KINDS, conditionLines, inKind, kindOf, openingFound, soleCard, openingCards, openingKeys, openingLike, type OpeningRow } from './openingKinds';
 
 const byKey = new Map((corpus as unknown as { ayat: BranchAyah[] }).ayat.map(ayah => [ayah.key, ayah]));
 const words = (key: string) => byKey.get(key)?.words ?? [];
@@ -76,6 +77,26 @@ describe('opening kinds', () => {
     for (const card of cards) for (const r of card.rows) expect(r.words.at(-1)).toHaveProperty('end');
     const short = row('alif-lam-mim', 2);
     expect(short.words.filter(w => 'end' in w).map(w => ('end' in w ? w.end : 0))).toEqual([1, 2]);
+  });
+
+  it('finds a card by a surah name or a word of its opening, typed as people type it', () => {
+    const nameOf = (surah: number) => SURAH_NAMES[surah];
+    /** The surahs of the cards a search keeps. */
+    const found = (query: string) => cards.filter(card => openingFound(card, query, nameOf)).flatMap(card => card.rows.map(r => r.surah));
+    expect(found('البقرة')).toContain(2);
+    expect(found('الكتاب')).toEqual(expect.arrayContaining([2, 18, 32]));
+    // The mushaf's own spellings: the hamza alone (القرءان), ىٰ (أتىٰك), ۦ (إۦلٰفهم).
+    expect(found('القرآن')).toEqual(expect.arrayContaining([15, 36, 38, 50]));
+    expect(found('هل أتاك')).toContain(88);
+    expect(found('إيلافهم')).toContain(106);
+    // A short name or letters only as a whole word: يس is not the start of يسبح.
+    expect(found('يس')).not.toContain(57);
+    expect(found('يس')).toContain(36);
+    expect(found('الم')).not.toContain(18);
+    // Not a word with the same letters but one: الفيل is not الفلق.
+    expect(found('الفيل')).not.toContain(113);
+    expect(found('سيارة')).toEqual([]);
+    expect(found('  ').length).toBe(cards.flatMap(card => card.rows).length);
   });
 
   it('finds the surahs whose opening is like a surah\'s, and none for one that stands alone', () => {
