@@ -55,14 +55,15 @@ export function SahihChain({ book, route, palette }: { book: SahihIndex; route: 
 /** One printed text: its chain drawn and its words under it, or the whole text with the chain in muted ink; its page folded. */
 export function SahihRouteView({ book, n, route, mode, palette, big }: { book: SahihIndex; n: number; route: SahihRoute; mode: DrawMode; palette: Palette; big?: boolean }) {
   const { chain, words } = splitRoute(route);
+  const place = `${sahihName(book, n, num, route.route)}، ج ${num(route.volume)}، ${pagesName(route.pages)}`;
   return (
     <View style={{ gap: 10 }}>
       {mode === 'drawing' && route.chain
         ? <><SahihChain book={book} route={route} palette={palette} /><Text style={body(palette, big)}>{words}</Text></>
         : <Text style={body(palette, big)}><Text style={{ color: palette.muted }}>{chain}</Text>{words}</Text>}
       {/* In a card with a row, the book joins its line and the page (linked to al-Shamela) its sheet (owner 2026-11-20). */}
-      <Reference title={book.title} palette={palette}
-        quotes={[{ text: '', cite: `${sahihName(book, n, num, route.route)}، ج ${num(route.volume)}، ${pagesName(route.pages)}`, url: sahihPage(book, route.shamela) }, { text: `${book.title}، ${book.edition}` }]} />
+      <Reference title={book.title} palette={palette} places={[place]} editions={[book.edition]}
+        quotes={[{ text: '', cite: place, url: sahihPage(book, route.shamela) }, { text: `${book.title}، ${book.edition}` }]} />
     </View>
   );
 }

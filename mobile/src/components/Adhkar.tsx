@@ -2,10 +2,10 @@ import { useEffect, useReducer, useRef, useState } from 'react';
 import { AppState, View } from 'react-native';
 import { Bell, BellOff, Check, RotateCcw } from 'lucide-react-native';
 import { ADHKAR_OCCASIONS, adhkarFor, type AdhkarOccasion, type Dhikr } from '@shared/adhkar';
-import { ADHKAR_LABELS, ADHKAR_TABS, adhkarQuotes, adhkarTitle } from '@shared/adhkarCite';
+import { ADHKAR_LABELS, ADHKAR_TABS, ADHKAR_TITLES, adhkarSource } from '@shared/adhkarCite';
 import { num } from '@shared/quran/arabicNumber';
 import type { AdhkarTime } from '@shared/adhanAlerts';
-import { CardWithRow } from '@/ui/Card';
+import { SharedCard, ShareHead } from '@/ui/CardShare';
 import Tabs from '@/ui/Tabs';
 import Button from '@/ui/Button';
 import IconButton from '@/ui/IconButton';
@@ -111,7 +111,8 @@ export default function Adhkar({ palette, on, onPlace, scrollTo }: { palette: Pa
         // The counter is the card's own tool, first in the row under it; the book on the line (owner 2026-11-20).
         return (
           <View key={item.id} onLayout={event => laid(item.id, event.nativeEvent.layout)}>
-            <CardWithRow palette={palette} pad={18} gap={14} source={[{ line: adhkarTitle(item), quotes: adhkarQuotes(item) }]}
+            <SharedCard palette={palette} pad={18} gap={14} source={[adhkarSource(item)]} shareLabel="شارك الذكر"
+              shareHead={<ShareHead title={`من أذكار ${ADHKAR_TITLES[occasion]}`} palette={palette} />}
               lead={item.repeat && <>
                 <IconButton round Icon={Check} render={({ size, color }) => <Check size={size} color={color} strokeWidth={2.5} />} label={`عُدَّ مرة، ${num(counted)} من ${num(item.repeat.count)}`}
                   disabled={counted >= item.repeat.count}
@@ -125,7 +126,7 @@ export default function Adhkar({ palette, on, onPlace, scrollTo }: { palette: Pa
                 ? <Text style={{ color: palette.ink, fontSize: 21, lineHeight: 40, textAlign: 'justify' }}>{item.content.text}</Text>
                 : <QuranPage item={item} palette={palette} />}
               {item.virtueQuote && <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>«{item.virtueQuote}»</Text>}
-            </CardWithRow>
+            </SharedCard>
           </View>
         );
       })}

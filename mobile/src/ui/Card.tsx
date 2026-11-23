@@ -89,7 +89,7 @@ export function CardWithRow({ lead, row, menu, cap = false, source, sourceLine, 
   const named = own.length ? own : inner;
   // Drawn inside another card (a page's section in a quiz's look-up, a feed post): no second card and no second row; its
   // buttons join that card's row and its books that card's line, or show as collapsed references where it has none.
-  if (inside) return <>{children}<UnderCard>{lead}{row}</UnderCard>{own.map(given => <Reference key={given.line} title={given.line} quotes={given.quotes} links={given.links} palette={palette} />)}</>;
+  if (inside) return <>{children}<UnderCard>{lead}{row}</UnderCard>{own.map(given => <Reference key={given.line} title={given.line} quotes={given.quotes} links={given.links} places={given.places} editions={given.editions} palette={palette} />)}</>;
   const sources = own.length + inner.length > 0 && (sourceLine ? sourceLine(named, [...own, ...inner]) : <SourceLine named={named} sources={[...own, ...inner]} palette={palette} />);
   // One block, so a page's gaps part its sections, not a card from its own row and line.
   return (
@@ -138,7 +138,10 @@ function keyed<T>(now: [string, T][], id: string, value: T | null): [string, T][
  * and dims while pressed; without it, it is a plain box, so a screen reader reaches the buttons inside it.
  * `style` is for the card's place only (width, height, flex, alignment), never for its look.
  */
-export default function Card({ palette, pad = 14, gap, spine = false, picked = false, dashed = false, outline, faded = false, clip = false, node = false, style, children, testID,
+/** A card's room inside its frame, unless it says otherwise. */
+export const CARD_PAD = 14;
+
+export default function Card({ palette, pad = CARD_PAD, gap, spine = false, picked = false, dashed = false, outline, faded = false, clip = false, node = false, style, children, testID,
   onPress, onLongPress, onLayout, ref, accessibilityRole, accessibilityLabel, accessibilityState }: {
   palette: Palette;
   /** Room inside the card: 14, 0 for content that runs to its edges (a mushaf slice, a list of rows), or [top and bottom, sides] for rows of text. */

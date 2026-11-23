@@ -81,12 +81,18 @@ export const MUSHAF_LINE = 'المصحف';
  * ayat instead («المصحف · الإخلاص ٣»). Opened, each place cited in it: the book's words with the place, linked where the
  * book is online, who says them on the line before them.
  */
-export function referenceGroups(sources: QuizSource[]): { title: string; lines: ReferenceLine[] }[] {
+export function referenceGroups(sources: QuizSource[]): { title: string; lines: ReferenceLine[]; places: string[]; editions: string[] }[] {
   const groups = new Map<string, ReferenceLine[]>();
+  // Where in each book, each place once, and its printings: what a share picture writes out under the book (it cannot be opened).
+  const placesOf = new Map<string, string[]>();
   const mushaf = sources.filter(source => source.book === MUSHAF_BOOK);
   if (mushaf.length) {
     const places = [...new Set(mushaf.flatMap(source => (source.at ? [source.at.split('، ص ')[0]] : [])))].join('، ');
-    groups.set(places ? `${MUSHAF_LINE} · ${places}` : MUSHAF_LINE, [{ text: MUSHAF_BOOK }, ...mushaf.flatMap(source => (source.at ? [{ text: source.at }] : []))]);
+    const title = places ? `${MUSHAF_LINE} · ${places}` : MUSHAF_LINE;
+    groups.set(title, [{ text: MUSHAF_BOOK }, ...mushaf.flatMap(source => (source.at ? [{ text: source.at }] : []))]);
+    // The ayat are on its line already; written out, it names its printing and pages.
+    const pages = [...new Set(mushaf.flatMap(source => (source.at?.includes('، ص ') ? [`ص ${source.at.split('، ص ')[1]}`] : [])))];
+    placesOf.set(title, [MUSHAF_BOOK, ...pages]);
   }
   const editions = new Map<string, string[]>();
   for (const source of sources) {
@@ -94,6 +100,9 @@ export function referenceGroups(sources: QuizSource[]): { title: string; lines: 
     const title = source.author ? `${source.book} · ${source.author}` : source.book;
     const at = source.at ?? '';
     const lines = groups.get(title) ?? [];
+    const cited = placesOf.get(title) ?? [];
+    if (at && !cited.includes(at)) cited.push(at);
+    placesOf.set(title, cited);
     // Who says it before his words (owner 2026-11-20), as the hadith and the sira put the speaker first.
     if (source.by) lines.push({ text: source.by });
     if (source.url) lines.push({ text: source.quote ?? '', cite: at, url: source.url });
@@ -102,11 +111,18 @@ export function referenceGroups(sources: QuizSource[]): { title: string; lines: 
     const printed = editions.get(title) ?? [];
     if (source.edition && !printed.includes(source.edition)) editions.set(title, [...printed, source.edition]);
   }
-  return [...groups].map(([title, lines]) => ({ title, lines: [...lines, ...(editions.get(title) ?? []).map((text): ReferenceLine => ({ text }))].filter(line => line.text || line.url) }));
+  return [...groups].map(([title, lines]) => ({
+    title, places: placesOf.get(title) ?? [], editions: editions.get(title) ?? [],
+    lines: [...lines, ...(editions.get(title) ?? []).map((text): ReferenceLine => ({ text }))].filter(line => line.text || line.url),
+  }));
 }
 
 /** A book named on a card's source line and what its sheet opens to (the app's ui/sourceSlot.ts and the website's common/sourceSlot.ts `Source`). */
-export type SourceEntry = { line: string; quotes: ReferenceLine[]; links?: { label: string; url: string }[] };
+export type SourceEntry = { line: string; quotes: ReferenceLine[]; links?: { label: string; url: string }[];
+  /** Where in the book (a volume and page, a hadith's number), each once; a share picture writes them out under the book. */
+  places?: string[];
+  /** The printings cited, written under its places in a share picture. */
+  editions?: string[] };
 
 /**
  * A card's books, each once (owner 2026-11-20: a section that quotes a book in several places names it once on its line):
@@ -116,7 +132,13 @@ export function mergeSources<T extends SourceEntry>(sources: T[]): SourceEntry[]
   const books = new Map<string, SourceEntry>();
   for (const source of sources) {
     const was = books.get(source.line);
-    if (!was) { books.set(source.line, { line: source.line, quotes: [...source.quotes], ...(source.links && { links: [...source.links] }) }); continue; }
+    if (!was) {
+      books.set(source.line, { line: source.line, quotes: [...source.quotes], ...(source.links && { links: [...source.links] }),
+        ...(source.places && { places: [...source.places] }), ...(source.editions && { editions: [...source.editions] }) });
+      continue;
+    }
+    for (const place of source.places ?? []) if (!was.places?.includes(place)) was.places = [...(was.places ?? []), place];
+    for (const edition of source.editions ?? []) if (!was.editions?.includes(edition)) was.editions = [...(was.editions ?? []), edition];
     for (const quote of source.quotes)
       if (!was.quotes.some(other => other.text === quote.text && other.cite === quote.cite && other.url === quote.url)) was.quotes.push(quote);
     for (const link of source.links ?? [])
@@ -126,4 +148,7 @@ export function mergeSources<T extends SourceEntry>(sources: T[]): SourceEntry[]
 }
 
 /** A card's books as source-line entries, one for each book (referenceGroups): what the line names and its sheet opens to. */
-export const sourceEntries = (sources: QuizSource[]): SourceEntry[] => referenceGroups(sources).map(group => ({ line: group.title, quotes: group.lines }));
+export const sourceEntries = (sources: QuizSource[]): SourceEntry[] => referenceGroups(sources).map(group => ({
+  line: group.title, quotes: group.lines,
+  ...(group.places.length && { places: group.places }), ...(group.editions.length && { editions: group.editions }),
+}));

@@ -3,7 +3,7 @@ import { ScrollView, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
-import { CardWithRow } from '@/ui/Card';
+import { SharedCard, ShareHead } from '@/ui/CardShare';
 import { sourcesOf } from '@/ui/SourceLine';
 import { citeSource, uniqueSources } from '@shared/quiz/sources';
 import { Section } from '@/components/QuizForm';
@@ -29,10 +29,13 @@ function Title({ children, palette }: { children: string; palette: Palette }) {
  */
 export function BattleView({ battle, palette }: { battle: AppBattle; palette: Palette }) {
   const heading = [battle.kind, battle.year, battle.location].flatMap(value => value?.refs ?? []);
+  // Each card shares as a picture under the battle's name (release 1: every page shares).
+  const head = <ShareHead title={battle.name} palette={palette} />;
+  const share = { shareHead: head };
   const moments = sourcesOf(uniqueSources(battle.moments.map(moment => citeSource({ text: '', cite: moment.cite, url: moment.url }))));
   return <>
     <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>{battle.name}</Text>
-    <CardWithRow palette={palette} pad={0} clip gap={0}>
+    <SharedCard palette={palette} pad={0} clip gap={0} {...share} shareLabel={`شارك ${battle.name}`}>
       {battle.place ? <BattleMap places={[battle.place]} palette={palette} /> : null}
       <View style={{ padding: 14, gap: 6 }}>
         <Text style={{ color: palette.ink, fontSize: 17, textAlign: 'right' }}>{battleLine(battle)}</Text>
@@ -41,16 +44,16 @@ export function BattleView({ battle, palette }: { battle: AppBattle; palette: Pa
         <Refs refs={heading} palette={palette} />
         <Readings values={[battle.kind, battle.year, battle.location]} palette={palette} />
       </View>
-    </CardWithRow>
-    {Object.values(battle.counts).some(Boolean) ? <CardWithRow palette={palette} gap={10}><Title palette={palette}>العدد</Title><Counts battle={battle} palette={palette} /></CardWithRow> : null}
+    </SharedCard>
+    {Object.values(battle.counts).some(Boolean) ? <SharedCard palette={palette} gap={10} {...share} shareLabel="شارك العدد"><Title palette={palette}>العدد</Title><Counts battle={battle} palette={palette} /></SharedCard> : null}
     {battle.moments.length ? (
-      <CardWithRow palette={palette} gap={10} source={moments}>
+      <SharedCard palette={palette} gap={10} source={moments} {...share} shareLabel={`شارك ${courseTitle(battle.kind?.value)}`}>
         <Title palette={palette}>{courseTitle(battle.kind?.value)}</Title>
         {battle.moments.map((moment, i) => <Moment key={moment.title} moment={moment} n={i + 1} palette={palette} plain />)}
-      </CardWithRow>
+      </SharedCard>
     ) : null}
-    {battle.martyrs.length ? <Section title="من استشهد يومئذ" palette={palette}><People people={battle.martyrs} palette={palette} /></Section> : null}
-    {battle.present.length ? <Section title="ممن شهدها" palette={palette}><People people={battle.present} palette={palette} /></Section> : null}
+    {battle.martyrs.length ? <Section title="من استشهد يومئذ" palette={palette} share={{ head }}><People people={battle.martyrs} palette={palette} /></Section> : null}
+    {battle.present.length ? <Section title="ممن شهدها" palette={palette} share={{ head }}><People people={battle.present} palette={palette} /></Section> : null}
   </>;
 }
 
