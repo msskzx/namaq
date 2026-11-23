@@ -100,11 +100,12 @@ function VirtuesLook({ slugs, mark, palette }: { slugs: string[]; mark?: { slug:
         {people.map(p => <Chip key={p.slug} label={personName(p)} on={p.slug === person.slug} palette={palette} onPress={() => setAt(p.slug)}
           Icon={p.slug === mark?.slug ? Check : undefined} accessibilityLabel={p.slug === mark?.slug ? `${personName(p)}، الجواب` : undefined} />)}
       </View>
-      <Card palette={palette} gap={10}>
-        <Text style={{ color: palette.accent, fontSize: 15, textAlign: 'right' }}>{person.sex === 'FEMALE' ? 'مناقبها' : 'مناقبه'}</Text>
+      {/* The virtues reach the card's edges (the Prophet's ﷺ band), as on his page. */}
+      <Card palette={palette} pad={0} clip>
+        <Text style={{ color: palette.accent, fontSize: 15, textAlign: 'right', paddingHorizontal: 16, paddingTop: 14 }}>{person.sex === 'FEMALE' ? 'مناقبها' : 'مناقبه'}</Text>
         {person.virtues.length
           ? <Virtues person={person} palette={palette} marked={mark?.slug === person.slug ? mark.index : undefined} />
-          : <Empty text="لم تُنقل له مناقب بعد." palette={palette} />}
+          : <View style={{ padding: 16 }}><Empty text="لم تُنقل له مناقب بعد." palette={palette} /></View>}
       </Card>
     </View>
   );

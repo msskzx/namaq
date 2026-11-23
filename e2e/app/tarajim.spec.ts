@@ -140,3 +140,19 @@ test('a long life on the person page opens folded, and its fold opens the rest',
   await page.getByRole('button', { name: 'اطوِ', exact: true }).click();
   await expect(page.getByRole('link', { name: 'غزوة تبوك', exact: true })).toHaveCount(0);
 });
+
+// «مناقبه» and «صفته» (owner, 2026-11-23, sketch tarajim-feed-card/sketch/traits-dark.png): the Prophet's ﷺ words first, each
+// with its own page that opens the book there; his looks as the book's words, the sayer the book names under each, and no
+// name under a word only an unnamed «وقيل» gives.
+test('his virtues put the Prophet\'s ﷺ words first with their pages, his looks as the book\'s words', async ({ page }) => {
+  await open(page, '/person?slug=abu-bakr-as-siddiq');
+  const saying = page.getByText(/ولو كنت متخذا خليلا/).first();
+  await saying.scrollIntoViewIfNeeded();
+  await expect(page.getByText('قال النبي ﷺ:').first()).toBeVisible();
+  await page.getByRole('button', { name: 'المصدر: سيرة الخلفاء الراشدين ١٢' }).first().click();
+  await expect(page.getByText(/^«ويأب. الله والمؤمنون إلا أبا بكر»$/)).toBeVisible();
+  await page.keyboard.press('Escape');
+  // Al-Zuhri names «مسترق الوركين»; «نحيف» is the unnamed sentence's only.
+  await expect(page.getByLabel('مسترق الوركين، عند الزهري', { exact: true })).toBeVisible();
+  await expect(page.getByLabel('نحيف', { exact: true })).toBeVisible();
+});

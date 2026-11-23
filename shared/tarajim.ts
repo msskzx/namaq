@@ -154,6 +154,9 @@ export function virtueGroups(facts: readonly PersonFact[]) {
  * written, a kunya in any case («أبو بكر», «أبا بكر», «أبي بكر»), short vowels in the text or not. Returns the text in
  * pieces, `name` true for his.
  */
+/** A book's words with no vowel marks or tatweel, for finding words in them whatever their vowelling. */
+export const unmarked = (text: string) => text.replace(/[\u064B-\u0652\u0670\u0640]/gu, '');
+
 export function namePieces(text: string, names: readonly string[]): { text: string; name: boolean }[] {
   const marks = '[\\u064B-\\u0652\\u0670]*';
   const bare = (name: string) => name.replace(/[\u064B-\u0652\u0670]/gu, '').trim();
