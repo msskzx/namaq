@@ -143,3 +143,17 @@ test.describe('«أين يلتقي نسبه ﷺ بنسب الخلفاء الأر
     await expect(page).toHaveURL(/\/nasab\?slug=prophet-muhammad(,|%2C)abu-bakr-as-siddiq/);
   });
 });
+
+// «من التراجم» (owner, 2026-11-23, sketch tarajim-feed-card design أ): the person in brief, every reading and saying with
+// who gives it in words, so a reader new to the books knows whose it is.
+test.describe('«من التراجم»', () => {
+  test.use({ seed: saved('tarajim', 'abu-bakrah-al-thaqafi-0') });
+  test('gives his name, his death with who gives each reading, and his virtue with its sayer', async ({ page }) => {
+    await open(page, '/library');
+    await expect(page.getByText('عند خليفة بن خياط', { exact: true })).toBeVisible();
+    await expect(page.getByText('عند ابن سعد', { exact: true })).toBeVisible();
+    await expect(page.getByText('قال الذهبي:', { exact: true })).toBeVisible();
+    await page.getByRole('button', { name: 'افتح ترجمة أبو بكرة الثقفي' }).click();
+    await expect(page).toHaveURL(/\/person\?slug=abu-bakrah-al-thaqafi/);
+  });
+});
