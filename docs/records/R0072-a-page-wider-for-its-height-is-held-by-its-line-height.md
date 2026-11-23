@@ -11,7 +11,7 @@ conditions: "Expo app, KFGQPC Hafs v18 font, iPad standing and lying down (two-p
 evidence: "mobile/src/components/MushafPageView.tsx (TEXT_HEIGHT, block)"
 implication: "A size fitted to the width needs a cap from the height that leaves the font's marks room: the Hafs marks need the line about twice the font size. A wider screen reaches the cap; narrow the text block rather than spreading the words."
 date: "2026-11-23"
-topics: ["mobile", "quran"]
+topics: ["mobile"]
 buildsOn: []
 ---
 
