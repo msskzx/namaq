@@ -1,9 +1,9 @@
 import { useDeferredValue, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { ChevronDown, ChevronUp, Send } from 'lucide-react-native';
+import { Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
-import { CONDITION_NOTES, CONDITION_SOURCES, CONDITION_SPANS, ITQAN_KIND_NOTES, ITQAN_QUOTES, OPENING_KINDS, conditionLines, inKind, openingFound, soleCard, openingCards, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
+import { CONDITION_NOTES, CONDITION_SPANS, ITQAN_KIND_NOTES, ITQAN_QUOTES, OPENING_KINDS, conditionLines, inKind, openingFound, soleCard, openingCards, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
 import { Text } from '@/ui/Text';
 import SourceLine from '@/ui/SourceLine';
 import Reference from '@/ui/Reference';
@@ -21,6 +21,7 @@ import Card, { CardWithRow } from '@/ui/Card';
 import { Tap } from '@/ui/Tap';
 import Chip from '@/ui/Chip';
 import Empty from '@/ui/Empty';
+import Folded from '@/ui/Folded';
 
 const words = (key: string) => ayahOf(key)?.words ?? [];
 
@@ -41,38 +42,47 @@ function Ayah({ words: list, menu, palette, light }: { words: OpeningWord[]; men
   );
 }
 
-function Conditions({ surah, palette }: { surah: number; palette: Palette }) {
+/** The rest of a surah's conditions after its opening, the answer marked, and what the mufassirun say of the answer with its source. */
+function Conditions({ surah, after, palette }: { surah: number; after: number; palette: Palette }) {
+  const note = CONDITION_NOTES[surah];
   return (
     <View style={{ gap: 4, paddingTop: 4 }}>
-      {conditionLines(surah).map(line => (
-        <View key={line.key} style={{ borderRightWidth: 2, borderStyle: line.role === 'disputed' ? 'dashed' : 'solid', borderColor: line.role === 'answer' ? palette.green : line.role === 'disputed' ? palette.muted : palette.rule, paddingRight: 8 }}>
-          {line.role !== 'condition' && <Text style={{ color: palette.muted, fontSize: 12, textAlign: 'right' }}>{line.role === 'answer' ? 'الجواب' : 'موضع الخلاف في الجواب'}</Text>}
+      {conditionLines(surah).filter(line => Number(line.key.split(':')[1]) > after).map(line => (
+        <View key={line.key} style={{ borderRightWidth: 2, borderColor: line.role === 'answer' ? palette.green : palette.rule, paddingRight: 8 }}>
+          {line.role === 'answer' && <Text style={{ color: palette.muted, fontSize: 12, textAlign: 'right' }}>الجواب</Text>}
           <Ayah palette={palette} menu={line.key} words={[...words(line.key).map(text => ({ text })), { end: Number(line.key.split(':')[1]) }]} />
         </View>
       ))}
+      <Text style={{ color: palette.muted, fontSize: 13, lineHeight: 21, textAlign: 'right', paddingTop: 4 }}>{note.text}</Text>
+      <Reference title={note.source.title} quotes={[]} links={[{ label: note.source.title, url: note.source.url }]} palette={palette} />
     </View>
   );
 }
 
 /** A card's surahs, each its name (opening the mushaf there) over its opening ayah: the page's card and its feed card. */
-export function OpeningRows({ card, palette, open, still }: { card: OpeningCard; palette: Palette; open?: boolean; still?: boolean }) {
+export function OpeningRows({ card, palette, still, conditions }: { card: OpeningCard; palette: Palette; still?: boolean;
+  /** The page's card: a surah of «إذا السماء» folds out its conditions (the feed card and the share image leave them out). */
+  conditions?: boolean }) {
   const [lit, setLit] = useState<string | null>(null);
   const light = still ? undefined : { lit, onWord: (link: string) => setLit(now => (now === link ? null : link)) };
   return <>
-    {card.rows.map((row, r) => (
-      <View key={row.surah} style={{ paddingVertical: 6, borderTopWidth: r ? 1 : 0, borderColor: `${palette.rule}55` }}>
-        {card.parts?.find(part => part.surahs[0] === row.surah) && <Text style={{ color: palette.ink, fontSize: 14, fontWeight: '700', textAlign: 'right', paddingBottom: 2 }}>{card.parts.find(part => part.surahs[0] === row.surah)!.label}</Text>}
-        <Tap disabled={still} onPress={() => readAyah(`${row.surah}:1`)} accessibilityRole="link" accessibilityLabel={`افتح ${surahNames[row.surah]} في المصحف`} style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          <Text style={{ color: palette.muted, fontSize: 14 }}>{surahNames[row.surah]}</Text>
-        </Tap>
-        {open && CONDITION_SPANS[row.surah] ? <Conditions surah={row.surah} palette={palette} /> : <Ayah words={row.words} menu={row.words.flatMap(word => ('end' in word ? [`${row.surah}:${word.end}`] : []))} palette={palette} light={light} />}
-      </View>
-    ))}
+    {card.rows.map((row, r) => {
+      const ends = row.words.flatMap(word => ('end' in word ? [word.end] : []));
+      return (
+        <View key={row.surah} style={{ paddingVertical: 6, borderTopWidth: r ? 1 : 0, borderColor: `${palette.rule}55` }}>
+          {card.parts?.find(part => part.surahs[0] === row.surah) && <Text style={{ color: palette.ink, fontSize: 14, fontWeight: '700', textAlign: 'right', paddingBottom: 2 }}>{card.parts.find(part => part.surahs[0] === row.surah)!.label}</Text>}
+          <Tap disabled={still} onPress={() => readAyah(`${row.surah}:1`)} accessibilityRole="link" accessibilityLabel={`افتح ${surahNames[row.surah]} في المصحف`} style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            <Text style={{ color: palette.muted, fontSize: 14 }}>{surahNames[row.surah]}</Text>
+          </Tap>
+          <Ayah words={row.words} menu={ends.map(end => `${row.surah}:${end}`)} palette={palette} light={light} />
+          {conditions && CONDITION_SPANS[row.surah] && <Folded credit="الشرط وجوابه" bare palette={palette}><Conditions surah={row.surah} after={Math.max(...ends)} palette={palette} /></Folded>}
+        </View>
+      );
+    })}
   </>;
 }
 
 function Opening({ card, palette, onLayout }: { card: OpeningCard; palette: Palette; onLayout?: (y: number) => void }) {
-  const [open, setOpen] = useState(false);
   const share = () => shareCard({ link: `https://namaq.vercel.app/quran/openings?kind=${card.kind}#${card.id}`, content: width => (
     <Card palette={palette} style={{ width }}>
       <Text style={{ color: palette.accent, fontSize: 19, textAlign: 'right' }}>{card.title}</Text>
@@ -83,15 +93,10 @@ function Opening({ card, palette, onLayout }: { card: OpeningCard; palette: Pale
     <View style={{ marginBottom: 20, gap: 2 }} onLayout={onLayout && (e => onLayout(e.nativeEvent.layout.y))}>
       {!soleCard(card) && <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 16, fontWeight: '700', textAlign: 'right', paddingHorizontal: 4, paddingBottom: 4 }}>{card.title}</Text>}
       <CardWithRow palette={palette} pad={[9, 16]} row={<>
-        {card.rows.some(row => CONDITION_SPANS[row.surah]) && <IconButton Icon={open ? ChevronUp : ChevronDown} label="الشرط وجوابه" onPress={() => setOpen(!open)} expanded={open} />}
         <IconButton Icon={Send} label={`شارك ${card.title}`} onPress={share} />
       </>}>
         {card.refs && !soleCard(card) && <Reference title={card.refs[0].cite!} quotes={card.refs} palette={palette} />}
-        <OpeningRows card={card} palette={palette} open={open} />
-        {open && <View style={{ gap: 4, borderTopWidth: 1, borderColor: `${palette.rule}55`, paddingTop: 8 }}>
-          {CONDITION_NOTES.map(text => <Text key={text} style={{ color: palette.muted, fontSize: 13, lineHeight: 21, textAlign: 'right' }}>{text}</Text>)}
-          {CONDITION_SOURCES.map(source => <Reference key={source.url} title={source.title} quotes={[]} links={[{ label: source.title, url: source.url }]} palette={palette} />)}
-        </View>}
+        <OpeningRows card={card} palette={palette} conditions />
       </CardWithRow>
     </View>
   );

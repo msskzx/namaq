@@ -8,7 +8,7 @@ import Reference from '@/components/common/Reference';
 import SourceLine from '@/components/common/SourceLine';
 import { ShareImageButton } from '@/components/share/ShareImage';
 import { num } from '@shared/quran/arabicNumber';
-import { CONDITION_NOTES, CONDITION_SOURCES, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, inKind, soleCard, type ConditionRole, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
+import { CONDITION_NOTES, ITQAN_KIND_NOTES, ITQAN_OPENING, ITQAN_QUOTES, OPENINGS_LEGEND, OPENING_KINDS, inKind, soleCard, type ConditionRole, type OpeningCard, type OpeningKindId, type OpeningWord } from '@shared/quran/openingKinds';
 import Button from '@/components/common/Button';
 import CardWithRow from '@/components/common/CardWithRow';
 import Chip from '@/components/common/Chip';
@@ -19,7 +19,6 @@ const icon = 'inline-flex size-8 items-center justify-center rounded-full text-[
 const ROLE: Record<ConditionRole, string> = {
   condition: 'border-[var(--home-rule)]',
   answer: 'border-[var(--home-green)] text-[var(--home-green)]',
-  disputed: 'border-dashed border-[var(--home-muted)]',
 };
 
 function Words({ words }: { words: OpeningWord[] }) {
@@ -32,7 +31,7 @@ function Conditions({ lines }: { lines: ConditionText[string] }) {
       {lines.map(line => (
         <div key={line.key} data-role={line.role} className={`border-s-2 ps-2 ${ROLE[line.role]}`}><AyahFlow>
           <AyahWords>{`${line.words.join(' ')} ${num(Number(line.key.split(':')[1]))}`}</AyahWords>
-          {line.role !== 'condition' && <span className="font-sans text-xs text-[var(--home-muted)] ms-2">{line.role === 'answer' ? 'الجواب' : 'موضع الخلاف في الجواب'}</span>}
+          {line.role === 'answer' && <span className="font-sans text-xs text-[var(--home-muted)] ms-2">الجواب</span>}
         </AyahFlow></div>
       ))}
     </div>
@@ -77,8 +76,8 @@ function OpeningItem({ card, names, conditions }: { card: OpeningCard; names: Re
         {card.refs && !soleCard(card) && <Reference title={card.refs[0].cite!} quotes={card.refs} />}
         <OpeningRows card={card} names={names} conditions={conditions} open={open} />
         {open && <div data-share-skip className="flex flex-col gap-1 border-t border-[var(--home-rule)]/40 pt-2 text-sm leading-relaxed text-[var(--home-muted)]">
-          {CONDITION_NOTES.map(n => <p key={n}>{n}</p>)}
-          {CONDITION_SOURCES.map(c => <Reference key={c.url} title={c.title} quotes={[]} links={[{ label: c.title, url: c.url }]} />)}
+          {Object.entries(CONDITION_NOTES).map(([surah, n]) => <p key={surah}>{`${names[Number(surah)]}: ${n.text}`}</p>)}
+          {Object.values(CONDITION_NOTES).map(({ source: c }) => <Reference key={c.url} title={c.title} quotes={[]} links={[{ label: c.title, url: c.url }]} />)}
         </div>}
       </CardWithRow>
     </div>
