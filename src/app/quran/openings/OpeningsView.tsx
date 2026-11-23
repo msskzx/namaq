@@ -13,7 +13,7 @@ import Button from '@/components/common/Button';
 import CardWithRow from '@/components/common/CardWithRow';
 import Chip from '@/components/common/Chip';
 
-export type ConditionText = Record<string, { key: string; role: ConditionRole; ours: boolean; words: string[] }[]>;
+export type ConditionText = Record<string, { key: string; role: ConditionRole; words: string[] }[]>;
 
 const icon = 'inline-flex size-8 items-center justify-center rounded-full text-[var(--home-muted)] hover:text-[var(--home-ink)]';
 const ROLE: Record<ConditionRole, string> = {
@@ -32,7 +32,7 @@ function Conditions({ lines }: { lines: ConditionText[string] }) {
       {lines.map(line => (
         <div key={line.key} data-role={line.role} className={`border-s-2 ps-2 ${ROLE[line.role]}`}><AyahFlow>
           <AyahWords>{`${line.words.join(' ')} ${num(Number(line.key.split(':')[1]))}`}</AyahWords>
-          {line.role !== 'condition' && <span className="font-sans text-xs text-[var(--home-muted)] ms-2">{line.role === 'answer' ? (line.ours ? 'الجواب، قراءتنا' : 'الجواب') : 'موضع الخلاف في الجواب'}</span>}
+          {line.role !== 'condition' && <span className="font-sans text-xs text-[var(--home-muted)] ms-2">{line.role === 'answer' ? 'الجواب' : 'موضع الخلاف في الجواب'}</span>}
         </AyahFlow></div>
       ))}
     </div>
@@ -53,7 +53,7 @@ export function OpeningRows({ card, names, conditions, open = false }: { card: O
         </div>
         {open && conditions?.[row.surah]
           ? <Conditions lines={conditions[row.surah]} />
-          : <AyahFlow><Words words={row.words} />{row.cut && <span className="text-[var(--home-muted)]"> …</span>}</AyahFlow>}
+          : <AyahFlow><Words words={row.words} /></AyahFlow>}
       </div>
     ))}
   </>;

@@ -155,14 +155,10 @@ export function openingKeys(surah: number, words: (key: string) => string[]): st
   return words(`${surah}:1`).length <= 2 ? [`${surah}:1`, `${surah}:2`] : [`${surah}:1`];
 }
 
-/** Rows longer than this show their first SHOWN words; the mushaf has the rest. */
-const LONG = 16;
-const SHOWN = 12;
-
 /** A word's colour, by the rule every view uses (shared/quran/wordMatch.ts): how alike, and whether only `some` rows share it. */
 export type OpeningMark = { kind: Likeness; some: boolean };
 export type OpeningWord = { text: string; mark?: OpeningMark } | { end: number };
-export type OpeningRow = { surah: number; words: OpeningWord[]; cut: boolean };
+export type OpeningRow = { surah: number; words: OpeningWord[] };
 export type OpeningCard = { id: string; kind: OpeningKindId; title: string; alone: boolean; rows: OpeningRow[]; parts?: { label: string; surahs: number[] }[]; refs?: Quote[] };
 
 /**
@@ -189,8 +185,7 @@ export function openingCards(ayahOf: (key: string) => BranchAyah | undefined): O
         }),
         { end: Number(ayah.key.split(':')[1]) },
       ]);
-      const cut = at > LONG;
-      return { surah, words: cut ? all.filter(word => 'text' in word).slice(0, SHOWN) : all, cut };
+      return { surah, words: all };
     });
     return { id: card.id, kind: card.kind, title: card.title, alone: !!card.alone, rows, ...(card.parts ? { parts: card.parts } : {}), ...(card.refs ? { refs: card.refs } : {}) };
   });
@@ -208,30 +203,31 @@ export const openingHref = (card: string, kind: OpeningKindId) => `/quran/openin
 // إذا السماء: the conditions from the first ayah to their answer, as the page showed them before the rework.
 export type ConditionRole = 'condition' | 'answer' | 'disputed';
 
-export const CONDITION_SPANS: Record<number, { to: number; answer?: number; sourced?: boolean }> = {
-  81: { to: 14, answer: 14, sourced: true },
+export const CONDITION_SPANS: Record<number, { to: number; answer?: number }> = {
+  81: { to: 14, answer: 14 },
   82: { to: 5, answer: 5 },
   84: { to: 6 },
 };
 
-/** Each ayah of the span with its role; 82's answer is our reading, and 84's is disputed. */
-export function conditionLines(surah: number): { key: string; role: ConditionRole; ours: boolean }[] {
+/** Each ayah of the span with its role; 84's answer is disputed. */
+export function conditionLines(surah: number): { key: string; role: ConditionRole }[] {
   const span = CONDITION_SPANS[surah];
   if (!span) return [];
   return Array.from({ length: span.to }, (_, i) => {
     const ayah = i + 1;
     const role: ConditionRole = span.answer === undefined ? (ayah === span.to ? 'disputed' : 'condition') : ayah === span.answer ? 'answer' : 'condition';
-    return { key: `${surah}:${ayah}`, role, ours: role === 'answer' && !span.sourced };
+    return { key: `${surah}:${ayah}`, role };
   });
 }
 
 export const CONDITION_NOTES = [
-  'في التكوير قال الطبري والقرطبي إن «علمت نفس ما أحضرت» جواب «إذا» وما قبلها. ونقرأ «علمت نفس ما قدمت وأخرت» في الانفطار جوابًا على النسق نفسه، وهذه قراءتنا ولم نجد من نص عليها.',
+  'في التكوير قال الطبري والقرطبي إن «علمت نفس ما أحضرت» جواب «إذا» وما قبلها. وفي الانفطار قال القرطبي في «علمت نفس ما قدمت وأخرت»: وهذا جواب «إذا السماء انفطرت».',
   'وفي الانشقاق اختلف المفسرون في الجواب: محذوف يُفهم من السياق (الطبري والبغوي والقرطبي)، أو «يا أيها الإنسان إنك كادح» (بعض نحويي البصرة)، أو «وأذنت» والواو زائدة (الفراء)، أو «فأما من أوتي كتابه بيمينه» (الكسائي، وقال النحاس: أصح ما قيل فيه).',
 ];
 
 export const CONDITION_SOURCES = [
   { title: 'الطبري والقرطبي في تفسير التكوير ١٤', url: 'https://quran.ksu.edu.sa/tafseer/ibn-tabary-qortobi-saadi/sura81-aya14.html' },
+  { title: 'القرطبي في تفسير الانفطار ٤', url: 'https://quran.ksu.edu.sa/tafseer/qortobi/sura82-aya4.html' },
   { title: 'الطبري والبغوي والقرطبي في تفسير الانشقاق ٥', url: 'https://quran.ksu.edu.sa/tafseer/ibn-baghawy-tabary-qortobi/sura84-aya5.html' },
 ];
 
