@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import bukhariIndex from './data/hadith/bukhari.json';
 import muslimIndex from './data/hadith/muslim.json';
-import { findHadith, placeOf, searchSahih, type SahihIndex, type SahihText } from './sahih';
+import { findHadith, kitabsHolding, placeOf, plainText, searchSahih, type SahihIndex, type SahihText } from './sahih';
 import { sahihKitabQuestions } from './quiz/sahih';
 import { seededRandom } from './quiz/feedQuiz';
 
@@ -33,6 +33,22 @@ describe('the Sahihayn', () => {
       const words = `${kitab.title} ${kitab.babs[hit.bab!].title}`.replace(/[ً-ْ]/g, '');
       expect(words).toMatch(/فضل/);
       expect(words).toMatch(/الوضوء/);
+    }
+  });
+});
+
+describe('a book page\'s search', () => {
+  it('lists a kitab whose name holds the words alone, and under any other kitab only the bab headings that hold them', () => {
+    const found = kitabsHolding(index, 'الحيض');
+    const named = index.kitabs.filter(kitab => plainText(kitab.title).includes('الحيض'));
+    expect(named.length).toBeGreaterThan(0);
+    for (const kitab of named) expect(found.get(kitab.n)).toEqual([]);
+    const others = [...found].filter(([n]) => !named.some(kitab => kitab.n === n));
+    expect(others.length).toBeGreaterThan(0);
+    for (const [n, babs] of others) {
+      expect(babs.length).toBeGreaterThan(0);
+      const kitab = index.kitabs.find(each => each.n === n)!;
+      for (const at of babs) expect(plainText(kitab.babs[at].title)).toContain('الحيض');
     }
   });
 });

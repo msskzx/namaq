@@ -13,11 +13,16 @@ import Folded from '@/ui/Folded';
 import Reference from '@/ui/Reference';
 import Button from '@/ui/Button';
 import TapRow from '@/ui/TapRow';
+import FactCells from '@/ui/FactCells';
+import BarStrip from '@/ui/BarStrip';
+import Ring from '@/ui/Ring';
+import ShareBar from '@/ui/ShareBar';
 import Empty from '@/ui/Empty';
 import { SearchField } from '@/ui/Field';
 import LoadingDots from '@/ui/LoadingDots';
 import type { Palette } from '@/lib/theme';
 import { addBook, type BookState } from '@/lib/books';
+import { lastOpened } from '@/lib/sahih';
 
 
 const body = (palette: Palette, big = false) => ({ color: palette.ink, fontSize: big ? 21 : 19, lineHeight: big ? 40 : 36, textAlign: 'right' as const });
@@ -121,28 +126,102 @@ export function SahihDownload({ slug, state, palette }: { slug: SahihIndex['slug
   );
 }
 
+/** «باب واحد», «بابان», «٣ أبواب», «٤٣ بابًا». */
+const babsName = (n: number) => (n === 1 ? 'باب واحد' : n === 2 ? 'بابان' : `${num(n)} ${n % 100 >= 3 && n % 100 <= 10 ? 'أبواب' : n % 100 >= 11 ? 'بابًا' : 'باب'}`);
+
+/** How many hadith a kitab holds by its numbers (none for a kitab of headings only). */
+const sizeOf = (kitab: SahihIndex['kitabs'][number]) => (kitab.from ? kitab.to - kitab.from + 1 : 0);
+
 /**
- * A Sahih's kitabs as rows in one card, each its number, name and hadith numbers; `mark` checks one (a quiz's answer).
- * The book's page opens a kitab on a tap; a quiz's look-up opens its bab headings under it.
+ * A Sahih's shape (owner, 2026-11-23: sketch hadith-design): its name and author, how many kitabs and hadith, and a bar for
+ * each kitab as tall as its hadith, the first on the right. A touch names the kitab under the finger and lifting it opens
+ * that kitab; the mark is over the kitab read last. On the hadith tab its head opens the book.
  */
-export function SahihKitabList({ book, onOpen, mark, open, palette, source }: { book: SahihIndex; onOpen: (kitab: number) => void; mark?: number; open?: number; palette: Palette;
+export function SahihShape({ book, onOpenBook, onOpenKitab, palette }: { book: SahihIndex; onOpenBook?: () => void; onOpenKitab: (kitab: number) => void; palette: Palette }) {
+  const [picked, setPicked] = useState<number | null>(null);
+  const last = lastOpened(book.slug);
+  const lastKitab = last ? book.kitabs.findIndex(kitab => last >= kitab.from && last <= kitab.to) : -1;
+  const head = (
+    <View style={{ flex: 1, gap: 2 }}>
+      <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 26, textAlign: 'right' }}>{book.title}</Text>
+      <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`${book.author} (ت ${num(book.died)}هـ)`}</Text>
+    </View>
+  );
+  const name = (i: number) => {
+    const kitab = book.kitabs[i];
+    return `${kitab.title}${kitab.from ? `، ${num(kitab.from)}–${num(kitab.to)}` : ''}`;
+  };
+  return (
+    <View style={{ gap: 12 }}>
+      {onOpenBook ? <TapRow role="link" label={book.title} onPress={onOpenBook}>{head}</TapRow> : head}
+      <View style={{ marginHorizontal: -14 }}>
+        <FactCells palette={palette} cells={[
+          { key: 'kitabs', label: 'كتبه', readings: [{ value: num(book.kitabs.length) }] },
+          { key: 'hadith', label: 'أحاديثه', readings: [{ value: num(book.kitabs[book.kitabs.length - 1].to) }] },
+        ]} />
+      </View>
+      <View style={{ marginTop: 22 }}>
+        <BarStrip counts={book.kitabs.map(sizeOf)} picked={picked} onPick={setPicked} height={64} holdScroll={false}
+          mark={lastKitab >= 0 ? lastKitab : undefined} name={name} label={`كتب ${book.title}، المس واسحب`}
+          ends={[book.kitabs[0].title, book.kitabs[book.kitabs.length - 1].title]}
+          onLift={i => { setPicked(null); onOpenKitab(book.kitabs[i].n); }} palette={palette} />
+      </View>
+      <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>
+        {`كل خطّ كتابٌ من كتبه، طوله على قدر أحاديثه. المسه واسحب تر اسمه، وارفع إصبعك يُفتح.${lastKitab >= 0 ? ' المؤشر حيث وقفت.' : ''}`}
+      </Text>
+    </View>
+  );
+}
+
+/**
+ * A Sahih's kitabs on one line down the card (owner, 2026-11-23: sketch hadith-design), each its number in a ring, its
+ * name, a bar as long as its hadith beside the longest kitab's, its babs and hadith numbers; «وقفت هنا» on the kitab read
+ * last when `here`. `mark` checks one (a quiz's answer). The book's page opens a kitab on a tap; a quiz's look-up opens its bab headings under it.
+ */
+export function SahihKitabList({ book, onOpen, mark, open, found, here: showHere = false, palette, source }: { book: SahihIndex; onOpen: (kitab: number) => void; mark?: number; open?: number; palette: Palette;
+  /** «وقفت هنا» on the kitab read last (the book's page, never a quiz). */
+  here?: boolean;
+  /** A search's hits: only these kitabs, each with the bab headings that hold the words (none when its name holds them). */
+  found?: Map<number, number[]>;
   /** The book itself, on the line under the list (the book's page). */
   source?: Source[] }) {
+  const longest = Math.max(1, ...book.kitabs.map(sizeOf));
+  const last = showHere ? lastOpened(book.slug) : undefined;
   return (
-    <CardWithRow palette={palette} pad={[4, 14]} source={source}>
-      {book.kitabs.map((kitab, i) => (
-        <View key={kitab.n} style={{ borderTopWidth: i ? 1 : 0, borderColor: palette.rule }}>
-          <TapRow role="link" label={kitab.n === mark ? `${kitab.title}، الجواب` : kitab.title} onPress={() => onOpen(kitab.n)}
-            style={{ alignItems: 'center', gap: 10, paddingVertical: 8 }}>
-            <Text style={{ width: 28, color: palette.accent, fontSize: 15 }}>{num(kitab.n)}</Text>
-            <Text style={{ flex: 1, color: palette.ink, fontSize: 17, textAlign: 'right' }}>{kitab.title}</Text>
-            {kitab.n === mark ? <Check size={18} color={palette.green} /> : <Text style={{ color: palette.muted, fontSize: 13 }}>{kitab.from ? `${num(kitab.from)}–${num(kitab.to)}` : ''}</Text>}
-          </TapRow>
-          {open === kitab.n && kitab.babs.filter(bab => bab.title).map((bab, at) => (
-            <Text key={at} style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right', paddingBottom: 6 }}>{bab.title}</Text>
-          ))}
-        </View>
-      ))}
+    <CardWithRow palette={palette} pad={[8, 14]} source={source}>
+      <View>
+        <View style={{ position: 'absolute', right: 13.5, top: 20, bottom: 20, width: 1, backgroundColor: palette.rule }} />
+        {book.kitabs.filter(kitab => !found || found.has(kitab.n)).map(kitab => {
+          const here = last !== undefined && last >= kitab.from && last <= kitab.to;
+          const answer = kitab.n === mark;
+          const tone = here ? palette.accent : answer ? palette.green : palette.rule;
+          return (
+            <View key={kitab.n}>
+              <TapRow role="link" label={answer ? `${kitab.title}، الجواب` : here ? `${kitab.title}، وقفت هنا` : kitab.title} onPress={() => onOpen(kitab.n)}
+                style={{ gap: 10, paddingVertical: 8 }}>
+                <View style={{ marginTop: 4 }}>
+                  <Ring tone={tone} palette={palette}>
+                    {answer ? <Check size={15} color={palette.green} /> : <Text style={{ color: here ? palette.accent : palette.muted, fontSize: 13 }}>{num(kitab.n)}</Text>}
+                  </Ring>
+                </View>
+                <View style={{ flex: 1, gap: 4 }}>
+                  <Text style={{ color: palette.ink, fontSize: 18, textAlign: 'right' }}>
+                    {kitab.title}{here ? <Text style={{ color: palette.accent, fontSize: 14 }}>{'  · وقفت هنا'}</Text> : null}
+                  </Text>
+                  {sizeOf(kitab) > 0 && <ShareBar share={sizeOf(kitab) / longest} colour={tone} />}
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={{ color: palette.muted, fontSize: 13 }}>{babsName(kitab.babs.length)}</Text>
+                    <Text style={{ color: palette.muted, fontSize: 13 }}>{kitab.from ? `${num(kitab.from)}–${num(kitab.to)}` : ''}</Text>
+                  </View>
+                </View>
+              </TapRow>
+              {(open === kitab.n ? kitab.babs : (found?.get(kitab.n) ?? []).map(at => kitab.babs[at])).filter(bab => bab.title).map((bab, at) => (
+                <Text key={at} style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right', paddingBottom: 6, paddingRight: 38 }}>{bab.title}</Text>
+              ))}
+            </View>
+          );
+        })}
+      </View>
     </CardWithRow>
   );
 }

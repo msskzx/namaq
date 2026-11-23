@@ -39,12 +39,21 @@ test.beforeEach(async ({ page }) => {
   });
 });
 
-test('the quizzes tab holds solo and party only, and the written kinds are asked inside the quiz', async ({ page }) => {
+test("the quizzes tab: a science's tree puts the tapped kind's question on the page, and the setup still mixes the written kinds", async ({ page }) => {
   await open(page, '/');
   await tab(page, 'الاختبارات').click();
-  // Two cards (owner, 2026-11-17): every kind of question is picked inside them.
-  await expect(page.getByRole('link')).toHaveText([/^اختبار فردي/, /^اختبار جماعي/]);
-  await page.getByRole('link', { name: /^اختبار فردي/ }).click();
+  // The four sciences (owner, 2026-11-23: the three designs joined), each with its tree of kinds under a live question.
+  await expect(page.getByRole('tab', { name: 'القرآن', exact: true })).toBeVisible();
+  await page.getByRole('tab', { name: 'السيرة', exact: true }).click();
+  await page.getByRole('radio', { name: 'ما كنيته؟', exact: true }).click();
+  await expect(page.getByRole('radio', { name: 'ما كنيته؟', exact: true })).toBeChecked();
+  await expect(page.getByRole('heading', { name: 'ما كنيته؟', exact: true })).toBeVisible();
+  // «خمسة أسئلة منه» starts a quiz of that kind alone.
+  await page.getByRole('button', { name: 'خمسة أسئلة منه' }).click();
+  await expect(page).toHaveURL(/\/quiz\/play/);
+  await expect(page.getByText(/^ما كنية /).filter({ visible: true }).first()).toBeVisible();
+
+  await open(page, '/quiz/solo');
   await page.getByRole('button', { name: 'سمّع الآية', exact: true }).click();
   await page.getByRole('button', { name: 'أوائل السور' }).click();
   await page.getByRole('button', { name: 'متشابهات القرآن', exact: true }).click();
@@ -55,6 +64,21 @@ test('the quizzes tab holds solo and party only, and the written kinds are asked
   await page.getByRole('button', { name: 'أظهر الآية التالية' }).click();
   await page.getByRole('button', { name: 'نسيتها' }).click();
   await expect.poll(async () => Object.keys(await stored<Record<string, unknown>>(page, 'ayah-forgot') ?? {}).length).toBe(1);
+});
+
+test.describe('a question answered wrong', () => {
+  // Missed in the feed, its rest over yesterday (shared/quiz/missedQuestions.ts).
+  test.use({ seed: { 'missed-questions': { 'TARAJIM_KUNYA:11': { kind: 'TARAJIM_KUNYA', seed: 11, step: 1, due: Date.now() - 86_400_000 } } } });
+
+  test('comes back in «عادت إليك», and a tap asks it again on the page', async ({ page }) => {
+    await open(page, '/');
+    await tab(page, 'الاختبارات').click();
+    await expect(page.getByRole('heading', { name: 'عادت إليك' })).toBeVisible();
+    await page.getByRole('button', { name: 'أجب: ما كنيته؟' }).click();
+    // Its science opens with it in the card, the leaf of its kind picked.
+    await expect(page.getByRole('tab', { name: 'السيرة', exact: true })).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByRole('radio', { name: 'ما كنيته؟', exact: true })).toBeChecked();
+  });
 });
 
 test('a solo quiz: right, wrong and empty answers, resume after reload, then the result', async ({ page }) => {

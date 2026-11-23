@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { Check, X, type LucideIcon } from 'lucide-react-native';
+import { Check, X, type LucideProps } from 'lucide-react-native';
 import IconButton from '@/ui/IconButton';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
@@ -30,7 +30,7 @@ export default function Chip({ label, on, onPress, palette, role = 'button', che
   /** A number after the label (how many ayat). */
   count?: number;
   /** An icon before the label: «+ أضف» at the end of a row of removable chips, the same size as them. */
-  Icon?: LucideIcon;
+  Icon?: (props: LucideProps) => React.ReactNode;
   /** Removable: an × that clears this filter (a search's terms); the chip itself does not press. */
   onClear?: () => void;
   accessibilityLabel?: string;
