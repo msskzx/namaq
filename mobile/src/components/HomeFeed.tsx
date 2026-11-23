@@ -58,7 +58,7 @@ import rajab from '@shared/data/hadith/ibnRajab.json';
 import IbnRajab from '@/components/IbnRajab';
 import { Report, ReportScene, reportSource, StoryAyat, StoryShare } from './stories/StoryParts';
 import { drawnReport } from '@shared/stories/story';
-import { armiesBattles, armiesItems, armiesSources, battleCardSources, battleItems, battleOnCard, battleYearItems, battleYearSlice, battleYearSources, atlasSources, type ArmiesTab, eventItems, eventOf, eventSources, nasabPeople, nasabSources, oathItems, oathSources, openingItems, openingSources, sceneItems, sceneOf, sceneSources, tiesPeople, tiesSources } from '@shared/drawingCards';
+import { armiesBattles, armiesItems, armiesSources, battleCardSources, battleItems, battleOnCard, battleYearItems, battleYearSlice, battleYearSources, atlasSources, type ArmiesTab, eventItems, eventOf, eventSources, nasabSources, oathItems, oathSources, openingItems, openingSources, sceneItems, sceneOf, sceneSources, tiesPeople, tiesSources } from '@shared/drawingCards';
 import { NasabTree } from '@/screens/nasab';
 import { OpeningRows } from '@/screens/openings';
 import TiesRing, { foldedKinds, personNode, RoundRing, ringName, ringRoom, roundLayout, TieSheet, tiesOf, DoubtedSheet } from './TiesRing';
@@ -1671,7 +1671,8 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   laqab: () => nameList('laqab').map(nameId),
   kunya: () => nameList('kunya').map(nameId),
   life: lifePeople,
-  nasab: () => nasabPeople(PEOPLE),
+  // One person's nasab is never drawn (owner, 2026-11-23: a long chain as a tree adds nothing); two meeting are «meet».
+  nasab: () => [],
   ties: () => tiesPeople(PEOPLE, GRAPH),
   battle: () => battleItems(BATTLES),
   'battle-year': () => battleYearItems(BATTLES),
