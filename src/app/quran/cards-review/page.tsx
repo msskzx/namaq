@@ -30,12 +30,12 @@ export default async function CardsReview({ searchParams }: { searchParams: Prom
   const pressed = pressesByCard(readCardPresses());
   const checkedPairs = new Set(Object.entries(withUnappliedReviews(compareVerdicts)).filter(([, verdict]) => verdict.checked).map(([pair]) => pair));
   const params = await searchParams;
-  const { changed, todo } = parseCardsReview(params);
-  const query = parseCardsReview(params, filteredPairs(index.cards, proposals, pressed, { changed, todo }, checkedPairs)[0]?.page);
-  const pairs = filteredPairs(index.cards, proposals, pressed, { changed, todo }, checkedPairs, query.pair);
+  const { changed, todo, books } = parseCardsReview(params);
+  const query = parseCardsReview(params, filteredPairs(index.cards, proposals, pressed, { changed, todo, books }, checkedPairs)[0]?.page);
+  const pairs = filteredPairs(index.cards, proposals, pressed, { changed, todo, books }, checkedPairs, query.pair);
   const list = selectCards(index.cards, proposals, pressed, query, checkedPairs);
   const { items, page, pages } = pageOf(list, query.size, query.page);
-  const counts = Object.fromEntries(CARD_KINDS.map(kind => [kind.id, selectCards(index.cards, proposals, pressed, { kind: kind.id, changed, todo }, checkedPairs).length])) as Record<CardKind, number>;
+  const counts = Object.fromEntries(CARD_KINDS.map(kind => [kind.id, selectCards(index.cards, proposals, pressed, { kind: kind.id, changed, todo, books }, checkedPairs).length])) as Record<CardKind, number>;
   const href = (change: Partial<typeof query>) => cardsReviewHref({ ...query, page: 1, ...change });
   const first = (page - 1) * query.size;
   const pairAt = pairs.findIndex(pair => pair.page === query.pair);
@@ -48,6 +48,7 @@ export default async function CardsReview({ searchParams }: { searchParams: Prom
     <div className="flex flex-wrap items-center gap-2">
       <Chip label="ما غيّره الوكلاء فقط" on={query.changed} href={href({ changed: !query.changed })} />
       <Chip label="غير المراجَعة فقط" on={query.todo} href={href({ todo: !query.todo })} />
+      <Chip label="بطاقات الكتب" on={query.books} href={href({ books: !query.books })} />
       <Segmented label="عدد البطاقات في الصفحة" options={PAGE_SIZES.map(size => ({ key: String(size), label: String(size), current: query.size === size, href: href({ size }) }))} />
     </div>
     <p className="text-sm text-[var(--home-muted)]">{list.length} بطاقة</p>

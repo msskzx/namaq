@@ -3,7 +3,7 @@ import { CARD_KINDS, type CardKind } from '@/lib/quran/curation/cardReviewIndex'
 export const PAGE_SIZES = [10, 20, 50, 100] as const;
 const DEFAULT_SIZE = 20;
 
-export type CardsReviewQuery = { kind: CardKind; size: number; page: number; changed: boolean; todo: boolean; pair?: string };
+export type CardsReviewQuery = { kind: CardKind; size: number; page: number; changed: boolean; todo: boolean; books: boolean; pair?: string };
 
 const one = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value);
 
@@ -19,6 +19,7 @@ export function parseCardsReview(params: Record<string, string | string[] | unde
     page: Number.isInteger(page) && page > 0 ? page : 1,
     changed: one(params.changed) === '1',
     todo: one(params.todo) === '1',
+    books: one(params.books) === '1',
     ...(kind === 'compare' ? { pair: pair && /^\d{1,3}\/\d{1,3}$/.test(pair) ? pair : firstPair } : {}),
   };
 }
@@ -31,6 +32,7 @@ export function cardsReviewHref(query: Partial<CardsReviewQuery>): string {
   if (query.size && query.size !== DEFAULT_SIZE) params.size = String(query.size);
   if (query.changed) params.changed = '1';
   if (query.todo) params.todo = '1';
+  if (query.books) params.books = '1';
   if (query.page && query.page > 1) params.page = String(query.page);
   const search = new URLSearchParams(params).toString();
   return `/quran/cards-review${search ? `?${search}` : ''}`;

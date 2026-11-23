@@ -129,22 +129,40 @@ export function pressOf(entry: Pick<CardReviewEntry, 'id' | 'twin' | 'pairs'>, p
 }
 
 /**
- * Whether a card needs no review: a book names it (every book entry stays a card), or the owner already reviewed it, by a press on
- * this page or a verdict they checked in an earlier review, either the card's own or, live, every compare pair it holds
- * (`checkedPairs`, with the compare review log's unapplied presses).
+ * Whether the owner already reviewed a card: a press on this page, or a verdict they checked in an earlier review, either the
+ * card's own or, live, every compare pair it holds (`checkedPairs`, with the compare review log's unapplied presses).
  */
 export function reviewed(entry: CardReviewEntry, pressed: Map<string, CardPress>, checkedPairs: Set<string> = new Set()): boolean {
-  if (entry.kind === 'book' || entry.books?.length || pressOf(entry, pressed) || entry.verdict?.checked) return true;
+  if (pressOf(entry, pressed) || entry.verdict?.checked) return true;
   const pairs = entry.pairs ?? (entry.twin ? [entry.twin] : []);
   return pairs.length > 0 && pairs.every(pair => checkedPairs.has(pair));
 }
 
-export type CardQuery = { kind: CardKind; changed?: boolean; todo?: boolean; pair?: string };
+/** A card a book names: a book's card, or a compare card that carries books (it holds a book card's ayat, or is a surah-order book's). */
+export const bookNamed = (entry: Pick<CardReviewEntry, 'kind' | 'books'>) => entry.kind === 'book' || !!entry.books?.length;
+
+/**
+ * A compare card that holds every ayah of a book's card is the book's too, even beside another ayah (2:48 and 2:123 with 82:19):
+ * it carries the book's names (owner 2026-11-23).
+ */
+export function markBookCards(entries: CardReviewEntry[]): CardReviewEntry[] {
+  const books = entries.filter(entry => entry.kind === 'book').map(entry => ({ places: [...new Set(entry.rows.map(row => row[0]))], names: entry.books ?? [] }));
+  return entries.map(entry => {
+    if (entry.kind !== 'compare' || entry.link) return entry;
+    const held = new Set(entry.rows.flat());
+    const names = books.filter(book => book.places.length > 1 && book.places.every(key => held.has(key))).flatMap(book => book.names);
+    return names.length ? { ...entry, books: [...new Set([...entry.books ?? [], ...names])] } : entry;
+  });
+}
+
+/** `books`: show the cards a book names, which need no review and stay out of it unless asked for (owner 2026-11-23). */
+export type CardQuery = { kind: CardKind; changed?: boolean; todo?: boolean; books?: boolean; pair?: string };
 
 /** The cards of one kind the owner asked to see, in the index's order; compare can be narrowed to one surah pair. */
 export function selectCards(cards: CardReviewEntry[], proposals: CardProposals, pressed: Map<string, CardPress>, query: CardQuery, checkedPairs?: Set<string>): CardReviewEntry[] {
   return cards.filter(entry => entry.kind === query.kind
     && (!query.pair || entry.page === query.pair)
+    && (query.books || !bookNamed(entry))
     && (!query.changed || agentsChanged(entry, proposals[entry.id]))
     && (!query.todo || !reviewed(entry, pressed, checkedPairs)));
 }

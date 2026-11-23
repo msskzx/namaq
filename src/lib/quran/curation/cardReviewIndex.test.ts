@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { agentsChanged, comparePages, filteredPairs, oneTwinPerPair, pageOf, pressesByCard, pressOf, rowsChanged, selectCards, sharedKey, type CardPress, type CardReviewEntry } from './cardReviewIndex';
+import { agentsChanged, comparePages, filteredPairs, markBookCards, oneTwinPerPair, pageOf, pressesByCard, pressOf, rowsChanged, selectCards, sharedKey, type CardPress, type CardReviewEntry } from './cardReviewIndex';
 
 const tree = (id: string, rows: string[][], extra: Partial<CardReviewEntry> = {}): CardReviewEntry => ({ id, kind: 'word', rows, verdict: { keep: true, why: 'old' }, ...extra });
 const press = (id: string, action: CardPress['action'], t = 0): CardPress => ({ t, id, action, version: 'original' });
@@ -112,6 +112,21 @@ describe('card review', () => {
     expect(filteredPairs(cards, {}, new Map(), { todo: true })).toEqual([{ page: '2/2', count: 1 }, { page: '3/3', count: 1 }]);
     expect(filteredPairs(cards, {}, new Map(), { todo: true }, undefined, '2/3')).toEqual([{ page: '2/2', count: 1 }, { page: '2/3', count: 0 }, { page: '3/3', count: 1 }]);
     expect(filteredPairs(cards, {}, new Map(), {})).toEqual(comparePages(cards));
+  });
+
+  it("leaves the cards a book names out of the review, even a compare card holding a book card's ayat beside another, unless asked for", () => {
+    const cards = markBookCards([
+      { id: 'book', kind: 'book', rows: [['2:48'], ['2:123']], books: ['al-Kirmani'] },
+      { id: 'with-82', kind: 'compare', rows: [['2:48'], ['2:123'], ['82:19']], pairs: ['2:48|82:19', '2:123|82:19'] },
+      { id: 'one-of-them', kind: 'compare', rows: [['2:48'], ['82:19']], pairs: ['2:48|82:19'] },
+      { id: 'surah-order', kind: 'compare', rows: [['1:1'], ['2:1']], pairs: ['1:1|2:1'], link: 1, books: ['al-Biqa\'i'] },
+    ]);
+    const shown = (kind: CardReviewEntry['kind'], books: boolean) => selectCards(cards, {}, new Map(), { kind, todo: true, books }, new Set()).map(entry => entry.id);
+    expect(cards[1].books).toEqual(['al-Kirmani']);
+    expect(shown('compare', false)).toEqual(['one-of-them']);
+    expect(shown('book', false)).toEqual([]);
+    expect(shown('compare', true)).toEqual(['with-82', 'one-of-them', 'surah-order']);
+    expect(shown('book', true)).toEqual(['book']);
   });
 });
 
