@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { BlurView } from 'expo-blur';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -62,6 +62,8 @@ import { SURAH_TITLES } from '@shared/quran/surahNames';
 
 /** Where the reader was: the page, and the recitation if one was running. Kept so the app opens where it was left. */
 const PLACE = 'reader-place';
+/** The home indicator's band at the screen's bottom, of iOS's bottom inset (Android's is its navigation bar, kept clear). */
+const INDICATOR = 20;
 /** Where the last recitation (not a review) stopped, to continue it later. */
 const LAST_RECITE = 'reader-recite-last';
 /** `y`: how far down the page the reader had scrolled, when the text is bigger than the printed page. */
@@ -336,7 +338,9 @@ export default function Reader() {
   // The page always keeps its full size: the recite and listen bars float over it (owner, 2026-11-19), wherever the
   // reader drops them. While writing, the page keeps its size and scrolls above the keyboard (owner, 2026-11-13: no
   // squeezed page), following the box being written.
-  const pageInsets = { top: insets.top, bottom: insets.bottom };
+  // Below, the page runs into the home indicator's band, its own bottom padding keeping the page number clear of the
+  // indicator (owner, 2026-11-23: room was left unused under the page on the iPad and the phone).
+  const pageInsets = { top: insets.top, bottom: Platform.OS === 'ios' ? Math.max(0, insets.bottom - INDICATOR) : insets.bottom };
   /** What the floating bars stay clear of: the status bar and the top bar above, the keyboard or the tab bar below. */
   const barClear = { top: insets.top + (tools ? TOP_BAR : 0) + 8, bottom: keyboard ? keyboard + 8 : tools ? tabBarTop(insets.bottom) + 8 : tabBarBottom(insets.bottom) };
   const height = size ? size.height - pageInsets.top - pageInsets.bottom : 0;

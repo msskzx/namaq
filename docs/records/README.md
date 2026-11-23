@@ -184,3 +184,4 @@ counts for neither.
 | [R0069](R0069-an-animated-style-sees-only-its-own-shared-values.md) | An animated style runs again only for the shared values in its own closure | detour | solved |
 | [R0070](R0070-a-bare-qala-is-read-from-the-sharh.md) | A bare «قال» is read from the sharh, not from the story's flow | challenge | solved |
 | [R0071](R0071-a-link-inside-a-text-is-placed-by-its-own-measure.md) | A link box inside a Text is placed by its own measure on iOS | challenge | solved |
+| [R0072](R0072-a-page-wider-for-its-height-is-held-by-its-line-height.md) | A mushaf page wider for its height is held by its line height | challenge | solved |

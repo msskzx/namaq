@@ -21,6 +21,13 @@ const SQUEEZE = 0.9;
 const STRETCH = 1.15;
 /** A slice's line height for its text size: about a phone reader's line, and the website's slice (MushafPage `--one-line`). */
 const SLICE_LINE = 1.9;
+/**
+ * The most a printed line's text may be for its line's height. The Hafs font's marks reach far above and below its
+ * letters: at 0.72 an iPad page, wider for its height than a phone's, drew each line's marks into the next (owner,
+ * 2026-11-23). A standing phone's page is fitted by its width, under it (only the opening oval on the smallest
+ * phones reaches it); a page that reaches it narrows its text block instead.
+ */
+const TEXT_HEIGHT = 0.55;
 
 /** Natural width of each word group at BASE, by line, per page; the same on every screen, so measured once per page. */
 const naturals = new Map<number, Record<number, number[]>>();
@@ -89,6 +96,18 @@ function Word({ press, onLayout, hold, children }: { press?: object; onLayout?: 
 }
 
 type Box = { x: number; y: number; w: number; h: number };
+/** The text body's size, and the page size (`WxH`) it was measured at. */
+type Body = { width: number; height: number; of?: string };
+
+/** The header's and page number's text size, by the page's width. */
+const smallOf = (width: number) => Math.max(11, width * 0.026);
+const headerOf = (width: number) => Math.ceil(Math.max(20, smallOf(width) * 1.6)) + 4;
+const footerOf = (width: number) => Math.ceil(smallOf(width) * 1.25) + 4;
+/** The printed page's text body inside its paddings, header, double frame and page number, as the layout below sets it. */
+const bodyOf = (width: number, height: number): Body => ({
+  width: width * (1 - 0.04 - 0.025) - 8,
+  height: height - width * (0.03 + 0.02 + 0.015) - headerOf(width) - footerOf(width) - 8,
+});
 /** A band behind the words: the selected ayah (neutral), or a forgotten one (the accent, faint). */
 type Band = 'playing' | 'mark' | 'forgot' | null;
 const BAND_TINT: Record<NonNullable<Band>, (palette: Palette) => string> = {
@@ -118,8 +137,13 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
   const flowing = zoom > 1;
   // The body's size at the printed page and with flowing text, each kept, so a pinch back to the printed page sets its
   // lines at once at the size they had (record R0058).
-  const [bodies, setBodies] = useState<{ page?: { width: number; height: number }; flow?: { width: number; height: number } }>({});
-  const laid = flowing ? bodies.flow ?? bodies.page ?? null : bodies.page ?? null;
+  // Each kept with the page size it was measured at: once the screen turns, the page is set at once at the size its frame
+  // will have (owner, 2026-11-23: a turned iPad drew the old size, or nothing, until the frame was measured again).
+  const [bodies, setBodies] = useState<{ page?: Body; flow?: Body }>({});
+  const estimate = slice ? null : bodyOf(width, height);
+  // A layout measured before the turn can arrive after it: one far from the estimate is not this size's.
+  const fresh = (one?: Body) => (one && one.of === `${width}x${height}` && (!estimate || Math.abs(one.width - estimate.width) < 2) ? one : undefined);
+  const laid = (flowing ? fresh(bodies.flow) ?? fresh(bodies.page) : fresh(bodies.page)) ?? estimate ?? bodies.page ?? null;
   // A slice is laid out at its own height, but sized as the whole page is.
   const body = useMemo(() => (laid && slice ? { width: laid.width, height } : laid), [laid, slice, height]);
   const [measured, setMeasured] = useState(() => naturals.get(page));
@@ -163,12 +187,20 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
   const size = useMemo(() => {
     if (!body || !measured) return 0;
     if (flowing) return flowSize(body.width, zoom);
-    if (oval) return Math.max(1, Math.min(oneLine * 0.72, ...lineAt.map(at => (BASE * oval.chords[at]) / (lineWidth(measured[at]) || 1))));
+    if (oval) return Math.max(1, Math.min(oneLine * TEXT_HEIGHT, ...lineAt.map(at => (BASE * oval.chords[at]) / (lineWidth(measured[at]) || 1))));
     const widths = lineAt.map(at => lineWidth(measured[at]) || 1);
     const widest = Math.max(1, ...widths);
     const typical = [...widths].sort((a, b) => a - b)[Math.floor(widths.length * 0.6)] ?? 1;
-    return Math.max(1, Math.min((BASE * body.width) / typical, (BASE * body.width) / (widest * SQUEEZE), rowHeight * 0.72));
-  }, [body, measured, lineAt, page, rowHeight, oval, oneLine, flowing, zoom]);
+    return Math.max(1, Math.min((BASE * body.width) / typical, (BASE * body.width) / (widest * SQUEEZE), rowHeight * (slice ? 0.72 : TEXT_HEIGHT)));
+  }, [body, measured, lineAt, page, rowHeight, oval, oneLine, flowing, zoom, slice]);
+  // The printed text block: the body's width, or narrower and centred where the line height held the text smaller.
+  const block = useMemo(() => {
+    if (!body || !measured || !size || flowing || oval || slice) return body?.width ?? 0;
+    const widths = lineAt.map(at => lineWidth(measured[at]) || 1);
+    const typical = [...widths].sort((a, b) => a - b)[Math.floor(widths.length * 0.6)] ?? 1;
+    return Math.min(body.width, (size * Math.max(typical, Math.max(1, ...widths) * SQUEEZE)) / BASE);
+  }, [body, measured, size, flowing, oval, slice, lineAt]);
+  const inBlock = block < (body?.width ?? 0) - 0.5 ? { width: block, alignSelf: 'center' as const } : null;
   // A surah title or basmala row: one of the page's 15 lines, or with flowing text one flowing line.
   // A slice's lines are as tall for their text as the reader's lines on a phone (and the website's slice), so the marks
   // over the first line are not cut (owner, 2026-11-15); until the words are measured, the most a slice's text can be.
@@ -229,7 +261,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
   const badges = data.items.flatMap(item => [...('quarter' in item && item.quarter ? [quarterLabel(item.quarter).join(' ')] : []), ...('line' in item && isSajda(item.line) ? ['سجدة'] : [])]);
   const veiled = { color: 'transparent', backgroundColor: tint(palette.muted, 0.1), borderRadius: 4 } as const;
   const upcoming = { backgroundColor: palette.paper } as const;
-  const small = Math.max(11, width * 0.026);
+  const small = smallOf(width);
   // Each pressable word by its ayah and place, so a drag after a long press can tell which word the finger is on.
   const wordViews = useRef<Record<string, ComponentRef<typeof View> | null>>({});
   const holdWord = (key: string, word: number) => (view: ComponentRef<typeof View> | null) => { wordViews.current[`${key}:${word}`] = view; };
@@ -330,7 +362,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
     <View key={flowing ? 'flow' : 'page'} onLayout={onHeight ? event => onHeight(page, event.nativeEvent.layout.height) : undefined}
       style={slice ? { width } : { width, ...(flowing ? { minHeight: height } : { height }), backgroundColor: palette.card, paddingTop: width * 0.03, paddingHorizontal: width * 0.02, paddingBottom: width * 0.02 }}>
       {/* One height on every page, chip or not, so facing pages' frames line up. */}
-      {!slice && <View style={{ height: Math.ceil(Math.max(20, small * 1.6)) + 4, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: width * 0.025, paddingBottom: 4, gap: 6 }}>
+      {!slice && <View style={{ height: headerOf(width), flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: width * 0.025, paddingBottom: 4, gap: 6 }}>
         <Text style={{ color: palette.muted, fontSize: small }}>{anonymous ? '' : `الجزء ${juzName(data.juz)}`}</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 6, flexShrink: 1 }}>
           {!anonymous && badges.map(label => (
@@ -344,7 +376,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
           nothing to scroll (owner, 2026-11-17). The web export grows them anyway, as browsers keep a flex item's content height. */}
       <View style={slice ? undefined : { ...(flowing ? { flexGrow: 1 } : { flex: 1 }), borderWidth: 1, borderColor: palette.rule }}>
         <View style={slice ? undefined : { ...(flowing ? { flexGrow: 1 } : { flex: 1 }), margin: 2, borderWidth: 1, borderColor: palette.rule, paddingHorizontal: width * 0.0125, paddingTop: width * 0.015 }}>
-          <Pressable {...press(null)} style={slice ? { height: sliceHeight, overflow: 'hidden' } : flowing ? { flexGrow: 1 } : { flex: 1, overflow: 'hidden' }} onLayout={event => { const { width: w, height: h } = event.nativeEvent.layout; setBodies(prev => ({ ...prev, [flowing ? 'flow' : 'page']: { width: w, height: h } })); }}>
+          <Pressable {...press(null)} style={slice ? { height: sliceHeight, overflow: 'hidden' } : flowing ? { flexGrow: 1 } : { flex: 1, overflow: 'hidden' }} onLayout={event => { const { width: w, height: h } = event.nativeEvent.layout; setBodies(prev => ({ ...prev, [flowing ? 'flow' : 'page']: { width: w, height: h, of: `${width}x${height}` } })); }}>
             {!measured && (
               <View pointerEvents="none" style={{ position: 'absolute', top: 0, right: 0, width: 10000, opacity: 0 }}>
                 {lineAt.map(at => {
@@ -371,7 +403,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                   surahHere = item.surah;
                   const veil = surahHidden(item.surah);
                   return (
-                    <View key={row.id} style={{ height: titleLine * (oval ? 2.6 : 1), justifyContent: oval ? 'flex-start' : 'center' }}>
+                    <View key={row.id} style={[{ height: titleLine * (oval ? 2.6 : 1), justifyContent: oval ? 'flex-start' : 'center' }, inBlock]}>
                       <View style={{ height: titleLine * 0.94, borderWidth: 1, borderColor: palette.rule, padding: 2 }}>
                         <View style={{ flex: 1, borderWidth: 1, borderColor: palette.rule, alignItems: 'center', justifyContent: 'center' }}>
                           <Text style={[{ fontFamily: QURAN_FONT, fontSize: Math.min(size * 0.8, titleLine * 0.46), color: palette.accent }, veil ? veiled : null, veil && next === `${item.surah}:1` ? upcoming : null]}>{names[item.surah]}</Text>
@@ -392,8 +424,9 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
               // A printed line is fitted to the page's width, squeezed or stretched a little; a flowing line spreads its
               // words across the page's width, all but a paragraph's last line, which starts at the right.
               const drawn = (row.natural * size) / BASE;
-              const width = oval && row.index !== undefined ? oval.chords[row.index] : body!.width;
-              const centred = flowing ? !!row.last && !row.single : drawn < width * 0.7;
+              const width = oval && row.index !== undefined ? oval.chords[row.index] : block;
+              // In the oval a line too short to reach its chord is centred, not spread with wide gaps (its text held by the line's height).
+              const centred = flowing ? !!row.last && !row.single : drawn < width * (oval ? 1 / STRETCH : 0.7);
               const scale = flowing ? Math.min(1, width / drawn) : centred ? 1 : Math.min(STRETCH, Math.max(oval ? 0 : SQUEEZE, width / drawn));
               const cells = row.groups.map(group => {
                 const key = `${group.surah}:${group.ayah}`;
@@ -411,7 +444,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
               const holdsFocus = flowing && !!focus && !focused.taken && cells.some(cell => cell.key === focus) && (focused.taken = true);
               return (
                 <View key={row.id} ref={holdsFocus ? focusRow : undefined} onLayout={holdsFocus ? findFocus : undefined}
-                  style={{ height: flowing ? size * FLOW_LINE : oval ? oneLine : lineHeight, flexDirection: 'row', alignItems: 'center', justifyContent: (centred && !flowing) || oval || (flowing && opening) ? 'center' : 'flex-start' }}>
+                  style={[{ height: flowing ? size * FLOW_LINE : oval ? oneLine : lineHeight, flexDirection: 'row', alignItems: 'center', justifyContent: (centred && !flowing) || oval || (flowing && opening) ? 'center' : 'flex-start' }, inBlock]}>
                   <View style={centred
                     ? { flexDirection: 'row', alignItems: 'center', gap: GAP * size }
                     : { width: width / scale, flexShrink: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', transform: [{ scaleX: scale }], transformOrigin: oval ? 'center' : 'right' }}>
@@ -455,7 +488,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
               );
             })}
           </Pressable>
-          {!slice && <View style={{ paddingVertical: 2 }}>
+          {!slice && <View style={{ height: footerOf(width), justifyContent: 'center' }}>
             <Text style={{ textAlign: 'center', color: palette.muted, fontSize: small }}>{anonymous ? ' ' : num(page)}</Text>
           </View>}
         </View>
