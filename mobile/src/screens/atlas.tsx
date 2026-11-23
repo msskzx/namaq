@@ -133,9 +133,7 @@ export default function AtlasScreen() {
             ? <View>{found.map(battle => <BattleRow key={battle.slug} battle={battle} onPress={() => pickFound(battle)} palette={palette} />)}</View>
             : <Empty text="لا غزوة ولا موضع بهذا الاسم" palette={palette} />
         ) : <>
-          <View style={{ flexDirection: 'row', gap: 8 }}>
-            <Tabs label="الطبقة" options={LAYERS.map(each => ({ key: each.key, label: each.name }))} value={layer} onChange={setLayer} palette={palette} fill />
-          </View>
+          <Tabs label="الطبقة" options={LAYERS.map(each => ({ key: each.key, label: each.name }))} value={layer} onChange={setLayer} palette={palette} fill />
           <Card palette={palette} pad={0} clip gap={0}>
             <BattleMap places={pins} box={box} palette={palette} onPin={showPlace} />
           </Card>
