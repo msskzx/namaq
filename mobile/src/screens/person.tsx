@@ -2,8 +2,8 @@ import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { usePageWidth } from '@/ui/column';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Link2, Network, Waypoints } from 'lucide-react-native';
-import { factSources, kunyaName, sayerAt, saidBy, virtueGroups, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
+import { CalendarDays, Link2, MapPin, Network, Waypoints } from 'lucide-react-native';
+import { factSources, kunyaName, namePieces, pageSources, sayerAt, saidBy, virtueGroups, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
 import { surahName } from '@shared/quran/surahNames';
 import { counted, num } from '@shared/quran/arabicNumber';
 import { sourceById } from '@shared/sources';
@@ -27,6 +27,8 @@ import { FEATURE_ICON } from '@/components/featureIcons';
 import Tabs from '@/ui/Tabs';
 import Saying from '@/ui/Saying';
 import Points from '@/ui/Points';
+import FactCells, { type FactCell, type Reading } from '@/ui/FactCells';
+import QuoteBar from '@/ui/QuoteBar';
 import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import { lifeSources } from '@shared/events/lifeTimeline';
 import type { QuizSource } from '@shared/quiz/sources';
@@ -90,8 +92,8 @@ function Quote({ fact, palette, marked = false, many = false, children }: { fact
   );
 }
 
-/** A person's virtues as the entry gives them, with the pages: the person page's «مناقبه» and a quiz's look-up draw it. */
-export function Virtues({ person, palette, marked }: { person: AppPerson; palette: Palette; marked?: number }) {
+/** A person's virtues by who says them, each its own point; `marked` (a quiz's answer, once shown) in green. */
+function VirtueList({ person, palette, marked }: { person: AppPerson; palette: Palette; marked?: number }) {
   return <>
     {virtueGroups(person.virtues).map(group => (
       <Saying key={group.items[0].at} by={group.by} palette={palette}>
@@ -99,9 +101,56 @@ export function Virtues({ person, palette, marked }: { person: AppPerson; palett
           key: at, node: <Text style={at === marked ? { ...body(palette), color: palette.green } : body(palette)}>{fact.text}</Text> }))} />
       </Saying>
     ))}
+  </>;
+}
+
+/** A person's virtues as the entry gives them, with the pages: the person page's «مناقبه» and a quiz's look-up draw it. */
+export function Virtues({ person, palette, marked }: { person: AppPerson; palette: Palette; marked?: number }) {
+  return <>
+    <VirtueList person={person} palette={palette} marked={marked} />
     <Credit facts={person.virtues} palette={palette} />
   </>;
 }
+
+/**
+ * A person in brief, as his page gives it (owner, 2026-11-23: the feed's «من التراجم» held one short line; sketch
+ * tarajim-feed-card/sketch design أ): his name large with the name the book prints under it, his death in cells, then
+ * his virtues each with a bar, his own names in them lit, the Prophet's ﷺ words barred in amber. The facts it draws, for
+ * the card's book line: `briefFacts`.
+ */
+export function PersonBrief({ person, palette }: { person: AppPerson; palette: Palette }) {
+  const f = person.sex === 'FEMALE';
+  // Who gives a reading, in words a reader new to the books follows: «عند خليفة بن خياط», «قيل»; the author's own, his name.
+  const reading = (fact: PersonFact, value: string): Reading => ({ value,
+    by: fact.anonymous ? 'قيل' : fact.by.length ? sayerAt(fact) : `عند ${pageSources(fact.refs)[0]?.author ?? 'الذهبي'}` });
+  const { year, place, age } = person.died;
+  const cells: FactCell[] = [
+    ...(year.length ? [{ key: 'year', Icon: CalendarDays, label: f ? 'وفاتها' : 'وفاته', readings: year.map(fact => reading(fact, yearOf(fact))) }] : []),
+    ...(place.length ? [{ key: 'place', Icon: MapPin, label: f ? 'ماتت في' : 'مات في', readings: place.map(fact => reading(fact, unvowelled(fact.text).replace(/^ب(?=ال)/u, ''))) }] : []),
+    ...(age.length ? [{ key: 'age', label: f ? 'عمرها' : 'عمره', readings: age.map(fact => reading(fact, ageOf(fact))) }] : []),
+  ];
+  const names = [personName(person), ...person.kunya.map(fact => fact.text), ...person.laqab.map(fact => fact.text)];
+  // The author's own words carry his name too, so every saying says whose it is.
+  const sayer = (fact: PersonFact, by?: string) => by ?? (fact.anonymous ? 'قيل:' : `قال ${pageSources(fact.refs)[0]?.author ?? 'الذهبي'}:`);
+  return (
+    <View>
+      <View style={{ padding: 16, paddingBottom: 12, gap: 2 }}>
+        <Text style={{ color: palette.ink, fontSize: 26, lineHeight: 36, textAlign: 'right' }}>{personName(person)}</Text>
+        {person.fullName && <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 24, textAlign: 'right' }}>{person.fullName.text}</Text>}
+      </View>
+      <FactCells cells={cells} palette={palette} />
+      {person.virtues.length > 0 && (
+        <View style={{ padding: 16, paddingTop: 14, gap: 14 }}>
+          {virtueGroups(person.virtues).flatMap(group => group.items.map(({ fact, at }) => (
+            <QuoteBar key={at} pieces={namePieces(fact.text, names)} palette={palette} by={sayer(fact, group.by)}
+              tone={group.by === 'قال النبي ﷺ:' ? palette.amber : undefined} />
+          )))}
+        </View>
+      )}
+    </View>
+  );
+}
+export const briefFacts = (person: AppPerson) => [...(person.fullName ? [person.fullName] : []), ...person.virtues, ...person.died.year, ...person.died.place, ...person.died.age];
 
 /** A labelled line: the label small on the left, the value on the right («أبوه  العوام بن خويلد»). */
 function Line({ label, palette, children }: { label: string; palette: Palette; children: React.ReactNode }) {

@@ -149,6 +149,31 @@ export function virtueGroups(facts: readonly PersonFact[]) {
   return groups.map((g, i) => ({ g, i })).sort((a, b) => rank(a.g.by) - rank(b.g.by) || a.i - b.i).map(({ g }) => g);
 }
 
+/**
+ * Where a person's own names fall in a text (owner, 2026-11-23: his virtues read better with him marked): `names` as
+ * written, a kunya in any case («أبو بكر», «أبا بكر», «أبي بكر»), short vowels in the text or not. Returns the text in
+ * pieces, `name` true for his.
+ */
+export function namePieces(text: string, names: readonly string[]): { text: string; name: boolean }[] {
+  const marks = '[\\u064B-\\u0652\\u0670]*';
+  const bare = (name: string) => name.replace(/[\u064B-\u0652\u0670]/gu, '').trim();
+  const pattern = (name: string) => [...bare(name)].map(ch => (ch === ' ' ? '\\s+' : ch.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&') + marks)).join('')
+    .replace(/^أ\[\\u064B-\\u0652\\u0670\]\*ب\[\\u064B-\\u0652\\u0670\]\*[وايى]/u, `أ${marks}ب${marks}[وايى]`);
+  const alts = [...new Set(names.map(bare).filter(name => name.length > 1))].sort((a, b) => b.length - a.length).map(pattern);
+  if (!alts.length) return [{ text, name: false }];
+  // A name may carry a joined «و», «ف», «ب», «ل», «ك» before it («وعمر»), left unmarked.
+  const re = new RegExp(`(?<=(?:^|[^\\p{L}])[وفبلك]?)(?:${alts.join('|')})(?![\\p{L}])`, 'gu');
+  const out: { text: string; name: boolean }[] = [];
+  let at = 0;
+  for (const hit of text.matchAll(re)) {
+    if (hit.index! > at) out.push({ text: text.slice(at, hit.index), name: false });
+    out.push({ text: hit[0], name: true });
+    at = hit.index! + hit[0].length;
+  }
+  if (at < text.length) out.push({ text: text.slice(at), name: false });
+  return out;
+}
+
 /** «عند فلان» under one reading among several: after «عند» a kunya is genitive («عند أبي نعيم», not «عند أبو نعيم»). */
 export function sayerAt(fact: PersonFact) {
   return `عند ${sayer(fact).split('، ').map(name => name.replace(/^(?:أبو|أبا)(?= )/u, 'أبي')).join('، ')}`;
