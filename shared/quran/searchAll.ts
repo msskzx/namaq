@@ -12,16 +12,19 @@ export type SearchHit =
   | { kind: 'tree'; id: string; text: string }
   | { kind: 'compare'; a: number; b: number; title: string }
   | { kind: 'event'; slug: string; event: number; title: string; prophet: string }
+  | { kind: 'sira'; title: string; chapter?: string; slug?: string }
   | { kind: 'tuhfa'; chapter: number; verse: number; first: string; second: string }
   | { kind: 'note'; key: string; text: string }
   | { kind: 'adhkar'; id: string; occasion: AdhkarOccasion; text: string };
 
 export type SearchKind = SearchHit['kind'];
-export const SEARCH_ORDER: SearchKind[] = ['surah', 'ayah', 'word', 'tree', 'compare', 'event', 'tuhfa', 'adhkar', 'note'];
+export const SEARCH_ORDER: SearchKind[] = ['surah', 'ayah', 'word', 'tree', 'compare', 'event', 'sira', 'tuhfa', 'adhkar', 'note'];
 export type SearchGroup = { kind: SearchKind; hits: SearchHit[] };
 
 export type CompareItem = { a: number; b: number; title: string };
 export type EventItem = { slug: string; event: number; title: string; prophet: string };
+/** A sira story's chapter (`chapter`) or a story (`slug`), by its name (owner, 2026-11-23: «الوفود», «حجة الوداع»). */
+export type SiraItem = { title: string; chapter?: string; slug?: string };
 export type TuhfaItem = { chapter: number; verse: number; first: string; second: string };
 export type AdhkarItem = { id: string; occasion: AdhkarOccasion; text: string };
 
@@ -33,6 +36,8 @@ export type SearchSources = {
   trees?: (query: string) => Extract<SearchHit, { kind: 'tree' }>[];
   compare?: CompareItem[];
   events?: EventItem[];
+  /** The sira stories' chapters, then the stories. */
+  sira?: SiraItem[];
   tuhfa?: TuhfaItem[];
   notes?: { key: string; text: string }[];
   /** The adhkar (shared/adhkar.ts), each opening its card in the utilities. */
@@ -63,6 +68,7 @@ export function searchAll(sources: SearchSources, query: string): SearchGroup[] 
     tree: text && sources.trees ? sources.trees(typed) : [],
     compare: (sources.compare ?? []).filter(item => holdsTerms(item.title, typed)).map(item => ({ kind: 'compare', ...item })),
     event: (sources.events ?? []).filter(item => holdsTerms(`${item.prophet} ${item.title}`, typed)).map(item => ({ kind: 'event', ...item })),
+    sira: (sources.sira ?? []).filter(item => holdsTerms(item.title, typed)).map(item => ({ kind: 'sira', ...item })),
     tuhfa: (sources.tuhfa ?? []).filter(item => holdsTerms(`${item.first} ${item.second}`, typed)).map(item => ({ kind: 'tuhfa', ...item })),
     adhkar: (sources.adhkar ?? []).filter(item => holdsTerms(item.text, typed)).map(item => ({ kind: 'adhkar', ...item })),
     note: (sources.notes ?? []).filter(item => holdsTerms(item.text, typed)).map(item => ({ kind: 'note', ...item })),
