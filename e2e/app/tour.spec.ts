@@ -11,8 +11,7 @@ test('the first launch tour steps through to the home page', async ({ page }) =>
   const next = page.getByRole('button', { name: 'التالي', exact: true });
   await next.click();
   await expect(page.getByText('اسحب الشجرة واضغط غصنًا')).toBeVisible();
-  await next.click();
-  await expect(page.getByRole('heading', { name: 'قصص الأنبياء' })).toBeAttached();
+  // No step asks for a default view any more (owner, 2026-11-23): the tree is followed by a prophet's story.
   await next.click();
   await expect(page.getByText('اضغط نقطة لترى آياتها')).toBeVisible();
   await next.click();

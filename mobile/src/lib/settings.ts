@@ -59,9 +59,11 @@ export function useQuizPen(): PenRule {
   return quiz === 'same' ? rule : quiz;
 }
 
-/** Tree or matrix: the default view of every tree, matrix unless the reader picks the tree (owner, 2026-11-17). */
+/**
+ * Tree or matrix. Every card opens as its matrix and its own button shows the tree where it has one; there is no setting for
+ * it any more (owner, 2026-11-23: not every card has a tree). A `branches-view` value an older version saved is never read.
+ */
 export type BranchView = 'tree' | 'matrix';
-export const branchView = setting<BranchView>('branches-view', 'matrix', (value): value is BranchView => value === 'tree' || value === 'matrix');
 
 /** How words the ayat share are coloured: by how alike they are, one colour, or none (owner, 2026-11-14). */
 export const markMode = setting<MarkMode>('word-marks', 'kinds', isMarkMode);
