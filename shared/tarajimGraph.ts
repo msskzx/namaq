@@ -160,6 +160,17 @@ export function tieWord(kind: TieKind, toSex: GraphNode['sex'], fromSex: GraphNo
   }
 }
 
+/**
+ * A tie's word on a drawn line round a person, as the arrow reads it (owner, 2026-11-23): kin as «أبوه», «بنته», the
+ * arrow from that relative to him; companionship always «صحابي» of the companion, the arrow from the companion to the one
+ * he accompanied, whichever of the two is in the middle.
+ */
+export function lineWord(kind: TieKind, toSex: GraphNode['sex'], fromSex: GraphNode['sex']) {
+  if (kind === 'companion') return toSex === 'FEMALE' ? 'صحابية' : 'صحابي';
+  if (kind === 'accompanied') return fromSex === 'FEMALE' ? 'صحابية' : 'صحابي';
+  return tieWord(kind, toSex, fromSex);
+}
+
 /** The names of the groups in the person view: «أبواه», «أزواجه», «أولاده»… */
 export function groupWord(kind: TieKind, sex: GraphNode['sex'], count = 2) {
   const s = sex === 'FEMALE' ? 'ها' : 'ه';
@@ -169,8 +180,8 @@ export function groupWord(kind: TieKind, sex: GraphNode['sex'], count = 2) {
     case 'spouse': return sex === 'FEMALE' && count === 1 ? `زوج${s}` : `أزواج${s}`;
     case 'sibling': return `إخوت${s}`;
     case 'cousin': return `قرابت${s}`;
-    case 'companion': return `صحب${s}`;
-    case 'accompanied': return sex === 'FEMALE' ? 'صَحِبَت' : 'صَحِبَ';
+    case 'companion': return `صحابت${s}`;
+    case 'accompanied': return sex === 'FEMALE' ? 'صحابية' : 'صحابي';
   }
 }
 
@@ -201,7 +212,7 @@ export function tieName(graph: PeopleGraph, step: Step) {
   const f = who.sex === 'FEMALE';
   const kind = step.kind === 'accompanied' ? 'companion' : step.kind;
   const word = ({ parent: f ? 'أم' : 'أب', child: f ? 'بنت' : 'ابن', spouse: f ? 'زوجة' : 'زوج', sibling: f ? 'أخت' : 'أخ',
-    cousin: f ? 'قريبة' : 'قريب', companion: f ? 'صاحبة' : 'صاحب' } as const)[kind];
+    cousin: f ? 'قريبة' : 'قريب', companion: f ? 'صحابية' : 'صحابي' } as const)[kind];
   const doubt = step.link.disputed ? ' على خلاف' : step.link.anonymous ? ' فيما قيل' : '';
   return { word: word + doubt, who: who.slug, of: of.slug };
 }
