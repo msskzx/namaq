@@ -26,6 +26,7 @@ import LifeTimeline from '@/components/LifeTimeline';
 import { FEATURE_ICON } from '@/components/featureIcons';
 import Tabs from '@/ui/Tabs';
 import Saying from '@/ui/Saying';
+import Points from '@/ui/Points';
 import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import { lifeSources } from '@shared/events/lifeTimeline';
 import type { QuizSource } from '@shared/quiz/sources';
@@ -94,15 +95,8 @@ export function Virtues({ person, palette, marked }: { person: AppPerson; palett
   return <>
     {virtueGroups(person.virtues).map(group => (
       <Saying key={group.items[0].at} by={group.by} palette={palette}>
-        <View style={{ gap: 10 }}>
-          {/* Each saying its own point (owner, 2026-11-23): one sayer's words on different days are not one speech. */}
-          {group.items.map(({ fact, at }) => (
-            <View key={at} style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
-              <View style={{ width: 6, height: 6, borderRadius: 3, marginTop: 12, backgroundColor: palette.accent }} />
-              <Text style={{ ...(at === marked ? { ...body(palette), color: palette.green } : body(palette)), flex: 1 }}>{fact.text}</Text>
-            </View>
-          ))}
-        </View>
+        <Points palette={palette} items={group.items.map(({ fact, at }) => ({
+          key: at, node: <Text style={at === marked ? { ...body(palette), color: palette.green } : body(palette)}>{fact.text}</Text> }))} />
       </Saying>
     ))}
     <Credit facts={person.virtues} palette={palette} />
