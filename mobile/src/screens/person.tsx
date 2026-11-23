@@ -2,8 +2,8 @@ import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { usePageWidth } from '@/ui/column';
 import { router, useLocalSearchParams } from 'expo-router';
-import { ArrowLeftRight, Link2, Network, Waypoints } from 'lucide-react-native';
-import { factSources, kunyaName, sayerAt, saidBy, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
+import { Link2, Network, Waypoints } from 'lucide-react-native';
+import { factSources, kunyaName, sayerAt, saidBy, virtueGroups, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
 import { surahName } from '@shared/quran/surahNames';
 import { counted, num } from '@shared/quran/arabicNumber';
 import { sourceById } from '@shared/sources';
@@ -23,6 +23,7 @@ import { findPerson, personName, unvowelled } from '@/lib/tarajim';
 import { personLife } from '@/lib/life';
 import { battleOf } from '@/lib/battles';
 import LifeTimeline from '@/components/LifeTimeline';
+import { FEATURE_ICON } from '@/components/featureIcons';
 import Tabs from '@/ui/Tabs';
 import Saying from '@/ui/Saying';
 import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
@@ -92,7 +93,13 @@ function Quote({ fact, palette, marked = false, many = false, children }: { fact
 /** A person's virtues as the entry gives them, with the pages: the person page's «مناقبه» and a quiz's look-up draw it. */
 export function Virtues({ person, palette, marked }: { person: AppPerson; palette: Palette; marked?: number }) {
   return <>
-    {person.virtues.map((fact, i) => <Quote key={i} fact={fact} palette={palette} marked={i === marked} />)}
+    {virtueGroups(person.virtues).map(group => (
+      <Saying key={group.items[0].at} by={group.by} palette={palette}>
+        <View style={{ gap: 10 }}>
+          {group.items.map(({ fact, at }) => <Text key={at} style={at === marked ? { ...body(palette), color: palette.green } : body(palette)}>{fact.text}</Text>)}
+        </View>
+      </Saying>
+    ))}
     <Credit facts={person.virtues} palette={palette} />
   </>;
 }
@@ -173,7 +180,8 @@ export default function PersonScreen() {
   const lifeItems = useMemo(() => (person ? personLife(person) : []), [person]);
   const back = () => (router.canGoBack() ? router.back() : toTab('/tarajim'));
   if (!person) return <View style={{ flex: 1, backgroundColor: palette.paper }}><TopBar back={back} /></View>;
-  const tree = () => router.push({ pathname: '/nasab', params: { slug: person.slug } });
+  // «قارن»: the comparison opens on its list of people, so a second one is a tap away (owner, 2026-11-23).
+  const tree = () => router.push({ pathname: '/nasab', params: { slug: person.slug, pick: '1' } });
   const names = [...person.kunya.map(fact => ({ label: `كنيت${suffixOf(person)}`, fact, kunya: true })), ...person.laqab.map(fact => ({ label: `لقب${suffixOf(person)}`, fact, kunya: false }))];
   const f = person.sex === 'FEMALE';
   // A battle the timeline draws is not named again under it; one the entry names that the timeline lacks stays in the line.
@@ -208,7 +216,7 @@ export default function PersonScreen() {
         {person.fullName && (
           <Part head={head} n={++n} title={person.sex === 'FEMALE' ? 'نسبها' : 'نسبه'} palette={palette}
             above={<Tabs palette={palette} label="كيف يُعرض النسب" value={nasabView} onChange={setNasabView} options={DRAWING_OR_TEXT} />}
-            row={<IconButton Icon={ArrowLeftRight} label={person.sex === 'FEMALE' ? 'قارن نسبها بغيرها' : 'قارن نسبه بغيره'} onPress={tree} />}>
+            row={<IconButton Icon={FEATURE_ICON.nasab} label={person.sex === 'FEMALE' ? 'قارن نسبها بغيرها' : 'قارن نسبه بغيره'} onPress={tree} />}>
             {nasabView === 'drawing' ? <NasabTree slugs={[person.slug]} palette={palette} meetings={false} text={false} /> : <>
             <Quote fact={person.fullName} palette={palette} many={!!person.otherNames?.length} />
             {person.otherNames?.map((fact, i) => (
@@ -248,7 +256,7 @@ export default function PersonScreen() {
 
         {(life.length > 0 || lifeItems.length > 0) && (
           <Part head={head} n={++n} title={person.sex === 'FEMALE' ? 'حياتها' : 'حياته'} palette={palette} source={lifeSources(lifeItems)}
-            row={lifeItems.length > 0 && <IconButton Icon={ArrowLeftRight} label={f ? 'قارن حياتها بغيرها' : 'قارن حياته بغيره'} onPress={() => router.push({ pathname: '/life', params: { slugs: person.slug } })} />}>
+            row={lifeItems.length > 0 && <IconButton Icon={FEATURE_ICON.life} label={f ? 'قارن حياتها بغيرها' : 'قارن حياته بغيره'} onPress={() => router.push({ pathname: '/life', params: { slugs: person.slug } })} />}>
             {lifeItems.length > 0 && <LifeTimeline items={lifeItems} palette={palette} inCard foldable />}
             {life.length > 0 ? <>
             {person.islamAge.map((fact, i) => (
