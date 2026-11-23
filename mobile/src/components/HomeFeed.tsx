@@ -1,7 +1,8 @@
 import { createContext, isValidElement, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, Dimensions, useWindowDimensions, View } from 'react-native';
+import { COLUMN_GAP, PageWidthProvider, usePageWidth } from '@/ui/column';
 import { router, useFocusEffect, type Href } from 'expo-router';
-import { CalendarRange, ChartNoAxesColumn, Bookmark, Check, CircleCheck, CircleMinus, Clock, Compass, EyeOff, LibraryBig, Network, Plus, LightbulbOff, ListTree, Scale, TextAlignEnd, ScrollText, Swords, Users, type LucideProps } from 'lucide-react-native';
+import { CalendarRange, ChartNoAxesColumn, Bookmark, Check, CircleCheck, CircleMinus, Clock, Compass, EyeOff, LibraryBig, Network, Plus, LightbulbOff, ListTree, Scale, TextAlignEnd, Swords, Users, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, toggleForgotten, mostForgotten, readAyahMarks, readDueMarks, rememberAyah, restoreMark, subscribeDueMarks, type AyahMark } from '@shared/ayahMarks';
@@ -114,6 +115,16 @@ import { BookCard, Shelf, TUHFA } from '@/screens/books';
 import { DarkSeaActions, DarkSeaCard, darkSeaName, darkSeaSourceList, openDarkSea } from './DarkSea';
 import { DARK_SEA_KEY } from '@shared/quran/scenes/darkSea';
 import { prophetStory } from '@/lib/prophets';
+import gharib from '@shared/data/quran/gharib';
+import { wordsOf as gharibWordsOf } from '@shared/quran/gharib';
+import { lemmasAtMushafWord } from '@shared/quran/words';
+import { words as wordCounts } from '@/lib/words';
+import { gharibSource } from './GharibSheet';
+import LitAyat from './quran/text/LitAyat';
+import BookRuns from './quran/text/BookRuns';
+import { TUHFA_PASSAGES, tuhfaPassage } from '@shared/tajwid/passages';
+import { TuhfaVerse } from '@/screens/tuhfa';
+import { PROPHET_STORY } from '@shared/quiz/prophetStory';
 import StoryMap from './StoryMap';
 import { ayahPlaces } from '@shared/quran/ayahPlaces';
 import itqan from '@shared/data/quran/itqanBalagha';
@@ -440,6 +451,8 @@ function openAnswer(question: SoloQuestion) {
     const [a, b] = [question.compare.shown.key, question.compare.asked.key];
     return openIntent({ tab: 'compare', lead: Number(a.split(':')[0]), other: Number(b.split(':')[0]), ayat: [a, b] });
   }
+  // The prophet's story, not the ayah its look shows.
+  if (question.family === PROPHET_STORY) return router.push({ pathname: '/prophets/[slug]', params: { slug: question.correctAnswer } });
   const look = question.look;
   switch (look?.view) {
     case 'ties': case 'life': return person(look.slug);
@@ -453,6 +466,7 @@ function openAnswer(question: SoloQuestion) {
     case 'tafsir': return readAyah(look.mark ?? look.keys[0]);
     case 'word': case 'balagha': case 'irab': case 'qiraat': return readAyah(look.key);
     case 'tuhfa': return toTab(look.mark ? { pathname: '/tuhfa', params: { verse: String(look.mark) } } : '/tuhfa');
+    case 'ayat': return readAyah(look.mark ?? look.keys[0]);
   }
   const dhikr = askedDhikr(question.key);
   if (dhikr) return openDhikr(dhikr);
@@ -462,6 +476,7 @@ function openAnswer(question: SoloQuestion) {
   if (aimed) return openOrder(aimed);
   const slug = question.key.split(':')[1];
   if (question.family === PROPHET_NAMES) return person('prophet-muhammad');
+
   if (slug && findPerson(slug)) return person(slug);
 }
 
@@ -565,7 +580,7 @@ function TarajimPost({ id, palette }: { id: string; palette: Palette }) {
  * that joins them, in one sentence with the pages that state each tie; the head opens «بينه وبين…» with the two picked.
  */
 function TiePost({ id, palette }: { id: string; palette: Palette }) {
-  const { width } = useWindowDimensions();
+  const width = usePageWidth();
   const [shown, setShown] = useState<DrawingOrText>('drawing');
   const pair = tiePairs().find(each => `${each.a},${each.b}` === id);
   if (!pair) return null;
@@ -655,7 +670,7 @@ function NasabPost({ slug, palette }: { slug: string; palette: Palette }) {
 
 /** «صلاته»: a person's ties ring as his ties page draws it; a person on it opens his page, and its open button the ties page. */
 function TiesPost({ slug, palette }: { slug: string; palette: Palette }) {
-  const { width } = useWindowDimensions();
+  const width = usePageWidth();
   const [tie, setTie] = useState<Tie | undefined>();
   const person = findPerson(slug);
   if (!person) return null;
@@ -682,7 +697,7 @@ const groupList = () => (groups ??= groupSources(STORIES, BATTLES));
  * in-laws, joined by family as «بينه وبين…» draws them; its open button opens that page with them picked.
  */
 function GroupPost({ id, palette }: { id: string; palette: Palette }) {
-  const { width } = useWindowDimensions();
+  const width = usePageWidth();
   const [shown, setShown] = useState<DrawingOrText>('drawing');
   const group = useMemo(() => groupOf(GRAPH, groupList(), id), [id]);
   if (!group) return null;
@@ -757,7 +772,7 @@ const SAHIH_NAMES = { bukhari: { book: 'صحيح البخاري', author: 'ال�
  * who hold it, or a hadith and the people it names, drawn round; a tie held in doubt is said under it with both views.
  */
 function RingPost({ id, palette }: { id: string; palette: Palette }) {
-  const { width } = useWindowDimensions();
+  const width = usePageWidth();
   const [tie, setTie] = useState<Tie | undefined>();
   const [doubtedOpen, setDoubtedOpen] = useState(false);
   const ring = ringList_().find(each => each.id === id);
@@ -830,7 +845,7 @@ function BattlePost({ slug, palette }: { slug: string; palette: Palette }) {
  * battles screen at that year.
  */
 function BattleYearPost({ id, palette }: { id: string; palette: Palette }) {
-  const { width } = useWindowDimensions();
+  const width = usePageWidth();
   const year = Number(id);
   const slice = battleYearSlice(BATTLES, year);
   if (!slice) return null;
@@ -1276,7 +1291,7 @@ function SiraPost({ id, palette }: { id: string; palette: Palette }) {
   const drawn = drawnReport(report);
   const open = () => { continueAfter('sira', id); toTab({ pathname: '/story', params: { slug: story.slug } }); };
   return (
-    <Post palette={palette} head={<PostHead Icon={ScrollText} title="من قصص السيرة" sub={story.name} open={topic('/stories', 'افتح قصص السيرة')} palette={palette} />}
+    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.stories} title="من قصص السيرة" sub={story.name} open={topic('/stories', 'افتح قصص السيرة')} palette={palette} />}
       open={<OpenButton label={`افتح ${story.name}`} onPress={open} palette={palette} />}
       share={drawn ? <StoryShare story={story} report={report} palette={palette} /> : undefined}
       source={reportSource(report, drawn)}>
@@ -1440,6 +1455,63 @@ function TermPost({ id, day, palette }: { id: string; day: number; palette: Pale
   );
 }
 
+/** Ibn Qutaybah's entries a card can hold: one place, a word or a few, said in a few lines, on an ayah that fits a card. */
+const GHARIB_WORDS = 3;
+const GHARIB_CHARS = 240;
+const GHARIB_AYAH = 30;
+const gharibItems = () => gharib.entries.flatMap((entry, at) => {
+  const [[ayah, from, to], ...more] = entry[4];
+  return !more.length && to - from < GHARIB_WORDS && entry[3].length <= GHARIB_CHARS && ayahMushafWords(`${entry[0]}:${ayah}`).length <= GHARIB_AYAH ? [String(at)] : [];
+});
+
+/**
+ * A word of the Quran and Ibn Qutaybah's meaning of it (release-1 plan 2026-11-23: «غريب القرآن» had questions and no
+ * card): the ayah with the words he quotes lit, then his entry whole. «افتح» opens the word's page, the head the words page.
+ */
+function GharibPost({ id, palette }: { id: string; palette: Palette }) {
+  const entry = gharib.entries[Number(id)];
+  if (!entry) return null;
+  const [surah, page, shamelaId, text, [[ayah, from, to]]] = entry;
+  const key = `${surah}:${ayah}`;
+  const words = ayahMushafWords(key);
+  // A word's page is one word's: an entry on a phrase opens the ayah's page.
+  const lemmas = from === to ? lemmasAtMushafWord(wordCounts, key, from) : [];
+  const open = () => (lemmas.length ? toTab({ pathname: '/word', params: { ids: lemmas.join(',') } }) : openAyahPage(key));
+  return (
+    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.words} title="من غريب القرآن" sub={`${shortNames[surah] ?? ''} ${num(ayah)}`} open={topic('/words', 'افتح ألفاظ القرآن')} palette={palette} />}
+      open={<OpenButton label={lemmas.length ? 'افتح صفحة الكلمة' : 'افتح صفحة الآية'} onPress={open} palette={palette} />}
+      source={gharibSource({ page, id: shamelaId })}>
+      <View style={{ paddingHorizontal: 14, paddingVertical: 12, gap: 8 }}>
+        <LitAyat ayat={[{ words, lit: gharibWordsOf(entry, ayah), number: ayah }]} menu={key} palette={palette} />
+        <View style={{ height: 1, backgroundColor: palette.rule, opacity: 0.6 }} />
+        <BookRuns text={text} quran={palette.accent} style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' }} />
+      </View>
+    </Post>
+  );
+}
+
+/**
+ * One rule of Tuhfat al-Atfal (release-1 plan 2026-11-23: «التجويد» had questions and no card): its verses as on the poem's
+ * page, and the letters the poem names for it. «افتح» opens the poem at its first verse, the head the poem's top.
+ */
+function TuhfaPost({ id, palette }: { id: string; palette: Palette }) {
+  const passage = tuhfaPassage(id);
+  if (!passage) return null;
+  const first = passage.verses[0].number;
+  return (
+    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.tuhfa} title="من تحفة الأطفال" sub={passage.chapter} open={topic('/tuhfa', 'افتح تحفة الأطفال')} palette={palette} />}
+      open={<OpenButton label="افتح المنظومة" onPress={() => toTab({ pathname: '/tuhfa', params: { verse: String(first) } })} palette={palette} />}
+      source={sourcesOf([{ book: TUHFA.title, author: TUHFA.by, at: passage.verses.length > 1 ? `الأبيات ${num(first)}–${num(passage.verses.at(-1)!.number)}` : `البيت ${num(first)}` }])}>
+      <View style={{ paddingHorizontal: 14, paddingVertical: 8 }}>
+        {passage.verses.map(verse => <TuhfaVerse key={verse.number} verse={verse} marked={false} palette={palette} />)}
+        {passage.letters && <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right', paddingTop: 10 }}>
+          {'حروفه: '}<Text style={{ color: palette.accent, fontSize: 20, letterSpacing: 6 }}>{[...passage.letters].join(' ')}</Text>
+        </Text>}
+      </View>
+    </Post>
+  );
+}
+
 /** Every battle's moments, in the battles' order, for the moment card. */
 const MOMENTS = (momentBattles as AppMomentBattle[]).flatMap(battle => battle.moments.map((moment, i) => ({ battle, moment, n: i + 1 })));
 const momentId = (item: (typeof MOMENTS)[number]) => momentItem(item.battle.slug, item.n);
@@ -1590,6 +1662,8 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   lives: () => livesPairs(new Map(PEOPLE.map(person => [person.slug, personLife(person)]))),
   meet: () => meetItems(PEOPLE, nasabQuestions(PEOPLE).flatMap(question => (question.look?.view === 'nasab' ? [question.look.slugs as [string, string]] : []))),
   ring: () => ringList_().map(ring => ring.id),
+  gharib: gharibItems,
+  tuhfa: () => TUHFA_PASSAGES.map(passage => passage.id),
   adhkar: () => ADHKAR.map(item => item.id),
 };
 const itemsOf = (kind: ListKind) => (itemLists[kind] ??= LIST_OF[kind]());
@@ -1642,6 +1716,8 @@ function ContentPost({ kind, item, day, palette }: { kind: ListKind; item: strin
     case 'lives': return <LivesPost id={item} palette={palette} />;
     case 'meet': return <MeetPost id={item} palette={palette} />;
     case 'ring': return <RingPost id={item} palette={palette} />;
+    case 'gharib': return <GharibPost id={item} palette={palette} />;
+    case 'tuhfa': return <TuhfaPost id={item} palette={palette} />;
     case 'adhkar': return <DhikrPost id={item} palette={palette} />;
     default: return null;
   }
@@ -1693,11 +1769,15 @@ const STEP_CARDS = INTERESTS.length;
  * `only` shows one interest's cards alone (the chip row over the feed). What was shown before is skipped (shared/feedSeen.ts);
  * once all was seen it starts again from the seen ones. A question answered wrong comes back after a rest.
  */
-export function Feed({ palette, nearEnd, screenBottom, only = null }: { palette: Palette; nearEnd: number;
+export function Feed({ palette, nearEnd, screenBottom, only = null, column = null, lead }: { palette: Palette; nearEnd: number;
   /** Where the bottom of the screen is in the page, for a card that comes while the feed is open (the prayer card). */
   screenBottom: () => number;
   /** One interest's id: its cards alone. */
-  only?: string | null }) {
+  only?: string | null;
+  /** A tablet lying down (owner, 2026-11-23): the width of each of two columns of cards, which take turns; otherwise one column. */
+  column?: number | null;
+  /** What heads the first column in two columns (the mushaf's page), so the second starts with a card beside it. */
+  lead?: React.ReactNode }) {
   const { day, juz } = useToday();
   const now = useMinute();
   const visit = useSyncExternalStore(subscribeVisit, visitStart, serverVisit);
@@ -1875,11 +1955,32 @@ export function Feed({ palette, nearEnd, screenBottom, only = null }: { palette:
     posts.splice(at, 0, <PrayerPost key={`pr${card.key}`} prayer={card.prayer} times={card.times} palette={palette} />);
     keys.splice(at, 0, `pr${card.key}`);
   }
+  const placed = (i: number) => <View key={keys[i]} onLayout={event => { tops.current.set(keys[i], event.nativeEvent.layout.y); }}>{posts[i]}</View>;
+  if (column) {
+    // Each column is a phone's page to the cards in it, so their drawings and ayat size from its width (ui/column.ts).
+    // A card's place is told within its column, which starts where the feed does, so the prayer card still comes below the screen.
+    // The cards take turns by their order without the prayer cards, which join the column of the card before them: a prayer
+    // card coming or going never moves a card to the other column.
+    let turn = -1;
+    const prayers = new Set(cards.map(card => `pr${card.key}`));
+    const sides = keys.map(key => (prayers.has(key) ? Math.max(turn, 0) % 2 : ++turn % 2));
+    return (
+      <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: COLUMN_GAP }} onLayout={event => { top.current = event.nativeEvent.layout.y; }}>
+        {[0, 1].map(side => (
+          <PageWidthProvider key={side} value={column + 32}>
+            <View style={{ width: column, gap: 14 }}>
+              {side === 0 && lead}
+              {posts.map((_post, i) => (sides[i] === side ? placed(i) : null))}
+            </View>
+          </PageWidthProvider>
+        ))}
+      </View>
+    );
+  }
   return (
     <View style={{ gap: 14 }} onLayout={event => { top.current = event.nativeEvent.layout.y; }}>
-      {posts.map((post, i) => (
-        <View key={keys[i]} onLayout={event => { tops.current.set(keys[i], event.nativeEvent.layout.y); }}>{post}</View>
-      ))}
+      {lead}
+      {posts.map((_post, i) => placed(i))}
     </View>
   );
 }

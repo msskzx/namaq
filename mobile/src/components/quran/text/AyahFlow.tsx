@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, type ComponentRef, type ReactNode, type Ref } from 'react';
-import { useWindowDimensions, View, type TextStyle, type ViewStyle } from 'react-native';
+import { View, type TextStyle, type ViewStyle } from 'react-native';
+import { usePageWidth } from '@/ui/column';
 import { Text } from '@/ui/Text';
 import { QURAN_FONT } from '@/lib/theme';
 import { CARD_MARGINS, FLOW_LINE, flowFontSize, wordFontSize } from '@shared/quran/quranText/flow';
@@ -34,7 +35,7 @@ export default function AyahFlow({ children, color, menu, row = false, center = 
   lines?: number; style?: ViewStyle }) {
   // Until it has measured its own width, it guesses from the screen's (less a card's margins), so it is drawn at about its
   // height from the first pass: a list that scrolls to an item by its laid-out place finds it there.
-  const screen = useWindowDimensions().width;
+  const screen = usePageWidth();
   const [measured, setMeasured] = useState(0);
   const size = fromScreen ? flowFontSize(screen - CARD_MARGINS) : measured || flowFontSize(screen - CARD_MARGINS);
   return (
@@ -60,7 +61,7 @@ export function AyahWords({ children, look }: { children: string; look?: WordLoo
 }
 
 /** The size of a Quran word on its own, and of a tree's words, on this screen. */
-export const useWordSize = () => wordFontSize(useWindowDimensions().width);
+export const useWordSize = () => wordFontSize(usePageWidth());
 
 /** Where a place may put a word on its own: its room in a row, never its size or font. */
 export type WordPlace = Pick<TextStyle, 'flex' | 'flexShrink' | 'minWidth' | 'maxWidth' | 'textAlign' | 'alignSelf'>;
