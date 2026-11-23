@@ -204,10 +204,6 @@
    "view": "matrix",
    "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
   },
-  "2:107|46:32": {
-   "view": "matrix",
-   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
-  },
   "2:110-112|2:277": {
    "view": "matrix",
    "why": "owner 2026-11-16: too long for a tree (a story part or over 40 words); the matrix reads better"
@@ -355,10 +351,6 @@
   "2:203|58:9": {
    "view": "matrix",
    "why": "owner 2026-11-16: parts and rejoins twice or more; two lines one above the other read more easily"
-  },
-  "2:207|66:1": {
-   "view": "matrix",
-   "why": "owner 2026-11-16: no run of two words in common, so the tree is two boxes side by side"
   },
   "2:212|7:32": {
    "view": "matrix",

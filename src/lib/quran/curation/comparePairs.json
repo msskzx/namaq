@@ -3,17 +3,20 @@
   "2:8|3:114": {
    "keep": false,
    "why": "Only the common formula 'believe in Allah and the Last Day'; one is the hypocrites, the other the righteous of the People of the Book.",
-   "checked": true
+   "checked": true,
+   "card": true
   },
   "2:24|3:131": {
    "keep": true,
    "why": "Same warning: fear the Fire prepared for the disbelievers.",
-   "checked": true
+   "checked": true,
+   "card": true
   },
   "2:39|3:116": {
    "keep": true,
    "why": "Same closing verdict: they are the companions of the Fire, abiding in it.",
-   "checked": true
+   "checked": true,
+   "card": true
   },
   "2:42|3:71": {
    "keep": true,
@@ -6933,15 +6936,21 @@
   },
   "2:66|41:42": {
    "keep": false,
-   "why": "Only 'before it and behind it'; different points."
+   "why": "Only the words before and behind; a punishment made an example versus falsehood not reaching the Quran. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:82|41:8": {
-   "keep": true,
-   "why": "Same idea: those who believe and do good have an unfailing reward."
+   "keep": false,
+   "why": "Only the generic formula of those who believe and do good, followed by different rewards. A stock phrase; nothing specific to ponder.",
+   "checked": true,
+   "card": true
   },
   "2:86|41:31": {
-   "keep": true,
-   "why": "Same contrast: this world and the Hereafter, for the deniers and for the believers."
+   "keep": false,
+   "why": "Only the pair this world and the Hereafter; those who sold the Hereafter versus the angels' promise to the steadfast. The shared wording is stock.",
+   "checked": true,
+   "card": true
   },
   "2:3|42:38": {
    "keep": true,
@@ -6985,19 +6994,27 @@
   },
   "2:70|43:49": {
    "keep": true,
-   "why": "Same request: call on your Lord for us, we will be guided (the Israelites and Pharaoh's people)."
+   "why": "Call on your Lord for us, then we will be guided: the Israelites and Pharaoh's people say the same words to Musa.",
+   "checked": true,
+   "card": true
   },
   "2:92|43:38": {
    "keep": false,
-   "why": "Only scattered words."
+   "why": "Only scattered words; the calf after Musa versus the regret of the one with an evil companion. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:117|43:9": {
    "keep": false,
-   "why": "Only heavens and earth as words; different points."
+   "why": "Only the words heavens and earth; creation by command versus the idolaters admitting who created them. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:131|43:89": {
    "keep": false,
-   "why": "Only 'say' and the root of peace; different points."
+   "why": "Only a shared root of peace and submission; Ibrahim's submission versus the Prophet told to turn away. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:117|44:7": {
    "keep": false,
@@ -7061,27 +7078,39 @@
   },
   "2:97|46:30": {
    "keep": true,
-   "why": "Same phrase: the revelation confirms what came before it and guides."
+   "why": "The Quran described as confirming what came before it and guiding, once about Jibril bringing it, once by the jinn who heard it. A rare shared description.",
+   "checked": true,
+   "card": true
   },
   "2:98|46:6": {
    "keep": false,
-   "why": "Only enmity and disbelief as roots; different points."
+   "why": "Only the roots of enmity and disbelief; enmity to Allah's angels versus idols disowning their worshippers. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:107|46:32": {
-   "keep": true,
-   "why": "Same idea: no protector besides Allah."
+   "keep": false,
+   "why": "Only the common idea of no protector besides Allah, in a stock wording; the dominion of Allah versus the jinn warning those who ignore the caller. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:176|46:2": {
    "keep": false,
-   "why": "Only the Book sent down by Allah as words."
+   "why": "Only the Book sent down from Allah; disputes about the Book versus a surah opening formula. Too common.",
+   "checked": true,
+   "card": true
   },
   "2:209|46:2": {
    "keep": false,
-   "why": "Shares only the names Mighty, Wise."
+   "why": "Only the names Mighty and Wise, a stock pair. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:284|46:33": {
    "keep": false,
-   "why": "Shares only heavens and earth and the closing 'able over all things'."
+   "why": "Only heavens and earth and the stock closing about Allah's power. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:25|47:12": {
    "keep": true,
@@ -7105,83 +7134,123 @@
   },
   "2:106|48:21": {
    "keep": false,
-   "why": "Shares only the closing 'able over all things'."
+   "why": "Only the stock closing about Allah's power over all things; abrogation versus spoils not yet won. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:107|48:14": {
    "keep": false,
-   "why": "Shares only the dominion of the heavens and earth."
+   "why": "Only the dominion of the heavens and earth, a stock phrase; no protector versus forgiving whom He wills. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:117|48:7": {
    "keep": false,
-   "why": "Only heavens and earth as words."
+   "why": "Only the words heavens and earth; creation by command versus Allah's hosts. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:119|48:8": {
    "keep": true,
-   "why": "Same sentence: We sent you as a bringer of good news and a warner."
+   "why": "We sent you as a bearer of good news and a warner.",
+   "checked": true,
+   "card": true
   },
   "2:148|48:21": {
    "keep": false,
-   "why": "Shares only the closing 'able over all things'."
+   "why": "Only the stock closing about Allah's power over all things; racing to good deeds versus spoils not yet won. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:209|48:7": {
    "keep": false,
-   "why": "Shares only the names Mighty, Wise."
+   "why": "Only the names Mighty and Wise, a stock closing. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:209|48:19": {
    "keep": false,
-   "why": "Shares only the names Mighty, Wise."
+   "why": "Only the names Mighty and Wise, a stock closing. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:284|48:14": {
    "keep": true,
-   "why": "Same sentence: to Allah belong the heavens and earth; He forgives whom He wills and punishes whom He wills."
+   "why": "His is what is in the heavens and the earth; He forgives whom He wills and punishes whom He wills.",
+   "checked": true,
+   "card": true
   },
   "2:95|49:1": {
    "keep": false,
-   "why": "Only 'what their hands put forward' / 'before Allah' and the name Knowing."
+   "why": "Only the words for what hands put forward and the name Knowing; the Jews not wishing for death versus manners before the Prophet. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:103|49:1": {
    "keep": false,
-   "why": "Only belief and fearing Allah as words."
+   "why": "Only the common words believe and fear Allah. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:107|49:16": {
    "keep": false,
-   "why": "Only heavens and earth and knowing as words."
+   "why": "Only heavens and earth and a verb of knowing. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:116|49:16": {
    "keep": false,
-   "why": "Only heavens and earth as words."
+   "why": "Only the stock phrase of what is in the heavens and earth. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:137|49:1": {
    "keep": false,
-   "why": "Shares only the names Hearing, Knowing."
+   "why": "Only the names Hearing and Knowing, a stock closing. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:160|49:10": {
    "keep": false,
-   "why": "Only reconciling and mercy roots; repentance vs brotherhood."
+   "why": "Only the roots of setting right and mercy; repentance versus brotherhood among believers. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:182|49:10": {
    "keep": true,
-   "why": "Same idea: making peace between people, and mercy."
+   "why": "Both command making peace between people: between heirs after an unjust bequest, and between believers who fight. Same act of reconciliation, closed with mercy.",
+   "checked": true,
+   "card": true
   },
   "2:192|49:5": {
    "keep": false,
-   "why": "Shares only the closing 'Forgiving, Merciful'."
+   "why": "Only the stock closing Forgiving, Merciful. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:218|49:15": {
    "keep": true,
-   "why": "Same description: those who believe and strive in the way of Allah."
+   "why": "Those who believe and strive in Allah's cause: they hope for His mercy (2:218), they are the truthful (49:15).",
+   "checked": true,
+   "card": true
   },
   "2:224|49:1": {
-   "keep": false,
-   "why": "Only fearing Allah and the names Hearing, Knowing."
+   "keep": true,
+   "why": "Owner kept it",
+   "checked": true,
+   "card": true
   },
   "2:224|49:13": {
    "keep": false,
-   "why": "Only fearing Allah and 'Knowing' as words."
+   "why": "Only the root of fearing Allah and the name Knowing. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:284|49:16": {
    "keep": false,
-   "why": "Only heavens and earth as words."
+   "why": "Only the stock phrase of what is in the heavens and earth. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:73|57:17": {
    "keep": true,
@@ -7250,24 +7319,33 @@
   },
   "2:86|59:3": {
    "keep": true,
-   "why": "Same idea: punishment in this world and the Hereafter."
+   "why": "This world and the Hereafter set side by side three ways: those who sold the Hereafter, the believers asking for good in both and protection from the Fire, and a people spared punishment in this world but left with the Fire.",
+   "checked": true,
+   "card": true
   },
   "2:116|59:24": {
    "keep": false,
-   "why": "Only heavens and earth as words; different points."
+   "why": "Only the stock phrase of what is in the heavens and earth. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:148|59:6": {
    "keep": false,
-   "why": "Shares only the closing 'able over all things'."
+   "why": "Only the stock closing about Allah's power over all things. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:201|59:3": {
    "keep": true,
-   "why": "Contrast: the believers ask for good in this world and the next and protection from the Fire; the deniers get punishment in both."
+   "why": "This world and the Hereafter set side by side three ways: those who sold the Hereafter, the believers asking for good in both and protection from the Fire, and a people spared punishment in this world but left with the Fire.",
+   "checked": true,
+   "card": true
   },
   "2:284|59:6": {
    "keep": false,
-   "why": "Shares only 'whom He wills' and 'able over all things'.",
-   "ask": "Compare and branches disagreed. Compare (drop): Shares only 'whom He wills' and 'able over all things'. Branches (keep): Qadir closing: yu'adhdhibu man yasha' (2:284) vs yusallitu rusulahu (59:6)"
+   "why": "Shared only a stock closing about God's will and His power over all things. One ayah is about the reckoning of what is in the soul, the other about spoils taken without battle; nothing to ponder together.",
+   "checked": true,
+   "card": true
   },
   "2:75|61:11": {
    "keep": false,
@@ -7366,11 +7444,15 @@
   },
   "2:29|65:12": {
    "keep": true,
-   "why": "Same subject: He created seven heavens and the earth, and knows all things."
+   "why": "Both speak of the creation of seven heavens and of Allah's knowledge of all things. A real shared subject.",
+   "checked": true,
+   "card": true
   },
   "2:148|65:3": {
    "keep": false,
-   "why": "Shares only 'all things' and Allah; different points."
+   "why": "Only the words all things. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:232|65:2": {
    "keep": true,
@@ -7378,31 +7460,45 @@
   },
   "2:261|65:12": {
    "keep": false,
-   "why": "Only 'seven' and Allah as words."
+   "why": "Only the number seven. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:284|65:3": {
    "keep": false,
-   "why": "Only 'all things' as words."
+   "why": "Only the words all things. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:284|65:12": {
    "keep": false,
-   "why": "Shares only heavens and earth and the closing 'able over all things'."
+   "why": "Only heavens and earth and the stock closing about Allah's power. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:173|66:1": {
    "keep": false,
-   "why": "Shares only the root of forbidding and the closing 'Forgiving, Merciful'."
+   "why": "Only the root of forbidding and the stock closing Forgiving, Merciful; the food laws versus the Prophet forbidding himself something. A possible point that only Allah sets what is lawful, but the wording is too thin.",
+   "checked": true,
+   "card": true
   },
   "2:199|66:1": {
    "keep": false,
-   "why": "Shares only the closing 'Forgiving, Merciful'."
+   "why": "Only the stock closing Forgiving, Merciful. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:207|66:1": {
-   "keep": true,
-   "why": "Same phrase: seeking the pleasure of ... (of Allah / of your wives), a telling contrast."
+   "keep": false,
+   "why": "Owner dropped it",
+   "checked": true,
+   "card": true
   },
   "2:218|66:1": {
    "keep": false,
-   "why": "Shares only the closing 'Forgiving, Merciful'."
+   "why": "Only the stock closing Forgiving, Merciful. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:25|85:11": {
    "keep": true,
@@ -25979,167 +26075,248 @@
   },
   "2:14|2:76": {
    "keep": true,
-   "why": "Same scene: hypocrites meeting the believers, then alone with their own"
+   "why": "When they meet the believers they say 'we believe', and when alone: with their devils (the hypocrites) or with one another (some of the Jews). Classic memorizer pair on the same double face.",
+   "checked": true,
+   "card": true
   },
   "2:16|2:175": {
    "keep": true,
-   "why": "Same description: those who bought error for guidance"
+   "why": "The same description of those who bought error for guidance: the hypocrites, and those who hide the Book. 2:175 adds punishment for forgiveness. A memorizer pair in one surah.",
+   "checked": true,
+   "card": true
   },
   "2:23|2:94": {
-   "keep": false,
-   "why": "Only the challenge formula «إن كنتم صادقين»; different subjects"
+   "keep": true,
+   "why": "Owner kept it",
+   "checked": true,
+   "card": true
   },
   "2:37|2:160": {
    "keep": true,
-   "why": "Repentance accepted, both closing with «التواب الرحيم»"
+   "why": "Adam's repentance accepted and the promise to accept those who hid the truth then repented: both end with the same divine name of accepting repentance.",
+   "checked": true,
+   "card": true
   },
   "2:39|2:81": {
    "keep": true,
-   "why": "Same verdict: companions of the Fire, abiding in it"
+   "why": "Two descriptions of the people of the Fire, one by disbelief and denial, one by sin that surrounds a person, ending in the same verdict. Useful for memorizers and for pondering who earns it.",
+   "checked": true,
+   "card": true
   },
   "2:40|2:47": {
    "keep": true,
-   "why": "Same call to the Children of Israel to remember the favour"
+   "why": "The same call to the Children of Israel to remember the favour, continuing two ways. A classic place for a memorizer to slip.",
+   "checked": true,
+   "card": true
   },
   "2:40|2:122": {
-   "keep": false,
-   "why": "Refrain repeat: shown with the refrain's first place"
+   "keep": true,
+   "why": "Owner kept it",
+   "checked": true,
+   "card": true
   },
   "2:45|2:153": {
    "keep": true,
-   "why": "Same command: seek help in patience and prayer"
+   "why": "Same command to seek help through patience and prayer, first to the Children of Israel, then to the believers, with different endings. A memorizer pair and a link worth pondering.",
+   "checked": true,
+   "card": true
   },
   "2:47|2:122": {
    "keep": true,
-   "why": "Same refrain, word for word"
+   "why": "The two ayat are word for word the same. The real difference is in the next ayah, where intercession and compensation swap places. A memorizer needs the pair together with the ayah after it.",
+   "checked": true,
+   "card": true
   },
   "2:48|2:123": {
    "keep": true,
-   "why": "Same warning of the Day no soul avails another"
+   "why": "Same warning of the Day, with intercession and ransom swapped in order. A classic memorizer pair; the books explain the swap.",
+   "checked": true,
+   "card": true
   },
   "2:51|2:92": {
    "keep": true,
-   "why": "Same rebuke: taking the calf after Musa"
+   "why": "The same rebuke for taking the calf after Musa left, once in the story itself and once as an argument against the Jews of Madina. They open differently and continue differently.",
+   "checked": true,
+   "card": true
   },
   "2:62|2:112": {
    "keep": true,
-   "why": "Same reward: no fear on them nor grief"
+   "why": "Four groups in one surah promised the same reward and freedom from fear and grief: the believers of all communities, the one who submits, the one who spends without reproach, the one who prays and gives zakat. Strong for memorizers and for pondering who earns it.",
+   "checked": true,
+   "card": true
   },
   "2:62|2:262": {
    "keep": true,
-   "why": "Same reward: no fear on them nor grief"
+   "why": "Four groups in one surah promised the same reward and freedom from fear and grief: the believers of all communities, the one who submits, the one who spends without reproach, the one who prays and gives zakat. Strong for memorizers and for pondering who earns it.",
+   "checked": true,
+   "card": true
   },
   "2:62|2:277": {
    "keep": true,
-   "why": "Same reward: no fear on them nor grief"
+   "why": "Four groups in one surah promised the same reward and freedom from fear and grief: the believers of all communities, the one who submits, the one who spends without reproach, the one who prays and gives zakat. Strong for memorizers and for pondering who earns it.",
+   "checked": true,
+   "card": true
   },
   "2:63|2:93": {
    "keep": true,
-   "why": "Same covenant and the mount raised over them"
+   "why": "The covenant and the mount raised over them, word for word, then two different continuations: remember what is in it, or hear (and they said: we hear and disobey). Memorizer pair and a telling contrast.",
+   "checked": true,
+   "card": true
   },
   "2:68|2:69": {
    "keep": true,
-   "why": "Same story: the cow, asking again"
+   "why": "Consecutive questions about the cow, each asking again for a detail: same opening, different question. The story shows the people making it harder for themselves.",
+   "checked": true,
+   "card": true
   },
   "2:89|2:101": {
    "keep": true,
-   "why": "Same pattern: what came from Allah confirming what they had, rejected"
+   "why": "The same opening, once about a book and once about a messenger, both confirming what they had. Both times a group rejects it. A close pair for a memorizer.",
+   "checked": true,
+   "card": true
   },
   "2:94|2:111": {
    "keep": true,
-   "why": "Claims of the Jews about the hereafter, challenged to be truthful"
+   "why": "Two claims of the People of the Book to own the hereafter or Paradise, each met with a challenge to prove it if they are truthful.",
+   "checked": true,
+   "card": true
   },
   "2:97|2:170": {
    "keep": false,
-   "why": "Only shared words, different subjects"
+   "why": "Only scattered common words; Jibril bringing the revelation versus following the fathers. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:103|2:239": {
    "keep": false,
-   "why": "Only shared words, different subjects"
+   "why": "Only common words like believing and knowing; a reward the Jews missed versus prayer in fear. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:103|2:278": {
    "keep": false,
-   "why": "Only shared words, different subjects"
+   "why": "Only the common words believe and fear Allah; different subjects (the reward missed by the sorcerers' followers, and leaving usury).",
+   "checked": true,
+   "card": true
   },
   "2:103|2:280": {
    "keep": false,
-   "why": "Only shared words, different subjects"
+   "why": "Only the ending about what is better if you knew; different subjects (the missed reward, and giving debtors time).",
+   "checked": true,
+   "card": true
   },
   "2:106|2:148": {
    "keep": false,
-   "why": "Only the closing «إن الله على كل شيء قدير»"
+   "why": "Only the stock closing about Allah's power over all things; abrogation versus each having a direction. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:110|2:277": {
    "keep": true,
-   "why": "Prayer and zakah, with the reward with their Lord"
+   "why": "Prayer and zakat with the promise that good is found with Allah, then the same promise phrased as reward with their Lord and no fear or grief. Shows how one surah repeats the same reward for the same deeds.",
+   "checked": true,
+   "card": true
   },
   "2:111|2:135": {
    "keep": true,
-   "why": "Same claim of the Jews and Christians"
+   "why": "Two claims of the Jews and Christians in the same passage, each opened with the same words and each answered by the Prophet: one asks for their proof, the other points to the way of Ibrahim.",
+   "checked": true,
+   "card": true
   },
   "2:112|2:262": {
    "keep": true,
-   "why": "Same reward: no fear on them nor grief"
+   "why": "Submitting to Allah and spending in His way, by day and night, earn the same reward with the same closing words. Good for a memorizer to see where each ending sits.",
+   "checked": true,
+   "card": true
   },
   "2:112|2:274": {
    "keep": true,
-   "why": "Same reward: no fear on them nor grief"
+   "why": "Submitting to Allah and spending in His way, by day and night, earn the same reward with the same closing words. Good for a memorizer to see where each ending sits.",
+   "checked": true,
+   "card": true
   },
   "2:112|2:277": {
    "keep": true,
-   "why": "Same reward: no fear on them nor grief"
+   "why": "Prayer and zakat with the promise that good is found with Allah, then the same promise phrased as reward with their Lord and no fear or grief. Shows how one surah repeats the same reward for the same deeds.",
+   "checked": true,
+   "card": true
   },
   "2:129|2:151": {
    "keep": true,
-   "why": "Same mission: a messenger reciting the signs, teaching the Book and wisdom, purifying"
+   "why": "Ibrahim's prayer for a messenger and its fulfilment, in nearly the same words; in the answer, purification comes before teaching. A well-known point for pondering and a place memorizers mix up.",
+   "checked": true,
+   "card": true
   },
   "2:134|2:141": {
    "keep": true,
-   "why": "Same refrain, word for word"
+   "why": "The same refrain, word for word, closing two passages on Abraham and his sons. Memorizers need to know it occurs twice; the repeat drives home that each nation answers for its own deeds.",
+   "checked": true,
+   "card": true
   },
   "2:144|2:149": {
    "keep": true,
-   "why": "Same command: turn your face toward the Sacred Mosque"
+   "why": "The command to face the Sacred Mosque repeated three times with different continuations. A classic spot for memorizers.",
+   "checked": true,
+   "card": true
   },
   "2:144|2:150": {
    "keep": true,
-   "why": "Same command: turn your face toward the Sacred Mosque"
+   "why": "The command to face the Sacred Mosque repeated three times with different continuations. A classic spot for memorizers.",
+   "checked": true,
+   "card": true
   },
   "2:154|2:190": {
    "keep": false,
-   "why": "Martyrs alive vs the command to fight; different subjects"
+   "why": "Martyrs alive vs the command to fight; different subjects",
+   "ask": "owner: discuss"
   },
   "2:154|2:244": {
-   "keep": false,
-   "why": "Martyrs alive vs the command to fight; different subjects"
+   "keep": true,
+   "why": "Owner kept it",
+   "checked": true,
+   "card": true
   },
   "2:168|2:208": {
    "keep": true,
-   "why": "Same warning: do not follow the steps of Satan"
+   "why": "The same warning not to follow Satan's footsteps, said first to all people about food and then to the believers about entering Islam fully. Same ending, different openings: useful for memorizers.",
+   "checked": true,
+   "card": true
   },
   "2:190|2:195": {
    "keep": true,
-   "why": "Contrast: fight in Allah's way and do not transgress, spend in Allah's way and do good"
+   "why": "Fight in the way of Allah but do not transgress, for He does not love transgressors; spend in His way and do good, for He loves those who do good. A clear contrast, plus the repeated command to fight.",
+   "checked": true,
+   "card": true
   },
   "2:190|2:244": {
    "keep": true,
-   "why": "Same command: fight in the way of Allah"
+   "why": "Fight in the way of Allah but do not transgress, for He does not love transgressors; spend in His way and do good, for He loves those who do good. A clear contrast, plus the repeated command to fight.",
+   "checked": true,
+   "card": true
   },
   "2:234|2:240": {
    "keep": true,
-   "why": "Same law: those who die leaving wives"
+   "why": "Two laws on widows, with the same 'no blame on you for what they do with themselves', differing in 'in what is right' versus 'of what is right' and in the closing names. Classic pair the books explain.",
+   "checked": true,
+   "card": true
   },
   "2:262|2:274": {
    "keep": true,
-   "why": "Spending wealth, the same reward with their Lord"
+   "why": "Two descriptions of those who spend, one by the absence of reproach, one by spending day and night, secretly and openly, with the same reward. Memorizers need to know which wording goes where.",
+   "checked": true,
+   "card": true
   },
   "2:262|2:277": {
    "keep": true,
-   "why": "Same reward: no fear on them nor grief"
+   "why": "The spenders and the believers who pray and give zakat share the same reward line. Useful for memorizers and for seeing that spending stands beside prayer.",
+   "checked": true,
+   "card": true
   },
   "2:274|2:277": {
    "keep": true,
-   "why": "Same reward: no fear on them nor grief"
+   "why": "The spenders and the believers who pray and give zakat share the same reward line. Useful for memorizers and for seeing that spending stands beside prayer.",
+   "checked": true,
+   "card": true
   },
   "3:4|3:11": {
    "keep": true,
@@ -30347,63 +30524,93 @@
   },
   "1:1|27:30": {
    "keep": true,
-   "why": "The basmala itself, quoted as the opening of Sulayman's letter."
+   "why": "The basmala opening the Quran, and quoted as the opening of Solomon's letter.",
+   "checked": true,
+   "card": true
   },
   "1:2|6:45": {
-   "keep": false,
-   "why": "Only the formula 'praise be to Allah, Lord of the worlds'."
+   "keep": true,
+   "why": "Owner kept it",
+   "checked": true,
+   "card": true
   },
   "1:2|10:10": {
-   "keep": false,
-   "why": "Only the formula 'praise be to Allah, Lord of the worlds'."
+   "keep": true,
+   "why": "The phrase that opens the Quran is the last call of the people of Paradise. A known point for pondering: praise is the first and the last word.",
+   "checked": true,
+   "card": true
   },
   "1:2|14:39": {
    "keep": false,
-   "why": "Only 'praise be to Allah'."
+   "why": "Only the opening words of praise are shared; 14:39 is Ibrahim thanking Allah for his sons in old age. Different subjects, nothing to learn from the pairing.",
+   "checked": true,
+   "card": true
   },
   "1:2|35:34": {
    "keep": false,
-   "why": "Only 'praise be to Allah'."
+   "why": "Only the opening words of praise; 35:34 is the people of Paradise thanking Allah for removing grief. The shared words are too common to make a card.",
+   "checked": true,
+   "card": true
   },
   "1:2|37:182": {
-   "keep": false,
-   "why": "Only the formula 'praise be to Allah, Lord of the worlds'."
+   "keep": true,
+   "why": "Owner kept it",
+   "checked": true,
+   "card": true
   },
   "1:2|40:65": {
-   "keep": false,
-   "why": "Only the formula 'praise be to Allah, Lord of the worlds'."
+   "keep": true,
+   "why": "Owner kept it",
+   "checked": true,
+   "card": true
   },
   "1:2|45:36": {
-   "keep": false,
-   "why": "Only the formula of praise."
+   "keep": true,
+   "why": "Al-Jathiya closes with the praise that opens al-Fatiha, spelling out the Lord of the worlds as Lord of the heavens and the earth. A small but real echo for pondering; a memorizer may also slip from one to the other.",
+   "checked": true,
+   "card": true
   },
   "1:6|4:68": {
    "keep": true,
-   "why": "The prayer for the straight path and its promise to those who obey."
+   "why": "The prayer for the straight path, and the promise that those who obey would be guided to it: the request and its answer.",
+   "checked": true,
+   "card": true
   },
   "1:6|6:87": {
    "keep": true,
-   "why": "The prayer for the straight path and the prophets who were guided to it."
+   "why": "The prayer for the straight path beside the prophets and their families whom Allah chose and guided to it: the reader asks for the path the prophets walked.",
+   "checked": true,
+   "card": true
   },
   "1:6|10:25": {
-   "keep": false,
-   "why": "Only 'guides whom He wills to a straight path'; a prayer vs a general statement."
+   "keep": true,
+   "why": "Owner kept it",
+   "checked": true,
+   "card": true
   },
   "1:6|16:121": {
    "keep": true,
-   "why": "The prayer for the straight path and Ibrahim, who was guided to it."
+   "why": "The prayer for the straight path beside Ibrahim, who was chosen and guided to it because he was grateful: a model of the answered prayer.",
+   "checked": true,
+   "card": true
   },
   "1:6|24:46": {
-   "keep": false,
-   "why": "Only 'guides whom He wills to a straight path'; a prayer vs a general statement."
+   "keep": true,
+   "why": "Owner kept it",
+   "checked": true,
+   "card": true
   },
   "1:6|37:118": {
    "keep": true,
-   "why": "The same words: the prayer for the straight path, granted to Musa and Harun."
+   "why": "'The straight path': our prayer for it (1:6) and Moses and Aaron guided to it (37:118).",
+   "checked": true,
+   "card": true
   },
   "1:6|67:22": {
-   "keep": false,
-   "why": "Only 'straight path'; a prayer vs the parable of the one walking prone."
+   "keep": true,
+   "why": "Owner kept it",
+   "checked": true,
+   "card": true
   },
   "2:11|26:152": {
    "keep": true,
@@ -30411,7 +30618,9 @@
   },
   "2:32|51:30": {
    "keep": true,
-   "why": "Angels speaking, both closing on العليم الحكيم in reverse order."
+   "why": "Angels speaking close with the names Knowing and Wise, in reverse order: to Allah, and to Ibrahim's wife. A memorizer trap.",
+   "checked": true,
+   "card": true
   },
   "2:34|38:74": {
    "keep": true,
@@ -30423,15 +30632,21 @@
   },
   "2:48|82:19": {
    "keep": true,
-   "why": "Same point: a day when no soul can avail another."
+   "why": "The Day when no soul can help another: twice in al-Baqara with intercession and ransom swapped, and once in 82:19 with all command belonging to Allah. A strong memorizer pair plus a theme.",
+   "checked": true,
+   "card": true
   },
   "2:55|51:44": {
    "keep": true,
-   "why": "Same punishment: the thunderbolt took them while they looked on."
+   "why": "The thunderbolt seized them while they looked: the Israelites and Thamud.",
+   "checked": true,
+   "card": true
   },
   "2:66|72:27": {
    "keep": false,
-   "why": "Only 'before and behind'; different subjects."
+   "why": "Only the words before and behind. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:82|84:25": {
    "keep": false,
@@ -30451,15 +30666,21 @@
   },
   "2:88|69:41": {
    "keep": true,
-   "why": "Same rebuke for rejecting the revelation: little do they believe."
+   "why": "The rare rebuke little do they believe, said of the Jews who claimed sealed hearts and of the Makkans who called the Quran poetry. Both refuse the revelation.",
+   "checked": true,
+   "card": true
   },
   "2:101|63:1": {
    "keep": false,
-   "why": "Only 'a messenger of Allah came'; different subjects."
+   "why": "Only the words a messenger of Allah came; the People of the Book casting the Book aside versus the hypocrites' false testimony. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:104|67:28": {
    "keep": false,
-   "why": "Only 'painful punishment for the disbelievers'."
+   "why": "Only painful punishment for the disbelievers, a stock phrase. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "2:117|26:24": {
    "keep": false,
@@ -30467,7 +30688,9 @@
   },
   "2:123|82:19": {
    "keep": true,
-   "why": "Same point: a day when no soul can avail another."
+   "why": "The Day when no soul can help another: twice in al-Baqara with intercession and ransom swapped, and once in 82:19 with all command belonging to Allah. A strong memorizer pair plus a theme.",
+   "checked": true,
+   "card": true
   },
   "2:154|37:36": {
    "keep": false,
@@ -30475,7 +30698,9 @@
   },
   "2:190|60:8": {
    "keep": true,
-   "why": "Contrast in the rules of fighting: fight those who fight you; be kind to those who did not."
+   "why": "Two rules for dealing with others: fight those who fight you and do not transgress; be kind and just to those who did not fight you. One says whom Allah does not love, the other whom He loves.",
+   "checked": true,
+   "card": true
   },
   "2:209|98:4": {
    "keep": false,
@@ -30483,7 +30708,9 @@
   },
   "2:218|60:7": {
    "keep": false,
-   "why": "Only the closing 'Forgiving, Merciful'."
+   "why": "Only the stock closing Forgiving, Merciful. Different subjects.",
+   "checked": true,
+   "card": true
   },
   "3:16|38:61": {
    "keep": false,

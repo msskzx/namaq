@@ -42,6 +42,7 @@
     "quran:compare-apply": "tsx scripts/quran/applyCompareReviewLog.ts",
     "quran:card-review": "tsx scripts/quran/buildCardReview.ts",
     "quran:card-proposals": "tsx scripts/quran/mergeCardProposals.ts",
+    "quran:card-apply": "tsx scripts/quran/applyCardReview.ts",
     "quran:missing-roots": "tsx scripts/quran/missingRoots.ts",
     "quran:story-apply": "tsx scripts/quran/applyStoryReviewLog.ts",
     "quran:branches": "tsx scripts/quran/buildBranches.ts",
