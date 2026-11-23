@@ -27,6 +27,7 @@ below. Never copy one into a screen.
 | `motion` (`useSlideAway`, `useHidden`, `hiddenProps`) | The one hide motion: slide off the edge and fade, hide 200ms ease-in, show 260ms ease-out | every bar that hides or comes back |
 | `GlassBar` | A floating frosted bar of buttons, as tall as one icon button; `small` is a shorter pill sized to small buttons, sharing its row | recite mode's bar (`components/recite/RecitePill`, `small` on the home recall card) |
 | `TabBar`, `tabBarSpace` | The floating bottom tab bar and its height | room under content |
+| `column` | The tablet column (680pt), home's two columns lying down, `usePageWidth` for anything sized from the page, `isTablet`/`isWide` | sizing from the window width |
 | `FloatingMenu` (+ `MenuAt`) | A row of ActButtons over what was pressed, wrapping, above or below the finger; `groups` lays them in groups with a thin line between; `bubble` (+ `span`, the button's height) is the round reaction pop-up over one button of an open menu; `overlay` dims behind and closes on a tap outside | the mushaf and book long press, the home cards menu |
 | `MoreMenu` | A card's «⋯»: an icon button that opens a `FloatingMenu` of its choices (ActButtons); nothing when there is none | the feed cards' «ليس من اهتماماتي» |
 | `Sheet` | Rises from the bottom, tap outside or swipe down closes; `tall` one height above the keyboard, `full` whole screen with title and close | every sheet, full-screen ones included (share, video) |

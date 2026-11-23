@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ComponentRef, type ReactNode } from 'react';
-import { Image, Platform, ScrollView, Share, View, useWindowDimensions } from 'react-native';
+import { Image, Platform, ScrollView, Share, View } from 'react-native';
+import { usePageWidth } from '@/ui/column';
 import { captureRef } from 'react-native-view-shot';
 import { Clapperboard, ImageDown, Link, ListVideo, Send } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
@@ -43,7 +44,7 @@ function Fit({ width, children, onReady }: { width: number; children: ReactNode;
 export default function ShareSheet() {
   const request = useShareRequest();
   const palette = usePalette();
-  const { width } = useWindowDimensions();
+  const width = usePageWidth();
   const frame = useRef<ComponentRef<typeof View>>(null);
   const [drawn, setDrawn] = useState(false);
   const [shot, setShot] = useState<Shot | null>(null);

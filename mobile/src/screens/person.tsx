@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { ScrollView, useWindowDimensions, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
+import { usePageWidth } from '@/ui/column';
 import { router, useLocalSearchParams } from 'expo-router';
 import { ArrowLeftRight, Link2, Network, Waypoints } from 'lucide-react-native';
 import { factSources, kunyaName, sayerAt, saidBy, volumeLabel, type AppPerson, type PersonFact, type PersonLink } from '@shared/tarajim';
@@ -154,7 +155,7 @@ export default function PersonScreen() {
   const onScroll = useShrinkOnScroll();
   const bottom = useTabBarSpace();
   const { slug = '' } = useLocalSearchParams<{ slug?: string }>();
-  const { width } = useWindowDimensions();
+  const width = usePageWidth();
   const [tie, setTie] = useState<Pick<Tie, 'to' | 'link' | 'reversed'> | undefined>();
   const showLink = (link: PersonLink) => setTie({ to: link.slug, link });
   // A battle opens its page when the app has one, as the timeline's battles do.

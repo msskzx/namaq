@@ -174,10 +174,10 @@ test('a solo quiz of the sira and battles: pick the right answers, each shows it
   expect(run!.questions.every(question => question.family === 'SIRA')).toBe(true);
   for (const [index, question] of run!.questions.entries()) {
     await choose(page, question.choices.find(choice => choice.value === question.correctAnswer)!.labelArabic);
-    await expect(page.getByText(/سير أعلام النبلاء|صحيح البخاري/).first()).toBeVisible();
+    await expect(page.getByText(/سير أعلام النبلاء|صحيح البخاري|صحيح مسلم/).first()).toBeVisible();
     if (index === 0) {
       // Collapsed to the book's name (owner, 2026-11-19); a tap opens where in it the answer is.
-      const book = page.getByRole('button', { name: /سير أعلام النبلاء|صحيح البخاري/ }).first();
+      const book = page.getByRole('button', { name: /سير أعلام النبلاء|صحيح البخاري|صحيح مسلم/ }).first();
       const places = page.getByText(/ص [٠-٩]|رقم [٠-٩]/);
       const before = await places.count();
       await book.click();

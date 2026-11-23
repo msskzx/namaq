@@ -5,7 +5,7 @@ import { expect, open, tab, test } from './fixtures';
 test('the tarajim tab opens the list of converted people, filters by title, and opens a person', async ({ page }) => {
   await open(page, '/');
   await tab(page, 'التراجم').click();
-  await page.getByRole('link', { name: /كل التراجم بترتيب الكتاب/ }).click();
+  await page.getByRole('link', { name: 'كل التراجم', exact: true }).click();
   await expect(page.getByRole('link', { name: 'الزبير بن العوام', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'العشرة المبشرون بالجنة' }).click();
   await expect(page.getByRole('link', { name: 'طلحة بن عبيد الله', exact: true })).toBeVisible();
@@ -91,7 +91,9 @@ test('between two people shows the chain that joins them, with its pages', async
 test('the person page draws his nasab tree, his life and his ties', async ({ page }) => {
   await open(page, '/person?slug=az-zubayr-ibn-al-awwam');
   // The tree first (owner, 2026-11-20), ending at him; the book's words on «النص».
-  await expect(page.getByRole('link', { name: 'الزبير' })).toBeVisible();
+  // Exact: a loose name is matched against every element of this long page while it loads, which takes the test browser
+  // past its timeout; the page itself is drawn by then.
+  await expect(page.getByRole('link', { name: 'الزبير', exact: true })).toBeVisible();
   await page.getByRole('tab', { name: 'النص' }).first().click();
   await expect(page.getByRole('button', { name: 'قارن نسبه بغيره' })).toBeVisible();
   // His ties round him: his mother opens her own page.

@@ -132,7 +132,9 @@ export type QuizLook =
   | { view: 'balagha'; key: string; mark?: undefined }
   | { view: 'irab'; key: string; word: number; mark?: undefined }
   | { view: 'qiraat'; key: string; mark?: undefined }
-  | { view: 'tuhfa'; mark?: number };
+  | { view: 'tuhfa'; mark?: number }
+  /** A run of ayat in the mushaf; once marked, the ayah that answers lit. */
+  | { view: 'ayat'; keys: string[]; mark?: string };
 
 /** A look as a party shows it before the reveal: without what points at the answer. */
 export const unmarked = (look: QuizLook | undefined): QuizLook | undefined => look && ({ ...look, mark: undefined });

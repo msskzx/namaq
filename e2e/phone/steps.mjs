@@ -14,11 +14,15 @@ export const HELP = {
   look: 'look                a screenshot and the list of what can be tapped, nothing else',
 };
 
-/** A browser the size of an iPhone 17 Pro Max (440×956 points), dark, Arabic and Cairo time, as the owner uses the app. */
+/**
+ * A browser the size of an iPhone 17 Pro Max (440×956 points), dark, Arabic and Cairo time, as the owner uses the app.
+ * PHONE_SIZE=WxH gives another screen: an iPad Air 11" is 820x1180 standing and 1180x820 lying down.
+ */
 export async function launch(baseURL) {
   const browser = await chromium.launch();
+  const [width, height] = (process.env.PHONE_SIZE || '440x956').split('x').map(Number);
   const context = await browser.newContext({
-    viewport: { width: 440, height: 956 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true,
+    viewport: { width, height }, deviceScaleFactor: 2, isMobile: true, hasTouch: true,
     colorScheme: 'dark', locale: 'ar', timezoneId: 'Africa/Cairo', baseURL,
   });
   // A returning user: the tour and the interests question are done (keys from mobile/src/lib/deviceStorage.ts).
