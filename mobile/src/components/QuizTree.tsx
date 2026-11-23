@@ -90,7 +90,7 @@ export function MatrixInputs({ question, values, hints, write, palette, names }:
         return (
           <Card key={`${path.join('-')}:${ayahKeys[0]}`} palette={palette} pad={10} gap={2}>
             {label ? <Text style={{ color: palette.muted, fontSize: 13 }}>{label}</Text> : null}
-            <AyahFlow row color={palette.ink}>
+            <AyahFlow row color={palette.ink} menu={false}>
               {before.length > 0 && <AyahWords>{before.join(' ')}</AyahWords>}
               <AyahWords look={{ color: palette.accent, fontWeight: '700' }}>{givenAnswer(question.tree)}</AyahWords>
               {path.map(index => {

@@ -111,7 +111,7 @@ import { SahihHadithView } from '@/components/Sahih';
 import { findHadith, placeOf, type SahihSlug } from '@shared/sahih';
 import type { BookId } from '@shared/books';
 import { BookCard, Shelf, TUHFA } from '@/screens/books';
-import DarkSea, { DarkSeaActions, darkSeaName, darkSeaSourceList } from './DarkSea';
+import { DarkSeaActions, DarkSeaCard, darkSeaName, darkSeaSourceList, openDarkSea } from './DarkSea';
 import { DARK_SEA_KEY } from '@shared/quran/scenes/darkSea';
 import { prophetStory } from '@/lib/prophets';
 import StoryMap from './StoryMap';
@@ -409,9 +409,9 @@ function Recall({ ayah, targetWord, title, Icon, head, writing, onWriting, open,
       open={open} actions={marks} source={mushafOf(ayah)}
       // Shared, the ayah's lines as the mushaf sets them: never what is hidden, nor whether it was remembered (owner, 2026-11-22).
       picture={{ head: <PostHead Icon={FEATURE_ICON.mushaf} title={shortNames[surah] ?? ''} sub={num(number)} palette={palette} />,
-        body: <View style={{ padding: 12 }}><AyahLines ayah={ayah} palette={palette} write={null} checked={null} shown whole /></View> }}>
+        body: <View style={{ padding: 12 }}><AyahLines ayah={ayah} menu={false} palette={palette} write={null} checked={null} shown whole /></View> }}>
       <View style={{ padding: 12 }}>
-        <AyahLines ayah={ayah} targetWord={targetWord} palette={palette} shown={shown} words={position.words} checked={recite.checked} onTouch={onTouch} write={recite.write} />
+        <AyahLines ayah={ayah} menu={false} targetWord={targetWord} palette={palette} shown={shown} words={position.words} checked={recite.checked} onTouch={onTouch} write={recite.write} />
         {recite.write && recite.boxes.field}
       </View>
     </Post>
@@ -1063,7 +1063,7 @@ function SavedAyahPost({ ayah, palette }: { ayah: string; palette: Palette }) {
     <Post palette={palette} head={<PostHead Icon={Bookmark} title="من المحفوظات" sub={`${shortNames[surah] ?? ''} ${num(number)}`} open={{ onPress: () => router.push('/library'), label: 'افتح المحفوظات' }} palette={palette} />}
       open={<OpenButton label="افتح صفحة الآية" onPress={() => openAyahPage(ayah)} palette={palette} />} source={mushafOf(ayah)}>
       <View style={{ padding: 12 }}>
-        <AyahLines ayah={ayah} palette={palette} shown whole write={null} checked={null} />
+        <AyahLines ayah={ayah} menu={ayah} palette={palette} shown whole write={null} checked={null} />
       </View>
     </Post>
   );
@@ -1243,8 +1243,8 @@ function BooksPost({ day, palette }: { day: number; palette: Palette }) {
 }
 
 /**
- * A scene from «مشاهد» as a post (owner, 2026-11-21): the scene's whole picture, still, with its ayah; the head opens the page
- * where the reader walks through it.
+ * A scene from «مشاهد» as a post (owner, 2026-11-22): its card as on the scenes page (picture, title, surah and ayah); the
+ * head opens the scenes page, the picture and «افتح» the scene itself.
  */
 const ScenePost = memo(function ScenePost({ id, palette }: { id: string; palette: Palette }) {
   if (id !== DARK_SEA_KEY) return null;
@@ -1252,7 +1252,7 @@ const ScenePost = memo(function ScenePost({ id, palette }: { id: string; palette
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.scenes} title="من المشاهد" sub={darkSeaName()} palette={palette} open={{ onPress: () => toTab('/lataif'), label: 'افتح المشاهد' }} />}
       open={<DarkSeaActions palette={palette} only="open" feed />} share={<DarkSeaActions palette={palette} only="share" />}
       source={darkSeaSourceList()}>
-      <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}><DarkSea palette={palette} still /></View>
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}><DarkSeaCard palette={palette} onPress={openDarkSea} /></View>
     </Post>
   );
 });
@@ -1425,7 +1425,7 @@ function TermPost({ id, day, palette }: { id: string; day: number; palette: Pale
         {example && <>
           <View style={{ height: 1, backgroundColor: palette.rule, opacity: 0.6, marginVertical: 4 }} />
           <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>من أمثلته</Text>
-          <View pointerEvents="none"><ExampleAyat example={example} palette={palette} /></View>
+          <ExampleAyat example={example} palette={palette} />
           <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{ayatName(example.ayat)}</Text>
         </>}
       </View>
@@ -1495,8 +1495,8 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
         open={<OpenButton label={`افتح صفحة الآية، ${head.open}`} onPress={show} palette={palette} />}
         source={sourcesOf(note.sources)}>
         {'readings' in note ? <View style={{ paddingVertical: 10 }}><QiraatPlace ayah={note.key} max={2} lines bare palette={palette} /></View> : <View style={{ paddingVertical: 10, gap: 6 }}>
-          <View pointerEvents="none" style={{ paddingHorizontal: 12 }}>
-            <AyahLines ayah={note.key} palette={palette} shown whole write={null} checked={null} />
+          <View style={{ paddingHorizontal: 12 }}>
+            <AyahLines ayah={note.key} menu={note.key} palette={palette} shown whole write={null} checked={null} />
           </View>
           <View style={{ height: 1, backgroundColor: palette.rule, marginHorizontal: 14, opacity: 0.6 }} />
           {'heading' in note && note.heading ? <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right', paddingHorizontal: 14 }}>{note.heading}</Text> : null}

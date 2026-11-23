@@ -7,6 +7,7 @@ import { syncPacks } from '@/lib/listenFiles';
 import { warmScreens } from '@/lib/lazyScreen';
 import ShareSheet from '@/components/ShareSheet';
 import SaveNotice from '@/components/SaveNotice';
+import AyahMenuHost from '@/components/AyahMenuHost';
 import { useStackOptions } from '@/lib/stackOptions';
 import { noteRootPage } from '@/lib/ways';
 import { leave } from '@/lib/storage';
@@ -38,6 +39,8 @@ export default function AppShell({ onReady }: { onReady: () => void }) {
       {/* Arabic first: every row starts on the right, and every page stack goes back with a swipe from the right edge (lib/stackOptions.ts). */}
       <LocaleProvider direction="rtl">
         <View style={{ flex: 1, direction: 'rtl', backgroundColor: palette.paper }}>
+          {/* A long press on an ayah anywhere off the mushaf opens the reader's menu (owner, 2026-11-22). */}
+          <AyahMenuHost>
           <Stack screenOptions={stack} screenListeners={({ route }) => ({ focus: () => noteRootPage(route.name) })}>
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="library" />
@@ -47,6 +50,7 @@ export default function AppShell({ onReady }: { onReady: () => void }) {
             <Stack.Screen name="attributions" />
             <Stack.Screen name="prophets/[slug]" />
           </Stack>
+          </AyahMenuHost>
           <ShareSheet />
           <SaveNotice />
         </View>

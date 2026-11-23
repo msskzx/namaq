@@ -1,5 +1,5 @@
 import { useColorScheme } from 'react-native';
-import { useMemo } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 import { cardColour, tintSurfaces } from '@shared/cardTint';
 import type { ConnectionTone } from '@shared/quran/mutashabih/connections';
 import { markTones, type Likeness } from '@shared/quran/wordMatch';
@@ -71,14 +71,29 @@ export const dark: Palette = {
  * Drawn shapes until the owner's own art comes.
  */
 export const SEA_ART = {
-  surface: ['#1f3340', '#2c4a57', '#1a3a4a', '#0e2230'], deep: ['#14303e', '#0b1d28', '#03090d'],
-  wave: '#1b3a49', waveEdge: '#7fa6b5', wave2: '#22455a', wave2Edge: '#8fb5c4', cloud: '#2c323c', night: '#000000', hand: '#f2eadc',
+  // The sea of an-Nur 40 (components/scenes/SeaArt), one dark world whatever the theme: dusk sky down to the black.
+  sky: ['#16222c', '#46606e', '#808f96'], glow: '#e1ecec', deep: ['#2c4654', '#0a161e', '#010203'], ray: '#96bece',
+  speck: '#aac8d4', crest: '#aac6d2', glint: '#f0ecdc', wave: ['#5c808c', '#304e5c', '#0e1e28', '#020507'], foam: '#e6f2f5',
+  cloud: ['#080c0f', '#1e282f', '#46585f'], underlight: '#bed2d7',
+  /** The edges of the two waves and the clouds, before the newest takes the gold. */
+  rim: ['#e1f0f4', '#ebf5f7', '#d7e6ea'],
+  /** The scene's words: the ayah's in gold (the edge of the newest layer takes it too), the sayings' in ink. */
+  gold: '#f0d29e', ink: '#ece4d4', muted: '#9a948a', source: '#7d776e', dotRule: 'rgba(236,228,212,0.3)',
+  /** The night it ends in, and the shade behind words over a bright sky. */
+  black: '#000', backing: 'rgba(0,0,0,0.45)',
+  /** The card's still (components/scenes/SeaThumb): the stormy night. */
+  thumb: { sky: ['#05080b', '#14222c', '#1f3644', '#03070a'], haze: '#7fa3b5', cloud: ['#0a0e11', '#2b3a43'], mist: '#33454f',
+    wave: ['#0e1b23', '#081218'], edge: ['#9fbccb', '#6d8a99'], badge: 'rgba(0,0,0,0.75)', badgeInk: '#fff' },
 } as const;
 
 /** Every card's corners, tree nodes included: one round radius (owner, 2026-11-13). */
 export const CARD = { borderRadius: 14 } as const;
 
 export { QURAN_FONT, UI_FONT, UI_FONT_BOLD } from './fonts';
+
+const Forced = createContext<Palette | null>(null);
+/** Draws what it wraps in one palette whatever the theme: a scene is always night (components/DarkSea). */
+export const ForcePalette = Forced.Provider;
 
 export function usePalette(): Palette {
   const scheme = useColorScheme();
@@ -89,11 +104,12 @@ export function usePalette(): Palette {
   const card = isDark ? cardColour('dark', tints.dark) : cardColour('light', tints.light);
   const surfaces = isDark ? tintSurfaces('dark', tints.dark) : tintSurfaces('light', tints.light);
   // Cards and reading areas take the tint chosen on the theme tiles; the page stays as it is.
-  return useMemo(() => {
+  const palette = useMemo(() => {
     const base = isDark ? dark : light;
     const page = surfaces ? { ...surfaces, glass: `${surfaces.paperDeep}b3` } : null;
     return { ...base, ...page, card, marks: markTones(mode, { exact: base.accent, written: base.amber, root: base.root }) };
   }, [isDark, card, surfaces, mode]);
+  return useContext(Forced) ?? palette;
 }
 
 /** Joined و is green and joined ف purple, as on the website's trees. */
