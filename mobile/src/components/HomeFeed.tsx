@@ -2,7 +2,7 @@ import { createContext, isValidElement, memo, useCallback, useContext, useEffect
 import { AppState, Dimensions, useWindowDimensions, View } from 'react-native';
 import { COLUMN_GAP, PageWidthProvider, usePageWidth } from '@/ui/column';
 import { router, useFocusEffect, type Href } from 'expo-router';
-import { CalendarRange, ChartNoAxesColumn, Bookmark, Check, CircleCheck, CircleMinus, Clock, Compass, EyeOff, LibraryBig, Network, Plus, LightbulbOff, ListTree, Scale, TextAlignEnd, Swords, Users, type LucideProps } from 'lucide-react-native';
+import { ChartNoAxesColumn, Bookmark, Check, CircleCheck, CircleMinus, Clock, Compass, EyeOff, LibraryBig, Network, Plus, LightbulbOff, ListTree, Scale, TextAlignEnd, Swords, Users, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, toggleForgotten, mostForgotten, readAyahMarks, readDueMarks, rememberAyah, restoreMark, subscribeDueMarks, type AyahMark } from '@shared/ayahMarks';
@@ -58,7 +58,7 @@ import rajab from '@shared/data/hadith/ibnRajab.json';
 import IbnRajab from '@/components/IbnRajab';
 import { Report, ReportScene, reportSource, StoryAyat, StoryShare } from './stories/StoryParts';
 import { drawnReport } from '@shared/stories/story';
-import { armiesBattles, armiesItems, armiesSources, battleCardSources, battleItems, battleOnCard, battleYearItems, battleYearSlice, battleYearSources, type ArmiesTab, eventItems, eventOf, eventSources, nasabPeople, nasabSources, oathItems, oathSources, openingItems, openingSources, sceneItems, sceneOf, sceneSources, tiesPeople, tiesSources } from '@shared/drawingCards';
+import { armiesBattles, armiesItems, armiesSources, battleCardSources, battleItems, battleOnCard, battleYearItems, battleYearSlice, battleYearSources, atlasSources, type ArmiesTab, eventItems, eventOf, eventSources, nasabPeople, nasabSources, oathItems, oathSources, openingItems, openingSources, sceneItems, sceneOf, sceneSources, tiesPeople, tiesSources } from '@shared/drawingCards';
 import { NasabTree } from '@/screens/nasab';
 import { OpeningRows } from '@/screens/openings';
 import TiesRing, { foldedKinds, personNode, RoundRing, ringName, ringRoom, roundLayout, TieSheet, tiesOf, DoubtedSheet } from './TiesRing';
@@ -70,6 +70,7 @@ import { lifeSources, type LifeItem } from '@shared/events/lifeTimeline';
 import { nasabQuestions } from '@shared/quiz/tarajim';
 import type { Tie } from '@shared/tarajimGraph';
 import BattleMap from './battles/BattleMap';
+import { atlasPins, layerBox, layerOf } from '@shared/battles/atlas';
 import { BATTLES, battleOf } from '@/lib/battles';
 import HadithScene from './HadithScene';
 import { HADITH } from '@/lib/hadith';
@@ -468,6 +469,8 @@ function openAnswer(question: SoloQuestion) {
     const [a, b] = [question.compare.shown.key, question.compare.asked.key];
     return openIntent({ tab: 'compare', lead: Number(a.split(':')[0]), other: Number(b.split(':')[0]), ayat: [a, b] });
   }
+  // «أين كانت؟»: the atlas at the place asked, its sheet open.
+  if (question.map) return toTab({ pathname: '/atlas', params: { place: question.correctAnswer } });
   // The prophet's story, not the ayah its look shows.
   if (question.family === PROPHET_STORY) return router.push({ pathname: '/prophets/[slug]', params: { slug: question.correctAnswer } });
   const look = question.look;
@@ -857,25 +860,28 @@ function BattlePost({ slug, palette }: { slug: string; palette: Palette }) {
 
 /**
  * A year of the battles timeline with the year before and after it (owner, 2026-11-21; feed-visuals sketch, panel 4), the
- * year lit, its battles' places on one map and its battles listed under them, each opening its page; a year's column, or the open button, opens the
- * battles screen at that year.
+ * year lit, and the year on the atlas's map (owner, 2026-11-23; atlas sketch, panel 5): in the Prophet's ﷺ years its places
+ * lit and the earlier years' quiet, on the atlas's still frame; its battles listed under, each opening its page. A year's
+ * column, the open button and the head open the atlas at that year.
  */
 function BattleYearPost({ id, palette }: { id: string; palette: Palette }) {
   const width = usePageWidth();
   const year = Number(id);
   const slice = battleYearSlice(BATTLES, year);
   if (!slice) return null;
-  const toYear = (at: number) => toTab({ pathname: '/battles', params: { year: String(at) } });
-  // The year's battles on one map (owner, 2026-11-22), each place once.
-  const places = [...new Map(slice.battles.flatMap(battle => (battle.place ? [[battle.place.name, battle.place] as const] : []))).values()];
+  const layer = slice.battles[0] ? layerOf(slice.battles[0]) : 'life';
+  const toYear = (at: number) => toTab({ pathname: '/atlas', params: layerOf({ year: { value: at, refs: [] } }) === 'life' ? { year: String(at) } : { layer: 'after' } });
+  // The year on the atlas: on «بعده ﷺ» only the year's own places, lit.
+  const places = layer === 'life' ? atlasPins(BATTLES, 'life', year)
+    : [...new Map(slice.battles.flatMap(battle => (battle.place ? [[battle.place.name, battle.place] as const] : []))).values()];
   return (
-    <Post palette={palette} head={<PostHead Icon={CalendarRange} title="من الغزوات والمعارك" sub={yearTitle(year)} open={topic('/battles', 'افتح الغزوات والمعارك')} palette={palette} />}
-      open={<OpenButton label={`افتح ${yearTitle(year)} في الغزوات والمعارك`} onPress={() => toYear(year)} palette={palette} />}
-      source={sourcesOf(battleYearSources(BATTLES, year))}>
+    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.atlas} title="من الأطلس" sub={yearTitle(year)} open={topic('/atlas', 'افتح الأطلس')} palette={palette} />}
+      open={<OpenButton label={`افتح ${yearTitle(year)} في الأطلس`} onPress={() => toYear(year)} palette={palette} />}
+      source={sourcesOf(uniqueSources([...battleYearSources(BATTLES, year), ...(layer === 'life' ? atlasSources(BATTLES, 'life', year) : [])]))}>
       <View style={{ padding: 14, gap: 6 }}>
         <BattleYears columns={slice.columns} lit={year} width={Math.min(width - 60, 480)} palette={palette} onYear={toYear} />
         {places.length ? <>
-          <BattleMap places={places} palette={palette} />
+          <BattleMap places={places} box={layer === 'life' ? layerBox(BATTLES, 'life') : undefined} palette={palette} />
         </> : null}
         {slice.battles.map(battle => (
           <TapRow key={battle.slug} role="link" label={`افتح ${battle.name}`} style={{ flexDirection: 'column', justifyContent: 'center' }}

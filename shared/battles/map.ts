@@ -83,3 +83,35 @@ export function pinsOf<P extends { name: string }>(places: readonly (P & { x: nu
   }
   return pins.map(pin => ({ x: pin.x, y: pin.y, name: pin.names.join('، ') }));
 }
+
+/** A name on the map: its pin, the box its letters take, and where they start. */
+export type PlacedLabel = { x: number; y: number; anchor: 'start' | 'middle' | 'end'; box: [number, number, number, number] };
+
+/** About how wide a run of Arabic letters is in the Amiri face, per point of font size. */
+const LETTER = 0.5;
+
+const overlaps = (a: readonly number[], b: readonly number[]) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3];
+
+/**
+ * Where each pin's name goes so no two names cover each other or another pin (owner, 2026-11-23: places close together
+ * must not have their names on top of one another). Each name tries beside its pin on the right, on the left, above,
+ * then below, and takes the first spot inside the map that is free; the pins are taken in the given order, so the ones
+ * that matter most come first. A name with no free spot is left off (null): the pin still opens its sheet by name.
+ */
+export function placeLabels(pins: readonly { x: number; y: number; text: string; size: number; r?: number }[], width: number, height: number): (PlacedLabel | null)[] {
+  const taken: number[][] = pins.map(({ x, y, r = 8 }) => [x - r, y - r, x + r, y + r]);
+  return pins.map(({ x, y, text, size, r = 8 }, own) => {
+    const wide = text.length * size * LETTER;
+    const gap = r + 4;
+    const spots: PlacedLabel[] = [
+      { x: x + gap, y: y + size / 3, anchor: 'start', box: [x + gap, y - size / 2, x + gap + wide, y + size / 2] },
+      { x: x - gap, y: y + size / 3, anchor: 'end', box: [x - gap - wide, y - size / 2, x - gap, y + size / 2] },
+      { x, y: y - gap - size / 6, anchor: 'middle', box: [x - wide / 2, y - gap - size, x + wide / 2, y - gap] },
+      { x, y: y + gap + size * 0.8, anchor: 'middle', box: [x - wide / 2, y + gap, x + wide / 2, y + gap + size] },
+    ];
+    const spot = spots.find(({ box }) => box[0] >= 0 && box[2] <= width && box[1] >= 0 && box[3] <= height
+      && taken.every((other, i) => i === own || !overlaps(box, other)));
+    if (spot) taken.push(spot.box);
+    return spot ?? null;
+  });
+}

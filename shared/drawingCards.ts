@@ -3,6 +3,7 @@
 import { eventItem, lastNumber, sceneItem } from './feedItems';
 import type { AppBattle, AppCite } from './battles/battle';
 import { battleTimeline } from './battles/timeline';
+import { layerBattles, type AtlasLayer } from './battles/atlas';
 import type { HadithUnitView, SceneView } from './hadith';
 import type { OathView } from './quran/oaths';
 import { OATH_QUOTES } from './quran/oathSources';
@@ -129,6 +130,15 @@ export function battleYearSources(battles: readonly AppBattle[], year: number): 
     ...citedOf(battles.filter(battle => years.has(battle.year?.value as number)).flatMap(battle => [battle.kind, battle.year])),
     ...citedOf(slice?.battles.map(battle => battle.place) ?? []),
   ]);
+}
+/**
+ * The atlas's sources (owner, 2026-11-23: every page and card carries its references): the books that place each pin it
+ * draws, and the pages giving the kinds and years of the battles it lists. On «في حياته ﷺ» that is up to `year`.
+ */
+export function atlasSources(battles: readonly AppBattle[], layer: AtlasLayer, year?: number): QuizSource[] {
+  const shown = layerBattles(battles, layer).filter(battle => layer === 'after' || (battle.year?.value ?? Infinity) <= (year ?? 0));
+  const listed = layer === 'after' ? shown : shown.filter(battle => battle.year?.value === year);
+  return uniqueSources([...citedOf(listed.flatMap(battle => [battle.kind, battle.year])), ...citedOf(shown.map(battle => battle.place))]);
 }
 export const battleYearItems = (battles: readonly AppBattle[]) =>
   [...new Set(battles.flatMap(battle => (typeof battle.year?.value === 'number' && battle.year.refs.length ? [battle.year.value] : [])))]

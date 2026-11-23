@@ -51,6 +51,7 @@ export default function TarajimScreen() {
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
               <IconTile label="قصص السيرة" Icon={FEATURE_ICON.stories} palette={palette} onPress={() => router.push('/stories')} />
               <IconTile label="الغزوات والمعارك" Icon={FEATURE_ICON.battles} palette={palette} onPress={() => router.push('/battles')} />
+              <IconTile label="الأطلس" Icon={FEATURE_ICON.atlas} palette={palette} onPress={() => router.push('/atlas')} />
             </View>
             <HubHeading text="الصلات بينهم" palette={palette} />
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>

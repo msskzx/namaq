@@ -25,6 +25,7 @@ const SHOWN: Record<string, string> = {
   number: 'the ayah number shown after its words',
   page: 'how the mushaf page is drawn; it names no surah',
   reveal: 'a recited snippet\'s rest, which the reader opens and grades himself',
+  map: 'which of the atlas\'s layers the pins are drawn on; it names no place',
   marked: 'the word the question asks about, marked on screen',
   look: 'the look-up view, its mark removed',
   passage: 'the book text the question asks about',
