@@ -1,10 +1,12 @@
-import { useEffect, useMemo, useRef, type ComponentRef } from 'react';
+import { useDeferredValue, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { battleTimeline } from '@shared/battles/timeline';
+import { normalizeWord } from '@shared/quran/normalize';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Card from '@/ui/Card';
+import Empty from '@/ui/Empty';
 import { usePalette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
@@ -16,7 +18,8 @@ import BattleTimeline from '@/components/battles/BattleTimeline';
 
 /**
  * Every battle in the app: the timeline over the years, then the list by year (undated last); each row opens its page.
- * Opened with `year` (the feed's year card), it scrolls to that year's group once it is laid out.
+ * Opened with `year` (the feed's year card), it scrolls to that year's group once it is laid out. The title is small in the
+ * top bar, beside a search that keeps the battles whose name or place holds every typed word (owner, 2026-11-23).
  */
 export default function BattlesScreen() {
   const palette = usePalette();
@@ -27,6 +30,16 @@ export default function BattlesScreen() {
   const timeline = useMemo(() => battleTimeline(BATTLES), []);
   const { year: opened } = useLocalSearchParams<{ year?: string }>();
   const pending = useRef<number | undefined>(undefined);
+  const [query, setQuery] = useState('');
+  const words = useDeferredValue(query).trim().split(/\s+/).filter(Boolean).map(normalizeWord);
+  const groups = words.length
+    ? timeline.groups
+      .map(group => ({ ...group, battles: group.battles.filter(battle => {
+        const said = normalizeWord(`${battle.name} ${battle.location?.value ?? ''} ${battle.place?.name ?? ''}`);
+        return words.every(word => said.includes(word));
+      }) }))
+      .filter(group => group.battles.length)
+    : timeline.groups;
   useTabRetap('battles', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   const toYear = (year: number) => {
     const y = groupAt.current.get(year);
@@ -41,11 +54,12 @@ export default function BattlesScreen() {
   }, [opened]);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar back={back} hideOnScroll />
-      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 10 }}>
-        <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>الغزوات والمعارك</Text>
-        <BattleTimeline madinah={timeline.madinah} after={timeline.after} palette={palette} onYear={toYear} />
-        {timeline.groups.map(group => (
+      <TopBar back={back} title="الغزوات والمعارك" hideOnScroll
+        search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث', label: 'ابحث في الغزوات والمعارك' }} />
+      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 10 }}>
+        {!words.length && <BattleTimeline madinah={timeline.madinah} after={timeline.after} palette={palette} onYear={toYear} />}
+        {!groups.length && <Empty text="لا غزوة ولا معركة بهذا الاسم" palette={palette} />}
+        {groups.map(group => (
           <View key={group.title} style={{ gap: 10, paddingTop: 6 }}
             onLayout={group.year === undefined ? undefined : event => {
               groupAt.current.set(group.year!, event.nativeEvent.layout.y);

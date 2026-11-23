@@ -12,6 +12,8 @@ const DOT = 8;
 const STEP = DOT + 3;
 /** Room between the lowest dot and the axis. */
 const ABOVE_AXIS = 6;
+/** The dotted stretch where years are skipped. */
+const SKIP = 28;
 
 /** A battle's dot: filled for a غزوة, a ring for a سرية, a quiet filled dot for a later معركة. */
 function DotShape({ kind, palette, cx, cy }: { kind: DotKind; palette: Palette; cx: number; cy: number }) {
@@ -38,12 +40,32 @@ function Year({ column, height, width, lit, palette, onYear }: { column: Timelin
     : <View style={{ width, alignItems: 'center' }}>{drawing}</View>;
 }
 
-/** An axis of years, right to left, every column `width` wide (MIN_TAP at least); it scrolls sideways where the screen is narrower. */
+/** How many jumps in the years an axis draws as dotted stretches. */
+const skips = (columns: TimelineYear[]) => columns.filter((column, i) => i > 0 && column.year > columns[i - 1].year + 1).length;
+
+/** Where years are skipped on an axis: the line goes on dotted, with no year under it. */
+function Skip({ height, palette }: { height: number; palette: Palette }) {
+  return (
+    <View style={{ width: SKIP, alignItems: 'center' }} accessible={false}>
+      <Svg width={SKIP} height={height}>
+        <Line x1={0} x2={SKIP} y1={height - 0.5} y2={height - 0.5} stroke={palette.rule} strokeWidth={1} strokeDasharray="2 3" />
+      </Svg>
+    </View>
+  );
+}
+
+/**
+ * An axis of years, right to left, every column `width` wide (MIN_TAP at least); it scrolls sideways where the screen is
+ * narrower. Where the years jump (11 to 15), a short dotted stretch stands for the skipped ones.
+ */
 function Axis({ columns, width = MIN_TAP, lit, palette, onYear }: { columns: TimelineYear[]; width?: number; lit?: number; palette: Palette; onYear: (year: number) => void }) {
   const height = Math.max(...columns.map(column => column.dots.length)) * STEP + ABOVE_AXIS;
   return (
     <RowScroll gap={0}>
-      {columns.map(column => <Year key={column.year} column={column} height={height} width={Math.max(width, MIN_TAP)} lit={column.year === lit} palette={palette} onYear={onYear} />)}
+      {columns.flatMap((column, i) => [
+        ...(i > 0 && column.year > columns[i - 1].year + 1 ? [<Skip key={`skip-${column.year}`} height={height} palette={palette} />] : []),
+        <Year key={column.year} column={column} height={height} width={Math.max(width, MIN_TAP)} lit={column.year === lit} palette={palette} onYear={onYear} />,
+      ])}
     </RowScroll>
   );
 }
@@ -63,21 +85,17 @@ function Legend({ kinds, palette }: { kinds: DotKind[]; palette: Palette }) {
 }
 
 /**
- * The battles drawn over the years (owner, 2026-11-20; layout-cleanup sketch, panel 5): the Prophet's ﷺ years in Madinah
- * on one axis, the later battles on a second by their own years. Laid out by `battleTimeline` (shared/battles/timeline.ts),
- * as on the website's /battles. A tap on a year hands it to `onYear`; the list under the drawing opens each battle.
+ * The battles drawn over the years (owner, 2026-11-20; layout-cleanup sketch, panel 5): the Prophet's ﷺ years in Madinah,
+ * then the later battles by their own years on the same line (owner, 2026-11-23: one line, not a second row), a dotted
+ * stretch where years are skipped. Laid out by `battleTimeline` (shared/battles/timeline.ts). A tap on a year hands it
+ * to `onYear`; the list under the drawing opens each battle.
  */
 export default function BattleTimeline({ madinah, after, palette, onYear }: { madinah: TimelineYear[]; after: TimelineYear[]; palette: Palette; onYear: (year: number) => void }) {
+  const columns = [...madinah, ...after];
   return (
     <View style={{ gap: 10 }}>
-      <Axis columns={madinah} palette={palette} onYear={onYear} />
-      {after.length > 0 && (
-        <View style={{ gap: 4 }}>
-          <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>بعد السنة {num(madinah.length)}</Text>
-          <Axis columns={after} palette={palette} onYear={onYear} />
-        </View>
-      )}
-      <Legend kinds={legendKinds([...madinah, ...after])} palette={palette} />
+      <Axis columns={columns} palette={palette} onYear={onYear} />
+      <Legend kinds={legendKinds(columns)} palette={palette} />
     </View>
   );
 }
@@ -89,9 +107,9 @@ export default function BattleTimeline({ madinah, after, palette, onYear }: { ma
 export function BattleYears({ columns, lit, width, palette, onYear }: { columns: TimelineYear[]; lit: number; width: number; palette: Palette; onYear: (year: number) => void }) {
   return (
     <View style={{ gap: 10 }}>
-      {/* The later axis holds only the years with a battle, as on the battles screen. */}
+      {/* A slice of the later years shows none of the Madinah years, so it says where it stands. */}
       {lit > MADINAH_YEARS && <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>بعد السنة {num(MADINAH_YEARS)}</Text>}
-      <Axis columns={columns} width={Math.floor(width / columns.length)} lit={lit} palette={palette} onYear={onYear} />
+      <Axis columns={columns} width={Math.floor((width - skips(columns) * SKIP) / columns.length)} lit={lit} palette={palette} onYear={onYear} />
       <Legend kinds={legendKinds(columns)} palette={palette} />
     </View>
   );
