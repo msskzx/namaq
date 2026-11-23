@@ -1,4 +1,4 @@
-import { expect, open, readerPage, reciteBarsHidden, returningUser, stored, test } from './fixtures';
+import { expect, onScreen, open, readerPage, reciteBarsHidden, returningUser, stored, test } from './fixtures';
 import type { Locator } from '@playwright/test';
 import { surahName as S } from '../../shared/quran/surahNames';
 import * as adhan from 'adhan';
@@ -115,16 +115,8 @@ test.describe('a new user', () => {
         // It opens as its matrix there too; its own button shows the tree, whose boxes name the surahs. The pager keeps its
         // neighbours drawn beside the screen, so the button pressed is the one on screen.
         const buttons = page.getByRole('button', { name: 'عرض الشجرة' });
-        const width = page.viewportSize()!.width;
-        const onScreen = async () => {
-          for (let i = 0; i < await buttons.count(); i++) {
-            const box = await buttons.nth(i).boundingBox();
-            if (box && box.x >= 0 && box.x + box.width <= width) return i;
-          }
-          return -1;
-        };
-        await expect.poll(onScreen).toBeGreaterThanOrEqual(0);
-        await buttons.nth(await onScreen()).click();
+        await expect.poll(async () => (await onScreen(page, buttons)).length).toBeGreaterThan(0);
+        await buttons.nth((await onScreen(page, buttons))[0]).click();
         await expect(page.getByRole('button', { name: `سورة ${surah}` }).first()).toBeAttached();
       });
 
