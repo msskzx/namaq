@@ -37,7 +37,15 @@ export function useSahihTexts(wanted: boolean): { texts: Partial<Record<SahihSlu
 const LAST = 'sahih-last';
 const isLast = (value: unknown): value is Partial<Record<SahihSlug, number>> => !!value && typeof value === 'object';
 export const lastOpened = (slug: SahihSlug) => readJson(LAST, isLast)?.[slug];
-export const rememberOpened = (slug: SahihSlug, n: number) => writeJson(LAST, { ...readJson(LAST, isLast), [slug]: n });
+/** The hadith read last in either book, with the narrator the words come from and their opening, for the tab's «تابع». */
+export type LastRead = { slug: SahihSlug; n: number; from?: string; words: string };
+const READ = 'sahih-last-read';
+const isRead = (value: unknown): value is LastRead => !!value && typeof value === 'object' && isSahihSlug((value as LastRead).slug) && typeof (value as LastRead).words === 'string';
+export const lastRead = () => readJson(READ, isRead);
+export const rememberOpened = (slug: SahihSlug, n: number, from: string | undefined, words: string) => {
+  writeJson(LAST, { ...readJson(LAST, isLast), [slug]: n });
+  writeJson(READ, { slug, n, from, words });
+};
 
 /** The ones of al-Nawawi's Forty whose records hold this hadith, so its page links to them. */
 export const fortyOf = (slug: SahihSlug, n: number) => FORTY.entries.filter(entry => entry.records.some(record => record.book === slug && record.number === n));

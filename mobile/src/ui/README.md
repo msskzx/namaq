@@ -54,6 +54,10 @@ below. Never copy one into a screen.
 | `StepDots` | A row of dots (`column` stands them up) for the steps of something walked in order: the reached one bigger in the theme's yellow, passed ones muted; a tap goes to a step | the layers of a «مشاهد» scene; a story's shared pictures in the share sheet |
 | `Shade` | A soft dark shade behind words over a picture, round at the corners; takes an animated style | the ayah and the sayings over a «مشاهد» scene's sky |
 | `Step` | A numbered step: the number in an accent ring, its content beside it | a sequence told in order (a battle's moments) |
+| `BarStrip` | A row of bars, the first on the right, each as tall as its count, the whole one control: a touch or slide picks the nearest bar and names it in a pill above the finger; `onLift` acts on lifting, `mark` points at one, `ends` names the two ends, `holdScroll` | where a word gathers by surah (`SurahStrip`), a Sahih's kitabs by their hadith (`SahihShape`) |
+| `NumberGrid` | Numbers in rings, six to a row, each opening its own; `tone` rings them in a colour | al-Nawawi's Forty and Ibn Rajab's eight on the hadith tab |
+| `Ring` | A small ring on its card's paper holding a number or an icon, in a tone | a Sahih's kitab numbers on their line |
+| `ShareBar` | A thin bar from the start, as long as its share of the row | how big a kitab is beside the longest |
 | `SplitBar` | Two amounts on one bar, each its share, accent then rule colour | comparing two sides (a battle's numbers) |
 | `Empty` | The one "nothing here" line: muted, centred, says what is missing and how to fill it | every empty list or search |
 | `LoadingDots`, `LoadingScreen`, `Hourglass` | The one loader (`fill` centres it for a page or sheet, `label` for screen readers), app start screen, quiz timer | waiting |

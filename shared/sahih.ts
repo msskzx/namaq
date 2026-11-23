@@ -126,5 +126,22 @@ export function searchSahih(books: { index: SahihIndex; text?: SahihText | null 
   return { babs, hadith };
 }
 
+/**
+ * A book page's search (owner, 2026-11-23: sketch hadith-design): the kitabs whose name holds every word typed, with no babs
+ * listed, and the kitabs with bab headings that do, with those babs (by their place in the kitab).
+ */
+export function kitabsHolding(index: SahihIndex, query: string): Map<number, number[]> {
+  const words = plainText(query).split(' ').filter(Boolean);
+  const found = new Map<number, number[]>();
+  if (!words.length) return found;
+  for (const kitab of index.kitabs) if (words.every(word => plainText(kitab.title).includes(word))) found.set(kitab.n, []);
+  for (const hit of searchSahih([{ index }], query).babs) {
+    const babs = found.get(hit.kitab);
+    if (!babs) found.set(hit.kitab, [hit.bab ?? 0]);
+    else if (babs.length) babs.push(hit.bab ?? 0);
+  }
+  return found;
+}
+
 /** A book's title, author and edition without its kitabs, for a page or card that shows one hadith (the index stays behind). */
 export const bookOf = ({ slug, title, author, died, edition, shamela, headingsBy }: SahihIndex): SahihBook => ({ slug, title, author, died, edition, shamela, headingsBy });
