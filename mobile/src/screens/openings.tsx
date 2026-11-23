@@ -124,15 +124,13 @@ export default function OpeningsScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar hub hideOnScroll search={{ value: query, onChangeText: setQuery, placeholder: 'اسم سورة أو كلمة من فاتحتها', label: 'ابحث في فواتح السور' }} />
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0, flexShrink: 0 }} contentContainerStyle={{ gap: 8, paddingHorizontal: 16, paddingVertical: 8, alignItems: 'center', flexDirection: 'row' }}>
-        {OPENING_KINDS.map(k => {
-          const on = kind === k.id;
-          return (
-            <Chip key={k.id} label={k.label} on={on} onPress={() => { setKind(on ? null : k.id); scroll.current?.scrollTo({ y: 0, animated: false }); }} palette={palette} />
-          );
-        })}
-      </ScrollView>
       <ScrollView ref={scroll} onScroll={shrink} scrollEventThrottle={16} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: bottom }}>
+        <View accessibilityRole="tablist" style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, paddingTop: 4, paddingBottom: 8 }}>
+          {OPENING_KINDS.map(k => {
+            const on = kind === k.id;
+            return <Chip key={k.id} role="tab" label={k.label} on={on} onPress={() => { setKind(on ? null : k.id); scroll.current?.scrollTo({ y: 0, animated: false }); }} palette={palette} />;
+          })}
+        </View>
         {!kinds.length && <Empty text="لا سورة بهذا الاسم ولا فاتحة فيها هذه الكلمة" palette={palette} />}
         {kinds.map(k => {
           const quote = ITQAN_QUOTES.find(q => q.kind === k.id)!;
