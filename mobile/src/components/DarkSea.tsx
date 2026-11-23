@@ -99,8 +99,11 @@ export default function DarkSea() {
   useAnimatedReaction(() => (pos.value > DARK - 0.98 && pos.value < DARK ? DARK : Math.round(pos.value)), (now, before) => { if (now !== before) scheduleOnRN(setPage, now); });
 
   /** To a page: into the darknesses each layer goes out with a rest after it; elsewhere a slow glide. */
-  const goTo = (target: number, from = pos.value) => {
+  const goTo = (target: number, at?: number) => {
     'worklet';
+    // Read here, not as a default parameter: a worklet's closure leaves out what a default reads, so on the UI thread (a
+    // swipe's end) `pos` was missing, the error aborted the app, and every swipe closed it (owner, 2026-11-23).
+    const from = at ?? pos.value;
     const to = Math.max(0, Math.min(LAST, target));
     if (reduced) { pos.value = to; return; }
     if (to === DARK && from < DARK - 0.5) {
