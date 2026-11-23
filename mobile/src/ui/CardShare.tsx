@@ -111,6 +111,17 @@ export function SharedCard({ shareHead, shareLabel, row, children, ...card }: Re
   return <CardWithRow {...card} row={row || share ? <>{row}{share}</> : undefined}>{children}</CardWithRow>;
 }
 
+/**
+ * A share button for a passage of a page drawn without a card (a battle's head or one of its scenes, owner 2026-11-23:
+ * the battle as an article): the passage as one picture under `head`, its books written out. Like SharedCard it draws
+ * nothing inside another card or a quiz's look-up.
+ */
+export function PassageShare(props: React.ComponentProps<typeof CardShare>) {
+  const inside = useInsideCard();
+  const quiet = useContext(NoShare);
+  return inside || quiet ? null : <CardShare pad={CARD_PAD} {...props} />;
+}
+
 /** Set around a page's view drawn as a quiz's look-up (a hint sheet, a party's review): no share buttons there. */
 export const NoShare = createContext(false);
 

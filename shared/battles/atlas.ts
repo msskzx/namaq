@@ -68,3 +68,18 @@ export function lonePlaces(battles: readonly AppBattle[], layer: AtlasLayer): st
   const places = [...new Map(layerBattles(battles, layer).flatMap(battle => (battle.place ? [[battle.place.name, at(battle.place.at)] as const] : []))).entries()];
   return places.filter(([name, [x, y]]) => places.every(([other, [ox, oy]]) => other === name || Math.hypot(x - ox, y - oy) >= PIN_JOIN)).map(([name]) => name);
 }
+
+/** A screen the atlas's map fills, and the band of it left open between the bars above and the sheet below. */
+export type AtlasScreen = { width: number; height: number; top: number; bottom: number };
+
+/**
+ * The frame of a map that fills the whole screen (owner, 2026-11-23; sketch tools-design/atlas sketch-v2) with every
+ * pinned place of the layer inside the open band between `top` and `bottom`, so no pin hides under the bars or the sheet.
+ * The layer's frame is made for the band's shape, then reaches up and down to the screen's edges at the same scale.
+ */
+export function screenBox(battles: readonly AppBattle[], layer: AtlasLayer, screen: AtlasScreen): Box {
+  const band = Math.max(1, screen.bottom - screen.top);
+  const [west, south, east, north] = frameOf(layerBattles(battles, layer).flatMap(battle => (battle.place ? [battle.place.at] : [])), band / screen.width);
+  const perPoint = (north - south) / band;
+  return [west, south - (screen.height - screen.bottom) * perPoint, east, north + screen.top * perPoint];
+}

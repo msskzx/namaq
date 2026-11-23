@@ -1,22 +1,24 @@
-import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
-import { ScrollView, View } from 'react-native';
+import { useEffect, useMemo, useState } from 'react';
+import { View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { atlasPins, battlesAt, layerBattles, layerBox, layerOf, LAYERS, lifeYears, type AtlasLayer } from '@shared/battles/atlas';
+import { atlasPins, battlesAt, layerBattles, layerOf, LAYERS, lifeYears, screenBox, type AtlasLayer } from '@shared/battles/atlas';
 import { battleTimeline, UNDATED_TITLE } from '@shared/battles/timeline';
 import { placeRefs, searchBattles, type AppBattle } from '@shared/battles/battle';
+import { placeSayer } from '@shared/battles/places';
 import { atlasSources } from '@shared/drawingCards';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
-import Card from '@/ui/Card';
 import Empty from '@/ui/Empty';
 import Tabs from '@/ui/Tabs';
 import Sheet from '@/ui/Sheet';
 import TapRow from '@/ui/TapRow';
 import OpenButton from '@/ui/OpenButton';
+import QuoteBar from '@/ui/QuoteBar';
+import EdgeBar from '@/ui/EdgeBar';
+import DrawerSheet from '@/ui/DrawerSheet';
 import SourceLine, { sourcesOf } from '@/ui/SourceLine';
 import { usePalette, type Palette } from '@/lib/theme';
-import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useTabRetap } from '@/lib/tabRetap';
 import { back } from '@/lib/ways';
@@ -24,6 +26,9 @@ import { BATTLES } from '@/lib/battles';
 import BattleMap from '@/components/battles/BattleMap';
 import { BattleYears } from '@/components/battles/BattleTimeline';
 import { battleLine, Refs } from '@/components/battles/BattleParts';
+
+/** Room kept between the lowest pin and the resting sheet's edge, for the pin's own dot. */
+const PIN_ROOM = 12;
 
 const openBattle = (slug: string) => router.push({ pathname: '/battle', params: { slug } });
 
@@ -38,6 +43,26 @@ function BattleRow({ battle, onPress, palette }: { battle: AppBattle; onPress?: 
       </View>
       {!battle.place && <Text style={{ color: palette.muted, fontSize: 13 }}>لا موضع</Text>}
     </TapRow>
+  );
+}
+
+/**
+ * A battle in the atlas's sheet as a passage (owner, 2026-11-23; sketch tools-design/atlas sketch-v2, list ب): a bar down
+ * its right, its kind, its name, its place in its book's words with who says them and the page, and the way to its page.
+ */
+function AtlasBattle({ battle, palette }: { battle: AppBattle; palette: Palette }) {
+  const said = battle.place?.refs.find(ref => ref.text && placeSayer(ref.cite));
+  return (
+    <EdgeBar tone={battle.place ? palette.accent : palette.rule} width={2} gap={4}>
+      {battle.kind ? <Text style={{ color: palette.accent, fontSize: 13, textAlign: 'right' }}>{battle.kind.value}</Text> : null}
+      <Text style={{ color: palette.ink, fontSize: 21, textAlign: 'right' }}>{battle.name}</Text>
+      {said ? <QuoteBar by={placeSayer(said.cite)} pieces={[{ text: said.text, name: false }]} tone={palette.rule} size={16} palette={palette} /> : null}
+      {!battle.place && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>لم يعيّن كتاب موضعها، فلا دبوس لها</Text>}
+      {placeRefs(battle).map(refs => <Refs key={refs[0]?.cite} refs={refs} palette={palette} />)}
+      <View style={{ alignItems: 'flex-start' }}>
+        <OpenButton label={`افتح ${battle.name}`} onPress={() => openBattle(battle.slug)} palette={palette} />
+      </View>
+    </EdgeBar>
   );
 }
 
@@ -74,19 +99,21 @@ function PlaceSheet({ battles, onClose, palette }: { battles: AppBattle[]; onClo
 }
 
 /**
- * «الأطلس» (owner, 2026-11-23; sketch /mnt/project-files/atlas/sketch2-dark.png): the battles we have on one still map,
+ * «الأطلس» (owner, 2026-11-23; sketch /mnt/project-files/atlas/sketch2-dark.png, laid out anew from sketch
+ * tools-design/atlas sketch-v2: the map fills the screen, the year and its battles in a sheet over its foot): the battles we have on one still map,
  * in two layers. «في حياته ﷺ»: a year at a time on the battles' own year axis, the year's places lit and the earlier
- * ones quiet, its battles listed under the map. «بعده ﷺ»: every later battle with a sourced place, no year axis since
+ * ones quiet, its battles listed in the sheet. «بعده ﷺ»: every later battle with a sourced place, no year axis since
  * most have no cited year; the dated ones listed first, the rest under «لم يذكر المصدر سنتها». A pin opens its sheet. The
  * search in the top bar finds a battle by its name or place on either layer. Opened with `layer`, `year` or `place`
  * (a quiz's answer, the feed's year card), it shows that.
  */
 export default function AtlasScreen() {
   const palette = usePalette();
-  const onScroll = useShrinkOnScroll();
   const bottom = useTabBarSpace();
-  const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
-  useTabRetap('atlas', () => scroll.current?.scrollTo({ y: 0, animated: true }));
+  const [size, setSize] = useState({ width: 0, height: 0 });
+  const [barsEnd, setBarsEnd] = useState(0);
+  const [lower, setLower] = useState(0);
+  useTabRetap('atlas', () => setLower(n => n + 1));
   const params = useLocalSearchParams<{ layer?: string; year?: string; place?: string; at?: string }>();
   const years = useMemo(() => lifeYears(BATTLES), []);
   const [layer, setLayer] = useState<AtlasLayer>('life');
@@ -104,7 +131,11 @@ export default function AtlasScreen() {
     if (toYear && years.includes(toYear)) setYear(toYear);
     if (at) setSheet(battlesAt(BATTLES, layerOf(at), [at.place!.name], toYear));
   }, [params.layer, params.year, params.place, params.at]);
-  const box = useMemo(() => layerBox(BATTLES, layer), [layer]);
+  // The bars over the map's top (the search, then the layers, measured), and where the sheet rests: the map is open between
+  // them, its pins kept a pin's room (PIN_ROOM) clear of the sheet's edge.
+  const low = Math.round(size.height * 0.56);
+  const box = useMemo(() => (size.width && barsEnd ? screenBox(BATTLES, layer, { width: size.width, height: size.height, top: barsEnd, bottom: low - PIN_ROOM }) : undefined),
+    [layer, size.width, size.height, barsEnd, low]);
   const pins = useMemo(() => atlasPins(BATTLES, layer, year), [layer, year]);
   const madinah = useMemo(() => battleTimeline(layerBattles(BATTLES, 'life')).madinah, []);
   const found = useMemo(() => searchBattles(BATTLES, query), [query]);
@@ -123,30 +154,35 @@ export default function AtlasScreen() {
     setSheet(battlesAt(BATTLES, to, [battle.place.name], battle.year?.value));
   };
   return (
-    <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar back={back} hideOnScroll
-        search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث في الأطلس', label: 'ابحث في الأطلس' }} />
-      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag"
-        contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 12 }}>
-        {query.trim() ? (
-          found.length
-            ? <View>{found.map(battle => <BattleRow key={battle.slug} battle={battle} onPress={() => pickFound(battle)} palette={palette} />)}</View>
-            : <Empty text="لا غزوة ولا موضع بهذا الاسم" palette={palette} />
-        ) : <>
+    <View style={{ flex: 1, backgroundColor: palette.paper, overflow: 'hidden' }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
+      {/* The map fills the screen (owner, 2026-11-23: as a maps app), the year's places in the open band above the sheet. */}
+      {box && <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden' }}>
+        <BattleMap places={pins} box={box} palette={palette} onPin={showPlace} />
+      </View>}
+      <View style={{ position: 'absolute', top: 0, left: 0, right: 0 }} onLayout={event => setBarsEnd(Math.round(event.nativeEvent.layout.height))}>
+        <TopBar back={back} search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث في الأطلس', label: 'ابحث في الأطلس' }} />
+        <View style={{ paddingHorizontal: 16, paddingTop: 4 }}>
           <Tabs label="الطبقة" options={LAYERS.map(each => ({ key: each.key, label: each.name }))} value={layer} onChange={setLayer} palette={palette} fill />
-          <Card palette={palette} pad={0} clip gap={0}>
-            <BattleMap places={pins} box={box} palette={palette} onPin={showPlace} />
-          </Card>
-          {layer === 'life' && <BattleYears columns={madinah} lit={year} width={madinah.length * 44} palette={palette} onYear={setYear} />}
-          <View style={{ gap: 2 }}>
-            {layer === 'life' && <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{`السنة ${num(year)} للهجرة`}</Text>}
-            {dated.map(battle => <BattleRow key={battle.slug} battle={battle} palette={palette} />)}
+        </View>
+      </View>
+      {size.height > 0 && barsEnd > 0 && (
+        <DrawerSheet low={low} high={barsEnd} bottom={bottom} lower={lower} raised={query.trim() !== ''} palette={palette}>
+          {query.trim() ? (
+            found.length
+              ? <View>{found.map(battle => <BattleRow key={battle.slug} battle={battle} onPress={() => pickFound(battle)} palette={palette} />)}</View>
+              : <Empty text="لا غزوة ولا موضع بهذا الاسم" palette={palette} />
+          ) : <>
+            {layer === 'life' && <>
+              <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>{`السنة ${num(year)}`}<Text style={{ color: palette.muted, fontSize: 15 }}> للهجرة</Text></Text>
+              <BattleYears columns={madinah} lit={year} width={Math.max(madinah.length * 44, size.width - 32)} palette={palette} onYear={setYear} />
+            </>}
+            {dated.map(battle => <AtlasBattle key={battle.slug} battle={battle} palette={palette} />)}
             {undated.length > 0 && <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 14, textAlign: 'right', paddingTop: 10 }}>{UNDATED_TITLE}</Text>}
-            {undated.map(battle => <BattleRow key={battle.slug} battle={battle} palette={palette} />)}
-          </View>
-          <SourceLine sources={sources} palette={palette} />
-        </>}
-      </ScrollView>
+            {undated.map(battle => <AtlasBattle key={battle.slug} battle={battle} palette={palette} />)}
+            <SourceLine sources={sources} palette={palette} />
+          </>}
+        </DrawerSheet>
+      )}
       <PlaceSheet battles={sheet} onClose={() => setSheet([])} palette={palette} />
     </View>
   );

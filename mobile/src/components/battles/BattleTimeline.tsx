@@ -15,10 +15,10 @@ const ABOVE_AXIS = 6;
 /** The dotted stretch where years are skipped. */
 const SKIP = 28;
 
-/** A battle's dot: filled for a غزوة, a ring for a سرية, a quiet filled dot for a later معركة. */
-function DotShape({ kind, palette, cx, cy }: { kind: DotKind; palette: Palette; cx: number; cy: number }) {
+/** A battle's dot: filled for a غزوة, a ring for a سرية, a quiet filled dot for a later معركة; `size` across. */
+export function DotShape({ kind, palette, cx, cy, size = DOT }: { kind: DotKind; palette: Palette; cx: number; cy: number; size?: number }) {
   const color = kind === 'battle' ? palette.muted : palette.accent;
-  return <Circle cx={cx} cy={cy} r={DOT / 2 - 0.75} fill={kind === 'sariyyah' ? 'none' : color} stroke={color} strokeWidth={1.5} />;
+  return <Circle cx={cx} cy={cy} r={size / 2 - 0.75} fill={kind === 'sariyyah' ? 'none' : color} stroke={color} strokeWidth={1.5} />;
 }
 
 /**
@@ -71,7 +71,7 @@ function Axis({ columns, width = MIN_TAP, lit, palette, onYear }: { columns: Tim
 }
 
 /** The kinds drawn, right to left: «● غزوة ○ سرية». */
-function Legend({ kinds, palette }: { kinds: DotKind[]; palette: Palette }) {
+export function Legend({ kinds, palette }: { kinds: DotKind[]; palette: Palette }) {
   return (
     <View style={{ direction: 'ltr', flexDirection: 'row-reverse', gap: 14 }}>
       {kinds.map(kind => (
@@ -80,22 +80,6 @@ function Legend({ kinds, palette }: { kinds: DotKind[]; palette: Palette }) {
           <Text style={{ color: palette.muted, fontSize: 13 }}>{DOT_NAMES[kind]}</Text>
         </View>
       ))}
-    </View>
-  );
-}
-
-/**
- * The battles drawn over the years (owner, 2026-11-20; layout-cleanup sketch, panel 5): the Prophet's ﷺ years in Madinah,
- * then the later battles by their own years on the same line (owner, 2026-11-23: one line, not a second row), a dotted
- * stretch where years are skipped. Laid out by `battleTimeline` (shared/battles/timeline.ts). A tap on a year hands it
- * to `onYear`; the list under the drawing opens each battle.
- */
-export default function BattleTimeline({ madinah, after, palette, onYear }: { madinah: TimelineYear[]; after: TimelineYear[]; palette: Palette; onYear: (year: number) => void }) {
-  const columns = [...madinah, ...after];
-  return (
-    <View style={{ gap: 10 }}>
-      <Axis columns={columns} palette={palette} onYear={onYear} />
-      <Legend kinds={legendKinds(columns)} palette={palette} />
     </View>
   );
 }

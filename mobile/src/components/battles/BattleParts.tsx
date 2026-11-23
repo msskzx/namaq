@@ -1,6 +1,6 @@
 import { PROPHET_AGENT, PROPHET_LABEL } from '@shared/hadith';
 import { View } from 'react-native';
-import type { AppBattle, AppCite, AppCited, AppMoment, AppPersonLink } from '@shared/battles/battle';
+import { UNIT_WORDS, unitFor, type AppBattle, type AppCite, type AppCited, type AppMoment, type AppPersonLink } from '@shared/battles/battle';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import Chip from '@/ui/Chip';
@@ -8,6 +8,7 @@ import { LeadLink } from '@/ui/ExternalLink';
 import Reference from '@/ui/Reference';
 import SplitBar from '@/ui/SplitBar';
 import Step from '@/ui/Step';
+import UnitDots from '@/ui/UnitDots';
 import type { Palette } from '@/lib/theme';
 
 export { battleLine } from '@shared/battles/battle';
@@ -51,7 +52,7 @@ export function SidesHead({ battle, palette }: { battle: Pick<AppBattle, 'kind'>
 export function CountRow({ label, ours, theirs, palette }: { label: string; ours?: number; theirs?: number; palette: Palette }) {
   const side = (value: number | undefined) => <Text numberOfLines={1} style={{ color: palette.ink, fontSize: 18, minWidth: 44, textAlign: 'center' }}>{value === undefined ? '—' : num(value)}</Text>;
   return (
-    <View style={{ gap: 2 }} accessibilityLabel={`${label}: المسلمون ${ours ? num(ours) : 'غير مذكور'}، ${theirs ? num(theirs) : 'غير مذكور'}`}>
+    <View style={{ gap: 2 }} accessibilityLabel={`${label}: المسلمون ${ours !== undefined ? num(ours) : 'غير مذكور'}، ${theirs !== undefined ? num(theirs) : 'غير مذكور'}`}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
         {side(ours)}
         {ours !== undefined && theirs !== undefined ? <SplitBar first={ours} second={theirs} palette={palette} /> : <View style={{ flex: 1 }} />}
@@ -62,18 +63,49 @@ export function CountRow({ label, ours, theirs, palette }: { label: string; ours
   );
 }
 
-/** How many on each side: the Muslims' bar in the accent, the other side's in the rule colour, both to one scale. */
+/** One side of a row of numbers: its number large with whose it is, then the number as dots of `unit` men each. */
+function Side({ name, value, unit, color, palette }: { name: string; value?: number; unit: number; color: string; palette: Palette }) {
+  return (
+    <View style={{ flex: 1, gap: 6 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' }}>
+        <Text style={{ color: value === undefined ? palette.muted : color, fontSize: 26 }}>{value === undefined ? '—' : num(value)}</Text>
+        <Text style={{ color: palette.muted, fontSize: 14 }}>{name}</Text>
+      </View>
+      {value === undefined
+        ? <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>لم يذكره المصدر</Text>
+        : value > 0 ? <UnitDots count={Math.max(1, Math.round(value / unit))} color={color} /> : null}
+    </View>
+  );
+}
+
+/**
+ * How many on each side (owner, 2026-11-23: as dots, sketch tools-design/battles page-v2): the Muslims on the right in the
+ * accent, the other side in the rule colour, each row's dots one unit of men that keeps the larger side under a hundred
+ * dots, said under it («كل نقطة عشرة رجال»). A side the source does not give is a dash.
+ */
 export function Counts({ battle, palette }: { battle: AppBattle; palette: Palette }) {
   const { muslims, others, muslimsKilled, othersKilled } = battle.counts;
+  const them = battle.kind?.value === 'معركة' ? 'العدو' : 'المشركون';
   const rows = [
-    { label: 'في الميدان', ours: muslims, theirs: others },
-    { label: 'القتلى', ours: muslimsKilled, theirs: othersKilled },
-  ].filter(row => row.ours || row.theirs);
+    { label: 'في الميدان', ours: muslims?.value, theirs: others?.value, names: ['المسلمون', them] },
+    { label: 'القتلى', ours: muslimsKilled?.value, theirs: othersKilled?.value, names: ['استشهد', 'قُتل'] },
+  ].filter(row => row.ours !== undefined || row.theirs !== undefined);
   if (!rows.length) return null;
   return (
-    <View style={{ gap: 10 }}>
-      <SidesHead battle={battle} palette={palette} />
-      {rows.map(({ label, ours, theirs }) => <CountRow key={label} label={label} ours={ours?.value} theirs={theirs?.value} palette={palette} />)}
+    <View style={{ gap: 14 }}>
+      {rows.map(({ label, ours, theirs, names }) => {
+        const unit = unitFor(Math.max(ours ?? 0, theirs ?? 0));
+        return (
+          <View key={label} style={{ gap: 6 }} accessibilityLabel={`${label}: المسلمون ${ours !== undefined ? num(ours) : 'غير مذكور'}، ${theirs !== undefined ? num(theirs) : 'غير مذكور'}`}>
+            <View style={{ flexDirection: 'row', gap: 14 }}>
+              <Side name={names[0]} value={ours} unit={unit} color={palette.accent} palette={palette} />
+              <View style={{ width: 1, backgroundColor: palette.rule, opacity: 0.4 }} />
+              <Side name={names[1]} value={theirs} unit={unit} color={palette.rule} palette={palette} />
+            </View>
+            <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'center' }}>{`${label} · كل نقطة ${UNIT_WORDS[unit]}`}</Text>
+          </View>
+        );
+      })}
       <Refs refs={[muslims, others, muslimsKilled, othersKilled].flatMap(value => value?.refs ?? [])} palette={palette} />
       <Readings values={[muslims, others, muslimsKilled, othersKilled]} palette={palette} />
     </View>

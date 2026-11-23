@@ -9,13 +9,16 @@ test('the tarajim tab opens the atlas; a year lights its places and a search ope
   await expect(page.getByRole('tab', { name: 'في حياته ﷺ', selected: true })).toBeVisible();
   await page.getByRole('button', { name: /^السنة ٩: / }).click();
   await expect(page.getByRole('img', { name: /^خريطة: .*تبوك/ })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'افتح غزوة تبوك' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'افتح غزوة تبوك' })).toBeVisible();
 
+  // The sheet comes up while a search is typed, so its results stay above the keyboard, and goes back down to show the pick.
   await page.getByLabel('ابحث في الأطلس').fill('اليرموك');
+  await expect(page.getByRole('button', { name: 'أنزل اللوح' })).toBeVisible();
   await page.getByRole('button', { name: 'معركة اليرموك' }).click();
+  await expect(page.getByRole('button', { name: 'ارفع اللوح' })).toBeVisible();
   // The pin's sheet names the book that places it and the GeoNames record of its coordinates.
-  await expect(page.getByRole('button', { name: /^معجم البلدان، / })).toBeVisible();
-  await expect(page.getByRole('button', { name: /^GeoNames، رقم / })).toBeVisible();
+  await expect(page.getByRole('dialog').getByRole('button', { name: /^معجم البلدان، / }).first()).toBeVisible();
+  await expect(page.getByRole('dialog').getByRole('button', { name: /^GeoNames، رقم / }).first()).toBeVisible();
   await expect(page.getByRole('tab', { name: 'بعده ﷺ', selected: true })).toBeVisible();
 });
 
@@ -26,7 +29,7 @@ test.describe('the year card', () => {
     await expect(page.getByRole('img', { name: /^خريطة: .*المدينة/ })).toBeVisible();
     await page.getByRole('button', { name: 'افتح السنة ٥ في الأطلس' }).click();
     await expect(page).toHaveURL(/\/atlas\?year=5/);
-    await expect(page.getByRole('link', { name: 'افتح غزوة الخندق' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'افتح غزوة الخندق' })).toBeVisible();
   });
 });
 
