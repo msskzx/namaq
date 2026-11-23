@@ -2324,7 +2324,8 @@
   },
   "cmp:0s7085e0k1ifr2": {
    "keep": true,
-   "why": "mutashabih: the places differ by a word or two, worth a tree"
+   "why": "mutashabih: the places differ by a word or two, worth a tree",
+   "same": "cmp:1oafpaz1wzgkj5"
   },
   "cmp:1fzcfaw0m63dn0": {
    "keep": true,
@@ -2719,7 +2720,8 @@
   },
   "tree:01kkev61jc45y8": {
    "keep": true,
-   "why": "Both about Isa receiving the Injil; fihi huda vs wa ja'alna"
+   "why": "Both about Isa receiving the Injil; fihi huda vs wa ja'alna",
+   "same": "cmp:1fcxqpb1waak4x"
   },
   "tree:0e55gvs19xgwqk": {
    "keep": true,
@@ -2791,7 +2793,8 @@
   },
   "tree:0tpqjmy1h7fhdq": {
    "keep": true,
-   "why": "Classic: yudhabbihuna vs yuqattiluna vs wa yudhabbihuna"
+   "why": "Classic: yudhabbihuna vs yuqattiluna vs wa yudhabbihuna",
+   "same": "cmp:0gbn0390li6xnd"
   },
   "tree:1l4s51v0cbcdjv": {
    "keep": true,
@@ -3424,7 +3427,8 @@
   },
   "tree:1q1q5k61x9e4q0": {
    "keep": true,
-   "why": "'uhillat lakum bahimat al-an'am' vs 'al-an'am illa ma yutla'"
+   "why": "'uhillat lakum bahimat al-an'am' vs 'al-an'am illa ma yutla'",
+   "same": "cmp:1qwxx430ijd7lb"
   },
   "tree:0ba3ctx1c3c3ql": {
    "keep": true,
@@ -4670,7 +4674,8 @@
   "tree:0vtwdgb0582udh": {
    "keep": true,
    "why": "Same question, who is more unjust than one reminded of his Lord's signs who turns away: 18:57 «فأعرض عنها» vs 32:22 «ثم أعرض عنهآ».",
-   "checked": true
+   "checked": true,
+   "same": "cmp:08cautm0gsrjj8"
   },
   "tree:18ozvsv1mr75r7": {
    "keep": true,
@@ -5844,7 +5849,8 @@
   },
   "tree:0xbw0on1we973b": {
    "keep": true,
-   "why": "Same 'tatafakkarun' ending twice in al-Baqara"
+   "why": "Same 'tatafakkarun' ending twice in al-Baqara",
+   "same": "cmp:03jy1gb0z4v44j"
   },
   "tree:0fz2xch0241zgx": {
    "keep": true,
@@ -7136,7 +7142,8 @@
   },
   "tree:06als3n0v8m8ev": {
    "keep": true,
-   "why": "Classic: مشتبها (6:99) vs متشابها (6:141), انظروا vs كلوا"
+   "why": "Classic: مشتبها (6:99) vs متشابها (6:141), انظروا vs كلوا",
+   "same": "cmp:1a6ebw91s0o5cp"
   },
   "tree:0pch9nl1jixevf": {
    "keep": true,
@@ -8162,7 +8169,8 @@
   },
   "tree:1njv2zf18g7v2v": {
    "keep": true,
-   "why": "نزل (7:71) vs أنزل (12:40, 53:23), then different continuations"
+   "why": "نزل (7:71) vs أنزل (12:40, 53:23), then different continuations",
+   "same": "cmp:0cu4v7z0l7ems3"
   },
   "tree:151y46j1vqdagx": {
    "keep": true,
@@ -8835,7 +8843,8 @@
   },
   "tree:01xpw1f1fn67jb": {
    "keep": true,
-   "why": "Same ending, 2:219 (العفو) vs 2:266 (فاحترقت)"
+   "why": "Same ending, 2:219 (العفو) vs 2:266 (فاحترقت)",
+   "same": "cmp:03jy1gb0z4v44j"
   },
   "tree:05zg97u1ajvok4": {
    "keep": true,
@@ -9584,7 +9593,8 @@
   },
   "tree:1xucahf1k1csxb": {
    "keep": true,
-   "why": "Classic: وتخرج/ومخرج/ويخرج الميت من الحي, then diverge"
+   "why": "Classic: وتخرج/ومخرج/ويخرج الميت من الحي, then diverge",
+   "same": "cmp:0g8svw608ps07i"
   },
   "tree:1g7jfug0aywd2a": {
    "keep": true,
@@ -10092,7 +10102,8 @@
   },
   "tree:1ybrhdw0n68qwe": {
    "keep": true,
-   "why": "Adjacent: أفأنت تسمع الصم (10:42) vs تهدي العمي (10:43)"
+   "why": "Adjacent: أفأنت تسمع الصم (10:42) vs تهدي العمي (10:43)",
+   "same": "cmp:0nu6o181rjys1a"
   },
   "tree:1872xmk0fdh5q0": {
    "keep": true,
@@ -10225,7 +10236,8 @@
   },
   "tree:19f78go1lfni1q": {
    "keep": true,
-   "why": "Classic: تدعونا (11:62) vs تدعوننا (14:9) إليه مريب"
+   "why": "Classic: تدعونا (11:62) vs تدعوننا (14:9) إليه مريب",
+   "same": "cmp:1w6zcdb1m6wpkl"
   },
   "tree:1eqw6ug0oyducw": {
    "keep": false,
@@ -10501,7 +10513,8 @@
   },
   "tree:0r0u25m1ebcfqc": {
    "keep": true,
-   "why": "Classic: من إملاق نحن نرزقكم وإياهم vs خشية إملاق نحن نرزقهم وإياكم"
+   "why": "Classic: من إملاق نحن نرزقكم وإياهم vs خشية إملاق نحن نرزقهم وإياكم",
+   "same": "cmp:01cpxly0takm5o"
   },
   "tree:1thcqj91wuiw53": {
    "keep": true,
@@ -11070,7 +11083,8 @@
   },
   "tree:1auyaz21mk41b8": {
    "keep": true,
-   "why": "bi-zallamin vs bi-zallamin spelling; aydikum vs yadak"
+   "why": "bi-zallamin vs bi-zallamin spelling; aydikum vs yadak",
+   "same": "cmp:1qybkxb00jnpnz"
   },
   "tree:0jz50611fmbydj": {
    "keep": true,
@@ -14359,7 +14373,8 @@
   },
   "tree:066f2ta1xfa6jc": {
    "keep": true,
-   "why": "li-kay la ya'lama ba'da ilmin shay'an (16:70) vs min ba'di (22:5)"
+   "why": "li-kay la ya'lama ba'da ilmin shay'an (16:70) vs min ba'di (22:5)",
+   "same": "cmp:0wgj3ik1070j9k"
   },
   "tree:10dctiz01y6tev": {
    "keep": true,
@@ -14459,7 +14474,8 @@
   },
   "tree:0bhyj211wl495h": {
    "keep": true,
-   "why": "qaffayna bi-Isa ibn Maryam musaddiqan (5:46) vs wa-ataynahu (57:27)"
+   "why": "qaffayna bi-Isa ibn Maryam musaddiqan (5:46) vs wa-ataynahu (57:27)",
+   "same": "cmp:1fcxqpb1waak4x"
   },
   "tree:1ipyfig11q3cnq": {
    "keep": false,
@@ -14875,7 +14891,8 @@
   },
   "tree:0hcanop17fh8k5": {
    "keep": true,
-   "why": "Iblis: fa-bima aghwaytani (7:16) vs rabbi bima aghwaytani (15:39)"
+   "why": "Iblis: fa-bima aghwaytani (7:16) vs rabbi bima aghwaytani (15:39)",
+   "same": "cmp:1n2rbh01ndxcj4"
   },
   "tree:0aeadej0240kbj": {
    "keep": true,
@@ -15159,7 +15176,8 @@
   },
   "tree:0xygsag0bcknyg": {
    "keep": true,
-   "why": "'ma anzala Allah biha min sultan' three places, different continuations"
+   "why": "'ma anzala Allah biha min sultan' three places, different continuations",
+   "same": "cmp:0cu4v7z0l7ems3"
   },
   "tree:1r1kfvb0l45psd": {
    "keep": false,
@@ -15456,7 +15474,8 @@
   },
   "tree:1tmx4oh1mnzzc1": {
    "keep": true,
-   "why": "'tabghunaha iwajan' 3:99 wa antum vs 7:86 wadhkuru"
+   "why": "'tabghunaha iwajan' 3:99 wa antum vs 7:86 wadhkuru",
+   "same": "cmp:0s5ztsw1sjryle"
   },
   "tree:0n7eswl1s7a0hv": {
    "keep": false,
@@ -15738,7 +15757,8 @@
   },
   "tree:1ivcdft0t3gtfz": {
    "keep": false,
-   "why": "2:35 and 7:19 are the confusable pair («وكلا منها رغدا» against «فكلا من»); 7:20 shares only «تكونا من». Kept instead: tree:00e6rgg002g8yu."
+   "why": "2:35 and 7:19 are the confusable pair («وكلا منها رغدا» against «فكلا من»); 7:20 shares only «تكونا من». Kept instead: tree:00e6rgg002g8yu.",
+   "same": "cmp:0jcevb119u41e3"
   },
   "tree:1fog68z1mj6x8l": {
    "keep": true,
@@ -16203,7 +16223,8 @@
   },
   "tree:1vogzlb1maaygf": {
    "keep": true,
-   "why": "Witness scene 4:41 wa ji'na bika ala ha'ula'i vs 16:89 shahidan"
+   "why": "Witness scene 4:41 wa ji'na bika ala ha'ula'i vs 16:89 shahidan",
+   "same": "cmp:07g8wxv0pq6nzx"
   },
   "tree:03qxika1vj99mu": {
    "keep": true,
@@ -18407,7 +18428,8 @@
   },
   "tree:132x0ij0i97zyl": {
    "keep": true,
-   "why": "Az-Zumar 39:71 kafaru vs 39:73 ittaqaw, parallel structure"
+   "why": "Az-Zumar 39:71 kafaru vs 39:73 ittaqaw, parallel structure",
+   "same": "cmp:0dupolj05cak6j"
   },
   "tree:1uvy0wd0g2qezx": {
    "keep": true,
@@ -19079,7 +19101,8 @@
   },
   "tree:1d7jd4e09fzp3k": {
    "keep": true,
-   "why": "classic: fa-inna dhalika / inna dhalika / inna dhalika la-min azm al-umur"
+   "why": "classic: fa-inna dhalika / inna dhalika / inna dhalika la-min azm al-umur",
+   "same": "cmp:12avxti079iwc2"
   },
   "tree:11s5hyx0lyrfot": {
    "keep": true,
@@ -19645,7 +19668,8 @@
   },
   "tree:0fvix4n092iylj": {
    "keep": true,
-   "why": "wa ji'na bika ala ha'ula'i shahida (4:41) vs shahidan ala ha'ula'i (16:89)"
+   "why": "wa ji'na bika ala ha'ula'i shahida (4:41) vs shahidan ala ha'ula'i (16:89)",
+   "same": "cmp:07g8wxv0pq6nzx"
   },
   "tree:14edkd60tzgel0": {
    "keep": false,
@@ -19825,7 +19849,8 @@
   },
   "tree:0ikndki1r8qojy": {
    "keep": true,
-   "why": "tastati' (18:78) vs tasti' (18:82) alayhi sabra: classic"
+   "why": "tastati' (18:78) vs tasti' (18:82) alayhi sabra: classic",
+   "same": "cmp:0ng3kzn0m94zxr"
   },
   "tree:0mb3k4z0i0qfhj": {
    "keep": true,
@@ -20102,7 +20127,8 @@
   },
   "tree:0x35pq1041xa8f": {
    "keep": true,
-   "why": "wa huwa a'lamu bil-muhtadin vs bi-man ihtada (53:30)"
+   "why": "wa huwa a'lamu bil-muhtadin vs bi-man ihtada (53:30)",
+   "same": "cmp:0t5t3h00k0g0uc"
   },
   "tree:1xzwg4t1eaah9l": {
    "keep": true,
@@ -20390,7 +20416,8 @@
   },
   "tree:11yldu90ek1hh7": {
    "keep": true,
-   "why": "mushtabihan vs mutashabihan wa ghayra mutashabih, unzuru vs kulu"
+   "why": "mushtabihan vs mutashabihan wa ghayra mutashabih, unzuru vs kulu",
+   "same": "cmp:1a6ebw91s0o5cp"
   },
   "tree:0bt1dby16l78dy": {
    "keep": true,
@@ -21939,7 +21966,8 @@
   },
   "tree:17wosgc0g7jklu": {
    "keep": true,
-   "why": "amanna bi-rabb al-alamin (7:121, 26:47) vs rabb Harun wa Musa (20:70)"
+   "why": "amanna bi-rabb al-alamin (7:121, 26:47) vs rabb Harun wa Musa (20:70)",
+   "same": "cmp:12jz9e21b2ostu"
   },
   "tree:0o0u0z11hy8dxj": {
    "keep": true,
@@ -22638,7 +22666,8 @@
   },
   "tree:1ihp6z416p56nw": {
    "keep": true,
-   "why": "qul fa-man yamliku min Allah (5:17) vs lakum min Allah (48:11)"
+   "why": "qul fa-man yamliku min Allah (5:17) vs lakum min Allah (48:11)",
+   "same": "cmp:0l5xy0e0n1qjrs"
   },
   "tree:1y5rpe3164trg5": {
    "keep": false,
@@ -23769,7 +23798,8 @@
   },
   "tree:0m4jyxu08myfee": {
    "keep": true,
-   "why": "karihu ma anzala vs ma nazzala Allah, both in Muhammad"
+   "why": "karihu ma anzala vs ma nazzala Allah, both in Muhammad",
+   "same": "cmp:034i56s0obq6cu"
   },
   "tree:04tup0m1jj74iw": {
    "keep": true,
@@ -25168,7 +25198,8 @@
   },
   "tree:0w7e4gl0vqjbxl": {
    "keep": true,
-   "why": "akthara al-nasi vs aktharahum la yashkurun"
+   "why": "akthara al-nasi vs aktharahum la yashkurun",
+   "same": "cmp:1fwii7w1w5l8b0"
   },
   "tree:0uomoyh07h1173": {
    "keep": true,
@@ -25180,7 +25211,8 @@
   },
   "tree:0r5nplq0129alo": {
    "keep": true,
-   "why": "ma la yadurruhum wa la yanfa'uhum vs la yanfa'uhum wa la yadurruhum"
+   "why": "ma la yadurruhum wa la yanfa'uhum vs la yanfa'uhum wa la yadurruhum",
+   "same": "cmp:0rr5gok1vmwhv2"
   },
   "tree:1btvqqy0vj8ij8": {
    "keep": true,
@@ -25312,7 +25344,8 @@
   },
   "tree:1gpwh68031bc0i": {
    "keep": true,
-   "why": "wa la yaltafit minkum ahadun illa imra'ataka vs wamdu"
+   "why": "wa la yaltafit minkum ahadun illa imra'ataka vs wamdu",
+   "same": "cmp:0yb9wnt1qkbtfz"
   },
   "tree:0wdq0ue1wq7i16": {
    "keep": true,
@@ -25516,7 +25549,8 @@
   },
   "tree:0h4vb7c1lufk32": {
    "keep": true,
-   "why": "wa la'in adhaqnahu na'ma'a vs rahmatan minna"
+   "why": "wa la'in adhaqnahu na'ma'a vs rahmatan minna",
+   "same": "cmp:062xhyr15caa19"
   },
   "tree:0uayxdr056twd7": {
    "keep": true,
@@ -25536,7 +25570,8 @@
   },
   "tree:0664s090x6jqjx": {
    "keep": true,
-   "why": "law sha'a Allah / rabbuna la-anzala mala'ikatan ma sami'na vs fa inna"
+   "why": "law sha'a Allah / rabbuna la-anzala mala'ikatan ma sami'na vs fa inna",
+   "same": "cmp:0bv2fi5002qqlp"
   },
   "tree:1wu8pwl0n9q7nr": {
    "keep": true,
@@ -25764,7 +25799,8 @@
   },
   "tree:1ls8fv80789sms": {
    "keep": true,
-   "why": "an la'natu Allah vs ala la'natu Allah ala al-zalimin"
+   "why": "an la'natu Allah vs ala la'natu Allah ala al-zalimin",
+   "same": "cmp:1odgxi40ve6d4e"
   },
   "tree:1awu8n016dmm9o": {
    "keep": true,
@@ -25896,7 +25932,8 @@
   },
   "tree:16ltf170l4v4j5": {
    "keep": true,
-   "why": "wa la-qad ji'tumuna furada kama vs la-qad ji'tumuna kama"
+   "why": "wa la-qad ji'tumuna furada kama vs la-qad ji'tumuna kama",
+   "same": "cmp:15y5fap0pzcixp"
   },
   "tree:0d3am8v17bpgql": {
    "keep": true,
@@ -25912,7 +25949,8 @@
   },
   "tree:15fml850exficd": {
    "keep": true,
-   "why": "sarrafna fi hadha al-qur'an li-yadhdhakkaru vs lil-nas min kulli mathal"
+   "why": "sarrafna fi hadha al-qur'an li-yadhdhakkaru vs lil-nas min kulli mathal",
+   "same": "cmp:1cclknc08q8tim"
   },
   "tree:1voi74k0my8ryg": {
    "keep": true,
@@ -26112,7 +26150,8 @@
   },
   "tree:1xakpb304a3k83": {
    "keep": true,
-   "why": "2:219 vs 2:266 identical closings, different contexts"
+   "why": "2:219 vs 2:266 identical closings, different contexts",
+   "same": "cmp:03jy1gb0z4v44j"
   },
   "tree:0eqicix17zuxlh": {
    "keep": true,
@@ -26224,7 +26263,8 @@
   },
   "tree:0hhr93d02hds31": {
    "keep": true,
-   "why": "salaka lakum fiha subulan wa anzala vs ja'ala ... la'allakum tahtadun"
+   "why": "salaka lakum fiha subulan wa anzala vs ja'ala ... la'allakum tahtadun",
+   "same": "cmp:0acrxef0t669hp"
   },
   "tree:1bv3z6l1rspdhb": {
    "keep": true,
@@ -28798,7 +28838,8 @@
   },
   "tree:0cpvnfn0wg24n5": {
    "keep": true,
-   "why": "Ma yumsikuhunna illallah 16:79 vs illar rahman 67:19"
+   "why": "Ma yumsikuhunna illallah 16:79 vs illar rahman 67:19",
+   "same": "cmp:1r5aotq093areq"
   },
   "tree:1hjmfv20wcbfbe": {
    "keep": true,
@@ -29281,7 +29322,8 @@
   },
   "tree:1saic430tzypsr": {
    "keep": true,
-   "why": "Fa-la-bi'sa 16:29 vs fa-bi'sa 39:72/40:76 mathwal mutakabbirin"
+   "why": "Fa-la-bi'sa 16:29 vs fa-bi'sa 39:72/40:76 mathwal mutakabbirin",
+   "same": "cmp:0ib65bi0hioxr0"
   },
   "tree:12be8kw0uae3qw": {
    "keep": true,
@@ -29317,7 +29359,8 @@
   },
   "tree:06sx5ll1yez5ud": {
    "keep": true,
-   "why": "Same surah 2:184/185 'ala safar vs 2:196 bihi adha"
+   "why": "Same surah 2:184/185 'ala safar vs 2:196 bihi adha",
+   "same": "cmp:0wtnx0f1l7xbcb"
   },
   "tree:0ryhytw1oasuv0": {
    "keep": false,
@@ -29609,7 +29652,8 @@
   },
   "tree:14e3o540qgmh9a": {
    "keep": true,
-   "why": "Yudhabbihuna 2:49 vs yuqattiluna 7:141 vs wa yudhabbihuna 14:6"
+   "why": "Yudhabbihuna 2:49 vs yuqattiluna 7:141 vs wa yudhabbihuna 14:6",
+   "same": "cmp:0gbn0390li6xnd"
   },
   "tree:1ql2dkj1cr732r": {
    "keep": false,
@@ -29745,7 +29789,8 @@
   },
   "tree:01q9lzr0sj0h81": {
    "keep": true,
-   "why": "Fa-manidturra ghayra baghin wala 'adin: 2:173/6:145/16:115 endings; 5:3"
+   "why": "Fa-manidturra ghayra baghin wala 'adin: 2:173/6:145/16:115 endings; 5:3",
+   "same": "cmp:176g62404i8w8g"
   },
   "tree:1ew7a9h1j545ov": {
    "keep": true,
@@ -30599,7 +30644,8 @@
   },
   "tree:12w2f7n1lop81l": {
    "keep": true,
-   "why": "22:5 thumma min mudgha vs 40:67 thumma yukhrijukum"
+   "why": "22:5 thumma min mudgha vs 40:67 thumma yukhrijukum",
+   "same": "cmp:0x600xq09t4o64"
   },
   "tree:0cr07vl0qna7b3": {
    "keep": true,
@@ -31700,7 +31746,8 @@
   },
   "tree:02jf4fx0klonlj": {
    "keep": true,
-   "why": "Same stages then mudgha (22:5) vs yukhrijukum tiflan (40:67)"
+   "why": "Same stages then mudgha (22:5) vs yukhrijukum tiflan (40:67)",
+   "same": "cmp:0x600xq09t4o64"
   },
   "tree:14hm2890ne0vjh": {
    "keep": false,
@@ -32040,7 +32087,8 @@
   },
   "tree:0fkl8b91dk85j3": {
    "keep": true,
-   "why": "Life stages: wa minkum man yuradd (22:5) vs min qabl (40:67)"
+   "why": "Life stages: wa minkum man yuradd (22:5) vs min qabl (40:67)",
+   "same": "cmp:0x600xq09t4o64"
   },
   "tree:1lrq6tc0of1hyw": {
    "keep": false,
@@ -32084,7 +32132,8 @@
   },
   "tree:1nqwi2b08avb1r": {
    "keep": true,
-   "why": "Its mate: wa baththa / li-yaskuna / wa anzala"
+   "why": "Its mate: wa baththa / li-yaskuna / wa anzala",
+   "same": "cmp:0va2u5p0e1b4pl"
   },
   "tree:0mmqo6d142za5l": {
    "keep": false,
@@ -32846,7 +32895,8 @@
   },
   "tree:1b6pqyx1n8tyq3": {
    "keep": true,
-   "why": "Adam: 2:35 = 7:19 la taqraba; 7:20 Iblis' whisper"
+   "why": "Adam: 2:35 = 7:19 la taqraba; 7:20 Iblis' whisper",
+   "same": "cmp:0jcevb119u41e3"
   },
   "tree:10y4ild1rstvdb": {
    "keep": true,
@@ -32854,7 +32904,8 @@
   },
   "tree:0ba8jlg0dw2t8c": {
    "keep": true,
-   "why": "Salih: 7:73 = 11:64 naqat Allah vs 26:155 naqa laha shirb"
+   "why": "Salih: 7:73 = 11:64 naqat Allah vs 26:155 naqa laha shirb",
+   "same": "cmp:0v4slh51n58hel"
   },
   "tree:1tuvobg0xm4jku": {
    "keep": true,
@@ -33656,7 +33707,8 @@
   },
   "tree:11f52vk13k87oi": {
    "keep": true,
-   "why": "Al-Hajj: ahlaknaha wa hiya zalima (22:45) vs amlaytu laha (22:48)"
+   "why": "Al-Hajj: ahlaknaha wa hiya zalima (22:45) vs amlaytu laha (22:48)",
+   "same": "cmp:16l4xyh1l86fpj"
   },
   "cmp:0gge80g04bm432": {
    "keep": true,
@@ -34327,7 +34379,8 @@
   },
   "tree:0k1012g0ivgzpo": {
    "keep": true,
-   "why": "Same ending; spending (2:219) vs burnt garden (2:266)"
+   "why": "Same ending; spending (2:219) vs burnt garden (2:266)",
+   "same": "cmp:03jy1gb0z4v44j"
   },
   "tree:1b6h7j30q26o71": {
    "keep": true,
@@ -35573,7 +35626,8 @@
   },
   "tree:12w66oc0u1182q": {
    "keep": true,
-   "why": "An-Nahl 16:84 min kull umma vs 16:89 fi kull umma"
+   "why": "An-Nahl 16:84 min kull umma vs 16:89 fi kull umma",
+   "same": "cmp:1e5zlml1aw2nc1"
   },
   "tree:09kthzm1691ep0": {
    "keep": false,
@@ -35986,6 +36040,476 @@
   "tree:0izl9on127msfx": {
    "keep": false,
    "why": "Only the closing «إن الله سميع عليم», a stock formula, after six unrelated rulings."
+  },
+  "cmp:1ooacff1rol7gt": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:16i3xs30oga9kf"
+  },
+  "cmp:1eudaw60ombsxm": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1u1p1mn1w9ophz"
+  },
+  "cmp:1sgd19r1tzk7gh": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1pwgr9k0ka71hc"
+  },
+  "cmp:1h89sv50tsk077": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0z9jerx0hahonj"
+  },
+  "cmp:0q22ffu08at540": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1cfzavi0pdq6dw"
+  },
+  "cmp:09xb7dw0gwxi30": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0y7nyqs1wf19q8"
+  },
+  "cmp:0ruiydc0nkq9o4": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:03dv3dv04ck32v"
+  },
+  "tree:0u7zbk4173i9sm": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:16vds290ztysi7"
+  },
+  "tree:0p8nbbw0z9rljq": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1l2eopr1g8oc67"
+  },
+  "tree:0x73mte00zsqg0": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:16vds290ztysi7"
+  },
+  "tree:1ezv1xc0rtk19m": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1n8xg8x03sgf63"
+  },
+  "tree:1mxzlyz0m42nk5": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1v8zpeb02n25w3"
+  },
+  "tree:0uy6glp1jn8sc7": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0bzzotk1fjdcc8"
+  },
+  "tree:0ssd68c1fqlowc": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0j3lq3i02oe71o"
+  },
+  "tree:0oh4oud1uzx8qr": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1crwsrv080r0x3"
+  },
+  "tree:1w0pbcy0bhctnw": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1c9z3s61q7ad64"
+  },
+  "tree:0ui7db30e85m1z": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1lkum5j1h2xfvr"
+  },
+  "tree:1ii788q1hl3au8": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1p0joz91hsm0eb"
+  },
+  "tree:1hn7yiw1kncu28": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0s7pmyd19qfolb"
+  },
+  "tree:0bud3bc1xp648e": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0vzd4rx1nxr3hd"
+  },
+  "tree:1loat1103xvy9n": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0d9j6wh1q9krhl"
+  },
+  "tree:00e6rgg002g8yu": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0jcevb119u41e3"
+  },
+  "tree:0jn7yfg00v2ft8": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0j3lq3i02oe71o"
+  },
+  "tree:1459h3m06du3c0": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1p0joz91hsm0eb"
+  },
+  "tree:0v9ehug0ivpgbu": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:06x5sdg0zjputg"
+  },
+  "tree:14zqfrz0u949cv": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0l6u7vy0gf75qw"
+  },
+  "tree:054qbs206ft8q0": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1hkakmg1w4sgug"
+  },
+  "tree:08k51171n54imh": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1k6l7q207dlbk6"
+  },
+  "tree:0wikpe10rnjt13": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:067eigl0a8ry9z"
+  },
+  "tree:0kf2b1y08xf3h8": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:15n1f9s15g46fm"
+  },
+  "tree:185sgui1pg2u46": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0ge0x0w10ctfoi"
+  },
+  "tree:01du2v20ugo44o": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:05kbnpo149ucg0"
+  },
+  "tree:1ae8ign0k60oiv": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1lkum5j1h2xfvr"
+  },
+  "tree:085bfdt089e12r": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0gmm6mo064160g"
+  },
+  "tree:1shp2bx18zawn3": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0qlc57x01l477n"
+  },
+  "tree:0fcfs870s2vz6r": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1bw3jvt0wrb1i9"
+  },
+  "tree:09tzezy0k5qhoa": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0zcsxvx1cveak7"
+  },
+  "tree:1jgok1t07yetcp": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0wy88ld1i6l2s9"
+  },
+  "tree:19qmuev1pb8kq3": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1yi2kc11cda53f"
+  },
+  "tree:1f4iiva13y6z7q": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:06951i10qyfowb"
+  },
+  "tree:0phfhwf16hs85z": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0l6u7vy0gf75qw"
+  },
+  "tree:09hcrbc1mjcds0": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1c9z3s61q7ad64"
+  },
+  "tree:04uuhcm0whdotg": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:06mrx9v0z18tgf"
+  },
+  "tree:10r1q8k1c5o0ma": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:06x5sdg0zjputg"
+  },
+  "tree:16ozkn51kektcl": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0p25y1t0hckn7j"
+  },
+  "tree:0wgnfdn1jsaffn": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1qg0y2l18ahxlh"
+  },
+  "tree:0zt6skv0s8kkgn": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0ra3kdm0nutx78"
+  },
+  "tree:1dojd4p0z7uzgj": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0ftw9pp1d4prjv"
+  },
+  "tree:05gj0co1kojxhk": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1hkakmg1w4sgug"
+  },
+  "tree:1mz7c0s0msm17u": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1v8zpeb02n25w3"
+  },
+  "tree:0d5exzc0jb0p4a": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:10lzszu0dczqp4"
+  },
+  "tree:170611j0i3ims3": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:17x5rsk1r17sya"
+  },
+  "tree:1bpfidi1gnlqbu": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0j99zck0rb2n64"
+  },
+  "tree:18e9s3q1xifslm": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1wvjbd80quqrbc"
+  },
+  "tree:1en6c0b0hj639p": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0cmswd11j7x1bn"
+  },
+  "tree:12s8pna0p9nhuo": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1085mfq1o7w32m"
+  },
+  "tree:0jgz9dc0796oek": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0x7xzh71yrzff1"
+  },
+  "tree:1bcw6010fx2bvd": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:09n2gz10jqxyl9"
+  },
+  "tree:0u9kff316yr41b": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:01rifzg10zj4eg"
+  },
+  "tree:0u2pltw0vh0ves": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:19h3z9c1yha5b6"
+  },
+  "tree:1xzn8441krlqig": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:19hqotl13x3q6t"
+  },
+  "tree:1pqimcp0k3uuir": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:14ov5po05mdijq"
+  },
+  "tree:1ho5i520bx4n5m": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0bzzotk1fjdcc8"
+  },
+  "tree:0sskioh09dh0fd": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:11fuuxl0h786w9"
+  },
+  "tree:0pln3h20nr4ut6": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1sh7d7l1nwzs61"
+  },
+  "tree:0k8rcxq0ggakoy": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0nbeubj1xz05lz"
+  },
+  "tree:1ddde9q04msjf4": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:192yph20u66yyq"
+  },
+  "tree:1lm616j0ohhwhd": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1cjqizz0z7vxip"
+  },
+  "tree:0ye14dd1tud983": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:17x5rsk1r17sya"
+  },
+  "tree:1t5spvk1bvmaxq": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:026kdwl10nneg5"
+  },
+  "tree:1ewswsf1flwoxh": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1cjqizz0z7vxip"
+  },
+  "tree:0zccv091x6hbmh": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0ncsnp60papmgm"
+  },
+  "tree:0kwb8jv0t2ilav": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0mzpc5t18xjwqr"
+  },
+  "tree:029o98g1yg2zlw": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1k6l7q207dlbk6"
+  },
+  "tree:06v2yxi1ofo9n2": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:02s6k980nab1ri"
+  },
+  "tree:1msd1e41af6o4q": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0l480mn0w8dsul"
+  },
+  "tree:0288tce0hkr1s6": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1j21mah0yw40md"
+  },
+  "tree:1768gtq1hboke2": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0cmswd11j7x1bn"
+  },
+  "tree:0zb36z51bg6o7j": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1uvk2af0iemtv3"
+  },
+  "tree:014u51q0bkndy4": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1q5zhst0x6syzl"
+  },
+  "tree:0gek1aq1j1zip0": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1gw66nk1gr9zoe"
+  },
+  "tree:0zm1i9i1s7hmxa": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:02s6k980nab1ri"
+  },
+  "tree:0q1k8ql003byvl": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1cjqizz0z7vxip"
+  },
+  "tree:0dolg4819ealq8": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1gw66nk1gr9zoe"
+  },
+  "tree:1ci6wz018v7ekg": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0nas6q60tpvg14"
+  },
+  "tree:1vgdqgq08d7tj2": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0d9j6wh1q9krhl"
+  },
+  "tree:0l3icag1k7tf48": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0wm6do81ajeds8"
+  },
+  "tree:0txzk880w5azck": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:055pi2k13w0a0k"
+  },
+  "tree:1srgb8c1w3p5na": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1l2eopr1g8oc67"
+  },
+  "tree:1kzmv1u0cjrwcw": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1crwsrv080r0x3"
+  },
+  "tree:1gkzi841qdckpi": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:1l2eopr1g8oc67"
+  },
+  "tree:0lidvbo0gqhd8s": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0j3lq3i02oe71o"
+  },
+  "tree:0jb4ec818x47nk": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:0d9j6wh1q9krhl"
+  },
+  "tree:0a1su0l0xdmren": {
+   "keep": false,
+   "why": "The same ayat as a book card; only the book card stays (owner 2026-11-23: one pair of ayat is one card).",
+   "same": "cmp:17x5rsk1r17sya"
   }
  }
 }
