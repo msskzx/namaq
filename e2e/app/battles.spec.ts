@@ -20,3 +20,14 @@ test('the tarajim tab lists the battles, and Badr opens with its map, numbers, m
   await page.getByRole('button', { name: 'سير أعلام النبلاء، السيرة ١، ص ٣٢٥' }).click();
   await expect(page.getByText(/ثلاثمائة وثلاثة عشر رجلا/)).toBeVisible();
 });
+
+// The search in the top bar (owner, 2026-11-23) keeps the battles whose name or place holds the typed words, and says so when none does.
+test('the battles search keeps the matching battles', async ({ page }) => {
+  await open(page, '/battles');
+  const search = page.getByLabel('ابحث في الغزوات والمعارك');
+  await search.fill('احد');
+  await expect(page.getByRole('link', { name: 'غزوة أحد', exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'غزوة بدر', exact: true })).toHaveCount(0);
+  await search.fill('لا شيء بهذا الاسم');
+  await expect(page.getByText('لا غزوة ولا معركة بهذا الاسم')).toBeVisible();
+});

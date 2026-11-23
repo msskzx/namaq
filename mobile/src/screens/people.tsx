@@ -6,7 +6,6 @@ import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Chip from '@/ui/Chip';
 import Empty from '@/ui/Empty';
-import { SearchField } from '@/ui/Field';
 import { usePalette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
@@ -40,10 +39,10 @@ export default function PeopleScreen() {
   const heading = (title && (groupName(title) ?? groups.find(group => group.key === title)?.name)) || 'كل التراجم';
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar back={back} hideOnScroll />
-      <ScrollView onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 10 }}>
+      {/* The search in the top bar, as on every page with one (owner, 2026-11-23). */}
+      <TopBar back={back} hideOnScroll search={{ value: query, onChangeText: setQuery, placeholder: title ? 'ابحث في هذه المجموعة' : 'ابحث في التراجم', label: 'ابحث في التراجم' }} />
+      <ScrollView onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 10 }}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>{heading}</Text>
-        <SearchField palette={palette} label="ابحث في التراجم" placeholder={title ? 'ابحث في هذه المجموعة' : 'ابحث في التراجم'} value={query} onChangeText={setQuery} />
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
           <Chip label="الكل" on={!title} onPress={() => setTitle(undefined)} palette={palette} />
           {groups.map(group => (

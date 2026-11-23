@@ -9,7 +9,7 @@ import type { SahihText } from './sahih';
 import type { AppPerson } from './tarajim';
 import { peopleGraph, type TieKind } from './tarajimGraph';
 import { lineOf, meetingOf } from './tarajimLine';
-import { CALIPHS_MEET, GROUP_MOST, HADITH_RINGS, groupItems, groupOf, groupSources, meetItems, ringList, spread, TITLE_COUNTS } from './peopleCards';
+import { CALIPHS_MEET, GROUP_MOST, HADITH_RINGS, groupItems, groupOf, groupSources, meetItems, ringList, settledTies, spread, TITLE_COUNTS } from './peopleCards';
 
 const people = peopleJson as AppPerson[];
 const graph = peopleGraph(people);
@@ -112,5 +112,19 @@ describe('spread', () => {
     const out = spread(ids);
     expect([...out].sort()).toEqual([...ids].sort());
     expect(out.slice(0, 3)).toEqual(['a,b', 'e,f', 'a,c']);
+  });
+});
+
+// Owner, 2026-11-23: the Prophet's ﷺ children are seven; Ibn al-Qayyim holds al-Tayyib and al-Tahir to be Abdullah's titles.
+describe('settledTies', () => {
+  it('leaves out the children a scholar\'s note settles, and only when its words are in the tie it is on', () => {
+    const prophet = (peopleJson as AppPerson[]).find(person => person.slug === 'prophet-muhammad')!;
+    const kept = settledTies('prophet-muhammad', 'child', prophet.children).map(child => child.slug);
+    expect(kept).toContain('abdullah-ibn-muhammad');
+    expect(kept).not.toContain('al-tayyib-ibn-muhammad');
+    expect(kept).not.toContain('al-tahir-ibn-muhammad');
+    expect(kept).toHaveLength(prophet.children.filter(child => !child.disputed).length);
+    const unsaid = prophet.children.map(child => ({ ...child, text: '' }));
+    expect(settledTies('prophet-muhammad', 'child', unsaid)).toHaveLength(unsaid.length);
   });
 });

@@ -66,20 +66,18 @@ type Light = { lit: string | null; onWord: (link: string) => void };
 /** The read-along in one row: the word being read (`row:key:index`) and its link (`link:<link>`), lit together. */
 type Read = { row: number; now: Set<string> };
 
-/** A word's colour: shared by every row in full, by only some rows faded into the card, lit on the highlight. */
-function toneOf(ayah: MatrixAyah, i: number, palette: Palette, light?: Light) {
-  const link = ayah.links?.get(i);
-  if (link && light?.lit === link.link) return { color: palette.onHighlight, backgroundColor: palette.highlight };
+/** A word's colour: shared by every row in full, by only some rows faded into the card. */
+function toneOf(ayah: MatrixAyah, i: number, palette: Palette) {
   const color = sharedTone(palette, ayah, i);
   return color ? { color } : undefined;
 }
 
-/** The word the read-along is on, and the words matched with it in the other rows, lit as a tap lights them. */
-function readTone(ayah: MatrixAyah, i: number, palette: Palette, read?: Read) {
-  if (!read?.now.size) return undefined;
+/** A tapped word and its partners, or the word the read-along is on and the words matched with it in the other rows. */
+function isLit(ayah: MatrixAyah, i: number, light?: Light, read?: Read) {
   const link = ayah.links?.get(i)?.link;
-  if (!read.now.has(readId(read.row, ayah.key, i)) && !(link && read.now.has(`link:${link}`))) return undefined;
-  return { color: palette.onHighlight, backgroundColor: palette.highlight };
+  if (link && light?.lit === link) return true;
+  if (!read?.now.size) return false;
+  return read.now.has(readId(read.row, ayah.key, i)) || !!(link && read.now.has(`link:${link}`));
 }
 
 /** `shown`: how many of this ayah's words show (the studio's growing ayah); the rest keep their place unseen. */
@@ -93,17 +91,17 @@ function Ayah({ ayah, palette, muted, light, read, shown = Infinity }: { ayah: M
   };
   if (registry && !muted) return <>
     {ayah.words.map((word, i) => {
-      const tone = readTone(ayah, i, palette, read) ?? toneOf(ayah, i, palette, light);
+      const lit = isLit(ayah, i, light, read);
       return <View key={i} ref={view => { if (view) registry.words.set(`${ayah.key}:${i}`, view); else registry.words.delete(`${ayah.key}:${i}`); }} onLayout={registry.measure} collapsable={false}>
-        <Text onPress={press(i)}><AyahWords look={{ ...tone, ...(i >= shown ? UNSEEN : null) }}>{word}</AyahWords></Text>
+        <Text><AyahWords lit={lit} onPress={press(i)} look={{ ...(lit ? null : toneOf(ayah, i, palette)), ...(i >= shown ? UNSEEN : null) }}>{word}</AyahWords></Text>
       </View>;
     })}
     <AyahWords look={{ color: palette.accent, ...(ayah.words.length > shown ? UNSEEN : null) }}>{num(number)}</AyahWords>
   </>;
   return <>
     {ayah.words.map((word, i) => {
-      const tone = readTone(ayah, i, palette, read) ?? toneOf(ayah, i, palette, light);
-      return <Text key={i}>{i > 0 ? ' ' : ''}<Text onPress={press(i)}><AyahWords look={{ ...tone, ...(i >= shown ? UNSEEN : null) }}>{word}</AyahWords></Text></Text>;
+      const lit = isLit(ayah, i, light, read);
+      return <Text key={i}>{i > 0 ? ' ' : ''}<AyahWords lit={lit} onPress={press(i)} look={{ ...(lit ? null : toneOf(ayah, i, palette)), ...(i >= shown ? UNSEEN : null) }}>{word}</AyahWords></Text>;
     })}
     <Text style={[{ color: muted ? palette.muted : palette.accent }, ayah.words.length > shown && UNSEEN]}> {num(number)} </Text>
   </>;

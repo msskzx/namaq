@@ -58,7 +58,7 @@ import rajab from '@shared/data/hadith/ibnRajab.json';
 import IbnRajab from '@/components/IbnRajab';
 import { Report, ReportScene, reportSource, StoryAyat, StoryShare } from './stories/StoryParts';
 import { drawnReport } from '@shared/stories/story';
-import { armiesBattles, armiesItems, armiesSources, battleHeadSources, battleItems, battleOnCard, battleYearItems, battleYearSlice, battleYearSources, type ArmiesTab, eventItems, eventOf, eventSources, nasabPeople, nasabSources, oathItems, oathSources, openingItems, openingSources, sceneItems, sceneOf, sceneSources, tiesPeople, tiesSources } from '@shared/drawingCards';
+import { armiesBattles, armiesItems, armiesSources, battleCardSources, battleItems, battleOnCard, battleYearItems, battleYearSlice, battleYearSources, type ArmiesTab, eventItems, eventOf, eventSources, nasabPeople, nasabSources, oathItems, oathSources, openingItems, openingSources, sceneItems, sceneOf, sceneSources, tiesPeople, tiesSources } from '@shared/drawingCards';
 import { NasabTree } from '@/screens/nasab';
 import { OpeningRows } from '@/screens/openings';
 import TiesRing, { foldedKinds, personNode, RoundRing, ringName, ringRoom, roundLayout, TieSheet, tiesOf, DoubtedSheet } from './TiesRing';
@@ -399,7 +399,7 @@ export function ForgottenPost({ ayah: asked, review, due: dueOne, title = 'هل 
   };
   const marks = <>
     {/* Worded, now that the recite bar has its own line (owner, 2026-11-23). */}
-    <View style={{ flexDirection: 'row', gap: 8, marginHorizontal: 8 }}>
+    <View style={{ flexDirection: 'row', gap: 8 }}>
       <Button pill label="تذكّرتها" Icon={done?.did === 'remembered' ? CircleCheck : Check} tone="green" active={done?.did === 'remembered'} onPress={() => mark('remembered')} />
       {!forgotten && <Button pill label="نسيتها" Icon={LightbulbOff} active={done?.did === 'forgot'} onPress={() => mark('forgot')} />}
     </View>
@@ -780,7 +780,7 @@ function MeetPost({ id, palette }: { id: string; palette: Palette }) {
 let rings: Ring[] | undefined;
 const ringList_ = () => (rings ??= (() => {
   const width = Math.min(Dimensions.get('window').width - 60, 480);
-  return ringList(GRAPH, PEOPLE, slug => foldedKinds(tiesOf(slug), ringRoom(width)), slugs => roundLayout(slugs.map(ringName), width) !== null);
+  return ringList(GRAPH, PEOPLE, slug => foldedKinds(tiesOf(slug), ringRoom(width)), slugs => roundLayout(slugs.map(slug => ringName(slug)), width) !== null);
 })());
 const SAHIH_NAMES = { bukhari: { book: 'صحيح البخاري', author: 'البخاري' }, muslim: { book: 'صحيح مسلم', author: 'مسلم' } } as const;
 
@@ -799,12 +799,12 @@ function RingPost({ id, palette }: { id: string; palette: Palette }) {
   const kin = ring.by === 'kin' ? kinOf(GRAPH, ring.slug, ring.kind) : undefined;
   const nodes = ring.people.map(slug => {
     const own = kin?.sure.find(each => each.to === slug);
-    return personNode(slug, ring.by === 'kin' ? kindColor(palette, ring.kind) : palette.rule, go, own ? () => setTie(own) : undefined);
+    return personNode(slug, ring.by === 'kin' ? kindColor(palette, ring.kind) : palette.rule, go, own ? () => setTie(own) : undefined, ring.by === 'kin' ? ring.slug : undefined);
   });
   // A tie the book gives «على خلاف» is drawn too, its line dashed (owner, 2026-11-22), when the ring still fits; a scholar's
   // note that settles them (`ring.note`) leaves them out.
   const doubted = ring.note ? [] : ring.doubted;
-  const withDoubted = [...nodes, ...doubted.map(each => ({ ...personNode(each.to, ring.by === 'kin' ? kindColor(palette, ring.kind) : palette.rule, go, () => setTie(each)), dashed: true }))];
+  const withDoubted = [...nodes, ...doubted.map(each => ({ ...personNode(each.to, ring.by === 'kin' ? kindColor(palette, ring.kind) : palette.rule, go, () => setTie(each), ring.by === 'kin' ? ring.slug : undefined), dashed: true }))];
   const drawn = doubted.length && roundLayout(withDoubted.map(node => node.label), drawW) ? withDoubted : nodes;
   const owner = ring.by === 'title' ? undefined : GRAPH.nodes.get(ring.by === 'kin' ? ring.slug : ring.middle)!;
   const middle = ring.by === 'title' ? ring.name : personName(owner!);
@@ -846,10 +846,9 @@ function BattlePost({ slug, palette }: { slug: string; palette: Palette }) {
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.battles} title={battle.name} sub={battleLine(battle)} open={topic('/battles', 'افتح الغزوات والمعارك')} palette={palette} />}
       open={<OpenButton label={`افتح ${battle.name}`} onPress={open} palette={palette} />}
-      source={sourcesOf(battleHeadSources(battle))}>
+      source={sourcesOf(battleCardSources(battle))}>
       {battle.place ? <>
         <BattleMap places={[battle.place]} palette={palette} />
-        <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right', paddingHorizontal: 12, paddingTop: 6 }}>موضع تقريبي على خريطة اليوم، من عندنا.</Text>
       </> : null}
       <View style={{ padding: 14 }}><Counts battle={battle} palette={palette} /></View>
     </Post>
@@ -877,7 +876,6 @@ function BattleYearPost({ id, palette }: { id: string; palette: Palette }) {
         <BattleYears columns={slice.columns} lit={year} width={Math.min(width - 60, 480)} palette={palette} onYear={toYear} />
         {places.length ? <>
           <BattleMap places={places} palette={palette} />
-          <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>مواضع تقريبية على خريطة اليوم، من عندنا.</Text>
         </> : null}
         {slice.battles.map(battle => (
           <TapRow key={battle.slug} role="link" label={`افتح ${battle.name}`} style={{ flexDirection: 'column', justifyContent: 'center' }}

@@ -71,7 +71,7 @@ export function appBattles(catalog: Catalog, claims = batchClaims()): AppBattle[
         kind: fields.engagement && { value: KIND_NAMES[fields.engagement.value], refs: refs(fields.engagement.claims) },
         year: cited(fields.hijriYear),
         location: cited(fields.location),
-        place: place ? { name: PLACES[place].name, at: PLACES[place].at } : undefined,
+        place: place ? { name: PLACES[place].name, at: PLACES[place].at, refs: PLACES[place].refs } : undefined,
         counts: {
           muslims: cited(fields.muslimForceCount),
           others: cited(fields.nonMuslimForceCount),

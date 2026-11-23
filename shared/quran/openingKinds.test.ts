@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import corpus from './quranText/corpus';
 import type { BranchAyah } from './branches';
-import { ITQAN_KIND_NOTES, ITQAN_QUOTES, OPENING_CARDS, OPENING_KINDS, conditionLines, inKind, kindOf, openingCards, openingKeys, openingLike, type OpeningRow } from './openingKinds';
+import { ITQAN_KIND_NOTES, ITQAN_QUOTES, OPENING_CARDS, OPENING_KINDS, conditionLines, inKind, kindOf, soleCard, openingCards, openingKeys, openingLike, type OpeningRow } from './openingKinds';
 
 const byKey = new Map((corpus as unknown as { ayat: BranchAyah[] }).ayat.map(ayah => [ayah.key, ayah]));
 const words = (key: string) => byKey.get(key)?.words ?? [];
@@ -51,6 +51,10 @@ describe('opening kinds', () => {
     for (const card of OPENING_CARDS) for (const ref of card.refs ?? []) expect(ref.cite).toMatch(/^السيوطي، (الإتقان ٣\/٣٦[١-٣]|تناسق الدرر ص[٠-٩]+)$/);
   });
 
+  it('gives every card a source: its own quote, or its kind\'s when it is the kind\'s only card (owner 2026-11-23)', () => {
+    for (const card of OPENING_CARDS) expect(card.refs?.length || soleCard(card) ? card.id : `${card.id} has no source`).toBe(card.id);
+  });
+
   it('opens with the first ayah, the next one too after a short one, and the Fatiha after the basmala', () => {
     expect(openingKeys(1, words)).toEqual(['1:2']);
     expect(openingKeys(2, words)).toEqual(['2:1', '2:2']);
@@ -68,12 +72,9 @@ describe('opening kinds', () => {
     for (const card of cards.filter(c => c.alone)) for (const r of card.rows) expect([...marked(r, false), ...marked(r, true)]).toEqual([]);
   });
 
-  it('cuts a long opening and ends every full one with its ayah number', () => {
-    const long = row('umma', 60);
-    expect(long.cut).toBe(true);
-    expect(long.words.filter(w => 'text' in w)).toHaveLength(12);
+  it('shows every opening ayah whole, ending with its number (owner 2026-11-23)', () => {
+    for (const card of cards) for (const r of card.rows) expect(r.words.at(-1)).toHaveProperty('end');
     const short = row('alif-lam-mim', 2);
-    expect(short.cut).toBe(false);
     expect(short.words.filter(w => 'end' in w).map(w => ('end' in w ? w.end : 0))).toEqual([1, 2]);
   });
 
@@ -84,7 +85,7 @@ describe('opening kinds', () => {
 
   it('keeps the condition and answer spans of al-Takwir, al-Infitar and al-Inshiqaq', () => {
     expect(conditionLines(81).map(l => l.role)).toEqual([...Array(13).fill('condition'), 'answer']);
-    expect(conditionLines(82).filter(l => l.ours).map(l => l.key)).toEqual(['82:5']);
+    expect(conditionLines(82).map(l => l.role)).toEqual([...Array(4).fill('condition'), 'answer']);
     expect(conditionLines(84).at(-1)!.role).toBe('disputed');
     expect(conditionLines(1)).toEqual([]);
   });

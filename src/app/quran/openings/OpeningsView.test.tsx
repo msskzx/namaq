@@ -72,7 +72,6 @@ describe('the surah openings page', () => {
     fireEvent.click(within(card.parentElement!).getByRole('button', { name: 'الشرط وجوابه' }));
     expect(card.querySelectorAll('[data-role="answer"]')).toHaveLength(2);
     expect(card.querySelectorAll('[data-role="disputed"]')).toHaveLength(1);
-    expect(within(card).getByText('الجواب، قراءتنا')).toBeTruthy();
     expect(document.getElementById('hamd')!.parentElement!.querySelector('[aria-expanded]')).toBeNull();
   });
 

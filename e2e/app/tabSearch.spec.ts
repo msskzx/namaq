@@ -33,3 +33,16 @@ test('the Quran tab finds a tool by its name', async ({ page }) => {
   await page.getByRole('textbox', { name: 'ابحث في علوم القرآن' }).filter({ visible: true }).fill('الاقسام');
   await expect(page.getByRole('link', { name: 'الأقسام', exact: true })).toBeVisible();
 });
+
+// A page reached from a tab keeps its search in the top bar too (owner, 2026-11-23: «كل التراجم» had it in the page).
+test('the list of all tarajim searches from the top bar', async ({ page }) => {
+  await open(page, '/people');
+  const search = page.getByRole('textbox', { name: 'ابحث في التراجم' }).filter({ visible: true });
+  const scrolls = await search.evaluate(input => {
+    for (let box = input.parentElement; box; box = box.parentElement) if (/auto|scroll/.test(getComputedStyle(box).overflowY)) return true;
+    return false;
+  });
+  expect(scrolls).toBe(false);
+  await search.fill('صفية');
+  await expect(page.getByRole('link', { name: 'صفية بنت عبد المطلب', exact: true })).toBeVisible();
+});

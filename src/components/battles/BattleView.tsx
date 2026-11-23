@@ -1,5 +1,5 @@
 import { num } from '@shared/quran/arabicNumber';
-import { battleLine, type AppBattle, type AppCited } from '@shared/battles/battle';
+import { battleLine, placeRefs, type AppBattle, type AppCited } from '@shared/battles/battle';
 import Chip from '@/components/common/Chip';
 import { Refs } from '@/components/stories/StoryView';
 import CardWithRow from '@/components/common/CardWithRow';
@@ -60,9 +60,9 @@ export default function BattleView({ battle, inset = false }: { battle: AppBattl
       {battle.place && <BattleMap place={battle.place} />}
       <div className="flex flex-col gap-1.5 p-4">
         <p className="text-lg">{battleLine(battle)}</p>
-        {battle.place ? <p className="text-sm text-[var(--home-muted)]">موضع تقريبي على خريطة اليوم، من عندنا.</p>
-          : battle.location && <p className="text-lg">{battle.location.value}</p>}
+        {battle.location && <p className="text-lg">{battle.location.value}</p>}
         <Refs refs={[battle.kind, battle.year, battle.location].flatMap(value => value?.refs ?? [])} />
+        {placeRefs(battle).map(refs => <Refs key={refs[0]?.cite} refs={refs} />)}
         <Readings values={[battle.kind, battle.year, battle.location]} />
       </div>
     </CardWithRow>

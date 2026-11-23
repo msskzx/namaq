@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { Check } from 'lucide-react-native';
 import { View } from 'react-native';
 import Svg, { Line } from 'react-native-svg';
+import { settledTies } from '@shared/peopleCards';
 import { groupWord, tieGroups, tieWord, type GraphNode, type Tie, type TieGroup, type TieKind } from '@shared/tarajimGraph';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
-import Card from '@/ui/Card';
+import Card, { useInsideCard } from '@/ui/Card';
 import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
 import type { Palette } from '@/lib/theme';
@@ -17,7 +18,24 @@ const NODE_H = 62;
 const GROW = 26;
 const GAP = 10;
 const ROW = NODE_H + 46;
-const nodeName = (node: GraphNode) => personName(node).replace(/\s+بن\s+.*$/u, (rest) => (rest.length > 18 ? '' : rest));
+/** A tie's word on its line: its height, and the most room it takes across. */
+const LABEL_H = 18;
+const LABEL_W = 70;
+/**
+ * A node's name: «X بن Y» shortened, and with no father's name when the father is the one in the middle (owner,
+ * 2026-11-23: «فاطمة», not «فاطمة بنت محمد», round the Prophet ﷺ; he is there in the same drawing).
+ */
+const nodeName = (node: GraphNode, middle?: string) => {
+  const name = personName(node);
+  const father = middle && GRAPH.nodes.get(middle)?.name.replace(/\s*ﷺ/u, '').split(/\s+(?:بن|بنت)\s+/u)[0].trim().split(/\s+/u);
+  // The child's name gives the father as the nasab does: a kunya in the genitive («بنت أبي بكر»), and maybe without his laqab.
+  const word = (w: string) => (/^أب[وياى]$/u.test(w) ? 'أب(?:و|ي|ا)' : w);
+  for (let n = father ? father.length : 0; father && n >= (/^أب[وي]$/u.test(father[0]) ? 2 : 1); n--) {
+    const own = name.replace(new RegExp(`\\s+(?:بن|بنت)\\s+${father.slice(0, n).map(word).join('\\s+')}$`, 'u'), '');
+    if (own !== name) return own;
+  }
+  return name.replace(/\s+بن\s+.*$/u, (rest) => (rest.length > 18 ? '' : rest));
+};
 
 /** A node round the middle: a person (opens his ties if he has a page), or a whole kind folded into one node with its count. */
 type Spot = { key: string; x: number; y: number; kind: TieKind } & ({ tie: Tie } | { group: TieKind; count: number });
@@ -136,19 +154,19 @@ export function RoundRing({ middle, nodes, width, palette }: { middle: string; n
 }
 
 /** A node's name in a ring: «X بن Y» shortened as the grid ring shortens it. */
-export const ringName = (slug: string) => nodeName(GRAPH.nodes.get(slug)!);
+export const ringName = (slug: string, middle?: string) => nodeName(GRAPH.nodes.get(slug)!, middle);
 
 /** A person in a round ring: his page when he has one, else the sentence that names him. */
-export function personNode(slug: string, colour: string, go: (slug: string) => void, show?: () => void): RoundNode {
+export function personNode(slug: string, colour: string, go: (slug: string) => void, show?: () => void, middle?: string): RoundNode {
   const node = GRAPH.nodes.get(slug)!;
-  return { key: slug, label: nodeName(node), colour, inApp: node.inApp, onPress: node.inApp ? () => go(slug) : () => show?.(), onLongPress: show };
+  return { key: slug, label: nodeName(node, middle), colour, inApp: node.inApp, onPress: node.inApp ? () => go(slug) : () => show?.(), onLongPress: show };
 }
 
 /** A person's ties by kind, each person once, under the nearest kind (al-Zubayr's kin the Prophet ﷺ is not drawn again as his companion). */
 export function tiesOf(slug: string): TieGroup[] {
   const seen = new Set<string>();
   return tieGroups(GRAPH, slug)
-    .map(g => ({ ...g, ties: g.ties.filter(tie => !seen.has(tie.to) && seen.add(tie.to)) }))
+    .map(g => ({ ...g, ties: settledTies(slug, g.kind, g.ties).filter(tie => !seen.has(tie.to) && seen.add(tie.to)) }))
     .filter(g => g.ties.length > 0);
 }
 
@@ -169,6 +187,7 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
   onShow?: (tie: Tie) => void;
 }) {
   const [opened, setOpen] = useState<{ slug: string; kind: TieKind } | undefined>();
+  const ground = useInsideCard() ? palette.card : palette.paper;
   const open = opened?.slug === slug ? opened.kind : undefined;
   const person = findPerson(slug);
   if (!person) return null;
@@ -191,7 +210,12 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
   const centre = { x: drawW / 2, y: middle };
   const placed: Spot[] = spots.map((spot, i) => ({ ...spot, ...places[i], key: 'tie' in spot ? `${spot.kind}:${spot.tie.to}` : `g:${spot.group}` }));
   const openGroup = open ? groups.find(g => g.kind === open) : undefined;
-  const listed = openGroup && openGroup.ties.length > room ? openGroup.ties : [];
+  // A kind opened that is more than the grid holds goes round the middle on an oval, which holds more (owner, 2026-11-23:
+  // the Prophet's ﷺ nine children came as a list); a list only past what even the oval holds.
+  const big = openGroup && openGroup.ties.length > room ? openGroup : undefined;
+  const oval = big && roundLayout(big.ties.map(tie => ringName(tie.to, slug)), drawW)
+    ? big.ties.map(tie => ({ ...personNode(tie.to, kindColor(palette, tie.kind), go, () => setShown(tie), slug), dashed: tie.link.disputed })) : undefined;
+  const listed = big && !oval ? big.ties : [];
 
   return (
     <View style={{ gap: 12 }}>
@@ -203,6 +227,7 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
             ))}
           </View>
         )}
+        {oval ? <RoundRing middle={personName(person)} nodes={oval} width={drawW} palette={palette} /> : (
         <View style={{ width: drawW, height: drawH, alignSelf: 'center' }}>
           <Svg width={drawW} height={drawH} style={{ position: 'absolute' }}>
             {placed.map(spot => {
@@ -211,6 +236,27 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
               return <Line key={spot.key} x1={from.x} y1={from.y} x2={to.x} y2={to.y} stroke={kindColor(palette, spot.kind)} strokeWidth={2} strokeOpacity={0.8} />;
             })}
           </Svg>
+          {/* What each one is to him, on his line (owner, 2026-11-23: on the edges, as «بينه وبين…» writes it), so a line's
+              colour is never the only clue; lines side by side each take the room to their neighbour. */}
+          {placed.map((spot, i) => {
+            if (!('tie' in spot)) return null;
+            const mid = (at: Spot) => {
+              const a = edge(centre, at, middleW / 2, 26), b = edge(at, centre, NODE_W / 2, NODE_H / 2);
+              return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+            };
+            // A node beside the middle has too short a line for a word: its word goes just over the node instead.
+            const m = spot.y === middle ? { x: spot.x, y: spot.y - (NODE_H + GROW) / 2 - LABEL_H / 2 + 6 } : mid(spot);
+            const room = Math.min(LABEL_W, ...placed.filter((_, j) => j !== i && placed[j].y !== middle).map(other => {
+              const o = mid(other);
+              return Math.abs(o.y - m.y) < LABEL_H ? Math.abs(o.x - m.x) - 4 : Infinity;
+            }));
+            const node = GRAPH.nodes.get(spot.tie.to)!;
+            return (
+              <View key={`w${spot.key}`} pointerEvents="none" style={{ position: 'absolute', left: Math.max(0, Math.min(drawW - room, m.x - room / 2)), top: m.y - LABEL_H / 2, width: room, height: LABEL_H, alignItems: 'center' }}>
+                <Text numberOfLines={1} style={{ color: kindColor(palette, spot.kind), fontSize: 12, lineHeight: LABEL_H, paddingHorizontal: 3, backgroundColor: ground }}>{tieWord(spot.kind, node.sex, person.sex)}</Text>
+              </View>
+            );
+          })}
           <View style={{ position: 'absolute', left: drawW / 2 - middleW / 2, top: middle - (NODE_H + GROW) / 2, height: NODE_H + GROW, width: middleW, justifyContent: 'center' }}>
             <Card palette={palette} node pad={[8, 10]} picked accessibilityRole="header" accessibilityLabel={personName(person)}>
               <Text numberOfLines={2} style={{ color: palette.accent, fontSize: 17, textAlign: 'center' }}>{personName(person)}</Text>
@@ -241,14 +287,13 @@ export default function TiesRing({ slug, width, palette, onPick, onShow, marked 
               <View key={spot.key} style={style}>
                 <Card palette={palette} node pad={[6, 8]} outline={node.slug === marked ? palette.green : undefined} accessibilityRole={node.inApp ? 'link' : 'button'} accessibilityLabel={label}
                   onPress={node.inApp ? () => go(node.slug) : () => setShown(spot.tie)} onLongPress={() => setShown(spot.tie)}>
-                  {/* What this person is to the one in the middle, on the node itself, so a line's colour is never the only clue. */}
-                  <Text style={{ color: kindColor(palette, spot.kind), fontSize: 12, textAlign: 'center' }}>{tieWord(spot.kind, node.sex, person.sex)}</Text>
-                  <Text numberOfLines={2} style={{ color: palette.ink, fontSize: 14, textAlign: 'center' }}>{nodeName(node)}</Text>
+                  <Text numberOfLines={2} style={{ color: palette.ink, fontSize: 14, textAlign: 'center' }}>{nodeName(node, slug)}</Text>
                 </Card>
               </View>
             );
           })}
         </View>
+        )}
         {open === undefined && (
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', columnGap: 14, rowGap: 4 }}>
             {groups.map(g => (

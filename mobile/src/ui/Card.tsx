@@ -83,7 +83,7 @@ export function CardWithRow({ lead, row, menu, cap = false, source, sourceLine, 
   // The feature's bar has a line of its own, at its full size, with the card's buttons on the line under it (owner, 2026-11-23).
   const buttonRow = (handedUp: [string, React.ReactNode][], more?: MoreItem[], first: React.ReactNode = lead) => (bar || first || row || handedUp.length > 0 || !!more?.length) && (<>
     {bar && <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4 }}>{bar}</View>}
-    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', gap: 8 }}>
       {first}{handedUp.map(([id, node]) => <View key={id} style={{ flexDirection: 'row', alignItems: 'center' }}>{node}</View>)}{row}
       {more?.length ? <><View style={{ flex: 1 }} /><MoreMenu items={more} /></> : null}
     </View>
