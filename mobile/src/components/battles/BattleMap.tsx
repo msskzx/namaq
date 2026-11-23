@@ -2,15 +2,16 @@ import { useMemo, useState } from 'react';
 import { View } from 'react-native';
 import Svg, { Circle, G, Path, Rect, Text as SvgText } from 'react-native-svg';
 import land from '@shared/data/battles/land.json';
-import { frameOf, landPath, pinsOf, placeLabels, projector, type Box, type LonLat } from '@shared/battles/map';
+import { frameOf, landPath, PIN_JOIN, pinsOf, placeLabels, projector, type Box, type LonLat } from '@shared/battles/map';
 import { LANDMARKS, PLACES } from '@shared/battles/places';
 import type { Palette } from '@/lib/theme';
+import TapRow from '@/ui/TapRow';
+import { MIN_TAP } from '@/ui/tapSize';
+import { num } from '@shared/quran/arabicNumber';
 
 const ASPECT = 0.85;
 /** How far from a battle (in degrees) a well-known city still shows beside it. */
 const NEAR = 7;
-/** Places drawn closer than this (in points) share one pin. */
-const JOIN = 24;
 
 /**
  * How a pin is drawn: `lit` in the accent with its name (the default), `quiet` a small muted dot with no name (the atlas's
@@ -37,7 +38,9 @@ export default function BattleMap({ places: given, palette, box: fixed, onPin }:
   const places = useMemo(() => given, [key]);
   const cities = useMemo(() => {
     const near = (city: { at: LonLat }) => places.some(place => Math.hypot(place.at[0] - city.at[0], place.at[1] - city.at[1]) < NEAR);
-    return LANDMARKS.map(key => PLACES[key]).filter(city => places.every(place => place.name !== city.name) && near(city));
+    // A city a lit pin names is that pin; one a quiet pin names is drawn as the city, its name kept.
+    const pinned = (city: { name: string }) => places.some(place => place.name === city.name && place.look !== 'quiet');
+    return LANDMARKS.map(key => PLACES[key]).filter(city => !pinned(city) && near(city));
   }, [places]);
   const boxKey = fixed?.join(',');
   const drawing = useMemo(() => {
@@ -46,8 +49,11 @@ export default function BattleMap({ places: given, palette, box: fixed, onPin }:
     const { height, at } = projector(box, width);
     // Pins of one look join; a lit pin never takes a quiet one's name. The lit and answered come first, so their names get the room.
     const order: PinLook[] = ['right', 'wrong', 'lit', 'selected', 'choice', 'quiet'];
-    const pins = order.flatMap(look => pinsOf(places.filter(place => (place.look ?? 'lit') === look)
-      .map(place => { const [x, y] = at(place.at); return { name: place.name, x, y }; }), JOIN).map(pin => ({ ...pin, look })));
+    const cityNames = new Set(cities.map(city => city.name));
+    const pins = order.flatMap(look => pinsOf(places.filter(place => (place.look ?? 'lit') === look && !(look === 'quiet' && cityNames.has(place.name)))
+      .map(place => { const [x, y] = at(place.at); return { name: place.name, x, y }; }), PIN_JOIN).map(pin => ({ ...pin, look })))
+      // A quiet pin under a lit one would cover it: the lit pin stands for the place.
+      .filter((pin, _, all) => pin.look !== 'quiet' || all.every(other => other.look === 'quiet' || Math.hypot(other.x - pin.x, other.y - pin.y) >= PIN_JOIN));
     const shown = cities.map(city => { const [x, y] = at(city.at); return { name: city.name, x, y }; });
     const named = (look: PinLook) => look === 'lit' || look === 'right' || look === 'wrong';
     const labels = placeLabels([
@@ -105,16 +111,21 @@ export default function BattleMap({ places: given, palette, box: fixed, onPin }:
               {at && label(at, name, 14)}
             </G>
           ))}
-          {drawing.pins.map(({ name, x, y, look, label: at }) => (
-            <G key={`${look}:${name}`} onPress={onPin ? () => onPin(name.split('، ')) : undefined}>
-              {/* A finger-sized target (44 points) round a pin that opens something. */}
-              {onPin && <Circle cx={x} cy={y} r={22} fill={palette.paper} fillOpacity={0.01} />}
+          {/* The quiet pins first, under the rest; the names were laid out in the opposite order, the lit first. */}
+          {[...drawing.pins].reverse().map(({ name, x, y, look, label: at }) => (
+            <G key={`${look}:${name}`}>
               {dot(look, x, y)}
               {at && label(at, name, 16)}
             </G>
           ))}
         </Svg>
       )}
+      {/* Each pin a finger-sized button over the drawing; a choice is named by its number in the list only, so it tells nothing. */}
+      {drawing && onPin && drawing.pins.map(({ name, x, y, look }) => (
+        <TapRow key={`${look}:${name}`} onPress={() => onPin(name.split('، '))}
+          label={look === 'choice' || look === 'selected' ? `موضع ${num(places.findIndex(place => place.name === name.split('، ')[0]) + 1)}` : name} selected={look === 'choice' || look === 'selected' ? look === 'selected' : undefined}
+          style={{ position: 'absolute', left: x - MIN_TAP / 2, top: y - MIN_TAP / 2, width: MIN_TAP, height: MIN_TAP }} />
+      ))}
     </View>
   );
 }

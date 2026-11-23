@@ -4,9 +4,8 @@
 // cited year in our data and none is made up. Every pin is a battle's own sourced place (shared/battles/places.ts): a
 // battle no book pins is listed without one.
 import type { AppBattle } from './battle';
-import { frameOf, type Box, type LonLat } from './map';
+import { frameOf, PIN_JOIN, projector, type Box, type LonLat } from './map';
 import { MADINAH_YEARS } from './timeline';
-import { normalizeWord } from '../quran/normalize';
 
 export type AtlasLayer = 'life' | 'after';
 export const LAYERS: { key: AtlasLayer; name: string }[] = [{ key: 'life', name: 'في حياته ﷺ' }, { key: 'after', name: 'بعده ﷺ' }];
@@ -17,8 +16,8 @@ export const layerOf = (battle: Pick<AppBattle, 'year'>): AtlasLayer =>
 
 export const layerBattles = <B extends Pick<AppBattle, 'year'>>(battles: readonly B[], layer: AtlasLayer) => battles.filter(battle => layerOf(battle) === layer);
 
-/** How tall the atlas's map is for its width: the Hijaz runs north to south, so the first layer is tall. */
-export const LAYER_ASPECT: Record<AtlasLayer, number> = { life: 1.3, after: 0.85 };
+/** How tall the atlas's map is for its width: the Hijaz runs north to south, so the first layer is tall; the second is wide, so it stays inside the land the app carries (scripts/battles/buildLand.ts). */
+export const LAYER_ASPECT: Record<AtlasLayer, number> = { life: 1.1, after: 0.6 };
 
 /** The layer's still frame: every pinned place of it with room around, so the map does not move as the year changes. */
 export function layerBox(battles: readonly AppBattle[], layer: AtlasLayer): Box {
@@ -52,30 +51,16 @@ export function battlesAt<B extends Pick<AppBattle, 'year' | 'place'>>(battles: 
 export const lifeYears = (battles: readonly Pick<AppBattle, 'year'>[]) =>
   [...new Set(layerBattles(battles, 'life').map(battle => battle.year!.value))].sort((a, b) => a - b);
 
-/** A word as names are matched: bare letters, no article. */
-const bare = (text: string) => normalizeWord(text).replace(/^ال/, '');
+/** The narrowest map a quiz card draws (a small phone's width less the card's margins), in points. */
+export const NARROWEST_MAP = 320;
 
 /**
- * The atlas's search (owner, 2026-11-23: a search at the top): the battles whose name or place holds every word typed,
- * on either layer.
- */
-export function searchAtlas<B extends Pick<AppBattle, 'name' | 'place' | 'location'>>(battles: readonly B[], query: string): B[] {
-  const words = query.split(/\s+/).filter(Boolean).map(bare).filter(Boolean);
-  if (!words.length) return [];
-  return battles.filter(battle => {
-    const said = [battle.name, battle.place?.name, battle.location?.value].filter(Boolean).join(' ').split(/\s+/).map(bare);
-    return words.every(word => said.some(each => each.includes(word)));
-  });
-}
-
-/** How close (in degrees) two places of a layer may be before «أين كانت؟» stops asking either: a finger could not tell them apart. */
-export const APART = 0.7;
-
-/**
- * The places «أين كانت؟» can ask about on a layer: those with no other place of the layer within APART, so the pin the
- * reader taps is the place itself and never one of a huddle (Makkah, al-Hudaybiyah, Hunayn and Nakhlah).
+ * The places «أين كانت؟» can ask about on a layer: those whose pin stands alone on the layer's map at its narrowest
+ * (`PIN_JOIN` points from any other), so the pin the reader taps is the place itself and never one shared with another
+ * (Makkah, al-Hudaybiyah, Hunayn and Nakhlah; Damascus, al-Yarmuk and Fihl).
  */
 export function lonePlaces(battles: readonly AppBattle[], layer: AtlasLayer): string[] {
-  const places = [...new Map(layerBattles(battles, layer).flatMap(battle => (battle.place ? [[battle.place.name, battle.place.at] as const] : []))).entries()];
-  return places.filter(([name, at]) => places.every(([other, there]) => other === name || Math.hypot(at[0] - there[0], at[1] - there[1]) >= APART)).map(([name]) => name);
+  const { at } = projector(layerBox(battles, layer), NARROWEST_MAP);
+  const places = [...new Map(layerBattles(battles, layer).flatMap(battle => (battle.place ? [[battle.place.name, at(battle.place.at)] as const] : []))).entries()];
+  return places.filter(([name, [x, y]]) => places.every(([other, [ox, oy]]) => other === name || Math.hypot(x - ox, y - oy) >= PIN_JOIN)).map(([name]) => name);
 }

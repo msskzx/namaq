@@ -1,14 +1,15 @@
 import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { atlasPins, battlesAt, layerBattles, layerBox, layerOf, LAYERS, lifeYears, searchAtlas, type AtlasLayer } from '@shared/battles/atlas';
+import { atlasPins, battlesAt, layerBattles, layerBox, layerOf, LAYERS, lifeYears, type AtlasLayer } from '@shared/battles/atlas';
 import { battleTimeline, UNDATED_TITLE } from '@shared/battles/timeline';
-import { placeRefs, type AppBattle } from '@shared/battles/battle';
+import { placeRefs, searchBattles, type AppBattle } from '@shared/battles/battle';
 import { atlasSources } from '@shared/drawingCards';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Card from '@/ui/Card';
+import Empty from '@/ui/Empty';
 import Chip from '@/ui/Chip';
 import Sheet from '@/ui/Sheet';
 import TapRow from '@/ui/TapRow';
@@ -99,7 +100,7 @@ export default function AtlasScreen() {
   const box = useMemo(() => layerBox(BATTLES, layer), [layer]);
   const pins = useMemo(() => atlasPins(BATTLES, layer, year), [layer, year]);
   const madinah = useMemo(() => battleTimeline(layerBattles(BATTLES, 'life')).madinah, []);
-  const found = useMemo(() => searchAtlas(BATTLES, query), [query]);
+  const found = useMemo(() => searchBattles(BATTLES, query), [query]);
   const battles = layer === 'life' ? BATTLES.filter(battle => layerOf(battle) === 'life' && battle.year!.value === year) : layerBattles(BATTLES, 'after');
   const dated = battles.filter(battle => battle.year);
   const undated = battles.filter(battle => !battle.year);
@@ -116,8 +117,8 @@ export default function AtlasScreen() {
   };
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar back={back} title="الأطلس" hideOnScroll
-        search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث باسم غزوة أو موضع', label: 'ابحث في الأطلس' }} />
+      <TopBar back={back} hideOnScroll
+        search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث في الأطلس', label: 'ابحث في الأطلس' }} />
       <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag"
         contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 12 }}>
         {query.trim() ? (
@@ -130,7 +131,7 @@ export default function AtlasScreen() {
                 </Text>
               </Card>
             ))
-            : <Text style={{ color: palette.muted, fontSize: 16, textAlign: 'right' }}>لا غزوة ولا موضع بهذا الاسم.</Text>
+            : <Empty text="لا غزوة ولا موضع بهذا الاسم" palette={palette} />
         ) : <>
           <View style={{ flexDirection: 'row', gap: 8 }}>
             {LAYERS.map(each => <Chip key={each.key} label={each.name} on={layer === each.key} onPress={() => setLayer(each.key)} palette={palette} />)}

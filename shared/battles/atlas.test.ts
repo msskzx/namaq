@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import data from '../data/battles/battles.json';
 import type { AppBattle } from './battle';
-import { APART, atlasPins, battlesAt, layerBox, layerOf, lifeYears, lonePlaces, searchAtlas } from './atlas';
+import { atlasPins, NARROWEST_MAP, battlesAt, layerBox, layerOf, lifeYears, lonePlaces } from './atlas';
+import { searchBattles } from './battle';
 import { MADINAH_YEARS } from './timeline';
+import { PIN_JOIN, projector } from './map';
+import land from '../data/battles/land.json';
 
 const BATTLES = data as AppBattle[];
 const placeOf = (slug: string) => BATTLES.find(battle => battle.slug === slug)!.place!;
@@ -41,6 +44,15 @@ describe('the atlas', () => {
     }
   });
 
+  it('draws each layer inside the land the app carries, so no edge of the map is empty', () => {
+    const points = (land as number[][][]).flat();
+    const [west, south, east, north] = [Math.min(...points.map(p => p[0])), Math.min(...points.map(p => p[1])), Math.max(...points.map(p => p[0])), Math.max(...points.map(p => p[1]))];
+    for (const layer of ['life', 'after'] as const) {
+      const box = layerBox(BATTLES, layer);
+      expect(box[0] >= west && box[1] >= south && box[2] <= east && box[3] <= north, layer).toBe(true);
+    }
+  });
+
   it('lists the battles a pin holds, the chosen year first', () => {
     const here = battlesAt(BATTLES, 'life', [placeOf('khandaq').name], 5);
     expect(here.length).toBeGreaterThan(1);
@@ -48,18 +60,20 @@ describe('the atlas', () => {
   });
 
   it('finds a battle by its name or its place, whatever the article or hamza', () => {
-    expect(searchAtlas(BATTLES, 'تبوك').map(battle => battle.slug)).toEqual(['tabuk']);
-    expect(searchAtlas(BATTLES, 'اليرموك').map(battle => battle.slug)).toContain('yarmuk');
-    expect(searchAtlas(BATTLES, 'احد').map(battle => battle.slug)).toContain('uhud');
-    expect(searchAtlas(BATTLES, '  ')).toEqual([]);
+    expect(searchBattles(BATTLES, 'تبوك').map(battle => battle.slug)).toEqual(['tabuk']);
+    expect(searchBattles(BATTLES, 'اليرموك').map(battle => battle.slug)).toContain('yarmuk');
+    expect(searchBattles(BATTLES, 'احد').map(battle => battle.slug)).toContain('uhud');
+    expect(searchBattles(BATTLES, '  ')).toEqual([]);
   });
 
-  it('asks «أين كانت؟» only about places that stand apart from every other on their layer', () => {
+  it('asks «أين كانت؟» only about places whose pin stands alone on the narrowest map, so a tap means one place', () => {
     for (const layer of ['life', 'after'] as const) {
+      const { at } = projector(layerBox(BATTLES, layer), NARROWEST_MAP);
+      const places = new Map(BATTLES.filter(battle => layerOf(battle) === layer && battle.place).map(battle => [battle.place!.name, at(battle.place!.at)]));
       const lone = lonePlaces(BATTLES, layer);
-      const places = new Map(BATTLES.filter(battle => layerOf(battle) === layer && battle.place).map(battle => [battle.place!.name, battle.place!.at]));
-      lone.forEach(name => places.forEach((at, other) => {
-        if (other !== name) expect(Math.hypot(at[0] - places.get(name)![0], at[1] - places.get(name)![1])).toBeGreaterThanOrEqual(APART);
+      expect(lone.length).toBeGreaterThan(0);
+      lone.forEach(name => places.forEach(([x, y], other) => {
+        if (other !== name) expect(Math.hypot(x - places.get(name)![0], y - places.get(name)![1])).toBeGreaterThanOrEqual(PIN_JOIN);
       }));
     }
     expect(lonePlaces(BATTLES, 'life')).not.toContain(placeOf('hudaybiyyah').name);

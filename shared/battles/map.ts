@@ -1,6 +1,9 @@
 // The static map behind a battle (owner, 2026-11-18): land drawn from Natural Earth in the app's own colours, no map
 // service, so it works offline. The land rings are written by scripts/battles/buildLand.ts.
 
+/** Places drawn closer than this (in points) share one pin (`pinsOf`), so no two pins sit on each other. */
+export const PIN_JOIN = 24;
+
 /** [longitude, latitude] */
 export type LonLat = readonly [number, number];
 /** West, south, east, north, in degrees. */

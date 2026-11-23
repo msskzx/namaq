@@ -2,6 +2,7 @@
 // into shared/data/battles/battles.json, since the app is offline.
 import type { LonLat } from './map';
 import { num } from '../quran/arabicNumber';
+import { normalizeWord } from '../quran/normalize';
 
 /** One quote a value stands on, with the page it cites. */
 export type AppCite = { text: string; cite: string; url?: string };
@@ -63,4 +64,20 @@ export function placeRefs(battle: Pick<AppBattle, 'place'>): AppCite[][] {
     groups.set(book, [...(groups.get(book) ?? []), ref]);
   }
   return [...groups.values()];
+}
+
+/** A word as names are matched: bare letters, no article. */
+const bare = (text: string) => normalizeWord(text).replace(/^ال/, '');
+
+/**
+ * The battles whose name, the source's place or the pinned place holds every word typed (owner, 2026-11-23: a search at
+ * the top of the battles page and of the atlas), whatever the article, the hamza or the vowel marks.
+ */
+export function searchBattles<B extends Pick<AppBattle, 'name' | 'place' | 'location'>>(battles: readonly B[], query: string): B[] {
+  const words = query.split(/\s+/).filter(Boolean).map(bare).filter(Boolean);
+  if (!words.length) return [];
+  return battles.filter(battle => {
+    const said = [battle.name, battle.place?.name, battle.location?.value].filter(Boolean).join(' ').split(/\s+/).map(bare);
+    return words.every(word => said.some(each => each.includes(word)));
+  });
 }
