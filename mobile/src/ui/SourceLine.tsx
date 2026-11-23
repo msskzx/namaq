@@ -16,12 +16,16 @@ export const sourcesOf = (sources: QuizSource[]): Source[] => sourceEntries(sour
  * A home card's source line (owner 2026-11-20, like an Instagram post's line under its buttons): a book icon and the
  * books (`named`), muted, no arrow; a tap anywhere on it opens a sheet with each book's places, words and links (`sources`).
  */
-export default function SourceLine({ named, sources, palette }: {
+export default function SourceLine({ named, sources, palette, label, small = false }: {
   /** The books named on the line; all of `sources` when left out (a page heading's line). */
-  named?: Source[]; sources: Source[]; palette: Palette }) {
+  named?: Source[]; sources: Source[]; palette: Palette;
+  /** The words on the line, when not the books' names: one saying's book and page («سير أعلام النبلاء ٣/١٠»). */
+  label?: string;
+  /** Under one saying inside a card: no side room. */
+  small?: boolean }) {
   const [open, setOpen] = useState(false);
   if (!sources.length) return null;
-  const line = [...new Set((named ?? sources).map(source => source.line))].join('، ');
+  const line = label ?? [...new Set((named ?? sources).map(source => source.line))].join('، ');
   // A book named on the line with nothing more to say is left out of the sheet when what the card holds says where in it.
   const books = mergeSources(sources);
   const told = books.filter(source => source.quotes.length || source.links?.length);
@@ -29,7 +33,7 @@ export default function SourceLine({ named, sources, palette }: {
   return (
     <>
       <Tap onPress={() => setOpen(true)} accessibilityRole="button" accessibilityLabel={`المصدر: ${line}`}
-        style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 12, minHeight: 32 }}>
+        style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: small ? 0 : 12, minHeight: 32 }}>
         <BookMarked size={15} color={palette.muted} />
         <Text numberOfLines={1} style={{ flex: 1, color: palette.muted, fontSize: 13, textAlign: 'right' }}>{line}</Text>
       </Tap>
