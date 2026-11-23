@@ -68,12 +68,9 @@ describe('opening kinds', () => {
     for (const card of cards.filter(c => c.alone)) for (const r of card.rows) expect([...marked(r, false), ...marked(r, true)]).toEqual([]);
   });
 
-  it('cuts a long opening and ends every full one with its ayah number', () => {
-    const long = row('umma', 60);
-    expect(long.cut).toBe(true);
-    expect(long.words.filter(w => 'text' in w)).toHaveLength(12);
+  it('shows every opening ayah whole, ending with its number (owner 2026-11-23)', () => {
+    for (const card of cards) for (const r of card.rows) expect(r.words.at(-1)).toHaveProperty('end');
     const short = row('alif-lam-mim', 2);
-    expect(short.cut).toBe(false);
     expect(short.words.filter(w => 'end' in w).map(w => ('end' in w ? w.end : 0))).toEqual([1, 2]);
   });
 
@@ -84,7 +81,7 @@ describe('opening kinds', () => {
 
   it('keeps the condition and answer spans of al-Takwir, al-Infitar and al-Inshiqaq', () => {
     expect(conditionLines(81).map(l => l.role)).toEqual([...Array(13).fill('condition'), 'answer']);
-    expect(conditionLines(82).filter(l => l.ours).map(l => l.key)).toEqual(['82:5']);
+    expect(conditionLines(82).map(l => l.role)).toEqual([...Array(4).fill('condition'), 'answer']);
     expect(conditionLines(84).at(-1)!.role).toBe('disputed');
     expect(conditionLines(1)).toEqual([]);
   });

@@ -27,7 +27,7 @@ export const QURAN_TILES: { route: string; label: string; Icon: (props: LucidePr
   { route: '/lataif', label: 'مشاهد', Icon: FEATURE_ICON.scenes },
   { route: '/terms', label: 'مصطلحات البلاغة', Icon: FEATURE_ICON.balagha },
   { route: '/qiraat', label: 'القراءات', Icon: FEATURE_ICON.qiraat },
-  { route: '/openings', label: 'افتتاح السور', Icon: FEATURE_ICON.openings },
+  { route: '/openings', label: 'فواتح السور', Icon: FEATURE_ICON.openings },
   { route: '/order', label: 'ترتيب السور', Icon: FEATURE_ICON.order },
 ];
 
