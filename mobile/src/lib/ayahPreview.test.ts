@@ -11,8 +11,8 @@ describe('the reader\'s ayah previews', () => {
 
   it('shows the other ayah of each compare card, with the words it shares marked', () => {
     const pairs = compareOfAyah('37:182');
-    expect(pairs.map(pair => pair.partner)).toEqual(['6:45']);
-    const [anam] = pairs;
+    // 37:182 is kept with 6:45 and with 1:2 (owner 2026-11-23); the one with al-An'am is checked here.
+    const anam = pairs.find(pair => pair.partner === '6:45')!;
     expect(anam.target).toMatchObject({ lead: 37, other: 6, ayat: [182, 45] });
     // «والحمد لله رب العالمين» is shared; «فقطع دابر القوم الذين ظلموا» is not.
     expect(anam.words.filter(word => word.shared)).toHaveLength(4);
