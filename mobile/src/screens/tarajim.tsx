@@ -4,16 +4,14 @@ import { router } from 'expo-router';
 import { counted } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
-import Card from '@/ui/Card';
 import Empty from '@/ui/Empty';
 import { usePalette, type Palette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useTabRetap } from '@/lib/tabRetap';
-import { heldGroups, searchPeople } from '@/lib/tarajim';
+import { searchPeople } from '@/lib/tarajim';
 import PersonRows from '@/components/tarajim/PersonRows';
 import IconTile from '@/ui/IconTile';
-import Chip from '@/ui/Chip';
 import { FEATURE_ICON } from '@/components/featureIcons';
 
 /** A hub section's heading: short and muted, as on the hadith hub. */
@@ -23,8 +21,8 @@ export function HubHeading({ text, palette }: { text: string; palette: Palette }
 
 /**
  * The tarajim tab (owner, 2026-11-19; sketch tarajim-hub/sketch-dark.png): a hub, not a list. Search in the top bar and no page title, as on every tab (owner, 2026-11-22); typing shows the
- * people found as rows in one card in place of the sections. Then the groups the scholars name, the sira and its battles,
- * the ties between people and the nasab search, and the whole list on its own page in the book's order (nothing capped, nothing dumped here).
+ * people found as rows in one card in place of the sections. Then the whole list (the scholars' groups are its chips, owner 2026-11-23), the sira and its battles,
+ * the ties between people and the nasab search (nothing capped, nothing dumped here).
  */
 export default function TarajimScreen() {
   const palette = usePalette();
@@ -33,7 +31,6 @@ export default function TarajimScreen() {
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   useTabRetap('tarajim', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   const [query, setQuery] = useState('');
-  const groups = useMemo(() => heldGroups(), []);
   const found = useMemo(() => (query.trim() ? searchPeople(query) : []), [query]);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
@@ -49,14 +46,7 @@ export default function TarajimScreen() {
               </>
         ) : (
           <>
-            <IconTile wide label="كل التراجم" line="بترتيب الكتاب: السيرة، ثم الخلفاء، ثم أجزاء السير" Icon={FEATURE_ICON.person} palette={palette} onPress={() => router.push('/people')} />
-            <HubHeading text="كما جمعهم العلماء" palette={palette} />
-            <Card palette={palette} style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-              {groups.map(group => (
-                <Chip key={group.key} label={group.name} on={false} palette={palette} role="button" accessibilityLabel={group.name}
-                  onPress={() => router.push({ pathname: '/people', params: { title: group.key } })} />
-              ))}
-            </Card>
+            <IconTile wide label="كل التراجم" line="بترتيب الكتاب، ومعها المجموعات كما جمعهم العلماء" Icon={FEATURE_ICON.person} palette={palette} onPress={() => router.push('/people')} />
             <HubHeading text="السيرة والأحداث" palette={palette} />
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
               <IconTile label="قصص السيرة" Icon={FEATURE_ICON.stories} palette={palette} onPress={() => router.push('/stories')} />
