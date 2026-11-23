@@ -163,8 +163,9 @@ export default function PersonScreen() {
   const showLink = (link: PersonLink) => setTie({ to: link.slug, link });
   // A battle opens its page when the app has one, as the timeline's battles do.
   const showBattle = (link: PersonLink) => (battleOf(link.slug) ? toTab({ pathname: '/battle', params: { slug: link.slug } }) : showLink(link));
-  // «نسبه» drawn as the tree of fathers or as the book writes it (owner 2026-11-20: «الرسم | النص», the drawing first).
-  const [nasabView, setNasabView] = useState<DrawingOrText>('drawing');
+  // «نسبه» drawn as the tree of fathers or as the book writes it: his full name as the book gives it first (owner
+  // 2026-11-23), the tree on «الرسم».
+  const [nasabView, setNasabView] = useState<DrawingOrText>('text');
   // «صلاته» as the ring or as the lines of names, which name the same people (the drawing first).
   const [tiesView, setTiesView] = useState<DrawingOrText>('drawing');
   const person = findPerson(slug);

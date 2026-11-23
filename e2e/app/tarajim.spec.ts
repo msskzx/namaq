@@ -86,16 +86,17 @@ test('between two people shows the chain that joins them, with its pages', async
   await expect(page.getByRole('button', { name: /^العباس/ })).toBeVisible();
 });
 
-// The person page draws what we have of him (owner, 2026-11-19): «نسبه» as the tree or as text (the drawing first, 2026-11-20), «حياته» on the timeline
+// The person page draws what we have of him (owner, 2026-11-19): «نسبه» as text or as the tree (the text first, 2026-11-23), «حياته» on the timeline
 // (sketch timeline-events/sketch-dark.png, screens 1 and 4), «صلاته» as the ring.
 test('the person page draws his nasab tree, his life and his ties', async ({ page }) => {
   await open(page, '/person?slug=az-zubayr-ibn-al-awwam');
-  // The tree first (owner, 2026-11-20), ending at him; the book's words on «النص».
+  // His full name as the book gives it first (owner, 2026-11-23); the tree on «الرسم», ending at him.
+  await expect(page.getByRole('button', { name: 'قارن نسبه بغيره' })).toBeVisible();
+  await expect(page.getByText(/الزُّبَيْرُ بنُ العَوَّامِ/).first()).toBeVisible();
+  await page.getByRole('tab', { name: 'الرسم' }).first().click();
   // Exact: a loose name is matched against every element of this long page while it loads, which takes the test browser
   // past its timeout; the page itself is drawn by then.
   await expect(page.getByRole('link', { name: 'الزبير', exact: true })).toBeVisible();
-  await page.getByRole('tab', { name: 'النص' }).first().click();
-  await expect(page.getByRole('button', { name: 'قارن نسبه بغيره' })).toBeVisible();
   // His ties round him: his mother opens her own page.
   await expect(page.getByRole('link', { name: /^أمه: صفية/ })).toBeVisible();
   // His life: a raid filter keeps Badr and drops the battle of the Camel; Badr opens its page.
