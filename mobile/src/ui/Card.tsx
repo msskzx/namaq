@@ -81,7 +81,7 @@ export function CardWithRow({ lead, row, menu, cap = false, source, sourceLine, 
   const { palette } = card;
   const inside = useContext(InsideCard);
   const buttonRow = (handedUp: [string, React.ReactNode][], more?: MoreItem[], first: React.ReactNode = lead) => (bar || first || row || handedUp.length > 0 || !!more?.length) && (
-    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', gap: bar ? 4 : 0, marginTop: bar ? 4 : 0 }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', gap: 8, marginTop: bar ? 4 : 0 }}>
       {bar}{first}{handedUp.map(([id, node]) => <View key={id} style={{ flexDirection: 'row', alignItems: 'center' }}>{node}</View>)}{row}
       {more?.length ? <><View style={{ flex: 1 }} /><MoreMenu items={more} /></> : null}
     </View>
