@@ -1,4 +1,4 @@
-import { useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
+import { useCallback, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
 import { RefreshControl, useWindowDimensions, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 // The gesture handler's scroll view, so a pinch on a tree card takes over from the page's scroll instead of losing to it.
 import { ScrollView } from 'react-native-gesture-handler';
@@ -27,20 +27,31 @@ import { COLUMN_GAP, isWide, WIDE_COLUMN } from '@/ui/column';
  */
 /** How close to the end (px) the feed asks for its next batch, about two cards ahead. */
 const NEAR_END = 1200;
+/** How many chips' own feeds stay drawn besides the mixed one. */
+const KEPT_FEEDS = 3;
 
 export default function HomeScreen() {
   const palette = usePalette();
   const shrink = useShrinkOnScroll();
-  // Near the end of the feed: ask it for the next batch, once for each new length of the page.
-  const [nearEnd, setNearEnd] = useState(0);
+  // The chip row's pick: one interest's cards alone, or the mixed feed (null).
+  const [chosen, setOnly] = useState<string | null>(null);
+  // A chip whose interest was taken out of the picks shows the mixed feed again.
+  const picked = usePicked();
+  const only = onlyOf(chosen, picked);
+  // Near the end of the feed: ask the feed on screen for its next batch, once for each new length of the page.
+  const [nearEnd, setNearEnd] = useState<Record<string, number>>({});
   const askedAt = useRef(0);
   const seenTo = useRef({ y: 0, height: 0 });
   const check = (contentHeight: number) => {
     if (contentHeight !== askedAt.current && seenTo.current.height + seenTo.current.y > contentHeight - NEAR_END) {
       askedAt.current = contentHeight;
-      setNearEnd(n => n + 1);
+      setNearEnd(now => ({ ...now, [only ?? '']: (now[only ?? ''] ?? 0) + 1 }));
     }
   };
+  // The feeds of the chips tapped last stay drawn, hidden, so going back to one is at once (owner, 2026-11-23); the mixed
+  // feed always stays.
+  const [kept, setKept] = useState<(string | null)[]>([null]);
+  if (!kept.includes(only)) setKept([null, only, ...kept.filter(view => view !== null)].slice(0, KEPT_FEEDS + 1));
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     shrink(event);
     const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
@@ -50,10 +61,7 @@ export default function HomeScreen() {
   const bottom = useTabBarSpace();
   const [seen, setSeen] = tourSeen.use();
   const asked = useSyncExternalStore(interestsAsked.subscribe, interestsAsked.read, interestsAsked.server);
-  // The chip row's pick: one interest's cards alone, or the mixed feed (null).
-  const [chosen, setOnly] = useState<string | null>(null);
-  // A chip whose interest was taken out of the picks shows the mixed feed again.
-  const only = onlyOf(chosen, usePicked());
+  const screenBottom = useCallback(() => seenTo.current.y + seenTo.current.height, []);
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   // Pulled down at the top, as in a social app: a new visit, so the feed shows what was not seen yet.
   const [refreshing, setRefreshing] = useState(false);
@@ -63,6 +71,8 @@ export default function HomeScreen() {
   // Lying down on a tablet, the cards come in two columns of a phone's size (owner, 2026-11-23); the page's padding is 16 each side.
   const { width, height } = useWindowDimensions();
   const column = isWide(width, height) ? (Math.min(width, WIDE_COLUMN) - 32 - COLUMN_GAP) / 2 : null;
+  // Made once, so a feed kept hidden is not drawn again each time the page is (the feeds are memo).
+  const lead = useMemo(() => <ContinueReading palette={palette} />, [palette]);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar settings search={() => toTab('/search')} hideOnScroll />
@@ -72,10 +82,14 @@ export default function HomeScreen() {
         contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 20 }}>
         <HomeButtons palette={palette} />
         <InterestChips only={only} onOnly={id => { askedAt.current = 0; setOnly(id); }} palette={palette} />
-        {!only && !column && <ContinueReading palette={palette} />}
-        {!only && <MemorizedPrompt palette={palette} />}
-        <Feed palette={palette} nearEnd={nearEnd} only={only} column={column} lead={column && !only ? <ContinueReading palette={palette} /> : null}
-          screenBottom={() => seenTo.current.y + seenTo.current.height} />
+        {kept.filter(view => onlyOf(view, picked) === view).map(view => (
+          <View key={view ?? ''} style={view === only ? { gap: 20 } : { display: 'none' }}>
+            {!view && !column && <ContinueReading palette={palette} />}
+            {!view && <MemorizedPrompt palette={palette} />}
+            <Feed palette={palette} nearEnd={nearEnd[view ?? ''] ?? 0} only={view} shown={view === only} column={column} lead={column && !view ? lead : null}
+              screenBottom={screenBottom} />
+          </View>
+        ))}
       </ScrollView>
       {/* The first open asks the interests (owner, 2026-11-19), then the tour runs. */}
       <InterestsWelcome palette={palette} />
