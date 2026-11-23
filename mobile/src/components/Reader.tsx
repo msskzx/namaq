@@ -42,6 +42,7 @@ import { useRecite } from './recite/useRecite';
 import ListenSheet from './ListenSheet';
 import { listen, useListening } from '@/lib/listen';
 import { firstAyahOfPage, PAGES, pageData, pageOfAyah, surahBefore } from '@/lib/mushaf';
+import { spreadOf } from '@shared/quran/readerPage';
 import { pageModel, reciteView } from '@shared/quran/recitePage';
 import { lemmasAtMushafWord } from '@shared/quran/words';
 import { sectionAt, surahTopicsOf } from '@shared/quran/surahTopics';
@@ -54,7 +55,8 @@ import { usePageTouch } from '@/lib/usePageTouch';
 import { settleZoom } from '@/lib/pageZoom';
 import { useIntent } from '@/lib/intent';
 import { usePalette } from '@/lib/theme';
-import { penRule } from '@/lib/settings';
+import { mushafSpread, penRule } from '@/lib/settings';
+import { isWide } from '@/ui/column';
 import { surahName } from '@shared/quran/surahNames';
 import { SURAH_TITLES } from '@shared/quran/surahNames';
 
@@ -243,9 +245,11 @@ export default function Reader() {
   const revealNextWord = recite.nextWord;
   const stepBackOne = recite.back;
 
-  const ayahText = (key: string) => model.lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === key).map(group => group.word) ?? []).join(' ');
+  // An ayah's own page: with two pages open it may be the left one, not the page the reader is on.
+  const modelAt = (key: string) => modelOf(pageOfAyah(key) ?? page);
+  const ayahText = (key: string) => modelAt(key).lines.flatMap(line => line?.filter(group => group.word && `${group.surah}:${group.ayah}` === key).map(group => group.word) ?? []).join(' ');
   /** The ayah's words by their place in it, the ۞ sign not counted (the places a selection counts). */
-  const ayahWords = (key: string) => model.lines.flatMap(line => line?.filter(group => group.word && group.word !== '۞' && `${group.surah}:${group.ayah}` === key).map(group => group.word) ?? []);
+  const ayahWords = (key: string) => modelAt(key).lines.flatMap(line => line?.filter(group => group.word && group.word !== '۞' && `${group.surah}:${group.ayah}` === key).map(group => group.word) ?? []);
   const toggleSaved = (key: string) => toggleBookmark({ id: ayahBookmarkId(key), text: ayahText(key), href: ayahHref(key) });
 
   // The gesture's mark pops where the finger was (owner, 2026-11-21), like the heart on a double tap.
@@ -288,6 +292,7 @@ export default function Reader() {
   const latest = useRef(run);
   latest.current = run;
   const shown = useRef(page);
+  const spreadNow = useRef(false);
   shown.current = page;
   const onMove = useCallback(() => {
     moved.current = Date.now();
@@ -312,7 +317,10 @@ export default function Reader() {
       else latest.current(action, key, x, y, word, gesture);
       return;
     }
-    if (mode === 'read') setMark(current => (key && !(gesture === 'tap' && current?.key === key) ? { key, page: shown.current, ...(gesture === 'long' && word !== undefined ? { words: { from: word, to: word } } : {}) } : null));
+    // With two pages open, the page touched becomes the page the reader is on: the فاصلة, reciting and the place kept follow it.
+    const touched = key ? pageOfAyah(key) : undefined;
+    if (touched && touched !== shown.current && spreadNow.current) setPage(touched);
+    if (mode === 'read') setMark(current => (key && !(gesture === 'tap' && current?.key === key) ? { key, page: pageOfAyah(key) ?? shown.current, ...(gesture === 'long' && word !== undefined ? { words: { from: word, to: word } } : {}) } : null));
     latest.current(readGestures()[mode][gesture], key, x, y, word, gesture);
   }, () => readGestures()[mode].double !== 'none');
   const onTouch = useCallback((touch: Touch, key: string | null, x: number, y: number, word?: number) => {
@@ -404,19 +412,36 @@ export default function Reader() {
   const focus = flowing ? (position ? view?.upcoming ?? null : mark?.page === page ? mark.key : null) : null;
   // What the page lights: the selected ayah while reading; while reciting, the ayah (and words) a long press opened the
   // menu on, as the website does (owner, 2026-11-20: a selection drew nothing in recite mode).
-  const selected = position ? (actions ? { key: actions.key, page, words: actions.words } : null) : mark;
-  const render = (at: number) => {
+  const selected = position ? (actions ? { key: actions.key, page: pageOfAyah(actions.key) ?? page, words: actions.words } : null) : mark;
+  // Lying down on a tablet, two facing pages, the odd one on the right (owner, 2026-11-23); a page turn turns both. Bigger
+  // text, which reflows and scrolls, and reciting, which walks one page's ayat, keep one page.
+  const [spreadOn] = mushafSpread.use();
+  const spread = spreadOn && !!size && isWide(size.width, size.height) && !flowing && !reciting;
+  spreadNow.current = spread;
+  const pageView = (at: number, width: number) => {
     const atModel = modelOf(at);
     return (
-      <MushafPageView page={at} data={pageData(at)} model={atModel} palette={palette} width={size?.width ?? 0} height={height}
+      <MushafPageView page={at} data={pageData(at)} model={atModel} palette={palette} width={width} height={height}
         zoom={zoom} onHeight={onHeight} focus={at === page ? focus : null} onFocus={onFocus}
         top={surahBefore(at)} names={SURAH_TITLES} mark={selected?.page === at ? selected.key : null} markWords={selected?.page === at ? selected.words ?? null : null}
         recite={position ? reciteView(atModel, position) : null} playing={listening?.key ?? null} forgot={forgot} saved={saved} onTouch={onTouch} onSelect={onSelect}
         write={at === page ? write : null} checked={position && at === page ? checked : null} />
     );
   };
+  const render = (at: number) => {
+    const width = size?.width ?? 0;
+    if (!spread) return pageView(at, width);
+    // The pager's pages are spreads here; its direction is right to left, so the first of the row (the odd page) sits on the right.
+    return (
+      <View style={{ flexDirection: 'row', width, height }}>
+        {spreadOf(at * 2 - 1).map(one => <View key={one} style={{ width: width / 2 }}>{pageView(one, width / 2)}</View>)}
+      </View>
+    );
+  };
 
   const actionKey = actions?.key;
+  // With two pages open, the ribbon is filled when the فاصلة is on either.
+  const fasilaHere = !!fasila && (spread ? spreadOf(page).includes(fasila.page) : fasila.page === page);
   // «نسيت» is one bulb toggle (owner, 2026-11-19): forgotten while due for review, and a tap then rests it. With a word lit
   // (long pressed, or dragged over) it opens a bubble with a bulb for the ayah and one for the lit words, each its own blank.
   const lit = actions?.words;
@@ -449,7 +474,7 @@ export default function Reader() {
         onScrollEndDrag={() => { setScrollTop(scrolled.current); keep(); }} onMomentumScrollEnd={() => { setScrollTop(scrolled.current); keep(); }}
         style={{ flex: 1 }} contentContainerStyle={{ paddingTop: pageInsets.top, paddingBottom: keyboard ? keyboard + RECITE_BAR + 24 : pageInsets.bottom }}>
         {size && height > 0 && (
-          <ReaderPager page={page} count={PAGES} width={size.width} height={pagerHeight} onPage={turnByHand} onMove={onMove} render={render} onPull={keyboard ? undefined : openIndex} zoom={zoom} onZoom={zoomTo} scrollTop={scrollTop}
+          <ReaderPager key={spread ? 'spread' : 'page'} page={spread ? Math.ceil(page / 2) : page} count={spread ? Math.ceil(PAGES / 2) : PAGES} width={size.width} height={pagerHeight} onPage={spread ? at => turnByHand(at * 2 - 1) : turnByHand} onMove={onMove} render={render} onPull={keyboard ? undefined : openIndex} zoom={zoom} onZoom={zoomTo} scrollTop={scrollTop}
             scroll={scrollGesture} onPinch={onPinch} hold={!!actions?.holding} />
         )}
       </ScrollView>
@@ -461,10 +486,10 @@ export default function Reader() {
             {/* Search first, at the right edge; the sheet shows the surah list until something is typed (owner, 2026-11-17). */}
             <IconButton Icon={Search} label="فهرس السور والبحث" tone="ink" onPress={() => setSheet('index')} />
             {/* The فاصلة: the ribbon fills on its page; a tap puts it on the page open or takes it off. Filled, not boxed (owner, 2026-11-17). */}
-            <Pressable onPress={() => { buzz(); setQuranFasila(fasila?.page === page ? null : { key: firstAyahOfPage(page), page }); }} accessibilityRole="button"
-              accessibilityState={{ selected: fasila?.page === page }} accessibilityLabel={fasila?.page === page ? 'أزل الفاصلة من هذه الصفحة' : 'ضع الفاصلة في هذه الصفحة: هنا توقفت'}
+            <Pressable onPress={() => { buzz(); setQuranFasila(fasilaHere ? null : { key: firstAyahOfPage(page), page }); }} accessibilityRole="button"
+              accessibilityState={{ selected: fasilaHere }} accessibilityLabel={fasilaHere ? 'أزل الفاصلة من هذه الصفحة' : 'ضع الفاصلة في هذه الصفحة: هنا توقفت'}
               hitSlop={6} style={{ padding: 9 }}>
-              <FasilaIcon size={24} color={palette.accent} filled={fasila?.page === page} />
+              <FasilaIcon size={24} color={palette.accent} filled={fasilaHere} />
             </Pressable>
             <IconButton Icon={EyeOff} label={reciting ? 'إنهاء التسميع' : 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة'} tone="ink" on={reciting} onPress={() => (reciting ? stopRecite() : setReciteMenu({ x: (size?.width ?? 390) - 122, y: insets.top + 26 }))} />
           </TopBar>

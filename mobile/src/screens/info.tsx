@@ -8,7 +8,7 @@ import ExternalLink from '@/ui/ExternalLink';
 import Button from '@/ui/Button';
 import { toTab } from '@/lib/ways';
 import { usePalette, type Palette } from '@/lib/theme';
-import { ABOUT_INTRO, ABOUT_REFERENCES, APP_PRIVACY, ATTRIBUTIONS_INTRO, NAMAQ_FORMS, NAMAQ_NAME, SOURCE_EXTRAS } from '@shared/infoPages';
+import { ABOUT_CONTENTS, ABOUT_INTRO, ABOUT_REFERENCES, APP_PRIVACY, ATTRIBUTIONS_INTRO, NAMAQ_FORMS, NAMAQ_NAME, SOURCE_EXTRAS } from '@shared/infoPages';
 import { GROUPS, SOURCES, type Source } from '@shared/sources';
 
 export type InfoPage = 'about' | 'privacy' | 'attributions';
@@ -22,7 +22,11 @@ function About({ palette }: { palette: Palette }) {
   return (
     <>
       <Text style={paragraph(palette)}>{ABOUT_INTRO.ar}</Text>
-      <Text accessibilityRole="header" style={heading(palette)}>المراجع</Text>
+      <Text accessibilityRole="header" style={heading(palette)}>ما فيه</Text>
+      {ABOUT_CONTENTS.map(({ title, body }) => (
+        <Text key={title.ar} style={paragraph(palette)}><Text style={{ color: palette.accent }}>{title.ar}: </Text>{body.ar}</Text>
+      ))}
+      <Text accessibilityRole="header" style={heading(palette)}>منهجه ومراجعه</Text>
       {ABOUT_REFERENCES.map(text => <Text key={text.ar} style={paragraph(palette)}>{text.ar}</Text>)}
       <View style={{ alignSelf: 'flex-start' }}><Button label={INFO_TITLES.attributions} onPress={() => router.push('/attributions')} /></View>
       <Text accessibilityRole="header" style={heading(palette)}>اسم نمق</Text>
@@ -51,6 +55,9 @@ function Line({ label, children, palette }: { label: string; children: React.Rea
   return <Text style={paragraph(palette)}><Text style={{ color: palette.muted }}>{label}</Text>{children}</Text>;
 }
 
+/** A use as the app says it: the website's labels mark the app's own pages «في تطبيق الهاتف», which is where this page already is. */
+const appUse = (use: string) => use.replace(/،? في تطبيق الهاتف$/, '');
+
 /** One source as the website's SourceCard draws it: its uses as plain words, since they name website pages. */
 function SourceCard({ source, palette }: { source: Source; palette: Palette }) {
   const extra = SOURCE_EXTRAS[source.id];
@@ -64,7 +71,7 @@ function SourceCard({ source, palette }: { source: Source; palette: Palette }) {
         <ExternalLink url={source.link.url} color={palette.accent} size={17}>{source.link.label}</ExternalLink>
       </View>
       <Line label="الترخيص: " palette={palette}>{source.licence.ar}</Line>
-      <Line label="يُستعمل في: " palette={palette}>{source.uses.map(use => use.ar).join('، ')}</Line>
+      <Line label="يُستعمل في: " palette={palette}>{source.uses.map(use => appUse(use.ar)).join('، ')}</Line>
       {/* Each link on its own line, as other screens put them: a link inside a line of text loses its alignment. */}
       {extra?.links?.flat().map(link => (
         <View key={link.url} style={{ alignItems: 'flex-start' }}>
@@ -84,7 +91,7 @@ function Attributions({ palette }: { palette: Palette }) {
       {GROUPS.map(({ group, title }) => (
         <View key={group} style={{ gap: 12 }}>
           <Text accessibilityRole="header" style={heading(palette)}>{title.ar}</Text>
-          {SOURCES.filter(source => source.group === group).map(source => <SourceCard key={source.id} source={source} palette={palette} />)}
+          {SOURCES.filter(source => source.group === group && !source.websiteOnly).map(source => <SourceCard key={source.id} source={source} palette={palette} />)}
         </View>
       ))}
     </>

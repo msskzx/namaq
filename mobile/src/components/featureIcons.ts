@@ -1,8 +1,9 @@
-import { ArrowLeftRight, BookOpenText, BookMarked, DoorOpen, Gem, GitCommitVertical, History, Layers, Link2, ListTree, MessagesSquare, Milestone, Network,
+import { ArrowLeftRight, BookOpenText, BookMarked, DoorOpen, Gem, GitCommitVertical, Layers, Link2, ListTree, MessagesSquare, Milestone, Network,
   NotebookText, Presentation, ScrollText, SunMoon, Swords, TextSearch, type LucideProps } from 'lucide-react-native';
 import type { FeedKind } from '@shared/quiz/feedQuiz';
 import TreeIcon from './TreeIcon';
 import OrderIcon from './OrderIcon';
+import LifeIcon from './LifeIcon';
 
 type Icon = (props: LucideProps) => React.ReactNode;
 
@@ -14,8 +15,8 @@ type Icon = (props: LucideProps) => React.ReactNode;
 export const FEATURE_ICON = {
   mushaf: BookOpenText, tafsir: NotebookText, trees: TreeIcon, compare: ArrowLeftRight, openings: DoorOpen, order: OrderIcon,
   oaths: SunMoon, words: TextSearch, balagha: Gem, qiraat: Layers, irab: ListTree, tuhfa: BookMarked, prophets: ScrollText,
-  scenes: Presentation, person: Milestone, life: History, nasab: Network, ties: Link2, battles: Swords, hadith: MessagesSquare,
-  chain: GitCommitVertical,
+  scenes: Presentation, person: Milestone, life: LifeIcon, nasab: Network, ties: Link2, battles: Swords, hadith: MessagesSquare,
+  chain: GitCommitVertical, stories: ScrollText,
 } satisfies Record<string, Icon>;
 
 /** Each question kind wears the icon of the feature it asks about. */

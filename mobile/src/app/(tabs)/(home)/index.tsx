@@ -1,5 +1,5 @@
 import { useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
-import { RefreshControl, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
+import { RefreshControl, useWindowDimensions, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 // The gesture handler's scroll view, so a pinch on a tree card takes over from the page's scroll instead of losing to it.
 import { ScrollView } from 'react-native-gesture-handler';
 import { newVisit } from '@shared/feedSeen';
@@ -16,6 +16,7 @@ import { useShrinkOnScroll } from '@/lib/chrome';
 import { tourSeen } from '@/lib/settings';
 import { useTabRetap } from '@/lib/tabRetap';
 import { usePalette } from '@/lib/theme';
+import { COLUMN_GAP, isWide, WIDE_COLUMN } from '@/ui/column';
 
 /**
  * Home (owner, 2026-11-13): reading and learning first, like a social app's home. A search field in the top bar, a few buttons
@@ -59,6 +60,9 @@ export default function HomeScreen() {
   const refresh = () => { setRefreshing(true); askedAt.current = 0; newVisit(); setTimeout(() => setRefreshing(false), 400); };
   // The home button tapped again: back to the top.
   useTabRetap('index', () => scroll.current?.scrollTo({ y: 0, animated: true }));
+  // Lying down on a tablet, the cards come in two columns of a phone's size (owner, 2026-11-23); the page's padding is 16 each side.
+  const { width, height } = useWindowDimensions();
+  const column = isWide(width, height) ? (Math.min(width, WIDE_COLUMN) - 32 - COLUMN_GAP) / 2 : null;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar settings search={() => toTab('/search')} hideOnScroll />
@@ -68,9 +72,10 @@ export default function HomeScreen() {
         contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 20 }}>
         <HomeButtons palette={palette} />
         <InterestChips only={only} onOnly={id => { askedAt.current = 0; setOnly(id); }} palette={palette} />
-        {!only && <ContinueReading palette={palette} />}
+        {!only && !column && <ContinueReading palette={palette} />}
         {!only && <MemorizedPrompt palette={palette} />}
-        <Feed palette={palette} nearEnd={nearEnd} only={only} screenBottom={() => seenTo.current.y + seenTo.current.height} />
+        <Feed palette={palette} nearEnd={nearEnd} only={only} column={column} lead={column && !only ? <ContinueReading palette={palette} /> : null}
+          screenBottom={() => seenTo.current.y + seenTo.current.height} />
       </ScrollView>
       {/* The first open asks the interests (owner, 2026-11-19), then the tour runs. */}
       <InterestsWelcome palette={palette} />

@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, View } from 'react-native';
+import { Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
 import { Text } from '@/ui/Text';
 import { BookOpen, ChevronLeft, Play, ShieldCheck } from 'lucide-react-native';
 import { router } from 'expo-router';
@@ -6,7 +6,8 @@ import Sheet from '@/ui/Sheet';
 import Logo from './Logo';
 import ThemeTiles, { MarkTiles } from './ThemeTiles';
 import { GestureSettings } from './ReaderSheets';
-import { around, besideLayout, connectors, haptics, hintsSeen, tourSeen } from '@/lib/settings';
+import { around, besideLayout, connectors, haptics, hintsSeen, mushafSpread, tourSeen } from '@/lib/settings';
+import { isTablet } from '@/ui/column';
 import Toggle from '@/ui/Toggle';
 import { MemorizedSetting } from './Memorized';
 import { InterestsSetting } from './Interests';
@@ -36,6 +37,7 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
         <BesideSetting palette={palette} />
         <ConnectorsSetting palette={palette} />
         <GestureSettings palette={palette} mode="read" />
+        <SpreadSetting palette={palette} />
         <PenSetting palette={palette} />
         <HapticsSetting palette={palette} />
         <View style={{ borderTopWidth: 1, borderColor: palette.rule }}>
@@ -79,6 +81,19 @@ function AroundSetting({ palette }: { palette: Palette }) {
 function BesideSetting({ palette }: { palette: Palette }) {
   const [on, setOn] = besideLayout.use();
   return <Toggle on={on} onChange={setOn} label="عرض آيات المقارنة جنبًا إلى جنب افتراضيًا" palette={palette} />;
+}
+
+/** Only a tablet turns, so only a tablet asks (owner, 2026-11-23). */
+function SpreadSetting({ palette }: { palette: Palette }) {
+  const [on, setOn] = mushafSpread.use();
+  const { width, height } = useWindowDimensions();
+  if (!isTablet(width, height)) return null;
+  return (
+    <View style={{ gap: 2 }}>
+      <Toggle on={on} onChange={setOn} label="صفحتان متقابلتان في المصحف" palette={palette} />
+      <Text style={{ color: palette.muted, fontSize: 13 }}>حين يُمال الجهاز، كالمصحف المطبوع. وإن أُوقفت فصفحة واحدة.</Text>
+    </View>
+  );
 }
 
 function HapticsSetting({ palette }: { palette: Palette }) {
