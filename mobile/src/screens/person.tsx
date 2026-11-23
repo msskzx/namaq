@@ -248,7 +248,7 @@ export default function PersonScreen() {
         {(life.length > 0 || lifeItems.length > 0) && (
           <Part head={head} n={++n} title={person.sex === 'FEMALE' ? 'حياتها' : 'حياته'} palette={palette} source={lifeSources(lifeItems)}
             row={lifeItems.length > 0 && <IconButton Icon={ArrowLeftRight} label={f ? 'قارن حياتها بغيرها' : 'قارن حياته بغيره'} onPress={() => router.push({ pathname: '/life', params: { slugs: person.slug } })} />}>
-            {lifeItems.length > 0 && <LifeTimeline items={lifeItems} palette={palette} inCard />}
+            {lifeItems.length > 0 && <LifeTimeline items={lifeItems} palette={palette} inCard foldable />}
             {life.length > 0 ? <>
             {person.islamAge.map((fact, i) => (
               <Line key={`i${i}`} label={f ? 'أسلمت وعمرها' : 'أسلم وعمره'} palette={palette}>
