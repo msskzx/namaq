@@ -360,19 +360,41 @@ test('an opened word shows where it gathers: a bar picks a surah, names it with 
   await page.getByLabel('ابحث عن كلمة في القرآن').fill('موسى');
   await page.getByRole('button', { name: /، .* مرة$/ }).first().click();
   const strip = page.getByLabel('عدد مرات ورودها في كل سورة');
+  // On the word's own page the chart comes under its card, «أصلها» and its meanings.
+  await strip.scrollIntoViewIfNeeded();
   const box = (await strip.boundingBox())!;
   // al-A'raf is the seventh surah from the right.
   await page.mouse.click(box.x + box.width * (1 - 6.5 / 114), box.y + 10);
-  await expect(page.getByText(`، منها ٢١ في ${S(7)}`)).toBeVisible();
+  await expect(page.getByText(`منها ٢١ في ${S(7)}`)).toBeInViewport();
   await expect(page.getByRole('button', { name: new RegExp(`^افتح ${S(7)} .* في المصحف$`) }).first()).toBeInViewport();
+});
+
+test("a word's page opens with al-Raghib's words on its root and Ibn Qutaybah's meanings as chips at their ayat, each opening his entry", async ({ page }) => {
+  await open(page, '/words');
+  await page.getByLabel('ابحث عن كلمة في القرآن').fill('فتنة');
+  await page.getByRole('button', { name: /^فِتۡنَة، / }).click();
+  await expect(page.getByText('قال الراغب:', { exact: true })).toBeVisible();
+  await expect(page.getByText(/^أصل الفَتْنِ: إدخال الذّهب النار/)).toBeVisible();
+  // Each line: the ayah's words he explains, his meaning of them in his words, the ayah's place; the first is open.
+  const branches = page.getByRole('tab', { name: /، .* [٠-٩]+$/ });
+  await expect(branches.first()).toHaveAttribute('aria-selected', 'true');
+  await page.getByRole('tab', { name: new RegExp(`: الكفر، ${S(3)} ٧$`) }).click();
+  await expect(page.getByText(`قال ابن قتيبة في ${S(3)} ٧:`)).toBeVisible();
+  // «كاملًا» brings al-Raghib's whole article in the page's own section.
+  await page.getByRole('button', { name: 'كلام الراغب فيها كاملًا' }).click();
+  await expect(page.getByRole('tab', { name: 'المفردات للراغب' })).toHaveAttribute('aria-selected', 'true');
 });
 
 test("a word's page holds Ibn Qutaybah's note on a phrase that explains it, and a phrase explained whole under «في عبارة»", async ({ page }) => {
   await open(page, '/words');
   await page.getByLabel('ابحث عن كلمة في القرآن').fill('ريب');
   await page.getByRole('button', { name: /^رَيۡب، / }).click();
+  // His note is a branch of the word's meanings at the top too; the book's own section adds its card under them.
+  const note = page.getByText('لا شكَّ فيه', { exact: false });
+  await expect(note.first()).toBeVisible();
+  const before = await note.count();
   await page.getByRole('tab', { name: 'غريب القرآن لابن قتيبة' }).click();
-  await expect(page.getByText('لا شكَّ فيه', { exact: false })).toBeVisible();
+  await expect(note).toHaveCount(before + 1);
   await open(page, '/words');
   await page.getByLabel('ابحث عن كلمة في القرآن').fill('نخل');
   await page.getByRole('button', { name: /^نَخۡل، / }).click();

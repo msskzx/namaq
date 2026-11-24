@@ -7,8 +7,8 @@ import type { Palette } from '@/lib/theme';
  * Twice as tall since the chart slides away while reading (owner, 2026-11-21). While the finger slides, the surah's name
  * rides in a pill above it, where the finger does not cover it; the name alone, as the count line gives the count.
  */
-export default function SurahStrip({ counts, picked, onPick, onSliding, names, palette }: {
-  counts: number[]; picked: number | null; onPick: (surah: number) => void; onSliding?: (sliding: boolean) => void; names: Record<number, string>; palette: Palette;
+export default function SurahStrip({ counts, picked, onPick, onLift, onSliding, names, palette }: {
+  counts: number[]; picked: number | null; onPick: (surah: number) => void; onLift?: (surah: number) => void; onSliding?: (sliding: boolean) => void; names: Record<number, string>; palette: Palette;
 }) {
-  return <BarStrip counts={counts} picked={picked} onPick={onPick} onSliding={onSliding} name={i => names[i + 1]} under label="عدد مرات ورودها في كل سورة" palette={palette} />;
+  return <BarStrip counts={counts} picked={picked} onPick={onPick} onLift={onLift} onSliding={onSliding} name={i => names[i + 1]} under label="عدد مرات ورودها في كل سورة" palette={palette} />;
 }
