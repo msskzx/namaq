@@ -13,6 +13,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { MUFRADAT_BOOK, MUFRADAT_EDITION, mufradatCredit, mufradatPage, type GharibPlaced, type MufradatEntry } from '@shared/quran/gharib';
 import { meaningBranches, mostIn, raghibOpening } from '@shared/quran/wordFace';
 import { surahNames } from '@/lib/branches';
+import { ayahMushafWords } from '@/lib/mushaf';
 import type { Palette } from '@/lib/theme';
 import { QuranWord } from './quran/text/AyahFlow';
 import BookRuns from './quran/text/BookRuns';
@@ -26,7 +27,7 @@ const bookStyle = { color: '', fontSize: 18, lineHeight: 34, textAlign: 'right',
 /**
  * The head of a word's page (owner, 2026-11-24: sketch quran-design/word-page, designs أ and ب together, with its «أصلها»
  * and «مواضعها»): the word with its root and counts as a person's card gives his, al-Raghib's opening words on its root,
- * then Ibn Qutaybah's meanings of it, each on a line of its own with its ayah (owner 2026-11-24: not a tree), the picked one's
+ * then Ibn Qutaybah's meanings of it, each on a line of its own: the ayah's words he explains, his meaning under them, the ayah's place (owner 2026-11-24), the picked one's
  * entry whole under them. The ayat follow it
  * on the page (components/WordSheet.tsx WordView).
  */
@@ -42,6 +43,8 @@ export default function WordFace({ name, root, count, ayat, counts, entries, art
   const branches = useMemo(() => meaningBranches(gharib, entries), [entries]);
   const [picked, setPicked] = useState(0);
   const branch = branches[Math.min(picked, branches.length - 1)];
+  // The ayah's words he explains, from the mushaf page, before his meaning of them (owner, 2026-11-24).
+  const quoted = (each: GharibPlaced) => { const page = ayahMushafWords(each.key); return each.words.map(([from, to]) => page.slice(from, to + 1).join(' ')).join(' … '); };
   const placeOf = (key: string) => { const [surah, number] = key.split(':').map(Number); return `${surahNames[surah] ?? num(surah)} ${num(number)}`; };
   return (
     <View style={{ gap: 18 }}>
@@ -75,7 +78,8 @@ export default function WordFace({ name, root, count, ayat, counts, entries, art
           <CardWithRow palette={palette} pad={[10, 14]} gap={10} source={gharibSource(branch)}
             lead={<OpenButton label={`افتح ${placeOf(branch.key)} في المصحف`} onPress={() => onOpen(branch.key)} />}>
             {branches.length > 1 && <TraitChips lines palette={palette} picked={picked} onPick={setPicked}
-              traits={branches.map(each => ({ label: each.meaning, names: [], agreed: false, place: placeOf(each.key) }))} />}
+              quran
+              traits={branches.map(each => ({ label: quoted(each), meaning: each.meaning, names: [], agreed: false, place: placeOf(each.key) }))} />}
             <QuoteBar by={`قال ابن قتيبة في ${placeOf(branch.key)}:`} palette={palette}>
               <BookRuns text={branch.text.replace(/^[٠-٩]+-\s*/, '')} quran={palette.accent} style={{ ...bookStyle, color: palette.ink }} />
             </QuoteBar>

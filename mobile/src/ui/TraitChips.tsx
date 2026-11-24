@@ -16,7 +16,7 @@ export type Trait = { label: string; names: string[]; agreed: boolean; meaning?:
  * give is framed in the accent with both names; a word from an unnamed view names no one. `quran` sets the words in the
  * mushaf's letters. With `onPick` each is a tab that shows its saying under the row, the picked one framed in the accent;
  * without it they are not buttons, the full sayings being under them. `lines` gives each a line of its own across the card,
- * its words on the right and its place on the left (owner, 2026-11-24: a word's meanings on its page).
+ * its words (and meaning under them) on the right and its place on the left (owner, 2026-11-24: a word's meanings on its page).
  */
 export default function TraitChips({ traits, palette, quran = false, picked, onPick, lines = false }: { traits: Trait[]; palette: Palette; quran?: boolean;
   picked?: number; onPick?: (at: number) => void; lines?: boolean }) {
@@ -27,7 +27,11 @@ export default function TraitChips({ traits, palette, quran = false, picked, onP
       alignItems: 'center' as const, minHeight: 44, justifyContent: lines ? 'space-between' as const : 'center' as const,
       ...(lines ? { flexDirection: 'row' as const, gap: 12 } : null), backgroundColor: picked === at ? `${palette.accent}18` : undefined };
     const inner = lines ? <>
-      <Text style={{ flexShrink: 1, color: palette.ink, fontSize: 17, lineHeight: 28, textAlign: 'right' }}>{trait.label}</Text>
+      <View style={{ flexShrink: 1, alignItems: 'flex-start' }}>
+        {quran ? <QuranWord look={{ color: lit ? palette.accent : palette.ink }} place={{ textAlign: 'right' }}>{trait.label}</QuranWord>
+          : <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 28, textAlign: 'right' }}>{trait.label}</Text>}
+        {trait.meaning ? <Text style={{ color: palette.ink, fontSize: 16, lineHeight: 26, textAlign: 'right' }}>{trait.meaning}</Text> : null}
+      </View>
       {trait.place ? <Text style={{ color: lit ? palette.accent : palette.muted, fontSize: 13 }}>{trait.place}</Text> : null}
     </> : <>
       {quran ? <QuranWord look={{ color: palette.ink }} place={{ textAlign: 'center' }}>{trait.label}</QuranWord>

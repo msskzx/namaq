@@ -374,10 +374,10 @@ test("a word's page opens with al-Raghib's words on its root and Ibn Qutaybah's 
   await page.getByRole('button', { name: /^فِتۡنَة، / }).click();
   await expect(page.getByText('قال الراغب:', { exact: true })).toBeVisible();
   await expect(page.getByText(/^أصل الفَتْنِ: إدخال الذّهب النار/)).toBeVisible();
-  // His meanings in his own words, each a chip at its ayah; the first is open.
+  // Each line: the ayah's words he explains, his meaning of them in his words, the ayah's place; the first is open.
   const branches = page.getByRole('tab', { name: /، .* [٠-٩]+$/ });
   await expect(branches.first()).toHaveAttribute('aria-selected', 'true');
-  await page.getByRole('tab', { name: `الكفر، ${S(3)} ٧` }).click();
+  await page.getByRole('tab', { name: new RegExp(`: الكفر، ${S(3)} ٧$`) }).click();
   await expect(page.getByText(`قال ابن قتيبة في ${S(3)} ٧:`)).toBeVisible();
   // «كاملًا» brings al-Raghib's whole article in the page's own section.
   await page.getByRole('button', { name: 'كلام الراغب فيها كاملًا' }).click();
