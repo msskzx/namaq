@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import units from './data/hadith/units.json';
 import forty from './data/hadith/forty.json';
 import type { AppIsnad } from './hadith';
-import { chainIsnad, isnadMetro, lastNarrator, metroOrder } from './isnadMetro';
+import { chainIsnad, isnadMetro, chainLinks, metroOrder } from './isnadMetro';
 
 const jibril = (units as unknown as { units: { id: string; isnad: Record<string, AppIsnad> }[] }).units.find(unit => unit.id === 'muslim-jibril')!;
 const isnad = Object.values(jibril.isnad)[0];
@@ -46,7 +46,7 @@ describe('isnad metro', () => {
     const record = (forty as unknown as { entries: { records: { isnad?: AppIsnad }[] }[] }).entries[0].records[0];
     const line = isnadMetro(record.isnad!);
     expect(line.cols).toBe(1);
-    expect(lastNarrator(record.isnad!)).toEqual({ name: 'عُمَرَ', mode: 'عَنْ' });
+    expect(chainLinks(record.isnad!).at(-1)).toEqual({ name: 'عُمَرَ', mode: 'عَنْ' });
     expect(new Set(line.stations.map(each => each.level)).size).toBe(line.stations.length);
     const chain = isnadMetro(chainIsnad('البخاري', [{ name: 'سُفْيَانُ', mode: 'حَدَّثَنَا' }, { name: 'الزُّهْرِيُّ', mode: 'عَنِ' }]));
     expect(metroOrder(chain)).toEqual(['البخاري', 'سُفْيَانُ', 'الزُّهْرِيُّ']);

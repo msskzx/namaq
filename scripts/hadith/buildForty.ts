@@ -100,15 +100,11 @@ export function cut(book: string, start: number, end: number) {
 const MODES = /(?:^|\s)(?:حدثنا|حدثني|أخبرنا|أخبرني|عن|سمعت|سمع|أنبأنا)[\s:،]*$/;
 export const bare = (text: string) => text.replace(/[\u064B-\u0652\u0670]/g, '');
 /**
- * The words a narrator narrated with, as printed, when the words before his name end with one: the word, with the «قال»
- * before it when the print has one («قَالَ: حَدَّثَنَا», owner 2026-11-21: the exact words).
+ * The words a narrator narrated with, as printed: every word between the narrator before him and his name («قَالَ:
+ * حَدَّثَنَا», «أَنَّهُ سَمِعَ», «عَلَى غَيْرِ مَا حَدَّثَنَاهُ الزُّهْرِيُّ، قَالَ: سَمِعْتُ»), so a drawn chain drops no word of the
+ * text (owner 2026-11-21 and 2026-11-24: the exact words). Undefined when they do not end with a word of narrating.
  */
-const modeOf = (before: string) => {
-  if (!MODES.test(bare(before))) return undefined;
-  const words = before.trim().replace(/[:،]$/, '').split(/\s+/);
-  const said = words.length > 1 && /^قالت?:?$/.test(bare(words[words.length - 2])) ? `${words[words.length - 2].replace(/:?$/, ':')} ` : '';
-  return said + words[words.length - 1];
-};
+const modeOf = (between: string) => (MODES.test(bare(between)) ? between.replace(/\s+([،.:؛])/g, '$1').replace(/^[\s،,:.]+|[\s،,:]+$/g, '') : undefined);
 
 /**
  * A record's text with Shamela's narrator links taken out, and its chain when the links make it plain: one line of
@@ -119,16 +115,20 @@ export function narrated(marked: string) {
   const quote = text.search(/[«"]/);
   const links: { name: string; mode: string }[] = [];
   let plain = '';
+  let since = 0;
   let single = true;
   for (const part of marked.split(/(⁅\d+⁆[^⁆]*⁆)/)) {
     const link = part.match(/⁅\d+⁆([^⁆]*)⁆/);
     if (!link) { plain += part; continue; }
     if (quote >= 0 && plain.replace(/\s+([،.:؛])/g, '$1').length >= quote) break;
-    const mode = modeOf(plain);
-    if (!mode) single = false;
-    if (/(?:^|\s)ح(?:\s|$)/.test(plain)) single = false;
+    // The first link's words follow the record's printed number («١ - », «٢ م - (١٥٩٩)»), which is not the chain's.
+    const mode = modeOf(since ? plain.slice(since) : plain.replace(/^[\s٠-٩()/-]*(?:\(?م\)?(?: [٠-٩]+)?\s)?[\s٠-٩()/-]*/, ''));
+    // No word of narrating before him, a second route (ح), or a record's number or words between two narrators: no plain chain.
+    if (!mode || /[٠-٩«»"؟]/.test(mode)) single = false;
+    if (/(?:^|[\s(])ح(?:[\s).]|$)/.test(plain)) single = false;
     links.push({ name: link[1].replace(/[،,:.\s]+$/, '').trim(), mode: mode ?? '' });
     plain += link[1];
+    since = plain.length;
   }
   return { text, ...(quote > 0 ? { isnadEnd: quote } : {}), ...(single && links.length > 1 ? { chain: links } : {}) };
 }
