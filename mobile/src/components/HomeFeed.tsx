@@ -297,8 +297,9 @@ const sourceLine = (palette: Palette) => (named: Source[], all: Source[]) => <So
 const topic = (href: Href, label: string) => ({ onPress: () => toTab(href), label });
 /** A head that names a person opens the person. */
 const personTopic = (slug: string) => ({ onPress: () => router.push({ pathname: '/person', params: { slug } }), label: `افتح ترجمة ${personName(GRAPH.nodes.get(slug)!)}` });
-/** One of the Forty's cards opens al-Nawawi's book. */
-const fortyTopic = () => topic({ pathname: '/hadith-book', params: { book: 'forty' } }, 'افتح الأربعين النووية');
+/** One of the Forty's cards opens its book: al-Nawawi's forty-two, or Ibn Rajab's eight after them. */
+const fortyTopic = (n: number) => n > 42 ? topic({ pathname: '/hadith-book', params: { book: 'added' } }, 'افتح زيادات ابن رجب')
+  : topic({ pathname: '/hadith-book', params: { book: 'forty' } }, 'افتح الأربعين النووية');
 
 /** Where a post's ayat are, for its head: «البقرة ٦١ · آل عمران ٢١، ١١٢» (shared/quran/ayahPlaces.ts). */
 const placesOf = (keys: string[]) => ayahPlaces(keys, shortNames);
@@ -1389,7 +1390,7 @@ function RajabPost({ id, palette }: { id: string; palette: Palette }) {
   if (!entry) return null;
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
-    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.tafsir} title="من شرح ابن رجب" sub={entry.heading} open={fortyTopic()} palette={palette} />}
+    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.tafsir} title="من شرح ابن رجب" sub={entry.heading} open={fortyTopic(entry.n)} palette={palette} />}
       open={<OpenButton label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}
       source={sourcesOf([{ book: FORTY.books.ibnrajab.title, author: 'ابن رجب' }])}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
@@ -1399,14 +1400,14 @@ function RajabPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/** One of the Forty in al-Nawawi's words; its open button opens the hadith's page with its records. */
+/** One of the Forty in al-Nawawi's words (Ibn Rajab's for his eight); its open button opens the hadith's page with its records. */
 function HadithPost({ id, palette }: { id: string; palette: Palette }) {
   const entry = FEED_FORTY.find(each => String(each.n) === id);
   if (!entry) return null;
   const { book } = compilerOf(entry);
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
-    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.hadith} title="من الحديث" sub={entry.heading} open={fortyTopic()} palette={palette} />}
+    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.hadith} title="من الحديث" sub={entry.heading} open={fortyTopic(entry.n)} palette={palette} />}
       open={<OpenButton label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}
       source={sourcesOf([compiledSource(entry)])}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
@@ -1452,7 +1453,7 @@ function RecordedPost({ id, palette }: { id: string; palette: Palette }) {
   if (!entry) return null;
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
-    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.chain} title="من أخرجه" sub={entry.heading} open={fortyTopic()} palette={palette} />}
+    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.chain} title="من أخرجه" sub={entry.heading} open={fortyTopic(entry.n)} palette={palette} />}
       open={<OpenButton label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}
       source={sourcesOf(uniqueSources([...entry.records.map(recordSource), compiledSource(entry)]))}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
@@ -1476,7 +1477,7 @@ function IsnadPost({ id, palette }: { id: string; palette: Palette }) {
   if (!entry || !record) return null;
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
-    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.chain} title="من الإسناد" sub={entry.heading} open={fortyTopic()} palette={palette} />}
+    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.chain} title="من الإسناد" sub={entry.heading} open={fortyTopic(entry.n)} palette={palette} />}
       open={<OpenButton label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}
       source={sourcesOf([recordSource(record)])}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>

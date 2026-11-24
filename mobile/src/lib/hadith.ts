@@ -7,12 +7,8 @@ export const HADITH = data as AppHadith;
 
 export const hadithUnit = (id: string): AppHadithUnit | undefined => HADITH.units.find(unit => unit.id === id);
 
-/**
- * al-Nawawi's Forty and the Bukhari and Muslim records he names (scripts/hadith/buildForty.ts). The eight Ibn Rajab adds
- * after them («الأحاديث المزيدة على ما ذكره الشيخ») stay in the data but out of the app for now (owner, 2026-11-24: a later
- * release, perhaps with his whole book); his commentary on al-Nawawi's own stays.
- */
-export const FORTY: AppForty = { ...(forty as AppForty), entries: (forty as AppForty).entries.filter(entry => !entry.source) };
+/** al-Nawawi's Forty and the Bukhari and Muslim records he names (scripts/hadith/buildForty.ts). */
+export const FORTY = forty as AppForty;
 
 export const fortyEntry = (n: number): FortyEntry | undefined => FORTY.entries.find(entry => entry.n === n);
 
