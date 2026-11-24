@@ -20,22 +20,27 @@ export const RIVAL = (key: string) => new RegExp(`^${key.replace(/[.*+?^${}()|[\
 const digits = (text: string) => text.replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[Number(d)]);
 
 /**
- * The edition's own volume a Siyar quote is on (1-2 the Sira, 3 the caliphs, 4 on the Siyar's parts). The `volume` a
- * batch wrote is sometimes Shamela's part label, which skips the first three volumes («1» for volume 4: AGENTS.md,
- * Content sources), and sometimes the edition's («5»); the account the batch read says which volume it is (its page's
- * `volumeNumber` where the entry crosses a binding). Only «السيرة N» names its volume outright, since the Sira account
- * runs over both Sira volumes.
+ * The edition's own volume a Siyar quote is on (1-2 the Sira, 3 the caliphs, 4 on the Siyar's parts), as batchClaims
+ * worked it out from the account the batch read; a citation read without its batch falls back to an «السيرة N» label.
  */
 export function citationVolume(citation: Citation): number | undefined {
   const sira = SIRA_VOLUME.exec(citation.volume ?? '');
-  return sira ? Number(sira[1]) : citation.editionVolume;
+  return citation.editionVolume ?? (sira ? Number(sira[1]) : undefined);
 }
 
-/** The account's volume for a page it cites: the page's own where the entry crosses a binding, else the account's. */
+/**
+ * The edition's volume for a quote, from the account the batch read. The `volume` a batch wrote is sometimes Shamela's
+ * part label, which skips the first three volumes («1» for volume 4: AGENTS.md, Content sources), sometimes the
+ * edition's («5»), and once «السيرة 2» for Sawdah's vol-5 pages; so the account decides. Only inside the Sira account,
+ * which runs over both Sira volumes and whose page lookup by printed number cannot tell them apart, does «السيرة N»
+ * name which of the two.
+ */
 function editionVolume(citation: Citation, accounts: Account[]): number | undefined {
   const account = accounts.find(each => each.sourceSlug === citation.sourceSlug);
   const first = /\d+/.exec(citation.pageReference ?? '')?.[0];
-  return account?.pages.find(page => page.printedPage === first)?.volumeNumber ?? account?.volumeNumber;
+  const fromAccount = account?.pages.find(page => page.printedPage === first)?.volumeNumber ?? account?.volumeNumber;
+  const sira = SIRA_VOLUME.exec(citation.volume ?? '');
+  return sira && (fromAccount === undefined || fromAccount <= 2) ? Number(sira[1]) : fromAccount;
 }
 
 /** «سير أعلام النبلاء، السيرة ١، ص ٣٢٥», «سير أعلام النبلاء، ج ٢، ص ٨٢» (volume 5 of the edition, the Siyar's second part) */

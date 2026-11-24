@@ -90,19 +90,24 @@ export function nasabOf(fullName: string) {
 /**
  * The ayat the catalog ties a person to with a batch's claim (data plan step 3, 2026-11-24): the converted entry reads
  * only his own entry, so a tie the Siyar states elsewhere (the Sira volumes: Abu Bakr and al-Rum 2-4) reached the links
- * file and not his page. Each comes with the claim's quotes, set apart as merged ties are («…» «…»), and every page they are on; one still owed its evidence
+ * file and not his page. Each quote is its own fact with the page it is on, so a source card never puts two quotes over
+ * two pages; only the Siyar's quotes, since a page ref with no `work` is the Siyar's. One still owed its evidence
  * («legacy-unreviewed») waits for the data week.
  */
-function catalogAyat(person: CatalogPerson | undefined, claims: Map<string, Claim>): AppPerson['ayat'] {
+export function catalogAyat(person: CatalogPerson | undefined, claims: Map<string, Claim>): AppPerson['ayat'] {
   return (person?.ayat ?? []).flatMap((link) => {
-    const cites = link.claims === legacyUnreviewed ? [] : link.claims.flatMap((key) => claims.get(key)?.citations ?? []).filter((cite) => cite.excerptArabic);
-    const refs = cites.flatMap((cite) => {
-      const volume = citationVolume(cite);
-      return volume !== undefined && cite.pageReference ? [{ volume, page: cite.pageReference }] : [];
+    const cites = link.claims === legacyUnreviewed ? [] : link.claims.flatMap((key) => claims.get(key)?.citations ?? [])
+      .filter((cite) => cite.excerptArabic && cite.sourceSlug === 'siyar-alam-al-nubala-risalah');
+    const quotes = [...new Set(cites.map((cite) => cite.excerptArabic!))];
+    return quotes.flatMap((quote) => {
+      const refs = cites.filter((cite) => cite.excerptArabic === quote).flatMap((cite) => {
+        const volume = citationVolume(cite);
+        return volume !== undefined && cite.pageReference ? [{ volume, page: cite.pageReference }] : [];
+      });
+      if (!refs.length) return [];
+      return [{ text: arabicCommas(quote), refs: refs.filter((ref, index) => refs.findIndex((other) => sameRef(other, ref)) === index), by: [],
+        value: `${link.surah}:${link.ayah}`, kind: link.kind === 'REVEALED_ABOUT' ? 'REVEALED_ABOUT' as const : 'ABOUT' as const }];
     });
-    if (!cites.length || !refs.length) return [];
-    return [{ text: arabicCommas([...new Set(cites.map((cite) => cite.excerptArabic!))].join('» «')), refs: refs.filter((ref, index) => refs.findIndex((other) => sameRef(other, ref)) === index), by: [],
-      value: `${link.surah}:${link.ayah}`, kind: link.kind === 'REVEALED_ABOUT' ? 'REVEALED_ABOUT' as const : 'ABOUT' as const }];
   });
 }
 
@@ -293,7 +298,7 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
       companionOf: merge(links('COMPANION_OF')),
       ...attendance(merge(links('PARTICIPATED_IN')),
         merge(of('ABSENT_FROM').flatMap((entry) => entry.object ? [{ ...fact(entry), text: sentence(entry), slug: entry.object, name: nameOf(entry.object, entry.objectMention), inApp: false }] : []))),
-      ayat: ((own) => [...own, ...catalogAyat(people.get(slug), claims).filter((fact) => !own.some((other) => other.value === fact.value))])([
+      ayat: ((own) => [...own, ...catalogAyat(people.get(slug), claims).filter((fact) => !own.some((other) => other.value === fact.value && other.text === fact.text))])([
         ...facts('REVEALED_ABOUT').map((fact) => ({ ...fact, kind: 'REVEALED_ABOUT' as const })),
         ...facts('ABOUT_AYAH').map((fact) => ({ ...fact, kind: 'ABOUT' as const })),
       ]),

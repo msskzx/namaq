@@ -1,7 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { loadCatalog } from '../catalog/loadCatalog';
-import { appPeople, nasabOf, nominativeName, shortName } from './appPeople';
+import { appPeople, catalogAyat, nasabOf, nominativeName, shortName } from './appPeople';
+import { batchClaims } from '../catalog/appBattles';
 import { ayatOf } from '@shared/stories/story';
 
 describe('the phone app people', () => {
@@ -72,15 +73,30 @@ describe('the phone app people', () => {
   });
 
   // Data plan step 3 (owner, 2026-11-24): a person's tie to an ayah is in one place. Every tie the catalog holds with a
-  // batch's quote is on his page, with its pages.
-  it("gives a person every ayah the catalog ties him to with a quote", async () => {
+  // batch's quote is on his page, and each quote shown sits over the page that quote is on, not another quote's.
+  it("gives a person every ayah the catalog ties him to, each quote with its own page", async () => {
     const catalog = await loadCatalog();
-    const people = new Map(appPeople(catalog).map((person) => [person.slug, person]));
-    const cited = catalog.people.flatMap((person) => (person.ayat ?? []).filter((link) => link.claims !== 'legacy-unreviewed').map((link) => ({ slug: person.slug, key: `${link.surah}:${link.ayah}` })));
+    const claims = batchClaims();
+    const people = new Map(appPeople(catalog, undefined, undefined, claims).map((person) => [person.slug, person]));
+    const cited = catalog.people.flatMap((person) => (person.ayat ?? []).filter((link) => link.claims !== 'legacy-unreviewed').map((link) => ({ person, link })));
     expect(cited.length).toBeGreaterThan(0);
-    for (const { slug, key } of cited) {
-      const fact = people.get(slug)?.ayat.find((each) => each.value === key);
-      expect(fact?.refs.length, `${slug} ${key}`).toBeGreaterThan(0);
+    for (const { person, link } of cited) {
+      const key = `${link.surah}:${link.ayah}`;
+      expect(people.get(person.slug)?.ayat.some((fact) => fact.value === key && fact.refs.length), `${person.slug} ${key}`).toBe(true);
+      const own = catalogAyat({ ...person, ayat: [link] }, claims);
+      expect(own.length, `${person.slug} ${key}`).toBeGreaterThan(0);
+      const cites = (link.claims as readonly string[]).flatMap((claim) => claims.get(claim)?.citations ?? []);
+      for (const fact of own) {
+        const pages = cites.filter((cite) => cite.excerptArabic && arabicCommas(cite.excerptArabic) === fact.text).map((cite) => cite.pageReference);
+        expect(fact.refs.map((ref) => ref.page).every((page) => pages.includes(page)), `${person.slug} ${key}: ${fact.text}`).toBe(true);
+      }
+      // Each of the Siyar's quotes for the tie reaches the page, whatever the converted entry already says on the ayah,
+      // and a tie the catalog says the ayah was revealed about is said so there.
+      const shown = people.get(person.slug)!.ayat.filter((fact) => fact.value === key);
+      for (const cite of cites.filter((each) => each.excerptArabic && each.sourceSlug === 'siyar-alam-al-nubala-risalah')) {
+        expect(shown.some((fact) => fact.text === arabicCommas(cite.excerptArabic!)), `${person.slug} ${key}: ${cite.excerptArabic}`).toBe(true);
+      }
+      if (link.kind === 'REVEALED_ABOUT') expect(shown.some((fact) => fact.kind === 'REVEALED_ABOUT'), `${person.slug} ${key}`).toBe(true);
     }
   }, 30_000);
 
@@ -98,6 +114,8 @@ describe('the phone app people', () => {
     expect(WAITING_FOR_BATCH.filter((tie) => !outside.includes(tie)), 'in the catalog now: take it off the list').toEqual([]);
   }, 30_000);
 });
+
+const arabicCommas = (text: string) => text.replace(/,/g, '،');
 
 const WAITING_FOR_BATCH = [
   'ibn-umm-maktum 4:95', 'al-irbad-ibn-sariyah 9:92', 'umm-kulthum-bint-uqbah 60:10', 'bilal-ibn-rabah 6:52', 'bilal-ibn-rabah 6:53',

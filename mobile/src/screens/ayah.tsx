@@ -302,14 +302,16 @@ const SectionPart = memo(function SectionPart({ section, ayah, word, palette, op
     case 'person': {
       // The link written on the person's own record: his entry's words on the ayah, who says them, and its pages.
       const person = findPerson(section.slug);
-      const fact = person?.ayat.find(each => each.value === ayah);
-      if (!person || !fact) return null;
+      const facts = person?.ayat.filter(each => each.value === ayah) ?? [];
+      if (!person || !facts.length) return null;
       return (
         <Part {...common} Icon={FEATURE_ICON.person} title={section.kind === 'REVEALED_ABOUT' ? 'فيمن نزلت' : 'في التراجم'} sub={personName(person)}
-          label={`افتح ${personName(person)}`} open={() => router.push({ pathname: '/person', params: { slug: person.slug } })} source={sourcesOf(factSources([fact], true))}>
-          <QuoteBar by={saidBy(fact) ?? `قال ${pageSources(fact.refs)[0]?.author ?? 'الذهبي'}:`} palette={palette}>
-            <Text numberOfLines={LINES} style={{ color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' }}>{fact.text}</Text>
-          </QuoteBar>
+          label={`افتح ${personName(person)}`} open={() => router.push({ pathname: '/person', params: { slug: person.slug } })} source={sourcesOf(factSources(facts, true))}>
+          {facts.map(fact => (
+            <QuoteBar key={fact.text} by={saidBy(fact) ?? `قال ${pageSources(fact.refs)[0]?.author ?? 'الذهبي'}:`} palette={palette}>
+              <Text numberOfLines={LINES} style={{ color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' }}>{fact.text}</Text>
+            </QuoteBar>
+          ))}
         </Part>
       );
     }
