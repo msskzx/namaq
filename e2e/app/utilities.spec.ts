@@ -17,6 +17,12 @@ test('the tools page: prayer times for a picked city, the qibla under them, and 
   await expect(page.getByRole('button', { name: /^المكان وطريقة الحساب: القاهرة/ }).filter({ visible: true }).first()).toBeVisible();
   for (const prayer of ['الفجر', 'الشروق', 'الظهر', 'العصر', 'المغرب', 'العشاء']) await expect(page.getByLabel(new RegExp(`^${prayer} `)).filter({ visible: true }).first()).toBeVisible();
   await expect(page.getByLabel(/^الصلاة التالية /).filter({ visible: true }).first()).toBeVisible();
+  // The times are drawn round a dial or down the day's line (owner, 2026-11-24); the line is kept after a reload, bells and all.
+  await page.getByRole('tab', { name: 'خط' }).filter({ visible: true }).first().click();
+  await page.reload();
+  await expect(page.getByRole('radio', { name: 'الأدوات' })).toBeChecked();
+  await expect(page.getByRole('tab', { name: 'خط' }).filter({ visible: true }).first()).toHaveAttribute('aria-selected', 'true');
+  for (const prayer of ['الفجر', 'العشاء']) await expect(page.getByLabel(new RegExp(`^${prayer} `)).filter({ visible: true }).first()).toBeVisible();
 
   // The dial's label names the qibla's bearing from the picked city.
   const dial = page.getByRole('img', { name: /^القبلة ١٣[٥-٧]° من الشمال/ }).filter({ visible: true }).first();

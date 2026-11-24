@@ -72,7 +72,7 @@
     "mobile/src/components/TabHint.tsx": 2,
     "mobile/src/components/Tour.tsx": 2,
     "mobile/src/components/TreePager.tsx": 1,
-    "mobile/src/components/Utilities.tsx": 13,
+    "mobile/src/components/Utilities.tsx": 12,
     "mobile/src/components/VideoSheet.tsx": 2,
     "mobile/src/components/WordSheet.tsx": 1,
     "mobile/src/lib/theme.ts": 1,
