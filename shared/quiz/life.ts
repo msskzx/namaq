@@ -3,8 +3,8 @@
 // years are asked by «السيرة والغزوات» (shared/quiz/sira.ts), so they are left to it. Where the sources give two years,
 // the right choice holds both, and no wrong year sits near either (owner 2026-11-18: «٤ أو ٥» with references; wrong
 // choices clearly wrong). The look-up is the person's own timeline.
-import peopleJson from '../data/tarajim/people.json';
-import lifeData from '../data/events/life.json';
+import peopleJsonFile from '../data/tarajim/people.json';
+import lifeDataFile from '../data/events/life.json';
 import { pageSources, type AppPerson, type PersonFact } from '../tarajim';
 import type { AppLife, AppLifeEntry } from '../events/life';
 import { num } from '../quran/arabicNumber';
@@ -12,6 +12,10 @@ import { genitive } from '../tarajimGraph';
 import { shuffle, type Random } from './random';
 import type { ChoiceKind, ChoiceQuestion } from './choiceKinds';
 import { citeSource, uniqueSources, type QuizSource } from './sources';
+import { dataOf } from '../appData';
+
+const peopleJson = dataOf(peopleJsonFile);
+const lifeData = dataOf(lifeDataFile);
 
 export const TARAJIM_LIFE = 'TARAJIM_LIFE';
 export const TARAJIM_LIFE_NAME = 'في أي سنة كان؟';

@@ -3,13 +3,16 @@
 // in the nominative as a box shows it (boxName); the wrong names are other fathers the converted entries name, near the
 // same depth of their own lines. Nothing is taught that the entries' nasabs do not print: the note after the answer is
 // the chain as far as the boxes go, and the sources are the entries each name comes from.
-import peopleJson from '../data/tarajim/people.json';
+import peopleJsonFile from '../data/tarajim/people.json';
 import { pageSources, type AppPerson } from '../tarajim';
 import { bareName, boxName, chainOf, lineOf, sameName, type LineName } from '../tarajimLine';
 import { genitive } from '../tarajimGraph';
 import { shuffle, type Random } from './random';
 import { uniqueSources } from './sources';
 import { BOX_ASKED as ASKED, BOX_BLANK as BLANK, type ChoiceKind, type ChoiceQuestion } from './choiceKinds';
+import { dataOf } from '../appData';
+
+const peopleJson = dataOf(peopleJsonFile);
 
 export const TARAJIM_NASAB_FILL = 'TARAJIM_NASAB_FILL';
 export const TARAJIM_NASAB_FILL_NAME = 'أكمل النسب';

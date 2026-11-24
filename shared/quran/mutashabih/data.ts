@@ -1,4 +1,4 @@
-import artifact from '../../data/quran/mutashabih.json';
+import artifactFile from '../../data/quran/mutashabih.json';
 import corpus from '../quranText/corpus';
 import type { PhraseOccurrence } from '../phraseTrees';
 import type { Group } from './types';
@@ -6,6 +6,9 @@ import { canonicalGroups } from './identity';
 import { categorizedGroups } from './categories';
 import { differenceWordsOf, quotedExample } from './examples';
 import { TANASUB_LINKS, tanasubTree } from '../tanasubCards';
+import { dataOf } from '../../appData';
+
+const artifact = dataOf(artifactFile);
 
 const keyOrder = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return surah * 1000 + ayah; };
 
