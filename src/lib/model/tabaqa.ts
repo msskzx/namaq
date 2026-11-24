@@ -31,7 +31,7 @@ export const TABAQA: Record<string, UnitTabaqa> = {
       links: [
         // No word between Yahya and Ibn Umar: «قَالَ» opens Yahya's story (owner 2026-11-24); he heard him in it («فَوُفِّقَ لَنَا»).
         { person: 'abdullah-ibn-umar', label: 'عبد الله بن عمر', mode: '', tabaqa: 1 },
-        { person: 'umar-ibn-al-khattab', label: 'عمر بن الخطاب', mode: 'حَدَّثَنِي', tabaqa: 1 },
+        { person: 'umar-ibn-al-khattab', label: 'عمر بن الخطاب', mode: 'حَدَّثَنِي', tabaqa: 1 },
       ],
     },
   },

@@ -40,7 +40,7 @@ describe('isnadGraph and layoutIsnad', () => {
     const nonGapEdges = graph.edges.filter((e) => e.label);
     expect(nonGapEdges.length).toBeGreaterThan(0);
     nonGapEdges.forEach((edge) => {
-      expect(['حَدَّثَنَا', 'أَخْبَرَنَا', 'عَنْ']).toContain(edge.label);
+      expect(['حَدَّثَنَا', 'أَخْبَرَنَا', 'عَنْ']).toContain(edge.label);
     });
   });
 
@@ -106,7 +106,7 @@ describe('isnadGraph and layoutIsnad', () => {
       scenes: [],
       chain: {
         links: [
-          { gap: false, narrator: 'Person A', mode: 'حَدَّثَنَا', modeKey: 'haddathana' },
+          { gap: false, narrator: 'Person A', mode: 'حَدَّثَنَا', modeKey: 'haddathana' },
           { gap: true },
           { gap: false, narrator: 'Person B', mode: 'عَنْ', modeKey: 'an' },
         ],
@@ -142,7 +142,7 @@ describe('rows by tabaqa', () => {
     expect(graph.edges).toContainEqual({
       from: 'p:umar-ibn-al-khattab',
       to: 'p:abdullah-ibn-umar',
-      label: 'حَدَّثَنِي',
+      label: 'حَدَّثَنِي',
     });
   });
 

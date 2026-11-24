@@ -15,8 +15,8 @@ describe('isnad metro', () => {
     expect(station('وَكِيعٌ').route).not.toBe(station('أَبِي').route);
     expect(station('كَهْمَسٍ').route).toBe(0);
     // The same tabaqa stands on one level: the two narrators Muslim heard from.
-    expect(station('أَبُو خَيْثَمَةَ').level).toBe(station('عُبَيْدُ اللَّهِ').level);
-    expect(metro.levels[station('عُبَيْدُ اللَّهِ').level].tabaqa).toBe(10);
+    expect(station('أَبُو خَيْثَمَةَ').level).toBe(station('عُبَيْدُ اللَّهِ').level);
+    expect(metro.levels[station('عُبَيْدُ اللَّهِ').level].tabaqa).toBe(10);
   });
 
   it('writes a word both routes say once, «عَنْ» and «عَنِ» being one word', () => {
@@ -25,9 +25,10 @@ describe('isnad metro', () => {
   });
 
   it('keeps each word with the route that says it where the routes differ', () => {
-    const twice = { ...isnad, edges: isnad.edges.map((edge, i) => (i === isnad.edges.length - 3 ? { ...edge, label: 'حَدَّثَنَا' } : edge)) };
+    const twice = { ...isnad, edges: isnad.edges.map((edge, i) => (i === isnad.edges.length - 3 ? { ...edge, label: 'حَدَّثَنَا' } : edge)) };
     const leg = isnadMetro(twice).legs.find(each => each.words.length > 1)!;
-    expect(leg.words).toEqual([{ route: 0, label: 'عَنْ' }, { route: 1, label: 'حَدَّثَنَا' }]);
+    // Muslim's edition prints this «عن» without vowels.
+    expect(leg.words).toEqual([{ route: 0, label: 'عن' }, { route: 1, label: 'حَدَّثَنَا' }]);
   });
 
   it('marks the Companions by their tabaqa and the collector apart', () => {
@@ -38,7 +39,7 @@ describe('isnad metro', () => {
   });
 
   it('reads right to left, the one the narrator heard from to his left on his own level', () => {
-    expect(station('يَحْيَى بْنِ يَعْمَرَ').col).toBeGreaterThan(station('بُرَيْدَةَ').col);
+    expect(station('يحيى بن يعمر').col).toBeGreaterThan(station('بُرَيْدَةَ').col);
     expect(metroOrder(metro)[0]).toBe('مسلم');
   });
 
@@ -48,8 +49,8 @@ describe('isnad metro', () => {
     expect(line.cols).toBe(1);
     expect(chainLinks(record.isnad!).at(-1)).toEqual({ name: 'عُمَرَ', mode: 'عَنْ' });
     expect(new Set(line.stations.map(each => each.level)).size).toBe(line.stations.length);
-    const chain = isnadMetro(chainIsnad('البخاري', [{ name: 'سُفْيَانُ', mode: 'حَدَّثَنَا' }, { name: 'الزُّهْرِيُّ', mode: 'عَنِ' }]));
-    expect(metroOrder(chain)).toEqual(['البخاري', 'سُفْيَانُ', 'الزُّهْرِيُّ']);
-    expect(chain.legs.map(leg => leg.words[0].label)).toEqual(['حَدَّثَنَا', 'عَنِ']);
+    const chain = isnadMetro(chainIsnad('البخاري', [{ name: 'سُفْيَانُ', mode: 'حَدَّثَنَا' }, { name: 'الزُّهْرِيُّ', mode: 'عَنِ' }]));
+    expect(metroOrder(chain)).toEqual(['البخاري', 'سُفْيَانُ', 'الزُّهْرِيُّ']);
+    expect(chain.legs.map(leg => leg.words[0].label)).toEqual(['حَدَّثَنَا', 'عَنِ']);
   });
 });

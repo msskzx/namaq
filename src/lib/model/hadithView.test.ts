@@ -16,37 +16,37 @@ describe('hadithView (the Jibril fixtures)', () => {
     const [hadith] = view.reports;
     expect(hadith.chain!.links).toHaveLength(5);
     expect(hadith.chain!.links.map((l) => ('text' in l ? l.text : ''))).toEqual([
-      'حَدَّثَنَا مُسَدَّدٌ',
-      'قَالَ حَدَّثَنَا إِسْمَاعِيلُ بْنُ إِبْرَاهِيمَ',
-      'أَخْبَرَنَا أَبُو حَيَّانَ التَّيْمِيُّ',
+      'حَدَّثَنَا مُسَدَّدٌ',
+      'قَالَ: حَدَّثَنَا إِسْمَاعِيلُ بْنُ إِبْرَاهِيمَ',
+      'أَخْبَرَنَا أَبُو حَيَّانَ التَّيْمِيُّ',
       'عَنْ أَبِي زُرْعَةَ',
       'عَنْ أَبِي هُرَيْرَةَ',
     ]);
     const lines = hadith.scenes[0].lines;
     expect(lines.filter((l) => l.kind === 'turn').map((l) => l.speaker)).toEqual([
       'جِبْرِيلُ',
-      'النَّبِيُّ',
+      'النَّبِيُّ',
       'جِبْرِيلُ',
-      'النَّبِيُّ',
+      'النَّبِيُّ',
       'جِبْرِيلُ',
-      'النَّبِيُّ',
+      'النَّبِيُّ',
       'جِبْرِيلُ',
-      'النَّبِيُّ',
-      'النَّبِيُّ',
-      'النَّبِيُّ',
+      'النَّبِيُّ',
+      'النَّبِيُّ',
+      'النَّبِيُّ',
     ]);
     expect(lines[0]).toMatchObject({ kind: 'narration', speaker: 'أَبِي هُرَيْرَةَ' });
-    expect(lines[0].text.endsWith('فَقَالَ')).toBe(true);
-    expect(lines[1]).toMatchObject({ kind: 'turn', text: 'مَا الإِيمَانُ' });
+    expect(lines[0].text.endsWith('فَقَالَ:')).toBe(true);
+    expect(lines[1]).toMatchObject({ kind: 'turn', text: 'مَا الْإِيمَانُ؟' });
     expect(lines[2]).toMatchObject({
       kind: 'narration',
       speaker: 'أَبِي هُرَيْرَةَ',
-      text: 'قَالَ',
+      text: 'قَالَ:',
     });
-    expect(lines[3].text).toMatch(/^الإِيمَانُ.*الْبَعْثِ\.$/);
-    expect(lines.some((l) => /["“”]/.test(l.text))).toBe(false);
-    expect(hadith.fullText!.startsWith('حَدَّثَنَا مُسَدَّدٌ')).toBe(true);
-    expect(hadith.fullText!.endsWith('دِينَهُمْ ".')).toBe(true);
+    expect(lines[3].text).toMatch(/^الْإِيمَانُ.*الْبَعْثِ\.$/);
+    expect(lines.some((l) => /["“”«»]/.test(l.text))).toBe(false);
+    expect(hadith.fullText!.startsWith('حَدَّثَنَا مُسَدَّدٌ')).toBe(true);
+    expect(hadith.fullText!.endsWith('دِينَهُمْ.»')).toBe(true);
     const matn = view.reports[0].statements[0];
     const joined = lines
       .map((l) => l.text)
@@ -97,7 +97,7 @@ describe('hadithView (the Jibril fixtures)', () => {
   it('loses no word of either hadith across its scenes', () => {
     const words = (t: string) =>
       t
-        .replace(/["“”.،-]/g, ' ')
+        .replace(/["“”«».،-]/g, ' ')
         .split(/\s+/)
         .filter(Boolean);
     for (const unit of ['bukhari-jibril', 'muslim-jibril']) {
@@ -112,8 +112,8 @@ describe('hadithView (the Jibril fixtures)', () => {
   it("ends the first Muslim scene on the son's qala and opens the nested story at baynama", () => {
     const [report] = hadithView('muslim-jibril')!.reports;
     const last = report.scenes[0].lines.at(-1)!;
-    expect(last.speaker).toContain('عُمَرَ بْنِ الْخَطَّابِ');
-    expect(last.text.endsWith('عُمَرُ بْنُ الْخَطَّابِ قَالَ')).toBe(true);
+    expect(last.speaker).toContain('عُمَرَ بْنِ الْخَطَّابِ');
+    expect(last.text.endsWith('عُمَرُ بْنُ الْخَطَّابِ، قَالَ:')).toBe(true);
     expect(report.scenes[1].lines[0].text.startsWith('بَيْنَمَا')).toBe(true);
   });
 
