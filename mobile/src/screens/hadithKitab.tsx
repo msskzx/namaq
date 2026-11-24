@@ -1,7 +1,6 @@
 import { useDeferredValue, useMemo, useState } from 'react';
 import { FlatList, ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import { plainText, type SahihBab, type SahihIndex, type SahihKitab } from '@shared/sahih';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
@@ -10,6 +9,7 @@ import Chip from '@/ui/Chip';
 import Ring from '@/ui/Ring';
 import TapRow from '@/ui/TapRow';
 import Button from '@/ui/Button';
+import OpenButton from '@/ui/OpenButton';
 import { CardWithRow } from '@/ui/Card';
 import Empty from '@/ui/Empty';
 import LoadingDots from '@/ui/LoadingDots';
@@ -117,7 +117,8 @@ function BabPage({ book, kitab, at }: { book: SahihIndex; kitab: SahihKitab; at:
         {book.headingsBy === 'nawawi' && bab.title !== '' && <View style={{ flexDirection: 'row' }}><Chip label="تبويب النووي" on={false} small role="text" palette={palette} /></View>}
         {state !== 'on' ? <SahihDownload slug={book.slug} state={state} palette={palette} /> : !text ? <LoadingDots /> : <>
           {said !== '' && (
-            <CardWithRow palette={palette} gap={6} row={said.length > 260 ? <Button variant="plain" label={whole ? 'اطوِ الترجمة' : 'اقرأ الترجمة كاملة'} onPress={() => setWhole(was => !was)} /> : undefined}>
+            <CardWithRow palette={palette} gap={6} {...(said.length > 260 ? { onPress: () => setWhole(was => !was), accessibilityState: { expanded: whole }, accessibilityLabel: `${saidBy}، ${whole ? 'اطوِها' : 'افتحها كاملة'}` } : {})}
+              lead={said.length > 260 && !whole ? <OpenButton label={`${saidBy} كاملة`} onPress={() => setWhole(true)} /> : undefined}>
               <Text style={{ color: palette.amber, fontSize: 14, textAlign: 'right' }}>{saidBy}</Text>
               <Text numberOfLines={whole ? undefined : 6} style={{ color: palette.muted, fontSize: 17, lineHeight: 32, textAlign: 'right' }}>{said}</Text>
             </CardWithRow>
@@ -126,8 +127,8 @@ function BabPage({ book, kitab, at }: { book: SahihIndex; kitab: SahihKitab; at:
           {hadith.map(each => <SahihHadithCard key={each.n} hadith={each} palette={palette} onPress={() => openSahih(book.slug, each.n)} />)}
         </>}
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 8, marginTop: 8 }}>
-          {before !== undefined ? <Button variant="plain" Icon={ChevronRight} label="الباب السابق" onPress={() => go(before)} /> : <View />}
-          {after !== undefined ? <Button variant="plain" Icon={ChevronLeft} label="الباب التالي" onPress={() => go(after)} /> : <View />}
+          {before !== undefined ? <OpenButton what="الباب السابق" label={kitab.babs[before].title || 'أول الكتاب'} onPress={() => go(before)} /> : <View />}
+          {after !== undefined ? <OpenButton what="الباب التالي" label={kitab.babs[after].title} onPress={() => go(after)} /> : <View />}
         </View>
       </ScrollView>
     </View>
