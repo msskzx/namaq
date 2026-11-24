@@ -1,17 +1,21 @@
 import { Pressable, ScrollView, View, useWindowDimensions } from 'react-native';
 import { Text } from '@/ui/Text';
-import { BookOpen, ChevronLeft, Play, ShieldCheck } from 'lucide-react-native';
+import { BookOpen, ChevronLeft, Hand, Palette as PaletteIcon, PenLine, Play, ShieldCheck } from 'lucide-react-native';
 import { router } from 'expo-router';
 import Sheet from '@/ui/Sheet';
 import Logo from './Logo';
-import ThemeTiles, { MarkTiles } from './ThemeTiles';
+import ThemeTiles, { LookPreview, MarkTiles } from './ThemeTiles';
+import Card from '@/ui/Card';
+import SettingRow from '@/ui/SettingRow';
+import { THEME_TILES, currentTile } from '@shared/cardTint';
+import { MARK_MODE_NAMES } from '@shared/quran/wordMatch';
 import { GestureSettings } from './ReaderSheets';
-import { around, besideLayout, connectors, haptics, hintsSeen, mushafSpread, tourSeen } from '@/lib/settings';
+import { around, besideLayout, cardTints, connectors, haptics, hintsSeen, markMode, mushafSpread, penRule, themeChoice, tourSeen } from '@/lib/settings';
 import { isTablet } from '@/ui/column';
 import Toggle from '@/ui/Toggle';
 import { MemorizedSetting } from './Memorized';
 import { InterestsSetting } from './Interests';
-import { PenSetting } from './recite/PenSetting';
+import { PEN_NAMES, PenSetting } from './recite/PenSetting';
 import type { Palette } from '@/lib/theme';
 
 /** The tour opens once the sheet has slid away: iOS cannot show it over a sheet that is still closing. Each page's first-visit tip comes back with it. */
@@ -25,36 +29,62 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
     { href: '/attributions' as const, label: 'المصادر والتراخيص', icon: <BookOpen size={20} color={palette.ink} /> },
     { href: '/privacy' as const, label: 'سياسة الخصوصية', icon: <ShieldCheck size={20} color={palette.ink} /> },
   ];
+  const [theme] = themeChoice.use();
+  const [tints] = cardTints.use();
+  const [marks] = markMode.use();
+  const [spread] = mushafSpread.use();
+  const [beside] = besideLayout.use();
+  const [pen] = penRule.use();
+  const lookLabel = `${THEME_TILES.find(tile => tile.key === currentTile(theme, tints))?.ar ?? ''} · ${MARK_MODE_NAMES[marks].ar}`;
+  const mushafLabel = [spread ? 'صفحتان حين يُمال الجهاز' : 'صفحة واحدة', beside ? 'المقارنة جنبًا إلى جنب' : 'المقارنة بعضها تحت بعض'].join(' · ');
   return (
     <Sheet open={open} onClose={onClose} palette={palette}>
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 20 }}>
+      {/* The preview stays at the top while the groups scroll under it (owner, 2026-11-24). */}
+      <ScrollView stickyHeaderIndices={[1]} contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 14 }}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, fontWeight: '700' }}>الإعدادات</Text>
-        <InterestsSetting palette={palette} />
-        <MemorizedSetting palette={palette} />
-        <ThemeTiles palette={palette} />
-        <MarkTiles palette={palette} />
-        <AroundSetting palette={palette} />
-        <BesideSetting palette={palette} />
-        <ConnectorsSetting palette={palette} />
-        <GestureSettings palette={palette} mode="read" />
-        <SpreadSetting palette={palette} />
-        <PenSetting palette={palette} />
-        <HapticsSetting palette={palette} />
-        <View style={{ borderTopWidth: 1, borderColor: palette.rule }}>
+        <View style={{ backgroundColor: palette.paper, paddingBottom: 4 }}><LookPreview palette={palette} /></View>
+        <Card palette={palette} pad={[6, 14]} gap={6}>
+          <InterestsSetting palette={palette} />
+          <MemorizedSetting palette={palette} />
+        </Card>
+        <Card palette={palette} pad={[6, 14]} gap={6}>
+          <SettingRow Icon={PaletteIcon} title="المظهر" value={lookLabel} palette={palette}>
+            <View style={{ gap: 16, paddingBottom: 8 }}>
+              <ThemeTiles palette={palette} />
+              <MarkTiles palette={palette} />
+            </View>
+          </SettingRow>
+          <SettingRow Icon={BookOpen} title="المصحف والآيات" value={mushafLabel} palette={palette}>
+            <View style={{ gap: 12, paddingBottom: 8 }}>
+              <AroundSetting palette={palette} />
+              <BesideSetting palette={palette} />
+              <ConnectorsSetting palette={palette} />
+              <SpreadSetting palette={palette} />
+            </View>
+          </SettingRow>
+          <SettingRow Icon={Hand} title="اللمسات في المصحف" value="القراءة والتسميع" palette={palette}>
+            <View style={{ paddingBottom: 8 }}><GestureSettings palette={palette} mode="read" /></View>
+          </SettingRow>
+          <SettingRow Icon={PenLine} title="التسميع بالقلم" value={PEN_NAMES[pen]} palette={palette}>
+            <View style={{ paddingBottom: 8 }}><PenSetting palette={palette} /></View>
+          </SettingRow>
+          <HapticsSetting palette={palette} />
+        </Card>
+        <Card palette={palette} pad={[0, 14]}>
           <Pressable onPress={() => { onClose(); setTimeout(() => { hintsSeen.set([]); tourSeen.set(false); }, REPLAY_AFTER); }} accessibilityRole="button" accessibilityLabel="الجولة التعريفية"
-            style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, borderBottomWidth: 1, borderColor: palette.rule, opacity: pressed ? 0.6 : 1 })}>
+            style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, borderBottomWidth: 1, borderColor: `${palette.rule}55`, opacity: pressed ? 0.6 : 1 })}>
             <Play size={20} color={palette.ink} />
             <Text style={{ flex: 1, color: palette.ink, fontSize: 16 }}>الجولة التعريفية</Text>
           </Pressable>
-          {links.map(link => (
+          {links.map((link, i) => (
             <Pressable key={link.href} onPress={() => { onClose(); router.push(link.href); }} accessibilityRole="link" accessibilityLabel={link.label}
-              style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, borderBottomWidth: 1, borderColor: palette.rule, opacity: pressed ? 0.6 : 1 })}>
+              style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, borderBottomWidth: i < links.length - 1 ? 1 : 0, borderColor: `${palette.rule}55`, opacity: pressed ? 0.6 : 1 })}>
               {link.icon}
               <Text style={{ flex: 1, color: palette.ink, fontSize: 16 }}>{link.label}</Text>
               <ChevronLeft size={16} color={palette.muted} />
             </Pressable>
           ))}
-        </View>
+        </Card>
       </ScrollView>
     </Sheet>
   );
