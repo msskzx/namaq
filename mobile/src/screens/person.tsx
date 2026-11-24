@@ -33,6 +33,7 @@ import { FEATURE_ICON } from '@/components/featureIcons';
 import Tabs from '@/ui/Tabs';
 import Saying from '@/ui/Saying';
 import FactCells, { type FactCell, type Reading } from '@/ui/FactCells';
+import TitleCells from '@/ui/TitleCells';
 import QuoteBar, { type QuotePiece } from '@/ui/QuoteBar';
 import SayingBand from '@/ui/SayingBand';
 import TraitChips from '@/ui/TraitChips';
@@ -221,11 +222,7 @@ export function PersonBrief({ person, palette }: { person: AppPerson; palette: P
   const sayer = (fact: PersonFact, by?: string) => by ?? (fact.anonymous ? 'قيل:' : `قال ${pageSources(fact.refs)[0]?.author ?? 'الذهبي'}:`);
   return (
     <View>
-      <View style={{ padding: 16, paddingBottom: 12, gap: 2 }}>
-        <Text style={{ color: palette.ink, fontSize: 26, lineHeight: 36, textAlign: 'right' }}>{personName(person)}</Text>
-        {person.fullName && <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 24, textAlign: 'right' }}>{person.fullName.text}</Text>}
-      </View>
-      <FactCells cells={cells} palette={palette} />
+      <TitleCells title={personName(person)} line={person.fullName?.text} cells={cells} palette={palette} />
       {person.virtues.length > 0 && (
         <View style={{ padding: 16, paddingTop: 14, gap: 14 }}>
           {virtueGroups(person.virtues).flatMap(group => group.items.map(({ fact, at }) => (
