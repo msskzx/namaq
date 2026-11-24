@@ -3,7 +3,8 @@
 // scripts/model/buildAppPeople.ts writes shared/data/tarajim/people.json; shared/tarajim.ts has the shape.
 import { OTHER_WORKS, TITLE_SPEAKER_AUTHOR, type AppPerson, type PageRef, type PersonFact, type PersonLink, type PersonTitle } from '@shared/tarajim';
 import { bareName } from '@shared/tarajimLine';
-import type { Catalog } from '../catalog/types';
+import { batchClaims, citationVolume, type Claim } from '../catalog/appBattles';
+import { legacyUnreviewed, type Catalog, type CatalogPerson } from '../catalog/types';
 import { loadModel } from './load';
 import { agentOfMention, profilesFromModel, type ProfileEntry } from './profile';
 import { renderSpanRecord } from './render';
@@ -86,7 +87,31 @@ export function nasabOf(fullName: string) {
   return names.map((name) => name.join(' ')).filter(Boolean);
 }
 
-export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.'), root = '.'): AppPerson[] {
+/**
+ * The ayat the catalog ties a person to with a batch's claim (data plan step 3, 2026-11-24): the converted entry reads
+ * only his own entry, so a tie the Siyar states elsewhere (the Sira volumes: Abu Bakr and al-Rum 2-4) reached the links
+ * file and not his page. Each quote is its own fact with the page it is on, so a source card never puts two quotes over
+ * two pages; only the Siyar's quotes, since a page ref with no `work` is the Siyar's. One still owed its evidence
+ * («legacy-unreviewed») waits for the data week.
+ */
+export function catalogAyat(person: CatalogPerson | undefined, claims: Map<string, Claim>): AppPerson['ayat'] {
+  return (person?.ayat ?? []).flatMap((link) => {
+    const cites = link.claims === legacyUnreviewed ? [] : link.claims.flatMap((key) => claims.get(key)?.citations ?? [])
+      .filter((cite) => cite.excerptArabic && cite.sourceSlug === 'siyar-alam-al-nubala-risalah');
+    const quotes = [...new Set(cites.map((cite) => cite.excerptArabic!))];
+    return quotes.flatMap((quote) => {
+      const refs = cites.filter((cite) => cite.excerptArabic === quote).flatMap((cite) => {
+        const volume = citationVolume(cite);
+        return volume !== undefined && cite.pageReference ? [{ volume, page: cite.pageReference }] : [];
+      });
+      if (!refs.length) return [];
+      return [{ text: arabicCommas(quote), refs: refs.filter((ref, index) => refs.findIndex((other) => sameRef(other, ref)) === index), by: [],
+        value: `${link.surah}:${link.ayah}`, kind: link.kind === 'REVEALED_ABOUT' ? 'REVEALED_ABOUT' as const : 'ABOUT' as const }];
+    });
+  });
+}
+
+export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.'), root = '.', claims: Map<string, Claim> = batchClaims()): AppPerson[] {
   const profiles = profilesFromModel(folders, root);
   const spans = new Map(folders.flatMap((folder) => folder.units.flatMap((file) => file.spans.map((span) => [span.id + '@' + file.unit.id, span] as const))));
   const units = new Map(folders.flatMap((folder) => folder.units.map((file) => [file.unit.id, file] as const)));
@@ -273,10 +298,10 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
       companionOf: merge(links('COMPANION_OF')),
       ...attendance(merge(links('PARTICIPATED_IN')),
         merge(of('ABSENT_FROM').flatMap((entry) => entry.object ? [{ ...fact(entry), text: sentence(entry), slug: entry.object, name: nameOf(entry.object, entry.objectMention), inApp: false }] : []))),
-      ayat: [
+      ayat: ((own) => [...own, ...catalogAyat(people.get(slug), claims).filter((fact) => !own.some((other) => other.value === fact.value && other.text === fact.text))])([
         ...facts('REVEALED_ABOUT').map((fact) => ({ ...fact, kind: 'REVEALED_ABOUT' as const })),
         ...facts('ABOUT_AYAH').map((fact) => ({ ...fact, kind: 'ABOUT' as const })),
-      ],
+      ]),
     };
   }).sort((a, b) => a.name.localeCompare(b.name, 'ar'));
   // A title is shared when the catalog or the converted entries give it to more than one person.

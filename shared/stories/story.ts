@@ -5,6 +5,7 @@ import { sceneSlots, type SceneLine } from '../hadith';
 import { num } from '../quran/arabicNumber';
 import { surahName } from '../quran/surahNames';
 import { plainName } from '../quran/normalize';
+import surahRows from '../data/quran/surahs.json';
 
 /**
  * One speaker's words, or the narrator's (no `speaker`): the bubble holds `text`, and `lead` («فقال:») is drawn above it.
@@ -118,3 +119,15 @@ export const whenName = (story: Pick<AppStory, 'when'>) =>
 
 /** Whether ayat of a story are the ones revealed about it («نزل فيه», «نزل فيه في رواية أنس»), not ones recited in it. */
 export const revealedIn = (ayat: Pick<AppStoryAyat, 'label'>) => ayat.label.startsWith('نزل فيه');
+
+/** Every ayah from one key to another in the mushaf's order, across a surah's end: exactly the ayat a source names. */
+export function ayatOf(from: string, to: string): string[] {
+  let [surah, ayah] = from.split(':').map(Number);
+  const keys = [from];
+  while (keys[keys.length - 1] !== to && surah <= 114) {
+    if (ayah < (surahRows.find(row => row.number === surah)?.numberOfAyat ?? 0)) ayah++;
+    else { surah++; ayah = 1; }
+    keys.push(`${surah}:${ayah}`);
+  }
+  return keys;
+}

@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { appBattles, appMoments, citeOf } from './appBattles';
+import { appBattles, appMoments, batchClaims, citeOf } from './appBattles';
 import { loadCatalog } from './loadCatalog';
 
 const built = appBattles(await loadCatalog());
@@ -50,5 +50,18 @@ describe('the app battles', () => {
 
   it('writes a citation the way the app shows it', () => {
     expect(citeOf({ sourceSlug: 'siyar-alam-al-nubala-risalah', volume: 'السيرة 2', pageReference: '18' })).toBe('سير أعلام النبلاء، السيرة ٢، ص ١٨');
+  });
+
+  // Batches wrote a Siyar volume three ways: Shamela's part label («1» for Talhah, edition volume 4), the edition's
+  // volume («5» for al-Abbas, the Siyar's second part), and «السيرة 2» for Sawdah's vol-5 pages. The account the batch
+  // read decides, except inside the Sira account, where «السيرة N» tells its two volumes apart. Each case below is
+  // checked against the Risalah edition's own volume for that page.
+  it("cites a Siyar quote by the volume its page is in, however its batch wrote the volume", () => {
+    const claims = batchClaims();
+    const siyar = (key: string) => claims.get(key)!.citations!.find(cite => cite.sourceSlug === 'siyar-alam-al-nubala-risalah')!;
+    expect(citeOf(siyar('talhah/full-name'))).toBe('سير أعلام النبلاء، ج ١، ص ٢٣');
+    expect(citeOf(siyar('al-abbas-ibn-abd-al-muttalib-siyar11/sex'))).toBe('سير أعلام النبلاء، ج ٢، ص ٧٨');
+    expect(citeOf(siyar('sawdah-bint-zamah-siyar40/full-name'))).toBe('سير أعلام النبلاء، ج ٢، ص ٢٦٥');
+    expect(citeOf(siyar('hudaybiyyah/year'))).toBe('سير أعلام النبلاء، السيرة ٢، ص ٢٨');
   });
 });

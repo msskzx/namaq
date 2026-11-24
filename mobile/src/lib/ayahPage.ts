@@ -64,7 +64,11 @@ function personAyat() {
   byAyah = new Map();
   for (const person of PEOPLE) {
     for (const fact of person.ayat) {
-      if (typeof fact.value === 'string') byAyah.set(fact.value, [...(byAyah.get(fact.value) ?? []), { slug: person.slug, kind: fact.kind }]);
+      if (typeof fact.value !== 'string') continue;
+      // One section per person: an ayah he has two quotes on (al-Abbas and al-Anfal 70) is one card with both.
+      const here = byAyah.get(fact.value) ?? [];
+      const same = here.find(each => each.slug === person.slug);
+      if (same) { if (fact.kind === 'REVEALED_ABOUT') same.kind = fact.kind; } else byAyah.set(fact.value, [...here, { slug: person.slug, kind: fact.kind }]);
     }
   }
   return byAyah;

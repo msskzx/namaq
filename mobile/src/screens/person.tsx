@@ -288,10 +288,6 @@ function ties(person: AppPerson) {
 /** «سنة ٣٦هـ», «جمادى الآخرة», «٨٨ سنة»: the number the reader confirmed, else the words as printed. */
 const yearOf = (fact: PersonFact) => (typeof fact.value === 'number' ? `سنة ${num(fact.value)}هـ` : unvowelled(fact.text));
 const ageOf = (fact: PersonFact) => (typeof fact.value === 'number' ? counted(fact.value, ['سنة', 'سنتين', 'سنين']) : unvowelled(fact.text));
-const ayahOf = (key: string) => {
-  const [surah, ayah] = key.split(':').map(Number);
-  return `${surahName(surah)} ${num(ayah)}`;
-};
 
 /**
  * A person's page (owner, 2026-11-18; sketch tarajim-app/person-page-dark.png): the name as the book prints it, then
@@ -427,18 +423,19 @@ export default function PersonScreen() {
         {(ayat.length > 0 || told.length > 0) && (
           <Part head={head} n={++n} palette={palette} source={[...factSources(ayat, true), ...told.flatMap(({ ayat: set }) => set.refs.map(citeSource))]}
             title={allRevealed ? (f ? 'آيات نزلت فيها' : 'آيات نزلت فيه') : (f ? 'آيات فيها' : 'آيات فيه')}>
-            {ayat.map(fact => (
-              <View key={fact.value} style={{ gap: 8 }}>
-                <AyahOf ayahKey={fact.value as string} palette={palette} />
+            {/* Ayat one sentence names together (al-Rum 2-4, al-An'am 52-53) are one block under it, as the book quotes them. */}
+            {groupBySentence(ayat).map(({ facts, keys }) => (
+              <View key={keys[0]} style={{ gap: 8 }}>
+                <LitAyat ayat={keys.map(key => ({ words: ayahMushafWords(key), lit: [], number: Number(key.split(':')[1]) }))} menu={keys} palette={palette} />
                 {/* The ayah is the subject: its name opens its page (owner, 2026-11-22). */}
-                <Button variant="plain" label={`${ayahOf(fact.value as string)}${fact.kind === 'REVEALED_ABOUT' && !allRevealed ? (f ? ' · نزلت فيها' : ' · نزلت فيه') : ''}`} Icon={ChevronLeft} onPress={() => openAyahPage(fact.value as string)} />
-                <QuoteBar by={saidBy(fact) ?? `قال ${pageSources(fact.refs)[0]?.author ?? 'الذهبي'}:`} pieces={namePieces(fact.text, namesOf(person))} palette={palette} size={17} />
+                <Button variant="plain" label={`${ayatName(keys)}${facts.some(fact => fact.kind === 'REVEALED_ABOUT') && !allRevealed ? (f ? ' · نزلت فيها' : ' · نزلت فيه') : ''}`} Icon={ChevronLeft} onPress={() => openAyahPage(keys[0])} />
+                {facts.map(fact => <QuoteBar key={fact.text} by={saidBy(fact) ?? `قال ${pageSources(fact.refs)[0]?.author ?? 'الذهبي'}:`} pieces={namePieces(fact.text, namesOf(person))} palette={palette} size={17} />)}
               </View>
             ))}
             {/* Ayat a story says were revealed about him, with the story that says so under them, opening the story. */}
             {told.map(({ story, ayat: set, keys }) => (
               <View key={story.slug + set.from} style={{ gap: 8 }}>
-                <LitAyat ayat={keys.map(key => ({ words: ayahMushafWords(key), lit: [], number: Number(key.split(':')[1]) }))} menu={keys[0]} palette={palette} />
+                <LitAyat ayat={keys.map(key => ({ words: ayahMushafWords(key), lit: [], number: Number(key.split(':')[1]) }))} menu={keys} palette={palette} />
                 <Button variant="plain" label={ayatName(keys)} Icon={ChevronLeft} onPress={() => openAyahPage(keys[0])} />
                 <StoryLinkRow story={story} palette={palette} />
               </View>
@@ -454,10 +451,6 @@ export default function PersonScreen() {
 
 const openBattle = (slug: string) => toTab({ pathname: '/battle', params: { slug } });
 
-/** An ayah as the page sets it, with its number (the Quran module's AyahFlow through LitAyat). */
-function AyahOf({ ayahKey, palette }: { ayahKey: string; palette: Palette }) {
-  return <LitAyat ayat={[{ words: ayahMushafWords(ayahKey), lit: [], number: Number(ayahKey.split(':')[1]) }]} menu={ayahKey} palette={palette} />;
-}
 
 /** The page's head card's books: the entry itself first (its pages), then every name, title and fact the card shows. */
 function heroSources(person: AppPerson) {
@@ -486,6 +479,25 @@ const placesSources = (places: AppBattle[], person: AppPerson, life: ReturnType<
   ...lifeSources(life.filter(item => places.some(battle => battle.slug === item.open?.slug))),
   ...placeSources(places),
 ];
+
+/** A person's ayat with the sentence that names them: ayat next to each other that one sentence names are one group. */
+/**
+ * Ayat drawn once per block: adjacent ayat on one sentence share it («الروم ٢–٤»), and one ayah with two quotes (al-Abbas
+ * and al-Anfal 70, on two pages) is drawn once with each quote under it.
+ */
+function groupBySentence(ayat: AppPerson['ayat']) {
+  const groups: { facts: AppPerson['ayat']; keys: string[] }[] = [];
+  for (const fact of ayat) {
+    const last = groups[groups.length - 1];
+    const head = last?.facts[0];
+    const [surah, ayah] = (fact.value as string).split(':').map(Number);
+    const [lastSurah, lastAyah] = (last?.keys[last.keys.length - 1] ?? '').split(':').map(Number);
+    if (head && last.facts.length === 1 && head.text === fact.text && head.kind === fact.kind && surah === lastSurah && ayah === lastAyah + 1) last.keys.push(fact.value as string);
+    else if (last?.keys.includes(fact.value as string)) last.facts.push(fact);
+    else groups.push({ facts: [fact], keys: [fact.value as string] });
+  }
+  return groups;
+}
 
 /** Ayat by name, each surah once and each run joined: «التوبة ١١٧، ١١٩», «النور ١٢–٢٠». */
 function ayatName(keys: string[]) {
