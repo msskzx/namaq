@@ -40,7 +40,7 @@ test('the surah order narrows to a juz and cites its books', async ({ page }) =>
 test('«مشاهد» lists the sea scene with a scholar\'s line and its book; it opens full screen and walks an-Nur 40, each saying with who says it, never «قيل»', async ({ page }) => {
   await open(page, '/lataif');
   await expect(page.getByText(/وهذا مَثَلٌ آخرُ ضرَبَه اللهُ لأعمالِ الكفارِ.*جامع البيان ١٧\/٣٢٩/)).toBeVisible();
-  await page.getByRole('link', { name: /^افتح مشهد/ }).click();
+  await page.getByRole('link', { name: /^افتح مشهد (?!الرحمن)/ }).click();
   await expect(page).toHaveURL(/\/scene/);
   for (const shot of ['بحر لجي', 'موج', 'موج فوقه', 'سحاب', 'ظلمات بعضها فوق بعض']) {
     await page.getByRole('tab', { name: shot, exact: true }).click();
@@ -62,6 +62,23 @@ test('«مشاهد» lists the sea scene with a scholar\'s line and its book; it
   await expect(page.getByText('ما هذه الظلمات؟')).toBeVisible();
   await drag(200, 700);
   await expect(page.getByText('ما هذه الظلمات؟')).toBeHidden();
+});
+
+// «الرحمن» (owner, 2026-11-24): still pages, the first with the name and its counts, the hadith pages each naming it; the
+// share button shares the very pages shown.
+test('«الرحمن» opens from «مشاهد» on its name and counts, turns its pages, and shares them', async ({ page }) => {
+  test.setTimeout(90_000);
+  await open(page, '/lataif');
+  await page.getByRole('link', { name: 'افتح مشهد الرحمن' }).click();
+  await expect(page).toHaveURL(/\/scene/);
+  await expect(page.getByText(/^١ من /)).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByText(/حديثًا من الصحيحين/).last()).toBeVisible();
+  // On the web the wheel turns the page a finger would.
+  await page.mouse.move(220, 480);
+  await page.mouse.wheel(0, 600);
+  await expect(page.getByText(/^٢ من /)).toBeVisible();
+  await page.getByRole('button', { name: 'شارك هذه الصفحات' }).click();
+  await expect(page.getByRole('button', { name: 'مشاركة هذه الصورة' })).toBeVisible({ timeout: 30_000 });
 });
 
 test('a new user\'s branches open as the matrix, with a switch to the tree', async ({ page }) => {

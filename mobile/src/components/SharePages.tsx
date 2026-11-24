@@ -49,6 +49,7 @@ export default function SharePages({ paged, width, palette, onShots, onFail }: {
     const h = event.nativeEvent.layout.height;
     setSizes(now => (now[key] === h ? now : { ...now, [key]: h }));
   };
+  const drawn = paged.pictures;
   const ready = sizes.head !== undefined && (!paged.foot || sizes.foot !== undefined) && paged.blocks.every((_, i) => sizes[i] !== undefined);
   const pages = useMemo(() => {
     if (!ready) return null;
@@ -57,14 +58,15 @@ export default function SharePages({ paged, width, palette, onShots, onFail }: {
       tailFrom: paged.tailFrom, foot: paged.foot ? sizes.foot + GAP : 0 });
   }, [ready, sizes, height, paged]);
   const refs = useRef<(ComponentRef<typeof View> | null)[]>([]);
+  const pictureCount = drawn ? drawn.length : pages?.length;
   useEffect(() => {
-    if (!pages) return;
+    if (!pictureCount) return;
     let live = true;
     // A moment after layout, so the fonts are on screen before the captures.
     const timer = setTimeout(() => {
       void (async () => {
         const shots: Shot[] = [];
-        for (const page of refs.current.slice(0, pages.length)) {
+        for (const page of refs.current.slice(0, pictureCount)) {
           if (!page) throw new Error('page not drawn');
           const uri = await captureRef(page, { format: 'png', result: CAPTURE_RESULT });
           shots.push(await new Promise<Shot>((resolve, reject) => Image.getSize(uri, (w, h) => resolve({ uri, width: w, height: h }), reject)));
@@ -73,11 +75,13 @@ export default function SharePages({ paged, width, palette, onShots, onFail }: {
       })().catch(() => { if (live) onFail(); });
     }, 150);
     return () => { live = false; clearTimeout(timer); };
-  }, [pages, onShots, onFail]);
+  }, [pictureCount, onShots, onFail]);
   const total = pages?.length ?? 0;
   return (
     <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0 }}>
-      {!pages ? (
+      {drawn ? drawn.map((picture, p) => (
+        <View key={p} ref={view => { refs.current[p] = view; }} collapsable={false} style={{ position: 'absolute', top: 0, left: 0, width, height }}>{picture}</View>
+      )) : !pages ? (
         <View style={{ width: inner, gap: 0, direction: 'rtl' }}>
           <View collapsable={false} onLayout={measured('head')}>{paged.head}</View>
           {paged.blocks.map((block, i) => <View key={i} collapsable={false} onLayout={measured(String(i))}>{block}</View>)}

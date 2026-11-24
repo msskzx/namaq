@@ -47,6 +47,7 @@ const USE = {
   oaths: { ar: 'الأقسام في القرآن', en: 'oaths in the Quran', href: '/quran/oaths' },
   iltifat: { ar: 'مشاهد: أمثلة مختارة', en: 'scenes: chosen examples', href: '/quran/lataif' },
   darkSea: { ar: 'مشاهد: ظلمات البحر في تطبيق الهاتف', en: 'scenes: the dark sea, in the phone app' },
+  rahman: { ar: 'مشاهد: «الرحمن» في تطبيق الهاتف', en: 'scenes: «al-Rahman», in the phone app' },
   branches: { ar: 'شواهد المتشابه في الفروع', en: 'the cited cases in branches', href: '/quran/branches' },
   prophets: { ar: 'ترتيب الأنبياء في قصصهم', en: 'the order of the prophets’ stories', href: '/quran/prophets' },
   qiraat: { ar: 'القراءات', en: 'the readings', href: '/quran/qiraat' },
@@ -107,14 +108,14 @@ export const SOURCES: Source[] = [
     edition: 'دار المنهاج، بيروت، الطبعة الأولى ١٤٣٠هـ، عناية قصي محمد نورس الحلاق وأنور بن أبي بكر الشيخي؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(12836), licence: PUBLIC_DOMAIN, uses: [USE.forty],
   },
   {
-    id: 'sahih-bukhari', group: 'books', files: ['shared/data/hadith/bukhari.json', 'shared/data/links.json'],
+    id: 'sahih-bukhari', group: 'books', files: ['shared/data/hadith/bukhari.json', 'shared/data/links.json', 'shared/data/quran/rahmanHadith.json'],
     title: { ar: 'صحيح البخاري', en: 'Sahih al-Bukhari' }, author: { ar: 'محمد بن إسماعيل البخاري', en: 'al-Bukhari' },
-    edition: 'الطبعة السلطانية، بولاق ١٣١١هـ، مصوّرة دار طوق النجاة ١٤٢٢هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1681), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih, USE.stories, USE.people],
+    edition: 'الطبعة السلطانية، بولاق ١٣١١هـ، مصوّرة دار طوق النجاة ١٤٢٢هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1681), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih, USE.stories, USE.people, USE.rahman],
   },
   {
-    id: 'sahih-muslim', group: 'books', files: ['shared/data/hadith/muslim.json', 'shared/data/links.json'],
+    id: 'sahih-muslim', group: 'books', files: ['shared/data/hadith/muslim.json', 'shared/data/links.json', 'shared/data/quran/rahmanHadith.json'],
     title: { ar: 'صحيح مسلم', en: 'Sahih Muslim' }, author: { ar: 'مسلم بن الحجاج النيسابوري', en: 'Muslim' },
-    edition: 'تحقيق محمد فؤاد عبد الباقي، مطبعة عيسى البابي الحلبي، القاهرة ١٣٧٤هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1727), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih, USE.stories, USE.people],
+    edition: 'تحقيق محمد فؤاد عبد الباقي، مطبعة عيسى البابي الحلبي، القاهرة ١٣٧٤هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1727), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih, USE.stories, USE.people, USE.rahman],
   },
   {
     id: 'kawkab-wahhaj', group: 'books', files: ['data/history/sources/kawkab-wahhaj/'],
@@ -354,7 +355,7 @@ export const SOURCES: Source[] = [
       ar: 'توفي المؤلف سنة ١٣٧٦هـ/١٩٥٦م، فنصه في الملك العام. نعرض نصه وحده دون حواشي المحقق، من ملف الموسوعة القرآنية، مع رقم الصفحة ورابطها. وما انقطع في الملف (سبعة مواضع، منها آل عمران ٩٦-٩٧ ويوسف ١١٠-١١١) أكملناه من نسخة المكتبة الشاملة للطبعة نفسها.',
       en: 'The author died in 1956, so his text is in the public domain. We show his text alone, without the editor’s footnotes, from Quranpedia’s dump, with the page number and a link. Where the dump breaks off (seven passages, among them Al ‘Imran 96–97 and Yusuf 110–111), the rest comes from Shamela’s copy of the same edition.',
     },
-    uses: [USE.tafsir, USE.books, USE.oaths, USE.tafsirQuiz, USE.darkSea],
+    uses: [USE.tafsir, USE.books, USE.oaths, USE.tafsirQuiz, USE.darkSea, USE.rahman],
   },
   {
     id: 'tibyan-ukbari', group: 'books', files: ['shared/data/quran/irabUkbari.js', 'shared/data/quran/irabUkbari.d.ts'],
@@ -526,7 +527,7 @@ export const SOURCES: Source[] = [
     title: { ar: 'المدوّنة القرآنية العربية', en: 'Quranic Arabic Corpus' }, author: { ar: 'Kais Dukes، جامعة ليدز', en: 'Kais Dukes, University of Leeds' },
     edition: 'التحليل الصرفي، الإصدار ٠٫٤', link: { url: 'https://corpus.quran.com', label: 'corpus.quran.com' },
     licence: { ar: 'GNU GPL، مع إبقاء حقوق النشر والرابط دون تغيير.', en: 'GNU GPL, with the copyright notice and link kept unchanged.' },
-    uses: [USE.words, { ar: 'الجذور في الأشجار', en: 'roots in the trees', href: '/quran/branches' }, USE.irab, USE.meaning, USE.irabQuiz],
+    uses: [USE.words, { ar: 'الجذور في الأشجار', en: 'roots in the trees', href: '/quran/branches' }, USE.irab, USE.meaning, USE.irabQuiz, USE.rahman],
   },
   {
     id: 'quranic-treebank', group: 'data', files: ['shared/data/quran/irab.js', 'shared/data/quran/irab.d.ts'],

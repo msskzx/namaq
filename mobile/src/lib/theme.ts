@@ -94,6 +94,15 @@ export const SEA_ART = {
     wave: ['#0e1b23', '#081218'], edge: ['#9fbccb', '#6d8a99'], badge: 'rgba(0,0,0,0.75)', badgeInk: '#fff' },
 } as const;
 
+/**
+ * The «الرحمن» scene's paper (components/scenes/RahmanPage, owner 2026-11-24: paper and ink, only the name in colour), one
+ * look whatever the theme so a shared page looks as it does in the scene: `accent` is the name's red, `table` the dark
+ * board the pages lie on.
+ */
+export const RAHMAN_PAPER: Palette = { ...light, paper: '#f3ead8', paperDeep: '#eadcc2', card: '#f3ead8', ink: '#2b2620', muted: '#7a6e5c',
+  rule: '#cdbd9c', accent: '#a8432d' };
+export const RAHMAN_ART = { table: '#2a2724', frame: '#b9a888', title: '#8a5a2e', mark: '#d9ccb2' } as const;
+
 /** Every card's corners, tree nodes included: one round radius (owner, 2026-11-13). */
 export const CARD = { borderRadius: 14 } as const;
 

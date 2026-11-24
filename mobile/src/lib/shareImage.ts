@@ -10,7 +10,9 @@ export type ShareRequest = { content: (width: number) => ReactNode; link?: strin
  * A long drawing laid out on equal pictures (shared/sharePages.ts): `head` on the first only, the `blocks` flowing between
  * them, those from `tailFrom` on together on the last, and `foot` (the source) at the last one's foot.
  */
-export type SharePaged = { head: ReactNode; blocks: ReactNode[]; tailFrom?: number; foot?: ReactNode };
+export type SharePaged = { head: ReactNode; blocks: ReactNode[]; tailFrom?: number; foot?: ReactNode;
+  /** Whole 4:5 pictures the place has laid out itself (a scene's pages), captured as they are: head and blocks are then unused. */
+  pictures?: ReactNode[] };
 
 /** iOS shows one modal at a time: what opens after another sheet closes waits this long for it to go. */
 export const MODAL_GAP = 350;

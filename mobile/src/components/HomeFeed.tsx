@@ -122,6 +122,8 @@ import type { BookId } from '@shared/books';
 import { BookCard, Shelf, TUHFA } from '@/screens/books';
 import { DarkSeaActions, DarkSeaCard, darkSeaName, darkSeaSourceList, openDarkSea } from './DarkSea';
 import { DARK_SEA_KEY } from '@shared/quran/scenes/darkSea';
+import { RAHMAN_KEY } from '@shared/quran/scenes/rahman';
+import { RahmanActions, RahmanCard, openRahman, rahmanSourceList } from './RahmanScene';
 import { prophetStory } from '@/lib/prophets';
 import gharib from '@shared/data/quran/gharib';
 import { wordsOf as gharibWordsOf } from '@shared/quran/gharib';
@@ -1336,6 +1338,14 @@ function BooksPost({ day, palette }: { day: number; palette: Palette }) {
  * head opens the scenes page, the picture and «افتح» the scene itself.
  */
 const ScenePost = memo(function ScenePost({ id, palette }: { id: string; palette: Palette }) {
+  const width = usePageWidth();
+  if (id === RAHMAN_KEY) return (
+    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.scenes} title="من المشاهد" sub="الرحمن" palette={palette} open={{ onPress: () => toTab('/lataif'), label: 'افتح المشاهد' }} />}
+      open={<RahmanActions only="open" />} share={<RahmanActions only="share" />} source={rahmanSourceList()}>
+      {/* The cover a little narrower than the card, so the card stays under two thirds of the screen. */}
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}><RahmanCard palette={palette} width={Math.round((width - 64) * 0.8)} onPress={openRahman} /></View>
+    </Post>
+  );
   if (id !== DARK_SEA_KEY) return null;
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.scenes} title="من المشاهد" sub={darkSeaName()} palette={palette} open={{ onPress: () => toTab('/lataif'), label: 'افتح المشاهد' }} />}
@@ -1724,7 +1734,7 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   term: () => balaghaTerms.terms.map(term => term.name),
   // The chosen iltifat examples left «مشاهد» on the phone (owner, 2026-11-21); the website keeps them for now.
   scene: () => [],
-  mashahid: () => [DARK_SEA_KEY],
+  mashahid: () => [DARK_SEA_KEY, RAHMAN_KEY],
   hadith: () => FEED_FORTY.map(entry => String(entry.n)),
   bukhari: () => sahihNumbers('bukhari'),
   muslim: () => sahihNumbers('muslim'),

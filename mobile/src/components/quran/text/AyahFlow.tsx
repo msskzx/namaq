@@ -23,7 +23,7 @@ export const useAyahSize = () => useContext(FlowSize).size;
  * passes false where a long press must not open it (an unanswered question, recite and write boxes, a tree, a sheet, a
  * picture); shared/quran/oneQuranText.test.ts holds the places allowed to.
  */
-export default function AyahFlow({ children, color, menu, row = false, center = false, screen: fromScreen = false, lines, style }: { children: ReactNode; color: string;
+export default function AyahFlow({ children, color, menu, row = false, center = false, screen: fromScreen = false, lines, zoom = 1, style }: { children: ReactNode; color: string;
   /** The ayah a long press opens the menu on («2:255»), the ayat in order when it shows several, or false where it opens nothing. */
   menu: AyahMenuKeys;
   /** Pieces side by side, wrapping (words and boxes in a matrix row); otherwise one justified paragraph. */
@@ -33,12 +33,14 @@ export default function AyahFlow({ children, color, menu, row = false, center = 
   /** Sized from the screen as the reader is, not from its own width: a narrow lane (two sides of a compare card side by side) keeps the reader's size and wraps sooner. */
   screen?: boolean;
   /** At most this many lines, the rest cut (a note's ayah over its text, a shelf card); not with `row`. */
-  lines?: number; style?: ViewStyle }) {
+  lines?: number;
+  /** Bigger than the flowing text by this much, as the reader's zoom is: a scene's one title word (the «الرحمن» scene's first page). */
+  zoom?: number; style?: ViewStyle }) {
   // Until it has measured its own width, it guesses from the screen's (less a card's margins), so it is drawn at about its
   // height from the first pass: a list that scrolls to an item by its laid-out place finds it there.
   const screen = usePageWidth();
   const [measured, setMeasured] = useState(0);
-  const size = fromScreen ? flowFontSize(screen - CARD_MARGINS) : measured || flowFontSize(screen - CARD_MARGINS);
+  const size = (fromScreen ? flowFontSize(screen - CARD_MARGINS) : measured || flowFontSize(screen - CARD_MARGINS)) * zoom;
   return (
     <AyahMenuPress menu={menu}>
     <View style={style} onLayout={event => setMeasured(flowFontSize(event.nativeEvent.layout.width))}>
