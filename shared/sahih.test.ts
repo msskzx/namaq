@@ -3,7 +3,10 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import bukhariIndex from './data/hadith/bukhari.json';
 import muslimIndex from './data/hadith/muslim.json';
-import { findHadith, kitabsHolding, leadIn, placeOf, plainText, searchSahih, type SahihIndex, type SahihText } from './sahih';
+import { findHadith, kitabsHolding, leadIn, placeOf, plainText, searchSahih, splitRoute, type SahihIndex, type SahihText } from './sahih';
+import { bareHadith, type AppForty } from './hadith';
+import { chainLinks } from './isnadMetro';
+import forty from './data/hadith/forty.json';
 import { sahihKitabQuestions } from './quiz/sahih';
 import { seededRandom } from './quiz/feedQuiz';
 
@@ -84,29 +87,47 @@ describe('«في أيّ كتاب؟»', () => {
 });
 
 describe('the words between the chain and the saying', () => {
-  const umar = { name: 'عُمَرَ بْنَ الْخَطَّابِ', mode: 'سَمِعْتُ' };
+  const alqama = { name: 'عَلْقَمَةَ بْنَ وَقَّاصٍ اللَّيْثِيَّ', mode: 'أَنَّهُ سَمِعَ' };
+  const umar = { name: 'عُمَرَ بْنَ الْخَطَّابِ', mode: 'يَقُولُ: سَمِعْتُ' };
   it("keeps what the narrator tells in the text, and the Prophet ﷺ named before his words apart", () => {
     const chain = 'أَنَّهُ سَمِعَ عَلْقَمَةَ بْنَ وَقَّاصٍ اللَّيْثِيَّ، يَقُولُ: سَمِعْتُ عُمَرَ بْنَ الْخَطَّابِ  رضي الله عنه عَلَى الْمِنْبَرِ، قَالَ: سَمِعْتُ رَسُولَ اللهِ ﷺ، يَقُولُ: ';
-    expect(leadIn(chain, umar)).toEqual({ lead: 'سَمِعْتُ عُمَرَ بْنَ الْخَطَّابِ  رضي الله عنه عَلَى الْمِنْبَرِ، قَالَ:', prophet: 'سَمِعْتُ رَسُولَ اللهِ ﷺ، يَقُولُ:' });
+    expect(leadIn(chain, [alqama, umar])).toEqual({ lead: 'رضي الله عنه عَلَى الْمِنْبَرِ، قَالَ:', prophet: 'سَمِعْتُ رَسُولَ اللهِ ﷺ، يَقُولُ:' });
   });
   it('names him after the narrator with no clause between', () => {
-    expect(leadIn('عَنْ عُمَرَ: أَنَّ رَسُولَ اللهِ ﷺ قَالَ: ', { name: 'عُمَرَ', mode: 'عَنْ' })).toEqual({ lead: '', prophet: 'أَنَّ رَسُولَ اللهِ ﷺ قَالَ:' });
-    expect(leadIn('عَنْ أَبِي هُرَيْرَةَ، عَنِ النَّبِيِّ ﷺ قَالَ: ', { name: 'أَبِي هُرَيْرَةَ', mode: 'عَنْ' })).toEqual({ lead: '', prophet: 'عَنِ النَّبِيِّ ﷺ قَالَ:' });
+    expect(leadIn('عَنْ عُمَرَ: أَنَّ رَسُولَ اللهِ ﷺ قَالَ: ', [{ name: 'عُمَرَ', mode: 'عَنْ' }])).toEqual({ lead: '', prophet: 'أَنَّ رَسُولَ اللهِ ﷺ قَالَ:' });
   });
-  it('keeps the narrator\'s last vowel, «رضي الله عنه» and his own «قَالَ» with him when no clause mark follows his name', () => {
-    expect(leadIn('عَنْ أَبِي هُرَيْرَةَ  رضي الله عنه عَنِ النَّبِيِّ ﷺ قَالَ: ', { name: 'أَبِي هُرَيْرَةَ', mode: 'عَنْ' })).toEqual({ lead: '', prophet: 'عَنِ النَّبِيِّ ﷺ قَالَ:' });
-    expect(leadIn('عَنْ أَبِي مَسْعُودٍ قَالَ قَالَ النَّبِيُّ ﷺ: ', { name: 'أَبِي مَسْعُودٍ', mode: 'عَنْ' })).toEqual({ lead: '', prophet: 'قَالَ النَّبِيُّ ﷺ:' });
+  // Owner 2026-11-24: «لا تحذف ولا كلمة»; the line shows the name, the text under it every word after it.
+  it('keeps «رضي الله عنه» and the narrator\'s own «قَالَ» under the line', () => {
+    expect(leadIn('عَنْ أَبِي هُرَيْرَةَ  رضي الله عنه عَنِ النَّبِيِّ ﷺ قَالَ: ', [{ name: 'أَبِي هُرَيْرَةَ', mode: 'عَنْ' }])).toEqual({ lead: 'رضي الله عنه', prophet: 'عَنِ النَّبِيِّ ﷺ قَالَ:' });
+    expect(leadIn('عَنْ أَنَسٍ رضي الله عنه قَالَ: ', [{ name: 'أَنَسٍ', mode: 'عَنْ' }])).toEqual({ lead: 'رضي الله عنه قَالَ:' });
   });
   it('never gives a narrator\'s own words to the Prophet ﷺ', () => {
-    const aisha = { name: 'عَائِشَةَ', mode: 'عَنْ' };
-    expect(leadIn('عَنْ عَائِشَةَ زَوْجِ النَّبِيِّ ﷺ قَالَتْ: ', aisha).prophet).toBeUndefined();
-    expect(leadIn('عَنْ أَبِي بَكْرَةَ: ذُكِرَ النَّبِيُّ ﷺ قَالَ: ', { name: 'أَبِي بَكْرَةَ', mode: 'عَنْ' }).prophet).toBeUndefined();
+    expect(leadIn('عَنْ عَائِشَةَ زَوْجِ النَّبِيِّ ﷺ قَالَتْ: ', [{ name: 'عَائِشَةَ', mode: 'عَنْ' }])?.prophet).toBeUndefined();
+    expect(leadIn('عَنْ أَبِي بَكْرَةَ: ذُكِرَ النَّبِيُّ ﷺ قَالَ: ', [{ name: 'أَبِي بَكْرَةَ', mode: 'عَنْ' }])?.prophet).toBeUndefined();
   });
-  it('drops a lead that only names the narrator again, the line saying it already', () => {
-    expect(leadIn('عَنْ أَنَسٍ رضي الله عنه قَالَ: ', { name: 'أَنَسٍ', mode: 'عَنْ' })).toEqual({ lead: '' });
+  it('draws no chain whose links leave out a word of the text', () => {
+    const chain = 'حَدَّثَنَا عَبْدُ اللهِ بْنُ مُحَمَّدٍ، قَالَ: حَدَّثَنَا أَبُو عَامِرٍ الْعَقَدِيُّ، قَالَ: ';
+    expect(leadIn(chain, [{ name: 'عَبْدُ اللهِ بْنُ مُحَمَّدٍ', mode: 'حَدَّثَنَا' }, { name: 'أَبُو عَامِرٍ الْعَقَدِيُّ', mode: 'حَدَّثَنَا' }])).toBeUndefined();
+    expect(leadIn(chain, [{ name: 'عَبْدُ اللهِ بْنُ مُحَمَّدٍ', mode: 'حَدَّثَنَا' }, { name: 'أَبُو عَامِرٍ الْعَقَدِيُّ', mode: 'قَالَ: حَدَّثَنَا' }])).toEqual({ lead: 'قَالَ:' });
   });
-  it('leaves words that are not his as the narrator\'s', () => {
-    const story = 'عَنْ أَبِي هُرَيْرَةَ قَالَ: كَانَ النَّبِيُّ ﷺ بَارِزًا يَوْمًا لِلنَّاسِ، فَأَتَاهُ جِبْرِيلُ فَقَالَ: ';
-    expect(leadIn(story, { name: 'أَبِي هُرَيْرَةَ', mode: 'عَنْ' })).toEqual({ lead: story.trim() });
+});
+
+// Owner 2026-11-24: the drawing and the text are two ways of showing one printed text; neither drops nor adds a word.
+describe('every drawn chain in the app', () => {
+  const words = (text: string) => bareHadith(text).replace(/[^\p{L}ﷺ]+/gu, ' ').trim().split(' ').filter(Boolean);
+  const shownWhole = (chainText: string, links: { name: string; mode: string }[]) => {
+    const said = leadIn(chainText, links);
+    return !!said && words([...links.flatMap(link => [link.mode, link.name]), said.lead, said.prophet ?? ''].join(' ')).join(' ') === words(chainText).join(' ');
+  };
+  it("shows every word of the Sahihayn's chains, the line and the words under it together", () => {
+    const routes = (['bukhari', 'muslim'] as const).flatMap(slug => (JSON.parse(readFileSync(join(__dirname, `../data/hadith/sahih/${slug}.json`), 'utf8')) as SahihText)
+      .kitabs.flatMap(file => file.hadith.flatMap(hadith => hadith.routes.filter(route => route.chain && route.isnadEnd).map(route => ({ n: hadith.n, route })))));
+    expect(routes.length).toBeGreaterThan(0);
+    for (const { n, route } of routes) expect(shownWhole(splitRoute(route).chain, route.chain!), `${n}: ${splitRoute(route).chain}`).toBe(true);
+  });
+  it("shows every word of the Forty's drawn chains", () => {
+    const records = (forty as unknown as AppForty).entries.flatMap(entry => entry.records.filter(record => record.isnad && record.isnadEnd));
+    expect(records.length).toBeGreaterThan(0);
+    for (const record of records) expect(shownWhole(record.text.slice(0, record.isnadEnd), chainLinks(record.isnad!)), `${record.book} ${record.number}`).toBe(true);
   });
 });

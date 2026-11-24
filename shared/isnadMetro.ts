@@ -119,10 +119,12 @@ export function chainIsnad(collector: string, chain: { name: string; mode: strin
 /** The order to read the stations in: level by level, right to left. */
 export const metroOrder = (metro: Metro) => [...metro.stations].sort((a, b) => a.level - b.level || a.col - b.col).map(station => station.label);
 
-/** A plain chain's last narrator, the one the words come from, with the word he narrated with. */
-export function lastNarrator(isnad: AppIsnad): { name: string; mode: string } | undefined {
-  const heard = new Set(isnad.edges.map(edge => edge.to));
-  const last = isnad.nodes.find(node => !heard.has(node.id));
-  const edge = last && isnad.edges.find(each => each.from === last.id);
-  return last && edge ? { name: last.label, mode: edge.label } : undefined;
+/** A plain chain's links as printed, from the collector's sheikh down: each narrator after the words he narrated with. */
+export function chainLinks(isnad: AppIsnad): { name: string; mode: string }[] {
+  const top = Math.min(...isnad.nodes.map(node => node.y));
+  const links: { name: string; mode: string }[] = [];
+  for (let edge = isnad.edges.find(each => each.to === isnad.nodes.find(node => node.y === top)?.id); edge && links.length < isnad.edges.length; edge = isnad.edges.find(each => each.to === edge!.from)) {
+    links.push({ name: isnad.nodes.find(node => node.id === edge!.from)!.label, mode: edge.label });
+  }
+  return links;
 }
