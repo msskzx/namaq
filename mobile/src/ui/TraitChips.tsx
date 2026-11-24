@@ -25,14 +25,14 @@ export default function TraitChips({ traits, palette, quran = false, picked, onP
     const said = `${trait.label}${trait.meaning ? `: ${trait.meaning}` : ''}${trait.names.length ? `، عند ${trait.names.join('، ')}` : ''}${trait.place ? `، ${trait.place}` : ''}`;
     const look = { borderWidth: 1, borderColor: lit ? palette.accent : palette.rule, borderRadius: 12, paddingHorizontal: 12, paddingVertical: 6,
       alignItems: 'center' as const, minHeight: 44, justifyContent: lines ? 'space-between' as const : 'center' as const,
-      ...(lines ? { flexDirection: 'row' as const, gap: 12 } : null), backgroundColor: picked === at ? `${palette.accent}18` : undefined };
+      ...(lines ? { flexDirection: 'row' as const, gap: 14, paddingHorizontal: 16, paddingVertical: 12, borderRadius: 14 } : null), backgroundColor: picked === at ? `${palette.accent}18` : undefined };
     const inner = lines ? <>
       <View style={{ flexShrink: 1, flexGrow: 1, alignItems: 'flex-start' }}>
         {/* The Quran in its own colour and letters, ruled off from the book's meaning (owner 2026-11-24: tell them apart). */}
         {quran ? <QuranWord look={{ color: palette.accent }} place={{ textAlign: 'right' }}>{trait.label}</QuranWord>
           : <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 28, textAlign: 'right' }}>{trait.label}</Text>}
         {trait.meaning ? <>
-          <View style={{ alignSelf: 'stretch', height: 1, backgroundColor: `${palette.rule}66`, marginVertical: 4 }} />
+          <View style={{ alignSelf: 'stretch', height: 1, backgroundColor: `${palette.rule}66`, marginVertical: 8 }} />
           <Text style={{ color: palette.ink, fontSize: 16, lineHeight: 26, textAlign: 'right' }}>
             <Text style={{ color: palette.muted, fontSize: 14 }}>معناها: </Text>{trait.meaning}
           </Text>
@@ -51,5 +51,5 @@ export default function TraitChips({ traits, palette, quran = false, picked, onP
           style={({ pressed }) => ({ ...look, opacity: pressed ? 0.6 : 1 })}>{inner}</Tap>
       : <View key={`${trait.label}-${at}`} accessible accessibilityLabel={said} style={look}>{inner}</View>;
   });
-  return <View style={lines ? { gap: 6 } : { flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>{chips}</View>;
+  return <View style={lines ? { gap: 12 } : { flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>{chips}</View>;
 }
