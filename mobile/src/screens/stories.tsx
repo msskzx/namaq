@@ -1,9 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
+import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { FlatList, Platform, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { ChevronDown, ChevronLeft, ChevronUp, List } from 'lucide-react-native';
 import type { PageKey, StoriesPage, StoryChapter } from '@shared/stories/pages';
 import { CHAPTER_BATTLE } from '@shared/stories/chapterBattles';
+import type { AppStory } from '@shared/stories/story';
+import { holdsTerms } from '@shared/quran/searchAll';
+import Empty from '@/ui/Empty';
 import { Text } from '@/ui/Text';
 import TapRow from '@/ui/TapRow';
 import StripTabs from '@/ui/StripTabs';
@@ -103,11 +106,32 @@ function Contents({ open, onClose, startAt, palette }: { open: boolean; onClose:
   );
 }
 
+/** What the search reads in a story: its name, chapter, place and tags, and the words of its first report. */
+const storyText = (story: AppStory) => [story.name, story.chapter, story.place?.value ?? '', ...story.tags,
+  ...(story.reports[0]?.moments ?? []).flatMap(moment => [moment.title, moment.text])].join(' ');
+const STORY_TEXT = new Map<string, string>();
+const textOf = (story: AppStory) => { let text = STORY_TEXT.get(story.slug); if (text === undefined) STORY_TEXT.set(story.slug, text = storyText(story)); return text; };
+
+/** The search's finds (owner, 2026-11-24: the search here opened the app's search, not the stories): the chapters named, then the stories that hold the words. */
+function Found({ query, palette }: { query: string; palette: Palette }) {
+  const chapters = STORY_CHAPTERS.filter(chapter => holdsTerms(chapter.name, query));
+  const stories = STORIES.filter(story => holdsTerms(textOf(story), query));
+  if (!chapters.length && !stories.length) return <Empty text="لا قصة ولا باب فيه هذه الكلمات" palette={palette} />;
+  return (
+    <>
+      {chapters.map(chapter => <ChapterCard key={chapter.name} chapter={chapter} palette={palette} />)}
+      {stories.length > 0 && <Card palette={palette} pad={[4, 14]} gap={0}>
+        {stories.map(story => <StoryRow key={story.slug} name={story.name} slug={story.slug} palette={palette} />)}
+      </Card>}
+    </>
+  );
+}
+
 /**
  * «قصص السيرة» (owner, 2026-11-23): a page for each year, swiped right to left as the book is read, the strip on top going
  * to any year; on each page al-Bukhari's chapters in his order. A story is on a year only where a source gives it that
  * year («بلا سنة» holds the rest); a tag (owner, 2026-11-18) narrows every year to its stories. «الفهرس» lists every
- * chapter whole, and the search finds a chapter or a story.
+ * chapter whole, and the search in the top bar finds a chapter, or a story by its name, place, tags or words.
  */
 export default function StoriesScreen() {
   const palette = usePalette();
@@ -122,6 +146,8 @@ export default function StoriesScreen() {
     setContents(true);
     router.setParams({ chapter: undefined });
   }, [chapter]);
+  const [query, setQuery] = useState('');
+  const typed = useDeferredValue(query.trim());
   const [tag, setTag] = useState<string | null>(null);
   const pages = useMemo(() => (tag ? storyPages(STORIES.filter(story => story.tags.includes(tag))) : STORY_PAGES), [tag]);
   const [at, setAt] = useState(0);
@@ -155,9 +181,14 @@ export default function StoriesScreen() {
   }, [settle]);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar back={back} hideOnScroll search={() => toTab('/search')}>
+      <TopBar back={back} hideOnScroll search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث في قصص السيرة', label: 'ابحث في قصص السيرة' }}>
         <IconButton Icon={List} label="الفهرس" onPress={() => { setStartAt(undefined); setContents(true); }} size="bar" />
       </TopBar>
+      {typed ? (
+        <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 10 }}>
+          <Found query={typed} palette={palette} />
+        </ScrollView>
+      ) : <>
       <View style={{ paddingHorizontal: 16, paddingTop: 4, gap: 6 }}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>قصص السيرة</Text>
         <RowScroll gap={6}>
@@ -173,12 +204,13 @@ export default function StoriesScreen() {
       <StripTabs labels={pages.map(page => page.label)} names={pages.map(page => page.title)} at={at} onPick={go} palette={palette} />
       <View style={{ flex: 1, direction: 'ltr' }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
         {width > 0 && (
-          <FlatList ref={list} data={pages} horizontal inverted pagingEnabled showsHorizontalScrollIndicator={false}
+          <FlatList ref={list} data={pages} horizontal inverted pagingEnabled showsHorizontalScrollIndicator={false} initialScrollIndex={Math.min(at, pages.length - 1)}
             keyExtractor={page => String(page.key)} getItemLayout={(_, index) => ({ length: width, offset: width * index, index })}
             extraData={{ palette, bottom }} onMomentumScrollEnd={settle} onScroll={scrolled} scrollEventThrottle={16} onScrollToIndexFailed={() => {}}
             renderItem={({ item }) => <YearPage page={item} width={width} height={height} bottom={bottom} palette={palette} scrollers={scrollers} />} />
         )}
       </View>
+      </>}
       <Contents open={contents} onClose={() => setContents(false)} startAt={startAt} palette={palette} />
     </View>
   );

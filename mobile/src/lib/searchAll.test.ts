@@ -47,3 +47,21 @@ describe('trees in the app search', () => {
     expect(group('حجة الوداع', 'sira')).toContainEqual(expect.objectContaining({ slug: 'the-sermon-of-the-farewell-hajj' }));
   });
 });
+
+describe('people, battles and hadith in the app search (owner, 2026-11-24: it found none of them)', () => {
+  it('finds a person by kunya, listed before the ayat since names are few and exact', () => {
+    expect(group('أبو بكر', 'person')).toContainEqual(expect.objectContaining({ slug: 'abu-bakr-as-siddiq' }));
+    const kinds = searchApp('أبو بكر').map(found => found.kind);
+    if (kinds.includes('ayah')) expect(kinds.indexOf('person')).toBeLessThan(kinds.indexOf('ayah'));
+  });
+
+  it('finds a battle by its name', () => {
+    expect(group('بدر', 'battle').length).toBeGreaterThan(0);
+    expect(group('بدر', 'battle').every(hit => 'name' in hit && hit.name.includes('بدر'))).toBe(true);
+  });
+
+  it('finds one of the Forty by its words and a Sahih bab by its heading, each with where it opens', () => {
+    expect(group('إنما الأعمال بالنيات', 'hadith')).toContainEqual(expect.objectContaining({ book: 'forty', n: 1 }));
+    expect(group('سدوا الأبواب', 'hadith')).toContainEqual(expect.objectContaining({ book: 'bukhari', kitab: expect.any(Number) }));
+  });
+});

@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
+import { useDeferredValue, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import { FlatList, ScrollView, View } from 'react-native';
 import { ArrowDownWideNarrow, X } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
+import { holdsTerms } from '@shared/quran/searchAll';
+import Empty from '@/ui/Empty';
 import { linkShows, ORDER_JUZ, orderInJuz, toggledJuz } from '@shared/quran/surahOrder';
 import HelpSheet from '@/components/HelpSheet';
 import TopBar from '@/ui/TopBar';
@@ -38,7 +40,15 @@ export default function OrderScreen() {
   const [juz, setJuz] = useState<readonly number[]>(opened ? [opened] : []);
   useEffect(() => { if (opened) setJuz([opened]); }, [opened]);
   const [help, setHelp] = useState(false);
-  const shown = useMemo(() => orderInJuz(orderSurahList(), juz), [juz]);
+  const [query, setQuery] = useState('');
+  const typed = useDeferredValue(query.trim());
+  // The search in the top bar keeps the surahs named, by name or number («١٨» or «18»), within the juz picked.
+  const shown = useMemo(() => {
+    const inJuz = orderInJuz(orderSurahList(), juz);
+    if (!typed) return inJuz;
+    const number = Number(typed.replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x0660)));
+    return inJuz.filter(s => (Number.isInteger(number) ? s.surah === number : holdsTerms(s.name, typed)));
+  }, [juz, typed]);
   // «رتّبها بنفسك» (owner, 2026-11-21; sketch surah-order-tray/sketch-dark.png, screen 4): the surahs of the picked juz, their
   // names shuffled into a tray, to fill back into their boxes; each box once checked opens the surah's card.
   const [practice, setPractice] = useState<Practice | null>(null);
@@ -52,7 +62,8 @@ export default function OrderScreen() {
   const chip = (label: string, value: number | null) => <Chip key={label} label={label} on={value === null ? !juz.length : juz.includes(value)} onPress={() => pick(value)} palette={palette} />;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar hub hideOnScroll={!practice} help={() => setHelp(true)}>
+      <TopBar hub hideOnScroll={!practice} help={() => setHelp(true)}
+        search={practice ? undefined : { value: query, onChangeText: setQuery, placeholder: 'ابحث في ترتيب السور', label: 'ابحث في ترتيب السور' }}>
         {practice
           ? <Button variant="plain" Icon={X} accessibilityLabel="أوقف الترتيب" onPress={() => setPractice(null)} />
           : shown.length > 1 && <Button Icon={ArrowDownWideNarrow} label="رتّبها بنفسك" onPress={begin} />}
@@ -74,7 +85,8 @@ export default function OrderScreen() {
       {/* A plain scroll, not a virtualized list (owner, 2026-11-20: the list flickered while scrolling): every card is laid out
           once, at its final size, so nothing above the reader is measured again and moves the page. */}
       <ScrollView ref={scroll} onScroll={event => { top.current = event.nativeEvent.contentOffset.y; shrink(event); }} scrollEventThrottle={16}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: bottom, gap: 10 }}>
+        keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: bottom, gap: 10 }}>
+        {!shown.length && <Empty text="لا سورة بهذا الاسم في ما اخترت" palette={palette} />}
         {shown.flatMap((s, i) => [
           ...(linkShows(shown, i) ? [<LinkBlock key={`link-${s.surah}`} link={s.link!} palette={palette} />] : []),
           <SurahCard key={s.surah} s={s} palette={palette} />,

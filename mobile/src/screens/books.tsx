@@ -4,6 +4,8 @@ import { usePageWidth } from '@/ui/column';
 import { router } from 'expo-router';
 import { Check, Download, Eye, EyeOff, Pencil, RotateCw, Trash2 } from 'lucide-react-native';
 import { BOOK_KINDS, BOOKS, type Book } from '@shared/books';
+import { holdsTerms } from '@shared/quran/searchAll';
+import Empty from '@/ui/Empty';
 import { isReaderBook, pageName } from '@shared/readerBooks';
 import { readFasilas, serverFasilas, subscribeFasilas } from '@shared/readingMarks';
 import { Text } from '@/ui/Text';
@@ -42,21 +44,26 @@ export default function LibraryScreen() {
   useBooks();
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   // The library button tapped again: editing ends and the shelf goes back to its top.
-  useTabRetap('books', () => { setEditing(false); scroll.current?.scrollTo({ y: 0, animated: true }); });
+  useTabRetap('books', () => { setEditing(false); setQuery(''); scroll.current?.scrollTo({ y: 0, animated: true }); });
   const fasilas = useSyncExternalStore(subscribeFasilas, readFasilas, serverFasilas);
-  const shown = BOOKS.filter(book => editing || !(book.builtIn && bookState(book.id) === 'off'));
+  const [query, setQuery] = useState('');
+  // The search in the top bar keeps the books whose title, author or kind holds the words typed.
+  const held = (book: { title: string; by: string; kind: string }) => !query.trim() || holdsTerms(`${book.title} ${book.by} ${book.kind}`, query);
+  const shown = BOOKS.filter(book => (editing || !(book.builtIn && bookState(book.id) === 'off')) && held({ ...book, kind: kindTitle(book) }));
+  const tuhfa = held(TUHFA);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       {/* The shelf opens from home's المكتبة, not from a button of the bar (owner, 2026-11-18), so it has a way back. */}
-      <TopBar hideOnScroll back={() => (router.canGoBack() ? router.back() : toTab('/'))}>
+      <TopBar hideOnScroll back={() => (router.canGoBack() ? router.back() : toTab('/'))} search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث في المكتبة', label: 'ابحث في المكتبة' }}>
         <IconButton Icon={editing ? Check : Pencil} label={editing ? 'تم' : 'تعديل الكتب'} onPress={() => setEditing(!editing)} on={editing} />
       </TopBar>
-      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
+      <ScrollView ref={scroll} onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ padding: 16, paddingBottom: bottom, flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
         {shown.map(book => {
           const fasila = isReaderBook(book.id) ? fasilas[book.id] : undefined;
           return <BookCard key={book.id} book={book} palette={palette} editing={editing} fasila={fasila && isReaderBook(book.id) ? pageName(book.id, fasila.part, fasila.page) : null} />;
         })}
-        <Shelf palette={palette} label={TUHFA.title} onPress={editing ? undefined : () => toTab('/tuhfa')} kind={TUHFA.kind} title={TUHFA.title} by={TUHFA.by} />
+        {!shown.length && !tuhfa && <View style={{ flexBasis: '100%' }}><Empty text="لا كتاب بهذا الاسم" palette={palette} /></View>}
+        {tuhfa && <Shelf palette={palette} label={TUHFA.title} onPress={editing ? undefined : () => toTab('/tuhfa')} kind={TUHFA.kind} title={TUHFA.title} by={TUHFA.by} />}
       </ScrollView>
     </View>
   );

@@ -7,6 +7,7 @@ import { placeRefs, searchBattles, type AppBattle } from '@shared/battles/battle
 import { placeSayer } from '@shared/battles/places';
 import { atlasSources } from '@shared/drawingCards';
 import { num } from '@shared/quran/arabicNumber';
+import { holdsTerms } from '@shared/quran/searchAll';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Empty from '@/ui/Empty';
@@ -104,7 +105,7 @@ function PlaceSheet({ battles, onClose, palette }: { battles: AppBattle[]; onClo
  * in two layers. «في حياته ﷺ»: a year at a time on the battles' own year axis, the year's places lit and the earlier
  * ones quiet, its battles listed in the sheet. «بعده ﷺ»: every later battle with a sourced place, no year axis since
  * most have no cited year; the dated ones listed first, the rest under «لم يذكر المصدر سنتها». A pin opens its sheet. The
- * search in the top bar finds a battle by its name or place on either layer. Opened with `layer`, `year` or `place`
+ * search in the top bar finds a year, a place, or a battle by its name or place, on either layer. Opened with `layer`, `year` or `place`
  * (a quiz's answer, the feed's year card), it shows that.
  */
 export default function AtlasScreen() {
@@ -138,7 +139,20 @@ export default function AtlasScreen() {
     [layer, size.width, size.height, barsEnd, low]);
   const pins = useMemo(() => atlasPins(BATTLES, layer, year), [layer, year]);
   const madinah = useMemo(() => battleTimeline(layerBattles(BATTLES, 'life')).madinah, []);
+  // The search finds a year of his life ﷺ by its number, the places by name, and the battles by name or place
+  // (owner, 2026-11-24: it said «ابحث في الأطلس» and found battles only).
   const found = useMemo(() => searchBattles(BATTLES, query), [query]);
+  const foundPlaces = useMemo(() => {
+    const typed = query.trim();
+    if (!typed) return [];
+    const first = new Map<string, AppBattle>();
+    for (const battle of BATTLES) if (battle.place && !first.has(battle.place.name) && holdsTerms(battle.place.name, typed)) first.set(battle.place.name, battle);
+    return [...first.values()];
+  }, [query]);
+  const foundYear = useMemo(() => {
+    const typed = Number(query.trim().replace(/^السنة\s*/, '').replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x0660)));
+    return query.trim() && years.includes(typed) ? typed : undefined;
+  }, [query, years]);
   const battles = layer === 'life' ? BATTLES.filter(battle => layerOf(battle) === 'life' && battle.year!.value === year) : layerBattles(BATTLES, 'after');
   const dated = battles.filter(battle => battle.year);
   const undated = battles.filter(battle => !battle.year);
@@ -168,9 +182,21 @@ export default function AtlasScreen() {
       {size.height > 0 && barsEnd > 0 && (
         <DrawerSheet low={low} high={barsEnd} bottom={bottom} lower={lower} raised={query.trim() !== ''} palette={palette}>
           {query.trim() ? (
-            found.length
-              ? <View>{found.map(battle => <BattleRow key={battle.slug} battle={battle} onPress={() => pickFound(battle)} palette={palette} />)}</View>
-              : <Empty text="لا غزوة ولا موضع بهذا الاسم" palette={palette} />
+            found.length || foundPlaces.length || foundYear
+              ? <View style={{ gap: 6 }}>
+                {foundYear ? <TapRow role="button" label={`السنة ${num(foundYear)} للهجرة`} onPress={() => { setQuery(''); setLayer('life'); setYear(foundYear); }}>
+                  <Text style={{ color: palette.ink, fontSize: 18, textAlign: 'right' }}>{`السنة ${num(foundYear)}`}<Text style={{ color: palette.muted, fontSize: 14 }}> للهجرة</Text></Text>
+                </TapRow> : null}
+                {foundPlaces.length > 0 && <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>المواضع</Text>}
+                {foundPlaces.map(battle => (
+                  <TapRow key={battle.place!.name} role="button" label={battle.place!.name} onPress={() => pickFound(battle)}>
+                    <Text style={{ color: palette.ink, fontSize: 18, textAlign: 'right' }}>{battle.place!.name}</Text>
+                  </TapRow>
+                ))}
+                {found.length > 0 && <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>الغزوات والمعارك</Text>}
+                {found.map(battle => <BattleRow key={battle.slug} battle={battle} onPress={() => pickFound(battle)} palette={palette} />)}
+              </View>
+              : <Empty text="لا سنة ولا موضع ولا غزوة بهذا الاسم" palette={palette} />
           ) : <>
             {layer === 'life' && <>
               <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>{`السنة ${num(year)}`}<Text style={{ color: palette.muted, fontSize: 15 }}> للهجرة</Text></Text>

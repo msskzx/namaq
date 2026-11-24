@@ -1,13 +1,14 @@
 import { useCallback, useDeferredValue, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { fromCompanion, sayingStart, type FortyEntry } from '@shared/hadith';
+import { fromCompanion, sayingStart, searchForty, type FortyEntry } from '@shared/hadith';
 import { placeOf, searchSahih, type SahihHit, type SahihSlug } from '@shared/sahih';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Card from '@/ui/Card';
 import Chip from '@/ui/Chip';
+import Tabs from '@/ui/Tabs';
 import Empty from '@/ui/Empty';
 import LoadingDots from '@/ui/LoadingDots';
 import { usePalette, type Palette } from '@/lib/theme';
@@ -18,7 +19,7 @@ import { FORTY } from '@/lib/hadith';
 import { SAHIH, SAHIH_SLUGS, lastRead, useSahihTexts, type LastRead } from '@/lib/sahih';
 import { bookState, useBooks } from '@/lib/books';
 import { findHadith } from '@shared/sahih';
-import { SahihShape, opening } from '@/components/Sahih';
+import { SahihDownload, SahihShape, opening } from '@/components/Sahih';
 import { CardWithRow } from '@/ui/Card';
 import OpenButton from '@/ui/OpenButton';
 import QuoteBar from '@/ui/QuoteBar';
@@ -84,6 +85,8 @@ export const ADDED_TITLE = 'الأحاديث المزيدة على ما ذكره
 const FORTY_COUNT = FORTY.entries.filter(entry => !entry.source).length;
 const ADDED_COUNT = FORTY.entries.filter(entry => entry.source === 'ibnrajab').length;
 
+type Found = 'hadith' | 'babs' | 'forty';
+
 /** Hits drawn at a time; more come as the list nears its end, so every hit shows without drawing thousands at once. */
 const SEARCH_STEP = 40;
 
@@ -115,9 +118,20 @@ export default function HadithScreen() {
   useBooks();
   const { texts, reading } = useSahihTexts(!!typed);
   const found = useMemo(() => (typed ? searchSahih(SAHIH_SLUGS.map(slug => ({ index: SAHIH[slug], text: texts[slug] })), typed, Infinity) : null), [typed, texts]);
-  const [drawn, setDrawn] = useState({ typed: '', count: SEARCH_STEP });
-  const count = drawn.typed === typed ? drawn.count : SEARCH_STEP;
   const missing = SAHIH_SLUGS.filter(slug => bookState(slug) !== 'on');
+  const forty = useMemo(() => (typed ? searchForty(FORTY.entries, typed) : []), [typed]);
+  // The finds in three lists, each its own tab with its count (owner, 2026-11-24: the hadith found were drawn only after
+  // every bab heading found, so a common word showed no hadith at all). It opens on the first with finds, the hadith first;
+  // a tab with none drops out, but the hadith's stays to offer the download.
+  const [picked, setPicked] = useState<Found | null>(null);
+  const lists = found ? ([
+    { key: 'hadith', label: missing.length === SAHIH_SLUGS.length ? 'الأحاديث' : `الأحاديث ${num(found.hadith.length)}`, size: found.hadith.length },
+    { key: 'babs', label: `الأبواب ${num(found.babs.length)}`, size: found.babs.length },
+    { key: 'forty', label: `الأربعون ${num(forty.length)}`, size: forty.length },
+  ] as const).filter(list => list.key === 'hadith' || list.size) : [];
+  const list: Found = lists.find(each => each.key === picked)?.key ?? lists.find(each => each.size)?.key ?? 'hadith';
+  const [drawn, setDrawn] = useState({ typed: '', list, count: SEARCH_STEP });
+  const count = drawn.typed === typed && drawn.list === list ? drawn.count : SEARCH_STEP;
   // «تابع» and the mark on each book read the last hadith again each time the tab comes back into view.
   const [, setSeen] = useState(0);
   const read = lastRead();
@@ -125,28 +139,29 @@ export default function HadithScreen() {
   const scrolled = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     onScroll(event);
     const { contentOffset, layoutMeasurement, contentSize } = event.nativeEvent;
-    if (found && contentOffset.y + layoutMeasurement.height > contentSize.height - 800) setDrawn({ typed, count: count + SEARCH_STEP });
+    if (found && contentOffset.y + layoutMeasurement.height > contentSize.height - 800) setDrawn({ typed, list, count: count + SEARCH_STEP });
   };
-  const babs = found ? found.babs.slice(0, count) : [];
-  const hadithHits = found ? found.hadith.slice(0, Math.max(0, count - found.babs.length)) : [];
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar hideOnScroll search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث في الأبواب والأحاديث', label: 'ابحث في الصحيحين' }} />
       <ScrollView ref={scroll} onScroll={scrolled} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 12 }}>
         {found ? <>
-          <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>في الأبواب</Text>
-          {found.babs.length ? babs.map(hit => {
+          {lists.length > 1 && <Tabs label="نتائج البحث" options={lists.map(({ key, label }) => ({ key, label }))} value={list} onChange={setPicked} palette={palette} fill />}
+          {list === 'babs' && found.babs.slice(0, count).map(hit => {
             const kitab = SAHIH[hit.book].kitabs.find(each => each.n === hit.kitab);
             return <Hit key={`b-${hit.book}-${hit.kitab}-${hit.bab}`} hit={hit} line={kitab?.babs[hit.bab ?? 0]?.title ?? ''} palette={palette} />;
-          }) : <Empty text="لا باب فيه هذه الكلمات" palette={palette} />}
-          <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>في الأحاديث</Text>
-          {hadithHits.map(hit => {
-            const hadith = texts[hit.book] && findHadith(texts[hit.book]!, hit.n)?.hadith;
-            return hadith ? <Hit key={`h-${hit.book}-${hit.n}`} hit={hit} line={opening(hadith)} palette={palette} /> : null;
           })}
-          {reading ? <LoadingDots label="يقرأ نص الصحيحين" />
-            : !found.hadith.length && <Empty text={missing.length === SAHIH_SLUGS.length ? 'نزّل الصحيحين من المكتبة ليبحث في نص الأحاديث' : 'لا حديث فيه هذه الكلمات'} palette={palette} />}
-          {missing.length > 0 && missing.length < SAHIH_SLUGS.length && <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{`نزّل ${SAHIH[missing[0]].title} من المكتبة ليبحث فيه أيضًا`}</Text>}
+          {list === 'forty' && forty.slice(0, count).map(entry => <FortyCard key={entry.n} entry={entry} palette={palette} onPress={() => router.push({ pathname: '/hadith-forty', params: { n: String(entry.n) } })} />)}
+          {list === 'hadith' && <>
+            {found.hadith.slice(0, count).map(hit => {
+              const hadith = texts[hit.book] && findHadith(texts[hit.book]!, hit.n)?.hadith;
+              return hadith ? <Hit key={`h-${hit.book}-${hit.n}`} hit={hit} line={opening(hadith)} palette={palette} /> : null;
+            })}
+            {reading ? <LoadingDots label="يقرأ نص الصحيحين" />
+              : !found.hadith.length && missing.length < SAHIH_SLUGS.length && <Empty text="لا حديث فيه هذه الكلمات" palette={palette} />}
+            {/* A book not on the phone is searched once downloaded: its download right here, not a pointer to the library. */}
+            {missing.map(slug => <SahihDownload key={slug} slug={slug} state={bookState(slug)} palette={palette} />)}
+          </>}
         </> : <>
           {read && <ContinueCard read={read} palette={palette} />}
           {SAHIH_SLUGS.map(slug => (

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { LayoutGrid, type LucideProps } from 'lucide-react-native';
 import { normalizeWord } from '@shared/quran/normalize';
-import type { SearchKind } from '@shared/quran/searchAll';
+import type { AppKind as SearchKind } from '@/lib/searchAll';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
@@ -42,7 +42,7 @@ const loose = (text: string) => normalizeWord(text).replace(/\s+/g, ' ').trim();
 export const toolsNamed = (query: string) => { const typed = loose(query); return typed ? QURAN_TILES.filter(tile => loose(tile.label).includes(typed)) : []; };
 
 /** The adhkar are not of the Quran: the home search finds them. */
-const quranKind = (kind: SearchKind) => kind !== 'adhkar';
+const quranKind = (kind: SearchKind) => !['adhkar', 'person', 'battle', 'hadith'].includes(kind);
 
 /**
  * The Quran tab (owner, 2026-11-13): a grid of the Quran tools, two to a row, the mushaf first (owner, 2026-11-18: it lost its own button).

@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
+import { useDeferredValue, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import { FlatList, Share, View } from 'react-native';
 import { Send } from 'lucide-react-native';
 import { ayahHref } from '@shared/ayahMarks';
 import { num } from '@shared/quran/arabicNumber';
+import { holdsTerms } from '@shared/quran/searchAll';
+import Empty from '@/ui/Empty';
 import { BY_QUOTES, OATH_BY, OATH_QUOTES, citesOf, kindQuotes, oathSections, sectionQuotes, type OathBy } from '@shared/quran/oathSources';
 import { buildOaths, oathPlace, oathShareText, type OathKind, type OathView } from '@shared/quran/oaths';
 import { Text } from '@/ui/Text';
@@ -30,8 +32,17 @@ const BY_ID = new Map(BUILT.allah.map(oath => [oath.id, oath]));
 
 /** A row of the list: a section's heading with its reference, or an oath's card. */
 type Row = { head: ReturnType<typeof oathSections>[number] } | { oath: OathView };
-const rowsOf = (kind: OathKind, by: OathBy | null): Row[] =>
-  kind === 'others' ? BUILT.others.map(oath => ({ oath })) : oathSections(by).flatMap(head => [{ head }, ...head.oaths.map(id => ({ oath: BY_ID.get(id)! }))]);
+/** What the search reads in an oath: its surah and ayah, who swears, what is sworn by, and the ayat's words. */
+const oathText = (oath: OathView) => [oathPlace(oath, num), oath.who ?? '', ...oath.by, ...oath.lines.flatMap(line => line.words.map(word => word.text))].join(' ');
+/** The rows, searched: the oaths that hold every word typed, each section's heading kept only over oaths found. */
+const rowsOf = (kind: OathKind, by: OathBy | null, query = ''): Row[] => {
+  const held = (oath: OathView) => !query.trim() || holdsTerms(oathText(oath), query);
+  if (kind === 'others') return BUILT.others.filter(held).map(oath => ({ oath }));
+  return oathSections(by).flatMap(head => {
+    const oaths = head.oaths.map(id => BY_ID.get(id)!).filter(held);
+    return oaths.length ? [{ head }, ...oaths.map(oath => ({ oath }))] : [];
+  });
+};
 
 function shareOath(oath: OathView) {
   void Share.share({ message: `${oathShareText(oath, num)}\n${WEBSITE}${ayahHref(oath.id)}` });
@@ -72,7 +83,9 @@ export default function OathsScreen() {
   const { at } = useLocalSearchParams<{ at?: string }>();
   const [kind, setKind] = useState<OathKind>(() => (BUILT.others.some(oath => oath.id === at) ? 'others' : 'allah'));
   const [by, setBy] = useState<OathBy | null>(null);
-  const rows = useMemo(() => rowsOf(kind, by), [kind, by]);
+  const [query, setQuery] = useState('');
+  const typed = useDeferredValue(query);
+  const rows = useMemo(() => rowsOf(kind, by, typed), [kind, by, typed]);
   const atRow = at ? rows.findIndex(row => 'oath' in row && row.oath.id === at) : -1;
   useEffect(() => {
     if (atRow >= 0) requestAnimationFrame(() => list.current?.scrollToIndex({ index: atRow, animated: false, viewOffset: 8 }));
@@ -82,13 +95,14 @@ export default function OathsScreen() {
   const chip = (label: string, value: OathBy | null) => <Chip key={label} label={label} on={by === value} onPress={() => setBy(value)} palette={palette} />;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar hub hideOnScroll />
+      <TopBar hub hideOnScroll search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث في الأقسام', label: 'ابحث في الأقسام' }} />
       <View style={{ paddingHorizontal: 16, paddingTop: 8, gap: 10 }}>
         <Tabs options={KINDS.map(option => ({ key: option.kind, label: option.label }))} value={kind} onChange={pick} palette={palette} fill />
       </View>
       {/* The references and chips scroll with the list, as on the website, so an open reference never pins the cards down. */}
       <FlatList ref={list} data={rows} keyExtractor={row => ('head' in row ? row.head.on : row.oath.id)} onScroll={event => { top.current = event.nativeEvent.contentOffset.y; shrink(event); }} scrollEventThrottle={16}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: bottom, gap: 10 }}
+        keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: bottom, gap: 10 }}
+        ListEmptyComponent={<Empty text="لا قسم فيه هذه الكلمات" palette={palette} />}
         // The rows are not all drawn yet: go near it, then to it once drawn.
         onScrollToIndexFailed={({ index, averageItemLength }) => {
           list.current?.scrollToOffset({ offset: index * averageItemLength, animated: false });

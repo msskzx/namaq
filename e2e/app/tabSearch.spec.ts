@@ -46,3 +46,34 @@ test('the list of all tarajim searches from the top bar', async ({ page }) => {
   await search.fill('صفية');
   await expect(page.getByRole('link', { name: 'صفية بنت عبد المطلب', exact: true })).toBeVisible();
 });
+
+// The hadith tab's finds come in tabs (owner, 2026-11-24: a common word listed hundreds of bab headings, and the hadith
+// found were drawn only after all of them, so none showed); the Forty are searched too.
+test('the hadith tab lists its finds by kind, the Forty among them', async ({ page }) => {
+  await open(page, '/');
+  await tab(page, 'الحديث').click();
+  await page.getByRole('textbox', { name: 'ابحث في الصحيحين' }).filter({ visible: true }).fill('الأعمال');
+  await page.getByRole('tab', { name: /^الأبواب/ }).click();
+  await expect(page.getByRole('link', { name: /صحيح (البخاري|مسلم)/ }).first()).toBeVisible();
+  await page.getByRole('tab', { name: /^الأربعون/ }).click();
+  await page.getByRole('link', { name: 'الحديث الأول، عن عمر بن الخطاب' }).click();
+  await expect(page).toHaveURL(/\/hadith-forty\?n=1$/);
+});
+
+// Every list page searches from the top bar, its placeholder naming the page (owner, 2026-11-23), and keeps only what
+// holds the words typed (owner, 2026-11-24: these pages had no search, and the stories' opened the app's search).
+for (const [route, field, typed, found, gone] of [
+  ['/hadith-book?book=forty', 'ابحث في الأربعين النووية', 'الأعمال', 'الحديث الأول', 'الحديث الثاني'],
+  ['/hadith-kitab?book=bukhari&kitab=2', 'ابحث في كِتَابُ الْإِيمَانِ', 'الحياء', 'بَابٌ: الْحَيَاءُ مِنَ الْإِيمَانِ', 'بَابٌ: الصَّلَاةُ مِنَ الْإِيمَانِ'],
+  ['/books', 'ابحث في المكتبة', 'الإتقان', 'الإتقان في علوم القرآن', 'تحفة الأطفال'],
+  ['/order', 'ابحث في ترتيب السور', 'الكهف', 'الكَهْفْ', 'البَقَرَةْ'],
+  ['/stories', 'ابحث في قصص السيرة', 'الهجرة', 'هجرة إلى المدينة', 'قبل الهجرة'],
+] as const) {
+  test(`${route} searches its list from the top bar`, async ({ page }) => {
+    await open(page, route);
+    const search = page.getByRole('textbox', { name: field }).filter({ visible: true });
+    await search.fill(typed);
+    await expect(page.getByText(found, { exact: true }).filter({ visible: true }).first()).toBeVisible();
+    await expect(page.getByText(gone, { exact: true }).filter({ visible: true })).toHaveCount(0);
+  });
+}
