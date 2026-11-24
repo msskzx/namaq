@@ -1,4 +1,4 @@
-import { type AppPerson, type PersonFact } from '@shared/tarajim';
+import { inAppOrder, type AppPerson, type PersonFact } from '@shared/tarajim';
 import { byVolume, heldGroups as heldIn, kunyaLine, personLine, unvowelled } from '@shared/tarajimGroups';
 import { matchesQuery, namesHay } from '@shared/tarajimLine';
 import { chainBetween, peopleGraph } from '@shared/tarajimGraph';
@@ -11,8 +11,7 @@ export const PROPHET = 'prophet-muhammad';
  * The people the app shows (owner, 2026-11-18): only those whose entry is converted under data/works, read from
  * shared/data/tarajim/people.json (npm run model:app-people). The Prophet ﷺ first, then the book's order.
  */
-export const PEOPLE: AppPerson[] = (peopleJson as AppPerson[]).slice().sort((a, b) =>
-  Number(b.slug === PROPHET) - Number(a.slug === PROPHET) || a.entry.volume - b.entry.volume || Number(a.entry.from) - Number(b.entry.from));
+export const PEOPLE: AppPerson[] = inAppOrder(peopleJson as AppPerson[]);
 
 
 const bySlug = new Map(PEOPLE.map(person => [person.slug, person]));
