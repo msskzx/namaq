@@ -14,7 +14,7 @@ import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
 import BattleMap from '@/components/battles/BattleMap';
 import LitAyat from '@/components/quran/text/LitAyat';
-import { ayahCounts, ayahMushafWords } from '@/lib/mushaf';
+import { ayahMushafWords } from '@/lib/mushaf';
 import { openAyahPage } from '@/lib/ways';
 import { placeSources } from '@shared/drawingCards';
 import type { AppBattle } from '@shared/battles/battle';
@@ -30,7 +30,6 @@ import { personLife } from '@/lib/life';
 import { battleOf } from '@/lib/battles';
 import { storiesOfPerson, storyAyatOf } from '@/lib/links';
 import { StoryLinkRow } from '@/components/stories/StoryParts';
-import { rangeName } from '@shared/stories/story';
 import { citeSource } from '@shared/quiz/sources';
 import LifeTimeline from '@/components/LifeTimeline';
 import { FEATURE_ICON } from '@/components/featureIcons';
@@ -426,7 +425,7 @@ export default function PersonScreen() {
         )}
 
         {(ayat.length > 0 || told.length > 0) && (
-          <Part head={head} n={++n} palette={palette} source={told.flatMap(({ ayat: set }) => set.refs.map(citeSource))}
+          <Part head={head} n={++n} palette={palette} source={[...factSources(ayat, true), ...told.flatMap(({ ayat: set }) => set.refs.map(citeSource))]}
             title={allRevealed ? (f ? 'آيات نزلت فيها' : 'آيات نزلت فيه') : (f ? 'آيات فيها' : 'آيات فيه')}>
             {ayat.map(fact => (
               <View key={fact.value} style={{ gap: 8 }}>
@@ -437,10 +436,10 @@ export default function PersonScreen() {
               </View>
             ))}
             {/* Ayat a story says were revealed about him, with the story that says so under them, opening the story. */}
-            {told.map(({ story, ayat: set }) => (
+            {told.map(({ story, ayat: set, keys }) => (
               <View key={story.slug + set.from} style={{ gap: 8 }}>
-                <LitAyat ayat={ayatOf(set.from, set.to).map(key => ({ words: ayahMushafWords(key), lit: [], number: Number(key.split(':')[1]) }))} menu={set.from} palette={palette} />
-                <Button variant="plain" label={rangeName(set.from, set.to)} Icon={ChevronLeft} onPress={() => openAyahPage(set.from)} />
+                <LitAyat ayat={keys.map(key => ({ words: ayahMushafWords(key), lit: [], number: Number(key.split(':')[1]) }))} menu={keys[0]} palette={palette} />
+                <Button variant="plain" label={ayatName(keys)} Icon={ChevronLeft} onPress={() => openAyahPage(keys[0])} />
                 <StoryLinkRow story={story} palette={palette} />
               </View>
             ))}
@@ -488,16 +487,16 @@ const placesSources = (places: AppBattle[], person: AppPerson, life: ReturnType<
   ...placeSources(places),
 ];
 
-/** Every ayah from one key to another in the mushaf's order, across a surah's end: exactly the ayat a story names. */
-function ayatOf(from: string, to: string) {
-  let [surah, ayah] = from.split(':').map(Number);
-  const keys = [from];
-  while (keys[keys.length - 1] !== to && surah <= 114) {
-    if (ayah < (ayahCounts.get(surah) ?? 0)) ayah++;
-    else { surah++; ayah = 1; }
-    keys.push(`${surah}:${ayah}`);
+/** Ayat by name, each surah once and each run joined: «التوبة ١١٧، ١١٩», «النور ١٢–٢٠». */
+function ayatName(keys: string[]) {
+  const runs: [number, number, number][] = [];
+  for (const [surah, ayah] of keys.map(key => key.split(':').map(Number))) {
+    const last = runs[runs.length - 1];
+    if (last && last[0] === surah && last[2] === ayah - 1) last[2] = ayah;
+    else runs.push([surah, ayah, ayah]);
   }
-  return keys;
+  const named = runs.map(([surah, first, last], i) => `${i && runs[i - 1][0] === surah ? '' : `${surahName(surah)} `}${num(first)}${last > first ? `–${num(last)}` : ''}`);
+  return named.join('، ');
 }
 
 /** A battle named in two places is one name in the line. */

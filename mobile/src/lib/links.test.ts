@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { reportHadith } from '@shared/stories/story';
-import { storiesOfHadith, storiesOfPerson, storyAyatOf } from './links';
+import { ayatOf, storiesOfHadith, storiesOfPerson, storyAyatOf } from './links';
 import { STORIES } from './stories';
 import { findPerson } from './tarajim';
 
@@ -22,15 +22,19 @@ describe('the pages that read the links file', () => {
     for (const { story, book, n } of told) expect(storiesOfHadith(book, n).map(each => each.slug), `${book}:${n} ${story}`).toContain(story);
   });
 
-  it('gives a person every set of ayat a story says was revealed about him, once, unless his entry already gives it', () => {
+  // His page draws his entry's ayat, then these: every ayah of the set once, none of his entry's twice (Ka'b: entry
+  // 9:118, story 9:117-119).
+  it('gives a person every ayah a story says was revealed about him, and none his entry already gives', () => {
     const about = STORIES.flatMap(story => story.ayat.flatMap(ayat => (ayat.about && findPerson(ayat.about.slug) ? [{ story, slug: ayat.about.slug, ayat }] : [])));
     expect(about.length).toBeGreaterThan(0);
     for (const { story, slug, ayat } of about) {
       const own = findPerson(slug)!.ayat.map(fact => fact.value as string);
       const shown = storyAyatOf(slug, own);
-      const once = shown.filter(each => each.story === story && each.ayat === ayat).length;
-      expect(once === 1 || (own.includes(ayat.from) && own.includes(ayat.to)), `${slug} ${ayat.from} ${story.slug}`).toBe(true);
-      expect(once, `${slug} ${ayat.from} ${story.slug} twice`).toBeLessThan(2);
+      const drawn = shown.filter(each => each.story === story && each.ayat === ayat).flatMap(each => each.keys);
+      expect([...own, ...drawn].filter(key => ayatOf(ayat.from, ayat.to).includes(key)).sort(), `${slug} ${story.slug}`)
+        .toEqual(expect.arrayContaining(ayatOf(ayat.from, ayat.to)));
+      for (const key of shown.flatMap(each => each.keys)) expect(own, `${slug} ${key} twice`).not.toContain(key);
+      expect(new Set(drawn).size, `${slug} ${story.slug} repeats`).toBe(drawn.length);
     }
   });
 });
