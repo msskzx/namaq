@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { View } from 'react-native';
-import { Search, type LucideProps } from 'lucide-react-native';
+import { List, Search, type LucideProps } from 'lucide-react-native';
 import type { BranchPiece } from '@shared/quran/branchInventory';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { num } from '@shared/quran/arabicNumber';
@@ -10,6 +10,7 @@ import { useTabRetap } from '@/lib/tabRetap';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import HelpSheet from '@/components/HelpSheet';
 import TreePager from '@/components/TreePager';
+import MutashabihIndex from '@/components/MutashabihIndex';
 import LoadingDots from '@/ui/LoadingDots';
 import BranchSearch from '@/components/BranchSearch';
 import { surahNames } from '@/lib/branches';
@@ -30,6 +31,8 @@ function BarButton({ label, onPress, Icon, palette, on, dot }: { label: string; 
 }
 
 type Opening = { id?: string; query?: string; view?: 'tree' };
+/** A list the index can show: a tab's whole list, not one narrowed to a search, a surah, an ayah or the saved cards. */
+const indexes = (list: ListState) => !list.query && !list.surah && !list.ayah && !list.saved;
 
 export default function BranchesScreen() {
   const palette = usePalette();
@@ -39,6 +42,10 @@ export default function BranchesScreen() {
   // Every card opens as its matrix with the settings' surrounding; each card switches both for itself.
   const [around] = aroundSetting.use();
   const [searching, setSearching] = useState(false);
+  /** The tab opens on its index by surah (owner, 2026-11-24, design ب); a card asked for by name, a search or a place opens the cards. */
+  const [browsing, setBrowsing] = useState(() => indexes(list));
+  /** The surah the index shows when it comes back: the one whose cards were open. */
+  const [indexSurah, setIndexSurah] = useState<number | undefined>(list.surah);
   /** Where a new list opens: a picked phrase, else the search's best tree; undefined keeps the saved place. `view`: that tree opens as its tree. */
   const [start, setStart] = useState<Opening | undefined>(undefined);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
@@ -55,6 +62,7 @@ export default function BranchesScreen() {
 
   const change = useCallback((next: ListState, opening?: Opening) => {
     closeStudio();
+    setBrowsing(!opening?.id && indexes(next));
     setPieces(null);
     setStart(opening ?? {});
     setList(next);
@@ -88,10 +96,14 @@ export default function BranchesScreen() {
   // The branches tab tapped again: back to the first tree, then (tapped again there) the filters and search cleared.
   useTabRetap('branches', () => {
     if (searching) return;
+    if (!browsing) { toIndex(); return; }
     if (at.current > 0 && pieces?.length) { writeJson('branches-place', { id: pieces[0].id }); setStart({ id: pieces[0].id }); setJumps(value => value + 1); }
     else if (list.query || list.surah || list.ayah || isFiltered(list)) change({ ...EMPTY_LIST, filters: tabOf(list) ? { categories: list.filters.categories } : {} });
   });
   const openSearch = useCallback(() => setSearching(true), []);
+  const toIndex = () => { if (list.surah) setIndexSurah(list.surah); change({ ...list, surah: undefined }); setBrowsing(true); };
+  // A row opens its card among all the tab's cards, so a search from there searches them all.
+  const openCard = (piece: BranchPiece, surah: number) => { setIndexSurah(surah); change(list, { id: piece.id }); };
   // A compare card's tree icon opens here with ?tree=<id>: that tree, in the list shown when it holds it.
   const { tree, view } = useLocalSearchParams<{ tree?: string; view?: string }>();
   useEffect(() => {
@@ -107,6 +119,7 @@ export default function BranchesScreen() {
       <TopBar hub hideOnScroll help={() => setHelp(true)}>
         {/* The search button first, under the thumb (owner, 2026-11-17). */}
         <BarButton label="ابحث" onPress={() => setSearching(true)} Icon={Search} palette={palette} dot={!!list.query || isFiltered(list)} />
+        <BarButton label="فهرس المتشابه بالسور" onPress={toIndex} Icon={List} palette={palette} on={browsing} />
         {/* The applied search and places sit in the bar, so they take no row of their own (owner, 2026-11-15). */}
         {(list.query || list.surah || list.ayah) ? <View style={{ flex: 1, flexDirection: 'row', gap: 6, overflow: 'hidden' }}>
           {list.query ? <Chip on={false} label={`«${list.query}»`} onClear={() => change({ ...list, query: '' })} palette={palette} /> : null}
@@ -119,7 +132,8 @@ export default function BranchesScreen() {
         {PAGE_KINDS.map(kind => <Chip key={kind.id} role="tab" label={kind.ar} on={tabOf(list) === kind.id} palette={palette}
           onPress={() => { if (tabOf(list) !== kind.id) change({ ...list, filters: { ...list.filters, categories: kind.id } }); }} />)}
       </View>
-      {pieces?.length ? <TreePager key={listKey} pieces={pieces} list={list} palette={palette} around={around} start={startIndex} startMode={startMode} onIndex={onIndex} onPull={openSearch} onOpen={openPart} />
+      {pieces?.length && browsing ? <MutashabihIndex key={tabOf(list)} pieces={pieces} start={indexSurah} onOpen={openCard} palette={palette} bottom={0} />
+        : pieces?.length ? <TreePager key={listKey} pieces={pieces} list={list} palette={palette} around={around} start={startIndex} startMode={startMode} onIndex={onIndex} onPull={openSearch} onOpen={openPart} />
         : <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}>
           {pieces ? <Empty palette={palette} text={list.query ? `لا شجرة تطابق «${list.query}».` : list.saved && !isFiltered({ ...list, saved: false }) ? 'لا شجرة محفوظة بعد. احفظ شجرة بزر الحفظ تحتها أولًا.' : isFiltered(list) ? 'لا مواضع متشابهة تطابق التصفية.' : 'لا شجرة في هذا النطاق.'} /> : <LoadingDots />}
         </View>}
@@ -128,7 +142,7 @@ export default function BranchesScreen() {
       {searching && <BranchSearch state={list} bookmarks={bookmarks} palette={palette} onClose={() => setSearching(false)}
         onApply={(next, opening) => { setSearching(false); change(next, opening); }} />}
       <HelpSheet topic={help ? 'branches' : null} onClose={() => setHelp(false)} palette={palette} />
-      <TabHint id="branches" palette={palette} hidden={searching} />
+      <TabHint id="branches" palette={palette} hidden={searching || browsing} />
     </View>
   );
 }

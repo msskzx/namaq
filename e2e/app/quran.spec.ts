@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test';
-import { closeSource, expect, onScreen, open, openSource, readerPage, tab, test } from './fixtures';
+import { closeSource, expect, onScreen, open, openSource, readerPage, tab, test, openCards } from './fixtures';
 import { surahName as S } from '../../shared/quran/surahNames';
 
 test('the Quran hub links to every tool', async ({ page }) => {
@@ -66,7 +66,7 @@ test('«مشاهد» lists the sea scene with a scholar\'s line and its book; it
 
 test('a new user\'s branches open as the matrix, with a switch to the tree', async ({ page }) => {
   // The matrix is the default view (owner, 2026-11-17).
-  await open(page, '/branches');
+  await openCards(page);
   await expect(page.getByRole('button', { name: /^قراءة / }).first()).toBeVisible();
   await page.getByRole('button', { name: 'عرض الشجرة' }).first().click();
   await expect(page.getByRole('button', { name: 'عرض المصفوفة' }).first()).toBeVisible();
@@ -83,7 +83,7 @@ test('every matrix has one studio: the read-along, and on a book matrix a switch
     }
     return found;
   };
-  await open(page, '/branches');
+  await openCards(page);
   await expect(page.getByLabel(/^الشجرة ١ من /)).toBeAttached();
   await expect.poll(async () => (await onScreen('استوديو القراءة')).length).toBe(1);
   expect(await onScreen('استوديو الروابط')).toHaveLength(0);
@@ -111,6 +111,24 @@ test('every matrix has one studio: the read-along, and on a book matrix a switch
   await expect(page.getByRole('button', { name: 'شاهد الروابط' })).toBeVisible();
 });
 
+test('the mutashabih tab opens on its index by surah; a row opens its card, which gives each book\'s answer, and the list button comes back', async ({ page }) => {
+  // Owner, 2026-11-24 (sketch quran-design/mutashabih-page): the index (design ب) leads to the card's page (design أ).
+  await open(page, '/branches');
+  await expect(page.getByRole('heading', { name: 'الفَاتِحَةْ' })).toBeVisible();
+  await page.getByRole('link', { name: /^الفَاتِحَةْ ١: / }).first().click();
+  await expect(page.getByLabel(/^الشجرة ١ من /)).toBeAttached();
+  await page.getByRole('button', { name: 'فهرس المتشابه بالسور' }).click();
+  await expect(page.getByRole('link', { name: /^الفَاتِحَةْ ١: / }).first()).toBeVisible();
+  // Al-Baqarah 126 and Ibrahim 35: three books give their reason, oldest author first, each from where his answer starts.
+  await page.getByRole('button', { name: 'ابحث' }).click();
+  const box = page.getByLabel('ابحث عن عبارة مشتركة بين آيتين أو أكثر');
+  await box.fill('رب اجعل هذا');
+  await box.press('Enter');
+  const said = page.getByText(/^قال (الإسكافي|الكرماني|ابن الزبير):$/).filter({ visible: true });
+  await expect(said).toHaveText(['قال الإسكافي:', 'قال الكرماني:', 'قال ابن الزبير:']);
+  await expect(page.getByText(/^والجواب عن ذلك من وجهين/).filter({ visible: true })).toBeVisible();
+});
+
 test.describe('branches', () => {
   // These tests are about the tree. Every card opens as its matrix (no setting picks the tree since 2026-11-23), so each
   // test switches the open card to its tree with the card's own button.
@@ -135,7 +153,7 @@ test.describe('branches', () => {
   };
 
   test('the tree switches to the matrix and back', async ({ page }) => {
-    await open(page, '/branches');
+    await openCards(page);
     await expect(page.getByLabel(/^الشجرة ١ من /)).toBeAttached();
     // Each card has its own switch, under it.
     await showTree(page);
@@ -146,7 +164,7 @@ test.describe('branches', () => {
   });
 
   test('a tree is saved, shows in «مدونتي» on home, and its «افتح» opens the tree', async ({ page }) => {
-    await open(page, '/branches');
+    await openCards(page);
     await page.getByRole('button', { name: 'حفظ الشجرة' }).first().click();
     await tab(page, 'الرئيسية').click();
     await page.getByRole('button', { name: 'مدونتي', exact: true }).click();
@@ -303,7 +321,9 @@ test.describe('a saved compare card', () => {
     await page.getByRole('button', { name: 'الشجرة', exact: true }).first().click();
     await expect(page).toHaveURL(/\/branches/);
     await expect(page.getByRole('button', { name: 'عرض المصفوفة' }).filter({ visible: true }).first()).toBeVisible();
+    // The tab opens on its index again; its first card opens as the matrix.
     await page.reload();
+    await page.getByRole('link', { name: /^الفَاتِحَةْ ١: / }).first().click();
     await expect(page.getByRole('button', { name: /^قراءة / }).first()).toBeVisible();
     await expect(page.getByRole('button', { name: 'عرض المصفوفة' })).toHaveCount(0);
   });
