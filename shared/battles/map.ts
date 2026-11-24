@@ -98,7 +98,7 @@ const overlaps = (a: readonly number[], b: readonly number[]) => a[0] < b[2] && 
 /**
  * Where each pin's name goes so no two names cover each other or another pin (owner, 2026-11-23: places close together
  * must not have their names on top of one another). A pin with no name takes only its own room. Each name tries beside its pin on the right, on the left, above,
- * then below, and takes the first spot inside the map that is free; the pins are taken in the given order, so the ones
+ * then below, then the same a line further out (a town under another pin's halo, owner 2026-11-24), and takes the first spot inside the map that is free; the pins are taken in the given order, so the ones
  * that matter most come first. A name with no free spot is left off (null): the pin still opens its sheet by name.
  */
 export function placeLabels(pins: readonly { x: number; y: number; text: string; size: number; r?: number }[], width: number, height: number): (PlacedLabel | null)[] {
@@ -106,13 +106,12 @@ export function placeLabels(pins: readonly { x: number; y: number; text: string;
   return pins.map(({ x, y, text, size, r = 8 }, own) => {
     if (!text) return null;
     const wide = text.length * size * LETTER;
-    const gap = r + 4;
-    const spots: PlacedLabel[] = [
+    const spots: PlacedLabel[] = [r + 4, r + 4 + size].flatMap((gap): PlacedLabel[] => [
       { x: x + gap, y: y + size / 3, anchor: 'start', box: [x + gap, y - size / 2, x + gap + wide, y + size / 2] },
       { x: x - gap, y: y + size / 3, anchor: 'end', box: [x - gap - wide, y - size / 2, x - gap, y + size / 2] },
       { x, y: y - gap - size / 6, anchor: 'middle', box: [x - wide / 2, y - gap - size, x + wide / 2, y - gap] },
       { x, y: y + gap + size * 0.8, anchor: 'middle', box: [x - wide / 2, y + gap, x + wide / 2, y + gap + size] },
-    ];
+    ]);
     const spot = spots.find(({ box }) => box[0] >= 0 && box[2] <= width && box[1] >= 0 && box[3] <= height
       && taken.every((other, i) => i === own || !overlaps(box, other)));
     if (spot) taken.push(spot.box);

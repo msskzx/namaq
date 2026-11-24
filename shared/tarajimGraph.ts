@@ -92,21 +92,18 @@ export interface Step {
   link: PersonLink;
 }
 
-/** The nearest chain of ties from one person to another (family before companionship), or undefined when none is stated. */
-export function chainBetween(graph: PeopleGraph, from: string, to: string): Step[] | undefined {
-  if (from === to || !graph.nodes.has(from) || !graph.nodes.has(to)) return from === to ? [] : undefined;
-  // Dijkstra over small integer costs: a list per cost is enough at a few thousand nodes.
+/**
+ * The nearest way back from every person reachable from `from` (Dijkstra over small integer costs: a list per cost is
+ * enough at a few thousand nodes), stopping once `to` is reached when one is given.
+ */
+function nearestFrom(graph: PeopleGraph, from: string, to?: string): Map<string, Step> {
   const best = new Map<string, number>([[from, 0]]);
   const back = new Map<string, Step>();
   const queue: string[][] = [[from]];
   for (let cost = 0; cost < queue.length; cost += 1) {
     for (const at of queue[cost] ?? []) {
       if (best.get(at)! < cost) continue;
-      if (at === to) {
-        const steps: Step[] = [];
-        for (let node = to; node !== from; node = back.get(node)!.from) steps.unshift(back.get(node)!);
-        return steps;
-      }
+      if (at === to) return back;
       for (const tie of graph.ties.get(at) ?? []) {
         // A tie stated «على خلاف» or by an unnamed «قيل» is the far way round when a settled one joins them too.
         const next = cost + COST[tie.kind] + (tie.link.disputed || tie.link.anonymous ? 3 : 0);
@@ -117,7 +114,21 @@ export function chainBetween(graph: PeopleGraph, from: string, to: string): Step
       }
     }
   }
-  return undefined;
+  return back;
+}
+
+/** The chain to `to` read off `nearestFrom`'s way back, or undefined when `to` was not reached. */
+function chainTo(back: Map<string, Step>, from: string, to: string): Step[] | undefined {
+  if (!back.has(to)) return undefined;
+  const steps: Step[] = [];
+  for (let node = to; node !== from; node = back.get(node)!.from) steps.unshift(back.get(node)!);
+  return steps;
+}
+
+/** The nearest chain of ties from one person to another (family before companionship), or undefined when none is stated. */
+export function chainBetween(graph: PeopleGraph, from: string, to: string): Step[] | undefined {
+  if (from === to || !graph.nodes.has(from) || !graph.nodes.has(to)) return from === to ? [] : undefined;
+  return chainTo(nearestFrom(graph, from, to), from, to);
 }
 
 /**
@@ -249,9 +260,12 @@ export function chainSentence(graph: PeopleGraph, steps: readonly Step[], nameOf
 export function linkedPairs(graph: PeopleGraph): { a: string; b: string; steps: Step[] }[] {
   const people = [...graph.nodes.values()].filter((node) => node.inApp).map((node) => node.slug).sort();
   const pairs: { a: string; b: string; steps: Step[] }[] = [];
+  // One search from each person reaches all the others: the same chains as chainBetween per pair, since a search that
+  // runs on past `b` never changes the way back to it.
   people.forEach((a, i) => {
+    const back = nearestFrom(graph, a);
     for (const b of people.slice(i + 1)) {
-      const steps = chainBetween(graph, a, b);
+      const steps = chainTo(back, a, b);
       if (steps && steps.length > 0) pairs.push({ a, b, steps });
     }
   });

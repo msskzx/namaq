@@ -22,7 +22,7 @@ import { pageSources, saidBy } from '@shared/tarajim';
 import { briefFacts, PersonBrief } from '@/screens/person';
 import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import Saying from '@/ui/Saying';
-import { findPerson, GRAPH, PEOPLE, personName, tiePairs, unvowelled } from '@/lib/tarajim';
+import { findPerson, GRAPH, PEOPLE, personName, TIE_PAIRS, tiePair, unvowelled } from '@/lib/tarajim';
 import { useSettledMemorized } from './Memorized';
 import { kunyaFacts, laqabFacts, type NameFact } from '@shared/tarajimNames';
 import { chainSentence, groupWord } from '@shared/tarajimGraph';
@@ -147,7 +147,7 @@ import { tafsirRuns } from '@shared/quran/tafsirSadi';
 import { corpusWords } from '@shared/quran/words';
 import type { WordDifference } from '@shared/quran/qiraat';
 import QuranWords from './quran/text/QuranWords';
-import { momentItem, nameItem, rajabItem, storyItem, tieItem, virtueItem } from '@shared/feedItems';
+import { momentItem, nameItem, rajabItem, storyItem, virtueItem } from '@shared/feedItems';
 import { useFitHeight } from '@/lib/useFit';
 import { storyMap } from '@shared/quran/prophets/story';
 import { STORY_GROUPS } from '@shared/quran/prophets/storyGroup';
@@ -640,7 +640,7 @@ function TarajimPost({ id, palette }: { id: string; palette: Palette }) {
 function TiePost({ id, palette }: { id: string; palette: Palette }) {
   const width = usePageWidth();
   const [shown, setShown] = useState<DrawingOrText>('drawing');
-  const pair = tiePairs().find(each => `${each.a},${each.b}` === id);
+  const pair = useMemo(() => tiePair(id), [id]);
   if (!pair) return null;
   const nodes = [...new Set(pair.steps.flatMap(step => [step.from, step.to]))];
   const name = (slug: string) => personName(GRAPH.nodes.get(slug)!);
@@ -1661,10 +1661,9 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
     <Post palette={palette} head={<PostHead Icon={head.Icon} title={head.title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} open={NOTE_TOPICS[kind]} palette={palette} />}
         open={<OpenButton label={`افتح صفحة الآية، ${head.open}`} onPress={show} palette={palette} />}
         source={sourcesOf(note.sources)}>
-        {'readings' in note ? <View style={{ paddingVertical: 10 }}><QiraatPlace ayah={note.key} max={2} lines bare palette={palette} /></View> : <View style={{ paddingBottom: 10, gap: 6 }}>
-          {/* «بطاقة التعريف» (owner, 2026-11-24: the tafsir card): the ayah's place large, then the ayah and the book's words; no juz and page cells (owner: room with no point). */}
-          <TitleCells title={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />
-          <View style={{ paddingHorizontal: 12, paddingTop: 4 }}>
+        {'readings' in note ? <View style={{ paddingVertical: 10 }}><QiraatPlace ayah={note.key} max={2} lines bare palette={palette} /></View> : <View style={{ paddingVertical: 10, gap: 6 }}>
+          {/* The ayah, then the book's words on a bar with whose they are (owner, 2026-11-24); its place is in the head above, so no title here. */}
+          <View style={{ paddingHorizontal: 12 }}>
             <AyahLines ayah={note.key} menu={note.key} palette={palette} shown whole write={null} checked={null} />
           </View>
           {'text' in note && <View style={{ paddingHorizontal: 14, paddingTop: 4 }}>
@@ -1734,7 +1733,7 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   moment: () => MOMENTS.map(momentId),
   // One card a person, his whole brief (owner, 2026-11-23), not one a virtue; a card saved before still opens.
   tarajim: () => virtueList().filter(each => each.index === 0).map(each => virtueItem(each.person.slug, each.index)),
-  tie: () => tiePairs().map(pair => tieItem(pair.a, pair.b)),
+  tie: () => TIE_PAIRS,
   laqab: () => nameList('laqab').map(nameId),
   kunya: () => nameList('kunya').map(nameId),
   life: lifePeople,

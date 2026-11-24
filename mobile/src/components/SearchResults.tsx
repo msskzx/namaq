@@ -4,16 +4,16 @@ import { router } from 'expo-router';
 import { ArrowLeftRight, ChevronDown, ChevronLeft, HandHeart, History, List, NotebookPen, ScrollText, TextSearch, type LucideProps } from 'lucide-react-native';
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { num } from '@shared/quran/arabicNumber';
-import type { SearchGroup, SearchHit, SearchKind } from '@shared/quran/searchAll';
 import { Text } from '@/ui/Text';
 import Card from '@/ui/Card';
+import TapRow from '@/ui/TapRow';
 import TreeIcon from '@/components/TreeIcon';
 import WordSheet from '@/components/WordSheet';
 import { QuranWord } from '@/components/quran/text/AyahFlow';
 import LitAyat from '@/components/quran/text/LitAyat';
 import { FEATURE_ICON } from '@/components/featureIcons';
 import { surahName } from '@/lib/compare';
-import { GROUP_MAX, searchApp, warmSearch } from '@/lib/searchAll';
+import { GROUP_MAX, searchApp, warmSearch, type AppGroup as SearchGroup, type AppHit as SearchHit, type AppKind as SearchKind } from '@/lib/searchAll';
 import { openDhikr } from '@/lib/adhkar';
 import { openIntent as go, toTab } from '@/lib/ways';
 import type { Palette } from '@/lib/theme';
@@ -29,6 +29,9 @@ export const GROUPS: Record<SearchKind, { title: string; Icon: (props: LucidePro
   compare: { title: 'المقارنة', Icon: ArrowLeftRight },
   event: { title: 'قصص الأنبياء', Icon: History },
   sira: { title: 'قصص السيرة', Icon: ScrollText },
+  person: { title: 'التراجم', Icon: FEATURE_ICON.person },
+  battle: { title: 'الغزوات والمعارك', Icon: FEATURE_ICON.battles },
+  hadith: { title: 'الحديث', Icon: FEATURE_ICON.hadith },
   tuhfa: { title: 'تحفة الأطفال', Icon: ScrollText },
   adhkar: { title: 'الأذكار', Icon: HandHeart },
   note: { title: 'تأملاتي', Icon: NotebookPen },
@@ -86,6 +89,25 @@ function HitRow({ hit, palette, onWord }: { hit: SearchHit; palette: Palette; on
           <Text style={{ color: palette.muted, fontSize: 13 }}>{hit.kind === 'event' ? hit.prophet : hit.chapter ? 'باب' : ''}</Text>
         </Pressable>
       );
+    case 'person': case 'battle':
+      return (
+        <TapRow role="link" label={hit.name} style={row} onPress={() => toTab({ pathname: hit.kind === 'person' ? '/person' : '/battle', params: { slug: hit.slug } })}>
+          <Text style={{ flex: 1, color: palette.ink, fontSize: 17, textAlign: 'right' }}>{hit.name}</Text>
+          {hit.line ? <Text numberOfLines={1} style={{ flexShrink: 1, maxWidth: '50%', color: palette.muted, fontSize: 13, textAlign: 'left' }}>{hit.line}</Text> : null}
+        </TapRow>
+      );
+    case 'hadith':
+      // A hadith of the Forty opens its page; a Sahih bab opens at its first hadith, or its kitab where the bab has none.
+      return (
+        <TapRow role="link" label={hit.title} style={row} onPress={() => toTab(hit.book === 'forty'
+          ? { pathname: '/hadith-forty', params: { n: String(hit.n) } }
+          : hit.n ? { pathname: '/hadith-sahih', params: { book: hit.book, n: String(hit.n) } } : { pathname: '/hadith-kitab', params: { book: hit.book, kitab: String(hit.kitab) } })}>
+          <View style={{ flex: 1, gap: 2 }}>
+            <Text numberOfLines={2} style={{ color: palette.ink, fontSize: 16, lineHeight: 28, textAlign: 'right' }}>{hit.title}</Text>
+            <Text numberOfLines={1} style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{hit.place}</Text>
+          </View>
+        </TapRow>
+      );
     case 'tuhfa':
       return (
         <Pressable onPress={() => toTab({ pathname: '/tuhfa', params: { verse: String(hit.verse) } })} accessibilityRole="link" style={({ pressed: on }) => [row, pressed(on)]}>
@@ -125,6 +147,9 @@ const hitKey = (hit: SearchHit) => {
     case 'sira': return `q${hit.slug ?? hit.chapter}`;
     case 'tuhfa': return `v${hit.verse}`;
     case 'adhkar': return `d${hit.id}`;
+    case 'person': return `p${hit.slug}`;
+    case 'battle': return `b${hit.slug}`;
+    case 'hadith': return `h${hit.book}${hit.n}:${hit.kitab ?? ''}:${hit.title}`;
   }
 };
 

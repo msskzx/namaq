@@ -4,7 +4,7 @@
 // the «من التراجم» and «صلة» feed cards. The client parts in src/components/tarajim draw what these return.
 import { nameItem, tieItem, virtueItem } from '@shared/feedItems';
 import peopleJson from '@shared/data/tarajim/people.json';
-import { factSources, pageLabel, pageSources, saidBy, type AppPerson, type PersonFact } from '@shared/tarajim';
+import { factSources, inAppOrder, pageLabel, pageSources, saidBy, type AppPerson, type PersonFact } from '@shared/tarajim';
 import { citeSource, sourceEntries, uniqueSources, type QuizSource, type SourceEntry } from '@shared/quiz/sources';
 import { byVolume, heldGroups, kunyaLine, personLine } from '@shared/tarajimGroups';
 import { chainOf, matchesQuery, namesHay, foldTop, lineOf, meetingOf, nasabTree, type NasabNode } from '@shared/tarajimLine';
@@ -20,8 +20,7 @@ import { drawsLine, lifeColumns, personLifeItems, type LifeItem } from '@shared/
 export const PROPHET = 'prophet-muhammad';
 
 /** The Prophet ﷺ first, then the book's order, as the app lists them (mobile/src/lib/tarajim.ts). */
-export const PEOPLE: AppPerson[] = (peopleJson as AppPerson[]).slice().sort((a, b) =>
-  Number(b.slug === PROPHET) - Number(a.slug === PROPHET) || a.entry.volume - b.entry.volume || Number(a.entry.from) - Number(b.entry.from));
+export const PEOPLE: AppPerson[] = inAppOrder(peopleJson as AppPerson[]);
 const bySlug = new Map(PEOPLE.map(person => [person.slug, person]));
 export const findPerson = (slug: string) => bySlug.get(slug);
 export const GRAPH = peopleGraph(PEOPLE);

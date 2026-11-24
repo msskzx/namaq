@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
-import type { SearchKind } from '@shared/quran/searchAll';
+import type { AppKind as SearchKind } from '@/lib/searchAll';
 import TopBar from '@/ui/TopBar';
 import Empty from '@/ui/Empty';
 import { useTabBarSpace } from '@/ui/tabBarSpace';

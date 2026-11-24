@@ -1,7 +1,7 @@
 import { useCallback, useDeferredValue, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
-import type { FortyEntry } from '@shared/hadith';
+import { searchForty, type FortyEntry } from '@shared/hadith';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
@@ -20,7 +20,7 @@ import { FortyCard, openBab, openKitab } from './hadith';
 /**
  * A book's page. A Sahih: its shape (its kitabs as bars, a touch opening one), a search in the top bar over its kitabs and
  * bab headings, and its kitabs on a line, each with a bar as long as its hadith (owner, 2026-11-23: sketch hadith-design).
- * al-Nawawi's Forty: his hadith in his order.
+ * al-Nawawi's Forty: his hadith in his order, the search in the top bar keeping those that hold the words typed.
  */
 export default function HadithBookScreen() {
   const palette = usePalette();
@@ -36,14 +36,15 @@ export default function HadithBookScreen() {
   useFocusEffect(useCallback(() => { setSeen(was => was + 1); }, []));
   const typed = useDeferredValue(query.trim());
   const found = useMemo(() => (sahih && typed ? kitabsHolding(sahih, typed) : undefined), [sahih, typed]);
+  const forty = useMemo(() => (sahih || !typed ? FORTY.entries : /[ء-ي]/.test(typed) ? searchForty(FORTY.entries, typed) : []), [sahih, typed]);
   const title = sahih?.title ?? FORTY.books.nawawi.title;
   const card = (entry: FortyEntry) => <FortyCard key={entry.n} entry={entry} palette={palette} onPress={() => router.push({ pathname: '/hadith-forty', params: { n: String(entry.n) } })} />;
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       {sahih
         ? <TopBar back={back} hideOnScroll search={{ value: query, onChangeText: setQuery, placeholder: `ابحث في كتب ${sahih.title} وأبوابه`, label: `ابحث في ${sahih.title}` }} />
-        : <TopBar back={back} title={title} hideOnScroll />}
-      <ScrollView onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 12 }}>
+        : <TopBar back={back} hideOnScroll search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث في الأربعين النووية', label: 'ابحث في الأربعين النووية' }} />}
+      <ScrollView onScroll={onScroll} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 12 }}>
         {!sahih && <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 26, textAlign: 'right' }}>{title}</Text>}
         {sahih ? <>
           {!found && <>
@@ -58,7 +59,7 @@ export default function HadithBookScreen() {
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right', marginTop: -6 }}>
             {`يحيى بن شرف النووي (ت ${num(676)}هـ)`}
           </Text>
-          {FORTY.entries.map(card)}
+          {forty.length ? forty.map(card) : <Empty text="لا حديث فيه هذه الكلمات" palette={palette} />}
         </>}
       </ScrollView>
     </View>

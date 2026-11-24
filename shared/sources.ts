@@ -290,7 +290,7 @@ export const SOURCES: Source[] = [
     edition: 'تحقيق محمد أبو الفضل إبراهيم، دار إحياء الكتب العربية، ١٣٧٦هـ', link: shamela(11436), licence: PUBLIC_DOMAIN, uses: [USE.branches, USE.iltifat, USE.openings],
   },
   {
-    id: 'asrar-al-tikrar', group: 'books', files: ['shared/data/quran/mutashabihKirmani.js', 'shared/data/quran/mutashabihKirmani.d.ts'],
+    id: 'asrar-al-tikrar', group: 'books', files: ['shared/data/quran/mutashabihKirmani.js', 'shared/data/quran/mutashabihKirmani.d.ts', 'shared/data/quran/mutashabihAnswers.js', 'shared/data/quran/mutashabihAnswers.d.ts'],
     title: { ar: 'أسرار التكرار في القرآن', en: 'Asrar al-Tikrar fi al-Quran' }, author: { ar: 'تاج القراء الكرماني', en: 'al-Kirmani' },
     edition: 'تحقيق عبد القادر أحمد عطا، دار الفضيلة', link: shamela(3580),
     licence: {
@@ -300,7 +300,7 @@ export const SOURCES: Source[] = [
     uses: [USE.branches, USE.books],
   },
   {
-    id: 'durrat-al-tanzil', group: 'books', files: ['shared/data/quran/mutashabihIskafi.js', 'shared/data/quran/mutashabihIskafi.d.ts'],
+    id: 'durrat-al-tanzil', group: 'books', files: ['shared/data/quran/mutashabihIskafi.js', 'shared/data/quran/mutashabihIskafi.d.ts', 'shared/data/quran/mutashabihAnswers.js', 'shared/data/quran/mutashabihAnswers.d.ts'],
     title: { ar: 'درة التنزيل وغرة التأويل', en: 'Durrat al-Tanzil' }, author: { ar: 'الخطيب الإسكافي', en: 'al-Khatib al-Iskafi' },
     edition: 'تحقيق محمد مصطفى آيدين، جامعة أم القرى، ١٤٢٢هـ', link: shamela(1340),
     licence: {
@@ -310,7 +310,7 @@ export const SOURCES: Source[] = [
     uses: [USE.branches, USE.books],
   },
   {
-    id: 'milak-al-tawil', group: 'books', files: ['shared/data/quran/mutashabihZubayr.js', 'shared/data/quran/mutashabihZubayr.d.ts'],
+    id: 'milak-al-tawil', group: 'books', files: ['shared/data/quran/mutashabihZubayr.js', 'shared/data/quran/mutashabihZubayr.d.ts', 'shared/data/quran/mutashabihAnswers.js', 'shared/data/quran/mutashabihAnswers.d.ts'],
     title: { ar: 'ملاك التأويل القاطع بذوي الإلحاد والتعطيل', en: 'Milak al-Ta’wil' }, author: { ar: 'ابن الزبير الغرناطي', en: 'Ibn al-Zubayr al-Gharnati' },
     edition: 'وضع حواشيه عبد الغني محمد علي الفاسي، دار الكتب العلمية، بيروت', link: shamela(1419),
     licence: {

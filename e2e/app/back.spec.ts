@@ -1,4 +1,4 @@
-import { expect, open, test } from './fixtures';
+import { expect, open, test, openCards } from './fixtures';
 
 // The home and Quran buttons hold page stacks, so the back arrow (and the swipe from the right edge on a phone) goes one page back.
 // A Quran tool's grid goes straight to the Quran hub (owner, 2026-11-15).
@@ -24,7 +24,7 @@ test.describe('going back', () => {
   });
 
   test('the grid on a compare opened from a tree goes straight to the hub', async ({ page }) => {
-    await open(page, '/branches');
+    await openCards(page);
     await page.getByRole('button', { name: 'في المقارنة' }).first().click();
     const pick = page.getByRole('dialog');
     if (await pick.isVisible().catch(() => false)) await pick.getByRole('button').first().click();
@@ -70,7 +70,7 @@ test.describe('going back', () => {
   });
 
   test('a tool opened again comes to the front with what it was opened for, not as a second copy', async ({ page }) => {
-    await open(page, '/branches');
+    await openCards(page);
     await page.getByRole('button', { name: 'في المقارنة' }).first().click();
     const pick = page.getByRole('dialog');
     if (await pick.isVisible().catch(() => false)) await pick.getByRole('button').first().click();

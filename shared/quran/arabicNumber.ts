@@ -2,6 +2,12 @@
 const ARABIC = new Intl.NumberFormat('ar-EG', { useGrouping: false });
 export const num = (n: number) => ARABIC.format(n);
 
-export const counted = (n: number, [one, two, few]: [string, string, string]) => (n === 1 ? one : n === 2 ? two : `${num(n)} ${n <= 10 ? few : one}`);
+/** «آية», «آيتان», «٣ آيات», «١١ آية», «١٠٣ آيات»: by the last two digits, 3 to 10 take the plural, 11 to 99 the accusative (`many`), the rest the singular. */
+export const counted = (n: number, [one, two, few, many = one]: [string, string, string, string?]) => {
+  if (n === 1) return one;
+  if (n === 2) return two;
+  const last = n % 100;
+  return `${num(n)} ${last >= 3 && last <= 10 ? few : last >= 11 ? many : one}`;
+};
 
 export const ayatCount = (n: number) => counted(n, ['آية', 'آيتان', 'آيات']);

@@ -236,3 +236,7 @@ export function pageLabel(refs: PageRef[]) {
   }
   return [...books].map(([book, pages]) => `${book} ${pages.join('، ')}`).join('؛ ');
 }
+
+/** The people in the app's order: the Prophet ﷺ first, then the book's order. Their ties are read in this order too. */
+export const inAppOrder = <P extends Pick<AppPerson, 'slug' | 'entry'>>(people: readonly P[]): P[] => people.slice().sort((a, b) =>
+  Number(b.slug === 'prophet-muhammad') - Number(a.slug === 'prophet-muhammad') || a.entry.volume - b.entry.volume || Number(a.entry.from) - Number(b.entry.from));
