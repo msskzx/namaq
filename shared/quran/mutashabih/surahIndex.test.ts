@@ -12,6 +12,7 @@ describe('the mutashabih index by surah', () => {
       const rows = indexRows(books, at + 1);
       expect(rows.length, `surah ${at + 1}`).toBe(count);
       expect(new Set(rows.map(row => row.piece.id)).size).toBe(rows.length);
+      for (const row of rows) expect(row.lit.length, row.piece.id).toBeLessThan(row.place.end - row.place.start);
       const order = rows.map(row => Number(row.place.key.split(':')[1]) * 1000 + row.place.start);
       expect(order).toEqual([...order].sort((a, b) => a - b));
     });

@@ -101,7 +101,14 @@ export default function BranchesScreen() {
     else if (list.query || list.surah || list.ayah || isFiltered(list)) change({ ...EMPTY_LIST, filters: tabOf(list) ? { categories: list.filters.categories } : {} });
   });
   const openSearch = useCallback(() => setSearching(true), []);
-  const toIndex = () => { if (list.surah) setIndexSurah(list.surah); change({ ...list, surah: undefined }); setBrowsing(true); };
+  // The index comes back at the surah of the card that was open.
+  const toIndex = () => {
+    const open = pieces?.[at.current];
+    const surah = list.surah ?? (open && Number((open.group?.places ?? open.phrase.occurrences)[0]?.key.split(':')[0]));
+    if (surah) setIndexSurah(surah);
+    change({ ...list, surah: undefined });
+    setBrowsing(true);
+  };
   // A row opens its card among all the tab's cards, so a search from there searches them all.
   const openCard = (piece: BranchPiece, surah: number) => { setIndexSurah(surah); change(list, { id: piece.id }); };
   // A compare card's tree icon opens here with ?tree=<id>: that tree, in the list shown when it holds it.

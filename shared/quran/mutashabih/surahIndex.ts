@@ -34,7 +34,9 @@ export function indexRows(pieces: BranchPiece[], surah: number): IndexRow[] {
     if (!here) return [];
     const others = [...new Set(places.filter(place => place !== here && !(place.key === here.key && place.start === here.start)).map(place => place.key))];
     const books = [...new Set((piece.group?.citations ?? []).map(citation => bookName(citation)))];
-    return [{ piece, place: here, others, books, lit: piece.group?.differences[here.key] ?? [] }];
+    // Words lit tell the place apart; where every word shown differs (a whole ayah set beside its like), none is lit.
+    const lit = (piece.group?.differences[here.key] ?? []).filter(at => at >= here.start && at < here.end);
+    return [{ piece, place: here, others, books, lit: lit.length < here.end - here.start ? lit : [] }];
   }).sort((a, b) => ayah(a.place.key) - ayah(b.place.key) || a.place.start - b.place.start);
 }
 
