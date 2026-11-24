@@ -55,6 +55,7 @@ import { STORIES } from '@/lib/stories';
 import { FORTY, fortyEntry } from '@/lib/hadith';
 import { compilerOf, drawnBukhari, fromCompanion, fromSahihayn, rajabFeedPassages, recordedIn, type RajabChapter } from '@shared/hadith';
 import Isnad from '@/components/Isnad';
+import { lastNarrator } from '@shared/isnadMetro';
 import HadithBooks from '@/components/HadithBooks';
 import rajab from '@shared/data/hadith/ibnRajab.json';
 import IbnRajab from '@/components/IbnRajab';
@@ -110,7 +111,7 @@ import { around as aroundSetting, penRule, prayerPlace, prayerSettings } from '@
 import { timesFor, useMinute } from '@/lib/prayer';
 import { bookState, useBooks } from '@/lib/books';
 import { SAHIH, isSahihSlug, useSahihText } from '@/lib/sahih';
-import { SahihHadithView } from '@/components/Sahih';
+import { ChainSaying, SahihHadithView } from '@/components/Sahih';
 import { findHadith, placeOf, type SahihSlug } from '@shared/sahih';
 import type { BookId } from '@shared/books';
 import { BookCard, Shelf, TUHFA } from '@/screens/books';
@@ -1467,7 +1468,7 @@ function IsnadPost({ id, palette }: { id: string; palette: Palette }) {
       source={sourcesOf([recordSource(record)])}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
         <Isnad isnad={record.isnad!} palette={palette} />
-        <Text numberOfLines={3} style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>{record.text.slice(record.isnadEnd)}</Text>
+        <ChainSaying chain={record.text.slice(0, record.isnadEnd)} last={lastNarrator(record.isnad!)} words={record.text.slice(record.isnadEnd)} lines={3} palette={palette} />
       </View>
     </Post>
   );

@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import bukhariIndex from './data/hadith/bukhari.json';
 import muslimIndex from './data/hadith/muslim.json';
-import { findHadith, kitabsHolding, placeOf, plainText, searchSahih, type SahihIndex, type SahihText } from './sahih';
+import { findHadith, kitabsHolding, leadIn, placeOf, plainText, searchSahih, type SahihIndex, type SahihText } from './sahih';
 import { sahihKitabQuestions } from './quiz/sahih';
 import { seededRandom } from './quiz/feedQuiz';
 
@@ -80,5 +80,33 @@ describe('«في أيّ كتاب؟»', () => {
       const subject = right.split(' ').map(word => word.replace(/^(?:و?ال)/, '').replace(/ة$/, '')).filter(word => word.length >= 3 && !['كتاب', 'باب', 'ابواب', 'وغيرها', 'رضي', 'الله', 'تعالى', 'عنهم'].includes(word));
       for (const word of subject) expect(heading.includes(word), `${heading} / ${right}`).toBe(false);
     }
+  });
+});
+
+describe('the words between the chain and the saying', () => {
+  const umar = { name: 'عُمَرَ بْنَ الْخَطَّابِ', mode: 'سَمِعْتُ' };
+  it("keeps what the narrator tells in the text, and the Prophet ﷺ named before his words apart", () => {
+    const chain = 'أَنَّهُ سَمِعَ عَلْقَمَةَ بْنَ وَقَّاصٍ اللَّيْثِيَّ، يَقُولُ: سَمِعْتُ عُمَرَ بْنَ الْخَطَّابِ  رضي الله عنه عَلَى الْمِنْبَرِ، قَالَ: سَمِعْتُ رَسُولَ اللهِ ﷺ، يَقُولُ: ';
+    expect(leadIn(chain, umar)).toEqual({ lead: 'سَمِعْتُ عُمَرَ بْنَ الْخَطَّابِ  رضي الله عنه عَلَى الْمِنْبَرِ، قَالَ:', prophet: 'سَمِعْتُ رَسُولَ اللهِ ﷺ، يَقُولُ:' });
+  });
+  it('names him after the narrator with no clause between', () => {
+    expect(leadIn('عَنْ عُمَرَ: أَنَّ رَسُولَ اللهِ ﷺ قَالَ: ', { name: 'عُمَرَ', mode: 'عَنْ' })).toEqual({ lead: '', prophet: 'أَنَّ رَسُولَ اللهِ ﷺ قَالَ:' });
+    expect(leadIn('عَنْ أَبِي هُرَيْرَةَ، عَنِ النَّبِيِّ ﷺ قَالَ: ', { name: 'أَبِي هُرَيْرَةَ', mode: 'عَنْ' })).toEqual({ lead: '', prophet: 'عَنِ النَّبِيِّ ﷺ قَالَ:' });
+  });
+  it('keeps the narrator\'s last vowel, «رضي الله عنه» and his own «قَالَ» with him when no clause mark follows his name', () => {
+    expect(leadIn('عَنْ أَبِي هُرَيْرَةَ  رضي الله عنه عَنِ النَّبِيِّ ﷺ قَالَ: ', { name: 'أَبِي هُرَيْرَةَ', mode: 'عَنْ' })).toEqual({ lead: '', prophet: 'عَنِ النَّبِيِّ ﷺ قَالَ:' });
+    expect(leadIn('عَنْ أَبِي مَسْعُودٍ قَالَ قَالَ النَّبِيُّ ﷺ: ', { name: 'أَبِي مَسْعُودٍ', mode: 'عَنْ' })).toEqual({ lead: '', prophet: 'قَالَ النَّبِيُّ ﷺ:' });
+  });
+  it('never gives a narrator\'s own words to the Prophet ﷺ', () => {
+    const aisha = { name: 'عَائِشَةَ', mode: 'عَنْ' };
+    expect(leadIn('عَنْ عَائِشَةَ زَوْجِ النَّبِيِّ ﷺ قَالَتْ: ', aisha).prophet).toBeUndefined();
+    expect(leadIn('عَنْ أَبِي بَكْرَةَ: ذُكِرَ النَّبِيُّ ﷺ قَالَ: ', { name: 'أَبِي بَكْرَةَ', mode: 'عَنْ' }).prophet).toBeUndefined();
+  });
+  it('drops a lead that only names the narrator again, the line saying it already', () => {
+    expect(leadIn('عَنْ أَنَسٍ رضي الله عنه قَالَ: ', { name: 'أَنَسٍ', mode: 'عَنْ' })).toEqual({ lead: '' });
+  });
+  it('leaves words that are not his as the narrator\'s', () => {
+    const story = 'عَنْ أَبِي هُرَيْرَةَ قَالَ: كَانَ النَّبِيُّ ﷺ بَارِزًا يَوْمًا لِلنَّاسِ، فَأَتَاهُ جِبْرِيلُ فَقَالَ: ';
+    expect(leadIn(story, { name: 'أَبِي هُرَيْرَةَ', mode: 'عَنْ' })).toEqual({ lead: story.trim() });
   });
 });
