@@ -70,7 +70,7 @@ test('a kitab lists its babs, and a bab opens on its own page with the next one 
   await page.getByRole('link', { name: 'بَابُ أُمُورِ الْإِيمَانِ', exact: true }).click();
   await expect(page).toHaveURL(/bab=2$/);
   await expect(page.getByRole('heading', { name: 'بَابُ أُمُورِ الْإِيمَانِ' }).first()).toBeVisible();
-  await page.getByRole('button', { name: 'الباب التالي' }).filter({ visible: true }).click();
+  await page.getByText('افتح الباب التالي').filter({ visible: true }).click();
   await expect(page).toHaveURL(/bab=3$/);
 });
 
