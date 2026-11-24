@@ -78,7 +78,6 @@
     "mobile/src/lib/theme.ts": 1,
     "mobile/src/screens/book.tsx": 3,
     "mobile/src/screens/books.tsx": 1,
-    "mobile/src/screens/library.tsx": 1,
     "mobile/src/screens/prophets.tsx": 1,
     "mobile/src/screens/quiz/party/code.tsx": 5,
     "mobile/src/screens/tuhfa.tsx": 2

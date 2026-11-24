@@ -423,8 +423,26 @@ test.describe('a returning user', () => {
     await open(page, '/');
     await page.getByRole('button', { name: 'مدونتي', exact: true }).click();
     await expect(page.getByLabel(/^آية: ٱللَّهُ لَآ إِلَٰهَ/)).toBeVisible();
+    await page.getByRole('tab', { name: 'المحفوظات', exact: true }).click();
     await page.getByRole('button', { name: 'في المصحف' }).click();
     await expect.poll(() => readerPage(page)).toBe(42);
+  });
+
+  // «مدونتي» in the mushaf's order (owner, 2026-11-24): each surah's name over what was kept in it, a line of what and when
+  // above each card, and a strip of the juz whose lit juz takes the list there.
+  test('«مدونتي» lists what was kept in the mushaf\'s order under the surahs\' names, and the juz strip goes to it', async ({ page }) => {
+    await open(page, '/');
+    await page.getByRole('button', { name: 'مدونتي', exact: true }).click();
+    const heads = page.getByRole('heading', { name: /^سورة / });
+    await expect(heads).toHaveText([`سورة ${S(2)}`, `سورة ${S(18)}`]);
+    await expect(page.getByText(/^تأملي · كتبته يوم /)).toBeVisible();
+    await expect(page.getByText(/^منسيّة · نسيتها يوم /)).toBeAttached();
+    // البقرة ٢٥٥ is in the third juz and الكهف ١٠ in the fifteenth; nothing kept in the first, so it is not a button.
+    await expect(page.getByRole('button', { name: /^الجزء / })).toHaveCount(2);
+    await page.getByRole('button', { name: 'الجزء ١٥' }).click();
+    await expect(page.getByRole('heading', { name: `سورة ${S(18)}` })).toBeInViewport();
+    await page.getByLabel('ابحث في مدونتي').fill('الكهف');
+    await expect(heads).toHaveText([`سورة ${S(18)}`]);
   });
 
   // Where the ayah is the subject, «افتح» opens its page with everything on it (owner, 2026-11-22).
@@ -523,8 +541,7 @@ test.describe('a returning user', () => {
   test('the notes list in «مدونتي» lists the notes, and a note can be deleted', async ({ page }) => {
     await open(page, '/');
     await page.getByRole('button', { name: 'مدونتي', exact: true }).click();
-    await page.getByRole('button', { name: /^اختر القائمة:/ }).click();
-    await page.getByRole('button', { name: 'تأملاتي', exact: true }).click();
+    await page.getByRole('tab', { name: 'تأملاتي', exact: true }).click();
     await expect(page.getByLabel('تأمل: تأمل في الحي القيوم')).toBeVisible();
     await page.getByRole('button', { name: 'احذف التأمل' }).click();
     await expect(page.getByLabel(/^تأمل:/)).toHaveCount(0);

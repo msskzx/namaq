@@ -16,7 +16,7 @@ const BUTTONS: { label: string; Icon: (props: LucideProps) => React.ReactNode; o
   { label: 'الأذكار', Icon: SunMoon, open: () => openUtility('adhkar') },
   { label: 'المكتبة', Icon: LibraryBig, open: () => toTab('/books') },
   { label: 'مشاهد', Icon: Presentation, open: () => toTab('/lataif') },
-  { label: 'مدونتي', Icon: NotebookPen, open: () => router.push({ pathname: '/library', params: { tab: 'saved' } }) },
+  { label: 'مدونتي', Icon: NotebookPen, open: () => router.push('/library') },
 ];
 
 export default function HomeButtons({ palette }: { palette: Palette }) {
