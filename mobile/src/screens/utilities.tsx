@@ -13,7 +13,7 @@ import { usePalette, type Palette } from '@/lib/theme';
 type Scroller = ComponentRef<typeof ScrollView>;
 
 /** One utility, scrolled up and down on its own. */
-function Page({ view, width, height, palette, on, current, bottom, onPlace, scrollers }: { view: UtilityView; width: number; height: number; palette: Palette; on: boolean; current: boolean; bottom: number; onPlace: () => void; scrollers: Map<UtilityView, Scroller> }) {
+function Page({ view, width, height, palette, on, current, bottom, onPlace, scrollers, query }: { view: UtilityView; width: number; height: number; palette: Palette; on: boolean; current: boolean; bottom: number; onPlace: () => void; scrollers: Map<UtilityView, Scroller>; query: string }) {
   const shrink = useShrinkOnScroll();
   // How far down the page has been seen, in steps of 50 so a scroll redraws it seldom: the qibla waits for it.
   const [reach, setReach] = useState(height);
@@ -27,7 +27,7 @@ function Page({ view, width, height, palette, on, current, bottom, onPlace, scro
     <ScrollView ref={node => { if (node) scrollers.set(view, node); else scrollers.delete(view); }} onScroll={scrolled} scrollEventThrottle={16}
       importantForAccessibility={current ? 'auto' : 'no-hide-descendants'} accessibilityElementsHidden={!current}
       style={{ width, height, direction: 'rtl' }} contentContainerStyle={{ padding: 16, paddingBottom: bottom }}>
-      <UtilityPage view={view} palette={palette} on={on} onPlace={onPlace} reach={reach} scrollTo={y => scrollers.get(view)?.scrollTo({ y, animated: view === 'tools' })} />
+      <UtilityPage view={view} palette={palette} on={on} onPlace={onPlace} reach={reach} query={query} scrollTo={y => scrollers.get(view)?.scrollTo({ y, animated: view === 'tools' })} />
     </ScrollView>
   );
 }
@@ -46,6 +46,7 @@ export default function UtilitiesTab() {
   const index = Math.max(0, UTILITY_VIEWS.indexOf(view));
   const [{ width, height }, setSize] = useState({ width: 0, height: 0 });
   const [picking, setPicking] = useState(false);
+  const [query, setQuery] = useState('');
   const pick = useCallback(() => setPicking(true), []);
   const list = useRef<FlatList<UtilityView>>(null);
   // The pager's place, 0 on the first page, which the highlight on the top icons follows.
@@ -88,7 +89,10 @@ export default function UtilitiesTab() {
   }, [settle, width, progress]);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar center back={back} hideOnScroll><UtilityPicker palette={palette} progress={progress} /></TopBar>
+      {/* On the adhkar the search sits in the top bar beside the picker (owner, 2026-11-24: never inside the page); the tools have none. */}
+      {view === 'adhkar'
+        ? <TopBar back={back} hideOnScroll search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث في الأذكار', label: 'ابحث في الأذكار' }}><UtilityPicker palette={palette} progress={progress} /></TopBar>
+        : <TopBar center back={back} hideOnScroll><UtilityPicker palette={palette} progress={progress} /></TopBar>}
       <View style={{ flex: 1, direction: 'ltr' }} onLayout={event => {
         const layout = event.nativeEvent.layout;
         if (layout.width === width && layout.height !== height) resized.current = true;
@@ -97,8 +101,8 @@ export default function UtilitiesTab() {
         {width > 0 && (
           <FlatList ref={list} data={UTILITY_VIEWS} horizontal inverted pagingEnabled showsHorizontalScrollIndicator={false}
             keyExtractor={id => id} initialScrollIndex={index} getItemLayout={(_, at) => ({ length: width, offset: width * at, index: at })}
-            extraData={{ palette, focused, view, bottom }} onMomentumScrollEnd={settle} onScroll={scrolled} onTouchMove={() => { resized.current = false; }} scrollEventThrottle={16} onScrollToIndexFailed={() => {}}
-            renderItem={({ item }) => <Page view={item} width={width} height={height} palette={palette} on={focused && item === view} current={item === view} bottom={bottom} onPlace={pick} scrollers={scrollers} />} />
+            extraData={{ palette, focused, view, bottom, query }} onMomentumScrollEnd={settle} onScroll={scrolled} onTouchMove={() => { resized.current = false; }} scrollEventThrottle={16} onScrollToIndexFailed={() => {}}
+            renderItem={({ item }) => <Page view={item} width={width} height={height} palette={palette} on={focused && item === view} current={item === view} bottom={bottom} onPlace={pick} scrollers={scrollers} query={query} />} />
         )}
       </View>
       <PlaceSheet open={picking} onClose={() => setPicking(false)} palette={palette} />

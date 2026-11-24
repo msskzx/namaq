@@ -7,7 +7,6 @@ import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
 import { ChevronUp } from 'lucide-react-native';
 import Empty from '@/ui/Empty';
-import { SearchField } from '@/ui/Field';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
@@ -55,8 +54,6 @@ export default function QiraatScreen() {
   const shown = start > 0 ? rows.slice(rows[start - 1].kind === 'surah' ? start - 1 : start) : rows;
   const head = (
     <View style={{ gap: 10, paddingBottom: 4 }}>
-      <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>القراءات</Text>
-      <SearchField palette={palette} label="ابحث عن كلمة أو سورة" placeholder="ابحث عن كلمة أو سورة" value={query} onChangeText={text => { setFrom(undefined); setQuery(text); }} />
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }} accessibilityRole="tablist">
         <Chip role="tab" label="الكل" on={!filter.reader} onPress={() => reader(undefined)} palette={palette} />
         {READERS.map(r => <Chip key={r.id} role="tab" label={r.name} on={filter.reader === r.id} onPress={() => reader(r.id)} palette={palette} />)}
@@ -75,7 +72,7 @@ export default function QiraatScreen() {
   );
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar back={back} hideOnScroll />
+      <TopBar back={back} hideOnScroll search={{ value: query, onChangeText: text => { setFrom(undefined); setQuery(text); }, placeholder: 'ابحث في القراءات', label: 'ابحث عن كلمة أو سورة' }} />
       <FlatList ref={list} data={shown} onScroll={shrink} scrollEventThrottle={16} keyboardShouldPersistTaps="handled"
         keyExtractor={row => (row.kind === 'surah' ? `s${row.surah}` : row.key)}
         contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 10 }}

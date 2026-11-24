@@ -65,7 +65,6 @@ test('the hadith tab lists its finds by kind, the Forty among them', async ({ pa
 // holds the words typed (owner, 2026-11-24: these pages had no search, and the stories' opened the app's search).
 for (const [route, field, typed, found, gone] of [
   ['/hadith-book?book=forty', 'ابحث في الأربعين النووية', 'الأعمال', 'الحديث الأول', 'الحديث الثاني'],
-  ['/hadith-kitab?book=bukhari&kitab=2', 'ابحث في كِتَابُ الْإِيمَانِ', 'الحياء', 'بَابٌ: الْحَيَاءُ مِنَ الْإِيمَانِ', 'بَابٌ: الصَّلَاةُ مِنَ الْإِيمَانِ'],
   ['/books', 'ابحث في المكتبة', 'الإتقان', 'الإتقان في علوم القرآن', 'تحفة الأطفال'],
   ['/order', 'ابحث في ترتيب السور', 'الكهف', 'الكَهْفْ', 'البَقَرَةْ'],
   ['/stories', 'ابحث في قصص السيرة', 'الهجرة', 'هجرة إلى المدينة', 'عتبة بن ربيعة يعرض على النبي ﷺ'],

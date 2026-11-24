@@ -5,7 +5,6 @@ import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Card from '@/ui/Card';
 import Empty from '@/ui/Empty';
-import { SearchField } from '@/ui/Field';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
@@ -34,10 +33,8 @@ export default function BalaghaTermsScreen() {
   }, [query]);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar back={back} hideOnScroll />
+      <TopBar back={back} hideOnScroll search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث في مصطلحات البلاغة', label: 'ابحث عن مصطلح' }} />
       <ScrollView ref={scroll} onScroll={shrink} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 10 }}>
-        <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>مصطلحات البلاغة</Text>
-        <SearchField palette={palette} label="ابحث عن مصطلح" placeholder="ابحث عن مصطلح" value={query} onChangeText={setQuery} />
         {!chapters.length && <Empty text="لا مصطلح بهذا الاسم. جرّب كلمة أقصر." palette={palette} />}
         {chapters.map(([kind, list]) => (
           <View key={kind} style={{ gap: 8 }}>

@@ -190,7 +190,6 @@ export default function StoriesScreen() {
         </ScrollView>
       ) : <>
       <View style={{ paddingHorizontal: 16, paddingTop: 4, gap: 6 }}>
-        <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>قصص السيرة</Text>
         <RowScroll gap={6}>
           {STORY_TAGS.map(name => <Chip key={name} label={name} on={tag === name} small palette={palette} onPress={() => {
             // A tag narrows every year to its stories, from the first year it has.

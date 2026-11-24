@@ -12,7 +12,6 @@ import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
 import IconButton from '@/ui/IconButton';
 import TapRow from '@/ui/TapRow';
-import { SearchField } from '@/ui/Field';
 import { Text } from '@/ui/Text';
 import { AyatRange } from './AyahLines';
 import { buzz } from '@/lib/haptics';
@@ -132,9 +131,8 @@ function DhikrRow({ item, occasion, said, first, palette }: { item: Dhikr; occas
 }
 
 /** The list of times, and a search over every dhikr (owner, 2026-11-24: no tabs, as the adhkar will grow). */
-function Times({ palette }: { palette: Palette }) {
+function Times({ query, palette }: { query: string; palette: Palette }) {
   const [count] = useSaidToday();
-  const [query, setQuery] = useState('');
   const found = useMemo(() => {
     const pattern = searchPattern(query);
     if (!pattern) return null;
@@ -143,7 +141,6 @@ function Times({ palette }: { palette: Palette }) {
   }, [query]);
   return (
     <View style={{ gap: GAP }}>
-      <SearchField palette={palette} value={query} onChangeText={setQuery} label="ابحث في الأذكار" placeholder="ابحث في الأذكار" />
       {found
         ? <Card palette={palette} pad={[4, 14]} gap={0}>
           {found.length
@@ -210,7 +207,8 @@ function TimeList({ occasion, palette, onPlace }: { occasion: AdhkarOccasion; pa
  * al-Nawawi's al-Adhkar, each with a named scholar's grade of sahih or hasan. The times as a list with a search, a time's
  * adhkar as rows, and a dhikr open full screen (screens/dhikr.tsx). What was said is kept until the day ends.
  */
-export default function Adhkar({ palette, onPlace }: { palette: Palette; onPlace: () => void }) {
+export default function Adhkar({ query = '', palette, onPlace }: { query?: string; palette: Palette; onPlace: () => void }) {
   const occasion = useAdhkarPlace();
-  return occasion ? <TimeList occasion={occasion} palette={palette} onPlace={onPlace} /> : <Times palette={palette} />;
+  // The search is in the top bar (owner, 2026-11-24: never inside the page); what is typed shows its finds over any time's list.
+  return occasion && !query.trim() ? <TimeList occasion={occasion} palette={palette} onPlace={onPlace} /> : <Times query={query} palette={palette} />;
 }

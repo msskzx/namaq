@@ -82,8 +82,8 @@ export const UTILITY_VIEWS = VIEWS.map(view => view.id);
  * the qibla into view; `reach` is how far down the
  * page has been seen, so the compass asks for the location only once it is reached.
  */
-export function UtilityPage({ view, palette, on = true, onPlace, scrollTo, reach = Infinity }: { view: UtilityView; palette: Palette; on?: boolean; onPlace: () => void; scrollTo?: (y: number) => void; reach?: number }) {
-  return view === 'adhkar' ? <Adhkar palette={palette} onPlace={onPlace} />
+export function UtilityPage({ view, palette, on = true, onPlace, scrollTo, reach = Infinity, query }: { view: UtilityView; palette: Palette; on?: boolean; onPlace: () => void; scrollTo?: (y: number) => void; reach?: number; query?: string }) {
+  return view === 'adhkar' ? <Adhkar query={query} palette={palette} onPlace={onPlace} />
     : <Tools palette={palette} on={on} onPlace={onPlace} scrollTo={scrollTo} reach={reach} />;
 }
 
