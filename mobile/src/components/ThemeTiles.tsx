@@ -5,6 +5,7 @@ import { MODE_PREVIEW, THEME_TILES, cardColour, currentTile, tintSurfaces, type 
 import { cardTints, markMode, themeChoice } from '@/lib/settings';
 import { MARK_LEGEND, MARK_MODE_NAMES, MARK_MODES, MARK_SETTING_LABEL, markTones, type Likeness } from '@shared/quran/wordMatch';
 import type { Palette } from '@/lib/theme';
+import Card from '@/ui/Card';
 import { MiniQuran } from './quran/text/AyahFlow';
 import { SAMPLE_AYAH, TILE_SHARE } from '@shared/viewPreview';
 
@@ -88,5 +89,25 @@ export function MarkTiles({ palette }: { palette: Palette }) {
         })}
       </View>
     </View>
+  );
+}
+
+/**
+ * The settings' preview (owner, 2026-11-24): a card as the app draws it now, in the chosen look, with the sample ayah and
+ * the shared words in the chosen colours; it stays at the top of the settings while they change under it.
+ */
+export function LookPreview({ palette }: { palette: Palette }) {
+  const [mode] = markMode.use();
+  const shown = markTones(mode, { exact: palette.accent, written: palette.amber, root: palette.root });
+  const words = MARK_LEGEND.filter((item): item is typeof item & { kind: Likeness } => item.kind !== 'plain');
+  return (
+    <Card palette={palette} pad={[10, 14]} gap={4}>
+      <Text style={{ color: palette.muted, fontSize: 13 }}>هكذا تبدو البطاقات الآن</Text>
+      <MiniQuran share={0.9}>{SAMPLE_AYAH.start} {SAMPLE_AYAH.end} <Text style={{ color: palette.accent }}>{SAMPLE_AYAH.ending}</Text></MiniQuran>
+      <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 14 }}>
+        {words.map(item => <MiniQuran key={item.kind} share={0.6} look={{ color: shown[item.kind] ?? palette.ink }}>{item.word}</MiniQuran>)}
+      </View>
+      <Text style={{ color: palette.muted, fontSize: 12 }}>الطور ١٧</Text>
+    </Card>
   );
 }
