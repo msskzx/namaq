@@ -48,6 +48,7 @@ below. Never copy one into a screen.
 | `Pickable` | A block of a card that picks it on a tap, `aria-pressed` | a book's paragraph that lights the ayah words it quotes |
 | `Saying` | Someone's words with who says them on a muted line before them («قال فلان:»); `by` left out draws the words alone; `center` centres both | every quote from a book with its sayer (a person's virtues, a laqab's words, a tie's sentence) |
 | `Points` | Separate sayings or facts one under another, each with an accent point at its first line | a sayer's several sayings under one «قال فلان:» (a person's virtues) |
+| `TitleCells` | A card's name large, a muted line under it, then its `FactCells` | the person card's head; the feed's story, moment and ayah-note cards |
 | `FactCells` | Short facts side by side, ruled apart, each a small label with its icon and every reading with who gives it | a person's death, place and age on the person card |
 | `QuoteBar` | A saying with a bar down its right, its sayer first in words, chosen words lit in the accent (`name`) or on a soft band (`mark`); `quoted` draws it between «» with no bar; `foot` under the words; `children` for words drawn by their own piece (a book's text with its Quran quotes) | a person's virtues and looks (the Prophet's ﷺ in amber); the ayah page's «قال السعدي:» |
 | `EdgeBar` | A block with a bar down its right edge in a tone, `width` thicker | QuoteBar's bar, a battle in the atlas's sheet |

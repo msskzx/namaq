@@ -27,20 +27,23 @@ export function Tags({ story, palette }: { story: AppStory; palette: Palette }) 
  * the book prints it (owner, 2026-11-19): a paragraph per moment, no titles or numbers, and the people once, under the
  * story's name. The moments' titles show only where a quiz asks by them (`titled`).
  */
-export function Report({ report, palette, plain, titled }: { report: AppReport; palette: Palette;
+export function Report({ report, palette, plain, titled, chainAfter }: { report: AppReport; palette: Palette;
   /** In a feed card the page is in the card's source line under its buttons (owner, 2026-11-20); the grading stays. */
   plain?: boolean;
+  /** The chain after the words, under «السند» (owner, 2026-11-24: the feed card's top is its identity, not its narrator). */
+  chainAfter?: boolean;
   /** Our few words naming each moment, small over it: the «what came next?» question asks by them (QuizLook). */
   titled?: boolean }) {
   return (
     <View style={{ gap: 12 }}>
-      {report.isnad ? <IsnadLine isnad={report.isnad} palette={palette} /> : null}
+      {report.isnad && !chainAfter ? <IsnadLine isnad={report.isnad} palette={palette} /> : null}
       {report.moments.map(moment => (
         <View key={moment.title} style={{ gap: 2 }}>
           {titled ? <Text style={{ color: palette.accent, fontSize: 14, fontWeight: '700', textAlign: 'right' }}>{moment.title}</Text> : null}
           <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' }}>{moment.text}</Text>
         </View>
       ))}
+      {report.isnad && chainAfter ? <ChainAfter isnad={report.isnad} palette={palette} /> : null}
       {plain ? (report.grading ? <Text style={{ color: palette.muted, fontSize: 13, lineHeight: 22, textAlign: 'right' }}>{report.grading}</Text> : null)
         : <LeadLink lead={report.grading ? `${report.grading} ·` : undefined} url={report.url} color={palette.muted} lineHeight={22}>{report.cite}</LeadLink>}
     </View>
@@ -81,6 +84,16 @@ export function IsnadLine({ isnad, palette }: { isnad: string; palette: Palette 
   );
 }
 
+/** A report's chain under the words it carries, named «السند» (the feed cards, owner 2026-11-24). */
+export function ChainAfter({ isnad, palette }: { isnad: string; palette: Palette }) {
+  return (
+    <View style={{ gap: 2, borderTopWidth: 1, borderColor: `${palette.rule}66`, paddingTop: 8 }}>
+      <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>السند</Text>
+      <IsnadLine isnad={isnad} palette={palette} />
+    </View>
+  );
+}
+
 /** A report's book and page, for the line under its card, and in its drawing the books that say who speaks. */
 export const reportSource = (report: AppReport, drawing = false) =>
   sourcesOf(uniqueSources([
@@ -93,12 +106,15 @@ export const reportSource = (report: AppReport, drawing = false) =>
  * «السند», then the hadith scene (`HadithScene`) of its turns. On the story's page the people's chips above, in the
  * speakers' colours, are the key (`slots` given, no key of its own); in the feed card the scene draws its own key.
  */
-export function ReportScene({ report, slots, palette }: { report: AppReport; slots?: Map<string, number>; palette: Palette }) {
+export function ReportScene({ report, slots, palette, chainAfter }: { report: AppReport; slots?: Map<string, number>; palette: Palette;
+  /** The chain after the conversation, under «السند» (the feed card). */
+  chainAfter?: boolean }) {
   const lines = reportLines(report);
   return (
     <View style={{ gap: 10 }}>
-      {report.isnad ? <IsnadLine isnad={report.isnad} palette={palette} /> : null}
+      {report.isnad && !chainAfter ? <IsnadLine isnad={report.isnad} palette={palette} /> : null}
       <HadithScene lines={lines} slots={slots ?? reportSlots(lines, palette.slots.length)} keyed={!slots} palette={palette} />
+      {report.isnad && chainAfter ? <ChainAfter isnad={report.isnad} palette={palette} /> : null}
       {report.grading ? <Text style={{ color: palette.muted, fontSize: 13, lineHeight: 22, textAlign: 'right' }}>{report.grading}</Text> : null}
     </View>
   );
