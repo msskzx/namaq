@@ -6,6 +6,8 @@ node_modules
 
 # Expo
 .expo/
+# the data files copied as assets by metro.config.js
+.appdata/
 dist/
 web-build/
 expo-env.d.ts

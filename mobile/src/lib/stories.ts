@@ -1,6 +1,9 @@
-import data from '@shared/data/events/stories.json';
+import dataFile from '@shared/data/events/stories.json';
 import type { AppStory } from '@shared/stories/story';
 import { storyPages, storyChapters } from '@shared/stories/pages';
+import { dataOf } from '@shared/appData';
+
+const data = dataOf(dataFile);
 
 /** The sira stories in the app, in al-Bukhari's order of chapters: written from the catalog by scripts/battles/buildAppBattles.ts. */
 export const STORIES = data as AppStory[];

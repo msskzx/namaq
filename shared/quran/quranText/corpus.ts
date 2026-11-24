@@ -1,9 +1,12 @@
-import data from '../../data/quran/trees.json';
+import dataFile from '../../data/quran/trees.json';
 import { MUSHAF } from '../../data/quran/mushaf';
 import { grown, nextWords, runOn, type BranchAyah } from '../branches';
 import { withoutConjunction, type TreeGroup } from '../phraseTrees';
 import type { Subtree } from '../subtrees';
 import { ayahWordsOf, wordsOnly } from './ayahWords';
+import { dataOf } from '../../appData';
+
+const data = dataOf(dataFile);
 
 /**
  * The trees' data with every ayah's words read from the Madina pages (owner 2026-11-17: the pages are the only stored Quran text).

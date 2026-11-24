@@ -57,7 +57,7 @@ import { compilerOf, drawnBukhari, fromSahihayn, rajabFeedPassages, recordedIn, 
 import Isnad from '@/components/Isnad';
 import { chainLinks } from '@shared/isnadMetro';
 import HadithBooks from '@/components/HadithBooks';
-import rajab from '@shared/data/hadith/ibnRajab.json';
+import rajabFile from '@shared/data/hadith/ibnRajab.json';
 import IbnRajab from '@/components/IbnRajab';
 import { ChainAfter, ReportScene, Report, reportSource, StoryAyat, StoryShare } from './stories/StoryParts';
 import TitleCells from '@/ui/TitleCells';
@@ -185,6 +185,9 @@ import { adhkarTimes, askedDhikr } from '@shared/quiz/adhkar';
 import { openDhikr } from '@/lib/adhkar';
 import { DhikrBody } from './Adhkar';
 import { QuranWord } from '@/components/quran/text/AyahFlow';
+import { dataOf } from '@shared/appData';
+
+const rajab = dataOf(rajabFile);
 
 type IconType = (props: LucideProps) => React.ReactNode;
 

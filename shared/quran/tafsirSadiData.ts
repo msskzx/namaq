@@ -1,5 +1,8 @@
-import data from '../data/quran/tafsirSadi.json';
+import dataFile from '../data/quran/tafsirSadi.json';
 import type { TafsirPassage } from './tafsirSadi';
+import { dataOf } from '../appData';
+
+const data = dataOf(dataFile);
 
 type Row = [number, number, number, number, number, string];
 const rows = data.passages as Row[];

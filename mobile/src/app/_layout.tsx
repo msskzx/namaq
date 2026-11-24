@@ -8,10 +8,16 @@ import { SplashScreen } from 'expo-router';
 import { QURAN_FONT, UI_FONT, UI_FONT_BOLD, usePalette } from '@/lib/theme';
 import '@/lib/storage';
 import LoadingScreen from '@/ui/LoadingScreen';
+import { loadAppData } from '@/lib/appData';
 
 SplashScreen.preventAutoHideAsync();
 
 type Shell = ComponentType<{ onReady: () => void }>;
+
+/** Stands in for the app when its data could not be read, so the error screen below says why. */
+function Unloaded({ error }: { error: Error }): null {
+  throw error;
+}
 
 /** Requires the app while rendering, so an error in it (or in home's data) reaches the error screen below. */
 function Loaded(props: { onReady: () => void }) {
@@ -33,17 +39,24 @@ export default function RootLayout() {
   });
   // A font that fails to load falls back to the system font rather than holding the loading screen forever.
   const fonts = fontsLoaded || !!fontError;
+  // The large data files ship beside the code (shared/appData.ts); the app is required only once they are read. If one
+  // cannot be read, the error screen shows why, and its «أعد المحاولة» reads them again: the app was never required, so
+  // nothing is left half-loaded.
+  const [data, setData] = useState<true | Error>();
+  useEffect(() => {
+    loadAppData().then(() => setData(true), (error: unknown) => setData(error instanceof Error ? error : new Error(String(error))));
+  }, []);
   const [App, setApp] = useState<Shell>();
   const [ready, setReady] = useState(false);
   const [loading, setLoading] = useState(true);
   // Two frames after the fonts: the name and slogan have started to fade in before the heavy load holds the thread.
   useEffect(() => {
-    if (!fonts) return;
+    if (!fonts || !data) return;
     let frame = requestAnimationFrame(() => {
-      frame = requestAnimationFrame(() => setApp(() => Loaded));
+      frame = requestAnimationFrame(() => setApp(() => (data === true ? Loaded : () => <Unloaded error={data} />)));
     });
     return () => cancelAnimationFrame(frame);
-  }, [fonts]);
+  }, [fonts, data]);
   const onReady = useCallback(() => setReady(true), []);
   const onGone = useCallback(() => setLoading(false), []);
   return (
