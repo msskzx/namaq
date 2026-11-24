@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { View } from 'react-native';
 import { Check, Download } from 'lucide-react-native';
 import { bookOf } from '@shared/books';
-import { lastLink, leadIn, sahihName, searchSahih, splitRoute, type SahihHadith, type SahihIndex, type SahihRoute } from '@shared/sahih';
+import { lastLink, leadIn, sahihName, searchSahih, splitRoute, type ChainLink, type SahihHadith, type SahihIndex, type SahihRoute } from '@shared/sahih';
 import { num } from '@shared/quran/arabicNumber';
 import { DRAW_MODES, type DrawMode } from '@shared/hadith';
 import { Text } from '@/ui/Text';
@@ -46,10 +46,10 @@ export function SahihChain({ book, route, palette }: { book: SahihIndex; route: 
  * The printed words after the drawn chain (owner 2026-11-24, sketch hadith-design/sketch4): the last narrator's link with
  * what he tells, muted, then the saying; when the Prophet ﷺ is named just before it, the saying under that line in amber.
  */
-export function ChainSaying({ chain, last, words, palette, big, lines }: { chain: string; last?: { name: string; mode: string }; words: string; palette: Palette; big?: boolean;
+export function ChainSaying({ chain, links, words, palette, big, lines }: { chain: string; links: readonly ChainLink[]; words: string; palette: Palette; big?: boolean;
   /** At most these lines of the words, for a card that opens the whole (never cut with «…»). */
   lines?: number }) {
-  const { lead, prophet } = leadIn(chain, last);
+  const { lead, prophet } = leadIn(chain, links) ?? { lead: '' };
   return <>
     {lead ? <Text style={{ color: palette.muted, fontSize: 16, lineHeight: 29, textAlign: 'right' }}>{lead}</Text> : null}
     {prophet
@@ -61,11 +61,12 @@ export function ChainSaying({ chain, last, words, palette, big, lines }: { chain
 /** One printed text: its chain drawn and its words under it, or the whole text with the chain in muted ink; its page folded. */
 export function SahihRouteView({ book, n, route, mode, palette, big }: { book: SahihIndex; n: number; route: SahihRoute; mode: DrawMode; palette: Palette; big?: boolean }) {
   const { chain, words } = splitRoute(route);
+  const drawsWhole = !!route.chain && leadIn(chain, route.chain) !== undefined;
   const place = `${sahihName(book, n, num, route.route)}، ج ${num(route.volume)}، ${pagesName(route.pages)}`;
   return (
     <View style={{ gap: 10 }}>
-      {mode === 'drawing' && route.chain
-        ? <><SahihChain book={book} route={route} palette={palette} /><ChainSaying chain={chain} last={route.chain[route.chain.length - 1]} words={words} palette={palette} big={big} /></>
+      {mode === 'drawing' && drawsWhole
+        ? <><SahihChain book={book} route={route} palette={palette} /><ChainSaying chain={chain} links={route.chain!} words={words} palette={palette} big={big} /></>
         : <Text style={body(palette, big)}><Text style={{ color: palette.muted }}>{chain}</Text>{words}</Text>}
       {/* In a card with a row, the book joins its line and the page (linked to al-Shamela) its sheet (owner 2026-11-20). */}
       <Reference title={book.title} palette={palette} places={[place]} editions={[book.edition]}
@@ -83,10 +84,11 @@ export function SahihHadithView({ book, hadith, palette }: { book: SahihIndex; h
   const [mode, setMode] = useState<DrawMode>('drawing');
   const [first, ...rest] = hadith.routes;
   const from = lastLink(first);
-  const drawn = hadith.routes.some(route => route.chain);
+  const drawsWhole = (route: SahihRoute) => !!route.chain && leadIn(splitRoute(route).chain, route.chain) !== undefined;
+  const drawn = hadith.routes.some(drawsWhole);
   return (
     <View style={{ gap: 12 }}>
-      {from && !(mode === 'drawing' && first.chain) && <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>{from}</Text>}
+      {from && !(mode === 'drawing' && drawsWhole(first)) && <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>{from}</Text>}
       {drawn && <Tabs label="طريقة العرض" options={DRAW_MODES} value={mode} onChange={setMode} palette={palette} />}
       <SahihRouteView book={book} n={hadith.n} route={first} mode={mode} palette={palette} big />
       {rest.length > 0 && (
@@ -179,7 +181,9 @@ export function SahihShape({ book, onOpenBook, onOpenKitab, palette }: { book: S
  * name, a bar as long as its hadith beside the longest kitab's, its babs and hadith numbers; «وقفت هنا» on the kitab read
  * last when `here`. `mark` checks one (a quiz's answer). The book's page opens a kitab on a tap; a quiz's look-up opens its bab headings under it.
  */
-export function SahihKitabList({ book, onOpen, mark, open, found, here: showHere = false, palette, source }: { book: SahihIndex; onOpen: (kitab: number) => void; mark?: number; open?: number; palette: Palette;
+export function SahihKitabList({ book, onOpen, onOpenBab, mark, open, found, here: showHere = false, palette, source }: { book: SahihIndex; onOpen: (kitab: number) => void; mark?: number; open?: number; palette: Palette;
+  /** A bab a search found opens its page (the book's page); without it the found babs are only named (a quiz). */
+  onOpenBab?: (kitab: number, bab: number) => void;
   /** «وقفت هنا» on the kitab read last (the book's page, never a quiz). */
   here?: boolean;
   /** A search's hits: only these kitabs, each with the bab headings that hold the words (none when its name holds them). */
@@ -216,9 +220,11 @@ export function SahihKitabList({ book, onOpen, mark, open, found, here: showHere
                   </View>
                 </View>
               </TapRow>
-              {(open === kitab.n ? kitab.babs : (found?.get(kitab.n) ?? []).map(at => kitab.babs[at])).filter(bab => bab.title).map((bab, at) => (
-                <Text key={at} style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right', paddingBottom: 6, paddingRight: 38 }}>{bab.title}</Text>
-              ))}
+              {(open === kitab.n ? kitab.babs.map((_, at) => at) : found?.get(kitab.n) ?? []).filter(at => kitab.babs[at].title).map(at => onOpenBab
+                ? <TapRow key={at} role="link" label={kitab.babs[at].title} onPress={() => onOpenBab(kitab.n, at)} style={{ paddingRight: 38 }}>
+                  <Text style={{ flex: 1, color: palette.ink, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>{kitab.babs[at].title}</Text>
+                </TapRow>
+                : <Text key={at} style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right', paddingBottom: 6, paddingRight: 38 }}>{kitab.babs[at].title}</Text>)}
             </View>
           );
         })}

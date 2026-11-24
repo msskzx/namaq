@@ -4,7 +4,7 @@ import { beforeComma, leading, OPENING, unbalancedAt } from '../opening';
 /**
  * The mutashabih page's «لماذا؟» (owner, 2026-11-24: sketch quran-design/mutashabih-page, design أ): each book's answer in
  * its own words, from where its answer starts, since the card already shows the ayat its question quotes. Built once into
- * shared/data/quran/mutashabihAnswers.json (npm run quran:mutashabih-answers), because the books themselves are a download.
+ * shared/data/quran/mutashabihAnswers.js (npm run quran:mutashabih-answers), because the books themselves are a download.
  */
 
 /** A citation's book in the book reader: al-Kirmani (K), al-Iskafi (I), Ibn al-Zubayr (G). Al-Zarkashi (Z) names a kind, not a reason. */
@@ -87,22 +87,24 @@ const entryWords = (locator: string) => /قوله:\s*([^،;]+)/.exec(locator)?.[
 
 /** The printed page a place in a passage is on. */
 function pageAt(data: MutashabihBookData, entry: number, offset: number): string {
-  let found = data.breaks.find(([at]) => at === entry);
-  for (const row of data.breaks) if (row[0] === entry && row[1] <= offset) found = row;
-  return found ? `${found[2]}:${found[3]}` : '';
+  let found = data.breaks[0];
+  for (const row of data.breaks) if (row[0] < entry || (row[0] === entry && row[1] <= offset)) found = row;
+  return `${found[2]}:${found[3]}`;
 }
 
 /**
  * His answer to the question a citation quotes: the citation found in his book (from the printed page it names, or anywhere in
- * it), its section read to the next section, and that cut to where his answer starts (`ANSWER`, else the section's start),
+ * it), its section read to the next section, and that cut to where his answer starts (`ANSWER`; none when it has no answer word),
  * then to an opening a reader takes in at a glance (`leading`), with no quotation mark left open.
  */
 export function bookAnswer(citation: AnswerCitation, book: AnswerBook, data: MutashabihBookData): BookAnswer | null {
   const printed = printedOf(citation.locator);
   const found = sectionOf(citation, book, data, printed);
   if (!found) return null;
+  // A section with no answer word for its reason is left out: its start is the question the card already shows.
   const answer = ANSWER[book].exec(found.section);
-  const from = answer ? answer.index + answer[0].length : 0;
+  if (!answer) return null;
+  const from = answer.index + answer[0].length;
   const rest = found.section.slice(from).replace(/^\s+/, '').replace(/:\s*\n\s*/g, ': ');
   let words = leading(rest, OPENING) || atSpace(rest, OPENING);
   // Ibn al-Zubayr quotes the ayat between plain marks, which have no closing form: an opening never leaves one of them open.

@@ -10,7 +10,7 @@ import type { Source } from '@/ui/sourceSlot';
 import answers from '@shared/data/quran/mutashabihAnswers';
 import { cardAnswers, type CardAnswer } from '@shared/quran/mutashabih/bookAnswer';
 import { TAGS, type Group } from '@shared/quran/mutashabih/types';
-import { num } from '@shared/quran/arabicNumber';
+import { counted, num } from '@shared/quran/arabicNumber';
 import { openBookPage } from '@/lib/ways';
 import type { Palette } from '@/lib/theme';
 import DifferenceWords from './quran/text/DifferenceWords';
@@ -18,7 +18,7 @@ import BookRuns from './quran/text/BookRuns';
 import { FEATURE_ICON } from './featureIcons';
 
 /** «كتاب واحد», «كتابان», «٣ كتب»: how many books set the card's ayat side by side. */
-const booksCount = (count: number) => (count === 1 ? 'كتاب واحد' : count === 2 ? 'كتابان' : `${num(count)} كتب`);
+const booksCount = (count: number) => (count === 1 ? 'كتاب واحد' : counted(count, ['كتاب', 'كتابان', 'كتب', 'كتابًا']));
 /** The page his answer starts on, as the book's own pages are named: al-Kirmani's one volume by page, the others by part and page. */
 const pageName = (answer: CardAnswer) => { const [part, page] = answer.page.split(':').map(Number); return answer.book === 'K' ? `ص ${num(page)}` : `ج ${num(part)} ص ${num(page)}`; };
 

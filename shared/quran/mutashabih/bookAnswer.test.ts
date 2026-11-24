@@ -38,6 +38,21 @@ describe('the books\' answers on the mutashabih page', () => {
     for (const [id, [text]] of Object.entries(shipped)) if (answerBookOf(id) === 'K') expect(text, id).not.toMatch(/^قَ?وْ?له/);
   });
 
+  test('every answer names a page its book prints, so «اقرأ الباقي» opens it there', () => {
+    for (const [id, [, , page]] of Object.entries(shipped)) {
+      const book = books[answerBookOf(id)!];
+      expect(book.breaks.some(([, , part, printed]) => `${part}:${printed}` === page), id).toBe(true);
+    }
+  });
+
+  test('al-Iskafi\'s and Ibn al-Zubayr\'s answers never open on the question their citation quotes', () => {
+    const letters = (text: string) => text.replace(/[^\u0621-\u064A]/g, '');
+    for (const [id, [text]] of Object.entries(shipped)) {
+      if (answerBookOf(id) === 'K') continue;
+      expect(letters(cases.get(id)!.quote).startsWith(letters(text).slice(0, 20)), id).toBe(false);
+    }
+  });
+
   test('al-Baqarah 126 and Ibrahim 35: each book gives its reason, not the question the card already shows', () => {
     const cited = source.cases.filter(citation => citation.places.includes('2:126') && answerBookOf(citation.id));
     expect(cited.map(citation => answerBookOf(citation.id)).sort()).toEqual(['G', 'I', 'K']);

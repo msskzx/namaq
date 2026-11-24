@@ -155,35 +155,45 @@ const PROPHET = /(?:^|[\s،:])(?:عن|أن|ان|إن|سمعت|سمع|قال|فق
 /** What may stand between his name and his words: his verb of saying only («، يَقُولُ:», «قَالَ:»). */
 const SAYING_ONLY = /^[\s،,]*(وهو\s+)?(ف?قال|ف?يقول)?\s*:?\s*$/;
 
+export interface ChainLink { name: string; mode: string }
+
 /**
- * The printed words between the drawn chain and the saying (owner 2026-11-24, sketch hadith-design/sketch4): the last
- * narrator's link as printed («سَمِعْتُ عُمَرَ بْنَ الْخَطَّابِ رضي الله عنه عَلَى الْمِنْبَرِ، قَالَ:»), with what he tells,
- * for what a narrator tells is the hadith's text and never the line; and apart from it the Prophet ﷺ named just before his
- * words («سَمِعْتُ رَسُولَ اللهِ ﷺ، يَقُولُ:»), when nothing but his verb of saying stands between his name and the words.
+ * The printed chain after its drawn links: each link's words and name found in order, with nothing but punctuation
+ * between them, so the drawing leaves out no word of the text and adds none (owner 2026-11-24: «لا تحذف ولا كلمة»).
+ * Undefined when a word of the chain is in no link: that chain is shown as text, never drawn.
  */
-export function leadIn(chainText: string, last: { name: string; mode: string } | undefined): { lead: string; prophet?: string } {
-  if (!last) return { lead: '' };
-  const name = last.name.trim();
-  const named = chainText.lastIndexOf(name);
-  if (!name || named < 0) return { lead: '' };
-  const moded = last.mode ? chainText.lastIndexOf(last.mode, named) : -1;
-  const start = moded >= 0 && named - moded - last.mode.length <= 3 ? moded : named;
-  const text = chainText.slice(start).trim();
-  // A lead that only names him again («عَنْ عُمَرَ:», «عَنْ أَنَسٍ رضي الله عنه قَالَ:»), the line already says.
-  const told = (part: string) => bare(part).replace(bare(last.mode), '').replace(bare(name), '').replace(/رضي الله عنه(ما|م|ا)?/g, '').replace(/(^|\s)(قال|قالت|يقول|تقول)(?=[\s:،]|$)/g, '$1').replace(/[\s:،,.؛]/g, '') !== '';
-  // Vowels set aside to find the names, each bare letter keeping its place in the printed text.
+export function chainRest(chainText: string, links: readonly ChainLink[]): string | undefined {
+  let at = 0;
+  for (const part of links.flatMap(link => [link.mode, link.name])) {
+    if (!part) continue;
+    const found = chainText.indexOf(part, at);
+    if (found < 0 || /\p{L}/u.test(chainText.slice(at, found))) return undefined;
+    at = found + part.length;
+  }
+  return chainText.slice(at);
+}
+
+/**
+ * The printed words between the drawn chain and the saying (owner 2026-11-24, sketch hadith-design/sketch4): every word
+ * after the last narrator's name, «رضي الله عنه», his own «قَالَ» and what he tells among them, for what a narrator tells
+ * is the hadith's text and never the line; and apart from it the Prophet ﷺ named just before his words («سَمِعْتُ رَسُولَ
+ * اللهِ ﷺ، يَقُولُ:»), when nothing but his verb of saying stands between his name and the words. Undefined when the chain
+ * cannot be drawn whole (chainRest).
+ */
+export function leadIn(chainText: string, links: readonly ChainLink[]): { lead: string; prophet?: string } | undefined {
+  const rest = chainRest(chainText, links);
+  if (rest === undefined) return undefined;
+  const text = rest.replace(/^[\s،,.:؛]+/, '').trim();
+  const shown = (part: string) => (/\p{L}/u.test(part) ? part : '');
+  // Vowels set aside to find his name, each bare letter keeping its place in the printed text.
   let plain = '';
   const at: number[] = [];
   for (let i = 0; i < text.length; i++) if (bare(text[i])) { plain += text[i]; at.push(i); }
-  const nameAt = plain.indexOf(bare(name));
-  if (nameAt < 0) return { lead: told(text) ? text : '' };
-  const nameEnd = nameAt + bare(name).length;
-  const mention = [...plain.matchAll(PROPHET)].filter(match => match.index! >= nameEnd).pop();
-  if (!mention || !SAYING_ONLY.test(plain.slice(mention.index! + mention[0].length))) return { lead: told(text) ? text : '' };
-  // His clause starts at the word before his name («…عَلَى الْمِنْبَرِ، قَالَ: | سَمِعْتُ رَسُولَ اللهِ ﷺ»); what is before it,
-  // «رضي الله عنه» and the narrator's own «قَالَ» among it, stays the narrator's.
+  const mention = [...plain.matchAll(PROPHET)].pop();
+  if (!mention || !SAYING_ONLY.test(plain.slice(mention.index! + mention[0].length))) return { lead: shown(text) };
+  // His clause starts at the word before his name («…عَلَى الْمِنْبَرِ، قَالَ: | سَمِعْتُ رَسُولَ اللهِ ﷺ»).
   const split = at[mention.index! + (/[\s،:]/.test(plain[mention.index!]) ? 1 : 0)];
-  const lead = text.slice(0, split).trim();
-  return { lead: told(lead) ? lead : '', prophet: text.slice(split).trim() };
+  const lead = shown(text.slice(0, split).replace(/[\s،,]+$/, '').trim());
+  return { lead, prophet: text.slice(split).trim() };
 }
 const bare = bareHadith;

@@ -31,8 +31,8 @@ function BarButton({ label, onPress, Icon, palette, on, dot }: { label: string; 
 }
 
 type Opening = { id?: string; query?: string; view?: 'tree' };
-/** A list the index can show: a tab's whole list, not one narrowed to a search, a surah, an ayah or the saved cards. */
-const indexes = (list: ListState) => !list.query && !list.surah && !list.ayah && !list.saved;
+/** A list the index can show: a tab's whole list, not one narrowed to a search, a surah, an ayah, a juz or the saved cards. */
+const indexes = (list: ListState) => !list.query && !list.surah && !list.ayah && !list.range && !list.saved;
 
 export default function BranchesScreen() {
   const palette = usePalette();
@@ -93,21 +93,21 @@ export default function BranchesScreen() {
   });
   const at = useRef(0);
   const onIndex = useCallback((index: number) => { at.current = index; }, []);
-  // The branches tab tapped again: back to the first tree, then (tapped again there) the filters and search cleared.
+  // The branches tab tapped again: back to the index, then (tapped again there) the filters cleared.
   useTabRetap('branches', () => {
     if (searching) return;
-    if (!browsing) { toIndex(); return; }
-    if (at.current > 0 && pieces?.length) { writeJson('branches-place', { id: pieces[0].id }); setStart({ id: pieces[0].id }); setJumps(value => value + 1); }
-    else if (list.query || list.surah || list.ayah || isFiltered(list)) change({ ...EMPTY_LIST, filters: tabOf(list) ? { categories: list.filters.categories } : {} });
+    if (!browsing) toIndex();
+    else if (isFiltered(list)) change({ ...EMPTY_LIST, filters: tabOf(list) ? { categories: list.filters.categories } : {} });
   });
   const openSearch = useCallback(() => setSearching(true), []);
-  // The index comes back at the surah of the card that was open.
+  // The index comes back at the surah the card was opened from while the open card is in it, else at the open card's first surah.
   const toIndex = () => {
+    if (browsing) return;
     const open = pieces?.[at.current];
-    const surah = list.surah ?? (open && Number((open.group?.places ?? open.phrase.occurrences)[0]?.key.split(':')[0]));
+    const surahs = open ? (open.group?.places ?? open.phrase.occurrences).map(place => Number(place.key.split(':')[0])) : [];
+    const surah = list.surah ?? (indexSurah && surahs.includes(indexSurah) ? indexSurah : surahs[0]);
     if (surah) setIndexSurah(surah);
-    change({ ...list, surah: undefined });
-    setBrowsing(true);
+    change({ ...EMPTY_LIST, filters: list.filters });
   };
   // A row opens its card among all the tab's cards, so a search from there searches them all.
   const openCard = (piece: BranchPiece, surah: number) => { setIndexSurah(surah); change(list, { id: piece.id }); };

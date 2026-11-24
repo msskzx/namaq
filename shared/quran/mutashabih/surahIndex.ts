@@ -1,6 +1,6 @@
 import type { BranchPiece } from '../branchInventory';
 import type { PhraseOccurrence } from '../phraseTrees';
-import { num } from '../arabicNumber';
+import { counted } from '../arabicNumber';
 import { ANSWER_BOOKS, answerBookOf } from './bookAnswer';
 
 /**
@@ -40,5 +40,5 @@ export function indexRows(pieces: BranchPiece[], surah: number): IndexRow[] {
   }).sort((a, b) => ayah(a.place.key) - ayah(b.place.key) || a.place.start - b.place.start);
 }
 
-/** «موضع واحد», «موضعان», «٣ مواضع», «١١ موضعًا». */
-export const placesCount = (count: number) => (count === 1 ? 'موضع واحد' : count === 2 ? 'موضعان' : count <= 10 ? `${num(count)} مواضع` : `${num(count)} موضعًا`);
+/** «موضع واحد», «موضعان», «٣ مواضع», «١١ موضعًا», «١٠١ موضع». */
+export const placesCount = (count: number) => (count === 1 ? 'موضع واحد' : counted(count, ['موضع', 'موضعان', 'مواضع', 'موضعًا']));

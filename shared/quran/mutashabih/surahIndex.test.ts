@@ -27,6 +27,6 @@ describe('the mutashabih index by surah', () => {
   });
 
   test('the count of places reads as Arabic counts them', () => {
-    expect([1, 2, 3, 10, 11, 105].map(placesCount)).toEqual(['موضع واحد', 'موضعان', '٣ مواضع', '١٠ مواضع', '١١ موضعًا', '١٠٥ موضعًا']);
+    expect([1, 2, 3, 10, 11, 101, 105, 111].map(placesCount)).toEqual(['موضع واحد', 'موضعان', '٣ مواضع', '١٠ مواضع', '١١ موضعًا', '١٠١ موضع', '١٠٥ مواضع', '١١١ موضعًا']);
   });
 });
