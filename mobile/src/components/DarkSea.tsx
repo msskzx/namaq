@@ -8,7 +8,7 @@ import { scheduleOnRN } from 'react-native-worklets';
 import { ChevronRight, Pause, Play, Send } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { surahName } from '@shared/quran/surahNames';
-import { DARK_SEA_KEY, DARK_SEA_STEPS, darkSeaShots, darkSeaSources, darkSeaTitle, darkSeaWords, shotOf, wordsPage, type Layer, type SceneSaying } from '@shared/quran/scenes/darkSea';
+import { DARK_SEA_KEY, DARK_SEA_STEPS, DARK_SEA_TEASER, darkSeaShots, darkSeaSources, darkSeaTitle, darkSeaWords, shotOf, wordsPage, type Layer, type SceneSaying } from '@shared/quran/scenes/darkSea';
 import { Text } from '@/ui/Text';
 import TapRow from '@/ui/TapRow';
 import Shade from '@/ui/Shade';
@@ -27,6 +27,7 @@ import { dark, ForcePalette, SEA_ART, type Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
 import SeaArt from './scenes/SeaArt';
 import SeaThumb, { useSceneWords } from './scenes/SeaThumb';
+import SeaCover from './scenes/SeaCover';
 import { FEATURE_ICON } from '@/components/featureIcons';
 
 const PAGES = DARK_SEA_STEPS;
@@ -208,13 +209,25 @@ export default function DarkSea() {
 }
 
 /** The scene's card: its picture, then its title (the ayah's opening words), the surah and ayah, and the books. */
-export function DarkSeaCard({ palette, onPress }: { palette: Palette; onPress?: () => void }) {
+export function DarkSeaCard({ palette, onPress, cover = false }: { palette: Palette; onPress?: () => void;
+  /** The «مشاهد» list's tall cover with two lines under it (owner, 2026-11-24); the feed and the share keep the wide still. */
+  cover?: boolean }) {
   const title = useSceneWords('sea');
   const [surah, ayah] = DARK_SEA_KEY.split(':').map(Number);
   const authors = [...new Set(darkSeaSources().map(source => source.author))].join(' · ');
   const Icon = FEATURE_ICON.scenes;
-  const body = (
-    <View style={{ gap: 10 }}>
+  const body = cover
+    ? <View style={{ gap: 10 }}>
+      <Card palette={palette} pad={0} clip><SeaCover place={darkSeaName()} /></Card>
+      <View style={{ gap: 4 }}>
+        <AyahFlow menu={DARK_SEA_KEY} color={palette.ink}>{title.map((word, i) => <AyahWords key={i}>{`${i ? ' ' : ''}${word}`}</AyahWords>)}</AyahFlow>
+        <Text style={{ color: palette.ink, fontSize: 16, lineHeight: 28, textAlign: 'right' }}>
+          <Text style={{ color: palette.accent }}>{DARK_SEA_TEASER.by}: </Text>«{DARK_SEA_TEASER.text}»
+          <Text style={{ color: palette.muted, fontSize: 14 }}> {DARK_SEA_TEASER.source.book} {DARK_SEA_TEASER.source.at}</Text>
+        </Text>
+      </View>
+    </View>
+    : <View style={{ gap: 10 }}>
       <Card palette={palette} pad={0} clip><SeaThumb place={darkSeaName()} /></Card>
       <View style={{ flexDirection: 'row', gap: 12, alignItems: 'flex-start' }}>
         <Icon size={22} color={palette.accent} style={{ marginTop: 6 }} />
@@ -224,8 +237,7 @@ export function DarkSeaCard({ palette, onPress }: { palette: Palette; onPress?: 
           <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{authors}</Text>
         </View>
       </View>
-    </View>
-  );
+    </View>;
   return onPress
     ? <TapRow onPress={onPress} role="link" label={`افتح مشهد ${darkSeaName()}`} style={{ flexDirection: 'column' }}>{body}</TapRow>
     : body;

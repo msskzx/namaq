@@ -5,12 +5,14 @@ import TopBar from '@/ui/TopBar';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { usePalette } from '@/lib/theme';
 import { useTabRetap } from '@/lib/tabRetap';
-import { DarkSeaCard, openDarkSea } from '@/components/DarkSea';
+import SourceLine from '@/ui/SourceLine';
+import { DarkSeaCard, darkSeaSourceList, openDarkSea } from '@/components/DarkSea';
 
 /**
- * «مشاهد» (owner, 2026-11-22: as a video list): a big card for each scene, about half the screen, with a picture that
- * invites a tap and, under it, the scene's title from its ayah, the surah and ayah, and its books. A tap opens the scene
- * itself (components/DarkSea), full screen. The first is an-Nur 40's sea.
+ * «مشاهد» (owner, 2026-11-22: as a video list): each scene a tall cover, a real frame of the scene held still, about half
+ * the screen so it invites a tap (owner, 2026-11-24); under it the ayah's opening words and one scholar's line with its
+ * book, then the scene's source line. A tap opens the scene itself (components/DarkSea), full screen; the next scene's cover
+ * peeks in under it. The first is an-Nur 40's sea.
  */
 export default function LataifScreen() {
   const palette = usePalette();
@@ -22,7 +24,10 @@ export default function LataifScreen() {
       <TopBar hub />
       <ScrollView ref={scroll} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 4, paddingBottom: bottom + 16, gap: 24 }}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 28, textAlign: 'right' }}>مشاهد</Text>
-        <DarkSeaCard palette={palette} onPress={openDarkSea} />
+        <View style={{ gap: 6 }}>
+          <DarkSeaCard cover palette={palette} onPress={openDarkSea} />
+          <SourceLine sources={darkSeaSourceList()} palette={palette} />
+        </View>
       </ScrollView>
     </View>
   );
