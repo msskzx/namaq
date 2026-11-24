@@ -256,6 +256,8 @@ test.describe('branches', () => {
     await expect(save).toBeVisible();
     // The tab's first-visit hint lies over the chips under a full-height tree.
     await page.getByRole('button', { name: /اضغط لإخفاء التلميح/ }).click();
+    // Measured once the fonts are in, so a late font's width is not taken for a move.
+    await page.evaluate(() => document.fonts.ready);
     const before = await save.boundingBox();
     await page.getByRole('button', { name: `سورة ${S(15)}` }).click();
     await expect(page.getByRole('button', { name: `قارن ${S(15)} ٤٥` })).toBeVisible();
@@ -312,8 +314,18 @@ test.describe('a long story compare', () => {
   test('a card switches to side by side: lanes for shared parts, one surah across the card with the other named', async ({ page }) => {
     await open(page, '/compare');
     await expect(page.getByText(`سورة ${S(7)} لا تذكر هذا الجزء`)).toHaveCount(0);
-    const story = page.getByRole('button', { name: 'السورتان جنبًا إلى جنب' }).nth(2);
-    await story.click();
+    // The story card's own switch: the first one on screen in the row under its «اقرأ» (the pairs either side are drawn off screen).
+    const read = page.getByRole('button', { name: `اقرأ ${S(2)} ٣٠–٣٤ في المصحف` });
+    await expect.poll(async () => (await onScreen(page, read)).length).toBe(1);
+    const top = (await read.nth((await onScreen(page, read))[0]).boundingBox())!.y;
+    const switches = page.getByRole('button', { name: 'السورتان جنبًا إلى جنب' });
+    const below = [];
+    for (const at of await onScreen(page, switches)) {
+      const box = (await switches.nth(at).boundingBox())!;
+      if (box.y > top) below.push({ at, y: box.y });
+    }
+    if (!below.length) throw new Error('no side-by-side switch under the story card');
+    await switches.nth(below.reduce((a, b) => (b.y < a.y ? b : a)).at).click();
     await expect(page.getByText(`سورة ${S(7)} لا تذكر هذا الجزء`).first()).toBeVisible();
     await expect(page.getByText(`${S(2)} ٣٠–٣٣`, { exact: true }).first()).toBeVisible();
     await expect(page.getByText(`${S(2)} ٣٤`, { exact: true }).first()).toBeVisible();
