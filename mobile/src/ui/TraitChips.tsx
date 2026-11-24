@@ -27,10 +27,16 @@ export default function TraitChips({ traits, palette, quran = false, picked, onP
       alignItems: 'center' as const, minHeight: 44, justifyContent: lines ? 'space-between' as const : 'center' as const,
       ...(lines ? { flexDirection: 'row' as const, gap: 12 } : null), backgroundColor: picked === at ? `${palette.accent}18` : undefined };
     const inner = lines ? <>
-      <View style={{ flexShrink: 1, alignItems: 'flex-start' }}>
-        {quran ? <QuranWord look={{ color: lit ? palette.accent : palette.ink }} place={{ textAlign: 'right' }}>{trait.label}</QuranWord>
+      <View style={{ flexShrink: 1, flexGrow: 1, alignItems: 'flex-start' }}>
+        {/* The Quran in its own colour and letters, ruled off from the book's meaning (owner 2026-11-24: tell them apart). */}
+        {quran ? <QuranWord look={{ color: palette.accent }} place={{ textAlign: 'right' }}>{trait.label}</QuranWord>
           : <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 28, textAlign: 'right' }}>{trait.label}</Text>}
-        {trait.meaning ? <Text style={{ color: palette.ink, fontSize: 16, lineHeight: 26, textAlign: 'right' }}>{trait.meaning}</Text> : null}
+        {trait.meaning ? <>
+          <View style={{ alignSelf: 'stretch', height: 1, backgroundColor: `${palette.rule}66`, marginVertical: 4 }} />
+          <Text style={{ color: palette.ink, fontSize: 16, lineHeight: 26, textAlign: 'right' }}>
+            <Text style={{ color: palette.muted, fontSize: 14 }}>معناها: </Text>{trait.meaning}
+          </Text>
+        </> : null}
       </View>
       {trait.place ? <Text style={{ color: lit ? palette.accent : palette.muted, fontSize: 13 }}>{trait.place}</Text> : null}
     </> : <>
