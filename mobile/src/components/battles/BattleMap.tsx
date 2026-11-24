@@ -21,6 +21,8 @@ const NEAR = 7;
  * `right` green and named, `wrong` the accent framed and named (a question once answered).
  */
 export type PinLook = 'lit' | 'quiet' | 'choice' | 'selected' | 'right' | 'wrong';
+/** How far each pin's drawing reaches, its halo included, so no name is laid over it. */
+const HALO: Record<PinLook, number> = { lit: 16, right: 16, selected: 15, wrong: 15, choice: 8, quiet: 6 };
 export type MapPlace = { name: string; at: LonLat; look?: PinLook };
 
 /**
@@ -58,7 +60,7 @@ export default function BattleMap({ places: given, palette, box: fixed, onPin }:
     const shown = cities.map(city => { const [x, y] = at(city.at); return { name: city.name, x, y }; });
     const named = (look: PinLook) => look === 'lit' || look === 'right' || look === 'wrong';
     const labels = placeLabels([
-      ...pins.map(pin => ({ x: pin.x, y: pin.y, text: named(pin.look) ? pin.name : '', size: 16, r: pin.look === 'quiet' ? 6 : 9 })),
+      ...pins.map(pin => ({ x: pin.x, y: pin.y, text: named(pin.look) ? pin.name : '', size: 16, r: HALO[pin.look] })),
       ...shown.map(city => ({ x: city.x, y: city.y, text: city.name, size: 14, r: 4 })),
     ], width, height);
     return {
