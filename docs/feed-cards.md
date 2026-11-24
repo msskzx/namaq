@@ -10,7 +10,8 @@ repository; update it in the PR that adds a feature, a card, a quiz kind or an e
 
 Continue reading, today's juz, prayer time, books, scenes (من المشاهد: a «مشاهد» scene's card as on the list, its still
 picture, its title from the ayah, the surah and ayah, under التفسير; «افتح» opens the scene full screen; `ScenePost` drawing
-`DarkSeaCard` from `components/DarkSea`, the list's own card), saved and forgotten
+`DarkSeaCard` from `components/DarkSea`, the list's own card; for «الرحمن» its first page and al-Sa'di's line, `RahmanCard`
+from `components/RahmanScene`, sharing that page), saved and forgotten
 ayat, surah openings, a balagha term (من مصطلحات البلاغة: its name, its definition in the scholar's words and one of
 al-Suyuti's examples, opening the term's page in «مصطلحات البلاغة»; `TermPost`), a battle's moment (من غزوة …, opening the battle's page), a sira story whole (من قصص السيرة, its first report with
 the ayat folded under it, opening the story's page), one of al-Nawawi's Forty (من الحديث, his text for an entry he takes whole
@@ -200,5 +201,6 @@ timeline), رتّب, من شهدها؟ / من أمير السرية؟, فيمَ 
 - Search, share and videos, settings, «ما أحفظه», «اهتماماتي»: tools, not content.
 - Party quizzes: played with others, not from the feed.
 - «مشاهد» has no quiz kind yet: what the darknesses stand for differs between the scholars (each shown by name), so a question
-  would ask a disputed point. An order question on the layers is a candidate once more scenes exist.
+  would ask a disputed point. An order question on the layers is a candidate once more scenes exist. «الرحمن» is still pages
+  of ayat and hadith that the Quran and hadith quizzes already ask about.
 - Tarajim: the battles have the moment card and the sira stories the story card; the people have «من التراجم», «صلة», «من حياته», «لقب وصاحبه», «كنية وصاحبها», «نسبه», «صلاته», «صلة بينهم», «حياتهما», «أين يلتقي نسبهما؟» and the rings.
