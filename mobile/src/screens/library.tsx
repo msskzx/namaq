@@ -1,90 +1,185 @@
-import { useRef, useState, useSyncExternalStore } from 'react';
-import { FlatList, Pressable, View } from 'react-native';
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { FlatList, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
-import { Check, NotebookPen } from 'lucide-react-native';
+import { NotebookPen } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
-import BarPicker from '@/ui/BarPicker';
+import { Tap } from '@/ui/Tap';
+import Tabs from '@/ui/Tabs';
 import TopBar from '@/ui/TopBar';
-import Sheet from '@/ui/Sheet';
 import { openIntent, toTab } from '@/lib/ways';
 import { markAyah, mostForgotten, readDueMarks, subscribeDueMarks } from '@shared/ayahMarks';
+import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
+import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
+import { searchPattern } from '@shared/bookReader';
+import { journalRows, juzRow, keptJuz, type JournalEntry, type JournalKind, type JournalRow } from '@shared/journal';
+import { JUZ_STARTS } from '@shared/quran/juz';
+import { surahName } from '@shared/quran/surahNames';
+import { dayDigits } from '@shared/prayer';
+import { ayahText } from '@/lib/mushaf';
 import { NOTE_LABEL, ShelfCard, useHomeCards } from '@/components/HomeCards';
 import { ForgottenPost, SavedFeedCard } from '@/components/HomeFeed';
+import type { SavedCard } from '@/lib/home';
 import { usePalette, type Palette } from '@/lib/theme';
 import Empty from '@/ui/Empty';
 
-type Tab = 'saved' | 'forgotten' | 'notes';
-const TABS: { tab: Tab; label: string }[] = [{ tab: 'saved', label: 'المحفوظات' }, { tab: 'forgotten', label: 'ما نسيته' }, { tab: 'notes', label: 'تأملاتي' }];
+type Tab = 'all' | 'saved' | 'forgotten' | 'notes';
+const TABS: { key: Tab; label: string }[] = [{ key: 'all', label: 'الكل' }, { key: 'saved', label: 'المحفوظات' }, { key: 'forgotten', label: 'ما نسيته' }, { key: 'notes', label: 'تأملاتي' }];
+const TAB_KIND: Record<Exclude<Tab, 'all'>, JournalKind> = { saved: 'saved', forgotten: 'forgotten', notes: 'note' };
+const SEARCH = 'ابحث في مدونتي';
 
-/** The open list's name with a chevron, as the prophets tab's picker; it opens a sheet with both lists. */
-function Picker({ tab, onTab, palette }: { tab: Tab; onTab: (tab: Tab) => void; palette: Palette }) {
-  const [open, setOpen] = useState(false);
-  const name = TABS.find(item => item.tab === tab)!.label;
-  return (
-    <>
-      <BarPicker text={name} label={`اختر القائمة: ${name}`} onPress={() => setOpen(true)} />
-      <Sheet open={open} onClose={() => setOpen(false)} palette={palette}>
-        <View style={{ paddingHorizontal: 8, paddingBottom: 16 }}>
-          {TABS.map(item => (
-            <Pressable key={item.tab} onPress={() => { onTab(item.tab); setOpen(false); }} accessibilityRole="button" accessibilityState={{ selected: item.tab === tab }}
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, height: 48, borderRadius: 10, backgroundColor: item.tab === tab ? palette.paperDeep : 'transparent' }}>
-              <Text style={{ flex: 1, color: palette.ink, fontSize: 17 }}>{item.label}</Text>
-              {item.tab === tab && <Check size={18} color={palette.accent} />}
-            </Pressable>
-          ))}
-        </View>
-      </Sheet>
-    </>
-  );
-}
+/** A time stored before the app kept real dates (a test's seed, an old record) is shown without a day. */
+const SINCE_DATES = Date.UTC(2020, 0, 1);
+const day = (at: number) => (at >= SINCE_DATES ? new Date(at).toLocaleDateString('ar-EG', { day: 'numeric', month: 'long' }) : '');
+/** The small line above a card (owner, 2026-11-24): what it is and when it was kept. */
+const headLine = (entry: JournalEntry) => {
+  const when = day(entry.at);
+  if (entry.kind === 'note') return when ? `تأملي · كتبته يوم ${when}` : 'تأملي';
+  if (entry.kind === 'forgotten') return when ? `منسيّة · نسيتها يوم ${when}` : 'منسيّة';
+  return when ? `محفوظة · ${when}` : 'محفوظة';
+};
 
 /**
- * The forgotten ayat to recall, one card each, the most forgotten first (owner, 2026-11-23): each is asked as recite mode
- * asks it, the lines before it shown and its forgotten words hidden in their places, so scrolling the list is a review.
- * An ayah ticked «تذكّرتها» keeps its place while the page is open, as a ticked card does on the homepage.
+ * The forgotten ayat to recall, one card each (owner, 2026-11-23), asked as recite mode asks them. An ayah ticked «تذكّرتها»
+ * keeps its place while the page is open, as a ticked card does on the homepage. Each comes with when it was last forgotten.
  */
 function useForgottenAyat() {
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks);
-  const kept = useRef<string[]>([]);
-  for (const key of mostForgotten(due)) if (!kept.current.includes(markAyah(key))) kept.current.push(markAyah(key));
-  // The first due mark of each ayah, most forgotten first: ForgottenPost hides all of that ayah's due words from it.
-  const first = new Map<string, string>();
-  for (const key of mostForgotten(due)) if (!first.has(markAyah(key))) first.set(markAyah(key), key);
-  return kept.current.map(ayah => first.get(ayah) ?? ayah);
+  const kept = useRef<{ key: string; at: number }[]>([]);
+  return useMemo(() => {
+    // The first due mark of each ayah, most forgotten first: ForgottenPost hides all of that ayah's due words from it.
+    const first = new Map<string, { key: string; at: number }>();
+    for (const key of mostForgotten(due)) {
+      const ayah = markAyah(key);
+      first.set(ayah, { key: first.get(ayah)?.key ?? key, at: Math.max(first.get(ayah)?.at ?? 0, due[key].at) });
+    }
+    // A card keeps its key, so a ticked ayah is not drawn again under another of its words.
+    kept.current = kept.current.map(item => ({ key: item.key, at: first.get(markAyah(item.key))?.at ?? item.at }));
+    for (const [ayah, mark] of first) if (!kept.current.some(item => markAyah(item.key) === ayah)) kept.current.push(mark);
+    return kept.current;
+  }, [due]);
 }
 
-/** Every saved card and every forgotten ayah, one list at a time; the homepage shelves show the latest few and open this page. */
-export default function LibraryScreen() {
-  const palette = usePalette();
-  const bottom = useTabBarSpace();
-  const params = useLocalSearchParams<{ tab?: string }>();
-  const [tab, setTab] = useState<Tab>(params.tab === 'forgotten' || params.tab === 'notes' ? params.tab : 'saved');
-  const { cards, noteCards, savedItems, noteItems, openOf, openAyah, menus } = useHomeCards(palette);
-  const forgotten = useForgottenAyat();
-  const shown = tab === 'saved' ? cards : noteCards;
-  const listStyle = { padding: 16, paddingBottom: bottom + 16, gap: 16 };
+/** The thirty juz as one strip (owner, 2026-11-24): those holding something kept are lit and take the list to it. */
+function JuzStrip({ lit, onJuz, palette }: { lit: Set<number>; onJuz: (juz: number) => void; palette: Palette }) {
   return (
-    <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      {/* Pushed over home in the home tab, so the tab bar stays (owner, 2026-11-23); the back button returns to home. */}
-      <TopBar back={() => (router.canGoBack() ? router.back() : toTab('/'))}>
-        <View style={{ flex: 1, alignItems: 'center' }}><Picker tab={tab} onTab={setTab} palette={palette} /></View>
-        <View style={{ width: 34 }} />
-      </TopBar>
-      {tab === 'forgotten'
-        ? <FlatList key={tab} data={forgotten} keyExtractor={markAyah} contentContainerStyle={listStyle}
-          renderItem={({ item }) => <ForgottenPost ayah={item} due palette={palette}
-            head={{ onPress: () => openIntent({ tab: 'read', at: markAyah(item) }), label: 'افتح الآية في المصحف' }} />}
-          ListEmptyComponent={<Empty palette={palette} text="لا آيات منسية." />} />
-        : <FlatList key={tab} data={shown} keyExtractor={card => card.id} contentContainerStyle={listStyle}
-        renderItem={({ item }) => tab === 'saved' && item.kind === 'card'
-          ? <SavedFeedCard id={item.id} palette={palette} />
-          : tab === 'saved'
-          ? <ShelfCard card={item} palette={palette} items={savedItems(item)} open={openOf(item)} />
-          : <ShelfCard note card={item} palette={palette} Icon={NotebookPen} label={NOTE_LABEL} items={noteItems(item)} open={openAyah(item)} />}
-        ListEmptyComponent={<Empty palette={palette} text={tab === 'saved' ? 'لا شيء محفوظ بعد. احفظ شجرة أو بطاقة مقارنة أو آية، أو أي بطاقة في الرئيسية من زر «…» فوقها، لتجدها هنا.' : 'لا تأملات بعد. اضغط مطولًا على آية في المصحف لتكتب تأملك.'} />} />}
-      {menus}
+    <View style={{ gap: 4 }}>
+      <View accessibilityLabel="الأجزاء" style={{ flexDirection: 'row', gap: 2, height: 44 }}>
+        {JUZ_STARTS.map((_, i) => {
+          const juz = i + 1;
+          const on = lit.has(juz);
+          return on
+            ? <Tap key={juz} onPress={() => onJuz(juz)} accessibilityRole="button" accessibilityLabel={`الجزء ${dayDigits(juz)}`} style={{ flex: 1, justifyContent: 'center' }}>
+              <View style={{ height: 26, backgroundColor: palette.accent }} />
+            </Tap>
+            : <View key={juz} style={{ flex: 1, justifyContent: 'center' }}><View style={{ height: 26, backgroundColor: palette.paperDeep }} /></View>;
+        })}
+      </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text style={{ color: palette.muted, fontSize: 12 }}>الجزء ١</Text>
+        <Text style={{ color: palette.muted, fontSize: 12 }}>الجزء ٣٠</Text>
+      </View>
     </View>
   );
 }
 
+/** A surah's name over its kept ayat, as the mushaf heads a surah. */
+const SurahHead = ({ surah, palette }: { surah: number; palette: Palette }) => (
+  <View accessibilityRole="header" style={{ alignItems: 'center', paddingVertical: 8, borderTopWidth: 1, borderBottomWidth: 1, borderColor: palette.rule }}>
+    <Text style={{ color: palette.accent, fontSize: 18 }}>سورة {surahName(surah)}</Text>
+  </View>
+);
+
+/**
+ * «مدونتي» (owner, 2026-11-24): everything kept, saved, forgotten and the reader's notes, in the mushaf's order under each
+ * surah's name, then what is kept outside the mushaf; a strip of the juz on top. The cards are the homepage's own cards,
+ * each with a small line above it of what it is and when.
+ */
+export default function LibraryScreen() {
+  const palette = usePalette();
+  const bottom = useTabBarSpace();
+  const params = useLocalSearchParams<{ tab?: string }>();
+  const [tab, setTab] = useState<Tab>(TABS.some(item => item.key === params.tab) ? params.tab as Tab : 'all');
+  const [query, setQuery] = useState('');
+  const { cards, noteCards, savedItems, noteItems, openOf, openAyah, menus } = useHomeCards(palette);
+  const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
+  const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes);
+  const forgotten = useForgottenAyat();
+  const list = useRef<FlatList<JournalRow>>(null);
+
+  const { rows, byId } = useMemo(() => {
+    const byId = new Map<string, { card?: SavedCard; text: string }>();
+    const entries: JournalEntry[] = [];
+    for (const card of cards) {
+      const reference = card.references[0];
+      const saved = bookmarks.find(item => item.id === card.id);
+      entries.push({ id: `saved:${card.id}`, kind: 'saved', at: saved?.savedAt ?? 0, ayah: reference ? `${reference.surah}:${reference.ayat[0]}` : undefined });
+      byId.set(`saved:${card.id}`, { card, text: card.text });
+    }
+    for (const card of noteCards) {
+      entries.push({ id: `note:${card.id}`, kind: 'note', at: notes[card.id]?.at ?? 0, ayah: card.id });
+      byId.set(`note:${card.id}`, { card, text: card.text });
+    }
+    for (const mark of forgotten) {
+      entries.push({ id: `forgotten:${mark.key}`, kind: 'forgotten', at: mark.at, ayah: markAyah(mark.key) });
+      byId.set(`forgotten:${mark.key}`, { text: '' });
+    }
+    const pattern = searchPattern(query);
+    const found = (entry: JournalEntry) => {
+      if (!pattern) return true;
+      const said = [byId.get(entry.id)?.text, entry.ayah && ayahText(entry.ayah), entry.ayah && surahName(Number(entry.ayah.split(':')[0]))].filter(Boolean).join(' ');
+      return new RegExp(pattern.source).test(said);
+    };
+    const shown = entries.filter(entry => (tab === 'all' || entry.kind === TAB_KIND[tab]) && found(entry));
+    return { rows: journalRows(shown), byId };
+  }, [cards, noteCards, forgotten, bookmarks, notes, tab, query]);
+
+  const retry = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => () => clearTimeout(retry.current), [rows]);
+  const toJuz = (juz: number) => {
+    const index = juzRow(rows, juz);
+    if (index >= 0) list.current?.scrollToIndex({ index, viewPosition: 0 });
+  };
+
+  const entryCard = (entry: JournalEntry) => {
+    const id = entry.id.slice(entry.id.indexOf(':') + 1);
+    const card = byId.get(entry.id)?.card;
+    if (entry.kind === 'forgotten') return <ForgottenPost ayah={id} due palette={palette} head={{ onPress: () => openIntent({ tab: 'read', at: markAyah(id) }), label: 'افتح الآية في المصحف' }} />;
+    if (!card) return null;
+    if (entry.kind === 'note') return <ShelfCard note card={card} palette={palette} Icon={NotebookPen} label={NOTE_LABEL} items={noteItems(card)} open={openAyah(card)} />;
+    if (card.kind === 'card') return <SavedFeedCard id={card.id} palette={palette} />;
+    return <ShelfCard card={card} palette={palette} items={savedItems(card)} open={openOf(card)} />;
+  };
+
+  const empty = query ? 'لا شيء في مدونتك بهذا.' : tab === 'forgotten' ? 'لا آيات منسية.' : tab === 'notes' ? 'لا تأملات بعد. اضغط مطولًا على آية في المصحف لتكتب تأملك.'
+    : 'لا شيء في مدونتك بعد. احفظ آية أو شجرة أو بطاقة مقارنة، أو أي بطاقة في الرئيسية من زر «…» فوقها، لتجدها هنا.';
+
+  return (
+    <View style={{ flex: 1, backgroundColor: palette.paper }}>
+      {/* Pushed over home in the home tab, so the tab bar stays (owner, 2026-11-23); the back button returns to home. */}
+      <TopBar back={() => (router.canGoBack() ? router.back() : toTab('/'))} search={{ value: query, onChangeText: setQuery, placeholder: SEARCH, label: SEARCH }} />
+      <FlatList ref={list} data={rows} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag"
+        keyExtractor={row => (row.row === 'entry' ? row.entry.id : row.row === 'surah' ? `surah:${row.surah}` : 'others')}
+        contentContainerStyle={{ padding: 16, paddingBottom: bottom + 16, gap: 12 }}
+        onScrollToIndexFailed={({ index, averageItemLength }) => {
+          list.current?.scrollToOffset({ offset: index * averageItemLength });
+          clearTimeout(retry.current);
+          retry.current = setTimeout(() => list.current?.scrollToIndex({ index, viewPosition: 0 }), 300);
+        }}
+        ListHeaderComponent={<View style={{ gap: 14, marginBottom: 4 }}>
+          <Tabs options={TABS} value={tab} onChange={setTab} label="ما يُعرض" palette={palette} fill />
+          <JuzStrip lit={keptJuz(rows)} onJuz={toJuz} palette={palette} />
+        </View>}
+        renderItem={({ item: row }) => row.row === 'surah'
+          ? <SurahHead surah={row.surah} palette={palette} />
+          : row.row === 'others'
+          ? <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 16, marginTop: 8 }}>خارج المصحف</Text>
+          : <View style={{ gap: 6 }}>
+            <Text style={{ color: palette.muted, fontSize: 13 }}>{headLine(row.entry)}</Text>
+            {entryCard(row.entry)}
+          </View>}
+        ListEmptyComponent={<Empty palette={palette} text={empty} />} />
+      {menus}
+    </View>
+  );
+}
