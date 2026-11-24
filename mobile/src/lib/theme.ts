@@ -70,6 +70,12 @@ export const dark: Palette = {
  * The «مشاهد» sea's picture (owner, 2026-11-21): the same in both themes, as a picture is; the darkness over it is black.
  * Drawn shapes until the owner's own art comes.
  */
+/**
+ * The day's sky down the tools page's line of times (owner, 2026-11-24), the same in both themes as a picture is: night,
+ * the dawn and dusk glow, the day; `twilight` is the dawn and dusk light on the dial.
+ */
+export const DAY_SKY = { night: '#0c0f1a', glow: '#8a5a4a', day: '#dcc5a0', twilight: '#6d6a78' };
+
 export const SEA_ART = {
   // The sea of an-Nur 40 (components/scenes/SeaArt), one dark world whatever the theme: dusk sky down to the black.
   sky: ['#16222c', '#46606e', '#808f96'], glow: '#e1ecec', deep: ['#2c4654', '#0a161e', '#010203'], ray: '#96bece',
