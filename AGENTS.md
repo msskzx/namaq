@@ -401,6 +401,7 @@ decision.
 | Surah name | `surahName` / `SURAH_NAMES` in `shared/quran/surahNames.ts` (pause form with tashkeel, «البَقَرَةْ»); `SURAH_TITLES` only for a mushaf page's surah headers; the plain `name` only for matching | `shared/quran/oneSurahName.test.ts` |
 | Tap size (44 × 44 pt at least, owner 2026-11-19) | app: `Tap` in `mobile/src/ui/Tap.tsx` widens its hit slop to `MIN_TAP` (`mobile/src/ui/tapSize.ts`); website: `Button`'s `TAP_FLOOR` | `shared/tapSize.test.ts` |
 | Bar floating over a page | `FloatingBar` (`mobile/src/ui/FloatingBar.tsx`, `src/components/common/FloatingBar.tsx`), places in `shared/barPlaces.ts` | `e2e/app/mushaf.spec.ts` (the recite bar floats) |
+| Words of a Sahih hadith in a catalog file (owner, 2026-11-24: one hadith text) | `sahih('bukhari', n, from, to)` in `src/lib/catalog/sahihText.ts`, read from `data/hadith/sahih`; `npm run catalog:story -- <slug>` prints a story with its words | `data/catalog/catalogRules.test.ts` ("copies no words of a Sahih hadith it cites") |
 | Link between two things (owner, 2026-11-24: everything links both ways, from one source) | written once on the catalog record that cites it (`data/catalog`); `appLinks` (`src/lib/catalog/appLinks.ts`, run by `npm run battles:app`) adds the other direction and writes `shared/data/links.json`, never edited by hand | `src/lib/catalog/appLinks.test.ts` (stale file, an end with no record, no source, a link missing its other end) |
 
 ### Quran text

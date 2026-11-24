@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -22,40 +23,40 @@ const jubairHearsAlTur = {
       kind: 'RECITED',
       from: '52:35',
       to: '52:37',
-      evidence: [{ source: 'sahih-al-bukhari', hadith: 4854, url: 'https://sunnah.com/bukhari:4854', quote: "فَلَمَّا بَلَغَ هَذِهِ الْآيَةَ: ﴿أَمْ خُلِقُوا مِنْ غَيْرِ شَيْءٍ أَمْ هُمُ الْخَالِقُونَ * أَمْ خَلَقُوا السَّمَاوَاتِ وَالأَرْضَ بَلْ لا يُوقِنُونَ * أَمْ عِنْدَهُمْ خَزَائِنُ رَبِّكَ أَمْ هُمُ المُسَيْطِرُونَ﴾ كَادَ قَلْبِي أَنْ يَطِيرَ" }],
+      evidence: [{ source: 'sahih-al-bukhari', hadith: 4854, url: 'https://sunnah.com/bukhari:4854', quote: sahih('bukhari', 4854, 224, 464) }],
     },
   ],
   reports: [
     {
-      isnad: "حَدَّثَنَا الْحُمَيْدِيُّ، حَدَّثَنَا سُفْيَانُ قَالَ: حَدَّثُونِي عَنِ الزُّهْرِيِّ، عَنْ مُحَمَّدِ بْنِ جُبَيْرِ بْنِ مُطْعِمٍ، عَنْ أَبِيهِ  رضي الله عنه",
+      isnad: sahih('bukhari', 4854, 0, 156),
       source: { slug: 'sahih-al-bukhari', hadith: 4854, url: 'https://sunnah.com/bukhari:4854' },
       moments: [
-        { title: 'يقرأ في المغرب بالطور', text: "قَالَ: «سَمِعْتُ النَّبِيَّ ﷺ يَقْرَأُ فِي الْمَغْرِبِ بِالطُّورِ،", people: ['jubair-ibn-mutim', 'prophet-muhammad'] },
-        { title: '«كاد قلبي أن يطير»', text: "فَلَمَّا بَلَغَ هَذِهِ الْآيَةَ: ﴿أَمْ خُلِقُوا مِنْ غَيْرِ شَيْءٍ أَمْ هُمُ الْخَالِقُونَ * أَمْ خَلَقُوا السَّمَاوَاتِ وَالأَرْضَ بَلْ لا يُوقِنُونَ * أَمْ عِنْدَهُمْ خَزَائِنُ رَبِّكَ أَمْ هُمُ المُسَيْطِرُونَ﴾ كَادَ قَلْبِي أَنْ يَطِيرَ».", people: ['jubair-ibn-mutim', 'prophet-muhammad'] },
-        { title: 'ما سمعه سفيان من الزهري', text: "قَالَ سُفْيَانُ: فَأَمَّا أَنَا، فَإِنَّمَا سَمِعْتُ الزُّهْرِيَّ يُحَدِّثُ عَنْ مُحَمَّدِ بْنِ جُبَيْرِ بْنِ مُطْعِمٍ، عَنْ أَبِيهِ: سَمِعْتُ النَّبِيَّ ﷺ يَقْرَأُ فِي الْمَغْرِبِ بِالطُّورِ، لَمْ أَسْمَعْهُ زَادَ الَّذِي قَالُوا لِي.", people: ['jubair-ibn-mutim', 'prophet-muhammad'] },
+        { title: 'يقرأ في المغرب بالطور', text: sahih('bukhari', 4854, 157, 223), people: ['jubair-ibn-mutim', 'prophet-muhammad'] },
+        { title: '«كاد قلبي أن يطير»', text: sahih('bukhari', 4854, 224, 466), people: ['jubair-ibn-mutim', 'prophet-muhammad'] },
+        { title: 'ما سمعه سفيان من الزهري', text: sahih('bukhari', 4854, 467, 702), people: ['jubair-ibn-mutim', 'prophet-muhammad'] },
       ],
     },
     {
-      isnad: "حَدَّثَنِي إِسْحَاقُ بْنُ مَنْصُورٍ: حَدَّثَنَا عَبْدُ الرَّزَّاقِ: أَخْبَرَنَا مَعْمَرٌ، عَنِ الزُّهْرِيِّ، عَنْ مُحَمَّدِ بْنِ جُبَيْرٍ، عَنْ أَبِيهِ",
+      isnad: sahih('bukhari', 4023, 0, 151),
       source: { slug: 'sahih-al-bukhari', hadith: 4023, url: 'https://sunnah.com/bukhari:4023' },
       moments: [
-        { title: 'يقرأ في المغرب بالطور', text: "قَالَ: «سَمِعْتُ النَّبِيَّ ﷺ يَقْرَأُ فِي الْمَغْرِبِ بِالطُّورِ،", people: ['jubair-ibn-mutim', 'prophet-muhammad'] },
-        { title: 'أول ما وقر الإيمان في قلبه', text: "وَذَلِكَ أوَّلَُ مَا وَقَرَ الْإِيمَانُ فِي قَلْبِي».", people: ['jubair-ibn-mutim'] },
+        { title: 'يقرأ في المغرب بالطور', text: sahih('bukhari', 4023, 152, 218), people: ['jubair-ibn-mutim', 'prophet-muhammad'] },
+        { title: 'أول ما وقر الإيمان في قلبه', text: sahih('bukhari', 4023, 219, 272), people: ['jubair-ibn-mutim'] },
       ],
     },
     {
-      isnad: "حَدَّثَنِي مَحْمُودٌ: حَدَّثَنَا عَبْدُ الرَّزَّاقِ: أَخْبَرَنَا مَعْمَرٌ، عَنِ الزُّهْرِيِّ، عَنْ مُحَمَّدِ بْنِ جُبَيْرٍ، عَنْ أَبِيهِ",
+      isnad: sahih('bukhari', 3050, 0, 136),
       source: { slug: 'sahih-al-bukhari', hadith: 3050, url: 'https://sunnah.com/bukhari:3050' },
       moments: [
-        { title: 'جاء في أسارى بدر', text: "وَكَانَ جَاءَ فِي أُسَارَى بَدْرٍ", people: ['jubair-ibn-mutim'] },
-        { title: 'يقرأ في المغرب بالطور', text: "قَالَ: «سَمِعْتُ النَّبِيَّ ﷺ يَقْرَأُ فِي الْمَغْرِبِ بِالطُّورِ.»", people: ['jubair-ibn-mutim', 'prophet-muhammad'] },
+        { title: 'جاء في أسارى بدر', text: sahih('bukhari', 3050, 137, 170), people: ['jubair-ibn-mutim'] },
+        { title: 'يقرأ في المغرب بالطور', text: sahih('bukhari', 3050, 171, 238), people: ['jubair-ibn-mutim', 'prophet-muhammad'] },
       ],
     },
     {
-      isnad: "حَدَّثَنَا عَبْدُ اللهِ بْنُ يُوسُفَ قَالَ: أَخْبَرَنَا مَالِكٌ، عَنِ ابْنِ شِهَابٍ، عَنْ مُحَمَّدِ بْنِ جُبَيْرِ بْنِ مُطْعِمٍ، عَنْ أَبِيهِ",
+      isnad: sahih('bukhari', 765, 0, 141),
       source: { slug: 'sahih-al-bukhari', hadith: 765, url: 'https://sunnah.com/bukhari:765' },
       moments: [
-        { title: 'قرأ في المغرب بالطور', text: "قَالَ: «سَمِعْتُ رَسُولَ اللهِ ﷺ قَرَأَ فِي الْمَغْرِبِ بِالطُّورِ.»", people: ['jubair-ibn-mutim', 'prophet-muhammad'] },
+        { title: 'قرأ في المغرب بالطور', text: sahih('bukhari', 765, 142, 210), people: ['jubair-ibn-mutim', 'prophet-muhammad'] },
       ],
     },
   ],

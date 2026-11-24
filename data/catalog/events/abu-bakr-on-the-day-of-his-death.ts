@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -22,32 +23,32 @@ const abuBakrOnTheDayOfHisDeath = {
       kind: 'RECITED',
       from: '3:144',
       to: '3:144',
-      evidence: [{ source: 'sahih-al-bukhari', hadith: 4454, url: 'https://sunnah.com/bukhari:4454', quote: "قَالَ اللهُ: ﴿وَمَا مُحَمَّدٌ إِلا رَسُولٌ قَدْ خَلَتْ مِنْ قَبْلِهِ الرُّسُلُ﴾ إِلَى قَوْلِهِ: ﴿الشَّاكِرِينَ﴾" }],
+      evidence: [{ source: 'sahih-al-bukhari', hadith: 4454, url: 'https://sunnah.com/bukhari:4454', quote: sahih('bukhari', 4454, 426, 537) }],
     },
   ],
   reports: [
     {
-      isnad: "حَدَّثَنَا يَحْيَى بْنُ بُكَيْرٍ، حَدَّثَنَا اللَّيْثُ، عَنْ عُقَيْلٍ، عَنِ ابْنِ شِهَابٍ قَالَ: أَخْبَرَنِي أَبُو سَلَمَةَ: أَنَّ عَائِشَةَ  أَخْبَرَتْهُ:",
+      isnad: sahih('bukhari', 4452, 0, 155),
       source: { slug: 'sahih-al-bukhari', hadith: 4452, url: 'https://sunnah.com/bukhari:4452' },
       moments: [
-        { title: "أكب عليه فقبله وبكى", text: "«أَنَّ أَبَا بَكْرٍ رضي الله عنه أَقْبَلَ عَلَى فَرَسٍ مِنْ مَسْكَنِهِ بِالسُّنْحِ، حَتَّى نَزَلَ فَدَخَلَ الْمَسْجِدَ، فَلَمْ يُكَلِّمِ النَّاسَ حَتَّى دَخَلَ عَلَى عَائِشَةَ، فَتَيَمَّمَ رَسُولَ اللهِ ﷺ وَهُوَ مُغَشًّى بِثَوْبِ حِبَرَةٍ، فَكَشَفَ عَنْ وَجْهِهِ ثُمَّ أَكَبَّ عَلَيْهِ فَقَبَّلَهُ وَبَكَى،", people: ['abu-bakr-as-siddiq', 'aisha-bint-abi-bakr', 'prophet-muhammad'] },
-        { title: "«لا يجمع الله عليك موتتين»", text: "ثُمَّ قَالَ: بِأَبِي أَنْتَ وَأُمِّي، وَاللهِ لَا يَجْمَعُ اللهُ عَلَيْكَ مَوْتَتَيْنِ، أَمَّا الْمَوْتَةُ الَّتِي كُتِبَتْ عَلَيْكَ فَقَدْ مُتَّهَا».", people: ['abu-bakr-as-siddiq', 'prophet-muhammad'] },
+        { title: "أكب عليه فقبله وبكى", text: sahih('bukhari', 4452, 156, 462), people: ['abu-bakr-as-siddiq', 'aisha-bint-abi-bakr', 'prophet-muhammad'] },
+        { title: "«لا يجمع الله عليك موتتين»", text: sahih('bukhari', 4452, 463, 613), people: ['abu-bakr-as-siddiq', 'prophet-muhammad'] },
       ],
     },
     {
-      isnad: "قَالَ الزُّهْرِيُّ: وَحَدَّثَنِي أَبُو سَلَمَةَ، عَنْ عَبْدِ اللهِ بْنِ عَبَّاسٍ:",
+      isnad: sahih('bukhari', 4454, 0, 81),
       source: { slug: 'sahih-al-bukhari', hadith: 4454, url: 'https://sunnah.com/bukhari:4454' },
       moments: [
-        { title: "«اجلس يا عمر»", text: "«أَنَّ أَبَا بَكْرٍ خَرَجَ وَعُمَرُ يُكَلِّمُ النَّاسَ، فَقَالَ: اجْلِسْ يَا عُمَرُ، فَأَبَى عُمَرُ أَنْ يَجْلِسَ، فَأَقْبَلَ النَّاسُ إِلَيْهِ وَتَرَكُوا عُمَرَ،", people: ['abu-bakr-as-siddiq', 'umar-ibn-al-khattab'] },
-        { title: "«فإن محمدا قد مات»", text: "فَقَالَ أَبُو بَكْرٍ: أَمَّا بَعْدُ؛ مَنْ كَانَ مِنْكُمْ يَعْبُدُ مُحَمَّدًا ﷺ فَإِنَّ مُحَمَّدًا قَدْ مَاتَ، وَمَنْ كَانَ مِنْكُمْ يَعْبُدُ اللهَ، فَإِنَّ اللهَ حَيٌّ لَا يَمُوتُ، قَالَ اللهُ: ﴿وَمَا مُحَمَّدٌ إِلا رَسُولٌ قَدْ خَلَتْ مِنْ قَبْلِهِ الرُّسُلُ﴾ إِلَى قَوْلِهِ: ﴿الشَّاكِرِينَ﴾. وَقَالَ: وَاللهِ لَكَأَنَّ النَّاسَ لَمْ يَعْلَمُوا أَنَّ اللهَ أَنْزَلَ هَذِهِ الْآيَةَ حَتَّى تَلَاهَا أَبُو بَكْرٍ، فَتَلَقَّاهَا مِنْهُ النَّاسُ كُلُّهُمْ، فَمَا أَسْمَعُ بَشَرًا مِنَ النَّاسِ إِلَّا يَتْلُوهَا.", people: ['abu-bakr-as-siddiq', 'prophet-muhammad'] },
-        { title: "«حتى ما تقلني رجلاي»", text: "فَأَخْبَرَنِي سَعِيدُ بْنُ الْمُسَيَّبِ: أَنَّ عُمَرَ قَالَ: وَاللهِ مَا هُوَ إِلَّا أَنْ سَمِعْتُ أَبَا بَكْرٍ تَلَاهَا فَعَقِرْتُ، حَتَّى مَا تُقِلُّنِي رِجْلَايَ، وَحَتَّى أَهْوَيْتُ إِلَى الْأَرْضِ حِينَ سَمِعْتُهُ تَلَاهَا، أَنَّ النَّبِيَّ ﷺ قَدْ مَاتَ».", people: ['umar-ibn-al-khattab', 'abu-bakr-as-siddiq'] },
+        { title: "«اجلس يا عمر»", text: sahih('bukhari', 4454, 82, 244), people: ['abu-bakr-as-siddiq', 'umar-ibn-al-khattab'] },
+        { title: "«فإن محمدا قد مات»", text: sahih('bukhari', 4454, 245, 754), people: ['abu-bakr-as-siddiq', 'prophet-muhammad'] },
+        { title: "«حتى ما تقلني رجلاي»", text: sahih('bukhari', 4454, 755, 1015), people: ['umar-ibn-al-khattab', 'abu-bakr-as-siddiq'] },
       ],
     },
     {
-      isnad: "حَدَّثَنِي عَبْدُ اللهِ بْنُ أَبِي شَيْبَةَ، حَدَّثَنَا يَحْيَى بْنُ سَعِيدٍ، عَنْ سُفْيَانَ، عَنْ مُوسَى بْنِ أَبِي عَائِشَةَ، عَنْ عُبَيْدِ اللهِ بْنِ عَبْدِ اللهِ بْنِ عُتْبَةَ، عَنْ عَائِشَةَ وَابْنِ عَبَّاسٍ:",
+      isnad: sahih('bukhari', 4455, 0, 213),
       source: { slug: 'sahih-al-bukhari', hadith: 4455, url: 'https://sunnah.com/bukhari:4455' },
       moments: [
-        { title: "قبله بعد موته", text: "«أَنَّ أَبَا بَكْرٍ رضي الله عنه قَبَّلَ النَّبِيَّ ﷺ بَعْدَ مَوْتِهِ.»", people: ['abu-bakr-as-siddiq', 'prophet-muhammad'] },
+        { title: "قبله بعد موته", text: sahih('bukhari', 4455, 214, 285), people: ['abu-bakr-as-siddiq', 'prophet-muhammad'] },
       ],
     },
   ],

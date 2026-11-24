@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -19,16 +20,16 @@ const umarAndTheVerseOfArafah = {
       kind: 'REVEALED_ABOUT',
       from: '5:3',
       to: '5:3',
-      evidence: [{ source: 'sahih-al-bukhari', hadith: 4407, url: 'https://sunnah.com/bukhari:4407', quote: "﴿الْيَوْمَ أَكْمَلْتُ لَكُمْ دِينَكُمْ وَأَتْمَمْتُ عَلَيْكُمْ نِعْمَتِي﴾ فَقَالَ عُمَرُ: إِنِّي لَأَعْلَمُ أَيَّ مَكَانٍ أُنْزِلَتْ، أُنْزِلَتْ وَرَسُولُ اللهِ ﷺ وَاقِفٌ بِعَرَفَةَ" }],
+      evidence: [{ source: 'sahih-al-bukhari', hadith: 4407, url: 'https://sunnah.com/bukhari:4407', quote: sahih('bukhari', 4407, 283, 464) }],
     },
   ],
   reports: [
     {
-      isnad: "حَدَّثَنَا مُحَمَّدُ بْنُ يُوسُفَ: حَدَّثَنَا سُفْيَانُ الثَّوْرِيُّ، عَنْ قَيْسِ بْنِ مُسْلِمٍ، عَنْ طَارِقِ بْنِ شِهَابٍ:",
+      isnad: sahih('bukhari', 4407, 0, 123),
       source: { slug: 'sahih-al-bukhari', hadith: 4407, url: 'https://sunnah.com/bukhari:4407' },
       moments: [
-        { title: "«لاتخذنا ذلك اليوم عيدا»", text: "«أَنَّ أُنَاسًا مِنَ الْيَهُودِ قَالُوا: لَوْ نَزَلَتْ هَذِهِ الْآيَةُ فِينَا لَاتَّخَذْنَا ذَلِكَ الْيَوْمَ عِيدًا، فَقَالَ عُمَرُ: أَيَّةُ آيَةٍ؟ فَقَالُوا: ﴿الْيَوْمَ أَكْمَلْتُ لَكُمْ دِينَكُمْ وَأَتْمَمْتُ عَلَيْكُمْ نِعْمَتِي﴾", people: ['umar-ibn-al-khattab'] },
-        { title: "«أنزلت ورسول الله ﷺ واقف بعرفة»", text: "فَقَالَ عُمَرُ: إِنِّي لَأَعْلَمُ أَيَّ مَكَانٍ أُنْزِلَتْ، أُنْزِلَتْ وَرَسُولُ اللهِ ﷺ وَاقِفٌ بِعَرَفَةَ.»", people: ['umar-ibn-al-khattab', 'prophet-muhammad'] },
+        { title: "«لاتخذنا ذلك اليوم عيدا»", text: sahih('bukhari', 4407, 124, 356), people: ['umar-ibn-al-khattab'] },
+        { title: "«أنزلت ورسول الله ﷺ واقف بعرفة»", text: sahih('bukhari', 4407, 357, 466), people: ['umar-ibn-al-khattab', 'prophet-muhammad'] },
       ],
     },
   ],

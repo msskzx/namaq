@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -20,31 +21,31 @@ const theRevelationOfSuratAlFath = {
       kind: 'RECITED',
       from: '48:1',
       to: '48:1',
-      evidence: [{ source: 'sahih-al-bukhari', hadith: 4177, url: 'https://sunnah.com/bukhari:4177', quote: "ثُمَّ قَرَأَ: ﴿إِنَّا فَتَحْنَا لَكَ فَتْحًا مُبِينًا﴾" }],
+      evidence: [{ source: 'sahih-al-bukhari', hadith: 4177, url: 'https://sunnah.com/bukhari:4177', quote: sahih('bukhari', 4177, 885, 939) }],
     },
     {
       kind: 'REVEALED_ABOUT',
       report: "في رواية أنس",
       from: '48:1',
       to: '48:5',
-      evidence: [{ source: 'sahih-muslim', hadith: 1786, url: 'https://sunnah.com/muslim:1786', quote: "لَمَّا نَزَلَتْ: ﴿إِنَّا فَتَحْنَا لَكَ فَتْحًا مبينا ليغفر لك الله﴾ إلى قوله: فوزا عظيما" }],
+      evidence: [{ source: 'sahih-muslim', hadith: 1786, url: 'https://sunnah.com/muslim:1786', quote: sahih('muslim', 1786, 185, 274) }],
     },
   ],
   reports: [
     {
-      isnad: "حَدَّثَنِي عَبْدُ اللهِ بْنُ يُوسُفَ: أَخْبَرَنَا مَالِكٌ، عَنْ زَيْدِ بْنِ أَسْلَمَ، عَنْ أَبِيهِ:",
+      isnad: sahih('bukhari', 4177, 0, 99),
       source: { slug: 'sahih-al-bukhari', hadith: 4177, url: 'https://sunnah.com/bukhari:4177' },
       moments: [
-        { title: "سأله ثلاث مرات فلم يجبه", text: "«أَنَّ رَسُولَ اللهِ ﷺ كَانَ يَسِيرُ فِي بَعْضِ أَسْفَارِهِ، وَعُمَرُ بْنُ الْخَطَّابِ يَسِيرُ مَعَهُ لَيْلًا، فَسَأَلَهُ عُمَرُ بْنُ الْخَطَّابِ، عَنْ شَيْءٍ فَلَمْ يُجِبْهُ رَسُولُ اللهِ ﷺ، ثُمَّ سَأَلَهُ فَلَمْ يُجِبْهُ، ثُمَّ سَأَلَهُ فَلَمْ يُجِبْهُ", people: ['prophet-muhammad', 'umar-ibn-al-khattab'] },
-        { title: "«ثكلتك أمك يا عمر»", text: "وَقَالَ عُمَرُ بْنُ الْخَطَّابِ: ثَكِلَتْكَ أُمُّكَ يَا عُمَرُ، نَزَرْتَ رَسُولَ اللهِ ﷺ ثَلَاثَ مَرَّاتٍ كُلُّ ذَلِكَ لَا يُجِيبُكَ، قَالَ عُمَرُ: فَحَرَّكْتُ بَعِيرِي ثُمَّ تَقَدَّمْتُ أَمَامَ الْمُسْلِمِينَ، وَخَشِيتُ أَنْ يَنْزِلَ فِيَّ قُرْآنٌ،", people: ['umar-ibn-al-khattab', 'prophet-muhammad'] },
-        { title: "«لقد أنزلت علي الليلة سورة»", text: "فَمَا نَشِبْتُ أَنْ سَمِعْتُ صَارِخًا يَصْرُخُ بِي، قَالَ: فَقُلْتُ: لَقَدْ خَشِيتُ أَنْ يَكُونَ نَزَلَ فِيَّ قُرْآنٌ، وَجِئْتُ رَسُولَ اللهِ ﷺ فَسَلَّمْتُ عَلَيْهِ، فَقَالَ: لَقَدْ أُنْزِلَتْ عَلَيَّ اللَّيْلَةَ سُورَةٌ، لَهِيَ أَحَبُّ إِلَيَّ مِمَّا طَلَعَتْ عَلَيْهِ الشَّمْسُ ثُمَّ قَرَأَ: ﴿إِنَّا فَتَحْنَا لَكَ فَتْحًا مُبِينًا﴾.»", people: ['umar-ibn-al-khattab', 'prophet-muhammad'] },
+        { title: "سأله ثلاث مرات فلم يجبه", text: sahih('bukhari', 4177, 100, 354), people: ['prophet-muhammad', 'umar-ibn-al-khattab'] },
+        { title: "«ثكلتك أمك يا عمر»", text: sahih('bukhari', 4177, 355, 604), people: ['umar-ibn-al-khattab', 'prophet-muhammad'] },
+        { title: "«لقد أنزلت علي الليلة سورة»", text: sahih('bukhari', 4177, 605, 941), people: ['umar-ibn-al-khattab', 'prophet-muhammad'] },
       ],
     },
     {
-      isnad: "وحَدَّثَنَا نَصْرُ بْنُ عَلِيٍّ الْجَهْضَمِيُّ. حَدَّثَنَا خَالِدُ بْنُ الْحَارِثِ. حَدَّثَنَا سَعِيدُ بْنُ أَبِي عَرُوبَةَ عَنْ قَتَادَةَ؛ أَنَّ أَنَسَ بْنَ مَالِكٍ حَدَّثَهُمْ قَالَ:",
+      isnad: sahih('muslim', 1786, 0, 184),
       source: { slug: 'sahih-muslim', hadith: 1786, url: 'https://sunnah.com/muslim:1786' },
       moments: [
-        { title: "«لقد أنزلت علي آية هي أحب إلي من الدنيا جميعا»", text: "لَمَّا نَزَلَتْ: ﴿إِنَّا فَتَحْنَا لَكَ فَتْحًا مبينا ليغفر لك الله﴾ إلى قوله: فوزا عظيما. [٤٨ /الفتح /الآيات ١ - ٥] مَرْجِعَهُ مِنْ الْحُدَيْبِيَةِ وَهُمْ يُخَالِطُهُمُ الْحُزْنُ وَالْكَآبَةُ. وَقَدْ نَحَرَ الْهَدْيَ بِالْحُدَيْبِيَةِ. فَقَالَ (لَقَدْ أُنْزِلَتْ عَلَيَّ آيَةٌ هِيَ أَحَبُّ إِلَيَّ مِنَ الدُّنْيَا جميعا).", people: ['prophet-muhammad'] },
+        { title: "«لقد أنزلت علي آية هي أحب إلي من الدنيا جميعا»", text: sahih('muslim', 1786, 185, 507), people: ['prophet-muhammad'] },
       ],
     },
   ],

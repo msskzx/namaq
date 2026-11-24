@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -17,21 +18,21 @@ const marriageOfAisha = {
   people: [{ person: 'aisha-bint-abi-bakr' }, { person: 'prophet-muhammad' }],
   reports: [
     {
-      isnad: "حَدَّثَنِي فَرْوَةُ بْنُ أَبِي الْمَغْرَاءِ: حَدَّثَنَا عَلِيُّ بْنُ مُسْهِرٍ، عَنْ هِشَامٍ، عَنْ أَبِيهِ، عَنْ عَائِشَةَ  رضي الله عنها",
+      isnad: sahih('bukhari', 3894, 0, 136),
       source: { slug: 'sahih-al-bukhari', hadith: 3894, url: 'https://sunnah.com/bukhari:3894' },
       moments: [
-        { title: "«تزوجني النبي ﷺ وأنا بنت ست سنين»", text: "قَالَتْ: «تَزَوَّجَنِي النَّبِيُّ ﷺ وَأَنَا بِنْتُ سِتِّ سِنِينَ، فَقَدِمْنَا الْمَدِينَةَ، فَنَزَلْنَا فِي بَنِي الْحَارِثِ بْنِ خَزْرَجٍ، فَوُعِكْتُ فَتَمَرَّقَ شَعَرِي فَوَفَى جُمَيْمَةً،", people: ['aisha-bint-abi-bakr', 'prophet-muhammad'] },
-        { title: "أم رومان تأخذها من الأرجوحة", text: "فَأَتَتْنِي أُمِّي أُمُّ رُومَانَ، وَإِنِّي لَفِي أُرْجُوحَةٍ، وَمَعِي صَوَاحِبُ لِي، فَصَرَخَتْ بِي فَأَتَيْتُهَا، لَا أَدْرِي مَا تُرِيدُ بِي فَأَخَذَتْ بِيَدِي حَتَّى أَوْقَفَتْنِي عَلَى بَابِ الدَّارِ، وَإِنِّي لَأَُنْهَجُ حَتَّى سَكَنَ بَعْضُ نَفَسِي، ثُمَّ أَخَذَتْ شَيْئًا مِنْ مَاءٍ فَمَسَحَتْ بِهِ وَجْهِي وَرَأْسِي،", people: ['aisha-bint-abi-bakr'] },
-        { title: "«على الخير والبركة»", text: "ثُمَّ أَدْخَلَتْنِي الدَّارَ، فَإِذَا نِسْوَةٌ مِنَ الْأَنْصَارِ فِي الْبَيْتِ، فَقُلْنَ: عَلَى الْخَيْرِ وَالْبَرَكَةِ، وَعَلَى خَيْرِ طَائِرٍ، فَأَسْلَمَتْنِي إِلَيْهِنَّ، فَأَصْلَحْنَ مِنْ شَأْنِي،", people: ['aisha-bint-abi-bakr'] },
-        { title: "«فلم يرعني إلا رسول الله ﷺ ضحى»", text: "فَلَمْ يَرُعْنِي إِلَّا رَسُولُ اللهِ ﷺ ضُحًى، فَأَسْلَمْنَنِي إِلَيْهِ، وَأَنَا يَوْمَئِذٍ بِنْتُ تِسْعِ سِنِينَ».", people: ['aisha-bint-abi-bakr', 'prophet-muhammad'] },
+        { title: "«تزوجني النبي ﷺ وأنا بنت ست سنين»", text: sahih('bukhari', 3894, 137, 327), people: ['aisha-bint-abi-bakr', 'prophet-muhammad'] },
+        { title: "أم رومان تأخذها من الأرجوحة", text: sahih('bukhari', 3894, 328, 653), people: ['aisha-bint-abi-bakr'] },
+        { title: "«على الخير والبركة»", text: sahih('bukhari', 3894, 654, 854), people: ['aisha-bint-abi-bakr'] },
+        { title: "«فلم يرعني إلا رسول الله ﷺ ضحى»", text: sahih('bukhari', 3894, 855, 970), people: ['aisha-bint-abi-bakr', 'prophet-muhammad'] },
       ],
     },
     {
-      isnad: "حَدَّثَنَا مُعَلًّى: حَدَّثَنَا وُهَيْبٌ، عَنْ هِشَامِ بْنِ عُرْوَةَ، عَنْ أَبِيهِ، عَنْ عَائِشَةَ  رضي الله عنها،",
+      isnad: sahih('bukhari', 3895, 0, 114),
       source: { slug: 'sahih-al-bukhari', hadith: 3895, url: 'https://sunnah.com/bukhari:3895' },
       moments: [
-        { title: "«أريتك في المنام مرتين»", text: "«أَنَّ النَّبِيَّ ﷺ قَالَ لَهَا: أُرِيتُكِ فِي الْمَنَامِ مَرَّتَيْنِ، أَرَى أَنَّكِ فِي سَرَقَةٍ مِنْ حَرِيرٍ، وَيَقُولُ: هَذِهِ امْرَأَتُكَ، فَاكْشِفْ عَنْهَا، فَإِذَا هِيَ أَنْتِ،", people: ['prophet-muhammad', 'aisha-bint-abi-bakr'] },
-        { title: "«إن يك هذا من عند الله يمضه»", text: "فَأَقُولُ: إِنْ يَكُ هَذَا مِنْ عِنْدِ اللهِ يُمْضِهِ».", people: ['prophet-muhammad'] },
+        { title: "«أريتك في المنام مرتين»", text: sahih('bukhari', 3895, 115, 297), people: ['prophet-muhammad', 'aisha-bint-abi-bakr'] },
+        { title: "«إن يك هذا من عند الله يمضه»", text: sahih('bukhari', 3895, 298, 353), people: ['prophet-muhammad'] },
       ],
     },
   ],

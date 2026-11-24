@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -19,16 +20,16 @@ const hassanRecitesToAisha = {
       kind: 'RECITED',
       from: '24:11',
       to: '24:11',
-      evidence: [{ source: 'sahih-al-bukhari', hadith: 4146, url: 'https://sunnah.com/bukhari:4146', quote: "وَقَدْ قَالَ اللهُ تَعَالَى: ﴿وَالَّذِي تَوَلَّى كِبْرَهُ مِنْهُمْ لَهُ عَذَابٌ عَظِيمٌ﴾" }],
+      evidence: [{ source: 'sahih-al-bukhari', hadith: 4146, url: 'https://sunnah.com/bukhari:4146', quote: sahih('bukhari', 4146, 492, 580) }],
     },
   ],
   reports: [
     {
-      isnad: "حَدَّثَنِي بِشْرُ بْنُ خَالِدٍ: أَخْبَرَنَا مُحَمَّدُ بْنُ جَعْفَرٍ، عَنْ شُعْبَةَ، عَنْ سُلَيْمَانَ، عَنْ أَبِي الضُّحَى، عَنْ مَسْرُوقٍ قَالَ:",
+      isnad: sahih('bukhari', 4146, 0, 144),
       source: { slug: 'sahih-al-bukhari', hadith: 4146, url: 'https://sunnah.com/bukhari:4146' },
       moments: [
-        { title: "«حصان رزان ما تزن بريبة»", text: "«دَخَلْنَا عَلَى عَائِشَةَ رضي الله عنها وَعِنْدَهَا حَسَّانُ بْنُ ثَابِتٍ يُنْشِدُهَا شِعْرًا، يُشَبِّبُ بِأَبْيَاتٍ لَهُ، وَقَالَ: حَصَانٌ رَزَانٌ مَا تُزَنُّ بِرِيبَةٍ … وَتُصْبِحُ غَرْثَى مِنْ لُحُومِ الْغَوَافِلِ فَقَالَتْ لَهُ عَائِشَةُ: لَكِنَّكَ لَسْتَ كَذَلِكَ.", people: ['aisha-bint-abi-bakr', 'hassan-ibn-thabit'] },
-        { title: "«وأي عذاب أشد من العمى؟»", text: "قَالَ مَسْرُوقٌ: فَقُلْتُ لَهَا لِمَ تَأْذَنِي لَهُ أَنْ يَدْخُلَ عَلَيْكِ؟ وَقَدْ قَالَ اللهُ تَعَالَى: ﴿وَالَّذِي تَوَلَّى كِبْرَهُ مِنْهُمْ لَهُ عَذَابٌ عَظِيمٌ﴾ فَقَالَتْ: وَأَيُّ عَذَابٍ أَشَدُّ مِنَ الْعَمَى؟ قَالَتْ لَهُ: إِنَّهُ كَانَ يُنَافِحُ، أَوْ: يُهَاجِي عَنْ رَسُولِ اللهِ ﷺ.»", people: ['aisha-bint-abi-bakr', 'hassan-ibn-thabit', 'prophet-muhammad'] },
+        { title: "«حصان رزان ما تزن بريبة»", text: sahih('bukhari', 4146, 145, 415), people: ['aisha-bint-abi-bakr', 'hassan-ibn-thabit'] },
+        { title: "«وأي عذاب أشد من العمى؟»", text: sahih('bukhari', 4146, 416, 707), people: ['aisha-bint-abi-bakr', 'hassan-ibn-thabit', 'prophet-muhammad'] },
       ],
     },
   ],

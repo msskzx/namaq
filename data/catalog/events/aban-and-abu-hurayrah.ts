@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -17,48 +18,48 @@ const abanAndAbuHurayrah = {
   people: [{ person: 'aban-ibn-said' }, { person: 'prophet-muhammad' }, { person: 'abu-hurayrah' }],
   reports: [
     {
-      isnad: "حَدَّثَنَا مُوسَى بْنُ إِسْمَاعِيلَ: حَدَّثَنَا عَمْرُو بْنُ يَحْيَى بْنِ سَعِيدٍ قَالَ: أَخْبَرَنِي جَدِّي:",
+      isnad: sahih('bukhari', 4239, 0, 108),
       source: { slug: 'sahih-al-bukhari', hadith: 4239, url: 'https://sunnah.com/bukhari:4239' },
       moments: [
         {
           title: "«هذا قاتل ابن قوقل»",
-          text: "«أَنَّ أَبَانَ بْنَ سَعِيدٍ أَقْبَلَ إِلَى النَّبِيِّ ﷺ فَسَلَّمَ عَلَيْهِ، فَقَالَ أَبُو هُرَيْرَةَ: يَا رَسُولَ اللهِ، هَذَا قَاتِلُ ابْنِ قَوْقَلٍ،",
+          text: sahih('bukhari', 4239, 109, 259),
           people: ['aban-ibn-said', 'prophet-muhammad', 'abu-hurayrah'],
           turns: [
-            { text: "«أَنَّ أَبَانَ بْنَ سَعِيدٍ أَقْبَلَ إِلَى النَّبِيِّ ﷺ فَسَلَّمَ عَلَيْهِ،" },
-            { text: "فَقَالَ أَبُو هُرَيْرَةَ: يَا رَسُولَ اللهِ، هَذَا قَاتِلُ ابْنِ قَوْقَلٍ،", speaker: { person: "abu-hurayrah", name: "أبو هريرة" }, lead: "فَقَالَ أَبُو هُرَيْرَةَ:" },
+            { text: sahih('bukhari', 4239, 109, 184) },
+            { text: sahih('bukhari', 4239, 185, 259), speaker: { person: "abu-hurayrah", name: "أبو هريرة" }, lead: sahih('bukhari', 4239, 185, 210) },
           ],
         },
         {
           title: "«ينعى علي امرأ أكرمه الله بيدي»",
-          text: "وَقَالَ أَبَانُ لِأَبِي هُرَيْرَةَ: وَاعَجَبَا لَكَ، وَبْرٌ تَدَأْدَأَ مِنْ قَدُومِ ضَأْنٍ، يَنْعَى عَلَيَّ امْرَأً أَكْرَمَهُ اللهُ بِيَدِي، وَمَنَعَهُ أَنْ يُهِينَنِي بِيَدِهِ.»",
+          text: sahih('bukhari', 4239, 260, 439),
           people: ['aban-ibn-said', 'abu-hurayrah'],
           turns: [
-            { text: "وَقَالَ أَبَانُ لِأَبِي هُرَيْرَةَ: وَاعَجَبَا لَكَ، وَبْرٌ تَدَأْدَأَ مِنْ قَدُومِ ضَأْنٍ، يَنْعَى عَلَيَّ امْرَأً أَكْرَمَهُ اللهُ بِيَدِي، وَمَنَعَهُ أَنْ يُهِينَنِي بِيَدِهِ.»", speaker: { person: "aban-ibn-said", name: "أبان" }, lead: "وَقَالَ أَبَانُ لِأَبِي هُرَيْرَةَ:" },
+            { text: sahih('bukhari', 4239, 260, 439), speaker: { person: "aban-ibn-said", name: "أبان" }, lead: sahih('bukhari', 4239, 260, 295) },
           ],
         },
       ],
     },
     {
-      isnad: "حَدَّثَنَا عَلِيُّ بْنُ عَبْدِ اللهِ: حَدَّثَنَا سُفْيَانُ قَالَ: سَمِعْتُ الزُّهْرِيَّ، وَسَأَلَهُ إِسْمَاعِيلُ بْنُ أُمَيَّةَ، قَالَ: أَخْبَرَنِي عَنْبَسَةُ بْنُ سَعِيدٍ:",
+      isnad: sahih('bukhari', 4237, 0, 172),
       source: { slug: 'sahih-al-bukhari', hadith: 4237, url: 'https://sunnah.com/bukhari:4237' },
       moments: [
         {
           title: "«لا تعطه»",
-          text: "«أَنَّ أَبَا هُرَيْرَةَ رضي الله عنه أَتَى النَّبِيَّ ﷺ فَسَأَلَهُ، قَالَ لَهُ بَعْضُ بَنِي سَعِيدِ بْنِ الْعَاصِ: لَا تُعْطِهِ،",
+          text: sahih('bukhari', 4237, 173, 301),
           people: ['abu-hurayrah', 'prophet-muhammad'],
           turns: [
-            { text: "«أَنَّ أَبَا هُرَيْرَةَ رضي الله عنه أَتَى النَّبِيَّ ﷺ فَسَأَلَهُ،" },
-            { text: "قَالَ لَهُ بَعْضُ بَنِي سَعِيدِ بْنِ الْعَاصِ: لَا تُعْطِهِ،", speaker: { name: "بعض بني سعيد بن العاص" }, lead: "قَالَ لَهُ بَعْضُ بَنِي سَعِيدِ بْنِ الْعَاصِ:" },
+            { text: sahih('bukhari', 4237, 173, 240) },
+            { text: sahih('bukhari', 4237, 241, 301), speaker: { name: "بعض بني سعيد بن العاص" }, lead: sahih('bukhari', 4237, 241, 287) },
           ],
         },
         {
           title: "«هذا قاتل ابن قوقل»",
-          text: "فَقَالَ أَبُو هُرَيْرَةَ: هَذَا قَاتِلُ ابْنِ قَوْقَلٍ، فَقَالَ: وَا عَجَبَاهْ لِوَبْرٍ، تَدَلَّى مِنْ قَدُومِ الضَّأْنِ»",
+          text: sahih('bukhari', 4237, 302, 423),
           people: ['abu-hurayrah', 'aban-ibn-said'],
           turns: [
-            { text: "فَقَالَ أَبُو هُرَيْرَةَ: هَذَا قَاتِلُ ابْنِ قَوْقَلٍ،", speaker: { person: "abu-hurayrah", name: "أبو هريرة" }, lead: "فَقَالَ أَبُو هُرَيْرَةَ:" },
-            { text: "فَقَالَ: وَا عَجَبَاهْ لِوَبْرٍ، تَدَلَّى مِنْ قَدُومِ الضَّأْنِ»" },
+            { text: sahih('bukhari', 4237, 302, 357), speaker: { person: "abu-hurayrah", name: "أبو هريرة" }, lead: sahih('bukhari', 4237, 302, 327) },
+            { text: sahih('bukhari', 4237, 358, 423) },
           ],
         },
       ],

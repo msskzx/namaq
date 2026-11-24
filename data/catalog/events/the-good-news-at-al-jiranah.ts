@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -17,12 +18,12 @@ const theGoodNewsAtAlJiranah = {
   tags: ['HIS_WORDS'],
   reports: [
     {
-      isnad: "حَدَّثَنَا مُحَمَّدُ بْنُ الْعَلَاءِ: حَدَّثَنَا أَبُو أُسَامَةَ، عَنْ بُرَيْدِ بْنِ عَبْدِ اللهِ، عَنْ أَبِي بُرْدَةَ، عَنْ أَبِي مُوسَى  رضي الله عنه قَالَ:",
+      isnad: sahih('bukhari', 4328, 0, 158),
       source: { slug: 'sahih-al-bukhari', hadith: 4328, url: 'https://sunnah.com/bukhari:4328' },
       moments: [
-        { title: "«رد البشرى، فاقبلا أنتما»", text: "«كُنْتُ عِنْدَ النَّبِيِّ ﷺ وَهُوَ نَازِلٌ بِالْجِعْرَانَةِ بَيْنَ مَكَّةَ وَالْمَدِينَةِ، وَمَعَهُ بِلَالٌ، فَأَتَى النَّبِيَّ ﷺ أَعْرَابِيٌّ فَقَالَ: أَلَا تُنْجِزُ لِي مَا وَعَدْتَنِي؟ فَقَالَ لَهُ: أَبْشِرْ. فَقَالَ: قَدْ أَكْثَرْتَ عَلَيَّ مِنْ أَبْشِرْ، فَأَقْبَلَ عَلَى أَبِي مُوسَى وَبِلَالٍ كَهَيْئَةِ الْغَضْبَانِ، فَقَالَ: رَدَّ الْبُشْرَى، فَاقْبَلَا أَنْتُمَا. قَالَا: قَبِلْنَا،", people: ['prophet-muhammad', 'abu-musa-al-ashari', 'bilal-ibn-rabah'] },
-        { title: "«اشربا منه»", text: "ثُمَّ دَعَا بِقَدَحٍ فِيهِ مَاءٌ، فَغَسَلَ يَدَيْهِ وَوَجْهَهُ فِيهِ وَمَجَّ فِيهِ، ثُمَّ قَالَ: اشْرَبَا مِنْهُ، وَأَفْرِغَا عَلَى وُجُوهِكُمَا وَنُحُورِكُمَا وَأَبْشِرَا.", people: ['prophet-muhammad', 'abu-musa-al-ashari', 'bilal-ibn-rabah'] },
-        { title: "«أن أفضلا لأمكما»", text: "فَأَخَذَا الْقَدَحَ فَفَعَلَا، فَنَادَتْ أُمُّ سَلَمَةَ مِنْ وَرَاءِ السِّتْرِ، أَنْ أَفْضِلَا لِأُمِّكُمَا، فَأَفْضَلَا لَهَا مِنْهُ طَائِفَةً».", people: ['abu-musa-al-ashari', 'bilal-ibn-rabah', 'umm-salamah'] },
+        { title: "«رد البشرى، فاقبلا أنتما»", text: sahih('bukhari', 4328, 159, 551), people: ['prophet-muhammad', 'abu-musa-al-ashari', 'bilal-ibn-rabah'] },
+        { title: "«اشربا منه»", text: sahih('bukhari', 4328, 552, 724), people: ['prophet-muhammad', 'abu-musa-al-ashari', 'bilal-ibn-rabah'] },
+        { title: "«أن أفضلا لأمكما»", text: sahih('bukhari', 4328, 725, 870), people: ['abu-musa-al-ashari', 'bilal-ibn-rabah', 'umm-salamah'] },
       ],
     },
   ],

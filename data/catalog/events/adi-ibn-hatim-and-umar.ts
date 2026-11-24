@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -15,10 +16,10 @@ const adiIbnHatimAndUmar = {
   people: [{ person: 'adi-ibn-hatim' }, { person: 'umar-ibn-al-khattab' }],
   reports: [
     {
-      isnad: "حَدَّثَنَا مُوسَى بْنُ إِسْمَاعِيلَ: حَدَّثَنَا أَبُو عَوَانَةَ: حَدَّثَنَا عَبْدُ الْمَلِكِ، عَنْ عَمْرِو بْنِ حُرَيْثٍ، عَنْ عَدِيِّ بْنِ حَاتِمٍ قَالَ:",
+      isnad: sahih('bukhari', 4394, 0, 154),
       source: { slug: 'sahih-al-bukhari', hadith: 4394, url: 'https://sunnah.com/bukhari:4394' },
       moments: [
-        { title: "«أسلمت إذ كفروا»", text: "«أَتَيْنَا عُمَرَ فِي وَفْدٍ فَجَعَلَ يَدْعُو رَجُلًا رَجُلًا وَيُسَمِّيهِمْ، فَقُلْتُ: أَمَا تَعْرِفُنِي يَا أَمِيرَ الْمُؤْمِنِينَ، قَالَ: بَلَى أَسْلَمْتَ إِذْ كَفَرُوا، وَأَقْبَلْتَ إِذْ أَدْبَرُوا، وَوَفَيْتَ إِذْ غَدَرُوا، وَعَرَفْتَ إِذْ أَنْكَرُوا، فَقَالَ عَدِيٌّ: فَلَا أُبَالِي إِذًا.»", people: ['adi-ibn-hatim', 'umar-ibn-al-khattab'] },
+        { title: "«أسلمت إذ كفروا»", text: sahih('bukhari', 4394, 155, 451), people: ['adi-ibn-hatim', 'umar-ibn-al-khattab'] },
       ],
     },
   ],

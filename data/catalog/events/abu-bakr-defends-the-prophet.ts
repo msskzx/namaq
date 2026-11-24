@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -19,18 +20,18 @@ const abuBakrDefendsTheProphet = {
       kind: 'RECITED',
       from: '40:28',
       to: '40:28',
-      evidence: [{ source: 'sahih-al-bukhari', hadith: 3856, url: 'https://sunnah.com/bukhari:3856', quote: "فَأَقْبَلَ أَبُو بَكْرٍ حَتَّى أَخَذَ بِمَنْكِبِهِ، وَدَفَعَهُ عَنِ النَّبِيِّ ﷺ قَالَ: ﴿أَتَقْتُلُونَ رَجُلا أَنْ يَقُولَ رَبِّيَ اللهُ﴾ الْآيَةَ." }],
+      evidence: [{ source: 'sahih-al-bukhari', hadith: 3856, url: 'https://sunnah.com/bukhari:3856', quote: sahih('bukhari', 3856, 512, 659) }],
     },
   ],
   reports: [
     {
-      isnad: "حَدَّثَنَا عَيَّاشُ بْنُ الْوَلِيدِ: حَدَّثَنَا الْوَلِيدُ بْنُ مُسْلِمٍ: حَدَّثَنِي الْأَوْزَاعِيُّ: حَدَّثَنِي يَحْيَى بْنُ أَبِي كَثِيرٍ، عَنْ مُحَمَّدِ بْنِ إِبْرَاهِيمَ التَّيْمِيِّ قَالَ: حَدَّثَنِي عُرْوَةُ بْنُ الزُّبَيْرِ",
+      isnad: sahih('bukhari', 3856, 0, 230),
       source: { slug: 'sahih-al-bukhari', hadith: 3856, url: 'https://sunnah.com/bukhari:3856' },
       moments: [
-        { title: "«أشد شيء صنعه المشركون»", text: "قَالَ: سَأَلْتُ ابْنَ عَمْرِو بْنِ الْعَاصِ: «أَخْبِرْنِي بِأَشَدِّ شَيْءٍ صَنَعَهُ الْمُشْرِكُونَ بِالنَّبِيِّ ﷺ،", people: ['abdullah-ibn-amr-ibn-al-as', 'prophet-muhammad'] },
-        { title: "عقبة يخنقه بثوبه", text: "قَالَ: بَيْنَا النَّبِيُّ ﷺ يُصَلِّي فِي حِجْرِ الْكَعْبَةِ، إِذْ أَقْبَلَ عُقْبَةُ بْنُ أَبِي مُعَيْطٍ، فَوَضَعَ ثَوْبَهُ فِي عُنُقِهِ، فَخَنَقَهُ خَنْقًا شَدِيدًا،", people: ['prophet-muhammad', 'uqba-ibn-abi-muayt'] },
-        { title: "«أتقتلون رجلا أن يقول ربي الله»", text: "فَأَقْبَلَ أَبُو بَكْرٍ حَتَّى أَخَذَ بِمَنْكِبِهِ، وَدَفَعَهُ عَنِ النَّبِيِّ ﷺ قَالَ: ﴿أَتَقْتُلُونَ رَجُلا أَنْ يَقُولَ رَبِّيَ اللهُ﴾ الْآيَةَ.»", people: ['abu-bakr-as-siddiq', 'prophet-muhammad', 'uqba-ibn-abi-muayt'] },
-        { title: "من سُئل عن ذلك", text: "تَابَعَهُ ابْنُ إِسْحَاقَ: حَدَّثَنِي يَحْيَى بْنُ عُرْوَةَ، عَنْ عُرْوَةَ، قُلْتُ لِعَبْدِ اللهِ بْنِ عَمْرٍو. وَقَالَ عَبْدَةُ، عَنْ هِشَامٍ، عَنْ أَبِيهِ: قِيلَ لِعَمْرِو بْنِ الْعَاصِ. وَقَالَ مُحَمَّدُ بْنُ عَمْرٍو، عَنْ أَبِي سَلَمَةَ: حَدَّثَنِي عَمْرُو بْنُ الْعَاصِ.", people: ['abdullah-ibn-amr-ibn-al-as', 'amr-ibn-al-as'] },
+        { title: "«أشد شيء صنعه المشركون»", text: sahih('bukhari', 3856, 231, 345), people: ['abdullah-ibn-amr-ibn-al-as', 'prophet-muhammad'] },
+        { title: "عقبة يخنقه بثوبه", text: sahih('bukhari', 3856, 346, 511), people: ['prophet-muhammad', 'uqba-ibn-abi-muayt'] },
+        { title: "«أتقتلون رجلا أن يقول ربي الله»", text: sahih('bukhari', 3856, 512, 660), people: ['abu-bakr-as-siddiq', 'prophet-muhammad', 'uqba-ibn-abi-muayt'] },
+        { title: "من سُئل عن ذلك", text: sahih('bukhari', 3856, 661, 936), people: ['abdullah-ibn-amr-ibn-al-as', 'amr-ibn-al-as'] },
       ],
     },
   ],

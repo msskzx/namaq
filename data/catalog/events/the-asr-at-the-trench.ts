@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -16,12 +17,12 @@ const theAsrAtTheTrench = {
   tags: ['HIS_WORDS'],
   reports: [
     {
-      isnad: "حَدَّثَنَا الْمَكِّيُّ بْنُ إِبْرَاهِيمَ: حَدَّثَنَا هِشَامٌ، عَنْ يَحْيَى، عَنْ أَبِي سَلَمَةَ، عَنْ جَابِرِ بْنِ عَبْدِ اللهِ:",
+      isnad: sahih('bukhari', 4112, 0, 128),
       source: { slug: 'sahih-al-bukhari', hadith: 4112, url: 'https://sunnah.com/bukhari:4112' },
       moments: [
-        { title: "«ما كدت أن أصلي»", text: "«أَنَّ عُمَرَ بْنَ الْخَطَّابِ رضي الله عنه جَاءَ يَوْمَ الْخَنْدَقِ بَعْدَمَا غَرَبَتِ الشَّمْسُ، جَعَلَ يَسُبُّ كُفَّارَ قُرَيْشٍ، وَقَالَ: يَا رَسُولَ اللهِ، مَا كِدْتُ أَنْ أُصَلِّيَ، حَتَّى كَادَتِ الشَّمْسُ أَنْ تَغْرُبَ.", people: ['umar-ibn-al-khattab', 'prophet-muhammad'] },
-        { title: "«والله ما صليتها»", text: "قَالَ النَّبِيُّ ﷺ: وَاللهِ مَا صَلَّيْتُهَا.", people: ['prophet-muhammad'] },
-        { title: "صلى العصر بعدما غربت الشمس", text: "فَنَزَلْنَا مَعَ النَّبِيِّ ﷺ بُطْحَانَ، فَتَوَضَّأَ لِلصَّلَاةِ وَتَوَضَّأْنَا لَهَا، فَصَلَّى الْعَصْرَ بَعْدَمَا غَرَبَتِ الشَّمْسُ، ثُمَّ صَلَّى بَعْدَهَا الْمَغْرِبَ».", people: ['prophet-muhammad'] },
+        { title: "«ما كدت أن أصلي»", text: sahih('bukhari', 4112, 129, 356), people: ['umar-ibn-al-khattab', 'prophet-muhammad'] },
+        { title: "«والله ما صليتها»", text: sahih('bukhari', 4112, 357, 402), people: ['prophet-muhammad'] },
+        { title: "صلى العصر بعدما غربت الشمس", text: sahih('bukhari', 4112, 403, 575), people: ['prophet-muhammad'] },
       ],
     },
   ],

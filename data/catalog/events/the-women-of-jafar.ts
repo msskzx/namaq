@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -17,12 +18,12 @@ const theWomenOfJafar = {
   tags: ['HIS_WORDS'],
   reports: [
     {
-      isnad: "حَدَّثَنَا قُتَيْبَةُ: حَدَّثَنَا عَبْدُ الْوَهَّابِ قَالَ: سَمِعْتُ يَحْيَى بْنَ سَعِيدٍ قَالَ: أَخْبَرَتْنِي عَمْرَةُ قَالَتْ: سَمِعْتُ عَائِشَةَ  رضي الله عنها تَقُولُ:",
+      isnad: sahih('bukhari', 4263, 0, 171),
       source: { slug: 'sahih-al-bukhari', hadith: 4263, url: 'https://sunnah.com/bukhari:4263' },
       moments: [
-        { title: "جلس يعرف فيه الحزن", text: "«لَمَّا جَاءَ قَتْلُ ابْنِ حَارِثَةَ، وَجَعْفَرِ بْنِ أَبِي طَالِبٍ، وَعَبْدِ اللهِ بْنِ رَوَاحَةَ رضي الله عنهم، جَلَسَ رَسُولُ اللهِ ﷺ يُعْرَفُ فِيهِ الْحُزْنُ، قَالَتْ عَائِشَةُ: وَأَنَا أَطَّلِعُ مِنْ صَائِرِ الْبَابِ، تَعْنِي مِنْ شَقِّ الْبَابِ،", people: ['prophet-muhammad', 'zaid-ibn-harithah', 'jaafar-ibn-abi-talib', 'abdullah-ibn-rawahah', 'aisha-bint-abi-bakr'] },
-        { title: "«فاحث في أفواههن من التراب»", text: "فَأَتَاهُ رَجُلٌ، فَقَالَ: أَيْ رَسُولَ اللهِ إِنَّ نِسَاءَ جَعْفَرٍ، قَالَ: وَذَكَرَ بُكَاءَهُنَّ، فَأَمَرَهُ أَنْ يَنْهَاهُنَّ، قَالَ: فَذَهَبَ الرَّجُلُ ثُمَّ أَتَى، فَقَالَ: قَدْ نَهَيْتُهُنَّ، وَذَكَرَ أَنَّهُ لَمْ يُطِعْنَهُ، قَالَ: فَأَمَرَ أَيْضًا، فَذَهَبَ ثُمَّ أَتَى فَقَالَ: وَاللهِ لَقَدْ غَلَبْنَنَا، فَزَعَمَتْ أَنَّ رَسُولَ اللهِ ﷺ قَالَ: فَاحْثُ فِي أَفْوَاهِهِنَّ مِنَ التُّرَابِ.", people: ['prophet-muhammad'] },
-        { title: "«أرغم الله أنفك»", text: "قَالَتْ عَائِشَةُ: فَقُلْتُ: أَرْغَمَ اللهُ أَنْفَكَ، فَوَاللهِ مَا أَنْتَ تَفْعَلُ، وَمَا تَرَكْتَ رَسُولَ اللهِ ﷺ مِنَ الْعَنَاءِ».", people: ['aisha-bint-abi-bakr', 'prophet-muhammad'] },
+        { title: "جلس يعرف فيه الحزن", text: sahih('bukhari', 4263, 172, 423), people: ['prophet-muhammad', 'zaid-ibn-harithah', 'jaafar-ibn-abi-talib', 'abdullah-ibn-rawahah', 'aisha-bint-abi-bakr'] },
+        { title: "«فاحث في أفواههن من التراب»", text: sahih('bukhari', 4263, 424, 822), people: ['prophet-muhammad'] },
+        { title: "«أرغم الله أنفك»", text: sahih('bukhari', 4263, 823, 956), people: ['aisha-bint-abi-bakr', 'prophet-muhammad'] },
       ],
     },
   ],

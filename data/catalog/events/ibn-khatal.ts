@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -17,10 +18,10 @@ const ibnKhatal = {
   tags: ['HIS_WORDS'],
   reports: [
     {
-      isnad: "حَدَّثَنَا يَحْيَى بْنُ قَزَعَةَ: حَدَّثَنَا مَالِكٌ، عَنِ ابْنِ شِهَابٍ، عَنْ أَنَسِ بْنِ مَالِكٍ  رضي الله عنه:",
+      isnad: sahih('bukhari', 4286, 0, 113),
       source: { slug: 'sahih-al-bukhari', hadith: 4286, url: 'https://sunnah.com/bukhari:4286' },
       moments: [
-        { title: "ابن خطل متعلق بأستار الكعبة", text: "«أَنَّ النَّبِيَّ ﷺ دَخَلَ مَكَّةَ يَوْمَ الْفَتْحِ وَعَلَى رَأْسِهِ الْمِغْفَرُ، فَلَمَّا نَزَعَهُ جَاءَ رَجُلٌ فَقَالَ: ابْنُ خَطَلٍ مُتَعَلِّقٌ بِأَسْتَارِ الْكَعْبَةِ، فَقَالَ: اقْتُلْهُ.» قَالَ مَالِكٌ: وَلَمْ يَكُنِ النَّبِيُّ ﷺ فِيمَا نُرَى وَاللهُ أَعْلَمُ يَوْمَئِذٍ مُحْرِمًا.", people: ['prophet-muhammad'] },
+        { title: "ابن خطل متعلق بأستار الكعبة", text: sahih('bukhari', 4286, 114, 400), people: ['prophet-muhammad'] },
       ],
     },
   ],

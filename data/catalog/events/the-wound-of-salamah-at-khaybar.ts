@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -15,11 +16,11 @@ const theWoundOfSalamahAtKhaybar = {
   people: [{ person: 'prophet-muhammad' }],
   reports: [
     {
-      isnad: "حَدَّثَنَا الْمَكِّيُّ بْنُ إِبْرَاهِيمَ: حَدَّثَنَا يَزِيدُ بْنُ أَبِي عُبَيْدٍ قَالَ:",
+      isnad: sahih('bukhari', 4206, 0, 87),
       source: { slug: 'sahih-al-bukhari', hadith: 4206, url: 'https://sunnah.com/bukhari:4206' },
       moments: [
-        { title: "«ما هذه الضربة؟»", text: "«رَأَيْتُ أَثَرَ ضَرْبَةٍ فِي سَاقِ سَلَمَةَ، فَقُلْتُ: يَا أَبَا مُسْلِمٍ، مَا هَذِهِ الضَّرْبَةُ؟ فَقَالَ: هَذِهِ ضَرْبَةٌ أَصَابَتْنِي يَوْمَ خَيْبَرَ، فَقَالَ النَّاسُ: أُصِيبَ سَلَمَةُ،", people: [] },
-        { title: "فنفث فيه ثلاث نفثات", text: "فَأَتَيْتُ النَّبِيَّ ﷺ فَنَفَثَ فِيهِ ثَلَاثَ نَفَثَاتٍ، فَمَا اشْتَكَيْتُهَا حَتَّى السَّاعَةِ.»", people: ['prophet-muhammad'] },
+        { title: "«ما هذه الضربة؟»", text: sahih('bukhari', 4206, 88, 278), people: [] },
+        { title: "فنفث فيه ثلاث نفثات", text: sahih('bukhari', 4206, 279, 377), people: ['prophet-muhammad'] },
       ],
     },
   ],

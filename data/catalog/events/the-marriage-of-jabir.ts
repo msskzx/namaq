@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -16,11 +17,11 @@ const theMarriageOfJabir = {
   tags: ['HIS_WORDS'],
   reports: [
     {
-      isnad: "حَدَّثَنَا قُتَيْبَةُ: حَدَّثَنَا سُفْيَانُ: أَخْبَرَنَا عَمْرٌو، عَنْ جَابِرٍ قَالَ:",
+      isnad: sahih('bukhari', 4052, 0, 85),
       source: { slug: 'sahih-al-bukhari', hadith: 4052, url: 'https://sunnah.com/bukhari:4052' },
       moments: [
-        { title: "«هل نكحت يا جابر؟»", text: "«قَالَ لِي رَسُولُ اللهِ ﷺ: هَلْ نَكَحْتَ يَا جَابِرُ؟ قُلْتُ: نَعَمْ. قَالَ: مَاذَا أَبِكْرًا أَمْ ثَيِّبًا؟ قُلْتُ: لَا بَلْ ثَيِّبًا، قَالَ: فَهَلَّا جَارِيَةً تُلَاعِبُكَ.", people: ['prophet-muhammad', 'jabir-ibn-abdullah'] },
-        { title: "«إن أبي قتل يوم أحد»", text: "قُلْتُ: يَا رَسُولَ اللهِ، إِنَّ أَبِي قُتِلَ يَوْمَ أُحُدٍ، وَتَرَكَ تِسْعَ بَنَاتٍ، كُنَّ لِي تِسْعَ أَخَوَاتٍ، فَكَرِهْتُ أَنْ أَجْمَعَ إِلَيْهِنَّ جَارِيَةً خَرْقَاءَ مِثْلَهُنَّ، وَلَكِنِ امْرَأَةً تَمْشُطُهُنَّ وَتَقُومُ عَلَيْهِنَّ، قَالَ: أَصَبْتَ».", people: ['jabir-ibn-abdullah', 'prophet-muhammad'] },
+        { title: "«هل نكحت يا جابر؟»", text: sahih('bukhari', 4052, 86, 261), people: ['prophet-muhammad', 'jabir-ibn-abdullah'] },
+        { title: "«إن أبي قتل يوم أحد»", text: sahih('bukhari', 4052, 262, 519), people: ['jabir-ibn-abdullah', 'prophet-muhammad'] },
       ],
     },
   ],

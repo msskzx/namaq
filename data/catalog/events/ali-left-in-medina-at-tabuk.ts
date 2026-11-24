@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -16,10 +17,10 @@ const aliLeftInMedinaAtTabuk = {
   tags: ['HIS_WORDS'],
   reports: [
     {
-      isnad: "حَدَّثَنَا مُسَدَّدٌ: حَدَّثَنَا يَحْيَى، عَنْ شُعْبَةَ، عَنِ الْحَكَمِ، عَنْ مُصْعَبِ بْنِ سَعْدٍ، عَنْ أَبِيهِ،",
+      isnad: sahih('bukhari', 4416, 0, 113),
       source: { slug: 'sahih-al-bukhari', hadith: 4416, url: 'https://sunnah.com/bukhari:4416' },
       moments: [
-        { title: "«ألا ترضى أن تكون مني بمنزلة هارون من موسى»", text: "«أَنَّ رَسُولَ اللهِ ﷺ خَرَجَ إِلَى تَبُوكَ وَاسْتَخْلَفَ عَلِيًّا، فَقَالَ: أَتُخَلِّفُنِي فِي الصِّبْيَانِ وَالنِّسَاءِ؟ قَالَ: أَلَا تَرْضَى أَنْ تَكُونَ مِنِّي بِمَنْزِلَةِ هَارُونَ مِنْ مُوسَى، إِلَّا أَنَّهُ لَيْسَ نَبِيٌّ بَعْدِي،» وَقَالَ أَبُو دَاوُدَ: حَدَّثَنَا شُعْبَةُ، عَنِ الْحَكَمِ: سَمِعْتُ مُصْعَبًا.", people: ['prophet-muhammad', 'ali-ibn-abi-talib'] },
+        { title: "«ألا ترضى أن تكون مني بمنزلة هارون من موسى»", text: sahih('bukhari', 4416, 114, 432), people: ['prophet-muhammad', 'ali-ibn-abi-talib'] },
       ],
     },
   ],

@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -15,11 +16,11 @@ const islamOfSaadIbnAbiWaqqas = {
   tags: ['ISLAM'],
   reports: [
     {
-      isnad: "حَدَّثَنِي إِسْحَاقُ: أَخْبَرَنَا أَبُو أُسَامَةَ: حَدَّثَنَا هَاشِمٌ قَالَ: سَمِعْتُ سَعِيدَ بْنَ الْمُسَيَّبِ",
+      isnad: sahih('bukhari', 3858, 0, 111),
       source: { slug: 'sahih-al-bukhari', hadith: 3858, url: 'https://sunnah.com/bukhari:3858' },
       moments: [
-        { title: "«ما أسلم أحد إلا في اليوم الذي أسلمت فيه»", text: "قَالَ: سَمِعْتُ أَبَا إِسْحَاقَ سَعْدَ بْنَ أَبِي وَقَّاصٍ يَقُولُ: «مَا أَسْلَمَ أَحَدٌ إِلَّا فِي الْيَوْمِ الَّذِي أَسْلَمْتُ فِيهِ،", people: ['saad-ibn-abi-waqqas'] },
-        { title: "«وإني لثلث الإسلام»", text: "وَلَقَدْ مَكَثْتُ سَبْعَةَ أَيَّامٍ، وَإِنِّي لَثُلُثُ الْإِسْلَامِ».", people: ['saad-ibn-abi-waqqas'] },
+        { title: "«ما أسلم أحد إلا في اليوم الذي أسلمت فيه»", text: sahih('bukhari', 3858, 112, 247), people: ['saad-ibn-abi-waqqas'] },
+        { title: "«وإني لثلث الإسلام»", text: sahih('bukhari', 3858, 248, 317), people: ['saad-ibn-abi-waqqas'] },
       ],
     },
   ],

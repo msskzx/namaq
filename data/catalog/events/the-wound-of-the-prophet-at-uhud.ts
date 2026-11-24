@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -16,19 +17,19 @@ const theWoundOfTheProphetAtUhud = {
   people: [{ person: 'prophet-muhammad' }, { person: 'fatimah-bint-muhammad' }, { person: 'ali-ibn-abi-talib' }],
   reports: [
     {
-      isnad: "حَدَّثَنَا قُتَيْبَةُ بْنُ سَعِيدٍ: حَدَّثَنَا يَعْقُوبُ، عَنْ أَبِي حَازِمٍ: أَنَّهُ",
+      isnad: sahih('bukhari', 4075, 0, 85),
       source: { slug: 'sahih-al-bukhari', hadith: 4075, url: 'https://sunnah.com/bukhari:4075' },
       moments: [
-        { title: "من كان يغسل جرح رسول الله ﷺ", text: "«سَمِعَ سَهْلَ بْنَ سَعْدٍ، وَهُوَ يُسْأَلُ عَنْ جُرْحِ رَسُولِ اللهِ ﷺ، فَقَالَ: أَمَا وَاللهِ إِنِّي لَأَعْرِفُ مَنْ كَانَ يَغْسِلُ جُرْحَ رَسُولِ اللهِ ﷺ، وَمَنْ كَانَ يَسْكُبُ الْمَاءَ، وَبِمَا دُووِيَ،", people: ['prophet-muhammad'] },
-        { title: "أخذت قطعة من حصير فأحرقتها", text: "قَالَ: كَانَتْ فَاطِمَةُ عليها السلام بِنْتُ رَسُولِ اللهِ ﷺ تَغْسِلُهُ، وَعَلِيٌّ يَسْكُبُ الْمَاءَ بِالْمِجَنِّ، فَلَمَّا رَأَتْ فَاطِمَةُ أَنَّ الْمَاءَ لَا يَزِيدُ الدَّمَ إِلَّا كَثْرَةً، أَخَذَتْ قِطْعَةً مِنْ حَصِيرٍ، فَأَحْرَقَتْهَا وَأَلْصَقَتْهَا، فَاسْتَمْسَكَ الدَّمُ، وَكُسِرَتْ رَبَاعِيَتُهُ يَوْمَئِذٍ، وَجُرِحَ وَجْهُهُ، وَكُسِرَتِ الْبَيْضَةُ عَلَى رَأْسِهِ.»", people: ['fatimah-bint-muhammad', 'prophet-muhammad', 'ali-ibn-abi-talib'] },
+        { title: "من كان يغسل جرح رسول الله ﷺ", text: sahih('bukhari', 4075, 86, 292), people: ['prophet-muhammad'] },
+        { title: "أخذت قطعة من حصير فأحرقتها", text: sahih('bukhari', 4075, 293, 669), people: ['fatimah-bint-muhammad', 'prophet-muhammad', 'ali-ibn-abi-talib'] },
       ],
     },
     {
-      isnad: "حَدَّثَنَا يَحْيَي بْنُ يَحْيَي التَّمِيمِيُّ. حَدَّثَنَا عَبْدُ الْعَزِيزِ بْنُ أَبِي حَازِمٍ عَنْ أَبِيهِ؛",
+      isnad: sahih('muslim', 1790, 0, 108),
       source: { slug: 'sahih-muslim', hadith: 1790, url: 'https://sunnah.com/muslim:1790' },
       moments: [
-        { title: "جرح وجه رسول الله ﷺ", text: "أَنَّهُ سَمِعَ سَهْلَ بْنَ سَعْدٍ يُسْأَلُ عَنْ جُرْحِ رسول الله ﷺ، يوم أُحُدٍ؟ فَقَالَ: جُرِحَ وَجْهُ رَسُولِ اللَّهِ ﷺ، وَكُسِرَتْ رَبَاعِيَتُهُ، وَهُشِمَتِ الْبَيْضَةُ عَلَى رَأْسِهِ.", people: ['prophet-muhammad'] },
-        { title: "أخذت قطعة من حصير فأحرقته", text: "فَكَانَتْ فَاطِمَةُ بِنْتُ رَسُولِ اللَّهِ ﷺ تَغْسِلُ الدَّمَ. وَكَانَ عَلِيُّ بْنُ أَبِي طَالِبٍ يَسْكُبُ عَلَيْهَا بِالْمِجَنِّ. فَلَمَّا رَأَتْ فَاطِمَةُ أَنَّ الْمَاءَ لَا يَزِيدُ الدم إلا كثرة، أخذت قطعة من حَصِيرٍ فَأَحْرَقَتْهُ حَتَّى صَارَ رَمَادًا. ثُمَّ أَلْصَقَتْهُ بالجرح. فاستمسك الدم.", people: ['fatimah-bint-muhammad', 'ali-ibn-abi-talib', 'prophet-muhammad'] },
+        { title: "جرح وجه رسول الله ﷺ", text: sahih('muslim', 1790, 109, 295), people: ['prophet-muhammad'] },
+        { title: "أخذت قطعة من حصير فأحرقته", text: sahih('muslim', 1790, 296, 594), people: ['fatimah-bint-muhammad', 'ali-ibn-abi-talib', 'prophet-muhammad'] },
       ],
     },
   ],

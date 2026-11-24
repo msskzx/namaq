@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -20,19 +21,19 @@ const theSwordFromTheKhumus = {
       about: 'saad-ibn-abi-waqqas',
       from: '8:1',
       to: '8:1',
-      evidence: [{ source: 'sahih-muslim', hadith: 1748, url: 'https://sunnah.com/muslim:1748', quote: "فَأَنْزَلَ اللَّهُ عز وجل: ﴿يَسْأَلُونَكَ عَنِ الأَنْفَالِ قل الأنفال لله والرسول﴾" }],
+      evidence: [{ source: 'sahih-muslim', hadith: 1748, url: 'https://sunnah.com/muslim:1748', quote: sahih('muslim', 1748, 224, 306) }],
     },
   ],
   reports: [
     {
-      isnad: "وحَدَّثَنَا قُتَيْبَةُ بْنُ سَعِيدٍ. حَدَّثَنَا أَبُو عَوَانَةَ عَنْ سِمَاكٍ، عَنْ مُصْعَبِ بْنِ سَعْدٍ، عَنْ أَبِيهِ. قَالَ:",
+      isnad: sahih('muslim', 1748, 0, 125),
       source: { slug: 'sahih-muslim', hadith: 1748, url: 'https://sunnah.com/muslim:1748' },
       moments: [
-        { title: "«هب لي هذا»", text: "أَخَذَ أَبِي مِنَ الْخُمْسِ سَيْفًا. فَأَتَى بِهِ النَّبِيُّ ﷺ. فَقَالَ: هَبْ لِي هَذَا. فَأَبَى. فَأَنْزَلَ اللَّهُ عز وجل: ﴿يَسْأَلُونَكَ عَنِ الأَنْفَالِ قل الأنفال لله والرسول﴾ [٨ /الأنفال /١]", people: ['saad-ibn-abi-waqqas', 'prophet-muhammad'],
+        { title: "«هب لي هذا»", text: sahih('muslim', 1748, 126, 322), people: ['saad-ibn-abi-waqqas', 'prophet-muhammad'],
           turns: [
-            { text: "أَخَذَ أَبِي مِنَ الْخُمْسِ سَيْفًا. فَأَتَى بِهِ النَّبِيُّ ﷺ." },
-            { text: "فَقَالَ: هَبْ لِي هَذَا.", speaker: { person: "saad-ibn-abi-waqqas", name: "سعد" }, lead: "فَقَالَ:", witness: { source: "kawkab-wahhaj", volume: 19, volumeLabel: "19", page: 131, quote: "(أخذ أبي) سعد … (النبي ﷺ فقال) أبي للنبي ﷺ (هب لي)", url: "https://shamela.ws/book/18268/7806" } },
-            { text: "فَأَبَى. فَأَنْزَلَ اللَّهُ عز وجل: ﴿يَسْأَلُونَكَ عَنِ الأَنْفَالِ قل الأنفال لله والرسول﴾ [٨ /الأنفال /١]" },
+            { text: sahih('muslim', 1748, 126, 189) },
+            { text: sahih('muslim', 1748, 190, 214), speaker: { person: "saad-ibn-abi-waqqas", name: "سعد" }, lead: sahih('muslim', 1748, 190, 198), witness: { source: "kawkab-wahhaj", volume: 19, volumeLabel: "19", page: 131, quote: "(أخذ أبي) سعد … (النبي ﷺ فقال) أبي للنبي ﷺ (هب لي)", url: "https://shamela.ws/book/18268/7806" } },
+            { text: sahih('muslim', 1748, 215, 322) },
           ] },
       ],
     },

@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -17,11 +18,11 @@ const buraydahAndAli = {
   tags: ['HIS_WORDS'],
   reports: [
     {
-      isnad: "حَدَّثَنِي مُحَمَّدُ بْنُ بَشَّارٍ: حَدَّثَنَا رَوْحُ بْنُ عُبَادَةَ: حَدَّثَنَا عَلِيُّ بْنُ سُوَيْدِ بْنِ مَنْجُوفٍ، عَنْ عَبْدِ اللهِ بْنِ بُرَيْدَةَ، عَنْ أَبِيهِ  رضي الله عنه قَالَ:",
+      isnad: sahih('bukhari', 4350, 0, 187),
       source: { slug: 'sahih-al-bukhari', hadith: 4350, url: 'https://sunnah.com/bukhari:4350' },
       moments: [
-        { title: "وكنت أبغض عليا", text: "«بَعَثَ النَّبِيُّ ﷺ عَلِيًّا إِلَى خَالِدٍ لِيَقْبِضَ الْخُمُسَ، وَكُنْتُ أُبْغِضُ عَلِيًّا، وَقَدِ اغْتَسَلَ، فَقُلْتُ لِخَالِدٍ: أَلَا تَرَى إِلَى هَذَا،", people: ['ali-ibn-abi-talib', 'khalid-ibn-al-walid', 'buraidah-ibn-al-husayb'] },
-        { title: "«يا بريدة أتبغض عليا»", text: "فَلَمَّا قَدِمْنَا عَلَى النَّبِيِّ ﷺ ذَكَرْتُ ذَلِكَ لَهُ، فَقَالَ: يَا بُرَيْدَةُ أَتُبْغِضُ عَلِيًّا، فَقُلْتُ: نَعَمْ، قَالَ: لَا تُبْغِضْهُ، فَإِنَّ لَهُ فِي الْخُمُسِ أَكْثَرَ مِنْ ذَلِكَ.»", people: ['prophet-muhammad', 'buraidah-ibn-al-husayb', 'ali-ibn-abi-talib'] },
+        { title: "وكنت أبغض عليا", text: sahih('bukhari', 4350, 188, 344), people: ['ali-ibn-abi-talib', 'khalid-ibn-al-walid', 'buraidah-ibn-al-husayb'] },
+        { title: "«يا بريدة أتبغض عليا»", text: sahih('bukhari', 4350, 345, 540), people: ['prophet-muhammad', 'buraidah-ibn-al-husayb', 'ali-ibn-abi-talib'] },
       ],
     },
   ],

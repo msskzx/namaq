@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -19,16 +20,16 @@ const theEightyFromAtTanim = {
       kind: 'REVEALED_ABOUT',
       from: '48:24',
       to: '48:24',
-      evidence: [{ source: 'sahih-muslim', hadith: 1808, url: 'https://sunnah.com/muslim:1808', quote: "فَأَنْزَلَ اللَّهُ عز وجل: ﴿وَهُوَ الَّذِي كَفَّ أَيْدِيَهُمْ عَنْكُمْ وَأَيْدِيَكُمْ عَنْهُمْ بِبَطْنِ مَكَّةَ مِنْ بعد أن أظفركم عليهم﴾" }],
+      evidence: [{ source: 'sahih-muslim', hadith: 1808, url: 'https://sunnah.com/muslim:1808', quote: sahih('muslim', 1808, 350, 487) }],
     },
   ],
   reports: [
     {
-      isnad: "حَدَّثَنِي عَمْرُو بْنُ مُحَمَّدٍ النَّاقِدُ. حَدَّثَنَا يَزِيدُ بْنُ هَارُونَ. أَخْبَرَنَا حَمَّادُ بْنُ سَلَمَةَ عَنْ ثَابِتٍ، عَنْ أَنَسِ بْنِ مَالِكٍ؛",
+      isnad: sahih('muslim', 1808, 0, 154),
       source: { slug: 'sahih-muslim', hadith: 1808, url: 'https://sunnah.com/muslim:1808' },
       moments: [
-        { title: "هبطوا من جبل التنعيم", text: "أن ثَمَانِينَ رَجُلًا مِنْ أَهْلِ مَكَّةَ هَبَطُوا عَلَى رسول الله ﷺ من جَبَلِ التَّنْعِيمِ مُتَسَلِّحِينَ. يُرِيدُونَ غِرَّةَ النَّبِيِّ ﷺ وَأَصْحَابِهِ. فَأَخَذَهُمْ سِلْمًا. فَاسْتَحْيَاهُمْ.", people: ['prophet-muhammad'] },
-        { title: "«وهو الذي كف أيديهم عنكم»", text: "فَأَنْزَلَ اللَّهُ عز وجل: ﴿وَهُوَ الَّذِي كَفَّ أَيْدِيَهُمْ عَنْكُمْ وَأَيْدِيَكُمْ عَنْهُمْ بِبَطْنِ مَكَّةَ مِنْ بعد أن أظفركم عليهم﴾ [٤٨ /الفتح /٢٤].", people: [] },
+        { title: "هبطوا من جبل التنعيم", text: sahih('muslim', 1808, 155, 349), people: ['prophet-muhammad'] },
+        { title: "«وهو الذي كف أيديهم عنكم»", text: sahih('muslim', 1808, 350, 504), people: [] },
       ],
     },
   ],

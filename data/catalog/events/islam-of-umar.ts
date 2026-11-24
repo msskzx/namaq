@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -55,28 +56,28 @@ const islamOfUmar = {
       ],
     },
     {
-      isnad: "حَدَّثَنَا يَحْيَى بْنُ سُلَيْمَانَ قَالَ: حَدَّثَنِي ابْنُ وَهْبٍ قَالَ: حَدَّثَنِي عُمَرُ بْنُ مُحَمَّدٍ قَالَ: فَأَخْبَرَنِي جَدِّي زَيْدُ بْنُ عَبْدِ اللهِ بْنِ عُمَرَ، عَنْ أَبِيهِ",
+      isnad: sahih('bukhari', 3864, 0, 185),
       source: { slug: 'sahih-al-bukhari', hadith: 3864, url: 'https://sunnah.com/bukhari:3864' },
       moments: [
-        { title: "في الدار خائفا", text: "قَالَ: «بَيْنَمَا هُوَ فِي الدَّارِ خَائِفًا، إِذْ جَاءَهُ الْعَاصِ بْنُ وَائِلٍ السَّهْمِيُّ أَبُو عَمْرٍو، عَلَيْهِ حُلَّةُ حِبَرَةٍ وَقَمِيصٌ مَكْفُوفٌ بِحَرِيرٍ، وَهُوَ مِنْ بَنِي سَهْمٍ، وَهُمْ حُلَفَاؤُنَا فِي الْجَاهِلِيَّةِ،", people: ['umar-ibn-al-khattab', 'al-as-ibn-wail-al-sahmi'] },
-        { title: "«لا سبيل إليك»", text: "فَقَالَ لَهُ: مَا بَالُكَ؟ قَالَ: زَعَمَ قَوْمُكَ أَنَّهُمْ سَيَقْتُلُونِي إِنْ أَسْلَمْتُ، قَالَ: لَا سَبِيلَ إِلَيْكَ، بَعْدَ أَنْ قَالَهَا أَمِنْتُ،", people: ['al-as-ibn-wail-al-sahmi', 'umar-ibn-al-khattab'] },
-        { title: "«فكرّ الناس»", text: "فَخَرَجَ العَاصِ فَلَقِيَ النَّاسَ قَدْ سَالَ بِهِمُ الْوَادِي، فَقَالَ: أَيْنَ تُرِيدُونَ؟ فَقَالُوا: نُرِيدُ هَذَا ابْنَ الْخَطَّابِ الَّذِي صَبَا، قَالَ: لَا سَبِيلَ إِلَيْهِ، فَكَرَّ النَّاسُ.»", people: ['al-as-ibn-wail-al-sahmi', 'umar-ibn-al-khattab'] },
+        { title: "في الدار خائفا", text: sahih('bukhari', 3864, 186, 418), people: ['umar-ibn-al-khattab', 'al-as-ibn-wail-al-sahmi'] },
+        { title: "«لا سبيل إليك»", text: sahih('bukhari', 3864, 419, 570), people: ['al-as-ibn-wail-al-sahmi', 'umar-ibn-al-khattab'] },
+        { title: "«فكرّ الناس»", text: sahih('bukhari', 3864, 571, 768), people: ['al-as-ibn-wail-al-sahmi', 'umar-ibn-al-khattab'] },
       ],
     },
     {
-      isnad: "حَدَّثَنَا عَلِيُّ بْنُ عَبْدِ اللهِ: حَدَّثَنَا سُفْيَانُ قَالَ عَمْرُو بْنُ دِينَارٍ سَمِعْتُهُ قَالَ: قَالَ عَبْدُ اللهِ بْنُ عُمَرَ  رضي الله عنهما:",
+      isnad: sahih('bukhari', 3865, 0, 152),
       source: { slug: 'sahih-al-bukhari', hadith: 3865, url: 'https://sunnah.com/bukhari:3865' },
       moments: [
-        { title: "«صبأ عمر»", text: "«لَمَّا أَسْلَمَ عُمَرُ، اجْتَمَعَ النَّاسُ عِنْدَ دَارِهِ، وَقَالُوا: صَبَا عُمَرُ، وَأَنَا غُلَامٌ فَوْقَ ظَهْرِ بَيْتِي،", people: ['umar-ibn-al-khattab'] },
-        { title: "«فأنا له جار»", text: "فَجَاءَ رَجُلٌ عَلَيْهِ قَبَاءٌ مِنْ دِيبَاجٍ، فَقَالَ: قَدْ صَبَا عُمَرُ، فَمَا ذَاكَ؟ فَأَنَا لَهُ جَارٌ،", people: ['al-as-ibn-wail-al-sahmi', 'umar-ibn-al-khattab'] },
-        { title: "تصدّع الناس عنه", text: "قَالَ: فَرَأَيْتُ النَّاسَ تَصَدَّعُوا عَنْهُ، فَقُلْتُ: مَنْ هَذَا؟ قَالُوا: العَاصِ بْنُ وَائِلٍ.»", people: ['al-as-ibn-wail-al-sahmi', 'umar-ibn-al-khattab'] },
+        { title: "«صبأ عمر»", text: sahih('bukhari', 3865, 153, 276), people: ['umar-ibn-al-khattab'] },
+        { title: "«فأنا له جار»", text: sahih('bukhari', 3865, 277, 384), people: ['al-as-ibn-wail-al-sahmi', 'umar-ibn-al-khattab'] },
+        { title: "تصدّع الناس عنه", text: sahih('bukhari', 3865, 385, 485), people: ['al-as-ibn-wail-al-sahmi', 'umar-ibn-al-khattab'] },
       ],
     },
     {
-      isnad: "حَدَّثَنِي مُحَمَّدُ بْنُ كَثِيرٍ: أَخْبَرَنَا سُفْيَانُ، عَنْ إِسْمَاعِيلَ بْنِ أَبِي خَالِدٍ، عَنْ قَيْسِ بْنِ أَبِي حَازِمٍ، عَنْ عَبْدِ اللهِ بْنِ مَسْعُودٍ  رضي الله عنه",
+      isnad: sahih('bukhari', 3863, 0, 174),
       source: { slug: 'sahih-al-bukhari', hadith: 3863, url: 'https://sunnah.com/bukhari:3863' },
       moments: [
-        { title: "«ما زلنا أعزة»", text: "قَالَ: «مَا زِلْنَا أَعِزَّةً مُنْذُ أَسْلَمَ عُمَرُ.»", people: ['abdullah-ibn-masud', 'umar-ibn-al-khattab'] },
+        { title: "«ما زلنا أعزة»", text: sahih('bukhari', 3863, 175, 229), people: ['abdullah-ibn-masud', 'umar-ibn-al-khattab'] },
       ],
     },
   ],

@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 // At Mecca, قبل مخرج النبي صلى الله عليه وسلم to Medina, which dates it before
@@ -21,27 +22,27 @@ const splittingOfTheMoon = {
   people: [{ person: 'prophet-muhammad', claims: ['sira/splitting-moon'] }, { person: 'abdullah-ibn-masud' }],
   reports: [
     {
-      isnad: "حَدَّثَنَا عَبْدَانُ، عَنْ أَبِي حَمْزَةَ، عَنِ الْأَعْمَشِ، عَنْ إِبْرَاهِيمَ، عَنْ أَبِي مَعْمَرٍ، عَنْ عَبْدِ اللهِ  رضي الله عنه",
+      isnad: sahih('bukhari', 3869, 0, 132),
       source: { slug: 'sahih-al-bukhari', hadith: 3869, url: 'https://sunnah.com/bukhari:3869' },
       moments: [
-        { title: "انشق ونحن معه بمنى", text: "قَالَ: «انْشَقَّ الْقَمَرُ وَنَحْنُ مَعَ النَّبِيِّ ﷺ بِمِنًى،", people: ['abdullah-ibn-masud', 'prophet-muhammad'] },
-        { title: "«اشهدوا»", text: "فَقَالَ: اشْهَدُوا وَذَهَبَتْ فِرْقَةٌ نَحْوَ الْجَبَلِ.»", people: ['prophet-muhammad'] },
-        { title: "«انشق بمكة»", text: "وَقَالَ أَبُو الضُّحَى، عَنْ مَسْرُوقٍ، عَنْ عَبْدِ اللهِ: انْشَقَّ بِمَكَّةَ. وَتَابَعَهُ مُحَمَّدُ بْنُ مُسْلِمٍ، عَنِ ابْنِ أَبِي نَجِيحٍ، عَنْ مُجَاهِدٍ، عَنْ أَبِي مَعْمَرٍ، عَنْ عَبْدِ اللهِ.", people: ['abdullah-ibn-masud'] },
+        { title: "انشق ونحن معه بمنى", text: sahih('bukhari', 3869, 133, 195), people: ['abdullah-ibn-masud', 'prophet-muhammad'] },
+        { title: "«اشهدوا»", text: sahih('bukhari', 3869, 196, 253), people: ['prophet-muhammad'] },
+        { title: "«انشق بمكة»", text: sahih('bukhari', 3869, 254, 451), people: ['abdullah-ibn-masud'] },
       ],
     },
     {
-      isnad: "حَدَّثَنِي عَبْدُ اللهِ بْنُ عَبْدِ الْوَهَّابِ: حَدَّثَنَا بِشْرُ بْنُ الْمُفَضَّلِ: حَدَّثَنَا سَعِيدُ بْنُ أَبِي عَرُوبَةَ، عَنْ قَتَادَةَ، عَنْ أَنَسِ بْنِ مَالِكٍ  رضي الله عنه:",
+      isnad: sahih('bukhari', 3868, 0, 182),
       source: { slug: 'sahih-al-bukhari', hadith: 3868, url: 'https://sunnah.com/bukhari:3868' },
       moments: [
-        { title: "سألوه أن يريهم آية", text: "«أَنَّ أَهْلَ مَكَّةَ سَأَلُوا رَسُولَ اللهِ ﷺ أَنْ يُرِيَهُمْ آيَةً،", people: ['prophet-muhammad'] },
-        { title: "حتى رأوا حراء بينهما", text: "فَأَرَاهُمُ الْقَمَرَ شِقَّتَيْنِ، حَتَّى رَأَوْا حِرَاءً بَيْنَهُمَا.»", people: ['prophet-muhammad'] },
+        { title: "سألوه أن يريهم آية", text: sahih('bukhari', 3868, 183, 252), people: ['prophet-muhammad'] },
+        { title: "حتى رأوا حراء بينهما", text: sahih('bukhari', 3868, 253, 324), people: ['prophet-muhammad'] },
       ],
     },
     {
-      isnad: "حَدَّثَنَا عُثْمَانُ بْنُ صَالِحٍ: حَدَّثَنَا بَكْرُ بْنُ مُضَرَ قَالَ: حَدَّثَنِي جَعْفَرُ بْنُ رَبِيعَةَ، عَنْ عِرَاكِ بْنِ مَالِكٍ، عَنْ عُبَيْدِ اللهِ بْنِ عَبْدِ اللهِ بْنِ عُتْبَةَ بْنِ مَسْعُودٍ، عَنْ عَبْدِ اللهِ بْنِ عَبَّاسٍ  رضي الله عنهما:",
+      isnad: sahih('bukhari', 3870, 0, 251),
       source: { slug: 'sahih-al-bukhari', hadith: 3870, url: 'https://sunnah.com/bukhari:3870' },
       moments: [
-        { title: "على زمان رسول الله ﷺ", text: "«أَنَّ الْقَمَرَ انْشَقَّ عَلَى زَمَانِ رَسُولِ اللهِ ﷺ.»", people: ['prophet-muhammad'] },
+        { title: "على زمان رسول الله ﷺ", text: sahih('bukhari', 3870, 252, 309), people: ['prophet-muhammad'] },
       ],
     },
   ],

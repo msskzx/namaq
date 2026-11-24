@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -15,12 +16,12 @@ const ummKhalidAndTheKhamisah = {
   people: [{ person: 'umm-khalid-bint-khalid' }, { person: 'prophet-muhammad' }],
   reports: [
     {
-      isnad: "حَدَّثَنَا الْحُمَيْدِيُّ: حَدَّثَنَا سُفْيَانُ: حَدَّثَنَا إِسْحَاقُ بْنُ سَعِيدٍ السَّعِيدِيُّ، عَنْ أَبِيهِ، عَنْ أُمِّ خَالِدٍ بِنْتِ خَالِدٍ",
+      isnad: sahih('bukhari', 3874, 0, 145),
       source: { slug: 'sahih-al-bukhari', hadith: 3874, url: 'https://sunnah.com/bukhari:3874' },
       moments: [
-        { title: "قدمت من الحبشة جويرية", text: "قَالَتْ: «قَدِمْتُ مِنْ أَرْضِ الْحَبَشَةِ وَأَنَا جُوَيْرِيَةٌ،", people: ['umm-khalid-bint-khalid'] },
-        { title: "«سناه سناه»", text: "فَكَسَانِي رَسُولُ اللهِ ﷺ خَمِيصَةً لَهَا أَعْلَامٌ، فَجَعَلَ رَسُولُ اللهِ ﷺ يَمْسَحُ الْأَعْلَامَ بِيَدِهِ وَيَقُولُ: سَنَاهْ سَنَاهْ.»", people: ['prophet-muhammad', 'umm-khalid-bint-khalid'] },
-        { title: "يعني حسن حسن", text: "قَالَ الْحُمَيْدِيُّ: يَعْنِي حَسَنٌ حَسَنٌ.", people: [] },
+        { title: "قدمت من الحبشة جويرية", text: sahih('bukhari', 3874, 146, 210), people: ['umm-khalid-bint-khalid'] },
+        { title: "«سناه سناه»", text: sahih('bukhari', 3874, 211, 349), people: ['prophet-muhammad', 'umm-khalid-bint-khalid'] },
+        { title: "يعني حسن حسن", text: sahih('bukhari', 3874, 350, 394), people: [] },
       ],
     },
   ],

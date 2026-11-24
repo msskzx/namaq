@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -16,11 +17,11 @@ const theMotherOfHarithah = {
   tags: ['HIS_WORDS'],
   reports: [
     {
-      isnad: "حَدَّثَنِي عَبْدُ اللهِ بْنُ مُحَمَّدٍ: حَدَّثَنَا مُعَاوِيَةُ بْنُ عَمْرٍو: حَدَّثَنَا أَبُو إِسْحَاقَ، عَنْ حُمَيْدٍ قَالَ: سَمِعْتُ أَنَسًا  رضي الله عنه يَقُولُ:",
+      isnad: sahih('bukhari', 3982, 0, 165),
       source: { slug: 'sahih-al-bukhari', hadith: 3982, url: 'https://sunnah.com/bukhari:3982' },
       moments: [
-        { title: "«قد عرفت منزلة حارثة مني»", text: "«أُصِيبَ حَارِثَةُ يَوْمَ بَدْرٍ وَهُوَ غُلَامٌ، فَجَاءَتْ أُمُّهُ إِلَى النَّبِيِّ ﷺ فَقَالَتْ: يَا رَسُولَ اللهِ، قَدْ عَرَفْتَ مَنْزِلَةَ حَارِثَةَ مِنِّي، فَإِنْ يَكُنْ فِي الْجَنَّةِ أَصْبِرْ وَأَحْتَسِبْ، وَإِنْ تَكُ الْأُخْرَى تَرَى مَا أَصْنَعُ،", people: ['harithah-ibn-suraqah', 'prophet-muhammad'] },
-        { title: "«إنها جنان كثيرة»", text: "فَقَالَ: وَيْحَكِ، أَوَهَبِلْتِ، أَوَجَنَّةٌ وَاحِدَةٌ هِيَ، إِنَّهَا جِنَانٌ كَثِيرَةٌ، وَإِنَّهُ فِي جَنَّةِ الْفِرْدَوْسِ».", people: ['prophet-muhammad', 'harithah-ibn-suraqah'] },
+        { title: "«قد عرفت منزلة حارثة مني»", text: sahih('bukhari', 3982, 166, 419), people: ['harithah-ibn-suraqah', 'prophet-muhammad'] },
+        { title: "«إنها جنان كثيرة»", text: sahih('bukhari', 3982, 420, 546), people: ['prophet-muhammad', 'harithah-ibn-suraqah'] },
       ],
     },
   ],

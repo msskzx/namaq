@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -36,34 +37,34 @@ const expulsionOfBanuNadir = {
       from: '59:5',
       to: '59:5',
       evidence: [
-        { source: 'sahih-al-bukhari', hadith: 4031, url: 'https://sunnah.com/bukhari:4031', quote: "فَنَزَلَتْ: ﴿مَا قَطَعْتُمْ مِنْ لِينَةٍ أَوْ تَرَكْتُمُوهَا قَائِمَةً عَلَى أُصُولِهَا فَبِإِذْنِ اللهِ﴾" },
-        { source: 'sahih-muslim', hadith: 1746, url: 'https://sunnah.com/muslim:1746', quote: "فَأَنْزَلَ اللَّهُ عز وجل: ﴿مَا قَطَعْتُمْ مِنْ لِينَةٍ أَوْ تَرَكْتُمُوهَا قَائِمَةً عَلَى أُصُولِهَا فَبِإِذْنِ اللَّهِ وليخزي الفاسقين﴾" },
+        { source: 'sahih-al-bukhari', hadith: 4031, url: 'https://sunnah.com/bukhari:4031', quote: sahih('bukhari', 4031, 176, 281) },
+        { source: 'sahih-muslim', hadith: 1746, url: 'https://sunnah.com/muslim:1746', quote: sahih('muslim', 1746, 306, 444) },
       ],
     },
   ],
   reports: [
     {
-      isnad: "حَدَّثَنَا آدَمُ: حَدَّثَنَا اللَّيْثُ، عَنْ نَافِعٍ، عَنِ ابْنِ عُمَرَ  رضي الله عنهما قَالَ:",
+      isnad: sahih('bukhari', 4031, 0, 94),
       source: { slug: 'sahih-al-bukhari', hadith: 4031, url: 'https://sunnah.com/bukhari:4031' },
       moments: [
-        { title: "حرق نخل بني النضير", text: "«حَرَّقَ رَسُولُ اللهِ ﷺ نَخْلَ بَنِي النَّضِيرِ وَقَطَعَ، وَهْيَ الْبُوَيْرَةُ، فَنَزَلَتْ: ﴿مَا قَطَعْتُمْ مِنْ لِينَةٍ أَوْ تَرَكْتُمُوهَا قَائِمَةً عَلَى أُصُولِهَا فَبِإِذْنِ اللهِ﴾».", people: ['prophet-muhammad'] },
+        { title: "حرق نخل بني النضير", text: sahih('bukhari', 4031, 95, 283), people: ['prophet-muhammad'] },
       ],
     },
     {
-      isnad: "حَدَّثَنِي إِسْحَاقُ: أَخْبَرَنَا حَبَّانُ: أَخْبَرَنَا جُوَيْرِيَةُ بْنُ أَسْمَاءَ، عَنْ نَافِعٍ، عَنِ ابْنِ عُمَرَ  رضي الله عنهما",
+      isnad: sahih('bukhari', 4032, 0, 132),
       source: { slug: 'sahih-al-bukhari', hadith: 4032, url: 'https://sunnah.com/bukhari:4032' },
       moments: [
-        { title: "حرق نخل بني النضير", text: "«أَنَّ النَّبِيَّ ﷺ حَرَّقَ نَخْلَ بَنِي النَّضِيرِ،", people: ['prophet-muhammad'] },
-        { title: "«حريق بالبويرة مستطير»", text: "قَالَ: وَلَهَا يَقُولُ حَسَّانُ بْنُ ثَابِتٍ: وَهَانَ عَلَى سَرَاةِ بَنِي لُؤَيٍّ … حَرِيقٌ بِالْبُوَيْرَةِ مُسْتَطِيرُ", people: ['hassan-ibn-thabit'] },
-        { title: "فأجابه أبو سفيان بن الحارث", text: "قَالَ: فَأَجَابَهُ أَبُو سُفْيَانَ بْنُ الْحَارِثِ: أَدَامَ اللهُ ذَلِكَ مِنْ صَنِيعٍ … وَحَرَّقَ فِي نَوَاحِيهَا السَّعِيرُ سَتَعْلَمُ أَيُّنَا مِنْهَا بِنُزْهٍ … وَتَعْلَمُ أَيَّ أَرْضَيْنَا تَضِيرُ.»", people: ['abu-sufyan-ibn-al-harith'] },
+        { title: "حرق نخل بني النضير", text: sahih('bukhari', 4032, 133, 185), people: ['prophet-muhammad'] },
+        { title: "«حريق بالبويرة مستطير»", text: sahih('bukhari', 4032, 186, 305), people: ['hassan-ibn-thabit'] },
+        { title: "فأجابه أبو سفيان بن الحارث", text: sahih('bukhari', 4032, 306, 508), people: ['abu-sufyan-ibn-al-harith'] },
       ],
     },
     {
-      isnad: "حَدَّثَنَا يَحْيَى بْنُ يَحْيَى وَمُحَمَّدُ بْنُ رُمْحٍ. قَالَا: أَخْبَرَنَا اللَّيْثُ. ح وحَدَّثَنَا قُتَيْبَةُ بْنُ سعيد. حَدَّثَنَا لَيْثٌ عَنْ نَافِعٍ، عَنْ عَبْدِ اللَّهِ؛",
+      isnad: sahih('muslim', 1746, 0, 176),
       source: { slug: 'sahih-muslim', hadith: 1746, url: 'https://sunnah.com/muslim:1746' },
       moments: [
-        { title: "حرق نخل بني النضير", text: "إن رسول الله ﷺ حَرَّقَ نَخْلَ بَنِي النَّضِيرِ وَقَطَعَ. وَهِيَ الْبُوَيْرَةُ.", people: ['prophet-muhammad'] },
-        { title: "فأنزل الله", text: "زَادَ قُتَيْبَةُ وَابْنُ رُمْحٍ فِي حَدِيثِهِمَا: فَأَنْزَلَ اللَّهُ عز وجل: ﴿مَا قَطَعْتُمْ مِنْ لِينَةٍ أَوْ تَرَكْتُمُوهَا قَائِمَةً عَلَى أُصُولِهَا فَبِإِذْنِ اللَّهِ وليخزي الفاسقين﴾ [٥٩ /الحشر / ٥].", people: [] },
+        { title: "حرق نخل بني النضير", text: sahih('muslim', 1746, 177, 255), people: ['prophet-muhammad'] },
+        { title: "فأنزل الله", text: sahih('muslim', 1746, 256, 461), people: [] },
       ],
     },
   ],

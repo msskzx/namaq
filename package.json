@@ -83,6 +83,7 @@
     "catalog:ledger": "tsx scripts/data/catalogLedger.ts",
     "catalog:checklist": "tsx scripts/data/catalogChecklist.ts",
     "catalog:quoted-report": "tsx scripts/data/quotedValueReport.ts",
+    "catalog:story": "tsx scripts/data/printStory.ts",
     "quiz:generate": "tsx scripts/quiz/generateQuestions.ts",
     "quiz:review": "tsx scripts/quiz/reviewQuestion.ts",
     "records:export": "tsx scripts/records/toDistillate.ts",

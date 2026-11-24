@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -19,17 +20,17 @@ const theTwoPartiesOverTheHypocrites = {
       kind: 'REVEALED_ABOUT',
       from: '4:88',
       to: '4:88',
-      evidence: [{ source: 'sahih-al-bukhari', hadith: 4050, url: 'https://sunnah.com/bukhari:4050', quote: "فَنَزَلَتْ: ﴿فَمَا لَكُمْ فِي الْمُنَافِقِينَ فِئَتَيْنِ وَاللهُ أَرْكَسَهُمْ بِمَا كَسَبُوا﴾" }],
+      evidence: [{ source: 'sahih-al-bukhari', hadith: 4050, url: 'https://sunnah.com/bukhari:4050', quote: sahih('bukhari', 4050, 361, 454) }],
     },
   ],
   reports: [
     {
-      isnad: "حَدَّثَنَا أَبُو الْوَلِيدِ حَدَّثَنَا شُعْبَةُ، عَنْ عَدِيِّ بْنِ ثَابِتٍ سَمِعْتُ عَبْدَ اللهِ بْنَ يَزِيدَ يُحَدِّثُ عَنْ زَيْدِ بْنِ ثَابِتٍ  رضي الله عنه قَالَ:",
+      isnad: sahih('bukhari', 4050, 0, 165),
       source: { slug: 'sahih-al-bukhari', hadith: 4050, url: 'https://sunnah.com/bukhari:4050' },
       moments: [
-        { title: "رجع ناس ممن خرج معه", text: "«لَمَّا خَرَجَ النَّبِيُّ ﷺ إِلَى أُحُدٍ، رَجَعَ نَاسٌ مِمَّنْ خَرَجَ مَعَهُ، وَكَانَ أَصْحَابُ النَّبِيِّ ﷺ فِرْقَتَيْنِ: فِرْقَةً تَقُولُ: نُقَاتِلُهُمْ، وَفِرْقَةً تَقُولُ: لَا نُقَاتِلُهُمْ،", people: ['prophet-muhammad'] },
-        { title: "«فما لكم في المنافقين فئتين»", text: "فَنَزَلَتْ: ﴿فَمَا لَكُمْ فِي الْمُنَافِقِينَ فِئَتَيْنِ وَاللهُ أَرْكَسَهُمْ بِمَا كَسَبُوا﴾", people: [] },
-        { title: "«إنها طيبة»", text: "وَقَالَ: إِنَّهَا طَيْبَةُ، تَنْفِي الذُّنُوبَ، كَمَا تَنْفِي النَّارُ خَبَثَ الْفِضَّةِ.»", people: [] },
+        { title: "رجع ناس ممن خرج معه", text: sahih('bukhari', 4050, 166, 360), people: ['prophet-muhammad'] },
+        { title: "«فما لكم في المنافقين فئتين»", text: sahih('bukhari', 4050, 361, 454), people: [] },
+        { title: "«إنها طيبة»", text: sahih('bukhari', 4050, 455, 545), people: [] },
       ],
     },
   ],

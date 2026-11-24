@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -20,8 +21,8 @@ const theIdolsAroundTheKaaba = {
       from: '17:81',
       to: '17:81',
       evidence: [
-        { source: 'sahih-al-bukhari', hadith: 4287, url: 'https://sunnah.com/bukhari:4287', quote: "﴿جَاءَ الْحَقُّ وَزَهَقَ الْبَاطِلُ﴾" },
-        { source: 'sahih-muslim', hadith: 1781, url: 'https://sunnah.com/muslim:1781', quote: "جَاءَ الْحَقُّ وَزَهَقَ الْبَاطِلُ. إِنَّ الْبَاطِلَ كان زهوقا" },
+        { source: 'sahih-al-bukhari', hadith: 4287, url: 'https://sunnah.com/bukhari:4287', quote: sahih('bukhari', 4287, 319, 355) },
+        { source: 'sahih-muslim', hadith: 1781, url: 'https://sunnah.com/muslim:1781', quote: sahih('muslim', 1781, 394, 456) },
       ],
     },
     {
@@ -29,24 +30,24 @@ const theIdolsAroundTheKaaba = {
       from: '34:49',
       to: '34:49',
       evidence: [
-        { source: 'sahih-al-bukhari', hadith: 4287, url: 'https://sunnah.com/bukhari:4287', quote: "﴿جَاءَ الْحَقُّ وَمَا يُبْدِئُ الْبَاطِلُ وَمَا يُعِيدُ﴾" },
-        { source: 'sahih-muslim', hadith: 1781, url: 'https://sunnah.com/muslim:1781', quote: "جَاءَ الْحَقُّ وَمَا يُبْدِئُ الْبَاطِلُ وَمَا يُعِيدُ" },
+        { source: 'sahih-al-bukhari', hadith: 4287, url: 'https://sunnah.com/bukhari:4287', quote: sahih('bukhari', 4287, 356, 412) },
+        { source: 'sahih-muslim', hadith: 1781, url: 'https://sunnah.com/muslim:1781', quote: sahih('muslim', 1781, 476, 530) },
       ],
     },
   ],
   reports: [
     {
-      isnad: "حَدَّثَنَا صَدَقَةُ بْنُ الْفَضْلِ: أَخْبَرَنَا ابْنُ عُيَيْنَةَ، عَنِ ابْنِ أَبِي نَجِيحٍ، عَنْ مُجَاهِدٍ، عَنْ أَبِي مَعْمَرٍ، عَنْ عَبْدِ اللهِ  رضي الله عنه قَالَ:",
+      isnad: sahih('bukhari', 4287, 0, 167),
       source: { slug: 'sahih-al-bukhari', hadith: 4287, url: 'https://sunnah.com/bukhari:4287' },
       moments: [
-        { title: "ستون وثلاثمائة نصب", text: "«دَخَلَ النَّبِيُّ ﷺ مَكَّةَ يَوْمَ الْفَتْحِ، وَحَوْلَ الْبَيْتِ سِتُّونَ وَثَلَاثُمِائَةِ نُصُبٍ، فَجَعَلَ يَطْعُنُهَا بِعُودٍ فِي يَدِهِ وَيَقُولُ: ﴿جَاءَ الْحَقُّ وَزَهَقَ الْبَاطِلُ﴾ ﴿جَاءَ الْحَقُّ وَمَا يُبْدِئُ الْبَاطِلُ وَمَا يُعِيدُ﴾.»", people: ['prophet-muhammad'] },
+        { title: "ستون وثلاثمائة نصب", text: sahih('bukhari', 4287, 168, 414), people: ['prophet-muhammad'] },
       ],
     },
     {
-      isnad: "حَدَّثَنَا أَبُو بَكْرِ بْنُ أَبِي شَيْبَةَ وعمرو بن النَّاقِدُ وَابْنُ أَبِي عُمَرَ (وَاللَّفْظُ لِابْنِ أَبِي شَيْبَةَ) قَالُوا: حَدَّثَنَا سُفْيَانُ بْنُ عُيَيْنَةَ عَنْ ابْنِ أَبِي نَجِيحٍ، عَنْ مُجَاهِدٍ، عَنْ أَبِي مَعْمَرٍ، عَنْ عَبْدِ اللَّهِ. قَالَ:",
+      isnad: sahih('muslim', 1781, 0, 258),
       source: { slug: 'sahih-muslim', hadith: 1781, url: 'https://sunnah.com/muslim:1781' },
       moments: [
-        { title: "ثلاثمائة وستون نصبا", text: "دَخَلَ النَّبِيُّ ﷺ مَكَّةَ. وَحَوْلَ الْكَعْبَةِ ثلاثمائة وَسِتُّونَ نُصُبًا. فَجَعَلَ يَطْعُنُهَا بِعُودٍ كَانَ بِيَدِهِ. وَيَقُولُ (جَاءَ الْحَقُّ وَزَهَقَ الْبَاطِلُ. إِنَّ الْبَاطِلَ كان زهوقا [١٧ /الإسراء /٨١]. جَاءَ الْحَقُّ وَمَا يُبْدِئُ الْبَاطِلُ وَمَا يُعِيدُ) [٣٤ /سبأ /٤٩]. زاد ابن أبي عمر: يوم الفتح.", people: ['prophet-muhammad'] },
+        { title: "ثلاثمائة وستون نصبا", text: sahih('muslim', 1781, 259, 574), people: ['prophet-muhammad'] },
       ],
     },
   ],
