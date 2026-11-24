@@ -66,6 +66,30 @@ test("the quizzes tab: a science's tree puts the tapped kind's question on the p
   await expect.poll(async () => Object.keys(await stored<Record<string, unknown>>(page, 'ayah-forgot') ?? {}).length).toBe(1);
 });
 
+test('«من راوي الحديث؟» folds the hadith, asks by chips, and once answered gives al-Nawawi\'s line as «الشاهد», the whole place in a sheet', async ({ page }) => {
+  await open(page, '/quizzes');
+  await page.getByRole('tablist', { name: 'العلوم' }).getByRole('tab', { name: 'الحديث', exact: true }).click();
+  await page.getByRole('radio', { name: 'من راوي الحديث؟', exact: true }).click();
+  // The hadith opens folded, «النص كاملًا» under it (owner, 2026-11-24: sketch question-look design أ).
+  await expect(page.getByRole('button', { name: 'النص كاملًا' })).toBeVisible();
+  const head = page.getByRole('heading', { name: 'من راوي الحديث؟', exact: true });
+  const choices = page.getByRole('button').filter({ hasText: /^(?!سؤال آخر|خمسة أسئلة منه|تحقق|تلميح|النص كاملًا|اختبار)/ });
+  const headAt = (await head.boundingBox())!.y;
+  const stop = (await page.getByRole('button', { name: 'سؤال آخر' }).boundingBox())!.y;
+  for (let i = 0; i < await choices.count(); i++) {
+    const box = await choices.nth(i).boundingBox();
+    if (box && box.y > headAt && box.y < stop) { await choices.nth(i).click(); break; }
+  }
+  await page.getByRole('button', { name: 'تحقق' }).filter({ visible: true }).first().click();
+  await expect(page.getByText('الشاهد', { exact: true })).toBeVisible();
+  await expect(page.getByText(/^قال النووي في /).filter({ visible: true }).first()).toBeVisible();
+  // Answered, the card stays within the screen (it ran to nearly three screens with the whole view under it).
+  const screen = page.viewportSize()!.height;
+  expect((await page.getByRole('button', { name: 'سؤال آخر' }).boundingBox())!.y - (await head.boundingBox())!.y).toBeLessThan(screen);
+  await page.getByRole('button', { name: 'الموضع كاملًا' }).click();
+  await expect(page.getByRole('button', { name: 'رجوع إلى السؤال' })).toBeVisible();
+});
+
 test.describe('a question answered wrong', () => {
   // Missed in the feed, its rest over yesterday (shared/quiz/missedQuestions.ts).
   test.use({ seed: { 'missed-questions': { 'TARAJIM_KUNYA:11': { kind: 'TARAJIM_KUNYA', seed: 11, step: 1, due: Date.now() - 86_400_000 } } } });
@@ -229,7 +253,8 @@ test('a solo quiz looks an answer up in the poem, and after the answer shows the
   await page.getByRole('button', { name: 'رجوع إلى السؤال' }).click();
   await choose(page, question.correctAnswer);
   await expect(page.getByRole('button', { name: 'ابحث عن الجواب' })).toHaveCount(0);
-  // Only the chapter of the verse that answers, the verse lit.
+  // «الموضع كاملًا» opens only the chapter of the verse that answers, the verse lit (owner, 2026-11-24: in a sheet).
+  await page.getByRole('button', { name: 'الموضع كاملًا' }).click();
   await expect(page.getByLabel(`${num(question.look.mark)}: `, { exact: false }).first()).toBeVisible();
   const chapter = chapters.find(part => part.verses.some(verse => verse.number === question.look.mark))!;
   await expect(page.getByRole('heading', { name: chapter.title })).toBeVisible();

@@ -175,7 +175,6 @@ import { termSource } from '@shared/quran/balaghaTerms';
 import { pieceSources, storySource } from '@shared/quran/pieceSources';
 import { tanasubLink, tanasubSource } from '@shared/quran/tanasubCards';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
-import { juzOf } from '@shared/quran/juz';
 import { METHODS } from '@shared/prayer';
 import Button from '@/ui/Button';
 import { ADHKAR, type Dhikr } from '@shared/adhkar';
@@ -1663,11 +1662,8 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
         open={<OpenButton label={`افتح صفحة الآية، ${head.open}`} onPress={show} palette={palette} />}
         source={sourcesOf(note.sources)}>
         {'readings' in note ? <View style={{ paddingVertical: 10 }}><QiraatPlace ayah={note.key} max={2} lines bare palette={palette} /></View> : <View style={{ paddingBottom: 10, gap: 6 }}>
-          {/* «بطاقة التعريف» (owner, 2026-11-24: the tafsir card): the ayah's place large, its juz and page, then the ayah and the book's words. */}
-          <TitleCells title={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} cells={[
-            { key: 'juz', label: 'الجزء', readings: [{ value: num(juzOf(note.key)) }] },
-            { key: 'page', label: 'الصفحة', readings: [{ value: num(pageOfAyah(note.key) ?? 0) }] },
-          ]} />
+          {/* «بطاقة التعريف» (owner, 2026-11-24: the tafsir card): the ayah's place large, then the ayah and the book's words; no juz and page cells (owner: room with no point). */}
+          <TitleCells title={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />
           <View style={{ paddingHorizontal: 12, paddingTop: 4 }}>
             <AyahLines ayah={note.key} menu={note.key} palette={palette} shown whole write={null} checked={null} />
           </View>
