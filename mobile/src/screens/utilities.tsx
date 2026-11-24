@@ -53,6 +53,10 @@ export default function UtilitiesTab() {
   const scrollers = useRef(new Map<UtilityView, Scroller>()).current;
   // Where the pager rests, so a tap on an icon scrolls it and a swipe that lands does not scroll it again.
   const shown = useRef(index);
+  // The page grows and shrinks as the top bar hides and comes back. On the web that can throw the pager back to its first
+  // page with no finger on it, and settling there switched to the tools mid-count, which ended the adhkar count (the
+  // adhkar test's flake, 2026-11-24). A rest the reader did not swipe to, right after such a change, goes back to the page.
+  const resized = useRef(false);
   useEffect(() => {
     if (!width || shown.current === index) return;
     shown.current = index;
@@ -62,6 +66,10 @@ export default function UtilitiesTab() {
   const settle = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (!width) return;
     const at = Math.round(Math.abs(event.nativeEvent.contentOffset.x) / width);
+    if (resized.current) {
+      resized.current = false;
+      if (at !== shown.current) { list.current?.scrollToIndex({ index: shown.current, animated: false }); return; }
+    }
     if (at === shown.current || at < 0 || at >= UTILITY_VIEWS.length) return;
     shown.current = at;
     // Each page has its own scroll, so the bars come back with the next one.
@@ -80,11 +88,15 @@ export default function UtilitiesTab() {
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar center back={back} hideOnScroll><UtilityPicker palette={palette} progress={progress} /></TopBar>
-      <View style={{ flex: 1, direction: 'ltr' }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
+      <View style={{ flex: 1, direction: 'ltr' }} onLayout={event => {
+        const layout = event.nativeEvent.layout;
+        if (layout.width === width && layout.height !== height) resized.current = true;
+        setSize({ width: layout.width, height: layout.height });
+      }}>
         {width > 0 && (
           <FlatList ref={list} data={UTILITY_VIEWS} horizontal inverted pagingEnabled showsHorizontalScrollIndicator={false}
             keyExtractor={id => id} initialScrollIndex={index} getItemLayout={(_, at) => ({ length: width, offset: width * at, index: at })}
-            extraData={{ palette, focused, view, bottom }} onMomentumScrollEnd={settle} onScroll={scrolled} scrollEventThrottle={16} onScrollToIndexFailed={() => {}}
+            extraData={{ palette, focused, view, bottom }} onMomentumScrollEnd={settle} onScroll={scrolled} onTouchStart={() => { resized.current = false; }} scrollEventThrottle={16} onScrollToIndexFailed={() => {}}
             renderItem={({ item }) => <Page view={item} width={width} height={height} palette={palette} on={focused && item === view} current={item === view} bottom={bottom} onPlace={pick} scrollers={scrollers} />} />
         )}
       </View>
