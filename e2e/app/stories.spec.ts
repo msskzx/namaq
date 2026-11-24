@@ -9,7 +9,7 @@ test('the tarajim tab lists the sira stories, and Utbah\'s opens whole with Fuss
   await open(page, '/');
   await tab(page, 'التراجم').click();
   await page.getByRole('link', { name: 'قصص السيرة' }).click();
-  await expect(page.getByRole('heading', { name: 'قصص السيرة' })).toBeVisible();
+  await expect(page.getByRole('textbox', { name: 'ابحث في قصص السيرة' }).filter({ visible: true })).toBeVisible();
   // The first year page is «قبل الهجرة», on al-Bukhari's chapters (owner, 2026-11-23); a tag narrows every year.
   await page.getByRole('button', { name: 'إسلامهم' }).click();
   await expect(page.getByRole('button', { name: 'أذى المشركين بمكة' })).toHaveCount(0);

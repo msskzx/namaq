@@ -103,6 +103,14 @@ const plainOf = (route: SahihRoute) => {
   return plain;
 };
 
+const headings = new WeakMap<object, string>();
+/** A bab's kitab and heading for search, worked out once per bab, as `plainOf` does for the hadith. */
+const headingOf = (kitab: { title: string }, bab: { title: string }) => {
+  let plain = headings.get(bab);
+  if (plain === undefined) headings.set(bab, plain = plainText(`${kitab.title} ${bab.title}`));
+  return plain;
+};
+
 export interface SahihHit { book: SahihSlug; n: number; kitab: number; bab?: number; at?: number }
 
 /**
@@ -117,7 +125,7 @@ export function searchSahih(books: { index: SahihIndex; text?: SahihText | null 
   const holds = (hay: string) => words.every(word => hay.includes(word));
   for (const { index, text } of books) {
     for (const kitab of index.kitabs) kitab.babs.forEach((bab, i) => {
-      if (babs.length < limit && bab.title && holds(plainText(`${kitab.title} ${bab.title}`))) babs.push({ book: index.slug, n: bab.from, kitab: kitab.n, bab: i });
+      if (babs.length < limit && bab.title && holds(headingOf(kitab, bab))) babs.push({ book: index.slug, n: bab.from, kitab: kitab.n, bab: i });
     });
     for (const file of text?.kitabs ?? []) for (const item of file.hadith) {
       if (hadith.length >= limit) break;

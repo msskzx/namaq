@@ -12,7 +12,6 @@ import { usePalette } from '@/lib/theme';
 import SourceLine from '@/ui/SourceLine';
 import { sourceById } from '@shared/sources';
 import { GHARIB_BOOK, GHARIB_EDITION, MUFRADAT_BOOK, MUFRADAT_EDITION } from '@shared/quran/gharib';
-import { SearchField } from '@/ui/Field';
 import { QuranWord } from '@/components/quran/text/AyahFlow';
 import { toTab } from '@/lib/ways';
 
@@ -38,9 +37,9 @@ export default function WordsScreen() {
   const found = useMemo(() => (query.trim() ? searchWords(words, query, WORDS_SHOWN) : words.lemmas.slice(0, WORDS_SHOWN).map((_, id) => id)), [query]);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      <TopBar hub hideOnScroll />
-      <View style={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 8 }}>
-        <SearchField value={query} onChangeText={setQuery} placeholder="ابحث عن كلمة" label="ابحث عن كلمة في القرآن" palette={palette} />
+      {/* The search in the top bar, as on every list page (owner, 2026-11-24: never inside the page). */}
+      <TopBar hub hideOnScroll search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث في ألفاظ القرآن', label: 'ابحث عن كلمة في القرآن' }} />
+      <View style={{ paddingHorizontal: 16, paddingBottom: 8 }}>
         {/* The page's book as the line under its search, as the home cards carry theirs (owner, 2026-11-20). */}
         {source && <View style={{ paddingTop: 8 }}>
           <SourceLine palette={palette} sources={[{ line: source.title.ar, quotes: WORDS_COUNTING.map(text => ({ text })),
