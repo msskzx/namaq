@@ -2,9 +2,9 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'reac
 import { FlatList, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
-import { NotebookPen } from 'lucide-react-native';
+import { NotebookPen, Square } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
-import { Tap } from '@/ui/Tap';
+import BarStrip from '@/ui/BarStrip';
 import Tabs from '@/ui/Tabs';
 import TopBar from '@/ui/TopBar';
 import { openIntent, toTab } from '@/lib/ways';
@@ -12,7 +12,7 @@ import { markAyah, mostForgotten, readDueMarks, subscribeDueMarks } from '@share
 import { readAyahNotes, subscribeAyahNotes } from '@shared/ayahNotes';
 import { readBookmarks, subscribeBookmarks } from '@shared/bookmarks';
 import { searchPattern } from '@shared/bookReader';
-import { journalRows, juzRow, keptJuz, type JournalEntry, type JournalKind, type JournalRow } from '@shared/journal';
+import { journalRows, juzRow, type JournalEntry, type JournalKind, type JournalRow } from '@shared/journal';
 import { JUZ_STARTS } from '@shared/quran/juz';
 import { surahName } from '@shared/quran/surahNames';
 import { dayDigits } from '@shared/prayer';
@@ -60,25 +60,37 @@ function useForgottenAyat() {
   }, [due]);
 }
 
-/** The thirty juz as one strip (owner, 2026-11-24): those holding something kept are lit and take the list to it. */
-function JuzStrip({ lit, onJuz, palette }: { lit: Set<number>; onJuz: (juz: number) => void; palette: Palette }) {
+/** The kinds as the juz strip stacks them, bottom up, each in its tone, with the legend's words. */
+const STRIP_KINDS: { kind: JournalKind; name: string; tone: (palette: Palette) => string }[] = [
+  { kind: 'forgotten', name: 'منسيّة', tone: palette => palette.root },
+  { kind: 'note', name: 'تأمل', tone: palette => palette.amber },
+  { kind: 'saved', name: 'محفوظة', tone: palette => palette.accent },
+];
+
+/**
+ * The thirty juz as bars (owner, 2026-11-24: like a histogram), juz 1 on the right: each as tall as what is kept in it,
+ * coloured by kind, with no numbers written. A touch names the juz; lifting the finger takes the list to it.
+ */
+function JuzStrip({ rows, onJuz, palette }: { rows: readonly JournalRow[]; onJuz: (juz: number) => void; palette: Palette }) {
+  const [picked, setPicked] = useState<number | null>(null);
+  const parts = JUZ_STARTS.map(() => STRIP_KINDS.map(() => 0));
+  for (const row of rows) if (row.row === 'entry' && row.juz) parts[row.juz - 1][STRIP_KINDS.findIndex(kind => kind.kind === row.entry.kind)]++;
+  const shown = STRIP_KINDS.filter((_, k) => parts.some(juz => juz[k] > 0));
   return (
-    <View style={{ gap: 4 }}>
-      <View accessibilityLabel="الأجزاء" style={{ flexDirection: 'row', gap: 2, height: 44 }}>
-        {JUZ_STARTS.map((_, i) => {
-          const juz = i + 1;
-          const on = lit.has(juz);
-          return on
-            ? <Tap key={juz} onPress={() => onJuz(juz)} accessibilityRole="button" accessibilityLabel={`الجزء ${dayDigits(juz)}`} style={{ flex: 1, justifyContent: 'center' }}>
-              <View style={{ height: 26, backgroundColor: palette.accent }} />
-            </Tap>
-            : <View key={juz} style={{ flex: 1, justifyContent: 'center' }}><View style={{ height: 26, backgroundColor: palette.paperDeep }} /></View>;
-        })}
-      </View>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Text style={{ color: palette.muted, fontSize: 12 }}>الجزء ١</Text>
-        <Text style={{ color: palette.muted, fontSize: 12 }}>الجزء ٣٠</Text>
-      </View>
+    <View style={{ gap: 6 }}>
+      <BarStrip counts={parts.map(juz => juz.reduce((sum, n) => sum + n, 0))} stack={{ parts, tones: STRIP_KINDS.map(kind => kind.tone(palette)) }}
+        picked={picked} onPick={setPicked} onLift={i => { setPicked(null); onJuz(i + 1); }} height={56} holdScroll={false}
+        name={i => `الجزء ${dayDigits(i + 1)}`} ends={['الجزء ١', 'الجزء ٣٠']} label="الأجزاء، المس واسحب ثم ارفع إصبعك" palette={palette} />
+      {shown.length > 1 && (
+        <View style={{ flexDirection: 'row', gap: 14 }}>
+          {shown.map(kind => (
+            <View key={kind.kind} style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+              <Square size={12} color={kind.tone(palette)} fill={kind.tone(palette)} />
+              <Text style={{ color: palette.muted, fontSize: 13 }}>{kind.name}</Text>
+            </View>
+          ))}
+        </View>
+      )}
     </View>
   );
 }
@@ -168,7 +180,7 @@ export default function LibraryScreen() {
         }}
         ListHeaderComponent={<View style={{ gap: 14, marginBottom: 4 }}>
           <Tabs options={TABS} value={tab} onChange={setTab} label="ما يُعرض" palette={palette} fill />
-          <JuzStrip lit={keptJuz(rows)} onJuz={toJuz} palette={palette} />
+          <JuzStrip rows={rows} onJuz={toJuz} palette={palette} />
         </View>}
         renderItem={({ item: row }) => row.row === 'surah'
           ? <SurahHead surah={row.surah} palette={palette} />
