@@ -335,8 +335,12 @@ export function sayingStart(text: string): string {
 }
 
 
-/** Ibn Rajab's text without its harakat, for matching how a paragraph starts («فقولُه» is «فقوله»). */
-const bare = (text: string) => text.replace(/[\u064B-\u065F\u0670]/g, '');
+/**
+ * Hadith text without its harakat (and tatweel), for matching: how Ibn Rajab's paragraph starts («فقولُه» is «فقوله»),
+ * a narrator's name in a chain, one word of narrating voweled two ways («عَنْ», «عَنِ»).
+ */
+export const bareHadith = (text: string) => text.replace(/[\u064B-\u065F\u0670\u0640]/g, '');
+const bare = bareHadith;
 
 /** A paragraph where Ibn Rajab explains a phrase of the hadith: «وقوله ﷺ: …», «فقوله: …», «ومعنى هذا الحديث …». */
 const EXPLAINS = /^(?:[فو]?قوله|ومعنى|وأما معنى)/;
