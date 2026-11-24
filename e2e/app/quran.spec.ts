@@ -368,13 +368,13 @@ test('an opened word shows where it gathers: a bar picks a surah, names it with 
   await expect(page.getByRole('button', { name: new RegExp(`^افتح ${S(7)} .* في المصحف$`) }).first()).toBeInViewport();
 });
 
-test("a word's page opens with al-Raghib's words on its root and Ibn Qutaybah's meanings as branches, each opening his entry", async ({ page }) => {
+test("a word's page opens with al-Raghib's words on its root and Ibn Qutaybah's meanings as chips at their ayat, each opening his entry", async ({ page }) => {
   await open(page, '/words');
   await page.getByLabel('ابحث عن كلمة في القرآن').fill('فتنة');
   await page.getByRole('button', { name: /^فِتۡنَة، / }).click();
   await expect(page.getByText('قال الراغب:', { exact: true })).toBeVisible();
   await expect(page.getByText(/^أصل الفَتْنِ: إدخال الذّهب النار/)).toBeVisible();
-  // His meanings in his own words, each a branch at its ayah; the first is open.
+  // His meanings in his own words, each a chip at its ayah; the first is open.
   const branches = page.getByRole('tab', { name: /، .* [٠-٩]+$/ });
   await expect(branches.first()).toHaveAttribute('aria-selected', 'true');
   await page.getByRole('tab', { name: `الكفر، ${S(3)} ٧` }).click();
