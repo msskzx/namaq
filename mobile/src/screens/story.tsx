@@ -12,12 +12,14 @@ import { useTabRetap } from '@/lib/tabRetap';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { back } from '@/lib/ways';
 import { storyOf } from '@/lib/stories';
-import type { AppStory } from '@shared/stories/story';
+import type { AppReport, AppStory } from '@shared/stories/story';
 import { People } from '@/components/battles/BattleParts';
 import Folded from '@/ui/Folded';
 import { Report, ReportScene, reportSource, StoryAyat, StoryShare, Tags } from '@/components/stories/StoryParts';
 import Tabs from '@/ui/Tabs';
-import { drawnReport, reportLines, reportSlots } from '@shared/stories/story';
+import { drawnReport, reportHadith, reportLines, reportSlots } from '@shared/stories/story';
+import OpenButton from '@/ui/OpenButton';
+import { openSahih } from './hadith';
 import { DRAW_MODES, type DrawMode } from '@shared/hadith';
 
 
@@ -52,7 +54,7 @@ export function StoryView({ story, palette, titled }: { story: AppStory; palette
       {drawn ? <Tabs label="طريقة العرض" options={DRAW_MODES} value={mode} onChange={setMode} palette={palette} /> : null}
     </View>
     {main ? (
-      <CardWithRow palette={palette} pad={16} gap={0} source={reportSource(main, drawing)} row={drawn ? <StoryShare story={story} report={main} palette={palette} /> : undefined}>
+      <CardWithRow palette={palette} pad={16} gap={0} source={reportSource(main, drawing)} lead={<HadithOpen report={main} />} row={drawn ? <StoryShare story={story} report={main} palette={palette} /> : undefined}>
         {drawing ? <ReportScene report={main} slots={slots} palette={palette} /> : <Report report={main} palette={palette} titled={titled} plain />}
       </CardWithRow>
     ) : null}
@@ -61,12 +63,18 @@ export function StoryView({ story, palette, titled }: { story: AppStory; palette
       <View style={{ gap: 10 }}>
         <Folded credit={rest.length === 1 ? 'رواية أخرى في الكتاب' : 'روايات أخرى في الكتاب'} palette={palette}>
           <View style={{ gap: 10 }}>
-            {rest.map(report => <CardWithRow key={report.url + (report.isnad ?? '')} palette={palette} pad={16} gap={0} source={reportSource(report)}><Report report={report} palette={palette} titled={titled} plain /></CardWithRow>)}
+            {rest.map(report => <CardWithRow key={report.url + (report.isnad ?? '')} palette={palette} pad={16} gap={0} source={reportSource(report)} lead={<HadithOpen report={report} />}><Report report={report} palette={palette} titled={titled} plain /></CardWithRow>)}
           </View>
         </Folded>
       </View>
     ) : null}
   </>;
+}
+
+/** A report's «افتح» opens its hadith on the hadith tab (owner, 2026-11-24: the story and the hadith that tells it link both ways). */
+function HadithOpen({ report }: { report: AppReport }) {
+  const hadith = reportHadith(report);
+  return hadith ? <OpenButton what="الحديث" label={`افتح ${report.cite}`} onPress={() => openSahih(hadith.book, hadith.n)} /> : null;
 }
 
 /**

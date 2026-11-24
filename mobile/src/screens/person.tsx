@@ -28,6 +28,9 @@ import { toTab } from '@/lib/ways';
 import { findPerson, personName, unvowelled } from '@/lib/tarajim';
 import { personLife } from '@/lib/life';
 import { battleOf } from '@/lib/battles';
+import { storiesOfPerson, storyAyatOf } from '@/lib/links';
+import { StoryLinkRow } from '@/components/stories/StoryParts';
+import { citeSource } from '@shared/quiz/sources';
 import LifeTimeline from '@/components/LifeTimeline';
 import { FEATURE_ICON } from '@/components/featureIcons';
 import Tabs from '@/ui/Tabs';
@@ -46,6 +49,8 @@ import type { Tie } from '@shared/tarajimGraph';
 import { settledTies } from '@shared/peopleCards';
 
 const siyar = sourceById('siyar')!;
+/** «قصصه» shows this many before «كل قصصه» (the sketch's three rows). */
+const STORIES_SHOWN = 3;
 /** The page's side room and the card's padding and frame, taken from the screen's width for the ties ring inside its card. */
 const RING_ROOM = 32 + 30;
 const body = (palette: Palette) => ({ color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' as const });
@@ -307,6 +312,8 @@ export default function PersonScreen() {
   // 2026-11-23), the tree on «الرسم».
   // «صلاته» as the ring or as the lines of names, which name the same people (the drawing first).
   const [tiesView, setTiesView] = useState<DrawingOrText>('drawing');
+  // «قصصه»: the first few, the rest on «كل قصصه» (owner, 2026-11-24, sketch data-plan/links-sketch design أ).
+  const [allStories, setAllStories] = useState(false);
   const person = findPerson(slug);
   const lifeItems = useMemo(() => (person ? personLife(person) : []), [person]);
   const back = () => (router.canGoBack() ? router.back() : toTab('/tarajim'));
@@ -321,7 +328,9 @@ export default function PersonScreen() {
   const life = [...battles, ...person.absentFrom];
   const places = mapBattles(person, lifeItems);
   const ayat = person.ayat.filter(fact => typeof fact.value === 'string');
+  const told = storyAyatOf(person.slug, ayat.map(fact => fact.value as string));
   const allRevealed = ayat.every(fact => fact.kind === 'REVEALED_ABOUT');
+  const stories = storiesOfPerson(person.slug);
   const tieList = ties(person);
   const head = <ShareHead title={personName(person)} palette={palette} />;
   let n = 0;
@@ -408,8 +417,15 @@ export default function PersonScreen() {
           </Part>
         )}
 
-        {ayat.length > 0 && (
-          <Part head={head} n={++n} palette={palette}
+        {stories.length > 0 && (
+          <Part head={head} n={++n} title={f ? 'قصصها' : 'قصصه'} palette={palette} gap={0}
+            row={stories.length > STORIES_SHOWN && !allStories && <Button pill label={f ? 'كل قصصها' : 'كل قصصه'} Icon={ChevronLeft} onPress={() => setAllStories(true)} />}>
+            {(allStories ? stories : stories.slice(0, STORIES_SHOWN)).map((story, i) => <StoryLinkRow key={story.slug} story={story} palette={palette} first={i === 0} />)}
+          </Part>
+        )}
+
+        {(ayat.length > 0 || told.length > 0) && (
+          <Part head={head} n={++n} palette={palette} source={[...factSources(ayat, true), ...told.flatMap(({ ayat: set }) => set.refs.map(citeSource))]}
             title={allRevealed ? (f ? 'آيات نزلت فيها' : 'آيات نزلت فيه') : (f ? 'آيات فيها' : 'آيات فيه')}>
             {ayat.map(fact => (
               <View key={fact.value} style={{ gap: 8 }}>
@@ -419,7 +435,15 @@ export default function PersonScreen() {
                 <QuoteBar by={saidBy(fact) ?? `قال ${pageSources(fact.refs)[0]?.author ?? 'الذهبي'}:`} pieces={namePieces(fact.text, namesOf(person))} palette={palette} size={17} />
               </View>
             ))}
-            <Credit facts={ayat} palette={palette} quotes />
+            {/* Ayat a story says were revealed about him, with the story that says so under them, opening the story. */}
+            {told.map(({ story, ayat: set, keys }) => (
+              <View key={story.slug + set.from} style={{ gap: 8 }}>
+                <LitAyat ayat={keys.map(key => ({ words: ayahMushafWords(key), lit: [], number: Number(key.split(':')[1]) }))} menu={keys[0]} palette={palette} />
+                <Button variant="plain" label={ayatName(keys)} Icon={ChevronLeft} onPress={() => openAyahPage(keys[0])} />
+                <StoryLinkRow story={story} palette={palette} />
+              </View>
+            ))}
+            {ayat.length > 0 && <Credit facts={ayat} palette={palette} quotes />}
           </Part>
         )}
       </ScrollView>
@@ -462,6 +486,18 @@ const placesSources = (places: AppBattle[], person: AppPerson, life: ReturnType<
   ...lifeSources(life.filter(item => places.some(battle => battle.slug === item.open?.slug))),
   ...placeSources(places),
 ];
+
+/** Ayat by name, each surah once and each run joined: «التوبة ١١٧، ١١٩», «النور ١٢–٢٠». */
+function ayatName(keys: string[]) {
+  const runs: [number, number, number][] = [];
+  for (const [surah, ayah] of keys.map(key => key.split(':').map(Number))) {
+    const last = runs[runs.length - 1];
+    if (last && last[0] === surah && last[2] === ayah - 1) last[2] = ayah;
+    else runs.push([surah, ayah, ayah]);
+  }
+  const named = runs.map(([surah, first, last], i) => `${i && runs[i - 1][0] === surah ? '' : `${surahName(surah)} `}${num(first)}${last > first ? `–${num(last)}` : ''}`);
+  return named.join('، ');
+}
 
 /** A battle named in two places is one name in the line. */
 function uniq(links: PersonLink[]) {

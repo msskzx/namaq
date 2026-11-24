@@ -105,3 +105,16 @@ export const narratorOf = (isnad: string) => isnadParts(isnad).tail.replace(/[؛
 
 /** A drawn report's colours: one scene, the Prophet ﷺ first, as the hadith scenes give them. */
 export const reportSlots = (lines: SceneLine[], count: number) => sceneSlots([{ ordinal: 0, lines }], count)[0];
+
+/** The hadith page a report opens: its book and number, from the page the catalog writes for it (src/lib/catalog/appStories.ts). */
+export function reportHadith(report: { url?: string }): { book: 'bukhari' | 'muslim'; n: number } | undefined {
+  const found = report.url ? /sunnah\.com\/(bukhari|muslim):(\d+)$/u.exec(report.url) : null;
+  return found ? { book: found[1] as 'bukhari' | 'muslim', n: Number(found[2]) } : undefined;
+}
+
+/** When a story was, as its year pages name it («قبل الهجرة», «السنة ٨»), or nothing when no source sets it. */
+export const whenName = (story: Pick<AppStory, 'when'>) =>
+  story.when?.pages.map(page => (page === 'before' ? 'قبل الهجرة' : `السنة ${num(page)}`)).join(' أو ');
+
+/** Whether ayat of a story are the ones revealed about it («نزل فيه», «نزل فيه في رواية أنس»), not ones recited in it. */
+export const revealedIn = (ayat: Pick<AppStoryAyat, 'label'>) => ayat.label.startsWith('نزل فيه');

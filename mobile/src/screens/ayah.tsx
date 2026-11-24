@@ -36,6 +36,11 @@ import { eventSources, oathSources } from '@shared/drawingCards';
 import { ayahSections, sectionOn, type AyahSection } from '@/lib/ayahPage';
 import { treePiecesOfAyah } from '@/lib/ayahPreview';
 import { prophetStory } from '@/lib/prophets';
+import { findPerson, personName } from '@/lib/tarajim';
+import { openSahih } from './hadith';
+import { People } from '@/components/battles/BattleParts';
+import { reportHadith, revealedIn } from '@shared/stories/story';
+import { factSources, pageSources, saidBy } from '@shared/tarajim';
 import { bookState, readBook, useBooks } from '@/lib/books';
 import { ayahCounts, ayahMushafWords, ayahText, pageOfAyah } from '@/lib/mushaf';
 import { openIntent, toTab } from '@/lib/ways';
@@ -268,13 +273,43 @@ const SectionPart = memo(function SectionPart({ section, ayah, word, palette, op
       );
     }
     case 'sira': {
-      const told = section.story.ayat.find(each => each.label === section.label);
+      const told = section.ayat;
       const first = section.story.reports[0]?.moments[0]?.text;
+      const openStory = () => toTab({ pathname: '/story', params: { slug: section.story.slug } });
+      // The person the story names, when his own entry gives the same tie: its words join the card's sources.
+      const entry = told.about && findPerson(told.about.slug)?.ayat.filter(fact => fact.value === ayah);
+      const source = sourcesOf([...told.refs.map(citeSource), ...(entry?.length ? factSources(entry, true) : [])]);
+      // Revealed about the story (owner, 2026-11-24, sketch data-plan/links-sketch design أ): the hadith's own words that
+      // say so, the hadith a tap away, then the people of the story, each opening his page.
+      if (revealedIn(told)) {
+        const ref = told.refs[0];
+        const hadith = ref && reportHadith(ref);
+        return (
+          <Part {...common} Icon={ScrollText} title="فيمن نزلت" sub={section.story.name} label={`افتح ${section.story.name}`} open={openStory} source={source}>
+            {ref ? <Text numberOfLines={LINES} style={{ color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' }}>{`«${ref.text}»`}</Text> : null}
+            {hadith ? <Button variant="plain" Icon={FEATURE_ICON.hadith} label={ref.cite} onPress={() => openSahih(hadith.book, hadith.n)} /> : null}
+            <People people={told.about ? [told.about] : section.story.people} palette={palette} />
+          </Part>
+        );
+      }
       return (
-        <Part {...common} Icon={ScrollText} title="من قصص السيرة" sub={section.story.name} label={`افتح ${section.story.name}`}
-          open={() => toTab({ pathname: '/story', params: { slug: section.story.slug } })} source={sourcesOf((told?.refs ?? []).map(citeSource))}>
-          <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>{section.label}</Text>
+        <Part {...common} Icon={ScrollText} title="من قصص السيرة" sub={section.story.name} label={`افتح ${section.story.name}`} open={openStory} source={source}>
+          <Text style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>{told.label}</Text>
           {first ? <Text numberOfLines={LINES} style={{ color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' }}>{first}</Text> : null}
+        </Part>
+      );
+    }
+    case 'person': {
+      // The link written on the person's own record: his entry's words on the ayah, who says them, and its pages.
+      const person = findPerson(section.slug);
+      const fact = person?.ayat.find(each => each.value === ayah);
+      if (!person || !fact) return null;
+      return (
+        <Part {...common} Icon={FEATURE_ICON.person} title={section.kind === 'REVEALED_ABOUT' ? 'فيمن نزلت' : 'في التراجم'} sub={personName(person)}
+          label={`افتح ${personName(person)}`} open={() => router.push({ pathname: '/person', params: { slug: person.slug } })} source={sourcesOf(factSources([fact], true))}>
+          <QuoteBar by={saidBy(fact) ?? `قال ${pageSources(fact.refs)[0]?.author ?? 'الذهبي'}:`} palette={palette}>
+            <Text numberOfLines={LINES} style={{ color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' }}>{fact.text}</Text>
+          </QuoteBar>
         </Part>
       );
     }

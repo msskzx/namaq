@@ -1,5 +1,7 @@
 import { PROPHET_AGENT, PROPHET_LABEL } from '@shared/hadith';
 import { View } from 'react-native';
+import { router } from 'expo-router';
+import { findPerson } from '@/lib/tarajim';
 import { UNIT_WORDS, unitFor, type AppBattle, type AppCite, type AppCited, type AppMoment, type AppPersonLink } from '@shared/battles/battle';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
@@ -112,6 +114,7 @@ export function Counts({ battle, palette }: { battle: AppBattle; palette: Palett
   );
 }
 
+/** The people of a story, a battle or a moment as chips: one with a page in the app opens it. */
 export function People({ people, palette, tints, more = [] }: { people: AppPersonLink[]; palette: Palette;
   /** A colour by person slug: in a story's drawing each speaker's chip is in his bubbles' colour, the key to them. */
   tints?: Map<string, string>;
@@ -121,7 +124,10 @@ export function People({ people, palette, tints, more = [] }: { people: AppPerso
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
       {people.map(person => {
         const tint = tints?.get(person.slug);
-        return <Chip key={person.slug} label={person.slug === PROPHET_AGENT ? PROPHET_LABEL : person.name} on={!!tint} lit={!!tint} tint={tint} role="text" small palette={palette} />;
+        // A name with a page in the app opens it (owner, 2026-11-24: everything links to what it touches); the rest are text.
+        const page = !!findPerson(person.slug);
+        return <Chip key={person.slug} label={person.slug === PROPHET_AGENT ? PROPHET_LABEL : person.name} on={!!tint} lit={!!tint} tint={tint} small palette={palette}
+          role={page ? 'button' : 'text'} onPress={page ? () => router.push({ pathname: '/person', params: { slug: person.slug } }) : undefined} />;
       })}
       {more.map(one => <Chip key={one.name} label={one.name} on lit tint={one.tint} role="text" small palette={palette} />)}
     </View>

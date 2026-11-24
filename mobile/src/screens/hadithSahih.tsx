@@ -1,7 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FlatList, Platform, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { MessagesSquare } from 'lucide-react-native';
+import { ChevronLeft, MessagesSquare } from 'lucide-react-native';
+import { CardWithRow } from '@/ui/Card';
+import { sourcesOf } from '@/ui/SourceLine';
+import { citeSource, uniqueSources } from '@shared/quiz/sources';
+import { storiesOfHadith } from '@/lib/links';
+import { People } from '@/components/battles/BattleParts';
+import { StoryLinkRow } from '@/components/stories/StoryParts';
+import { rangeName, reportHadith } from '@shared/stories/story';
 import { findHadith, lastLink, placeOf, type SahihHadith, type SahihIndex } from '@shared/sahih';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
@@ -12,7 +19,7 @@ import LoadingDots from '@/ui/LoadingDots';
 import { usePalette, type Palette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
-import { toTab } from '@/lib/ways';
+import { openAyahPage, toTab } from '@/lib/ways';
 import { SAHIH, fortyOf, isSahihSlug, rememberOpened, useSahihText } from '@/lib/sahih';
 import { SahihDownload, SahihHadithView, opening } from '@/components/Sahih';
 import HadithBooks from '@/components/HadithBooks';
@@ -41,6 +48,7 @@ function SahihPage({ book, hadith, width, palette }: { book: SahihIndex; hadith:
         shareHead={<ShareHead title={`${book.title} ${numbers}`} sub={place ? `${place.kitab.title}${place.bab?.title ? ` › ${place.bab.title}` : ''}` : undefined} palette={palette} />}>
         <SahihHadithView book={book} hadith={hadith} palette={palette} />
       </SharedCard>
+      <InHadith book={book.slug} n={hadith.n} palette={palette} />
       {forty.length > 0 && (
         <View style={{ gap: 8 }}>
           <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 17, fontWeight: '700', textAlign: 'right' }}>من أخرجه</Text>
@@ -50,6 +58,33 @@ function SahihPage({ book, hadith, width, palette }: { book: SahihIndex; hadith:
         </View>
       )}
     </ScrollView>
+  );
+}
+
+/**
+ * «في هذا الحديث» (owner, 2026-11-24, sketch data-plan/links-sketch design أ): the stories this hadith tells, from the one
+ * links file, each with its people (a name with a page opens it), the story itself and the ayat it turns on.
+ */
+function InHadith({ book, n, palette }: { book: string; n: number; palette: Palette }) {
+  const stories = storiesOfHadith(book, n);
+  if (!stories.length) return null;
+  return (
+    <View style={{ gap: 8 }}>
+      <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 17, fontWeight: '700', textAlign: 'right' }}>في هذا الحديث</Text>
+      {stories.map(story => (
+        <CardWithRow key={story.slug} palette={palette} pad={[10, 14]} gap={8} source={sourcesOf(uniqueSources([
+          // The report that is this hadith names the story's people; the ayat carry the words that tie them to it.
+          ...story.reports.filter(report => reportHadith(report)?.n === n && reportHadith(report)?.book === book).map(report => citeSource({ text: '', cite: report.cite, url: report.url })),
+          ...story.ayat.flatMap(ayat => ayat.refs).map(citeSource)]))}>
+          <People people={story.people} palette={palette} />
+          <StoryLinkRow story={story} palette={palette} />
+          {story.ayat.map(ayat => (
+            <Button key={ayat.from + ayat.label} variant="plain" Icon={ChevronLeft} label={`${rangeName(ayat.from, ayat.to)} · ${ayat.label}`}
+              onPress={() => openAyahPage(ayat.from)} />
+          ))}
+        </CardWithRow>
+      ))}
+    </View>
   );
 }
 
