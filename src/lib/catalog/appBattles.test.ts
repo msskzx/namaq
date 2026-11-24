@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { appBattles, appMoments, citeOf } from './appBattles';
+import { appBattles, appMoments, batchClaims, citeOf } from './appBattles';
 import { loadCatalog } from './loadCatalog';
 
 const built = appBattles(await loadCatalog());
@@ -50,5 +50,20 @@ describe('the app battles', () => {
 
   it('writes a citation the way the app shows it', () => {
     expect(citeOf({ sourceSlug: 'siyar-alam-al-nubala-risalah', volume: 'السيرة 2', pageReference: '18' })).toBe('سير أعلام النبلاء، السيرة ٢، ص ١٨');
+  });
+
+  // Batches wrote a Siyar volume two ways: Shamela's part label («1» for Talhah) and the edition's volume («5» for
+  // al-Abbas, which is the Siyar's second part). The account the batch read names the volume, so every quote cites the
+  // part its account is in, whichever way its batch wrote it.
+  it("cites a Siyar quote by its account's volume, however its batch wrote the volume", () => {
+    const quotes = [...batchClaims().values()].flatMap(claim => claim.citations ?? [])
+      .filter(cite => cite.sourceSlug === 'siyar-alam-al-nubala-risalah' && !/^السيرة/.test(cite.volume ?? '') && cite.editionVolume !== undefined);
+    expect(quotes.some(cite => cite.volume !== String(cite.editionVolume))).toBe(true);
+    expect(quotes.some(cite => cite.volume === String(cite.editionVolume))).toBe(true);
+    for (const cite of quotes) {
+      const volume = cite.editionVolume!;
+      const part = volume <= 2 ? `السيرة ${volume}` : volume === 3 ? 'سيرة الخلفاء الراشدين' : `ج ${volume - 3}`;
+      expect(citeOf(cite), `${cite.extractionUrl} ${cite.volume}`).toContain(part.replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[Number(d)]));
+    }
   });
 });

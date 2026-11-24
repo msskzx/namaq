@@ -7,7 +7,10 @@ import { BATTLE_PLACE, PLACES } from '@shared/battles/places';
 import type { Catalog, Cited } from './types';
 import { legacyUnreviewed } from './types';
 
-type Citation = { volume?: string; pageReference?: string; excerptArabic?: string; extractionUrl?: string; sourceSlug?: string };
+type Citation = { volume?: string; pageReference?: string; excerptArabic?: string; extractionUrl?: string; sourceSlug?: string; passageAnchor?: string;
+  /** The edition's volume, from the account the batch read (batchClaims): see citationVolume. */
+  editionVolume?: number };
+type Account = { sourceSlug?: string; volumeNumber?: number; pages: { printedPage?: string; volumeNumber?: number }[] };
 export type Claim = { key: string; assertion?: string; disputed?: boolean; citations?: Citation[] };
 
 const BOOKS: Record<string, string> = { 'siyar-alam-al-nubala-risalah': 'سير أعلام النبلاء' };
@@ -16,17 +19,40 @@ const SIRA_VOLUME = /^السيرة (\d)$/;
 export const RIVAL = (key: string) => new RegExp(`^${key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}-(alt|other)(-|$)`);
 const digits = (text: string) => text.replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[Number(d)]);
 
-/** «سير أعلام النبلاء، السيرة ١، ص ٣٢٥» */
+/**
+ * The edition's own volume a Siyar quote is on (1-2 the Sira, 3 the caliphs, 4 on the Siyar's parts). The `volume` a
+ * batch wrote is sometimes Shamela's part label, which skips the first three volumes («1» for volume 4: AGENTS.md,
+ * Content sources), and sometimes the edition's («5»); the account the batch read says which volume it is (its page's
+ * `volumeNumber` where the entry crosses a binding). Only «السيرة N» names its volume outright, since the Sira account
+ * runs over both Sira volumes.
+ */
+export function citationVolume(citation: Citation): number | undefined {
+  const sira = SIRA_VOLUME.exec(citation.volume ?? '');
+  return sira ? Number(sira[1]) : citation.editionVolume;
+}
+
+/** The account's volume for a page it cites: the page's own where the entry crosses a binding, else the account's. */
+function editionVolume(citation: Citation, accounts: Account[]): number | undefined {
+  const account = accounts.find(each => each.sourceSlug === citation.sourceSlug);
+  const first = /\d+/.exec(citation.pageReference ?? '')?.[0];
+  return account?.pages.find(page => page.printedPage === first)?.volumeNumber ?? account?.volumeNumber;
+}
+
+/** «سير أعلام النبلاء، السيرة ١، ص ٣٢٥», «سير أعلام النبلاء، ج ٢، ص ٨٢» (volume 5 of the edition, the Siyar's second part) */
 export function citeOf(citation: Citation): string {
   const book = BOOKS[citation.sourceSlug ?? ''] ?? citation.sourceSlug ?? '';
-  const volume = citation.volume ? (SIRA_VOLUME.test(citation.volume) ? citation.volume : `ج ${citation.volume}`) : '';
+  const edition = citation.sourceSlug === 'siyar-alam-al-nubala-risalah' ? citationVolume(citation) : undefined;
+  const volume = edition !== undefined
+    ? (edition <= 2 ? `السيرة ${edition}` : edition === 3 ? 'سيرة الخلفاء الراشدين' : `ج ${edition - 3}`)
+    : citation.volume ? (SIRA_VOLUME.test(citation.volume) ? citation.volume : `ج ${citation.volume}`) : '';
   return digits([book, volume, citation.pageReference ? `ص ${citation.pageReference}` : ''].filter(Boolean).join('، '));
 }
 
 export function batchClaims(root = 'data/history/batches'): Map<string, Claim> {
-  return new Map(
-    readdirSync(root).flatMap(dir => (JSON.parse(readFileSync(`${root}/${dir}/batch.json`, 'utf8')) as { claims: Claim[] }).claims).map(claim => [claim.key, claim]),
-  );
+  return new Map(readdirSync(root).flatMap(dir => {
+    const { accounts = [], claims } = JSON.parse(readFileSync(`${root}/${dir}/batch.json`, 'utf8')) as { accounts?: Account[]; claims: Claim[] };
+    return claims.map(claim => [claim.key, { ...claim, ...(claim.citations && { citations: claim.citations.map(cite => ({ ...cite, editionVolume: editionVolume(cite, accounts) })) }) }] as const);
+  }));
 }
 
 /**

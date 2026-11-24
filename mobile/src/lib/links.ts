@@ -1,8 +1,9 @@
 import data from '@shared/data/links.json';
 import type { Link, LinkIndex } from '@shared/links';
-import type { AppStory, AppStoryAyat } from '@shared/stories/story';
+import { ayatOf, type AppStory, type AppStoryAyat } from '@shared/stories/story';
+
+export { ayatOf };
 import { STORIES, storyOf } from './stories';
-import surahs from '@shared/data/quran/surahs.json';
 
 /**
  * Every link between two things, both ways (owner, 2026-11-24), as the catalog build writes it (shared/links.ts). A page
@@ -43,18 +44,6 @@ export function storyAyatOf(slug: string, given: readonly string[] = []): { stor
     }
   }
   return [...sets.values()].sort((a, b) => ayahOrder(a.keys[0]) - ayahOrder(b.keys[0]));
-}
-
-/** Every ayah from one key to another in the mushaf's order, across a surah's end: exactly the ayat a source names. */
-export function ayatOf(from: string, to: string) {
-  let [surah, ayah] = from.split(':').map(Number);
-  const keys = [from];
-  while (keys[keys.length - 1] !== to && surah <= 114) {
-    if (ayah < (surahs.find(row => row.number === surah)?.numberOfAyat ?? 0)) ayah++;
-    else { surah++; ayah = 1; }
-    keys.push(`${surah}:${ayah}`);
-  }
-  return keys;
 }
 
 const ayahOrder = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return surah * 1000 + ayah; };
