@@ -240,8 +240,8 @@ export const briefFacts = (person: AppPerson) => [...(person.fullName ? [person.
 function Line({ label, palette, children }: { label: string; palette: Palette; children: React.ReactNode }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 12 }}>
+      <Text style={{ color: palette.muted, fontSize: 14, paddingTop: 4 }}>{label}</Text>
       <View style={{ flex: 1 }}>{children}</View>
-      <Text style={{ color: palette.muted, fontSize: 13, paddingTop: 4 }}>{label}</Text>
     </View>
   );
 }

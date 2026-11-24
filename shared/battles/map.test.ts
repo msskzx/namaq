@@ -81,6 +81,13 @@ describe('the names on a map', () => {
     expect(named?.anchor).toBe('start');
   });
 
+  it('still names a town that sits under another pin\'s halo, a little further out', () => {
+    // Makkah under Nakhla's lit pin on the atlas (2026-11-24): every spot beside the town touched the halo, so its name was dropped.
+    const [, town] = placeLabels([{ x: 200, y: 100, text: 'نخلة', size: 16, r: 16 }, { x: 196, y: 104, text: 'مكة', size: 14, r: 4 }], 400, 300);
+    expect(town).not.toBeNull();
+    expect(overlap(town!.box, [184, 84, 216, 116])).toBe(false);
+  });
+
   it('names a lone pin beside it', () => {
     expect(placeLabels([{ x: 100, y: 100, text: 'تبوك', size: 16 }], 400, 300)[0]?.anchor).toBe('start');
   });
