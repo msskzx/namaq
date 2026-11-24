@@ -90,11 +90,11 @@ describe('the phone app people', () => {
         const pages = cites.filter((cite) => cite.excerptArabic && arabicCommas(cite.excerptArabic) === fact.text).map((cite) => cite.pageReference);
         expect(fact.refs.map((ref) => ref.page).every((page) => pages.includes(page)), `${person.slug} ${key}: ${fact.text}`).toBe(true);
       }
-      // Each of the Siyar's quotes for the tie reaches the page, whatever the converted entry already says on the ayah,
+      // Each of the Siyar's quotes for the tie reaches the page, or the entry's own quote of the same words does,
       // and a tie the catalog says the ayah was revealed about is said so there.
       const shown = people.get(person.slug)!.ayat.filter((fact) => fact.value === key);
       for (const cite of cites.filter((each) => each.excerptArabic && each.sourceSlug === 'siyar-alam-al-nubala-risalah')) {
-        expect(shown.some((fact) => fact.text === arabicCommas(cite.excerptArabic!)), `${person.slug} ${key}: ${cite.excerptArabic}`).toBe(true);
+        expect(shown.some((fact) => arabicCommas(cite.excerptArabic!).includes(fact.text)), `${person.slug} ${key}: ${cite.excerptArabic}`).toBe(true);
       }
       if (link.kind === 'REVEALED_ABOUT') expect(shown.some((fact) => fact.kind === 'REVEALED_ABOUT'), `${person.slug} ${key}`).toBe(true);
     }
@@ -118,7 +118,7 @@ describe('the phone app people', () => {
 const arabicCommas = (text: string) => text.replace(/,/g, '،');
 
 const WAITING_FOR_BATCH = [
-  'ibn-umm-maktum 4:95', 'al-irbad-ibn-sariyah 9:92', 'umm-kulthum-bint-uqbah 60:10', 'bilal-ibn-rabah 6:52', 'bilal-ibn-rabah 6:53',
-  'tamim-al-dari 5:106', 'zaid-ibn-arqam 63:1', 'zaid-ibn-harithah 33:5', 'zaid-ibn-harithah 33:37', 'abdullah-ibn-salam 46:10',
-  'abdullah-ibn-amr-ibn-haram 3:169', 'kaab-ibn-ujrah 2:196',
+  'ibn-umm-maktum 4:95', 'al-irbad-ibn-sariyah 9:92', 'umm-kulthum-bint-uqbah 60:10',
+  'tamim-al-dari 5:106', 'zaid-ibn-arqam 63:1', 'zaid-ibn-harithah 33:37', 'abdullah-ibn-salam 46:10',
+  'kaab-ibn-ujrah 2:196',
 ];

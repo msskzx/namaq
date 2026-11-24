@@ -111,6 +111,15 @@ export function catalogAyat(person: CatalogPerson | undefined, claims: Map<strin
   });
 }
 
+/**
+ * The entry's ayat with the catalog's beside them. The entry's quote is the clean one (no isnad, no footnote marks, its
+ * speaker named), so a catalog quote that only repeats it, or holds it with more around it, is not shown a second time.
+ */
+function mergeAyat(catalog: AppPerson['ayat'], own: AppPerson['ayat']): AppPerson['ayat'] {
+  const shown = (fact: AppPerson['ayat'][number]) => own.some((other) => other.value === fact.value && fact.text.includes(other.text));
+  return [...own, ...catalog.filter((fact) => !shown(fact))];
+}
+
 export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.'), root = '.', claims: Map<string, Claim> = batchClaims()): AppPerson[] {
   const profiles = profilesFromModel(folders, root);
   const spans = new Map(folders.flatMap((folder) => folder.units.flatMap((file) => file.spans.map((span) => [span.id + '@' + file.unit.id, span] as const))));
@@ -298,7 +307,7 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
       companionOf: merge(links('COMPANION_OF')),
       ...attendance(merge(links('PARTICIPATED_IN')),
         merge(of('ABSENT_FROM').flatMap((entry) => entry.object ? [{ ...fact(entry), text: sentence(entry), slug: entry.object, name: nameOf(entry.object, entry.objectMention), inApp: false }] : []))),
-      ayat: ((own) => [...own, ...catalogAyat(people.get(slug), claims).filter((fact) => !own.some((other) => other.value === fact.value && other.text === fact.text))])([
+      ayat: mergeAyat(catalogAyat(people.get(slug), claims), [
         ...facts('REVEALED_ABOUT').map((fact) => ({ ...fact, kind: 'REVEALED_ABOUT' as const })),
         ...facts('ABOUT_AYAH').map((fact) => ({ ...fact, kind: 'ABOUT' as const })),
       ]),

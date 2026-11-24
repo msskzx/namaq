@@ -36,6 +36,11 @@ const bilalIbnRabah = {
     },
   ],
 
+  // Sa'd's report: «وكنت أنا، وابن مسعود، وبلال، ورجل من هذيل، وآخران»; the other three are unnamed.
+  ayat: [
+    { surah: 6, ayah: 52, kind: 'REVEALED_ABOUT', claims: ['bilal-ibn-rabah-siyar76/ayah-al-anam'], revealedAbout: { with: ['saad-ibn-abi-waqqas', 'abdullah-ibn-masud'], alsoUnnamed: true } },
+    { surah: 6, ayah: 53, kind: 'REVEALED_ABOUT', claims: ['bilal-ibn-rabah-siyar76/ayah-al-anam'], revealedAbout: { with: ['saad-ibn-abi-waqqas', 'abdullah-ibn-masud'], alsoUnnamed: true } },
+  ],
   titles: [
     {
       title: 'companion',

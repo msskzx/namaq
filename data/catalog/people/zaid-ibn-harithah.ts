@@ -29,6 +29,9 @@ const zaidIbnHarithah = {
     },
   ],
 
+  ayat: [
+    { surah: 33, ayah: 5, kind: 'REVEALED_ABOUT', claims: ['zaid-ibn-harithah-siyar36/ayah-al-ahzab-5'], revealedAbout: {} },
+  ],
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],
