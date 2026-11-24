@@ -181,7 +181,9 @@ export function SahihShape({ book, onOpenBook, onOpenKitab, palette }: { book: S
  * name, a bar as long as its hadith beside the longest kitab's, its babs and hadith numbers; «وقفت هنا» on the kitab read
  * last when `here`. `mark` checks one (a quiz's answer). The book's page opens a kitab on a tap; a quiz's look-up opens its bab headings under it.
  */
-export function SahihKitabList({ book, onOpen, mark, open, found, here: showHere = false, palette, source }: { book: SahihIndex; onOpen: (kitab: number) => void; mark?: number; open?: number; palette: Palette;
+export function SahihKitabList({ book, onOpen, onOpenBab, mark, open, found, here: showHere = false, palette, source }: { book: SahihIndex; onOpen: (kitab: number) => void; mark?: number; open?: number; palette: Palette;
+  /** A bab a search found opens its page (the book's page); without it the found babs are only named (a quiz). */
+  onOpenBab?: (kitab: number, bab: number) => void;
   /** «وقفت هنا» on the kitab read last (the book's page, never a quiz). */
   here?: boolean;
   /** A search's hits: only these kitabs, each with the bab headings that hold the words (none when its name holds them). */
@@ -218,9 +220,11 @@ export function SahihKitabList({ book, onOpen, mark, open, found, here: showHere
                   </View>
                 </View>
               </TapRow>
-              {(open === kitab.n ? kitab.babs : (found?.get(kitab.n) ?? []).map(at => kitab.babs[at])).filter(bab => bab.title).map((bab, at) => (
-                <Text key={at} style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right', paddingBottom: 6, paddingRight: 38 }}>{bab.title}</Text>
-              ))}
+              {(open === kitab.n ? kitab.babs.map((_, at) => at) : found?.get(kitab.n) ?? []).filter(at => kitab.babs[at].title).map(at => onOpenBab
+                ? <TapRow key={at} role="link" label={kitab.babs[at].title} onPress={() => onOpenBab(kitab.n, at)} style={{ paddingRight: 38 }}>
+                  <Text style={{ flex: 1, color: palette.ink, fontSize: 15, lineHeight: 26, textAlign: 'right' }}>{kitab.babs[at].title}</Text>
+                </TapRow>
+                : <Text key={at} style={{ color: palette.muted, fontSize: 15, lineHeight: 26, textAlign: 'right', paddingBottom: 6, paddingRight: 38 }}>{kitab.babs[at].title}</Text>)}
             </View>
           );
         })}
