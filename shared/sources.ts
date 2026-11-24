@@ -107,12 +107,12 @@ export const SOURCES: Source[] = [
     edition: 'دار المنهاج، بيروت، الطبعة الأولى ١٤٣٠هـ، عناية قصي محمد نورس الحلاق وأنور بن أبي بكر الشيخي؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(12836), licence: PUBLIC_DOMAIN, uses: [USE.forty],
   },
   {
-    id: 'sahih-bukhari', group: 'books', files: ['shared/data/hadith/bukhari.json'],
+    id: 'sahih-bukhari', group: 'books', files: ['shared/data/hadith/bukhari.json', 'shared/data/links.json'],
     title: { ar: 'صحيح البخاري', en: 'Sahih al-Bukhari' }, author: { ar: 'محمد بن إسماعيل البخاري', en: 'al-Bukhari' },
     edition: 'الطبعة السلطانية، بولاق ١٣١١هـ، مصوّرة دار طوق النجاة ١٤٢٢هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1681), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih, USE.stories, USE.people],
   },
   {
-    id: 'sahih-muslim', group: 'books', files: ['shared/data/hadith/muslim.json'],
+    id: 'sahih-muslim', group: 'books', files: ['shared/data/hadith/muslim.json', 'shared/data/links.json'],
     title: { ar: 'صحيح مسلم', en: 'Sahih Muslim' }, author: { ar: 'مسلم بن الحجاج النيسابوري', en: 'Muslim' },
     edition: 'تحقيق محمد فؤاد عبد الباقي، مطبعة عيسى البابي الحلبي، القاهرة ١٣٧٤هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1727), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih, USE.stories, USE.people],
   },
@@ -190,7 +190,8 @@ export const SOURCES: Source[] = [
     edition: 'تحقيق شعيب الأرنؤوط وإبراهيم باجس، مؤسسة الرسالة، بيروت، الطبعة السابعة ١٤١٧هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٩', link: shamela(4268), licence: PUBLIC_DOMAIN, uses: [USE.forty],
   },
   {
-    id: 'siyar', group: 'books',
+    // links.json: every link the catalog holds, cited from al-Siyar, the two Sahihs and Tafsir al-Sa'di.
+    id: 'siyar', group: 'books', files: ['shared/data/links.json'],
     title: { ar: 'سير أعلام النبلاء', en: 'Siyar A‘lam al-Nubala’' }, author: { ar: 'شمس الدين الذهبي', en: 'al-Dhahabi' },
     edition: 'مؤسسة الرسالة، الطبعة الثالثة، ١٤٠٥هـ/١٩٨٥م', link: shamela(10906), licence: PUBLIC_DOMAIN,
     uses: [USE.people, USE.stories, USE.battles, { ar: 'الأحاديث', en: 'hadith', href: '/hadith' }], shelf: 'siyar-alam-al-nubala-risalah',
@@ -346,7 +347,7 @@ export const SOURCES: Source[] = [
     link: { url: 'https://quran.ksu.edu.sa', label: 'مصحف جامعة الملك سعود' }, licence: PUBLIC_DOMAIN, uses: [USE.openings, USE.iltifat],
   },
   {
-    id: 'tafsir-sadi', group: 'books', files: ['shared/data/quran/tafsirSadi.json'],
+    id: 'tafsir-sadi', group: 'books', files: ['shared/data/quran/tafsirSadi.json', 'shared/data/links.json'],
     title: { ar: 'تيسير الكريم الرحمن في تفسير كلام المنان', en: 'Taysir al-Karim al-Rahman' }, author: { ar: 'عبد الرحمن بن ناصر السعدي', en: 'al-Sa‘di' },
     edition: 'مؤسسة الرسالة، الطبعة الأولى ١٤٢٠هـ/٢٠٠٠م، تحقيق عبد الرحمن بن معلا اللويحق', link: { url: 'https://quranpedia.net/book/3', label: 'الموسوعة القرآنية' },
     licence: {
