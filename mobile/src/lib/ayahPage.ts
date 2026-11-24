@@ -15,7 +15,9 @@ import type { AppStory } from '@shared/stories/story';
 import { ayahOf } from './branches';
 import { compareTargetsOfAyah } from './compare';
 import { branchList, EMPTY_LIST } from './branchList';
-import { STORIES as SIRA_STORIES } from './stories';
+import { storyOf } from './stories';
+import { idKey, inAyat, linksOf } from './links';
+import { PEOPLE } from './tarajim';
 import { bookState } from './books';
 
 /**
@@ -35,17 +37,13 @@ export type AyahSection =
   | { id: 'oath'; oath: string; kind: OathKind; by: string[]; range: [number, number] }
   | { id: 'prophet'; slug: string; at: number; event: StoryEvent }
   | { id: 'sira'; story: AppStory; label: string }
+  /** A person whose entry ties him to the ayah, with how it ties them («نزلت فيه», or named in it). */
+  | { id: 'person'; slug: string; kind: string }
   | { id: 'topic'; section: number; title: string; from?: number; to?: number };
 
 export type AyahSectionId = AyahSection['id'];
 
 const holds = (surah: number, ayah: number, at: { surah: number; range: [number, number] }) => at.surah === surah && ayah >= at.range[0] && ayah <= at.range[1];
-
-/** The key lies between two keys in mushaf order; a range may run on into the next surah. */
-const inRange = (key: string, from: string, to: string) => {
-  const order = (each: string) => { const [surah, ayah] = each.split(':').map(Number); return surah * 1000 + ayah; };
-  return order(key) >= order(from) && order(key) <= order(to);
-};
 
 /** The deepest topic of the surah that holds the ayah: a section, or its part when the section is divided. */
 function topicOf(surah: number, ayah: number): Extract<AyahSection, { id: 'topic' }> | null {
@@ -56,6 +54,19 @@ function topicOf(surah: number, ayah: number): Extract<AyahSection, { id: 'topic
   const part = top.parts?.find((each: TopicSection) => each.from !== undefined && each.to !== undefined && ayah >= each.from && ayah <= each.to);
   const shown = part ?? top;
   return { id: 'topic', section, title: shown.title, from: shown.from, to: shown.to };
+}
+
+/** Each ayah a person's entry ties him to, with the people it ties and how, built once. */
+let byAyah: Map<string, { slug: string; kind: string }[]> | undefined;
+function personAyat() {
+  if (byAyah) return byAyah;
+  byAyah = new Map();
+  for (const person of PEOPLE) {
+    for (const fact of person.ayat) {
+      if (typeof fact.value === 'string') byAyah.set(fact.value, [...(byAyah.get(fact.value) ?? []), { slug: person.slug, kind: fact.kind }]);
+    }
+  }
+  return byAyah;
 }
 
 /** What the built-in books and lists hold on the ayah; the scan walks every tree and story, so each ayah is scanned once. */
@@ -91,10 +102,17 @@ function scan(key: string): AyahSection[] {
       if (event.segments.some(segment => holds(surah, ayah, segment))) sections.push({ id: 'prophet', slug, at, event });
     });
   }
-  for (const story of SIRA_STORIES) {
-    const told = story.ayat?.find(each => inRange(key, each.from, each.to));
-    if (told) sections.push({ id: 'sira', story, label: told.label });
+  // The stories and people tied to the ayah, from the one links file (shared/data/links.json).
+  const links = linksOf(`ayah:${key}`);
+  for (const slug of new Set(links.filter(link => link.to.startsWith('event:')).map(link => idKey(link.to)))) {
+    const story = storyOf(slug);
+    const told = story?.ayat.find(each => inAyat(key, each.from, each.to));
+    if (story && told) sections.push({ id: 'sira', story, label: told.label });
   }
+  // A person his entry ties to the ayah has his own section, from the entry his page shows it from (the person page's
+  // «آيات فيه»), so the two pages show the same tie both ways. The catalog's own person-to-ayah links are a second record
+  // of these ties until the data plan makes them one (/mnt/project-files/data-plan/debate.md).
+  for (const { slug, kind } of personAyat().get(key) ?? []) sections.push({ id: 'person', slug, kind });
   const topic = topicOf(surah, ayah);
   if (topic) sections.push(topic);
   scanned.set(key, sections);
@@ -117,7 +135,7 @@ export function ayahSections(key: string, kashshaf?: KashshafData | null): AyahS
 }
 
 /** The page's order of sections. */
-export const ORDER: AyahSectionId[] = ['tafsir', 'gharib', 'irab', 'balagha', 'qiraat', 'trees', 'compare', 'opening', 'oath', 'prophet', 'sira', 'topic'];
+export const ORDER: AyahSectionId[] = ['tafsir', 'gharib', 'irab', 'balagha', 'qiraat', 'trees', 'compare', 'opening', 'oath', 'prophet', 'sira', 'person', 'topic'];
 
 /** The book a section reads from is on the phone (the person may take a book off; the readings and lists are built in). */
 export const sectionOn = (section: AyahSection) =>
@@ -130,6 +148,6 @@ export const sectionOn = (section: AyahSection) =>
 /** The short names of what an ayah's page holds, for a saved card's line («تفسير · إعراب · قصة»), each once, in page order. */
 const SHORT: Record<AyahSectionId, string> = {
   tafsir: 'تفسير', gharib: 'معاني', irab: 'إعراب', balagha: 'بلاغة', qiraat: 'قراءات', trees: 'متشابهات', compare: 'مقارنة',
-  opening: 'افتتاح', oath: 'قسم', prophet: 'قصة', sira: 'سيرة', topic: 'موضوع',
+  opening: 'افتتاح', oath: 'قسم', prophet: 'قصة', sira: 'سيرة', person: 'تراجم', topic: 'موضوع',
 };
 export const sectionNames = (sections: AyahSection[]) => [...new Set(sections.map(section => SHORT[section.id]))];

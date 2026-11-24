@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FlatList, Platform, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { MessagesSquare } from 'lucide-react-native';
+import { ChevronLeft, MessagesSquare } from 'lucide-react-native';
+import Card from '@/ui/Card';
+import { storiesOfHadith } from '@/lib/links';
+import { People } from '@/components/battles/BattleParts';
+import { StoryLinkRow } from '@/components/stories/StoryParts';
+import { rangeName, revealedIn } from '@shared/stories/story';
 import { findHadith, lastLink, placeOf, type SahihHadith, type SahihIndex } from '@shared/sahih';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
@@ -12,7 +17,7 @@ import LoadingDots from '@/ui/LoadingDots';
 import { usePalette, type Palette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
-import { toTab } from '@/lib/ways';
+import { openAyahPage, toTab } from '@/lib/ways';
 import { SAHIH, fortyOf, isSahihSlug, rememberOpened, useSahihText } from '@/lib/sahih';
 import { SahihDownload, SahihHadithView, opening } from '@/components/Sahih';
 import HadithBooks from '@/components/HadithBooks';
@@ -41,6 +46,7 @@ function SahihPage({ book, hadith, width, palette }: { book: SahihIndex; hadith:
         shareHead={<ShareHead title={`${book.title} ${numbers}`} sub={place ? `${place.kitab.title}${place.bab?.title ? ` › ${place.bab.title}` : ''}` : undefined} palette={palette} />}>
         <SahihHadithView book={book} hadith={hadith} palette={palette} />
       </SharedCard>
+      <InHadith book={book.slug} n={hadith.n} palette={palette} />
       {forty.length > 0 && (
         <View style={{ gap: 8 }}>
           <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 17, fontWeight: '700', textAlign: 'right' }}>من أخرجه</Text>
@@ -50,6 +56,30 @@ function SahihPage({ book, hadith, width, palette }: { book: SahihIndex; hadith:
         </View>
       )}
     </ScrollView>
+  );
+}
+
+/**
+ * «في هذا الحديث» (owner, 2026-11-24, sketch data-plan/links-sketch design أ): the stories this hadith tells, from the one
+ * links file, each with its people (a name with a page opens it), the story itself and the ayat it turns on.
+ */
+function InHadith({ book, n, palette }: { book: string; n: number; palette: Palette }) {
+  const stories = storiesOfHadith(book, n);
+  if (!stories.length) return null;
+  return (
+    <View style={{ gap: 8 }}>
+      <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 17, fontWeight: '700', textAlign: 'right' }}>في هذا الحديث</Text>
+      {stories.map(story => (
+        <Card key={story.slug} palette={palette} pad={[10, 14]} gap={8}>
+          <People people={story.people} palette={palette} />
+          <StoryLinkRow story={story} palette={palette} />
+          {story.ayat.map(ayat => (
+            <Button key={ayat.from + ayat.label} variant="plain" Icon={ChevronLeft} label={`${rangeName(ayat.from, ayat.to)} · ${revealedIn(ayat) ? 'نزلت في هذه القصة' : 'قُرئت في هذه القصة'}`}
+              onPress={() => openAyahPage(ayat.from)} />
+          ))}
+        </Card>
+      ))}
+    </View>
   );
 }
 

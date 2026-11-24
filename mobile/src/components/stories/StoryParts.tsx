@@ -1,7 +1,8 @@
 import { View } from 'react-native';
-import { isnadParts, narratorOf, rangeName, reportLines, reportSlots, type AppReport, type AppStory, type AppStoryAyat } from '@shared/stories/story';
+import { isnadParts, narratorOf, rangeName, reportLines, reportSlots, whenName, type AppReport, type AppStory, type AppStoryAyat } from '@shared/stories/story';
 import HadithScene, { sceneBlocks } from '@/components/HadithScene';
-import { BookMarked, ChevronDown, ChevronUp, Send } from 'lucide-react-native';
+import { BookMarked, ChevronDown, ChevronLeft, ChevronUp, Send } from 'lucide-react-native';
+import { router } from 'expo-router';
 import { useState } from 'react';
 import TapRow from '@/ui/TapRow';
 import IconButton from '@/ui/IconButton';
@@ -151,4 +152,24 @@ function storyPictures(story: AppStory, report: AppReport, palette: Palette): Sh
 /** The share button of a drawn story, on its page and its feed card. */
 export function StoryShare({ story, report, palette }: { story: AppStory; report: AppReport; palette: Palette }) {
   return <IconButton Icon={Send} label={`شارك ${story.name}`} onPress={() => shareCard({ content: () => null, paged: () => storyPictures(story, report, palette) })} />;
+}
+
+/**
+ * A story as one row of a list on another thing's page (owner, 2026-11-24, sketch data-plan/links-sketch design أ): its
+ * name, when it was and the hadith that tells it under it, and the arrow; the whole row opens the story.
+ */
+export function StoryLinkRow({ story, palette, first = false }: { story: AppStory; palette: Palette;
+  /** The first row of a card has no hairline over it. */
+  first?: boolean }) {
+  const line = [whenName(story), story.reports[0]?.cite].filter(Boolean).join(' · ');
+  return (
+    <TapRow onPress={() => router.push({ pathname: '/story', params: { slug: story.slug } })} role="link" label={story.name}
+      style={{ alignItems: 'center', gap: 8, paddingVertical: 8, ...(first ? {} : { borderTopWidth: 1, borderColor: `${palette.rule}70` }) }}>
+      <View style={{ flex: 1, gap: 2 }}>
+        <Text style={{ color: palette.ink, fontSize: 17, textAlign: 'right' }}>{story.name}</Text>
+        {line ? <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{line}</Text> : null}
+      </View>
+      <ChevronLeft size={18} color={palette.muted} />
+    </TapRow>
+  );
 }

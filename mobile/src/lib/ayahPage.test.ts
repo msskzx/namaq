@@ -5,6 +5,7 @@ import { OPENING_CARDS } from '@shared/quran/openingKinds';
 import { surahTopicsOf } from '@shared/quran/surahTopics';
 import { ayahSections, ORDER, sectionNames, type AyahSection } from './ayahPage';
 import { STORIES as SIRA_STORIES } from './stories';
+import { PEOPLE } from './tarajim';
 
 // The books' on/off state lives on the phone; every book is on here.
 vi.mock('./books', () => ({ bookState: () => 'on' }));
@@ -61,6 +62,13 @@ describe("an ayah's page (owner, 2026-11-22)", () => {
     for (const { slug, from, to } of told) {
       for (const key of [from, to]) expect(has(key, section => section.id === 'sira' && section.story.slug === slug), `${slug} ${key}`).toBe(true);
     }
+  });
+
+  // Every link both ways (owner, 2026-11-24): an ayah a person's entry ties him to names him on its page.
+  it("shows on an ayah's page every person whose entry ties him to it", () => {
+    const tied = PEOPLE.flatMap(person => person.ayat.flatMap(fact => (typeof fact.value === 'string' ? [{ slug: person.slug, key: fact.value }] : [])));
+    expect(tied.length).toBeGreaterThan(0);
+    for (const { slug, key } of tied) expect(has(key, section => section.id === 'person' && section.slug === slug), `${slug} ${key}`).toBe(true);
   });
 
   it('names the part of a divided section, not the whole section', () => {
