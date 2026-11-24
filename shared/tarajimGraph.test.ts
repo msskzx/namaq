@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import type { AppPerson } from './tarajim';
 import peopleJson from './data/tarajim/people.json';
+import tiePairsJson from './tarajimTiePairs.json';
+import { tieItem } from './feedItems';
 import { chainBetween, chainSentence, genitive, joining, linkedPairs, peopleGraph, tieGroups } from './tarajimGraph';
 
 const people = peopleJson as AppPerson[];
@@ -58,6 +60,15 @@ describe('linkedPairs', () => {
     }
     expect(pairs.every((pair) => pair.steps.length > 1 && pair.steps.length <= 3)).toBe(true);
     expect(pairs.some((pair) => pair.steps.some((step) => step.kind === 'companion' || step.kind === 'accompanied'))).toBe(false);
+  });
+
+  it('finds each chain as chainBetween does for that pair alone', () => {
+    const graph = peopleGraph(peopleJson as AppPerson[]);
+    for (const pair of linkedPairs(graph)) expect(pair.steps).toEqual(chainBetween(graph, pair.a, pair.b));
+  });
+
+  it('is what the app reads from tiePairs.json (rebuild with npm run model:app-people)', () => {
+    expect(tiePairsJson).toEqual(linkedPairs(peopleGraph(peopleJson as AppPerson[])).map((pair) => tieItem(pair.a, pair.b)));
   });
 });
 

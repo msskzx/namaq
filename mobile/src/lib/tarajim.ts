@@ -1,8 +1,9 @@
 import { type AppPerson, type PersonFact } from '@shared/tarajim';
 import { byVolume, heldGroups as heldIn, kunyaLine, personLine, unvowelled } from '@shared/tarajimGroups';
 import { matchesQuery, namesHay } from '@shared/tarajimLine';
-import { linkedPairs, peopleGraph } from '@shared/tarajimGraph';
+import { chainBetween, peopleGraph } from '@shared/tarajimGraph';
 import peopleJson from '@shared/data/tarajim/people.json';
+import tiePairsJson from '@shared/tarajimTiePairs.json';
 
 export const PROPHET = 'prophet-muhammad';
 
@@ -20,9 +21,20 @@ export const findPerson = (slug: string) => bySlug.get(slug);
 /** Every tie the converted entries state (shared/tarajimGraph.ts), for the ties and «بينه وبين…» screens and the «صلة» card. */
 export const GRAPH = peopleGraph(PEOPLE);
 
-let pairs: ReturnType<typeof linkedPairs> | undefined;
-/** The pairs the «صلة» feed card goes through, found once when the first card asks. */
-export const tiePairs = () => (pairs ??= linkedPairs(GRAPH));
+/**
+ * The «صلة» feed card's pairs as their feed ids «a,b», found at build time (npm run model:app-people writes
+ * shared/tarajimTiePairs.json; shared/tarajimGraph.test.ts keeps it equal to linkedPairs).
+ */
+export const TIE_PAIRS: readonly string[] = tiePairsJson;
+const tieSet = new Set(TIE_PAIRS);
+
+/** A «صلة» card's two people and the nearest chain between them, when the id is one of the card's pairs. */
+export function tiePair(id: string) {
+  if (!tieSet.has(id)) return undefined;
+  const [a, b] = id.split(',');
+  const steps = chainBetween(GRAPH, a, b);
+  return steps ? { a, b, steps } : undefined;
+}
 
 /** The name to show: the Prophet with ﷺ (design rule), everyone else as the catalog names them. */
 export function personName(person: { slug: string; name: string }) {

@@ -2,7 +2,12 @@
 import { writeFileSync } from 'node:fs';
 import { loadCatalog } from '../../src/lib/catalog/loadCatalog';
 import { appPeople } from '../../src/lib/model/appPeople';
+import { tieItem } from '../../shared/feedItems';
+import { linkedPairs, peopleGraph } from '../../shared/tarajimGraph';
 
 loadCatalog().then((catalog) => {
-  writeFileSync('shared/data/tarajim/people.json', `${JSON.stringify(appPeople(catalog))}\n`);
+  const people = appPeople(catalog);
+  writeFileSync('shared/data/tarajim/people.json', `${JSON.stringify(people)}\n`);
+  // The «صلة» card's pairs, worked out from the people above (no source of their own), found here once: searching every pair took seconds on the phone's home feed.
+  writeFileSync('shared/tarajimTiePairs.json', `${JSON.stringify(linkedPairs(peopleGraph(people)).map((pair) => tieItem(pair.a, pair.b)))}\n`);
 });
