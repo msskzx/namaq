@@ -2,7 +2,7 @@ import surahRows from '../data/quran/surahs.json';
 import wordsData from '../data/quran/words.json';
 import poemData from '../tajwid/tuhfat-al-atfal.json';
 import { searchAyat } from './ayahSearch';
-import { corpusIndex as ayahIndex } from './corpusIndex';
+import { corpusIndex as ayahIndex, warmCorpusIndex } from './corpusIndex';
 import { branchInventory, distinctBranchPieces } from './branchInventory';
 import { searchSharedPhrases } from './branchSearch';
 import { curatedFor } from './curatedComparisons';
@@ -24,7 +24,7 @@ const names: Record<number, string> = SURAH_NAMES;
 export const pairName = (a: number, b: number) => (a === b ? `سورة ${names[a]} مع نفسها` : `سورة ${names[a]} وسورة ${names[b]}`);
 
 /** Builds the ayah index ahead of the first search, so typing does not wait for it. */
-export const warmSearch = () => void ayahIndex();
+export const warmSearch = () => warmCorpusIndex();
 
 let lists: { compare: CompareItem[]; events: EventItem[]; tuhfa: TuhfaItem[] } | undefined;
 function staticLists(pairs: { a: number; b: number }[]) {
