@@ -15,8 +15,11 @@ const LIFT_SLOP = 10;
  * hadith-design), where lifting the finger opens the kitab and `mark` points at the one read last.
  * `holdScroll` keeps the touch from the page's scroll (a sheet); without it a page scrolled over the bars still scrolls.
  */
-export default function BarStrip({ counts, picked, onPick, onLift, onSliding, name, under, mark, ends, height = 96, holdScroll = true, label, palette }: {
-  counts: number[]; picked: number | null; onPick: (index: number) => void;
+export default function BarStrip({ counts, tone, picked, onPick, onLift, onSliding, name, under, mark, ends, height = 96, holdScroll = true, label, palette }: {
+  counts: number[];
+  /** The bars' colour when it is not the rule's («مدونتي»'s juz, lit where something is kept). */
+  tone?: string;
+  picked: number | null; onPick: (index: number) => void;
   /** The finger lifted (or a screen reader activated) on this bar. */
   onLift?: (index: number) => void;
   onSliding?: (sliding: boolean) => void;
@@ -66,7 +69,7 @@ export default function BarStrip({ counts, picked, onPick, onLift, onSliding, na
         <View pointerEvents="none" style={{ marginTop: top, height, borderBottomWidth: 1, borderColor: palette.rule }}>
           {width > 0 && counts.map((count, i) => count > 0 && (
             <View key={i} style={{ position: 'absolute', bottom: 0, right: i * bar + bar * 0.15, width: Math.max(1, bar * 0.7),
-              height: Math.max(2, (count / max) * (height - 2)), borderRadius: 1, backgroundColor: i === picked ? palette.accent : i === mark ? palette.amber : palette.rule }} />
+              height: Math.max(2, (count / max) * (height - 2)), borderRadius: 1, backgroundColor: i === picked ? palette.accent : i === mark ? palette.amber : tone ?? palette.rule, opacity: tone && picked !== null && i !== picked ? 0.55 : 1 }} />
           ))}
         </View>
         {mark !== undefined && width > 0 && (
