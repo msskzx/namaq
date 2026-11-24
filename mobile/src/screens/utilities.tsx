@@ -55,7 +55,8 @@ export default function UtilitiesTab() {
   const shown = useRef(index);
   // The page grows and shrinks as the top bar hides and comes back. On the web that can throw the pager back to its first
   // page with no finger on it, and settling there switched to the tools mid-count, which ended the adhkar count (the
-  // adhkar test's flake, 2026-11-24). A rest the reader did not swipe to, right after such a change, goes back to the page.
+  // adhkar test's flake, 2026-11-24). A rest on the first page that no swipe brought, after such a change, goes back to
+  // the open page (a tap on a card is no swipe, so it keeps the guard).
   const resized = useRef(false);
   useEffect(() => {
     if (!width || shown.current === index) return;
@@ -68,7 +69,7 @@ export default function UtilitiesTab() {
     const at = Math.round(Math.abs(event.nativeEvent.contentOffset.x) / width);
     if (resized.current) {
       resized.current = false;
-      if (at !== shown.current) { list.current?.scrollToIndex({ index: shown.current, animated: false }); return; }
+      if (at === 0 && at !== shown.current) { list.current?.scrollToIndex({ index: shown.current, animated: false }); return; }
     }
     if (at === shown.current || at < 0 || at >= UTILITY_VIEWS.length) return;
     shown.current = at;
@@ -96,7 +97,7 @@ export default function UtilitiesTab() {
         {width > 0 && (
           <FlatList ref={list} data={UTILITY_VIEWS} horizontal inverted pagingEnabled showsHorizontalScrollIndicator={false}
             keyExtractor={id => id} initialScrollIndex={index} getItemLayout={(_, at) => ({ length: width, offset: width * at, index: at })}
-            extraData={{ palette, focused, view, bottom }} onMomentumScrollEnd={settle} onScroll={scrolled} onTouchStart={() => { resized.current = false; }} scrollEventThrottle={16} onScrollToIndexFailed={() => {}}
+            extraData={{ palette, focused, view, bottom }} onMomentumScrollEnd={settle} onScroll={scrolled} onTouchMove={() => { resized.current = false; }} scrollEventThrottle={16} onScrollToIndexFailed={() => {}}
             renderItem={({ item }) => <Page view={item} width={width} height={height} palette={palette} on={focused && item === view} current={item === view} bottom={bottom} onPlace={pick} scrollers={scrollers} />} />
         )}
       </View>
