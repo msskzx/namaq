@@ -77,8 +77,14 @@ function writtenLinks(catalog: Catalog, problems: LinkProblem[]): Written[] {
     }
   }
 
+  const places = new Map((catalog.places ?? []).map(place => [place.slug, place]));
   for (const battle of catalog.battles) {
     const id = `battle:${battle.slug}`;
+    // The books that place it are what the link stands on: a place with no record has none, and is refused.
+    if (battle.place) {
+      const books = places.get(battle.place)?.books ?? [];
+      cross(id, 'FOUGHT_AT', `place:${battle.place}`, books.map(book => [book.source, ...(book.volume === undefined ? [] : [book.volume]), book.page].join(':')));
+    }
     for (const participant of battle.participants)
       cross(id, participant.relation ?? 'PARTICIPATED_IN', `person:${participant.person}`, claimsSrc(participant.claims));
     for (const moment of battle.moments ?? [])
@@ -127,6 +133,7 @@ function problemsOf(links: readonly Written[], catalog: Catalog, unprofiled: Rea
     ...catalog.battles.map(battle => `battle:${battle.slug}`),
     ...catalog.events.map(event => `event:${event.slug}`),
     ...catalog.utterances.map(utterance => `utterance:${utterance.slug}`),
+    ...(catalog.places ?? []).map(place => `place:${place.slug}`),
     ...AYAH_IDS,
   ]);
   const books = new Set(Object.values(HADITH_BOOKS));

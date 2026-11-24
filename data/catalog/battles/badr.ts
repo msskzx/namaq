@@ -14,6 +14,7 @@ const badr = {
   kind: 'BATTLE',
   slug: 'badr',
   name: 'غزوة بدر',
+  place: 'badr',
   nameTransliterated: 'Battle of Badr',
   fields: {
     engagement: { value: 'GHAZWAH', claims: ['sira/badr-ghazwah'] },

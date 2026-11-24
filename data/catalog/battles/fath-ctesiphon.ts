@@ -7,6 +7,7 @@ const fathCtesiphon = {
   kind: 'BATTLE',
   slug: 'fath-ctesiphon',
   name: 'فتح المدائن',
+  place: 'ctesiphon',
   nameTransliterated: 'Conquest of Ctesiphon',
   fields: {
     engagement: { value: 'BATTLE', claims: legacyUnreviewed },

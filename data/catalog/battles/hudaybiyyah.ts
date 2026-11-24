@@ -17,6 +17,7 @@ const hudaybiyyah = {
   kind: 'BATTLE',
   slug: 'hudaybiyyah',
   name: 'صلح الحديبية',
+  place: 'hudaybiyyah',
   nameTransliterated: 'Treaty of Hudaybiyyah',
   fields: {
     engagement: { value: 'GHAZWAH', claims: ['hudaybiyyah/engagement'] },

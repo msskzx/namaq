@@ -6,6 +6,7 @@ const badrAlUla = {
   kind: 'BATTLE',
   slug: 'badr-al-ula',
   name: 'بدر الأولى',
+  // No place: no book pins it (al-Biladi p. 158: «لا يعرف اليوم موضع باسم سفوان»).
   nameTransliterated: 'The First Badr',
   fields: {
     engagement: { value: 'GHAZWAH', claims: ['sira/badr-ula'] },

@@ -7,6 +7,7 @@ const siffin = {
   kind: 'BATTLE',
   slug: 'siffin',
   name: 'معركة صفين',
+  place: 'siffin',
   nameTransliterated: 'Battle of Siffin',
   fields: {
     engagement: { value: 'BATTLE', claims: legacyUnreviewed },

@@ -1,4 +1,5 @@
 import { RECIPROCAL_INVERSES } from '@/lib/relationship/categories';
+import { SOURCES } from '@shared/sources';
 import { orderingProblems } from './ordering';
 import {
   legacyUnreviewed,
@@ -182,6 +183,22 @@ export function validateCatalog(catalog: Catalog, known: KnownSlugs): CatalogIss
 
   const events = new Set(catalog.events.map((event) => event.slug));
   const battles = new Set(catalog.battles.map((battle) => battle.slug));
+
+  // Every place names the book that places it and the GeoNames records its pin is from (owner, 2026-11-23).
+  const books = new Set(SOURCES.filter((source) => source.group === 'books').map((source) => source.id));
+  const places = new Set((catalog.places ?? []).map((place) => place.slug));
+  (catalog.places ?? []).forEach((place) => {
+    const at = `places/${place.slug}`;
+    if (place.books.length === 0) issues.push({ path: at, message: 'no book places it' });
+    if (place.geonames.length === 0) issues.push({ path: at, message: 'no GeoNames record for its pin' });
+    place.books.forEach((book) => {
+      if (!books.has(book.source)) issues.push({ path: at, message: `unknown book ${book.source}: list it in shared/sources.ts` });
+      if (!book.text) issues.push({ path: at, message: `${book.source} p. ${book.page}: no words quoted` });
+    });
+  });
+  catalog.battles.forEach((battle) => {
+    if (battle.place && !places.has(battle.place)) issues.push({ path: `battles/${battle.slug}`, message: `unknown place ${battle.place}` });
+  });
 
   catalog.utterances.forEach((utterance) => {
     const at = `utterances/${utterance.slug}`;

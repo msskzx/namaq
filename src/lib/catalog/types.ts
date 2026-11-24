@@ -204,6 +204,8 @@ export interface CatalogBattle {
   /** Required because the projector creates the row when none exists. */
   readonly name: string;
   readonly nameTransliterated?: string;
+  /** Where it was fought: a place record's slug (data/catalog/places). */
+  readonly place?: string;
   readonly fields?: CatalogBattleFields;
   readonly dateParts?: CatalogDateParts;
   readonly participants: readonly CatalogParticipation[];
@@ -360,8 +362,27 @@ export interface CatalogOrdering {
   readonly claims: Provenance;
 }
 
+/**
+ * A place on today's map (owner, 2026-11-23: every place on the map is correct and carries its reference). A book names
+ * it and says where it is today; its pin is the coordinates of a GeoNames record it links, never ours. Where the book gives
+ * only a distance and a direction, or a stretch between two places, the pin follows its words from the records it names,
+ * and the record's file says how. The quotes are the books' words without their vowel marks.
+ */
+export interface CatalogPlace {
+  readonly kind: 'PLACE';
+  readonly slug: string;
+  readonly name: string;
+  /** Longitude, latitude. */
+  readonly at: readonly [number, number];
+  /** A page of a book in shared/sources.ts (by its id) placing it; `shamela` is that page's id on Shamela. */
+  readonly books: readonly { readonly source: string; readonly volume?: number; readonly page: number; readonly shamela: number; readonly text: string }[];
+  /** The GeoNames records its pin is taken from. */
+  readonly geonames: readonly number[];
+}
+
 export interface Catalog {
   readonly orderings?: readonly CatalogOrdering[];
+  readonly places?: readonly CatalogPlace[];
   readonly people: readonly CatalogPerson[];
   readonly battles: readonly CatalogBattle[];
   readonly events: readonly CatalogEvent[];

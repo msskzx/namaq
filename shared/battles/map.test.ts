@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import land from '../data/battles/land.json';
 import { clipRing, frameOf, landPath, pinsOf, placeLabels, projector, type LonLat } from './map';
-import { BATTLE_PLACE, PLACES } from './places';
+import { PLACES } from './places';
 
 const square: LonLat[] = [[0, 0], [10, 0], [10, 10], [0, 10]];
 
@@ -39,8 +39,8 @@ describe('the battle map', () => {
   });
 
   it('pins every place inside the land the app carries', () => {
-    Object.values(BATTLE_PLACE).forEach(key => {
-      const [lon, lat] = PLACES[key].at;
+    Object.values(PLACES).forEach(place => {
+      const [lon, lat] = place.at;
       expect(lon > 24 && lon < 52 && lat > 12 && lat < 40).toBe(true);
     });
   });

@@ -6,6 +6,7 @@ const fihl = {
   kind: 'BATTLE',
   slug: 'fihl',
   name: 'معركة فحل',
+  place: 'fihl',
   nameTransliterated: 'Battle of Fihl',
   fields: {
     engagement: { value: 'BATTLE', claims: legacyUnreviewed },

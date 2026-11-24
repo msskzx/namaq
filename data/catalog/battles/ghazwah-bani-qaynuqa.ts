@@ -17,6 +17,7 @@ const ghazwahBaniQaynuqa = {
   kind: 'BATTLE',
   slug: 'ghazwah-bani-qaynuqa',
   name: 'غزوة بني قينقاع',
+  place: 'madinah',
   nameTransliterated: 'The Expedition against Banu Qaynuqa',
   fields: {
     engagement: { value: 'GHAZWAH', claims: ['sira/bani-qaynuqa'] },

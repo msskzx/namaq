@@ -12,6 +12,7 @@ const ghazwahHamraAlAsad = {
   kind: 'BATTLE',
   slug: 'ghazwah-hamra-al-asad',
   name: 'غزوة حمراء الأسد',
+  place: 'hamra-al-asad',
   nameTransliterated: 'The Expedition of Hamra al-Asad',
   fields: {
     engagement: { value: 'GHAZWAH', claims: ['sira/hamra-al-asad'] },

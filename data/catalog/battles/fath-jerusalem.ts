@@ -6,6 +6,7 @@ const fathJerusalem = {
   kind: 'BATTLE',
   slug: 'fath-jerusalem',
   name: 'فتح بيت المقدس',
+  place: 'jerusalem',
   nameTransliterated: 'Conquest of Jerusalem',
   fields: {
     engagement: { value: 'BATTLE', claims: legacyUnreviewed },

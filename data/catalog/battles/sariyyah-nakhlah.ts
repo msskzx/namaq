@@ -7,6 +7,7 @@ const sariyyahNakhlah = {
   kind: 'BATTLE',
   slug: 'sariyyah-nakhlah',
   name: 'سرية نخلة',
+  place: 'nakhlah',
   nameTransliterated: 'The Expedition of Nakhlah',
   fields: {
     engagement: { value: 'SARIYYAH', claims: ['sira/nakhlah'] },

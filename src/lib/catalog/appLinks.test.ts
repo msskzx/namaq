@@ -73,6 +73,18 @@ describe('every link, both ways (owner, 2026-11-24)', async () => {
     expect(problems.map(problem => problem.message)).toEqual(['person:nobody names no record', 'no source']);
   });
 
+  // A battle's place is written on the battle and stands on the books that place it (owner, 2026-11-23).
+  it('joins a battle and its place both ways on the books that place it, and refuses a place with no record', () => {
+    const books = [{ source: 'biladi-maalim', page: 41, shamela: 36, text: 'وهي اليوم بلدة' }];
+    const place = { kind: 'PLACE' as const, slug: 'badr', name: 'بدر', at: [38.8, 23.8] as const, books, geonames: [107744] };
+    const battle = { kind: 'BATTLE' as const, slug: 'badr', name: 'بدر', place: 'badr', participants: [] };
+    const { links, problems } = appLinks(catalog({ battles: [battle], places: [place] }));
+    expect(problems).toEqual([]);
+    expect(links['battle:badr']).toContainEqual({ t: 'FOUGHT_AT', to: 'place:badr', src: ['biladi-maalim:41'], at: ['battle:badr'] });
+    expect(links['place:badr']).toContainEqual({ t: 'FOUGHT_AT', to: 'battle:badr', src: ['biladi-maalim:41'], at: ['battle:badr'] });
+    expect(appLinks(catalog({ battles: [battle] })).problems.map(problem => problem.message)).toEqual(['place:badr names no record', 'no source']);
+  });
+
   it('gives a range of ayat one link for each ayah in it, across a surah\'s end', () => {
     const { links } = appLinks(catalog({
       events: [story([], [{ kind: 'RECITED', from: '113:5', to: '114:1', evidence: [{ source: 'sahih-al-bukhari', hadith: 4367, quote: '', url: '' }] }])],

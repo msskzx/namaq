@@ -68,6 +68,21 @@ describe('validateCatalog', () => {
     expect(validateCatalog(catalog({ people: [person()], battles: [badr] }), known)).toEqual([]);
   });
 
+  // Owner, 2026-11-23: every place on the map names the book that places it and the GeoNames record of its pin.
+  it('rejects a place with no book or no GeoNames record, a book not in the sources list, and a battle at no known place', () => {
+    const bare = { kind: 'PLACE' as const, slug: 'nowhere', name: 'لا مكان', at: [0, 0] as const, books: [], geonames: [] };
+    const unlisted = { ...bare, slug: 'unlisted', books: [{ source: 'a-blog', page: 1, shamela: 1, text: 'هنا' }], geonames: [1] };
+    const unquoted = { ...bare, slug: 'unquoted', books: [{ source: 'yaqut-buldan', volume: 1, page: 1, shamela: 1, text: '' }], geonames: [1] };
+    const battle = { kind: 'BATTLE' as const, slug: 'somewhere', name: 'غزوة', place: 'atlantis', participants: [] };
+    expect(validateCatalog(catalog({ places: [bare, unlisted, unquoted], battles: [battle] }), known)).toEqual([
+      { path: 'places/nowhere', message: 'no book places it' },
+      { path: 'places/nowhere', message: 'no GeoNames record for its pin' },
+      { path: 'places/unlisted', message: 'unknown book a-blog: list it in shared/sources.ts' },
+      { path: 'places/unquoted', message: 'yaqut-buldan p. 1: no words quoted' },
+      { path: 'battles/somewhere', message: 'unknown place atlantis' },
+    ]);
+  });
+
   it('rejects a claim key no approved batch declares', () => {
     const subject = person({ virtues: [{ value: 'مناقب', claims: ['pilot/absent'] }] });
 

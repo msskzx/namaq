@@ -7,6 +7,7 @@ const nahrawan = {
   kind: 'BATTLE',
   slug: 'nahrawan',
   name: 'معركة النهروان',
+  // No place: Yaqut 5/325 names a whole district («بين بغداد وواسط من الجانب الشرقي»), no point in it.
   nameTransliterated: 'Battle of Nahrawan',
   fields: {
     engagement: { value: 'BATTLE', claims: legacyUnreviewed },

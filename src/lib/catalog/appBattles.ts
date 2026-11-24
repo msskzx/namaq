@@ -3,7 +3,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import type { AppBattle, AppCite, AppCited, AppMomentBattle, AppPersonLink, AppReading } from '@shared/battles/battle';
 import { KIND_NAMES } from '@shared/battles/battle';
-import { BATTLE_PLACE, PLACES } from '@shared/battles/places';
+import { appPlaces } from './appPlaces';
 import type { Catalog, Cited } from './types';
 import { legacyUnreviewed } from './types';
 
@@ -89,10 +89,11 @@ export function appBattles(catalog: Catalog, claims = batchClaims()): AppBattle[
   const people = new Map(catalog.people.map(person => [person.slug, person.name]));
   const link = (slug: string): AppPersonLink => ({ slug, name: people.get(slug) ?? slug });
   const { cited, refs } = citing(claims);
+  const places = appPlaces(catalog);
   return catalog.battles
     .map(battle => {
       const fields = battle.fields ?? {};
-      const place = BATTLE_PLACE[battle.slug];
+      const place = battle.place ? places[battle.place] : undefined;
       const muslims = battle.participants.filter(p => p.isMuslim && (p.relation ?? 'PARTICIPATED_IN') === 'PARTICIPATED_IN');
       return {
         slug: battle.slug,
@@ -102,7 +103,7 @@ export function appBattles(catalog: Catalog, claims = batchClaims()): AppBattle[
         kind: fields.engagement && { value: KIND_NAMES[fields.engagement.value], refs: refs(fields.engagement.claims) },
         year: cited(fields.hijriYear),
         location: cited(fields.location),
-        place: place ? { name: PLACES[place].name, at: PLACES[place].at, refs: PLACES[place].refs } : undefined,
+        place,
         counts: {
           muslims: cited(fields.muslimForceCount),
           others: cited(fields.nonMuslimForceCount),

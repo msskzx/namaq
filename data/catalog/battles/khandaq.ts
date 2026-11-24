@@ -14,6 +14,7 @@ const khandaq = {
   kind: 'BATTLE',
   slug: 'khandaq',
   name: 'غزوة الخندق',
+  place: 'madinah',
   nameTransliterated: 'Battle of the Trench',
   fields: {
     engagement: { value: 'GHAZWAH', claims: ['khandaq/engagement'] },

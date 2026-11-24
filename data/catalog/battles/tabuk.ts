@@ -19,6 +19,7 @@ const tabuk = {
   kind: 'BATTLE',
   slug: 'tabuk',
   name: 'غزوة تبوك',
+  place: 'tabuk',
   nameTransliterated: 'Expedition of Tabuk',
   fields: {
     engagement: { value: 'GHAZWAH', claims: ['tabuk/engagement'] },

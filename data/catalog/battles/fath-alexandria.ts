@@ -7,6 +7,7 @@ const fathAlexandria = {
   kind: 'BATTLE',
   slug: 'fath-alexandria',
   name: 'فتح الإسكندرية',
+  place: 'alexandria',
   nameTransliterated: 'Conquest of Alexandria',
   fields: {
     engagement: { value: 'BATTLE', claims: legacyUnreviewed },
