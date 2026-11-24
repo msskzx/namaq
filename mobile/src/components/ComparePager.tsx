@@ -84,9 +84,19 @@ const ComparePager = forwardRef<PagerHandle, { visits: Visit[]; index: number; o
     const [size, setSize] = useState({ width: 0, height: 0 });
     const { width, height } = size;
     useImperativeHandle(ref, () => ({ goTo: (to, animated = true) => list.current?.scrollToIndex({ index: to, animated }) }), []);
+    // The page grows and shrinks as the top bar hides and comes back. On the web that can throw the pager to a
+    // neighbouring pair with no finger on it (the long story compare test's flake, 2026-11-24, as the adhkar pager in
+    // #1204). A rest elsewhere that no swipe brought, right after such a change, goes back to the open pair. The mark
+    // lasts a moment only: a desktop swipe (trackpad, wheel) makes no touch to clear it, and the bar resizes the page often.
+    const resized = useRef(0);
     const settle = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
       if (!width) return;
       const at = Math.round(Math.abs(event.nativeEvent.contentOffset.x) / width);
+      if (resized.current) {
+        const fresh = Date.now() - resized.current < 600;
+        resized.current = 0;
+        if (fresh && at !== index) { list.current?.scrollToIndex({ index, animated: false }); return; }
+      }
       // Another pair opens at its own top, so the bars come back with it.
       if (at !== index && at >= 0 && at < visits.length) { setCompact(false); onIndex(at); }
     }, [width, index, visits.length, onIndex]);
@@ -101,11 +111,15 @@ const ComparePager = forwardRef<PagerHandle, { visits: Visit[]; index: number; o
     const layout = useCallback((_: unknown, at: number) => ({ length: width, offset: width * at, index: at }), [width]);
     const extra = useMemo(() => ({ palette, savedOnly, focus, height }), [palette, savedOnly, focus, height]);
     return (
-      <View style={{ flex: 1, direction: 'ltr' }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
+      <View style={{ flex: 1, direction: 'ltr' }} onLayout={event => {
+        const next = event.nativeEvent.layout;
+        if (next.width === width && next.height !== height) resized.current = Date.now();
+        setSize({ width: next.width, height: next.height });
+      }}>
         {width > 0 && <FlatList ref={list} data={visits} horizontal inverted pagingEnabled showsHorizontalScrollIndicator={false}
           keyExtractor={visitKey} getItemLayout={layout} initialScrollIndex={Math.min(index, visits.length - 1)}
           initialNumToRender={1} maxToRenderPerBatch={2} windowSize={3} extraData={extra}
-          onMomentumScrollEnd={settle} onScroll={scrolled} scrollEventThrottle={32} onScrollToIndexFailed={() => {}}
+          onMomentumScrollEnd={settle} onScroll={scrolled} onTouchMove={() => { resized.current = 0; }} scrollEventThrottle={32} onScrollToIndexFailed={() => {}}
           renderItem={({ item }) => <PairPage visit={item} width={width} height={height} palette={palette} savedOnly={savedOnly} savedIds={savedIds} focus={focus?.visit === visitKey(item) ? focus.ayat : undefined} onLanded={onLanded} />} />}
       </View>
     );
