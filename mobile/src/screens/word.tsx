@@ -26,7 +26,7 @@ export default function WordScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar back={back} hideOnScroll />
-      {lemmas.length > 0 && <View style={{ flex: 1, paddingTop: 8 }}><WordView key={ids} lemmas={lemmas} toTop={toTop} hidden={hidden} onScroll={onScroll} reveal={() => setCompact(false)} bottom={bottom} palette={palette} /></View>}
+      {lemmas.length > 0 && <View style={{ flex: 1, paddingTop: 8 }}><WordView key={ids} full lemmas={lemmas} toTop={toTop} hidden={hidden} onScroll={onScroll} reveal={() => setCompact(false)} bottom={bottom} palette={palette} /></View>}
     </View>
   );
 }

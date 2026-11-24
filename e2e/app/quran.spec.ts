@@ -359,11 +359,29 @@ test('an opened word shows where it gathers: a bar picks a surah, names it with 
   await page.getByLabel('ابحث عن كلمة في القرآن').fill('موسى');
   await page.getByRole('button', { name: /، .* مرة$/ }).first().click();
   const strip = page.getByLabel('عدد مرات ورودها في كل سورة');
+  // On the word's own page the chart comes under its card, «أصلها» and its meanings.
+  await strip.scrollIntoViewIfNeeded();
   const box = (await strip.boundingBox())!;
   // al-A'raf is the seventh surah from the right.
   await page.mouse.click(box.x + box.width * (1 - 6.5 / 114), box.y + 10);
-  await expect(page.getByText(`، منها ٢١ في ${S(7)}`)).toBeVisible();
+  await expect(page.getByText(`منها ٢١ في ${S(7)}`)).toBeVisible();
   await expect(page.getByRole('button', { name: new RegExp(`^افتح ${S(7)} .* في المصحف$`) }).first()).toBeInViewport();
+});
+
+test("a word's page opens with al-Raghib's words on its root and Ibn Qutaybah's meanings as branches, each opening his entry", async ({ page }) => {
+  await open(page, '/words');
+  await page.getByLabel('ابحث عن كلمة في القرآن').fill('فتنة');
+  await page.getByRole('button', { name: /^فِتۡنَة، / }).click();
+  await expect(page.getByText('قال الراغب:', { exact: true })).toBeVisible();
+  await expect(page.getByText(/^أصل الفَتْنِ: إدخال الذّهب النار/)).toBeVisible();
+  // His meanings in his own words, each a branch at its ayah; the first is open.
+  const branches = page.getByRole('tab', { name: /، .* [٠-٩]+$/ });
+  await expect(branches.first()).toHaveAttribute('aria-selected', 'true');
+  await page.getByRole('tab', { name: `الكفر، ${S(3)} ٧` }).click();
+  await expect(page.getByText(`قال ابن قتيبة في ${S(3)} ٧:`)).toBeVisible();
+  // «كاملًا» brings al-Raghib's whole article in the page's own section.
+  await page.getByRole('button', { name: 'كلام الراغب فيها كاملًا' }).click();
+  await expect(page.getByRole('tab', { name: 'المفردات للراغب' })).toHaveAttribute('aria-selected', 'true');
 });
 
 test("a word's page holds Ibn Qutaybah's note on a phrase that explains it, and a phrase explained whole under «في عبارة»", async ({ page }) => {

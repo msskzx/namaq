@@ -28,6 +28,8 @@ import Chip from '@/ui/Chip';
 import Tabs from '@/ui/Tabs';
 import IconButton from '@/ui/IconButton';
 import { FEATURE_ICON } from '@/components/featureIcons';
+import PostHead from '@/ui/PostHead';
+import WordFace from './WordFace';
 
 /** Ayat (or Ibn Qutaybah's entries) shown at first, and added by each «المزيد». */
 export const PLACES_STEP = 20;
@@ -80,11 +82,16 @@ export function useHideOnScroll(): [boolean, (event: NativeSyntheticEvent<Native
  * the sections and the chart slide away while the list scrolls down and come back on any scroll up (`hidden`).
  * A mushaf word holding two lemmas («مِمَّا») picks one at the top. docs/plans/word-counts-app.md
  */
-export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bottom = 16, palette }: {
+export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bottom = 16, full = false, palette }: {
   /** Filled with what brings the list back to its top, for the page's tab button tapped again (lib/tabRetap.ts). */
   toTop?: MutableRefObject<() => void>;
   lemmas: number[]; onOpen?: () => void; hidden: boolean; onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void; reveal: () => void;
-  bottom?: number; palette: Palette;
+  bottom?: number;
+  /**
+   * The word's own page (owner, 2026-11-24, sketch quran-design/word-page): its card, «أصلها» and its meanings as a tree
+   * (components/WordFace.tsx) head the list, and the sections and the chart scroll with it, «مواضعها» last.
+   */
+  full?: boolean; palette: Palette;
 }) {
   useBooks();
   const [picked, setPicked] = useState(0);
@@ -108,6 +115,8 @@ export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bott
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   if (toTop) toTop.current = () => scroll.current?.scrollTo({ y: 0, animated: true });
   const tops = useRef(new Map<string, number>());
+  /** Where «مواضعها» and the books' sections start on the word's own page. */
+  const sectionsAt = useRef(0);
   const pending = useRef<string | null>(null);
   const [top, setTop] = useState(0);
   // The chart stays while a finger slides on it, and after the list's own jump to a picked surah, which is not the reader scrolling.
@@ -140,28 +149,44 @@ export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bott
   const total = showing === 'gharib' ? entries.length : places.length;
   // Each book's card shares as a picture under the word (release 1: every page shares).
   const head = <ShareHead title={`«${name}»`} sub={root ? `جذرها «${root}»` : undefined} palette={palette} />;
+  const lemmaTabs = (
+    <View accessibilityRole="tablist" style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+      {lemmas.map((lemma, i) => (
+        <Chip key={lemma} role="tab" lit quran label={words.lemmas[lemma][0]} on={i === picked} palette={palette} onPress={() => { setPicked(i); restart(); }} />
+      ))}
+    </View>
+  );
+  const sectionTabs = sections.length > 1 && <Tabs options={sections.map(at => ({ key: at, label: at === 'places' ? 'المواضع' : BOOK_NAMES[at] }))} value={showing}
+    onChange={at => { setSection(at); restart(); }} label="أقسام الكلمة" palette={palette} />;
+  const strip = showing === 'places' && places.length > 0 && <SurahStrip counts={counts} picked={surah} onPick={pickSurah} onSliding={onSlide} names={surahNames} palette={palette} />;
   return (
     <View style={{ flexShrink: 1, flexGrow: 1 }}>
       {/* The top's frame gives its room back as it slides away; the top itself is laid out at full height to be measured. */}
-      <Animated.View {...hiddenProps(away)} style={[{ overflow: 'hidden' }, top ? slide.frame : null]}>
+      {!full && <Animated.View {...hiddenProps(away)} style={[{ overflow: 'hidden' }, top ? slide.frame : null]}>
         <Animated.View onLayout={event => setTop(event.nativeEvent.layout.height)} style={[{ position: top ? 'absolute' : 'relative', left: 0, right: 0, paddingHorizontal: 18, paddingBottom: 10, gap: 6 }, slide.content]}>
           {lemmas.length > 1
-            ? <View accessibilityRole="tablist" style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
-              {lemmas.map((lemma, i) => (
-                <Chip key={lemma} role="tab" lit quran label={words.lemmas[lemma][0]} on={i === picked} palette={palette} onPress={() => { setPicked(i); restart(); }} />
-              ))}
-            </View>
+            ? lemmaTabs
             : <QuranWord header look={{ color: palette.accent }} place={{ textAlign: 'right' }}>{name}</QuranWord>}
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>
             {`ترد في القرآن ${num(count)} مرة في ${num(places.length)} آية${root ? `، وجذرها «${root}»` : ''}`}
             {showing === 'places' && surah !== null && <Text style={{ color: palette.accent, fontSize: 15 }}>{`، منها ${num(counts[surah])} في ${surahNames[surah + 1]}`}</Text>}
           </Text>
-          {sections.length > 1 && <Tabs options={sections.map(at => ({ key: at, label: at === 'places' ? 'المواضع' : BOOK_NAMES[at] }))} value={showing}
-            onChange={at => { setSection(at); restart(); }} label="أقسام الكلمة" palette={palette} />}
-          {showing === 'places' && places.length > 0 && <SurahStrip counts={counts} picked={surah} onPick={pickSurah} onSliding={onSlide} names={surahNames} palette={palette} />}
+          {sectionTabs}
+          {strip}
         </Animated.View>
-      </Animated.View>
+      </Animated.View>}
       <ScrollView key={id} ref={scroll} onScroll={scrolled} scrollEventThrottle={16} style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 10, paddingBottom: bottom }}>
+        {full && <View style={{ gap: 18, marginBottom: 8 }}>
+          {lemmas.length > 1 && lemmaTabs}
+          <WordFace name={name} root={root || undefined} count={count} ayat={places.length} counts={counts} entries={entries} article={articles[0]}
+            onOpen={open} onWhole={() => { setSection('mufradat'); setShown(PLACES_STEP); jump(sectionsAt.current); }} palette={palette} />
+          <View style={{ gap: 8 }} onLayout={event => { sectionsAt.current = event.nativeEvent.layout.y; }}>
+            <PostHead Icon={FEATURE_ICON.mushaf} title="مواضعها" sub={`${num(places.length)} آية`} palette={palette} />
+            {sectionTabs}
+            {strip}
+            {showing === 'places' && surah !== null && <Text style={{ color: palette.accent, fontSize: 15, textAlign: 'right' }}>{`منها ${num(counts[surah])} في ${surahNames[surah + 1]}`}</Text>}
+          </View>
+        </View>}
         {showing === 'places' && places.slice(0, shown).map(({ key, words: marked }) => {
           const [s, number] = key.split(':').map(Number);
           const place = `${surahNames[s] ?? num(s)} ${num(number)}`;
