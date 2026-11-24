@@ -86,8 +86,20 @@ export function narratorQuestions(random: Random): ChoiceQuestion[] {
     const also = new Set([entry.companion, ...(entry.alsoFrom ?? [])].map(bare));
     const wrong = all.map(other => other.entry.companion).filter(name => !also.has(bare(name)));
     const question = choose(`${record.number}`, HADITH_NARRATOR, `${saying}\nعن أي صحابي روى البخاري هذا الحديث؟`, entry.companion, wrong, { sources: sources(entry, record), whose: narrates }, entry, random);
-    return question ? [question] : [];
+    return question ? [{ ...question, witness: narratorWitness(entry) }] : [];
   }), random);
+}
+
+/**
+ * «الشاهد» of «من راوي الحديث؟»: the entry's opening in its compiler's words, up to the Companion's «رضي الله عنه» («عن أبي
+ * عبد الرحمن عبد الله بن مسعود رضي الله عنه»), his name in it. It stops there, before the saying: al-Nawawi often runs his
+ * lead straight into the Prophet's ﷺ words with no colon between.
+ */
+export function narratorWitness(entry: FortyEntry): ChoiceQuestion['witness'] {
+  const lead = entry.text.replace(/^«/, '').match(/^.*?رضي الله (?:تعالى )?(?:عنهما|عنها|عنه)/)?.[0];
+  if (!lead) return undefined;
+  const { name, book } = compilerOf(entry);
+  return { by: `قال ${name} في ${FORTY.books[book].title}:`, text: lead, lit: entry.companion };
 }
 
 /** A saying's last two words, and the saying before them; none when the words are already said before. */

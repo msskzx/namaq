@@ -5,7 +5,7 @@ import { SAHIH } from '@/lib/sahih';
 import { UnderCard, useCardRow } from '@/ui/Card';
 import { ScrollView, View } from 'react-native';
 import { usePageWidth } from '@/ui/column';
-import { BookSearch, Check } from 'lucide-react-native';
+import { BookSearch, Check, Maximize2 } from 'lucide-react-native';
 import type { QuizLook } from '@shared/quiz/choiceKinds';
 import { LOOKED_POINTS, POINTS } from '@shared/quiz/score';
 import { num } from '@shared/quran/arabicNumber';
@@ -265,6 +265,27 @@ export function LookButton({ look, onLook, costs = false, palette, top }: { look
         {top && <View style={{ paddingTop: 8 }}>{top}</View>}
         <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ padding: 16, gap: 12 }} keyboardShouldPersistTaps="handled">
           <LookView look={look} shown={false} palette={palette} />
+          <View style={{ alignItems: 'flex-start' }}><Button label="رجوع إلى السؤال" onPress={() => setOpen(false)} /></View>
+        </ScrollView>
+      </Sheet>
+    </View>
+  );
+}
+
+/**
+ * «الموضع كاملًا» (owner, 2026-11-24; sketch question-look design أ): after the answer, the view it was looked up in opens in
+ * a sheet, the answer lit there, so the answered card stays short (the whole view under it ran to two or three screens).
+ */
+export function PlaceButton({ look, palette }: { look: QuizLook; palette: Palette }) {
+  const [open, setOpen] = useState(false);
+  const inRow = useCardRow();
+  const button = <Button Icon={Maximize2} label="الموضع كاملًا" onPress={() => setOpen(true)} pill={inRow} />;
+  return (
+    <View style={{ alignItems: 'flex-start' }}>
+      {inRow ? <UnderCard>{button}</UnderCard> : button}
+      <Sheet open={open} onClose={() => setOpen(false)} palette={palette} tall>
+        <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ padding: 16, gap: 12 }} keyboardShouldPersistTaps="handled">
+          <LookView look={look} shown palette={palette} />
           <View style={{ alignItems: 'flex-start' }}><Button label="رجوع إلى السؤال" onPress={() => setOpen(false)} /></View>
         </ScrollView>
       </Sheet>

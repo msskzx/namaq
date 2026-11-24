@@ -3,7 +3,7 @@ import fortyData from '../data/hadith/forty.json';
 import rajabData from '../data/hadith/ibnRajab.json';
 import { rajabFeedPassages, rajabOpening, recordName, sayingStart, type AppForty, type RajabChapter } from '../hadith';
 import { num } from '../quran/arabicNumber';
-import { bookQuestions, chainQuestions, completeQuestions, namedBooks, narratorQuestions, recordSource } from './hadith';
+import { bookQuestions, chainQuestions, completeQuestions, namedBooks, narratorQuestions, narratorWitness, recordSource } from './hadith';
 
 const FORTY = fortyData as AppForty;
 const RAJAB = rajabData as RajabChapter[];
@@ -246,5 +246,23 @@ describe('the words on an isnad line', () => {
   it('keeps «قَالَ:» before the word of transmission where al-Bukhari prints it', () => {
     const record = FORTY.entries[0].records.find(each => each.book === 'bukhari' && each.number === 54)!;
     expect(record.isnad!.edges.map(edge => bare(edge.label))).toEqual(['حدثنا', 'قال: أخبرنا', 'عن', 'عن', 'عن', 'عن']);
+  });
+});
+
+describe('«الشاهد» of «من راوي الحديث؟»', () => {
+  it('is al-Nawawi\'s own opening of the entry, up to the Companion\'s «رضي الله عنه», his name in it', () => {
+    const fourth = FORTY.entries.find(entry => entry.n === 4)!;
+    const witness = narratorWitness(fourth)!;
+    expect(fourth.text).toContain(witness.text);
+    expect(witness.text).toBe('عن أبي عبد الرحمن عبد الله بن مسعود رضي الله عنه');
+    expect(witness.text).toContain(witness.lit!);
+  });
+
+  it('is given for every narrator question, and stops before the saying', () => {
+    for (const question of narrator) {
+      expect(question.witness).toBeDefined();
+      // It ends at the Companion's «رضي الله عنه», before a word of the saying.
+      expect(question.witness!.text).toMatch(/رضي الله (تعالى )?عن(ه|ها|هما)$/);
+    }
   });
 });
