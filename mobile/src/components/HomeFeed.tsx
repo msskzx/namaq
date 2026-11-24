@@ -1661,10 +1661,9 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
     <Post palette={palette} head={<PostHead Icon={head.Icon} title={head.title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} open={NOTE_TOPICS[kind]} palette={palette} />}
         open={<OpenButton label={`افتح صفحة الآية، ${head.open}`} onPress={show} palette={palette} />}
         source={sourcesOf(note.sources)}>
-        {'readings' in note ? <View style={{ paddingVertical: 10 }}><QiraatPlace ayah={note.key} max={2} lines bare palette={palette} /></View> : <View style={{ paddingBottom: 10, gap: 6 }}>
-          {/* «بطاقة التعريف» (owner, 2026-11-24: the tafsir card): the ayah's place large, then the ayah and the book's words; no juz and page cells (owner: room with no point). */}
-          <TitleCells title={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} />
-          <View style={{ paddingHorizontal: 12, paddingTop: 4 }}>
+        {'readings' in note ? <View style={{ paddingVertical: 10 }}><QiraatPlace ayah={note.key} max={2} lines bare palette={palette} /></View> : <View style={{ paddingVertical: 10, gap: 6 }}>
+          {/* The ayah, then the book's words on a bar with whose they are (owner, 2026-11-24); its place is in the head above, so no title here. */}
+          <View style={{ paddingHorizontal: 12 }}>
             <AyahLines ayah={note.key} menu={note.key} palette={palette} shown whole write={null} checked={null} />
           </View>
           {'text' in note && <View style={{ paddingHorizontal: 14, paddingTop: 4 }}>

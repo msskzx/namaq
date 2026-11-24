@@ -43,6 +43,7 @@ function StoryRow({ name, slug, palette, onLeave }: { name: string; slug: string
 function ChapterCard({ chapter, palette, startOpen = false, onLeave }: { chapter: StoryChapter; palette: Palette; startOpen?: boolean; onLeave?: () => void }) {
   const [open, setOpen] = useState(startOpen);
   const battle = CHAPTER_BATTLE[chapter.name];
+  const others = chapter.stories.map(story => story.name).filter(name => name !== chapter.name);
   return (
     <Card palette={palette} pad={[4, 14]} gap={0}>
       <TapRow onPress={() => setOpen(was => !was)} expanded={open} label={chapter.name} style={{ alignItems: 'center', gap: 8 }}>
@@ -59,11 +60,11 @@ function ChapterCard({ chapter, palette, startOpen = false, onLeave }: { chapter
             </TapRow>
           ) : null}
         </>
-      ) : (
+      ) : others.length ? (
         <Text numberOfLines={1} style={{ color: palette.muted, fontSize: 14, textAlign: 'right', paddingBottom: 8 }}>
-          {chapter.stories.map(story => story.name).join('، ')}
+          {others.join('، ')}
         </Text>
-      )}
+      ) : null}
     </Card>
   );
 }
