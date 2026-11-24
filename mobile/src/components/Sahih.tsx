@@ -2,11 +2,14 @@ import { useState } from 'react';
 import { View } from 'react-native';
 import { Check, Download } from 'lucide-react-native';
 import { bookOf } from '@shared/books';
-import { lastLink, sahihName, searchSahih, splitRoute, type SahihHadith, type SahihIndex, type SahihRoute } from '@shared/sahih';
+import { lastLink, leadIn, sahihName, searchSahih, splitRoute, type SahihHadith, type SahihIndex, type SahihRoute } from '@shared/sahih';
 import { num } from '@shared/quran/arabicNumber';
 import { DRAW_MODES, type DrawMode } from '@shared/hadith';
 import { Text } from '@/ui/Text';
 import Card, { CardWithRow } from '@/ui/Card';
+import QuoteBar from '@/ui/QuoteBar';
+import Isnad from '@/components/Isnad';
+import { chainIsnad } from '@shared/isnadMetro';
 import type { Source } from '@/ui/sourceSlot';
 import Tabs from '@/ui/Tabs';
 import Folded from '@/ui/Folded';
@@ -34,27 +37,25 @@ export const sahihPage = (book: SahihIndex, shamela: number) => `https://shamela
 /** The opening of a hadith's words, for a list: its first route's words after the chain. */
 export const opening = (hadith: SahihHadith) => splitRoute(hadith.routes[0]).words.trim();
 
-/**
- * A chain as the edition prints it, drawn top to bottom: the collector, then each narrator under the one who narrated from
- * him, the word he narrated with on the line between them. Only a plain chain (one line, no ح) is drawn.
- */
+/** A plain chain (one line, no ح) drawn as the metro line, the collector on top. */
 export function SahihChain({ book, route, palette }: { book: SahihIndex; route: SahihRoute; palette: Palette }) {
-  const chain = route.chain ?? [];
-  const collector = book.slug === 'bukhari' ? 'البخاري' : 'مسلم';
-  return (
-    <View accessible accessibilityLabel={`الإسناد: ${[collector, ...chain.map(link => link.name)].join('، ')}`} style={{ alignItems: 'center' }}>
-      <Text style={{ color: palette.accent, fontSize: 17 }}>{collector}</Text>
-      {chain.map((link, i) => (
-        <View key={`${link.name}-${i}`} style={{ alignItems: 'center' }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, minHeight: 30 }}>
-            <View style={{ width: 1, alignSelf: 'stretch', backgroundColor: palette.rule }} />
-            <Text style={{ color: palette.amber, fontSize: 13 }}>{link.mode}</Text>
-          </View>
-          <Text style={{ color: i === chain.length - 1 ? palette.ink : palette.muted, fontSize: 16, textAlign: 'center' }}>{link.name}</Text>
-        </View>
-      ))}
-    </View>
-  );
+  return <Isnad isnad={chainIsnad(book.slug === 'bukhari' ? 'البخاري' : 'مسلم', route.chain ?? [])} palette={palette} />;
+}
+
+/**
+ * The printed words after the drawn chain (owner 2026-11-24, sketch hadith-design/sketch4): the last narrator's link with
+ * what he tells, muted, then the saying; when the Prophet ﷺ is named just before it, the saying under that line in amber.
+ */
+export function ChainSaying({ chain, last, words, palette, big, lines }: { chain: string; last?: { name: string; mode: string }; words: string; palette: Palette; big?: boolean;
+  /** At most these lines of the words, for a card that opens the whole (never cut with «…»). */
+  lines?: number }) {
+  const { lead, prophet } = leadIn(chain, last);
+  return <>
+    {lead ? <Text style={{ color: palette.muted, fontSize: 16, lineHeight: 29, textAlign: 'right' }}>{lead}</Text> : null}
+    {prophet
+      ? <QuoteBar by={prophet} tone={palette.amber} palette={palette}><Text numberOfLines={lines} style={body(palette, big)}>{words.trim()}</Text></QuoteBar>
+      : <Text numberOfLines={lines} style={body(palette, big)}>{words.trim()}</Text>}
+  </>;
 }
 
 /** One printed text: its chain drawn and its words under it, or the whole text with the chain in muted ink; its page folded. */
@@ -64,7 +65,7 @@ export function SahihRouteView({ book, n, route, mode, palette, big }: { book: S
   return (
     <View style={{ gap: 10 }}>
       {mode === 'drawing' && route.chain
-        ? <><SahihChain book={book} route={route} palette={palette} /><Text style={body(palette, big)}>{words}</Text></>
+        ? <><SahihChain book={book} route={route} palette={palette} /><ChainSaying chain={chain} last={route.chain[route.chain.length - 1]} words={words} palette={palette} big={big} /></>
         : <Text style={body(palette, big)}><Text style={{ color: palette.muted }}>{chain}</Text>{words}</Text>}
       {/* In a card with a row, the book joins its line and the page (linked to al-Shamela) its sheet (owner 2026-11-20). */}
       <Reference title={book.title} palette={palette} places={[place]} editions={[book.edition]}
@@ -85,7 +86,7 @@ export function SahihHadithView({ book, hadith, palette }: { book: SahihIndex; h
   const drawn = hadith.routes.some(route => route.chain);
   return (
     <View style={{ gap: 12 }}>
-      {from && <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>{from}</Text>}
+      {from && !(mode === 'drawing' && first.chain) && <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>{from}</Text>}
       {drawn && <Tabs label="طريقة العرض" options={DRAW_MODES} value={mode} onChange={setMode} palette={palette} />}
       <SahihRouteView book={book} n={hadith.n} route={first} mode={mode} palette={palette} big />
       {rest.length > 0 && (

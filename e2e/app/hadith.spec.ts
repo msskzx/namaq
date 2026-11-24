@@ -142,12 +142,10 @@ test.describe('the «من الإسناد» card', () => {
   });
 });
 
-// Owner, 2026-11-20: the isnad is boxes joined by lines, even inside the record's card (a drawing's box is not a card in a card).
-test('each narrator of a drawn chain keeps his box inside the record\'s card', async ({ page }) => {
+// Owner, 2026-11-24 (sketch hadith-design/sketch4): the line carries the narrators only; the Prophet ﷺ named before his
+// words heads the saying, not the drawing.
+test('a drawn chain names the narrators, and the Prophet ﷺ heads his words under it', async ({ page }) => {
   await open(page, '/hadith-forty?n=1');
-  const box = page.getByText('مَالِكٌ', { exact: true }).first().locator('..');
-  await expect(box).toBeVisible();
-  for (const side of ['borderLeftWidth', 'borderRightWidth', 'borderBottomWidth'] as const) {
-    expect(await box.evaluate((el, key) => getComputedStyle(el)[key], side)).toBe('1px');
-  }
+  await expect(page.getByLabel(/^الإسناد: البخاري، عَبْدُ اللهِ بْنُ مَسْلَمَةَ، مَالِكٌ/).first()).toBeVisible();
+  await expect(page.getByText('رَسُولَ اللهِ ﷺ قَالَ:').first()).toBeVisible();
 });

@@ -32,6 +32,12 @@ const said = (by: keyof typeof book, place: keyof typeof at, text: string): Scen
   ({ by: book[by].author, text, source: { ...book[by], ...at[place], quote: text } });
 
 /**
+ * The scene's line under its cover in the list (owner, 2026-11-24: the cover, and under it a line or two that make one
+ * want to open it): al-Tabari on what the whole likeness is, quoted as the last shot quotes it.
+ */
+export const DARK_SEA_TEASER = said('tabari', 'tabari', 'وهذا مَثَلٌ آخرُ ضرَبَه اللهُ لأعمالِ الكفارِ');
+
+/**
  * What a shot draws (owner, 2026-11-22: a full-screen short, swiped anywhere). The opening sea, then each layer in the ayah's
  * order; `night` is the darknesses going out one over another, `hand` darker still with the hand's words (no hand is drawn:
  * no source says where the man is), `end` the ayah's last words alone in the black.
@@ -88,7 +94,7 @@ export const DARK_SEA_STEPS: SceneStep[] = [
   ] },
   { layer: 'end', name: 'فما له من نور', phrase: 'ومن لم يجعل الله له نورا فما له من نور', sayings: [] },
   { layer: 'end', name: WHAT, phrase: '', more: true, head: WHAT, sayings: [
-    said('tabari', 'tabari', 'وهذا مَثَلٌ آخرُ ضرَبَه اللهُ لأعمالِ الكفارِ'),
+    DARK_SEA_TEASER,
     said('tabari', 'tabariCore', 'فجعَل الظُّلُماتِ مَثَلًا لأعمالِهم، والبحرَ اللُّجِّيَّ مثَلًا لقلبِ الكافِرِ'),
     DARK_SEA_READINGS[0],
   ] },

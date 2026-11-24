@@ -17,6 +17,8 @@ import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { toTab } from '@/lib/ways';
 import { FORTY, JIBRIL, fortyEntry, shamelaPage } from '@/lib/hadith';
 import Isnad from '@/components/Isnad';
+import { ChainSaying } from '@/components/Sahih';
+import { lastNarrator } from '@shared/isnadMetro';
 import IbnRajab from '@/components/IbnRajab';
 import HadithBooks from '@/components/HadithBooks';
 import rajab from '@shared/data/hadith/ibnRajab.json';
@@ -45,7 +47,7 @@ function Record({ record, mode, palette }: { record: FortyRecord; mode: Mode; pa
       {mode === 'drawing' && record.isnad
         ? <>
           <Isnad isnad={record.isnad} palette={palette} />
-          <Text style={body(palette)}>{saying}</Text>
+          <ChainSaying chain={chain} last={lastNarrator(record.isnad)} words={saying} palette={palette} />
         </>
         : <Text style={body(palette)}><Text style={{ color: palette.muted }}>{chain}</Text>{saying}</Text>}
       {record.from && <Text style={{ color: palette.ink, fontSize: 14, textAlign: 'right' }}>{record.mursal ? `مرسلًا، عن ${record.from}` : `من حديث ${record.from}`}</Text>}

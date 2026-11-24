@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { countOf, counting, isDone, type Counting } from './adhkarCount';
+import { countOf, countsOnDay, counting, isDone, isSaidToday, localDay, saidCount, saidDone, saidKey, sayOnce, type Counting } from './adhkarCount';
 
 const run = (events: Parameters<typeof counting>[1][]) => events.reduce<Counting>(counting, null);
 const tap = (id: string, target = 3) => ({ type: 'tap' as const, id, target });
@@ -33,17 +33,28 @@ describe('the adhkar counter', () => {
     expect(run([tap('a'), tap('a'), { type: 'leave' }])).toBeNull();
   });
 
-  it('writes nothing to the phone or the browser: the pages and their counter use no storage', () => {
-    const page = readFileSync(new URL('../mobile/src/components/Adhkar.tsx', import.meta.url), 'utf8');
+  it('the website writes nothing: its page and counter use no storage', () => {
     const web = readFileSync(new URL('../src/components/utilities/Adhkar.tsx', import.meta.url), 'utf8');
-    const libs = ['../mobile/src/lib/adhkar.ts', './adhkarCount.ts'].map(file => readFileSync(new URL(file, import.meta.url), 'utf8'));
-    for (const source of [page, web, ...libs]) {
-      expect(source).not.toMatch(/storage|writeJson|AsyncStorage|SecureStore|MMKV/);
-      // Settings it touches: which utility is open, the reminder switches and the place they need. Never a count.
-      // (`boxes.current.set` is the card sizes kept in a ref for the search scroll, not a setting.)
-      const settings = [...source.matchAll(/\b(\w+)\.(?:set|use)\(/g)].map(match => match[1]).filter(name => name !== 'current');
-      expect(settings.every(name => ['utilityView', 'adhkarAlerts', 'prayerPlace'].includes(name))).toBe(true);
-    }
-    for (const source of [page, web]) expect(source).toMatch(/useReducer\(counting, null\)/);
+    expect(web).not.toMatch(/storage|writeJson|AsyncStorage|SecureStore|MMKV/);
+    expect(web).toMatch(/useReducer\(counting, null\)/);
+  });
+
+  // Owner, 2026-11-24: on the phone a ticked dhikr stays ticked until the day ends, and a new day starts with nothing said.
+  it('the phone keeps each count until the day ends, each time and each dhikr on its own', () => {
+    const morning = new Date(2026, 10, 24, 7, 0);
+    const night = new Date(2026, 10, 24, 23, 59);
+    const next = new Date(2026, 10, 25, 0, 1);
+    const [a, b, evening] = [saidKey('morning', 'a'), saidKey('morning', 'b'), saidKey('evening', 'a')];
+    // Two of three on one, then another said: the first keeps its two.
+    const counts = sayOnce(sayOnce(sayOnce({}, a, 3), a, 3), b, 1);
+    const said = { day: localDay(morning), counts };
+    expect(isSaidToday(said)).toBe(true);
+    const tonight = countsOnDay(said, localDay(night));
+    expect(saidCount(tonight, a)).toBe(2);
+    expect(saidDone(tonight, b)).toBe(true);
+    expect(saidDone(tonight, evening)).toBe(false);
+    expect(saidCount(sayOnce(sayOnce(tonight, a, 3), a, 3), a)).toBe(3);
+    expect(saidCount(sayOnce(tonight, a, null), a)).toBe(0);
+    expect(countsOnDay(said, localDay(next))).toEqual({});
   });
 });

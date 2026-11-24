@@ -36,9 +36,10 @@ test('the surah order narrows to a juz and cites its books', async ({ page }) =>
   await expect(page.getByRole('button', { name: /^المصدر: البقاعي، نظم الدرر/ }).first()).toBeVisible();
 });
 
-test('«مشاهد» lists the sea scene with its surah and ayah; it opens full screen and walks an-Nur 40, each saying with who says it, never «قيل»', async ({ page }) => {
+// The list (owner, 2026-11-24): a tall cover from the scene itself, and under it the ayah's opening and one scholar's line with its book.
+test('«مشاهد» lists the sea scene with a scholar\'s line and its book; it opens full screen and walks an-Nur 40, each saying with who says it, never «قيل»', async ({ page }) => {
   await open(page, '/lataif');
-  await expect(page.getByText(/^سورة .+ · الآية ٤٠$/)).toBeVisible();
+  await expect(page.getByText(/وهذا مَثَلٌ آخرُ ضرَبَه اللهُ لأعمالِ الكفارِ.*جامع البيان ١٧\/٣٢٩/)).toBeVisible();
   await page.getByRole('link', { name: /^افتح مشهد/ }).click();
   await expect(page).toHaveURL(/\/scene/);
   for (const shot of ['بحر لجي', 'موج', 'موج فوقه', 'سحاب', 'ظلمات بعضها فوق بعض']) {

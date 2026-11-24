@@ -430,16 +430,17 @@ test.describe('a returning user', () => {
 
   // «مدونتي» in the mushaf's order (owner, 2026-11-24): each surah's name over what was kept in it, a line of what and when
   // above each card, and a strip of the juz whose lit juz takes the list there.
-  test('«مدونتي» lists what was kept in the mushaf\'s order under the surahs\' names, and the juz strip goes to it', async ({ page }) => {
+  test('«مدونتي» lists what was kept in the mushaf\'s order under the surahs\' names, and the juz bars go to it', async ({ page }) => {
     await open(page, '/');
     await page.getByRole('button', { name: 'مدونتي', exact: true }).click();
     const heads = page.getByRole('heading', { name: /^سورة / });
     await expect(heads).toHaveText([`سورة ${S(2)}`, `سورة ${S(18)}`]);
     await expect(page.getByText(/^تأملي · كتبته يوم /)).toBeVisible();
     await expect(page.getByText(/^منسيّة · نسيتها يوم /)).toBeAttached();
-    // البقرة ٢٥٥ is in the third juz and الكهف ١٠ in the fifteenth; nothing kept in the first, so it is not a button.
-    await expect(page.getByRole('button', { name: /^الجزء / })).toHaveCount(2);
-    await page.getByRole('button', { name: 'الجزء ١٥' }).click();
+    // The juz as bars, the first on the right (owner, 2026-11-24: like a histogram): lifting the finger on the fifteenth,
+    // where الكهف ١٠ is, takes the list there.
+    const strip = await page.getByLabel(/^الأجزاء،/).boundingBox();
+    await page.mouse.click(strip!.x + strip!.width * (1 - 14.5 / 30), strip!.y + strip!.height / 2);
     await expect(page.getByRole('heading', { name: `سورة ${S(18)}` })).toBeInViewport();
     await page.getByLabel('ابحث في مدونتي').fill('الكهف');
     await expect(heads).toHaveText([`سورة ${S(18)}`]);

@@ -46,6 +46,8 @@ describe('the al-Adhkar selection', () => {
       for (const part of printed(item)) expect(report).toContain(part);
       expect(report).toContain(item.occasionQuote);
       if (item.noteQuote) expect(report).toContain(item.noteQuote);
+      // The whole report is the report itself, its number left out.
+      if (item.fullReport) expect(report).toBe(`${report.split(' - ')[0]} - ${item.fullReport}`);
       if (item.virtueQuote) expect(report).toContain(item.virtueQuote);
       if (item.instructionQuote) expect(report).toContain(item.instructionQuote);
       for (const collection of item.collections) expect(report).toContain(collection);
