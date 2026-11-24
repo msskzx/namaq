@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { View } from 'react-native';
 import { Check, Download } from 'lucide-react-native';
 import { bookOf } from '@shared/books';
-import { lastLink, leadIn, sahihName, searchSahih, splitRoute, type SahihHadith, type SahihIndex, type SahihRoute } from '@shared/sahih';
+import { lastLink, leadIn, sahihName, searchSahih, splitRoute, type ChainLink, type SahihHadith, type SahihIndex, type SahihRoute } from '@shared/sahih';
 import { num } from '@shared/quran/arabicNumber';
 import { DRAW_MODES, type DrawMode } from '@shared/hadith';
 import { Text } from '@/ui/Text';
@@ -26,7 +26,6 @@ import LoadingDots from '@/ui/LoadingDots';
 import type { Palette } from '@/lib/theme';
 import { addBook, type BookState } from '@/lib/books';
 import { lastOpened } from '@/lib/sahih';
-import { JIBRIL, hadithUnit } from '@/lib/hadith';
 
 
 const body = (palette: Palette, big = false) => ({ color: palette.ink, fontSize: big ? 21 : 19, lineHeight: big ? 40 : 36, textAlign: 'right' as const });
@@ -47,10 +46,10 @@ export function SahihChain({ book, route, palette }: { book: SahihIndex; route: 
  * The printed words after the drawn chain (owner 2026-11-24, sketch hadith-design/sketch4): the last narrator's link with
  * what he tells, muted, then the saying; when the Prophet ﷺ is named just before it, the saying under that line in amber.
  */
-export function ChainSaying({ chain, last, words, palette, big, lines }: { chain: string; last?: { name: string; mode: string }; words: string; palette: Palette; big?: boolean;
+export function ChainSaying({ chain, links, words, palette, big, lines }: { chain: string; links: readonly ChainLink[]; words: string; palette: Palette; big?: boolean;
   /** At most these lines of the words, for a card that opens the whole (never cut with «…»). */
   lines?: number }) {
-  const { lead, prophet } = leadIn(chain, last);
+  const { lead, prophet } = leadIn(chain, links) ?? { lead: '' };
   return <>
     {lead ? <Text style={{ color: palette.muted, fontSize: 16, lineHeight: 29, textAlign: 'right' }}>{lead}</Text> : null}
     {prophet
@@ -59,33 +58,15 @@ export function ChainSaying({ chain, last, words, palette, big, lines }: { chain
   </>;
 }
 
-/**
- * A Sahih hadith drawn as one of the hadith pages draws it (owner 2026-11-24: Muslim 8 opened from the hadith tab showed
- * no drawing): its isnad with Muslim's two routes and the tabaqat, and the narrator its routes meet at, where his words begin.
- */
-const UNIT_OF: Record<string, string> = { 'muslim:8': JIBRIL.muslim, 'bukhari:50': JIBRIL.bukhari };
-export function unitDrawing(book: SahihIndex, n: number) {
-  const unit = hadithUnit(UNIT_OF[`${book.slug}:${n}`] ?? '');
-  const report = unit?.reports.find(each => unit.isnad[each.id]);
-  return unit && report ? { isnad: unit.isnad[report.id], origin: report.origin } : undefined;
-}
-
 /** One printed text: its chain drawn and its words under it, or the whole text with the chain in muted ink; its page folded. */
-export function SahihRouteView({ book, n, route, mode, palette, big, drawing }: { book: SahihIndex; n: number; route: SahihRoute; mode: DrawMode; palette: Palette; big?: boolean;
-  /** Its isnad as a hadith page draws it, routes and tabaqat. */
-  drawing?: ReturnType<typeof unitDrawing> }) {
+export function SahihRouteView({ book, n, route, mode, palette, big }: { book: SahihIndex; n: number; route: SahihRoute; mode: DrawMode; palette: Palette; big?: boolean }) {
   const { chain, words } = splitRoute(route);
+  const drawsWhole = !!route.chain && leadIn(chain, route.chain) !== undefined;
   const place = `${sahihName(book, n, num, route.route)}، ج ${num(route.volume)}، ${pagesName(route.pages)}`;
-  // Where routes are joined (Muslim's «ح»), the words are read whole from the narrator they meet at: his story is the text.
-  const from = drawing && !route.chain && drawing.origin ? route.text.lastIndexOf(drawing.origin, route.isnadEnd ?? route.text.length) : -1;
   return (
     <View style={{ gap: 10 }}>
-      {mode === 'drawing' && drawing && (route.chain || from >= 0)
-        ? <><Isnad isnad={drawing.isnad} palette={palette} />{route.chain
-          ? <ChainSaying chain={chain} last={route.chain[route.chain.length - 1]} words={words} palette={palette} big={big} />
-          : <Text style={body(palette, big)}>{route.text.slice(Math.max(0, route.text.lastIndexOf(' ', from - 2) + 1))}</Text>}</>
-        : mode === 'drawing' && route.chain
-        ? <><SahihChain book={book} route={route} palette={palette} /><ChainSaying chain={chain} last={route.chain[route.chain.length - 1]} words={words} palette={palette} big={big} /></>
+      {mode === 'drawing' && drawsWhole
+        ? <><SahihChain book={book} route={route} palette={palette} /><ChainSaying chain={chain} links={route.chain!} words={words} palette={palette} big={big} /></>
         : <Text style={body(palette, big)}><Text style={{ color: palette.muted }}>{chain}</Text>{words}</Text>}
       {/* In a card with a row, the book joins its line and the page (linked to al-Shamela) its sheet (owner 2026-11-20). */}
       <Reference title={book.title} palette={palette} places={[place]} editions={[book.edition]}
@@ -103,13 +84,13 @@ export function SahihHadithView({ book, hadith, palette }: { book: SahihIndex; h
   const [mode, setMode] = useState<DrawMode>('drawing');
   const [first, ...rest] = hadith.routes;
   const from = lastLink(first);
-  const drawing = unitDrawing(book, hadith.n);
-  const drawn = !!drawing || hadith.routes.some(route => route.chain);
+  const drawsWhole = (route: SahihRoute) => !!route.chain && leadIn(splitRoute(route).chain, route.chain) !== undefined;
+  const drawn = hadith.routes.some(drawsWhole);
   return (
     <View style={{ gap: 12 }}>
-      {from && !(mode === 'drawing' && (first.chain || drawing)) && <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>{from}</Text>}
+      {from && !(mode === 'drawing' && drawsWhole(first)) && <Text style={{ color: palette.ink, fontSize: 16, textAlign: 'right' }}>{from}</Text>}
       {drawn && <Tabs label="طريقة العرض" options={DRAW_MODES} value={mode} onChange={setMode} palette={palette} />}
-      <SahihRouteView book={book} n={hadith.n} route={first} mode={mode} palette={palette} big drawing={drawing} />
+      <SahihRouteView book={book} n={hadith.n} route={first} mode={mode} palette={palette} big />
       {rest.length > 0 && (
         <Folded credit={`طرق أخرى عند ${book.slug === 'muslim' ? 'مسلم' : 'البخاري'} (${num(rest.length)})`} palette={palette}>
           {rest.map((route, i) => <SahihRouteView key={`${route.route}-${i}`} book={book} n={hadith.n} route={route} mode={mode} palette={palette} />)}
