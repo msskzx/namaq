@@ -1,28 +1,28 @@
-import { useEffect, useReducer, useRef, useState } from 'react';
-import { AppState, View } from 'react-native';
-import { Bed, Bell, BellOff, Check, Moon, Mosque, RotateCcw, Sun, Sunrise } from 'lucide-react-native';
-import { ADHKAR_OCCASIONS, adhkarFor, type AdhkarOccasion, type Dhikr } from '@shared/adhkar';
-import { ADHKAR_NAMES, ADHKAR_TABS, ADHKAR_TITLES, adhkarSource, gradeLine } from '@shared/adhkarCite';
-import { counted as counted_, num } from '@shared/quran/arabicNumber';
+import { useEffect, useMemo, useState } from 'react';
+import { View } from 'react-native';
+import { Bed, Bell, BellOff, ChevronLeft, ChevronRight, Circle, CircleCheck, Moon, Mosque, Sun, Sunrise } from 'lucide-react-native';
+import { ADHKAR, adhkarFor, type AdhkarOccasion, type Dhikr } from '@shared/adhkar';
+import { ADHKAR_TABS, ADHKAR_TITLES, gradeLine } from '@shared/adhkarCite';
+import { surahName } from '@shared/quran/surahNames';
+import { searchPattern } from '@shared/bookReader';
+import { num } from '@shared/quran/arabicNumber';
 import type { AdhkarTime } from '@shared/adhanAlerts';
-import { SharedCard, ShareHead } from '@/ui/CardShare';
-import Tabs from '@/ui/Tabs';
+import Card from '@/ui/Card';
 import Chip from '@/ui/Chip';
-import SplitBar from '@/ui/SplitBar';
-import StepDots from '@/ui/StepDots';
 import Button from '@/ui/Button';
 import IconButton from '@/ui/IconButton';
+import TapRow from '@/ui/TapRow';
+import { SearchField } from '@/ui/Field';
 import { Text } from '@/ui/Text';
 import { AyatRange } from './AyahLines';
 import { buzz } from '@/lib/haptics';
 import { ALERTS_SUPPORTED, allowAlerts, alertsAllowed, openPhoneSettings, useForeground } from '@/lib/adhan';
-import { reachedAdhkar, showAdhkar, useAdhkarPlace } from '@/lib/adhkar';
-import { countOf, counting, isDone } from '@shared/adhkarCount';
+import { openDhikr, showAdhkar, useAdhkarPlace, useSaidToday } from '@/lib/adhkar';
+import { saidDone, saidKey, type SaidToday } from '@shared/adhkarCount';
 import { adhkarAlerts, prayerPlace } from '@/lib/settings';
 import type { Palette } from '@/lib/theme';
 
-const ICONS = { morning: Sun, evening: Moon, sleep: Bed, waking: Sunrise, 'after-prayer': Mosque } as const;
-const TABS = ADHKAR_TABS.filter(key => ADHKAR_OCCASIONS.includes(key)).map(key => ({ key, label: ADHKAR_NAMES[key], Icon: ICONS[key] }));
+export const ADHKAR_ICONS = { morning: Sun, evening: Moon, sleep: Bed, waking: Sunrise, 'after-prayer': Mosque } as const;
 /** Room between the cards. */
 const GAP = 16;
 const REMINDER: Partial<Record<AdhkarOccasion, { time: AdhkarTime; label: string }>> = {
@@ -86,7 +86,7 @@ function useReminder(time: AdhkarTime | undefined, onPlace: () => void) {
 }
 
 /** The grade under a dhikr, in its scholar's name, and who recorded it (owner, 2026-11-23: the reference right under it). */
-function GradeLine({ item, palette }: { item: Dhikr; palette: Palette }) {
+export function GradeLine({ item, palette }: { item: Dhikr; palette: Palette }) {
   const { grades, recorded } = gradeLine(item);
   return (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 8, paddingTop: 10, borderTopWidth: 1, borderColor: `${palette.rule}66` }}>
@@ -101,101 +101,116 @@ function GradeLine({ item, palette }: { item: Dhikr; palette: Palette }) {
   );
 }
 
-/**
- * The adhkar page in the utilities (owner, 2026-11-17; redesigned 2026-11-23, sketch /mnt/project-files/adhkar-page-redesign):
- * al-Nawawi's al-Adhkar, each item with a named scholar's grade of sahih or hasan. Each card says when it is said and how
- * often, the grade under the words, the virtue; the count button under it, a card done turns green and the page moves to
- * the next. A dot for each card shows how far the reader has come. The count is in this page's state only and never stored.
- */
-export default function Adhkar({ palette, on, onPlace, scrollTo }: { palette: Palette; on: boolean; onPlace: () => void; scrollTo?: (y: number) => void }) {
-  const { occasion, id: wanted } = useAdhkarPlace();
+/** «١٤ ذكرًا», «٣ أذكار», «ذكران». */
+export const adhkarCount = (n: number) => (n === 1 ? 'ذكر واحد' : n === 2 ? 'ذكران' : n <= 10 ? `${num(n)} أذكار` : `${num(n)} ذكرًا`);
+
+/** A dhikr in one line of a list: its first words, or the surahs and ayat it recites. */
+export function dhikrLine(item: Dhikr) {
+  if (item.content.kind === 'quran') return item.content.ranges.map(range => `${surahName(range.surah)} ${num(range.from)}${range.to > range.from ? `–${num(range.to)}` : ''}`).join('، ');
+  const words = item.content.text.split(/\s+/);
+  return words.length > 6 ? `${words.slice(0, 6).join(' ')}…` : item.content.text;
+}
+
+/** How many of a time's adhkar were said today. */
+const saidOf = (counts: SaidToday['counts'], occasion: AdhkarOccasion) => adhkarFor(occasion).filter(item => saidDone(counts, saidKey(occasion, item.id))).length;
+
+const BOOK_NOTE = 'جمعها النووي في «الأذكار»، والحكم على كل حديث باسم قائله.';
+
+/** One dhikr as a row: said today or not, its first words, how often, and its grade (design ب, owner 2026-11-24). */
+function DhikrRow({ item, occasion, said, first, palette }: { item: Dhikr; occasion: AdhkarOccasion; said: boolean; first: boolean; palette: Palette }) {
+  const grade = gradeLine(item).grades[0]?.rank;
+  const line = dhikrLine(item);
+  return (
+    <TapRow onPress={() => openDhikr(occasion, item.id)} label={`${line}${said ? '، قلته اليوم' : ''}`}
+      style={{ alignItems: 'center', gap: 10, paddingVertical: 10, ...(first ? {} : { borderTopWidth: 1, borderColor: `${palette.rule}66` }) }}>
+      {said ? <CircleCheck size={22} color={palette.green} /> : <Circle size={22} color={palette.rule} />}
+      <Text numberOfLines={1} style={{ flex: 1, color: said ? palette.muted : palette.ink, fontSize: 17 }}>{line}</Text>
+      {item.repeat && <Chip small on={false} role="text" label={`×${num(item.repeat.count)}`} palette={palette} />}
+      {grade && <Text style={{ color: palette.muted, fontSize: 13 }}>{grade}</Text>}
+    </TapRow>
+  );
+}
+
+/** The list of times, and a search over every dhikr (owner, 2026-11-24: no tabs, as the adhkar will grow). */
+function Times({ palette }: { palette: Palette }) {
+  const [count] = useSaidToday();
+  const [query, setQuery] = useState('');
+  const found = useMemo(() => {
+    const pattern = searchPattern(query);
+    if (!pattern) return null;
+    const match = (text: string) => new RegExp(pattern.source).test(text);
+    return ADHKAR.filter(item => match([item.content.kind === 'text' ? item.content.text : dhikrLine(item), item.occasionQuote, item.virtueQuote ?? ''].join(' ')));
+  }, [query]);
+  return (
+    <View style={{ gap: GAP }}>
+      <SearchField palette={palette} value={query} onChangeText={setQuery} label="ابحث في الأذكار" placeholder="ابحث في الأذكار" />
+      {found
+        ? <Card palette={palette} pad={[4, 14]} gap={0}>
+          {found.length
+            ? found.map((item, i) => {
+              const occasion = ADHKAR_TABS.find(tab => item.occasions.includes(tab))!;
+              return <DhikrRow key={item.id} item={item} occasion={occasion} said={saidDone(count, saidKey(occasion, item.id))} first={i === 0} palette={palette} />;
+            })
+            : <Text style={{ color: palette.muted, fontSize: 15, paddingVertical: 12 }}>لا ذكر بهذه الكلمات.</Text>}
+        </Card>
+        : <Card palette={palette} pad={[4, 14]} gap={0}>
+          {ADHKAR_TABS.map((occasion, i) => {
+            const Icon = ADHKAR_ICONS[occasion];
+            const all = adhkarFor(occasion).length;
+            const said = saidOf(count, occasion);
+            const sub = said ? `${adhkarCount(all)} · قلت ${num(said)} اليوم` : adhkarCount(all);
+            return (
+              <TapRow key={occasion} onPress={() => showAdhkar(occasion)} label={`أذكار ${ADHKAR_TITLES[occasion]}، ${sub}`}
+                style={{ alignItems: 'center', gap: 12, paddingVertical: 12, ...(i ? { borderTopWidth: 1, borderColor: `${palette.rule}66` } : {}) }}>
+                <Icon size={22} color={said === all ? palette.green : palette.accent} />
+                <View style={{ flex: 1 }}>
+                  <Text style={{ color: palette.ink, fontSize: 19 }}>أذكار {ADHKAR_TITLES[occasion]}</Text>
+                  <Text style={{ color: palette.muted, fontSize: 14 }}>{sub}</Text>
+                </View>
+                <ChevronLeft size={18} color={palette.muted} />
+              </TapRow>
+            );
+          })}
+        </Card>}
+      <Text style={{ color: palette.muted, fontSize: 13 }}>{BOOK_NOTE}</Text>
+    </View>
+  );
+}
+
+/** One time's adhkar as a list, each marked once said today; a tap opens it (design ب, owner 2026-11-24). */
+function TimeList({ occasion, palette, onPlace }: { occasion: AdhkarOccasion; palette: Palette; onPlace: () => void }) {
+  const [count] = useSaidToday();
   const items = adhkarFor(occasion);
-  const [count, dispatch] = useReducer(counting, null);
-  // The count ends when the reader leaves: another tab, or the page going out of view. The page coming into view is not
-  // a leaving, so a tap made just as it opens is kept.
-  const wasOn = useRef(on);
-  useEffect(() => { dispatch({ type: 'leave' }); clearTimeout(next.current); }, [occasion]);
-  useEffect(() => {
-    if (wasOn.current && !on) { dispatch({ type: 'leave' }); clearTimeout(next.current); }
-    wasOn.current = on;
-  }, [on]);
-  useEffect(() => {
-    const listener = AppState.addEventListener('change', state => { if (state === 'background') dispatch({ type: 'leave' }); });
-    return () => listener.remove();
-  }, []);
-  // A search asked for one card: follow it while the cards above it are laid out (the Quran page draws once its width is
-  // known, and the web reports a card's new size but not its new place), then let it go, so a later visit starts at the top.
-  const settle = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const boxes = useRef(new Map<string, { y: number; height: number }>());
-  const next = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  useEffect(() => () => { clearTimeout(settle.current); clearTimeout(next.current); }, []);
-  const topOf = (at: number) => {
-    const first = boxes.current.get(items[0].id);
-    const above = items.slice(0, at).map(item => boxes.current.get(item.id));
-    return first && !above.some(box => !box) ? first.y + above.reduce((sum, box) => sum + box!.height + GAP, 0) : null;
-  };
-  const laid = (id: string, box: { y: number; height: number }) => {
-    boxes.current.set(id, box);
-    const at = items.findIndex(item => item.id === wanted);
-    if (at < 0) return;
-    const y = topOf(at);
-    if (y === null) return;
-    scrollTo?.(y + 8);
-    clearTimeout(settle.current);
-    settle.current = setTimeout(reachedAdhkar, 600);
-  };
-  const tap = (item: Dhikr, at: number) => {
-    buzz();
-    const target = item.repeat?.count ?? 1;
-    dispatch({ type: 'tap', id: item.id, target });
-    // The last count of a card brings the next one up.
-    // Measured once the finished card has dropped its bar and laid out again, not before the tap.
-    if (countOf(count, item.id) + 1 >= target && at + 1 < items.length) {
-      clearTimeout(next.current);
-      next.current = setTimeout(() => { const y = topOf(at + 1); if (y !== null) scrollTo?.(y + 8); }, 250);
-    }
-  };
+  const said = saidOf(count, occasion);
   const reminder = ALERTS_SUPPORTED ? REMINDER[occasion] : undefined;
   const bell = useReminder(reminder?.time, onPlace);
   return (
-    <View style={{ gap: GAP }}>
-      <Tabs label="وقت الذكر" options={TABS} value={occasion} onChange={key => showAdhkar(key)} palette={palette} fill />
+    <View style={{ gap: 12 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Button variant="plain" Icon={ChevronRight} label="الأذكار" onPress={() => showAdhkar(null)} />
+      </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, minHeight: 44 }}>
-        <StepDots names={items.map(item => item.id)} at={items.findIndex(item => count?.id === item.id)} done={items.map(item => isDone(count, item.id))} palette={palette}
-          label={`أتممت ${num(items.filter(item => isDone(count, item.id)).length)} من ${num(items.length)}`} />
+        <View style={{ flex: 1 }}>
+          <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 21 }}>أذكار {ADHKAR_TITLES[occasion]}</Text>
+          <Text style={{ color: palette.muted, fontSize: 14 }}>{adhkarCount(items.length)}{said ? ` · قلت ${num(said)} اليوم` : ''}</Text>
+        </View>
         {reminder && <IconButton Icon={bell.on ? Bell : BellOff} label={reminder.label} onPress={bell.toggle} on={bell.on} />}
       </View>
       {bell.blocked && <Button variant="plain" Icon={BellOff} label="التنبيهات موقوفة، فاسمح بها من إعدادات الجوال" onPress={openPhoneSettings} />}
-      {items.map((item, at) => {
-        const counted = countOf(count, item.id);
-        const target = item.repeat?.count ?? 1;
-        const done = isDone(count, item.id);
-        // The counter is the card's own tool, first in the row under it; the book on the line (owner 2026-11-20).
-        return (
-          <View key={item.id} onLayout={event => laid(item.id, event.nativeEvent.layout)}>
-            <SharedCard palette={palette} pad={18} gap={12} outline={done ? palette.green : undefined} source={[adhkarSource(item)]} shareLabel="شارك الذكر"
-              shareHead={<ShareHead title={`من أذكار ${ADHKAR_TITLES[occasion]}`} palette={palette} />}
-              lead={<>
-                <Button big pill variant={done ? 'outline' : 'primary'} disabled={done} Icon={Check}
-                  label={item.repeat ? `${num(counted)} / ${num(target)}` : 'قلته'}
-                  accessibilityLabel={item.repeat ? `عُدَّ مرة، ${num(counted)} من ${num(target)}` : 'قلته'}
-                  onPress={() => tap(item, at)} />
-                {counted > 0 && <IconButton Icon={RotateCcw} label="من جديد" onPress={() => dispatch({ type: 'reset', id: item.id })} />}
-              </>}>
-              <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
-                <Text style={{ flex: 1, color: palette.muted, fontSize: 15, lineHeight: 24, textAlign: 'right' }}>«{item.occasionQuote}»</Text>
-                {item.repeat && <Chip small on={false} role="text" label={counted_(item.repeat.count, ['مرة', 'مرتين', 'مرات'])} palette={palette} />}
-              </View>
-              <DhikrBody item={item} palette={palette} />
-              <GradeLine item={item} palette={palette} />
-              {/* The bar is there before the first count, so the button under it never moves under a finger that taps again. */}
-              {item.repeat && !done && (
-                <View style={{ flexDirection: 'row' }}><SplitBar first={counted} second={target - counted} palette={palette} /></View>
-              )}
-            </SharedCard>
-          </View>
-        );
-      })}
+      <Card palette={palette} pad={[4, 14]} gap={0}>
+        {items.map((item, i) => <DhikrRow key={item.id} item={item} occasion={occasion} said={saidDone(count, saidKey(occasion, item.id))} first={i === 0} palette={palette} />)}
+      </Card>
+      <Text style={{ color: palette.muted, fontSize: 13 }}>{BOOK_NOTE}</Text>
     </View>
   );
+}
+
+/**
+ * The adhkar page in the utilities (owner, 2026-11-17; redesigned 2026-11-24, sketch /mnt/project-files/tools-design/adhkar):
+ * al-Nawawi's al-Adhkar, each with a named scholar's grade of sahih or hasan. The times as a list with a search, a time's
+ * adhkar as rows, and a dhikr open full screen (screens/dhikr.tsx). What was said is kept until the day ends.
+ */
+export default function Adhkar({ palette, onPlace }: { palette: Palette; onPlace: () => void }) {
+  const occasion = useAdhkarPlace();
+  return occasion ? <TimeList occasion={occasion} palette={palette} onPlace={onPlace} /> : <Times palette={palette} />;
 }

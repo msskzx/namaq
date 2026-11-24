@@ -3,6 +3,13 @@ import { expect, open, test } from './fixtures';
 
 // The utilities open from home's buttons (owner, 2026-11-18): «القبلة» on the qibla, «الأذكار» on the adhkar. Two pages
 // since 2026-11-23: «الأدوات» (the date, the prayer times, the qibla under them) and «الأذكار».
+/** A dhikr's row in a list is named by its first words. */
+const rowOf = (id: string) => {
+  const content = dhikrById(id)!.content;
+  const start = content.kind === 'text' ? content.text.split(/\s+/).slice(0, 3).join(' ') : '';
+  return new RegExp(`^${start.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`);
+};
+
 const tools = async (page: import('@playwright/test').Page) => {
   await page.getByRole('button', { name: 'القبلة', exact: true }).filter({ visible: true }).first().click();
   await expect(page.getByRole('radio', { name: 'الأدوات' })).toBeChecked();
@@ -49,40 +56,50 @@ test('a sideways swipe moves to the adhkar and its icon', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'التقويم الهجري' }).filter({ visible: true })).toBeInViewport();
 });
 
-test('the adhkar: each time\'s cards, a counter that stops at its number and starts again, and a search that opens the card', async ({ page }) => {
+// The adhkar (owner, 2026-11-24): the times as a list, a time's adhkar as rows, a dhikr open full screen that swipes
+// through the rest; what was said is kept until the day ends.
+test('the adhkar: a time, its list, a dhikr open with its count kept for the day, its whole report and its source', async ({ page }) => {
   await open(page, '/');
   await tools(page);
   await page.getByRole('radio', { name: 'الأذكار' }).click();
-  await expect(page.getByRole('tab', { name: 'الصباح' }).filter({ visible: true }).first()).toBeVisible();
-  // Only a card whose hadith states a number has a counter; it stops at three.
-  const tap = page.getByRole('button', { name: /^عُدَّ مرة/ }).filter({ visible: true }).nth(1);
-  await expect(tap).toHaveAccessibleName('عُدَّ مرة، ٠ من ٣');
-  for (const n of ['١', '٢', '٣']) { await tap.click(); await expect(tap).toHaveAccessibleName(`عُدَّ مرة، ${n} من ٣`); }
-  await expect(tap).toHaveAccessibleName('عُدَّ مرة، ٣ من ٣');
-  await expect(tap).toBeDisabled();
+  await page.getByRole('button', { name: /^أذكار الصباح،/ }).filter({ visible: true }).first().click();
+  await expect(page.getByRole('heading', { name: 'أذكار الصباح' }).filter({ visible: true })).toBeVisible();
+  await page.getByRole('button', { name: rowOf('morning-evening-name') }).filter({ visible: true }).first().click();
+  await expect(page).toHaveURL(/\/dhikr/);
+  // Only a dhikr whose hadith states a number counts to it; the ring stops there.
+  const ring = page.getByRole('button', { name: /^عُدَّ مرة/ }).filter({ visible: true }).first();
+  await expect(ring).toHaveAccessibleName('عُدَّ مرة، ٠ من ٣');
+  for (const n of ['١', '٢']) { await ring.click(); await expect(ring).toHaveAccessibleName(`عُدَّ مرة، ${n} من ٣`); }
+  await ring.click();
+  // Said three times, it is kept for today, and the next dhikr comes in; «السابق» goes back to it, done.
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('adhkar-said') ?? 'null')?.counts)).toEqual({ 'morning:morning-evening-name': { n: 3, of: 3 } });
+  await expect(page.getByLabel(/^الذكر .*، قلت ١$/)).toBeVisible();
+  await page.getByRole('button', { name: 'السابق' }).click();
+  const done = page.getByRole('button', { name: 'عُدَّ مرة، ٣ من ٣' }).filter({ visible: true }).first();
+  await expect(done).toBeDisabled();
+  await page.reload();
+  await expect(page.getByRole('button', { name: 'عُدَّ مرة، ٣ من ٣' }).filter({ visible: true }).first()).toBeDisabled();
   await page.getByRole('button', { name: 'من جديد' }).filter({ visible: true }).first().click();
-  await expect(tap).toHaveAccessibleName('عُدَّ مرة، ٠ من ٣');
-  // Another tab ends the count, and nothing about it is stored.
-  await tap.click();
-  await page.getByRole('tab', { name: 'المساء' }).filter({ visible: true }).first().click();
-  await page.getByRole('tab', { name: 'الصباح' }).filter({ visible: true }).first().click();
-  await expect(page.getByRole('button', { name: /^عُدَّ مرة/ }).filter({ visible: true }).nth(1)).toHaveAccessibleName('عُدَّ مرة، ٠ من ٣');
-  expect(await page.evaluate(() => Object.keys(localStorage).filter(key => /adhkar|count/i.test(key) && key !== 'adhkar-alerts'))).toEqual([]);
-  // A card's source line, under its buttons, opens on al-Nawawi's words and the scholar's grade (owner, 2026-11-20).
+  await expect(page.getByRole('button', { name: /^عُدَّ مرة/ }).filter({ visible: true }).first()).toHaveAccessibleName('عُدَّ مرة، ٠ من ٣');
+  // The whole report, al-Nawawi's own words, folded under the dhikr (owner, 2026-11-24: a sample on one or two first).
+  await page.getByRole('button', { name: 'الحديث كاملًا كما رواه النووي' }).filter({ visible: true }).first().click();
+  await expect(page.getByText(/هذا لفظ الترمذي/).filter({ visible: true }).first()).toBeVisible();
+  // A card's source line opens on al-Nawawi's words and the scholar's grade (owner, 2026-11-20).
   await page.getByRole('button', { name: /^المصدر: الأذكار ٧٨ ح٢١٣/ }).filter({ visible: true }).first().click();
   await expect(page.getByText('«قال الترمذي: هذا حديث حسن صحيح»', { exact: false }).filter({ visible: true }).first()).toBeVisible();
+});
+
+test('a search finds a dhikr, on the adhkar page and in the app\'s search, and opens it', async ({ page }) => {
+  await open(page, '/');
+  await tools(page);
+  await page.getByRole('radio', { name: 'الأذكار' }).click();
+  await page.getByLabel('ابحث في الأذكار').filter({ visible: true }).first().fill('بك أصبحنا');
+  await page.getByRole('button', { name: rowOf('morning-by-you') }).filter({ visible: true }).first().click();
+  await expect(page.getByRole('button', { name: /^المصدر: الأذكار ٧٧ ح٢٠٨/ }).filter({ visible: true }).first()).toBeInViewport();
 
   await open(page, '/search');
   await page.getByRole('textbox', { name: /ابحث/ }).first().fill('أنت السلام ومنك السلام');
   const peace = dhikrById('prayer-peace')!.content;
   await page.getByRole('link', { name: peace.kind === 'text' ? peace.text : '' }).first().click();
-  await expect(page.getByRole('tab', { name: 'الصلاة' }).filter({ visible: true }).first()).toHaveAttribute('aria-selected', 'true');
   await expect(page.getByRole('button', { name: /^المصدر: الأذكار ٧١ ح١٨٣/ }).filter({ visible: true }).first()).toBeInViewport();
-
-  // A morning card sits under the whole Quran page, which is drawn after the cards are first laid out.
-  await open(page, '/search');
-  await page.getByRole('textbox', { name: /ابحث/ }).first().fill('بك أصبحنا وبك أمسينا');
-  const morning = dhikrById('morning-by-you')!.content;
-  await page.getByRole('link', { name: morning.kind === 'text' ? morning.text : '' }).first().click();
-  await expect(page.getByRole('button', { name: /^المصدر: الأذكار ٧٧ ح٢٠٨/ }).filter({ visible: true }).first()).toBeInViewport();
 });

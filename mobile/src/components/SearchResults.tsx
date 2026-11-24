@@ -14,7 +14,7 @@ import LitAyat from '@/components/quran/text/LitAyat';
 import { FEATURE_ICON } from '@/components/featureIcons';
 import { surahName } from '@/lib/compare';
 import { GROUP_MAX, searchApp, warmSearch } from '@/lib/searchAll';
-import { openAdhkar } from '@/lib/adhkar';
+import { openDhikr } from '@/lib/adhkar';
 import { openIntent as go, toTab } from '@/lib/ways';
 import type { Palette } from '@/lib/theme';
 
@@ -98,7 +98,7 @@ function HitRow({ hit, palette, onWord }: { hit: SearchHit; palette: Palette; on
       );
     case 'adhkar':
       return (
-        <Card palette={palette} pad={[8, 12]} onPress={() => openAdhkar(hit.occasion, hit.id)} accessibilityRole="link" accessibilityLabel={hit.text} style={{ marginBottom: 8 }}>
+        <Card palette={palette} pad={[8, 12]} onPress={() => openDhikr(hit.occasion, hit.id)} accessibilityRole="link" accessibilityLabel={hit.text} style={{ marginBottom: 8 }}>
           <Text numberOfLines={3} style={{ color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' }}>{hit.text}</Text>
         </Card>
       );

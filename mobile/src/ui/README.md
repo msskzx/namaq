@@ -61,6 +61,8 @@ below. Never copy one into a screen.
 | `PullQuote` | Words set apart in a long read: large, centred, between «», ruled above and below in a tone (amber for the Prophet's ﷺ words) | the Prophet's ﷺ words in a battle's course |
 | `BarStrip` | A row of bars, the first on the right, each as tall as its count, the whole one control: a touch or slide picks the nearest bar and names it in a pill above the finger; `onLift` acts on lifting, `mark` points at one, `ends` names the two ends, `holdScroll` | where a word gathers by surah (`SurahStrip`), a Sahih's kitabs by their hadith (`SahihShape`) |
 | `NumberGrid` | Numbers in rings, six to a row, each opening its own; `tone` rings them in a colour | al-Nawawi's Forty and Ibn Rajab's eight on the hadith tab |
+| `CountRing` | A counter drawn as a ring that fills as it counts, the number in the middle and a word under it, the whole ring one button; green and closed once done | an open dhikr's count |
+| `Pager` | Pages side by side, one at a time, swiping right for the next as a book turns in Arabic; `index` and `onIndex` | an open dhikr and the rest of its time's adhkar |
 | `Ring` | A small ring on its card's paper holding a number or an icon, in a tone | a Sahih's kitab numbers on their line |
 | `ShareBar` | A thin bar from the start, as long as its share of the row | how big a kitab is beside the longest |
 | `SplitBar` | Two amounts on one bar, each its share, accent then rule colour | comparing two sides (a battle's numbers) |
