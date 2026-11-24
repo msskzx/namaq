@@ -26,7 +26,7 @@ const bookStyle = { color: '', fontSize: 18, lineHeight: 34, textAlign: 'right',
 /**
  * The head of a word's page (owner, 2026-11-24: sketch quran-design/word-page, designs أ and ب together, with its «أصلها»
  * and «مواضعها»): the word with its root and counts as a person's card gives his, al-Raghib's opening words on its root,
- * then Ibn Qutaybah's meanings of it as chips, each at its ayah (owner 2026-11-24: chips, not a tree), the picked one's
+ * then Ibn Qutaybah's meanings of it, each on a line of its own with its ayah (owner 2026-11-24: not a tree), the picked one's
  * entry whole under them. The ayat follow it
  * on the page (components/WordSheet.tsx WordView).
  */
@@ -74,7 +74,7 @@ export default function WordFace({ name, root, count, ayat, counts, entries, art
           <PostHead Icon={FEATURE_ICON.words} title="معانيها في القرآن" sub="عند ابن قتيبة، بلفظه" palette={palette} />
           <CardWithRow palette={palette} pad={[10, 14]} gap={10} source={gharibSource(branch)}
             lead={<OpenButton label={`افتح ${placeOf(branch.key)} في المصحف`} onPress={() => onOpen(branch.key)} />}>
-            {branches.length > 1 && <TraitChips palette={palette} picked={picked} onPick={setPicked}
+            {branches.length > 1 && <TraitChips lines palette={palette} picked={picked} onPick={setPicked}
               traits={branches.map(each => ({ label: each.meaning, names: [], agreed: false, place: placeOf(each.key) }))} />}
             <QuoteBar by={`قال ابن قتيبة في ${placeOf(branch.key)}:`} palette={palette}>
               <BookRuns text={branch.text.replace(/^[٠-٩]+-\s*/, '')} quran={palette.accent} style={{ ...bookStyle, color: palette.ink }} />
