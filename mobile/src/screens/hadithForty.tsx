@@ -21,7 +21,10 @@ import { ChainSaying } from '@/components/Sahih';
 import { chainLinks } from '@shared/isnadMetro';
 import IbnRajab from '@/components/IbnRajab';
 import HadithBooks from '@/components/HadithBooks';
-import rajab from '@shared/data/hadith/ibnRajab.json';
+import rajabFile from '@shared/data/hadith/ibnRajab.json';
+import { dataOf } from '@shared/appData';
+
+const rajab = dataOf(rajabFile);
 
 const RAJAB = rajab as RajabChapter[];
 

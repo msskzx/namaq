@@ -1,5 +1,8 @@
-import data from '../data/quran/branchVerdicts.json';
+import dataFile from '../data/quran/branchVerdicts.json';
 import twinData from '../data/quran/twinVerdicts.json';
+import { dataOf } from '../appData';
+
+const data = dataOf(dataFile);
 
 /**
  * The owner's verdict on one branches card. `ask` holds an open question. The tree's words are not kept here: the id names the tree, the pages hold its words.

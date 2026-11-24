@@ -2,7 +2,7 @@
 // whose Siyar entry is converted (shared/data/tarajim/people.json) and nothing else: where two nasabs meet, and whose
 // virtue this is. Every value is the book's, and after answering the note says where it is, so the tree or the person's
 // page is the way to check it.
-import peopleJson from '../data/tarajim/people.json';
+import peopleJsonFile from '../data/tarajim/people.json';
 import virtueSkip from '../data/tarajim/virtueQuizSkip.json';
 import { pageSources, saidBy, type AppPerson } from '../tarajim';
 import { uniqueSources } from './sources';
@@ -11,6 +11,9 @@ import { bareName, chainOf, lineOf, meetingOf, type LineName } from '../tarajimL
 import { genitive, peopleGraph, TIE_KINDS, tieWord, type TieKind } from '../tarajimGraph';
 import { shuffle, type Random } from './random';
 import { PICKS, type ChoiceKind, type ChoiceQuestion } from './choiceKinds';
+import { dataOf } from '../appData';
+
+const peopleJson = dataOf(peopleJsonFile);
 
 export const TARAJIM_NASAB = 'TARAJIM_NASAB';
 export const TARAJIM_VIRTUE = 'TARAJIM_VIRTUE';

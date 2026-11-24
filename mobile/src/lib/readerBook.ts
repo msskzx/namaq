@@ -4,8 +4,11 @@ import { kashshafEntries, mutashabihEntries, sadiEntries, ukbariEntries, type Mu
 import type { KashshafData } from '@shared/quran/kashshaf';
 import type { UkbariData } from '@shared/quran/irab';
 import breaks from '@shared/data/quran/bookPages.json';
-import sadi from '@shared/data/quran/tafsirSadi.json';
+import sadiFile from '@shared/data/quran/tafsirSadi.json';
 import { bookRevision, bookState, readBook, useBooks } from './books';
+import { dataOf } from '@shared/appData';
+
+const sadi = dataOf(sadiFile);
 
 export type ReaderBook = { entries: BookEntry[]; pages: BookPage[] };
 

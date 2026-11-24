@@ -3,7 +3,7 @@
 // only from what the source states and with its reference under the choices. Where the source has more than one reading,
 // the right choice holds every reading in the source's words, and nothing next to it is offered as wrong (owner,
 // 2026-11-18: «٤ أو ٥» with references; wrong choices clearly wrong).
-import storiesData from '../data/events/stories.json';
+import storiesDataFile from '../data/events/stories.json';
 import battlesData from '../data/battles/battles.json';
 import type { AppBattle, AppCite, AppPersonLink } from '../battles/battle';
 import { rangeName, type AppStory } from '../stories/story';
@@ -13,6 +13,9 @@ import { SURAH_NAMES } from '../quran/surahNames';
 import { shuffle, type Random } from './random';
 import type { ChoiceKind, ChoiceQuestion, QuizLook } from './choiceKinds';
 import { citeSource, uniqueSources } from './sources';
+import { dataOf } from '../appData';
+
+const storiesData = dataOf(storiesDataFile);
 
 export const SIRA = 'SIRA';
 export const SIRA_NAME = 'السيرة والغزوات';

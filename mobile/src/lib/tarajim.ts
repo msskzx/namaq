@@ -2,8 +2,11 @@ import { inAppOrder, type AppPerson, type PersonFact } from '@shared/tarajim';
 import { byVolume, heldGroups as heldIn, kunyaLine, personLine, unvowelled } from '@shared/tarajimGroups';
 import { matchesQuery, namesHay } from '@shared/tarajimLine';
 import { chainBetween, peopleGraph } from '@shared/tarajimGraph';
-import peopleJson from '@shared/data/tarajim/people.json';
+import peopleJsonFile from '@shared/data/tarajim/people.json';
 import tiePairsJson from '@shared/tarajimTiePairs.json';
+import { dataOf } from '@shared/appData';
+
+const peopleJson = dataOf(peopleJsonFile);
 
 export const PROPHET = 'prophet-muhammad';
 

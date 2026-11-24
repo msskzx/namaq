@@ -1,9 +1,12 @@
-import data from '@shared/data/links.json';
+import dataFile from '@shared/data/links.json';
 import type { Link, LinkIndex } from '@shared/links';
 import { ayatOf, type AppStory, type AppStoryAyat } from '@shared/stories/story';
 
 export { ayatOf };
 import { STORIES, storyOf } from './stories';
+import { dataOf } from '@shared/appData';
+
+const data = dataOf(dataFile);
 
 /**
  * Every link between two things, both ways (owner, 2026-11-24), as the catalog build writes it (shared/links.ts). A page
