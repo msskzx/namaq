@@ -2,7 +2,7 @@ import { createContext, isValidElement, memo, useCallback, useContext, useEffect
 import { AppState, Dimensions, useWindowDimensions, View } from 'react-native';
 import { COLUMN_GAP, PageWidthProvider, usePageWidth } from '@/ui/column';
 import { router, useFocusEffect, type Href } from 'expo-router';
-import { ChartNoAxesColumn, Bookmark, Check, CircleCheck, CircleMinus, Clock, Compass, EyeOff, LibraryBig, Network, Plus, LightbulbOff, ListTree, Scale, TextAlignEnd, Swords, Users, type LucideProps } from 'lucide-react-native';
+import { CalendarDays, MapPin, ChartNoAxesColumn, Bookmark, Check, CircleCheck, CircleMinus, Clock, Compass, EyeOff, LibraryBig, Network, Plus, LightbulbOff, ListTree, Scale, TextAlignEnd, Swords, Users, type LucideProps } from 'lucide-react-native';
 import { readBookmarks, subscribeBookmarks, type Bookmark as SavedItem } from '@shared/bookmarks';
 import { compareBookmarkAyat, savedAs } from '@shared/compareBookmarks';
 import { ayahBookmarkId, ayahHref, markAyah, markWord, markForgotten, toggleForgotten, mostForgotten, readAyahMarks, readDueMarks, rememberAyah, restoreMark, subscribeDueMarks, type AyahMark } from '@shared/ayahMarks';
@@ -47,19 +47,24 @@ import { continuePage, readFasilas, serverFasilas, subscribeFasilas } from '@sha
 import { Text } from '@/ui/Text';
 import momentBattles from '@shared/data/battles/moments.json';
 import type { AppBattle, AppMomentBattle } from '@shared/battles/battle';
-import { battleLine, CountRow, Counts, Moment, Readings, SidesHead } from './battles/BattleParts';
+import { battleLine, CountRow, Counts, People, Readings, SidesHead } from './battles/BattleParts';
 import { BattleYears } from './battles/BattleTimeline';
 import { yearTitle } from '@shared/battles/timeline';
 import TapRow from '@/ui/TapRow';
 import { STORIES } from '@/lib/stories';
 import { FORTY, fortyEntry } from '@/lib/hadith';
-import { compilerOf, drawnBukhari, fromCompanion, fromSahihayn, rajabFeedPassages, recordedIn, type RajabChapter } from '@shared/hadith';
+import { compilerOf, drawnBukhari, fromSahihayn, rajabFeedPassages, recordedIn, type RajabChapter } from '@shared/hadith';
 import Isnad from '@/components/Isnad';
-import { lastNarrator } from '@shared/isnadMetro';
+import { chainLinks } from '@shared/isnadMetro';
 import HadithBooks from '@/components/HadithBooks';
 import rajab from '@shared/data/hadith/ibnRajab.json';
 import IbnRajab from '@/components/IbnRajab';
-import { Report, ReportScene, reportSource, StoryAyat, StoryShare } from './stories/StoryParts';
+import { ChainAfter, ReportScene, Report, reportSource, StoryAyat, StoryShare } from './stories/StoryParts';
+import TitleCells from '@/ui/TitleCells';
+import type { FactCell } from '@/ui/FactCells';
+import QuoteBar from '@/ui/QuoteBar';
+import { prophetSaying } from '@shared/battles/battle';
+import type { StoryPage } from '@shared/stories/story';
 import { drawnReport } from '@shared/stories/story';
 import { armiesBattles, armiesItems, armiesSources, battleCardSources, battleItems, battleOnCard, battleYearItems, battleYearSlice, battleYearSources, atlasSources, type ArmiesTab, eventItems, eventOf, eventSources, nasabSources, oathItems, oathSources, openingItems, openingSources, sceneItems, sceneOf, sceneSources, tiesPeople, tiesSources } from '@shared/drawingCards';
 import { NasabTree } from '@/screens/nasab';
@@ -170,6 +175,7 @@ import { termSource } from '@shared/quran/balaghaTerms';
 import { pieceSources, storySource } from '@shared/quran/pieceSources';
 import { tanasubLink, tanasubSource } from '@shared/quran/tanasubCards';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
+import { juzOf } from '@shared/quran/juz';
 import { METHODS } from '@shared/prayer';
 import Button from '@/ui/Button';
 import { ADHKAR, type Dhikr } from '@shared/adhkar';
@@ -291,9 +297,8 @@ const sourceLine = (palette: Palette) => (named: Source[], all: Source[]) => <So
 const topic = (href: Href, label: string) => ({ onPress: () => toTab(href), label });
 /** A head that names a person opens the person. */
 const personTopic = (slug: string) => ({ onPress: () => router.push({ pathname: '/person', params: { slug } }), label: `افتح ترجمة ${personName(GRAPH.nodes.get(slug)!)}` });
-/** One of the Forty's cards opens its book: al-Nawawi's forty-two, or Ibn Rajab's eight after them. */
-const fortyTopic = (n: number) => n > 42 ? topic({ pathname: '/hadith-book', params: { book: 'added' } }, 'افتح زيادات ابن رجب')
-  : topic({ pathname: '/hadith-book', params: { book: 'forty' } }, 'افتح الأربعين النووية');
+/** One of the Forty's cards opens al-Nawawi's book. */
+const fortyTopic = () => topic({ pathname: '/hadith-book', params: { book: 'forty' } }, 'افتح الأربعين النووية');
 
 /** Where a post's ayat are, for its head: «البقرة ٦١ · آل عمران ٢١، ١١٢» (shared/quran/ayahPlaces.ts). */
 const placesOf = (keys: string[]) => ayahPlaces(keys, shortNames);
@@ -982,6 +987,12 @@ function HadithScenePost({ id, palette }: { id: string; palette: Palette }) {
 let openings: OpeningCard[] | undefined;
 const openingList = () => (openings ??= openingCards(ayahOf));
 
+/** A card's year cell (TitleCells): every reading the books give, «٢ للهجرة» or «قبل الهجرة». */
+const yearCell = (values: string[]): FactCell[] => (values.length ? [{ key: 'year', Icon: CalendarDays, label: 'السنة', readings: values.map(value => ({ value })) }] : []);
+/** A card's place cell (TitleCells), in its book's words. */
+const placeCell = (value?: string): FactCell[] => (value ? [{ key: 'place', Icon: MapPin, label: 'المكان', readings: [{ value }] }] : []);
+const storyYear = (page: StoryPage) => (page === 'before' ? 'قبل الهجرة' : `${num(page)} للهجرة`);
+
 /** «فواتح السور»: a card of surahs whose openings go together, as the openings page draws it; its open button opens it there. */
 function OpeningCardPost({ id, palette }: { id: string; palette: Palette }) {
   const card = openingList().find(each => each.id === id);
@@ -1349,8 +1360,10 @@ function SiraPost({ id, palette }: { id: string; palette: Palette }) {
       open={<OpenButton label={`افتح ${story.name}`} onPress={open} palette={palette} />}
       share={drawn ? <StoryShare story={story} report={report} palette={palette} /> : undefined}
       source={reportSource(report, drawn)}>
+      {/* Its identity on top, the year and place where a book gives them; who tells it after the words (owner, 2026-11-24). */}
+      <TitleCells title={story.name} cells={[...yearCell((story.when?.pages ?? []).map(storyYear)), ...placeCell(story.place?.value)]} palette={palette} />
       <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
-        {drawn ? <ReportScene report={report} palette={palette} /> : <Report report={report} palette={palette} plain />}
+        {drawn ? <ReportScene report={report} palette={palette} chainAfter /> : <Report report={report} palette={palette} plain chainAfter />}
         {story.ayat.map(ayat => <StoryAyat key={ayat.from} ayat={ayat} palette={palette} folded />)}
       </View>
     </Post>
@@ -1376,7 +1389,7 @@ function RajabPost({ id, palette }: { id: string; palette: Palette }) {
   if (!entry) return null;
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
-    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.tafsir} title="من شرح ابن رجب" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} open={fortyTopic(entry.n)} palette={palette} />}
+    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.tafsir} title="من شرح ابن رجب" sub={entry.heading} open={fortyTopic()} palette={palette} />}
       open={<OpenButton label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}
       source={sourcesOf([{ book: FORTY.books.ibnrajab.title, author: 'ابن رجب' }])}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
@@ -1386,14 +1399,14 @@ function RajabPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/** One of the Forty in al-Nawawi's words (Ibn Rajab's for his eight); its open button opens the hadith's page with its records. */
+/** One of the Forty in al-Nawawi's words; its open button opens the hadith's page with its records. */
 function HadithPost({ id, palette }: { id: string; palette: Palette }) {
   const entry = FEED_FORTY.find(each => String(each.n) === id);
   if (!entry) return null;
   const { book } = compilerOf(entry);
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
-    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.hadith} title="من الحديث" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} open={fortyTopic(entry.n)} palette={palette} />}
+    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.hadith} title="من الحديث" sub={entry.heading} open={fortyTopic()} palette={palette} />}
       open={<OpenButton label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}
       source={sourcesOf([compiledSource(entry)])}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}>
@@ -1439,7 +1452,7 @@ function RecordedPost({ id, palette }: { id: string; palette: Palette }) {
   if (!entry) return null;
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
-    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.chain} title="من أخرجه" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} open={fortyTopic(entry.n)} palette={palette} />}
+    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.chain} title="من أخرجه" sub={entry.heading} open={fortyTopic()} palette={palette} />}
       open={<OpenButton label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}
       source={sourcesOf(uniqueSources([...entry.records.map(recordSource), compiledSource(entry)]))}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
@@ -1463,12 +1476,12 @@ function IsnadPost({ id, palette }: { id: string; palette: Palette }) {
   if (!entry || !record) return null;
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
-    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.chain} title="من الإسناد" sub={`${entry.heading}، ${fromCompanion(entry.companion)}`} open={fortyTopic(entry.n)} palette={palette} />}
+    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.chain} title="من الإسناد" sub={entry.heading} open={fortyTopic()} palette={palette} />}
       open={<OpenButton label={`افتح ${entry.heading}`} onPress={open} palette={palette} />}
       source={sourcesOf([recordSource(record)])}>
       <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
         <Isnad isnad={record.isnad!} palette={palette} />
-        <ChainSaying chain={record.text.slice(0, record.isnadEnd)} last={lastNarrator(record.isnad!)} words={record.text.slice(record.isnadEnd)} lines={3} palette={palette} />
+        <ChainSaying chain={record.text.slice(0, record.isnadEnd)} links={chainLinks(record.isnad!)} words={record.text.slice(record.isnadEnd)} lines={3} palette={palette} />
       </View>
     </Post>
   );
@@ -1577,12 +1590,34 @@ function MomentPost({ id, palette }: { id: string; palette: Palette }) {
   const { battle, moment, n } = item;
   const open = () => { continueAfter('moment', id); toTab({ pathname: '/battle', params: { slug: battle.slug } }); };
   return (
-    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.battles} title={`من ${battle.name}`} sub={battleLine(battle)} open={topic({ pathname: '/battle', params: { slug: battle.slug } }, `افتح ${battle.name}`)} palette={palette} />}
+    <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.battles} title={`من ${battle.name}`} sub={moment.title} open={topic({ pathname: '/battle', params: { slug: battle.slug } }, `افتح ${battle.name}`)} palette={palette} />}
       open={<OpenButton label={`افتح ${battle.name}`} onPress={open} palette={palette} />}
       source={sourcesOf([citeSource({ text: '', cite: moment.cite, url: moment.url })])}>
-      <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}><Moment moment={moment} n={n} palette={palette} plain /></View>
+      {/* «بطاقة التعريف» (owner, 2026-11-24): the scene's name, the battle's year and place; the chain after the words. */}
+      <TitleCells title={moment.title} palette={palette}
+        cells={[...yearCell(battle.year ? [`${num(battle.year.value)} للهجرة`] : []), ...placeCell(battleOf(battle.slug)?.place?.name)]} />
+      <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}><MomentWords moment={moment} palette={palette} /></View>
     </Post>
   );
+}
+
+/**
+ * A battle's scene in its book's words for the feed card: the Prophet's ﷺ saying barred in amber where the text gives it
+ * whole, then the chain under «السند», the grading and the people.
+ */
+function MomentWords({ moment, palette }: { moment: AppMomentBattle['moments'][number]; palette: Palette }) {
+  const split = prophetSaying(moment.quote);
+  const body = { color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' as const };
+  return <>
+    {split ? <>
+      {split.lead ? <Text style={body}>{split.lead}</Text> : null}
+      <QuoteBar pieces={[{ text: `«${split.saying}»` }]} tone={palette.amber} palette={palette} />
+      {split.rest ? <Text style={body}>{split.rest}</Text> : null}
+    </> : <Text style={body}>{moment.quote}</Text>}
+    {moment.isnad ? <ChainAfter isnad={moment.isnad} palette={palette} /> : null}
+    <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{moment.grading}</Text>
+    {moment.people.length ? <People people={moment.people} palette={palette} /> : null}
+  </>;
 }
 
 /** Each ayah card's list of ayat, read once when first asked for. */
@@ -1627,17 +1662,22 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
     <Post palette={palette} head={<PostHead Icon={head.Icon} title={head.title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} open={NOTE_TOPICS[kind]} palette={palette} />}
         open={<OpenButton label={`افتح صفحة الآية، ${head.open}`} onPress={show} palette={palette} />}
         source={sourcesOf(note.sources)}>
-        {'readings' in note ? <View style={{ paddingVertical: 10 }}><QiraatPlace ayah={note.key} max={2} lines bare palette={palette} /></View> : <View style={{ paddingVertical: 10, gap: 6 }}>
-          <View style={{ paddingHorizontal: 12 }}>
+        {'readings' in note ? <View style={{ paddingVertical: 10 }}><QiraatPlace ayah={note.key} max={2} lines bare palette={palette} /></View> : <View style={{ paddingBottom: 10, gap: 6 }}>
+          {/* «بطاقة التعريف» (owner, 2026-11-24: the tafsir card): the ayah's place large, its juz and page, then the ayah and the book's words. */}
+          <TitleCells title={`${shortNames[surah] ?? ''} ${num(number)}`} palette={palette} cells={[
+            { key: 'juz', label: 'الجزء', readings: [{ value: num(juzOf(note.key)) }] },
+            { key: 'page', label: 'الصفحة', readings: [{ value: num(pageOfAyah(note.key) ?? 0) }] },
+          ]} />
+          <View style={{ paddingHorizontal: 12, paddingTop: 4 }}>
             <AyahLines ayah={note.key} menu={note.key} palette={palette} shown whole write={null} checked={null} />
           </View>
-          <View style={{ height: 1, backgroundColor: palette.rule, marginHorizontal: 14, opacity: 0.6 }} />
-          {'heading' in note && note.heading ? <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right', paddingHorizontal: 14 }}>{note.heading}</Text> : null}
-          {'text' in note && <>
-            <Text numberOfLines={NOTE_LINES} style={{ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'right', writingDirection: 'rtl', paddingHorizontal: 14 }}>
-              {tafsirRuns(note.text).map((run, i) => (run.quran ? <QuranWords key={i} style={{ color: palette.accent }}>{run.text}</QuranWords> : run.text))}
-            </Text>
-          </>}
+          {'text' in note && <View style={{ paddingHorizontal: 14, paddingTop: 4 }}>
+            <QuoteBar by={[note.heading, `قال ${note.sources[0]?.author ?? ''}:`].filter(Boolean).join(' · ')} palette={palette}>
+              <Text numberOfLines={NOTE_LINES} style={{ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'right', writingDirection: 'rtl' }}>
+                {tafsirRuns(note.text).map((run, i) => (run.quran ? <QuranWords key={i} style={{ color: palette.accent }}>{run.text}</QuranWords> : run.text))}
+              </Text>
+            </QuoteBar>
+          </View>}
           {'word' in note && <View style={{ paddingHorizontal: 14, gap: 2 }}>
             <QuranWord look={{ color: palette.accent }} place={{ textAlign: 'right' }}>{note.shown}</QuranWord>
             <Text style={{ color: palette.ink, fontSize: 19, lineHeight: 31, textAlign: 'right' }}>{note.role}</Text>

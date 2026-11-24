@@ -214,7 +214,7 @@ function assemble(book: string, heads: Heading[], cuts: Cut[], meta: SahihBook, 
     // The number heading the text («٨ - », «١٩ - (١٦) ») is shown apart from it.
     // The next number's digits can stay at the end, after the closing mark («… إِلَيْهِ». ٢»): they are its head, not this text.
     // A bab heading the table of contents places after its first word leaves «بَابُ» at the end of the hadith before it.
-    const text = unmark(piece.text.replace(/\s+بَ?ا?بٌ?ُ?:?$/, '').replace(/([».،:؟])\s*[٠-٩]+(?:\s*-\s*[٠-٩]+)*\s*-?$/, '$1').replace(/^[٠-٩]+(?: \(م\))?(?:(?: ?- ?| )[٠-٩]+)* ?-?(?: ?[٠-٩]+ ?-?)*\s*/, '').replace(/^(?:[٠-٩]+ ?)?(?:- )?(?:٠ )?(?:م(?: [٠-٩]+)? ?)?(?:- )?\([٠-٩]+(?:\/ ?[٠-٩]+)?\)(?: -)?\s*/, ''), c.n);
+    const text = unmark(piece.text.replace(/\s+بَ?ا?بٌ?ُ?:?$/, '').replace(/([».،:؟])\s*[٠-٩]+(?:\s*-\s*[٠-٩]+)*\s*-?$/, '$1').replace(/^[٠-٩]+(?: \(م\))?(?:(?: ?- ?| )[٠-٩]+)* ?-?(?: ?[٠-٩]+ ?-?)*\s*/, '').replace(/^(?:[٠-٩]+ ?)?(?:- )?(?:٠ )?(?:م(?: [٠-٩]+)? ?)?(?:- )?\([٠-٩]+(?:\/ ?[٠-٩]+)?\)(?: -)?\s*/, '').replace(/^\(م\)\s*/, ''), c.n);
     const route: SahihRoute = { ...(c.route ? { route: c.route } : {}), ...(piece.chain ? { chain: piece.chain } : {}), text, volume: piece.volume, pages: piece.pages, shamela: piece.shamela };
     const earlier = muslim ? byNumber.get(c.n) : undefined;
     if (earlier) { earlier.routes.push(route); continue; }

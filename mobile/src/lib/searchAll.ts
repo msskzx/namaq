@@ -51,7 +51,7 @@ const SAHIH_SLUGS: SahihSlug[] = ['bukhari', 'muslim'];
 
 function hadithHits(query: string): Extract<AppHit, { kind: 'hadith' }>[] {
   const forty = searchForty(FORTY.entries, query)
-    .map(entry => ({ kind: 'hadith' as const, book: 'forty' as const, n: entry.n, title: sayingStart(entry.text), place: `${entry.source === 'ibnrajab' ? FORTY.books.ibnrajab.title : FORTY.books.nawawi.title}، ${entry.heading}` }));
+    .map(entry => ({ kind: 'hadith' as const, book: 'forty' as const, n: entry.n, title: sayingStart(entry.text), place: `${FORTY.books.nawawi.title}، ${entry.heading}` }));
   const babs = searchSahih(SAHIH_SLUGS.map(slug => ({ index: SAHIH[slug] })), query, FIND).babs.map(hit => {
     const book = SAHIH[hit.book];
     const kitab = book.kitabs.find(each => each.n === hit.kitab);
