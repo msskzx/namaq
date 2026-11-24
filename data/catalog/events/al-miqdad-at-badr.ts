@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -16,12 +17,12 @@ const alMiqdadAtBadr = {
   people: [{ person: 'abdullah-ibn-masud' }, { person: 'al-miqdad-ibn-amr' }, { person: 'prophet-muhammad' }],
   reports: [
     {
-      isnad: "حَدَّثَنَا أَبُو نُعَيْمٍ: حَدَّثَنَا إِسْرَائِيلُ، عَنْ مُخَارِقٍ، عَنْ طَارِقِ بْنِ شِهَابٍ قَالَ: سَمِعْتُ ابْنَ مَسْعُودٍ يَقُولُ:",
+      isnad: sahih('bukhari', 3952, 0, 134),
       source: { slug: 'sahih-al-bukhari', hadith: 3952, url: 'https://sunnah.com/bukhari:3952' },
       moments: [
-        { title: "شهدت من المقداد مشهدا", text: "«شَهِدْتُ مِنَ الْمِقْدَادِ بْنِ الْأَسْوَدِ مَشْهَدًا، لَأَنْ أَكُونَ صَاحِبَهُ أَحَبُّ إِلَيَّ مِمَّا عُدِلَ بِهِ، أَتَى النَّبِيَّ ﷺ وَهُوَ يَدْعُو عَلَى الْمُشْرِكِينَ،", people: ['abdullah-ibn-masud', 'al-miqdad-ibn-amr', 'prophet-muhammad'] },
-        { title: "«لا نقول كما قال قوم موسى»", text: "فَقَالَ: لَا نَقُولُ كَمَا قَالَ قَوْمُ مُوسَى: اذْهَبْ أَنْتَ وَرَبُّكَ فَقَاتِلَا، وَلَكِنَّا نُقَاتِلُ عَنْ يَمِينِكَ وَعَنْ شِمَالِكَ وَبَيْنَ يَدَيْكَ وَخَلْفَكَ.", people: ['al-miqdad-ibn-amr'] },
-        { title: "أشرق وجهه", text: "فَرَأَيْتُ النَّبِيَّ ﷺ أَشْرَقَ وَجْهُهُ وَسَرَّهُ». يَعْنِي: قَوْلَهُ.", people: ['abdullah-ibn-masud', 'prophet-muhammad'] },
+        { title: "شهدت من المقداد مشهدا", text: sahih('bukhari', 3952, 135, 307), people: ['abdullah-ibn-masud', 'al-miqdad-ibn-amr', 'prophet-muhammad'] },
+        { title: "«لا نقول كما قال قوم موسى»", text: sahih('bukhari', 3952, 308, 475), people: ['al-miqdad-ibn-amr'] },
+        { title: "أشرق وجهه", text: sahih('bukhari', 3952, 476, 548), people: ['abdullah-ibn-masud', 'prophet-muhammad'] },
       ],
     },
   ],

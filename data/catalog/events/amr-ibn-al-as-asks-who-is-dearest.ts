@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -18,11 +19,11 @@ const amrIbnAlAsAsksWhoIsDearest = {
   tags: ['HIS_WORDS'],
   reports: [
     {
-      isnad: "حَدَّثَنَا إِسْحَاقُ: أَخْبَرَنَا خَالِدُ بْنُ عَبْدِ اللهِ، عَنْ خَالِدٍ الْحَذَّاءِ، عَنْ أَبِي عُثْمَانَ:",
+      isnad: sahih('bukhari', 4358, 0, 108),
       source: { slug: 'sahih-al-bukhari', hadith: 4358, url: 'https://sunnah.com/bukhari:4358' },
       moments: [
-        { title: "جيش ذات السلاسل", text: "«أَنَّ رَسُولَ اللهِ ﷺ بَعَثَ عَمْرَو بْنَ الْعَاصِ عَلَى جَيْشِ ذَاتِ السَّلَاسِلِ،", people: ['prophet-muhammad', 'amr-ibn-al-as'] },
-        { title: "«أي الناس أحب إليك؟»", text: "قَالَ: فَأَتَيْتُهُ فَقُلْتُ: أَيُّ النَّاسِ أَحَبُّ إِلَيْكَ؟ قَالَ: عَائِشَةُ، قُلْتُ: مِنَ الرِّجَالِ؟ قَالَ: أَبُوهَا، قُلْتُ: ثُمَّ مَنْ؟ قَالَ: عُمَرُ، فَعَدَّ رِجَالًا، فَسَكَتُّ مَخَافَةَ أَنْ يَجْعَلَنِي فِي آخِرِهِمْ».", people: ['amr-ibn-al-as', 'prophet-muhammad'] },
+        { title: "جيش ذات السلاسل", text: sahih('bukhari', 4358, 109, 193), people: ['prophet-muhammad', 'amr-ibn-al-as'] },
+        { title: "«أي الناس أحب إليك؟»", text: sahih('bukhari', 4358, 194, 422), people: ['amr-ibn-al-as', 'prophet-muhammad'] },
       ],
     },
   ],

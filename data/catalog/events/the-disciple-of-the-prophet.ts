@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -16,11 +17,11 @@ const theDiscipleOfTheProphet = {
   tags: ['HIS_WORDS'],
   reports: [
     {
-      isnad: "حَدَّثَنَا مُحَمَّدُ بْنُ كَثِيرٍ: أَخْبَرَنَا سُفْيَانُ، عَنِ ابْنِ الْمُنْكَدِرِ قَالَ: سَمِعْتُ جَابِرًا يَقُولُ:",
+      isnad: sahih('bukhari', 4113, 0, 116),
       source: { slug: 'sahih-al-bukhari', hadith: 4113, url: 'https://sunnah.com/bukhari:4113' },
       moments: [
-        { title: "«من يأتينا بخبر القوم»", text: "«قَالَ رَسُولُ اللهِ ﷺ يَوْمَ الْأَحْزَابِ: مَنْ يَأْتِينَا بِخَبَرِ الْقَوْمِ. فَقَالَ الزُّبَيْرُ: أَنَا، ثُمَّ قَالَ: مَنْ يَأْتِينَا بِخَبَرِ الْقَوْمِ. فَقَالَ الزُّبَيْرُ: أَنَا، ثُمَّ قَالَ: مَنْ يَأْتِينَا بِخَبَرِ الْقَوْمِ. فَقَالَ الزُّبَيْرُ: أَنَا،", people: ['prophet-muhammad', 'az-zubayr-ibn-al-awwam'] },
-        { title: "«إن لكل نبي حواري»", text: "ثُمَّ قَالَ: إِنَّ لِكُلِّ نَبِيٍّ حَوَارِيًّ، وَإِنَّ حَوَارِيَّ الزُّبَيْرُ.»", people: ['prophet-muhammad', 'az-zubayr-ibn-al-awwam'] },
+        { title: "«من يأتينا بخبر القوم»", text: sahih('bukhari', 4113, 117, 378), people: ['prophet-muhammad', 'az-zubayr-ibn-al-awwam'] },
+        { title: "«إن لكل نبي حواري»", text: sahih('bukhari', 4113, 379, 458), people: ['prophet-muhammad', 'az-zubayr-ibn-al-awwam'] },
       ],
     },
   ],

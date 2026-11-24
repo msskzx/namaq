@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -32,11 +33,11 @@ const firstPledgeOfAqaba = {
   ],
   reports: [
     {
-      isnad: "حَدَّثَنَا قُتَيْبَةُ: حَدَّثَنَا اللَّيْثُ، عَنْ يَزِيدَ بْنِ أَبِي حَبِيبٍ، عَنْ أَبِي الْخَيْرِ، عَنِ الصُّنَابِحِيِّ، عَنْ عُبَادَةَ بْنِ الصَّامِتِ  رضي الله عنه",
+      isnad: sahih('bukhari', 3893, 0, 166),
       source: { slug: 'sahih-al-bukhari', hadith: 3893, url: 'https://sunnah.com/bukhari:3893' },
       moments: [
-        { title: "«إني من النقباء»", text: "أَنَّهُ قَالَ: «إِنِّي مِنَ النُّقَبَاءِ الَّذِينَ بَايَعُوا رَسُولَ اللهِ ﷺ،", people: ['ubadah-ibn-al-samit', 'prophet-muhammad'] },
-        { title: "ما بايعوه عليه", text: "وَقَالَ: بَايَعْنَاهُ عَلَى أَنْ لَا نُشْرِكَ بِاللهِ شَيْئًا، وَلَا نَسْرِقَ، وَلَا نَزْنِيَ، وَلَا نَقْتُلَ النَّفْسَ الَّتِي حَرَّمَ اللهُ، وَلَا نَنْتَهِبَ، وَلَا نَعْصِيَ، بِالْجَنَّةِ إِنْ فَعَلْنَا ذَلِكَ، فَإِنْ غَشِينَا مِنْ ذَلِكَ شَيْئًا، كَانَ قَضَاءُ ذَلِكَ إِلَى اللهِ».", people: ['ubadah-ibn-al-samit', 'prophet-muhammad'] },
+        { title: "«إني من النقباء»", text: sahih('bukhari', 3893, 167, 244), people: ['ubadah-ibn-al-samit', 'prophet-muhammad'] },
+        { title: "ما بايعوه عليه", text: sahih('bukhari', 3893, 245, 529), people: ['ubadah-ibn-al-samit', 'prophet-muhammad'] },
       ],
     },
   ],

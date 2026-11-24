@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -18,20 +19,20 @@ const theProstrationAtAlNajm = {
   tags: ['HEARD_QURAN'],
   reports: [
     {
-      isnad: "حَدَّثَنَا سُلَيْمَانُ بْنُ حَرْبٍ: حَدَّثَنَا شُعْبَةُ، عَنْ أَبِي إِسْحَاقَ، عَنِ الْأَسْوَدِ، عَنْ عَبْدِ اللهِ  رضي الله عنه",
+      isnad: sahih('bukhari', 3853, 0, 128),
       source: { slug: 'sahih-al-bukhari', hadith: 3853, url: 'https://sunnah.com/bukhari:3853' },
       moments: [
-        { title: "قرأ النجم فسجد", text: "قَالَ: «قَرَأَ النَّبِيُّ ﷺ النَّجْمَ فَسَجَدَ فَمَا بَقِيَ أَحَدٌ إِلَّا سَجَدَ", people: ['prophet-muhammad'] },
-        { title: "«هذا يكفيني»", text: "إِلَّا رَجُلٌ رَأَيْتُهُ أَخَذَ كَفًّا مِنْ حَصًا فَرَفَعَهُ فَسَجَدَ عَلَيْهِ، وَقَالَ: هَذَا يَكْفِينِي،", people: ['abdullah-ibn-masud'] },
-        { title: "قُتل كافرا", text: "فَلَقَدْ رَأَيْتُهُ بَعْدُ قُتِلَ كَافِرًا بِاللهِ.»", people: ['abdullah-ibn-masud'] },
+        { title: "قرأ النجم فسجد", text: sahih('bukhari', 3853, 129, 209), people: ['prophet-muhammad'] },
+        { title: "«هذا يكفيني»", text: sahih('bukhari', 3853, 210, 316), people: ['abdullah-ibn-masud'] },
+        { title: "قُتل كافرا", text: sahih('bukhari', 3853, 317, 369), people: ['abdullah-ibn-masud'] },
       ],
     },
     {
-      isnad: "حَدَّثَنَا عَبْدَانُ بْنُ عُثْمَانَ قَالَ: أَخْبَرَنِي أَبِي، عَنْ شُعْبَةَ، عَنْ أَبِي إِسْحَاقَ، عَنِ الْأَسْوَدِ، عَنْ عَبْدِ اللهِ  رضي الله عنه، عَنِ النَّبِيِّ ﷺ:",
+      isnad: sahih('bukhari', 3972, 0, 168),
       source: { slug: 'sahih-al-bukhari', hadith: 3972, url: 'https://sunnah.com/bukhari:3972' },
       moments: [
-        { title: "قرأ والنجم فسجد بها", text: "«أَنَّهُ قَرَأَ وَالنَّجْمِ فَسَجَدَ بِهَا، وَسَجَدَ مَنْ مَعَهُ، غَيْرَ أَنَّ شَيْخًا أَخَذَ كَفًّا مِنْ تُرَابٍ فَرَفَعَهُ إِلَى جَبْهَتِهِ، فَقَالَ: يَكْفِينِي هَذَا،", people: ['prophet-muhammad'] },
-        { title: "قُتل كافرا", text: "قَالَ عَبْدُ اللهِ: فَلَقَدْ رَأَيْتُهُ بَعْدُ قُتِلَ كَافِرًا».", people: ['abdullah-ibn-masud'] },
+        { title: "قرأ والنجم فسجد بها", text: sahih('bukhari', 3972, 169, 338), people: ['prophet-muhammad'] },
+        { title: "قُتل كافرا", text: sahih('bukhari', 3972, 339, 403), people: ['abdullah-ibn-masud'] },
       ],
     },
   ],

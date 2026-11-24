@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -15,10 +16,10 @@ const islamOfAbuBakr = {
   tags: ['ISLAM'],
   reports: [
     {
-      isnad: "حَدَّثَنِي عَبْدُ اللهِ بْنُ حَمَّادٍ الْآمُلِيُّ قَالَ: حَدَّثَنِي يَحْيَى بْنُ مَعِينٍ: حَدَّثَنَا إِسْمَاعِيلُ بْنُ مُجَالِدٍ، عَنْ بَيَانٍ، عَنْ وَبَرَةَ، عَنْ هَمَّامِ بْنِ الْحَارِثِ",
+      isnad: sahih('bukhari', 3857, 0, 188),
       source: { slug: 'sahih-al-bukhari', hadith: 3857, url: 'https://sunnah.com/bukhari:3857' },
       moments: [
-        { title: "«وما معه إلا خمسة أعبد وامرأتان وأبو بكر»", text: "قَالَ: قَالَ عَمَّارُ بْنُ يَاسِرٍ: «رَأَيْتُ رَسُولَ اللهِ ﷺ وَمَا مَعَهُ إِلَّا خَمْسَةُ أَعْبُدٍ وَامْرَأَتَانِ، وَأَبُو بَكْرٍ.»", people: ['ammar-ibn-yasir', 'prophet-muhammad', 'abu-bakr-as-siddiq'] },
+        { title: "«وما معه إلا خمسة أعبد وامرأتان وأبو بكر»", text: sahih('bukhari', 3857, 189, 321), people: ['ammar-ibn-yasir', 'prophet-muhammad', 'abu-bakr-as-siddiq'] },
       ],
     },
   ],

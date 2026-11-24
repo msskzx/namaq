@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -22,35 +23,35 @@ const notYoursIsTheMatter = {
       from: '3:128',
       to: '3:128',
       evidence: [
-        { source: 'sahih-al-bukhari', hadith: 4069, url: 'https://sunnah.com/bukhari:4069', quote: "فَأَنْزَلَ اللهُ: ﴿لَيْسَ لَكَ مِنَ الأَمْرِ شَيْءٌ﴾ إِلَى قَوْلِهِ: ﴿فَإِنَّهُمْ ظَالِمُونَ﴾" },
-        { source: 'sahih-al-bukhari', hadith: 4070, url: 'https://sunnah.com/bukhari:4070', quote: "فَنَزَلَتْ: ﴿لَيْسَ لَكَ مِنَ الأَمْرِ شَيْءٌ﴾ إِلَى قَوْلِهِ: ﴿فَإِنَّهُمْ ظَالِمُونَ﴾" },
-        { source: 'sahih-muslim', hadith: 1791, url: 'https://sunnah.com/muslim:1791', quote: "فَأَنْزَلَ اللَّهُ تعالى: ﴿لَيْسَ لَكَ مِنَ الأَمْرِ شَيْءٌ﴾" },
+        { source: 'sahih-al-bukhari', hadith: 4069, url: 'https://sunnah.com/bukhari:4069', quote: sahih('bukhari', 4069, 401, 494) },
+        { source: 'sahih-al-bukhari', hadith: 4070, url: 'https://sunnah.com/bukhari:4070', quote: sahih('bukhari', 4070, 198, 285) },
+        { source: 'sahih-muslim', hadith: 1791, url: 'https://sunnah.com/muslim:1791', quote: sahih('muslim', 1791, 317, 377) },
       ],
     },
   ],
   reports: [
     {
-      isnad: "حَدَّثَنَا يَحْيَى بْنُ عَبْدِ اللهِ السُّلَمِيُّ: أَخْبَرَنَا عَبْدُ اللهِ: أَخْبَرَنَا مَعْمَرٌ، عَنِ الزُّهْرِيِّ: حَدَّثَنِي سَالِمٌ، عَنْ أَبِيهِ",
+      isnad: sahih('bukhari', 4069, 0, 150),
       source: { slug: 'sahih-al-bukhari', hadith: 4069, url: 'https://sunnah.com/bukhari:4069' },
       moments: [
-        { title: "«اللهم العن فلانا وفلانا وفلانا»", text: "«أَنَّهُ: سَمِعَ رَسُولَ اللهِ ﷺ إِذَا رَفَعَ رَأْسَهُ مِنَ الرُّكُوعِ مِنَ الرَّكْعَةِ الْآخِرَةِ مِنَ الْفَجْرِ يَقُولُ: اللَّهُمَّ الْعَنْ فُلَانًا وَفُلَانًا وَفُلَانًا. بَعْدَمَا يَقُولُ: سَمِعَ اللهُ لِمَنْ حَمِدَهُ، رَبَّنَا وَلَكَ الْحَمْدُ.", people: ['prophet-muhammad'] },
-        { title: "«ليس لك من الأمر شيء»", text: "فَأَنْزَلَ اللهُ: ﴿لَيْسَ لَكَ مِنَ الأَمْرِ شَيْءٌ﴾ إِلَى قَوْلِهِ: ﴿فَإِنَّهُمْ ظَالِمُونَ﴾.»", people: [] },
+        { title: "«اللهم العن فلانا وفلانا وفلانا»", text: sahih('bukhari', 4069, 151, 400), people: ['prophet-muhammad'] },
+        { title: "«ليس لك من الأمر شيء»", text: sahih('bukhari', 4069, 401, 496), people: [] },
       ],
     },
     {
-      isnad: "وَعَنْ حَنْظَلَةَ بْنِ أَبِي سُفْيَانَ سَمِعْتُ سَالِمَ بْنَ عَبْدِ اللهِ يَقُولُ:",
+      isnad: sahih('bukhari', 4070, 0, 82),
       source: { slug: 'sahih-al-bukhari', hadith: 4070, url: 'https://sunnah.com/bukhari:4070' },
       moments: [
-        { title: "يدعو على صفوان بن أمية", text: "«كَانَ رَسُولُ اللهِ ﷺ يَدْعُو عَلَى: صَفْوَانَ بْنِ أُمَيَّةَ، وَسُهَيْلِ بْنِ عَمْرٍو، وَالْحَارِثِ بْنِ هِشَامٍ", people: ['prophet-muhammad', 'safwan-ibn-umayyah'] },
-        { title: "«ليس لك من الأمر شيء»", text: "فَنَزَلَتْ: ﴿لَيْسَ لَكَ مِنَ الأَمْرِ شَيْءٌ﴾ إِلَى قَوْلِهِ: ﴿فَإِنَّهُمْ ظَالِمُونَ﴾»", people: [] },
+        { title: "يدعو على صفوان بن أمية", text: sahih('bukhari', 4070, 83, 197), people: ['prophet-muhammad', 'safwan-ibn-umayyah'] },
+        { title: "«ليس لك من الأمر شيء»", text: sahih('bukhari', 4070, 198, 286), people: [] },
       ],
     },
     {
-      isnad: "حَدَّثَنَا عَبْدُ اللَّهِ بْنُ مَسْلَمَةَ بْنِ قَعْنَبٍ. حَدَّثَنَا حَمَّادُ بْنُ سَلَمَةَ عَنْ ثَابِتٍ، عَنْ أنس؛",
+      isnad: sahih('muslim', 1791, 0, 114),
       source: { slug: 'sahih-muslim', hadith: 1791, url: 'https://sunnah.com/muslim:1791' },
       moments: [
-        { title: "«كيف يفلح قوم شجوا نبيهم؟»", text: "أن رسول الله ﷺ كُسِرَتْ رَبَاعِيَتُهُ يَوْمَ أُحُدٍ. وَشُجَّ فِي رَأْسِهِ. فَجَعَلَ يَسْلُتُ الدَّمَ عَنْهُ وَيَقُولُ (كَيْفَ يفلح قوم شجوا نبيهم وشجوا رَبَاعِيَتَهُ، وَهُوَ يَدْعُوهُمْ إِلَى اللَّهِ؟)", people: ['prophet-muhammad'] },
-        { title: "«ليس لك من الأمر شيء»", text: "فَأَنْزَلَ اللَّهُ تعالى: ﴿لَيْسَ لَكَ مِنَ الأَمْرِ شَيْءٌ﴾ [٣ /آل عمران /١٢٨].", people: [] },
+        { title: "«كيف يفلح قوم شجوا نبيهم؟»", text: sahih('muslim', 1791, 115, 316), people: ['prophet-muhammad'] },
+        { title: "«ليس لك من الأمر شيء»", text: sahih('muslim', 1791, 317, 397), people: [] },
       ],
     },
   ],

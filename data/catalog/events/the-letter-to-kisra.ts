@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -16,11 +17,11 @@ const theLetterToKisra = {
   people: [{ person: 'prophet-muhammad' }, { person: 'abdullah-ibn-hudhafah' }],
   reports: [
     {
-      isnad: "حَدَّثَنَا إِسْحَاقُ، حَدَّثَنَا يَعْقُوبُ بْنُ إِبْرَاهِيمَ، حَدَّثَنَا أَبِي، عَنْ صَالِحٍ، عَنِ ابْنِ شِهَابٍ قَالَ: أَخْبَرَنِي عُبَيْدُ اللهِ بْنُ عَبْدِ اللهِ: أَنَّ ابْنَ عَبَّاسٍ أَخْبَرَهُ:",
+      isnad: sahih('bukhari', 4424, 0, 198),
       source: { slug: 'sahih-al-bukhari', hadith: 4424, url: 'https://sunnah.com/bukhari:4424' },
       moments: [
-        { title: "فلما قرأه مزقه", text: "«أَنَّ رَسُولَ اللهِ ﷺ بَعَثَ بِكِتَابِهِ إِلَى كِسْرَى، مَعَ عَبْدِ اللهِ بْنِ حُذَافَةَ السَّهْمِيِّ، فَأَمَرَهُ أَنْ يَدْفَعَهُ إِلَى عَظِيمِ الْبَحْرَيْنِ، فَدَفَعَهُ عَظِيمُ الْبَحْرَيْنِ إِلَى كِسْرَى، فَلَمَّا قَرَأَهُ مَزَّقَهُ،»", people: ['prophet-muhammad', 'abdullah-ibn-hudhafah'] },
-        { title: "أن يمزقوا كل ممزق", text: "فَحَسِبْتُ أَنَّ ابْنَ الْمُسَيَّبِ قَالَ: فَدَعَا عَلَيْهِمْ رَسُولُ اللهِ ﷺ: أَنْ يُمَزَّقُوا كُلَّ مُمَزَّقٍ.", people: ['prophet-muhammad'] },
+        { title: "فلما قرأه مزقه", text: sahih('bukhari', 4424, 199, 436), people: ['prophet-muhammad', 'abdullah-ibn-hudhafah'] },
+        { title: "أن يمزقوا كل ممزق", text: sahih('bukhari', 4424, 437, 549), people: ['prophet-muhammad'] },
       ],
     },
   ],

@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -16,10 +17,10 @@ const thePrayerForDaws = {
   tags: ['HIS_WORDS'],
   reports: [
     {
-      isnad: "حَدَّثَنَا أَبُو نُعَيْمٍ: حَدَّثَنَا سُفْيَانُ، عَنِ ابْنِ ذَكْوَانَ، عَنْ عَبْدِ الرَّحْمَنِ الْأَعْرَجِ، عَنْ أَبِي هُرَيْرَةَ  رضي الله عنه قَالَ:",
+      isnad: sahih('bukhari', 4392, 0, 150),
       source: { slug: 'sahih-al-bukhari', hadith: 4392, url: 'https://sunnah.com/bukhari:4392' },
       moments: [
-        { title: "«اللهم اهد دوسا وأت بهم»", text: "«جَاءَ الطُّفَيْلُ بْنُ عَمْرٍو إِلَى النَّبِيِّ ﷺ، فَقَالَ: إِنَّ دَوْسًا قَدْ هَلَكَتْ، عَصَتْ، وَأَبَتْ، فَادْعُ اللهَ عَلَيْهِمْ، فَقَالَ: اللَّهُمَّ اهْدِ دَوْسًا وَأْتِ بِهِمْ.»", people: ['at-tufayl-ibn-amr-ad-dawsi', 'prophet-muhammad'] },
+        { title: "«اللهم اهد دوسا وأت بهم»", text: sahih('bukhari', 4392, 151, 334), people: ['at-tufayl-ibn-amr-ad-dawsi', 'prophet-muhammad'] },
       ],
     },
   ],

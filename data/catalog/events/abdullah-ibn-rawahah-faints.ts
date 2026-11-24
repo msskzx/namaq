@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -16,18 +17,18 @@ const abdullahIbnRawahahFaints = {
   people: [{ person: 'abdullah-ibn-rawahah' }],
   reports: [
     {
-      isnad: "حَدَّثَنِي عِمْرَانُ بْنُ مَيْسَرَةَ: حَدَّثَنَا مُحَمَّدُ بْنُ فُضَيْلٍ، عَنْ حُصَيْنٍ، عَنْ عَامِرٍ، عَنِ النُّعْمَانِ بْنِ بَشِيرٍ  رضي الله عنهما قَالَ:",
+      isnad: sahih('bukhari', 4267, 0, 156),
       source: { slug: 'sahih-al-bukhari', hadith: 4267, url: 'https://sunnah.com/bukhari:4267' },
       moments: [
-        { title: "أخته تعدد عليه", text: "«أُغْمِيَ عَلَى عَبْدِ اللهِ بْنِ رَوَاحَةَ، فَجَعَلَتْ أُخْتُهُ عَمْرَةُ تَبْكِي: وَا جَبَلَاهْ، وَا كَذَا وَا كَذَا، تُعَدِّدُ عَلَيْهِ،", people: ['abdullah-ibn-rawahah'] },
-        { title: "«آنت كذلك»", text: "فَقَالَ حِينَ أَفَاقَ: مَا قُلْتِ شَيْئًا إِلَّا قِيلَ لِي: آنْتَ كَذَلِكَ.»", people: ['abdullah-ibn-rawahah'] },
+        { title: "أخته تعدد عليه", text: sahih('bukhari', 4267, 157, 295), people: ['abdullah-ibn-rawahah'] },
+        { title: "«آنت كذلك»", text: sahih('bukhari', 4267, 296, 372), people: ['abdullah-ibn-rawahah'] },
       ],
     },
     {
-      isnad: "حَدَّثَنَا قُتَيْبَةُ: حَدَّثَنَا عَبْثَرُ، عَنْ حُصَيْنٍ، عَنِ الشَّعْبِيِّ، عَنِ النُّعْمَانِ بْنِ بَشِيرٍ قَالَ:",
+      isnad: sahih('bukhari', 4268, 0, 115),
       source: { slug: 'sahih-al-bukhari', hadith: 4268, url: 'https://sunnah.com/bukhari:4268' },
       moments: [
-        { title: "فلما مات لم تبك عليه", text: "«أُغْمِيَ عَلَى عَبْدِ اللهِ بْنِ رَوَاحَةَ: بِهَذَا، فَلَمَّا مَاتَ لَمْ تَبْكِ عَلَيْهِ».", people: ['abdullah-ibn-rawahah'] },
+        { title: "فلما مات لم تبك عليه", text: sahih('bukhari', 4268, 116, 207), people: ['abdullah-ibn-rawahah'] },
       ],
     },
   ],

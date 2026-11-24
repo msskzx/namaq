@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -29,51 +30,51 @@ const islamOfDimad = {
   reports: [
     {
       // Muslim's own telling (owner, 2026-11-21): clearer than al-Dhahabi's, whose «"ثلاث مرات"» sits inside the shahada.
-      isnad: "وحَدَّثَنَا إِسْحَاقُ بْنُ إِبْرَاهِيمَ وَمُحَمَّدُ بْنُ الْمُثَنَّى. كلاهما عَنْ عَبْدِ الْأَعْلَى. قَالَ ابْنُ الْمُثَنَّى: حَدَّثَنِي عَبْدُ الْأَعْلَى (وَهُوَ أَبُو هَمَّامٍ) حَدَّثَنَا دَاوُدُ عَنْ عَمْرِو بْنِ سَعِيدٍ، عَنْ سَعِيدِ بْنِ جُبَيْرٍ، عَنْ ابْنِ عَبَّاسٍ؛",
+      isnad: sahih('muslim', 868, 0, 273),
       source: { slug: 'sahih-muslim', hadith: 868, url: 'https://sunnah.com/muslim:868' },
       moments: [
         {
           title: "جاء ليرقيه",
-          text: "أَنَّ ضِمَادًا قدم مكة. كان مِنْ أَزْدِ شَنُوءَةَ. وَكَانَ يَرْقِي مِنْ هَذِهِ الرِّيحِ. فَسَمِعَ سُفَهَاءَ مِنْ أَهْلِ مَكَّةَ يَقُولُونَ: إِنَّ مُحَمَّدًا مَجْنُونٌ. فَقَالَ: لَوْ أَنِّي رَأَيْتُ هَذَا الرَّجُلَ لَعَلَّ اللَّهَ يَشْفِيهِ عَلَى يَدَيَّ. قَالَ فَلَقِيَهُ. فَقَالَ: يَا مُحَمَّدُ! إِنِّي أَرْقِي مِنْ هَذِهِ الرِّيحِ. وَإِنَّ اللَّهَ يَشْفِي عَلَى يدي من يشاء. فَهَلْ لَكَ؟",
+          text: sahih('muslim', 868, 274, 663),
           people: ["dimad-al-azdi"],
           turns: [
-            { text: "أَنَّ ضِمَادًا قدم مكة. كان مِنْ أَزْدِ شَنُوءَةَ. وَكَانَ يَرْقِي مِنْ هَذِهِ الرِّيحِ. فَسَمِعَ سُفَهَاءَ مِنْ أَهْلِ مَكَّةَ يَقُولُونَ: إِنَّ مُحَمَّدًا مَجْنُونٌ." },
-            { text: "فَقَالَ: لَوْ أَنِّي رَأَيْتُ هَذَا الرَّجُلَ لَعَلَّ اللَّهَ يَشْفِيهِ عَلَى يَدَيَّ.", speaker: { person: "dimad-al-azdi", name: "ضماد" }, lead: "فَقَالَ:", witness: { source: "kawkab-wahhaj", volume: 10, volumeLabel: "10", page: 343, quote: "(فقال) ضماد (لو أني رأيت هذا الرجل)", url: "https://shamela.ws/book/18268/4142" } },
-            { text: "قَالَ فَلَقِيَهُ." },
-            { text: "فَقَالَ: يَا مُحَمَّدُ! إِنِّي أَرْقِي مِنْ هَذِهِ الرِّيحِ. وَإِنَّ اللَّهَ يَشْفِي عَلَى يدي من يشاء. فَهَلْ لَكَ؟", speaker: { person: "dimad-al-azdi", name: "ضماد" }, lead: "فَقَالَ:", witness: { source: "kawkab-wahhaj", volume: 10, volumeLabel: "10", page: 343, quote: "(فقال) ضماد له ﷺ (يا محمد إني أرقي)", url: "https://shamela.ws/book/18268/4142" } },
+            { text: sahih('muslim', 868, 274, 441) },
+            { text: sahih('muslim', 868, 442, 528), speaker: { person: "dimad-al-azdi", name: "ضماد" }, lead: sahih('muslim', 868, 442, 450), witness: { source: "kawkab-wahhaj", volume: 10, volumeLabel: "10", page: 343, quote: "(فقال) ضماد (لو أني رأيت هذا الرجل)", url: "https://shamela.ws/book/18268/4142" } },
+            { text: sahih('muslim', 868, 529, 546) },
+            { text: sahih('muslim', 868, 547, 663), speaker: { person: "dimad-al-azdi", name: "ضماد" }, lead: sahih('muslim', 868, 547, 555), witness: { source: "kawkab-wahhaj", volume: 10, volumeLabel: "10", page: 343, quote: "(فقال) ضماد له ﷺ (يا محمد إني أرقي)", url: "https://shamela.ws/book/18268/4142" } },
           ],
         },
         {
           title: "ما قاله النبي ﷺ",
-          text: "فَقَالَ رَسُولُ اللَّهِ ﷺ: \"إِنَّ الْحَمْدَ لِلَّهِ. نَحْمَدُهُ وَنَسْتَعِينُهُ مَنْ يَهْدِهِ اللَّهُ فَلَا مُضِلَّ لَهُ وَمَنْ يُضْلِلْ فَلَا هَادِيَ لَهُ. وَأَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ. وَأَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ. أَمَّا بَعْدُ\". قَالَ فَقَالَ: أَعِدْ عَلَيَّ كَلِمَاتِكَ هَؤُلَاءِ. فَأَعَادَهُنَّ عَلَيْهِ رَسُولُ اللَّهِ ﷺ. ثلاث مَرَّاتٍ.",
+          text: sahih('muslim', 868, 664, 1057),
           people: ["prophet-muhammad", "dimad-al-azdi"],
           turns: [
-            { text: "فَقَالَ رَسُولُ اللَّهِ ﷺ: \"إِنَّ الْحَمْدَ لِلَّهِ. نَحْمَدُهُ وَنَسْتَعِينُهُ مَنْ يَهْدِهِ اللَّهُ فَلَا مُضِلَّ لَهُ وَمَنْ يُضْلِلْ فَلَا هَادِيَ لَهُ. وَأَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ. وَأَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ. أَمَّا بَعْدُ\".", speaker: { person: "prophet-muhammad", name: "رسول الله ﷺ" }, lead: "فَقَالَ رَسُولُ اللَّهِ ﷺ:" },
-            { text: "قَالَ فَقَالَ: أَعِدْ عَلَيَّ كَلِمَاتِكَ هَؤُلَاءِ.", speaker: { person: "dimad-al-azdi", name: "ضماد" }, lead: "قَالَ فَقَالَ:", witness: { source: "kawkab-wahhaj", volume: 10, volumeLabel: "10", page: 344, quote: "(قال) ابن عباس (فقال) ضماد لرسول الله ﷺ (أعد عليّ)", url: "https://shamela.ws/book/18268/4143" } },
-            { text: "فَأَعَادَهُنَّ عَلَيْهِ رَسُولُ اللَّهِ ﷺ. ثلاث مَرَّاتٍ." },
+            { text: sahih('muslim', 868, 664, 946), speaker: { person: "prophet-muhammad", name: "رسول الله ﷺ" }, lead: sahih('muslim', 868, 664, 690) },
+            { text: sahih('muslim', 868, 947, 999), speaker: { person: "dimad-al-azdi", name: "ضماد" }, lead: sahih('muslim', 868, 947, 961), witness: { source: "kawkab-wahhaj", volume: 10, volumeLabel: "10", page: 344, quote: "(قال) ابن عباس (فقال) ضماد لرسول الله ﷺ (أعد عليّ)", url: "https://shamela.ws/book/18268/4143" } },
+            { text: sahih('muslim', 868, 1000, 1057) },
           ],
         },
         {
           title: "ناعوس البحر",
-          text: "قَالَ فَقَالَ: لَقَدْ سَمِعْتُ قَوْلَ الْكَهَنَةِ وَقَوْلَ السَّحَرَةِ وَقَوْلَ الشُّعَرَاءِ. فَمَا سَمِعْتُ مِثْلَ كلمات هَؤُلَاءِ. وَلَقَدْ بَلَغْنَ نَاعُوسَ الْبَحْرِ. قَالَ فَقَالَ: هَاتِ يَدَكَ أُبَايِعْكَ عَلَى الْإِسْلَامِ. قَالَ فَبَايَعَهُ. فقال رسول الله ﷺ: \"وَعَلَى قَوْمِكَ\". قَالَ: وَعَلَى قَوْمِي.",
+          text: sahih('muslim', 868, 1058, 1369),
           people: ["dimad-al-azdi", "prophet-muhammad"],
           turns: [
-            { text: "قَالَ فَقَالَ: لَقَدْ سَمِعْتُ قَوْلَ الْكَهَنَةِ وَقَوْلَ السَّحَرَةِ وَقَوْلَ الشُّعَرَاءِ. فَمَا سَمِعْتُ مِثْلَ كلمات هَؤُلَاءِ. وَلَقَدْ بَلَغْنَ نَاعُوسَ الْبَحْرِ.", speaker: { person: "dimad-al-azdi", name: "ضماد" }, lead: "قَالَ فَقَالَ:", witness: { source: "kawkab-wahhaj", volume: 10, volumeLabel: "10", page: 344, quote: "(فقال) ضماد: والله (لقد سمعت قول الكهنة)", url: "https://shamela.ws/book/18268/4143" } },
-            { text: "قَالَ فَقَالَ: هَاتِ يَدَكَ أُبَايِعْكَ عَلَى الْإِسْلَامِ.", speaker: { person: "dimad-al-azdi", name: "ضماد" }, lead: "قَالَ فَقَالَ:", witness: { source: "kawkab-wahhaj", volume: 10, volumeLabel: "10", page: 344, quote: "(قال) ابن عباس (فقال) ضماد: (هات يدك)", url: "https://shamela.ws/book/18268/4143" } },
-            { text: "قَالَ فَبَايَعَهُ." },
-            { text: "فقال رسول الله ﷺ: \"وَعَلَى قَوْمِكَ\".", speaker: { person: "prophet-muhammad", name: "رسول الله ﷺ" }, lead: "فقال رسول الله ﷺ:" },
-            { text: "قَالَ: وَعَلَى قَوْمِي.", speaker: { person: "dimad-al-azdi", name: "ضماد" }, lead: "قَالَ:", witness: { source: "kawkab-wahhaj", volume: 10, volumeLabel: "10", page: 345, quote: "(قال) ضماد (و) بايعت (على) الإسلام لنفسي ولـ (قومي", url: "https://shamela.ws/book/18268/4144" } },
+            { text: sahih('muslim', 868, 1058, 1228), speaker: { person: "dimad-al-azdi", name: "ضماد" }, lead: sahih('muslim', 868, 1058, 1072), witness: { source: "kawkab-wahhaj", volume: 10, volumeLabel: "10", page: 344, quote: "(فقال) ضماد: والله (لقد سمعت قول الكهنة)", url: "https://shamela.ws/book/18268/4143" } },
+            { text: sahih('muslim', 868, 1229, 1288), speaker: { person: "dimad-al-azdi", name: "ضماد" }, lead: sahih('muslim', 868, 1229, 1243), witness: { source: "kawkab-wahhaj", volume: 10, volumeLabel: "10", page: 344, quote: "(قال) ابن عباس (فقال) ضماد: (هات يدك)", url: "https://shamela.ws/book/18268/4143" } },
+            { text: sahih('muslim', 868, 1289, 1307) },
+            { text: sahih('muslim', 868, 1308, 1345), speaker: { person: "prophet-muhammad", name: "رسول الله ﷺ" }, lead: sahih('muslim', 868, 1308, 1325) },
+            { text: sahih('muslim', 868, 1346, 1369), speaker: { person: "dimad-al-azdi", name: "ضماد" }, lead: sahih('muslim', 868, 1346, 1352), witness: { source: "kawkab-wahhaj", volume: 10, volumeLabel: "10", page: 345, quote: "(قال) ضماد (و) بايعت (على) الإسلام لنفسي ولـ (قومي", url: "https://shamela.ws/book/18268/4144" } },
           ],
         },
         {
           title: "قوم ضماد",
-          text: "قَالَ فَبَعَثَ رَسُولُ اللَّهِ ﷺ سَرِيَّةً فَمَرُّوا بِقَوْمِهِ. فَقَالَ صَاحِبُ السَّرِيَّةِ لِلْجَيْشِ: هَلْ أَصَبْتُمْ مِنْ هَؤُلَاءِ شَيْئًا؟ فَقَالَ رَجُلٌ مِنَ الْقَوْمِ: أَصَبْتُ مِنْهُمْ مِطْهَرَةً. فَقَالَ: رُدُّوهَا. فَإِنَّ هؤلاء قوم ضماد.",
+          text: sahih('muslim', 868, 1370, 1620),
           people: [],
           turns: [
-            { text: "قَالَ فَبَعَثَ رَسُولُ اللَّهِ ﷺ سَرِيَّةً فَمَرُّوا بِقَوْمِهِ." },
-            { text: "فَقَالَ صَاحِبُ السَّرِيَّةِ لِلْجَيْشِ: هَلْ أَصَبْتُمْ مِنْ هَؤُلَاءِ شَيْئًا؟", speaker: { name: "صاحب السرية" }, lead: "فَقَالَ صَاحِبُ السَّرِيَّةِ لِلْجَيْشِ:" },
-            { text: "فَقَالَ رَجُلٌ مِنَ الْقَوْمِ: أَصَبْتُ مِنْهُمْ مِطْهَرَةً.", speaker: { name: "رجل من القوم" }, lead: "فَقَالَ رَجُلٌ مِنَ الْقَوْمِ:" },
-            { text: "فَقَالَ: رُدُّوهَا. فَإِنَّ هؤلاء قوم ضماد.", speaker: { name: "صاحب السرية" }, lead: "فَقَالَ:", witness: { source: "kawkab-wahhaj", volume: 10, volumeLabel: "10", page: 345, quote: "(فقال صاحب السرية) أي أميرهم … (فقال) أمير السرية (ردها)", url: "https://shamela.ws/book/18268/4144" } },
+            { text: sahih('muslim', 868, 1370, 1434) },
+            { text: sahih('muslim', 868, 1435, 1515), speaker: { name: "صاحب السرية" }, lead: sahih('muslim', 868, 1435, 1475) },
+            { text: sahih('muslim', 868, 1516, 1576), speaker: { name: "رجل من القوم" }, lead: sahih('muslim', 868, 1516, 1546) },
+            { text: sahih('muslim', 868, 1577, 1620), speaker: { name: "صاحب السرية" }, lead: sahih('muslim', 868, 1577, 1585), witness: { source: "kawkab-wahhaj", volume: 10, volumeLabel: "10", page: 345, quote: "(فقال صاحب السرية) أي أميرهم … (فقال) أمير السرية (ردها)", url: "https://shamela.ws/book/18268/4144" } },
           ],
         },
       ],

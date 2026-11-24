@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -26,17 +27,17 @@ const islamOfSalmanAlFarisi = {
   people: [{ person: 'salman-al-farisi', claims: ['salman/islam'] }],
   reports: [
     {
-      isnad: "حَدَّثَنِي الْحَسَنُ بْنُ عُمَرَ بْنِ شَقِيقٍ: حَدَّثَنَا مُعْتَمِرٌ: قَالَ أَبِي. وَحَدَّثَنَا أَبُو عُثْمَانَ، عَنْ سَلْمَانَ الْفَارِسِيِّ:",
+      isnad: sahih('bukhari', 3946, 0, 142),
       source: { slug: 'sahih-al-bukhari', hadith: 3946, url: 'https://sunnah.com/bukhari:3946' },
       moments: [
-        { title: "«من رب إلى رب»", text: "«أَنَّهُ تَدَاوَلَهُ بِضْعَةَ عَشَرَ، مِنْ رَبٍّ إِلَى رَبٍّ».", people: ['salman-al-farisi'] },
+        { title: "«من رب إلى رب»", text: sahih('bukhari', 3946, 143, 205), people: ['salman-al-farisi'] },
       ],
     },
     {
-      isnad: "حَدَّثَنَا مُحَمَّدُ بْنُ يُوسُفَ: حَدَّثَنَا سُفْيَانُ، عَنْ عَوْفٍ، عَنْ أَبِي عُثْمَانَ قَالَ:",
+      isnad: sahih('bukhari', 3947, 0, 97),
       source: { slug: 'sahih-al-bukhari', hadith: 3947, url: 'https://sunnah.com/bukhari:3947' },
       moments: [
-        { title: "«أنا من رام هرمز»", text: "«سَمِعْتُ سَلْمَانَ رضي الله عنه يَقُولُ: أَنَا مِنْ رَامَ هُرْمُزَ.»", people: ['salman-al-farisi'] },
+        { title: "«أنا من رام هرمز»", text: sahih('bukhari', 3947, 98, 167), people: ['salman-al-farisi'] },
       ],
     },
   ],

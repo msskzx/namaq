@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -39,10 +40,10 @@ const theNightOfTheJinn = {
       ],
     },
     {
-      isnad: "حَدَّثَنِي عُبَيْدُ اللهِ بْنُ سَعِيدٍ: حَدَّثَنَا أَبُو أُسَامَةَ: حَدَّثَنَا مِسْعَرٌ، عَنْ مَعْنِ بْنِ عَبْدِ الرَّحْمَنِ",
+      isnad: sahih('bukhari', 3859, 0, 124),
       source: { slug: 'sahih-al-bukhari', hadith: 3859, url: 'https://sunnah.com/bukhari:3859' },
       moments: [
-        { title: "آذنته بهم شجرة", text: "قَالَ: سَمِعْتُ أَبِي قَالَ: «سَأَلْتُ مَسْرُوقًا: مَنْ آذَنَ النَّبِيَّ ﷺ بِالْجِنِّ لَيْلَةَ اسْتَمَعُوا الْقُرْآنَ؟ فَقَالَ: حَدَّثَنِي أَبُوكَ، يَعْنِي عَبْدَ اللهِ: أَنَّهُ آذَنَتْ بِهِمْ شَجَرَةٌ.»", people: ['prophet-muhammad', 'abdullah-ibn-masud'] },
+        { title: "آذنته بهم شجرة", text: sahih('bukhari', 3859, 125, 328), people: ['prophet-muhammad', 'abdullah-ibn-masud'] },
       ],
     },
   ],

@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -15,10 +16,10 @@ const theProclamationAtAbuBakrsHajj = {
   people: [{ person: 'abu-bakr-as-siddiq' }, { person: 'abu-hurayrah' }, { person: 'prophet-muhammad' }],
   reports: [
     {
-      isnad: "حَدَّثَنَا سُلَيْمَانُ بْنُ دَاوُدَ أَبُو الرَّبِيعِ: حَدَّثَنَا فُلَيْحٌ، عَنِ الزُّهْرِيِّ، عَنْ حُمَيْدِ بْنِ عَبْدِ الرَّحْمَنِ، عَنْ أَبِي هُرَيْرَةَ:",
+      isnad: sahih('bukhari', 4363, 0, 155),
       source: { slug: 'sahih-al-bukhari', hadith: 4363, url: 'https://sunnah.com/bukhari:4363' },
       moments: [
-        { title: "«لا يحج بعد العام مشرك»", text: "«أَنَّ أَبَا بَكْرٍ الصِّدِّيقَ رضي الله عنه بَعَثَهُ، فِي الْحَجَّةِ الَّتِي أَمَّرَهُ النَّبِيُّ ﷺ قَبْلَ حَجَّةِ الْوَدَاعِ، يَوْمَ النَّحْرِ فِي رَهْطٍ يُؤَذِّنُ فِي النَّاسِ: لَا يَحُجُّ بَعْدَ الْعَامِ مُشْرِكٌ، وَلَا يَطُوفُ بِالْبَيْتِ عُرْيَانٌ».", people: ['abu-bakr-as-siddiq', 'abu-hurayrah', 'prophet-muhammad'] },
+        { title: "«لا يحج بعد العام مشرك»", text: sahih('bukhari', 4363, 156, 411), people: ['abu-bakr-as-siddiq', 'abu-hurayrah', 'prophet-muhammad'] },
       ],
     },
   ],

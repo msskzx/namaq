@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -18,11 +19,11 @@ const theMedicineInHisMouth = {
   tags: ['HIS_WORDS'],
   reports: [
     {
-      isnad: "حَدَّثَنَا عَلِيٌّ، حَدَّثَنَا يَحْيَى، وَزَادَ: قَالَتْ عَائِشَةُ:",
+      isnad: sahih('bukhari', 4458, 0, 67),
       source: { slug: 'sahih-al-bukhari', hadith: 4458, url: 'https://sunnah.com/bukhari:4458' },
       moments: [
-        { title: "لددناه في مرضه", text: "«لَدَدْنَاهُ فِي مَرَضِهِ، فَجَعَلَ يُشِيرُ إِلَيْنَا: أَنْ لَا تَلُدُّونِي، فَقُلْنَا: كَرَاهِيَةُ الْمَرِيضِ لِلدَّوَاءِ،", people: ['aisha-bint-abi-bakr', 'prophet-muhammad'] },
-        { title: "«ألم أنهكم أن تلدوني»", text: "فَلَمَّا أَفَاقَ قَالَ: أَلَمْ أَنْهَكُمْ أَنْ تَلُدُّونِي، قُلْنَا: كَرَاهِيَةَ الْمَرِيضِ لِلدَّوَاءِ، فَقَالَ: لَا يَبْقَى أَحَدٌ فِي الْبَيْتِ إِلَّا لُدَّ، وَأَنَا أَنْظُرُ إِلَّا الْعَبَّاسَ، فَإِنَّهُ لَمْ يَشْهَدْكُمْ». رَوَاهُ ابْنُ أَبِي الزِّنَادِ، عَنْ هِشَامٍ، عَنْ أَبِيهِ، عَنْ عَائِشَةَ، عَنِ النَّبِيِّ ﷺ.", people: ['prophet-muhammad'] },
+        { title: "لددناه في مرضه", text: sahih('bukhari', 4458, 68, 191), people: ['aisha-bint-abi-bakr', 'prophet-muhammad'] },
+        { title: "«ألم أنهكم أن تلدوني»", text: sahih('bukhari', 4458, 192, 514), people: ['prophet-muhammad'] },
       ],
     },
   ],

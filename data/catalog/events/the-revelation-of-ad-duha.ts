@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -19,22 +20,22 @@ const theRevelationOfAdDuha = {
       kind: 'REVEALED_ABOUT',
       from: '93:1',
       to: '93:3',
-      evidence: [{ source: 'sahih-muslim', hadith: 1797, url: 'https://sunnah.com/muslim:1797', quote: "فَأَنْزَلَ اللَّهُ عَزَّ وَجَلَّ: ﴿وَالضُّحَى. وَاللَّيْلِ إِذَا سَجَى. مَا وَدَّعَكَ رَبُّكَ وَمَا قَلَى﴾" }],
+      evidence: [{ source: 'sahih-muslim', hadith: 1797, url: 'https://sunnah.com/muslim:1797', quote: sahih('muslim', 1797, 218, 324) }],
     },
   ],
   reports: [
     {
-      isnad: "حَدَّثَنَا إِسْحَاقُ بْنُ إِبْرَاهِيمَ. أَخْبَرَنَا سُفْيَانُ عَنْ الْأَسْوَدِ بْنِ قَيْسٍ؛ أَنَّهُ سَمِعَ جُنْدُبًا يَقُولُ:",
+      isnad: sahih('muslim', 1797, 0, 125),
       source: { slug: 'sahih-muslim', hadith: 1797, url: 'https://sunnah.com/muslim:1797' },
       moments: [
-        { title: "«قد ودع محمد»", text: "أَبْطَأَ جِبْرِيلُ عَلَى رَسُولِ اللَّهِ ﷺ. فَقَالَ الْمُشْرِكُونَ: قَدْ وُدِّعَ مُحَمَّدٌ.", people: ['prophet-muhammad'],
+        { title: "«قد ودع محمد»", text: sahih('muslim', 1797, 126, 217), people: ['prophet-muhammad'],
           turns: [
-            { text: "أَبْطَأَ جِبْرِيلُ عَلَى رَسُولِ اللَّهِ ﷺ." },
-            { text: "فَقَالَ الْمُشْرِكُونَ: قَدْ وُدِّعَ مُحَمَّدٌ.", speaker: { name: "المشركون" }, lead: "فَقَالَ الْمُشْرِكُونَ:" },
+            { text: sahih('muslim', 1797, 126, 169) },
+            { text: sahih('muslim', 1797, 170, 217), speaker: { name: "المشركون" }, lead: sahih('muslim', 1797, 170, 193) },
           ] },
-        { title: "﴿ما ودعك ربك وما قلى﴾", text: "فَأَنْزَلَ اللَّهُ عَزَّ وَجَلَّ: ﴿وَالضُّحَى. وَاللَّيْلِ إِذَا سَجَى. مَا وَدَّعَكَ رَبُّكَ وَمَا قَلَى﴾ [٩٣ /الضحى /١ و٢ و٣].", people: [],
+        { title: "﴿ما ودعك ربك وما قلى﴾", text: sahih('muslim', 1797, 218, 346), people: [],
           turns: [
-            { text: "فَأَنْزَلَ اللَّهُ عَزَّ وَجَلَّ: ﴿وَالضُّحَى. وَاللَّيْلِ إِذَا سَجَى. مَا وَدَّعَكَ رَبُّكَ وَمَا قَلَى﴾ [٩٣ /الضحى /١ و٢ و٣]." },
+            { text: sahih('muslim', 1797, 218, 346) },
           ] },
       ],
     },

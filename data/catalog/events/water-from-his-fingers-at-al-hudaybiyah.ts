@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -16,12 +17,12 @@ const waterFromHisFingersAtAlHudaybiyah = {
   tags: ['HIS_WORDS'],
   reports: [
     {
-      isnad: "حَدَّثَنَا يُوسُفُ بْنُ عِيسَى: حَدَّثَنَا ابْنُ فُضَيْلٍ: حَدَّثَنَا حُصَيْنٌ، عَنْ سَالِمٍ، عَنْ جَابِرٍ  رضي الله عنه قَالَ:",
+      isnad: sahih('bukhari', 4152, 0, 127),
       source: { slug: 'sahih-al-bukhari', hadith: 4152, url: 'https://sunnah.com/bukhari:4152' },
       moments: [
-        { title: "«ما لكم؟»", text: "«عَطِشَ النَّاسُ يَوْمَ الْحُدَيْبِيَةِ، وَرَسُولُ اللهِ ﷺ بَيْنَ يَدَيْهِ رَكْوَةٌ فَتَوَضَّأَ مِنْهَا، ثُمَّ أَقْبَلَ النَّاسُ نَحْوَهُ، فَقَالَ رَسُولُ اللهِ ﷺ: مَا لَكُمْ؟ قَالُوا: يَا رَسُولَ اللهِ، لَيْسَ عِنْدَنَا مَاءٌ نَتَوَضَّأُ بِهِ وَلَا نَشْرَبُ إِلَّا مَا فِي رَكْوَتِكَ،", people: ['prophet-muhammad'] },
-        { title: "يفور من بين أصابعه", text: "قَالَ: فَوَضَعَ النَّبِيُّ ﷺ يَدَهُ فِي الرَّكْوَةِ فَجَعَلَ الْمَاءُ يَفُورُ مِنْ بَيْنِ أَصَابِعِهِ كَأَمْثَالِ الْعُيُونِ، قَالَ: فَشَرِبْنَا وَتَوَضَّأْنَا،", people: ['prophet-muhammad'] },
-        { title: "«لو كنا مائة ألف لكفانا»", text: "فَقُلْتُ لِجَابِرٍ: كَمْ كُنْتُمْ يَوْمَئِذٍ؟ قَالَ: لَوْ كُنَّا مِائَةَ أَلْفٍ لَكَفَانَا، كُنَّا خَمْسَ عَشْرَةَ مِائَةً.»", people: ['jabir-ibn-abdullah'] },
+        { title: "«ما لكم؟»", text: sahih('bukhari', 4152, 128, 413), people: ['prophet-muhammad'] },
+        { title: "يفور من بين أصابعه", text: sahih('bukhari', 4152, 414, 574), people: ['prophet-muhammad'] },
+        { title: "«لو كنا مائة ألف لكفانا»", text: sahih('bukhari', 4152, 575, 699), people: ['jabir-ibn-abdullah'] },
       ],
     },
   ],

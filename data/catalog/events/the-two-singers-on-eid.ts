@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -17,31 +18,31 @@ const theTwoSingersOnEid = {
   tags: ['HIS_WORDS'],
   reports: [
     {
-      isnad: "حَدَّثَنِي مُحَمَّدُ بْنُ الْمُثَنَّى: حَدَّثَنَا غُنْدَرٌ: حَدَّثَنَا شُعْبَةُ، عَنْ هِشَامٍ، عَنْ أَبِيهِ، عَنْ عَائِشَةَ",
+      isnad: sahih('bukhari', 3931, 0, 123),
       source: { slug: 'sahih-al-bukhari', hadith: 3931, url: 'https://sunnah.com/bukhari:3931' },
       moments: [
         {
           title: "قينتان يوم عيد",
-          text: "«أَنَّ أَبَا بَكْرٍ دَخَلَ عَلَيْهَا، وَالنَّبِيُّ ﷺ عِنْدَهَا، يَوْمَ فِطْرٍ أَوْ أَضْحًى، وَعِنْدَهَا قَيْنَتَانِ بِمَا تَقَاذَفَتِ الْأَنْصَارُ يَوْمَ بُعَاثٍ،",
+          text: sahih('bukhari', 3931, 124, 286),
           people: ['abu-bakr-as-siddiq', 'aisha-bint-abi-bakr', 'prophet-muhammad'],
           turns: [
-            { text: "«أَنَّ أَبَا بَكْرٍ دَخَلَ عَلَيْهَا، وَالنَّبِيُّ ﷺ عِنْدَهَا، يَوْمَ فِطْرٍ أَوْ أَضْحًى، وَعِنْدَهَا قَيْنَتَانِ بِمَا تَقَاذَفَتِ الْأَنْصَارُ يَوْمَ بُعَاثٍ،" },
+            { text: sahih('bukhari', 3931, 124, 286) },
           ],
         },
         {
           title: "«مزمار الشيطان»",
-          text: "فَقَالَ أَبُو بَكْرٍ: مِزْمَارُ الشَّيْطَانِ مَرَّتَيْنِ،",
+          text: sahih('bukhari', 3931, 287, 344),
           people: ['abu-bakr-as-siddiq'],
           turns: [
-            { text: "فَقَالَ أَبُو بَكْرٍ: مِزْمَارُ الشَّيْطَانِ مَرَّتَيْنِ،", speaker: { person: 'abu-bakr-as-siddiq', name: "أبو بكر" }, lead: "فَقَالَ أَبُو بَكْرٍ:" },
+            { text: sahih('bukhari', 3931, 287, 344), speaker: { person: 'abu-bakr-as-siddiq', name: "أبو بكر" }, lead: sahih('bukhari', 3931, 287, 308) },
           ],
         },
         {
           title: "«إن لكل قوم عيدا»",
-          text: "فَقَالَ النَّبِيُّ ﷺ: دَعْهُمَا يَا أَبَا بَكْرٍ، إِنَّ لِكُلِّ قَوْمٍ عِيدًا، وَإِنَّ عِيدَنَا هَذَا الْيَوْمُ.»",
+          text: sahih('bukhari', 3931, 345, 458),
           people: ['prophet-muhammad', 'abu-bakr-as-siddiq'],
           turns: [
-            { text: "فَقَالَ النَّبِيُّ ﷺ: دَعْهُمَا يَا أَبَا بَكْرٍ، إِنَّ لِكُلِّ قَوْمٍ عِيدًا، وَإِنَّ عِيدَنَا هَذَا الْيَوْمُ.»", speaker: { person: 'prophet-muhammad', name: "النبي ﷺ" }, lead: "فَقَالَ النَّبِيُّ ﷺ:" },
+            { text: sahih('bukhari', 3931, 345, 458), speaker: { person: 'prophet-muhammad', name: "النبي ﷺ" }, lead: sahih('bukhari', 3931, 345, 366) },
           ],
         },
       ],

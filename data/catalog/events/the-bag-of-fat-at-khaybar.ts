@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -16,17 +17,17 @@ const theBagOfFatAtKhaybar = {
   people: [{ person: 'abdullah-ibn-mughaffal' }, { person: 'prophet-muhammad' }],
   reports: [
     {
-      isnad: "حَدَّثَنَا أَبُو الْوَلِيدِ: حَدَّثَنَا شُعْبَةُ وَحَدَّثَنِي عَبْدُ اللهِ بْنُ مُحَمَّدٍ: حَدَّثَنَا وَهْبٌ: حَدَّثَنَا شُعْبَةُ، عَنْ حُمَيْدِ بْنِ هِلَالٍ، عَنْ عَبْدِ اللهِ بْنِ مُغَفَّلٍ  رضي الله عنه قَالَ:",
+      isnad: sahih('bukhari', 4214, 0, 212),
       source: { slug: 'sahih-al-bukhari', hadith: 4214, url: 'https://sunnah.com/bukhari:4214' },
       moments: [
-        { title: "جراب فيه شحم", text: "«كُنَّا مُحَاصِرِي خَيْبَرَ، فَرَمَى إِنْسَانٌ بِجِرَابٍ فِيهِ شَحْمٌ، فَنَزَوْتُ لِآخُذَهُ، فَالْتَفَتُّ فَإِذَا النَّبِيُّ ﷺ فَاسْتَحْيَيْتُ».", people: ['abdullah-ibn-mughaffal', 'prophet-muhammad'] },
+        { title: "جراب فيه شحم", text: sahih('bukhari', 4214, 213, 357), people: ['abdullah-ibn-mughaffal', 'prophet-muhammad'] },
       ],
     },
     {
-      isnad: "حَدَّثَنَا شَيْبَانُ بْنُ فَرُّوخَ. حَدَّثَنَا سُلَيْمَانُ (يَعْنِي ابْنَ الْمُغِيرَةِ). حَدَّثَنَا حُمَيْدُ بْنُ هِلَالٍ عَنْ عَبْدِ اللَّهِ بْنِ مُغَفَّلٍ، قَالَ:",
+      isnad: sahih('muslim', 1772, 0, 164),
       source: { slug: 'sahih-muslim', hadith: 1772, url: 'https://sunnah.com/muslim:1772' },
       moments: [
-        { title: "«لا أعطي اليوم أحدا من هذا شيئا»", text: "أَصَبْتُ جِرَابًا مِنْ شَحْمٍ، يَوْمَ خَيْبَرَ. قَالَ: فَالْتَزَمْتُهُ. فَقُلْتُ: لَا أُعْطِي الْيَوْمَ أَحَدًا مِنْ هَذَا شَيْئًا. قَالَ: فَالْتَفَتُّ فَإِذَا رَسُولُ اللَّهِ ﷺ متبسما.", people: ['abdullah-ibn-mughaffal', 'prophet-muhammad'] },
+        { title: "«لا أعطي اليوم أحدا من هذا شيئا»", text: sahih('muslim', 1772, 165, 350), people: ['abdullah-ibn-mughaffal', 'prophet-muhammad'] },
       ],
     },
   ],

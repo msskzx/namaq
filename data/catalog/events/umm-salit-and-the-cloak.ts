@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -15,27 +16,27 @@ const ummSalitAndTheCloak = {
   people: [{ person: 'umar-ibn-al-khattab' }, { person: 'prophet-muhammad' }, { person: 'umm-kulthum-bint-ali' }],
   reports: [
     {
-      isnad: "حَدَّثَنَا يَحْيَى بْنُ بُكَيْرٍ: حَدَّثَنَا اللَّيْثُ، عَنْ يُونُسَ، عَنِ ابْنِ شِهَابٍ وَقَالَ ثَعْلَبَةُ بْنُ أَبِي مَالِكٍ:",
+      isnad: sahih('bukhari', 4071, 0, 127),
       source: { slug: 'sahih-al-bukhari', hadith: 4071, url: 'https://sunnah.com/bukhari:4071' },
       moments: [
         {
           title: "«أعط هذا بنت رسول الله ﷺ التي عندك»",
-          text: "«إِنَّ عُمَرَ بْنَ الْخَطَّابِ رضي الله عنه قَسَمَ مُرُوطًا بَيْنَ نِسَاءٍ مِنْ نِسَاءِ أَهْلِ الْمَدِينَةِ، فَبَقِيَ مِنْهَا مِرْطٌ جَيِّدٌ، فَقَالَ لَهُ بَعْضُ مَنْ عِنْدَهُ: يَا أَمِيرَ الْمُؤْمِنِينَ، أَعْطِ هَذَا بِنْتَ رَسُولِ اللهِ ﷺ الَّتِي عِنْدَكَ، يُرِيدُونَ أُمَّ كُلْثُومٍ بِنْتَ عَلِيٍّ،",
+          text: sahih('bukhari', 4071, 128, 429),
           people: ['umar-ibn-al-khattab', 'prophet-muhammad', 'umm-kulthum-bint-ali'],
           turns: [
-            { text: "«إِنَّ عُمَرَ بْنَ الْخَطَّابِ رضي الله عنه قَسَمَ مُرُوطًا بَيْنَ نِسَاءٍ مِنْ نِسَاءِ أَهْلِ الْمَدِينَةِ، فَبَقِيَ مِنْهَا مِرْطٌ جَيِّدٌ،" },
-            { text: "فَقَالَ لَهُ بَعْضُ مَنْ عِنْدَهُ: يَا أَمِيرَ الْمُؤْمِنِينَ، أَعْطِ هَذَا بِنْتَ رَسُولِ اللهِ ﷺ الَّتِي عِنْدَكَ،", speaker: { name: "بعض من عنده" }, lead: "فَقَالَ لَهُ بَعْضُ مَنْ عِنْدَهُ:" },
-            { text: "يُرِيدُونَ أُمَّ كُلْثُومٍ بِنْتَ عَلِيٍّ،" },
+            { text: sahih('bukhari', 4071, 128, 269) },
+            { text: sahih('bukhari', 4071, 270, 386), speaker: { name: "بعض من عنده" }, lead: sahih('bukhari', 4071, 270, 304) },
+            { text: sahih('bukhari', 4071, 387, 429) },
           ],
         },
         {
           title: "«كانت تزفر لنا القرب يوم أحد»",
-          text: "فَقَالَ عُمَرُ: أُمُّ سَلِيطٍ أَحَقُّ بِهِ وَأُمُّ سَلِيطٍ مِنْ نِسَاءِ الْأَنْصَارِ، مِمَّنْ بَايَعَ رَسُولَ اللهِ ﷺ، قَالَ عُمَرُ: فَإِنَّهَا كَانَتْ تُزْفِرُ لَنَا الْقِرَبَ يَوْمَ أُحُدٍ.»",
+          text: sahih('bukhari', 4071, 430, 622),
           people: ['umar-ibn-al-khattab', 'prophet-muhammad'],
           turns: [
-            { text: "فَقَالَ عُمَرُ: أُمُّ سَلِيطٍ أَحَقُّ بِهِ", speaker: { person: "umar-ibn-al-khattab", name: "عمر" }, lead: "فَقَالَ عُمَرُ:" },
-            { text: "وَأُمُّ سَلِيطٍ مِنْ نِسَاءِ الْأَنْصَارِ، مِمَّنْ بَايَعَ رَسُولَ اللهِ ﷺ،" },
-            { text: "قَالَ عُمَرُ: فَإِنَّهَا كَانَتْ تُزْفِرُ لَنَا الْقِرَبَ يَوْمَ أُحُدٍ.»", speaker: { person: "umar-ibn-al-khattab", name: "عمر" }, lead: "قَالَ عُمَرُ:" },
+            { text: sahih('bukhari', 4071, 430, 472), speaker: { person: "umar-ibn-al-khattab", name: "عمر" }, lead: sahih('bukhari', 4071, 430, 445) },
+            { text: sahih('bukhari', 4071, 473, 548) },
+            { text: sahih('bukhari', 4071, 549, 622), speaker: { person: "umar-ibn-al-khattab", name: "عمر" }, lead: sahih('bukhari', 4071, 549, 562) },
           ],
         },
       ],

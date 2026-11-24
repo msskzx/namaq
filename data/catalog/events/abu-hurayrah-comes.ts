@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -15,11 +16,11 @@ const abuHurayrahComes = {
   people: [{ person: 'abu-hurayrah' }, { person: 'prophet-muhammad' }],
   reports: [
     {
-      isnad: "حَدَّثَنِي مُحَمَّدُ بْنُ الْعَلَاءِ: حَدَّثَنَا أَبُو أُسَامَةَ: حَدَّثَنَا إِسْمَاعِيلُ، عَنْ قَيْسٍ، عَنْ أَبِي هُرَيْرَةَ قَالَ:",
+      isnad: sahih('bukhari', 4393, 0, 132),
       source: { slug: 'sahih-al-bukhari', hadith: 4393, url: 'https://sunnah.com/bukhari:4393' },
       moments: [
-        { title: "«يا ليلة من طولها وعنائها»", text: "«لَمَّا قَدِمْتُ عَلَى النَّبِيِّ ﷺ، قُلْتُ فِي الطَّرِيقِ: يَا لَيْلَةً مِنْ طُولِهَا وَعَنَائِهَا … عَلَى أَنَّهَا مِنْ دَارَةِ الْكُفْرِ نَجَّتِ وَأَبَقَ غُلَامٌ لِي فِي الطَّرِيقِ،", people: ['abu-hurayrah'] },
-        { title: "«هو لوجه الله»", text: "فَلَمَّا قَدِمْتُ عَلَى النَّبِيِّ ﷺ، فَبَايَعْتُهُ، فَبَيْنَا أَنَا عِنْدَهُ إِذْ طَلَعَ الْغُلَامُ، فَقَالَ لِي النَّبِيُّ ﷺ: يَا أَبَا هُرَيْرَةَ، هَذَا غُلَامُكَ، فَقُلْتُ: هُوَ لِوَجْهِ اللهِ فَأَعْتَقْتُهُ.»", people: ['abu-hurayrah', 'prophet-muhammad'] },
+        { title: "«يا ليلة من طولها وعنائها»", text: sahih('bukhari', 4393, 133, 317), people: ['abu-hurayrah'] },
+        { title: "«هو لوجه الله»", text: sahih('bukhari', 4393, 318, 531), people: ['abu-hurayrah', 'prophet-muhammad'] },
       ],
     },
   ],

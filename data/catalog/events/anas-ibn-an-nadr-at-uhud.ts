@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -17,13 +18,13 @@ const anasIbnAnNadrAtUhud = {
   people: [{ person: 'anas-ibn-an-nadr' }, { person: 'prophet-muhammad' }, { person: 'saad-ibn-muadh' }],
   reports: [
     {
-      isnad: "أَخْبَرَنَا حَسَّانُ بْنُ حَسَّانَ: حَدَّثَنَا مُحَمَّدُ بْنُ طَلْحَةَ: حَدَّثَنَا حُمَيْدٌ، عَنْ أَنَسٍ  رضي الله عنه:",
+      isnad: sahih('bukhari', 4048, 0, 119),
       source: { slug: 'sahih-al-bukhari', hadith: 4048, url: 'https://sunnah.com/bukhari:4048' },
       moments: [
-        { title: "«ليرين الله ما أجد»", text: "«أَنَّ عَمَّهُ غَابَ عَنْ بَدْرٍ، فَقَالَ: غِبْتُ عَنْ أَوَّلِ قِتَالِ النَّبِيِّ ﷺ، لَئِنْ أَشْهَدَنِي اللهُ مَعَ النَّبِيِّ ﷺ لَيَرَيَنَّ اللهُ مَا أُجِدُّ،", people: ['anas-ibn-an-nadr', 'prophet-muhammad'] },
-        { title: "«اللهم إني أعتذر إليك»", text: "فَلَقِيَ يَوْمَ أُحُدٍ، فَهُزِمَ النَّاسُ، فَقَالَ: اللَّهُمَّ إِنِّي أَعْتَذِرُ إِلَيْكَ مِمَّا صَنَعَ هَؤُلَاءِ، يَعْنِي الْمُسْلِمِينَ، وَأَبْرَأُ إِلَيْكَ مِمَّا جَاءَ بِهِ الْمُشْرِكُونَ،", people: ['anas-ibn-an-nadr'] },
-        { title: "«إني أجد ريح الجنة دون أحد»", text: "فَتَقَدَّمَ بِسَيْفِهِ فَلَقِيَ سَعْدَ بْنَ مُعَاذٍ، فَقَالَ: أَيْنَ يَا سَعْدُ، إِنِّي أَجِدُ رِيحَ الْجَنَّةِ دُونَ أُحُدٍ، فَمَضَى فَقُتِلَ،", people: ['anas-ibn-an-nadr', 'saad-ibn-muadh'] },
-        { title: "عرفته أخته", text: "فَمَا عُرِفَ حَتَّى عَرَفَتْهُ أُخْتُهُ بِشَامَةٍ، أَوْ بِبَنَانِهِ، وَبِهِ بِضْعٌ وَثَمَانُونَ: مِنْ طَعْنَةٍ وَضَرْبَةٍ وَرَمْيَةٍ بِسَهْمٍ.»", people: ['anas-ibn-an-nadr'] },
+        { title: "«ليرين الله ما أجد»", text: sahih('bukhari', 4048, 120, 278), people: ['anas-ibn-an-nadr', 'prophet-muhammad'] },
+        { title: "«اللهم إني أعتذر إليك»", text: sahih('bukhari', 4048, 279, 471), people: ['anas-ibn-an-nadr'] },
+        { title: "«إني أجد ريح الجنة دون أحد»", text: sahih('bukhari', 4048, 472, 615), people: ['anas-ibn-an-nadr', 'saad-ibn-muadh'] },
+        { title: "عرفته أخته", text: sahih('bukhari', 4048, 616, 759), people: ['anas-ibn-an-nadr'] },
       ],
     },
   ],

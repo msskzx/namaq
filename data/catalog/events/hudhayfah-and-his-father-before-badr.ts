@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -17,20 +18,20 @@ const hudhayfahAndHisFatherBeforeBadr = {
   tags: ['HIS_WORDS'],
   reports: [
     {
-      isnad: "وحَدَّثَنَا أَبُو بَكْرِ بْنُ أَبِي شَيْبَةَ. حَدَّثَنَا أَبُو أُسَامَةَ عَنْ الْوَلِيدِ ابن جُمَيْعٍ. حَدَّثَنَا أَبُو الطُّفَيْلِ. حَدَّثَنَا حُذَيْفَةُ بْنُ اليمان. قال:",
+      isnad: sahih('muslim', 1787, 0, 172),
       source: { slug: 'sahih-muslim', hadith: 1787, url: 'https://sunnah.com/muslim:1787' },
       moments: [
-        { title: "«ما نريد إلا المدينة»", text: "ما معنى أَنْ أَشْهَدَ بَدْرًا إِلَّا أَنِّي خَرَجْتُ أَنَا وَأَبِي، حُسَيْلٌ. قَالَ: فَأَخَذَنَا كُفَّارُ قُرَيْشٍ. قَالُوا: إِنَّكُمْ تُرِيدُونَ مُحَمَّدًا؟ فَقُلْنَا: مَا نُرِيدُهُ. مَا نُرِيدُ إِلَّا الْمَدِينَةَ. فَأَخَذُوا مِنَّا عَهْدَ اللَّهِ وَمِيثَاقَهُ لَنَنْصَرِفَنَّ إِلَى الْمَدِينَةِ وَلَا نُقَاتِلُ مَعَهُ.", people: ['hudhayfah-ibn-al-yaman', 'hisl-ibn-jabir-al-absi'],
+        { title: "«ما نريد إلا المدينة»", text: sahih('muslim', 1787, 173, 494), people: ['hudhayfah-ibn-al-yaman', 'hisl-ibn-jabir-al-absi'],
           turns: [
-            { text: "ما معنى أَنْ أَشْهَدَ بَدْرًا إِلَّا أَنِّي خَرَجْتُ أَنَا وَأَبِي، حُسَيْلٌ. قَالَ: فَأَخَذَنَا كُفَّارُ قُرَيْشٍ." },
-            { text: "قَالُوا: إِنَّكُمْ تُرِيدُونَ مُحَمَّدًا؟", speaker: { name: "كفار قريش" }, lead: "قَالُوا:", witness: { source: "kawkab-wahhaj", volume: 19, volumeLabel: "19", page: 302, quote: "(كفار قريش) فـ (ـقالوا) لنا: (إنكم تريدون محمدًا", url: "https://shamela.ws/book/18268/7977" } },
-            { text: "فَقُلْنَا: مَا نُرِيدُهُ. مَا نُرِيدُ إِلَّا الْمَدِينَةَ." },
-            { text: "فَأَخَذُوا مِنَّا عَهْدَ اللَّهِ وَمِيثَاقَهُ لَنَنْصَرِفَنَّ إِلَى الْمَدِينَةِ وَلَا نُقَاتِلُ مَعَهُ." },
+            { text: sahih('muslim', 1787, 173, 288) },
+            { text: sahih('muslim', 1787, 289, 330), speaker: { name: "كفار قريش" }, lead: sahih('muslim', 1787, 289, 297), witness: { source: "kawkab-wahhaj", volume: 19, volumeLabel: "19", page: 302, quote: "(كفار قريش) فـ (ـقالوا) لنا: (إنكم تريدون محمدًا", url: "https://shamela.ws/book/18268/7977" } },
+            { text: sahih('muslim', 1787, 331, 389) },
+            { text: sahih('muslim', 1787, 390, 494) },
           ] },
-        { title: "«نفي بعهدهم، ونستعين الله عليهم»", text: "فَأَتَيْنَا رَسُولَ اللَّهِ ﷺ فأخبرناه الخبر. فقال (انصرفا. نفي بِعَهْدِهِمْ، وَنَسْتَعِينُ اللَّهَ عَلَيْهِمْ).", people: ['hudhayfah-ibn-al-yaman', 'hisl-ibn-jabir-al-absi', 'prophet-muhammad'],
+        { title: "«نفي بعهدهم، ونستعين الله عليهم»", text: sahih('muslim', 1787, 495, 607), people: ['hudhayfah-ibn-al-yaman', 'hisl-ibn-jabir-al-absi', 'prophet-muhammad'],
           turns: [
-            { text: "فَأَتَيْنَا رَسُولَ اللَّهِ ﷺ فأخبرناه الخبر." },
-            { text: "فقال (انصرفا. نفي بِعَهْدِهِمْ، وَنَسْتَعِينُ اللَّهَ عَلَيْهِمْ).", speaker: { person: "prophet-muhammad", name: "رسول الله ﷺ" }, lead: "فقال", witness: { source: "kawkab-wahhaj", volume: 19, volumeLabel: "19", page: 302, quote: "(فقال) لنا رسول الله ﷺ: (انصرفا)", url: "https://shamela.ws/book/18268/7977" } },
+            { text: sahih('muslim', 1787, 495, 540) },
+            { text: sahih('muslim', 1787, 541, 607), speaker: { person: "prophet-muhammad", name: "رسول الله ﷺ" }, lead: sahih('muslim', 1787, 541, 545), witness: { source: "kawkab-wahhaj", volume: 19, volumeLabel: "19", page: 302, quote: "(فقال) لنا رسول الله ﷺ: (انصرفا)", url: "https://shamela.ws/book/18268/7977" } },
           ] },
       ],
     },

@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -15,10 +16,10 @@ const theRansomOfAlAbbas = {
   tags: ['HIS_WORDS'],
   reports: [
     {
-      isnad: "حَدَّثَنِي إِبْرَاهِيمُ بْنُ الْمُنْذِرِ: حَدَّثَنَا مُحَمَّدُ بْنُ فُلَيْحٍ، عَنْ مُوسَى بْنِ عُقْبَةَ: قَالَ ابْنُ شِهَابٍ: حَدَّثَنَا أَنَسُ بْنُ مَالِكٍ:",
+      isnad: sahih('bukhari', 4018, 0, 157),
       source: { slug: 'sahih-al-bukhari', hadith: 4018, url: 'https://sunnah.com/bukhari:4018' },
       moments: [
-        { title: "«والله لا تذرون منه درهما»", text: "«أَنَّ رِجَالًا مِنَ الْأَنْصَارِ اسْتَأْذَنُوا رَسُولَ اللهِ ﷺ، فَقَالُوا: ائْذَنْ لَنَا فَلْنَتْرُكْ لِابْنِ أُخْتِنَا عَبَّاسٍ فِدَاءَهُ، قَالَ: وَاللهِ لَا تَذَرُونَ مِنْهُ دِرْهَمًا».", people: ['prophet-muhammad', 'al-abbas-ibn-abd-al-muttalib'] },
+        { title: "«والله لا تذرون منه درهما»", text: sahih('bukhari', 4018, 158, 346), people: ['prophet-muhammad', 'al-abbas-ibn-abd-al-muttalib'] },
       ],
     },
   ],

@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -18,13 +19,13 @@ const theJinnOfNasibin = {
   tags: ['HIS_WORDS'],
   reports: [
     {
-      isnad: "حَدَّثَنَا مُوسَى بْنُ إِسْمَاعِيلَ: حَدَّثَنَا عَمْرُو بْنُ يَحْيَى بْنِ سَعِيدٍ قَالَ: أَخْبَرَنِي جَدِّي، عَنْ أَبِي هُرَيْرَةَ  رضي الله عنه:",
+      isnad: sahih('bukhari', 3860, 0, 145),
       source: { slug: 'sahih-al-bukhari', hadith: 3860, url: 'https://sunnah.com/bukhari:3860' },
       moments: [
-        { title: 'يحمل له الإداوة', text: "«أَنَّهُ كَانَ يَحْمِلُ مَعَ النَّبِيِّ ﷺ إِدَاوَةً لِوَضُوئِهِ وَحَاجَتِهِ، فَبَيْنَمَا هُوَ يَتْبَعُهُ بِهَا، فَقَالَ: مَنْ هَذَا فَقَالَ: أَنَا أَبُو هُرَيْرَةَ،", people: ['abu-hurayrah', 'prophet-muhammad'] },
-        { title: '«ولا تأتني بعظم ولا بروثة»', text: "فَقَالَ: ابْغِنِي أَحْجَارًا أَسْتَنْفِضْ بِهَا، وَلَا تَأْتِنِي بِعَظْمٍ وَلَا بِرَوْثَةٍ فَأَتَيْتُهُ بِأَحْجَارٍ أَحْمِلُهَا فِي طَرَفِ ثَوْبِي، حَتَّى وَضَعْتُ إِلَى جَنْبِهِ، ثُمَّ انْصَرَفْتُ،", people: ['prophet-muhammad', 'abu-hurayrah'] },
-        { title: '«ما بال العظم والروثة»', text: "حَتَّى إِذَا فَرَغَ مَشَيْتُ، فَقُلْتُ: مَا بَالُ الْعَظْمِ وَالرَّوْثَةِ؟", people: ['abu-hurayrah', 'prophet-muhammad'] },
-        { title: '«أتاني وفد جن نصيبين»', text: "قَالَ: هُمَا مِنْ طَعَامِ الْجِنِّ، وَإِنَّهُ أَتَانِي وَفْدُ جِنِّ نَصِيبِينَ، وَنِعْمَ الْجِنُّ، فَسَأَلُونِي الزَّادَ، فَدَعَوْتُ اللهَ لَهُمْ أَنْ لَا يَمُرُّوا بِعَظْمٍ وَلَا بِرَوْثَةٍ إِلَّا وَجَدُوا عَلَيْهَا طَعَامًا.»", people: ['prophet-muhammad'] },
+        { title: 'يحمل له الإداوة', text: sahih('bukhari', 3860, 146, 310), people: ['abu-hurayrah', 'prophet-muhammad'] },
+        { title: '«ولا تأتني بعظم ولا بروثة»', text: sahih('bukhari', 3860, 311, 509), people: ['prophet-muhammad', 'abu-hurayrah'] },
+        { title: '«ما بال العظم والروثة»', text: sahih('bukhari', 3860, 510, 584), people: ['abu-hurayrah', 'prophet-muhammad'] },
+        { title: '«أتاني وفد جن نصيبين»', text: sahih('bukhari', 3860, 585, 812), people: ['prophet-muhammad'] },
       ],
     },
   ],

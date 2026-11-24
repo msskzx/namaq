@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -16,12 +17,12 @@ const azZubayrAndAbuDhatAlKarish = {
   people: [{ person: 'az-zubayr-ibn-al-awwam' }, { person: 'prophet-muhammad' }, { person: 'abu-bakr-as-siddiq' }, { person: 'umar-ibn-al-khattab' }, { person: 'uthman-ibn-affan' }],
   reports: [
     {
-      isnad: "حَدَّثَنِي عُبَيْدُ بْنُ إِسْمَاعِيلَ: حَدَّثَنَا أَبُو أُسَامَةَ، عَنْ هِشَامِ بْنِ عُرْوَةَ، عَنْ أَبِيهِ قَالَ: قَالَ الزُّبَيْرُ:",
+      isnad: sahih('bukhari', 3998, 0, 133),
       source: { slug: 'sahih-al-bukhari', hadith: 3998, url: 'https://sunnah.com/bukhari:3998' },
       moments: [
-        { title: "«أنا أبو ذات الكرش»", text: "«لَقِيتُ يَوْمَ بَدْرٍ عُبَيْدَةَ بْنَ سَعِيدِ بْنِ الْعَاصِ، وَهُوَ مُدَجَّجٌ، لَا يُرَى مِنْهُ إِلَّا عَيْنَاهُ، وَهُوَ يُكْنَى أَبُو ذَاتِ الْكَرِشِ، فَقَالَ أَنَا أَبُو ذَاتِ الْكَرِشِ، فَحَمَلْتُ عَلَيْهِ بِالْعَنَزَةِ فَطَعَنْتُهُ فِي عَيْنِهِ فَمَاتَ.", people: ['az-zubayr-ibn-al-awwam'] },
-        { title: "انثنى طرفاها", text: "قَالَ هِشَامٌ: فَأُخْبِرْتُ: أَنَّ الزُّبَيْرَ قَالَ: لَقَدْ وَضَعْتُ رِجْلِي عَلَيْهِ، ثُمَّ تَمَطَّأْتُ، فَكَانَ الْجَهْدَ أَنْ نَزَعْتُهَا وَقَدِ انْثَنَى طَرَفَاهَا.", people: ['az-zubayr-ibn-al-awwam'] },
-        { title: "فسأله إياها رسول الله ﷺ", text: "قَالَ عُرْوَةُ: فَسَأَلَهُ إِيَّاهَا رَسُولُ اللهِ ﷺ فَأَعْطَاهُ، فَلَمَّا قُبِضَ رَسُولُ اللهِ ﷺ أَخَذَهَا، ثُمَّ طَلَبَهَا أَبُو بَكْرٍ فَأَعْطَاهُ، فَلَمَّا قُبِضَ أَبُو بَكْرٍ سَأَلَهَا إِيَّاهُ عُمَرُ فَأَعْطَاهُ إِيَّاهَا، فَلَمَّا قُبِضَ عُمَرُ أَخَذَهَا، ثُمَّ طَلَبَهَا عُثْمَانُ مِنْهُ فَأَعْطَاهُ إِيَّاهَا، فَلَمَّا قُتِلَ عُثْمَانُ وَقَعَتْ عِنْدَ آلِ عَلِيٍّ، فَطَلَبَهَا عَبْدُ اللهِ بْنُ الزُّبَيْرِ، فَكَانَتْ عِنْدَهُ حَتَّى قُتِلَ».", people: ['prophet-muhammad', 'az-zubayr-ibn-al-awwam', 'abu-bakr-as-siddiq', 'umar-ibn-al-khattab', 'uthman-ibn-affan'] },
+        { title: "«أنا أبو ذات الكرش»", text: sahih('bukhari', 3998, 134, 392), people: ['az-zubayr-ibn-al-awwam'] },
+        { title: "انثنى طرفاها", text: sahih('bukhari', 3998, 393, 562), people: ['az-zubayr-ibn-al-awwam'] },
+        { title: "فسأله إياها رسول الله ﷺ", text: sahih('bukhari', 3998, 563, 1014), people: ['prophet-muhammad', 'az-zubayr-ibn-al-awwam', 'abu-bakr-as-siddiq', 'umar-ibn-al-khattab', 'uthman-ibn-affan'] },
       ],
     },
   ],

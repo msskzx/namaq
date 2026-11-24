@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -17,19 +18,19 @@ const mayAllahHaveMercyOnMusa = {
   tags: ['HIS_WORDS'],
   reports: [
     {
-      isnad: "حَدَّثَنَا قُتَيْبَةُ بْنُ سَعِيدٍ: حَدَّثَنَا جَرِيرٌ، عَنْ مَنْصُورٍ، عَنْ أَبِي وَائِلٍ، عَنْ عَبْدِ اللهِ  رضي الله عنه قَالَ:",
+      isnad: sahih('bukhari', 4336, 0, 130),
       source: { slug: 'sahih-al-bukhari', hadith: 4336, url: 'https://sunnah.com/bukhari:4336' },
       moments: [
-        { title: "«ما أريد بهذه القسمة وجه الله»", text: "«لَمَّا كَانَ يَوْمُ حُنَيْنٍ آثَرَ النَّبِيُّ ﷺ نَاسًا، أَعْطَى الْأَقْرَعَ مِائَةً مِنَ الْإِبِلِ، وَأَعْطَى عُيَيْنَةَ مِثْلَ ذَلِكَ، وَأَعْطَى نَاسًا، فَقَالَ رَجُلٌ: مَا أُرِيدَ بِهَذِهِ الْقِسْمَةِ وَجْهُ اللهِ،", people: ['prophet-muhammad'] },
-        { title: "«رحم الله موسى»", text: "فَقُلْتُ: لَأُخْبِرَنَّ النَّبِيَّ ﷺ، قَالَ: رَحِمَ اللهُ مُوسَى، قَدْ أُوذِيَ بِأَكْثَرَ مِنْ هَذَا فَصَبَرَ.»", people: ['abdullah-ibn-masud', 'prophet-muhammad'] },
+        { title: "«ما أريد بهذه القسمة وجه الله»", text: sahih('bukhari', 4336, 131, 348), people: ['prophet-muhammad'] },
+        { title: "«رحم الله موسى»", text: sahih('bukhari', 4336, 349, 460), people: ['abdullah-ibn-masud', 'prophet-muhammad'] },
       ],
     },
     {
-      isnad: "حَدَّثَنَا قَبِيصَةُ: حَدَّثَنَا سُفْيَانُ، عَنِ الْأَعْمَشِ، عَنْ أَبِي وَائِلٍ، عَنْ عَبْدِ اللهِ قَالَ:",
+      isnad: sahih('bukhari', 4335, 0, 106),
       source: { slug: 'sahih-al-bukhari', hadith: 4335, url: 'https://sunnah.com/bukhari:4335' },
       moments: [
-        { title: "«ما أراد بها وجه الله»", text: "«لَمَّا قَسَمَ النَّبِيُّ ﷺ قِسْمَةَ حُنَيْنٍ، قَالَ رَجُلٌ مِنَ الْأَنْصَارِ: مَا أَرَادَ بِهَا وَجْهَ اللهِ،", people: ['prophet-muhammad'] },
-        { title: "«رحمة الله على موسى»", text: "فَأَتَيْتُ النَّبِيَّ ﷺ فَأَخْبَرْتُهُ، فَتَغَيَّرَ وَجْهُهُ ثُمَّ قَالَ: رَحْمَةُ اللهِ عَلَى مُوسَى، لَقَدْ أُوذِيَ بِأَكْثَرَ مِنْ هَذَا فَصَبَرَ.»", people: ['abdullah-ibn-masud', 'prophet-muhammad'] },
+        { title: "«ما أراد بها وجه الله»", text: sahih('bukhari', 4335, 107, 217), people: ['prophet-muhammad'] },
+        { title: "«رحمة الله على موسى»", text: sahih('bukhari', 4335, 218, 368), people: ['abdullah-ibn-masud', 'prophet-muhammad'] },
       ],
     },
   ],

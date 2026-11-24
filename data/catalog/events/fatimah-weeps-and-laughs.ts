@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -15,11 +16,11 @@ const fatimahWeepsAndLaughs = {
   people: [{ person: 'prophet-muhammad' }, { person: 'fatimah-bint-muhammad' }, { person: 'aisha-bint-abi-bakr' }],
   reports: [
     {
-      isnad: "حَدَّثَنَا يَسَرَةُ بْنُ صَفْوَانَ بْنِ جَمِيلٍ اللَّخْمِيُّ، حَدَّثَنَا إِبْرَاهِيمُ بْنُ سَعْدٍ، عَنْ أَبِيهِ، عَنْ عُرْوَةَ، عَنْ عَائِشَةَ رضي الله عنها قَالَتْ:",
+      isnad: sahih('bukhari', 4433, 0, 165),
       source: { slug: 'sahih-al-bukhari', hadith: 4433, url: 'https://sunnah.com/bukhari:4433' },
       moments: [
-        { title: "سارها فبكت ثم سارها فضحكت", text: "«دَعَا النَّبِيُّ ﷺ فَاطِمَةَ عليها السلام فِي شَكْوَاهُ الَّذِي قُبِضَ فِيهِ، فَسَارَّهَا بِشَيْءٍ فَبَكَتْ، ثُمَّ دَعَاهَا فَسَارَّهَا بِشَيْءٍ فَضَحِكَتْ، فَسَأَلْنَا عَنْ ذَلِكَ،", people: ['prophet-muhammad', 'fatimah-bint-muhammad', 'aisha-bint-abi-bakr'] },
-        { title: "«أني أول أهله يتبعه»", text: "فَقَالَتْ: سَارَّنِي النَّبِيُّ ﷺ: أَنَّهُ يُقْبَضُ فِي وَجَعِهِ الَّذِي تُوُفِّيَ فِيهِ، فَبَكَيْتُ، ثُمَّ سَارَّنِي فَأَخْبَرَنِي أَنِّي أَوَّلُ أَهْلِهِ يَتْبَعُهُ، فَضَحِكْتُ.»", people: ['fatimah-bint-muhammad', 'prophet-muhammad'] },
+        { title: "سارها فبكت ثم سارها فضحكت", text: sahih('bukhari', 4433, 166, 348), people: ['prophet-muhammad', 'fatimah-bint-muhammad', 'aisha-bint-abi-bakr'] },
+        { title: "«أني أول أهله يتبعه»", text: sahih('bukhari', 4433, 349, 529), people: ['fatimah-bint-muhammad', 'prophet-muhammad'] },
       ],
     },
   ],

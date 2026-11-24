@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -15,11 +16,11 @@ const abdAlRahmanIbnAwfWeeps = {
   people: [{ person: 'abdur-rahman-ibn-awf' }, { person: 'musab-ibn-umayr' }, { person: 'hamzah-ibn-abd-al-muttalib' }],
   reports: [
     {
-      isnad: "حَدَّثَنَا عَبْدَانُ: حَدَّثَنَا عَبْدُ اللهِ: أَخْبَرَنَا شُعْبَةُ، عَنْ سَعْدِ بْنِ إِبْرَاهِيمَ، عَنْ أَبِيهِ إِبْرَاهِيمَ:",
+      isnad: sahih('bukhari', 4045, 0, 126),
       source: { slug: 'sahih-al-bukhari', hadith: 4045, url: 'https://sunnah.com/bukhari:4045' },
       moments: [
-        { title: "«قتل مصعب بن عمير وهو خير مني»", text: "«أَنَّ عَبْدَ الرَّحْمَنِ بْنَ عَوْفٍ أُتِيَ بِطَعَامٍ، وَكَانَ صَائِمًا، فَقَالَ: قُتِلَ مُصْعَبُ بْنُ عُمَيْرٍ وَهْوَ خَيْرٌ مِنِّي، كُفِّنَ فِي بُرْدَةٍ: إِنْ غُطِّيَ رَأْسُهُ بَدَتْ رِجْلَاهُ، وَإِنْ غُطِّيَ رِجْلَاهُ بَدَا رَأْسُهُ،", people: ['abdur-rahman-ibn-awf', 'musab-ibn-umayr'] },
-        { title: "«وقد خشينا أن تكون حسناتنا عجلت لنا»", text: "وَأُرَاهُ قَالَ: وَقُتِلَ حَمْزَةُ وَهْوَ خَيْرٌ مِنِّي، ثُمَّ بُسِطَ لَنَا مِنَ الدُّنْيَا مَا بُسِطَ، أَوْ قَالَ: أُعْطِينَا مِنَ الدُّنْيَا مَا أُعْطِينَا، وَقَدْ خَشِينَا أَنْ تَكُونَ حَسَنَاتُنَا عُجِّلَتْ لَنَا، ثُمَّ جَعَلَ يَبْكِي حَتَّى تَرَكَ الطَّعَامَ.»", people: ['hamzah-ibn-abd-al-muttalib', 'abdur-rahman-ibn-awf'] },
+        { title: "«قتل مصعب بن عمير وهو خير مني»", text: sahih('bukhari', 4045, 127, 364), people: ['abdur-rahman-ibn-awf', 'musab-ibn-umayr'] },
+        { title: "«وقد خشينا أن تكون حسناتنا عجلت لنا»", text: sahih('bukhari', 4045, 365, 630), people: ['hamzah-ibn-abd-al-muttalib', 'abdur-rahman-ibn-awf'] },
       ],
     },
   ],

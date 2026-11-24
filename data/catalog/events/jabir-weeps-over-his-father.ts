@@ -1,3 +1,4 @@
+import { sahih } from '@/lib/catalog/sahihText';
 import type { CatalogEvent } from '@/lib/catalog/types';
 
 /**
@@ -16,23 +17,23 @@ const jabirWeepsOverHisFather = {
   tags: ['HIS_WORDS'],
   reports: [
     {
-      isnad: "وَقَالَ أَبُو الْوَلِيدِ عَنْ شُعْبَةَ، عَنِ ابْنِ الْمُنْكَدِرِ قَالَ: سَمِعْتُ جَابِرًا قَالَ:",
+      isnad: sahih('bukhari', 4080, 0, 96),
       source: { slug: 'sahih-al-bukhari', hadith: 4080, url: 'https://sunnah.com/bukhari:4080' },
       moments: [
         {
           title: "جعلت أبكي",
-          text: "«لَمَّا قُتِلَ أَبِي جَعَلْتُ أَبْكِي، وَأَكْشِفُ الثَّوْبَ عَنْ وَجْهِهِ، فَجَعَلَ أَصْحَابُ النَّبِيِّ ﷺ يَنْهَوْنِي وَالنَّبِيُّ ﷺ لَمْ يَنْهَ،",
+          text: sahih('bukhari', 4080, 97, 243),
           people: ['jabir-ibn-abdullah', 'prophet-muhammad'],
           turns: [
-            { text: "«لَمَّا قُتِلَ أَبِي جَعَلْتُ أَبْكِي، وَأَكْشِفُ الثَّوْبَ عَنْ وَجْهِهِ، فَجَعَلَ أَصْحَابُ النَّبِيِّ ﷺ يَنْهَوْنِي وَالنَّبِيُّ ﷺ لَمْ يَنْهَ،" },
+            { text: sahih('bukhari', 4080, 97, 243) },
           ],
         },
         {
           title: "«ما زالت الملائكة تظله بأجنحتها»",
-          text: "وَقَالَ النَّبِيُّ ﷺ: لَا تَبْكِيهِ أو مَا تَبْكِيهِ مَا زَالَتِ الْمَلَائِكَةُ تُظِلُّهُ بِأَجْنِحَتِهَا حَتَّى رُفِعَ».",
+          text: sahih('bukhari', 4080, 244, 365),
           people: ['prophet-muhammad'],
           turns: [
-            { text: "وَقَالَ النَّبِيُّ ﷺ: لَا تَبْكِيهِ أو مَا تَبْكِيهِ مَا زَالَتِ الْمَلَائِكَةُ تُظِلُّهُ بِأَجْنِحَتِهَا حَتَّى رُفِعَ».", speaker: { person: 'prophet-muhammad', name: "النبي ﷺ" }, lead: "وَقَالَ النَّبِيُّ ﷺ:" },
+            { text: sahih('bukhari', 4080, 244, 365), speaker: { person: 'prophet-muhammad', name: "النبي ﷺ" }, lead: sahih('bukhari', 4080, 244, 265) },
           ],
         },
       ],
