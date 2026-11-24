@@ -25,20 +25,24 @@ export const storiesOfHadith = (book: string, n: number): AppStory[] =>
   linksOf(`hadith:${book}:${n}`).filter(link => link.t === 'TOLD_IN').flatMap(link => storyOf(idKey(link.to)) ?? []);
 
 /**
- * The ayat a story says were revealed about a person (the link written on the story, not on his entry), each with the
- * story and its ayat as the story holds them; `given` are the ayat his entry already gives, not drawn twice.
+ * The ayat a story says were revealed about a person (the link written on the story, not on his entry), once for each set
+ * of ayat the story gives, in mushaf order; a set his entry already gives whole (`given`) is left out, as his page has it.
  */
-export function storyAyatOf(slug: string, given: readonly string[] = []): { key: string; story: AppStory; ayat: AppStoryAyat }[] {
-  return linksOf(`person:${slug}`).filter(link => link.to.startsWith('ayah:') && !given.includes(idKey(link.to))).flatMap(link => {
+export function storyAyatOf(slug: string, given: readonly string[] = []): { story: AppStory; ayat: AppStoryAyat }[] {
+  const sets = new Map<string, { story: AppStory; ayat: AppStoryAyat }>();
+  for (const link of linksOf(`person:${slug}`)) {
+    if (!link.to.startsWith('ayah:')) continue;
     const key = idKey(link.to);
-    const story = link.at.filter(at => at.startsWith('event:')).map(at => storyOf(idKey(at))).find(Boolean);
-    const ayat = story?.ayat.find(each => each.about?.slug === slug && inAyat(key, each.from, each.to));
-    return story && ayat ? [{ key, story, ayat }] : [];
-  });
+    for (const story of link.at.filter(at => at.startsWith('event:')).flatMap(at => storyOf(idKey(at)) ?? [])) {
+      for (const ayat of story.ayat.filter(each => each.about?.slug === slug && inAyat(key, each.from, each.to))) {
+        if (!given.includes(key)) sets.set(`${story.slug} ${ayat.from} ${ayat.label}`, { story, ayat });
+      }
+    }
+  }
+  return [...sets.values()].sort((a, b) => ayahOrder(a.ayat.from) - ayahOrder(b.ayat.from));
 }
 
+const ayahOrder = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return surah * 1000 + ayah; };
+
 /** Whether an ayah («2:255») is within a run of ayat, which may cross a surah's end. */
-export const inAyat = (key: string, from: string, to: string) => {
-  const order = (each: string) => { const [surah, ayah] = each.split(':').map(Number); return surah * 1000 + ayah; };
-  return order(key) >= order(from) && order(key) <= order(to);
-};
+export const inAyat = (key: string, from: string, to: string) => ayahOrder(key) >= ayahOrder(from) && ayahOrder(key) <= ayahOrder(to);

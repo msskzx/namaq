@@ -22,13 +22,15 @@ describe('the pages that read the links file', () => {
     for (const { story, book, n } of told) expect(storiesOfHadith(book, n).map(each => each.slug), `${book}:${n} ${story}`).toContain(story);
   });
 
-  it('gives a person every ayah a story says was revealed about him, unless his entry already gives it', () => {
-    const about = STORIES.flatMap(story => story.ayat.flatMap(ayat => (ayat.about && findPerson(ayat.about.slug) ? [{ story: story.slug, slug: ayat.about.slug, key: ayat.from }] : [])));
+  it('gives a person every set of ayat a story says was revealed about him, once, unless his entry already gives it', () => {
+    const about = STORIES.flatMap(story => story.ayat.flatMap(ayat => (ayat.about && findPerson(ayat.about.slug) ? [{ story, slug: ayat.about.slug, ayat }] : [])));
     expect(about.length).toBeGreaterThan(0);
-    for (const { story, slug, key } of about) {
+    for (const { story, slug, ayat } of about) {
       const own = findPerson(slug)!.ayat.map(fact => fact.value as string);
-      const shown = [...own, ...storyAyatOf(slug, own).map(each => each.key)];
-      expect(shown, `${slug} ${key} ${story}`).toContain(key);
+      const shown = storyAyatOf(slug, own);
+      const once = shown.filter(each => each.story === story && each.ayat === ayat).length;
+      expect(once === 1 || (own.includes(ayat.from) && own.includes(ayat.to)), `${slug} ${ayat.from} ${story.slug}`).toBe(true);
+      expect(once, `${slug} ${ayat.from} ${story.slug} twice`).toBeLessThan(2);
     }
   });
 });

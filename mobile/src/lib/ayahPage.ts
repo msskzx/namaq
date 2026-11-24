@@ -11,7 +11,7 @@ import { openingKeys, openingLike, OPENING_CARDS } from '@shared/quran/openingKi
 import { sectionAt, surahTopicsOf, type TopicSection } from '@shared/quran/surahTopics';
 import { STORIES as PROPHET_STORIES } from '@shared/quran/prophets/stories';
 import type { StoryEvent } from '@shared/quran/prophets/story';
-import type { AppStory } from '@shared/stories/story';
+import { revealedIn, type AppStory, type AppStoryAyat } from '@shared/stories/story';
 import { ayahOf } from './branches';
 import { compareTargetsOfAyah } from './compare';
 import { branchList, EMPTY_LIST } from './branchList';
@@ -36,7 +36,8 @@ export type AyahSection =
   | { id: 'opening'; card: string; title: string }
   | { id: 'oath'; oath: string; kind: OathKind; by: string[]; range: [number, number] }
   | { id: 'prophet'; slug: string; at: number; event: StoryEvent }
-  | { id: 'sira'; story: AppStory; label: string }
+  /** A sira story, with the ayat of it that hold this ayah (a story may give several sets, «نزل فيه» more than once). */
+  | { id: 'sira'; story: AppStory; ayat: AppStoryAyat }
   /** A person whose entry ties him to the ayah, with how it ties them («نزلت فيه», or named in it). */
   | { id: 'person'; slug: string; kind: string }
   | { id: 'topic'; section: number; title: string; from?: number; to?: number };
@@ -106,13 +107,15 @@ function scan(key: string): AyahSection[] {
   const links = linksOf(`ayah:${key}`);
   for (const slug of new Set(links.filter(link => link.to.startsWith('event:')).map(link => idKey(link.to)))) {
     const story = storyOf(slug);
-    const told = story?.ayat.find(each => inAyat(key, each.from, each.to));
-    if (story && told) sections.push({ id: 'sira', story, label: told.label });
+    for (const ayat of story?.ayat.filter(each => inAyat(key, each.from, each.to)) ?? []) sections.push({ id: 'sira', story: story!, ayat });
   }
+  // A person the story itself names as the one it was revealed about is on its card, with his entry's words among its
+  // sources (screens/ayah.tsx), not on a second card.
+  const named = new Set(sections.flatMap(section => (section.id === 'sira' && revealedIn(section.ayat) && section.ayat.about ? [section.ayat.about.slug] : [])));
   // A person his entry ties to the ayah has his own section, from the entry his page shows it from (the person page's
   // «آيات فيه»), so the two pages show the same tie both ways. The catalog's own person-to-ayah links are a second record
   // of these ties until the data plan makes them one (/mnt/project-files/data-plan/debate.md).
-  for (const { slug, kind } of personAyat().get(key) ?? []) sections.push({ id: 'person', slug, kind });
+  for (const { slug, kind } of personAyat().get(key) ?? []) if (!named.has(slug)) sections.push({ id: 'person', slug, kind });
   const topic = topicOf(surah, ayah);
   if (topic) sections.push(topic);
   scanned.set(key, sections);

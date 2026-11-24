@@ -2,11 +2,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FlatList, Platform, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { ChevronLeft, MessagesSquare } from 'lucide-react-native';
-import Card from '@/ui/Card';
+import { CardWithRow } from '@/ui/Card';
+import { sourcesOf } from '@/ui/SourceLine';
+import { citeSource, uniqueSources } from '@shared/quiz/sources';
 import { storiesOfHadith } from '@/lib/links';
 import { People } from '@/components/battles/BattleParts';
 import { StoryLinkRow } from '@/components/stories/StoryParts';
-import { rangeName, revealedIn } from '@shared/stories/story';
+import { rangeName, reportHadith } from '@shared/stories/story';
 import { findHadith, lastLink, placeOf, type SahihHadith, type SahihIndex } from '@shared/sahih';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
@@ -70,14 +72,17 @@ function InHadith({ book, n, palette }: { book: string; n: number; palette: Pale
     <View style={{ gap: 8 }}>
       <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 17, fontWeight: '700', textAlign: 'right' }}>في هذا الحديث</Text>
       {stories.map(story => (
-        <Card key={story.slug} palette={palette} pad={[10, 14]} gap={8}>
+        <CardWithRow key={story.slug} palette={palette} pad={[10, 14]} gap={8} source={sourcesOf(uniqueSources([
+          // The report that is this hadith names the story's people; the ayat carry the words that tie them to it.
+          ...story.reports.filter(report => reportHadith(report)?.n === n && reportHadith(report)?.book === book).map(report => citeSource({ text: '', cite: report.cite, url: report.url })),
+          ...story.ayat.flatMap(ayat => ayat.refs).map(citeSource)]))}>
           <People people={story.people} palette={palette} />
           <StoryLinkRow story={story} palette={palette} />
           {story.ayat.map(ayat => (
-            <Button key={ayat.from + ayat.label} variant="plain" Icon={ChevronLeft} label={`${rangeName(ayat.from, ayat.to)} · ${revealedIn(ayat) ? 'نزلت في هذه القصة' : 'قُرئت في هذه القصة'}`}
+            <Button key={ayat.from + ayat.label} variant="plain" Icon={ChevronLeft} label={`${rangeName(ayat.from, ayat.to)} · ${ayat.label}`}
               onPress={() => openAyahPage(ayat.from)} />
           ))}
-        </Card>
+        </CardWithRow>
       ))}
     </View>
   );

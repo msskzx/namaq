@@ -14,7 +14,7 @@ import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
 import BattleMap from '@/components/battles/BattleMap';
 import LitAyat from '@/components/quran/text/LitAyat';
-import { ayahMushafWords } from '@/lib/mushaf';
+import { ayahCounts, ayahMushafWords } from '@/lib/mushaf';
 import { openAyahPage } from '@/lib/ways';
 import { placeSources } from '@shared/drawingCards';
 import type { AppBattle } from '@shared/battles/battle';
@@ -30,6 +30,8 @@ import { personLife } from '@/lib/life';
 import { battleOf } from '@/lib/battles';
 import { storiesOfPerson, storyAyatOf } from '@/lib/links';
 import { StoryLinkRow } from '@/components/stories/StoryParts';
+import { rangeName } from '@shared/stories/story';
+import { citeSource } from '@shared/quiz/sources';
 import LifeTimeline from '@/components/LifeTimeline';
 import { FEATURE_ICON } from '@/components/featureIcons';
 import Tabs from '@/ui/Tabs';
@@ -424,7 +426,7 @@ export default function PersonScreen() {
         )}
 
         {(ayat.length > 0 || told.length > 0) && (
-          <Part head={head} n={++n} palette={palette}
+          <Part head={head} n={++n} palette={palette} source={told.flatMap(({ ayat: set }) => set.refs.map(citeSource))}
             title={allRevealed ? (f ? 'آيات نزلت فيها' : 'آيات نزلت فيه') : (f ? 'آيات فيها' : 'آيات فيه')}>
             {ayat.map(fact => (
               <View key={fact.value} style={{ gap: 8 }}>
@@ -434,11 +436,11 @@ export default function PersonScreen() {
                 <QuoteBar by={saidBy(fact) ?? `قال ${pageSources(fact.refs)[0]?.author ?? 'الذهبي'}:`} pieces={namePieces(fact.text, namesOf(person))} palette={palette} size={17} />
               </View>
             ))}
-            {/* An ayah a story says was revealed about him, with the story that says so under it, opening the story. */}
-            {told.map(({ key, story }) => (
-              <View key={key} style={{ gap: 8 }}>
-                <AyahOf ayahKey={key} palette={palette} />
-                <Button variant="plain" label={ayahOf(key)} Icon={ChevronLeft} onPress={() => openAyahPage(key)} />
+            {/* Ayat a story says were revealed about him, with the story that says so under them, opening the story. */}
+            {told.map(({ story, ayat: set }) => (
+              <View key={story.slug + set.from} style={{ gap: 8 }}>
+                <LitAyat ayat={ayatOf(set.from, set.to).map(key => ({ words: ayahMushafWords(key), lit: [], number: Number(key.split(':')[1]) }))} menu={set.from} palette={palette} />
+                <Button variant="plain" label={rangeName(set.from, set.to)} Icon={ChevronLeft} onPress={() => openAyahPage(set.from)} />
                 <StoryLinkRow story={story} palette={palette} />
               </View>
             ))}
@@ -485,6 +487,18 @@ const placesSources = (places: AppBattle[], person: AppPerson, life: ReturnType<
   ...lifeSources(life.filter(item => places.some(battle => battle.slug === item.open?.slug))),
   ...placeSources(places),
 ];
+
+/** Every ayah from one key to another in the mushaf's order, across a surah's end: exactly the ayat a story names. */
+function ayatOf(from: string, to: string) {
+  let [surah, ayah] = from.split(':').map(Number);
+  const keys = [from];
+  while (keys[keys.length - 1] !== to && surah <= 114) {
+    if (ayah < (ayahCounts.get(surah) ?? 0)) ayah++;
+    else { surah++; ayah = 1; }
+    keys.push(`${surah}:${ayah}`);
+  }
+  return keys;
+}
 
 /** A battle named in two places is one name in the line. */
 function uniq(links: PersonLink[]) {

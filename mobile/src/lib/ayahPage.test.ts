@@ -6,6 +6,8 @@ import { surahTopicsOf } from '@shared/quran/surahTopics';
 import { ayahSections, ORDER, sectionNames, type AyahSection } from './ayahPage';
 import { STORIES as SIRA_STORIES } from './stories';
 import { PEOPLE } from './tarajim';
+import { inAyat } from './links';
+import { revealedIn } from '@shared/stories/story';
 
 // The books' on/off state lives on the phone; every book is on here.
 vi.mock('./books', () => ({ bookState: () => 'on' }));
@@ -56,11 +58,16 @@ describe("an ayah's page (owner, 2026-11-22)", () => {
     }
   });
 
-  it('lists every sira story on the first and last ayah it says was revealed about it', () => {
-    const told = SIRA_STORIES.flatMap(story => (story.ayat ?? []).map(each => ({ slug: story.slug, ...each })));
+  // A story may give several sets of ayat, two of them «نزل فيه» (the-ifk: 24:11 about Aisha, 24:22 about Abu Bakr); each
+  // ayah's card quotes the set that holds it, not the story's first.
+  it('lists every sira story on the first and last ayah of each set it gives, with that set', () => {
+    const told = SIRA_STORIES.flatMap(story => story.ayat.map(ayat => ({ slug: story.slug, ayat })));
     expect(told.length).toBeGreaterThan(0);
-    for (const { slug, from, to } of told) {
-      for (const key of [from, to]) expect(has(key, section => section.id === 'sira' && section.story.slug === slug), `${slug} ${key}`).toBe(true);
+    for (const { slug, ayat } of told) {
+      for (const key of [ayat.from, ayat.to]) {
+        expect(has(key, section => section.id === 'sira' && section.story.slug === slug && section.ayat === ayat), `${slug} ${key}`).toBe(true);
+        for (const section of ayahSections(key)) if (section.id === 'sira') expect(inAyat(key, section.ayat.from, section.ayat.to), `${section.story.slug} on ${key}`).toBe(true);
+      }
     }
   });
 
@@ -68,7 +75,11 @@ describe("an ayah's page (owner, 2026-11-22)", () => {
   it("shows on an ayah's page every person whose entry ties him to it", () => {
     const tied = PEOPLE.flatMap(person => person.ayat.flatMap(fact => (typeof fact.value === 'string' ? [{ slug: person.slug, key: fact.value }] : [])));
     expect(tied.length).toBeGreaterThan(0);
-    for (const { slug, key } of tied) expect(has(key, section => section.id === 'person' && section.slug === slug), `${slug} ${key}`).toBe(true);
+    // On his own card, or on the card of the story that names him as the one it was revealed about (not on both).
+    const named = (key: string, slug: string) => has(key, section => section.id === 'sira' && revealedIn(section.ayat) && section.ayat.about?.slug === slug);
+    const own = (key: string, slug: string) => has(key, section => section.id === 'person' && section.slug === slug);
+    for (const { slug, key } of tied) expect([named(key, slug), own(key, slug)], `${slug} ${key}`).toContainEqual(true);
+    for (const { slug, key } of tied) expect(named(key, slug) && own(key, slug), `${slug} ${key} twice`).toBe(false);
   });
 
   it('names the part of a divided section, not the whole section', () => {
