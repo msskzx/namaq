@@ -1,7 +1,7 @@
 import { RECIPROCAL_INVERSES } from '@/lib/relationship/categories';
 import type { RelationType } from '@/lib/relationship/types';
 import type { SeedRelation } from '../../../neo4j/seedRelations';
-import type { Catalog, Sex } from './types';
+import type { Catalog, CatalogRelation, Sex } from './types';
 
 /**
  * The inverse to write when a relation has more than one, keyed by the sex of
@@ -22,6 +22,27 @@ const BY_SEX: Partial<Record<RelationType, Record<Sex, RelationType>>> = {
   MILK_SISTER: { MALE: 'MILK_BROTHER', FEMALE: 'MILK_SISTER' },
 };
 
+/** Each catalog person's sex, by slug, for inverseOf. */
+export const sexesOf = (catalog: Catalog) =>
+  new Map(catalog.people.flatMap((person) => (person.fields.sex ? [[person.slug, person.fields.sex.value] as const] : [])));
+
+/**
+ * The relation to write the other way. An explicit inverse always wins. Failing
+ * that, a single reciprocal is unambiguous, and an ambiguous one is settled by
+ * the TARGET's sex, not the subject's: X --FATHER--> Y reverses to Y --SON--> X
+ * or Y --DAUGHTER--> X according to what Y is.
+ */
+export function inverseOf(relation: CatalogRelation, sexOf: ReadonlyMap<string, Sex>): RelationType | undefined {
+  const reciprocals = RECIPROCAL_INVERSES[relation.type] ?? [];
+  const bySex = BY_SEX[relation.type];
+  const targetSex = sexOf.get(relation.to);
+  return (
+    relation.inverse ??
+    (reciprocals.length === 1 ? reciprocals[0] : undefined) ??
+    (bySex && targetSex ? bySex[targetSex] : undefined)
+  );
+}
+
 /**
  * The person-to-person edges a catalog implies, in the shape the graph stores
  * them: both directions, since a module declares only one.
@@ -32,25 +53,13 @@ const BY_SEX: Partial<Record<RelationType, Record<Sex, RelationType>>> = {
  */
 export function catalogRelations(catalog: Catalog): SeedRelation[] {
   const edges: SeedRelation[] = [];
-  const sexOf = new Map(
-    catalog.people.flatMap((person) => (person.fields.sex ? [[person.slug, person.fields.sex.value] as const] : [])),
-  );
+  const sexOf = sexesOf(catalog);
 
   for (const person of catalog.people) {
     for (const relation of person.relations) {
       edges.push({ from: person.slug, to: relation.to, type: relation.type });
 
-      const reciprocals = RECIPROCAL_INVERSES[relation.type] ?? [];
-      // An explicit inverse always wins. Failing that, a single reciprocal is
-      // unambiguous, and an ambiguous one is settled by the TARGET's sex, not
-      // the subject's: X --FATHER--> Y reverses to Y --SON--> X or
-      // Y --DAUGHTER--> X according to what Y is.
-      const bySex = BY_SEX[relation.type];
-      const targetSex = sexOf.get(relation.to);
-      const inverse =
-        relation.inverse ??
-        (reciprocals.length === 1 ? reciprocals[0] : undefined) ??
-        (bySex && targetSex ? bySex[targetSex] : undefined);
+      const inverse = inverseOf(relation, sexOf);
       if (inverse) edges.push({ from: relation.to, to: person.slug, type: inverse });
     }
   }

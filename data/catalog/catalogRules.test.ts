@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { loadCatalog } from '@/lib/catalog/loadCatalog';
 import { legacyUnreviewed, type Cited, type Provenance } from '@/lib/catalog/types';
 import { validateCatalog } from '@/lib/catalog/validateCatalog';
+import { UNPROFILED_PEOPLE } from '@/lib/catalog/unprofiled';
 import { loadBatch } from '@/lib/history/loadBatch';
 import { loadModel } from '@/lib/model/load';
 
@@ -35,18 +36,12 @@ describe('the whole catalog', () => {
 
     const issues = validateCatalog(catalog, { people, claims: new Set(claimByKey.keys()), spans, claimSources });
 
-    // Relatives an entry names who have no profile. The phone shows them as a
-    // plain name (on the ring, a tap opens the sentence that names them), which
-    // the owner kept (2026-11-22). The website's graph needs a row for each, so
-    // a new one is a choice to make, not a slip: add it here on purpose.
-    const withoutProfile = [
-      'people/jabr-ibn-atik.relations.FATHER: unknown person atik-ibn-jabr',
-      'people/jabr-ibn-atik.relations.FATHER: unknown person abdullah-ibn-jabr',
-      'people/jabr-ibn-atik.relations.FATHER: unknown person umm-thabit-bint-jabr',
-      'people/jabr-ibn-atik.relations.PATERNAL_UNCLE: unknown person al-harith-ibn-qais-ibn-hayshah-al-awsi',
-      'people/umayr-ibn-saad-al-ansari.relations.FATHER: unknown person abd-al-rahman-ibn-umayr-ibn-saad',
-    ];
-    expect(issues.map((issue) => `${issue.path}: ${issue.message}`)).toEqual(withoutProfile);
+    // Relatives a person's entry names who have no profile stay a plain name (src/lib/catalog/unprofiled.ts lists
+    // them). Only a person's own relations may name one, and each on the list is still named and still has no record.
+    const unprofiled = (issue: { path: string; message: string }) =>
+      /^people\/[^.]+\.relations\./.test(issue.path) && UNPROFILED_PEOPLE.has(issue.message.replace(/^unknown person /, ''));
+    expect(issues.filter((issue) => !unprofiled(issue))).toEqual([]);
+    expect(new Set(issues.filter(unprofiled).map((issue) => issue.message.replace(/^unknown person /, '')))).toEqual(UNPROFILED_PEOPLE);
   });
 
   // A claim may back a whole sentence (no field) or one value; a count never rests on a claim stating another value.
