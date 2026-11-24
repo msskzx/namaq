@@ -403,6 +403,26 @@
           "accessedAt": "2026-09-28"
         }
       ]
+    },
+    {
+      "key": "zaid-ibn-harithah-siyar36/ayah-al-ahzab-5",
+      "subjectKind": "PERSON",
+      "subjectSlug": "zaid-ibn-harithah",
+      "field": "ayat",
+      "assertion": "كانوا يدعونه زيد بن محمد فنزلت: {ادعوهم لآبائهم}، الأحزاب ٥، من حديث ابن عمر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/224-p4",
+          "volume": "4",
+          "pageReference": "224",
+          "extractionUrl": "https://shamela.ws/book/10906/1650",
+          "excerptArabic": "مَا كُنَّا نَدْعُوْ زَيْدَ بنَ حَارِثَةَ إِلاَّ زَيْدَ بنَ مُحَمَّدٍ، فَنَزَلَتْ: {ادْعُوْهُم لآبَائِهِم، هُوَ أَقْسَطُ عِنْدَ اللهِ} [الأَحْزَابُ : ٥]",
+          "accessedAt": "2026-11-24"
+        }
+      ]
     }
   ],
   "approval": {

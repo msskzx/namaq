@@ -360,6 +360,26 @@
           "accessedAt": "2026-10-01"
         }
       ]
+    },
+    {
+      "key": "bilal-ibn-rabah-siyar76/ayah-al-anam",
+      "subjectKind": "PERSON",
+      "subjectSlug": "bilal-ibn-rabah",
+      "field": "ayat",
+      "assertion": "نزلت فيه وفي سعد وابن مسعود ونفر معهم: {ولا تطرد الذين يدعون ربهم} الآيتان، الأنعام ٥٢-٥٣، من حديث سعد.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/353-p16",
+          "volume": "4",
+          "pageReference": "353",
+          "extractionUrl": "https://shamela.ws/book/10906/1779",
+          "excerptArabic": "وَكُنْتُ أَنَا، وَابْنُ مَسْعُوْدٍ، وَبِلاَلٌ، وَرَجُلٌ مِنْ هُذَيْلٍ، وَآخَرَانِ. فَأَنْزَلَ اللهُ: {وَلاَ تَطْرُدِ الَّذِيْنَ يَدْعُوْنَ رَبَّهُم ... } ، الآيَتَيْنِ [الأَنْعَامُ: ٥٢، ٥٣]",
+          "accessedAt": "2026-11-24"
+        }
+      ]
     }
   ],
   "approval": {

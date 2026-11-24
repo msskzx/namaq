@@ -26,6 +26,11 @@ const abdullahIbnAmrIbnHaram = {
     },
   ],
 
+  ayat: [
+    // Jabir's report, outside the two Sahihs (the editor gives al-Tirmidhi's «حسن»), ties it to his father's word; the
+    // ayah is on the martyrs as a whole, so a quiz asks no «فيمن نزلت» on it (docs/quiz-ayah-revealed.md).
+    { surah: 3, ayah: 169, kind: 'REVEALED_ABOUT', claims: ['abdullah-ibn-amr-ibn-haram-siyar67/ayah-al-imran'], revealedAbout: { alsoUnnamed: true } },
+  ],
   titles: [
     { title: 'companion', name: 'صحابي', nameTransliterated: 'Companion', claims: legacyUnreviewed },
   ],

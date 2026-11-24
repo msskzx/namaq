@@ -255,6 +255,26 @@
           "accessedAt": "2026-09-29"
         }
       ]
+    },
+    {
+      "key": "abdullah-ibn-amr-ibn-haram-siyar67/ayah-al-imran",
+      "subjectKind": "PERSON",
+      "subjectSlug": "abdullah-ibn-amr-ibn-haram",
+      "field": "ayat",
+      "assertion": "سأل ربه أن يبلغ من وراءه فأنزل الله: {ولا تحسبن الذين قتلوا في سبيل الله أمواتا}، آل عمران ١٦٩، من حديث جابر.",
+      "confidence": "ESTABLISHED",
+      "reviewStatus": "NOT_REVIEWED",
+      "citations": [
+        {
+          "sourceSlug": "siyar-alam-al-nubala-risalah",
+          "passageAnchor": "4/327-p14",
+          "volume": "4",
+          "pageReference": "327–328",
+          "extractionUrl": "https://shamela.ws/book/10906/1753",
+          "excerptArabic": "قَالَ: يَا رَبِّ! فَأَبْلِغْ مَنْ وَرَائِي. فَأَنْزَلَ اللهُ: {وَلاَ تَحْسَبَنَّ الَّذِيْنَ قُتِلُوا فِي سَبِيْلِ اللهِ أَمْوَاتاً، بَلْ أَحْيَاءٌ عِنْدَ رَبِّهِم يُرْزَقُوْنَ} [آلُ عِمْرَانَ : ١٦٩]",
+          "accessedAt": "2026-11-24"
+        }
+      ]
     }
   ],
   "approval": {
