@@ -266,15 +266,33 @@ export function textIs(text: string, query: string): boolean {
 
 export const keys = (node: Branch): string[] => node.via ?? [...node.ayat, ...node.children.flatMap(keys)];
 
-const continues = (ayah: BranchAyah, ayat: BranchAyah[]) => (!!chapterOpening(ayah) && ayah.words.length === 1) || ayat.some(other => other !== ayah && other.words.length > ayah.words.length && ayah.words.every((_, i) => sameWord(ayah, i, other, i)));
+const continues = (ayah: BranchAyah, ayat: readonly BranchAyah[]) => (!!chapterOpening(ayah) && ayah.words.length === 1) || ayat.some(other => other !== ayah && other.words.length > ayah.words.length && ayah.words.every((_, i) => sameWord(ayah, i, other, i)));
 
 const identical = (a: BranchAyah, b: BranchAyah) => a.words.length === b.words.length && a.words.every((_, i) => sameWord(a, i, b, i));
 
-const twinned = (ayah: BranchAyah, ayat: BranchAyah[]) => ayat.some(other => other !== ayah && other.key !== ayah.key && identical(ayah, other));
+const twinned = (ayah: BranchAyah, ayat: readonly BranchAyah[]) => ayat.some(other => other !== ayah && other.key !== ayah.key && identical(ayah, other));
 
 const ayahEnd = (key: string) => `﴿${num(Number(key.split(':')[1]))}﴾`;
 
-export const grown = (ayat: BranchAyah[]) => ayat.map(ayah => (ayah.next && (continues(ayah, ayat) || twinned(ayah, ayat)) ? { ...ayah, words: [...ayah.words, ayahEnd(ayah.key), ...ayah.next], ...(ayah.roots && { roots: [...ayah.roots, null, ...(ayah.nextRoots ?? ayah.next.map(() => null))] }), ...(ayah.lemmas && { lemmas: [...ayah.lemmas, null, ...(ayah.nextLemmas ?? ayah.next.map(() => null))] }) } : ayah));
+/**
+ * The ayat whose first word reads as `ayah`'s does: only they can hold its words at their start (sameWord compares the
+ * letters first), so continues and twinned look there instead of through all 6,236 ayat for each one.
+ */
+const byFirstWord = (ayat: BranchAyah[]) => {
+  const groups = new Map<string, BranchAyah[]>();
+  for (const ayah of ayat) {
+    if (!ayah.words.length) continue;
+    const first = lettersOf(ayah.words[0]);
+    if (groups.has(first)) groups.get(first)!.push(ayah);
+    else groups.set(first, [ayah]);
+  }
+  return (ayah: BranchAyah) => (ayah.words.length ? groups.get(lettersOf(ayah.words[0])) ?? [] : ayat);
+};
+
+export const grown = (ayat: BranchAyah[]) => {
+  const near = byFirstWord(ayat);
+  return ayat.map(ayah => (ayah.next && (continues(ayah, near(ayah)) || twinned(ayah, near(ayah))) ? { ...ayah, words: [...ayah.words, ayahEnd(ayah.key), ...ayah.next], ...(ayah.roots && { roots: [...ayah.roots, null, ...(ayah.nextRoots ?? ayah.next.map(() => null))] }), ...(ayah.lemmas && { lemmas: [...ayah.lemmas, null, ...(ayah.nextLemmas ?? ayah.next.map(() => null))] }) } : ayah));
+};
 
 type RunOn = Pick<BranchAyah, 'words' | 'roots' | 'lemmas'>;
 

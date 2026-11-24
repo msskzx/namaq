@@ -76,6 +76,8 @@ export function nasabFillQuestions(people: AppPerson[] = PEOPLE, random: Random 
   const bySlug = new Map(people.map(person => [person.slug, person]));
   const lines = new Map(people.map(person => [person.slug, lineOf(person, people)]));
   const fathers = fathersOf(lines);
+  // Each line's names bare, worked out once rather than again for every other person.
+  const bareLines = new Map([...lines].map(([slug, line]) => [slug, line.map(father => bareName(boxName(father.name)))]));
   return people.flatMap(person => {
     const line = lines.get(person.slug)!.slice(0, BOXES);
     if (line.length < FEWEST) return [];
@@ -90,10 +92,10 @@ export function nasabFillQuestions(people: AppPerson[] = PEOPLE, random: Random 
       return entry ? pageSources(entry.refs, { text: entry.text }) : [];
     }));
     if (sources.length === 0) return [];
-    const bares = line.map(father => bareName(boxName(father.name)));
-    const otherLines = [...lines].filter(([slug]) => slug !== person.slug).map(([, other]) => other.map(father => bareName(boxName(father.name))));
+    const whole = bareLines.get(person.slug)!;
+    const bares = whole.slice(0, BOXES);
+    const otherLines = [...bareLines].filter(([slug]) => slug !== person.slug).map(([, other]) => other);
     // Wrong names: fathers no line of this person names, nor his shown name.
-    const whole = lines.get(person.slug)!.map(own => bareName(boxName(own.name)));
     // Nor a kunya after a word of his name («أبو سلمة» for أم سلمة, her husband): it only misleads.
     const shownWords = new Set(bareName(boxName(shown)).split(' '));
     const others = fathers.filter(father => !whole.some(own => same(own, father.bare)) && !told(shown, father.name)
