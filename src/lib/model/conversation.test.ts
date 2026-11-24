@@ -24,7 +24,7 @@ describe('conversationOf (the hadith of Jibril fixtures)', () => {
     const { folder, file } = muslim();
     const [first] = conversationOf(folder, file, 'r_hadith', ROOT).scenes[0].turns;
     expect(first.parts).toHaveLength(2);
-    expect(first.parts[0].startsWith('أَبَا عَبْدِ الرَّحْمَنِ')).toBe(true);
+    expect(first.parts[0].startsWith('أَبَا عَبْدِ الرحمن')).toBe(true);
     expect(first.parts[1].endsWith('أُنُفٌ')).toBe(true);
   });
 
@@ -35,7 +35,7 @@ describe('conversationOf (the hadith of Jibril fixtures)', () => {
     expect(byId).toMatchObject({
       o1: 'يَحْيَى بْنِ يَعْمَرَ',
       s1: 'رَجُلٌ',
-      s2: 'رَسُولُ اللَّهِ',
+      s2: 'رَسُولُ اللَّهِ',
     });
     expect(byId.o2).toBeUndefined();
   });

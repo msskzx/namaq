@@ -12,7 +12,7 @@ describe('complete hadith example', () => {
     const { container } = render(<HadithPreview view={view} />);
     const [first, second] = view.reports[0].scenes;
     for (const line of [...first.lines, ...second.lines.slice(0, 2)]) expect(container.textContent).toContain(line.text);
-    expect(second.lines[0].text).toMatch(/وَقَالَ$/);
+    expect(second.lines[0].text).toMatch(/وَقَالَ:$/);
     expect(container.textContent).not.toContain(second.lines[2].text);
     expect(screen.queryByRole('heading', { name: 'Scene 3' })).toBeNull();
     expect(screen.getByRole('heading', { name: 'Scene 1' })).toBeTruthy();

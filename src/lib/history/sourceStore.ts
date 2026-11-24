@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { hadithText } from '../catalog/sahihText';
 
 export const sourcesRoot = 'data/history/sources';
 
@@ -47,13 +48,26 @@ export function loadSourceManifest(root: string, sourceSlug: string): SourceMani
   return JSON.parse(readFileSync(path, 'utf8')) as SourceManifest;
 }
 
+// A Sahih's page «h<N>» is its hadith N, read from the one Sahih text.
+const SAHIH_PAGE: Record<string, 'bukhari' | 'muslim'> = { 'sahih-al-bukhari': 'bukhari', 'sahih-muslim': 'muslim' };
+
 /** Reads one page of the store, or null if it has not been transcribed. */
+
 export function loadStorePage(
   root: string,
   sourceSlug: string,
   volumeNumber: number,
   printedPage: string,
 ): StorePage | null {
+  // A Sahih hadith is one text, data/hadith/sahih (owner, 2026-11-24): its «page» is the hadith, h<number>.
+  const hadith = SAHIH_PAGE[sourceSlug] && /^h(\d+)$/.exec(printedPage);
+  if (hadith) {
+    try {
+      return { body: hadithText(SAHIH_PAGE[sourceSlug], Number(hadith[1])), notes: null };
+    } catch {
+      return null;
+    }
+  }
   const dir = join(root, sourcesRoot, sourceSlug, `v${volumeNumber}`);
   const bodyPath = join(dir, `${printedPage}.md`);
   if (!existsSync(bodyPath)) return null;

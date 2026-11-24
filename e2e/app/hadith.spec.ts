@@ -78,7 +78,7 @@ test('the hadith of Jibril opens its scenes in al-Bukhari and in Muslim', async 
   await open(page, '/hadith-forty?n=2');
   await page.getByRole('button', { name: 'رواية أبي هريرة في البخاري' }).click();
   await expect(page).toHaveURL(/\/hadith-unit\?unit=bukhari-jibril/);
-  await expect(page.getByLabel(/^الإسناد: البخاري، مُسَدَّدٌ/)).toBeVisible();
+  await expect(page.getByLabel(/^الإسناد: البخاري، مُسَدَّدٌ/)).toBeVisible();
   // The scenes are drawn with the speakers' chips, and no «المشهد ١» heading of ours (owner, 2026-11-22).
   await expect(page.getByText('رسول الله ﷺ', { exact: true }).first()).toBeVisible();
   await expect(page.getByText(/^المشهد /)).toHaveCount(0);

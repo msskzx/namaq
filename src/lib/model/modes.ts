@@ -32,3 +32,6 @@ const MODE_KEYS: Record<string, string> = {
 export function modeKeyOf(printed: string) {
   return MODE_KEYS[matchForm(printed).replace(HARAKAT, '')];
 }
+
+/** A link whose edition prints no formula before the narrator. */
+export const NO_MODE = 'none';

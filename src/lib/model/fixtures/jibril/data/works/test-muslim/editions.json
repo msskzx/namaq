@@ -10,7 +10,7 @@
   ],
   "witnesses": [
     {
-      "slug": "test-muslim",
+      "slug": "sahih-muslim",
       "edition": "test-muslim-edition",
       "vowelled": true,
       "hasFootnotes": false,

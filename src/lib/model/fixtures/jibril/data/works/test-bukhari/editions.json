@@ -10,7 +10,7 @@
   ],
   "witnesses": [
     {
-      "slug": "test-bukhari",
+      "slug": "sahih-al-bukhari",
       "edition": "test-bukhari-edition",
       "vowelled": true,
       "hasFootnotes": false,

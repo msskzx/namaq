@@ -48,7 +48,9 @@ describe('the isnads of the Jibril fixtures (test data)', () => {
     expect(chain.elements).toEqual([]);
     expect(chain.branches).toHaveLength(2);
     const [a, b] = chain.branches!.map((x) => links(x));
-    expect(a.map((l) => l.modeKey)).toEqual(['haddatha/1sg', 'haddatha/1pl', 'an', 'an', 'an']);
+    // The edition prints no formula before Abu Khaythama (Muslim 8 opens on his name).
+    expect(a.map((l) => l.modeKey)).toEqual(['none', 'haddatha/1pl', 'an', 'an', 'an']);
+    expect(a[0].mode).toEqual([]);
     expect(b.map((l) => l.modeKey)).toEqual([
       'haddatha/1pl',
       'haddatha/1pl',
@@ -79,6 +81,23 @@ describe('chain checks', () => {
     expect(issues('test-bukhari', (m) => (links(m.report.chain!)[1].mode = ['sp_t1']))).toMatch(
       /outside the isnad/,
     );
+  });
+
+  it("lets only the isnad's first link have no printed formula, and then with no span", () => {
+    const bare = (link: Link) => {
+      link.mode = [];
+      link.modeKey = 'none';
+    };
+    expect(issues('test-bukhari', (m) => bare(links(m.report.chain!)[0]))).toBe('');
+    expect(issues('test-bukhari', (m) => bare(links(m.report.chain!)[1]))).toMatch(
+      /only the isnad's first link/,
+    );
+    expect(
+      issues('test-muslim', (m) => bare(links(m.report.chain!.branches![1])[0])),
+    ).toMatch(/only the isnad's first link/);
+    expect(
+      issues('test-muslim', (m) => (links(m.report.chain!.branches![0])[0].mode = ['sp_a2'])),
+    ).toMatch(/no printed formula has a mode span/);
   });
 
   it('fails a formula it has no key for', () => {
@@ -184,7 +203,7 @@ describe('a review closure and a chain', () => {
     };
     const closure = closureOf(file, assertion);
     expect(closure.spans.map((s) => s.id)).toEqual(
-      expect.arrayContaining(['sp_tahwil', 'sp_a1', 'sp_b1']),
+      expect.arrayContaining(['sp_tahwil', 'sp_a2', 'sp_b1']),
     );
     expect(closure.mentions.map((m) => m.id)).toEqual(
       expect.arrayContaining(['m_a1', 'm_b1', 'm_yahya_a']),

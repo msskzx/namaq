@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { loadSourceManifest, sourcesRoot } from '../history/sourceStore';
 import { dateParts, dateReaders } from './dateReader';
 import { locateSpanRecord } from './render';
-import { modeKeyOf } from './modes';
+import { modeKeyOf, NO_MODE } from './modes';
 import { splitRef } from './refs';
 import { HARAKAT, matchForm } from './span';
 import {
@@ -178,6 +178,7 @@ function checkUnit(
       };
       const ascending = (a: [number, number], b: [number, number]) =>
         a[0] < b[0] || (a[0] === b[0] && a[1] < b[1]);
+      let linksWalked = 0;
       const walk = (chain: Chain) => {
         const branches = chain.branches ?? [];
         if (chain.elements.length === 0 && branches.length < 2) {
@@ -213,6 +214,16 @@ function checkUnit(
               fail(`${chainOwner}: narrator ${element.narrator} is out of reading order`);
             }
             lastNarrator = now ?? lastNarrator;
+          }
+          // The edition prints no formula before this narrator (Muslim 8 opens
+          // «أَبُو خَيْثَمَةَ» with nothing before it): the link says so with
+          // modeKey 'none' and no span, and nothing else may be left empty.
+          // Only the isnad's first link can open on a bare name.
+          const first = linksWalked++ === 0;
+          if (element.modeKey === NO_MODE) {
+            if (element.mode.length > 0) fail(`${chainOwner}: a link with no printed formula has a mode span`);
+            if (!first) fail(`${chainOwner}: only the isnad's first link may have no printed formula`);
+            continue;
           }
           if (element.mode.length === 0) fail(`${chainOwner}: a link has no mode span`);
           for (const id of element.mode) {

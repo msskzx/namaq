@@ -12,15 +12,16 @@ export const fixturesRoot = 'src/lib/model/fixtures/jibril';
 export type { ChainLink, ChainView, HadithUnitView, ReaderPage, ReportView, SceneLine, SceneView } from '@shared/hadith';
 import type { ChainView, HadithUnitView, ReaderPage, SceneLine } from '@shared/hadith';
 
-const LEAD = /((?:[فو][\u064B-\u0652]*)?(?:قَالَ|قُلْتُ))(\s*["“]?\s*)$/;
-const TRAIL = /^\s*["”]?\s*[.،]?\s*/;
-const PUNCT_ONLY = /^[\s.،"“”:]*$/;
+// The Sahih's text marks speech with «» and ends questions with ؟.
+const LEAD = /((?:[فو][\u064B-\u0652]*)?(?:قَالَ|قُلْتُ):?)(\s*["“«]?\s*)$/;
+const TRAIL = /^\s*["”»]?\s*[.،؟!]?\s*["”»]?\s*/;
+const PUNCT_ONLY = /^[\s.،؛؟!"“”«»:]*$/;
 
 const withoutQuotes = (text: string) =>
-  text.replace(/\s*["“”]\s*/g, ' ').replace(/\s+([.،])/g, '$1').replace(/\s+/g, ' ').trim();
+  text.replace(/\s*["“”«»]\s*/g, ' ').replace(/\s+([.،])/g, '$1').replace(/\s+/g, ' ').trim();
 
 const cutAfterFirstQala = (body: string, start: number, end: number) => {
-  const m = body.slice(start, end).match(/قَالَ/);
+  const m = body.slice(start, end).match(/قَالَ:?/);
   return m ? start + m.index! + m[0].length : end;
 };
 
@@ -70,6 +71,7 @@ function sceneLines(
       : undefined;
   const parents = new Set(report.scenes!.map((sc) => sc.inTurn));
   const links = (report.chain ? linkElements(report.chain) : [])
+    .filter((el) => el.mode.length > 0)
     .map((el) => ({
       el,
       at: locateSpanRecord(folder, file.spans.find((x) => x.id === el.mode[0])!, root),
@@ -83,7 +85,7 @@ function sceneLines(
   const nameAt = last && lastName ? body.indexOf(lastName, last.at.start) : -1;
   const lastLink =
     last && nameAt >= 0
-      ? nameAt + lastName!.length + (body.slice(nameAt + lastName!.length).match(/^[\s،]*/)?.[0].length ?? 0)
+      ? nameAt + lastName!.length + (body.slice(nameAt + lastName!.length).match(/^[\s،؛]*/)?.[0].length ?? 0)
       : last?.at.start;
   const from = parentStart ?? lastLink ?? (bounds ? bounds.start : spans[0].start);
   const lines: SceneLine[] = [];
@@ -126,7 +128,7 @@ function fullTextOf(
   const isnad = find(report.isnadSpan);
   const last = find(statement.spans[statement.spans.length - 1]);
   if (isnad.key !== last.key || isnad.start >= last.end) return undefined;
-  const closing = last.body.slice(last.end).match(/^\s*["”]?\s*[.،]?/)?.[0] ?? '';
+  const closing = last.body.slice(last.end).match(/^\s*["”»]?\s*[.،؟!]?\s*["”»]?/)?.[0] ?? '';
   return matchForm(last.body.slice(isnad.start, last.end + closing.length)).trim();
 }
 
@@ -189,6 +191,9 @@ function linkElements(chain: Chain): Link[] {
   ];
 }
 
+// A link's own words are found by its formula, or by its narrator where none is printed.
+const linkKey = (el: Link) => el.mode[0] ?? el.narrator;
+
 function linkTexts(
   folder: WorkFolder,
   file: UnitFile,
@@ -200,9 +205,11 @@ function linkTexts(
   const find = (id: string) => locateSpanRecord(folder, file.spans.find((s) => s.id === id)!, root);
   const isnad = find(report.isnadSpan);
   const links = linkElements(report.chain).map((el) => {
+    // A link the edition prints no formula for starts where the isnad starts.
+    if (el.mode.length === 0) return { id: linkKey(el), at: isnad };
     const at = find(el.mode[0]);
     const conj = at.body.slice(Math.max(0, at.start - 2), at.start).match(/[وف][\u064B-\u0652]?$/);
-    return { id: el.mode[0], at: { ...at, start: at.start - (conj?.[0].length ?? 0) } };
+    return { id: linkKey(el), at: { ...at, start: at.start - (conj?.[0].length ?? 0) } };
   });
   if (links.some((l) => l.at.key !== isnad.key)) return texts;
   const cuts = [
@@ -214,10 +221,10 @@ function linkTexts(
   for (const link of ordered) {
     const end = Math.min(...cuts.filter((c) => c > link.at.start), isnad.end);
     const raw = matchForm(isnad.body.slice(link.at.start, end)).trim();
-    const lead = raw.match(/\s*قَالَ$/);
-    const own = (lead ? raw.slice(0, lead.index) : raw).replace(/[\s،]+$/, '');
+    const lead = raw.match(/[\s،؛]*(قَالَ:?)$/);
+    const own = (lead ? raw.slice(0, lead.index) : raw).replace(/[\s،؛]+$/, '');
     texts.set(link.id, `${carry}${own}`);
-    carry = lead && links.some((l) => l.at.start === end) ? 'قَالَ ' : '';
+    carry = lead && links.some((l) => l.at.start === end) ? `${lead[1]} ` : '';
   }
   return texts;
 }
@@ -249,7 +256,7 @@ function chainView(
             agent: agentOf(el.narrator),
             mode: text(el.mode),
             modeKey: el.modeKey,
-            text: texts.get(el.mode[0]),
+            text: texts.get(linkKey(el)),
           },
     ),
     tahwil: chain.tahwil ? text(chain.tahwil) : undefined,

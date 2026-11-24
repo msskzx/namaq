@@ -48,7 +48,7 @@ describe('HadithUnit component', () => {
     render(<HadithUnit view={view} />);
     const modeSwitch = screen.getByRole('switch', { name: /الرسم/ });
     fireEvent.click(modeSwitch);
-    expect(screen.getByText(/حَدَّثَنَا مُسَدَّدٌ/)).toBeTruthy();
+    expect(screen.getByText(/حَدَّثَنَا مُسَدَّدٌ/)).toBeTruthy();
   });
 
   it('switches back from Full text to bubbles mode', () => {
@@ -56,7 +56,7 @@ describe('HadithUnit component', () => {
     render(<HadithUnit view={view} />);
     const modeSwitch = screen.getByRole('switch', { name: /الرسم/ });
     fireEvent.click(modeSwitch);
-    expect(screen.getByText(/حَدَّثَنَا مُسَدَّدٌ/)).toBeTruthy();
+    expect(screen.getByText(/حَدَّثَنَا مُسَدَّدٌ/)).toBeTruthy();
     fireEvent.click(modeSwitch);
     const h3s = screen.getAllByRole('heading', { level: 3 });
     expect(h3s.length).toBeGreaterThan(0);
