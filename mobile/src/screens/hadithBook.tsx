@@ -15,7 +15,7 @@ import { SahihDownload, SahihKitabList, SahihShape } from '@/components/Sahih';
 import Card from '@/ui/Card';
 import Empty from '@/ui/Empty';
 import { kitabsHolding } from '@shared/sahih';
-import { FortyCard, openKitab } from './hadith';
+import { FortyCard, openBab, openKitab } from './hadith';
 
 /**
  * A book's page. A Sahih: its shape (its kitabs as bars, a touch opening one), a search in the top bar over its kitabs and
@@ -52,7 +52,7 @@ export default function HadithBookScreen() {
             {state !== 'on' && <SahihDownload slug={sahih.slug} state={state} palette={palette} />}
           </>}
           {found && !found.size && <Empty text="لا كتاب ولا باب فيه هذه الكلمات" palette={palette} />}
-          <SahihKitabList book={sahih} found={found} here onOpen={kitab => openKitab(sahih.slug, kitab)} palette={palette}
+          <SahihKitabList book={sahih} found={found} here onOpen={kitab => openKitab(sahih.slug, kitab)} onOpenBab={(kitab, bab) => openBab(sahih.slug, kitab, bab)} palette={palette}
             source={[{ line: sahih.title, quotes: [{ text: `${sahih.title}، ${sahih.edition}` }], links: [{ label: 'الكتاب في المكتبة الشاملة', url: `https://shamela.ws/book/${sahih.shamela}` }] }]} />
         </> : <>
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right', marginTop: -6 }}>

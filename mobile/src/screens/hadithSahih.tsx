@@ -17,7 +17,7 @@ import { SAHIH, fortyOf, isSahihSlug, rememberOpened, useSahihText } from '@/lib
 import { SahihDownload, SahihHadithView, opening } from '@/components/Sahih';
 import HadithBooks from '@/components/HadithBooks';
 import { recordedIn, type BookBox } from '@shared/hadith';
-import { openKitab, openSahih } from './hadith';
+import { openBab, openKitab, openSahih } from './hadith';
 
 /** A box of «من أخرجه» opens that hadith's page when it is in the Sahihayn. */
 const openBox = (box: BookBox) => {
@@ -34,7 +34,7 @@ function SahihPage({ book, hadith, width, palette }: { book: SahihIndex; hadith:
   const numbers = [hadith.n, ...(hadith.also ?? [])].map(each => num(each)).join(' - ');
   return (
     <ScrollView style={{ width, direction: 'rtl' }} onScroll={onScroll} scrollEventThrottle={16} contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 14 }}>
-      {place && <Button variant="plain" label={`${place.kitab.title}${place.bab?.title ? ` › ${place.bab.title}` : ''}`} onPress={() => openKitab(book.slug, place.kitab.n)} />}
+      {place && <Button variant="plain" label={`${place.kitab.title}${place.bab?.title ? ` › ${place.bab.title}` : ''}`} onPress={() => (place.bab?.title ? openBab(book.slug, place.kitab.n, hadith.bab) : openKitab(book.slug, place.kitab.n))} />}
       {book.headingsBy === 'nawawi' && place?.bab?.title && <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right', marginTop: -10 }}>تبويب النووي</Text>}
       <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 24, textAlign: 'right' }}>{`${book.title} ${numbers}`}</Text>
       <SharedCard palette={palette} shareLabel={`شارك ${book.title} ${num(hadith.n)}`}
