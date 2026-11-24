@@ -2,6 +2,12 @@
 
 Rules for any agent (Claude Code or otherwise) making changes in this repo.
 
+## Release plan
+
+- [docs/release-plan.md](docs/release-plan.md) holds everything the owner agreed for release 1,
+  release 2 and later, and his answers to open questions. Read it before starting work, decide
+  which release the work belongs to, and add new agreements there.
+
 ## Writing
 
 - Invoke the `unslop` skill before writing prose: docs, commit messages, PR
