@@ -99,8 +99,13 @@ export type ChoiceQuestion = {
   map?: { layer: 'life' | 'after' };
   /** A compare question (compareQuiz.ts): typed into its blanks, not picked from choices. */
   compare?: CompareAsk;
-  /** What «ابحث عن الجواب» opens, and after the answer what shows under it: the feature's own view (QuizLook). */
+  /** What «ابحث عن الجواب» opens, and after the answer «الموضع كاملًا»: the feature's own view (QuizLook). */
   look?: QuizLook;
+  /**
+   * «الشاهد» (owner, 2026-11-24; sketch question-look/sketch-dark.png design أ): the line of the book that holds the answer,
+   * shown under the choices once answered; `by` says whose words they are, `lit` the answer's words in them.
+   */
+  witness?: { by: string; text: string; lit?: string };
   /** Where the answer comes from, shown once answered, collapsed to each book's name (shared/quiz/sources.ts). */
   sources: QuizSource[];
   evidence: { claimKeys: string[] };

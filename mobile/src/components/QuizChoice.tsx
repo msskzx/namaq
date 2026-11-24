@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import TapRow from '@/ui/TapRow';
+import QuoteBar, { type QuotePiece } from '@/ui/QuoteBar';
 import Card, { UnderCard, useCardRow } from '@/ui/Card';
 import { Pressable, ScrollView, View } from 'react-native';
-import { Check, Eye, Square, SquareCheck, X } from 'lucide-react-native';
+import { Check, ChevronDown, ChevronUp, Eye, Square, SquareCheck, X } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import Button from '@/ui/Button';
 import { alikeDiff, BOX_ASKED, FORGOT, isRightChoice, orders, PICKS, picksOf, recited, RECITED, ticks, type ChoiceQuestion } from '@shared/quiz/choiceKinds';
@@ -14,7 +16,7 @@ import QuranWords from './quran/text/QuranWords';
 import BookRuns from './quran/text/BookRuns';
 import TermChips from './TermSheet';
 import QuizSources from './QuizSources';
-import { LookButton, LookView } from './QuizLook';
+import { LookButton, PlaceButton } from './QuizLook';
 import type { WriteAsk } from '@shared/quiz/score';
 import type { PenRule } from '@shared/quran/writeAyah';
 import { num } from '@shared/quran/arabicNumber';
@@ -25,9 +27,53 @@ import AtlasQuizMap from './battles/AtlasQuizMap';
 
 const AYAH_NUMBER = /^[٠-٩]+$/;
 
-/** A question's own line over its choices: tall enough lines and room above for the marks of a vowelled verse (the Tuhfa's). */
-export const QuizPrompt = ({ text, palette }: { text: string; palette: Palette }) =>
-  <Text style={{ color: palette.ink, fontSize: 16, lineHeight: 32, textAlign: 'right', paddingHorizontal: 16, paddingTop: 8 }}>{text}</Text>;
+/** A text over a question longer than this many letters opens folded to its first lines. */
+const FOLD_OVER = 160;
+const FOLD_LINES = 3;
+
+/**
+ * A question's own line over its choices: tall enough lines and room above for the marks of a vowelled verse (the Tuhfa's).
+ * What it asks about, given before its last line (a hadith, «من راوي الحديث؟»), opens folded to three lines with «كاملًا»
+ * under it (owner, 2026-11-24; sketch question-look design أ), so the card stays short.
+ */
+export function QuizPrompt({ text, palette }: { text: string; palette: Palette }) {
+  const cut = text.lastIndexOf('\n');
+  const about = cut > 0 ? text.slice(0, cut) : '';
+  const ask = cut > 0 ? text.slice(cut + 1) : text;
+  const style = { color: palette.ink, fontSize: 16, lineHeight: 32, textAlign: 'right' as const };
+  return (
+    <View style={{ paddingHorizontal: 16, paddingTop: 8, gap: 6 }}>
+      {about ? <Fold long={about.length > FOLD_OVER} palette={palette}>{lines => <Text numberOfLines={lines} style={{ ...style, fontSize: 18, lineHeight: 34 }}>{about}</Text>}</Fold> : null}
+      <Text style={style}>{ask}</Text>
+    </View>
+  );
+}
+
+/** A long text cut to its first lines, «النص كاملًا» under it opening the rest in place. */
+function Fold({ long, palette, children }: { long: boolean; palette: Palette; children: (lines?: number) => React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  const Arrow = open ? ChevronUp : ChevronDown;
+  return (
+    <View style={{ gap: 2 }}>
+      {children(long && !open ? FOLD_LINES : undefined)}
+      {long ? (
+        <TapRow onPress={() => setOpen(was => !was)} expanded={open} label={open ? 'اطوِ النص' : 'النص كاملًا'} style={{ alignItems: 'center', gap: 4, alignSelf: 'flex-start' }}>
+          <Text style={{ color: palette.muted, fontSize: 14 }}>{open ? 'اطوِ' : 'النص كاملًا'}</Text>
+          <Arrow size={16} color={palette.muted} />
+        </TapRow>
+      ) : null}
+    </View>
+  );
+}
+
+/** The witness's words with the answer's lit, for QuoteBar. */
+function witnessPieces(text: string, lit?: string): QuotePiece[] {
+  const at = lit ? text.indexOf(lit) : -1;
+  return at < 0 ? [{ text: `«${text}»` }] : [{ text: `«${text.slice(0, at)}` }, { text: lit!, name: true }, { text: `${text.slice(at + lit!.length)}»` }];
+}
+
+/** Short choices are drawn as chips in a wrap (sketch question-look design أ), each no longer than this many letters. */
+const CHIP_LETTERS = 26;
 
 function Words({ words, marked, palette }: { words: string[]; marked?: number[]; palette: Palette }) {
   // A run of ayat carries each ayah's number between them, drawn as the end mark after the last one is.
@@ -85,6 +131,8 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
     onTicks?.(value);
   };
   const picks = several && answered ? picksOf(picked) : [];
+  // One right choice of a few short names: chips in a wrap, not a column of rows (owner, 2026-11-24).
+  const chipped = single && !question.quranChoices && !question.explains && question.choices.every(choice => choice.labelArabic.length <= CHIP_LETTERS);
   const alike = answered && !several && picked !== question.correctAnswer ? question.alike?.[picked] : undefined;
   const diff = alike && question.quran ? alikeDiff(question.quran, alike.words) : undefined;
   const name = (value: string) => question.choices.find(choice => choice.value === value)?.labelArabic ?? '';
@@ -106,7 +154,11 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
       {header}
       {/* A book's text the question asks about («لأي آية هذا التفسير؟»), its quotes of the ayah hidden: plain text, no card in the card. */}
       {question.passage && (
-        <BookRuns text={question.passage} quran={palette.accent} style={{ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'right', paddingHorizontal: 16 }} />
+        <View style={{ paddingHorizontal: 16 }}>
+          <Fold long={question.passage.length > FOLD_OVER} palette={palette}>
+            {lines => <BookRuns text={question.passage!} quran={palette.accent} lines={lines} style={{ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'right' }} />}
+          </Fold>
+        </View>
       )}
       {/* A chain drawn as boxes («أكمل النسب»): «؟» the box asked, framed in the accent; once answered it holds the right name. */}
       {question.boxes && (
@@ -148,7 +200,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
           picked={answered ? picked : ticked[0]} onPick={answered || !onPick ? undefined : select} palette={palette} />
       )}
       {revealed && !write && !orders(question) && !question.map && (
-        <View style={{ paddingHorizontal: 16, gap: 10 }}>
+        <View style={chipped ? { paddingHorizontal: 16, flexDirection: 'row', flexWrap: 'wrap', gap: 8 } : { paddingHorizontal: 16, gap: 10 }}>
           {question.choices.map(choice => {
             const chosen = several ? (answered ? picks : ticked).includes(choice.value) : choice.value === picked;
             // Selected, not yet submitted: framed in the accent until «تحقق».
@@ -165,13 +217,14 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
                 onPress={() => (several ? toggle(choice.value) : single ? select(choice.value) : onPick?.(choice.value))} accessibilityRole="button" accessibilityLabel={answered && question.explains?.[choice.value] ? `${choice.labelArabic} معنى ${question.explains[choice.value].quote}، ${question.explains[choice.value].where}`
                 : answered && question.whereOf?.[choice.value] ? `${choice.labelArabic}، ${question.whereOf[choice.value]}` : choice.labelArabic}
                 accessibilityState={several ? { checked: chosen, disabled: answered } : { selected: chosen || selected, disabled: answered }}
-                style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderWidth: right || wrong || missed || selected ? 1.5 : 1, borderColor: right || wrong || missed ? color : selected ? palette.accent : palette.rule, borderStyle: missed ? 'dashed' : 'solid', ...CARD, paddingVertical: 12, paddingHorizontal: 16, backgroundColor: pressed ? palette.paperDeep : 'transparent' })}>
+                style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: chipped ? 6 : 0, borderWidth: right || wrong || missed || selected ? 1.5 : 1, borderColor: right || wrong || missed ? color : selected ? palette.accent : palette.rule, borderStyle: missed ? 'dashed' : 'solid',
+                  ...(chipped ? { borderRadius: 999, minHeight: 44, paddingHorizontal: 16 } : { ...CARD, paddingVertical: 12, paddingHorizontal: 16 }), backgroundColor: pressed || selected ? palette.paperDeep : 'transparent' })}>
                 <View style={{ flexShrink: 1, flexGrow: question.quranChoices ? 1 : 0, gap: 2 }}>
                   {question.quranChoices
                     ? <AyahFlow color={color} menu={false}><AyahWords>{choice.labelArabic}</AyahWords></AyahFlow>
-                    : <Text style={{ color, fontSize: 19, fontWeight: right ? '700' : '400' }}>{choice.labelArabic}{missed ? ' · فاتك' : ''}</Text>}
-                  {/* What a choice is, once answered: an ayah's place, a reading's readers. */}
-                  {answered && question.whereOf?.[choice.value] && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{question.whereOf[choice.value]}</Text>}
+                    : <Text style={{ color, fontSize: chipped ? 17 : 19, fontWeight: right ? '700' : '400' }}>{choice.labelArabic}{missed ? ' · فاتك' : ''}</Text>}
+                  {/* What a choice is, once answered: an ayah's place, a reading's readers (as chips, in one list under them). */}
+                  {answered && !chipped && question.whereOf?.[choice.value] && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{question.whereOf[choice.value]}</Text>}
                   {/* What a choice is, once answered («معنى «فراتا»، المرسلات ٢٧»). */}
                   {answered && question.explains?.[choice.value] && (
                     <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>
@@ -184,6 +237,23 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
               </Pressable>
             );
           })}
+        </View>
+      )}
+      {/* Chips say what each is in one list under them, once answered (owner, 2026-11-22: every choice says whose it is). */}
+      {answered && chipped && question.whereOf && (
+        <View style={{ paddingHorizontal: 16, gap: 2 }}>
+          {question.choices.filter(choice => question.whereOf![choice.value]).map(choice => (
+            <Text key={choice.value} style={{ color: palette.muted, fontSize: 14, lineHeight: 22, textAlign: 'right' }}>
+              <Text style={{ color: isRightChoice(question, choice.value) ? palette.green : palette.ink }}>{choice.labelArabic}</Text>{`: ${question.whereOf![choice.value]}`}
+            </Text>
+          ))}
+        </View>
+      )}
+      {/* «الشاهد»: the book's line that holds the answer, its words lit (owner, 2026-11-24). */}
+      {answered && question.witness && (
+        <View style={{ marginHorizontal: 16, borderTopWidth: 1, borderColor: `${palette.rule}66`, paddingTop: 10, gap: 6 }}>
+          <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>الشاهد</Text>
+          <QuoteBar by={question.witness.by} pieces={witnessPieces(question.witness.text, question.witness.lit)} size={16} palette={palette} />
         </View>
       )}
       {/* In a feed card «تحقق» joins the row under the card, before «تلميح» (owner, 2026-11-22: no button in a card). */}
@@ -212,8 +282,8 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
       )}
       {/* Where the answer comes from, each book collapsed to its name (owner, 2026-11-19). */}
       {answered && !!question.sources?.length && <View style={{ paddingHorizontal: 16 }}><QuizSources sources={question.sources} palette={palette} /></View>}
-      {/* After the answer, the view it was looked up in, the answer lit there, so everyone learns from it (owner, 2026-11-19). */}
-      {answered && question.look && <View style={{ paddingHorizontal: 16 }}><LookView look={question.look} shown palette={palette} /></View>}
+      {/* After the answer, the view it was looked up in, the answer lit there (owner, 2026-11-19), in a sheet (2026-11-24). */}
+      {answered && question.look && <View style={{ paddingHorizontal: 16 }}><PlaceButton look={question.look} palette={palette} /></View>}
       {answered && question.ayahKey && onOpen && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}><Button Icon={FEATURE_ICON.mushaf} accessibilityLabel="في المصحف" onPress={() => onOpen(question.ayahKey!)} /></View>}
     </Box>
   );

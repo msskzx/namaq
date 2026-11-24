@@ -44,6 +44,8 @@ export function FortyCard({ entry, palette, onPress }: { entry: FortyEntry; pale
 
 export const openBook = (book: SahihSlug | 'forty') => router.push({ pathname: '/hadith-book', params: { book } });
 export const openKitab = (book: SahihSlug, kitab: number) => router.push({ pathname: '/hadith-kitab', params: { book, kitab: String(kitab) } });
+/** A bab's page: the kitab's page with the bab's place in its list (sketch hadith-design/sketch5 «أ»). */
+export const openBab = (book: SahihSlug, kitab: number, bab: number) => router.push({ pathname: '/hadith-kitab', params: { book, kitab: String(kitab), bab: String(bab) } });
 export const openSahih = (book: SahihSlug, n: number) => router.push({ pathname: '/hadith-sahih', params: { book, n: String(n) } });
 
 /** The hadith read last, its narrator and the opening of its words, with «افتح» back to it (owner, 2026-11-23: sketch hadith-design). */
@@ -89,7 +91,7 @@ function Hit({ hit, line, palette }: { hit: SahihHit; line: string; palette: Pal
   const book = SAHIH[hit.book];
   const place = placeOf(book, hit.n);
   return (
-    <Card palette={palette} pad={[10, 14]} gap={4} accessibilityRole="link" onPress={() => (hit.n ? openSahih(hit.book, hit.n) : openKitab(hit.book, hit.kitab))}>
+    <Card palette={palette} pad={[10, 14]} gap={4} accessibilityRole="link" onPress={() => (hit.n ? openSahih(hit.book, hit.n) : hit.bab !== undefined ? openBab(hit.book, hit.kitab, hit.bab) : openKitab(hit.book, hit.kitab))}>
       <Text numberOfLines={1} style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>{hit.n ? `${book.title} ${num(hit.n)}، ${place?.kitab.title ?? ''}` : `${book.title}، ${book.kitabs.find(each => each.n === hit.kitab)?.title ?? ''}`}</Text>
       <Text numberOfLines={3} style={{ color: palette.ink, fontSize: 16, lineHeight: 28, textAlign: 'right' }}>{line}</Text>
     </Card>

@@ -58,6 +58,20 @@ test('a Sahih\'s page finds kitabs and bab headings by a word', async ({ page })
   await expect(page.getByRole('link', { name: 'كِتَابُ الْحَيْضِ', exact: true })).toBeVisible();
   await expect(page.getByText(/^بَابُ اعْتِزَالِ/)).toBeVisible();
   await expect(page.getByRole('link', { name: 'بدء الوحي', exact: true })).toHaveCount(0);
+  // A bab the search found opens its own page (owner 2026-11-24: a bab's name did not open it).
+  await page.getByRole('link', { name: /^بَابُ اعْتِزَالِ/ }).first().click();
+  await expect(page).toHaveURL(/\/hadith-kitab\?book=bukhari&kitab=\d+&bab=\d+/);
+});
+
+// A kitab is the list of its babs, each a link to the bab's own page (owner's choice 2026-11-24, sketch hadith-design/sketch5 «أ»).
+test('a kitab lists its babs, and a bab opens on its own page with the next one a tap away', async ({ page }) => {
+  await open(page, '/hadith-kitab?book=bukhari&kitab=2');
+  await expect(page.getByRole('heading', { name: 'كِتَابُ الْإِيمَانِ' }).first()).toBeVisible();
+  await page.getByRole('link', { name: 'بَابُ أُمُورِ الْإِيمَانِ', exact: true }).click();
+  await expect(page).toHaveURL(/bab=2$/);
+  await expect(page.getByRole('heading', { name: 'بَابُ أُمُورِ الْإِيمَانِ' }).first()).toBeVisible();
+  await page.getByText('افتح الباب التالي').filter({ visible: true }).click();
+  await expect(page).toHaveURL(/bab=3$/);
 });
 
 test('the hadith of Jibril opens its scenes in al-Bukhari and in Muslim', async ({ page }) => {
