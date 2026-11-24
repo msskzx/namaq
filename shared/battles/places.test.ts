@@ -1,9 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { BATTLE_PLACE, GEONAMES, LANDMARKS, PLACES, placeSayer } from './places';
+import { GEONAMES, LANDMARKS, PLACES, placeSayer } from './places';
 
 // Owner, 2026-11-23: every place on the battle maps is correct and carries its reference.
 describe('the places on the battle maps', () => {
-  const shown = [...new Set([...Object.values(BATTLE_PLACE), ...LANDMARKS])];
+  const shown = Object.keys(PLACES);
+
+  it('has a record for every landmark the maps show', () => {
+    LANDMARKS.forEach(key => expect(PLACES[key], key).toBeDefined());
+  });
 
   it('names, for every pin, a book that places it, in the book’s own words with a link to its page', () => {
     shown.forEach(key => {

@@ -6,6 +6,7 @@ const qadisiyyah = {
   kind: 'BATTLE',
   slug: 'qadisiyyah',
   name: 'معركة القادسية',
+  place: 'qadisiyyah',
   nameTransliterated: 'Battle of al-Qadisiyyah',
   fields: {
     engagement: { value: 'BATTLE', claims: legacyUnreviewed },

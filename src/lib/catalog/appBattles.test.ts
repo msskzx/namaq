@@ -1,15 +1,18 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { appBattles, appMoments, batchClaims, citeOf } from './appBattles';
+import { appPlaces } from './appPlaces';
 import { loadCatalog } from './loadCatalog';
 
-const built = appBattles(await loadCatalog());
+const catalog = await loadCatalog();
+const built = appBattles(catalog);
 const badr = built.find(battle => battle.slug === 'badr')!;
 
 describe('the app battles', () => {
   it('is what the catalog builds now (npm run battles:app)', () => {
     expect(JSON.parse(readFileSync('shared/data/battles/battles.json', 'utf8'))).toEqual(JSON.parse(JSON.stringify(built)));
     expect(JSON.parse(readFileSync('shared/data/battles/moments.json', 'utf8'))).toEqual(JSON.parse(JSON.stringify(appMoments(built))));
+    expect(JSON.parse(readFileSync('shared/data/places.json', 'utf8'))).toEqual(JSON.parse(JSON.stringify(appPlaces(catalog))));
   });
 
   it('carries every battle in the catalog, earliest first', () => {

@@ -7,6 +7,7 @@ const fathCyprus = {
   kind: 'BATTLE',
   slug: 'fath-cyprus',
   name: 'فتح قبرص',
+  place: 'cyprus',
   nameTransliterated: 'Conquest of Cyprus',
   fields: {
     engagement: { value: 'BATTLE', claims: legacyUnreviewed },

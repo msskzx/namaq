@@ -12,6 +12,7 @@ const banuQurayzah = {
   kind: 'BATTLE',
   slug: 'banu-qurayzah',
   name: 'غزوة بني قريظة',
+  place: 'madinah',
   nameTransliterated: 'Siege of Banu Qurayzah',
   fields: {
     engagement: { value: 'GHAZWAH', claims: ['qurayzah/engagement'] },

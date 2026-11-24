@@ -7,6 +7,7 @@ const nahavand = {
   kind: 'BATTLE',
   slug: 'nahavand',
   name: 'معركة نهاوند',
+  place: 'nahavand',
   nameTransliterated: 'Battle of Nahavand',
   fields: {
     engagement: { value: 'BATTLE', claims: legacyUnreviewed },

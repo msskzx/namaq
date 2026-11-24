@@ -4,6 +4,7 @@ const uhud = {
   kind: 'BATTLE',
   slug: 'uhud',
   name: 'غزوة أحد',
+  place: 'uhud',
   nameTransliterated: 'Battle of Uhud',
   /*
    * Both values came off the legacy marker when chapter five was read. The

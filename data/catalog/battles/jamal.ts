@@ -4,6 +4,7 @@ const jamal = {
   kind: 'BATTLE',
   slug: 'jamal',
   name: 'معركة الجمل',
+  place: 'old-basra',
   nameTransliterated: 'Battle of the Camel',
   // The entry dates the killing, not the battle: he was killed at Jamal and
   // his killing was in 36, so the battle was. Same move as plague-of-amwas,

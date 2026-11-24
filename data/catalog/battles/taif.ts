@@ -8,6 +8,7 @@ const taif = {
   kind: 'BATTLE',
   slug: 'taif',
   name: 'غزوة الطائف',
+  place: 'taif',
   nameTransliterated: 'Siege of Taif',
   fields: {
     engagement: { value: 'GHAZWAH', claims: legacyUnreviewed },

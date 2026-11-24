@@ -6,6 +6,7 @@ const fathMakkah = {
   kind: 'BATTLE',
   slug: 'fath-makkah',
   name: 'فتح مكة',
+  place: 'makkah',
   nameTransliterated: 'Conquest of Mecca',
   fields: {
     engagement: { value: 'GHAZWAH', claims: legacyUnreviewed },

@@ -197,7 +197,7 @@ export const SOURCES: Source[] = [
     uses: [USE.people, USE.stories, USE.battles, { ar: 'الأحاديث', en: 'hadith', href: '/hadith' }], shelf: 'siyar-alam-al-nubala-risalah',
   },
   {
-    id: 'biladi-maalim', group: 'books',
+    id: 'biladi-maalim', group: 'books', files: ['data/catalog/places/', 'shared/data/places.json'],
     title: { ar: 'معجم المعالم الجغرافية في السيرة النبوية', en: 'Mu‘jam al-Ma‘alim al-Jughrafiyya fi al-Sira al-Nabawiyya' },
     author: { ar: 'عاتق بن غيث البلادي', en: '‘Atiq ibn Ghayth al-Biladi' },
     edition: 'دار مكة للنشر والتوزيع، مكة المكرمة، الطبعة الأولى ١٤٠٢هـ/١٩٨٢م؛ من نسخة turath.io، ٢٠٢٦-١١-٢٣', link: shamela(9777),
@@ -208,12 +208,12 @@ export const SOURCES: Source[] = [
     uses: [USE.battles],
   },
   {
-    id: 'yaqut-buldan', group: 'books',
+    id: 'yaqut-buldan', group: 'books', files: ['data/catalog/places/', 'shared/data/places.json'],
     title: { ar: 'معجم البلدان', en: 'Mu‘jam al-Buldan' }, author: { ar: 'ياقوت الحموي', en: 'Yaqut al-Hamawi' },
     edition: 'دار صادر، بيروت، الطبعة الثانية ١٩٩٥م، ٧ أجزاء؛ من نسخة turath.io، ٢٠٢٦-١١-٢٣', link: shamela(23735), licence: PUBLIC_DOMAIN, uses: [USE.battles],
   },
   {
-    id: 'shurrab-maalim', group: 'books',
+    id: 'shurrab-maalim', group: 'books', files: ['data/catalog/places/', 'shared/data/places.json'],
     title: { ar: 'المعالم الأثيرة في السنة والسيرة', en: 'al-Ma‘alim al-Athira fi al-Sunna wa-l-Sira' }, author: { ar: 'محمد محمد حسن شرّاب', en: 'Muhammad Hasan Shurrab' },
     edition: 'دار القلم والدار الشامية، دمشق وبيروت، الطبعة الأولى ١٤١١هـ؛ من نسخة turath.io، ٢٠٢٦-١١-٢٣', link: shamela(23677),
     licence: {
@@ -223,7 +223,7 @@ export const SOURCES: Source[] = [
     uses: [USE.battles],
   },
   {
-    id: 'lughat-al-arab', group: 'books',
+    id: 'lughat-al-arab', group: 'books', files: ['data/catalog/places/', 'shared/data/places.json'],
     title: { ar: 'مجلة لغة العرب', en: 'Lughat al-‘Arab (journal)' }, author: { ar: 'أنستاس ماري الكرملي', en: 'Anastase-Marie al-Karmali' },
     edition: 'بغداد، مطبعة الآداب، ٩ أجزاء؛ من نسخة turath.io، ٢٠٢٦-١١-٢٣', link: shamela(36540),
     licence: {
@@ -512,7 +512,7 @@ export const SOURCES: Source[] = [
     licence: { ar: 'ملك عام.', en: 'Public domain.' }, uses: [USE.battles],
   },
   {
-    id: 'geonames', group: 'data', files: ['shared/battles/places.ts'],
+    id: 'geonames', group: 'data', files: ['data/catalog/places/', 'shared/data/places.json'],
     title: { ar: 'GeoNames: معجم الأماكن الجغرافية', en: 'GeoNames geographical database' },
     edition: 'ملفات البلدان من download.geonames.org، ٢٠٢٦-١١-٢٣؛ لكل موضع رقم سجله', link: { url: 'https://www.geonames.org', label: 'geonames.org' },
     licence: {

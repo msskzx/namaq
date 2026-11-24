@@ -4,6 +4,7 @@ const fathDamascus = {
   kind: 'BATTLE',
   slug: 'fath-damascus',
   name: 'فتح دمشق',
+  place: 'damascus',
   nameTransliterated: 'Conquest of Damascus',
   // Carried from the old seed, which an earlier agent extracted from this same
   // work without citations. The entry does not date it, so the evidence is

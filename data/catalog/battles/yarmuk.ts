@@ -4,6 +4,7 @@ const yarmuk = {
   kind: 'BATTLE',
   slug: 'yarmuk',
   name: 'معركة اليرموك',
+  place: 'yarmuk',
   nameTransliterated: 'Battle of Yarmuk',
   // Carried from the old seed, which an earlier agent extracted from this same
   // work without citations. The entry does not date it, so the evidence is

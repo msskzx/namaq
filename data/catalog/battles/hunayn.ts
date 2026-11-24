@@ -7,6 +7,7 @@ const hunayn = {
   kind: 'BATTLE',
   slug: 'hunayn',
   name: 'غزوة حنين',
+  place: 'hunayn',
   nameTransliterated: 'Battle of Hunayn',
   fields: {
     engagement: { value: 'GHAZWAH', claims: legacyUnreviewed },

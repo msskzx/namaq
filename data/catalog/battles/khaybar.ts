@@ -18,6 +18,7 @@ const khaybar = {
   kind: 'BATTLE',
   slug: 'khaybar',
   name: 'غزوة خيبر',
+  place: 'khaybar',
   nameTransliterated: 'Battle of Khaybar',
   fields: {
     engagement: { value: 'GHAZWAH', claims: ['khaybar/engagement'] },

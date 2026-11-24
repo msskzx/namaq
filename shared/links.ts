@@ -5,13 +5,13 @@
  * shared/data/links.json. Nothing edits that file by hand: a fix goes into the record and the build runs again.
  *
  * An id names its kind: person:<slug>, ayah:<surah>:<ayah>, hadith:<book>:<number>, battle:<slug>, event:<slug>,
- * utterance:<slug>. A link between two kinds keeps its type on both ends, since the other end's kind says which way it
+ * utterance:<slug>, place:<slug>. A link between two kinds keeps its type on both ends, since the other end's kind says which way it
  * reads (person:x REVEALED_ABOUT ayah:y is read «آيات نزلت فيه» on the person and «نزلت فيه» on the ayah). Only a link
  * between two people turns into another type the other way (FATHER becomes SON or DAUGHTER), as the catalog's
  * relations already do.
  */
 
-export const ID_KINDS = ['person', 'ayah', 'hadith', 'battle', 'event', 'utterance'] as const;
+export const ID_KINDS = ['person', 'ayah', 'hadith', 'battle', 'event', 'utterance', 'place'] as const;
 export type IdKind = (typeof ID_KINDS)[number];
 
 /** The hadith books an id may name, by the catalog's source slug. */
@@ -36,6 +36,8 @@ export const LINK_TYPES = {
   PARTICIPATED_IN: 'شهدها',
   ABSENT_FROM: 'غاب عنها',
   IN_MOMENT: 'ذُكر في خبر من أخبارها',
+  // A battle and the place it was fought at, on the books that place it.
+  FOUGHT_AT: 'كانت فيه',
   // Someone's words (poetry or a saying) and who said them, who they are about, and where they were said.
   SAID: 'قالها',
   ABOUT: 'قيلت فيه',

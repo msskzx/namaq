@@ -21,6 +21,7 @@ const mutah = {
   kind: 'BATTLE',
   slug: 'mutah',
   name: 'غزوة مؤتة',
+  place: 'mutah',
   nameTransliterated: "Battle of Mu'tah",
   fields: {
     engagement: { value: 'SARIYYAH', claims: ['mutah/engagement'] },
