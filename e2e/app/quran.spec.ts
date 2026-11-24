@@ -364,7 +364,7 @@ test('an opened word shows where it gathers: a bar picks a surah, names it with 
   const box = (await strip.boundingBox())!;
   // al-A'raf is the seventh surah from the right.
   await page.mouse.click(box.x + box.width * (1 - 6.5 / 114), box.y + 10);
-  await expect(page.getByText(`منها ٢١ في ${S(7)}`)).toBeVisible();
+  await expect(page.getByText(`منها ٢١ في ${S(7)}`)).toBeInViewport();
   await expect(page.getByRole('button', { name: new RegExp(`^افتح ${S(7)} .* في المصحف$`) }).first()).toBeInViewport();
 });
 
@@ -388,8 +388,12 @@ test("a word's page holds Ibn Qutaybah's note on a phrase that explains it, and 
   await open(page, '/words');
   await page.getByLabel('ابحث عن كلمة في القرآن').fill('ريب');
   await page.getByRole('button', { name: /^رَيۡب، / }).click();
+  // His note is a branch of the word's meanings at the top too; the book's own section adds its card under them.
+  const note = page.getByText('لا شكَّ فيه', { exact: false });
+  await expect(note.first()).toBeVisible();
+  const before = await note.count();
   await page.getByRole('tab', { name: 'غريب القرآن لابن قتيبة' }).click();
-  await expect(page.getByText('لا شكَّ فيه', { exact: false })).toBeVisible();
+  await expect(note).toHaveCount(before + 1);
   await open(page, '/words');
   await page.getByLabel('ابحث عن كلمة في القرآن').fill('نخل');
   await page.getByRole('button', { name: /^نَخۡل، / }).click();

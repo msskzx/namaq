@@ -117,6 +117,8 @@ export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bott
   const tops = useRef(new Map<string, number>());
   /** Where «مواضعها» and the books' sections start on the word's own page. */
   const sectionsAt = useRef(0);
+  /** The chart's height while it stays at the top of the word's own page, so a picked surah's first ayah shows under it. */
+  const stuck = useRef(0);
   const pending = useRef<string | null>(null);
   const [top, setTop] = useState(0);
   // The chart stays while a finger slides on it, and after the list's own jump to a picked surah, which is not the reader scrolling.
@@ -143,7 +145,7 @@ export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bott
     const first = places.findIndex(place => place.key.startsWith(`${at + 1}:`));
     const key = places[first].key;
     const y = tops.current.get(key);
-    if (first < shown && y !== undefined) jump(y);
+    if (first < shown && y !== undefined) jump(y - stuck.current);
     else { pending.current = key; if (first >= shown) setShown(first + PLACES_STEP); }
   };
   const total = showing === 'gharib' ? entries.length : places.length;
@@ -158,7 +160,10 @@ export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bott
   );
   const sectionTabs = sections.length > 1 && <Tabs options={sections.map(at => ({ key: at, label: at === 'places' ? 'المواضع' : BOOK_NAMES[at] }))} value={showing}
     onChange={at => { setSection(at); restart(); }} label="أقسام الكلمة" palette={palette} />;
-  const strip = showing === 'places' && places.length > 0 && <SurahStrip counts={counts} picked={surah} onPick={pickSurah} onSliding={onSlide} names={surahNames} palette={palette} />;
+  const charted = showing === 'places' && places.length > 0;
+  // On the word's own page the chart scrolls with the page: a finger sliding on it lights a surah, and lifting it there brings
+  // that surah's ayat up, so sliding never moves the page under the finger.
+  const strip = charted && <SurahStrip counts={counts} picked={surah} onPick={full ? setSurah : pickSurah} onLift={full ? pickSurah : undefined} onSliding={onSlide} names={surahNames} palette={palette} />;
   return (
     <View style={{ flexShrink: 1, flexGrow: 1 }}>
       {/* The top's frame gives its room back as it slides away; the top itself is laid out at full height to be measured. */}
@@ -175,7 +180,7 @@ export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bott
           {strip}
         </Animated.View>
       </Animated.View>}
-      <ScrollView key={id} ref={scroll} onScroll={scrolled} scrollEventThrottle={16} style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 10, paddingBottom: bottom }}>
+      <ScrollView key={id} ref={scroll} onScroll={scrolled} scrollEventThrottle={16} stickyHeaderIndices={full && charted ? [1] : undefined} style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 10, paddingBottom: bottom }}>
         {full && <View style={{ gap: 18, marginBottom: 8 }}>
           {lemmas.length > 1 && lemmaTabs}
           <WordFace name={name} root={root || undefined} count={count} ayat={places.length} counts={counts} entries={entries} article={articles[0]}
@@ -183,9 +188,13 @@ export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bott
           <View style={{ gap: 8 }} onLayout={event => { sectionsAt.current = event.nativeEvent.layout.y; }}>
             <PostHead Icon={FEATURE_ICON.mushaf} title="مواضعها" sub={`${num(places.length)} آية`} palette={palette} />
             {sectionTabs}
-            {strip}
-            {showing === 'places' && surah !== null && <Text style={{ color: palette.accent, fontSize: 15, textAlign: 'right' }}>{`منها ${num(counts[surah])} في ${surahNames[surah + 1]}`}</Text>}
           </View>
+        </View>}
+        {/* The chart stays at the top while its ayat scroll under it, as it did above the sheet's list. Its line keeps its room
+            before a surah is picked, so picking one moves no ayah. */}
+        {full && charted && <View onLayout={event => { stuck.current = event.nativeEvent.layout.height; }} style={{ backgroundColor: palette.paper, paddingBottom: 4 }}>
+          {strip}
+          <Text style={{ color: palette.accent, fontSize: 15, lineHeight: 24, minHeight: 24, textAlign: 'right' }}>{surah !== null ? `منها ${num(counts[surah])} في ${surahNames[surah + 1]}` : ''}</Text>
         </View>}
         {showing === 'places' && places.slice(0, shown).map(({ key, words: marked }) => {
           const [s, number] = key.split(':').map(Number);
@@ -196,7 +205,7 @@ export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bott
               onLayout={event => {
                 const y = event.nativeEvent.layout.y;
                 tops.current.set(key, y);
-                if (pending.current === key) { pending.current = null; jump(y); }
+                if (pending.current === key) { pending.current = null; jump(y - stuck.current); }
               }} accessibilityRole="button" accessibilityLabel={`افتح ${place} في المصحف`}>
               <AyahFlow color={palette.ink} menu={false}>
                 {text.map((word, i) => <AyahWords key={i} look={marked.includes(i) ? { color: palette.accent } : undefined}>{`${i ? ' ' : ''}${word}`}</AyahWords>)}

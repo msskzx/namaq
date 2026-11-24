@@ -30,14 +30,23 @@ describe('mostIn', () => {
 });
 
 describe('raghibOpening', () => {
-  test('quotes his opening words as written, stopping before any quotation', () => {
+  test('quotes his own opening words exactly as stored, never an ayah he quotes nor a bracket left open', () => {
+    let opened = 0;
     for (const [, , , , text] of mufradat.entries) {
       const opening = raghibOpening(text);
-      if (!opening) { expect(text.trim()).toMatch(/^(قال|وقال|يقال|ويقال|نحو|كقوله|وقوله|ومنه)[^،.]{0,20}:/); continue; }
-      expect(opening.text.length).toBeGreaterThan(0);
-      expect(text.replace(/\s+/g, ' ').trim().startsWith(opening.text)).toBe(true);
-      expect(opening.text).not.toMatch(/(^|\s)(قال|يقال|وقوله|كقوله)[^،.]{0,20}:/);
+      if (!opening) continue;
+      opened++;
+      expect(text.trim().startsWith(opening.text)).toBe(true);
+      expect(opening.text).not.toMatch(/(قوله|قال)( الله)? تعالى|\[[^\]]*\/\s*[٠-٩]+\]/);
+      for (const [left, right] of [['«', '»'], ['(', ')'], ['[', ']'], ['﴿', '﴾']]) expect(opening.text.split(left).length).toBe(opening.text.split(right).length);
     }
+    expect(opened).toBeGreaterThan(0);
+  });
+
+  test('gives none for an article that opens on an ayah', () => {
+    const ab = mufradat.entries.find(entry => entry[0] === 'أب')!;
+    expect(ab[4].trim()).toMatch(/^قوله تعالى/);
+    expect(raghibOpening(ab[4])).toBeNull();
   });
 
   test('says when his article goes on after it', () => {
@@ -53,14 +62,11 @@ describe('meaningBranches', () => {
   const fitna = data.lemmas.findIndex(([name]) => name === 'فِتۡنَة');
   const entries = gharibOfPlaces(gharib, marks, mushafPlacesOf(data, fitna));
 
-  test('each branch is one entry explaining the word, with his meaning in his words', () => {
+  test('every entry explaining the word is a branch, in his own words; none for a phrase it is in', () => {
     const branches = meaningBranches(gharib, entries);
-    expect(branches.length).toBeGreaterThan(1);
-    for (const branch of branches) {
-      expect(branch.phrase).toBeFalsy();
-      expect(gharib.meanings[branch.at]).toContain(branch.meaning);
-    }
-    expect(new Set(branches.map(branch => branch.at)).size).toBe(branches.length);
+    expect(branches.map(branch => branch.at)).toEqual(entries.filter(entry => !entry.phrase).map(entry => entry.at));
+    expect(entries.some(entry => !gharib.meanings[entry.at])).toBe(true);
+    for (const branch of branches) expect(`${gharib.meanings[branch.at] ?? ''} ${branch.text}`).toContain(branch.meaning);
   });
 
   test('two entries giving the same meaning stay two branches', () => {

@@ -61,12 +61,10 @@ export default function WordFace({ name, root, count, ayat, counts, entries, art
       {article && (
         <View style={{ gap: 4 }}>
           <PostHead Icon={FEATURE_ICON.words} title="أصلها" sub={`جذرها «${article[0]}» عند الراغب`} palette={palette} />
-          <CardWithRow palette={palette} pad={[10, 14]} gap={6} lead={<OpenButton label="كلام الراغب فيها كاملًا" onPress={onWhole} />}
+          <CardWithRow palette={palette} pad={[10, 14]} gap={6} lead={!opening || opening.cut ? <OpenButton label="كلام الراغب فيها كاملًا" onPress={onWhole} /> : undefined}
             source={[{ line: MUFRADAT_BOOK, quotes: [{ text: '', cite: mufradatCredit(article), url: mufradatPage(article) }], editions: [MUFRADAT_EDITION] }]}>
-            <QuoteBar by="قال الراغب:" palette={palette}>
-              {opening ? <BookRuns text={opening.text} quran={palette.accent} style={{ ...bookStyle, color: palette.ink }} />
-                : <Text style={{ color: palette.muted, fontSize: 16, textAlign: 'right' }}>يفتتح كلامه فيها بآية، فاقرأه كاملًا.</Text>}
-            </QuoteBar>
+            {opening ? <QuoteBar by="قال الراغب:" palette={palette}><BookRuns text={opening.text} quran={palette.accent} style={{ ...bookStyle, color: palette.ink }} /></QuoteBar>
+              : <Text style={{ color: palette.ink, fontSize: 17, textAlign: 'right' }}>{`كلام الراغب في مادة «${article[0]}» في «المفردات».`}</Text>}
           </CardWithRow>
         </View>
       )}
@@ -75,11 +73,8 @@ export default function WordFace({ name, root, count, ayat, counts, entries, art
           <PostHead Icon={FEATURE_ICON.words} title="معانيها في القرآن" sub="عند ابن قتيبة، بلفظه" palette={palette} />
           <CardWithRow palette={palette} pad={[10, 14]} gap={10} source={gharibSource(branch)}
             lead={<OpenButton label={`افتح ${placeOf(branch.key)} في المصحف`} onPress={() => onOpen(branch.key)} />}>
-            {branches.length > 1 && <View>
-              <QuranWord look={{ color: palette.accent }} place={{ textAlign: 'right' }}>{name}</QuranWord>
-              <TraitChips branches palette={palette} picked={picked} onPick={setPicked}
-                traits={branches.map(each => ({ label: each.meaning, names: [], agreed: false, place: placeOf(each.key) }))} />
-            </View>}
+            {branches.length > 1 && <TraitChips root={name} palette={palette} picked={picked} onPick={setPicked}
+              traits={branches.map(each => ({ label: each.meaning, names: [], agreed: false, place: placeOf(each.key) }))} />}
             <QuoteBar by={`قال ابن قتيبة في ${placeOf(branch.key)}:`} palette={palette}>
               <BookRuns text={branch.text.replace(/^[٠-٩]+-\s*/, '')} quran={palette.accent} style={{ ...bookStyle, color: palette.ink }} />
             </QuoteBar>
