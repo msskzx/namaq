@@ -6,6 +6,7 @@ import { isPenRule, type PenRule } from '@shared/quran/writeAyah';
 import { isMarkMode, type MarkMode } from '@shared/quran/wordMatch';
 import { HINT_IDS, HINTS_SEEN, type HintId } from '@shared/tabHints';
 import { isAdhanAlerts, isAdhkarAlerts, NO_ADHKAR_ALERTS, NO_ALERTS, type AdhanAlerts, type AdhkarAlerts } from '@shared/adhanAlerts';
+import { isSaidToday, type SaidToday } from '@shared/adhkarCount';
 import { DEFAULT_PRAYER_SETTINGS, isPlace, isPrayerSettings, type Place, type PrayerSettings } from '@shared/prayer';
 
 /** A value kept on the phone that every screen reading it follows. */
@@ -104,3 +105,6 @@ export const prayerView = setting<PrayerView>('prayer-view', 'dial', (value): va
 export type UtilityView = 'tools' | 'adhkar';
 export const utilityView = setting<UtilityView>('utilities-view', 'tools', (value): value is UtilityView => value === 'tools' || value === 'adhkar');
 
+
+/** The adhkar said today, kept until the day ends (owner, 2026-11-24); lib/adhkar.ts reads it for today only. */
+export const adhkarSaid = setting<SaidToday | null>('adhkar-said', null, (value): value is SaidToday | null => value === null || isSaidToday(value));

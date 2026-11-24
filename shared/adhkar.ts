@@ -40,6 +40,11 @@ export type Dhikr = {
   repeat?: { count: number; quote: string; scope: 'whole-selection' };
   instructionQuote?: string;
   virtueQuote?: string;
+  /**
+   * The whole report as al-Nawawi gives it at the same page and number, his words only, shown when the dhikr is open
+   * (owner, 2026-11-24: a sample on one or two adhkar first, the rest later).
+   */
+  fullReport?: string;
   /** A remark in the report shown with the reference (a narrator's doubt, the Prophet ﷺ as the source of a companion's words). */
   noteQuote?: string;
   /**
@@ -132,6 +137,7 @@ export const ADHKAR: readonly Dhikr[] = [
   },
   {
     "id": "prayer-peace",
+    "fullReport": "وروينا في \" صحيح مسلم \"، عن ثوبان ﵁ قال: كان رسول الله ﷺ إذا انصرف من صلاته استغفر ثلاثًا وقال: \" اللَّهُمَّ أنْتَ السَّلامُ وَمِنْكَ السَّلامُ، تَبارَكْتَ يا ذَا الجَلالِ وَالإِكْرامِ \". قيل للأوزاعي وهو أحد رواة الحديث: كيف الاستغفار؟ قال: تقول: اسْتَغْفِرُ اللَّهَ، أسْتَغْفِرُ اللَّهَ.",
     "occasions": [
       "after-prayer"
     ],
@@ -653,6 +659,7 @@ export const ADHKAR: readonly Dhikr[] = [
   },
   {
     "id": "morning-evening-name",
+    "fullReport": "وروينا في \" سنن أبي داود \" و\" الترمذي \" عن عثمان بن عفان ﵁ قال: قال رسول الله ﷺ: \" مَا مِنْ عَبْدٍ يَقُولُ في صَباحِ كُلّ يَوْمٍ وَمَساءِ كل ليلة: بِسْمِ اللَّهِ الَّذي لاَ يَضُرُّ مَعَ اسْمِهِ شئ فِي الأرْضِ وَلا في السَّماءِ وَهُوَ السَّمِيعُ العَلِيم، ثَلاثَ مَرَّاتٍ لَمْ يَضُرَّه شئ \" قال الترمذي: هذا حديث حسن صحيح، هذا لفظ الترمذي. وفي رواية أبي داود: \" لَم تُصِبْهُ فجأة بلاء \".",
     "occasions": [
       "morning",
       "evening"

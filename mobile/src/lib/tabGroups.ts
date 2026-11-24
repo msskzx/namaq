@@ -23,4 +23,4 @@ export function openPage(segments: readonly string[]): { tab: string; page: stri
  * shelf, from a hadith back to the list, and from a person, a nasab tree or the full list back to the tarajim hub (a way back, not a re-tap);
  * any other page goes to its top, then resets (lib/tabRetap.ts).
  */
-export const tapOnOpen = (page: string): 'back' | 'retap' => (page === 'search' || page === 'utilities' || page === 'library' || page === 'book' || page === 'hadith-unit' || page === 'hadith-forty' || page.startsWith('hadith-') || page === 'person' || page === 'nasab' || page === 'ties' || page === 'between' || page === 'people' ? 'back' : 'retap');
+export const tapOnOpen = (page: string): 'back' | 'retap' => (page === 'search' || page === 'utilities' || page === 'dhikr' || page === 'library' || page === 'book' || page === 'hadith-unit' || page === 'hadith-forty' || page.startsWith('hadith-') || page === 'person' || page === 'nasab' || page === 'ties' || page === 'between' || page === 'people' ? 'back' : 'retap');

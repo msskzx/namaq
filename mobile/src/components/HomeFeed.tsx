@@ -174,7 +174,7 @@ import Button from '@/ui/Button';
 import { ADHKAR, type Dhikr } from '@shared/adhkar';
 import { ADHKAR_TABS, adhkarSource } from '@shared/adhkarCite';
 import { adhkarTimes, askedDhikr } from '@shared/quiz/adhkar';
-import { openAdhkar } from '@/lib/adhkar';
+import { openDhikr } from '@/lib/adhkar';
 import { DhikrBody } from './Adhkar';
 import { QuranWord } from '@/components/quran/text/AyahFlow';
 
@@ -497,7 +497,7 @@ function openAnswer(question: SoloQuestion) {
     case 'ayat': return readAyah(look.mark ?? look.keys[0]);
   }
   const dhikr = askedDhikr(question.key);
-  if (dhikr) return openDhikr(dhikr);
+  if (dhikr) return openDhikrCard(dhikr);
   if (question.ayahKey) return readAyah(question.ayahKey);
   if (question.order?.length) return router.push({ pathname: '/order', params: { juz: String(orderJuz(question.order)) } });
   const aimed = question.family === 'SURAH_AIM' && orderSurahOf(question.correctAnswer);
@@ -1656,7 +1656,7 @@ const nameList = (kind: 'laqab' | 'kunya') => (nameLists[kind] ??= kind === 'laq
 const nameId = (each: NameFact) => nameItem(each.person.slug, each.name);
 
 /** A dhikr's card on the adhkar page: its first tab (a morning and evening dhikr opens on the morning), scrolled to it. */
-const openDhikr = (item: Dhikr) => openAdhkar(ADHKAR_TABS.find(tab => item.occasions.includes(tab))!, item.id);
+const openDhikrCard = (item: Dhikr) => openDhikr(ADHKAR_TABS.find(tab => item.occasions.includes(tab))!, item.id);
 
 /**
  * A dhikr of the adhkar page (owner, 2026-11-23: every feature a feed card): the page's own card body, its times and how
@@ -1668,7 +1668,7 @@ function DhikrPost({ id, palette }: { id: string; palette: Palette }) {
   const often = item.repeat ? ` · ${counted(item.repeat.count, ['مرة', 'مرتين', 'مرات'])}` : '';
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.adhkar} title="من الأذكار" sub={`${adhkarTimes(item)}${often}`} open={{ onPress: () => openUtility('adhkar'), label: 'افتح الأذكار' }} palette={palette} />}
-      open={<OpenButton label="افتح الذكر في الأذكار" onPress={() => openDhikr(item)} palette={palette} />}
+      open={<OpenButton label="افتح الذكر في الأذكار" onPress={() => openDhikrCard(item)} palette={palette} />}
       source={[adhkarSource(item)]}>
       <View style={{ paddingHorizontal: 18, paddingVertical: 14, gap: 14 }}>
         <DhikrBody item={item} palette={palette} />

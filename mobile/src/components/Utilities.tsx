@@ -78,12 +78,12 @@ export function UtilityPicker({ palette, progress }: { palette: Palette; progres
 export const UTILITY_VIEWS = VIEWS.map(view => view.id);
 
 /**
- * One utility's page: the tools or the adhkar. `on` runs the compass only while its page is on screen, and ends an adhkar
- * count when the page is left; `scrollTo` brings a searched adhkar card or the qibla into view; `reach` is how far down the
+ * One utility's page: the tools or the adhkar. `on` runs the compass only while its page is on screen; `scrollTo` brings
+ * the qibla into view; `reach` is how far down the
  * page has been seen, so the compass asks for the location only once it is reached.
  */
 export function UtilityPage({ view, palette, on = true, onPlace, scrollTo, reach = Infinity }: { view: UtilityView; palette: Palette; on?: boolean; onPlace: () => void; scrollTo?: (y: number) => void; reach?: number }) {
-  return view === 'adhkar' ? <Adhkar palette={palette} on={on} onPlace={onPlace} scrollTo={scrollTo} />
+  return view === 'adhkar' ? <Adhkar palette={palette} onPlace={onPlace} />
     : <Tools palette={palette} on={on} onPlace={onPlace} scrollTo={scrollTo} reach={reach} />;
 }
 
