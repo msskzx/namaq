@@ -23,7 +23,8 @@ import { WEBSITE } from '@/lib/website';
 import { compareTargetsFor, type CompareTarget } from '@/lib/compare';
 import { setIntent } from '@/lib/intent';
 import EvidenceSheet from './EvidenceSheet';
-import BookQuote, { TanasubQuote } from './BookQuote';
+import { TanasubQuote } from './TanasubQuote';
+import { BookAnswers, MutashabihCells } from './MutashabihFace';
 import CompareTargetsSheet from './CompareTargetsSheet';
 import { TAGS, type Group, type Tag } from '@shared/quran/mutashabih/types';
 import { connectionTone } from '@shared/quran/mutashabih/connections';
@@ -406,8 +407,9 @@ export default function TreePager({ pieces, list, palette, around: defaultAround
                   connections={linked ? { group: linked, tags: current && growth.studio && growth.kind === 'matrix' ? studioTags : tagsOf(pieces[at], linked) } : undefined}
                   growth={current && growth.studio && growth.kind !== 'tree' ? { hidden: growth.hidden, now: growth.now, ask: growth.ask } : undefined}
                   reading={current && growth.studio && growth.kind === 'read'} onScroll={current && !embedded ? shrink : undefined}
-                  below={embedded ? undefined : group?.citations.length ? <BookQuote citations={group.citations} onMore={() => setEvidence(group)} palette={palette} />
-                    : pieces[at].group?.tanasub ? <TanasubQuote link={pieces[at].group!.tanasub!} palette={palette} /> : undefined} />
+                  below={embedded ? undefined : group?.citations.length ? <MutashabihCells group={group} palette={palette} />
+                    : pieces[at].group?.tanasub ? <TanasubQuote link={pieces[at].group!.tanasub!} palette={palette} /> : undefined}
+                  after={!embedded && group?.citations.length ? <View style={{ direction: 'rtl', paddingHorizontal: 16, paddingBottom: 24 }}><BookAnswers group={group} palette={palette} /></View> : undefined} />
                 : embedded
                   ? <TreeCard piece={pieces[at]} list={list} palette={palette} view={view} lane={at === index ? lane : undefined} around={atAround}
                     rotated={rotatedId === pieces[at].id} shareRef={at === index ? shareRef : undefined}

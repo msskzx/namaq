@@ -72,6 +72,13 @@ export async function open(page: Page, path: string) {
   await expect(page.locator('#root')).not.toBeEmpty();
 }
 
+/** Opens the mutashabih tab, which opens on its index by surah, and its first row: the first card, among all the tab's cards. */
+export async function openCards(page: Page) {
+  await open(page, '/branches');
+  await page.getByRole('link', { name: /^الفَاتِحَةْ ١: / }).first().click();
+  await expect(page.getByLabel(/^الشجرة ١ من /)).toBeAttached();
+}
+
 /** A long press: hold the pointer down on the element's centre. */
 export async function longPress(page: Page, target: Locator, ms = 900) {
   // The mushaf page measures its lines and draws again once, so the target is looked up afresh for the press.

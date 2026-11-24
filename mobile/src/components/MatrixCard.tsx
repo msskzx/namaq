@@ -45,6 +45,8 @@ type Props = {
   note?: (key: string) => React.ReactNode;
   /** Inside the card under its rows, in the middle column (a book's words under the ayat it names). */
   below?: React.ReactNode;
+  /** After the footer, in the page's scroll: a book card's «لماذا؟» (components/MutashabihFace.tsx). Not with `pinFooter`. */
+  after?: React.ReactNode;
   /** The rows scrolled (the branches tab hides its top bar while they scroll down). */
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void };
 
@@ -185,7 +187,7 @@ export function MatrixShare({ presentation, palette, width }: { presentation: Pr
  * The website's ayah matrix: a row per ayah of the tree, coloured where every row shares a word. With the surrounding switch,
  * the ayah before and after each sit in columns either side; a sideways swipe steps a column, then on to the next tree.
  */
-export default function MatrixCard({ onFit, presentation, palette, view, lane, around, onTap, onMove, footer, pinFooter = false, connections, growth, reading, onColumn, alongside, note, below, onScroll }: Props) {
+export default function MatrixCard({ onFit, presentation, palette, view, lane, around, onTap, onMove, footer, pinFooter = false, connections, growth, reading, onColumn, alongside, note, below, after, onScroll }: Props) {
   const matrix = useMemo(() => matrixOf(presentation, around), [presentation, around]);
   const count = matrix.columns.length;
   // One column fills the card; with the ayat around it, its neighbours peek in from the sides.
@@ -312,6 +314,7 @@ export default function MatrixCard({ onFit, presentation, palette, view, lane, a
           </Animated.View>
           </Words.Provider>
           {!pinFooter && footer}
+          {!pinFooter && after}
         </ScrollView>
         {pinFooter && footer}
       </View>
