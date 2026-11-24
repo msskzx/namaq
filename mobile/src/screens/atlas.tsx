@@ -145,9 +145,10 @@ export default function AtlasScreen() {
   const foundPlaces = useMemo(() => {
     const typed = query.trim();
     if (!typed) return [];
-    const first = new Map<string, AppBattle>();
-    for (const battle of BATTLES) if (battle.place && !first.has(battle.place.name) && holdsTerms(battle.place.name, typed)) first.set(battle.place.name, battle);
-    return [...first.values()];
+    // Each place by its last battle (BATTLES runs earliest first): its sheet then lists every battle there up to that year.
+    const last = new Map<string, AppBattle>();
+    for (const battle of BATTLES) if (battle.place && holdsTerms(battle.place.name, typed)) last.set(battle.place.name, battle);
+    return [...last.values()];
   }, [query]);
   const foundYear = useMemo(() => {
     const typed = Number(query.trim().replace(/^السنة\s*/, '').replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x0660)));

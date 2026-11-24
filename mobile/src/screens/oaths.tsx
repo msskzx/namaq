@@ -86,10 +86,14 @@ export default function OathsScreen() {
   const [query, setQuery] = useState('');
   const typed = useDeferredValue(query);
   const rows = useMemo(() => rowsOf(kind, by, typed), [kind, by, typed]);
-  const atRow = at ? rows.findIndex(row => 'oath' in row && row.oath.id === at) : -1;
+  // Scrolled to once per opening, not again as a search moves its row.
+  const reached = useRef<string | undefined>(undefined);
+  const atRow = at && reached.current !== at && !typed.trim() ? rows.findIndex(row => 'oath' in row && row.oath.id === at) : -1;
   useEffect(() => {
-    if (atRow >= 0) requestAnimationFrame(() => list.current?.scrollToIndex({ index: atRow, animated: false, viewOffset: 8 }));
-  }, [atRow]);
+    if (atRow < 0) return;
+    reached.current = at;
+    requestAnimationFrame(() => list.current?.scrollToIndex({ index: atRow, animated: false, viewOffset: 8 }));
+  }, [atRow, at]);
   useTabRetap('oaths', () => { if (top.current > 4) list.current?.scrollToOffset({ offset: 0, animated: true }); else setBy(null); });
   const pick = (next: OathKind) => { setKind(next); setBy(null); list.current?.scrollToOffset({ offset: 0, animated: false }); };
   const chip = (label: string, value: OathBy | null) => <Chip key={label} label={label} on={by === value} onPress={() => setBy(value)} palette={palette} />;

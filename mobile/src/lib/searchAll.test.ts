@@ -64,4 +64,12 @@ describe('people, battles and hadith in the app search (owner, 2026-11-24: it fo
     expect(group('إنما الأعمال بالنيات', 'hadith')).toContainEqual(expect.objectContaining({ book: 'forty', n: 1 }));
     expect(group('سدوا الأبواب', 'hadith')).toContainEqual(expect.objectContaining({ book: 'bukhari', kitab: expect.any(Number) }));
   });
+
+  it('lists no hadith for a number, which holds no Arabic word to match', () => {
+    expect(group('12', 'hadith')).toEqual([]);
+  });
+
+  it('keeps Muslim\'s babs when al-Bukhari alone could fill the list', () => {
+    expect(group('الصلاة', 'hadith')).toContainEqual(expect.objectContaining({ book: 'muslim' }));
+  });
 });

@@ -113,17 +113,19 @@ export default function HadithScreen() {
   const { texts, reading } = useSahihTexts(!!typed);
   const found = useMemo(() => (typed ? searchSahih(SAHIH_SLUGS.map(slug => ({ index: SAHIH[slug], text: texts[slug] })), typed, Infinity) : null), [typed, texts]);
   const missing = SAHIH_SLUGS.filter(slug => bookState(slug) !== 'on');
-  const forty = useMemo(() => (typed ? searchForty(FORTY.entries, typed) : []), [typed]);
+  const forty = useMemo(() => (/[ء-ي]/.test(typed) ? searchForty(FORTY.entries, typed) : []), [typed]);
   // The finds in three lists, each its own tab with its count (owner, 2026-11-24: the hadith found were drawn only after
   // every bab heading found, so a common word showed no hadith at all). It opens on the first with finds, the hadith first;
   // a tab with none drops out, but the hadith's stays to offer the download.
-  const [picked, setPicked] = useState<Found | null>(null);
+  // A tab picked holds for its search only; while the books' text is read the hadith tab waits with its loading dots.
+  const [picked, setPicked] = useState<{ typed: string; key: Found } | null>(null);
   const lists = found ? ([
     { key: 'hadith', label: missing.length === SAHIH_SLUGS.length ? 'الأحاديث' : `الأحاديث ${num(found.hadith.length)}`, size: found.hadith.length },
     { key: 'babs', label: `الأبواب ${num(found.babs.length)}`, size: found.babs.length },
     { key: 'forty', label: `الأربعون ${num(forty.length)}`, size: forty.length },
   ] as const).filter(list => list.key === 'hadith' || list.size) : [];
-  const list: Found = lists.find(each => each.key === picked)?.key ?? lists.find(each => each.size)?.key ?? 'hadith';
+  const list: Found = (picked?.typed === typed ? lists.find(each => each.key === picked.key)?.key : undefined)
+    ?? (reading ? 'hadith' : lists.find(each => each.size)?.key ?? 'hadith');
   const [drawn, setDrawn] = useState({ typed: '', list, count: SEARCH_STEP });
   const count = drawn.typed === typed && drawn.list === list ? drawn.count : SEARCH_STEP;
   // «تابع» and the mark on each book read the last hadith again each time the tab comes back into view.
@@ -140,7 +142,7 @@ export default function HadithScreen() {
       <TopBar hideOnScroll search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث في الأبواب والأحاديث', label: 'ابحث في الصحيحين' }} />
       <ScrollView ref={scroll} onScroll={scrolled} scrollEventThrottle={16} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ padding: 16, paddingBottom: bottom, gap: 12 }}>
         {found ? <>
-          {lists.length > 1 && <Tabs label="نتائج البحث" options={lists.map(({ key, label }) => ({ key, label }))} value={list} onChange={setPicked} palette={palette} fill />}
+          {lists.length > 1 && <Tabs label="نتائج البحث" options={lists.map(({ key, label }) => ({ key, label }))} value={list} onChange={key => setPicked({ typed, key })} palette={palette} fill />}
           {list === 'babs' && found.babs.slice(0, count).map(hit => {
             const kitab = SAHIH[hit.book].kitabs.find(each => each.n === hit.kitab);
             return <Hit key={`b-${hit.book}-${hit.kitab}-${hit.bab}`} hit={hit} line={kitab?.babs[hit.bab ?? 0]?.title ?? ''} palette={palette} />;

@@ -50,14 +50,16 @@ const SAHIH: Record<SahihSlug, SahihIndex> = { bukhari: bukhari as SahihIndex, m
 const SAHIH_SLUGS: SahihSlug[] = ['bukhari', 'muslim'];
 
 function hadithHits(query: string): Extract<AppHit, { kind: 'hadith' }>[] {
-  const forty = searchForty(FORTY.entries, query)
+  // searchForty keeps every entry when nothing Arabic is typed («12»), so the Forty are searched only for Arabic words.
+  const forty = (/[ء-ي]/.test(query) ? searchForty(FORTY.entries, query) : [])
     .map(entry => ({ kind: 'hadith' as const, book: 'forty' as const, n: entry.n, title: sayingStart(entry.text), place: `${FORTY.books.nawawi.title}، ${entry.heading}` }));
-  const babs = searchSahih(SAHIH_SLUGS.map(slug => ({ index: SAHIH[slug] })), query, FIND).babs.map(hit => {
+  // Each book with its own limit, so a common word that fills the list from al-Bukhari still shows Muslim's babs.
+  const babs = SAHIH_SLUGS.flatMap(slug => searchSahih([{ index: SAHIH[slug] }], query, FIND).babs).map(hit => {
     const book = SAHIH[hit.book];
     const kitab = book.kitabs.find(each => each.n === hit.kitab);
     return { kind: 'hadith' as const, book: hit.book, n: hit.n, kitab: hit.kitab, title: kitab?.babs[hit.bab ?? 0]?.title ?? '', place: `${book.title}، ${kitab?.title ?? ''}` };
   });
-  return [...forty, ...babs].slice(0, FIND);
+  return [...forty, ...babs];
 }
 
 export function searchApp(query: string): AppGroup[] {

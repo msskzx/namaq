@@ -66,7 +66,7 @@ export default function OrderScreen() {
         search={practice ? undefined : { value: query, onChangeText: setQuery, placeholder: 'ابحث في ترتيب السور', label: 'ابحث في ترتيب السور' }}>
         {practice
           ? <Button variant="plain" Icon={X} accessibilityLabel="أوقف الترتيب" onPress={() => setPractice(null)} />
-          : shown.length > 1 && <Button Icon={ArrowDownWideNarrow} label="رتّبها بنفسك" onPress={begin} />}
+          : !typed && shown.length > 1 && <Button Icon={ArrowDownWideNarrow} label="رتّبها بنفسك" onPress={begin} />}
       </TopBar>
       {/* Inverted in a left-to-right box, as the home shelves, so «الكل» sits on the right on every platform. */}
       <View style={{ direction: 'ltr' }}>

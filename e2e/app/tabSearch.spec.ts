@@ -48,7 +48,8 @@ test('the list of all tarajim searches from the top bar', async ({ page }) => {
 });
 
 // The hadith tab's finds come in tabs (owner, 2026-11-24: a common word listed hundreds of bab headings, and the hadith
-// found were drawn only after all of them, so none showed); the Forty are searched too.
+// found were drawn only after all of them, so none showed); the Forty are searched too. The test build has no Sahih
+// downloaded, so the hadith list itself is checked by hand (npm run phone, after «نزّل الكتاب»).
 test('the hadith tab lists its finds by kind, the Forty among them', async ({ page }) => {
   await open(page, '/');
   await tab(page, 'الحديث').click();
@@ -67,7 +68,7 @@ for (const [route, field, typed, found, gone] of [
   ['/hadith-kitab?book=bukhari&kitab=2', 'ابحث في كِتَابُ الْإِيمَانِ', 'الحياء', 'بَابٌ: الْحَيَاءُ مِنَ الْإِيمَانِ', 'بَابٌ: الصَّلَاةُ مِنَ الْإِيمَانِ'],
   ['/books', 'ابحث في المكتبة', 'الإتقان', 'الإتقان في علوم القرآن', 'تحفة الأطفال'],
   ['/order', 'ابحث في ترتيب السور', 'الكهف', 'الكَهْفْ', 'البَقَرَةْ'],
-  ['/stories', 'ابحث في قصص السيرة', 'الهجرة', 'هجرة إلى المدينة', 'قبل الهجرة'],
+  ['/stories', 'ابحث في قصص السيرة', 'الهجرة', 'هجرة إلى المدينة', 'عتبة بن ربيعة يعرض على النبي ﷺ'],
 ] as const) {
   test(`${route} searches its list from the top bar`, async ({ page }) => {
     await open(page, route);

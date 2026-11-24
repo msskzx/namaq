@@ -36,7 +36,7 @@ export default function HadithBookScreen() {
   useFocusEffect(useCallback(() => { setSeen(was => was + 1); }, []));
   const typed = useDeferredValue(query.trim());
   const found = useMemo(() => (sahih && typed ? kitabsHolding(sahih, typed) : undefined), [sahih, typed]);
-  const forty = useMemo(() => (sahih || !typed ? FORTY.entries : searchForty(FORTY.entries, typed)), [sahih, typed]);
+  const forty = useMemo(() => (sahih || !typed ? FORTY.entries : /[ء-ي]/.test(typed) ? searchForty(FORTY.entries, typed) : []), [sahih, typed]);
   const title = sahih?.title ?? FORTY.books.nawawi.title;
   const card = (entry: FortyEntry) => <FortyCard key={entry.n} entry={entry} palette={palette} onPress={() => router.push({ pathname: '/hadith-forty', params: { n: String(entry.n) } })} />;
   return (
