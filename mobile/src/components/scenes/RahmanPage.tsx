@@ -364,8 +364,8 @@ function Cover({ look }: { look: CoverLook }) {
 const PLOT_INK = { basmala: RAHMAN_ART.basmala, name: paper.accent } as const;
 const PLOT_UNIT = 3;
 const PLOT_BAR = 9;
-/** Rows of surahs (owner, 2026-11-25: «اقسمها على ٧ أسطر أو ما شابه»). */
-const PLOT_ROWS = 6;
+/** Rows of surahs (owner, 2026-11-25: «اقسمها على ٧ أسطر أو ما شابه»), each name right under its bar. */
+const PLOT_ROWS = 7;
 const PLOT_NAME = 13;
 
 /**
@@ -378,18 +378,33 @@ function CoverPlot() {
   const basmalas = BASMALAS.reduce((sum, n) => sum + n, 0);
   const places = placeCount(PLACES_OF());
   const perRow = Math.ceil(bars.length / PLOT_ROWS);
-  /** Named: only the surahs where the name stands more than once, and at-Tawba with no basmala (owner, 2026-11-25: all of them was too much). */
-  const named = (bar: (typeof bars)[number]) => bar.name + bar.both > 1 || bar.surah === NO_BASMALA;
   const step = BLOCK_W / perRow;
   const units = (bar: (typeof bars)[number]) => [
     ...Array<keyof typeof PLOT_INK>(bar.basmala + bar.both).fill('basmala'),
     ...Array<keyof typeof PLOT_INK>(bar.both + bar.name).fill('name'),
   ];
+  /** Named: every surah whose bar is longer than one unit, and at-Tawba with none (owner, 2026-11-25). */
+  const named = (bar: (typeof bars)[number]) => units(bar).length > 1 || bar.surah === NO_BASMALA;
+  /** A name's width at the plot's size, near enough to keep two names apart: its letters without their marks. */
+  const nameWidth = (surah: number) => surahName(surah).replace(/[\u064b-\u0652\u0670\u06e1]/g, '').length * 4.6 + 4;
+  /** Each name right under its bar, a line lower where it would touch the name before it. */
+  const nameLines = (some: typeof bars) => {
+    const ends: number[] = [];
+    return some.map((bar, i) => {
+      if (!named(bar)) return -1;
+      const half = nameWidth(bar.surah) / 2;
+      const centre = i * step + step / 2;
+      let line = 0;
+      while ((ends[line] ?? -Infinity) > centre - half) line++;
+      ends[line] = centre + half;
+      return line;
+    });
+  };
   const row = (r: number) => {
     const some = bars.slice(r * perRow, (r + 1) * perRow);
     const height = Math.max(...some.map(bar => units(bar).length)) * PLOT_UNIT;
-    // Two lines of names only where two named surahs stand side by side.
-    const lines = some.some((bar, i) => named(bar) && i > 0 && named(some[i - 1])) ? 2 : some.some(named) ? 1 : 0;
+    const at = nameLines(some);
+    const lines = Math.max(0, ...at.map(line => line + 1));
     return (
       <View key={r}>
         <View style={{ height }}>
@@ -401,8 +416,8 @@ function CoverPlot() {
         </View>
         <View style={{ height: 1, backgroundColor: RAHMAN_ART.mark }} />
         <View style={{ height: PLOT_NAME * lines }}>
-          {some.map((bar, i) => named(bar) && (
-            <Text key={bar.surah} numberOfLines={1} style={{ position: 'absolute', top: (lines > 1 ? i % 2 : 0) * PLOT_NAME, right: Math.min(Math.max(i * step - step / 2 - 3, 0), BLOCK_W - step * 2 - 6), width: step * 2 + 6, textAlign: 'center', color: paper.ink, fontSize: 10, lineHeight: PLOT_NAME }}>{surahName(bar.surah)}</Text>
+          {some.map((bar, i) => at[i] >= 0 && (
+            <Text key={bar.surah} numberOfLines={1} style={{ position: 'absolute', top: at[i] * PLOT_NAME, right: i * step - step / 2, width: step * 2, textAlign: 'center', color: paper.ink, fontSize: 9, lineHeight: PLOT_NAME }}>{surahName(bar.surah)}</Text>
           ))}
         </View>
       </View>
@@ -416,7 +431,7 @@ function CoverPlot() {
   );
   return (
     <View style={{ gap: 6 }} accessible accessibilityLabel={`في ${num(basmalas)} بسملة، وفي ${num(places)} موضعًا من الآيات، وفي ${num(HADITH_COUNT)} حديثًا من الصحيحين`}>
-      <View style={{ gap: 2 }}>{Array.from({ length: PLOT_ROWS }, (_, r) => row(r))}</View>
+      <View style={{ gap: 5 }}>{Array.from({ length: PLOT_ROWS }, (_, r) => row(r))}</View>
       <View style={{ flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', columnGap: 12, direction: 'rtl' }}>
         {key(PLOT_INK.basmala, `بسملة، إلا ${surahName(NO_BASMALA)}`)}
         {key(PLOT_INK.name, '«الرحمن» في آيات السورة')}
