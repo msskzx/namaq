@@ -1,0 +1,9 @@
+[
+ {
+  "book": "muslim", "n": 395, "route": "٣٨",
+  "wrong": "قسمت الصلاة بين وَبَيْنَ عَبْدِي",
+  "right": "قسمت الصلاة بيني وَبَيْنَ عَبْدِي",
+  "witness": "صحيح مسلم، ت. محمد فؤاد عبد الباقي، ١/٢٩٦ (shamela.ws/book/1727/823); the owner, 2026-11-25",
+  "note": "the turath.io export drops the ي of «بيني»"
+ }
+]

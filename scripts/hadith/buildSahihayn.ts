@@ -269,7 +269,23 @@ function muslimUnmarked(misprinted: Record<string, string[]>) {
   return { unmark, check };
 }
 
+/**
+ * Slips of the turath.io export, each fixed from the printed page it names (data/hadith/sahih-text-fixes.json): applied to
+ * every build, so a rebuild never brings a slip back. shared/sahihTextFixes.test.ts checks the built text holds each fix.
+ */
+type TextFix = { book: string; n: number; route?: string; wrong: string; right: string; witness: string };
+function fixText(built: Built) {
+  const fixes = (JSON.parse(readFileSync('data/hadith/sahih-text-fixes.json', 'utf8')) as TextFix[]).filter(fix => fix.book === built.index.slug);
+  for (const fix of fixes) {
+    const hadith = built.files.flatMap(file => file.hadith).find(each => each.n === fix.n);
+    const route = hadith?.routes.find(each => (fix.route ? each.route === fix.route : each.text.includes(fix.wrong)));
+    if (!route || !route.text.includes(fix.wrong)) throw new Error(`${fix.book} ${fix.n}: «${fix.wrong}» is not in its text`);
+    route.text = route.text.replace(fix.wrong, fix.right);
+  }
+}
+
 function write(built: Built) {
+  fixText(built);
   const slug = built.index.slug;
   writeFileSync(`shared/data/hadith/${slug}.json`, `${JSON.stringify(built.index)}\n`);
   mkdirSync('data/hadith/sahih', { recursive: true });
