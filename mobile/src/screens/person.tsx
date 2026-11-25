@@ -38,6 +38,7 @@ import Saying from '@/ui/Saying';
 import FactCells, { type FactCell, type Reading } from '@/ui/FactCells';
 import TitleCells from '@/ui/TitleCells';
 import QuoteBar, { type QuotePiece } from '@/ui/QuoteBar';
+import SahihSaying from '@/components/SahihSaying';
 import SayingBand from '@/ui/SayingBand';
 import TraitChips from '@/ui/TraitChips';
 import { traitChips, traitSpans } from '@shared/tarajimTraits';
@@ -126,7 +127,10 @@ function PageOf({ fact, palette }: { fact: PersonFact; palette: Palette }) {
  */
 function VirtueList({ person, palette, marked }: { person: AppPerson; palette: Palette; marked?: number }) {
   const names = namesOf(person);
-  const groups = virtueGroups(person.virtues);
+  // A report the Sahih gives is shown in its words (SahihSaying), after the Prophet's ﷺ band: it opens with its narrator.
+  const groups = virtueGroups(person.virtues).map(group => ({ ...group, items: group.items.filter(({ fact }) => !fact.sahih) })).filter(group => group.items.length);
+  const sahih = virtueGroups(person.virtues).flatMap(group => group.items.filter(({ fact }) => fact.sahih).map(item => ({ ...item, prophet: group.by === PROPHET_SAYS })))
+    .sort((a, b) => Number(b.prophet) - Number(a.prophet) || a.at - b.at);
   const prophet = groups.find(group => group.by === PROPHET_SAYS);
   const author = (fact: PersonFact) => `قال ${pageSources(fact.refs)[0]?.author ?? 'الذهبي'}:`;
   return <>
@@ -138,8 +142,11 @@ function VirtueList({ person, palette, marked }: { person: AppPerson; palette: P
         ))}
       </SayingBand>
     )}
-    {groups.some(group => group !== prophet) && (
+    {(sahih.length > 0 || groups.some(group => group !== prophet)) && (
       <View style={{ padding: 16, gap: 14 }}>
+        {sahih.map(({ fact, at, prophet: his }) => (
+          <SahihSaying key={at} fact={fact} names={names} palette={palette} tone={his ? palette.amber : undefined} marked={at === marked} />
+        ))}
         {groups.filter(group => group !== prophet).flatMap(group => group.items.map(({ fact, at }) => (
           <QuoteBar key={at} by={group.by ?? (fact.anonymous ? 'قيل:' : author(fact))} pieces={namePieces(fact.text, names)} palette={palette}
             marked={at === marked} foot={<PageOf fact={fact} palette={palette} />} />
@@ -230,9 +237,11 @@ export function PersonBrief({ person, palette }: { person: AppPerson; palette: P
       <TitleCells title={personName(person)} line={person.fullName?.text} cells={cells} palette={palette} />
       {person.virtues.length > 0 && (
         <View style={{ padding: 16, paddingTop: 14, gap: 14 }}>
-          {virtueGroups(person.virtues).flatMap(group => group.items.map(({ fact, at }) => (
-            <QuoteBar key={at} pieces={namePieces(fact.text, names)} palette={palette} by={sayer(fact, group.by)}
-              tone={group.by === 'قال النبي ﷺ:' ? palette.amber : undefined} />
+          {/* A report the Sahih gives, in its words (owner, 2026-11-25), as on his page. */}
+          {virtueGroups(person.virtues).flatMap(group => group.items.map(({ fact, at }) => (fact.sahih
+            ? <SahihSaying key={at} fact={fact} names={names} palette={palette} tone={group.by === PROPHET_SAYS ? palette.amber : undefined} />
+            : <QuoteBar key={at} pieces={namePieces(fact.text, names)} palette={palette} by={sayer(fact, group.by)}
+              tone={group.by === PROPHET_SAYS ? palette.amber : undefined} />
           )))}
         </View>
       )}
@@ -429,7 +438,9 @@ export default function PersonScreen() {
                 <LitAyat ayat={keys.map(key => ({ words: ayahMushafWords(key), lit: [], number: Number(key.split(':')[1]) }))} menu={keys} palette={palette} />
                 {/* The ayah is the subject: its name opens its page (owner, 2026-11-22). */}
                 <Button variant="plain" label={`${ayatName(keys)}${facts.some(fact => fact.kind === 'REVEALED_ABOUT') && !allRevealed ? (f ? ' · نزلت فيها' : ' · نزلت فيه') : ''}`} Icon={ChevronLeft} onPress={() => openAyahPage(keys[0])} />
-                {facts.map(fact => <QuoteBar key={fact.text} by={saidBy(fact) ?? `قال ${pageSources(fact.refs)[0]?.author ?? 'الذهبي'}:`} pieces={namePieces(fact.text, namesOf(person))} palette={palette} size={17} />)}
+                {facts.map(fact => (fact.sahih
+                  ? <SahihSaying key={fact.text} fact={fact} names={namesOf(person)} palette={palette} />
+                  : <QuoteBar key={fact.text} by={saidBy(fact) ?? `قال ${pageSources(fact.refs)[0]?.author ?? 'الذهبي'}:`} pieces={namePieces(fact.text, namesOf(person))} palette={palette} size={17} />))}
               </View>
             ))}
             {/* Ayat a story says were revealed about him, with the story that says so under them, opening the story. */}

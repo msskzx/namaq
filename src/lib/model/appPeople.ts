@@ -9,6 +9,7 @@ import { loadModel } from './load';
 import { agentOfMention, profilesFromModel, type ProfileEntry } from './profile';
 import { renderSpanRecord } from './render';
 import type { WorkFolder } from './types';
+import { quoteOf, sahihOfFact } from './sahihNotes';
 
 const IBN = /^(?:ابن|بن|بنت|ابنة)$/u;
 // A nisba after the last name («الهاشمية», «القرشي») is not a father.
@@ -120,6 +121,8 @@ function mergeAyat(catalog: AppPerson['ayat'], own: AppPerson['ayat']): AppPerso
   return [...own, ...catalog.filter((fact) => !shown(fact))];
 }
 
+const SAHIH_PREDICATES = new Set<ProfileEntry['predicate']>(['virtue', 'REVEALED_ABOUT', 'ABOUT_AYAH']);
+
 export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.'), root = '.', claims: Map<string, Claim> = batchClaims()): AppPerson[] {
   const profiles = profilesFromModel(folders, root);
   const spans = new Map(folders.flatMap((folder) => folder.units.flatMap((file) => file.spans.map((span) => [span.id + '@' + file.unit.id, span] as const))));
@@ -206,6 +209,7 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
       return pages.filter((ref, index) => pages.findIndex((other) => sameRef(other, ref)) === index);
     };
     const fact = (entry: ProfileEntry): PersonFact => ({
+      ...sahihOf(entry),
       id: `${entry.unit}#${entry.assertionId}`,
       text: arabicCommas(entry.text),
       refs: refsOf(entry),
@@ -236,6 +240,16 @@ export function appPeople(catalog: Catalog, folders: WorkFolder[] = loadModel('.
       ...(entry.parsed !== undefined && { value: entry.parsed }),
       ...(entry.classified !== undefined && { value: entry.classified }),
     });
+    // A report the Sahih gives, in its words (owner, 2026-11-25): virtues and what was revealed about him, the sayings
+    // the page quotes; a name, a date or a tie stays al-Dhahabi's.
+    function sahihOf(entry: ProfileEntry): Pick<PersonFact, 'sahih'> {
+      if (!SAHIH_PREDICATES.has(entry.predicate)) return {};
+      const from = units.get(entry.unit)!;
+      const ids = entry.spanIds.length ? entry.spanIds : from.statements.filter((s) => entry.statementIds.includes(s.id)).flatMap((s) => s.spans);
+      const found = sahihOfFact(folderOf.get(entry.unit)!, ids.map((id) => from.spans.find((span) => span.id === id)!).filter(Boolean), entry.text, root)
+        .find((one) => one.open);
+      return found?.open ? { sahih: [found.open, ...found.others].map(quoteOf) } : {};
+    }
     const of = (predicate: ProfileEntry['predicate']) => entries.filter((entry) => entry.predicate === predicate);
     const facts = (predicate: ProfileEntry['predicate']) => of(predicate).map(fact);
     // A name read from the text may be in the genitive or accusative («أبي العاص» after «بن»): it reads as a name.

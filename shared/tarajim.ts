@@ -42,6 +42,24 @@ export interface PersonFact {
   anonymous?: true;
   /** The number or key read from the text: a year, an age, a month, an ayah key. */
   value?: number | string;
+  /**
+   * The report as al-Bukhari or Muslim prints it, where the Siyar's editor says they give it (owner, 2026-11-25): the
+   * route closest to the Siyar's words first and shown open, the others his note names after it, closed.
+   */
+  sahih?: SahihQuote[];
+}
+
+/** One route of a Sahih hadith: its chain (folded on the page), then from its last narrator on, and where it is printed. */
+export interface SahihQuote {
+  book: 'bukhari' | 'muslim';
+  n: number;
+  /** Muslim's label for the route under the number («م ٢»). */
+  route?: string;
+  isnad: string;
+  words: string;
+  volume: number;
+  pages: number[];
+  shamela: number;
 }
 
 /**
@@ -240,3 +258,31 @@ export function pageLabel(refs: PageRef[]) {
 /** The people in the app's order: the Prophet ﷺ first, then the book's order. Their ties are read in this order too. */
 export const inAppOrder = <P extends Pick<AppPerson, 'slug' | 'entry'>>(people: readonly P[]): P[] => people.slice().sort((a, b) =>
   Number(b.slug === 'prophet-muhammad') - Number(a.slug === 'prophet-muhammad') || a.entry.volume - b.entry.volume || Number(a.entry.from) - Number(b.entry.from));
+
+const SAHIH_SOURCE = { bukhari: 'sahih-bukhari', muslim: 'sahih-muslim' } as const;
+/** «صحيح البخاري (٤٠٥٨)»: a Sahih route's book and number; Muslim's label for the route is in the sheet. */
+export function sahihPlace(quote: SahihQuote) {
+  const title = sourceById(SAHIH_SOURCE[quote.book])!.title.ar;
+  return `${title} (${arabic(quote.n)})`;
+}
+
+/** The line under a hadith in the Sahih's words (owner, 2026-11-25): the first route's book and number, «وذكره غيره». */
+export const sahihLabel = (fact: PersonFact) => `${sahihPlace(fact.sahih![0])}، وذكره غيره`;
+
+/**
+ * What the line's sheet lists: each route the card shows at its volume and page, linked to its page online, then the
+ * Siyar's page, where al-Dhahabi gives the report and his editor names these.
+ */
+export function sahihSources(fact: PersonFact): QuizSource[] {
+  return [
+    ...(fact.sahih ?? []).map((quote): QuizSource => {
+      const source = sourceById(SAHIH_SOURCE[quote.book])!;
+      return {
+        book: source.title.ar, ...(source.author && { author: source.author.ar }),
+        at: `${arabic(quote.n)}${quote.route ? `، ${quote.route}` : ''}، ج ${arabic(quote.volume)}، ص ${quote.pages.map(arabic).join('-')}`,
+        url: `${source.link.url}/${quote.shamela}`, edition: source.edition,
+      };
+    }),
+    ...pageSources(fact.refs),
+  ];
+}

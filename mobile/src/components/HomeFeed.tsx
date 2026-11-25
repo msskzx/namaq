@@ -18,7 +18,7 @@ import { PROPHET_NAMES } from '@shared/quiz/tarajim';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
 import { allVirtues, feedBooks, LIST_KINDS, listStart, type ListKind, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, isKahfDay, KAHF_SLOT, prayerSoon, type FeedSlot } from '@shared/homeFeed';
-import { pageSources, saidBy } from '@shared/tarajim';
+import { pageSources, sahihSources, saidBy } from '@shared/tarajim';
 import { briefFacts, PersonBrief } from '@/screens/person';
 import { DRAWING_OR_TEXT, type DrawingOrText } from '@shared/drawingText';
 import Saying from '@/ui/Saying';
@@ -630,7 +630,8 @@ function TarajimPost({ id, palette }: { id: string; palette: Palette }) {
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.person} title="من التراجم" sub={personName(pick.person)} open={topic('/tarajim', 'افتح التراجم')} palette={palette} />}
       open={<OpenButton label={`افتح ترجمة ${personName(pick.person)}`} onPress={open} palette={palette} />}
-      source={sourcesOf(pageSources(briefFacts(pick.person).flatMap(fact => fact.refs)))}>
+      // The Sahih's routes too, where a virtue is shown in its words (owner, 2026-11-25).
+      source={sourcesOf([...pageSources(briefFacts(pick.person).flatMap(fact => fact.refs)), ...briefFacts(pick.person).flatMap(fact => sahihSources(fact).slice(0, fact.sahih?.length ?? 0))])}>
       <View style={{ padding: 14 }}>
         <PersonBrief person={pick.person} palette={palette} />
       </View>
