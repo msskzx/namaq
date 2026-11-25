@@ -94,14 +94,15 @@ function Ayah({ ayahKey, basmala, title }: { ayahKey: string; basmala?: boolean;
 }
 
 /** Ayat of one surah that follow each other in one flow, each with its number, the surah's name over them. */
-function AyahRun({ keys, bare }: { keys: string[]; bare?: boolean }) {
+function AyahRun({ keys, bare, breakAfter }: { keys: string[]; bare?: boolean; breakAfter?: string }) {
   return (
     <View style={{ gap: 2 }}>
       {bare ? null : <Ref>{surahName(Number(keys[0].split(':')[0]))}</Ref>}
       <AyahFlow menu={keys[0]} color={paper.ink} center>
         {keys.map((key, k) => {
           const lit = NAME_AT_OF().get(key);
-          return ayahMushafWords(key).map((word, i) => <AyahWords key={`${k}-${i}`} look={lit?.has(i) ? { color: paper.accent } : undefined}>{`${k || i ? ' ' : ''}${word}`}</AyahWords>)
+          const after = keys[k - 1] === breakAfter ? '\n' : ' ';
+          return ayahMushafWords(key).map((word, i) => <AyahWords key={`${k}-${i}`} look={lit?.has(i) ? { color: paper.accent } : undefined}>{`${k && !i ? after : i ? ' ' : ''}${word}`}</AyahWords>)
             .concat(<AyahWords key={`${k}-n`} look={{ color: paper.muted }}>{`\u00a0${num(Number(key.split(':')[1]))}`}</AyahWords>);
         })}
       </AyahFlow>
@@ -258,7 +259,7 @@ function Sadi() {
 export function RahmanBlockView({ block, size, live }: { block: RahmanBlock; size: number; live: boolean }) {
   switch (block.kind) {
     case 'ayah': return <Ayah ayahKey={block.key} basmala={block.basmala} title={block.title} />;
-    case 'run': return <AyahRun keys={block.keys} bare={block.bare} />;
+    case 'run': return <AyahRun keys={block.keys} bare={block.bare} breakAfter={block.breakAfter} />;
     case 'hadith': return <Hadith id={block.id} size={size} live={live} />;
     case 'sadi': return <Sadi />;
     case 'cover': return <CoverPlot />;
