@@ -8,7 +8,7 @@ export type SahihBook = 'bukhari' | 'muslim';
 export const SAHIH_SOURCE: Record<SahihBook, string> = { bukhari: 'sahih-al-bukhari', muslim: 'sahih-muslim' };
 
 /** The sha256 (first 16) of each book's file when the catalog's positions were taken (catalogRules.test.ts). */
-export const ANCHORED: Record<SahihBook, string> = { bukhari: '5ef8ef5097b7423d', muslim: '7e30955616f53fc5' };
+export const ANCHORED: Record<SahihBook, string> = { bukhari: '5ef8ef5097b7423d', muslim: 'e7b6be75d70e54d1' };
 
 const books = new Map<SahihBook, SahihText>();
 const book = (name: SahihBook) => {

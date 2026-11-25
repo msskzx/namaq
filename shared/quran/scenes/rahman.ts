@@ -1,12 +1,15 @@
 import { mushafPlacesOf, type WordPlace, type WordsData } from '../words';
 import { normalizeWord } from '../normalize';
+import mutashabihFile from '../../data/quran/mutashabih.json';
+import { dataOf } from '../../appData';
 
 /**
  * «الرحمن», the second scene of «مشاهد» (owner, 2026-11-24, thread "Design a still scene on «الرحمن»"): still pages, not a
  * video, each one ready to share as a 4:5 picture. Five pages of introduction come first, with no button on them so they
  * share clean; then every place the name is written: the basmalas and the 57 places in the Quran, surat al-Rahman and
  * al-Fatiha, every ayah, and every hadith of the Sahihayn whose words name «الرحمن»; the hadith of the hundred mercies
- * closes it. Every page holds the name; there are no drawings (owner: «امسح الرسم»). Sketches in
+ * closes it. Every page holds the name; the only drawings are the map, al-Kirmani's repeated ayah and the hundred mercies
+ * (owner, 2026-11-25). Sketches in
  * /mnt/project-files/mashahid/rahman/.
  */
 export const RAHMAN_KEY = 'rahman';
@@ -41,8 +44,10 @@ export type HadithRef = { book: SahihBookSlug; n: number };
  * - `from`/`until`: the words start after the first `from` and stop before `until`, where the edition marks no matn.
  * - `cut`: too long for a page (the Hudaybiyyah runs to 39); a part around the name shows, and its page opens the whole.
  * - `part`: `from`/`until` cut inside its words, so they show with «…» on both sides.
+ * - `lead`: a muted line over its words saying what it is and who narrates it, as the scholars introduce it.
+ * - `lit`: words of it in a second colour (owner, 2026-11-25: «أثنى علي عبدي», not the name's red).
  */
-export type SceneHadith = HadithRef & { id: string; title: string; route?: string; from?: string; until?: string; cut?: boolean; part?: boolean;
+export type SceneHadith = HadithRef & { id: string; title: string; route?: string; from?: string; until?: string; cut?: boolean; part?: boolean; lead?: string; lit?: string;
   /** The other numbers that hold the same words, in the same book or the other. */
   also?: HadithRef[] };
 
@@ -50,9 +55,10 @@ const b = (n: number): HadithRef => ({ book: 'bukhari', n });
 const m = (n: number): HadithRef => ({ book: 'muslim', n });
 
 /** «قسمت الصلاة…» in Muslim (395): al-Fatiha's page shows its words whole, up to Sufyan's own note after them. */
-export const FATIHA_HADITH: SceneHadith = { id: 'fatiha', ...m(395), route: '٣٨', title: 'أثنى علي عبدي', until: 'قَالَ سُفْيَانُ' };
+export const FATIHA_HADITH: SceneHadith = { id: 'fatiha', ...m(395), route: '٣٨', title: 'أثنى علي عبدي', until: 'قَالَ سُفْيَانُ', lit: 'أثنى علي عبدي' };
 /** The same, on the introduction: from Allah's words up to «أثنى علي عبدي» (owner, 2026-11-24: the part before it too). */
-export const FATIHA_PART: SceneHadith = { ...FATIHA_HADITH, id: 'fatiha-part', part: true, from: 'سَمِعْتُ رسول الله ﷺ يقول: ', until: ' وَإِذَا قال مالك' };
+/** Its narrator is Abu Hurayra (route ٣٨: «عن أبي هريرة، عن النبي ﷺ»); the owner asked for the line (2026-11-25). */
+export const FATIHA_PART: SceneHadith = { ...FATIHA_HADITH, id: 'fatiha-part', part: true, lead: 'في الحديث القدسي، عن أبي هريرة رضي الله عنه:', from: 'سَمِعْتُ رسول الله ﷺ يقول: ', until: ' وَإِذَا قال مالك' };
 
 /** The hadith pages, in the order they show. Every hadith of the Sahihayn whose words name «الرحمن» is here (rahmanHadith.test.ts). */
 export const SCENE_HADITH: SceneHadith[] = [
@@ -88,7 +94,7 @@ export const sceneHadithNumbers = (): HadithRef[] => {
 export type BuiltHadith = { book: SahihBookSlug; n: number; from: number; to: number; text: string; cutBefore: boolean; cutAfter: boolean };
 
 /** The introduction's ayat (owner, 2026-11-24; al-Furqan 60 swapped for Qaf 33). */
-export const INTRO_AYAT = ['19:96', '19:93', '20:108', '50:33', '67:19'];
+export const INTRO_AYAT = ['19:96', '19:93', '20:108', '67:19'];
 /** The introduction's hadith, each whole. */
 export const INTRO_HADITH = ['habibatan', 'shijnah', 'sifah'];
 /** Surat al-Rahman's page: its basmala, then its first ayat. */
@@ -109,10 +115,17 @@ export const isName = (word: string, before = '') => {
   return /^(?:[وفب]?ال|[وف]?لل|[وف]?بال)رحمن$/.test(plain) && !/عبي?د$/.test(normalizeWord(before).replace(/[^ء-ي]/g, ''));
 };
 
-/** A text's words, each with whether it is the name. */
-export function nameRuns(text: string): { text: string; name: boolean }[] {
+const plainWord = (word: string) => normalizeWord(word).replace(/[^ء-ي]/g, '');
+
+/** A text's words, each with whether it is the name, or one of the `lit` words (matched without marks). */
+export function nameRuns(text: string, lit?: string): { text: string; name: boolean; lit: boolean }[] {
   const words = text.split(' ');
-  return words.map((word, i) => ({ text: (i ? ' ' : '') + word, name: isName(word, words[i - 1]) }));
+  const want = lit ? lit.split(' ').map(plainWord) : [];
+  const inLit = new Set<number>();
+  for (let i = 0; want.length && i + want.length <= words.length; i++) {
+    if (want.every((word, k) => plainWord(words[i + k]) === word)) for (let k = 0; k < want.length; k++) inLit.add(i + k);
+  }
+  return words.map((word, i) => ({ text: (i ? ' ' : '') + word, name: isName(word, words[i - 1]), lit: inLit.has(i) }));
 }
 
 /** What a page of the scene holds, block by block: each block is measured, and a section's blocks flow over its pages. */
@@ -124,7 +137,13 @@ export type RahmanBlock =
     title?: boolean }
   | { kind: 'hadith'; id: string }
   | { kind: 'sadi' }
-  | { kind: 'map' };
+  | { kind: 'map'; part: 'basmala' | 'name' }
+  /** The hundred parts of mercy, as sketch B the owner chose (owner, 2026-11-25): ninety-nine kept, one sent down. */
+  | { kind: 'mercy' }
+  /** «فبأي آلاء ربكما تكذبان» in al-Kirmani's four runs, then his words (owner, 2026-11-25). */
+  | { kind: 'tikrar' }
+  /** Al-Kirmani's words on a repeated ayah, whole (Asrar al-Tikrar). */
+  | { kind: 'kirmani'; key: string };
 
 /** A run of pages: its title over each of them, its blocks flowing from page to page. `intro`: no taps on its pages. */
 export type RahmanSection = { id: string; title: string; blocks: RahmanBlock[]; intro?: boolean };
@@ -141,16 +160,17 @@ const BASMALA: RahmanBlock = { kind: 'ayah', key: '1:1', basmala: true };
 export function rahmanSections(placeKeys: string[]): RahmanSection[] {
   return [
     { id: 'name', title: '', blocks: [{ kind: 'ayah', key: '55:1', title: true }, { kind: 'counts' }], intro: true },
-    { id: 'opening', title: 'البسملة والفاتحة', blocks: [BASMALA, { kind: 'ayah', key: '1:3' }, { kind: 'hadith', id: FATIHA_PART.id }, ...ayat(['55:1', '55:2'])], intro: true },
+    { id: 'opening', title: 'البسملة والفاتحة', blocks: [BASMALA, { kind: 'ayah', key: '1:3' }, { kind: 'hadith', id: FATIHA_PART.id }, ...ayat(['55:1', '55:2', '50:33'])], intro: true },
     { id: 'intro-ayat', title: 'من الآيات', blocks: ayat(INTRO_AYAT), intro: true },
     { id: 'intro-hadith', title: 'من الأحاديث', blocks: hadith(INTRO_HADITH), intro: true },
-    { id: 'intro-mercy', title: MERCY_HADITH.title, blocks: hadith([MERCY_HADITH.id]), intro: true },
-    { id: 'map', title: 'البسملة والآيات', blocks: [{ kind: 'map' }] },
+    { id: 'intro-mercy', title: MERCY_HADITH.title, blocks: [{ kind: 'mercy' }, ...hadith([MERCY_HADITH.id])], intro: true },
+    { id: 'map', title: 'البسملة والآيات', blocks: [{ kind: 'map', part: 'basmala' }, { kind: 'map', part: 'name' }] },
     { id: 'surah', title: 'سورة الرحمن', blocks: [BASMALA, ...ayat(SURAH_AYAT), { kind: 'sadi' }] },
-    { id: 'fatiha', title: 'سورة الفاتحة', blocks: [{ kind: 'ayah', key: '1:3' }, { kind: 'hadith', id: FATIHA_HADITH.id }] },
+    { id: 'tikrar', title: 'تكرار الآية في سورة الرحمن', blocks: [{ kind: 'ayah', key: TIKRAR_FIRST }, { kind: 'tikrar' }, { kind: 'kirmani', key: TIKRAR_FIRST }] },
+    { id: 'fatiha', title: 'سورة الفاتحة', blocks: [{ kind: 'ayah', key: '1:3' }, { kind: 'kirmani', key: '1:3' }, { kind: 'hadith', id: FATIHA_HADITH.id }] },
     { id: 'ayat', title: 'الآيات', blocks: ayat(placeKeys) },
     ...SCENE_HADITH.map(each => ({ id: each.id, title: each.title, blocks: hadith([each.id]) })),
-    { id: 'mercy', title: MERCY_HADITH.title, blocks: hadith([MERCY_HADITH.id]) },
+    { id: 'mercy', title: MERCY_HADITH.title, blocks: [{ kind: 'mercy' }, ...hadith([MERCY_HADITH.id])] },
   ];
 }
 
@@ -171,3 +191,35 @@ export function mostPlaces(places: WordPlace[]): { surah: number; count: number 
   const [surah, count] = [...counts].reduce((best, each) => (each[1] > best[1] ? each : best));
   return { surah, count };
 }
+
+/** The parts of mercy in the hadith of the hundred mercies, and those Allah kept with Him. */
+export const MERCY_PARTS = 100;
+export const MERCY_KEPT = 99;
+
+type KirmaniCitation = { book: string; quote: string; locator: string; places: string[] };
+
+/**
+ * Al-Kirmani on a repeated ayah, as the mutashabih data quotes him (Asrar al-Tikrar): the citation that names `key` and
+ * the most places with it (on al-Rahman's refrain, the one that counts all thirty-one).
+ */
+export function kirmaniOn(key: string): KirmaniCitation {
+  const groups = dataOf(mutashabihFile) as unknown as { citations: KirmaniCitation[] }[];
+  const found = groups.flatMap(group => group.citations)
+    .filter(citation => citation.book.includes('الكرماني') && citation.places.includes(key))
+    .sort((x, y) => y.places.length - x.places.length)[0];
+  if (!found) throw new Error(`no al-Kirmani citation on ${key}`);
+  return found;
+}
+/** The first place of al-Rahman's refrain «فبأي آلاء ربكما تكذبان». */
+export const TIKRAR_FIRST = '55:13';
+
+/**
+ * Al-Kirmani's four runs of the repeated ayah, each named in his words and counted as he counts them (ص ٢٣١): after the
+ * wonders of creation, after the Fire, the Gardens, and the two Gardens below them.
+ */
+export const TIKRAR_RUNS = [
+  { words: 'تعداد عجائب خلق الله', count: 8 },
+  { words: 'ذكر النار وشدائدها', count: 7 },
+  { words: 'وصف الجنان وأهلها', count: 8 },
+  { words: 'للجنتين اللتين دونهما', count: 8 },
+] as const;
