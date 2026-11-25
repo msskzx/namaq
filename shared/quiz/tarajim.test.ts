@@ -34,6 +34,13 @@ describe('صاحب المنقبة', () => {
     // Ibn Ma'in's «مسور ثقة» names al-Miswar without the article.
     expect(questions.some(q => bareName(q.promptArabic).startsWith('«مسور'))).toBe(false);
   });
+
+  it('never teaches in the Siyar\'s words a report the Sahih gives (owner, 2026-11-25)', () => {
+    const people = peopleJson as unknown as AppPerson[];
+    const sahih = new Set(people.flatMap(p => p.virtues.flatMap((v, k) => (v.sahih ? [`${p.slug}:${k}`] : []))));
+    expect(sahih.size).toBeGreaterThan(0);
+    for (const q of virtueQuestions(people, seededRandom(1))) expect(sahih.has(q.key.split(':').slice(1).join(':'))).toBe(false);
+  });
 });
 
 describe('fair choices', () => {

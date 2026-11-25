@@ -141,6 +141,10 @@ export function virtueQuestions(people: AppPerson[] = PEOPLE, random: Random = M
   for (const person of people) {
     const names = namesOf(person, lines.get(person.slug)!);
     person.virtues.forEach((virtue, k) => {
+      // A report the Sahih gives is taught in its words (owner, 2026-11-25), and a question's card cannot hold a whole
+      // route: not asked until the saying's place in the Sahih is marked, as a story's is
+      // (data/works/siyar-alam-al-nubala/sahih-notes-data-week.md).
+      if (virtue.sahih) return;
       const quote = virtue.text;
       // A quote that names its owner gives the answer; one that only points («هذا ممن…») needs its scene to say whom.
       // A sayer that names the owner («امرأة ابن رواحة») gives it away too; and some virtues fit others as well (SKIP).

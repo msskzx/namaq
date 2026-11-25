@@ -108,12 +108,12 @@ export const SOURCES: Source[] = [
     edition: 'دار المنهاج، بيروت، الطبعة الأولى ١٤٣٠هـ، عناية قصي محمد نورس الحلاق وأنور بن أبي بكر الشيخي؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(12836), licence: PUBLIC_DOMAIN, uses: [USE.forty],
   },
   {
-    id: 'sahih-bukhari', group: 'books', files: ['shared/data/hadith/bukhari.json', 'shared/data/links.json', 'shared/data/quran/rahmanHadith.json'],
+    id: 'sahih-bukhari', group: 'books', files: ['shared/data/hadith/bukhari.json', 'shared/data/links.json', 'shared/data/quran/rahmanHadith.json', 'shared/data/tarajim/people.json'],
     title: { ar: 'صحيح البخاري', en: 'Sahih al-Bukhari' }, author: { ar: 'محمد بن إسماعيل البخاري', en: 'al-Bukhari' },
     edition: 'الطبعة السلطانية، بولاق ١٣١١هـ، مصوّرة دار طوق النجاة ١٤٢٢هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1681), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih, USE.stories, USE.people, USE.rahman],
   },
   {
-    id: 'sahih-muslim', group: 'books', files: ['shared/data/hadith/muslim.json', 'shared/data/links.json', 'shared/data/quran/rahmanHadith.json'],
+    id: 'sahih-muslim', group: 'books', files: ['shared/data/hadith/muslim.json', 'shared/data/links.json', 'shared/data/quran/rahmanHadith.json', 'shared/data/tarajim/people.json'],
     title: { ar: 'صحيح مسلم', en: 'Sahih Muslim' }, author: { ar: 'مسلم بن الحجاج النيسابوري', en: 'Muslim' },
     edition: 'تحقيق محمد فؤاد عبد الباقي، مطبعة عيسى البابي الحلبي، القاهرة ١٣٧٤هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٨', link: shamela(1727), licence: PUBLIC_DOMAIN, uses: [USE.forty, USE.sahih, USE.stories, USE.people, USE.rahman],
   },
