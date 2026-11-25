@@ -360,11 +360,9 @@ function Cover({ look }: { look: CoverLook }) {
   );
 }
 
-/** One unit of a bar: the basmala over the surah, the name inside it, and a basmala counted in both (owner, 2026-11-25). */
-// Red, green and yellow (owner, 2026-11-25).
-const PLOT_INK = { basmala: RAHMAN_ART.basmala, name: paper.accent, both: RAHMAN_ART.lit } as const;
+// Two colours, each bar one piece (owner, 2026-11-25): a basmala that is also an ayah holding the name stands in both.
+const PLOT_INK = { basmala: RAHMAN_ART.basmala, name: paper.accent } as const;
 const PLOT_UNIT = 3;
-const PLOT_GAP = 0.7;
 const PLOT_BAR = 9;
 /** Rows of surahs (owner, 2026-11-25: «اقسمها على ٧ أسطر أو ما شابه»). */
 const PLOT_ROWS = 6;
@@ -384,9 +382,8 @@ function CoverPlot() {
   const named = (bar: (typeof bars)[number]) => bar.name + bar.both > 1 || bar.surah === NO_BASMALA;
   const step = BLOCK_W / perRow;
   const units = (bar: (typeof bars)[number]) => [
-    ...Array<keyof typeof PLOT_INK>(bar.basmala).fill('basmala'),
-    ...Array<keyof typeof PLOT_INK>(bar.both).fill('both'),
-    ...Array<keyof typeof PLOT_INK>(bar.name).fill('name'),
+    ...Array<keyof typeof PLOT_INK>(bar.basmala + bar.both).fill('basmala'),
+    ...Array<keyof typeof PLOT_INK>(bar.both + bar.name).fill('name'),
   ];
   const row = (r: number) => {
     const some = bars.slice(r * perRow, (r + 1) * perRow);
@@ -397,8 +394,8 @@ function CoverPlot() {
       <View key={r}>
         <View style={{ height }}>
           {some.map((bar, i) => (
-            <View key={bar.surah} style={{ position: 'absolute', bottom: 0, right: i * step + (step - PLOT_BAR) / 2, width: PLOT_BAR, flexDirection: 'column-reverse', gap: PLOT_GAP }}>
-              {units(bar).map((ink, k) => <View key={k} style={{ height: PLOT_UNIT - PLOT_GAP, backgroundColor: PLOT_INK[ink] }} />)}
+            <View key={bar.surah} style={{ position: 'absolute', bottom: 0, right: i * step + (step - PLOT_BAR) / 2, width: PLOT_BAR, flexDirection: 'column-reverse' }}>
+              {(['basmala', 'name'] as const).map(ink => <View key={ink} style={{ height: units(bar).filter(each => each === ink).length * PLOT_UNIT, backgroundColor: PLOT_INK[ink] }} />)}
             </View>
           ))}
         </View>
@@ -423,8 +420,8 @@ function CoverPlot() {
       <View style={{ flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', columnGap: 12, direction: 'rtl' }}>
         {key(PLOT_INK.basmala, `بسملة، إلا ${surahName(NO_BASMALA)}`)}
         {key(PLOT_INK.name, '«الرحمن» في آيات السورة')}
-        {key(PLOT_INK.both, `تُعدّ مرتين: ${ayahPlace('1:1')}، ${ayahPlace(BASMALA_AYAH)}`)}
       </View>
+      <Ref>{`بسملة ${ayahPlace('1:1')} و${ayahPlace(BASMALA_AYAH)} آيتان فيهما الاسم، فتُعدّان في اللونين`}</Ref>
       <Text style={{ color: paper.ink, fontSize: 15, lineHeight: 22, textAlign: 'center' }}>
         <Text style={{ color: paper.accent }}>{num(basmalas)}</Text>{' بسملة، '}
         <Text style={{ color: paper.accent }}>{num(places)}</Text>{' موضعًا من الآيات، '}
