@@ -88,11 +88,30 @@ function Ayah({ ayahKey, basmala, title }: { ayahKey: string; basmala?: boolean;
   );
 }
 
+/** Ayat that follow each other in one flow, each with its number; their places under them («الرحمن ١، ٢»). */
+function AyahRun({ keys }: { keys: string[] }) {
+  return (
+    <View style={{ gap: 2 }}>
+      <AyahFlow menu={keys[0]} color={paper.ink} center>
+        {keys.map((key, k) => {
+          const lit = NAME_AT_OF().get(key);
+          return ayahMushafWords(key).map((word, i) => <AyahWords key={`${k}-${i}`} look={lit?.has(i) ? { color: paper.accent } : undefined}>{`${k || i ? ' ' : ''}${word}`}</AyahWords>)
+            .concat(<AyahWords key={`${k}-n`} look={{ color: paper.muted }}>{` ${num(Number(key.split(':')[1]))}`}</AyahWords>);
+        })}
+      </AyahFlow>
+      <Ref>{[ayahPlace(keys[0]), ...keys.slice(1).map(key => num(Number(key.split(':')[1])))].join('، ')}</Ref>
+    </View>
+  );
+}
+
 /** Words of a book with the name in colour, and the Quran it quotes (﴿…﴾) in the mushaf font (AGENTS.md, "Quran text"). */
-function NamedText({ text, size, lit }: { text: string; size: number; lit?: string }) {
+function NamedText({ text, size, lit, before }: { text: string; size: number; lit?: string;
+  /** Words over it in the muted ink, in the same paragraph (a hadith's narrator). */
+  before?: string }) {
   const colour = (run: { name: boolean; lit: boolean }) => (run.name ? { color: paper.accent } : run.lit ? { color: RAHMAN_ART.lit } : undefined);
   return (
     <Text style={{ color: paper.ink, fontSize: size, lineHeight: size * 1.85, textAlign: 'justify', writingDirection: 'rtl' }}>
+      {before ? <Text style={{ color: paper.muted }}>{`${before} `}</Text> : null}
       {tafsirRuns(text).map((part, k) => {
         const runs = nameRuns(part.text, lit).map((run, i) => <Text key={i} style={colour(run)}>{run.text}</Text>);
         return part.quran ? <QuranWords key={k}>{runs}</QuranWords> : <Text key={k}>{runs}</Text>;
@@ -109,7 +128,7 @@ function Hadith({ id, size, live }: { id: string; size: number; live: boolean })
   const body = (
     <View style={{ gap: 2 }}>
       {hadith.lead ? <Text style={{ color: paper.muted, fontSize: size * 0.85, lineHeight: size * 1.6, textAlign: 'right' }}>{hadith.lead}</Text> : null}
-      <NamedText text={text} size={size} lit={hadith.lit} />
+      <NamedText text={text} size={size} lit={hadith.lit} before={built.narrator} />
       <Ref>{hadithRef(id)}</Ref>
     </View>
   );
@@ -181,34 +200,55 @@ function NameMap({ part }: { part: 'basmala' | 'name' }) {
   );
 }
 
-/** The hundred parts of mercy (sketch B, owner 2026-11-25): ninety-nine kept in a square, the hundredth left pale and sent down to the earth. */
+/** A spiral of two arms around the middle, and stars scattered over the band: where the one part spreads (owner, 2026-11-25). */
+const GALAXY_H = 92;
+const HEART = 5;
+const GALAXY = (() => {
+  const dots: { x: number; y: number; r: number; o: number }[] = [];
+  for (let arm = 0; arm < 2; arm++) {
+    for (let k = 0; k < 46; k++) {
+      const angle = k * 0.3 + arm * Math.PI;
+      const radius = 5 + k * 1.05;
+      dots.push({ x: Math.cos(angle) * radius * 3.4, y: Math.sin(angle) * radius * 0.75, r: Math.max(1.2, 3.2 - k * 0.045), o: Math.max(0.25, 1 - k * 0.016) });
+    }
+  }
+  for (let k = 0; k < 40; k++) {
+    const u = Math.abs(Math.sin(k * 12.9898) * 43758.5453) % 1;
+    const v = Math.abs(Math.sin(k * 78.233) * 12345.678) % 1;
+    dots.push({ x: (u - 0.5) * BLOCK_W, y: (v - 0.5) * (GALAXY_H - 6), r: 1 + (k % 3) * 0.4, o: 0.35 });
+  }
+  return dots;
+})();
+
+/**
+ * The hundred parts of mercy (sketch B, owner 2026-11-25), small over the hadith: ninety-nine kept, the hundredth left pale,
+ * sent down to the earth and spread over all creation, drawn as a galaxy (owner: «موزعة على جميع المخلوقات… الكون»).
+ */
 function MercyParts() {
-  const SIDE_COUNT = Math.sqrt(MERCY_PARTS);
-  const DOT = 9;
-  const GAP = 6;
-  const square = SIDE_COUNT * DOT + (SIDE_COUNT - 1) * GAP;
-  const dot = (i: number) => {
-    const kept = i < MERCY_KEPT;
-    return <View key={i} style={{ width: DOT, height: DOT, borderRadius: DOT / 2, backgroundColor: kept ? RAHMAN_ART.title : RAHMAN_ART.mark }} />;
-  };
-  const label = (text: string) => <Text style={{ color: paper.muted, fontSize: 14 }}>{text}</Text>;
+  const COLUMNS = 25;
+  const DOT = 5;
+  const GAP = 3;
+  const width = COLUMNS * DOT + (COLUMNS - 1) * GAP;
+  const rows = MERCY_PARTS / COLUMNS;
+  const sent = (rows - 1) * COLUMNS + Math.floor(COLUMNS / 2);
   return (
-    <View style={{ alignItems: 'center' }} accessible accessibilityLabel={`${num(MERCY_PARTS)} جزء: ${num(MERCY_KEPT)} عنده، وجزء في الأرض`}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-        <View style={{ width: square, flexDirection: 'row', flexWrap: 'wrap', gap: GAP, direction: 'rtl' }}>
-          {Array.from({ length: MERCY_PARTS }, (_, i) => dot(i))}
+    <View style={{ alignItems: 'center' }} accessible accessibilityLabel={`${num(MERCY_PARTS)} جزء: ${num(MERCY_KEPT)} عنده، وجزء في الأرض يتراحم به الخلق`}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+        <View style={{ width, flexDirection: 'row', flexWrap: 'wrap', gap: GAP }}>
+          {Array.from({ length: MERCY_PARTS }, (_, i) => (
+            <View key={i} style={{ width: DOT, height: DOT, borderRadius: DOT / 2, backgroundColor: i === sent ? RAHMAN_ART.mark : RAHMAN_ART.title }} />
+          ))}
         </View>
-        {label(num(MERCY_KEPT))}
+        <Text style={{ color: paper.muted, fontSize: 13 }}>{num(MERCY_KEPT)}</Text>
       </View>
-      <View style={{ width: square, alignItems: 'flex-start', direction: 'ltr' }}>
-        <View style={{ width: DOT, alignItems: 'center' }}>
-          {Array.from({ length: 5 }, (_, k) => <View key={k} style={{ width: 1.5, height: 3, marginTop: 3, backgroundColor: RAHMAN_ART.frame }} />)}
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 3 }}>
-          <View style={{ width: DOT + 3, height: DOT + 3, borderRadius: (DOT + 3) / 2, backgroundColor: paper.accent, marginStart: -1.5 }} />
-          {label(`${num(MERCY_PARTS - MERCY_KEPT)} في الأرض`)}
-        </View>
-        <View style={{ width: square, height: 1, backgroundColor: RAHMAN_ART.mark, marginTop: 3 }} />
+      <View style={{ alignItems: 'center', marginEnd: 10 + 13 }}>
+        {Array.from({ length: 3 }, (_, k) => <View key={k} style={{ width: 1.5, height: 3, marginTop: 3, backgroundColor: RAHMAN_ART.frame }} />)}
+      </View>
+      <View style={{ width: BLOCK_W, height: GALAXY_H }}>
+        {GALAXY.map((dot, i) => (
+          <View key={i} style={{ position: 'absolute', left: BLOCK_W / 2 + dot.x - dot.r, top: GALAXY_H / 2 + dot.y - dot.r, width: dot.r * 2, height: dot.r * 2, borderRadius: dot.r, backgroundColor: paper.accent, opacity: dot.o }} />
+        ))}
+        <View style={{ position: 'absolute', left: BLOCK_W / 2 - HEART, top: GALAXY_H / 2 - HEART, width: HEART * 2, height: HEART * 2, borderRadius: HEART, backgroundColor: paper.accent }} />
       </View>
     </View>
   );
@@ -261,6 +301,7 @@ export function RahmanBlockView({ block, size, live }: { block: RahmanBlock; siz
   switch (block.kind) {
     case 'counts': return <Counts />;
     case 'ayah': return <Ayah ayahKey={block.key} basmala={block.basmala} title={block.title} />;
+    case 'run': return <AyahRun keys={block.keys} />;
     case 'hadith': return <Hadith id={block.id} size={size} live={live} />;
     case 'sadi': return <Sadi />;
     case 'map': return <NameMap part={block.part} />;

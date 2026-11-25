@@ -39,10 +39,26 @@ export function builtHadith(hadith: SceneHadith): BuiltHadith {
   }
   while (text[start] === ' ') start++;
   while (text[end - 1] === ' ') end--;
+  let narrator: string | undefined;
+  if (hadith.narrator) {
+    const i = lastPlainIndex(text, hadith.narrator, start);
+    if (i < 0) throw new Error(`${hadith.id}: «${hadith.narrator}» is not in its isnad`);
+    narrator = text.slice(i, start).trim();
+  }
   let cutBefore = !!hadith.part;
   let cutAfter = !!hadith.part;
   if (hadith.cut) [start, end, cutBefore, cutAfter] = partAround(text, start, end);
-  return { book: hadith.book, n: hadith.n, from: offset + start, to: offset + end, text: text.slice(start, end), cutBefore, cutAfter };
+  return { book: hadith.book, n: hadith.n, from: offset + start, to: offset + end, text: text.slice(start, end), cutBefore, cutAfter, ...(narrator ? { narrator } : {}) };
+}
+
+/** Where `words` last stand in `text` before `before`, matched without their vowel marks (the edition marks them unevenly). */
+function lastPlainIndex(text: string, words: string, before: number): number {
+  const mark = /[\u064b-\u0652\u0670]/;
+  const at: number[] = [];
+  let plain = '';
+  for (let i = 0; i < before; i++) if (!mark.test(text[i])) { at.push(i); plain += text[i]; }
+  const found = plain.lastIndexOf([...words].filter(ch => !mark.test(ch)).join(''));
+  return found < 0 ? -1 : at[found];
 }
 
 /** Whole words around the first naming of «الرحمن» between `start` and `end`, about PART letters, a third of them before it. */

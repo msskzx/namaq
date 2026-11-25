@@ -25,7 +25,7 @@ import { BLOCK_GAP, BLOCK_W, HADITH_SIZES, PAGE_H, PAGE_ROOM, PAGE_W, rahmanAyat
  * «الرحمن», the second scene of «مشاهد» (owner, 2026-11-24; shared/quran/scenes/rahman.ts): still pages, each a 4:5 picture,
  * turned up and down like a short. Each section's blocks are measured out of sight, then flowed over its pages
  * (shared/sharePages.ts), its hadith at the biggest size that needs no more pages. The share button shares the section the
- * page is in, as the very pages shown: the five of the introduction together, or one hadith's page.
+ * page is in, as the very pages shown: the seven of the introduction together, or one hadith's page.
  */
 let sections: RahmanSection[] | null = null;
 /** The scene's sections, read on first use (they list the ayat from the corpus). */

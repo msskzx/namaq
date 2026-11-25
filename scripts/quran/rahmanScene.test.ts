@@ -4,7 +4,7 @@ import words from '../../shared/data/quran/words.json';
 import { plainText } from '../../shared/sahih';
 import { normalizeWord } from '../../shared/quran/normalize';
 import {
-  FATIHA_HADITH, MERCY_HADITH, MERCY_KEPT, MERCY_PARTS, TIKRAR_FIRST, TIKRAR_RUNS, kirmaniOn, SCENE_HADITH, SCENE_HADITH_BY_ID, basmalasBySurah, isName, nameRuns, placeCount, rahmanPlaces, sceneHadithNumbers,
+  FATIHA_HADITH, MERCY_HADITH, rahmanSections, MERCY_KEPT, MERCY_PARTS, TIKRAR_FIRST, TIKRAR_RUNS, kirmaniOn, SCENE_HADITH, SCENE_HADITH_BY_ID, basmalasBySurah, isName, nameRuns, placeCount, rahmanPlaces, sceneHadithNumbers,
   type SahihBookSlug,
 } from '../../shared/quran/scenes/rahman';
 import type { WordsData } from '../../shared/quran/words';
@@ -86,5 +86,15 @@ describe('the «الرحمن» scene', () => {
       from = at;
     }
     expect(TIKRAR_RUNS.reduce((sum, run) => sum + run.count, 0)).toBe(citation.places.length);
+  });
+
+  it('shows every ayah of the introduction again inside the scene (owner, 2026-11-25: «تأكد من ذكرها في المشهد»)', () => {
+    const sections = rahmanSections(rahmanPlaces(words as unknown as WordsData).map(place => place.key));
+    const keysOf = (intro: boolean) => new Set(sections.filter(section => !!section.intro === intro).flatMap(section => section.blocks.flatMap(block =>
+      block.kind === 'ayah' ? [block.key] : block.kind === 'run' ? block.keys : [])));
+    const inScene = keysOf(false);
+    const introKeys = [...keysOf(true)];
+    expect(introKeys.length).toBeGreaterThan(0);
+    expect(introKeys.filter(key => !inScene.has(key))).toEqual([]);
   });
 });
