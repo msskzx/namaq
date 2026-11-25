@@ -186,7 +186,7 @@ const BASMALA: RahmanBlock = { kind: 'ayah', key: '1:1', basmala: true };
 export function rahmanSections(placeKeys: string[]): RahmanSection[] {
   return [
     { id: 'name', title: '', blocks: [{ kind: 'ayah', key: '55:1', title: true }, { kind: 'cover' }], intro: true },
-    { id: 'opening', title: 'البسملة والفاتحة', blocks: [{ kind: 'run', keys: ['1:1', '1:3'], bare: true }, { kind: 'hadith', id: FATIHA_PART.id }], intro: true },
+    { id: 'opening', title: 'البسملة والفاتحة', blocks: [{ kind: 'run', keys: ['1:1', '1:2', '1:3'], bare: true }, { kind: 'hadith', id: FATIHA_PART.id }], intro: true },
     { id: 'intro-ayat', title: 'من الآيات', blocks: [{ kind: 'run', keys: ['55:1', '55:2'] }, ...ayat(INTRO_AYAT)], intro: true },
     { id: 'intro-hadith', title: 'من الأحاديث', blocks: hadith(INTRO_HADITH.slice(0, 2)), intro: true },
     { id: 'intro-hadith-2', title: 'من الأحاديث', blocks: hadith(INTRO_HADITH.slice(2)), intro: true },

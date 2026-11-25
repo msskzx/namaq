@@ -99,12 +99,14 @@ describe('the «الرحمن» scene', () => {
     expect(TIKRAR_RUNS.reduce((sum, run) => sum + run.count, 0)).toBe(citation.places.length);
   });
 
-  it('shows every ayah of the introduction again inside the scene (owner, 2026-11-25: «تأكد من ذكرها في المشهد»)', () => {
-    const sections = rahmanSections(rahmanPlaces(words as unknown as WordsData).map(place => place.key));
+  it('shows every ayah of the introduction that holds the name again inside the scene (owner, 2026-11-25: «تأكد من ذكرها في المشهد»)', () => {
+    const named = new Set(rahmanPlaces(words as unknown as WordsData).map(place => place.key));
+    const sections = rahmanSections([...named]);
     const keysOf = (intro: boolean) => new Set(sections.filter(section => !!section.intro === intro).flatMap(section => section.blocks.flatMap(block =>
       block.kind === 'ayah' ? [block.key] : block.kind === 'run' ? block.keys : [])));
     const inScene = keysOf(false);
-    const introKeys = [...keysOf(true)];
+    // al-Fatiha 2 stands between its 1 and 3 on the second page only so the surah reads whole (owner, 2026-11-25).
+    const introKeys = [...keysOf(true)].filter(key => named.has(key));
     expect(introKeys.length).toBeGreaterThan(0);
     expect(introKeys.filter(key => !inScene.has(key))).toEqual([]);
   });
