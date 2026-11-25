@@ -101,7 +101,8 @@ export const SEA_ART = {
  */
 export const RAHMAN_PAPER: Palette = { ...light, paper: '#f3ead8', paperDeep: '#eadcc2', card: '#f3ead8', ink: '#2b2620', muted: '#7a6e5c',
   rule: '#cdbd9c', accent: '#a8432d' };
-export const RAHMAN_ART = { table: '#2a2724', frame: '#b9a888', title: '#8a5a2e', mark: '#d9ccb2' } as const;
+/** `lit`: words lit beside the name in a second colour (owner, 2026-11-25: «أثنى علي عبدي», not red). */
+export const RAHMAN_ART = { table: '#2a2724', frame: '#b9a888', title: '#8a5a2e', mark: '#d9ccb2', lit: '#2f6b5e' } as const;
 
 /** Every card's corners, tree nodes included: one round radius (owner, 2026-11-13). */
 export const CARD = { borderRadius: 14 } as const;

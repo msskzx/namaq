@@ -2,8 +2,9 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import words from '../../shared/data/quran/words.json';
 import { plainText } from '../../shared/sahih';
+import { normalizeWord } from '../../shared/quran/normalize';
 import {
-  FATIHA_HADITH, MERCY_HADITH, SCENE_HADITH, basmalasBySurah, isName, nameRuns, placeCount, rahmanPlaces, sceneHadithNumbers,
+  FATIHA_HADITH, MERCY_HADITH, MERCY_KEPT, MERCY_PARTS, TIKRAR_FIRST, TIKRAR_RUNS, kirmaniOn, SCENE_HADITH, SCENE_HADITH_BY_ID, basmalasBySurah, isName, nameRuns, placeCount, rahmanPlaces, sceneHadithNumbers,
   type SahihBookSlug,
 } from '../../shared/quran/scenes/rahman';
 import type { WordsData } from '../../shared/quran/words';
@@ -47,10 +48,33 @@ describe('the «الرحمن» scene', () => {
     expect(basmalas.reduce((sum, n) => sum + n, 0)).toBe(basmalas.length);
   });
 
+  it('lights every hadith\'s `lit` words where its page shows them (owner, 2026-11-25: «أثنى علي عبدي»)', () => {
+    const lit = Object.values(SCENE_HADITH_BY_ID).filter(hadith => hadith.lit);
+    expect(lit.length).toBeGreaterThan(0);
+    for (const hadith of lit) {
+      const runs = nameRuns(built[hadith.id].text, hadith.lit).filter(run => run.lit);
+      expect(runs, hadith.id).toHaveLength(hadith.lit!.split(' ').length);
+    }
+  });
+
   it('colours the name, not «عبد الرحمن»', () => {
     expect(isName('الرَّحْمَنِ')).toBe(true);
     expect(isName('لِلرَّحْمَنِ')).toBe(true);
     expect(isName('الرَّحْمَنِ', 'عَبْدُ')).toBe(false);
     expect(isName('الرَّحْمَنِ', 'عُبَيْدِ')).toBe(false);
+  });
+
+  it('draws the hundred mercies as the hadith counts them (owner, 2026-11-25: sketch B)', () => {
+    const text = plainText(built[MERCY_HADITH.id].text);
+    expect(text).toContain('مائه جزء');
+    expect(text).toContain('تسعه وتسعين جزءا');
+    expect(MERCY_PARTS - MERCY_KEPT).toBe(1);
+  });
+
+  it('draws al-Kirmani\'s four runs of «فبأي آلاء ربكما تكذبان» in his words, covering every place he counts', () => {
+    const plain = (text: string) => text.split(/\s+/).map(word => normalizeWord(word).replace(/[^ء-ي]/g, '')).join(' ');
+    const citation = kirmaniOn(TIKRAR_FIRST);
+    for (const run of TIKRAR_RUNS) expect(plain(citation.quote), run.words).toContain(plain(run.words));
+    expect(TIKRAR_RUNS.reduce((sum, run) => sum + run.count, 0)).toBe(citation.places.length);
   });
 });

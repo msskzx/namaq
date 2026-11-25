@@ -22,7 +22,7 @@ const GAP = 10;
 export function ShareBrand({ small, palette }: { small?: boolean; palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-      <Logo size={small ? 22 : 26} />
+      <Logo size={small ? 22 : 26} palette={palette} />
       <Text style={{ color: palette.ink, fontSize: small ? 17 : 19, fontFamily: UI_FONT_BOLD, lineHeight: small ? 28 : 30 }}>نمق</Text>
     </View>
   );
