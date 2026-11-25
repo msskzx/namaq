@@ -4,7 +4,7 @@ import words from '../../shared/data/quran/words.json';
 import { plainText } from '../../shared/sahih';
 import { normalizeWord } from '../../shared/quran/normalize';
 import {
-  FATIHA_HADITH, MERCY_HADITH, rahmanSections, MERCY_KEPT, MERCY_PARTS, TIKRAR_FIRST, TIKRAR_RUNS, kirmaniOn, tikrarWords, SCENE_HADITH, SCENE_HADITH_BY_ID, basmalasBySurah, isName, nameRuns, placeCount, rahmanPlaces, sceneHadithNumbers,
+  FATIHA_HADITH, MERCY_HADITH, rahmanSections, MERCY_KEPT, MERCY_PARTS, TIKRAR_FIRST, TIKRAR_RUNS, kirmaniOn, tikrarWords, SCENE_HADITH, SCENE_HADITH_BY_ID, basmalasBySurah, surahBars, isName, nameRuns, placeCount, rahmanPlaces, sceneHadithNumbers,
   type SahihBookSlug,
 } from '../../shared/quran/scenes/rahman';
 import type { WordsData } from '../../shared/quran/words';
@@ -46,6 +46,16 @@ describe('the «الرحمن» scene', () => {
     const basmalas = basmalasBySurah();
     expect(basmalas.filter(n => n === 0)).toHaveLength(1);
     expect(basmalas.reduce((sum, n) => sum + n, 0)).toBe(basmalas.length);
+  });
+
+  it('splits each surah\'s bar without counting a place twice or losing one (owner, 2026-11-25: the first page\'s plot)', () => {
+    const places = rahmanPlaces(words as unknown as WordsData);
+    const bars = surahBars(places);
+    const sum = (pick: (bar: (typeof bars)[number]) => number) => bars.reduce((total, bar) => total + pick(bar), 0);
+    expect(sum(bar => bar.basmala + bar.both)).toBe(basmalasBySurah().reduce((total, n) => total + n, 0));
+    expect(sum(bar => bar.name + bar.both)).toBe(placeCount(places));
+    expect(bars.filter(bar => bar.both).length).toBe(places.filter(place => place.key === '1:1' || place.key === '27:30').length);
+    expect(bars.every(bar => bar.basmala >= 0 && bar.name >= 0)).toBe(true);
   });
 
   it('lights every hadith\'s `lit` words where its page shows them (owner, 2026-11-25: «أثنى علي عبدي»)', () => {

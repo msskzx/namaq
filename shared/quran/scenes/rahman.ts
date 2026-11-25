@@ -34,6 +34,24 @@ export const BASMALA_AYAH = '27:30';
 export const basmalasBySurah = (surahs = 114): number[] =>
   Array.from({ length: surahs }, (_, i) => (i + 1 === NO_BASMALA ? 0 : i + 1 === Number(BASMALA_AYAH.split(':')[0]) ? 2 : 1));
 
+/** Basmalas that are also ayat holding the name: counted once among the basmalas and once among the places. */
+const COUNTED_TWICE = new Set(['1:1', BASMALA_AYAH]);
+export type SurahBar = { basmala: number; name: number; both: number };
+/**
+ * Each surah's bar for the first page (owner, 2026-11-25: one plot, a colour for the basmala over the surah, one for the
+ * name inside it, and a third for a basmala that is counted twice, al-Fatiha 1 and an-Naml 30).
+ */
+export function surahBars(places: WordPlace[], surahs = 114): SurahBar[] {
+  const basmalas = basmalasBySurah(surahs);
+  const bars = basmalas.map(count => ({ basmala: count, name: 0, both: 0 }));
+  for (const place of places) {
+    const bar = bars[Number(place.key.split(':')[0]) - 1];
+    if (COUNTED_TWICE.has(place.key)) { bar.both += 1; bar.basmala -= 1; bar.name += place.words.length - 1; }
+    else bar.name += place.words.length;
+  }
+  return bars;
+}
+
 export type SahihBookSlug = 'bukhari' | 'muslim';
 export type HadithRef = { book: SahihBookSlug; n: number };
 
@@ -157,8 +175,8 @@ export type RahmanBlock =
   | { kind: 'kirmani'; key: string };
 
 /** The first page's two designs offered to the owner (2026-11-25): each count beside its drawing, or one mushaf band. */
-export type CoverLook = 'rows' | 'band';
-export const COVER_LOOK: CoverLook = 'band';
+export type CoverLook = 'rows' | 'band' | 'plot';
+export const COVER_LOOK: CoverLook = 'plot';
 
 /** A run of pages: its title over each of them, its blocks flowing from page to page. `intro`: no taps on its pages. */
 export type RahmanSection = { id: string; title: string; blocks: RahmanBlock[]; intro?: boolean };

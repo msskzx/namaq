@@ -6,7 +6,7 @@ import { sahihName } from '@shared/sahih';
 import { tafsirSadiOf } from '@shared/quran/tafsirSadiData';
 import builtHadith from '@shared/data/quran/rahmanHadith.json';
 import {
-  BASMALA_AYAH, COVER_LOOK, MERCY_KEPT, MERCY_PARTS, NO_BASMALA, TIKRAR_RUNS, kirmaniOn, tikrarWords, SADI_OPENING, SCENE_HADITH_BY_ID, basmalasBySurah, hadithNumbers, mostPlaces, nameRuns, placeCount, rahmanPlaces,
+  BASMALA_AYAH, COVER_LOOK, MERCY_KEPT, MERCY_PARTS, NO_BASMALA, TIKRAR_RUNS, kirmaniOn, tikrarWords, SADI_OPENING, SCENE_HADITH_BY_ID, basmalasBySurah, surahBars, hadithNumbers, mostPlaces, nameRuns, placeCount, rahmanPlaces,
   sadiOpening, sceneHadithNumbers, type BuiltHadith, type CoverLook, type RahmanBlock,
 } from '@shared/quran/scenes/rahman';
 import { Text } from '@/ui/Text';
@@ -43,7 +43,7 @@ export const PAGE_ROOM = PAGE_H - EDGE * 2 - 2 - 10 - 6 - HEAD - FOOT - 8;
 export const HADITH_SIZES = [22, 20, 18, 17, 15.5, 14] as const;
 
 /** The first page's name, over the map (owner, 2026-11-25: pages 1 and 7 merged), with its number in its medallion. */
-const TITLE_ZOOM = COVER_LOOK === 'rows' ? 1.5 : 2.2;
+const TITLE_ZOOM = COVER_LOOK === 'rows' ? 1.5 : COVER_LOOK === 'plot' ? 1.5 : 2.2;
 const HADITH_DOT = 8;
 
 const BUILT = builtHadith as Record<string, BuiltHadith>;
@@ -360,6 +360,76 @@ function Cover({ look }: { look: CoverLook }) {
   );
 }
 
+/** One unit of a bar: the basmala over the surah, the name inside it, and a basmala counted in both (owner, 2026-11-25). */
+const PLOT_INK = { basmala: RAHMAN_ART.title, name: paper.accent, both: RAHMAN_ART.lit } as const;
+const PLOT_UNIT = 3;
+const PLOT_GAP = 0.7;
+const PLOT_BAR = 9;
+/** Rows of surahs (owner, 2026-11-25: «اقسمها على ٧ أسطر أو ما شابه»), each surah's name under its bar on one of two lines. */
+const PLOT_ROWS = 6;
+const PLOT_NAME = 10;
+
+/**
+ * The first page under the name (owner, 2026-11-25: «رسم واحد», each surah by its name, in rows): a bar for every surah in
+ * the mushaf's order, each unit one place: the basmala over the surah at its foot, the name inside it over that, and the
+ * two basmalas that are also ayat holding the name in a third colour, since they are counted twice.
+ */
+function CoverPlot() {
+  const bars = surahBars(PLACES_OF()).map((bar, i) => ({ ...bar, surah: i + 1 }));
+  const basmalas = BASMALAS.reduce((sum, n) => sum + n, 0);
+  const places = placeCount(PLACES_OF());
+  const perRow = Math.ceil(bars.length / PLOT_ROWS);
+  const step = BLOCK_W / perRow;
+  const units = (bar: (typeof bars)[number]) => [
+    ...Array<keyof typeof PLOT_INK>(bar.basmala).fill('basmala'),
+    ...Array<keyof typeof PLOT_INK>(bar.both).fill('both'),
+    ...Array<keyof typeof PLOT_INK>(bar.name).fill('name'),
+  ];
+  const row = (r: number) => {
+    const some = bars.slice(r * perRow, (r + 1) * perRow);
+    const height = Math.max(...some.map(bar => units(bar).length)) * PLOT_UNIT;
+    return (
+      <View key={r}>
+        <View style={{ height }}>
+          {some.map((bar, i) => (
+            <View key={bar.surah} style={{ position: 'absolute', bottom: 0, right: i * step + (step - PLOT_BAR) / 2, width: PLOT_BAR, flexDirection: 'column-reverse', gap: PLOT_GAP }}>
+              {units(bar).map((ink, k) => <View key={k} style={{ height: PLOT_UNIT - PLOT_GAP, backgroundColor: PLOT_INK[ink] }} />)}
+            </View>
+          ))}
+        </View>
+        <View style={{ height: 1, backgroundColor: RAHMAN_ART.mark }} />
+        <View style={{ height: PLOT_NAME * 2 }}>
+          {some.map((bar, i) => (
+            <Text key={bar.surah} numberOfLines={1} style={{ position: 'absolute', top: (i % 2) * PLOT_NAME, right: Math.min(Math.max(i * step - step / 2 - 3, 0), BLOCK_W - step * 2 - 6), width: step * 2 + 6, textAlign: i === 0 ? 'right' : i * step - step / 2 - 3 > BLOCK_W - step * 2 - 6 ? 'left' : 'center', color: paper.ink, fontSize: 8.5, lineHeight: PLOT_NAME }}>{surahName(bar.surah)}</Text>
+          ))}
+        </View>
+      </View>
+    );
+  };
+  const key = (ink: string, label: string) => (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, direction: 'rtl' }}>
+      <View style={{ width: PLOT_BAR, height: PLOT_UNIT * 2, backgroundColor: ink }} />
+      <Text style={{ color: paper.ink, fontSize: 12, lineHeight: 18 }}>{label}</Text>
+    </View>
+  );
+  return (
+    <View style={{ gap: 6 }} accessible accessibilityLabel={`في ${num(basmalas)} بسملة، وفي ${num(places)} موضعًا من الآيات، وفي ${num(HADITH_COUNT)} حديثًا من الصحيحين`}>
+      <View style={{ gap: 2 }}>{Array.from({ length: PLOT_ROWS }, (_, r) => row(r))}</View>
+      <View style={{ flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', columnGap: 12, direction: 'rtl' }}>
+        {key(PLOT_INK.basmala, `بسملة، إلا ${surahName(NO_BASMALA)}`)}
+        {key(PLOT_INK.name, '«الرحمن» في آيات السورة')}
+        {key(PLOT_INK.both, `تُعدّ مرتين: ${ayahPlace('1:1')}، ${ayahPlace(BASMALA_AYAH)}`)}
+      </View>
+      <Text style={{ color: paper.ink, fontSize: 15, lineHeight: 22, textAlign: 'center' }}>
+        <Text style={{ color: paper.accent }}>{num(basmalas)}</Text>{' بسملة، '}
+        <Text style={{ color: paper.accent }}>{num(places)}</Text>{' موضعًا من الآيات، '}
+        <Text style={{ color: paper.accent }}>{num(HADITH_COUNT)}</Text>{' حديثًا من الصحيحين'}
+      </Text>
+      <Ref>العدّ: المدونة القرآنية العربية، على صفحات مصحف المدينة</Ref>
+    </View>
+  );
+}
+
 /** Al-Sa'di on the surah's opening, in his words. */
 function Sadi() {
   const passage = tafsirSadiOf(SADI_OPENING.key);
@@ -382,7 +452,7 @@ export function RahmanBlockView({ block, size, live }: { block: RahmanBlock; siz
     case 'hadith': return <Hadith id={block.id} size={size} live={live} />;
     case 'sadi': return <Sadi />;
     case 'map': return <NameMap part={block.part} />;
-    case 'cover': return <Cover look={block.look} />;
+    case 'cover': return block.look === 'plot' ? <CoverPlot /> : <Cover look={block.look} />;
     case 'mercy': return <MercyParts />;
     case 'tikrar': return <TikrarRuns />;
     case 'kirmani': return <Kirmani ayahKey={block.key} />;
