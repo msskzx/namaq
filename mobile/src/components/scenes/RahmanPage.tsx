@@ -77,7 +77,7 @@ function Ref({ children }: { children: string }) {
 
 /**
  * An ayah whole, its words that are the name in colour, and its surah's name over it (owner, 2026-11-25: the number is in
- * its medallion); the first page's name is the surah's own, so nothing repeats it (owner, 2026-11-25). Its long press opens the
+ * its medallion); the first page's name is the surah's own, so nothing repeats it, not even its number (owner, 2026-11-25). Its long press opens the
  * reader's menu.
  */
 function Ayah({ ayahKey, basmala, title }: { ayahKey: string; basmala?: boolean; title?: boolean }) {
@@ -88,7 +88,7 @@ function Ayah({ ayahKey, basmala, title }: { ayahKey: string; basmala?: boolean;
       {basmala || title ? null : <Ref>{surahName(Number(ayahKey.split(':')[0]))}</Ref>}
       <AyahFlow menu={ayahKey} color={paper.ink} center zoom={title ? TITLE_ZOOM : 1}>
         {text.map((word, i) => <AyahWords key={i} look={lit?.has(i) ? { color: paper.accent } : undefined}>{`${i ? ' ' : ''}${word}`}</AyahWords>)}
-        {basmala ? null : <AyahWords look={{ color: paper.muted }}>{`\u00a0${num(Number(ayahKey.split(':')[1]))}`}</AyahWords>}
+        {basmala || title ? null : <AyahWords look={{ color: paper.muted }}>{`\u00a0${num(Number(ayahKey.split(':')[1]))}`}</AyahWords>}
       </AyahFlow>
     </View>
   );
@@ -360,60 +360,37 @@ function Cover({ look }: { look: CoverLook }) {
   );
 }
 
-// Two colours, each bar one piece (owner, 2026-11-25): a basmala that is also an ayah holding the name stands in both.
-const PLOT_INK = { basmala: RAHMAN_ART.basmala, name: paper.accent } as const;
 const PLOT_UNIT = 5.5;
 const PLOT_BAR = 10;
 const PLOT_ROW = 21;
-const PLOT_NAME_W = 58;
+const PLOT_NAME_W = 52;
 const PLOT_COUNT_W = 18;
 const PLOT_COLUMNS = 2;
 
 /**
- * The first page under the name (owner, 2026-11-25, chose «أعمدة أفقية»): a row for every surah the name is in, in the
- * mushaf's order, its name and a bar: the basmala over it in yellow, the name inside it in red, as many units as places,
- * and its count; the other surahs, a basmala each, in one line under them.
+ * The first page under the name (owner, 2026-11-25, chose «أعمدة أفقية»; then: the name only, in red, counted inside the
+ * surah and not over it): a row for every surah whose ayat hold the name, in the mushaf's order, its name, a bar as long
+ * as its places and their count; one line under it for the basmalas and the hadith.
  */
 function CoverPlot() {
-  const bars = surahBars(PLACES_OF()).map((bar, i) => ({ ...bar, surah: i + 1 }));
-  const named = bars.filter(bar => bar.name + bar.both > 0);
-  const others = bars.filter(bar => !named.includes(bar) && bar.basmala > 0).length;
+  const bars = surahBars(PLACES_OF()).map((bar, i) => ({ surah: i + 1, count: bar.name + bar.both })).filter(bar => bar.count > 0);
   const basmalas = BASMALAS.reduce((sum, n) => sum + n, 0);
   const places = placeCount(PLACES_OF());
-  const perColumn = Math.ceil(named.length / PLOT_COLUMNS);
+  const perColumn = Math.ceil(bars.length / PLOT_COLUMNS);
   const row = (bar: (typeof bars)[number]) => (
     <View key={bar.surah} style={{ flexDirection: 'row', alignItems: 'center', height: PLOT_ROW, gap: 4, direction: 'rtl' }}>
       <Text style={{ width: PLOT_NAME_W, color: paper.ink, fontSize: 12, lineHeight: PLOT_ROW }} numberOfLines={1}>{surahName(bar.surah)}</Text>
-      <View style={{ flexDirection: 'row', height: PLOT_BAR }}>
-        <View style={{ width: (bar.basmala + bar.both) * PLOT_UNIT, backgroundColor: PLOT_INK.basmala }} />
-        <View style={{ width: (bar.name + bar.both) * PLOT_UNIT, backgroundColor: PLOT_INK.name }} />
-      </View>
-      <Text style={{ width: PLOT_COUNT_W, color: paper.accent, fontSize: 12, lineHeight: PLOT_ROW }}>{num(bar.name + bar.both)}</Text>
-    </View>
-  );
-  const key = (ink: string, label: string) => (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, direction: 'rtl' }}>
-      <View style={{ width: PLOT_UNIT * 2, height: PLOT_BAR, backgroundColor: ink }} />
-      <Text style={{ color: paper.ink, fontSize: 12, lineHeight: 18 }}>{label}</Text>
+      <View style={{ width: bar.count * PLOT_UNIT, height: PLOT_BAR, backgroundColor: paper.accent }} />
+      <Text style={{ width: PLOT_COUNT_W, color: paper.accent, fontSize: 12, lineHeight: PLOT_ROW }}>{num(bar.count)}</Text>
     </View>
   );
   return (
-    <View style={{ gap: 6 }} accessible accessibilityLabel={`في ${num(basmalas)} بسملة، وفي ${num(places)} موضعًا من الآيات، وفي ${num(HADITH_COUNT)} حديثًا من الصحيحين`}>
+    <View style={{ gap: 8 }} accessible accessibilityLabel={`«الرحمن» في ${num(places)} موضعًا من الآيات، والبسملة في ${num(basmalas)} موضعًا، وفي ${num(HADITH_COUNT)} حديثًا من الصحيحين`}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', direction: 'rtl' }}>
-        {Array.from({ length: PLOT_COLUMNS }, (_, c) => <View key={c}>{named.slice(c * perColumn, (c + 1) * perColumn).map(row)}</View>)}
+        {Array.from({ length: PLOT_COLUMNS }, (_, c) => <View key={c}>{bars.slice(c * perColumn, (c + 1) * perColumn).map(row)}</View>)}
       </View>
-      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, direction: 'rtl', borderTopWidth: 1, borderTopColor: RAHMAN_ART.mark, paddingTop: 6 }}>
-        <View style={{ width: PLOT_UNIT, height: PLOT_BAR, backgroundColor: PLOT_INK.basmala }} />
-        <Text style={{ color: paper.ink, fontSize: 13, lineHeight: 19 }}>{`وفي ${num(others)} سورة غيرها بسملة واحدة، و${surahName(NO_BASMALA)} بلا بسملة`}</Text>
-      </View>
-      <View style={{ flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', columnGap: 12, direction: 'rtl' }}>
-        {key(PLOT_INK.basmala, 'البسملة على رأس السورة')}
-        {key(PLOT_INK.name, '«الرحمن» في آيات السورة')}
-      </View>
-      <Ref>{`بسملة ${ayahPlace('1:1')} و${ayahPlace(BASMALA_AYAH)} آيتان فيهما الاسم، فتُعدّان في اللونين`}</Ref>
-      <Text style={{ color: paper.ink, fontSize: 15, lineHeight: 22, textAlign: 'center' }}>
-        <Text style={{ color: paper.accent }}>{num(basmalas)}</Text>{' بسملة، '}
-        <Text style={{ color: paper.accent }}>{num(places)}</Text>{' موضعًا من الآيات، '}
+      <Text style={{ color: paper.ink, fontSize: 15, lineHeight: 24, textAlign: 'center', borderTopWidth: 1, borderTopColor: RAHMAN_ART.mark, paddingTop: 8 }}>
+        {'البسملة في '}<Text style={{ color: paper.accent }}>{num(basmalas)}</Text>{` موضعًا: على رأس كل سورة إلا ${surahName(NO_BASMALA)}، وفي ${ayahPlace(BASMALA_AYAH).replace(' ', '\u00a0')}؛ و«الرحمن» في `}
         <Text style={{ color: paper.accent }}>{num(HADITH_COUNT)}</Text>{' حديثًا من الصحيحين'}
       </Text>
       <Ref>العدّ: المدونة القرآنية العربية، على صفحات مصحف المدينة</Ref>
