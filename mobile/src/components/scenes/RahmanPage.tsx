@@ -361,13 +361,14 @@ function Cover({ look }: { look: CoverLook }) {
 }
 
 /** One unit of a bar: the basmala over the surah, the name inside it, and a basmala counted in both (owner, 2026-11-25). */
-const PLOT_INK = { basmala: RAHMAN_ART.title, name: paper.accent, both: RAHMAN_ART.lit } as const;
+// Red, green and yellow (owner, 2026-11-25).
+const PLOT_INK = { basmala: RAHMAN_ART.basmala, name: paper.accent, both: RAHMAN_ART.lit } as const;
 const PLOT_UNIT = 3;
 const PLOT_GAP = 0.7;
 const PLOT_BAR = 9;
-/** Rows of surahs (owner, 2026-11-25: «اقسمها على ٧ أسطر أو ما شابه»), each surah's name under its bar on one of two lines. */
+/** Rows of surahs (owner, 2026-11-25: «اقسمها على ٧ أسطر أو ما شابه»). */
 const PLOT_ROWS = 6;
-const PLOT_NAME = 10;
+const PLOT_NAME = 13;
 
 /**
  * The first page under the name (owner, 2026-11-25: «رسم واحد», each surah by its name, in rows): a bar for every surah in
@@ -379,6 +380,8 @@ function CoverPlot() {
   const basmalas = BASMALAS.reduce((sum, n) => sum + n, 0);
   const places = placeCount(PLACES_OF());
   const perRow = Math.ceil(bars.length / PLOT_ROWS);
+  /** Named: only the surahs where the name stands more than once, and at-Tawba with no basmala (owner, 2026-11-25: all of them was too much). */
+  const named = (bar: (typeof bars)[number]) => bar.name + bar.both > 1 || bar.surah === NO_BASMALA;
   const step = BLOCK_W / perRow;
   const units = (bar: (typeof bars)[number]) => [
     ...Array<keyof typeof PLOT_INK>(bar.basmala).fill('basmala'),
@@ -388,6 +391,8 @@ function CoverPlot() {
   const row = (r: number) => {
     const some = bars.slice(r * perRow, (r + 1) * perRow);
     const height = Math.max(...some.map(bar => units(bar).length)) * PLOT_UNIT;
+    // Two lines of names only where two named surahs stand side by side.
+    const lines = some.some((bar, i) => named(bar) && i > 0 && named(some[i - 1])) ? 2 : some.some(named) ? 1 : 0;
     return (
       <View key={r}>
         <View style={{ height }}>
@@ -398,9 +403,9 @@ function CoverPlot() {
           ))}
         </View>
         <View style={{ height: 1, backgroundColor: RAHMAN_ART.mark }} />
-        <View style={{ height: PLOT_NAME * 2 }}>
-          {some.map((bar, i) => (
-            <Text key={bar.surah} numberOfLines={1} style={{ position: 'absolute', top: (i % 2) * PLOT_NAME, right: Math.min(Math.max(i * step - step / 2 - 3, 0), BLOCK_W - step * 2 - 6), width: step * 2 + 6, textAlign: i === 0 ? 'right' : i * step - step / 2 - 3 > BLOCK_W - step * 2 - 6 ? 'left' : 'center', color: paper.ink, fontSize: 8.5, lineHeight: PLOT_NAME }}>{surahName(bar.surah)}</Text>
+        <View style={{ height: PLOT_NAME * lines }}>
+          {some.map((bar, i) => named(bar) && (
+            <Text key={bar.surah} numberOfLines={1} style={{ position: 'absolute', top: (lines > 1 ? i % 2 : 0) * PLOT_NAME, right: Math.min(Math.max(i * step - step / 2 - 3, 0), BLOCK_W - step * 2 - 6), width: step * 2 + 6, textAlign: 'center', color: paper.ink, fontSize: 10, lineHeight: PLOT_NAME }}>{surahName(bar.surah)}</Text>
           ))}
         </View>
       </View>
