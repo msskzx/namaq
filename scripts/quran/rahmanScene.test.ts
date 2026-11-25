@@ -4,7 +4,7 @@ import words from '../../shared/data/quran/words.json';
 import { plainText } from '../../shared/sahih';
 import { normalizeWord } from '../../shared/quran/normalize';
 import {
-  FATIHA_HADITH, MERCY_HADITH, rahmanSections, MERCY_KEPT, MERCY_PARTS, TIKRAR_FIRST, TIKRAR_RUNS, kirmaniOn, SCENE_HADITH, SCENE_HADITH_BY_ID, basmalasBySurah, isName, nameRuns, placeCount, rahmanPlaces, sceneHadithNumbers,
+  FATIHA_HADITH, MERCY_HADITH, rahmanSections, MERCY_KEPT, MERCY_PARTS, TIKRAR_FIRST, TIKRAR_RUNS, kirmaniOn, tikrarWords, SCENE_HADITH, SCENE_HADITH_BY_ID, basmalasBySurah, isName, nameRuns, placeCount, rahmanPlaces, sceneHadithNumbers,
   type SahihBookSlug,
 } from '../../shared/quran/scenes/rahman';
 import type { WordsData } from '../../shared/quran/words';
@@ -78,11 +78,12 @@ describe('the «الرحمن» scene', () => {
     const quote = plain(citation.quote);
     let from = 0;
     for (const run of TIKRAR_RUNS) {
-      const at = quote.indexOf(plain(run.words), from);
-      expect(at, run.words).toBeGreaterThan(-1);
+      const words = plain(tikrarWords(run));
+      const at = quote.indexOf(words, from);
+      expect(at, words).toBeGreaterThan(from - 1);
       // His count for the run is the number word nearest before or after its words.
-      const near = quote.slice(Math.max(0, at - 40), at + plain(run.words).length + 40);
-      expect(near, run.words).toContain(NUMBER[run.count]);
+      const near = quote.slice(Math.max(0, at - 40), at + words.length + 40);
+      expect(near, words).toContain(NUMBER[run.count]);
       from = at;
     }
     expect(TIKRAR_RUNS.reduce((sum, run) => sum + run.count, 0)).toBe(citation.places.length);

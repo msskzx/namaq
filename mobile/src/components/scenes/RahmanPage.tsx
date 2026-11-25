@@ -6,7 +6,7 @@ import { sahihName } from '@shared/sahih';
 import { tafsirSadiOf } from '@shared/quran/tafsirSadiData';
 import builtHadith from '@shared/data/quran/rahmanHadith.json';
 import {
-  BASMALA_AYAH, MERCY_KEPT, MERCY_PARTS, NO_BASMALA, TIKRAR_RUNS, kirmaniOn, SADI_OPENING, SCENE_HADITH_BY_ID, basmalasBySurah, hadithNumbers, mostPlaces, nameRuns, placeCount, rahmanPlaces,
+  BASMALA_AYAH, MERCY_KEPT, MERCY_PARTS, NO_BASMALA, TIKRAR_RUNS, kirmaniOn, tikrarWords, SADI_OPENING, SCENE_HADITH_BY_ID, basmalasBySurah, hadithNumbers, mostPlaces, nameRuns, placeCount, rahmanPlaces,
   sadiOpening, sceneHadithNumbers, type BuiltHadith, type RahmanBlock,
 } from '@shared/quran/scenes/rahman';
 import { Text } from '@/ui/Text';
@@ -239,10 +239,10 @@ function MercyParts() {
 function TikrarRuns() {
   const DOT = 10;
   return (
-    <View style={{ gap: 8 }} accessible accessibilityLabel={TIKRAR_RUNS.map(run => `${run.words}: ${num(run.count)}`).join('، ')}>
+    <View style={{ gap: 8 }} accessible accessibilityLabel={TIKRAR_RUNS.map(run => `${tikrarWords(run)}: ${num(run.count)}`).join('، ')}>
       {TIKRAR_RUNS.map(run => (
-        <View key={run.words} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', direction: 'rtl' }}>
-          <Text style={{ color: paper.ink, fontSize: 15 }}>{run.words}</Text>
+        <View key={run.words[0]} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', direction: 'rtl' }}>
+          <Text style={{ color: paper.ink, fontSize: 15 }}>{tikrarWords(run)}</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5, direction: 'rtl' }}>
             {Array.from({ length: run.count }, (_, k) => <View key={k} style={{ width: DOT, height: DOT, borderRadius: DOT / 2, backgroundColor: RAHMAN_ART.title }} />)}
             <Text style={{ color: paper.muted, fontSize: 14, width: 18, textAlign: 'center' }}>{num(run.count)}</Text>

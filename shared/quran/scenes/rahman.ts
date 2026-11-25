@@ -223,12 +223,16 @@ export function kirmaniOn(key: string): KirmaniCitation {
 export const TIKRAR_FIRST = '55:13';
 
 /**
- * Al-Kirmani's four runs of the repeated ayah, each named in his words and counted as he counts them (ص ٢٣١): after the
+ * Al-Kirmani's four runs of the repeated ayah, each named by the words of his quote at `words` (word positions, end
+ * excluded) and counted as he counts them (ص ٢٣١): after the
  * wonders of creation, after the Fire, the Gardens, and the two Gardens below them.
  */
 export const TIKRAR_RUNS = [
-  { words: 'تعداد عجائب خلق الله', count: 8 },
-  { words: 'ذكر النار وشدائدها', count: 7 },
-  { words: 'وصف الجنان وأهلها', count: 8 },
-  { words: 'للجنتين اللتين دونهما', count: 8 },
+  { words: [16, 20], count: 8 },
+  { words: [31, 34], count: 7 },
+  { words: [62, 65], count: 8 },
+  { words: [72, 75], count: 8 },
 ] as const;
+
+/** A run's name: its words in al-Kirmani's quote, read from it (owner, 2026-11-25: nothing copied). */
+export const tikrarWords = (run: (typeof TIKRAR_RUNS)[number]) => kirmaniOn(TIKRAR_FIRST).quote.split(' ').slice(...run.words).join(' ');
