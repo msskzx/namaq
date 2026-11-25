@@ -141,7 +141,9 @@ export type RahmanBlock =
     /** The first page's name: big, with no number. */
     title?: boolean }
   /** Ayat of one surah that follow each other, in one flow with their numbers (owner, 2026-11-25: «الرحمن علم القرآن» on one line). */
-  | { kind: 'run'; keys: string[] }
+  | { kind: 'run'; keys: string[];
+    /** No surah name over it (owner, 2026-11-25: al-Fatiha's basmala and ayah 3 on the second page). */
+    bare?: boolean }
   | { kind: 'hadith'; id: string }
   | { kind: 'sadi' }
   | { kind: 'map'; part: 'basmala' | 'name' }
@@ -167,7 +169,7 @@ const BASMALA: RahmanBlock = { kind: 'ayah', key: '1:1', basmala: true };
 export function rahmanSections(placeKeys: string[]): RahmanSection[] {
   return [
     { id: 'name', title: '', blocks: [{ kind: 'ayah', key: '55:1', title: true }, { kind: 'map', part: 'basmala' }, { kind: 'map', part: 'name' }, { kind: 'counts', only: 'hadith' }], intro: true },
-    { id: 'opening', title: 'البسملة والفاتحة', blocks: [BASMALA, { kind: 'ayah', key: '1:3' }, { kind: 'hadith', id: FATIHA_PART.id }], intro: true },
+    { id: 'opening', title: 'البسملة والفاتحة', blocks: [{ kind: 'run', keys: ['1:1', '1:3'], bare: true }, { kind: 'hadith', id: FATIHA_PART.id }], intro: true },
     { id: 'intro-ayat', title: 'من الآيات', blocks: [{ kind: 'run', keys: ['55:1', '55:2'] }, ...ayat(INTRO_AYAT)], intro: true },
     { id: 'intro-hadith', title: 'من الأحاديث', blocks: hadith(INTRO_HADITH.slice(0, 2)), intro: true },
     { id: 'intro-hadith-2', title: 'من الأحاديث', blocks: hadith(INTRO_HADITH.slice(2)), intro: true },
