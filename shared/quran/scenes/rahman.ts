@@ -134,7 +134,8 @@ export function nameRuns(text: string, lit?: string): { text: string; name: bool
 
 /** What a page of the scene holds, block by block: each block is measured, and a section's blocks flow over its pages. */
 export type RahmanBlock =
-  | { kind: 'counts' }
+  /** The scene's counts; `hadith`: its hadith count alone, under the map that draws the other two. */
+  | { kind: 'counts'; only?: 'hadith' }
   /** An ayah whole; `basmala` draws al-Fatiha's first ayah with no number, as the basmala over a surah. */
   | { kind: 'ayah'; key: string; basmala?: boolean;
     /** The first page's name: big, with no number. */
@@ -165,13 +166,12 @@ const BASMALA: RahmanBlock = { kind: 'ayah', key: '1:1', basmala: true };
  */
 export function rahmanSections(placeKeys: string[]): RahmanSection[] {
   return [
-    { id: 'name', title: '', blocks: [{ kind: 'ayah', key: '55:1', title: true }, { kind: 'counts' }], intro: true },
+    { id: 'name', title: '', blocks: [{ kind: 'ayah', key: '55:1', title: true }, { kind: 'map', part: 'basmala' }, { kind: 'map', part: 'name' }, { kind: 'counts', only: 'hadith' }], intro: true },
     { id: 'opening', title: 'البسملة والفاتحة', blocks: [BASMALA, { kind: 'ayah', key: '1:3' }, { kind: 'hadith', id: FATIHA_PART.id }], intro: true },
     { id: 'intro-ayat', title: 'من الآيات', blocks: [{ kind: 'run', keys: ['55:1', '55:2'] }, ...ayat(INTRO_AYAT)], intro: true },
     { id: 'intro-hadith', title: 'من الأحاديث', blocks: hadith(INTRO_HADITH.slice(0, 2)), intro: true },
     { id: 'intro-hadith-2', title: 'من الأحاديث', blocks: hadith(INTRO_HADITH.slice(2)), intro: true },
     { id: 'intro-mercy', title: MERCY_HADITH.title, blocks: [{ kind: 'mercy' }, ...hadith([MERCY_HADITH.id])], intro: true },
-    { id: 'map', title: 'البسملة والآيات', blocks: [{ kind: 'map', part: 'basmala' }, { kind: 'map', part: 'name' }], intro: true },
     { id: 'surah', title: 'سورة الرحمن', blocks: [BASMALA, ...ayat(SURAH_AYAT), { kind: 'sadi' }] },
     { id: 'tikrar', title: 'تكرار الآية في سورة الرحمن', blocks: [{ kind: 'ayah', key: TIKRAR_FIRST }, { kind: 'tikrar' }, { kind: 'kirmani', key: TIKRAR_FIRST }] },
     { id: 'fatiha', title: 'سورة الفاتحة', blocks: [{ kind: 'ayah', key: '1:3' }, { kind: 'kirmani', key: '1:3' }, { kind: 'hadith', id: FATIHA_HADITH.id }] },
