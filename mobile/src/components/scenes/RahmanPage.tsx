@@ -43,7 +43,7 @@ export const PAGE_ROOM = PAGE_H - EDGE * 2 - 2 - 10 - 6 - HEAD - FOOT - 8;
 export const HADITH_SIZES = [22, 20, 18, 17, 15.5, 14] as const;
 
 /** The first page's name, over the map (owner, 2026-11-25: pages 1 and 7 merged), with its number in its medallion. */
-const TITLE_ZOOM = COVER_LOOK === 'rows' ? 1.5 : COVER_LOOK === 'plot' ? 1.5 : 2.2;
+const TITLE_ZOOM = COVER_LOOK === 'rows' ? 1.5 : COVER_LOOK === 'plot' ? 1.8 : 2.2;
 const HADITH_DOT = 8;
 
 const BUILT = builtHadith as Record<string, BuiltHadith>;
@@ -362,78 +362,52 @@ function Cover({ look }: { look: CoverLook }) {
 
 // Two colours, each bar one piece (owner, 2026-11-25): a basmala that is also an ayah holding the name stands in both.
 const PLOT_INK = { basmala: RAHMAN_ART.basmala, name: paper.accent } as const;
-const PLOT_UNIT = 3;
-const PLOT_BAR = 9;
-/** Rows of surahs (owner, 2026-11-25: «اقسمها على ٧ أسطر أو ما شابه»), each name right under its bar. */
-const PLOT_ROWS = 7;
-const PLOT_NAME = 13;
+const PLOT_UNIT = 5.5;
+const PLOT_BAR = 10;
+const PLOT_ROW = 21;
+const PLOT_NAME_W = 58;
+const PLOT_COUNT_W = 18;
+const PLOT_COLUMNS = 2;
 
 /**
- * The first page under the name (owner, 2026-11-25: «رسم واحد», each surah by its name, in rows): a bar for every surah in
- * the mushaf's order, each unit one place: the basmala over the surah at its foot, the name inside it over that, and the
- * two basmalas that are also ayat holding the name in a third colour, since they are counted twice.
+ * The first page under the name (owner, 2026-11-25, chose «أعمدة أفقية»): a row for every surah the name is in, in the
+ * mushaf's order, its name and a bar: the basmala over it in yellow, the name inside it in red, as many units as places,
+ * and its count; the other surahs, a basmala each, in one line under them.
  */
 function CoverPlot() {
   const bars = surahBars(PLACES_OF()).map((bar, i) => ({ ...bar, surah: i + 1 }));
+  const named = bars.filter(bar => bar.name + bar.both > 0);
+  const others = bars.filter(bar => !named.includes(bar) && bar.basmala > 0).length;
   const basmalas = BASMALAS.reduce((sum, n) => sum + n, 0);
   const places = placeCount(PLACES_OF());
-  const perRow = Math.ceil(bars.length / PLOT_ROWS);
-  const step = BLOCK_W / perRow;
-  const units = (bar: (typeof bars)[number]) => [
-    ...Array<keyof typeof PLOT_INK>(bar.basmala + bar.both).fill('basmala'),
-    ...Array<keyof typeof PLOT_INK>(bar.both + bar.name).fill('name'),
-  ];
-  /** Named: every surah whose bar is longer than one unit, and at-Tawba with none (owner, 2026-11-25). */
-  const named = (bar: (typeof bars)[number]) => units(bar).length > 1 || bar.surah === NO_BASMALA;
-  /** A name's width at the plot's size, near enough to keep two names apart: its letters without their marks. */
-  const nameWidth = (surah: number) => surahName(surah).replace(/[\u064b-\u0652\u0670\u06e1]/g, '').length * 4.6 + 4;
-  /** Each name right under its bar, a line lower where it would touch the name before it. */
-  const nameLines = (some: typeof bars) => {
-    const ends: number[] = [];
-    return some.map((bar, i) => {
-      if (!named(bar)) return -1;
-      const half = nameWidth(bar.surah) / 2;
-      const centre = i * step + step / 2;
-      let line = 0;
-      while ((ends[line] ?? -Infinity) > centre - half) line++;
-      ends[line] = centre + half;
-      return line;
-    });
-  };
-  const row = (r: number) => {
-    const some = bars.slice(r * perRow, (r + 1) * perRow);
-    const height = Math.max(...some.map(bar => units(bar).length)) * PLOT_UNIT;
-    const at = nameLines(some);
-    const lines = Math.max(0, ...at.map(line => line + 1));
-    return (
-      <View key={r}>
-        <View style={{ height }}>
-          {some.map((bar, i) => (
-            <View key={bar.surah} style={{ position: 'absolute', bottom: 0, right: i * step + (step - PLOT_BAR) / 2, width: PLOT_BAR, flexDirection: 'column-reverse' }}>
-              {(['basmala', 'name'] as const).map(ink => <View key={ink} style={{ height: units(bar).filter(each => each === ink).length * PLOT_UNIT, backgroundColor: PLOT_INK[ink] }} />)}
-            </View>
-          ))}
-        </View>
-        <View style={{ height: 1, backgroundColor: RAHMAN_ART.mark }} />
-        <View style={{ height: PLOT_NAME * lines }}>
-          {some.map((bar, i) => at[i] >= 0 && (
-            <Text key={bar.surah} numberOfLines={1} style={{ position: 'absolute', top: at[i] * PLOT_NAME, right: i * step - step / 2, width: step * 2, textAlign: 'center', color: paper.ink, fontSize: 9, lineHeight: PLOT_NAME }}>{surahName(bar.surah)}</Text>
-          ))}
-        </View>
+  const perColumn = Math.ceil(named.length / PLOT_COLUMNS);
+  const row = (bar: (typeof bars)[number]) => (
+    <View key={bar.surah} style={{ flexDirection: 'row', alignItems: 'center', height: PLOT_ROW, gap: 4, direction: 'rtl' }}>
+      <Text style={{ width: PLOT_NAME_W, color: paper.ink, fontSize: 12, lineHeight: PLOT_ROW }} numberOfLines={1}>{surahName(bar.surah)}</Text>
+      <View style={{ flexDirection: 'row', height: PLOT_BAR }}>
+        <View style={{ width: (bar.basmala + bar.both) * PLOT_UNIT, backgroundColor: PLOT_INK.basmala }} />
+        <View style={{ width: (bar.name + bar.both) * PLOT_UNIT, backgroundColor: PLOT_INK.name }} />
       </View>
-    );
-  };
+      <Text style={{ width: PLOT_COUNT_W, color: paper.accent, fontSize: 12, lineHeight: PLOT_ROW }}>{num(bar.name + bar.both)}</Text>
+    </View>
+  );
   const key = (ink: string, label: string) => (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, direction: 'rtl' }}>
-      <View style={{ width: PLOT_BAR, height: PLOT_UNIT * 2, backgroundColor: ink }} />
+      <View style={{ width: PLOT_UNIT * 2, height: PLOT_BAR, backgroundColor: ink }} />
       <Text style={{ color: paper.ink, fontSize: 12, lineHeight: 18 }}>{label}</Text>
     </View>
   );
   return (
     <View style={{ gap: 6 }} accessible accessibilityLabel={`في ${num(basmalas)} بسملة، وفي ${num(places)} موضعًا من الآيات، وفي ${num(HADITH_COUNT)} حديثًا من الصحيحين`}>
-      <View style={{ gap: 5 }}>{Array.from({ length: PLOT_ROWS }, (_, r) => row(r))}</View>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', direction: 'rtl' }}>
+        {Array.from({ length: PLOT_COLUMNS }, (_, c) => <View key={c}>{named.slice(c * perColumn, (c + 1) * perColumn).map(row)}</View>)}
+      </View>
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, direction: 'rtl', borderTopWidth: 1, borderTopColor: RAHMAN_ART.mark, paddingTop: 6 }}>
+        <View style={{ width: PLOT_UNIT, height: PLOT_BAR, backgroundColor: PLOT_INK.basmala }} />
+        <Text style={{ color: paper.ink, fontSize: 13, lineHeight: 19 }}>{`وفي ${num(others)} سورة غيرها بسملة واحدة، و${surahName(NO_BASMALA)} بلا بسملة`}</Text>
+      </View>
       <View style={{ flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', columnGap: 12, direction: 'rtl' }}>
-        {key(PLOT_INK.basmala, `بسملة، إلا ${surahName(NO_BASMALA)}`)}
+        {key(PLOT_INK.basmala, 'البسملة على رأس السورة')}
         {key(PLOT_INK.name, '«الرحمن» في آيات السورة')}
       </View>
       <Ref>{`بسملة ${ayahPlace('1:1')} و${ayahPlace(BASMALA_AYAH)} آيتان فيهما الاسم، فتُعدّان في اللونين`}</Ref>
