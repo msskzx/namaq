@@ -7,10 +7,10 @@ import Folded from '@/ui/Folded';
 import SourceLine, { sourcesOf } from '@/ui/SourceLine';
 import type { Palette } from '@/lib/theme';
 
-/** The narrator's own opening, up to the first quote mark when it comes soon («قَالَ: سَمِعْتُ عَلِيًّا يَقُولُ: «»): muted. */
+/** The narrator's own opening, up to the first quote mark when no sentence ends before it («قَالَ: سَمِعْتُ عَلِيًّا يَقُولُ: «»): muted. */
 const leadOf = (words: string) => {
   const at = words.search(/[«"“]/);
-  return at > 0 && at <= 120 ? at : 0;
+  return at > 0 && !/[.؟!]/.test(words.slice(0, at)) ? at : 0;
 };
 
 /** One route: its chain folded (shown on a tap, never left out), then from its last narrator on, his name lit. */

@@ -2,7 +2,7 @@
 // al-Bukhari or Muslim gives the report («أخرجه البخاري (٤٠٥٨)»), the fact is shown as the Sahih prints it, the route
 // closest to the Siyar's words open and the others the note names closed under it; al-Dhahabi's page stays its reference.
 import { readFileSync } from 'node:fs';
-import { chainRest, findHadith, type SahihRoute, type SahihText } from '@shared/sahih';
+import { chainRest, findHadith, plainText, type SahihRoute, type SahihText } from '@shared/sahih';
 import type { SahihQuote } from '@shared/tarajim';
 import { loadStorePage } from '../history/sourceStore';
 import type { SahihBook } from '../catalog/sahihText';
@@ -53,7 +53,7 @@ export function noteNumbers(note: string, name: 'البخاري' | 'مسلم') {
 }
 
 /** Letters only, vowels and hamza seats set aside: the Siyar's «رَسُوْلِ» and the Sahih's «رَسُولِ» are one word. */
-const fold = (word: string) => word.replace(/[ً-ْٰـ]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/[^ء-ي]/g, '');
+const fold = (word: string) => plainText(word).replace(/\s/g, '');
 const words = (text: string) => [...text.matchAll(/\S+/g)].map((m) => ({ word: fold(m[0]), start: m.index!, end: m.index! + m[0].length })).filter((w) => w.word);
 
 /** The longest run of the fact's words found in order in the route, and where in the route it lies. */
@@ -85,14 +85,15 @@ function match(fact: string, route: string) {
 // comes after the name it belongs to («أَنَّ عَلِيَّ بْنَ الْحُسَيْنِ حَدَّثَهُ»), so it starts no link.
 const FORMULA = /^(?:و?(?:عن|سمعت|سمع|ان|حدثني|حدثنا|اخبرني|اخبرنا|حدثتني|اخبرتني))$/;
 const CHAIN = /^(?:و?(?:عن|عنه|سمعت|سمع|ان|انه|انها|حدثني|حدثه|حدثنا|اخبرني|اخبره|اخبرنا|حدثتني|اخبرتني|قرات|قرا|ح))$/;
-const SAYS = /^(?:قال|قالت|يقول|تقول|قالا|قالوا|يحدث)$/;
+const SAYS = /^(?:[فو]?(?:قال|قالت)|يقول|تقول|قالا|قالوا|يحدث)$/;
 const PROPHET = /^(?:رسول|النبي|لرسول|للنبي)$/;
 
 /**
  * Where a route's last narrator begins («قَالَ: سَمِعْتُ عَلِيًّا يَقُولُ: …»): the chain before it is folded and nothing is
  * left out. With the edition's links, the last link's words. Else the last «عن», «سمعت», «أن»… before the narrator's own
  * words begin: the first verb of saying with no word of the chain in the few words after it, outside the editor's
- * brackets («(قَالَ يَحْيَى: أَخْبَرَنَا)»), and before the Prophet ﷺ is named. Undefined when the chain cannot be told from the words.
+ * brackets («(قَالَ يَحْيَى: أَخْبَرَنَا)»), and before the Prophet ﷺ is named. Undefined when the chain cannot be told from the words, or
+ * none is printed before him (a number's later part).
  */
 export function lastNarrator(route: SahihRoute) {
   if (route.chain?.length && route.isnadEnd && chainRest(route.text.slice(0, route.isnadEnd), route.chain) !== undefined) {
@@ -120,7 +121,7 @@ export function lastNarrator(route: SahihRoute) {
     // The chain is told before the Prophet ﷺ is first named; a «عن» after him is in the story.
     if (list[i].raw.includes('ﷺ')) told = true;
     if (!told && FORMULA.test(list[i].word) && !/^إ/.test(list[i].raw) && !PROPHET.test(list[i + 1]?.word ?? '')) last = list[i].start;
-    if (SAYS.test(list[i].word) && last !== undefined && ![1, 2, 3].some((k) => chainWord(list[i + k]))) return last;
+    if (SAYS.test(list[i].word) && last !== undefined && ![1, 2, 3].some((k) => chainWord(list[i + k]))) return last > 0 ? last : undefined;
   }
   return undefined;
 }
@@ -136,6 +137,9 @@ function bestRoute(name: SahihBook, n: number, fact: string): SahihMatch | undef
   if (!found) return undefined;
   let best: SahihMatch | undefined;
   found.hadith.routes.forEach((route, index) => {
+    // A route whose chain cannot be told apart (a number's later part, printed with no chain of its own) is not shown:
+    // its words would read with no narrator, or the chain as his words.
+    if (lastNarrator(route) === undefined) return;
     const scored = match(fact, route.text);
     if (scored && (!best || scored.share > best.share)) best = { book: name, n, route: index, share: scored.share, start: scored.start };
   });
@@ -146,7 +150,7 @@ function bestRoute(name: SahihBook, n: number, fact: string): SahihMatch | undef
 export function quoteOf(found: SahihMatch): SahihQuote {
   const hadith = findHadith(book(found.book), found.n)!.hadith;
   const route = hadith.routes[found.route];
-  const cut = lastNarrator(route) ?? 0;
+  const cut = lastNarrator(route)!;
   return {
     book: found.book, n: found.n, ...(route.route && { route: route.route }),
     isnad: route.text.slice(0, cut).trim(), words: route.text.slice(cut).trim(),

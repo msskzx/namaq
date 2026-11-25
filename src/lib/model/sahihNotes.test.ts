@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { findHadith, type SahihText } from '@shared/sahih';
-import { sahihLabel, sahihSources, unmarked, type AppPerson } from '@shared/tarajim';
+import { sahihLabel, sahihPlace, sahihSources, unmarked, type AppPerson } from '@shared/tarajim';
 import { lastNarrator, noteNumbers, noteOf } from './sahihNotes';
 
 const people = JSON.parse(readFileSync('shared/data/tarajim/people.json', 'utf8')) as AppPerson[];
@@ -25,24 +25,31 @@ describe('a report on a person page in the Sahih\'s words (owner, 2026-11-25)', 
     expect(unmarked(route.text.slice(cut)).startsWith('سمعت عليا يقول')).toBe(true);
   });
 
-  it('opens Sa\'d\'s «يجمع أبويه» on al-Bukhari\'s route and keeps Muslim\'s among the others', () => {
-    const saad = people.find((person) => person.slug === 'saad-ibn-abi-waqqas')!;
-    const fact = saad.virtues.find((one) => one.id?.endsWith('#a_sd_v_ali'))!;
-    expect(fact.sahih![0]).toMatchObject({ book: 'bukhari', n: 4058 });
-    expect(fact.sahih!.some((quote) => quote.book === 'muslim' && quote.n === 2411)).toBe(true);
-    // One line under it (owner, 2026-11-25), its sheet every place the report is: the Sahih's routes, then the Siyar's page.
-    expect(unmarked(sahihLabel(fact))).toBe('صحيح البخاري (٤٠٥٨)، وذكره غيره');
-    const books = sahihSources(fact).map((source) => source.book);
-    expect(books[0]).toBe('صحيح البخاري');
-    expect(books).toContain('صحيح مسلم');
-    expect(books.at(-1)).toBe(sahihSources({ ...fact, sahih: [] }).at(-1)!.book);
+  it('stops a chain where the narrator\'s story begins, and shows no route that prints no chain', () => {
+    // Muslim 1610: «…عن أبيه؛ أن أروى بنت أويس ادعت… فقال سعيد…»: the story's own «سمعت» is not a link of the chain.
+    const story = findHadith(sahih.muslim, 1610)!.hadith.routes.find((route) => unmarked(route.text).includes('أن أروى بنت أويس'))!;
+    expect(unmarked(story.text.slice(lastNarrator(story)!)).startsWith('أن أروى بنت أويس')).toBe(true);
+    // Muslim 2503 is the later part of 2502, printed with no chain: there is no narrator to open it with.
+    expect(lastNarrator(findHadith(sahih.muslim, 2503)!.hadith.routes[0])).toBeUndefined();
   });
 
-  it('drops no word of a route: its folded chain and what is shown are the whole printed text', () => {
+  it('opens on the route closest to the Siyar\'s words, under one line naming it, its sheet the Sahih then the Siyar', () => {
+    for (const { fact } of quoted) {
+      expect(unmarked(sahihLabel(fact))).toBe(`${unmarked(sahihPlace(fact.sahih![0]))}، وذكره غيره`);
+      const books = sahihSources(fact).map((source) => source.book);
+      expect(books.slice(0, fact.sahih!.length)).toEqual(fact.sahih!.map((quote) => (quote.book === 'bukhari' ? 'صحيح البخاري' : 'صحيح مسلم')));
+      expect(books.slice(fact.sahih!.length)).toEqual(sahihSources({ ...fact, sahih: [] }).map((source) => source.book));
+    }
+  });
+
+  it('folds a chain and only a chain, and drops no word of the route', () => {
     expect(quoted.length).toBeGreaterThan(0);
     for (const { fact } of quoted) for (const quote of fact.sahih!) {
       const route = findHadith(sahih[quote.book], quote.n)!.hadith.routes.find((one) => (one.route ?? '') === (quote.route ?? '') && one.shamela === quote.shamela)!;
       expect(spaced(`${quote.isnad} ${quote.words}`)).toBe(spaced(route.text));
+      // A chain is folded, never the story: it is there, and it is told before the Prophet ﷺ is named.
+      expect(quote.isnad).not.toBe('');
+      expect(quote.isnad).not.toContain('ﷺ');
     }
   });
 

@@ -4,7 +4,7 @@
 // page is the way to check it.
 import peopleJsonFile from '../data/tarajim/people.json';
 import virtueSkip from '../data/tarajim/virtueQuizSkip.json';
-import { pageSources, sahihSources, saidBy, type AppPerson } from '../tarajim';
+import { pageSources, saidBy, type AppPerson } from '../tarajim';
 import { uniqueSources } from './sources';
 import { kunyaFacts, laqabFacts, type NameFact } from '../tarajimNames';
 import { bareName, chainOf, lineOf, meetingOf, type LineName } from '../tarajimLine';
@@ -134,9 +134,6 @@ function namesOf(person: AppPerson, line: LineName[]) {
  * uncles too), and no one the quote names or who says it; a virtue with fewer than three such people waits for more
  * entries to be converted.
  */
-/** The longest Sahih words a «فيمن قيل هذا؟» card asks: a question's card stays under two thirds of the screen once answered. */
-const SAHIH_ASKED = 280;
-
 export function virtueQuestions(people: AppPerson[] = PEOPLE, random: Random = Math.random): ChoiceQuestion[] {
   const questions: ChoiceQuestion[] = [];
   const lines = linesOf(people);
@@ -144,11 +141,11 @@ export function virtueQuestions(people: AppPerson[] = PEOPLE, random: Random = M
   for (const person of people) {
     const names = namesOf(person, lines.get(person.slug)!);
     person.virtues.forEach((virtue, k) => {
-      // A report the Sahih gives is asked in its words (owner, 2026-11-25: we teach the Sahih's wording), from its
-      // narrator on; one too long for a question's card is not asked.
-      const sahih = virtue.sahih?.[0];
-      if (sahih && sahih.words.length > SAHIH_ASKED) return;
-      const quote = sahih ? sahih.words : virtue.text;
+      // A report the Sahih gives is taught in its words (owner, 2026-11-25), and a question's card cannot hold a whole
+      // route: not asked until the saying's place in the Sahih is marked, as a story's is
+      // (data/works/siyar-alam-al-nubala/sahih-notes-data-week.md).
+      if (virtue.sahih) return;
+      const quote = virtue.text;
       // A quote that names its owner gives the answer; one that only points («هذا ممن…») needs its scene to say whom.
       // A sayer that names the owner («امرأة ابن رواحة») gives it away too; and some virtues fit others as well (SKIP).
       if (names.some(name => mentions(quote, name) || virtue.by.some(by => mentions(by, name)))) return;
@@ -163,10 +160,10 @@ export function virtueQuestions(people: AppPerson[] = PEOPLE, random: Random = M
       questions.push({
         key: `${TARAJIM_VIRTUE}:${person.slug}:${k}`,
         family: TARAJIM_VIRTUE,
-        promptArabic: sahih ? `${quote}\nفيمن قيل هذا؟` : `${virtue.by.length ? `${saidBy(virtue)} ` : ''}«${virtue.text}»\nفيمن قيل هذا؟`,
+        promptArabic: `${virtue.by.length ? `${saidBy(virtue)} ` : ''}«${virtue.text}»\nفيمن قيل هذا؟`,
         choices,
         correctAnswer: person.slug,
-        sources: sahih ? sahihSources(virtue) : pageSources(virtue.refs, { text: virtue.text, by: saidBy(virtue) }),
+        sources: pageSources(virtue.refs, { text: virtue.text, by: saidBy(virtue) }),
         look: { view: 'virtues', slugs: choices.map(choice => choice.value), mark: { slug: person.slug, index: k } },
         evidence: { claimKeys: [] },
       });
