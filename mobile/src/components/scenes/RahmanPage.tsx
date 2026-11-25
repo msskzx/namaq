@@ -6,8 +6,8 @@ import { sahihName } from '@shared/sahih';
 import { tafsirSadiOf } from '@shared/quran/tafsirSadiData';
 import builtHadith from '@shared/data/quran/rahmanHadith.json';
 import {
-  BASMALA_AYAH, MERCY_KEPT, MERCY_PARTS, NO_BASMALA, TIKRAR_RUNS, kirmaniOn, tikrarWords, SADI_OPENING, SCENE_HADITH_BY_ID, basmalasBySurah, hadithNumbers, mostPlaces, nameRuns, placeCount, rahmanPlaces,
-  sadiOpening, sceneHadithNumbers, type BuiltHadith, type RahmanBlock,
+  BASMALA_AYAH, COVER_LOOK, MERCY_KEPT, MERCY_PARTS, NO_BASMALA, TIKRAR_RUNS, kirmaniOn, tikrarWords, SADI_OPENING, SCENE_HADITH_BY_ID, basmalasBySurah, hadithNumbers, mostPlaces, nameRuns, placeCount, rahmanPlaces,
+  sadiOpening, sceneHadithNumbers, type BuiltHadith, type CoverLook, type RahmanBlock,
 } from '@shared/quran/scenes/rahman';
 import { Text } from '@/ui/Text';
 import TapRow from '@/ui/TapRow';
@@ -43,7 +43,8 @@ export const PAGE_ROOM = PAGE_H - EDGE * 2 - 2 - 10 - 6 - HEAD - FOOT - 8;
 export const HADITH_SIZES = [22, 20, 18, 17, 15.5, 14] as const;
 
 /** The first page's name, over the map (owner, 2026-11-25: pages 1 and 7 merged), with its number in its medallion. */
-const TITLE_ZOOM = 1.5;
+const TITLE_ZOOM = COVER_LOOK === 'rows' ? 1.5 : 2.2;
+const HADITH_DOT = 8;
 
 const BUILT = builtHadith as Record<string, BuiltHadith>;
 // Read on first use, not when the app starts (the home feed imports this file): it walks the whole corpus.
@@ -264,6 +265,101 @@ function Kirmani({ ayahKey }: { ayahKey: string }) {
   );
 }
 
+/** The first page under the name: the three counts with their drawings (owner, 2026-11-25: same content, a new look). */
+function Cover({ look }: { look: CoverLook }) {
+  const basmalas = BASMALAS.reduce((sum, n) => sum + n, 0);
+  const places = placeCount(PLACES_OF());
+  const most = mostPlaces(PLACES_OF());
+  const LAST_PAGE = 604;
+  const placePages = PLACES_OF().map(place => pageOfAyah(place.key) ?? 1);
+  const notes = (
+    <View style={{ gap: 0 }}>
+      <Ref>{`البسملة على رأس كل سورة إلا ${surahName(NO_BASMALA)}، وفي ${ayahPlace(BASMALA_AYAH)}`}</Ref>
+      <Ref>{`${num(most.count)} من المواضع في سورة ${surahName(most.surah)} · العدّ: المدونة القرآنية العربية، على صفحات مصحف المدينة`}</Ref>
+    </View>
+  );
+  const big = (count: number, label: string) => (
+    <View style={{ alignItems: 'center' }}>
+      <Text style={{ color: paper.accent, fontSize: look === 'rows' ? 30 : 34, lineHeight: look === 'rows' ? 38 : 46 }}>{num(count)}</Text>
+      <Text style={{ color: paper.ink, fontSize: 15, lineHeight: 22, textAlign: 'center' }}>{label}</Text>
+    </View>
+  );
+  if (look === 'rows') {
+    const SIDE_W = 132;
+    const art = BLOCK_W - SIDE_W - 12;
+    const row = (count: number, label: string, drawing: React.ReactNode, last?: boolean) => (
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 4, borderBottomWidth: last ? 0 : 1, borderBottomColor: RAHMAN_ART.mark, direction: 'rtl' }}>
+        <View style={{ width: SIDE_W }}>{big(count, label)}</View>
+        <View style={{ width: art }}>{drawing}</View>
+      </View>
+    );
+    const COLS = 19;
+    const cell = (art - 2 * (COLS - 1)) / COLS;
+    const ROWS = 4;
+    const perRow = LAST_PAGE / ROWS;
+    return (
+      <View style={{ gap: 6 }} accessible accessibilityLabel={`في ${num(basmalas)} بسملة، وفي ${num(places)} موضعًا من الآيات، وفي ${num(HADITH_COUNT)} حديثًا من الصحيحين`}>
+        <View>
+          {row(basmalas, 'بسملة', (
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 2, direction: 'rtl' }}>
+              {BASMALAS.map((count, i) => (
+                <View key={i} style={{ width: cell, height: 8, borderWidth: 1, borderColor: RAHMAN_ART.frame, borderStyle: count ? 'solid' : 'dashed', justifyContent: 'center', gap: 1, paddingHorizontal: 1 }}>
+                  {Array.from({ length: count }, (_, k) => <View key={k} style={{ height: count > 1 ? 1.5 : 2, backgroundColor: paper.accent }} />)}
+                </View>
+              ))}
+            </View>
+          ))}
+          {row(places, 'موضعًا من الآيات', (
+            <View style={{ gap: 4 }}>
+              {Array.from({ length: ROWS }, (_, r) => (
+                <View key={r} style={{ height: 12, justifyContent: 'center' }}>
+                  <View style={{ height: 4, backgroundColor: RAHMAN_ART.mark }} />
+                  {placePages.filter(page => Math.min(ROWS - 1, Math.floor((page - 1) / perRow)) === r).map((page, k) => (
+                    <View key={k} style={{ position: 'absolute', top: 0, bottom: 0, width: 1.5, backgroundColor: paper.accent, start: ((page - 1 - r * perRow) / perRow) * art }} />
+                  ))}
+                </View>
+              ))}
+            </View>
+          ))}
+          {row(HADITH_COUNT, 'حديثًا من الصحيحين', (
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 5, direction: 'rtl' }}>
+              {Array.from({ length: HADITH_COUNT }, (_, i) => <View key={i} style={{ width: HADITH_DOT, height: HADITH_DOT, borderRadius: HADITH_DOT / 2, backgroundColor: RAHMAN_ART.title }} />)}
+            </View>
+          ), true)}
+        </View>
+        {notes}
+      </View>
+    );
+  }
+  // One band for the mushaf, its first page on the right: a basmala over each surah's first page above it, the name's places below.
+  const at = (page: number) => ((page - 1) / (LAST_PAGE - 1)) * BLOCK_W;
+  const starts = BASMALAS.flatMap((count, i) => (count ? [pageOfAyah(`${i + 1}:1`) ?? 1] : []));
+  const tick = (page: number, k: number, up: boolean) => (
+    <View key={`${up}${k}`} style={{ position: 'absolute', end: at(page), top: up ? 0 : 30, width: 1, height: 22, backgroundColor: up ? RAHMAN_ART.frame : paper.accent }} />
+  );
+  return (
+    <View style={{ gap: 14 }} accessible accessibilityLabel={`في ${num(basmalas)} بسملة، وفي ${num(places)} موضعًا من الآيات، وفي ${num(HADITH_COUNT)} حديثًا من الصحيحين`}>
+      <View>
+        <View style={{ height: 52 }}>
+          {starts.map((page, k) => tick(page, k, true))}
+          <View style={{ position: 'absolute', top: 23, start: 0, end: 0, height: 6, backgroundColor: RAHMAN_ART.mark }} />
+          {placePages.map((page, k) => tick(page, k, false))}
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', direction: 'rtl' }}>
+          <Text style={{ color: paper.muted, fontSize: 12 }}>{surahName(1)}</Text>
+          <Text style={{ color: paper.muted, fontSize: 12 }}>{surahName(114)}</Text>
+        </View>
+      </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-around', direction: 'rtl' }}>
+        {big(basmalas, 'بسملة')}
+        {big(places, 'موضعًا من الآيات')}
+        {big(HADITH_COUNT, 'حديثًا من الصحيحين')}
+      </View>
+      {notes}
+    </View>
+  );
+}
+
 /** Al-Sa'di on the surah's opening, in his words. */
 function Sadi() {
   const passage = tafsirSadiOf(SADI_OPENING.key);
@@ -286,6 +382,7 @@ export function RahmanBlockView({ block, size, live }: { block: RahmanBlock; siz
     case 'hadith': return <Hadith id={block.id} size={size} live={live} />;
     case 'sadi': return <Sadi />;
     case 'map': return <NameMap part={block.part} />;
+    case 'cover': return <Cover look={block.look} />;
     case 'mercy': return <MercyParts />;
     case 'tikrar': return <TikrarRuns />;
     case 'kirmani': return <Kirmani ayahKey={block.key} />;

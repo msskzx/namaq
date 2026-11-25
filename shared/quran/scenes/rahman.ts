@@ -147,12 +147,18 @@ export type RahmanBlock =
   | { kind: 'hadith'; id: string }
   | { kind: 'sadi' }
   | { kind: 'map'; part: 'basmala' | 'name' }
+  /** The first page's counts and their drawings as one picture, in one of the looks offered (owner, 2026-11-25). */
+  | { kind: 'cover'; look: CoverLook }
   /** The hundred parts of mercy, as sketch B the owner chose (owner, 2026-11-25): ninety-nine kept, one sent down. */
   | { kind: 'mercy' }
   /** «فبأي آلاء ربكما تكذبان» in al-Kirmani's four runs, then his words (owner, 2026-11-25). */
   | { kind: 'tikrar' }
   /** Al-Kirmani's words on a repeated ayah, whole (Asrar al-Tikrar). */
   | { kind: 'kirmani'; key: string };
+
+/** The first page's two designs offered to the owner (2026-11-25): each count beside its drawing, or one mushaf band. */
+export type CoverLook = 'rows' | 'band';
+export const COVER_LOOK: CoverLook = 'band';
 
 /** A run of pages: its title over each of them, its blocks flowing from page to page. `intro`: no taps on its pages. */
 export type RahmanSection = { id: string; title: string; blocks: RahmanBlock[]; intro?: boolean };
@@ -168,7 +174,7 @@ const BASMALA: RahmanBlock = { kind: 'ayah', key: '1:1', basmala: true };
  */
 export function rahmanSections(placeKeys: string[]): RahmanSection[] {
   return [
-    { id: 'name', title: '', blocks: [{ kind: 'ayah', key: '55:1', title: true }, { kind: 'map', part: 'basmala' }, { kind: 'map', part: 'name' }, { kind: 'counts', only: 'hadith' }], intro: true },
+    { id: 'name', title: '', blocks: [{ kind: 'ayah', key: '55:1', title: true }, { kind: 'cover', look: COVER_LOOK }], intro: true },
     { id: 'opening', title: 'البسملة والفاتحة', blocks: [{ kind: 'run', keys: ['1:1', '1:3'], bare: true }, { kind: 'hadith', id: FATIHA_PART.id }], intro: true },
     { id: 'intro-ayat', title: 'من الآيات', blocks: [{ kind: 'run', keys: ['55:1', '55:2'] }, ...ayat(INTRO_AYAT)], intro: true },
     { id: 'intro-hadith', title: 'من الأحاديث', blocks: hadith(INTRO_HADITH.slice(0, 2)), intro: true },
