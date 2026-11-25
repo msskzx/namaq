@@ -68,13 +68,23 @@ describe('the «الرحمن» scene', () => {
     const text = plainText(built[MERCY_HADITH.id].text);
     expect(text).toContain('مائه جزء');
     expect(text).toContain('تسعه وتسعين جزءا');
-    expect(MERCY_PARTS - MERCY_KEPT).toBe(1);
+    expect([MERCY_PARTS, MERCY_KEPT]).toEqual([100, 99]);
   });
 
   it('draws al-Kirmani\'s four runs of «فبأي آلاء ربكما تكذبان» in his words, covering every place he counts', () => {
     const plain = (text: string) => text.split(/\s+/).map(word => normalizeWord(word).replace(/[^ء-ي]/g, '')).join(' ');
     const citation = kirmaniOn(TIKRAR_FIRST);
-    for (const run of TIKRAR_RUNS) expect(plain(citation.quote), run.words).toContain(plain(run.words));
+    const NUMBER = { 7: 'سبعه', 8: 'ثمانيه' } as const;
+    const quote = plain(citation.quote);
+    let from = 0;
+    for (const run of TIKRAR_RUNS) {
+      const at = quote.indexOf(plain(run.words), from);
+      expect(at, run.words).toBeGreaterThan(-1);
+      // His count for the run is the number word nearest before or after its words.
+      const near = quote.slice(Math.max(0, at - 40), at + plain(run.words).length + 40);
+      expect(near, run.words).toContain(NUMBER[run.count]);
+      from = at;
+    }
     expect(TIKRAR_RUNS.reduce((sum, run) => sum + run.count, 0)).toBe(citation.places.length);
   });
 });

@@ -17,6 +17,8 @@ import type { WordPlace } from '@shared/quran/words';
 import { RAHMAN_ART, RAHMAN_PAPER as paper } from '@/lib/theme';
 import { openSahih } from '@/screens/hadith';
 import AyahFlow, { AyahWords } from '../quran/text/AyahFlow';
+import QuranWords from '../quran/text/QuranWords';
+import { tafsirRuns } from '@shared/quran/tafsirSadi';
 import { ShareBrand } from '../SharePages';
 
 /**
@@ -86,11 +88,15 @@ function Ayah({ ayahKey, basmala, title }: { ayahKey: string; basmala?: boolean;
   );
 }
 
-/** Words of a book with the name in colour. */
+/** Words of a book with the name in colour, and the Quran it quotes (﴿…﴾) in the mushaf font (AGENTS.md, "Quran text"). */
 function NamedText({ text, size, lit }: { text: string; size: number; lit?: string }) {
+  const colour = (run: { name: boolean; lit: boolean }) => (run.name ? { color: paper.accent } : run.lit ? { color: RAHMAN_ART.lit } : undefined);
   return (
     <Text style={{ color: paper.ink, fontSize: size, lineHeight: size * 1.85, textAlign: 'justify', writingDirection: 'rtl' }}>
-      {nameRuns(text, lit).map((run, i) => <Text key={i} style={run.name ? { color: paper.accent } : run.lit ? { color: RAHMAN_ART.lit } : undefined}>{run.text}</Text>)}
+      {tafsirRuns(text).map((part, k) => {
+        const runs = nameRuns(part.text, lit).map((run, i) => <Text key={i} style={colour(run)}>{run.text}</Text>);
+        return part.quran ? <QuranWords key={k}>{runs}</QuranWords> : <Text key={k}>{runs}</Text>;
+      })}
     </Text>
   );
 }
