@@ -6,7 +6,7 @@ import { sahihName } from '@shared/sahih';
 import { tafsirSadiOf } from '@shared/quran/tafsirSadiData';
 import builtHadith from '@shared/data/quran/rahmanHadith.json';
 import {
-  BASMALA_AYAH, MERCY_KEPT, MERCY_PARTS, NO_BASMALA, TIKRAR_RUNS, kirmaniOn, SADI_OPENING, SCENE_HADITH_BY_ID, basmalasBySurah, hadithNumbers, mostPlaces, nameRuns, placeCount, rahmanPlaces,
+  BASMALA_AYAH, MERCY_KEPT, MERCY_PARTS, NO_BASMALA, TIKRAR_RUNS, kirmaniOn, tikrarWords, SADI_OPENING, SCENE_HADITH_BY_ID, basmalasBySurah, surahBars, hadithNumbers, mostPlaces, nameRuns, placeCount, rahmanPlaces,
   sadiOpening, sceneHadithNumbers, type BuiltHadith, type RahmanBlock,
 } from '@shared/quran/scenes/rahman';
 import { Text } from '@/ui/Text';
@@ -20,6 +20,7 @@ import AyahFlow, { AyahWords } from '../quran/text/AyahFlow';
 import QuranWords from '../quran/text/QuranWords';
 import { tafsirRuns } from '@shared/quran/tafsirSadi';
 import { ShareBrand } from '../SharePages';
+import MercyGalaxy from './MercyGalaxy';
 
 /**
  * A page of the «الرحمن» scene (owner, 2026-11-24, sketches /mnt/project-files/mashahid/rahman/paper3 and intro): a 4:5
@@ -41,8 +42,8 @@ export const PAGE_ROOM = PAGE_H - EDGE * 2 - 2 - 10 - 6 - HEAD - FOOT - 8;
 /** The hadith text sizes a section may take, biggest first: the biggest that needs no more pages than the smallest. */
 export const HADITH_SIZES = [22, 20, 18, 17, 15.5, 14] as const;
 
-/** The first page's name, as big as the sketch the owner agreed (intro-1): its place stays under it. */
-const TITLE_ZOOM = 2.6;
+/** The first page's name, over the map (owner, 2026-11-25: pages 1 and 7 merged), with its number in its medallion. */
+const TITLE_ZOOM = 1.8;
 
 const BUILT = builtHadith as Record<string, BuiltHadith>;
 // Read on first use, not when the app starts (the home feed imports this file): it walks the whole corpus.
@@ -73,26 +74,49 @@ function Ref({ children }: { children: string }) {
   return <Text style={{ color: paper.muted, fontSize: 13, lineHeight: 20, textAlign: 'center' }}>{children}</Text>;
 }
 
-/** An ayah whole, its words that are the name in colour, and its place under it; its long press opens the reader's menu. */
+/**
+ * An ayah whole, its words that are the name in colour, and its surah's name over it (owner, 2026-11-25: the number is in
+ * its medallion); the first page's name is the surah's own, so nothing repeats it, not even its number (owner, 2026-11-25). Its long press opens the
+ * reader's menu.
+ */
 function Ayah({ ayahKey, basmala, title }: { ayahKey: string; basmala?: boolean; title?: boolean }) {
   const lit = NAME_AT_OF().get(ayahKey);
   const text = ayahMushafWords(ayahKey);
   return (
     <View style={{ gap: 2 }}>
+      {basmala || title ? null : <Ref>{surahName(Number(ayahKey.split(':')[0]))}</Ref>}
       <AyahFlow menu={ayahKey} color={paper.ink} center zoom={title ? TITLE_ZOOM : 1}>
         {text.map((word, i) => <AyahWords key={i} look={lit?.has(i) ? { color: paper.accent } : undefined}>{`${i ? ' ' : ''}${word}`}</AyahWords>)}
-        {basmala || title ? null : <AyahWords look={{ color: paper.muted }}>{` ${num(Number(ayahKey.split(':')[1]))}`}</AyahWords>}
+        {basmala || title ? null : <AyahWords look={{ color: paper.muted }}>{`\u00a0${num(Number(ayahKey.split(':')[1]))}`}</AyahWords>}
       </AyahFlow>
-      {basmala ? null : <Ref>{ayahPlace(ayahKey)}</Ref>}
+    </View>
+  );
+}
+
+/** Ayat of one surah that follow each other in one flow, each with its number, the surah's name over them. */
+function AyahRun({ keys, bare }: { keys: string[]; bare?: boolean }) {
+  return (
+    <View style={{ gap: 2 }}>
+      {bare ? null : <Ref>{surahName(Number(keys[0].split(':')[0]))}</Ref>}
+      <AyahFlow menu={keys[0]} color={paper.ink} center>
+        {keys.map((key, k) => {
+          const lit = NAME_AT_OF().get(key);
+          return ayahMushafWords(key).map((word, i) => <AyahWords key={`${k}-${i}`} look={lit?.has(i) ? { color: paper.accent } : undefined}>{`${k || i ? ' ' : ''}${word}`}</AyahWords>)
+            .concat(<AyahWords key={`${k}-n`} look={{ color: paper.muted }}>{`\u00a0${num(Number(key.split(':')[1]))}`}</AyahWords>);
+        })}
+      </AyahFlow>
     </View>
   );
 }
 
 /** Words of a book with the name in colour, and the Quran it quotes (﴿…﴾) in the mushaf font (AGENTS.md, "Quran text"). */
-function NamedText({ text, size, lit }: { text: string; size: number; lit?: string }) {
+function NamedText({ text, size, lit, before }: { text: string; size: number; lit?: string;
+  /** Words over it in the muted ink, in the same paragraph (a hadith's narrator). */
+  before?: string }) {
   const colour = (run: { name: boolean; lit: boolean }) => (run.name ? { color: paper.accent } : run.lit ? { color: RAHMAN_ART.lit } : undefined);
   return (
     <Text style={{ color: paper.ink, fontSize: size, lineHeight: size * 1.85, textAlign: 'justify', writingDirection: 'rtl' }}>
+      {before ? <Text style={{ color: paper.muted }}>{`${before} `}</Text> : null}
       {tafsirRuns(text).map((part, k) => {
         const runs = nameRuns(part.text, lit).map((run, i) => <Text key={i} style={colour(run)}>{run.text}</Text>);
         return part.quran ? <QuranWords key={k}>{runs}</QuranWords> : <Text key={k}>{runs}</Text>;
@@ -109,7 +133,7 @@ function Hadith({ id, size, live }: { id: string; size: number; live: boolean })
   const body = (
     <View style={{ gap: 2 }}>
       {hadith.lead ? <Text style={{ color: paper.muted, fontSize: size * 0.85, lineHeight: size * 1.6, textAlign: 'right' }}>{hadith.lead}</Text> : null}
-      <NamedText text={text} size={size} lit={hadith.lit} />
+      <NamedText text={text} size={size} lit={hadith.lit} before={built.narrator} />
       <Ref>{hadithRef(id)}</Ref>
     </View>
   );
@@ -119,97 +143,33 @@ function Hadith({ id, size, live }: { id: string; size: number; live: boolean })
     : body;
 }
 
-/** The scene's counts under the name: the basmalas, the places in the ayat, the hadith numbers. */
-function Counts() {
-  const line = (before: string, count: number, after: string) => (
-    <Text style={{ color: paper.ink, fontSize: 24, lineHeight: 46, textAlign: 'center' }}>{before} <Text style={{ color: paper.accent }}>{num(count)}</Text> {after}</Text>
-  );
-  return (
-    <View>
-      {line('في', BASMALAS.reduce((sum, n) => sum + n, 0), 'بسملة')}
-      {line('وفي', placeCount(PLACES_OF()), 'موضعًا من الآيات')}
-      {line('وفي', HADITH_COUNT, 'حديثًا من الصحيحين')}
-    </View>
-  );
-}
+const GALAXY_H = 120;
 
 /**
- * The map in two parts on one page (owner, 2026-11-25): under the basmala, a box for each surah's basmala in the mushaf's
- * order; under the name alone, where it stands in the ayat along the mushaf.
+ * The hundred parts of mercy (sketch B, owner 2026-11-25), small over the hadith: ninety-nine kept, the hundredth left pale,
+ * sent down to the earth and spread over all creation, drawn as a galaxy (owner: «موزعة على جميع المخلوقات… الكون»).
  */
-function NameMap({ part }: { part: 'basmala' | 'name' }) {
-  const note = (text: string) => <Text style={{ color: paper.muted, fontSize: 14, lineHeight: 22, textAlign: 'center' }}>{text}</Text>;
-  if (part === 'basmala') {
-    const COLUMNS = 12;
-    const GAP = 3;
-    const cell = (BLOCK_W - GAP * (COLUMNS - 1)) / COLUMNS;
-    return (
-      <View style={{ gap: 8 }} accessible accessibilityLabel={`البسملة على رأس كل سورة إلا ${surahName(NO_BASMALA)}، وفي ${ayahPlace(BASMALA_AYAH)}`}>
-        <Ayah ayahKey="1:1" basmala />
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: GAP, direction: 'rtl' }}>
-          {BASMALAS.map((count, i) => (
-            <View key={i} style={{ width: cell, height: 8, borderWidth: 1, borderColor: RAHMAN_ART.frame, borderStyle: count ? 'solid' : 'dashed', justifyContent: 'center', gap: 1, paddingHorizontal: 2 }}>
-              {Array.from({ length: count }, (_, k) => <View key={k} style={{ height: count > 1 ? 1.5 : 2, backgroundColor: paper.accent }} />)}
-            </View>
+function MercyParts() {
+  const COLUMNS = 25;
+  const DOT = 5;
+  const GAP = 3;
+  const width = COLUMNS * DOT + (COLUMNS - 1) * GAP;
+  const rows = MERCY_PARTS / COLUMNS;
+  const sent = (rows - 1) * COLUMNS + Math.floor(COLUMNS / 2);
+  return (
+    <View style={{ alignItems: 'center' }} accessible accessibilityLabel={`${num(MERCY_PARTS)} جزء: ${num(MERCY_KEPT)} عنده، وجزء في الأرض يتراحم به الخلق`}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+        <View style={{ width, flexDirection: 'row', flexWrap: 'wrap', gap: GAP }}>
+          {Array.from({ length: MERCY_PARTS }, (_, i) => (
+            <View key={i} style={{ width: DOT, height: DOT, borderRadius: DOT / 2, backgroundColor: i === sent ? RAHMAN_ART.mark : RAHMAN_ART.title }} />
           ))}
         </View>
-        {note(`في ${num(BASMALAS.reduce((sum, n) => sum + n, 0))} بسملة: على رأس كل سورة إلا ${surahName(NO_BASMALA)}، وفي ${ayahPlace(BASMALA_AYAH)}`)}
+        <Text style={{ color: paper.muted, fontSize: 13 }}>{num(MERCY_KEPT)}</Text>
       </View>
-    );
-  }
-  const ROWS = 6;
-  const LAST_PAGE = 604;
-  const perRow = LAST_PAGE / ROWS;
-  const most = mostPlaces(PLACES_OF());
-  const pages = PLACES_OF().map(place => pageOfAyah(place.key) ?? 1);
-  return (
-    <View style={{ gap: 8 }} accessible accessibilityLabel={`والاسم في ${num(placeCount(PLACES_OF()))} موضعًا من الآيات`}>
-      <Text style={{ color: paper.accent, fontSize: 26, lineHeight: 34, textAlign: 'center' }}>{RAHMAN_NAME}</Text>
-      <View style={{ gap: 4 }}>
-        {Array.from({ length: ROWS }, (_, row) => (
-          <View key={row} style={{ height: 12, justifyContent: 'center' }}>
-            <View style={{ height: 5, backgroundColor: RAHMAN_ART.mark }} />
-            {pages.filter(page => Math.min(ROWS - 1, Math.floor((page - 1) / perRow)) === row).map((page, k) => (
-              <View key={k} style={{ position: 'absolute', top: 0, bottom: 0, width: 1.5, backgroundColor: paper.accent, start: ((page - 1 - row * perRow) / perRow) * BLOCK_W }} />
-            ))}
-          </View>
-        ))}
+      <View style={{ alignItems: 'center', marginEnd: 10 + 13 }}>
+        {Array.from({ length: 3 }, (_, k) => <View key={k} style={{ width: 1.5, height: 3, marginTop: 3, backgroundColor: RAHMAN_ART.frame }} />)}
       </View>
-      {note(`في ${num(placeCount(PLACES_OF()))} موضعًا من الآيات، ${num(most.count)} منها في سورة ${surahName(most.surah)}`)}
-      <Ref>العدّ: المدونة القرآنية العربية، على صفحات مصحف المدينة</Ref>
-    </View>
-  );
-}
-
-/** The hundred parts of mercy (sketch B, owner 2026-11-25): ninety-nine kept in a square, the hundredth left pale and sent down to the earth. */
-function MercyParts() {
-  const SIDE_COUNT = Math.sqrt(MERCY_PARTS);
-  const DOT = 9;
-  const GAP = 6;
-  const square = SIDE_COUNT * DOT + (SIDE_COUNT - 1) * GAP;
-  const dot = (i: number) => {
-    const kept = i < MERCY_KEPT;
-    return <View key={i} style={{ width: DOT, height: DOT, borderRadius: DOT / 2, backgroundColor: kept ? RAHMAN_ART.title : RAHMAN_ART.mark }} />;
-  };
-  const label = (text: string) => <Text style={{ color: paper.muted, fontSize: 14 }}>{text}</Text>;
-  return (
-    <View style={{ alignItems: 'center' }} accessible accessibilityLabel={`${num(MERCY_PARTS)} جزء: ${num(MERCY_KEPT)} عنده، وجزء في الأرض`}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-        <View style={{ width: square, flexDirection: 'row', flexWrap: 'wrap', gap: GAP, direction: 'rtl' }}>
-          {Array.from({ length: MERCY_PARTS }, (_, i) => dot(i))}
-        </View>
-        {label(num(MERCY_KEPT))}
-      </View>
-      <View style={{ width: square, alignItems: 'flex-start', direction: 'ltr' }}>
-        <View style={{ width: DOT, alignItems: 'center' }}>
-          {Array.from({ length: 5 }, (_, k) => <View key={k} style={{ width: 1.5, height: 3, marginTop: 3, backgroundColor: RAHMAN_ART.frame }} />)}
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 3 }}>
-          <View style={{ width: DOT + 3, height: DOT + 3, borderRadius: (DOT + 3) / 2, backgroundColor: paper.accent, marginStart: -1.5 }} />
-          {label(`${num(MERCY_PARTS - MERCY_KEPT)} في الأرض`)}
-        </View>
-        <View style={{ width: square, height: 1, backgroundColor: RAHMAN_ART.mark, marginTop: 3 }} />
-      </View>
+      <MercyGalaxy width={BLOCK_W} height={GALAXY_H} />
     </View>
   );
 }
@@ -218,10 +178,10 @@ function MercyParts() {
 function TikrarRuns() {
   const DOT = 10;
   return (
-    <View style={{ gap: 8 }} accessible accessibilityLabel={TIKRAR_RUNS.map(run => `${run.words}: ${num(run.count)}`).join('، ')}>
+    <View style={{ gap: 8 }} accessible accessibilityLabel={TIKRAR_RUNS.map(run => `${tikrarWords(run)}: ${num(run.count)}`).join('، ')}>
       {TIKRAR_RUNS.map(run => (
-        <View key={run.words} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', direction: 'rtl' }}>
-          <Text style={{ color: paper.ink, fontSize: 15 }}>{run.words}</Text>
+        <View key={run.words[0]} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', direction: 'rtl' }}>
+          <Text style={{ color: paper.ink, fontSize: 15 }}>{tikrarWords(run)}</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5, direction: 'rtl' }}>
             {Array.from({ length: run.count }, (_, k) => <View key={k} style={{ width: DOT, height: DOT, borderRadius: DOT / 2, backgroundColor: RAHMAN_ART.title }} />)}
             <Text style={{ color: paper.muted, fontSize: 14, width: 18, textAlign: 'center' }}>{num(run.count)}</Text>
@@ -243,6 +203,44 @@ function Kirmani({ ayahKey }: { ayahKey: string }) {
   );
 }
 
+const PLOT_UNIT = 5.5;
+const PLOT_BAR = 10;
+const PLOT_ROW = 21;
+const PLOT_NAME_W = 52;
+const PLOT_COUNT_W = 18;
+const PLOT_COLUMNS = 2;
+
+/**
+ * The first page under the name (owner, 2026-11-25, chose «أعمدة أفقية»; then: the name only, in red, counted inside the
+ * surah and not over it): a row for every surah whose ayat hold the name, in the mushaf's order, its name, a bar as long
+ * as its places and their count; one line under it for the basmalas and the hadith.
+ */
+function CoverPlot() {
+  const bars = surahBars(PLACES_OF()).map((bar, i) => ({ surah: i + 1, count: bar.name + bar.both })).filter(bar => bar.count > 0);
+  const basmalas = BASMALAS.reduce((sum, n) => sum + n, 0);
+  const places = placeCount(PLACES_OF());
+  const perColumn = Math.ceil(bars.length / PLOT_COLUMNS);
+  const row = (bar: (typeof bars)[number]) => (
+    <View key={bar.surah} style={{ flexDirection: 'row', alignItems: 'center', height: PLOT_ROW, gap: 4, direction: 'rtl' }}>
+      <Text style={{ width: PLOT_NAME_W, color: paper.ink, fontSize: 12, lineHeight: PLOT_ROW }} numberOfLines={1}>{surahName(bar.surah)}</Text>
+      <View style={{ width: bar.count * PLOT_UNIT, height: PLOT_BAR, backgroundColor: paper.accent }} />
+      <Text style={{ width: PLOT_COUNT_W, color: paper.accent, fontSize: 12, lineHeight: PLOT_ROW }}>{num(bar.count)}</Text>
+    </View>
+  );
+  return (
+    <View style={{ gap: 8 }} accessible accessibilityLabel={`«الرحمن» في ${num(places)} موضعًا من الآيات، والبسملة في ${num(basmalas)} موضعًا، وفي ${num(HADITH_COUNT)} حديثًا من الصحيحين`}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', direction: 'rtl' }}>
+        {Array.from({ length: PLOT_COLUMNS }, (_, c) => <View key={c}>{bars.slice(c * perColumn, (c + 1) * perColumn).map(row)}</View>)}
+      </View>
+      <Text style={{ color: paper.ink, fontSize: 15, lineHeight: 24, textAlign: 'center', borderTopWidth: 1, borderTopColor: RAHMAN_ART.mark, paddingTop: 8 }}>
+        {'البسملة في '}<Text style={{ color: paper.accent }}>{num(basmalas)}</Text>{` موضعًا: على رأس كل سورة إلا ${surahName(NO_BASMALA)}، وفي ${ayahPlace(BASMALA_AYAH).replace(' ', '\u00a0')}؛ و«الرحمن» في `}
+        <Text style={{ color: paper.accent }}>{num(HADITH_COUNT)}</Text>{' حديثًا من الصحيحين'}
+      </Text>
+      <Ref>العدّ: المدونة القرآنية العربية، على صفحات مصحف المدينة</Ref>
+    </View>
+  );
+}
+
 /** Al-Sa'di on the surah's opening, in his words. */
 function Sadi() {
   const passage = tafsirSadiOf(SADI_OPENING.key);
@@ -259,11 +257,11 @@ function Sadi() {
 /** One block of a page. `live`: a tap opens the hadith (never on the introduction, owner 2026-11-24: it shares clean). */
 export function RahmanBlockView({ block, size, live }: { block: RahmanBlock; size: number; live: boolean }) {
   switch (block.kind) {
-    case 'counts': return <Counts />;
     case 'ayah': return <Ayah ayahKey={block.key} basmala={block.basmala} title={block.title} />;
+    case 'run': return <AyahRun keys={block.keys} bare={block.bare} />;
     case 'hadith': return <Hadith id={block.id} size={size} live={live} />;
     case 'sadi': return <Sadi />;
-    case 'map': return <NameMap part={block.part} />;
+    case 'cover': return <CoverPlot />;
     case 'mercy': return <MercyParts />;
     case 'tikrar': return <TikrarRuns />;
     case 'kirmani': return <Kirmani ayahKey={block.key} />;

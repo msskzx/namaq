@@ -4,7 +4,7 @@ import words from '../../shared/data/quran/words.json';
 import { plainText } from '../../shared/sahih';
 import { normalizeWord } from '../../shared/quran/normalize';
 import {
-  FATIHA_HADITH, MERCY_HADITH, MERCY_KEPT, MERCY_PARTS, TIKRAR_FIRST, TIKRAR_RUNS, kirmaniOn, SCENE_HADITH, SCENE_HADITH_BY_ID, basmalasBySurah, isName, nameRuns, placeCount, rahmanPlaces, sceneHadithNumbers,
+  FATIHA_HADITH, MERCY_HADITH, rahmanSections, MERCY_KEPT, MERCY_PARTS, TIKRAR_FIRST, TIKRAR_RUNS, kirmaniOn, tikrarWords, SCENE_HADITH, SCENE_HADITH_BY_ID, basmalasBySurah, surahBars, isName, nameRuns, placeCount, rahmanPlaces, sceneHadithNumbers,
   type SahihBookSlug,
 } from '../../shared/quran/scenes/rahman';
 import type { WordsData } from '../../shared/quran/words';
@@ -48,6 +48,16 @@ describe('the «الرحمن» scene', () => {
     expect(basmalas.reduce((sum, n) => sum + n, 0)).toBe(basmalas.length);
   });
 
+  it('splits each surah\'s bar without counting a place twice or losing one (owner, 2026-11-25: the first page\'s plot)', () => {
+    const places = rahmanPlaces(words as unknown as WordsData);
+    const bars = surahBars(places);
+    const sum = (pick: (bar: (typeof bars)[number]) => number) => bars.reduce((total, bar) => total + pick(bar), 0);
+    expect(sum(bar => bar.basmala + bar.both)).toBe(basmalasBySurah().reduce((total, n) => total + n, 0));
+    expect(sum(bar => bar.name + bar.both)).toBe(placeCount(places));
+    expect(bars.filter(bar => bar.both).length).toBe(places.filter(place => place.key === '1:1' || place.key === '27:30').length);
+    expect(bars.every(bar => bar.basmala >= 0 && bar.name >= 0)).toBe(true);
+  });
+
   it('lights every hadith\'s `lit` words where its page shows them (owner, 2026-11-25: «أثنى علي عبدي»)', () => {
     const lit = Object.values(SCENE_HADITH_BY_ID).filter(hadith => hadith.lit);
     expect(lit.length).toBeGreaterThan(0);
@@ -78,13 +88,24 @@ describe('the «الرحمن» scene', () => {
     const quote = plain(citation.quote);
     let from = 0;
     for (const run of TIKRAR_RUNS) {
-      const at = quote.indexOf(plain(run.words), from);
-      expect(at, run.words).toBeGreaterThan(-1);
+      const words = plain(tikrarWords(run));
+      const at = quote.indexOf(words, from);
+      expect(at, words).toBeGreaterThan(from - 1);
       // His count for the run is the number word nearest before or after its words.
-      const near = quote.slice(Math.max(0, at - 40), at + plain(run.words).length + 40);
-      expect(near, run.words).toContain(NUMBER[run.count]);
+      const near = quote.slice(Math.max(0, at - 40), at + words.length + 40);
+      expect(near, words).toContain(NUMBER[run.count]);
       from = at;
     }
     expect(TIKRAR_RUNS.reduce((sum, run) => sum + run.count, 0)).toBe(citation.places.length);
+  });
+
+  it('shows every ayah of the introduction again inside the scene (owner, 2026-11-25: «تأكد من ذكرها في المشهد»)', () => {
+    const sections = rahmanSections(rahmanPlaces(words as unknown as WordsData).map(place => place.key));
+    const keysOf = (intro: boolean) => new Set(sections.filter(section => !!section.intro === intro).flatMap(section => section.blocks.flatMap(block =>
+      block.kind === 'ayah' ? [block.key] : block.kind === 'run' ? block.keys : [])));
+    const inScene = keysOf(false);
+    const introKeys = [...keysOf(true)];
+    expect(introKeys.length).toBeGreaterThan(0);
+    expect(introKeys.filter(key => !inScene.has(key))).toEqual([]);
   });
 });
