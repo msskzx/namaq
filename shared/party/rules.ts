@@ -68,7 +68,8 @@ export type PlayerAction =
   | { type: 'settings'; settings: Partial<PartySettings> }
   | { type: 'ready'; ready: boolean }
   | { type: 'remove'; target: string }
-  | { type: 'start'; early?: boolean }
+  /** `questions`: the host's phone built the quiz itself (the app works without the website); without them the worker asks /api/quiz. */
+  | { type: 'start'; early?: boolean; questions?: PartyQuestion[]; surahNames?: Record<number, string> }
   | { type: 'submit'; answer: QuestionAnswer }
   | { type: 'draft'; answer: QuestionAnswer }
   | { type: 'look' }
@@ -131,6 +132,10 @@ export function quizQuery(settings: PartySettings) {
   if (settings.topics.some(topic => WRITTEN_TOPICS.includes(topic))) params.set('pen', settings.pen ?? DEFAULT_SETTINGS.pen);
   return params.toString();
 }
+
+/** Questions the host's phone sent with its start: a list of questions, each with a key to grade it by. */
+const hostBuilt = (questions: unknown): questions is PartyQuestion[] =>
+  Array.isArray(questions) && questions.length > 0 && questions.every(question => !!question && typeof question === 'object' && typeof (question as PartyQuestion).key === 'string');
 
 const key = (name: string) => name.normalize('NFC').trim().replace(/\s+/g, ' ').toLocaleLowerCase();
 /** Typed questions (a tree, a compare card's blanks, a written ayah) get the longer time. */
@@ -250,6 +255,7 @@ function apply(state: PartyState, action: Action, now: number): { state: PartySt
     case 'start':
       if (state.phase !== 'lobby') return { state, error: 'wrong-phase' };
       if (!action.early && state.players.some(item => item.id !== state.hostId && !item.ready)) return { state, error: 'not-ready' };
+      if (hostBuilt(action.questions)) return { state: ask({ ...state, questions: action.questions.slice(0, state.settings.length), surahNames: action.surahNames ?? {}, error: null }, 0, now) };
       return { state: { ...state, phase: 'loading', error: null, deadline: now + LOADING_MS } };
     case 'next':
       if (state.phase !== 'reveal') return { state, error: 'wrong-phase' };
@@ -302,7 +308,7 @@ export function viewFor(state: PartyState, playerId: string, now: number): Party
   // A choice question's key, ayah and look-alikes name its surah, so they wait for the reveal too. A written ayah names its
   // place in the question and is drawn on its page, so its ayah stays; its words and its rest wait.
   const written = question?.write as { asked: number[] } | undefined;
-  const hidden = question && !revealed ? { ...question, key: `q${state.current}`, correctAnswer: '', ...(question.correctAnswers ? { correctAnswers: [] } : {}), ...(question.order ? { order: [] } : {}), evidence: undefined, ayahKey: written ? question.ayahKey : undefined, alike: undefined, explains: undefined, whereOf: undefined, note: undefined, sources: undefined, look: unmarked(question.look as QuizLook | undefined),
+  const hidden = question && !revealed ? { ...question, key: `q${state.current}`, correctAnswer: '', ...(question.correctAnswers ? { correctAnswers: [] } : {}), ...(question.order ? { order: [] } : {}), evidence: undefined, ayahKey: written ? question.ayahKey : undefined, alike: undefined, explains: undefined, whereOf: undefined, note: undefined, witness: undefined, sources: undefined, look: unmarked(question.look as QuizLook | undefined),
     ...(written ? { write: { asked: written.asked }, reveal: undefined } : {}) } : question;
   return {
     code: state.code,

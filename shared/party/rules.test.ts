@@ -76,6 +76,12 @@ describe('party lobby', () => {
     expect(act(state, { type: 'start', playerId: 'p1', early: true }, 0).error).toBe('not-host');
   });
 
+  it('asks the questions the host’s phone sent with its start at once, with no website to ask', () => {
+    const state = act(lobby('Host', 'Amina'), { type: 'start', playerId: 'p0', early: true, questions: [choice('q1'), choice('q2')], surahNames: { 2: 'البقرة' } }, 0).state;
+    expect(state).toMatchObject({ phase: 'question', current: 0, surahNames: { 2: 'البقرة' } });
+    expect(state.questions.map(question => question.key)).toEqual(['q1', 'q2']);
+  });
+
   it('lets the host remove a player in the lobby only', () => {
     const state = lobby('Host', 'Amina');
     expect(act(state, { type: 'remove', playerId: 'p0', target: 'p1' }, 0).state.players.map(player => player.name)).toEqual(['Host']);
