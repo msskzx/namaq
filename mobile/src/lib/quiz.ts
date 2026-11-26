@@ -18,7 +18,14 @@ import { mixQuestions, questionAyat, type ChoiceQuestion, type ChoiceScope } fro
 import { kunyaNotFirst } from '@shared/quiz/tarajim';
 import { emptyCompareAnswers, type CompareAsk } from '@shared/quiz/compareAnswers';
 import { CHOICE_KINDS } from '@shared/quiz/kinds';
-import { CHOICE_TOPICS, type QuizTopic } from '@shared/quiz/settings';
+import { CHOICE_TOPICS, WRITTEN_TOPICS, type QuizTopic } from '@shared/quiz/settings';
+import { quizQuery, type PartyQuestion, type PartySettings } from '@shared/party/rules';
+import { parseTreeScope } from '@shared/quiz/treeScope';
+import { parseJuzRange } from '@shared/quran/juz';
+import { shuffle } from '@shared/quiz/random';
+import { orders, recited, ticks } from '@shared/quiz/choiceKinds';
+import { writeAsk } from '@shared/quiz/writeAsk';
+import { surahName } from '@shared/quran/surahNames';
 
 /** Which trees the quiz asks, with the branches tab's filters: kinds, differences, part of the Quran, saved only. */
 export type QuizList = { filters: GroupFilters; range: JuzRange | null; saved: boolean };
@@ -110,7 +117,7 @@ export type SoloRun = {
 };
 
 export function startSolo(settings: SoloSettings, random: Random = Math.random, bookmarks?: Bookmark[]): SoloRun {
-  const trees = settings.kinds.includes('BRANCHES') ? branchQuiz(poolFor(settings.list, bookmarks), settings.length, settings.leaves, random, settings.difficulty) : [];
+  const trees = settings.kinds.includes('BRANCHES') ? branchQuiz(poolFor(settings.list, bookmarks), settings.length * 3, settings.leaves, random, settings.difficulty) : [];
   const kinds = kindsOf(settings).map(kind => kind.questions(scopeOf(settings), settings.difficulty, random, settings.length * 3));
   const questions = kunyaNotFirst(mixQuestions<SoloQuestion>([trees, ...kinds], settings.length, random, questionAyat));
   return { settings, questions, typed: questions.map(emptyOf), checked: questions.map(() => false), current: 0, submitted: false };
@@ -172,4 +179,33 @@ export function soloScore(run: SoloRun) {
   const score = points.reduce((sum, point) => sum + point.earned, 0);
   const total = points.reduce((sum, point) => sum + point.total, 0);
   return { points, score, total, percent: total ? Math.round((score / total) * 100) : 0 };
+}
+
+/**
+ * A party's questions built on the host's phone, as the website's /api/quiz builds them (src/lib/quiz/assemble.ts):
+ * the app needs no website, so the host sends these with «ابدأ» and the party worker asks them.
+ */
+export function partyQuiz(settings: PartySettings, random: Random = Math.random): { questions: PartyQuestion[]; surahNames: Record<number, string> } {
+  // The settings read back exactly as the website reads the party's request.
+  const params = new URLSearchParams(quizQuery(settings));
+  const range = parseJuzRange(params.get('juzFrom'), params.get('juzTo'));
+  const scope = parseTreeScope(params);
+  const choiceScope: ChoiceScope = { range, filters: scope.filters ?? {} };
+  // Spare trees, as the website draws: a tree sharing an ayah with one already picked is skipped, and the quiz still fills.
+  const trees = settings.topics.includes('BRANCHES')
+    ? branchQuiz(branchQuestionPool(corpus.ayat as BranchAyah[], range, quizTrees(range, scope)), settings.length * 3, settings.leaves, random, settings.difficulty)
+    : [];
+  const kinds = CHOICE_KINDS.filter(kind => settings.topics.includes(kind.id)).map(kind => kind.questions(choiceScope, settings.difficulty, random, settings.length * 3));
+  const written = settings.topics.some(topic => WRITTEN_TOPICS.includes(topic));
+  const questions = kunyaNotFirst(mixQuestions<SoloQuestion>([trees, ...kinds], settings.length, random, questionAyat)).map(question => {
+    const choice = question as ChoiceQuestion;
+    const write = written && choice.ayahKey && choice.page?.recite ? writeAsk(choice.ayahKey, choice.page, settings.pen) : null;
+    return {
+      ...question,
+      choices: recited(choice) || ticks(choice) || orders(choice) ? question.choices : shuffle(question.choices, random),
+      ...(write && { write }),
+    } as unknown as PartyQuestion;
+  });
+  const surahs = new Set(questions.flatMap(question => ((question.branches ?? []) as { ayat: { key: string }[] }[]).flatMap(branch => branch.ayat.map(ayah => Number(ayah.key.split(':')[0])))));
+  return { questions, surahNames: Object.fromEntries([...surahs].map(number => [number, surahName(number)])) };
 }

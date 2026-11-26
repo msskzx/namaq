@@ -22,6 +22,18 @@ now lives in client components (`branchPoints` in
 A party has no speed bonus, because points would then depend on each device's
 network delay.
 
+## Amended 2026-11-26: the phone app's host builds the questions
+
+The phone app must work without the website (release 1 is phone only), and a
+party whose questions came from `/api/quiz` failed to start whenever the site
+was down. So the app's host builds the questions on the phone from the bundled
+data (`partyQuiz` in `mobile/src/lib/quiz.ts`, the same shared builders the
+website's `assembleQuiz` uses) and sends them with its start action. The
+object takes them, and every player still gets the same questions and is graded
+by the object. The host's phone holds the answers, which the screen never shows;
+the owner does not mind cheating in a party (2026-10-26). A start without
+questions, from the website, still makes the object call `/api/quiz`.
+
 ## Considered options
 
 - Each device builds its own quiz. Players would get different questions, and

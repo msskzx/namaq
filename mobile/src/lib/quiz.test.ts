@@ -7,7 +7,9 @@ import { quizTrees } from '@shared/quiz/treeScope';
 import type { BranchAyah } from '@shared/quran/branches';
 import corpus from '@shared/quran/quranText/corpus';
 import { isAsked } from '@shared/quiz/score';
-import { availability, check, cleanSolo, DEFAULT_LIST, goTo, hasTyped, isTree, pick, questionState, reveal, setHints, soloScore, startSolo, submit, typeAnswer, type SoloRun } from './quiz';
+import { DEFAULT_SETTINGS } from '@shared/party/rules';
+import { QUIZ_LENGTHS } from '@shared/quiz/settings';
+import { availability, DEFAULT_SOLO, partyQuiz, check, cleanSolo, DEFAULT_LIST, goTo, hasTyped, isTree, pick, questionState, reveal, setHints, soloScore, startSolo, submit, typeAnswer, type SoloRun } from './quiz';
 import type { AskedBranchQuestion } from '@shared/quiz/branchQuestions';
 
 const seeded = (seed: number) => () => (seed = (seed * 16807) % 2147483647) / 2147483647;
@@ -127,4 +129,28 @@ describe('kunya questions never come first (guard 9, owner 2026-11-18)', () => {
       expect(first?.family).not.toBe('TARAJIM_KUNYA');
     }
   }, 30_000);
+});
+
+describe('party quiz built on the host’s phone', () => {
+  it('asks the host’s number of trees, only from the juz the host chose, with the names of their surahs', () => {
+    const { questions, surahNames } = partyQuiz({ ...DEFAULT_SETTINGS, juzFrom: 30, juzTo: 30 }, seeded(7));
+    expect(questions).toHaveLength(DEFAULT_SETTINGS.length);
+    const ayat = questions.flatMap(question => (question as unknown as AskedBranchQuestion).branches.flatMap(branch => branch.ayat.map(ayah => ayah.key)));
+    expect(ayat.every(key => inJuzRange(key, { from: 30, to: 30 }))).toBe(true);
+    expect(Object.keys(surahNames).map(Number).sort((a, b) => a - b)).toEqual([...new Set(ayat.map(key => Number(key.split(':')[0])))].sort((a, b) => a - b));
+  });
+
+  it('fills the longest tree quiz, solo or party, though trees sharing an ayah are skipped', () => {
+    const longest = Math.max(...QUIZ_LENGTHS);
+    for (const seed of [1, 2, 3]) {
+      expect(partyQuiz({ ...DEFAULT_SETTINGS, length: longest }, seeded(seed)).questions).toHaveLength(longest);
+      expect(startSolo({ ...DEFAULT_SOLO, length: longest }, seeded(seed)).questions).toHaveLength(longest);
+    }
+  });
+
+  it('gives a recited ayah the words the host’s pen asks, so the party can grade what each player writes', () => {
+    const { questions } = partyQuiz({ ...DEFAULT_SETTINGS, topics: ['RECITE'], juzFrom: 30, juzTo: 30, pen: 'whole' }, seeded(3));
+    expect(questions.length).toBeGreaterThan(0);
+    expect(questions.every(question => Array.isArray((question as { write?: { words?: unknown } }).write?.words))).toBe(true);
+  });
 });

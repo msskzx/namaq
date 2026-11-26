@@ -35,7 +35,7 @@ import { useKeyboardShown } from '@/lib/keyboard';
 import { WEBSITE } from '@/lib/website';
 import { scopeSummary } from '@shared/quiz/scopeSummary';
 import { partyUrl, playerId, saveName, savedName, usePartySocket, type PartyStatus } from '@/lib/party';
-import type { QuestionState } from '@/lib/quiz';
+import { partyQuiz, type QuestionState } from '@/lib/quiz';
 import { usePalette, type Palette } from '@/lib/theme';
 import Field from '@/ui/Field';
 
@@ -260,6 +260,18 @@ function Lobby({ view, send, error, palette }: { view: PartyView; send: Send; er
   const [confirming, setConfirming] = useState(false);
   useEffect(() => { if (error === 'not-ready') setConfirming(true); }, [error]);
   useEffect(() => { if (readyCount === others.length) setConfirming(false); }, [readyCount, others.length]);
+  // The host's phone builds the questions and sends them with «ابدأ», so a party needs no website.
+  const [built, setBuilt] = useState<'short' | 'failed' | null>(null);
+  const settingsKey = JSON.stringify(view.settings);
+  useEffect(() => setBuilt(null), [settingsKey]);
+  const begin = (early?: boolean) => {
+    let quiz;
+    try { quiz = partyQuiz(view.settings); } catch { return setBuilt('failed'); }
+    if (quiz.questions.length < view.settings.length) return setBuilt('short');
+    setBuilt(null);
+    send({ type: 'start', ...(early && { early }), ...quiz });
+  };
+  const problem = built ?? (view.error ? (view.error === 'Not enough approved questions' ? 'short' : 'failed') : null);
   return (
     <>
       <Invite code={view.code} palette={palette} />
@@ -274,18 +286,18 @@ function Lobby({ view, send, error, palette }: { view: PartyView; send: Send; er
         ))}
       </Section>
       <Settings settings={view.settings} editable={isHost} send={send} palette={palette} />
-      {view.error ? <Text accessibilityRole="alert" style={{ color: palette.accent, textAlign: 'right' }}>{view.error === 'Not enough approved questions' ? 'لا توجد أسئلة كافية لهذه الإعدادات.' : 'تعذر إنشاء الاختبار.'}</Text> : null}
+      {problem ? <Text accessibilityRole="alert" style={{ color: palette.accent, textAlign: 'right' }}>{problem === 'short' ? 'لا توجد أسئلة كافية لهذه الإعدادات.' : 'تعذر إنشاء الاختبار.'}</Text> : null}
       {isHost ? (confirming ? (
         <Section title="تأكيد البدء" palette={palette}>
           <Label palette={palette}>{`استعد ${num(readyCount)} من ${num(others.length)}. أتبدأ الآن؟`}</Label>
           <Row>
-            <Button variant="primary" Icon={Play} label="ابدأ الآن" onPress={() => { setConfirming(false); send({ type: 'start', early: true }); }} />
+            <Button variant="primary" Icon={Play} label="ابدأ الآن" onPress={() => { setConfirming(false); begin(true); }} />
             <Button label="انتظر" onPress={() => setConfirming(false)} />
           </Row>
         </Section>
       ) : (
         <Row gap={12}>
-          <Button big variant="primary" Icon={Play} label="ابدأ الاختبار" disabled={!view.settings.topics.length} onPress={() => send({ type: 'start' })} />
+          <Button big variant="primary" Icon={Play} label="ابدأ الاختبار" disabled={!view.settings.topics.length} onPress={() => begin()} />
           <Label palette={palette} muted>{`استعد ${num(readyCount)} من ${num(others.length)}`}</Label>
         </Row>
       )) : (
