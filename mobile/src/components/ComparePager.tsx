@@ -1,4 +1,4 @@
-import { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { forwardRef, memo, useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { FlatList, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import type { Visit } from '@shared/quran/compareCards';
 import { cardsFor, focusIndex, visitKey } from '@/lib/compare';
@@ -12,6 +12,8 @@ import SourceLine, { sourcesOf } from '@/ui/SourceLine';
 import { pairNote, tanasubSource } from '@shared/quran/tanasubCards';
 import type { Link } from '@shared/quran/surahOrder';
 import { useWebScrollEnd } from '@/lib/hooks/useWebScrollEnd';
+import { useLater } from '@/lib/hooks/useLater';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 const GAP = 14;
 
@@ -39,12 +41,12 @@ const PairPage = memo(function PairPage({ visit, width, height, palette, savedOn
   const pending = useRef(target);
   const heights = useRef<number[]>([]);
   const header = useRef(0);
-  useEffect(() => {
+  const giveUp = useLater();
+  useOnChange([target], () => {
     pending.current = target;
-    if (target < 0) return;
-    const timer = setTimeout(() => { pending.current = -1; landed.current?.(); }, 3000);
-    return () => clearTimeout(timer);
-  }, [target]);
+    if (target < 0) giveUp.cancel();
+    else giveUp.after(3000, () => { pending.current = -1; landed.current?.(); });
+  });
   const land = useCallback(() => {
     const at = pending.current;
     if (at <= 0 || heights.current.slice(0, at).filter(Boolean).length < at) return;

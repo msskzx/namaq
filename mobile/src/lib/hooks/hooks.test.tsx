@@ -3,6 +3,7 @@ import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useAdjustOn } from './useAdjustOn';
 import { useAfter } from './useAfter';
+import { useBeforePaint } from './useBeforePaint';
 import { useDebounced } from './useDebounced';
 import { useDelayedFlag } from './useDelayedFlag';
 import { useLater } from './useLater';
@@ -195,6 +196,25 @@ describe('useOnChange', () => {
     view.rerender({ at: 1, label: 'second' });
     view.rerender({ at: 2, label: 'third' });
     expect(seen).toEqual(['first', 'third']);
+  });
+});
+
+describe('useBeforePaint', () => {
+  it('runs once on the first draw and again only when a dependency changes', () => {
+    const run = vi.fn();
+    const view = mount(({ at }: { at: number }) => useBeforePaint([at], () => run(at)), { at: 1 });
+    view.rerender({ at: 1 });
+    view.rerender({ at: 2 });
+    expect(run.mock.calls).toEqual([[1], [2]]);
+  });
+
+  it('runs before the effects that run after the draw, even ones written above it', () => {
+    const order: string[] = [];
+    mount(() => {
+      useEffect(() => { order.push('after the draw'); }, []);
+      useBeforePaint([], () => order.push('before the draw'));
+    }, {});
+    expect(order).toEqual(['before the draw', 'after the draw']);
   });
 });
 

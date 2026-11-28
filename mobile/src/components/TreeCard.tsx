@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useWindowDimensions, View, type LayoutChangeEvent } from 'react-native';
 import { Gesture, GestureDetector, type GestureType } from 'react-native-gesture-handler';
 import Animated, { cancelAnimation, useAnimatedStyle, useSharedValue, withTiming, type SharedValue } from 'react-native-reanimated';
@@ -15,6 +15,7 @@ import { CARD, type Palette } from '@/lib/theme';
 import PathAyat from './PathAyat';
 import SurahChips, { CHIPS_HEIGHT, TUCK } from './SurahChips';
 import { BACK_EDGE_SLOP } from '@/lib/stackOptions';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 export type Lane = {
   offset: SharedValue<number>;
@@ -89,7 +90,7 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
   const room = growth || !readKeys.length ? AYAH_SPACE : fitted;
   const strip = fixed ? ayatRoom?.height ?? room : readKeys.length ? stripHeight : 0;
   const askRoom = ayatRoom?.set;
-  useEffect(() => { askRoom?.(readKeys.length ? room : 0); }, [askRoom, readKeys.length > 0, room]); // eslint-disable-line react-hooks/exhaustive-deps
+  useOnChange([askRoom, readKeys.length > 0, room], () => { askRoom?.(readKeys.length ? room : 0); });
   const view = useMemo(() => ({ width: full.width, height: Math.max(1, full.height - footHeight - strip) }), [full.width, full.height, footHeight, strip]);
   const surrounding = useMemo(() => around ? aroundOf(card.presentation) : undefined, [around, card]);
   const [measuredSizes, setMeasuredSizes] = useState<Sized | undefined>(undefined);
@@ -124,10 +125,10 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
   const restored = useRef(initialCamera);
   const [zoomed, setZoomed] = useState(false);
 
-  useEffect(() => {
+  useOnChange([view], () => {
     viewSize.value = view;
     if (content) camera.value = settleCamera(camera.value, content, view);
-  }, [view]); // eslint-disable-line react-hooks/exhaustive-deps
+  });
 
   const measured = useCallback((event: LayoutChangeEvent) => {
     const { width, height } = event.nativeEvent.layout;

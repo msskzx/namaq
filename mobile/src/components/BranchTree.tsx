@@ -1,4 +1,4 @@
-import { createContext, memo, useContext, useEffect, useId, useRef, useState, type ComponentRef } from 'react';
+import { createContext, memo, useContext, useId, useRef, useState, type ComponentRef } from 'react';
 import { Pressable, View, type LayoutChangeEvent } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { Text, UI_SCALE } from '@/ui/Text';
@@ -21,6 +21,7 @@ import TreeIcon from './TreeIcon';
 import type { SceneBox, SceneEdge, ScenePart, SceneText, TreeScene } from '@/lib/scene';
 import { TreeText, useWordSize } from './quran/text/AyahFlow';
 import { FLOW_LINE } from '@shared/quran/quranText/flow';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 type Tap = (ayahKeys: string[], lightPath?: () => void) => void;
 export type Paths = { lit: Set<string>; pinned: Map<string, string[]>; pin: (id: string, keys: string[]) => void };
@@ -66,7 +67,7 @@ function Fade({ id, children, style, delay = 0 }: { id: string; children: React.
   const growth = useContext(Growth);
   const hidden = growth.hidden.has(id) && growth.ask?.id !== id;
   const opacity = useSharedValue(hidden ? 0 : 1);
-  useEffect(() => { opacity.value = hidden ? 0 : withDelay(delay, withTiming(1, { duration: FADE })); }, [hidden, opacity, delay]);
+  useOnChange([hidden, opacity, delay], () => { opacity.value = hidden ? 0 : withDelay(delay, withTiming(1, { duration: FADE })); });
   const faded = useAnimatedStyle(() => ({ opacity: opacity.value }));
   return <Animated.View style={[style, faded]} pointerEvents={hidden ? 'none' : 'auto'}>{children}</Animated.View>;
 }
@@ -328,7 +329,7 @@ function Fan({ entries, shared, join, bare, onSpans }: { entries: Entry[]; share
   const litShown = lit.map((on, i) => on && shown[i]);
   const spine = litShown.some(Boolean) ? litSpine(spans, litShown, whole) : null;
   const drawn = growing && shown.some(Boolean) ? litSpine(spans, shown, whole) : null;
-  useEffect(() => { if (onSpans && spans.length === entries.length && spans.every(Boolean)) onSpans(spans); }, [spans]); // eslint-disable-line react-hooks/exhaustive-deps
+  useOnChange([spans], () => { if (onSpans && spans.length === entries.length && spans.every(Boolean)) onSpans(spans); });
   return (
     <View style={{ flexDirection: down ? 'row' : 'column', alignItems: join ? 'stretch' : 'flex-start' }} onLayout={event => setWhole(down ? event.nativeEvent.layout.width : event.nativeEvent.layout.height)}>
       {entries.map((entry, i) => (
@@ -351,11 +352,11 @@ function Spine({ range, color, down, from, grow = true }: { range: [number, numb
   const start = grow && from > range[0] && from < range[1];
   const low = useSharedValue(start ? from : range[0]);
   const high = useSharedValue(start ? from : range[1]);
-  useEffect(() => {
+  useOnChange([range[0], range[1], grow], () => {
     const reach = grow && range[0] <= low.value && range[1] >= high.value;
     low.value = reach ? withTiming(range[0], { duration: REACH }) : range[0];
     high.value = reach ? withTiming(range[1], { duration: REACH }) : range[1];
-  }, [range[0], range[1], grow]); // eslint-disable-line react-hooks/exhaustive-deps
+  });
   const style = useAnimatedStyle(() => down ? { left: low.value, width: high.value - low.value } : { top: low.value, height: high.value - low.value });
   return <Animated.View pointerEvents="none" style={[down
     ? { position: 'absolute', top: 0, borderTopWidth: LINE, borderColor: color }

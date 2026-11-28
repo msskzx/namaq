@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ComponentRef, type MutableRefObject } from 'react';
+import { Fragment, useCallback, useMemo, useRef, useState, type ComponentRef, type MutableRefObject } from 'react';
 import { Pressable, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { Text } from '@/ui/Text';
@@ -30,6 +30,7 @@ import IconButton from '@/ui/IconButton';
 import { FEATURE_ICON } from '@/components/featureIcons';
 import PostHead from '@/ui/PostHead';
 import WordFace from './WordFace';
+import { useLater } from '@/lib/hooks/useLater';
 
 export const PLACES_STEP = 20;
 
@@ -98,9 +99,8 @@ export function WordView({ lemmas, onOpen, toTop, hidden, onScroll, reveal, bott
   const [sliding, setSliding] = useState(false);
   const away = hidden && !sliding;
   const slide = useSlideAway(away, 'top', top);
-  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
-  useEffect(() => () => clearTimeout(timer.current), []);
-  const settled = () => { clearTimeout(timer.current); timer.current = setTimeout(reveal, SETTLE_MS); };
+  const timer = useLater();
+  const settled = () => timer.after(SETTLE_MS, reveal);
   const scrolled = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const { contentSize, layoutMeasurement } = event.nativeEvent;
     if (contentSize.height - layoutMeasurement.height + (away ? top : 0) > top + TOP) onScroll(event);

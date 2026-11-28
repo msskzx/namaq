@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
+import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { Modal, View, type LayoutChangeEvent } from 'react-native';
 import { Text } from '@/ui/Text';
 import { Gesture, GestureDetector, GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
@@ -25,6 +25,8 @@ import type { Palette } from '@/lib/theme';
 import type { RecitePosition } from '@shared/quran/recite';
 import { APP_NAME, OPENING, SLOGAN } from '@shared/brand';
 import { SURAH_TITLES } from '@shared/quran/surahNames';
+import { useLater } from '@/lib/hooks/useLater';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 type Size = { width: number; height: number };
 const noop = () => {};
@@ -68,7 +70,8 @@ function Timeline({ palette, onPick }: { palette: Palette; onPick: () => void })
   const [open, setOpen] = useState<{ event: number; surah: number }>();
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   const placesY = useRef(0);
-  useEffect(() => { if (open) setTimeout(() => scroll.current?.scrollTo({ y: placesY.current, animated: true }), 80); }, [open]);
+  const later = useLater();
+  useOnChange([open], () => { if (open) later.after(80, () => scroll.current?.scrollTo({ y: placesY.current, animated: true })); });
   if (!prophet || !map) return null;
   const { story, events } = prophet;
   const show = (event: number, surah?: number) => { setOpen({ event, surah: surah ?? map.places[event][0].surah }); onPick(); };
@@ -106,7 +109,7 @@ export default function Tour({ palette, onDone }: { palette: Palette; onDone: ()
   const hasNext = at < steps.length - 1;
   const hasBack = at > 1;
   const rest = at * width;
-  useEffect(() => { offset.value = rest; }, [rest]); // eslint-disable-line react-hooks/exhaustive-deps
+  useOnChange([rest], () => { offset.value = rest; });
   const turnTo = (index: number) => setStep(steps[index]);
   const slide = (dir: 1 | -1) => {
     const target = at + dir;

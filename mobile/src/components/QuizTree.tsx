@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import { Fragment, useMemo, useState, useSyncExternalStore } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { useFitReport, type OnFit } from '@/lib/useFit';
 import { Text } from '@/ui/Text';
@@ -28,6 +28,8 @@ import { useWriteBlanks, type WriteBlanks } from './recite/useRecite';
 import { writeBlank, type WriteBlank } from '@shared/quiz/writeBlanks';
 import QuizSources from './QuizSources';
 import type { QuizSource } from '@shared/quiz/sources';
+import { useLater } from '@/lib/hooks/useLater';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 export type TreeQuestion = ScoredQuestion & { tree: Branch; prefixes?: Variant[]; sources?: QuizSource[] };
 
@@ -166,11 +168,11 @@ function Bar({ label, onPress, Icon, palette, on, fill }: { label: string; onPre
 
 function TreeActions({ phrase, text, palette, onShare }: { phrase: string; text: string; palette: Palette; onShare: (link: string) => void }) {
   const [piece, setPiece] = useState<BranchPiece | undefined>(undefined);
-  useEffect(() => {
+  const find = useLater();
+  useOnChange([phrase], () => {
     setPiece(undefined);
-    const timer = setTimeout(() => setPiece(listShowing(EMPTY_LIST, phrase)?.piece), 0);
-    return () => clearTimeout(timer);
-  }, [phrase]);
+    find.after(0, () => setPiece(listShowing(EMPTY_LIST, phrase)?.piece));
+  });
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const saved = piece ? isSaved(piece, bookmarks) : bookmarks.some(bookmark => bookmark.id === phrase);
   const save = () => piece ? toggleSaved(piece) : toggleBookmark({ id: phrase, text, href: branchesHref(phrase) });

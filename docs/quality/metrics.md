@@ -75,3 +75,8 @@ Counts are of product code: test files are left out. "Empty catch blocks" counts
 | 2026-11-28 | 7, ui and small components | app | React Compiler findings | 151 | 143 | 8 set-state-in-effect went with the effects |
 | 2026-11-28 | 7, ui and small components | app | shared hooks | 9 | 12 | useOnLeave, useWindowEvent, useLiftInto |
 | 2026-11-28 | 7, ui and small components | app | effects replaced by the event handler itself | 0 | 1 | the compare card's double-tap pop animates in the tap, with no state in between |
+| 2026-11-28 | 7, components batch 3a | app components (20 files) | useEffect / useLayoutEffect calls / timers | 32 / 11 | 0 / 0 | compare, reader, notes, quiz tree, scenes, tour, share pages, recite |
+| 2026-11-28 | 7, components batch 3a | app | effects on the shrink-only list | 80 | 48 | |
+| 2026-11-28 | 7, components batch 3a | app | timers on the shrink-only list | 25 | 14 | |
+| 2026-11-28 | 7, components batch 3a | app | React Compiler findings | 143 | 132 | 10 set-state-in-effect and 1 refs went with the effects |
+| 2026-11-28 | 7, components batch 3a | app | shared hooks | 12 | 13 | useBeforePaint, for the reader's page offset and zoom |

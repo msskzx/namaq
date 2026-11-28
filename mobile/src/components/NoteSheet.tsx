@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { View } from 'react-native';
 import { NotebookPen, Send, Trash2 } from 'lucide-react-native';
 import { shareAyah } from './AyahShare';
@@ -13,28 +13,34 @@ import IconButton from '@/ui/IconButton';
 import { onLeave } from '@/lib/storage';
 import { surahName } from '@shared/quran/surahNames';
 import Field from '@/ui/Field';
+import { useLater } from '@/lib/hooks/useLater';
+import { useOnChange } from '@/lib/hooks/useOnChange';
+import { useOnLeave } from '@/lib/hooks/useOnLeave';
 
 const SAVE_MS = 400;
 
 export default function NoteSheet({ ayah, onClose, palette }: { ayah: string | null; onClose: () => void; palette: Palette }) {
   const [text, setText] = useState('');
   const [shown, setShown] = useState(ayah);
-  const pending = useRef<{ key: string; text: string; timer: ReturnType<typeof setTimeout> } | null>(null);
-  const flush = () => { if (pending.current) { clearTimeout(pending.current.timer); writeAyahNote(pending.current.key, pending.current.text); pending.current = null; } };
-  useEffect(() => { const stop = onLeave(flush); return () => { stop(); flush(); }; }, []);
-  useEffect(() => {
+  const pending = useRef<{ key: string; text: string } | null>(null);
+  const save = useLater();
+  const flush = () => { save.cancel(); if (pending.current) { writeAyahNote(pending.current.key, pending.current.text); pending.current = null; } };
+  const stopLeave = useRef(() => {});
+  useOnChange([], () => { stopLeave.current = onLeave(flush); });
+  useOnLeave(() => { stopLeave.current(); flush(); });
+  useOnChange([ayah], () => {
     flush();
     if (!ayah) return;
     setShown(ayah);
     setText(readAyahNotes()[ayah]?.text ?? '');
-  }, [ayah]);
+  });
   const [surah, number] = (shown ?? '0:0').split(':').map(Number);
   const edit = (next: string, now = false) => {
     setText(next);
     if (!shown) return;
     if (pending.current && pending.current.key !== shown) flush();
-    if (pending.current) clearTimeout(pending.current.timer);
-    pending.current = { key: shown, text: next, timer: setTimeout(flush, SAVE_MS) };
+    pending.current = { key: shown, text: next };
+    save.after(SAVE_MS, flush);
     if (now) flush();
   };
   return (

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import { useMemo, useState, useSyncExternalStore } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
 import { Text } from '@/ui/Text';
 import { ayatCount, num } from '@shared/quran/arabicNumber';
@@ -17,6 +17,7 @@ import Chip from '@/ui/Chip';
 import { SearchField } from '@/ui/Field';
 import Empty from '@/ui/Empty';
 import { useDebounced } from '@/lib/hooks/useDebounced';
+import { useAdjustOn } from '@/lib/hooks/useAdjustOn';
 
 export type Jump = { page: number; key: string; mark: boolean };
 
@@ -41,7 +42,7 @@ export function IndexSheet({ open, onClose, onJump, palette, page, recite, query
   recite?: boolean;
 }) {
   const [query, setQuery] = useState('');
-  useEffect(() => { if (open && asked) setQuery(asked); }, [open, asked]);
+  useAdjustOn([open, asked], () => { if (open && asked) setQuery(asked); });
   const groups = useMemo(() => juzGroups(surahs), []);
   const reference = parseReference(query, surahs);
   const words = !reference && searchable(query) ? query.trim() : '';
@@ -146,7 +147,7 @@ const ACTION_NAMES: Record<GestureAction, string> = {
 export function GestureSettings({ palette, mode: shownMode }: { palette: Palette; mode: ReaderMode }) {
   const gestures = useSyncExternalStore(subscribeGestures, readGestures, serverGestures);
   const [mode, setMode] = useState<ReaderMode>(shownMode);
-  useEffect(() => { setMode(shownMode); }, [shownMode]);
+  useAdjustOn([shownMode], () => setMode(shownMode));
   return (
     <View style={{ gap: 14 }}>
       <Text style={{ color: palette.muted, fontSize: 14 }}>اللمسات في المصحف</Text>

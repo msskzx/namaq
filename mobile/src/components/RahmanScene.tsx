@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
 import { FlatList, useWindowDimensions, View, type LayoutChangeEvent, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -20,6 +20,8 @@ import { toTab } from '@/lib/ways';
 import { shareCard } from '@/lib/shareImage';
 import { dark, ForcePalette, RAHMAN_ART, RAHMAN_PAPER, type Palette } from '@/lib/theme';
 import { BLOCK_GAP, BLOCK_W, HADITH_SIZES, PAGE_H, PAGE_ROOM, PAGE_W, rahmanAyat, RAHMAN_NAME, RahmanBlockView, RahmanPage, ScaledPage } from './scenes/RahmanPage';
+import { useLater } from '@/lib/hooks/useLater';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 let sections: RahmanSection[] | null = null;
 const SECTIONS = () => (sections ??= rahmanSections(rahmanAyat()));
@@ -66,10 +68,8 @@ export default function RahmanScene() {
   const [heights, setHeights] = useState<Record<string, number>>({});
   const [settled, setSettled] = useState<Record<string, number> | null>(null);
   const [at, setAt] = useState(0);
-  useEffect(() => {
-    const timer = setTimeout(() => setSettled(heights), SETTLE_MS);
-    return () => clearTimeout(timer);
-  }, [heights]);
+  const settle = useLater();
+  useOnChange([heights], () => settle.after(SETTLE_MS, () => setSettled(heights)));
   const pages = useMemo(() => (settled ? layOut(settled) : null), [settled]);
   const handlers = useRef(new Map<string, (event: { nativeEvent: { layout: { height: number } } }) => void>());
   const measured = (key: string) => {

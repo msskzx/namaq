@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, type ReactNode } from 'react';
+import { useCallback, useRef, type ReactNode } from 'react';
 import { View } from 'react-native';
 import { Gesture, GestureDetector, type GestureType } from 'react-native-gesture-handler';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 import { landingPage, MAX_ZOOM, settleZoom } from '@/lib/pageZoom';
 import { BACK_EDGE_SLOP } from '@/lib/stackOptions';
+import { useBeforePaint } from '@/lib/hooks/useBeforePaint';
+import { useOnLeave } from '@/lib/hooks/useOnLeave';
 
 const PULL = 70;
 const PULL_FLICK = 600;
@@ -37,7 +39,7 @@ export default function ReaderPager({ page, count, width, height, onPage, onMove
   const focal = useSharedValue({ x: 0, y: 0 });
 
   const laidOut = useRef(width);
-  useLayoutEffect(() => {
+  useBeforePaint([page, width, offset], () => {
     if (!width) return;
     const target = (page - 1) * width;
     if (laidOut.current !== width) {
@@ -47,11 +49,11 @@ export default function ReaderPager({ page, count, width, height, onPage, onMove
       offset.value = Math.abs(settled.current - page) === 1 ? withTiming(target, { duration: TURN }) : target;
     }
     settled.current = page;
-  }, [page, width, offset]);
+  });
 
-  useEffect(() => () => onPinch?.(false), [onPinch]);
+  useOnLeave(() => onPinch?.(false));
 
-  useLayoutEffect(() => { stretch.value = 1; }, [zoom, stretch]);
+  useBeforePaint([zoom, stretch], () => { stretch.value = 1; });
 
   const arrive = useCallback((next: number) => {
     settled.current = next;
