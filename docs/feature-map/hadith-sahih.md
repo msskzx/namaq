@@ -37,12 +37,12 @@ flowchart RL
 | --- | --- | --- | --- |
 | `People` | (onPress) | [الترجمة](person.md) | [components/battles/BattleParts.tsx:113](../../mobile/src/components/battles/BattleParts.tsx#L113) |
 | `StoryLinkRow` | (onPress) | [القصة](story.md) | [components/stories/StoryParts.tsx:131](../../mobile/src/components/stories/StoryParts.tsx#L131) |
-| `SahihPage` | ‹›‹› | [أبواب الكتاب](hadith-kitab.md) | [screens/hadithSahih.tsx:42](../../mobile/src/screens/hadithSahih.tsx#L42) |
-|  | ‹›‹› | [أبواب الكتاب](hadith-kitab.md) | [screens/hadithSahih.tsx:42](../../mobile/src/screens/hadithSahih.tsx#L42) |
-|  | (onOpen) | [حديث الصحيح](hadith-sahih.md) | [screens/hadithSahih.tsx:53](../../mobile/src/screens/hadithSahih.tsx#L53) |
-|  | (onPress) | [حديث الأربعين](hadith-forty.md) | [screens/hadithSahih.tsx:55](../../mobile/src/screens/hadithSahih.tsx#L55) |
-| `InHadith` | ‹› · ‹› | [صفحة الآية](ayah.md) | [screens/hadithSahih.tsx:76](../../mobile/src/screens/hadithSahih.tsx#L76) |
-| `HadithSahihScreen` | (back) | [الحديث](hadith.md) | [screens/hadithSahih.tsx:107](../../mobile/src/screens/hadithSahih.tsx#L107) |
+| `SahihPage` | ‹›‹› | [أبواب الكتاب](hadith-kitab.md) | [screens/hadithSahih.tsx:43](../../mobile/src/screens/hadithSahih.tsx#L43) |
+|  | ‹›‹› | [أبواب الكتاب](hadith-kitab.md) | [screens/hadithSahih.tsx:43](../../mobile/src/screens/hadithSahih.tsx#L43) |
+|  | (onOpen) | [حديث الصحيح](hadith-sahih.md) | [screens/hadithSahih.tsx:54](../../mobile/src/screens/hadithSahih.tsx#L54) |
+|  | (onPress) | [حديث الأربعين](hadith-forty.md) | [screens/hadithSahih.tsx:56](../../mobile/src/screens/hadithSahih.tsx#L56) |
+| `InHadith` | ‹› · ‹› | [صفحة الآية](ayah.md) | [screens/hadithSahih.tsx:77](../../mobile/src/screens/hadithSahih.tsx#L77) |
+| `HadithSahihScreen` | (back) | [الحديث](hadith.md) | [screens/hadithSahih.tsx:108](../../mobile/src/screens/hadithSahih.tsx#L108) |
 
 ## Sheets
 

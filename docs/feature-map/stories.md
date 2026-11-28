@@ -27,8 +27,8 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `StoryRow` | (onPress) | [القصة](story.md) | [screens/stories.tsx:35](../../mobile/src/screens/stories.tsx#L35) |
-| `ChapterCard` | (onPress) | [الغزوة](battle.md) | [screens/stories.tsx:56](../../mobile/src/screens/stories.tsx#L56) |
+| `StoryRow` | (onPress) | [القصة](story.md) | [screens/stories.tsx:37](../../mobile/src/screens/stories.tsx#L37) |
+| `ChapterCard` | (onPress) | [الغزوة](battle.md) | [screens/stories.tsx:58](../../mobile/src/screens/stories.tsx#L58) |
 
 ## Sheets
 

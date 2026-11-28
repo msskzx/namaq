@@ -37,7 +37,7 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `HomeScreen` | (search) | [البحث](search.md) | [app/(tabs)/(home)/index.tsx:59](../../mobile/src/app/(tabs)/(home)/index.tsx#L59) |
+| `HomeScreen` | (search) | [البحث](search.md) | [app/(tabs)/(home)/index.tsx:61](../../mobile/src/app/(tabs)/(home)/index.tsx#L61) |
 | `SideHead` | (onPress) | [المصحف](read.md) | [components/CompareCard.tsx:101](../../mobile/src/components/CompareCard.tsx#L101) |
 |  | افتح في متشابهات القرآن | [متشابهات القرآن](branches.md) | [components/CompareCard.tsx:102](../../mobile/src/components/CompareCard.tsx#L102) |
 | `LaneHead` | اقرأ ‹› في المصحف | [المصحف](read.md) | [components/CompareCard.tsx:113](../../mobile/src/components/CompareCard.tsx#L113) |
@@ -194,7 +194,7 @@ flowchart RL
 | `BookCard` | (open) | [كتاب الحديث](hadith-book.md) | [screens/books.tsx:62](../../mobile/src/screens/books.tsx#L62) |
 |  | (open) | [الكتاب](book.md) | [screens/books.tsx:63](../../mobile/src/screens/books.tsx#L63) |
 | `Box` | (onPress) | [الترجمة](person.md) | [screens/nasab.tsx:31](../../mobile/src/screens/nasab.tsx#L31) |
-| `OpeningRows` | ‹›:1 | [المصحف](read.md) | [screens/openings.tsx:70](../../mobile/src/screens/openings.tsx#L70) |
+| `OpeningRows` | ‹›:1 | [المصحف](read.md) | [screens/openings.tsx:71](../../mobile/src/screens/openings.tsx#L71) |
 | `HadithOpen` | افتح ‹› | [حديث الصحيح](hadith-sahih.md) | [screens/story.tsx:67](../../mobile/src/screens/story.tsx#L67) |
 
 ## Sheets

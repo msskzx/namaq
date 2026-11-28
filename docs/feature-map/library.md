@@ -136,14 +136,14 @@ flowchart RL
 | `TiesChain` | (open) | [الصلات](ties.md) | [components/TiesChain.tsx:135](../../mobile/src/components/TiesChain.tsx#L135) |
 | `People` | (onPress) | [الترجمة](person.md) | [components/battles/BattleParts.tsx:113](../../mobile/src/components/battles/BattleParts.tsx#L113) |
 | `Hadith` | افتح الحديث كاملًا: ‹› | [حديث الصحيح](hadith-sahih.md) | [components/scenes/RahmanPage.tsx:119](../../mobile/src/components/scenes/RahmanPage.tsx#L119) |
-| `LibraryScreen` | ({ cards, noteCards, savedItems, noteItems, openOf, openAyah, menus }) | [المصحف](read.md) | [screens/library.tsx:77](../../mobile/src/screens/library.tsx#L77) |
-|  | ({ cards, noteCards, savedItems, noteItems, openOf, openAyah, menus }) | [متشابهات القرآن](branches.md) | [screens/library.tsx:77](../../mobile/src/screens/library.tsx#L77) |
-|  | ({ cards, noteCards, savedItems, noteItems, openOf, openAyah, menus }) | [مقارنة السور](compare.md) | [screens/library.tsx:77](../../mobile/src/screens/library.tsx#L77) |
-|  | ({ cards, noteCards, savedItems, noteItems, openOf, openAyah, menus }) | [صفحة الآية](ayah.md) | [screens/library.tsx:77](../../mobile/src/screens/library.tsx#L77) |
-|  | افتح الآية في المصحف | [المصحف](read.md) | [screens/library.tsx:120](../../mobile/src/screens/library.tsx#L120) |
-|  | (back) | [الرئيسية](home.md) | [screens/library.tsx:132](../../mobile/src/screens/library.tsx#L132) |
+| `LibraryScreen` | ({ cards, noteCards, savedItems, noteItems, openOf, openAyah, menus }) | [المصحف](read.md) | [screens/library.tsx:79](../../mobile/src/screens/library.tsx#L79) |
+|  | ({ cards, noteCards, savedItems, noteItems, openOf, openAyah, menus }) | [متشابهات القرآن](branches.md) | [screens/library.tsx:79](../../mobile/src/screens/library.tsx#L79) |
+|  | ({ cards, noteCards, savedItems, noteItems, openOf, openAyah, menus }) | [مقارنة السور](compare.md) | [screens/library.tsx:79](../../mobile/src/screens/library.tsx#L79) |
+|  | ({ cards, noteCards, savedItems, noteItems, openOf, openAyah, menus }) | [صفحة الآية](ayah.md) | [screens/library.tsx:79](../../mobile/src/screens/library.tsx#L79) |
+|  | افتح الآية في المصحف | [المصحف](read.md) | [screens/library.tsx:122](../../mobile/src/screens/library.tsx#L122) |
+|  | (back) | [الرئيسية](home.md) | [screens/library.tsx:134](../../mobile/src/screens/library.tsx#L134) |
 | `Box` | (onPress) | [الترجمة](person.md) | [screens/nasab.tsx:31](../../mobile/src/screens/nasab.tsx#L31) |
-| `OpeningRows` | ‹›:1 | [المصحف](read.md) | [screens/openings.tsx:70](../../mobile/src/screens/openings.tsx#L70) |
+| `OpeningRows` | ‹›:1 | [المصحف](read.md) | [screens/openings.tsx:71](../../mobile/src/screens/openings.tsx#L71) |
 
 ## Sheets
 

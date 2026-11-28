@@ -24,7 +24,7 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `OpeningRows` | ‹›:1 | [المصحف](read.md) | [screens/openings.tsx:70](../../mobile/src/screens/openings.tsx#L70) |
+| `OpeningRows` | ‹›:1 | [المصحف](read.md) | [screens/openings.tsx:71](../../mobile/src/screens/openings.tsx#L71) |
 
 ## Sheets
 
