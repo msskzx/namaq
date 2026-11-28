@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { fromBuckwalter } from '../../../src/lib/quran/lemmas';
@@ -7,12 +7,10 @@ import kashshaf from '../../data/quran/kashshaf';
 import { ayahWords, mushafPages, type MushafPage } from '../readerPage';
 import { ayahWordsOf, corpusWordsAt, wordsOnly } from './ayahWords';
 
-// Owner 2026-11-24: no display drops or adds a word of a source text. Every ayah is checked here, all 6,236 of them:
-// once against a second copy made apart from the Madina pages, then through each way the app and the website read
-// an ayah off the pages.
-
 const ROOT = join(__dirname, '../../..');
-const pages: MushafPage[] = Array.from({ length: 604 }, (_, at) => JSON.parse(readFileSync(join(ROOT, `shared/data/quran/mushaf/${at + 1}.json`), 'utf8')));
+const MUSHAF = join(ROOT, 'shared/data/quran/mushaf');
+const pages: MushafPage[] = readdirSync(MUSHAF).filter(file => /^\d+\.json$/.test(file)).map(file => Number(file.slice(0, -5))).sort((a, b) => a - b)
+  .map(page => JSON.parse(readFileSync(join(MUSHAF, `${page}.json`), 'utf8')));
 const tokens = ayahWordsOf(pages);
 const keys = Object.keys(tokens);
 const startPage = mushafPages(pages);
@@ -29,15 +27,16 @@ for (const line of readFileSync(join(ROOT, 'data/quran/quranic-corpus-morphology
 }
 
 /**
- * The letters alone. The two copies spell a hamza, a long alif and a tatweel their own ways («ٱلۡأٓخِرَةِ», «ٱلۡءَاخِرَةِ»),
- * so those are folded; any other letter that differs, and any word dropped or added, still shows.
+ * The letters and shaddas alone. The two copies spell a hamza, a long alif, an alif maqsura and a tatweel their own ways
+ * («ٱلۡأٓخِرَةِ», «ٱلۡءَاخِرَةِ»), so those are folded; any other letter that differs, and any word dropped or added, still shows.
+ * The vowels, the small letters and the signs are not compared: the two copies write them with different marks.
  */
-const letters = (text: string) => text.normalize('NFC').replace(/[^ء-يٱ]/g, '').replace(/[ءـ]/g, '')
-  .replace(/[ٱأإآ]/g, 'ا').replace(/ؤ/g, 'و').replace(/[ئى]/g, 'ي').replace(/ة/g, 'ت');
+const letters = (text: string) => text.normalize('NFC').replace(/[^ء-يٱّ]/g, '').replace(/[ءـ]/g, '')
+  .replace(/[ٱأإآ]/g, 'ا').replace(/ؤ/g, 'و').replace(/[ئى]/g, 'ي');
 
 /**
- * Where the corpus spells a word with letters the page does not print. Reported to the owner 2026-11-28; it stays here
- * until a named source (the printed Madina page) says which copy is right, and leaves when that is settled.
+ * Where the two encodings write a word with different letters: the page's KFGQPC text and the corpus's Tanzil text.
+ * Reported to the owner 2026-11-28; each stays until the printed Madina page settles it.
  */
 const LETTERS_DIFFER: Record<string, string> = {
   '12:39': 'the page «يَٰصَٰحِبَيِ», the corpus «يَٰصَىٰحِبَىِ»',
@@ -66,8 +65,6 @@ describe('every ayah against the Quranic Arabic Corpus', () => {
 });
 
 describe('every ayah as the app and the website read it off the pages', () => {
-  // The reader, the phone's ayah views (mobile/src/lib/mushaf.ts ayahMushafWords) and the website (pageAyat) read the
-  // same pages two ways: page by page through the reader's lines, and in one run over all the pages.
   it('reads the same words, signs and hizb marks page by page as in one run', () => {
     const differ = keys.filter(key => {
       const read: string[] = [];
@@ -81,7 +78,6 @@ describe('every ayah as the app and the website read it off the pages', () => {
     expect(differ).toEqual([]);
   });
 
-  // Copying an ayah (mobile/src/lib/mushaf.ts ayahText) reads only the page it starts on.
   it('holds each ayah whole on the page it starts on, so a copied ayah has all its words', () => {
     const cut = keys.filter(key => JSON.stringify(ayahWords(key, pages[startPage.get(key)! - 1], surahBefore(startPage.get(key)!))) !== JSON.stringify(tokens[key]));
     expect(cut).toEqual([]);

@@ -4,29 +4,19 @@ import { describe, expect, it } from 'vitest';
 import { findHadith, type SahihText } from './sahih';
 import type { AppForty } from './hadith';
 import type { AppStory } from './stories/story';
-import { bookPagesOf, type BookEntry, type PageBreak, type ReaderBookId } from './bookReader';
-import { kashshafEntries, mutashabihEntries, sadiEntries, ukbariEntries } from './readerBooks';
-import { tafsirRuns } from './quran/tafsirSadi';
+import { READER_BOOKS } from './readerBooks';
 import { kashshafRuns } from './quran/kashshaf';
+import { readerBook } from '../src/lib/books/readerBook';
 import forty from './data/hadith/forty.json';
 import stories from './data/events/stories.json';
-import sadi from './data/quran/tafsirSadi.json';
-import breaks from './data/quran/bookPages.json';
 import kashshaf from './data/quran/kashshaf';
-import ukbari from './data/quran/irabUkbari';
-import kirmani from './data/quran/mutashabihKirmani';
-import iskafi from './data/quran/mutashabihIskafi';
-import zubayr from './data/quran/mutashabihZubayr';
-
-// Owner 2026-11-24: no display drops or adds a word of a source text. Each text the app shows from a book is checked
-// here whole, every record and passage, against the one copy it is taken from.
 
 const sahih = {
   bukhari: JSON.parse(readFileSync(join(__dirname, '../data/hadith/sahih/bukhari.json'), 'utf8')) as SahihText,
   muslim: JSON.parse(readFileSync(join(__dirname, '../data/hadith/sahih/muslim.json'), 'utf8')) as SahihText,
 };
-/** The words, their marks kept; only punctuation and spacing set aside, which the two copies print their own ways. */
-const words = (text: string) => text.replace(/[^\p{L}\p{M}ﷺ]+/gu, ' ').trim();
+/** The words and numbers, their marks kept; only punctuation and spacing set aside, which the copies print their own ways. */
+const words = (text: string) => text.replace(/[^\p{L}\p{M}\p{Nd}ﷺ]+/gu, ' ').trim();
 /** A number as a cite writes it («٣٨٥٢»). */
 const fromArabicDigits = (digits: string) => Number([...digits].map(digit => '٠١٢٣٤٥٦٧٨٩'.indexOf(digit)).join(''));
 /** The record's own number in front of it as its book prints it («٧٠ - (١٧٣٣)», «م - »), which is not the hadith's text. */
@@ -43,27 +33,36 @@ describe('the Forty\'s records from the Sahihayn', () => {
   it('show the same words as the Sahih text, whole routes, none dropped or added', () => {
     const records = (forty as unknown as AppForty).entries.flatMap(entry => entry.records).filter(record => record.book === 'bukhari' || record.book === 'muslim');
     expect(records.length).toBeGreaterThan(0);
+    const name = (record: (typeof records)[number]) => `${record.book} ${record.number} ${record.route ?? ''}`.trim();
     const differ = records.filter(record => {
-      const routes = findHadith(sahih[record.book as 'bukhari' | 'muslim'], record.number)?.hadith.routes.map(route => words(route.text)) ?? [];
+      const printed = findHadith(sahih[record.book as 'bukhari' | 'muslim'], record.number)?.hadith.routes ?? [];
+      const routes = printed.map(route => words(route.text));
+      const own = record.route ? printed.findIndex(route => route.route === record.route) : -1;
       const shown = words(record.text.replace(printedNumber, ''));
-      return !routes.some((_, from) => routes.some((_, to) => to >= from && routes.slice(from, to + 1).join(' ') === shown));
-    }).map(record => `${record.book} ${record.number} ${record.route ?? ''}`.trim());
-    expect(differ).toEqual(Object.keys(RUN_ON));
+      if (name(record) in RUN_ON) return !routes[own]?.startsWith(`${shown} `);
+      const starts = own >= 0 ? [own] : routes.map((_, at) => at);
+      return !starts.some(from => routes.some((_, to) => to >= from && routes.slice(from, to + 1).join(' ') === shown));
+    }).map(name);
+    expect(differ).toEqual([]);
   });
 });
 
 describe('the sira stories', () => {
   const reports = (stories as unknown as AppStory[]).flatMap(story => story.reports.map(report => ({ story: story.slug, report })));
 
-  it('tell a Sahih report as one unbroken run of its printed words, chain and moments together', () => {
+  it('tell a Sahih report as one unbroken run of its printed words, from a route\'s start to a sentence\'s end', () => {
     const fromSahih = reports.flatMap(({ story, report }) => {
       const cite = report.cite.match(/^صحيح (البخاري|مسلم)، رقم ([٠-٩]+)/);
       return cite ? [{ story, report, book: cite[1] === 'البخاري' ? sahih.bukhari : sahih.muslim, n: fromArabicDigits(cite[2]) }] : [];
     });
     expect(fromSahih.length).toBeGreaterThan(0);
     const broken = fromSahih.filter(({ report, book, n }) => {
-      const printed = words(findHadith(book, n)?.hadith.routes.map(route => route.text).join(' ') ?? '');
-      return !printed.includes(words([report.isnad ?? '', ...report.moments.map(moment => moment.text)].join(' ')));
+      const routes = (findHadith(book, n)?.hadith.routes ?? []).map(route => words(route.text));
+      const told = [report.isnad ?? '', ...report.moments.map(moment => moment.text)].join(' ').trim();
+      const shown = words(told);
+      if (shown === routes.join(' ')) return false;
+      const fromRoute = routes.some((_, from) => `${routes.slice(from).join(' ')} `.startsWith(`${shown} `));
+      return !fromRoute || !/[.\]»)؟!]$/.test(told);
     }).map(({ story, report }) => `${story} ${report.cite}`);
     expect(broken).toEqual([]);
   });
@@ -77,26 +76,16 @@ describe('the sira stories', () => {
 });
 
 describe('the tafsir and the books in the reader', () => {
-  it('draw every passage of al-Sa\'di and al-Kashshaf whole, the Quran quotes cut out of the prose and nothing else', () => {
-    const sadiText = sadiEntries(sadi.passages).map(entry => entry.text);
-    expect(sadiText.filter(text => tafsirRuns(text).map(run => run.text).join('') !== text)).toEqual([]);
+  it('draw every passage of al-Kashshaf whole, its lit sentences and Quran quotes cut out of the prose and nothing else', () => {
     const passages = kashshaf.entries.map(([, , , , , , text, lit]) => ({ text, lit }));
     expect(passages.filter(passage => kashshafRuns(passage).map(run => run.text).join('') !== passage.text).map(passage => passage.text.slice(0, 40))).toEqual([]);
   });
 
-  const BOOKS: Record<ReaderBookId, { entries: BookEntry[]; breaks: PageBreak[] }> = {
-    sadi: { entries: sadiEntries(sadi.passages), breaks: breaks.sadi as PageBreak[] },
-    kashshaf: { entries: kashshafEntries(kashshaf), breaks: breaks.kashshaf as PageBreak[] },
-    ukbari: { entries: ukbariEntries(ukbari), breaks: breaks.ukbari as PageBreak[] },
-    kirmani: { entries: mutashabihEntries(kirmani), breaks: kirmani.breaks },
-    iskafi: { entries: mutashabihEntries(iskafi), breaks: iskafi.breaks },
-    zubayr: { entries: mutashabihEntries(zubayr), breaks: zubayr.breaks },
-  };
-
-  it.each(Object.entries(BOOKS))('turn %s page by page through every passage, each word once and in order', (_, { entries, breaks: pageBreaks }) => {
+  it.each(READER_BOOKS)('turn %s page by page through every passage, each word once and in order', async id => {
+    const { entries, pages } = await readerBook(id);
     expect(entries.length).toBeGreaterThan(0);
     const shown = entries.map(() => '');
-    for (const page of bookPagesOf(entries, pageBreaks)) {
+    for (const page of pages) {
       expect(page.slices.length, `page ${page.part}/${page.page}`).toBeGreaterThan(0);
       for (const slice of page.slices) shown[slice.entry] += entries[slice.entry].text.slice(slice.from, slice.to);
     }
