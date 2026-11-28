@@ -28,6 +28,9 @@ and only show up on a phone, so the rule moves them into a few small hooks that 
 | something outside React to do when a value changes (scroll to the linked place, clear the route params, save the shown page, tell the parent) | `useOnChange(deps, run)`: runs after the draw, once per change, always with the latest `run` |
 | a file or book read when a key turns on | `useLoaded(key, load)`: `null` until that key's value arrives, never an older key's value, and a failed read goes to `reportError` |
 | a timer or frame the screen starts from a handler (auto-advance, a retry, a spinner that must paint before heavy work) | `useLater()`: `after(ms, run)`, `nextFrame(run)`, `afterPaint(run)`, `cancel()`; a new job replaces the waiting one and none runs after unmount |
+| something to do when the screen closes (save a draft, refresh the feed after settings) | `useOnLeave(run)`: runs the latest `run` once, on unmount |
+| a browser event on `window` (a message from the video recorder's frame) | `useWindowEvent(name, listen)`: one listener, removed on unmount, always the latest `listen` |
+| a value a child lifts into its parent's slot before the paint (the row under a card, a card's source line) | `useLiftInto(slot, value)` |
 
 The hooks are in `mobile/src/lib/hooks/` and tested in `hooks.test.tsx`. Each clears its timer when the
 screen closes.

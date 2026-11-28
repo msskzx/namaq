@@ -146,3 +146,30 @@ types, but the import no longer says what it is. Each got its `type` mark back. 
 - **Found by:** `quality/no-raw-effects`, frozen in the baseline since step 7.
 - **Fix:** `useLoaded(kashshafOn ? 'kashshaf' : null, …)`, which keeps the `live` check in one place and sends a
   failure to `reportError`.
+
+## A state change React dropped (step 7, ui)
+
+- **Where:** `ui/Sheet.tsx`, during this step's rewrite.
+- **Wrong:** `shown` was set while rendering (`useAdjustOn`), but the same state is also set to `false` when the
+  close animation ends, and that update can still be waiting in a slower lane.
+- **Effect:** the settings sheet stopped opening. A log showed `shown` true for one draw and false the next: React
+  rebased the waiting update and skipped the one made while rendering. Lint, types and 1,600 unit tests passed.
+- **Found by:** using the app with `npm run phone`, then narrowing the change down file by file.
+- **Fix:** the sheet sets `shown` after the draw again (`useOnChange`), as before the rewrite. `effects.md` now says
+  `useAdjustOn` is only for state nothing else sets from a timer, an animation's end, a layout event or a promise.
+  `ui/FloatingMenu.tsx` (measured by a layout event) and the tools pages' scroll reach got the same change.
+
+## An effect that only replayed a tap (step 7, components)
+
+- **Where:** `components/CompareCard.tsx`.
+- **Wrong:** a double tap bumped a `pop` counter, and an effect watched the counter to start the pop animation.
+- **Effect:** one extra draw per tap, and a state that existed only to carry the tap to the effect.
+- **Fix:** the tap starts the animation itself; the counter is gone.
+
+## A failed load that never surfaced (step 7, components)
+
+- **Where:** `components/scenes/SeaArt.web.tsx`.
+- **Wrong:** Skia for the web was loaded in an effect with no rejection handler.
+- **Effect:** if the file failed to load, the sea scene stayed empty with no error anywhere.
+- **Fix:** a module-level `lazy()` under `Suspense`: no effect, and a failed load reaches the crash screen's error
+  boundary with its cause.
