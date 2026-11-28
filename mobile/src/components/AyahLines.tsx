@@ -94,10 +94,10 @@ export const AyatRange = memo(function AyatRange({ from, to, palette }: { from: 
   }, [from, to]);
   return (
     <AyahMenuPress menu={keys}>
-    <View onLayout={event => setWidth(event.nativeEvent.layout.width)}>
+    <View onLayout={event => setWidth(event.nativeEvent.layout.width)} style={{ gap: 8 }}>
       {width > 0 && parts.map(part => (
         <MushafPageView key={part.page} page={part.page} data={part.data} model={part.model} palette={palette} width={width} height={width * PAGE_TEXT_RATIO}
-          top={surahBefore(part.page)} names={SURAH_TITLES} forgot={NONE} saved={NO_SAVES} onTouch={noTouch} slice={part.slice} />
+          top={surahBefore(part.page)} names={SURAH_TITLES} forgot={NONE} saved={NO_SAVES} onTouch={noTouch} slice={part.slice} framed />
       ))}
     </View>
     </AyahMenuPress>
@@ -124,10 +124,10 @@ export const SurahJoin = memo(function SurahJoin({ surah, palette }: { surah: nu
   const keys = useMemo(() => [...(surah > 1 ? [`${surah - 1}:${ayahCounts.get(surah - 1)}`] : []), `${surah}:1`], [surah]);
   return (
     <AyahMenuPress menu={keys}>
-    <View onLayout={event => setWidth(event.nativeEvent.layout.width)}>
+    <View onLayout={event => setWidth(event.nativeEvent.layout.width)} style={{ gap: 8 }}>
       {width > 0 && parts.map(part => (
         <MushafPageView key={part.page} page={part.page} data={part.data} model={part.model} palette={palette} width={width} height={width * PAGE_TEXT_RATIO}
-          top={surahBefore(part.page)} names={SURAH_TITLES} forgot={NONE} saved={NO_SAVES} onTouch={noTouch} slice={part.slice} />
+          top={surahBefore(part.page)} names={SURAH_TITLES} forgot={NONE} saved={NO_SAVES} onTouch={noTouch} slice={part.slice} framed />
       ))}
     </View>
     </AyahMenuPress>

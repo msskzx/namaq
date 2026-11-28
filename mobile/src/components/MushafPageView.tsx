@@ -54,6 +54,7 @@ type Props = {
   focus?: string | null;
   onFocus?: (y: number, height: number) => void;
   slice?: { from: number; to: number };
+  framed?: boolean;
   anonymous?: boolean;
 };
 
@@ -99,7 +100,7 @@ function SurahNumber({ surah, ring, palette }: { surah: number; ring: number; pa
   );
 }
 
-function MushafPageView({ page, data, model, palette, width, height, top, names, mark, playing = null, markWords = null, recite, forgot, saved, onTouch, onSelect, write, checked, zoom = 1, onHeight, focus, onFocus, slice, anonymous = false }: Props) {
+function MushafPageView({ page, data, model, palette, width, height, top, names, mark, playing = null, markWords = null, recite, forgot, saved, onTouch, onSelect, write, checked, zoom = 1, onHeight, focus, onFocus, slice, framed = false, anonymous = false }: Props) {
   const flowing = zoom > 1;
   // see R0058
   const [bodies, setBodies] = useState<{ page?: Body; flow?: Body }>({});
@@ -313,8 +314,8 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
         </View>
         <Text style={[{ color: palette.muted, fontSize: small }, current && surahHidden(current) ? veiled : null]}>{!anonymous && current && names[current] ? names[current] : ''}</Text>
       </View>}
-      <View style={slice ? undefined : { ...(flowing ? { flexGrow: 1 } : { flex: 1 }), borderWidth: 1, borderColor: palette.rule }}>
-        <View style={slice ? undefined : { ...(flowing ? { flexGrow: 1 } : { flex: 1 }), margin: 2, borderWidth: 1, borderColor: palette.rule, paddingHorizontal: width * 0.0125, paddingTop: width * 0.015 }}>
+      <View style={slice ? (framed ? { borderWidth: 1, borderColor: palette.rule } : undefined) : { ...(flowing ? { flexGrow: 1 } : { flex: 1 }), borderWidth: 1, borderColor: palette.rule }}>
+        <View style={slice ? (framed ? { margin: 2, borderWidth: 1, borderColor: palette.rule, paddingHorizontal: width * 0.0125, paddingVertical: width * 0.015 } : undefined) : { ...(flowing ? { flexGrow: 1 } : { flex: 1 }), margin: 2, borderWidth: 1, borderColor: palette.rule, paddingHorizontal: width * 0.0125, paddingTop: width * 0.015 }}>
           <Pressable {...press(null)} style={slice ? { height: sliceHeight, overflow: 'hidden' } : flowing ? { flexGrow: 1 } : { flex: 1, overflow: 'hidden' }} onLayout={event => { const { width: w, height: h } = event.nativeEvent.layout; setBodies(prev => ({ ...prev, [flowing ? 'flow' : 'page']: { width: w, height: h, of: `${width}x${height}` } })); }}>
             {!measured && (
               <View pointerEvents="none" style={{ position: 'absolute', top: 0, right: 0, width: 10000, opacity: 0 }}>
