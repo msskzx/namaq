@@ -36,15 +36,15 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `ContinueCard` | افتح ‹› | [حديث الصحيح](hadith-sahih.md) | [screens/hadith.tsx:57](../../mobile/src/screens/hadith.tsx#L57) |
-| `FortyShape` | (onOpen) | [حديث الأربعين](hadith-forty.md) | [screens/hadith.tsx:76](../../mobile/src/screens/hadith.tsx#L76) |
-| `Hit` | (onPress) | [حديث الصحيح](hadith-sahih.md) | [screens/hadith.tsx:94](../../mobile/src/screens/hadith.tsx#L94) |
-|  | (onPress) | [أبواب الكتاب](hadith-kitab.md) | [screens/hadith.tsx:94](../../mobile/src/screens/hadith.tsx#L94) |
-|  | (onPress) | [أبواب الكتاب](hadith-kitab.md) | [screens/hadith.tsx:94](../../mobile/src/screens/hadith.tsx#L94) |
-| `HadithScreen` | (onPress) | [حديث الأربعين](hadith-forty.md) | [screens/hadith.tsx:152](../../mobile/src/screens/hadith.tsx#L152) |
-|  | (onOpenBook) | [كتاب الحديث](hadith-book.md) | [screens/hadith.tsx:167](../../mobile/src/screens/hadith.tsx#L167) |
-|  | (onOpenKitab) | [أبواب الكتاب](hadith-kitab.md) | [screens/hadith.tsx:167](../../mobile/src/screens/hadith.tsx#L167) |
-|  | (onOpenBook) | [كتاب الحديث](hadith-book.md) | [screens/hadith.tsx:171](../../mobile/src/screens/hadith.tsx#L171) |
+| `ContinueCard` | افتح ‹› | [حديث الصحيح](hadith-sahih.md) | [screens/hadith.tsx:56](../../mobile/src/screens/hadith.tsx#L56) |
+| `FortyShape` | (onOpen) | [حديث الأربعين](hadith-forty.md) | [screens/hadith.tsx:75](../../mobile/src/screens/hadith.tsx#L75) |
+| `Hit` | (onPress) | [حديث الصحيح](hadith-sahih.md) | [screens/hadith.tsx:93](../../mobile/src/screens/hadith.tsx#L93) |
+|  | (onPress) | [أبواب الكتاب](hadith-kitab.md) | [screens/hadith.tsx:93](../../mobile/src/screens/hadith.tsx#L93) |
+|  | (onPress) | [أبواب الكتاب](hadith-kitab.md) | [screens/hadith.tsx:93](../../mobile/src/screens/hadith.tsx#L93) |
+| `HadithScreen` | (onPress) | [حديث الأربعين](hadith-forty.md) | [screens/hadith.tsx:151](../../mobile/src/screens/hadith.tsx#L151) |
+|  | (onOpenBook) | [كتاب الحديث](hadith-book.md) | [screens/hadith.tsx:166](../../mobile/src/screens/hadith.tsx#L166) |
+|  | (onOpenKitab) | [أبواب الكتاب](hadith-kitab.md) | [screens/hadith.tsx:166](../../mobile/src/screens/hadith.tsx#L166) |
+|  | (onOpenBook) | [كتاب الحديث](hadith-book.md) | [screens/hadith.tsx:170](../../mobile/src/screens/hadith.tsx#L170) |
 
 ## Sheets
 

@@ -22,28 +22,28 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `ForgottenPost` | افتح صفحة الآية | [صفحة الآية](ayah.md) | [components/HomeFeed.tsx:427](../../mobile/src/components/HomeFeed.tsx#L427) |
-|  | افتح ما نسيته | [مدونتي](library.md) | [components/HomeFeed.tsx:429](../../mobile/src/components/HomeFeed.tsx#L429) |
-|  | (head) | [الاختبارات](quizzes.md) | [components/HomeFeed.tsx:429](../../mobile/src/components/HomeFeed.tsx#L429) |
-| `ReciteAction` | تسميع | [المصحف](read.md) | [components/HomeFeed.tsx:475](../../mobile/src/components/HomeFeed.tsx#L475) |
-| `QuizPost` | (open) | [الاختبارات](quizzes.md) | [components/HomeFeed.tsx:583](../../mobile/src/components/HomeFeed.tsx#L583) |
-|  | افتح ما يشرح الجواب | [الترجمة](person.md) | [components/HomeFeed.tsx:585](../../mobile/src/components/HomeFeed.tsx#L585) |
-|  | افتح ما يشرح الجواب | [متشابهات القرآن](branches.md) | [components/HomeFeed.tsx:585](../../mobile/src/components/HomeFeed.tsx#L585) |
-|  | افتح ما يشرح الجواب | [مقارنة السور](compare.md) | [components/HomeFeed.tsx:585](../../mobile/src/components/HomeFeed.tsx#L585) |
-|  | افتح ما يشرح الجواب | [الأطلس](atlas.md) | [components/HomeFeed.tsx:585](../../mobile/src/components/HomeFeed.tsx#L585) |
-|  | افتح ما يشرح الجواب | [قصة النبي](prophets-slug.md) | [components/HomeFeed.tsx:585](../../mobile/src/components/HomeFeed.tsx#L585) |
-|  | افتح ما يشرح الجواب | [النسب](nasab.md) | [components/HomeFeed.tsx:585](../../mobile/src/components/HomeFeed.tsx#L585) |
-|  | افتح ما يشرح الجواب | [المصطلح](term.md) | [components/HomeFeed.tsx:585](../../mobile/src/components/HomeFeed.tsx#L585) |
-|  | افتح ما يشرح الجواب | [حديث الأربعين](hadith-forty.md) | [components/HomeFeed.tsx:585](../../mobile/src/components/HomeFeed.tsx#L585) |
-|  | افتح ما يشرح الجواب | [كتاب الحديث](hadith-book.md) | [components/HomeFeed.tsx:585](../../mobile/src/components/HomeFeed.tsx#L585) |
-|  | افتح ما يشرح الجواب | [أبواب الكتاب](hadith-kitab.md) | [components/HomeFeed.tsx:585](../../mobile/src/components/HomeFeed.tsx#L585) |
-|  | افتح ما يشرح الجواب | [الحديث](hadith.md) | [components/HomeFeed.tsx:585](../../mobile/src/components/HomeFeed.tsx#L585) |
-|  | افتح ما يشرح الجواب | [القصة](story.md) | [components/HomeFeed.tsx:585](../../mobile/src/components/HomeFeed.tsx#L585) |
-|  | افتح ما يشرح الجواب | [الغزوة](battle.md) | [components/HomeFeed.tsx:585](../../mobile/src/components/HomeFeed.tsx#L585) |
-|  | افتح ما يشرح الجواب | [المصحف](read.md) | [components/HomeFeed.tsx:585](../../mobile/src/components/HomeFeed.tsx#L585) |
-|  | افتح ما يشرح الجواب | [تحفة الأطفال](tuhfa.md) | [components/HomeFeed.tsx:585](../../mobile/src/components/HomeFeed.tsx#L585) |
-|  | افتح ما يشرح الجواب | [الذكر](dhikr.md) | [components/HomeFeed.tsx:585](../../mobile/src/components/HomeFeed.tsx#L585) |
-|  | افتح ما يشرح الجواب | [ترتيب السور](order.md) | [components/HomeFeed.tsx:585](../../mobile/src/components/HomeFeed.tsx#L585) |
+| `ForgottenPost` | افتح صفحة الآية | [صفحة الآية](ayah.md) | [components/HomeFeed.tsx:415](../../mobile/src/components/HomeFeed.tsx#L415) |
+|  | افتح ما نسيته | [مدونتي](library.md) | [components/HomeFeed.tsx:417](../../mobile/src/components/HomeFeed.tsx#L417) |
+|  | (head) | [الاختبارات](quizzes.md) | [components/HomeFeed.tsx:417](../../mobile/src/components/HomeFeed.tsx#L417) |
+| `ReciteAction` | تسميع | [المصحف](read.md) | [components/HomeFeed.tsx:463](../../mobile/src/components/HomeFeed.tsx#L463) |
+| `QuizPost` | (open) | [الاختبارات](quizzes.md) | [components/HomeFeed.tsx:571](../../mobile/src/components/HomeFeed.tsx#L571) |
+|  | افتح ما يشرح الجواب | [الترجمة](person.md) | [components/HomeFeed.tsx:573](../../mobile/src/components/HomeFeed.tsx#L573) |
+|  | افتح ما يشرح الجواب | [متشابهات القرآن](branches.md) | [components/HomeFeed.tsx:573](../../mobile/src/components/HomeFeed.tsx#L573) |
+|  | افتح ما يشرح الجواب | [مقارنة السور](compare.md) | [components/HomeFeed.tsx:573](../../mobile/src/components/HomeFeed.tsx#L573) |
+|  | افتح ما يشرح الجواب | [الأطلس](atlas.md) | [components/HomeFeed.tsx:573](../../mobile/src/components/HomeFeed.tsx#L573) |
+|  | افتح ما يشرح الجواب | [قصة النبي](prophets-slug.md) | [components/HomeFeed.tsx:573](../../mobile/src/components/HomeFeed.tsx#L573) |
+|  | افتح ما يشرح الجواب | [النسب](nasab.md) | [components/HomeFeed.tsx:573](../../mobile/src/components/HomeFeed.tsx#L573) |
+|  | افتح ما يشرح الجواب | [المصطلح](term.md) | [components/HomeFeed.tsx:573](../../mobile/src/components/HomeFeed.tsx#L573) |
+|  | افتح ما يشرح الجواب | [حديث الأربعين](hadith-forty.md) | [components/HomeFeed.tsx:573](../../mobile/src/components/HomeFeed.tsx#L573) |
+|  | افتح ما يشرح الجواب | [كتاب الحديث](hadith-book.md) | [components/HomeFeed.tsx:573](../../mobile/src/components/HomeFeed.tsx#L573) |
+|  | افتح ما يشرح الجواب | [أبواب الكتاب](hadith-kitab.md) | [components/HomeFeed.tsx:573](../../mobile/src/components/HomeFeed.tsx#L573) |
+|  | افتح ما يشرح الجواب | [الحديث](hadith.md) | [components/HomeFeed.tsx:573](../../mobile/src/components/HomeFeed.tsx#L573) |
+|  | افتح ما يشرح الجواب | [القصة](story.md) | [components/HomeFeed.tsx:573](../../mobile/src/components/HomeFeed.tsx#L573) |
+|  | افتح ما يشرح الجواب | [الغزوة](battle.md) | [components/HomeFeed.tsx:573](../../mobile/src/components/HomeFeed.tsx#L573) |
+|  | افتح ما يشرح الجواب | [المصحف](read.md) | [components/HomeFeed.tsx:573](../../mobile/src/components/HomeFeed.tsx#L573) |
+|  | افتح ما يشرح الجواب | [تحفة الأطفال](tuhfa.md) | [components/HomeFeed.tsx:573](../../mobile/src/components/HomeFeed.tsx#L573) |
+|  | افتح ما يشرح الجواب | [الذكر](dhikr.md) | [components/HomeFeed.tsx:573](../../mobile/src/components/HomeFeed.tsx#L573) |
+|  | افتح ما يشرح الجواب | [ترتيب السور](order.md) | [components/HomeFeed.tsx:573](../../mobile/src/components/HomeFeed.tsx#L573) |
 | `Item` | (onPress) | [الغزوة](battle.md) | [components/LifeTimeline.tsx:123](../../mobile/src/components/LifeTimeline.tsx#L123) |
 |  | (onPress) | [القصة](story.md) | [components/LifeTimeline.tsx:123](../../mobile/src/components/LifeTimeline.tsx#L123) |
 | `LifeSheet` | (onPress) | [الغزوة](battle.md) | [components/LifeTimeline.tsx:164](../../mobile/src/components/LifeTimeline.tsx#L164) |

@@ -71,3 +71,22 @@ types, but the import no longer says what it is. Each got its `type` mark back. 
   the error can be dropped. That is the pattern from the talk: the comment makes the shortcut look reviewed.
   The stricter rule from the review (a catch block holding only a comment counts as empty) flagged both, and
   they now report what failed.
+
+## The mushaf's ayah menu has no «صفحة الآية» (step 3, feature map)
+
+- **Where:** `mobile/src/components/Reader.tsx`, the menu on a long press in the mushaf.
+- **Wrong:** the reader builds its own ayah menu. `AyahMenuHost.tsx`, which every other screen uses, adds
+  «صفحة الآية»; the reader's copy never got it.
+- **Effect:** the owner could open an ayah's page from every screen except the mushaf, where people read most.
+- **Found by:** the owner on his phone. Now the rule "the ayah menu offers «صفحة الآية» wherever it shows"
+  (`e2e/featureRules.test.ts`) lists it from the links found in the code.
+- **Fix:** listed in `e2e/featureRules.baseline.json`, to be fixed; the list may only shrink.
+
+## A page's search that opened the home search (step 3, feature map)
+
+- **Where:** the tarajim tab, before #1225.
+- **Wrong:** its search button called `toTab('/search')`, the home search, instead of searching the page.
+- **Effect:** typing a name in التراجم left the tab and showed results from the whole app.
+- **Found by:** the owner. Now the rule "a page's search stays on the page" fails on it: putting the call back
+  in `screens/tarajim.tsx` fails `e2e/featureRules.test.ts`.
+- **Fix:** #1225; the rule keeps it from coming back.

@@ -243,7 +243,7 @@ What the bars and menus that nearly every screen draws can open. Each screen's p
 
 | Part | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `AppShell` |  | [الأدوات والأذكار](feature-map/utilities.md) | [components/AppShell.tsx:25](../mobile/src/components/AppShell.tsx#L25) |
+| `AppShell` |  | [الأدوات والأذكار](feature-map/utilities.md) | [components/AppShell.tsx:26](../mobile/src/components/AppShell.tsx#L26) |
 | `AyahMenuHost` | (page) | [صفحة الآية](feature-map/ayah.md) | [components/AyahMenuHost.tsx:56](../mobile/src/components/AyahMenuHost.tsx#L56) |
 | `AyahMenuHost` | (mushaf) | [المصحف](feature-map/read.md) | [components/AyahMenuHost.tsx:57](../mobile/src/components/AyahMenuHost.tsx#L57) |
 | `AyahMenuHost` | (recite) | [المصحف](feature-map/read.md) | [components/AyahMenuHost.tsx:58](../mobile/src/components/AyahMenuHost.tsx#L58) |
@@ -262,21 +262,21 @@ What the bars and menus that nearly every screen draws can open. Each screen's p
 | `SettingsSheet` | عن نمق | [عن نمق](feature-map/about.md) | [components/SettingsSheet.tsx:28](../mobile/src/components/SettingsSheet.tsx#L28) |
 | `SettingsSheet` | المصادر والتراخيص | [المصادر والتراخيص](feature-map/attributions.md) | [components/SettingsSheet.tsx:29](../mobile/src/components/SettingsSheet.tsx#L29) |
 | `SettingsSheet` | سياسة الخصوصية | [سياسة الخصوصية](feature-map/privacy.md) | [components/SettingsSheet.tsx:30](../mobile/src/components/SettingsSheet.tsx#L30) |
-| `TreePager` | (openCompare) | [مقارنة السور](feature-map/compare.md) | [components/TreePager.tsx:246](../mobile/src/components/TreePager.tsx#L246) |
+| `TreePager` | (openCompare) | [مقارنة السور](feature-map/compare.md) | [components/TreePager.tsx:245](../mobile/src/components/TreePager.tsx#L245) |
 | `TopBar` | أدوات القرآن | [القرآن](feature-map/quran.md) | [ui/TopBar.tsx:81](../mobile/src/ui/TopBar.tsx#L81) |
 | `TopBar` | المكتبة | [المكتبة](feature-map/books.md) | [ui/TopBar.tsx:84](../mobile/src/ui/TopBar.tsx#L84) |
 | `TopBar` | الصفحة الرئيسية | [الرئيسية](feature-map/home.md) | [ui/TopBar.tsx:107](../mobile/src/ui/TopBar.tsx#L107) |
-| `AppShell` |  | sheet `ShareSheet` | [components/AppShell.tsx:63](../mobile/src/components/AppShell.tsx#L63) |
+| `AppShell` |  | sheet `ShareSheet` | [components/AppShell.tsx:64](../mobile/src/components/AppShell.tsx#L64) |
 | `AyahMenuHost` | الآية ‹› من السورة ‹› | sheet `FloatingMenu` | [components/AyahMenuHost.tsx:53](../mobile/src/components/AyahMenuHost.tsx#L53) |
 | `AyahMenuHost` |  | sheet `AyahPreviewSheet` | [components/AyahMenuHost.tsx:72](../mobile/src/components/AyahMenuHost.tsx#L72) |
 | `AyahMenuHost` |  | sheet `BalaghaSheet` | [components/AyahMenuHost.tsx:73](../mobile/src/components/AyahMenuHost.tsx#L73) |
 | `AyahMenuHost` |  | sheet `NoteSheet` | [components/AyahMenuHost.tsx:74](../mobile/src/components/AyahMenuHost.tsx#L74) |
 | `AyahMenuHost` |  | sheet `TopicSheet` | [components/AyahMenuHost.tsx:75](../mobile/src/components/AyahMenuHost.tsx#L75) |
 | `PathAyat` |  | sheet `CompareTargetsSheet` | [components/PathAyat.tsx:86](../mobile/src/components/PathAyat.tsx#L86) |
-| `TreePager` |  | sheet `VideoSheet` | [components/TreePager.tsx:428](../mobile/src/components/TreePager.tsx#L428) |
-| `TreePager` |  | sheet `EvidenceSheet` | [components/TreePager.tsx:429](../mobile/src/components/TreePager.tsx#L429) |
-| `TreePager` |  | sheet `CompareTargetsSheet` | [components/TreePager.tsx:430](../mobile/src/components/TreePager.tsx#L430) |
-| `CardWithRow` |  | sheet `MoreMenu` | [ui/Card.tsx:88](../mobile/src/ui/Card.tsx#L88) |
+| `TreePager` |  | sheet `VideoSheet` | [components/TreePager.tsx:427](../mobile/src/components/TreePager.tsx#L427) |
+| `TreePager` |  | sheet `EvidenceSheet` | [components/TreePager.tsx:428](../mobile/src/components/TreePager.tsx#L428) |
+| `TreePager` |  | sheet `CompareTargetsSheet` | [components/TreePager.tsx:429](../mobile/src/components/TreePager.tsx#L429) |
+| `CardWithRow` |  | sheet `MoreMenu` | [ui/Card.tsx:87](../mobile/src/ui/Card.tsx#L87) |
 | `MoreMenu` |  | sheet `FloatingMenu` | [ui/MoreMenu.tsx:26](../mobile/src/ui/MoreMenu.tsx#L26) |
 | `TopBar` |  | sheet `SettingsSheet` | [ui/TopBar.tsx:112](../mobile/src/ui/TopBar.tsx#L112) |
 
